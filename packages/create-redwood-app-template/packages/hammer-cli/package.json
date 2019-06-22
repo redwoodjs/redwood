@@ -1,0 +1,21 @@
+{
+  "name": "@hammerframework/hammer-cli",
+  "version": "0.0.0-alpha.0",
+  "bin": {
+    "hammer": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "nodemon --exec babel-node src/index.js"
+  },
+  "dependencies": {
+    "ink": "^2.2.0",
+    "react": "^16.8.6",
+    "require-dir": "^1.2.0"
+  },
+  "devDependencies": {
+    "babel-plugin-module-resolver": "^3.2.0"
+  }
+}
