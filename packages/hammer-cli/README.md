@@ -6,22 +6,37 @@ and not everything contained within it is true yet.
 
 ## What is this?
 
-By installing `hammer` you'll be able to run a bunch of commands that you'll
+By installing `hammer` you'll be able to run a bunch of commands that you might
 find useful during development.
 
 ## Installation
 
 `yarn add -D @hammerframework/hammer-cli`
+or
 `npm i @hammerframework/hammer-cli --dev`
 
-## Command: Scaffolding
+## Usage
+
+```terminal
+yarn hammer
+
+⚒ Hammer - Build something. (https://example.org) (v0.0.0-alpha.0)
+
+Commands
+
+ scaffold    auto generate a set of files for rapid development
+```
 
 Run `yarn hammer scaffold component <path> <name>` to create a component, a test
-file and a stubbed MDX file in that specified path.
+file, and a stubbed MDX file in that specified path.
 
 ## Development
 
-We're building this in [React Pastel](https://github.com/vadimdemedes/pastel).
+Run `yarn dev`
 
 Add a new command by creating a `commandName.js` file in the `./commands`
 directory.
+
+## Publishing
+
+This is a monorepo and is published via LearnaJS. See the root README for instructions.

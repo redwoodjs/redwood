@@ -17,11 +17,17 @@ const MainMenu = () => {
     <Box flexDirection="column">
       <Header />
       <Box flexDirection="column">
-        <Text height={2} bold>
-          Commands{' '}
-        </Text>
+        <Box paddingY={1} bold>
+          Commands
+        </Box>
         {Object.keys(commands).map(command => {
-          return <Text key={command}> - {command}</Text>;
+          return (
+            <Text key={command}>
+              <Text bold> {command}</Text>
+              {'    '}
+              {commands[command].description}
+            </Text>
+          );
         })}
       </Box>
     </Box>
