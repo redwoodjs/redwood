@@ -5,7 +5,7 @@
       "babel-plugin-module-resolver",
       {
         "alias": {
-          "src": "./commands"
+          "src": "./src"
         }
       }
     ]
