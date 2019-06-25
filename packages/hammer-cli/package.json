@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "dev": "nodemon --exec babel-node src/index.js",
-    "test": "jest --colors",
+    "test": "jest",
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
