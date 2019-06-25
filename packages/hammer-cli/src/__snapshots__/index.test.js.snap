@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`hammer-cli the default menu is shown when no arguments are passed 1`] = `
+"[38;5;220m[4m[1m⚒ Hammer[22m[24m - Build something. (https://example.org)[39m [38;5;246m| v0.0.0-alpha.0[39m
+
+[4m[1mCommands[22m[24m
+
+[1mcommand_a[22m [39mthe cat was frightened by the loud sound[22m
+[1mcommand_b[22m [39mthe sound of the tyres on the road roared above that of it's engine.[22m"
+`;
