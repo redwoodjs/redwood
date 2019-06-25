@@ -8,7 +8,9 @@
     "dist"
   ],
   "scripts": {
-    "dev": "nodemon --exec babel-node src/index.js scaffold component Documents"
+    "dev": "nodemon --exec babel-node src/index.js",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "ink": "^2.2.0",
@@ -17,6 +19,7 @@
     "yargs-parser": "^13.1.1"
   },
   "devDependencies": {
-    "babel-plugin-module-resolver": "^3.2.0"
+    "babel-plugin-module-resolver": "^3.2.0",
+    "ink-testing-library": "^1.0.2"
   }
 }

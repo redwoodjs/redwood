@@ -11,24 +11,21 @@ find useful during development.
 
 ## Installation
 
-`yarn add -D @hammerframework/hammer-cli`
-or
-`npm i @hammerframework/hammer-cli --dev`
+With Yarn `yarn add -D @hammerframework/hammer-cli`, or NPM
+`npm install --save-dev @hammerframework/hammer-cli`
 
 ## Usage
 
 ```terminal
-yarn hammer
-
-⚒ Hammer - Build something. (https://example.org) (v0.0.0-alpha.0)
+⚒ Hammer - Build something. (https://example.org) | v0.0.0-alpha.0
 
 Commands
 
- scaffold    auto generate a set of files for rapid development
+generate save time by automatically generating boilerplate code
 ```
 
-Run `yarn hammer scaffold component <path> <name>` to create a component, a test
-file, and a stubbed MDX file in that specified path.
+Run `yarn hammer generate component <path> <name>` to create a component, a test
+file, and a stubbed MDX (docz) file at the specified path.
 
 ## Development
 
@@ -36,6 +33,17 @@ Run `yarn dev`
 
 Add a new command by creating a `commandName.js` file in the `./commands`
 directory.
+
+A command should export the following:
+
+```js
+export default ({ args }) => {}; // The react-ink component.
+export const commandProps = {
+  name: 'generate',
+  alias: 'g', // invoke with hammer s instead of hammer scaffold,
+  description: 'This command does a, b, but not c.',
+};
+```
 
 ## Publishing
 
