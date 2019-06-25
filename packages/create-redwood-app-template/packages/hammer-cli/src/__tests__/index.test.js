@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'ink-testing-library';
 
-import Router from './index';
+import Router from '../index';
 
 describe('hammer-cli', () => {
   const commands = [
