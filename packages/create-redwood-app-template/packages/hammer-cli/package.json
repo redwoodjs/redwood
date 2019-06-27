@@ -1,6 +1,7 @@
 {
   "name": "@hammerframework/hammer-cli",
   "version": "0.0.0-alpha.0",
+  "license": "MIT",
   "bin": {
     "hammer": "./dist/index.js"
   },
@@ -8,11 +9,14 @@
     "dist"
   ],
   "scripts": {
+    "hammer": "babel-node src/index.js",
     "dev": "nodemon --exec babel-node src/index.js",
     "test": "jest",
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
+    "camelcase": "^5.3.1",
+    "find-yarn-workspace-root": "^1.2.1",
     "ink": "^2.2.0",
     "react": "^16.8.6",
     "require-dir": "^1.2.0",
