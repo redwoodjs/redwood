@@ -5,19 +5,21 @@ import { render, Color, Text, Box } from 'ink';
 import { getCommands, parseArgs } from 'src/lib';
 import { Header, CommandList } from 'src/components';
 
-const Router = ({ commands, args }) => {
-  const commandToRun = args && args._ && args._[0];
+const Router = ({ commands, args = [] }) => {
+  const commandToRun = args[0];
   const command = commands.find(({ commandProps: { name, alias } }) =>
     [name, alias].includes(commandToRun)
   );
 
   return (
     <Box flexDirection="column">
-      <Header marginBottom={1} />
       {command ? (
         command.default({ args })
       ) : (
-        <CommandList commands={commands} />
+        <>
+          <Header marginBottom={1} />
+          <CommandList commands={commands} />
+        </>
       )}
     </Box>
   );

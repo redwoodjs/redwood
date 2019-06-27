@@ -13,7 +13,7 @@ const CommandList = ({ commands }) => {
       {commands.map(({ commandProps: { name, description } }) => {
         return (
           <Box key={`command-${name}`}>
-            <Box justifyContent="flex-end" marginRight={1}>
+            <Box justifyContent="flex-end" marginX={1}>
               <Box>
                 <Text bold>{name}</Text>
               </Box>

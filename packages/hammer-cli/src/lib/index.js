@@ -1,5 +1,33 @@
+import fs from 'fs';
+import path from 'path';
 import requireDir from 'require-dir';
-import argv from 'yargs-parser';
+import parse from 'yargs-parser';
+import workspaceRoot from 'find-yarn-workspace-root';
+
+export const writeFile = (
+  target,
+  contents,
+  { overwriteExisting = false } = {}
+) => {
+  if (overwriteExisting === false) {
+    if (fs.existsSync(target)) {
+      throw `${target} already exists`;
+    }
+  }
+  const filename = path.basename(target);
+  const targetDir = target.replace(filename, '');
+  fs.mkdirSync(targetDir, { recursive: true });
+  fs.writeFileSync(target, contents);
+};
+
+export const bytes = contents => Buffer.byteLength(contents, 'utf8');
+
+/**
+ * This determines the root `yarn workspace` directory.
+ * TODO: Don't rely on workspaces, find the hammer config or `.hammer`
+ * directory.
+ */
+export const hammerWorkspaceDir = () => workspaceRoot(process.cwd());
 
 const validateCommandExports = ({ commandProps, ...rest }) => {
   if (typeof rest.default !== 'function') {
@@ -16,18 +44,28 @@ const validateCommandExports = ({ commandProps, ...rest }) => {
   }
 };
 
+// TODO: Throw on duplicate commands
 export const getCommands = (commandsPath = '../commands') => {
   const foundCommands = requireDir(commandsPath, {
-    recurse: false,
+    recurse: true,
     extensions: ['.js'],
   });
 
   return Object.keys(foundCommands).reduce((newCommands, commandName) => {
-    const command = foundCommands[commandName];
+    let command = foundCommands[commandName];
+    // is this a directory-named-modules? Eg: `/generate/generate.js`
+    // NOTE: Improve this by looking at the file names before importing
+    // everything.
+    if (command.index && command.index.default) {
+      command = command.index;
+    } else if (command[commandName] && command[commandName].default) {
+      command = command[commandName];
+    }
+
     try {
       validateCommandExports(command);
     } catch (e) {
-      throw `your "${commandName}" command is exporting the correct requirements: ${e}`;
+      throw `your "${commandName}" command is not exporting the correct requirements: ${e}`;
     }
 
     const { commandProps, ...rest } = command;
@@ -47,5 +85,5 @@ export const getCommands = (commandsPath = '../commands') => {
 };
 
 export const parseArgs = () => {
-  return argv(process.argv.slice(2));
+  return parse(process.argv.slice(2))._;
 };

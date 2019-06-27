@@ -3,7 +3,7 @@ import { render } from 'ink-testing-library';
 
 import Router from '../index';
 
-describe('hammer-cli', () => {
+describe('Router', () => {
   const commands = [
     {
       default: () => 'I am the a',
@@ -34,7 +34,7 @@ describe('hammer-cli', () => {
 
   it('routes to the correct command when the name is matched ', () => {
     const { lastFrame } = renderComponent({
-      args: { _: ['command_a'] },
+      args: ['command_a'],
     });
     expect(lastFrame()).toMatch(/I am the a/g);
   });
