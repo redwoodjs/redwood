@@ -3,7 +3,8 @@ import React from 'react';
 import { Box, Text, Color } from 'ink';
 
 import { hammerWorkspaceDir, writeFile, bytes } from 'src/lib';
-import component from './component';
+
+import component from './generators/component';
 
 const getGenerator = generator =>
   ({
