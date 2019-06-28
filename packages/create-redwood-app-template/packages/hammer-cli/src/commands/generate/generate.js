@@ -6,17 +6,24 @@ import { hammerWorkspaceDir, writeFile, bytes } from 'src/lib';
 
 import component from './generators/component';
 
-const getGenerator = generator =>
-  ({
-    component,
-  }[generator]);
+/**
+ * A generator is a function that takes a name and returns a list of filenames
+ * and contents that should be written to the disk.
+ */
+const DEFAULT_GENERATORS = {
+  component,
+};
 
 const DEFAULT_COMPONENT_DIR = path.join(
   hammerWorkspaceDir(),
   './web/src/components/'
 );
 
-const Generate = ({ args }) => {
+const Generate = ({
+  args,
+  generators = DEFAULT_GENERATORS,
+  fileWriter = writeFile,
+}) => {
   const [
     _commandName,
     generatorName,
@@ -24,7 +31,7 @@ const Generate = ({ args }) => {
     targetDir = DEFAULT_COMPONENT_DIR,
   ] = args;
 
-  const generator = getGenerator(generatorName);
+  const generator = generators[generatorName];
 
   // If no generator is specified list the
   if (!generator || !name) {
@@ -52,7 +59,7 @@ const Generate = ({ args }) => {
   const results = Object.keys(files).map(filename => {
     const contents = files[filename];
     try {
-      writeFile(path.join(targetDir, filename), contents);
+      fileWriter(path.join(targetDir, filename), contents);
       return (
         <Text key={`wrote-${filename}`}>
           Wrote {filename} {bytes(contents)} bytes
