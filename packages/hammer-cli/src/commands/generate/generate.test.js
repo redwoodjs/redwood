@@ -23,6 +23,6 @@ describe('Command: Generate', () => {
         fileWriter={() => {}}
       />
     );
-    console.log(lastFrame());
+    expect(lastFrame()).toMatch(/Wrote a.js/g);
   });
 });
