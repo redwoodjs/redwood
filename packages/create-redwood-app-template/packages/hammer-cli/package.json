@@ -1,7 +1,12 @@
 {
   "name": "@hammerframework/hammer-cli",
-  "version": "0.0.0-alpha.0",
+  "description": "The Hammer CLI",
+  "version": "0.0.0-alpha.3",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hammerframework/hammer.git/"
+  },
   "bin": {
     "hammer": "./dist/index.js"
   },
@@ -9,6 +14,9 @@
     "dist"
   ],
   "scripts": {
+    "build": "babel src --out-dir dist",
+    "clean": "rm -rf dist",
+    "prepare": "yarn clean && yarn build",
     "hammer": "babel-node src/index.js",
     "dev": "nodemon --exec babel-node src/index.js",
     "test": "jest",
@@ -16,6 +24,7 @@
   },
   "dependencies": {
     "camelcase": "^5.3.1",
+    "core-js": "^3.1.4",
     "find-yarn-workspace-root": "^1.2.1",
     "ink": "^2.2.0",
     "react": "^16.8.6",
@@ -25,5 +34,6 @@
   "devDependencies": {
     "babel-plugin-module-resolver": "^3.2.0",
     "ink-testing-library": "^1.0.2"
-  }
+  },
+  "gitHead": "f45e8e09cba6e0176396288f24a376ec19280e2f"
 }
