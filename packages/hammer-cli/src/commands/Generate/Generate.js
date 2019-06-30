@@ -14,21 +14,27 @@ const DEFAULT_GENERATORS = {
   component,
 };
 
-const DEFAULT_COMPONENT_DIR = path.join(
-  hammerWorkspaceDir(),
-  './web/src/components/'
-);
+const DEFAULT_COMPONENT_DIR = () =>
+  path.join(hammerWorkspaceDir(), './web/src/components/');
 
 const Generate = ({
   args,
   generators = DEFAULT_GENERATORS,
   fileWriter = writeFile,
 }) => {
+  if (!hammerWorkspaceDir()) {
+    return (
+      <Color red>
+        The `generate` command has to be run in your hammer project directory.
+      </Color>
+    );
+  }
+
   const [
     _commandName,
     generatorName,
     name,
-    targetDir = DEFAULT_COMPONENT_DIR,
+    targetDir = DEFAULT_COMPONENT_DIR(),
   ] = args;
 
   const generator = generators[generatorName];
@@ -37,18 +43,22 @@ const Generate = ({
     return (
       <>
         <Box flexDirection="column" marginBottom={1}>
-          <Text bold underline>
-            Usage:
-          </Text>
+          <Box marginBottom={1}>
+            <Text bold>Usage</Text>
+          </Box>
           <Text>
-            hammer generate {generatorName || 'GENERATOR'} [name] [path]
+            hammer generate{' '}
+            <Color blue>{generatorName || 'generator'} name [path]</Color>
           </Text>
         </Box>
-        <Box flexDirection="column">
+        <Box flexDirection="column" marginBottom={1}>
           <Text bold underline>
             Available generators:
           </Text>
-          <Text marginLeft={1}> component</Text>
+          <Box marginX={2} flexDirection="column">
+            <Text> component</Text>
+            <Text> Generate a React component</Text>
+          </Box>
         </Box>
       </>
     );
@@ -79,7 +89,7 @@ const Generate = ({
 export const commandProps = {
   name: 'generate',
   alias: 'g',
-  description: 'save time by generating boilerplate code',
+  description: 'Save time by generating boilerplate code',
 };
 
 export default Generate;

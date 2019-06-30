@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import path from 'path';
 import React from 'react';
 import { render, Box } from 'ink';
