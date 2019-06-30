@@ -1,0 +1,11 @@
+{
+  "packages": ["packages/*"],
+  "version": "0.0.0-alpha.4",
+  "npmClient": "yarn",
+  "useWorkspaces": true,
+  "command": {
+    "publish": {
+      "verifyAccess": false
+    }
+  }
+}
