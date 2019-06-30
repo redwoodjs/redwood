@@ -17,22 +17,15 @@ With Yarn `yarn add -D @hammerframework/hammer-cli`, or NPM
 ## Usage
 
 ```terminal
-⚒ Hammer - Build something. (https://example.org) | v0.0.0-alpha.0
-
-Commands
-
-generate save time by automatically generating boilerplate code
+yarn hammer [command]
 ```
-
-Run `yarn hammer generate component <path> <name>` to create a component, a test
-file, and a stubbed MDX (docz) file at the specified path.
 
 ## Development
 
-Run `yarn dev`
+Run `yarn dev` to automatically reload the
 
-Add a new command by creating a `commandName.js` file in the `./commands`
-directory.
+Add a new command by creating `CommandName/CommandName.js` file in the
+`./src/commands` directory.
 
 A command should export the following:
 
