@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'ink-testing-library';
 
-import Generate from './generate';
+import Generate from './Generate';
 
 describe('Command: Generate', () => {
   const generators = {
