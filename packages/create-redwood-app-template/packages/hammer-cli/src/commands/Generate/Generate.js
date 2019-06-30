@@ -33,7 +33,6 @@ const Generate = ({
 
   const generator = generators[generatorName];
 
-  // If no generator is specified list the
   if (!generator || !name) {
     return (
       <>
@@ -78,6 +77,7 @@ const Generate = ({
 };
 
 export const commandProps = {
+  name: 'generate',
   alias: 'g',
   description: 'save time by generating boilerplate code',
 };

@@ -49,11 +49,14 @@ export const getCommands = (commandsPath = '../commands') => {
   const foundCommands = requireDir(commandsPath, {
     recurse: true,
     extensions: ['.js'],
+    filter: fullPath => {
+      return fullPath.indexOf('.test.js') === -1;
+    },
   });
 
   return Object.keys(foundCommands).reduce((newCommands, commandName) => {
     let command = foundCommands[commandName];
-    // is this a directory-named-modules? Eg: `/generate/generate.js`
+    // is this a directory-named-modules? Eg: `/Generate/Generate.js`
     // NOTE: Improve this by looking at the file names before importing
     // everything.
     if (command.index && command.index.default) {

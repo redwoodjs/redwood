@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'ink-testing-library';
 
-import Router from '../index';
+import Router from './';
 
 describe('Router', () => {
   const commands = [
@@ -29,7 +29,7 @@ describe('Router', () => {
 
   it('the default menu is shown when no arguments are passed', () => {
     const { lastFrame } = renderComponent();
-    expect(lastFrame()).toMatchSnapshot();
+    expect(lastFrame()).toMatch(/Commands/g);
   });
 
   it('routes to the correct command when the name is matched ', () => {

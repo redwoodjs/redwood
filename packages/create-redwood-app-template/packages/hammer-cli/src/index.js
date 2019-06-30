@@ -1,6 +1,6 @@
 import path from 'path';
 import React from 'react';
-import { render, Color, Text, Box } from 'ink';
+import { render, Box } from 'ink';
 
 import { getCommands, parseArgs } from 'src/lib';
 import { Header, CommandList } from 'src/components';
