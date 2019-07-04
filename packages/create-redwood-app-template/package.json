@@ -1,5 +1,4 @@
 {
-  "name": "hammer",
   "private": true,
   "license": "MIT",
   "workspaces": [
