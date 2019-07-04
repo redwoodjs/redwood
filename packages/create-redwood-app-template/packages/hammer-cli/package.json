@@ -1,7 +1,7 @@
 {
   "name": "@hammerframework/hammer-cli",
   "description": "The Hammer CLI",
-  "version": "0.0.0-alpha.4",
+  "version": "0.0.0-alpha.5",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -34,6 +34,5 @@
   "devDependencies": {
     "babel-plugin-module-resolver": "^3.2.0",
     "ink-testing-library": "^1.0.2"
-  },
-  "gitHead": "f45e8e09cba6e0176396288f24a376ec19280e2f"
+  }
 }

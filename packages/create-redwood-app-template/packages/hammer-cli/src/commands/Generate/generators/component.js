@@ -3,16 +3,17 @@ import camelcase from 'camelcase';
 const pascalCase = string => camelcase(string, { pascalCase: true });
 
 const component = componentName => {
-  return `/**
+  return `
+/**
  * This amazing component does...
  */
 const ${componentName} = (props) => {
   return <div>I am ${componentName}.</div>;
 };
 
-${ComponentName}.propTypes = {}
+${componentName}.propTypes = {}
 
-${ComponentName}.queryProps = {
+${componentName}.queryProps = {
   query: gql\`query ${componentName}Query {}\`,
   skeleton: undefined,
   dataToProps: (data) => data,
@@ -36,7 +37,7 @@ describe('${componentName}', () => {
   });
 
   it('this test will fail', () => {
-    const component = renderComponent(<${ComponentName} />);
+    const component = renderComponent(<${componentName} />);
     component.debug();
     expect(true).toBe(false);
   })
