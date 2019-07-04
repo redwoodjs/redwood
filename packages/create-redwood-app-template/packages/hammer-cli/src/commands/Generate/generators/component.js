@@ -1,27 +1,22 @@
-import fs from 'fs';
-import path from 'path';
 import camelcase from 'camelcase';
 
 const pascalCase = string => camelcase(string, { pascalCase: true });
 
 const component = componentName => {
-  return `import React from 'react'
-import PropTypes from 'prop-types'
-
-/**
+  return `/**
  * This amazing component does...
  */
-const ${componentName} = ({ as: Element = div, ...rest }) => {
-  return <Element {...rest}>I am ${componentName}.</Element>;
+const ${componentName} = (props) => {
+  return <div>I am ${componentName}.</div>;
 };
 
-ComponentName.propTypes = {}
+${ComponentName}.propTypes = {}
 
-export const queryProps = (args = {}) => ({
-  query: gql\`query ${componentName}View {}\`,
-  skeleton: () => null,
-  ...args
-});
+${ComponentName}.queryProps = {
+  query: gql\`query ${componentName}Query {}\`,
+  skeleton: undefined,
+  dataToProps: (data) => data,
+};
 
 export default ${componentName};
 `;
@@ -41,7 +36,7 @@ describe('${componentName}', () => {
   });
 
   it('this test will fail', () => {
-    const component = renderComponent(ComponentName);
+    const component = renderComponent(<${ComponentName} />);
     component.debug();
     expect(true).toBe(false);
   })
