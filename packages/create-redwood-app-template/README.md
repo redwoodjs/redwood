@@ -1,6 +1,6 @@
 # Hammer
 
-*by Tom Preston-Werner and Peter Pistorius.*
+_by Tom Preston-Werner and Peter Pistorius._
 
 **WARNING:** This document is aspirational (see [Readme Driven
 Development](https://tom.preston-werner.com/2010/08/23/readme-driven-development.html))
@@ -14,14 +14,14 @@ components.
 
 Here's a quick taste of the technologies a standard Hammer application will use:
 
-* React
-* JSX
-* Styled Components
-* Reach Router
-* GraphQL
-* Apollo
-* Prisma Photon
-* Docz
+- React
+- JSX
+- Styled Components
+- Reach Router
+- GraphQL
+- Apollo
+- Prisma Photon
+- Docz
 
 ## The Hammer philosophy
 
@@ -118,7 +118,7 @@ hasten the arrival of the future I predicted!
 
 ## Why is it called Hammer?
 
-*(A history, by Tom Preson-Werner)*
+_(A history, by Tom Preson-Werner)_
 
 When I first started working on Hammer, I was listening to Neil Gaimain's Norse
 Mythology audiobook. With Neil himself providing the voice, it is truly one of
@@ -127,7 +127,7 @@ highly enough.
 
 One of the Norse myths involves the origin story of Thor's hammer. In short,
 Loki decides it would be funny to shave off the beautiful golden hair of Thor's
-wife, Seph. Thor finds out it was Loki, and demands he fix it or he will break
+wife, Sif. Thor finds out it was Loki, and demands he fix it or he will break
 every one of his bones. Loki knows some dwarves that can forge a replacement for
 Seph's hair and tricks them into a competition with another set of dwarves to
 each create better gifts for the gods. Among the gifts, the sons of Yvaldi
@@ -137,17 +137,17 @@ Atri produce their masterwork: a hammer for Thor.
 Thor's hammer is called Mjollnir and has properties that I thought would be
 aspirational for my nascent web app framework. Namely:
 
-* **Mjollnir is unbreakable.** Wouldn't it be nice if your web app had this
+- **Mjollnir is unbreakable.** Wouldn't it be nice if your web app had this
   property?
 
-* **When thrown, it will never miss its target.** Again, you'd be in good shape
+- **When thrown, it will never miss its target.** Again, you'd be in good shape
   if your web application always hit the mark!
 
-* **No matter how far it's thrown, it will always return.** Quite appropriate
+- **No matter how far it's thrown, it will always return.** Quite appropriate
   for a client/server model, don't you think? Robust enough for every request to
   generate a response.
 
-* **You can grow or shrink Mjollnir as needed.** As mentioned in the philosophy
+- **You can grow or shrink Mjollnir as needed.** As mentioned in the philosophy
   section, I wanted my framework to be a pleasure for both large and small
   projects alike. Just like Thor's hammer! This also works when talking about
   the auto-scaling features that serverless JAMstack enables. Double whammy!
