@@ -6,6 +6,10 @@ _by Tom Preston-Werner and Peter Pistorius._
 Development](https://tom.preston-werner.com/2010/08/23/readme-driven-development.html))
 and not everything contained within it is true yet.
 
+**EXAMPLE:** If you'd like to see an example of what a Hammer application will look
+like, we are working on an example app called
+[Billable](https://github.com/hammerframework/billable).
+
 **Hammer is an opinionated, full stack, serverless web application framework
 that will allow you to build JAMstack applications with ease.** By making a lot
 of decisions for you, Hammer lets you get to work on what makes your application
