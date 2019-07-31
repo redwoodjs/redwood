@@ -1,4 +1,4 @@
-# Hammer
+# Hammer 🔨
 
 _by Tom Preston-Werner and Peter Pistorius._
 
