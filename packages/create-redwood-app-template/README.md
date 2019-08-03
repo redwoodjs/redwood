@@ -69,27 +69,27 @@ it easy to operate across both projects, while still keeping them in a single
 Git repository.
 
 The frontend project is called `web` and the backend project is called `api`.
-For clarity, we will refer to these in prose as "spheres", i.e. the "web sphere"
-and the "api sphere". They are separate projects because code in the web sphere
-will end up running in the user's browser while code in the api sphere will run
+For clarity, we will refer to these in prose as "sides", i.e. the "web side"
+and the "api side". They are separate projects because code on the web side
+will end up running in the user's browser while code on the api side will run
 on a server somewhere. It is important that you keep this distinction clear in
 your mind as you develop your application. The two separate projects are
 intended to make this obvious. In addition, separate projects allow for
 different dependencies and build processes for each project.
 
-The api sphere is an implementation of a GraphQL API. Hammer makes it easy to
+The api side is an implementation of a GraphQL API. Hammer makes it easy to
 interact with a database via Prisma's Photon ORM. Code can be organized into
 Photon's model classes, which keeps things clean. Photon also provides
 first-class migrations that take the pain out of evolving your database schema.
 
-The web sphere is coded with React. Hammer provides a variety of utility
+The web side is coded with React. Hammer provides a variety of utility
 components designed to make it easy to run queries and mutations against your
 GraphQL API. These components also help separate data fetching from rendering so
 you can easily test your components and develop them in isolation (enhanced by
 using Docz).
 
-You'll notice that the web sphere is called "web" and not "frontend". This is
-because Hammer conceives of a world where you may have other spheres like
+You'll notice that the web side is called "web" and not "frontend". This is
+because Hammer conceives of a world where you may have other sides like
 "mobile" or perhaps another type of client, all of which consume the same
 GraphQL backend.
 
