@@ -18,14 +18,17 @@ components.
 
 Here's a quick taste of the technologies a standard Hammer application will use:
 
+- Babel
 - React
+- GraphQL
+- Prisma Photon
 - JSX
 - Styled Components
 - Reach Router
-- GraphQL
 - Apollo
-- Prisma Photon
-- Docz
+- Prisma Lift
+- GraphQL Nexus
+- Storybook
 
 ## The Hammer philosophy
 
