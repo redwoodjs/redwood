@@ -1,5 +1,5 @@
-import React from 'react';
-import { Text, Box } from 'ink';
+import React from 'react'
+import { Text, Box } from 'ink'
 
 const CommandList = ({ commands }) => {
   return (
@@ -17,10 +17,10 @@ const CommandList = ({ commands }) => {
             </Box>
             <Box flex={1}>{description}</Box>
           </Box>
-        );
+        )
       })}
     </Box>
-  );
-};
+  )
+}
 
-export default CommandList;
+export default CommandList
