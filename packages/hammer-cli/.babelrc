@@ -2,6 +2,16 @@
   "extends": "../../babel.config.js",
   "plugins": [
     [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "node": "8.10.0"
+        },
+        "useBuiltIns": "usage",
+        "corejs": 3
+      }
+    ],
+    [
       "babel-plugin-module-resolver",
       {
         "alias": {
