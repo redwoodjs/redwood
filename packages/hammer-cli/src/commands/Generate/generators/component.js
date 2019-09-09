@@ -1,8 +1,8 @@
-import camelcase from 'camelcase';
+import camelcase from 'camelcase'
 
-const pascalCase = string => camelcase(string, { pascalCase: true });
+const pascalCase = (string) => camelcase(string, { pascalCase: true })
 
-const component = componentName => {
+const component = (componentName) => {
   return `
 /**
  * This amazing component does...
@@ -20,10 +20,10 @@ ${componentName}.queryProps = {
 };
 
 export default ${componentName};
-`;
-};
+`
+}
 
-const test = componentName => {
+const test = (componentName) => {
   return `
 import React from 'react';
 import { fireEvent, cleanup } from '@testing-library/react';
@@ -42,10 +42,10 @@ describe('${componentName}', () => {
     expect(true).toBe(false);
   })
 })
-`;
-};
+`
+}
 
-const mdx = componentName => {
+const mdx = (componentName) => {
   return `
 import ${componentName} from './'
 
@@ -53,15 +53,15 @@ import ${componentName} from './'
 
 - [ ] Document the props/ types
 - [ ] Allow user to play with the component
-  `;
-};
+  `
+}
 
-export default name => {
-  const componentName = pascalCase(name);
+export default (name) => {
+  const componentName = pascalCase(name)
 
   return {
     [`${componentName}/${componentName}.js`]: component(componentName),
     [`${componentName}/${componentName}.test.js`]: test(componentName),
     [`${componentName}/${componentName}.mdx`]: mdx(componentName),
-  };
-};
+  }
+}
