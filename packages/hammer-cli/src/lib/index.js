@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import requireDir from 'require-dir'
 import parse from 'yargs-parser'
-import workspaceRoot from 'find-yarn-workspace-root'
+import { getHammerConfig } from '@hammerframework/hammer-core'
 
 export const writeFile = (
   target,
@@ -22,12 +22,7 @@ export const writeFile = (
 
 export const bytes = (contents) => Buffer.byteLength(contents, 'utf8')
 
-/**
- * This determines the root `yarn workspace` directory.
- * TODO: Don't rely on workspaces, find the hammer config or `.hammer`
- * directory.
- */
-export const hammerWorkspaceDir = () => workspaceRoot(process.cwd())
+export const hammerBaseDir = () => getHammerConfig().baseDir
 
 const validateCommandExports = ({ commandProps, ...rest }) => {
   if (typeof rest.default !== 'function') {
@@ -77,13 +72,7 @@ export const getCommands = (commandsPath = '../commands') => {
       ...commandProps,
     }
 
-    return [
-      ...newCommands,
-      {
-        commandProps: newCommandProps,
-        ...rest,
-      },
-    ]
+    return [...newCommands, { commandProps: newCommandProps, ...rest }]
   }, [])
 }
 
