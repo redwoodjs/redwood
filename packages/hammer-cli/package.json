@@ -1,7 +1,7 @@
 {
   "name": "@hammerframework/hammer-cli",
   "description": "The Hammer CLI",
-  "version": "0.0.0-alpha.5",
+  "version": "0.0.1-alpha.8",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -23,12 +23,15 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
+    "@hammerframework/hammer-core": "^0.0.1-alpha.8",
+    "axios": "^0.19.0",
     "camelcase": "^5.3.1",
     "core-js": "^3.1.4",
-    "find-yarn-workspace-root": "^1.2.1",
+    "decompress": "^4.2.0",
     "ink": "^2.2.0",
     "react": "^16.8.6",
     "require-dir": "^1.2.0",
+    "tmp": "^0.1.0",
     "yargs-parser": "^13.1.1"
   },
   "devDependencies": {
