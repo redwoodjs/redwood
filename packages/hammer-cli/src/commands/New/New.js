@@ -5,7 +5,7 @@ import decompress from 'decompress'
 import axios from 'axios'
 
 import React, { useState, useRef, useEffect } from 'react'
-import { Box, Text } from 'ink'
+import { Box, Text, Color } from 'ink'
 
 const downloadFile = async (sourceUrl, targetFile) => {
   const writer = fs.createWriteStream(targetFile)
@@ -68,8 +68,14 @@ const New = ({ args: [_commandName, targetDir] }) => {
       setNewMessage(`Extracted ${files.length} files to ${newHammerAppDir}!`)
     }
 
-    createHammerApp()
-  }, [])
+    if (targetDir) {
+      createHammerApp()
+    }
+  }, [targetDir])
+
+  if (!targetDir) {
+    return <Color red>Usage `hammer new ./path/to/new-project`</Color>
+  }
 
   return (
     <Box flexDirection="column">
