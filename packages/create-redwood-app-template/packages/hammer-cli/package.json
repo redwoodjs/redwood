@@ -1,7 +1,7 @@
 {
   "name": "@hammerframework/hammer-cli",
   "description": "The Hammer CLI",
-  "version": "0.0.0-alpha.5",
+  "version": "0.0.1-alpha.8",
   "license": "MIT",
   "repository": {
     "type": "git",
