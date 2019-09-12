@@ -1,23 +1,24 @@
-# Hammer-CLI
-
-**WARNING:** This document is aspirational (see [Readme Driven
-Development](https://tom.preston-werner.com/2010/08/23/readme-driven-development.html))
-and not everything contained within it is true yet.
-
-## What is this?
-
-By installing `hammer` you'll be able to run a bunch of commands that you might
-find useful during development.
+# The Hammer Command Line
 
 ## Installation
 
-With Yarn `yarn add -D @hammerframework/hammer-cli`, or NPM
-`npm install --save-dev @hammerframework/hammer-cli`
+We recommend that you install Hammer's CLI globally
+with npm `npm install -g @hammerframework/hammer-cli` or with
+yarn `yarn global add @hammerframework/hammer-cli`.
 
-## Usage
+## Command line basics
+
+### `hammer new`
+
+The first thing we'll want to do is create a new Hammer application by running the
+`hammer new` command after installation.
 
 ```terminal
-yarn hammer [command]
+$ yarn new ~/myprojects/todo
+Created ~/myprojects/todo
+Downloading https://github.com/hammerframework/create-hammer-app/archive/v0.0.1-alpha.7.zip...
+Extracting...
+Added 50 files in ~/myprojects/todo
 ```
 
 ## Development
@@ -30,12 +31,12 @@ Add a new command by creating `CommandName/CommandName.js` file in the
 A command should export the following:
 
 ```js
-export default ({ args }) => {}; // The react-ink component.
+export default ({ args }) => {} // The react-ink component.
 export const commandProps = {
   name: 'generate',
   alias: 'g', // invoke with hammer s instead of hammer scaffold,
   description: 'This command does a, b, but not c.',
-};
+}
 ```
 
 ## Publishing
