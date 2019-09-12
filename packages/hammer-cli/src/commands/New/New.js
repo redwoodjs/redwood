@@ -51,8 +51,12 @@ const New = ({ args: [_commandName, targetDir] }) => {
         )
         return
       } else {
-        fs.mkdirSync(newHammerAppDir)
-        setNewMessage(`Created ${newHammerAppDir}`)
+        fs.mkdirSync(newHammerAppDir, { recursive: true })
+        setNewMessage(
+          <Text>
+            Created <Color green>{newHammerAppDir}</Color>
+          </Text>
+        )
       }
 
       // Download the latest release of `create-hammer-app`
@@ -60,12 +64,16 @@ const New = ({ args: [_commandName, targetDir] }) => {
         prefix: 'hammer',
         postfix: '.zip',
       })
-      setNewMessage(`Downloading ${RELEASE_URL}...`)
+      setNewMessage(<Text>Downloading {RELEASE_URL}...</Text>)
       await downloadFile(RELEASE_URL, tmpDownloadPath)
 
-      setNewMessage(`Extracting ${tmpDownloadPath}...`)
+      setNewMessage(<Text>Extracting...</Text>)
       const files = await unzip(tmpDownloadPath, newHammerAppDir)
-      setNewMessage(`Extracted ${files.length} files to ${newHammerAppDir}!`)
+      setNewMessage(
+        <Text>
+          Added {files.length} files in <Color green>{newHammerAppDir}</Color>
+        </Text>
+      )
     }
 
     if (targetDir) {
