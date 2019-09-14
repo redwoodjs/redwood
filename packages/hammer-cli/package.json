@@ -1,6 +1,6 @@
 {
   "name": "@hammerframework/hammer-cli",
-  "description": "The Hammer CLI",
+  "description": "The Hammer Command Line",
   "version": "0.0.1-alpha.8",
   "license": "MIT",
   "repository": {
@@ -26,7 +26,6 @@
     "@hammerframework/hammer-core": "^0.0.1-alpha.8",
     "axios": "^0.19.0",
     "camelcase": "^5.3.1",
-    "core-js": "^3.1.4",
     "decompress": "^4.2.0",
     "ink": "^2.2.0",
     "react": "^16.8.6",
@@ -35,7 +34,6 @@
     "yargs-parser": "^13.1.1"
   },
   "devDependencies": {
-    "babel-plugin-module-resolver": "^3.2.0",
     "ink-testing-library": "^1.0.2"
   }
 }
