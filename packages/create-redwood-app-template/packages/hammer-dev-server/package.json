@@ -1,0 +1,37 @@
+{
+  "name": "@hammerframework/hammer-dev-server",
+  "version": "0.0.1-alpha.8.1",
+  "bin": {
+    "hammer-dev-server": "./dist/main.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@babel/register": "^7.5.5",
+    "@hammerframework/hammer-core": "^0.0.1-alpha.8",
+    "args": "^5.0.1",
+    "body-parser": "^1.19.0",
+    "chokidar": "^3.0.2",
+    "clear": "^0.1.0",
+    "express": "^4.17.1",
+    "express-logging": "^1.1.1",
+    "qs": "^6.7.0",
+    "require-dir": "^1.2.0"
+  },
+  "devDependencies": {
+    "@types/args": "^3.0.0",
+    "@types/aws-lambda": "^8.10.27",
+    "@types/express": "^4.17.0",
+    "@types/qs": "^6.5.3",
+    "@types/require-dir": "^1.0.0"
+  },
+  "scripts": {
+    "dev": "yarn nodemon --watch ./src --exec 'babel-node --extensions \".ts\" ./src/main.ts'",
+    "build": "yarn clean && yarn build:js",
+    "build:js": "babel src --out-dir dist --extensions \".ts\" --source-maps inline",
+    "prepublish": "yarn build",
+    "clean": "rm -rf dist"
+  }
+}
