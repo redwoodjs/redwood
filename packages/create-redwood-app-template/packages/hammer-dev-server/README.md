@@ -1,17 +1,15 @@
-# HammerFramework
+# The Hammer Development Server
 
-## hammer-dev-server
+The hamer dev server looks for "lambda functions" in the directory (default: `./api/src/functions`) specified in your `hammer.toml` configuration file.
 
-This is the hammer dev server. It looks for "lambda functions" in the
-`./api/src/functions` directory and serves them.
+Each lambda function is mapped to a URI based on their filename, as
+an example: `./api/src/functions/graphql.js` would be accessible
+at `http://localhost:8911/graphql`.
 
-The filename is mapped to a URI, as an example `hello.js` would be
-served as `https://localhost:8911/hello`.
-
-At the moment they emulate the AWS lambda function definition.
+A lambda function must export a handler to be valid:
 
 ```js
 export const handler = (event, context, callback) => {
-  return callback(null, { status: 200, body: "Hello, world" });
-};
+  return callback(null, { status: 200, body: 'Hello, world' })
+}
 ```
