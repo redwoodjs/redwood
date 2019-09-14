@@ -3,16 +3,6 @@
 import { Response, Request } from 'express'
 import { APIGatewayProxyResult, APIGatewayProxyEvent } from 'aws-lambda'
 
-/**
- * The hammer-dev-server is a command line argument that does 3 things:
- *
- * 1. Reads the hammer config file and sets the default path for finding the
- * lambda functions and the port
- * 2. Maps the lambda functions to a path and serves them via http
- * 3. Emulates a "AWS Lambda Function Handler":
- *  https://docs.aws.amazon.com/lambda/latest/dg/nodejs-prog-model-handler.html
- */
-
 import path from 'path'
 import { getHammerConfig } from '@hammerframework/hammer-core'
 import express from 'express'
@@ -60,8 +50,6 @@ const showHeader = (lambdas: Object) => {
   )
 }
 
-// These removes everything in the cache. It's a bit extreme, but we
-// can always refine the mechanism here.
 const purgeRequireCache = () => {
   Object.keys(require.cache).forEach((cacheKey) => {
     delete require.cache[cacheKey]
@@ -81,7 +69,6 @@ app.use(
 app.use(bodyParser.raw({ type: '*/*' }))
 app.use(expressLogging(console))
 
-// Find all the lambda functions that we should serve
 let lambdaFunctions = requireLambdaFunctions(PATH)
 
 app.all('/', (_, res) => {
