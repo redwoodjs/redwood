@@ -5898,7 +5898,7 @@ jsx-ast-utils@^2.1.0, jsx-ast-utils@^2.2.1:
     array-includes "^3.0.3"
     object.assign "^4.1.0"
 
-kill-port@^1.5.1:
+kill-port@^1.5.2:
   version "1.5.2"
   resolved "https://registry.yarnpkg.com/kill-port/-/kill-port-1.5.2.tgz#260a5bc0bcc11d26ed262dc1ee2fca8b4d15e664"
   integrity sha512-YZPDpVUv9oZAg9uB6xnjwi1JGzA+c65Z+q4dID8G4aFSla81dHmqpCB/jV7tj6Y15SwABuqQB4jVfHn9aziKYw==
@@ -6598,22 +6598,6 @@ node-releases@^1.1.23:
   integrity sha512-wym2jptfuKowMmkZsfCSTsn8qAVo8zm+UiQA6l5dNqUcpfChZSnS/vbbpOeXczf+VdPhutxh+99lWHhdd6xKzg==
   dependencies:
     semver "^5.3.0"
-
-nodemon@1.19.1:
-  version "1.19.1"
-  resolved "https://registry.npmjs.org/nodemon/-/nodemon-1.19.1.tgz#576f0aad0f863aabf8c48517f6192ff987cd5071"
-  integrity sha512-/DXLzd/GhiaDXXbGId5BzxP1GlsqtMGM9zTmkWrgXtSqjKmGSbLicM/oAy4FR0YWm14jCHRwnR31AHS2dYFHrg==
-  dependencies:
-    chokidar "^2.1.5"
-    debug "^3.1.0"
-    ignore-by-default "^1.0.1"
-    minimatch "^3.0.4"
-    pstree.remy "^1.1.6"
-    semver "^5.5.0"
-    supports-color "^5.2.0"
-    touch "^3.1.0"
-    undefsafe "^2.0.2"
-    update-notifier "^2.5.0"
 
 nodemon@^1.19.2:
   version "1.19.2"
