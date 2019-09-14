@@ -1,0 +1,25 @@
+{
+  "name": "@hammerframework/hammer-core",
+  "version": "0.0.1-alpha.8",
+  "main": "dist/main.js",
+  "files": [
+    "dist"
+  ],
+  "types": "./dist/main.d.ts",
+  "license": "MIT",
+  "dependencies": {
+    "findup-sync": "^3.0.0",
+    "toml": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/findup-sync": "^2.0.2"
+  },
+  "scripts": {
+    "build": "yarn clean && yarn build:js && yarn build:types",
+    "build:js": "babel src --out-dir dist --extensions \".ts\" --source-maps inline",
+    "build:types": "tsc --declaration --emitDeclarationOnly",
+    "build:watch": "nodemon --ignore dist --exec 'yarn build'",
+    "prepublish": "yarn build",
+    "clean": "rm -rf dist"
+  }
+}

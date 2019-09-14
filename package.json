@@ -20,7 +20,8 @@
     "jest": "^24.8.0",
     "lerna": "^3.15.0",
     "kill-port": "^1.5.2",
-    "nodemon": "^1.19.2"
+    "nodemon": "^1.19.2",
+    "typescript": "^3.5.3"
   },
   "eslintConfig": {
     "extends": "@hammerframework/eslint-config-hammer"
