@@ -3,6 +3,7 @@ import path from 'path'
 import tmp from 'tmp'
 import decompress from 'decompress'
 import axios from 'axios'
+import { spawn, hasYarn } from 'yarn-or-npm'
 
 import React, { useState, useRef, useEffect } from 'react'
 import { Box, Text, Color } from 'ink'
@@ -74,6 +75,15 @@ const New = ({ args: [_commandName, targetDir] }) => {
           Added {files.length} files in <Color green>{newHammerAppDir}</Color>
         </Text>
       )
+
+      setNewMessage(<Text>Installing packages...</Text>)
+      if (hasYarn()) {
+        spawn.sync(['install', '--cwd', newHammerAppDir], { stdio: 'inherit' })
+      } else {
+        spawn.sync(['install', '--prefix', newHammerAppDir], {
+          stdio: 'inherit',
+        })
+      }
     }
 
     if (targetDir) {
