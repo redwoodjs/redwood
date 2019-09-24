@@ -31,7 +31,8 @@
     "react": "^16.8.6",
     "require-dir": "^1.2.0",
     "tmp": "^0.1.0",
-    "yargs-parser": "^13.1.1"
+    "yargs-parser": "^13.1.1",
+    "yarn-or-npm": "^3.0.1"
   },
   "devDependencies": {
     "ink-testing-library": "^1.0.2"
