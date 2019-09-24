@@ -77,13 +77,8 @@ const New = ({ args: [_commandName, targetDir] }) => {
       )
 
       setNewMessage(<Text>Installing packages...</Text>)
-      if (hasYarn()) {
-        spawn.sync(['install', '--cwd', newHammerAppDir], { stdio: 'inherit' })
-      } else {
-        spawn.sync(['install', '--prefix', newHammerAppDir], {
-          stdio: 'inherit',
-        })
-      }
+      const prefixFlag = hasYarn() ? '--cwd' : '--prefix'
+      spawn.sync(['install', prefixFlag, newHammerAppDir], { stdio: 'inherit' })
     }
 
     if (targetDir) {
