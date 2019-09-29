@@ -5,7 +5,8 @@
   "useWorkspaces": true,
   "command": {
     "publish": {
-      "verifyAccess": false
+      "verifyAccess": false,
+      "skipGit": true
     }
   }
 }
