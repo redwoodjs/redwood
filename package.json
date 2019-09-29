@@ -31,5 +31,6 @@
     "test": "lerna run test -- --colors",
     "lint": "eslint 'packages/**/*.js'",
     "lint:fix": "eslint --fix 'packages/**/*.js'"
-  }
+  },
+  "version": "0.0.0"
 }
