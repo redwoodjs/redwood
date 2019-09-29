@@ -55,7 +55,6 @@ module.exports = {
     // 'object-curly-spacing': ['error', 'always'],
 
     // Code formatting rules **NOT** covered by prettier
-    'space-before-function-paren': ['error', 'always'],
     'prefer-object-spread': 'warn',
     'prefer-spread': 'warn',
     'no-unused-expressions': [
