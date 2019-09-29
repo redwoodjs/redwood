@@ -1,15 +1,11 @@
 {
   "packages": ["packages/*"],
-  "version": "0.0.1-alpha.8.1",
+  "version": "0.0.1-alpha.9",
   "npmClient": "yarn",
   "useWorkspaces": true,
   "command": {
     "publish": {
-      "verifyAccess": false,
-      "skipGit": true
-    },
-    "version": {
-      "skipGit": true
+      "verifyAccess": false
     }
   }
 }
