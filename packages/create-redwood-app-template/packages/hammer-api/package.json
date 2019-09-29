@@ -1,0 +1,34 @@
+{
+  "name": "@hammerframework/hammer-api",
+  "version": "0.0.1-alpha.8",
+  "main": "dist/main.js",
+  "files": [
+    "dist"
+  ],
+  "types": "./dist/main.d.ts",
+  "license": "MIT",
+  "dependencies": {
+    "@hammerframework/hammer-core": "^0.0.1-alpha.8"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.27",
+    "@types/graphql": "^14.2.2",
+    "@zerollup/ts-transform-paths": "^1.7.3",
+    "apollo-server-lambda": "^2.9.4",
+    "graphql": "^14.5.6",
+    "nexus": "v0.12.0-beta.5",
+    "ttypescript": "^1.5.7"
+  },
+  "peerDependencies": {
+    "apollo-server-lambda": "2.9.x",
+    "nexus": "v0.12.0-beta.5"
+  },
+  "scripts": {
+    "build": "yarn clean && yarn build:js && yarn build:types",
+    "build:js": "babel src --out-dir dist --extensions \".ts\" --source-maps inline",
+    "build:types": "ttsc --declaration --emitDeclarationOnly",
+    "build:watch": "nodemon --ignore dist --exec 'yarn build'",
+    "prepublish": "yarn build",
+    "clean": "rm -rf dist"
+  }
+}
