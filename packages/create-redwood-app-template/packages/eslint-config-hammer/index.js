@@ -65,7 +65,10 @@ module.exports = {
     camelcase: ['warn', { properties: 'never' }],
     'no-new': 'warn',
     'new-cap': ['error', { newIsCap: true, capIsNew: false }],
-    'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+    'no-unused-vars': [
+      'error',
+      { varsIgnorePattern: '^_', argsIgnorePattern: '^_' },
+    ],
     'import/order': [
       'error',
       {
