@@ -1,6 +1,6 @@
 {
   "name": "@hammerframework/hammer-web",
-  "version": "0.0.1-alpha.8",
+  "version": "0.0.1-alpha.9",
   "files": [
     "dist"
   ],
@@ -18,12 +18,12 @@
     "proptypes": "^1.1.0"
   },
   "devDependencies": {
-    "styled-components": "^4.4.0",
-    "react-router-dom": "^5.0.1"
+    "react-router-dom": "^5.0.1",
+    "styled-components": "^4.4.0"
   },
   "peerDependencies": {
-    "styled-components": "4.4.x",
-    "react-router-dom": "^5.0.x"
+    "react-router-dom": "^5.0.x",
+    "styled-components": "4.4.x"
   },
   "scripts": {
     "build": "yarn clean && babel src -d dist",

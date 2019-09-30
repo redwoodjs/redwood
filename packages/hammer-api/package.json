@@ -1,6 +1,6 @@
 {
   "name": "@hammerframework/hammer-api",
-  "version": "0.0.1-alpha.8",
+  "version": "0.0.1-alpha.9",
   "main": "dist/main.js",
   "files": [
     "dist"
@@ -8,7 +8,7 @@
   "types": "./dist/main.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@hammerframework/hammer-core": "^0.0.1-alpha.8"
+    "@hammerframework/hammer-core": "^0.0.1-alpha.9"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.27",
