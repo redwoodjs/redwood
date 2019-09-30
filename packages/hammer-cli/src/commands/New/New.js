@@ -1,10 +1,10 @@
 import fs from 'fs'
 import path from 'path'
+
 import tmp from 'tmp'
 import decompress from 'decompress'
 import axios from 'axios'
 import { spawn, hasYarn } from 'yarn-or-npm'
-
 import React, { useState, useRef, useEffect } from 'react'
 import { Box, Text, Color } from 'ink'
 
