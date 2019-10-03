@@ -27,7 +27,12 @@ const unzip = async (path, targetDir) =>
   await decompress(path, targetDir, { strip: 1 })
 
 const RELEASE_URL =
-  'https://github.com/hammerframework/create-hammer-app/archive/v0.0.1-alpha.7.zip'
+  'https://api.github.com/repos/hammerframework/create-hammer-app/releases'
+
+const latestReleaseZipFile = async () => {
+  const response = await axios.get(RELEASE_URL)
+  return response.data[0].zipball_url
+}
 
 // TODO: Grab the latest release URL from GitHub
 const New = ({ args: [_commandName, targetDir] }) => {
@@ -65,8 +70,10 @@ const New = ({ args: [_commandName, targetDir] }) => {
         prefix: 'hammer',
         postfix: '.zip',
       })
-      setNewMessage(<Text>Downloading {RELEASE_URL}...</Text>)
-      await downloadFile(RELEASE_URL, tmpDownloadPath)
+
+      const realeaseUrl = await latestReleaseZipFile()
+      setNewMessage(<Text>Downloading {realeaseUrl}...</Text>)
+      await downloadFile(realeaseUrl, tmpDownloadPath)
 
       setNewMessage(<Text>Extracting...</Text>)
       const files = await unzip(tmpDownloadPath, newHammerAppDir)
