@@ -13,12 +13,8 @@
 
 module.exports = {
   parser: 'babel-eslint',
-  extends: [
-    'eslint-config-prettier',
-    'eslint:recommended',
-    'plugin:react/recommended',
-  ],
-  plugins: ['prettier', 'import', 'jsx-a11y', 'react', 'react-hooks'],
+  plugins: ['prettier', 'babel', 'import', 'jsx-a11y', 'react', 'react-hooks'],
+  extends: ['eslint:recommended', 'plugin:react/recommended'],
   settings: {
     react: {
       version: 'detect',
@@ -40,21 +36,8 @@ module.exports = {
     __HAMMER__: 'readyonly',
   },
   rules: {
-    // Rules already covered by Prettier:
-    // We disable rules related to code formatting that are aleady covered
-    // by prettier:
-    //
-    // semi: ['error', 'never'],
-    // 'comma-dangle': ['error', 'always-multiline'],
-    // quotes: [
-    //   'error',
-    //   'single',
-    //   { avoidEscape: true, allowTemplateLiterals: true },
-    // ],
-    // 'arrow-parens': ['error', 'always'],
-    // 'object-curly-spacing': ['error', 'always'],
-
-    // Code formatting rules **NOT** covered by prettier
+    'prettier/prettier': 'error',
+    'no-console': 'off',
     'prefer-object-spread': 'warn',
     'prefer-spread': 'warn',
     'no-unused-expressions': [
