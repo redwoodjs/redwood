@@ -1,6 +1,6 @@
 {
   "name": "@hammerframework/hammer-core",
-  "version": "0.0.1-alpha.9",
+  "version": "0.0.1-alpha.10",
   "main": "dist/main.js",
   "files": [
     "dist"
@@ -8,9 +8,9 @@
   "types": "./dist/main.d.ts",
   "license": "MIT",
   "dependencies": {
+    "core-js": "3.3.3",
     "findup-sync": "^3.0.0",
-    "toml": "^3.0.0",
-    "core-js": "3.3.3"
+    "toml": "^3.0.0"
   },
   "devDependencies": {
     "@types/findup-sync": "^2.0.2"
