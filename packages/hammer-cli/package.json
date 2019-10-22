@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@hammerframework/hammer-core": "^0.0.1-alpha.9",
-    "core-js": "^3.2.1",
+    "core-js": "^3.3.3",
     "axios": "^0.19.0",
     "camelcase": "^5.3.1",
     "decompress": "^4.2.0",

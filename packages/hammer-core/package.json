@@ -9,7 +9,8 @@
   "license": "MIT",
   "dependencies": {
     "findup-sync": "^3.0.0",
-    "toml": "^3.0.0"
+    "toml": "^3.0.0",
+    "core-js": "3.3.3"
   },
   "devDependencies": {
     "@types/findup-sync": "^2.0.2"
