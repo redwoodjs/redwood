@@ -1,6 +1,8 @@
 import ApolloClient from 'apollo-boost'
 import { ApolloProvider } from '@apollo/react-hooks'
 
+export { useCell } from './useCell'
+
 const DEFAULT_CLIENT_CONFIG = {
   uri: `${__HAMMER__.apiProxyPath}/graphql`,
 }
