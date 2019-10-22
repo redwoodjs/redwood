@@ -1,6 +1,6 @@
 {
   "name": "@hammerframework/hammer-dev-server",
-  "version": "0.0.1-alpha.9",
+  "version": "0.0.1-alpha.10",
   "bin": {
     "hammer-dev-server": "./dist/main.js"
   },
@@ -10,7 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "@babel/register": "^7.5.5",
-    "@hammerframework/hammer-core": "^0.0.1-alpha.9",
+    "@hammerframework/hammer-core": "^0.0.1-alpha.10",
     "args": "^5.0.1",
     "body-parser": "^1.19.0",
     "chokidar": "^3.0.2",
