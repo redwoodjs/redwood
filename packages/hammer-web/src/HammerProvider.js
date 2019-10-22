@@ -3,7 +3,6 @@ import { ThemeProvider } from 'styled-components'
 
 import { GraphQLProvider as RealGraphQLProvider } from 'src/graphql'
 
-// Ordinary returns
 let USE_AUTH
 export const useAuth = () => {
   return USE_AUTH()
