@@ -2,8 +2,6 @@ import React, { useEffect, useState, useRef } from 'react'
 import { useQuery } from '@apollo/react-hooks'
 import { Query } from '@apollo/react-components'
 
-// HOC version
-
 export const WithCell = ({
   query,
   queryOptions,
@@ -50,10 +48,6 @@ export const useCell = (
   const result = useRef(null)
   const [status, setStatus] = useState('idle')
   const { error, loading, data, ...queryRest } = useQuery(query, queryOptions)
-
-  // we need to manually run reconciliation for some reason,
-  // I'm sure there's something here that I'm not entirely
-  // grokking... maybe it's because I'm using the hook.
 
   useEffect(() => {
     if (error) {
