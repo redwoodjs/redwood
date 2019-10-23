@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "eamodio.gitlens",
+    "tombonnike.vscode-status-bar-format-toggle",
+    "coenraads.bracket-pair-colorizer",
+    "ofhumanbondage.react-proptypes-intellisense",
+    "mgmcdermott.vscode-language-babel"
+  ],
+  "unwantedRecommendations": []
+}
