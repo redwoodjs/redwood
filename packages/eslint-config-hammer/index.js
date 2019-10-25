@@ -14,7 +14,19 @@
 module.exports = {
   parser: 'babel-eslint',
   plugins: ['prettier', 'babel', 'import', 'jsx-a11y', 'react', 'react-hooks'],
-  extends: ['eslint:recommended', 'plugin:react/recommended'],
+  extends: [
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'plugin:@typescript-eslint/recommended',
+    'prettier/@typescript-eslint',
+    'plugin:prettier/recommended',
+  ],
+  overrides: [
+    {
+      files: ['*.ts', '*.tsx'],
+      parser: '@typescript-eslint/parser',
+    },
+  ],
   settings: {
     react: {
       version: 'detect',
@@ -33,7 +45,7 @@ module.exports = {
   globals: {
     gql: 'readonly',
     React: 'readonly',
-    __HAMMER__: 'readyonly',
+    __HAMMER__: 'readonly',
   },
   rules: {
     'prettier/prettier': 'error',
