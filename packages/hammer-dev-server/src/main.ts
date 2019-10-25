@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 // types
+import path from 'path'
+
 import { Response, Request } from 'express'
 import { APIGatewayProxyResult, APIGatewayProxyEvent } from 'aws-lambda'
-
-import path from 'path'
 import { getHammerConfig } from '@hammerframework/hammer-core'
 import express from 'express'
 // @ts-ignore
@@ -13,8 +13,6 @@ import qs from 'qs'
 import args from 'args'
 import requireDir from 'require-dir'
 import chokidar from 'chokidar'
-// @ts-ignore
-import clear from 'clear'
 // @ts-ignore
 import babelRegister from '@babel/register'
 
@@ -38,7 +36,7 @@ args
 const { port: PORT, path: PATH } = args.parse(process.argv)
 const HOSTNAME = `http://localhost:${PORT}`
 
-const showHeader = (lambdas: Object) => {
+const showHeader = (lambdas: Record<string, any>) => {
   console.log(`\n⚒ HammerFramework's API Development Server\n`)
   console.log(`◌ Listening on ${HOSTNAME}`)
   console.log(`◌ Watching ${hammerApiDir}`)
@@ -182,11 +180,9 @@ app.all('/:routeName', async (req, res) => {
 })
 
 const reloadLambdas = (path: string) => {
-  console.log('\nReloading...\n')
+  console.log('Reloading...')
   purgeRequireCache()
   lambdaFunctions = requireLambdaFunctions(PATH)
-  clear()
-  showHeader(lambdaFunctions)
 }
 
 const startServer = () => app.listen(PORT, () => showHeader(lambdaFunctions))
