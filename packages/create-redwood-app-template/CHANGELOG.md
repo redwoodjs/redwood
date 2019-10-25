@@ -10,7 +10,8 @@
 ### Changed
 
 - `hammer-api` now exports submodules, so all graphql things are
-  available in `@hammerframework/hammer-api/graphql`
+  available in `@hammerframework/hammer-api/graphql`.
+- `hammer-dev-server` no longer clears the screen.
 
 ## [0.0.1-alpha.9] - 2019-09-29
 
