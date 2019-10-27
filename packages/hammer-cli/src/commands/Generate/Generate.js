@@ -2,8 +2,9 @@ import path from 'path'
 
 import React from 'react'
 import { Box, Text, Color } from 'ink'
+import { getHammerBaseDir } from '@hammerframework/hammer-core'
 
-import { hammerWorkspaceDir, writeFile, bytes } from 'src/lib'
+import { writeFile, bytes } from 'src/lib'
 
 import component from './generators/component'
 
@@ -16,14 +17,14 @@ const DEFAULT_GENERATORS = {
 }
 
 const DEFAULT_COMPONENT_DIR = () =>
-  path.join(hammerWorkspaceDir(), './web/src/components/')
+  path.join(getHammerBaseDir(), './web/src/components/')
 
 const Generate = ({
   args,
   generators = DEFAULT_GENERATORS,
   fileWriter = writeFile,
 }) => {
-  if (!hammerWorkspaceDir()) {
+  if (!getHammerBaseDir()) {
     return (
       <Color red>
         The `generate` command has to be run in your hammer project directory.
