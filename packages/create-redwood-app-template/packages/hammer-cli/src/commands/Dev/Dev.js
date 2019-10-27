@@ -1,15 +1,31 @@
-import { exec } from 'child_process'
-
+import concurrently from 'concurrently'
 import { getHammerBaseDir } from '@hammerframework/hammer-core'
 
 const Dev = () => {
-  exec('yarn dev', { cwd: getHammerBaseDir() }, (err, stdout, stderr) => {
-    if (err) {
-      console.error(err)
-      return
+  const baseDir = getHammerBaseDir()
+
+  concurrently(
+    [
+      {
+        command: `cd ${baseDir}/web && yarn webpack-dev-server --config ./config/webpack.dev.js`,
+        name: 'web',
+        prefixColor: 'yellow',
+      },
+      {
+        command: `cd ${baseDir}/api && yarn hammer-dev-server`,
+        name: 'api',
+        prefixColor: 'green',
+      },
+      {
+        command: `cd ${baseDir}/api && yarn prisma2 dev`,
+        name: 'prisma',
+        prefixColor: 'purple',
+      },
+    ],
+    {
+      prefix: 'name',
     }
-    console.log(stdout, stderr)
-  })
+  )
   return null
 }
 

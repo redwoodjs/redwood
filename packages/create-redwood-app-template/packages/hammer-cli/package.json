@@ -26,6 +26,7 @@
     "@hammerframework/hammer-core": "^0.0.1-alpha.10",
     "axios": "^0.19.0",
     "camelcase": "^5.3.1",
+    "concurrently": "^5.0.0",
     "core-js": "^3.3.3",
     "decompress": "^4.2.0",
     "ink": "^2.2.0",
