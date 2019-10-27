@@ -17,20 +17,20 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
-    'plugin:@typescript-eslint/recommended',
-    'prettier/@typescript-eslint',
     'plugin:prettier/recommended',
+    'prettier/react',
   ],
   overrides: [
     {
       files: ['*.ts', '*.tsx'],
       parser: '@typescript-eslint/parser',
+      extends: [
+        'plugin:@typescript-eslint/recommended',
+        'prettier/@typescript-eslint',
+      ],
     },
   ],
   settings: {
-    react: {
-      version: 'detect',
-    },
     'import/resolver': {
       'babel-module': {},
     },
