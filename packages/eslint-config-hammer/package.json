@@ -10,15 +10,15 @@
     "@typescript-eslint/eslint-plugin": "^2.5.0",
     "@typescript-eslint/parser": "^2.5.0",
     "babel-eslint": "^10.0.3",
-    "eslint": "5.16.0",
-    "eslint-config-prettier": "^6.4.0",
+    "eslint": "6.6.0",
+    "eslint-config-prettier": "^6.5.0",
     "eslint-import-resolver-babel-module": "^5.1.0",
     "eslint-plugin-babel": "^5.3.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-prettier": "^3.1.0",
-    "eslint-plugin-react": "^7.14.3",
-    "eslint-plugin-react-hooks": "^2.0.1",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-react": "^7.16.0",
+    "eslint-plugin-react-hooks": "^2.2.0",
     "prettier": "^1.18.2"
   }
 }
