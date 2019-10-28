@@ -1,6 +1,6 @@
 {
   "name": "@hammerframework/hammer-api",
-  "version": "0.0.1-alpha.10",
+  "version": "0.0.1-alpha.11",
   "main": "dist/main.js",
   "files": [
     "dist",
@@ -9,9 +9,9 @@
   "types": "./dist/main.d.ts",
   "license": "MIT",
   "dependencies": {
-    "core-js": "3.3.3",
+    "@hammerframework/hammer-core": "^0.0.1-alpha.11",
     "apollo-server-lambda": "2.9.7",
-    "@hammerframework/hammer-core": "^0.0.1-alpha.10",
+    "core-js": "3.3.3",
     "nexus": "v0.12.0-beta.14"
   },
   "devDependencies": {
