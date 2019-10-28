@@ -1,6 +1,6 @@
 {
   "name": "@hammerframework/hammer-core",
-  "version": "0.0.1-alpha.10",
+  "version": "0.0.1-alpha.11",
   "main": "dist/main.js",
   "files": [
     "dist"
@@ -8,9 +8,6 @@
   "types": "./dist/main.d.ts",
   "license": "MIT",
   "dependencies": {
-    "core-js": "3.3.5",
-    "findup-sync": "^4.0.0",
-    "toml": "^3.0.0",
     "@babel/cli": "^7.6.4",
     "@babel/core": "^7.6.4",
     "@babel/node": "^7.6.3",
@@ -21,6 +18,9 @@
     "@babel/preset-react": "^7.6.3",
     "@babel/preset-typescript": "^7.6.0",
     "babel-plugin-module-resolver": "^3.2.0",
+    "core-js": "3.3.5",
+    "findup-sync": "^4.0.0",
+    "toml": "^3.0.0",
     "typescript": "^3.6.4"
   },
   "devDependencies": {
