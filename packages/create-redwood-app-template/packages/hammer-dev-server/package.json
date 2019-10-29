@@ -32,5 +32,6 @@
     "build:js": "babel src --out-dir dist --extensions \".ts\" --source-maps inline",
     "prepublish": "yarn build",
     "clean": "rm -rf dist"
-  }
+  },
+  "gitHead": "3d2b48923b7e0fc34f1737552d5870a77c2be02d"
 }

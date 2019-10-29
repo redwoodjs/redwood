@@ -20,5 +20,6 @@
     "eslint-plugin-react": "^7.16.0",
     "eslint-plugin-react-hooks": "^2.2.0",
     "prettier": "^1.18.2"
-  }
+  },
+  "gitHead": "3d2b48923b7e0fc34f1737552d5870a77c2be02d"
 }
