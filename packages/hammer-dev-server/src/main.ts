@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-// types
 import path from 'path'
 
 import { Response, Request } from 'express'
@@ -21,6 +20,7 @@ const hammerApiDir = path.join(hammerConfig.baseDir, 'api')
 
 babelRegister({
   extends: path.join(hammerApiDir, '.babelrc.js'),
+  extensions: ['.js', '.ts'],
   only: [hammerApiDir],
   ignore: ['node_modules'],
 })
@@ -48,14 +48,16 @@ const showHeader = (lambdas: Record<string, any>) => {
   )
 }
 
-const purgeRequireCache = () => {
+const purgeRequireCache = (): void => {
   Object.keys(require.cache).forEach((cacheKey) => {
     delete require.cache[cacheKey]
   })
 }
 
-const requireLambdaFunctions = (path: string) =>
-  requireDir(path, { recurse: false })
+const requireLambdaFunctions = (path: string): { [path: string]: any } => {
+  // @ts-ignore ; requireDir is outdated.
+  return requireDir(path, { recurse: false, extensions: ['.js', '.ts'] })
+}
 
 const app = express()
 
