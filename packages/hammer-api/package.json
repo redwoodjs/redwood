@@ -1,6 +1,6 @@
 {
   "name": "@hammerframework/hammer-api",
-  "version": "0.0.1-alpha.12",
+  "version": "0.0.1-alpha.12.1",
   "main": "dist/main.js",
   "files": [
     "dist"
@@ -15,8 +15,8 @@
   "devDependencies": {
     "@zerollup/ts-transform-paths": "^1.7.3",
     "graphql": "^14.5.6",
-    "ttypescript": "^1.5.7",
-    "nexus": "v0.12.0-beta.14"
+    "nexus": "v0.12.0-beta.14",
+    "ttypescript": "^1.5.7"
   },
   "peerDependencies": {
     "nexus": "v0.12.0-beta.14"
