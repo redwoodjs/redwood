@@ -3,8 +3,7 @@
   "version": "0.0.1-alpha.12",
   "main": "dist/main.js",
   "files": [
-    "dist",
-    "graphql"
+    "dist"
   ],
   "types": "./dist/main.d.ts",
   "license": "MIT",
@@ -23,15 +22,15 @@
     "nexus": "v0.12.0-beta.14"
   },
   "eslintConfig": {
-    "extends": "@hammerframework/eslint-config-hammer/typescript"
+    "extends": "@hammerframework/eslint-config-hammer"
   },
   "scripts": {
-    "build": "yarn clean && yarn build:js && yarn build:types && mv dist/graphql graphql",
+    "build": "yarn clean && yarn build:js && yarn build:types",
     "build:js": "babel src/ --out-dir dist/ --extensions \".ts\" --source-maps inline",
     "build:types": "ttsc --declaration --emitDeclarationOnly",
     "build:watch": "nodemon --ignore dist --exec 'yarn build'",
     "prepublish": "yarn build",
-    "clean": "rm -rf dist && rm -rf graphql"
+    "clean": "rm -rf dist"
   },
   "gitHead": "3d2b48923b7e0fc34f1737552d5870a77c2be02d"
 }
