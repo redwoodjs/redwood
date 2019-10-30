@@ -16,11 +16,6 @@ const Dev = () => {
         name: 'api',
         prefixColor: 'green',
       },
-      {
-        command: `cd ${baseDir}/api && yarn prisma2 dev`,
-        name: 'prisma',
-        prefixColor: 'purple',
-      },
     ],
     {
       prefix: 'name',
