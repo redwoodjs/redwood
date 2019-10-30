@@ -11,13 +11,16 @@
   "dependencies": {
     "@hammerframework/hammer-core": "^0.0.1-alpha.12",
     "apollo-server-lambda": "2.9.7",
-    "core-js": "3.3.3",
-    "nexus": "v0.12.0-beta.14"
+    "core-js": "3.3.3"
   },
   "devDependencies": {
     "@zerollup/ts-transform-paths": "^1.7.3",
     "graphql": "^14.5.6",
-    "ttypescript": "^1.5.7"
+    "ttypescript": "^1.5.7",
+    "nexus": "v0.12.0-beta.14"
+  },
+  "peerDependencies": {
+    "nexus": "v0.12.0-beta.14"
   },
   "eslintConfig": {
     "extends": "@hammerframework/eslint-config-hammer/typescript"
