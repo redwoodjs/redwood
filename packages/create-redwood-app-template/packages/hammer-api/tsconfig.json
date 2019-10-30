@@ -12,12 +12,6 @@
     },
     "declaration": true,
     "declarationDir": "./dist",
-    // "plugins": [
-    //   {
-    //     "transform": "@zerollup/ts-transform-paths",
-    //     "exclude": ["*"]
-    //   }
-    // ]
   },
   "include": [
     "src"
