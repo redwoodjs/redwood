@@ -6,16 +6,20 @@
     "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
-      "src/*": ["src/*"]
+      "src/*": [
+        "src/*"
+      ]
     },
     "declaration": true,
     "declarationDir": "./dist",
-    "plugins": [
-      {
-        "transform": "@zerollup/ts-transform-paths",
-        "exclude": ["*"]
-      }
-    ]
+    // "plugins": [
+    //   {
+    //     "transform": "@zerollup/ts-transform-paths",
+    //     "exclude": ["*"]
+    //   }
+    // ]
   },
-  "include": ["src"]
+  "include": [
+    "src"
+  ]
 }
