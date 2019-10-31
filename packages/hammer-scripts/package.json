@@ -1,6 +1,6 @@
 {
   "name": "@hammerframework/hammer-scripts",
-  "version": "0.0.1-alpha.12",
+  "version": "0.0.1-alpha.12.5",
   "license": "MIT",
   "dependencies": {
     "@babel/cli": "^7.6.4",
