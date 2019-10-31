@@ -3,21 +3,20 @@ import { Query } from '@apollo/react-components'
 
 export const withCell = ({
   query,
-  queryOptions,
   parseData = (data) => ({ ...data }),
   Loader = () => null,
   Error = () => null,
   default: Component,
 }) => {
-  return (props) => (
+  return ({ queryOptions, ...rest }) => (
     <Query query={query} {...queryOptions}>
       {({ error, loading, data, ...queryRest }) => {
         if (error) {
-          return <Error error={error} {...queryRest} {...props} />
+          return <Error error={error} {...queryRest} {...rest} />
         } else if (loading) {
-          return <Loader {...queryRest} {...props} />
+          return <Loader {...queryRest} {...rest} />
         } else {
-          return <Component {...parseData(data)} {...queryRest} {...props} />
+          return <Component {...parseData(data)} {...queryRest} {...rest} />
         }
       }}
     </Query>
