@@ -10,7 +10,7 @@ export const withCell = ({
   default: Component,
 }) => {
   return (props) => (
-    <Query query={query} queryOptions={queryOptions}>
+    <Query query={query} {...queryOptions}>
       {({ error, loading, data, ...queryRest }) => {
         if (error) {
           return <Error error={error} {...queryRest} {...props} />
