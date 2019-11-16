@@ -9,9 +9,11 @@
   "license": "MIT",
   "dependencies": {
     "@hammerframework/hammer-core": "^0.0.1-alpha.12.5",
+    "@types/lodash.merge": "^4.6.6",
     "apollo-server-lambda": "2.9.9",
     "core-js": "3.4.1",
-    "graphql": "^14.5.8"
+    "graphql": "^14.5.8",
+    "lodash.merge": "^4.6.2"
   },
   "eslintConfig": {
     "extends": "@hammerframework/eslint-config-hammer"
