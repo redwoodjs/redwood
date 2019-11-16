@@ -30,5 +30,6 @@
     "test": "lerna run test -- --colors",
     "lint": "yarn eslint 'packages/*/src/**/*.js'",
     "lint:fix": "yarn eslint --fix 'packages/*/src/**/*.js'"
-  }
+  },
+  "version": "0.0.0"
 }
