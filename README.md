@@ -2,13 +2,17 @@
 
 _by Tom Preston-Werner and Peter Pistorius._
 
-**WARNING:** This document is aspirational (see [Readme Driven
-Development](https://tom.preston-werner.com/2010/08/23/readme-driven-development.html))
+**WARNING:** This document is aspirational (see
+[Readme Driven Development](https://tom.preston-werner.com/2010/08/23/readme-driven-development.html))
 and not everything contained within it is true yet.
 
-**EXAMPLE:** If you'd like to see an example of what a Hammer application will look
-like, we are working on an example app called
-[Billable](https://github.com/hammerframework/billable).
+**EXAMPLE:** If you'd like to see some examples of what a Hammer application
+might look like (these are still very much works in progress), take a look at
+the following projects:
+
+- [Todo](https://github.com/hammerframework/example-todo)
+- [Blog](https://github.com/hammerframework/example-blog)
+- [Invoice](https://github.com/hammerframework/example-invoice)
 
 **Hammer is an opinionated, full stack, serverless web application framework
 that will allow you to build JAMstack applications with ease.** By making a lot
@@ -24,10 +28,9 @@ Here's a quick taste of the technologies a standard Hammer application will use:
 - Prisma Photon
 - JSX
 - Styled Components
-- Reach Router
+- React Router
 - Apollo
 - Prisma Lift
-- GraphQL Nexus
 - Storybook
 
 ## The Hammer philosophy
@@ -72,13 +75,13 @@ it easy to operate across both projects, while still keeping them in a single
 Git repository.
 
 The frontend project is called `web` and the backend project is called `api`.
-For clarity, we will refer to these in prose as "sides", i.e. the "web side"
-and the "api side". They are separate projects because code on the web side
-will end up running in the user's browser while code on the api side will run
-on a server somewhere. It is important that you keep this distinction clear in
-your mind as you develop your application. The two separate projects are
-intended to make this obvious. In addition, separate projects allow for
-different dependencies and build processes for each project.
+For clarity, we will refer to these in prose as "sides", i.e. the "web side" and
+the "api side". They are separate projects because code on the web side will end
+up running in the user's browser while code on the api side will run on a server
+somewhere. It is important that you keep this distinction clear in your mind as
+you develop your application. The two separate projects are intended to make
+this obvious. In addition, separate projects allow for different dependencies
+and build processes for each project.
 
 The api side is an implementation of a GraphQL API. Hammer makes it easy to
 interact with a database via Prisma's Photon ORM. Code can be organized into
@@ -89,12 +92,12 @@ The web side is coded with React. Hammer provides a variety of utility
 components designed to make it easy to run queries and mutations against your
 GraphQL API. These components also help separate data fetching from rendering so
 you can easily test your components and develop them in isolation (enhanced by
-using Docz).
+using Storybook).
 
 You'll notice that the web side is called "web" and not "frontend". This is
 because Hammer conceives of a world where you may have other sides like
-"mobile" or perhaps another type of client, all of which consume the same
-GraphQL backend.
+"mobile", "cli", etc, all consuming the same GraphQL API and living in the same
+monorepo.
 
 ## How can it be serverless if it involves a GraphQL API and database?
 
@@ -114,8 +117,8 @@ In fact, the whole reason I (Tom) started working on Hammer is because of a
 tweet I posted some time ago:
 
 > Prediction: within 5 years, you’ll build your next large scale, fully featured
-> web app with #JAMstack and deploy on @Netlify. [—@mojombo • 9 July
-> 2018](https://twitter.com/mojombo/status/1016506622477135872)
+> web app with #JAMstack and deploy on @Netlify.
+> [—@mojombo • 9 July 2018](https://twitter.com/mojombo/status/1016506622477135872)
 
 I kept waiting for a high quality full-stack framework to arrive, but it didn't,
 so I decided to take matters into my own hands. And that's why Hammer exists.
@@ -136,9 +139,9 @@ One of the Norse myths involves the origin story of Thor's hammer. In short,
 Loki decides it would be funny to shave off the beautiful golden hair of Thor's
 wife, Sif. Thor finds out it was Loki, and demands he fix it or he will break
 every one of his bones. Loki knows some dwarves that can forge a replacement for
-Seph's hair and tricks them into a competition with another set of dwarves to
+Sif's hair and tricks them into a competition with another set of dwarves to
 each create better gifts for the gods. Among the gifts, the sons of Yvaldi
-deliver the ever-growing perfect golden hair for Seph and the team of Brock and
+deliver the ever-growing perfect golden hair for Sif and the team of Brock and
 Atri produce their masterwork: a hammer for Thor.
 
 Thor's hammer is called Mjollnir and has properties that I thought would be
@@ -162,9 +165,9 @@ aspirational for my nascent web app framework. Namely:
 At the same time, I'd been learning German. The German word Hammer means, well,
 hammer. German is funny that way. Or should I say, English is funny that way.
 But Germans also use Hammer as slang for "awesome". Therefore, I thought it
-would be amusing to be able to say...Hammer ist Hammer. To say this properly,
-pronounce Hammer in the proper German way, which is more like "HAH-muh".
-Coincidentally, this is also exactly how Neil Gaiman pronounces it with his
-British accent. =)
+would be amusing to be able to say...Hammer ist der Hammer. To say this
+properly, pronounce Hammer in the proper German way, which is more like
+"HAH-muh". Coincidentally, this is also exactly how Neil Gaiman pronounces it
+with his British accent. =)
 
 And there you have it.
