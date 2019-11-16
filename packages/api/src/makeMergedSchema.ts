@@ -1,17 +1,14 @@
-import {
-  makeExecutableSchema,
-  IResolvers,
-  ITypedef,
-} from 'apollo-server-lambda'
+import { makeExecutableSchema, ITypedef } from 'apollo-server-lambda'
 import { GraphQLSchema } from 'graphql'
+import merge from 'lodash.merge'
 
 export interface TypeDefResolverExports {
   schema: ITypedef
-  resolvers: IResolvers
+  resolvers: any
 }
 
 /**
- * Merge typedef and resolvers into a single schemas
+ * Merge typedef and resolvers into a single schema
  *
  * Example
  *
@@ -23,14 +20,8 @@ export interface TypeDefResolverExports {
 export const makeMergedSchema = (
   schemas: Array<TypeDefResolverExports>
 ): GraphQLSchema => {
-  // combine all the typedefs and resolvers into a single thing.
-  const typeDefs = schemas.reduce((allTypedefs, { schema }) => {
-    return [...allTypedefs, schema]
-  }, [])
-  const resolvers = schemas.reduce((allResolvers, { resolvers }) => {
-    return [...allResolvers, resolvers]
-  }, [])
-
+  const typeDefs = schemas.map(({ schema }) => schema)
+  const resolvers = merge(schemas.map((resolver) => resolver))
   return makeExecutableSchema({
     typeDefs,
     resolvers,
