@@ -165,9 +165,9 @@ aspirational for my nascent web app framework. Namely:
 At the same time, I'd been learning German. The German word Hammer means, well,
 hammer. German is funny that way. Or should I say, English is funny that way.
 But Germans also use Hammer as slang for "awesome". Therefore, I thought it
-would be amusing to be able to say...Hammer ist Hammer. To say this properly,
-pronounce Hammer in the proper German way, which is more like "HAH-muh".
-Coincidentally, this is also exactly how Neil Gaiman pronounces it with his
-British accent. =)
+would be amusing to be able to say...Hammer ist der Hammer. To say this
+properly, pronounce Hammer in the proper German way, which is more like
+"HAH-muh". Coincidentally, this is also exactly how Neil Gaiman pronounces it
+with his British accent. =)
 
 And there you have it.
