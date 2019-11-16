@@ -2,8 +2,8 @@
 
 _by Tom Preston-Werner and Peter Pistorius._
 
-**WARNING:** This document is aspirational (see [Readme Driven
-Development](https://tom.preston-werner.com/2010/08/23/readme-driven-development.html))
+**WARNING:** This document is aspirational (see
+[Readme Driven Development](https://tom.preston-werner.com/2010/08/23/readme-driven-development.html))
 and not everything contained within it is true yet.
 
 **EXAMPLE:** If you'd like to see some examples of what a Hammer application
@@ -31,7 +31,6 @@ Here's a quick taste of the technologies a standard Hammer application will use:
 - React Router
 - Apollo
 - Prisma Lift
-- GraphQL Nexus
 - Storybook
 
 ## The Hammer philosophy
@@ -76,13 +75,13 @@ it easy to operate across both projects, while still keeping them in a single
 Git repository.
 
 The frontend project is called `web` and the backend project is called `api`.
-For clarity, we will refer to these in prose as "sides", i.e. the "web side"
-and the "api side". They are separate projects because code on the web side
-will end up running in the user's browser while code on the api side will run
-on a server somewhere. It is important that you keep this distinction clear in
-your mind as you develop your application. The two separate projects are
-intended to make this obvious. In addition, separate projects allow for
-different dependencies and build processes for each project.
+For clarity, we will refer to these in prose as "sides", i.e. the "web side" and
+the "api side". They are separate projects because code on the web side will end
+up running in the user's browser while code on the api side will run on a server
+somewhere. It is important that you keep this distinction clear in your mind as
+you develop your application. The two separate projects are intended to make
+this obvious. In addition, separate projects allow for different dependencies
+and build processes for each project.
 
 The api side is an implementation of a GraphQL API. Hammer makes it easy to
 interact with a database via Prisma's Photon ORM. Code can be organized into
@@ -118,8 +117,8 @@ In fact, the whole reason I (Tom) started working on Hammer is because of a
 tweet I posted some time ago:
 
 > Prediction: within 5 years, you’ll build your next large scale, fully featured
-> web app with #JAMstack and deploy on @Netlify. [—@mojombo • 9 July
-> 2018](https://twitter.com/mojombo/status/1016506622477135872)
+> web app with #JAMstack and deploy on @Netlify.
+> [—@mojombo • 9 July 2018](https://twitter.com/mojombo/status/1016506622477135872)
 
 I kept waiting for a high quality full-stack framework to arrive, but it didn't,
 so I decided to take matters into my own hands. And that's why Hammer exists.
