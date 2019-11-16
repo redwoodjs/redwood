@@ -6,9 +6,13 @@ _by Tom Preston-Werner and Peter Pistorius._
 Development](https://tom.preston-werner.com/2010/08/23/readme-driven-development.html))
 and not everything contained within it is true yet.
 
-**EXAMPLE:** If you'd like to see an example of what a Hammer application will look
-like, we are working on an example app called
-[Billable](https://github.com/hammerframework/billable).
+**EXAMPLE:** If you'd like to see some examples of what a Hammer application
+might look like (these are still very much works in progress), take a look at
+the following projects:
+
+- [Todo](https://github.com/hammerframework/example-todo)
+- [Blog](https://github.com/hammerframework/example-blog)
+- [Invoice](https://github.com/hammerframework/example-invoice)
 
 **Hammer is an opinionated, full stack, serverless web application framework
 that will allow you to build JAMstack applications with ease.** By making a lot
@@ -24,7 +28,7 @@ Here's a quick taste of the technologies a standard Hammer application will use:
 - Prisma Photon
 - JSX
 - Styled Components
-- Reach Router
+- React Router
 - Apollo
 - Prisma Lift
 - GraphQL Nexus
@@ -89,12 +93,12 @@ The web side is coded with React. Hammer provides a variety of utility
 components designed to make it easy to run queries and mutations against your
 GraphQL API. These components also help separate data fetching from rendering so
 you can easily test your components and develop them in isolation (enhanced by
-using Docz).
+using Storybook).
 
 You'll notice that the web side is called "web" and not "frontend". This is
 because Hammer conceives of a world where you may have other sides like
-"mobile" or perhaps another type of client, all of which consume the same
-GraphQL backend.
+"mobile", "cli", etc, all consuming the same GraphQL API and living in the same
+monorepo.
 
 ## How can it be serverless if it involves a GraphQL API and database?
 
@@ -136,9 +140,9 @@ One of the Norse myths involves the origin story of Thor's hammer. In short,
 Loki decides it would be funny to shave off the beautiful golden hair of Thor's
 wife, Sif. Thor finds out it was Loki, and demands he fix it or he will break
 every one of his bones. Loki knows some dwarves that can forge a replacement for
-Seph's hair and tricks them into a competition with another set of dwarves to
+Sif's hair and tricks them into a competition with another set of dwarves to
 each create better gifts for the gods. Among the gifts, the sons of Yvaldi
-deliver the ever-growing perfect golden hair for Seph and the team of Brock and
+deliver the ever-growing perfect golden hair for Sif and the team of Brock and
 Atri produce their masterwork: a hammer for Thor.
 
 Thor's hammer is called Mjollnir and has properties that I thought would be
