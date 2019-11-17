@@ -8,19 +8,20 @@ export interface TypeDefResolverExports {
 }
 
 /**
- * Merge typedef and resolvers into a single schema
+ * Merge graphql type defintions and resolvers into a single executable schema
  *
- * @example
- *  import * as todo from 'src/graphql/todo'
- *  import * as currentUser from 'src/graphql/currentUser'
+ * ```js
+ * import * as currentUser from 'src/graphql/currentUser'
+ * import * as todo from 'src/graphql/todo'
  *
- *  const schema = makeMergedSchema([todo, currentUser])
+ * const schema = makeMergedSchema([todo, currentUser])
+ * ```
  */
 export const makeMergedSchema = (
   schemas: Array<TypeDefResolverExports>
 ): GraphQLSchema => {
   const typeDefs = schemas.map(({ schema }) => schema)
-  const resolvers = merge(schemas.map(({resolvers}) => resolvers))
+  const resolvers = merge(schemas.map(({ resolvers }) => resolvers))
   return makeExecutableSchema({
     typeDefs,
     resolvers,
