@@ -1,6 +1,6 @@
 {
   "name": "@hammerframework/hammer-scripts",
-  "version": "0.0.1-alpha.12.5",
+  "version": "0.0.1-alpha.12.6",
   "license": "MIT",
   "dependencies": {
     "@babel/cli": "^7.6.4",
@@ -33,7 +33,8 @@
     "webpack-assets-manifest": "^3.1.1",
     "webpack-cli": "^3.3.9",
     "webpack-dev-server": "^3.9.0",
-    "webpack-merge": "^4.2.2"
+    "webpack-merge": "^4.2.2",
+    "url-loader": "2.2.0"
   },
   "gitHead": "32eaaa53d304aea1c49a42b4f15467a3d9114d64"
 }
