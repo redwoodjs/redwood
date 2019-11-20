@@ -4,8 +4,8 @@ import { Query } from '@apollo/react-components'
 /**
  * Is a higher-order-component that executes a GraphQL query and automatically
  * manages the lifecycle of that query. If you export named parameters that match
- * the requirement params of `withCell` it will be automatically wrapped in this
- * HOC.
+ * the required params of `withCell` it will be automatically wrapped in this
+ * HOC via a babel-plugin.
  *
  * @param {string} QUERY - The graphQL syntax tree to execute
  * @param {function=} beforeQuery - Prepare the variables and options for the query
@@ -22,9 +22,6 @@ import { Query } from '@apollo/react-components'
  *
  * import { withCell } from '@hammerframework/web'
  * import * as cell from './ExampleComponent'
- *
- * // re-export these here
- * export default cell
  *
  * export default withCell(cell)
  * ```
