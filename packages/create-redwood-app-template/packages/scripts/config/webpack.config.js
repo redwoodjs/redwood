@@ -10,7 +10,7 @@ const Dotenv = require('dotenv-webpack')
 const { getHammerConfig } = require('@hammerframework/hammer-core')
 
 const hammerConfig = getHammerConfig()
-const BASE_DIR = getHammerConfig.baseDir
+const BASE_DIR = hammerConfig.baseDir
 
 // I've borrowed and learnt extensively from the `create-react-app`
 // repo: https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/config/webpack.config.js
@@ -61,17 +61,13 @@ module.exports = (webpackEnv) => {
       },
     },
     plugins: [
-      // new WebpackAssetsManifest({
-      //   entrypoints: true,
-      //   publicPath: true,
-      // }),
       isEnvProduction &&
         new MiniCssExtractPlugin({
           filename: '[name].[contenthash:8].css',
           chunkFilename: '[name].[contenthash:8].css',
         }),
       new HtmlWebpackPlugin({
-        template: path.resolve(BASE_DIR, 'src/index.html'),
+        template: path.resolve(BASE_DIR, 'web/src/index.html'),
       }),
       new webpack.ProvidePlugin({
         React: 'react',
@@ -90,6 +86,7 @@ module.exports = (webpackEnv) => {
       new FaviconsWebpackPlugin(path.resolve(BASE_DIR, 'web/src/favicon.png')),
       new Dotenv({
         path: path.resolve(BASE_DIR, '.env'),
+        silent: true,
       }),
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     ].filter(Boolean),
@@ -126,7 +123,7 @@ module.exports = (webpackEnv) => {
             },
             {
               test: /\.svg$/,
-              loader: 'svg-inline-loader',
+              loader: 'svg-react-loader',
             },
             ...getStyleLoaders(),
             {
