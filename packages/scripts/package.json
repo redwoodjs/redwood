@@ -31,12 +31,13 @@
     "lodash.escaperegexp": "^4.1.2",
     "mini-css-extract-plugin": "^0.8.0",
     "style-loader": "^1.0.0",
+    "svg-react-loader": "^0.4.6",
     "typescript": "^3.6.4",
+    "url-loader": "2.3.0",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.9.0",
-    "webpack-merge": "^4.2.2",
-    "url-loader": "2.3.0"
+    "webpack-merge": "^4.2.2"
   },
   "gitHead": "32eaaa53d304aea1c49a42b4f15467a3d9114d64"
 }
