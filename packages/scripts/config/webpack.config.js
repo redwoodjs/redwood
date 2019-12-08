@@ -44,6 +44,7 @@ module.exports = (webpackEnv) => {
       app: path.resolve(BASE_DIR, 'web/src/index.js'),
     },
     resolve: {
+      extensions: ['.ts', '.tsx', '.js', '.json'],
       plugins: [
         new DirectoryNamedWebpackPlugin({
           honorIndex: true,
@@ -111,7 +112,7 @@ module.exports = (webpackEnv) => {
               test: /\.(md|test\.js|stories\.js)$/,
             },
             {
-              test: /\.js$/,
+              test: /\.(js|jsx|ts|tsx)$/,
               exclude: /(node_modules)/,
               use: {
                 loader: 'babel-loader',
