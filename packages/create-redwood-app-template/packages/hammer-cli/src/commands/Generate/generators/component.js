@@ -1,10 +1,14 @@
 import pascalcase from 'pascalcase'
 
-const name = "component"
+const name = "Component"
+const command = "component"
 const description = "Generates a React component"
 
-const output = nameArg => {
-  const name = pascalcase(nameArg)
+const output = args => {
+  const [_commandName, _generatorName, componentName, ...rest] = args
+  const name = pascalcase(componentName)
+  const path = `components/${name}/${name}`
+
   const component = `
 /**
  * This amazing component does...
@@ -53,15 +57,16 @@ import ${name} from './'
 - [ ] Allow user to play with the component
 `
 
-  return ({
-    [`components/${name}/${name}.js`]: component,
-    [`components/${name}/${name}.test.js`]: test,
-    [`components/${name}/${name}.mdx`]: mdx
-  })
+  return {
+    [`${path}.js`]: component,
+    [`${path}.test.js`]: test,
+    [`${path}.mdx`]: mdx,
+  }
 }
 
 export default {
   name,
+  command,
   description,
   files: nameArg => output(nameArg)
 }
