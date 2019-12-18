@@ -30,6 +30,8 @@
     "core-js": "^3.3.3",
     "decompress": "^4.2.0",
     "ink": "^2.2.0",
+    "param-case": "^3.0.2",
+    "pascalcase": "^1.0.0",
     "react": "^16.8.6",
     "require-dir": "^1.2.0",
     "tmp": "^0.1.0",
