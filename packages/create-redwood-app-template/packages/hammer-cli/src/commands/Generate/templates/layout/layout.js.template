@@ -1,0 +1,5 @@
+const <%= name %> = (props) => {
+  return { props.children }
+};
+
+export default <%= name %>;
