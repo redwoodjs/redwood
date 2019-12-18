@@ -38,3 +38,19 @@ An example generator's return:
   routes: name => (['<Route path="/foo" page={FooPage} name="foo" />'])
 }
 ```
+
+## Templates
+
+Templates for the files created by generators go in `src/commands/Generate/templates` and should be named after the command that invokes your generator. The files inside should end in `.template` to avoid being compiled by Babel.
+
+    src/commands/Generate/
+    ├── generators
+    │   ├── component.js
+    │   └── page.js
+    └── templates
+        ├── component
+        │   ├── component.js.template
+        │   ├── readme.mdx.template
+        │   └── test.js.template
+        └── page
+            └── page.js.template

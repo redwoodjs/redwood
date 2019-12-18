@@ -7,17 +7,15 @@ import { getHammerBaseDir } from '@hammerframework/hammer-core'
 import { readFile, writeFile, bytes } from 'src/lib'
 
 import component from './generators/component'
+import layout from './generators/layout'
 import page from './generators/page'
 
-/**
- * A generator is a function that takes a name and returns a list of filenames
- * and contents that should be written to the disk.
- */
-const DEFAULT_GENERATORS = [component, page]
-const ROUTE_PATH = './web/src/Routes.js'
+const DEFAULT_GENERATORS = [component, layout, page]
+const SRC_PATH = './web/src'
+const ROUTE_PATH = `${SRC_PATH}/Routes.js`
 
 const DEFAULT_SRC_DIR = () =>
-  path.join(getHammerBaseDir(), './web/src/')
+  path.join(getHammerBaseDir(), SRC_PATH)
 
 const Generate = ({
   args,
@@ -41,6 +39,9 @@ const Generate = ({
   ] = args
 
   const generator = generators.find(generator => generator.command === generatorCommand)
+
+  // If the generator command is not found in the list of generators, or a
+  // second "name" argument is not given, return usage text
 
   if (!generator || !name) {
     const generatorText = generators.map((generator, i) => {
@@ -76,7 +77,7 @@ const Generate = ({
 
   let results = []
 
-  // Generator found, do we need to create any files?
+  // Do we need to create any files?
 
   if ('files' in generator) {
     const files = generator.files(args)
