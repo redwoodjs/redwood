@@ -17,13 +17,13 @@ const DEFAULT_GENERATORS = [component, page]
 
 The generator must export a default hash containing the following keys:
 
-| Name          | Value                                                                                                                                                                                                         | Required |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| `name`        | The name of the generator                                                                                                                                                                                     | Yes      |
-| `command`     | The command line input that triggers the generator                                                                                                                                                            | Yes      |
-| `description` | Text that is shown on the generator's help message                                                                                                                                                            | Yes      |
-| `files`       | A function which accepts a single argument (the first string after the name of generator when called from the command line). Returns an object containing filenames and contents of those files to be created | No       |
-| `routes`      | A function which accepts a single argument (the first string after the name of the generator when called from the command line). Returns an array of `<Route>` tags to append to the Routes.js file           | No       |
+| Name          | Value                                                                                                                                                           | Required |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `name`        | The name of the generator                                                                                                                                       | Yes      |
+| `command`     | The command line input that triggers the generator                                                                                                              | Yes      |
+| `description` | Text that is shown on the generator's help message                                                                                                              | Yes      |
+| `files`       | A function which accepts the array of arguments given to the `hammer` command. Returns an object containing filenames and contents of those files to be created | No       |
+| `routes`      | A function which accepts the array of arguments given to the `hammer` command. Returns an array of `<Route>` tags to append to the Routes.js file               | No       |
 
 An example generator's return:
 
