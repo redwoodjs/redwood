@@ -4,7 +4,7 @@ import React from 'react'
 import { Box, Text, Color } from 'ink'
 import { getHammerBaseDir } from '@hammerframework/hammer-core'
 
-import { writeFile, bytes } from 'src/lib'
+import { readFile, writeFile, bytes } from 'src/lib'
 
 import component from './generators/component'
 import page from './generators/page'
@@ -14,6 +14,7 @@ import page from './generators/page'
  * and contents that should be written to the disk.
  */
 const DEFAULT_GENERATORS = [component, page]
+const ROUTE_PATH = './web/src/Routes.js'
 
 const DEFAULT_SRC_DIR = () =>
   path.join(getHammerBaseDir(), './web/src/')
@@ -101,7 +102,21 @@ const Generate = ({
   // Do we need to append any routes?
 
   if ('routes' in generator) {
-    console.info(generator.routes(args))
+    console.info()
+    const routeFile = readFile(ROUTE_PATH).toString()
+    let newRouteFile = routeFile
+
+    generator.routes(args).forEach(route => {
+      newRouteFile = newRouteFile.replace(/(\s*)\<Router\>/, `$1<Router>$1  ${route}`)
+    })
+
+    fileWriter(path.join(ROUTE_PATH), newRouteFile, { overwriteExisting: true })
+
+    results.push(
+      <Text key="route">
+        <Color green>Appened route</Color>
+      </Text>
+    )
   }
 
   return results
