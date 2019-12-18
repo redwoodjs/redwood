@@ -34,19 +34,19 @@ const Generate = ({
 
   const [
     _commandName,
-    generatorName,
+    generatorCommand,
     name,
     targetDir = DEFAULT_SRC_DIR(),
   ] = args
 
-  const generator = generators.find(generator => generator.name === generatorName)
+  const generator = generators.find(generator => generator.command === generatorCommand)
 
   if (!generator || !name) {
     const generatorText = generators.map((generator, i) => {
       return (
         <Box key={i} marginLeft={1}>
           <Box width={12}>
-            <Color yellow>{generator.name}</Color></Box>
+            <Color yellow>{generator.command}</Color></Box>
           <Box>{generator.description}</Box>
         </Box>
       )
@@ -60,7 +60,7 @@ const Generate = ({
           </Box>
           <Text>
             hammer generate{' '}
-            <Color blue>{generatorName || 'generator'} name [path]</Color>
+            <Color blue>{generatorCommand || 'generator'} name [path]</Color>
           </Text>
         </Box>
         <Box marginBottom={1}>
@@ -78,14 +78,14 @@ const Generate = ({
   // Generator found, do we need to create any files?
 
   if ('files' in generator) {
-    const files = generator.files(name)
+    const files = generator.files(args)
     results = results.concat(Object.keys(files).map((filename) => {
       const contents = files[filename]
       try {
         fileWriter(path.join(targetDir, filename), contents)
         return (
           <Text key={`wrote-${filename}`}>
-            Wrote {filename} {bytes(contents)} bytes
+            <Color green>Wrote {filename}</Color> {bytes(contents)} bytes
           </Text>
         )
       } catch (e) {
@@ -101,7 +101,7 @@ const Generate = ({
   // Do we need to append any routes?
 
   if ('routes' in generator) {
-
+    console.info(generator.routes(args))
   }
 
   return results

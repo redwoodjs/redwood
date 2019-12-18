@@ -1,11 +1,20 @@
+import camelcase from 'camelcase'
 import pascalcase from 'pascalcase'
 import { paramCase } from 'param-case'
 
-const name = "page"
+const name = "Page"
+const command = "page"
 const description = "Generates a Hammer page component"
 
-const output = nameArg => {
-  const name = pascalcase(nameArg) + 'Page'
+const output = args => {
+  const [
+    _commandName,
+    _generatorName,
+    pageName,
+    ...rest
+  ] = args
+
+  const name = pascalcase(pageName) + 'Page'
   const path = `pages/${name}/${name}.js`
 
   const page = `
@@ -22,18 +31,18 @@ export default ${name};
   return { [path]: page }
 }
 
-const routes = nameArg => {
-  const pageName = pascalcase(nameArg) + 'Page'
-  const pathName = paramCase(nameArg)
+const routes = args => {
+  const [_commandName, _generatorName, name, ...rest] = args
 
   return [
-    `<Route path="/${pathName}" page={${pageName}} name="${nameArg}" />`
+    `<Route path="/${paramCase(name)}" page={${pascalcase(name)}Page}} name="${camelcase(name)}" />`
   ]
 }
 
 export default {
   name,
+  command,
   description,
-  files: nameArg => output(nameArg),
-  routes: nameArg => routes(nameArg)
+  files: (args) => output(args),
+  routes: (args) => routes(args),
 }
