@@ -1,0 +1,8 @@
+const <%= name %> = () => {
+  return (
+    <h1><%= name %></h1>
+    <p>Find me in web/src/<%= path %></p>
+  )
+};
+
+export default <%= name %>;

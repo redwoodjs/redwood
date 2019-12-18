@@ -1,72 +1,31 @@
 import pascalcase from 'pascalcase'
+import lodash from 'lodash/string'
+import path from 'path'
+import { readFile, templateRoot } from 'src/lib'
 
-const name = "Component"
-const command = "component"
-const description = "Generates a React component"
+const COMPONENT_TEMPLATE_PATH = path.join(templateRoot, 'component', 'component.js.template')
+const TEST_TEMPLATE_PATH = path.join(templateRoot, 'component', 'test.js.template')
+const MDX_TEMPLATE_PATH = path.join(templateRoot, 'component', 'readme.mdx.template')
 
-const output = args => {
+const files = args => {
   const [_commandName, _generatorName, componentName, ...rest] = args
   const name = pascalcase(componentName)
   const path = `components/${name}/${name}`
 
-  const component = `
-/**
- * This amazing component does...
- */
-const ${name} = (props) => {
-  return <div>I am ${name}.</div>;
-};
-
-${name}.propTypes = {}
-
-${name}.queryProps = {
-  query: gql\`query ${name}Query {}\`,
-  skeleton: undefined,
-  dataToProps: (data) => data,
-};
-
-export default ${name};
-`
-
-  const test = `
-import React from 'react';
-import { fireEvent, cleanup } from '@testing-library/react';
-
-import ${name} from './';
-
-describe('${name}', () => {
-
-  afterEach(() => {
-    cleanup()
-  });
-
-  it('this test will fail', () => {
-    const component = renderComponent(<${name} />);
-    component.debug();
-    expect(true).toBe(false);
-  })
-})
-`
-
-  const mdx = `
-import ${name} from './'
-
-# ${name}
-
-- [ ] Document the props/ types
-- [ ] Allow user to play with the component
-`
+  const componentTemplate = lodash.template(readFile(COMPONENT_TEMPLATE_PATH).toString())
+  const testTemplate = lodash.template(readFile(TEST_TEMPLATE_PATH).toString())
+  const readmeTemplate = lodash.template(readFile(MDX_TEMPLATE_PATH).toString())
 
   return {
-    [`${path}.js`]: component,
-    [`${path}.test.js`]: test,
-    [`${path}.mdx`]: mdx,
+    [`${path}.js`]: componentTemplate({ name }),
+    [`${path}.test.js`]: testTemplate({ name }),
+    [`${path}.mdx`]: readmeTemplate({ name }),
   }
 }
 
 export default {
-  name,
-  command,
-  description,
-  files: nameArg => output(nameArg)
+  name: "Component",
+  command: "component",
+  description: "Generates a React component",
+  files: nameArg => files(nameArg)
 }

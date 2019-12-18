@@ -1,0 +1,16 @@
+/**
+ * This amazing component does...
+ */
+const <%= name %> = (props) => {
+  return <div>I am <%= name %>.</div>;
+};
+
+<%= name %>.propTypes = {}
+
+<%= name %>.queryProps = {
+  query: gql`query <%= name %>Query {}`,
+  skeleton: undefined,
+  dataToProps: (data) => data,
+};
+
+export default <%= name %>;

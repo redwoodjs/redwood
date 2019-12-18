@@ -5,6 +5,8 @@ import requireDir from 'require-dir'
 import parse from 'yargs-parser'
 import { getHammerConfig } from '@hammerframework/hammer-core'
 
+export const templateRoot = path.join(__dirname, '..', '..', 'src', 'commands', 'Generate', 'templates')
+
 export const readFile = target => fs.readFileSync(target)
 
 export const writeFile = (
