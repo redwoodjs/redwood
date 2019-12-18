@@ -1,67 +1,67 @@
-import camelcase from 'camelcase'
+import pascalcase from 'pascalcase'
 
-const pascalCase = (string) => camelcase(string, { pascalCase: true })
+const name = "component"
+const description = "Generates a React component"
 
-const component = (componentName) => {
-  return `
+const output = nameArg => {
+  const name = pascalcase(nameArg)
+  const component = `
 /**
  * This amazing component does...
  */
-const ${componentName} = (props) => {
-  return <div>I am ${componentName}.</div>;
+const ${name} = (props) => {
+  return <div>I am ${name}.</div>;
 };
 
-${componentName}.propTypes = {}
+${name}.propTypes = {}
 
-${componentName}.queryProps = {
-  query: gql\`query ${componentName}Query {}\`,
+${name}.queryProps = {
+  query: gql\`query ${name}Query {}\`,
   skeleton: undefined,
   dataToProps: (data) => data,
 };
 
-export default ${componentName};
+export default ${name};
 `
-}
 
-const test = (componentName) => {
-  return `
+  const test = `
 import React from 'react';
 import { fireEvent, cleanup } from '@testing-library/react';
 
-import ${componentName} from './';
+import ${name} from './';
 
-describe('${componentName}', () => {
+describe('${name}', () => {
 
   afterEach(() => {
     cleanup()
   });
 
   it('this test will fail', () => {
-    const component = renderComponent(<${componentName} />);
+    const component = renderComponent(<${name} />);
     component.debug();
     expect(true).toBe(false);
   })
 })
 `
-}
 
-const mdx = (componentName) => {
-  return `
-import ${componentName} from './'
+  const mdx = `
+import ${name} from './'
 
-# ${componentName}
+# ${name}
 
 - [ ] Document the props/ types
 - [ ] Allow user to play with the component
-  `
+`
+
+  return ({
+    [`components/${name}/${name}.js`]: component,
+    [`components/${name}/${name}.test.js`]: test,
+    [`components/${name}/${name}.mdx`]: mdx
+  })
 }
 
-export default (name) => {
-  const componentName = pascalCase(name)
-
-  return {
-    [`${componentName}/${componentName}.js`]: component(componentName),
-    [`${componentName}/${componentName}.test.js`]: test(componentName),
-    [`${componentName}/${componentName}.mdx`]: mdx(componentName),
-  }
+export default {
+  name,
+  description,
+  files: nameArg => output(nameArg)
 }
