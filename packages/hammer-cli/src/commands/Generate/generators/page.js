@@ -35,7 +35,7 @@ const routes = args => {
   const [_commandName, _generatorName, name, ...rest] = args
 
   return [
-    `<Route path="/${paramCase(name)}" page={${pascalcase(name)}Page}} name="${camelcase(name)}" />`
+    `<Route path="/${paramCase(name)}" page={${pascalcase(name)}Page} name="${camelcase(name)}" />`
   ]
 }
 
