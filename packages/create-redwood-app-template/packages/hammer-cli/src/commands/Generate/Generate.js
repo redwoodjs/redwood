@@ -6,12 +6,13 @@ import { getHammerBaseDir } from '@hammerframework/hammer-core'
 
 import { readFile, writeFile, bytes } from 'src/lib'
 
+import cell from './generators/cell'
 import component from './generators/component'
 import layout from './generators/layout'
 import page from './generators/page'
 import service from './generators/service'
 
-const DEFAULT_GENERATORS = [component, layout, page, service]
+const DEFAULT_GENERATORS = [cell, component, layout, page, service]
 const SRC_PATH = './web/src'
 const ROUTE_PATH = `${SRC_PATH}/Routes.js`
 
