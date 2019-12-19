@@ -4,8 +4,16 @@ import path from 'path'
 import requireDir from 'require-dir'
 import parse from 'yargs-parser'
 import { getHammerConfig } from '@hammerframework/hammer-core'
+import lodash from 'lodash/string'
 
 export const templateRoot = path.join(__dirname, '..', '..', 'src', 'commands', 'Generate', 'templates')
+
+export const generateTemplate = (templateFilename, replacements) => {
+  const templatePath = path.join(templateRoot, templateFilename)
+  const template = lodash.template(readFile(templatePath).toString())
+
+  return template(replacements)
+}
 
 export const readFile = target => fs.readFileSync(target)
 
