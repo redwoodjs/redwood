@@ -1,0 +1,11 @@
+import { Photon } from '@generated/photon'
+
+const photon = new Photon()
+
+const <%= name %> = {
+  <%= camelName %>: () => {
+    return photon.<%= camelName %>.findMany()
+  }
+}
+
+export default <%= name %>
