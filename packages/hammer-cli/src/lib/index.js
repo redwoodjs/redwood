@@ -6,7 +6,15 @@ import parse from 'yargs-parser'
 import { getHammerConfig } from '@hammerframework/hammer-core'
 import lodash from 'lodash/string'
 
-export const templateRoot = path.join(__dirname, '..', '..', 'src', 'commands', 'Generate', 'templates')
+export const templateRoot = path.join(
+  __dirname,
+  '..',
+  '..',
+  'src',
+  'commands',
+  'Generate',
+  'templates'
+)
 
 export const generateTemplate = (templateFilename, replacements) => {
   const templatePath = path.join(templateRoot, templateFilename)
@@ -15,7 +23,7 @@ export const generateTemplate = (templateFilename, replacements) => {
   return template(replacements)
 }
 
-export const readFile = target => fs.readFileSync(target)
+export const readFile = (target) => fs.readFileSync(target)
 
 export const writeFile = (
   target,
