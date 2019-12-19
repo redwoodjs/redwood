@@ -10,10 +10,11 @@ import cell from './generators/cell'
 import component from './generators/component'
 import layout from './generators/layout'
 import page from './generators/page'
+import scaffold from './generators/scaffold'
 import sdl from './generators/sdl'
 import service from './generators/service'
 
-const GENERATORS = [cell, component, layout, page, sdl, service]
+const GENERATORS = [cell, component, layout, page, scaffold, sdl, service]
 const ROUTES_PATH = path.join(getHammerBaseDir(), 'web', 'src', 'Routes.js')
 
 const Generate = ({
