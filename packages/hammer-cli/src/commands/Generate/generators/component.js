@@ -1,10 +1,14 @@
-import pascalcase from 'pascalcase'
 import path from 'path'
+
+import pascalcase from 'pascalcase'
+
 import { generateTemplate } from 'src/lib'
+
+const OUTPUT_PATH = path.join('web', 'src', 'components')
 
 const files = ([componentName, ...rest]) => {
   const name = pascalcase(componentName)
-  const outputPath = path.join('components', name)
+  const outputPath = path.join(OUTPUT_PATH, name)
 
   const componentPath = path.join(outputPath, `${name}.js`)
   const componentTemplate = generateTemplate(
@@ -30,8 +34,8 @@ const files = ([componentName, ...rest]) => {
 }
 
 export default {
-  name: "Component",
-  command: "component",
-  description: "Generates a React component",
-  files: args => files(args)
+  name: 'Component',
+  command: 'component',
+  description: 'Generates a React component',
+  files: (args) => files(args),
 }
