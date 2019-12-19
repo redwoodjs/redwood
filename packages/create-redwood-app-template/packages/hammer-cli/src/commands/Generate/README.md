@@ -17,13 +17,14 @@ const DEFAULT_GENERATORS = [component, page]
 
 The generator must export a default hash containing the following keys:
 
-| Name          | Value                                                                                                                                                           | Required |
-| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| `name`        | The name of the generator                                                                                                                                       | Yes      |
-| `command`     | The command line input that triggers the generator                                                                                                              | Yes      |
-| `description` | Text that is shown on the generator's help message                                                                                                              | Yes      |
-| `files`       | A function which accepts the array of arguments given to the `hammer` command. Returns an object containing filenames and contents of those files to be created | No       |
-| `routes`      | A function which accepts the array of arguments given to the `hammer` command. Returns an array of `<Route>` tags to append to the Routes.js file               | No       |
+| Name          | Value                                                                                                                                                                                                                                                                | Required |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `name`        | The name of the generator                                                                                                                                                                                                                                            | Yes      |
+| `command`     | The command line input that triggers the generator                                                                                                                                                                                                                   | Yes      |
+| `description` | Text that is shown on the generator's help message                                                                                                                                                                                                                   | Yes      |
+| `files`       | A function which accepts the array of arguments given to the `hammer` command. Returns an object containing filenames and contents of those files to be created                                                                                                      | No       |
+| `routes`      | A function which accepts the array of arguments given to the `hammer` command. Returns an array of `<Route>` tags to append to the Routes.js file                                                                                                                    | No       |
+| `generate`    | A function which accepts the array of arguments given to the `hammer` command. Returns an array of an array of arguments that would be passed to the Generate function in the same order the commands would be sent in from a command line call to `hammer generate` | No       |
 
 An example generator's return:
 
@@ -35,7 +36,8 @@ An example generator's return:
   files: name => ({
     'pages/FooPage/FooPage.js': 'const FooPage = () => { ... }'
   }),
-  routes: name => (['<Route path="/foo" page={FooPage} name="foo" />'])
+  routes: name => (['<Route path="/foo" page={FooPage} name="foo" />']),
+  generate: name => ([['service', 'foo']])
 }
 ```
 
