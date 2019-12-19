@@ -1,29 +1,23 @@
 import camelcase from 'camelcase'
 import pascalcase from 'pascalcase'
 import { paramCase } from 'param-case'
-import lodash from 'lodash/string'
 import path from 'path'
-import { readFile, templateRoot } from 'src/lib'
+import { generateTemplate } from 'src/lib'
 
-const TEMPLATE_PATH = path.join(templateRoot, 'page', 'page.js.template')
-
-const files = args => {
-  const [_commandName, _generatorName, pageName, ...rest] = args
+const files = ([pageName, ...rest]) => {
   const name = pascalcase(pageName) + 'Page'
-  const path = `pages/${name}/${name}.js`
+  const outputPath = path.join('pages', name, `${name}.js`)
+  const template = generateTemplate(
+    path.join('page', 'page.js.template'),
+    { name, path }
+  )
 
-  const pageTemplate = lodash.template(readFile(TEMPLATE_PATH).toString())
-
-  return {
-    [path]: pageTemplate({ name, path })
-  }
+  return { [outputPath]: template }
 }
 
-const routes = args => {
-  const [_commandName, _generatorName, name, ...rest] = args
-
+const routes = ([pageName, ...rest]) => {
   return [
-    `<Route path="/${paramCase(name)}" page={${pascalcase(name)}Page} name="${camelcase(name)}" />`
+    `<Route path="/${paramCase(pageName)}" page={${pascalcase(pageName)}Page} name="${camelcase(pageName)}" />`
   ]
 }
 
@@ -31,6 +25,6 @@ export default {
   name: "Page",
   command: "page",
   description: "Generates a Hammer page component",
-  files: (args) => files(args),
-  routes: (args) => routes(args),
+  files: args => files(args),
+  routes: args => routes(args)
 }

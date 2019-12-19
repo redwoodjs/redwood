@@ -9,8 +9,9 @@ import { readFile, writeFile, bytes } from 'src/lib'
 import component from './generators/component'
 import layout from './generators/layout'
 import page from './generators/page'
+import service from './generators/service'
 
-const DEFAULT_GENERATORS = [component, layout, page]
+const DEFAULT_GENERATORS = [component, layout, page, service]
 const SRC_PATH = './web/src'
 const ROUTE_PATH = `${SRC_PATH}/Routes.js`
 
@@ -31,12 +32,7 @@ const Generate = ({
     )
   }
 
-  const [
-    _commandName,
-    generatorCommand,
-    name,
-    targetDir = DEFAULT_SRC_DIR(),
-  ] = args
+  const [_commandName, generatorCommand, name, ...rest] = args
 
   const generator = generators.find(generator => generator.command === generatorCommand)
 
@@ -80,11 +76,11 @@ const Generate = ({
   // Do we need to create any files?
 
   if ('files' in generator) {
-    const files = generator.files(args)
+    const files = generator.files([name, ...rest])
     results = results.concat(Object.keys(files).map((filename) => {
       const contents = files[filename]
       try {
-        fileWriter(path.join(targetDir, filename), contents)
+        fileWriter(path.join(DEFAULT_SRC_DIR(), filename), contents)
         return (
           <Text key={`wrote-${filename}`}>
             <Color green>Wrote {filename}</Color> {bytes(contents)} bytes
@@ -103,11 +99,10 @@ const Generate = ({
   // Do we need to append any routes?
 
   if ('routes' in generator) {
-    console.info()
     const routeFile = readFile(ROUTE_PATH).toString()
     let newRouteFile = routeFile
 
-    generator.routes(args).forEach(route => {
+    generator.routes([name, ...rest]).forEach(route => {
       newRouteFile = newRouteFile.replace(/(\s*)\<Router\>/, `$1<Router>$1  ${route}`)
     })
 
