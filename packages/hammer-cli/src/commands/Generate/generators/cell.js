@@ -8,7 +8,7 @@ import { generateTemplate } from 'src/lib'
 
 const OUTPUT_PATH = path.join('web', 'src', 'cells')
 
-const files = ([pageName, ...rest]) => {
+const files = ([pageName, ..._rest]) => {
   const name = pascalcase(pageName) + 'Cell'
   const camelName = camelcase(pluralize(pageName))
   const outputPath = path.join(OUTPUT_PATH, name, `${name}.js`)
