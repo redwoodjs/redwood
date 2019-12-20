@@ -2,7 +2,7 @@ import <%= serviceName %> from 'src/services/<%= serviceFileName %>'
 
 export const schema = gql`
   type <%= typeName %> {
-    <%= querySDL %>
+    <%= query %>
   }
 
   type Query {
@@ -10,7 +10,7 @@ export const schema = gql`
   }
 
   input <%= typeName %>Input {
-    <%= inputSDL %>
+    <%= input %>
   }
 
   type Mutation {
