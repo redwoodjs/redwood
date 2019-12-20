@@ -97,6 +97,16 @@ export const getCommands = (commandsPath = '../commands') => {
   }, [])
 }
 
+// turns command line args like:
+//
+//   generate sdl contact--force
+//
+// into:
+//
+//   [['generate', 'sdl', 'contact'], { force: true }]
 export const parseArgs = () => {
-  return parse(process.argv.slice(2))._
+  const parsed = parse(process.argv.slice(2))
+  const { _: positional, ...flags } = parsed
+
+  return [positional, flags]
 }

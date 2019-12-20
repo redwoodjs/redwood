@@ -48,7 +48,8 @@ const sdlFromSchemaModel = async (name) => {
   }
 }
 
-const files = async ([sdlName, ..._rest]) => {
+const files = async (args) => {
+  const [[sdlName, ...rest], flags] = args
   const typeName = pascalcase(sdlName)
   const serviceName = pluralize(typeName)
   const serviceFileName = camelcase(serviceName)
@@ -69,7 +70,8 @@ const files = async ([sdlName, ..._rest]) => {
 
 // also create a service for the SDL to automap to resolvers
 const generate = (args) => {
-  return [['service', ...args]]
+  console.info('generate args', args)
+  return [[['service', ...args[0]], args[1]]]
 }
 
 export default {

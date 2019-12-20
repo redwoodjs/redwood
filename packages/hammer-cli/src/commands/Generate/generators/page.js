@@ -8,7 +8,8 @@ import { generateTemplate } from 'src/lib'
 
 const OUTPUT_PATH = path.join('web', 'src', 'pages')
 
-const files = ([pageName, ..._rest]) => {
+const files = (args) => {
+  const [[pageName, ..._rest], _flags] = args
   const name = pascalcase(pageName) + 'Page'
   const outputPath = path.join(OUTPUT_PATH, name, `${name}.js`)
   const template = generateTemplate(path.join('page', 'page.js.template'), {
