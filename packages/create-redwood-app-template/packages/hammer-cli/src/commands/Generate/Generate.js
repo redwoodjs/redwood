@@ -1,4 +1,5 @@
 import path from 'path'
+import { writeFileSync } from 'fs'
 
 import React from 'react'
 import { Box, Text, Color } from 'ink'
@@ -28,6 +29,26 @@ const Generate = ({
         The `generate` command has to be run in your hammer project directory.
       </Color>
     )
+  }
+
+  const writeFiles = (files) => {
+    return Object.keys(files).map((filename) => {
+      const contents = files[filename]
+      try {
+        fileWriter(path.join(getHammerBaseDir(), filename), contents)
+        return (
+          <Text key={`wrote-${filename}`}>
+            <Color green>Wrote {filename}</Color> {bytes(contents)} bytes
+          </Text>
+        )
+      } catch (e) {
+        return (
+          <Text key={`error-${filename}`}>
+            <Color red>{e}</Color>
+          </Text>
+        )
+      }
+    })
   }
 
   const [_commandName, generatorCommand, name, ...rest] = args
@@ -78,25 +99,12 @@ const Generate = ({
 
   if ('files' in generator) {
     const files = generator.files([name, ...rest])
-    results = results.concat(
-      Object.keys(files).map((filename) => {
-        const contents = files[filename]
-        try {
-          fileWriter(path.join(getHammerBaseDir(), filename), contents)
-          return (
-            <Text key={`wrote-${filename}`}>
-              <Color green>Wrote {filename}</Color> {bytes(contents)} bytes
-            </Text>
-          )
-        } catch (e) {
-          return (
-            <Text key={`error-${filename}`}>
-              <Color red>{e}</Color>
-            </Text>
-          )
-        }
-      })
-    )
+
+    if (files instanceof Promise) {
+      files.then((f) => (results = results.concat(writeFiles(f))))
+    } else {
+      results = results.concat(writeFiles(files))
+    }
   }
 
   // Do we need to append any routes?
