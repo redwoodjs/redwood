@@ -50,7 +50,8 @@ const Generate = ({
     })
   }
 
-  const [_commandName, generatorCommand, name, ...rest] = args
+  const [_commandName, generatorCommand, name, ...rest] = args[0]
+  const flags = args[1]
 
   const generator = generators.find(
     (generator) => generator.command === generatorCommand
@@ -97,13 +98,24 @@ const Generate = ({
   // Do we need to create any files?
 
   if ('files' in generator) {
-    const files = generator.files([name, ...rest])
+    const files = generator.files([args[0].slice(2), args[1]])
 
     if (files instanceof Promise) {
       files.then((f) => (results = results.concat(writeFiles(f))))
     } else {
       results = results.concat(writeFiles(files))
     }
+  }
+
+  // Does this generator need to run any other generators?
+
+  if ('generate' in generator) {
+    results = results.concat(
+      generator.generate([args[0].slice(2), args[1]]).map((args) => {
+        console.info('Generate(args)', args)
+        return Generate({ args: [['g', ...args[0]], args[1]] })
+      })
+    )
   }
 
   // Do we need to append any routes?
@@ -125,16 +137,6 @@ const Generate = ({
       <Text key="route">
         <Color green>Appened route</Color>
       </Text>
-    )
-  }
-
-  // Does this generator need to run any other generators?
-
-  if ('generate' in generator) {
-    results = results.concat(
-      generator.generate([name, ...rest]).map((args) => {
-        return Generate({ args: ['generate', ...args] })
-      })
     )
   }
 
