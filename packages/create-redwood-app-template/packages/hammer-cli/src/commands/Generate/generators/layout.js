@@ -6,7 +6,7 @@ import { generateTemplate } from 'src/lib'
 
 const OUTPUT_PATH = path.join('web', 'src', 'layouts')
 
-const files = ([layoutName, ...rest]) => {
+const files = ([layoutName, ..._rest]) => {
   const name = pascalcase(layoutName) + 'Layout'
   const outputPath = path.join(OUTPUT_PATH, name, `${name}.js`)
   const template = generateTemplate(path.join('layout', 'layout.js.template'), {

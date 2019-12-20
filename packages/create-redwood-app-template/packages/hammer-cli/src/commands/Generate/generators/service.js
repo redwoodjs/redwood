@@ -8,7 +8,7 @@ import { generateTemplate } from 'src/lib'
 
 const OUTPUT_PATH = path.join('api', 'src', 'services')
 
-const files = ([serviceName, ...rest]) => {
+const files = ([serviceName, ..._rest]) => {
   const name = pascalcase(pluralize(serviceName))
   const camelName = camelcase(name)
   const outputPath = path.join(OUTPUT_PATH, `${camelName}.js`)

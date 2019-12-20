@@ -1,5 +1,4 @@
 import path from 'path'
-import { writeFileSync } from 'fs'
 
 import React from 'react'
 import { Box, Text, Color } from 'ink'
