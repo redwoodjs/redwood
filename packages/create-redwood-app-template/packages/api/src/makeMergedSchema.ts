@@ -26,12 +26,25 @@ export const makeMergedSchema = (
     scalar Date
     scalar Time
     scalar DateTime
+
+    type HammerFramework {
+      version: String
+    }
+
+    type Query {
+      hammerframework: HammerFramework
+    }
   `
 
   const rootResolver = {
     Date: GraphQLDate,
     Time: GraphQLTime,
     DateTime: GraphQLDateTime,
+    Query: {
+      hammerframework: () => ({
+        version: '0.0.0',
+      }),
+    },
   }
 
   return mergeSchemas({
