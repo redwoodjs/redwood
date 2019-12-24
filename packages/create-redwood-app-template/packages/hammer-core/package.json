@@ -1,6 +1,6 @@
 {
   "name": "@hammerframework/hammer-core",
-  "version": "0.0.1-alpha.12.5",
+  "version": "0.0.1-alpha.14",
   "main": "dist/main.js",
   "files": [
     "dist"
