@@ -6,7 +6,9 @@
   ],
   "main": "dist/index.js",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "core-js": "3.6.0"
+  },
   "devDependencies": {
     "react": "16.12.0"
   },
