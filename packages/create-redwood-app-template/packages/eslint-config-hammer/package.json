@@ -1,6 +1,6 @@
 {
   "name": "@hammerframework/eslint-config-hammer",
-  "version": "0.0.1-alpha.12",
+  "version": "0.0.1-alpha.14",
   "main": "index.js",
   "files": [
     "./typescript.js"
