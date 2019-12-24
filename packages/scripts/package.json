@@ -19,7 +19,7 @@
     "@babel/runtime": "^7.7.4",
     "@types/jest": "^24.0.23",
     "@types/node": "^12.12.14",
-    "@types/react": "^16.9.15",
+    "@types/react": "^16.9.17",
     "@types/react-dom": "^16.9.4",
     "babel-loader": "^8.0.6",
     "babel-plugin-module-resolver": "^3.2.0",
