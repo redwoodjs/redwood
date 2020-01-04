@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/scripts",
-  "version": "0.0.1-alpha.14",
+  "version": "0.0.1-alpha.15",
   "license": "MIT",
   "files": [
     "config/*"
