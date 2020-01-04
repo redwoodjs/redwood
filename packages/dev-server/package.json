@@ -1,8 +1,8 @@
 {
-  "name": "@redwoodjs/api-dev-server",
+  "name": "@redwoodjs/dev-server",
   "version": "0.0.1-alpha.14",
   "bin": {
-    "api-dev-server": "./dist/main.js"
+    "dev-server": "./dist/main.js"
   },
   "files": [
     "dist"
