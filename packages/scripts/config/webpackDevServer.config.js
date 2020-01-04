@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const merge = require('webpack-merge')
 const escapeRegExp = require('lodash.escaperegexp')
-const { getHammerConfig } = require('@hammerframework/hammer-core')
+const { getHammerConfig } = require('@redwoodjs/core')
 
 const webpackConfig = require('./webpack.config.js')
 

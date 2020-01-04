@@ -1,5 +1,5 @@
 {
-  "name": "@hammerframework/eslint-config-hammer",
+  "name": "@redwoodjs/eslint-config-hammer",
   "version": "0.0.1-alpha.14",
   "main": "index.js",
   "files": [
