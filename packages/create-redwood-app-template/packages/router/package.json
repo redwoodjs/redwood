@@ -1,5 +1,5 @@
 {
-  "name": "@hammerframework/router",
+  "name": "@redwoodjs/router",
   "version": "0.0.1-alpha.14.1",
   "files": [
     "dist"
@@ -8,9 +8,6 @@
   "license": "MIT",
   "dependencies": {
     "core-js": "3.6.0"
-  },
-  "devDependencies": {
-    "react": "16.12.0"
   },
   "scripts": {
     "build": "yarn clean && babel src -d dist",

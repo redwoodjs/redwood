@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [0.0.1-alpha.15] - 2020-01-04
+
+### Changed
+
+- Renamed `hammerframework` to `redwoodjs`
+
 ## [0.0.1-alpha.10.1] - 2019-10-23
 
 ### Added

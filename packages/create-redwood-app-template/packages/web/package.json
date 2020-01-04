@@ -1,5 +1,5 @@
 {
-  "name": "@hammerframework/web",
+  "name": "@redwoodjs/web",
   "version": "0.0.1-alpha.14",
   "files": [
     "dist"

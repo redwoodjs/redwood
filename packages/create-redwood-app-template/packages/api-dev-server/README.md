@@ -1,4 +1,4 @@
-# The Hammer Development Server
+# The API Development Server
 
 The hamer dev server looks for "lambda functions" in the directory
 (default: `./api/src/functions`) specified in your `hammer.toml`

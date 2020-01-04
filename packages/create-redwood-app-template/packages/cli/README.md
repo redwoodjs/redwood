@@ -2,9 +2,9 @@
 
 ## Installation
 
-We recommend that you install Hammer's CLI globally
-with npm `npm install -g @hammerframework/hammer-cli` or with
-yarn `yarn global add @hammerframework/hammer-cli`.
+We recommend that you install Redwood's CLI globally
+with npm `npm install -g @redwoodjs/cli` or with
+yarn `yarn global add @redwoodjs/cli`.
 
 ## Command line basics
 

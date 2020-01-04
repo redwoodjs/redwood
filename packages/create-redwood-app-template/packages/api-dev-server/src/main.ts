@@ -3,7 +3,7 @@ import path from 'path'
 
 import { Response, Request } from 'express'
 import { APIGatewayProxyResult, APIGatewayProxyEvent } from 'aws-lambda'
-import { getHammerConfig } from '@hammerframework/hammer-core'
+import { getHammerConfig } from '@redwoodjs/core'
 import express from 'express'
 // @ts-ignore
 import expressLogging from 'express-logging'

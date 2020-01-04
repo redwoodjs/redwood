@@ -1,5 +1,5 @@
 import concurrently from 'concurrently'
-import { getHammerBaseDir } from '@hammerframework/hammer-core'
+import { getHammerBaseDir } from '@redwoodjs/core'
 
 const Dev = () => {
   const baseDir = getHammerBaseDir()

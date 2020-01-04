@@ -1,5 +1,5 @@
 {
-  "name": "@hammerframework/api",
+  "name": "@redwoodjs/api",
   "version": "0.0.1-alpha.14",
   "main": "dist/main.js",
   "files": [
@@ -8,9 +8,7 @@
   "types": "./dist/main.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@hammerframework/hammer-core": "^0.0.1-alpha.14",
-    "@types/graphql-iso-date": "^3.3.3",
-    "@types/lodash.merge": "^4.6.6",
+    "@redwoodjs/core": "^0.0.1-alpha.14",
     "apollo-server-lambda": "2.9.9",
     "core-js": "3.6.0",
     "graphql": "^14.5.8",
@@ -18,8 +16,9 @@
     "graphql-tools": "4.0.6",
     "lodash.merge": "^4.6.2"
   },
-  "eslintConfig": {
-    "extends": "@hammerframework/eslint-config-hammer"
+  "devDependencies": {
+    "@types/graphql-iso-date": "^3.3.3",
+    "@types/lodash.merge": "^4.6.6"
   },
   "scripts": {
     "build": "yarn clean && yarn build:js && yarn build:types",
