@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/web",
-  "version": "0.0.1-alpha.15",
+  "version": "0.0.1-alpha.15.1",
   "files": [
     "dist"
   ],
@@ -18,12 +18,6 @@
     "core-js": "3.6.0",
     "graphql": "^14.5.8",
     "proptypes": "^1.1.0"
-  },
-  "devDependencies": {
-    "styled-components": "^4.4.0"
-  },
-  "peerDependencies": {
-    "styled-components": "4.4.x"
   },
   "scripts": {
     "build": "yarn clean && babel src -d dist",
