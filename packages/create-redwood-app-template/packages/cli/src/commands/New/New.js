@@ -27,7 +27,7 @@ const unzip = async (path, targetDir) =>
   await decompress(path, targetDir, { strip: 1 })
 
 const RELEASE_URL =
-  'https://api.github.com/repos/hammerframework/create-hammer-app/releases'
+  'https://api.github.com/repos/redwoodjs/create-redwood-app/releases'
 
 const latestReleaseZipFile = async () => {
   const response = await axios.get(RELEASE_URL)
@@ -67,7 +67,7 @@ const New = ({ args: [_commandName, targetDir] }) => {
 
       // Download the latest release of `create-hammer-app`
       const tmpDownloadPath = tmp.tmpNameSync({
-        prefix: 'hammer',
+        prefix: 'redwood',
         postfix: '.zip',
       })
 
@@ -94,7 +94,7 @@ const New = ({ args: [_commandName, targetDir] }) => {
   }, [targetDir])
 
   if (!targetDir) {
-    return <Color red>Usage `hammer new ./path/to/new-project`</Color>
+    return <Color red>Usage `redwood new ./path/to/new-project`</Color>
   }
 
   return (
@@ -111,7 +111,7 @@ const New = ({ args: [_commandName, targetDir] }) => {
 export const commandProps = {
   name: 'new',
   alias: 'n',
-  description: 'Create a new hammer app',
+  description: 'Create a new redwood app',
 }
 
 export default New
