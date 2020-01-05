@@ -1,4 +1,4 @@
-# The Hammer Command Line
+# The Redwood Command Line
 
 ## Installation
 
@@ -8,10 +8,10 @@ yarn `yarn global add @redwoodjs/cli`.
 
 ## Command line basics
 
-### `hammer new`
+### `redwood new`
 
-The first thing we'll want to do is create a new Hammer application by running the
-`hammer new` command after installation.
+The first thing we'll want to do is create a new Redwood application by running the
+`redwood new` command after installation.
 
 ```terminal
 $ yarn new ~/myprojects/todo

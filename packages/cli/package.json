@@ -4,7 +4,7 @@
   "version": "0.0.1-alpha.15",
   "license": "MIT",
   "bin": {
-    "hammer": "./dist/index.js"
+    "redwood": "./dist/index.js"
   },
   "files": [
     "dist"
@@ -13,7 +13,7 @@
     "build": "babel src --out-dir dist",
     "clean": "rm -rf dist",
     "prepare": "yarn clean && yarn build",
-    "hammer": "babel-node src/index.js",
+    "redwood": "babel-node src/index.js",
     "dev": "nodemon --exec babel-node src/index.js",
     "test": "jest",
     "test:watch": "yarn test --watch"
