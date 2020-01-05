@@ -1,6 +1,6 @@
 {
-  "name": "@hammerframework/hammer-core",
-  "version": "0.0.1-alpha.12.5",
+  "name": "@redwoodjs/core",
+  "version": "0.0.1-alpha.15",
   "main": "dist/main.js",
   "files": [
     "dist"

@@ -3,7 +3,7 @@ import path from 'path'
 
 import { Response, Request } from 'express'
 import { APIGatewayProxyResult, APIGatewayProxyEvent } from 'aws-lambda'
-import { getHammerConfig } from '@hammerframework/hammer-core'
+import { getHammerConfig } from '@redwoodjs/core'
 import express from 'express'
 // @ts-ignore
 import expressLogging from 'express-logging'
@@ -37,7 +37,6 @@ const { port: PORT, path: PATH } = args.parse(process.argv)
 const HOSTNAME = `http://localhost:${PORT}`
 
 const showHeader = (lambdas: Record<string, any>) => {
-  console.log(`\n⚒ HammerFramework's API Development Server\n`)
   console.log(`◌ Listening on ${HOSTNAME}`)
   console.log(`◌ Watching ${hammerApiDir}`)
   console.log('\nNow serving\n')

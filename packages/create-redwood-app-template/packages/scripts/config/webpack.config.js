@@ -7,7 +7,7 @@ const DirectoryNamedWebpackPlugin = require('directory-named-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const Dotenv = require('dotenv-webpack')
-const { getHammerConfig } = require('@hammerframework/hammer-core')
+const { getHammerConfig } = require('@redwoodjs/core')
 
 const hammerConfig = getHammerConfig()
 const BASE_DIR = hammerConfig.baseDir
@@ -44,6 +44,7 @@ module.exports = (webpackEnv) => {
       app: path.resolve(BASE_DIR, 'web/src/index.js'),
     },
     resolve: {
+      extensions: ['.ts', '.tsx', '.js', '.json'],
       plugins: [
         new DirectoryNamedWebpackPlugin({
           honorIndex: true,
@@ -72,7 +73,7 @@ module.exports = (webpackEnv) => {
       new webpack.ProvidePlugin({
         React: 'react',
         PropTypes: 'prop-types',
-        gql: ['@hammerframework/web', 'gql'],
+        gql: ['@redwoodjs/web', 'gql'],
       }),
       new webpack.DefinePlugin({
         '__HAMMER__.apiProxyPath': JSON.stringify(
@@ -111,7 +112,7 @@ module.exports = (webpackEnv) => {
               test: /\.(md|test\.js|stories\.js)$/,
             },
             {
-              test: /\.js$/,
+              test: /\.(js|jsx|ts|tsx)$/,
               exclude: /(node_modules)/,
               use: {
                 loader: 'babel-loader',
