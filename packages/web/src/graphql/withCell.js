@@ -20,7 +20,7 @@ import { Query } from '@apollo/react-components'
  * // `src/ExampleComponent/index.js`. This file will be removed and
  * // automatically dealt with in babel.
  *
- * import { withCell } from '@hammerframework/web'
+ * import { withCell } from '@redwoodjs/web'
  * import * as cell from './ExampleComponent'
  *
  * export default withCell(cell)

@@ -14,7 +14,8 @@
     "@babel/preset-env": "^7.6.0",
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.6.0",
-    "@hammerframework/eslint-config-hammer": "^0.0.1-alpha.10",
+    "@redwoodjs/eslint-config": "^0.0.1-alpha.10",
+    "@types/node-fetch": "^2.5.4",
     "babel-plugin-module-resolver": "^3.2.0",
     "jest": "^24.8.0",
     "kill-port": "^1.5.2",
@@ -23,7 +24,7 @@
     "typescript": "^3.5.3"
   },
   "eslintConfig": {
-    "extends": "@hammerframework/eslint-config-hammer"
+    "extends": "@redwoodjs/eslint-config"
   },
   "scripts": {
     "build": "lerna run build",

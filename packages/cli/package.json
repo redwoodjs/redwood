@@ -1,14 +1,10 @@
 {
-  "name": "@hammerframework/hammer-cli",
-  "description": "The Hammer Command Line",
-  "version": "0.0.1-alpha.12.5",
+  "name": "@redwoodjs/cli",
+  "description": "The Redwood Command Line",
+  "version": "0.0.1-alpha.15",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/hammerframework/hammer.git/"
-  },
   "bin": {
-    "hammer": "./dist/index.js"
+    "redwood": "./dist/index.js"
   },
   "files": [
     "dist"
@@ -17,25 +13,25 @@
     "build": "babel src --out-dir dist",
     "clean": "rm -rf dist",
     "prepare": "yarn clean && yarn build",
-    "hammer": "babel-node src/index.js",
+    "redwood": "babel-node src/index.js",
     "dev": "nodemon --exec babel-node src/index.js",
     "test": "jest",
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@hammerframework/hammer-core": "^0.0.1-alpha.12.5",
     "@prisma/sdk": "0.0.103",
+    "@redwoodjs/core": "^0.0.1-alpha.15",
     "axios": "^0.19.0",
     "camelcase": "^5.3.1",
     "concurrently": "^5.0.0",
-    "core-js": "^3.3.3",
+    "core-js": "3.6.0",
     "decompress": "^4.2.0",
     "ink": "^2.2.0",
     "lodash": "^4.17.15",
     "param-case": "^3.0.2",
     "pascalcase": "^1.0.0",
     "pluralize": "^8.0.0",
-    "react": "^16.8.6",
+    "react": "16.12.0",
     "require-dir": "^1.2.0",
     "tmp": "^0.1.0",
     "yargs-parser": "^13.1.1",

@@ -3,7 +3,7 @@ import path from 'path'
 
 import requireDir from 'require-dir'
 import parse from 'yargs-parser'
-import { getHammerConfig } from '@hammerframework/hammer-core'
+import { getHammerConfig } from '@redwoodjs/core'
 import lodash from 'lodash/string'
 
 export const templateRoot = path.join(
