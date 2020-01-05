@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types'
-import { ThemeProvider } from 'styled-components'
 
 import { GraphQLProvider as RealGraphQLProvider } from 'src/graphql'
 
@@ -8,7 +7,7 @@ export const useAuth = () => {
   return USE_AUTH()
 }
 
-const HammerProvider = ({ auth = {}, theme = {}, children }) => {
+const HammerProvider = ({ auth = {}, children }) => {
   const {
     AuthProvider = React.Fragment,
     GraphQLProvider = RealGraphQLProvider,
@@ -17,9 +16,7 @@ const HammerProvider = ({ auth = {}, theme = {}, children }) => {
   USE_AUTH = useAuth
   return (
     <AuthProvider>
-      <GraphQLProvider>
-        <ThemeProvider theme={theme}>{children}</ThemeProvider>
-      </GraphQLProvider>
+      <GraphQLProvider>{children}</GraphQLProvider>
     </AuthProvider>
   )
 }
@@ -30,7 +27,6 @@ HammerProvider.propTypes = {
     useAuth: PropTypes.func.isRequired,
     GraphQLProvider: PropTypes.func.isRequired,
   }),
-  theme: PropTypes.object,
 }
 
 export default HammerProvider

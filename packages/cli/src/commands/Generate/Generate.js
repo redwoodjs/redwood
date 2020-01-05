@@ -2,7 +2,7 @@ import path from 'path'
 
 import React from 'react'
 import { Box, Text, Color } from 'ink'
-import { getHammerBaseDir } from '@hammerframework/hammer-core'
+import { getHammerBaseDir } from '@redwoodjs/core'
 
 import { writeFile, bytes } from 'src/lib'
 
