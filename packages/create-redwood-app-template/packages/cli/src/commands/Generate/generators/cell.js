@@ -24,6 +24,6 @@ const files = (args) => {
 export default {
   name: 'Cell',
   command: 'cell',
-  description: 'Generates a Hammer cell component',
+  description: 'Generates a cell component',
   files: (args) => files(args),
 }

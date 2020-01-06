@@ -3,7 +3,7 @@ import path from 'path'
 
 import { Response, Request } from 'express'
 import { APIGatewayProxyResult, APIGatewayProxyEvent } from 'aws-lambda'
-import { getHammerConfig } from '@redwoodjs/core'
+import { getConfig } from '@redwoodjs/core'
 import express from 'express'
 // @ts-ignore
 import expressLogging from 'express-logging'
@@ -15,30 +15,30 @@ import chokidar from 'chokidar'
 // @ts-ignore
 import babelRegister from '@babel/register'
 
-const hammerConfig = getHammerConfig()
-const hammerApiDir = path.join(hammerConfig.baseDir, 'api')
+const config = getConfig()
+const API_DIR = path.join(config.baseDir, 'api')
 
 babelRegister({
-  extends: path.join(hammerApiDir, '.babelrc.js'),
+  extends: path.join(API_DIR, '.babelrc.js'),
   extensions: ['.js', '.ts'],
-  only: [hammerApiDir],
+  only: [API_DIR],
   ignore: ['node_modules'],
 })
 
 // TODO: Convert to yargs.
 args
-  .option('port', '', hammerConfig.api.port)
+  .option('port', '', config.api.port)
   .option(
     'path',
     'The path to your lambda functions',
-    hammerConfig.api.paths.functions
+    config.api.paths.functions
   )
 const { port: PORT, path: PATH } = args.parse(process.argv)
 const HOSTNAME = `http://localhost:${PORT}`
 
 const showHeader = (lambdas: Record<string, any>) => {
   console.log(`◌ Listening on ${HOSTNAME}`)
-  console.log(`◌ Watching ${hammerApiDir}`)
+  console.log(`◌ Watching ${API_DIR}`)
   console.log('\nNow serving\n')
   console.log(
     Object.keys(lambdas)
@@ -190,7 +190,7 @@ const startServer = () => app.listen(PORT, () => showHeader(lambdaFunctions))
 const server = startServer()
 server.setTimeout(10 * 1000)
 
-const watcher = chokidar.watch(hammerApiDir, {
+const watcher = chokidar.watch(API_DIR, {
   ignored: (path: string) => path.includes('node_modules'),
 })
 

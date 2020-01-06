@@ -7,7 +7,7 @@ export const useAuth = () => {
   return USE_AUTH()
 }
 
-const HammerProvider = ({ auth = {}, children }) => {
+const RedwoodProvider = ({ auth = {}, children }) => {
   const {
     AuthProvider = React.Fragment,
     GraphQLProvider = RealGraphQLProvider,
@@ -21,7 +21,7 @@ const HammerProvider = ({ auth = {}, children }) => {
   )
 }
 
-HammerProvider.propTypes = {
+RedwoodProvider.propTypes = {
   auth: PropTypes.shape({
     AuthProvider: PropTypes.func.isRequired,
     useAuth: PropTypes.func.isRequired,
@@ -29,4 +29,4 @@ HammerProvider.propTypes = {
   }),
 }
 
-export default HammerProvider
+export default RedwoodProvider

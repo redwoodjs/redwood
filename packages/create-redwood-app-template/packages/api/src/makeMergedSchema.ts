@@ -27,12 +27,12 @@ export const makeMergedSchema = (
     scalar Time
     scalar DateTime
 
-    type HammerFramework {
+    type Redwood {
       version: String
     }
 
     type Query {
-      hammerframework: HammerFramework
+      redwood: Redwood
     }
   `
 
@@ -41,7 +41,7 @@ export const makeMergedSchema = (
     Time: GraphQLTime,
     DateTime: GraphQLDateTime,
     Query: {
-      hammerframework: () => ({
+      redwood: () => ({
         version: '0.0.0',
       }),
     },

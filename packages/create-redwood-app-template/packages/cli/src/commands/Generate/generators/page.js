@@ -31,7 +31,7 @@ const routes = ([pageName, ..._rest]) => {
 export default {
   name: 'Page',
   command: 'page',
-  description: 'Generates a Hammer page component',
+  description: 'Generates a page component',
   files: (args) => files(args),
   routes: (args) => routes(args),
 }
