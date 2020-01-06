@@ -1,0 +1,5 @@
+const <%= name %> = ({ children }) => {
+  return <>{children}</>
+}
+
+export default <%= name %>

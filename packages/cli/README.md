@@ -16,14 +16,31 @@ The first thing we'll want to do is create a new Redwood application by running 
 ```terminal
 $ yarn new ~/myprojects/todo
 Created ~/myprojects/todo
-Downloading https://github.com/hammerframework/create-hammer-app/archive/v0.0.1-alpha.7.zip...
+Downloading https://github.com/redwoodjs/create-redwood-app/archive/v0.0.1-alpha.7.zip...
 Extracting...
 Added 50 files in ~/myprojects/todo
 ```
 
 ## Development
 
-Run `yarn dev` to automatically reload the
+Commands require a "redwood project structure" to be effectively tested.
+You can use `create-redwood-app` to test your commands, but first you'll need link
+to this repo with `create-redwood-app`.
+
+```terminal
+$ cd redwood/packages/cli
+$ yarn link
+success Registered "@redwoodjs/cli".
+info You can now run `yarn link "@redwoodjs/cli"` in the projects where you want to use this package and it will be used instead.
+$ cd ../../../create-redwood-app
+$ `yarn link "@redwoodjs/cli"`
+$ yarn redwood dev <command>
+```
+
+Run `yarn dev <command>` to automatically re-run your command when you make changes
+during development.
+
+### Adding new commands
 
 Add a new command by creating `CommandName/CommandName.js` file in the
 `./src/commands` directory.
@@ -34,7 +51,7 @@ A command should export the following:
 export default ({ args }) => {} // The react-ink component.
 export const commandProps = {
   name: 'generate',
-  alias: 'g', // invoke with hammer s instead of hammer scaffold,
+  alias: 'g', // invoke with `redwood s` instead of `redwood scaffold`,
   description: 'This command does a, b, but not c.',
 }
 ```

@@ -1,67 +1,42 @@
-import camelcase from 'camelcase'
+import path from 'path'
 
-const pascalCase = (string) => camelcase(string, { pascalCase: true })
+import pascalcase from 'pascalcase'
 
-const component = (componentName) => {
-  return `
-/**
- * This amazing component does...
- */
-const ${componentName} = (props) => {
-  return <div>I am ${componentName}.</div>;
-};
+import { generateTemplate } from 'src/lib'
 
-${componentName}.propTypes = {}
+const OUTPUT_PATH = path.join('web', 'src', 'components')
 
-${componentName}.queryProps = {
-  query: gql\`query ${componentName}Query {}\`,
-  skeleton: undefined,
-  dataToProps: (data) => data,
-};
+const files = (args) => {
+  const [[componentName, ..._rest], _flags] = args
+  const name = pascalcase(componentName)
+  const outputPath = path.join(OUTPUT_PATH, name)
 
-export default ${componentName};
-`
-}
-
-const test = (componentName) => {
-  return `
-import React from 'react';
-import { fireEvent, cleanup } from '@testing-library/react';
-
-import ${componentName} from './';
-
-describe('${componentName}', () => {
-
-  afterEach(() => {
-    cleanup()
-  });
-
-  it('this test will fail', () => {
-    const component = renderComponent(<${componentName} />);
-    component.debug();
-    expect(true).toBe(false);
-  })
-})
-`
-}
-
-const mdx = (componentName) => {
-  return `
-import ${componentName} from './'
-
-# ${componentName}
-
-- [ ] Document the props/ types
-- [ ] Allow user to play with the component
-  `
-}
-
-export default (name) => {
-  const componentName = pascalCase(name)
+  const componentPath = path.join(outputPath, `${name}.js`)
+  const componentTemplate = generateTemplate(
+    path.join('component', 'component.js.template'),
+    { name }
+  )
+  const testPath = path.join(outputPath, `${name}.test.js`)
+  const testTemplate = generateTemplate(
+    path.join('component', 'test.js.template'),
+    { name }
+  )
+  const readmePath = path.join(outputPath, `${name}.mdx`)
+  const readmeTemplate = generateTemplate(
+    path.join('component', 'readme.mdx.template'),
+    { name }
+  )
 
   return {
-    [`${componentName}/${componentName}.js`]: component(componentName),
-    [`${componentName}/${componentName}.test.js`]: test(componentName),
-    [`${componentName}/${componentName}.mdx`]: mdx(componentName),
+    [componentPath]: componentTemplate,
+    [testPath]: testTemplate,
+    [readmePath]: readmeTemplate,
   }
+}
+
+export default {
+  name: 'Component',
+  command: 'component',
+  description: 'Generates a React component',
+  files: (args) => files(args),
 }

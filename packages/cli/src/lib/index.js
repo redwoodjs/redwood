@@ -4,6 +4,26 @@ import path from 'path'
 import requireDir from 'require-dir'
 import parse from 'yargs-parser'
 import { getHammerConfig } from '@redwoodjs/core'
+import lodash from 'lodash/string'
+
+export const templateRoot = path.join(
+  __dirname,
+  '..',
+  '..',
+  'src',
+  'commands',
+  'Generate',
+  'templates'
+)
+
+export const generateTemplate = (templateFilename, replacements) => {
+  const templatePath = path.join(templateRoot, templateFilename)
+  const template = lodash.template(readFile(templatePath).toString())
+
+  return template(replacements)
+}
+
+export const readFile = (target) => fs.readFileSync(target)
 
 export const writeFile = (
   target,
@@ -77,6 +97,16 @@ export const getCommands = (commandsPath = '../commands') => {
   }, [])
 }
 
+// turns command line args like:
+//
+//   generate sdl contact--force
+//
+// into:
+//
+//   [['generate', 'sdl', 'contact'], { force: true }]
 export const parseArgs = () => {
-  return parse(process.argv.slice(2))._
+  const parsed = parse(process.argv.slice(2))
+  const { _: positional, ...flags } = parsed
+
+  return [positional, flags]
 }
