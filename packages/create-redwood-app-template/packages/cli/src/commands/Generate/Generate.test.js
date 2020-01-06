@@ -8,7 +8,7 @@ describe('Command: Generate', () => {
     testGenerator: () => ({ 'a.js': 'a', 'a.test.js': 'b' }),
   }
 
-  it('command usage is shown when no or a bad generator is selected', () => {
+  it('command usage is shown when no generator or an unknown generator is selected', () => {
     const { lastFrame } = render(
       <Generate args={['generate']} generators={generators} />
     )

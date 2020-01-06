@@ -6,8 +6,8 @@ import { render, Box } from 'ink'
 import { getCommands, parseArgs } from 'src/lib'
 import { Header, CommandList } from 'src/components'
 
-const Router = ({ commands, args = [] }) => {
-  const commandToRun = args[0]
+const Router = ({ commands, args = [[], {}] }) => {
+  const commandToRun = args[0][0]
   const command = commands.find(({ commandProps: { name, alias } }) =>
     [name, alias].includes(commandToRun)
   )

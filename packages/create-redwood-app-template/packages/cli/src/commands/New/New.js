@@ -1,3 +1,10 @@
+// The `redwood new` command creates a new Redwood application. It downloads the
+// latest release at https://github.com/redwoodjs/create-redwood-app/ and extracts
+// it into the specified directory.
+//
+// Usage:
+// $ redwood new ./path/to/new-project
+
 import fs from 'fs'
 import path from 'path'
 
@@ -34,7 +41,6 @@ const latestReleaseZipFile = async () => {
   return response.data[0].zipball_url
 }
 
-// TODO: Grab the latest release URL from GitHub
 const New = ({ args: [_commandName, targetDir] }) => {
   const [messages, setMessages] = useState([])
   // Swimming against the tide: https://overreacted.io/a-complete-guide-to-useeffect/#swimming-against-the-tide
@@ -46,26 +52,25 @@ const New = ({ args: [_commandName, targetDir] }) => {
   }
 
   useEffect(() => {
-    const createHammerApp = async () => {
-      // Create the project directory
-      const newHammerAppDir = path.resolve(process.cwd(), targetDir)
-      if (fs.existsSync(newHammerAppDir)) {
-        // TODO: Ask the user if they want to proceed, make it look like
-        // an error?
+    const createApp = async () => {
+      // First check and create the new project directory
+      const newAppDir = path.resolve(process.cwd(), targetDir)
+      if (fs.existsSync(newAppDir)) {
         setNewMessage(
-          `🖐  We can't continue because "${newHammerAppDir}" already exists`
+          `🖐  We can't continue because "${newAppDir}" already exists`
         )
         return
       } else {
-        fs.mkdirSync(newHammerAppDir, { recursive: true })
+        fs.mkdirSync(newAppDir, { recursive: true })
         setNewMessage(
           <Text>
-            Created <Color green>{newHammerAppDir}</Color>
+            Created <Color green>{newAppDir}</Color>
           </Text>
         )
       }
 
-      // Download the latest release of `create-hammer-app`
+      // Then download the latest release of `create-redwood-app` and extract
+      // it to the user's desired location
       const tmpDownloadPath = tmp.tmpNameSync({
         prefix: 'redwood',
         postfix: '.zip',
@@ -76,20 +81,21 @@ const New = ({ args: [_commandName, targetDir] }) => {
       await downloadFile(realeaseUrl, tmpDownloadPath)
 
       setNewMessage(<Text>Extracting...</Text>)
-      const files = await unzip(tmpDownloadPath, newHammerAppDir)
+      const files = await unzip(tmpDownloadPath, newAppDir)
       setNewMessage(
         <Text>
-          Added {files.length} files in <Color green>{newHammerAppDir}</Color>
+          Added {files.length} files in <Color green>{newAppDir}</Color>
         </Text>
       )
 
+      // TODO: Remove this since we only use `yarn`
       setNewMessage(<Text>Installing packages...</Text>)
       const prefixFlag = hasYarn() ? '--cwd' : '--prefix'
-      spawn.sync(['install', prefixFlag, newHammerAppDir], { stdio: 'inherit' })
+      spawn.sync(['install', prefixFlag, newAppDir], { stdio: 'inherit' })
     }
 
     if (targetDir) {
-      createHammerApp()
+      createApp()
     }
   }, [targetDir])
 

@@ -1,0 +1,18 @@
+import <%= serviceName %> from 'src/services/<%= serviceFileName %>'
+
+export const schema = gql`
+  type <%= typeName %> {
+    <%= query %>
+  }
+
+  type Query {
+    <%= queryAllName %>: [<%= typeName %>]
+  }
+
+  input <%= typeName %>Input {
+    <%= input %>
+  }
+
+  type Mutation {
+  }
+`
