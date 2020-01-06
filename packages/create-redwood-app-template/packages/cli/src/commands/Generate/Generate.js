@@ -25,7 +25,7 @@ const Generate = ({
   if (!getHammerBaseDir()) {
     return (
       <Color red>
-        The `generate` command has to be run in your hammer project directory.
+        The `generate` command has to be run in your redwood project directory.
       </Color>
     )
   }
@@ -79,7 +79,7 @@ const Generate = ({
             <Text bold>Usage</Text>
           </Box>
           <Text>
-            hammer generate{' '}
+            redwood generate{' '}
             <Color blue>{generatorCommand || 'generator'} name [path]</Color>
           </Text>
         </Box>
