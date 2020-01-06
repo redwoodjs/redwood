@@ -1,3 +1,9 @@
+// The new command creates a new Redwood application. It works by downloading the
+// latest release at https://github.com/redwoodjs/create-redwood-app/, and extracts
+// it into the directory specified.
+//
+// Usage:
+// $ redwood new ./path/to/new-project
 import fs from 'fs'
 import path from 'path'
 
@@ -34,7 +40,6 @@ const latestReleaseZipFile = async () => {
   return response.data[0].zipball_url
 }
 
-// TODO: Grab the latest release URL from GitHub
 const New = ({ args: [_commandName, targetDir] }) => {
   const [messages, setMessages] = useState([])
   // Swimming against the tide: https://overreacted.io/a-complete-guide-to-useeffect/#swimming-against-the-tide
@@ -46,12 +51,10 @@ const New = ({ args: [_commandName, targetDir] }) => {
   }
 
   useEffect(() => {
-    const createHammerApp = async () => {
-      // Create the project directory
+    const createApp = async () => {
+      // First check and create the new project directory
       const newHammerAppDir = path.resolve(process.cwd(), targetDir)
       if (fs.existsSync(newHammerAppDir)) {
-        // TODO: Ask the user if they want to proceed, make it look like
-        // an error?
         setNewMessage(
           `🖐  We can't continue because "${newHammerAppDir}" already exists`
         )
@@ -65,7 +68,8 @@ const New = ({ args: [_commandName, targetDir] }) => {
         )
       }
 
-      // Download the latest release of `create-hammer-app`
+      // Then download the latest release of `create-hammer-app` and extract
+      // it to the user's desired location
       const tmpDownloadPath = tmp.tmpNameSync({
         prefix: 'redwood',
         postfix: '.zip',
@@ -89,7 +93,7 @@ const New = ({ args: [_commandName, targetDir] }) => {
     }
 
     if (targetDir) {
-      createHammerApp()
+      createApp()
     }
   }, [targetDir])
 
