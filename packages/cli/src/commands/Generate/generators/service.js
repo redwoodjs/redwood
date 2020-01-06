@@ -24,6 +24,6 @@ const files = (args) => {
 export default {
   name: 'Service',
   command: 'service',
-  description: 'Generates a Hammer service object',
+  description: 'Generates a service object',
   files: (args) => files(args),
 }

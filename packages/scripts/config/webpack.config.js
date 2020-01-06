@@ -7,10 +7,10 @@ const DirectoryNamedWebpackPlugin = require('directory-named-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const Dotenv = require('dotenv-webpack')
-const { getHammerConfig } = require('@redwoodjs/core')
+const { getConfig } = require('@redwoodjs/core')
 
-const hammerConfig = getHammerConfig()
-const BASE_DIR = hammerConfig.baseDir
+const config = getConfig()
+const BASE_DIR = config.baseDir
 
 // I've borrowed and learnt extensively from the `create-react-app`
 // repo: https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/config/webpack.config.js
@@ -76,9 +76,7 @@ module.exports = (webpackEnv) => {
         gql: ['@redwoodjs/web', 'gql'],
       }),
       new webpack.DefinePlugin({
-        '__HAMMER__.apiProxyPath': JSON.stringify(
-          hammerConfig.web.apiProxyPath
-        ),
+        '__REDWOOD__.apiProxyPath': JSON.stringify(config.web.apiProxyPath),
         __filename: webpack.DefinePlugin.runtimeValue((runtimeValue) => {
           // absolute path of imported file
           return JSON.stringify(runtimeValue.module.resource)

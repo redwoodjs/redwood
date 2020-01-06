@@ -3,20 +3,20 @@
 // $ redwood dev
 
 import concurrently from 'concurrently'
-import { getHammerBaseDir } from '@redwoodjs/core'
+import { getBaseDir } from '@redwoodjs/core'
 
 const Dev = () => {
-  const baseDir = getHammerBaseDir()
+  const baseDir = getBaseDir()
 
   concurrently(
     [
       {
-        command: `cd ${baseDir}/web && yarn webpack-dev-server --config ./config/webpack.dev.js`,
+        command: `cd ${baseDir}/web && yarn dev`,
         name: 'web',
         prefixColor: 'yellow',
       },
       {
-        command: `cd ${baseDir}/api && yarn hammer-dev-server`,
+        command: `cd ${baseDir}/api && yarn dev`,
         name: 'api',
         prefixColor: 'green',
       },

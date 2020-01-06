@@ -6,7 +6,7 @@ import { version } from '../../package.json'
 export default (props) => (
   <Box {...props}>
     <Color hex="#FFD900">
-      <Text bold>⚒ Hammer</Text> - Build something. (https://example.org)
+      <Text bold>Redwood</Text> - Build something. (https://redwoodjs.com)
     </Color>{' '}
     <Color hex="#999">| v{version}</Color>
   </Box>

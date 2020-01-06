@@ -4,7 +4,7 @@ import { ApolloProvider } from '@apollo/react-hooks'
 export { withCell } from './withCell'
 
 const DEFAULT_CLIENT_CONFIG = {
-  uri: `${__HAMMER__.apiProxyPath}/graphql`,
+  uri: `${__REDWOOD__.apiProxyPath}/graphql`,
 }
 
 export const createGraphQLClient = (config) => {

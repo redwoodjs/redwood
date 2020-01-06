@@ -21,6 +21,6 @@ const files = (args) => {
 export default {
   name: 'Layout',
   command: 'layout',
-  description: 'Generates a Hammer layout component',
+  description: 'Generates a layout component',
   files: (args) => files(args),
 }

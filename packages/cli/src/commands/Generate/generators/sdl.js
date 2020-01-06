@@ -77,7 +77,7 @@ const generate = (args) => {
 export default {
   name: 'SDL',
   command: 'sdl',
-  description: 'Generates a GraphQL SDL file and Hammer service object',
+  description: 'Generates a GraphQL SDL file and service object',
   files: async (args) => await files(args),
   generate: (args) => generate(args),
 }
