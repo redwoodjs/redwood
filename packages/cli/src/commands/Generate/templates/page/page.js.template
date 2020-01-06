@@ -3,6 +3,6 @@ const <%= name %> = () => {
     <h1><%= name %></h1>
     <p>Find me in <%= path %></p>
   )
-};
+}
 
-export default <%= name %>;
+export default <%= name %>
