@@ -1,17 +1,17 @@
 import React from 'react';
-import { fireEvent, cleanup } from '@testing-library/react';
+import { fireEvent, cleanup } from '@testing-library/react'
 
-import <%= name %> from './';
+import <%= name %> from './'
 
 describe('<%= name %>', () => {
 
   afterEach(() => {
     cleanup()
-  });
+  })
 
   it('this test will fail', () => {
-    const component = renderComponent(<<%= name %> />);
+    const component = renderComponent(<<%= name %> />)
     component.debug();
-    expect(true).toBe(false);
+    expect(true).toBe(false)
   })
 })

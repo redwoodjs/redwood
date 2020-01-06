@@ -4,14 +4,14 @@ export const QUERY = gql`
       id
     }
   }
-`;
+`
 
-export const Loading = () => <div>Loading...</div>;
+export const Loading = () => <div>Loading...</div>
 
-export const Empty = () => <div>Empty</div>;
+export const Empty = () => <div>Empty</div>
 
-export const Failure = ({ message }) => <div>Error: {message}</div>;
+export const Failure = ({ message }) => <div>Error: {message}</div>
 
 export const Success = ({ <%= camelName %> }) => {
-  return <%= camelName %>.toString();
-};
+  return <%= camelName %>.toString()
+}
