@@ -2,7 +2,7 @@ import path from 'path'
 
 import React from 'react'
 import { Box, Text, Color } from 'ink'
-import { getHammerBaseDir } from '@redwoodjs/core'
+import { getBaseDir } from '@redwoodjs/core'
 
 import { readFile, writeFile, bytes } from 'src/lib'
 
@@ -15,17 +15,17 @@ import sdl from './generators/sdl'
 import service from './generators/service'
 
 const GENERATORS = [cell, component, layout, page, scaffold, sdl, service]
-const ROUTES_PATH = path.join(getHammerBaseDir(), 'web', 'src', 'Routes.js')
+const ROUTES_PATH = path.join(getBaseDir(), 'web', 'src', 'Routes.js')
 
 const Generate = ({
   args,
   generators = GENERATORS,
   fileWriter = writeFile,
 }) => {
-  if (!getHammerBaseDir()) {
+  if (!getBaseDir()) {
     return (
       <Color red>
-        The `generate` command has to be run in your redwood project directory.
+        The `generate` command has to be run in your Redwood project directory.
       </Color>
     )
   }
@@ -34,7 +34,7 @@ const Generate = ({
     return Object.keys(files).map((filename) => {
       const contents = files[filename]
       try {
-        fileWriter(path.join(getHammerBaseDir(), filename), contents)
+        fileWriter(path.join(getBaseDir(), filename), contents)
         return (
           <Text key={`wrote-${filename}`}>
             <Color green>Wrote {filename}</Color> {bytes(contents)} bytes

@@ -3,7 +3,6 @@ import path from 'path'
 
 import requireDir from 'require-dir'
 import parse from 'yargs-parser'
-import { getHammerConfig } from '@redwoodjs/core'
 import lodash from 'lodash/string'
 
 export const templateRoot = path.join(
@@ -42,8 +41,6 @@ export const writeFile = (
 }
 
 export const bytes = (contents) => Buffer.byteLength(contents, 'utf8')
-
-export const hammerBaseDir = () => getHammerConfig().baseDir
 
 const validateCommandExports = ({ commandProps, ...rest }) => {
   if (typeof rest.default !== 'function') {

@@ -1,5 +1,4 @@
-//
-// Hammer's ESLint configuration is a mixture between ESLint's recommended
+// Our ESLint configuration is a mixture between ESLint's recommended
 // rules [^1], React's recommended rules [^2], and a bit of our own stylistic
 // flair:
 // - no semicolons
@@ -46,7 +45,7 @@ module.exports = {
   globals: {
     gql: 'readonly',
     React: 'readonly',
-    __HAMMER__: 'readonly',
+    __REDWOOD__: 'readonly',
   },
   rules: {
     'prettier/prettier': 'error',
