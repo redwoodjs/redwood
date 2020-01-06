@@ -1,11 +1,11 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const merge = require('webpack-merge')
 const escapeRegExp = require('lodash.escaperegexp')
-const { getHammerConfig } = require('@redwoodjs/core')
+const { getConfig } = require('@redwoodjs/core')
 
 const webpackConfig = require('./webpack.config.js')
 
-const hammerConfig = getHammerConfig()
+const config = getConfig()
 
 module.exports = merge(webpackConfig('development'), {
   devServer: {
@@ -18,12 +18,12 @@ module.exports = merge(webpackConfig('development'), {
     injectClient: false,
     quiet: true,
     historyApiFallback: true,
-    port: hammerConfig.web.port,
+    port: config.web.port,
     proxy: {
-      [hammerConfig.web.apiProxyPath]: {
-        target: `http://localhost:${hammerConfig.api.port}`,
+      [config.web.apiProxyPath]: {
+        target: `http://localhost:${config.api.port}`,
         pathRewrite: {
-          [`^${escapeRegExp(hammerConfig.web.apiProxyPath)}`]: '',
+          [`^${escapeRegExp(config.web.apiProxyPath)}`]: '',
         },
       },
     },

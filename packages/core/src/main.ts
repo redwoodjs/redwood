@@ -4,25 +4,23 @@ import path from 'path'
 import findUp from 'findup-sync'
 import toml from 'toml'
 
-const HAMMER_CONFIG_FILE = 'hammer.toml'
+const CONFIG_FILE_NAME = 'redwood.toml'
 
-export const getHammerConfigPath = (): string => {
-  const configPath = findUp(HAMMER_CONFIG_FILE)
+export const getConfigPath = (): string => {
+  const configPath = findUp(CONFIG_FILE_NAME)
   if (!configPath) {
     throw new Error(
-      `Could not find a "${HAMMER_CONFIG_FILE}" file, are you in a hammer project?`
+      `Could not find a "${CONFIG_FILE_NAME}" file, are you sure you're in a Redwood project?`
     )
   }
   return configPath
 }
 
-export const getHammerBaseDir = (
-  configPath: string = getHammerConfigPath()
-): string => {
+export const getBaseDir = (configPath: string = getConfigPath()): string => {
   return path.dirname(configPath)
 }
 
-export interface HammerConfig {
+export interface ConfigInterface {
   baseDir: string
   web: {
     port: number
@@ -38,13 +36,13 @@ export interface HammerConfig {
   }
 }
 
-export const getHammerConfig = (): HammerConfig => {
-  const configPath = getHammerConfigPath()
-  const baseDir = getHammerBaseDir(configPath)
+export const getConfig = (): ConfigInterface => {
+  const configPath = getConfigPath()
+  const baseDir = getBaseDir(configPath)
   try {
     const config = toml.parse(
       fs.readFileSync(configPath, 'utf8')
-    ) as HammerConfig
+    ) as ConfigInterface
 
     return {
       ...config,
