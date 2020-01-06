@@ -1,9 +1,10 @@
-// The new command creates a new Redwood application. It works by downloading the
-// latest release at https://github.com/redwoodjs/create-redwood-app/, and extracts
-// it into the directory specified.
+// The `redwood new` command creates a new Redwood application. It downloads the
+// latest release at https://github.com/redwoodjs/create-redwood-app/ and extracts
+// it into the specified directory.
 //
 // Usage:
 // $ redwood new ./path/to/new-project
+
 import fs from 'fs'
 import path from 'path'
 
@@ -53,22 +54,22 @@ const New = ({ args: [_commandName, targetDir] }) => {
   useEffect(() => {
     const createApp = async () => {
       // First check and create the new project directory
-      const newHammerAppDir = path.resolve(process.cwd(), targetDir)
-      if (fs.existsSync(newHammerAppDir)) {
+      const newAppDir = path.resolve(process.cwd(), targetDir)
+      if (fs.existsSync(newAppDir)) {
         setNewMessage(
-          `🖐  We can't continue because "${newHammerAppDir}" already exists`
+          `🖐  We can't continue because "${newAppDir}" already exists`
         )
         return
       } else {
-        fs.mkdirSync(newHammerAppDir, { recursive: true })
+        fs.mkdirSync(newAppDir, { recursive: true })
         setNewMessage(
           <Text>
-            Created <Color green>{newHammerAppDir}</Color>
+            Created <Color green>{newAppDir}</Color>
           </Text>
         )
       }
 
-      // Then download the latest release of `create-hammer-app` and extract
+      // Then download the latest release of `create-redwood-app` and extract
       // it to the user's desired location
       const tmpDownloadPath = tmp.tmpNameSync({
         prefix: 'redwood',
@@ -80,16 +81,17 @@ const New = ({ args: [_commandName, targetDir] }) => {
       await downloadFile(realeaseUrl, tmpDownloadPath)
 
       setNewMessage(<Text>Extracting...</Text>)
-      const files = await unzip(tmpDownloadPath, newHammerAppDir)
+      const files = await unzip(tmpDownloadPath, newAppDir)
       setNewMessage(
         <Text>
-          Added {files.length} files in <Color green>{newHammerAppDir}</Color>
+          Added {files.length} files in <Color green>{newAppDir}</Color>
         </Text>
       )
 
+      // TODO: Remove this since we only use `yarn`
       setNewMessage(<Text>Installing packages...</Text>)
       const prefixFlag = hasYarn() ? '--cwd' : '--prefix'
-      spawn.sync(['install', prefixFlag, newHammerAppDir], { stdio: 'inherit' })
+      spawn.sync(['install', prefixFlag, newAppDir], { stdio: 'inherit' })
     }
 
     if (targetDir) {

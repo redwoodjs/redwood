@@ -1,3 +1,7 @@
+// The `redwood dev` command runs the api and web development servers.
+// Usage:
+// $ redwood dev
+
 import concurrently from 'concurrently'
 import { getHammerBaseDir } from '@redwoodjs/core'
 
