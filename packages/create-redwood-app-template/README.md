@@ -6,7 +6,14 @@ _by Tom Preston-Werner and Peter Pistorius._
 [Readme Driven Development](https://tom.preston-werner.com/2010/08/23/readme-driven-development.html))
 and not everything contained within it is true yet.
 
-**EXAMPLE:** If you'd like to see some examples of what a Redwood application
+**TUTORIAL:** We have a "getting started from scratch" tutorial in the works,
+but keep in mind that we are driving Redwood development with that prose, and
+many of the commands don't actually work yet. We would love your feedback on
+anything you find confusing.
+
+https://github.com/redwoodjs/tutorial
+
+**EXAMPLES:** If you'd like to see some examples of what a Redwood application
 might look like (these are still very much works in progress), take a look at
 the following projects:
 
