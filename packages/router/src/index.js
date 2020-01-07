@@ -4,6 +4,8 @@
 
 import { useContext } from 'react'
 
+import SplashPage from './SplashPage'
+
 // Convert the given path (from the path specified in the Route) into
 // a regular expression that will match any named parameters.
 //
@@ -267,6 +269,13 @@ const RouterImpl = ({ pathname, search, children }) => {
         )
       }
     }
+  }
+
+  // If the router is being used in a Redwood app and only the notfound page is
+  // specified, show the Redwood splash page.
+  if (routes.length === 1 && NotFoundPage) {
+    const isRedwood = typeof __REDWOOD__ !== 'undefined'
+    return <SplashPage isRedwood={isRedwood} />
   }
 
   return (
