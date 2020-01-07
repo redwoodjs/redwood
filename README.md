@@ -27,6 +27,11 @@ of decisions for you, Redwood lets you get to work on what makes your
 application special, instead of wasting cycles choosing and re-choosing various
 technology components.
 
+We are obsessed with developer experience and eliminating as much boilerplate as
+possible. Where existing libraries elegantly solve our problems, we use them;
+where they don't, we write our own solutions. The end result is a JavaScript
+development experience you can fall in love with!
+
 Here's a quick taste of the technologies a standard Redwood application will
 use:
 
@@ -87,21 +92,27 @@ you develop your application. The two separate projects are intended to make
 this obvious. In addition, separate projects allow for different dependencies
 and build processes for each project.
 
-The api side is an implementation of a GraphQL API. Redwood makes it easy to
-interact with a database via Prisma's Photon ORM. Code can be organized into
-Photon's model classes, which keeps things clean. Photon also provides
-first-class migrations that take the pain out of evolving your database schema.
+The api side is an implementation of a GraphQL API. Your business logic is
+organized into "services" that represent their own internal API and can be
+called both from external GraphQL requests and other internal services. Redwood
+can automatically connect your internal services with Apollo, reducing the
+amount of boilerplate you have to write. Your services can interact with a
+database via Prisma's Photon ORM, and Prisma's Lift provides first-class
+migrations that take the pain out of evolving your database schema.
 
-The web side is coded with React. Redwood provides a variety of utility
-components designed to make it easy to run queries and mutations against your
-GraphQL API. These components also help separate data fetching from rendering so
-you can easily test your components and develop them in isolation (enhanced by
-using Storybook).
+The web side is built with React. Redwood's router makes it simple to map URL
+paths to React "Page" components. Pages may contain a "Layout" component to wrap
+content. They also contain "Cells" and regular React components. Cells allow you
+to declaratively manage the lifecycle of a component that fetches and displays
+data. Other Redwood utility components make it trivial to implement smart forms
+and various common needs. An ideal development flow starts with Storybook
+entries and Jest tests, so Redwood closely integrates both, making it easy to do
+the right thing.
 
 You'll notice that the web side is called "web" and not "frontend". This is
 because Redwood conceives of a world where you may have other sides like
-"mobile", "cli", etc, all consuming the same GraphQL API and living in the same
-monorepo.
+"mobile", "desktop", "cli", etc, all consuming the same GraphQL API and living
+in the same monorepo.
 
 ## How can it be serverless if it involves a GraphQL API and database?
 
