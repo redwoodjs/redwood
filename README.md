@@ -2,6 +2,12 @@
 
 _by Tom Preston-Werner and Peter Pistorius._
 
+**Redwood is an opinionated, full stack, serverless web application framework
+that will allow you to build JAMstack applications with ease.** By making a lot
+of decisions for you, Redwood lets you get to work on what makes your
+application special, instead of wasting cycles choosing and re-choosing various
+technology components.
+
 **WARNING:** This document is aspirational (see
 [Readme Driven Development](https://tom.preston-werner.com/2010/08/23/readme-driven-development.html))
 and not everything contained within it is true yet.
@@ -21,11 +27,7 @@ the following projects:
 - [Blog](https://github.com/redwoodjs/example-blog)
 - [Invoice](https://github.com/redwoodjs/example-invoice)
 
-**Redwood is an opinionated, full stack, serverless web application framework
-that will allow you to build JAMstack applications with ease.** By making a lot
-of decisions for you, Redwood lets you get to work on what makes your
-application special, instead of wasting cycles choosing and re-choosing various
-technology components.
+## Technologies
 
 We are obsessed with developer experience and eliminating as much boilerplate as
 possible. Where existing libraries elegantly solve our problems, we use them;
