@@ -20,9 +20,15 @@ const files = (args) => {
   return { [outputPath]: template }
 }
 
-const routes = ([pageName, ..._rest]) => {
+const routes = ([pageName, pathSpec, ..._rest]) => {
+  let computedPathSpec
+  if (typeof pathSpec !== 'undefined') {
+    computedPathSpec = pathSpec
+  } else {
+    computedPathSpec = `/${paramCase(pageName)}`
+  }
   return [
-    `<Route path="/${paramCase(pageName)}" page={${pascalcase(
+    `<Route path="${computedPathSpec}" page={${pascalcase(
       pageName
     )}Page} name="${camelcase(pageName)}" />`,
   ]
