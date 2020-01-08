@@ -46,6 +46,7 @@ module.exports = {
     gql: 'readonly',
     React: 'readonly',
     __REDWOOD__: 'readonly',
+    __REDWOOD__API_PROXY_PATH: 'readonly',
   },
   rules: {
     'prettier/prettier': 'error',

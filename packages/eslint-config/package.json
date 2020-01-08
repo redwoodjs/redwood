@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/eslint-config",
-  "version": "0.0.1-alpha.16",
+  "version": "0.0.1-alpha.16.2",
   "main": "index.js",
   "license": "MIT",
   "dependencies": {

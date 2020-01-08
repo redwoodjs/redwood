@@ -74,12 +74,12 @@ module.exports = (webpackEnv) => {
         React: 'react',
         PropTypes: 'prop-types',
         gql: ['@redwoodjs/web', 'gql'],
+        __REDWOOD__: ['@redwoodjs/web', '__REDWOOD__'],
       }),
       // The define plugin will replace these keys with their values during build
       // time.
       new webpack.DefinePlugin({
-        __REDWOOD: true,
-        __REDWOOD_API_PROXY_PATH: JSON.stringify(config.web.apiProxyPath),
+        __REDWOOD__API_PROXY_PATH: JSON.stringify(config.web.apiProxyPath),
         __filename: webpack.DefinePlugin.runtimeValue((runtimeValue) => {
           // absolute path of imported file
           return JSON.stringify(runtimeValue.module.resource)
