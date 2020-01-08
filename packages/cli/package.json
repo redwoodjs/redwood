@@ -10,7 +10,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "babel src --out-dir dist",
+    "build": "babel src --out-dir dist && cp -r ./src/commands/Generate/templates ./dist/commands/Generate/templates",
     "clean": "rm -rf dist",
     "prepare": "yarn clean && yarn build",
     "redwood": "babel-node src/index.js",
