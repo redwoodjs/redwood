@@ -41,7 +41,7 @@ const latestReleaseZipFile = async () => {
   return response.data[0].zipball_url
 }
 
-const New = ({ args: [_commandName, targetDir] }) => {
+const New = ({ args: [[_commandName, targetDir]] }) => {
   const [messages, setMessages] = useState([])
   // Swimming against the tide: https://overreacted.io/a-complete-guide-to-useeffect/#swimming-against-the-tide
   const latestMessages = useRef(messages)

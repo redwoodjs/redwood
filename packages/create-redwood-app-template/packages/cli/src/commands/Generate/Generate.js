@@ -15,13 +15,14 @@ import sdl from './generators/sdl'
 import service from './generators/service'
 
 const GENERATORS = [cell, component, layout, page, scaffold, sdl, service]
-const ROUTES_PATH = path.join(getBaseDir(), 'web', 'src', 'Routes.js')
 
 const Generate = ({
   args,
   generators = GENERATORS,
   fileWriter = writeFile,
 }) => {
+  const ROUTES_PATH = path.join(getBaseDir(), 'web', 'src', 'Routes.js')
+
   if (!getBaseDir()) {
     return (
       <Color red>
