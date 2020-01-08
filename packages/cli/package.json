@@ -11,6 +11,7 @@
   ],
   "scripts": {
     "build": "babel src --out-dir dist && cp -r ./src/commands/Generate/templates ./dist/commands/Generate/templates",
+    "build:watch": "nodemon --ignore dist --exec 'yarn build'",
     "clean": "rm -rf dist",
     "prepare": "yarn clean && yarn build",
     "redwood": "babel-node src/index.js",
