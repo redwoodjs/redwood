@@ -10,7 +10,7 @@ export interface TypeDefResolverExports {
 }
 
 /**
- * Merge graphql type defintions and resolvers into a single executable schema
+ * Merge graphql type definitions and resolvers into a single executable schema
  *
  * ```js
  * import * as currentUser from 'src/graphql/currentUser'
