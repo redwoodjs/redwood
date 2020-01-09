@@ -6,9 +6,9 @@ Run `yarn lerna changed` to see a list of packages that will be published, and r
 
 ## Troubleshooting
 
-If `yarn lerna publish` has failed use the `yarn lerna publish from-package` to command to publish the packages that aren't already in the registry.
+If `yarn lerna publish` has failed use the `yarn lerna publish from-package` command to publish the packages that aren't already in the registry.
 
 ## Resources
 
-- https://lerna.js.org/
+- https://github.com/lerna/lerna#readme
 - https://www.christopherbiscardi.com/post/multi-package-repos-with-lerna/#but-why
