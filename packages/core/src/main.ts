@@ -25,6 +25,9 @@ export interface ConfigInterface {
   web: {
     port: number
     apiProxyPath: string
+    paths: {
+      pages: string
+    }
   }
   api: {
     port: number
@@ -53,6 +56,12 @@ export const getConfig = (): ConfigInterface => {
           functions: path.join(baseDir, config.api.paths.functions),
           graphql: path.join(baseDir, config.api.paths.graphql),
           generated: path.join(baseDir, config.api.paths.generated),
+        },
+      },
+      web: {
+        ...config.web,
+        paths: {
+          pages: path.join(baseDir, 'web/src/pages'),
         },
       },
     }
