@@ -137,6 +137,20 @@ module.exports = (webpackEnv) => {
             },
           ],
         },
+        {
+          test: path.resolve(BASE_DIR, 'web', 'src', 'Routes.js'),
+          use: {
+            loader: path.resolve(
+              __dirname,
+              '..',
+              'loaders',
+              'routes-auto-loader'
+            ),
+            options: {
+              dir: path.resolve(BASE_DIR, 'web', 'src', 'pages'),
+            },
+          },
+        },
       ],
     },
     optimization: {
