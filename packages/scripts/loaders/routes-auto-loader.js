@@ -1,6 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 
+const { flattenDeep } = require('lodash')
 const { getOptions } = require('loader-utils')
 
 function processDir(dir, prefix = []) {
@@ -37,7 +38,7 @@ function processDir(dir, prefix = []) {
 
   // We may have nested arrays because of the recursion, so flatten the deps
   // into a list.
-  return [].concat.apply([], deps)
+  return flattenDeep(deps)
 }
 
 function routesAutoLoader(source) {
@@ -58,7 +59,7 @@ function routesAutoLoader(source) {
   const importString = deps.map((x) => x.importStatement).join('\n')
 
   // Give 'em what they want!
-  return importString + '\n' + source
+  return importString + '\n\n' + source
 }
 
 module.exports = routesAutoLoader
