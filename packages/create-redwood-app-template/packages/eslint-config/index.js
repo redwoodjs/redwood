@@ -29,6 +29,12 @@ module.exports = {
         'prettier/@typescript-eslint',
       ],
     },
+    {
+      files: ['web/src/Routes.js', 'web/src/Routes.ts'],
+      rules: {
+        'no-undef': 'off',
+      },
+    },
   ],
   settings: {
     'import/resolver': {
