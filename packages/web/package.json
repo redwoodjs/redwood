@@ -19,11 +19,22 @@
     "graphql": "^14.5.8",
     "proptypes": "^1.1.0"
   },
+  "devDependencies": {
+    "react": "16.12.0",
+    "react-dom": "16.12.0"
+  },
+  "jest": {
+    "setupFilesAfterEnv": [
+      "./jest.setup.js"
+    ]
+  },
   "scripts": {
     "build": "yarn clean && babel src -d dist",
     "build:watch": "nodemon --ignore dist --exec 'yarn build'",
     "prepublish": "yarn build",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "test": "jest ./",
+    "test:watch": "yarn test --watch"
   },
   "gitHead": "3d2b48923b7e0fc34f1737552d5870a77c2be02d"
 }
