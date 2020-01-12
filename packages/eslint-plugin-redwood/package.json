@@ -1,0 +1,10 @@
+{
+  "name": "@redwoodjs/eslint-plugin-redwood",
+  "version": "0.0.1",
+  "description": "eslint plugin for Redwood rules.",
+  "main": "index.js",
+  "repository": "https://github.com/redwoodjs/redwood",
+  "author": "Tom Preston-Werner",
+  "license": "MIT",
+  "private": false
+}
