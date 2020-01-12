@@ -12,7 +12,15 @@
 
 module.exports = {
   parser: 'babel-eslint',
-  plugins: ['prettier', 'babel', 'import', 'jsx-a11y', 'react', 'react-hooks'],
+  plugins: [
+    'prettier',
+    'babel',
+    'import',
+    'jsx-a11y',
+    'react',
+    'react-hooks',
+    '@redwoodjs/redwood',
+  ],
   ignorePatterns: ['node_modules'],
   extends: [
     'eslint:recommended',
@@ -33,6 +41,7 @@ module.exports = {
       files: ['web/src/Routes.js', 'web/src/Routes.ts'],
       rules: {
         'no-undef': 'off',
+        '@redwoodjs/redwood/no-unavailable-pages': 'error',
       },
     },
   ],
