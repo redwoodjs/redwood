@@ -1,6 +1,6 @@
 export const QUERY = gql`
   query {
-    <%= camelName %> {
+    ${camelName} {
       id
     }
   }
@@ -12,6 +12,6 @@ export const Empty = () => <div>Empty</div>
 
 export const Failure = ({ message }) => <div>Error: {message}</div>
 
-export const Success = ({ <%= camelName %> }) => {
-  return <%= camelName %>.toString()
+export const Success = ({ ${camelName} }) => {
+  return ${camelName}.toString()
 }

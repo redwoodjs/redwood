@@ -1,6 +1,6 @@
-import <%= name %> from './'
+import ${name} from './'
 
-# <%= name %>
+# ${name}
 
 - [ ] Document the props/ types
 - [ ] Allow user to play with the component

@@ -1,10 +1,10 @@
-const <%= name %> = () => {
+const ${name} = () => {
   return (
     <div>
-      <h1><%= name %></h1>
-      <p>Find me in <%= path %></p>
+      <h1>${name}</h1>
+      <p>Find me in ${path}</p>
     </div>
   )
 }
 
-export default <%= name %>
+export default ${name}

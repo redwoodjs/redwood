@@ -1,5 +1,5 @@
-const <%= name %> = ({ children }) => {
+const ${name} = ({ children }) => {
   return <>{children}</>
 }
 
-export default <%= name %>
+export default ${name}
