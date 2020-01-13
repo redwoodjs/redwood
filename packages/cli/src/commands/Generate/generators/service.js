@@ -9,13 +9,16 @@ import { generateTemplate } from 'src/lib'
 const OUTPUT_PATH = path.join('api', 'src', 'services')
 
 const files = (args) => {
-  const [[serviceName, ..._rest], _flags] = args
-  const name = pascalcase(pluralize(serviceName))
-  const camelName = camelcase(name)
-  const outputPath = path.join(OUTPUT_PATH, `${camelName}.js`)
+  const [[serviceName, ..._rest], flags] = args
+  const singularName = pascalcase(serviceName)
+  const pluralName = pluralize(singularName)
+  const singularCamelName = camelcase(singularName)
+  const pluralCamelName = camelcase(pluralName)
+  const outputPath = path.join(OUTPUT_PATH, `${pluralCamelName}.js`)
+  const isCrud = !!flags['crud']
   const template = generateTemplate(
     path.join('service', 'service.js.template'),
-    { name, camelName }
+    { singularName, pluralName, singularCamelName, pluralCamelName, isCrud }
   )
 
   return { [outputPath]: template }

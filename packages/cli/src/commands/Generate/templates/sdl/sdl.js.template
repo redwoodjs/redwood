@@ -1,18 +1,22 @@
-import <%= serviceName %> from 'src/services/<%= serviceFileName %>'
+import ${serviceName} from 'src/services/${serviceFileName}'
 
 export const schema = gql`
-  type <%= typeName %> {
-    <%= query %>
+  type ${typeName} {
+    ${query}
   }
 
   type Query {
-    <%= queryAllName %>: [<%= typeName %>]
+    ${queryAllName}: [${typeName}]
+    <% if (isCrud) { %>${queryFindName}: ${typeName}<% } %>
   }
 
-  input <%= typeName %>Input {
-    <%= input %>
+  input ${typeName}Input {
+    ${input}
   }
 
   type Mutation {
+    <% if (isCrud) { %>create${typeName}(input: ${typeName}Input!): ${typeName}
+    update${typeName}(id: ID!, input: ${typeName}Input!): ${typeName}
+    delete${typeName}(id: ID!): ${typeName}<% } %>
   }
 `

@@ -54,13 +54,17 @@ const files = async (args) => {
   const serviceName = pluralize(typeName)
   const serviceFileName = camelcase(serviceName)
   const queryAllName = camelcase(serviceName)
+  const queryFindName = sdlName
   const outputPath = path.join(OUTPUT_PATH, `${serviceFileName}.sdl.js`)
+  const isCrud = !!flags['crud']
   const { query, input } = await sdlFromSchemaModel(typeName)
   const template = generateTemplate(path.join('sdl', 'sdl.js.template'), {
     typeName,
     serviceName,
     serviceFileName,
     queryAllName,
+    queryFindName,
+    isCrud,
     query,
     input,
   })
@@ -70,7 +74,6 @@ const files = async (args) => {
 
 // also create a service for the SDL to automap to resolvers
 const generate = (args) => {
-  console.info('generate args', args)
   return [[['service', ...args[0]], args[1]]]
 }
 

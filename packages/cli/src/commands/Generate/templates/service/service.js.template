@@ -2,10 +2,35 @@ import { Photon } from '@prisma/photon'
 
 const photon = new Photon()
 
-const <%= name %> = {
-  <%= camelName %>: () => {
-    return photon.<%= camelName %>.findMany()
-  }
+const ${pluralName} = {
+  ${pluralCamelName}: () => {
+    return photon.${pluralCamelName}.findMany()
+  },
+<% if (isCrud) { %>
+  ${singularCamelName}: ({ id }) => {
+    return photon.${pluralCamelName}.findOne({
+      where: { id: id },
+    })
+  },
+
+  create${singularName}: ({ input }) => {
+    return photon.${pluralCamelName}.create({
+      data: input,
+    })
+  },
+
+  update${singularName}: ({ id, input }) => {
+    return photon.${pluralCamelName}.update({
+      data: input,
+      where: { id: id },
+    })
+  },
+
+  delete${singularName}: ({ id }) => {
+    return photon.${pluralCamelName}.delete({
+      where: { id: id },
+    })
+  },<% } %>
 }
 
-export default <%= name %>
+export default ${pluralName}
