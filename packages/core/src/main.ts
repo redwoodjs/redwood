@@ -7,7 +7,7 @@ import toml from 'toml'
 const CONFIG_FILE_NAME = 'redwood.toml'
 const PATH_API_DIR_FUNCTIONS = 'api/src/functions'
 const PATH_API_DIR_GRAPHQL = 'api/src/graphql'
-const PATH_WEB_ROUTER = 'web/src/Router.js'
+const PATH_WEB_ROUTES = 'web/src/Routes.js'
 const PATH_WEB_DIR_PAGES = 'web/src/pages/'
 const PATH_WEB_DIR_COMPONENTS = 'web/src/components'
 
@@ -31,7 +31,7 @@ export interface ConfigInterface {
     port: number
     apiProxyPath: string
     paths: {
-      router: string
+      routes: string
       pages: string
       components: string
     }
@@ -56,13 +56,13 @@ export const getConfig = (): ConfigInterface => {
     const {
       functions = PATH_API_DIR_FUNCTIONS,
       graphql = PATH_API_DIR_GRAPHQL,
-    } = config.api.paths
+    } = config?.api?.paths || {}
 
     const {
-      router = PATH_WEB_ROUTER,
+      routes = PATH_WEB_ROUTES,
       pages = PATH_WEB_DIR_PAGES,
       components = PATH_WEB_DIR_COMPONENTS,
-    } = config.web.paths
+    } = config?.web?.paths || {}
 
     return {
       ...config,
@@ -77,7 +77,7 @@ export const getConfig = (): ConfigInterface => {
       web: {
         ...config.web,
         paths: {
-          router: path.join(BASE_DIR, router),
+          routes: path.join(BASE_DIR, routes),
           pages: path.join(BASE_DIR, pages),
           components: path.join(BASE_DIR, components),
         },
