@@ -1,6 +1,7 @@
 import path from 'path'
 
 import pascalcase from 'pascalcase'
+import { getConfig } from '@redwoodjs/core'
 
 import { generateTemplate } from 'src/lib'
 

@@ -35,10 +35,11 @@ const Generate = ({
     return Object.keys(files).map((filename) => {
       const contents = files[filename]
       try {
-        fileWriter(path.join(BASE_DIR, filename), contents)
+        fileWriter(filename, contents)
         return (
           <Text key={`wrote-${filename}`}>
-            <Color green>Wrote {filename}</Color> {bytes(contents)} bytes
+            <Color green>Wrote .{filename.replace(BASE_DIR, '')}</Color>{' '}
+            {bytes(contents)} bytes
           </Text>
         )
       } catch (e) {
