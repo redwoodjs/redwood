@@ -4,9 +4,9 @@ import pascalcase from 'pascalcase'
 
 import { generateTemplate } from 'src/lib'
 
-const OUTPUT_PATH = path.join('web', 'src', 'components')
-
 const files = (args) => {
+  const OUTPUT_PATH = getConfig().web.path.components
+
   const [[componentName, ..._rest], _flags] = args
   const name = pascalcase(componentName)
   const outputPath = path.join(OUTPUT_PATH, name)
