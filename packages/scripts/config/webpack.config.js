@@ -12,8 +12,8 @@ const { getConfig } = require('@redwoodjs/core')
 const config = getConfig()
 const BASE_DIR = config.baseDir
 
-// I've borrowed and learnt extensively from the `create-react-app`
-// repo: https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/config/webpack.config.js
+// I've borrowed and learnt extensively from the `create-react-app` repo:
+// https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/config/webpack.config.js
 module.exports = (webpackEnv) => {
   const isEnvProduction = webpackEnv === 'production'
 
@@ -138,7 +138,7 @@ module.exports = (webpackEnv) => {
           ],
         },
         {
-          test: path.resolve(BASE_DIR, 'web', 'src', 'Routes.js'),
+          test: config.web.paths.router,
           use: {
             loader: path.resolve(
               __dirname,
@@ -147,7 +147,7 @@ module.exports = (webpackEnv) => {
               'routes-auto-loader'
             ),
             options: {
-              dir: path.resolve(BASE_DIR, 'web', 'src', 'pages'),
+              dir: config.web.paths.pages,
             },
           },
         },
