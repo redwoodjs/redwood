@@ -62,3 +62,4 @@ Templates for the files created by generators go in `src/commands/Generate/templ
 - Allow --force for overwriting files that exist
 - Check for existence of route before writing, console output skipping if already exists
 - Remove `import` statements from service files once photon is automatically included
+- Fix console log output of files created async
