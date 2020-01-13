@@ -112,9 +112,18 @@ const Generate = ({
 
   if ('generate' in generator) {
     results = results.concat(
-      generator.generate([args[0].slice(2), args[1]]).map((args) => {
-        console.info('Generate(args)', args)
-        return Generate({ args: [['g', ...args[0]], args[1]] })
+      generator.generate([args[0].slice(2), args[1]]).map((args, i) => {
+        const name = args[0][0]
+        return (
+          <Box key={`generator-${i}`} flexDirection="column">
+            <Text>
+              <Color yellow>Invoking {name} generator</Color>
+            </Text>
+            <Box paddingTop={1} paddingBottom={1} paddingLeft={1}>
+              {Generate({ args: [['g', ...args[0]], args[1]] })}
+            </Box>
+          </Box>
+        )
       })
     )
   }
@@ -125,20 +134,21 @@ const Generate = ({
     const routeFile = readFile(ROUTES_PATH).toString()
     let newRouteFile = routeFile
 
-    generator.routes([name, ...rest]).forEach((route) => {
+    generator.routes([name, ...rest]).forEach((route, i) => {
       newRouteFile = newRouteFile.replace(
         /(\s*)\<Router\>/,
         `$1<Router>$1  ${route}`
       )
+      results.push(
+        <Box key={`route-${i}`} flexDirection="column">
+          <Text>
+            <Color green>Appened route {route}</Color>
+          </Text>
+        </Box>
+      )
     })
 
     fileWriter(ROUTES_PATH, newRouteFile, { overwriteExisting: true })
-
-    results.push(
-      <Text key="route">
-        <Color green>Appened route</Color>
-      </Text>
-    )
   }
 
   return results
