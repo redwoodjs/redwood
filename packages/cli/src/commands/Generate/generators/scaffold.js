@@ -14,8 +14,14 @@ const PAGES = fs.readdirSync(path.join(templateRoot, 'scaffold', 'pages'))
 const COMPONENTS = fs.readdirSync(
   path.join(templateRoot, 'scaffold', 'components')
 )
-const filenameToPageName = (name) => {
-  return name
+
+// Helper for converting a template filename to component name (without the
+// "Page" suffix):
+//
+//  EditNamePage.js.template -> EditPost
+//  NamesPage.js.template    -> Posts
+const filenameToPageName = (name, filename) => {
+  return filename
     .replace(/\.js\.template/, '')
     .replace(/Names/, pascalcase(pluralize(name)))
     .replace(/Name/, pascalcase(pluralize.singular(name)))
@@ -24,6 +30,14 @@ const filenameToPageName = (name) => {
 
 const files = (args) => {
   const [[name, ..._rest], _flags] = args
+  let fileList = {}
+  Object.assign(fileList, pageFiles(name))
+  Object.assign(fileList, componentFiles(name))
+
+  return fileList
+}
+
+const pageFiles = (name) => {
   const pluralName = pascalcase(pluralize(name))
   const singularName = pascalcase(pluralize.singular(name))
   let fileList = {}
@@ -44,6 +58,14 @@ const files = (args) => {
     fileList[outputPath] = template
   })
 
+  return fileList
+}
+
+const componentFiles = (name) => {
+  const pluralName = pascalcase(pluralize(name))
+  const singularName = pascalcase(pluralize.singular(name))
+  let fileList = {}
+
   COMPONENTS.forEach((component) => {
     const outputComponentName = component
       .replace(/Names/, pluralName)
@@ -63,8 +85,6 @@ const files = (args) => {
     fileList[outputPath] = template
   })
 
-  console.info('fileList', fileList)
-
   return fileList
 }
 
@@ -73,7 +93,8 @@ const routes = ([name, ..._rest]) => {
   const singularName = pascalcase(pluralize.singular(name))
 
   return PAGES.map((page) => {
-    const pageName = filenameToPageName(page)
+    const pageName = filenameToPageName(singularName, page)
+
     let path = `/${paramCase(pageName)}`
     if (pageName.match(/New/)) {
       path = `/${camelcase(singularName)}/new`

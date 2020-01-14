@@ -119,9 +119,7 @@ const Generate = ({
             <Text>
               <Color yellow>Invoking {name} generator</Color>
             </Text>
-            <Box paddingTop={1} paddingBottom={1} paddingLeft={1}>
-              {Generate({ args: [['g', ...args[0]], args[1]] })}
-            </Box>
+            <Box>{Generate({ args: [['g', ...args[0]], args[1]] })}</Box>
           </Box>
         )
       })
