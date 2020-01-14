@@ -44,7 +44,7 @@ const Generate = ({
       } catch (e) {
         return (
           <Text key={`error-${filename}`}>
-            <Color red>{e}</Color>
+            <Color red>{e.message}</Color>
           </Text>
         )
       }
@@ -134,19 +134,22 @@ const Generate = ({
     const routeFile = readFile(ROUTES_PATH).toString()
     let newRouteFile = routeFile
 
-    generator.routes([name, ...rest]).forEach((route, i) => {
-      newRouteFile = newRouteFile.replace(
-        /(\s*)\<Router\>/,
-        `$1<Router>$1  ${route}`
-      )
-      results.push(
-        <Box key={`route-${i}`} flexDirection="column">
-          <Text>
-            <Color green>Appened route {route}</Color>
-          </Text>
-        </Box>
-      )
-    })
+    generator
+      .routes([name, ...rest])
+      .reverse()
+      .forEach((route, i) => {
+        newRouteFile = newRouteFile.replace(
+          /(\s*)\<Router\>/,
+          `$1<Router>$1  ${route}`
+        )
+        results.push(
+          <Box key={`route-${i}`} flexDirection="column">
+            <Text>
+              <Color green>Appened route {route}</Color>
+            </Text>
+          </Box>
+        )
+      })
 
     fileWriter(ROUTES_PATH, newRouteFile, { overwriteExisting: true })
   }

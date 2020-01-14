@@ -1,7 +1,7 @@
-import ${pluralPascalCase}Cell from 'src/components/${pluralPascalCase}Cell'
+import ${pluralPascalName}Cell from 'src/components/${pluralPascalName}Cell'
 
-const ${pluralPascalCase}Page = () => {
-  return <${pluralPascalCase}Cell />
+const ${pluralPascalName}Page = () => {
+  return <${pluralPascalName}Cell />
 }
 
-export default ${pluralPascalCase}Page
+export default ${pluralPascalName}Page

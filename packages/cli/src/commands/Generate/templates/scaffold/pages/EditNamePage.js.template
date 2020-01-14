@@ -1,7 +1,7 @@
-import Edit${singularPascalCase}Cell from 'src/components/Edit${singularPascalCase}Cell'
+import Edit${singularPascalName}Cell from 'src/components/Edit${singularPascalName}Cell'
 
-const Edit${singularPascalCase}Page = ({ id }) => {
+const Edit${singularPascalName}Page = ({ id }) => {
   return <EditPostCell id={id} />
 }
 
-export default Edit${singularPascalCase}Page
+export default Edit${singularPascalName}Page

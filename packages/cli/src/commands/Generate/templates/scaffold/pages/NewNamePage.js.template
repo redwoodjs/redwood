@@ -1,7 +1,7 @@
-import New${singularPascalCase} from 'src/components/New${singularPascalCase}'
+import New${singularPascalName} from 'src/components/New${singularPascalName}'
 
-const New${singularPascalCase}Page = () => {
-  return <New${singularPascalCase} />
+const New${singularPascalName}Page = () => {
+  return <New${singularPascalName} />
 }
 
-export default New${singularPascalCase}Page
+export default New${singularPascalName}Page

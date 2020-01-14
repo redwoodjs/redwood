@@ -49,8 +49,6 @@ export const generateTemplate = (templateFilename, vars) => {
   const template = lodash.template(readFile(templatePath).toString())
   const replacements = Object.assign(vars, nameVariants(vars.name))
 
-  console.info(replacements)
-
   return template(replacements)
 }
 

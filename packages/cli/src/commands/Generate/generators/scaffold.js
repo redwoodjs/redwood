@@ -1,34 +1,85 @@
+import fs from 'fs'
 import path from 'path'
 
 import camelcase from 'camelcase'
 import pascalcase from 'pascalcase'
 import { paramCase } from 'param-case'
+import pluralize from 'pluralize'
 
-import { generateTemplate } from 'src/lib'
+import { generateTemplate, templateRoot } from 'src/lib'
 
 const COMPONENT_PATH = path.join('web', 'src', 'components')
 const PAGE_PATH = path.join('web', 'src', 'pages')
-const PAGES = ['EditNamePage', 'NamePage', 'NamesPage', 'NewNamePage']
-const COMPONENTS = ['EditNameCell', 'NameForm', 'NamesCell', 'NamesList', 'NewName', 'ShowName']
+const PAGES = fs.readdirSync(path.join(templateRoot, 'scaffold', 'pages'))
+const COMPONENTS = fs.readdirSync(
+  path.join(templateRoot, 'scaffold', 'components')
+)
+const filenameToPageName = (name) => {
+  return name
+    .replace(/\.js\.template/, '')
+    .replace(/Names/, pascalcase(pluralize(name)))
+    .replace(/Name/, pascalcase(pluralize.singular(name)))
+    .replace(/Page/, '')
+}
 
 const files = (args) => {
-  const [[objName, ..._rest], _flags] = args
-  const name = pascalcase(pageName) + 'Page'
-  const outputPath = path.join(OUTPUT_PATH, name, `${name}.js`)
-  const template = generateTemplate(path.join('page', 'page.js.template'), {
-    name,
-    path: outputPath,
+  const [[name, ..._rest], _flags] = args
+  const pluralName = pascalcase(pluralize(name))
+  const singularName = pascalcase(pluralize.singular(name))
+  let fileList = {}
+
+  PAGES.forEach((page) => {
+    const outputPageName = page
+      .replace(/Names/, pluralName)
+      .replace(/Name/, singularName)
+      .replace(/\.template/, '')
+    const outputPath = path.join(
+      PAGE_PATH,
+      outputPageName.replace(/\.js/, ''),
+      outputPageName
+    )
+    const template = generateTemplate(path.join('scaffold', 'pages', page), {
+      name,
+    })
+    fileList[outputPath] = template
   })
 
-  return { [outputPath]: template }
+  COMPONENTS.forEach((component) => {
+    const outputComponentName = component
+      .replace(/Names/, pluralName)
+      .replace(/Name/, singularName)
+      .replace(/\.template/, '')
+    const outputPath = path.join(
+      COMPONENT_PATH,
+      outputComponentName.replace(/\.js/, ''),
+      outputComponentName
+    )
+    const template = generateTemplate(
+      path.join('scaffold', 'components', component),
+      {
+        name,
+      }
+    )
+    fileList[outputPath] = template
+  })
+
+  console.info('fileList', fileList)
+
+  return fileList
 }
 
 // add routes for all pages
-const routes = ([objName, ..._rest]) => {
-  return PAGES.map(page => {
+const routes = ([name, ..._rest]) => {
+  const singularName = pascalcase(pluralize.singular(name))
 
-    const pageName = page.replace(/Names/, ) + pascalcase(objName)
-    const path = `/${paramCase(pageName)}`
+  return PAGES.map((page) => {
+    const pageName = filenameToPageName(page)
+    let path = `/${paramCase(pageName)}`
+    if (pageName.match(/New/)) {
+      path = `/${camelcase(singularName)}/new`
+    } else if (pageName.match(/Edit/)) {
+      path = `/${camelcase(singularName)}/{id}/edit`
+    }
     const name = camelcase(pageName)
 
     return `<Route path="${path}" page={${pageName}Page} name="${name}" />`
@@ -37,7 +88,6 @@ const routes = ([objName, ..._rest]) => {
 
 // also create a full CRUD SDL
 const generate = (args) => {
-  console.info('generate args', args)
   args[1]['crud'] = true
 
   return [[['sdl', ...args[0]], args[1]]]
@@ -48,6 +98,7 @@ export default {
   command: 'scaffold',
   description:
     'Generates pages, SDL and a service for CRUD operations on a single database table',
+  files: (args) => files(args),
   routes: (args) => routes(args),
-  generate: (args) => generate(args)
+  generate: (args) => generate(args),
 }
