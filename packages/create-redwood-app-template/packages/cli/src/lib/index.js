@@ -30,8 +30,6 @@ export const writeFile = (
     }
   }
   const filename = path.basename(target)
-  console.log(filename)
-  console.log(target)
   const targetDir = target.replace(filename, '')
   fs.mkdirSync(targetDir, { recursive: true })
   fs.writeFileSync(target, contents)
