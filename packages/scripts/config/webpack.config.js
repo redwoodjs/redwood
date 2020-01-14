@@ -142,7 +142,7 @@ module.exports = (webpackEnv) => {
           ],
         },
         {
-          test: redwoodPaths.web.router,
+          test: redwoodPaths.web.routes,
           use: {
             loader: path.resolve(
               __dirname,

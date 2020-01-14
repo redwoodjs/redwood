@@ -32,7 +32,7 @@ args
   .option(
     'path',
     'The path to your lambda functions',
-    config.api.paths.functions
+    redwoodPaths.api.functions
   )
 const { port: PORT, path: PATH } = args.parse(process.argv)
 const HOSTNAME = `http://localhost:${PORT}`
