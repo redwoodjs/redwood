@@ -7,10 +7,10 @@ const DirectoryNamedWebpackPlugin = require('directory-named-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const Dotenv = require('dotenv-webpack')
-const { getConfig } = require('@redwoodjs/core')
+const { getConfig, getPaths } = require('@redwoodjs/core')
 
-const config = getConfig()
-const BASE_DIR = config.baseDir
+const redwoodConfig = getConfig()
+const redwoodPaths = getPaths()
 
 // I've borrowed and learnt extensively from the `create-react-app` repo:
 // https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/config/webpack.config.js
@@ -41,7 +41,7 @@ module.exports = (webpackEnv) => {
     mode: isEnvProduction ? 'production' : 'development',
     devtool: isEnvProduction ? 'source-map' : 'cheap-module-source-map',
     entry: {
-      app: path.resolve(BASE_DIR, 'web/src/index.js'),
+      app: path.resolve(redwoodPaths.base, 'web/src/index.js'),
     },
     resolve: {
       extensions: ['.ts', '.tsx', '.js', '.json'],
@@ -54,11 +54,11 @@ module.exports = (webpackEnv) => {
       alias: {
         // https://www.styled-components.com/docs/faqs#duplicated-module-in-node_modules
         'styled-components': path.resolve(
-          BASE_DIR,
+          redwoodPaths.base,
           'node_modules',
           'styled-components'
         ),
-        react: path.resolve(BASE_DIR, 'node_modules', 'react'),
+        react: path.resolve(redwoodPaths.base, 'node_modules', 'react'),
       },
     },
     plugins: [
@@ -68,7 +68,7 @@ module.exports = (webpackEnv) => {
           chunkFilename: '[name].[contenthash:8].css',
         }),
       new HtmlWebpackPlugin({
-        template: path.resolve(BASE_DIR, 'web/src/index.html'),
+        template: path.resolve(redwoodPaths.base, 'web/src/index.html'),
       }),
       new webpack.ProvidePlugin({
         React: 'react',
@@ -79,15 +79,19 @@ module.exports = (webpackEnv) => {
       // The define plugin will replace these keys with their values during build
       // time.
       new webpack.DefinePlugin({
-        __REDWOOD__API_PROXY_PATH: JSON.stringify(config.web.apiProxyPath),
+        __REDWOOD__API_PROXY_PATH: JSON.stringify(
+          redwoodConfig.web.apiProxyPath
+        ),
         __filename: webpack.DefinePlugin.runtimeValue((runtimeValue) => {
           // absolute path of imported file
           return JSON.stringify(runtimeValue.module.resource)
         }),
       }),
-      new FaviconsWebpackPlugin(path.resolve(BASE_DIR, 'web/src/favicon.png')),
+      new FaviconsWebpackPlugin(
+        path.resolve(redwoodPaths.base, 'web/src/favicon.png')
+      ),
       new Dotenv({
-        path: path.resolve(BASE_DIR, '.env'),
+        path: path.resolve(redwoodPaths.base, '.env'),
         silent: true,
       }),
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
@@ -138,7 +142,7 @@ module.exports = (webpackEnv) => {
           ],
         },
         {
-          test: config.web.paths.router,
+          test: redwoodPaths.web.router,
           use: {
             loader: path.resolve(
               __dirname,
@@ -147,7 +151,7 @@ module.exports = (webpackEnv) => {
               'routes-auto-loader'
             ),
             options: {
-              dir: config.web.paths.pages,
+              dir: redwoodPaths.web.pages,
             },
           },
         },
@@ -170,12 +174,12 @@ module.exports = (webpackEnv) => {
       chunkFilename: isEnvProduction
         ? '[name].[contenthash:8].chunk.js'
         : '[name].chunk.js',
-      path: path.resolve(BASE_DIR, 'web/dist'),
+      path: path.resolve(redwoodPaths.base, 'web/dist'),
       publicPath: '/',
       devtoolModuleFilenameTemplate: isEnvProduction
         ? (info) =>
             path
-              .relative(BASE_DIR, 'web', 'src', info.absoluteResourcePath)
+              .relative(redwoodPaths.web, 'src', info.absoluteResourcePath)
               .replace(/\\/g, '/')
         : (info) => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
     },

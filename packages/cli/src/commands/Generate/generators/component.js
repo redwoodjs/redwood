@@ -1,12 +1,12 @@
 import path from 'path'
 
 import pascalcase from 'pascalcase'
-import { getConfig } from '@redwoodjs/core'
+import { getPaths } from '@redwoodjs/core'
 
 import { generateTemplate } from 'src/lib'
 
 const files = (args) => {
-  const OUTPUT_PATH = getConfig().web.path.components
+  const OUTPUT_PATH = getPaths().web.components
 
   const [[componentName, ..._rest], _flags] = args
   const name = pascalcase(componentName)

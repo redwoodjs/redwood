@@ -1,20 +1,10 @@
 export type Config = {
-  baseDir: string
   web: {
     port: number
     apiProxyPath: string
-    paths: {
-      routes: string
-      pages: string
-      components: string
-    }
   }
   api: {
     port: number
-    paths: {
-      functions: string
-      graphql: string
-    }
   }
 }
 

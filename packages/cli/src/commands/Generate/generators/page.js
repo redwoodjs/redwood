@@ -3,12 +3,12 @@ import path from 'path'
 import camelcase from 'camelcase'
 import pascalcase from 'pascalcase'
 import { paramCase } from 'param-case'
-import { getConfig } from '@redwoodjs/core'
+import { getPaths } from '@redwoodjs/core'
 
 import { generateTemplate } from 'src/lib'
 
 const files = (args) => {
-  const OUTPUT_PATH = getConfig().web.paths.pages
+  const OUTPUT_PATH = getPaths().web.pages
   const [[pageName, ..._rest], _flags] = args
   const name = pascalcase(pageName) + 'Page'
   const outputPath = path.join(OUTPUT_PATH, name, `${name}.js`)
