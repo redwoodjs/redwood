@@ -2,7 +2,7 @@ import { Photon } from '@prisma/photon'
 
 const photon = new Photon()
 
-const ${pluralName} = {
+const ${pluralPascalName} = {
   ${pluralCamelName}: () => {
     return photon.${pluralCamelName}.findMany()
   },
@@ -13,24 +13,24 @@ const ${pluralName} = {
     })
   },
 
-  create${singularName}: ({ input }) => {
+  create${singularPascalName}: ({ input }) => {
     return photon.${pluralCamelName}.create({
       data: input,
     })
   },
 
-  update${singularName}: ({ id, input }) => {
+  update${singularPascalName}: ({ id, input }) => {
     return photon.${pluralCamelName}.update({
       data: input,
       where: { id: id },
     })
   },
 
-  delete${singularName}: ({ id }) => {
+  delete${singularPascalName}: ({ id }) => {
     return photon.${pluralCamelName}.delete({
       where: { id: id },
     })
   },<% } %>
 }
 
-export default ${pluralName}
+export default ${pluralPascalName}

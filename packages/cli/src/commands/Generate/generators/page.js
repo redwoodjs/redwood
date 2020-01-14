@@ -3,15 +3,16 @@ import path from 'path'
 import camelcase from 'camelcase'
 import pascalcase from 'pascalcase'
 import { paramCase } from 'param-case'
+import pluralize from 'pluralize'
 
 import { generateTemplate } from 'src/lib'
 
 const OUTPUT_PATH = path.join('web', 'src', 'pages')
 
 const files = (args) => {
-  const [[pageName, ..._rest], _flags] = args
-  const name = pascalcase(pageName) + 'Page'
-  const outputPath = path.join(OUTPUT_PATH, name, `${name}.js`)
+  const [[name, ..._rest], _flags] = args
+  const filename = pascalcase(pluralize.singular(name)) + 'Page'
+  const outputPath = path.join(OUTPUT_PATH, filename, `${filename}.js`)
   const template = generateTemplate(path.join('page', 'page.js.template'), {
     name,
     path: outputPath,

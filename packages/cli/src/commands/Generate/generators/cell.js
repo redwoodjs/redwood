@@ -9,13 +9,11 @@ import { generateTemplate } from 'src/lib'
 const OUTPUT_PATH = path.join('web', 'src', 'cells')
 
 const files = (args) => {
-  const [[cellName, ..._rest], _flags] = args
-  const name = pascalcase(cellName) + 'Cell'
-  const camelName = camelcase(pluralize(cellName))
-  const outputPath = path.join(OUTPUT_PATH, name, `${name}.js`)
+  const [[name, ..._rest], _flags] = args
+  const filename = pascalcase(name) + 'Cell'
+  const outputPath = path.join(OUTPUT_PATH, filename, `${filename}.js`)
   const template = generateTemplate(path.join('cell', 'cell.js.template'), {
     name,
-    camelName,
   })
 
   return { [outputPath]: template }

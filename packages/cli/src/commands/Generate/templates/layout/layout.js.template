@@ -1,5 +1,5 @@
-const ${name} = ({ children }) => {
+const ${singularPascalName}Layout = ({ children }) => {
   return <>{children}</>
 }
 
-export default ${name}
+export default ${singularPascalName}Layout

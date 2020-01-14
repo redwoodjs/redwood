@@ -49,24 +49,12 @@ const sdlFromSchemaModel = async (name) => {
 }
 
 const files = async (args) => {
-  const [[sdlName, ...rest], flags] = args
-  const typeName = pascalcase(sdlName)
-  const serviceName = pluralize(typeName)
-  const serviceFileName = camelcase(serviceName)
-  const queryAllName = camelcase(serviceName)
-  const queryFindName = sdlName
-  const outputPath = path.join(OUTPUT_PATH, `${serviceFileName}.sdl.js`)
+  const [[name, ...rest], flags] = args
+  const outputPath = path.join(OUTPUT_PATH, `${camelcase(pluralize(name))}.sdl.js`)
   const isCrud = !!flags['crud']
-  const { query, input } = await sdlFromSchemaModel(typeName)
+  const { query, input } = await sdlFromSchemaModel(pascalcase(pluralize.singular(name)))
   const template = generateTemplate(path.join('sdl', 'sdl.js.template'), {
-    typeName,
-    serviceName,
-    serviceFileName,
-    queryAllName,
-    queryFindName,
-    isCrud,
-    query,
-    input,
+    name, isCrud, query, input
   })
 
   return { [outputPath]: template }
