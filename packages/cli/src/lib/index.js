@@ -4,6 +4,35 @@ import path from 'path'
 import requireDir from 'require-dir'
 import parse from 'yargs-parser'
 import lodash from 'lodash/string'
+import camelcase from 'camelcase'
+import pascalcase from 'pascalcase'
+import pluralize from 'pluralize'
+import { paramCase } from 'param-case'
+
+// Returns variants of the passed `name` for usage in templates. If the given
+// name was "fooBar" then these would be:
+//
+//   pascalName: FooBar
+//   singularPascalName: FooBar
+//   pluralPascalName: FooBars
+//   singularCamelName: fooBar
+//   pluralCamelName: fooBars
+//   singularParamName: foo-bar
+//   pluralParamName: foo-bars
+
+const nameVariants = (name) => {
+  const normalizedName = pascalcase(pluralize.singular(name))
+
+  return {
+    pascalName: pascalcase(name),
+    singularPascalName: normalizedName,
+    pluralPascalName: pluralize(normalizedName),
+    singularCamelName: camelcase(normalizedName),
+    pluralCamelName: camelcase(pluralize(normalizedName)),
+    singularParamName: paramCase(normalizedName),
+    pluralParamName: paramCase(pluralize(normalizedName)),
+  }
+}
 
 export const templateRoot = path.join(
   __dirname,
@@ -15,9 +44,12 @@ export const templateRoot = path.join(
   'templates'
 )
 
-export const generateTemplate = (templateFilename, replacements) => {
+export const generateTemplate = (templateFilename, vars) => {
   const templatePath = path.join(templateRoot, templateFilename)
   const template = lodash.template(readFile(templatePath).toString())
+  const replacements = Object.assign(vars, nameVariants(vars.name))
+
+  console.info(replacements)
 
   return template(replacements)
 }
