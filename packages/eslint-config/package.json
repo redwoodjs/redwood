@@ -1,10 +1,10 @@
 {
   "name": "@redwoodjs/eslint-config",
-  "version": "0.0.1-alpha.17",
+  "version": "0.0.1-alpha.18",
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@redwoodjs/eslint-plugin-redwood": "0.0.1",
+    "@redwoodjs/eslint-plugin-redwood": "^0.0.1-alpha.18",
     "@typescript-eslint/eslint-plugin": "^2.14.0",
     "@typescript-eslint/parser": "^2.14.0",
     "babel-eslint": "^10.0.3",
