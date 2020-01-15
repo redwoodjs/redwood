@@ -147,6 +147,7 @@ module.exports = (webpackEnv) => {
             loader: path.resolve(
               __dirname,
               '..',
+              'dist',
               'loaders',
               'routes-auto-loader'
             ),
