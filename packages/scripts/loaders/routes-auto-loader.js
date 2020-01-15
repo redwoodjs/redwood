@@ -25,7 +25,7 @@ function processDir(dir, prefix = []) {
         deps.push({
           const: importName,
           path: path.join(dir, entry.name),
-          importStatement: `const ${importName} = () => import(/* webpackChunkName: "${entry.name}" */ '${importFile}')`,
+          importStatement: `import ${importName} from '${importFile}'`,
         })
       } else {
         // If the Page doesn't exist then we are in a directory of Page
