@@ -33,5 +33,5 @@
     "prepublish": "yarn build",
     "clean": "rm -rf dist"
   },
-  "gitHead": "32eaaa53d304aea1c49a42b4f15467a3d9114d64"
+  "gitHead": "ca5de73e28e7f9c034232a2dc5d5e810fcb14a0a"
 }
