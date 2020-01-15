@@ -66,6 +66,7 @@ module.exports = (webpackEnv) => {
           filename: '[name].[contenthash:8].css',
           chunkFilename: '[name].[contenthash:8].css',
         }),
+      !isEnvProduction && new webpack.HotModuleReplacementPlugin(),
       new HtmlWebpackPlugin({
         template: path.resolve(redwoodPaths.base, 'web/src/index.html'),
       }),
