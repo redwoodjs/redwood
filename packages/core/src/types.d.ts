@@ -20,3 +20,11 @@ export type Paths = {
     graphql: string
   }
 }
+
+export type Pages = [
+  {
+    const: string
+    path: string
+    importStatement: string
+  }?
+]
