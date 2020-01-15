@@ -3,7 +3,7 @@ import fs from 'fs'
 
 import findUp from 'findup-sync'
 
-import { Paths, Pages } from './types'
+import { Paths, PagesDependencies } from './types'
 
 const CONFIG_FILE_NAME = 'redwood.toml'
 
@@ -52,13 +52,14 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
 }
 
 /**
- * Recursively process the pages directory
+ * Recursively process the pages directory and return information useful for
+ * automated imports.
  */
 export const processPagesDir = (
   webPagesDir: string = getPaths().web.pages,
   prefix = []
-): Pages => {
-  const deps: Pages = []
+): PagesDependencies => {
+  const deps: PagesDependencies = []
   const entries = fs.readdirSync(webPagesDir, { withFileTypes: true })
 
   // Iterate over a dir's entries, recursing as necessary into
