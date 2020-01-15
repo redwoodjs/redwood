@@ -5,12 +5,10 @@
  * Check to make sure that all referenced Pages exist in the `/web/src/pages`
  * directory. Thanks to eslint/undef upon which this code is based.
  */
-'use strict'
+import fs from 'fs'
+import path from 'path'
 
-const fs = require('fs')
-const path = require('path')
-
-const { flattenDeep } = require('lodash')
+import { flattenDeep } from 'lodash'
 
 //------------------------------------------------------------------------------
 // Helpers
@@ -69,7 +67,7 @@ function hasTypeOfOperator(node) {
 // Rule Definition
 //------------------------------------------------------------------------------
 
-module.exports = {
+export default {
   meta: {
     type: 'problem',
 
