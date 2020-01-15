@@ -1,12 +1,8 @@
 import { processPagesDir } from '@redwoodjs/core'
-import { getOptions } from 'loader-utils'
 
-export default (source) => {
-  // Get the top level directory from the Webpack config options.
-  const { dir } = getOptions(this)
-
+export default function(source) {
   // Process the dir to find all Page dependencies.
-  const deps = processPagesDir(dir)
+  const deps = processPagesDir()
 
   // Inform Webpack that we're pulling external dependencies so it can do the
   // right thing with watched files, etc.

@@ -151,9 +151,6 @@ module.exports = (webpackEnv) => {
               'loaders',
               'routes-auto-loader'
             ),
-            options: {
-              dir: redwoodPaths.web.pages,
-            },
           },
         },
       ],
