@@ -54,7 +54,10 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
 /**
  * Recursively process the pages directory
  */
-export const processPagesDir = (webPagesDir: string, prefix = []): Pages => {
+export const processPagesDir = (
+  webPagesDir: string = getPaths().web.pages,
+  prefix = []
+): Pages => {
   const deps: Pages = []
   const entries = fs.readdirSync(webPagesDir, { withFileTypes: true })
 
