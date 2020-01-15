@@ -5,7 +5,7 @@
   "files": [
     "dist"
   ],
-  "types": "./dist/main.d.ts",
+  "types": "./dist/types.d.ts",
   "license": "MIT",
   "dependencies": {
     "findup-sync": "^4.0.0",

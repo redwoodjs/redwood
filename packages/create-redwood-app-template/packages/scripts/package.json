@@ -3,7 +3,8 @@
   "version": "0.0.1-alpha.17",
   "license": "MIT",
   "files": [
-    "config/*"
+    "config/*",
+    "loaders/*"
   ],
   "dependencies": {
     "@babel/cli": "^7.7.4",

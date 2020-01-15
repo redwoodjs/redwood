@@ -3,20 +3,20 @@
 // $ redwood dev
 
 import concurrently from 'concurrently'
-import { getBaseDir } from '@redwoodjs/core'
+import { getPaths } from '@redwoodjs/core'
 
 const Dev = () => {
-  const baseDir = getBaseDir()
+  const redwoodPaths = getPaths()
 
   concurrently(
     [
       {
-        command: `cd ${baseDir}/web && yarn dev`,
+        command: `cd ${redwoodPaths.base}/web && yarn dev`,
         name: 'web',
         prefixColor: 'yellow',
       },
       {
-        command: `cd ${baseDir}/api && yarn dev`,
+        command: `cd ${redwoodPaths.base}/api && yarn dev`,
         name: 'api',
         prefixColor: 'green',
       },
