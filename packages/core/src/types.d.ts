@@ -21,7 +21,7 @@ export type Paths = {
   }
 }
 
-export type Pages = [
+export type PagesDependencies = [
   {
     const: string
     path: string
