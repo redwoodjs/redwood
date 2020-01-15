@@ -5,14 +5,9 @@ import requireDir from 'require-dir'
 import parse from 'yargs-parser'
 import lodash from 'lodash/string'
 
-export const templateRoot = path.join(
+export const templateRoot = path.resolve(
   __dirname,
-  '..',
-  '..',
-  'src',
-  'commands',
-  'Generate',
-  'templates'
+  '../commands/Generate/templates'
 )
 
 export const generateTemplate = (templateFilename, replacements) => {
