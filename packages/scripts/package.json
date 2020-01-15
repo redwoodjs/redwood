@@ -41,7 +41,7 @@
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.9.0",
-    "webpack-merge": "^4.2.2",
+    "webpack-merge": "^4.2.2"
   },
   "gitHead": "ca5de73e28e7f9c034232a2dc5d5e810fcb14a0a",
   "scripts": {
