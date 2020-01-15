@@ -90,21 +90,17 @@ const componentFiles = (name) => {
 
 // add routes for all pages
 const routes = ([name, ..._rest]) => {
-  const singularName = pascalcase(pluralize.singular(name))
+  const singularPascalName = pascalcase(pluralize.singular(name))
+  const pluralPascalName = pascalcase(pluralize(name))
+  const singularCamelName = camelcase(singularName)
+  const pluralCamelName = camelcase(pluralName)
 
-  return PAGES.map((page) => {
-    const pageName = filenameToPageName(singularName, page)
-
-    let path = `/${paramCase(pageName)}`
-    if (pageName.match(/New/)) {
-      path = `/${camelcase(singularName)}/new`
-    } else if (pageName.match(/Edit/)) {
-      path = `/${camelcase(singularName)}/{id}/edit`
-    }
-    const name = camelcase(pageName)
-
-    return `<Route path="${path}" page={${pageName}Page} name="${name}" />`
-  })
+  return [
+    `<Route path="/${pluralCamelName}/{id}/edit" page={Edit${singularPascalName}Page} name="edit${singularPascalName}" />`,
+    `<Route path="/${pluralCamelName}/{id}" page={${singularPascalName}Page} name="${singularCamelName}" />`,
+    `<Route path="/${pluralCamelName}/new" page={New${singularPascalName}Page} name="new${singularPascalName}" />`,
+    `<Route path="/${pluralCamelName}" page={${pluralPascalName}Page} name="${pluralCamelName}" />`,
+  ]
 }
 
 // also create a full CRUD SDL
