@@ -1,8 +1,6 @@
-import path from 'path'
-
 import React from 'react'
 import { Box, Text, Color } from 'ink'
-import { getBaseDir } from '@redwoodjs/core'
+import { getPaths } from '@redwoodjs/core'
 
 import { readFile, writeFile, bytes } from 'src/lib'
 
@@ -21,24 +19,19 @@ const Generate = ({
   generators = GENERATORS,
   fileWriter = writeFile,
 }) => {
-  const ROUTES_PATH = path.join(getBaseDir(), 'web', 'src', 'Routes.js')
-
-  if (!getBaseDir()) {
-    return (
-      <Color red>
-        The `generate` command has to be run in your Redwood project directory.
-      </Color>
-    )
-  }
+  const redwoodPaths = getPaths()
 
   const writeFiles = (files) => {
     return Object.keys(files).map((filename) => {
       const contents = files[filename]
       try {
-        fileWriter(path.join(getBaseDir(), filename), contents)
+        fileWriter(filename, contents)
         return (
           <Text key={`wrote-${filename}`}>
-            <Color green>Wrote {filename}</Color> {bytes(contents)} bytes
+            <Color green>
+              Wrote .{filename.replace(redwoodPaths.base, '')}
+            </Color>{' '}
+            {bytes(contents)} bytes
           </Text>
         )
       } catch (e) {
@@ -122,7 +115,7 @@ const Generate = ({
   // Do we need to append any routes?
 
   if ('routes' in generator) {
-    const routeFile = readFile(ROUTES_PATH).toString()
+    const routeFile = readFile(redwoodPaths.web.routes).toString()
     let newRouteFile = routeFile
 
     generator.routes([name, ...rest]).forEach((route) => {
@@ -132,7 +125,9 @@ const Generate = ({
       )
     })
 
-    fileWriter(ROUTES_PATH, newRouteFile, { overwriteExisting: true })
+    fileWriter(redwoodPaths.web.routes, newRouteFile, {
+      overwriteExisting: true,
+    })
 
     results.push(
       <Text key="route">

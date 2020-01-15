@@ -3,7 +3,7 @@ import path from 'path'
 
 import { Response, Request } from 'express'
 import { APIGatewayProxyResult, APIGatewayProxyEvent } from 'aws-lambda'
-import { getConfig } from '@redwoodjs/core'
+import { getConfig, getPaths } from '@redwoodjs/core'
 import express from 'express'
 // @ts-ignore
 import expressLogging from 'express-logging'
@@ -15,8 +15,9 @@ import chokidar from 'chokidar'
 // @ts-ignore
 import babelRegister from '@babel/register'
 
-const config = getConfig()
-const API_DIR = path.join(config.baseDir, 'api')
+const redwoodConfig = getConfig()
+const redwoodPaths = getPaths()
+const API_DIR = path.join(redwoodPaths.base, 'api')
 
 babelRegister({
   extends: path.join(API_DIR, '.babelrc.js'),
@@ -27,11 +28,11 @@ babelRegister({
 
 // TODO: Convert to yargs.
 args
-  .option('port', '', config.api.port)
+  .option('port', '', redwoodConfig.api.port)
   .option(
     'path',
     'The path to your lambda functions',
-    config.api.paths.functions
+    redwoodPaths.api.functions
   )
 const { port: PORT, path: PATH } = args.parse(process.argv)
 const HOSTNAME = `http://localhost:${PORT}`
