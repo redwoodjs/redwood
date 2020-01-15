@@ -2,7 +2,7 @@
 // Rails' routing approach and from both React Router and Reach Router (the
 // latter of which has closely inspired some of this code).
 
-import { useContext } from 'react'
+import { useContext, Suspense } from 'react'
 
 // Convert the given path (from the path specified in the Route) into
 // a regular expression that will match any named parameters.
@@ -260,11 +260,23 @@ const RouterImpl = ({ pathname, search, children }) => {
           </RouterImpl>
         )
       } else {
-        return (
-          <ParamsContext.Provider value={allParams}>
-            <Page {...allParams} />
-          </ParamsContext.Provider>
-        )
+        console.log(Page)
+        if (typeof Page === 'function') {
+          const LazyPage = React.lazy(Page)
+          return (
+            <ParamsContext.Provider value={allParams}>
+              <Suspense fallback={<div>Loading...</div>}>
+                <LazyPage {...allParams} />
+              </Suspense>
+            </ParamsContext.Provider>
+          )
+        } else {
+          return (
+            <ParamsContext.Provider value={allParams}>
+              <Page {...allParams} />
+            </ParamsContext.Provider>
+          )
+        }
       }
     }
   }
