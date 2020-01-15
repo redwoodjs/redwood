@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/scripts",
-  "version": "0.0.1-alpha.17",
+  "version": "0.0.1-alpha.18.0.1",
   "license": "MIT",
   "files": [
     "config/*",
@@ -42,5 +42,5 @@
     "webpack-dev-server": "^3.9.0",
     "webpack-merge": "^4.2.2"
   },
-  "gitHead": "32eaaa53d304aea1c49a42b4f15467a3d9114d64"
+  "gitHead": "ca5de73e28e7f9c034232a2dc5d5e810fcb14a0a"
 }
