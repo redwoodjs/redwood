@@ -9,16 +9,6 @@
   "files": [
     "dist"
   ],
-  "scripts": {
-    "build": "babel src --out-dir dist && cp -r ./src/commands/Generate/templates ./dist/commands/Generate/templates",
-    "build:watch": "nodemon --ignore dist --exec 'yarn build'",
-    "clean": "rm -rf dist",
-    "prepare": "yarn clean && yarn build",
-    "redwood": "babel-node src/index.js",
-    "dev": "nodemon --exec babel-node src/index.js",
-    "test": "jest",
-    "test:watch": "yarn test --watch"
-  },
   "dependencies": {
     "@prisma/sdk": "0.0.103",
     "@redwoodjs/core": "^0.0.1-alpha.16",
@@ -40,6 +30,14 @@
   },
   "devDependencies": {
     "ink-testing-library": "^1.0.2"
+  },
+  "scripts": {
+    "build": "babel src --out-dir dist && cp -r ./src/commands/Generate/templates ./dist/commands/Generate/templates",
+    "build:watch": "nodemon --ignore dist --exec 'yarn build'",
+    "clean": "rm -rf dist",
+    "prepare": "yarn clean && yarn build",
+    "test": "jest",
+    "test:watch": "yarn test --watch"
   },
   "gitHead": "32eaaa53d304aea1c49a42b4f15467a3d9114d64"
 }

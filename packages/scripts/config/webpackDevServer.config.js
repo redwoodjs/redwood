@@ -5,7 +5,7 @@ const { getConfig } = require('@redwoodjs/core')
 
 const webpackConfig = require('./webpack.config.js')
 
-const config = getConfig()
+const redwoodConfig = getConfig()
 
 module.exports = merge(webpackConfig('development'), {
   devServer: {
@@ -18,12 +18,12 @@ module.exports = merge(webpackConfig('development'), {
     injectClient: false,
     quiet: true,
     historyApiFallback: true,
-    port: config.web.port,
+    port: redwoodConfig.web.port,
     proxy: {
-      [config.web.apiProxyPath]: {
-        target: `http://localhost:${config.api.port}`,
+      [redwoodConfig.web.apiProxyPath]: {
+        target: `http://localhost:${redwoodConfig.api.port}`,
         pathRewrite: {
-          [`^${escapeRegExp(config.web.apiProxyPath)}`]: '',
+          [`^${escapeRegExp(redwoodConfig.web.apiProxyPath)}`]: '',
         },
       },
     },
