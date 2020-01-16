@@ -5,54 +5,7 @@
  * Check to make sure that all referenced Pages exist in the `/web/src/pages`
  * directory. Thanks to eslint/undef upon which this code is based.
  */
-'use strict'
-
-const fs = require('fs')
-const path = require('path')
-
-const { flattenDeep } = require('lodash')
-
-//------------------------------------------------------------------------------
-// Helpers
-//------------------------------------------------------------------------------
-
-function processDir(dir, prefix = []) {
-  const deps = []
-  const entries = fs.readdirSync(dir, { withFileTypes: true })
-
-  // Iterate over a dir's entries, recursing as necessary into
-  // subdirectories.
-  entries.forEach((entry) => {
-    if (entry.isDirectory()) {
-      // Actual JS files reside in a directory of the same name, so let's
-      // construct the filename of the actual Page file.
-      const testFile = path.join(dir, entry.name, entry.name + '.js')
-
-      if (fs.existsSync(testFile)) {
-        // If the Page exists, then construct the dependency object and push it
-        // onto the deps array.
-        const basename = path.posix.basename(entry.name, '.js')
-        const importName = prefix.join() + basename
-        const importFile = path.join('src', 'pages', ...prefix, basename)
-        deps.push({
-          const: importName,
-          path: path.join(dir, entry.name),
-          importStatement: `import ${importName} from '${importFile}'`,
-        })
-      } else {
-        // If the Page doesn't exist then we are in a directory of Page
-        // directories, so let's recurse into it and do the whole thing over
-        // again.
-        const newPrefix = prefix.concat(entry.name)
-        deps.push(processDir(path.join(dir, entry.name), newPrefix))
-      }
-    }
-  })
-
-  // We may have nested arrays because of the recursion, so flatten the deps
-  // into a list.
-  return flattenDeep(deps)
-}
+import { processPagesDir } from '@redwoodjs/core'
 
 /**
  * Checks if the given node is the argument of a typeof operator.
@@ -69,7 +22,7 @@ function hasTypeOfOperator(node) {
 // Rule Definition
 //------------------------------------------------------------------------------
 
-module.exports = {
+export default {
   meta: {
     type: 'problem',
 
@@ -100,7 +53,7 @@ module.exports = {
     const options = context.options[0]
     const considerTypeOf = (options && options.typeof === true) || false
 
-    const deps = processDir(path.join(context.getCwd(), 'web', 'src', 'pages'))
+    const deps = processPagesDir()
     const pageConsts = deps.map((dep) => dep.const)
 
     return {
