@@ -20,11 +20,8 @@ export type Paths = {
     graphql: string
   }
 }
-
-export type PagesDependencies = [
-  {
-    const: string
-    path: string
-    importStatement: string
-  }?
-]
+export type PagesDependency = {
+  const: string
+  path: string
+  importStatement: string
+}
