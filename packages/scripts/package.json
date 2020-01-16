@@ -4,7 +4,7 @@
   "license": "MIT",
   "files": [
     "config/*",
-    "loaders/*"
+    "dist/*"
   ],
   "dependencies": {
     "@babel/cli": "^7.7.4",
@@ -42,5 +42,11 @@
     "webpack-dev-server": "^3.9.0",
     "webpack-merge": "^4.2.2"
   },
-  "gitHead": "ca5de73e28e7f9c034232a2dc5d5e810fcb14a0a"
+  "gitHead": "ca5de73e28e7f9c034232a2dc5d5e810fcb14a0a",
+  "scripts": {
+    "build": "yarn clean && babel src -d dist",
+    "build:watch": "nodemon --ignore dist --exec 'yarn build'",
+    "prepare": "yarn build",
+    "clean": "rm -rf dist"
+  }
 }

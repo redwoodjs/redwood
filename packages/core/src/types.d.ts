@@ -14,9 +14,16 @@ export type Paths = {
     routes: string
     pages: string
     components: string
+    layouts: string
   }
   api: {
     functions: string
     graphql: string
+    services: string
   }
+}
+export type PagesDependency = {
+  const: string
+  path: string
+  importStatement: string
 }
