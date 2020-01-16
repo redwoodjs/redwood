@@ -50,6 +50,12 @@ const componentFiles = (name) => {
   const pluralName = pascalcase(pluralize(name))
   const singularName = pascalcase(pluralize.singular(name))
   let fileList = {}
+  const columns = [
+    { name: 'id', type: 'Int' },
+    { name: 'title', type: 'String' },
+    { name: 'body', type: 'String' },
+    { name: 'createdAt', type: 'DateTime' },
+  ]
 
   COMPONENTS.forEach((component) => {
     const outputComponentName = component
@@ -65,6 +71,7 @@ const componentFiles = (name) => {
       path.join('scaffold', 'components', component),
       {
         name,
+        columns,
       }
     )
     fileList[outputPath] = template
