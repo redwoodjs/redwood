@@ -1,1 +1,21 @@
-${singularPascalName}Cell
+import ${singularPascalName} from 'src/components/${singularPascalName}'
+
+export const QUERY = gql`
+  query FIND_POST_BY_ID($id: ID!) {
+    ${singularCamelName}: ${singularCamelName}(id: $id) {
+      <% columns.forEach(column => { %>
+      <%= column.name %>
+      <% }) %>
+    }
+  }
+`
+
+// export const beforeQuery = ({ id }) => {
+//   return { variables: { id } }
+// }
+
+export const Loading = () => <div>Loading...</div>
+
+export const Success = ({ ${singularCamelName} }) => {
+  return <${singularPascalName} ${singularCamelName}={${singularCamelName}} />
+}

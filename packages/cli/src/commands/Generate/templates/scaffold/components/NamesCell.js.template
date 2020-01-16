@@ -1,1 +1,18 @@
-${pluralPascalName}Cell
+import ${pluralPascalName} from 'src/components/${pluralPascalName}'
+
+export const QUERY = gql`
+  query POSTS {
+    ${pluralCamelName} {
+      id
+      title
+      body
+      createdAt
+    }
+  }
+`
+
+export const Loading = () => <div>Loading...</div>
+
+export const Success = ({ ${pluralCamelName} }) => {
+  return <${pluralPascalName} ${pluralCamelName}={${pluralCamelName}} />
+}
