@@ -3,30 +3,15 @@ import path from 'path'
 
 import camelcase from 'camelcase'
 import pascalcase from 'pascalcase'
-import { paramCase } from 'param-case'
 import pluralize from 'pluralize'
+import { getPaths } from '@redwoodjs/core'
 
 import { generateTemplate, templateRoot } from 'src/lib'
 
-const COMPONENT_PATH = path.join('web', 'src', 'components')
-const PAGE_PATH = path.join('web', 'src', 'pages')
 const PAGES = fs.readdirSync(path.join(templateRoot, 'scaffold', 'pages'))
 const COMPONENTS = fs.readdirSync(
   path.join(templateRoot, 'scaffold', 'components')
 )
-
-// Helper for converting a template filename to component name (without the
-// "Page" suffix):
-//
-//  EditNamePage.js.template -> EditPost
-//  NamesPage.js.template    -> Posts
-const filenameToPageName = (name, filename) => {
-  return filename
-    .replace(/\.js\.template/, '')
-    .replace(/Names/, pascalcase(pluralize(name)))
-    .replace(/Name/, pascalcase(pluralize.singular(name)))
-    .replace(/Page/, '')
-}
 
 const files = (args) => {
   const [[name, ..._rest], _flags] = args
@@ -48,7 +33,7 @@ const pageFiles = (name) => {
       .replace(/Name/, singularName)
       .replace(/\.template/, '')
     const outputPath = path.join(
-      PAGE_PATH,
+      getPaths().web.pages,
       outputPageName.replace(/\.js/, ''),
       outputPageName
     )
@@ -72,7 +57,7 @@ const componentFiles = (name) => {
       .replace(/Name/, singularName)
       .replace(/\.template/, '')
     const outputPath = path.join(
-      COMPONENT_PATH,
+      getPaths().web.components,
       outputComponentName.replace(/\.js/, ''),
       outputComponentName
     )

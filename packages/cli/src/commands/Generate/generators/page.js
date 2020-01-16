@@ -9,10 +9,9 @@ import { getPaths } from '@redwoodjs/core'
 import { generateTemplate } from 'src/lib'
 
 const files = (args) => {
-  const OUTPUT_PATH = getPaths().web.pages
   const [[name, ..._rest], _flags] = args
   const filename = pascalcase(pluralize.singular(name)) + 'Page'
-  const outputPath = path.join(OUTPUT_PATH, filename, `${filename}.js`)
+  const outputPath = path.join(getPaths().web.pages, filename, `${filename}.js`)
   const template = generateTemplate(path.join('page', 'page.js.template'), {
     name,
     path: outputPath,

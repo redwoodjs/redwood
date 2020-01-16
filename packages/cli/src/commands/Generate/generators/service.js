@@ -2,14 +2,16 @@ import path from 'path'
 
 import camelcase from 'camelcase'
 import pluralize from 'pluralize'
+import { getPaths } from '@redwoodjs/core'
 
 import { generateTemplate } from 'src/lib'
 
-const OUTPUT_PATH = path.join('api', 'src', 'services')
-
 const files = (args) => {
   const [[name, ..._rest], flags] = args
-  const outputPath = path.join(OUTPUT_PATH, `${camelcase(pluralize(name))}.js`)
+  const outputPath = path.join(
+    getPaths().api.services,
+    `${camelcase(pluralize(name))}.js`
+  )
   const isCrud = !!flags['crud']
   const template = generateTemplate(
     path.join('service', 'service.js.template'),

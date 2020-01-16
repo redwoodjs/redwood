@@ -7,11 +7,9 @@ import { getPaths } from '@redwoodjs/core'
 import { generateTemplate } from 'src/lib'
 
 const files = (args) => {
-  const OUTPUT_PATH = getPaths().web.components
-
   const [[name, ..._rest], _flags] = args
   const filename = pascalcase(pluralize.singular(name))
-  const outputPath = path.join(OUTPUT_PATH, filename)
+  const outputPath = path.join(getPaths().web.components, filename)
   const componentPath = path.join(outputPath, `${filename}.js`)
   const componentTemplate = generateTemplate(
     path.join('component', 'component.js.template'),
