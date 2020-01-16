@@ -21,8 +21,9 @@ function processDir(dir, prefix = []) {
         // onto the deps array.
         const basename = path.posix.basename(entry.name, '.js')
         const importName = prefix.join() + basename
-        const importFile = path.join('src', 'pages', basename)
+        const importFile = path.join('src', 'pages', ...prefix, basename)
         deps.push({
+          const: importName,
           path: path.join(dir, entry.name),
           importStatement: `import ${importName} from '${importFile}'`,
         })

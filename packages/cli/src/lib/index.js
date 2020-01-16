@@ -34,14 +34,9 @@ const nameVariants = (name) => {
   }
 }
 
-export const templateRoot = path.join(
+export const templateRoot = path.resolve(
   __dirname,
-  '..',
-  '..',
-  'src',
-  'commands',
-  'Generate',
-  'templates'
+  '../commands/Generate/templates'
 )
 
 export const generateTemplate = (templateFilename, vars) => {

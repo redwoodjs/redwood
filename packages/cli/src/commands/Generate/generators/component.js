@@ -2,16 +2,16 @@ import path from 'path'
 
 import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
+import { getPaths } from '@redwoodjs/core'
 
 import { generateTemplate } from 'src/lib'
 
-const OUTPUT_PATH = path.join('web', 'src', 'components')
-
 const files = (args) => {
+  const OUTPUT_PATH = getPaths().web.components
+
   const [[name, ..._rest], _flags] = args
   const filename = pascalcase(pluralize.singular(name))
   const outputPath = path.join(OUTPUT_PATH, filename)
-
   const componentPath = path.join(outputPath, `${filename}.js`)
   const componentTemplate = generateTemplate(
     path.join('component', 'component.js.template'),

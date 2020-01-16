@@ -4,12 +4,12 @@ import camelcase from 'camelcase'
 import pascalcase from 'pascalcase'
 import { paramCase } from 'param-case'
 import pluralize from 'pluralize'
+import { getPaths } from '@redwoodjs/core'
 
 import { generateTemplate } from 'src/lib'
 
-const OUTPUT_PATH = path.join('web', 'src', 'pages')
-
 const files = (args) => {
+  const OUTPUT_PATH = getPaths().web.pages
   const [[name, ..._rest], _flags] = args
   const filename = pascalcase(pluralize.singular(name)) + 'Page'
   const outputPath = path.join(OUTPUT_PATH, filename, `${filename}.js`)

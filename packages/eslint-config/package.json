@@ -1,10 +1,10 @@
 {
   "name": "@redwoodjs/eslint-config",
-  "version": "0.0.1-alpha.17",
+  "version": "0.0.1-alpha.18.0.1",
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@redwoodjs/eslint-plugin-redwood": "file:../eslint-plugin-redwood",
+    "@redwoodjs/eslint-plugin-redwood": "^0.0.1-alpha.18.0.1",
     "@typescript-eslint/eslint-plugin": "^2.14.0",
     "@typescript-eslint/parser": "^2.14.0",
     "babel-eslint": "^10.0.3",
@@ -19,5 +19,5 @@
     "eslint-plugin-react-hooks": "^2.3.0",
     "prettier": "^1.19.1"
   },
-  "gitHead": "3d2b48923b7e0fc34f1737552d5870a77c2be02d"
+  "gitHead": "ca5de73e28e7f9c034232a2dc5d5e810fcb14a0a"
 }

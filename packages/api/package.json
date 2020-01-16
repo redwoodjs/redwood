@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/api",
-  "version": "0.0.1-alpha.17",
+  "version": "0.0.1-alpha.18.0.1",
   "main": "dist/main.js",
   "files": [
     "dist"
@@ -8,7 +8,7 @@
   "types": "./dist/main.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@redwoodjs/core": "^0.0.1-alpha.16",
+    "@redwoodjs/core": "^0.0.1-alpha.18.0.1",
     "apollo-server-lambda": "2.9.9",
     "core-js": "3.6.0",
     "graphql": "^14.5.8",
@@ -28,5 +28,5 @@
     "prepublish": "yarn build",
     "clean": "rm -rf dist"
   },
-  "gitHead": "32eaaa53d304aea1c49a42b4f15467a3d9114d64"
+  "gitHead": "ca5de73e28e7f9c034232a2dc5d5e810fcb14a0a"
 }
