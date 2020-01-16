@@ -28,7 +28,6 @@
     "css-loader": "^3.2.0",
     "directory-named-webpack-plugin": "^4.0.1",
     "dotenv-webpack": "^1.7.0",
-    "favicons-webpack-plugin": "^1.0.2",
     "file-loader": "^4.3.0",
     "findup-sync": "^4.0.0",
     "html-webpack-plugin": "^3.2.0",
