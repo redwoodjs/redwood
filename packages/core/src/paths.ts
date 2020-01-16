@@ -3,7 +3,7 @@ import fs from 'fs'
 
 import findUp from 'findup-sync'
 
-import { Paths, PagesDependencies } from './types'
+import { Paths, PagesDependency } from './types'
 
 const CONFIG_FILE_NAME = 'redwood.toml'
 
@@ -57,9 +57,9 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
  */
 export const processPagesDir = (
   webPagesDir: string = getPaths().web.pages,
-  prefix = []
-): PagesDependencies => {
-  const deps: PagesDependencies = []
+  prefix: Array<string> = []
+): Array<PagesDependency> => {
+  const deps: Array<PagesDependency> = []
   const entries = fs.readdirSync(webPagesDir, { withFileTypes: true })
 
   // Iterate over a dir's entries, recursing as necessary into
@@ -85,8 +85,7 @@ export const processPagesDir = (
         // If the Page doesn't exist then we are in a directory of Page
         // directories, so let's recurse into it and do the whole thing over
         // again.
-        // @ts-ignore
-        const newPrefix = prefix.concat(entry.name)
+        const newPrefix = [...prefix, entry.name]
         deps.push(
           ...processPagesDir(path.join(webPagesDir, entry.name), newPrefix)
         )
