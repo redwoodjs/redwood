@@ -15,12 +15,14 @@
     "@types/findup-sync": "^2.0.2"
   },
   "scripts": {
+    "clean": "rm -rf dist",
     "build": "yarn clean && yarn build:js && yarn build:types",
     "build:js": "babel src --out-dir dist --extensions \".ts\" --source-maps inline",
     "build:types": "tsc --declaration --emitDeclarationOnly",
     "build:watch": "nodemon --ignore dist --exec 'yarn build'",
-    "prepublish": "yarn build",
-    "clean": "rm -rf dist"
+    "prepare": "yarn build",
+    "test": "jest",
+    "test:watch": "yarn test --watch"
   },
   "gitHead": "ca5de73e28e7f9c034232a2dc5d5e810fcb14a0a"
 }
