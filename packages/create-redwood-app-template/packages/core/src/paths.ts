@@ -9,7 +9,9 @@ const CONFIG_FILE_NAME = 'redwood.toml'
 
 const PATH_API_DIR_FUNCTIONS = 'api/src/functions'
 const PATH_API_DIR_GRAPHQL = 'api/src/graphql'
+const PATH_API_DIR_SERVICES = 'api/src/services'
 const PATH_WEB_ROUTES = 'web/src/Routes.js'
+const PATH_WEB_DIR_LAYOUTS = 'web/src/layouts/'
 const PATH_WEB_DIR_PAGES = 'web/src/pages/'
 const PATH_WEB_DIR_COMPONENTS = 'web/src/components'
 
@@ -42,11 +44,13 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
     api: {
       functions: path.join(BASE_DIR, PATH_API_DIR_FUNCTIONS),
       graphql: path.join(BASE_DIR, PATH_API_DIR_GRAPHQL),
+      services: path.join(BASE_DIR, PATH_API_DIR_SERVICES),
     },
     web: {
       routes: path.join(BASE_DIR, PATH_WEB_ROUTES),
       pages: path.join(BASE_DIR, PATH_WEB_DIR_PAGES),
       components: path.join(BASE_DIR, PATH_WEB_DIR_COMPONENTS),
+      layouts: path.join(BASE_DIR, PATH_WEB_DIR_LAYOUTS),
     },
   }
 }
