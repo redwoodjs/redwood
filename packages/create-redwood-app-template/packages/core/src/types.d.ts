@@ -17,6 +17,7 @@ export type Paths = {
     layouts: string
   }
   api: {
+    db: string
     functions: string
     graphql: string
     services: string
