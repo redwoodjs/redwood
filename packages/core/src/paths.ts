@@ -9,7 +9,7 @@ const CONFIG_FILE_NAME = 'redwood.toml'
 
 const PATH_API_DIR_FUNCTIONS = 'api/src/functions'
 const PATH_API_DIR_GRAPHQL = 'api/src/graphql'
-const PATH_API_DIR_DB = 'api/src/prisma'
+const PATH_API_DIR_DB = 'api/prisma'
 const PATH_API_DIR_SERVICES = 'api/src/services'
 const PATH_WEB_ROUTES = 'web/src/Routes.js'
 const PATH_WEB_DIR_LAYOUTS = 'web/src/layouts/'
