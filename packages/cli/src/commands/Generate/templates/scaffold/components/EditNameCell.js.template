@@ -4,10 +4,8 @@ import ${singularPascalName}Form from 'src/components/${singularPascalName}Form'
 
 export const QUERY = gql`
   query FIND_POST_BY_ID($id: ID!) {
-    ${singularCamelName}: ${singularCamelName}(id: $id) {
-      <% columns.forEach(column => { %>
-      <%= column.name %>
-      <% }) %>
+    ${singularCamelName}: ${singularCamelName}(id: $id) {<% columns.forEach(column => { %>
+      <%= column.name %><% }) %>
     }
   }
 `

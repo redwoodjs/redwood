@@ -67,6 +67,9 @@ const componentFiles = (name) => {
       outputComponentName.replace(/\.js/, ''),
       outputComponentName
     )
+
+    console.info(component)
+
     const template = generateTemplate(
       path.join('scaffold', 'components', component),
       {
@@ -84,8 +87,8 @@ const componentFiles = (name) => {
 const routes = ([name, ..._rest]) => {
   const singularPascalName = pascalcase(pluralize.singular(name))
   const pluralPascalName = pascalcase(pluralize(name))
-  const singularCamelName = camelcase(singularName)
-  const pluralCamelName = camelcase(pluralName)
+  const singularCamelName = camelcase(singularPascalName)
+  const pluralCamelName = camelcase(pluralPascalName)
 
   return [
     `<Route path="/${pluralCamelName}/{id}/edit" page={Edit${singularPascalName}Page} name="edit${singularPascalName}" />`,

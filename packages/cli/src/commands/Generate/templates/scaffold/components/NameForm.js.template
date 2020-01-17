@@ -31,8 +31,7 @@ const ${singularPascalName}Form = (props) => {
           titleClassName="font-semibold"
           listClassName="mt-2 list-disc list-inside"
         />
-
-        <% columns.forEach(column => { %>
+<% columns.forEach(column => { %>
         <Label
           name="<%= column.name %>"
           className={CSS.label}
@@ -40,14 +39,13 @@ const ${singularPascalName}Form = (props) => {
         />
         <TextField
           name="<%= column.name %>"
-          defaultValue={props.${singularCamelName}?.title}
+          defaultValue={props.${singularCamelName}?.<%= column.name %>}
           className={CSS.input}
           errorClassName={CSS.inputError}
           validation={{ required: true }}
         />
         <FieldError name="<%= column.name %>" className={CSS.errorMessage} />
-        <% }) %>
-
+<% }) %>
         <div className="mt-8 text-center">
           <Submit
             disabled={props.loading}

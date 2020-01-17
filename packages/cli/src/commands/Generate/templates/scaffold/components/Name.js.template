@@ -18,7 +18,7 @@ const ${singularPascalName} = ({ ${singularCamelName} }) => {
   })
 
   const onDeleteClick = (id) => {
-    if (confirm(`Are you sure you want to delete ${singularCamelName} ${id}?`)) {
+    if (confirm('Are you sure you want to delete ${singularCamelName} ' + id + '?')) {
       delete${singularPascalName}({ variables: { id } })
     }
   }
@@ -31,8 +31,7 @@ const ${singularPascalName} = ({ ${singularCamelName} }) => {
         </header>
         <table className="w-full text-sm">
           <tbody>
-            <% columns.forEach(column => { %>
-            <tr className="odd:bg-gray-100 even:bg-white border-t">
+            <% columns.forEach(column => { %><tr className="odd:bg-gray-100 even:bg-white border-t">
               <td className="font-semibold p-3 text-right md:w-1/5"><%= column.name %></td>
               <td className="p-3">{${singularCamelName}.<%= column.name %>}</td>
             </tr>
@@ -53,7 +52,6 @@ const ${singularPascalName} = ({ ${singularCamelName} }) => {
           <li className="inline-block ml-2">
             <a
               href="#"
-              data-id={${singularCamelName}.id}
               className="text-xs bg-red-600 text-white hover:bg-red-700 rounded px-4 py-2 uppercase font-semibold tracking-wide"
               onClick={() => onDeleteClick(${singularCamelName}.id)}
             >
