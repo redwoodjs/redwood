@@ -1,4 +1,7 @@
-# Redwood
+<p align="center">
+  <img src="https://avatars2.githubusercontent.com/u/45050444?s=200&v=4"/>
+  <h1 align="center">Redwood</h1>
+</p>
 
 _by Tom Preston-Werner and Peter Pistorius._
 
