@@ -4,21 +4,39 @@ import path from 'path'
 import camelcase from 'camelcase'
 import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
+import { getDMMF } from '@prisma/sdk'
 import { getPaths } from '@redwoodjs/core'
 
-import { generateTemplate, templateRoot } from 'src/lib'
+import { generateTemplate, templateRoot, readFile, asyncForEach } from 'src/lib'
 
+const SCHEMA_PATH = path.join('api', 'prisma', 'schema.prisma')
 const NON_EDITABLE_COLUMNS = ['id', 'createdAt', 'updatedAt']
 const PAGES = fs.readdirSync(path.join(templateRoot, 'scaffold', 'pages'))
 const COMPONENTS = fs.readdirSync(
   path.join(templateRoot, 'scaffold', 'components')
 )
 
-const files = (args) => {
+const sdlFromSchemaModel = async (name) => {
+  const metadata = await getDMMF({
+    datamodel: readFile(SCHEMA_PATH).toString(),
+  })
+
+  const model = metadata.datamodel.models.find((model) => {
+    return model.name === name
+  })
+
+  if (model) {
+    return model
+  } else {
+    throw `no schema definition found for \`${name}\``
+  }
+}
+
+const files = async (args) => {
   const [[name, ..._rest], _flags] = args
   let fileList = {}
   Object.assign(fileList, pageFiles(name))
-  Object.assign(fileList, componentFiles(name))
+  Object.assign(fileList, await componentFiles(name))
 
   return fileList
 }
@@ -47,21 +65,17 @@ const pageFiles = (name) => {
   return fileList
 }
 
-const componentFiles = (name) => {
+const componentFiles = async (name) => {
   const pluralName = pascalcase(pluralize(name))
   const singularName = pascalcase(pluralize.singular(name))
+  const model = await sdlFromSchemaModel(singularName)
+  const columns = model.fields
   let fileList = {}
-  const columns = [
-    { name: 'id', type: 'Int' },
-    { name: 'title', type: 'String' },
-    { name: 'body', type: 'String' },
-    { name: 'createdAt', type: 'DateTime' },
-  ]
   const editableColumns = columns.filter((column) => {
     return NON_EDITABLE_COLUMNS.indexOf(column.name) === -1
   })
 
-  COMPONENTS.forEach((component) => {
+  await asyncForEach(COMPONENTS, (component) => {
     const outputComponentName = component
       .replace(/Names/, pluralName)
       .replace(/Name/, singularName)
@@ -113,7 +127,7 @@ export default {
   command: 'scaffold',
   description:
     'Generates pages, SDL and a service for CRUD operations on a single database table',
-  files: (args) => files(args),
+  files: async (args) => await files(args),
   routes: (args) => routes(args),
   generate: (args) => generate(args),
 }
