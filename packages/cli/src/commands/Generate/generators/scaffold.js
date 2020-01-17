@@ -8,6 +8,7 @@ import { getPaths } from '@redwoodjs/core'
 
 import { generateTemplate, templateRoot } from 'src/lib'
 
+const NON_EDITABLE_COLUMNS = ['id', 'createdAt', 'updatedAt']
 const PAGES = fs.readdirSync(path.join(templateRoot, 'scaffold', 'pages'))
 const COMPONENTS = fs.readdirSync(
   path.join(templateRoot, 'scaffold', 'components')
@@ -56,6 +57,9 @@ const componentFiles = (name) => {
     { name: 'body', type: 'String' },
     { name: 'createdAt', type: 'DateTime' },
   ]
+  const editableColumns = columns.filter((column) => {
+    return NON_EDITABLE_COLUMNS.indexOf(column.name) === -1
+  })
 
   COMPONENTS.forEach((component) => {
     const outputComponentName = component
@@ -68,13 +72,12 @@ const componentFiles = (name) => {
       outputComponentName
     )
 
-    console.info(component)
-
     const template = generateTemplate(
       path.join('scaffold', 'components', component),
       {
         name,
         columns,
+        editableColumns,
       }
     )
     fileList[outputPath] = template

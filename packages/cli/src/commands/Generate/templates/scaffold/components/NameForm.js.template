@@ -31,7 +31,7 @@ const ${singularPascalName}Form = (props) => {
           titleClassName="font-semibold"
           listClassName="mt-2 list-disc list-inside"
         />
-<% columns.forEach(column => { %>
+<% editableColumns.forEach(column => { %>
         <Label
           name="<%= column.name %>"
           className={CSS.label}
