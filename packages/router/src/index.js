@@ -6,6 +6,15 @@ import { useContext } from 'react'
 
 import SplashPage from './SplashPage'
 
+const coreParamTypes = {
+  Int: {
+    constraint: /\d+/,
+    transform: parseInt,
+  },
+}
+
+const separator = '__redwood_param_type__'
+
 // Convert the given path (from the path specified in the Route) into
 // a regular expression that will match any named parameters.
 //
@@ -15,8 +24,23 @@ import SplashPage from './SplashPage'
 //
 //   reRoute('/blog/{year}/{month}/{day}')
 const reRoute = (path) => {
-  const withCaptures = path.replace(/\{([^}]+)\}/g, '(?<$1>[^/]+)')
-  return `^${withCaptures}$`
+  let pathWithCaptures = path
+
+  Object.keys(coreParamTypes).forEach((pType) => {
+    const { constraint: pConstraint } = coreParamTypes[pType]
+    const regex = new RegExp(`\{([^}]+):${pType}\}`, 'g')
+    const constraintString = pConstraint.toString()
+    const constraint = constraintString.substring(
+      1,
+      constraintString.length - 1
+    )
+    const capture = `(?<$1${separator}${pType}>${constraint})`
+    pathWithCaptures = pathWithCaptures.replace(regex, capture)
+  })
+
+  pathWithCaptures = pathWithCaptures.replace(/\{([^}]+)\}/g, '(?<$1>[^/]+)')
+
+  return `^${pathWithCaptures}$`
 }
 
 // Determine if the given route is a match for the given pathname. If so,
@@ -36,7 +60,21 @@ const matchPath = (route, pathname) => {
   const matches = Array.from(pathname.matchAll(reRoute(route)))
   if (matches.length > 0) {
     const params = matches[0].groups || {}
-    return { match: true, params }
+
+    const transformedParams = Object.keys(params).reduce((acc, key) => {
+      const pMatches = key.match(`^(\\w+)${separator}(\\w+)$`)
+
+      if (pMatches.length > 0) {
+        const [_, pName, pType] = pMatches
+        acc[pName] = coreParamTypes[pType].transform(params[key])
+      } else {
+        acc[key] = params[key]
+      }
+
+      return acc
+    }, {})
+
+    return { match: true, params: transformedParams }
   } else {
     return { match: false }
   }
