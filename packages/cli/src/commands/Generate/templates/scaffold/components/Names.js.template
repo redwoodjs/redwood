@@ -9,10 +9,12 @@ const DELETE_POST_MUTATION = gql`
   }
 `
 
+const MAX_STRING_LENGTH = 150
+
 const truncate = (text) => {
   let output = text
-  if (text.length > 100) {
-    output = output.substring(0, 150) + '...'
+  if (text.length > MAX_STRING_LENGTH) {
+    output = output.substring(0, MAX_STRING_LENGTH) + '...'
   }
   return output
 }
@@ -53,7 +55,7 @@ const ${pluralPascalName}List = ({ ${pluralCamelName} }) => {
               key={${singularCamelName}.id}
               className="odd:bg-gray-100 even:bg-white border-t"
             ><% columns.forEach(column => { %>
-              <td className="p-3">{truncate(${singularCamelName}.<%= column.name %>)}</td><% }) %>
+              <td className="p-3">{<% if (column.type === 'DateTime') { %>timeTag<% } else { %>truncate<% } %>(${singularCamelName}.<%= column.name %>)}</td><% }) %>
               <td className="p-3 pr-4 text-right whitespace-no-wrap">
                 <nav>
                   <ul>
