@@ -20,9 +20,7 @@ const ${pluralPascalName}Layout = (props) => {
           <div className="ml-1 leading-loose">New ${singularPascalName}</div>
         </Link>
       </header>
-      <main className="mx-4 pb-4">
-        {props.children}
-      </main>
+      <main className="mx-4 pb-4">{props.children}</main>
     </div>
   )
 }

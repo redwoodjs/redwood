@@ -9,8 +9,8 @@ import { getPaths } from '@redwoodjs/core'
 
 import { generateTemplate, templateRoot, readFile, asyncForEach } from 'src/lib'
 
-const SCHEMA_PATH = path.join('api', 'prisma', 'schema.prisma')
 const NON_EDITABLE_COLUMNS = ['id', 'createdAt', 'updatedAt']
+const LAYOUTS = fs.readdirSync(path.join(templateRoot, 'scaffold', 'layouts'))
 const PAGES = fs.readdirSync(path.join(templateRoot, 'scaffold', 'pages'))
 const COMPONENTS = fs.readdirSync(
   path.join(templateRoot, 'scaffold', 'components')
@@ -18,7 +18,9 @@ const COMPONENTS = fs.readdirSync(
 
 const sdlFromSchemaModel = async (name) => {
   const metadata = await getDMMF({
-    datamodel: readFile(SCHEMA_PATH).toString(),
+    datamodel: readFile(
+      path.join(getPaths().api.db, 'schema.prisma')
+    ).toString(),
   })
 
   const model = metadata.datamodel.models.find((model) => {
@@ -35,8 +37,36 @@ const sdlFromSchemaModel = async (name) => {
 const files = async (args) => {
   const [[name, ..._rest], _flags] = args
   let fileList = {}
+  Object.assign(fileList, layoutFiles(name))
   Object.assign(fileList, pageFiles(name))
   Object.assign(fileList, await componentFiles(name))
+
+  return fileList
+}
+
+const layoutFiles = (name) => {
+  const pluralName = pascalcase(pluralize(name))
+  const singularName = pascalcase(pluralize.singular(name))
+  let fileList = {}
+
+  LAYOUTS.forEach((layout) => {
+    const outputLayoutName = layout
+      .replace(/Names/, pluralName)
+      .replace(/Name/, singularName)
+      .replace(/\.template/, '')
+    const outputPath = path.join(
+      getPaths().web.layouts,
+      outputLayoutName.replace(/\.js/, ''),
+      outputLayoutName
+    )
+    const template = generateTemplate(
+      path.join('scaffold', 'layouts', layout),
+      {
+        name,
+      }
+    )
+    fileList[outputPath] = template
+  })
 
   return fileList
 }
