@@ -6,24 +6,54 @@ import { useContext } from 'react'
 
 import SplashPage from './SplashPage'
 
-// Convert the given path (from the path specified in the Route) into
-// a regular expression that will match any named parameters.
+// Definitions of the core param types.
+const coreParamTypes = {
+  Int: {
+    constraint: /\d+/,
+    transform: parseInt,
+  },
+}
+
+// Separator token used during param type recognition.
+const separator = '__redwood_param_type__'
+
+// Convert the given path (from the path specified in the Route) into a regular
+// expression that will match any named parameters. Param types are handled here
+// as well.
 //
-// path - The path as specified in the <Route ... />.
+// path          - The path as specified in the <Route ... />.
+// allParamTypes - The object containing all param type definitions.
 //
 // Examples:
 //
 //   reRoute('/blog/{year}/{month}/{day}')
-const reRoute = (path) => {
-  const withCaptures = path.replace(/\{([^}]+)\}/g, '(?<$1>[^/]+)')
-  return `^${withCaptures}$`
+//   reRoute('/post/{id:Int}')
+const reRoute = (path, allParamTypes) => {
+  let pathWithCaptures = path
+
+  Object.keys(allParamTypes).forEach((pType) => {
+    const { constraint: pConstraint } = allParamTypes[pType]
+    const regex = new RegExp(`\{([^}]+):${pType}\}`, 'g')
+    const constraintString = pConstraint.toString()
+    const constraint = constraintString.substring(
+      1,
+      constraintString.length - 1
+    )
+    const capture = `(?<$1${separator}${pType}>${constraint})`
+    pathWithCaptures = pathWithCaptures.replace(regex, capture)
+  })
+
+  pathWithCaptures = pathWithCaptures.replace(/\{([^}]+)\}/g, '(?<$1>[^/]+)')
+
+  return `^${pathWithCaptures}$`
 }
 
 // Determine if the given route is a match for the given pathname. If so,
 // extract any named params and return them in an object.
 //
-// route    - The route path as specified in the <Route path={...} />
-// pathname - The pathname from the window.location.
+// route         - The route path as specified in the <Route path={...} />
+// pathname      - The pathname from the window.location.
+// allParamTypes - The object containing all param type definitions.
 //
 // Examples:
 //
@@ -32,11 +62,29 @@ const reRoute = (path) => {
 //
 //   matchPath('/about', '/')
 //   => { match: false }
-const matchPath = (route, pathname) => {
-  const matches = Array.from(pathname.matchAll(reRoute(route)))
+//
+//   matchPath('/post/{id:Int}', '/post/7')
+//   => { match: true, params: { id: 7 }}
+const matchPath = (route, pathname, allParamTypes) => {
+  const matches = Array.from(pathname.matchAll(reRoute(route, allParamTypes)))
   if (matches.length > 0) {
     const params = matches[0].groups || {}
-    return { match: true, params }
+
+    // Handle param types.
+    const transformedParams = Object.keys(params).reduce((acc, key) => {
+      const pMatches = key.match(`^(\\w+)${separator}(\\w+)$`)
+
+      if (pMatches.length > 0) {
+        const [_, pName, pType] = pMatches
+        acc[pName] = allParamTypes[pType].transform(params[key])
+      } else {
+        acc[key] = params[key]
+      }
+
+      return acc
+    }, {})
+
+    return { match: true, params: transformedParams }
   } else {
     return { match: false }
   }
@@ -186,7 +234,8 @@ const replaceParams = (path, args = {}) => {
   let newPath = parts
     .map((part) => {
       if (part[0] === '{' && part[part.length - 1] === '}') {
-        const paramName = part.substr(1, part.length - 2)
+        const paramSpec = part.substr(1, part.length - 2)
+        const paramName = paramSpec.split(':')[0]
         const arg = args[paramName]
         if (arg) {
           delete args[paramName]
@@ -235,21 +284,29 @@ export const routes = namedRoutes
 
 // The guts of the router implementation.
 
-const RouterImpl = ({ pathname, search, children }) => {
+const RouterImpl = ({ pathname, search, paramTypes, children }) => {
   const routes = React.Children.toArray(children)
   if (!namedRoutesDone) {
     mapNamedRoutes(routes)
   }
 
   let NotFoundPage
+  const allParamTypes = { ...coreParamTypes, ...paramTypes }
 
   for (let route of routes) {
     const { path, page: Page, redirect, notfound } = route.props
+
     if (notfound) {
       NotFoundPage = Page
       continue
     }
-    const { match, params: pathParams } = matchPath(path, pathname)
+
+    const { match, params: pathParams } = matchPath(
+      path,
+      pathname,
+      allParamTypes
+    )
+
     if (match) {
       const searchParams = parseSearch(search)
       const allParams = { ...pathParams, ...searchParams }
