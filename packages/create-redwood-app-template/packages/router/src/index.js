@@ -6,6 +6,7 @@ import { useContext } from 'react'
 
 import SplashPage from './SplashPage'
 
+// Definitions of the core param types.
 const coreParamTypes = {
   Int: {
     constraint: /\d+/,
@@ -13,16 +14,19 @@ const coreParamTypes = {
   },
 }
 
+// Separator token used during param type recognition.
 const separator = '__redwood_param_type__'
 
-// Convert the given path (from the path specified in the Route) into
-// a regular expression that will match any named parameters.
+// Convert the given path (from the path specified in the Route) into a regular
+// expression that will match any named parameters. Param types are handled here
+// as well.
 //
 // path - The path as specified in the <Route ... />.
 //
 // Examples:
 //
 //   reRoute('/blog/{year}/{month}/{day}')
+//   reRoute('/post/{id:Int}')
 const reRoute = (path) => {
   let pathWithCaptures = path
 
@@ -61,6 +65,7 @@ const matchPath = (route, pathname) => {
   if (matches.length > 0) {
     const params = matches[0].groups || {}
 
+    // Handle param types.
     const transformedParams = Object.keys(params).reduce((acc, key) => {
       const pMatches = key.match(`^(\\w+)${separator}(\\w+)$`)
 
