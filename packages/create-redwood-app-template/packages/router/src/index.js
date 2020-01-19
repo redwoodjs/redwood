@@ -26,8 +26,8 @@ const separator = '__redwood_param_type__'
 //
 // Examples:
 //
-//   reRoute('/blog/{year}/{month}/{day}')
-//   reRoute('/post/{id:Int}')
+//   reRoute('/blog/{year}/{month}/{day}', { ... })
+//   reRoute('/post/{id:Int}', { Int: { ... }})
 const reRoute = (path, allParamTypes) => {
   let pathWithCaptures = path
 
