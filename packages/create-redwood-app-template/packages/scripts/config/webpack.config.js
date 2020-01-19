@@ -154,6 +154,18 @@ module.exports = (webpackEnv) => {
             ),
           },
         },
+        {
+          test: /web\/src\/components\/.+Cell.js$/,
+          use: {
+            loader: path.resolve(
+              __dirname,
+              '..',
+              'dist',
+              'loaders',
+              'cell-loader'
+            ),
+          },
+        },
       ],
     },
     optimization: {
