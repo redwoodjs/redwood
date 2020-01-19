@@ -5,7 +5,6 @@ const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const DirectoryNamedWebpackPlugin = require('directory-named-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const Dotenv = require('dotenv-webpack')
 const { getConfig, getPaths } = require('@redwoodjs/core')
 
@@ -88,9 +87,6 @@ module.exports = (webpackEnv) => {
           return JSON.stringify(runtimeValue.module.resource)
         }),
       }),
-      new FaviconsWebpackPlugin(
-        path.resolve(redwoodPaths.base, 'web/src/favicon.png')
-      ),
       new Dotenv({
         path: path.resolve(redwoodPaths.base, '.env'),
         silent: true,
