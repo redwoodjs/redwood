@@ -1,3 +1,5 @@
+import { Link, routes } from '@redwoodjs/router'
+
 import ${pluralPascalName} from 'src/components/${pluralPascalName}'
 
 export const QUERY = gql`
@@ -12,6 +14,20 @@ export const QUERY = gql`
 `
 
 export const Loading = () => <div>Loading...</div>
+
+export const Empty = () => {
+  return (
+    <div className="text-center">
+      No ${pluralCamelName} yet.
+      <Link
+        to={routes.new${singularPascalName}()}
+        className="text-blue-500 underline hover:text-blue-700"
+      >
+        Create one?
+      </Link>
+    </div>
+  )
+}
 
 export const Success = ({ ${pluralCamelName} }) => {
   return <${pluralPascalName} ${pluralCamelName}={${pluralCamelName}} />

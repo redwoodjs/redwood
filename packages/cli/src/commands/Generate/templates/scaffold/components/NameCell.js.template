@@ -14,6 +14,8 @@ export const QUERY = gql`
 
 export const Loading = () => <div>Loading...</div>
 
+export const Empty = () => <div>${singularPascalName} not found</div>
+
 export const Success = ({ ${singularCamelName} }) => {
   return <${singularPascalName} ${singularCamelName}={${singularCamelName}} />
 }
