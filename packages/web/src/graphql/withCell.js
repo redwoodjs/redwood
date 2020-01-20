@@ -41,13 +41,18 @@ export const withCell = ({
   afterQuery = (data) => ({ ...data }),
   Loading = () => null,
   Error = () => null,
+  Empty = () => null,
   Success,
 }) => {
   return (props) => (
     <Query query={QUERY} {...beforeQuery(props)}>
       {({ error, loading, data, ...queryRest }) => {
         if (error) {
-          return <Error error={error} {...queryRest} {...props} />
+          if (Error) {
+            return <Error error={error} {...queryRest} {...props} />
+          } else {
+            console.error(error)
+          }
         } else if (loading) {
           return <Loading {...queryRest} {...props} />
         } else {
