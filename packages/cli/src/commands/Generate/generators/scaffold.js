@@ -10,6 +10,7 @@ import { getPaths } from '@redwoodjs/core'
 import { generateTemplate, templateRoot, readFile, asyncForEach } from 'src/lib'
 
 const NON_EDITABLE_COLUMNS = ['id', 'createdAt', 'updatedAt']
+const ASSETS = fs.readdirSync(path.join(templateRoot, 'scaffold', 'assets'))
 const LAYOUTS = fs.readdirSync(path.join(templateRoot, 'scaffold', 'layouts'))
 const PAGES = fs.readdirSync(path.join(templateRoot, 'scaffold', 'pages'))
 const COMPONENTS = fs.readdirSync(
@@ -37,9 +38,29 @@ const sdlFromSchemaModel = async (name) => {
 const files = async (args) => {
   const [[name, ..._rest], _flags] = args
   let fileList = {}
+  Object.assign(fileList, assetFiles(name))
   Object.assign(fileList, layoutFiles(name))
   Object.assign(fileList, pageFiles(name))
   Object.assign(fileList, await componentFiles(name))
+
+  return fileList
+}
+
+const assetFiles = (name) => {
+  let fileList = {}
+
+  ASSETS.forEach((asset) => {
+    const outputAssetName = layout.replace(/\.template/, '')
+    const outputPath = path.join(
+      getPaths().web.src,
+      outputAssetName.replace(/\.js/, ''),
+      outputAssetName
+    )
+    const template = generateTemplate(path.join('scaffold', 'assets', asset), {
+      name,
+    })
+    fileList[outputPath] = template
+  })
 
   return fileList
 }
