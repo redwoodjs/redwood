@@ -56,8 +56,8 @@ export const withCell = ({
         } else if (loading) {
           return <Loading {...queryRest} {...props} />
         } else if (
-          data === null ||
-          (Array.isArray(data) && Array.isEmpty(data) && Empty)
+          (data === null || (Array.isArray(data) && Array.isEmpty(data))) &&
+          Empty
         ) {
           return <Empty {...queryRest} {...props} />
         } else {
