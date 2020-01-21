@@ -36,7 +36,7 @@ import { Query } from '@apollo/react-components'
  * }
  */
 export const withCell = ({
-  beforeQuery = () => ({}),
+  beforeQuery = (props) => ({ variables: props }),
   QUERY,
   afterQuery = (data) => ({ ...data }),
   Loading = () => null,
