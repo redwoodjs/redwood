@@ -4,7 +4,7 @@
 
 import { useContext } from 'react'
 
-import SplashPage from './SplashPage'
+import SplashPage from './SplashPage/SplashPage'
 
 // Definitions of the core param types.
 const coreParamTypes = {

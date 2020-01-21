@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/web",
-  "version": "0.0.1-alpha.18.0.1",
+  "version": "0.0.1-alpha.19.0.1",
   "files": [
     "dist"
   ],
@@ -18,7 +18,7 @@
     "core-js": "3.6.0",
     "graphql": "^14.5.8",
     "proptypes": "^1.1.0",
-    "react-hook-form": "^4.5.5"
+    "react-hook-form": "^4.6.2"
   },
   "scripts": {
     "build": "yarn clean && babel src -d dist",

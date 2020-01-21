@@ -148,7 +148,7 @@ const Generate = ({
 
     results.push(
       <Text key="route">
-        <Color green>Appened route</Color>
+        <Color green>Appended routes</Color>
       </Text>
     )
   }
