@@ -2,8 +2,8 @@
  * This amazing component does...
  */
 
-const <%= name %> = (props) => {
-  return <>I am <%= name %>.</>
+const ${pascalName} = (props) => {
+  return <>I am ${pascalName}.</>
 }
 
-export default <%= name %>
+export default ${pascalName}

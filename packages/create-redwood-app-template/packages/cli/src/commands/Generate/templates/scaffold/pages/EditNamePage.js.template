@@ -1,0 +1,13 @@
+import { Link, routes } from '@redwoodjs/router'
+import ${pluralPascalName}Layout from 'src/layouts/${pluralPascalName}Layout'
+import Edit${singularPascalName}Cell from 'src/components/Edit${singularPascalName}Cell'
+
+const Edit${singularPascalName}Page = ({ id }) => {
+  return (
+    <${pluralPascalName}Layout>
+      <Edit${singularPascalName}Cell id={parseInt(id)} />
+    </${pluralPascalName}Layout>
+  )
+}
+
+export default Edit${singularPascalName}Page

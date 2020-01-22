@@ -1,18 +1,24 @@
-import <%= serviceName %> from 'src/services/<%= serviceFileName %>'
+import { gql } from '@redwoodjs/api'
+
+import ${pluralPascalName} from 'src/services/${pluralCamelName}'
 
 export const schema = gql`
-  type <%= typeName %> {
-    <%= query %>
+  type ${singularPascalName} {
+    ${query}
   }
 
   type Query {
-    <%= queryAllName %>: [<%= typeName %>]
+    ${pluralCamelName}: [${singularPascalName}]
+    <% if (isCrud) { %>${singularCamelName}: ${singularPascalName}<% } %>
   }
 
-  input <%= typeName %>Input {
-    <%= input %>
+  input ${singularPascalName}Input {
+    ${input}
   }
 
   type Mutation {
+    <% if (isCrud) { %>create${singularPascalName}(input: ${singularPascalName}Input!): ${singularPascalName}
+    update${singularPascalName}(id: ID!, input: ${singularPascalName}Input!): ${singularPascalName}
+    delete${singularPascalName}(id: ID!): ${singularPascalName}<% } %>
   }
 `
