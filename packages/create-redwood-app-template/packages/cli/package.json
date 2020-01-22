@@ -28,7 +28,7 @@
     "ink-testing-library": "^1.0.2"
   },
   "scripts": {
-    "build": "babel src --out-dir dist && cp -r ./src/commands/Generate/templates ./dist/commands/Generate/templates",
+    "build": "yarn clean; babel src --out-dir dist && cp -r ./src/commands/Generate/templates ./dist/commands/Generate/templates",
     "build:watch": "nodemon --ignore dist --exec 'yarn build'",
     "clean": "rm -rf dist",
     "prepare": "yarn clean && yarn build",
