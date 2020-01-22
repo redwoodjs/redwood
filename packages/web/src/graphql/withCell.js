@@ -44,6 +44,22 @@ export const withCell = ({
   Empty = () => null,
   Success,
 }) => {
+  const isDataNull = (data) => {
+    return dataField(data) === null
+  }
+
+  const isDataEmptyArray = (data) => {
+    return Array.isArray(dataField(data)) && dataField(data).length === 0
+  }
+
+  const dataField = (data) => {
+    return data[Object.keys(data)[0]]
+  }
+
+  const isEmpty = (data) => {
+    return isDataNull(data) || isDataEmptyArray(data)
+  }
+
   return (props) => (
     <Query query={QUERY} {...beforeQuery(props)}>
       {({ error, loading, data, ...queryRest }) => {
@@ -55,13 +71,14 @@ export const withCell = ({
           }
         } else if (loading) {
           return <Loading {...queryRest} {...props} />
-        } else if (
-          (data === null || (Array.isArray(data) && Array.isEmpty(data))) &&
-          Empty
-        ) {
-          return <Empty {...queryRest} {...props} />
+        } else if (data) {
+          if (isEmpty(data) && Empty) {
+            return <Empty {...queryRest} {...props} />
+          } else {
+            return <Success {...afterQuery(data)} {...queryRest} {...props} />
+          }
         } else {
-          return <Success {...afterQuery(data)} {...queryRest} {...props} />
+          throw 'Cannot render cell: graphQL success but `data` is null'
         }
       }}
     </Query>
