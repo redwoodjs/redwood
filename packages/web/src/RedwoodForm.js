@@ -1,4 +1,4 @@
-import useForm, { FormContext, useFormContext } from 'react-hook-form'
+import { useForm, FormContext, useFormContext } from 'react-hook-form'
 import { useContext } from 'react'
 
 const DEFAULT_MESSAGES = {
@@ -96,7 +96,12 @@ const RedwoodFormError = ({
 const RedwoodForm = (props) => {
   // deconstruct some props we care about and keep the remaining `formProps` to
   // pass to the <form> tag
-  let { error: errorProps, propFormMethods, onSubmit, ...formProps } = props
+  const {
+    error: errorProps,
+    formMethods: propFormMethods,
+    onSubmit,
+    ...formProps
+  } = props
   const useFormMethods = useForm(props.validation)
   const formMethods = propFormMethods || useFormMethods
 
