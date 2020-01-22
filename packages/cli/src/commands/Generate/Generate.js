@@ -37,7 +37,7 @@ const Generate = ({
       } catch (e) {
         return (
           <Text key={`error-${filename}`}>
-            <Color red>{e}</Color>
+            <Color red>{e.message}</Color>
           </Text>
         )
       }
@@ -105,9 +105,16 @@ const Generate = ({
 
   if ('generate' in generator) {
     results = results.concat(
-      generator.generate([args[0].slice(2), args[1]]).map((args) => {
-        console.info('Generate(args)', args)
-        return Generate({ args: [['g', ...args[0]], args[1]] })
+      generator.generate([args[0].slice(2), args[1]]).map((args, i) => {
+        const name = args[0][0]
+        return (
+          <Box key={`generator-${i}`} flexDirection="column">
+            <Text>
+              <Color yellow>Invoking {name} generator</Color>
+            </Text>
+            <Box>{Generate({ args: [['g', ...args[0]], args[1]] })}</Box>
+          </Box>
+        )
       })
     )
   }
@@ -118,16 +125,39 @@ const Generate = ({
     const routeFile = readFile(redwoodPaths.web.routes).toString()
     let newRouteFile = routeFile
 
-    generator.routes([name, ...rest]).forEach((route) => {
-      newRouteFile = newRouteFile.replace(
-        /(\s*)\<Router\>/,
-        `$1<Router>$1  ${route}`
-      )
-    })
+    generator
+      .routes([name, ...rest])
+      .reverse()
+      .forEach((route, i) => {
+        newRouteFile = newRouteFile.replace(
+          /(\s*)\<Router\>/,
+          `$1<Router>$1  ${route}`
+        )
+        results.push(
+          <Box key={`route-${i}`} flexDirection="column">
+            <Text>
+              <Color green>Appened route {route}</Color>
+            </Text>
+          </Box>
+        )
+      })
 
     fileWriter(redwoodPaths.web.routes, newRouteFile, {
       overwriteExisting: true,
     })
+
+    // If there is an `other` prop then call that and let the generator do
+    // anything else it wants to do
+
+    if ('other' in generator) {
+      results.push(
+        <Box key="other" flexDirection="column">
+          <Text>
+            <Color green>Other: {generator.other(args)}</Color>
+          </Text>
+        </Box>
+      )
+    }
 
     results.push(
       <Text key="route">
