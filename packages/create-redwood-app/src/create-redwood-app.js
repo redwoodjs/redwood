@@ -54,7 +54,7 @@ export const parseArgs = () => {
   return [positional, flags]
 }
 
-const CreateNewApp = ({ args }) => {
+export const CreateNewApp = ({ args }) => {
   const targetDir = args?.[0]?.[0]
   const [messages, setMessages] = useState([])
   // Swimming against the tide: https://overreacted.io/a-complete-guide-to-useeffect/#swimming-against-the-tide
@@ -141,4 +141,6 @@ const CreateNewApp = ({ args }) => {
   )
 }
 
-render(<CreateNewApp args={parseArgs()} />)
+if (process.env.NODE_ENV !== 'test') {
+  render(<CreateNewApp args={parseArgs()} />)
+}
