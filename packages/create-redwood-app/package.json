@@ -1,6 +1,6 @@
 {
   "name": "create-redwood-app",
-  "version": "0.0.1-alpha.18.0.1",
+  "version": "0.0.1-alpha.20",
   "license": "MIT",
   "bin": "./dist/create-redwood-app.js",
   "files": [
@@ -16,7 +16,7 @@
     "yargs-parser": "^16.1.0"
   },
   "scripts": {
-    "build": "babel src --out-dir dist",
+    "build": "yarn clean && babel src --out-dir dist",
     "build:watch": "nodemon --ignore dist --exec 'yarn build'",
     "clean": "rm -rf dist",
     "prepare": "yarn clean && yarn build",

@@ -1,8 +1,6 @@
 import React from 'react'
 import { render } from 'ink-testing-library'
 
-jest.mock('fs')
-
 import { CreateNewApp } from './create-redwood-app'
 
 describe('Router', () => {
