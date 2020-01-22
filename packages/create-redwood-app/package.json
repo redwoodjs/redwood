@@ -7,8 +7,8 @@
     "dist"
   ],
   "dependencies": {
-    "@redwoodjs/core": "^0.0.1-alpha.18.0.1",
-    "axios": "^0.19.1",
+    "@redwoodjs/core": "^0.0.1-alpha.19",
+    "axios": "^0.19.2",
     "decompress": "^4.2.0",
     "ink": "^2.6.0",
     "react": "^16.12.0",

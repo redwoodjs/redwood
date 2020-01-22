@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/router",
-  "version": "0.0.1-alpha.16",
+  "version": "0.0.1-alpha.19.0.2",
   "files": [
     "dist"
   ],
@@ -12,7 +12,7 @@
   "scripts": {
     "build": "yarn clean && babel src -d dist",
     "build:watch": "nodemon --ignore dist --exec 'yarn build'",
-    "prepublish": "yarn build",
+    "prepare": "yarn build",
     "clean": "rm -rf dist"
   }
 }
