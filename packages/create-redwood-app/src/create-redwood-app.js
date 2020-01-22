@@ -6,6 +6,7 @@
 
 import fs from 'fs'
 import path from 'path'
+import { spawn } from 'child_process'
 
 import React, { useState, useRef, useEffect } from 'react'
 import tmp from 'tmp'
@@ -69,7 +70,9 @@ const CreateNewApp = ({ args }) => {
       const newAppDir = path.resolve(process.cwd(), targetDir)
       if (fs.existsSync(newAppDir)) {
         setNewMessage(
-          `🖐  We can't continue because "${newAppDir}" already exists`
+          <Color red>
+            We can't continue because "{newAppDir}" already exists
+          </Color>
         )
         return
       } else {
@@ -87,7 +90,11 @@ const CreateNewApp = ({ args }) => {
         postfix: '.zip',
       })
       const realeaseUrl = await latestReleaseZipFile()
-      setNewMessage(<Text>Downloading {realeaseUrl}...</Text>)
+      setNewMessage(
+        <Text>
+          Downloading <Color green>{realeaseUrl}</Color>...
+        </Text>
+      )
       await downloadFile(realeaseUrl, tmpDownloadPath)
 
       // Extract the contents of the downloaded release into our new project directory.
@@ -95,16 +102,21 @@ const CreateNewApp = ({ args }) => {
       const files = await unzip(tmpDownloadPath, newAppDir)
       setNewMessage(
         <Text>
-          Added {files.length} files in <Color green>{newAppDir}</Color>
+          Extracted {files.length} files in <Color green>{newAppDir}</Color>
         </Text>
       )
 
       // Run `yarn install`
-
-      // // TODO: Remove this since we only use `yarn`
-      // setNewMessage(<Text>Installing packages...</Text>)
-      // const prefixFlag = hasYarn() ? '--cwd' : '--prefix'
-      // spawn.sync(['install', prefixFlag, newAppDir], { stdio: 'inherit' })
+      setNewMessage(<Text>Installing packages...</Text>)
+      const child = spawn(`yarn install --cwd ${targetDir}`, {
+        shell: true,
+      })
+      child.stdout.on('data', (data) => {
+        setNewMessage(<Text>{data.toString().replace('\n', '')}</Text>)
+      })
+      child.stderr.on('data', (data) => {
+        setNewMessage(<Color red>{data.toString().replace('\n', '')}</Color>)
+      })
     }
 
     if (targetDir) {
