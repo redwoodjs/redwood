@@ -2,7 +2,7 @@
 // and extracts it into the supplied directory.
 //
 // Usage:
-// `$ yarn create redwood-app`
+// `$ yarn create redwood-app ./path/to/new-project`
 
 import fs from 'fs'
 import path from 'path'
@@ -11,7 +11,8 @@ import React, { useState, useRef, useEffect } from 'react'
 import tmp from 'tmp'
 import decompress from 'decompress'
 import axios from 'axios'
-import { Box, Text, Color } from 'ink'
+import { render, Box, Text, Color } from 'ink'
+import parse from 'yargs-parser'
 
 const RELEASE_URL =
   'https://api.github.com/repos/redwoodjs/create-redwood-app/releases'
@@ -32,17 +33,30 @@ const downloadFile = async (sourceUrl, targetFile) => {
 const unzip = async (path, targetDir) =>
   await decompress(path, targetDir, { strip: 1 })
 
+// Gets the latest releases' zip file from GitHub's API.
 const latestReleaseZipFile = async () => {
   const response = await axios.get(RELEASE_URL)
   return response.data[0].zipball_url
 }
 
+// turns command line args like:
+//
+//   generate sdl contact--force
+//
+// into:
+//
+//   [['generate', 'sdl', 'contact'], { force: true }]
+export const parseArgs = () => {
+  const parsed = parse(process.argv.slice(2))
+  const { _: positional, ...flags } = parsed
 
-const New = ({ args: [[_commandName, targetDir]] }) => {
+  return [positional, flags]
+}
+
+const CreateNewApp = ({ args: [[_commandName, targetDir]] }) => {
   const [messages, setMessages] = useState([])
   // Swimming against the tide: https://overreacted.io/a-complete-guide-to-useeffect/#swimming-against-the-tide
   const latestMessages = useRef(messages)
-
   const setNewMessage = (newMessage) => {
     latestMessages.current = [...latestMessages.current, newMessage]
     setMessages(latestMessages.current)
@@ -50,7 +64,7 @@ const New = ({ args: [[_commandName, targetDir]] }) => {
 
   useEffect(() => {
     const createApp = async () => {
-      // First check and create the new project directory
+      // Attempt to create the new project directory, but abort if it already exists.
       const newAppDir = path.resolve(process.cwd(), targetDir)
       if (fs.existsSync(newAppDir)) {
         setNewMessage(
@@ -66,17 +80,16 @@ const New = ({ args: [[_commandName, targetDir]] }) => {
         )
       }
 
-      // Then download the latest release of `create-redwood-app` and extract
-      // it to the user's desired location
+      // Download the latest release of `create-redwood-app` from GitHub.
       const tmpDownloadPath = tmp.tmpNameSync({
         prefix: 'redwood',
         postfix: '.zip',
       })
-
       const realeaseUrl = await latestReleaseZipFile()
       setNewMessage(<Text>Downloading {realeaseUrl}...</Text>)
       await downloadFile(realeaseUrl, tmpDownloadPath)
 
+      // Extract the contents of the downloaded release into our new project directory.
       setNewMessage(<Text>Extracting...</Text>)
       const files = await unzip(tmpDownloadPath, newAppDir)
       setNewMessage(
@@ -84,6 +97,8 @@ const New = ({ args: [[_commandName, targetDir]] }) => {
           Added {files.length} files in <Color green>{newAppDir}</Color>
         </Text>
       )
+
+      // Run `yarn install`
 
       // // TODO: Remove this since we only use `yarn`
       // setNewMessage(<Text>Installing packages...</Text>)
@@ -97,7 +112,9 @@ const New = ({ args: [[_commandName, targetDir]] }) => {
   }, [targetDir])
 
   if (!targetDir) {
-    return <Color red>Usage `redwood new ./path/to/new-project`</Color>
+    return (
+      <Color red>Usage `yarn create redwood-app ./path/to/new-project`</Color>
+    )
   }
 
   return (
@@ -111,3 +128,4 @@ const New = ({ args: [[_commandName, targetDir]] }) => {
   )
 }
 
+render(<CreateNewApp args={parseArgs()} />)
