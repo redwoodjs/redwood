@@ -186,7 +186,7 @@ module.exports = (webpackEnv) => {
       devtoolModuleFilenameTemplate: isEnvProduction
         ? (info) =>
             path
-              .relative(redwoodPaths.web, 'src', info.absoluteResourcePath)
+              .relative(redwoodPaths.web.src, info.absoluteResourcePath)
               .replace(/\\/g, '/')
         : (info) => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
     },
