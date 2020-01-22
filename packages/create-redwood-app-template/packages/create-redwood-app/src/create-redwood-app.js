@@ -53,7 +53,8 @@ export const parseArgs = () => {
   return [positional, flags]
 }
 
-const CreateNewApp = ({ args: [[_commandName, targetDir]] }) => {
+const CreateNewApp = ({ args }) => {
+  const targetDir = args?.[0]?.[0]
   const [messages, setMessages] = useState([])
   // Swimming against the tide: https://overreacted.io/a-complete-guide-to-useeffect/#swimming-against-the-tide
   const latestMessages = useRef(messages)
