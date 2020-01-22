@@ -96,14 +96,15 @@ const RedwoodFormError = ({
 const RedwoodForm = (props) => {
   // deconstruct some props we care about and keep the remaining `formProps` to
   // pass to the <form> tag
-  let { error: errorProps, formMethods, onSubmit, ...formProps } = props
-  formMethods = formMethods || useForm(props.validation)
+  let { error: errorProps, propFormMethods, onSubmit, ...formProps } = props
+  const useFormMethods = useForm(props.validation)
+  const formMethods = propFormMethods || useFormMethods
 
   return (
     <form {...formProps} onSubmit={formMethods.handleSubmit(onSubmit)}>
       <FieldErrorContext.Provider
         value={
-          props.error?.graphQLErrors[0]?.extensions?.exception?.messages || {}
+          errorProps?.graphQLErrors[0]?.extensions?.exception?.messages || {}
         }
       >
         <FormContext {...formMethods}>{props.children}</FormContext>
