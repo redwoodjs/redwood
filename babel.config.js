@@ -6,4 +6,5 @@ module.exports = {
     ['@babel/plugin-proposal-object-rest-spread'],
     ['@babel/plugin-proposal-optional-chaining'],
   ],
+  ignore: ['**/*.test.js', '**/__tests__', '**/__mocks__'],
 }
