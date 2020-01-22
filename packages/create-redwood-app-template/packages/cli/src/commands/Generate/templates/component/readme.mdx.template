@@ -1,6 +1,6 @@
-import <%= name %> from './'
+import ${pascalName} from './'
 
-# <%= name %>
+# ${pascalName}
 
 - [ ] Document the props/ types
 - [ ] Allow user to play with the component

@@ -4,10 +4,10 @@ import camelcase from 'camelcase'
 import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 import { getDMMF } from '@prisma/sdk'
+import { getPaths } from '@redwoodjs/core'
 
 import { readFile, generateTemplate } from 'src/lib'
 
-const OUTPUT_PATH = path.join('api', 'src', 'graphql')
 const SCHEMA_PATH = path.join('api', 'prisma', 'schema.prisma')
 const IGNORE_FIELDS = ['id', 'createdAt']
 
@@ -49,18 +49,18 @@ const sdlFromSchemaModel = async (name) => {
 }
 
 const files = async (args) => {
-  const [[sdlName, ...rest], flags] = args
-  const typeName = pascalcase(sdlName)
-  const serviceName = pluralize(typeName)
-  const serviceFileName = camelcase(serviceName)
-  const queryAllName = camelcase(serviceName)
-  const outputPath = path.join(OUTPUT_PATH, `${serviceFileName}.sdl.js`)
-  const { query, input } = await sdlFromSchemaModel(typeName)
+  const [[name, ...rest], flags] = args
+  const outputPath = path.join(
+    getPaths().api.graphql,
+    `${camelcase(pluralize(name))}.sdl.js`
+  )
+  const isCrud = !!flags['crud']
+  const { query, input } = await sdlFromSchemaModel(
+    pascalcase(pluralize.singular(name))
+  )
   const template = generateTemplate(path.join('sdl', 'sdl.js.template'), {
-    typeName,
-    serviceName,
-    serviceFileName,
-    queryAllName,
+    name,
+    isCrud,
     query,
     input,
   })
@@ -70,7 +70,6 @@ const files = async (args) => {
 
 // also create a service for the SDL to automap to resolvers
 const generate = (args) => {
-  console.info('generate args', args)
   return [[['service', ...args[0]], args[1]]]
 }
 

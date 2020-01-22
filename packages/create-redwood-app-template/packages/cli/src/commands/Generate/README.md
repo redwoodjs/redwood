@@ -17,13 +17,13 @@ const DEFAULT_GENERATORS = [component, page]
 
 The generator must export a default hash containing the following keys:
 
-| Name          | Value                                                                                                                                                                                                                                                                | Required |
-| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| `name`        | The name of the generator                                                                                                                                                                                                                                            | Yes      |
-| `command`     | The command line input that triggers the generator                                                                                                                                                                                                                   | Yes      |
-| `description` | Text that is shown on the generator's help message                                                                                                                                                                                                                   | Yes      |
-| `files`       | A function which accepts the array of arguments given to the `redwood` command. Returns an object containing filenames and contents of those files to be created                                                                                                      | No       |
-| `routes`      | A function which accepts the array of arguments given to the `redwood` command. Returns an array of `<Route>` tags to append to the Routes.js file                                                                                                                    | No       |
+| Name          | Value                                                                                                                                                                                                                                                                  | Required |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `name`        | The name of the generator                                                                                                                                                                                                                                              | Yes      |
+| `command`     | The command line input that triggers the generator                                                                                                                                                                                                                     | Yes      |
+| `description` | Text that is shown on the generator's help message                                                                                                                                                                                                                     | Yes      |
+| `files`       | A function which accepts the array of arguments given to the `redwood` command. Returns an object containing filenames and contents of those files to be created                                                                                                       | No       |
+| `routes`      | A function which accepts the array of arguments given to the `redwood` command. Returns an array of `<Route>` tags to append to the Routes.js file                                                                                                                     | No       |
 | `generate`    | A function which accepts the array of arguments given to the `redwood` command. Returns an array of an array of arguments that would be passed to the Generate function in the same order the commands would be sent in from a command line call to `redwood generate` | No       |
 
 An example generator's return:
@@ -56,3 +56,10 @@ Templates for the files created by generators go in `src/commands/Generate/templ
         │   └── test.js.template
         └── page
             └── page.js.template
+
+## TODO
+
+- Allow --force for overwriting files that exist
+- Check for existence of route before writing, console output skipping if already exists
+- Remove `import` statements from service files once photon is automatically included
+- Fix console log output of files created async
