@@ -146,6 +146,19 @@ const Generate = ({
       overwriteExisting: true,
     })
 
+    // If there is an `other` prop then call that and let the generator do
+    // anything else it wants to do
+
+    if ('other' in generator) {
+      results.push(
+        <Box key="other" flexDirection="column">
+          <Text>
+            <Color green>Other: {generator.other(args)}</Color>
+          </Text>
+        </Box>
+      )
+    }
+
     results.push(
       <Text key="route">
         <Color green>Appended routes</Color>

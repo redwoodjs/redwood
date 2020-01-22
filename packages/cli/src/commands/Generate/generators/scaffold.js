@@ -7,7 +7,13 @@ import pluralize from 'pluralize'
 import { getDMMF } from '@prisma/sdk'
 import { getPaths } from '@redwoodjs/core'
 
-import { generateTemplate, templateRoot, readFile, asyncForEach } from 'src/lib'
+import {
+  generateTemplate,
+  templateRoot,
+  readFile,
+  writeFile,
+  asyncForEach,
+} from 'src/lib'
 
 const NON_EDITABLE_COLUMNS = ['id', 'createdAt', 'updatedAt']
 const ASSETS = fs.readdirSync(path.join(templateRoot, 'scaffold', 'assets'))
@@ -49,13 +55,11 @@ const files = async (args) => {
 const assetFiles = (name) => {
   let fileList = {}
 
+  console.info('getPaths().web.src', getPaths().web.src)
+
   ASSETS.forEach((asset) => {
-    const outputAssetName = layout.replace(/\.template/, '')
-    const outputPath = path.join(
-      getPaths().web.src,
-      outputAssetName.replace(/\.js/, ''),
-      outputAssetName
-    )
+    const outputAssetName = asset.replace(/\.template/, '')
+    const outputPath = path.join(getPaths().web.src, outputAssetName)
     const template = generateTemplate(path.join('scaffold', 'assets', asset), {
       name,
     })
@@ -173,6 +177,20 @@ const generate = (args) => {
   return [[['sdl', ...args[0]], args[1]]]
 }
 
+const addScaffoldImport = (_args) => {
+  const indexJsPath = path.join(getPaths().web.src, 'index.js')
+  let indexJsContents = readFile(indexJsPath).toString()
+
+  indexJsContents = indexJsContents.replace(
+    "import Routes from 'src/Routes'\n",
+    "import Routes from 'src/Routes'\n\nimport './scaffold.css'"
+  )
+
+  writeFile(indexJsPath, indexJsContents, { overwriteExisting: true })
+
+  return 'Added scaffold import to index.js'
+}
+
 export default {
   name: 'Scaffold',
   command: 'scaffold',
@@ -181,4 +199,5 @@ export default {
   files: async (args) => await files(args),
   routes: (args) => routes(args),
   generate: (args) => generate(args),
+  other: (args) => addScaffoldImport(args),
 }
