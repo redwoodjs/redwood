@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 // This downloads the latest release of Redwood from https://github.com/redwoodjs/create-redwood-app/
 // and extracts it into the supplied directory.
 //
