@@ -1,4 +1,4 @@
-import useForm, { FormContext, useFormContext } from 'react-hook-form'
+import { useForm, FormContext, useFormContext } from 'react-hook-form'
 import { useContext } from 'react'
 
 const DEFAULT_MESSAGES = {
