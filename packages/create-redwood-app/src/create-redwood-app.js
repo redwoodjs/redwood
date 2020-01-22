@@ -57,6 +57,7 @@ export const parseArgs = () => {
 export const CreateNewApp = ({ args }) => {
   const targetDir = args?.[0]?.[0]
   const [messages, setMessages] = useState([])
+  // TODO: Rewrite this to just use a component. Testing these hooks are impossible.
   // Swimming against the tide: https://overreacted.io/a-complete-guide-to-useeffect/#swimming-against-the-tide
   const latestMessages = useRef(messages)
   const setNewMessage = (newMessage) => {
