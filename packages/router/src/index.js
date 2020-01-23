@@ -74,7 +74,7 @@ const matchPath = (route, pathname, allParamTypes) => {
     const transformedParams = Object.keys(params).reduce((acc, key) => {
       const pMatches = key.match(`^(\\w+)${separator}(\\w+)$`)
 
-      if (pMatches.length > 0) {
+      if (pMatches && pMatches.length > 0) {
         const [_, pName, pType] = pMatches
         acc[pName] = allParamTypes[pType].transform(params[key])
       } else {
