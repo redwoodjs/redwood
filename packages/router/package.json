@@ -6,9 +6,6 @@
   ],
   "main": "dist/index.js",
   "license": "MIT",
-  "dependencies": {
-    "core-js": "3.6.0"
-  },
   "scripts": {
     "build": "yarn clean && babel src -d dist",
     "build:watch": "nodemon --ignore dist --exec 'yarn build'",

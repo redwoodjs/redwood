@@ -10,7 +10,6 @@
   "dependencies": {
     "@redwoodjs/core": "^0.0.1-alpha.21",
     "apollo-server-lambda": "2.9.9",
-    "core-js": "3.6.0",
     "graphql": "^14.5.8",
     "graphql-iso-date": "^3.6.1",
     "graphql-tools": "4.0.6",
