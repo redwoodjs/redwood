@@ -5,7 +5,7 @@ import ${singularPascalName}Cell from 'src/components/${singularPascalName}Cell'
 const ${singularPascalName}Page = ({ id }) => {
   return (
     <${pluralPascalName}Layout>
-      <${singularPascalName}Cell id={parseInt(id)} />
+      <${singularPascalName}Cell id={id} />
     </${pluralPascalName}Layout>
   )
 }

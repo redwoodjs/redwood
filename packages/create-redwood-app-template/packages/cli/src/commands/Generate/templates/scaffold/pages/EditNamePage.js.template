@@ -5,7 +5,7 @@ import Edit${singularPascalName}Cell from 'src/components/Edit${singularPascalNa
 const Edit${singularPascalName}Page = ({ id }) => {
   return (
     <${pluralPascalName}Layout>
-      <Edit${singularPascalName}Cell id={parseInt(id)} />
+      <Edit${singularPascalName}Cell id={id} />
     </${pluralPascalName}Layout>
   )
 }
