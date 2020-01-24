@@ -4,11 +4,8 @@ import ${pluralPascalName} from 'src/components/${pluralPascalName}'
 
 export const QUERY = gql`
   query POSTS {
-    ${pluralCamelName} {
-      id
-      title
-      body
-      createdAt
+    ${pluralCamelName} {<% columns.forEach(column => { %>
+      <%= column.name %><% }) %>
     }
   }
 `
