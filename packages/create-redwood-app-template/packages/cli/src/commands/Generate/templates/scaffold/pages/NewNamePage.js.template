@@ -1,4 +1,3 @@
-import { Link, routes } from '@redwoodjs/router'
 import ${pluralPascalName}Layout from 'src/layouts/${pluralPascalName}Layout'
 import New${singularPascalName} from 'src/components/New${singularPascalName}'
 
