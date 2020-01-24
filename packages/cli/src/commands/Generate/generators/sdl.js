@@ -3,12 +3,10 @@ import path from 'path'
 import camelcase from 'camelcase'
 import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
-import { getDMMF } from '@prisma/sdk'
 import { getPaths } from '@redwoodjs/core'
 
-import { readFile, generateTemplate } from 'src/lib'
+import { generateTemplate, getSchema } from 'src/lib'
 
-const SCHEMA_PATH = path.join('api', 'prisma', 'schema.prisma')
 const IGNORE_FIELDS = ['id', 'createdAt']
 
 const modelFieldToSDL = (field, required = true) => {
@@ -17,20 +15,20 @@ const modelFieldToSDL = (field, required = true) => {
   }`
 }
 
-const querySDL = (fields) => {
-  return fields.map((field) => modelFieldToSDL(field))
+const querySDL = (model) => {
+  return model.fields.map((field) => modelFieldToSDL(field))
 }
 
-const inputSDL = (fields) => {
-  return fields
+const inputSDL = (model) => {
+  return model.fields
     .filter((field) => {
       return IGNORE_FIELDS.indexOf(field.name) === -1
     })
     .map((field) => modelFieldToSDL(field, false))
 }
 
-const idType = (fields) => {
-  const idField = fields.find((field) => field.name === 'id')
+const idType = (model) => {
+  const idField = model.fields.find((field) => field.name === 'id')
   if (!idField) {
     throw 'Cannot generate SDL without an `id` database column'
   }
@@ -38,19 +36,13 @@ const idType = (fields) => {
 }
 
 const sdlFromSchemaModel = async (name) => {
-  const metadata = await getDMMF({
-    datamodel: readFile(SCHEMA_PATH).toString(),
-  })
-
-  const model = metadata.datamodel.models.find((model) => {
-    return model.name === name
-  })
+  const model = await getSchema(name)
 
   if (model) {
     return {
-      query: querySDL(model.fields).join('\n    '),
-      input: inputSDL(model.fields).join('\n    '),
-      idType: idType(model.fields),
+      query: querySDL(model).join('\n    '),
+      input: inputSDL(model).join('\n    '),
+      idType: idType(model),
     }
   } else {
     throw `No schema definition found for \`${name}\``

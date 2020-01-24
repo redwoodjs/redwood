@@ -4,7 +4,6 @@ import path from 'path'
 import camelcase from 'camelcase'
 import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
-import { getDMMF } from '@prisma/sdk'
 import { getPaths } from '@redwoodjs/core'
 
 import {
@@ -13,6 +12,7 @@ import {
   readFile,
   writeFile,
   asyncForEach,
+  getSchema,
 } from 'src/lib'
 
 const NON_EDITABLE_COLUMNS = ['id', 'createdAt', 'updatedAt']
@@ -23,22 +23,8 @@ const COMPONENTS = fs.readdirSync(
   path.join(templateRoot, 'scaffold', 'components')
 )
 
-const sdlFromSchemaModel = async (name) => {
-  const metadata = await getDMMF({
-    datamodel: readFile(
-      path.join(getPaths().api.db, 'schema.prisma')
-    ).toString(),
-  })
-
-  const model = metadata.datamodel.models.find((model) => {
-    return model.name === name
-  })
-
-  if (model) {
-    return model
-  } else {
-    throw `no schema definition found for \`${name}\``
-  }
+const getIdType = (model) => {
+  return model.fields.find((field) => field.name === 'id')?.type
 }
 
 const files = async (args) => {
@@ -54,8 +40,6 @@ const files = async (args) => {
 
 const assetFiles = (name) => {
   let fileList = {}
-
-  console.info('getPaths().web.src', getPaths().web.src)
 
   ASSETS.forEach((asset) => {
     const outputAssetName = asset.replace(/\.template/, '')
@@ -123,7 +107,8 @@ const pageFiles = (name) => {
 const componentFiles = async (name) => {
   const pluralName = pascalcase(pluralize(name))
   const singularName = pascalcase(pluralize.singular(name))
-  const model = await sdlFromSchemaModel(singularName)
+  const model = await getSchema(singularName)
+  const idType = getIdType(model)
   const columns = model.fields
   let fileList = {}
   const editableColumns = columns.filter((column) => {
@@ -147,6 +132,7 @@ const componentFiles = async (name) => {
         name,
         columns,
         editableColumns,
+        idType,
       }
     )
     fileList[outputPath] = template
