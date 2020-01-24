@@ -29,6 +29,14 @@ const inputSDL = (fields) => {
     .map((field) => modelFieldToSDL(field, false))
 }
 
+const idType = (fields) => {
+  const idField = fields.find((field) => field.name === 'id')
+  if (!idField) {
+    throw 'Cannot generate SDL without an `id` database column'
+  }
+  return idField.type
+}
+
 const sdlFromSchemaModel = async (name) => {
   const metadata = await getDMMF({
     datamodel: readFile(SCHEMA_PATH).toString(),
@@ -42,9 +50,10 @@ const sdlFromSchemaModel = async (name) => {
     return {
       query: querySDL(model.fields).join('\n    '),
       input: inputSDL(model.fields).join('\n    '),
+      idType: idType(model.fields),
     }
   } else {
-    throw `no schema definition found for \`${name}\``
+    throw `No schema definition found for \`${name}\``
   }
 }
 
@@ -55,7 +64,7 @@ const files = async (args) => {
     `${camelcase(pluralize(name))}.sdl.js`
   )
   const isCrud = !!flags['crud']
-  const { query, input } = await sdlFromSchemaModel(
+  const { query, input, idType } = await sdlFromSchemaModel(
     pascalcase(pluralize.singular(name))
   )
   const template = generateTemplate(path.join('sdl', 'sdl.js.template'), {
@@ -63,6 +72,7 @@ const files = async (args) => {
     isCrud,
     query,
     input,
+    idType,
   })
 
   return { [outputPath]: template }
