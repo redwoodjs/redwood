@@ -8,11 +8,38 @@ import camelcase from 'camelcase'
 import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 import { paramCase } from 'param-case'
+import { getDMMF } from '@prisma/sdk'
+import { getPaths } from '@redwoodjs/core'
 
 export const asyncForEach = async (array, callback) => {
   for (let index = 0; index < array.length; index++) {
     await callback(array[index], index, array)
   }
+}
+
+// Returns the database schema for the given `name` database table parsed from
+// the schema.prisma of the target applicaiton. If no `name` is given then the
+// entire schema is returned.
+
+export const getSchema = async (name) => {
+  const schemaPath = path.join(getPaths().api.db, 'schema.prisma')
+  const metadata = await getDMMF({
+    datamodel: readFile(schemaPath.toString()),
+  })
+
+  if (name) {
+    const model = metadata.datamodel.models.find((model) => {
+      return model.name === name
+    })
+
+    if (model) {
+      return model
+    } else {
+      throw `No schema definition found for \`${name}\``
+    }
+  }
+
+  return metadata.datamodel
 }
 
 // Returns variants of the passed `name` for usage in templates. If the given

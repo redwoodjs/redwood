@@ -1,7 +1,7 @@
 import ${singularPascalName} from 'src/components/${singularPascalName}'
 
 export const QUERY = gql`
-  query FIND_POST_BY_ID($id: ID!) {
+  query FIND_POST_BY_ID($id: ${idType}!) {
     ${singularCamelName}: ${singularCamelName}(id: $id) {<% columns.forEach(column => { %>
       <%= column.name %><% }) %>
     }
