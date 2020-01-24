@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://avatars2.githubusercontent.com/u/45050444?s=200&v=4"/>
+  <img src="https://avatars2.githubusercontent.com/u/45050444?v=4" style="width:150px" />
   <h1 align="center">Redwood</h1>
 </p>
 
