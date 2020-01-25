@@ -1,6 +1,6 @@
 import noUnavailablePages from 'src/no-unavailable-pages'
 
-export default {
+module.exports = {
   rules: {
     'no-unavailable-pages': noUnavailablePages,
   },
