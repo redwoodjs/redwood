@@ -42,10 +42,10 @@ use:
 
 - React
 - GraphQL (Apollo)
-- Prisma Photon
-- Prisma Lift
+- Prisma (Photon & Lift)
 - Storybook
 - Babel
+- Webpack
 
 ## The Redwood philosophy
 
