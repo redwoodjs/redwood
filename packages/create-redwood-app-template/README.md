@@ -3,7 +3,7 @@
   <h1 align="center">Redwood</h1>
 </p>
 
-_by Tom Preston-Werner and Peter Pistorius._
+_by Tom Preston-Werner, Peter Pistorius, and Rob Cameron._
 
 **Redwood is an opinionated, full stack, serverless web application framework
 that will allow you to build JAMstack applications with ease.** By making a lot
@@ -148,7 +148,7 @@ hasten the arrival of the future I predicted!
 
 ## Why is it called Redwood?
 
-_(A history, by Tom Preson-Werner)_
+_(A history, by Tom Preston-Werner)_
 
 Where I live in Northern California there is a type of tree called a redwood.
 Redwoods are HUGE, the tallest in the world, some topping out at 115 meters (380
