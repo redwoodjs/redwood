@@ -116,9 +116,9 @@ const SplashPage = ({ isRedwood }) => (
       )}
       <div>
         <p>
-          Thanks for choosing Redwood Router! You're seeing this page because
-          you don't have any custom routes yet. You can add a homepage route
-          like so:
+          Thanks for choosing Redwood Router! You&apos;re seeing this page
+          because you don&apos;t have any custom routes yet. You can add a
+          homepage route like so:
         </p>
         <div className="code">
           <code>
@@ -138,4 +138,4 @@ const SplashPage = ({ isRedwood }) => (
   </main>
 )
 
-export default SplashPage
+export { SplashPage }
