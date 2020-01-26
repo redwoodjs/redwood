@@ -1,5 +1,7 @@
 // The guts of the router implementation.
 
+import { Suspense } from 'react'
+
 import {
   Location,
   parseSearch,
@@ -62,9 +64,14 @@ const RouterImpl = ({ pathname, search, paramTypes, children }) => {
           </RouterImpl>
         )
       } else {
+        console.log(Page)
+        const LazyPage = React.lazy(Page)
+        console.log(LazyPage)
         return (
           <ParamsContext.Provider value={allParams}>
-            <Page {...allParams} />
+            <Suspense fallback={null}>
+              <LazyPage {...allParams} />
+            </Suspense>
           </ParamsContext.Provider>
         )
       }
