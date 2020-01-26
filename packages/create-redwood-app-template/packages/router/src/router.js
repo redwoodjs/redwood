@@ -15,7 +15,7 @@ import {
 const coreParamTypes = {
   Int: {
     constraint: /\d+/,
-    transform: parseInt,
+    transform: Number,
   },
 }
 

@@ -101,7 +101,7 @@ Route parameters are extracted as strings by default, but they will often repres
 <Route path="/user/{id:Int}" page={UserPage} name="user" />
 ```
 
-By adding `:Int` onto the route parameter, you are telling RR to only match `/\d+/` and then use `parseInt()` to convert the parameter into a number. Now, instead of a string being sent to the Page, a number will be sent! This means you could have both a route that matches numeric user IDs **and** a route that matches string IDs:
+By adding `:Int` onto the route parameter, you are telling RR to only match `/\d+/` and then use `Number()` to convert the parameter into a number. Now, instead of a string being sent to the Page, a number will be sent! This means you could have both a route that matches numeric user IDs **and** a route that matches string IDs:
 
 ```js
 // Routes.js
