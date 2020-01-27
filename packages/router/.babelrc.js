@@ -1,23 +1,11 @@
+const { presetEnvConfig, pluginModuleResolveAliasSrcDir } = require('../../scripts/babelConfigHelpers')
+
 module.exports = {
   "extends": "../../babel.config.js",
   "presets": [
-    [
-      "@babel/preset-env",
-      {
-        "targets": "> 0.25%, not dead",
-        "useBuiltIns": "usage",
-        "corejs": 3
-      }
-    ]
+    presetEnvConfig("browsers"),
   ],
   "plugins": [
-    [
-      "babel-plugin-module-resolver",
-      {
-        "alias": {
-          "src": "./src"
-        }
-      }
-    ]
-  ]
+    pluginModuleResolveAliasSrcDir(),
+  ],
 }
