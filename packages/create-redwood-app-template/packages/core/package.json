@@ -5,7 +5,7 @@
   "files": [
     "dist"
   ],
-  "types": "./dist/main.ts",
+  "types": "./dist/main.d.ts",
   "license": "MIT",
   "dependencies": {
     "babel-plugin-macros": "^2.8.0",
