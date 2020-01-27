@@ -3,7 +3,8 @@ const TARGETS_BROWSERS = 'defaults'
 const CORE_JS_VERSION = '3.6.0'
 
 /**
- * Preset for targetting an environment, which can be either "node" or "browsers"
+ * Preset for targetting an environment.
+ * @param {('node'|'browsers')} target
  */
 const presetEnvConfig = (target, ...rest) => {
   return [
