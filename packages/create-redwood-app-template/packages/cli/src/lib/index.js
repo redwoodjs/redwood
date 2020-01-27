@@ -58,6 +58,7 @@ const nameVariants = (name) => {
 
   return {
     pascalName: pascalcase(name),
+    camelName: camelcase(name),
     singularPascalName: normalizedName,
     pluralPascalName: pluralize(normalizedName),
     singularCamelName: camelcase(normalizedName),
