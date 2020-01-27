@@ -20,8 +20,7 @@
     "kill-port": "^1.6.0",
     "lerna": "^3.20.2",
     "nodemon": "^2.0.2",
-    "typescript": "^3.7.5",
-    "@types/node-fetch": "^2.5.4"
+    "typescript": "^3.7.5"
   },
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config"
