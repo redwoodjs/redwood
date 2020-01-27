@@ -14,7 +14,13 @@
     "toml": "^3.0.0"
   },
   "devDependencies": {
-    "@types/findup-sync": "^2.0.2"
+    "@types/findup-sync": "^2.0.2",
+    "babel-plugin-tester": "^8.0.1"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/fixtures/"
+    ]
   },
   "scripts": {
     "clean": "rm -rf dist",

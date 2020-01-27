@@ -8,5 +8,4 @@ module.exports = {
     ['@babel/plugin-proposal-export-default-from'],
     ['@babel/plugin-proposal-object-rest-spread'],
   ],
-  ignore: ['**/*.test.js', '**/__tests__', '**/__mocks__'],
 }
