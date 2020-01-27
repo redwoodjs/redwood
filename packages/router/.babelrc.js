@@ -1,12 +1,10 @@
-{
+module.exports = {
   "extends": "../../babel.config.js",
   "presets": [
     [
       "@babel/preset-env",
       {
-        "targets": {
-          "node": "12.13.0"
-        },
+        "targets": "> 0.25%, not dead",
         "useBuiltIns": "usage",
         "corejs": 3
       }
