@@ -15,12 +15,12 @@ export const Loading = () => <div>Loading...</div>
 export const Empty = () => {
   return (
     <div className="text-center">
-      No ${pluralCamelName} yet.
+      {'No ${pluralCamelName} yet. '}
       <Link
         to={routes.new${singularPascalName}()}
         className="text-blue-500 underline hover:text-blue-700"
       >
-        Create one?
+        {'Create one?'}
       </Link>
     </div>
   )
