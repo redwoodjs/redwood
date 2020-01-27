@@ -5,24 +5,23 @@
     "packages/*"
   ],
   "devDependencies": {
-    "@babel/cli": "^7.8.0",
-    "@babel/core": "^7.8.0",
-    "@babel/node": "^7.8.0",
-    "@babel/plugin-proposal-class-properties": "^7.8.0",
-    "@babel/plugin-proposal-decorators": "^7.8.0",
-    "@babel/plugin-proposal-export-default-from": "^7.8.0",
-    "@babel/plugin-proposal-optional-chaining": "^7.8.0",
-    "@babel/preset-env": "^7.8.2",
-    "@babel/preset-react": "^7.8.0",
-    "@babel/preset-typescript": "^7.8.0",
     "@redwoodjs/eslint-config": "^0.0.1-alpha.17",
-    "@types/node-fetch": "^2.5.4",
+    "@babel/cli": "^7.8.3",
+    "@babel/core": "^7.8.3",
+    "@babel/node": "^7.8.3",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-proposal-decorators": "^7.8.3",
+    "@babel/plugin-proposal-export-default-from": "^7.8.3",
+    "@babel/preset-env": "^7.8.3",
+    "@babel/preset-react": "^7.8.3",
+    "@babel/preset-typescript": "^7.8.3",
     "babel-plugin-module-resolver": "^4.0.0",
-    "jest": "^24.9.0",
+    "jest": "^25.1.0",
     "kill-port": "^1.6.0",
     "lerna": "^3.20.2",
     "nodemon": "^2.0.2",
-    "typescript": "^3.7.4"
+    "typescript": "^3.7.5",
+    "@types/node-fetch": "^2.5.4"
   },
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config"
@@ -32,6 +31,5 @@
     "test": "lerna run test -- --colors",
     "lint": "yarn eslint 'packages/*/src/**/*.js'",
     "lint:fix": "yarn eslint --fix 'packages/*/src/**/*.js'"
-  },
-  "version": "0.0.0"
+  }
 }
