@@ -8,7 +8,9 @@
   "types": "./dist/main.ts",
   "license": "MIT",
   "dependencies": {
+    "babel-plugin-macros": "^2.8.0",
     "findup-sync": "^4.0.0",
+    "glob": "^7.1.6",
     "toml": "^3.0.0"
   },
   "devDependencies": {
