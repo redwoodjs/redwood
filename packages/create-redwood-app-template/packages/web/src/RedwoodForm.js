@@ -28,11 +28,15 @@ const inputTagProps = (props) => {
   // any errors on this field
   const validationError = errors[props.name]
 
-  // get `errorClassName` out of props and set className to it if there are
-  // errors on the field
-  const { errorClassName, ...tagProps } = props
-  if (validationError && errorClassName) {
-    tagProps.className = errorClassName
+  // get errorStyle/errorClassName and replace style/className if present
+  const { errorClassName, errorStyle, ...tagProps } = props
+  if (validationError) {
+    if (errorClassName) {
+      tagProps.className = errorClassName
+    }
+    if (errorStyle) {
+      tagProps.style = errorStyle
+    }
   }
 
   return tagProps
