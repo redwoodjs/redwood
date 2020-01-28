@@ -1,4 +1,5 @@
 export * from 'apollo-server-lambda'
 
-export { makeMergedSchema } from './makeMergedSchema/makeMergedSchema'
+export * from './makeServices'
+export * from './makeMergedSchema/makeMergedSchema'
 export { server } from './server'

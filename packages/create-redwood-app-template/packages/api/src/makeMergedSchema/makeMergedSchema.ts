@@ -1,33 +1,22 @@
 import { mergeSchemas } from 'apollo-server-lambda'
-import { GraphQLSchema } from 'graphql'
-import { IResolversParameter } from 'graphql-tools'
 import merge from 'lodash.merge'
 
-export interface TypeDefResolverExports {
-  schema: GraphQLSchema
-  resolvers: IResolversParameter
-}
+import { MakeMergedSchema } from '../types'
 
 import * as rootSchema from './rootSchema'
 
 /**
- * Merge graphql type definitions and resolvers into a single executable schema
+ * Merge GraphQL schemas and resolvers into a single schema.
  *
+ * @example
  * ```js
- * import * as currentUser from 'src/graphql/currentUser'
- * import * as todo from 'src/graphql/todo'
+ * const schemas = importAll('api', 'graphql')
+ * const services = importAll('api', 'services')
  *
- * const schema = makeMergedSchema([todo, currentUser])
+ * const schema = makeMergedSchema({
+ *  schema,
+ *  services: makeServices({ services }),
+ * })
  * ```
  */
-export const makeMergedSchema = (
-  schemas: Array<TypeDefResolverExports>
-): GraphQLSchema => {
-  return mergeSchemas({
-    schemas: [rootSchema.schema, ...schemas.map(({ schema }) => schema)],
-    resolvers: [
-      rootSchema.resolvers,
-      ...merge(schemas.map(({ resolvers }) => resolvers)),
-    ],
-  })
-}
+export const makeMergedSchema: MakeMergedSchema = ({ schemas, services }) => {}
