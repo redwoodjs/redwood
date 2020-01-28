@@ -155,7 +155,7 @@ const HiddenField = (props) => {
       {...props}
       type="hidden"
       id={props.id || props.name}
-      ref={register()}
+      ref={register(props.validation || { required: false })}
     />
   )
 }
@@ -170,7 +170,7 @@ const TextAreaField = (props) => {
     <textarea
       {...tagProps}
       id={props.id || props.name}
-      ref={register(props.validation)}
+      ref={register(props.validation || { required: false })}
     />
   )
 }
@@ -186,7 +186,7 @@ const TextField = (props) => {
       {...tagProps}
       type={props.type || 'text'}
       id={props.id || props.name}
-      ref={register(props.validation)}
+      ref={register(props.validation || { required: false })}
     />
   )
 }
