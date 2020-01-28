@@ -1,0 +1,76 @@
+import path from 'path'
+
+import { createMacro } from 'babel-plugin-macros'
+import glob from 'glob'
+
+import { getPaths } from './paths'
+
+// The majority of this code is copied from `importAll.macro`: https://github.com/kentcdodds/import-all.macro
+// And was modified to work with our `getPaths`.
+
+/**
+ * This macro runs during build time.
+ * @example
+ * ```js
+ *  import importAll from '@redwoodjs/core/importAll.macro
+ *  const typeDefs = importAll('api', 'graphql')
+ * ```
+ */
+function prevalMacros({ references, state, babel }) {
+  references.default.forEach((referencePath) => {
+    if (referencePath.parentPath.type === 'CallExpression') {
+      importAll({ referencePath, state, babel })
+    } else {
+      throw new Error(
+        `This is not supported: \`${referencePath
+          .findParent(babel.types.isExpression)
+          .getSource()}\`. Please use "importAll('target', 'directory')"`
+      )
+    }
+  })
+}
+
+const getGlobPattern = (callExpressionPath) => {
+  const redwoodPaths = getPaths()
+  const args = callExpressionPath.parentPath.get('arguments')
+  const target = args[0].evaluate().value
+  const dir = args[1].evaluate().value
+  return `${redwoodPaths[target][dir]}/*.{ts,js}`
+}
+
+function importAll({ referencePath, state, babel }) {
+  const t = babel.types
+  const globPattern = getGlobPattern(referencePath)
+  // Grab a list of the files
+  const importSources = glob.sync(globPattern)
+
+  const { importNodes, objectProperties } = importSources.reduce(
+    (all, source) => {
+      const id = referencePath.scope.generateUidIdentifier(source)
+      all.importNodes.push(
+        t.importDeclaration(
+          [t.importNamespaceSpecifier(id)],
+          t.stringLiteral(source)
+        )
+      )
+
+      // Turn `./relativePath/a.js` into `a`.
+      const objectKey = path
+        .basename(source, path.extname(source))
+        .replace('.sdl', '')
+      all.objectProperties.push(
+        t.objectProperty(t.stringLiteral(objectKey), id)
+      )
+      return all
+    },
+    { importNodes: [], objectProperties: [] }
+  )
+
+  const program = state.file.path
+  program.node.body.unshift(...importNodes)
+
+  const objectExpression = t.objectExpression(objectProperties)
+  referencePath.parentPath.replaceWith(objectExpression)
+}
+
+export default createMacro(prevalMacros)
