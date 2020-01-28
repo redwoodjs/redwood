@@ -10,7 +10,7 @@ module.exports = {
   ],
   // Only build test files when testing
   ignore:
-    process.env.NODE_ENV == 'test'
+    process.env.NODE_ENV === 'test'
       ? []
       : ['**/*.test.', '**/__tests__', '**/__mocks__'],
 }
