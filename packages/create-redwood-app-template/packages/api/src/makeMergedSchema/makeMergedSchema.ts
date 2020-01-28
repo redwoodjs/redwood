@@ -1,13 +1,14 @@
-import { mergeSchemas, gql } from 'apollo-server-lambda'
+import { mergeSchemas } from 'apollo-server-lambda'
 import { GraphQLSchema } from 'graphql'
 import { IResolversParameter } from 'graphql-tools'
 import merge from 'lodash.merge'
-import { GraphQLDate, GraphQLTime, GraphQLDateTime } from 'graphql-iso-date'
 
 export interface TypeDefResolverExports {
   schema: GraphQLSchema
   resolvers: IResolversParameter
 }
+
+import * as rootSchema from './rootSchema'
 
 /**
  * Merge graphql type definitions and resolvers into a single executable schema
@@ -22,35 +23,10 @@ export interface TypeDefResolverExports {
 export const makeMergedSchema = (
   schemas: Array<TypeDefResolverExports>
 ): GraphQLSchema => {
-  const rootSchema = gql`
-    scalar Date
-    scalar Time
-    scalar DateTime
-
-    type Redwood {
-      version: String
-    }
-
-    type Query {
-      redwood: Redwood
-    }
-  `
-
-  const rootResolver = {
-    Date: GraphQLDate,
-    Time: GraphQLTime,
-    DateTime: GraphQLDateTime,
-    Query: {
-      redwood: () => ({
-        version: '0.0.0',
-      }),
-    },
-  }
-
   return mergeSchemas({
-    schemas: [rootSchema, ...schemas.map(({ schema }) => schema)],
+    schemas: [rootSchema.schema, ...schemas.map(({ schema }) => schema)],
     resolvers: [
-      rootResolver,
+      rootSchema.resolvers,
       ...merge(schemas.map(({ resolvers }) => resolvers)),
     ],
   })
