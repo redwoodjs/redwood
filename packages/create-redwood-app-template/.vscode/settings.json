@@ -31,4 +31,9 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
+  "workbench.colorCustomizations": {
+    "statusBar.background": "#ff0000",
+    "statusBarItem.hoverBackground": "#ff3333",
+    "statusBar.foreground": "#e7e7e7"
+  },
 }
