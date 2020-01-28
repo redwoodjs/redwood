@@ -20,12 +20,19 @@
     "@types/graphql-iso-date": "^3.3.3",
     "@types/lodash.merge": "^4.6.6"
   },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/fixtures/"
+    ]
+  },
   "scripts": {
     "build": "yarn clean && yarn build:js && yarn build:types",
     "build:js": "babel src/ --out-dir dist/ --extensions \".ts\" --source-maps inline",
     "build:types": "tsc --declaration --emitDeclarationOnly",
     "build:watch": "nodemon --ignore dist --exec 'yarn build'",
     "prepublish": "yarn build",
+    "test": "yarn jest",
+    "test:watch": "yarn test --watch",
     "clean": "rm -rf dist"
   },
   "gitHead": "ca5de73e28e7f9c034232a2dc5d5e810fcb14a0a"
