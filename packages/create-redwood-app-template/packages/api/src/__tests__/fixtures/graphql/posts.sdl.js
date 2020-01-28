@@ -7,8 +7,9 @@ export const schema = gql`
   }
 
   type Query {
-    blog: Blog,
-    blogs Blog[],
+    blog: Blog
+    blogs: [Blog]
+    notfound: Boolean
   }
 `
 
