@@ -1,13 +1,13 @@
 {
   "name": "create-redwood-app",
-  "version": "0.0.1-alpha.21",
+  "version": "0.0.1-alpha.22",
   "license": "MIT",
   "bin": "./dist/create-redwood-app.js",
   "files": [
     "dist"
   ],
   "dependencies": {
-    "@redwoodjs/core": "^0.0.1-alpha.21",
+    "@redwoodjs/core": "^0.0.1-alpha.22",
     "axios": "^0.19.2",
     "decompress": "^4.2.0",
     "ink": "^2.6.0",
@@ -22,5 +22,6 @@
     "prepare": "yarn clean && yarn build",
     "test": "jest",
     "test:watch": "yarn test --watch"
-  }
+  },
+  "gitHead": "e7f45aaa32d8d33799c04f8169b0b0125bcaaece"
 }

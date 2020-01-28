@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/core",
-  "version": "0.0.1-alpha.21",
+  "version": "0.0.1-alpha.22",
   "main": "dist/main.js",
   "files": [
     "dist"
@@ -32,5 +32,5 @@
     "test": "jest",
     "test:watch": "yarn test --watch"
   },
-  "gitHead": "ca5de73e28e7f9c034232a2dc5d5e810fcb14a0a"
+  "gitHead": "e7f45aaa32d8d33799c04f8169b0b0125bcaaece"
 }
