@@ -6,10 +6,18 @@
     "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
-      "src/*": ["src/*"]
+      "src/*": [
+        "src/*"
+      ]
     },
     "declaration": true,
     "declarationDir": "./dist"
   },
-  "include": ["src"]
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "**/__tests__",
+    "**/__mocks__"
+  ]
 }
