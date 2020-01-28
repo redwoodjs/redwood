@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/router",
-  "version": "0.0.1-alpha.21",
+  "version": "0.0.1-alpha.22",
   "files": [
     "dist"
   ],
@@ -14,5 +14,6 @@
     "build:watch": "nodemon --ignore dist --exec 'yarn build'",
     "prepare": "yarn build",
     "clean": "rm -rf dist"
-  }
+  },
+  "gitHead": "e7f45aaa32d8d33799c04f8169b0b0125bcaaece"
 }
