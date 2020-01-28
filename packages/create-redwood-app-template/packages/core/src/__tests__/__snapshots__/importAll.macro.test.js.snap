@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`macros api.graphql: api.graphql 1`] = `
+
+import importAll from '../importAll.macro.js'
+const graphQLImports = importAll('api', 'graphql')
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import * as _UsersPeterpPersonalRedwoodjsRedwoodPackagesCoreSrc__tests__FixturesApiSrcGraphqlPostsSdlTs from '/Users/peterp/Personal/redwoodjs/redwood/packages/core/src/__tests__/fixtures/api/src/graphql/posts.sdl.ts'
+import * as _UsersPeterpPersonalRedwoodjsRedwoodPackagesCoreSrc__tests__FixturesApiSrcGraphqlUsersSdlJs from '/Users/peterp/Personal/redwoodjs/redwood/packages/core/src/__tests__/fixtures/api/src/graphql/users.sdl.js'
+const graphQLImports = {
+  posts: _UsersPeterpPersonalRedwoodjsRedwoodPackagesCoreSrc__tests__FixturesApiSrcGraphqlPostsSdlTs,
+  users: _UsersPeterpPersonalRedwoodjsRedwoodPackagesCoreSrc__tests__FixturesApiSrcGraphqlUsersSdlJs,
+}
+
+
+`;
+
+exports[`macros api.services: api.services 1`] = `
+
+import importAll from '../importAll.macro.js'
+const serviceImports = importAll('api', 'services')
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import * as _UsersPeterpPersonalRedwoodjsRedwoodPackagesCoreSrc__tests__FixturesApiSrcServicesPostsTs from '/Users/peterp/Personal/redwoodjs/redwood/packages/core/src/__tests__/fixtures/api/src/services/posts.ts'
+import * as _UsersPeterpPersonalRedwoodjsRedwoodPackagesCoreSrc__tests__FixturesApiSrcServicesUsersJs from '/Users/peterp/Personal/redwoodjs/redwood/packages/core/src/__tests__/fixtures/api/src/services/users.js'
+const serviceImports = {
+  posts: _UsersPeterpPersonalRedwoodjsRedwoodPackagesCoreSrc__tests__FixturesApiSrcServicesPostsTs,
+  users: _UsersPeterpPersonalRedwoodjsRedwoodPackagesCoreSrc__tests__FixturesApiSrcServicesUsersJs,
+}
+
+
+`;

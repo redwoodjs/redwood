@@ -8,5 +8,9 @@ module.exports = {
     ['@babel/plugin-proposal-export-default-from'],
     ['@babel/plugin-proposal-object-rest-spread'],
   ],
-  ignore: ['**/*.test.js', '**/__tests__', '**/__mocks__'],
+  // Only build test files when testing
+  ignore:
+    process.env.NODE_ENV == 'test'
+      ? []
+      : ['**/*.test.', '**/__tests__', '**/__mocks__'],
 }
