@@ -1,3 +1,1 @@
-export const blog = ({ id }) => {
-  return { id: 1, title: 'blog post 1' }
-}
+export const blog = () => "I'm a service."

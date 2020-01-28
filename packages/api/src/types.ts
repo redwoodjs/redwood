@@ -22,3 +22,31 @@ export interface MakeMergedSchemaInterface {
 export type MakeMergedSchema = (
   args: MakeMergedSchemaInterface
 ) => GraphQLSchema
+
+export type SchemasWithServices = {
+  [name: string]: {
+    schema: GraphQLSchema
+    resolvers: IResolvers
+  }
+}
+export interface MapServicesToSchemaInterface {
+  schemas: ImportedSchemas
+  services: Services
+}
+export type MapServicesToSchema = (
+  args: MapServicesToSchemaInterface
+) => SchemasWithServices
+
+export interface MapSchemaTypeFieldsToServiceInterface {
+  type: string
+  schema: GraphQLSchema
+  resolvers: IResolvers
+  service: Services
+  serviceName: string
+}
+export type MapSchemaTypeFieldsToService = (
+  args: MapSchemaTypeFieldsToServiceInterface
+) => {
+  schema: GraphQLSchema
+  resolvers: IResolvers
+}
