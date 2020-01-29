@@ -4,14 +4,13 @@ import omitBy from 'lodash.omitby'
 
 import * as rootSchema from './rootSchema'
 
-class SchemaFieldResolverNotFoundError extends Error { }
 const mapFieldsToService = ({
   fields = {},
   resolvers: unmappedResolvers,
   services,
 }) =>
   Object.keys(fields).reduce((resolvers, name) => {
-    // Does the resolver already exist in the schema definition?
+    // Does the function already exist in the resolvers from the schema definition?
     if (resolvers?.[name]) {
       return resolvers
     }
@@ -20,7 +19,8 @@ const mapFieldsToService = ({
     if (services?.[name]) {
       return {
         ...resolvers,
-        // Map the resolver type to the service type.
+        // Map the arguments from GraphQL to an ordinary function a service would
+        // expect.
         [name]: (root, args, context) =>
           services[name](args, { root, context }),
       }
@@ -33,7 +33,6 @@ const mapFieldsToService = ({
  * This iterates over all the schemas definitions and figures out which resolvers
  * are missing, it then tries to add the missing resolvers from the corresponding
  * service.
- * A warning is displayed if they cannot be found.
  */
 const mergeResolversWithServices = ({ schema, resolvers, services }) => {
   const mergedServices = merge(
@@ -68,7 +67,7 @@ const mergeResolvers = (schemas) =>
   )
 
 /**
- * Merge GraphQL schemas and resolvers into a single schema.
+ * Merge GraphQL typeDefs and resolvers into a single schema.
  *
  * @example
  * ```js
