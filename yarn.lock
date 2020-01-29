@@ -3324,6 +3324,14 @@
     "@types/prop-types" "*"
     csstype "^2.2.0"
 
+"@types/react@^16.9.19":
+  version "16.9.19"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.19.tgz#c842aa83ea490007d29938146ff2e4d9e4360c40"
+  integrity sha512-LJV97//H+zqKWMms0kvxaKYJDG05U2TtQB3chRLF8MPNs+MQh/H1aGlyDUxjaHvu08EAGerdX2z4LTBc7ns77A==
+  dependencies:
+    "@types/prop-types" "*"
+    csstype "^2.2.0"
+
 "@types/require-dir@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@types/require-dir/-/require-dir-1.0.0.tgz#c68e8c4c3a35bc2f2b3145cb184d116169c1c8d3"
