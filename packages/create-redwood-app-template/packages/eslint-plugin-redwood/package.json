@@ -13,7 +13,7 @@
   "scripts": {
     "build": "yarn clean && babel src -d dist",
     "build:watch": "nodemon --ignore dist --exec 'yarn build'",
-    "prepare": "yarn build",
+    "prepublishOnly": "yarn clean && yarn build",
     "clean": "rm -rf dist"
   }
 }
