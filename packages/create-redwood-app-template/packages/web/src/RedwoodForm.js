@@ -28,11 +28,15 @@ const inputTagProps = (props) => {
   // any errors on this field
   const validationError = errors[props.name]
 
-  // get `errorClassName` out of props and set className to it if there are
-  // errors on the field
-  const { errorClassName, ...tagProps } = props
-  if (validationError && errorClassName) {
-    tagProps.className = errorClassName
+  // get errorStyle/errorClassName and replace style/className if present
+  const { errorClassName, errorStyle, ...tagProps } = props
+  if (validationError) {
+    if (errorClassName) {
+      tagProps.className = errorClassName
+    }
+    if (errorStyle) {
+      tagProps.style = errorStyle
+    }
   }
 
   return tagProps
@@ -48,9 +52,13 @@ const FieldErrorContext = React.createContext()
 const RedwoodFormError = ({
   error,
   wrapperClassName,
+  wrapperStyle,
   titleClassName,
+  titleStyle,
   listClassName,
+  listStyle,
   listItemClassName,
+  listItemStyle,
 }) => {
   let rootMessage = null
   let messages = null
@@ -76,11 +84,17 @@ const RedwoodFormError = ({
   return (
     <>
       {messages && (
-        <div className={wrapperClassName}>
-          <p className={titleClassName}>{rootMessage}</p>
-          <ul className={listClassName}>
+        <div className={wrapperClassName} style={wrapperStyle}>
+          <p className={titleClassName} style={titleStyle}>
+            {rootMessage}
+          </p>
+          <ul className={listClassName} style={listStyle}>
             {messages.map((message, index) => (
-              <li key={index} className={listItemClassName}>
+              <li
+                key={index}
+                className={listItemClassName}
+                style={listItemStyle}
+              >
                 {message}
               </li>
             ))}
@@ -155,7 +169,7 @@ const HiddenField = (props) => {
       {...props}
       type="hidden"
       id={props.id || props.name}
-      ref={register()}
+      ref={register(props.validation || { required: false })}
     />
   )
 }
@@ -170,7 +184,7 @@ const TextAreaField = (props) => {
     <textarea
       {...tagProps}
       id={props.id || props.name}
-      ref={register(props.validation)}
+      ref={register(props.validation || { required: false })}
     />
   )
 }
@@ -186,7 +200,7 @@ const TextField = (props) => {
       {...tagProps}
       type={props.type || 'text'}
       id={props.id || props.name}
-      ref={register(props.validation)}
+      ref={register(props.validation || { required: false })}
     />
   )
 }

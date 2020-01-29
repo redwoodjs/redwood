@@ -5,7 +5,7 @@ export default function(source) {
     'QUERY',
     'Loading',
     'Success',
-    'Error',
+    'Failure',
     'Empty',
     'beforeQuery',
     'afterQuery',
