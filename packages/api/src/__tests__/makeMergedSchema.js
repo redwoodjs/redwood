@@ -1,12 +1,11 @@
 import { gql } from 'src/main'
-import { GraphQLObjectType } from 'graphql'
+
 
 import { makeMergedSchema } from '../makeMergedSchema/makeMergedSchema'
-import { ImportedSchemas, ImportedServices } from '../types'
 
 describe('makeMergedSchema', () => {
   // Simulate `importAll`
-  const schemas: ImportedSchemas = {
+  const schemas = {
     tests: {
       schema: gql`
         type Query {
@@ -21,23 +20,23 @@ describe('makeMergedSchema', () => {
       `,
       resolvers: {
         Query: {
-          inResolverAndServices: (): string => "I'm defined in the resolver.",
-          inResolver: (): string => "I'm defined in the resolver.",
+          inResolverAndServices: () => "I'm defined in the resolver.",
+          inResolver: () => "I'm defined in the resolver.",
         },
       },
     },
   }
 
-  const services: ImportedServices = {
+  const services = {
     tests: {
-      inResolverAndServices: (): string => 'I should NOT be called.',
-      inServices: (): string => "I'm defined in the service.",
-      makeBlog: (): string => "I'm defined in the service.",
+      inResolverAndServices: () => 'I should NOT be called.',
+      inServices: () => "I'm defined in the service.",
+      makeBlog: () => "I'm defined in the service.",
     },
   }
 
   const schema = makeMergedSchema({ schemas, services })
-  const queryType = schema.getType('Query') as GraphQLObjectType
+  const queryType = schema.getType('Query')
   const queryFields = queryType.getFields()
 
   it('Resolver functions take preference over service functions.', () => {
