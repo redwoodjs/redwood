@@ -3,7 +3,7 @@ import { GraphQLDate, GraphQLTime, GraphQLDateTime } from 'graphql-iso-date'
 
 /**
  * This adds scalar types for dealing with Date, Time, and DateTime, and adds a root
- * `Query` type which is needed to start the GraphQL server on a fresh launch.
+ * `Query` type which is needed to start the GraphQL server on a fresh install.
  */
 export const schema = gql`
   scalar Date

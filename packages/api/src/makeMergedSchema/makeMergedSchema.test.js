@@ -49,21 +49,4 @@ describe('makeMergedSchema', () => {
       "I'm defined in the service."
     )
   })
-
-  it('A schema that defines a field which has no resolver or service function throws', () => {
-    expect(() => {
-      makeMergedSchema({
-        schemas: {
-          thisThrows: {
-            schema: gql`
-              type Query {
-                imGoingToThrow: String
-              }
-            `,
-          },
-        },
-        services: {},
-      })
-    }).toThrow('Could not find resolver or service for "imGoingToThrow".')
-  })
 })
