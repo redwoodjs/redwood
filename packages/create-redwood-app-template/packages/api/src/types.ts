@@ -7,7 +7,7 @@ export type ImportedServices = {
 export type ImportedSchemas = {
   [name: string]: {
     schema: DocumentNode
-    resolvers: IResolvers
+    resolvers?: IResolvers
   }
 }
 
@@ -29,7 +29,7 @@ export type MakeMergedSchema = (
 export type SchemasWithServices = {
   [name: string]: {
     schema: GraphQLSchema
-    resolvers: IResolvers
+    resolvers?: IResolvers
   }
 }
 export interface MapServicesToSchemaInterface {
@@ -42,9 +42,8 @@ export type MapServicesToSchema = (
 
 export interface MapSchemaTypeFieldsToServiceInterface {
   fields: { [key: string]: any }
-  resolvers: any
+  resolvers?: any
   service: Services
-  serviceName: string
 }
 export type MapSchemaTypeFieldsToService = (
   args: MapSchemaTypeFieldsToServiceInterface

@@ -2,8 +2,8 @@ import { gql } from 'apollo-server-lambda'
 import { GraphQLDate, GraphQLTime, GraphQLDateTime } from 'graphql-iso-date'
 
 /**
- * Adds scalar types for dealing with Date, Time, and DateTime.
- * Adds a root Query Type which is need to start the GraphQL server on a fresh launch.
+ * This adds scalar types for dealing with Date, Time, and DateTime, and adds a root
+ * `Query` type which is needed to start the GraphQL server on a fresh launch.
  */
 export const schema = gql`
   scalar Date

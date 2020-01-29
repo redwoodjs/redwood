@@ -1,23 +1,71 @@
-import {
-  mapServicesToSchema,
-  makeMergedSchema,
-} from '../makeMergedSchema/makeMergedSchema'
-import { ImportedSchemas, Services } from '../types'
+import { gql } from 'src/main'
+import { GraphQLObjectType } from 'graphql'
 
-import * as postsSchema from './fixtures/graphql/posts.sdl'
-import * as postsService from './fixtures/services/posts'
+import { makeMergedSchema } from '../makeMergedSchema/makeMergedSchema'
+import { ImportedSchemas, ImportedServices } from '../types'
 
 describe('makeMergedSchema', () => {
-  describe('mapServicesToSchema', () => {
-    const importedSchemas: ImportedSchemas = { posts: postsSchema }
-    const importedServices: Services = { posts: postsService }
+  // Simulate `importAll`
+  const schemas: ImportedSchemas = {
+    tests: {
+      schema: gql`
+        type Query {
+          inResolverAndServices: String
+          inResolver: String
+          inServices: String
+        }
 
-    it('It adds service function exports to resolvers', () => {
-      const { schemas, resolvers } = mapServicesToSchema({
-        schemas: importedSchemas,
-        services: importedServices,
+        type Mutation {
+          makeBlog: String
+        }
+      `,
+      resolvers: {
+        Query: {
+          inResolverAndServices: () => "I'm defined in the resolver.",
+          inResolver: (): string => "I'm defined in the resolver.",
+        },
+      },
+    },
+  }
+
+  const services: ImportedServices = {
+    tests: {
+      inResolverAndServices: (): string => 'I should NOT be called.',
+      inServices: (): string => "I'm defined in the service.",
+      makeBlog: (): string => "I'm defined in the service.",
+    },
+  }
+
+  const schema = makeMergedSchema({ schemas, services })
+  const queryType = schema.getType('Query') as GraphQLObjectType
+  const queryFields = queryType.getFields()
+
+  it('Resolver functions take preference over service functions.', () => {
+    expect(queryFields.inResolverAndServices.resolve()).toEqual(
+      "I'm defined in the resolver."
+    )
+  })
+
+  it('Service functions are correctly mapped', () => {
+    expect(queryFields.inServices.resolve()).toEqual(
+      "I'm defined in the service."
+    )
+  })
+
+  it('A schema that defines a field which has no resolver or service function throws', () => {
+    expect(() => {
+      makeMergedSchema({
+        schemas: {
+          thisThrows: {
+            schema: gql`
+              type Query {
+                imGoingToThrow: String
+              }
+            `,
+          },
+        },
+        services: {},
       })
-      expect(resolvers.Query.blog()).toEqual("I'm a service.")
-    })
+    }).toThrow('Could not find resolver or service for "imGoingToThrow".')
   })
 })
