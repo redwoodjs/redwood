@@ -9,7 +9,7 @@ const ${pluralPascalName} = {
 <% if (isCrud) { %>
   ${singularCamelName}: ({ id }) => {
     return photon.${pluralCamelName}.findOne({
-      where: { id: id },
+      where: { id },
     })
   },
 
@@ -22,13 +22,13 @@ const ${pluralPascalName} = {
   update${singularPascalName}: ({ id, input }) => {
     return photon.${pluralCamelName}.update({
       data: input,
-      where: { id: id },
+      where: { id },
     })
   },
 
   delete${singularPascalName}: ({ id }) => {
     return photon.${pluralCamelName}.delete({
-      where: { id: id },
+      where: { id },
     })
   },<% } %>
 }
