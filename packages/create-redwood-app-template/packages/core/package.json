@@ -25,7 +25,7 @@
   "scripts": {
     "clean": "rm -rf dist",
     "build": "yarn clean && yarn build:js && yarn build:types",
-    "build:js": "babel src --out-dir dist --extensions \".ts\" --source-maps inline",
+    "build:js": "babel src --out-dir dist --extensions \".js,.ts\" --source-maps inline",
     "build:types": "tsc --declaration --emitDeclarationOnly",
     "build:watch": "nodemon --ignore dist --exec 'yarn build'",
     "prepare": "yarn build",
