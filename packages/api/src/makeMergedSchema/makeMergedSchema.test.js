@@ -1,6 +1,5 @@
 import { gql } from 'src/main'
 
-
 import { makeMergedSchema } from '../makeMergedSchema/makeMergedSchema'
 
 describe('makeMergedSchema', () => {
