@@ -11,9 +11,13 @@
       ]
     },
     "declaration": true,
-    "declarationDir": "./dist",
+    "declarationDir": "./dist"
   },
   "include": [
     "src"
+  ],
+  "exclude": [
+    "**/__tests__",
+    "**/__mocks__"
   ]
 }

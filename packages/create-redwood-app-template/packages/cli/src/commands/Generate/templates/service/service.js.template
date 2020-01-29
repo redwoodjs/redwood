@@ -2,35 +2,32 @@ import { Photon } from '@prisma/photon'
 
 const photon = new Photon()
 
-const ${pluralPascalName} = {
-  ${pluralCamelName}: () => {
-    return photon.${pluralCamelName}.findMany()
-  },
+export const ${pluralCamelName} = () => {
+  return photon.${pluralCamelName}.findMany()
+}
 <% if (isCrud) { %>
-  ${singularCamelName}: ({ id }) => {
-    return photon.${pluralCamelName}.findOne({
-      where: { id },
-    })
-  },
+export const ${singularCamelName} = ({ id }) => {
+  return photon.${pluralCamelName}.findOne({
+    where: { id },
+  })
+}
 
-  create${singularPascalName}: ({ input }) => {
-    return photon.${pluralCamelName}.create({
-      data: input,
-    })
-  },
+export const create${singularPascalName} = ({ input }) => {
+  return photon.${pluralCamelName}.create({
+    data: input,
+  })
+}
 
-  update${singularPascalName}: ({ id, input }) => {
-    return photon.${pluralCamelName}.update({
-      data: input,
-      where: { id },
-    })
-  },
+export const update${singularPascalName} = ({ id, input }) => {
+  return photon.${pluralCamelName}.update({
+    data: input,
+    where: { id },
+  })
+}
 
-  delete${singularPascalName}: ({ id }) => {
+delete${singularPascalName}: ({ id }) => {
     return photon.${pluralCamelName}.delete({
       where: { id },
     })
-  },<% } %>
-}
-
-export default ${pluralPascalName}
+  }
+<% } %>
