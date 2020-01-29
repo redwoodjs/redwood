@@ -8,17 +8,19 @@
   "types": "./dist/main.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@redwoodjs/core": "^0.0.1-alpha.21",
-    "apollo-server-lambda": "2.9.9",
-    "core-js": "3.6.0",
-    "graphql": "^14.5.8",
+    "@redwoodjs/core": "^0.0.1-alpha.22.0.1",
+    "apollo-server-lambda": "2.9.16",
+    "core-js": "3.6.4",
+    "graphql": "^14.6.0",
     "graphql-iso-date": "^3.6.1",
     "graphql-tools": "4.0.6",
-    "lodash.merge": "^4.6.2"
+    "lodash.merge": "^4.6.2",
+    "lodash.omitby": "^4.6.0"
   },
   "devDependencies": {
     "@types/graphql-iso-date": "^3.3.3",
-    "@types/lodash.merge": "^4.6.6"
+    "@types/lodash.merge": "^4.6.6",
+    "@types/lodash.omitby": "^4.6.6"
   },
   "jest": {
     "testPathIgnorePatterns": [
