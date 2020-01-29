@@ -32,7 +32,7 @@
     "build": "yarn clean && babel src --out-dir dist && rm -rf ./dist/commands/Generate/templates && cp -r ./src/commands/Generate/templates ./dist/commands/Generate/templates",
     "build:watch": "nodemon --ignore dist --exec 'yarn build'",
     "clean": "rm -rf dist",
-    "prepare": "yarn clean && yarn build",
+    "prepublishOnly": "yarn clean && yarn build",
     "test": "jest",
     "test:watch": "yarn test --watch"
   },
