@@ -21,7 +21,7 @@ describe('makeMergedSchema', () => {
       `,
       resolvers: {
         Query: {
-          inResolverAndServices: () => "I'm defined in the resolver.",
+          inResolverAndServices: (): string => "I'm defined in the resolver.",
           inResolver: (): string => "I'm defined in the resolver.",
         },
       },
