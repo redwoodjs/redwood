@@ -7,12 +7,12 @@
   "main": "dist/index.js",
   "license": "MIT",
   "dependencies": {
-    "core-js": "3.6.0"
+    "core-js": "3.6.4"
   },
   "scripts": {
     "build": "yarn clean && babel src -d dist",
     "build:watch": "nodemon --ignore dist --exec 'yarn build'",
-    "prepare": "yarn build",
+    "prepublishOnly": "yarn clean && yarn build",
     "clean": "rm -rf dist"
   },
   "gitHead": "e7f45aaa32d8d33799c04f8169b0b0125bcaaece"
