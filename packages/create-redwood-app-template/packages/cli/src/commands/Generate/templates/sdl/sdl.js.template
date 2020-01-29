@@ -1,7 +1,5 @@
 import { gql } from '@redwoodjs/api'
 
-import ${pluralPascalName} from 'src/services/${pluralCamelName}'
-
 export const schema = gql`
   type ${singularPascalName} {
     ${query}
