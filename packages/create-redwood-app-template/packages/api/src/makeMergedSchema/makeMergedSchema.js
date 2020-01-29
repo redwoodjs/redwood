@@ -26,11 +26,7 @@ const mapFieldsToService = ({
       }
     }
 
-    // The function does not exist in resolvers or service.Let the developer know that
-    // they've got a potential bug.
-    throw new SchemaFieldResolverNotFoundError(
-      `Could not find resolver or service for "${name}".`
-    )
+    return resolvers
   }, unmappedResolvers)
 
 /**
