@@ -1,7 +1,9 @@
 import { IResolvers } from 'graphql-tools'
 import { DocumentNode, GraphQLSchema } from 'graphql'
 
-export type ImportedServices = { [name: string]: CallableFunction }
+export type ImportedServices = {
+  [serviceName: string]: Services
+}
 export type ImportedSchemas = {
   [name: string]: {
     schema: DocumentNode
@@ -12,7 +14,8 @@ export type ImportedSchemas = {
 export interface MakeServicesInterface {
   services: ImportedServices
 }
-export type Services = { [name: string]: CallableFunction }
+// TODO: Remap any to a promise or function.
+export type Services = { [funcName: string]: any }
 export type MakeServices = (args: MakeServicesInterface) => Services
 
 export interface MakeMergedSchemaInterface {
@@ -38,9 +41,8 @@ export type MapServicesToSchema = (
 ) => SchemasWithServices
 
 export interface MapSchemaTypeFieldsToServiceInterface {
-  type: string
-  schema: GraphQLSchema
-  resolvers: IResolvers
+  fields: { [key: string]: any }
+  resolvers: any
   service: Services
   serviceName: string
 }
