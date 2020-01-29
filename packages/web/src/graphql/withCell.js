@@ -11,7 +11,7 @@ import { Query } from '@apollo/react-components'
  * @param {function=} beforeQuery - Prepare the variables and options for the query
  * @param {function=} afterQuery - Sanitize the data return from graphQL
  * @param {Component=} Loading - Loading, render this component
- * @param {Component=} Error - Something went wrong, render this component
+ * @param {Component=} Failure - Something went wrong, render this component
  * @param {Component} Success - Data has loaded, render this component
  *
  * @example
@@ -40,7 +40,7 @@ export const withCell = ({
   QUERY,
   afterQuery = (data) => ({ ...data }),
   Loading = () => null,
-  Error = () => null,
+  Failure = () => null,
   Empty = () => null,
   Success,
 }) => {
@@ -64,8 +64,8 @@ export const withCell = ({
     <Query query={QUERY} {...beforeQuery(props)}>
       {({ error, loading, data, ...queryRest }) => {
         if (error) {
-          if (Error) {
-            return <Error error={error} {...queryRest} {...props} />
+          if (Failure) {
+            return <Failure error={error} {...queryRest} {...props} />
           } else {
             console.error(error)
           }
