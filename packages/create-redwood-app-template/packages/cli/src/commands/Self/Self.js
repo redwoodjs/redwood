@@ -1,6 +1,8 @@
 import { promisify } from 'util'
 import { exec } from 'child_process'
 
+import { getPaths } from '@redwoodjs/core'
+
 const asyncExec = promisify(exec)
 
 const installedPackages = async (pattern = '@redwoodjs') => {
@@ -11,19 +13,26 @@ const installedPackages = async (pattern = '@redwoodjs') => {
 const link = async () => {
   const redwoodPackages = await installedPackages()
   redwoodPackages.forEach(async (pkgName) => {
-    const { stdout, stderr } = await asyncExec(`yarn link '${pkgName}'`)
-    console.log(stdout, stderr)
+    console.log(`Linking ${pkgName}`)
+    const { stderr } = await asyncExec(`yarn link '${pkgName}'`)
+    if (stderr) {
+      console.error(stderr)
+    }
   })
 }
+
+const build = async () => { }
 
 /**
  * The self commands are used during development of the RedwoodJS project.
  *
- * `self link` - Links all of the redwood packages to the current project folder.
+ * `self link`  - Links all of the Redwood packages to the current project folder.
+ * `self build` - Builds all of the Redwood packages when a change is detected.
  */
 export default ({ args }) => {
   const commands = {
     link,
+    build,
   }
 
   const subcommandToRun = args?.[0]?.[1]
