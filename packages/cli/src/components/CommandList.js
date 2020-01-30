@@ -7,7 +7,13 @@ const CommandList = ({ commands }) => {
       <Box marginBottom={1}>
         <Text bold>Commands</Text>
       </Box>
-      {commands.map(({ commandProps: { name, description } }) => {
+      {commands.map(({ commandProps: { name, description, hidden } }) => {
+        // Redwood has some commands that are not exposed in the menu. We use this
+        // to hide commands that are used by developers that are working on Redwood.
+        if (hidden) {
+          return null
+        }
+
         return (
           <Box key={`command-${name}`}>
             <Box justifyContent="flex-end" marginX={2}>
