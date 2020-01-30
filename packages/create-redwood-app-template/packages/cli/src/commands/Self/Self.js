@@ -1,25 +1,42 @@
-import { getPaths } from '@redwoodjs/core'
+import { promisify } from 'util'
+import { exec } from 'child_process'
 
-const installedPackages = (pattern = '@redwoodjs') => {
-  //➜ yarn list --pattern "@redwoodjs" --depth=0
-  // ├─ @redwoodjs/api@0.0.1-alpha.22
-  // ├─ @redwoodjs/cli@0.0.1-alpha.22
-  // ├─ @redwoodjs/core@0.0.1-alpha.22
-  // ├─ @redwoodjs/dev-server@0.0.1-alpha.22
-  // ├─ @redwoodjs/eslint-config@0.0.1-alpha.22
-  // ├─ @redwoodjs/eslint-plugin-redwood@0.0.1-alpha.22
-  // ├─ @redwoodjs/router@0.0.1-alpha.22
-  // ├─ @redwoodjs/scripts@0.0.1-alpha.22
-  // └─ @redwoodjs/web@0.0.1-alpha.22
+const asyncExec = promisify(exec)
+
+const installedPackages = async (pattern = '@redwoodjs') => {
+  const { stdout } = await asyncExec(`yarn list --pattern "${pattern}"`)
+  return new Set(stdout.match(/@redwoodjs\/(.+)@/g).map((s) => s.slice(0, -1)))
+}
+
+const link = async () => {
+  const redwoodPackages = await installedPackages()
+  redwoodPackages.forEach(async (pkgName) => {
+    const { stdout, stderr } = await asyncExec(`yarn link '${pkgName}'`)
+    console.log(stdout, stderr)
+  })
 }
 
 /**
  * The self commands are used during development of the RedwoodJS project.
  *
- * `self link`    - Links all of the redwood packages to the current project folder.
+ * `self link` - Links all of the redwood packages to the current project folder.
  */
 export default ({ args }) => {
-  const redwoodPaths = getPaths()
+  const commands = {
+    link,
+  }
+
+  const subcommandToRun = args?.[0]?.[1]
+  if (!commands[subcommandToRun]) {
+    console.warn(
+      `self ${subcommandToRun} is a not a valid argument.\n\nCommands:\n${Object.keys(
+        commands
+      ).join('\n')}`
+    )
+    return null
+  }
+
+  commands[subcommandToRun]()
 
   return null
 }
