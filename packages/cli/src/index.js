@@ -17,11 +17,11 @@ const Router = ({ commands, args = [[], {}] }) => {
       {command ? (
         command.default({ args })
       ) : (
-        <>
-          <Header marginBottom={1} />
-          <CommandList commands={commands} />
-        </>
-      )}
+          <>
+            <Header marginBottom={1} />
+            <CommandList commands={commands} />
+          </>
+        )}
     </Box>
   )
 }

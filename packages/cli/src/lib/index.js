@@ -112,7 +112,7 @@ const validateCommandExports = ({ commandProps, ...rest }) => {
 
   const { description } = commandProps
   if (!description) {
-    throw 'you must add a `description` to  your `commandProps`'
+    throw 'you must add a `description` to your `commandProps`'
   }
 }
 
