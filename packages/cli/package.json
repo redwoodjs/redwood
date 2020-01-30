@@ -26,8 +26,8 @@
     "yargs-parser": "^13.1.1"
   },
   "devDependencies": {
-    "@types/react": "^16.9.19",
     "@types/node-fetch": "^2.5.4",
+    "@types/react": "^16.9.19",
     "ink-testing-library": "^1.0.2"
   },
   "scripts": {

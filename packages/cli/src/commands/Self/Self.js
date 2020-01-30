@@ -1,13 +1,16 @@
+import path from 'path'
 import { promisify } from 'util'
 import { exec } from 'child_process'
 
-import { getPaths } from '@redwoodjs/core'
+import concurrently from 'concurrently'
 
 const asyncExec = promisify(exec)
 
-const installedPackages = async (pattern = '@redwoodjs') => {
-  const { stdout } = await asyncExec(`yarn list --pattern "${pattern}"`)
-  return new Set(stdout.match(/@redwoodjs\/(.+)@/g).map((s) => s.slice(0, -1)))
+const installedPackages = async () => {
+  const { stdout } = await asyncExec('yarn list --pattern "@redwoodjs"')
+  return Array.from(
+    new Set(stdout.match(/@redwoodjs\/(.+)@/g).map((s) => s.slice(0, -1)))
+  )
 }
 
 const link = async () => {
@@ -21,7 +24,26 @@ const link = async () => {
   })
 }
 
-const build = async () => { }
+const build = async ({ args }) => {
+  const relativePath = args?.[0]?.[2]
+
+  if (!relativePath) {
+    console.error('You must supply a redwood project path.')
+  }
+
+  const redwoodPath = path.resolve(relativePath)
+  const redwoodPackages = await installedPackages()
+
+  const runMe = redwoodPackages.map((pkgName) => {
+    const pkgPath = path.resolve(
+      redwoodPath,
+      pkgName.replace('@redwoodjs/', 'packages/')
+    )
+    return { command: `yarn --cwd ${pkgPath} build:watch` }
+  })
+
+  concurrently(runMe)
+}
 
 /**
  * The self commands are used during development of the RedwoodJS project.
@@ -45,7 +67,7 @@ export default ({ args }) => {
     return null
   }
 
-  commands[subcommandToRun]()
+  commands[subcommandToRun]({ args })
 
   return null
 }
