@@ -1,32 +1,32 @@
-import { Photon } from '@prisma/photon'
+import { PrismaClient } from '@prisma/client'
 
-const photon = new Photon()
+const prisma = new PrismaClient()
 
 export const ${pluralCamelName} = () => {
-  return photon.${pluralCamelName}.findMany()
+  return photon.${singularCamelName}.findMany()
 }
 <% if (isCrud) { %>
 export const ${singularCamelName} = ({ id }) => {
-  return photon.${pluralCamelName}.findOne({
+  return photon.${singularCamelName}.findOne({
     where: { id },
   })
 }
 
 export const create${singularPascalName} = ({ input }) => {
-  return photon.${pluralCamelName}.create({
+  return photon.${singularCamelName}.create({
     data: input,
   })
 }
 
 export const update${singularPascalName} = ({ id, input }) => {
-  return photon.${pluralCamelName}.update({
+  return photon.${singularCamelName}.update({
     data: input,
     where: { id },
   })
 }
 
 delete${singularPascalName}: ({ id }) => {
-    return photon.${pluralCamelName}.delete({
+    return photon.${singularCamelName}.delete({
       where: { id },
     })
   }
