@@ -1,13 +1,13 @@
 {
   "name": "create-redwood-app",
-  "version": "0.0.1-alpha.22",
+  "version": "0.0.1-alpha.23",
   "license": "MIT",
   "bin": "./dist/create-redwood-app.js",
   "files": [
     "dist"
   ],
   "dependencies": {
-    "@redwoodjs/core": "^0.0.1-alpha.22",
+    "@redwoodjs/core": "^0.0.1-alpha.23",
     "axios": "^0.19.2",
     "decompress": "^4.2.0",
     "ink": "^2.6.0",
