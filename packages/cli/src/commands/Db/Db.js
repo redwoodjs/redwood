@@ -44,10 +44,29 @@ const save = () => {
   return null
 }
 
+const seed = () => {
+  const { base } = getPaths()
+
+  concurrently(
+    [
+      {
+        command: `cd ${base}/api && node prisma/seeds.js`,
+        name: 'seed',
+        prefixColor: 'yellow',
+      },
+    ],
+    {
+      prefix: 'name',
+    }
+  )
+  return null
+}
+
 export default ({ args }) => {
   const commands = {
     up,
     save,
+    seed,
   }
 
   const subcommandToRun = args?.[0]?.[1]
