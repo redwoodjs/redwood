@@ -2972,16 +2972,6 @@
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=
 
-"@redwoodjs/core@^0.0.1-alpha.22.0.1":
-  version "0.0.1-alpha.22.0.1"
-  resolved "https://registry.yarnpkg.com/@redwoodjs/core/-/core-0.0.1-alpha.22.0.1.tgz#f3f45e8450efd547776c21ca5b678b3864dfaccb"
-  integrity sha512-upUMUUt7HXnMQ1RkKu250epfrGs7y9Xg8ZtUxNxb4WFPYHc0hnlVEAx2xW6SOCGXhmvnn9wAgSJK1LnaoYnDtw==
-  dependencies:
-    babel-plugin-macros "^2.8.0"
-    findup-sync "^4.0.0"
-    glob "^7.1.6"
-    toml "^3.0.0"
-
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.14.0.tgz#9fb3a3cf3132328151f353de4632e01e52102bea"

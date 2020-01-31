@@ -1,8 +1,8 @@
-import { useEffect } from 'react'
 // The `redwood dev` command runs the api and web development servers.
 // Usage:
 // $ redwood dev
 
+import { useEffect } from 'react'
 import concurrently from 'concurrently'
 import { getPaths } from '@redwoodjs/core'
 
@@ -23,7 +23,9 @@ export default ({ args }) => {
 
       // API requires a Prisma client to launch, but the Prisma client generation code is
       // slower than the dev-server. This fixes that race condition.
-      await asyncExec(`cd ${base}/api && yarn prisma2 generate`)
+      await asyncExec(
+        `cd ${base}/api && yarn prisma2 migrate up --experimental --create-db && yarn prisma2 generate`
+      )
 
       let runCommands = Object.keys(availableWatchers)
       if (subcommandToRun) {
