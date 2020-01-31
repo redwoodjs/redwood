@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 // The `redwood dev` command runs the api and web development servers.
 // Usage:
 // $ redwood dev
@@ -5,33 +6,49 @@
 import concurrently from 'concurrently'
 import { getPaths } from '@redwoodjs/core'
 
+import { asyncExec } from 'src/lib'
+
 export default ({ args }) => {
-  const { base } = getPaths()
-  const availableWatchers = {
-    api: `cd ${base}/api && yarn dev-server`,
-    web: `cd ${base}/web && yarn webpack-dev-server --config ./config/webpack.dev.js`,
-    db: `cd ${base}/api && yarn prisma2 generate --watch`,
-  }
+  useEffect(() => {
+    const runCommands = async () => {
+      const { base } = getPaths()
+      const availableWatchers = {
+        db: `cd ${base}/api && yarn prisma2 generate --watch`,
+        api: `cd ${base}/api && yarn dev-server`,
+        web: `cd ${base}/web && yarn webpack-dev-server --config ./config/webpack.dev.js`,
+      }
 
-  // The user can do something like `$ yarn rw dev api,web` or just `yarn rw dev`
-  const subcommandToRun = args?.[0]?.[1]
+      // The user can do something like `$ yarn rw dev api,web` or just `yarn rw dev`
+      const subcommandToRun = args?.[0]?.[1]
 
-  let runCommands = Object.keys(availableWatchers)
-  if (subcommandToRun) {
-    // TODO: Split by ' ' char?
-    const watchers = subcommandToRun.split(',')
-    runCommands = watchers.filter((n) => runCommands.includes(n))
-  }
+      // API requires a Prisma client to launch, but the Prisma client generation code is
+      // slower than the dev-server. This fixes that race condition.
+      await asyncExec(`cd ${base}/api && yarn prisma2 generate`)
 
-  concurrently(
-    runCommands.map((name) => ({
-      command: availableWatchers[name],
-      name,
-    })),
-    {
-      prefix: 'name',
+      let runCommands = Object.keys(availableWatchers)
+      if (subcommandToRun) {
+        // TODO: Split by ' ' char?
+        const watchers = subcommandToRun.split(',')
+        runCommands = watchers.filter((n) => runCommands.includes(n))
+      }
+
+      // maybe we just generate before?
+
+      concurrently(
+        runCommands.map((name) => ({
+          command: availableWatchers[name],
+          name,
+        })),
+        {
+          restartTries: 3,
+          restartDelay: 100,
+          prefix: 'name',
+        }
+      )
     }
-  )
+
+    runCommands()
+  }, [args])
 
   return null
 }
@@ -39,5 +56,5 @@ export default ({ args }) => {
 export const commandProps = {
   name: 'dev',
   alias: 'd',
-  description: 'Launch api, web and prisma dev servers',
+  description: 'Launch api, web and prisma dev servers.',
 }
