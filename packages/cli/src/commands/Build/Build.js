@@ -37,5 +37,5 @@ export default ({ args }) => {
 
 export const commandProps = {
   name: 'build',
-  description: 'Build the redwood project',
+  description: 'Build the Redwood api and web packages.',
 }

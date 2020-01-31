@@ -89,5 +89,5 @@ export default ({ args }) => {
 export const commandProps = {
   name: 'database',
   alias: 'db',
-  description: 'Migrations, generators, all the datase things.',
+  description: 'Migrations, run database seeds, and client generation.',
 }

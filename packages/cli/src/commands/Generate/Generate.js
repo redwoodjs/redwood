@@ -172,7 +172,7 @@ const Generate = ({
 export const commandProps = {
   name: 'generate',
   alias: 'g',
-  description: 'Save time by generating boilerplate code',
+  description: 'Save time by generating boilerplate code.',
 }
 
 export default Generate
