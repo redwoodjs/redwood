@@ -1,5 +1,7 @@
 import fs from 'fs'
 import path from 'path'
+import { promisify } from 'util'
+import { exec } from 'child_process'
 
 import requireDir from 'require-dir'
 import parse from 'yargs-parser'
@@ -10,6 +12,8 @@ import pluralize from 'pluralize'
 import { paramCase } from 'param-case'
 import { getDMMF } from '@prisma/sdk'
 import { getPaths } from '@redwoodjs/core'
+
+export const asyncExec = promisify(exec)
 
 export const asyncForEach = async (array, callback) => {
   for (let index = 0; index < array.length; index++) {
