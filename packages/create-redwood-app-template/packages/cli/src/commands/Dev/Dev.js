@@ -11,12 +11,17 @@ const Dev = () => {
   concurrently(
     [
       {
-        command: `cd ${redwoodPaths.base}/web && yarn dev`,
+        command: `cd ${redwoodPaths.base}/web && yarn webpack-dev-server --config ./config/webpack.dev.js`,
         name: 'web',
         prefixColor: 'yellow',
       },
       {
-        command: `cd ${redwoodPaths.base}/api && yarn dev`,
+        command: `cd ${redwoodPaths.base}/api && yarn prisma2 generate --watch`,
+        name: 'database',
+        prefixColor: 'yellow',
+      },
+      {
+        command: `cd ${redwoodPaths.base}/api && yarn dev-server`,
         name: 'api',
         prefixColor: 'green',
       },
