@@ -1,10 +1,8 @@
 import path from 'path'
-import { promisify } from 'util'
-import { exec } from 'child_process'
 
 import concurrently from 'concurrently'
 
-const asyncExec = promisify(exec)
+import { asyncExec } from 'src/lib'
 
 const installedPackages = async () => {
   const { stdout } = await asyncExec('yarn list --pattern "@redwoodjs"')
