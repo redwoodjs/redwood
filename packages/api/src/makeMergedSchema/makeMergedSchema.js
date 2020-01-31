@@ -39,19 +39,22 @@ const mergeResolversWithServices = ({ schema, resolvers, services }) => {
     {},
     ...Object.keys(services).map((name) => services[name])
   )
-  return {
-    ...resolvers,
-    Query: mapFieldsToService({
-      fields: schema.getType('Query')?.getFields(),
-      resolvers: resolvers?.Query,
-      services: mergedServices,
-    }),
-    Mutation: mapFieldsToService({
-      fields: schema.getType('Mutation')?.getFields(),
-      resolvers: resolvers?.Mutation,
-      services: mergedServices,
-    }),
-  }
+  return omitBy(
+    {
+      ...resolvers,
+      Query: mapFieldsToService({
+        fields: schema.getType('Query')?.getFields(),
+        resolvers: resolvers?.Query,
+        services: mergedServices,
+      }),
+      Mutation: mapFieldsToService({
+        fields: schema.getType('Mutation')?.getFields(),
+        resolvers: resolvers?.Mutation,
+        services: mergedServices,
+      }),
+    },
+    (v) => typeof v === 'undefined'
+  )
 }
 
 const mergeResolvers = (schemas) =>
