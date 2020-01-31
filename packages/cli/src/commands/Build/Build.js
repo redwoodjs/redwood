@@ -1,6 +1,6 @@
-// The `redwood dev` command runs the api and web development servers.
+// The `redwood buid` command builds the app.
 // Usage:
-// $ redwood dev
+// $ redwood build
 
 import concurrently from 'concurrently'
 import { getPaths } from '@redwoodjs/core'
@@ -8,12 +8,11 @@ import { getPaths } from '@redwoodjs/core'
 export default ({ args }) => {
   const { base } = getPaths()
   const availableWatchers = {
-    api: `cd ${base}/api && yarn dev-server`,
-    web: `cd ${base}/web && yarn webpack-dev-server --config ./config/webpack.dev.js`,
-    db: `cd ${base}/api && yarn prisma2 generate --watch`,
+    api: `cd ${base}/api && NODE_ENV=production yarn babel src --out-dir dist`,
+    web: `cd ${base}/web && yarn webpack --config config/webpack.prod.js`,
   }
 
-  // The user can do something like `$ yarn rw dev api,web` or just `yarn rw dev`
+  // The user can do something like `$ yarn rw build api,web` or just `yarn rw build`
   const subcommandToRun = args?.[0]?.[1]
 
   let runCommands = Object.keys(availableWatchers)
@@ -37,7 +36,6 @@ export default ({ args }) => {
 }
 
 export const commandProps = {
-  name: 'dev',
-  alias: 'd',
-  description: 'Launch api, web and prisma dev servers',
+  name: 'build',
+  description: 'Build the redwood project',
 }
