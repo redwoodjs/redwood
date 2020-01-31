@@ -1,10 +1,10 @@
 // The `redwood db` commands run in the api folder and allows the user to apply
 // the migrations to the database, to generate a client, and to save migrations.
-// $ redwood db up
-// $ redwood db save
+// $ yarn rw db up
+// $ yarn rw db save
 
 import React from 'react'
-import { Box, Text, Color } from 'ink'
+import { Box, Text } from 'ink'
 import concurrently from 'concurrently'
 import { getPaths } from '@redwoodjs/core'
 
