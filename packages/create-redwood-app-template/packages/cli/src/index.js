@@ -12,18 +12,16 @@ const Router = ({ commands, args = [[], {}] }) => {
     [name, alias].includes(commandToRun)
   )
 
-  return (
-    <Box flexDirection="column">
-      {command ? (
-        command.default({ args })
-      ) : (
-          <>
-            <Header marginBottom={1} />
-            <CommandList commands={commands} />
-          </>
-        )}
-    </Box>
-  )
+  if (!command) {
+    return (
+      <Box flexDirection="column">
+        <Header marginBottom={1} />
+        <CommandList commands={commands} />
+      </Box>
+    )
+  }
+
+  return command.default({ args })
 }
 
 if (process.env.NODE_ENV !== 'test') {
