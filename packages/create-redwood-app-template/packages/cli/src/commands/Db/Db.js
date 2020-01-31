@@ -14,7 +14,7 @@ const up = () => {
   concurrently(
     [
       {
-        command: `cd ${base}/api && yarn prisma2 migrate up --experimental`,
+        command: `cd ${base}/api && yarn prisma2 migrate up --experimental && yarn prisma2 generate`,
         name: 'migrate',
         prefixColor: 'yellow',
       },
