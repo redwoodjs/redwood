@@ -30,14 +30,14 @@ const lintFix = () => {
 export default ({ args }) => {
   const commands = {
     lint,
-    'lint:fix': lintFix,
+    'lint fix': lintFix,
     open: () => {
       exec('open http://localhost:8910')
       return null
     },
   }
 
-  const subcommandToRun = args?.[0]?.[1]
+  const subcommandToRun = args?.[0].slice(1, -1).join(' ')
   if (!commands[subcommandToRun]) {
     // TODO: Improve this with actual usage.
     return (
