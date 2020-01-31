@@ -6,7 +6,7 @@ import { version } from '../../package.json'
 export default (props) => (
   <Box {...props}>
     <Color hex="#FFD900">
-      <Text bold>Redwood</Text> - Fullstack to the JAMstack.
+      <Text bold>Redwood</Text> - Bringing full-stack to the JAMstack.
       (https://redwoodjs.com)
     </Color>{' '}
     <Color hex="#999">| v{version}</Color>
