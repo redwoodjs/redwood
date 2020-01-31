@@ -144,8 +144,10 @@ export const getCommands = (commandsPath = '../commands') => {
     }
 
     const { commandProps, ...rest } = command
+    const name = commandProps.name || commandName
     const newCommandProps = {
-      name: commandProps.name || commandName,
+      name: name,
+      alias: commandProps.alias || name,
       ...commandProps,
     }
 
