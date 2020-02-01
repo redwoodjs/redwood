@@ -1,9 +1,0 @@
-{
-  "events": {
-    "start": "kill-port 8911",
-    "restart": "kill-port 8911",
-    "crash": "kill-port 8911",
-    "exit": "kill-port 8911"
-  },
-  "signal": "SIGHUP"
-}
