@@ -18,10 +18,12 @@ import babelRegister from '@babel/register'
 const redwoodConfig = getConfig()
 const redwoodPaths = getPaths()
 
+const API_DIR = path.join(redwoodPaths.base, 'api')
+
 babelRegister({
-  extends: path.join(redwoodPaths.api.src, '.babelrc.js'),
+  extends: path.join(API_DIR, '.babelrc.js'),
   extensions: ['.js', '.ts'],
-  only: [redwoodPaths.api.src],
+  only: [API_DIR],
   ignore: ['node_modules'],
   cache: false,
 })
@@ -39,7 +41,7 @@ const HOSTNAME = `http://localhost:${PORT}`
 
 const showHeader = (lambdas: Record<string, any>) => {
   console.log(`◌ Listening on ${HOSTNAME}`)
-  console.log(`◌ Watching ${redwoodPaths.api.src}`)
+  console.log(`◌ Watching ${API_DIR}`)
   console.log('\nNow serving\n')
   console.log(
     Object.keys(lambdas)
@@ -191,7 +193,7 @@ const startServer = () => app.listen(PORT, () => showHeader(lambdaFunctions))
 const server = startServer()
 server.setTimeout(10 * 1000)
 
-const watcher = chokidar.watch(redwoodPaths.api.src, {
+const watcher = chokidar.watch(API_DIR, {
   ignored: (path: string) => path.includes('node_modules'),
 })
 
