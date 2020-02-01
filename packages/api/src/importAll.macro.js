@@ -11,7 +11,7 @@ import { getPaths } from '@redwoodjs/core'
  * This macro runs during build time.
  * @example
  * ```js
- *  import importAll from '@redwoodjs/core/importAll.macro
+ *  import importAll from '@redwoodjs/api/importAll.macro
  *  const typeDefs = importAll('api', 'graphql')
  * ```
  */
