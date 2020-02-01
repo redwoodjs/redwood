@@ -3,7 +3,8 @@
   "version": "0.0.1-alpha.23.0.2",
   "main": "dist/main.js",
   "files": [
-    "dist"
+    "dist",
+    "importAll.macro.js"
   ],
   "types": "./dist/main.d.ts",
   "license": "MIT",
@@ -15,7 +16,9 @@
     "graphql-iso-date": "^3.6.1",
     "graphql-tools": "4.0.6",
     "lodash.merge": "^4.6.2",
-    "lodash.omitby": "^4.6.0"
+    "lodash.omitby": "^4.6.0",
+    "babel-plugin-macros": "^2.8.0",
+    "glob": "^7.1.6"
   },
   "devDependencies": {
     "@types/graphql-iso-date": "^3.3.3",
