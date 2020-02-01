@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/dev-server",
-  "version": "0.0.1-alpha.23.0.2",
+  "version": "0.0.1-alpha.23.0.3",
   "bin": {
     "dev-server": "./dist/main.js"
   },
