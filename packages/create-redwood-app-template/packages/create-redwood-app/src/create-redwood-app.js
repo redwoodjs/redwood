@@ -118,7 +118,7 @@ export const CreateNewApp = ({ args }) => {
         setNewMessage(<Text>{data.toString().replace('\n', '')}</Text>)
       })
       child.stderr.on('data', (data) => {
-        setNewMessage(<Color red>{data.toString().replace('\n', '')}</Color>)
+        setNewMessage(<Text>{data.toString().replace('\n', '')}</Text>)
       })
     }
 
