@@ -2,8 +2,7 @@ import path from 'path'
 
 import { createMacro } from 'babel-plugin-macros'
 import glob from 'glob'
-
-import { getPaths } from './paths'
+import { getPaths } from '@redwoodjs/core'
 
 // The majority of this code is copied from `importAll.macro`: https://github.com/kentcdodds/import-all.macro
 // And was modified to work with our `getPaths`.
