@@ -9,7 +9,7 @@ export default ({ args }) => {
   const { base } = getPaths()
   const availableWatchers = {
     api: `cd ${base}/api && NODE_ENV=production yarn babel src --out-dir dist`,
-    web: `cd ${base}/web && yarn webpack --config config/webpack.prod.js`,
+    web: `cd ${base}/web && yarn webpack --config ../node_modules/@redwoodjs/scripts/config/webpack.production.js`,
   }
 
   // The user can do something like `$ yarn rw build api,web` or just `yarn rw build`
