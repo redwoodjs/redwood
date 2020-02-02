@@ -62,10 +62,10 @@ module.exports = (webpackEnv) => {
     },
     plugins: [
       isEnvProduction &&
-        new MiniCssExtractPlugin({
-          filename: '[name].[contenthash:8].css',
-          chunkFilename: '[name].[contenthash:8].css',
-        }),
+      new MiniCssExtractPlugin({
+        filename: '[name].[contenthash:8].css',
+        chunkFilename: '[name].[contenthash:8].css',
+      }),
       !isEnvProduction && new webpack.HotModuleReplacementPlugin(),
       new HtmlWebpackPlugin({
         template: path.resolve(redwoodPaths.base, 'web/src/index.html'),
@@ -185,9 +185,9 @@ module.exports = (webpackEnv) => {
       publicPath: '/',
       devtoolModuleFilenameTemplate: isEnvProduction
         ? (info) =>
-            path
-              .relative(redwoodPaths.web.src, info.absoluteResourcePath)
-              .replace(/\\/g, '/')
+          path
+            .relative(redwoodPaths.web.src, info.absoluteResourcePath)
+            .replace(/\\/g, '/')
         : (info) => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
     },
   }
