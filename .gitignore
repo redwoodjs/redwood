@@ -1,5 +1,6 @@
 .DS_Store
 node_modules
 dist
+packages/api/importAll.macro.js
 lerna-debug.log
 yarn-error.log
