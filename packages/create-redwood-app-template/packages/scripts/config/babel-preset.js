@@ -4,13 +4,14 @@
 
 const { getPaths } = require('@redwoodjs/core')
 
+const CORE_JS_VERSION = '3.6.4'
+
 module.exports = () => ({
   presets: ['@babel/preset-react', '@babel/typescript'],
   plugins: [
     ['@babel/plugin-proposal-class-properties', { loose: true }],
     'babel-plugin-macros',
   ],
-
   overrides: [
     {
       test: './api/',
@@ -21,8 +22,11 @@ module.exports = () => ({
             targets: {
               node: '8.10.0',
             },
-            useBuiltIns: 'entry',
-            corejs: 3,
+            useBuiltIns: 'usage',
+            corejs: {
+              version: CORE_JS_VERSION,
+              proposals: true,
+            },
           },
         ],
       ],
@@ -35,6 +39,7 @@ module.exports = () => ({
             },
           },
         ],
+        '@babel/plugin-proposal-optional-chaining',
       ],
     },
     {
@@ -43,9 +48,8 @@ module.exports = () => ({
         [
           '@babel/preset-env',
           {
-            targets: '> 0.25%, not dead',
+            // the targets are set in web/package.json
             useBuiltIns: 'usage',
-            corejs: 3,
           },
         ],
       ],
@@ -59,7 +63,6 @@ module.exports = () => ({
             },
           },
         ],
-        'babel-plugin-styled-components',
       ],
     },
   ],
