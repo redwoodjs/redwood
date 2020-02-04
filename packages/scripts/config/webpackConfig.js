@@ -69,6 +69,8 @@ module.exports = (webpackEnv) => {
       !isEnvProduction && new webpack.HotModuleReplacementPlugin(),
       new HtmlWebpackPlugin({
         template: path.resolve(redwoodPaths.base, 'web/src/index.html'),
+        inject: true,
+        chunks: 'all',
       }),
       new webpack.ProvidePlugin({
         React: 'react',
@@ -119,7 +121,6 @@ module.exports = (webpackEnv) => {
               use: {
                 loader: 'babel-loader',
                 options: {
-                  presets: ['@babel/preset-env'],
                   cacheDirectory: true,
                 },
               },
@@ -167,7 +168,7 @@ module.exports = (webpackEnv) => {
     optimization: {
       splitChunks: {
         chunks: 'all',
-        name: false,
+        name: 'vendors',
       },
       runtimeChunk: {
         name: (entrypoint) => `runtime-${entrypoint.name}`,
