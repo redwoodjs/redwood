@@ -4,8 +4,7 @@
   "license": "MIT",
   "files": [
     "./config",
-    "./dist",
-    "babel-preset.js"
+    "./dist"
   ],
   "dependencies": {
     "@babel/cli": "^7.8.4",
