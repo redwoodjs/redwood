@@ -50,6 +50,10 @@ module.exports = () => ({
           {
             // the targets are set in web/package.json
             useBuiltIns: 'usage',
+            corejs: {
+              version: CORE_JS_VERSION,
+              proposals: true,
+            },
           },
         ],
       ],
