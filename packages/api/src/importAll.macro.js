@@ -29,19 +29,24 @@ function prevalMacros({ references, state, babel }) {
   })
 }
 
-const getGlobPattern = (callExpressionPath) => {
-  const redwoodPaths = getPaths()
+const getGlobPattern = (callExpressionPath, cwd) => {
   const args = callExpressionPath.parentPath.get('arguments')
   const target = args[0].evaluate().value
   const dir = args[1].evaluate().value
-  return `${redwoodPaths[target][dir]}/*.{ts,js}`
+
+  const redwoodPaths = getPaths()
+  const relativePaths = path.relative(cwd, redwoodPaths[target][dir])
+  return `./${relativePaths}/*.{ts,js}`
 }
 
 function importAll({ referencePath, state, babel }) {
   const t = babel.types
-  const globPattern = getGlobPattern(referencePath)
+  const { filename } = state.file.opts
+  const cwd = path.dirname(filename)
+  const globPattern = getGlobPattern(referencePath, cwd)
+
   // Grab a list of the files
-  const importSources = glob.sync(globPattern)
+  const importSources = glob.sync(globPattern, { cwd })
 
   const { importNodes, objectProperties } = importSources.reduce(
     (all, source) => {
