@@ -15,7 +15,7 @@ export default ({ args }) => {
       const availableWatchers = {
         db: `cd ${base}/api && yarn prisma2 generate --watch`,
         api: `cd ${base}/api && yarn dev-server`,
-        web: `cd ${base}/web && yarn webpack-dev-server --config ./config/webpack.dev.js`,
+        web: `cd ${base}/web && yarn webpack-dev-server --config ../node_modules/@redwoodjs/scripts/config/webpack.development.js`,
       }
 
       // The user can do something like `$ yarn rw dev api,web` or just `yarn rw dev`

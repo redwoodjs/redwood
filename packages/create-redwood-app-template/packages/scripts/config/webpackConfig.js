@@ -62,13 +62,15 @@ module.exports = (webpackEnv) => {
     },
     plugins: [
       isEnvProduction &&
-        new MiniCssExtractPlugin({
-          filename: '[name].[contenthash:8].css',
-          chunkFilename: '[name].[contenthash:8].css',
-        }),
+      new MiniCssExtractPlugin({
+        filename: '[name].[contenthash:8].css',
+        chunkFilename: '[name].[contenthash:8].css',
+      }),
       !isEnvProduction && new webpack.HotModuleReplacementPlugin(),
       new HtmlWebpackPlugin({
         template: path.resolve(redwoodPaths.base, 'web/src/index.html'),
+        inject: true,
+        chunks: 'all',
       }),
       new webpack.ProvidePlugin({
         React: 'react',
@@ -119,7 +121,6 @@ module.exports = (webpackEnv) => {
               use: {
                 loader: 'babel-loader',
                 options: {
-                  presets: ['@babel/preset-env'],
                   cacheDirectory: true,
                 },
               },
@@ -167,7 +168,7 @@ module.exports = (webpackEnv) => {
     optimization: {
       splitChunks: {
         chunks: 'all',
-        name: false,
+        name: 'vendors',
       },
       runtimeChunk: {
         name: (entrypoint) => `runtime-${entrypoint.name}`,
@@ -185,9 +186,9 @@ module.exports = (webpackEnv) => {
       publicPath: '/',
       devtoolModuleFilenameTemplate: isEnvProduction
         ? (info) =>
-            path
-              .relative(redwoodPaths.web.src, info.absoluteResourcePath)
-              .replace(/\\/g, '/')
+          path
+            .relative(redwoodPaths.web.src, info.absoluteResourcePath)
+            .replace(/\\/g, '/')
         : (info) => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
     },
   }

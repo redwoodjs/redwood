@@ -7,11 +7,11 @@ const graphQLImports = importAll('api', 'graphql')
 
       ↓ ↓ ↓ ↓ ↓ ↓
 
-import * as _UsersPeterpPersonalRedwoodjsRedwoodPackagesApiSrc__tests__FixturesApiSrcGraphqlPostsSdlTs from '/Users/peterp/Personal/redwoodjs/redwood/packages/api/src/__tests__/fixtures/api/src/graphql/posts.sdl.ts'
-import * as _UsersPeterpPersonalRedwoodjsRedwoodPackagesApiSrc__tests__FixturesApiSrcGraphqlUsersSdlJs from '/Users/peterp/Personal/redwoodjs/redwood/packages/api/src/__tests__/fixtures/api/src/graphql/users.sdl.js'
+import * as _fixturesApiSrcGraphqlPostsSdlTs from './fixtures/api/src/graphql/posts.sdl.ts'
+import * as _fixturesApiSrcGraphqlUsersSdlJs from './fixtures/api/src/graphql/users.sdl.js'
 const graphQLImports = {
-  posts: _UsersPeterpPersonalRedwoodjsRedwoodPackagesApiSrc__tests__FixturesApiSrcGraphqlPostsSdlTs,
-  users: _UsersPeterpPersonalRedwoodjsRedwoodPackagesApiSrc__tests__FixturesApiSrcGraphqlUsersSdlJs,
+  posts: _fixturesApiSrcGraphqlPostsSdlTs,
+  users: _fixturesApiSrcGraphqlUsersSdlJs,
 }
 
 
@@ -24,11 +24,11 @@ const serviceImports = importAll('api', 'services')
 
       ↓ ↓ ↓ ↓ ↓ ↓
 
-import * as _UsersPeterpPersonalRedwoodjsRedwoodPackagesApiSrc__tests__FixturesApiSrcServicesPostsTs from '/Users/peterp/Personal/redwoodjs/redwood/packages/api/src/__tests__/fixtures/api/src/services/posts.ts'
-import * as _UsersPeterpPersonalRedwoodjsRedwoodPackagesApiSrc__tests__FixturesApiSrcServicesUsersJs from '/Users/peterp/Personal/redwoodjs/redwood/packages/api/src/__tests__/fixtures/api/src/services/users.js'
+import * as _fixturesApiSrcServicesPostsTs from './fixtures/api/src/services/posts.ts'
+import * as _fixturesApiSrcServicesUsersJs from './fixtures/api/src/services/users.js'
 const serviceImports = {
-  posts: _UsersPeterpPersonalRedwoodjsRedwoodPackagesApiSrc__tests__FixturesApiSrcServicesPostsTs,
-  users: _UsersPeterpPersonalRedwoodjsRedwoodPackagesApiSrc__tests__FixturesApiSrcServicesUsersJs,
+  posts: _fixturesApiSrcServicesPostsTs,
+  users: _fixturesApiSrcServicesUsersJs,
 }
 
 
