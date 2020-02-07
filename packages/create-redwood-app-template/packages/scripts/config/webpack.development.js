@@ -26,6 +26,7 @@ module.exports = merge(webpackConfig('development'), {
     },
     inline: true,
     overlay: true,
+    open: true,
   },
   optimization: {
     removeAvailableModules: false,
