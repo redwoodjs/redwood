@@ -11,7 +11,10 @@ import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 import { paramCase } from 'param-case'
 import { getDMMF } from '@prisma/sdk'
-import { getPaths } from '@redwoodjs/core'
+import { getPaths as getRedwoodPaths } from '@redwoodjs/core'
+
+
+import c from 'src/lib/colors'
 
 export const asyncExec = promisify(exec)
 
@@ -171,4 +174,16 @@ export const parseArgs = () => {
   const { _: positional, ...flags } = parsed
 
   return [positional, flags]
+}
+
+/**
+ *
+ */
+export const getPaths = () => {
+  try {
+    return getRedwoodPaths()
+  } catch (e) {
+    console.log(c.error(e.message))
+    process.exit(0)
+  }
 }
