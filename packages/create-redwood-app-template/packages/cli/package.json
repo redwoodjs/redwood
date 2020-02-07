@@ -19,6 +19,7 @@
     "cli-spinners": "^2.2.0",
     "concurrently": "^5.0.0",
     "core-js": "3.6.4",
+    "execa": "^4.0.0",
     "ink": "^2.2.0",
     "lodash": "^4.17.15",
     "ora": "^4.0.3",
