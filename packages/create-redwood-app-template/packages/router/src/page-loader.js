@@ -12,17 +12,20 @@ const PageLoader = ({ loadPage, params }) => {
   console.log(pageName, loading, cache)
 
   const loadedPage = cache[loadPage.name]
-  if (loadedPage) {
+  if (loading) {
+    // noop
+  } else if (loadedPage) {
     if (pageName != loadedPage.name) {
       setPageName(loadedPage.name)
     }
   } else {
     setLoading(true)
     loadPage().then((module) => {
+      console.log('Loaded', loadPage.name)
       cache[loadPage.name] = module.default
       setCache(cache)
       setPageName(loadPage.name)
-      //setLoading(false)
+      setLoading(false)
     })
   }
 
@@ -38,4 +41,4 @@ const PageLoader = ({ loadPage, params }) => {
   }
 }
 
-export { PageLoader }
+export { PageLoader, PageLoadingContext }
