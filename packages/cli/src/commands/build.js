@@ -1,12 +1,16 @@
-import ora from 'ora'
 import execa from 'execa'
+import Listr from 'listr'
 
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 
 export const command = 'build [app..]'
-export const desc = 'Build the [app] for deployment.'
-export const builder = { app: { default: ['api', 'web'] } }
+export const desc = 'Build for production.'
+export const builder = {
+  app: { choices: ['api', 'web'], default: ['api', 'web'] },
+}
+
+// TODO: Add verbose flag.
 export const handler = ({ app }) => {
   const { base: BASE_DIR } = getPaths()
   const execCommandsForApps = {
@@ -14,14 +18,16 @@ export const handler = ({ app }) => {
     web: `cd ${BASE_DIR}/web && yarn webpack --config ../node_modules/@redwoodjs/scripts/config/webpack.production.js`,
   }
 
-  app.forEach(async (appName) => {
-    const spinner = ora(`Building "${appName}..."`).start()
-    try {
-      await execa(execCommandsForApps[appName], undefined, { shell: true })
-      spinner.succeed()
-    } catch (e) {
-      spinner.fail()
-      console.log(c.error(e.message))
-    }
-  })
+  const tasks = new Listr(
+    app.map((appName) => ({
+      title: `Building "${appName}..."`,
+      task: () => {
+        const cmd = execa(execCommandsForApps[appName], undefined, {
+          shell: true,
+        })
+        return cmd
+      },
+    }))
+  )
+  tasks.run()
 }
