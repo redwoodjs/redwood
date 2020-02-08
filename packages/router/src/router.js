@@ -67,7 +67,6 @@ const RouterImpl = ({ pathname, search, paramTypes, children }) => {
           </RouterImpl>
         )
       } else {
-        console.log(Page)
         return (
           <ParamsContext.Provider value={allParams}>
             <PageLoader loadPage={Page} params={allParams} />
@@ -86,7 +85,7 @@ const RouterImpl = ({ pathname, search, paramTypes, children }) => {
 
   return (
     <ParamsContext.Provider value={{}}>
-      <NotFoundPage />
+      <PageLoader loadPage={NotFoundPage} />
     </ParamsContext.Provider>
   )
 }
