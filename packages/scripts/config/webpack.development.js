@@ -5,6 +5,7 @@ const { getConfig } = require('@redwoodjs/core')
 
 const webpackConfig = require('./webpackConfig.js')
 
+// this is the parsed redwood.toml
 const redwoodConfig = getConfig()
 
 module.exports = merge(webpackConfig('development'), {
@@ -26,7 +27,8 @@ module.exports = merge(webpackConfig('development'), {
     },
     inline: true,
     overlay: true,
-    open: true,
+    // checks for override in redwood.toml, defaults to true
+    open: !redwoodConfig.browser || redwoodConfig.browser.open,
   },
   optimization: {
     removeAvailableModules: false,
