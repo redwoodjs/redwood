@@ -1,7 +1,5 @@
 // The guts of the router implementation.
 
-import { Suspense } from 'react'
-
 import {
   Location,
   parseSearch,
@@ -11,6 +9,7 @@ import {
   navigate,
   mapNamedRoutes,
   SplashPage,
+  PageLoader,
 } from './internal'
 
 // Definitions of the core param types.
@@ -30,6 +29,10 @@ const Router = (props) => (
     {(locationContext) => <RouterImpl {...locationContext} {...props} />}
   </Location>
 )
+
+// const PAGE_NORMAL = 1
+// const PAGE_REDIRECT = 2
+// const PAGE_NOTFOUND = 3
 
 const RouterImpl = ({ pathname, search, paramTypes, children }) => {
   const routes = React.Children.toArray(children)
@@ -65,13 +68,9 @@ const RouterImpl = ({ pathname, search, paramTypes, children }) => {
         )
       } else {
         console.log(Page)
-        const LazyPage = React.lazy(Page)
-        console.log(LazyPage)
         return (
           <ParamsContext.Provider value={allParams}>
-            <Suspense fallback={null}>
-              <LazyPage {...allParams} />
-            </Suspense>
+            <PageLoader loadPage={Page} params={allParams} />
           </ParamsContext.Provider>
         )
       }
