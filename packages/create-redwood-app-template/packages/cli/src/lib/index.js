@@ -13,7 +13,6 @@ import { paramCase } from 'param-case'
 import { getDMMF } from '@prisma/sdk'
 import { getPaths as getRedwoodPaths } from '@redwoodjs/core'
 
-
 import c from 'src/lib/colors'
 
 export const asyncExec = promisify(exec)
