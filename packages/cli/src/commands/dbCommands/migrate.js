@@ -15,9 +15,6 @@ const runPrismaCommand = async (args) => {
     // submit a bug report. This causes our invokation to "freeze."
     subprocess.cancel()
   })
-  subprocess.stderr.on('error', (e) => {
-    console.log(e.message)
-  })
 
   try {
     await subprocess
@@ -34,7 +31,7 @@ export const builder = (yargs) => {
     .command({
       command: 'save [name..]',
       desc: 'Create a new migration.',
-      handler: async ({ name = false }) => {
+      handler: ({ name = false }) => {
         runPrismaCommand([
           'migrate save',
           name && `--name ${name}`,
