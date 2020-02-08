@@ -2,7 +2,6 @@ import execa from 'execa'
 import Listr from 'listr'
 
 import { getPaths } from 'src/lib'
-import c from 'src/lib/colors'
 
 export const command = 'build [app..]'
 export const desc = 'Build for production.'
