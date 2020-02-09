@@ -11,7 +11,7 @@ export const builder = {
 
 // TODO: The development server should restart if something breaks.
 // TODO: Allow each process to show additional information:
-//  - Reloading
+//  - Reloading (File change detected.)
 //  - Error
 //  - Restart
 export const handler = ({ app }) => {
