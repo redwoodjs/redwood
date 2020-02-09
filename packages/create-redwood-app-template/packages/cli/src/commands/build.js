@@ -21,10 +21,9 @@ export const handler = ({ app }) => {
     app.map((appName) => ({
       title: `Building "${appName}..."`,
       task: () => {
-        const cmd = execa(execCommandsForApps[appName], undefined, {
+        return execa(execCommandsForApps[appName], undefined, {
           shell: true,
         })
-        return cmd
       },
     }))
   )
