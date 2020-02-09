@@ -1,29 +1,47 @@
 import path from 'path'
 
+import Listr from 'listr'
 import camelcase from 'camelcase'
 import pluralize from 'pluralize'
-import { getPaths } from '@redwoodjs/core'
 
-import { generateTemplate } from 'src/lib'
+import { generateTemplate, getPaths, writeFilesTask } from 'src/lib'
 
-const files = (args) => {
-  const [[name, ..._rest], flags] = args
+export const command = 'service <model> [crud]'
+export const desc = 'Generate a service object.'
+export const builder = {
+  crud: { type: 'boolean', default: true },
+}
+
+export const files = async ({ model: name, crud }) => {
   const outputPath = path.join(
     getPaths().api.services,
     `${camelcase(pluralize(name))}.js`
   )
-  const isCrud = !!flags['crud']
   const template = generateTemplate(
     path.join('service', 'service.js.template'),
-    { name, isCrud }
+    { name, isCrud: crud }
   )
 
   return { [outputPath]: template }
 }
 
-export default {
-  name: 'Service',
-  command: 'service',
-  description: 'Generates a service object',
-  files: (args) => files(args),
+export const handler = async ({ model, crud, force }) => {
+  const tasks = new Listr(
+    [
+      {
+        title: 'Generating service files...',
+        task: async () => {
+          const f = await files({ model, crud })
+          return writeFilesTask(f, { overwriteExisting: force })
+        },
+      },
+    ],
+    { collapse: false }
+  )
+
+  try {
+    await tasks.run()
+  } catch (e) {
+    // do nothing
+  }
 }
