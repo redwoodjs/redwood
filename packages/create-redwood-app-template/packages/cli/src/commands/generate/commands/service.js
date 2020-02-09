@@ -6,7 +6,7 @@ import pluralize from 'pluralize'
 
 import { generateTemplate, getPaths, writeFilesTask } from 'src/lib'
 
-export const command = 'service <model> [crud]'
+export const command = 'service <model>'
 export const desc = 'Generate a service object.'
 export const builder = {
   crud: { type: 'boolean', default: true },

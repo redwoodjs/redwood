@@ -73,14 +73,13 @@ export const files = async ({ model: name, crud }) => {
   return { [outputPath]: template }
 }
 
-export const command = 'sdl <model> [crud] [services] [force]'
+export const command = 'sdl <model>'
 export const desc = 'Generate a GraphQL schema and service object.'
 export const builder = {
   crud: { type: 'boolean', default: true },
   services: { type: 'boolean', default: true },
   force: { type: 'boolean', default: false },
 }
-
 // TODO: Add --dry-run command
 export const handler = async ({ model, crud, services, force }) => {
   const tasks = new Listr(
