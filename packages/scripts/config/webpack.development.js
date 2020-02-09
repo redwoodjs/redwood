@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable import/no-extraneous-dependencies */
 const merge = require('webpack-merge')
 const escapeRegExp = require('lodash.escaperegexp')
@@ -28,7 +29,7 @@ module.exports = merge(webpackConfig('development'), {
     inline: true,
     overlay: true,
     // checks for override in redwood.toml, defaults to true
-    open: !redwoodConfig.browser || redwoodConfig.browser.open,
+    open: redwoodConfig?.browser?.open ? redwoodConfig.browser.open : true,
   },
   optimization: {
     removeAvailableModules: false,
