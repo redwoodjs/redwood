@@ -4,10 +4,12 @@ import { createNamedContext } from './internal'
 
 const PageLoadingContext = createNamedContext('PageLoading')
 
-const PageLoader = ({ loadPage, params }) => {
+const PageLoader = ({ loadPage, delay, params }) => {
   const [cache, setCache] = useState({})
   const [pageName, setPageName] = useState(null)
   const [loading, setLoading] = useState(false)
+
+  let loadingTimeout
 
   console.log(pageName, loading, cache)
 
@@ -19,13 +21,16 @@ const PageLoader = ({ loadPage, params }) => {
       setPageName(loadedPage.name)
     }
   } else {
-    setLoading(true)
+    loadingTimeout = setTimeout(() => setLoading(true), delay)
     loadPage().then((module) => {
       console.log('Loaded', loadPage.name)
       cache[loadPage.name] = module.default
       setCache(cache)
       setPageName(loadPage.name)
       setLoading(false)
+      if (loadingTimeout) {
+        clearTimeout(loadingTimeout)
+      }
     })
   }
 

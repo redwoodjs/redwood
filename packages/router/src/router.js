@@ -30,11 +30,15 @@ const Router = (props) => (
   </Location>
 )
 
-// const PAGE_NORMAL = 1
-// const PAGE_REDIRECT = 2
-// const PAGE_NOTFOUND = 3
+const DEFAULT_PAGE_LOADING_DELAY = 1000 // milliseconds
 
-const RouterImpl = ({ pathname, search, paramTypes, children }) => {
+const RouterImpl = ({
+  pathname,
+  search,
+  paramTypes,
+  pageLoadingDelay = DEFAULT_PAGE_LOADING_DELAY,
+  children,
+}) => {
   const routes = React.Children.toArray(children)
   mapNamedRoutes(routes)
 
@@ -69,7 +73,11 @@ const RouterImpl = ({ pathname, search, paramTypes, children }) => {
       } else {
         return (
           <ParamsContext.Provider value={allParams}>
-            <PageLoader loadPage={Page} params={allParams} />
+            <PageLoader
+              loadPage={Page}
+              delay={pageLoadingDelay}
+              params={allParams}
+            />
           </ParamsContext.Provider>
         )
       }
