@@ -1,9 +1,7 @@
 import fs from 'fs'
 import path from 'path'
-import { promisify } from 'util'
-import { exec } from 'child_process'
 
-import requireDir from 'require-dir'
+import Listr from 'listr'
 import parse from 'yargs-parser'
 import lodash from 'lodash/string'
 import camelcase from 'camelcase'
@@ -14,8 +12,6 @@ import { getDMMF } from '@prisma/sdk'
 import { getPaths as getRedwoodPaths } from '@redwoodjs/core'
 
 import c from 'src/lib/colors'
-
-export const asyncExec = promisify(exec)
 
 export const asyncForEach = async (array, callback) => {
   for (let index = 0; index < array.length; index++) {
@@ -89,16 +85,15 @@ export const generateTemplate = (templateFilename, vars) => {
 
 export const readFile = (target) => fs.readFileSync(target)
 
-export const writeFile = (
+export const writeFile = async (
   target,
   contents,
   { overwriteExisting = false } = {}
 ) => {
-  if (overwriteExisting === false) {
-    if (fs.existsSync(target)) {
-      throw `${target} already exists`
-    }
+  if (!overwriteExisting && fs.existsSync(target)) {
+    throw new Error(`${target} already exists.`)
   }
+
   const filename = path.basename(target)
   const targetDir = target.replace(filename, '')
   fs.mkdirSync(targetDir, { recursive: true })
@@ -107,59 +102,59 @@ export const writeFile = (
 
 export const bytes = (contents) => Buffer.byteLength(contents, 'utf8')
 
-const validateCommandExports = ({ commandProps, ...rest }) => {
-  if (typeof rest.default !== 'function') {
-    throw 'you must export a default function'
-  }
+// const validateCommandExports = ({ commandProps, ...rest }) => {
+//   if (typeof rest.default !== 'function') {
+//     throw 'you must export a default function'
+//   }
 
-  if (!commandProps) {
-    throw 'you must export an object called `commandProps`'
-  }
+//   if (!commandProps) {
+//     throw 'you must export an object called `commandProps`'
+//   }
 
-  const { description } = commandProps
-  if (!description) {
-    throw 'you must add a `description` to your `commandProps`'
-  }
-}
+//   const { description } = commandProps
+//   if (!description) {
+//     throw 'you must add a `description` to your `commandProps`'
+//   }
+// }
 
-// TODO: Throw on duplicate commands
-export const getCommands = (commandsPath = '../commands') => {
-  const foundCommands = requireDir(commandsPath, {
-    recurse: true,
-    extensions: ['.js'],
-    filter: (fullPath) => {
-      return fullPath.indexOf('.test.js') === -1
-    },
-  })
+// // TODO: Throw on duplicate commands
+// export const getCommands = (commandsPath = '../commands') => {
+//   const foundCommands = requireDir(commandsPath, {
+//     recurse: true,
+//     extensions: ['.js'],
+//     filter: (fullPath) => {
+//       return fullPath.indexOf('.test.js') === -1
+//     },
+//   })
 
-  return Object.keys(foundCommands).reduce((newCommands, commandName) => {
-    let command = foundCommands[commandName]
-    // is this a directory-named-modules? Eg: `/Generate/Generate.js`
-    // NOTE: Improve this by looking at the file names before importing
-    // everything.
-    if (command.index && command.index.default) {
-      command = command.index
-    } else if (command[commandName] && command[commandName].default) {
-      command = command[commandName]
-    }
+//   return Object.keys(foundCommands).reduce((newCommands, commandName) => {
+//     let command = foundCommands[commandName]
+//     // is this a directory-named-modules? Eg: `/Generate/Generate.js`
+//     // NOTE: Improve this by looking at the file names before importing
+//     // everything.
+//     if (command.index && command.index.default) {
+//       command = command.index
+//     } else if (command[commandName] && command[commandName].default) {
+//       command = command[commandName]
+//     }
 
-    try {
-      validateCommandExports(command)
-    } catch (e) {
-      throw `your "${commandName}" command is not exporting the correct requirements: ${e}`
-    }
+//     try {
+//       validateCommandExports(command)
+//     } catch (e) {
+//       throw `your "${commandName}" command is not exporting the correct requirements: ${e}`
+//     }
 
-    const { commandProps, ...rest } = command
-    const name = commandProps.name || commandName
-    const newCommandProps = {
-      name: name,
-      alias: commandProps.alias || name,
-      ...commandProps,
-    }
+//     const { commandProps, ...rest } = command
+//     const name = commandProps.name || commandName
+//     const newCommandProps = {
+//       name: name,
+//       alias: commandProps.alias || name,
+//       ...commandProps,
+//     }
 
-    return [...newCommands, { commandProps: newCommandProps, ...rest }]
-  }, [])
-}
+//     return [...newCommands, { commandProps: newCommandProps, ...rest }]
+//   }, [])
+// }
 
 // turns command line args like:
 //
@@ -176,7 +171,8 @@ export const parseArgs = () => {
 }
 
 /**
- *
+ * This wraps the core version of getPaths into something that catches the exception
+ * and displays a helpful error message.
  */
 export const getPaths = () => {
   try {
@@ -185,4 +181,22 @@ export const getPaths = () => {
     console.log(c.error(e.message))
     process.exit(0)
   }
+}
+
+/**
+ * Creates a list of tasks that write files to the disk.
+ *
+ * @param files - {[filepath]: contents}
+ */
+export const writeFilesTask = (files, options) => {
+  const { base } = getPaths()
+  return new Listr(
+    Object.keys(files).map((file) => {
+      const contents = files[file]
+      return {
+        title: `Writing \`./${path.relative(base, file)}\`...`,
+        task: () => writeFile(file, contents, options),
+      }
+    })
+  )
 }
