@@ -5,6 +5,7 @@ const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const DirectoryNamedWebpackPlugin = require('directory-named-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
 const Dotenv = require('dotenv-webpack')
 const { getConfig, getPaths } = require('@redwoodjs/core')
 
@@ -94,6 +95,7 @@ module.exports = (webpackEnv) => {
         silent: true,
       }),
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+      new CopyPlugin([{ from: 'public/', to: '', ignore: ['README.md'] }]),
     ].filter(Boolean),
     module: {
       rules: [
@@ -106,7 +108,7 @@ module.exports = (webpackEnv) => {
                   loader: 'url-loader',
                   options: {
                     limit: '10000',
-                    name: '[name].[hash:8].[ext]',
+                    name: 'static/media/[name].[hash:8].[ext]',
                   },
                 },
               ],
@@ -134,7 +136,7 @@ module.exports = (webpackEnv) => {
               loader: 'file-loader',
               exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
               options: {
-                name: '[name].[hash:8].[ext]',
+                name: 'static/media/[name].[hash:8].[ext]',
               },
             },
           ],
