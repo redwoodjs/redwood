@@ -1,26 +1,24 @@
-import path from 'path'
-
 import Listr from 'listr'
 import camelcase from 'camelcase'
 import pascalcase from 'pascalcase'
 import { paramCase } from 'param-case'
-import pluralize from 'pluralize'
 
-import {
-  getPaths,
-  generateTemplate,
-  writeFilesTask,
-  addRoutesToRouterTask,
-} from 'src/lib'
+import { writeFilesTask, addRoutesToRouterTask } from 'src/lib'
 
-export const files = ({ name }) => {
-  const filename = pascalcase(pluralize.singular(name)) + 'Page'
-  const outputPath = path.join(getPaths().web.pages, filename, `${filename}.js`)
-  const template = generateTemplate(path.join('page', 'page.js.template'), {
+import { templateForComponentFile } from '../helpers'
+
+const COMPONENT_SUFFIX = 'Page'
+const REDWOOD_WEB_PATH_NAME = 'pages'
+const TEMPLATE_PATH = 'page/page.js.template'
+
+export const files = ({ name, ...rest }) => {
+  const [outputPath, template] = templateForComponentFile({
     name,
-    path: outputPath,
+    suffix: COMPONENT_SUFFIX,
+    webPathSection: REDWOOD_WEB_PATH_NAME,
+    templatePath: TEMPLATE_PATH,
+    templateVars: rest,
   })
-
   return { [outputPath]: template }
 }
 
@@ -40,7 +38,7 @@ export const handler = async ({ name, path }) => {
       {
         title: 'Generating page files...',
         task: async () => {
-          const f = await files({ name })
+          const f = await files({ name, path })
           return writeFilesTask(f)
         },
       },
