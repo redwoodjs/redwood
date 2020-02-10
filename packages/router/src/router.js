@@ -71,15 +71,27 @@ const RouterImpl = ({
           </RouterImpl>
         )
       } else {
-        return (
-          <ParamsContext.Provider value={allParams}>
-            <PageLoader
-              loadPage={Page}
-              delay={pageLoadingDelay}
-              params={allParams}
-            />
-          </ParamsContext.Provider>
-        )
+        console.log('Page', Page)
+        if (Page.loader) {
+          // Async Page
+          console.log('Async Page', Page)
+          return (
+            <ParamsContext.Provider value={allParams}>
+              <PageLoader
+                spec={Page}
+                delay={pageLoadingDelay}
+                params={allParams}
+              />
+            </ParamsContext.Provider>
+          )
+        } else {
+          // Sync Page
+          return (
+            <ParamsContext.Provider value={allParams}>
+              <Page {...allParams} />
+            </ParamsContext.Provider>
+          )
+        }
       }
     }
   }
