@@ -24,8 +24,8 @@ TODO
 boolean = true string
 ```
 
-Tells the dev server to open the browser after server start. Defaults to true in Redwood App.
+Tells the dev server to open the browser after server start. Defaults to false if config missing.
 
-Can also provide a browser name to use instead of the default, e.g. `open = 'Firefox'`
+Can instead provide a browser name to use instead of system default. E.g. `open = 'Firefox'` will auto-open in Firefox regardless of which browser is default.
 
 Uses Webpack. For more details see [Webpack devServer.open](https://webpack.js.org/configuration/dev-server/#devserveropen)
