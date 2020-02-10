@@ -1,29 +1,28 @@
-import path from 'path'
+import {
+  templateForComponentFile,
+  createYargsForComponentGeneration,
+} from '../helpers'
 
-import pascalcase from 'pascalcase'
-import pluralize from 'pluralize'
-import { getPaths } from '@redwoodjs/core'
+const COMPONENT_SUFFIX = 'Layout'
+const REDWOOD_WEB_PATH_NAME = 'layouts'
+const TEMPLATE_PATH = 'layout/layout.js.template'
 
-import { generateTemplate } from 'src/lib'
-
-const files = (args) => {
-  const [[name, ..._rest], _flags] = args
-  const filename = pascalcase(pluralize.singular(name)) + 'Layout'
-  const outputPath = path.join(
-    getPaths().web.layouts,
-    filename,
-    `${filename}.js`
-  )
-  const template = generateTemplate(path.join('layout', 'layout.js.template'), {
+export const files = ({ name }) => {
+  const [outputPath, template] = templateForComponentFile({
     name,
+    suffix: COMPONENT_SUFFIX,
+    webPathSection: REDWOOD_WEB_PATH_NAME,
+    templatePath: TEMPLATE_PATH,
   })
-
   return { [outputPath]: template }
 }
 
-export default {
-  name: 'Layout',
-  command: 'layout',
-  description: 'Generates a layout component',
-  files: (args) => files(args),
-}
+export const {
+  command,
+  desc,
+  builder,
+  handler,
+} = createYargsForComponentGeneration({
+  componentName: 'layout',
+  filesFn: files,
+})
