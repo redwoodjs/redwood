@@ -29,7 +29,7 @@ module.exports = merge(webpackConfig('development'), {
     inline: true,
     overlay: true,
     // checks for override in redwood.toml, defaults to true
-    open: redwoodConfig?.browser?.open ? redwoodConfig.browser.open : true,
+    open: redwoodConfig.browser ? redwoodConfig.browser.open : false,
   },
   optimization: {
     removeAvailableModules: false,
