@@ -62,10 +62,10 @@ module.exports = (webpackEnv) => {
     },
     plugins: [
       isEnvProduction &&
-      new MiniCssExtractPlugin({
-        filename: '[name].[contenthash:8].css',
-        chunkFilename: '[name].[contenthash:8].css',
-      }),
+        new MiniCssExtractPlugin({
+          filename: 'static/css/[name].[contenthash:8].css',
+          chunkFilename: 'static/css/[name].[contenthash:8].css',
+        }),
       !isEnvProduction && new webpack.HotModuleReplacementPlugin(),
       new HtmlWebpackPlugin({
         template: path.resolve(redwoodPaths.base, 'web/src/index.html'),
@@ -177,18 +177,18 @@ module.exports = (webpackEnv) => {
     output: {
       pathinfo: true,
       filename: isEnvProduction
-        ? '[name].[contenthash:8].js'
-        : '[name].bundle.js',
+        ? 'static/js/[name].[contenthash:8].js'
+        : 'static/js/[name].bundle.js',
       chunkFilename: isEnvProduction
-        ? '[name].[contenthash:8].chunk.js'
-        : '[name].chunk.js',
+        ? 'static/js/[name].[contenthash:8].chunk.js'
+        : 'static/js/[name].chunk.js',
       path: path.resolve(redwoodPaths.base, 'web/dist'),
       publicPath: '/',
       devtoolModuleFilenameTemplate: isEnvProduction
         ? (info) =>
-          path
-            .relative(redwoodPaths.web.src, info.absoluteResourcePath)
-            .replace(/\\/g, '/')
+            path
+              .relative(redwoodPaths.web.src, info.absoluteResourcePath)
+              .replace(/\\/g, '/')
         : (info) => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
     },
   }
