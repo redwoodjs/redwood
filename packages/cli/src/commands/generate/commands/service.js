@@ -6,12 +6,6 @@ import pluralize from 'pluralize'
 
 import { generateTemplate, getPaths, writeFilesTask } from 'src/lib'
 
-export const command = 'service <model>'
-export const desc = 'Generate a service object.'
-export const builder = {
-  crud: { type: 'boolean', default: true },
-}
-
 export const files = async ({ model: name, crud }) => {
   const outputPath = path.join(
     getPaths().api.services,
@@ -25,6 +19,12 @@ export const files = async ({ model: name, crud }) => {
   return { [outputPath]: template }
 }
 
+export const command = 'service <model>'
+export const desc = 'Generate a service object.'
+export const builder = {
+  crud: { type: 'boolean', default: true },
+  force: { type: 'boolean', default: true },
+}
 export const handler = async ({ model, crud, force }) => {
   const tasks = new Listr(
     [

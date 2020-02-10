@@ -1,41 +1,51 @@
-import path from 'path'
+import {
+  templateForComponentFile,
+  createYargsForComponentGeneration,
+} from '../helpers'
 
-import pascalcase from 'pascalcase'
-import pluralize from 'pluralize'
-import { getPaths } from '@redwoodjs/core'
+const REDWOOD_WEB_PATH_NAME = 'components'
 
-import { generateTemplate } from 'src/lib'
+export const files = ({ name }) => {
+  const componentFile = templateForComponentFile({
+    name,
+    webPathSection: REDWOOD_WEB_PATH_NAME,
+    templatePath: 'component/component.js.template',
+  })
+  const testFile = templateForComponentFile({
+    name,
+    extension: '.test.js',
+    webPathSection: REDWOOD_WEB_PATH_NAME,
+    templatePath: 'component/test.js.template',
+  })
+  const readmeFile = templateForComponentFile({
+    name,
+    extension: '.mdx',
+    webPathSection: REDWOOD_WEB_PATH_NAME,
+    templatePath: 'component/readme.mdx.template',
+  })
 
-const files = (args) => {
-  const [[name, ..._rest], _flags] = args
-  const filename = pascalcase(pluralize.singular(name))
-  const outputPath = path.join(getPaths().web.components, filename)
-  const componentPath = path.join(outputPath, `${filename}.js`)
-  const componentTemplate = generateTemplate(
-    path.join('component', 'component.js.template'),
-    { name }
+  // Returns
+  // {
+  //    "path/to/fileA": "<<<template>>>",
+  //    "path/to/fileB": "<<<template>>>",
+  // }
+  return [componentFile, testFile, readmeFile].reduce(
+    (acc, [outputPath, content]) => {
+      return {
+        [outputPath]: content,
+        ...acc,
+      }
+    },
+    {}
   )
-  const testPath = path.join(outputPath, `${filename}.test.js`)
-  const testTemplate = generateTemplate(
-    path.join('component', 'test.js.template'),
-    { name }
-  )
-  const readmePath = path.join(outputPath, `${filename}.mdx`)
-  const readmeTemplate = generateTemplate(
-    path.join('component', 'readme.mdx.template'),
-    { name }
-  )
-
-  return {
-    [componentPath]: componentTemplate,
-    [testPath]: testTemplate,
-    [readmePath]: readmeTemplate,
-  }
 }
 
-export default {
-  name: 'Component',
-  command: 'component',
-  description: 'Generates a React component',
-  files: (args) => files(args),
-}
+export const {
+  command,
+  desc,
+  builder,
+  handler,
+} = createYargsForComponentGeneration({
+  componentName: 'component',
+  filesFn: files,
+})
