@@ -76,12 +76,14 @@ export const templateRoot = path.resolve(
   '../commands/Generate/templates'
 )
 
-export const generateTemplate = (templateFilename, vars) => {
+export const generateTemplate = (templateFilename, { name, ...rest }) => {
   const templatePath = path.join(templateRoot, templateFilename)
   const template = lodash.template(readFile(templatePath).toString())
-  const replacements = Object.assign(vars, nameVariants(vars.name))
-
-  return template(replacements)
+  return template({
+    name,
+    ...nameVariants(name),
+    ...rest,
+  })
 }
 
 export const readFile = (target) => fs.readFileSync(target)
