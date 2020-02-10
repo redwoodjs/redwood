@@ -2,7 +2,13 @@
 
 _Future Intro Here: ...something something... play nice._
 
-## Linking Redwood Packages Locally
+**Table of Contents**
+- [Local Package Development](##Local-Package-Development-Setup)
+- [CLI Package Development](##CLI-Package-Development)
+
+<!-- toc -->
+
+## Local Package Development Setup
 
 You'll want to run a local redwood app sandbox using your local @redwoodjs packages instead of the current releases from the package registry. To do this we use [`yarn link`](`https://classic.yarnpkg.com/en/docs/cli/link/).
 
@@ -68,3 +74,23 @@ However, for local package development, you'll need to manually stop/start the r
 yarn rw dev api
 yarn rw dev web
 ```
+
+## CLI Package Development
+We are using [Yargs](https://yargs.js.org/)
+_Historical note: originally implemented in react-ink (too slow!) then converted._
+
+### Example
+Example dev command:
+
+```
+export const command = 'dev [app..]'
+export const desc = 'Run development servers.'
+export const builder = {
+  app: { choices: ['db', 'api', 'web'], default: ['db', 'api', 'web'] },
+}
+export const handler = ({ app }) => {
+   // do stuff...
+}
+```
+
+Yargs creates a nice interface, coerces the args, and runs the handler.
