@@ -1,0 +1,11 @@
+name: Run Jest
+description: Run Jest on JavaScript files
+inputs:
+  jestArgs:
+    description: Args to jest
+    required: false
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.jestArgs }}
