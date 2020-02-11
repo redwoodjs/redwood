@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable import/no-extraneous-dependencies */
 const merge = require('webpack-merge')
 const escapeRegExp = require('lodash.escaperegexp')
@@ -5,6 +6,7 @@ const { getConfig } = require('@redwoodjs/core')
 
 const webpackConfig = require('./webpackConfig.js')
 
+// this is the parsed redwood.toml
 const redwoodConfig = getConfig()
 
 module.exports = merge(webpackConfig('development'), {
@@ -26,6 +28,8 @@ module.exports = merge(webpackConfig('development'), {
     },
     inline: true,
     overlay: true,
+    // checks for override in redwood.toml, defaults to true
+    open: redwoodConfig.browser ? redwoodConfig.browser.open : false,
   },
   optimization: {
     removeAvailableModules: false,
