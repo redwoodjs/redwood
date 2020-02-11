@@ -10,7 +10,8 @@ import { generateTemplate, getPaths, writeFilesTask } from 'src/lib'
  * Reduces boilerplate for generating an output path and content to write to disk
  * for a component.
  */
-// TODO: Make this read all the files in a template directory.
+// TODO: Make this read all the files in a template directory instead of
+// manually passing in each file.
 export const templateForComponentFile = ({
   name,
   suffix = '',
@@ -34,6 +35,7 @@ export const templateForComponentFile = ({
  * Reduces boilerplate for creating a yargs handler that writes a component to a
  * location.
  */
+// TODO: Make this work for all files, not just components.
 export const createYargsForComponentGeneration = ({
   componentName,
   filesFn,
@@ -43,7 +45,6 @@ export const createYargsForComponentGeneration = ({
     desc: `Generate a ${componentName} component.`,
     builder: { force: { type: 'boolean', default: false } },
     handler: async ({ force, ...rest }) => {
-      console.log('yo yo yo')
       const tasks = new Listr(
         [
           {

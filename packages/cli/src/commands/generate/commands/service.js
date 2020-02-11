@@ -23,7 +23,7 @@ export const command = 'service <model>'
 export const desc = 'Generate a service object.'
 export const builder = {
   crud: { type: 'boolean', default: true },
-  force: { type: 'boolean', default: true },
+  force: { type: 'boolean', default: false },
 }
 export const handler = async ({ model, crud, force }) => {
   const tasks = new Listr(
