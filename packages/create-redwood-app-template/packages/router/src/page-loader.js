@@ -9,11 +9,9 @@ const PageLoader = ({ spec, delay, params }) => {
   const [pageName, setPageName] = useState(null)
   const [loading, setLoading] = useState(false)
 
-  const { loader: loadPage, name } = spec
+  const { loader, name } = spec
 
   let loadingTimeout
-
-  console.log(pageName, loading, cache)
 
   const loadedPage = cache[name]
   if (loading) {
@@ -24,8 +22,7 @@ const PageLoader = ({ spec, delay, params }) => {
     }
   } else {
     loadingTimeout = setTimeout(() => setLoading(true), delay)
-    loadPage().then((module) => {
-      console.log('Loaded', name)
+    loader().then((module) => {
       cache[name] = module.default
       setCache(cache)
       setPageName(name)
