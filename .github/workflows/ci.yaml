@@ -10,5 +10,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # This step uses GitHub's hello-world-javascript-action: https://github.com/actions/hello-world-javascript-action
-      - name: Run Tests
-        uses: ./.github/actions/jest-tests
+      - name: Jest Tests
+        uses: ./.github/actions/
