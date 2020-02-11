@@ -30,10 +30,27 @@ const Router = (props) => (
   </Location>
 )
 
+/**
+ * Pages can be imported automatically or manually. Automatic imports are actually
+ * objects and take the following form (which we call a 'spec'):
+ *
+ *   const WhateverPage = {
+ *     name: 'WhateverPage',
+ *     loader: () => import('src/pages/WhateverPage')
+ *   }
+ *
+ * Manual imports simply load the page:
+ *
+ *   import WhateverPage from 'src/pages/WhateverPage'
+ *
+ * Before passing a "page" to the PageLoader, we will normalize the manually
+ * imported version into a spec. */
 const normalizePage = (specOrPage) => {
   if (specOrPage.loader) {
+    // Already a spec, just return it.
     return specOrPage
   } else {
+    // Wrap the Page in a fresh spec.
     return {
       name: specOrPage.name,
       loader: () =>
