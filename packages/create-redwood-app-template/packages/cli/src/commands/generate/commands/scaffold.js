@@ -4,7 +4,6 @@ import path from 'path'
 import camelcase from 'camelcase'
 import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
-import { getPaths } from '@redwoodjs/core'
 
 import {
   generateTemplate,
@@ -13,6 +12,7 @@ import {
   writeFile,
   asyncForEach,
   getSchema,
+  getPaths,
 } from 'src/lib'
 
 const NON_EDITABLE_COLUMNS = ['id', 'createdAt', 'updatedAt']
