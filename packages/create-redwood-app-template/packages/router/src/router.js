@@ -30,6 +30,22 @@ const Router = (props) => (
   </Location>
 )
 
+const normalizePage = (specOrPage) => {
+  if (specOrPage.loader) {
+    return specOrPage
+  } else {
+    return {
+      name: specOrPage.name,
+      loader: () =>
+        new Promise((resolve) =>
+          resolve({
+            default: specOrPage,
+          })
+        ),
+    }
+  }
+}
+
 const DEFAULT_PAGE_LOADING_DELAY = 1000 // milliseconds
 
 const RouterImpl = ({
@@ -71,27 +87,15 @@ const RouterImpl = ({
           </RouterImpl>
         )
       } else {
-        console.log('Page', Page)
-        if (Page.loader) {
-          // Async Page
-          console.log('Async Page', Page)
-          return (
-            <ParamsContext.Provider value={allParams}>
-              <PageLoader
-                spec={Page}
-                delay={pageLoadingDelay}
-                params={allParams}
-              />
-            </ParamsContext.Provider>
-          )
-        } else {
-          // Sync Page
-          return (
-            <ParamsContext.Provider value={allParams}>
-              <Page {...allParams} />
-            </ParamsContext.Provider>
-          )
-        }
+        return (
+          <ParamsContext.Provider value={allParams}>
+            <PageLoader
+              spec={normalizePage(Page)}
+              delay={pageLoadingDelay}
+              params={allParams}
+            />
+          </ParamsContext.Provider>
+        )
       }
     }
   }
@@ -105,7 +109,7 @@ const RouterImpl = ({
 
   return (
     <ParamsContext.Provider value={{}}>
-      <PageLoader loadPage={NotFoundPage} />
+      <PageLoader spec={normalizePage(NotFoundPage)} />
     </ParamsContext.Provider>
   )
 }
