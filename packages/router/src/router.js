@@ -50,15 +50,11 @@ const normalizePage = (specOrPage) => {
     // Already a spec, just return it.
     return specOrPage
   } else {
-    // Wrap the Page in a fresh spec.
+    // Wrap the Page in a fresh spec, and put it in a promise to emulate
+    // an async module import.
     return {
       name: specOrPage.name,
-      loader: () =>
-        new Promise((resolve) =>
-          resolve({
-            default: specOrPage,
-          })
-        ),
+      loader: async () => ({ default: specOrPage }),
     }
   }
 }
