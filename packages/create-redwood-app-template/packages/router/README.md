@@ -189,23 +189,22 @@ Redwood will detect your explicit import and refrain from splitting that page in
 
 ## PageLoadingContext
 
-Because lazily-loaded pages can take a non-negligible amount of time to load (depending on bundle size and network connection), you may want to show a loading indicator to signal to the user that something is happening after they click a link. RR makes this really easy with `PageLoadingContext`:
+Because lazily-loaded pages can take a non-negligible amount of time to load (depending on bundle size and network connection), you may want to show a loading indicator to signal to the user that something is happening after they click a link. RR makes this really easy with `usePageLoadingContext`:
 
 ```js
 // SomeLayout.js
 
-import { PageLoadingContext } from '@redwoodjs/router'
+import { usePageLoadingContext } from '@redwoodjs/router'
 
-const SomeLayout = () => (
-  <div>
-    <PageLoadingContext.Consumer>
-      {(context) => {
-        return context && <div>Loading...</div>
-      }}
-    </PageLoadingContext.Consumer>
-    <main>{props.children}</main>
-  </div>
-)
+const SomeLayout = () => {
+  const { loading } = usePageLoadingContext()
+  return (
+    <div>
+      {loading && <div>Loading...</div>}
+      <main>{props.children}</main>
+    </div>
+  )
+}
 ```
 
 When the lazy-loaded page is loading, `PageLoadingContext.Consumer` will pass `true` to the render function, or false otherwise. You can use this context wherever you like in your application!
