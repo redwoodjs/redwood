@@ -36,7 +36,7 @@ const PageLoader = ({ spec, delay, params }) => {
   let Page = cache[pageName]
   if (Page) {
     return (
-      <PageLoadingContext.Provider value={loading}>
+      <PageLoadingContext.Provider value={{ loading }}>
         <Page {...params} />
       </PageLoadingContext.Provider>
     )
