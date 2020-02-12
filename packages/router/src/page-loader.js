@@ -1,8 +1,10 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useContext } from 'react'
 
 import { createNamedContext } from './internal'
 
 const PageLoadingContext = createNamedContext('PageLoading')
+
+export const usePageLoadingContext = () => useContext(PageLoadingContext)
 
 const PageLoader = ({ spec, delay, params }) => {
   const [cache, setCache] = useState({})
