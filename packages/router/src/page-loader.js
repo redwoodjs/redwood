@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 
 import { createNamedContext } from './internal'
 
@@ -11,26 +11,28 @@ const PageLoader = ({ spec, delay, params }) => {
   const loadingTimeout = useRef()
 
   const { loader, name } = spec
-
-  const loadedPage = cache[name]
-  if (loading) {
-    // noop
-  } else if (loadedPage) {
-    if (pageName != loadedPage.name) {
-      setPageName(loadedPage.name)
-    }
-  } else {
-    loadingTimeout.current = setTimeout(() => setLoading(true), delay)
-    loader().then((module) => {
-      cache[name] = module.default
-      setCache(cache)
-      setPageName(name)
-      setLoading(false)
-      if (loadingTimeout.current) {
-        clearTimeout(loadingTimeout.current)
+  useEffect(() => {
+    const loadedPage = cache[name]
+    if (loading) {
+      // noop
+    } else if (loadedPage) {
+      //
+      if (pageName != loadedPage.name) {
+        setPageName(loadedPage.name)
       }
-    })
-  }
+    } else {
+      loadingTimeout.current = setTimeout(() => setLoading(true), delay)
+      loader().then((module) => {
+        // Clear the timeout once the module has been imported.
+        if (loadingTimeout.current) {
+          clearTimeout(loadingTimeout.current)
+        }
+        setCache({ [name]: module.default })
+        setPageName(name)
+        setLoading(false)
+      })
+    }
+  }, [cache, delay, loader, loading, name, pageName])
 
   let Page = cache[pageName]
   if (Page) {
