@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 
 import { createNamedContext } from './internal'
 
@@ -8,10 +8,9 @@ const PageLoader = ({ spec, delay, params }) => {
   const [cache, setCache] = useState({})
   const [pageName, setPageName] = useState(null)
   const [loading, setLoading] = useState(false)
+  const loadingTimeout = useRef()
 
   const { loader, name } = spec
-
-  let loadingTimeout
 
   const loadedPage = cache[name]
   if (loading) {
@@ -21,14 +20,14 @@ const PageLoader = ({ spec, delay, params }) => {
       setPageName(loadedPage.name)
     }
   } else {
-    loadingTimeout = setTimeout(() => setLoading(true), delay)
+    loadingTimeout.current = setTimeout(() => setLoading(true), delay)
     loader().then((module) => {
       cache[name] = module.default
       setCache(cache)
       setPageName(name)
       setLoading(false)
-      if (loadingTimeout) {
-        clearTimeout(loadingTimeout)
+      if (loadingTimeout.current) {
+        clearTimeout(loadingTimeout.current)
       }
     })
   }
