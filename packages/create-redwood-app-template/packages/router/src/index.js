@@ -12,3 +12,5 @@ export {
   navigate,
   PageLoadingContext,
 } from './internal'
+
+export { usePageLoadingContext } from './page-loader'
