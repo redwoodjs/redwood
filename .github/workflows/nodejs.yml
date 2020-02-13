@@ -1,4 +1,4 @@
-name: Jest Tests with Yarn Caching
+name: Jest Tests Node 10 and 12
 
 on: [push]
 
@@ -10,19 +10,7 @@ jobs:
         node-version: [dubnium-alpine, erbium-alpine]
     container: node:${{ matrix.node-version }} 
 
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Get yarn cache
-      id: yarn-cache
-      run: echo "::set-output name=dir::$(yarn cache dir)"
-    - uses: actions/cache@v1
-      with:
-        path: ${{ steps.yarn-cache.outputs.dir }}
-        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-yarn-
-          
+    steps:          
     - run: node --version
     - run: yarn --version
     - run: yarn install --frozen-lockfile
