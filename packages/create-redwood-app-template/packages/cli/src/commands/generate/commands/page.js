@@ -24,22 +24,25 @@ export const files = ({ name, ...rest }) => {
 
 export const routes = ({ name, path }) => {
   return [
-    `<Route path="${path ?? `/${paramCase(name)}`}" page={${pascalcase(
+    `<Route path="${path}" page={${pascalcase(name)}Page} name="${camelcase(
       name
-    )}Page} name="${camelcase(name)}" />`,
+    )}" />`,
   ]
 }
 
 export const command = 'page <name> [path]'
 export const desc = 'Generates a page component.'
-export const handler = async ({ name, path }) => {
+export const builder = { force: { type: 'boolean', default: false } }
+
+export const handler = async ({ name, path, force }) => {
+  path = path ?? `/${paramCase(name)}`
   const tasks = new Listr(
     [
       {
         title: 'Generating page files...',
         task: async () => {
           const f = await files({ name, path })
-          return writeFilesTask(f)
+          return writeFilesTask(f, { overwriteExisting: force })
         },
       },
       {
