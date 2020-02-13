@@ -8,6 +8,7 @@ jobs:
     strategy:
       matrix:
         node-version: [dubnium-alpine, erbium-alpine]
+      fail-fast: false
     container: node:${{ matrix.node-version }}
 
     steps:
