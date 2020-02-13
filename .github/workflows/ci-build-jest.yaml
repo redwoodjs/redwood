@@ -1,0 +1,27 @@
+name: Build and Jest Tests on Node 10 and 12
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [dubnium-alpine, erbium-alpine]
+    container: node:${{ matrix.node-version }}
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Node and Yarn Versions
+      run: |
+        node --version
+        yarn --version
+    - name: Install using lockfile
+      run: yarn install --frozen-lockfile
+    - name: Build
+      run: yarn build
+    - name: Run Jest Tests
+      run: yarn test
+      env:
+        CI: true
