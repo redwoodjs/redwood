@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [dubnium-alpine, current-alpine]
+        node-version: [dubnium-alpine, erbium-alpine]
     container: node:${{ matrix.node-version }} 
 
     steps:
