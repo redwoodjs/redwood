@@ -1,10 +1,10 @@
 import fs from 'fs'
 import path from 'path'
 
+import Listr from 'listr'
 import camelcase from 'camelcase'
 import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
-import { getPaths } from '@redwoodjs/core'
 
 import {
   generateTemplate,
@@ -13,6 +13,9 @@ import {
   writeFile,
   asyncForEach,
   getSchema,
+  getPaths,
+  writeFilesTask,
+  addRoutesToRouterTask,
 } from 'src/lib'
 
 const NON_EDITABLE_COLUMNS = ['id', 'createdAt', 'updatedAt']
@@ -27,15 +30,13 @@ const getIdType = (model) => {
   return model.fields.find((field) => field.name === 'id')?.type
 }
 
-const files = async (args) => {
-  const [[name, ..._rest], _flags] = args
-  let fileList = {}
-  Object.assign(fileList, assetFiles(name))
-  Object.assign(fileList, layoutFiles(name))
-  Object.assign(fileList, pageFiles(name))
-  Object.assign(fileList, await componentFiles(name))
-
-  return fileList
+export const files = async ({ model: name }) => {
+  return {
+    ...assetFiles(name),
+    ...layoutFiles(name),
+    ...pageFiles(name),
+    ...(await componentFiles(name)),
+  }
 }
 
 const assetFiles = (name) => {
@@ -142,7 +143,7 @@ const componentFiles = async (name) => {
 }
 
 // add routes for all pages
-const routes = ([name, ..._rest]) => {
+const routes = ({ model: name }) => {
   const singularPascalName = pascalcase(pluralize.singular(name))
   const pluralPascalName = pascalcase(pluralize(name))
   const singularCamelName = camelcase(singularPascalName)
@@ -156,14 +157,7 @@ const routes = ([name, ..._rest]) => {
   ]
 }
 
-// also create a full CRUD SDL
-const generate = (args) => {
-  args[1]['crud'] = true
-
-  return [[['sdl', ...args[0]], args[1]]]
-}
-
-const addScaffoldImport = (_args) => {
+const addScaffoldImport = () => {
   const indexJsPath = path.join(getPaths().web.src, 'index.js')
   let indexJsContents = readFile(indexJsPath).toString()
 
@@ -177,13 +171,38 @@ const addScaffoldImport = (_args) => {
   return 'Added scaffold import to index.js'
 }
 
-export default {
-  name: 'Scaffold',
-  command: 'scaffold',
-  description:
-    'Generates pages, SDL and a service for CRUD operations on a single database table',
-  files: async (args) => await files(args),
-  routes: (args) => routes(args),
-  generate: (args) => generate(args),
-  other: (args) => addScaffoldImport(args),
+export const command = 'scaffold <model>'
+export const desc = 'Generate pages, SDL, and a services object.'
+export const builder = {
+  force: { type: 'boolean', default: false },
+}
+export const handler = async ({ model, force }) => {
+  const tasks = new Listr(
+    [
+      {
+        title: 'Generating scaffold files...',
+        task: async () => {
+          const f = await files({ model })
+          return writeFilesTask(f, { overwriteExisting: force })
+        },
+      },
+      {
+        title: 'Adding scaffold routes...',
+        task: async () => {
+          return addRoutesToRouterTask(routes({ model }))
+        },
+      },
+      {
+        title: 'Adding scaffold asset imports...',
+        task: () => addScaffoldImport(),
+      },
+    ],
+
+    { collapse: false }
+  )
+  try {
+    await tasks.run()
+  } catch (e) {
+    // do nothing
+  }
 }
