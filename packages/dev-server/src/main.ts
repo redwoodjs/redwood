@@ -5,8 +5,7 @@ import { Response, Request } from 'express'
 import { APIGatewayProxyResult, APIGatewayProxyEvent } from 'aws-lambda'
 import { getConfig, getPaths } from '@redwoodjs/core'
 import express from 'express'
-// @ts-ignore
-import expressLogging from 'express-logging'
+import morgan from 'morgan'
 import bodyParser from 'body-parser'
 import qs from 'qs'
 import args from 'args'
@@ -40,8 +39,8 @@ const { port: PORT, path: PATH } = args.parse(process.argv)
 const HOSTNAME = `http://localhost:${PORT}`
 
 const showHeader = (lambdas: Record<string, any>) => {
-  console.log(`◌ Listening on ${HOSTNAME}`)
-  console.log(`◌ Watching ${API_DIR}`)
+  console.log(`Listening on ${HOSTNAME}`)
+  console.log(`Watching ${API_DIR}`)
   console.log('\nNow serving\n')
   console.log(
     Object.keys(lambdas)
@@ -69,7 +68,7 @@ app.use(
   })
 )
 app.use(bodyParser.raw({ type: '*/*' }))
-app.use(expressLogging(console))
+app.use(morgan('dev'))
 
 let lambdaFunctions = requireLambdaFunctions(PATH)
 
@@ -184,7 +183,7 @@ app.all('/:routeName', async (req, res) => {
 })
 
 const reloadLambdas = (path: string) => {
-  console.log('Reloading...')
+  console.log('Change detected, rebuilding...')
   purgeRequireCache()
   lambdaFunctions = requireLambdaFunctions(PATH)
 }
