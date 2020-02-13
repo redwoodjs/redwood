@@ -14,8 +14,7 @@ jobs:
     - uses: actions/checkout@v2
       
     - name: Node and Yarn Versions
-      run: node --version
-      run: yarn --version
+      run: node --version && yarn --version
     - name: Install using lockfile
       run: yarn install --frozen-lockfile
     - name: Build
