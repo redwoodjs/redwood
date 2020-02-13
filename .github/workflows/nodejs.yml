@@ -10,7 +10,9 @@ jobs:
         node-version: [dubnium-alpine, erbium-alpine]
     container: node:${{ matrix.node-version }} 
 
-    steps:          
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run Build and Tests           
     - run: node --version
     - run: yarn --version
     - run: yarn install --frozen-lockfile
