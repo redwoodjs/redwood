@@ -10,4 +10,7 @@ export {
   routes,
   useParams,
   navigate,
+  PageLoadingContext,
 } from './internal'
+
+export { usePageLoadingContext } from './page-loader'

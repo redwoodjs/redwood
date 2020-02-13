@@ -5,6 +5,7 @@ const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const DirectoryNamedWebpackPlugin = require('directory-named-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
 const Dotenv = require('dotenv-webpack')
 const { getConfig, getPaths } = require('@redwoodjs/core')
 
@@ -62,10 +63,10 @@ module.exports = (webpackEnv) => {
     },
     plugins: [
       isEnvProduction &&
-      new MiniCssExtractPlugin({
-        filename: '[name].[contenthash:8].css',
-        chunkFilename: '[name].[contenthash:8].css',
-      }),
+        new MiniCssExtractPlugin({
+          filename: 'static/css/[name].[contenthash:8].css',
+          chunkFilename: 'static/css/[name].[contenthash:8].css',
+        }),
       !isEnvProduction && new webpack.HotModuleReplacementPlugin(),
       new HtmlWebpackPlugin({
         template: path.resolve(redwoodPaths.base, 'web/src/index.html'),
@@ -94,6 +95,7 @@ module.exports = (webpackEnv) => {
         silent: true,
       }),
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+      new CopyPlugin([{ from: 'public/', to: '', ignore: ['README.md'] }]),
     ].filter(Boolean),
     module: {
       rules: [
@@ -106,7 +108,7 @@ module.exports = (webpackEnv) => {
                   loader: 'url-loader',
                   options: {
                     limit: '10000',
-                    name: '[name].[hash:8].[ext]',
+                    name: 'static/media/[name].[hash:8].[ext]',
                   },
                 },
               ],
@@ -134,7 +136,7 @@ module.exports = (webpackEnv) => {
               loader: 'file-loader',
               exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
               options: {
-                name: '[name].[hash:8].[ext]',
+                name: 'static/media/[name].[hash:8].[ext]',
               },
             },
           ],
@@ -177,18 +179,18 @@ module.exports = (webpackEnv) => {
     output: {
       pathinfo: true,
       filename: isEnvProduction
-        ? '[name].[contenthash:8].js'
-        : '[name].bundle.js',
+        ? 'static/js/[name].[contenthash:8].js'
+        : 'static/js/[name].bundle.js',
       chunkFilename: isEnvProduction
-        ? '[name].[contenthash:8].chunk.js'
-        : '[name].chunk.js',
+        ? 'static/js/[name].[contenthash:8].chunk.js'
+        : 'static/js/[name].chunk.js',
       path: path.resolve(redwoodPaths.base, 'web/dist'),
       publicPath: '/',
       devtoolModuleFilenameTemplate: isEnvProduction
         ? (info) =>
-          path
-            .relative(redwoodPaths.web.src, info.absoluteResourcePath)
-            .replace(/\\/g, '/')
+            path
+              .relative(redwoodPaths.web.src, info.absoluteResourcePath)
+              .replace(/\\/g, '/')
         : (info) => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
     },
   }
