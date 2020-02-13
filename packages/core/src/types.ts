@@ -6,6 +6,9 @@ export type Config = {
   api: {
     port: number
   }
+  browser: {
+    open: boolean | string
+  }
 }
 
 export type Paths = {

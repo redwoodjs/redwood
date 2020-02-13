@@ -42,7 +42,7 @@ use:
 
 - React
 - GraphQL (Apollo)
-- Prisma (Photon & Lift)
+- Prisma
 - Storybook
 - Babel
 - Webpack

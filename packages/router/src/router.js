@@ -9,6 +9,7 @@ import {
   navigate,
   mapNamedRoutes,
   SplashPage,
+  PageLoader,
 } from './internal'
 
 // Definitions of the core param types.
@@ -29,7 +30,44 @@ const Router = (props) => (
   </Location>
 )
 
-const RouterImpl = ({ pathname, search, paramTypes, children }) => {
+/**
+ * Pages can be imported automatically or manually. Automatic imports are actually
+ * objects and take the following form (which we call a 'spec'):
+ *
+ *   const WhateverPage = {
+ *     name: 'WhateverPage',
+ *     loader: () => import('src/pages/WhateverPage')
+ *   }
+ *
+ * Manual imports simply load the page:
+ *
+ *   import WhateverPage from 'src/pages/WhateverPage'
+ *
+ * Before passing a "page" to the PageLoader, we will normalize the manually
+ * imported version into a spec. */
+const normalizePage = (specOrPage) => {
+  if (specOrPage.loader) {
+    // Already a spec, just return it.
+    return specOrPage
+  } else {
+    // Wrap the Page in a fresh spec, and put it in a promise to emulate
+    // an async module import.
+    return {
+      name: specOrPage.name,
+      loader: async () => ({ default: specOrPage }),
+    }
+  }
+}
+
+const DEFAULT_PAGE_LOADING_DELAY = 1000 // milliseconds
+
+const RouterImpl = ({
+  pathname,
+  search,
+  paramTypes,
+  pageLoadingDelay = DEFAULT_PAGE_LOADING_DELAY,
+  children,
+}) => {
   const routes = React.Children.toArray(children)
   mapNamedRoutes(routes)
 
@@ -64,7 +102,11 @@ const RouterImpl = ({ pathname, search, paramTypes, children }) => {
       } else {
         return (
           <ParamsContext.Provider value={allParams}>
-            <Page {...allParams} />
+            <PageLoader
+              spec={normalizePage(Page)}
+              delay={pageLoadingDelay}
+              params={allParams}
+            />
           </ParamsContext.Provider>
         )
       }
@@ -80,7 +122,7 @@ const RouterImpl = ({ pathname, search, paramTypes, children }) => {
 
   return (
     <ParamsContext.Provider value={{}}>
-      <NotFoundPage />
+      <PageLoader spec={normalizePage(NotFoundPage)} />
     </ParamsContext.Provider>
   )
 }

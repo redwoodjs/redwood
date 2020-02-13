@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/scripts",
-  "version": "0.0.1-alpha.25.0.3",
+  "version": "0.0.1-alpha.26",
   "license": "MIT",
   "files": [
     "config",
@@ -17,9 +17,9 @@
     "@babel/preset-react": "^7.8.3",
     "@babel/preset-typescript": "^7.8.3",
     "@babel/runtime": "^7.8.4",
-    "@redwoodjs/cli": "^0.0.1-alpha.25",
-    "@redwoodjs/core": "^0.0.1-alpha.24",
-    "@redwoodjs/dev-server": "^0.0.1-alpha.24",
+    "@redwoodjs/cli": "^0.0.1-alpha.26",
+    "@redwoodjs/core": "^0.0.1-alpha.26",
+    "@redwoodjs/dev-server": "^0.0.1-alpha.26",
     "@redwoodjs/eslint-config": "^0.0.1-alpha.24",
     "@types/jest": "^25.1.1",
     "@types/node": "^13.7.0",
@@ -27,6 +27,7 @@
     "@types/react-dom": "^16.9.5",
     "babel-loader": "^8.0.6",
     "babel-plugin-module-resolver": "^4.0.0",
+    "copy-webpack-plugin": "^5.1.1",
     "core-js": "3.6.4",
     "css-loader": "^3.4.2",
     "directory-named-webpack-plugin": "^4.0.1",
