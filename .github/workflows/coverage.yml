@@ -1,0 +1,12 @@
+name: Checks Test Coverage
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+  
+  uses: ziishaned/jest-reporter-action@v0.0.1
+  with:
+    github-token: ${{ secrets.89fa98f2fb58bc4ab6f6780c1541d0815cc5c185 }}
+    test-command: "yarn jest --coverage"
