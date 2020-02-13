@@ -5,18 +5,13 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
-        node-version: [10.x, 12.x]
+        node-version: [dubnium-alpine, current-alpine]
+    container: node:${{ matrix.node-version }} 
 
     steps:
     - uses: actions/checkout@v2
-
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
 
     - name: Get yarn cache
       id: yarn-cache
