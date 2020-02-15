@@ -1,15 +1,20 @@
 <p align="center">
   <img src="https://avatars2.githubusercontent.com/u/45050444?v=4" width="200" />
   <h1 align="center">Redwood</h1>
+  <h2 align="center">Bringing <b>full-stack</b> to the <b>JAMstack</b></h2>
 </p>
 
 _by Tom Preston-Werner, Peter Pistorius, and Rob Cameron._
 
-**Redwood is an opinionated, full stack, serverless web application framework
-that will allow you to build JAMstack applications with ease.** By making a lot
-of decisions for you, Redwood lets you get to work on what makes your
-application special, instead of wasting cycles choosing and re-choosing various
-technology components.
+**Redwood is an opinionated, full-stack, serverless web application framework
+that will allow you to build and deploy JAMstack applications with ease.**
+Imagine a React frontend, statically delivered by CDN, that talks via GraphQL to
+your backend running on AWS Lambdas around the world, all deployable with just a
+`git push`—that's Redwood. By making a lot of decisions for you, Redwood lets
+you get to work on what makes your application special, instead of wasting
+cycles choosing and re-choosing various technologies and configurations. Plus,
+because Redwood is a proper framework, you benefit from continued performance
+and feature upgrades over time and with minimum effort.
 
 **WARNING:** This document is aspirational (see
 [Readme Driven Development](https://tom.preston-werner.com/2010/08/23/readme-driven-development.html))
@@ -17,8 +22,8 @@ and not everything contained within it is true yet.
 
 **TUTORIAL:** We have a "getting started from scratch" tutorial in the works,
 but keep in mind that we are driving Redwood development with that prose, and
-many of the commands don't actually work yet. We would love your feedback on
-anything you find confusing.
+some of the commands may not work yet. We would love your feedback on anything
+you find confusing.
 
 https://github.com/redwoodjs/tutorial
 
@@ -102,17 +107,17 @@ organized into "services" that represent their own internal API and can be
 called both from external GraphQL requests and other internal services. Redwood
 can automatically connect your internal services with Apollo, reducing the
 amount of boilerplate you have to write. Your services can interact with a
-database via Prisma's Photon ORM, and Prisma's Lift provides first-class
+database via Prisma's ORM, and Prisma's migration tooling provides first-class
 migrations that take the pain out of evolving your database schema.
 
 The web side is built with React. Redwood's router makes it simple to map URL
-paths to React "Page" components. Pages may contain a "Layout" component to wrap
-content. They also contain "Cells" and regular React components. Cells allow you
-to declaratively manage the lifecycle of a component that fetches and displays
-data. Other Redwood utility components make it trivial to implement smart forms
-and various common needs. An ideal development flow starts with Storybook
-entries and Jest tests, so Redwood closely integrates both, making it easy to do
-the right thing.
+paths to React "Page" components (and automatically code-split your app on each
+route). Pages may contain a "Layout" component to wrap content. They also
+contain "Cells" and regular React components. Cells allow you to declaratively
+manage the lifecycle of a component that fetches and displays data. Other
+Redwood utility components make it trivial to implement smart forms and various
+common needs. An ideal development flow starts with Storybook entries and Jest
+tests, so Redwood closely integrates both, making it easy to do the right thing.
 
 You'll notice that the web side is called "web" and not "frontend". This is
 because Redwood conceives of a world where you may have other sides like
