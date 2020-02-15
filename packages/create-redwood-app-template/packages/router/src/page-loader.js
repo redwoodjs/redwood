@@ -18,7 +18,6 @@ const PageLoader = ({ spec, delay, params }) => {
     if (loading) {
       // noop
     } else if (loadedPage) {
-      //
       if (pageName != loadedPage.name) {
         setPageName(loadedPage.name)
       }
@@ -29,7 +28,11 @@ const PageLoader = ({ spec, delay, params }) => {
         if (loadingTimeout.current) {
           clearTimeout(loadingTimeout.current)
         }
-        setCache({ [name]: module.default })
+        // Append the module for the loaded page to the cache.
+        setCache({
+          ...cache,
+          [name]: module.default,
+        })
         setPageName(name)
         setLoading(false)
       })

@@ -3,7 +3,7 @@ import plugin from 'babel-plugin-macros'
 
 const MACRO_IMPORT_PATH = '../importAll.macro.js'
 
-jest.mock('@redwoodjs/core')
+jest.mock('@redwoodjs/internal')
 
 pluginTester({
   plugin,

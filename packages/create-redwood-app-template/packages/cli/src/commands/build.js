@@ -14,7 +14,7 @@ export const handler = ({ app }) => {
   const { base: BASE_DIR } = getPaths()
   const execCommandsForApps = {
     api: `cd ${BASE_DIR}/api && NODE_ENV=production yarn babel src --out-dir dist`,
-    web: `cd ${BASE_DIR}/web && yarn webpack --config ../node_modules/@redwoodjs/scripts/config/webpack.production.js`,
+    web: `cd ${BASE_DIR}/web && yarn webpack --config ../node_modules/@redwoodjs/core/config/webpack.production.js`,
   }
 
   const tasks = new Listr(

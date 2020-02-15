@@ -1,12 +1,9 @@
-/* eslint-disable prettier/prettier */
 /* eslint-disable import/no-extraneous-dependencies */
 const merge = require('webpack-merge')
 const escapeRegExp = require('lodash.escaperegexp')
-const { getConfig } = require('@redwoodjs/core')
+const { getConfig } = require('@redwoodjs/internal')
 
-const webpackConfig = require('./webpackConfig.js')
-
-// this is the parsed redwood.toml
+const webpackConfig = require('./webpack.common')
 const redwoodConfig = getConfig()
 
 module.exports = merge(webpackConfig('development'), {
