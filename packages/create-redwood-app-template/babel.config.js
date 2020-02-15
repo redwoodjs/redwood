@@ -18,6 +18,7 @@ module.exports = {
         useBuiltIns: 'usage',
         corejs: {
           version: CORE_JS_VERSION,
+          // List of supported proposals: https://github.com/zloirock/core-js/blob/master/docs/2019-03-19-core-js-3-babel-and-a-look-into-the-future.md#ecmascript-proposals
           proposals: true,
         },
       },
@@ -50,6 +51,7 @@ module.exports = {
     ],
   ],
   overrides: [
+    // ** WEB PACKAGES **
     {
       test: ['./packages/router', './packages/web/'],
       presets: [
@@ -63,10 +65,6 @@ module.exports = {
           },
         ],
       ],
-      // TODO:
-      // useESModules
-      // boolean, defaults to false.
-      // When enabled, the transform will use helpers that do not get run through @babel/plugin-transform-modules-commonjs. This allows for smaller builds in module systems like webpack, since it doesn't need to preserve commonjs semantics.
     },
   ],
   // Only build test files when testing
