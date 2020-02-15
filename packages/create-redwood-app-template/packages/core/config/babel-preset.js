@@ -5,7 +5,7 @@
 // TODO: Determine what to do different during development, test, and production
 // TODO: Take a look at create-react-app. They've dropped a ton of knowledge.
 
-const { getPaths } = require('@redwoodjs/core')
+const { getPaths } = require('@redwoodjs/internal')
 
 const TARGETS_NODE = '8.10.0'
 // https://github.com/zloirock/core-js/blob/master/README.md#babelpreset-env
