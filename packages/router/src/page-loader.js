@@ -30,15 +30,16 @@ export class PageLoader extends React.Component {
 
   startPageLoadTransition = async () => {
     const { spec, delay } = this.props
-    // This spec is the page where the user has navigated., we'll kick of an async
-    // request to import the page's module.
     const { loader, name } = spec
 
-    // If loading the page is taking too long (> `this.props.delay`) then update
-    // the context. Consumers of the context can display a loading interstitial.
-    this.loadingTimeout = setTimeout(() => {
-      this.setState({ slowModuleImport: true })
-    }, delay)
+    // Update the context if importing the page is taking longer
+    // than `delay`.
+    // Consumers of the context can show a loading indicator
+    // to signal to the user that something is happening.
+    this.loadingTimeout = setTimeout(
+      () => this.setState({ slowModuleImport: true }),
+      delay
+    )
 
     const module = await loader()
 
