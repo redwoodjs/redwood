@@ -73,7 +73,7 @@ export const CreateNewApp = ({ args }) => {
       return userDir
         .split("/")
         .slice(-1)[0]
-        .split(/ |-|_/)
+        .split(/[ _-]/)
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
         .join(' ')
     }
@@ -82,14 +82,13 @@ export const CreateNewApp = ({ args }) => {
       if (e) {
         return setNewMessage(e)
       }
-      var result = data.replace(/\<\s*title[^>]*>(.*?)\<\s*\/\s*title\s*\>/g, '<title>' + newTitle(path) + '</title>')
+      const titleTag = RegExp('\<title\>(.*?)\<\/title\>')
+      const newTitleTag = '<title>' + newTitle(path) + '</title>'
+      const result = data.replace(titleTag, newTitleTag)
       fs.writeFile(path + '/web/src/index.html', result, 'utf8', (e) => {
         if (e) {
           return setNewMessage(e)
         }
-        // else {
-        //   return setNewMessage('successfully changed index.html meta title: ' + newTitle(path))
-        // }
       })
     })
   }
@@ -136,8 +135,6 @@ export const CreateNewApp = ({ args }) => {
         </Text>
       )
 
-      console.log("newAppDir is: " + newAppDir)
-
       // change html.index meta Title using directory
       await changeHtmlTitle(newAppDir)
 
@@ -155,8 +152,8 @@ export const CreateNewApp = ({ args }) => {
     }
 
     if (targetDir) {
-        createApp()
-      }
+      createApp()
+    }
   }, [targetDir])
 
   if (!targetDir) {
