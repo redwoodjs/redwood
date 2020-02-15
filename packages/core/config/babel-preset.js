@@ -32,6 +32,7 @@ module.exports = () => ({
         version: '^7.8.3',
       },
     ],
+    ['babel-plugin-graphql-tag'],
   ],
   overrides: [
     // ** API **
