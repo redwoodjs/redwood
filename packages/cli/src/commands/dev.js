@@ -18,7 +18,7 @@ export const handler = ({ app }) => {
     api: {
       name: 'api',
       command: `cd ${path.join(BASE_DIR, 'api')} && yarn dev-server`,
-      prefixColor: 'blue',
+      prefixColor: 'cyan',
     },
     db: {
       name: ' db',
@@ -26,7 +26,7 @@ export const handler = ({ app }) => {
         BASE_DIR,
         'api'
       )} && yarn prisma2 generate --watch`,
-      prefixColor: 'red',
+      prefixColor: 'magenta',
     },
     web: {
       name: 'web',
@@ -34,7 +34,7 @@ export const handler = ({ app }) => {
         BASE_DIR,
         'web'
       )} && yarn webpack-dev-server --config ../node_modules/@redwoodjs/scripts/config/webpack.development.js`,
-      prefixColor: 'green',
+      prefixColor: 'blue',
     },
   }
 
