@@ -1,54 +1,69 @@
-import { useState, useRef, useEffect, useContext } from 'react'
+import { useContext } from 'react'
 
 import { createNamedContext } from './internal'
 
-const PageLoadingContext = createNamedContext('PageLoading')
+export const PageLoadingContext = createNamedContext('PageLoading')
 
 export const usePageLoadingContext = () => useContext(PageLoadingContext)
 
-const PageLoader = ({ spec, delay, params }) => {
-  const [cache, setCache] = useState({})
-  const [pageName, setPageName] = useState(null)
-  const [loading, setLoading] = useState(false)
-  const loadingTimeout = useRef()
+export class PageLoader extends React.Component {
+  state = {
+    Page: undefined,
+    pageName: undefined,
+    slowModuleImport: false,
+  }
 
-  const { loader, name } = spec
-  useEffect(() => {
-    const loadedPage = cache[name]
-    if (loading) {
-      // noop
-    } else if (loadedPage) {
-      if (pageName != loadedPage.name) {
-        setPageName(loadedPage.name)
-      }
-    } else {
-      loadingTimeout.current = setTimeout(() => setLoading(true), delay)
-      loader().then((module) => {
-        // Clear the timeout once the module has been imported.
-        if (loadingTimeout.current) {
-          clearTimeout(loadingTimeout.current)
-        }
-        // Append the module for the loaded page to the cache.
-        setCache({
-          ...cache,
-          [name]: module.default,
-        })
-        setPageName(name)
-        setLoading(false)
-      })
+  componentDidMount() {
+    this.startPageLoadTransition()
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.spec.name !== this.props.spec.name) {
+      this.clearLoadingTimeout()
+      this.startPageLoadTransition()
     }
-  }, [cache, delay, loader, loading, name, pageName])
+  }
 
-  let Page = cache[pageName]
-  if (Page) {
-    return (
-      <PageLoadingContext.Provider value={{ loading }}>
-        <Page {...params} />
-      </PageLoadingContext.Provider>
-    )
-  } else {
-    return null
+  clearLoadingTimeout = () => {
+    clearTimeout(this.loadingTimeout)
+  }
+
+  startPageLoadTransition = async () => {
+    const { spec, delay } = this.props
+    // This spec is the page where the user has navigated., we'll kick of an async
+    // request to import the page's module.
+    const { loader, name } = spec
+
+    // If loading the page is taking too long (> `this.props.delay`) then update
+    // the context. Consumers of the context can display a loading interstitial.
+    this.loadingTimeout = setTimeout(() => {
+      this.setState({ slowModuleImport: true })
+    }, delay)
+
+    const module = await loader()
+
+    // Remove the timeout because the page has loaded.
+    this.clearLoadingTimeout()
+
+    this.setState({
+      pageName: name,
+      Page: module.default,
+      slowModuleImport: false,
+    })
+  }
+
+  render() {
+    const { Page } = this.state
+    if (Page) {
+      return (
+        <PageLoadingContext.Provider
+          value={{ loading: this.state.slowModuleImport }}
+        >
+          <Page {...this.props.params} />
+        </PageLoadingContext.Provider>
+      )
+    } else {
+      return null
+    }
   }
 }
-
-export { PageLoader, PageLoadingContext }
