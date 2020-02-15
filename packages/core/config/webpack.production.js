@@ -1,3 +1,3 @@
-const webpackConfig = require('./webpackConfig.js')
+const webpackConfig = require('./webpack.common')
 
 module.exports = webpackConfig('production')
