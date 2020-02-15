@@ -1,7 +1,6 @@
 <p align="center">
   <img src="https://avatars2.githubusercontent.com/u/45050444?v=4" width="200" />
   <h1 align="center">Redwood</h1>
-  <h2 align="center">Bringing <b>full-stack</b> to the <b>JAMstack</b></h2>
 </p>
 
 _by Tom Preston-Werner, Peter Pistorius, and Rob Cameron._
