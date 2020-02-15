@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/core",
-  "version": "0.0.1-alpha.26",
+  "version": "0.0.1-alpha.27",
   "license": "MIT",
   "files": [
     "config",
@@ -16,10 +16,10 @@
     "@babel/preset-react": "^7.8.3",
     "@babel/preset-typescript": "^7.8.3",
     "@babel/runtime-corejs3": "^7.8.4",
-    "@redwoodjs/cli": "^0.0.1-alpha.26",
-    "@redwoodjs/dev-server": "^0.0.1-alpha.26",
-    "@redwoodjs/eslint-config": "^0.0.1-alpha.24",
-    "@redwoodjs/internal": "^0.0.1-alpha.26",
+    "@redwoodjs/cli": "^0.0.1-alpha.27",
+    "@redwoodjs/dev-server": "^0.0.1-alpha.27",
+    "@redwoodjs/eslint-config": "^0.0.1-alpha.27",
+    "@redwoodjs/internal": "^0.0.1-alpha.27",
     "@types/jest": "^25.1.2",
     "@types/node": "^13.7.1",
     "@types/react": "^16.9.19",
