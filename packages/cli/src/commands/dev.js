@@ -33,7 +33,7 @@ export const handler = ({ app }) => {
       command: `cd ${path.join(
         BASE_DIR,
         'web'
-      )} && yarn webpack-dev-server --config ../node_modules/@redwoodjs/scripts/config/webpack.development.js`,
+      )} && yarn webpack-dev-server --config ../node_modules/@redwoodjs/core/config/webpack.development.js`,
       prefixColor: 'blue',
     },
   }
