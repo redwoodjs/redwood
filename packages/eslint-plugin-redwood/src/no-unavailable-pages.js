@@ -5,7 +5,7 @@
  * Check to make sure that all referenced Pages exist in the `/web/src/pages`
  * directory. Thanks to eslint/undef upon which this code is based.
  */
-import { processPagesDir } from '@redwoodjs/core'
+import { processPagesDir } from '@redwoodjs/internal'
 
 /**
  * Checks if the given node is the argument of a typeof operator.

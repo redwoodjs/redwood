@@ -3,7 +3,7 @@ import path from 'path'
 
 import { Response, Request } from 'express'
 import { APIGatewayProxyResult, APIGatewayProxyEvent } from 'aws-lambda'
-import { getConfig, getPaths } from '@redwoodjs/core'
+import { getConfig, getPaths } from '@redwoodjs/internal'
 import express from 'express'
 import morgan from 'morgan'
 import bodyParser from 'body-parser'
