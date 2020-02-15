@@ -67,6 +67,33 @@ export const CreateNewApp = ({ args }) => {
     setMessages(latestMessages.current)
   }
 
+  // set index.html title based on user input directory
+  const changeHtmlTitle = async (path) => {
+    const newTitle = (userDir) => {
+      return userDir
+        .split("/")
+        .slice(-1)[0]
+        .split(/ |-|_/)
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ')
+    }
+
+    fs.readFile(path + '/web/src/index.html', 'utf8', (e, data) => {
+      if (e) {
+        return setNewMessage(e)
+      }
+      var result = data.replace(/\<\s*title[^>]*>(.*?)\<\s*\/\s*title\s*\>/g, '<title>' + newTitle(path) + '</title>')
+      fs.writeFile(path + '/web/src/index.html', result, 'utf8', (e) => {
+        if (e) {
+          return setNewMessage(e)
+        }
+        // else {
+        //   return setNewMessage('successfully changed index.html meta title: ' + newTitle(path))
+        // }
+      })
+    })
+  }
+
   useEffect(() => {
     const createApp = async () => {
       // Attempt to create the new project directory, but abort if it already exists.
@@ -109,6 +136,11 @@ export const CreateNewApp = ({ args }) => {
         </Text>
       )
 
+      console.log("newAppDir is: " + newAppDir)
+
+      // change html.index meta Title using directory
+      await changeHtmlTitle(newAppDir)
+
       // Run `yarn install`
       setNewMessage(<Text>Installing packages...</Text>)
       const child = spawn(`yarn install --cwd ${targetDir}`, {
@@ -123,8 +155,8 @@ export const CreateNewApp = ({ args }) => {
     }
 
     if (targetDir) {
-      createApp()
-    }
+        createApp()
+      }
   }, [targetDir])
 
   if (!targetDir) {
