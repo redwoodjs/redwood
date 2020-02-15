@@ -1,4 +1,4 @@
-import { processPagesDir } from '@redwoodjs/core'
+import { processPagesDir } from '@redwoodjs/internal'
 
 export default function(source) {
   // Process the dir to find all Page dependencies.

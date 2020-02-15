@@ -17,7 +17,7 @@
     "@babel/preset-react": "^7.8.3",
     "@babel/preset-typescript": "^7.8.3",
     "@redwoodjs/cli": "^0.0.1-alpha.26",
-    "@redwoodjs/core": "^0.0.1-alpha.26",
+    "@redwoodjs/internal": "^0.0.1-alpha.26",
     "@redwoodjs/dev-server": "^0.0.1-alpha.26",
     "@redwoodjs/eslint-config": "^0.0.1-alpha.24",
     "@types/jest": "^25.1.2",

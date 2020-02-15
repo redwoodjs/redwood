@@ -7,7 +7,7 @@ const DirectoryNamedWebpackPlugin = require('directory-named-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 const Dotenv = require('dotenv-webpack')
-const { getConfig, getPaths } = require('@redwoodjs/core')
+const { getConfig, getPaths } = require('@redwoodjs/internal')
 
 const redwoodConfig = getConfig()
 const redwoodPaths = getPaths()

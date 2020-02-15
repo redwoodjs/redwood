@@ -8,7 +8,7 @@ import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 import { paramCase } from 'param-case'
 import { getDMMF } from '@prisma/sdk'
-import { getPaths as getRedwoodPaths } from '@redwoodjs/core'
+import { getPaths as getRedwoodPaths } from '@redwoodjs/internal'
 
 import c from 'src/lib/colors'
 
