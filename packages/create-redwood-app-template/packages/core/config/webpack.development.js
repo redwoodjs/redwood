@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 const merge = require('webpack-merge')
 const escapeRegExp = require('lodash.escaperegexp')
 const { getConfig } = require('@redwoodjs/internal')

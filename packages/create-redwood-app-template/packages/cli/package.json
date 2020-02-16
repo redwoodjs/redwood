@@ -20,6 +20,7 @@
     "core-js": "3.6.4",
     "execa": "^4.0.0",
     "listr": "^0.14.3",
+    "listr-verbose-renderer": "^0.6.0",
     "lodash": "^4.17.15",
     "param-case": "^3.0.2",
     "pascalcase": "^1.0.0",
