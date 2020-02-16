@@ -44,6 +44,7 @@
     "typescript": "^3.7.5",
     "url-loader": "3.0.0",
     "webpack": "^4.41.6",
+    "webpack-bundle-analyzer": "^3.6.0",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3",
     "webpack-merge": "^4.2.2"
