@@ -207,7 +207,7 @@ const SomeLayout = () => {
 }
 ```
 
-When the lazy-loaded page is loading, `PageLoadingContext.Consumer` will pass `true` to the render function, or false otherwise. You can use this context wherever you like in your application!
+When the lazy-loaded page is loading, `PageLoadingContext.Consumer` will pass `{ loading: true }` to the render function, or false otherwise. You can use this context wherever you like in your application!
 
 After adding this to your app you will probably not see it when navigating between pages. This is because having a loading indicator is nice, but can get annoying when it shows up every single time you navigate to a new page. In fact, this behavior makes it feel like your pages take even longer to load than they actually do! RR takes this into account and, by default, will only show the loader when it takes more than 1000 milliseconds for the page to load. You can change this to whatever you like with the `pageLoadingDelay` prop on `Router`:
 
