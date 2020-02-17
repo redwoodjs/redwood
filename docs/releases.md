@@ -2,7 +2,11 @@
 
 We use Lerna to release packages because it automatically figures out what's changed in our packages since the last release and keeps cross project dependencies in sync.
 
-Run `yarn lerna changed` to see a list of packages that will be published, and run `yarn lerna publish` to bump the versions and release them to the public.
+  yarn lerna version --force-publish
+  yarn lerna publish from-package
+
+Will change the versions of **all the packages**, even if they haven't been updated, and publish them
+to npm.
 
 ## Troubleshooting
 
