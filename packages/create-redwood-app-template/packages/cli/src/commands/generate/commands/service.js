@@ -38,6 +38,7 @@ export const builder = {
   crud: { type: 'boolean', default: false },
   force: { type: 'boolean', default: false },
 }
+
 export const handler = async ({ model, crud, force }) => {
   const tasks = new Listr(
     [
