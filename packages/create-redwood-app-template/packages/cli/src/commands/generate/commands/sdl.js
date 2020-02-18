@@ -14,7 +14,7 @@ const IGNORE_FIELDS = ['id', 'createdAt']
 const modelFieldToSDL = (field, required = true) => {
   return `${field.name}: ${field.type}${
     field.isRequired && required ? '!' : ''
-    }`
+  }`
 }
 
 const querySDL = (model) => {
@@ -76,7 +76,7 @@ export const files = async ({ model: name, crud }) => {
 export const command = 'sdl <model>'
 export const desc = 'Generate a GraphQL schema and service object.'
 export const builder = {
-  crud: { type: 'boolean', default: true },
+  crud: { type: 'boolean', default: false },
   services: { type: 'boolean', default: true },
   force: { type: 'boolean', default: false },
 }
