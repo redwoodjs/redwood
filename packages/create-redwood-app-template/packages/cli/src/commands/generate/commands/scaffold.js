@@ -34,7 +34,7 @@ const getIdType = (model) => {
 
 export const files = async ({ model: name }) => {
   return {
-    ...sdlFiles({ name, crud: true }),
+    ...sdlFiles({ name, crud: true, services: true }),
     ...assetFiles(name),
     ...layoutFiles(name),
     ...pageFiles(name),
