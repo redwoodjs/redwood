@@ -21,7 +21,7 @@ export const handler = async ({ verbose }) => {
   const tasks = new Listr(
     [
       {
-        title: 'Applying migrations...',
+        title: 'Migrating your database up...',
         task: async () => {
           return execa(
             'yarn prisma2',
