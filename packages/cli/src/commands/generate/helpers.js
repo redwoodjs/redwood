@@ -27,7 +27,11 @@ export const templateForComponentFile = ({
     componentName,
     componentName + extension
   )
-  const content = generateTemplate(templatePath, { name, ...templateVars })
+  const content = generateTemplate(templatePath, {
+    name,
+    outputPath: `./${path.relative(getPaths().base, outputPath)}`,
+    ...templateVars,
+  })
   return [outputPath, content]
 }
 
