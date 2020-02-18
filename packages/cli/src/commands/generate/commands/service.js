@@ -8,22 +8,10 @@ import { generateTemplate, getPaths, writeFilesTask } from 'src/lib'
 
 export const files = async ({ model: name, crud }) => {
   const pluralCamelName = camelcase(pluralize(name))
-  const servicePath = path.join(
-    getPaths().api.services,
-    pluralCamelName,
-    `${pluralCamelName}.js`
-  )
-  const readmePath = path.join(
-    getPaths().api.services,
-    pluralCamelName,
-    `${pluralCamelName}.mdx`
-  )
-  const testPath = path.join(
-    getPaths().api.services,
-    pluralCamelName,
-    `${pluralCamelName}.test.js`
-  )
-
+  const outputPathRoot = path.join(getPaths().api.services, pluralCamelName)
+  const servicePath = path.join(outputPathRoot, `${pluralCamelName}.js`)
+  const readmePath = path.join(outputPathRoot, `${pluralCamelName}.mdx`)
+  const testPath = path.join(outputPathRoot, `${pluralCamelName}.test.js`)
   const serviceTemplate = generateTemplate(
     path.join('service', 'service.js.template'),
     { name, isCrud: crud }
@@ -47,7 +35,7 @@ export const files = async ({ model: name, crud }) => {
 export const command = 'service <model>'
 export const desc = 'Generate a service object.'
 export const builder = {
-  crud: { type: 'boolean', default: true },
+  crud: { type: 'boolean', default: false },
   force: { type: 'boolean', default: false },
 }
 export const handler = async ({ model, crud, force }) => {
