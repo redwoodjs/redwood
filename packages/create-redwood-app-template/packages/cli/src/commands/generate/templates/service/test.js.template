@@ -1,0 +1,10 @@
+import React from 'react';
+import { fireEvent, cleanup } from '@testing-library/react'
+
+import { ${pluralCamelName} } from './${pluralCamelName}'
+
+describe('${pluralCamelName}', () => {
+  it('returns an array', () => {
+    expect(Array.isArray(${pluralCamelName}()).toBe(true)
+  })
+})
