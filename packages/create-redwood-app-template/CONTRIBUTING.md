@@ -1,6 +1,6 @@
 # Setup and Process Overview
 
-_Future Intro Here: ...something something... play nice._
+Before interacting with the Redwood community, please read and understand our [Code of Conduct](https://github.com/redwoodjs/redwood/blob/master/CODE_OF_CONDUCT.md).
 
 **Table of Contents**
 - [Local Package Development](##Local-Package-Development-Setup)
