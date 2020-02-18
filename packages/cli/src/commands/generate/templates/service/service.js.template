@@ -25,9 +25,9 @@ export const update${singularPascalName} = ({ id, input }) => {
   })
 }
 
-delete${singularPascalName}: ({ id }) => {
-    return db.${singularCamelName}.delete({
-      where: { id },
-    })
-  }
+export const delete${singularPascalName} = ({ id }) => {
+  return db.${singularCamelName}.delete({
+    where: { id },
+  })
+}
 <% } %>

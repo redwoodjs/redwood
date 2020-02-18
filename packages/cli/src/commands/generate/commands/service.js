@@ -7,16 +7,41 @@ import pluralize from 'pluralize'
 import { generateTemplate, getPaths, writeFilesTask } from 'src/lib'
 
 export const files = async ({ model: name, crud }) => {
-  const outputPath = path.join(
+  const pluralCamelName = camelcase(pluralize(name))
+  const servicePath = path.join(
     getPaths().api.services,
-    `${camelcase(pluralize(name))}.js`
+    pluralCamelName,
+    `${pluralCamelName}.js`
   )
-  const template = generateTemplate(
+  const readmePath = path.join(
+    getPaths().api.services,
+    pluralCamelName,
+    `${pluralCamelName}.mdx`
+  )
+  const testPath = path.join(
+    getPaths().api.services,
+    pluralCamelName,
+    `${pluralCamelName}.test.js`
+  )
+
+  const serviceTemplate = generateTemplate(
     path.join('service', 'service.js.template'),
     { name, isCrud: crud }
   )
+  const readmeTemplate = generateTemplate(
+    path.join('service', 'readme.mdx.template'),
+    { name, isCrud: crud }
+  )
+  const testTemplate = generateTemplate(
+    path.join('service', 'test.js.template'),
+    { name, isCrud: crud }
+  )
 
-  return { [outputPath]: template }
+  return {
+    [servicePath]: serviceTemplate,
+    [readmePath]: readmeTemplate,
+    [testPath]: testTemplate,
+  }
 }
 
 export const command = 'service <model>'
