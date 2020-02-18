@@ -6,7 +6,7 @@ import pluralize from 'pluralize'
 
 import { generateTemplate, getPaths, writeFilesTask } from 'src/lib'
 
-export const files = async ({ model: name, crud }) => {
+export const files = async ({ name, crud }) => {
   const pluralCamelName = camelcase(pluralize(name))
   const outputPathRoot = path.join(getPaths().api.services, pluralCamelName)
   const servicePath = path.join(outputPathRoot, `${pluralCamelName}.js`)
@@ -45,7 +45,7 @@ export const handler = async ({ model, crud, force }) => {
       {
         title: 'Generating service files...',
         task: async () => {
-          const f = await files({ model, crud })
+          const f = await files({ name: model, crud })
           return writeFilesTask(f, { overwriteExisting: force })
         },
       },

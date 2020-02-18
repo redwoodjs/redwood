@@ -53,7 +53,7 @@ const sdlFromSchemaModel = async (name) => {
   }
 }
 
-export const files = async ({ model: name, crud }) => {
+export const files = async ({ name, crud }) => {
   const { query, input, idType } = await sdlFromSchemaModel(
     pascalcase(pluralize.singular(name))
   )
@@ -87,14 +87,14 @@ export const handler = async ({ model, crud, services, force }) => {
       {
         title: 'Generating SDL files...',
         task: async () => {
-          const f = await files({ model, crud })
+          const f = await files({ name: model, crud })
           return writeFilesTask(f, { overwriteExisting: force })
         },
       },
       services && {
         title: 'Generating service files...',
         task: async () => {
-          const f = await serviceFiles({ model, crud })
+          const f = await serviceFiles({ name: model, crud })
           return writeFilesTask(f, { overwriteExisting: force })
         },
       },
