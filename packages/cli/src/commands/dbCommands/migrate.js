@@ -39,20 +39,6 @@ export const builder = (yargs) => {
         ])
       },
     })
-    .command({
-      command: 'up',
-      desc: 'Migrate your database up.',
-      handler: () => {
-        runPrismaCommand(['migrate up', '--create-db', '--experimental'])
-      },
-    })
-    .command({
-      command: 'down',
-      desc: 'Migrate your database down.',
-      handler: () => {
-        runPrismaCommand(['migrate down', '--experimental'])
-      },
-    })
     .demandCommand()
     .help()
 }
