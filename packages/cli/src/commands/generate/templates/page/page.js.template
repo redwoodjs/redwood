@@ -2,7 +2,7 @@ const ${singularPascalName}Page = () => {
   return (
     <div>
       <h1>${singularPascalName}Page</h1>
-      <p>Find me in ${path}</p>
+      <p>Find me in ${outputPath}</p>
     </div>
   )
 }
