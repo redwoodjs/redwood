@@ -66,120 +66,106 @@ const newTitle = targetDir
 
 const newTitleTag = '<title>' + String(newTitle) + '</title>'
 
-export const CreateNewApp = () => {
-  //TODO does this need async() ?
-  const tasks = new Listr([
-    {
-      title: 'Checking if Soil is Available',
-      task: () => {
-        return new Listr([
-          {
-            //TODO ugly fail; but good enough?
-            title: 'Checking for path in command',
-            task: (ctx) => {
-              if (!targetDir) {
-                ctx.stop = true
-                throw new Error(
-                  'Missing path arg. Usage `yarn create redwood-app ./path/to/new-project`'
-                )
-              }
-            },
-          },
-          {
-            //TODO ugly fail; but good enough?
-            title: 'Checking if directory already exists',
-            task: (ctx) => {
-              if (fs.existsSync(newAppDir)) {
-                ctx.stop = true
-                throw new Error(
-                  `Install error: directory ${targetDir} already exists.`
-                )
-              }
-            },
-          },
-        ])
-      },
-    },
-    {
-      title: `Tilling Soil at "${newAppDir}/"`,
-      enabled: (ctx) => ctx.stop != true,
-      task: (ctx, task) =>
-        fs.mkdirSync(newAppDir, { recursive: true }, (e) => {
-          ctx.stop = true
-          task.skip(`Error creating directory ${targetDir}`)
-        }),
-    },
-    {
-      //TODO better Listr error handling and ctx updates
-      title: 'Planting Seed',
-      enabled: (ctx) => ctx.stop != true,
-      task: () => {
-        return new Listr([
-          {
-            title: `Downloading latest release from ${RELEASE_URL}`,
-            task: async () => {
-              // const releaseUrl = await latestReleaseZipFile()
-              downloadFile(latestReleaseZipFile(), tmpDownloadPath)
-            },
-          },
-          {
-            title: 'Extracting...',
-            task: async () => {
-              decompress(tmpDownloadPath, newAppDir, { strip: 1 })
-            },
-          },
-          {
-            title: 'Renaming index.html Meta Title',
-            task: async (task) => {
-              const fileData = fs.readFileSync(
-                newAppDir + '/web/src/index.html',
-                'utf8',
-                (e, data) => {
-                  //skipping, error should not kill remaining installation
-                  if (e) {
-                    task.skip('Could not read /web/src/index.html')
-                  }
-                  return data
-                }
+const tasks = new Listr([
+  {
+    title: 'Checking if Soil is Available',
+    task: () => {
+      return new Listr([
+        {
+          //TODO ugly fail; but good enough?
+          title: 'Checking for path in command',
+          task: (ctx) => {
+            if (!targetDir) {
+              ctx.stop = true
+              throw new Error(
+                'Missing path arg. Usage `yarn create redwood-app ./path/to/new-project`'
               )
-              fs.writeFileSync(
-                newAppDir + '/web/src/index.html',
-                fileData.replace(newTitle, newTitleTag),
-                'utf8',
-                (e) => {
-                  if (e) {
-                    task.skip('Could not write /web/src/index.html')
-                  }
-                }
-              )
-            },
+            }
           },
-        ])
-      },
+        },
+        {
+          //TODO ugly fail; but good enough?
+          title: 'Checking if directory already exists',
+          task: (ctx) => {
+            if (fs.existsSync(newAppDir)) {
+              ctx.stop = true
+              throw new Error(
+                `Install error: directory ${targetDir} already exists.`
+              )
+            }
+          },
+        },
+      ])
     },
-    {
-      title: 'Watering Soil',
-      enabled: (ctx) => ctx.stop != true,
-      task: async (ctx, task) => {
-        task.output = `${task.title} ...installing packages...`
-        return execa('yarn install', {
-          shell: true,
-          cwd: `${targetDir}`,
-        }).catch(() => {
-          ctx.stop = true
-          task.title = `${task.title} (or not)`
-          task.skip('Yarn not installed. Cannot proceed.')
-        })
-      },
+  },
+  {
+    title: `Tilling Soil at "${newAppDir}/"`,
+    enabled: (ctx) => ctx.stop != true,
+    task: (ctx, task) => {
+      fs.mkdirSync(newAppDir, { recursive: true })
     },
-    {
-      title: 'Success: Your Redwood is Ready to Grow!',
-      task: () => {
-        console.log('installation complete')
-      },
+  },
+  {
+    //TODO better Listr error handling and ctx updates
+    title: 'Planting Seed',
+    enabled: (ctx) => ctx.stop != true,
+    task: () => {
+      return new Listr([
+        {
+          title: `Downloading latest release from ${RELEASE_URL}`,
+          task: async () => {
+            const url = await latestReleaseZipFile()
+            return downloadFile(url, tmpDownloadPath)
+          },
+        },
+        {
+          title: 'Extracting...',
+          task: async () => {
+            await decompress(tmpDownloadPath, newAppDir, { strip: 1 })
+          },
+        },
+        {
+          title: 'Renaming index.html Meta Title',
+          task: (_ctx, task) => {
+            try {
+              const indexHtml = path.join(newAppDir, './web/src/index.html')
+              const data = fs.readFileSync(indexHtml, { encoding: 'utf8' })
+              fs.writeFileSync(indexHtml, data.replace(newTitle, newTitleTag), {
+                encoding: 'utf8',
+              })
+            } catch (e) {
+              console.log(e)
+              task.skip('Could not read /web/src/index.html')
+              throw e
+            }
+          },
+        },
+      ])
     },
-  ])
-  tasks.run()
-}
+  },
+  {
+    title: 'Watering Soil',
+    enabled: (ctx) => ctx.stop != true,
+    task: async (ctx, task) => {
+      task.output = `${task.title} ...installing packages...`
+      return execa('yarn install', {
+        shell: true,
+        cwd: `${targetDir}`,
+      }).catch(() => {
+        ctx.stop = true
+        task.title = `${task.title} (or not)`
+        task.skip('Yarn not installed. Cannot proceed.')
+      })
+    },
+  },
+  {
+    title: 'Success: Your Redwood is Ready to Grow!',
+    task: () => {
+      console.log('installation complete')
+    },
+  },
+])
 
-CreateNewApp()
+tasks.run().catch((e) => {
+  console.log(e.message)
+})
