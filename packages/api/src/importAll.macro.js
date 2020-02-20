@@ -46,7 +46,7 @@ function importAll({ referencePath, state, babel }) {
   const globPattern = getGlobPattern(referencePath, cwd)
 
   // Grab a list of the files
-  const importSources = glob.sync(globPattern, { cwd })
+  const importSources = glob.sync(globPattern, { cwd, ignore: './**/*.test.*' })
 
   const { importNodes, objectProperties } = importSources.reduce(
     (all, source) => {
