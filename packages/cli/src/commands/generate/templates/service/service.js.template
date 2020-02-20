@@ -4,8 +4,8 @@ const db = new PrismaClient()
 
 export const ${pluralCamelName} = () => {
   return db.${singularCamelName}.findMany()
-}
-<% if (isCrud) { %>
+}<% if (isCrud) { %>
+
 export const ${singularCamelName} = ({ id }) => {
   return db.${singularCamelName}.findOne({
     where: { id },
@@ -25,9 +25,8 @@ export const update${singularPascalName} = ({ id, input }) => {
   })
 }
 
-delete${singularPascalName}: ({ id }) => {
-    return db.${singularCamelName}.delete({
-      where: { id },
-    })
-  }
-<% } %>
+export const delete${singularPascalName} = ({ id }) => {
+  return db.${singularCamelName}.delete({
+    where: { id },
+  })
+}<% } %>

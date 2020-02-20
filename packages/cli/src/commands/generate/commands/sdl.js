@@ -14,7 +14,7 @@ const IGNORE_FIELDS = ['id', 'createdAt']
 const modelFieldToSDL = (field, required = true) => {
   return `${field.name}: ${field.type}${
     field.isRequired && required ? '!' : ''
-    }`
+  }`
 }
 
 const querySDL = (model) => {
@@ -53,7 +53,7 @@ const sdlFromSchemaModel = async (name) => {
   }
 }
 
-export const files = async ({ model: name, crud }) => {
+export const files = async ({ name, crud }) => {
   const { query, input, idType } = await sdlFromSchemaModel(
     pascalcase(pluralize.singular(name))
   )
@@ -76,8 +76,8 @@ export const files = async ({ model: name, crud }) => {
 export const command = 'sdl <model>'
 export const desc = 'Generate a GraphQL schema and service object.'
 export const builder = {
-  crud: { type: 'boolean', default: true },
   services: { type: 'boolean', default: true },
+  crud: { type: 'boolean', default: false },
   force: { type: 'boolean', default: false },
 }
 // TODO: Add --dry-run command
@@ -87,14 +87,14 @@ export const handler = async ({ model, crud, services, force }) => {
       {
         title: 'Generating SDL files...',
         task: async () => {
-          const f = await files({ model, crud })
+          const f = await files({ name: model, crud })
           return writeFilesTask(f, { overwriteExisting: force })
         },
       },
       services && {
         title: 'Generating service files...',
         task: async () => {
-          const f = await serviceFiles({ model, crud })
+          const f = await serviceFiles({ name: model, crud })
           return writeFilesTask(f, { overwriteExisting: force })
         },
       },
