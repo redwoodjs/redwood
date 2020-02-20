@@ -14,12 +14,12 @@ export const handler = async ({ verbose }) => {
         cmd: 'yarn prisma2',
         args: ['migrate up', '--experimental'],
       },
+      {
+        title: 'Generating the Prisma client...',
+        cmd: 'yarn prisma2',
+        args: ['generate'],
+      },
     ],
-    {
-      title: 'Generating the Prisma client...',
-      cmd: 'yarn prisma2',
-      args: ['generate'],
-    },
     { verbose }
   )
 }
