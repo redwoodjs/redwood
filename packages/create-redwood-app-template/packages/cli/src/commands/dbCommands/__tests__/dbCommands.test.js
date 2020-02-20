@@ -19,24 +19,22 @@ describe('db commands', () => {
   it('runs the command as expected', async () => {
     await up.handler({})
     expect(runCommandTask.mock.results[0].value).toEqual([
-      'yarn prisma2 migrate up --experimental',
-      'yarn prisma2 generate',
+      'prisma2 migrate up --experimental --create-db',
+      'prisma2 generate',
     ])
 
     await down.handler({})
     expect(runCommandTask.mock.results[1].value).toEqual([
-      'yarn prisma2 migrate down --experimental',
+      'prisma2 migrate down --experimental',
     ])
 
     await save.handler({ name: 'my-migration' })
     expect(runCommandTask.mock.results[2].value).toEqual([
-      'yarn prisma2 migrate save --name my-migration --experimental',
+      'prisma2 migrate save --name my-migration --experimental',
     ])
 
     await generate.handler({})
-    expect(runCommandTask.mock.results[3].value).toEqual([
-      'yarn prisma2 generate',
-    ])
+    expect(runCommandTask.mock.results[3].value).toEqual(['prisma2 generate'])
 
     await seed.handler({})
     expect(runCommandTask.mock.results[4].value).toEqual(['node seeds.js'])
