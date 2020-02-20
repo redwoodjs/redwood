@@ -36,7 +36,7 @@ const getGlobPattern = (callExpressionPath, cwd) => {
 
   const redwoodPaths = getPaths()
   const relativePaths = path.relative(cwd, redwoodPaths[target][dir])
-  return `./${relativePaths}/*.{ts,js}`
+  return `./${relativePaths}/**/*.{ts,js}`
 }
 
 function importAll({ referencePath, state, babel }) {
@@ -46,7 +46,7 @@ function importAll({ referencePath, state, babel }) {
   const globPattern = getGlobPattern(referencePath, cwd)
 
   // Grab a list of the files
-  const importSources = glob.sync(globPattern, { cwd })
+  const importSources = glob.sync(globPattern, { cwd, ignore: './**/*.test.*' })
 
   const { importNodes, objectProperties } = importSources.reduce(
     (all, source) => {
@@ -58,7 +58,10 @@ function importAll({ referencePath, state, babel }) {
         )
       )
 
-      // Turn `./relativePath/a.js` into `a`.
+      // Convert the relative path of the module to a key:
+      //  ./services/a.js -> a
+      //  ./services/a/a.js -> a
+      //  ./graphql/x/x.sdl.js -> x
       const objectKey = path
         .basename(source, path.extname(source))
         .replace('.sdl', '')
