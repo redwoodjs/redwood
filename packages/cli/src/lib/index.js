@@ -169,6 +169,7 @@ export const runCommandTask = async (commands, { verbose }) => {
     })),
     {
       renderer: verbose && VerboseRenderer,
+      dateFormat: false,
     }
   )
 
