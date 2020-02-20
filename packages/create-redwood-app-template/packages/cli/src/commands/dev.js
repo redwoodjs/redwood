@@ -4,6 +4,7 @@ import concurrently from 'concurrently'
 
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
+import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
 
 export const command = 'dev [app..]'
 export const desc = 'Run development servers.'
@@ -11,8 +12,11 @@ export const builder = {
   app: { choices: ['db', 'api', 'web'], default: ['db', 'api', 'web'] },
 }
 
-export const handler = ({ app }) => {
+export const handler = async ({ app }) => {
   const { base: BASE_DIR } = getPaths()
+
+  // The Redwood API needs the Prisma client to be created before it is started.
+  await generatePrismaClient({ verbose: false })
 
   const jobs = {
     api: {

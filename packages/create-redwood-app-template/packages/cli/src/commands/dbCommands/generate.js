@@ -6,7 +6,7 @@ export const builder = {
   verbose: { type: 'boolean', default: true, alias: ['v'] },
 }
 export const handler = async ({ verbose }) => {
-  await runCommandTask(
+  return await runCommandTask(
     [
       {
         title: 'Generating the Prisma client...',
