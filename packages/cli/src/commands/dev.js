@@ -15,7 +15,8 @@ export const builder = {
 export const handler = async ({ app }) => {
   const { base: BASE_DIR } = getPaths()
 
-  // The Redwood API needs the Prisma client to be created before it is started.
+  // The Redwood API needs the Prisma client to be created before it is started,
+  // because it throws when it cannot import the Prisma client.
   await generatePrismaClient({ verbose: false })
 
   const jobs = {
