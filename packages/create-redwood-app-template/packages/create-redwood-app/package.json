@@ -8,14 +8,11 @@
   ],
   "dependencies": {
     "@redwoodjs/internal": "^0.0.1-alpha.28",
-    "@types/react": "^16.9.19",
     "axios": "^0.19.2",
     "decompress": "^4.2.0",
     "execa": "^4.0.0",
-    "ink": "^2.6.0",
-    "react": "^16.12.0",
-    "tmp": "^0.1.0",
-    "yargs-parser": "^16.1.0"
+    "listr": "^0.14.3",
+    "tmp": "^0.1.0"
   },
   "scripts": {
     "build": "yarn clean && babel src --out-dir dist",
