@@ -57,30 +57,14 @@ const tmpDownloadPath = tmp.tmpNameSync({
 const targetDir = String(process.argv.slice(2))
 const newAppDir = path.resolve(process.cwd(), targetDir)
 
-const changeHtmlTitle = async (dirPath) => {
-  const newTitle = (userDir) => {
-    return userDir
-      .split('/')
-      .slice(-1)[0]
-      .split(/[ _-]/)
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ')
-  }
+const newTitle = targetDir
+  .split('/')
+  .slice(-1)[0]
+  .split(/[ _-]/)
+  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+  .join(' ')
 
-  await fs.readFileSync(dirPath + '/web/src/index.html', 'utf8', (e, data) => {
-    if (e) {
-      throw new Error('Could not read /web/src/index.html')
-    }
-    const titleTag = RegExp('<title>(.*?)</title>')
-    const newTitleTag = '<title>' + newTitle(dirPath) + '</title>'
-    const result = data.replace(titleTag, newTitleTag)
-    fs.writeFileSync(dirPath + '/web/src/index.html', result, 'utf8', (e) => {
-      if (e) {
-        throw new Error('Could not write /web/src/index.html')
-      }
-    })
-  })
-}
+const newTitleTag = '<title>' + String(newTitle) + '</title>'
 
 export const CreateNewApp = () => {
   //TODO does this need async() ?
@@ -90,7 +74,7 @@ export const CreateNewApp = () => {
       task: () => {
         return new Listr([
           {
-            //TODO Errors are not being handled correctly; ugly fail
+            //TODO ugly fail; but good enough?
             title: 'Checking for path in command',
             task: (ctx) => {
               if (!targetDir) {
@@ -102,7 +86,7 @@ export const CreateNewApp = () => {
             },
           },
           {
-            //TODO Errors are not being handled correctly; ugly fail
+            //TODO ugly fail; but good enough?
             title: 'Checking if directory already exists',
             task: (ctx) => {
               if (fs.existsSync(newAppDir)) {
@@ -117,7 +101,7 @@ export const CreateNewApp = () => {
       },
     },
     {
-      title: `Tilling Soil at "${targetDir}/"`,
+      title: `Tilling Soil at "${newAppDir}/"`,
       enabled: (ctx) => ctx.stop != true,
       task: (ctx, task) =>
         fs.mkdirSync(newAppDir, { recursive: true }, (e) => {
@@ -126,16 +110,51 @@ export const CreateNewApp = () => {
         }),
     },
     {
+      //TODO better Listr error handling and ctx updates
       title: 'Planting Seed',
       enabled: (ctx) => ctx.stop != true,
-      task: async (ctx, task) => {
-        const releaseUrl = await latestReleaseZipFile()
-        task.output = `Downloading ${releaseUrl}`
-        await downloadFile(releaseUrl, tmpDownloadPath)
-        task.output = 'Extracting...'
-        await decompress(tmpDownloadPath, newAppDir, { strip: 1 })
-        task.output = 'Renaming index.html Meta Title'
-        await changeHtmlTitle(newAppDir)
+      task: () => {
+        return new Listr([
+          {
+            title: `Downloading latest release from ${RELEASE_URL}`,
+            task: async () => {
+              // const releaseUrl = await latestReleaseZipFile()
+              downloadFile(latestReleaseZipFile(), tmpDownloadPath)
+            },
+          },
+          {
+            title: 'Extracting...',
+            task: async () => {
+              decompress(tmpDownloadPath, newAppDir, { strip: 1 })
+            },
+          },
+          {
+            title: 'Renaming index.html Meta Title',
+            task: async (task) => {
+              const fileData = fs.readFileSync(
+                newAppDir + '/web/src/index.html',
+                'utf8',
+                (e, data) => {
+                  //skipping, error should not kill remaining installation
+                  if (e) {
+                    task.skip('Could not read /web/src/index.html')
+                  }
+                  return data
+                }
+              )
+              fs.writeFileSync(
+                newAppDir + '/web/src/index.html',
+                fileData.replace(newTitle, newTitleTag),
+                'utf8',
+                (e) => {
+                  if (e) {
+                    task.skip('Could not write /web/src/index.html')
+                  }
+                }
+              )
+            },
+          },
+        ])
       },
     },
     {
