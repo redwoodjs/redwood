@@ -1,7 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 
-import Listr from 'listr'
 import lodash from 'lodash/string'
 import camelcase from 'camelcase'
 import pascalcase from 'pascalcase'
@@ -9,6 +8,9 @@ import pluralize from 'pluralize'
 import { paramCase } from 'param-case'
 import { getDMMF } from '@prisma/sdk'
 import { getPaths as getRedwoodPaths } from '@redwoodjs/internal'
+import execa from 'execa'
+import Listr from 'listr'
+import VerboseRenderer from 'listr-verbose-renderer'
 
 import c from 'src/lib/colors'
 
@@ -148,4 +150,31 @@ export const addRoutesToRouterTask = (routes) => {
   writeFile(redwoodPaths.web.routes, newRoutesContent, {
     overwriteExisting: true,
   })
+}
+
+export const runCommandTask = async (commands, { verbose }) => {
+  const tasks = new Listr(
+    commands.map(({ title, cmd, args, opts = {} }) => ({
+      title,
+      task: async () => {
+        return execa(cmd, args, {
+          shell: true,
+          cwd: `${getPaths().base}/api`,
+          stdio: verbose ? 'inherit' : 'pipe',
+          extendEnv: true,
+          cleanup: true,
+          ...opts,
+        })
+      },
+    })),
+    {
+      renderer: verbose && VerboseRenderer,
+    }
+  )
+
+  try {
+    await tasks.run()
+  } catch (e) {
+    console.log(c.error(e.message))
+  }
 }
