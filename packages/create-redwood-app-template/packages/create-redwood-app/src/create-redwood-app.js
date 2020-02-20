@@ -8,17 +8,33 @@
 
 import fs from 'fs'
 import path from 'path'
-import { spawn } from 'child_process'
 
-import React, { useState, useRef, useEffect } from 'react'
-import tmp from 'tmp'
 import decompress from 'decompress'
 import axios from 'axios'
-import { render, Box, Text, Color } from 'ink'
-import parse from 'yargs-parser'
+import Listr from 'listr'
+// import parse from 'yargs-parser'
+import execa from 'execa'
+import tmp from 'tmp'
+
+// ---
+// QUESTION: PP, why did you originally include this step below?
+// ---
+// export const parseArgs = () => {
+//   const parsed = parse(process.argv.slice(2))
+//   const { _: positional, ...flags } = parsed
+
+//   return [positional, flags]
+// }
+//
+// const targetDir = parseArgs()?.[0]?.[0]
 
 const RELEASE_URL =
   'https://api.github.com/repos/redwoodjs/create-redwood-app/releases'
+
+const latestReleaseZipFile = async () => {
+  const response = await axios.get(RELEASE_URL)
+  return response.data[0].zipball_url
+}
 
 const downloadFile = async (sourceUrl, targetFile) => {
   const writer = fs.createWriteStream(targetFile)
@@ -33,146 +49,118 @@ const downloadFile = async (sourceUrl, targetFile) => {
   })
 }
 
-const unzip = async (path, targetDir) =>
-  await decompress(path, targetDir, { strip: 1 })
+const tmpDownloadPath = tmp.tmpNameSync({
+  prefix: 'redwood',
+  postfix: '.zip',
+})
 
-// Gets the latest releases' zip file from GitHub's API.
-const latestReleaseZipFile = async () => {
-  const response = await axios.get(RELEASE_URL)
-  return response.data[0].zipball_url
-}
+const targetDir = String(process.argv.slice(2))
+const newAppDir = path.resolve(process.cwd(), targetDir)
 
-// turns command line args like:
-//
-//   generate sdl contact--force
-//
-// into:
-//
-//   [['generate', 'sdl', 'contact'], { force: true }]
-export const parseArgs = () => {
-  const parsed = parse(process.argv.slice(2))
-  const { _: positional, ...flags } = parsed
-
-  return [positional, flags]
-}
-
-export const CreateNewApp = ({ args }) => {
-  const targetDir = args?.[0]?.[0]
-  const [messages, setMessages] = useState([])
-  // TODO: Rewrite this to just use a component. Testing these hooks are impossible.
-  // Swimming against the tide: https://overreacted.io/a-complete-guide-to-useeffect/#swimming-against-the-tide
-  const latestMessages = useRef(messages)
-  const setNewMessage = (newMessage) => {
-    latestMessages.current = [...latestMessages.current, newMessage]
-    setMessages(latestMessages.current)
+const changeHtmlTitle = async (dirPath) => {
+  const newTitle = (userDir) => {
+    return userDir
+      .split('/')
+      .slice(-1)[0]
+      .split(/[ _-]/)
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ')
   }
 
-  // set index.html title based on user input directory
-  const changeHtmlTitle = async (path) => {
-    const newTitle = (userDir) => {
-      return userDir
-        .split("/")
-        .slice(-1)[0]
-        .split(/[ _-]/)
-        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(' ')
+  await fs.readFileSync(dirPath + '/web/src/index.html', 'utf8', (e, data) => {
+    if (e) {
+      throw new Error('Could not read /web/src/index.html')
     }
-
-    fs.readFile(path + '/web/src/index.html', 'utf8', (e, data) => {
+    const titleTag = RegExp('<title>(.*?)</title>')
+    const newTitleTag = '<title>' + newTitle(dirPath) + '</title>'
+    const result = data.replace(titleTag, newTitleTag)
+    fs.writeFileSync(dirPath + '/web/src/index.html', result, 'utf8', (e) => {
       if (e) {
-        return setNewMessage(e)
+        throw new Error('Could not write /web/src/index.html')
       }
-      const titleTag = RegExp('\<title\>(.*?)\<\/title\>')
-      const newTitleTag = '<title>' + newTitle(path) + '</title>'
-      const result = data.replace(titleTag, newTitleTag)
-      fs.writeFile(path + '/web/src/index.html', result, 'utf8', (e) => {
-        if (e) {
-          return setNewMessage(e)
-        }
-      })
     })
-  }
-
-  useEffect(() => {
-    const createApp = async () => {
-      // Attempt to create the new project directory, but abort if it already exists.
-      const newAppDir = path.resolve(process.cwd(), targetDir)
-      if (fs.existsSync(newAppDir)) {
-        setNewMessage(
-          <Color red>
-            We can't continue because "{newAppDir}" already exists
-          </Color>
-        )
-        return
-      } else {
-        fs.mkdirSync(newAppDir, { recursive: true })
-        setNewMessage(
-          <Text>
-            Created <Color green>{newAppDir}</Color>
-          </Text>
-        )
-      }
-
-      // Download the latest release of `create-redwood-app` from GitHub.
-      const tmpDownloadPath = tmp.tmpNameSync({
-        prefix: 'redwood',
-        postfix: '.zip',
-      })
-      const realeaseUrl = await latestReleaseZipFile()
-      setNewMessage(
-        <Text>
-          Downloading <Color green>{realeaseUrl}</Color>...
-        </Text>
-      )
-      await downloadFile(realeaseUrl, tmpDownloadPath)
-
-      // Extract the contents of the downloaded release into our new project directory.
-      setNewMessage(<Text>Extracting...</Text>)
-      const files = await unzip(tmpDownloadPath, newAppDir)
-      setNewMessage(
-        <Text>
-          Extracted {files.length} files in <Color green>{newAppDir}</Color>
-        </Text>
-      )
-
-      // change html.index meta Title using directory
-      await changeHtmlTitle(newAppDir)
-
-      // Run `yarn install`
-      setNewMessage(<Text>Installing packages...</Text>)
-      const child = spawn(`yarn install --cwd ${targetDir}`, {
-        shell: true,
-      })
-      child.stdout.on('data', (data) => {
-        setNewMessage(<Text>{data.toString().replace('\n', '')}</Text>)
-      })
-      child.stderr.on('data', (data) => {
-        setNewMessage(<Text>{data.toString().replace('\n', '')}</Text>)
-      })
-    }
-
-    if (targetDir) {
-      createApp()
-    }
-  }, [targetDir])
-
-  if (!targetDir) {
-    return (
-      <Color red>Usage `yarn create redwood-app ./path/to/new-project`</Color>
-    )
-  }
-
-  return (
-    <Box flexDirection="column">
-      {messages.map((message, index) => (
-        <Box key={'message' + index}>
-          <Text>{message}</Text>
-        </Box>
-      ))}
-    </Box>
-  )
+  })
 }
 
-if (process.env.NODE_ENV !== 'test') {
-  render(<CreateNewApp args={parseArgs()} />)
+export const CreateNewApp = () => {
+  //TODO does this need async() ?
+  const tasks = new Listr([
+    {
+      title: 'Checking if Soil is Available',
+      task: () => {
+        return new Listr([
+          {
+            //TODO Errors are not being handled correctly; ugly fail
+            title: 'Checking for path in command',
+            task: (ctx) => {
+              if (!targetDir) {
+                ctx.stop = true
+                throw new Error(
+                  'Missing path arg. Usage `yarn create redwood-app ./path/to/new-project`'
+                )
+              }
+            },
+          },
+          {
+            //TODO Errors are not being handled correctly; ugly fail
+            title: 'Checking if directory already exists',
+            task: (ctx) => {
+              if (fs.existsSync(newAppDir)) {
+                ctx.stop = true
+                throw new Error(
+                  `Install error: directory ${targetDir} already exists.`
+                )
+              }
+            },
+          },
+        ])
+      },
+    },
+    {
+      title: `Tilling Soil at "${targetDir}/"`,
+      enabled: (ctx) => ctx.stop != true,
+      task: (ctx, task) =>
+        fs.mkdirSync(newAppDir, { recursive: true }, (e) => {
+          ctx.stop = true
+          task.skip(`Error creating directory ${targetDir}`)
+        }),
+    },
+    {
+      title: 'Planting Seed',
+      enabled: (ctx) => ctx.stop != true,
+      task: async (ctx, task) => {
+        const releaseUrl = await latestReleaseZipFile()
+        task.output = `Downloading ${releaseUrl}`
+        await downloadFile(releaseUrl, tmpDownloadPath)
+        task.output = 'Extracting...'
+        await decompress(tmpDownloadPath, newAppDir, { strip: 1 })
+        task.output = 'Renaming index.html Meta Title'
+        await changeHtmlTitle(newAppDir)
+      },
+    },
+    {
+      title: 'Watering Soil',
+      enabled: (ctx) => ctx.stop != true,
+      task: async (ctx, task) => {
+        task.output = `${task.title} ...installing packages...`
+        return execa('yarn install', {
+          shell: true,
+          cwd: `${targetDir}`,
+        }).catch(() => {
+          ctx.stop = true
+          task.title = `${task.title} (or not)`
+          task.skip('Yarn not installed. Cannot proceed.')
+        })
+      },
+    },
+    {
+      title: 'Success: Your Redwood is Ready to Grow!',
+      task: () => {
+        console.log('installation complete')
+      },
+    },
+  ])
+  tasks.run()
 }
+
+CreateNewApp()
