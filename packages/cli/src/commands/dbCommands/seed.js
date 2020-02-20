@@ -1,14 +1,17 @@
-import execa from 'execa'
-
-import { getPaths } from 'src/lib'
+import { getPaths, runCommandTask } from 'src/lib'
 
 export const command = 'seed'
 export const desc = 'Seed your database with test data.'
-
 export const handler = () => {
-  execa('node', ['seeds.js'], {
-    shell: true,
-    cwd: getPaths().api.db,
-    stdio: 'inherit',
-  })
+  runCommandTask(
+    [
+      {
+        title: 'Seeding your database...',
+        cmd: 'node',
+        args: ['seeds.js'],
+        opts: { cwd: getPaths().api.db },
+      },
+    ],
+    { verbose: true }
+  )
 }
