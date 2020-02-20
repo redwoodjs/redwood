@@ -61,7 +61,7 @@ function importAll({ referencePath, state, babel }) {
       // Convert the relative path of the module to a key:
       //  ./services/a.js -> a
       //  ./services/a/a.js -> a
-      //  ./services/a/a.sdl.js -> a
+      //  ./graphql/x/x.sdl.js -> x
       const objectKey = path
         .basename(source, path.extname(source))
         .replace('.sdl', '')
