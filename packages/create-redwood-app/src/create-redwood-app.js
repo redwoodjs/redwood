@@ -135,21 +135,21 @@ const tasks = new Listr(
         ])
       },
     },
-    // {
-    //   title: 'Watering Soil',
-    //   enabled: (ctx) => ctx.stop != true,
-    //   task: async (ctx, task) => {
-    //     task.output = `${task.title} ...installing packages...`
-    //     return execa('yarn install', {
-    //       shell: true,
-    //       cwd: `${targetDir}`,
-    //     }).catch(() => {
-    //       ctx.stop = true
-    //       task.title = `${task.title} (or not)`
-    //       task.skip('Yarn not installed. Cannot proceed.')
-    //     })
-    //   },
-    // },
+    {
+      title: 'Watering Soil',
+      enabled: (ctx) => ctx.stop != true,
+      task: async (ctx, task) => {
+        task.output = `${task.title} ...installing packages...`
+        return execa('yarn install', {
+          shell: true,
+          cwd: `${targetDir}`,
+        }).catch(() => {
+          ctx.stop = true
+          task.title = `${task.title} (or not)`
+          task.skip('Yarn not installed. Cannot proceed.')
+        })
+      },
+    },
     {
       title: 'Success: Your Redwood is Ready to Grow!',
       task: () => {
