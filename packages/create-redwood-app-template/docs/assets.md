@@ -6,7 +6,7 @@ In general, it's best to import files directly into a template, page, or compone
 
 ### Example Asset Import with Webpack
 Using `import`, we can do the following:
-```
+```javascript
 import React from "react"
 import logo from "./my-logo.jpg"
 
@@ -41,11 +41,11 @@ Assuming `public/` includes the following:
 
 Running `yarn build` will copy the file `favicon.png` to `/dist/favicon.png`. The new directory with file `static-files/my-logo.jpg` will be copied to `/dist/static-files/my-logo.jpg`. These can be referenced in your code directly without any special handling, e.g.
 
-```
+```html
 <link rel="icon" type="image/png" href="/favicon.png" />
 ```
 and
-```
+```html
 <img src="/static-files/my-logo.jpg"> alt="Logo" />
 ```
 
