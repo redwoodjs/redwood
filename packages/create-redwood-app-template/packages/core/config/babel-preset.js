@@ -63,6 +63,20 @@ module.exports = () => ({
             },
           },
         ],
+        [
+          'babel-plugin-auto-import',
+          {
+            declarations: [
+              {
+                // `db.findMany()` becomes:
+                //   import db from '@redwoodjs/core/dist/loaders/db-auto-loader'
+                //   db.findMany()
+                default: 'db',
+                path: '@redwoodjs/core/dist/loaders/db-auto-loader',
+              },
+            ],
+          },
+        ],
       ],
     },
     // ** WEB **
