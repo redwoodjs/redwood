@@ -2,7 +2,6 @@ import path from 'path'
 
 import Listr from 'listr'
 import pascalcase from 'pascalcase'
-import pluralize from 'pluralize'
 
 import { generateTemplate, getPaths, writeFilesTask } from 'src/lib'
 
@@ -21,7 +20,7 @@ export const templateForComponentFile = ({
   templateVars,
 }) => {
   const basePath = getPaths().web[webPathSection]
-  const componentName = pascalcase(pluralize.singular(name)) + suffix
+  const componentName = pascalcase(name) + suffix
   const outputPath = path.join(
     basePath,
     componentName,
