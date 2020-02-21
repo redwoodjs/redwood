@@ -41,7 +41,7 @@ const tmpDownloadPath = tmp.tmpNameSync({
   postfix: '.zip',
 })
 
-const targetDir = String(process.argv.slice(2))
+const targetDir = String(process.argv.slice(2)).replace(/,/g, '-')
 const newAppDir = path.resolve(process.cwd(), targetDir)
 
 // Uses Listr: https://github.com/SamVerschueren/listr
