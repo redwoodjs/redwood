@@ -48,7 +48,9 @@
     "webpack-bundle-analyzer": "^3.6.0",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3",
-    "webpack-merge": "^4.2.2"
+    "webpack-merge": "^4.2.2",
+    "prisma2": "2.0.0-preview021",
+    "@prisma/client": "2.0.0-preview021"
   },
   "gitHead": "e7f45aaa32d8d33799c04f8169b0b0125bcaaece",
   "scripts": {
