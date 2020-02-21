@@ -44,6 +44,9 @@ const tmpDownloadPath = tmp.tmpNameSync({
 const targetDir = String(process.argv.slice(2))
 const newAppDir = path.resolve(process.cwd(), targetDir)
 
+// Uses Listr: https://github.com/SamVerschueren/listr
+// Sequencial terminal tasks and output
+// Individual task error stops execution unless `exitOnError: false`
 const tasks = new Listr(
   [
     {
@@ -53,9 +56,8 @@ const tasks = new Listr(
           [
             {
               title: 'Checking for path in command',
-              task: (ctx) => {
+              task: () => {
                 if (!targetDir) {
-                  ctx.stop = true
                   throw new Error(
                     'Missing path arg. Usage `yarn create redwood-app ./path/to/new-project`'
                   )
@@ -64,9 +66,8 @@ const tasks = new Listr(
             },
             {
               title: 'Checking if directory already exists',
-              task: (ctx) => {
+              task: () => {
                 if (fs.existsSync(newAppDir)) {
-                  ctx.stop = true
                   throw new Error(
                     `Install error: directory ${targetDir} already exists.`
                   )
@@ -80,15 +81,12 @@ const tasks = new Listr(
     },
     {
       title: `Tilling Soil at "${newAppDir}/"`,
-      enabled: (ctx) => ctx.stop != true,
       task: () => {
         fs.mkdirSync(newAppDir, { recursive: true })
       },
     },
     {
-      //TODO better Listr error handling and ctx updates
       title: 'Planting Seed',
-      enabled: (ctx) => ctx.stop != true,
       task: () => {
         return new Listr([
           {
@@ -125,10 +123,7 @@ const tasks = new Listr(
                   'utf8'
                 )
               } catch (e) {
-                console.log('0---------------------------')
-                console.log(e)
                 task.skip('Error updating title tag for /web/src/index.html')
-                throw new Error(e)
               }
             },
           },
@@ -137,23 +132,23 @@ const tasks = new Listr(
     },
     {
       title: 'Watering Soil',
-      enabled: (ctx) => ctx.stop != true,
       task: async (ctx, task) => {
-        task.output = `${task.title} ...installing packages...`
+        task.output = `...installing packages...`
         return execa('yarn install', {
           shell: true,
           cwd: `${targetDir}`,
         }).catch(() => {
           ctx.stop = true
           task.title = `${task.title} (or not)`
-          task.skip('Yarn not installed. Cannot proceed.')
+          throw new Error('Yarn not installed. Cannot proceed.')
         })
       },
     },
     {
-      title: 'Success: Your Redwood is Ready to Grow!',
-      task: () => {
-        console.log('installation complete')
+      title: '...Redwood planting in progress...',
+      task: (_ctx, task) => {
+        task.title = 'Success: Your Redwood is Ready to Grow!'
+        console.log('')
       },
     },
   ],
