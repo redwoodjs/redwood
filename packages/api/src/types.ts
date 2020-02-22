@@ -1,6 +1,3 @@
-import { IResolvers } from 'graphql-tools'
-import { DocumentNode, GraphQLSchema } from 'graphql'
-
 export type Services = { [funcName: string]: any }
 export type ImportedServices = {
   [serviceName: string]: Services
