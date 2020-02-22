@@ -7,7 +7,7 @@
 
 const { getPaths } = require('@redwoodjs/internal')
 
-const TARGETS_NODE = '8.10.0'
+const TARGETS_NODE = '12.16.1'
 // https://github.com/zloirock/core-js/blob/master/README.md#babelpreset-env
 // Warning! Recommended to specify used minor core-js version, like corejs: '3.6',
 // instead of corejs: 3, since with corejs: 3 will not be injected modules which
@@ -69,9 +69,8 @@ module.exports = () => ({
             declarations: [
               {
                 // `db.findMany()` becomes:
-                //   import { db } from '@redwoodjs/core/dist/loaders/db-auto-loader'
-                //   db.findMany()
-                default: 'db',
+                // import { db } from '@redwoodjs/core/dist/loaders/api-auto-loaders'
+                // db.findMany()
                 members: ['db'],
                 path: '@redwoodjs/core/dist/loaders/api-auto-loaders',
               },
