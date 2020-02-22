@@ -10,7 +10,7 @@ export const handleContext = (options: Config) => {
     // a reponse.
     context.callbackWaitsForEmptyEventLoop = false
 
-    // The user can a context object or function when they
+    // The user can set a context object or function when they
     // initialize the handler.
     let userContext = options?.context || {}
     if (typeof userContext === 'function') {
@@ -19,7 +19,8 @@ export const handleContext = (options: Config) => {
 
     // The context object returned from this function is passed to
     // the resolvers.
-    // Redwood also introduces a **global** context object.
+    // This also sets **global** context object, which can be imported:
+    // import { context } from '@redwoodjs/api'
     return setContext({
       ...context,
       ...userContext,
@@ -36,6 +37,7 @@ export const handleContext = (options: Config) => {
  */
 export const createGraphQLHandler = (options: Config = {}) => {
   const handler = new ApolloServer({
+    playground: process.env.NODE_ENV !== 'production',
     ...options,
     context: handleContext(options),
   }).createHandler()
