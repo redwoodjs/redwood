@@ -104,7 +104,7 @@
     invariant "^2.2.4"
     semver "^5.5.0"
 
-"@babel/core@^7.1.0", "@babel/core@^7.7.5", "@babel/core@^7.8.3", "@babel/core@^7.8.4":
+"@babel/core@^7.1.0", "@babel/core@^7.2.2", "@babel/core@^7.7.5", "@babel/core@^7.8.3", "@babel/core@^7.8.4":
   version "7.8.4"
   resolved "https://registry.yarnpkg.com/@babel/core/-/core-7.8.4.tgz#d496799e5c12195b3602d0fddd77294e3e38e80e"
   integrity sha512-0LiLrB2PwrVI+a2/IEskBopDYSd8BCb3rOvH7D5tzoWd696TBEduBvuLVm4Nx6rltrLZqvI3MCalB2K2aVzQjA==
@@ -2005,6 +2005,11 @@
   dependencies:
     "@types/node" ">= 8"
 
+"@prisma/client@2.0.0-preview021":
+  version "2.0.0-preview021"
+  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-2.0.0-preview021.tgz#7205345e3faa09278f3de104bb8af60e063420ad"
+  integrity sha512-pKU6p1r5gBwmQ6fa+zy6hQ/IAw6AsUWQ1VRZ9xy6i1zidsvGDzbSFzihqI9aBXB0ed0sdbijiGcujsG2tHBTYw==
+
 "@prisma/engine-core@2.0.41":
   version "2.0.41"
   resolved "https://registry.yarnpkg.com/@prisma/engine-core/-/engine-core-2.0.41.tgz#23c8e388352c0712df70ccc78b65012468be1c56"
@@ -3463,6 +3468,14 @@ babel-loader@^8.0.6:
     loader-utils "^1.0.2"
     mkdirp "^0.5.1"
     pify "^4.0.1"
+
+babel-plugin-auto-import@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/babel-plugin-auto-import/-/babel-plugin-auto-import-1.0.5.tgz#350778fbbc2a341420b7059e8f543b9fb2636b60"
+  integrity sha512-U/TmCczhGEU9l65yKVdKMGP0bNlWUpulFaaRMcNaVwCRSgjfnASdwZUVrHdKbVW1EV02iR0JtO6J96aTHB9NXw==
+  dependencies:
+    "@babel/core" "^7.2.2"
+    logical-not "^1.0.0"
 
 babel-plugin-dynamic-import-node@^2.3.0:
   version "2.3.0"
@@ -8615,6 +8628,11 @@ log-update@^2.3.0:
     cli-cursor "^2.0.0"
     wrap-ansi "^3.0.1"
 
+logical-not@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/logical-not/-/logical-not-1.0.0.tgz#3149848c0cce1fea1f76a0e45725c7bcdb33a627"
+  integrity sha512-l3X5Sf25wwZkprKfrfJ2YjCcxkNnitMvuqoVPAFNz1xpAMG7B4CkdELK19hafcR8K9fcUs0K0LkzZ62U+xdHpA==
+
 loglevel@^1.6.6:
   version "1.6.7"
   resolved "https://registry.yarnpkg.com/loglevel/-/loglevel-1.6.7.tgz#b3e034233188c68b889f5b862415306f565e2c56"
@@ -10293,6 +10311,11 @@ prettysize@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/prettysize/-/prettysize-2.0.0.tgz#902c02480d865d9cc0813011c9feb4fa02ce6996"
   integrity sha512-VVtxR7sOh0VsG8o06Ttq5TrI1aiZKmC+ClSn4eBPaNf4SHr5lzbYW+kYGX3HocBL/MfpVrRfFZ9V3vCbLaiplg==
+
+prisma2@2.0.0-preview021:
+  version "2.0.0-preview021"
+  resolved "https://registry.yarnpkg.com/prisma2/-/prisma2-2.0.0-preview021.tgz#3d27b7f1e2ac519ba0851e0bcc92eb5da1460e50"
+  integrity sha512-Llj0U+t4kWrC75U2ReDFRQkch/nwfDtO94k71UcNa/88ABjE03uwgw3EbSke7GB5VOl0nXUKRlzEAyk5SS3jqA==
 
 private@^0.1.6:
   version "0.1.8"
