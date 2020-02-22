@@ -75,6 +75,10 @@ module.exports = () => ({
                 members: ['db'],
                 path: '@redwoodjs/core/dist/loaders/api-auto-loaders',
               },
+              {
+                default: 'gql',
+                path: 'graphql-tag',
+              },
             ],
           },
         ],
