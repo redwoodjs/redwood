@@ -68,11 +68,14 @@ module.exports = () => ({
           {
             declarations: [
               {
-                // `db.findMany()` becomes:
                 // import { db } from '@redwoodjs/core/dist/loaders/api-auto-loaders'
-                // db.findMany()
                 members: ['db'],
                 path: '@redwoodjs/core/dist/loaders/api-auto-loaders',
+              },
+              {
+                // import { context } from '@redwoodjs/api'
+                members: ['context'],
+                path: '@redwoodjs/api',
               },
               {
                 default: 'gql',
