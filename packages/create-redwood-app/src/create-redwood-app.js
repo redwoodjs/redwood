@@ -50,7 +50,7 @@ const newAppDir = path.resolve(process.cwd(), targetDir)
 const tasks = new Listr(
   [
     {
-      title: 'Checking if Soil is Available',
+      title: 'Pre-Installation Check',
       task: () => {
         return new Listr(
           [
@@ -80,13 +80,13 @@ const tasks = new Listr(
       },
     },
     {
-      title: `Tilling Soil at "${newAppDir}/"`,
+      title: `Creating "${newAppDir}/"`,
       task: () => {
         fs.mkdirSync(newAppDir, { recursive: true })
       },
     },
     {
-      title: 'Planting Seed',
+      title: 'Extracting “Create-Redwood-App” Current Release',
       task: () => {
         return new Listr([
           {
@@ -122,6 +122,7 @@ const tasks = new Listr(
                   ),
                   'utf8'
                 )
+                task.title = `index.html Meta Title is now "${newTitle}"`
               } catch (e) {
                 task.skip('Error updating title tag for /web/src/index.html')
               }
@@ -131,7 +132,7 @@ const tasks = new Listr(
       },
     },
     {
-      title: 'Watering Soil',
+      title: 'Installing Packages',
       task: async (ctx, task) => {
         task.output = `...installing packages...`
         return execa('yarn install', {
