@@ -1,10 +1,16 @@
 import { ApolloServer, Config } from 'apollo-server-lambda'
 
+import {
+  APIGatewayProxyEvent,
+  Context as LambdaContext,
+} from 'aws-lambda';
+
+
 import { setContext } from './globalContext'
 
 export const handleContext = (options: Config) => {
   // Returns a function that deals with the context on request.
-  return ({ context = {}, events } = {}) => {
+  return ({ context, event }: {context: LambdaContext, event: APIGatewayProxyEvent}) => {
     // Prevent the Lambda function from waiting for all resources,
     // such as database connections, to be released before returning
     // a reponse.
@@ -14,7 +20,7 @@ export const handleContext = (options: Config) => {
     // initialize the handler.
     let userContext = options?.context || {}
     if (typeof userContext === 'function') {
-      userContext = userContext({ context, events })
+      userContext = userContext({ context, event })
     }
 
     // The context object returned from this function is passed to
