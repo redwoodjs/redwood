@@ -69,10 +69,11 @@ module.exports = () => ({
             declarations: [
               {
                 // `db.findMany()` becomes:
-                //   import db from '@redwoodjs/core/dist/loaders/db-auto-loader'
+                //   import { db } from '@redwoodjs/core/dist/loaders/db-auto-loader'
                 //   db.findMany()
                 default: 'db',
-                path: '@redwoodjs/core/dist/loaders/db-auto-loader',
+                members: ['db'],
+                path: '@redwoodjs/core/dist/loaders/api-auto-loaders',
               },
             ],
           },
