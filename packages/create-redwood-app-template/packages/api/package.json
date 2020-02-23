@@ -35,7 +35,7 @@
     "build": "yarn clean && yarn build:js && yarn build:types && mv dist/importAll.macro.js .",
     "build:js": "babel src --out-dir dist --extensions \".js,.ts\" --source-maps inline",
     "build:types": "tsc --declaration --emitDeclarationOnly",
-    "build:watch": "nodemon --watch src --ignore dist --exec 'yarn build'",
+    "build:watch": "nodemon --watch src -e ts,js --ignore dist --exec 'yarn build'",
     "prepublish": "yarn build",
     "test": "yarn jest",
     "test:watch": "yarn test --watch",
