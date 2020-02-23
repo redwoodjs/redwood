@@ -5,7 +5,6 @@ import {
   Context as LambdaContext,
 } from 'aws-lambda';
 
-
 import { setContext } from './globalContext'
 
 export const handleContext = (options: Config) => {
