@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/core",
-  "version": "0.0.1-alpha.29",
+  "version": "0.0.1-alpha.30",
   "license": "MIT",
   "files": [
     "config",
@@ -16,11 +16,11 @@
     "@babel/preset-react": "^7.8.3",
     "@babel/preset-typescript": "^7.8.3",
     "@babel/runtime-corejs3": "^7.8.4",
-
-    "@redwoodjs/cli": "^0.0.1-alpha.29",
-    "@redwoodjs/dev-server": "^0.0.1-alpha.29",
-    "@redwoodjs/eslint-config": "^0.0.1-alpha.29",
-    "@redwoodjs/internal": "^0.0.1-alpha.29",
+    "@prisma/client": "2.0.0-preview021",
+    "@redwoodjs/cli": "^0.0.1-alpha.30",
+    "@redwoodjs/dev-server": "^0.0.1-alpha.30",
+    "@redwoodjs/eslint-config": "^0.0.1-alpha.30",
+    "@redwoodjs/internal": "^0.0.1-alpha.30",
     "@types/jest": "^25.1.2",
     "@types/node": "^13.7.1",
     "@types/react": "^16.9.19",
@@ -42,7 +42,6 @@
     "lodash.escaperegexp": "^4.1.2",
     "mini-css-extract-plugin": "^0.9.0",
     "prisma2": "2.0.0-preview021",
-    "@prisma/client": "2.0.0-preview021",
     "style-loader": "^1.1.3",
     "svg-react-loader": "^0.4.6",
     "typescript": "^3.7.5",
