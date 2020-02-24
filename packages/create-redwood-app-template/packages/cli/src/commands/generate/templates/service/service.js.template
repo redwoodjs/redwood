@@ -1,7 +1,3 @@
-import { PrismaClient } from '@prisma/client'
-
-const db = new PrismaClient()
-
 export const ${pluralCamelName} = () => {
   return db.${singularCamelName}.findMany()
 }<% if (isCrud) { %>
