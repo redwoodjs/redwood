@@ -1,4 +1,4 @@
-name: Build and Test against latest Node 10, 12
+name: Build and Jest Tests on Node 10 and 12
 
 on: [push]
 
