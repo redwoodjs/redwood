@@ -19,6 +19,7 @@ import {
 } from 'src/lib'
 
 import { files as sdlFiles } from './sdl'
+import { files as serviceFiles } from './service'
 
 const NON_EDITABLE_COLUMNS = ['id', 'createdAt', 'updatedAt']
 const ASSETS = fs.readdirSync(path.join(templateRoot, 'scaffold', 'assets'))
@@ -34,7 +35,8 @@ const getIdType = (model) => {
 
 export const files = async ({ model: name }) => {
   return {
-    ...(await sdlFiles({ name, crud: true, services: true })),
+    ...(await sdlFiles({ name, crud: true })),
+    ...(await serviceFiles({ name, crud: true })),
     ...assetFiles(name),
     ...layoutFiles(name),
     ...pageFiles(name),
