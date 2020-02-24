@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/api",
-  "version": "0.0.1-alpha.26",
+  "version": "0.0.1-alpha.30",
   "files": [
     "dist",
     "importAll.macro.js"
@@ -9,7 +9,7 @@
   "types": "./dist/main.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@redwoodjs/core": "^0.0.1-alpha.26",
+    "@redwoodjs/internal": "^0.0.1-alpha.30",
     "apollo-server-lambda": "2.9.16",
     "babel-plugin-macros": "^2.8.0",
     "core-js": "3.6.4",
@@ -35,7 +35,7 @@
     "build": "yarn clean && yarn build:js && yarn build:types && mv dist/importAll.macro.js .",
     "build:js": "babel src --out-dir dist --extensions \".js,.ts\" --source-maps inline",
     "build:types": "tsc --declaration --emitDeclarationOnly",
-    "build:watch": "nodemon --ignore dist --exec 'yarn build'",
+    "build:watch": "nodemon --watch src -e ts,js --ignore dist --exec 'yarn build'",
     "prepublish": "yarn build",
     "test": "yarn jest",
     "test:watch": "yarn test --watch",

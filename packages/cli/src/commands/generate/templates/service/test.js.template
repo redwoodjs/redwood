@@ -1,0 +1,7 @@
+import { ${pluralCamelName} } from './${pluralCamelName}'
+
+describe('${pluralCamelName}', () => {
+  it('returns an array', () => {
+    expect(Array.isArray(${pluralCamelName}()).toBe(true)
+  })
+})

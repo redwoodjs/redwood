@@ -1,0 +1,33 @@
+{
+  "name": "@redwoodjs/internal",
+  "version": "0.0.1-alpha.30",
+  "main": "dist/main.js",
+  "files": [
+    "dist"
+  ],
+  "types": "./dist/main.d.ts",
+  "license": "MIT",
+  "dependencies": {
+    "findup-sync": "^4.0.0",
+    "toml": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/findup-sync": "^2.0.2"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/fixtures/"
+    ]
+  },
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "yarn clean && yarn build:js && yarn build:types",
+    "build:js": "babel src --out-dir dist --extensions \".js,.ts\" --source-maps inline",
+    "build:types": "tsc --declaration --emitDeclarationOnly",
+    "build:watch": "nodemon --ignore dist --exec 'yarn build'",
+    "prepublishOnly": "yarn clean && yarn build",
+    "test": "jest",
+    "test:watch": "yarn test --watch"
+  },
+  "gitHead": "e7f45aaa32d8d33799c04f8169b0b0125bcaaece"
+}

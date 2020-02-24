@@ -6,11 +6,9 @@ WARNING: This software is in alpha and should not be considered suitable for pro
 
 Redwood Router (RR from now on) is designed to list all routes in a single file, without any nesting. We prefer this design, as it makes it very easy to track which routes map to which pages.
 
-## Installation and use outside of a Redwood app
+## Installation
 
-RR was designed for use in Redwood apps, and the rest of the documentation here will use examples that are appropriate in that context. That said, you can use RR outside of Redwood apps too! If you do, there are a few things to note:
-
-1. Redwood auto-imports every Page component in the `Routes.js` file, so if you use it outside of that context, you will need to import your Pages manually.
+RR was designed for use in Redwood apps, and if you use `yarn create-redwood-app` it will be installed for you. The rest of the documentation here will use examples that are appropriate in that context. That said, you can use RR outside of Redwood apps too! To learn more, see [Installation and use outside of a Redwood app](#installation-and-use-outside-of-a-redwood-app) at the end of this document.
 
 ## Router and Route
 
@@ -170,3 +168,88 @@ const SomePage = () => {
   ...
 }
 ```
+
+## Code-splitting
+
+By default, RR (when used in a Redwood app) will code-split on every Page, creating a separate lazy-loaded webpack bundle for each. When navigating from page to page, RR will wait until the new Page module is loaded before re-rendering, thus preventing the "white-flash" effect.
+
+## Not code splitting
+
+If you'd like to override the default lazy-loading behavior and include certain Pages in the main webpack bundle, you can simply add the import statement to the `Routes.js` file:
+
+```js
+// Routes.js
+
+import HomePage from 'src/pages/HomePage'
+```
+
+Redwood will detect your explicit import and refrain from splitting that page into a separate bundle. Be careful with this feature, as you can easily bloat the size of your main bundle to the point where your initial page load time becomes unacceptable.
+
+## PageLoadingContext
+
+Because lazily-loaded pages can take a non-negligible amount of time to load (depending on bundle size and network connection), you may want to show a loading indicator to signal to the user that something is happening after they click a link. RR makes this really easy with `usePageLoadingContext`:
+
+```js
+// SomeLayout.js
+
+import { usePageLoadingContext } from '@redwoodjs/router'
+
+const SomeLayout = () => {
+  const { loading } = usePageLoadingContext()
+  return (
+    <div>
+      {loading && <div>Loading...</div>}
+      <main>{props.children}</main>
+    </div>
+  )
+}
+```
+
+When the lazy-loaded page is loading, `PageLoadingContext.Consumer` will pass `{ loading: true }` to the render function, or false otherwise. You can use this context wherever you like in your application!
+
+After adding this to your app you will probably not see it when navigating between pages. This is because having a loading indicator is nice, but can get annoying when it shows up every single time you navigate to a new page. In fact, this behavior makes it feel like your pages take even longer to load than they actually do! RR takes this into account and, by default, will only show the loader when it takes more than 1000 milliseconds for the page to load. You can change this to whatever you like with the `pageLoadingDelay` prop on `Router`:
+
+```js
+// Routes.js
+
+<Router pageLoadingDelay={500}>...</Router>
+```
+
+Now the loader will show up after 500ms of load time. To see your loading indicator, you can set this value to 0 or, even better, [change the network speed](https://developers.google.com/web/tools/chrome-devtools/network#throttle) in developer tools to "Slow 3G" or another agonizingly slow connection speed.
+
+## Installation and use outside of a Redwood app
+
+If you'd like to use RR in a non-Redwood app, you can! Start by installing it:
+
+```terminal
+$ yarn add @redwoodjs/router
+```
+
+Then you can import and use the various RR components like normal. The only exception being that Redwood automatically takes care of making all your Pages available in the `Routes.js` file. When using RR outside that context, you'll need to do this on your own. By default, RR provides code splitting for every Page. To mimic this, you'll need to define each Page as an object, like so:
+
+```js
+const HomePage = {
+  name: 'HomePage',
+  loader: () => import('path/to/HomePage.js'),
+}
+
+...
+
+<Router>
+  <Route path="/" page={HomePage} name="home" />
+</Router>
+```
+
+Then RR will take care of the lazy loading for you. If you'd prefer to have some or all of your Pages included in the main webpack bundle, you can import them normally:
+
+```js
+import HomePage from 'path/to/HomePage.js'
+
+...
+
+<Router>
+  <Route path="/" page={HomePage} name="home" />
+</Router>
+```
+
+That's it! Everything else should work the same as it does inside a Redwood app!

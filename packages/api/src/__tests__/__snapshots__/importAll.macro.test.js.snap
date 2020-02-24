@@ -25,9 +25,11 @@ const serviceImports = importAll('api', 'services')
       ↓ ↓ ↓ ↓ ↓ ↓
 
 import * as _fixturesApiSrcServicesPostsTs from './fixtures/api/src/services/posts.ts'
+import * as _fixturesApiSrcServicesTodosTodosJs from './fixtures/api/src/services/todos/todos.js'
 import * as _fixturesApiSrcServicesUsersJs from './fixtures/api/src/services/users.js'
 const serviceImports = {
   posts: _fixturesApiSrcServicesPostsTs,
+  todos: _fixturesApiSrcServicesTodosTodosJs,
   users: _fixturesApiSrcServicesUsersJs,
 }
 

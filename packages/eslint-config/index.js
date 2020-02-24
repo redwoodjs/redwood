@@ -44,6 +44,13 @@ module.exports = {
         '@redwoodjs/redwood/no-unavailable-pages': 'error',
       },
     },
+    {
+      files: ['api/src/**/*.js'],
+      globals: {
+        db: 'readonly',
+        context: 'readonly',
+      },
+    },
   ],
   settings: {
     'import/resolver': {
