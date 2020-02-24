@@ -21,12 +21,6 @@ describe('graphQLServer handleContext', () => {
       b: 2,
       callbackWaitsForEmptyEventLoop: false,
     })
-
-    const handler2 = handleContext({ context: { a: 1 } })
-    expect(handler2()).toEqual({
-      a: 1,
-      callbackWaitsForEmptyEventLoop: false,
-    })
   })
 
   it('also accepts a function', () => {
