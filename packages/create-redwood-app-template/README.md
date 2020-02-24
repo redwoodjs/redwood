@@ -23,8 +23,8 @@ and feature upgrades over time and with minimum effort.
 > but keep in mind that we are driving Redwood development with that prose, and
 > some of the commands may not work yet. We would love your feedback on anything
 > you find confusing.
-
-https://github.com/redwoodjs/tutorial
+>
+> https://github.com/redwoodjs/tutorial
 
 **EXAMPLES:** If you'd like to see some examples of what a Redwood application
 might look like (these are still very much works in progress), take a look at
