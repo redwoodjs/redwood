@@ -17,7 +17,7 @@
     "@babel/preset-typescript": "^7.8.3",
     "@babel/runtime-corejs3": "^7.8.4",
     "@prisma/client": "2.0.0-preview021",
-    "@redwoodjs/cli": "^0.0.1-alpha.30",
+    "@redwoodjs/cli": "^0.0.1-alpha.30.0.1",
     "@redwoodjs/dev-server": "^0.0.1-alpha.30",
     "@redwoodjs/eslint-config": "^0.0.1-alpha.30",
     "@redwoodjs/internal": "^0.0.1-alpha.30",
