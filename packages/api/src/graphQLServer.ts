@@ -1,15 +1,17 @@
 import { ApolloServer, Config } from 'apollo-server-lambda'
-
-import {
-  APIGatewayProxyEvent,
-  Context as LambdaContext,
-} from 'aws-lambda';
+import { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 
 import { setContext } from './globalContext'
 
 export const handleContext = (options: Config) => {
-  // Returns a function that deals with the context on request.
-  return ({ context, event }: {context: LambdaContext, event: APIGatewayProxyEvent}) => {
+  // Returns a function that deals with the context per request.
+  return ({
+    context,
+    event,
+  }: {
+    context: LambdaContext
+    event: APIGatewayProxyEvent
+  }) => {
     // Prevent the Lambda function from waiting for all resources,
     // such as database connections, to be released before returning
     // a reponse.
