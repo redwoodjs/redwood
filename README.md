@@ -15,14 +15,14 @@ cycles choosing and re-choosing various technologies and configurations. Plus,
 because Redwood is a proper framework, you benefit from continued performance
 and feature upgrades over time and with minimum effort.
 
-**WARNING:** This document is aspirational (see
-[Readme Driven Development](https://tom.preston-werner.com/2010/08/23/readme-driven-development.html))
-and not everything contained within it is true yet.
+> **WARNING:** This document is aspirational (see
+> [Readme Driven Development](https://tom.preston-werner.com/2010/08/23/readme-driven-development.html))
+> and not everything contained within it is true yet.
 
-**TUTORIAL:** We have a "getting started from scratch" tutorial in the works,
-but keep in mind that we are driving Redwood development with that prose, and
-some of the commands may not work yet. We would love your feedback on anything
-you find confusing.
+> **TUTORIAL:** We have a "getting started from scratch" tutorial in the works,
+> but keep in mind that we are driving Redwood development with that prose, and
+> some of the commands may not work yet. We would love your feedback on anything
+> you find confusing.
 
 https://github.com/redwoodjs/tutorial
 
