@@ -1,6 +1,6 @@
 export const ${pluralCamelName} = () => {
   return db.${singularCamelName}.findMany()
-}<% if (isCrud) { %>
+}<% if (crud) { %>
 
 export const ${singularCamelName} = ({ id }) => {
   return db.${singularCamelName}.findOne({
