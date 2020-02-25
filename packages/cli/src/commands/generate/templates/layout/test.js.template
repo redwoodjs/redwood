@@ -1,9 +1,9 @@
 import React from 'react';
 import { fireEvent, cleanup } from '@testing-library/react'
 
-import ${pascalName} from './'
+import ${pascalName}Layout from './'
 
-describe('${pascalName}', () => {
+describe('${pascalName}Layout', () => {
   it('is true', () => {
     expect(true).toBe(true)
   })

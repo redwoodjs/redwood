@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, cleanup } from '@testing-library/react'
+import { render, fireEvent, waitForElement } from '@testing-library/react'
 
 import ${pascalName} from './'
 
