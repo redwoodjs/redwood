@@ -41,6 +41,7 @@ const tmpDownloadPath = tmp.tmpNameSync({
   postfix: '.zip',
 })
 
+// To run any commands, use these to set path for the working dir
 const targetDir = String(process.argv.slice(2)).replace(/,/g, '-')
 const newAppDir = path.resolve(process.cwd(), targetDir)
 
@@ -128,6 +129,28 @@ const tasks = new Listr(
               }
             },
           },
+          {
+            title: 'Set Local App Development README.md',
+            task: (_ctx, task) => {
+              try {
+                fs.unlinkSync(path.join(newAppDir, './README.md'))
+              } catch (e) {
+                task.skip(
+                  'Could not replace source README.md with a local copy'
+                )
+              }
+              try {
+                fs.renameSync(
+                  path.join(newAppDir, './README_APP.md'),
+                  path.join(newAppDir, './README.md')
+                )
+              } catch (e) {
+                task.skip(
+                  'Could not replace source README.md with a local copy'
+                )
+              }
+            },
+          },
         ])
       },
     },
@@ -148,7 +171,7 @@ const tasks = new Listr(
     {
       title: '...Redwood planting in progress...',
       task: (_ctx, task) => {
-        task.title = 'Success: Your Redwood is Ready to Grow!'
+        task.title = 'SUCCESS: Your Redwood is Ready to Grow!'
         console.log('')
       },
     },
