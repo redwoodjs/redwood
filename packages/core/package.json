@@ -21,10 +21,12 @@
     "@redwoodjs/dev-server": "^0.0.1-alpha.31",
     "@redwoodjs/eslint-config": "^0.0.1-alpha.31",
     "@redwoodjs/internal": "^0.0.1-alpha.31",
+    "@testing-library/react": "^9.4.1",
     "@types/jest": "^25.1.2",
     "@types/node": "^13.7.1",
     "@types/react": "^16.9.19",
     "@types/react-dom": "^16.9.5",
+    "babel-jest": "^25.1.0",
     "babel-loader": "^8.0.6",
     "babel-plugin-auto-import": "^1.0.5",
     "babel-plugin-graphql-tag": "^2.5.0",
@@ -39,6 +41,8 @@
     "graphql": "^14.6.0",
     "graphql-tag": "^2.10.3",
     "html-webpack-plugin": "^3.2.0",
+    "jest": "^25.1.0",
+    "jest-directory-named-resolver": "^0.3.0",
     "lodash.escaperegexp": "^4.1.2",
     "mini-css-extract-plugin": "^0.9.0",
     "prisma2": "2.0.0-preview021",
@@ -58,11 +62,6 @@
     "build:watch": "nodemon --ignore dist --exec 'yarn build'",
     "prepublishOnly": "yarn clean && yarn build",
     "clean": "rm -rf dist"
-  },
-  "devDependencies": {
-    "@testing-library/react": "^9.4.1",
-    "jest": "^25.1.0",
-    "jest-directory-named-resolver": "jsonnull/jest-directory-named-resolver"
   },
   "jest": {
     "resolver": "jest-directory-named-resolver"
