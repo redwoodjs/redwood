@@ -10,13 +10,13 @@
   "license": "MIT",
   "dependencies": {
     "@redwoodjs/internal": "^0.0.1-alpha.31",
-    "apollo-server-lambda": "2.9.16",
+    "apollo-server-lambda": "2.10.1",
     "babel-plugin-macros": "^2.8.0",
     "core-js": "3.6.4",
     "glob": "^7.1.6",
     "graphql": "^14.6.0",
     "graphql-iso-date": "^3.6.1",
-    "graphql-tools": "4.0.6",
+    "graphql-tools": "4.0.7",
     "lodash.merge": "^4.6.2",
     "lodash.omitby": "^4.6.0"
   },
