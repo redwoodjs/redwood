@@ -149,16 +149,18 @@ const componentFiles = async (name) => {
 }
 
 // add routes for all pages
-const routes = ({ model: name }) => {
+const routes = async ({ model: name }) => {
   const singularPascalName = pascalcase(pluralize.singular(name))
   const pluralPascalName = pascalcase(pluralize(name))
   const singularCamelName = camelcase(singularPascalName)
   const pluralCamelName = camelcase(pluralPascalName)
+  const model = await getSchema(singularPascalName)
+  const idRouteParam = getIdType(model) === 'Int' ? ':Int' : ''
 
   return [
-    `<Route path="/${pluralCamelName}/{id:Int}/edit" page={Edit${singularPascalName}Page} name="edit${singularPascalName}" />`,
+    `<Route path="/${pluralCamelName}/{id${idRouteParam}}/edit" page={Edit${singularPascalName}Page} name="edit${singularPascalName}" />`,
     `<Route path="/${pluralCamelName}/new" page={New${singularPascalName}Page} name="new${singularPascalName}" />`,
-    `<Route path="/${pluralCamelName}/{id:Int}" page={${singularPascalName}Page} name="${singularCamelName}" />`,
+    `<Route path="/${pluralCamelName}/{id${idRouteParam}}" page={${singularPascalName}Page} name="${singularCamelName}" />`,
     `<Route path="/${pluralCamelName}" page={${pluralPascalName}Page} name="${pluralCamelName}" />`,
   ]
 }
@@ -198,7 +200,7 @@ export const handler = async ({ model, force }) => {
       {
         title: 'Adding scaffold routes...',
         task: async () => {
-          return addRoutesToRouterTask(routes({ model }))
+          return addRoutesToRouterTask(await routes({ model }))
         },
       },
       {
