@@ -17,27 +17,18 @@ export const files = ({ name }) => {
     webPathSection: REDWOOD_WEB_PATH_NAME,
     templatePath: 'component/test.js.template',
   })
-  const readmeFile = templateForComponentFile({
-    name,
-    extension: '.mdx',
-    webPathSection: REDWOOD_WEB_PATH_NAME,
-    templatePath: 'component/readme.mdx.template',
-  })
 
   // Returns
   // {
   //    "path/to/fileA": "<<<template>>>",
   //    "path/to/fileB": "<<<template>>>",
   // }
-  return [componentFile, testFile, readmeFile].reduce(
-    (acc, [outputPath, content]) => {
-      return {
-        [outputPath]: content,
-        ...acc,
-      }
-    },
-    {}
-  )
+  return [componentFile, testFile].reduce((acc, [outputPath, content]) => {
+    return {
+      [outputPath]: content,
+      ...acc,
+    }
+  }, {})
 }
 
 export const {

@@ -28,6 +28,7 @@ const PAGES = fs.readdirSync(path.join(templateRoot, 'scaffold', 'pages'))
 const COMPONENTS = fs.readdirSync(
   path.join(templateRoot, 'scaffold', 'components')
 )
+const SCAFFOLD_STYLE_PATH = './scaffold.css'
 
 const getIdType = (model) => {
   return model.fields.find((field) => field.name === 'id')?.type
@@ -166,11 +167,14 @@ const addScaffoldImport = () => {
   const indexJsPath = path.join(getPaths().web.src, 'index.js')
   let indexJsContents = readFile(indexJsPath).toString()
 
+  if (indexJsContents.match(SCAFFOLD_STYLE_PATH)) {
+    return 'Skipping scaffold style include'
+  }
+
   indexJsContents = indexJsContents.replace(
     "import Routes from 'src/Routes'\n",
-    "import Routes from 'src/Routes'\n\nimport './scaffold.css'"
+    `import Routes from 'src/Routes'\n\nimport '${SCAFFOLD_STYLE_PATH}'`
   )
-
   writeFile(indexJsPath, indexJsContents, { overwriteExisting: true })
 
   return 'Added scaffold import to index.js'
