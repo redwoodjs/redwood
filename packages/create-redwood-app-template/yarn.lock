@@ -7902,9 +7902,10 @@ jest-diff@^25.1.0:
     jest-get-type "^25.1.0"
     pretty-format "^25.1.0"
 
-jest-directory-named-resolver@jsonnull/jest-directory-named-resolver:
+jest-directory-named-resolver@^0.3.0:
   version "0.3.0"
-  resolved "https://codeload.github.com/jsonnull/jest-directory-named-resolver/tar.gz/1e304799cec36ae4508051a8b50c8bd29d798459"
+  resolved "https://registry.yarnpkg.com/jest-directory-named-resolver/-/jest-directory-named-resolver-0.3.0.tgz#77b7843e25189f2522c3af4bd25eb6323dc12830"
+  integrity sha512-1A/N75O6ly4oedbJvEnWY+Rr9S+9qYX8h6Aql+SCBNu9ViQRKlvmBHOMVzk/jI/8lcqzP0iPo6R1r4ubSP8t1A==
   dependencies:
     resolve "^1.9.0"
 
