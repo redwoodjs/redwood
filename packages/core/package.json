@@ -58,5 +58,13 @@
     "build:watch": "nodemon --ignore dist --exec 'yarn build'",
     "prepublishOnly": "yarn clean && yarn build",
     "clean": "rm -rf dist"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^9.4.1",
+    "jest": "^25.1.0",
+    "jest-directory-named-resolver": "jsonnull/jest-directory-named-resolver"
+  },
+  "jest": {
+    "resolver": "jest-directory-named-resolver"
   }
 }
