@@ -5,16 +5,33 @@ import {
 
 const COMPONENT_SUFFIX = 'Cell'
 const REDWOOD_WEB_PATH_NAME = 'components'
-const TEMPLATE_PATH = 'cell/cell.js.template'
 
 export const files = ({ name }) => {
-  const [outputPath, template] = templateForComponentFile({
+  const cellFile = templateForComponentFile({
     name,
     suffix: COMPONENT_SUFFIX,
     webPathSection: REDWOOD_WEB_PATH_NAME,
-    templatePath: TEMPLATE_PATH,
+    templatePath: 'cell/cell.js.template',
   })
-  return { [outputPath]: template }
+  const testFile = templateForComponentFile({
+    name,
+    suffix: COMPONENT_SUFFIX,
+    extension: '.test.js',
+    webPathSection: REDWOOD_WEB_PATH_NAME,
+    templatePath: 'cell/test.js.template',
+  })
+
+  // Returns
+  // {
+  //    "path/to/fileA": "<<<template>>>",
+  //    "path/to/fileB": "<<<template>>>",
+  // }
+  return [cellFile, testFile].reduce((acc, [outputPath, content]) => {
+    return {
+      [outputPath]: content,
+      ...acc,
+    }
+  }, {})
 }
 
 export const {
