@@ -62,8 +62,5 @@
     "build:watch": "nodemon --ignore dist --exec 'yarn build'",
     "prepublishOnly": "yarn clean && yarn build",
     "clean": "rm -rf dist"
-  },
-  "jest": {
-    "resolver": "jest-directory-named-resolver"
   }
 }
