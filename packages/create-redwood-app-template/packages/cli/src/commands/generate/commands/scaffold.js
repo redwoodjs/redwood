@@ -28,6 +28,7 @@ const PAGES = fs.readdirSync(path.join(templateRoot, 'scaffold', 'pages'))
 const COMPONENTS = fs.readdirSync(
   path.join(templateRoot, 'scaffold', 'components')
 )
+const SCAFFOLD_STYLE_PATH = './scaffold.css'
 
 const getIdType = (model) => {
   return model.fields.find((field) => field.name === 'id')?.type
@@ -148,16 +149,18 @@ const componentFiles = async (name) => {
 }
 
 // add routes for all pages
-const routes = ({ model: name }) => {
+const routes = async ({ model: name }) => {
   const singularPascalName = pascalcase(pluralize.singular(name))
   const pluralPascalName = pascalcase(pluralize(name))
   const singularCamelName = camelcase(singularPascalName)
   const pluralCamelName = camelcase(pluralPascalName)
+  const model = await getSchema(singularPascalName)
+  const idRouteParam = getIdType(model) === 'Int' ? ':Int' : ''
 
   return [
-    `<Route path="/${pluralCamelName}/{id:Int}/edit" page={Edit${singularPascalName}Page} name="edit${singularPascalName}" />`,
+    `<Route path="/${pluralCamelName}/{id${idRouteParam}}/edit" page={Edit${singularPascalName}Page} name="edit${singularPascalName}" />`,
     `<Route path="/${pluralCamelName}/new" page={New${singularPascalName}Page} name="new${singularPascalName}" />`,
-    `<Route path="/${pluralCamelName}/{id:Int}" page={${singularPascalName}Page} name="${singularCamelName}" />`,
+    `<Route path="/${pluralCamelName}/{id${idRouteParam}}" page={${singularPascalName}Page} name="${singularCamelName}" />`,
     `<Route path="/${pluralCamelName}" page={${pluralPascalName}Page} name="${pluralCamelName}" />`,
   ]
 }
@@ -166,11 +169,14 @@ const addScaffoldImport = () => {
   const indexJsPath = path.join(getPaths().web.src, 'index.js')
   let indexJsContents = readFile(indexJsPath).toString()
 
+  if (indexJsContents.match(SCAFFOLD_STYLE_PATH)) {
+    return 'Skipping scaffold style include'
+  }
+
   indexJsContents = indexJsContents.replace(
     "import Routes from 'src/Routes'\n",
-    "import Routes from 'src/Routes'\n\nimport './scaffold.css'"
+    `import Routes from 'src/Routes'\n\nimport '${SCAFFOLD_STYLE_PATH}'`
   )
-
   writeFile(indexJsPath, indexJsContents, { overwriteExisting: true })
 
   return 'Added scaffold import to index.js'
@@ -194,7 +200,7 @@ export const handler = async ({ model, force }) => {
       {
         title: 'Adding scaffold routes...',
         task: async () => {
-          return addRoutesToRouterTask(routes({ model }))
+          return addRoutesToRouterTask(await routes({ model }))
         },
       },
       {
