@@ -1,4 +1,4 @@
-import { ${pluralCamelName} } from './'
+import { ${pluralCamelName} } from './${pluralCamelName}'
 
 describe('${pluralCamelName}', () => {
   it('returns true', () => {

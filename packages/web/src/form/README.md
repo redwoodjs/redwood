@@ -1,6 +1,8 @@
 # Redwood Form
 
-Redwood provides several helpers to make your life easier when working with forms. It is a simple wrapper around [react-hook-form](https://react-hook-form.com/) that makes it even easier to use in many cases. If Redwood's form helpers aren't flexible enough for you, you can always use `react-hook-form` directly, or use any other [form builder](https://github.com/jaredpalmer/formik) that works with React
+Redwood provides several helpers to make your life easier when working with forms. It is a simple wrapper around [react-hook-form](https://react-hook-form.com/) that makes it even easier to use in many cases. If Redwood's form helpers aren't flexible enough for you, you can always use `react-hook-form` directly, or use any other [form builder](https://github.com/jaredpalmer/formik) that works with React.
+
+> WARNING: This software is in alpha and should not be considered suitable for production use. In the "make it work; make it right; make it fast" paradigm, RR is in the later stages of the "make it work" phase.
 
 Redwood currently provides the following form components:
 
@@ -105,6 +107,29 @@ The object given to `validation` is forwarded to `useForm` behind the scenes whe
 
 ```javascript
 <Form validation={{ mode: 'onBlur' }}>
+```
+
+#### formMethods
+
+If you need access to the functions that `useForm` gives you then you can manually call it in your component, but you'll need to provide those functions to `<Form>` so that it can use those instead of calling `useForm` itself and generating its own instance of them.
+
+```javascript
+import { useForm } from 'react-hook-form'
+
+const ContactPage = () => {
+  const formMethods = useForm()
+
+  const onSubmit = (data) => {
+    console.info(data)
+    formMethods.reset()
+  }
+
+  return (
+    <Form formMethods={formMethods} onSubmit={onSubmit}>
+      // ...
+    </Form>
+  )
+}
 ```
 
 ## `<FormError>`
@@ -264,15 +289,15 @@ Besides the attributes listed below, any additional attributes are passed on as 
 
 #### name
 
-See `<TextField>` [name](#validation)
+See `<TextField>` [name](#textfield-attributes)
 
 #### validation
 
-See `<TextField>` [validation](#validation)
+See `<TextField>` [validation](#textfield-attributes)
 
 #### errorStyle / errorClassName
 
-See `<TextField>` [errorStyle](#errorStyle)
+See `<TextField>` [errorStyle](#textfield-attributes)
 
 ## `<FieldError>`
 
