@@ -130,28 +130,6 @@ const tasks = new Listr(
             },
           },
           {
-            title: 'Set Local App Development README.md',
-            task: (_ctx, task) => {
-              try {
-                fs.unlinkSync(path.join(newAppDir, './README.md'))
-              } catch (e) {
-                task.skip(
-                  'Could not replace source README.md with a local copy'
-                )
-              }
-              try {
-                fs.renameSync(
-                  path.join(newAppDir, './README_APP.md'),
-                  path.join(newAppDir, './README.md')
-                )
-              } catch (e) {
-                task.skip(
-                  'Could not replace source README.md with a local copy'
-                )
-              }
-            },
-          },
-          {
             title: 'Initialize Git and Add First Commit',
             task: (_ctx, task) => {
               try {
