@@ -49,7 +49,7 @@ const FieldErrorContext = React.createContext()
 // Big error message at the top of the page explaining everything that's wrong
 // with the form fields in this form
 
-const RedwoodFormError = ({
+const FormError = ({
   error,
   wrapperClassName,
   wrapperStyle,
@@ -107,7 +107,7 @@ const RedwoodFormError = ({
 
 // Renders a containing <form> tag with required contexts
 
-const RedwoodForm = (props) => {
+const Form = (props) => {
   // deconstruct some props we care about and keep the remaining `formProps` to
   // pass to the <form> tag
   const {
@@ -216,9 +216,9 @@ const Submit = (props) => {
 }
 
 export {
-  RedwoodForm,
+  Form,
   FieldErrorContext,
-  RedwoodFormError,
+  FormError,
   FieldError,
   Label,
   HiddenField,

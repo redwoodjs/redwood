@@ -1,6 +1,6 @@
 import {
-  RedwoodForm,
-  RedwoodFormError,
+  Form,
+  FormError,
   FieldError,
   Label,
   TextField,
@@ -24,8 +24,8 @@ const ${singularPascalName}Form = (props) => {
 
   return (
     <div className="text-sm -mt-4">
-      <RedwoodForm onSubmit={onSubmit} error={props.error}>
-        <RedwoodFormError
+      <Form onSubmit={onSubmit} error={props.error}>
+        <FormError
           error={props.error}
           wrapperClassName="p-4 bg-red-100 text-red-700 border border-red-300 rounded mb-4"
           titleClassName="font-semibold"
@@ -54,7 +54,7 @@ const ${singularPascalName}Form = (props) => {
             Save
           </Submit>
         </div>
-      </RedwoodForm>
+      </Form>
     </div>
   )
 }
