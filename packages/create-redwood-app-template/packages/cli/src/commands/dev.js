@@ -26,7 +26,7 @@ export const handler = async ({ app }) => {
       prefixColor: 'cyan',
     },
     db: {
-      name: ' db',
+      name: 'db',
       command: `cd ${path.join(
         BASE_DIR,
         'api'
