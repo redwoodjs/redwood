@@ -1,7 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 
-import tmp from 'tmp'
 import lodash from 'lodash/string'
 import camelcase from 'camelcase'
 import pascalcase from 'pascalcase'
@@ -14,18 +13,6 @@ import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 
 import c from 'src/lib/colors'
-
-const SCHEMA_FILENAME = 'schema.prisma'
-const TMP_SCHEMA_PATH = tmp.tmpNameSync({
-  prefix: 'schema',
-  postfix: '.prisma',
-})
-const REAL_SCHEMA_PATH = path.join(getRedwoodPaths().api.db, SCHEMA_FILENAME)
-const PROVIDER_MAP = {
-  file: 'sqlite',
-  postgres: 'postgresql',
-  mysql: 'mysql',
-}
 
 export const asyncForEach = async (array, callback) => {
   for (let index = 0; index < array.length; index++) {
@@ -193,32 +180,4 @@ export const runCommandTask = async (commands, { verbose }) => {
   }
 }
 
-// reads api/prisma/schema.prisma and dynamically sets the provider based on what you have set in
-// your ENV, then writes out the schema to a tmp file and has prisma generate based off that
-export const generateTempSchema = () => {
-  let schema = fs.readFileSync(REAL_SCHEMA_PATH).toString()
-  const matches = schema.match(/url *= *env\(['"](.*?)['"]\)/)
-
-  // is `url` set to an env() var in the schema?
-  if (matches) {
-    const host = process.env[matches[1]]
-    // is the named ENV var present?
-    if (host) {
-      const provider = PROVIDER_MAP[host.split(':')[0]]
-      // is the provider found in the env var one we recognize?
-      if (provider) {
-        schema = schema.replace('redwood', provider)
-        console.info(`Using ${provider} provider as set in DB_HOST`)
-      } else {
-        throw `Unable to determine provider from host "${host}". Make sure your db host scheme (the part before ://) is one of: [file, postgres, mysql]`
-      }
-    } else {
-      console.info(
-        `Skipping DB provider: ENV var \`${matches[1]}\` not available in environment`
-      )
-    }
-  }
-  fs.writeFileSync(TMP_SCHEMA_PATH, schema)
-
-  return TMP_SCHEMA_PATH
-}
+export * from './schema_generator'
