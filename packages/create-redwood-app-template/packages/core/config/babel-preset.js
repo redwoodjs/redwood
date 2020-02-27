@@ -111,6 +111,28 @@ module.exports = () => ({
             },
           },
         ],
+        [
+          'babel-plugin-auto-import',
+          {
+            declarations: [
+              {
+                // import { React } from 'react'
+                default: 'React',
+                path: 'react',
+              },
+              {
+                // import { PropTypes } from 'prop-types'
+                default: 'PropTypes',
+                path: 'prop-types',
+              },
+              {
+                // import { gql } from '@redwoodjs/web'
+                members: ['gql'],
+                path: '@redwoodjs/web',
+              },
+            ],
+          },
+        ],
       ],
     },
   ],
