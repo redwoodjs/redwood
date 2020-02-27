@@ -126,9 +126,9 @@ module.exports = () => ({
                 path: 'prop-types',
               },
               {
-                // import { gql } from '@redwoodjs/web'
-                members: ['gql'],
-                path: '@redwoodjs/web',
+                // import gql from 'graphql-tag'
+                default: 'gql',
+                path: 'graphql-tag',
               },
             ],
           },
