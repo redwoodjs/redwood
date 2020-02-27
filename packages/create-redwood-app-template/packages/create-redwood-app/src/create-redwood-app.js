@@ -41,6 +41,7 @@ const tmpDownloadPath = tmp.tmpNameSync({
   postfix: '.zip',
 })
 
+// To run any commands, use these to set path for the working dir
 const targetDir = String(process.argv.slice(2)).replace(/,/g, '-')
 const newAppDir = path.resolve(process.cwd(), targetDir)
 
@@ -128,6 +129,34 @@ const tasks = new Listr(
               }
             },
           },
+          {
+            title: 'Initialize Git and Add First Commit',
+            task: (_ctx, task) => {
+              try {
+                execa.commandSync('git init', {
+                  shell: true,
+                  cwd: `${targetDir}`,
+                })
+              } catch (e) {
+                task.skip(
+                  'Git not installed. Recommend initializing this directory using `git init`.'
+                )
+              }
+              try {
+                execa.commandSync(
+                  'git add . && git commit -m "Initialized with Create Readwood App"',
+                  {
+                    shell: true,
+                    cwd: `${targetDir}`,
+                  }
+                )
+              } catch (e) {
+                task.skip(
+                  'Initial git commit failed. Recommend running `git add .` and `git commit -m` '
+                )
+              }
+            },
+          },
         ])
       },
     },
@@ -148,7 +177,7 @@ const tasks = new Listr(
     {
       title: '...Redwood planting in progress...',
       task: (_ctx, task) => {
-        task.title = 'Success: Your Redwood is Ready to Grow!'
+        task.title = 'SUCCESS: Your Redwood is Ready to Grow!'
         console.log('')
       },
     },
