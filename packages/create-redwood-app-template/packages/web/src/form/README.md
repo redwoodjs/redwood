@@ -107,6 +107,29 @@ The object given to `validation` is forwarded to `useForm` behind the scenes whe
 <Form validation={{ mode: 'onBlur' }}>
 ```
 
+#### formMethods
+
+If you need access to the functions that `useForm` gives you then you can manually call it in your component, but you'll need to provide those functions to `<Form>` so that it can use those instead of calling `useForm` itself and generating its own instance of them.
+
+```javascript
+import { useForm } from 'react-hook-form'
+
+const ContactPage = () => {
+  const formMethods = useForm()
+
+  const onSubmit = (data) => {
+    console.info(data)
+    formMethods.reset()
+  }
+
+  return (
+    <Form formMethods={formMethods} onSubmit={onSubmit}>
+      // ...
+    </Form>
+  )
+}
+```
+
 ## `<FormError>`
 
 This helper will render a `<div>` containing a "title" message and a `<ul>` containing any errors reported by the server when trying to save your form data.
@@ -264,15 +287,15 @@ Besides the attributes listed below, any additional attributes are passed on as 
 
 #### name
 
-See `<TextField>` [name](#validation)
+See `<TextField>` [name](#textfield-attributes)
 
 #### validation
 
-See `<TextField>` [validation](#validation)
+See `<TextField>` [validation](#textfield-attributes)
 
 #### errorStyle / errorClassName
 
-See `<TextField>` [errorStyle](#errorStyle)
+See `<TextField>` [errorStyle](#textfield-attributes)
 
 ## `<FieldError>`
 
