@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, waitForElement } from '@testing-library/react'
 
-import ${pascalName} from './'
+import ${pascalName} from './${pascalName}'
 
 describe('${pascalName}', () => {
   it('is true', () => {
