@@ -11,14 +11,15 @@ import { Query } from '@apollo/react-components'
  * @param {function=} beforeQuery - Prepare the variables and options for the query
  * @param {function=} afterQuery - Sanitize the data return from graphQL
  * @param {Component=} Loading - Loading, render this component
+ * @param {Component=} Empty - Loading, render this component
  * @param {Component=} Failure - Something went wrong, render this component
  * @param {Component} Success - Data has loaded, render this component
  *
  * @example
  * ```js
  * // IMPLEMENTATION:
- * // `src/ExampleComponent/index.js`. This file will be removed and
- * // automatically dealt with in babel.
+ * // `src/ExampleComponent/index.js`. This file is automatically dealt with
+ * in webpack.
  *
  * import { withCell } from '@redwoodjs/web'
  * import * as cell from './ExampleComponent'
@@ -39,9 +40,9 @@ export const withCell = ({
   beforeQuery = (props) => ({ variables: props }),
   QUERY,
   afterQuery = (data) => ({ ...data }),
-  Loading = () => null,
-  Failure = () => null,
-  Empty = () => null,
+  Loading = () => 'Loading...',
+  Failure,
+  Empty,
   Success,
 }) => {
   const isDataNull = (data) => {
@@ -72,7 +73,7 @@ export const withCell = ({
         } else if (loading) {
           return <Loading {...queryRest} {...props} />
         } else if (data) {
-          if (isEmpty(data) && Empty) {
+          if (typeof Empty !== 'undefined' && isEmpty(data)) {
             return <Empty {...queryRest} {...props} />
           } else {
             return <Success {...afterQuery(data)} {...queryRest} {...props} />
