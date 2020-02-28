@@ -102,6 +102,10 @@ module.exports = (webpackEnv) => {
         {
           oneOf: [
             {
+              loader: 'null-loader',
+              test: /\.(md|test\.js|stories\.js)$/,
+            },
+            {
               test: /\.(png|jpg|gif)$/,
               use: [
                 {
@@ -112,10 +116,6 @@ module.exports = (webpackEnv) => {
                   },
                 },
               ],
-            },
-            {
-              loader: 'null-loader',
-              test: /\.(md|test\.js|stories\.js)$/,
             },
             {
               test: /\.(js|jsx|ts|tsx)$/,
