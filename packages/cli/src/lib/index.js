@@ -180,4 +180,4 @@ export const runCommandTask = async (commands, { verbose }) => {
   }
 }
 
-export * from './schema_generator'
+export * from './generateTempSchema'
