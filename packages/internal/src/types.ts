@@ -22,6 +22,7 @@ export type Paths = {
   }
   api: {
     db: string
+    dbSchema: string
     functions: string
     graphql: string
     services: string
