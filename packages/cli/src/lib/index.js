@@ -179,3 +179,5 @@ export const runCommandTask = async (commands, { verbose }) => {
     console.log(c.error(e.message))
   }
 }
+
+export * from './generateTempSchema'
