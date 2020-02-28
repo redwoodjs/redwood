@@ -29,7 +29,7 @@ export const handler = async ({ app }) => {
     app.map((appName) => {
       const { cwd, cmd } = execCommands[appName]
       return {
-        title: `Running '${appName}/' jest tests in`,
+        title: `Running '${appName}' jest tests`,
         task: () => {
           return execa(cmd, undefined, {
             stdio: 'inherit',
