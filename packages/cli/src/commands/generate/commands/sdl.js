@@ -60,7 +60,7 @@ export const files = async ({ name, crud }) => {
 
   const template = generateTemplate(path.join('sdl', 'sdl.js.template'), {
     name,
-    isCrud: crud,
+    crud,
     query,
     input,
     idType,

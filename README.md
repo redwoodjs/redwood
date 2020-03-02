@@ -15,16 +15,16 @@ cycles choosing and re-choosing various technologies and configurations. Plus,
 because Redwood is a proper framework, you benefit from continued performance
 and feature upgrades over time and with minimum effort.
 
-**WARNING:** This document is aspirational (see
-[Readme Driven Development](https://tom.preston-werner.com/2010/08/23/readme-driven-development.html))
-and not everything contained within it is true yet.
+> **WARNING:** This document is aspirational (see
+> [Readme Driven Development](https://tom.preston-werner.com/2010/08/23/readme-driven-development.html))
+> and not everything contained within it is true yet.
 
-**TUTORIAL:** We have a "getting started from scratch" tutorial in the works,
-but keep in mind that we are driving Redwood development with that prose, and
-some of the commands may not work yet. We would love your feedback on anything
-you find confusing.
-
-https://github.com/redwoodjs/tutorial
+> **TUTORIAL:** We have a "getting started from scratch" tutorial in the works,
+> but keep in mind that we are driving Redwood development with that prose, and
+> some of the commands may not work yet. We would love your feedback on anything
+> you find confusing.
+>
+> https://github.com/redwoodjs/tutorial
 
 **EXAMPLES:** If you'd like to see some examples of what a Redwood application
 might look like (these are still very much works in progress), take a look at
@@ -47,9 +47,24 @@ use:
 - React
 - GraphQL (Apollo)
 - Prisma
-- Storybook
+- Jest (coming soon)
+- Storybook (coming soon)
 - Babel
 - Webpack
+
+## Features
+
+- Opinionated defaults for formatting, file organization, webpack, Babel, and more.
+- Simple but powerful routing (all routes defined in one file) with dynamic (typed) parameters, constraints, and named route functions (to generate correct URLs).
+- Automatic page-based code-splitting.
+- Boilerplate-less GraphQL API construction.
+- Cells: a declarative way to fetch data from the backend API.
+- Generators for pages, layouts, cells, SDL, services, etc.
+- Scaffold generator for CRUD operations around a specific DB table.
+- Forms with easy client- and/or server-side validation and error handling.
+- Hot module replacement (HMR) for faster development.
+- Database migrations (via Prisma 2).
+- First class JAMstack-style deployment to Netlify.
 
 ## The Redwood philosophy
 

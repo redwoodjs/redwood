@@ -42,12 +42,26 @@ export const handleContext = (options: Config) => {
  * export const handler = createGraphQLHandler({ schema, context })
  * ```
  */
-export const createGraphQLHandler = (options: Config = {}) => {
+export const createGraphQLHandler = (options: Config = {}, db: any) => {
+  // We wrap the ApolloServer handler because we want
+  // to disconnect from the database when an exception is thrown.
   const handler = new ApolloServer({
     playground: process.env.NODE_ENV !== 'production',
     ...options,
     context: handleContext(options),
   }).createHandler()
 
-  return handler
+  return (
+    event: APIGatewayProxyEvent,
+    context: LambdaContext,
+    callback: any
+  ): void => {
+    try {
+      handler(event, context, callback)
+    } catch (e) {
+      // Disconnect from the database.
+      db && db.disconnect()
+      throw e
+    }
+  }
 }
