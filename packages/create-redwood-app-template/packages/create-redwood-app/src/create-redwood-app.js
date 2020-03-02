@@ -104,6 +104,51 @@ const tasks = new Listr(
             },
           },
           {
+            title: 'Set Local App Development README.md',
+            task: (_ctx, task) => {
+              try {
+                fs.unlinkSync(path.join(newAppDir, './README.md'))
+              } catch (e) {
+                task.skip(
+                  'Could not replace source README.md with a local copy'
+                )
+              }
+              try {
+                fs.renameSync(
+                  path.join(newAppDir, './README_APP.md'),
+                  path.join(newAppDir, './README.md')
+                )
+              } catch (e) {
+                task.skip(
+                  'Could not replace source README.md with a local copy'
+                )
+              }
+            },
+          },
+          {
+            title: 'Set Local App Development .gitignore',
+            task: (_ctx, task) => {
+              try {
+                fs.unlinkSync(path.join(newAppDir, './.gitignore'))
+              } catch (e) {
+                task.skip(
+                  'Could not replace source .gitignore with a local copy'
+                )
+              }
+              try {
+                fs.renameSync(
+                  path.join(newAppDir, './.gitignore.app'),
+                  path.join(newAppDir, './.gitignore')
+                )
+              } catch (e) {
+                task.skip(
+                  'Could not replace source .gitignore with a local copy'
+                )
+              }
+            },
+          },
+
+          {
             title: 'Renaming index.html Meta Title',
             task: (_ctx, task) => {
               try {
