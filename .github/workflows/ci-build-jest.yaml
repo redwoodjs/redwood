@@ -9,13 +9,13 @@ jobs:
       matrix:
         node-version: ['10', '12']
       fail-fast: false
-    name: Node ${{ matrix.node-version }}
+    name: Node ${{ matrix.node-version }} latest
     steps:
     - uses: actions/checkout@v2
     - name: Setup node
       uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
+      with:
+        node-version: ${{ matrix.node-version }}
     - name: Node and Yarn Versions
       run: |
         node --version

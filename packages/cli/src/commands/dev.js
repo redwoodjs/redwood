@@ -4,7 +4,7 @@ import concurrently from 'concurrently'
 
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
-import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
+import { handler as generatePrismaClient } from 'src/commands/db_commands/generate'
 
 export const command = 'dev [app..]'
 export const desc = 'Run development servers.'
