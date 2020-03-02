@@ -7,13 +7,15 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [dubnium-alpine, erbium-alpine]
+        node-version: ['10', '12']
       fail-fast: false
-    container: node:${{ matrix.node-version }}
-
+    name: Node ${{ matrix.node-version }}
     steps:
     - uses: actions/checkout@v2
-
+    - name: Setup node
+      uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
     - name: Node and Yarn Versions
       run: |
         node --version
