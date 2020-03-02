@@ -147,7 +147,6 @@ const tasks = new Listr(
               }
             },
           },
-
           {
             title: 'Renaming index.html Meta Title',
             task: (_ctx, task) => {
