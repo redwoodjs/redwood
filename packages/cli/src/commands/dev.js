@@ -14,7 +14,6 @@ export const builder = {
 
 export const handler = async ({ app }) => {
   const { base: BASE_DIR } = getPaths()
-  const tempSchemaPath = generateTempSchema()
 
   // The Redwood API needs the Prisma client to be created before it is started,
   // because it throws when it cannot import the Prisma client.
@@ -31,7 +30,7 @@ export const handler = async ({ app }) => {
       command: `cd ${path.join(
         BASE_DIR,
         'api'
-      )} && yarn prisma2 generate --watch --schema=${tempSchemaPath}`,
+      )} && yarn prisma2 generate --watch --schema=${generateTempSchema()}`,
       prefixColor: 'magenta',
     },
     web: {
