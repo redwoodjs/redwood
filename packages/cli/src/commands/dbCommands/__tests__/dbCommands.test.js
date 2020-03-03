@@ -1,7 +1,7 @@
 jest.mock('@redwoodjs/internal')
 jest.mock('src/lib')
 
-import { runCommandTask } from 'src/lib'
+import { runCommandTask, generateTempSchema } from 'src/lib'
 
 import * as up from '../up'
 import * as down from '../down'
@@ -19,22 +19,24 @@ describe('db commands', () => {
   it('runs the command as expected', async () => {
     await up.handler({})
     expect(runCommandTask.mock.results[0].value).toEqual([
-      'prisma2 migrate up --experimental --create-db',
-      'prisma2 generate',
+      `prisma2 migrate up --experimental --create-db --schema=${generateTempSchema}`,
+      `prisma2 generate --schema=${generateTempSchema}`,
     ])
 
     await down.handler({})
     expect(runCommandTask.mock.results[1].value).toEqual([
-      'prisma2 migrate down --experimental',
+      `prisma2 migrate down --experimental --schema=${generateTempSchema}`,
     ])
 
     await save.handler({ name: 'my-migration' })
     expect(runCommandTask.mock.results[2].value).toEqual([
-      'prisma2 migrate save --name my-migration --experimental',
+      `prisma2 migrate save --name my-migration --experimental --schema=${generateTempSchema}`,
     ])
 
     await generate.handler({})
-    expect(runCommandTask.mock.results[3].value).toEqual(['prisma2 generate'])
+    expect(runCommandTask.mock.results[3].value).toEqual([
+      `prisma2 generate --schema=${generateTempSchema}`,
+    ])
 
     await seed.handler({})
     expect(runCommandTask.mock.results[4].value).toEqual(['node seeds.js'])

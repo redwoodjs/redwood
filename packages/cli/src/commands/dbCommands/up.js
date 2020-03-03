@@ -7,7 +7,7 @@ export const builder = {
 }
 
 export const handler = async ({ verbose }) => {
-  const tempSchemaPath = generateTempSchema()
+  const tempSchemaPath = generateTempSchema
 
   await runCommandTask(
     [

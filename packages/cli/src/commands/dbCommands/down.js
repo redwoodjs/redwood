@@ -6,7 +6,7 @@ export const builder = {
   verbose: { type: 'boolean', default: true, alias: ['v'] },
 }
 export const handler = async ({ verbose }) => {
-  const tempSchemaPath = generateTempSchema()
+  const tempSchemaPath = generateTempSchema
 
   await runCommandTask(
     [
