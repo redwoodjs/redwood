@@ -1,5 +1,4 @@
 import fs from 'fs'
-import path from 'path'
 
 import tmp from 'tmp'
 import { getPaths } from '@redwoodjs/internal'
