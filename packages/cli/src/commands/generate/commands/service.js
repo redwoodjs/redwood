@@ -1,18 +1,23 @@
+import camelcase from 'camelcase'
+import pluralize from 'pluralize'
+
 import {
   templateForComponentFile,
   createYargsForComponentGeneration,
 } from '../helpers'
 
 export const files = async ({ name, ...rest }) => {
-  console.info(rest)
+  const componentName = camelcase(pluralize(name))
   const serviceFile = templateForComponentFile({
     name,
+    componentName: componentName,
     apiPathSection: 'services',
     templatePath: 'service/service.js.template',
     templateVars: { ...rest },
   })
   const testFile = templateForComponentFile({
     name,
+    componentName: componentName,
     extension: '.test.js',
     apiPathSection: 'services',
     templatePath: 'service/test.js.template',
