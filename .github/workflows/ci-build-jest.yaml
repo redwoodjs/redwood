@@ -24,6 +24,10 @@ jobs:
       run: yarn install --frozen-lockfile
     - name: Build
       run: yarn build
+    - name: Run ESLint
+      run: yarn lint
+      env:
+        CI: true
     - name: Run Jest Tests
       run: yarn test
       env:
