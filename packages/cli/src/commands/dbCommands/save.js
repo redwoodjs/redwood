@@ -20,6 +20,10 @@ export const handler = async ({ name, verbose }) => {
           `--schema=${tempSchemaPath}`,
         ],
       },
+      {
+        title: 'Cleaning up temp schema...',
+        cmd: `rm ${tempSchemaPath}`,
+      },
     ],
     {
       verbose,

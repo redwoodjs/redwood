@@ -11,6 +11,10 @@ export const handler = () => {
         args: ['seeds.js'],
         opts: { cwd: getPaths().api.db },
       },
+      {
+        title: 'Cleaning up temp schema...',
+        cmd: `rm ${tempSchemaPath}`,
+      },
     ],
     { verbose: true }
   )

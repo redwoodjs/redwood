@@ -15,6 +15,10 @@ export const handler = async ({ verbose }) => {
         cmd: 'prisma2',
         args: ['generate', `--schema=${tempSchemaPath}`],
       },
+      {
+        title: 'Cleaning up temp schema...',
+        cmd: `rm ${tempSchemaPath}`,
+      },
     ],
     {
       verbose,
