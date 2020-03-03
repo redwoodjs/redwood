@@ -10,7 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "@redwoodjs/internal": "^0.0.1-alpha.32",
-    "apollo-server-lambda": "2.10.1",
+    "apollo-server-lambda": "2.11.0",
     "babel-plugin-macros": "^2.8.0",
     "core-js": "3.6.4",
     "glob": "^7.1.6",

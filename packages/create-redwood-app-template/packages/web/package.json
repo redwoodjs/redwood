@@ -18,7 +18,7 @@
     "core-js": "3.6.4",
     "graphql": "^14.6.0",
     "proptypes": "^1.1.0",
-    "react-hook-form": "^4.6.2"
+    "react-hook-form": "^4.10.1"
   },
   "scripts": {
     "build": "yarn clean && babel src -d dist",
