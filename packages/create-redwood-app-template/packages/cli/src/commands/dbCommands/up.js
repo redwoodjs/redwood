@@ -1,4 +1,4 @@
-import { runCommandTask, generateTempSchema } from 'src/lib'
+import { runCommandTask } from 'src/lib'
 
 export const command = 'up'
 export const desc = 'Generate the Prisma client and apply migrations.'
@@ -7,24 +7,17 @@ export const builder = {
 }
 
 export const handler = async ({ verbose }) => {
-  const tempSchemaPath = generateTempSchema()
-
   await runCommandTask(
     [
       {
         title: 'Migrate database up...',
         cmd: 'prisma2',
-        args: [
-          'migrate up',
-          '--experimental',
-          '--create-db',
-          `--schema=${tempSchemaPath}`,
-        ],
+        args: ['migrate up', '--experimental', '--create-db'],
       },
       {
         title: 'Generating the Prisma client...',
         cmd: 'prisma2',
-        args: ['generate', `--schema=${tempSchemaPath}`],
+        args: ['generate'],
       },
     ],
     { verbose }
