@@ -21,7 +21,8 @@ export const handler = async ({ app }) => {
     },
     web: {
       cwd: `${BASE_DIR}/web`,
-      cmd: `yarn jest --passWithNoTests --config ../node_modules/@redwoodjs/core/config/jest.config.web.js`,
+      cmd:
+        'yarn jest --passWithNoTests --config ../node_modules/@redwoodjs/core/config/jest.config.web.js',
     },
   }
 
