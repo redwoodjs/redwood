@@ -173,34 +173,6 @@ const tasks = new Listr(
               }
             },
           },
-          {
-            title: 'Initialize Git and Add First Commit',
-            task: (_ctx, task) => {
-              try {
-                execa.commandSync('git init', {
-                  shell: true,
-                  cwd: `${targetDir}`,
-                })
-              } catch (e) {
-                task.skip(
-                  'Git not installed. Recommend initializing this directory using `git init`.'
-                )
-              }
-              try {
-                execa.commandSync(
-                  'git add . && git commit -m "Initialized with Create Readwood App"',
-                  {
-                    shell: true,
-                    cwd: `${targetDir}`,
-                  }
-                )
-              } catch (e) {
-                task.skip(
-                  'Initial git commit failed. Recommend running `git add .` and `git commit -m` '
-                )
-              }
-            },
-          },
         ])
       },
     },
