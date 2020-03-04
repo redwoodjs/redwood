@@ -74,6 +74,9 @@ module.exports = (webpackEnv) => {
         chunks: 'all',
       }),
       new webpack.ProvidePlugin({
+        React: 'react',
+        PropTypes: 'prop-types',
+        gql: ['@redwoodjs/web', 'gql'],
         __REDWOOD__: ['@redwoodjs/web', '__REDWOOD__'],
       }),
       // The define plugin will replace these keys with their values during build
