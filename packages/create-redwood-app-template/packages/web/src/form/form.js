@@ -15,10 +15,12 @@ const DEFAULT_MESSAGES = {
 // any errors on it
 
 const inputTagProps = (props) => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { errors, setError } = useFormContext()
 
   // Check for errors from server and set on field if present
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const fieldErrorsContext = useContext(FieldErrorContext)
   const contextError = fieldErrorsContext[props.name]
   if (contextError) {
