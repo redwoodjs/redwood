@@ -142,7 +142,7 @@ const Label = (props) => {
 
   return (
     <label htmlFor={props.name} {...tagProps}>
-      {props.text || props.name}
+      {props.children || props.name}
     </label>
   )
 }
