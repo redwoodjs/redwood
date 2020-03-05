@@ -1,10 +1,31 @@
-import React from 'react';
-import { fireEvent, cleanup } from '@testing-library/react'
+import { render, cleanup } from '@testing-library/react'
 
-import ${pascalName}Cell from './${pascalName}Cell'
+import { Loading, Empty, Failure, Success } from './${camelName}Cell'
 
-describe('${pascalName}Cell', () => {
-  it('is true', () => {
-    expect(true).toBe(true)
+const error = { message: 'error message' }
+
+describe('${camelName}Cell', () => {
+  afterEach(() => {
+    cleanup()
+  })
+  it('Loading renders successfully', () => {
+    expect(() => {
+      render(<Loading />)
+    }).not.toThrow()
+  })
+  it('Empty renders successfully', () => {
+    expect(() => {
+      render(<Empty />)
+    }).not.toThrow()
+  })
+  it('Failure renders successfully', () => {
+    expect(() => {
+      render(<Failure error={error} />)
+    }).not.toThrow()
+  })
+  it('Success renders successfully', () => {
+    expect(() => {
+      Success('${camelName}Cell')
+    }).not.toThrow()
   })
 })
