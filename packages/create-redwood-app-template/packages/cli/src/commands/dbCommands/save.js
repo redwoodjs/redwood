@@ -11,7 +11,11 @@ export const handler = async ({ name, verbose }) => {
       {
         title: 'Creating database migration...',
         cmd: 'prisma2',
-        args: ['migrate save', `--name ${name}`, '--experimental'],
+        args: [
+          'migrate save',
+          name && `--name ${name}`,
+          '--experimental',
+        ].filter(Boolean),
       },
     ],
     {
