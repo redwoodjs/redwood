@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/eslint-plugin-redwood",
-  "version": "0.0.1-alpha.32",
+  "version": "0.0.1-alpha.33",
   "description": "eslint plugin for Redwood rules.",
   "files": [
     "dist"
