@@ -70,7 +70,7 @@ module.exports = () => ({
               {
                 // import { db } from '@redwoodjs/api/dist/dbInstance'
                 members: ['db'],
-                path: '@redwoodjs/api/dist/loaders/api-auto-loaders',
+                path: '@redwoodjs/api/dist/dbInstance',
               },
               {
                 // import { context } from '@redwoodjs/api'
