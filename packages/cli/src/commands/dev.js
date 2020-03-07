@@ -15,15 +15,8 @@ export const builder = {
 export const handler = async ({ app }) => {
   const { base: BASE_DIR } = getPaths()
 
-  // Generate the prisma client if it doesn't exist. The Prisma client
-  // throws when it's not generated.
-  try {
-    const { PrismaClient } = require('@prisma/client')
-    // eslint-disable-next-line no-new
-    new PrismaClient()
-  } catch (e) {
-    await generatePrismaClient({ verbose: false })
-  }
+  // Generate the prisma client if it doesn't exist.
+  await generatePrismaClient({ verbose: false, force: false })
 
   const jobs = {
     api: {
