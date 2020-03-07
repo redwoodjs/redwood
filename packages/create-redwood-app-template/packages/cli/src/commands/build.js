@@ -4,6 +4,7 @@ import VerboseRenderer from 'listr-verbose-renderer'
 
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
+import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
 
 export const command = 'build [app..]'
 export const desc = 'Build for production.'
@@ -13,8 +14,17 @@ export const builder = {
   stats: { type: 'boolean', default: false },
 }
 
-export const handler = async ({ app, verbose, stats }) => {
+export const handler = async ({
+  app = ['api', 'web'],
+  verbose = false,
+  stats = false,
+}) => {
   const { base: BASE_DIR } = getPaths()
+
+  if (app.includes('api')) {
+    await generatePrismaClient({ verbose, force: true })
+  }
+
   const execCommandsForApps = {
     api: {
       cwd: `${BASE_DIR}/api`,
