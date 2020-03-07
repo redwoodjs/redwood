@@ -14,11 +14,15 @@ export const builder = {
   stats: { type: 'boolean', default: false },
 }
 
-export const handler = async ({ app, verbose, stats }) => {
+export const handler = async ({
+  app = ['api', 'web'],
+  verbose = false,
+  stats = false,
+}) => {
   const { base: BASE_DIR } = getPaths()
 
   if (app.includes('api')) {
-    await generatePrismaClient({ verbose: false, force: true })
+    await generatePrismaClient({ verbose, force: true })
   }
 
   const execCommandsForApps = {
