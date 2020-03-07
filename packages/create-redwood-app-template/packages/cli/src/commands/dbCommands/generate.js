@@ -9,9 +9,9 @@ export const builder = {
   force: { type: 'boolean', default: true, alias: ['f'] },
 }
 export const handler = async ({ verbose, force }) => {
-  // Do not generate the prisma client if it exists exist. The
-  // Prisma client throws when it's not generated.
+  // Do not generate the Prisma client if it exists.
   if (!force) {
+    // The Prisma client throws if it is not generated.
     try {
       // Import the client from the redwood apps node_modules path.
       const { PrismaClient } = require(path.join(
@@ -22,7 +22,7 @@ export const handler = async ({ verbose, force }) => {
       new PrismaClient()
       return undefined
     } catch (e) {
-      // Do nothing, the client already exists and we're not forcing generation.
+      // Swallow your pain.
     }
   }
 
