@@ -148,7 +148,7 @@ number of use-cases that can take advantage of this technology.
 
 Databases are a little trickier, especially for the traditional relational ones
 like PostgresQL and MySQL. Right now, you still need to set these up manually,
-but we are working hard with Netlify and other providers to fulfil the
+but we are working hard with Netlify and other providers to fulfill the
 serverless dream here too.
 
 Redwood is intentionally pushing the boundaries of what's possible with

@@ -68,9 +68,9 @@ module.exports = () => ({
           {
             declarations: [
               {
-                // import { db } from '@redwoodjs/core/dist/loaders/api-auto-loaders'
+                // import { db } from '@redwoodjs/api/dist/dbInstance'
                 members: ['db'],
-                path: '@redwoodjs/core/dist/loaders/api-auto-loaders',
+                path: '@redwoodjs/api/dist/dbInstance',
               },
               {
                 // import { context } from '@redwoodjs/api'

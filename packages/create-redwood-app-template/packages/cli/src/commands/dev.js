@@ -12,12 +12,11 @@ export const builder = {
   app: { choices: ['db', 'api', 'web'], default: ['db', 'api', 'web'] },
 }
 
-export const handler = async ({ app }) => {
+export const handler = async ({ app = ['db', 'api', 'web'] }) => {
   const { base: BASE_DIR } = getPaths()
 
-  // The Redwood API needs the Prisma client to be created before it is started,
-  // because it throws when it cannot import the Prisma client.
-  await generatePrismaClient({ verbose: false })
+  // Generate the prisma client if it doesn't exist.
+  await generatePrismaClient({ verbose: false, force: false })
 
   const jobs = {
     api: {
@@ -26,7 +25,7 @@ export const handler = async ({ app }) => {
       prefixColor: 'cyan',
     },
     db: {
-      name: ' db',
+      name: ' db', // prefixed with ` ` to match output indentation.
       command: `cd ${path.join(
         BASE_DIR,
         'api'

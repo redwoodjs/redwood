@@ -39,19 +39,39 @@ const mergeResolversWithServices = ({ schema, resolvers, services }) => {
     {},
     ...Object.keys(services).map((name) => services[name])
   )
+
+  // Get a list of types that have fields.
+  // TODO: Figure out if this would interfere with other types: Interface types, etc.`
+  const typesWithFields = Object.keys(schema.getTypeMap())
+    .filter((name) => !name.startsWith('_'))
+    .filter((name) => typeof schema.getType(name).getFields !== 'undefined')
+    .map((name) => {
+      return schema.getType(name)
+    })
+
+  const mappedResolvers = typesWithFields.reduce((acc, type) => {
+    // Services export Query and Mutation field resolvers as named
+    // exports, but other GraphQLObjectTypes are exported as an object
+    // named after the type.
+    let servicesForType = mergedServices
+    if (!['Query', 'Mutation'].includes(type.name)) {
+      servicesForType = mergedServices?.[type.name]
+    }
+
+    return {
+      ...acc,
+      [type.name]: mapFieldsToService({
+        fields: type.getFields(),
+        resolvers: resolvers?.[type.name],
+        services: servicesForType,
+      }),
+    }
+  }, {})
+
   return omitBy(
     {
       ...resolvers,
-      Query: mapFieldsToService({
-        fields: schema.getType('Query')?.getFields(),
-        resolvers: resolvers?.Query,
-        services: mergedServices,
-      }),
-      Mutation: mapFieldsToService({
-        fields: schema.getType('Mutation')?.getFields(),
-        resolvers: resolvers?.Mutation,
-        services: mergedServices,
-      }),
+      ...mappedResolvers,
     },
     (v) => typeof v === 'undefined'
   )
