@@ -43,11 +43,11 @@ const mergeResolversWithServices = ({ schema, resolvers, services }) => {
   // Get a list of types that have fields.
   // TODO: Figure out if this would interfere with other types: Interface types, etc.`
   const typesWithFields = Object.keys(schema.getTypeMap())
-  .filter(name => !name.startsWith('_'))
-  .filter(name => typeof schema.getType(name).getFields !== 'undefined')
-  .map(name => {
-    return schema.getType(name)
-  })
+    .filter((name) => !name.startsWith('_'))
+    .filter((name) => typeof schema.getType(name).getFields !== 'undefined')
+    .map((name) => {
+      return schema.getType(name)
+    })
 
   const mappedResolvers = typesWithFields.reduce((acc, type) => {
     // Services export Query and Mutation field resolvers as named
@@ -64,7 +64,7 @@ const mergeResolversWithServices = ({ schema, resolvers, services }) => {
         fields: type.getFields(),
         resolvers: resolvers?.[type.name],
         services: servicesForType,
-      })
+      }),
     }
   }, {})
 
