@@ -15,9 +15,15 @@ export const builder = {
 export const handler = async ({ app }) => {
   const { base: BASE_DIR } = getPaths()
 
-  // The Redwood API needs the Prisma client to be created before it is started,
-  // because it throws when it cannot import the Prisma client.
-  await generatePrismaClient({ verbose: false })
+  // Generate the prisma client if it doesn't exist. The Prisma client
+  // throws when it's not generated.
+  try {
+    const { PrismaClient } = require('@prisma/client')
+    // eslint-disable-next-line no-new
+    new PrismaClient()
+  } catch (e) {
+    await generatePrismaClient({ verbose: false })
+  }
 
   const jobs = {
     api: {
@@ -26,7 +32,7 @@ export const handler = async ({ app }) => {
       prefixColor: 'cyan',
     },
     db: {
-      name: ' db',
+      name: ' db', // prefixed with ` ` to match indentation.
       command: `cd ${path.join(
         BASE_DIR,
         'api'
