@@ -8,7 +8,7 @@ export const builder = {
   verbose: { type: 'boolean', default: true, alias: ['v'] },
   force: { type: 'boolean', default: true, alias: ['f'] },
 }
-export const handler = async ({ verbose, force }) => {
+export const handler = async ({ verbose = true, force = true }) => {
   // Do not generate the Prisma client if it exists.
   if (!force) {
     // The Prisma client throws if it is not generated.

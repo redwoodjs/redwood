@@ -8,11 +8,7 @@ export const builder = {
   dbClient: { type: 'boolean', default: true },
 }
 
-export const handler = async ({ verbose, dbClient }) => {
-  if (dbClient) {
-    await generatePrismaClient({ force: true, verbose: true })
-  }
-
+export const handler = async ({ verbose = true, dbClient = true }) => {
   await runCommandTask(
     [
       {
@@ -23,4 +19,8 @@ export const handler = async ({ verbose, dbClient }) => {
     ],
     { verbose }
   )
+
+  if (dbClient) {
+    await generatePrismaClient({ force: true, verbose })
+  }
 }
