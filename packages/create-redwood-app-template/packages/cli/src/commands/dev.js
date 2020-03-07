@@ -12,7 +12,7 @@ export const builder = {
   app: { choices: ['db', 'api', 'web'], default: ['db', 'api', 'web'] },
 }
 
-export const handler = async ({ app }) => {
+export const handler = async ({ app = ['db', 'api', 'web'] }) => {
   const { base: BASE_DIR } = getPaths()
 
   // Generate the prisma client if it doesn't exist.
