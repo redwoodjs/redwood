@@ -26,7 +26,6 @@ describe('makeMergedSchema', () => {
           inTypeResolverAndServices: () =>
             "MyOwnType: I'm defined in the resolver.",
           inTypeResolver: () => "MyOwnType: I'm defined in the resolver.",
-          inTypeServices: () => 'I should NOT be called',
         },
         Query: {
           inResolverAndServices: () => "I'm defined in the resolver.",
@@ -40,7 +39,7 @@ describe('makeMergedSchema', () => {
   const services = {
     tests: {
       MyOwnType: {
-        inTypeServices: () => "MyOwnType: I'm defined in the resolver.",
+        inTypeServices: () => "MyOwnType: I'm defined in the services.",
       },
       inResolverAndServices: () => 'I should NOT be called.',
       inServices: () => "I'm defined in the service.",
@@ -90,7 +89,7 @@ describe('makeMergedSchema', () => {
 
     it('Service functions are mapped correctly.', () => {
       expect(myOwnTypeFields.inTypeServices.resolve()).toEqual(
-        "I'm defined in the service."
+        "MyOwnType: I'm defined in the services."
       )
     })
   })
