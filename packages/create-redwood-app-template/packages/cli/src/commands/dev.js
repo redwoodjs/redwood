@@ -25,7 +25,7 @@ export const handler = async ({ app }) => {
       prefixColor: 'cyan',
     },
     db: {
-      name: ' db', // prefixed with ` ` to match indentation.
+      name: ' db', // prefixed with ` ` to match output indentation.
       command: `cd ${path.join(
         BASE_DIR,
         'api'

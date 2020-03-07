@@ -12,17 +12,17 @@ export const handler = async ({ verbose, force }) => {
   // Do not generate the prisma client if it exists exist. The
   // Prisma client throws when it's not generated.
   if (!force) {
-    // We have to import from the redwood apps node_modules path.
     try {
+      // Import the client from the redwood apps node_modules path.
       const { PrismaClient } = require(path.join(
         getPaths().base,
         'node_modules/@prisma/client'
       ))
-      // eslint-disable-next-line no-new
+      // eslint-disable-next-line
       new PrismaClient()
       return undefined
     } catch (e) {
-      // do nothing, the client already exists and we're not forcing generation.
+      // Do nothing, the client already exists and we're not forcing generation.
     }
   }
 
