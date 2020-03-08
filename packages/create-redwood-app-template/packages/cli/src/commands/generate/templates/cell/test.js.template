@@ -2,7 +2,7 @@ import { render, cleanup } from '@testing-library/react'
 
 import { Loading, Empty, Failure, Success } from './${pascalName}Cell'
 
-describe('${camelName}Cell', () => {
+describe('${pascalName}Cell', () => {
   afterEach(() => {
     cleanup()
   })
