@@ -1,7 +1,7 @@
 const ${pascalName} = () => {
   return (
     <div>
-      <h2>{'${pascalName}}</h2>
+      <h2>{'${pascalName}'}</h2>
       <p>{'Find me in ${outputPath}'}</p>
     </div>
   )
