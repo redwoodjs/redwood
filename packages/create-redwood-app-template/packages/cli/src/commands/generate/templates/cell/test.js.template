@@ -1,8 +1,6 @@
 import { render, cleanup } from '@testing-library/react'
 
-import { Loading, Empty, Failure, Success } from './${camelName}Cell'
-
-const error = { message: 'error message' }
+import { Loading, Empty, Failure, Success } from './${pascalName}Cell'
 
 describe('${camelName}Cell', () => {
   afterEach(() => {
@@ -20,12 +18,12 @@ describe('${camelName}Cell', () => {
   })
   it('Failure renders successfully', () => {
     expect(() => {
-      render(<Failure error={error} />)
+      render(<Failure error={{ message: 'error message' }} />)
     }).not.toThrow()
   })
   it('Success renders successfully', () => {
     expect(() => {
-      Success('${camelName}Cell')
+      Success({ ${camelName}: { objectKey: 'objectValue' } })
     }).not.toThrow()
   })
 })
