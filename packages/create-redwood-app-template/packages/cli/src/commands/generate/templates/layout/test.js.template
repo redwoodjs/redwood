@@ -1,10 +1,14 @@
-import React from 'react';
-import { fireEvent, cleanup } from '@testing-library/react'
+import { render, cleanup } from '@testing-library/react'
 
 import ${pascalName}Layout from './${pascalName}Layout'
 
 describe('${pascalName}Layout', () => {
-  it('is true', () => {
-    expect(true).toBe(true)
+  afterEach(() => {
+    cleanup()
+  })
+  it('renders successfully', () => {
+    expect(() => {
+      render(<${pascalName}Layout />)
+    }).not.toThrow()
   })
 })
