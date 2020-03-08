@@ -19,15 +19,16 @@ export const templateForComponentFile = ({
   apiPathSection,
   templatePath,
   templateVars,
+  componentName,
 }) => {
   const basePath = webPathSection
     ? getPaths().web[webPathSection]
     : getPaths().api[apiPathSection]
-  const componentName = pascalcase(name) + suffix
+  const outputComponentName = componentName || pascalcase(name) + suffix
   const outputPath = path.join(
     basePath,
-    componentName,
-    componentName + extension
+    outputComponentName,
+    outputComponentName + extension
   )
   const content = generateTemplate(templatePath, {
     name,
