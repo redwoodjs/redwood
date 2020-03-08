@@ -40,5 +40,5 @@
     "test": "jest",
     "test:watch": "yarn test --watch"
   },
-  "gitHead": "e7f45aaa32d8d33799c04f8169b0b0125bcaaece"
+  "gitHead": "2801c132f40263f9fcfbdac8b1750d2e423eb649"
 }
