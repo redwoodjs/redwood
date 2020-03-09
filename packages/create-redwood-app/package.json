@@ -1,6 +1,6 @@
 {
   "name": "create-redwood-app",
-  "version": "0.0.1-alpha.35",
+  "version": "0.0.1-alpha.35.0.1",
   "license": "MIT",
   "bin": "./dist/create-redwood-app.js",
   "files": [
@@ -8,7 +8,7 @@
   ],
   "dependencies": {
     "@babel/runtime-corejs3": "^7.8.4",
-    "@redwoodjs/internal": "^0.0.1-alpha.35",
+    "@redwoodjs/internal": "^0.0.1-alpha.35.0.1",
     "axios": "^0.19.2",
     "chalk": "^3.0.0",
     "check-node-version": "^4.0.2",
