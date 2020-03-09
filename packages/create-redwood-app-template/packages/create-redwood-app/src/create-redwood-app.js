@@ -14,6 +14,8 @@ import axios from 'axios'
 import Listr from 'listr'
 import execa from 'execa'
 import tmp from 'tmp'
+import checkNodeVersion from 'check-node-version'
+import chalk from 'chalk'
 
 const RELEASE_URL =
   'https://api.github.com/repos/redwoodjs/create-redwood-app/releases'
@@ -36,202 +38,135 @@ const downloadFile = async (sourceUrl, targetFile) => {
   })
 }
 
-const tmpDownloadPath = tmp.tmpNameSync({
-  prefix: 'redwood',
-  postfix: '.zip',
-})
-
-// To run any commands, use these to set path for the working dir
 const targetDir = String(process.argv.slice(2)).replace(/,/g, '-')
+if (!targetDir) {
+  console.error('Please specify the project directory')
+  console.log(
+    `  ${chalk.cyan('yarn create redwood-app')} ${chalk.green(
+      '<project-directory>'
+    )}`
+  )
+  console.log()
+  console.log('For example:')
+  console.log(
+    `  ${chalk.cyan('yarn create redwood-app')} ${chalk.green(
+      'my-redwood-app'
+    )}`
+  )
+  process.exit(1)
+}
+
 const newAppDir = path.resolve(process.cwd(), targetDir)
 
-// Uses Listr: https://github.com/SamVerschueren/listr
-// Sequencial terminal tasks and output
-// Individual task error stops execution unless `exitOnError: false`
-const tasks = new Listr(
-  [
+const createProjectTasks = ({ newAppDir }) => {
+  const tmpDownloadPath = tmp.tmpNameSync({
+    prefix: 'redwood',
+    postfix: '.zip',
+  })
+
+  return [
     {
-      title: 'Pre-Installation Check',
+      title: `Creating directory '${newAppDir}'`,
       task: () => {
-        return new Listr(
-          [
-            {
-              title: 'Checking for path in command',
-              task: () => {
-                if (!targetDir) {
-                  throw new Error(
-                    'Missing path arg. Usage `yarn create redwood-app ./path/to/new-project`'
-                  )
-                }
-              },
-            },
-            {
-              title: 'Checking if directory already exists',
-              task: () => {
-                if (fs.existsSync(newAppDir)) {
-                  throw new Error(
-                    `Install error: directory ${targetDir} already exists.`
-                  )
-                }
-              },
-            },
-          ],
-          { concurrent: true }
-        )
-      },
-    },
-    {
-      title: `Creating "${newAppDir}/"`,
-      task: () => {
+        if (fs.existsSync(newAppDir)) {
+          throw new Error(`'${newAppDir}' already exists.`)
+        }
         fs.mkdirSync(newAppDir, { recursive: true })
       },
     },
     {
-      title: 'Extracting “Create-Redwood-App” Current Release',
-      task: () => {
-        return new Listr([
-          {
-            title: `Downloading latest release from ${RELEASE_URL}`,
-            task: async () => {
-              const url = await latestReleaseZipFile()
-              return downloadFile(url, tmpDownloadPath)
-            },
-          },
-          {
-            title: 'Extracting...',
-            task: async () => {
-              await decompress(tmpDownloadPath, newAppDir, { strip: 1 })
-            },
-          },
-          {
-            title: 'Set Local App Development README.md',
-            task: (_ctx, task) => {
-              try {
-                fs.unlinkSync(path.join(newAppDir, './README.md'))
-              } catch (e) {
-                task.skip(
-                  'Could not replace source README.md with a local copy'
-                )
-              }
-              try {
-                fs.renameSync(
-                  path.join(newAppDir, './README_APP.md'),
-                  path.join(newAppDir, './README.md')
-                )
-              } catch (e) {
-                task.skip(
-                  'Could not replace source README.md with a local copy'
-                )
-              }
-            },
-          },
-          {
-            title: 'Set Local App Development .gitignore',
-            task: (_ctx, task) => {
-              try {
-                fs.unlinkSync(path.join(newAppDir, './.gitignore'))
-              } catch (e) {
-                task.skip(
-                  'Could not replace source .gitignore with a local copy'
-                )
-              }
-              try {
-                fs.renameSync(
-                  path.join(newAppDir, './.gitignore.app'),
-                  path.join(newAppDir, './.gitignore')
-                )
-              } catch (e) {
-                task.skip(
-                  'Could not replace source .gitignore with a local copy'
-                )
-              }
-            },
-          },
-          {
-            title: 'Renaming index.html Meta Title',
-            task: (_ctx, task) => {
-              try {
-                const indexHtml = path.join(newAppDir, './web/src/index.html')
-                const data = fs.readFileSync(indexHtml, 'utf8')
-                const newTitle = String(targetDir)
-                  .split('/')
-                  .slice(-1)[0]
-                  .split(/[ _-]/)
-                  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                  .join(' ')
-                fs.writeFileSync(
-                  indexHtml,
-                  data.replace(
-                    RegExp('<title>(.*?)</title>'),
-                    '<title>' + String(newTitle) + '</title>'
-                  ),
-                  'utf8'
-                )
-                task.title = `index.html Meta Title is now "${newTitle}"`
-              } catch (e) {
-                task.skip('Error updating title tag for /web/src/index.html')
-              }
-            },
-          },
-        ])
+      title: 'Downloading latest release',
+      task: async () => {
+        const url = await latestReleaseZipFile()
+        return downloadFile(url, tmpDownloadPath)
       },
     },
     {
-      title: 'Installing Packages',
-      task: () => {
-        return new Listr([
-          {
-            title: 'Engine Check: Node and Yarn Version Requirements',
-            task: async(ctx, task) => {
-              return execa(`check-node-version --node $(node -p "require('./package.json').engines.node")\
-                --yarn $(node -p "require('./package.json').engines.yarn")`, {
-                shell: true,
-                cwd: `${targetDir}`,
-              }).catch((e) => {
-                ctx.engineError = true
-                ctx.engineErrorMessage = e
-                task.title = 'Error: Unmet package.json Engine Requirements'
-                throw new Error('Version requirements not met: See Error below starting with "Wanted..." for details')
-              })
-            },
-          },
-          {
-            title: 'Waiting to run `yarn install`',
-            task: async (ctx, task) => {
-              task.output = `...installing packages...`
-              return execa('yarn install', {
-                shell: true,
-                cwd: `${targetDir}`,
-              }).then(
-                task.title = 'Running `yarn install`'
-              ).catch((e) => {
-                ctx.installError = true
-                task.title = 'Error: Could not run `yarn install`'
-                throw new Error('Confirm yarn is installed and meets RedwoodJS version requirements')
-              })
-            },
-          },
-        ],
-        { exitOnError: false }
-        )
-      },
+      title: 'Extracting latest release',
+      task: () => decompress(tmpDownloadPath, newAppDir, { strip: 1 }),
     },
     {
-      title: '...Redwood planting in progress...',
-      task: (ctx, task) => {
-        if (ctx.engineError || ctx.installError) {
-          task.title = `WARNING: please fix errors and then run \`yarn install\` from ${targetDir}/ root`
-          throw new Error(ctx.engineErrorMessage)
-        } else {
-          task.title = 'SUCCESS: Your Redwood is Ready to Grow!'
-          console.log('')
+      title: 'Clean up',
+      task: () => {
+        try {
+          fs.unlinkSync(path.join(newAppDir, './README.md'))
+          fs.renameSync(
+            path.join(newAppDir, './README_APP.md'),
+            path.join(newAppDir, './README.md')
+          )
+
+          fs.unlinkSync(path.join(newAppDir, './.gitignore'))
+          fs.renameSync(
+            path.join(newAppDir, './.gitignore.app'),
+            path.join(newAppDir, './.gitignore')
+          )
+        } catch (e) {
+          throw new Error('Could not move project files')
         }
       },
     },
-  ],
-  { collapse: false }
-)
+  ]
+}
 
-tasks.run().catch((e) => {
-  console.log(e.message)
-})
+const installNodeModulesTasks = ({ newAppDir }) => {
+  return [
+    {
+      title: 'Checking node and yarn compatability',
+      task: () => {
+        return new Promise((resolve, reject) => {
+          const { engines } = require(path.join(newAppDir, 'package.json'))
+
+          checkNodeVersion(engines, (_error, result) => {
+            if (result.isSatisfied) {
+              return resolve()
+            }
+
+            const errors = Object.keys(result.versions).map((name) => {
+              const { version, wanted } = result.versions[name]
+              return `${name} ${wanted} required, but you have ${version}.`
+            })
+            return reject(new Error(errors.join('\n')))
+          })
+        })
+      },
+    },
+    {
+      title: 'Running `yarn install`... (Could take awhile)',
+      task: () => {
+        return execa('yarn install', {
+          shell: true,
+          cwd: newAppDir,
+        })
+      },
+    },
+  ]
+}
+
+new Listr(
+  [
+    {
+      title: 'Creating Redwood app',
+      task: () => new Listr(createProjectTasks({ newAppDir })),
+    },
+    {
+      title: 'Installing packages',
+      task: () => new Listr(installNodeModulesTasks({ newAppDir })),
+    },
+  ],
+  { collapse: false, exitOnError: true }
+)
+  .run()
+  .then(() => {
+    // TODO: show helpful out for next steps.
+    console.log()
+    console.log(`Thanks for trying out Redwood! We've created '${newAppDir}'`)
+    console.log()
+    console.log(
+      'Inside that directory you can run `yarn rw dev` to start the development server.'
+    )
+  })
+  .catch((e) => {
+    console.log()
+    console.log(e)
+    process.exit(1)
+  })
