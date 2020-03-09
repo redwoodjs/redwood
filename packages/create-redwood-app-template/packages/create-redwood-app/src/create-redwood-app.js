@@ -178,23 +178,54 @@ const tasks = new Listr(
     },
     {
       title: 'Installing Packages',
-      task: async (ctx, task) => {
-        task.output = `...installing packages...`
-        return execa('yarn install', {
-          shell: true,
-          cwd: `${targetDir}`,
-        }).catch(() => {
-          ctx.stop = true
-          task.title = `${task.title} (or not)`
-          throw new Error('Yarn not installed. Cannot proceed.')
-        })
+      task: () => {
+        return new Listr([
+          {
+            title: 'Engine Check: Node and Yarn Version Requirements',
+            task: async(ctx, task) => {
+              return execa(`check-node-version --node $(node -p "require('./package.json').engines.node")\
+                --yarn $(node -p "require('./package.json').engines.yarn")`, {
+                shell: true,
+                cwd: `${targetDir}`,
+              }).catch((e) => {
+                ctx.engineError = true
+                ctx.engineErrorMessage = e
+                task.title = 'Error: Unmet package.json Engine Requirements'
+                throw new Error('Version requirements not met: See Error below starting with "Wanted..." for details')
+              })
+            },
+          },
+          {
+            title: 'Waiting to run `yarn install`',
+            task: async (ctx, task) => {
+              task.output = `...installing packages...`
+              return execa('yarn install', {
+                shell: true,
+                cwd: `${targetDir}`,
+              }).then(
+                task.title = 'Running `yarn install`'
+              ).catch((e) => {
+                ctx.installError = true
+                task.title = 'Error: Could not run `yarn install`'
+                throw new Error('Confirm yarn is installed and meets RedwoodJS version requirements')
+              })
+            },
+          },
+        ],
+        { exitOnError: false }
+        )
       },
     },
     {
       title: '...Redwood planting in progress...',
-      task: (_ctx, task) => {
-        task.title = 'SUCCESS: Your Redwood is Ready to Grow!'
-        console.log('')
+      task: (ctx, task) => {
+        if (ctx.engineError || ctx.installError) {
+          task.title = `WARNING: please fix errors and then run \`yarn install\` from ${targetDir}/ root`
+          throw new Error(ctx.engineErrorMessage)
+        } else {
+          task.title = 'SUCCESS: Your Redwood is Ready to Grow!'
+          console.log('')
+        }
       },
     },
   ],
