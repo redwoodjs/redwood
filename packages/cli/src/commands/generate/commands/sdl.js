@@ -6,6 +6,7 @@ import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 
 import { generateTemplate, getSchema, getPaths, writeFilesTask } from 'src/lib'
+import c from 'src/lib/colors'
 
 import { files as serviceFiles } from './service'
 
@@ -105,6 +106,6 @@ export const handler = async ({ model, crud, services, force }) => {
   try {
     await tasks.run()
   } catch (e) {
-    // do nothing.
+    console.log(c.error(e.message))
   }
 }
