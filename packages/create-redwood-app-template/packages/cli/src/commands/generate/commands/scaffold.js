@@ -17,6 +17,7 @@ import {
   writeFilesTask,
   addRoutesToRouterTask,
 } from 'src/lib'
+import c from 'src/lib/colors'
 
 import { files as sdlFiles } from './sdl'
 import { files as serviceFiles } from './service'
@@ -213,6 +214,6 @@ export const handler = async ({ model, force }) => {
   try {
     await tasks.run()
   } catch (e) {
-    // do nothing
+    console.log(c.error(e.message))
   }
 }

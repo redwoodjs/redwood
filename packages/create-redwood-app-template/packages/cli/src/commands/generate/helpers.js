@@ -4,6 +4,7 @@ import Listr from 'listr'
 import pascalcase from 'pascalcase'
 
 import { generateTemplate, getPaths, writeFilesTask } from 'src/lib'
+import c from 'src/lib/colors'
 
 /**
  * Reduces boilerplate for generating an output path and content to write to disk
@@ -68,7 +69,7 @@ export const createYargsForComponentGeneration = ({
       try {
         await tasks.run()
       } catch (e) {
-        // do nothing
+        console.log(c.error(e.message))
       }
     },
   }

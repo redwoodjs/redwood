@@ -4,6 +4,7 @@ import pascalcase from 'pascalcase'
 import { paramCase } from 'param-case'
 
 import { writeFilesTask, addRoutesToRouterTask } from 'src/lib'
+import c from 'src/lib/colors'
 
 import { templateForComponentFile } from '../helpers'
 
@@ -76,6 +77,6 @@ export const handler = async ({ name, path, force }) => {
   try {
     await tasks.run()
   } catch (e) {
-    // do nothing.
+    console.log(c.error(e.message))
   }
 }
