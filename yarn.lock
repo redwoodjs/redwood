@@ -4524,6 +4524,18 @@ chardet@^0.7.0:
   resolved "https://registry.yarnpkg.com/chardet/-/chardet-0.7.0.tgz#90094849f0937f2eedc2425d0d28a9e5f0cbad9e"
   integrity sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==
 
+check-node-version@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/check-node-version/-/check-node-version-4.0.2.tgz#0385880c42425651ce4aaee8de8008e4a640f5dc"
+  integrity sha512-PsIRqtX9i4oWuScZrBf7I3fDfGfo8aS5uU7F1jJ771X0lNwW6hd+SYgIfs9w8Cw9mY4bF2QlU8ZZ1KdYdCobFA==
+  dependencies:
+    chalk "^3.0.0"
+    map-values "^1.0.1"
+    minimist "^1.2.0"
+    object-filter "^1.0.2"
+    run-parallel "^1.1.4"
+    semver "^6.3.0"
+
 check-types@^8.0.3:
   version "8.0.3"
   resolved "https://registry.yarnpkg.com/check-types/-/check-types-8.0.3.tgz#3356cca19c889544f2d7a95ed49ce508a0ecf552"
@@ -9367,6 +9379,11 @@ map-obj@^2.0.0:
   resolved "https://registry.yarnpkg.com/map-obj/-/map-obj-2.0.0.tgz#a65cd29087a92598b8791257a523e021222ac1f9"
   integrity sha1-plzSkIepJZi4eRJXpSPgISIqwfk=
 
+map-values@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/map-values/-/map-values-1.0.1.tgz#768b8e79c009bf2b64fee806e22a7b1c4190c990"
+  integrity sha1-douOecAJvytk/ugG4ip7HEGQyZA=
+
 map-visit@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/map-visit/-/map-visit-1.0.0.tgz#ecdca8f13144e660f1b5bd41f12f3479d98dfb8f"
@@ -10113,6 +10130,11 @@ object-copy@^0.1.0:
     copy-descriptor "^0.1.0"
     define-property "^0.2.5"
     kind-of "^3.0.3"
+
+object-filter@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/object-filter/-/object-filter-1.0.2.tgz#af0b797ffebeaf8a52c6637cedbe8816cfec1bc8"
+  integrity sha1-rwt5f/6+r4pSxmN87b6IFs/sG8g=
 
 object-inspect@^1.7.0:
   version "1.7.0"
@@ -11741,6 +11763,11 @@ run-async@^2.2.0:
   integrity sha1-A3GrSuC91yDUFm19/aZP96RFpsA=
   dependencies:
     is-promise "^2.1.0"
+
+run-parallel@^1.1.4:
+  version "1.1.9"
+  resolved "https://registry.yarnpkg.com/run-parallel/-/run-parallel-1.1.9.tgz#c9dd3a7cf9f4b2c4b6244e173a6ed866e61dd679"
+  integrity sha512-DEqnSRTDw/Tc3FXf49zedI638Z9onwUotBMiUFKmrO2sdFKIbXamXGQ3Axd4qgphxKB4kw/qP1w5kTxnfU1B9Q==
 
 run-queue@^1.0.0, run-queue@^1.0.3:
   version "1.0.3"
