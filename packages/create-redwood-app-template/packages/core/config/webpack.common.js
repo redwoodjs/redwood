@@ -69,6 +69,7 @@ module.exports = (webpackEnv) => {
         }),
       !isEnvProduction && new webpack.HotModuleReplacementPlugin(),
       new HtmlWebpackPlugin({
+        title: path.basename(redwoodPaths.base),
         template: path.resolve(redwoodPaths.base, 'web/src/index.html'),
         inject: true,
         chunks: 'all',
