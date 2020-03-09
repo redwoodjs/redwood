@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/router",
-  "version": "0.0.1-alpha.35",
+  "version": "0.0.1-alpha.35.0.1",
   "files": [
     "dist"
   ],
