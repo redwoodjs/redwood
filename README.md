@@ -15,20 +15,21 @@ cycles choosing and re-choosing various technologies and configurations. Plus,
 because Redwood is a proper framework, you benefit from continued performance
 and feature upgrades over time and with minimum effort.
 
-> **WARNING:** This document is aspirational (see
-> [Readme Driven Development](https://tom.preston-werner.com/2010/08/23/readme-driven-development.html))
-> and not everything contained within it is true yet.
+> **WARNING:** Redwood is still in the **alpha** phase of development. We do not
+> recommend that you use Redwood applications in production at this time. That said,
+> your input can have a huge impact during this period, and we welcome your feedback
+> and ideas! Check out the [Redwood Community
+> Forum](https://community.redwoodjs.com/) to join in.
 
 > **TUTORIAL:** We have a "getting started from scratch" tutorial in the works,
 > but keep in mind that we are driving Redwood development with that prose, and
 > some of the commands may not work yet. We would love your feedback on anything
 > you find confusing.
 >
-> https://github.com/redwoodjs/tutorial
+> https://redwoodjs.com/tutorial
 
-**EXAMPLES:** If you'd like to see some examples of what a Redwood application
-might look like (these are still very much works in progress), take a look at
-the following projects:
+**EXAMPLES:** If you'd like to see some examples of what a Redwood application looks
+like, take a look at the following projects:
 
 - [Todo](https://github.com/redwoodjs/example-todo)
 - [Blog](https://github.com/redwoodjs/example-blog)
