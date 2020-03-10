@@ -63,7 +63,7 @@ export const createYargsForComponentGeneration = ({
             },
           },
         ],
-        { collapse: false }
+        { collapse: false, exitOnError: true }
       )
 
       try {
