@@ -75,7 +75,7 @@ const nameVariants = (name) => {
 
 export const templateRoot = path.resolve(
   __dirname,
-  '../commands/Generate/templates'
+  '../commands/generate/templates'
 )
 
 export const generateTemplate = (templateFilename, { name, ...rest }) => {
