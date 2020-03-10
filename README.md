@@ -21,12 +21,8 @@ and feature upgrades over time and with minimum effort.
 > and ideas! Check out the [Redwood Community
 > Forum](https://community.redwoodjs.com/) to join in.
 
-> **TUTORIAL:** We have a "getting started from scratch" tutorial in the works,
-> but keep in mind that we are driving Redwood development with that prose, and
-> some of the commands may not work yet. We would love your feedback on anything
-> you find confusing.
->
-> https://redwoodjs.com/tutorial
+> **TUTORIAL:** The best way to get to know Redwood is by going through the extensive
+> [Redwood Tutorial](https://redwoodjs.com/tutorial). Have fun!
 
 **EXAMPLES:** If you'd like to see some examples of what a Redwood application looks
 like, take a look at the following projects:
