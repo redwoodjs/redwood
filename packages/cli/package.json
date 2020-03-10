@@ -33,7 +33,7 @@
     "@types/node-fetch": "^2.5.5"
   },
   "scripts": {
-    "build": "yarn clean && babel src --out-dir dist && rm -rf ./dist/commands/Generate/templates && cp -r ./src/commands/Generate/templates ./dist/commands/Generate/templates",
+    "build": "yarn clean && babel src --out-dir dist && rm -rf ./dist/commands/generate/templates && cp -r ./src/commands/Generate/templates ./dist/commands/Generate/templates",
     "build:watch": "nodemon --ignore dist --exec 'yarn build'",
     "clean": "rm -rf dist",
     "prepublishOnly": "yarn clean && yarn build",
