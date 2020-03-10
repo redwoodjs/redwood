@@ -49,7 +49,7 @@ const sdlFromSchemaModel = async (name) => {
     }
   } else {
     throw new Error(
-      `\`${name}"\` model not found, check \`./api/prisma/schema.prisma\` that it exists`
+      `\`${name}"\` model not found, check if it exists in \`./api/prisma/schema.prisma\``
     )
   }
 }
