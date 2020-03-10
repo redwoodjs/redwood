@@ -209,7 +209,7 @@ export const handler = async ({ model, force }) => {
         task: () => addScaffoldImport(),
       },
     ],
-    { collapse: false }
+    { collapse: false, exitOnError: true }
   )
   try {
     await tasks.run()

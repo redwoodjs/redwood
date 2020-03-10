@@ -49,7 +49,7 @@ const sdlFromSchemaModel = async (name) => {
     }
   } else {
     throw new Error(
-      `No model schema definition found for \`${name}"\`, check \`schema.prisma\``
+      `\`${name}"\` model not found, check if it exists in \`./api/prisma/schema.prisma\``
     )
   }
 }
@@ -100,7 +100,7 @@ export const handler = async ({ model, crud, services, force }) => {
         },
       },
     ].filter(Boolean),
-    { collapse: false }
+    { collapse: false, exitOnError: true }
   )
 
   try {
