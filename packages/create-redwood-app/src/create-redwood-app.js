@@ -111,7 +111,7 @@ const createProjectTasks = ({ newAppDir }) => {
 const installNodeModulesTasks = ({ newAppDir }) => {
   return [
     {
-      title: 'Checking node and yarn compatability',
+      title: 'Checking node and yarn compatibility',
       task: () => {
         return new Promise((resolve, reject) => {
           const { engines } = require(path.join(newAppDir, 'package.json'))
