@@ -14,15 +14,7 @@ const IGNORE_FIELDS = ['id', 'createdAt']
 
 const modelFieldToSDL = (field, required = true, types = {}) => {
   if (Object.entries(types).length) {
-    if (field.kind === "object") {
-      if (!(field.type in types)) {
-        throw new Error(
-          `"${field.type}" model not found, check if it exists in "./api/prisma/schema.prisma"`
-        )
-      } else {
-        field.type = field.kind === 'object' ? idType(types[field.type]) : field.type
-      }
-    }
+    field.type = field.kind === 'object' ? idType(types[field.type]) : field.type
   }
   return `${field.name}: ${field.type}${
     field.isRequired && required ? '!' : ''
