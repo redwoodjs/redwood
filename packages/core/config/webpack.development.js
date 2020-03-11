@@ -13,6 +13,7 @@ module.exports = merge(webpackConfig('development'), {
     compress: true,
     quiet: true,
     historyApiFallback: true,
+    host: redwoodConfig.web.host || 'localhost',
     port: redwoodConfig.web.port,
     proxy: {
       [redwoodConfig.web.apiProxyPath]: {

@@ -1,9 +1,11 @@
 export type Config = {
   web: {
+    host: string
     port: number
     apiProxyPath: string
   }
   api: {
+    host: string
     port: number
   }
   browser: {
