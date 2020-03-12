@@ -208,14 +208,11 @@ const TextField = (props) => {
 }
 
 // Renders a <button type="submit">
-
-const Submit = (props) => {
-  return (
-    <button {...props} type="submit">
-      {props.children}
-    </button>
-  )
-}
+const Submit = forwardRef(({ children, ...props }, ref) => (
+  <button ref={ref} {...props} type="submit">
+    {children}
+  </button>
+))
 
 export {
   Form,
