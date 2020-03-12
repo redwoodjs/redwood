@@ -42,7 +42,6 @@ const idType = (model) => {
 }
 
 const sdlFromSchemaModel = async (name) => {
-  console.log('FRED')
   const model = await getSchema(name)
 
   if (model) {
