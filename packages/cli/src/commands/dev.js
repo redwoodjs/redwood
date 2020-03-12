@@ -13,7 +13,7 @@ export const builder = {
 }
 
 export const handler = async ({ app = ['db', 'api', 'web'] }) => {
-  // Replaces ` ` with `\ `. Damn.here has got to be a better
+  // Replaces ` ` with `\ `. Damn, there has got to be a better
   // way to sanitize paths?!
   const BASE_DIR = getPaths().base.replace(' ', '\\ ')
 
