@@ -194,7 +194,9 @@ const server = startServer()
 server.setTimeout(10 * 1000)
 
 const watcher = chokidar.watch(API_DIR, {
-  ignored: (path: string) => path.includes('node_modules') || ['.db', '.sqlite', '-journal'].some((ext) => path.endsWith(ext)),
+  ignored: (path: string) =>
+    path.includes('node_modules') ||
+    ['.db', '.sqlite', '-journal'].some((ext) => path.endsWith(ext)),
 })
 
 watcher.on('ready', () => {
