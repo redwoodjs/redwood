@@ -13,9 +13,11 @@ export const builder = {
 }
 
 export const handler = async ({ app = ['db', 'api', 'web'] }) => {
-  const { base: BASE_DIR } = getPaths()
+  // Replaces ` ` with `\ `. Damn, there has got to be a better
+  // way to sanitize paths?!
+  const BASE_DIR = getPaths().base.replace(' ', '\\ ')
 
-  // Generate the prisma client if it doesn't exist.
+  // Generate the Prisma client if it doesn't exist.
   await generatePrismaClient({ verbose: false, force: false })
 
   const jobs = {
