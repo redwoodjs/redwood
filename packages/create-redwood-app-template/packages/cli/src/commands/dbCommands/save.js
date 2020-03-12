@@ -10,7 +10,7 @@ export const handler = async ({ name, verbose = true }) => {
     [
       {
         title: 'Creating database migration...',
-        cmd: 'prisma2',
+        cmd: 'yarn prisma2',
         args: [
           'migrate save',
           name && `--name ${name}`,

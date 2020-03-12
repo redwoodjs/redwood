@@ -32,7 +32,7 @@ export const handler = async ({
     },
     web: {
       cwd: `${BASE_DIR}/web`,
-      cmd: `webpack --config ../node_modules/@redwoodjs/core/config/webpack.${
+      cmd: `yarn webpack --config ../node_modules/@redwoodjs/core/config/webpack.${
         stats ? 'stats' : 'production'
       }.js`,
     },

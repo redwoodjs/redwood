@@ -13,7 +13,7 @@ export const handler = async ({ verbose = true, dbClient = true }) => {
     [
       {
         title: 'Migrate database up...',
-        cmd: 'prisma2',
+        cmd: 'yarn prisma2',
         args: ['migrate up', '--experimental', '--create-db'],
       },
     ],
