@@ -12,7 +12,10 @@ import { files as serviceFiles } from './service'
 
 const IGNORE_FIELDS = ['id', 'createdAt']
 
-const modelFieldToSDL = (field, required = true) => {
+const modelFieldToSDL = (field, required = true, types = {}) => {
+  if (Object.entries(types).length) {
+    field.type = field.kind === 'object' ? idType(types[field.type]) : field.type
+  }
   return `${field.name}: ${field.type}${
     field.isRequired && required ? '!' : ''
   }`
@@ -22,12 +25,12 @@ const querySDL = (model) => {
   return model.fields.map((field) => modelFieldToSDL(field))
 }
 
-const inputSDL = (model) => {
+const inputSDL = (model, types = {}) => {
   return model.fields
     .filter((field) => {
       return IGNORE_FIELDS.indexOf(field.name) === -1
     })
-    .map((field) => modelFieldToSDL(field, false))
+    .map((field) => modelFieldToSDL(field, false, types))
 }
 
 const idType = (model) => {
@@ -42,14 +45,25 @@ const sdlFromSchemaModel = async (name) => {
   const model = await getSchema(name)
 
   if (model) {
+    // get models for user-defined types referenced
+    const types = (await Promise.all(
+      model.fields
+      .filter(field => field.kind === 'object')
+      .map( async field => {
+        const model = await getSchema(field.type);
+        return model
+      })
+    ))
+    .reduce((acc, cur) => ({ ...acc, [cur.name]: cur }), {})
+
     return {
       query: querySDL(model).join('\n    '),
-      input: inputSDL(model).join('\n    '),
+      input: inputSDL(model, types).join('\n    '),
       idType: idType(model),
     }
   } else {
     throw new Error(
-      `\`${name}"\` model not found, check if it exists in \`./api/prisma/schema.prisma\``
+      `"${name}" model not found, check if it exists in "./api/prisma/schema.prisma"`
     )
   }
 }
