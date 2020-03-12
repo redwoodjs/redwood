@@ -32,7 +32,7 @@ const COMPONENTS = fs.readdirSync(
 const SCAFFOLD_STYLE_PATH = './scaffold.css'
 
 const getIdType = (model) => {
-  return model.fields.find((field) => field.name === 'id')?.type
+  return model.fields.find((field) => field.isId)?.type
 }
 
 export const files = async ({ model: name }) => {

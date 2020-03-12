@@ -34,7 +34,7 @@ const inputSDL = (model, types = {}) => {
 }
 
 const idType = (model) => {
-  const idField = model.fields.find((field) => field.name === 'id')
+  const idField = model.fields.find((field) => field.isId)
   if (!idField) {
     throw new Error('Cannot generate SDL without an `id` database column')
   }
