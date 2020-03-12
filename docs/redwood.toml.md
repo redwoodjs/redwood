@@ -2,21 +2,33 @@
 
 Develompment environment settings can be adjusted using `redwood.toml`.
 
-## web
+## [web]
 
-TODO
+This table contains the configuration for web side.
+
+### web.host
+
+The hostname (string) to listen to for the web server, defaults to `localhost`.  When running the server within containers/VMs, using `0.0.0.0` would allow network connections to/from the host.
 
 ### web.port
 
-TODO
+The port number (integer) to listen to for the web side.
 
 ### web.apiProxyPaths
 
 TODO
 
+## [api]
+
+This table contains the configuration for api side.
+
+## api.host
+
+The hostname (string) to listen to for the web server, defaults to `localhost`.  When running the server within containers/VMs, using `0.0.0.0` would allow network connections to/from the host.
+
 ## api.port
 
-TODO
+The port number (integer) to listen to for the api side.
 
 ## browser.open
 
