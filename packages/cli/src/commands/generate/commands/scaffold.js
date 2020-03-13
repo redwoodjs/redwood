@@ -159,8 +159,8 @@ const routes = async ({ model: name }) => {
   const idRouteParam = getIdType(model) === 'Int' ? ':Int' : ''
 
   return [
-    `<Route path="/${pluralCamelName}/{id${idRouteParam}}/edit" page={Edit${singularPascalName}Page} name="edit${singularPascalName}" />`,
     `<Route path="/${pluralCamelName}/new" page={New${singularPascalName}Page} name="new${singularPascalName}" />`,
+    `<Route path="/${pluralCamelName}/{id${idRouteParam}}/edit" page={Edit${singularPascalName}Page} name="edit${singularPascalName}" />`,
     `<Route path="/${pluralCamelName}/{id${idRouteParam}}" page={${singularPascalName}Page} name="${singularCamelName}" />`,
     `<Route path="/${pluralCamelName}" page={${pluralPascalName}Page} name="${pluralCamelName}" />`,
   ]
