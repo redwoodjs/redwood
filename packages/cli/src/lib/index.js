@@ -145,6 +145,9 @@ export const addRoutesToRouterTask = (routes) => {
   const redwoodPaths = getPaths()
   const routesContent = readFile(redwoodPaths.web.routes).toString()
   const newRoutesContent = routes.reduce((content, route) => {
+    if (content.includes(route)) {
+      return content;
+    }
     return content.replace(/(\s*)\<Router\>/, `$1<Router>$1  ${route}`)
   }, routesContent)
   writeFile(redwoodPaths.web.routes, newRoutesContent, {
