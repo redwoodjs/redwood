@@ -58,4 +58,4 @@ export const commandProps = {
 
 ## Publishing
 
-This is a monorepo and is published via LearnaJS. See the root README for instructions.
+This is a monorepo and is published via [LernaJS](https://lerna.js.org/). See the root README for instructions.
