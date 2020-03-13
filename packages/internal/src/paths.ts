@@ -87,7 +87,8 @@ export const processPagesDir = (
         // onto the deps array.
         const basename = path.posix.basename(entry.name, '.js')
         const importName = prefix.join() + basename
-        const importFile = path.join('src', 'pages', ...prefix, basename)
+        // `src/pages/<PageName>`
+        const importFile = ['src', 'pages', ...prefix, basename].join('/')
         deps.push({
           const: importName,
           path: path.join(webPagesDir, entry.name),
