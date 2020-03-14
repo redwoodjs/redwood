@@ -9,4 +9,7 @@ export const getPaths = () => ({
     services: path.resolve(BASE_PATH, './api/src/services'),
     graphql: path.resolve(BASE_PATH, './api/src/graphql'),
   },
+  web: {
+    routes: './web/src/Routes.js',
+  },
 })
