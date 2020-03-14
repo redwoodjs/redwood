@@ -25,7 +25,7 @@
   },
   "scripts": {
     "build": "lerna run build",
-    "test": "lerna run test -- --colors",
+    "test": "lerna run test --stream -- --colors",
     "lint": "yarn eslint 'packages/*/src/**/*.js'",
     "lint:fix": "yarn eslint --fix 'packages/*/src/**/*.js'"
   }
