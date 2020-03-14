@@ -1,6 +1,8 @@
 import { gql } from 'apollo-server-lambda'
 import { GraphQLDate, GraphQLTime, GraphQLDateTime } from 'graphql-iso-date'
 
+import apiPackageJson from 'src/../package.json'
+
 /**
  * This adds scalar types for dealing with Date, Time, and DateTime, and adds a root
  * `Query` type which is needed to start the GraphQL server on a fresh install.
@@ -25,7 +27,7 @@ export const resolvers = {
   DateTime: GraphQLDateTime,
   Query: {
     redwood: () => ({
-      version: '0.0.0',
+      version: apiPackageJson.version,
     }),
   },
 }
