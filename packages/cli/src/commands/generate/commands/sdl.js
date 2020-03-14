@@ -14,7 +14,8 @@ const IGNORE_FIELDS = ['id', 'createdAt']
 
 const modelFieldToSDL = (field, required = true, types = {}) => {
   if (Object.entries(types).length) {
-    field.type = field.kind === 'object' ? idType(types[field.type]) : field.type
+    field.type =
+      field.kind === 'object' ? idType(types[field.type]) : field.type
   }
   return `${field.name}: ${field.type}${
     field.isRequired && required ? '!' : ''
@@ -46,15 +47,16 @@ const sdlFromSchemaModel = async (name) => {
 
   if (model) {
     // get models for user-defined types referenced
-    const types = (await Promise.all(
-      model.fields
-      .filter(field => field.kind === 'object')
-      .map( async field => {
-        const model = await getSchema(field.type);
-        return model
-      })
-    ))
-    .reduce((acc, cur) => ({ ...acc, [cur.name]: cur }), {})
+    const types = (
+      await Promise.all(
+        model.fields
+          .filter((field) => field.kind === 'object')
+          .map(async (field) => {
+            const model = await getSchema(field.type)
+            return model
+          })
+      )
+    ).reduce((acc, cur) => ({ ...acc, [cur.name]: cur }), {})
 
     return {
       query: querySDL(model).join('\n    '),
