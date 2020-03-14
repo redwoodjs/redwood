@@ -17,12 +17,12 @@ export const handler = async ({ app }) => {
     api: {
       cwd: `${BASE_DIR}/api`,
       cmd:
-        'yarn jest --passWithNoTests --config ../node_modules/@redwoodjs/core/config/jest.config.api.js',
+        'yarn jest --passWithNoTests --config ../node_modules/@redwoodjs/api/jest.config.js',
     },
     web: {
       cwd: `${BASE_DIR}/web`,
       cmd:
-        'yarn jest --passWithNoTests --config ../node_modules/@redwoodjs/core/config/jest.config.web.js',
+        'yarn jest --passWithNoTests --config ../node_modules/@redwoodjs/web/jest.config.js',
     },
   }
 
