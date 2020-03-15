@@ -45,10 +45,18 @@ module.exports = {
       },
     },
     {
-      files: ['api/src/**/*.js'],
+      files: ['api/src/**'],
       globals: {
         db: 'readonly',
         context: 'readonly',
+      },
+    },
+    {
+      files: 'web/src/**',
+      settings: {
+        'eslint-import-resolver-webpack': {
+          config: 'node_modules/@redwoodjs/core/config/webpack.development.js',
+        },
       },
     },
   ],
@@ -56,9 +64,6 @@ module.exports = {
     // This is used to support our `import/order` configuration.
     'import/resolver': {
       'eslint-import-resolver-babel-module': {},
-      'eslint-import-resolver-webpack': {
-        config: '@redwoodjs/core/config/webpack.development.js',
-      },
     },
     react: {
       version: 'detect',
