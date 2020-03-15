@@ -23,7 +23,7 @@
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config"
   },
-  "eslintIgnore": ["dist", "packages/api/importAll.macro.js"],
+  "eslintIgnore": ["dist", "packages/api/importAll.macro.js", "__test__", "__mocks__", "test.js"],
   "scripts": {
     "build": "lerna run build",
     "test": "lerna run test --stream -- --colors",
