@@ -1,1 +1,1 @@
-export const PrismaClient = class MockPrismaClient { }
+export const PrismaClient = class MockPrismaClient {}

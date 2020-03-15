@@ -21,7 +21,7 @@ module.exports = {
     'react-hooks',
     '@redwoodjs/redwood',
   ],
-  ignorePatterns: ['node_modules'],
+  ignorePatterns: ['node_modules', 'dist'],
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
@@ -45,7 +45,7 @@ module.exports = {
       },
     },
     {
-      files: ['api/src/**/*.js'],
+      files: ['api/src/**'],
       globals: {
         db: 'readonly',
         context: 'readonly',
@@ -53,8 +53,9 @@ module.exports = {
     },
   ],
   settings: {
+    // This is used to support our `import/order` configuration.
     'import/resolver': {
-      'babel-module': {},
+      'eslint-import-resolver-babel-module': {},
     },
     react: {
       version: 'detect',
@@ -106,7 +107,7 @@ module.exports = {
     ],
     // React rules
     'react/prop-types': [
-      'error',
+      'warn',
       {
         skipUndeclared: true,
         ignore: ['style', 'children', 'className', 'theme'],
