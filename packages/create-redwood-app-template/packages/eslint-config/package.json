@@ -11,7 +11,6 @@
     "eslint": "6.8.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-import-resolver-babel-module": "^5.1.2",
-    "eslint-import-resolver-webpack": "^0.12.1",
     "eslint-plugin-babel": "^5.3.0",
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-jsx-a11y": "^6.2.3",
