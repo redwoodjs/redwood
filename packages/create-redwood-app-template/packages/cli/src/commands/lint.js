@@ -9,13 +9,9 @@ export const builder = {
 }
 
 export const handler = ({ fix }) => {
-  execa(
-    'yarn eslint',
-    [fix && '--fix', 'web/src/**/*.js', 'api/src/**/*.js'].filter(Boolean),
-    {
-      cwd: getPaths().base,
-      shell: true,
-      stdio: 'inherit',
-    }
-  )
+  execa('yarn eslint', [fix && '--fix', 'web/src', 'api/src'].filter(Boolean), {
+    cwd: getPaths().base,
+    shell: true,
+    stdio: 'inherit',
+  })
 }
