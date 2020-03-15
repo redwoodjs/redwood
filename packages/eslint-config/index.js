@@ -51,14 +51,6 @@ module.exports = {
         context: 'readonly',
       },
     },
-    {
-      files: 'web/src/**',
-      settings: {
-        'eslint-import-resolver-webpack': {
-          config: 'node_modules/@redwoodjs/core/config/webpack.development.js',
-        },
-      },
-    },
   ],
   settings: {
     // This is used to support our `import/order` configuration.
