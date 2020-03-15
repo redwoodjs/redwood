@@ -100,7 +100,7 @@ module.exports = {
       { varsIgnorePattern: '^_', argsIgnorePattern: '^_' },
     ],
     'import/order': [
-      'warn',
+      'error',
       {
         groups: [
           'builtin',
