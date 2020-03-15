@@ -23,10 +23,11 @@
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config"
   },
+  "eslintIgnore": ["dist", "packages/api/importAll.macro.js"],
   "scripts": {
-    "build": "lerna run build",
+    "build": "NODE_ENV=production lerna run build",
     "test": "lerna run test --stream -- --colors",
-    "lint": "yarn eslint 'packages/*/src/**/*.js'",
-    "lint:fix": "yarn eslint --fix 'packages/*/src/**/*.js'"
+    "lint": "yarn eslint './packages/'",
+    "lint:fix": "yarn eslint --fix './packages/'"
   }
 }
