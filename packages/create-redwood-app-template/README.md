@@ -41,13 +41,13 @@ development experience you can fall in love with!
 Here's a quick taste of the technologies a standard Redwood application will
 use:
 
-- React
-- GraphQL (Apollo)
-- Prisma
-- Jest (coming soon)
-- Storybook (coming soon)
-- Babel
-- Webpack
+- [React](https://reactjs.org/)
+- [GraphQL](https://graphql.org/) ([Apollo](https://github.com/apollographql))
+- [Prisma](https://www.prisma.io/)
+- [Jest](https://jestjs.io/) (coming soon)
+- [Storybook](https://storybook.js.org/) (coming soon)
+- [Babel](https://babeljs.io/)
+- [Webpack](https://webpack.js.org/)
 
 ## Features
 
@@ -59,13 +59,13 @@ use:
 - Generators for pages, layouts, cells, SDL, services, etc.
 - Scaffold generator for CRUD operations around a specific DB table.
 - Forms with easy client- and/or server-side validation and error handling.
-- Hot module replacement (HMR) for faster development.
+- [Hot module replacement](https://webpack.js.org/concepts/hot-module-replacement/) (HMR) for faster development.
 - Database migrations (via Prisma 2).
-- First class JAMstack-style deployment to Netlify.
+- First class JAMstack-style deployment to [Netlify](https://www.netlify.com/).
 
 ## The Redwood philosophy
 
-Redwood believes that JAMstack is a huge leap forward in how we can write web
+Redwood believes that [JAMstack](https://jamstack.org/) is a huge leap forward in how we can write web
 applications that are easy to write, deploy, scale, and maintain.
 
 Redwood believes that there is power in standards, and makes decisions for you
@@ -74,7 +74,7 @@ name things. With a shared understanding of the Redwood conventions, a developer
 should be able to jump into any Redwood application and get up to speed very
 quickly.
 
-Redwood believes that traditional, relational databases like PostgresQL and
+Redwood believes that traditional, relational databases like PostgreSQL and
 MySQL are still workhorses of today's web applications and should be first-class
 citizens. However, that does not mean that Redwood doesn't shine with NoSQL or
 other types of "web scale" databases.
@@ -100,7 +100,7 @@ from code reuse to hiring developers.
 ## How it works
 
 A Redwood application is split into two parts: a frontend and a backend. This is
-represented as two node projects within a single monorepo. We use Yarn to make
+represented as two node projects within a single monorepo. We use [Yarn](https://yarnpkg.com/) to make
 it easy to operate across both projects, while still keeping them in a single
 Git repository.
 
@@ -144,7 +144,7 @@ continue to enjoy performance improvements which will further increase the
 number of use-cases that can take advantage of this technology.
 
 Databases are a little trickier, especially for the traditional relational ones
-like PostgresQL and MySQL. Right now, you still need to set these up manually,
+like PostgreSQL and MySQL. Right now, you still need to set these up manually,
 but we are working hard with Netlify and other providers to fulfill the
 serverless dream here too.
 
