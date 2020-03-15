@@ -21,7 +21,7 @@ module.exports = {
     'react-hooks',
     '@redwoodjs/redwood',
   ],
-  ignorePatterns: ['node_modules'],
+  ignorePatterns: ['node_modules', 'dist'],
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
@@ -53,8 +53,12 @@ module.exports = {
     },
   ],
   settings: {
+    // This is used to support our `import/order` configuration.
     'import/resolver': {
-      'babel-module': {},
+      'eslint-import-resolver-babel-module': {},
+      'eslint-import-resolver-webpack': {
+        config: '@redwoodjs/core/config/webpack.development.js',
+      },
     },
     react: {
       version: 'detect',
@@ -91,7 +95,7 @@ module.exports = {
       { varsIgnorePattern: '^_', argsIgnorePattern: '^_' },
     ],
     'import/order': [
-      'error',
+      'warn',
       {
         groups: [
           'builtin',
@@ -106,7 +110,7 @@ module.exports = {
     ],
     // React rules
     'react/prop-types': [
-      'error',
+      'warn',
       {
         skipUndeclared: true,
         ignore: ['style', 'children', 'className', 'theme'],
