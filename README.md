@@ -74,7 +74,7 @@ name things. With a shared understanding of the Redwood conventions, a developer
 should be able to jump into any Redwood application and get up to speed very
 quickly.
 
-Redwood believes that traditional, relational databases like PostgresQL and
+Redwood believes that traditional, relational databases like PostgreSQL and
 MySQL are still workhorses of today's web applications and should be first-class
 citizens. However, that does not mean that Redwood doesn't shine with NoSQL or
 other types of "web scale" databases.
