@@ -155,7 +155,8 @@ module.exports = (webpackEnv) => {
           },
         },
         {
-          test: /web\/src\/components\/.+Cell.js$/,
+          test: /.+Cell.js$/,
+          include: path.join(redwoodPaths.base, 'web/src/components'),
           use: {
             loader: path.resolve(
               __dirname,
