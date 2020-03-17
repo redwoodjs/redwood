@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/dev-server",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "bin": {
     "dev-server": "./dist/main.js"
   },
@@ -10,7 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "@babel/register": "^7.8.6",
-    "@redwoodjs/internal": "^0.2.2",
+    "@redwoodjs/internal": "^0.2.3",
     "args": "^5.0.1",
     "body-parser": "^1.19.0",
     "chokidar": "^3.3.1",
