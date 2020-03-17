@@ -21,8 +21,8 @@ const mapFieldsToService = ({
         ...resolvers,
         // Map the arguments from GraphQL to an ordinary function a service would
         // expect.
-        [name]: (root, args, context) =>
-          services[name](args, { root, context }),
+        [name]: (root, args, context, info) =>
+          services[name](args, { root, context, info }),
       }
     }
 
