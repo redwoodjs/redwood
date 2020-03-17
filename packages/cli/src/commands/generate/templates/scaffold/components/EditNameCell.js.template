@@ -23,7 +23,6 @@ export const Success = ({ ${singularCamelName} }) => {
   const [update${singularPascalName}, { loading, error }] = useMutation(UPDATE_POST_MUTATION, {
     onCompleted: () => {
       navigate(routes.${pluralCamelName}())
-      location.reload()
     },
   })
 
