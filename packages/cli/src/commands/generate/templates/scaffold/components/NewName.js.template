@@ -14,7 +14,6 @@ const New${singularPascalName} = () => {
   const [create${singularPascalName}, { loading, error }] = useMutation(CREATE_POST_MUTATION, {
     onCompleted: () => {
       navigate(routes.${pluralCamelName}())
-      location.reload()
     },
   })
 
