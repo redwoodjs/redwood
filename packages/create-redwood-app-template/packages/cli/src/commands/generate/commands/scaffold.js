@@ -30,6 +30,8 @@ const COMPONENTS = fs.readdirSync(
   path.join(templateRoot, 'scaffold', 'components')
 )
 const SCAFFOLD_STYLE_PATH = './scaffold.css'
+// Any assets that should not trigger an overwrite error and require a --force
+const SKIPPABLE_ASSETS = ['scaffold.css']
 
 const getIdType = (model) => {
   return model.fields.find((field) => field.isId)?.type
@@ -52,10 +54,20 @@ const assetFiles = (name) => {
   ASSETS.forEach((asset) => {
     const outputAssetName = asset.replace(/\.template/, '')
     const outputPath = path.join(getPaths().web.src, outputAssetName)
-    const template = generateTemplate(path.join('scaffold', 'assets', asset), {
-      name,
-    })
-    fileList[outputPath] = template
+
+    // skip assets that already exist on disk, never worry about overwriting
+    if (
+      !SKIPPABLE_ASSETS.includes(outputPath.split('/').pop()) ||
+      !fs.existsSync(outputPath)
+    ) {
+      const template = generateTemplate(
+        path.join('scaffold', 'assets', asset),
+        {
+          name,
+        }
+      )
+      fileList[outputPath] = template
+    }
   })
 
   return fileList
