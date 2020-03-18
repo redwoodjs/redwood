@@ -69,15 +69,14 @@ Redwood believes that [JAMstack](https://jamstack.org/) is a huge leap forward i
 applications that are easy to write, deploy, scale, and maintain.
 
 Redwood believes that there is power in standards, and makes decisions for you
-about what technologies to use, how to organize your code into files, and how to
+about which technologies to use, how to organize your code into files, and how to
 name things. With a shared understanding of the Redwood conventions, a developer
 should be able to jump into any Redwood application and get up to speed very
 quickly.
 
 Redwood believes that traditional, relational databases like PostgreSQL and
-MySQL are still workhorses of today's web applications and should be first-class
-citizens. However, that does not mean that Redwood doesn't shine with NoSQL or
-other types of "web scale" databases.
+MySQL are still the workhorses of today's web applications and should be first-class
+citizens. However, Redwood also shines with NoSQL databases.
 
 Redwood believes that, as much as possible, you should be able to operate in a
 serverless mindset and deploy to a generic computational grid. This helps unlock
@@ -86,22 +85,22 @@ the next point...
 Redwood believes that deployment and scaling should be super easy. To deploy
 your application, you should only need to commit and push to your Git
 repository. To scale from zero to thousands of users should not require your
-intervention. The principles of JAMstack make this possible.
+intervention. The principles of JAMstack and serverless make this possible.
 
 Redwood believes that it should be equally useful for writing both simple, toy
-applications, and complex, mission critical applications. In addition, it should
+applications and complex, mission-critical applications. In addition, it should
 require very little operational work to grow your app from the former to the
 latter.
 
 Redwood believes that you can use JavaScript as your primary language on both
-the frontend and backend. Only needing a single language simplifies everything
+the frontend and backend. Using a single language simplifies everything
 from code reuse to hiring developers.
 
 ## How it works
 
 A Redwood application is split into two parts: a frontend and a backend. This is
 represented as two node projects within a single monorepo. We use [Yarn](https://yarnpkg.com/) to make
-it easy to operate across both projects, while still keeping them in a single
+it easy to operate across both projects while keeping them in a single
 Git repository.
 
 The frontend project is called `web` and the backend project is called `api`.
@@ -132,18 +131,18 @@ tests, so Redwood closely integrates both, making it easy to do the right thing.
 
 You'll notice that the web side is called "web" and not "frontend". This is
 because Redwood conceives of a world where you may have other sides like
-"mobile", "desktop", "cli", etc, all consuming the same GraphQL API and living
+"mobile", "desktop", "cli", etc., all consuming the same GraphQL API and living
 in the same monorepo.
 
 ## How can it be serverless if it involves a GraphQL API and database?
 
 I'm glad you asked! Currently, Redwood can deploy your GraphQL API to a Lambda
-function. This is not appropriate for all use-cases, but on hosting providers
+function. This is not appropriate for all use cases, but on hosting providers
 like Netlify, it makes deployment a breeze. As time goes on, "functions" will
 continue to enjoy performance improvements which will further increase the
-number of use-cases that can take advantage of this technology.
+number of use cases that can take advantage of this technology.
 
-Databases are a little trickier, especially for the traditional relational ones
+Databases are a little trickier, especially the traditional relational ones
 like PostgreSQL and MySQL. Right now, you still need to set these up manually,
 but we are working hard with Netlify and other providers to fulfill the
 serverless dream here too.
