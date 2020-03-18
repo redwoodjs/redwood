@@ -23,6 +23,7 @@ export type Paths = {
     src: string
   }
   api: {
+    config: string
     db: string
     dbSchema: string
     functions: string
