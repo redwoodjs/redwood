@@ -9,6 +9,7 @@ const CONFIG_FILE_NAME = 'redwood.toml'
 
 const PATH_API_DIR_FUNCTIONS = 'api/src/functions'
 const PATH_API_DIR_GRAPHQL = 'api/src/graphql'
+const PATH_API_DIR_CONFIG = 'api/config'
 const PATH_API_DIR_DB = 'api/prisma'
 const PATH_API_DIR_DB_SCHEMA = 'api/prisma/schema.prisma'
 const PATH_API_DIR_SERVICES = 'api/src/services'
@@ -46,6 +47,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
   return {
     base: BASE_DIR,
     api: {
+      config: path.join(BASE_DIR, PATH_API_DIR_CONFIG),
       db: path.join(BASE_DIR, PATH_API_DIR_DB),
       dbSchema: path.join(BASE_DIR, PATH_API_DIR_DB_SCHEMA),
       functions: path.join(BASE_DIR, PATH_API_DIR_FUNCTIONS),
