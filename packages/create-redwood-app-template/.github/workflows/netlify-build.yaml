@@ -1,5 +1,5 @@
 
-name: Netlify deploy hook adding new docs to Redwoodjs.com
+name: Netlify deploy hook to add new docs on Redwoodjs.com
 
 on:
   push:
