@@ -14,7 +14,7 @@ The first thing we'll want to do is create a new Redwood application by running 
 `redwood new` command after installation.
 
 ```terminal
-$ yarn new ~/myprojects/todo
+$ redwood new ~/myprojects/todo
 Created ~/myprojects/todo
 Downloading https://github.com/redwoodjs/create-redwood-app/archive/v0.0.1-alpha.7.zip...
 Extracting...
