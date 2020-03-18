@@ -4,7 +4,7 @@
   "files": [
     "dist"
   ],
-  "module": "dist/index.js",
+  "main": "dist/index.js",
   "license": "MIT",
   "dependencies": {
     "@apollo/react-components": "^3.1.3",
