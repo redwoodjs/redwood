@@ -4,7 +4,7 @@
   "files": [
     "dist"
   ],
-  "module": "dist/index.js",
+  "main": "dist/index.js",
   "license": "MIT",
   "dependencies": {
     "core-js": "3.6.4"

@@ -61,7 +61,6 @@ module.exports = {
             targets: {
               browsers: TARGETS_BROWSERS,
             },
-            modules: false,
           },
         ],
       ],
