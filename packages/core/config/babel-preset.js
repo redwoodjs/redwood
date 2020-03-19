@@ -16,7 +16,7 @@ const TARGETS_NODE = '12.16.1'
 // instead of corejs: 3, since with corejs: 3 will not be injected modules which
 // were added in minor core-js releases.
 const CORE_JS_VERSION = '3.6'
-const DB_INITIALIZER_PATH = path.join(getPaths().api.init, 'dbInstance')
+const DB_INITIALIZER_PATH = path.join(getPaths().api.config, 'dbInstance')
 
 // Whether a given file path is a Javascript or Typescript file
 const isScript = (filePath) => {
