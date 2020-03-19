@@ -64,6 +64,25 @@ module.exports = {
           },
         ],
       ],
+      plugins: [
+        [
+          'babel-plugin-auto-import',
+          {
+            declarations: [
+              {
+                // import { React } from 'react'
+                default: 'React',
+                path: 'react',
+              },
+              {
+                // import { PropTypes } from 'prop-types'
+                default: 'PropTypes',
+                path: 'prop-types',
+              },
+            ],
+          },
+        ],
+      ],
     },
   ],
   // Do not build tests or mocks in production.

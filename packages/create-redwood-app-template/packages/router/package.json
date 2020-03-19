@@ -9,6 +9,9 @@
   "dependencies": {
     "core-js": "3.6.4"
   },
+  "peerDependencies": {
+    "react": "*"
+  },
   "scripts": {
     "build": "yarn clean && babel src -d dist",
     "build:watch": "nodemon --ignore dist --exec 'yarn build'",
