@@ -1,0 +1,17 @@
+
+name: Netlify deploy hook to add new docs on reADD
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy_hook:
+    name: Starting Netlify Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: POST build hook
+      run: |
+        set -e
+        curl -X POST https://api.netlify.com/build_hooks/5e72a1a0d832c03eb1f56934
