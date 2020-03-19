@@ -3,4 +3,7 @@
 module.exports = {
   resolver: 'jest-directory-named-resolver',
   rootDir: process.cwd(),
+  globals: {
+    __REDWOOD__API_PROXY_PATH: '/',
+  },
 }
