@@ -10,10 +10,11 @@
     "@babel/node": "^7.8.3",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/plugin-transform-runtime": "^7.8.3",
-    "@babel/runtime-corejs3": "^7.8.4",
     "@babel/preset-env": "^7.8.4",
     "@babel/preset-react": "^7.8.3",
     "@babel/preset-typescript": "^7.8.3",
+    "@babel/runtime-corejs3": "^7.8.4",
+    "babel-plugin-auto-import": "^1.0.5",
     "babel-plugin-module-resolver": "^4.0.0",
     "jest": "^25.1.0",
     "lerna": "^3.20.2",
@@ -23,7 +24,10 @@
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config"
   },
-  "eslintIgnore": ["dist", "packages/api/importAll.macro.js"],
+  "eslintIgnore": [
+    "dist",
+    "packages/api/importAll.macro.js"
+  ],
   "scripts": {
     "build": "NODE_ENV=production lerna run build",
     "test": "lerna run test --stream -- --colors",

@@ -20,6 +20,10 @@
     "proptypes": "^1.1.0",
     "react-hook-form": "^4.10.1"
   },
+  "peerDependencies": {
+    "react": "*",
+    "prop-types": "*"
+  },
   "scripts": {
     "build": "yarn clean && babel src -d dist",
     "build:watch": "nodemon --ignore dist --exec 'yarn build'",
