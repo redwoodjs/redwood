@@ -19,8 +19,8 @@ describe('${pascalName}Cell', () => {
   })
 
   it('Failure renders successfully', () => {
-    render(<Failure error={{ message: 'On no!' }} />)
-    expect(screen.queryByText('Error: On no!')).toBeInTheDocument()
+    render(<Failure error={{ message: 'Oh no!' }} />)
+    expect(screen.queryByText('Error: Oh no!')).toBeInTheDocument()
   })
 
   it('Success renders successfully', () => {
