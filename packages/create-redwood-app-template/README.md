@@ -168,7 +168,7 @@ _(A history, by Tom Preston-Werner)_
 Where I live in Northern California there is a type of tree called a redwood.
 Redwoods are HUGE, the tallest in the world, some topping out at 115 meters (380
 feet) in height. The eldest of the still-living redwoods sprouted from the
-ground an astonishing 2,500 years ago. To stand among them is transcendent.
+ground an astonishing 3,200 years ago. To stand among them is transcendent.
 Sometimes, when I need to think or be creative, I will journey to my favorite
 grove of redwoods and walk among these giants, soaking myself in their silent
 grandeur.
