@@ -24,4 +24,11 @@ describe('matchPath', () => {
 
     expect(matchPath('/about', '/', coreParamTypes)).toEqual({ match: false })
   })
+
+  it('transforms a param based on the specified transform', () => {
+    expect(matchPath('/post/{id:Int}', '/post/1337', coreParamTypes)).toEqual({
+      match: true,
+      params: { id: 1337 },
+    })
+  })
 })
