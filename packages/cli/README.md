@@ -15,7 +15,7 @@ Additionally, you can use `rw` as shorthand for `redwood`. For example, `yarn rw
 ### Get Help
 
 ```terminal
-yarn redwood --help
+$ yarn redwood --help
 ```
 
 You can see the list of available CLI commands directly from the terminal. The output will be similar to:
@@ -38,7 +38,7 @@ The `--help` flag can be passed after any of the Redwood CLI commands described 
 ### Create a New Redwood Project
 
 ```terminal
-yarn create redwood-app <project-dir>
+$ yarn create redwood-app <project-dir>
 ```
 
 OK, OK, so this isn't really part of the RedwoodJS CLI, per se. But we felt it belonged here anyway!
