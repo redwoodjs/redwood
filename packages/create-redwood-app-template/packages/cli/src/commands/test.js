@@ -16,23 +16,29 @@ export const handler = async ({ app }) => {
   const execCommands = {
     api: {
       cwd: `${BASE_DIR}/api`,
-      cmd:
-        'yarn jest --passWithNoTests --config ../node_modules/@redwoodjs/core/config/jest.config.api.js',
+      cmd: 'yarn jest',
+      args: [
+        '--passWithNoTests',
+        '--config ../node_modules/@redwoodjs/core/config/jest.config.api.js',
+      ],
     },
     web: {
       cwd: `${BASE_DIR}/web`,
-      cmd:
-        'yarn jest --passWithNoTests --config ../node_modules/@redwoodjs/core/config/jest.config.web.js',
+      cmd: 'yarn jest',
+      args: [
+        '--passWithNoTests',
+        '--config ../node_modules/@redwoodjs/core/config/jest.config.web.js',
+      ],
     },
   }
 
   const tasks = new Listr(
     app.map((appName) => {
-      const { cwd, cmd } = execCommands[appName]
+      const { cmd, args, cwd } = execCommands[appName]
       return {
         title: `Running '${appName}' jest tests`,
         task: () => {
-          return execa(cmd, undefined, {
+          return execa(cmd, args, {
             stdio: 'inherit',
             shell: true,
             cwd,
