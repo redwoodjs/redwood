@@ -1,24 +1,29 @@
-# The Redwood Command Line
+# The Redwood Command Line Interface
 
-## Installation
+The Redwood CLI comes with RedwoodJS (which means no extra software to install!).
 
-We recommend that you install Redwood's CLI globally
-with npm `npm install -g @redwoodjs/cli` or with
-yarn `yarn global add @redwoodjs/cli`.
+## Usage
+
+The [`yarn`](https://classic.yarnpkg.com/en/docs/install) package is required to use the Redwood CLI.
+
+Be sure to prefix all Redwood CLI commands with `yarn `. For example, `yarn redwood new`.
+
+Additionally, you can use `rw` as shorthand for `redwood`. For example, `yarn rw new`.
 
 ## Command line basics
 
-### `redwood new`
+```terminal
+yarn create redwood-app <project-dir>
+```
 
-The first thing we'll want to do is create a new Redwood application by running the
-`redwood new` command after installation.
+OK, OK, so this isn't really part of the RedwoodJS CLI, per se. But we felt it belonged here anyway!
+
+We create a new Redwood application by running the `yarn create redwood-app <project-dir>` command, where `<project-dir>` is the path of the to-be Redwood project.
+
+For example:
 
 ```terminal
-$ yarn new ~/myprojects/todo
-Created ~/myprojects/todo
-Downloading https://github.com/redwoodjs/create-redwood-app/archive/v0.0.1-alpha.7.zip...
-Extracting...
-Added 50 files in ~/myprojects/todo
+$ yarn create redwood-app ~/myprojects/todo
 ```
 
 ## Development
