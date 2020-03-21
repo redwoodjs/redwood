@@ -15,7 +15,7 @@ The generator must export the following:
   `builder`: A function that describes the arguments for the command.
   `handler`: The function that's invoked by the command.
 
-A typicall generator writes files.
+A typical generator writes files.
 
 ## Templates
 

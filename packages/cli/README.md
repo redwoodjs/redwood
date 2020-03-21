@@ -109,6 +109,40 @@ This command seeds the database with test data.
 
 More specifically, it runs the `api/prisma/seeds.js` file which must be filled with seed code to seed the database with initial test data.
 
+### Run Linter
+
+```terminal
+$ yarn redwood lint
+```
+
+This command runs the linter in all projects.
+
+### Run Development Server(s)
+
+```terminal
+$ yarn redwood dev [app..]
+```
+
+This command runs the development servers.
+
+It takes an optional parameter, `app`, which is an array of strings, each which identifies the project to be run. This defaults to run all projects (`api` and `web`).
+
+For example, if you'd like to _only_ run the `api` project, you can run:
+
+```terminal
+$ yarn redwood dev api
+```
+
+### Open Project
+
+```terminal
+$ yarn redwood open
+```
+
+This command opens the browser to the local port in which the web development server is running. This port is defined and can be modified in your project's `redwood.toml` file (found in the root).
+
+Please note that this command _does not_ run the development server. It simply opens the browser.
+
 ## Development
 
 Commands require a "redwood project structure" to be effectively tested.
