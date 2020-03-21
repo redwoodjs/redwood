@@ -42,9 +42,7 @@ describe('db commands', () => {
     ])
 
     await seed.handler({})
-    expect(runCommandTask.mock.results[5].value).toEqual([
-        'node seeds.js'
-    ])
+    expect(runCommandTask.mock.results[5].value).toEqual(['node seeds.js'])
 
     await fix.handler({})
     expect(runCommandTask.mock.results[6].value).toEqual([
