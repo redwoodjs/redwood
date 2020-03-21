@@ -9,15 +9,21 @@ const createNamedContext = (name, defaultValue) => {
 //
 // '/blog/{year}/{month}/{day:Int}' => [['year'], ['month'], ['day', 'Int']]
 const paramsForType = (route) => {
+  // Match the strings between `{` and `}`.
   const params = [...route.matchAll(/\{([^}]+)\}/g)]
-  return (
-    params
-      .map((match) => match[1])
-      // remove the param type part
-      .map((match) => {
-        return match.split(':')
-      })
-  )
+  return params
+    .map((match) => match[1])
+    .map((match) => {
+      return match.split(':')
+    })
+}
+
+// Definitions of the core param types.
+const coreParamTypes = {
+  Int: {
+    constraint: /\d+/,
+    transform: Number,
+  },
 }
 
 // Determine if the given route is a match for the given pathname. If so,
@@ -37,14 +43,19 @@ const paramsForType = (route) => {
 //
 //   matchPath('/post/{id:Int}', '/post/7')
 //   => { match: true, params: { id: 7 }}
-const matchPath = (route, pathname, allParamTypes) => {
+const matchPath = (route, pathname, paramTypes) => {
+  // Does the `pathname` match the `route`?
   const matches = [
     ...pathname.matchAll(`^${route.replace(/\{([^}]+)\}/g, '([^/]+)')}$`),
   ]
+
   if (matches.length === 0) {
     return { match: false }
   }
 
+  const allParamTypes = { ...coreParamTypes, ...paramTypes }
+
+  // Get the names and the transform types for the given route.
   const paramInfo = paramsForType(route)
   const params = matches[0].slice(1).reduce((acc, value, index) => {
     const [name, transformName] = paramInfo[index]
