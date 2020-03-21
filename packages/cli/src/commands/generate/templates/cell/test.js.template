@@ -1,4 +1,4 @@
-import { render, cleanup } from '@testing-library/react'
+import { render, cleanup, screen } from '@testing-library/react'
 
 import { Loading, Empty, Failure, Success } from './${pascalName}Cell'
 
@@ -6,24 +6,29 @@ describe('${pascalName}Cell', () => {
   afterEach(() => {
     cleanup()
   })
+
   it('Loading renders successfully', () => {
-    expect(() => {
-      render(<Loading />)
-    }).not.toThrow()
+    render(<Loading />)
+    // Use screen.debug() to see output.
+    expect(screen.queryByText('Loading...')).toBeInTheDocument()
   })
+
   it('Empty renders successfully', () => {
-    expect(() => {
-      render(<Empty />)
-    }).not.toThrow()
+    render(<Empty />)
+    expect(screen.queryByText('Empty')).toBeInTheDocument()
   })
+
   it('Failure renders successfully', () => {
-    expect(() => {
-      render(<Failure error={{ message: 'error message' }} />)
-    }).not.toThrow()
+    render(<Failure error={{ message: 'Oh no!' }} />)
+    expect(screen.queryByText('Error: Oh no!')).toBeInTheDocument()
   })
+
   it('Success renders successfully', () => {
-    expect(() => {
-      Success({ ${camelName}: { objectKey: 'objectValue' } })
-    }).not.toThrow()
+    render(
+      <Success userExample={{ ${camelName}: { objectKey: 'objectValue' } }} />
+    )
+    expect(
+      screen.queryByText('{"${camelName}":{"objectKey":"objectValue"}}')
+    ).toBeInTheDocument()
   })
 })

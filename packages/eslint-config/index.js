@@ -19,6 +19,7 @@ module.exports = {
     'jsx-a11y',
     'react',
     'react-hooks',
+    'jest-dom',
     '@redwoodjs/redwood',
   ],
   ignorePatterns: ['node_modules', 'dist'],
@@ -26,6 +27,7 @@ module.exports = {
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:prettier/recommended',
+    'plugin:jest-dom/recommended',
     'prettier/react',
   ],
   overrides: [

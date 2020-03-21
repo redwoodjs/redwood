@@ -4,7 +4,7 @@
   "files": [
     "dist"
   ],
-  "module": "dist/index.js",
+  "main": "dist/index.js",
   "license": "MIT",
   "dependencies": {
     "@apollo/react-components": "^3.1.3",
@@ -19,6 +19,10 @@
     "graphql": "^14.6.0",
     "proptypes": "^1.1.0",
     "react-hook-form": "^4.10.1"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "prop-types": "*"
   },
   "scripts": {
     "build": "yarn clean && babel src -d dist",
