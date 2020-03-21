@@ -13,6 +13,7 @@ import {
 } from './internal'
 
 // Definitions of the core param types.
+// TODO: Move these to utils, and merge them with the "paramtypes" that a user defines.
 const coreParamTypes = {
   Int: {
     constraint: /\d+/,
