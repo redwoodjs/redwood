@@ -1,16 +1,41 @@
 # The Redwood Command Line Interface
 
-The Redwood CLI comes with RedwoodJS (which means no extra software to install!).
+The Redwood CLI comes with RedwoodJS (which means no extra software to install!). It is made with [yargs](https://yargs.js.org/).
 
 ## Usage
 
 The [`yarn`](https://classic.yarnpkg.com/en/docs/install) package is required to use the Redwood CLI.
 
-Be sure to prefix all Redwood CLI commands with `yarn `. For example, `yarn redwood new`.
+Be sure to prefix all Redwood CLI commands with `yarn`. For example, `yarn redwood new`.
 
 Additionally, you can use `rw` as shorthand for `redwood`. For example, `yarn rw new`.
 
 ## Command line basics
+
+### Get Help
+
+```terminal
+yarn redwood --help
+```
+
+You can see the list of available CLI commands directly from the terminal. The output will be similar to:
+
+```terminal
+rw <command>
+
+Commands:
+  rw build [app..]    Build for production.
+  rw db <command>     Database tools.                        [aliases: database]
+  rw dev [app..]      Run development servers.
+  rw generate <type>  Save time by generating boilerplate code.     [aliases: g]
+  rw lint             Lint your files.
+  rw open [port]      Open your project in your browser.
+  rw test [app..]     Run Jest tests for api and web.
+```
+
+The `--help` flag can be passed after any of the Redwood CLI commands described above. For example, `yarn redwood open --help` displays the documentation for the `redwood open` command.
+
+### Create a New Redwood Project
 
 ```terminal
 yarn create redwood-app <project-dir>
@@ -25,6 +50,64 @@ For example:
 ```terminal
 $ yarn create redwood-app ~/myprojects/todo
 ```
+
+### Database Tools
+
+```terminal
+$ yarn redwood database <command>
+```
+
+or
+
+```terminal
+$ yarn redwood db <command>
+```
+
+This command exposes the various database commands.
+
+#### Create a New Migration
+
+```terminal
+$ yarn redwood db save [name..]
+```
+
+This command creates and saves new migrations in a new folder based on current data model changes.
+
+It takes an optional parameter, `name`, that, if present, will be used as a name for the new migration.
+
+#### Generate Prisma Client and Apply Migrations
+
+```terminal
+$ yarn redwood db up
+```
+
+This command generates the Prisma Client and applies any unapplied migrations.
+
+#### Undo Migrations
+
+```terminal
+$ yarn redwood db down
+```
+
+This command undoes any migrations that were applied to the database.
+
+#### Generate Prisma Client
+
+```terminal
+$ yarn redwood db generate
+```
+
+This command generates the Prisma Client (more specifially, it invokes the generators specific in the Prisma project file).
+
+#### Seed Database
+
+```terminal
+$ yarn redwood db seed
+```
+
+This command seeds the database with test data.
+
+More specifically, it runs the `api/prisma/seeds.js` file which must be filled with seed code to seed the database with initial test data.
 
 ## Development
 
