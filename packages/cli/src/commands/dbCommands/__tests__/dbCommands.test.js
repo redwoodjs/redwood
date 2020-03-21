@@ -8,6 +8,7 @@ import * as down from '../down'
 import * as save from '../save'
 import * as generate from '../generate'
 import * as seed from '../seed'
+import * as fix from '../fix'
 
 describe('db commands', () => {
   it('some commands have a verbose flag', () => {
@@ -41,6 +42,13 @@ describe('db commands', () => {
     ])
 
     await seed.handler({})
-    expect(runCommandTask.mock.results[5].value).toEqual(['node seeds.js'])
+    expect(runCommandTask.mock.results[5].value).toEqual([
+        'node seeds.js'
+    ])
+
+    await fix.handler({})
+    expect(runCommandTask.mock.results[6].value).toEqual([
+      'yarn prisma2 migrate fix --experimental',
+    ])
   })
 })
