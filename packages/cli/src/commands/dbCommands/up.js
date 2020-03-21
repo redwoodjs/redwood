@@ -9,7 +9,7 @@ export const builder = {
 }
 
 export const handler = async ({ verbose = true, dbClient = true }) => {
-  await runCommandTask(
+  const success = await runCommandTask(
     [
       {
         title: 'Migrate database up...',
@@ -20,7 +20,7 @@ export const handler = async ({ verbose = true, dbClient = true }) => {
     { verbose }
   )
 
-  if (dbClient) {
+  if (success && dbClient) {
     await generatePrismaClient({ force: true, verbose })
   }
 }

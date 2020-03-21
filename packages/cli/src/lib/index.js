@@ -178,7 +178,9 @@ export const runCommandTask = async (commands, { verbose }) => {
 
   try {
     await tasks.run()
+    return true
   } catch (e) {
     console.log(c.error(e.message))
+    return false
   }
 }
