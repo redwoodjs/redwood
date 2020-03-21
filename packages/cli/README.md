@@ -6,9 +6,9 @@ The Redwood CLI comes with RedwoodJS (which means no extra software to install!)
 
 The [`yarn`](https://classic.yarnpkg.com/en/docs/install) package is required to use the Redwood CLI.
 
-Be sure to prefix all Redwood CLI commands with `yarn`. For example, `yarn redwood new`.
+Be sure to prefix all Redwood CLI commands with `yarn`. For example, `yarn redwood lint`.
 
-Additionally, you can use `rw` as shorthand for `redwood`. For example, `yarn rw new`.
+Additionally, you can use `rw` as shorthand for `redwood`. For example, `yarn rw lint`.
 
 ## Command line basics
 
@@ -108,6 +108,48 @@ $ yarn redwood db seed
 This command seeds the database with test data.
 
 More specifically, it runs the `api/prisma/seeds.js` file which must be filled with seed code to seed the database with initial test data.
+
+### Generate
+
+```terminal
+yarn redwood generate <type>
+```
+
+This command exposes various generators that generate boilerplate code for a module type. For example, `yarn redwood generate component todo` generates boilerplate code for a `Todo`.
+
+The various module types are described below.
+
+#### Genreate Cell
+
+```terminal
+yarn redwood generate cell <name>
+```
+
+This command generates boilerplate code for a Redwood cell.
+
+It requires a `name` parameter which is the name of the cell. The cell component and test file are saved to the `/web/src/components/NameCell` (where _"Name"_ is replaced with the `name` parameter) directory.
+
+For example,
+
+```terminal
+yarn redwood generate cell todo
+```
+
+generates a cell component and a test file in the `/web/src/components/TodoCell` directory.
+
+#### Generate Component
+
+This command generates boilerplate code for a React component.
+
+It requires a `name` parameter which is the name of the component. The component and test file are saved to the `/web/src/components/Name` (where _"Name"_ is replaced with the `name` parameter) directory.
+
+For example,
+
+```terminal
+yarn redwood generate component todo
+```
+
+generates a component and a test file in the `/web/src/components/Todo` directory.
 
 ### Run Linter
 
