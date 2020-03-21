@@ -45,7 +45,7 @@
     "jest-directory-named-resolver": "^0.3.0",
     "lodash.escaperegexp": "^4.1.2",
     "mini-css-extract-plugin": "^0.9.0",
-    "prisma2": "2.0.0-preview023",
+    "prisma2": "2.0.0-preview024",
     "style-loader": "^1.1.3",
     "svg-react-loader": "^0.4.6",
     "typescript": "^3.8.3",
