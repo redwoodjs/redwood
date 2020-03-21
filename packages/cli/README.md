@@ -117,6 +117,24 @@ $ yarn redwood lint
 
 This command runs the linter in all projects.
 
+### Run Tests
+
+```terminal
+$ yarn redwood test [app..]
+```
+
+This command runs tests in the specified projects.
+
+It takes an optional parameter, `app`, which is an array of strings, each which identifies the project to be run.
+
+By default, it runs the tests of all projects (`api` and `web`).
+
+For example, if you'd like to _only_ run the `api` project tests, run:
+
+```terminal
+$ yarn redwood test api
+```
+
 ### Run Development Server(s)
 
 ```terminal
@@ -125,9 +143,11 @@ $ yarn redwood dev [app..]
 
 This command runs the development servers.
 
-It takes an optional parameter, `app`, which is an array of strings, each which identifies the project to be run. This defaults to run all projects (`api` and `web`).
+It takes an optional parameter, `app`, which is an array of strings, each which identifies the project to be run.
 
-For example, if you'd like to _only_ run the `api` project, you can run:
+By default, it runs the development servers of all projects (`api` and `web`).
+
+For example, if you'd like to _only_ run the `api` project development server, run:
 
 ```terminal
 $ yarn redwood dev api
