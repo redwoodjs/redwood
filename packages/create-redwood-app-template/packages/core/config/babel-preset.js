@@ -4,8 +4,6 @@
 
 // TODO: Determine what to do different during development, test, and production
 // TODO: Take a look at create-react-app. They've dropped a ton of knowledge.
-
-const fs = require('fs')
 const path = require('path')
 
 const { getPaths } = require('@redwoodjs/internal')
@@ -16,21 +14,6 @@ const TARGETS_NODE = '12.16.1'
 // instead of corejs: 3, since with corejs: 3 will not be injected modules which
 // were added in minor core-js releases.
 const CORE_JS_VERSION = '3.6'
-const DB_INITIALIZER_PATH =
-
-// Whether a given file path is a Javascript or Typescript file
-const isScript = (filePath) => {
-  return !!path.extname(filePath).match(/^[jt]s$/)
-}
-// Filters a list of files to only return Javascript or Typescripts
-const scriptsOnly = (files) => {
-  return files.filter(isScript)
-}
-// Given a path like 'src/config/dbInstance' will return the path to the actual
-// filename like 'src/config/dbInstance.ts' (or .js) or will return null
-const pathIfScriptExists = (path) => {
-  return scriptsOnly(fs.readdirSync(path)).length !== 0 ? path : null
-}
 
 module.exports = () => ({
   presets: ['@babel/preset-react', '@babel/typescript'],
@@ -88,7 +71,7 @@ module.exports = () => ({
               {
                 // import { db } from '<base-dir>/api/config/db'
                 members: ['db'],
-                path: path.join(getPaths().api.config, 'db')
+                path: path.join(getPaths().api.config, 'db'),
               },
               {
                 // import { context } from '@redwoodjs/api'
