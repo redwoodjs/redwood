@@ -16,7 +16,7 @@ const TARGETS_NODE = '12.16.1'
 // instead of corejs: 3, since with corejs: 3 will not be injected modules which
 // were added in minor core-js releases.
 const CORE_JS_VERSION = '3.6'
-const DB_INITIALIZER_PATH = path.join(getPaths().api.config, 'dbInstance')
+const DB_INITIALIZER_PATH =
 
 // Whether a given file path is a Javascript or Typescript file
 const isScript = (filePath) => {
@@ -86,11 +86,9 @@ module.exports = () => ({
           {
             declarations: [
               {
-                // import { db } from '@redwoodjs/api/dist/dbInstance'
+                // import { db } from '<base-dir>/api/config/db'
                 members: ['db'],
-                path:
-                  pathIfScriptExists(DB_INITIALIZER_PATH) ||
-                  '@redwoodjs/api/dist/dbInstance',
+                path: path.join(getPaths().api.config, 'db')
               },
               {
                 // import { context } from '@redwoodjs/api'
