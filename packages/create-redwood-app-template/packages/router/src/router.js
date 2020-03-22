@@ -12,14 +12,6 @@ import {
   PageLoader,
 } from './internal'
 
-// Definitions of the core param types.
-const coreParamTypes = {
-  Int: {
-    constraint: /\d+/,
-    transform: Number,
-  },
-}
-
 const Route = () => {
   return null
 }
@@ -72,7 +64,6 @@ const RouterImpl = ({
   mapNamedRoutes(routes)
 
   let NotFoundPage
-  const allParamTypes = { ...coreParamTypes, ...paramTypes }
 
   for (let route of routes) {
     const { path, page: Page, redirect, notfound } = route.props
@@ -82,11 +73,7 @@ const RouterImpl = ({
       continue
     }
 
-    const { match, params: pathParams } = matchPath(
-      path,
-      pathname,
-      allParamTypes
-    )
+    const { match, params: pathParams } = matchPath(path, pathname, paramTypes)
 
     if (match) {
       const searchParams = parseSearch(search)

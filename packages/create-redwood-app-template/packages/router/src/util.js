@@ -5,38 +5,25 @@ const createNamedContext = (name, defaultValue) => {
   return Ctx
 }
 
-// Separator token used during param type recognition.
-const separator = '__redwood_param_type__'
-
-// Convert the given path (from the path specified in the Route) into a regular
-// expression that will match any named parameters. Param types are handled here
-// as well.
+// Get param name and type tranform for a route
 //
-// path          - The path as specified in the <Route ... />.
-// allParamTypes - The object containing all param type definitions.
-//
-// Examples:
-//
-//   reRoute('/blog/{year}/{month}/{day}', { ... })
-//   reRoute('/post/{id:Int}', { Int: { ... }})
-const reRoute = (path, allParamTypes) => {
-  let pathWithCaptures = path
+// '/blog/{year}/{month}/{day:Int}' => [['year'], ['month'], ['day', 'Int']]
+const paramsForType = (route) => {
+  // Match the strings between `{` and `}`.
+  const params = [...route.matchAll(/\{([^}]+)\}/g)]
+  return params
+    .map((match) => match[1])
+    .map((match) => {
+      return match.split(':')
+    })
+}
 
-  Object.keys(allParamTypes).forEach((pType) => {
-    const { constraint: pConstraint } = allParamTypes[pType]
-    const regex = new RegExp(`\{([^}]+):${pType}\}`, 'g')
-    const constraintString = pConstraint.toString()
-    const constraint = constraintString.substring(
-      1,
-      constraintString.length - 1
-    )
-    const capture = `(?<$1${separator}${pType}>${constraint})`
-    pathWithCaptures = pathWithCaptures.replace(regex, capture)
-  })
-
-  pathWithCaptures = pathWithCaptures.replace(/\{([^}]+)\}/g, '(?<$1>[^/]+)')
-
-  return `^${pathWithCaptures}$`
+// Definitions of the core param types.
+const coreParamTypes = {
+  Int: {
+    constraint: /\d+/,
+    transform: Number,
+  },
 }
 
 // Determine if the given route is a match for the given pathname. If so,
@@ -56,29 +43,34 @@ const reRoute = (path, allParamTypes) => {
 //
 //   matchPath('/post/{id:Int}', '/post/7')
 //   => { match: true, params: { id: 7 }}
-const matchPath = (route, pathname, allParamTypes) => {
-  const matches = Array.from(pathname.matchAll(reRoute(route, allParamTypes)))
-  if (matches.length > 0) {
-    const params = matches[0].groups || {}
+const matchPath = (route, pathname, paramTypes) => {
+  // Does the `pathname` match the `route`?
+  const matches = [
+    ...pathname.matchAll(`^${route.replace(/\{([^}]+)\}/g, '([^/]+)')}$`),
+  ]
 
-    // Handle param types.
-    const transformedParams = Object.keys(params).reduce((acc, key) => {
-      const pMatches = key.match(`^(\\w+)${separator}(\\w+)$`)
-
-      if (pMatches && pMatches.length > 0) {
-        const [_, pName, pType] = pMatches
-        acc[pName] = allParamTypes[pType].transform(params[key])
-      } else {
-        acc[key] = params[key]
-      }
-
-      return acc
-    }, {})
-
-    return { match: true, params: transformedParams }
-  } else {
+  if (matches.length === 0) {
     return { match: false }
   }
+
+  const allParamTypes = { ...coreParamTypes, ...paramTypes }
+
+  // Get the names and the transform types for the given route.
+  const paramInfo = paramsForType(route)
+  const params = matches[0].slice(1).reduce((acc, value, index) => {
+    const [name, transformName] = paramInfo[index]
+
+    if (transformName) {
+      value = allParamTypes[transformName].transform(value)
+    }
+
+    return {
+      ...acc,
+      [name]: value,
+    }
+  }, {})
+
+  return { match: true, params }
 }
 
 // Parse the given search string into key/value pairs and return them in an
@@ -166,7 +158,6 @@ const replaceParams = (path, args = {}) => {
 
 export {
   createNamedContext,
-  reRoute,
   matchPath,
   parseSearch,
   validatePath,
