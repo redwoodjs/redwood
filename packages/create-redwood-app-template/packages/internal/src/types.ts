@@ -21,6 +21,7 @@ export type Paths = {
     components: string
     layouts: string
     src: string
+    webpack: string
   }
   api: {
     db: string
