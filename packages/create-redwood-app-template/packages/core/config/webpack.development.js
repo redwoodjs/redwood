@@ -1,9 +1,9 @@
 const merge = require('webpack-merge')
 const escapeRegExp = require('lodash.escaperegexp')
 const { getConfig } = require('@redwoodjs/internal')
-
-const { mergeUserWebpackConfig } = require('./utils')
 const webpackConfig = require('./webpack.common')
+
+const { mergeUserWebpackConfig } = webpackConfig
 const redwoodConfig = getConfig()
 
 const baseConfig = merge(webpackConfig('development'), {
