@@ -18,7 +18,7 @@ const PATH_WEB_DIR_LAYOUTS = 'web/src/layouts/'
 const PATH_WEB_DIR_PAGES = 'web/src/pages/'
 const PATH_WEB_DIR_COMPONENTS = 'web/src/components'
 const PATH_WEB_DIR_SRC = 'web/src'
-const PATH_WEB_WEBPACK_CONFIG = 'web/webpack.config.js'
+const PATH_WEB_DIR_CONFIG = 'web/config/webpack.config.js'
 
 /**
  * Search the parent directories for the Redwood configuration file.
@@ -60,7 +60,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       components: path.join(BASE_DIR, PATH_WEB_DIR_COMPONENTS),
       layouts: path.join(BASE_DIR, PATH_WEB_DIR_LAYOUTS),
       src: path.join(BASE_DIR, PATH_WEB_DIR_SRC),
-      webpack: path.join(BASE_DIR, PATH_WEB_WEBPACK_CONFIG),
+      webpack: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG),
     },
   }
 }
