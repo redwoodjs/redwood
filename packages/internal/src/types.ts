@@ -24,6 +24,7 @@ export type Paths = {
     webpack: string
   }
   api: {
+    config: string
     db: string
     dbSchema: string
     functions: string

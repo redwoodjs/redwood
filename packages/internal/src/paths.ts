@@ -11,6 +11,7 @@ const PATH_API_DIR_FUNCTIONS = 'api/src/functions'
 const PATH_API_DIR_GRAPHQL = 'api/src/graphql'
 const PATH_API_DIR_DB = 'api/prisma'
 const PATH_API_DIR_DB_SCHEMA = 'api/prisma/schema.prisma'
+const PATH_API_DIR_CONFIG = 'api/src/config'
 const PATH_API_DIR_SERVICES = 'api/src/services'
 const PATH_API_DIR_SRC = 'api/src'
 const PATH_WEB_ROUTES = 'web/src/Routes.js'
@@ -51,6 +52,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       dbSchema: path.join(BASE_DIR, PATH_API_DIR_DB_SCHEMA),
       functions: path.join(BASE_DIR, PATH_API_DIR_FUNCTIONS),
       graphql: path.join(BASE_DIR, PATH_API_DIR_GRAPHQL),
+      config: path.join(BASE_DIR, PATH_API_DIR_CONFIG),
       services: path.join(BASE_DIR, PATH_API_DIR_SERVICES),
       src: path.join(BASE_DIR, PATH_API_DIR_SRC),
     },
