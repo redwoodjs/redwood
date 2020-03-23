@@ -21,7 +21,7 @@ const ContactPage = () => {
     <nav className="text-right">
       <If condition ={currentUser}>
         <Then>
-        <a href="#" onClick={signout} className="text-indigo-500" >Sign Out</a>
+          <a href="#" onClick={signout} className="text-indigo-500" >Sign Out</a>
         </Then>
         <Else>
             signin()
