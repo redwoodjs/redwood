@@ -7,7 +7,6 @@ import {
 } from '../helpers'
 
 export const files = async ({ name, ...rest }) => {
-  console.info(rest)
   const componentName = camelcase(pluralize(name))
   const serviceFile = templateForComponentFile({
     name,
