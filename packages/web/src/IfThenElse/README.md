@@ -22,10 +22,10 @@ const ContactPage = () => {
       <If condition ={currentUser}>
         <Then>
         <a href="#" onClick={signout} className="text-indigo-500" >Sign Out</a>
-            <Else>
-                signin()
-            </Else>
         </Then>
+        <Else>
+            signin()
+        </Else>
       </If>
     </nav>
   )
