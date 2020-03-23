@@ -60,7 +60,8 @@ const newAppDir = path.resolve(process.cwd(), targetDir)
 const appDirExists = fs.existsSync(newAppDir)
 
 if (appDirExists && fs.readdirSync(newAppDir).length > 0) {
-  throw new Error(`'${newAppDir}' already exists and is not empty.`)
+  console.error(`'${newAppDir}' already exists and is not empty.`)
+  process.exit(1)
 }
 
 const createProjectTasks = ({ newAppDir }) => {
