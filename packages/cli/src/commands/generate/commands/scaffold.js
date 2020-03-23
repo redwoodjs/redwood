@@ -57,7 +57,7 @@ const assetFiles = (name) => {
 
     // skip assets that already exist on disk, never worry about overwriting
     if (
-      !SKIPPABLE_ASSETS.includes(outputPath.split('/').pop()) ||
+      !SKIPPABLE_ASSETS.includes(path.basename(outputPath)) ||
       !fs.existsSync(outputPath)
     ) {
       const template = generateTemplate(
