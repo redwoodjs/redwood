@@ -21,7 +21,7 @@ const removeFileFromDest = (file, source, destination) => {}
 // Watch the source directory for changes to files
 // and copy those to the destination's `node_modules/@redwoodjs/*`
 const start = ({ destination }) => {
-  const source = path.resolve('./packages/api')
+  const source = path.resolve('./packages')
   destination = path.resolve(
     process.cwd(),
     destination,
@@ -39,7 +39,6 @@ const start = ({ destination }) => {
   const watcher = chokidar.watch(source, {
     cwd: process.cwd(),
     persistent: true,
-    followSymlinks: false,
     awaitWriteFinish: true,
   })
   watcher
