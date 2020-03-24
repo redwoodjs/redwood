@@ -1,27 +1,20 @@
 // inspired by gatsby/packages/gatsby-cli/src/create-cli.js and
 // and gridsome/packages/cli/lib/commands/info.js
 import envinfo from 'envinfo'
-import clipboardy from 'clipboardy'
 
 export const command = 'info'
-export const desc = 'Get environment information'
+export const desc = 'Prints your system environment information'
 export const builder = {
   clipboard: {
-    alias: `C`,
-    type: `boolean`,
+    alias: 'C',
+    type: 'boolean',
     default: false,
-    describe: `Copy info to clipboard`,
+    describe: 'Copy info to clipboard',
   },
 }
-export const handler = (args) => {
+export const handler = async () => {
   try {
-    const copyToClipboard =
-      // linux tty not supported by clipboardy
-      process.platform === `linux` && !process.env.DISPLAY
-        ? false
-        : args.clipboard
-
-    envinfo
+    await envinfo
       .run({
         System: ['OS', 'Shell'],
         Binaries: ['Node', 'Yarn'],
@@ -32,14 +25,10 @@ export const handler = (args) => {
       })
       .then((envinfoOutput) => {
         console.log(envinfoOutput)
-
-        if (copyToClipboard) {
-          clipboardy.writeSync(envinfoOutput)
-          console.log('System info copied to clipboard ✂️ 📋\n')
-        }
       })
-  } catch (err) {
+  } catch (e) {
     console.log('Error: Cannot access environment info')
-    console.log(err)
+    console.log(e)
+    process.exit(1)
   }
 }
