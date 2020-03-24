@@ -37,12 +37,12 @@ export const files = async ({ name, ...rest }) => {
   }, {})
 }
 
-export const {
-  command,
-  desc,
-  builder,
-  handler,
-} = createYargsForComponentGeneration({
+export const builder = {
+  crud: { type: 'boolean', default: false, desc: 'Create CRUD functions' },
+  force: { type: 'boolean', default: false },
+}
+
+export const { command, desc, handler } = createYargsForComponentGeneration({
   componentName: 'service',
   filesFn: files,
 })
