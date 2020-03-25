@@ -4,14 +4,6 @@ import envinfo from 'envinfo'
 
 export const command = 'info'
 export const desc = 'Prints your system environment information'
-export const builder = {
-  clipboard: {
-    alias: 'C',
-    type: 'boolean',
-    default: false,
-    describe: 'Copy info to clipboard',
-  },
-}
 export const handler = async () => {
   try {
     await envinfo
