@@ -162,7 +162,9 @@ new Listr(
   .then(() => {
     // TODO: show helpful out for next steps.
     console.log()
-    console.log(`Thanks for trying out Redwood! We've created your app in '${newAppDir}'`)
+    console.log(
+      `Thanks for trying out Redwood! We've created your app in '${newAppDir}'`
+    )
     console.log()
     console.log(
       'Inside that directory you can run `yarn rw dev` to start the development server.'
