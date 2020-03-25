@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/web",
-  "version": "0.2.5",
+  "version": "0.3.0",
   "files": [
     "dist"
   ],
@@ -21,8 +21,8 @@
     "react-hook-form": "^4.10.1"
   },
   "peerDependencies": {
-    "react": "*",
-    "prop-types": "*"
+    "prop-types": "*",
+    "react": "*"
   },
   "scripts": {
     "build": "yarn clean && babel src -d dist",
