@@ -4,8 +4,6 @@
 
 // TODO: Determine what to do different during development, test, and production
 // TODO: Take a look at create-react-app. They've dropped a ton of knowledge.
-const path = require('path')
-
 const { getPaths } = require('@redwoodjs/internal')
 
 const TARGETS_NODE = '12.16.1'
@@ -68,11 +66,6 @@ module.exports = () => ({
           'babel-plugin-auto-import',
           {
             declarations: [
-              {
-                // import { db } from '<base-dir>/api/config/db'
-                members: ['db'],
-                path: path.join(getPaths().api.config, 'db'),
-              },
               {
                 // import { context } from '@redwoodjs/api'
                 members: ['context'],
