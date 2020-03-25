@@ -69,11 +69,6 @@ module.exports = () => ({
           {
             declarations: [
               {
-                // import { db } from '<base-dir>/api/config/db'
-                members: ['db'],
-                path: path.join(getPaths().api.config, 'db'),
-              },
-              {
                 // import { context } from '@redwoodjs/api'
                 members: ['context'],
                 path: '@redwoodjs/api',
