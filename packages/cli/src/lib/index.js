@@ -144,7 +144,7 @@ export const writeFilesTask = (files, options) => {
 export const addRoutesToRouterTask = (routes) => {
   const redwoodPaths = getPaths()
   const routesContent = readFile(redwoodPaths.web.routes).toString()
-  const newRoutesContent = routes.reduce((content, route) => {
+  const newRoutesContent = routes.reverse().reduce((content, route) => {
     if (content.includes(route)) {
       return content
     }
