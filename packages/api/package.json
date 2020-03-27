@@ -19,7 +19,8 @@
     "graphql-iso-date": "^3.6.1",
     "graphql-tools": "4.0.7",
     "lodash.merge": "^4.6.2",
-    "lodash.omitby": "^4.6.0"
+    "lodash.omitby": "^4.6.0",
+    "merge-graphql-schemas": "^1.7.6"
   },
   "devDependencies": {
     "@types/graphql-iso-date": "^3.3.3",
@@ -29,7 +30,8 @@
   },
   "jest": {
     "testPathIgnorePatterns": [
-      "/fixtures/"
+      "/fixtures/",
+      "/dist/"
     ]
   },
   "scripts": {
