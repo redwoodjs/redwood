@@ -29,7 +29,8 @@
   },
   "jest": {
     "testPathIgnorePatterns": [
-      "/fixtures/"
+      "/fixtures/",
+      "/dist/"
     ]
   },
   "scripts": {
