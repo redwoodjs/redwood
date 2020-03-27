@@ -25,7 +25,7 @@
     "@types/graphql-iso-date": "^3.3.3",
     "@types/lodash.merge": "^4.6.6",
     "@types/lodash.omitby": "^4.6.6",
-    "babel-plugin-tester": "^8.0.1"
+    "babel-plugin-tester": "^9.0.0"
   },
   "jest": {
     "testPathIgnorePatterns": [
