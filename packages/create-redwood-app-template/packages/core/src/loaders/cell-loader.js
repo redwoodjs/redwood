@@ -1,4 +1,4 @@
-export default function(source) {
+export default function (source) {
   const exports = []
 
   const names = [
