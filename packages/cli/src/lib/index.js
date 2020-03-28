@@ -81,11 +81,13 @@ export const templateRoot = path.resolve(
 export const generateTemplate = (templateFilename, { name, ...rest }) => {
   const templatePath = path.join(templateRoot, templateFilename)
   const template = lodash.template(readFile(templatePath).toString())
-  return template({
-    name,
-    ...nameVariants(name),
-    ...rest,
-  })
+  return formatTemplate(
+    template({
+      name,
+      ...nameVariants(name),
+      ...rest,
+    })
+  )
 }
 
 export const readFile = (target) => fs.readFileSync(target)
