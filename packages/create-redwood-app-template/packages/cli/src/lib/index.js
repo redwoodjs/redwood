@@ -11,7 +11,7 @@ import { getPaths as getRedwoodPaths } from '@redwoodjs/internal'
 import execa from 'execa'
 import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
-
+import { format } from 'prettier'
 import c from 'src/lib/colors'
 
 export const asyncForEach = async (array, callback) => {
@@ -114,6 +114,23 @@ export const bytes = (contents) => Buffer.byteLength(contents, 'utf8')
 export const getPaths = () => {
   try {
     return getRedwoodPaths()
+  } catch (e) {
+    console.log(c.error(e.message))
+    process.exit(0)
+  }
+}
+
+/**
+ * Format a given string using the config provided in `prettier.config.js`
+ * of a Redwood project.
+ *
+ * @param {string} content - generated content.
+ */
+export const formatTemplate = (content) => {
+  try {
+    const { base: BASE_DIR } = getPaths()
+    const prettierConfig = require(path.join(BASE_DIR, 'prettier.config.js'))
+    return format(content, prettierConfig)
   } catch (e) {
     console.log(c.error(e.message))
     process.exit(0)
