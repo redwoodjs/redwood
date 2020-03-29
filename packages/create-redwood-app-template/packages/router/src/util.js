@@ -1,13 +1,15 @@
-// Create a React Context with the given name.
+/** Create a React Context with the given name. */
 const createNamedContext = (name, defaultValue) => {
   const Ctx = React.createContext(defaultValue)
   Ctx.displayName = name
   return Ctx
 }
 
-// Get param name and type tranform for a route
-//
-// '/blog/{year}/{month}/{day:Int}' => [['year'], ['month'], ['day', 'Int']]
+/**
+ * Get param name and type transform for a route
+ *
+ *    '/blog/{year}/{month}/{day:Int}' => [['year'], ['month'], ['day', 'Int']]
+ */
 const paramsForType = (route) => {
   // Match the strings between `{` and `}`.
   const params = [...route.matchAll(/\{([^}]+)\}/g)]
@@ -18,7 +20,7 @@ const paramsForType = (route) => {
     })
 }
 
-// Definitions of the core param types.
+/** Definitions of the core param types. */
 const coreParamTypes = {
   Int: {
     constraint: /\d+/,
@@ -26,23 +28,25 @@ const coreParamTypes = {
   },
 }
 
-// Determine if the given route is a match for the given pathname. If so,
-// extract any named params and return them in an object.
-//
-// route         - The route path as specified in the <Route path={...} />
-// pathname      - The pathname from the window.location.
-// allParamTypes - The object containing all param type definitions.
-//
-// Examples:
-//
-//   matchPath('/blog/{year}/{month}/{day}', '/blog/2019/12/07')
-//   => { match: true, params: { year: '2019', month: '12', day: '07' }}
-//
-//   matchPath('/about', '/')
-//   => { match: false }
-//
-//   matchPath('/post/{id:Int}', '/post/7')
-//   => { match: true, params: { id: 7 }}
+/**
+ * Determine if the given route is a match for the given pathname. If so,
+ * extract any named params and return them in an object.
+ *
+ * route         - The route path as specified in the <Route path={...} />
+ * pathname      - The pathname from the window.location.
+ * allParamTypes - The object containing all param type definitions.
+ *
+ * Examples:
+ *
+ *    matchPath('/blog/{year}/{month}/{day}', '/blog/2019/12/07')
+ *    => { match: true, params: { year: '2019', month: '12', day: '07' }}
+ *
+ *    matchPath('/about', '/')
+ *    => { match: false }
+ *
+ *    matchPath('/post/{id:Int}', '/post/7')
+ *    => { match: true, params: { id: 7 }}
+ */
 const matchPath = (route, pathname, paramTypes) => {
   // Does the `pathname` match the `route`?
   const matches = [
@@ -73,13 +77,15 @@ const matchPath = (route, pathname, paramTypes) => {
   return { match: true, params }
 }
 
-// Parse the given search string into key/value pairs and return them in an
-// object.
-//
-// Examples:
-//
-//   parseSearch('?key1=val1&key2=val2')
-//   => { key1: 'val1', key2: 'val2' }
+/**
+ * Parse the given search string into key/value pairs and return them in an
+ * object.
+ *
+ * Examples:
+ *
+ *    parseSearch('?key1=val1&key2=val2')
+ *    => { key1: 'val1', key2: 'val2' }
+ */
 const parseSearch = (search) => {
   if (search === '') {
     return {}
@@ -94,9 +100,11 @@ const parseSearch = (search) => {
   return searchProps
 }
 
-// Validate a path to make sure it follows the router's rules. If any problems
-// are found, a descriptive Error will be thrown, as problems with routes are
-// critical enough to be considered fatal.
+/**
+ * Validate a path to make sure it follows the router's rules. If any problems
+ * are found, a descriptive Error will be thrown, as problems with routes are
+ * critical enough to be considered fatal.
+ */
 const validatePath = (path) => {
   // Check that path begins with a slash.
   if (path[0] !== '/') {
@@ -116,13 +124,16 @@ const validatePath = (path) => {
   }
 }
 
-// Take a given route path and replace any named parameters with those in the
-// given args object. Any extra params not used in the path will be appended
-// as key=value pairs in the search part.
-//
-// Examples:
-//     replaceParams('/tags/{tag}', { tag: 'code', extra: 'foo' })
-//     => '/tags/code?extra=foo
+/**
+ * Take a given route path and replace any named parameters with those in the
+ * given args object. Any extra params not used in the path will be appended
+ * as key=value pairs in the search part.
+ *
+ * Examples:
+ *
+ *     replaceParams('/tags/{tag}', { tag: 'code', extra: 'foo' })
+ *     => '/tags/code?extra=foo
+ */
 const replaceParams = (path, args = {}) => {
   // Split the path apart and replace named parameters with those sent in,
   // then join it back together.
