@@ -21,7 +21,7 @@ const paramsForType = (route) => {
 // Definitions of the core param types.
 const coreParamTypes = {
   Int: {
-    constraint: /\d+/,
+    constraint: /^\d+$/,
     transform: Number,
   },
 }
