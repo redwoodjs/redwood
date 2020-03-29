@@ -1,7 +1,15 @@
 # Our Internals
 
-This package is not intended to be used directly by user's of Redwood.
+This package is not intended to be used directly by user's of Redwood, this offers functionality to parse the Redwood configuration and a way to get a project's paths.
 
-This package searches for and parses the `redwood.toml` configuration
-file. The `redwood.toml` file is used to designate the base
-directory of a Redwood app.
+## Paths
+
+### The base directory
+
+Redwood is anchored to a single `redwood.toml` file. We use this to determine the base directory of a project.
+
+### Sides
+
+Redwood seperates your project into sides, by default we have a "web side" and an "api side." Each side has a target ("browser" for "web" and "node" for "api"). We use the concept of sides and targets to determine how to build, test, lint and manage your project.
+
+We will support add support for Electron, and React-Native in upcoming releases.

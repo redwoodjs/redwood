@@ -24,8 +24,8 @@ export interface BrowserPaths {
 
 export interface Paths {
   base: string
-  workspaces: {
-    [workspace: string]: NodePaths | BrowserPaths
+  sides: {
+    [side: string]: NodePaths | BrowserPaths
   }
 }
 
@@ -60,23 +60,22 @@ export const getPaths = (): Paths => {
   // The Redwood config file denotes the base directory of a Redwood project.
   const base = path.dirname(getConfigPath())
   const config = getConfig()
-  // Redwood supports different targets (node, browser) for workspaces. They
-  // have different directory structures, so we map the workspaces based
-  // on the "target" parameter.
-  const workspaces = Object.keys(config).reduce((acc, key) => {
-    const workspace = config[key]
+  // Redwood supports different targets for sides. They have different directory
+  // structures, so we map the side based on the "target" parameter.
+  const sides = Object.keys(config).reduce((acc, key) => {
+    const side = config[key]
     let paths
-    switch (workspace.target) {
+    switch (side.target) {
       case TargetEnum.NODE:
-        paths = mapNodePaths(path.join(base, workspace.path))
+        paths = mapNodePaths(path.join(base, side.path))
         break
       case TargetEnum.BROWSER:
-        paths = mapBrowserPaths(path.join(base, workspace.path))
+        paths = mapBrowserPaths(path.join(base, side.path))
         break
       default:
         throw new Error(
           `Woah there! "${key}" has a target that is is not currently supported:\n${JSON.stringify(
-            workspace,
+            side,
             undefined,
             2
           )}`
@@ -90,12 +89,10 @@ export const getPaths = (): Paths => {
 
   return {
     base,
-    workspaces,
+    sides,
   }
 }
 
-export const getWorkspacePaths = (
-  workspaceName: string
-): BrowserPaths | NodePaths => {
-  return getPaths().workspaces[workspaceName]
+export const getSidePaths = (sideName: string): BrowserPaths | NodePaths => {
+  return getPaths().sides[sideName]
 }

@@ -17,7 +17,7 @@ describe('paths', () => {
       const paths = getPaths()
       expect(paths).toEqual({
         base: '/path/to/project',
-        workspaces: {
+        sides: {
           api: {
             db: '/path/to/project/api/prisma',
             dbSchema: '/path/to/project/api/prisma/schema.prisma',
