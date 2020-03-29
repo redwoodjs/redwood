@@ -85,19 +85,17 @@ const matchPath = (route, pathname, paramTypes) => {
  *
  *    parseSearch('?key1=val1&key2=val2')
  *    => { key1: 'val1', key2: 'val2' }
+ *
+ * @fixme
+ * This utility ignores keys with multiple values such as `?foo=1&foo=2`.
  */
 const parseSearch = (search) => {
-  if (search === '') {
-    return {}
-  }
-  const searchPart = search.substring(1)
-  const pairs = searchPart.split('&')
-  const searchProps = {}
-  pairs.forEach((pair) => {
-    const keyval = pair.split('=')
-    searchProps[keyval[0]] = keyval[1] || ''
-  })
-  return searchProps
+  const searchParams = new URLSearchParams(search);
+
+  return [...searchParams.keys()].reduce((params, key) => ({
+    ...params,
+    [key]: searchParams.get(key)
+  }), {});
 }
 
 /**
@@ -107,7 +105,7 @@ const parseSearch = (search) => {
  */
 const validatePath = (path) => {
   // Check that path begins with a slash.
-  if (path[0] !== '/') {
+  if (!path.startsWith('/')) {
     throw new Error('Route path does not begin with a slash: "' + path + '"')
   }
 
