@@ -7,7 +7,7 @@ The Webpack config can be overriden by adding a `web/config/webpack.config.js` f
 Two formats are supported:
 
 1. Overwriting the base config
-```
+```js
 module.exports = (config, {env}) => {
   if (env === 'development') {
     // Add dev plugin
