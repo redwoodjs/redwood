@@ -46,7 +46,7 @@ const coreParamTypes = {
 const matchPath = (route, pathname, paramTypes) => {
   // Does the `pathname` match the `route`?
   const matches = [
-    ...pathname.matchAll(`^${route.replace(/\{([^}]+)\}/g, '([^/]+)')}$`),
+    ...pathname.matchAll(`^${route.replace(/{([^}]+)}/g, '([^/]+)')}$`),
   ]
 
   if (matches.length === 0) {
@@ -57,20 +57,44 @@ const matchPath = (route, pathname, paramTypes) => {
 
   // Get the names and the transform types for the given route.
   const paramInfo = paramsForType(route)
-  const params = matches[0].slice(1).reduce((acc, value, index) => {
-    const [name, transformName] = paramInfo[index]
+  const providedParams = matches[0].slice(1)
+  if (providedParams.length > 0) {
+    // Some params were provided: check that they meet potential type constraints & cast their values if needed
+    const params = providedParams.reduce((acc, value, index) => {
+      const [name, transformName] = paramInfo[index]
 
-    if (transformName) {
-      value = allParamTypes[transformName].transform(value)
+      if (transformName) {
+        const typeInfo = allParamTypes[transformName]
+
+        // TODO: extract constraint evaluation to a function to allow different types of constraints (regexp, func)
+        if (typeInfo.constraint && !value.match(typeInfo.constraint)) {
+          return acc
+        }
+
+        if (typeInfo.transform) {
+          value = typeInfo.transform(value)
+        }
+      }
+
+      return {
+        ...acc,
+        [name]: value,
+      }
+    }, {})
+
+    // Check that we got a value for all expected route params
+    for (const [name] of paramInfo) {
+      if (params[name] == null) {
+        return { match: false }
+      }
     }
 
-    return {
-      ...acc,
-      [name]: value,
-    }
-  }, {})
-
-  return { match: true, params }
+    return { match: true, params }
+  } else if (paramInfo.length > 0) {
+    // No params were provided to a route that expects at least one
+    // (given the way we extract providedParams, we should never get down here)
+    return { match: false }
+  }
 }
 
 // Parse the given search string into key/value pairs and return them in an

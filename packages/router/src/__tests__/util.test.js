@@ -7,9 +7,25 @@ describe('matchPath', () => {
       params: { id: 7 },
     })
 
+    expect(matchPath('/post/{id:Int}', '/post/notAnInt')).toEqual({
+      match: false,
+    })
+
     expect(
       matchPath('/blog/{year}/{month}/{day}', '/blog/2019/12/07')
     ).toEqual({ match: true, params: { day: '07', month: '12', year: '2019' } })
+
+    expect(
+      matchPath('/blog/{year}/{month:Int}/{day}', '/blog/2019/december/07')
+    ).toEqual({ match: false })
+
+    expect(matchPath('/blog/{year}/{month}/{day}', '/blog/2019/07')).toEqual({
+      match: false,
+    })
+
+    expect(matchPath('/posts/{id}/edit', '/posts//edit')).toEqual({
+      match: false,
+    })
 
     expect(matchPath('/about', '/')).toEqual({ match: false })
   })
