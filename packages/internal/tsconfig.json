@@ -4,20 +4,19 @@
     "moduleResolution": "node",
     "strict": true,
     "esModuleInterop": true,
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "paths": {
-      "src/*": [
-        "src/*"
+      "*": [
+        "./*"
       ]
     },
     "declaration": true,
     "declarationDir": "./dist"
   },
   "include": [
-    "src"
+    "./**/*"
   ],
   "exclude": [
-    "**/__tests__",
-    "**/__mocks__"
+    "**/*.test.*",
   ]
 }
