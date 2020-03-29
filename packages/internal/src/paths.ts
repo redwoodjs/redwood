@@ -1,9 +1,14 @@
 import path from 'path'
 
-import { getConfig, getConfigPath } from './config'
+import {
+  getConfig,
+  getConfigPath,
+  getConfigSides,
+  getSideConfig,
+} from './config'
 import { TargetEnum } from './config'
 
-export interface NodePaths {
+export interface NodeTargetPaths {
   db: string
   dbSchema: string
   src: string
@@ -13,7 +18,7 @@ export interface NodePaths {
   services: string
 }
 
-export interface BrowserPaths {
+export interface BrowserTargetPaths {
   src: string
   routes: string
   pages: string
@@ -25,11 +30,11 @@ export interface BrowserPaths {
 export interface Paths {
   base: string
   sides: {
-    [side: string]: NodePaths | BrowserPaths
+    [side: string]: NodeTargetPaths | BrowserTargetPaths
   }
 }
 
-const mapNodePaths = (wsPath: string): NodePaths => {
+const mapNodePaths = (wsPath: string): NodeTargetPaths => {
   return {
     src: path.join(wsPath, 'src'),
     functions: path.join(wsPath, 'src/functions'),
@@ -41,7 +46,7 @@ const mapNodePaths = (wsPath: string): NodePaths => {
   }
 }
 
-const mapBrowserPaths = (wsPath: string): BrowserPaths => {
+const mapBrowserPaths = (wsPath: string): BrowserTargetPaths => {
   return {
     src: path.join(wsPath, 'src'),
     routes: path.join(wsPath, 'src/Routes.js'),
@@ -59,11 +64,12 @@ const mapBrowserPaths = (wsPath: string): BrowserPaths => {
 export const getPaths = (): Paths => {
   // The Redwood config file denotes the base directory of a Redwood project.
   const base = path.dirname(getConfigPath())
-  const config = getConfig()
+
+  const configSides = getConfigSides()
   // Redwood supports different targets for sides. They have different directory
   // structures, so we map the side based on the "target" parameter.
-  const sides = Object.keys(config).reduce((acc, key) => {
-    const side = config[key]
+  const sides = Object.keys(configSides).reduce((acc, key) => {
+    const side = configSides[key]
     let paths
     switch (side.target) {
       case TargetEnum.NODE:
@@ -93,6 +99,14 @@ export const getPaths = (): Paths => {
   }
 }
 
-export const getSidePaths = (sideName: string): BrowserPaths | NodePaths => {
-  return getPaths().sides[sideName]
+export const getSidePaths = (
+  name: string
+): NodeTargetPaths | BrowserTargetPaths => {
+  const paths = getPaths()
+  if (!paths.sides[name]) {
+    throw new Error(
+      `A side named "${name}" does not exist? Is it in your redwood.toml configuration?`
+    )
+  }
+  return paths.sides[name]
 }

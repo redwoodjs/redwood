@@ -1,7 +1,7 @@
 import mockfs from 'mock-fs'
 
 import * as config from './config'
-import { getPaths } from './paths'
+import { getPaths, getSidePaths } from './paths'
 
 jest
   .spyOn(config, 'getConfigPath')
@@ -37,6 +37,23 @@ describe('paths', () => {
           },
         },
       })
+    })
+  })
+
+  describe('getSidePaths', () => {
+    it('returns the correct paths for the given side', () => {
+      expect(getSidePaths('web')).toEqual({
+        components: '/path/to/project/web/src/components',
+        config: '/path/to/project/web/src/config',
+        layouts: '/path/to/project/web/src/layouts',
+        pages: '/path/to/project/web/src/pages',
+        routes: '/path/to/project/web/src/Routes.js',
+        src: '/path/to/project/web/src',
+      })
+    })
+
+    it('throws when the side is incorrect', () => {
+      expect(() => getSidePaths('banana')).toThrow()
     })
   })
 
