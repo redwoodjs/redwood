@@ -1,113 +1,101 @@
 import path from 'path'
-import fs from 'fs'
 
-import findUp from 'findup-sync'
+import { getConfig, getConfigPath } from './config'
+import { TargetEnum } from './config'
 
-import { Paths, PagesDependency } from './types'
+export interface NodePaths {
+  db: string
+  dbSchema: string
+  src: string
+  functions: string
+  graphql: string
+  lib: string
+  services: string
+}
 
-const CONFIG_FILE_NAME = 'redwood.toml'
+export interface BrowserPaths {
+  src: string
+  routes: string
+  pages: string
+  components: string
+  layouts: string
+  config: string
+}
 
-const PATH_API_DIR_FUNCTIONS = 'api/src/functions'
-const PATH_API_DIR_GRAPHQL = 'api/src/graphql'
-const PATH_API_DIR_DB = 'api/prisma'
-const PATH_API_DIR_DB_SCHEMA = 'api/prisma/schema.prisma'
-const PATH_API_DIR_CONFIG = 'api/src/config'
-const PATH_API_DIR_SERVICES = 'api/src/services'
-const PATH_API_DIR_SRC = 'api/src'
-const PATH_WEB_ROUTES = 'web/src/Routes.js'
-const PATH_WEB_DIR_LAYOUTS = 'web/src/layouts/'
-const PATH_WEB_DIR_PAGES = 'web/src/pages/'
-const PATH_WEB_DIR_COMPONENTS = 'web/src/components'
-const PATH_WEB_DIR_SRC = 'web/src'
-const PATH_WEB_DIR_CONFIG = 'web/config/webpack.config.js'
-
-/**
- * Search the parent directories for the Redwood configuration file.
- */
-export const getConfigPath = (): string => {
-  const configPath = findUp(CONFIG_FILE_NAME)
-  if (!configPath) {
-    throw new Error(
-      `Could not find a "${CONFIG_FILE_NAME}" file, are you sure you're in a Redwood project?`
-    )
+export interface Paths {
+  base: string
+  workspaces: {
+    [workspace: string]: NodePaths | BrowserPaths
   }
-  return configPath
 }
 
-/**
- * The Redwood config file is used as an anchor for the base directory of a project.
- */
-export const getBaseDir = (configPath: string = getConfigPath()): string => {
-  return path.dirname(configPath)
-}
-
-/**
- * Path constants that are relevant to a Redwood project.
- */
-export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
+const mapNodePaths = (wsPath: string): NodePaths => {
   return {
-    base: BASE_DIR,
-    api: {
-      db: path.join(BASE_DIR, PATH_API_DIR_DB),
-      dbSchema: path.join(BASE_DIR, PATH_API_DIR_DB_SCHEMA),
-      functions: path.join(BASE_DIR, PATH_API_DIR_FUNCTIONS),
-      graphql: path.join(BASE_DIR, PATH_API_DIR_GRAPHQL),
-      config: path.join(BASE_DIR, PATH_API_DIR_CONFIG),
-      services: path.join(BASE_DIR, PATH_API_DIR_SERVICES),
-      src: path.join(BASE_DIR, PATH_API_DIR_SRC),
-    },
-    web: {
-      routes: path.join(BASE_DIR, PATH_WEB_ROUTES),
-      pages: path.join(BASE_DIR, PATH_WEB_DIR_PAGES),
-      components: path.join(BASE_DIR, PATH_WEB_DIR_COMPONENTS),
-      layouts: path.join(BASE_DIR, PATH_WEB_DIR_LAYOUTS),
-      src: path.join(BASE_DIR, PATH_WEB_DIR_SRC),
-      webpack: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG),
-    },
+    src: path.join(wsPath, 'src'),
+    functions: path.join(wsPath, 'src/functions'),
+    graphql: path.join(wsPath, 'src/graphql'),
+    lib: path.join(wsPath, 'src/lib'),
+    services: path.join(wsPath, 'src/services'),
+    db: path.join(wsPath, 'prisma'),
+    dbSchema: path.join(wsPath, 'prisma/schema.prisma'),
+  }
+}
+
+const mapBrowserPaths = (wsPath: string): BrowserPaths => {
+  return {
+    src: path.join(wsPath, 'src'),
+    routes: path.join(wsPath, 'src/Routes.js'),
+    pages: path.join(wsPath, 'src/pages'),
+    components: path.join(wsPath, 'src/components'),
+    layouts: path.join(wsPath, 'src/layouts'),
+    config: path.join(wsPath, 'src/config'),
   }
 }
 
 /**
- * Recursively process the pages directory and return information useful for
- * automated imports.
+ * Absolute paths for the directory structure of a Redwood project based
+ * on the `redwood.toml` file.
  */
-export const processPagesDir = (
-  webPagesDir: string = getPaths().web.pages,
-  prefix: Array<string> = []
-): Array<PagesDependency> => {
-  const deps: Array<PagesDependency> = []
-  const entries = fs.readdirSync(webPagesDir, { withFileTypes: true })
-
-  // Iterate over a dir's entries, recursing as necessary into
-  // subdirectories.
-  entries.forEach((entry) => {
-    if (entry.isDirectory()) {
-      // Actual JS files reside in a directory of the same name, so let's
-      // construct the filename of the actual Page file.
-      const testFile = path.join(webPagesDir, entry.name, entry.name + '.js')
-
-      if (fs.existsSync(testFile)) {
-        // If the Page exists, then construct the dependency object and push it
-        // onto the deps array.
-        const basename = path.posix.basename(entry.name, '.js')
-        const importName = prefix.join() + basename
-        // `src/pages/<PageName>`
-        const importFile = ['src', 'pages', ...prefix, basename].join('/')
-        deps.push({
-          const: importName,
-          path: path.join(webPagesDir, entry.name),
-          importStatement: `const ${importName} = { name: '${importName}', loader: () => import('${importFile}') }`,
-        })
-      } else {
-        // If the Page doesn't exist then we are in a directory of Page
-        // directories, so let's recurse into it and do the whole thing over
-        // again.
-        const newPrefix = [...prefix, entry.name]
-        deps.push(
-          ...processPagesDir(path.join(webPagesDir, entry.name), newPrefix)
+export const getPaths = (): Paths => {
+  // The Redwood config file denotes the base directory of a Redwood project.
+  const base = path.dirname(getConfigPath())
+  const config = getConfig()
+  // Redwood supports different targets (node, browser) for workspaces. They
+  // have different directory structures, so we map the workspaces based
+  // on the "target" parameter.
+  const workspaces = Object.keys(config).reduce((acc, key) => {
+    const workspace = config[key]
+    let paths
+    switch (workspace.target) {
+      case TargetEnum.NODE:
+        paths = mapNodePaths(path.join(base, workspace.path))
+        break
+      case TargetEnum.BROWSER:
+        paths = mapBrowserPaths(path.join(base, workspace.path))
+        break
+      default:
+        throw new Error(
+          `Woah there! "${key}" has a target that is is not currently supported:\n${JSON.stringify(
+            workspace,
+            undefined,
+            2
+          )}`
         )
-      }
     }
-  })
-  return deps
+    return {
+      [key]: paths,
+      ...acc,
+    }
+  }, {})
+
+  return {
+    base,
+    workspaces,
+  }
+}
+
+export const getWorkspacePaths = (
+  workspaceName: string
+): BrowserPaths | NodePaths => {
+  return getPaths().workspaces[workspaceName]
 }
