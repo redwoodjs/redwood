@@ -11,6 +11,26 @@ describe('matchPath', () => {
       match: false,
     })
 
+    expect(matchPath('/post/{id:Int}', '/post/2.0')).toEqual({
+      match: false,
+    })
+
+    expect(matchPath('/post/{id:Int}', '/post/.1')).toEqual({
+      match: false,
+    })
+
+    expect(matchPath('/post/{id:Int}', '/post/0.1')).toEqual({
+      match: false,
+    })
+
+    expect(matchPath('/post/{id:Int}', '/post/123abcd')).toEqual({
+      match: false,
+    })
+
+    expect(matchPath('/post/{id:Int}', '/post/abcd123')).toEqual({
+      match: false,
+    })
+
     expect(
       matchPath('/blog/{year}/{month}/{day}', '/blog/2019/12/07')
     ).toEqual({ match: true, params: { day: '07', month: '12', year: '2019' } })
