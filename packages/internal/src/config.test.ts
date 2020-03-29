@@ -94,7 +94,7 @@ describe('config', () => {
       })
 
       it('throws when you try to get a config that does not exist', () => {
-        expect(getSideConfig('rambo')).toThrow()
+        expect(() => getSideConfig('rambo')).toThrow()
       })
     })
   })
