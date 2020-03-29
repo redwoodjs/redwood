@@ -81,12 +81,13 @@ export const templateRoot = path.resolve(
 export const generateTemplate = (templateFilename, { name, ...rest }) => {
   const templatePath = path.join(templateRoot, templateFilename)
   const template = lodash.template(readFile(templatePath).toString())
-  return formatTemplate(
+  return format(
     template({
       name,
       ...nameVariants(name),
       ...rest,
-    })
+    }),
+    prettierOptions()
   )
 }
 
@@ -123,19 +124,13 @@ export const getPaths = () => {
 }
 
 /**
- * Format a given string using the config provided in `prettier.config.js`
- * of a Redwood project.
- *
- * @param {string} content - generated content.
+ * This returns the config present in `prettier.config.js` of a Redwood project.
  */
-export const formatTemplate = (content) => {
+export const prettierOptions = () => {
   try {
-    const { base: BASE_DIR } = getPaths()
-    const prettierConfig = require(path.join(BASE_DIR, 'prettier.config.js'))
-    return format(content, prettierConfig)
+    return require(path.join(getPaths().base, 'prettier.config.js'))
   } catch (e) {
-    console.log(c.error(e.message))
-    process.exit(0)
+    return undefined
   }
 }
 
