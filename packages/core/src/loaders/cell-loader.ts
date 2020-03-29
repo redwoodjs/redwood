@@ -1,5 +1,5 @@
-export default function(source) {
-  const exports = []
+export default function(source: string) {
+  const exports: string[] = []
 
   const names = [
     'QUERY',

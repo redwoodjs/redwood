@@ -1,17 +1,10 @@
 {
+  "extends": "../../tsconfig.compilerOption.json",
   "compilerOptions": {
-    "target": "esnext",
-    "moduleResolution": "node",
-    "strict": true,
-    "esModuleInterop": true,
+    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
     "baseUrl": ".",
-    "paths": {
-      "src/*": [
-        "src/*"
-      ]
-    },
-    "declaration": true,
-    "declarationDir": "./dist"
+    "outDir": "dist",
+    "rootDir": "src"
   },
   "include": [
     "src"

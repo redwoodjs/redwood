@@ -1,6 +1,7 @@
+import { loader } from 'webpack'
 import { processPagesDir } from '@redwoodjs/internal'
 
-export default function(source) {
+export default function(this: loader.LoaderContext, source: string) {
   // Process the dir to find all Page dependencies.
   const deps = processPagesDir()
 
