@@ -8,16 +8,14 @@
   "types": "./dist/main.d.ts",
   "license": "MIT",
   "dependencies": {
+    "deepmerge": "^4.2.2",
     "findup-sync": "^4.0.0",
     "toml": "^3.0.0"
   },
   "devDependencies": {
-    "@types/findup-sync": "^2.0.2"
-  },
-  "jest": {
-    "testPathIgnorePatterns": [
-      "/fixtures/"
-    ]
+    "@types/findup-sync": "^2.0.2",
+    "@types/mock-fs": "^4.10.0",
+    "mock-fs": "^4.11.0"
   },
   "scripts": {
     "clean": "rm -rf dist",
