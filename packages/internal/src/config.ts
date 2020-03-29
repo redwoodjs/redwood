@@ -33,7 +33,8 @@ interface BuildConfig {
   destination?: string
 }
 
-interface NodeProjectConfig {
+interface NodeTargetConfig {
+  name?: string
   host: string
   port: number
   path: string
@@ -41,7 +42,8 @@ interface NodeProjectConfig {
   build: [BuildConfig]
 }
 
-interface BrowserProjectConfig {
+interface BrowserTargetConfig {
+  name?: string
   host: string
   port: number
   path: string
@@ -52,7 +54,7 @@ interface BrowserProjectConfig {
 }
 
 export type Config = {
-  [workspace: string]: BrowserProjectConfig | NodeProjectConfig
+  [sideName: string]: BrowserTargetConfig | NodeTargetConfig
 } & {
   browser?: { open: boolean | string }
 }
@@ -101,7 +103,9 @@ export const DEFAULT_CONFIG: Config = {
 /**
  * These configuration options are modified by the user in `redwood.toml`.
  * The modifications are merged with our default configuration where we provide
- * two workspaces: `api` and `web`.
+ * two default sides: `api` and `web`.
+ *
+ * TODO: Move side into `sides` key.
  */
 export const getConfig = (): Config => {
   const configPath = getConfigPath()
@@ -111,4 +115,36 @@ export const getConfig = (): Config => {
   } catch (e) {
     throw new Error(`Could not parse "${configPath}": ${e}`)
   }
+}
+
+export const getConfigSides = (): {
+  [sideName: string]: BrowserTargetConfig | NodeTargetConfig
+} => {
+  const config = getConfig()
+
+  // We use "target" to figure out if this is a config for a side, eventually
+  // we'll nest them under "sides" to make it explicit.
+  return Object.keys(config)
+    .filter((key) => typeof config[key].target !== 'undefined')
+    .reduce((sides, key) => {
+      return {
+        ...sides,
+        [key]: {
+          name: key,
+          ...config[key],
+        },
+      }
+    }, {})
+}
+
+export const getSideConfig = (
+  name: string
+): BrowserTargetConfig | NodeTargetConfig => {
+  const sides = getConfigSides()
+  if (!sides[name]) {
+    throw new Error(
+      `A side named "${name}" does not exist? Is it in your redwood.toml configuration?`
+    )
+  }
+  return sides[name]
 }
