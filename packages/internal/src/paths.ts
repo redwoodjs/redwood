@@ -9,6 +9,7 @@ import {
 import { TargetEnum } from './config'
 
 export interface NodeTargetPaths {
+  base: string
   db: string
   dbSchema: string
   src: string
@@ -19,6 +20,7 @@ export interface NodeTargetPaths {
 }
 
 export interface BrowserTargetPaths {
+  base: string
   src: string
   routes: string
   pages: string
@@ -34,26 +36,28 @@ export interface Paths {
   }
 }
 
-const mapNodePaths = (wsPath: string): NodeTargetPaths => {
+const mapNodePaths = (sidePath: string): NodeTargetPaths => {
   return {
-    src: path.join(wsPath, 'src'),
-    functions: path.join(wsPath, 'src/functions'),
-    graphql: path.join(wsPath, 'src/graphql'),
-    lib: path.join(wsPath, 'src/lib'),
-    services: path.join(wsPath, 'src/services'),
-    db: path.join(wsPath, 'prisma'),
-    dbSchema: path.join(wsPath, 'prisma/schema.prisma'),
+    base: sidePath,
+    src: path.join(sidePath, 'src'),
+    functions: path.join(sidePath, 'src/functions'),
+    graphql: path.join(sidePath, 'src/graphql'),
+    lib: path.join(sidePath, 'src/lib'),
+    services: path.join(sidePath, 'src/services'),
+    db: path.join(sidePath, 'prisma'),
+    dbSchema: path.join(sidePath, 'prisma/schema.prisma'),
   }
 }
 
-const mapBrowserPaths = (wsPath: string): BrowserTargetPaths => {
+const mapBrowserPaths = (sidePath: string): BrowserTargetPaths => {
   return {
-    src: path.join(wsPath, 'src'),
-    routes: path.join(wsPath, 'src/Routes.js'),
-    pages: path.join(wsPath, 'src/pages'),
-    components: path.join(wsPath, 'src/components'),
-    layouts: path.join(wsPath, 'src/layouts'),
-    config: path.join(wsPath, 'src/config'),
+    base: sidePath,
+    src: path.join(sidePath, 'src'),
+    routes: path.join(sidePath, 'src/Routes.js'),
+    pages: path.join(sidePath, 'src/pages'),
+    components: path.join(sidePath, 'src/components'),
+    layouts: path.join(sidePath, 'src/layouts'),
+    config: path.join(sidePath, 'src/config'),
   }
 }
 

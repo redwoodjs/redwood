@@ -26,6 +26,7 @@ describe('paths', () => {
             lib: '/path/to/project/api/src/lib',
             services: '/path/to/project/api/src/services',
             src: '/path/to/project/api/src',
+            base: '/path/to/project/api',
           },
           web: {
             components: '/path/to/project/web/src/components',
@@ -34,6 +35,7 @@ describe('paths', () => {
             pages: '/path/to/project/web/src/pages',
             routes: '/path/to/project/web/src/Routes.js',
             src: '/path/to/project/web/src',
+            base: '/path/to/project/web',
           },
         },
       })
@@ -49,6 +51,7 @@ describe('paths', () => {
         pages: '/path/to/project/web/src/pages',
         routes: '/path/to/project/web/src/Routes.js',
         src: '/path/to/project/web/src',
+        base: '/path/to/project/web',
       })
     })
 
