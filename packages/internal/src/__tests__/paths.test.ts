@@ -1,21 +1,19 @@
-import mockfs from 'mock-fs'
+import mockrw from '@redwoodjs/test-mocks'
 
-import * as config from './config'
-import { getPaths, getSidePaths } from './paths'
-
-jest
-  .spyOn(config, 'getConfigPath')
-  .mockImplementation(() => '/path/to/project/redwood.toml')
+import { getPaths, getSidePaths } from '../paths'
 
 describe('paths', () => {
-  describe('getPaths', () => {
-    mockfs({
-      'redwood.toml': '',
-    })
+  beforeEach(() => {
+    mockrw.mockProject()
+  })
 
+  afterAll(() => {
+    mockrw.restore()
+  })
+
+  describe('getPaths', () => {
     it('provides defaults based off an empty configuration', () => {
-      const paths = getPaths()
-      expect(paths).toEqual({
+      expect(getPaths()).toEqual({
         base: '/path/to/project',
         sides: {
           api: {
@@ -58,10 +56,5 @@ describe('paths', () => {
     it('throws when the side is incorrect', () => {
       expect(() => getSidePaths('banana')).toThrow()
     })
-  })
-
-  afterAll(() => {
-    jest.clearAllMocks()
-    mockfs.restore()
   })
 })

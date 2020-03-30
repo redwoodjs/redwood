@@ -1,49 +1,42 @@
-import mockfs from 'mock-fs'
+import mockrw from '@redwoodjs/test-mocks'
 
 import {
   getConfig,
   DEFAULT_CONFIG,
   getConfigSides,
   getSideConfig,
-} from './config'
+} from '../config'
 
 describe('config', () => {
-  describe('getConfig', () => {
-    it('has defaults', () => {
-      // Call `console.log` before mocking the file-system:
-      // https://github.com/tschaub/mock-fs/issues/234
-      // console.log('')
-      mockfs({
-        'redwood.toml': '',
-      })
+  beforeEach(() => {
+    mockrw.mockProject()
+  })
 
+  afterAll(() => {
+    mockrw.restore()
+  })
+
+  describe('getConfig', () => {
+    it('returns a default config even when `redwood.toml` is empty', () => {
       expect(getConfig()).toEqual(DEFAULT_CONFIG)
     })
 
-    it('default config merges with `redwood.toml`', () => {
-      // Call `console.log` before mocking the file-system:
-      // https://github.com/tschaub/mock-fs/issues/234
-      // console.log('')
+    it('the default config is merged with `redwood.toml`', () => {
       const toml = `
       [web]
         port = 8080
       [api]
         port = 8081
     `
-      mockfs({
-        'redwood.toml': toml,
-      })
-
+      mockrw.mockProject(toml)
       const config = getConfig()
       expect(config.web.port).toEqual(8080)
       expect(config.api.port).toEqual(8081)
     })
+  })
 
-    describe('getConfigSides', () => {
-      mockfs({
-        'redwood.toml': '',
-      })
-
+  describe('getConfigSides', () => {
+    it('returns the config sides', () => {
       expect(getConfigSides()).toEqual({
         api: {
           build: [
@@ -87,19 +80,15 @@ describe('config', () => {
         },
       })
     })
-
-    describe('getSideConfig', () => {
-      it('returns the correct side', () => {
-        expect(getSideConfig('web').name).toEqual('web')
-      })
-
-      it('throws when you try to get a config that does not exist', () => {
-        expect(() => getSideConfig('rambo')).toThrow()
-      })
-    })
   })
 
-  afterAll(() => {
-    mockfs.restore()
+  describe('getSideConfig', () => {
+    it('returns the correct side', () => {
+      expect(getSideConfig('web').name).toEqual('web')
+    })
+
+    it('throws when you try to get a config that does not exist', () => {
+      expect(() => getSideConfig('rambo')).toThrow()
+    })
   })
 })
