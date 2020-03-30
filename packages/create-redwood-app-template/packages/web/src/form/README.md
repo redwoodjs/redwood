@@ -315,7 +315,7 @@ Any attributes not listed below are passed through to the underlying `<span>` ta
 
 #### name
 
-The same as the `name` of the input that this should show the error messag for.
+The same as the `name` of the input that this should show the error message for.
 
 ## `<Submit>`
 
