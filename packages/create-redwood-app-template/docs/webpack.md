@@ -10,7 +10,7 @@ Two formats are supported:
 
 1. Overwriting the base config
 
-```js
+```javascript
 module.exports = (config, {env}) => {
   if (env === 'development') {
     // Add dev plugin
@@ -23,7 +23,7 @@ module.exports = (config, {env}) => {
 
 2. Returning a completely new config
 
-```js
+```javascript
 module.exports = {
   module: {
     rules: [{...}]
@@ -35,7 +35,7 @@ module.exports = {
 
 ### Changing the title of the page
 
-```js
+```javascript
 module.exports = (config, { env }) => {
   config.plugins.forEach((plugin) => {
     if (plugin.constructor.name === 'HtmlWebpackPlugin') {
@@ -49,7 +49,7 @@ module.exports = (config, { env }) => {
 
 ### Adding TailwindCSS support
 
-```js
+```javascript
 const configDir = __dirname
 
 module.exports = (config) => {
