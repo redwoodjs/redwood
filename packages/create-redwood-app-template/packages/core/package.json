@@ -58,7 +58,7 @@
   },
   "gitHead": "2801c132f40263f9fcfbdac8b1750d2e423eb649",
   "scripts": {
-    "build": "NODE_ENV=production yarn babel --delete-dir-on-start src -d dist",
+    "build": "cross-env NODE_ENV=production yarn babel --delete-dir-on-start src -d dist",
     "build:watch": "nodemon --ignore dist --exec 'yarn build'"
   }
 }
