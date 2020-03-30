@@ -20,5 +20,8 @@
     "test:watch": "yarn test --watch",
     "clean": "rm -rf dist"
   },
-  "gitHead": "2801c132f40263f9fcfbdac8b1750d2e423eb649"
+  "gitHead": "2801c132f40263f9fcfbdac8b1750d2e423eb649",
+  "devDependencies": {
+    "react": "^16.13.1"
+  }
 }
