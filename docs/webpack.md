@@ -1,12 +1,15 @@
 # Webpack config
+
 RedwoodJS uses webpack to bundle and build it's assets.
 
 ## Overriding Webpack config
+
 The Webpack config can be overriden by adding a `web/config/webpack.config.js` file.
 
 Two formats are supported:
 
 1. Overwriting the base config
+
 ```js
 module.exports = (config, {env}) => {
   if (env === 'development') {
@@ -19,7 +22,8 @@ module.exports = (config, {env}) => {
 ```
 
 2. Returning a completely new config
-```
+
+```js
 module.exports = {
   module: {
     rules: [{...}]
@@ -31,7 +35,7 @@ module.exports = {
 
 ### Changing the title of the page
 
-```
+```js
 module.exports = (config, { env }) => {
   config.plugins.forEach((plugin) => {
     if (plugin.constructor.name === 'HtmlWebpackPlugin') {
@@ -45,7 +49,7 @@ module.exports = (config, { env }) => {
 
 ### Adding TailwindCSS support
 
-```
+```js
 const configDir = __dirname
 
 module.exports = (config) => {
