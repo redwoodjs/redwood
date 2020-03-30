@@ -8,10 +8,10 @@ export default function(source: string) {
     'Failure',
     'Empty',
     'beforeQuery',
-    'afterQuery',
+    'afterQuery'
   ]
 
-  names.forEach((name) => {
+  names.forEach(name => {
     source.match(`export const ${name}`) && exports.push(name)
   })
 

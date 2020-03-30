@@ -194,7 +194,7 @@ Because lazily-loaded pages can take a non-negligible amount of time to load (de
 
 import { usePageLoadingContext } from '@redwoodjs/router'
 
-const SomeLayout = () => {
+const SomeLayout = (props) => {
   const { loading } = usePageLoadingContext()
   return (
     <div>
