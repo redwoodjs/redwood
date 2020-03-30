@@ -14,8 +14,7 @@
   },
   "devDependencies": {
     "@types/findup-sync": "^2.0.2",
-    "@types/mock-fs": "^4.10.0",
-    "mock-fs": "^4.11.0"
+    "@redwoodjs/test-mocks": "0.0.0"
   },
   "scripts": {
     "clean": "rm -rf dist",

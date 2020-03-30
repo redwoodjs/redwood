@@ -2,20 +2,18 @@
   "compilerOptions": {
     "target": "esnext",
     "moduleResolution": "node",
+    "module": "esnext",
     "strict": true,
     "esModuleInterop": true,
-    "baseUrl": "./src",
+    "baseUrl": "./",
     "paths": {
-      "*": [
-        "./*"
+      "src/*": [
+        "./src/*"
       ]
     },
     "declaration": true,
     "declarationDir": "./dist"
   },
-  "include": [
-    "./**/*"
-  ],
   "exclude": [
     "**/*.test.*",
   ]

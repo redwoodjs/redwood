@@ -1,11 +1,6 @@
 import path from 'path'
 
-import {
-  getConfig,
-  getConfigPath,
-  getConfigSides,
-  getSideConfig,
-} from './config'
+import { getConfigPath, getConfigSides } from './config'
 import { TargetEnum } from './config'
 
 export interface NodeTargetPaths {
