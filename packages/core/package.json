@@ -58,9 +58,7 @@
   },
   "gitHead": "2801c132f40263f9fcfbdac8b1750d2e423eb649",
   "scripts": {
-    "build": "yarn clean && babel src -d dist",
-    "build:watch": "nodemon --ignore dist --exec 'yarn build'",
-    "prepublishOnly": "yarn clean && yarn build",
-    "clean": "rm -rf dist"
+    "build": "NODE_ENV=production yarn babel --delete-dir-on-start src -d dist",
+    "build:watch": "nodemon --ignore dist --exec 'yarn build'"
   }
 }
