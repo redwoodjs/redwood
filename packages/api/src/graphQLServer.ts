@@ -1,11 +1,12 @@
-import { ApolloServer, Config } from 'apollo-server-lambda'
 import { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
+
+import { ApolloServer, Config } from 'apollo-server-lambda'
 
 import { setContext } from './globalContext'
 
 export const handleContext = (options: Config) => {
   // Returns a function that deals with the context per request.
-  return ({
+  return async ({
     context,
     event,
   }: {
@@ -21,7 +22,7 @@ export const handleContext = (options: Config) => {
     // initialize the handler.
     let userContext = options?.context || {}
     if (typeof userContext === 'function') {
-      userContext = userContext({ context, event })
+      userContext = await userContext({ context, event })
     }
 
     // The context object returned from this function is passed to
