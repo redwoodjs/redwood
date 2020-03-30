@@ -12,6 +12,7 @@ import execa from 'execa'
 import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import { format } from 'prettier'
+
 import c from 'src/lib/colors'
 
 export const asyncForEach = async (array, callback) => {
