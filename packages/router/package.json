@@ -13,12 +13,10 @@
     "react": "*"
   },
   "scripts": {
-    "build": "yarn clean && babel src -d dist",
+    "build": "yarn babel --delete-dir-on-start src -d dist",
     "build:watch": "nodemon --ignore dist --exec 'yarn build'",
-    "prepublishOnly": "yarn clean && yarn build",
     "test": "yarn jest src",
-    "test:watch": "yarn test --watch",
-    "clean": "rm -rf dist"
+    "test:watch": "yarn test --watch"
   },
   "gitHead": "2801c132f40263f9fcfbdac8b1750d2e423eb649",
   "devDependencies": {
