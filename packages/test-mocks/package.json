@@ -1,0 +1,11 @@
+{
+  "name": "@redwoodjs/test-mocks",
+  "version": "0.0.0",
+  "private": true,
+  "main": "src/index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "mock-fs": "^4.11.0",
+    "@types/mock-fs": "^4.10.0"
+  }
+}
