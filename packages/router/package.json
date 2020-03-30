@@ -13,7 +13,7 @@
     "react": "*"
   },
   "scripts": {
-    "build": "yarn babel --delete-dir-on-start src -d dist",
+    "build": "NODE_ENV=production yarn babel --delete-dir-on-start src -d dist",
     "build:watch": "nodemon --ignore dist --exec 'yarn build'",
     "test": "yarn jest src",
     "test:watch": "yarn test --watch"
