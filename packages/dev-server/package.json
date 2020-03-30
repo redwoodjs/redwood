@@ -28,7 +28,7 @@
     "@types/require-dir": "^1.0.0"
   },
   "scripts": {
-    "build": "NODE_ENV=production yarn babel --delete-dir-on-start src --out-dir dist --extensions \".ts\" --source-maps inline"
+    "build": "cross-env NODE_ENV=production yarn babel --delete-dir-on-start src --out-dir dist --extensions \".ts\" --source-maps inline"
   },
   "gitHead": "2801c132f40263f9fcfbdac8b1750d2e423eb649"
 }
