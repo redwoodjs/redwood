@@ -27,6 +27,7 @@
     "param-case": "^3.0.3",
     "pascalcase": "^1.0.0",
     "pluralize": "^8.0.0",
+    "prettier": "^2.0.2",
     "react": "16.13.0",
     "yargs": "^15.1.0"
   },
