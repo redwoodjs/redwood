@@ -33,7 +33,7 @@
     "@types/node-fetch": "^2.5.5"
   },
   "scripts": {
-    "build": "yarn cross-env NODE_ENV=production babel --delete-dir-on-start src --out-dir dist --copy-files",
+    "build": "yarn cross-env NODE_ENV=production babel --delete-dir-on-start src --out-dir dist --copy-files --no-copy-ignored",
     "build:watch": "nodemon --ignore dist --exec 'yarn build'",
     "test": "jest",
     "test:watch": "yarn test --watch"
