@@ -26,7 +26,9 @@
     "@types/graphql-iso-date": "^3.3.3",
     "@types/lodash.merge": "^4.6.6",
     "@types/lodash.omitby": "^4.6.6",
-    "babel-plugin-tester": "^9.0.0"
+    "babel-plugin-tester": "^9.0.0",
+    "del-cli": "^3.0.0",
+    "move-cli": "^1.2.1"
   },
   "jest": {
     "testPathIgnorePatterns": [
@@ -35,14 +37,12 @@
     ]
   },
   "scripts": {
-    "build": "yarn clean && yarn build:js && yarn build:types && mv dist/importAll.macro.js .",
-    "build:js": "babel src --out-dir dist --extensions \".js,.ts\" --source-maps inline",
+    "build": "yarn build:js && yarn build:types && yarn move-cli dist/importAll.macro.js ./importAll.macro.js",
+    "build:js": "yarn del-cli importAll.macro.js && cross-env NODE_ENV=production yarn babel --delete-dir-on-start src --out-dir dist --extensions \".js,.ts\" --source-maps inline",
     "build:types": "tsc --declaration --emitDeclarationOnly",
     "build:watch": "nodemon --watch src -e ts,js --ignore dist --exec 'yarn build'",
-    "prepublish": "yarn build",
     "test": "yarn jest",
-    "test:watch": "yarn test --watch",
-    "clean": "rm -rf dist && rm -rf importAll.macro.js"
+    "test:watch": "yarn test --watch"
   },
   "gitHead": "2801c132f40263f9fcfbdac8b1750d2e423eb649"
 }
