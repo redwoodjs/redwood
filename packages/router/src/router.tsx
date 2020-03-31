@@ -1,5 +1,6 @@
 // The guts of the router implementation.
 import 'url-search-params-polyfill';
+import React from 'react';
 
 import {
   Location,

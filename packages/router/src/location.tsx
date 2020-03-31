@@ -1,8 +1,11 @@
+import React from 'react'
 import { createNamedContext, gHistory } from './internal'
 
-const LocationContext = createNamedContext('Location')
+type WindowLocation = typeof window.location;
 
-class LocationProvider extends React.Component {
+const LocationContext = createNamedContext<Partial<WindowLocation>>('Location')
+
+class LocationProvider extends React.Component<{location: WindowLocation}> {
   static defaultProps = {
     location: window.location,
   }
@@ -33,7 +36,7 @@ class LocationProvider extends React.Component {
   }
 }
 
-const Location = ({ children }) => (
+const Location: React.FC<{children: (context: Partial<WindowLocation>) => React.ReactNode}> = ({ children }) => (
   <LocationContext.Consumer>
     {(context) =>
       context ? (

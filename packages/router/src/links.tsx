@@ -2,7 +2,11 @@ import { useContext, forwardRef } from 'react'
 
 import { LocationContext, navigate } from './internal'
 
-const Link = forwardRef(({ to, ...rest }, ref) => (
+interface LinkProps extends React.HTMLAttributes<HTMLAnchorElement>{
+  to: string;
+}
+
+const Link = forwardRef<HTMLAnchorElement, LinkProps>(({ to, ...rest }, ref) => (
   <a
     href={to}
     ref={ref}
@@ -14,10 +18,15 @@ const Link = forwardRef(({ to, ...rest }, ref) => (
   />
 ))
 
-const NavLink = forwardRef(
+interface NavLinkProps extends React.HTMLAttributes<HTMLAnchorElement>{
+  to: string;
+  activeClassName?: string;
+}
+
+const NavLink = forwardRef<HTMLAnchorElement, NavLinkProps>(
   ({ to, className, activeClassName, ...rest }, ref) => {
     const context = useContext(LocationContext)
-    const theClassName = to === context.pathname ? activeClassName : className
+    const theClassName = to === context?.pathname ? activeClassName : className
     return (
       <a
         href={to}
@@ -34,3 +43,4 @@ const NavLink = forwardRef(
 )
 
 export { Link, NavLink }
+
