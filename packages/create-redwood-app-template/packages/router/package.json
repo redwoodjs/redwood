@@ -7,8 +7,7 @@
   "main": "dist/index.js",
   "license": "MIT",
   "dependencies": {
-    "core-js": "3.6.4",
-    "url-search-params-polyfill": "^8.0.0"
+    "core-js": "3.6.4"
   },
   "peerDependencies": {
     "react": "*"
