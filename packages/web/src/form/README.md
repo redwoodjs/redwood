@@ -12,7 +12,7 @@ Redwood currently provides the following form components:
 * `<TextField>` is used in place of the HTML `<input type="text">` tag and can accept validation options and be styled differently in the presence of an error
 * `<TextAreaField>` is used in place of the HTML `<textarea>` tag and can accept validation options and be styled differently in the presence of an error
 * `<FieldError>` will display error messages from form validation and server errors
-* `<Submit>` is used in place of `<button type="submit">` and will trigger a validation check and "submission" of the form (actually exectues the function given to the `onSubmit` attribute on `<Form>`)
+* `<Submit>` is used in place of `<button type="submit">` and will trigger a validation check and "submission" of the form (actually executes the function given to the `onSubmit` attribute on `<Form>`)
 
 Some fields share options:
 
@@ -315,7 +315,7 @@ Any attributes not listed below are passed through to the underlying `<span>` ta
 
 #### name
 
-The same as the `name` of the input that this should show the error messag for.
+The same as the `name` of the input that this should show the error message for.
 
 ## `<Submit>`
 
