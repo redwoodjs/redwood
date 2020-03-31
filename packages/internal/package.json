@@ -21,7 +21,7 @@
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",
-    "build:js": "cross-env NODE_ENV=production yarn babel --delete-dir-on-start src --out-dir dist --extensions \".js,.ts\" --source-maps inline",
+    "build:js": "yarn cross-env NODE_ENV=production babel --delete-dir-on-start src --out-dir dist --extensions \".js,.ts\" --source-maps inline",
     "build:types": "tsc --declaration --emitDeclarationOnly",
     "build:watch": "nodemon --ignore dist --exec 'yarn build'",
     "test": "jest",
