@@ -1,5 +1,4 @@
 // The guts of the router implementation.
-import 'url-search-params-polyfill';
 
 import {
   Location,
