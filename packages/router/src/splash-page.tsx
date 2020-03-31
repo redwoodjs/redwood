@@ -1,4 +1,7 @@
-const SplashPage = ({ isRedwood }) => (
+interface SplashPageProps {
+  isRedwood?: boolean
+}
+const SplashPage = ({ isRedwood }: SplashPageProps) => (
   <main>
     <section>
       <style

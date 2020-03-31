@@ -3,6 +3,7 @@
     {"path": "packages/api"},
     {"path": "packages/core"},
     {"path": "packages/dev-server"},
+    {"path": "packages/router"},
     {"path": "packages/internal"}
   ],
   "files": []
