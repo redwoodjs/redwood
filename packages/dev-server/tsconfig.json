@@ -14,7 +14,7 @@
     "declaration": true,
     "declarationDir": "./dist"
   },
-  "include": [
-    "src"
+  "exclude": [
+    "**/*.test.*",
   ]
 }

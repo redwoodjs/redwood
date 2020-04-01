@@ -29,6 +29,7 @@ babelRegister({
 
 // TODO: Convert to yargs.
 args
+  .option('side', '', 'api')
   .option('host', '', redwoodConfig.api.host || 'localhost')
   .option('port', '', redwoodConfig.api.port)
   .option(
@@ -36,8 +37,11 @@ args
     'The path to your lambda functions',
     redwoodPaths.api.functions
   )
+
 const { host: HOST, port: PORT, path: PATH } = args.parse(process.argv)
 const HOSTNAME = `http://${HOST}:${PORT}`
+
+// Get the path, port, and host for the "side" from the configuration.
 
 const showHeader = (lambdas: Record<string, any>) => {
   console.log(`Listening on ${HOSTNAME}`)
