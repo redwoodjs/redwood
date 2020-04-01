@@ -1,4 +1,8 @@
-import { mergeSchemas, addResolveFunctionsToSchema } from 'apollo-server-lambda'
+import {
+  addResolveFunctionsToSchema,
+  makeExecutableSchema,
+} from 'apollo-server-lambda'
+import { mergeTypes } from 'merge-graphql-schemas'
 import merge from 'lodash.merge'
 import omitBy from 'lodash.omitby'
 
@@ -103,12 +107,15 @@ const mergeResolvers = (schemas) =>
  * })
  * ```
  */
-export const makeMergedSchema = ({ schemas, services }) => {
-  const schema = mergeSchemas({
-    schemas: [
-      rootSchema.schema,
-      ...Object.values(schemas).map(({ schema }) => schema),
-    ],
+export const makeMergedSchema = ({ schemas, services, schemaDirectives }) => {
+  const typeDefs = mergeTypes(
+    [rootSchema.schema, ...Object.values(schemas).map(({ schema }) => schema)],
+    { all: true }
+  )
+
+  const schema = makeExecutableSchema({
+    typeDefs,
+    schemaDirectives,
   })
 
   const resolvers = mergeResolversWithServices({

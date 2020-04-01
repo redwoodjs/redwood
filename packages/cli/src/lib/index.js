@@ -11,6 +11,7 @@ import { getPaths as getRedwoodPaths } from '@redwoodjs/internal'
 import execa from 'execa'
 import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
+import { format } from 'prettier'
 
 import c from 'src/lib/colors'
 
@@ -39,7 +40,7 @@ export const getSchema = async (name) => {
     if (model) {
       return model
     } else {
-      throw `No schema definition found for \`${name}\``
+      throw `No schema definition found for \`${name}\` in schema.prisma file`
     }
   }
 
@@ -81,11 +82,14 @@ export const templateRoot = path.resolve(
 export const generateTemplate = (templateFilename, { name, ...rest }) => {
   const templatePath = path.join(templateRoot, templateFilename)
   const template = lodash.template(readFile(templatePath).toString())
-  return template({
-    name,
-    ...nameVariants(name),
-    ...rest,
-  })
+  return format(
+    template({
+      name,
+      ...nameVariants(name),
+      ...rest,
+    }),
+    prettierOptions()
+  )
 }
 
 export const readFile = (target) => fs.readFileSync(target)
@@ -117,6 +121,17 @@ export const getPaths = () => {
   } catch (e) {
     console.log(c.error(e.message))
     process.exit(0)
+  }
+}
+
+/**
+ * This returns the config present in `prettier.config.js` of a Redwood project.
+ */
+export const prettierOptions = () => {
+  try {
+    return require(path.join(getPaths().base, 'prettier.config.js'))
+  } catch (e) {
+    return undefined
   }
 }
 
