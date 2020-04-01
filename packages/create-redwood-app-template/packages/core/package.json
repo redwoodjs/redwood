@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/core",
-  "version": "0.4.0-rc.1",
+  "version": "0.4.0-rc.2",
   "license": "MIT",
   "files": [
     "config",
@@ -17,7 +17,7 @@
     "@babel/preset-typescript": "^7.9.0",
     "@babel/runtime-corejs3": "^7.9.2",
     "@prisma/cli": "2.0.0-preview025",
-    "@redwoodjs/cli": "^0.4.0-rc.1",
+    "@redwoodjs/cli": "^0.4.0-rc.2",
     "@redwoodjs/dev-server": "^0.4.0-rc.1",
     "@redwoodjs/eslint-config": "^0.4.0-rc.1",
     "@redwoodjs/internal": "^0.4.0-rc.1",
