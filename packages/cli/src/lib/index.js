@@ -40,7 +40,7 @@ export const getSchema = async (name) => {
     if (model) {
       return model
     } else {
-      throw `No schema definition found for \`${name}\``
+      throw `No schema definition found for \`${name}\` in schema.prisma file`
     }
   }
 
