@@ -83,19 +83,19 @@ export const generateTemplate = (templateFilename, { name, ...rest }) => {
   const templatePath = path.join(templateRoot, templateFilename)
   const template = lodash.template(readFile(templatePath).toString())
 
+  const renderedTemplate = template({
+    name,
+    ...nameVariants(name),
+    ...rest,
+  })
+
   // We format .js and .css templates, we need to tell prettier which parser
   // we're using.
   // https://prettier.io/docs/en/options.html#parser
   const parser = {
     css: 'css',
     js: 'babel',
-  }[path.extname(name)]
-
-  const renderedTemplate = template({
-    name,
-    ...nameVariants(name),
-    ...rest,
-  })
+  }[path.extname(templateFilename)]
 
   if (typeof parser === 'undefined') {
     return renderedTemplate
