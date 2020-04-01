@@ -4,31 +4,31 @@ describe('matchPath', () => {
   it('matches paths correctly', () => {
     expect(matchPath('/post/{id:Int}', '/post/7')).toEqual({
       match: true,
-      params: { id: 7 }
+      params: { id: 7 },
     })
 
     expect(matchPath('/post/{id:Int}', '/post/notAnInt')).toEqual({
-      match: false
+      match: false,
     })
 
     expect(matchPath('/post/{id:Int}', '/post/2.0')).toEqual({
-      match: false
+      match: false,
     })
 
     expect(matchPath('/post/{id:Int}', '/post/.1')).toEqual({
-      match: false
+      match: false,
     })
 
     expect(matchPath('/post/{id:Int}', '/post/0.1')).toEqual({
-      match: false
+      match: false,
     })
 
     expect(matchPath('/post/{id:Int}', '/post/123abcd')).toEqual({
-      match: false
+      match: false,
     })
 
     expect(matchPath('/post/{id:Int}', '/post/abcd123')).toEqual({
-      match: false
+      match: false,
     })
 
     expect(
@@ -40,11 +40,11 @@ describe('matchPath', () => {
     ).toEqual({ match: false })
 
     expect(matchPath('/blog/{year}/{month}/{day}', '/blog/2019/07')).toEqual({
-      match: false
+      match: false,
     })
 
     expect(matchPath('/posts/{id}/edit', '/posts//edit')).toEqual({
-      match: false
+      match: false,
     })
 
     expect(matchPath('/about', '/')).toEqual({ match: false })
@@ -53,12 +53,12 @@ describe('matchPath', () => {
   it('transforms a param based on the specified transform', () => {
     expect(matchPath('/post/{id}', '/post/1337')).toEqual({
       match: true,
-      params: { id: '1337' }
+      params: { id: '1337' },
     })
 
     expect(matchPath('/post/{id:Int}', '/post/1337')).toEqual({
       match: true,
-      params: { id: 1337 }
+      params: { id: 1337 },
     })
   })
 })
