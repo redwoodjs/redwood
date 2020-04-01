@@ -8,12 +8,12 @@ const createNamedContext = (name, defaultValue) => {
 // Get param name and type tranform for a route
 //
 // '/blog/{year}/{month}/{day:Int}' => [['year'], ['month'], ['day', 'Int']]
-const paramsForRoute = route => {
+const paramsForRoute = (route) => {
   // Match the strings between `{` and `}`.
   const params = [...route.matchAll(/\{([^}]+)\}/g)]
   return params
-    .map(match => match[1])
-    .map(match => {
+    .map((match) => match[1])
+    .map((match) => {
       return match.split(':')
     })
 }
@@ -22,8 +22,8 @@ const paramsForRoute = route => {
 const coreParamTypes = {
   Int: {
     constraint: /\d+/,
-    transform: Number
-  }
+    transform: Number,
+  },
 }
 
 // Determine if the given route is a match for the given pathname. If so,
@@ -85,7 +85,7 @@ const matchPath = (route, pathname, paramTypes) => {
 
     return {
       ...acc,
-      [name]: value
+      [name]: value,
     }
   }, {})
 
@@ -99,14 +99,14 @@ const matchPath = (route, pathname, paramTypes) => {
 //
 //   parseSearch('?key1=val1&key2=val2')
 //   => { key1: 'val1', key2: 'val2' }
-const parseSearch = search => {
+const parseSearch = (search) => {
   if (search === '') {
     return {}
   }
   const searchPart = search.substring(1)
   const pairs = searchPart.split('&')
   const searchProps = {}
-  pairs.forEach(pair => {
+  pairs.forEach((pair) => {
     const keyval = pair.split('=')
     searchProps[keyval[0]] = keyval[1] || ''
   })
@@ -116,7 +116,7 @@ const parseSearch = search => {
 // Validate a path to make sure it follows the router's rules. If any problems
 // are found, a descriptive Error will be thrown, as problems with routes are
 // critical enough to be considered fatal.
-const validatePath = path => {
+const validatePath = (path) => {
   // Check that path begins with a slash.
   if (path[0] !== '/') {
     throw new Error('Route path does not begin with a slash: "' + path + '"')
@@ -147,7 +147,7 @@ const replaceParams = (path, args = {}) => {
   // then join it back together.
   const parts = path.split('/')
   let newPath = parts
-    .map(part => {
+    .map((part) => {
       if (part[0] === '{' && part[part.length - 1] === '}') {
         const paramSpec = part.substr(1, part.length - 2)
         const paramName = paramSpec.split(':')[0]
@@ -163,7 +163,7 @@ const replaceParams = (path, args = {}) => {
 
   // Prepare any unnamed params to be be appended as search params.
   const queryParams = []
-  Object.keys(args).forEach(key => {
+  Object.keys(args).forEach((key) => {
     queryParams.push(`${key}=${args[key]}`)
   })
 
@@ -180,5 +180,5 @@ export {
   matchPath,
   parseSearch,
   validatePath,
-  replaceParams
+  replaceParams,
 }
