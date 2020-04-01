@@ -1,0 +1,34 @@
+name: Build, Lint, and Test against latest Node 12
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ['12']
+      fail-fast: false
+    name: Node ${{ matrix.node-version }} latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup node
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Node and Yarn Versions
+      run: |
+        node --version
+        yarn --version
+    - name: Install using lockfile
+      run: yarn install --frozen-lockfile
+    - name: Build
+      run: yarn build
+    - name: Run ESLint
+      run: yarn lint
+      env:
+        CI: true
+    - name: Run Jest Tests
+      run: yarn test
+      env:
+        CI: true
