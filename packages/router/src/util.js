@@ -8,12 +8,12 @@ const createNamedContext = (name, defaultValue) => {
 // Get param name and type tranform for a route
 //
 // '/blog/{year}/{month}/{day:Int}' => [['year'], ['month'], ['day', 'Int']]
-const paramsForType = (route) => {
+const paramsForRoute = route => {
   // Match the strings between `{` and `}`.
   const params = [...route.matchAll(/\{([^}]+)\}/g)]
   return params
-    .map((match) => match[1])
-    .map((match) => {
+    .map(match => match[1])
+    .map(match => {
       return match.split(':')
     })
 }
@@ -21,9 +21,9 @@ const paramsForType = (route) => {
 // Definitions of the core param types.
 const coreParamTypes = {
   Int: {
-    constraint: /^\d+$/,
-    transform: Number,
-  },
+    constraint: /\d+/,
+    transform: Number
+  }
 }
 
 // Determine if the given route is a match for the given pathname. If so,
@@ -44,57 +44,52 @@ const coreParamTypes = {
 //   matchPath('/post/{id:Int}', '/post/7')
 //   => { match: true, params: { id: 7 }}
 const matchPath = (route, pathname, paramTypes) => {
-  // Does the `pathname` match the `route`?
-  const matches = [
-    ...pathname.matchAll(`^${route.replace(/{([^}]+)}/g, '([^/]+)')}$`),
-  ]
+  // Get the names and the transform types for the given route.
+  const routeParams = paramsForRoute(route)
+  const allParamTypes = { ...coreParamTypes, ...paramTypes }
+  let typeConstrainedRoute = route
+
+  // Map all params from the route to their type constraint regex to create a "type-constrained route" regexp
+  for (const [name, type] of routeParams) {
+    let typeRegex = '[^/]+'
+    const constraint = type && allParamTypes[type].constraint
+
+    if (constraint) {
+      // Get the type
+      typeRegex = constraint.toString() || '/[^/]+/'
+      typeRegex = typeRegex.substring(1, typeRegex.length - 1)
+    }
+
+    typeConstrainedRoute = typeConstrainedRoute.replace(
+      type ? `{${name}:${type}}` : `{${name}}`,
+      `(${typeRegex})`
+    )
+  }
+
+  // Does the `pathname` match the route?
+  const matches = [...pathname.matchAll(`^${typeConstrainedRoute}$`)]
 
   if (matches.length === 0) {
     return { match: false }
   }
 
-  const allParamTypes = { ...coreParamTypes, ...paramTypes }
-
-  // Get the names and the transform types for the given route.
-  const paramInfo = paramsForType(route)
+  // Map extracted values to their param name, casting the value if needed
   const providedParams = matches[0].slice(1)
-  if (providedParams.length > 0) {
-    // Some params were provided: check that they meet potential type constraints & cast their values if needed
-    const params = providedParams.reduce((acc, value, index) => {
-      const [name, transformName] = paramInfo[index]
+  const params = providedParams.reduce((acc, value, index) => {
+    const [name, transformName] = routeParams[index]
+    const typeInfo = allParamTypes[transformName]
 
-      if (transformName) {
-        const typeInfo = allParamTypes[transformName]
-
-        // TODO: extract constraint evaluation to a function to allow different types of constraints (regexp, func)
-        if (typeInfo.constraint && !value.match(typeInfo.constraint)) {
-          return acc
-        }
-
-        if (typeInfo.transform) {
-          value = typeInfo.transform(value)
-        }
-      }
-
-      return {
-        ...acc,
-        [name]: value,
-      }
-    }, {})
-
-    // Check that we got a value for all expected route params
-    for (const [name] of paramInfo) {
-      if (params[name] == null) {
-        return { match: false }
-      }
+    if (typeInfo && typeof typeInfo.transform === 'function') {
+      value = typeInfo.transform(value)
     }
 
-    return { match: true, params }
-  } else if (paramInfo.length > 0) {
-    // No params were provided to a route that expects at least one
-    // (given the way we extract providedParams, we should never get down here)
-    return { match: false }
-  }
+    return {
+      ...acc,
+      [name]: value
+    }
+  }, {})
+
+  return { match: true, params }
 }
 
 // Parse the given search string into key/value pairs and return them in an
@@ -104,14 +99,14 @@ const matchPath = (route, pathname, paramTypes) => {
 //
 //   parseSearch('?key1=val1&key2=val2')
 //   => { key1: 'val1', key2: 'val2' }
-const parseSearch = (search) => {
+const parseSearch = search => {
   if (search === '') {
     return {}
   }
   const searchPart = search.substring(1)
   const pairs = searchPart.split('&')
   const searchProps = {}
-  pairs.forEach((pair) => {
+  pairs.forEach(pair => {
     const keyval = pair.split('=')
     searchProps[keyval[0]] = keyval[1] || ''
   })
@@ -121,7 +116,7 @@ const parseSearch = (search) => {
 // Validate a path to make sure it follows the router's rules. If any problems
 // are found, a descriptive Error will be thrown, as problems with routes are
 // critical enough to be considered fatal.
-const validatePath = (path) => {
+const validatePath = path => {
   // Check that path begins with a slash.
   if (path[0] !== '/') {
     throw new Error('Route path does not begin with a slash: "' + path + '"')
@@ -152,7 +147,7 @@ const replaceParams = (path, args = {}) => {
   // then join it back together.
   const parts = path.split('/')
   let newPath = parts
-    .map((part) => {
+    .map(part => {
       if (part[0] === '{' && part[part.length - 1] === '}') {
         const paramSpec = part.substr(1, part.length - 2)
         const paramName = paramSpec.split(':')[0]
@@ -168,7 +163,7 @@ const replaceParams = (path, args = {}) => {
 
   // Prepare any unnamed params to be be appended as search params.
   const queryParams = []
-  Object.keys(args).forEach((key) => {
+  Object.keys(args).forEach(key => {
     queryParams.push(`${key}=${args[key]}`)
   })
 
@@ -185,5 +180,5 @@ export {
   matchPath,
   parseSearch,
   validatePath,
-  replaceParams,
+  replaceParams
 }
