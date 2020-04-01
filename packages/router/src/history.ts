@@ -1,15 +1,17 @@
+type Listener = () => void
+
 const createHistory = () => {
-  const listeners = []
+  const listeners: Listener[] = []
 
   return {
-    listen: (listener) => {
+    listen: (listener: Listener) => {
       listeners.push(listener)
       window.addEventListener('popstate', () => {
         listener()
       })
     },
-    navigate: (to) => {
-      window.history.pushState({}, null, to)
+    navigate: (to: string) => {
+      window.history.pushState({}, '', to)
       listeners.forEach((listener) => listener())
     },
   }

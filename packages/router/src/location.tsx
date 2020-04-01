@@ -1,11 +1,12 @@
 import React from 'react'
+
 import { createNamedContext, gHistory } from './internal'
 
-type WindowLocation = typeof window.location;
+type WindowLocation = typeof window.location
 
 const LocationContext = createNamedContext<Partial<WindowLocation>>('Location')
 
-class LocationProvider extends React.Component<{location: WindowLocation}> {
+class LocationProvider extends React.Component<{ location: WindowLocation }> {
   static defaultProps = {
     location: window.location,
   }
@@ -26,8 +27,8 @@ class LocationProvider extends React.Component<{location: WindowLocation}> {
   }
 
   render() {
-    let { children } = this.props
-    let { context } = this.state
+    const { children } = this.props
+    const { context } = this.state
     return (
       <LocationContext.Provider value={context}>
         {typeof children === 'function' ? children(context) : children || null}
@@ -36,7 +37,9 @@ class LocationProvider extends React.Component<{location: WindowLocation}> {
   }
 }
 
-const Location: React.FC<{children: (context: Partial<WindowLocation>) => React.ReactNode}> = ({ children }) => (
+const Location: React.FC<{
+  children: (context: Partial<WindowLocation>) => React.ReactNode
+}> = ({ children }) => (
   <LocationContext.Consumer>
     {(context) =>
       context ? (
