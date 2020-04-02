@@ -2,7 +2,7 @@
   "name": "@redwoodjs/test-mocks",
   "version": "0.0.0",
   "private": true,
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "license": "MIT",
   "dependencies": {
     "deepmerge": "^4.2.2",
@@ -13,6 +13,7 @@
     "@types/mock-fs": "^4.10.0"
   },
   "scripts": {
+    "build": "babel src --out-dir dist --extensions \".ts\" --source-maps inline --delete-dir-on-start",
     "test": "yarn jest src"
   }
 }
