@@ -1,0 +1,62 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test-mocks allows the filesystem to be mutated 1`] = `
+Object {
+  "api": Object {
+    "src": Object {
+      "functions": Object {
+        "graphql.js": Object {},
+      },
+    },
+  },
+  "redwood.toml": "",
+  "web": Object {
+    "src": Object {},
+  },
+}
+`;
+
+exports[`test-mocks allows the filesystem to be updated with merge 1`] = `
+Object {
+  "another-file.text": "hello",
+  "api": Object {
+    "src": Object {
+      "functions": Object {
+        "graphql.js": Object {},
+      },
+    },
+  },
+  "redwood.toml": "",
+  "web": Object {
+    "src": Object {
+      "pages": Object {
+        "HelloPage/HelloPage.js": "",
+      },
+    },
+  },
+}
+`;
+
+exports[`test-mocks provides a default mock filesystem 1`] = `
+Object {
+  "api": Object {
+    "src": Object {
+      "functions": Object {
+        "graphql.js": Object {},
+      },
+    },
+  },
+  "redwood.toml": "
+  [web]
+    port = 8910
+    apiProxyPath = \\"/.netlify/functions\\"
+  [api]
+    port = 8911
+  [browser]
+    open = true
+  ",
+  "web": Object {
+    "src": Object {},
+  },
+}
+`;
