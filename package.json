@@ -33,6 +33,6 @@
     "build": "yarn cross-env NODE_ENV=production lerna run build",
     "test": "lerna run test --stream -- --colors",
     "lint": "yarn eslint 'packages'",
-    "lint:fix": "yarn eslint --fix 'packages'"
+    "lint:fix": "yarn eslint --fix packages"
   }
 }
