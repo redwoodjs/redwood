@@ -35,7 +35,7 @@
     "build:js": "NODE_ENV=production lerna run build",
     "build:types": "tsc --build --clean && tsc --build",
     "test": "lerna run test --stream -- --colors",
-    "lint": "yarn eslint './packages/'",
+    "lint": "yarn prettier --list-different . && yarn eslint './packages/'",
     "lint:fix": "yarn prettier --write . && yarn lint --fix"
   }
 }
