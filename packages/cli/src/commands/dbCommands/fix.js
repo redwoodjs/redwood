@@ -5,12 +5,17 @@ export const desc = 'Fix database migration conflicts.'
 export const builder = {
   verbose: { type: 'boolean', default: true, alias: ['v'] },
 }
-export const handler = async () => {
-  await runCommandTask([
+export const handler = async ({ verbose = true }) => {
+  await runCommandTask(
+    [
+      {
+        title: 'Fix Prisma migration conflicts...',
+        cmd: 'yarn prisma2',
+        args: ['migrate fix', '--experimental'],
+      },
+    ],
     {
-      title: 'Fix Prisma migration conflicts...',
-      cmd: 'yarn prisma2',
-      args: ['migrate fix', '--experimental'],
-    },
-  ])
+      verbose,
+    }
+  )
 }
