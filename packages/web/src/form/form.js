@@ -207,6 +207,21 @@ const TextField = (props) => {
   )
 }
 
+// Renders a <select> field
+
+const SelectField = (props) => {
+  const { register } = useFormContext()
+  const tagProps = inputTagProps(props)
+
+  return (
+    <select
+      {...tagProps}
+      id={props.id || props.name}
+      ref={register(props.validation || { required: false })}
+    />
+  )
+}
+
 // Renders a <button type="submit">
 const Submit = React.forwardRef((props, ref) => (
   <button ref={ref} type="submit" {...props} />
@@ -221,5 +236,6 @@ export {
   HiddenField,
   TextAreaField,
   TextField,
+  SelectField,
   Submit,
 }

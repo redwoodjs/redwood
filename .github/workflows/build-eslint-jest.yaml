@@ -1,6 +1,10 @@
 name: Build, Lint, and Test against latest Node 12
 
-on: [push]
+on:
+  push:
+    branches: [master]
+  pull_request:
+    types: [opened, edited, synchronize, reopened] 
 
 jobs:
   build:
