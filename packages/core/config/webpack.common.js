@@ -1,5 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const path = require('path')
+const { existsSync } = require('fs')
 
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -8,6 +9,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 const Dotenv = require('dotenv-webpack')
 const { getConfig, getPaths } = require('@redwoodjs/internal')
+const merge = require('webpack-merge')
 
 const redwoodConfig = getConfig()
 const redwoodPaths = getPaths()
@@ -196,4 +198,19 @@ module.exports = (webpackEnv) => {
         : (info) => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
     },
   }
+}
+
+module.exports['mergeUserWebpackConfig'] = (mode, baseConfig) => {
+  const redwoodPaths = getPaths()
+  const hasCustomConfig = existsSync(redwoodPaths.web.webpack)
+  if (!hasCustomConfig) {
+    return baseConfig
+  }
+  const userWebpackConfig = require(redwoodPaths.web.webpack)
+
+  if (typeof userWebpackConfig === 'function') {
+    return userWebpackConfig(baseConfig, { mode })
+  }
+
+  return merge(baseConfig, userWebpackConfig)
 }

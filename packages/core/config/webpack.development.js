@@ -3,9 +3,11 @@ const escapeRegExp = require('lodash.escaperegexp')
 const { getConfig } = require('@redwoodjs/internal')
 
 const webpackConfig = require('./webpack.common')
+
+const { mergeUserWebpackConfig } = webpackConfig
 const redwoodConfig = getConfig()
 
-module.exports = merge(webpackConfig('development'), {
+const baseConfig = merge(webpackConfig('development'), {
   devServer: {
     // https://webpack.js.org/configuration/dev-server/
     hot: true,
@@ -34,3 +36,5 @@ module.exports = merge(webpackConfig('development'), {
     splitChunks: false,
   },
 })
+
+module.exports = mergeUserWebpackConfig('development', baseConfig)

@@ -5,8 +5,6 @@
 // TODO: Determine what to do different during development, test, and production
 // TODO: Take a look at create-react-app. They've dropped a ton of knowledge.
 
-const { getPaths } = require('@redwoodjs/internal')
-
 const TARGETS_NODE = '12.16.1'
 // https://github.com/zloirock/core-js/blob/master/README.md#babelpreset-env
 // Warning! Recommended to specify used minor core-js version, like corejs: '3.6',
@@ -59,7 +57,7 @@ module.exports = () => ({
           'babel-plugin-module-resolver',
           {
             alias: {
-              src: getPaths().api.src,
+              src: './src',
             },
           },
         ],
@@ -67,11 +65,6 @@ module.exports = () => ({
           'babel-plugin-auto-import',
           {
             declarations: [
-              {
-                // import { db } from '@redwoodjs/api/dist/dbInstance'
-                members: ['db'],
-                path: '@redwoodjs/api/dist/dbInstance',
-              },
               {
                 // import { context } from '@redwoodjs/api'
                 members: ['context'],

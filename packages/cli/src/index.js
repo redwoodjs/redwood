@@ -12,4 +12,11 @@ config({
 })
 
 // eslint-disable-next-line no-unused-expressions
-yargs.commandDir('./commands').demandCommand().argv
+yargs
+  .commandDir('./commands')
+  .scriptName('rw')
+  .example(
+    'yarn rw g page home /',
+    "\"Create a page component named 'Home' at path '/'\""
+  )
+  .demandCommand().argv

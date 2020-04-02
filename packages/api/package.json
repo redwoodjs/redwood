@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/api",
-  "version": "0.2.5",
+  "version": "0.4.0",
   "files": [
     "dist",
     "importAll.macro.js"
@@ -9,8 +9,8 @@
   "types": "./dist/main.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@prisma/client": "2.0.0-preview023",
-    "@redwoodjs/internal": "^0.2.5",
+    "@prisma/client": "2.0.0-preview025",
+    "@redwoodjs/internal": "^0.4.0",
     "apollo-server-lambda": "2.11.0",
     "babel-plugin-macros": "^2.8.0",
     "core-js": "3.6.4",
@@ -19,17 +19,19 @@
     "graphql-iso-date": "^3.6.1",
     "graphql-tools": "4.0.7",
     "lodash.merge": "^4.6.2",
-    "lodash.omitby": "^4.6.0"
+    "lodash.omitby": "^4.6.0",
+    "merge-graphql-schemas": "^1.7.6"
   },
   "devDependencies": {
     "@types/graphql-iso-date": "^3.3.3",
     "@types/lodash.merge": "^4.6.6",
     "@types/lodash.omitby": "^4.6.6",
-    "babel-plugin-tester": "^8.0.1"
+    "babel-plugin-tester": "^9.0.0"
   },
   "jest": {
     "testPathIgnorePatterns": [
-      "/fixtures/"
+      "/fixtures/",
+      "/dist/"
     ]
   },
   "scripts": {

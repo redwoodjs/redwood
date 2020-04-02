@@ -1,6 +1,6 @@
 # Redwood App Configuration
 
-Develompment environment settings can be adjusted using `redwood.toml`.
+Development environment settings can be adjusted using `redwood.toml`.
 
 ## [web]
 

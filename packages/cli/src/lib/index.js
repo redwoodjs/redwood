@@ -11,6 +11,7 @@ import { getPaths as getRedwoodPaths } from '@redwoodjs/internal'
 import execa from 'execa'
 import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
+import { format } from 'prettier'
 
 import c from 'src/lib/colors'
 
@@ -39,7 +40,7 @@ export const getSchema = async (name) => {
     if (model) {
       return model
     } else {
-      throw `No schema definition found for \`${name}\``
+      throw `No schema definition found for \`${name}\` in schema.prisma file`
     }
   }
 
@@ -81,10 +82,28 @@ export const templateRoot = path.resolve(
 export const generateTemplate = (templateFilename, { name, ...rest }) => {
   const templatePath = path.join(templateRoot, templateFilename)
   const template = lodash.template(readFile(templatePath).toString())
-  return template({
+
+  const renderedTemplate = template({
     name,
     ...nameVariants(name),
     ...rest,
+  })
+
+  // We format .js and .css templates, we need to tell prettier which parser
+  // we're using.
+  // https://prettier.io/docs/en/options.html#parser
+  const parser = {
+    css: 'css',
+    js: 'babel',
+  }[path.extname(templateFilename)]
+
+  if (typeof parser === 'undefined') {
+    return renderedTemplate
+  }
+
+  return format(renderedTemplate, {
+    ...prettierOptions(),
+    parser,
   })
 }
 
@@ -121,6 +140,17 @@ export const getPaths = () => {
 }
 
 /**
+ * This returns the config present in `prettier.config.js` of a Redwood project.
+ */
+export const prettierOptions = () => {
+  try {
+    return require(path.join(getPaths().base, 'prettier.config.js'))
+  } catch (e) {
+    return undefined
+  }
+}
+
+/**
  * Creates a list of tasks that write files to the disk.
  *
  * @param files - {[filepath]: contents}
@@ -144,7 +174,7 @@ export const writeFilesTask = (files, options) => {
 export const addRoutesToRouterTask = (routes) => {
   const redwoodPaths = getPaths()
   const routesContent = readFile(redwoodPaths.web.routes).toString()
-  const newRoutesContent = routes.reduce((content, route) => {
+  const newRoutesContent = routes.reverse().reduce((content, route) => {
     if (content.includes(route)) {
       return content
     }
@@ -178,7 +208,9 @@ export const runCommandTask = async (commands, { verbose }) => {
 
   try {
     await tasks.run()
+    return true
   } catch (e) {
     console.log(c.error(e.message))
+    return false
   }
 }

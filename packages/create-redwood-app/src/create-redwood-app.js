@@ -57,6 +57,12 @@ if (!targetDir) {
 }
 
 const newAppDir = path.resolve(process.cwd(), targetDir)
+const appDirExists = fs.existsSync(newAppDir)
+
+if (appDirExists && fs.readdirSync(newAppDir).length > 0) {
+  console.error(`'${newAppDir}' already exists and is not empty.`)
+  process.exit(1)
+}
 
 const createProjectTasks = ({ newAppDir }) => {
   const tmpDownloadPath = tmp.tmpNameSync({
@@ -66,11 +72,8 @@ const createProjectTasks = ({ newAppDir }) => {
 
   return [
     {
-      title: `Creating directory '${newAppDir}'`,
+      title: `${appDirExists ? 'Using' : 'Creating'} directory '${newAppDir}'`,
       task: () => {
-        if (fs.existsSync(newAppDir)) {
-          throw new Error(`'${newAppDir}' already exists.`)
-        }
         fs.mkdirSync(newAppDir, { recursive: true })
       },
     },
@@ -159,7 +162,9 @@ new Listr(
   .then(() => {
     // TODO: show helpful out for next steps.
     console.log()
-    console.log(`Thanks for trying out Redwood! We've created '${newAppDir}'`)
+    console.log(
+      `Thanks for trying out Redwood! We've created your app in '${newAppDir}'`
+    )
     console.log()
     console.log(
       'Inside that directory you can run `yarn rw dev` to start the development server.'
