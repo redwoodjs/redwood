@@ -1,10 +1,12 @@
-import mockrw from '@redwoodjs/test-mocks'
+import MockProject, { DEFAULT_PROJECT_PATH } from '@redwoodjs/test-mocks'
 
 import { processPagesDir } from '../pages'
 
 describe('pages', () => {
+  const mockrw = new MockProject()
+
   beforeEach(() => {
-    mockrw.mockProject()
+    mockrw.mock()
   })
 
   afterAll(() => {
@@ -13,23 +15,22 @@ describe('pages', () => {
 
   describe('processPagesDir', () => {
     it('finds the pages and returns the correct things', () => {
-      const [AboutPage, AdminUsersPage] = processPagesDir(
-        '/path/to/project/web/src/pages'
-      )
+      mockrw.mergePaths(() => ({
+        web: {
+          src: {
+            pages: {
+              HomePage: { 'HomePage.js': '' },
+              AboutPage: { 'AboutPage.js': '' },
+              Admin: { UsersPage: { 'UsersPage.js': '' } },
+            },
+          },
+        },
+      }))
 
-      expect(AboutPage).toEqual({
-        const: 'AboutPage',
-        path: '/path/to/project/web/src/pages/AboutPage',
-        importStatement:
-          "const AboutPage = { name: 'AboutPage', loader: () => import('src/pages/AboutPage') }",
-      })
+      const pages = processPagesDir(`${DEFAULT_PROJECT_PATH}/web/src/pages`)
 
-      expect(AdminUsersPage).toEqual({
-        const: 'AdminUsersPage',
-        importStatement:
-          "const AdminUsersPage = { name: 'AdminUsersPage', loader: () => import('src/pages/Admin/UsersPage') }",
-        path: '/path/to/project/web/src/pages/Admin/UsersPage',
-      })
+      mockrw.restore()
+      expect(pages).toMatchSnapshot()
     })
   })
 })

@@ -1,4 +1,4 @@
-import mockrw from '@redwoodjs/test-mocks'
+import MockProject from '@redwoodjs/test-mocks'
 
 import {
   getConfig,
@@ -8,8 +8,10 @@ import {
 } from '../config'
 
 describe('config', () => {
+  const mockrw = new MockProject()
+
   beforeEach(() => {
-    mockrw.mockProject()
+    mockrw.mock()
   })
 
   afterAll(() => {
@@ -17,18 +19,20 @@ describe('config', () => {
   })
 
   describe('getConfig', () => {
-    it('returns a default config even when `redwood.toml` is empty', () => {
+    it('returns a default config', () => {
       expect(getConfig()).toEqual(DEFAULT_CONFIG)
     })
 
     it('the default config is merged with `redwood.toml`', () => {
-      const toml = `
-      [web]
-        port = 8080
-      [api]
-        port = 8081
-    `
-      mockrw.mockProject(toml)
+      mockrw.setPaths((paths) => {
+        paths['redwood.toml'] = `
+          [web]
+            port = 8080
+          [api]
+            port = 8081
+        `
+        return paths
+      })
       const config = getConfig()
       expect(config.web.port).toEqual(8080)
       expect(config.api.port).toEqual(8081)
@@ -37,48 +41,9 @@ describe('config', () => {
 
   describe('getConfigSides', () => {
     it('returns the config sides', () => {
-      expect(getConfigSides()).toEqual({
-        api: {
-          build: [
-            {
-              command: 'NODE_ENV=production babel src --out-dir dist',
-              destination: './dist',
-              name: 'default',
-              source: './src',
-            },
-          ],
-          host: 'localhost',
-          name: 'api',
-          path: './api',
-          port: 8911,
-          target: 'node',
-        },
-        web: {
-          apiProxyPath: './netlify/functions',
-          apiProxyPort: 8911,
-          build: [
-            {
-              command:
-                'yarn webpack --config ../node_modules/@redwoodjs/core/config/webpack.production.js',
-              destination: './dist',
-              name: 'default',
-              source: './src',
-            },
-            {
-              command:
-                'yarn webpack --config ../node_modules/@redwoodjs/core/config/webpack.stats.js',
-              destination: './dist',
-              name: 'stats',
-              source: './src',
-            },
-          ],
-          host: 'localhost',
-          name: 'web',
-          path: './web',
-          port: 8910,
-          target: 'browser',
-        },
-      })
+      const sides = getConfigSides()
+      mockrw.restore()
+      expect(sides).toMatchSnapshot()
     })
   })
 

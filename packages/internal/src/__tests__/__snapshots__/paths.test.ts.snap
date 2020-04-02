@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`paths getPaths provides defaults based off an empty configuration 1`] = `
+Object {
+  "base": "/mock/project",
+  "sides": Object {
+    "api": Object {
+      "base": "/mock/project/api",
+      "db": "/mock/project/api/prisma",
+      "dbSchema": "/mock/project/api/prisma/schema.prisma",
+      "functions": "/mock/project/api/src/functions",
+      "graphql": "/mock/project/api/src/graphql",
+      "lib": "/mock/project/api/src/lib",
+      "services": "/mock/project/api/src/services",
+      "src": "/mock/project/api/src",
+    },
+    "web": Object {
+      "base": "/mock/project/web",
+      "components": "/mock/project/web/src/components",
+      "config": "/mock/project/web/src/config",
+      "layouts": "/mock/project/web/src/layouts",
+      "pages": "/mock/project/web/src/pages",
+      "routes": "/mock/project/web/src/Routes.js",
+      "src": "/mock/project/web/src",
+    },
+  },
+}
+`;
+
+exports[`paths getSidePaths returns the correct paths for the given side 1`] = `
+Object {
+  "base": "/mock/project/web",
+  "components": "/mock/project/web/src/components",
+  "config": "/mock/project/web/src/config",
+  "layouts": "/mock/project/web/src/layouts",
+  "pages": "/mock/project/web/src/pages",
+  "routes": "/mock/project/web/src/Routes.js",
+  "src": "/mock/project/web/src",
+}
+`;

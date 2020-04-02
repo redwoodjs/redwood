@@ -65,7 +65,7 @@ export const DEFAULT_CONFIG: Config = {
     port: 8910,
     path: './web',
     target: TargetEnum.BROWSER,
-    apiProxyPath: './netlify/functions',
+    apiProxyPath: '/.netlify/functions',
     apiProxyPort: 8911,
     build: [
       {
@@ -97,6 +97,9 @@ export const DEFAULT_CONFIG: Config = {
         destination: './dist',
       },
     ],
+  },
+  browser: {
+    open: true,
   },
 }
 

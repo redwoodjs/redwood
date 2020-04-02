@@ -10,7 +10,7 @@ describe('test-mocks', () => {
   })
 
   it('allows the filesystem to be mutated', () => {
-    mockrw.update((paths) => {
+    mockrw.setPaths((paths) => {
       paths['redwood.toml'] = ''
       return paths
     })
@@ -18,7 +18,7 @@ describe('test-mocks', () => {
   })
 
   it('allows the filesystem to be updated with merge', () => {
-    mockrw.merge(() => {
+    mockrw.mergePaths(() => {
       return {
         'another-file.text': 'hello',
         web: {

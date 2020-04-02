@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`config getConfigSides returns the config sides 1`] = `
+Object {
+  "api": Object {
+    "build": Array [
+      Object {
+        "command": "NODE_ENV=production babel src --out-dir dist",
+        "destination": "./dist",
+        "name": "default",
+        "source": "./src",
+      },
+    ],
+    "host": "localhost",
+    "name": "api",
+    "path": "./api",
+    "port": 8081,
+    "target": "node",
+  },
+  "web": Object {
+    "apiProxyPath": "/.netlify/functions",
+    "apiProxyPort": 8911,
+    "build": Array [
+      Object {
+        "command": "yarn webpack --config ../node_modules/@redwoodjs/core/config/webpack.production.js",
+        "destination": "./dist",
+        "name": "default",
+        "source": "./src",
+      },
+      Object {
+        "command": "yarn webpack --config ../node_modules/@redwoodjs/core/config/webpack.stats.js",
+        "destination": "./dist",
+        "name": "stats",
+        "source": "./src",
+      },
+    ],
+    "host": "localhost",
+    "name": "web",
+    "path": "./web",
+    "port": 8080,
+    "target": "browser",
+  },
+}
+`;

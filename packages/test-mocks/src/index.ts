@@ -2,7 +2,7 @@ import mockfs from 'mock-fs'
 import merge from 'deepmerge'
 import produce from 'immer'
 
-const DEFAULT_PROJECT_PATH = '/mock/project/'
+export const DEFAULT_PROJECT_PATH = '/mock/project/'
 // This is our default `redwood.toml` as defined in our
 // `create-redwood-app` repo.
 const DEFAULT_CONFIG = `
@@ -76,14 +76,14 @@ class MockRedwood {
    * })
    * ```
    */
-  update = (updateFn) => {
+  setPaths = (updateFn) => {
     this.paths = produce(this.paths, (currentPaths) => {
       return updateFn(currentPaths, merge)
     })
     this.mock()
   }
 
-  merge = (mergeFn): void => {
+  mergePaths = (mergeFn): void => {
     const newPaths = mergeFn()
     this.paths = merge(this.paths, newPaths)
     this.mock()
@@ -101,8 +101,3 @@ class MockRedwood {
 }
 
 export default MockRedwood
-// pages: {
-//   HomePage: { 'HomePage.js': '' },
-//   AboutPage: { 'AboutPage.js': '' },
-//   Admin: { UsersPage: { 'UsersPage.js': '' } },
-// }

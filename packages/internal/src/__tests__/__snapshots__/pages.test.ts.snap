@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`pages processPagesDir finds the pages and returns the correct things 1`] = `
+Array [
+  Object {
+    "const": "AboutPage",
+    "importStatement": "const AboutPage = { name: 'AboutPage', loader: () => import('src/pages/AboutPage') }",
+    "path": "/mock/project/web/src/pages/AboutPage",
+  },
+  Object {
+    "const": "AdminUsersPage",
+    "importStatement": "const AdminUsersPage = { name: 'AdminUsersPage', loader: () => import('src/pages/Admin/UsersPage') }",
+    "path": "/mock/project/web/src/pages/Admin/UsersPage",
+  },
+  Object {
+    "const": "HomePage",
+    "importStatement": "const HomePage = { name: 'HomePage', loader: () => import('src/pages/HomePage') }",
+    "path": "/mock/project/web/src/pages/HomePage",
+  },
+]
+`;
