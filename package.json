@@ -35,6 +35,6 @@
     "build:types": "tsc --build --clean && tsc --build",
     "test": "lerna run test --stream -- --colors",
     "lint": "yarn eslint './packages/'",
-    "lint:fix": "yarn lint --fix"
+    "lint:fix": "yarn prettier --write . && yarn lint --fix"
   }
 }

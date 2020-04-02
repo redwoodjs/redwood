@@ -1,9 +1,9 @@
 {
   "references": [
-    {"path": "packages/api"},
-    {"path": "packages/core"},
-    {"path": "packages/dev-server"},
-    {"path": "packages/internal"}
+    { "path": "packages/api" },
+    { "path": "packages/core" },
+    { "path": "packages/dev-server" },
+    { "path": "packages/internal" }
   ],
   "files": []
 }

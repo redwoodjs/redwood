@@ -6,7 +6,5 @@
     "outDir": "dist",
     "rootDir": "src"
   },
-  "references": [
-    {"path": "../internal"}
-  ]
+  "references": [{ "path": "../internal" }]
 }
