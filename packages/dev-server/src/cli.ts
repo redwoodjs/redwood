@@ -5,17 +5,6 @@ import {
   NodeTargetPaths,
 } from '@redwoodjs/internal'
 
-// import { start } from './main'
-
-// const command = yargs
-//   .command(({ side }) => {
-//     // fetch the configuration and paths for the side.
-
-//   })
-//   .option('side', { type: 'string', default: 'api' })
-
-// process.env !== 'test' ? command.argv : command.p
-
 export const getArgsForSide = (
   side: string
 ): { port: number; host: string; functionsPath: string; watchPath: string } => {
@@ -28,4 +17,13 @@ export const getArgsForSide = (
     functionsPath: paths.functions,
     watchPath: paths.base,
   }
+}
+
+const { side } = yargs.option('side', { default: 'api' }).argv
+
+try {
+  const { host, port, functionsPath, watchPath } = getArgsForSide(side)
+} catch (e) {
+  console.error(e.message)
+  process.exit(1)
 }

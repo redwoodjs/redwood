@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`cli getArgsForSide supplies the appropriate options to the dev server 1`] = `
+Object {
+  "functionsPath": "/mock/project/api/src/functions",
+  "host": "localhost",
+  "port": 8911,
+  "watchPath": "/mock/project/api",
+}
+`;
