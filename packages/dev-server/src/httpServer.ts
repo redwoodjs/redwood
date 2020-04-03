@@ -8,16 +8,10 @@ import express from 'express'
 import morgan from 'morgan'
 import bodyParser from 'body-parser'
 import qs from 'qs'
-import args from 'args'
 import requireDir from 'require-dir'
 import chokidar from 'chokidar'
 // @ts-ignore
 import babelRegister from '@babel/register'
-
-const redwoodConfig = getConfig()
-const redwoodPaths = getPaths()
-
-const API_DIR = path.join(redwoodPaths.base, 'api')
 
 babelRegister({
   extends: path.join(API_DIR, '.babelrc.js'),
@@ -27,18 +21,18 @@ babelRegister({
   cache: false,
 })
 
-// TODO: Convert to yargs.
-args
-  .option('side', '', 'api')
-  .option('host', '', redwoodConfig.api.host || 'localhost')
-  .option('port', '', redwoodConfig.api.port)
-  .option(
-    'path',
-    'The path to your lambda functions',
-    redwoodPaths.api.functions
-  )
+// // TODO: Convert to yargs.
+// args
+//   .option('side', '', 'api')
+//   .option('host', '', redwoodConfig.api.host || 'localhost')
+//   .option('port', '', redwoodConfig.api.port)
+//   .option(
+//     'path',
+//     'The path to your lambda functions',
+//     redwoodPaths.api.functions
+//   )
 
-const { host: HOST, port: PORT, path: PATH } = args.parse(process.argv)
+//const { host: HOST, port: PORT, path: PATH } = args.parse(process.argv)
 const HOSTNAME = `http://${HOST}:${PORT}`
 
 // Get the path, port, and host for the "side" from the configuration.
