@@ -8,12 +8,14 @@ import * as down from '../down'
 import * as save from '../save'
 import * as generate from '../generate'
 import * as seed from '../seed'
+import * as introspect from '../introspect'
 
 describe('db commands', () => {
   it('some commands have a verbose flag', () => {
     expect(up.builder.verbose).toBeDefined()
     expect(down.builder.verbose).toBeDefined()
     expect(generate.builder.verbose).toBeDefined()
+    expect(introspect.builder.verbose).toBeDefined()
   })
 
   it('runs the command as expected', async () => {
@@ -40,7 +42,12 @@ describe('db commands', () => {
       'yarn prisma2 generate',
     ])
 
+    await introspect.handler({})
+    expect(runCommandTask.mock.results[5].value).toEqual([
+      'yarn prisma2 introspect',
+    ])
+
     await seed.handler({})
-    expect(runCommandTask.mock.results[5].value).toEqual(['node seeds.js'])
+    expect(runCommandTask.mock.results[6].value).toEqual(['node seeds.js'])
   })
 })
