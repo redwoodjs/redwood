@@ -46,7 +46,7 @@ describe('db commands', () => {
 
     await fix.handler({})
     expect(runCommandTask.mock.results[6].value).toEqual([
-      'yarn prisma2 migrate fix --experimental',
+      'yarn prisma migrate fix --experimental',
     ])
   })
 })
