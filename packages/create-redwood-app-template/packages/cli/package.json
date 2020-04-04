@@ -38,7 +38,9 @@
     "clean": "rm -rf dist",
     "prepublishOnly": "yarn clean && yarn build",
     "test": "jest",
-    "test:watch": "yarn test --watch"
+    "test:watch": "yarn test --watch",
+    "lint": "yarn eslint './src/'",
+    "lint:fix": "yarn eslint --fix './src/'"
   },
   "gitHead": "2801c132f40263f9fcfbdac8b1750d2e423eb649"
 }

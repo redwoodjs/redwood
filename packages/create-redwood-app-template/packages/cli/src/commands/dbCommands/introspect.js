@@ -16,8 +16,8 @@ export const handler = async ({ verbose = true }) => {
         opts: { cwd: getPaths().api.db },
       },
     ],
-    { 
-      verbose
+    {
+      verbose,
     }
   )
 }
