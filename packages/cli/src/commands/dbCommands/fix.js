@@ -10,7 +10,7 @@ export const handler = async ({ verbose = true }) => {
     [
       {
         title: 'Fix Prisma migration conflicts...',
-        cmd: 'yarn prisma2',
+        cmd: 'yarn prisma',
         args: ['migrate fix', '--experimental'],
       },
     ],
