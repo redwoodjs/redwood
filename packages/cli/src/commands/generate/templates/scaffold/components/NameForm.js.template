@@ -23,7 +23,7 @@ const ${singularPascalName}Form = (props) => {
   }
 
   return (
-    <div className="text-sm -mt-4">
+    <div className="box-border text-sm -mt-4">
       <Form onSubmit={onSubmit} error={props.error}>
         <FormError
           error={props.error}
