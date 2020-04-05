@@ -49,9 +49,17 @@ export const routes = ({ name, path }) => {
   ]
 }
 
-export const command = 'page <name> [path]'
+export const command = 'page <name> [router-path]'
 export const desc = 'Generates a page component.'
-export const builder = { force: { type: 'boolean', default: false } }
+export const builder = {
+  'router-path': {
+    type: 'string',
+    required: false,
+    description:
+      'The path used to reference this page in the router: `/about-us`, `/home`, etc...',
+  },
+  force: { type: 'boolean', default: false },
+}
 
 export const handler = async ({ name, path, force }) => {
   path = path ?? `/${paramCase(name)}`
