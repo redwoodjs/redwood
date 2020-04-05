@@ -42,6 +42,18 @@ As you make changes to a package (in this example `packages/cli`), you'll need t
 yarn build:watch
 ```
 
+You'd think you could just go over to your sandbox app and run your `cli` command, like:
+
+```
+yarn redwood generate scaffold MyModel
+```
+
+Unfortunately thanks to a long-standing [issue](https://github.com/yarnpkg/yarn/issues/3587) in Yarn, the bin files that are generated are not executable. You can fix that before running your command like so:
+
+```
+chmod +x node_modules/.bin/redwood && yarn redwood generate scaffold MyModel
+```
+
 ### Unlinking Packages
 
 Lastly, to reverse the process and remove the links, work backwords using `yarn unlink`. Starting first from the local redwood sandbox app root

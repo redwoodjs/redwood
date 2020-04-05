@@ -19,9 +19,9 @@ A typicall generator writes files.
 
 ## Templates
 
-Templates for the files created by generators go in `src/commands/Generate/templates` and should be named after the command that invokes your generator. The files inside should end in `.template` to avoid being compiled by Babel.
+Templates for the files created by generators go in `src/commands/generate/templates` and should be named after the command that invokes your generator. The files inside should end in `.template` to avoid being compiled by Babel.
 
-    src/commands/Generate/
+    src/commands/generate/
     ├── generators
     │   ├── component.js
     │   └── page.js

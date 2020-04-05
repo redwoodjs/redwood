@@ -1,17 +1,14 @@
-import React from 'react';
-import { fireEvent, cleanup } from '@testing-library/react'
+import { render, cleanup } from '@testing-library/react'
 
-import ${pascalName} from './'
+import ${pascalName} from './${pascalName}'
 
 describe('${pascalName}', () => {
-
   afterEach(() => {
     cleanup()
   })
-
-  it('this test will fail', () => {
-    const component = renderComponent(<${pascalName} />)
-    component.debug();
-    expect(true).toBe(false)
+  it('renders successfully', () => {
+    expect(() => {
+      render(<${pascalName} />)
+    }).not.toThrow()
   })
 })

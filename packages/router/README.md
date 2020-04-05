@@ -2,7 +2,7 @@
 
 This is the built-in router for Redwood apps. It takes inspiration from Ruby on Rails, React Router, and Reach Router, but is very opinionated in its own way.
 
-WARNING: This software is in alpha and should not be considered suitable for production use. In the "make it work; make it right; make it fast" paradigm, RR is in the later stages of the "make it work" phase.
+> WARNING: This software is in alpha and should not be considered suitable for production use. In the "make it work; make it right; make it fast" paradigm, RR is in the later stages of the "make it work" phase.
 
 Redwood Router (RR from now on) is designed to list all routes in a single file, without any nesting. We prefer this design, as it makes it very easy to track which routes map to which pages.
 
@@ -194,7 +194,7 @@ Because lazily-loaded pages can take a non-negligible amount of time to load (de
 
 import { usePageLoadingContext } from '@redwoodjs/router'
 
-const SomeLayout = () => {
+const SomeLayout = (props) => {
   const { loading } = usePageLoadingContext()
   return (
     <div>

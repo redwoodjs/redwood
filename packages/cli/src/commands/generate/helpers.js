@@ -2,9 +2,9 @@ import path from 'path'
 
 import Listr from 'listr'
 import pascalcase from 'pascalcase'
-import pluralize from 'pluralize'
 
 import { generateTemplate, getPaths, writeFilesTask } from 'src/lib'
+import c from 'src/lib/colors'
 
 /**
  * Reduces boilerplate for generating an output path and content to write to disk
@@ -17,15 +17,19 @@ export const templateForComponentFile = ({
   suffix = '',
   extension = '.js',
   webPathSection,
+  apiPathSection,
   templatePath,
   templateVars,
+  componentName,
 }) => {
-  const basePath = getPaths().web[webPathSection]
-  const componentName = pascalcase(pluralize.singular(name)) + suffix
+  const basePath = webPathSection
+    ? getPaths().web[webPathSection]
+    : getPaths().api[apiPathSection]
+  const outputComponentName = componentName || pascalcase(name) + suffix
   const outputPath = path.join(
     basePath,
-    componentName,
-    componentName + extension
+    outputComponentName,
+    outputComponentName + extension
   )
   const content = generateTemplate(templatePath, {
     name,
@@ -59,13 +63,13 @@ export const createYargsForComponentGeneration = ({
             },
           },
         ],
-        { collapse: false }
+        { collapse: false, exitOnError: true }
       )
 
       try {
         await tasks.run()
       } catch (e) {
-        // do nothing
+        console.log(c.error(e.message))
       }
     },
   }

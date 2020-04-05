@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/cli",
   "description": "The Redwood Command Line",
-  "version": "0.0.1-alpha.28",
+  "version": "0.4.0",
   "license": "MIT",
   "bin": {
     "redwood": "./dist/index.js",
@@ -11,33 +11,34 @@
     "dist"
   ],
   "dependencies": {
-    "@prisma/sdk": "0.0.103",
-    "@redwoodjs/internal": "^0.0.1-alpha.28",
-    "@types/react": "^16.9.19",
+    "@prisma/sdk": "^2.0.0-preview025",
+    "@redwoodjs/internal": "^0.4.0",
     "camelcase": "^5.3.1",
     "chalk": "^3.0.0",
     "concurrently": "^5.1.0",
     "core-js": "3.6.4",
+    "dotenv-defaults": "^1.1.1",
+    "envinfo": "^7.5.0",
     "execa": "^4.0.0",
     "listr": "^0.14.3",
     "listr-verbose-renderer": "^0.6.0",
     "lodash": "^4.17.15",
-    "param-case": "^3.0.2",
+    "param-case": "^3.0.3",
     "pascalcase": "^1.0.0",
     "pluralize": "^8.0.0",
-    "react": "16.12.0",
-    "yargs": "^15.1.0"
+    "prettier": "^2.0.2",
+    "yargs": "^15.3.1"
   },
   "devDependencies": {
-    "@types/node-fetch": "^2.5.4"
+    "@types/node-fetch": "^2.5.5"
   },
   "scripts": {
-    "build": "yarn clean && babel src --out-dir dist && rm -rf ./dist/commands/Generate/templates && cp -r ./src/commands/Generate/templates ./dist/commands/Generate/templates",
+    "build": "yarn clean && yarn babel src --out-dir dist && cp -r ./src/commands/generate/templates/. ./dist/commands/generate/templates",
     "build:watch": "nodemon --ignore dist --exec 'yarn build'",
     "clean": "rm -rf dist",
     "prepublishOnly": "yarn clean && yarn build",
     "test": "jest",
     "test:watch": "yarn test --watch"
   },
-  "gitHead": "e7f45aaa32d8d33799c04f8169b0b0125bcaaece"
+  "gitHead": "2801c132f40263f9fcfbdac8b1750d2e423eb649"
 }

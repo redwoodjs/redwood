@@ -10,6 +10,8 @@ const CONFIG_FILE_NAME = 'redwood.toml'
 const PATH_API_DIR_FUNCTIONS = 'api/src/functions'
 const PATH_API_DIR_GRAPHQL = 'api/src/graphql'
 const PATH_API_DIR_DB = 'api/prisma'
+const PATH_API_DIR_DB_SCHEMA = 'api/prisma/schema.prisma'
+const PATH_API_DIR_CONFIG = 'api/src/config'
 const PATH_API_DIR_SERVICES = 'api/src/services'
 const PATH_API_DIR_SRC = 'api/src'
 const PATH_WEB_ROUTES = 'web/src/Routes.js'
@@ -17,6 +19,7 @@ const PATH_WEB_DIR_LAYOUTS = 'web/src/layouts/'
 const PATH_WEB_DIR_PAGES = 'web/src/pages/'
 const PATH_WEB_DIR_COMPONENTS = 'web/src/components'
 const PATH_WEB_DIR_SRC = 'web/src'
+const PATH_WEB_DIR_CONFIG = 'web/config/webpack.config.js'
 
 /**
  * Search the parent directories for the Redwood configuration file.
@@ -46,8 +49,10 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
     base: BASE_DIR,
     api: {
       db: path.join(BASE_DIR, PATH_API_DIR_DB),
+      dbSchema: path.join(BASE_DIR, PATH_API_DIR_DB_SCHEMA),
       functions: path.join(BASE_DIR, PATH_API_DIR_FUNCTIONS),
       graphql: path.join(BASE_DIR, PATH_API_DIR_GRAPHQL),
+      config: path.join(BASE_DIR, PATH_API_DIR_CONFIG),
       services: path.join(BASE_DIR, PATH_API_DIR_SERVICES),
       src: path.join(BASE_DIR, PATH_API_DIR_SRC),
     },
@@ -57,6 +62,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       components: path.join(BASE_DIR, PATH_WEB_DIR_COMPONENTS),
       layouts: path.join(BASE_DIR, PATH_WEB_DIR_LAYOUTS),
       src: path.join(BASE_DIR, PATH_WEB_DIR_SRC),
+      webpack: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG),
     },
   }
 }
@@ -85,7 +91,8 @@ export const processPagesDir = (
         // onto the deps array.
         const basename = path.posix.basename(entry.name, '.js')
         const importName = prefix.join() + basename
-        const importFile = path.join('src', 'pages', ...prefix, basename)
+        // `src/pages/<PageName>`
+        const importFile = ['src', 'pages', ...prefix, basename].join('/')
         deps.push({
           const: importName,
           path: path.join(webPagesDir, entry.name),

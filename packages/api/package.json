@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/api",
-  "version": "0.0.1-alpha.28",
+  "version": "0.4.0",
   "files": [
     "dist",
     "importAll.macro.js"
@@ -9,37 +9,40 @@
   "types": "./dist/main.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@redwoodjs/internal": "^0.0.1-alpha.28",
-    "apollo-server-lambda": "2.9.16",
+    "@prisma/client": "2.0.0-preview025",
+    "@redwoodjs/internal": "^0.4.0",
+    "apollo-server-lambda": "2.11.0",
     "babel-plugin-macros": "^2.8.0",
     "core-js": "3.6.4",
     "glob": "^7.1.6",
     "graphql": "^14.6.0",
     "graphql-iso-date": "^3.6.1",
-    "graphql-tools": "4.0.6",
+    "graphql-tools": "4.0.7",
     "lodash.merge": "^4.6.2",
-    "lodash.omitby": "^4.6.0"
+    "lodash.omitby": "^4.6.0",
+    "merge-graphql-schemas": "^1.7.6"
   },
   "devDependencies": {
     "@types/graphql-iso-date": "^3.3.3",
     "@types/lodash.merge": "^4.6.6",
     "@types/lodash.omitby": "^4.6.6",
-    "babel-plugin-tester": "^8.0.1"
+    "babel-plugin-tester": "^9.0.0"
   },
   "jest": {
     "testPathIgnorePatterns": [
-      "/fixtures/"
+      "/fixtures/",
+      "/dist/"
     ]
   },
   "scripts": {
     "build": "yarn clean && yarn build:js && yarn build:types && mv dist/importAll.macro.js .",
     "build:js": "babel src --out-dir dist --extensions \".js,.ts\" --source-maps inline",
     "build:types": "tsc --declaration --emitDeclarationOnly",
-    "build:watch": "nodemon --watch src --ignore dist --exec 'yarn build'",
+    "build:watch": "nodemon --watch src -e ts,js --ignore dist --exec 'yarn build'",
     "prepublish": "yarn build",
     "test": "yarn jest",
     "test:watch": "yarn test --watch",
     "clean": "rm -rf dist && rm -rf importAll.macro.js"
   },
-  "gitHead": "e7f45aaa32d8d33799c04f8169b0b0125bcaaece"
+  "gitHead": "2801c132f40263f9fcfbdac8b1750d2e423eb649"
 }

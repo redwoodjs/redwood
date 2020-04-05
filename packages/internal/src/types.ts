@@ -1,9 +1,11 @@
 export type Config = {
   web: {
+    host: string
     port: number
     apiProxyPath: string
   }
   api: {
+    host: string
     port: number
   }
   browser: {
@@ -19,9 +21,12 @@ export type Paths = {
     components: string
     layouts: string
     src: string
+    webpack: string
   }
   api: {
+    config: string
     db: string
+    dbSchema: string
     functions: string
     graphql: string
     services: string

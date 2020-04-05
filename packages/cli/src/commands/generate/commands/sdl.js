@@ -6,12 +6,17 @@ import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 
 import { generateTemplate, getSchema, getPaths, writeFilesTask } from 'src/lib'
+import c from 'src/lib/colors'
 
 import { files as serviceFiles } from './service'
 
 const IGNORE_FIELDS = ['id', 'createdAt']
 
-const modelFieldToSDL = (field, required = true) => {
+const modelFieldToSDL = (field, required = true, types = {}) => {
+  if (Object.entries(types).length) {
+    field.type =
+      field.kind === 'object' ? idType(types[field.type]) : field.type
+  }
   return `${field.name}: ${field.type}${
     field.isRequired && required ? '!' : ''
   }`
@@ -21,16 +26,16 @@ const querySDL = (model) => {
   return model.fields.map((field) => modelFieldToSDL(field))
 }
 
-const inputSDL = (model) => {
+const inputSDL = (model, types = {}) => {
   return model.fields
     .filter((field) => {
       return IGNORE_FIELDS.indexOf(field.name) === -1
     })
-    .map((field) => modelFieldToSDL(field, false))
+    .map((field) => modelFieldToSDL(field, false, types))
 }
 
 const idType = (model) => {
-  const idField = model.fields.find((field) => field.name === 'id')
+  const idField = model.fields.find((field) => field.isId)
   if (!idField) {
     throw new Error('Cannot generate SDL without an `id` database column')
   }
@@ -41,14 +46,26 @@ const sdlFromSchemaModel = async (name) => {
   const model = await getSchema(name)
 
   if (model) {
+    // get models for user-defined types referenced
+    const types = (
+      await Promise.all(
+        model.fields
+          .filter((field) => field.kind === 'object')
+          .map(async (field) => {
+            const model = await getSchema(field.type)
+            return model
+          })
+      )
+    ).reduce((acc, cur) => ({ ...acc, [cur.name]: cur }), {})
+
     return {
       query: querySDL(model).join('\n    '),
-      input: inputSDL(model).join('\n    '),
+      input: inputSDL(model, types).join('\n    '),
       idType: idType(model),
     }
   } else {
     throw new Error(
-      `No model schema definition found for \`${name}"\`, check \`schema.prisma\``
+      `"${name}" model not found, check if it exists in "./api/prisma/schema.prisma"`
     )
   }
 }
@@ -60,7 +77,7 @@ export const files = async ({ name, crud }) => {
 
   const template = generateTemplate(path.join('sdl', 'sdl.js.template'), {
     name,
-    isCrud: crud,
+    crud,
     query,
     input,
     idType,
@@ -99,12 +116,12 @@ export const handler = async ({ model, crud, services, force }) => {
         },
       },
     ].filter(Boolean),
-    { collapse: false }
+    { collapse: false, exitOnError: true }
   )
 
   try {
     await tasks.run()
   } catch (e) {
-    // do nothing.
+    console.log(c.error(e.message))
   }
 }

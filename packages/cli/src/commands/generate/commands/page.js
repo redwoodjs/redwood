@@ -4,22 +4,41 @@ import pascalcase from 'pascalcase'
 import { paramCase } from 'param-case'
 
 import { writeFilesTask, addRoutesToRouterTask } from 'src/lib'
+import c from 'src/lib/colors'
 
 import { templateForComponentFile } from '../helpers'
 
 const COMPONENT_SUFFIX = 'Page'
 const REDWOOD_WEB_PATH_NAME = 'pages'
-const TEMPLATE_PATH = 'page/page.js.template'
 
 export const files = ({ name, ...rest }) => {
-  const [outputPath, template] = templateForComponentFile({
+  const pageFile = templateForComponentFile({
     name,
     suffix: COMPONENT_SUFFIX,
     webPathSection: REDWOOD_WEB_PATH_NAME,
-    templatePath: TEMPLATE_PATH,
+    templatePath: 'page/page.js.template',
     templateVars: rest,
   })
-  return { [outputPath]: template }
+  const testFile = templateForComponentFile({
+    name,
+    suffix: COMPONENT_SUFFIX,
+    extension: '.test.js',
+    webPathSection: REDWOOD_WEB_PATH_NAME,
+    templatePath: 'page/test.js.template',
+    templateVars: rest,
+  })
+
+  // Returns
+  // {
+  //    "path/to/fileA": "<<<template>>>",
+  //    "path/to/fileB": "<<<template>>>",
+  // }
+  return [pageFile, testFile].reduce((acc, [outputPath, content]) => {
+    return {
+      [outputPath]: content,
+      ...acc,
+    }
+  }, {})
 }
 
 export const routes = ({ name, path }) => {
@@ -58,6 +77,6 @@ export const handler = async ({ name, path, force }) => {
   try {
     await tasks.run()
   } catch (e) {
-    // do nothing.
+    console.log(c.error(e.message))
   }
 }

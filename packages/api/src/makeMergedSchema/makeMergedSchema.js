@@ -1,4 +1,8 @@
-import { mergeSchemas, addResolveFunctionsToSchema } from 'apollo-server-lambda'
+import {
+  addResolveFunctionsToSchema,
+  makeExecutableSchema,
+} from 'apollo-server-lambda'
+import { mergeTypes } from 'merge-graphql-schemas'
 import merge from 'lodash.merge'
 import omitBy from 'lodash.omitby'
 
@@ -21,8 +25,8 @@ const mapFieldsToService = ({
         ...resolvers,
         // Map the arguments from GraphQL to an ordinary function a service would
         // expect.
-        [name]: (root, args, context) =>
-          services[name](args, { root, context }),
+        [name]: (root, args, context, info) =>
+          services[name](args, { root, context, info }),
       }
     }
 
@@ -39,19 +43,39 @@ const mergeResolversWithServices = ({ schema, resolvers, services }) => {
     {},
     ...Object.keys(services).map((name) => services[name])
   )
+
+  // Get a list of types that have fields.
+  // TODO: Figure out if this would interfere with other types: Interface types, etc.`
+  const typesWithFields = Object.keys(schema.getTypeMap())
+    .filter((name) => !name.startsWith('_'))
+    .filter((name) => typeof schema.getType(name).getFields !== 'undefined')
+    .map((name) => {
+      return schema.getType(name)
+    })
+
+  const mappedResolvers = typesWithFields.reduce((acc, type) => {
+    // Services export Query and Mutation field resolvers as named
+    // exports, but other GraphQLObjectTypes are exported as an object
+    // named after the type.
+    let servicesForType = mergedServices
+    if (!['Query', 'Mutation'].includes(type.name)) {
+      servicesForType = mergedServices?.[type.name]
+    }
+
+    return {
+      ...acc,
+      [type.name]: mapFieldsToService({
+        fields: type.getFields(),
+        resolvers: resolvers?.[type.name],
+        services: servicesForType,
+      }),
+    }
+  }, {})
+
   return omitBy(
     {
       ...resolvers,
-      Query: mapFieldsToService({
-        fields: schema.getType('Query')?.getFields(),
-        resolvers: resolvers?.Query,
-        services: mergedServices,
-      }),
-      Mutation: mapFieldsToService({
-        fields: schema.getType('Mutation')?.getFields(),
-        resolvers: resolvers?.Mutation,
-        services: mergedServices,
-      }),
+      ...mappedResolvers,
     },
     (v) => typeof v === 'undefined'
   )
@@ -83,12 +107,15 @@ const mergeResolvers = (schemas) =>
  * })
  * ```
  */
-export const makeMergedSchema = ({ schemas, services }) => {
-  const schema = mergeSchemas({
-    schemas: [
-      rootSchema.schema,
-      ...Object.values(schemas).map(({ schema }) => schema),
-    ],
+export const makeMergedSchema = ({ schemas, services, schemaDirectives }) => {
+  const typeDefs = mergeTypes(
+    [rootSchema.schema, ...Object.values(schemas).map(({ schema }) => schema)],
+    { all: true }
+  )
+
+  const schema = makeExecutableSchema({
+    typeDefs,
+    schemaDirectives,
   })
 
   const resolvers = mergeResolversWithServices({

@@ -19,13 +19,15 @@ module.exports = {
     'jsx-a11y',
     'react',
     'react-hooks',
+    'jest-dom',
     '@redwoodjs/redwood',
   ],
-  ignorePatterns: ['node_modules'],
+  ignorePatterns: ['node_modules', 'dist'],
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:prettier/recommended',
+    'plugin:jest-dom/recommended',
     'prettier/react',
   ],
   overrides: [
@@ -44,10 +46,21 @@ module.exports = {
         '@redwoodjs/redwood/no-unavailable-pages': 'error',
       },
     },
+    {
+      files: ['api/src/**'],
+      globals: {
+        db: 'readonly',
+        context: 'readonly',
+      },
+    },
   ],
   settings: {
+    // This is used to support our `import/order` configuration.
     'import/resolver': {
-      'babel-module': {},
+      'eslint-import-resolver-babel-module': {},
+    },
+    react: {
+      version: 'detect',
     },
   },
   env: {
@@ -96,7 +109,7 @@ module.exports = {
     ],
     // React rules
     'react/prop-types': [
-      'error',
+      'warn',
       {
         skipUndeclared: true,
         ignore: ['style', 'children', 'className', 'theme'],

@@ -5,28 +5,33 @@
     "packages/*"
   ],
   "devDependencies": {
-    "@babel/cli": "^7.8.3",
-    "@babel/core": "^7.8.3",
-    "@babel/node": "^7.8.3",
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/node": "^7.8.7",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
-    "@babel/plugin-transform-runtime": "^7.8.3",
-    "@babel/runtime-corejs3": "^7.8.4",
-    "@babel/preset-env": "^7.8.4",
-    "@babel/preset-react": "^7.8.3",
-    "@babel/preset-typescript": "^7.8.3",
+    "@babel/plugin-transform-runtime": "^7.9.0",
+    "@babel/preset-env": "^7.9.0",
+    "@babel/preset-react": "^7.9.4",
+    "@babel/preset-typescript": "^7.9.0",
+    "@babel/runtime-corejs3": "^7.9.2",
+    "babel-plugin-auto-import": "^1.0.5",
     "babel-plugin-module-resolver": "^4.0.0",
-    "jest": "^25.1.0",
+    "jest": "^25.2.3",
     "lerna": "^3.20.2",
     "nodemon": "^2.0.2",
-    "typescript": "^3.7.5"
+    "typescript": "^3.8.3"
   },
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config"
   },
+  "eslintIgnore": [
+    "dist",
+    "packages/api/importAll.macro.js"
+  ],
   "scripts": {
-    "build": "lerna run build",
-    "test": "lerna run test -- --colors",
-    "lint": "yarn eslint 'packages/*/src/**/*.js'",
-    "lint:fix": "yarn eslint --fix 'packages/*/src/**/*.js'"
+    "build": "NODE_ENV=production lerna run build",
+    "test": "lerna run test --stream -- --colors",
+    "lint": "yarn eslint './packages/'",
+    "lint:fix": "yarn eslint --fix './packages/'"
   }
 }

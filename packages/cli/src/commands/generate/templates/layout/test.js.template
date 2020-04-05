@@ -1,0 +1,14 @@
+import { render, cleanup } from '@testing-library/react'
+
+import ${pascalName}Layout from './${pascalName}Layout'
+
+describe('${pascalName}Layout', () => {
+  afterEach(() => {
+    cleanup()
+  })
+  it('renders successfully', () => {
+    expect(() => {
+      render(<${pascalName}Layout />)
+    }).not.toThrow()
+  })
+})

@@ -1,18 +1,14 @@
 # Releases
 
-We use Lerna to release packages because it automatically figures out what's changed in our packages since the last release and keeps cross project dependencies in sync.
+To publish a new version of Redwood to NPM run the following commands:
 
-  yarn lerna version --force-publish
-  yarn lerna publish from-package
+```bash
+yarn lerna version --force-publish
+yarn lerna publish from-package
+```
 
-Will change the versions of **all the packages**, even if they haven't been updated, and publish them
-to npm.
+The changes the version of **all the packages** (even those that haven't changed) and publishes it to NPM.
 
 ## Troubleshooting
 
-If `yarn lerna publish` has failed use the `yarn lerna publish from-package` command to publish the packages that aren't already in the registry.
-
-## Resources
-
-- https://github.com/lerna/lerna#readme
-- https://www.christopherbiscardi.com/post/multi-package-repos-with-lerna/#but-why
+If something went wrong you can use `yarn lerna publish from-package` to publish the packages that aren't already in the registry.

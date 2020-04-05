@@ -5,13 +5,17 @@ export const desc = 'Create a new migration.'
 export const builder = {
   verbose: { type: 'boolean', default: true, alias: ['v'] },
 }
-export const handler = async ({ name, verbose }) => {
+export const handler = async ({ name, verbose = true }) => {
   await runCommandTask(
     [
       {
         title: 'Creating database migration...',
-        cmd: 'prisma2',
-        args: ['migrate save', `--name ${name}`, '--experimental'],
+        cmd: 'yarn prisma2',
+        args: [
+          'migrate save',
+          name && `--name ${name}`,
+          '--experimental',
+        ].filter(Boolean),
       },
     ],
     {

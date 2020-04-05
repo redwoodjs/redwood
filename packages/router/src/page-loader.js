@@ -6,7 +6,7 @@ export const PageLoadingContext = createNamedContext('PageLoading')
 
 export const usePageLoadingContext = () => useContext(PageLoadingContext)
 
-export class PageLoader extends React.Component {
+export class PageLoader extends React.PureComponent {
   state = {
     Page: undefined,
     pageName: undefined,
@@ -41,6 +41,7 @@ export class PageLoader extends React.Component {
       delay
     )
 
+    // Wait to download and parse the page.
     const module = await loader()
 
     // Remove the timeout because the page has loaded.
@@ -50,6 +51,7 @@ export class PageLoader extends React.Component {
       pageName: name,
       Page: module.default,
       slowModuleImport: false,
+      params: this.props.params,
     })
   }
 
@@ -60,7 +62,7 @@ export class PageLoader extends React.Component {
         <PageLoadingContext.Provider
           value={{ loading: this.state.slowModuleImport }}
         >
-          <Page {...this.props.params} />
+          <Page {...this.state.params} />
         </PageLoadingContext.Provider>
       )
     } else {

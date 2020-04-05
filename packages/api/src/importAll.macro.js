@@ -45,8 +45,12 @@ function importAll({ referencePath, state, babel }) {
   const cwd = path.dirname(filename)
   const globPattern = getGlobPattern(referencePath, cwd)
 
-  // Grab a list of the files
-  const importSources = glob.sync(globPattern, { cwd, ignore: './**/*.test.*' })
+  // Grab a list of the `js` and `ts` files in the specified directory.
+  // Remove `.test.{js|ts}` files from matched patterns, `ignore` in glob
+  // doesn't appear to be working correctly:https://github.com/isaacs/node-glob/issues/309
+  const importSources = glob
+    .sync(globPattern, { cwd })
+    .filter((path) => !path.match(/\.(test\.js|stories\.js)$/))
 
   const { importNodes, objectProperties } = importSources.reduce(
     (all, source) => {

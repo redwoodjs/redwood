@@ -15,10 +15,12 @@ const DEFAULT_MESSAGES = {
 // any errors on it
 
 const inputTagProps = (props) => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { errors, setError } = useFormContext()
 
   // Check for errors from server and set on field if present
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const fieldErrorsContext = useContext(FieldErrorContext)
   const contextError = fieldErrorsContext[props.name]
   if (contextError) {
@@ -49,7 +51,7 @@ const FieldErrorContext = React.createContext()
 // Big error message at the top of the page explaining everything that's wrong
 // with the form fields in this form
 
-const RedwoodFormError = ({
+const FormError = ({
   error,
   wrapperClassName,
   wrapperStyle,
@@ -107,7 +109,7 @@ const RedwoodFormError = ({
 
 // Renders a containing <form> tag with required contexts
 
-const RedwoodForm = (props) => {
+const Form = (props) => {
   // deconstruct some props we care about and keep the remaining `formProps` to
   // pass to the <form> tag
   const {
@@ -140,7 +142,7 @@ const Label = (props) => {
 
   return (
     <label htmlFor={props.name} {...tagProps}>
-      {props.text || props.name}
+      {props.children || props.name}
     </label>
   )
 }
@@ -205,24 +207,35 @@ const TextField = (props) => {
   )
 }
 
-// Renders a <button type="submit">
+// Renders a <select> field
 
-const Submit = (props) => {
+const SelectField = (props) => {
+  const { register } = useFormContext()
+  const tagProps = inputTagProps(props)
+
   return (
-    <button {...props} type="submit">
-      {props.children}
-    </button>
+    <select
+      {...tagProps}
+      id={props.id || props.name}
+      ref={register(props.validation || { required: false })}
+    />
   )
 }
 
+// Renders a <button type="submit">
+const Submit = React.forwardRef((props, ref) => (
+  <button ref={ref} type="submit" {...props} />
+))
+
 export {
-  RedwoodForm,
+  Form,
   FieldErrorContext,
-  RedwoodFormError,
+  FormError,
   FieldError,
   Label,
   HiddenField,
   TextAreaField,
   TextField,
+  SelectField,
   Submit,
 }

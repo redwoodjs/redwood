@@ -5,9 +5,7 @@
 // TODO: Determine what to do different during development, test, and production
 // TODO: Take a look at create-react-app. They've dropped a ton of knowledge.
 
-const { getPaths } = require('@redwoodjs/internal')
-
-const TARGETS_NODE = '8.10.0'
+const TARGETS_NODE = '12.16.1'
 // https://github.com/zloirock/core-js/blob/master/README.md#babelpreset-env
 // Warning! Recommended to specify used minor core-js version, like corejs: '3.6',
 // instead of corejs: 3, since with corejs: 3 will not be injected modules which
@@ -59,8 +57,24 @@ module.exports = () => ({
           'babel-plugin-module-resolver',
           {
             alias: {
-              src: getPaths().api.src,
+              src: './src',
             },
+          },
+        ],
+        [
+          'babel-plugin-auto-import',
+          {
+            declarations: [
+              {
+                // import { context } from '@redwoodjs/api'
+                members: ['context'],
+                path: '@redwoodjs/api',
+              },
+              {
+                default: 'gql',
+                path: 'graphql-tag',
+              },
+            ],
           },
         ],
       ],
@@ -88,6 +102,28 @@ module.exports = () => ({
             alias: {
               src: './src',
             },
+          },
+        ],
+        [
+          'babel-plugin-auto-import',
+          {
+            declarations: [
+              {
+                // import { React } from 'react'
+                default: 'React',
+                path: 'react',
+              },
+              {
+                // import { PropTypes } from 'prop-types'
+                default: 'PropTypes',
+                path: 'prop-types',
+              },
+              {
+                // import gql from 'graphql-tag'
+                default: 'gql',
+                path: 'graphql-tag',
+              },
+            ],
           },
         ],
       ],

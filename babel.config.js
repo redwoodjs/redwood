@@ -61,15 +61,33 @@ module.exports = {
             targets: {
               browsers: TARGETS_BROWSERS,
             },
-            modules: false,
+          },
+        ],
+      ],
+      plugins: [
+        [
+          'babel-plugin-auto-import',
+          {
+            declarations: [
+              {
+                // import { React } from 'react'
+                default: 'React',
+                path: 'react',
+              },
+              {
+                // import { PropTypes } from 'prop-types'
+                default: 'PropTypes',
+                path: 'prop-types',
+              },
+            ],
           },
         ],
       ],
     },
   ],
-  // Only build test files when testing
+  // Do not build tests or mocks in production.
   ignore:
-    process.env.NODE_ENV === 'test'
-      ? []
-      : [/\.test\.(js|ts)/, '**/__tests__', '**/__mocks__'],
+    process.env.NODE_ENV === 'production'
+      ? [/\.test\.(js|ts)/, '**/__tests__', '**/__mocks__']
+      : [],
 }

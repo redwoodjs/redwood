@@ -1,6 +1,6 @@
 import { processPagesDir } from '@redwoodjs/internal'
 
-export default function(source) {
+export default function (source) {
   // Process the dir to find all Page dependencies.
   const deps = processPagesDir()
 

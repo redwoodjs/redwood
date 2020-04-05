@@ -8,17 +8,22 @@
 
 import fs from 'fs'
 import path from 'path'
-import { spawn } from 'child_process'
 
-import React, { useState, useRef, useEffect } from 'react'
-import tmp from 'tmp'
 import decompress from 'decompress'
 import axios from 'axios'
-import { render, Box, Text, Color } from 'ink'
-import parse from 'yargs-parser'
+import Listr from 'listr'
+import execa from 'execa'
+import tmp from 'tmp'
+import checkNodeVersion from 'check-node-version'
+import chalk from 'chalk'
 
 const RELEASE_URL =
   'https://api.github.com/repos/redwoodjs/create-redwood-app/releases'
+
+const latestReleaseZipFile = async () => {
+  const response = await axios.get(RELEASE_URL)
+  return response.data[0].zipball_url
+}
 
 const downloadFile = async (sourceUrl, targetFile) => {
   const writer = fs.createWriteStream(targetFile)
@@ -33,117 +38,140 @@ const downloadFile = async (sourceUrl, targetFile) => {
   })
 }
 
-const unzip = async (path, targetDir) =>
-  await decompress(path, targetDir, { strip: 1 })
-
-// Gets the latest releases' zip file from GitHub's API.
-const latestReleaseZipFile = async () => {
-  const response = await axios.get(RELEASE_URL)
-  return response.data[0].zipball_url
-}
-
-// turns command line args like:
-//
-//   generate sdl contact--force
-//
-// into:
-//
-//   [['generate', 'sdl', 'contact'], { force: true }]
-export const parseArgs = () => {
-  const parsed = parse(process.argv.slice(2))
-  const { _: positional, ...flags } = parsed
-
-  return [positional, flags]
-}
-
-export const CreateNewApp = ({ args }) => {
-  const targetDir = args?.[0]?.[0]
-  const [messages, setMessages] = useState([])
-  // TODO: Rewrite this to just use a component. Testing these hooks are impossible.
-  // Swimming against the tide: https://overreacted.io/a-complete-guide-to-useeffect/#swimming-against-the-tide
-  const latestMessages = useRef(messages)
-  const setNewMessage = (newMessage) => {
-    latestMessages.current = [...latestMessages.current, newMessage]
-    setMessages(latestMessages.current)
-  }
-
-  useEffect(() => {
-    const createApp = async () => {
-      // Attempt to create the new project directory, but abort if it already exists.
-      const newAppDir = path.resolve(process.cwd(), targetDir)
-      if (fs.existsSync(newAppDir)) {
-        setNewMessage(
-          <Color red>
-            We can't continue because "{newAppDir}" already exists
-          </Color>
-        )
-        return
-      } else {
-        fs.mkdirSync(newAppDir, { recursive: true })
-        setNewMessage(
-          <Text>
-            Created <Color green>{newAppDir}</Color>
-          </Text>
-        )
-      }
-
-      // Download the latest release of `create-redwood-app` from GitHub.
-      const tmpDownloadPath = tmp.tmpNameSync({
-        prefix: 'redwood',
-        postfix: '.zip',
-      })
-      const realeaseUrl = await latestReleaseZipFile()
-      setNewMessage(
-        <Text>
-          Downloading <Color green>{realeaseUrl}</Color>...
-        </Text>
-      )
-      await downloadFile(realeaseUrl, tmpDownloadPath)
-
-      // Extract the contents of the downloaded release into our new project directory.
-      setNewMessage(<Text>Extracting...</Text>)
-      const files = await unzip(tmpDownloadPath, newAppDir)
-      setNewMessage(
-        <Text>
-          Extracted {files.length} files in <Color green>{newAppDir}</Color>
-        </Text>
-      )
-
-      // Run `yarn install`
-      setNewMessage(<Text>Installing packages...</Text>)
-      const child = spawn(`yarn install --cwd ${targetDir}`, {
-        shell: true,
-      })
-      child.stdout.on('data', (data) => {
-        setNewMessage(<Text>{data.toString().replace('\n', '')}</Text>)
-      })
-      child.stderr.on('data', (data) => {
-        setNewMessage(<Text>{data.toString().replace('\n', '')}</Text>)
-      })
-    }
-
-    if (targetDir) {
-      createApp()
-    }
-  }, [targetDir])
-
-  if (!targetDir) {
-    return (
-      <Color red>Usage `yarn create redwood-app ./path/to/new-project`</Color>
-    )
-  }
-
-  return (
-    <Box flexDirection="column">
-      {messages.map((message, index) => (
-        <Box key={'message' + index}>
-          <Text>{message}</Text>
-        </Box>
-      ))}
-    </Box>
+const targetDir = String(process.argv.slice(2)).replace(/,/g, '-')
+if (!targetDir) {
+  console.error('Please specify the project directory')
+  console.log(
+    `  ${chalk.cyan('yarn create redwood-app')} ${chalk.green(
+      '<project-directory>'
+    )}`
   )
+  console.log()
+  console.log('For example:')
+  console.log(
+    `  ${chalk.cyan('yarn create redwood-app')} ${chalk.green(
+      'my-redwood-app'
+    )}`
+  )
+  process.exit(1)
 }
 
-if (process.env.NODE_ENV !== 'test') {
-  render(<CreateNewApp args={parseArgs()} />)
+const newAppDir = path.resolve(process.cwd(), targetDir)
+const appDirExists = fs.existsSync(newAppDir)
+
+if (appDirExists && fs.readdirSync(newAppDir).length > 0) {
+  console.error(`'${newAppDir}' already exists and is not empty.`)
+  process.exit(1)
 }
+
+const createProjectTasks = ({ newAppDir }) => {
+  const tmpDownloadPath = tmp.tmpNameSync({
+    prefix: 'redwood',
+    postfix: '.zip',
+  })
+
+  return [
+    {
+      title: `${appDirExists ? 'Using' : 'Creating'} directory '${newAppDir}'`,
+      task: () => {
+        fs.mkdirSync(newAppDir, { recursive: true })
+      },
+    },
+    {
+      title: 'Downloading latest release',
+      task: async () => {
+        const url = await latestReleaseZipFile()
+        return downloadFile(url, tmpDownloadPath)
+      },
+    },
+    {
+      title: 'Extracting latest release',
+      task: () => decompress(tmpDownloadPath, newAppDir, { strip: 1 }),
+    },
+    {
+      title: 'Clean up',
+      task: () => {
+        try {
+          fs.unlinkSync(path.join(newAppDir, 'README.md'))
+          fs.renameSync(
+            path.join(newAppDir, 'README_APP.md'),
+            path.join(newAppDir, 'README.md')
+          )
+
+          fs.unlinkSync(path.join(newAppDir, '.gitignore'))
+          fs.renameSync(
+            path.join(newAppDir, '.gitignore.app'),
+            path.join(newAppDir, '.gitignore')
+          )
+        } catch (e) {
+          throw new Error('Could not move project files')
+        }
+      },
+    },
+  ]
+}
+
+const installNodeModulesTasks = ({ newAppDir }) => {
+  return [
+    {
+      title: 'Checking node and yarn compatibility',
+      task: () => {
+        return new Promise((resolve, reject) => {
+          const { engines } = require(path.join(newAppDir, 'package.json'))
+
+          checkNodeVersion(engines, (_error, result) => {
+            if (result.isSatisfied) {
+              return resolve()
+            }
+
+            const errors = Object.keys(result.versions).map((name) => {
+              const { version, wanted } = result.versions[name]
+              return `${name} ${wanted} required, but you have ${version}.`
+            })
+            return reject(new Error(errors.join('\n')))
+          })
+        })
+      },
+    },
+    {
+      title: 'Running `yarn install`... (This could take a while)',
+      task: () => {
+        return execa('yarn install', {
+          shell: true,
+          cwd: newAppDir,
+        })
+      },
+    },
+  ]
+}
+
+new Listr(
+  [
+    {
+      title: 'Creating Redwood app',
+      task: () => new Listr(createProjectTasks({ newAppDir })),
+    },
+    {
+      title: 'Installing packages',
+      task: () => new Listr(installNodeModulesTasks({ newAppDir })),
+    },
+  ],
+  { collapse: false, exitOnError: true }
+)
+  .run()
+  .then(() => {
+    // TODO: show helpful out for next steps.
+    console.log()
+    console.log(
+      `Thanks for trying out Redwood! We've created your app in '${newAppDir}'`
+    )
+    console.log()
+    console.log(
+      'Inside that directory you can run `yarn rw dev` to start the development server.'
+    )
+  })
+  .catch((e) => {
+    console.log()
+    console.log(e)
+    process.exit(1)
+  })

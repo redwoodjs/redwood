@@ -17,8 +17,10 @@ import {
   writeFilesTask,
   addRoutesToRouterTask,
 } from 'src/lib'
+import c from 'src/lib/colors'
 
 import { files as sdlFiles } from './sdl'
+import { files as serviceFiles } from './service'
 
 const NON_EDITABLE_COLUMNS = ['id', 'createdAt', 'updatedAt']
 const ASSETS = fs.readdirSync(path.join(templateRoot, 'scaffold', 'assets'))
@@ -27,14 +29,18 @@ const PAGES = fs.readdirSync(path.join(templateRoot, 'scaffold', 'pages'))
 const COMPONENTS = fs.readdirSync(
   path.join(templateRoot, 'scaffold', 'components')
 )
+const SCAFFOLD_STYLE_PATH = './scaffold.css'
+// Any assets that should not trigger an overwrite error and require a --force
+const SKIPPABLE_ASSETS = ['scaffold.css']
 
 const getIdType = (model) => {
-  return model.fields.find((field) => field.name === 'id')?.type
+  return model.fields.find((field) => field.isId)?.type
 }
 
 export const files = async ({ model: name }) => {
   return {
-    ...(await sdlFiles({ name, crud: true, services: true })),
+    ...(await sdlFiles({ name, crud: true })),
+    ...(await serviceFiles({ name, crud: true })),
     ...assetFiles(name),
     ...layoutFiles(name),
     ...pageFiles(name),
@@ -48,10 +54,20 @@ const assetFiles = (name) => {
   ASSETS.forEach((asset) => {
     const outputAssetName = asset.replace(/\.template/, '')
     const outputPath = path.join(getPaths().web.src, outputAssetName)
-    const template = generateTemplate(path.join('scaffold', 'assets', asset), {
-      name,
-    })
-    fileList[outputPath] = template
+
+    // skip assets that already exist on disk, never worry about overwriting
+    if (
+      !SKIPPABLE_ASSETS.includes(path.basename(outputPath)) ||
+      !fs.existsSync(outputPath)
+    ) {
+      const template = generateTemplate(
+        path.join('scaffold', 'assets', asset),
+        {
+          name,
+        }
+      )
+      fileList[outputPath] = template
+    }
   })
 
   return fileList
@@ -146,16 +162,18 @@ const componentFiles = async (name) => {
 }
 
 // add routes for all pages
-const routes = ({ model: name }) => {
+const routes = async ({ model: name }) => {
   const singularPascalName = pascalcase(pluralize.singular(name))
   const pluralPascalName = pascalcase(pluralize(name))
   const singularCamelName = camelcase(singularPascalName)
   const pluralCamelName = camelcase(pluralPascalName)
+  const model = await getSchema(singularPascalName)
+  const idRouteParam = getIdType(model) === 'Int' ? ':Int' : ''
 
   return [
-    `<Route path="/${pluralCamelName}/{id:Int}/edit" page={Edit${singularPascalName}Page} name="edit${singularPascalName}" />`,
     `<Route path="/${pluralCamelName}/new" page={New${singularPascalName}Page} name="new${singularPascalName}" />`,
-    `<Route path="/${pluralCamelName}/{id:Int}" page={${singularPascalName}Page} name="${singularCamelName}" />`,
+    `<Route path="/${pluralCamelName}/{id${idRouteParam}}/edit" page={Edit${singularPascalName}Page} name="edit${singularPascalName}" />`,
+    `<Route path="/${pluralCamelName}/{id${idRouteParam}}" page={${singularPascalName}Page} name="${singularCamelName}" />`,
     `<Route path="/${pluralCamelName}" page={${pluralPascalName}Page} name="${pluralCamelName}" />`,
   ]
 }
@@ -164,11 +182,14 @@ const addScaffoldImport = () => {
   const indexJsPath = path.join(getPaths().web.src, 'index.js')
   let indexJsContents = readFile(indexJsPath).toString()
 
+  if (indexJsContents.match(SCAFFOLD_STYLE_PATH)) {
+    return 'Skipping scaffold style include'
+  }
+
   indexJsContents = indexJsContents.replace(
     "import Routes from 'src/Routes'\n",
-    "import Routes from 'src/Routes'\n\nimport './scaffold.css'"
+    `import Routes from 'src/Routes'\n\nimport '${SCAFFOLD_STYLE_PATH}'`
   )
-
   writeFile(indexJsPath, indexJsContents, { overwriteExisting: true })
 
   return 'Added scaffold import to index.js'
@@ -192,7 +213,7 @@ export const handler = async ({ model, force }) => {
       {
         title: 'Adding scaffold routes...',
         task: async () => {
-          return addRoutesToRouterTask(routes({ model }))
+          return addRoutesToRouterTask(await routes({ model }))
         },
       },
       {
@@ -200,11 +221,11 @@ export const handler = async ({ model, force }) => {
         task: () => addScaffoldImport(),
       },
     ],
-    { collapse: false }
+    { collapse: false, exitOnError: true }
   )
   try {
     await tasks.run()
   } catch (e) {
-    // do nothing
+    console.log(c.error(e.message))
   }
 }
