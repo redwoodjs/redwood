@@ -19,4 +19,5 @@ yargs
     'yarn rw g page home /',
     "\"Create a page component named 'Home' at path '/'\""
   )
-  .demandCommand().argv
+  .demandCommand()
+  .strict().argv
