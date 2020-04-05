@@ -28,7 +28,7 @@ const ${singularPascalName}Form = (props) => {
         <FormError
           error={props.error}
           wrapperClassName="p-4 bg-red-100 text-red-700 border border-red-300 rounded mt-4 mb-4"
-          titleClassName="font-semibold"
+          titleClassName="mt-0 font-semibold"
           listClassName="mt-2 list-disc list-inside"
         />
 <% editableColumns.forEach(column => { %>

@@ -72,6 +72,7 @@
 .rw-scaffold .mx-2{margin-left:.5rem;margin-right:.5rem}
 .rw-scaffold .my-4{margin-top:1rem;margin-bottom:1rem}
 .rw-scaffold .mx-4{margin-left:1rem;margin-right:1rem}
+.rw-scaffold .mt-0{margin-top:0}
 .rw-scaffold .mt-1{margin-top:.25rem}
 .rw-scaffold .ml-1{margin-left:.25rem}
 .rw-scaffold .mt-2{margin-top:.5rem}
