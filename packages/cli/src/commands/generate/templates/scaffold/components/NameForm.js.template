@@ -27,7 +27,7 @@ const ${singularPascalName}Form = (props) => {
       <Form onSubmit={onSubmit} error={props.error}>
         <FormError
           error={props.error}
-          wrapperClassName="p-4 bg-red-100 text-red-700 border border-red-300 rounded mb-4"
+          wrapperClassName="p-4 bg-red-100 text-red-700 border border-red-300 rounded mt-4 mb-4"
           titleClassName="font-semibold"
           listClassName="mt-2 list-disc list-inside"
         />
