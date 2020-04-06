@@ -7,6 +7,7 @@ import {
 
 import { server, setLambdaFunctions } from './http'
 import { watchFunctions } from './watchFunctions'
+import { requestHandler } from './awsLambdaRequestHandler'
 
 export const getArgsForSide = (
   side: string
@@ -25,11 +26,12 @@ const { side } = yargs.option('side', { default: 'api' }).argv
 
 try {
   const { host, port, paths } = getArgsForSide(side)
-  server().listen(port, () => {
+  server({ requestHandler }).listen(port, () => {
     console.log(`Running at 'http://${host}:${port}'`)
     console.log(`Watching files in '${paths.functions}'`)
     watchFunctions({
       paths,
+
       onChange: (_event, _path) => {
         process.stdout.write('Reloading... ')
       },

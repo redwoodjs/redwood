@@ -3,8 +3,6 @@ import express from 'express'
 import morgan from 'morgan'
 import bodyParser from 'body-parser'
 
-import { requestHandler } from './awsLambdaRequestHandler'
-
 export interface Lambdas {
   [path: string]: any
 }
@@ -13,7 +11,11 @@ export const setLambdaFunctions = (functions: Lambdas): void => {
   LAMBDA_FUNCTIONS = functions
 }
 
-export const server = (): any => {
+export const server = ({
+  requestHandler,
+}: {
+  requestHandler: (req: Request, res: Response, lambdaFunction: any) => void
+}): any => {
   const app = express()
   app.use(
     bodyParser.text({
