@@ -4,6 +4,8 @@
 
 // TODO: Determine what to do different during development, test, and production
 // TODO: Take a look at create-react-app. They've dropped a ton of knowledge.
+// FIXME: When you are developing `@redwoodjs/dev-server` you're required to
+// supply absolute paths to babel-plugin-module-resolver.
 
 const TARGETS_NODE = '12.16.1'
 // https://github.com/zloirock/core-js/blob/master/README.md#babelpreset-env
@@ -96,14 +98,6 @@ module.exports = () => ({
         ],
       ],
       plugins: [
-        [
-          'babel-plugin-module-resolver',
-          {
-            alias: {
-              src: './src',
-            },
-          },
-        ],
         [
           'babel-plugin-auto-import',
           {
