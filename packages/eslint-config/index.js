@@ -13,7 +13,7 @@
 module.exports = {
   parser: 'babel-eslint',
   plugins: [
-    'prettier',
+    // 'prettier',
     'babel',
     'import',
     'jsx-a11y',
