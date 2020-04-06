@@ -31,7 +31,7 @@ export const handler = async ({ app = ['db', 'api', 'web'] }) => {
       command: `cd ${path.join(
         BASE_DIR,
         'api'
-      )} && yarn prisma2 generate --watch`,
+      )} && yarn prisma generate --watch`,
       prefixColor: 'magenta',
     },
     web: {
