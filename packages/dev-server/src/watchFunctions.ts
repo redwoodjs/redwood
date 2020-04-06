@@ -31,9 +31,11 @@ export const importFreshFunctions = (functionsPath: string): Functions => {
 
 export const watchFunctions = ({
   paths,
+  onChange,
   onImport,
 }: {
   paths: NodeTargetPaths
+  onChange: (event: string, path: string) => void
   onImport: (functions: Functions) => void
 }): void => {
   // Use babel-register to add a require hook:
@@ -42,7 +44,6 @@ export const watchFunctions = ({
   //
   // This will use the `.babelrc.js` configuration file in the base directory
   // of the project.
-  console.log(path.join(paths.base, '.babelrc.js'))
   babelRequireHook({
     extends: path.join(paths.base, '.babelrc.js'),
     extensions: ['.js', '.ts'],
@@ -60,7 +61,8 @@ export const watchFunctions = ({
       WATCHER_IGNORE_EXTENSIONS.some((ext) => file.endsWith(ext)),
   })
   watcher.on('ready', () => {
-    watcher.on('all', () => {
+    watcher.on('all', (event, path) => {
+      onChange(event, path)
       const functions = importFreshFunctions(paths.functions)
       onImport(functions)
     })
