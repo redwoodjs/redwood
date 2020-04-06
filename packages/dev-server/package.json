@@ -2,7 +2,7 @@
   "name": "@redwoodjs/dev-server",
   "version": "0.3.2",
   "bin": {
-    "dev-server": "./dist/main.js"
+    "dev-server": "./dist/cli.js"
   },
   "files": [
     "dist"
@@ -32,6 +32,7 @@
   "scripts": {
     "build": "yarn clean && yarn build:js",
     "build:js": "babel src --out-dir dist --extensions \".ts\" --source-maps inline",
+    "build:watch": "nodemon --watch src -e ts,js --ignore dist --exec 'yarn build'",
     "prepublish": "yarn build",
     "clean": "rm -rf dist",
     "test": "jest",
