@@ -23,11 +23,7 @@ const modelFieldToSDL = (field, required = true, types = {}) => {
 }
 
 const querySDL = (model) => {
-  return model.fields
-    .filter((field) => {
-      return field.kind !== 'object'
-    })
-    .map((field) => modelFieldToSDL(field))
+  return model.fields.map((field) => modelFieldToSDL(field))
 }
 
 const inputSDL = (model, types = {}) => {
