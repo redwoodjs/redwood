@@ -20,6 +20,7 @@
     "jest": "^25.2.3",
     "lerna": "^3.20.2",
     "nodemon": "^2.0.2",
+    "patch-package": "^6.2.2",
     "typescript": "^3.8.3"
   },
   "eslintConfig": {
@@ -30,6 +31,7 @@
     "packages/api/importAll.macro.js"
   ],
   "scripts": {
+    "postinstall": "patch-package",
     "build": "yarn cross-env NODE_ENV=production lerna run build",
     "test": "lerna run test --stream -- --colors",
     "lint": "yarn eslint packages",

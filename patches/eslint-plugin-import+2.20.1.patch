@@ -1,0 +1,33 @@
+diff --git a/node_modules/eslint-plugin-import/lib/rules/order.js b/node_modules/eslint-plugin-import/lib/rules/order.js
+index a891ea0..b44fa7b 100644
+--- a/node_modules/eslint-plugin-import/lib/rules/order.js
++++ b/node_modules/eslint-plugin-import/lib/rules/order.js
+@@ -113,7 +113,7 @@ function findEndOfLineWithComments(sourceCode, node) {
+   let endOfTokens = tokensToEndOfLine.length > 0 ? tokensToEndOfLine[tokensToEndOfLine.length - 1].range[1] : node.range[1];
+   let result = endOfTokens;
+   for (let i = endOfTokens; i < sourceCode.text.length; i++) {
+-    if (sourceCode.text[i] === '\n') {
++    if (sourceCode.text[i] === require('os').EOL) {
+       result = i + 1;
+       break;
+     }
+@@ -193,8 +193,8 @@ function fixOutOfOrder(context, firstNode, secondNode, order) {
+   const canFix = canReorderItems(firstRoot, secondRoot);
+ 
+   let newCode = sourceCode.text.substring(secondRootStart, secondRootEnd);
+-  if (newCode[newCode.length - 1] !== '\n') {
+-    newCode = newCode + '\n';
++  if (newCode[newCode.length - 1] !== require('os').EOL) {
++    newCode = newCode + require('os').EOL;
+   }
+ 
+   const message = '`' + secondNode.name + '` import should occur ' + order + ' import of `' + firstNode.name + '`';
+@@ -425,7 +425,7 @@ function fixNewLineAfterImport(context, previousImport) {
+   if (tokensToEndOfLine.length > 0) {
+     endOfLine = tokensToEndOfLine[tokensToEndOfLine.length - 1].range[1];
+   }
+-  return fixer => fixer.insertTextAfterRange([prevRoot.range[0], endOfLine], '\n');
++  return fixer => fixer.insertTextAfterRange([prevRoot.range[0], endOfLine], require('os').EOL);
+ }
+ 
+ function removeNewLineAfterImport(context, currentImport, previousImport) {
