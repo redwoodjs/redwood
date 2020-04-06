@@ -10,7 +10,7 @@ import c from 'src/lib/colors'
 
 import { files as serviceFiles } from './service'
 
-const IGNORE_FIELDS = ['id', 'createdAt']
+const IGNORE_FIELDS_FOR_INPUT = ['id', 'createdAt']
 
 const modelFieldToSDL = (field, required = true, types = {}) => {
   if (Object.entries(types).length) {
@@ -29,7 +29,10 @@ const querySDL = (model) => {
 const inputSDL = (model, types = {}) => {
   return model.fields
     .filter((field) => {
-      return IGNORE_FIELDS.indexOf(field.name) === -1
+      return (
+        IGNORE_FIELDS_FOR_INPUT.indexOf(field.name) === -1 &&
+        field.kind !== 'object'
+      )
     })
     .map((field) => modelFieldToSDL(field, false, types))
 }
