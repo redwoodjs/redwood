@@ -28,10 +28,7 @@
     "@types/require-dir": "^1.0.0"
   },
   "scripts": {
-    "build": "yarn clean && yarn build:js",
-    "build:js": "babel src --out-dir dist --extensions \".ts\" --source-maps inline",
-    "prepublish": "yarn build",
-    "clean": "rm -rf dist"
+    "build": "yarn cross-env NODE_ENV=production babel src -d dist --delete-dir-on-start --extensions \".ts\" --source-maps inline"
   },
   "gitHead": "2801c132f40263f9fcfbdac8b1750d2e423eb649"
 }
