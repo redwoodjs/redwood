@@ -13,7 +13,7 @@ import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import { format } from 'prettier'
 
-import c from 'src/lib/colors'
+import c from './colors'
 
 export const asyncForEach = async (array, callback) => {
   for (let index = 0; index < array.length; index++) {
@@ -134,7 +134,7 @@ export const getPaths = () => {
   try {
     return getRedwoodPaths()
   } catch (e) {
-    console.log(c.error(e.message))
+    console.error(c.error(e.message))
     process.exit(0)
   }
 }

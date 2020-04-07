@@ -162,7 +162,7 @@ const componentFiles = async (name) => {
 }
 
 // add routes for all pages
-const routes = async ({ model: name }) => {
+export const routes = async ({ model: name }) => {
   const singularPascalName = pascalcase(pluralize.singular(name))
   const pluralPascalName = pascalcase(pluralize(name))
   const singularCamelName = camelcase(singularPascalName)
