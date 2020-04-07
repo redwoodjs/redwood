@@ -1,0 +1,36 @@
+datasource hammerDatasource {
+  provider = "sqlite"
+  url = env("DB_HOST")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-1.0.x"]
+}
+
+// Define your own models here and run yarn db:save to create
+// migrations for them.
+
+model Post {
+  id Int @id @default(autoincrement())
+  title String
+  slug String @unique
+  author String
+  body String
+  image String?
+  tags Tag[]
+  postedAt DateTime?
+}
+
+model Tag {
+  id Int @id @default(autoincrement())
+  name String @unique
+  posts Post[]
+}
+
+model User {
+  id Int @id @default(autoincrement())
+  name String?
+  email String @unique
+  isAdmin Boolean @default(false)
+}

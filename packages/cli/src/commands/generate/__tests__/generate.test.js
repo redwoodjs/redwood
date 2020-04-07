@@ -2,9 +2,11 @@ import * as cell from '../commands/cell'
 import * as component from '../commands/component'
 import * as layout from '../commands/layout'
 import * as page from '../commands/page'
+import * as scaffold from '../commands/scaffold'
 import * as sdl from '../commands/sdl'
 import * as service from '../commands/service'
 
+global.__dirname = __dirname
 jest.mock('@redwoodjs/internal', () => {
   const path = require('path')
   return {
@@ -14,11 +16,13 @@ jest.mock('@redwoodjs/internal', () => {
       return {
         base: BASE_PATH,
         api: {
+          db: path.join(global.__dirname, 'fixtures'), // this folder
           src: path.join(BASE_PATH, './api/src'),
           services: path.join(BASE_PATH, './api/src/services'),
           graphql: path.join(BASE_PATH, './api/src/graphql'),
         },
         web: {
+          src: path.join(BASE_PATH, './web/src'),
           routes: path.join(BASE_PATH, 'web/src/Routes.js'),
           components: path.join(BASE_PATH, '/web/src/components'),
           layouts: path.join(BASE_PATH, '/web/src/layouts'),
@@ -56,11 +60,26 @@ describe('generate', () => {
     })
   })
 
-  // describe('sdl', () => {
-  //   it('files', () => {
-  //     expect(sdl.files({ name: 'User', crud: true })).toMatchSnapshot()
-  //   })
-  // })
+  describe('scaffold', () => {
+    it('files', async (done) => {
+      const files = await scaffold.files({ model: 'Post' })
+      expect(files).toMatchSnapshot()
+      done()
+    })
+
+    it('routes', async (done) => {
+      expect(await scaffold.routes({ model: 'Post' })).toMatchSnapshot()
+      done()
+    })
+  })
+
+  describe('sdl', () => {
+    it('files', async (done) => {
+      const files = await sdl.files({ name: 'Post', crud: true })
+      expect(files).toMatchSnapshot()
+      done()
+    })
+  })
 
   describe('services', () => {
     it('files', async (done) => {
