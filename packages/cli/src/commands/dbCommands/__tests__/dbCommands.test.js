@@ -1,4 +1,4 @@
-import * as lib from 'src/lib'
+import { runCommandTask } from 'src/lib'
 
 import * as up from '../up'
 import * as down from '../down'
@@ -6,15 +6,22 @@ import * as save from '../save'
 import * as generate from '../generate'
 import * as seed from '../seed'
 
+jest.mock('src/lib', () => {
+  return {
+    ...require.requireActual('src/lib'),
+    runCommandTask: jest.fn((commands) => {
+      return commands.map(({ cmd, args }) => `${cmd} ${args.join(' ')}`)
+    }),
+    getPaths: () => ({
+      api: {},
+      web: {},
+    }),
+  }
+})
+
 describe('db commands', () => {
   afterAll(() => {
     jest.clearAllMocks()
-  })
-
-  beforeAll(() => {
-    lib.runCommandTask = jest.fn((commands) => {
-      return commands.map(({ cmd, args }) => `${cmd} ${args.join(' ')}`)
-    })
   })
 
   it('some commands have a verbose flag', () => {
@@ -24,8 +31,6 @@ describe('db commands', () => {
   })
 
   it('runs the command as expected', async () => {
-    const { runCommandTask } = lib
-
     await up.handler({ dbClient: true })
     expect(runCommandTask.mock.results[0].value).toEqual([
       'yarn prisma migrate up --experimental --create-db',
