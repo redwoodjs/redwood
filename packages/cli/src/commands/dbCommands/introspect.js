@@ -1,7 +1,7 @@
 import { getPaths, runCommandTask } from 'src/lib'
 
 export const command = 'introspect'
-export const desc = 'Introspect your database.'
+export const desc = 'Introspect your database and generate the models in api/prisma/schema.prisma (overwrites existing models).'
 export const builder = {
   verbose: { type: 'boolean', default: true, alias: ['v'] },
 }
