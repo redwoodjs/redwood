@@ -12,7 +12,8 @@ export const files = async ({ name, ...rest }) => {
     name,
     componentName: componentName,
     apiPathSection: 'services',
-    templatePath: 'service/service.js.template',
+    generator: 'service',
+    templatePath: 'service.js.template',
     templateVars: { ...rest },
   })
   const testFile = templateForComponentFile({
@@ -20,7 +21,8 @@ export const files = async ({ name, ...rest }) => {
     componentName: componentName,
     extension: '.test.js',
     apiPathSection: 'services',
-    templatePath: 'service/test.js.template',
+    generator: 'service',
+    templatePath: 'test.js.template',
     templateVars: { ...rest },
   })
 

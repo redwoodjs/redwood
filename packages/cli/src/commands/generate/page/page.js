@@ -16,7 +16,8 @@ export const files = ({ name, ...rest }) => {
     name,
     suffix: COMPONENT_SUFFIX,
     webPathSection: REDWOOD_WEB_PATH_NAME,
-    templatePath: 'page/page.js.template',
+    generator: 'page',
+    templatePath: 'page.js.template',
     templateVars: rest,
   })
   const testFile = templateForComponentFile({
@@ -24,7 +25,8 @@ export const files = ({ name, ...rest }) => {
     suffix: COMPONENT_SUFFIX,
     extension: '.test.js',
     webPathSection: REDWOOD_WEB_PATH_NAME,
-    templatePath: 'page/test.js.template',
+    generator: 'page',
+    templatePath: 'test.js.template',
     templateVars: rest,
   })
 

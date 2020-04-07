@@ -11,14 +11,16 @@ export const files = ({ name }) => {
     name,
     suffix: COMPONENT_SUFFIX,
     webPathSection: REDWOOD_WEB_PATH_NAME,
-    templatePath: 'layout/layout.js.template',
+    generator: 'layout',
+    templatePath: 'layout.js.template',
   })
   const testFile = templateForComponentFile({
     name,
     suffix: COMPONENT_SUFFIX,
     extension: '.test.js',
     webPathSection: REDWOOD_WEB_PATH_NAME,
-    templatePath: 'layout/test.js.template',
+    generator: 'layout',
+    templatePath: 'test.js.template',
   })
 
   // Returns
