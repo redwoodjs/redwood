@@ -81,50 +81,8 @@ describe('generate', () => {
   describe('sdl', () => {
     it('files', async (done) => {
       const files = await sdl.files({ name: 'Post', crud: true })
-
-      expect(Object.keys(files)).toMatchInlineSnapshot(`
-        Array [
-          "/path/to/project/api/src/graphql/posts.sdl.js",
-        ]
-      `)
-
-      expect(files).toMatchInlineSnapshot(`
-        Object {
-          "/path/to/project/api/src/graphql/posts.sdl.js": "export const schema = gql\`
-          type Post {
-            id: Int!
-            title: String!
-            slug: String!
-            author: String!
-            body: String!
-            image: String
-            tags: Tag
-            postedAt: DateTime
-          }
-
-          type Query {
-            posts: [Post]
-            post(id: Int!): Post
-          }
-
-          input PostInput {
-            title: String
-            slug: String
-            author: String
-            body: String
-            image: String
-            postedAt: DateTime
-          }
-
-          type Mutation {
-            createPost(input: PostInput!): Post
-            updatePost(id: Int!, input: PostInput!): Post
-            deletePost(id: Int!): Post
-          }
-        \`
-        ",
-        }
-      `)
+      expect(Object.keys(files)).toMatchSnapshot()
+      expect(files).toMatchSnapshot()
       done()
     })
   })
@@ -132,49 +90,7 @@ describe('generate', () => {
   describe('services', () => {
     it('files', async (done) => {
       const files = await service.files({ name: 'User', crud: true })
-      expect(files).toMatchInlineSnapshot(`
-        Object {
-          "/path/to/project/api/src/services/users/users.js": "import { db } from 'src/lib/db'
-
-        export const users = () => {
-          return db.user.findMany()
-        }
-
-        export const user = ({ id }) => {
-          return db.user.findOne({
-            where: { id },
-          })
-        }
-
-        export const createUser = ({ input }) => {
-          return db.user.create({
-            data: input,
-          })
-        }
-
-        export const updateUser = ({ id, input }) => {
-          return db.user.update({
-            data: input,
-            where: { id },
-          })
-        }
-
-        export const deleteUser = ({ id }) => {
-          return db.user.delete({
-            where: { id },
-          })
-        }
-        ",
-          "/path/to/project/api/src/services/users/users.test.js": "import { users } from './users'
-
-        describe('users', () => {
-          it('returns true', () => {
-            expect(true).toBe(true)
-          })
-        })
-        ",
-        }
-      `)
+      expect(files).toMatchSnapshot()
       done()
     })
   })
