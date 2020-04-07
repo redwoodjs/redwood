@@ -30,7 +30,7 @@ export const handler = async ({ verbose = true, force = true }) => {
     [
       {
         title: 'Generating the Prisma client...',
-        cmd: 'yarn prisma2',
+        cmd: 'yarn prisma',
         args: ['generate'],
       },
     ],

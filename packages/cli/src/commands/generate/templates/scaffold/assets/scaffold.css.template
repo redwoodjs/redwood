@@ -72,10 +72,12 @@
 .rw-scaffold .mx-2{margin-left:.5rem;margin-right:.5rem}
 .rw-scaffold .my-4{margin-top:1rem;margin-bottom:1rem}
 .rw-scaffold .mx-4{margin-left:1rem;margin-right:1rem}
+.rw-scaffold .mt-0{margin-top:0}
 .rw-scaffold .mt-1{margin-top:.25rem}
 .rw-scaffold .ml-1{margin-left:.25rem}
 .rw-scaffold .mt-2{margin-top:.5rem}
 .rw-scaffold .ml-2{margin-left:.5rem}
+.rw-scaffold .mt-4{margin-top:1rem}
 .rw-scaffold .mb-4{margin-bottom:1rem}
 .rw-scaffold .mt-6{margin-top:1.5rem}
 .rw-scaffold .mt-8{margin-top:2rem}
@@ -122,6 +124,7 @@
 .rw-scaffold .whitespace-no-wrap{white-space:nowrap}
 .rw-scaffold .truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .rw-scaffold .w-full{width:100%}
+.rw-scaffold .box-border{box-sizing:border-box}
 @media (min-width:768px) {
   .rw-scaffold .md\:w-1\/5{width:20%}
 }
