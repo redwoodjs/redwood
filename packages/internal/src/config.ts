@@ -55,8 +55,6 @@ interface BrowserTargetConfig {
 
 export type Config = {
   [sideName: string]: BrowserTargetConfig | NodeTargetConfig
-} & {
-  browser?: { open: boolean | string }
 }
 
 export const DEFAULT_CONFIG: Config = {
@@ -97,9 +95,6 @@ export const DEFAULT_CONFIG: Config = {
         destination: './dist',
       },
     ],
-  },
-  browser: {
-    open: true,
   },
 }
 

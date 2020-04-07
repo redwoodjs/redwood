@@ -22,10 +22,17 @@ const DEFAULT_PATHS = {
       functions: {
         'graphql.js': {},
       },
+      services: {},
+      sdl: {},
     },
+    prisma: {},
   },
   web: {
-    src: {},
+    src: {
+      components: {},
+      layouts: {},
+      pages: {},
+    },
   },
 }
 

@@ -22,9 +22,12 @@ export const templateForComponentFile = ({
   templateVars,
   componentName,
 }) => {
+  const paths = getPaths().sides
+
   const basePath = webPathSection
-    ? getPaths().web[webPathSection]
-    : getPaths().api[apiPathSection]
+    ? paths.web[webPathSection]
+    : paths.api[apiPathSection]
+
   const outputComponentName = componentName || pascalcase(name) + suffix
   const outputPath = path.join(
     basePath,
