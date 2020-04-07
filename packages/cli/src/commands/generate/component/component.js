@@ -3,22 +3,21 @@ import {
   createYargsForComponentGeneration,
 } from '../helpers'
 
-const COMPONENT_SUFFIX = 'Cell'
 const REDWOOD_WEB_PATH_NAME = 'components'
 
 export const files = ({ name }) => {
-  const cellFile = templateForComponentFile({
+  const componentFile = templateForComponentFile({
     name,
-    suffix: COMPONENT_SUFFIX,
     webPathSection: REDWOOD_WEB_PATH_NAME,
-    templatePath: 'cell/cell.js.template',
+    generator: 'component',
+    templatePath: 'component.js.template',
   })
   const testFile = templateForComponentFile({
     name,
-    suffix: COMPONENT_SUFFIX,
     extension: '.test.js',
     webPathSection: REDWOOD_WEB_PATH_NAME,
-    templatePath: 'cell/test.js.template',
+    generator: 'component',
+    templatePath: 'test.js.template',
   })
 
   // Returns
@@ -26,7 +25,7 @@ export const files = ({ name }) => {
   //    "path/to/fileA": "<<<template>>>",
   //    "path/to/fileB": "<<<template>>>",
   // }
-  return [cellFile, testFile].reduce((acc, [outputPath, content]) => {
+  return [componentFile, testFile].reduce((acc, [outputPath, content]) => {
     return {
       [outputPath]: content,
       ...acc,
@@ -40,6 +39,6 @@ export const {
   builder,
   handler,
 } = createYargsForComponentGeneration({
-  componentName: 'cell',
+  componentName: 'component',
   filesFn: files,
 })

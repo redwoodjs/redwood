@@ -18,6 +18,7 @@ export const templateForComponentFile = ({
   extension = '.js',
   webPathSection,
   apiPathSection,
+  generator,
   templatePath,
   templateVars,
   componentName,
@@ -31,11 +32,14 @@ export const templateForComponentFile = ({
     outputComponentName,
     outputComponentName + extension
   )
-  const content = generateTemplate(templatePath, {
-    name,
-    outputPath: `./${path.relative(getPaths().base, outputPath)}`,
-    ...templateVars,
-  })
+  const content = generateTemplate(
+    path.join(generator, 'templates', templatePath),
+    {
+      name,
+      outputPath: `./${path.relative(getPaths().base, outputPath)}`,
+      ...templateVars,
+    }
+  )
   return [outputPath, content]
 }
 

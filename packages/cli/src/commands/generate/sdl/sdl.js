@@ -8,7 +8,7 @@ import pluralize from 'pluralize'
 import { generateTemplate, getSchema, getPaths, writeFilesTask } from 'src/lib'
 import c from 'src/lib/colors'
 
-import { files as serviceFiles } from './service'
+import { files as serviceFiles } from '../service/service'
 
 const IGNORE_FIELDS_FOR_INPUT = ['id', 'createdAt']
 

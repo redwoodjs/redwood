@@ -19,15 +19,21 @@ import {
 } from 'src/lib'
 import c from 'src/lib/colors'
 
-import { files as sdlFiles } from './sdl'
-import { files as serviceFiles } from './service'
+import { files as sdlFiles } from '../sdl/sdl'
+import { files as serviceFiles } from '../service/service'
 
 const NON_EDITABLE_COLUMNS = ['id', 'createdAt', 'updatedAt']
-const ASSETS = fs.readdirSync(path.join(templateRoot, 'scaffold', 'assets'))
-const LAYOUTS = fs.readdirSync(path.join(templateRoot, 'scaffold', 'layouts'))
-const PAGES = fs.readdirSync(path.join(templateRoot, 'scaffold', 'pages'))
+const ASSETS = fs.readdirSync(
+  path.join(templateRoot, 'scaffold', 'templates', 'assets')
+)
+const LAYOUTS = fs.readdirSync(
+  path.join(templateRoot, 'scaffold', 'templates', 'layouts')
+)
+const PAGES = fs.readdirSync(
+  path.join(templateRoot, 'scaffold', 'templates', 'pages')
+)
 const COMPONENTS = fs.readdirSync(
-  path.join(templateRoot, 'scaffold', 'components')
+  path.join(templateRoot, 'scaffold', 'templates', 'components')
 )
 const SCAFFOLD_STYLE_PATH = './scaffold.css'
 // Any assets that should not trigger an overwrite error and require a --force
