@@ -1,7 +1,4 @@
-jest.mock('@redwoodjs/internal')
-jest.mock('src/lib')
-
-import { runCommandTask } from 'src/lib'
+import * as lib from 'src/lib'
 
 import * as up from '../up'
 import * as down from '../down'
@@ -10,6 +7,16 @@ import * as generate from '../generate'
 import * as seed from '../seed'
 
 describe('db commands', () => {
+  afterAll(() => {
+    jest.clearAllMocks()
+  })
+
+  beforeAll(() => {
+    lib.runCommandTask = jest.fn((commands) => {
+      return commands.map(({ cmd, args }) => `${cmd} ${args.join(' ')}`)
+    })
+  })
+
   it('some commands have a verbose flag', () => {
     expect(up.builder.verbose).toBeDefined()
     expect(down.builder.verbose).toBeDefined()
@@ -17,6 +24,8 @@ describe('db commands', () => {
   })
 
   it('runs the command as expected', async () => {
+    const { runCommandTask } = lib
+
     await up.handler({ dbClient: true })
     expect(runCommandTask.mock.results[0].value).toEqual([
       'yarn prisma migrate up --experimental --create-db',
