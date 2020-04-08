@@ -16,9 +16,11 @@
     "@babel/runtime-corejs3": "^7.9.2",
     "babel-plugin-auto-import": "^1.0.5",
     "babel-plugin-module-resolver": "^4.0.0",
+    "cross-env": "^7.0.2",
     "jest": "^25.2.3",
     "lerna": "^3.20.2",
     "nodemon": "^2.0.2",
+    "npm-run-all": "^4.1.5",
     "prettier": "2",
     "typescript": "^3.8.3"
   },
@@ -30,12 +32,12 @@
     "packages/api/importAll.macro.js"
   ],
   "scripts": {
-    "build": "yarn clean && yarn build:js && yarn build:types",
+    "build": "run-s clean build:js build:types",
     "clean": "lerna run clean",
-    "build:js": "NODE_ENV=production lerna run build",
     "build:types": "tsc --build --clean && tsc --build",
+    "build:js": "yarn cross-env NODE_ENV=production lerna run build",
     "test": "lerna run test --stream -- --colors",
-    "lint": "yarn prettier --list-different . && yarn eslint './packages/'",
-    "lint:fix": "yarn prettier --write . && yarn lint --fix"
+    "lint": "yarn eslint packages",
+    "lint:fix": "yarn eslint --fix packages"
   }
 }

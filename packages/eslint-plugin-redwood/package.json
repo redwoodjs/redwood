@@ -11,9 +11,7 @@
   "license": "MIT",
   "gitHead": "2801c132f40263f9fcfbdac8b1750d2e423eb649",
   "scripts": {
-    "build": "yarn clean && babel src -d dist",
-    "build:watch": "nodemon --ignore dist --exec 'yarn build'",
-    "prepublishOnly": "yarn clean && yarn build",
-    "clean": "rm -rf dist"
+    "build": "yarn cross-env NODE_ENV=production babel src -d dist --delete-dir-on-start",
+    "build:watch": "nodemon --ignore dist --exec 'yarn build'"
   }
 }

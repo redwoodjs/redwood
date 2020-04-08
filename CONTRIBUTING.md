@@ -15,7 +15,7 @@ You'll want to run a local redwood app sandbox using your local @redwoodjs packa
 
 ### Example Setup: Package `@redwoodjs/cli` Local Dev
 
-Assuming you've already cloned `redwoodjs/redwood` locally and run `yarn install`, navigate to the `packages/cli` directory and run the following command:
+Assuming you've already cloned `redwoodjs/redwood` locally and run `yarn install` and `yarn build`, navigate to the `packages/cli` directory and run the following command:
 
 ```
 yarn link

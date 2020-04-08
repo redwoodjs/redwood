@@ -1,4 +1,4 @@
-name: Build, Lint, and Test against latest Node 12
+name: Build, Lint, and Test
 
 on:
   push:
@@ -8,12 +8,13 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os: [ubuntu-latest]
         node-version: ['12']
       fail-fast: false
-    name: Node ${{ matrix.node-version }} latest
+    name: ${{ matrix.os }} | Node ${{ matrix.node-version }} latest
     steps:
       - uses: actions/checkout@v2
       - name: Setup node
