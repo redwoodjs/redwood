@@ -40,7 +40,9 @@ export const getSchema = async (name) => {
     if (model) {
       return model
     } else {
-      throw `No schema definition found for \`${name}\` in schema.prisma file`
+      throw new Error(
+        `No schema definition found for \`${name}\` in schema.prisma file`
+      )
     }
   }
 
@@ -59,8 +61,8 @@ export const getSchema = async (name) => {
  * singularParamName: foo-bar
  * pluralParamName: foo-bars
 */
-const nameVariants = (name) => {
-  const normalizedName = pascalcase(pluralize.singular(name))
+export const nameVariants = (name) => {
+  const normalizedName = pascalcase(paramCase(pluralize.singular(name)))
 
   return {
     pascalName: pascalcase(name),
