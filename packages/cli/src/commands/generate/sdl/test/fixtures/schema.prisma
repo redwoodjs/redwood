@@ -12,25 +12,33 @@ generator client {
 // migrations for them.
 
 model Post {
-  id Int @id @default(autoincrement())
-  title String
-  slug String @unique
-  author String
-  body String
-  image String?
-  tags Tag[]
+  id       Int      @id @default(autoincrement())
+  title    String
+  slug     String @unique
+  author   String
+  body     String
+  image    String?
+  tags     Tag[]
   postedAt DateTime?
 }
 
 model Tag {
-  id Int @id @default(autoincrement())
-  name String @unique
+  id    Int    @id @default(autoincrement())
+  name  String @unique
   posts Post[]
 }
 
 model User {
-  id Int @id @default(autoincrement())
-  name String?
-  email String @unique
-  isAdmin Boolean @default(false)
+  id       Int     @id @default(autoincrement())
+  name     String?
+  email    String  @unique
+  isAdmin  Boolean @default(false)
+  profiles UserProfile[]
+}
+
+model UserProfile {
+  id       Int    @id @default(autoincrement())
+  username String @unique
+  userId   Int
+  user     User   @relation(fields: [userId], references: [id])
 }

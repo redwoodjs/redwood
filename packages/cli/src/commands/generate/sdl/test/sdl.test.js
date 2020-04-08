@@ -3,25 +3,38 @@ import { loadGeneratorFixture } from 'src/lib/test'
 
 import * as sdl from '../sdl'
 
-let files //, crudFiles
-
-beforeAll(async () => {
-  files = await sdl.files({ name: 'User', crud: false })
-  // crudFiles = await sdl.files({ name: 'Post', crud: true })
-})
-
 afterEach(() => {
   jest.clearAllMocks()
 })
 
-test('creates a sdl file', () => {
+test('creates a single word sdl file', async () => {
+  const files = await sdl.files({ name: 'User', crud: false })
+
   expect(files['/path/to/project/api/src/graphql/users.sdl.js']).toEqual(
-    loadGeneratorFixture('sdl', 'sdl.js')
+    loadGeneratorFixture('sdl', 'singleWordSdl.js')
   )
 })
 
-// test('creates a sdl file with CRUD actions', () => {
-//   expect(crudFiles['/path/to/project/api/src/sdls/posts/posts.js']).toEqual(
-//     loadGeneratorFixture('sdl', 'sdlCrud.js')
-//   )
-// })
+test('creates a multi word sdl file', async () => {
+  const files = await sdl.files({ name: 'UserProfile', crud: false })
+
+  expect(files['/path/to/project/api/src/graphql/userProfiles.sdl.js']).toEqual(
+    loadGeneratorFixture('sdl', 'multiWordSdl.js')
+  )
+})
+
+test('creates a single word sdl file with CRUD actions', async () => {
+  const files = await sdl.files({ name: 'Post', crud: true })
+
+  expect(files['/path/to/project/api/src/graphql/posts.sdl.js']).toEqual(
+    loadGeneratorFixture('sdl', 'singleWordSdlCrud.js')
+  )
+})
+
+test('creates a multi word sdl file with CRUD actions', async () => {
+  const files = await sdl.files({ name: 'UserProfile', crud: true })
+
+  expect(files['/path/to/project/api/src/graphql/userProfiles.sdl.js']).toEqual(
+    loadGeneratorFixture('sdl', 'multiWordSdlCrud.js')
+  )
+})
