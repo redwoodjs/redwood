@@ -3,7 +3,7 @@ import {} from 'src/lib/test'
 
 import * as helpers from './helpers'
 
-const TEMPLATE_OUTPUT = `const FooBarPage = () => {
+const PAGE_TEMPLATE_OUTPUT = `const FooBarPage = () => {
   return (
     <div>
       <h1>FooBarPage</h1>
@@ -99,7 +99,7 @@ test('templateForComponentFile creates a template', () => {
     templatePath: 'page.js.template',
   })
 
-  expect(output[1]).toEqual(TEMPLATE_OUTPUT)
+  expect(output[1]).toEqual(PAGE_TEMPLATE_OUTPUT)
 })
 
 test('pathName uses passed path if present', () => {
