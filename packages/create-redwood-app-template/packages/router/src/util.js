@@ -10,7 +10,7 @@ const createNamedContext = (name, defaultValue) => {
  *
  *    '/blog/{year}/{month}/{day:Int}' => [['year'], ['month'], ['day', 'Int']]
  */
-const paramsForType = (route) => {
+const paramsForRoute = (route) => {
   // Match the strings between `{` and `}`.
   const params = [...route.matchAll(/\{([^}]+)\}/g)]
   return params
@@ -48,24 +48,43 @@ const coreParamTypes = {
  *    => { match: true, params: { id: 7 }}
  */
 const matchPath = (route, pathname, paramTypes) => {
-  // Does the `pathname` match the `route`?
-  const matches = [
-    ...pathname.matchAll(`^${route.replace(/\{([^}]+)\}/g, '([^/]+)')}$`),
-  ]
+  // Get the names and the transform types for the given route.
+  const routeParams = paramsForRoute(route)
+  const allParamTypes = { ...coreParamTypes, ...paramTypes }
+  let typeConstrainedRoute = route
+
+  // Map all params from the route to their type constraint regex to create a "type-constrained route" regexp
+  for (const [name, type] of routeParams) {
+    let typeRegex = '[^/]+'
+    const constraint = type && allParamTypes[type].constraint
+
+    if (constraint) {
+      // Get the type
+      typeRegex = constraint.toString() || '/[^/]+/'
+      typeRegex = typeRegex.substring(1, typeRegex.length - 1)
+    }
+
+    typeConstrainedRoute = typeConstrainedRoute.replace(
+      type ? `{${name}:${type}}` : `{${name}}`,
+      `(${typeRegex})`
+    )
+  }
+
+  // Does the `pathname` match the route?
+  const matches = [...pathname.matchAll(`^${typeConstrainedRoute}$`)]
 
   if (matches.length === 0) {
     return { match: false }
   }
 
-  const allParamTypes = { ...coreParamTypes, ...paramTypes }
+  // Map extracted values to their param name, casting the value if needed
+  const providedParams = matches[0].slice(1)
+  const params = providedParams.reduce((acc, value, index) => {
+    const [name, transformName] = routeParams[index]
+    const typeInfo = allParamTypes[transformName]
 
-  // Get the names and the transform types for the given route.
-  const paramInfo = paramsForType(route)
-  const params = matches[0].slice(1).reduce((acc, value, index) => {
-    const [name, transformName] = paramInfo[index]
-
-    if (transformName) {
-      value = allParamTypes[transformName].transform(value)
+    if (typeInfo && typeof typeInfo.transform === 'function') {
+      value = typeInfo.transform(value)
     }
 
     return {
@@ -90,12 +109,15 @@ const matchPath = (route, pathname, paramTypes) => {
  * This utility ignores keys with multiple values such as `?foo=1&foo=2`.
  */
 const parseSearch = (search) => {
-  const searchParams = new URLSearchParams(search);
+  const searchParams = new URLSearchParams(search)
 
-  return [...searchParams.keys()].reduce((params, key) => ({
-    ...params,
-    [key]: searchParams.get(key)
-  }), {});
+  return [...searchParams.keys()].reduce(
+    (params, key) => ({
+      ...params,
+      [key]: searchParams.get(key),
+    }),
+    {}
+  )
 }
 
 /**
