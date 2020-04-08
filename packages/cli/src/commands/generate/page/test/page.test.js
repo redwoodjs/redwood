@@ -3,22 +3,39 @@ import { loadGeneratorFixture } from 'src/lib/test'
 
 import * as page from '../page'
 
-let files
+let singleWordFiles, multiWordFiles
 
 beforeAll(() => {
-  files = page.files({ name: 'Home' })
+  singleWordFiles = page.files({ name: 'Home' })
+  multiWordFiles = page.files({ name: 'ContactUs' })
 })
 
 test('creates a page component', () => {
-  expect(files['/path/to/project/web/src/pages/HomePage/HomePage.js']).toEqual(
-    loadGeneratorFixture('page', 'page.js')
-  )
+  expect(
+    singleWordFiles['/path/to/project/web/src/pages/HomePage/HomePage.js']
+  ).toEqual(loadGeneratorFixture('page', 'singleWordPage.js'))
 })
 
 test('creates a page test', () => {
   expect(
-    files['/path/to/project/web/src/pages/HomePage/HomePage.test.js']
-  ).toEqual(loadGeneratorFixture('page', 'page.test.js'))
+    singleWordFiles['/path/to/project/web/src/pages/HomePage/HomePage.test.js']
+  ).toEqual(loadGeneratorFixture('page', 'singleWordPage.test.js'))
+})
+
+test('creates a page component', () => {
+  expect(
+    multiWordFiles[
+      '/path/to/project/web/src/pages/ContactUsPage/ContactUsPage.js'
+    ]
+  ).toEqual(loadGeneratorFixture('page', 'multiWordPage.js'))
+})
+
+test('creates a page test', () => {
+  expect(
+    multiWordFiles[
+      '/path/to/project/web/src/pages/ContactUsPage/ContactUsPage.test.js'
+    ]
+  ).toEqual(loadGeneratorFixture('page', 'multiWordPage.test.js'))
 })
 
 test('creates a single-word route name', () => {
