@@ -6,7 +6,7 @@ import { paramCase } from 'param-case'
 import { writeFilesTask, addRoutesToRouterTask } from 'src/lib'
 import c from 'src/lib/colors'
 
-import { templateForComponentFile } from '../helpers'
+import { templateForComponentFile, pathName } from '../helpers'
 
 const COMPONENT_SUFFIX = 'Page'
 const REDWOOD_WEB_PATH_NAME = 'pages'
@@ -56,20 +56,19 @@ export const desc = 'Generates a page component.'
 export const builder = { force: { type: 'boolean', default: false } }
 
 export const handler = async ({ name, path, force }) => {
-  path = path ?? `/${paramCase(name)}`
   const tasks = new Listr(
     [
       {
         title: 'Generating page files...',
         task: async () => {
-          const f = await files({ name, path })
+          const f = await files({ name, path: pathName(path, name) })
           return writeFilesTask(f, { overwriteExisting: force })
         },
       },
       {
         title: 'Updating routes file...',
         task: async () => {
-          addRoutesToRouterTask(routes({ name, path }))
+          addRoutesToRouterTask(routes({ name, path: pathName(path, name) }))
         },
       },
     ].filter(Boolean),

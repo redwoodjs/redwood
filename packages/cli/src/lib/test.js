@@ -9,7 +9,6 @@
 import fs from 'fs'
 import path from 'path'
 
-global.__dirname = __dirname // this file
 jest.mock('@redwoodjs/internal', () => {
   const path = require('path')
   return {

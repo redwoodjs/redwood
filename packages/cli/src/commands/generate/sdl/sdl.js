@@ -78,13 +78,16 @@ export const files = async ({ name, crud }) => {
     pascalcase(pluralize.singular(name))
   )
 
-  const template = generateTemplate(path.join('sdl', 'sdl.js.template'), {
-    name,
-    crud,
-    query,
-    input,
-    idType,
-  })
+  const template = generateTemplate(
+    path.join('sdl', 'templates', 'sdl.js.template'),
+    {
+      name,
+      crud,
+      query,
+      input,
+      idType,
+    }
+  )
 
   const outputPath = path.join(
     getPaths().api.graphql,

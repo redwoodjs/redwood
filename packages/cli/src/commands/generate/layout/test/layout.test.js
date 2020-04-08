@@ -1,3 +1,4 @@
+global.__dirname = __dirname
 import { loadGeneratorFixture } from 'src/lib/test'
 
 import * as layout from '../layout'
