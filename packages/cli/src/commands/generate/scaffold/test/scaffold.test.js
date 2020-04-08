@@ -1,9 +1,9 @@
 global.__dirname = __dirname
-import { loadGeneratorFixture } from 'src/lib/test'
+// import { loadGeneratorFixture } from 'src/lib/test'
 
-import * as scaffold from '../scaffold'
+// import * as scaffold from '../scaffold'
 
-let files
+// let files
 
 beforeAll(() => {
   // files = scaffold.files({ name: 'Home' })

@@ -1,7 +1,6 @@
 import Listr from 'listr'
 import camelcase from 'camelcase'
 import pascalcase from 'pascalcase'
-import { paramCase } from 'param-case'
 
 import { writeFilesTask, addRoutesToRouterTask } from 'src/lib'
 import c from 'src/lib/colors'

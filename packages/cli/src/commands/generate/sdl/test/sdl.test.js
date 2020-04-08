@@ -3,11 +3,11 @@ import { loadGeneratorFixture } from 'src/lib/test'
 
 import * as sdl from '../sdl'
 
-let files, crudFiles
+let files //, crudFiles
 
 beforeAll(async () => {
   files = await sdl.files({ name: 'User', crud: false })
-  crudFiles = await sdl.files({ name: 'Post', crud: true })
+  // crudFiles = await sdl.files({ name: 'Post', crud: true })
 })
 
 afterEach(() => {
