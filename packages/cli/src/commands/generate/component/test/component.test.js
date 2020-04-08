@@ -27,7 +27,7 @@ test('creates a multi word component', () => {
     multiWordFiles[
       '/path/to/project/web/src/components/UserProfile/UserProfile.js'
     ]
-  ).toEqual()
+  ).toEqual(loadGeneratorFixture('component', 'multiWordComponent.js'))
 })
 
 test('creates a multi word component test', () => {
@@ -35,5 +35,5 @@ test('creates a multi word component test', () => {
     multiWordFiles[
       '/path/to/project/web/src/components/UserProfile/UserProfile.test.js'
     ]
-  ).toEqual()
+  ).toEqual(loadGeneratorFixture('component', 'multiWordComponent.test.js'))
 })
