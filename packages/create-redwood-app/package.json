@@ -1,6 +1,6 @@
 {
   "name": "create-redwood-app",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "license": "MIT",
   "bin": "./dist/create-redwood-app.js",
   "files": [
@@ -8,7 +8,7 @@
   ],
   "dependencies": {
     "@babel/runtime-corejs3": "^7.9.2",
-    "@redwoodjs/internal": "^0.3.2",
+    "@redwoodjs/internal": "^0.4.0",
     "axios": "^0.19.2",
     "chalk": "^3.0.0",
     "check-node-version": "^4.0.2",
@@ -18,10 +18,8 @@
     "tmp": "^0.1.0"
   },
   "scripts": {
-    "build": "yarn clean && babel src --out-dir dist",
-    "build:watch": "nodemon --ignore dist --exec 'yarn build'",
-    "clean": "rm -rf dist",
-    "prepublishOnly": "yarn clean && yarn build"
+    "build": "yarn cross-env NODE_ENV=production babel src -d dist --delete-dir-on-start",
+    "build:watch": "nodemon --ignore dist --exec 'yarn build'"
   },
   "gitHead": "2801c132f40263f9fcfbdac8b1750d2e423eb649"
 }

@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/cli",
   "description": "The Redwood Command Line",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "license": "MIT",
   "bin": {
     "redwood": "./dist/index.js",
@@ -11,8 +11,8 @@
     "dist"
   ],
   "dependencies": {
-    "@prisma/sdk": "^2.0.0-preview025",
-    "@redwoodjs/internal": "^0.3.2",
+    "@prisma/sdk": "^2.0.0-beta.1",
+    "@redwoodjs/internal": "^0.4.0",
     "camelcase": "^5.3.1",
     "chalk": "^3.0.0",
     "concurrently": "^5.1.0",
@@ -33,10 +33,8 @@
     "@types/node-fetch": "^2.5.5"
   },
   "scripts": {
-    "build": "yarn clean && yarn babel src --out-dir dist && cp -r ./src/commands/generate/templates/. ./dist/commands/generate/templates",
+    "build": "yarn cross-env NODE_ENV=production babel src -d dist --delete-dir-on-start --copy-files --no-copy-ignored",
     "build:watch": "nodemon --ignore dist --exec 'yarn build'",
-    "clean": "rm -rf dist",
-    "prepublishOnly": "yarn clean && yarn build",
     "test": "jest",
     "test:watch": "yarn test --watch"
   },
