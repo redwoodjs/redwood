@@ -4,16 +4,18 @@ jest.mock('@redwoodjs/internal', () => {
   return {
     ...require.requireActual('@redwoodjs/internal'),
     getPaths: () => {
-      const BASE_PATH = '/path/to/project'
+      const BASE_PATH = path.join(global.__dirname, 'fixtures')
       return {
         base: BASE_PATH,
         api: {
-          db: path.join(global.__dirname, 'fixtures'), // this folder
+          db: BASE_PATH, // this folder
         },
       }
     },
   }
 })
+
+import path from 'path'
 
 import * as index from '../index'
 
@@ -74,4 +76,28 @@ test('nameVariants returns a multi word cased variables', () => {
     expect(vars.singularParamName).toEqual('foo-bar')
     expect(vars.pluralParamName).toEqual('foo-bars')
   })
+})
+
+test('generateTemplate returns a lodash-templated string', () => {
+  const output = index.generateTemplate(path.join('fixtures', 'text.txt'), {
+    root: __dirname,
+    name: 'amet',
+    noun: 'world',
+  })
+
+  expect(output).toEqual(`Lorem ipsum dolar sit amet\nHello, world!\n`)
+})
+
+// Be careful when editing the code.js fixture as the prettifier.config.js will cause it to get
+// prettified and then it already match the expected output, with no changes
+test('generateTemplate returns prettified JS code', () => {
+  const output = index.generateTemplate(path.join('fixtures', 'code.js'), {
+    root: __dirname,
+    name: 'fox',
+    foo: 'dog',
+  })
+
+  expect(output).toEqual(
+    `const line1 = 'The quick brown foxes jumps over the lazy dog.'\nconst line2 = 'Sphinx of black quartz, judge my vow.'\n`
+  )
 })

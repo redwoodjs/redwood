@@ -78,8 +78,8 @@ export const nameVariants = (name) => {
 
 export const templateRoot = path.resolve(__dirname, '../commands/generate')
 
-export const generateTemplate = (templateFilename, { name, ...rest }) => {
-  const templatePath = path.join(templateRoot, templateFilename)
+export const generateTemplate = (templateFilename, { name, root, ...rest }) => {
+  const templatePath = path.join(root || templateRoot, templateFilename)
   const template = lodash.template(readFile(templatePath).toString())
 
   const renderedTemplate = template({
@@ -92,8 +92,8 @@ export const generateTemplate = (templateFilename, { name, ...rest }) => {
   // we're using.
   // https://prettier.io/docs/en/options.html#parser
   const parser = {
-    css: 'css',
-    js: 'babel',
+    '.css': 'css',
+    '.js': 'babel',
   }[path.extname(templateFilename)]
 
   if (typeof parser === 'undefined') {
