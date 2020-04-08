@@ -2,6 +2,7 @@ import path from 'path'
 
 import Listr from 'listr'
 import pascalcase from 'pascalcase'
+import { paramCase } from 'param-case'
 
 import { generateTemplate, getPaths, writeFilesTask } from 'src/lib'
 import c from 'src/lib/colors'
@@ -26,7 +27,8 @@ export const templateForComponentFile = ({
   const basePath = webPathSection
     ? getPaths().web[webPathSection]
     : getPaths().api[apiPathSection]
-  const outputComponentName = componentName || pascalcase(name) + suffix
+  const outputComponentName =
+    componentName || pascalcase(paramCase(name)) + suffix
   const outputPath = path.join(
     basePath,
     outputComponentName,
@@ -41,6 +43,14 @@ export const templateForComponentFile = ({
     }
   )
   return [outputPath, content]
+}
+
+/**
+ * Creates a route path, either returning the existing path if passed, otherwise
+ * creates one based on the name
+ */
+export const pathName = (path, name) => {
+  return path ?? `/${paramCase(name)}`
 }
 
 /**
