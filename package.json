@@ -35,9 +35,13 @@
     "build": "run-s clean build:js build:types",
     "clean": "lerna run clean",
     "build:types": "tsc --build --clean && tsc --build",
-    "build:js": "yarn cross-env NODE_ENV=production lerna run build",
+    "build:js": "cross-env NODE_ENV=production lerna run build",
     "test": "lerna run test --stream -- --colors",
-    "lint": "yarn eslint packages",
-    "lint:fix": "yarn eslint --fix packages"
+    "lint": "run-s eslint:check prettier:check",
+    "lint:fix": "run-s eslint:fix prettier:fix",
+    "eslint:check": "yarn eslint packages",
+    "eslint:fix": "yarn eslint --fix packages",
+    "prettier:check": "prettier --list-different .",
+    "prettier:fix": "prettier --write ."
   }
 }
