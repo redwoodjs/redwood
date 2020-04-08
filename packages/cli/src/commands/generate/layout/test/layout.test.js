@@ -3,20 +3,39 @@ import { loadGeneratorFixture } from 'src/lib/test'
 
 import * as layout from '../layout'
 
-let files
+let singleWordFiles, multiWordFiles
 
 beforeAll(() => {
-  files = layout.files({ name: 'App' })
+  singleWordFiles = layout.files({ name: 'App' })
+  multiWordFiles = layout.files({ name: 'SinglePage' })
 })
 
-test('creates a layout component', () => {
+test('creates a single word layout component', () => {
   expect(
-    files['/path/to/project/web/src/layouts/AppLayout/AppLayout.js']
-  ).toEqual(loadGeneratorFixture('layout', 'layout.js'))
+    singleWordFiles['/path/to/project/web/src/layouts/AppLayout/AppLayout.js']
+  ).toEqual(loadGeneratorFixture('layout', 'singleWordLayout.js'))
 })
 
-test('creates a layout test', () => {
+test('creates a single word layout test', () => {
   expect(
-    files['/path/to/project/web/src/layouts/AppLayout/AppLayout.test.js']
-  ).toEqual(loadGeneratorFixture('layout', 'layout.test.js'))
+    singleWordFiles[
+      '/path/to/project/web/src/layouts/AppLayout/AppLayout.test.js'
+    ]
+  ).toEqual(loadGeneratorFixture('layout', 'singleWordLayout.test.js'))
+})
+
+test('creates a multi word layout component', () => {
+  expect(
+    multiWordFiles[
+      '/path/to/project/web/src/layouts/SinglePageLayout/SinglePageLayout.js'
+    ]
+  ).toEqual(loadGeneratorFixture('layout', 'multiWordLayout.js'))
+})
+
+test('creates a multi word layout test', () => {
+  expect(
+    multiWordFiles[
+      '/path/to/project/web/src/layouts/SinglePageLayout/SinglePageLayout.test.js'
+    ]
+  ).toEqual(loadGeneratorFixture('layout', 'multiWordLayout.test.js'))
 })
