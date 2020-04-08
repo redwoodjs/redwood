@@ -45,14 +45,14 @@ export const generatorsRootPath = path.join(
 export const sdlFixturesPath = path.join(
   generatorsRootPath,
   'sdl',
-  'test',
+  '__tests__',
   'fixtures'
 )
 
 export const serviceFixturesPath = path.join(
   generatorsRootPath,
   'service',
-  'test',
+  '__tests__',
   'fixtures'
 )
 
@@ -71,7 +71,7 @@ export const loadGeneratorFixture = (generator, name) => {
       'commands',
       'generate',
       generator,
-      'test',
+      '__tests__',
       'fixtures',
       name
     )
