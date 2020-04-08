@@ -35,6 +35,27 @@ jest.mock('@redwoodjs/internal', () => {
   }
 })
 
+export const generatorsRootPath = path.join(
+  __dirname,
+  '..',
+  'commands',
+  'generate'
+)
+
+export const sdlFixturesPath = path.join(
+  generatorsRootPath,
+  'sdl',
+  'test',
+  'fixtures'
+)
+
+export const serviceFixturesPath = path.join(
+  generatorsRootPath,
+  'service',
+  'test',
+  'fixtures'
+)
+
 // Loads the fixture for a generator by assuming a lot of the path structure automatically:
 //
 //   loadGeneratorFixture('scaffold', 'NamePage.js')

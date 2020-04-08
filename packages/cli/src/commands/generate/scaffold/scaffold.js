@@ -5,6 +5,7 @@ import Listr from 'listr'
 import camelcase from 'camelcase'
 import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
+import { paramCase } from 'param-case'
 
 import {
   generateTemplate,
@@ -67,7 +68,7 @@ const assetFiles = (name) => {
       !fs.existsSync(outputPath)
     ) {
       const template = generateTemplate(
-        path.join('scaffold', 'assets', asset),
+        path.join('scaffold', 'templates', 'assets', asset),
         {
           name,
         }
@@ -95,7 +96,7 @@ const layoutFiles = (name) => {
       outputLayoutName
     )
     const template = generateTemplate(
-      path.join('scaffold', 'layouts', layout),
+      path.join('scaffold', 'templates', 'layouts', layout),
       {
         name,
       }
@@ -121,9 +122,12 @@ const pageFiles = (name) => {
       outputPageName.replace(/\.js/, ''),
       outputPageName
     )
-    const template = generateTemplate(path.join('scaffold', 'pages', page), {
-      name,
-    })
+    const template = generateTemplate(
+      path.join('scaffold', 'templates', 'pages', page),
+      {
+        name,
+      }
+    )
     fileList[outputPath] = template
   })
 
@@ -153,7 +157,7 @@ const componentFiles = async (name) => {
     )
 
     const template = generateTemplate(
-      path.join('scaffold', 'components', component),
+      path.join('scaffold', 'templates', 'components', component),
       {
         name,
         columns,
@@ -173,14 +177,15 @@ export const routes = async ({ model: name }) => {
   const pluralPascalName = pascalcase(pluralize(name))
   const singularCamelName = camelcase(singularPascalName)
   const pluralCamelName = camelcase(pluralPascalName)
+  const pluralParamName = paramCase(pluralPascalName)
   const model = await getSchema(singularPascalName)
   const idRouteParam = getIdType(model) === 'Int' ? ':Int' : ''
 
   return [
-    `<Route path="/${pluralCamelName}/new" page={New${singularPascalName}Page} name="new${singularPascalName}" />`,
-    `<Route path="/${pluralCamelName}/{id${idRouteParam}}/edit" page={Edit${singularPascalName}Page} name="edit${singularPascalName}" />`,
-    `<Route path="/${pluralCamelName}/{id${idRouteParam}}" page={${singularPascalName}Page} name="${singularCamelName}" />`,
-    `<Route path="/${pluralCamelName}" page={${pluralPascalName}Page} name="${pluralCamelName}" />`,
+    `<Route path="/${pluralParamName}/new" page={New${singularPascalName}Page} name="new${singularPascalName}" />`,
+    `<Route path="/${pluralParamName}/{id${idRouteParam}}/edit" page={Edit${singularPascalName}Page} name="edit${singularPascalName}" />`,
+    `<Route path="/${pluralParamName}/{id${idRouteParam}}" page={${singularPascalName}Page} name="${singularCamelName}" />`,
+    `<Route path="/${pluralParamName}" page={${pluralPascalName}Page} name="${pluralCamelName}" />`,
   ]
 }
 

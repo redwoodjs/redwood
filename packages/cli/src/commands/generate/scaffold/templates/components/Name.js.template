@@ -34,8 +34,7 @@ const ${singularPascalName} = ({ ${singularCamelName} }) => {
             <% columns.forEach(column => { %><tr className="odd:bg-gray-100 even:bg-white border-t">
               <td className="font-semibold p-3 text-right md:w-1/5"><%= column.name %></td>
               <td className="p-3">{${singularCamelName}.<%= column.name %>}</td>
-            </tr>
-            <% }) %>
+            </tr><% }) %>
           </tbody>
         </table>
       </div>

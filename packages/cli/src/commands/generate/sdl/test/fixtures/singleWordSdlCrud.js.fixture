@@ -6,7 +6,6 @@ export const schema = gql`
     author: String!
     body: String!
     image: String
-    tags: Tag
     postedAt: DateTime
   }
 
