@@ -11,7 +11,7 @@
     "dist"
   ],
   "dependencies": {
-    "@prisma/sdk": "^2.0.0-beta.1",
+    "@prisma/sdk": "^2.0.0-beta.2",
     "@redwoodjs/internal": "^0.4.0",
     "camelcase": "^5.3.1",
     "chalk": "^3.0.0",
