@@ -3,20 +3,39 @@ import { loadGeneratorFixture } from 'src/lib/test'
 
 import * as cell from '../cell'
 
-let files
+let singleWordFiles, multiWordFiles
 
 beforeAll(() => {
-  files = cell.files({ name: 'User' })
+  singleWordFiles = cell.files({ name: 'User' })
+  multiWordFiles = cell.files({ name: 'UserProfile' })
 })
 
-test('creates a cell component', () => {
+test('creates a cell component with a single word name', () => {
   expect(
-    files['/path/to/project/web/src/components/UserCell/UserCell.js']
-  ).toEqual(loadGeneratorFixture('cell', 'cell.js'))
+    singleWordFiles['/path/to/project/web/src/components/UserCell/UserCell.js']
+  ).toEqual(loadGeneratorFixture('cell', 'singleWordCell.js'))
 })
 
-test('creates a cell test', () => {
+test('creates a cell test with a single word name', () => {
   expect(
-    files['/path/to/project/web/src/components/UserCell/UserCell.test.js']
-  ).toEqual(loadGeneratorFixture('cell', 'cell.test.js'))
+    singleWordFiles[
+      '/path/to/project/web/src/components/UserCell/UserCell.test.js'
+    ]
+  ).toEqual(loadGeneratorFixture('cell', 'singleWordCell.test.js'))
+})
+
+test('creates a cell component with a multi word name', () => {
+  expect(
+    multiWordFiles[
+      '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.js'
+    ]
+  ).toEqual(loadGeneratorFixture('cell', 'multiWordCell.js'))
+})
+
+test('creates a cell test with a multi word name', () => {
+  expect(
+    multiWordFiles[
+      '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.test.js'
+    ]
+  ).toEqual(loadGeneratorFixture('cell', 'multiWordCell.test.js'))
 })
