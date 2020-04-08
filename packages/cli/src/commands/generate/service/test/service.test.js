@@ -3,6 +3,12 @@ import { loadGeneratorFixture } from 'src/lib/test'
 
 import * as service from '../service'
 
+test('returns exactly 2 files', async () => {
+  const files = await service.files({ name: 'User', crud: false })
+
+  expect(Object.keys(files).length).toEqual(2)
+})
+
 test('creates a single word service file', async () => {
   const files = await service.files({ name: 'User', crud: false })
 

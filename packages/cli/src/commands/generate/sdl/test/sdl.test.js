@@ -7,6 +7,12 @@ afterEach(() => {
   jest.clearAllMocks()
 })
 
+test('returns exactly 1 file', async () => {
+  const files = await sdl.files({ name: 'User', crud: false })
+
+  expect(Object.keys(files).length).toEqual(1)
+})
+
 test('creates a single word sdl file', async () => {
   const files = await sdl.files({ name: 'User', crud: false })
 

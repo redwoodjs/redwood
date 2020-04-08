@@ -10,6 +10,10 @@ beforeAll(() => {
   multiWordFiles = cell.files({ name: 'UserProfile' })
 })
 
+test('returns exactly 2 files', () => {
+  expect(Object.keys(singleWordFiles).length).toEqual(2)
+})
+
 test('creates a cell component with a single word name', () => {
   expect(
     singleWordFiles['/path/to/project/web/src/components/UserCell/UserCell.js']

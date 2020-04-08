@@ -10,6 +10,10 @@ beforeAll(() => {
   multiWordFiles = component.files({ name: 'UserProfile' })
 })
 
+test('returns exactly 2 files', () => {
+  expect(Object.keys(singleWordFiles).length).toEqual(2)
+})
+
 test('creates a single word component', () => {
   expect(
     singleWordFiles['/path/to/project/web/src/components/User/User.js']

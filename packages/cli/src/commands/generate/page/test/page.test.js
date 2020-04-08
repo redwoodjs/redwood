@@ -10,6 +10,10 @@ beforeAll(() => {
   multiWordFiles = page.files({ name: 'ContactUs' })
 })
 
+test('returns exactly 2 files', () => {
+  expect(Object.keys(singleWordFiles).length).toEqual(2)
+})
+
 test('creates a page component', () => {
   expect(
     singleWordFiles['/path/to/project/web/src/pages/HomePage/HomePage.js']

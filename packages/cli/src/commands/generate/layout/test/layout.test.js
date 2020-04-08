@@ -10,6 +10,10 @@ beforeAll(() => {
   multiWordFiles = layout.files({ name: 'SinglePage' })
 })
 
+test('returns exactly 2 files', () => {
+  expect(Object.keys(singleWordFiles).length).toEqual(2)
+})
+
 test('creates a single word layout component', () => {
   expect(
     singleWordFiles['/path/to/project/web/src/layouts/AppLayout/AppLayout.js']
