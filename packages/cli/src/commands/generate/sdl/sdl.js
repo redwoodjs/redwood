@@ -93,7 +93,10 @@ export const files = async ({ name, crud }) => {
     getPaths().api.graphql,
     `${camelcase(pluralize(name))}.sdl.js`
   )
-  return { [outputPath]: template }
+  return {
+    [outputPath]: template,
+    ...(await serviceFiles({ name, crud })),
+  }
 }
 
 export const command = 'sdl <model>'
@@ -111,13 +114,6 @@ export const handler = async ({ model, crud, services, force }) => {
         title: 'Generating SDL files...',
         task: async () => {
           const f = await files({ name: model, crud })
-          return writeFilesTask(f, { overwriteExisting: force })
-        },
-      },
-      services && {
-        title: 'Generating service files...',
-        task: async () => {
-          const f = await serviceFiles({ name: model, crud })
           return writeFilesTask(f, { overwriteExisting: force })
         },
       },
