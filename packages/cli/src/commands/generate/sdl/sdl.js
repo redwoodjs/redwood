@@ -9,6 +9,7 @@ import { generateTemplate, getSchema, getPaths, writeFilesTask } from 'src/lib'
 import c from 'src/lib/colors'
 
 import { files as serviceFiles } from '../service/service'
+import { relationsForModel } from '../helpers'
 
 const IGNORE_FIELDS_FOR_INPUT = ['id', 'createdAt']
 
@@ -35,15 +36,6 @@ const inputSDL = (model, types = {}) => {
       )
     })
     .map((field) => modelFieldToSDL(field, false, types))
-}
-
-const relations = (model) => {
-  return model.fields
-    .filter((f) => f.relationName)
-    .map((field) => {
-      const relationName = camelcase(field.type)
-      return field.isList ? pluralize(relationName) : relationName
-    })
 }
 
 const idType = (model) => {
@@ -74,7 +66,7 @@ const sdlFromSchemaModel = async (name) => {
       query: querySDL(model).join('\n    '),
       input: inputSDL(model, types).join('\n    '),
       idType: idType(model),
-      relations: relations(model),
+      relations: relationsForModel(model),
     }
   } else {
     throw new Error(

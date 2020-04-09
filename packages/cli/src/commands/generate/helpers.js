@@ -1,5 +1,7 @@
 import path from 'path'
 
+import camelcase from 'camelcase'
+import pluralize from 'pluralize'
 import Listr from 'listr'
 import pascalcase from 'pascalcase'
 import { paramCase } from 'param-case'
@@ -87,4 +89,13 @@ export const createYargsForComponentGeneration = ({
       }
     },
   }
+}
+
+export const relationsForModel = (model) => {
+  return model.fields
+    .filter((f) => f.relationName)
+    .map((field) => {
+      const relationName = camelcase(field.type)
+      return field.isList ? pluralize(relationName) : relationName
+    })
 }

@@ -1,11 +1,6 @@
 global.__dirname = __dirname
-import path from 'path'
 
-import {
-  loadFixture,
-  loadGeneratorFixture,
-  serviceFixturesPath,
-} from 'src/lib/test'
+import { loadGeneratorFixture } from 'src/lib/test'
 
 import * as sdl from '../sdl'
 

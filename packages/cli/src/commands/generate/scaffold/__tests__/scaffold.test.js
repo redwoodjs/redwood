@@ -1,12 +1,7 @@
 global.__dirname = __dirname
 import path from 'path'
 
-import {
-  loadFixture,
-  loadGeneratorFixture,
-  sdlFixturesPath,
-  serviceFixturesPath,
-} from 'src/lib/test'
+import { loadGeneratorFixture } from 'src/lib/test'
 
 import * as scaffold from '../scaffold'
 
@@ -20,35 +15,33 @@ test('returns exactly 16 files', () => {
   expect(Object.keys(files).length).toEqual(16)
 })
 
-// styles
-
-test('creates a stylesheet', () => {
-  expect(files['/path/to/project/web/src/scaffold.css']).toEqual(
-    loadGeneratorFixture('scaffold', path.join('assets', 'scaffold.css'))
-  )
-})
-
 // SDL
 
-test('creates a graphql sdl', () => {
-  expect(files['/path/to/project/api/src/graphql/posts.sdl.js']).toEqual(
-    loadFixture(path.join(sdlFixturesPath, 'singleWordSdlCrud.js'))
-  )
+test('creates an sdl', () => {
+  expect(files).toHaveProperty([
+    '/path/to/project/api/src/graphql/posts.sdl.js',
+  ])
 })
 
 // Service
 
 test('creates a service', () => {
-  expect(files['/path/to/project/api/src/services/posts/posts.js']).toEqual(
-    loadFixture(path.join(serviceFixturesPath, 'singleWordServiceCrud.js'))
-  )
+  expect(files).toHaveProperty([
+    '/path/to/project/api/src/services/posts/posts.js',
+  ])
 })
 
 test('creates a service test', () => {
-  expect(
-    files['/path/to/project/api/src/services/posts/posts.test.js']
-  ).toEqual(
-    loadFixture(path.join(serviceFixturesPath, 'singleWordServiceCrud.test.js'))
+  expect(files).toHaveProperty([
+    '/path/to/project/api/src/services/posts/posts.test.js',
+  ])
+})
+
+// styles
+
+test('creates a stylesheet', () => {
+  expect(files['/path/to/project/web/src/scaffold.css']).toEqual(
+    loadGeneratorFixture('scaffold', path.join('assets', 'scaffold.css'))
   )
 })
 

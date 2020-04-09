@@ -20,6 +20,7 @@ import {
 } from 'src/lib'
 import c from 'src/lib/colors'
 
+import { relationsForModel } from '../helpers'
 import { files as sdlFiles } from '../sdl/sdl'
 import { files as serviceFiles } from '../service/service'
 
@@ -45,9 +46,15 @@ const getIdType = (model) => {
 }
 
 export const files = async ({ model: name }) => {
+  const model = await getSchema(pascalcase(pluralize.singular(name)))
+
   return {
     ...(await sdlFiles({ name, crud: true })),
-    ...(await serviceFiles({ name, crud: true })),
+    ...(await serviceFiles({
+      name,
+      crud: true,
+      relations: relationsForModel(model),
+    })),
     ...assetFiles(name),
     ...layoutFiles(name),
     ...pageFiles(name),
