@@ -37,6 +37,15 @@ const inputSDL = (model, types = {}) => {
     .map((field) => modelFieldToSDL(field, false, types))
 }
 
+const relations = (model) => {
+  return model.fields
+    .filter((f) => f.relationName)
+    .map((field) => {
+      const relationName = camelcase(field.type)
+      return field.isList ? pluralize(relationName) : relationName
+    })
+}
+
 const idType = (model) => {
   const idField = model.fields.find((field) => field.isId)
   if (!idField) {
@@ -65,6 +74,7 @@ const sdlFromSchemaModel = async (name) => {
       query: querySDL(model).join('\n    '),
       input: inputSDL(model, types).join('\n    '),
       idType: idType(model),
+      relations: relations(model),
     }
   } else {
     throw new Error(
@@ -74,7 +84,7 @@ const sdlFromSchemaModel = async (name) => {
 }
 
 export const files = async ({ name, crud }) => {
-  const { query, input, idType } = await sdlFromSchemaModel(
+  const { query, input, idType, relations } = await sdlFromSchemaModel(
     pascalcase(pluralize.singular(name))
   )
 
@@ -95,7 +105,7 @@ export const files = async ({ name, crud }) => {
   )
   return {
     [outputPath]: template,
-    ...(await serviceFiles({ name, crud })),
+    ...(await serviceFiles({ name, crud, relations })),
   }
 }
 
