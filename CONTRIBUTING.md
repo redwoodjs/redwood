@@ -3,9 +3,8 @@
 Before interacting with the Redwood community, please read and understand our [Code of Conduct](https://github.com/redwoodjs/redwood/blob/master/CODE_OF_CONDUCT.md).
 
 **Table of Contents**
-
-- [Local Package Development](##Local-Package-Development-Setup)
-- [CLI Package Development](##CLI-Package-Development)
+- [Local Package Development](#Local-Package-Development-Setup)
+- [CLI Package Development](#CLI-Package-Development)
 
 <!-- toc -->
 
