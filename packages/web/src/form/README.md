@@ -6,13 +6,13 @@ Redwood provides several helpers to make your life easier when working with form
 
 Redwood currently provides the following form components:
 
-- `<Form>` surrounds all form elements and provides contexts for errors and form submission
-- `<FormError>` displays an error message, typically at the top of your form, containing error messages from the server
-- `<Label>` is used in place of the HTML `<label>` tag and can respond to errors with different styling
-- `<TextField>` is used in place of the HTML `<input type="text">` tag and can accept validation options and be styled differently in the presence of an error
-- `<TextAreaField>` is used in place of the HTML `<textarea>` tag and can accept validation options and be styled differently in the presence of an error
-- `<FieldError>` will display error messages from form validation and server errors
-- `<Submit>` is used in place of `<button type="submit">` and will trigger a validation check and "submission" of the form (actually executes the function given to the `onSubmit` attribute on `<Form>`)
+* `<Form>` surrounds all form elements and provides contexts for errors and form submission
+* `<FormError>` displays an error message, typically at the top of your form, containing error messages from the server
+* `<Label>` is used in place of the HTML `<label>` tag and can respond to errors with different styling
+* `<TextField>` is used in place of the HTML `<input type="text">` tag and can accept validation options and be styled differently in the presence of an error
+* `<TextAreaField>` is used in place of the HTML `<textarea>` tag and can accept validation options and be styled differently in the presence of an error
+* `<FieldError>` will display error messages from form validation and server errors
+* `<Submit>` is used in place of `<button type="submit">` and will trigger a validation check and "submission" of the form (actually executes the function given to the `onSubmit` attribute on `<Form>`)
 
 Some fields share options:
 
@@ -84,7 +84,7 @@ const ContactPage = () => {
 Any form you want Redwood to provide validation and error styling on should be surrounded by this tag. Except for the view attributes specific to validation and submission, props are passed down to the regular `<form>` tag that is rendered.
 
 ```html
-<form onSubmit="{onSubmit}" className="form">...</form>
+<Form onSubmit={onSubmit} className="form">...</Form>
 
 <!-- Renders: <form class="form">...</form> -->
 ```
@@ -95,7 +95,7 @@ Besides the attributes listed below, any additional attributes are passed on as 
 
 #### onSubmit
 
-The `onSubmit` prop accepts a function name or anonymous function to be called _if_ validation is successful. This function will be called with a single object containing name/value pairs of all _Redwood form helper_ fields in your form. Meaning if you mix `<input>` and `<TextField>` form fields, only `<TextField>` names/values will be present.
+The `onSubmit` prop accepts a function name or anonymous function to be called *if* validation is successful. This function will be called with a single object containing name/value pairs of all *Redwood form helper* fields in your form. Meaning if you mix `<input>` and `<TextField>` form fields, only `<TextField>` names/values will be present.
 
 Behind the scenes the handler given to `onSubmit` is given to [react-hook-form](https://react-hook-form.com/api#handleSubmit)'s `handleSubmit` function.
 
@@ -175,7 +175,7 @@ const ContactPage = (props) => {
   const [create, { loading, error }] = useMutation(CREATE_CONTACT)
 
   onSubmit = (data) => {
-    create({ variables: { input: data } })
+    create({ variables: { input: data }})
   }
 
   return (
@@ -212,7 +212,7 @@ Generates an HTML `<label>` tag but is given different `style` and `className` a
 This tag can be self closing, in which case the `name` becomes the text of the label:
 
 ```html
-<label name="name" className="input" errorClassName="input error" />
+<Label name="name" className="input" errorClassName="input error" />
 
 <!-- Renders: <label for="name" class="input">name</label> -->
 ```
@@ -220,9 +220,7 @@ This tag can be self closing, in which case the `name` becomes the text of the l
 It can also have standard separate open/close tags and take text inside, in which that text will be the text of the rendered `<label>`:
 
 ```html
-<label name="name" className="input" errorClassName="input error"
-  >Your Name</label
->
+<Label name="name" className="input" errorClassName="input error">Your Name</Label>
 
 <!-- Renders: <label for="name" class="input">Your Name</label> -->
 ```
@@ -237,7 +235,7 @@ The name of the field that this label is connected to. This should be the same a
 
 #### errorStyle / errorClassName
 
-The `style` and `className` that should be passed to the HTML `<label>` tag that is generated _if_ the field with the same `name` has a validation error.
+The `style` and `className` that should be passed to the HTML `<label>` tag that is generated *if* the field with the same `name` has a validation error.
 
 ## `<TextField>`
 
@@ -265,7 +263,7 @@ The `name` of this field which will be used as the key in the object sent to the
 
 #### errorStyle / errorClassName
 
-The `style` and `className` that should be passed to the HTML `<input>` tag that is generated _if_ this field has a validation error.
+The `style` and `className` that should be passed to the HTML `<input>` tag that is generated *if* this field has a validation error.
 
 #### validation
 
@@ -303,12 +301,12 @@ See `<TextField>` [errorStyle](#textfield-attributes)
 
 ## `<FieldError>`
 
-Renders a `<span>` containing any validation error message _if_ the field with the same `name` attribute has a validation error. Otherwise renders nothing.
+Renders a `<span>` containing any validation error message *if* the field with the same `name` attribute has a validation error. Otherwise renders nothing.
 
 ```html
 <FieldError name="name" className="error-message">
-  <!-- Renders: <span class="error-message">name is required</span> --></FieldError
->
+
+<!-- Renders: <span class="error-message">name is required</span> -->
 ```
 
 ### `<FieldError>` Attributes
