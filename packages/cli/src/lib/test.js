@@ -80,5 +80,5 @@ export const loadGeneratorFixture = (generator, name) => {
 
 // Returns the contents of a text file suffixed with ".fixture"
 export const loadFixture = (filepath) => {
-  return fs.readFileSync(`${filepath}.fixture`).toString()
+  return fs.readFileSync(filepath).toString()
 }

@@ -1,7 +1,7 @@
 global.__dirname = __dirname
 import {} from 'src/lib/test'
 
-import * as helpers from './helpers'
+import * as helpers from '../helpers'
 
 const PAGE_TEMPLATE_OUTPUT = `const FooBarPage = () => {
   return (
