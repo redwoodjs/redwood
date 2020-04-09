@@ -154,3 +154,38 @@ test('creates a multi-word name routes', async () => {
     '<Route path="/user-profiles" page={UserProfilesPage} name="userProfiles" />',
   ])
 })
+
+// GraphQL queries
+
+test('the GraphQL in the index query does not contain object types', async () => {
+  const userProfileFiles = await scaffold.files({ model: 'UserProfile' })
+  const cell =
+    userProfileFiles[
+      '/path/to/project/web/src/components/UserProfilesCell/UserProfilesCell.js'
+    ]
+  const query = cell.match(/(userProfiles.*?\})/s)[1]
+
+  expect(query).not.toMatch(/^\s+user$/m)
+})
+
+test('the GraphQL in the show query does not contain object types', async () => {
+  const userProfileFiles = await scaffold.files({ model: 'UserProfile' })
+  const cell =
+    userProfileFiles[
+      '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.js'
+    ]
+  const query = cell.match(/(userProfile.*?\})/s)[1]
+
+  expect(query).not.toMatch(/^\s+user$/m)
+})
+
+test('the GraphQL in the edit query does not contain object types', async () => {
+  const userProfileFiles = await scaffold.files({ model: 'UserProfile' })
+  const cell =
+    userProfileFiles[
+      '/path/to/project/web/src/components/EditUserProfileCell/EditUserProfileCell.js'
+    ]
+  const query = cell.match(/(userProfile.*?\})/s)[1]
+
+  expect(query).not.toMatch(/^\s+user$/m)
+})

@@ -146,7 +146,7 @@ const componentFiles = async (name) => {
   const singularName = pascalcase(pluralize.singular(name))
   const model = await getSchema(singularName)
   const idType = getIdType(model)
-  const columns = model.fields
+  const columns = model.fields.filter((field) => field.kind !== 'object')
   let fileList = {}
   const editableColumns = columns.filter((column) => {
     return NON_EDITABLE_COLUMNS.indexOf(column.name) === -1
