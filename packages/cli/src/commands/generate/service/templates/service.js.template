@@ -27,4 +27,8 @@ export const delete${singularPascalName} = ({ id }) => {
   return db.${singularCamelName}.delete({
     where: { id },
   })
+}<% } %><% if (relations.length) { %>
+
+export const ${singularPascalName} = {<% relations.forEach(relation => { %>
+  ${relation}: (_obj, { root }) => db.${singularCamelName}.findOne({ where: { id: root.id } }).${relation}(),<% }) %>
 }<% } %>
