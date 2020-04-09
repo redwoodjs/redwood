@@ -107,7 +107,7 @@ export const builder = {
   force: { type: 'boolean', default: false },
 }
 // TODO: Add --dry-run command
-export const handler = async ({ model, crud, services, force }) => {
+export const handler = async ({ model, crud, force }) => {
   const tasks = new Listr(
     [
       {
