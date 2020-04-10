@@ -189,3 +189,35 @@ test('the GraphQL in the edit query does not contain object types', async () => 
 
   expect(query).not.toMatch(/^\s+user$/m)
 })
+
+// Foreign key casting
+
+test('creates a new component with int foreign keys converted in onSave', async () => {
+  const foreignKeyFiles = await scaffold.files({ model: 'UserProfile' })
+
+  expect(
+    foreignKeyFiles[
+      '/path/to/project/web/src/components/NewUserProfile/NewUserProfile.js'
+    ]
+  ).toEqual(
+    loadGeneratorFixture(
+      'scaffold',
+      path.join('components', 'foreignKeys', 'new.js')
+    )
+  )
+})
+
+test('creates an edit component with int foreign keys converted in onSave', async () => {
+  const foreignKeyFiles = await scaffold.files({ model: 'UserProfile' })
+
+  expect(
+    foreignKeyFiles[
+      '/path/to/project/web/src/components/EditUserProfileCell/EditUserProfileCell.js'
+    ]
+  ).toEqual(
+    loadGeneratorFixture(
+      'scaffold',
+      path.join('components', 'foreignKeys', 'edit.js')
+    )
+  )
+})
