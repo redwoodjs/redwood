@@ -117,3 +117,223 @@ test('pathName creates path based on name if path is null', () => {
     expect(helpers.pathName(null, name)).toEqual('/foo-bar')
   })
 })
+
+test('relationsForModel returns related field names from a belongs-to relationship', () => {
+  const model = {
+    name: 'UserProfile',
+    isEmbedded: false,
+    dbName: null,
+    fields: [
+      {
+        name: 'id',
+        kind: 'scalar',
+        dbNames: [],
+        isList: false,
+        isRequired: true,
+        isUnique: false,
+        isId: true,
+        type: 'Int',
+        default: [Object],
+        isGenerated: false,
+        isUpdatedAt: false,
+      },
+      {
+        name: 'userId',
+        kind: 'scalar',
+        dbNames: [],
+        isList: false,
+        isRequired: true,
+        isUnique: false,
+        isId: false,
+        type: 'Int',
+        isGenerated: false,
+        isUpdatedAt: false,
+      },
+      {
+        name: 'user',
+        kind: 'object',
+        dbNames: [],
+        isList: false,
+        isRequired: true,
+        isUnique: false,
+        isId: false,
+        type: 'User',
+        relationName: 'UserToUserProfile',
+        relationToFields: [Array],
+        relationOnDelete: 'NONE',
+        isGenerated: false,
+        isUpdatedAt: false,
+      },
+    ],
+    isGenerated: false,
+    idFields: [],
+    uniqueFields: [],
+  }
+
+  expect(helpers.relationsForModel(model)).toEqual(['user'])
+})
+
+test('relationsForModel returns related field names from a has-many relationship', () => {
+  const model = {
+    name: 'User',
+    isEmbedded: false,
+    dbName: null,
+    fields: [
+      {
+        name: 'id',
+        kind: 'scalar',
+        dbNames: [],
+        isList: false,
+        isRequired: true,
+        isUnique: false,
+        isId: true,
+        type: 'Int',
+        default: [Object],
+        isGenerated: false,
+        isUpdatedAt: false,
+      },
+      {
+        name: 'name',
+        kind: 'scalar',
+        dbNames: [],
+        isList: false,
+        isRequired: false,
+        isUnique: false,
+        isId: false,
+        type: 'String',
+        isGenerated: false,
+        isUpdatedAt: false,
+      },
+      {
+        name: 'profiles',
+        kind: 'object',
+        dbNames: [],
+        isList: true,
+        isRequired: false,
+        isUnique: false,
+        isId: false,
+        type: 'UserProfile',
+        relationName: 'UserToUserProfile',
+        relationToFields: [],
+        relationOnDelete: 'NONE',
+        isGenerated: false,
+        isUpdatedAt: false,
+      },
+    ],
+    isGenerated: false,
+    idFields: [],
+    uniqueFields: [],
+  }
+
+  expect(helpers.relationsForModel(model)).toEqual(['userProfiles'])
+})
+
+test('intForeignKeysForModel returns names of foreign keys that are Int datatypes', () => {
+  const model = {
+    name: 'UserProfile',
+    isEmbedded: false,
+    dbName: null,
+    fields: [
+      {
+        name: 'id',
+        kind: 'scalar',
+        dbNames: [],
+        isList: false,
+        isRequired: true,
+        isUnique: false,
+        isId: true,
+        type: 'Int',
+        default: [Object],
+        isGenerated: false,
+        isUpdatedAt: false,
+      },
+      {
+        name: 'userId',
+        kind: 'scalar',
+        dbNames: [],
+        isList: false,
+        isRequired: true,
+        isUnique: false,
+        isId: false,
+        type: 'Int',
+        isGenerated: false,
+        isUpdatedAt: false,
+      },
+      {
+        name: 'user',
+        kind: 'object',
+        dbNames: [],
+        isList: false,
+        isRequired: true,
+        isUnique: false,
+        isId: false,
+        type: 'User',
+        relationName: 'UserToUserProfile',
+        relationToFields: [Array],
+        relationOnDelete: 'NONE',
+        isGenerated: false,
+        isUpdatedAt: false,
+      },
+    ],
+    isGenerated: false,
+    idFields: [],
+    uniqueFields: [],
+  }
+
+  expect(helpers.intForeignKeysForModel(model)).toEqual(['userId'])
+})
+
+test('intForeignKeysForModel does not include foreign keys of other datatypes', () => {
+  const model = {
+    name: 'UserProfile',
+    isEmbedded: false,
+    dbName: null,
+    fields: [
+      {
+        name: 'id',
+        kind: 'scalar',
+        dbNames: [],
+        isList: false,
+        isRequired: true,
+        isUnique: false,
+        isId: true,
+        type: 'Int',
+        default: [Object],
+        isGenerated: false,
+        isUpdatedAt: false,
+      },
+      {
+        name: 'userId',
+        kind: 'scalar',
+        dbNames: [],
+        isList: false,
+        isRequired: true,
+        isUnique: false,
+        isId: false,
+        type: 'String',
+        isGenerated: false,
+        isUpdatedAt: false,
+      },
+      {
+        name: 'user',
+        kind: 'object',
+        dbNames: [],
+        isList: false,
+        isRequired: true,
+        isUnique: false,
+        isId: false,
+        type: 'User',
+        relationName: 'UserToUserProfile',
+        relationToFields: [Array],
+        relationOnDelete: 'NONE',
+        isGenerated: false,
+        isUpdatedAt: false,
+      },
+    ],
+    isGenerated: false,
+    idFields: [],
+    uniqueFields: [],
+  }
+
+  expect(helpers.intForeignKeysForModel(model)).toEqual([])
+})

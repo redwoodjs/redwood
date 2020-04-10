@@ -6,7 +6,7 @@ import {
   createYargsForComponentGeneration,
 } from '../helpers'
 
-export const files = async ({ name, ...rest }) => {
+export const files = async ({ name, relations, ...rest }) => {
   const componentName = camelcase(pluralize(name))
   const serviceFile = templateForComponentFile({
     name,
@@ -14,7 +14,7 @@ export const files = async ({ name, ...rest }) => {
     apiPathSection: 'services',
     generator: 'service',
     templatePath: 'service.js.template',
-    templateVars: { ...rest },
+    templateVars: { relations: relations || [], ...rest },
   })
   const testFile = templateForComponentFile({
     name,
@@ -23,7 +23,7 @@ export const files = async ({ name, ...rest }) => {
     apiPathSection: 'services',
     generator: 'service',
     templatePath: 'test.js.template',
-    templateVars: { ...rest },
+    templateVars: { relations: relations || [], ...rest },
   })
 
   // Returns

@@ -9,6 +9,7 @@ import { generateTemplate, getSchema, getPaths, writeFilesTask } from 'src/lib'
 import c from 'src/lib/colors'
 
 import { files as serviceFiles } from '../service/service'
+import { relationsForModel } from '../helpers'
 
 const IGNORE_FIELDS_FOR_INPUT = ['id', 'createdAt']
 
@@ -65,6 +66,7 @@ const sdlFromSchemaModel = async (name) => {
       query: querySDL(model).join('\n    '),
       input: inputSDL(model, types).join('\n    '),
       idType: idType(model),
+      relations: relationsForModel(model),
     }
   } else {
     throw new Error(
@@ -74,7 +76,7 @@ const sdlFromSchemaModel = async (name) => {
 }
 
 export const files = async ({ name, crud }) => {
-  const { query, input, idType } = await sdlFromSchemaModel(
+  const { query, input, idType, relations } = await sdlFromSchemaModel(
     pascalcase(pluralize.singular(name))
   )
 
@@ -95,7 +97,7 @@ export const files = async ({ name, crud }) => {
   )
   return {
     [outputPath]: template,
-    ...(await serviceFiles({ name, crud })),
+    ...(await serviceFiles({ name, crud, relations })),
   }
 }
 

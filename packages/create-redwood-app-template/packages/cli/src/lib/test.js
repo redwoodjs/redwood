@@ -42,20 +42,6 @@ export const generatorsRootPath = path.join(
   'generate'
 )
 
-export const sdlFixturesPath = path.join(
-  generatorsRootPath,
-  'sdl',
-  '__tests__',
-  'fixtures'
-)
-
-export const serviceFixturesPath = path.join(
-  generatorsRootPath,
-  'service',
-  '__tests__',
-  'fixtures'
-)
-
 // Loads the fixture for a generator by assuming a lot of the path structure automatically:
 //
 //   loadGeneratorFixture('scaffold', 'NamePage.js')

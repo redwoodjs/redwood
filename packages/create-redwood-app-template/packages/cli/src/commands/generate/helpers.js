@@ -1,5 +1,7 @@
 import path from 'path'
 
+import camelcase from 'camelcase'
+import pluralize from 'pluralize'
 import Listr from 'listr'
 import pascalcase from 'pascalcase'
 import { paramCase } from 'param-case'
@@ -87,4 +89,21 @@ export const createYargsForComponentGeneration = ({
       }
     },
   }
+}
+
+// Returns all relations to other models
+export const relationsForModel = (model) => {
+  return model.fields
+    .filter((f) => f.relationName)
+    .map((field) => {
+      const relationName = camelcase(field.type)
+      return field.isList ? pluralize(relationName) : relationName
+    })
+}
+
+// Returns only relations that are of datatype Int
+export const intForeignKeysForModel = (model) => {
+  return model.fields
+    .filter((f) => f.name.match(/Id$/) && f.type === 'Int')
+    .map((f) => f.name)
 }
