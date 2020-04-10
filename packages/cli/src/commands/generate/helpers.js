@@ -91,6 +91,7 @@ export const createYargsForComponentGeneration = ({
   }
 }
 
+// Returns all relations to other models
 export const relationsForModel = (model) => {
   return model.fields
     .filter((f) => f.relationName)
@@ -98,4 +99,11 @@ export const relationsForModel = (model) => {
       const relationName = camelcase(field.type)
       return field.isList ? pluralize(relationName) : relationName
     })
+}
+
+// Returns only relations that are of datatype Int
+export const intForeignKeysForModel = (model) => {
+  return model.fields
+    .filter((f) => f.name.match(/Id$/) && f.type === 'Int')
+    .map((f) => f.name)
 }
