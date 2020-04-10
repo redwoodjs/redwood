@@ -1,4 +1,4 @@
-import { matchPath } from '../util'
+import { matchPath, parseSearch } from '../util'
 
 describe('matchPath', () => {
   it('matches paths correctly', () => {
@@ -60,5 +60,17 @@ describe('matchPath', () => {
       match: true,
       params: { id: 1337 },
     })
+  })
+})
+
+describe('parseSearch', () => {
+  it('deals silently with an empty search string', () => {
+    expect(parseSearch('')).toEqual({})
+  })
+
+  it('correctly parses a search string', () => {
+    expect(
+      parseSearch('?search=all+dogs+go+to+heaven&category=movies')
+    ).toEqual({ category: 'movies', search: 'all dogs go to heaven' })
   })
 })
