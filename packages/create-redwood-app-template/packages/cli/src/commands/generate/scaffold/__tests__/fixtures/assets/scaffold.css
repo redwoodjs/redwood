@@ -1,0 +1,167 @@
+/*
+  This file was created automatically as the result of the scaffold generator.
+  If you decide to use TailwindCSS in your project then you can safely delete
+  this file, but first remove the <div className="rw-scaffold"> from the Layout
+  that your scaffold is wrapped in. Check the comment blocks below for a
+  couple of config options you'll need to add to Tailwind to preserve the
+  scaffold appearance.
+
+  If you don't use Tailwind then you should keep it here until you have
+  completely converted your scaffolded pages or removed them, or if you don't
+  mind your scaffolded pages being monumentally ugly.
+*/
+
+/*
+  normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css
+*/
+
+.rw-scaffold main{display:block}
+.rw-scaffold h1{font-size:2em;margin:.67em 0}
+.rw-scaffold a{background-color:transparent}
+.rw-scaffold input{font-family:inherit;font-size:100%;line-height:1.15;margin:0}
+.rw-scaffold input{overflow:visible}
+.rw-scaffold *,.rw-scaffold ::after,.rw-scaffold ::before{box-sizing:inherit}
+.rw-scaffold h1,.rw-scaffold h2{margin:0}
+.rw-scaffold ul{list-style:none;margin:0;padding:0}
+.rw-scaffold *,.rw-scaffold ::after,.rw-scaffold ::before{border-width:0;border-style:solid;border-color:#e2e8f0}
+.rw-scaffold input:-ms-input-placeholder{color:#a0aec0}
+.rw-scaffold input::-ms-input-placeholder{color:#a0aec0}
+.rw-scaffold input::placeholder{color:#a0aec0}
+.rw-scaffold table{border-collapse:collapse}
+.rw-scaffold h1,.rw-scaffold .rw-scaffold h2{font-size:inherit;font-weight:inherit}
+.rw-scaffold a{color:inherit;text-decoration:inherit}
+.rw-scaffold input{padding:0;line-height:inherit;color:inherit}
+
+/*
+  Classes we use in scaffolds from TailwindCSS v1.1.4
+*/
+
+.rw-scaffold .bg-white{background-color:#fff}
+.rw-scaffold .bg-gray-100{background-color:#f7fafc}
+.rw-scaffold .bg-gray-300{background-color:#e2e8f0}
+.rw-scaffold .bg-red-100{background-color:#fff5f5}
+.rw-scaffold .bg-red-600{background-color:#e53e3e}
+.rw-scaffold .bg-green-500{background-color:#48bb78}
+.rw-scaffold .bg-blue-600{background-color:#3182ce}
+.rw-scaffold .hover\:bg-gray-600:hover{background-color:#718096}
+.rw-scaffold .hover\:bg-red-600:hover{background-color:#e53e3e}
+.rw-scaffold .hover\:bg-red-700:hover{background-color:#c53030}
+.rw-scaffold .hover\:bg-green-600:hover{background-color:#38a169}
+.rw-scaffold .hover\:bg-blue-600:hover{background-color:#3182ce}
+.rw-scaffold .hover\:bg-blue-700:hover{background-color:#2b6cb0}
+.rw-scaffold .border-gray-300{border-color:#e2e8f0}
+.rw-scaffold .border-red-300{border-color:#feb2b2}
+.rw-scaffold .border-red-700{border-color:#c53030}
+.rw-scaffold .focus\:border-gray-500:focus{border-color:#a0aec0}
+.rw-scaffold .rounded-sm{border-radius:.125rem}
+.rw-scaffold .rounded{border-radius:.25rem}
+.rw-scaffold .rounded-lg{border-radius:.5rem}
+.rw-scaffold .border{border-width:1px}
+.rw-scaffold .border-t{border-top-width:1px}
+.rw-scaffold .block{display:block}
+.rw-scaffold .inline-block{display:inline-block}
+.rw-scaffold .flex{display:flex}
+.rw-scaffold .table{display:table}
+.rw-scaffold .justify-between{justify-content:space-between}
+.rw-scaffold .font-sans{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"}
+.rw-scaffold .font-semibold{font-weight:600}
+.rw-scaffold .leading-none{line-height:1}
+.rw-scaffold .leading-loose{line-height:2}
+.rw-scaffold .list-inside{list-style-position:inside}
+.rw-scaffold .list-disc{list-style-type:disc}
+.rw-scaffold .mx-2{margin-left:.5rem;margin-right:.5rem}
+.rw-scaffold .my-4{margin-top:1rem;margin-bottom:1rem}
+.rw-scaffold .mx-4{margin-left:1rem;margin-right:1rem}
+.rw-scaffold .mt-0{margin-top:0}
+.rw-scaffold .mt-1{margin-top:.25rem}
+.rw-scaffold .ml-1{margin-left:.25rem}
+.rw-scaffold .mt-2{margin-top:.5rem}
+.rw-scaffold .ml-2{margin-left:.5rem}
+.rw-scaffold .mt-4{margin-top:1rem}
+.rw-scaffold .mb-4{margin-bottom:1rem}
+.rw-scaffold .mt-6{margin-top:1.5rem}
+.rw-scaffold .mt-8{margin-top:2rem}
+.rw-scaffold .-mt-4{margin-top:-1rem}
+.rw-scaffold .focus\:outline-none:focus{outline:0}
+.rw-scaffold .overflow-hidden{overflow:hidden}
+.rw-scaffold .overflow-x-scroll{overflow-x:scroll}
+.rw-scaffold .p-2{padding:.5rem}
+.rw-scaffold .p-3{padding:.75rem}
+.rw-scaffold .p-4{padding:1rem}
+.rw-scaffold .py-1{padding-top:.25rem;padding-bottom:.25rem}
+.rw-scaffold .py-2{padding-top:.5rem;padding-bottom:.5rem}
+.rw-scaffold .px-2{padding-left:.5rem;padding-right:.5rem}
+.rw-scaffold .py-3{padding-top:.75rem;padding-bottom:.75rem}
+.rw-scaffold .px-3{padding-left:.75rem;padding-right:.75rem}
+.rw-scaffold .py-4{padding-top:1rem;padding-bottom:1rem}
+.rw-scaffold .px-4{padding-left:1rem;padding-right:1rem}
+.rw-scaffold .px-8{padding-left:2rem;padding-right:2rem}
+.rw-scaffold .pr-4{padding-right:1rem}
+.rw-scaffold .pb-4{padding-bottom:1rem}
+.rw-scaffold .table-auto{table-layout:auto}
+.rw-scaffold .text-left{text-align:left}
+.rw-scaffold .text-center{text-align:center}
+.rw-scaffold .text-right{text-align:right}
+.rw-scaffold .text-white{color:#fff}
+.rw-scaffold .text-gray-600{color:#718096}
+.rw-scaffold .text-gray-700{color:#4a5568}
+.rw-scaffold .text-gray-900{color:#1a202c}
+.rw-scaffold .text-red-600{color:#e53e3e}
+.rw-scaffold .text-red-700{color:#c53030}
+.rw-scaffold .text-red-900{color:#742a2a}
+.rw-scaffold .text-blue-500{color:#4299e1}
+.rw-scaffold .text-blue-600{color:#3182ce}
+.rw-scaffold .hover\:text-white:hover{color:#fff}
+.rw-scaffold .hover\:text-gray-900:hover{color:#1a202c}
+.rw-scaffold .hover\:text-blue-700:hover{color:#2b6cb0}
+.rw-scaffold .text-xs{font-size:.75rem}
+.rw-scaffold .text-sm{font-size:.875rem}
+.rw-scaffold .text-xl{font-size:1.25rem}
+.rw-scaffold .uppercase{text-transform:uppercase}
+.rw-scaffold .underline{text-decoration:underline}
+.rw-scaffold .hover\:underline:hover{text-decoration:underline}
+.rw-scaffold .tracking-wide{letter-spacing:.025em}
+.rw-scaffold .whitespace-no-wrap{white-space:nowrap}
+.rw-scaffold .truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rw-scaffold .w-full{width:100%}
+.rw-scaffold .box-border{box-sizing:border-box}
+@media (min-width:768px) {
+  .rw-scaffold .md\:w-1\/5{width:20%}
+}
+
+/*
+  Here are variants (:odd, :even) that aren't enabled in Tailwind by default.
+  If you decide to include Tailwind yourself and still want scaffolds to look
+  the same then you can tell it to build these variants by adding the following
+  to tailwind.config.js:
+
+    module.exports = {
+      variants: {
+        backgroundColor: ['hover', 'focus', 'odd', 'even']
+      }
+    }
+
+  Tailwind variant customization docs: https://tailwindcss.com/docs/configuring-variants
+*/
+
+.rw-scaffold .odd\:bg-gray-100:nth-child(odd) {background-color: #f7fafc}
+.rw-scaffold .even\:bg-white:nth-child(even) {background-color: #ffffff;}
+
+/*
+  Any custom styles that Tailwind doesn't provide. You can add these to your
+  own install of Tailwind by adding the following to tailwind.config.js:
+
+    module.exports = {
+      theme: {
+        extend: {
+          minWidth: {
+            '3xl': '48rem'
+          }
+        }
+      }
+    }
+
+  Tailwind theme extension docs: https://tailwindcss.com/docs/theme#extending-the-default-theme
+*/
+
+.rw-scaffold .min-w-3xl {min-width: 48rem}

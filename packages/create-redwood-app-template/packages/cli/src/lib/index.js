@@ -13,7 +13,7 @@ import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import { format } from 'prettier'
 
-import c from 'src/lib/colors'
+import c from './colors'
 
 export const asyncForEach = async (array, callback) => {
   for (let index = 0; index < array.length; index++) {
@@ -40,7 +40,9 @@ export const getSchema = async (name) => {
     if (model) {
       return model
     } else {
-      throw `No schema definition found for \`${name}\` in schema.prisma file`
+      throw new Error(
+        `No schema definition found for \`${name}\` in schema.prisma file`
+      )
     }
   }
 
@@ -59,8 +61,8 @@ export const getSchema = async (name) => {
  * singularParamName: foo-bar
  * pluralParamName: foo-bars
 */
-const nameVariants = (name) => {
-  const normalizedName = pascalcase(pluralize.singular(name))
+export const nameVariants = (name) => {
+  const normalizedName = pascalcase(paramCase(pluralize.singular(name)))
 
   return {
     pascalName: pascalcase(name),
@@ -74,13 +76,10 @@ const nameVariants = (name) => {
   }
 }
 
-export const templateRoot = path.resolve(
-  __dirname,
-  '../commands/generate/templates'
-)
+export const templateRoot = path.resolve(__dirname, '../commands/generate')
 
-export const generateTemplate = (templateFilename, { name, ...rest }) => {
-  const templatePath = path.join(templateRoot, templateFilename)
+export const generateTemplate = (templateFilename, { name, root, ...rest }) => {
+  const templatePath = path.join(root || templateRoot, templateFilename)
   const template = lodash.template(readFile(templatePath).toString())
 
   const renderedTemplate = template({
@@ -93,8 +92,8 @@ export const generateTemplate = (templateFilename, { name, ...rest }) => {
   // we're using.
   // https://prettier.io/docs/en/options.html#parser
   const parser = {
-    css: 'css',
-    js: 'babel',
+    '.css': 'css',
+    '.js': 'babel',
   }[path.extname(templateFilename)]
 
   if (typeof parser === 'undefined') {
@@ -134,7 +133,7 @@ export const getPaths = () => {
   try {
     return getRedwoodPaths()
   } catch (e) {
-    console.log(c.error(e.message))
+    console.error(c.error(e.message))
     process.exit(0)
   }
 }

@@ -1,6 +1,3 @@
-jest.mock('@redwoodjs/internal')
-jest.mock('src/lib')
-
 import { runCommandTask } from 'src/lib'
 
 import * as up from '../up'
@@ -9,7 +6,24 @@ import * as save from '../save'
 import * as generate from '../generate'
 import * as seed from '../seed'
 
+jest.mock('src/lib', () => {
+  return {
+    ...require.requireActual('src/lib'),
+    runCommandTask: jest.fn((commands) => {
+      return commands.map(({ cmd, args }) => `${cmd} ${args.join(' ')}`)
+    }),
+    getPaths: () => ({
+      api: {},
+      web: {},
+    }),
+  }
+})
+
 describe('db commands', () => {
+  afterAll(() => {
+    jest.clearAllMocks()
+  })
+
   it('some commands have a verbose flag', () => {
     expect(up.builder.verbose).toBeDefined()
     expect(down.builder.verbose).toBeDefined()
