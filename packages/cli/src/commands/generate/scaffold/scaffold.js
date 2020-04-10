@@ -20,6 +20,7 @@ import {
 } from 'src/lib'
 import c from 'src/lib/colors'
 
+import { relationsForModel, intForeignKeysForModel } from '../helpers'
 import { files as sdlFiles } from '../sdl/sdl'
 import { files as serviceFiles } from '../service/service'
 
@@ -45,9 +46,15 @@ const getIdType = (model) => {
 }
 
 export const files = async ({ model: name }) => {
+  const model = await getSchema(pascalcase(pluralize.singular(name)))
+
   return {
     ...(await sdlFiles({ name, crud: true })),
-    ...(await serviceFiles({ name, crud: true })),
+    ...(await serviceFiles({
+      name,
+      crud: true,
+      relations: relationsForModel(model),
+    })),
     ...assetFiles(name),
     ...layoutFiles(name),
     ...pageFiles(name),
@@ -139,7 +146,8 @@ const componentFiles = async (name) => {
   const singularName = pascalcase(pluralize.singular(name))
   const model = await getSchema(singularName)
   const idType = getIdType(model)
-  const columns = model.fields
+  const columns = model.fields.filter((field) => field.kind !== 'object')
+  const intForeignKeys = intForeignKeysForModel(model)
   let fileList = {}
   const editableColumns = columns.filter((column) => {
     return NON_EDITABLE_COLUMNS.indexOf(column.name) === -1
@@ -163,6 +171,7 @@ const componentFiles = async (name) => {
         columns,
         editableColumns,
         idType,
+        intForeignKeys,
       }
     )
     fileList[outputPath] = template

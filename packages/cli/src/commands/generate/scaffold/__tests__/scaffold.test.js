@@ -1,12 +1,7 @@
 global.__dirname = __dirname
 import path from 'path'
 
-import {
-  loadFixture,
-  loadGeneratorFixture,
-  sdlFixturesPath,
-  serviceFixturesPath,
-} from 'src/lib/test'
+import { loadGeneratorFixture } from 'src/lib/test'
 
 import * as scaffold from '../scaffold'
 
@@ -20,35 +15,33 @@ test('returns exactly 16 files', () => {
   expect(Object.keys(files).length).toEqual(16)
 })
 
-// styles
-
-test('creates a stylesheet', () => {
-  expect(files['/path/to/project/web/src/scaffold.css']).toEqual(
-    loadGeneratorFixture('scaffold', path.join('assets', 'scaffold.css'))
-  )
-})
-
 // SDL
 
-test('creates a graphql sdl', () => {
-  expect(files['/path/to/project/api/src/graphql/posts.sdl.js']).toEqual(
-    loadFixture(path.join(sdlFixturesPath, 'singleWordSdlCrud.js'))
-  )
+test('creates an sdl', () => {
+  expect(files).toHaveProperty([
+    '/path/to/project/api/src/graphql/posts.sdl.js',
+  ])
 })
 
 // Service
 
 test('creates a service', () => {
-  expect(files['/path/to/project/api/src/services/posts/posts.js']).toEqual(
-    loadFixture(path.join(serviceFixturesPath, 'singleWordServiceCrud.js'))
-  )
+  expect(files).toHaveProperty([
+    '/path/to/project/api/src/services/posts/posts.js',
+  ])
 })
 
 test('creates a service test', () => {
-  expect(
-    files['/path/to/project/api/src/services/posts/posts.test.js']
-  ).toEqual(
-    loadFixture(path.join(serviceFixturesPath, 'singleWordServiceCrud.test.js'))
+  expect(files).toHaveProperty([
+    '/path/to/project/api/src/services/posts/posts.test.js',
+  ])
+})
+
+// styles
+
+test('creates a stylesheet', () => {
+  expect(files['/path/to/project/web/src/scaffold.css']).toEqual(
+    loadGeneratorFixture('scaffold', path.join('assets', 'scaffold.css'))
   )
 })
 
@@ -160,4 +153,71 @@ test('creates a multi-word name routes', async () => {
     '<Route path="/user-profiles/{id:Int}" page={UserProfilePage} name="userProfile" />',
     '<Route path="/user-profiles" page={UserProfilesPage} name="userProfiles" />',
   ])
+})
+
+// GraphQL queries
+
+test('the GraphQL in the index query does not contain object types', async () => {
+  const userProfileFiles = await scaffold.files({ model: 'UserProfile' })
+  const cell =
+    userProfileFiles[
+      '/path/to/project/web/src/components/UserProfilesCell/UserProfilesCell.js'
+    ]
+  const query = cell.match(/(userProfiles.*?\})/s)[1]
+
+  expect(query).not.toMatch(/^\s+user$/m)
+})
+
+test('the GraphQL in the show query does not contain object types', async () => {
+  const userProfileFiles = await scaffold.files({ model: 'UserProfile' })
+  const cell =
+    userProfileFiles[
+      '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.js'
+    ]
+  const query = cell.match(/(userProfile.*?\})/s)[1]
+
+  expect(query).not.toMatch(/^\s+user$/m)
+})
+
+test('the GraphQL in the edit query does not contain object types', async () => {
+  const userProfileFiles = await scaffold.files({ model: 'UserProfile' })
+  const cell =
+    userProfileFiles[
+      '/path/to/project/web/src/components/EditUserProfileCell/EditUserProfileCell.js'
+    ]
+  const query = cell.match(/(userProfile.*?\})/s)[1]
+
+  expect(query).not.toMatch(/^\s+user$/m)
+})
+
+// Foreign key casting
+
+test('creates a new component with int foreign keys converted in onSave', async () => {
+  const foreignKeyFiles = await scaffold.files({ model: 'UserProfile' })
+
+  expect(
+    foreignKeyFiles[
+      '/path/to/project/web/src/components/NewUserProfile/NewUserProfile.js'
+    ]
+  ).toEqual(
+    loadGeneratorFixture(
+      'scaffold',
+      path.join('components', 'foreignKeys', 'new.js')
+    )
+  )
+})
+
+test('creates an edit component with int foreign keys converted in onSave', async () => {
+  const foreignKeyFiles = await scaffold.files({ model: 'UserProfile' })
+
+  expect(
+    foreignKeyFiles[
+      '/path/to/project/web/src/components/EditUserProfileCell/EditUserProfileCell.js'
+    ]
+  ).toEqual(
+    loadGeneratorFixture(
+      'scaffold',
+      path.join('components', 'foreignKeys', 'edit.js')
+    )
+  )
 })

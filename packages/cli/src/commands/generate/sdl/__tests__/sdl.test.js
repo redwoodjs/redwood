@@ -1,11 +1,6 @@
 global.__dirname = __dirname
-import path from 'path'
 
-import {
-  loadFixture,
-  loadGeneratorFixture,
-  serviceFixturesPath,
-} from 'src/lib/test'
+import { loadGeneratorFixture } from 'src/lib/test'
 
 import * as sdl from '../sdl'
 
@@ -19,32 +14,18 @@ test('returns exactly 3 files', async () => {
   expect(Object.keys(files).length).toEqual(3)
 })
 
+// in this case we'll trust that a service and test are actually created
+// with the correct filename, but the contents of that file should be the
+// job of the service tests
 test('creates a service', async () => {
   const files = await sdl.files({ name: 'User', crud: false })
 
-  expect(files['/path/to/project/api/src/services/users/users.js']).toEqual(
-    loadFixture(path.join(serviceFixturesPath, 'singleWordService.js'))
-  )
-})
-
-test('creates a service test', async () => {
-  const files = await sdl.files({ name: 'User', crud: false })
-
-  expect(
-    files['/path/to/project/api/src/services/users/users.test.js']
-  ).toEqual(
-    loadFixture(path.join(serviceFixturesPath, 'singleWordService.test.js'))
-  )
-})
-
-test('the generated service inherits crud setting', async () => {
-  const files = await sdl.files({ name: 'Post', crud: true })
-
-  expect(
-    files['/path/to/project/api/src/services/posts/posts.test.js']
-  ).toEqual(
-    loadFixture(path.join(serviceFixturesPath, 'singleWordServiceCrud.test.js'))
-  )
+  expect(files).toHaveProperty([
+    '/path/to/project/api/src/services/users/users.js',
+  ])
+  expect(files).toHaveProperty([
+    '/path/to/project/api/src/services/users/users.test.js',
+  ])
 })
 
 test('creates a single word sdl file', async () => {
