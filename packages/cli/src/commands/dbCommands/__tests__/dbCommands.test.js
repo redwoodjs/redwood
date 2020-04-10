@@ -58,7 +58,7 @@ describe('db commands', () => {
 
     await introspect.handler({})
     expect(runCommandTask.mock.results[5].value).toEqual([
-      'yarn prisma2 introspect',
+      'yarn prisma introspect',
     ])
 
     await seed.handler({})
