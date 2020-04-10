@@ -3,14 +3,14 @@
 Before interacting with the Redwood community, please read and understand our [Code of Conduct](https://github.com/redwoodjs/redwood/blob/master/CODE_OF_CONDUCT.md).
 
 **Table of Contents**
-- [Local Package Development](##Local-Package-Development-Setup)
-- [CLI Package Development](##CLI-Package-Development)
+- [Local Package Development](#Local-Package-Development-Setup)
+- [CLI Package Development](#CLI-Package-Development)
 
 <!-- toc -->
 
 ## Local Package Development Setup
 
-You'll want to run a local redwood app sandbox using your local @redwoodjs packages instead of the current releases from the package registry. To do this we use [`yarn link`](`https://classic.yarnpkg.com/en/docs/cli/link/).
+You'll want to run a local redwood app sandbox using your local @redwoodjs packages instead of the current releases from the package registry. To do this we use [`yarn link`](https://classic.yarnpkg.com/en/docs/cli/link/).
 
 ### Example Setup: Package `@redwoodjs/cli` Local Dev
 
