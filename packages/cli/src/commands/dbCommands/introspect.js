@@ -12,7 +12,7 @@ export const handler = async ({ verbose = true }) => {
     [
       {
         title: 'Introspecting your database...',
-        cmd: 'yarn prisma2',
+        cmd: 'yarn prisma',
         args: ['introspect'],
         opts: { cwd: getPaths().api.db },
       },
