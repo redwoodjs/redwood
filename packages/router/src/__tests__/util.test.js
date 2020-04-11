@@ -95,6 +95,18 @@ describe('validatePath', () => {
   ])('rejects path "%s" with duplicate params', (path) => {
     expect(validatePath.bind(null, path)).toThrowError(`Route path contains duplicate parameter: "${path}"`)
   })
+
+  it.each([
+    '/users/{id:Int}/photos/{photo_id:Int}',
+    '/users/{id}/photos/{photo_id}',
+    '/users/{id}/photos/{photo_id}?format=jpg&w=400&h=400',
+    '/',
+    '/404',
+    '/about',
+    '/about/redwood',
+  ])('validates correct path "%s"', (path) => {
+    expect(validatePath.bind(null, path)).not.toThrow();
+  })
 })
 
 describe('parseSearch', () => {
