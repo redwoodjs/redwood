@@ -1,0 +1,99 @@
+{
+  "dbName": null,
+  "documentation": "Define your own models here and run yarn db:save to create migrations for them.",
+  "fields": [
+    {
+      "dbNames": [],
+      "default": {
+        "args": [],
+        "name": "autoincrement"
+      },
+      "isGenerated": false,
+      "isId": true,
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isUpdatedAt": false,
+      "kind": "scalar",
+      "name": "id",
+      "type": "Int"
+    },
+    {
+      "dbNames": [],
+      "isGenerated": false,
+      "isId": false,
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isUpdatedAt": false,
+      "kind": "scalar",
+      "name": "title",
+      "type": "String"
+    },
+    {
+      "dbNames": [],
+      "isGenerated": false,
+      "isId": false,
+      "isList": false,
+      "isRequired": true,
+      "isUnique": true,
+      "isUpdatedAt": false,
+      "kind": "scalar",
+      "name": "slug",
+      "type": "String"
+    },
+    {
+      "dbNames": [],
+      "isGenerated": false,
+      "isId": false,
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isUpdatedAt": false,
+      "kind": "scalar",
+      "name": "author",
+      "type": "String"
+    },
+    {
+      "dbNames": [],
+      "isGenerated": false,
+      "isId": false,
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isUpdatedAt": false,
+      "kind": "scalar",
+      "name": "body",
+      "type": "String"
+    },
+    {
+      "dbNames": [],
+      "isGenerated": false,
+      "isId": false,
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isUpdatedAt": false,
+      "kind": "scalar",
+      "name": "image",
+      "type": "String"
+    },
+    {
+      "dbNames": [],
+      "isGenerated": false,
+      "isId": false,
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isUpdatedAt": false,
+      "kind": "scalar",
+      "name": "postedAt",
+      "type": "DateTime"
+    }
+  ],
+  "idFields": [],
+  "isEmbedded": false,
+  "isGenerated": false,
+  "name": "Post",
+  "uniqueFields": []
+}

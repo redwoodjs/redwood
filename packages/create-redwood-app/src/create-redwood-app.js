@@ -18,11 +18,11 @@ import checkNodeVersion from 'check-node-version'
 import chalk from 'chalk'
 
 const RELEASE_URL =
-  'https://api.github.com/repos/redwoodjs/create-redwood-app/releases'
+  'https://api.github.com/repos/redwoodjs/create-redwood-app/releases/latest'
 
 const latestReleaseZipFile = async () => {
   const response = await axios.get(RELEASE_URL)
-  return response.data[0].zipball_url
+  return response.data.zipball_url
 }
 
 const downloadFile = async (sourceUrl, targetFile) => {
