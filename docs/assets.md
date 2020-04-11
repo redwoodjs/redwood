@@ -53,7 +53,7 @@ Running `yarn build` will copy the file `favicon.png` to `/dist/favicon.png`. Th
 and
 
 ```html
-<img src="/static-files/my-logo.jpg" /> alt="Logo" />
+<img src="/static-files/my-logo.jpg" alt="Logo" />
 ```
 
 > Note: because the directory `dist/` becomes your production root, it should not be included in the path.
