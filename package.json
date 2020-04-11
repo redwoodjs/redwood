@@ -20,7 +20,6 @@
     "jest": "^25.2.3",
     "lerna": "^3.20.2",
     "nodemon": "^2.0.2",
-    "npm-run-all": "^4.1.5",
     "typescript": "^3.8.3"
   },
   "eslintConfig": {
@@ -31,10 +30,10 @@
     "packages/api/importAll.macro.js"
   ],
   "scripts": {
-    "build": "run-s build:*",
+    "build": "yarn build:clean && yarn build:js && yarn build:types",
     "build:clean": "lerna run build:clean",
     "build:js": "cross-env NODE_ENV=production lerna run build",
-    "build:types": "tsc --build",
+    "build:types": "tsc --build --clean && tsc --build",
     "test": "lerna run test --stream -- --colors",
     "lint": "yarn eslint packages",
     "lint:fix": "yarn eslint --fix packages"
