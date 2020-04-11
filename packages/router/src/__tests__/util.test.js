@@ -73,6 +73,21 @@ describe('validatePath', () => {
   })
 
   it.each([
+    '/path/to/user profile',
+    '/path/ to/userprofile',
+    '/path/to /userprofile',
+    '/path/to/users/{id: Int}',
+    '/path/to/users/{id :Int}',
+    '/path/to/users/{id : Int}',
+    '/path/to/users/{ id:Int}',
+    '/path/to/users/{id:Int }',
+    '/path/to/users/{ id:Int }',
+    '/path/to/users/{ id : Int }',
+  ])('rejects paths with spaces: "%s"', (path) => {
+    expect(validatePath.bind(null, path)).toThrowError(`Route path contains spaces: "${path}"`)
+  })
+
+  it.each([
     '/users/{id}/photos/{id}',
     '/users/{id}/photos/{id:Int}',
     '/users/{id:Int}/photos/{id}',

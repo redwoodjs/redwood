@@ -131,6 +131,10 @@ const validatePath = (path) => {
     throw new Error(`Route path does not begin with a slash: "${path}"`)
   }
 
+  if (path.indexOf(' ') >= 0) {
+    throw new Error(`Route path contains spaces: "${path}"`)
+  }
+
   // Check for duplicate named params.
   const matches = path.matchAll(/\{([^}]+)\}/g)
   let memo = {}
