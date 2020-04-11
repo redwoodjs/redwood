@@ -3,6 +3,7 @@
 Before interacting with the Redwood community, please read and understand our [Code of Conduct](https://github.com/redwoodjs/redwood/blob/master/CODE_OF_CONDUCT.md).
 
 **Table of Contents**
+- [A Note on Contributing](#A-Note-on-Contributing)
 - [Local Package Development](#Local-Package-Development-Setup)
   - [Example Setup: Package `@redwoodjs/cli` Local Dev](#Example-Setup:-Package-`@redwoodjs/cli`-Local-Dev)
   - [`Yarn Build:Watch`](#`Yarn-Build:Watch`)
@@ -10,6 +11,13 @@ Before interacting with the Redwood community, please read and understand our [C
   - [Running the Local Server(s)](#Running-the-Local-Server(s))
 - [CLI Package Development](#CLI-Package-Development)
   - [Example](#Example)
+
+## A Note on Contributing
+
+At some point, contributing will most likely look very different.
+Currently, local package development revolves around `yarn link`,
+a command that works but leaves a lot to be desired.
+Custom tools have been discussed (see [#109](https://github.com/redwoodjs/redwood/issues/109) and [#319](https://github.com/redwoodjs/redwood/pull/319)), but their timeline is uncertain.
 
 <!-- toc -->
 
