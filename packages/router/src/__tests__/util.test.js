@@ -1,4 +1,4 @@
-import {matchPath, parseSearch, validatePath} from '../util'
+import { matchPath, parseSearch, validatePath } from '../util'
 
 describe('matchPath', () => {
   it.each([
@@ -11,9 +11,8 @@ describe('matchPath', () => {
     ['/blog/{year}/{month:Int}/{day}', '/blog/2019/december/07'],
     ['/blog/{year}/{month}/{day}', '/blog/2019/07'],
     ['/posts/{id}/edit', '/posts//edit'],
-    ['/about', '/']
-  ])('does not match route "%s" with path "%s"',
-    (route, pathname) => {
+    ['/about', '/'],
+  ])('does not match route "%s" with path "%s"', (route, pathname) => {
     expect(matchPath(route, pathname)).toEqual({ match: false })
   })
 
@@ -42,13 +41,14 @@ describe('matchPath', () => {
 })
 
 describe('validatePath', () => {
-  it.each([
-    'invalid/route',
-    '{id}/invalid/route',
-    ' /invalid/route',
-  ])('rejects "%s" path that does not begin with a slash', (path) => {
-    expect(validatePath.bind(null, path)).toThrowError(`Route path does not begin with a slash: "${path}"`)
-  })
+  it.each(['invalid/route', '{id}/invalid/route', ' /invalid/route'])(
+    'rejects "%s" path that does not begin with a slash',
+    (path) => {
+      expect(validatePath.bind(null, path)).toThrowError(
+        `Route path does not begin with a slash: "${path}"`
+      )
+    }
+  )
 
   it.each([
     '/path/to/user profile',
@@ -62,7 +62,9 @@ describe('validatePath', () => {
     '/path/to/users/{ id:Int }',
     '/path/to/users/{ id : Int }',
   ])('rejects paths with spaces: "%s"', (path) => {
-    expect(validatePath.bind(null, path)).toThrowError(`Route path contains spaces: "${path}"`)
+    expect(validatePath.bind(null, path)).toThrowError(
+      `Route path contains spaces: "${path}"`
+    )
   })
 
   it.each([
@@ -71,7 +73,9 @@ describe('validatePath', () => {
     '/users/{id:Int}/photos/{id}',
     '/users/{id:Int}/photos/{id:Int}',
   ])('rejects path "%s" with duplicate params', (path) => {
-    expect(validatePath.bind(null, path)).toThrowError(`Route path contains duplicate parameter: "${path}"`)
+    expect(validatePath.bind(null, path)).toThrowError(
+      `Route path contains duplicate parameter: "${path}"`
+    )
   })
 
   it.each([
@@ -83,7 +87,7 @@ describe('validatePath', () => {
     '/about',
     '/about/redwood',
   ])('validates correct path "%s"', (path) => {
-    expect(validatePath.bind(null, path)).not.toThrow();
+    expect(validatePath.bind(null, path)).not.toThrow()
   })
 })
 
