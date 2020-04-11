@@ -37,11 +37,7 @@
     "build:js": "cross-env NODE_ENV=production lerna run build",
     "build:types": "tsc --build --clean && tsc --build",
     "test": "lerna run test --stream -- --colors",
-    "lint": "run-s eslint:check prettier:check",
-    "lint:fix": "run-s eslint:fix prettier:fix",
-    "eslint:check": "yarn eslint packages",
-    "eslint:fix": "yarn eslint --fix packages",
-    "prettier:check": "prettier --list-different .",
-    "prettier:fix": "prettier --write ."
+    "lint": "yarn eslint packages",
+    "lint:fix": "yarn eslint --fix packages"
   }
 }
