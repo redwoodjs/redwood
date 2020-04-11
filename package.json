@@ -32,10 +32,10 @@
     "packages/api/importAll.macro.js"
   ],
   "scripts": {
-    "build": "run-s clean build:js build:types",
-    "clean": "lerna run clean",
-    "build:types": "tsc --build --clean && tsc --build",
+    "build": "run-s build:clean build:js build:types",
+    "build:clean": "lerna run build:clean",
     "build:js": "cross-env NODE_ENV=production lerna run build",
+    "build:types": "tsc --build --clean && tsc --build",
     "test": "lerna run test --stream -- --colors",
     "lint": "run-s eslint:check prettier:check",
     "lint:fix": "run-s eslint:fix prettier:fix",
