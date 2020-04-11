@@ -110,7 +110,7 @@ To do this, in your local redwood sandbox app's root, run:
 yarn add -W [package]
 ```
 
-where `[package]` addresses the discrepancy. For example, local development with v0.4.0 redwood apps require you update prisma since the master branch's already using prisma-2.0.0-beta.2:
+where `[package]` addresses the discrepancy. For example, local development with v0.4.0 redwood apps requires you update prisma since the master branch's already using prisma-2.0.0-beta.2:
 
 ```
 yarn add -W @prisma/cli
