@@ -1,4 +1,4 @@
-import { matchPath, parseSearch } from '../util'
+import {matchPath, parseSearch, validatePath} from '../util'
 
 describe('matchPath', () => {
   it('matches paths correctly', () => {
@@ -60,6 +60,25 @@ describe('matchPath', () => {
       match: true,
       params: { id: 1337 },
     })
+  })
+})
+
+describe('validatePath', () => {
+  it.each([
+    'invalid/route',
+    '{id}/invalid/route',
+    ' /invalid/route',
+  ])('rejects "%s" path that does not begin with a slash', (path) => {
+    expect(validatePath.bind(null, path)).toThrowError(`Route path does not begin with a slash: "${path}"`)
+  })
+
+  it.each([
+    '/users/{id}/photos/{id}',
+    '/users/{id}/photos/{id:Int}',
+    '/users/{id:Int}/photos/{id}',
+    '/users/{id:Int}/photos/{id:Int}',
+  ])('rejects path "%s" with duplicate params', (path) => {
+    expect(validatePath.bind(null, path)).toThrowError(`Route path contains duplicate parameter: "${path}"`)
   })
 })
 
