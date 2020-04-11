@@ -4,7 +4,12 @@ Before interacting with the Redwood community, please read and understand our [C
 
 **Table of Contents**
 - [Local Package Development](#Local-Package-Development-Setup)
+  - [Example Setup: Package `@redwoodjs/cli` Local Dev](#Example-Setup:-Package-`@redwoodjs/cli`-Local-Dev)
+  - [`Yarn Build:Watch`](#`Yarn-Build:Watch`)
+  - [Unlinking Packages](#Unlinking-Packages)
+  - [Running the Local Server(s)](#Running-the-Local-Server(s))
 - [CLI Package Development](#CLI-Package-Development)
+  - [Example](#Example)
 
 <!-- toc -->
 
