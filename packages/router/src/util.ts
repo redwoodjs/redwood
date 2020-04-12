@@ -1,10 +1,9 @@
-import React from 'react';
+import React from 'react'
 
 interface ParameterType {
-  constraint: RegExp,
-  transform: (value: string) => any,
+  constraint: RegExp
+  transform: (value: string) => any
 }
-
 
 /** Create a React Context with the given name. */
 const createNamedContext = <T = unknown>(name: string, defaultValue?: T) => {
@@ -55,10 +54,16 @@ const coreParamTypes: Record<string, ParameterType> = {
  *    matchPath('/post/{id:Int}', '/post/7')
  *    => { match: true, params: { id: 7 }}
  */
-const matchPath = (route: string, pathname: string, paramTypes: Record<string, ParameterType>) => {
+const matchPath = (
+  route: string,
+  pathname: string,
+  paramTypes?: Record<string, ParameterType>
+) => {
   // Does the `pathname` match the `route`?
   const matches = [
-    ...pathname.matchAll(new RegExp(`^${route.replace(/\{([^}]+)\}/g, '([^/]+)')}$`)),
+    ...pathname.matchAll(
+      new RegExp(`^${route.replace(/\{([^}]+)\}/g, '([^/]+)')}$`)
+    ),
   ]
 
   if (matches.length === 0) {
@@ -98,12 +103,15 @@ const matchPath = (route: string, pathname: string, paramTypes: Record<string, P
  * This utility ignores keys with multiple values such as `?foo=1&foo=2`.
  */
 const parseSearch = (search: string) => {
-  const searchParams = new URLSearchParams(search);
+  const searchParams = new URLSearchParams(search)
 
-  return [...searchParams.keys()].reduce((params, key) => ({
-    ...params,
-    [key]: searchParams.get(key)
-  }), {});
+  return [...searchParams.keys()].reduce(
+    (params, key) => ({
+      ...params,
+      [key]: searchParams.get(key),
+    }),
+    {}
+  )
 }
 
 /**
@@ -119,7 +127,7 @@ const validatePath = (path: string) => {
 
   // Check for duplicate named params.
   const matches = path.matchAll(/\{([^}]+)\}/g)
-  let memo: Record<string, boolean> = {}
+  const memo: Record<string, boolean> = {}
   for (const match of matches) {
     const param = match[0]
     if (memo[param]) {

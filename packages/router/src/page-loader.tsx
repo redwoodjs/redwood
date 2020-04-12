@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import React, { useContext } from 'react'
 
 import { createNamedContext } from './internal'
 
@@ -6,8 +6,27 @@ export const PageLoadingContext = createNamedContext('PageLoading')
 
 export const usePageLoadingContext = () => useContext(PageLoadingContext)
 
-export class PageLoader extends React.PureComponent {
-  state = {
+interface PageLoaderState {
+  Page?: any
+  pageName?: string
+  slowModuleImport: boolean
+}
+
+interface PageLoaderProps {
+  spec: {
+    name: string
+    loader: () => void
+  }
+  delay: number
+  params: Record<string, string>
+}
+
+export class PageLoader extends React.PureComponent<
+  PageLoaderProps,
+  PageLoaderState
+> {
+  private loadingTimeout?: number | NodeJS.Timeout
+  readonly state = {
     Page: undefined,
     pageName: undefined,
     slowModuleImport: false,
@@ -17,7 +36,7 @@ export class PageLoader extends React.PureComponent {
     this.startPageLoadTransition()
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps: PageLoaderProps) {
     if (prevProps.spec.name !== this.props.spec.name) {
       this.clearLoadingTimeout()
       this.startPageLoadTransition()
@@ -25,7 +44,9 @@ export class PageLoader extends React.PureComponent {
   }
 
   clearLoadingTimeout = () => {
-    clearTimeout(this.loadingTimeout)
+    if (this.loadingTimeout) {
+      clearTimeout(this.loadingTimeout)
+    }
   }
 
   startPageLoadTransition = async () => {
