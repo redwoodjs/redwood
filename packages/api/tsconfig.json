@@ -4,13 +4,8 @@
     "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
     "baseUrl": ".",
     "rootDir": "src",
-    "outDir": "dist",
+    "outDir": "dist"
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "**/__tests__",
-    "**/__mocks__"
-  ]
+  "include": ["src"],
+  "exclude": ["**/__tests__", "**/__mocks__"]
 }

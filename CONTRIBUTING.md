@@ -3,8 +3,9 @@
 Before interacting with the Redwood community, please read and understand our [Code of Conduct](https://github.com/redwoodjs/redwood/blob/master/CODE_OF_CONDUCT.md).
 
 **Table of Contents**
-- [Local Package Development](##Local-Package-Development-Setup)
-- [CLI Package Development](##CLI-Package-Development)
+
+- [Local Package Development](#Local-Package-Development-Setup)
+- [CLI Package Development](#CLI-Package-Development)
 
 <!-- toc -->
 
@@ -14,7 +15,7 @@ You'll want to run a local redwood app sandbox using your local @redwoodjs packa
 
 ### Example Setup: Package `@redwoodjs/cli` Local Dev
 
-Assuming you've already cloned `redwoodjs/redwood` locally and run `yarn install`, navigate to the `packages/cli` directory and run the following command:
+Assuming you've already cloned `redwoodjs/redwood` locally and run `yarn install` and `yarn build`, navigate to the `packages/cli` directory and run the following command:
 
 ```
 yarn link
@@ -88,10 +89,12 @@ yarn rw dev web
 ```
 
 ## CLI Package Development
+
 We are using [Yargs](https://yargs.js.org/)
 _Historical note: originally implemented in react-ink (too slow!) then converted._
 
 ### Example
+
 Example dev command:
 
 ```

@@ -6,7 +6,7 @@ The Redwood CLI comes with RedwoodJS (which means no extra software to install!)
 
 The [`yarn`](https://classic.yarnpkg.com/en/docs/install) package is required to use the Redwood CLI.
 
-Be sure to prefix all Redwood CLI commands with `yarn `. For example, `yarn redwood new`.
+Be sure to prefix all Redwood CLI commands with `yarn`. For example, `yarn redwood new`.
 
 Additionally, you can use `rw` as shorthand for `redwood`. For example, `yarn rw new`.
 
