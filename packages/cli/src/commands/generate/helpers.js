@@ -1,7 +1,10 @@
 import path from 'path'
 
+import camelcase from 'camelcase'
+import pluralize from 'pluralize'
 import Listr from 'listr'
 import pascalcase from 'pascalcase'
+import { paramCase } from 'param-case'
 
 import { generateTemplate, getPaths, writeFilesTask } from 'src/lib'
 import c from 'src/lib/colors'
@@ -18,6 +21,7 @@ export const templateForComponentFile = ({
   extension = '.js',
   webPathSection,
   apiPathSection,
+  generator,
   templatePath,
   templateVars,
   componentName,
@@ -25,18 +29,30 @@ export const templateForComponentFile = ({
   const basePath = webPathSection
     ? getPaths().web[webPathSection]
     : getPaths().api[apiPathSection]
-  const outputComponentName = componentName || pascalcase(name) + suffix
+  const outputComponentName =
+    componentName || pascalcase(paramCase(name)) + suffix
   const outputPath = path.join(
     basePath,
     outputComponentName,
     outputComponentName + extension
   )
-  const content = generateTemplate(templatePath, {
-    name,
-    outputPath: `./${path.relative(getPaths().base, outputPath)}`,
-    ...templateVars,
-  })
+  const content = generateTemplate(
+    path.join(generator, 'templates', templatePath),
+    {
+      name,
+      outputPath: `./${path.relative(getPaths().base, outputPath)}`,
+      ...templateVars,
+    }
+  )
   return [outputPath, content]
+}
+
+/**
+ * Creates a route path, either returning the existing path if passed, otherwise
+ * creates one based on the name
+ */
+export const pathName = (path, name) => {
+  return path ?? `/${paramCase(name)}`
 }
 
 /**
@@ -73,4 +89,21 @@ export const createYargsForComponentGeneration = ({
       }
     },
   }
+}
+
+// Returns all relations to other models
+export const relationsForModel = (model) => {
+  return model.fields
+    .filter((f) => f.relationName)
+    .map((field) => {
+      const relationName = camelcase(field.type)
+      return field.isList ? pluralize(relationName) : relationName
+    })
+}
+
+// Returns only relations that are of datatype Int
+export const intForeignKeysForModel = (model) => {
+  return model.fields
+    .filter((f) => f.name.match(/Id$/) && f.type === 'Int')
+    .map((f) => f.name)
 }

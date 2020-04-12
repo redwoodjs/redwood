@@ -23,7 +23,10 @@
     "typescript": "^3.8.3"
   },
   "eslintConfig": {
-    "extends": "@redwoodjs/eslint-config"
+    "extends": "@redwoodjs/eslint-config",
+    "ignorePatterns": [
+      "fixtures"
+    ]
   },
   "eslintIgnore": [
     "dist",

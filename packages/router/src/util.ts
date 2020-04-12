@@ -15,7 +15,7 @@ const createNamedContext = <T = unknown>(name: string, defaultValue?: T) => {
 /**
  * Get param name and type transform for a route
  *
- *    '/blog/{year}/{month}/{day:Int}' => [['year'], ['month'], ['day', 'Int']]
+ *  '/blog/{year}/{month}/{day:Int}' => [['year'], ['month'], ['day', 'Int']]
  */
 const paramsForType = (route: string) => {
   // Match the strings between `{` and `}`.
@@ -45,14 +45,14 @@ const coreParamTypes: Record<string, ParameterType> = {
  *
  * Examples:
  *
- *    matchPath('/blog/{year}/{month}/{day}', '/blog/2019/12/07')
- *    => { match: true, params: { year: '2019', month: '12', day: '07' }}
+ *  matchPath('/blog/{year}/{month}/{day}', '/blog/2019/12/07')
+ *  => { match: true, params: { year: '2019', month: '12', day: '07' }}
  *
- *    matchPath('/about', '/')
- *    => { match: false }
+ *  matchPath('/about', '/')
+ *  => { match: false }
  *
- *    matchPath('/post/{id:Int}', '/post/7')
- *    => { match: true, params: { id: 7 }}
+ *  matchPath('/post/{id:Int}', '/post/7')
+ *  => { match: true, params: { id: 7 }}
  */
 const matchPath = (
   route: string,
@@ -96,8 +96,8 @@ const matchPath = (
  *
  * Examples:
  *
- *    parseSearch('?key1=val1&key2=val2')
- *    => { key1: 'val1', key2: 'val2' }
+ *  parseSearch('?key1=val1&key2=val2')
+ *  => { key1: 'val1', key2: 'val2' }
  *
  * @fixme
  * This utility ignores keys with multiple values such as `?foo=1&foo=2`.
@@ -145,8 +145,8 @@ const validatePath = (path: string) => {
  *
  * Examples:
  *
- *     replaceParams('/tags/{tag}', { tag: 'code', extra: 'foo' })
- *     => '/tags/code?extra=foo
+ *   replaceParams('/tags/{tag}', { tag: 'code', extra: 'foo' })
+ *   => '/tags/code?extra=foo
  */
 const replaceParams = (path: string, args: Record<string, string> = {}) => {
   // Split the path apart and replace named parameters with those sent in,

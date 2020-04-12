@@ -11,7 +11,7 @@ Before interacting with the Redwood community, please read and understand our [C
 
 ## Local Package Development Setup
 
-You'll want to run a local redwood app sandbox using your local @redwoodjs packages instead of the current releases from the package registry. To do this we use [`yarn link`](`https://classic.yarnpkg.com/en/docs/cli/link/).
+You'll want to run a local redwood app sandbox using your local @redwoodjs packages instead of the current releases from the package registry. To do this we use [`yarn link`](https://classic.yarnpkg.com/en/docs/cli/link/).
 
 ### Example Setup: Package `@redwoodjs/cli` Local Dev
 

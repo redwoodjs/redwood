@@ -28,7 +28,7 @@ export const handler = async ({
   const execCommandsForApps = {
     api: {
       cwd: `${BASE_DIR}/api`,
-      cmd: 'NODE_ENV=production babel src --out-dir dist',
+      cmd: 'yarn cross-env NODE_ENV=production babel src --out-dir dist',
     },
     web: {
       cwd: `${BASE_DIR}/web`,

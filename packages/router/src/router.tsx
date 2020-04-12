@@ -1,6 +1,9 @@
 // The guts of the router implementation.
+<<<<<<< HEAD:packages/router/src/router.tsx
 import 'url-search-params-polyfill';
 import React from 'react';
+=======
+>>>>>>> 4d392e8d1a3774a51213c29690a67ccc6c69582a:packages/router/src/router.js
 
 import {
   Location,
