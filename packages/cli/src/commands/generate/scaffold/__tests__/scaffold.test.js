@@ -19,7 +19,7 @@ test('returns exactly 16 files', () => {
 
 test('creates an sdl', () => {
   expect(files).toHaveProperty([
-    '/path/to/project/api/src/graphql/posts.sdl.js',
+    path.normalize('/path/to/project/api/src/graphql/posts.sdl.js'),
   ])
 })
 
@@ -27,20 +27,22 @@ test('creates an sdl', () => {
 
 test('creates a service', () => {
   expect(files).toHaveProperty([
-    '/path/to/project/api/src/services/posts/posts.js',
+    path.normalize('/path/to/project/api/src/services/posts/posts.js'),
   ])
 })
 
 test('creates a service test', () => {
   expect(files).toHaveProperty([
-    '/path/to/project/api/src/services/posts/posts.test.js',
+    path.normalize('/path/to/project/api/src/services/posts/posts.test.js'),
   ])
 })
 
 // styles
 
 test('creates a stylesheet', () => {
-  expect(files['/path/to/project/web/src/scaffold.css']).toEqual(
+  expect(
+    files[path.normalize('/path/to/project/web/src/scaffold.css')]
+  ).toEqual(
     loadGeneratorFixture('scaffold', path.join('assets', 'scaffold.css'))
   )
 })
@@ -49,7 +51,11 @@ test('creates a stylesheet', () => {
 
 test('creates a layout', async () => {
   expect(
-    files['/path/to/project/web/src/layouts/PostsLayout/PostsLayout.js']
+    files[
+      path.normalize(
+        '/path/to/project/web/src/layouts/PostsLayout/PostsLayout.js'
+      )
+    ]
   ).toEqual(loadGeneratorFixture('scaffold', path.join('layouts', 'layout.js')))
 })
 
@@ -57,7 +63,11 @@ test('creates a layout', async () => {
 
 test('creates a edit page', async () => {
   expect(
-    files['/path/to/project/web/src/pages/EditPostPage/EditPostPage.js']
+    files[
+      path.normalize(
+        '/path/to/project/web/src/pages/EditPostPage/EditPostPage.js'
+      )
+    ]
   ).toEqual(loadGeneratorFixture('scaffold', path.join('pages', 'editPage.js')))
 })
 
@@ -76,16 +86,20 @@ test('creates a new page', async () => {
 })
 
 test('creates a show page', async () => {
-  expect(files['/path/to/project/web/src/pages/PostPage/PostPage.js']).toEqual(
-    loadGeneratorFixture('scaffold', path.join('pages', 'showPage.js'))
-  )
+  expect(
+    files[path.normalize('/path/to/project/web/src/pages/PostPage/PostPage.js')]
+  ).toEqual(loadGeneratorFixture('scaffold', path.join('pages', 'showPage.js')))
 })
 
 // Cells
 
 test('creates an edit cell', async () => {
   expect(
-    files['/path/to/project/web/src/components/EditPostCell/EditPostCell.js']
+    files[
+      path.normalize(
+        '/path/to/project/web/src/components/EditPostCell/EditPostCell.js'
+      )
+    ]
   ).toEqual(
     loadGeneratorFixture('scaffold', path.join('components', 'editCell.js'))
   )
@@ -101,7 +115,9 @@ test('creates an index cell', async () => {
 
 test('creates a show cell', async () => {
   expect(
-    files['/path/to/project/web/src/components/PostCell/PostCell.js']
+    files[
+      path.normalize('/path/to/project/web/src/components/PostCell/PostCell.js')
+    ]
   ).toEqual(
     loadGeneratorFixture('scaffold', path.join('components', 'showCell.js'))
   )
@@ -111,7 +127,9 @@ test('creates a show cell', async () => {
 
 test('creates a form component', async () => {
   expect(
-    files['/path/to/project/web/src/components/PostForm/PostForm.js']
+    files[
+      path.normalize('/path/to/project/web/src/components/PostForm/PostForm.js')
+    ]
   ).toEqual(
     loadGeneratorFixture('scaffold', path.join('components', 'form.js'))
   )
@@ -125,12 +143,16 @@ test('creates an index component', async () => {
 
 test('creates a new component', async () => {
   expect(
-    files['/path/to/project/web/src/components/NewPost/NewPost.js']
+    files[
+      path.normalize('/path/to/project/web/src/components/NewPost/NewPost.js')
+    ]
   ).toEqual(loadGeneratorFixture('scaffold', path.join('components', 'new.js')))
 })
 
 test('creates a show component', async () => {
-  expect(files['/path/to/project/web/src/components/Post/Post.js']).toEqual(
+  expect(
+    files[path.normalize('/path/to/project/web/src/components/Post/Post.js')]
+  ).toEqual(
     loadGeneratorFixture('scaffold', path.join('components', 'show.js'))
   )
 })
@@ -161,7 +183,9 @@ test('the GraphQL in the index query does not contain object types', async () =>
   const userProfileFiles = await scaffold.files({ model: 'UserProfile' })
   const cell =
     userProfileFiles[
-      '/path/to/project/web/src/components/UserProfilesCell/UserProfilesCell.js'
+      path.normalize(
+        '/path/to/project/web/src/components/UserProfilesCell/UserProfilesCell.js'
+      )
     ]
   const query = cell.match(/(userProfiles.*?\})/s)[1]
 
@@ -172,7 +196,9 @@ test('the GraphQL in the show query does not contain object types', async () => 
   const userProfileFiles = await scaffold.files({ model: 'UserProfile' })
   const cell =
     userProfileFiles[
-      '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.js'
+      path.normalize(
+        '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.js'
+      )
     ]
   const query = cell.match(/(userProfile.*?\})/s)[1]
 
@@ -183,7 +209,9 @@ test('the GraphQL in the edit query does not contain object types', async () => 
   const userProfileFiles = await scaffold.files({ model: 'UserProfile' })
   const cell =
     userProfileFiles[
-      '/path/to/project/web/src/components/EditUserProfileCell/EditUserProfileCell.js'
+      path.normalize(
+        '/path/to/project/web/src/components/EditUserProfileCell/EditUserProfileCell.js'
+      )
     ]
   const query = cell.match(/(userProfile.*?\})/s)[1]
 
@@ -197,7 +225,9 @@ test('creates a new component with int foreign keys converted in onSave', async 
 
   expect(
     foreignKeyFiles[
-      '/path/to/project/web/src/components/NewUserProfile/NewUserProfile.js'
+      path.normalize(
+        '/path/to/project/web/src/components/NewUserProfile/NewUserProfile.js'
+      )
     ]
   ).toEqual(
     loadGeneratorFixture(
@@ -212,7 +242,9 @@ test('creates an edit component with int foreign keys converted in onSave', asyn
 
   expect(
     foreignKeyFiles[
-      '/path/to/project/web/src/components/EditUserProfileCell/EditUserProfileCell.js'
+      path.normalize(
+        '/path/to/project/web/src/components/EditUserProfileCell/EditUserProfileCell.js'
+      )
     ]
   ).toEqual(
     loadGeneratorFixture(
