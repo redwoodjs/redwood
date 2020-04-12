@@ -1,0 +1,5 @@
+const ${singularPascalName}Layout = ({ children }) => {
+  return <>{children}</>
+}
+
+export default ${singularPascalName}Layout

@@ -1,0 +1,15 @@
+{
+  "editor.tabSize": 2,
+  "files.trimTrailingWhitespace": true,
+  "editor.formatOnSave": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "workbench.colorCustomizations": {
+    "statusBar.background": "#b85833",
+    "statusBarItem.hoverBackground": "#ce7350",
+    "statusBar.foreground": "#e7e7e7",
+    "statusBar.border": "#b85833"
+  },
+  "peacock.color": "#b85833",
+}

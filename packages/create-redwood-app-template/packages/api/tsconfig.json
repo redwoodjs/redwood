@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "moduleResolution": "node",
+    "strict": true,
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "src/*": [
+        "src/*"
+      ]
+    },
+    "declaration": true,
+    "declarationDir": "./dist"
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "**/__tests__",
+    "**/__mocks__"
+  ]
+}

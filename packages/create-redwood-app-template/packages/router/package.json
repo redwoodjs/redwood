@@ -1,0 +1,25 @@
+{
+  "name": "@redwoodjs/router",
+  "version": "0.4.0",
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.js",
+  "license": "MIT",
+  "dependencies": {
+    "core-js": "3.6.4"
+  },
+  "peerDependencies": {
+    "react": "*"
+  },
+  "scripts": {
+    "build": "yarn cross-env NODE_ENV=production babel src -d dist --delete-dir-on-start",
+    "build:watch": "nodemon --ignore dist --exec 'yarn build'",
+    "test": "yarn jest src",
+    "test:watch": "yarn test --watch"
+  },
+  "gitHead": "2801c132f40263f9fcfbdac8b1750d2e423eb649",
+  "devDependencies": {
+    "react": "^16.13.1"
+  }
+}

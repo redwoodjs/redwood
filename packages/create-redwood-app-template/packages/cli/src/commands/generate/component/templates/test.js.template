@@ -1,0 +1,14 @@
+import { render, cleanup } from '@testing-library/react'
+
+import ${pascalName} from './${pascalName}'
+
+describe('${pascalName}', () => {
+  afterEach(() => {
+    cleanup()
+  })
+  it('renders successfully', () => {
+    expect(() => {
+      render(<${pascalName} />)
+    }).not.toThrow()
+  })
+})

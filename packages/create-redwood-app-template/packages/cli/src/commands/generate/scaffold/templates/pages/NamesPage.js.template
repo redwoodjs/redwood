@@ -1,0 +1,12 @@
+import ${pluralPascalName}Layout from 'src/layouts/${pluralPascalName}Layout'
+import ${pluralPascalName}Cell from 'src/components/${pluralPascalName}Cell'
+
+const ${pluralPascalName}Page = () => {
+  return (
+    <${pluralPascalName}Layout>
+      <${pluralPascalName}Cell />
+    </${pluralPascalName}Layout>
+  )
+}
+
+export default ${pluralPascalName}Page

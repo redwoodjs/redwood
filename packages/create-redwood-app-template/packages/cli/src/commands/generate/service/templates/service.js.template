@@ -1,0 +1,34 @@
+import { db } from 'src/lib/db'
+
+export const ${pluralCamelName} = () => {
+  return db.${singularCamelName}.findMany()
+}<% if (crud) { %>
+
+export const ${singularCamelName} = ({ id }) => {
+  return db.${singularCamelName}.findOne({
+    where: { id },
+  })
+}
+
+export const create${singularPascalName} = ({ input }) => {
+  return db.${singularCamelName}.create({
+    data: input,
+  })
+}
+
+export const update${singularPascalName} = ({ id, input }) => {
+  return db.${singularCamelName}.update({
+    data: input,
+    where: { id },
+  })
+}
+
+export const delete${singularPascalName} = ({ id }) => {
+  return db.${singularCamelName}.delete({
+    where: { id },
+  })
+}<% } %><% if (relations.length) { %>
+
+export const ${singularPascalName} = {<% relations.forEach(relation => { %>
+  ${relation}: (_obj, { root }) => db.${singularCamelName}.findOne({ where: { id: root.id } }).${relation}(),<% }) %>
+}<% } %>

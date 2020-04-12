@@ -1,0 +1,14 @@
+import { render, cleanup } from '@testing-library/react'
+
+import ${pascalName}Page from './${pascalName}Page'
+
+describe('${pascalName}Page', () => {
+  afterEach(() => {
+    cleanup()
+  })
+  it('renders successfully', () => {
+    expect(() => {
+      render(<${pascalName}Page />)
+    }).not.toThrow()
+  })
+})
