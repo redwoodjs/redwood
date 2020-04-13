@@ -1,7 +1,7 @@
 # Local Postgres Setup
 
 RedwoodJS uses a SQLite database by default. While SQLite makes local development easy, you're
-likely going to want to run the same database setup you use on production. Here's how to setup
+likely going to want to run the same database setup you use on production. Here's how to set up
 Postgres.
 
 ## Install Postgres
