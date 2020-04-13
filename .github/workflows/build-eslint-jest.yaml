@@ -13,7 +13,7 @@ jobs:
       matrix:
         node-version: ['12']
       fail-fast: false
-    name: ${{ runs-on }} | Node ${{ matrix.node-version }} latest
+    name: Ubuntu latest | Node ${{ matrix.node-version }} latest
     steps:
     - uses: actions/checkout@v2
     - name: Setup node
