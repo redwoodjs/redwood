@@ -23,6 +23,7 @@
     "build": "yarn build:js && yarn build:types",
     "build:js": "yarn cross-env NODE_ENV=production babel src -d dist --delete-dir-on-start --extensions \".js,.ts\" --source-maps inline",
     "build:types": "tsc --declaration --emitDeclarationOnly",
+    "prepublishOnly": "yarn build",
     "build:watch": "nodemon --ignore dist --exec 'yarn build'",
     "test": "jest",
     "test:watch": "yarn test --watch"
