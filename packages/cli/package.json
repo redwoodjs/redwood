@@ -11,7 +11,7 @@
     "dist"
   ],
   "dependencies": {
-    "@prisma/sdk": "^2.0.0-preview025",
+    "@prisma/sdk": "^2.0.0-beta.2",
     "@redwoodjs/internal": "^0.4.0",
     "camelcase": "^5.3.1",
     "chalk": "^3.0.0",
@@ -27,16 +27,17 @@
     "pascalcase": "^1.0.0",
     "pluralize": "^8.0.0",
     "prettier": "^2.0.2",
+    "rimraf": "^3.0.2",
     "yargs": "^15.3.1"
   },
   "devDependencies": {
     "@types/node-fetch": "^2.5.5"
   },
   "scripts": {
-    "build": "yarn clean && yarn babel src --out-dir dist && cp -r ./src/commands/generate/templates/. ./dist/commands/generate/templates",
+    "build": "yarn build:js && yarn build:clean-dist",
+    "build:js": "yarn cross-env NODE_ENV=production yarn babel src -d dist --delete-dir-on-start --copy-files --no-copy-ignored",
+    "build:clean-dist": "yarn rimraf 'dist/**/__tests__'",
     "build:watch": "nodemon --ignore dist --exec 'yarn build'",
-    "clean": "rm -rf dist",
-    "prepublishOnly": "yarn clean && yarn build",
     "test": "jest",
     "test:watch": "yarn test --watch"
   },

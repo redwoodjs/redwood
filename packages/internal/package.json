@@ -20,12 +20,10 @@
     ]
   },
   "scripts": {
-    "clean": "rm -rf dist",
-    "build": "yarn clean && yarn build:js && yarn build:types",
-    "build:js": "babel src --out-dir dist --extensions \".js,.ts\" --source-maps inline",
+    "build": "yarn build:js && yarn build:types",
+    "build:js": "yarn cross-env NODE_ENV=production babel src -d dist --delete-dir-on-start --extensions \".js,.ts\" --source-maps inline",
     "build:types": "tsc --declaration --emitDeclarationOnly",
     "build:watch": "nodemon --ignore dist --exec 'yarn build'",
-    "prepublishOnly": "yarn clean && yarn build",
     "test": "jest",
     "test:watch": "yarn test --watch"
   },
