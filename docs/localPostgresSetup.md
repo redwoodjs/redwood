@@ -34,7 +34,6 @@ following example uses `redwoodblog_dev` for the database. It also has `postgres
 superuser for ease of use.
 
 ```env
-# .env
 DATABASE_URL="postgresql://postgres@localhost/redwoodblog_dev?connection_limit=1"
 ```
 
