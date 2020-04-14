@@ -40,8 +40,12 @@ module.exports = (webpackEnv) => {
   }
 
   const redwoodEnvPrefix = 'REDWOOD_ENV_'
+  const includeEnvKeys = redwoodConfig.web.includeEnvironmentVariables
   const redwoodEnvKeys = Object.keys(process.env).reduce((prev, next) => {
-    if (next.startsWith(redwoodEnvPrefix)) {
+    if (
+      next.startsWith(redwoodEnvPrefix) ||
+      (includeEnvKeys && includeEnvKeys.includes(next))
+    ) {
       prev[`process.env.${next}`] = JSON.stringify(process.env[next])
     }
     return prev
