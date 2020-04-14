@@ -3,7 +3,7 @@ import { navigate, routes } from '@redwoodjs/router'
 import ${singularPascalName}Form from 'src/components/${singularPascalName}Form'
 
 const CREATE_POST_MUTATION = gql`
-  mutation Create${singularPascalName}Mutation($input: ${singularPascalName}Input!) {
+  mutation Create${singularPascalName}Mutation($input: Create${singularPascalName}Input!) {
     create${singularPascalName}(input: $input) {
       id
     }

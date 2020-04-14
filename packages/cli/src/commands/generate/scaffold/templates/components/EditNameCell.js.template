@@ -10,7 +10,7 @@ export const QUERY = gql`
   }
 `
 const UPDATE_POST_MUTATION = gql`
-  mutation Update${singularPascalName}Mutation($id: ${idType}!, $input: ${singularPascalName}Input!) {
+  mutation Update${singularPascalName}Mutation($id: ${idType}!, $input: Update${singularPascalName}Input!) {
     update${singularPascalName}(id: $id, input: $input) {
       id
     }
