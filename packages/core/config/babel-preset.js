@@ -74,6 +74,11 @@ module.exports = () => ({
                 default: 'gql',
                 path: 'graphql-tag',
               },
+              {
+                // workaround --> import { foreignKeyReplacement } from '@redwoodjs/api'
+                members: ['foreignKeyReplacement'],
+                path: '@redwoodjs/api',
+              },
             ],
           },
         ],
