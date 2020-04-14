@@ -27,7 +27,7 @@ const querySDL = (model) => {
   return model.fields.map((field) => modelFieldToSDL(field))
 }
 
-const inputSDL = (model, types = {}) => {
+const inputSDL = (model, required, types = {}) => {
   return model.fields
     .filter((field) => {
       return (
@@ -35,7 +35,17 @@ const inputSDL = (model, types = {}) => {
         field.kind !== 'object'
       )
     })
-    .map((field) => modelFieldToSDL(field, true, types))
+    .map((field) => modelFieldToSDL(field, required, types))
+}
+
+// creates the CreateInput type (all fields are required)
+const createInputSDL = (model, types = {}) => {
+  return inputSDL(model, true, types)
+}
+
+// creates the UpdateInput type (not all fields are required)
+const updateInputSDL = (model, types = {}) => {
+  return inputSDL(model, false, types)
 }
 
 const idType = (model) => {
@@ -64,7 +74,8 @@ const sdlFromSchemaModel = async (name) => {
 
     return {
       query: querySDL(model).join('\n    '),
-      input: inputSDL(model, types).join('\n    '),
+      createInput: createInputSDL(model, types).join('\n    '),
+      updateInput: updateInputSDL(model, types).join('\n    '),
       idType: idType(model),
       relations: relationsForModel(model),
     }
@@ -76,9 +87,13 @@ const sdlFromSchemaModel = async (name) => {
 }
 
 export const files = async ({ name, crud }) => {
-  const { query, input, idType, relations } = await sdlFromSchemaModel(
-    pascalcase(pluralize.singular(name))
-  )
+  const {
+    query,
+    createInput,
+    updateInput,
+    idType,
+    relations,
+  } = await sdlFromSchemaModel(pascalcase(pluralize.singular(name)))
 
   const template = generateTemplate(
     path.join('sdl', 'templates', 'sdl.js.template'),
@@ -86,7 +101,8 @@ export const files = async ({ name, crud }) => {
       name,
       crud,
       query,
-      input,
+      createInput,
+      updateInput,
       idType,
     }
   )

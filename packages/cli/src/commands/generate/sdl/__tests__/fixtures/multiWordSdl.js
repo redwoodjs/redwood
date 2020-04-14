@@ -10,8 +10,13 @@ export const schema = gql`
     userProfiles: [UserProfile!]!
   }
 
-  input UserProfileInput {
+  input CreateUserProfileInput {
     username: String!
     userId: Int!
+  }
+
+  input UpdateUserProfileInput {
+    username: String
+    userId: Int
   }
 `

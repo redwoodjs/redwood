@@ -11,9 +11,15 @@ export const schema = gql`
     users: [User!]!
   }
 
-  input UserInput {
+  input CreateUserInput {
     name: String
     email: String!
     isAdmin: Boolean!
+  }
+
+  input UpdateUserInput {
+    name: String
+    email: String
+    isAdmin: Boolean
   }
 `

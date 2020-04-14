@@ -11,14 +11,19 @@ export const schema = gql`
     userProfile(id: Int!): UserProfile!
   }
 
-  input UserProfileInput {
+  input CreateUserProfileInput {
     username: String!
     userId: Int!
   }
 
+  input UpdateUserProfileInput {
+    username: String
+    userId: Int
+  }
+
   type Mutation {
-    createUserProfile(input: UserProfileInput!): UserProfile
-    updateUserProfile(id: Int!, input: UserProfileInput!): UserProfile
-    deleteUserProfile(id: Int!): UserProfile
+    createUserProfile(input: CreateUserProfileInput!): UserProfile!
+    updateUserProfile(id: Int!, input: UpdateUserProfileInput!): UserProfile!
+    deleteUserProfile(id: Int!): UserProfile!
   }
 `
