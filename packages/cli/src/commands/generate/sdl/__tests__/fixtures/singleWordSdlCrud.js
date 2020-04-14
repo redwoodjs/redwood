@@ -15,10 +15,10 @@ export const schema = gql`
   }
 
   input PostInput {
-    title: String
-    slug: String
-    author: String
-    body: String
+    title: String!
+    slug: String!
+    author: String!
+    body: String!
     image: String
     postedAt: DateTime
   }

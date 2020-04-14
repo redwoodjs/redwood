@@ -12,8 +12,8 @@ export const schema = gql`
   }
 
   input UserProfileInput {
-    username: String
-    userId: Int
+    username: String!
+    userId: Int!
   }
 
   type Mutation {

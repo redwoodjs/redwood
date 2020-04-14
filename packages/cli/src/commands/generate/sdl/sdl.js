@@ -35,7 +35,7 @@ const inputSDL = (model, types = {}) => {
         field.kind !== 'object'
       )
     })
-    .map((field) => modelFieldToSDL(field, false, types))
+    .map((field) => modelFieldToSDL(field, true, types))
 }
 
 const idType = (model) => {
