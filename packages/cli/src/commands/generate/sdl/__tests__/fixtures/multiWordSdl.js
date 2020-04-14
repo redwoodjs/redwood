@@ -7,7 +7,7 @@ export const schema = gql`
   }
 
   type Query {
-    userProfiles: [UserProfile]
+    userProfiles: [UserProfile!]!
   }
 
   input UserProfileInput {

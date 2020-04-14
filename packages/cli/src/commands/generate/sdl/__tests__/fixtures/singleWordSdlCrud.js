@@ -10,8 +10,8 @@ export const schema = gql`
   }
 
   type Query {
-    posts: [Post]
-    post(id: Int!): Post
+    posts: [Post!]!
+    post(id: Int!): Post!
   }
 
   input PostInput {

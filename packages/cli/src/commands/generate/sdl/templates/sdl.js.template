@@ -4,8 +4,8 @@ export const schema = gql`
   }
 
   type Query {
-    ${pluralCamelName}: [${singularPascalName}]<% if (crud) { %>
-    ${singularCamelName}(id: ${idType}!): ${singularPascalName}<% } %>
+    ${pluralCamelName}: [${singularPascalName}!]!<% if (crud) { %>
+    ${singularCamelName}(id: ${idType}!): ${singularPascalName}!<% } %>
   }
 
   input ${singularPascalName}Input {
