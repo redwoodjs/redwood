@@ -12,7 +12,7 @@ export const QUERY = gql`
   }
 `
 const UPDATE_POST_MUTATION = gql`
-  mutation UpdateUserProfileMutation($id: Int!, $input: UserProfileInput!) {
+  mutation UpdateUserProfileMutation($id: Int!, $input: UpdateUserProfileInput!) {
     updateUserProfile(id: $id, input: $input) {
       id
     }

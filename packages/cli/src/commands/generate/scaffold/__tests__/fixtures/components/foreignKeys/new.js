@@ -3,7 +3,7 @@ import { navigate, routes } from '@redwoodjs/router'
 import UserProfileForm from 'src/components/UserProfileForm'
 
 const CREATE_POST_MUTATION = gql`
-  mutation CreateUserProfileMutation($input: UserProfileInput!) {
+  mutation CreateUserProfileMutation($input: CreateUserProfileInput!) {
     createUserProfile(input: $input) {
       id
     }
