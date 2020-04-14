@@ -5,7 +5,8 @@
   "license": "MIT",
   "bin": {
     "redwood": "./dist/index.js",
-    "rw": "./dist/index.js"
+    "rw": "./dist/index.js",
+    "rwdev": "./dist/rwdev.js"
   },
   "files": [
     "dist"
@@ -27,11 +28,11 @@
     "pascalcase": "^1.0.0",
     "pluralize": "^8.0.0",
     "prettier": "^2.0.2",
-    "rimraf": "^3.0.2",
     "yargs": "^15.3.1"
   },
   "devDependencies": {
-    "@types/node-fetch": "^2.5.5"
+    "@types/node-fetch": "^2.5.5",
+    "rimraf": "^3.0.2"
   },
   "scripts": {
     "build": "yarn build:js && yarn build:clean-dist",
