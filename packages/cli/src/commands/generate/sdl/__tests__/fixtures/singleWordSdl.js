@@ -8,10 +8,16 @@ export const schema = gql`
   }
 
   type Query {
-    users: [User]
+    users: [User!]!
   }
 
-  input UserInput {
+  input CreateUserInput {
+    name: String
+    email: String!
+    isAdmin: Boolean!
+  }
+
+  input UpdateUserInput {
     name: String
     email: String
     isAdmin: Boolean

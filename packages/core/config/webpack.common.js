@@ -39,6 +39,18 @@ module.exports = (webpackEnv) => {
     ]
   }
 
+  const redwoodEnvPrefix = 'REDWOOD_ENV_'
+  const includeEnvKeys = redwoodConfig.web.includeEnvironmentVariables
+  const redwoodEnvKeys = Object.keys(process.env).reduce((prev, next) => {
+    if (
+      next.startsWith(redwoodEnvPrefix) ||
+      (includeEnvKeys && includeEnvKeys.includes(next))
+    ) {
+      prev[`process.env.${next}`] = JSON.stringify(process.env[next])
+    }
+    return prev
+  }, {})
+
   return {
     mode: isEnvProduction ? 'production' : 'development',
     devtool: isEnvProduction ? 'source-map' : 'cheap-module-source-map',
@@ -92,6 +104,7 @@ module.exports = (webpackEnv) => {
           // absolute path of imported file
           return JSON.stringify(runtimeValue.module.resource)
         }),
+        ...redwoodEnvKeys,
       }),
       new Dotenv({
         path: path.resolve(redwoodPaths.base, '.env'),
