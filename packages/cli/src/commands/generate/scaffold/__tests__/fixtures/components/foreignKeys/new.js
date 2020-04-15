@@ -18,9 +18,8 @@ const NewUserProfile = () => {
   })
 
   const onSave = (input) => {
-    const castInput = input
-    castInput = Object.assign(castInput, parseInt(input.userId))
-    createUserProfile({ variables: { castInput } })
+    const castInput = Object.assign(input, { userId: parseInt(input.userId), })
+    createUserProfile({ variables: { input: castInput } })
   }
 
   return (

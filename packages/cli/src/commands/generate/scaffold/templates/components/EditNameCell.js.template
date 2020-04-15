@@ -27,9 +27,8 @@ export const Success = ({ ${singularCamelName} }) => {
   })
 
   const onSave = (input, id) => {<% if (intForeignKeys.length) { %>
-    const castInput = input
-    <% intForeignKeys.forEach(key => { %>castInput = Object.assign(castInput, parseInt(input.${key}))<% }) %><% } %>
-    update${singularPascalName}({ variables: { id, <% if (intForeignKeys.length) { %>castInput<% } else { %>input<% } %> } })
+    const castInput = Object.assign(input, { <% intForeignKeys.forEach(key => { %>${key}: parseInt(input.${key}), }<% }) %>)<% } %>
+    update${singularPascalName}({ variables: { id, <% if (intForeignKeys.length) { %>input: castInput<% } else { %>input<% } %> } })
   }
 
   return (

@@ -29,9 +29,8 @@ export const Success = ({ userProfile }) => {
   })
 
   const onSave = (input, id) => {
-    const castInput = input
-    castInput = Object.assign(castInput, parseInt(input.userId))
-    updateUserProfile({ variables: { id, castInput } })
+    const castInput = Object.assign(input, { userId: parseInt(input.userId), })
+    updateUserProfile({ variables: { id, input: castInput } })
   }
 
   return (
