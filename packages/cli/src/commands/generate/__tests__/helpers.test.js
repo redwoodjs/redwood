@@ -1,3 +1,5 @@
+import path from 'path'
+
 global.__dirname = __dirname
 import {} from 'src/lib/test'
 
@@ -7,7 +9,9 @@ const PAGE_TEMPLATE_OUTPUT = `const FooBarPage = () => {
   return (
     <div>
       <h1>FooBarPage</h1>
-      <p>Find me in ./web/src/pages/FooBarPage/FooBarPage.js</p>
+      <p>Find me in ./${path.normalize(
+        'web/src/pages/FooBarPage/FooBarPage.js'
+      )}</p>
     </div>
   )
 }
@@ -28,7 +32,7 @@ test('templateForComponentFile creates a proper output path for files', () => {
     })
 
     expect(output[0]).toEqual(
-      '/path/to/project/web/src/pages/FooBarPage/FooBarPage.js'
+      path.normalize('/path/to/project/web/src/pages/FooBarPage/FooBarPage.js')
     )
   })
 })
@@ -43,7 +47,7 @@ test('templateForComponentFile can create a path in /web', () => {
   })
 
   expect(output[0]).toEqual(
-    '/path/to/project/web/src/pages/HomePage/HomePage.js'
+    path.normalize('/path/to/project/web/src/pages/HomePage/HomePage.js')
   )
 })
 
@@ -57,7 +61,7 @@ test('templateForComponentFile can create a path in /api', () => {
   })
 
   expect(output[0]).toEqual(
-    '/path/to/project/api/src/services/HomePage/HomePage.js'
+    path.normalize('/path/to/project/api/src/services/HomePage/HomePage.js')
   )
 })
 
@@ -71,7 +75,7 @@ test('templateForComponentFile can override generated component name', () => {
   })
 
   expect(output[0]).toEqual(
-    '/path/to/project/web/src/pages/Hobbiton/Hobbiton.js'
+    path.normalize('/path/to/project/web/src/pages/Hobbiton/Hobbiton.js')
   )
 })
 
@@ -86,7 +90,7 @@ test('templateForComponentFile can override file extension', () => {
   })
 
   expect(output[0]).toEqual(
-    '/path/to/project/web/src/pages/HomePage/HomePage.txt'
+    path.normalize('/path/to/project/web/src/pages/HomePage/HomePage.txt')
   )
 })
 
