@@ -18,6 +18,10 @@ The port number (integer) to listen to for the web side.
 
 TODO
 
+### includeEnvironmentVariables
+
+The set of environment variable keys (list of strings) to include for the web side, in addition to any that are prefixed with `REDWOOD_ENV_`.
+
 ## [api]
 
 This table contains the configuration for api side.

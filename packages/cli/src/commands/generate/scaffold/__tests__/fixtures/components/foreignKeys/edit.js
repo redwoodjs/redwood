@@ -12,7 +12,7 @@ export const QUERY = gql`
   }
 `
 const UPDATE_POST_MUTATION = gql`
-  mutation UpdateUserProfileMutation($id: Int!, $input: UserProfileInput!) {
+  mutation UpdateUserProfileMutation($id: Int!, $input: UpdateUserProfileInput!) {
     updateUserProfile(id: $id, input: $input) {
       id
     }
@@ -29,9 +29,8 @@ export const Success = ({ userProfile }) => {
   })
 
   const onSave = (input, id) => {
-    const castInput = input
-    castInput = Object.assign(castInput, parseInt(input.userId))
-    updateUserProfile({ variables: { id, castInput } })
+    const castInput = Object.assign(input, { userId: parseInt(input.userId), })
+    updateUserProfile({ variables: { id, input: castInput } })
   }
 
   return (
