@@ -29,9 +29,9 @@ const Link = forwardRef(({ to, ...rest }, ref) => (
 const NavLink = forwardRef(
   ({ to, className, activeClassName, ...rest }, ref) => {
     const matchInfo = useMatch(to)
-    const theClassName = matchInfo.match
-      ? `${className || ''} ${activeClassName}`
-      : className
+    const theClassName = [className, matchInfo.match && activeClassName]
+      .filter(Boolean)
+      .join(' ')
 
     return (
       <a
