@@ -1,4 +1,4 @@
-# Setup and Process Overview
+# Contributing
 
 Before interacting with the Redwood community, please read and understand our [Code of Conduct](https://github.com/redwoodjs/redwood/blob/master/CODE_OF_CONDUCT.md).
 
@@ -96,13 +96,15 @@ yarn rw dev web
 ```
 
 ## CLI Package Development
+
 We are using [Yargs](https://yargs.js.org/)
 _Historical note: originally implemented in react-ink (too slow!) then converted._
 
 ### Example
+
 Example dev command:
 
-```
+```javascript
 export const command = 'dev [app..]'
 export const desc = 'Run development servers.'
 export const builder = {
