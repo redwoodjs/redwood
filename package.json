@@ -34,6 +34,7 @@
   ],
   "scripts": {
     "build": "yarn cross-env NODE_ENV=production lerna run build",
+    "build:watch": "lerna run build:watch --parallel",
     "test": "lerna run test --stream -- --colors",
     "lint": "yarn eslint packages",
     "lint:fix": "yarn eslint --fix packages"

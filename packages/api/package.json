@@ -40,6 +40,7 @@
     "build": "yarn build:js && yarn build:types && yarn move-cli dist/importAll.macro.js ./importAll.macro.js",
     "build:js": "yarn del-cli importAll.macro.js && yarn cross-env NODE_ENV=production babel src -d dist --delete-dir-on-start --extensions \".js,.ts\" --source-maps inline",
     "build:types": "tsc --declaration --emitDeclarationOnly",
+    "prepublishOnly": "yarn build",
     "build:watch": "nodemon --watch src -e ts,js --ignore dist --exec 'yarn build'",
     "test": "yarn jest",
     "test:watch": "yarn test --watch"

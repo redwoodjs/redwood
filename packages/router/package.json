@@ -14,6 +14,7 @@
   },
   "scripts": {
     "build": "yarn cross-env NODE_ENV=production babel src -d dist --delete-dir-on-start",
+    "prepublishOnly": "yarn build",
     "build:watch": "nodemon --ignore dist --exec 'yarn build'",
     "test": "yarn jest src",
     "test:watch": "yarn test --watch"
