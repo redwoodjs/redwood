@@ -128,18 +128,23 @@ const parseSearch = (search) => {
 const validatePath = (path) => {
   // Check that path begins with a slash.
   if (!path.startsWith('/')) {
-    throw new Error('Route path does not begin with a slash: "' + path + '"')
+    throw new Error(`Route path does not begin with a slash: "${path}"`)
+  }
+
+  if (path.indexOf(' ') >= 0) {
+    throw new Error(`Route path contains spaces: "${path}"`)
   }
 
   // Check for duplicate named params.
   const matches = path.matchAll(/\{([^}]+)\}/g)
   let memo = {}
   for (const match of matches) {
-    const param = match[0]
+    // Extract the param's name to make sure there aren't any duplicates
+    const param = match[1].split(':')[0]
     if (memo[param]) {
-      throw new Error('Route path contains duplicate parameter: "' + path + '"')
+      throw new Error(`Route path contains duplicate parameter: "${path}"`)
     } else {
-      memo[match[0]] = true
+      memo[param] = true
     }
   }
 }
