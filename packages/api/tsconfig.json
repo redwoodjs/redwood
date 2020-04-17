@@ -1,23 +1,11 @@
 {
+  "extends": "../../tsconfig.compilerOption.json",
   "compilerOptions": {
-    "target": "esnext",
-    "moduleResolution": "node",
-    "strict": true,
-    "esModuleInterop": true,
+    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
     "baseUrl": ".",
-    "paths": {
-      "src/*": [
-        "src/*"
-      ]
-    },
-    "declaration": true,
-    "declarationDir": "./dist"
+    "rootDir": "src",
+    "outDir": "dist"
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "**/__tests__",
-    "**/__mocks__"
-  ]
+  "include": ["src"],
+  "exclude": ["**/__tests__", "**/__mocks__"]
 }

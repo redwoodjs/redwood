@@ -10,10 +10,10 @@ you would create `src/commands/generate/page/page.js`. The file name does not ha
 
 The generator must export the following:
 
-  `command`: A yargs command definition.
-  `desc`: A description of the generator shown during help.
-  `builder`: A function that describes the arguments for the command.
-  `handler`: The function that's invoked by the command.
+`command`: A yargs command definition.
+`desc`: A description of the generator shown during help.
+`builder`: A function that describes the arguments for the command.
+`handler`: The function that's invoked by the command.
 
 A typicall generator writes files.
 

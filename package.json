@@ -33,7 +33,10 @@
     "packages/api/importAll.macro.js"
   ],
   "scripts": {
-    "build": "yarn cross-env NODE_ENV=production lerna run build",
+    "build": "yarn build:clean && yarn build:js && yarn build:types",
+    "build:clean": "lerna run build:clean",
+    "build:js": "cross-env NODE_ENV=production lerna run build",
+    "build:types": "tsc --build --clean && tsc --build",
     "build:watch": "lerna run build:watch --parallel",
     "test": "lerna run test --stream -- --colors",
     "lint": "yarn eslint packages",

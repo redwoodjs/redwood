@@ -183,7 +183,7 @@ app.all('/:routeName', async (req, res) => {
   }
 })
 
-const reloadLambdas = (path: string) => {
+const reloadLambdas = () => {
   console.log('Change detected, rebuilding...')
   purgeRequireCache()
   lambdaFunctions = requireLambdaFunctions(PATH)

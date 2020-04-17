@@ -38,6 +38,9 @@ module.exports = {
         'plugin:@typescript-eslint/recommended',
         'prettier/@typescript-eslint',
       ],
+      rules: {
+        '@typescript-eslint/explicit-function-return-type': 'off',
+      },
     },
     {
       files: ['web/src/Routes.js', 'web/src/Routes.ts'],

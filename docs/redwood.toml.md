@@ -8,7 +8,7 @@ This table contains the configuration for web side.
 
 ### web.host
 
-The hostname (string) to listen to for the web server, defaults to `localhost`.  When running the server within containers/VMs, using `0.0.0.0` would allow network connections to/from the host.
+The hostname (string) to listen to for the web server, defaults to `localhost`. When running the server within containers/VMs, using `0.0.0.0` would allow network connections to/from the host.
 
 ### web.port
 
@@ -28,7 +28,7 @@ This table contains the configuration for api side.
 
 ## api.host
 
-The hostname (string) to listen to for the web server, defaults to `localhost`.  When running the server within containers/VMs, using `0.0.0.0` would allow network connections to/from the host.
+The hostname (string) to listen to for the web server, defaults to `localhost`. When running the server within containers/VMs, using `0.0.0.0` would allow network connections to/from the host.
 
 ## api.port
 
