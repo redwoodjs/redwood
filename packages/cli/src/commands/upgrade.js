@@ -27,7 +27,7 @@ export const handler = async ({ dry-run }) => {
       task: (_ctx, task) => {
         if (dry-run) {
           task.title = 'Checking available upgrades for @redwoodjs packages'
-          execa(`yarn outdated ${rwPackages}`, undefined, {
+          execa.command(`yarn outdated ${rwPackages}`, {
             stdio: 'inherit',
             shell: true,
           })
