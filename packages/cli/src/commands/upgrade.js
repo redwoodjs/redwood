@@ -27,7 +27,7 @@ export const handler = async ({ check }) => {
       task: (_ctx, task) => {
         if (check) {
           task.title = 'Checking available upgrades for @redwoodjs packages'
-          execa(`yarn outdated ${rwPackages}`, undefined, {
+          execa.command(`yarn outdated ${rwPackages}`, {
             stdio: 'inherit',
             shell: true,
           })
