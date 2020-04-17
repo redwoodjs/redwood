@@ -14,7 +14,7 @@ Before interacting with the Redwood community, please read and understand our [C
 
 ## Local development
 
-When contributing to Redwood, you'll probably want to see your changes in the Redwood Framework's monorepo "running live" in one of your own Redwood projects or in one of our example apps. To make this possible, we offer two workflows: "watch and copy", which has some restrictions, and "emulate npm", which doesn't. If you've installed or upgraded a dependency, you'll want to use the "emulate npm" workflow; otherwise, use "watch and copy". Both workflows use `rwdev`, a companion CLI development tool.
+When contributing to Redwood, you'll probably want to see your changes in the Redwood Framework's monorepo "running live" in one of your own Redwood projects or in one of our example apps. We offer two workflows to make this possible: "watch and copy", which has some restrictions, and "emulate npm", which doesn't. If you've installed or upgraded a dependency, you'll want to use the "emulate npm" workflow; otherwise, use "watch and copy". Both workflows use `rwdev`, Redwood's companion CLI development tool.
 
 ### Watch and copy
 
@@ -41,11 +41,11 @@ Trigger event:  add
 building file list ... done
 ```
 
-You can create a `RW_PATH` env var so you don't have to specify the path in the watch command.
+> You can create a `RW_PATH` env var so you don't have to specify the path in the watch command.
 
-Now any changes made in the framework will be copied into your project.
+Now any changes made in the framework will be copied into your project!
 
-### Emulating package publishing
+### Emulate NPM
 
 Sometimes you'll want to test the full-development flow, from building and publishing our packages to installing them in your project. We facilitate this using a local NPM registry called [Verdaccio](https://github.com/verdaccio/verdaccio).
 
@@ -71,7 +71,11 @@ You can build a particular package by specifying the path to the package: `./tas
 
 #### Installing published packages
 
-`rwdev` makes installing local npm packages easy: `yarn rwdev install @redwoodjs/dev-server`.
+`rwdev` makes installing local npm packages easy:
+
+```terminal
+yarn rwdev install @redwoodjs/dev-server
+```
 
 This is equivalent to running:
 
