@@ -14,11 +14,11 @@ Before interacting with the Redwood community, please read and understand our [C
 
 ## Local development
 
-When contributing to Redwood, you'll probably want to see your addition, fix, or change in the Redwood Framework's monorepo "running live" in one of your own Redwood projects or in one of our example apps. To make this possible, we offer two workflows: "watch and copy", which has some restrictions, and "emulate npm", which doesn't. If you've installed or upgraded a dependency, you'll want to use the "emulate npm" workflow; otherwise, "watch and copy" will do just fine.
+When contributing to Redwood, you'll probably want to see your changes in the Redwood Framework's monorepo "running live" in one of your own Redwood projects or in one of our example apps. To make this possible, we offer two workflows: "watch and copy", which has some restrictions, and "emulate npm", which doesn't. If you've installed or upgraded a dependency, you'll want to use the "emulate npm" workflow; otherwise, use "watch and copy".
 
 ### Watch and copy
 
-The first step is to build-and-watch files in the Redwood Framework for changes:
+First, build-and-watch files in the Redwood Framework for changes:
 
 ```terminal
 cd redwood
@@ -30,7 +30,7 @@ create-redwood-app: $ nodemon --ignore dist --exec 'yarn build'
 @redwoodjs/eslint-plugin-redwood: $ nodemon --ignore dist --exec 'yarn build'
 ```
 
-The second step is to watch-and-copy those changes into your Redwood project or example app (here, example-invoice):
+Then, watch-and-copy those changes into your Redwood project or example app (here, example-invoice):
 
 ```terminal
 cd example-invoice
@@ -43,11 +43,11 @@ building file list ... done
 
 You can create a `RW_PATH` env var so you don't have to specify the path in the watch command.
 
-Now any changes that are made in the framework are copied into your project.
+Now any changes made in the framework will be copied into your project.
 
 ### Emulating package publishing
 
-Sometimes you'll want to test the full development flow from building and publishing our packages, to installing them in your project. We facilitate this using a local NPM registry called [Verdaccio](https://github.com/verdaccio/verdaccio).
+Sometimes you'll want to test the full-development flow, from building and publishing our packages to installing them in your project. We facilitate this using a local NPM registry called [Verdaccio](https://github.com/verdaccio/verdaccio).
 
 #### Setting up and running a local NPM registry
 
@@ -60,7 +60,7 @@ This starts Verdaccio (http://localhost:4873) with our configuration file.
 
 #### Publishing a package
 
-`./tasks/publish-local` will build, unpublish, and publish all the Redwood packages to your local NPM registry with a "dev" tag, for the curious it is the equivalent of running:
+`./tasks/publish-local` will build, unpublish, and publish all the Redwood packages to your local NPM registry with a "dev" tag. For the curious, it's equivalent to running:
 
 ```terminal
 npm unpublish --tag dev --registry http://localhost:4873/ --force
@@ -73,7 +73,7 @@ You can build a particular package by specifying the path to the package: `./tas
 
 Redwood installs `rwdev` a companion CLI development tool that makes installing local npm packages easy: `yarn rwdev install @redwoodjs/dev-server`.
 
-This is equivilant to running:
+This is equivalent to running:
 
 ```terminal
 rm -rf <PROJECT_PATH>/node_modules/@redwoodjs/dev-server
@@ -88,7 +88,7 @@ You can run both the API and Web servers with a single command:
 yarn rw dev
 ```
 
-However, for local package development, you'll need to manually stop/start the respective server to include changes. In this case you can run the servers for each of the yarn workspaces independently:
+But for local package development, you'll need to manually stop/start the respective server to include changes. In this case you can run the servers for each of the yarn workspaces independently:
 
 ```terminal
 yarn rw dev api
