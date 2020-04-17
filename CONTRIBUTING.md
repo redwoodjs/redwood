@@ -30,7 +30,7 @@ create-redwood-app: $ nodemon --ignore dist --exec 'yarn build'
 @redwoodjs/eslint-plugin-redwood: $ nodemon --ignore dist --exec 'yarn build'
 ```
 
-Then, watch-and-copy those changes into your Redwood project or example app (here, example-invoice):
+Then, watch-and-copy those changes into your Redwood project or example app (here, [example-invoice](https://github.com/redwoodjs/example-invoice)):
 
 ```terminal
 cd example-invoice
