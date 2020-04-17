@@ -92,7 +92,7 @@ export const processPagesDir = (
         // Actual page js or tsx files reside in a directory of the same
         // name (supported by: directory-named-webpack-plugin), so let's
         // construct the filename of the actual Page file.
-        // `require.resolve` will throw if it can't be resolved.
+        // `require.resolve` will throw if a module cannot be found.
         require.resolve(path.join(webPagesDir, entry.name, entry.name))
 
         // If the Page exists, then construct the dependency object and push it
