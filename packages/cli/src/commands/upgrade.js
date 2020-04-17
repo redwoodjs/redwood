@@ -6,22 +6,38 @@ import c from 'src/lib/colors'
 export const command = 'upgrade'
 export const desc = 'Upgrade all @redwoodjs packages via interactive CLI'
 
-export const handler = async () => {
-  const execCommands = {
-    cmd:
-      'yarn upgrade-interactive @redwoodjs/core @redwoodjs/api @redwoodjs/web @redwoodjs/router',
-    args: ['--latest'],
-  }
+export const builder = (yargs) => {
+  yargs
+    .option('check', {
+      alias: 'c',
+      type: 'boolean',
+      default: false,
+      description: 'Check for outdated packages without upgrading',
+    })
+    .strict()
+}
 
+const rwPackages =
+  '@redwoodjs/core @redwoodjs/api @redwoodjs/web @redwoodjs/router'
+
+export const handler = async ({ check }) => {
   const tasks = new Listr([
     {
-      title: 'Running @redwoodjs Interactive Upgrade CLI',
-      task: () => {
-        const { cmd, args } = execCommands
-        execa(cmd, args, {
-          stdio: 'inherit',
-          shell: true,
-        })
+      title: "Running 'redwood upgrade'",
+      task: (_ctx, task) => {
+        if (check) {
+          task.title = 'Checking available upgrades for @redwoodjs packages'
+          execa(`yarn outdated ${rwPackages}`, undefined, {
+            stdio: 'inherit',
+            shell: true,
+          })
+        } else {
+          task.title = 'Running @redwoodjs package interactive upgrade CLI'
+          execa(`yarn upgrade-interactive ${rwPackages}`, ['--latest'], {
+            stdio: 'inherit',
+            shell: true,
+          })
+        }
       },
     },
   ])
