@@ -52,7 +52,7 @@ Sometimes you'll want to test the full development flow from building and publis
 #### Setting up and running a local NPM registry
 
 ```terminal
-yarn add global verdaccio
+yarn global add verdaccio
 ./tasks/run-local-npm
 ```
 
