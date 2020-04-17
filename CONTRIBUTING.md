@@ -14,7 +14,7 @@ Before interacting with the Redwood community, please read and understand our [C
 
 ## Local development
 
-When contributing to Redwood, you'll probably want to see your changes in the Redwood Framework's monorepo "running live" in one of your own Redwood projects or in one of our example apps. To make this possible, we offer two workflows: "watch and copy", which has some restrictions, and "emulate npm", which doesn't. If you've installed or upgraded a dependency, you'll want to use the "emulate npm" workflow; otherwise, use "watch and copy".
+When contributing to Redwood, you'll probably want to see your changes in the Redwood Framework's monorepo "running live" in one of your own Redwood projects or in one of our example apps. To make this possible, we offer two workflows: "watch and copy", which has some restrictions, and "emulate npm", which doesn't. If you've installed or upgraded a dependency, you'll want to use the "emulate npm" workflow; otherwise, use "watch and copy". Both workflows use `rwdev`, a companion CLI development tool.
 
 ### Watch and copy
 
@@ -71,7 +71,7 @@ You can build a particular package by specifying the path to the package: `./tas
 
 #### Installing published packages
 
-Redwood installs `rwdev` a companion CLI development tool that makes installing local npm packages easy: `yarn rwdev install @redwoodjs/dev-server`.
+`rwdev` makes installing local npm packages easy: `yarn rwdev install @redwoodjs/dev-server`.
 
 This is equivalent to running:
 
