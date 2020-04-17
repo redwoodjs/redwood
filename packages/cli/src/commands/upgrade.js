@@ -20,12 +20,14 @@ export const builder = (yargs) => {
 const rwPackages =
   '@redwoodjs/core @redwoodjs/api @redwoodjs/web @redwoodjs/router'
 
-export const handler = async ({ dry-run }) => {
+// yargs allows passing the 'dry-run' alias 'd' here,
+// which we need to use because babel fails on 'dry-run'
+export const handler = async ({ d }) => {
   const tasks = new Listr([
     {
       title: "Running 'redwood upgrade'",
       task: (_ctx, task) => {
-        if (dry-run) {
+        if (d) {
           task.title = 'Checking available upgrades for @redwoodjs packages'
           execa.command(`yarn outdated ${rwPackages}`, {
             stdio: 'inherit',
