@@ -88,13 +88,13 @@ export const processPagesDir = (
   // subdirectories.
   entries.forEach((entry) => {
     if (entry.isDirectory()) {
-      // Actual page js or tsx files reside in a directory of the same name, so let's
-      // construct the filename of the actual Page file.
-      const testFile = require.resolve(
-        path.join(webPagesDir, entry.name, entry.name)
-      )
+      try {
+        // Actual page js or tsx files reside in a directory of the same
+        // name (supported by: directory-named-webpack-plugin), so let's
+        // construct the filename of the actual Page file.
+        // `require.resolve` will throw if it can't be resolved.
+        require.resolve(path.join(webPagesDir, entry.name, entry.name))
 
-      if (fs.existsSync(testFile)) {
         // If the Page exists, then construct the dependency object and push it
         // onto the deps array.
         const basename = path.posix.basename(entry.name)
@@ -106,7 +106,7 @@ export const processPagesDir = (
           path: path.join(webPagesDir, entry.name),
           importStatement: `const ${importName} = { name: '${importName}', loader: () => import('${importFile}') }`,
         })
-      } else {
+      } catch (e) {
         // If the Page doesn't exist then we are in a directory of Page
         // directories, so let's recurse into it and do the whole thing over
         // again.
