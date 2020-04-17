@@ -1,0 +1,2 @@
+Lorem ipsum dolar sit ${singularCamelName}
+Hello, ${noun}!

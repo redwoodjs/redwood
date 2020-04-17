@@ -45,4 +45,4 @@ const Location = ({ children }) => (
   </LocationContext.Consumer>
 )
 
-export { Location, LocationContext }
+export { Location, LocationProvider, LocationContext }

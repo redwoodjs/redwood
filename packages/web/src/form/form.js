@@ -1,5 +1,5 @@
 import { useForm, FormContext, useFormContext } from 'react-hook-form'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 
 const DEFAULT_MESSAGES = {
   required: 'is required',
@@ -23,9 +23,13 @@ const inputTagProps = (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const fieldErrorsContext = useContext(FieldErrorContext)
   const contextError = fieldErrorsContext[props.name]
-  if (contextError) {
-    setError(props.name, 'server', contextError)
-  }
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffect(() => {
+    if (contextError) {
+      setError(props.name, 'server', contextError)
+    }
+  }, [contextError, props.name, setError])
 
   // any errors on this field
   const validationError = errors[props.name]

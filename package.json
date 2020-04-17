@@ -23,7 +23,10 @@
     "typescript": "^3.8.3"
   },
   "eslintConfig": {
-    "extends": "@redwoodjs/eslint-config"
+    "extends": "@redwoodjs/eslint-config",
+    "ignorePatterns": [
+      "fixtures"
+    ]
   },
   "eslintIgnore": [
     "dist",
@@ -34,6 +37,7 @@
     "build:clean": "lerna run build:clean",
     "build:js": "cross-env NODE_ENV=production lerna run build",
     "build:types": "tsc --build --clean && tsc --build",
+    "build:watch": "lerna run build:watch --parallel",
     "test": "lerna run test --stream -- --colors",
     "lint": "yarn eslint packages",
     "lint:fix": "yarn eslint --fix packages"

@@ -1,0 +1,24 @@
+export const schema = gql`
+  type ${singularPascalName} {
+    ${query}
+  }
+
+  type Query {
+    ${pluralCamelName}: [${singularPascalName}!]!<% if (crud) { %>
+    ${singularCamelName}(id: ${idType}!): ${singularPascalName}!<% } %>
+  }
+
+  input Create${singularPascalName}Input {
+    ${createInput}
+  }
+
+  input Update${singularPascalName}Input {
+    ${updateInput}
+  }<% if (crud) { %>
+
+  type Mutation {
+    create${singularPascalName}(input: Create${singularPascalName}Input!): ${singularPascalName}!
+    update${singularPascalName}(id: ${idType}!, input: Update${singularPascalName}Input!): ${singularPascalName}!
+    delete${singularPascalName}(id: ${idType}!): ${singularPascalName}!
+  }<% } %>
+`
