@@ -14,11 +14,11 @@ Before interacting with the Redwood community, please read and understand our [C
 
 ## Local development
 
-When contributing to Redwood, you'll probably want to see your addition, fix, or change in the Redwood Framework's monorepo "running live" in one of your own projects or in one of our example apps. To make this possible, we offer two workflows: "watch and copy", which has some restrictions, and "emulate npm", which doesn't. If you've installed or upgraded a dependency, you'll want to use the "emulate npm" workflow; otherwise, "watch and copy" will do just fine.
+When contributing to Redwood, you'll probably want to see your addition, fix, or change in the Redwood Framework's monorepo "running live" in one of your own Redwood projects or in one of our example apps. To make this possible, we offer two workflows: "watch and copy", which has some restrictions, and "emulate npm", which doesn't. If you've installed or upgraded a dependency, you'll want to use the "emulate npm" workflow; otherwise, "watch and copy" will do just fine.
 
 ### Watch and copy
 
-The first step is to watch files for changes and build those changes in the Redwood framework:
+The first step is to build-and-watch files in the Redwood Framework for changes:
 
 ```terminal
 cd redwood
@@ -30,7 +30,7 @@ create-redwood-app: $ nodemon --ignore dist --exec 'yarn build'
 @redwoodjs/eslint-plugin-redwood: $ nodemon --ignore dist --exec 'yarn build'
 ```
 
-The second step is to watch and copy those changes into your Redwood project:
+The second step is to watch-and-copy those changes into your Redwood project or example app (here, example-invoice):
 
 ```terminal
 cd example-invoice
@@ -41,7 +41,7 @@ Trigger event:  add
 building file list ... done
 ```
 
-You can also create a `RW_PATH` env var and then you don't have to specify the path in the watch command.
+You can create a `RW_PATH` env var so you don't have to specify the path in the watch command.
 
 Now any changes that are made in the framework are copied into your project.
 
