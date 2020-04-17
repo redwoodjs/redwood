@@ -14,9 +14,7 @@ Before interacting with the Redwood community, please read and understand our [C
 
 ## Local development
 
-When contributing to Redwood you'll often want to add, fix, or change something in the Redwood Framework's monorepo, and see the implementation "running "live" in your own side project or one of our example apps.
-
-We offer two workflows for making that possible: "watch and copy" with some restrictions, and "emulate npm" without restrictions. The consideration for using the "emulate npm" workflow is if you've installed or upgraded a dependency, otherwise the "watch and copy" workflow should be fine.
+When contributing to Redwood, you'll probably want to see your addition, fix, or change in the Redwood Framework's monorepo "running live" in one of your own projects or in one of our example apps. To make this possible, we offer two workflows: "watch and copy", which has some restrictions, and "emulate npm", which doesn't. If you've installed or upgraded a dependency, you'll want to use the "emulate npm" workflow; otherwise, "watch and copy" will do just fine.
 
 ### Watch and copy
 
