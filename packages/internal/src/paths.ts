@@ -14,7 +14,7 @@ const PATH_API_DIR_DB_SCHEMA = 'api/prisma/schema.prisma'
 const PATH_API_DIR_CONFIG = 'api/src/config'
 const PATH_API_DIR_SERVICES = 'api/src/services'
 const PATH_API_DIR_SRC = 'api/src'
-const PATH_WEB_ROUTES = 'web/src/Routes.js'
+const PATH_WEB_ROUTES = 'web/src/Routes' // .js|.tsx
 const PATH_WEB_DIR_LAYOUTS = 'web/src/layouts/'
 const PATH_WEB_DIR_PAGES = 'web/src/pages/'
 const PATH_WEB_DIR_COMPONENTS = 'web/src/components'
@@ -45,6 +45,12 @@ export const getBaseDir = (configPath: string = getConfigPath()): string => {
  * Path constants that are relevant to a Redwood project.
  */
 export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
+  // The path.web.routes file can either be a js or a tsx file. We use
+  // nodejs internals to resolve it.
+  require.extensions['.tsx'] = () => undefined
+  require.extensions['.ts'] = () => undefined
+  const routes = require.resolve(path.join(BASE_DIR, PATH_WEB_ROUTES))
+
   return {
     base: BASE_DIR,
     api: {
@@ -57,7 +63,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       src: path.join(BASE_DIR, PATH_API_DIR_SRC),
     },
     web: {
-      routes: path.join(BASE_DIR, PATH_WEB_ROUTES),
+      routes,
       pages: path.join(BASE_DIR, PATH_WEB_DIR_PAGES),
       components: path.join(BASE_DIR, PATH_WEB_DIR_COMPONENTS),
       layouts: path.join(BASE_DIR, PATH_WEB_DIR_LAYOUTS),
@@ -82,14 +88,16 @@ export const processPagesDir = (
   // subdirectories.
   entries.forEach((entry) => {
     if (entry.isDirectory()) {
-      // Actual JS files reside in a directory of the same name, so let's
-      // construct the filename of the actual Page file.
-      const testFile = path.join(webPagesDir, entry.name, entry.name + '.js')
+      try {
+        // Actual page js or tsx files reside in a directory of the same
+        // name (supported by: directory-named-webpack-plugin), so let's
+        // construct the filename of the actual Page file.
+        // `require.resolve` will throw if a module cannot be found.
+        require.resolve(path.join(webPagesDir, entry.name, entry.name))
 
-      if (fs.existsSync(testFile)) {
         // If the Page exists, then construct the dependency object and push it
         // onto the deps array.
-        const basename = path.posix.basename(entry.name, '.js')
+        const basename = path.posix.basename(entry.name)
         const importName = prefix.join() + basename
         // `src/pages/<PageName>`
         const importFile = ['src', 'pages', ...prefix, basename].join('/')
@@ -98,7 +106,7 @@ export const processPagesDir = (
           path: path.join(webPagesDir, entry.name),
           importStatement: `const ${importName} = { name: '${importName}', loader: () => import('${importFile}') }`,
         })
-      } else {
+      } catch (e) {
         // If the Page doesn't exist then we are in a directory of Page
         // directories, so let's recurse into it and do the whole thing over
         // again.

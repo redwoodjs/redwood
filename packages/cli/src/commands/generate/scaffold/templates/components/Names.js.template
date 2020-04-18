@@ -28,15 +28,11 @@ const timeTag = (datetime) => {
 }
 
 const ${pluralPascalName}List = ({ ${pluralCamelName} }) => {
-  const [delete${singularPascalName}] = useMutation(DELETE_POST_MUTATION, {
-    onCompleted: () => {
-      location.reload()
-    },
-  })
+  const [delete${singularPascalName}] = useMutation(DELETE_POST_MUTATION)
 
   const onDeleteClick = (id) => {
     if (confirm('Are you sure you want to delete ${singularCamelName} ' + id + '?')) {
-      delete${singularPascalName}({ variables: { id } })
+      delete${singularPascalName}({ variables: { id }, refetchQueries: ['POSTS'] })
     }
   }
 

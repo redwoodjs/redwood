@@ -51,4 +51,4 @@ const Location: React.FC<{
   </LocationContext.Consumer>
 )
 
-export { Location, LocationContext }
+export { Location, LocationProvider, LocationContext }

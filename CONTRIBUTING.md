@@ -1,89 +1,96 @@
-# Setup and Process Overview
+# Contributing
 
 Before interacting with the Redwood community, please read and understand our [Code of Conduct](https://github.com/redwoodjs/redwood/blob/master/CODE_OF_CONDUCT.md).
 
 **Table of Contents**
 
-- [Local Package Development](#Local-Package-Development-Setup)
+- [Local development](#Local-development)
+- [Running the Local Server(s)](#Running-the-Local-Server(s))
 - [CLI Package Development](#CLI-Package-Development)
 
 <!-- toc -->
 
-## Local Package Development Setup
+## Local development
 
-You'll want to run a local redwood app sandbox using your local @redwoodjs packages instead of the current releases from the package registry. To do this we use [`yarn link`](https://classic.yarnpkg.com/en/docs/cli/link/).
+When contributing to Redwood you'll often want to add, fix, or change something in the Redwood Framework's monorepo, and see the implementation "running "live" in your own side project or one of our example apps.
 
-### Example Setup: Package `@redwoodjs/cli` Local Dev
+We offer two workflows for making that possible: "watch and copy" with some restrictions, and "emulate npm" without restrictions. The consideration for using the "emulate npm" workflow is if you've installed or upgraded a dependency, otherwise the "watch and copy" workflow should be fine.
 
-Assuming you've already cloned `redwoodjs/redwood` locally and run `yarn install` and `yarn build`, navigate to the `packages/cli` directory and run the following command:
+### Watch and copy
 
-```
-yarn link
-```
+The first step is to watch files for changes and build those changes in the Redwood framework:
 
-You should see a message `success Registered "@redwoodjs/cli"`.
-
-If you haven't created a local redwood app for testing, first run `yarn create redwood-app [app-name]` and then run `yarn` from the app's root directory. Still in the root directory of the app, run the following:
-
-```
-yarn link @redwoodjs/cli
-```
-
-> You can link as many packages as needed at a time. Note: although some packages include others, e.g. /scripts uses /cli as a dependency, you'll still need to link packages individually.
-
-You should see a success message and can confirm the symlink was created by viewing the `/node_modules/@redwoodjs` directory from your editor or via command line `$ ls -l node_modules/@redwoodjs`
-
-> HEADS UP: it's easy to forget you're using linked local packages in your sandbox app instead of those published to the package registry. You'll need to manually `git pull` upstream changes to packages.
-
-### `Yarn Build:Watch`
-
-As you make changes to a package (in this example `packages/cli`), you'll need to publish locally so the updates are included in your sandbox app. You can manually publish using `yarn build`. But it's more convenient to have the package re-publish each time you make a change. Run the following from the root of the package you're developing, `packages/cli` in this example:
-
-```
+```terminal
+cd redwood
 yarn build:watch
+
+@redwoodjs/api: $ nodemon --watch src -e ts,js --ignore dist --exec 'yarn build'
+@redwoodjs/core: $ nodemon --ignore dist --exec 'yarn build'
+create-redwood-app: $ nodemon --ignore dist --exec 'yarn build'
+@redwoodjs/eslint-plugin-redwood: $ nodemon --ignore dist --exec 'yarn build'
 ```
 
-You'd think you could just go over to your sandbox app and run your `cli` command, like:
+The second step is to watch and copy those changes into your Redwood project:
 
-```
-yarn redwood generate scaffold MyModel
-```
+```terminal
+cd example-invoice
+yarn rwdev watch ../path/to/redwood
 
-Unfortunately thanks to a long-standing [issue](https://github.com/yarnpkg/yarn/issues/3587) in Yarn, the bin files that are generated are not executable. You can fix that before running your command like so:
-
-```
-chmod +x node_modules/.bin/redwood && yarn redwood generate scaffold MyModel
-```
-
-### Unlinking Packages
-
-Lastly, to reverse the process and remove the links, work backwords using `yarn unlink`. Starting first from the local redwood sandbox app root
-
-```
-yarn unlink @redwoodjs/cli
-yarn install --force
+Redwood Framework Path:  /Users/peterp/Personal/redwoodjs/redwood
+Trigger event:  add
+building file list ... done
 ```
 
-_The latter command reinstalls the current published package._
+You can also create a `RW_PATH` env var and then you don't have to specify the path in the watch command.
 
-Then from the package directory `/redwoodjs/redwood/packages/cli` of your local clone, run:
+Now any changes that are made in the framework are copied into your project.
 
+### Emulating package publishing
+
+Sometimes you'll want to test the full development flow from building and publishing our packages, to installing them in your project. We facilitate this using a local NPM registry called [Verdaccio](https://github.com/verdaccio/verdaccio).
+
+#### Setting up and running a local NPM registry
+
+```terminal
+yarn global add verdaccio
+./tasks/run-local-npm
 ```
-yarn unlink
-yarn install --force
+
+This starts Verdaccio (http://localhost:4873) with our configuration file.
+
+#### Publishing a package
+
+`./tasks/publish-local` will build, unpublish, and publish all the Redwood packages to your local NPM registry with a "dev" tag, for the curious it is the equivalent of running:
+
+```terminal
+npm unpublish --tag dev --registry http://localhost:4873/ --force
+npm publish --tag dev --registry http://localhost:4873/ --force
 ```
 
-### Running the Local Server(s)
+You can build a particular package by specifying the path to the package: `./tasks/publish-local ./packages/api`.
+
+#### Installing published packages
+
+Redwood installs `rwdev` a companion CLI development tool that makes installing local npm packages easy: `yarn rwdev install @redwoodjs/dev-server`.
+
+This is equivilant to running:
+
+```terminal
+rm -rf <PROJECT_PATH>/node_modules/@redwoodjs/dev-server
+yarn upgrade @redwoodjs/dev-server@dev --no-lockfile --registry http://localhost:4873/
+```
+
+## Running the Local Server(s)
 
 You can run both the API and Web servers with a single command:
 
-```
+```terminal
 yarn rw dev
 ```
 
 However, for local package development, you'll need to manually stop/start the respective server to include changes. In this case you can run the servers for each of the yarn workspaces independently:
 
-```
+```terminal
 yarn rw dev api
 yarn rw dev web
 ```
@@ -97,7 +104,7 @@ _Historical note: originally implemented in react-ink (too slow!) then converted
 
 Example dev command:
 
-```
+```javascript
 export const command = 'dev [app..]'
 export const desc = 'Run development servers.'
 export const builder = {

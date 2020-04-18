@@ -28,15 +28,11 @@ const timeTag = (datetime) => {
 }
 
 const PostsList = ({ posts }) => {
-  const [deletePost] = useMutation(DELETE_POST_MUTATION, {
-    onCompleted: () => {
-      location.reload()
-    },
-  })
+  const [deletePost] = useMutation(DELETE_POST_MUTATION)
 
   const onDeleteClick = (id) => {
     if (confirm('Are you sure you want to delete post ' + id + '?')) {
-      deletePost({ variables: { id } })
+      deletePost({ variables: { id }, refetchQueries: ['POSTS'] })
     }
   }
 

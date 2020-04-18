@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/core",
-  "version": "0.4.0",
+  "version": "0.6.0-rc.1",
   "license": "MIT",
   "files": [
     "config",
@@ -18,16 +18,17 @@
     "@babel/preset-typescript": "^7.9.0",
     "@babel/runtime-corejs3": "^7.9.2",
     "@prisma/cli": "2.0.0-beta.2",
-    "@redwoodjs/cli": "^0.4.0",
-    "@redwoodjs/dev-server": "^0.4.0",
-    "@redwoodjs/eslint-config": "^0.4.0",
-    "@redwoodjs/internal": "^0.4.0",
+    "@redwoodjs/cli": "^0.6.0-rc.1",
+    "@redwoodjs/dev-server": "^0.6.0-rc.1",
+    "@redwoodjs/eslint-config": "^0.6.0-rc.1",
+    "@redwoodjs/internal": "^0.6.0-rc.1",
     "@testing-library/jest-dom": "^5.3.0",
     "@testing-library/react": "^10.0.1",
     "@types/jest": "^25.1.4",
     "@types/node": "^13.9.5",
     "@types/react": "^16.9.26",
     "@types/react-dom": "^16.9.5",
+    "@types/webpack": "^4.41.11",
     "babel-jest": "^25.2.3",
     "babel-loader": "^8.1.0",
     "babel-plugin-auto-import": "^1.0.5",
@@ -59,12 +60,8 @@
   },
   "gitHead": "2801c132f40263f9fcfbdac8b1750d2e423eb649",
   "scripts": {
-    "build": "babel src --out-dir dist --extensions \".js,.ts\" --source-maps inline",
-    "build:watch": "nodemon --ignore dist --exec 'yarn build'",
-    "prepublishOnly": "yarn clean && yarn build",
-    "clean": "rm -rf dist"
-  },
-  "devDependencies": {
-    "@types/webpack": "^4.41.9"
+    "build": "yarn cross-env NODE_ENV=production babel src -d dist --delete-dir-on-start",
+    "prepublishOnly": "yarn build",
+    "build:watch": "nodemon --ignore dist --exec 'yarn build'"
   }
 }

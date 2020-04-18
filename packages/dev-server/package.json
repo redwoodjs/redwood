@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/dev-server",
-  "version": "0.4.0",
+  "version": "0.6.0-rc.1",
   "bin": {
     "dev-server": "./dist/main.js"
   },
@@ -10,7 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "@babel/register": "^7.9.0",
-    "@redwoodjs/internal": "^0.4.0",
+    "@redwoodjs/internal": "^0.6.0-rc.1",
     "args": "^5.0.1",
     "body-parser": "^1.19.0",
     "chokidar": "^3.3.1",
@@ -28,7 +28,9 @@
     "@types/require-dir": "^1.0.0"
   },
   "scripts": {
-    "build": "yarn cross-env NODE_ENV=production babel src -d dist --delete-dir-on-start --extensions \".ts\" --source-maps inline"
+    "build": "yarn cross-env NODE_ENV=production babel src -d dist --delete-dir-on-start --extensions \".ts\" --source-maps inline",
+    "prepublishOnly": "yarn build",
+    "build:watch": "nodemon --ignore dist --exec 'yarn build'"
   },
   "gitHead": "2801c132f40263f9fcfbdac8b1750d2e423eb649"
 }

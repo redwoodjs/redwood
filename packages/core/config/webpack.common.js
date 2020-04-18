@@ -14,6 +14,22 @@ const merge = require('webpack-merge')
 const redwoodConfig = getConfig()
 const redwoodPaths = getPaths()
 
+const getEnvVars = () => {
+  const redwoodEnvPrefix = 'REDWOOD_ENV_'
+  const includeEnvKeys = redwoodConfig.web.includeEnvironmentVariables
+  const redwoodEnvKeys = Object.keys(process.env).reduce((prev, next) => {
+    if (
+      next.startsWith(redwoodEnvPrefix) ||
+      (includeEnvKeys && includeEnvKeys.includes(next))
+    ) {
+      prev[`process.env.${next}`] = JSON.stringify(process.env[next])
+    }
+    return prev
+  }, {})
+
+  return redwoodEnvKeys
+}
+
 // I've borrowed and learnt extensively from the `create-react-app` repo:
 // https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/config/webpack.config.js
 module.exports = (webpackEnv) => {
@@ -43,7 +59,7 @@ module.exports = (webpackEnv) => {
     mode: isEnvProduction ? 'production' : 'development',
     devtool: isEnvProduction ? 'source-map' : 'cheap-module-source-map',
     entry: {
-      app: path.resolve(redwoodPaths.base, 'web/src/index.js'),
+      app: path.resolve(redwoodPaths.base, 'web/src/index'),
     },
     resolve: {
       extensions: ['.ts', '.tsx', '.js', '.json'],
@@ -88,10 +104,7 @@ module.exports = (webpackEnv) => {
         __REDWOOD__API_PROXY_PATH: JSON.stringify(
           redwoodConfig.web.apiProxyPath
         ),
-        __filename: webpack.DefinePlugin.runtimeValue((runtimeValue) => {
-          // absolute path of imported file
-          return JSON.stringify(runtimeValue.module.resource)
-        }),
+        ...getEnvVars(),
       }),
       new Dotenv({
         path: path.resolve(redwoodPaths.base, '.env'),
@@ -145,28 +158,23 @@ module.exports = (webpackEnv) => {
           ],
         },
         {
+          // Automatically import files in `src/pages/*` in to
+          // the `src/Routes.[ts|jsx]` file.
           test: redwoodPaths.web.routes,
           use: {
             loader: path.resolve(
               __dirname,
-              '..',
-              'dist',
-              'loaders',
-              'routes-auto-loader'
+              '../dist/loaders/routes-auto-loader'
             ),
           },
         },
         {
-          test: /.+Cell.js$/,
+          // "Create" an `index.js` file adjacent to a user's Cell.js|tsx file
+          // so that the Cell exports are run through the `withCell` HOC
+          test: /.+Cell.(js|tsx)$/,
           include: path.join(redwoodPaths.base, 'web/src/components'),
           use: {
-            loader: path.resolve(
-              __dirname,
-              '..',
-              'dist',
-              'loaders',
-              'cell-loader'
-            ),
+            loader: path.resolve(__dirname, '../dist/loaders/cell-loader'),
           },
         },
       ],
@@ -214,3 +222,5 @@ module.exports['mergeUserWebpackConfig'] = (mode, baseConfig) => {
 
   return merge(baseConfig, userWebpackConfig)
 }
+
+module.exports.getEnvVars = getEnvVars

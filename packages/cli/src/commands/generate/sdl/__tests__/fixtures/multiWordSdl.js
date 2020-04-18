@@ -7,10 +7,15 @@ export const schema = gql`
   }
 
   type Query {
-    userProfiles: [UserProfile]
+    userProfiles: [UserProfile!]!
   }
 
-  input UserProfileInput {
+  input CreateUserProfileInput {
+    username: String!
+    userId: Int!
+  }
+
+  input UpdateUserProfileInput {
     username: String
     userId: Int
   }
