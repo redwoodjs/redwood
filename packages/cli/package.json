@@ -8,7 +8,6 @@
     "rw": "./dist/index.js",
     "redwood-tools": "./dist/redwood-tools.js",
     "rwt": "./dist/redwood-tools.js"
-
   },
   "files": [
     "dist"
