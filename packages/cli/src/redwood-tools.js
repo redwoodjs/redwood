@@ -64,10 +64,36 @@ export const fixProjectBinaries = (PROJECT_PATH) => {
     })
 }
 
+export const copyFiles = async (src, dest) => {
+  // TODO: Figure out if we need to only run based on certain events.
+  await execa('rsync', ['-rtvu --delete', `'${src}'`, `'${dest}'`], {
+    shell: true,
+    stdio: 'inherit',
+    cleanup: true,
+  })
+  // when rsync is run modify the permission to make binaries executable.
+  fixProjectBinaries(getPaths().base)
+}
+
 // eslint-disable-next-line no-unused-expressions
 yargs
   .command(
-    ['watch [RW_PATH]', 'w'],
+    ['copy [RW_PATH]', 'cp'],
+    'Copy the Redwood Framework path to this project',
+    {},
+    ({ RW_PATH = process.env.RW_PATH }) => {
+      RW_PATH = resolveFrameworkPath(RW_PATH)
+
+      console.log('Redwood Framework Path: ', RW_PATH)
+
+      const src = `${RW_PATH}/packages/`
+      const dest = `${getPaths().base}/node_modules/@redwoodjs/` // eslint-disable-line
+
+      copyFiles(src, dest)
+    }
+  )
+  .command(
+    ['copy:watch [RW_PATH]', 'cpw'],
     'Watch the Redwood Framework path for changes and copy them over to this project',
     {},
     ({ RW_PATH = process.env.RW_PATH }) => {
@@ -85,16 +111,10 @@ yargs
         })
         .on(
           'all',
-          _.debounce(async (event) => {
+          _.debounce((event) => {
             // TODO: Figure out if we need to only run based on certain events.
             console.log('Trigger event: ', event)
-            await execa('rsync', ['-rtvu --delete', `'${src}'`, `'${dest}'`], {
-              shell: true,
-              stdio: 'inherit',
-              cleanup: true,
-            })
-            // when rsync is run modify the permission to make binaries executable.
-            fixProjectBinaries(getPaths().base)
+            copyFiles(src, dest)
           }, 500)
         )
     }
