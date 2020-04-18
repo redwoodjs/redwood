@@ -55,7 +55,7 @@ module.exports = (webpackEnv) => {
     mode: isEnvProduction ? 'production' : 'development',
     devtool: isEnvProduction ? 'source-map' : 'cheap-module-source-map',
     entry: {
-      app: path.resolve(redwoodPaths.base, 'web/src/index.js'),
+      app: path.resolve(redwoodPaths.base, 'web/src/index'),
     },
     resolve: {
       extensions: ['.ts', '.tsx', '.js', '.json'],
@@ -158,28 +158,23 @@ module.exports = (webpackEnv) => {
           ],
         },
         {
+          // Automatically import files in `src/pages/*` in to
+          // the `src/Routes.[ts|jsx]` file.
           test: redwoodPaths.web.routes,
           use: {
             loader: path.resolve(
               __dirname,
-              '..',
-              'dist',
-              'loaders',
-              'routes-auto-loader'
+              '../dist/loaders/routes-auto-loader'
             ),
           },
         },
         {
-          test: /.+Cell.js$/,
+          // "Create" an `index.js` file adjacent to a user's Cell.js|tsx file
+          // so that the Cell exports are run through the `withCell` HOC
+          test: /.+Cell.(js|tsx)$/,
           include: path.join(redwoodPaths.base, 'web/src/components'),
           use: {
-            loader: path.resolve(
-              __dirname,
-              '..',
-              'dist',
-              'loaders',
-              'cell-loader'
-            ),
+            loader: path.resolve(__dirname, '../dist/loaders/cell-loader'),
           },
         },
       ],
