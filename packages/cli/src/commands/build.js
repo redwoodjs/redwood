@@ -22,7 +22,12 @@ export const handler = async ({
   const { base: BASE_DIR } = getPaths()
 
   if (app.includes('api')) {
-    await generatePrismaClient({ verbose, force: true })
+    try {
+      await generatePrismaClient({ verbose, force: true })
+    } catch (e) {
+      console.log(e)
+      process.exit(1)
+    }
   }
 
   const execCommandsForApps = {
@@ -68,5 +73,6 @@ export const handler = async ({
     await tasks.run()
   } catch (e) {
     console.log(c.error(e.message))
+    process.exit(1)
   }
 }
