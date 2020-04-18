@@ -14,6 +14,22 @@ const merge = require('webpack-merge')
 const redwoodConfig = getConfig()
 const redwoodPaths = getPaths()
 
+const getEnvVars = () => {
+  const redwoodEnvPrefix = 'REDWOOD_ENV_'
+  const includeEnvKeys = redwoodConfig.web.includeEnvironmentVariables
+  const redwoodEnvKeys = Object.keys(process.env).reduce((prev, next) => {
+    if (
+      next.startsWith(redwoodEnvPrefix) ||
+      (includeEnvKeys && includeEnvKeys.includes(next))
+    ) {
+      prev[`process.env.${next}`] = JSON.stringify(process.env[next])
+    }
+    return prev
+  }, {})
+
+  return redwoodEnvKeys
+}
+
 // I've borrowed and learnt extensively from the `create-react-app` repo:
 // https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/config/webpack.config.js
 module.exports = (webpackEnv) => {
@@ -38,18 +54,6 @@ module.exports = (webpackEnv) => {
       },
     ]
   }
-
-  const redwoodEnvPrefix = 'REDWOOD_ENV_'
-  const includeEnvKeys = redwoodConfig.web.includeEnvironmentVariables
-  const redwoodEnvKeys = Object.keys(process.env).reduce((prev, next) => {
-    if (
-      next.startsWith(redwoodEnvPrefix) ||
-      (includeEnvKeys && includeEnvKeys.includes(next))
-    ) {
-      prev[`process.env.${next}`] = JSON.stringify(process.env[next])
-    }
-    return prev
-  }, {})
 
   return {
     mode: isEnvProduction ? 'production' : 'development',
@@ -100,11 +104,7 @@ module.exports = (webpackEnv) => {
         __REDWOOD__API_PROXY_PATH: JSON.stringify(
           redwoodConfig.web.apiProxyPath
         ),
-        __filename: webpack.DefinePlugin.runtimeValue((runtimeValue) => {
-          // absolute path of imported file
-          return JSON.stringify(runtimeValue.module.resource)
-        }),
-        ...redwoodEnvKeys,
+        ...getEnvVars(),
       }),
       new Dotenv({
         path: path.resolve(redwoodPaths.base, '.env'),
@@ -222,3 +222,5 @@ module.exports['mergeUserWebpackConfig'] = (mode, baseConfig) => {
 
   return merge(baseConfig, userWebpackConfig)
 }
+
+module.exports.getEnvVars = getEnvVars
