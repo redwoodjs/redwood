@@ -52,7 +52,6 @@ module.exports = {
     {
       files: ['api/src/**'],
       globals: {
-        db: 'readonly',
         context: 'readonly',
       },
     },
