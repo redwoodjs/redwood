@@ -37,7 +37,7 @@ module.exports = {
     'react',
     'react-hooks',
     'jest-dom',
-    supportRedwoodAutoPageImports && '@redwoodjs/redwood-eslint-plugin',
+    supportRedwoodAutoPageImports && '@redwoodjs/redwood', // @redwoodjs/redwood-eslint-plugin
   ].filter(Boolean),
   ignorePatterns: ['node_modules', 'dist'],
   extends: [
