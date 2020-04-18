@@ -1,9 +1,5 @@
 // The guts of the router implementation.
-<<<<<<< HEAD:packages/router/src/router.tsx
-import 'url-search-params-polyfill';
-import React from 'react';
-=======
->>>>>>> 4d392e8d1a3774a51213c29690a67ccc6c69582a:packages/router/src/router.js
+import * as React from 'react'
 
 import {
   Location,
@@ -21,7 +17,11 @@ const Route = () => {
   return null
 }
 
-const Router = (props) => (
+const Router: React.FC<
+  RouteProps & {
+    /** Location Context Type  */
+  }
+> = (props) => (
   <Location>
     {(locationContext) => <RouterImpl {...locationContext} {...props} />}
   </Location>
@@ -58,7 +58,14 @@ const normalizePage = (specOrPage) => {
 
 const DEFAULT_PAGE_LOADING_DELAY = 1000 // milliseconds
 
-const RouterImpl = ({
+export interface RouteProps {
+  pathname: string
+  search?: string
+  paramTypes?: string
+  pageLoadingDelay?: number
+}
+
+const RouterImpl: React.FC<RouteProps> = ({
   pathname,
   search,
   paramTypes,
@@ -70,7 +77,7 @@ const RouterImpl = ({
 
   let NotFoundPage
 
-  for (let route of routes) {
+  for (const route of routes) {
     const { path, page: Page, redirect, notfound } = route.props
 
     if (notfound) {

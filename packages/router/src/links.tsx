@@ -1,4 +1,4 @@
-import { forwardRef, useContext } from 'react'
+import * as React from 'react'
 
 import { navigate, matchPath, LocationContext } from './internal'
 
@@ -8,25 +8,37 @@ import { navigate, matchPath, LocationContext } from './internal'
  * <NavLink>.
  */
 const useMatch = (route) => {
-  const location = useContext(LocationContext)
+  const location = React.useContext(LocationContext)
   const matchInfo = matchPath(route, location.pathname)
 
   return matchInfo
 }
 
-const Link = forwardRef(({ to, ...rest }, ref) => (
-  <a
-    href={to}
-    ref={ref}
-    {...rest}
-    onClick={(event) => {
-      event.preventDefault()
-      navigate(to)
-    }}
-  />
-))
+export interface LinkProps {
+  to: string
+}
 
-const NavLink = forwardRef(
+const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
+  ({ to, ...rest }, ref) => (
+    <a
+      href={to}
+      ref={ref}
+      {...rest}
+      onClick={(event) => {
+        event.preventDefault()
+        navigate(to)
+      }}
+    />
+  )
+)
+
+export interface NavLinkProps {
+  to: string
+  className?: string | null
+  activeClassName?: string | null
+}
+
+const NavLink = React.forwardRef<HTMLAnchorElement, NavLinkProps>(
   ({ to, className, activeClassName, ...rest }, ref) => {
     const matchInfo = useMatch(to)
     const theClassName = [className, matchInfo.match && activeClassName]
