@@ -10,6 +10,23 @@
 // [^1] https://eslint.org/docs/rules/
 // [^2] https://www.npmjs.com/package/eslint-plugin-react#list-of-supported-rules
 
+let supportRedwoodAutoPageImports = false
+try {
+  // This will throw if the module cannot be resolved, it will not
+  // resolve if the module is not built, in which case we're probably
+  // building the framework and don't need this plugin.
+  require.resolve('@redwoodjs/eslint-plugin-redwood')
+  supportRedwoodAutoPageImports = {
+    files: ['web/src/Routes.js', 'web/src/Routes.ts'],
+    rules: {
+      'no-undef': 'off',
+      '@redwoodjs/redwood/no-unavailable-pages': 'error',
+    },
+  }
+} catch (e) {
+  // noop
+}
+
 module.exports = {
   parser: 'babel-eslint',
   plugins: [
@@ -20,8 +37,8 @@ module.exports = {
     'react',
     'react-hooks',
     'jest-dom',
-    '@redwoodjs/redwood',
-  ],
+    supportRedwoodAutoPageImports && '@redwoodjs/redwood-eslint-plugin',
+  ].filter(Boolean),
   ignorePatterns: ['node_modules', 'dist'],
   extends: [
     'eslint:recommended',
@@ -42,20 +59,14 @@ module.exports = {
         '@typescript-eslint/explicit-function-return-type': 'off',
       },
     },
-    {
-      files: ['web/src/Routes.js', 'web/src/Routes.ts'],
-      rules: {
-        'no-undef': 'off',
-        '@redwoodjs/redwood/no-unavailable-pages': 'error',
-      },
-    },
+    supportRedwoodAutoPageImports,
     {
       files: ['api/src/**'],
       globals: {
         context: 'readonly',
       },
     },
-  ],
+  ].filter(Boolean),
   settings: {
     // This is used to support our `import/order` configuration.
     'import/resolver': {
