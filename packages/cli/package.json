@@ -6,7 +6,9 @@
   "bin": {
     "redwood": "./dist/index.js",
     "rw": "./dist/index.js",
-    "rwdev": "./dist/rwdev.js"
+    "redwood-tools": "./dist/redwood-tools.js",
+    "rwt": "./dist/redwood-tools.js"
+
   },
   "files": [
     "dist"

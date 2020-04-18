@@ -11,7 +11,8 @@ import _ from 'lodash'
 const RW_BINS = {
   redwood: 'cli/dist/index.js',
   rw: 'cli/dist/index.js',
-  rwdev: 'cli/dist/rwdev.js',
+  'redwood-tools': 'cli/dist/redwood-tools.js',
+  rwt: 'cli/dist/redwood-tools.js',
   'dev-server': 'dev-server/dist/main.js',
 }
 
@@ -142,4 +143,5 @@ yargs
       fixProjectBinaries(getPaths().base)
     }
   )
-  .demandCommand().argv
+  .demandCommand()
+  .strict().argv
