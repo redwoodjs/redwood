@@ -25,7 +25,7 @@ export const handler = async ({
     try {
       await generatePrismaClient({ verbose, force: true })
     } catch (e) {
-      console.log(e)
+      console.log(c.error(e.message))
       process.exit(1)
     }
   }
