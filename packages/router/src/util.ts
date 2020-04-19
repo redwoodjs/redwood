@@ -56,21 +56,26 @@ const coreParamTypes: Record<string, ParameterType> = {
  */
 const matchPath = (
   route: string,
-  pathname: string,
+  pathname?: string,
   paramTypes?: Record<string, ParameterType>
 ) => {
   // Does the `pathname` match the `route`?
-  const matches = [
-    ...pathname.matchAll(
-      new RegExp(`^${route.replace(/\{([^}]+)\}/g, '([^/]+)')}$`)
-    ),
-  ]
+  const matches = pathname
+    ? [
+        ...pathname.matchAll(
+          new RegExp(`^${route.replace(/\{([^}]+)\}/g, '([^/]+)')}$`)
+        ),
+      ]
+    : []
 
   if (matches.length === 0) {
     return { match: false }
   }
 
-  const allParamTypes = { ...coreParamTypes, ...paramTypes }
+  const allParamTypes: Record<string, ParameterType> = {
+    ...coreParamTypes,
+    ...paramTypes,
+  }
 
   // Get the names and the transform types for the given route.
   const paramInfo = paramsForType(route)
@@ -102,7 +107,7 @@ const matchPath = (
  * @fixme
  * This utility ignores keys with multiple values such as `?foo=1&foo=2`.
  */
-const parseSearch = (search: string) => {
+const parseSearch = (search?: string) => {
   const searchParams = new URLSearchParams(search)
 
   return [...searchParams.keys()].reduce(

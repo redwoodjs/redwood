@@ -7,9 +7,9 @@ import { navigate, matchPath, LocationContext } from './internal'
  * This is useful for components that need to know "active" state, e.g.
  * <NavLink>.
  */
-const useMatch = (route) => {
+const useMatch = (route: string) => {
   const location = React.useContext(LocationContext)
-  const matchInfo = matchPath(route, location.pathname)
+  const matchInfo = matchPath(route, location?.pathname)
 
   return matchInfo
 }
@@ -36,6 +36,7 @@ export interface NavLinkProps {
   to: string
   className?: string | null
   activeClassName?: string | null
+  children: React.ReactNode
 }
 
 const NavLink = React.forwardRef<HTMLAnchorElement, NavLinkProps>(

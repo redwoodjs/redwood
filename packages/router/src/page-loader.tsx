@@ -6,16 +6,21 @@ export const PageLoadingContext = createNamedContext('PageLoading')
 
 export const usePageLoadingContext = () => useContext(PageLoadingContext)
 
-interface PageLoaderState {
-  Page?: any
-  pageName?: string
-  slowModuleImport: boolean
+interface PageModule {
+  default: React.ComponentType
 }
 
-interface PageLoaderProps {
+interface PageLoaderState {
+  Page?: PageModule['default']
+  pageName?: string
+  slowModuleImport: boolean
+  params: Record<string, string>
+}
+
+export interface PageLoaderProps {
   spec: {
     name: string
-    loader: () => void
+    loader: () => PageModule | Promise<PageModule>
   }
   delay: number
   params: Record<string, string>
@@ -25,11 +30,12 @@ export class PageLoader extends React.PureComponent<
   PageLoaderProps,
   PageLoaderState
 > {
-  private loadingTimeout?: number | NodeJS.Timeout
-  readonly state = {
+  private loadingTimeout?: NodeJS.Timeout
+  readonly state: PageLoaderState = {
     Page: undefined,
     pageName: undefined,
     slowModuleImport: false,
+    params: {},
   }
 
   componentDidMount() {

@@ -10,7 +10,6 @@ import {
   navigate,
   mapNamedRoutes,
   SplashPage,
-  PageLoader,
 } from './internal'
 
 const Route = () => {
@@ -18,12 +17,14 @@ const Route = () => {
 }
 
 const Router: React.FC<
-  RouteProps & {
+  RouterImplementationProps & {
     /** Location Context Type  */
   }
 > = (props) => (
   <Location>
-    {(locationContext) => <RouterImpl {...locationContext} {...props} />}
+    {(locationContext) => (
+      <RouterImplementation {...locationContext} {...props} />
+    )}
   </Location>
 )
 
@@ -42,7 +43,15 @@ const Router: React.FC<
  *
  * Before passing a "page" to the PageLoader, we will normalize the manually
  * imported version into a spec. */
-const normalizePage = (specOrPage) => {
+
+export interface PageLoader {
+  name: string
+  loader?: () => Promise<any>
+}
+
+const normalizePage: (
+  specOrPage: PageLoader | React.ReactElement
+) => PageLoader = (specOrPage) => {
   if (specOrPage.loader) {
     // Already a spec, just return it.
     return specOrPage
@@ -58,21 +67,33 @@ const normalizePage = (specOrPage) => {
 
 const DEFAULT_PAGE_LOADING_DELAY = 1000 // milliseconds
 
-export interface RouteProps {
+export interface RouterImplementationProps {
   pathname: string
   search?: string
   paramTypes?: string
   pageLoadingDelay?: number
+  children: React.ReactNode[]
 }
 
-const RouterImpl: React.FC<RouteProps> = ({
+export interface RouteProps {
+  path: string
+  name: string
+  notfound?: boolean
+  redirect?: string
+  page: React.ReactElement
+}
+
+const RouterImplementation: React.FC<RouterImplementationProps> = ({
   pathname,
   search,
   paramTypes,
   pageLoadingDelay = DEFAULT_PAGE_LOADING_DELAY,
   children,
 }) => {
-  const routes = React.Children.toArray(children)
+  // TODO
+  const routes: React.ReactElement<RouteProps>[] = React.Children.toArray(
+    children
+  )
   mapNamedRoutes(routes)
 
   let NotFoundPage
@@ -94,9 +115,9 @@ const RouterImpl: React.FC<RouteProps> = ({
         const newPath = replaceParams(redirect, pathParams)
         navigate(newPath)
         return (
-          <RouterImpl pathname={newPath} search={search}>
+          <RouterImplementation pathname={newPath} search={search}>
             {children}
-          </RouterImpl>
+          </RouterImplementation>
         )
       } else {
         return (
