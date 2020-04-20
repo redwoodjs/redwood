@@ -116,17 +116,6 @@ export const generateTemplate = (templateFilename, { name, root, ...rest }) => {
     ...rest,
   })
 
-  /*
-
-   <% enums.forEach((enumDef, idx) => { %>
-  enum ${enums[idx].name} {
-    <% enums[idx].values.forEach((enumDefValue, idk) => { %>
-        ${enums[idx].values[idk].name}
-    <% }) %>
-  }
-  <% }) %>
-   */
-
   // We format .js and .css templates, we need to tell prettier which parser
   // we're using.
   // https://prettier.io/docs/en/options.html#parser
