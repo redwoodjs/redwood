@@ -50,6 +50,34 @@ export const getSchema = async (name) => {
 }
 
 /**
+ * Returns the enum defined with the given `name` parsed from
+ * the schema.prisma of the target applicaiton. If no `name` is given then the
+ * all enum definitions are returned
+ */
+export const getEnum = async (name) => {
+  const schemaPath = path.join(getPaths().api.db, 'schema.prisma')
+  const metadata = await getDMMF({
+    datamodel: readFile(schemaPath.toString()),
+  })
+
+  if (name) {
+    const model = metadata.datamodel.enums.find((model) => {
+      return model.name === name
+    })
+
+    if (model) {
+      return model
+    } else {
+      throw new Error(
+        `No enum schema definition found for \`${name}\` in schema.prisma file`
+      )
+    }
+  }
+
+  return metadata.datamodel.enums
+}
+
+/**
  * Returns variants of the passed `name` for usage in templates. If the given
  * name was "fooBar" then these would be:
 
@@ -87,6 +115,17 @@ export const generateTemplate = (templateFilename, { name, root, ...rest }) => {
     ...nameVariants(name),
     ...rest,
   })
+
+  /*
+
+   <% enums.forEach((enumDef, idx) => { %>
+  enum ${enums[idx].name} {
+    <% enums[idx].values.forEach((enumDefValue, idk) => { %>
+        ${enums[idx].values[idk].name}
+    <% }) %>
+  }
+  <% }) %>
+   */
 
   // We format .js and .css templates, we need to tell prettier which parser
   // we're using.
