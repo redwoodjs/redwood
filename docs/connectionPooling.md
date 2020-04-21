@@ -14,7 +14,7 @@ For Postgres, see [How to Manage Connection Pools](https://www.digitalocean.com/
 Connection Pooling for MySQL is not yet supported.
 
 ## AWS
-Use [Amazon RDS Proxy] https://aws.amazon.com/rds/proxy for MySQL or RDS PostgreSQL.
+Use [Amazon RDS Proxy](https://aws.amazon.com/rds/proxy) for MySQL or RDS PostgreSQL.
 
 
 ## Why Connection Pooling?
