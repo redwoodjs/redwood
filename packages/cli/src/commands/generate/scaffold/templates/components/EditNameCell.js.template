@@ -3,13 +3,13 @@ import { navigate, routes } from '@redwoodjs/router'
 import ${singularPascalName}Form from 'src/components/${singularPascalName}Form'
 
 export const QUERY = gql`
-  query FIND_POST_BY_ID($id: ${idType}!) {
+  query FIND_${singularConstantName}_BY_ID($id: ${idType}!) {
     ${singularCamelName}: ${singularCamelName}(id: $id) {<% columns.forEach(column => { %>
       <%= column.name %><% }) %>
     }
   }
 `
-const UPDATE_POST_MUTATION = gql`
+const UPDATE_${singularConstantName}_MUTATION = gql`
   mutation Update${singularPascalName}Mutation($id: ${idType}!, $input: Update${singularPascalName}Input!) {
     update${singularPascalName}(id: $id, input: $input) {
       id
@@ -20,7 +20,7 @@ const UPDATE_POST_MUTATION = gql`
 export const Loading = () => <div>Loading...</div>
 
 export const Success = ({ ${singularCamelName} }) => {
-  const [update${singularPascalName}, { loading, error }] = useMutation(UPDATE_POST_MUTATION, {
+  const [update${singularPascalName}, { loading, error }] = useMutation(UPDATE_${singularConstantName}_MUTATION, {
     onCompleted: () => {
       navigate(routes.${pluralCamelName}())
     },

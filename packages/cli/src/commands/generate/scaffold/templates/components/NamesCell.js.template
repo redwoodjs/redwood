@@ -3,7 +3,7 @@ import { Link, routes } from '@redwoodjs/router'
 import ${pluralPascalName} from 'src/components/${pluralPascalName}'
 
 export const QUERY = gql`
-  query POSTS {
+  query ${pluralConstantName} {
     ${pluralCamelName} {<% columns.forEach(column => { %>
       <%= column.name %><% }) %>
     }

@@ -20,6 +20,7 @@
     "concurrently": "^5.1.0",
     "core-js": "3.6.4",
     "cross-env": "^7.0.2",
+    "decamelize": "^4.0.0",
     "dotenv-defaults": "^1.1.1",
     "envinfo": "^7.5.0",
     "execa": "^4.0.0",

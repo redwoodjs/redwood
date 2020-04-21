@@ -5,6 +5,7 @@ import lodash from 'lodash/string'
 import camelcase from 'camelcase'
 import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
+import decamelize from 'decamelize'
 import { paramCase } from 'param-case'
 import { getDMMF } from '@prisma/sdk'
 import { getPaths as getRedwoodPaths } from '@redwoodjs/internal'
@@ -60,6 +61,8 @@ export const getSchema = async (name) => {
  * pluralCamelName: fooBars
  * singularParamName: foo-bar
  * pluralParamName: foo-bars
+ * singularConstantName: FOO_BAR
+ * pluralConstantName: FOO_BARS
 */
 export const nameVariants = (name) => {
   const normalizedName = pascalcase(paramCase(pluralize.singular(name)))
@@ -73,6 +76,8 @@ export const nameVariants = (name) => {
     pluralCamelName: camelcase(pluralize(normalizedName)),
     singularParamName: paramCase(normalizedName),
     pluralParamName: paramCase(pluralize(normalizedName)),
+    singularConstantName: decamelize(normalizedName).toUpperCase(),
+    pluralConstantName: decamelize(pluralize(normalizedName)).toUpperCase(),
   }
 }
 

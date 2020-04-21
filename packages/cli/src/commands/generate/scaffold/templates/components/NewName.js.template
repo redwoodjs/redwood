@@ -2,7 +2,7 @@ import { useMutation } from '@redwoodjs/web'
 import { navigate, routes } from '@redwoodjs/router'
 import ${singularPascalName}Form from 'src/components/${singularPascalName}Form'
 
-const CREATE_POST_MUTATION = gql`
+const CREATE_${singularConstantName}_MUTATION = gql`
   mutation Create${singularPascalName}Mutation($input: Create${singularPascalName}Input!) {
     create${singularPascalName}(input: $input) {
       id
@@ -11,7 +11,7 @@ const CREATE_POST_MUTATION = gql`
 `
 
 const New${singularPascalName} = () => {
-  const [create${singularPascalName}, { loading, error }] = useMutation(CREATE_POST_MUTATION, {
+  const [create${singularPascalName}, { loading, error }] = useMutation(CREATE_${singularConstantName}_MUTATION, {
     onCompleted: () => {
       navigate(routes.${pluralCamelName}())
     },
