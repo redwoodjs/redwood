@@ -51,7 +51,6 @@ export const resolveFile = (
 ): string | null => {
   for (const extension of extensions) {
     const p = `${filePath}${extension}`
-    console.log(p)
     if (fs.existsSync(p)) {
       return p
     }
@@ -63,7 +62,7 @@ export const resolveFile = (
  * Path constants that are relevant to a Redwood project.
  */
 export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
-  const routes = resolveFile(path.join(BASE_DIR, PATH_WEB_ROUTES))
+  const routes = resolveFile(path.join(BASE_DIR, PATH_WEB_ROUTES)) as string
 
   return {
     base: BASE_DIR,
