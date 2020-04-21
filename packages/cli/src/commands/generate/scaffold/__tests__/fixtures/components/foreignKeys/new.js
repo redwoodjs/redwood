@@ -2,7 +2,7 @@ import { useMutation } from '@redwoodjs/web'
 import { navigate, routes } from '@redwoodjs/router'
 import UserProfileForm from 'src/components/UserProfileForm'
 
-const CREATE_POST_MUTATION = gql`
+const CREATE_USER_PROFILE_MUTATION = gql`
   mutation CreateUserProfileMutation($input: CreateUserProfileInput!) {
     createUserProfile(input: $input) {
       id
@@ -11,7 +11,7 @@ const CREATE_POST_MUTATION = gql`
 `
 
 const NewUserProfile = () => {
-  const [createUserProfile, { loading, error }] = useMutation(CREATE_POST_MUTATION, {
+  const [createUserProfile, { loading, error }] = useMutation(CREATE_USER_PROFILE_MUTATION, {
     onCompleted: () => {
       navigate(routes.userProfiles())
     },

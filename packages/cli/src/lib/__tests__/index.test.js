@@ -58,6 +58,8 @@ test('nameVariants returns a single word cased variables', () => {
     expect(vars.pluralCamelName).toEqual('homes')
     expect(vars.singularParamName).toEqual('home')
     expect(vars.pluralParamName).toEqual('homes')
+    expect(vars.singularConstantName).toEqual('HOME')
+    expect(vars.pluralConstantName).toEqual('HOMES')
   })
 })
 
