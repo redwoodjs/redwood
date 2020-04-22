@@ -122,12 +122,18 @@ This starts Verdaccio (http://localhost:4873) with our configuration file.
 
 #### Publishing a Package
 
-`./tasks/publish-local` will build, unpublish, and publish all the Redwood packages to your local NPM registry with a "dev" tag. For the curious, it's equivalent to running:
+To build, unpublish, and publish all the Redwood packages to your local NPM registry with a "dev" tag, run:
 
 ```terminal
-npm unpublish --tag dev --registry http://localhost:4873/ --force
-npm publish --tag dev --registry http://localhost:4873/ --force
+./tasks/publish-local
 ```
+
+> Note: this script is equivalent to running:
+>
+> ```terminal
+> npm unpublish --tag dev --registry http://localhost:4873/ --force
+> npm publish --tag dev --registry http://localhost:4873/ --force
+> ```
 
 You can build a particular package by specifying the path to the package: `./tasks/publish-local ./packages/api`.
 
@@ -145,12 +151,12 @@ The last step is to install the package into your Redwood App. The CLI command `
 yarn rwt install @redwoodjs/dev-server
 ```
 
-This is equivalent to running:
-
-```terminal
-rm -rf <APP_PATH>/node_modules/@redwoodjs/dev-server
-yarn upgrade @redwoodjs/dev-server@dev --no-lockfile --registry http://localhost:4873/
-```
+> Note: this is equivalent to running:
+>
+> ```terminal
+> rm -rf <APP_PATH>/node_modules/@redwoodjs/dev-server
+> yarn upgrade @redwoodjs/dev-server@dev --no-lockfile --registry http://localhost:4873/
+> ```
 
 ## Running Your Redwood App's Local Server(s)
 
