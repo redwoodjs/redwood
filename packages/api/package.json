@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/api",
-  "version": "0.6.0-rc.2",
+  "version": "0.6.0",
   "files": [
     "dist",
     "importAll.macro.js"
@@ -10,7 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "@prisma/client": "2.0.0-beta.3",
-    "@redwoodjs/internal": "^0.6.0-rc.2",
+    "@redwoodjs/internal": "^0.6.0",
     "apollo-server-lambda": "2.11.0",
     "babel-plugin-macros": "^2.8.0",
     "core-js": "3.6.4",
