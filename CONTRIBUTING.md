@@ -6,17 +6,25 @@ Before interacting with the Redwood community, please read and understand our [C
 
 **Table of Contents**
 
-- [Local development](#Local-development)
+- [Local Development](#Local-Development)
 - [Running the Local Server(s)](#Running-the-Local-Server(s))
 - [CLI Package Development](#CLI-Package-Development)
 
 <!-- toc -->
 
-## Local development
+## Local Development
 
-When contributing to Redwood, you'll probably want to see your changes in the Redwood Framework's monorepo "running live" in one of your own Redwood projects or in one of our example apps. We offer two workflows to make this possible: "watch and copy", which has some restrictions, and "emulate npm", which doesn't. If you've installed or upgraded a dependency, you'll want to use the "emulate npm" workflow; otherwise, use "watch and copy".
+As a Redwood user, you're already familiar with the codebase `yarn create redwood-app` creates.
+Here we'll call this codebase a "Redwood App"--it’s the fullstack-to-Jamstack solution you already know and love.
 
-> Both workflows use `rwdev`, Redwood's companion CLI development tool.
+As a contributor, you'll have to gain familiarity with one more codebase: the Redwood Framework.
+The Redwood Framework lives in the monorepo redwoodjs/redwood; it contains all the packages that make Redwood App's work the way they do.
+
+While you'll be making most of your changes in the Redwood Framework, you'll probably want to see your changes “running live" in one of your own Redwood Apps or in one of our example apps.
+We offer two workflows for making this possible: "copy and watch", which has some restrictions, and "local package registry emulation", which doesn't.
+If you've installed or upgraded a dependency, use the "local package registry emulation" workflow; otherwise, use "copy and watch".
+
+> Both workflows use `redwood-tools` (alias `rwt`), Redwood's companion CLI development tool.
 
 ### Watch and copy
 
@@ -32,7 +40,7 @@ create-redwood-app: $ nodemon --ignore dist --exec 'yarn build'
 @redwoodjs/eslint-plugin-redwood: $ nodemon --ignore dist --exec 'yarn build'
 ```
 
-Then, watch-and-copy those changes into your Redwood project or example app (here, [example-invoice](https://github.com/redwoodjs/example-invoice)):
+Then, watch-and-copy those changes into your Redwood App or example app (here, [example-invoice](https://github.com/redwoodjs/example-invoice)):
 
 ```terminal
 cd example-invoice
@@ -45,11 +53,11 @@ building file list ... done
 
 > You can create a `RW_PATH` env var so you don't have to specify the path in the watch command.
 
-Now any changes made in the framework will be copied into your project!
+Now any changes made in the framework will be copied into your app!
 
 ### Emulate NPM
 
-Sometimes you'll want to test the full-development flow, from building and publishing our packages to installing them in your project. We facilitate this using a local NPM registry called [Verdaccio](https://github.com/verdaccio/verdaccio).
+Sometimes you'll want to test the full-development flow, from building and publishing our packages to installing them in your app. We facilitate this using a local NPM registry called [Verdaccio](https://github.com/verdaccio/verdaccio).
 
 #### Setting up and running a local NPM registry
 
@@ -82,7 +90,7 @@ yarn rwdev install @redwoodjs/dev-server
 This is equivalent to running:
 
 ```terminal
-rm -rf <PROJECT_PATH>/node_modules/@redwoodjs/dev-server
+rm -rf <APP_PATH>/node_modules/@redwoodjs/dev-server
 yarn upgrade @redwoodjs/dev-server@dev --no-lockfile --registry http://localhost:4873/
 ```
 
