@@ -8,7 +8,11 @@ Before interacting with the Redwood community, please read and understand our [C
 
 - [Local Development](#Local-Development)
   - [Copy and Watch](#Copy-and-Watch)
+    - [Specifying a RW_PATH](#Specifying-a-RW_PATH)
   - [Local Package Registry Emulation](#Local-Package-Registry-Emulation)
+    - [Setting Up and Running a Local NPM Registry](#Setting-Up-and-Running-a-Local-NPM-Registry)
+    - [Publishing a Package](#Publishing-a-Package)
+    - [Installing Published Packages in Your Redwood App](#Installing-Published-Packages-in-Your-Redwood-App)
 - [Running Your Redwood App's Local Server(s)](#Running-Your-Redwood-App's-Local-Server(s))
 
 <!-- toc -->
@@ -96,7 +100,7 @@ And see your changes copied!
 
 Sometimes you'll want to test the full package-development workflow: building, publishing, and installing in your Redwood App. We facilitate this using a local NPM registry called [Verdaccio](https://github.com/verdaccio/verdaccio).
 
-#### Setting up and running a local NPM registry
+#### Setting Up and Running a Local NPM Registry
 
 First, install Verdaccio:
 
@@ -112,7 +116,7 @@ Then, in your local copy of the Redwood Framework, run:
 
 This starts Verdaccio (http://localhost:4873) with our configuration file.
 
-#### Publishing a package
+#### Publishing a Package
 
 `./tasks/publish-local` will build, unpublish, and publish all the Redwood packages to your local NPM registry with a "dev" tag. For the curious, it's equivalent to running:
 
@@ -129,7 +133,7 @@ For example, if you've made changes to the `@redwoodjs/dev-server` package, you 
 ./tasks/publish-local ./packages/dev-server
 ```
 
-#### Installing published packages
+#### Installing Published Packages in Your Redwood App
 
 The last step is to install the package into your Redwood App. The CLI command `redwood-tools` (alias `rwt`) makes installing local NPM packages easy:
 
