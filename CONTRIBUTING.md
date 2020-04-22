@@ -100,25 +100,3 @@ But for local package development, you'll need to manually stop/start the respec
 yarn rw dev api
 yarn rw dev web
 ```
-
-## CLI Package Development
-
-We are using [Yargs](https://yargs.js.org/)
-_Historical note: originally implemented in react-ink (too slow!) then converted._
-
-### Example
-
-Example dev command:
-
-```javascript
-export const command = 'dev [app..]'
-export const desc = 'Run development servers.'
-export const builder = {
-  app: { choices: ['db', 'api', 'web'], default: ['db', 'api', 'web'] },
-}
-export const handler = ({ app }) => {
-   // do stuff...
-}
-```
-
-Yargs creates a nice interface, coerces the args, and runs the handler.
