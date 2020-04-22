@@ -29,6 +29,8 @@ While you'll be making most of your changes in the Redwood Framework, you'll pro
 We offer two workflows for making this possible: "copy and watch", which has some restrictions, and "local package registry emulation", which doesn't.
 If you've installed or upgraded a dependency, use the "local package registry emulation" workflow; otherwise, use "copy and watch".
 
+**How to choose which one to use?** If you've installed or upgraded a dependency, use the "local package registry emulation" workflow; otherwise, use "copy and watch".
+
 > Both workflows use `redwood-tools` (alias `rwt`), Redwood's companion CLI development tool.
 
 ### Copy and Watch
