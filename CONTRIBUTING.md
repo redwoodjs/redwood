@@ -98,8 +98,15 @@ Sometimes you'll want to test the full package-development workflow: building, p
 
 #### Setting up and running a local NPM registry
 
+First, install Verdaccio:
+
 ```terminal
 yarn global add verdaccio
+```
+
+Then, in your local copy of the Redwood Framework, run:
+
+```terminal
 ./tasks/run-local-npm
 ```
 
