@@ -133,13 +133,9 @@ yarn upgrade @redwoodjs/dev-server@dev --no-lockfile --registry http://localhost
 
 ## Running Your Redwood App's Local Server(s)
 
-You can run both the API and Web servers with a single command:
-
-```terminal
-yarn rw dev
-```
-
-But for local package development, you'll need to manually stop/start the respective server to include changes. In this case you can run the servers for each of the yarn workspaces independently:
+When developing Redwood Apps, you’re probably used to running both the API and Web servers with `yarn rw dev` and seeing your changes included immediately.
+But for local package development, your changes won’t be included automatically--you'll need to manually stop/start the respective server to include them.
+In this case you might find it more convenient to run the servers for each of the yarn workspaces independently:
 
 ```terminal
 yarn rw dev api
