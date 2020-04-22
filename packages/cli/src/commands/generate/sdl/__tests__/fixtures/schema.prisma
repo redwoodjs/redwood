@@ -1,5 +1,5 @@
 datasource hammerDatasource {
-  provider = "sqlite"
+  provider = "mysql"
   url = env("DB_HOST")
 }
 
