@@ -91,6 +91,7 @@ export RW_PATH=”$HOME/path/to/redwood/framework”
 ```
 
 Where /path/to/redwood/framework is replaced by the path to your local copy of the Redwood Framework.
+
 Then, in your Redwood App or example app, you can just run:
 
 ```terminal
