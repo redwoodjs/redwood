@@ -19,7 +19,7 @@ As a Redwood user, you're already familiar with the codebase `yarn create redwoo
 Here we'll call this codebase a "Redwood App"--it’s the fullstack-to-Jamstack solution you already know and love.
 
 As a contributor, you'll have to gain familiarity with one more codebase: the Redwood Framework.
-The Redwood Framework lives in the monorepo redwoodjs/redwood; it contains all the packages that make Redwood App's work the way they do.
+The Redwood Framework lives in the monorepo redwoodjs/redwood; it contains all the packages that make Redwood Apps work the way they do.
 
 While you'll be making most of your changes in the Redwood Framework, you'll probably want to see your changes “running live" in one of your own Redwood Apps or in one of our example apps.
 We offer two workflows for making this possible: "copy and watch", which has some restrictions, and "local package registry emulation", which doesn't.
