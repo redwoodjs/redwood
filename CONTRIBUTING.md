@@ -165,6 +165,7 @@ yarn rwt install @redwoodjs/dev-server
 
 When developing Redwood Apps, you’re probably used to running both the API and Web servers with `yarn rw dev` and seeing your changes included immediately.
 But for local package development, your changes won’t be included automatically--you'll need to manually stop/start the respective server to include them.
+
 In this case you might find it more convenient to run the servers for each of the yarn workspaces independently:
 
 ```terminal
