@@ -6,14 +6,15 @@ Before interacting with the Redwood community, please read and understand our [C
 
 **Table of Contents**
 
-- [Local Development](#Local-Development)
-  - [Copy and Watch](#Copy-and-Watch)
-    - [Specifying a RW_PATH](#Specifying-a-RW_PATH)
-  - [Local Package Registry Emulation](#Local-Package-Registry-Emulation)
-    - [Setting Up and Running a Local NPM Registry](#Setting-Up-and-Running-a-Local-NPM-Registry)
-    - [Publishing a Package](#Publishing-a-Package)
-    - [Installing Published Packages in Your Redwood App](#Installing-Published-Packages-in-Your-Redwood-App)
-- [Running Your Redwood App's Local Server(s)](#Running-Your-Redwood-App's-Local-Server(s))
+- [Contributing](#Contributing)
+  - [Local Development](#Local-Development)
+    - [Copy and Watch](#Copy-and-Watch)
+      - [Specifying a RW_PATH](#Specifying-a-RW_PATH)
+    - [Local Package Registry Emulation](#Local-Package-Registry-Emulation)
+      - [Setting Up and Running a Local NPM Registry](#Setting-Up-and-Running-a-Local-NPM-Registry)
+      - [Publishing a Package](#Publishing-a-Package)
+      - [Installing Published Packages in Your Redwood App](#Installing-Published-Packages-in-Your-Redwood-App)
+  - [Running Your Redwood App's Local Server(s)](#Running-Your-Redwood-App's-Local-Server(s))
 
 <!-- toc -->
 
