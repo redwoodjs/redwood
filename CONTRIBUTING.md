@@ -44,16 +44,52 @@ Then, watch-and-copy those changes into your Redwood App or example app (here, [
 
 ```terminal
 cd example-invoice
-yarn rwdev watch ../path/to/redwood
+yarn rwt copy:watch ../path/to/redwood
 
 Redwood Framework Path:  /Users/peterp/Personal/redwoodjs/redwood
 Trigger event:  add
 building file list ... done
 ```
 
-> You can create a `RW_PATH` env var so you don't have to specify the path in the watch command.
-
 Now any changes made in the framework will be copied into your app!
+
+#### Specifying a RW_PATH
+
+You can create a `RW_PATH` environment variable so you don't have to specify the path in the `copy:watch` command.
+
+_On Linux_
+
+Add the following line to your `~/.bashrc`:
+
+```terminal
+export RW_PATH=”$HOME/path/to/redwood/framework”
+```
+
+Where /path/to/redwood/framework is replaced by the path to your local copy of the Redwood Framework.
+Then, in your Redwood App or example app, you can just run:
+
+```terminal
+yarn rwt copy:watch
+```
+
+And see your changes copied!
+
+_On Mac_
+
+Add the following line to your `~/.bash_profile`:
+
+```terminal
+export RW_PATH=”$HOME/path/to/redwood/framework”
+```
+
+Where /path/to/redwood/framework is replaced by the path to your local copy of the Redwood Framework.
+Then, in your Redwood App or example app, you can just run:
+
+```terminal
+yarn rwt copy:watch
+```
+
+And see your changes copied!
 
 ### Emulate NPM
 
@@ -81,10 +117,10 @@ You can build a particular package by specifying the path to the package: `./tas
 
 #### Installing published packages
 
-`rwdev` makes installing local npm packages easy:
+`redwood-tools` (alias `rwt`) makes installing local npm packages easy:
 
 ```terminal
-yarn rwdev install @redwoodjs/dev-server
+yarn rwt install @redwoodjs/dev-server
 ```
 
 This is equivalent to running:
