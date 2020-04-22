@@ -7,8 +7,9 @@ Before interacting with the Redwood community, please read and understand our [C
 **Table of Contents**
 
 - [Local Development](#Local-Development)
-- [Running the Local Server(s)](#Running-the-Local-Server(s))
-- [CLI Package Development](#CLI-Package-Development)
+  - [Copy and Watch](#Copy-and-Watch)
+  - [Local Package Registry Emulation](#Local-Package-Registry-Emulation)
+- [Running Your Redwood App's Local Server(s)](#Running-Your-Redwood-App's-Local-Server(s))
 
 <!-- toc -->
 
@@ -26,7 +27,7 @@ If you've installed or upgraded a dependency, use the "local package registry em
 
 > Both workflows use `redwood-tools` (alias `rwt`), Redwood's companion CLI development tool.
 
-### Watch and copy
+### Copy and Watch
 
 First, build-and-watch files in the Redwood Framework for changes:
 
@@ -91,9 +92,9 @@ yarn rwt copy:watch
 
 And see your changes copied!
 
-### Emulate NPM
+### Local Package Registry Emulation
 
-Sometimes you'll want to test the full-development flow, from building and publishing our packages to installing them in your app. We facilitate this using a local NPM registry called [Verdaccio](https://github.com/verdaccio/verdaccio).
+Sometimes you'll want to test the full package-development workflow: building, publishing, and installing in your Redwood App. We facilitate this using a local NPM registry called [Verdaccio](https://github.com/verdaccio/verdaccio).
 
 #### Setting up and running a local NPM registry
 
@@ -130,7 +131,7 @@ rm -rf <APP_PATH>/node_modules/@redwoodjs/dev-server
 yarn upgrade @redwoodjs/dev-server@dev --no-lockfile --registry http://localhost:4873/
 ```
 
-## Running the Local Server(s)
+## Running Your Redwood App's Local Server(s)
 
 You can run both the API and Web servers with a single command:
 
