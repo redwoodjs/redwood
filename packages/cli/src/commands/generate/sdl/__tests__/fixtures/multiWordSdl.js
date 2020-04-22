@@ -19,4 +19,4 @@ export const schema = gql`
     username: String
     userId: Int
   }
-`
+`;

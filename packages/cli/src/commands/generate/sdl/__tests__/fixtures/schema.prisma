@@ -35,3 +35,14 @@ model UserProfile {
   userId   Int
   user     User   @relation(fields: [userId], references: [id])
 }
+
+model Shoe {
+  id       Int    @id @default(autoincrement())
+  color    Color
+}
+
+enum Color {
+    RED
+    GREEN
+    BLUE
+}

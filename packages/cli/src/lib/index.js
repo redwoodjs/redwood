@@ -119,10 +119,14 @@ export const generateTemplate = (templateFilename, { name, root, ...rest }) => {
   // We format .js and .css templates, we need to tell prettier which parser
   // we're using.
   // https://prettier.io/docs/en/options.html#parser
-  const parser = {
+  let parser = {
     '.css': 'css',
     '.js': 'babel',
   }[path.extname(templateFilename)]
+
+  if (path.basename(templateFilename).endsWith('sdl.js.template')) {
+    parser = 'babel'
+  }
 
   if (typeof parser === 'undefined') {
     return renderedTemplate

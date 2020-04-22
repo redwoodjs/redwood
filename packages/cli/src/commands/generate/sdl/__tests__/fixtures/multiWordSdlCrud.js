@@ -26,4 +26,4 @@ export const schema = gql`
     updateUserProfile(id: Int!, input: UpdateUserProfileInput!): UserProfile!
     deleteUserProfile(id: Int!): UserProfile!
   }
-`
+`;

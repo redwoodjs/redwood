@@ -22,4 +22,4 @@ export const schema = gql`
     email: String
     isAdmin: Boolean
   }
-`
+`;
