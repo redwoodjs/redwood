@@ -6,7 +6,6 @@
     "config",
     "dist"
   ],
-  "main": "dist/index.js",
   "dependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.9.0",
@@ -17,7 +16,7 @@
     "@babel/preset-react": "^7.9.4",
     "@babel/preset-typescript": "^7.9.0",
     "@babel/runtime-corejs3": "^7.9.2",
-    "@prisma/cli": "2.0.0-beta.2",
+    "@prisma/cli": "2.0.0-beta.3",
     "@redwoodjs/cli": "^0.6.0-rc.1",
     "@redwoodjs/dev-server": "^0.6.0-rc.1",
     "@redwoodjs/eslint-config": "^0.6.0-rc.1",
@@ -60,8 +59,8 @@
   },
   "gitHead": "2801c132f40263f9fcfbdac8b1750d2e423eb649",
   "scripts": {
-    "build": "yarn cross-env NODE_ENV=production babel src -d dist --delete-dir-on-start",
+    "build": "yarn cross-env NODE_ENV=production babel src --out-dir dist  --extensions \".ts\" --delete-dir-on-start",
     "prepublishOnly": "yarn build",
-    "build:watch": "nodemon --ignore dist --exec 'yarn build'"
+    "build:watch": "nodemon --watch src --ext 'js,ts,tsx' --ignore dist --exec 'yarn build'"
   }
 }

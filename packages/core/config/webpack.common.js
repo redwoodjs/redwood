@@ -164,7 +164,7 @@ module.exports = (webpackEnv) => {
           use: {
             loader: path.resolve(
               __dirname,
-              '../dist/loaders/routes-auto-loader'
+              '../dist/loaders/routes-auto-loader.js'
             ),
           },
         },
@@ -174,7 +174,7 @@ module.exports = (webpackEnv) => {
           test: /.+Cell.(js|tsx)$/,
           include: path.join(redwoodPaths.base, 'web/src/components'),
           use: {
-            loader: path.resolve(__dirname, '../dist/loaders/cell-loader'),
+            loader: path.resolve(__dirname, '../dist/loaders/cell-loader.js'),
           },
         },
       ],

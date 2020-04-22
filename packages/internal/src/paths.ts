@@ -42,14 +42,27 @@ export const getBaseDir = (configPath: string = getConfigPath()): string => {
 }
 
 /**
+ * Use this to resolve files when the path to the file is known, but the extension
+ * is not.
+ */
+export const resolveFile = (
+  filePath: string,
+  extensions: string[] = ['.js', '.tsx', '.ts']
+): string | null => {
+  for (const extension of extensions) {
+    const p = `${filePath}${extension}`
+    if (fs.existsSync(p)) {
+      return p
+    }
+  }
+  return null
+}
+
+/**
  * Path constants that are relevant to a Redwood project.
  */
 export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
-  // The path.web.routes file can either be a js or a tsx file. We use
-  // nodejs internals to resolve it.
-  require.extensions['.tsx'] = () => undefined
-  require.extensions['.ts'] = () => undefined
-  const routes = require.resolve(path.join(BASE_DIR, PATH_WEB_ROUTES))
+  const routes = resolveFile(path.join(BASE_DIR, PATH_WEB_ROUTES)) as string
 
   return {
     base: BASE_DIR,

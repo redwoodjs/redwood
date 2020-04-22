@@ -1,6 +1,6 @@
 import path from 'path'
 
-import { processPagesDir } from '../paths'
+import { processPagesDir, resolveFile } from '../paths'
 
 describe('paths', () => {
   describe('processPagesDir', () => {
@@ -11,5 +11,10 @@ describe('paths', () => {
       expect(deps[0].const).toEqual('AdminMargleTheWorld')
       expect(deps[1].const).toEqual('HelloWorld')
     })
+  })
+
+  describe('resolveFile', () => {
+    const p = resolveFile(path.join(__dirname, './fixtures/api/test/test'))
+    expect(path.extname(p)).toEqual('.ts')
   })
 })
