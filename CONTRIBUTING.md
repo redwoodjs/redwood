@@ -116,9 +116,15 @@ npm publish --tag dev --registry http://localhost:4873/ --force
 
 You can build a particular package by specifying the path to the package: `./tasks/publish-local ./packages/api`.
 
+For example, if you've made changes to the `@redwoodjs/dev-server` package, you would run:
+
+```terminal
+./tasks/publish-local ./packages/dev-server
+```
+
 #### Installing published packages
 
-`redwood-tools` (alias `rwt`) makes installing local npm packages easy:
+The last step is to install the package into your Redwood App. The CLI command `redwood-tools` (alias `rwt`) makes installing local NPM packages easy:
 
 ```terminal
 yarn rwt install @redwoodjs/dev-server
