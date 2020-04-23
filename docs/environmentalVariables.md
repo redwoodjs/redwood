@@ -1,6 +1,6 @@
 # Environment Variables
 
-You can provide environment variables to each side of your Redwood project in different ways, and depending on your target.
+You can provide environment variables to each side of your Redwood project in different ways, depending on your target.
 
 ## API
 On the API side with NodeJS as your target, you can add access the environment variables defined in your `.env` and `.env.defaults` file.
