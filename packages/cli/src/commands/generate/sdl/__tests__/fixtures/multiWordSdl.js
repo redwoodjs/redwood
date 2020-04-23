@@ -6,6 +6,8 @@ export const schema = gql`
     user: User!
   }
 
+
+
   type Query {
     userProfiles: [UserProfile!]!
   }
@@ -19,4 +21,4 @@ export const schema = gql`
     username: String
     userId: Int
   }
-`;
+`

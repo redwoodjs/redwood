@@ -4,13 +4,17 @@ export const schema = gql`
     color: Color!
   }
 
+
   enum Color {
+
     RED
 
     GREEN
 
     BLUE
+
   }
+
 
   type Query {
     shoes: [Shoe!]!
@@ -30,4 +34,4 @@ export const schema = gql`
     updateShoe(id: Int!, input: UpdateShoeInput!): Shoe!
     deleteShoe(id: Int!): Shoe!
   }
-`;
+`

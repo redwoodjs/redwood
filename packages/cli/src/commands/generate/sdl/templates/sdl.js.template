@@ -3,13 +3,13 @@ export const schema = gql`
     ${query}
   }
 
-  <% enums.forEach((enumDef, idx) => { %>
-    enum ${enums[idx].name} {
-      <% enums[idx].values.forEach((enumDefValue, idk) => { %>
-          ${enums[idx].values[idk].name}
-      <% }) %>
-    }
-  <% }) %>
+<%enums.forEach((enumDef, idx)=>{%>
+  enum ${enums[idx].name} {
+<%enums[idx].values.forEach((enumDefValue, idk)=>{%>
+    ${enums[idx].values[idk].name}
+<%})%>
+  }
+<%})%>
 
   type Query {
     ${pluralCamelName}: [${singularPascalName}!]!<% if (crud) { %>

@@ -129,10 +129,6 @@ export const generateTemplate = (templateFilename, { name, root, ...rest }) => {
     '.js': 'babel',
   }[path.extname(templateFilename)]
 
-  if (path.basename(templateFilename).endsWith('sdl.js.template')) {
-    parser = 'babel'
-  }
-
   if (typeof parser === 'undefined') {
     return renderedTemplate
   }

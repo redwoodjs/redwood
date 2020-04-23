@@ -7,6 +7,8 @@ export const schema = gql`
     profiles: UserProfile
   }
 
+
+
   type Query {
     users: [User!]!
   }
@@ -22,4 +24,4 @@ export const schema = gql`
     email: String
     isAdmin: Boolean
   }
-`;
+`
