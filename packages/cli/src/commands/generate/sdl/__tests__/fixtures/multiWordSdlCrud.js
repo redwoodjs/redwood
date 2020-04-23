@@ -6,8 +6,6 @@ export const schema = gql`
     user: User!
   }
 
-
-
   type Query {
     userProfiles: [UserProfile!]!
     userProfile(id: Int!): UserProfile!

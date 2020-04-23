@@ -9,8 +9,6 @@ export const schema = gql`
     postedAt: DateTime
   }
 
-
-
   type Query {
     posts: [Post!]!
     post(id: Int!): Post!

@@ -78,6 +78,7 @@ const sdlFromSchemaModel = async (name) => {
       )
     ).reduce((acc, cur) => ({ ...acc, [cur.name]: cur }), {})
 
+    // Get enum definiton and fields from user-defined types
     const enums = (
       await Promise.all(
         model.fields

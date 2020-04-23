@@ -4,7 +4,6 @@ export const schema = gql`
     color: Color!
   }
 
-
   enum Color {
 
     RED
@@ -14,7 +13,6 @@ export const schema = gql`
     BLUE
 
   }
-
 
   type Query {
     shoes: [Shoe!]!

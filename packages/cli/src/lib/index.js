@@ -28,13 +28,10 @@ export const asyncForEach = async (array, callback) => {
  * entire schema is returned.
  */
 export const getSchema = async (name) => {
-  const schemaPath = path.join(getPaths().api.db, 'schema.prisma')
-  const metadata = await getDMMF({
-    datamodel: readFile(schemaPath.toString()),
-  })
+  const schema = await getSchemaDefinitions()
 
   if (name) {
-    const model = metadata.datamodel.models.find((model) => {
+    const model = schema.datamodel.models.find((model) => {
       return model.name === name
     })
 
@@ -47,7 +44,7 @@ export const getSchema = async (name) => {
     }
   }
 
-  return metadata.datamodel
+  return schema.metadata.datamodel
 }
 
 /**
@@ -56,13 +53,10 @@ export const getSchema = async (name) => {
  * all enum definitions are returned
  */
 export const getEnum = async (name) => {
-  const schemaPath = path.join(getPaths().api.db, 'schema.prisma')
-  const metadata = await getDMMF({
-    datamodel: readFile(schemaPath.toString()),
-  })
+  const schema = await getSchemaDefinitions()
 
   if (name) {
-    const model = metadata.datamodel.enums.find((model) => {
+    const model = schema.datamodel.enums.find((model) => {
       return model.name === name
     })
 
@@ -75,7 +69,19 @@ export const getEnum = async (name) => {
     }
   }
 
-  return metadata.datamodel.enums
+  return schema.metadata.datamodel.enums
+}
+
+/*
+ * Returns the DMMF defined by `prisma` resolving the relevant `shema.prisma` path.
+ */
+export const getSchemaDefinitions = async () => {
+  const schemaPath = path.join(getPaths().api.db, 'schema.prisma')
+  const metadata = await getDMMF({
+    datamodel: readFile(schemaPath.toString()),
+  })
+
+  return metadata
 }
 
 /**
