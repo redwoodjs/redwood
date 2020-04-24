@@ -135,7 +135,22 @@ module.exports = (webpackEnv) => {
             },
             {
               test: /\.(js|jsx|ts|tsx)$/,
-              exclude: /(node_modules)/,
+              include: /redwood\/.*/,
+              exclude: /node_modules/,
+              resolve: {
+                mainFields: ['module', 'main', 'browser'],
+              },
+              use: {
+                loader: 'babel-loader',
+                options: {
+                  root: path.resolve(__dirname, '..', '..', '..'),
+                  cacheDirectory: true,
+                },
+              },
+            },
+            {
+              test: /\.(js|jsx|ts|tsx)$/,
+              exclude: /node_modules/,
               use: {
                 loader: 'babel-loader',
                 options: {

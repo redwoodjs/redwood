@@ -1,3 +1,5 @@
+const path = require('path')
+
 const TARGETS_NODE = '12.13.0'
 const TARGETS_BROWSERS = 'defaults'
 // Warning! Recommended to specify used minor core-js version, like corejs: '3.6',
@@ -9,6 +11,7 @@ const CORE_JS_VERSION = '3.6'
 // We use the recommended babel configuration for monorepos, which is a base directory
 // `babel.config.js` file, but then use a per-project `.babelrc.js` file.
 // Learn more: https://babeljs.io/docs/en/config-files#monorepos
+
 module.exports = {
   presets: [
     [
@@ -31,8 +34,13 @@ module.exports = {
       'babel-plugin-module-resolver',
       {
         alias: {
-          src: './src',
+          src: [
+            './src',
+            path.resolve(__dirname, 'packages', 'router', 'src'),
+            path.resolve(__dirname, 'packages', 'web', 'src'),
+          ],
         },
+        loglevel: 'info',
       },
     ],
     ['@babel/plugin-proposal-class-properties', { loose: true }],
