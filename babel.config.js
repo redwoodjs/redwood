@@ -40,7 +40,6 @@ module.exports = {
             path.resolve(__dirname, 'packages', 'web', 'src'),
           ],
         },
-        loglevel: 'info',
       },
     ],
     ['@babel/plugin-proposal-class-properties', { loose: true }],
