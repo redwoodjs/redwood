@@ -1,4 +1,5 @@
 import path from 'path'
+import { spawnSync } from 'child_process'
 
 import concurrently from 'concurrently'
 
@@ -9,10 +10,13 @@ import { handler as generatePrismaClient } from 'src/commands/dbCommands/generat
 export const command = 'dev [app..]'
 export const desc = 'Run development servers.'
 export const builder = {
-  app: { choices: ['db', 'api', 'web'], default: ['db', 'api', 'web'] },
+  app: {
+    choices: ['db', 'api', 'web', 'ide'],
+    default: ['db', 'api', 'web', 'ide'],
+  },
 }
 
-export const handler = async ({ app = ['db', 'api', 'web'] }) => {
+export const handler = async ({ app = ['db', 'api', 'web', 'ide'] }) => {
   // For Windows: Replaces ` ` with `\ `. Damn, there has got to be a better
   // way to sanitize paths?!
   const BASE_DIR = getPaths().base.replace(' ', '\\ ')
@@ -42,12 +46,32 @@ export const handler = async ({ app = ['db', 'api', 'web'] }) => {
       )} && yarn webpack-dev-server --config ../node_modules/@redwoodjs/core/config/webpack.development.js`,
       prefixColor: 'blue',
     },
+    ide: {
+      name: 'ide',
+      command: `cd ${path.join(
+        BASE_DIR,
+        'api'
+      )} && yarn prisma studio --port=8912 --experimental`,
+      prefixColor: 'green',
+    },
+  }
+
+  const shouldRun = (n) => {
+    if (n.name == 'ide') {
+      const grep = spawnSync('grep', [
+        'UserExample',
+        'api/prisma/schema.prisma',
+      ])
+      return !grep.stdout.toString().includes('UserExample')
+    } else {
+      return true
+    }
   }
 
   concurrently(
     Object.keys(jobs)
       .map((n) => app.includes(n) && jobs[n])
-      .filter(Boolean),
+      .filter(shouldRun),
     {
       restartTries: 3,
       prefix: '{time} {name} |',
