@@ -12,7 +12,7 @@ const CORE_JS_VERSION = '3.6'
 // `babel.config.js` file, but then use a per-project `.babelrc.js` file.
 // Learn more: https://babeljs.io/docs/en/config-files#monorepos
 
-module.exports = {
+module.exports = (api) => ({
   presets: [
     [
       '@babel/preset-env',
@@ -34,11 +34,14 @@ module.exports = {
       'babel-plugin-module-resolver',
       {
         alias: {
-          src: [
-            './src',
-            path.resolve(__dirname, 'packages', 'router', 'src'),
-            path.resolve(__dirname, 'packages', 'web', 'src'),
-          ],
+          // For some reason jest doesn not like multiple targets for an alias
+          src: api.env('test')
+            ? './src'
+            : [
+                './src',
+                path.resolve(__dirname, 'packages', 'router', 'src'),
+                path.resolve(__dirname, 'packages', 'web', 'src'),
+              ],
         },
       },
     ],
@@ -97,4 +100,4 @@ module.exports = {
     process.env.NODE_ENV === 'production'
       ? [/\.test\.(js|ts)/, '**/__tests__', '**/__mocks__']
       : [],
-}
+})
