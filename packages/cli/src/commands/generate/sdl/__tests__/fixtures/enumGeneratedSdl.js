@@ -5,13 +5,9 @@ export const schema = gql`
   }
 
   enum Color {
-
     RED
-
     GREEN
-
     BLUE
-
   }
 
   type Query {
