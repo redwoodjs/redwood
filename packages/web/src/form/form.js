@@ -211,6 +211,21 @@ const TextField = (props) => {
   )
 }
 
+// Renders an <input type="radio"> field
+const RadioField = (props) => {
+  const { register } = useFormContext()
+  const tagProps = inputTagProps(props)
+
+  return (
+    <input
+      {...tagProps}
+      type='radio'
+      id={props.id || props.name}
+      ref={register(props.validation  || { required: false })}
+    />
+  )
+}
+
 // Renders a <select> field
 
 const SelectField = (props) => {
@@ -240,6 +255,7 @@ export {
   HiddenField,
   TextAreaField,
   TextField,
+  RadioField,
   SelectField,
   Submit,
 }
