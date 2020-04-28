@@ -219,9 +219,9 @@ const RadioField = (props) => {
   return (
     <input
       {...tagProps}
-      type='radio'
+      type="radio"
       id={props.id || props.name}
-      ref={register(props.validation  || { required: false })}
+      ref={register(props.validation || { required: false })}
     />
   )
 }
