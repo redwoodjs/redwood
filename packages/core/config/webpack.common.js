@@ -10,6 +10,7 @@ const CopyPlugin = require('copy-webpack-plugin')
 const Dotenv = require('dotenv-webpack')
 const { getConfig, getPaths } = require('@redwoodjs/internal')
 const merge = require('webpack-merge')
+const ErrorOverlayPlugin = require('error-overlay-webpack-plugin')
 
 const redwoodConfig = getConfig()
 const redwoodPaths = getPaths()
@@ -112,6 +113,7 @@ module.exports = (webpackEnv) => {
       }),
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
       new CopyPlugin([{ from: 'public/', to: '', ignore: ['README.md'] }]),
+      new ErrorOverlayPlugin(),
     ].filter(Boolean),
     module: {
       rules: [
