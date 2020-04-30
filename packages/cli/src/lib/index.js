@@ -147,6 +147,8 @@ export const generateTemplate = (templateFilename, { name, root, ...rest }) => {
 
 export const readFile = (target) => fs.readFileSync(target)
 
+export const deleteFile = (target) => fs.unlinkSync(target)
+
 export const writeFile = async (
   target,
   contents,
@@ -201,6 +203,24 @@ export const writeFilesTask = (files, options) => {
       return {
         title: `Writing \`./${path.relative(base, file)}\`...`,
         task: () => writeFile(file, contents, options),
+      }
+    })
+  )
+}
+
+/**
+ * Creates a list of tasks that delete files from the disk.
+ *
+ * @param files - {[filepath]: contents}
+ */
+export const deleteFilesTask = (files) => {
+  const { base } = getPaths()
+  return new Listr(
+    Object.keys(files).map((file) => {
+      return {
+        title: `Destroying \`./${path.relative(base, file)}\`...`,
+        skip: () => !fs.existsSync(file),
+        task: () => deleteFile(file),
       }
     })
   )

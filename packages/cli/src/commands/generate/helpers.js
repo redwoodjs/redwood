@@ -6,7 +6,12 @@ import Listr from 'listr'
 import pascalcase from 'pascalcase'
 import { paramCase } from 'param-case'
 
-import { generateTemplate, getPaths, writeFilesTask } from 'src/lib'
+import {
+  deleteFilesTask,
+  generateTemplate,
+  getPaths,
+  writeFilesTask,
+} from 'src/lib'
 import c from 'src/lib/colors'
 
 /**
@@ -75,6 +80,33 @@ export const createYargsForComponentGeneration = ({
             task: async () => {
               const f = await filesFn(rest)
               return writeFilesTask(f, { overwriteExisting: force })
+            },
+          },
+        ],
+        { collapse: false, exitOnError: true }
+      )
+
+      try {
+        await tasks.run()
+      } catch (e) {
+        console.log(c.error(e.message))
+      }
+    },
+  }
+}
+
+export const createYargsForComponentDestroy = ({ componentName, filesFn }) => {
+  return {
+    command: `${componentName} <name>`,
+    desc: `Destroy a ${componentName} component.`,
+    handler: async (names) => {
+      const tasks = new Listr(
+        [
+          {
+            title: `Destroying ${componentName} files...`,
+            task: async () => {
+              const f = await filesFn(names)
+              return deleteFilesTask(f)
             },
           },
         ],
