@@ -226,6 +226,21 @@ const RadioField = (props) => {
   )
 }
 
+// Renders an <input type="checkbox"> field
+const CheckBox = (props) => {
+  const { register } = useFormContext()
+  const tagProps = inputTagProps(props)
+
+  return (
+    <input
+      {...tagProps}
+      type="checkbox"
+      id={props.id || props.name}
+      ref={register(props.validation || { required: false })}
+    />
+  )
+}
+
 // Renders a <select> field
 
 const SelectField = (props) => {
@@ -256,6 +271,7 @@ export {
   TextAreaField,
   TextField,
   RadioField,
+  CheckBox,
   SelectField,
   Submit,
 }
