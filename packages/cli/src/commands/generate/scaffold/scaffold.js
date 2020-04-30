@@ -25,21 +25,38 @@ import { files as sdlFiles } from '../sdl/sdl'
 import { files as serviceFiles } from '../service/service'
 
 const NON_EDITABLE_COLUMNS = ['id', 'createdAt', 'updatedAt']
-const ASSETS = fs.readdirSync(
-  path.join(templateRoot, 'scaffold', 'templates', 'assets')
-)
-const LAYOUTS = fs.readdirSync(
-  path.join(templateRoot, 'scaffold', 'templates', 'layouts')
-)
-const PAGES = fs.readdirSync(
-  path.join(templateRoot, 'scaffold', 'templates', 'pages')
-)
-const COMPONENTS = fs.readdirSync(
-  path.join(templateRoot, 'scaffold', 'templates', 'components')
-)
-const SCAFFOLD_STYLE_PATH = './scaffold.css'
-// Any assets that should not trigger an overwrite error and require a --force
-const SKIPPABLE_ASSETS = ['scaffold.css']
+
+
+let ASSETS;
+let LAYOUTS;
+let PAGES;
+let COMPONENTS;
+let SCAFFOLD_STYLE_PATH;
+let SKIPPABLE_ASSETS;
+
+const setTemplateFiles = (engine) => {
+  let root = templateRoot;
+  if (engine) {
+    const modulePath = require.resolve(`redwood-scaffold-engine-${engine}`);
+    root = _path.dirname(modulePath);
+  }
+
+  ASSETS = fs.readdirSync(
+    path.join(root, 'scaffold', 'templates', 'assets')
+  )
+  LAYOUTS = fs.readdirSync(
+    path.join(root, 'scaffold', 'templates', 'layouts')
+  )
+  PAGES = fs.readdirSync(
+    path.join(root, 'scaffold', 'templates', 'pages')
+  )
+  COMPONENTS = fs.readdirSync(
+    path.join(root, 'scaffold', 'templates', 'components')
+  )
+  SCAFFOLD_STYLE_PATH = './scaffold.css'
+  // Any assets that should not trigger an overwrite error and require a --force
+  SKIPPABLE_ASSETS = ['scaffold.css']
+}
 
 const getIdType = (model) => {
   return model.fields.find((field) => field.isId)?.type
@@ -220,13 +237,14 @@ export const desc = 'Generate pages, SDL, and a services object.'
 export const builder = {
   force: { type: 'boolean', default: false },
 }
-export const handler = async ({ model, force }) => {
+export const handler = async ({ model, force, engine }) => {
+  setTemplateFiles(engine);
   const tasks = new Listr(
     [
       {
         title: 'Generating scaffold files...',
         task: async () => {
-          const f = await files({ model })
+          const f = await files({ model, engine })
           return writeFilesTask(f, { overwriteExisting: force })
         },
       },
