@@ -1,5 +1,4 @@
-import { createYargsForComponentDestroy } from 'src/lib'
-
+import { createYargsForComponentDestroy } from '../generate/helpers'
 import { files as componentFiles } from '../generate/component/component'
 
 export const {
