@@ -219,7 +219,7 @@ export const deleteFilesTask = (files) => {
     Object.keys(files).map((file) => {
       return {
         title: `Destroying \`./${path.relative(base, file)}\`...`,
-        skip: () => !fs.existsSync(file),
+        skip: () => !fs.existsSync(file) && `File doesn't exist`,
         task: () => deleteFile(file),
       }
     })
