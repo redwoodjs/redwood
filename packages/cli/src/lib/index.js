@@ -149,7 +149,7 @@ export const readFile = (target) => fs.readFileSync(target)
 
 export const deleteFile = (target) => fs.unlinkSync(target)
 
-export const writeFile = async (
+export const writeFile = (
   target,
   contents,
   { overwriteExisting = false } = {}
@@ -238,6 +238,24 @@ export const addRoutesToRouterTask = (routes) => {
     }
     return content.replace(/(\s*)\<Router\>/, `$1<Router>$1  ${route}`)
   }, routesContent)
+  writeFile(redwoodPaths.web.routes, newRoutesContent, {
+    overwriteExisting: true,
+  })
+}
+
+/**
+ * Remove named routes from the project's routes file.
+ *
+ * @param {string[]} routes - Route names
+ */
+export const removeRoutesFromRouterTask = (routes) => {
+  const redwoodPaths = getPaths()
+  const routesContent = readFile(redwoodPaths.web.routes).toString()
+  const newRoutesContent = routes.reduce((content, route) => {
+    const matchRouteByName = new RegExp(`\\s*<Route[^>]*name="${route}"[^>]*/>`)
+    return content.replace(matchRouteByName, '')
+  }, routesContent)
+
   writeFile(redwoodPaths.web.routes, newRoutesContent, {
     overwriteExisting: true,
   })
