@@ -18,6 +18,7 @@ export const handler = async ({ app = ['db', 'api', 'web'] }) => {
   // way to sanitize paths?!
   const BASE_DIR = getPaths().base.replace(' ', '\\ ')
   const API_DIR = path.join(BASE_DIR, 'api')
+  const WEB_DIR = path.join(BASE_DIR, 'web')
 
   // Generate the Prisma client if it doesn't exist.
   await generatePrismaClient({ verbose: false, force: false })
@@ -45,14 +46,14 @@ export const handler = async ({ app = ['db', 'api', 'web'] }) => {
         'web'
       )} && yarn webpack-dev-server --config ../node_modules/@redwoodjs/core/config/webpack.development.js`,
       prefixColor: 'blue',
-      runWhen: () => true,
+      runWhen: () => fs.existsSync(WEB_DIR),
     },
   }
 
   concurrently(
     Object.keys(jobs)
       .map((n) => app.includes(n) && jobs[n])
-      .filter((job) => job.runWhen()),
+      .filter((job) => job && job.runWhen()),
     {
       restartTries: 3,
       prefix: '{time} {name} |',
