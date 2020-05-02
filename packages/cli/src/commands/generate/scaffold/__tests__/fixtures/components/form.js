@@ -36,7 +36,9 @@ const PostForm = (props) => {
           name="title"
           className={CSS.label}
           errorClassName={CSS.labelError}
-        />
+        >
+          Title
+        </Label>
         <TextField
           name="title"
           defaultValue={props.post?.title}
@@ -50,7 +52,9 @@ const PostForm = (props) => {
           name="slug"
           className={CSS.label}
           errorClassName={CSS.labelError}
-        />
+        >
+          Slug
+        </Label>
         <TextField
           name="slug"
           defaultValue={props.post?.slug}
@@ -64,7 +68,9 @@ const PostForm = (props) => {
           name="author"
           className={CSS.label}
           errorClassName={CSS.labelError}
-        />
+        >
+          Author
+        </Label>
         <TextField
           name="author"
           defaultValue={props.post?.author}
@@ -78,7 +84,9 @@ const PostForm = (props) => {
           name="body"
           className={CSS.label}
           errorClassName={CSS.labelError}
-        />
+        >
+          Body
+        </Label>
         <TextField
           name="body"
           defaultValue={props.post?.body}
@@ -92,7 +100,9 @@ const PostForm = (props) => {
           name="image"
           className={CSS.label}
           errorClassName={CSS.labelError}
-        />
+        >
+          Image
+        </Label>
         <TextField
           name="image"
           defaultValue={props.post?.image}
@@ -106,7 +116,9 @@ const PostForm = (props) => {
           name="postedAt"
           className={CSS.label}
           errorClassName={CSS.labelError}
-        />
+        >
+          Posted at
+        </Label>
         <TextField
           name="postedAt"
           defaultValue={props.post?.postedAt}
