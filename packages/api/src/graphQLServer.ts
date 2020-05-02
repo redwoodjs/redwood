@@ -1,5 +1,4 @@
 import { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
-
 import { ApolloServer, Config } from 'apollo-server-lambda'
 
 import { setContext } from './globalContext'
