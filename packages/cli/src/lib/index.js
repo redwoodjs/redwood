@@ -215,12 +215,42 @@ export const writeFilesTask = (files, options) => {
  */
 export const deleteFilesTask = (files) => {
   const { base } = getPaths()
-  return new Listr(
-    Object.keys(files).map((file) => {
+  return new Listr([
+    ...Object.keys(files).map((file) => {
       return {
         title: `Destroying \`./${path.relative(base, file)}\`...`,
         skip: () => !fs.existsSync(file) && `File doesn't exist`,
         task: () => deleteFile(file),
+      }
+    }),
+    {
+      title: 'Cleaning up empty directories...',
+      task: () => cleanupEmptyDirsTask(files),
+    },
+  ])
+}
+
+/**
+ * @param files - {[filepath]: contents}
+ */
+export const cleanupEmptyDirsTask = (files) => {
+  const { base } = getPaths()
+  const allDirs = Object.keys(files).map((file) => path.dirname(file))
+  const uniqueDirs = [...new Set(allDirs)]
+  return new Listr(
+    uniqueDirs.map((dir) => {
+      return {
+        title: `Removing \`./${path.relative(base, dir)}\`...`,
+        task: () => fs.rmdirSync(dir),
+        skip: () => {
+          if (!fs.existsSync(dir)) {
+            return `Doesn't exist`
+          }
+          if (fs.readdirSync(dir).length > 0) {
+            return 'Not empty'
+          }
+          return false
+        },
       }
     })
   )
