@@ -6,6 +6,7 @@ import camelcase from 'camelcase'
 import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 import { paramCase } from 'param-case'
+import humanize from 'humanize-string'
 
 import {
   generateTemplate,
@@ -159,6 +160,7 @@ const componentFiles = async (name) => {
     })
     .map((column) => ({
       ...column,
+      label: humanize(column.name),
       component: fieldComponents[column['type']] || 'TextField',
     }))
 

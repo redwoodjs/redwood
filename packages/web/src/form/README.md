@@ -13,7 +13,7 @@ Redwood currently provides the following form components:
 * `<TextAreaField>` is used in place of the HTML `<textarea>` tag and can accept validation options and be styled differently in the presence of an error
 * `<RadioField>` is used in place of the HTML `<input type="radio">` tag and can accept validation options.
  The default validation for `required` is `false` for this field, To make it required, please pass the prop `validation={{ required: true }}` for all the `<RadioField>`.
-*`<CheckBox>`is used in place of the HTML `<input type="checkbox">` tag. If it needs to be required to be checked before the form submission, please pass the prop `validation={{ required: true }}` in the `<CheckBox>` component.
+* `<CheckBox>` is used in place of the HTML `<input type="checkbox">` tag. If it needs to be required to be checked before the form submission, please pass the prop `validation={{ required: true }}` in the `<CheckBox>` component.
 * `<FieldError>` will display error messages from form validation and server errors
 * `<Submit>` is used in place of `<button type="submit">` and will trigger a validation check and "submission" of the form (actually executes the function given to the `onSubmit` attribute on `<Form>`)
 
