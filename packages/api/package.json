@@ -26,6 +26,7 @@
     "@types/graphql-iso-date": "^3.3.3",
     "@types/lodash.merge": "^4.6.6",
     "@types/lodash.omitby": "^4.6.6",
+    "gotrue-js": "^0.9.25",
     "babel-plugin-tester": "^9.0.0",
     "del-cli": "^3.0.0",
     "move-cli": "^1.2.1"
@@ -37,11 +38,12 @@
     ]
   },
   "scripts": {
-    "build": "yarn build:js && yarn build:types && yarn move-cli dist/importAll.macro.js ./importAll.macro.js",
-    "build:js": "yarn del-cli importAll.macro.js && yarn cross-env NODE_ENV=production babel src -d dist --delete-dir-on-start --extensions \".js,.ts\" --source-maps inline",
+    "build": "yarn build:clean && yarn build:js && yarn build:types",
+    "build:js": "yarn cross-env NODE_ENV=production babel src -d dist --extensions \".js,.ts\" --source-maps inline && yarn move-cli ./dist/importAll.macro.js ./importAll.macro.js",
+    "build:clean": "yarn del-cli dist importAll.macro.js",
     "build:types": "tsc --declaration --emitDeclarationOnly",
     "prepublishOnly": "yarn build",
-    "build:watch": "nodemon --watch src --ext 'js,ts,tsx' --ignore dist --exec 'yarn build'",
+    "build:watch": "nodemon --watch src --ext 'js,ts,tsx' --ignore dist --ignore importAll.macro.js --exec 'yarn build'",
     "test": "yarn jest",
     "test:watch": "yarn test --watch"
   },
