@@ -149,9 +149,18 @@ const componentFiles = async (name) => {
   const columns = model.fields.filter((field) => field.kind !== 'object')
   const intForeignKeys = intForeignKeysForModel(model)
   let fileList = {}
-  const editableColumns = columns.filter((column) => {
-    return NON_EDITABLE_COLUMNS.indexOf(column.name) === -1
-  })
+  const fieldComponents = {
+    Boolean: 'CheckBox',
+    String: 'TextField',
+  }
+  const editableColumns = columns
+    .filter((column) => {
+      return NON_EDITABLE_COLUMNS.indexOf(column.name) === -1
+    })
+    .map((column) => ({
+      ...column,
+      component: fieldComponents[column['type']] || 'TextField',
+    }))
 
   await asyncForEach(COMPONENTS, (component) => {
     const outputComponentName = component

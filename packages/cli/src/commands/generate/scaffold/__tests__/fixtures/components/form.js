@@ -4,6 +4,7 @@ import {
   FieldError,
   Label,
   TextField,
+  CheckBox,
   Submit,
 } from '@redwoodjs/web'
 
@@ -101,6 +102,20 @@ const PostForm = (props) => {
           validation={{ required: true }}
         />
         <FieldError name="image" className={CSS.errorMessage} />
+
+        <Label
+          name="isPinned"
+          className={CSS.label}
+          errorClassName={CSS.labelError}
+        />
+        <CheckBox
+          name="isPinned"
+          defaultValue={props.post?.isPinned}
+          className={CSS.input}
+          errorClassName={CSS.inputError}
+          validation={{ required: true }}
+        />
+        <FieldError name="isPinned" className={CSS.errorMessage} />
 
         <Label
           name="postedAt"

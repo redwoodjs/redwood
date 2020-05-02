@@ -3,7 +3,8 @@ import {
   FormError,
   FieldError,
   Label,
-  TextField,
+  TextField,${editableColumns.map((c) => c.component).includes('CheckBox') && `
+  CheckBox,`}
   Submit,
 } from '@redwoodjs/web'
 
@@ -37,7 +38,7 @@ const ${singularPascalName}Form = (props) => {
           className={CSS.label}
           errorClassName={CSS.labelError}
         />
-        <TextField
+        <<%= column.component %>
           name="<%= column.name %>"
           defaultValue={props.${singularCamelName}?.<%= column.name %>}
           className={CSS.input}

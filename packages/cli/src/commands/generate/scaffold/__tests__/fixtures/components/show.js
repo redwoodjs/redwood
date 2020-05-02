@@ -50,6 +50,9 @@ const Post = ({ post }) => {
               <td className="font-semibold p-3 text-right md:w-1/5">image</td>
               <td className="p-3">{post.image}</td>
             </tr><tr className="odd:bg-gray-100 even:bg-white border-t">
+              <td className="font-semibold p-3 text-right md:w-1/5">isPinned</td>
+              <td className="p-3">{post.isPinned}</td>
+            </tr><tr className="odd:bg-gray-100 even:bg-white border-t">
               <td className="font-semibold p-3 text-right md:w-1/5">postedAt</td>
               <td className="p-3">{post.postedAt}</td>
             </tr>
