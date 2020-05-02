@@ -197,6 +197,10 @@ const componentFiles = async (name, scaffoldPath = '') => {
   const columns = model.fields.filter((field) => field.kind !== 'object')
   const intForeignKeys = intForeignKeysForModel(model)
   let fileList = {}
+  const fieldComponents = {
+    Boolean: 'CheckBox',
+    String: 'TextField',
+  }
   const editableColumns = columns
     .filter((column) => {
       return NON_EDITABLE_COLUMNS.indexOf(column.name) === -1
@@ -204,6 +208,7 @@ const componentFiles = async (name, scaffoldPath = '') => {
     .map((column) => ({
       ...column,
       label: humanize(column.name),
+      component: fieldComponents[column['type']] || 'TextField',
     }))
 
   const pascalScaffoldPath =
