@@ -24,10 +24,11 @@ const RedwoodProvider = ({ useAuth = useAuthStub, children }) => {
   if (loading) {
     return null
   }
-
+  // If we have an authToken then modify the headers of the GraphQL client.
   const client = authToken
     ? createGraphQLClient({
         headers: {
+          // Used by `api` to determine the auth type.
           'X-Redwood-Auth-Type': type,
           Authorization: `Bearer ${authToken}`,
         },
