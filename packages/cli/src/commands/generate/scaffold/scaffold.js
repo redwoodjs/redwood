@@ -6,6 +6,7 @@ import camelcase from 'camelcase'
 import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 import { paramCase } from 'param-case'
+import humanize from 'humanize-string'
 
 import {
   generateTemplate,
@@ -149,9 +150,14 @@ const componentFiles = async (name) => {
   const columns = model.fields.filter((field) => field.kind !== 'object')
   const intForeignKeys = intForeignKeysForModel(model)
   let fileList = {}
-  const editableColumns = columns.filter((column) => {
-    return NON_EDITABLE_COLUMNS.indexOf(column.name) === -1
-  })
+  const editableColumns = columns
+    .filter((column) => {
+      return NON_EDITABLE_COLUMNS.indexOf(column.name) === -1
+    })
+    .map((column) => ({
+      ...column,
+      label: humanize(column.name),
+    }))
 
   await asyncForEach(COMPONENTS, (component) => {
     const outputComponentName = component
