@@ -1,4 +1,4 @@
-datasource hammerDatasource {
+datasource DS {
   provider = "sqlite"
   url = env("DB_HOST")
 }
