@@ -1,5 +1,5 @@
-import { createYargsForComponentDestroy } from '../../generate/helpers'
 import { files } from '../../generate/service/service'
+import { createYargsForComponentDestroy } from '../helpers'
 
 // This function wraps files(), so we can pass templateVars. templateVars
 // referenced in a file template must be defined, otherwise template rendering

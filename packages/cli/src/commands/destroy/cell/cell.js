@@ -1,5 +1,5 @@
-import { createYargsForComponentDestroy } from '../../generate/helpers'
-import { files } from '../../generate/cell/cell'
+import { files as cellFiles } from '../../generate/cell/cell'
+import { createYargsForComponentDestroy } from '../helpers'
 
 export const {
   command,
@@ -8,5 +8,5 @@ export const {
   handler,
 } = createYargsForComponentDestroy({
   componentName: 'cell',
-  filesFn: files,
+  filesFn: cellFiles,
 })

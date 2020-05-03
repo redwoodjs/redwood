@@ -3,7 +3,10 @@ import Listr from 'listr'
 import { deleteFilesTask, removeRoutesFromRouterTask } from 'src/lib'
 import c from 'src/lib/colors'
 
-import { files, routes as routesFn } from '../../generate/scaffold/scaffold'
+import {
+  files,
+  routes as scaffoldRoutes,
+} from '../../generate/scaffold/scaffold'
 
 export const command = 'scaffold <model>'
 export const desc = 'Destroy pages, SDL, and a services object.'
@@ -21,7 +24,7 @@ export const handler = async ({ model }) => {
       {
         title: 'Cleaning up scaffold routes...',
         task: async () => {
-          const routes = await routesFn({ model })
+          const routes = await scaffoldRoutes({ model })
           const routeNames = routes.map(extractRouteName)
           return removeRoutesFromRouterTask(routeNames)
         },

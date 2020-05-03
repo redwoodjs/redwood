@@ -24,7 +24,7 @@ export const asyncForEach = async (array, callback) => {
 
 /**
  * Returns the database schema for the given `name` database table parsed from
- * the schema.prisma of the target applicaiton. If no `name` is given then the
+ * the schema.prisma of the target application. If no `name` is given then the
  * entire schema is returned.
  */
 export const getSchema = async (name) => {
@@ -240,7 +240,7 @@ export const cleanupEmptyDirsTask = (files) => {
   return new Listr(
     uniqueDirs.map((dir) => {
       return {
-        title: `Removing \`./${path.relative(base, dir)}\`...`,
+        title: `Removing empty \`./${path.relative(base, dir)}\`...`,
         task: () => fs.rmdirSync(dir),
         skip: () => {
           if (!fs.existsSync(dir)) {
