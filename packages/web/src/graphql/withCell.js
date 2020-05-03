@@ -60,9 +60,16 @@ export const withCell = ({
   const isEmpty = (data) => {
     return isDataNull(data) || isDataEmptyArray(data)
   }
+  
+  const queryObject = (props) => {
+    if (typeof QUERY === 'function') {
+      return QUERY(props)
+    }
+    return QUERY
+  }
 
   return (props) => (
-    <Query query={QUERY} {...beforeQuery(props)}>
+    <Query query={queryObject(props)} {...beforeQuery(props)}>
       {({ error, loading, data, ...queryRest }) => {
         if (error) {
           if (Failure) {
