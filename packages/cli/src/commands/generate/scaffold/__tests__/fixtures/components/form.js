@@ -107,7 +107,9 @@ const PostForm = (props) => {
           name="isPinned"
           className={CSS.label}
           errorClassName={CSS.labelError}
-        />
+        >
+          Is pinned
+        </Label>
         <CheckBox
           name="isPinned"
           defaultValue={props.post?.isPinned}
