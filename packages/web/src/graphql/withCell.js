@@ -60,7 +60,7 @@ export const withCell = ({
   const isEmpty = (data) => {
     return isDataNull(data) || isDataEmptyArray(data)
   }
-  
+
   const queryObject = (props) => {
     if (typeof QUERY === 'function') {
       return QUERY(props)
