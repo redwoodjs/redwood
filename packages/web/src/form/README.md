@@ -13,7 +13,29 @@ Redwood currently provides the following form components:
  The default validation for `required` is `false` for this field, To make it required, please pass the prop `validation={{ required: true }}` for all the `<RadioField>`.
 * `<FieldError>` will display error messages from form validation and server errors
 * `<Submit>` is used in place of `<button type="submit">` and will trigger a validation check and "submission" of the form (actually executes the function given to the `onSubmit` attribute on `<Form>`)
-* HTML `<input>` types are available as a component `<TypeField>` where `Type` is one of the official [HTML types](https://www.w3schools.com/html/html_form_input_types.asp) which includes ones like `<HiddenField>`, `<TextField>`, `<PasswordField>` and the rest. They can accept validation options and be styled differently in the presence of an error. We'll refer to these collectively as "InputFields" below.
+* HTML `<input>` types are available as a component `<TypeField>` where `Type` is one of the official [HTML types](https://www.w3schools.com/html/html_form_input_types.asp). They can accept validation options and be styled differently in the presence of an error. We'll refer to these collectively as "InputFields" below. The full list is:
+    * `<ButtonField>`
+    * `<CheckboxField>`
+    * `<ColorField>`
+    * `<DateField>`
+    * `<DatetimeLocalField>`
+    * `<EmailField>`
+    * `<FileField>`
+    * `<HiddenField>`
+    * `<ImageField>`
+    * `<MonthField>`
+    * `<NumberField>`
+    * `<PasswordField>`
+    * `<RadioField>`
+    * `<RangeField>`
+    * `<ResetField>`
+    * `<SearchField>`
+    * `<SubmitField>`
+    * `<TelField>`
+    * `<TextField>`
+    * `<TimeField>`
+    * `<UrlField>`
+    * `<WeekField>`
 
 Some fields share options:
 
