@@ -226,7 +226,15 @@ const Submit = React.forwardRef((props, ref) => (
   <button ref={ref} type="submit" {...props} />
 ))
 
-// Create a component for each type of Input
+// Create a component for each type of Input.
+//
+// Uses a bit of Javascript metaprogramming to create the functions with a dynamic
+// name rather than having to write out each and every component definition. In
+// simple terms it creates an object with the key being the current value of `type`
+// and then immediately returns the value, which is the component function definition.
+//
+// In the end we end up with `inputComponents.TextField` and all the others. Export those
+// and we're good to go.
 
 let inputComponents = {}
 INPUT_TYPES.forEach((type) => {

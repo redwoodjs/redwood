@@ -9,19 +9,17 @@ Redwood currently provides the following form components:
 * `<Form>` surrounds all form elements and provides contexts for errors and form submission
 * `<FormError>` displays an error message, typically at the top of your form, containing error messages from the server
 * `<Label>` is used in place of the HTML `<label>` tag and can respond to errors with different styling
-* `<TextField>` is used in place of the HTML `<input type="text">` tag and can accept validation options and be styled differently in the presence of an error
 * `<TextAreaField>` is used in place of the HTML `<textarea>` tag and can accept validation options and be styled differently in the presence of an error
-* `<RadioField>` is used in place of the HTML `<input type="radio">` tag and can accept validation options.
  The default validation for `required` is `false` for this field, To make it required, please pass the prop `validation={{ required: true }}` for all the `<RadioField>`.
-* `<CheckBox>` is used in place of the HTML `<input type="checkbox">` tag. If it needs to be required to be checked before the form submission, please pass the prop `validation={{ required: true }}` in the `<CheckBox>` component.
 * `<FieldError>` will display error messages from form validation and server errors
 * `<Submit>` is used in place of `<button type="submit">` and will trigger a validation check and "submission" of the form (actually executes the function given to the `onSubmit` attribute on `<Form>`)
+* HTML `<input>` types are available as a component `<TypeField>` where `Type` is one of the official [HTML types](https://www.w3schools.com/html/html_form_input_types.asp) which includes ones like `<HiddenField>`, `<TextField>`, `<PasswordField>` and the rest. They can accept validation options and be styled differently in the presence of an error. We'll refer to these collectively as "InputFields" below.
 
 Some fields share options:
 
-`<Label>`, `<TextField>` and `<TextAreaField>` take similar options for styling in the presence of an error.
+`<Label>`, `<TextAreaField>` and all InputFields take similar options for styling in the presence of an error.
 
-`<TextField>` and `<TextAreaField>` accept the same options for validation.
+The `<TextAreaField>` and all InputFields accept the same options for validation.
 
 `<FieldError>` only takes styling for errors and is only rendered if there is an error on the associated field.
 
@@ -240,7 +238,7 @@ The name of the field that this label is connected to. This should be the same a
 
 The `style` and `className` that should be passed to the HTML `<label>` tag that is generated *if* the field with the same `name` has a validation error.
 
-## `<TextField>`
+## InputFields
 
 Inputs are the backbone of most forms. `<TextField>` renders an HTML `<input type="text">` field, but is registered with `react-hook-form` to provide some validation and error handling.
 
@@ -250,7 +248,7 @@ Inputs are the backbone of most forms. `<TextField>` renders an HTML `<input typ
 <!-- Renders <input type="text" name="name" class="input" /> -->
 ```
 
-### `<TextField>` Attributes
+### InputFields Attributes
 
 Besides the attributes listed below, any additional attributes are passed on as props to the underlying `<input>` tag which is rendered.
 
@@ -292,15 +290,15 @@ Besides the attributes listed below, any additional attributes are passed on as 
 
 #### name
 
-See `<TextField>` [name](#textfield-attributes)
+See InputFields [name](#inputfields-attributes)
 
 #### validation
 
-See `<TextField>` [validation](#textfield-attributes)
+See InputFields [validation](#inputfields-attributes)
 
 #### errorStyle / errorClassName
 
-See `<TextField>` [errorStyle](#textfield-attributes)
+See InputFields [errorStyle](#inputfields-attributes)
 
 ## `<FieldError>`
 
