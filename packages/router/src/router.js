@@ -16,6 +16,24 @@ const Route = () => {
   return null
 }
 
+const PrivateRoute = (props) => {
+  return <Route private {...props} />
+}
+
+const PrivatePageLoader = ({ useAuth, children }) => {
+  const { loading, authenticated } = useAuth()
+
+  if (loading) {
+    return null
+  }
+
+  if (authenticated) {
+    return children
+  } else {
+    // TODO: Should we navigate away, exec a function?
+  }
+}
+
 const Router = (props) => (
   <Location>
     {(locationContext) => <RouterImpl {...locationContext} {...props} />}
@@ -59,6 +77,7 @@ const RouterImpl = ({
   paramTypes,
   pageLoadingDelay = DEFAULT_PAGE_LOADING_DELAY,
   children,
+  useAuth,
 }) => {
   const routes = React.Children.toArray(children)
   mapNamedRoutes(routes)
@@ -78,6 +97,7 @@ const RouterImpl = ({
     if (match) {
       const searchParams = parseSearch(search)
       const allParams = { ...pathParams, ...searchParams }
+
       if (redirect) {
         const newPath = replaceParams(redirect, pathParams)
         navigate(newPath)
@@ -87,15 +107,32 @@ const RouterImpl = ({
           </RouterImpl>
         )
       } else {
-        return (
-          <ParamsContext.Provider value={allParams}>
-            <PageLoader
-              spec={normalizePage(Page)}
-              delay={pageLoadingDelay}
-              params={allParams}
-            />
-          </ParamsContext.Provider>
-        )
+        const Loaders = () => {
+          return (
+            <ParamsContext.Provider value={allParams}>
+              <PageLoader
+                spec={normalizePage(Page)}
+                delay={pageLoadingDelay}
+                params={allParams}
+              />
+            </ParamsContext.Provider>
+          )
+        }
+
+        if (route.type === PrivateRoute || route?.props?.private) {
+          if (typeof useAuth === 'undefined') {
+            throw new Error(
+              "You're using a private route, but haven't passed `useAuth` to the Router's props."
+            )
+          }
+          return (
+            <PrivatePageLoader useAuth={useAuth}>
+              <Loaders />
+            </PrivatePageLoader>
+          )
+        }
+
+        return <Loaders />
       }
     }
   }
@@ -114,4 +151,4 @@ const RouterImpl = ({
   )
 }
 
-export { Router, Route }
+export { Router, Route, PrivateRoute }
