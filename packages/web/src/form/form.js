@@ -238,25 +238,20 @@ const Submit = React.forwardRef((props, ref) => (
 
 let inputComponents = {}
 INPUT_TYPES.forEach((type) => {
-  const component = {
-    [type]: (props) => {
-      const { register } = useFormContext()
-      const tagProps = inputTagProps(props)
+  inputComponents[`${pascalcase(type)}Field`] = (props) => {
+    const { register } = useFormContext()
+    const tagProps = inputTagProps(props)
 
-      return (
-        <input
-          {...tagProps}
-          type={type}
-          id={props.id || props.name}
-          ref={register(props.validation || { required: false })}
-        />
-      )
-    },
-  }[type]
-  inputComponents[`${pascalcase(type)}Field`] = component
+    return (
+      <input
+        {...tagProps}
+        type={type}
+        id={props.id || props.name}
+        ref={register(props.validation || { required: false })}
+      />
+    )
+  }
 })
-
-console.info(inputComponents)
 
 export {
   Form,
