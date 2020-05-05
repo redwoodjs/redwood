@@ -265,4 +265,27 @@ export {
   Submit,
 }
 
-export inputComponents
+export const {
+  ButtonField,
+  CheckboxField,
+  ColorField,
+  DateField,
+  DatetimeLocalField,
+  EmailField,
+  FileField,
+  HiddenField,
+  ImageField,
+  MonthField,
+  NumberField,
+  PasswordField,
+  RadioField,
+  RangeField,
+  ResetField,
+  SearchField,
+  SubmitField,
+  TelField,
+  TextField,
+  TimeField,
+  UrlField,
+  WeekField,
+} = inputComponents
