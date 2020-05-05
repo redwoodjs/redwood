@@ -22,18 +22,6 @@ export const files = async ({ name, ...rest }) => {
   })
 
   return { [file[0]]: file[1] }
-
-  // Returns
-  // {
-  //    "path/to/fileA": "<<<template>>>",
-  //    "path/to/fileB": "<<<template>>>",
-  // }
-  return [file].reduce((acc, [outputPath, content]) => {
-    return {
-      [outputPath]: content,
-      ...acc,
-    }
-  }, {})
 }
 
 export const desc = 'Generate a function'
