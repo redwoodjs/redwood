@@ -8,21 +8,23 @@ import {
 
 export const files = async ({ name, relations, ...rest }) => {
   const componentName = camelcase(pluralize(name))
+  const extension = rest.typescript ? 'ts' : 'js'
   const serviceFile = templateForComponentFile({
     name,
     componentName: componentName,
+    extension: `.${extension}`,
     apiPathSection: 'services',
     generator: 'service',
-    templatePath: 'service.js.template',
+    templatePath: `service.${extension}.template`,
     templateVars: { relations: relations || [], ...rest },
   })
   const testFile = templateForComponentFile({
     name,
     componentName: componentName,
-    extension: '.test.js',
+    extension: `.test.${extension}`,
     apiPathSection: 'services',
     generator: 'service',
-    templatePath: 'test.js.template',
+    templatePath: `test.${extension}.template`,
     templateVars: { relations: relations || [], ...rest },
   })
 
@@ -42,6 +44,7 @@ export const files = async ({ name, relations, ...rest }) => {
 export const builder = {
   crud: { type: 'boolean', default: false, desc: 'Create CRUD functions' },
   force: { type: 'boolean', default: false },
+  typescript: { type: 'boolean', default: false },
 }
 
 export const { command, desc, handler } = createYargsForComponentGeneration({

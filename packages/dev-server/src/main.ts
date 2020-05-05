@@ -58,7 +58,11 @@ const purgeRequireCache = (): void => {
 
 const requireLambdaFunctions = (path: string): { [path: string]: any } => {
   // @ts-ignore ; requireDir is outdated.
-  return requireDir(path, { recurse: false, extensions: ['.js', '.ts'] })
+  return requireDir(path, {
+    recurse: false,
+    extensions: ['.js', '.ts'],
+    filter: (path: string) => path.match(/\.test\.[jt]s/),
+  })
 }
 
 const app = express()

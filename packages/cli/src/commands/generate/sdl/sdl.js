@@ -105,7 +105,7 @@ const sdlFromSchemaModel = async (name) => {
   }
 }
 
-export const files = async ({ name, crud }) => {
+export const files = async ({ name, crud, typescript }) => {
   const {
     query,
     createInput,
@@ -115,8 +115,9 @@ export const files = async ({ name, crud }) => {
     enums,
   } = await sdlFromSchemaModel(pascalcase(pluralize.singular(name)))
 
+  const extension = typescript ? 'ts' : 'js'
   const template = generateTemplate(
-    path.join('sdl', 'templates', 'sdl.js.template'),
+    path.join('sdl', 'templates', `sdl.${extension}.template`),
     {
       name,
       crud,
@@ -130,11 +131,11 @@ export const files = async ({ name, crud }) => {
 
   const outputPath = path.join(
     getPaths().api.graphql,
-    `${camelcase(pluralize(name))}.sdl.js`
+    `${camelcase(pluralize(name))}.sdl.${extension}`
   )
   return {
     [outputPath]: template,
-    ...(await serviceFiles({ name, crud, relations })),
+    ...(await serviceFiles({ name, crud, relations, typescript })),
   }
 }
 
@@ -144,15 +145,16 @@ export const builder = {
   services: { type: 'boolean', default: true },
   crud: { type: 'boolean', default: false },
   force: { type: 'boolean', default: false },
+  typescript: { type: 'boolean', default: false },
 }
 // TODO: Add --dry-run command
-export const handler = async ({ model, crud, force }) => {
+export const handler = async ({ model, crud, force, typescript }) => {
   const tasks = new Listr(
     [
       {
         title: 'Generating SDL files...',
         task: async () => {
-          const f = await files({ name: model, crud })
+          const f = await files({ name: model, crud, typescript })
           return writeFilesTask(f, { overwriteExisting: force })
         },
       },

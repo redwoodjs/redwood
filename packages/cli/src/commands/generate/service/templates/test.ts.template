@@ -1,0 +1,7 @@
+import { ${pluralCamelName} } from './${pluralCamelName}'
+
+describe('${pluralCamelName}', () => {
+  it('returns true', () => {
+    expect(true).toBe(true)
+  })
+})
