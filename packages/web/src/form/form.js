@@ -239,6 +239,7 @@ const Submit = React.forwardRef((props, ref) => (
 let inputComponents = {}
 INPUT_TYPES.forEach((type) => {
   inputComponents[`${pascalcase(type)}Field`] = (props) => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const { register } = useFormContext()
     const tagProps = inputTagProps(props)
 
@@ -264,27 +265,4 @@ export {
   Submit,
 }
 
-export const {
-  ButtonField,
-  CheckboxField,
-  ColorField,
-  DateField,
-  DatetimeLocalField,
-  EmailField,
-  FileField,
-  HiddenField,
-  ImageField,
-  MonthField,
-  NumberField,
-  PasswordField,
-  RadioField,
-  RangeField,
-  ResetField,
-  SearchField,
-  SubmitField,
-  TelField,
-  TextField,
-  TimeField,
-  UrlField,
-  WeekField,
-} = inputComponents
+export inputComponents
