@@ -57,9 +57,9 @@ const purgeRequireCache = (): void => {
 }
 
 const requireLambdaFunctions = (path: string): { [path: string]: any } => {
-  // @ts-ignore ; requireDir is outdated.
   return requireDir(path, {
     recurse: false,
+    // @ts-ignore: requireDir is outdated, PR: https://github.com/DefinitelyTyped/DefinitelyTyped/pull/44494
     extensions: ['.js', '.ts'],
     filter: (path: string) => path.match(/\.test\.[jt]s/),
   })
