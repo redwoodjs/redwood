@@ -1,6 +1,6 @@
-exports handler = async (event, context) => {
+export const handler = async (event, context) => {
   return {
     statusCode: 200,
-    body: `foo function`
+    body: `foo function`,
   }
 }
