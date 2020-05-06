@@ -10,6 +10,7 @@ import {
   mapNamedRoutes,
   SplashPage,
   PageLoader,
+  routes,
 } from './internal'
 
 const Route = () => {
@@ -20,7 +21,7 @@ const PrivateRoute = (props) => {
   return <Route private {...props} />
 }
 
-const PrivatePageLoader = ({ useAuth, children }) => {
+const PrivatePageLoader = ({ useAuth, onUnauthorized, children }) => {
   const { loading, authenticated } = useAuth()
 
   if (loading) {
@@ -30,7 +31,9 @@ const PrivatePageLoader = ({ useAuth, children }) => {
   if (authenticated) {
     return children
   } else {
-    // TODO: Should we navigate away, exec a function?
+    // By default this would redirect the user to the Route that is marked as `unauthorized`.
+    onUnauthorized()
+    return null
   }
 }
 
@@ -78,18 +81,24 @@ const RouterImpl = ({
   pageLoadingDelay = DEFAULT_PAGE_LOADING_DELAY,
   children,
   useAuth,
+  onUnauthorized,
 }) => {
   const routes = React.Children.toArray(children)
   mapNamedRoutes(routes)
 
+  let unauthorizedRoutePath
   let NotFoundPage
 
   for (let route of routes) {
-    const { path, page: Page, redirect, notfound } = route.props
+    const { path, page: Page, redirect, notfound, unauthorized } = route.props
 
     if (notfound) {
       NotFoundPage = Page
       continue
+    }
+
+    if (unauthorized) {
+      unauthorizedRoutePath = path
     }
 
     const { match, params: pathParams } = matchPath(path, pathname, paramTypes)
@@ -126,7 +135,21 @@ const RouterImpl = ({
             )
           }
           return (
-            <PrivatePageLoader useAuth={useAuth}>
+            <PrivatePageLoader
+              useAuth={useAuth}
+              onUnauthorized={
+                // Run the custom function (passed to the router),
+                // or fallback to the default which is to redirect the user to the
+                // page that's marked `unauthorized`
+                // TODO: Pass in the origin pathname.
+                onUnauthorized
+                  ? onUnauthorized
+                  : () => {
+                      // The developer must implement an unauthorized route.
+                      navigate(unauthorizedRoutePath)
+                    }
+              }
+            >
               <Loaders />
             </PrivatePageLoader>
           )
