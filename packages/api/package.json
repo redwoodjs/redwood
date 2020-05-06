@@ -18,17 +18,20 @@
     "graphql": "^14.6.0",
     "graphql-iso-date": "^3.6.1",
     "graphql-tools": "4.0.7",
+    "jsonwebtoken": "^8.5.1",
+    "jwks-rsa": "^1.8.0",
     "lodash.merge": "^4.6.2",
     "lodash.omitby": "^4.6.0",
     "merge-graphql-schemas": "^1.7.6"
   },
   "devDependencies": {
     "@types/graphql-iso-date": "^3.3.3",
+    "@types/jsonwebtoken": "^8.3.9",
     "@types/lodash.merge": "^4.6.6",
     "@types/lodash.omitby": "^4.6.6",
-    "gotrue-js": "^0.9.25",
     "babel-plugin-tester": "^9.0.0",
     "del-cli": "^3.0.0",
+    "gotrue-js": "^0.9.25",
     "move-cli": "^1.2.1"
   },
   "jest": {
