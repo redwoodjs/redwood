@@ -1,5 +1,13 @@
+// This is supposed to wrap a file that's has a suffix of `Cell` in Redwood's `withCell` higher order component.
+// The HOC is responsible for the lifecycle methods during a graphQL query.
+// The end result of this plugin is something like:
+// ```js
+// import { withCell } from '@redwoodjs/web'
+// export default withCell({ QUERY, Loading, Succes, Failure, Empty, beforeQuery, afterQuery })
+// ```
 module.exports = function ({ types: t }) {
-  const names = [
+  // These are the expected named exports from a Cell file.
+  const EXPORTS_FROM_CELL = [
     'QUERY',
     'Loading',
     'Success',
@@ -61,7 +69,7 @@ module.exports = function ({ types: t }) {
           name = declaration.id.name
         }
 
-        if (names.includes(name)) {
+        if (EXPORTS_FROM_CELL.includes(name)) {
           exportNames.push(name)
         }
       },
