@@ -3,7 +3,6 @@
 // The end result of this plugin is something like:
 // ```js
 // import { withCell } from '@redwoodjs/web'
-// 
 // export default withCell({ QUERY, Loading, Succes, Failure, Empty, beforeQuery, afterQuery })
 // ```
 module.exports = function ({ types: t }) {
