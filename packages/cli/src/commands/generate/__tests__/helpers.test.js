@@ -99,10 +99,10 @@ test('templateForComponentFile can override output path', () => {
     name: 'Home',
     generator: 'Page',
     templatePath: 'page.js.template',
-    outputPath: 'foo/bar/path/file.raw',
+    outputPath: '/path/to/project/file.raw',
   })
 
-  expect(output[0]).toEqual(path.normalize('foo/bar/path/file.raw'))
+  expect(output[0]).toEqual(path.normalize('/path/to/project/file.raw'))
 })
 
 test('templateForComponentFile creates a template', () => {
