@@ -1,27 +1,28 @@
 # Web
 
 <!-- toc -->
-- [Purpose/aspirational vision](#Purpose/aspirational-vision)
-- [Package Lead (i.e. the decision maker or go-to for questions)](#Package-Lead-(i.e.-the-decision-maker-or-go-to-for-questions))
-- [Roadmap and/or near-term priorities](#Roadmap-and/or-near-term-priorities)
-- [Overview](#Overview)
+- [Purpose and Vision](#Purpose-and-Vision)
+- [Package Lead](#Package-Lead)
+- [Roadmap](#Roadmap)
 - [Contributing](#Contributing)
 - [FAQ](#FAQ)
 
-## Purpose/aspirational vision
-TODO
+## Purpose and Vision
+Summarise the project's values, purpose, and aspirational vision.
 
-## Package Lead (i.e. the decision maker or go-to for questions)
-TODO
+## Package Lead
+Identify the decision maker and/or go-to for questions.
 
-## Roadmap and/or near-term priorities
-TODO
-
-## Overview
-TODO
+## Roadmap
+Similar to Purpose and Vision, but more concrete, comprising near-term priorities and long-term goals.
 
 ## Contributing
-TODO
+Explains how to contribute by addressing the following three points:
+
+1) Core technologies a contributor should be a familiar with.
+2) How this package fits into the Redwood Framework, if it depends on other Redwood packages, etc.
+3) The structure of the package and/or an explanation of its contents.
 
 ## FAQ
-TODO
+
+Answers to frequently asked questions.
