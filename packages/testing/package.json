@@ -1,0 +1,21 @@
+{
+  "name": "@redwoodjs/testing",
+  "version": "0.6.0",
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.js",
+  "license": "MIT",
+  "peerDependencies": {
+    "@redwoodjs/router": "^0.6.0",
+    "react": "*"
+  },
+  "dependencies": {
+    "@apollo/react-testing": "^3.1.4",
+    "@redwoodjs/web": "^0.6.0",
+    "@testing-library/react": "^10.0.4"
+  },
+  "scripts": {
+    "build": "yarn cross-env NODE_ENV=production babel src -d dist --delete-dir-on-start --extensions \".js,.ts\" --source-maps inline"
+  }
+}
