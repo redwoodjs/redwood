@@ -10,7 +10,6 @@ import {
   mapNamedRoutes,
   SplashPage,
   PageLoader,
-  routes,
 } from './internal'
 
 const Route = () => {

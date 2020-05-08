@@ -1,4 +1,5 @@
 import type { APIGatewayProxyEvent, Context } from 'aws-lambda'
+import jwt from 'jsonwebtoken'
 
 import { verifyAuth0Token } from './verifyAuth0Token'
 
@@ -22,8 +23,15 @@ export const getUserFromContext = async ({
 }) => {
   const type = event?.headers[REDWOOD_AUTH_TYPE_HEADER] as SupportedAuthTypes
   switch (type) {
-    case 'netlify':
-      return context.clientContext?.user
+    case 'netlify': {
+      if (process.env.NODE_ENV === 'production') {
+        return context.clientContext?.user
+      }
+      // We're in development mode and we want to emulate Netlify's experience.
+      // We decode the token, but don't verify it.
+      const bearerToken = event.headers?.authorization.split(' ')[1]
+      return jwt.decode(bearerToken)
+    }
     case 'auth0': {
       // Example: Bearer o2LBTnXUiHEiSD5AR6rfKEY7T7ODcPJW
       const bearerToken = event.headers?.authorization.split(' ')[1]
