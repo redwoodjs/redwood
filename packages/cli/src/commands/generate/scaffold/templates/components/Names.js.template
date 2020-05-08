@@ -32,7 +32,7 @@ const ${pluralPascalName}List = ({ ${pluralCamelName} }) => {
 
   const onDeleteClick = (id) => {
     if (confirm('Are you sure you want to delete ${singularCamelName} ' + id + '?')) {
-      delete${singularPascalName}({ variables: { id }, refetchQueries: ['POSTS'] })
+      delete${singularPascalName}({ variables: { id }, refetchQueries: ['${pluralConstantName}'] })
     }
   }
 
