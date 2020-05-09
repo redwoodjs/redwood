@@ -1,34 +1,39 @@
-import { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
-import { ApolloServer, Config } from 'apollo-server-lambda'
+import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
+import type { Config } from 'apollo-server-lambda'
+import { ApolloServer } from 'apollo-server-lambda'
 
+import { getUserFromContext } from './auth/getUserFromContext'
 import { setContext } from './globalContext'
 
 export const handleContext = (options: Config) => {
   // Returns a function that deals with the context per request.
   return async ({
-    context,
     event,
+    context,
   }: {
     context: LambdaContext
     event: APIGatewayProxyEvent
   }) => {
     // Prevent the Lambda function from waiting for all resources,
-    // such as database connections, to be released before returning
-    // a reponse.
+    // such as database connections, to be released before returning a reponse.
     context.callbackWaitsForEmptyEventLoop = false
 
-    // The user can set a context object or function when they
-    // initialize the handler.
+    // Extract the authenticated user to be placed into the context.
+    const currentUser = getUserFromContext({ context, event })
+
+    // The user can set a custom context object or function when they initialize
+    // the handler.
     let userContext = options?.context || {}
     if (typeof userContext === 'function') {
       userContext = await userContext({ context, event })
     }
 
     // The context object returned from this function is passed to
-    // the resolvers.
+    // the second argument of the resolvers.
     // This also sets **global** context object, which can be imported:
     // import { context } from '@redwoodjs/api'
     return setContext({
+      currentUser,
       ...context,
       ...userContext,
     })
