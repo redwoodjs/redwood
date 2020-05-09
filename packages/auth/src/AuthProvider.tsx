@@ -12,7 +12,7 @@ import { createAuthClient } from './authClient'
 export interface AuthContextInterface {
   loading: boolean
   authenticated: boolean
-  user: null | object // TODO: Provide a generic interface to the users object.
+  currentUser: null | object // TODO: Provide a generic interface to the users object.
   login(): Promise<void>
   logout(): Promise<void>
   getToken(): Promise<null | string>
@@ -45,7 +45,9 @@ export const AuthProvider = ({
 }): JSX.Element => {
   const [loading, setLoading] = useState(true)
   const [authenticated, setAuthenticated] = useState(false)
-  const [user, setUser] = useState<null | GoTrueUser | Auth0User>(null)
+  const [currentUser, setCurrentUser] = useState<null | GoTrueUser | Auth0User>(
+    null
+  )
 
   // Map the methods from auth0 and netlify into a unified interface.
   const rwClient = createAuthClient(client, type)
@@ -56,7 +58,7 @@ export const AuthProvider = ({
       rwClient.restoreAuthState && (await rwClient.restoreAuthState())
 
       const user = await rwClient.currentUser()
-      setUser(user)
+      setCurrentUser(user)
       setAuthenticated(user !== null)
       setLoading(false)
     }
@@ -66,13 +68,13 @@ export const AuthProvider = ({
 
   const login = async (...args) => {
     const user = await rwClient.login(...args)
-    setUser(user)
+    setCurrentUser(user)
     setAuthenticated(user !== null)
   }
 
   const logout = async () => {
     await rwClient.logout()
-    setUser(null)
+    setCurrentUser(null)
     setAuthenticated(false)
   }
 
@@ -81,7 +83,7 @@ export const AuthProvider = ({
       value={{
         loading,
         authenticated,
-        user,
+        currentUser,
         login,
         logout,
         getToken: rwClient.getToken,
