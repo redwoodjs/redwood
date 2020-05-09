@@ -9,7 +9,10 @@ const useAuthStub = () => ({ loading: false, authenticated: false })
  * when you pass the `useAuth` hook from `@redwoodjs/auth`
  * The authentication token is added to the headers of the GraphQL client.
  */
-const RedwoodProvider = ({ useAuth = useAuthStub, children }) => {
+const RedwoodProvider = ({
+  useAuth = window.__REDWOOD__USE_AUTH || useAuthStub,
+  children,
+}) => {
   const { loading, authenticated, getToken, type } = useAuth()
   const [authToken, setAuthToken] = useState()
 
