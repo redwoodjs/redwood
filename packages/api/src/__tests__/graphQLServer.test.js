@@ -12,6 +12,7 @@ describe('graphQLServer handleContext', () => {
       a: 1,
       b: 2,
       callbackWaitsForEmptyEventLoop: false,
+      currentUser: null,
     })
   })
 
@@ -20,6 +21,7 @@ describe('graphQLServer handleContext', () => {
     expect(await handler1({ context: { b: 2 } })).toEqual({
       b: 2,
       callbackWaitsForEmptyEventLoop: false,
+      currentUser: null,
     })
   })
 
@@ -29,6 +31,7 @@ describe('graphQLServer handleContext', () => {
       c: 3,
       d: 4,
       callbackWaitsForEmptyEventLoop: false,
+      currentUser: null,
     })
   })
 
@@ -40,6 +43,7 @@ describe('graphQLServer handleContext', () => {
       c: 3,
       d: 4,
       callbackWaitsForEmptyEventLoop: false,
+      currentUser: null,
     })
   })
 })
