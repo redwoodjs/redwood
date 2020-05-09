@@ -7,6 +7,7 @@ describe('graphQLServer handleContext', () => {
       a: 1,
       b: 2,
       callbackWaitsForEmptyEventLoop: false,
+      currentUser: null,
     })
     expect(context).toEqual({
       a: 1,
