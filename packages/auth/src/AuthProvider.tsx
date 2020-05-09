@@ -5,7 +5,7 @@ import type {
   SupportedAuthTypes,
   SupportedAuthClients,
   Auth0User,
-  NetlifyUser,
+  GoTrueUser,
 } from './authClient'
 import { createAuthClient } from './authClient'
 
@@ -45,7 +45,7 @@ export const AuthProvider = ({
 }): JSX.Element => {
   const [loading, setLoading] = useState(true)
   const [authenticated, setAuthenticated] = useState(false)
-  const [user, setUser] = useState<null | NetlifyUser | Auth0User>(null)
+  const [user, setUser] = useState<null | GoTrueUser | Auth0User>(null)
 
   // Map the methods from auth0 and netlify into a unified interface.
   const rwClient = createAuthClient(client, type)

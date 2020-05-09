@@ -9,6 +9,7 @@
   "devDependencies": {
     "react": "^16.13.1",
     "@auth0/auth0-spa-js": "^1.7.0",
+    "netlify-identity-widget": "1.6.0",
     "@types/react": "^16.9.34",
     "gotrue-js": "^0.9.25"
   },

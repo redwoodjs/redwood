@@ -1,17 +1,21 @@
-import type { default as GoTrue, User as NetlifyUser } from 'gotrue-js'
+import type { default as GoTrue, User as GoTrueUser } from 'gotrue-js'
 import type { Auth0Client as Auth0 } from '@auth0/auth0-spa-js'
-
+import type NetlifyIdentityNS from 'netlify-identity-widget'
 // TODO: Can also return an Auth0 user which doesn't have a definition.
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Auth0User {}
-export type { NetlifyUser }
+export type { GoTrueUser }
+export type NetlifyIdentity = typeof NetlifyIdentityNS
+
+export type SupportedAuthClients = Auth0 | GoTrue | NetlifyIdentity
+export type SupportedAuthTypes = 'auth0' | 'gotrue' | 'netlify'
 
 export interface AuthClient {
   restoreAuthState?(): void | Promise<any>
   login(options?: any): Promise<any>
   logout(): void | Promise<void>
   getToken(): Promise<null | string>
-  currentUser(): Promise<null | Auth0User | NetlifyUser>
+  currentUser(): Promise<null | Auth0User | GoTrueUser>
   client: SupportedAuthClients
   type: SupportedAuthTypes
 }
@@ -23,12 +27,9 @@ export interface AuthClientGoTrue extends AuthClient {
     email: string
     password: string
     remember?: boolean
-  }): Promise<NetlifyUser>
+  }): Promise<GoTrueUser>
   client: GoTrue
 }
-
-export type SupportedAuthClients = Auth0 | GoTrue
-export type SupportedAuthTypes = 'auth0' | 'gotrue' | 'netlify'
 
 const mapAuthClientAuth0 = (client: Auth0): AuthClientAuth0 => {
   return {
@@ -74,12 +75,11 @@ const mapAuthClientGoTrue = (client: GoTrue): AuthClientGoTrue => {
   }
 }
 
-const mapAuthClientNetlify = (client: any): AuthClient => {
+const mapAuthClientNetlify = (client: NetlifyIdentity): AuthClient => {
   return {
     type: 'netlify',
     client,
     login: () => {
-      // We have to turn this into a promise.
       return new Promise((resolve, reject) => {
         client.open('login')
         client.on('login', (user) => {
@@ -98,7 +98,7 @@ const mapAuthClientNetlify = (client: any): AuthClient => {
     },
     getToken: async () => {
       const user = await client.currentUser()
-      return user?.jwt() || null
+      return user?.token?.access_token || null
     },
     currentUser: async () => {
       return client.currentUser()
@@ -116,7 +116,7 @@ export const createAuthClient = (
     case 'gotrue':
       return mapAuthClientGoTrue(client as GoTrue)
     case 'netlify':
-      return mapAuthClientNetlify(client as any)
+      return mapAuthClientNetlify(client as NetlifyIdentity)
     default:
       throw new Error(
         `The ${type} auth client is not currently supported, please consider adding it.`
