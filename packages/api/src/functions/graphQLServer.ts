@@ -1,12 +1,14 @@
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import type { Config } from 'apollo-server-lambda'
 import { ApolloServer } from 'apollo-server-lambda'
+import { getUserFromContext } from 'src/auth/getUserFromContext'
+import { setContext } from 'src/globalContext'
 
-import { getUserFromContext } from './auth/getUserFromContext'
-import { setContext } from './globalContext'
-
+/**
+ * This updates the Apollo GraphQL context per-request. The context is passed to
+ * each resolver/ service, and updates the global context.
+ */
 export const handleContext = (options: Config) => {
-  // Returns a function that deals with the context per request.
   return async ({
     event,
     context,
@@ -19,9 +21,9 @@ export const handleContext = (options: Config) => {
     context.callbackWaitsForEmptyEventLoop = false
 
     // Extract the authenticated user to be placed into the context.
-    const currentUser = getUserFromContext({ context, event })
+    const currentUser = await getUserFromContext({ context, event })
 
-    // The user can set a custom context object or function when they initialize
+    // The user can create a custom context object or function when they initialize
     // the handler.
     let userContext = options?.context || {}
     if (typeof userContext === 'function') {
