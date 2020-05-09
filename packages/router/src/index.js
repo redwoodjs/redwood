@@ -5,6 +5,7 @@
 export {
   Router,
   Route,
+  PrivateRoute,
   Link,
   NavLink,
   useMatch,
