@@ -5,6 +5,7 @@
   "files": [
     "dist"
   ],
+  "types": "dist/index.d.ts",
   "license": "MIT",
   "devDependencies": {
     "react": "^16.13.1",
