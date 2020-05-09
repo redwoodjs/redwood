@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import React, { useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 
 import type {
   SupportedAuthTypes,
@@ -48,16 +48,16 @@ export const AuthProvider = ({
   const [currentUser, setCurrentUser] = useState<null | GoTrueUser | Auth0User>(
     null
   )
-
-  // Map the methods from auth0 and netlify into a unified interface.
-  const rwClient = createAuthClient(client, type)
+  const rwClient = useRef(createAuthClient(client, type))
 
   // Attempt to restore the authentication state when a user visits the app again.
   useEffect(() => {
+    // Map the methods from auth0 and netlify into a unified interface.
     const restoreAuthState = async () => {
-      rwClient.restoreAuthState && (await rwClient.restoreAuthState())
+      rwClient.current.restoreAuthState &&
+        (await rwClient.current.restoreAuthState())
 
-      const user = await rwClient.currentUser()
+      const user = await rwClient.current.currentUser()
       setCurrentUser(user)
       setAuthenticated(user !== null)
       setLoading(false)
@@ -67,13 +67,13 @@ export const AuthProvider = ({
   }, [])
 
   const login = async (...args) => {
-    const user = await rwClient.login(...args)
+    const user = await rwClient.current.login(...args)
     setCurrentUser(user)
     setAuthenticated(user !== null)
   }
 
   const logout = async () => {
-    await rwClient.logout()
+    await rwClient.current.logout()
     setCurrentUser(null)
     setAuthenticated(false)
   }
@@ -86,9 +86,9 @@ export const AuthProvider = ({
         currentUser,
         login,
         logout,
-        getToken: rwClient.getToken,
-        client: rwClient.client,
-        type: rwClient.type,
+        getToken: rwClient.current.getToken,
+        client: rwClient.current.client,
+        type: rwClient.current.type,
       }}
     >
       {children}
