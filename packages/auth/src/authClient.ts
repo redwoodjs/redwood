@@ -1,5 +1,4 @@
-import type { default as Netlify } from 'gotrue-js'
-import type { User as NetlifyUser } from 'gotrue-js'
+import type { default as GoTrue, User as NetlifyUser } from 'gotrue-js'
 import type { Auth0Client as Auth0 } from '@auth0/auth0-spa-js'
 
 // TODO: Can also return an Auth0 user which doesn't have a definition.
@@ -19,17 +18,17 @@ export interface AuthClient {
 
 export type AuthClientAuth0 = AuthClient
 
-export interface AuthClientNetlify extends AuthClient {
+export interface AuthClientGoTrue extends AuthClient {
   login(options: {
     email: string
     password: string
     remember?: boolean
   }): Promise<NetlifyUser>
-  client: Netlify
+  client: GoTrue
 }
 
-export type SupportedAuthClients = Auth0 | Netlify
-export type SupportedAuthTypes = 'auth0' | 'netlify'
+export type SupportedAuthClients = Auth0 | GoTrue
+export type SupportedAuthTypes = 'auth0' | 'gotrue' | 'netlify'
 
 const mapAuthClientAuth0 = (client: Auth0): AuthClientAuth0 => {
   return {
@@ -57,9 +56,9 @@ const mapAuthClientAuth0 = (client: Auth0): AuthClientAuth0 => {
   }
 }
 
-const mapAuthClientNetlify = (client: Netlify): AuthClientNetlify => {
+const mapAuthClientGoTrue = (client: GoTrue): AuthClientGoTrue => {
   return {
-    type: 'netlify',
+    type: 'gotrue',
     client,
     login: async ({ email, password, remember }) =>
       client.login(email, password, remember),
@@ -75,6 +74,38 @@ const mapAuthClientNetlify = (client: Netlify): AuthClientNetlify => {
   }
 }
 
+const mapAuthClientNetlify = (client: any): AuthClient => {
+  return {
+    type: 'netlify',
+    client,
+    login: () => {
+      // We have to turn this into a promise.
+      return new Promise((resolve, reject) => {
+        client.open('login')
+        client.on('login', (user) => {
+          return resolve(user)
+        })
+        client.on('close', () => resolve(null))
+        client.on('error', reject)
+      })
+    },
+    logout: () => {
+      return new Promise((resolve, reject) => {
+        client.logout()
+        client.on('logout', resolve)
+        client.on('error', reject)
+      })
+    },
+    getToken: async () => {
+      const user = await client.currentUser()
+      return user?.jwt() || null
+    },
+    currentUser: async () => {
+      return client.currentUser()
+    },
+  }
+}
+
 export const createAuthClient = (
   client: SupportedAuthClients,
   type: SupportedAuthTypes
@@ -82,8 +113,10 @@ export const createAuthClient = (
   switch (type) {
     case 'auth0':
       return mapAuthClientAuth0(client as Auth0)
+    case 'gotrue':
+      return mapAuthClientGoTrue(client as GoTrue)
     case 'netlify':
-      return mapAuthClientNetlify(client as Netlify)
+      return mapAuthClientNetlify(client as any)
     default:
       throw new Error(
         `The ${type} auth client is not currently supported, please consider adding it.`

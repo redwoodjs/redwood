@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken'
 
 import { verifyAuth0Token } from './verifyAuth0Token'
 
-export type SupportedAuthTypes = 'auth0' | 'netlify'
+export type SupportedAuthTypes = 'auth0' | 'netlify' | 'gotrue'
 
 type ClientContext = Context & {
   clientContext: {
@@ -23,6 +23,7 @@ export const getUserFromContext = async ({
 }) => {
   const type = event?.headers[REDWOOD_AUTH_TYPE_HEADER] as SupportedAuthTypes
   switch (type) {
+    case 'gotrue':
     case 'netlify': {
       if (process.env.NODE_ENV === 'production') {
         return context.clientContext?.user
@@ -33,7 +34,6 @@ export const getUserFromContext = async ({
       return jwt.decode(bearerToken)
     }
     case 'auth0': {
-      // Example: Bearer o2LBTnXUiHEiSD5AR6rfKEY7T7ODcPJW
       const bearerToken = event.headers?.authorization.split(' ')[1]
       return await verifyAuth0Token(bearerToken)
     }
