@@ -1,4 +1,7 @@
 # Generators
+RedwoodJS CLI tools are built with Yargs:
+- http://yargs.js.org/
+- https://github.com/yargs/yargs
 
 ## Creating a Generator
 

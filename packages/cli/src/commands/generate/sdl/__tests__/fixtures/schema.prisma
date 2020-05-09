@@ -1,4 +1,4 @@
-datasource hammerDatasource {
+datasource DS {
   provider = "mysql"
   url = env("DB_HOST")
 }

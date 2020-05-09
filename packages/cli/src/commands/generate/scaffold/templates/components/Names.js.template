@@ -13,7 +13,7 @@ const MAX_STRING_LENGTH = 150
 
 const truncate = (text) => {
   let output = text
-  if (text.length > MAX_STRING_LENGTH) {
+  if (text && text.length > MAX_STRING_LENGTH) {
     output = output.substring(0, MAX_STRING_LENGTH) + '...'
   }
   return output
@@ -32,7 +32,7 @@ const ${pluralPascalName}List = ({ ${pluralCamelName} }) => {
 
   const onDeleteClick = (id) => {
     if (confirm('Are you sure you want to delete ${singularCamelName} ' + id + '?')) {
-      delete${singularPascalName}({ variables: { id }, refetchQueries: ['POSTS'] })
+      delete${singularPascalName}({ variables: { id }, refetchQueries: ['${pluralConstantName}'] })
     }
   }
 
