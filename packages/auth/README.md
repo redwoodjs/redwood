@@ -41,7 +41,9 @@ ReactDOM.render(
 
 ### For Auth0
 
-We assume that you've followed the Quickstart guide.
+In order to get your application keys, only complete the ["Configure Auth0"](https://auth0.com/docs/quickstart/spa/react#get-your-application-keys) section of the SPA Quickstart guide.
+
+**NOTE** If you're using Auth0 with Redwood then you must also [create an API](https://auth0.com/docs/quickstart/spa/react/02-calling-an-api#create-an-api) and set the audience parameter or you'll receive an opaque token instead of the required JWT token.
 
 ```js
 import { AuthProvider } from '@redwoodjs/auth'
@@ -109,11 +111,13 @@ The following values are available from the `useAuth` hook:
 
 ## Usage in Redwood
 
-Redwood offers a zeroconf experience when using the Auth package.
+Redwood offers a zeroconf experience when using our Auth package!
 
 ### GraphQL Query and Mutations
 
-Requests to GraphQL automatically receive an `Authorization` header once you're signed in, the `context` on an API project will contain the `currentUser`.
+Requests to GraphQL automatically receive an `Authorization` bearer token header once you're signed in, the `context` on an API project will contain the `currentUser` which is a decoded and verified version of the JWT.
+
+**NOTE** If you're using Auth0 you must also [create an API](https://auth0.com/docs/quickstart/spa/react/02-calling-an-api#create-an-api) and set the audience parameter or you'll receive an opaque token instead of a JWT token, and Redwood expects to receive a JWT token.
 
 ### Routes
 
