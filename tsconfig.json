@@ -3,7 +3,8 @@
     { "path": "packages/api" },
     { "path": "packages/core" },
     { "path": "packages/dev-server" },
-    { "path": "packages/internal" }
+    { "path": "packages/internal" },
+    { "path": "packages/auth" }
   ],
   "files": []
 }
