@@ -5,7 +5,6 @@ import concurrently from 'concurrently'
 
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
-import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
 
 export const command = 'dev [app..]'
 export const desc = 'Run development servers for db, api, and web.'
@@ -20,11 +19,6 @@ export const handler = async ({ app = ['db', 'api', 'web'] }) => {
   const API_DIR = path.join(BASE_DIR, 'api')
   const WEB_DIR = path.join(BASE_DIR, 'web')
 
-  // Generate the Prisma client if it doesn't exist
-  // but only in case of db command option and API dir present
-  if (app.includes('db') && fs.existsSync(API_DIR)) {
-    await generatePrismaClient({ verbose: false, force: false })
-  }
   const jobs = {
     api: {
       name: 'api',
