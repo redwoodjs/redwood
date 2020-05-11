@@ -5,10 +5,9 @@ import concurrently from 'concurrently'
 
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
-import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
 
 export const command = 'dev [app..]'
-export const desc = 'Run development servers.'
+export const desc = 'Run development servers for db, api, and web.'
 export const builder = {
   app: { choices: ['db', 'api', 'web'], default: ['db', 'api', 'web'] },
 }
@@ -19,9 +18,6 @@ export const handler = async ({ app = ['db', 'api', 'web'] }) => {
   const BASE_DIR = getPaths().base.replace(' ', '\\ ')
   const API_DIR = path.join(BASE_DIR, 'api')
   const WEB_DIR = path.join(BASE_DIR, 'web')
-
-  // Generate the Prisma client if it doesn't exist.
-  await generatePrismaClient({ verbose: false, force: false })
 
   const jobs = {
     api: {
