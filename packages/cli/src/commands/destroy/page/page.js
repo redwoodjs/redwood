@@ -10,8 +10,8 @@ import { files as pageFiles } from '../../generate/page/page'
 export const command = 'page <name> [path]'
 export const desc = 'Destroy a page component.'
 
-export const handler = async ({ name, path }) => {
-  const tasks = new Listr(
+export const tasks = ({ name, path }) =>
+  new Listr(
     [
       {
         title: 'Destroying page files...',
@@ -28,6 +28,8 @@ export const handler = async ({ name, path }) => {
     { collapse: false, exitOnError: true }
   )
 
+export const handler = async ({ name, path }) => {
+  const tasks = tasks({ name, path })
   try {
     await tasks.run()
   } catch (e) {
