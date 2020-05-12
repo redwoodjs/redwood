@@ -117,7 +117,7 @@ export const processPagesDir = (
         deps.push({
           const: importName,
           path: path.join(webPagesDir, entry.name),
-          importStatement: `const ${importName} = { name: '${importName}', loader: () => import('${importFile}') }`,
+          importStatement: `const ${importName.split(',').join('')} = { name: '${importName.split(',').join('')}', loader: () => import('${importFile}') }`,
         })
       } catch (e) {
         // If the Page doesn't exist then we are in a directory of Page
