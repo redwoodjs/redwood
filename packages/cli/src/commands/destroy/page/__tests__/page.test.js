@@ -28,18 +28,40 @@ beforeEach(() => {
   })
 })
 
-test('destroys a page and route', async () => {
+test('destroys page files', async () => {
   const unlinkSpy = jest.spyOn(fs, 'unlinkSync')
   const t = tasks({ name: 'About' })
   t.setRenderer('silent')
 
-  return t.run().then(() => {
-    // Make sure all generated files were destroyed.
+  return t._tasks[0].run().then(() => {
     const generatedFiles = Object.keys(files({ name: 'About' }))
     expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
     generatedFiles.forEach((f) => expect(unlinkSpy).toHaveBeenCalledWith(f))
+  })
+})
 
-    // Make sure Routes.js has been cleaned up.
+test('cleans up route from Routes.js', async () => {
+  const t = tasks({ name: 'About' })
+  t.setRenderer('silent')
+
+  return t._tasks[1].run().then(() => {
+    const routes = fs.readFileSync(getPaths().web.routes)
+    expect(routes).toEqual(
+      [
+        '<Routes>',
+        '  <Route path="/" page={HomePage} name="home" />',
+        '  <Route notfound page={NotFoundPage} />',
+        '</Routes>',
+      ].join('\n')
+    )
+  })
+})
+
+test('cleans up route with a custom path from Routes.js', async () => {
+  const t = tasks({ name: 'About', path: '/about-us' })
+  t.setRenderer('silent')
+
+  return t._tasks[1].run().then(() => {
     const routes = fs.readFileSync(getPaths().web.routes)
     expect(routes).toEqual(
       [
