@@ -1,4 +1,5 @@
 // The guts of the router implementation.
+import PropTypes from 'prop-types'
 
 import {
   Location,
@@ -16,8 +17,19 @@ const Route = () => {
   return null
 }
 
-const PrivateRoute = (props) => {
-  return <Route private {...props} />
+/**
+ * `Routes` nested in `Private` require authentication.
+ * When a user is not authenticated and attempts to visit this route they will be
+ * redirected to `unauthorized` route.
+ */
+const Private = () => {
+  return null
+}
+Private.propTypes = {
+  /**
+   * The "page name" where a user should be redirected when unauthenticated.
+   */
+  unauthorized: PropTypes.string.isRequired,
 }
 
 const PrivatePageLoader = ({ useAuth, onUnauthorized, children }) => {
@@ -30,7 +42,6 @@ const PrivatePageLoader = ({ useAuth, onUnauthorized, children }) => {
   if (authenticated) {
     return children
   } else {
-    // By default this would redirect the user to the Route that is marked as `unauthorized`.
     onUnauthorized()
     return null
   }
@@ -80,24 +91,39 @@ const RouterImpl = ({
   pageLoadingDelay = DEFAULT_PAGE_LOADING_DELAY,
   children,
   useAuth = window.__REDWOOD__USE_AUTH,
-  onUnauthorized,
 }) => {
-  const routes = React.Children.toArray(children)
-  mapNamedRoutes(routes)
+  // Find `Private` components, mark their children `Route` components as private,
+  // and merge them into a single array.
+  const privateRoutes =
+    children
+      .filter((child) => child.type === Private)
+      .map((privateElement) => {
+        // Set `Route` props
+        const { unauthorized, children } = privateElement.props
+        return React.Children.toArray(children).map((route) =>
+          React.cloneElement(route, {
+            private: true,
+            unauthorizedRedirect: unauthorized,
+          })
+        )
+      })
+      .reduce((a, b) => a.concat(b), []) || []
 
-  let unauthorizedRoutePath
+  const routes = [
+    ...privateRoutes,
+    ...React.Children.toArray(children).filter((child) => child.type === Route),
+  ]
+
+  const namedRoutes = mapNamedRoutes(routes)
+
   let NotFoundPage
 
   for (let route of routes) {
-    const { path, page: Page, redirect, notfound, unauthorized } = route.props
+    const { path, page: Page, redirect, notfound } = route.props
 
     if (notfound) {
       NotFoundPage = Page
       continue
-    }
-
-    if (unauthorized) {
-      unauthorizedRoutePath = path
     }
 
     const { match, params: pathParams } = matchPath(path, pathname, paramTypes)
@@ -127,7 +153,7 @@ const RouterImpl = ({
           )
         }
 
-        if (route.type === PrivateRoute || route?.props?.private) {
+        if (route?.props?.private) {
           if (typeof useAuth === 'undefined') {
             throw new Error(
               "You're using a private route, but `useAuth` is undefined. Have you created an AuthProvider, or pased in the incorrect prop to `useAuth`?"
@@ -136,18 +162,14 @@ const RouterImpl = ({
           return (
             <PrivatePageLoader
               useAuth={useAuth}
-              onUnauthorized={
-                // Run the custom function (passed to the router),
-                // or fallback to the default which is to redirect the user to the
-                // page that's marked `unauthorized`
-                // TODO: Pass in the origin pathname.
-                onUnauthorized
-                  ? onUnauthorized
-                  : () => {
-                      // The developer must implement an unauthorized route.
-                      navigate(unauthorizedRoutePath)
-                    }
-              }
+              onUnauthorized={() => {
+                // Not adding this would redirect, but the Route wouldn't load.
+                setTimeout(
+                  () =>
+                    navigate(namedRoutes[route.props.unauthorizedRedirect]()),
+                  1
+                )
+              }}
             >
               <Loaders />
             </PrivatePageLoader>
@@ -173,4 +195,4 @@ const RouterImpl = ({
   )
 }
 
-export { Router, Route, PrivateRoute }
+export { Router, Route, Private }
