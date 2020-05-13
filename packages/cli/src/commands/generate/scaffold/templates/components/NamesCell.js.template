@@ -1,9 +1,9 @@
 import { Link, routes } from '@redwoodjs/router'
 
-import ${pluralPascalName} from 'src/components/${pluralPascalName}'
+import ${pluralPascalName} from 'src/components/${pascalScaffoldPath}${pluralPascalName}'
 
 export const QUERY = gql`
-  query POSTS {
+  query ${pluralConstantName} {
     ${pluralCamelName} {<% columns.forEach(column => { %>
       <%= column.name %><% }) %>
     }
@@ -21,7 +21,7 @@ export const Empty = () => {
     <div className="text-center">
       {'No ${pluralCamelName} yet. '}
       <Link
-        to={routes.new${singularPascalName}()}
+        to={routes.${newRouteName}()}
         className="text-blue-500 underline hover:text-blue-700"
       >
         {'Create one?'}

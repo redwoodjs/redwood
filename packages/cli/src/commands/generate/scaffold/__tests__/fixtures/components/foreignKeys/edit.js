@@ -3,7 +3,7 @@ import { navigate, routes } from '@redwoodjs/router'
 import UserProfileForm from 'src/components/UserProfileForm'
 
 export const QUERY = gql`
-  query FIND_POST_BY_ID($id: Int!) {
+  query FIND_USER_PROFILE_BY_ID($id: Int!) {
     userProfile: userProfile(id: $id) {
       id
       username
@@ -11,7 +11,7 @@ export const QUERY = gql`
     }
   }
 `
-const UPDATE_POST_MUTATION = gql`
+const UPDATE_USER_PROFILE_MUTATION = gql`
   mutation UpdateUserProfileMutation($id: Int!, $input: UpdateUserProfileInput!) {
     updateUserProfile(id: $id, input: $input) {
       id
@@ -22,7 +22,7 @@ const UPDATE_POST_MUTATION = gql`
 export const Loading = () => <div>Loading...</div>
 
 export const Success = ({ userProfile }) => {
-  const [updateUserProfile, { loading, error }] = useMutation(UPDATE_POST_MUTATION, {
+  const [updateUserProfile, { loading, error }] = useMutation(UPDATE_USER_PROFILE_MUTATION, {
     onCompleted: () => {
       navigate(routes.userProfiles())
     },

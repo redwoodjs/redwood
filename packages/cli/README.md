@@ -1,4 +1,4 @@
-# The Redwood Command Line Interface
+# Command Line Interface
 
 The Redwood CLI comes with RedwoodJS (which means no extra software to install!).
 

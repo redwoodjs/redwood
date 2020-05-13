@@ -5,6 +5,7 @@ import lodash from 'lodash/string'
 import camelcase from 'camelcase'
 import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
+import decamelize from 'decamelize'
 import { paramCase } from 'param-case'
 import { getDMMF } from '@prisma/sdk'
 import { getPaths as getRedwoodPaths } from '@redwoodjs/internal'
@@ -27,13 +28,10 @@ export const asyncForEach = async (array, callback) => {
  * entire schema is returned.
  */
 export const getSchema = async (name) => {
-  const schemaPath = path.join(getPaths().api.db, 'schema.prisma')
-  const metadata = await getDMMF({
-    datamodel: readFile(schemaPath.toString()),
-  })
+  const schema = await getSchemaDefinitions()
 
   if (name) {
-    const model = metadata.datamodel.models.find((model) => {
+    const model = schema.datamodel.models.find((model) => {
       return model.name === name
     })
 
@@ -46,7 +44,44 @@ export const getSchema = async (name) => {
     }
   }
 
-  return metadata.datamodel
+  return schema.metadata.datamodel
+}
+
+/**
+ * Returns the enum defined with the given `name` parsed from
+ * the schema.prisma of the target applicaiton. If no `name` is given then the
+ * all enum definitions are returned
+ */
+export const getEnum = async (name) => {
+  const schema = await getSchemaDefinitions()
+
+  if (name) {
+    const model = schema.datamodel.enums.find((model) => {
+      return model.name === name
+    })
+
+    if (model) {
+      return model
+    } else {
+      throw new Error(
+        `No enum schema definition found for \`${name}\` in schema.prisma file`
+      )
+    }
+  }
+
+  return schema.metadata.datamodel.enums
+}
+
+/*
+ * Returns the DMMF defined by `prisma` resolving the relevant `shema.prisma` path.
+ */
+export const getSchemaDefinitions = async () => {
+  const schemaPath = path.join(getPaths().api.db, 'schema.prisma')
+  const metadata = await getDMMF({
+    datamodel: readFile(schemaPath.toString()),
+  })
+
+  return metadata
 }
 
 /**
@@ -60,6 +95,8 @@ export const getSchema = async (name) => {
  * pluralCamelName: fooBars
  * singularParamName: foo-bar
  * pluralParamName: foo-bars
+ * singularConstantName: FOO_BAR
+ * pluralConstantName: FOO_BARS
 */
 export const nameVariants = (name) => {
   const normalizedName = pascalcase(paramCase(pluralize.singular(name)))
@@ -73,6 +110,8 @@ export const nameVariants = (name) => {
     pluralCamelName: camelcase(pluralize(normalizedName)),
     singularParamName: paramCase(normalizedName),
     pluralParamName: paramCase(pluralize(normalizedName)),
+    singularConstantName: decamelize(normalizedName).toUpperCase(),
+    pluralConstantName: decamelize(pluralize(normalizedName)).toUpperCase(),
   }
 }
 

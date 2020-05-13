@@ -54,9 +54,10 @@ const mergeResolversWithServices = ({ schema, resolvers, services }) => {
     })
 
   const mappedResolvers = typesWithFields.reduce((acc, type) => {
-    // Services export Query and Mutation field resolvers as named
-    // exports, but other GraphQLObjectTypes are exported as an object
-    // named after the type.
+    // Services export Query and Mutation field resolvers as named exports,
+    // but other GraphQLObjectTypes are exported as an object that are named
+    // after the type.
+    // Example: export const MyType = { field: () => {} }
     let servicesForType = mergedServices
     if (!['Query', 'Mutation'].includes(type.name)) {
       servicesForType = mergedServices?.[type.name]

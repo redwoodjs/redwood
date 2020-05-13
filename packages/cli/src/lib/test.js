@@ -22,6 +22,7 @@ jest.mock('@redwoodjs/internal', () => {
           src: path.join(BASE_PATH, './api/src'),
           services: path.join(BASE_PATH, './api/src/services'),
           graphql: path.join(BASE_PATH, './api/src/graphql'),
+          functions: path.join(BASE_PATH, './api/src/functions'),
         },
         web: {
           src: path.join(BASE_PATH, './web/src'),

@@ -56,6 +56,34 @@ You use a `Link` to generate a link to one of your routes and can access URL gen
 
 Named route functions simply return a string, so you can still pass in hardcoded strings to the `to` prop of the `Link` component, but using the proper named route function is easier and safer. Plus, if you ever decide to change the `path` of a route, you don't need to change any of the `Link`s to it (as long as you keep the `name` the same)!
 
+## Active links
+
+`NavLink` is a special version of `Link` that will add an `activeClassName` to the rendered element when it matches the current URL.
+
+```js
+// MainMenu.js
+import { NavLink, routes } from '@redwoodjs/router'
+
+// Will render <a href="/" className="link activeLink"> when on the home page
+const MainMenu = () => <NavLink className="link" activeClassName="activeLink" to={routes.home()} >Home</NavLink>
+```
+
+You can `useMatch` to create your own component with active styles. `NavLink` uses it internally!
+
+```js
+import { Link, routes, useMatch } from '@redwoodjs/router'
+
+const CustomLink = ({to, ...rest}) => {
+  const matchInfo = useMatch(to)
+
+  return <SomeStyledComponent as={Link} to={to} isActive={matchInfo.match} />
+}
+
+const MainMenu = () => {
+  return <CustomLink to={routes.about()} />
+}
+```
+
 ## Route parameters
 
 To match variable data in a path, you can use route parameters, which are specified by a parameter name surrounded by curly braces:

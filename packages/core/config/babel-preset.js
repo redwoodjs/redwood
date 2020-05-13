@@ -13,7 +13,7 @@ const TARGETS_NODE = '12.16.1'
 const CORE_JS_VERSION = '3.6'
 
 module.exports = () => ({
-  presets: ['@babel/preset-react', '@babel/typescript'],
+  presets: ['@babel/preset-react', '@babel/preset-typescript'],
   plugins: [
     ['@babel/plugin-proposal-class-properties', { loose: true }],
     'babel-plugin-macros',
@@ -127,6 +127,10 @@ module.exports = () => ({
           },
         ],
       ],
+    },
+    {
+      test: /.+Cell.(js|tsx)$/,
+      plugins: [require('./babel-plugin-redwood-cell')],
     },
   ],
 })

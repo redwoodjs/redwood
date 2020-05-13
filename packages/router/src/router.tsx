@@ -16,11 +16,27 @@ const Route = () => {
   return null
 }
 
-const Router: React.FC<
-  RouterImplementationProps & {
-    /** Location Context Type  */
+const PrivateRoute = (props) => {
+  return <Route private {...props} />
+}
+
+const PrivatePageLoader = ({ useAuth, onUnauthorized, children }) => {
+  const { loading, authenticated } = useAuth()
+
+  if (loading) {
+    return null
   }
-> = (props) => (
+
+  if (authenticated) {
+    return children
+  } else {
+    // By default this would redirect the user to the Route that is marked as `unauthorized`.
+    onUnauthorized()
+    return null
+  }
+}
+
+const Router = (props) => (
   <Location>
     {(locationContext) => (
       <RouterImplementation {...locationContext} {...props} />
@@ -89,6 +105,8 @@ const RouterImplementation: React.FC<RouterImplementationProps> = ({
   paramTypes,
   pageLoadingDelay = DEFAULT_PAGE_LOADING_DELAY,
   children,
+  useAuth = window.__REDWOOD__USE_AUTH,
+  onUnauthorized,
 }) => {
   // TODO
   const routes: React.ReactElement<RouteProps>[] = React.Children.toArray(
@@ -96,14 +114,19 @@ const RouterImplementation: React.FC<RouterImplementationProps> = ({
   )
   mapNamedRoutes(routes)
 
+  let unauthorizedRoutePath
   let NotFoundPage
 
   for (const route of routes) {
-    const { path, page: Page, redirect, notfound } = route.props
+    const { path, page: Page, redirect, notfound, unauthorized } = route.props
 
     if (notfound) {
       NotFoundPage = Page
       continue
+    }
+
+    if (unauthorized) {
+      unauthorizedRoutePath = path
     }
 
     const { match, params: pathParams } = matchPath(path, pathname, paramTypes)
@@ -111,6 +134,7 @@ const RouterImplementation: React.FC<RouterImplementationProps> = ({
     if (match) {
       const searchParams = parseSearch(search)
       const allParams = { ...pathParams, ...searchParams }
+
       if (redirect) {
         const newPath = replaceParams(redirect, pathParams)
         navigate(newPath)
@@ -120,15 +144,46 @@ const RouterImplementation: React.FC<RouterImplementationProps> = ({
           </RouterImplementation>
         )
       } else {
-        return (
-          <ParamsContext.Provider value={allParams}>
-            <PageLoader
-              spec={normalizePage(Page)}
-              delay={pageLoadingDelay}
-              params={allParams}
-            />
-          </ParamsContext.Provider>
-        )
+        const Loaders = () => {
+          return (
+            <ParamsContext.Provider value={allParams}>
+              <PageLoader
+                spec={normalizePage(Page)}
+                delay={pageLoadingDelay}
+                params={allParams}
+              />
+            </ParamsContext.Provider>
+          )
+        }
+
+        if (route.type === PrivateRoute || route?.props?.private) {
+          if (typeof useAuth === 'undefined') {
+            throw new Error(
+              "You're using a private route, but `useAuth` is undefined. Have you created an AuthProvider, or pased in the incorrect prop to `useAuth`?"
+            )
+          }
+          return (
+            <PrivatePageLoader
+              useAuth={useAuth}
+              onUnauthorized={
+                // Run the custom function (passed to the router),
+                // or fallback to the default which is to redirect the user to the
+                // page that's marked `unauthorized`
+                // TODO: Pass in the origin pathname.
+                onUnauthorized
+                  ? onUnauthorized
+                  : () => {
+                      // The developer must implement an unauthorized route.
+                      navigate(unauthorizedRoutePath)
+                    }
+              }
+            >
+              <Loaders />
+            </PrivatePageLoader>
+          )
+        }
+
+        return <Loaders />
       }
     }
   }
@@ -147,4 +202,4 @@ const RouterImplementation: React.FC<RouterImplementationProps> = ({
   )
 }
 
-export { Router, Route }
+export { Router, Route, PrivateRoute }

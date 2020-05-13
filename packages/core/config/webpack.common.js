@@ -164,17 +164,8 @@ module.exports = (webpackEnv) => {
           use: {
             loader: path.resolve(
               __dirname,
-              '../dist/loaders/routes-auto-loader'
+              '../dist/loaders/routes-auto-loader.js'
             ),
-          },
-        },
-        {
-          // "Create" an `index.js` file adjacent to a user's Cell.js|tsx file
-          // so that the Cell exports are run through the `withCell` HOC
-          test: /.+Cell.(js|tsx)$/,
-          include: path.join(redwoodPaths.base, 'web/src/components'),
-          use: {
-            loader: path.resolve(__dirname, '../dist/loaders/cell-loader'),
           },
         },
       ],
