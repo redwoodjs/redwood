@@ -11,6 +11,7 @@ import {
   mapNamedRoutes,
   SplashPage,
   PageLoader,
+  Redirect,
 } from './internal'
 
 const Route = () => {
@@ -32,7 +33,7 @@ Private.propTypes = {
   unauthorized: PropTypes.string.isRequired,
 }
 
-const PrivatePageLoader = ({ useAuth, onUnauthorized, children }) => {
+const PrivatePageLoader = ({ useAuth, unauthorizedRoute, children }) => {
   const { loading, authenticated } = useAuth()
 
   if (loading) {
@@ -42,8 +43,7 @@ const PrivatePageLoader = ({ useAuth, onUnauthorized, children }) => {
   if (authenticated) {
     return children
   } else {
-    onUnauthorized()
-    return null
+    return <Redirect to={unauthorizedRoute()} />
   }
 }
 
@@ -162,14 +162,7 @@ const RouterImpl = ({
           return (
             <PrivatePageLoader
               useAuth={useAuth}
-              onUnauthorized={() => {
-                // Not adding this would redirect, but the Route wouldn't load.
-                setTimeout(
-                  () =>
-                    navigate(namedRoutes[route.props.unauthorizedRedirect]()),
-                  1
-                )
-              }}
+              unauthorizedRoute={namedRoutes[route.props.unauthorizedRedirect]}
             >
               <Loaders />
             </PrivatePageLoader>

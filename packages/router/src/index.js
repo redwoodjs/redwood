@@ -9,6 +9,7 @@ export {
   Link,
   NavLink,
   useMatch,
+  Redirect,
   routes,
   useParams,
   navigate,
