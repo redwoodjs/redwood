@@ -42,9 +42,7 @@ export const verifyAuth0Token = (
       bearerToken,
       (header, callback) => {
         client.getSigningKey(header.kid as string, (error, key) => {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-          // @ts-ignore
-          callback(error, key.publicKey || key.rsaPublicKey)
+          callback(error, key.getPublicKey())
         })
       },
       {
