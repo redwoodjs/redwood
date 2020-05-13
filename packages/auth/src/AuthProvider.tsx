@@ -43,6 +43,7 @@ export const AuthProvider = ({
   type: SupportedAuthTypes
   client: SupportedAuthClients
 }): JSX.Element => {
+  // TODO: Change this to state.
   const [loading, setLoading] = useState(true)
   const [authenticated, setAuthenticated] = useState(false)
   const [currentUser, setCurrentUser] = useState<null | GoTrueUser | Auth0User>(

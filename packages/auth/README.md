@@ -91,7 +91,7 @@ const UserAuthTools = () => {
         }
       }}
     >
-      {authenticated ? 'Log out' : 'Log in'}
+      {authenticated ? 'Logout' : 'Login'}
     </Button>
   )
 }
