@@ -130,6 +130,7 @@ export const handler = async ({ provider, force }) => {
             'web',
             'add',
             ...providerData.packages,
+            '@redwoodjs/auth',
           ])
         },
       },
