@@ -43,17 +43,18 @@ export const createContextHandler = (
     // For authentication: Get the authorization information from the request
     // headers.
     const authToken = await decodeAuthToken({ event, context })
-    const currentUser = getCurrentUser
-      ? await getCurrentUser(authToken)
-      : authToken
+    const currentUser =
+      typeof getCurrentUser == 'function'
+        ? await getCurrentUser(authToken)
+        : authToken
 
     if (typeof userContext === 'function') {
       userContext = await userContext({ event, context })
     }
 
-    // The context object returned from this function is passed to
-    // the second argument of the resolvers.
-    // This also sets **global** context object, which can be imported:
+    // The context object returned from this function is passed
+    // to the second argument of the resolvers.
+    // This also sets **global** context object, which can be imported with:
     // import { context } from '@redwoodjs/api'
     return setContext({
       currentUser,
