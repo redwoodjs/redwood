@@ -25,26 +25,24 @@ import jwksClient from 'jwks-rsa'
  */
 export const verifyAuth0Token = (
   bearerToken: string
-): Promise<undefined | object> => {
+): Promise<null | object> => {
   return new Promise((resolve, reject) => {
     const { AUTH0_DOMAIN, AUTH0_AUDIENCE } = process.env
-    if (!AUTH0_DOMAIN) {
-      throw new Error('`AUTH0_DOMAIN` env var is not set.')
+    if (!AUTH0_DOMAIN || !AUTH0_AUDIENCE) {
+      throw new Error(
+        '`AUTH0_DOMAIN` or `AUTH0_AUDIENCE` env vars are not set.'
+      )
     }
 
     const client = jwksClient({
       jwksUri: `https://${AUTH0_DOMAIN}/.well-known/jwks.json`,
-      cache: true,
-      rateLimit: true,
     })
 
     jwt.verify(
       bearerToken,
       (header, callback) => {
         client.getSigningKey(header.kid as string, (error, key) => {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-          // @ts-ignore
-          callback(error, key.publicKey || key.rsaPublicKey)
+          callback(error, key.getPublicKey())
         })
       },
       {
@@ -56,7 +54,7 @@ export const verifyAuth0Token = (
         if (verifyError) {
           return reject(verifyError)
         }
-        resolve(decoded)
+        resolve(typeof decoded !== 'undefined' ? decoded : null)
       }
     )
   })

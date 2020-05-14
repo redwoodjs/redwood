@@ -5,9 +5,11 @@ import { GraphQLProvider, createGraphQLClient } from 'src/graphql'
 const useAuthStub = () => ({ loading: false, authenticated: false })
 
 /**
- * Redwood's Provider ties together our authentication and Apollo's GraphQL Provider
- * when you pass the `useAuth` hook from `@redwoodjs/auth`
- * The authentication token is added to the headers of the GraphQL client.
+ * Redwood's Provider is a zeroconf way to tie together authentication and
+ * GraphQL requests.
+ *
+ * When the `useAuth` hook from `@redwoodjs/auth` is available the authentication
+ * token is automatically added to the Authorization headers of each GraphQL request.
  */
 const RedwoodProvider = ({
   useAuth = window.__REDWOOD__USE_AUTH || useAuthStub,
@@ -28,12 +30,13 @@ const RedwoodProvider = ({
     return null
   }
   // If we have an authToken then modify the headers of the GraphQL client.
+  // TODO: Add a way for user's to pass in custom headers to GraphQL, or just a custom client.
   const client = authToken
     ? createGraphQLClient({
         headers: {
           // Used by `api` to determine the auth type.
-          'X-Redwood-Auth-Type': type,
-          Authorization: `Bearer ${authToken}`,
+          'auth-provider': type,
+          authorization: `Bearer ${authToken}`,
         },
       })
     : undefined

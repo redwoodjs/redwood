@@ -22,7 +22,7 @@ Instantiate your authentication library and pass it along to the `AuthProvider`:
 
 ### For Netlify Identity Widget
 
-```js
+```jsx
 import { AuthProvider } from '@redwoodjs/auth'
 import netlifyIdentity from 'netlify-identity-widget'
 
@@ -30,11 +30,13 @@ netlifyIdentity.init()
 
 // in your JSX component
 ReactDOM.render(
-    <AuthProvider client={netlifyIdentity} type="netlify">
-      <RedwoodProvider>
-        <Routes />
-      </RedwoodProvider>
-    </AuthProvider>,
+    <FatalErrorBoundary page={FatalErrorPage}>
+      <AuthProvider client={netlifyIdentity} type="netlify">
+        <RedwoodProvider>
+          <Routes />
+        </RedwoodProvider>
+      </AuthProvider>
+    </FatalErrorBoundary>,
   document.getElementById('redwood-app')
 )
 ```
@@ -69,7 +71,7 @@ ReactDOM.render(
 
 ## Usage
 
-We provide a hooks based interface to `AuthProvider`'s context:
+Use our `useAuth` hook:
 
 ```js
 const UserAuthTools = () => {
@@ -91,7 +93,7 @@ const UserAuthTools = () => {
         }
       }}
     >
-      {authenticated ? 'Log out' : 'Log in'}
+      {authenticated ? 'Logout' : 'Login'}
     </Button>
   )
 }
@@ -104,7 +106,7 @@ The following values are available from the `useAuth` hook:
 * async `login()`: Differs based on the client library, with Netlify Identity a pop-up is shown, and with Auth0 the user is redirected
 * async `logout()`: Log out the current user
 * `currentUser`: an object containing information about the current user, or `null` if the user is not authenticated
-* async `getToken()`: returns a jwt
+* async `getToken()`: returns a authorization token
 * `client`: Access the instance of the client which you passed into `AuthProvider`
 * `authenticated`: used to determine if the current user has authenticated
 * `loading`: The auth state is restored asynchronously, use this to determine if you have the correct state
@@ -121,11 +123,15 @@ Requests to GraphQL automatically receive an `Authorization` bearer token header
 
 ### Routes
 
-Routes can be marked as require an authenticated user by wrapping them in `PrivateRoute` rather than `Route`. If a user is not authenticated they will be redirected to the route marked as `unauthorized`.
+Routes can be marked as require an authenticated user by wrapping them in `Private`. If a user is not authenticated they will be redirected to the page named `unauthorized`.
 
 ```js
+import { Router, Route, Private } from "@redwoodjs/router"
+
 <Router>
   <Route unauthorized path="/" page={HomePage} name="home" />
-  <PrivateRoute path="/admin" page={AdminPage} name="admin" />
+  <Private unauthorized="home">
+    <Route path="/admin" page={AdminPage} name="admin" />
+  </Private>
 </Router>
 ```
