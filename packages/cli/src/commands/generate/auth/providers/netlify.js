@@ -1,13 +1,10 @@
 // the lines that need to be added to index.js
 export const config = {
-  import: [
-    "import { AuthProvider } from '@redwoodjs/auth'",
-    "import netlifyIdentity from 'netlify-identity-widget'",
-  ],
+  imports: [{ import: 'netlifyIdentity', from: 'netlify-identity-widget' }],
   init: 'netlifyIdentity.init()',
-  render: {
-    open: '<AuthProvider client={netlifyIdentity} type="netlify">',
-    close: '</AuthProvider>',
+  authProvider: {
+    client: 'netlifyIdentity',
+    type: 'netlify',
   },
 }
 
