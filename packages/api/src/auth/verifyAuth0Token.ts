@@ -28,14 +28,14 @@ export const verifyAuth0Token = (
 ): Promise<undefined | object> => {
   return new Promise((resolve, reject) => {
     const { AUTH0_DOMAIN, AUTH0_AUDIENCE } = process.env
-    if (!AUTH0_DOMAIN) {
-      throw new Error('`AUTH0_DOMAIN` env var is not set.')
+    if (!AUTH0_DOMAIN || !AUTH0_AUDIENCE) {
+      throw new Error(
+        '`AUTH0_DOMAIN` or `AUTH0_AUDIENCE` env vars are not set.'
+      )
     }
 
     const client = jwksClient({
       jwksUri: `https://${AUTH0_DOMAIN}/.well-known/jwks.json`,
-      cache: true,
-      rateLimit: true,
     })
 
     jwt.verify(
