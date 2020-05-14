@@ -10,8 +10,7 @@ export const useAuth = (): AuthContextInterface => {
 declare global {
   interface Window {
     /**
-     * Global reference to @redwoodjs/auth's `useAuth` hook for zero-config
-     * authentication.
+     * Global reference to @redwoodjs/auth's `useAuth` hook for zero-config authentication.
      * We use this as the default value for `useAuth` in @redwoodjs/router's `Router`,
      * and @redwoodjs/web's `RedwoodProvider` so that the user no longer has to pass
      * in the value.

@@ -1,10 +1,10 @@
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import type { Config } from 'apollo-server-lambda'
 import type { Context, ContextFunction } from 'apollo-server-core'
-import type { AuthTokenType } from 'src/auth/decodeAuthToken'
+import type { AuthTokenType } from 'src/auth/authHeaders'
 //
 import { ApolloServer } from 'apollo-server-lambda'
-import { decodeAuthToken } from 'src/auth/decodeAuthToken'
+import { getAuthProviderType, decodeAuthToken } from 'src/auth/authHeaders'
 import { setContext } from 'src/globalContext'
 
 export type GetCurrentUser = (
@@ -15,11 +15,7 @@ export type GetCurrentUser = (
  * We use Apollo Server's `context` option as an entry point for constructing our own
  * global context object.
  *
- * A user passes a context object or async function when instantiating
- * `createGraphQLHandler` and result of `context` is appended to the resolver,
- * and the global context.
- *
- * Context from Apollo's Docs:
+ * Context explained Apollo's Docs:
  * Context is an object shared by all resolvers in a particular query,
  * and is used to contain per-request state, including authentication information,
  * dataloader instances, and anything else that should be taken into account when
@@ -34,30 +30,29 @@ export const createContextHandler = (
     context,
   }: {
     event: APIGatewayProxyEvent
-    context: LambdaContext
+    context: LambdaContext & { [key: string]: any }
   }) => {
     // Prevent the Lambda function from waiting for all resources,
     // such as database connections, to be released before returning a reponse.
     context.callbackWaitsForEmptyEventLoop = false
 
-    // For authentication: Get the authorization information from the request
-    // headers.
-    const authToken = await decodeAuthToken({ event, context })
-    const currentUser =
-      typeof getCurrentUser == 'function'
-        ? await getCurrentUser(authToken)
-        : authToken
+    // Get the authorization information from the request headers and request context.
+    const type = getAuthProviderType(event)
+    if (typeof type !== 'undefined') {
+      const authToken = await decodeAuthToken({ type, event, context })
+      context.currentUser =
+        typeof getCurrentUser == 'function'
+          ? await getCurrentUser(authToken)
+          : authToken
+    }
 
     if (typeof userContext === 'function') {
       userContext = await userContext({ event, context })
     }
 
-    // The context object returned from this function is passed
-    // to the second argument of the resolvers.
-    // This also sets **global** context object, which can be imported with:
+    // Sets the **global** context object, which can be imported with:
     // import { context } from '@redwoodjs/api'
     return setContext({
-      currentUser,
       ...context,
       ...userContext,
     })
@@ -70,8 +65,8 @@ interface GraphQLHandlerOptions extends Config {
    */
   context?: Context | ContextFunction
   /**
-   * An async function that maps the auth token retrieved from the request headers
-   * to an object.
+   * An async function that maps the auth token retrieved from the request headers to an object.
+   * Is it executed when the `auth-provider` contains one of the supported providers.
    */
   getCurrentUser?: GetCurrentUser
   /**
