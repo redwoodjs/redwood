@@ -1,5 +1,5 @@
 import { forwardRef, useContext, useEffect } from 'react'
-import PropTypes from 'PropTypes'
+import PropTypes from 'prop-types'
 
 import { navigate, matchPath, LocationContext } from './internal'
 
