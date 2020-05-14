@@ -24,17 +24,6 @@ export const AuthContext = React.createContext<Partial<AuthContextInterface>>(
   {}
 )
 
-/**
- * @example
- * ```js
- *  const client = new Auth0Client(options)
- *  // ...
- *  <AuthProvider client={client} type="auth0">
- *    {children}
- *  </AuthProvider>
- * ```
- */
-
 type AuthProviderProps = {
   client: AuthClient
   type: SupportedAuthTypes
@@ -45,7 +34,16 @@ type AuthProviderState = {
   authenticated: boolean
   currentUser: null | Auth0User | GoTrueUser
 }
-
+/**
+ * @example
+ * ```js
+ *  const client = new Auth0Client(options)
+ *  // ...
+ *  <AuthProvider client={client} type="auth0">
+ *    {children}
+ *  </AuthProvider>
+ * ```
+ */
 export class AuthProvider extends React.Component<
   AuthProviderProps,
   AuthProviderState
@@ -73,8 +71,8 @@ export class AuthProvider extends React.Component<
     })
   }
 
-  login = async () => {
-    const currentUser = await this.rwClient.login()
+  login = async (options?) => {
+    const currentUser = await this.rwClient.login(options)
     this.setState({ currentUser, authenticated: currentUser !== null })
   }
 
