@@ -11,13 +11,13 @@ import { verifyAuth0Token } from './verifyAuth0Token'
 export type SupportedAuthTypes = 'auth0' | 'netlify' | 'gotrue'
 
 // This is shared by `@redwoodjs/web`
-const AUTH_PROVIDER_HEADER = 'Auth-Provider'
+const AUTH_PROVIDER_HEADER = 'auth-provider'
 
 type NewClientContext = ClientContext & {
   user?: object
 }
 
-export type AuthTokenType = null | object | string
+export type AuthTokenType = undefined | null | object | string
 
 /**
  * Redwood supports multiple authentication providers. We add headers to the client
