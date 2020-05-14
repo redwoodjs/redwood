@@ -81,11 +81,17 @@ const mapAuthClientNetlify = (client: NetlifyIdentity): AuthClient => {
     client,
     login: () => {
       return new Promise((resolve, reject) => {
+        let autoClosedModal = false
         client.open('login')
         client.on('login', (user) => {
+          // This closes the modal which pops-up immediately after you login.
+          autoClosedModal = true
+          client.close()
           return resolve(user)
         })
-        client.on('close', () => resolve(null))
+        client.on('close', () => {
+          !autoClosedModal && resolve(null)
+        })
         client.on('error', reject)
       })
     },

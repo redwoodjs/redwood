@@ -8,7 +8,7 @@ let namedRoutesDone = false
 
 const mapNamedRoutes = (routes) => {
   if (namedRoutesDone) {
-    return
+    return namedRoutes
   }
   for (let route of routes) {
     const { path, name, notfound } = route.props
@@ -27,6 +27,8 @@ const mapNamedRoutes = (routes) => {
 
   // Only need to do this once.
   namedRoutesDone = true
+
+  return namedRoutes
 }
 
 const routes = namedRoutes
