@@ -1,24 +1,32 @@
-# Auth
+# Authentication
 
 `@redwoodjs/auth` is a lightweight wrapper around popular SPA authentication libraries. We currently support the following authentication providers:
 
 - [Netlify Identity Widget](https://github.com/netlify/netlify-identity-widget)
 - [Auth0](https://github.com/auth0/auth0-spa-js)
 - [Netlify GoTrue-JS](https://github.com/netlify/gotrue-js)
-- Contribute one, it's "super easy!"
+- [Contribute](#contributing) one, it's SuperEasy™!
 
 ## Installation
 
-### For Netlify Identity Widget
+### CLI Auth Generator
+The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
+```bash
+yarn rw g auth [provider]
+```
+*`[provider]` values can be either "netlify" or "auth0".*
 
-```js
+### Manual Install
+#### Netlify Identity Widget
+
+```bash
 cd web
 yarn add @redwoodjs/auth netlify-identity-widget
 ```
 
-### For Auth0:
+#### Auth0
 
-```js
+```bash
 cd web
 yarn add @redwoodjs/auth @auth0/auth0-spa-js
 ```
@@ -118,11 +126,11 @@ The following values are available from the `useAuth` hook:
 * async `getToken()`: returns a jwt
 * `client`: Access the instance of the client which you passed into `AuthProvider`
 * `authenticated`: used to determine if the current user has authenticated
-* `loading`: The auth state is restored asynchronously when the user visits the site for teh first time, use this to determine if you have the correct state
+* `loading`: The auth state is restored asynchronously when the user visits the site for the first time, use this to determine if you have the correct state
 
 ## Usage in Redwood
 
-Redwood providers a zeroconf experience when using our Auth package!
+Redwood provides a zeroconf experience when using our Auth package!
 
 ### GraphQL Query and Mutations
 
