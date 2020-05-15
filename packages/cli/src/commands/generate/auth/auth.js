@@ -24,7 +24,7 @@ const addWebImports = (content, imports) => {
   })
 
   return (
-    `import AuthProvider from '@redwoodjs/auth'\n` +
+    `import { AuthProvider } from '@redwoodjs/auth'\n` +
     importStatements.join('\n') +
     '\n' +
     content
