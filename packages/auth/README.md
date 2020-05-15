@@ -128,7 +128,7 @@ The following values are available from the `useAuth` hook:
 * `authenticated`: used to determine if the current user has authenticated
 * `loading`: The auth state is restored asynchronously when the user visits the site for the first time, use this to determine if you have the correct state
 
-## Usage in RedwoodJS
+## Usage in Redwood
 
 Redwood provides a zeroconf experience when using our Auth package!
 
