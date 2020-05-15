@@ -5,6 +5,6 @@
 //     return await db.user.findOne({ where: email })
 //   }
 
-export const currentUser = async (jwt) => {
+export const getCurrentUser = async (jwt) => {
   return jwt
 }

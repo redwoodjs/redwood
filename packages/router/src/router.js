@@ -95,7 +95,7 @@ const RouterImpl = ({
   // Find `Private` components, mark their children `Route` components as private,
   // and merge them into a single array.
   const privateRoutes =
-    children
+    React.Children.toArray(children)
       .filter((child) => child.type === Private)
       .map((privateElement) => {
         // Set `Route` props
