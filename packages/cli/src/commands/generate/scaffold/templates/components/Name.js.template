@@ -12,7 +12,7 @@ const DELETE_${singularConstantName}_MUTATION = gql`
 const ${singularPascalName} = ({ ${singularCamelName} }) => {
   const [delete${singularPascalName}] = useMutation(DELETE_${singularConstantName}_MUTATION, {
     onCompleted: () => {
-      navigate(routes.${pluralCamelName}())
+      navigate(routes.${pluralRouteName}())
       location.reload()
     },
   })
@@ -42,7 +42,7 @@ const ${singularPascalName} = ({ ${singularCamelName} }) => {
         <ul>
           <li className="inline-block ml-2">
             <Link
-              to={routes.edit${singularPascalName}({ id: ${singularCamelName}.id })}
+              to={routes.${editRouteName}({ id: ${singularCamelName}.id })}
               className="text-xs bg-blue-600 text-white hover:bg-blue-700 rounded px-4 py-2 uppercase font-semibold tracking-wide"
             >
               Edit

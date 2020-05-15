@@ -10,7 +10,8 @@
     "core-js": "3.6.4"
   },
   "peerDependencies": {
-    "react": "*"
+    "react": "*",
+    "prop-types": "*"
   },
   "scripts": {
     "build": "yarn cross-env NODE_ENV=production babel src -d dist --delete-dir-on-start",
@@ -22,6 +23,7 @@
   "gitHead": "2801c132f40263f9fcfbdac8b1750d2e423eb649",
   "devDependencies": {
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "prop-types": "15.7.2"
   }
 }

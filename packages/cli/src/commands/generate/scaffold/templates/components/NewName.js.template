@@ -1,6 +1,6 @@
 import { useMutation } from '@redwoodjs/web'
 import { navigate, routes } from '@redwoodjs/router'
-import ${singularPascalName}Form from 'src/components/${singularPascalName}Form'
+import ${singularPascalName}Form from 'src/components/${pascalScaffoldPath}${singularPascalName}Form'
 
 const CREATE_${singularConstantName}_MUTATION = gql`
   mutation Create${singularPascalName}Mutation($input: Create${singularPascalName}Input!) {
@@ -13,12 +13,12 @@ const CREATE_${singularConstantName}_MUTATION = gql`
 const New${singularPascalName} = () => {
   const [create${singularPascalName}, { loading, error }] = useMutation(CREATE_${singularConstantName}_MUTATION, {
     onCompleted: () => {
-      navigate(routes.${pluralCamelName}())
+      navigate(routes.${pluralRouteName}())
     },
   })
 
   const onSave = (input) => {<% if (intForeignKeys.length) { %>
-    const castInput = Object.assign(input, { <% intForeignKeys.forEach(key => { %>${key}: parseInt(input.${key}), }<% }) %>)<% } %>
+    const castInput = Object.assign(input, { <% intForeignKeys.forEach(key => { %>${key}: parseInt(input.${key}), <% }) %>})<% } %>
     create${singularPascalName}({ variables: { <% if (intForeignKeys.length) { %>input: castInput<% } else { %>input<% } %> } })
   }
 

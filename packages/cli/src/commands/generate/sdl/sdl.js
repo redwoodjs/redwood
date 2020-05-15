@@ -5,7 +5,13 @@ import camelcase from 'camelcase'
 import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 
-import { generateTemplate, getSchema, getPaths, writeFilesTask } from 'src/lib'
+import {
+  generateTemplate,
+  getSchema,
+  getPaths,
+  writeFilesTask,
+  getEnum,
+} from 'src/lib'
 import c from 'src/lib/colors'
 
 import { files as serviceFiles } from '../service/service'
@@ -72,12 +78,25 @@ const sdlFromSchemaModel = async (name) => {
       )
     ).reduce((acc, cur) => ({ ...acc, [cur.name]: cur }), {})
 
+    // Get enum definiton and fields from user-defined types
+    const enums = (
+      await Promise.all(
+        model.fields
+          .filter((field) => field.kind === 'enum')
+          .map(async (field) => {
+            const enumDef = await getEnum(field.type)
+            return enumDef
+          })
+      )
+    ).reduce((acc, curr) => acc.concat(curr), [])
+
     return {
       query: querySDL(model).join('\n    '),
       createInput: createInputSDL(model, types).join('\n    '),
       updateInput: updateInputSDL(model, types).join('\n    '),
       idType: idType(model),
       relations: relationsForModel(model),
+      enums,
     }
   } else {
     throw new Error(
@@ -93,6 +112,7 @@ export const files = async ({ name, crud }) => {
     updateInput,
     idType,
     relations,
+    enums,
   } = await sdlFromSchemaModel(pascalcase(pluralize.singular(name)))
 
   const template = generateTemplate(
@@ -104,6 +124,7 @@ export const files = async ({ name, crud }) => {
       createInput,
       updateInput,
       idType,
+      enums,
     }
   )
 

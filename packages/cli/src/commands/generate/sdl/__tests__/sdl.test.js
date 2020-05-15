@@ -59,3 +59,11 @@ test('creates a multi word sdl file with CRUD actions', async () => {
     loadGeneratorFixture('sdl', 'multiWordSdlCrud.js')
   )
 })
+
+test('creates a sdl file with enum definitions', async () => {
+  const files = await sdl.files({ name: 'Shoe', crud: true })
+
+  expect(files['/path/to/project/api/src/graphql/shoes.sdl.js']).toEqual(
+    loadGeneratorFixture('sdl', 'enumGeneratedSdl.js')
+  )
+})

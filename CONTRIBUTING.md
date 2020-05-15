@@ -15,6 +15,7 @@ Before interacting with the Redwood community, please read and understand our [C
       - [Publishing a Package](#Publishing-a-Package)
       - [Installing Published Packages in Your Redwood App](#Installing-Published-Packages-in-Your-Redwood-App)
   - [Running Your Redwood App's Local Server(s)](#Running-Your-Redwood-App's-Local-Server(s))
+  - [Releases](#Releases)
 
 <!-- toc -->
 
@@ -100,7 +101,7 @@ yarn rwt copy:watch
 
 And see your changes copied!
 
-_On Windows_  
+_On Windows_
 [Todo: please contribute a PR if you can help add instructions here.]
 
 ### Local Package Registry Emulation
@@ -172,3 +173,18 @@ In this case you might find it more convenient to run the servers for each of th
 yarn rw dev api
 yarn rw dev web
 ```
+
+## Releases
+
+To publish a new version of Redwood to NPM run the following commands:
+
+```bash
+yarn lerna version --force-publish
+yarn lerna publish from-package
+```
+
+The changes the version of **all the packages** (even those that haven't changed) and publishes it to NPM.
+
+### Troubleshooting
+
+If something went wrong you can use `yarn lerna publish from-package` to publish the packages that aren't already in the registry.

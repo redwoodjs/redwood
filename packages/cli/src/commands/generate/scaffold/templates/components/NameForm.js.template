@@ -36,7 +36,9 @@ const ${singularPascalName}Form = (props) => {
           name="<%= column.name %>"
           className={CSS.label}
           errorClassName={CSS.labelError}
-        />
+        >
+          <%= column.label %>
+        </Label>
         <TextField
           name="<%= column.name %>"
           defaultValue={props.${singularCamelName}?.<%= column.name %>}
