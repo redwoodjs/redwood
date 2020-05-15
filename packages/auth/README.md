@@ -10,7 +10,7 @@
 ## Installation
 
 ### CLI Auth Generator
-The following CLI command will install required packages and generate boilerplate code and files for Redwood Apps:
+The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
 ```bash
 yarn rw g auth [provider]
 ```
