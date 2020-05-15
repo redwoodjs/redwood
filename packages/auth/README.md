@@ -1,11 +1,11 @@
-# Auth
+# Authentication
 
 `@redwoodjs/auth` is a lightweight wrapper around popular SPA authentication libraries. We currently support the following authentication providers:
 
 - [Netlify Identity Widget](https://github.com/netlify/netlify-identity-widget)
 - [Auth0](https://github.com/auth0/auth0-spa-js)
 - [Netlify GoTrue-JS](https://github.com/netlify/gotrue-js)
-- [Contribute](##contributing) one, it's SuperEasy™!
+- [Contribute](#contributing) one, it's SuperEasy™!
 
 ## Installation
 
