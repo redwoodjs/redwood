@@ -1,4 +1,8 @@
 export default function (source: string) {
+  if (source.match('export default')) {
+    return source
+  }
+
   const exports: string[] = []
 
   const names = [
