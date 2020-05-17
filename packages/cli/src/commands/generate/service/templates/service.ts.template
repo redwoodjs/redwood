@@ -1,10 +1,11 @@
-import { db } from 'src/lib/db'
-<%if (crud) { %>import {
-  ${singularPascalName}WhereUniqueInput,
+<%if (crud || relations.length > 0) { %>import {
+  ${singularPascalName}WhereUniqueInput,<% if (crud) { %>
   ${singularPascalName}CreateInput,
-  ${singularPascalName}UpdateInput,
+  ${singularPascalName}UpdateInput,<% } %>
 } from '@prisma/client'
-<% } %>
+<% } %><% if (relations.length) { %>import { ResolverArgs } from '@redwoodjs/api/dist/types'
+<% } %>import { db } from 'src/lib/db'
+
 export const ${pluralCamelName} = () => {
   return db.${singularCamelName}.findMany()
 }<% if (crud) { %>
@@ -44,5 +45,5 @@ export const delete${singularPascalName} = ({ id }: ${singularPascalName}WhereUn
 }<% } %><% if (relations.length) { %>
 
 export const ${singularPascalName} = {<% relations.forEach(relation => { %>
-  ${relation}: (_obj, { root }) => db.${singularCamelName}.findOne({ where: { id: root.id } }).${relation}(),<% }) %>
+  ${relation}: (_obj, { root }: ResolverArgs<${singularPascalName}WhereUniqueInput>) => db.${singularCamelName}.findOne({ where: { id: root.id } }).${relation}(),<% }) %>
 }<% } %>

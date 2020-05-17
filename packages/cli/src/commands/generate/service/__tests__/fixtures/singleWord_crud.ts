@@ -1,9 +1,9 @@
-import { db } from 'src/lib/db'
 import {
   PostWhereUniqueInput,
   PostCreateInput,
   PostUpdateInput,
 } from '@prisma/client'
+import { db } from 'src/lib/db'
 
 export const posts = () => {
   return db.post.findMany()
