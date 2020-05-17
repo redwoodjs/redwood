@@ -1,8 +1,11 @@
 import React from 'react'
+import { getPaths } from '@redwoodjs/internal'
 import { render } from '@testing-library/react'
 import { MockedProvider } from '@apollo/react-testing'
 
-import Routes from '~/web/Routes'
+const redwoodPaths = getPaths()
+
+const Routes = require(`${redwoodPaths.web.src}/Routes.js`).default
 
 const AllTheProviders = ({ mocks, children }) => {
   return (

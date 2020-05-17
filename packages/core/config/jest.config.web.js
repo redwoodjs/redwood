@@ -15,6 +15,10 @@ module.exports = {
   // TODO: use getPaths().web.base instead.
   setupFilesAfterEnv: [path.resolve(__dirname, './jest.setup.web.js')],
   moduleNameMapper: {
+    /**
+     * Make sure modules that require different versions of these
+     * dependencies end up using the same one.
+     */
     '^react$': path.resolve(redwoodPaths.base, 'node_modules', 'react'),
     '^react-dom$': path.resolve(redwoodPaths.base, 'node_modules', 'react-dom'),
     '^@apollo/react-common': path.resolve(
@@ -22,10 +26,13 @@ module.exports = {
       'node_modules',
       '@apollo/react-common'
     ),
+
+    /**
+     * Mock out files that aren't particularly useful in tests. See fileMock.js for more info.
+     */
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|css)$': path.resolve(
       __dirname,
       'fileMock.js'
     ),
-    '~/web/Routes': '<rootDir>/src/Routes',
   },
 }
