@@ -1,4 +1,5 @@
-import { forwardRef, useContext } from 'react'
+import { forwardRef, useContext, useEffect } from 'react'
+import PropTypes from 'prop-types'
 
 import { navigate, matchPath, LocationContext } from './internal'
 
@@ -48,4 +49,18 @@ const NavLink = forwardRef(
   }
 )
 
-export { Link, NavLink, useMatch }
+/**
+ * A declarative way to redirect to a route name
+ */
+const Redirect = ({ to }) => {
+  useEffect(() => {
+    navigate(to)
+  }, [to])
+  return null
+}
+Redirect.propTypes = {
+  /** The name of the route to redirect to */
+  to: PropTypes.string.isRequired,
+}
+
+export { Link, NavLink, useMatch, Redirect }

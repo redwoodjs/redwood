@@ -94,6 +94,21 @@ test('templateForComponentFile can override file extension', () => {
   )
 })
 
+test('templateForComponentFile can override output path', () => {
+  const output = helpers.templateForComponentFile({
+    name: 'func',
+    apiPathSection: 'functions',
+    generator: 'function',
+    templatePath: 'function.js.template',
+    templateVars: { name: 'func' },
+    outputPath: '/path/to/project/api/src/functions/func.js',
+  })
+
+  expect(output[0]).toEqual(
+    path.normalize('/path/to/project/api/src/functions/func.js')
+  )
+})
+
 test('templateForComponentFile creates a template', () => {
   const output = helpers.templateForComponentFile({
     name: 'FooBar',

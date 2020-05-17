@@ -1,8 +1,13 @@
+export interface Context {
+  [name: string]: any
+}
+
 export let context = {}
 
-export const setContext = (newContext: {
-  [funcName: string]: any
-}): { [funcName: string]: any } => {
+/**
+ * Replace the existing global context.
+ */
+export const setContext = (newContext: Context): Context => {
   context = newContext
   return context
 }

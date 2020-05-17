@@ -5,9 +5,11 @@
 export {
   Router,
   Route,
+  Private,
   Link,
   NavLink,
   useMatch,
+  Redirect,
   routes,
   useParams,
   navigate,

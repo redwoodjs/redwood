@@ -12,6 +12,7 @@ const PATH_API_DIR_GRAPHQL = 'api/src/graphql'
 const PATH_API_DIR_DB = 'api/prisma'
 const PATH_API_DIR_DB_SCHEMA = 'api/prisma/schema.prisma'
 const PATH_API_DIR_CONFIG = 'api/src/config'
+const PATH_API_DIR_LIB = 'api/src/lib'
 const PATH_API_DIR_SERVICES = 'api/src/services'
 const PATH_API_DIR_SRC = 'api/src'
 const PATH_WEB_ROUTES = 'web/src/Routes' // .js|.tsx
@@ -71,6 +72,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       dbSchema: path.join(BASE_DIR, PATH_API_DIR_DB_SCHEMA),
       functions: path.join(BASE_DIR, PATH_API_DIR_FUNCTIONS),
       graphql: path.join(BASE_DIR, PATH_API_DIR_GRAPHQL),
+      lib: path.join(BASE_DIR, PATH_API_DIR_LIB),
       config: path.join(BASE_DIR, PATH_API_DIR_CONFIG),
       services: path.join(BASE_DIR, PATH_API_DIR_SERVICES),
       src: path.join(BASE_DIR, PATH_API_DIR_SRC),
@@ -117,7 +119,11 @@ export const processPagesDir = (
         deps.push({
           const: importName,
           path: path.join(webPagesDir, entry.name),
-          importStatement: `const ${importName} = { name: '${importName}', loader: () => import('${importFile}') }`,
+          importStatement: `const ${importName
+            .split(',')
+            .join('')} = { name: '${importName
+            .split(',')
+            .join('')}', loader: () => import('${importFile}') }`,
         })
       } catch (e) {
         // If the Page doesn't exist then we are in a directory of Page

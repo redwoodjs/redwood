@@ -185,8 +185,12 @@ app.all('/:routeName', async (req, res) => {
 
 const reloadLambdas = () => {
   console.log('Change detected, rebuilding...')
+  const start = new Date().getTime();
   purgeRequireCache()
   lambdaFunctions = requireLambdaFunctions(PATH)
+  const end = new Date().getTime();
+  const timeTakenInRebuild = end - start
+  console.log(`Done in ${timeTakenInRebuild}ms.`)
 }
 
 const startServer = () => app.listen(PORT, () => showHeader(lambdaFunctions))
