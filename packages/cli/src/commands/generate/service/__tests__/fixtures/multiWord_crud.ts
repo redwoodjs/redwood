@@ -1,9 +1,9 @@
-import { db } from 'src/lib/db'
 import {
   UserProfileWhereUniqueInput,
   UserProfileCreateInput,
   UserProfileUpdateInput,
 } from '@prisma/client'
+import { db } from 'src/lib/db'
 
 export const userProfiles = () => {
   return db.userProfile.findMany()

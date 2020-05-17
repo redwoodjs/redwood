@@ -1,3 +1,7 @@
+import {
+  UserWhereUniqueInput,
+} from '@prisma/client'
+import { ResolverArgs } from '@redwoodjs/api/dist/types'
 import { db } from 'src/lib/db'
 
 export const users = () => {
@@ -5,6 +9,6 @@ export const users = () => {
 }
 
 export const User = {
-  userProfiles: (_obj, { root }) => db.user.findOne({ where: { id: root.id } }).userProfiles(),
-  identity: (_obj, { root }) => db.user.findOne({ where: { id: root.id } }).identity(),
+  userProfiles: (_obj, { root }: ResolverArgs<UserWhereUniqueInput>) => db.user.findOne({ where: { id: root.id } }).userProfiles(),
+  identity: (_obj, { root }: ResolverArgs<UserWhereUniqueInput>) => db.user.findOne({ where: { id: root.id } }).identity(),
 }
