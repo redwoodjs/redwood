@@ -12,6 +12,7 @@ module.exports = {
   globals: {
     __REDWOOD__API_PROXY_PATH: '/',
   },
+  // TODO: use getPaths().web.base instead.
   setupFilesAfterEnv: [path.resolve(__dirname, './jest.setup.web.js')],
   moduleNameMapper: {
     '^react$': path.resolve(redwoodPaths.base, 'node_modules', 'react'),
