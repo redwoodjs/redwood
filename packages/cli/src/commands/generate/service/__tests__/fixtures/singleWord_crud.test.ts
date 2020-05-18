@@ -1,4 +1,6 @@
+/*
 import { posts } from './posts'
+*/
 
 describe('posts', () => {
   it('returns true', () => {

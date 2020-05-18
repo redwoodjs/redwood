@@ -15,6 +15,7 @@
   "dependencies": {
     "@prisma/sdk": "^2.0.0-beta.5",
     "@redwoodjs/internal": "^0.7.0-rc.2",
+    "babel-plugin-generator-prettier": "^1.2.0",
     "camelcase": "^5.3.1",
     "chalk": "^3.0.0",
     "concurrently": "^5.1.0",
