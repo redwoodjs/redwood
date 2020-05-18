@@ -5,6 +5,7 @@ import pluralize from 'pluralize'
 import Listr from 'listr'
 import pascalcase from 'pascalcase'
 import { paramCase } from 'param-case'
+import { CommandModule } from 'yargs'
 
 import { generateTemplate, getPaths, writeFilesTask } from 'src/lib'
 import c from 'src/lib/colors'
@@ -76,12 +77,12 @@ export const createYargsForComponentGeneration = ({
 }: {
   componentName: 'cell' | 'component' | 'function' | 'layout' | 'service'
   filesFn: Function
-}) => {
+}): CommandModule => {
   return {
     command: `${componentName} <name>`,
-    desc: `Generate a ${componentName} component.`,
+    describe: `Generate a ${componentName} component.`,
     builder: { force: { type: 'boolean', default: false } },
-    handler: async ({ force, ...rest }: { force: boolean }) => {
+    handler: async ({ force, ...rest }) => {
       const tasks = new Listr(
         [
           {

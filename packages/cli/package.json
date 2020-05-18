@@ -38,6 +38,7 @@
     "@types/listr": "^0.14.2",
     "@types/node-fetch": "^2.5.5",
     "@types/pluralize": "^0.0.29",
+    "@types/yargs": "^15.0.5",
     "rimraf": "^3.0.2"
   },
   "scripts": {
