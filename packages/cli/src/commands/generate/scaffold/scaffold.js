@@ -46,7 +46,7 @@ const getIdType = (model) => {
   return model.fields.find((field) => field.isId)?.type
 }
 
-export const files = async ({ model: name }) => {
+export const files = async ({ model: name, path: scaffoldPath = '' }) => {
   const model = await getSchema(pascalcase(pluralize.singular(name)))
 
   return {
@@ -57,9 +57,9 @@ export const files = async ({ model: name }) => {
       relations: relationsForModel(model),
     })),
     ...assetFiles(name),
-    ...layoutFiles(name),
-    ...pageFiles(name),
-    ...(await componentFiles(name)),
+    ...layoutFiles(name, scaffoldPath),
+    ...pageFiles(name, scaffoldPath),
+    ...(await componentFiles(name, scaffoldPath)),
   }
 }
 
@@ -88,10 +88,26 @@ const assetFiles = (name) => {
   return fileList
 }
 
-const layoutFiles = (name) => {
+const layoutFiles = (name, scaffoldPath = '') => {
   const pluralName = pascalcase(pluralize(name))
   const singularName = pascalcase(pluralize.singular(name))
   let fileList = {}
+
+  const pascalScaffoldPath =
+    scaffoldPath === ''
+      ? scaffoldPath
+      : scaffoldPath.split('/').map(pascalcase).join('/') + '/'
+
+  const pluralCamelName = camelcase(pluralName)
+  const camelScaffoldPath = camelcase(pascalcase(scaffoldPath))
+
+  const pluralRouteName =
+    scaffoldPath === '' ? pluralCamelName : `${camelScaffoldPath}${pluralName}`
+
+  const newRouteName =
+    scaffoldPath === ''
+      ? `new${singularName}`
+      : `${camelScaffoldPath}New${singularName}`
 
   LAYOUTS.forEach((layout) => {
     const outputLayoutName = layout
@@ -100,6 +116,7 @@ const layoutFiles = (name) => {
       .replace(/\.template/, '')
     const outputPath = path.join(
       getPaths().web.layouts,
+      pascalScaffoldPath,
       outputLayoutName.replace(/\.js/, ''),
       outputLayoutName
     )
@@ -107,6 +124,9 @@ const layoutFiles = (name) => {
       path.join('scaffold', 'templates', 'layouts', layout),
       {
         name,
+        pascalScaffoldPath,
+        pluralRouteName,
+        newRouteName,
       }
     )
     fileList[outputPath] = template
@@ -115,10 +135,15 @@ const layoutFiles = (name) => {
   return fileList
 }
 
-const pageFiles = (name) => {
+const pageFiles = (name, scaffoldPath = '') => {
   const pluralName = pascalcase(pluralize(name))
   const singularName = pascalcase(pluralize.singular(name))
   let fileList = {}
+
+  const pascalScaffoldPath =
+    scaffoldPath === ''
+      ? scaffoldPath
+      : scaffoldPath.split('/').map(pascalcase).join('/') + '/'
 
   PAGES.forEach((page) => {
     const outputPageName = page
@@ -127,6 +152,7 @@ const pageFiles = (name) => {
       .replace(/\.template/, '')
     const outputPath = path.join(
       getPaths().web.pages,
+      pascalScaffoldPath,
       outputPageName.replace(/\.js/, ''),
       outputPageName
     )
@@ -134,6 +160,7 @@ const pageFiles = (name) => {
       path.join('scaffold', 'templates', 'pages', page),
       {
         name,
+        pascalScaffoldPath,
       }
     )
     fileList[outputPath] = template
@@ -142,7 +169,7 @@ const pageFiles = (name) => {
   return fileList
 }
 
-const componentFiles = async (name) => {
+const componentFiles = async (name, scaffoldPath = '') => {
   const pluralName = pascalcase(pluralize(name))
   const singularName = pascalcase(pluralize.singular(name))
   const model = await getSchema(singularName)
@@ -159,6 +186,32 @@ const componentFiles = async (name) => {
       label: humanize(column.name),
     }))
 
+  const pascalScaffoldPath =
+    scaffoldPath === ''
+      ? scaffoldPath
+      : scaffoldPath.split('/').map(pascalcase).join('/') + '/'
+
+  const pluralCamelName = camelcase(pluralName)
+  const camelScaffoldPath = camelcase(pascalcase(scaffoldPath))
+
+  const pluralRouteName =
+    scaffoldPath === '' ? pluralCamelName : `${camelScaffoldPath}${pluralName}`
+
+  const editRouteName =
+    scaffoldPath === ''
+      ? `edit${singularName}`
+      : `${camelScaffoldPath}Edit${singularName}`
+
+  const singularRouteName =
+    scaffoldPath === ''
+      ? camelcase(singularName)
+      : `${camelScaffoldPath}${singularName}`
+
+  const newRouteName =
+    scaffoldPath === ''
+      ? `new${singularName}`
+      : `${camelScaffoldPath}New${singularName}`
+
   await asyncForEach(COMPONENTS, (component) => {
     const outputComponentName = component
       .replace(/Names/, pluralName)
@@ -166,6 +219,7 @@ const componentFiles = async (name) => {
       .replace(/\.template/, '')
     const outputPath = path.join(
       getPaths().web.components,
+      pascalScaffoldPath,
       outputComponentName.replace(/\.js/, ''),
       outputComponentName
     )
@@ -178,6 +232,11 @@ const componentFiles = async (name) => {
         editableColumns,
         idType,
         intForeignKeys,
+        pascalScaffoldPath,
+        pluralRouteName,
+        editRouteName,
+        singularRouteName,
+        newRouteName,
       }
     )
     fileList[outputPath] = template
@@ -187,7 +246,7 @@ const componentFiles = async (name) => {
 }
 
 // add routes for all pages
-export const routes = async ({ model: name }) => {
+export const routes = async ({ model: name, path: scaffoldPath = '' }) => {
   const singularPascalName = pascalcase(pluralize.singular(name))
   const pluralPascalName = pascalcase(pluralize(name))
   const singularCamelName = camelcase(singularPascalName)
@@ -196,11 +255,44 @@ export const routes = async ({ model: name }) => {
   const model = await getSchema(singularPascalName)
   const idRouteParam = getIdType(model) === 'Int' ? ':Int' : ''
 
+  const paramScaffoldPath =
+    scaffoldPath === ''
+      ? scaffoldPath
+      : scaffoldPath.split('/').map(paramCase).join('/') + '/'
+  const pascalScaffoldPath = pascalcase(scaffoldPath)
+  const camelScaffoldPath = camelcase(pascalScaffoldPath)
+
+  const newRouteName =
+    scaffoldPath === ''
+      ? `new${singularPascalName}`
+      : `${camelScaffoldPath}New${singularPascalName}`
+
+  const editRouteName =
+    scaffoldPath === ''
+      ? `edit${singularPascalName}`
+      : `${camelScaffoldPath}Edit${singularPascalName}`
+
+  const singularRouteName =
+    scaffoldPath === ''
+      ? singularCamelName
+      : `${camelScaffoldPath}${singularPascalName}`
+
+  const pluralRouteName =
+    scaffoldPath === ''
+      ? pluralCamelName
+      : `${camelScaffoldPath}${pluralPascalName}`
+
+  // TODO: These names look like they need changing
+
   return [
-    `<Route path="/${pluralParamName}/new" page={New${singularPascalName}Page} name="new${singularPascalName}" />`,
-    `<Route path="/${pluralParamName}/{id${idRouteParam}}/edit" page={Edit${singularPascalName}Page} name="edit${singularPascalName}" />`,
-    `<Route path="/${pluralParamName}/{id${idRouteParam}}" page={${singularPascalName}Page} name="${singularCamelName}" />`,
-    `<Route path="/${pluralParamName}" page={${pluralPascalName}Page} name="${pluralCamelName}" />`,
+    // new
+    `<Route path="/${paramScaffoldPath}${pluralParamName}/new" page={${pascalScaffoldPath}New${singularPascalName}Page} name="${newRouteName}" />`,
+    // edit
+    `<Route path="/${paramScaffoldPath}${pluralParamName}/{id${idRouteParam}}/edit" page={${pascalScaffoldPath}Edit${singularPascalName}Page} name="${editRouteName}" />`,
+    // singular
+    `<Route path="/${paramScaffoldPath}${pluralParamName}/{id${idRouteParam}}" page={${pascalScaffoldPath}${singularPascalName}Page} name="${singularRouteName}" />`,
+    // plural
+    `<Route path="/${paramScaffoldPath}${pluralParamName}" page={${pascalScaffoldPath}${pluralPascalName}Page} name="${pluralRouteName}" />`,
   ]
 }
 
@@ -221,25 +313,42 @@ const addScaffoldImport = () => {
   return 'Added scaffold import to index.js'
 }
 
-export const command = 'scaffold <model>'
+export const command = 'scaffold <pathSlashModel>'
 export const desc = 'Generate pages, SDL, and a services object.'
 export const builder = {
   force: { type: 'boolean', default: false },
+  // So the user can specify a path to nest the generated files under.
+  // E.g. yarn rw g scaffold post --path=admin
+  path: { type: 'string', default: false },
 }
-export const handler = async ({ model, force }) => {
+// The user can also specify a path in the argument.
+// E.g. yarn rw g scaffold admin/post
+export const handler = async ({ pathSlashModel, force, path: pathFlag }) => {
+  let path
+  // If path is specified by both pathSlashModel and pathFlag,
+  // we give pathFlag precedence.
+  pathFlag
+    ? (path = pathFlag)
+    : (path = pathSlashModel.split('/').slice(0, -1).join('/'))
+
+  // This code will work whether or not there's a path in pathSlashModel
+  // E.g. if pathSlashModel is just 'post',
+  // path.split('/') will return ['post'].
+  const model = pathSlashModel.split('/').pop()
+
   const tasks = new Listr(
     [
       {
         title: 'Generating scaffold files...',
         task: async () => {
-          const f = await files({ model })
+          const f = await files({ model, path })
           return writeFilesTask(f, { overwriteExisting: force })
         },
       },
       {
         title: 'Adding scaffold routes...',
         task: async () => {
-          return addRoutesToRouterTask(await routes({ model }))
+          return addRoutesToRouterTask(await routes({ model, path }))
         },
       },
       {
