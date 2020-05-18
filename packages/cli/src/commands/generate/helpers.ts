@@ -26,6 +26,17 @@ export const templateForComponentFile = ({
   templateVars,
   componentName,
   outputPath,
+}: {
+  name: string
+  suffix?: string
+  extension?: string
+  webPathSection?: string
+  apiPathSection?: string
+  generator: string
+  templatePath: string
+  templateVars?: {}
+  componentName?: string
+  outputPath?: string
 }) => {
   const basePath = webPathSection
     ? getPaths().web[webPathSection]
@@ -50,7 +61,7 @@ export const templateForComponentFile = ({
  * Creates a route path, either returning the existing path if passed, otherwise
  * creates one based on the name
  */
-export const pathName = (path, name) => {
+export const pathName = (path: string | null, name: string): string => {
   return path ?? `/${paramCase(name)}`
 }
 
@@ -62,12 +73,15 @@ export const pathName = (path, name) => {
 export const createYargsForComponentGeneration = ({
   componentName,
   filesFn,
+}: {
+  componentName: 'cell' | 'component' | 'function' | 'layout' | 'service'
+  filesFn: Function
 }) => {
   return {
     command: `${componentName} <name>`,
     desc: `Generate a ${componentName} component.`,
     builder: { force: { type: 'boolean', default: false } },
-    handler: async ({ force, ...rest }) => {
+    handler: async ({ force, ...rest }: { force: boolean }) => {
       const tasks = new Listr(
         [
           {
@@ -78,7 +92,7 @@ export const createYargsForComponentGeneration = ({
             },
           },
         ],
-        { collapse: false, exitOnError: true }
+        { exitOnError: true }
       )
 
       try {
@@ -91,7 +105,8 @@ export const createYargsForComponentGeneration = ({
 }
 
 // Returns all relations to other models
-export const relationsForModel = (model) => {
+// TODO align with prisma type once src/lib is typed
+export const relationsForModel = (model: { fields: any[] }) => {
   return model.fields
     .filter((f) => f.relationName)
     .map((field) => {
@@ -100,8 +115,11 @@ export const relationsForModel = (model) => {
     })
 }
 
-// Returns only relations that are of datatype Int
-export const intForeignKeysForModel = (model) => {
+/**
+ * Returns only relations that are of datatype Int
+ * */
+// TODO align with prisma types once src/lib is typed
+export const intForeignKeysForModel = (model: { fields: any[] }) => {
   return model.fields
     .filter((f) => f.name.match(/Id$/) && f.type === 'Int')
     .map((f) => f.name)
