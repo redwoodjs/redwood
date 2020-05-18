@@ -6,6 +6,7 @@ export const {
   desc,
   builder,
   handler,
+  tasks,
 } = createYargsForComponentDestroy({
   componentName: 'cell',
   filesFn: cellFiles,

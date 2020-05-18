@@ -11,22 +11,22 @@ import fs from 'fs'
 
 import 'src/lib/test'
 
-import { files } from '../../../generate/component/component'
-import { tasks } from '../component'
+import { files } from '../../../generate/cell/cell'
+import { tasks } from '../cell'
 
 beforeEach(() => {
   fs.__setMockFiles({
-    ...files({ name: 'About' }),
+    ...files({ name: 'User' }),
   })
 })
 
-test('destroys component files', async () => {
+test('destroys cell files', async () => {
   const unlinkSpy = jest.spyOn(fs, 'unlinkSync')
-  const t = tasks({ componentName: 'component', filesFn: files, name: 'About' })
+  const t = tasks({ componentName: 'cell', filesFn: files, name: 'User' })
   t.setRenderer('silent')
 
   return t.run().then(() => {
-    const generatedFiles = Object.keys(files({ name: 'About' }))
+    const generatedFiles = Object.keys(files({ name: 'User' }))
     expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
     generatedFiles.forEach((f) => expect(unlinkSpy).toHaveBeenCalledWith(f))
   })
