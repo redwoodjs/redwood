@@ -5,26 +5,28 @@ import c from 'src/lib/colors'
 
 import {
   files,
+  resolveScaffoldPath,
   routes as scaffoldRoutes,
 } from '../../generate/scaffold/scaffold'
 
-export const command = 'scaffold <model>'
+export const command = 'scaffold <pathSlashModel>'
 export const desc = 'Destroy pages, SDL, and a services object.'
 
-export const handler = async ({ model }) => {
+export const handler = async ({ pathSlashModel }) => {
+  const { model, path } = resolveScaffoldPath({ pathSlashModel })
   const tasks = new Listr(
     [
       {
         title: 'Destroying scaffold files...',
         task: async () => {
-          const f = await files({ model })
+          const f = await files({ model, path })
           return deleteFilesTask(f)
         },
       },
       {
         title: 'Cleaning up scaffold routes...',
         task: async () => {
-          const routes = await scaffoldRoutes({ model })
+          const routes = await scaffoldRoutes({ model, path })
           const routeNames = routes.map(extractRouteName)
           return removeRoutesFromRouterTask(routeNames)
         },

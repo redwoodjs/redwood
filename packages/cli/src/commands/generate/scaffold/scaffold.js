@@ -313,17 +313,7 @@ const addScaffoldImport = () => {
   return 'Added scaffold import to index.js'
 }
 
-export const command = 'scaffold <pathSlashModel>'
-export const desc = 'Generate pages, SDL, and a services object.'
-export const builder = {
-  force: { type: 'boolean', default: false },
-  // So the user can specify a path to nest the generated files under.
-  // E.g. yarn rw g scaffold post --path=admin
-  path: { type: 'string', default: false },
-}
-// The user can also specify a path in the argument.
-// E.g. yarn rw g scaffold admin/post
-export const handler = async ({ pathSlashModel, force, path: pathFlag }) => {
+export const resolveScaffoldPath = ({ pathSlashModel, pathFlag }) => {
   let path
   // If path is specified by both pathSlashModel and pathFlag,
   // we give pathFlag precedence.
@@ -335,6 +325,23 @@ export const handler = async ({ pathSlashModel, force, path: pathFlag }) => {
   // E.g. if pathSlashModel is just 'post',
   // path.split('/') will return ['post'].
   const model = pathSlashModel.split('/').pop()
+
+  return { model, path }
+}
+
+export const command = 'scaffold <pathSlashModel>'
+export const desc = 'Generate pages, SDL, and a services object.'
+export const builder = {
+  force: { type: 'boolean', default: false },
+  // So the user can specify a path to nest the generated files under.
+  // E.g. yarn rw g scaffold post --path=admin
+  path: { type: 'string', default: false },
+}
+
+// The user can also specify a path in the argument.
+// E.g. yarn rw g scaffold admin/post
+export const handler = async ({ pathSlashModel, force, path: pathFlag }) => {
+  const { model, path } = resolveScaffoldPath({ pathSlashModel, pathFlag })
 
   const tasks = new Listr(
     [
