@@ -13,7 +13,9 @@ export const filesWithTemplateVars = (templateVars) => {
   return (args) => files({ ...args, ...templateVars })
 }
 
-export const { command, desc, handler } = createYargsForComponentDestroy({
-  componentName: 'service',
-  filesFn: filesWithTemplateVars({ crud: false }),
-})
+export const { command, desc, handler, tasks } = createYargsForComponentDestroy(
+  {
+    componentName: 'service',
+    filesFn: filesWithTemplateVars({ crud: false }),
+  }
+)
