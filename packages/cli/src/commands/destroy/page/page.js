@@ -29,9 +29,9 @@ export const tasks = ({ name, path }) =>
   )
 
 export const handler = async ({ name, path }) => {
-  const tasks = tasks({ name, path })
+  const t = tasks({ name, path })
   try {
-    await tasks.run()
+    await t.run()
   } catch (e) {
     console.log(c.error(e.message))
   }
