@@ -33,14 +33,14 @@ let installCanaryCommand =
   ' && yarn workspace api upgrade @redwoodjs/api@canary' +
   ' && yarn workspace web upgrade @redwoodjs/web@canary @redwoodjs/router@canary'
 
-// yargs allows passing the 'dry-run' alias 'd' here,
-// which we need to use because babel fails on 'dry-run'
-export const handler = async ({ d, canary }) => {
-  const tasks = new Listr([
+const checkInstalled = () => {
+  return [
     {
       // yarn upgrade will install listed packages even if not already installed
-      // this is a hack to check for Auth install and then add to options if true
-      title: 'Checking installed packages...',
+      // this is a workaround to check for Auth install and then add to options if true
+      // TODO: this will not support cases where api/ or web/ do not exist;
+      // need to build a list of installed and use reference object to map commands
+      title: '...',
       task: async (_ctx, task) => {
         try {
           const { stdout } = await execa.command(
@@ -48,9 +48,9 @@ export const handler = async ({ d, canary }) => {
           )
           if (stdout.includes('redwoodjs/auth')) {
             installCanaryCommand += ' @redwoodjs/auth@canary'
-            task.title = 'Checking installed packages... found @redwoodjs/auth'
+            task.title = 'Found @redwoodjs/auth'
           } else {
-            task.title = 'Checking installed packages... done'
+            task.title = 'Done'
           }
         } catch (e) {
           task.skip('"yarn list ..." caused an Error')
@@ -58,8 +58,15 @@ export const handler = async ({ d, canary }) => {
         }
       },
     },
+  ]
+}
+
+// yargs allows passing the 'dry-run' alias 'd' here,
+// which we need to use because babel fails on 'dry-run'
+const runUpgrade = ({ d, canary }) => {
+  return [
     {
-      title: "Running 'redwood upgrade'",
+      title: '...',
       task: (_ctx, task) => {
         if (d) {
           task.title = canary
@@ -73,6 +80,8 @@ export const handler = async ({ d, canary }) => {
               stdio: 'inherit',
               shell: true,
             })
+          } else {
+            throw new Error()
           }
           // using @tag with workspaces limits us to use 'upgrade' with full list
         } else if (canary) {
@@ -95,7 +104,24 @@ export const handler = async ({ d, canary }) => {
         }
       },
     },
-  ])
+  ]
+}
+
+export const handler = async ({ d, canary }) => {
+  // structuring as nested tasks to avoid bug with task.title causing duplicates
+  const tasks = new Listr(
+    [
+      {
+        title: 'Checking installed packages',
+        task: () => new Listr(checkInstalled()),
+      },
+      {
+        title: 'Running upgrade command',
+        task: () => new Listr(runUpgrade({ d, canary })),
+      },
+    ],
+    { collapse: false }
+  )
 
   try {
     await tasks.run()
