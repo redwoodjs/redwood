@@ -1,7 +1,22 @@
 global.__dirname = __dirname
+
 import { loadGeneratorFixture } from 'src/lib/test'
 
 import * as service from '../service'
+
+jest.mock('../../../../lib', () => {
+  const path = require('path')
+  const lib = jest.requireActual('../../../../lib')
+  return {
+    ...lib,
+    prettierOptions: () => {
+      return require(path.resolve(
+        global.__dirname +
+          '../../../../../lib/__tests__/fixtures/prettier.config.js'
+      ))
+    },
+  }
+})
 
 const extensionForBaseArgs = (baseArgs) =>
   baseArgs && baseArgs.typescript ? 'ts' : 'js'

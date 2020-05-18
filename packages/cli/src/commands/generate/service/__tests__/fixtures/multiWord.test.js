@@ -1,4 +1,6 @@
+/*
 import { userProfiles } from './userProfiles'
+*/
 
 describe('userProfiles', () => {
   it('returns true', () => {
