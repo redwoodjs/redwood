@@ -1,11 +1,8 @@
-import { resolve } from 'path'
-
 import camelcase from 'camelcase'
 import pluralize from 'pluralize'
-import * as prettier from 'prettier'
 import * as babel from '@babel/core'
 
-import { prettierOptions } from '../../../lib'
+import { transformTSToJS } from '../../../lib'
 import {
   templateForComponentFile,
   createYargsForComponentGeneration,
@@ -14,7 +11,6 @@ import {
 export const files = async ({ name, relations, ...rest }) => {
   const componentName = camelcase(pluralize(name))
   const extension = 'ts'
-  const configOptions = prettierOptions()
   const serviceFile = templateForComponentFile({
     name,
     componentName: componentName,
@@ -42,16 +38,10 @@ export const files = async ({ name, relations, ...rest }) => {
   return [serviceFile, testFile].reduce((acc, [outputPath, content]) => {
     const isTypescript = rest.typescript
     if (!isTypescript) {
-      content = babel.transform(content, {
-        plugins: ['@babel/plugin-transform-typescript', 'generator-prettier'],
-        generatorOpts: configOptions,
-      }).code
+      content = transformTSToJS(content)
       outputPath = outputPath.replace('.ts', '.js')
     }
-    content = prettier.format(content, {
-      ...configOptions,
-      parser: isTypescript ? 'babel-ts' : 'babel',
-    })
+
     return {
       [outputPath]: content,
       ...acc,

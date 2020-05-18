@@ -7,6 +7,7 @@ import pluralize from 'pluralize'
 
 import {
   generateTemplate,
+  transformTSToJS,
   getSchema,
   getPaths,
   writeFilesTask,
@@ -115,9 +116,8 @@ export const files = async ({ name, crud, typescript }) => {
     enums,
   } = await sdlFromSchemaModel(pascalcase(pluralize.singular(name)))
 
-  const extension = typescript ? 'ts' : 'js'
-  const template = generateTemplate(
-    path.join('sdl', 'templates', `sdl.${extension}.template`),
+  let template = generateTemplate(
+    path.join('sdl', 'templates', `sdl.ts.template`),
     {
       name,
       crud,
@@ -129,10 +129,16 @@ export const files = async ({ name, crud, typescript }) => {
     }
   )
 
-  const outputPath = path.join(
+  const extension = typescript ? 'ts' : 'js'
+  let outputPath = path.join(
     getPaths().api.graphql,
     `${camelcase(pluralize(name))}.sdl.${extension}`
   )
+
+  if (!typescript) {
+    template = transformTSToJS(template)
+  }
+
   return {
     [outputPath]: template,
     ...(await serviceFiles({ name, crud, relations, typescript })),

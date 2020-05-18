@@ -36,6 +36,28 @@ jest.mock('@redwoodjs/internal', () => {
   }
 })
 
+global.__prettierPath = path.resolve(
+  __dirname,
+  './__tests__/fixtures/prettier.config.js'
+)
+
+jest.mock('path', () => {
+  const path = jest.requireActual('path')
+  return {
+    ...path,
+    join: (...paths) => {
+      if (
+        paths &&
+        paths[0] === '/path/to/project' &&
+        paths[1] === 'prettier.config.js'
+      ) {
+        return global.__prettierPath
+      }
+      return path.join(...paths)
+    },
+  }
+})
+
 export const generatorsRootPath = path.join(
   __dirname,
   '..',
