@@ -4722,6 +4722,15 @@ babel-plugin-dynamic-import-node@^2.3.3:
   dependencies:
     object.assign "^4.1.0"
 
+babel-plugin-generator-prettier@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/babel-plugin-generator-prettier/-/babel-plugin-generator-prettier-1.2.0.tgz#ec4a00c787f670bbf669228b5375bf9fcd3a5fac"
+  integrity sha512-FE/doiOxcLaw7f4ydNw/poNyxbNUiTmhc4LAx/KW3JKBYzMVsOuLk+oGbgdHJeIAl0B9QKIdCO/ZD4hpdsXV+Q==
+  dependencies:
+    has "^1.0.3"
+    prettier "^1.18.2"
+    source-map "^0.5.7"
+
 babel-plugin-graphql-tag@^2.5.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-graphql-tag/-/babel-plugin-graphql-tag-2.5.0.tgz#2b2df0dc4b9638022d18868d03abe60117aaf38d"
@@ -13022,7 +13031,11 @@ prettier-linter-helpers@^1.0.0:
     fast-diff "^1.1.2"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 prettier@^1.19.1:
+=======
+prettier@^1.18.2:
+>>>>>>> 7e8f41a... extract transform from service, get it working with SDL
   version "1.19.1"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.19.1.tgz#f7d7f5ff8a9cd872a7be4ca142095956a60797cb"
   integrity sha512-s7PoyDv/II1ObgQunCbB9PdLmUcBZcnWOcxDh7O0N/UwDEsHyqkW+Qh28jW+mVuCdx7gLB0BotYI1Y6uI9iyew==
@@ -14824,7 +14837,7 @@ source-map-url@^0.4.0:
   resolved "https://registry.yarnpkg.com/source-map-url/-/source-map-url-0.4.0.tgz#3e935d7ddd73631b97659956d55128e87b5084a3"
   integrity sha1-PpNdfd1zYxuXZZlW1VEo6HtQhKM=
 
-source-map@^0.5.0, source-map@^0.5.6:
+source-map@^0.5.0, source-map@^0.5.6, source-map@^0.5.7:
   version "0.5.7"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.5.7.tgz#8a039d2d1021d22d1ea14c80d8ea468ba2ef3fcc"
   integrity sha1-igOdLRAh0i0eoUyA2OpGi6LvP8w=
