@@ -24,18 +24,42 @@ export const builder = (yargs) => {
 }
 
 const rwPackages =
-  '@redwoodjs/core @redwoodjs/api @redwoodjs/web @redwoodjs/router'
+  '@redwoodjs/core @redwoodjs/api @redwoodjs/web @redwoodjs/router @redwoodjs/auth'
 
-// yarn upgrade-interactive does not allow tags, so we resort to this mess
-const installCanaryCommand =
-  'yarn workspace api upgrade @redwoodjs/api@canary' +
-  '&& yarn workspace web upgrade @redwoodjs/web@canary @redwoodjs/router@canary' +
-  '&& yarn upgrade @redwoodjs/core@canary'
+// yarn upgrade-interactive does not allow --tags, so we resort to this mess
+// @redwoodjs/auth may not be installed so we don't include here
+let installCanaryCommand =
+  // 'yarn upgrade @redwoodjs/core@canary' +
+  // ' && yarn workspace api upgrade @redwoodjs/api@canary' +
+  // ' && yarn workspace web upgrade @redwoodjs/web@canary @redwoodjs/router@canary'
+  'yarn workspace web upgrade @redwoodjs/web@canary'
 
 // yargs allows passing the 'dry-run' alias 'd' here,
 // which we need to use because babel fails on 'dry-run'
 export const handler = async ({ d, canary }) => {
   const tasks = new Listr([
+    {
+      // yarn upgrade will install listed packages even if not already installed
+      // this is a hack to check for install and then add to options if true
+      title: 'Checking installed packages...',
+      task: async (_ctx, task) => {
+        try {
+          const { stdout } = await execa.command(
+            'yarn list --depth 0 --pattern @redwoodjs/auth'
+          )
+          console.log('===this is stdout===\n', stdout)
+          if (stdout.includes('redwoodjs/auth')) {
+            installCanaryCommand += ' @redwoodjs/auth@canary'
+            task.title = 'Checking installed packages... found @redwoodjs/auth'
+          } else {
+            task.title = 'Checking installed packages... done'
+          }
+        } catch (e) {
+          task.skip('"yarn list ..." caused an Error')
+          console.log(c.error(e.message))
+        }
+      },
+    },
     {
       title: "Running 'redwood upgrade'",
       task: (_ctx, task) => {
@@ -43,12 +67,16 @@ export const handler = async ({ d, canary }) => {
           task.title = canary
             ? 'The --dry-run option is not supported for --canary'
             : 'Checking available upgrades for @redwoodjs packages'
+          // 'yarn outdated --scope @redwoodjs' will include netlify plugin ¯\_(ツ)_/¯
+          // so we have to use hardcoded list,
+          // which will NOT display info for uninstalled packages
           if (!canary) {
             execa.command(`yarn outdated ${rwPackages}`, {
               stdio: 'inherit',
               shell: true,
             })
           }
+          // using @tag with workspaces limits us to 'upgrade' with full list
         } else if (canary) {
           task.title =
             'Force upgrading @redwoodjs packages to latest canary release'
@@ -58,10 +86,14 @@ export const handler = async ({ d, canary }) => {
           })
         } else {
           task.title = 'Running @redwoodjs package interactive upgrade CLI'
-          execa(`yarn upgrade-interactive ${rwPackages}`, ['--latest'], {
-            stdio: 'inherit',
-            shell: true,
-          })
+          execa(
+            'yarn upgrade-interactive',
+            ['--scope @redwoodjs', '--latest'],
+            {
+              stdio: 'inherit',
+              shell: true,
+            }
+          )
         }
       },
     },
