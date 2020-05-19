@@ -20,6 +20,11 @@ beforeEach(() => {
   })
 })
 
+afterEach(() => {
+  fs.__setMockFiles({})
+  jest.spyOn(fs, 'unlinkSync').mockClear()
+})
+
 test('destroys service files', async () => {
   const unlinkSpy = jest.spyOn(fs, 'unlinkSync')
   const t = tasks({ componentName: 'service', filesFn: files, name: 'User' })

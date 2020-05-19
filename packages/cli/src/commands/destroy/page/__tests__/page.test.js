@@ -28,6 +28,11 @@ beforeEach(() => {
   })
 })
 
+afterEach(() => {
+  fs.__setMockFiles({})
+  jest.spyOn(fs, 'unlinkSync').mockClear()
+})
+
 test('destroys page files', async () => {
   const unlinkSpy = jest.spyOn(fs, 'unlinkSync')
   const t = tasks({ name: 'About' })

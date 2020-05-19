@@ -15,9 +15,12 @@ import { files } from '../../../generate/layout/layout'
 import { tasks } from '../layout'
 
 beforeEach(() => {
-  fs.__setMockFiles({
-    ...files({ name: 'Blog' }),
-  })
+  fs.__setMockFiles(files({ name: 'Blog' }))
+})
+
+afterEach(() => {
+  fs.__setMockFiles({})
+  jest.spyOn(fs, 'unlinkSync').mockClear()
 })
 
 test('destroys layout files', async () => {

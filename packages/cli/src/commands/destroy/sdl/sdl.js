@@ -8,8 +8,8 @@ import { files } from '../../generate/sdl/sdl'
 export const command = 'sdl <model>'
 export const desc = 'Destroy a GraphQL schema and service object.'
 
-export const handler = async ({ model }) => {
-  const tasks = new Listr(
+export const tasks = ({ model }) =>
+  new Listr(
     [
       {
         title: 'Destroying GraphQL schema and service object files...',
@@ -22,8 +22,11 @@ export const handler = async ({ model }) => {
     { collapse: false, exitOnError: true }
   )
 
+export const handler = async ({ model }) => {
+  const t = tasks({ model })
+
   try {
-    await tasks.run()
+    await t.run()
   } catch (e) {
     console.log(c.error(e.message))
   }

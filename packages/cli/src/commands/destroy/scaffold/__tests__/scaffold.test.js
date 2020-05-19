@@ -35,7 +35,7 @@ describe('destroy scaffold post', () => {
     })
   })
 
-  afterAll(() => {
+  afterEach(() => {
     fs.__setMockFiles({})
     jest.spyOn(fs, 'unlinkSync').mockClear()
   })
@@ -86,7 +86,7 @@ describe('destroy namespaced scaffold post', () => {
     })
   })
 
-  afterAll(() => {
+  afterEach(() => {
     fs.__setMockFiles({})
     jest.spyOn(fs, 'unlinkSync').mockClear()
   })
