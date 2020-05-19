@@ -2,15 +2,12 @@ import type { default as GoTrue, User as GoTrueUser } from 'gotrue-js'
 import type { Auth0Client as Auth0 } from '@auth0/auth0-spa-js'
 import type NetlifyIdentityNS from 'netlify-identity-widget'
 
-import { MagicSDKAdditionalConfiguration } from 'magic-sdk'
-import { SDKBase,  } from 'magic-sdk/dist/cjs/core/sdk'
-
 // TODO: Can also return an Auth0 user which doesn't have a definition.
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Auth0User {}
 export type { GoTrueUser }
 export type NetlifyIdentity = typeof NetlifyIdentityNS
-export type MagicLinks = SDKBase<MagicSDKAdditionalConfiguration<string, any>>
+export type MagicLinks = { user: any; auth: any }
 
 export type SupportedAuthClients = Auth0 | GoTrue | NetlifyIdentity | MagicLinks
 export type SupportedAuthTypes = 'auth0' | 'gotrue' | 'netlify' | 'magicLinks'
@@ -107,6 +104,7 @@ const mapAuthClientNetlify = (client: NetlifyIdentity): AuthClient => {
         client.on('error', reject)
       })
     },
+
     getToken: async () => {
       const user = await client.currentUser()
       return user?.token?.access_token || null
@@ -117,50 +115,32 @@ const mapAuthClientNetlify = (client: NetlifyIdentity): AuthClient => {
   }
 }
 
-
-
 const mapAuthClientMagicLinks = (client: MagicLinks): AuthClient => {
   return {
     type: 'magicLinks',
     client,
     login: async ({ email }) => {
       try {
+        console.log('login: Login User With Magic Link')
         await client.auth.loginWithMagicLink({ email: email })
-      } catch {
+      } catch (e) {
+        // Handle errors if required!
+        console.error('error: ', e)
         // Handle errors if required!
       }
     },
-    logout: async () => {
-      try {
-        await client.user.logout()
-        // console.log(await client.user.isLoggedIn()) // => `false`
-      } catch {
-        // Handle errors if required!
-      }
+    logout: () => {
+      client.user.logout()
     },
     getToken: async () => {
-      if (!(await client.user.isLoggedIn())) {
-        return null
-      } else {
-        try {
-          return await client.user.getIdToken()
-        } catch {
-          // Handle errors if required!
-          return null
-        }
-      }
+      const token = await client.user.getIdToken()
+      console.log(token)
+      return token
     },
     currentUser: async () => {
-      if (!(await client.user.isLoggedIn())) {
-        return null
-      } else {
-        try {
-          return await client.user.getMetadata()
-        } catch {
-          // Handle errors if required!
-          return null
-        }
-      }
+      return (await client.user.isLoggedIn())
+        ? await client.user.getMetadata()
+        : null
     },
   }
 }
