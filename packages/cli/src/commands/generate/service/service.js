@@ -1,6 +1,5 @@
 import camelcase from 'camelcase'
 import pluralize from 'pluralize'
-import * as babel from '@babel/core'
 
 import { transformTSToJS } from '../../../lib'
 import {
@@ -8,7 +7,13 @@ import {
   createYargsForComponentGeneration,
 } from '../helpers'
 
-export const files = async ({ name, relations, ...rest }) => {
+export const files = async ({
+  name,
+  relations,
+  javascript,
+  typescript,
+  ...rest
+}) => {
   const componentName = camelcase(pluralize(name))
   const extension = 'ts'
   const serviceFile = templateForComponentFile({
@@ -36,8 +41,7 @@ export const files = async ({ name, relations, ...rest }) => {
   //    "path/to/fileB": "<<<template>>>",
   // }
   return [serviceFile, testFile].reduce((acc, [outputPath, content]) => {
-    const isTypescript = rest.typescript
-    if (!isTypescript) {
+    if (javascript && !typescript) {
       content = transformTSToJS(content)
       outputPath = outputPath.replace('.ts', '.js')
     }
@@ -49,13 +53,26 @@ export const files = async ({ name, relations, ...rest }) => {
   }, {})
 }
 
-export const builder = {
-  crud: { type: 'boolean', default: false, desc: 'Create CRUD functions' },
-  force: { type: 'boolean', default: false },
-  typescript: { type: 'boolean', default: false },
-}
-
-export const { command, desc, handler } = createYargsForComponentGeneration({
+export const {
+  command,
+  desc,
+  builder,
+  handler,
+} = createYargsForComponentGeneration({
   componentName: 'service',
   filesFn: files,
+  builder: {
+    crud: { type: 'boolean', default: false, desc: 'Create CRUD functions' },
+    force: { type: 'boolean', default: false },
+    typescript: {
+      type: 'boolean',
+      default: false,
+      desc: 'Generate TypeScript files',
+    },
+    javascript: {
+      type: 'boolean',
+      default: true,
+      desc: 'Generate JavaScript files',
+    },
+  },
 })
