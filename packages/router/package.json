@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/router",
-  "version": "0.6.0",
+  "version": "0.7.0-rc.2",
   "files": [
     "dist"
   ],
@@ -10,8 +10,8 @@
     "core-js": "3.6.4"
   },
   "peerDependencies": {
-    "react": "*",
-    "prop-types": "*"
+    "prop-types": "*",
+    "react": "*"
   },
   "scripts": {
     "build": "yarn cross-env NODE_ENV=production babel src -d dist --delete-dir-on-start",
@@ -20,10 +20,10 @@
     "test": "yarn jest src",
     "test:watch": "yarn test --watch"
   },
-  "gitHead": "2801c132f40263f9fcfbdac8b1750d2e423eb649",
+  "gitHead": "ac0479bd57af9938d040d1d7636bf58f9e9d9731",
   "devDependencies": {
+    "prop-types": "15.7.2",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "prop-types": "15.7.2"
+    "react-dom": "^16.13.1"
   }
 }

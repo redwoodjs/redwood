@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/internal",
-  "version": "0.6.0",
+  "version": "0.7.0-rc.2",
   "main": "dist/main.js",
   "files": [
     "dist"
@@ -26,5 +26,5 @@
     "test": "jest",
     "test:watch": "yarn test --watch"
   },
-  "gitHead": "2801c132f40263f9fcfbdac8b1750d2e423eb649"
+  "gitHead": "ac0479bd57af9938d040d1d7636bf58f9e9d9731"
 }
