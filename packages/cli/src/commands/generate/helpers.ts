@@ -5,10 +5,10 @@ import pluralize from 'pluralize'
 import Listr from 'listr'
 import pascalcase from 'pascalcase'
 import { paramCase } from 'param-case'
-import { CommandModule } from 'yargs'
+import type { CommandModule } from 'yargs'
 import { generateTemplate, getPaths, writeFilesTask } from 'src/lib'
 import c from 'src/lib/colors'
-import { Paths } from '@redwoodjs/internal/src/types'
+import type { Paths } from '@redwoodjs/internal/src/types'
 
 /**
  * Reduces boilerplate for generating an output path and content to write to disk
