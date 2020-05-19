@@ -3,7 +3,6 @@ import path from 'path'
 
 import execa from 'execa'
 import Listr from 'listr'
-
 import { getPaths, writeFilesTask } from 'src/lib'
 import c from 'src/lib/colors'
 

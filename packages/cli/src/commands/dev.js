@@ -2,7 +2,6 @@ import fs from 'fs'
 import path from 'path'
 
 import concurrently from 'concurrently'
-
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 

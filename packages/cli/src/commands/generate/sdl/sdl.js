@@ -4,7 +4,6 @@ import Listr from 'listr'
 import camelcase from 'camelcase'
 import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
-
 import {
   generateTemplate,
   getSchema,

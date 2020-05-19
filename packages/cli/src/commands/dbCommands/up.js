@@ -1,4 +1,5 @@
 import { runCommandTask } from 'src/lib'
+
 import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
 
 export const command = 'up'

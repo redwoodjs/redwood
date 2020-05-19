@@ -1,7 +1,6 @@
 import path from 'path'
 
 import camelcase from 'camelcase'
-
 import { getPaths } from 'src/lib'
 
 import {

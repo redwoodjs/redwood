@@ -1,7 +1,6 @@
 import execa from 'execa'
 import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
-
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 

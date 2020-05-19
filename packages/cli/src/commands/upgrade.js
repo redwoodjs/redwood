@@ -1,6 +1,5 @@
 import execa from 'execa'
 import Listr from 'listr'
-
 import c from 'src/lib/colors'
 
 export const command = 'upgrade'

@@ -7,7 +7,6 @@ import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 import { paramCase } from 'param-case'
 import humanize from 'humanize-string'
-
 import {
   generateTemplate,
   templateRoot,

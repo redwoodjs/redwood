@@ -1,5 +1,4 @@
 import execa from 'execa'
-
 import { getPaths } from 'src/lib'
 
 export const command = 'lint'
