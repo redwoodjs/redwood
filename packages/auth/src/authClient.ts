@@ -1,14 +1,19 @@
 import type { default as GoTrue, User as GoTrueUser } from 'gotrue-js'
 import type { Auth0Client as Auth0 } from '@auth0/auth0-spa-js'
 import type NetlifyIdentityNS from 'netlify-identity-widget'
+
+import { MagicSDKAdditionalConfiguration } from 'magic-sdk'
+import { SDKBase,  } from 'magic-sdk/dist/cjs/core/sdk'
+
 // TODO: Can also return an Auth0 user which doesn't have a definition.
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Auth0User {}
 export type { GoTrueUser }
 export type NetlifyIdentity = typeof NetlifyIdentityNS
+export type MagicLinks = SDKBase<MagicSDKAdditionalConfiguration<string, any>>
 
-export type SupportedAuthClients = Auth0 | GoTrue | NetlifyIdentity
-export type SupportedAuthTypes = 'auth0' | 'gotrue' | 'netlify'
+export type SupportedAuthClients = Auth0 | GoTrue | NetlifyIdentity | MagicLinks
+export type SupportedAuthTypes = 'auth0' | 'gotrue' | 'netlify' | 'magicLinks'
 
 export interface AuthClient {
   restoreAuthState?(): void | Promise<any>
@@ -112,6 +117,54 @@ const mapAuthClientNetlify = (client: NetlifyIdentity): AuthClient => {
   }
 }
 
+
+
+const mapAuthClientMagicLinks = (client: MagicLinks): AuthClient => {
+  return {
+    type: 'magicLinks',
+    client,
+    login: async ({ email }) => {
+      try {
+        await client.auth.loginWithMagicLink({ email: email })
+      } catch {
+        // Handle errors if required!
+      }
+    },
+    logout: async () => {
+      try {
+        await client.user.logout()
+        // console.log(await client.user.isLoggedIn()) // => `false`
+      } catch {
+        // Handle errors if required!
+      }
+    },
+    getToken: async () => {
+      if (!(await client.user.isLoggedIn())) {
+        return null
+      } else {
+        try {
+          return await client.user.getIdToken()
+        } catch {
+          // Handle errors if required!
+          return null
+        }
+      }
+    },
+    currentUser: async () => {
+      if (!(await client.user.isLoggedIn())) {
+        return null
+      } else {
+        try {
+          return await client.user.getMetadata()
+        } catch {
+          // Handle errors if required!
+          return null
+        }
+      }
+    },
+  }
+}
+
 export const createAuthClient = (
   client: SupportedAuthClients,
   type: SupportedAuthTypes
@@ -123,6 +176,8 @@ export const createAuthClient = (
       return mapAuthClientGoTrue(client as GoTrue)
     case 'netlify':
       return mapAuthClientNetlify(client as NetlifyIdentity)
+    case 'magicLinks':
+      return mapAuthClientMagicLinks(client as MagicLinks)
     default:
       throw new Error(
         `The ${type} auth client is not currently supported, please consider adding it.`
