@@ -93,7 +93,7 @@ test('generateTemplate returns a lodash-templated string', () => {
 // Be careful when editing the code.js fixture as the prettifier.config.js will cause it to get
 // prettified and then it already match the expected output, with no changes
 test('generateTemplate returns prettified JS code', () => {
-  const output = index.generateTemplate(path.join('fixtures', 'code.js'), {
+  const output = index.generateTemplate(path.join('fixtures', 'code.ts'), {
     root: __dirname,
     name: 'fox',
     foo: 'dog',

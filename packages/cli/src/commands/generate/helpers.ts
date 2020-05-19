@@ -6,9 +6,9 @@ import Listr from 'listr'
 import pascalcase from 'pascalcase'
 import { paramCase } from 'param-case'
 import { CommandModule } from 'yargs'
-
 import { generateTemplate, getPaths, writeFilesTask } from 'src/lib'
 import c from 'src/lib/colors'
+import { Paths } from '@redwoodjs/internal/src/types'
 
 /**
  * Reduces boilerplate for generating an output path and content to write to disk
@@ -31,8 +31,8 @@ export const templateForComponentFile = ({
   name: string
   suffix?: string
   extension?: string
-  webPathSection?: string
-  apiPathSection?: string
+  webPathSection?: keyof Paths['web']
+  apiPathSection?: keyof Paths['api']
   generator: string
   templatePath: string
   templateVars?: {}
@@ -93,7 +93,7 @@ export const createYargsForComponentGeneration = ({
             },
           },
         ],
-        { exitOnError: true }
+        { collapse: false, exitOnError: true }
       )
 
       try {

@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import lodash from 'lodash/string'
+import lodash from 'lodash'
 import camelcase from 'camelcase'
 import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
@@ -16,9 +16,48 @@ import { format } from 'prettier'
 
 import c from './colors'
 
-export const asyncForEach = async (array, callback) => {
+export const asyncForEach = async (array: any[], callback: Function) => {
   for (let index = 0; index < array.length; index++) {
     await callback(array[index], index, array)
+  }
+}
+
+export const readFile = (target: Parameters<typeof fs['readFileSync']>[0]) =>
+  fs.readFileSync(target)
+
+/**
+ * This wraps the core version of getPaths into something that catches the exception
+ * and displays a helpful error message.
+ */
+export const getPaths = () => {
+  try {
+    return getRedwoodPaths()
+  } catch (e) {
+    console.error(c.error(e.message))
+    process.exit(0)
+  }
+}
+
+/*
+ * Returns the DMMF defined by `prisma` resolving the relevant `shema.prisma` path.
+ */
+export const getSchemaDefinitions = async () => {
+  const schemaPath = path.join(getPaths().api.db, 'schema.prisma')
+  const metadata = await getDMMF({
+    datamodel: readFile(schemaPath).toString(),
+  })
+
+  return metadata
+}
+
+/**
+ * This returns the config present in `prettier.config.js` of a Redwood project.
+ */
+export const prettierOptions = () => {
+  try {
+    return require(path.join(getPaths().base, 'prettier.config.js'))
+  } catch (e) {
+    return undefined
   }
 }
 
@@ -27,7 +66,7 @@ export const asyncForEach = async (array, callback) => {
  * the schema.prisma of the target applicaiton. If no `name` is given then the
  * entire schema is returned.
  */
-export const getSchema = async (name) => {
+export const getSchema = async (name: string) => {
   const schema = await getSchemaDefinitions()
 
   if (name) {
@@ -49,10 +88,10 @@ export const getSchema = async (name) => {
 
 /**
  * Returns the enum defined with the given `name` parsed from
- * the schema.prisma of the target applicaiton. If no `name` is given then the
+ * the schema.prisma of the target application. If no `name` is given then the
  * all enum definitions are returned
  */
-export const getEnum = async (name) => {
+export const getEnum = async (name: string) => {
   const schema = await getSchemaDefinitions()
 
   if (name) {
@@ -72,18 +111,6 @@ export const getEnum = async (name) => {
   return schema.metadata.datamodel.enums
 }
 
-/*
- * Returns the DMMF defined by `prisma` resolving the relevant `shema.prisma` path.
- */
-export const getSchemaDefinitions = async () => {
-  const schemaPath = path.join(getPaths().api.db, 'schema.prisma')
-  const metadata = await getDMMF({
-    datamodel: readFile(schemaPath.toString()),
-  })
-
-  return metadata
-}
-
 /**
  * Returns variants of the passed `name` for usage in templates. If the given
  * name was "fooBar" then these would be:
@@ -98,7 +125,7 @@ export const getSchemaDefinitions = async () => {
  * singularConstantName: FOO_BAR
  * pluralConstantName: FOO_BARS
 */
-export const nameVariants = (name) => {
+export const nameVariants = (name: string) => {
   const normalizedName = pascalcase(paramCase(pluralize.singular(name)))
 
   return {
@@ -117,7 +144,10 @@ export const nameVariants = (name) => {
 
 export const templateRoot = path.resolve(__dirname, '../commands/generate')
 
-export const generateTemplate = (templateFilename, { name, root, ...rest }) => {
+export const generateTemplate = (
+  templateFilename: string,
+  { name, root, ...rest }: { [key: string]: any }
+) => {
   const templatePath = path.join(root || templateRoot, templateFilename)
   const template = lodash.template(readFile(templatePath).toString())
 
@@ -133,7 +163,7 @@ export const generateTemplate = (templateFilename, { name, root, ...rest }) => {
   const parser = {
     '.css': 'css',
     '.js': 'babel',
-  }[path.extname(templateFilename)]
+  }[path.extname(templateFilename) as '.css' | '.js']
 
   if (typeof parser === 'undefined') {
     return renderedTemplate
@@ -145,11 +175,9 @@ export const generateTemplate = (templateFilename, { name, root, ...rest }) => {
   })
 }
 
-export const readFile = (target) => fs.readFileSync(target)
-
 export const writeFile = async (
-  target,
-  contents,
+  target: string,
+  contents: string | object,
   { overwriteExisting = false } = {}
 ) => {
   if (!overwriteExisting && fs.existsSync(target)) {
@@ -162,38 +190,18 @@ export const writeFile = async (
   fs.writeFileSync(target, contents)
 }
 
-export const bytes = (contents) => Buffer.byteLength(contents, 'utf8')
-
-/**
- * This wraps the core version of getPaths into something that catches the exception
- * and displays a helpful error message.
- */
-export const getPaths = () => {
-  try {
-    return getRedwoodPaths()
-  } catch (e) {
-    console.error(c.error(e.message))
-    process.exit(0)
-  }
-}
-
-/**
- * This returns the config present in `prettier.config.js` of a Redwood project.
- */
-export const prettierOptions = () => {
-  try {
-    return require(path.join(getPaths().base, 'prettier.config.js'))
-  } catch (e) {
-    return undefined
-  }
-}
+export const bytes = (contents: Parameters<typeof Buffer['byteLength']>[0]) =>
+  Buffer.byteLength(contents, 'utf8')
 
 /**
  * Creates a list of tasks that write files to the disk.
  *
  * @param files - {[filepath]: contents}
  */
-export const writeFilesTask = (files, options) => {
+export const writeFilesTask = (
+  files: { [filepath: string]: string },
+  options: { overwriteExisting: boolean }
+) => {
   const { base } = getPaths()
   return new Listr(
     Object.keys(files).map((file) => {
@@ -209,7 +217,7 @@ export const writeFilesTask = (files, options) => {
 /**
  * Update the project's routes file.
  */
-export const addRoutesToRouterTask = (routes) => {
+export const addRoutesToRouterTask = (routes: string[]) => {
   const redwoodPaths = getPaths()
   const routesContent = readFile(redwoodPaths.web.routes).toString()
   const newRoutesContent = routes.reverse().reduce((content, route) => {
@@ -223,7 +231,15 @@ export const addRoutesToRouterTask = (routes) => {
   })
 }
 
-export const runCommandTask = async (commands, { verbose }) => {
+export const runCommandTask = async (
+  commands: {
+    title: string
+    cmd: string
+    args: string[]
+    opts: execa.Options
+  }[],
+  { verbose }: { verbose: boolean }
+) => {
   const tasks = new Listr(
     commands.map(({ title, cmd, args, opts = {} }) => ({
       title,
@@ -240,6 +256,7 @@ export const runCommandTask = async (commands, { verbose }) => {
     })),
     {
       renderer: verbose && VerboseRenderer,
+      // @ts-ignore TODO dateFormat comes from listr-verbose-renderer
       dateFormat: false,
     }
   )
