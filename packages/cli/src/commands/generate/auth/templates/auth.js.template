@@ -5,7 +5,7 @@
 //     return await db.user.findOne({ where: { email } })
 //   }
 
-import { AuthenticationError } from '@redwoodjs/auth'
+import { AuthenticationError } from '@redwoodjs/api'
 
 export const getCurrentUser = async (jwt) => {
   return jwt
