@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth",
-  "version": "0.6.0",
+  "version": "0.7.0-rc.2",
   "main": "dist/index.js",
   "files": [
     "dist"
@@ -8,11 +8,11 @@
   "types": "dist/index.d.ts",
   "license": "MIT",
   "devDependencies": {
-    "react": "^16.13.1",
     "@auth0/auth0-spa-js": "^1.7.0",
-    "netlify-identity-widget": "1.6.0",
     "@types/react": "^16.9.34",
-    "gotrue-js": "^0.9.25"
+    "gotrue-js": "^0.9.25",
+    "netlify-identity-widget": "1.6.0",
+    "react": "^16.13.1"
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",
@@ -20,5 +20,6 @@
     "build:types": "tsc --build --clean && tsc --build",
     "prepublishOnly": "yarn build",
     "build:watch": "nodemon --watch src --ext 'js,ts,tsx' --ignore dist --exec 'yarn build'"
-  }
+  },
+  "gitHead": "ac0479bd57af9938d040d1d7636bf58f9e9d9731"
 }
