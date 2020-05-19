@@ -31,6 +31,7 @@ const Post = ({ post }) => {
         </header>
         <table className="rw-table">
           <tbody>
+<<<<<<< HEAD
             <tr>
               <th>id</th>
               <td>{post.id}</td>
@@ -52,6 +53,37 @@ const Post = ({ post }) => {
             </tr><tr>
               <th>postedAt</th>
               <td>{post.postedAt}</td>
+=======
+            <tr className="odd:bg-gray-100 even:bg-white border-t">
+              <td className="font-semibold p-3 text-right md:w-1/5">id</td>
+              <td className="p-3">{post.id}</td>
+            </tr>
+            <tr className="odd:bg-gray-100 even:bg-white border-t">
+              <td className="font-semibold p-3 text-right md:w-1/5">title</td>
+              <td className="p-3">{post.title}</td>
+            </tr>
+            <tr className="odd:bg-gray-100 even:bg-white border-t">
+              <td className="font-semibold p-3 text-right md:w-1/5">slug</td>
+              <td className="p-3">{post.slug}</td>
+            </tr>
+            <tr className="odd:bg-gray-100 even:bg-white border-t">
+              <td className="font-semibold p-3 text-right md:w-1/5">author</td>
+              <td className="p-3">{post.author}</td>
+            </tr>
+            <tr className="odd:bg-gray-100 even:bg-white border-t">
+              <td className="font-semibold p-3 text-right md:w-1/5">body</td>
+              <td className="p-3">{post.body}</td>
+            </tr>
+            <tr className="odd:bg-gray-100 even:bg-white border-t">
+              <td className="font-semibold p-3 text-right md:w-1/5">image</td>
+              <td className="p-3">{post.image}</td>
+            </tr>
+            <tr className="odd:bg-gray-100 even:bg-white border-t">
+              <td className="font-semibold p-3 text-right md:w-1/5">
+                postedAt
+              </td>
+              <td className="p-3">{post.postedAt}</td>
+>>>>>>> f0d1418... update scaffold code
             </tr>
           </tbody>
         </table>

@@ -176,9 +176,8 @@ export const getPaths = () => {
   try {
     return getRedwoodPaths()
   } catch (e) {
-    console.log(e)
     console.error(c.error(e.message))
-    //process.exit(0)
+    process.exit(0)
   }
 }
 
@@ -335,4 +334,14 @@ export const runCommandTask = async (commands, { verbose }) => {
     console.log(c.error(e.message))
     return false
   }
+}
+
+/*
+ * Extract default CLI args from an exported builder
+ */
+export const getDefaultArgs = (builder) => {
+  return Object.entries(builder).reduce((agg, [k, v]) => {
+    agg[k] = v.default
+    return agg
+  }, {})
 }

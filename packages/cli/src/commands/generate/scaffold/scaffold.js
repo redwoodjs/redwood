@@ -15,6 +15,7 @@ import {
   writeFile,
   asyncForEach,
   getSchema,
+  getDefaultArgs,
   getPaths,
   writeFilesTask,
   addRoutesToRouterTask,
@@ -22,8 +23,11 @@ import {
 import c from 'src/lib/colors'
 
 import { relationsForModel, intForeignKeysForModel } from '../helpers'
-import { files as sdlFiles } from '../sdl/sdl'
-import { files as serviceFiles } from '../service/service'
+import { files as sdlFiles, builder as sdlBuilder } from '../sdl/sdl'
+import {
+  files as serviceFiles,
+  builder as serviceBuilder,
+} from '../service/service'
 
 const NON_EDITABLE_COLUMNS = ['id', 'createdAt', 'updatedAt']
 const ASSETS = fs.readdirSync(
@@ -46,15 +50,29 @@ const getIdType = (model) => {
   return model.fields.find((field) => field.isId)?.type
 }
 
-export const files = async ({ model: name, path: scaffoldPath = '' }) => {
+export const files = async ({
+  model: name,
+  path: scaffoldPath = '',
+  typescript,
+  javascript,
+}) => {
   const model = await getSchema(pascalcase(pluralize.singular(name)))
 
   return {
-    ...(await sdlFiles({ name, crud: true })),
+    ...(await sdlFiles({
+      ...getDefaultArgs(sdlBuilder),
+      name,
+      crud: true,
+      typescript,
+      javascript,
+    })),
     ...(await serviceFiles({
+      ...getDefaultArgs(serviceBuilder),
       name,
       crud: true,
       relations: relationsForModel(model),
+      typescript,
+      javascript,
     })),
     ...assetFiles(name),
     ...layoutFiles(name, scaffoldPath),
@@ -324,6 +342,16 @@ export const builder = (yargs) => {
   yargs.option('force', {
     default: false,
     type: 'boolean',
+  })
+  yargs.option('typescript', {
+    type: 'boolean',
+    default: false,
+    desc: 'Generate TypeScript files',
+  })
+  yargs.options('javascript', {
+    type: 'boolean',
+    default: true,
+    desc: 'Generate JavaScript files',
   })
 }
 const tasks = ({ model, path, force }) => {

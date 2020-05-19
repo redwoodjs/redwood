@@ -11,14 +11,17 @@ const CREATE_USER_PROFILE_MUTATION = gql`
 `
 
 const NewUserProfile = () => {
-  const [createUserProfile, { loading, error }] = useMutation(CREATE_USER_PROFILE_MUTATION, {
-    onCompleted: () => {
-      navigate(routes.userProfiles())
-    },
-  })
+  const [createUserProfile, { loading, error }] = useMutation(
+    CREATE_USER_PROFILE_MUTATION,
+    {
+      onCompleted: () => {
+        navigate(routes.userProfiles())
+      },
+    }
+  )
 
   const onSave = (input) => {
-    const castInput = Object.assign(input, { userId: parseInt(input.userId), })
+    const castInput = Object.assign(input, { userId: parseInt(input.userId) })
     createUserProfile({ variables: { input: castInput } })
   }
 
