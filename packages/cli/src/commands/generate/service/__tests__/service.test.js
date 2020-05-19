@@ -212,22 +212,24 @@ const itCreatesASingleWordServiceFileWithMultipleRelations = (baseArgs) => {
 }
 
 describe('in javascript mode', () => {
-  itReturnsExactly2Files()
-  itCreatesASingleWordServiceFile()
-  itCreatesASingleWordServiceTestFile()
-  itCreatesAMultiWordServiceFile()
-  itCreatesAMultiWordServiceTestFile()
-  itCreatesASingleWordServiceFileWithCRUDActions()
-  itCreatesASingleWordServiceTestFileWithCRUDActions()
-  itCreatesAMultiWordServiceFileWithCRUDActions()
-  itCreatesAMultiWordServiceTestFileWithCRUDActions()
-  itCreatesASingleWordServiceFileWithAHasManyRelation()
-  itCreatesASingleWordServiceFileWithABelongsToRelation()
-  itCreatesASingleWordServiceFileWithMultipleRelations()
+  const baseArgs = { javascript: true }
+
+  itReturnsExactly2Files(baseArgs)
+  itCreatesASingleWordServiceFile(baseArgs)
+  itCreatesASingleWordServiceTestFile(baseArgs)
+  itCreatesAMultiWordServiceFile(baseArgs)
+  itCreatesAMultiWordServiceTestFile(baseArgs)
+  itCreatesASingleWordServiceFileWithCRUDActions(baseArgs)
+  itCreatesASingleWordServiceTestFileWithCRUDActions(baseArgs)
+  itCreatesAMultiWordServiceFileWithCRUDActions(baseArgs)
+  itCreatesAMultiWordServiceTestFileWithCRUDActions(baseArgs)
+  itCreatesASingleWordServiceFileWithAHasManyRelation(baseArgs)
+  itCreatesASingleWordServiceFileWithABelongsToRelation(baseArgs)
+  itCreatesASingleWordServiceFileWithMultipleRelations(baseArgs)
 })
 
 describe('in typescript mode', () => {
-  const baseArgs = { typescript: true }
+  const baseArgs = { javscript: true, typescript: true }
 
   itReturnsExactly2Files(baseArgs)
   itCreatesASingleWordServiceFile(baseArgs)

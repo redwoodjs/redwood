@@ -100,17 +100,19 @@ const itCreatesASDLFileWithEnumDefinitions = (baseArgs = {}) => {
 }
 
 describe('in javascript mode', () => {
-  itReturnsExactlyThreeFiles()
-  itCreatesAService()
-  itCreatesASingleWordSDLFile()
-  itCreatesAMultiWordSDLFile()
-  itCreatesASingleWordSDLFileWithCRUD()
-  itCreateAMultiWordSDLFileWithCRUD()
-  itCreatesASDLFileWithEnumDefinitions()
+  const baseArgs = { javascript: true }
+
+  itReturnsExactlyThreeFiles(baseArgs)
+  itCreatesAService(baseArgs)
+  itCreatesASingleWordSDLFile(baseArgs)
+  itCreatesAMultiWordSDLFile(baseArgs)
+  itCreatesASingleWordSDLFileWithCRUD(baseArgs)
+  itCreateAMultiWordSDLFileWithCRUD(baseArgs)
+  itCreatesASDLFileWithEnumDefinitions(baseArgs)
 })
 
 describe('in typescript mode', () => {
-  const baseArgs = { typescript: true }
+  const baseArgs = { javascript: true, typescript: true }
 
   itReturnsExactlyThreeFiles(baseArgs)
   itCreatesAService(baseArgs)
