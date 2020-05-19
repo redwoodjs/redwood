@@ -53,26 +53,23 @@ export const files = async ({
   }, {})
 }
 
-export const {
-  command,
-  desc,
-  builder,
-  handler,
-} = createYargsForComponentGeneration({
+export const builder = {
+  crud: { type: 'boolean', default: false, desc: 'Create CRUD functions' },
+  force: { type: 'boolean', default: false },
+  typescript: {
+    type: 'boolean',
+    default: false,
+    desc: 'Generate TypeScript files',
+  },
+  javascript: {
+    type: 'boolean',
+    default: true,
+    desc: 'Generate JavaScript files',
+  },
+}
+
+export const { command, desc, handler } = createYargsForComponentGeneration({
   componentName: 'service',
   filesFn: files,
-  builder: {
-    crud: { type: 'boolean', default: false, desc: 'Create CRUD functions' },
-    force: { type: 'boolean', default: false },
-    typescript: {
-      type: 'boolean',
-      default: false,
-      desc: 'Generate TypeScript files',
-    },
-    javascript: {
-      type: 'boolean',
-      default: true,
-      desc: 'Generate JavaScript files',
-    },
-  },
+  builder,
 })

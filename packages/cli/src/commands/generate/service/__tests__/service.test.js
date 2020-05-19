@@ -1,6 +1,6 @@
 global.__dirname = __dirname
 
-import { loadGeneratorFixture } from 'src/lib/test'
+import { loadGeneratorFixture, getDefaultArgs } from 'src/lib/test'
 
 import * as service from '../service'
 
@@ -12,8 +12,6 @@ const itReturnsExactly2Files = (baseArgs) => {
     const files = await service.files({
       ...baseArgs,
       name: 'User',
-      crud: false,
-      relations: [],
     })
 
     expect(Object.keys(files).length).toEqual(2)
@@ -24,8 +22,6 @@ const itCreatesASingleWordServiceFile = (baseArgs) => {
     const files = await service.files({
       ...baseArgs,
       name: 'User',
-      crud: false,
-      relations: [],
     })
     const extension = extensionForBaseArgs(baseArgs)
 
@@ -39,8 +35,6 @@ const itCreatesASingleWordServiceTestFile = (baseArgs) => {
     const files = await service.files({
       ...baseArgs,
       name: 'User',
-      crud: false,
-      relations: null,
     })
     const extension = extensionForBaseArgs(baseArgs)
 
@@ -55,8 +49,6 @@ const itCreatesAMultiWordServiceFile = (baseArgs) => {
     const files = await service.files({
       ...baseArgs,
       name: 'UserProfile',
-      crud: false,
-      relations: null,
     })
     const extension = extensionForBaseArgs(baseArgs)
 
@@ -73,8 +65,6 @@ const itCreatesAMultiWordServiceTestFile = (baseArgs) => {
     const files = await service.files({
       ...baseArgs,
       name: 'UserProfile',
-      crud: false,
-      relations: null,
     })
     const extension = extensionForBaseArgs(baseArgs)
 
@@ -92,7 +82,6 @@ const itCreatesASingleWordServiceFileWithCRUDActions = (baseArgs) => {
       ...baseArgs,
       name: 'Post',
       crud: true,
-      relations: null,
     })
     const extension = extensionForBaseArgs(baseArgs)
 
@@ -108,7 +97,6 @@ const itCreatesASingleWordServiceTestFileWithCRUDActions = (baseArgs) => {
       ...baseArgs,
       name: 'Post',
       crud: true,
-      relations: null,
     })
     const extension = extensionForBaseArgs(baseArgs)
 
@@ -126,7 +114,6 @@ const itCreatesAMultiWordServiceFileWithCRUDActions = (baseArgs) => {
       ...baseArgs,
       name: 'UserProfile',
       crud: true,
-      relations: null,
     })
     const extension = extensionForBaseArgs(baseArgs)
 
@@ -143,7 +130,6 @@ const itCreatesAMultiWordServiceTestFileWithCRUDActions = (baseArgs) => {
       ...baseArgs,
       name: 'UserProfile',
       crud: true,
-      relations: null,
     })
     const extension = extensionForBaseArgs(baseArgs)
 
@@ -162,7 +148,6 @@ const itCreatesASingleWordServiceFileWithAHasManyRelation = (baseArgs) => {
     const files = await service.files({
       ...baseArgs,
       name: 'User',
-      crud: false,
       relations: ['userProfiles'],
     })
     const extension = extensionForBaseArgs(baseArgs)
@@ -180,7 +165,6 @@ const itCreatesASingleWordServiceFileWithABelongsToRelation = (baseArgs) => {
     const files = await service.files({
       ...baseArgs,
       name: 'User',
-      crud: false,
       relations: ['identity'],
     })
     const extension = extensionForBaseArgs(baseArgs)
@@ -198,7 +182,6 @@ const itCreatesASingleWordServiceFileWithMultipleRelations = (baseArgs) => {
     const files = await service.files({
       ...baseArgs,
       name: 'User',
-      crud: false,
       relations: ['userProfiles', 'identity'],
     })
     const extension = extensionForBaseArgs(baseArgs)
@@ -212,7 +195,7 @@ const itCreatesASingleWordServiceFileWithMultipleRelations = (baseArgs) => {
 }
 
 describe('in javascript mode', () => {
-  const baseArgs = { javascript: true }
+  const baseArgs = getDefaultArgs(service.builder)
 
   itReturnsExactly2Files(baseArgs)
   itCreatesASingleWordServiceFile(baseArgs)
@@ -229,7 +212,7 @@ describe('in javascript mode', () => {
 })
 
 describe('in typescript mode', () => {
-  const baseArgs = { javscript: true, typescript: true }
+  const baseArgs = { ...getDefaultArgs(service.builder), typescript: true }
 
   itReturnsExactly2Files(baseArgs)
   itCreatesASingleWordServiceFile(baseArgs)

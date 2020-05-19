@@ -91,3 +91,13 @@ export const loadGeneratorFixture = (generator, name) => {
 export const loadFixture = (filepath) => {
   return fs.readFileSync(filepath).toString()
 }
+
+/*
+ * Extract default CLI args from an exported builder
+ */
+export const getDefaultArgs = (builder) => {
+  return Object.entries(builder).reduce((agg, [k, v]) => {
+    agg[k] = v.default
+    return agg
+  }, {})
+}

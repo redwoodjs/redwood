@@ -1,6 +1,6 @@
 global.__dirname = __dirname
 
-import { loadGeneratorFixture } from 'src/lib/test'
+import { loadGeneratorFixture, getDefaultArgs } from 'src/lib/test'
 
 import * as sdl from '../sdl'
 
@@ -38,7 +38,7 @@ const itCreatesAService = (baseArgs = {}) => {
 
 const itCreatesASingleWordSDLFile = (baseArgs = {}) => {
   test('creates a single word sdl file', async () => {
-    const files = await sdl.files({ ...baseArgs, name: 'User', crud: false })
+    const files = await sdl.files({ ...baseArgs, name: 'User' })
     const extension = extensionForBaseArgs(baseArgs)
 
     expect(
@@ -52,7 +52,6 @@ const itCreatesAMultiWordSDLFile = (baseArgs = {}) => {
     const files = await sdl.files({
       ...baseArgs,
       name: 'UserProfile',
-      crud: false,
     })
     const extension = extensionForBaseArgs(baseArgs)
 
@@ -100,7 +99,7 @@ const itCreatesASDLFileWithEnumDefinitions = (baseArgs = {}) => {
 }
 
 describe('in javascript mode', () => {
-  const baseArgs = { javascript: true }
+  const baseArgs = getDefaultArgs(sdl.builder)
 
   itReturnsExactlyThreeFiles(baseArgs)
   itCreatesAService(baseArgs)
@@ -112,7 +111,7 @@ describe('in javascript mode', () => {
 })
 
 describe('in typescript mode', () => {
-  const baseArgs = { javascript: true, typescript: true }
+  const baseArgs = { ...getDefaultArgs(sdl.builder), typescript: true }
 
   itReturnsExactlyThreeFiles(baseArgs)
   itCreatesAService(baseArgs)
