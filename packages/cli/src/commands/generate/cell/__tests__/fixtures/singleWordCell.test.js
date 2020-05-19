@@ -24,9 +24,7 @@ describe('UserCell', () => {
   })
 
   it('Success renders successfully', () => {
-    render(
-      <Success userExample={{ user: { objectKey: 'objectValue' } }} />
-    )
+    render(<Success userExample={{ user: { objectKey: 'objectValue' } }} />)
     expect(
       screen.queryByText('{"user":{"objectKey":"objectValue"}}')
     ).toBeInTheDocument()
