@@ -21,7 +21,7 @@ export const createYargsForComponentDestroy = ({ componentName, filesFn }) => {
   return {
     command: `${componentName} <name>`,
     desc: `Destroy a ${componentName} component.`,
-    handler: async (name) => {
+    handler: async ({ name }) => {
       const t = tasks({ componentName, filesFn, name })
 
       try {
