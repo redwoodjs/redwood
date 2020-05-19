@@ -12,9 +12,8 @@ import {
 export const command = 'scaffold <pathSlashModel>'
 export const desc = 'Destroy pages, SDL, and a services object.'
 
-export const handler = async ({ pathSlashModel }) => {
-  const { model, path } = resolveScaffoldPath({ pathSlashModel })
-  const tasks = new Listr(
+export const tasks = ({ model, path }) =>
+  new Listr(
     [
       {
         title: 'Destroying scaffold files...',
@@ -34,8 +33,11 @@ export const handler = async ({ pathSlashModel }) => {
     ],
     { collapse: false, exitOnError: true }
   )
+
+export const handler = async ({ pathSlashModel }) => {
+  const t = tasks(resolveScaffoldPath({ pathSlashModel }))
   try {
-    await tasks.run()
+    await t.run()
   } catch (e) {
     console.log(c.error(e.message))
   }
