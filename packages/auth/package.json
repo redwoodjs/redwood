@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth",
-  "version": "0.7.0-rc.3",
+  "version": "0.7.0-rc.4",
   "main": "dist/index.js",
   "files": [
     "dist"
