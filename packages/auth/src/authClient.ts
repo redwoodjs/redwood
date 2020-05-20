@@ -119,29 +119,12 @@ const mapAuthClientMagicLinks = (client: MagicLinks): AuthClient => {
   return {
     type: 'magicLinks',
     client,
-    login: async ({ email }) => {
-      try {
-        console.log('login: Login User With Magic Link')
-        await client.auth.loginWithMagicLink({ email: email })
-      } catch (e) {
-        // Handle errors if required!
-        console.error('error: ', e)
-        // Handle errors if required!
-      }
-    },
-    logout: () => {
-      client.user.logout()
-    },
-    getToken: async () => {
-      const token = await client.user.getIdToken()
-      console.log(token)
-      return token
-    },
-    currentUser: async () => {
-      return (await client.user.isLoggedIn())
-        ? await client.user.getMetadata()
-        : null
-    },
+    login: async ({ email }) =>
+      await client.auth.loginWithMagicLink({ email: email }),
+    logout: () => client.user.logout(),
+    getToken: async () => await client.user.getIdToken(),
+    currentUser: async () =>
+      (await client.user.isLoggedIn()) ? await client.user.getMetadata() : null,
   }
 }
 
