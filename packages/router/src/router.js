@@ -34,13 +34,13 @@ Private.propTypes = {
 }
 
 const PrivatePageLoader = ({ useAuth, unauthenticatedRoute, children }) => {
-  const { loading, authenticated } = useAuth()
+  const { loading, isAuthenticated } = useAuth()
 
   if (loading) {
     return null
   }
 
-  if (authenticated) {
+  if (isAuthenticated) {
     return children
   } else {
     return <Redirect to={unauthenticatedRoute()} />
