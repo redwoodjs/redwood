@@ -1,47 +1,96 @@
 import { useState, useEffect } from 'react'
 
-import { GraphQLProvider, createGraphQLClient } from 'src/graphql'
+import { GraphQLProvider } from 'src/graphql'
 
-const useAuthStub = () => ({ loading: false, authenticated: false })
+const GraphQLProviderWithAuth = ({
+  useAuth,
+  graphQLClientConfig = { headers: {} },
+  children,
+  ...rest
+}) => {
+  const { loading, isAuthenticated, getToken, type } = useAuth()
+  const [authToken, setAuthToken] = useState()
+
+  useEffect(() => {
+    const fetchAuthToken = async () => {
+      const token = await getToken()
+      setAuthToken(token)
+    }
+
+    if (isAuthenticated) {
+      fetchAuthToken()
+    }
+  }, [isAuthenticated, getToken])
+
+  // This really sucks because rendering is completely blocked whilst we're
+  // restoring authentication. In a lot of cases that's OK since the token is stored
+  // in localstorage or a secure cookie.
+  if (loading) {
+    return null
+  }
+
+
+  if (!isAuthenticated) {
+    return (
+      <GraphQLProvider config={graphQLClientConfig} {...rest}>
+        {children}
+      </GraphQLProvider>
+    )
+  }
+
+  // The user is authenticated, so we have to wait for the auth token to be retrieved
+  // before continueing.
+  if (!authToken) {
+    return null
+  }
+
+  return (
+    <GraphQLProvider
+      config={{
+        ...graphQLClientConfig,
+        headers: {
+          /** `auth-provider` is used by the API to determine how to decode the token */
+          'auth-provider': type,
+          authorization: `Bearer ${authToken}`,
+          ...graphQLClientConfig.headers,
+        },
+      }}
+    >
+      {children}
+    </GraphQLProvider>
+  )
+}
 
 /**
  * Redwood's Provider is a zeroconf way to tie together authentication and
  * GraphQL requests.
  *
- * When the `useAuth` hook from `@redwoodjs/auth` is available the authentication
- * token is automatically added to the Authorization headers of each GraphQL request.
+ * When `AuthProvider` is instantiated this component will automatically add
+ * Authorization headers to each request.
  */
 const RedwoodProvider = ({
-  useAuth = window.__REDWOOD__USE_AUTH || useAuthStub,
+  useAuth = window.__REDWOOD__USE_AUTH,
+  graphQLClientConfig,
   children,
+  ...rest
 }) => {
-  const { loading, authenticated, getToken, type } = useAuth()
-  const [authToken, setAuthToken] = useState()
-
-  useEffect(() => {
-    if (authenticated) {
-      getToken().then((token) => setAuthToken(token))
-    }
-  }, [authenticated, getToken])
-
-  // This really sucks because rendering is completely blocked whilst we're
-  // restoring authentication.
-  if (loading) {
-    return null
+  if (typeof useAuth === 'undefined') {
+    return (
+      <GraphQLProvider config={graphQLClientConfig} {...rest}>
+        {children}
+      </GraphQLProvider>
+    )
   }
-  // If we have an authToken then modify the headers of the GraphQL client.
-  // TODO: Add a way for user's to pass in custom headers to GraphQL, or just a custom client.
-  const client = authToken
-    ? createGraphQLClient({
-        headers: {
-          // Used by `api` to determine the auth type.
-          'auth-provider': type,
-          authorization: `Bearer ${authToken}`,
-        },
-      })
-    : undefined
 
-  return <GraphQLProvider client={client}>{children}</GraphQLProvider>
+  return (
+    <GraphQLProviderWithAuth
+      useAuth={useAuth}
+      config={graphQLClientConfig}
+      {...rest}
+    >
+      {children}
+    </GraphQLProviderWithAuth>
+  )
 }
 
 export default RedwoodProvider
