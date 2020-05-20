@@ -29,7 +29,6 @@ const GraphQLProviderWithAuth = ({
     return null
   }
 
-
   if (!isAuthenticated) {
     return (
       <GraphQLProvider config={graphQLClientConfig} {...rest}>
