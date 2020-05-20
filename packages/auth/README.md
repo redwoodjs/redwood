@@ -178,7 +178,7 @@ The value returned by `getCurrentUser` is available in `context.currentUser`
 
 ### Routes
 
-Routes can require authentication by wrapping them in a `<Private>` component. An  unauthenticated user will be redirected to the page specified in`unauthorized`.
+Routes can require authentication by wrapping them in a `<Private>` component. An  unauthenticated user will be redirected to the page specified in`unauthenticated`.
 
 ```js
 import { Router, Route, Private } from "@redwoodjs/router"
@@ -187,7 +187,7 @@ import { Router, Route, Private } from "@redwoodjs/router"
   <Route path="/" page={HomePage} name="home" />
   <Route path="/login" page={LoginPage} name="login" />
 
-  <Private unauthorized="login">
+  <Private unauthenticated="login">
     <Route path="/admin" page={AdminPage} name="admin" />
     <Route path="/secret-page" page={SecretPage} name="secret" />
   </Private>

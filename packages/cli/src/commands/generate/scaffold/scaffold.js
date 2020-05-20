@@ -313,35 +313,25 @@ const addScaffoldImport = () => {
   return 'Added scaffold import to index.js'
 }
 
-export const resolveScaffoldPath = ({ pathSlashModel, pathFlag }) => {
-  let path
-  // If path is specified by both pathSlashModel and pathFlag,
-  // we give pathFlag precedence.
-  pathFlag
-    ? (path = pathFlag)
-    : (path = pathSlashModel.split('/').slice(0, -1).join('/'))
-
-  // This code will work whether or not there's a path in pathSlashModel
-  // E.g. if pathSlashModel is just 'post',
+export const command = 'scaffold <model>'
+export const desc =
+  'Generate Pages, SDL, and Services files based on a given DB schema Model. Also accepts <path/model>.'
+export const builder = (yargs) => {
+  yargs.positional('model', {
+    description:
+      "Model to scaffold. You can also use <path/model> to nest files by type at the given path directory (or directories). For example, 'rw g scaffold admin/post'.",
+  })
+  yargs.option('force', {
+    default: false,
+    type: 'boolean',
+  })
+}
+export const handler = async ({ model: modelArg, force }) => {
+  let path = modelArg.split('/').slice(0, -1).join('/')
+  // This code will work whether or not there's a path in model
+  // E.g. if model is just 'post',
   // path.split('/') will return ['post'].
-  const model = pathSlashModel.split('/').pop()
-
-  return { model, path }
-}
-
-export const command = 'scaffold <pathSlashModel>'
-export const desc = 'Generate pages, SDL, and a services object.'
-export const builder = {
-  force: { type: 'boolean', default: false },
-  // So the user can specify a path to nest the generated files under.
-  // E.g. yarn rw g scaffold post --path=admin
-  path: { type: 'string', default: false },
-}
-
-// The user can also specify a path in the argument.
-// E.g. yarn rw g scaffold admin/post
-export const handler = async ({ pathSlashModel, force, path: pathFlag }) => {
-  const { model, path } = resolveScaffoldPath({ pathSlashModel, pathFlag })
+  const model = modelArg.split('/').pop()
 
   const tasks = new Listr(
     [
