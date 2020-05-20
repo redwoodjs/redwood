@@ -5,11 +5,11 @@ import c from 'src/lib/colors'
 
 import {
   files,
-  resolveScaffoldPath,
   routes as scaffoldRoutes,
+  splitPathAndModel,
 } from '../../generate/scaffold/scaffold'
 
-export const command = 'scaffold <pathSlashModel>'
+export const command = 'scaffold <model>'
 export const desc = 'Destroy pages, SDL, and a services object.'
 
 export const tasks = ({ model, path }) =>
@@ -34,8 +34,10 @@ export const tasks = ({ model, path }) =>
     { collapse: false, exitOnError: true }
   )
 
-export const handler = async ({ pathSlashModel }) => {
-  const t = tasks(resolveScaffoldPath({ pathSlashModel }))
+export const handler = async ({ model: modelArg }) => {
+  const { model, path } = splitPathAndModel(modelArg)
+
+  const t = tasks({ model, path })
   try {
     await t.run()
   } catch (e) {
