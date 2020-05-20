@@ -11,10 +11,10 @@ import { createAuthClient } from './authClient'
 
 export interface AuthContextInterface {
   loading: boolean
-  authenticated: boolean
+  isAuthenticated: boolean
   currentUser: null | GoTrueUser | Auth0User
-  login(): Promise<void>
-  logout(): Promise<void>
+  logIn(): Promise<void>
+  logOut(): Promise<void>
   getToken(): Promise<null | string>
   client: null | SupportedAuthClients
   type: null | SupportedAuthTypes
@@ -31,7 +31,7 @@ type AuthProviderProps = {
 
 type AuthProviderState = {
   loading: boolean
-  authenticated: boolean
+  isAuthenticated: boolean
   currentUser: null | Auth0User | GoTrueUser
 }
 /**
@@ -50,7 +50,7 @@ export class AuthProvider extends React.Component<
 > {
   state: AuthProviderState = {
     loading: true,
-    authenticated: false,
+    isAuthenticated: false,
     currentUser: null,
   }
 
@@ -66,19 +66,19 @@ export class AuthProvider extends React.Component<
     const currentUser = await this.rwClient.currentUser()
     this.setState({
       currentUser,
-      authenticated: currentUser !== null,
+      isAuthenticated: currentUser !== null,
       loading: false,
     })
   }
 
-  login = async (options?) => {
+  logIn = async (options?) => {
     const currentUser = await this.rwClient.login(options)
-    this.setState({ currentUser, authenticated: currentUser !== null })
+    this.setState({ currentUser, isAuthenticated: currentUser !== null })
   }
 
-  logout = async () => {
+  logOut = async () => {
     await this.rwClient.logout()
-    this.setState({ currentUser: null, authenticated: false })
+    this.setState({ currentUser: null, isAuthenticated: false })
   }
 
   render() {
@@ -88,8 +88,8 @@ export class AuthProvider extends React.Component<
       <AuthContext.Provider
         value={{
           ...this.state,
-          login: this.login,
-          logout: this.logout,
+          logIn: this.logIn,
+          logOut: this.logOut,
           getToken: this.rwClient.getToken,
           client: client,
           type: type,

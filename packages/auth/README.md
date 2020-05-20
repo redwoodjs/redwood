@@ -92,7 +92,7 @@ ReactDOM.render(
 
 ```js
 const UserAuthTools = () => {
-  const { loading, authenticated, login, logout } = useAuth()
+  const { loading, isAuthenticated, logIn, logOut } = useAuth()
 
   if (loading) {
     // auth is rehydrating
@@ -102,15 +102,15 @@ const UserAuthTools = () => {
   return (
     <Button
       onClick={async () => {
-        if (authenticated) {
-          await logout()
+        if (isAuthenticated) {
+          await logOut()
           navigate('/')
         } else {
-          await login()
+          await logIn()
         }
       }}
     >
-      {authenticated ? 'Logout' : 'Login'}
+      {isAuthenticated ? 'Log out' : 'Log in'}
     </Button>
   )
 }
