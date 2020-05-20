@@ -29,7 +29,6 @@ const GraphQLProviderWithAuth = ({
     return null
   }
 
-  console.log(isAuthenticated)
 
   if (!isAuthenticated) {
     return (
