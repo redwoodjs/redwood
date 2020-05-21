@@ -1,13 +1,13 @@
 import type { default as GoTrue, User as GoTrueUser } from 'gotrue-js'
 import type { Auth0Client as Auth0 } from '@auth0/auth0-spa-js'
 import type NetlifyIdentityNS from 'netlify-identity-widget'
-
+import type { Magic } from 'magic-sdk'
 // TODO: Can also return an Auth0 user which doesn't have a definition.
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Auth0User {}
 export type { GoTrueUser }
 export type NetlifyIdentity = typeof NetlifyIdentityNS
-export type MagicLinks = { user: any; auth: any }
+export type MagicLinks = Magic
 
 export type SupportedAuthClients = Auth0 | GoTrue | NetlifyIdentity | MagicLinks
 export type SupportedAuthTypes = 'auth0' | 'gotrue' | 'netlify' | 'magic.link'
