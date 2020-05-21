@@ -4,7 +4,9 @@
     "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
     "baseUrl": ".",
     "outDir": "dist",
-    "rootDir": "src"
+    "rootDir": "src",
+    "typeRoots": ["."]
   },
-  "include": ["src"]
+  "include": ["src", "ambient.d.ts"],
+  "references": [{ "path": "../internal" }]
 }
