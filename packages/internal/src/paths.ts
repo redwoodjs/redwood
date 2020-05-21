@@ -3,7 +3,7 @@ import fs from 'fs'
 
 import findUp from 'findup-sync'
 
-import { Paths, PagesDependency } from './types'
+import type { Paths, PagesDependency } from './types'
 
 const CONFIG_FILE_NAME = 'redwood.toml'
 
@@ -20,7 +20,8 @@ const PATH_WEB_DIR_LAYOUTS = 'web/src/layouts/'
 const PATH_WEB_DIR_PAGES = 'web/src/pages/'
 const PATH_WEB_DIR_COMPONENTS = 'web/src/components'
 const PATH_WEB_DIR_SRC = 'web/src'
-const PATH_WEB_DIR_CONFIG = 'web/config/webpack.config.js'
+const PATH_WEB_DIR_CONFIG = 'web/config'
+const PATH_WEB_DIR_CONFIG_WEBPACK = 'web/config/webpack.config.js'
 
 /**
  * Search the parent directories for the Redwood configuration file.
@@ -68,6 +69,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
   return {
     base: BASE_DIR,
     api: {
+      base: path.join(BASE_DIR, 'api'),
       db: path.join(BASE_DIR, PATH_API_DIR_DB),
       dbSchema: path.join(BASE_DIR, PATH_API_DIR_DB_SCHEMA),
       functions: path.join(BASE_DIR, PATH_API_DIR_FUNCTIONS),
@@ -79,11 +81,13 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
     },
     web: {
       routes,
+      base: path.join(BASE_DIR, 'web'),
       pages: path.join(BASE_DIR, PATH_WEB_DIR_PAGES),
       components: path.join(BASE_DIR, PATH_WEB_DIR_COMPONENTS),
       layouts: path.join(BASE_DIR, PATH_WEB_DIR_LAYOUTS),
       src: path.join(BASE_DIR, PATH_WEB_DIR_SRC),
-      webpack: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG),
+      config: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG),
+      webpack: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG_WEBPACK),
     },
   }
 }
