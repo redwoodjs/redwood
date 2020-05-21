@@ -2814,10 +2814,10 @@
     "@types/prop-types" "*"
     csstype "^2.2.0"
 
-"@types/require-dir@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@types/require-dir/-/require-dir-1.0.0.tgz#c68e8c4c3a35bc2f2b3145cb184d116169c1c8d3"
-  integrity sha512-KkJBNlfnyLYYj5y4j5081oFkaAbS56jeoYWJ3unpcj5yhRH+MNq4T9Ocbe8e0d/BP0At+m5Qcz8bj0p6NqQW3g==
+"@types/require-dir@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@types/require-dir/-/require-dir-1.0.1.tgz#ea0b071a1c0f6dfa39674db7003cf51a0b70518a"
+  integrity sha512-6Wc0PEnLEjXxI+sZ/R2TLppqvs0zWTLT4CTXAt0oEHllMJtQ+OlTceqV91b66DeyTXbs3cDJ7xVBuFvSZOkxfA==
 
 "@types/resolve@0.0.8":
   version "0.0.8"

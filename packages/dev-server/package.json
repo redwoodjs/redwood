@@ -1,8 +1,10 @@
 {
   "name": "@redwoodjs/dev-server",
+  "description": "Redwood's HTTP server for serverless functions",
   "version": "0.7.0",
   "bin": {
-    "dev-server": "./dist/main.js"
+    "redwood-http-server": "./dist/cli.js",
+    "dev-server": "./dist/cli.js"
   },
   "files": [
     "dist"
@@ -17,7 +19,8 @@
     "express": "^4.17.1",
     "morgan": "^1.10.0",
     "qs": "^6.9.3",
-    "require-dir": "^1.2.0"
+    "require-dir": "^1.2.0",
+    "yargs": "^15.3.1"
   },
   "devDependencies": {
     "@types/args": "^3.0.0",
@@ -25,7 +28,7 @@
     "@types/express": "^4.17.3",
     "@types/morgan": "^1.9.0",
     "@types/qs": "^6.9.1",
-    "@types/require-dir": "^1.0.0"
+    "@types/require-dir": "^1.0.1"
   },
   "scripts": {
     "build": "yarn cross-env NODE_ENV=production babel src -d dist --delete-dir-on-start --extensions \".ts\" --source-maps inline",
