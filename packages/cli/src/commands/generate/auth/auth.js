@@ -86,8 +86,8 @@ export const addApiConfig = () => {
   )
   // add object to handler
   content = content.replace(
-    /(export const handler = createGraphQLHandler\(\{)/,
-    `$1\n  getCurrentUser,`
+    /^(\s*)(schema: makeMergedSchema)(.*)$/m,
+    `$1getCurrentUser,\n$1$2$3`
   )
   fs.writeFileSync(API_GRAPHQL_PATH, content)
 }

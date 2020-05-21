@@ -100,6 +100,11 @@ const lambdaEventForExpressRequest = (
     headers: request.headers,
     path: request.path,
     queryStringParameters: qs.parse(request.url.split(/\?(.+)/)[1]),
+    requestContext: {
+      identity: {
+        sourceIp: request.ip,
+      },
+    },
     ...parseBody(request.body), // adds `body` and `isBase64Encoded`
   } as APIGatewayProxyEvent
 }
