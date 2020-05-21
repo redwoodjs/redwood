@@ -1,4 +1,4 @@
-# The Development Server
+# The Development Server (Becoming Function-HTTP-Server)
 
 The dev server looks for "lambda functions" in the directory
 (default: `./api/src/functions`) specified by your `redwood.toml`
