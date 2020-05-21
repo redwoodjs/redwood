@@ -33,6 +33,10 @@ export interface AuthClientGoTrue extends AuthClient {
   client: GoTrue
 }
 
+export interface MagicLinksClient extends AuthClient {
+  login(options: { email: string; showUI?: boolean })
+}
+
 const mapAuthClientAuth0 = (client: Auth0): AuthClientAuth0 => {
   return {
     type: 'auth0',
@@ -115,13 +119,15 @@ const mapAuthClientNetlify = (client: NetlifyIdentity): AuthClient => {
   }
 }
 
-const mapAuthClientMagicLinks = (client: MagicLinks): AuthClient => {
+const mapAuthClientMagicLinks = (client: MagicLinks): MagicLinksClient => {
   return {
     type: 'magic.link',
     client,
-    login: async ({ email }) =>
-      await client.auth.loginWithMagicLink({ email: email }),
-    logout: () => client.user.logout(),
+    login: async ({ email, showUI }) =>
+      await client.auth.loginWithMagicLink({ email: email, showUI: showUI }),
+    logout: async () => {
+      await client.user.logout()
+    },
     getToken: async () => await client.user.getIdToken(),
     currentUser: async () =>
       (await client.user.isLoggedIn()) ? await client.user.getMetadata() : null,
