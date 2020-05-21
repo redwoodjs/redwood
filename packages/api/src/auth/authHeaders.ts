@@ -9,7 +9,7 @@ import { AuthenticationError } from 'apollo-server-lambda'
 
 import { verifyAuth0Token } from './verifyAuth0Token'
 
-export type SupportedAuthTypes = 'auth0' | 'netlify' | 'gotrue' | 'magicLinks'
+export type SupportedAuthTypes = 'auth0' | 'netlify' | 'gotrue' | 'magic.link'
 
 // This is shared by `@redwoodjs/web`
 const AUTH_PROVIDER_HEADER = 'auth-provider'
