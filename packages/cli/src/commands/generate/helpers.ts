@@ -8,7 +8,7 @@ import { paramCase } from 'param-case'
 import type { CommandModule } from 'yargs'
 import { generateTemplate, getPaths, writeFilesTask } from 'src/lib'
 import c from 'src/lib/colors'
-import type { Paths } from '@redwoodjs/internal/src/types'
+import type { Paths } from '@redwoodjs/internal'
 
 /**
  * Reduces boilerplate for generating an output path and content to write to disk
