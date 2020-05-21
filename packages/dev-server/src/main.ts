@@ -42,7 +42,7 @@ try {
         process.stdout.write('Change detected, building... ')
       },
       onImport: (functions) => {
-        console.log(`Done. Took ${new Date().getTime() - startBuild}ms`)
+        console.log(`Done. Took ${new Date().getTime() - startBuild}ms.`)
         setLambdaFunctions(functions)
       },
     })

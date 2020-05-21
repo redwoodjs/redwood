@@ -27,11 +27,12 @@ export const server = ({
 
   app.all('/', (_, res) => {
     return res.send(`
-      <p>The following lambda functions are available:</p>
+      <p>The following serverless Functions are available:</p>
       <ol>
         ${Object.keys(LAMBDA_FUNCTIONS)
           .sort()
-          .map((name) => `<li><a href="/${name}">/${name}</a></li>`)}
+          .map((name) => `<li><a href="/${name}">/${name}</a></li>`)
+          .join()}
       </ol>
     `)
   })
@@ -42,7 +43,7 @@ export const server = ({
       const { routeName } = req.params
       const lambdaFunction = LAMBDA_FUNCTIONS[routeName]
       if (!lambdaFunction) {
-        const errorMessage = `Route "${routeName}" was not found.`
+        const errorMessage = `Function "${routeName}" was not found.`
         console.error(errorMessage)
         res.status(404).send(errorMessage)
         return
