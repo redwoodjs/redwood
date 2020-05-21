@@ -117,7 +117,7 @@ const mapAuthClientNetlify = (client: NetlifyIdentity): AuthClient => {
 
 const mapAuthClientMagicLinks = (client: MagicLinks): AuthClient => {
   return {
-    type: 'magicLinks',
+    type: 'magic.link',
     client,
     login: async ({ email }) =>
       await client.auth.loginWithMagicLink({ email: email }),
