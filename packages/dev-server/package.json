@@ -3,8 +3,8 @@
   "description": "Redwood's HTTP server for serverless functions",
   "version": "0.7.0",
   "bin": {
-    "redwood-http-server": "./dist/cli.js",
-    "dev-server": "./dist/cli.js"
+    "redwood-http-server": "./dist/main.js",
+    "dev-server": "./dist/main.js"
   },
   "files": [
     "dist"

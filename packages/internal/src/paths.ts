@@ -3,7 +3,40 @@ import fs from 'fs'
 
 import findUp from 'findup-sync'
 
-import type { Paths, PagesDependency } from './types'
+export interface NodeTargetPaths {
+  base: string
+  db: string
+  dbSchema: string
+  src: string
+  functions: string
+  graphql: string
+  lib: string
+  services: string
+  config: string
+}
+
+export interface BrowserTargetPaths {
+  base: string
+  src: string
+  routes: string
+  pages: string
+  components: string
+  layouts: string
+  config: string
+  webpack: string
+}
+
+export interface Paths {
+  base: string
+  web: BrowserTargetPaths
+  api: NodeTargetPaths
+}
+
+export interface PagesDependency {
+  const: string
+  path: string
+  importStatement: string
+}
 
 const CONFIG_FILE_NAME = 'redwood.toml'
 

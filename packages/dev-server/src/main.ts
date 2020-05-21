@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import yargs from 'yargs'
 import { getConfig, getPaths } from '@redwoodjs/internal'
 import type { NodeTargetPaths } from '@redwoodjs/internal'
