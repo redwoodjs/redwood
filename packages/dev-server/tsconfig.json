@@ -3,10 +3,8 @@
   "compilerOptions": {
     "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
     "baseUrl": ".",
-    "outDir": "dist",
     "rootDir": "src",
-    "typeRoots": ["."]
+    "outDir": "dist"
   },
-  "include": ["src", "ambient.d.ts"],
-  "references": [{ "path": "../internal" }]
+  "include": ["src", "ambient.d.ts"]
 }

@@ -41,6 +41,7 @@ export type Paths = {
   web: BrowserTargetPaths
   api: NodeTargetPaths
 }
+
 export type PagesDependency = {
   const: string
   path: string

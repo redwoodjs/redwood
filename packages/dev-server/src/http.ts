@@ -1,4 +1,4 @@
-import { Response, Request } from 'express'
+import type { Response, Request } from 'express'
 import express from 'express'
 import morgan from 'morgan'
 import bodyParser from 'body-parser'
@@ -36,17 +36,20 @@ export const server = ({
     `)
   })
 
-  app.all('/:routeName', async (req: Request, res: Response) => {
-    const { routeName } = req.params
-
-    const lambdaFunction = LAMBDA_FUNCTIONS[routeName]
-    if (!lambdaFunction) {
-      const errorMessage = `Route "${routeName}" was not found.`
-      console.error(errorMessage)
-      return res.status(404).send(errorMessage)
+  app.all(
+    '/:routeName',
+    async (req: Request, res: Response): Promise<void> => {
+      const { routeName } = req.params
+      const lambdaFunction = LAMBDA_FUNCTIONS[routeName]
+      if (!lambdaFunction) {
+        const errorMessage = `Route "${routeName}" was not found.`
+        console.error(errorMessage)
+        res.status(404).send(errorMessage)
+        return
+      }
+      await requestHandler(req, res, lambdaFunction)
     }
-    await requestHandler(req, res, lambdaFunction)
-  })
+  )
 
   return app
 }
