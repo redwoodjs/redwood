@@ -71,7 +71,8 @@ export const decodeAuthToken = async ({
       decoded = await verifyAuth0Token(token)
       break
     }
-    case 'magicLinks': {
+    // The tokens here include a custom library for decoding. The user receives a "raw token" which they have to decode themselves.
+    case 'magic.link': {
       decoded = token
       break
     }
