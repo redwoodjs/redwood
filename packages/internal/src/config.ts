@@ -63,8 +63,7 @@ const DEFAULT_CONFIG: Config = {
  * These configuration options are modified by the user via the Redwood
  * config file.
  */
-export const getConfig = (): Config => {
-  const configPath = getConfigPath()
+export const getConfig = (configPath = getConfigPath()): Config => {
   try {
     const rawConfig = fs.readFileSync(configPath, 'utf8')
     return merge(DEFAULT_CONFIG, toml.parse(rawConfig))
