@@ -10,7 +10,7 @@ export type NetlifyIdentity = typeof NetlifyIdentityNS
 export type MagicLinks = { user: any; auth: any }
 
 export type SupportedAuthClients = Auth0 | GoTrue | NetlifyIdentity | MagicLinks
-export type SupportedAuthTypes = 'auth0' | 'gotrue' | 'netlify' | 'magicLinks'
+export type SupportedAuthTypes = 'auth0' | 'gotrue' | 'netlify' | 'magic.link'
 
 export interface AuthClient {
   restoreAuthState?(): void | Promise<any>
