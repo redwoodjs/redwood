@@ -139,7 +139,7 @@ export const createAuthClient = (
       return mapAuthClientGoTrue(client as GoTrue)
     case 'netlify':
       return mapAuthClientNetlify(client as NetlifyIdentity)
-    case 'magicLinks':
+    case 'magic.link':
       return mapAuthClientMagicLinks(client as MagicLinks)
     default:
       throw new Error(
