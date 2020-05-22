@@ -205,7 +205,9 @@ If you're using Auth0 you must also [create an API](https://auth0.com/docs/quick
 
 ### Magic Links
 
-The redwood API does not include the funcionality to decode the magiclinks authentication tokens so the client is inisiated and decodes the tokens inside of getCurrentUser. Magic.link recommends using the issuer as the userID.
+The redwood API does not include the funcionality to decode the magiclinks authentication tokens so the client is inisiated and decodes the tokens inside of `getCurrentUser`.
+
+Magic.link recommends using the issuer as the userID.
 
 ```js
 // redwood/api/src/lib/auth.ts
