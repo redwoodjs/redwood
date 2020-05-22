@@ -5,6 +5,7 @@
 - [Netlify Identity Widget](https://github.com/netlify/netlify-identity-widget)
 - [Auth0](https://github.com/auth0/auth0-spa-js)
 - [Netlify GoTrue-JS](https://github.com/netlify/gotrue-js)
+- [Magic Links - Magic.js](https://github.com/MagicHQ/magic-js)
 - [Contribute](#contributing) one, it's SuperEasy™!
 
 ## Installation
@@ -79,6 +80,28 @@ const auth0 = new Auth0Client({
 ReactDOM.render(
   <FatalErrorBoundary page={FatalErrorPage}>
     <AuthProvider client={auth0} type="auth0">
+      <RedwoodProvider>
+        <Routes />
+      </RedwoodProvider>
+    </AuthProvider>
+  </FatalErrorBoundary>,
+  document.getElementById('redwood-app')
+)
+```
+
+### For Magic.Link
+
+To get your application keys, go to [dashboard.magic.link](https://dashboard.magic.link/) then navigate to the API keys add them to your .env
+
+```js
+// web/src/index.js
+import { Magic } from 'magic-sdk'
+
+const m = new Magic(process.env.MAGICLINK_PUBLIC)
+
+ReactDOM.render(
+  <FatalErrorBoundary page={FatalErrorPage}>
+    <AuthProvider client={m} type="magic.link">
       <RedwoodProvider>
         <Routes />
       </RedwoodProvider>
@@ -174,7 +197,33 @@ export const handler = createGraphQLHandler({
 
 The value returned by `getCurrentUser` is available in `context.currentUser`
 
-**NOTE** If you're using Auth0 you must also [create an API](https://auth0.com/docs/quickstart/spa/react/02-calling-an-api#create-an-api) and set the audience parameter, or you'll receive an opaque token instead of a JWT token, and Redwood expects to receive a JWT token.
+### API Specific Intergration
+
+### Auth0
+
+If you're using Auth0 you must also [create an API](https://auth0.com/docs/quickstart/spa/react/02-calling-an-api#create-an-api) and set the audience parameter, or you'll receive an opaque token instead of a JWT token, and Redwood expects to receive a JWT token.
+
+### Magic Links
+
+The redwood API does not include the funcionality to decode the magiclinks authentication tokens so the client is inisiated and decodes the tokens inside of getCurrentUser. Magic.link recommends using the issuer as the userID.
+
+```js
+// redwood/api/src/lib/auth.ts
+import { Magic } from '@magic-sdk/admin'
+
+export const getCurrentUser = async (authToken) => {
+  const mAdmin = new Magic(process.env.MAGICLINK_SECRET)
+  const {
+    email,
+    publicAddress,
+    issuer,
+  } = await mAdmin.users.getMetadataByToken(authToken)
+
+  return await db.user.findOne({ where: { issuer } })
+}
+```
+
+---
 
 ### Routes
 
@@ -233,6 +282,6 @@ You'll need to import the type definition for you client and add it to the suppo
 
 ```ts
 // authClients.ts
-export type SupportedAuthClients = Auth0 | GoTrue | NetlifyIdentity
-export type SupportedAuthTypes = 'auth0' | 'gotrue' | 'netlify'
+export type SupportedAuthClients = Auth0 | GoTrue | NetlifyIdentity | MagicLinks
+export type SupportedAuthTypes = 'auth0' | 'gotrue' | 'netlify' | 'magic.link'
 ```
