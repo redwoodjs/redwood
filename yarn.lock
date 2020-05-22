@@ -10576,10 +10576,10 @@ macos-release@^2.2.0:
   resolved "https://registry.yarnpkg.com/macos-release/-/macos-release-2.3.0.tgz#eb1930b036c0800adebccd5f17bc4c12de8bb71f"
   integrity sha512-OHhSbtcviqMPt7yfw5ef5aghS2jzFVKEFyCJndQt2YpSQ9qRVSEv2axSJI1paVThEu+FFGs584h/1YhxjVqajA==
 
-magic-sdk@^1.3.4:
-  version "1.3.4"
-  resolved "https://registry.yarnpkg.com/magic-sdk/-/magic-sdk-1.3.4.tgz#e35e6b94a94329ded316ccb9f19aed9243beb541"
-  integrity sha512-AggsrZdPPxjNyV4hhlgJYLqiL54TqjO83CCFfkL+JFqfklyDtp0pmL5mVhd729CYyl3IyTwnb8QUC8OFT0q9ZA==
+magic-sdk@^1.3.5:
+  version "1.3.5"
+  resolved "https://registry.yarnpkg.com/magic-sdk/-/magic-sdk-1.3.5.tgz#edfe7a3562a8b1242746759643651a6c0929bfda"
+  integrity sha512-vF9hRkn2uHtCOXb7HU5CecZoVAP51OviCUyMX1XjhPrfdAB5ndH74b0Od70MW6GsMUdCoU1oYz6mp7U4D19xUg==
   dependencies:
     react-native-webview "^8.1.2"
     snyk "^1.319.1"
