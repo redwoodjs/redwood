@@ -245,10 +245,10 @@ INPUT_TYPES.forEach((type) => {
 
     return (
       <input
-        {...tagProps}
         type={type}
         id={props.id || props.name}
         ref={register(props.validation || { required: false })}
+        {...tagProps}
       />
     )
   }

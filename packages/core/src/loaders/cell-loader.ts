@@ -1,4 +1,8 @@
 export default function (source: string) {
+  if (source.match('export default') && !source.match('export const QUERY')) {
+    return source
+  }
+
   const exports: string[] = []
 
   const names = [

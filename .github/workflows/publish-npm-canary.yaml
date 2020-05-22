@@ -10,6 +10,7 @@ on:
 
 jobs:
   build:
+    if: github.repository == 'redwoodjs/redwood'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
