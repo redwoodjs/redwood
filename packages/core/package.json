@@ -67,6 +67,7 @@
     "test:watch": "yarn test --watch"
   },
   "devDependencies": {
+    "@types/babel-core": "^6.25.6",
     "babel-plugin-tester": "^9.0.1"
   }
 }

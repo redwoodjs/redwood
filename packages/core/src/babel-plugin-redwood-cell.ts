@@ -1,33 +1,47 @@
-// This is supposed to wrap a file that's has a suffix of `Cell` in Redwood's `withCell` higher order component.
-// The HOC is responsible for the lifecycle methods during a graphQL query.
-// The end result of this plugin is something like:
+import type { PluginObj, types } from '@babel/core'
+
+// This wraps a file that has a suffix of `Cell` in Redwood's `withCell` higher
+// order component. The HOC deals with the lifecycle methods during a GraphQL query.
+//
 // ```js
 // import { withCell } from '@redwoodjs/web'
+// <YOUR CODE>
 // export default withCell({ QUERY, Loading, Succes, Failure, Empty, beforeQuery, afterQuery })
 // ```
-module.exports = function ({ types: t }) {
-  // These are the expected named exports from a Cell file.
-  const EXPECTED_EXPORTS_FROM_CELL = [
-    'QUERY',
-    'Loading',
-    'Success',
-    'Failure',
-    'Empty',
-    'beforeQuery',
-    'afterQuery',
-  ]
 
+// A cell can export the declarations below.
+const EXPECTED_EXPORTS_FROM_CELL = [
+  'beforeQuery',
+  'QUERY',
+  'afterQuery',
+  'Loading',
+  'Success',
+  'Failure',
+  'Empty',
+]
+
+export default function ({ types: t }: { types: typeof types }): PluginObj {
   // This array will
   // - collect exports from the Cell file during ExportNamedDeclaration
   // - collected exports will then be passed to `withCell`
   // - be cleared after Program exit to prepare for the next file
-  let exportNames = []
+  let exportNames: string[] = []
+  let hasDefaultExport = false
 
   return {
+    name: 'babel-plugin-redwood-cell',
     visitor: {
+      ExportDefaultDeclaration() {
+        // This is not a cell since it exports a default.
+        hasDefaultExport = true
+        return
+      },
       ExportNamedDeclaration(path) {
-        const { declaration } = path.node
+        if (hasDefaultExport) {
+          return
+        }
 
+        const declaration = path.node.declaration
         let name
         if (declaration.type === 'VariableDeclaration') {
           name = declaration.declarations[0].id.name
@@ -43,7 +57,12 @@ module.exports = function ({ types: t }) {
       },
       Program: {
         exit(path) {
-          // import { withCell } from '@redwoodjs/web'
+          if (exportNames.length === 0) {
+            return
+          }
+
+          // Insert at the top of the file:
+          // `import { withCell } from '@redwoodjs/web'`
           path.node.body.unshift(
             t.importDeclaration(
               [
@@ -56,6 +75,7 @@ module.exports = function ({ types: t }) {
             )
           )
 
+          // Insert at the bottom of the file:
           // export default withCell({ QUERY?, Loading?, Succes?, Failure?, Empty?, beforeQuery?, afterQuery? })
           path.node.body.push(
             t.exportDefaultDeclaration(
@@ -74,6 +94,7 @@ module.exports = function ({ types: t }) {
             )
           )
 
+          hasDefaultExport = false
           exportNames = []
         },
       },

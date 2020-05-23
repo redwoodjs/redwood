@@ -130,7 +130,7 @@ module.exports = () => ({
     },
     {
       test: /.+Cell.(js|tsx)$/,
-      plugins: [require('./babel-plugin-redwood-cell')],
+      plugins: [require('../dist/babel-plugin-redwood-cell')],
     },
   ],
 })
