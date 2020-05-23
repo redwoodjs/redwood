@@ -21,7 +21,7 @@ module.exports = {
      */
     '^react$': path.resolve(redwoodPaths.base, 'node_modules', 'react'),
     '^react-dom$': path.resolve(redwoodPaths.base, 'node_modules', 'react-dom'),
-    '^@apollo/react-common': path.resolve(
+    '^@apollo/react-common$': path.resolve(
       redwoodPaths.base,
       'node_modules',
       '@apollo/react-common'
@@ -31,7 +31,8 @@ module.exports = {
      * Mock out files that aren't particularly useful in tests. See fileMock.js for more info.
      */
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|css)$': path.resolve(
-      __dirname,
+      redwoodPaths.base,
+      'node_modules',
       'fileMock.js'
     ),
   },
