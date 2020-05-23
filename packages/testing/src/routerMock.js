@@ -1,6 +1,6 @@
 import React from 'react'
 
-const routes = {}
+export const routes = {}
 
 export const Router = ({ children }) => {
   for (let route of React.Children.toArray(children)) {
@@ -10,5 +10,3 @@ export const Router = ({ children }) => {
 
   return <></>
 }
-
-export { routes }
