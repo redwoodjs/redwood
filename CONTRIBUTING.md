@@ -6,18 +6,22 @@ Before interacting with the Redwood community, please read and understand our [C
 
 **Table of Contents**
 
-- [Contributing](#Contributing)
-  - [Local Development](#Local-Development)
-    - [Copy and Watch](#Copy-and-Watch)
-      - [Specifying a RW_PATH](#Specifying-a-RW_PATH)
-    - [Local Package Registry Emulation](#Local-Package-Registry-Emulation)
-      - [Setting Up and Running a Local NPM Registry](#Setting-Up-and-Running-a-Local-NPM-Registry)
-      - [Publishing a Package](#Publishing-a-Package)
-      - [Installing Published Packages in Your Redwood App](#Installing-Published-Packages-in-Your-Redwood-App)
-  - [Running Your Redwood App's Local Server(s)](#Running-Your-Redwood-App's-Local-Server(s))
-  - [Releases](#Releases)
-
-<!-- toc -->
+- [Local Development](#local-development)
+  - [Copy and Watch](#copy-and-watch)
+    - [Specifying a RW_PATH](#specifying-a-rwpath)
+  - [Local Package Registry Emulation](#local-package-registry-emulation)
+    - [Setting Up and Running a Local NPM Registry](#setting-up-and-running-a-local-npm-registry)
+    - [Publishing a Package](#publishing-a-package)
+    - [Installing Published Packages in Your Redwood App](#installing-published-packages-in-your-redwood-app)
+- [Running Your Redwood App's Local Server(s)](#running-your-redwood-apps-local-servers)
+- [Releases](#releases)
+  - [Troubleshooting](#troubleshooting)
+- [CLI Reference: redwood-tools](#cli-reference-redwood-tools)
+  - [redwood-tools (alias rwt)](#redwood-tools-alias-rwt)
+  - [copy (alias cp)](#copy-alias-cp)
+  - [copy:watch (alias cpw)](#copywatch-alias-cpw)
+  - [fix-bins (alias fix)](#fix-bins-alias-fix)
+  - [install (alias i)](#install-alias-i)
 
 ## Local Development
 
@@ -188,3 +192,70 @@ The changes the version of **all the packages** (even those that haven't changed
 ### Troubleshooting
 
 If something went wrong you can use `yarn lerna publish from-package` to publish the packages that aren't already in the registry.
+
+## CLI Reference: `redwood-tools`
+
+This CLI Reference section covers the `redwood-tools` command options. For `redwood` options, see the [CLI Reference on redwoodjs.com](https://redwoodjs.com/reference/command-line-interface).
+
+### redwood-tools (alias rwt)
+
+Redwood's companion CLI development tool. You'll be using this if you're contributing to Redwood.
+
+```
+yarn rwt <command>
+```
+
+|Command | Description|
+|:-|:-|
+|`copy` | Copy the Redwood Framework path to this project.|
+|`copy:watch` | Watch the Redwood Framework path for changes and copy them over to this project.|
+|`fix-bins` | Fix Redwood symlinks and permissions.|
+|`install` | Install a package from your local NPM registry.|
+
+### copy (alias cp)
+
+Copy the Redwood Framework path to this project.
+
+```terminal
+yarn rwt cp [RW_PATH]
+```
+
+You can avoid having to provide `RW_PATH` by defining an environment variable on your system. See [Specifying a RW_PATH](https://github.com/redwoodjs/redwood/blob/master/CONTRIBUTING.md#specifying-a-rw_path).
+
+### copy:watch (alias cpw)
+
+Watch the Redwood Framework path for changes and copy them over to this project.
+
+```terminal
+yarn rwt cpw [RW_PATH]
+```
+
+You can avoid having to provide `RW_PATH` by defining an environment variable on your system. See [Specifying a RW_PATH](https://github.com/redwoodjs/redwood/blob/master/CONTRIBUTING.md#specifying-a-rw_path).
+
+### fix-bins (alias fix)
+
+Fix Redwood symlinks and permissions.
+
+```terminal
+yarn rwt fix
+```
+
+The Redwood CLI has the following binaries:
+
+- `redwood`
+- `rw`
+- `redwood-tools`
+- `rwt`
+- `dev-server`
+
+When you're contributing, the permissions of these binaries can sometimes get mixed up. This makes them executable again.
+
+### install (alias i)
+
+Install a package from your local NPM registry.
+
+```terminal
+yarn rwt i <packageName>
+```
+
+You'll use this command if you're testing the full package-development workflow. See [Local Package Registry Emulation](https://github.com/redwoodjs/redwood/blob/master/CONTRIBUTING.md#local-package-registry-emulation).

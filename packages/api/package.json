@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/api",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "files": [
     "dist",
     "importAll.macro.js"
@@ -10,7 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "@prisma/client": "2.0.0-beta.5",
-    "@redwoodjs/internal": "^0.6.0",
+    "@redwoodjs/internal": "^0.7.0",
     "apollo-server-lambda": "2.11.0",
     "babel-plugin-macros": "^2.8.0",
     "core-js": "3.6.4",
@@ -49,5 +49,5 @@
     "test": "yarn jest",
     "test:watch": "yarn test --watch"
   },
-  "gitHead": "2801c132f40263f9fcfbdac8b1750d2e423eb649"
+  "gitHead": "ac0479bd57af9938d040d1d7636bf58f9e9d9731"
 }

@@ -92,7 +92,7 @@ export const createGraphQLHandler = (
   /**
    * @deprecated please use onException instead to disconnect your database.
    * */
-  db: any
+  db?: any
 ) => {
   const handler = new ApolloServer({
     playground: process.env.NODE_ENV !== 'production',
