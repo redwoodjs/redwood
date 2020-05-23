@@ -1,54 +1,27 @@
-# How to mock `@redwoodjs/router`
+# PackageName
 
-Place a manual mock in the `web/__mocks__` folder. Jest requires mocks for node_modules to be in the project root. Using the mock provided by `@redwoodjs/testing` will pass tests using `routes.existingRoute()` and fail tests using `routes.nonExistingRoute()`
+<!-- toc -->
+- [Purpose and Vision](#Purpose-and-Vision)
+- [Package Lead](#Package-Lead)
+- [Roadmap](#Roadmap)
+- [Contributing](#Contributing)
+- [FAQ](#FAQ)
 
-```javascript
-// web/__mocks__/@redwoodjs/router.js
-import { routerMock } from '@redwoodjs/testing'
+## Purpose and Vision
+The Testing package contains a custom renderer based on `@testing-library/react`'s `render` method. All methods from this library are exposed through `@redwoodjs/testing`
 
-export * from '@redwoodjs/router'
-export default routerMock
-```
+## Package Lead
+[@RobertBroersma](https://github.com/RobertBroersma)
 
-# How to mock API calls
+## Roadmap
+See [[Testing] Support Jest --config extensibility](https://github.com/redwoodjs/redwood/issues/564)
 
-Wrap your subject in `MockedProvider` and mock queries by passing them into it. ([More Info](https://www.apollographql.com/docs/react/development-testing/testing/#mockedprovider))
+## Contributing
+Core technologies
+- [Jest](https://jestjs.io/docs/en/getting-started)
+- [React Testing Library](https://testing-library.com/docs/react-testing-library/intro)
 
-Example for `BlogPostPage`, a page containing a Cell:
 
-```javascript
-import { render, screen, MockedProvider } from '@redwoodjs/testing'
+## FAQ
 
-import { QUERY } from 'src/components/BlogPostCell/BlogPostCell'
-
-import BlogPostPage from './BlogPostPage'
-
-describe('BlogPostPage', () => {
-  it('renders successfully', async () => {
-    const mocks = [
-      {
-        request: {
-          query: QUERY,
-          variables: {
-            id: 'id-123',
-          },
-        },
-        result: {
-          data: {
-            post: { title: 'Post Title', id: 'id-123', body: 'Test' },
-          },
-        },
-      },
-    ]
-
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <BlogPostPage id="id-123" />
-      </MockedProvider>
-    )
-
-    expect(await screen.findByText(/Post Title/)).toBeInTheDocument()
-  })
-})
-
-```
+Answers to frequently asked questions.
