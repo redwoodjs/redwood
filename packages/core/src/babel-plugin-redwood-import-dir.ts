@@ -5,7 +5,9 @@ import type { PluginObj, types } from '@babel/core'
 
 /**
  * This babel plugin will search for import statements that include a star "*",
- * the source part of the statement is a glob, the files that are matched are
+ * the source part of the statement is a glob, the files that are matched are imported,
+ * and appended to an object.
+ *
  * @example:
  * Given a directory "src/services" that contains "a.js" and "b.ts", will produce
  * the following results
@@ -17,7 +19,7 @@ import type { PluginObj, types } from '@babel/core'
  * ```
  *
  * @todo We **do not** support nested directories.
- * @todo Generate ambient declerations for TypeScript for the imported files.
+ * @todo Generate ambient declerations for TypeScript of imported files.
  */
 export default function ({ types: t }: { types: typeof types }): PluginObj {
   return {
