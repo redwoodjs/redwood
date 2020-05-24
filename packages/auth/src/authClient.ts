@@ -1,14 +1,16 @@
 import type { default as GoTrue, User as GoTrueUser } from 'gotrue-js'
 import type { Auth0Client as Auth0 } from '@auth0/auth0-spa-js'
 import type NetlifyIdentityNS from 'netlify-identity-widget'
+// TODO: Import missing Firebase type
 // TODO: Can also return an Auth0 user which doesn't have a definition.
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Auth0User {}
 export type { GoTrueUser }
 export type NetlifyIdentity = typeof NetlifyIdentityNS
 
+// TODO: Add missing Firebase Type
 export type SupportedAuthClients = Auth0 | GoTrue | NetlifyIdentity
-export type SupportedAuthTypes = 'auth0' | 'gotrue' | 'netlify'
+export type SupportedAuthTypes = 'auth0' | 'firebase' | 'gotrue' | 'netlify'
 
 export interface AuthClient {
   restoreAuthState?(): void | Promise<any>
@@ -39,11 +41,11 @@ const mapAuthClientAuth0 = (client: Auth0): AuthClientAuth0 => {
       if (window.location.search.includes('code=')) {
         const { appState } = await client.handleRedirectCallback()
         window.history.replaceState(
-          {},
-          document.title,
-          appState && appState.targetUrl
-            ? appState.targetUrl
-            : window.location.pathname
+            {},
+            document.title,
+            appState && appState.targetUrl
+                ? appState.targetUrl
+                : window.location.pathname
         )
       }
     },
@@ -62,7 +64,7 @@ const mapAuthClientGoTrue = (client: GoTrue): AuthClientGoTrue => {
     type: 'gotrue',
     client,
     login: async ({ email, password, remember }) =>
-      client.login(email, password, remember),
+        client.login(email, password, remember),
     logout: async () => {
       const user = await client.currentUser()
       return user?.logout()
@@ -112,11 +114,28 @@ const mapAuthClientNetlify = (client: NetlifyIdentity): AuthClient => {
   }
 }
 
+const mapAuthClientFirebase = (client: Firebase): AuthClient => {
+  return {
+    type: 'firebase',
+    client,
+    restoreAuthState: () => client.auth().getRedirectResult(),
+    login: async () => {
+      const provider = new client.auth.GoogleAuthProvider()
+      return client.auth().signInWithRedirect(provider)
+    },
+    logout: () => client.auth().signOut(),
+    getToken: async () => client.auth().currentUser.getIdToken(),
+    currentUser: async () => client.auth().currentUser,
+  }
+}
+
 export const createAuthClient = (
-  client: SupportedAuthClients,
-  type: SupportedAuthTypes
+    client: SupportedAuthClients,
+    type: SupportedAuthTypes
 ): AuthClient => {
   switch (type) {
+    case 'firebase':
+      return mapAuthClientFirebase(client as Firebase);
     case 'auth0':
       return mapAuthClientAuth0(client as Auth0)
     case 'gotrue':
@@ -125,7 +144,7 @@ export const createAuthClient = (
       return mapAuthClientNetlify(client as NetlifyIdentity)
     default:
       throw new Error(
-        `The ${type} auth client is not currently supported, please consider adding it.`
+          `The ${type} auth client is not currently supported, please consider adding it.`
       )
   }
 }
