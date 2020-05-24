@@ -41,11 +41,11 @@ const mapAuthClientAuth0 = (client: Auth0): AuthClientAuth0 => {
       if (window.location.search.includes('code=')) {
         const { appState } = await client.handleRedirectCallback()
         window.history.replaceState(
-            {},
-            document.title,
-            appState && appState.targetUrl
-                ? appState.targetUrl
-                : window.location.pathname
+          {},
+          document.title,
+          appState && appState.targetUrl
+            ? appState.targetUrl
+            : window.location.pathname
         )
       }
     },
@@ -64,7 +64,7 @@ const mapAuthClientGoTrue = (client: GoTrue): AuthClientGoTrue => {
     type: 'gotrue',
     client,
     login: async ({ email, password, remember }) =>
-        client.login(email, password, remember),
+      client.login(email, password, remember),
     logout: async () => {
       const user = await client.currentUser()
       return user?.logout()
@@ -130,12 +130,12 @@ const mapAuthClientFirebase = (client: Firebase): AuthClient => {
 }
 
 export const createAuthClient = (
-    client: SupportedAuthClients,
-    type: SupportedAuthTypes
+  client: SupportedAuthClients,
+  type: SupportedAuthTypes
 ): AuthClient => {
   switch (type) {
     case 'firebase':
-      return mapAuthClientFirebase(client as Firebase);
+      return mapAuthClientFirebase(client as Firebase)
     case 'auth0':
       return mapAuthClientAuth0(client as Auth0)
     case 'gotrue':
@@ -144,7 +144,7 @@ export const createAuthClient = (
       return mapAuthClientNetlify(client as NetlifyIdentity)
     default:
       throw new Error(
-          `The ${type} auth client is not currently supported, please consider adding it.`
+        `The ${type} auth client is not currently supported, please consider adding it.`
       )
   }
 }
