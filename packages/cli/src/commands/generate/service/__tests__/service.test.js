@@ -196,7 +196,7 @@ const itCreatesASingleWordServiceFileWithMultipleRelations = (baseArgs) => {
 }
 
 describe('in javascript mode', () => {
-  const baseArgs = getDefaultArgs(service.builder)
+  const baseArgs = getDefaultArgs(service.defaults)
 
   itReturnsExactly2Files(baseArgs)
   itCreatesASingleWordServiceFile(baseArgs)
@@ -213,7 +213,7 @@ describe('in javascript mode', () => {
 })
 
 describe('in typescript mode', () => {
-  const baseArgs = { ...getDefaultArgs(service.builder), typescript: true }
+  const baseArgs = { ...getDefaultArgs(service.defaults), typescript: true }
 
   itReturnsExactly2Files(baseArgs)
   itCreatesASingleWordServiceFile(baseArgs)

@@ -100,7 +100,7 @@ const itCreatesASDLFileWithEnumDefinitions = (baseArgs = {}) => {
 }
 
 describe('in javascript mode', () => {
-  const baseArgs = getDefaultArgs(sdl.builder)
+  const baseArgs = getDefaultArgs(sdl.defaults)
 
   itReturnsExactlyThreeFiles(baseArgs)
   itCreatesAService(baseArgs)
@@ -112,7 +112,7 @@ describe('in javascript mode', () => {
 })
 
 describe('in typescript mode', () => {
-  const baseArgs = { ...getDefaultArgs(sdl.builder), typescript: true }
+  const baseArgs = { ...getDefaultArgs(sdl.defaults), typescript: true }
 
   itReturnsExactlyThreeFiles(baseArgs)
   itCreatesAService(baseArgs)
