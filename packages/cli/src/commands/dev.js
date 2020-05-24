@@ -52,7 +52,8 @@ export const handler = async ({ app = ['db', 'api', 'web'] }) => {
       .filter((job) => job && job.runWhen()),
     {
       restartTries: 3,
-      prefix: '{time} {name} |',
+      restartDelay: 1000,
+      prefix: '{name} |',
       timestampFormat: 'HH:mm:ss',
     }
   ).catch((e) => {
