@@ -77,6 +77,7 @@ module.exports = () => ({
             ],
           },
         ],
+        [require('../dist/babel-plugin-redwood-import-dir')],
       ],
     },
     // ** WEB **
