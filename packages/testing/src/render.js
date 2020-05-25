@@ -4,7 +4,7 @@ import { render } from '@testing-library/react'
 
 const redwoodPaths = getPaths()
 
-const Routes = require(`${redwoodPaths.web.src}/Routes.js`).default
+const Routes = require(redwoodPaths.web.src).default
 
 const AllTheProviders = ({ children }) => {
   return (
