@@ -1,3 +1,6 @@
+import fs from 'fs'
+import path from 'path'
+
 import execa from 'execa'
 import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
@@ -6,10 +9,25 @@ import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
 
+// For Windows: Replaces ` ` with `\ ` to sanitize paths
+const BASE_DIR = getPaths().base.replace(' ', '\\ ')
+const apiExists = fs.existsSync(path.join(BASE_DIR, 'api'))
+const webExists = fs.existsSync(path.join(BASE_DIR, 'web'))
+
+const optionDefault = (webExists, apiExists) => {
+  let options = []
+  if (webExists) options.push('web')
+  if (apiExists) options.push('api')
+  return options
+}
+
 export const command = 'build [app..]'
 export const desc = 'Build for production.'
 export const builder = {
-  app: { choices: ['api', 'web'], default: ['api', 'web'] },
+  app: {
+    choices: ['api', 'web'],
+    default: optionDefault(webExists, apiExists),
+  },
   verbose: { type: 'boolean', default: false, alias: ['v'] },
   stats: { type: 'boolean', default: false },
 }
