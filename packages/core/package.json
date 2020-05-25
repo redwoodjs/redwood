@@ -68,6 +68,7 @@
   },
   "devDependencies": {
     "@types/babel-core": "^6.25.6",
+    "@types/babel-plugin-tester": "^9.0.0",
     "babel-plugin-tester": "^9.0.1"
   }
 }
