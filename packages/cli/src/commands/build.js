@@ -13,6 +13,7 @@ import { handler as generatePrismaClient } from 'src/commands/dbCommands/generat
 const BASE_DIR = getPaths().base.replace(' ', '\\ ')
 const apiExists = fs.existsSync(path.join(BASE_DIR, 'api'))
 const webExists = fs.existsSync(path.join(BASE_DIR, 'web'))
+const prismaExists = fs.existsSync(path.join(BASE_DIR, 'api/prisma'))
 
 const optionDefault = (webExists, apiExists) => {
   let options = []
@@ -39,7 +40,7 @@ export const handler = async ({
 }) => {
   const { base: BASE_DIR } = getPaths()
 
-  if (app.includes('api')) {
+  if (app.includes('api') && prismaExists) {
     try {
       await generatePrismaClient({ verbose, force: true })
     } catch (e) {
