@@ -331,6 +331,22 @@ const addScaffoldImport = () => {
   return 'Added scaffold import to index.js'
 }
 
+export const defaults = {
+  force: {
+    default: false,
+    type: 'boolean',
+  },
+  typescript: {
+    type: 'boolean',
+    default: false,
+    desc: 'Generate TypeScript files',
+  },
+  javascript: {
+    type: 'boolean',
+    default: true,
+    desc: 'Generate JavaScript files',
+  },
+}
 export const command = 'scaffold <model>'
 export const desc =
   'Generate Pages, SDL, and Services files based on a given DB schema Model. Also accepts <path/model>.'
@@ -339,19 +355,8 @@ export const builder = (yargs) => {
     description:
       "Model to scaffold. You can also use <path/model> to nest files by type at the given path directory (or directories). For example, 'rw g scaffold admin/post'.",
   })
-  yargs.option('force', {
-    default: false,
-    type: 'boolean',
-  })
-  yargs.option('typescript', {
-    type: 'boolean',
-    default: false,
-    desc: 'Generate TypeScript files',
-  })
-  yargs.options('javascript', {
-    type: 'boolean',
-    default: true,
-    desc: 'Generate JavaScript files',
+  Object.entries(defaults).forEach((option, config) => {
+    yargs.option(option, config)
   })
 }
 const tasks = ({ model, path, force }) => {

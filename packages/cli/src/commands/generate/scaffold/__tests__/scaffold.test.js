@@ -11,7 +11,7 @@ describe('in javascript (defualt) mode', () => {
 
   beforeAll(async () => {
     files = await scaffold.files({
-      ...getDefaultArgs(scaffold.builder),
+      ...getDefaultArgs(scaffold.defaults),
       model: 'Post',
     })
   })
@@ -22,7 +22,7 @@ describe('in javascript (defualt) mode', () => {
 
   // SDL
 
-  test('creates an sdl', () => {
+  test.only('creates an sdl', () => {
     expect(files).toHaveProperty([
       path.normalize('/path/to/project/api/src/graphql/posts.sdl.js'),
     ])
@@ -281,7 +281,7 @@ describe('in typescript mode', () => {
 
   beforeAll(async () => {
     files = await scaffold.files({
-      ...getDefaultArgs(scaffold.builder),
+      ...getDefaultArgs(scaffold.defaults),
       model: 'Post',
       typescript: true,
     })
