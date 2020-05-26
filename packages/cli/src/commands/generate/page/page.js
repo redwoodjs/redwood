@@ -51,7 +51,7 @@ export const routes = ({ name, path }) => {
 }
 
 export const command = 'page <name> [path]'
-export const desc = 'Generates a page component.'
+export const desc = 'Generate a page component.'
 export const builder = { force: { type: 'boolean', default: false } }
 
 export const handler = async ({ name, path, force }) => {
