@@ -1,15 +1,18 @@
 import type { default as GoTrue, User as GoTrueUser } from 'gotrue-js'
 import type { Auth0Client as Auth0 } from '@auth0/auth0-spa-js'
 import type NetlifyIdentityNS from 'netlify-identity-widget'
-// TODO: Import missing Firebase type
+import * as firebase from 'firebase/app'
 // TODO: Can also return an Auth0 user which doesn't have a definition.
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Auth0User {}
 export type { GoTrueUser }
 export type NetlifyIdentity = typeof NetlifyIdentityNS
-
-// TODO: Add missing Firebase Type
-export type SupportedAuthClients = Auth0 | GoTrue | NetlifyIdentity
+export type FirebaseClient = typeof firebase
+export type SupportedAuthClients =
+  | Auth0
+  | FirebaseClient
+  | GoTrue
+  | NetlifyIdentity
 export type SupportedAuthTypes = 'auth0' | 'firebase' | 'gotrue' | 'netlify'
 
 export interface AuthClient {
@@ -114,7 +117,7 @@ const mapAuthClientNetlify = (client: NetlifyIdentity): AuthClient => {
   }
 }
 
-const mapAuthClientFirebase = (client: Firebase): AuthClient => {
+const mapAuthClientFirebase = (client: FirebaseClient): AuthClient => {
   return {
     type: 'firebase',
     client,
@@ -124,7 +127,7 @@ const mapAuthClientFirebase = (client: Firebase): AuthClient => {
       return client.auth().signInWithRedirect(provider)
     },
     logout: () => client.auth().signOut(),
-    getToken: async () => client.auth().currentUser.getIdToken(),
+    getToken: async () => client.auth().currentUser?.getIdToken() ?? null,
     currentUser: async () => client.auth().currentUser,
   }
 }
@@ -135,7 +138,7 @@ export const createAuthClient = (
 ): AuthClient => {
   switch (type) {
     case 'firebase':
-      return mapAuthClientFirebase(client as Firebase)
+      return mapAuthClientFirebase(client as FirebaseClient)
     case 'auth0':
       return mapAuthClientAuth0(client as Auth0)
     case 'gotrue':
