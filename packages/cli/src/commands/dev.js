@@ -15,14 +15,17 @@ export const builder = {
 export const handler = async ({ app = ['db', 'api', 'web'] }) => {
   // For Windows: Replaces ` ` with `\ `. Damn, there has got to be a better
   // way to sanitize paths?!
+  // We use BASE_DIR when we need to effectively set the working dir
   const BASE_DIR = getPaths().base.replace(' ', '\\ ')
-  const API_DIR = path.join(BASE_DIR, 'api')
-  const WEB_DIR = path.join(BASE_DIR, 'web')
+  // For validation, e.g. dirExists?, we use these
+  const API_DIR = getPaths().api.base
+  const WEB_DIR = getPaths().web.base
+  const PRISMA_SCHEMA = getPaths().api.dbSchema
 
   const jobs = {
     api: {
       name: 'api',
-      command: `cd ${API_DIR} && yarn dev-server`,
+      command: `cd ${path.join(BASE_DIR, 'api')} && yarn dev-server`,
       prefixColor: 'cyan',
       runWhen: () => fs.existsSync(API_DIR),
     },
@@ -33,7 +36,7 @@ export const handler = async ({ app = ['db', 'api', 'web'] }) => {
         'api'
       )} && yarn prisma generate --watch`,
       prefixColor: 'magenta',
-      runWhen: () => fs.existsSync(API_DIR),
+      runWhen: () => fs.existsSync(PRISMA_SCHEMA),
     },
     web: {
       name: 'web',
