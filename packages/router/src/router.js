@@ -1,4 +1,5 @@
 // The guts of the router implementation.
+import PropTypes from 'prop-types'
 
 import {
   Location,
@@ -10,10 +11,40 @@ import {
   mapNamedRoutes,
   SplashPage,
   PageLoader,
+  Redirect,
 } from './internal'
 
 const Route = () => {
   return null
+}
+
+/**
+ * `Routes` nested in `Private` require authentication.
+ * When a user is not authenticated and attempts to visit this route they will be
+ * redirected to `unauthenticated` route.
+ */
+const Private = () => {
+  return null
+}
+Private.propTypes = {
+  /**
+   * The page name where a user will be redirected when not authenticated.
+   */
+  unauthenticated: PropTypes.string.isRequired,
+}
+
+const PrivatePageLoader = ({ useAuth, unauthenticatedRoute, children }) => {
+  const { loading, isAuthenticated } = useAuth()
+
+  if (loading) {
+    return null
+  }
+
+  if (isAuthenticated) {
+    return children
+  } else {
+    return <Redirect to={unauthenticatedRoute()} />
+  }
 }
 
 const Router = (props) => (
@@ -59,9 +90,31 @@ const RouterImpl = ({
   paramTypes,
   pageLoadingDelay = DEFAULT_PAGE_LOADING_DELAY,
   children,
+  useAuth = window.__REDWOOD__USE_AUTH,
 }) => {
-  const routes = React.Children.toArray(children)
-  mapNamedRoutes(routes)
+  // Find `Private` components, mark their children `Route` components as private,
+  // and merge them into a single array.
+  const privateRoutes =
+    React.Children.toArray(children)
+      .filter((child) => child.type === Private)
+      .map((privateElement) => {
+        // Set `Route` props
+        const { unauthenticated, children } = privateElement.props
+        return React.Children.toArray(children).map((route) =>
+          React.cloneElement(route, {
+            private: true,
+            unauthenticatedRedirect: unauthenticated,
+          })
+        )
+      })
+      .reduce((a, b) => a.concat(b), []) || []
+
+  const routes = [
+    ...privateRoutes,
+    ...React.Children.toArray(children).filter((child) => child.type === Route),
+  ]
+
+  const namedRoutes = mapNamedRoutes(routes)
 
   let NotFoundPage
 
@@ -78,6 +131,7 @@ const RouterImpl = ({
     if (match) {
       const searchParams = parseSearch(search)
       const allParams = { ...pathParams, ...searchParams }
+
       if (redirect) {
         const newPath = replaceParams(redirect, pathParams)
         navigate(newPath)
@@ -87,15 +141,37 @@ const RouterImpl = ({
           </RouterImpl>
         )
       } else {
-        return (
-          <ParamsContext.Provider value={allParams}>
-            <PageLoader
-              spec={normalizePage(Page)}
-              delay={pageLoadingDelay}
-              params={allParams}
-            />
-          </ParamsContext.Provider>
-        )
+        const Loaders = () => {
+          return (
+            <ParamsContext.Provider value={allParams}>
+              <PageLoader
+                spec={normalizePage(Page)}
+                delay={pageLoadingDelay}
+                params={allParams}
+              />
+            </ParamsContext.Provider>
+          )
+        }
+
+        if (route?.props?.private) {
+          if (typeof useAuth === 'undefined') {
+            throw new Error(
+              "You're using a private route, but `useAuth` is undefined. Have you created an AuthProvider, or pased in the incorrect prop to `useAuth`?"
+            )
+          }
+          return (
+            <PrivatePageLoader
+              useAuth={useAuth}
+              unauthenticatedRoute={
+                namedRoutes[route.props.unauthenticatedRedirect]
+              }
+            >
+              <Loaders />
+            </PrivatePageLoader>
+          )
+        }
+
+        return <Loaders />
       }
     }
   }
@@ -114,4 +190,4 @@ const RouterImpl = ({
   )
 }
 
-export { Router, Route }
+export { Router, Route, Private }

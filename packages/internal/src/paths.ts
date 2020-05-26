@@ -3,7 +3,40 @@ import fs from 'fs'
 
 import findUp from 'findup-sync'
 
-import { Paths, PagesDependency } from './types'
+export interface NodeTargetPaths {
+  base: string
+  db: string
+  dbSchema: string
+  src: string
+  functions: string
+  graphql: string
+  lib: string
+  services: string
+  config: string
+}
+
+export interface BrowserTargetPaths {
+  base: string
+  src: string
+  routes: string
+  pages: string
+  components: string
+  layouts: string
+  config: string
+  webpack: string
+}
+
+export interface Paths {
+  base: string
+  web: BrowserTargetPaths
+  api: NodeTargetPaths
+}
+
+export interface PagesDependency {
+  const: string
+  path: string
+  importStatement: string
+}
 
 const CONFIG_FILE_NAME = 'redwood.toml'
 
@@ -12,6 +45,7 @@ const PATH_API_DIR_GRAPHQL = 'api/src/graphql'
 const PATH_API_DIR_DB = 'api/prisma'
 const PATH_API_DIR_DB_SCHEMA = 'api/prisma/schema.prisma'
 const PATH_API_DIR_CONFIG = 'api/src/config'
+const PATH_API_DIR_LIB = 'api/src/lib'
 const PATH_API_DIR_SERVICES = 'api/src/services'
 const PATH_API_DIR_SRC = 'api/src'
 const PATH_WEB_ROUTES = 'web/src/Routes' // .js|.tsx
@@ -19,7 +53,8 @@ const PATH_WEB_DIR_LAYOUTS = 'web/src/layouts/'
 const PATH_WEB_DIR_PAGES = 'web/src/pages/'
 const PATH_WEB_DIR_COMPONENTS = 'web/src/components'
 const PATH_WEB_DIR_SRC = 'web/src'
-const PATH_WEB_DIR_CONFIG = 'web/config/webpack.config.js'
+const PATH_WEB_DIR_CONFIG = 'web/config'
+const PATH_WEB_DIR_CONFIG_WEBPACK = 'web/config/webpack.config.js'
 
 /**
  * Search the parent directories for the Redwood configuration file.
@@ -67,21 +102,25 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
   return {
     base: BASE_DIR,
     api: {
+      base: path.join(BASE_DIR, 'api'),
       db: path.join(BASE_DIR, PATH_API_DIR_DB),
       dbSchema: path.join(BASE_DIR, PATH_API_DIR_DB_SCHEMA),
       functions: path.join(BASE_DIR, PATH_API_DIR_FUNCTIONS),
       graphql: path.join(BASE_DIR, PATH_API_DIR_GRAPHQL),
+      lib: path.join(BASE_DIR, PATH_API_DIR_LIB),
       config: path.join(BASE_DIR, PATH_API_DIR_CONFIG),
       services: path.join(BASE_DIR, PATH_API_DIR_SERVICES),
       src: path.join(BASE_DIR, PATH_API_DIR_SRC),
     },
     web: {
       routes,
+      base: path.join(BASE_DIR, 'web'),
       pages: path.join(BASE_DIR, PATH_WEB_DIR_PAGES),
       components: path.join(BASE_DIR, PATH_WEB_DIR_COMPONENTS),
       layouts: path.join(BASE_DIR, PATH_WEB_DIR_LAYOUTS),
       src: path.join(BASE_DIR, PATH_WEB_DIR_SRC),
-      webpack: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG),
+      config: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG),
+      webpack: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG_WEBPACK),
     },
   }
 }
@@ -117,7 +156,11 @@ export const processPagesDir = (
         deps.push({
           const: importName,
           path: path.join(webPagesDir, entry.name),
-          importStatement: `const ${importName} = { name: '${importName}', loader: () => import('${importFile}') }`,
+          importStatement: `const ${importName
+            .split(',')
+            .join('')} = { name: '${importName
+            .split(',')
+            .join('')}', loader: () => import('${importFile}') }`,
         })
       } catch (e) {
         // If the Page doesn't exist then we are in a directory of Page

@@ -1,6 +1,6 @@
 import { useMutation } from '@redwoodjs/web'
 import { navigate, routes } from '@redwoodjs/router'
-import ${singularPascalName}Form from 'src/components/${singularPascalName}Form'
+import ${singularPascalName}Form from 'src/components/${pascalScaffoldPath}${singularPascalName}Form'
 
 export const QUERY = gql`
   query FIND_${singularConstantName}_BY_ID($id: ${idType}!) {
@@ -22,7 +22,7 @@ export const Loading = () => <div>Loading...</div>
 export const Success = ({ ${singularCamelName} }) => {
   const [update${singularPascalName}, { loading, error }] = useMutation(UPDATE_${singularConstantName}_MUTATION, {
     onCompleted: () => {
-      navigate(routes.${pluralCamelName}())
+      navigate(routes.${pluralRouteName}())
     },
   })
 

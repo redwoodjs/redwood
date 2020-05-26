@@ -8,13 +8,17 @@ const DEFAULT_CLIENT_CONFIG = {
   uri: `${__REDWOOD__.API_PROXY_PATH}/graphql`,
 }
 
+/**
+ * Creates a GraphQL Client (Apollo) that points to the `apiProxyPath` that's
+ * specified in `redwood.toml`.
+ */
 export const createGraphQLClient = (config) => {
   return new ApolloClient({ ...DEFAULT_CLIENT_CONFIG, ...config })
 }
 
-export const GraphQLProvider = ({
-  client = createGraphQLClient(),
-  ...rest
-}) => {
-  return <ApolloProvider client={client} {...rest} />
+/**
+ * A GraphQL provider that instantiates a client automatically.
+ */
+export const GraphQLProvider = ({ config, ...rest }) => {
+  return <ApolloProvider client={createGraphQLClient(config)} {...rest} />
 }

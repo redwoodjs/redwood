@@ -1,6 +1,7 @@
 const merge = require('webpack-merge')
 const escapeRegExp = require('lodash.escaperegexp')
 const { getConfig } = require('@redwoodjs/internal')
+const ErrorOverlayPlugin = require('error-overlay-webpack-plugin')
 
 const webpackConfig = require('./webpack.common')
 
@@ -35,6 +36,7 @@ const baseConfig = merge(webpackConfig('development'), {
     removeEmptyChunks: false,
     splitChunks: false,
   },
+  plugins: [new ErrorOverlayPlugin()],
 })
 
 module.exports = mergeUserWebpackConfig('development', baseConfig)

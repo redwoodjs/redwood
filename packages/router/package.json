@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/router",
-  "version": "0.6.0",
+  "version": "0.7.1-canary.8",
   "files": [
     "dist"
   ],
@@ -10,6 +10,7 @@
     "core-js": "3.6.4"
   },
   "peerDependencies": {
+    "prop-types": "*",
     "react": "*"
   },
   "scripts": {
@@ -19,8 +20,9 @@
     "test": "yarn jest src",
     "test:watch": "yarn test --watch"
   },
-  "gitHead": "2801c132f40263f9fcfbdac8b1750d2e423eb649",
+  "gitHead": "1cb7c8d1085147787209af423c33a9c91c3e6517",
   "devDependencies": {
+    "prop-types": "15.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   }

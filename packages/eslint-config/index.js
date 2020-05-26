@@ -12,8 +12,9 @@
 
 let supportRedwoodAutoPageImports = false
 try {
-  // This will throw if the module cannot be resolved, it will not
-  // resolve if the module is not built, in which case we're probably
+  // This will throw if the module cannot be resolved,
+  // it will not resolve if the module is not built,
+  // in which case we're probably
   // building the framework and don't need this plugin.
   require.resolve('@redwoodjs/eslint-plugin-redwood')
   supportRedwoodAutoPageImports = {
@@ -37,7 +38,7 @@ module.exports = {
     'react',
     'react-hooks',
     'jest-dom',
-    supportRedwoodAutoPageImports && '@redwoodjs/redwood', // @redwoodjs/redwood-eslint-plugin
+    supportRedwoodAutoPageImports && '@redwoodjs/eslint-plugin-redwood',
   ].filter(Boolean),
   ignorePatterns: ['node_modules', 'dist'],
   extends: [
