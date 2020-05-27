@@ -13,13 +13,12 @@ export const builder = {
 }
 
 export const handler = async ({ app = ['db', 'api', 'web'] }) => {
-  // For Windows: Replaces ` ` with `\ `. Damn, there has got to be a better
-  // way to sanitize paths?!
   // We use BASE_DIR when we need to effectively set the working dir
-  const BASE_DIR = getPaths().base.replace(' ', '\\ ')
+  const BASE_DIR = getPaths().base
   // For validation, e.g. dirExists?, we use these
-  const API_DIR = getPaths().api.base
-  const WEB_DIR = getPaths().web.base
+  // note: getPaths().web|api.base returns undefined on Windows
+  const API_DIR_SRC = getPaths().api.src
+  const WEB_DIR_SRC = getPaths().web.src
   const PRISMA_SCHEMA = getPaths().api.dbSchema
 
   const jobs = {
@@ -27,7 +26,7 @@ export const handler = async ({ app = ['db', 'api', 'web'] }) => {
       name: 'api',
       command: `cd ${path.join(BASE_DIR, 'api')} && yarn dev-server`,
       prefixColor: 'cyan',
-      runWhen: () => fs.existsSync(API_DIR),
+      runWhen: () => fs.existsSync(API_DIR_SRC),
     },
     db: {
       name: ' db', // prefixed with ` ` to match output indentation.
@@ -45,7 +44,7 @@ export const handler = async ({ app = ['db', 'api', 'web'] }) => {
         'web'
       )} && yarn webpack-dev-server --config ../node_modules/@redwoodjs/core/config/webpack.development.js`,
       prefixColor: 'blue',
-      runWhen: () => fs.existsSync(WEB_DIR),
+      runWhen: () => fs.existsSync(WEB_DIR_SRC),
     },
   }
 
