@@ -22,7 +22,7 @@ describe('in javascript (defualt) mode', () => {
 
   // SDL
 
-  test.only('creates an sdl', () => {
+  test('creates an sdl', () => {
     expect(files).toHaveProperty([
       path.normalize('/path/to/project/api/src/graphql/posts.sdl.js'),
     ])
