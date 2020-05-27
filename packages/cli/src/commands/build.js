@@ -1,4 +1,5 @@
 import fs from 'fs'
+import path from 'path'
 
 import execa from 'execa'
 import Listr from 'listr'
@@ -45,11 +46,12 @@ export const handler = async ({
 
   const execCommandsForApps = {
     api: {
-      cwd: getPaths().api.base,
+      // must use path.join() here, and for 'web' below, to support Windows
+      cwd: path.join(getPaths().base, 'api'),
       cmd: 'yarn cross-env NODE_ENV=production babel src --out-dir dist',
     },
     web: {
-      cwd: getPaths().web.base,
+      cwd: path.join(getPaths().base, 'web'),
       cmd: `yarn webpack --config ../node_modules/@redwoodjs/core/config/webpack.${
         stats ? 'stats' : 'production'
       }.js`,
