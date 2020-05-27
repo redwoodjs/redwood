@@ -355,7 +355,7 @@ export const builder = (yargs) => {
     description:
       "Model to scaffold. You can also use <path/model> to nest files by type at the given path directory (or directories). For example, 'rw g scaffold admin/post'.",
   })
-  Object.entries(defaults).forEach((option, config) => {
+  Object.entries(defaults).forEach(([option, config]) => {
     yargs.option(option, config)
   })
 }
