@@ -37,10 +37,6 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         return
       },
       ExportNamedDeclaration(path) {
-        if (hasDefaultExport) {
-          return
-        }
-
         const declaration = path.node.declaration
         let name
         if (declaration.type === 'VariableDeclaration') {
@@ -57,7 +53,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
       },
       Program: {
         exit(path) {
-          if (exportNames.length === 0) {
+          if (hasDefaultExport && !exportNames.includes('QUERY')) {
             return
           }
 
