@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/internal",
-  "version": "0.7.0",
+  "version": "0.7.1-canary.8",
   "main": "dist/main.js",
   "files": [
     "dist"
@@ -8,9 +8,9 @@
   "types": "./dist/main.d.ts",
   "license": "MIT",
   "dependencies": {
+    "deepmerge": "^4.2.2",
     "findup-sync": "^4.0.0",
-    "toml": "^3.0.0",
-    "deepmerge": "^4.2.2"
+    "toml": "^3.0.0"
   },
   "devDependencies": {
     "@types/findup-sync": "^2.0.2"
@@ -27,5 +27,5 @@
     "test": "jest",
     "test:watch": "yarn test --watch"
   },
-  "gitHead": "ac0479bd57af9938d040d1d7636bf58f9e9d9731"
+  "gitHead": "1cb7c8d1085147787209af423c33a9c91c3e6517"
 }
