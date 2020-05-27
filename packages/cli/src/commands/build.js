@@ -1,5 +1,4 @@
 import fs from 'fs'
-import path from 'path'
 
 import execa from 'execa'
 import Listr from 'listr'
@@ -9,11 +8,8 @@ import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
 
-// For Windows: Replaces ` ` with `\ ` to sanitize paths
-const BASE_DIR = getPaths().base.replace(' ', '\\ ')
-const apiExists = fs.existsSync(path.join(BASE_DIR, 'api'))
-const webExists = fs.existsSync(path.join(BASE_DIR, 'web'))
-const prismaExists = fs.existsSync(path.join(BASE_DIR, 'api/prisma'))
+const apiExists = fs.existsSync(getPaths().api.src)
+const webExists = fs.existsSync(getPaths().web.src)
 
 const optionDefault = (webExists, apiExists) => {
   let options = []
@@ -38,9 +34,7 @@ export const handler = async ({
   verbose = false,
   stats = false,
 }) => {
-  const { base: BASE_DIR } = getPaths()
-
-  if (app.includes('api') && prismaExists) {
+  if (app.includes('api')) {
     try {
       await generatePrismaClient({ verbose, force: true })
     } catch (e) {
@@ -51,11 +45,11 @@ export const handler = async ({
 
   const execCommandsForApps = {
     api: {
-      cwd: `${BASE_DIR}/api`,
+      cwd: getPaths().api.base,
       cmd: 'yarn cross-env NODE_ENV=production babel src --out-dir dist',
     },
     web: {
-      cwd: `${BASE_DIR}/web`,
+      cwd: getPaths().web.base,
       cmd: `yarn webpack --config ../node_modules/@redwoodjs/core/config/webpack.${
         stats ? 'stats' : 'production'
       }.js`,
