@@ -24,25 +24,25 @@ export const handler = async ({ app = ['db', 'api', 'web'] }) => {
   const jobs = {
     api: {
       name: 'api',
-      command: `cd ${path.join(BASE_DIR, 'api')} && yarn dev-server`,
+      command: `cd "${path.join(BASE_DIR, 'api')}" && yarn dev-server`,
       prefixColor: 'cyan',
       runWhen: () => fs.existsSync(API_DIR_SRC),
     },
     db: {
       name: ' db', // prefixed with ` ` to match output indentation.
-      command: `cd ${path.join(
+      command: `cd "${path.join(
         BASE_DIR,
         'api'
-      )} && yarn prisma generate --watch`,
+      )}" && yarn prisma generate --watch`,
       prefixColor: 'magenta',
       runWhen: () => fs.existsSync(PRISMA_SCHEMA),
     },
     web: {
       name: 'web',
-      command: `cd ${path.join(
+      command: `cd "${path.join(
         BASE_DIR,
         'web'
-      )} && yarn webpack-dev-server --config ../node_modules/@redwoodjs/core/config/webpack.development.js`,
+      )}" && yarn webpack-dev-server --config ../node_modules/@redwoodjs/core/config/webpack.development.js`,
       prefixColor: 'blue',
       runWhen: () => fs.existsSync(WEB_DIR_SRC),
     },
