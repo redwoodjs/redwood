@@ -24,7 +24,7 @@ export const asyncForEach = async (array, callback) => {
 
 /**
  * Returns the database schema for the given `name` database table parsed from
- * the schema.prisma of the target applicaiton. If no `name` is given then the
+ * the schema.prisma of the target application. If no `name` is given then the
  * entire schema is returned.
  */
 export const getSchema = async (name) => {
@@ -147,7 +147,9 @@ export const generateTemplate = (templateFilename, { name, root, ...rest }) => {
 
 export const readFile = (target) => fs.readFileSync(target)
 
-export const writeFile = async (
+export const deleteFile = (target) => fs.unlinkSync(target)
+
+export const writeFile = (
   target,
   contents,
   { overwriteExisting = false } = {}
@@ -207,6 +209,54 @@ export const writeFilesTask = (files, options) => {
 }
 
 /**
+ * Creates a list of tasks that delete files from the disk.
+ *
+ * @param files - {[filepath]: contents}
+ */
+export const deleteFilesTask = (files) => {
+  const { base } = getPaths()
+  return new Listr([
+    ...Object.keys(files).map((file) => {
+      return {
+        title: `Destroying \`./${path.relative(base, file)}\`...`,
+        skip: () => !fs.existsSync(file) && `File doesn't exist`,
+        task: () => deleteFile(file),
+      }
+    }),
+    {
+      title: 'Cleaning up empty directories...',
+      task: () => cleanupEmptyDirsTask(files),
+    },
+  ])
+}
+
+/**
+ * @param files - {[filepath]: contents}
+ */
+export const cleanupEmptyDirsTask = (files) => {
+  const { base } = getPaths()
+  const allDirs = Object.keys(files).map((file) => path.dirname(file))
+  const uniqueDirs = [...new Set(allDirs)]
+  return new Listr(
+    uniqueDirs.map((dir) => {
+      return {
+        title: `Removing empty \`./${path.relative(base, dir)}\`...`,
+        task: () => fs.rmdirSync(dir),
+        skip: () => {
+          if (!fs.existsSync(dir)) {
+            return `Doesn't exist`
+          }
+          if (fs.readdirSync(dir).length > 0) {
+            return 'Not empty'
+          }
+          return false
+        },
+      }
+    })
+  )
+}
+
+/**
  * Update the project's routes file.
  */
 export const addRoutesToRouterTask = (routes) => {
@@ -218,6 +268,24 @@ export const addRoutesToRouterTask = (routes) => {
     }
     return content.replace(/(\s*)\<Router\>/, `$1<Router>$1  ${route}`)
   }, routesContent)
+  writeFile(redwoodPaths.web.routes, newRoutesContent, {
+    overwriteExisting: true,
+  })
+}
+
+/**
+ * Remove named routes from the project's routes file.
+ *
+ * @param {string[]} routes - Route names
+ */
+export const removeRoutesFromRouterTask = (routes) => {
+  const redwoodPaths = getPaths()
+  const routesContent = readFile(redwoodPaths.web.routes).toString()
+  const newRoutesContent = routes.reduce((content, route) => {
+    const matchRouteByName = new RegExp(`\\s*<Route[^>]*name="${route}"[^>]*/>`)
+    return content.replace(matchRouteByName, '')
+  }, routesContent)
+
   writeFile(redwoodPaths.web.routes, newRoutesContent, {
     overwriteExisting: true,
   })
