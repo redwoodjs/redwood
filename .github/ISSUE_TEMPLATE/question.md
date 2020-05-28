@@ -18,8 +18,8 @@ labels: Question
 
 | Software          | Version(s) |
 | ----------------- | ---------- |
-| `redwood`         |            |
-| `node`            |            |
-| `yarn`            |            |
-| `Browser`         |            |
-| `Operating System`|            |
+| `redwood`         |
+| `node`            |
+| `yarn`            |
+| `Browser`         |
+| `Operating System`|
