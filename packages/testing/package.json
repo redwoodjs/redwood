@@ -1,0 +1,23 @@
+{
+  "name": "@redwoodjs/testing",
+  "description": "Tools, wrappers and defaults for testing a Redwood project.",
+  "version": "0.7.0",
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.js",
+  "license": "MIT",
+  "peerDependencies": {
+    "@redwoodjs/router": "*",
+    "react": "*"
+  },
+  "dependencies": {
+    "@redwoodjs/internal": "^0.7.0",
+    "@redwoodjs/web": "^0.7.0",
+    "@testing-library/react": "^10.0.4"
+  },
+  "scripts": {
+    "build": "yarn cross-env NODE_ENV=production babel src -d dist --delete-dir-on-start --extensions \".js,.ts\" --source-maps inline",
+    "build:watch": "nodemon --watch src --ext 'js,ts,tsx' --ignore dist --exec 'yarn build'"
+  }
+}

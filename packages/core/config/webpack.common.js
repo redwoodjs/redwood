@@ -157,17 +157,6 @@ module.exports = (webpackEnv) => {
             },
           ],
         },
-        {
-          // Automatically import files in `src/pages/*` in to
-          // the `src/Routes.[ts|jsx]` file.
-          test: redwoodPaths.web.routes,
-          use: {
-            loader: path.resolve(
-              __dirname,
-              '../dist/loaders/routes-auto-loader.js'
-            ),
-          },
-        },
       ],
     },
     optimization: {

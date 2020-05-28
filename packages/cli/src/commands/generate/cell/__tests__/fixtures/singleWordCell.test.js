@@ -1,4 +1,4 @@
-import { render, cleanup, screen } from '@testing-library/react'
+import { render, cleanup, screen } from '@redwoodjs/testing'
 
 import { Loading, Empty, Failure, Success } from './UserCell'
 
