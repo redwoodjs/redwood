@@ -3,26 +3,23 @@ import { Link, routes } from '@redwoodjs/router'
 const PostsLayout = (props) => {
   return (
     <div className="rw-scaffold">
-      <div className="bg-white font-sans">
-        <header className="flex justify-between py-4 px-8">
-          <h1 className="text-xl font-semibold">
-            <Link
-              to={routes.posts()}
-              className="text-gray-700 hover:text-gray-900 hover:underline"
-            >
-              Posts
-            </Link>
-          </h1>
+      <header className="rw-header">
+        <h1 className="rw-heading rw-heading-primary">
           <Link
-            to={routes.newPost()}
-            className="flex bg-green-500 hover:bg-green-600 text-white text-xs font-semibold px-3 py-1 uppercase tracking-wide rounded"
+            to={routes.posts()}
+            className="rw-link"
           >
-            <div className="text-xl leading-none">+</div>
-            <div className="ml-1 leading-loose">New Post</div>
+            Posts
           </Link>
-        </header>
-        <main className="mx-4 pb-4">{props.children}</main>
-      </div>
+        </h1>
+        <Link
+          to={routes.newPost()}
+          className="rw-button rw-button-green"
+        >
+          <div className="rw-button-icon">+</div> New Post
+        </Link>
+      </header>
+      <main className="rw-main">{props.children}</main>
     </div>
   )
 }
