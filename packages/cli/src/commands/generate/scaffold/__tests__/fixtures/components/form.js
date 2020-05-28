@@ -7,14 +7,6 @@ import {
   Submit,
 } from '@redwoodjs/web'
 
-const CSS = {
-  label: 'rw-label',
-  labelError: 'rw-label rw-label-error',
-  input: 'rw-input',
-  inputError: 'rw-input rw-input-error',
-  errorMessage: 'rw-field-error',
-}
-
 const PostForm = (props) => {
   const onSubmit = (data) => {
     props.onSave(data, props?.post?.id)
@@ -32,99 +24,99 @@ const PostForm = (props) => {
 
         <Label
           name="title"
-          className={CSS.label}
-          errorClassName={CSS.labelError}
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
         >
           Title
         </Label>
         <TextField
           name="title"
           defaultValue={props.post?.title}
-          className={CSS.input}
-          errorClassName={CSS.inputError}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
           validation={{ required: true }}
         />
-        <FieldError name="title" className={CSS.errorMessage} />
+        <FieldError name="title" className="rw-field-error" />
 
         <Label
           name="slug"
-          className={CSS.label}
-          errorClassName={CSS.labelError}
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
         >
           Slug
         </Label>
         <TextField
           name="slug"
           defaultValue={props.post?.slug}
-          className={CSS.input}
-          errorClassName={CSS.inputError}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
           validation={{ required: true }}
         />
-        <FieldError name="slug" className={CSS.errorMessage} />
+        <FieldError name="slug" className="rw-field-error" />
 
         <Label
           name="author"
-          className={CSS.label}
-          errorClassName={CSS.labelError}
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
         >
           Author
         </Label>
         <TextField
           name="author"
           defaultValue={props.post?.author}
-          className={CSS.input}
-          errorClassName={CSS.inputError}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
           validation={{ required: true }}
         />
-        <FieldError name="author" className={CSS.errorMessage} />
+        <FieldError name="author" className="rw-field-error" />
 
         <Label
           name="body"
-          className={CSS.label}
-          errorClassName={CSS.labelError}
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
         >
           Body
         </Label>
         <TextField
           name="body"
           defaultValue={props.post?.body}
-          className={CSS.input}
-          errorClassName={CSS.inputError}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
           validation={{ required: true }}
         />
-        <FieldError name="body" className={CSS.errorMessage} />
+        <FieldError name="body" className="rw-field-error" />
 
         <Label
           name="image"
-          className={CSS.label}
-          errorClassName={CSS.labelError}
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
         >
           Image
         </Label>
         <TextField
           name="image"
           defaultValue={props.post?.image}
-          className={CSS.input}
-          errorClassName={CSS.inputError}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
           validation={{ required: true }}
         />
-        <FieldError name="image" className={CSS.errorMessage} />
+        <FieldError name="image" className="rw-field-error" />
 
         <Label
           name="postedAt"
-          className={CSS.label}
-          errorClassName={CSS.labelError}
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
         >
           Posted at
         </Label>
         <TextField
           name="postedAt"
           defaultValue={props.post?.postedAt}
-          className={CSS.input}
-          errorClassName={CSS.inputError}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
           validation={{ required: true }}
         />
-        <FieldError name="postedAt" className={CSS.errorMessage} />
+        <FieldError name="postedAt" className="rw-field-error" />
 
         <div className="rw-button-group">
           <Submit

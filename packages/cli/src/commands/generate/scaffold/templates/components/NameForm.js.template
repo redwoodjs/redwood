@@ -7,14 +7,6 @@ import {
   Submit,
 } from '@redwoodjs/web'
 
-const CSS = {
-  label: 'rw-label',
-  labelError: 'rw-label rw-label-error',
-  input: 'rw-input',
-  inputError: 'rw-input rw-input-error',
-  errorMessage: 'rw-field-error',
-}
-
 const ${singularPascalName}Form = (props) => {
   const onSubmit = (data) => {
     props.onSave(data, props?.${singularCamelName}?.id)
@@ -32,19 +24,19 @@ const ${singularPascalName}Form = (props) => {
 <% editableColumns.forEach(column => { %>
         <Label
           name="<%= column.name %>"
-          className={CSS.label}
-          errorClassName={CSS.labelError}
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
         >
           <%= column.label %>
         </Label>
         <TextField
           name="<%= column.name %>"
           defaultValue={props.${singularCamelName}?.<%= column.name %>}
-          className={CSS.input}
-          errorClassName={CSS.inputError}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
           validation={{ required: true }}
         />
-        <FieldError name="<%= column.name %>" className={CSS.errorMessage} />
+        <FieldError name="<%= column.name %>" className="rw-field-error" />
 <% }) %>
         <div className="rw-button-group">
           <Submit
