@@ -15,11 +15,12 @@
 - [ ] router
 - [ ] testing
 - [ ] web
+- [ ] other
 
 ### Versioning
-- [ ] Patch: Bug Fix?
-- [ ] Minor: New Feature?
-- [ ] Major: Breaking Change?
+- [ ] Patch: Bug Fix
+- [ ] Minor: New Feature
+- [ ] Major: Breaking Change
 
 ### Fixed Issues
 
