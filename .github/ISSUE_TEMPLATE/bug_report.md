@@ -2,7 +2,7 @@
 name: Bug Report
 about: Use this template to report a bug.
 title: "[DESCRIPTIVE BUG NAME]"
-labels: Bug Report, Needs Triage
+labels: Bug Report
 ---
 
 ### Prerequisites
