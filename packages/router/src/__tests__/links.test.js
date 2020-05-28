@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react'
+import { render } from '@redwoodjs/testing'
 // TODO: Remove when jest configs are in place
 import { toHaveClass, toHaveStyle } from '@testing-library/jest-dom/matchers'
 expect.extend({ toHaveClass, toHaveStyle })
