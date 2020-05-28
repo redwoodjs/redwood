@@ -6,13 +6,14 @@ import type {
   Auth0User,
   GoTrueUser,
   AuthClient,
+  MagicUser,
 } from './authClient'
 import { createAuthClient } from './authClient'
 
 export interface AuthContextInterface {
   loading: boolean
   isAuthenticated: boolean
-  currentUser: null | GoTrueUser | Auth0User
+  currentUser: null | GoTrueUser | Auth0User | MagicUser
   logIn(): Promise<void>
   logOut(): Promise<void>
   getToken(): Promise<null | string>
