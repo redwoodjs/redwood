@@ -32,7 +32,6 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
     name: 'babel-plugin-redwood-cell',
     visitor: {
       ExportDefaultDeclaration() {
-        // This is not a cell since it exports a default.
         hasDefaultExport = true
         return
       },
@@ -53,6 +52,9 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
       },
       Program: {
         exit(path) {
+          // Validate that this file has exports which are "cell-like":
+          // If the user is not exporting `QUERY` and has a default export then
+          // it's likely not a cell.
           if (hasDefaultExport && !exportNames.includes('QUERY')) {
             return
           }
