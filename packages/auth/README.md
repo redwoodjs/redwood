@@ -143,12 +143,12 @@ const UserAuthTools = () => {
 
 The following values are available from the `useAuth` hook:
 
-* async `login()`: Differs based on the client library, with Netlify Identity a pop-up is shown, and with Auth0 the user is redirected
-* async `logout()`: Log out the current user
+* async `logIn()`: Differs based on the client library, with Netlify Identity a pop-up is shown, and with Auth0 the user is redirected
+* async `logOut()`: Log out the current user
 * `currentUser`: an object containing information about the current user, or `null` if the user is not authenticated
 * async `getToken()`: returns a jwt
 * `client`: Access the instance of the client which you passed into `AuthProvider`
-* `authenticated`: used to determine if the current user has authenticated
+* `isAuthenticated`: used to determine if the current user has authenticated
 * `loading`: The auth state is restored asynchronously when the user visits the site for the first time, use this to determine if you have the correct state
 
 ## Usage in Redwood
@@ -269,8 +269,8 @@ const mapAuthClientAuth0 = (client: Auth0): AuthClientAuth0 => {
         )
       }
     },
-    login: async () => client.loginWithRedirect(),
-    logout: () => client.logout(),
+    logIn: async () => client.loginWithRedirect(),
+    logOut: () => client.logout(),
     getToken: async () => client.getTokenSilently(),
     currentUser: async () => {
       const user = await client.getUser()
