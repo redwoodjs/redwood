@@ -20,11 +20,11 @@ labels: Bug Report, Needs Triage
 2. [Second Step]
 3. [and so on...]
 
-### Expected behavior
+### Expected outcome
 
 [What you expected to happen?]
 
-### Actual behavior
+### Actual outcome
 
 [What actually happened? Please include any error stack traces you encounter.]
 
@@ -33,6 +33,16 @@ labels: Bug Report, Needs Triage
 [If possible, please provide a code repository, gist, code snippet or sample files to reproduce the issue.]
 
 ### Environment
+
+<!--
+Run the following commands in your project directory
+
+- for redwood `yarn redwood --version`
+- for yarn `yarn --version`
+- node `node --version`
+- yarn `yarn --version`
+-->
+
 
 | Software          | Version(s) |
 | ----------------- | ---------- |

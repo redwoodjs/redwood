@@ -16,6 +16,16 @@ labels: Question
 
 ### Environment
 
+<!--
+Run the following commands in your project directory
+
+- for redwood `yarn redwood --version`
+- for yarn `yarn --version`
+- node `node --version`
+- yarn `yarn --version`
+-->
+
+
 | Software          | Version(s) |
 | ----------------- | ---------- |
 | `redwood`         |
