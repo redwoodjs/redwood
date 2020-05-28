@@ -49,38 +49,30 @@ const ${pluralPascalName}List = ({ ${pluralCamelName} }) => {
           {${pluralCamelName}.map((${singularCamelName}) => (
             <tr key={${singularCamelName}.id}><% columns.forEach(column => { %>
               <td>{<% if (column.type === 'DateTime') { %>timeTag<% } else { %>truncate<% } %>(${singularCamelName}.<%= column.name %>)}</td><% }) %>
-              <td className="rw-table-actions">
-                <nav>
-                  <ul>
-                    <li>
-                      <Link
-                        to={routes.${singularRouteName}({ id: ${singularCamelName}.id })}
-                        title={'Show ${singularCamelName} ' + ${singularCamelName}.id + ' detail'}
-                        className="rw-button rw-button-small"
-                      >
-                        Show
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        to={routes.${editRouteName}({ id: ${singularCamelName}.id })}
-                        title={'Edit ${singularCamelName} ' + ${singularCamelName}.id}
-                        className="rw-button rw-button-small rw-button-blue"
-                      >
-                        Edit
-                      </Link>
-                    </li>
-                    <li>
-                      <a
-                        href="#"
-                        title={'Delete ${singularCamelName} ' + ${singularCamelName}.id}
-                        className="rw-button rw-button-small rw-button-red"
-                        onClick={() => onDeleteClick(${singularCamelName}.id)}
-                      >
-                        Delete
-                      </a>
-                    </li>
-                  </ul>
+              <td>
+                <nav className="rw-table-actions">
+                  <Link
+                    to={routes.${singularRouteName}({ id: ${singularCamelName}.id })}
+                    title={'Show ${singularCamelName} ' + ${singularCamelName}.id + ' detail'}
+                    className="rw-button rw-button-small"
+                  >
+                    Show
+                  </Link>
+                  <Link
+                    to={routes.${editRouteName}({ id: ${singularCamelName}.id })}
+                    title={'Edit ${singularCamelName} ' + ${singularCamelName}.id}
+                    className="rw-button rw-button-small rw-button-blue"
+                  >
+                    Edit
+                  </Link>
+                  <a
+                    href="#"
+                    title={'Delete ${singularCamelName} ' + ${singularCamelName}.id}
+                    className="rw-button rw-button-small rw-button-red"
+                    onClick={() => onDeleteClick(${singularCamelName}.id)}
+                  >
+                    Delete
+                  </a>
                 </nav>
               </td>
             </tr>

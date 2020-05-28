@@ -32,25 +32,25 @@ const Post = ({ post }) => {
         <table className="rw-table">
           <tbody>
             <tr>
-              <td>id</td>
+              <th>id</th>
               <td>{post.id}</td>
             </tr><tr>
-              <td>title</td>
+              <th>title</th>
               <td>{post.title}</td>
             </tr><tr>
-              <td>slug</td>
+              <th>slug</th>
               <td>{post.slug}</td>
             </tr><tr>
-              <td>author</td>
+              <th>author</th>
               <td>{post.author}</td>
             </tr><tr>
-              <td>body</td>
+              <th>body</th>
               <td>{post.body}</td>
             </tr><tr>
-              <td>image</td>
+              <th>image</th>
               <td>{post.image}</td>
             </tr><tr>
-              <td>postedAt</td>
+              <th>postedAt</th>
               <td>{post.postedAt}</td>
             </tr>
           </tbody>

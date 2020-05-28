@@ -32,7 +32,7 @@ const ${singularPascalName} = ({ ${singularCamelName} }) => {
         <table className="rw-table">
           <tbody>
             <% columns.forEach(column => { %><tr>
-              <td><%= column.name %></td>
+              <th><%= column.name %></th>
               <td>{${singularCamelName}.<%= column.name %>}</td>
             </tr><% }) %>
           </tbody>

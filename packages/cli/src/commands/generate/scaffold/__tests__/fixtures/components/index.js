@@ -61,38 +61,30 @@ const PostsList = ({ posts }) => {
               <td>{truncate(post.body)}</td>
               <td>{truncate(post.image)}</td>
               <td>{timeTag(post.postedAt)}</td>
-              <td className="rw-table-actions">
-                <nav>
-                  <ul>
-                    <li>
-                      <Link
-                        to={routes.post({ id: post.id })}
-                        title={'Show post ' + post.id + ' detail'}
-                        className="rw-button rw-button-small"
-                      >
-                        Show
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        to={routes.editPost({ id: post.id })}
-                        title={'Edit post ' + post.id}
-                        className="rw-button rw-button-small rw-button-blue"
-                      >
-                        Edit
-                      </Link>
-                    </li>
-                    <li>
-                      <a
-                        href="#"
-                        title={'Delete post ' + post.id}
-                        className="rw-button rw-button-small rw-button-red"
-                        onClick={() => onDeleteClick(post.id)}
-                      >
-                        Delete
-                      </a>
-                    </li>
-                  </ul>
+              <td>
+                <nav className="rw-table-actions">
+                  <Link
+                    to={routes.post({ id: post.id })}
+                    title={'Show post ' + post.id + ' detail'}
+                    className="rw-button rw-button-small"
+                  >
+                    Show
+                  </Link>
+                  <Link
+                    to={routes.editPost({ id: post.id })}
+                    title={'Edit post ' + post.id}
+                    className="rw-button rw-button-small rw-button-blue"
+                  >
+                    Edit
+                  </Link>
+                  <a
+                    href="#"
+                    title={'Delete post ' + post.id}
+                    className="rw-button rw-button-small rw-button-red"
+                    onClick={() => onDeleteClick(post.id)}
+                  >
+                    Delete
+                  </a>
                 </nav>
               </td>
             </tr>
