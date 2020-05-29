@@ -40,6 +40,26 @@ To create a route to a normal Page, you'll pass three props: `path`, `page`, and
 
 The `path` prop specifies the URL path to match, starting with the beginning slash. The `page` prop specifies the Page component to render when the path is matched. The `name` prop is used to specify the name of the _named route function_.
 
+## Private Routes
+Some pages should only be visible to authenticated users.
+
+All `Routes` nested in `<Private>` require authentication.
+When a user is not authenticated and attempts to visit this route,
+they will be redirected to the route passed as the `unauthenticated` prop.
+
+```js
+// Routes.js
+<Router>
+  <Route path="/" page={HomePage} name="home" />
+  <Private unauthenticated="home">
+    <Routes path="/admin" page={AdminPage} name="admin" />
+  </Private>
+</Router>
+```
+
+Redwood uses the `useAuth` hook under the hood to determine if the user is authenticated.
+Read more about authentication in redwood [here](https://redwoodjs.com/tutorial/authentication).
+
 ## Link and named route functions
 
 When it comes to routing, matching URLs to Pages is only half the equation. The other half is generating links to your pages. RR makes this really simple without having to hardcode URL paths. In a Page component, you can do this (only relevant bits are shown in code samples from now on):
@@ -194,6 +214,21 @@ const SomePage = () => {
     navigate(routes.home())
   }
   ...
+}
+```
+
+## Redirect
+
+If you want to declaratively redirect to a different page, use the `<Redirect>` component.
+
+In the example below, SomePage will redirect to the home page.
+
+```js
+// SomePage.js
+import { Redirect, routes } from '@redwoodjs/router'
+
+const SomePage = () => {
+  <Redirect to={routes.home()}/>
 }
 ```
 
