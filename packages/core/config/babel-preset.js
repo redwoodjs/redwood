@@ -133,7 +133,7 @@ module.exports = () => ({
     },
     {
       test: /.+Cell.(js|tsx)$/,
-      plugins: [require('./babel-plugin-redwood-cell')],
+      plugins: [require('../dist/babel-plugin-redwood-cell')],
     },
     // Automatically import files in `src/pages/*` in to
     // the `src/Routes.[ts|jsx]` file.
