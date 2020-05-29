@@ -25,7 +25,6 @@ export const handler = async ({ verbose = true, force = false }) => {
         // eslint-disable-next-line
         new PrismaClient()
       }
-      console.log('schema path: ', getPaths().api.dbSchema)
       return undefined
     } catch (e) {
       // Swallow your pain.
@@ -39,9 +38,8 @@ export const handler = async ({ verbose = true, force = false }) => {
           ? 'Generating the Prisma client...'
           : 'Skipping Prisma Client: no schema.prisma found',
         cmd: schemaExists
-          ? 'yarn prisma'
+          ? 'yarn prisma generate'
           : 'echo "no schema.prisma file found"',
-        args: schemaExists ? ['generate'] : [],
       },
     ],
     {
