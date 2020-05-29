@@ -2327,32 +2327,6 @@
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=
 
-"@redwoodjs/internal@^0.7.0":
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/@redwoodjs/internal/-/internal-0.7.0.tgz#c708878421f985c74bb947021add9dd965d7b04a"
-  integrity sha512-VnJk1IrbNhMFK+l1/gF3ScNBsx19+sVnuiKCNAGFJMIDQReaZSQC3FOux9IVgJJCN2AgMnp/X8q+Bz4TQ6gHvA==
-  dependencies:
-    findup-sync "^4.0.0"
-    toml "^3.0.0"
-
-"@redwoodjs/web@^0.7.0":
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/@redwoodjs/web/-/web-0.7.0.tgz#dfacca767db1e70df1d3e84288a74989aefff63e"
-  integrity sha512-6fy/9xdZlNIrWZtjDTdZoOX40OSn8eiE7bvhrCgjgzoAAu7vZBSeujkBFTS+Wg+9pblQHN6IQfyM+EqRDJgShw==
-  dependencies:
-    "@apollo/react-components" "^3.1.3"
-    "@apollo/react-hooks" "^3.1.3"
-    "@types/react" "16.9.34"
-    apollo-boost "0.4.7"
-    apollo-cache "^1.3.4"
-    apollo-client "^2.6.8"
-    apollo-link "^1.2.13"
-    apollo-utilities "^1.3.3"
-    core-js "3.6.4"
-    graphql "^14.6.0"
-    proptypes "^1.1.0"
-    react-hook-form "^5.1.3"
-
 "@rollup/plugin-commonjs@11.0.1":
   version "11.0.1"
   resolved "https://registry.yarnpkg.com/@rollup/plugin-commonjs/-/plugin-commonjs-11.0.1.tgz#6056a6757286901cc6c1599123e6680a78cad6c2"
@@ -3096,14 +3070,6 @@
   version "16.9.35"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.35.tgz#a0830d172e8aadd9bd41709ba2281a3124bbd368"
   integrity sha512-q0n0SsWcGc8nDqH2GJfWQWUOmZSJhXV64CjVN5SvcNti3TdEaA3AH0D8DwNmMdzjMAC/78tB8nAZIlV8yTz+zQ==
-  dependencies:
-    "@types/prop-types" "*"
-    csstype "^2.2.0"
-
-"@types/react@16.9.34":
-  version "16.9.34"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.34.tgz#f7d5e331c468f53affed17a8a4d488cd44ea9349"
-  integrity sha512-8AJlYMOfPe1KGLKyHpflCg5z46n0b5DbRfqDksxBLBTUpB75ypDBAO9eCUcjNwE6LCUslwTz00yyG/X9gaVtow==
   dependencies:
     "@types/prop-types" "*"
     csstype "^2.2.0"
@@ -15265,7 +15231,7 @@ undefsafe@^2.0.2:
   dependencies:
     debug "^2.2.0"
 
-"undici@github:mcollina/undici":
+undici@mcollina/undici:
   version "0.5.0"
   resolved "https://codeload.github.com/mcollina/undici/tar.gz/6c3d7eed592cab9c4b63d56164ecd3cc9358945a"
   dependencies:
