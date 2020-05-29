@@ -129,14 +129,14 @@ export const files = async ({ name, crud, typescript, javascript }) => {
     }
   )
 
-  const extension = typescript ? 'ts' : 'js'
+  const extension = typescript === true ? 'ts' : 'js'
   let outputPath = path.join(
     getPaths().api.graphql,
     `${camelcase(pluralize(name))}.sdl.${extension}`
   )
 
   if (javascript && !typescript) {
-    template = transformTSToJS(template)
+    template = transformTSToJS(outputPath, template)
   }
 
   return {

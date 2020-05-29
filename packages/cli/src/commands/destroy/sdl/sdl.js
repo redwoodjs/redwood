@@ -1,9 +1,9 @@
 import Listr from 'listr'
 
-import { deleteFilesTask } from 'src/lib'
+import { getDefaultArgs, deleteFilesTask } from 'src/lib'
 import c from 'src/lib/colors'
 
-import { files } from '../../generate/sdl/sdl'
+import { builder, files } from '../../generate/sdl/sdl'
 
 export const command = 'sdl <model>'
 export const desc = 'Destroy a GraphQL schema and service object.'
@@ -14,7 +14,7 @@ export const tasks = ({ model }) =>
       {
         title: 'Destroying GraphQL schema and service object files...',
         task: async () => {
-          const f = await files({ name: model, crud: false })
+          const f = await files({ ...getDefaultArgs(builder), name: model })
           return deleteFilesTask(f)
         },
       },

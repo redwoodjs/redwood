@@ -359,13 +359,13 @@ export const builder = (yargs) => {
     yargs.option(option, config)
   })
 }
-const tasks = ({ model, path, force }) => {
+const tasks = ({ model, path, force, typescript, javascript }) => {
   return new Listr(
     [
       {
         title: 'Generating scaffold files...',
         task: async () => {
-          const f = await files({ model, path })
+          const f = await files({ model, path, typescript, javascript })
           return writeFilesTask(f, { overwriteExisting: force })
         },
       },
@@ -384,10 +384,15 @@ const tasks = ({ model, path, force }) => {
   )
 }
 
-export const handler = async ({ model: modelArg, force }) => {
+export const handler = async ({
+  model: modelArg,
+  force,
+  typescript,
+  javascript,
+}) => {
   const { model, path } = splitPathAndModel(modelArg)
 
-  const t = tasks({ model, path, force })
+  const t = tasks({ model, path, force, typescript, javascript })
   try {
     await t.run()
   } catch (e) {

@@ -42,7 +42,7 @@ export const files = async ({
   // }
   return [serviceFile, testFile].reduce((acc, [outputPath, content]) => {
     if (javascript && !typescript) {
-      content = transformTSToJS(content)
+      content = transformTSToJS(outputPath, content)
       outputPath = outputPath.replace('.ts', '.js')
     }
 

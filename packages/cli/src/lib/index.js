@@ -128,6 +128,10 @@ export const generateTemplate = (templateFilename, { name, root, ...rest }) => {
     ...rest,
   })
 
+  return prettify(templateFilename, renderedTemplate)
+}
+
+export const prettify = (templateFilename, renderedTemplate) => {
   // We format .js and .css templates, we need to tell prettier which parser
   // we're using.
   // https://prettier.io/docs/en/options.html#parser
@@ -196,13 +200,13 @@ export const prettierOptions = () => {
 /*
  * Convert a generated TS template file into JS.
  */
-export const transformTSToJS = (content) => {
-  const configOptions = prettierOptions()
+export const transformTSToJS = (filename, content) => {
   content = babel.transform(content, {
-    plugins: ['@babel/plugin-transform-typescript', 'generator-prettier'],
-    generatorOpts: configOptions,
+    filename,
+    configFile: false,
+    plugins: ['@babel/plugin-transform-typescript', 'graphql-tag'],
   }).code
-  return content
+  return prettify(filename, content)
 }
 
 /**
