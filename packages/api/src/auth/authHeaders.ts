@@ -9,7 +9,7 @@ import { AuthenticationError } from 'apollo-server-lambda'
 
 import { verifyAuth0Token } from './verifyAuth0Token'
 
-export type SupportedAuthTypes = 'auth0' | 'firebase' | 'netlify' | 'gotrue'
+export type SupportedAuthTypes = 'auth0' | 'netlify' | 'gotrue' | 'magic.link' | 'firebase'
 
 // This is shared by `@redwoodjs/web`
 const AUTH_PROVIDER_HEADER = 'auth-provider'
@@ -72,6 +72,11 @@ export const decodeAuthToken = async ({
       break
     case 'auth0': {
       decoded = await verifyAuth0Token(token)
+      break
+    }
+    // The tokens here include a custom library for decoding. The user receives a "raw token" which they have to decode themselves.
+    case 'magic.link': {
+      decoded = token
       break
     }
     default:

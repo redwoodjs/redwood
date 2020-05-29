@@ -34,11 +34,11 @@ export const Success = ({ userProfile }) => {
   }
 
   return (
-    <div className="bg-white border rounded-lg overflow-hidden">
-      <header className="bg-gray-300 text-gray-700 py-3 px-4">
-        <h2 className="text-sm font-semibold">Edit UserProfile {userProfile.id}</h2>
+    <div className="rw-segment">
+      <header className="rw-segment-header">
+        <h2 className="rw-heading rw-heading-secondary">Edit UserProfile {userProfile.id}</h2>
       </header>
-      <div className="bg-gray-100 p-4">
+      <div className="rw-segment-main">
         <UserProfileForm userProfile={userProfile} onSave={onSave} error={error} loading={loading} />
       </div>
     </div>
