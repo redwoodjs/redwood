@@ -39,6 +39,9 @@ const getGlobPattern = (callExpressionPath, cwd) => {
   return `./${relativePaths}/**/*.{ts,js}`
 }
 
+/**
+ * @deprecated Please use: `import services from 'src/lib/services/*.{js,ts}'` instead.
+ */
 function importAll({ referencePath, state, babel }) {
   const t = babel.types
   const { filename } = state.file.opts

@@ -6,7 +6,7 @@
     "outDir": "dist",
     "rootDir": "src"
   },
-  "references": [{ "path": "../internal" }],
   "include": ["src"],
-  "exclude": ["**/__tests__", "**/__mocks__"]
+  "exclude": ["**/__tests__", "**/__mocks__"],
+  "references": [{ "path": "../internal" }]
 }
