@@ -326,14 +326,8 @@ export const builder = (yargs) => {
     type: 'boolean',
   })
 }
-export const handler = async ({ model: modelArg, force }) => {
-  let path = modelArg.split('/').slice(0, -1).join('/')
-  // This code will work whether or not there's a path in model
-  // E.g. if model is just 'post',
-  // path.split('/') will return ['post'].
-  const model = modelArg.split('/').pop()
-
-  const tasks = new Listr(
+const tasks = ({ model, path, force }) => {
+  return new Listr(
     [
       {
         title: 'Generating scaffold files...',
@@ -355,9 +349,25 @@ export const handler = async ({ model: modelArg, force }) => {
     ],
     { collapse: false, exitOnError: true }
   )
+}
+
+export const handler = async ({ model: modelArg, force }) => {
+  const { model, path } = splitPathAndModel(modelArg)
+
+  const t = tasks({ model, path, force })
   try {
-    await tasks.run()
+    await t.run()
   } catch (e) {
     console.log(c.error(e.message))
   }
+}
+
+export const splitPathAndModel = (pathSlashModel) => {
+  const path = pathSlashModel.split('/').slice(0, -1).join('/')
+  // This code will work whether or not there's a path in model
+  // E.g. if model is just 'post',
+  // path.split('/') will return ['post'].
+  const model = pathSlashModel.split('/').pop()
+
+  return { model, path }
 }

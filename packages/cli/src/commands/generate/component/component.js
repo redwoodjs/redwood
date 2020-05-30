@@ -33,12 +33,9 @@ export const files = ({ name }) => {
   }, {})
 }
 
-export const {
-  command,
-  desc,
-  builder,
-  handler,
-} = createYargsForComponentGeneration({
+export const desc = 'Generate a component.'
+
+export const { command, builder, handler } = createYargsForComponentGeneration({
   componentName: 'component',
   filesFn: files,
 })
