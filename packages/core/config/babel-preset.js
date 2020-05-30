@@ -140,7 +140,7 @@ module.exports = () => ({
     // the `src/Routes.[ts|jsx]` file.
     {
       test: redwoodPaths.web.routes,
-      plugins: [require('./babel-plugin-routes-auto-loader')],
+      plugins: [require('../dist/babel-plugin-redwood-routes-auto-loader')],
     },
   ],
 })
