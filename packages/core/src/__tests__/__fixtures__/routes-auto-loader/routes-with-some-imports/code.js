@@ -1,0 +1,6 @@
+import SearchPage from './this-file-does-not-exist'
+import PostPage from './this-file-does-not-exist'
+import NotFoundPage from './this-file-does-not-exist'
+import FatalErrorPage from './this-file-does-not-exist'
+import ContactPage from './this-file-does-not-exist'
+import AboutPage from './this-file-does-not-exist'
