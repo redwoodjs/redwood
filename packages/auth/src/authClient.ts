@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import type { default as GoTrue, User as GoTrueUser } from 'gotrue-js'
 import type { Auth0Client as Auth0 } from '@auth0/auth0-spa-js'
 import type NetlifyIdentityNS from 'netlify-identity-widget'
@@ -13,43 +12,24 @@ export type MagicUser = MagicUserMetadata
 
 export type SupportedAuthClients = Auth0 | GoTrue | NetlifyIdentity | MagicLinks
 export type SupportedAuthTypes = 'auth0' | 'gotrue' | 'netlify' | 'magic.link'
-=======
-import type { default as Netlify } from 'gotrue-js'
-import type { User as NetlifyUser } from 'gotrue-js'
-import type { Auth0Client as Auth0 } from '@auth0/auth0-spa-js'
-
-// TODO: Can also return an Auth0 user which doesn't have a definition.
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface Auth0User {}
-export type { NetlifyUser }
->>>>>>> bb1ab34... Add auth package.
 
 export interface AuthClient {
   restoreAuthState?(): void | Promise<any>
   login(options?: any): Promise<any>
   logout(): void | Promise<void>
   getToken(): Promise<null | string>
-<<<<<<< HEAD
   currentUser(): Promise<null | Auth0User | GoTrueUser | MagicUser>
-=======
-  currentUser(): Promise<null | Auth0User | NetlifyUser>
->>>>>>> bb1ab34... Add auth package.
   client: SupportedAuthClients
   type: SupportedAuthTypes
 }
 
 export type AuthClientAuth0 = AuthClient
 
-<<<<<<< HEAD
 export interface AuthClientGoTrue extends AuthClient {
-=======
-export interface AuthClientNetlify extends AuthClient {
->>>>>>> bb1ab34... Add auth package.
   login(options: {
     email: string
     password: string
     remember?: boolean
-<<<<<<< HEAD
   }): Promise<GoTrueUser>
   client: GoTrue
 }
@@ -57,14 +37,6 @@ export interface AuthClientNetlify extends AuthClient {
 export interface MagicLinksClient extends AuthClient {
   login(options: { email: string; showUI?: boolean })
 }
-=======
-  }): Promise<NetlifyUser>
-  client: Netlify
-}
-
-export type SupportedAuthClients = Auth0 | Netlify
-export type SupportedAuthTypes = 'auth0' | 'netlify'
->>>>>>> bb1ab34... Add auth package.
 
 const mapAuthClientAuth0 = (client: Auth0): AuthClientAuth0 => {
   return {
@@ -92,15 +64,9 @@ const mapAuthClientAuth0 = (client: Auth0): AuthClientAuth0 => {
   }
 }
 
-<<<<<<< HEAD
 const mapAuthClientGoTrue = (client: GoTrue): AuthClientGoTrue => {
   return {
     type: 'gotrue',
-=======
-const mapAuthClientNetlify = (client: Netlify): AuthClientNetlify => {
-  return {
-    type: 'netlify',
->>>>>>> bb1ab34... Add auth package.
     client,
     login: async ({ email, password, remember }) =>
       client.login(email, password, remember),
@@ -116,7 +82,6 @@ const mapAuthClientNetlify = (client: Netlify): AuthClientNetlify => {
   }
 }
 
-<<<<<<< HEAD
 const mapAuthClientNetlify = (client: NetlifyIdentity): AuthClient => {
   return {
     type: 'netlify',
@@ -170,8 +135,6 @@ const mapAuthClientMagicLinks = (client: MagicLinks): MagicLinksClient => {
   }
 }
 
-=======
->>>>>>> bb1ab34... Add auth package.
 export const createAuthClient = (
   client: SupportedAuthClients,
   type: SupportedAuthTypes
@@ -179,17 +142,12 @@ export const createAuthClient = (
   switch (type) {
     case 'auth0':
       return mapAuthClientAuth0(client as Auth0)
-<<<<<<< HEAD
     case 'gotrue':
       return mapAuthClientGoTrue(client as GoTrue)
     case 'netlify':
       return mapAuthClientNetlify(client as NetlifyIdentity)
     case 'magic.link':
       return mapAuthClientMagicLinks(client as MagicLinks)
-=======
-    case 'netlify':
-      return mapAuthClientNetlify(client as Netlify)
->>>>>>> bb1ab34... Add auth package.
     default:
       throw new Error(
         `The ${type} auth client is not currently supported, please consider adding it.`

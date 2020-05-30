@@ -13,17 +13,8 @@
     "dist"
   ],
   "dependencies": {
-<<<<<<< HEAD
     "@prisma/sdk": "^2.0.0-beta.6",
     "@redwoodjs/internal": "^0.8.1",
-=======
-    "@prisma/sdk": "^2.0.0-beta.5",
-    "@redwoodjs/internal": "^0.7.1-canary.8",
-<<<<<<< HEAD
-    "babel-plugin-generator-prettier": "^1.2.0",
->>>>>>> a81200f... use only ts template for services
-=======
->>>>>>> 89ef31d... real world testing updates
     "camelcase": "^5.3.1",
     "chalk": "^3.0.0",
     "concurrently": "^5.1.0",

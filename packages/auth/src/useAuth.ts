@@ -6,7 +6,6 @@ import type { AuthContextInterface } from './AuthProvider'
 export const useAuth = (): AuthContextInterface => {
   return React.useContext(AuthContext) as AuthContextInterface
 }
-<<<<<<< HEAD
 
 declare global {
   interface Window {
@@ -21,5 +20,3 @@ declare global {
 }
 
 window.__REDWOOD__USE_AUTH = useAuth
-=======
->>>>>>> bb1ab34... Add auth package.

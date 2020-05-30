@@ -40,14 +40,6 @@ export const Success = ({ userProfile }) => {
   }
 
   return (
-<<<<<<< HEAD
-    <div className="rw-segment">
-      <header className="rw-segment-header">
-        <h2 className="rw-heading rw-heading-secondary">Edit UserProfile {userProfile.id}</h2>
-      </header>
-      <div className="rw-segment-main">
-        <UserProfileForm userProfile={userProfile} onSave={onSave} error={error} loading={loading} />
-=======
     <div className="bg-white border rounded-lg overflow-hidden">
       <header className="bg-gray-300 text-gray-700 py-3 px-4">
         <h2 className="text-sm font-semibold">
@@ -61,7 +53,6 @@ export const Success = ({ userProfile }) => {
           error={error}
           loading={loading}
         />
->>>>>>> f0d1418... update scaffold code
       </div>
     </div>
   )
