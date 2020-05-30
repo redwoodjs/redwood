@@ -21,32 +21,9 @@ export const getArgsForSide = (
   const paths = getPaths()
 
   return {
-    httpMethod: request.method,
-    headers: request.headers,
-    path: request.path,
-    queryStringParameters: qs.parse(request.url.split(/\?(.+)/)[1]),
-    requestContext: {
-      identity: {
-        sourceIp: request.ip,
-      },
-    },
-    ...parseBody(request.body), // adds `body` and `isBase64Encoded`
-  } as APIGatewayProxyEvent
-}
-
-const expressResponseForLambdaResult = (
-  expressResFn: Response,
-  lambdaResult: APIGatewayProxyResult
-) => {
-  // The response object must be compatible with JSON.stringify according
-  // to the aws lambda docs, but the type definition specifies that it has
-  // to be a string. Let's double check this.
-  const { statusCode = 200, headers, body = '' } = lambdaResult
-  if (headers) {
-    Object.keys(headers).forEach((headerName) => {
-      const headerValue: any = headers[headerName]
-      expressResFn.setHeader(headerName, headerValue)
-    })
+    port,
+    host,
+    paths: paths[side],
   }
 }
 
