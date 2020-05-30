@@ -27,39 +27,39 @@ const Post = ({ post }) => {
     <>
       <div className="rw-segment">
         <header className="rw-segment-header">
-          <h2 className="rw-heading rw-heading-secondary">Post {post.id} Detail</h2>
+          <h2 className="rw-heading rw-heading-secondary">
+            Post {post.id} Detail
+          </h2>
         </header>
         <table className="rw-table">
           <tbody>
-            <tr className="odd:bg-gray-100 even:bg-white border-t">
-              <td className="font-semibold p-3 text-right md:w-1/5">id</td>
-              <td className="p-3">{post.id}</td>
+            <tr>
+              <th>id</th>
+              <td>{post.id}</td>
             </tr>
-            <tr className="odd:bg-gray-100 even:bg-white border-t">
-              <td className="font-semibold p-3 text-right md:w-1/5">title</td>
-              <td className="p-3">{post.title}</td>
+            <tr>
+              <th>title</th>
+              <td>{post.title}</td>
             </tr>
-            <tr className="odd:bg-gray-100 even:bg-white border-t">
-              <td className="font-semibold p-3 text-right md:w-1/5">slug</td>
-              <td className="p-3">{post.slug}</td>
+            <tr>
+              <th>slug</th>
+              <td>{post.slug}</td>
             </tr>
-            <tr className="odd:bg-gray-100 even:bg-white border-t">
-              <td className="font-semibold p-3 text-right md:w-1/5">author</td>
-              <td className="p-3">{post.author}</td>
+            <tr>
+              <th>author</th>
+              <td>{post.author}</td>
             </tr>
-            <tr className="odd:bg-gray-100 even:bg-white border-t">
-              <td className="font-semibold p-3 text-right md:w-1/5">body</td>
-              <td className="p-3">{post.body}</td>
+            <tr>
+              <th>body</th>
+              <td>{post.body}</td>
             </tr>
-            <tr className="odd:bg-gray-100 even:bg-white border-t">
-              <td className="font-semibold p-3 text-right md:w-1/5">image</td>
-              <td className="p-3">{post.image}</td>
+            <tr>
+              <th>image</th>
+              <td>{post.image}</td>
             </tr>
-            <tr className="odd:bg-gray-100 even:bg-white border-t">
-              <td className="font-semibold p-3 text-right md:w-1/5">
-                postedAt
-              </td>
-              <td className="p-3">{post.postedAt}</td>
+            <tr>
+              <th>postedAt</th>
+              <td>{post.postedAt}</td>
             </tr>
           </tbody>
         </table>
