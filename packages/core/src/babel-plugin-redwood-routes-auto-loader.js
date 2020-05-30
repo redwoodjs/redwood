@@ -1,9 +1,8 @@
-const path = require('path')
+import path from 'path'
 
-const { getPaths } = require('@redwoodjs/internal')
-const { processPagesDir } = require('@redwoodjs/internal')
+import { getPaths, processPagesDir } from '@redwoodjs/internal'
 
-const redwoodPaths = getPaths()
+const WEB_PAGES_DIR = getPaths().web.pages
 
 module.exports = function ({ types: t }) {
   // Process the dir to find all Page dependencies.
@@ -18,17 +17,14 @@ module.exports = function ({ types: t }) {
         const declaredImports = path.node.specifiers.map(
           (specifier) => specifier.local.name
         )
-
         deps = deps.filter((dep) => !declaredImports.includes(dep.const))
       },
       Program: {
         exit(nodePath) {
           // Prepend all imports to the top of the file
           deps.forEach((dep) => {
-            const basename = path.posix.basename(dep.const)
-            const importFile = [redwoodPaths.web.src, 'pages', basename].join(
-              '/'
-            )
+            const basename = path.basename(dep.const)
+            const importFile = path.join(WEB_PAGES_DIR, basename)
 
             nodePath.node.body.unshift(
               t.variableDeclaration('const', [
