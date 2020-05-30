@@ -132,14 +132,15 @@ module.exports = () => ({
         ],
       ],
     },
+    // ** Files ending in `Cell` **
     {
       test: /.+Cell.(js|tsx)$/,
       plugins: [require('../dist/babel-plugin-redwood-cell')],
     },
-    // Automatically import files in `src/pages/*` in to
-    // the `src/Routes.[ts|jsx]` file.
+    // Automatically import files in `./web/src/pages/*` in to
+    // the `./web/src/Routes.[ts|jsx]` file.
     {
-      test: redwoodPaths.web.routes,
+      test: /\/web\/src\/Routes.(js|tsx)$/,
       plugins: [require('../dist/babel-plugin-redwood-routes-auto-loader')],
     },
   ],
