@@ -153,7 +153,32 @@ export const prettify = (templateFilename, renderedTemplate) => {
 
 export const readFile = (target) => fs.readFileSync(target)
 
-export const deleteFile = (target) => fs.unlinkSync(target)
+export const deleteFile = (file) => {
+  const extension = path.extname(file)
+  if (['.js', '.ts'].includes(extension)) {
+    const baseFile = getBaseFile(file)
+    const files = [baseFile + '.js', baseFile + '.ts']
+    files.forEach((f) => {
+      if (fs.existsSync(f)) {
+        fs.unlinkSync(f)
+      }
+    })
+  } else {
+    fs.unlinkSync(file)
+  }
+}
+
+const getBaseFile = (file) => file.replace(/\.\w*$/, '')
+
+const existsAnyExtensionSync = (file) => {
+  const extension = path.extname(file)
+  if (['.js', '.ts'].includes(extension)) {
+    const baseFile = getBaseFile(file)
+    return fs.existsSync(`${baseFile}.js`) || fs.existsSync(`${baseFile}.ts`)
+  }
+
+  return fs.existsSync(file)
+}
 
 export const writeFile = (
   target,
@@ -206,7 +231,7 @@ export const transformTSToJS = (filename, content) => {
     configFile: false,
     plugins: ['@babel/plugin-transform-typescript'],
   }).code
-  return prettify(filename.replace(/\.t(sx?)$/, '.j$1'), content)
+  return prettify(filename.replace(/\.ts$/, '.js'), content)
 }
 
 /**
@@ -234,11 +259,12 @@ export const writeFilesTask = (files, options) => {
  */
 export const deleteFilesTask = (files) => {
   const { base } = getPaths()
+
   return new Listr([
     ...Object.keys(files).map((file) => {
       return {
-        title: `Destroying \`./${path.relative(base, file)}\`...`,
-        skip: () => !fs.existsSync(file) && `File doesn't exist`,
+        title: `Destroying \`./${path.relative(base, getBaseFile(file))}\`...`,
+        skip: () => !existsAnyExtensionSync(file) && `File doesn't exist`,
         task: () => deleteFile(file),
       }
     }),
