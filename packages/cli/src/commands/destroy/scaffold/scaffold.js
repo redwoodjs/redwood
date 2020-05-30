@@ -1,15 +1,10 @@
 import Listr from 'listr'
 
-import {
-  getDefaultArgs,
-  deleteFilesTask,
-  removeRoutesFromRouterTask,
-} from 'src/lib'
+import { deleteFilesTask, removeRoutesFromRouterTask } from 'src/lib'
 import c from 'src/lib/colors'
 
 import {
   files,
-  defaults,
   routes as scaffoldRoutes,
   splitPathAndModel,
 } from '../../generate/scaffold/scaffold'
@@ -23,7 +18,7 @@ export const tasks = ({ model, path }) =>
       {
         title: 'Destroying scaffold files...',
         task: async () => {
-          const f = await files({ ...getDefaultArgs(defaults), model, path })
+          const f = await files({ model, path })
           return deleteFilesTask(f)
         },
       },

@@ -204,9 +204,9 @@ export const transformTSToJS = (filename, content) => {
   content = babel.transform(content, {
     filename,
     configFile: false,
-    plugins: ['@babel/plugin-transform-typescript', 'graphql-tag'],
+    plugins: ['@babel/plugin-transform-typescript'],
   }).code
-  return prettify(filename, content)
+  return prettify(filename.replace(/\.t(sx?)$/, '.j$1'), content)
 }
 
 /**
