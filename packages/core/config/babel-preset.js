@@ -2,9 +2,6 @@
  * This is the babel preset used `create-redwood-app`
  */
 
-const { getPaths } = require('@redwoodjs/internal')
-const redwoodPaths = getPaths()
-
 // TODO: Determine what to do different during development, test, and production
 // TODO: Take a look at create-react-app. They've dropped a ton of knowledge.
 
