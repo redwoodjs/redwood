@@ -8,8 +8,24 @@ describe('paths', () => {
       const deps = processPagesDir(
         path.resolve(__dirname, './fixtures/web/pages/')
       )
-      expect(deps[0].const).toEqual('AdminMargleTheWorld')
-      expect(deps[1].const).toEqual('HelloWorld')
+      expect(deps).toMatchInlineSnapshot(`
+        Array [
+          Object {
+            "const": "AdminMargleTheWorld",
+            "importName": "AdminMargleTheWorld",
+            "importPath": "src/pages/Admin/MargleTheWorld",
+            "importStatement": "const AdminMargleTheWorld = { name: 'AdminMargleTheWorld', loader: () => import('src/pages/Admin/MargleTheWorld') }",
+            "path": "/Users/peterp/x/redwoodjs/redwood/packages/internal/src/__tests__/fixtures/web/pages/Admin/MargleTheWorld",
+          },
+          Object {
+            "const": "HelloWorld",
+            "importName": "HelloWorld",
+            "importPath": "src/pages/HelloWorld",
+            "importStatement": "const HelloWorld = { name: 'HelloWorld', loader: () => import('src/pages/HelloWorld') }",
+            "path": "/Users/peterp/x/redwoodjs/redwood/packages/internal/src/__tests__/fixtures/web/pages/HelloWorld",
+          },
+        ]
+      `)
     })
   })
 
