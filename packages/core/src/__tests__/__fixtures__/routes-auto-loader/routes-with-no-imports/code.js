@@ -1,2 +1,1 @@
-/* eslint-disable */
-// This is an empty `Routes.js` file
+// This is an empty `Routes.js` file, the pages will be automatically imported

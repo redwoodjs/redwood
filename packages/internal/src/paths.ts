@@ -33,6 +33,8 @@ export interface Paths {
 }
 
 export interface PagesDependency {
+  importName: string
+  importPath: string
   const: string
   path: string
   importStatement: string
@@ -154,6 +156,8 @@ export const processPagesDir = (
         // `src/pages/<PageName>`
         const importFile = ['src', 'pages', ...prefix, basename].join('/')
         deps.push({
+          importName,
+          importPath: importFile,
           const: importName,
           path: path.join(webPagesDir, entry.name),
           importStatement: `const ${importName
