@@ -2,9 +2,6 @@
  * This is the babel preset used `create-redwood-app`
  */
 
-const { getPaths } = require('@redwoodjs/internal')
-const redwoodPaths = getPaths()
-
 // TODO: Determine what to do different during development, test, and production
 // TODO: Take a look at create-react-app. They've dropped a ton of knowledge.
 
@@ -80,6 +77,7 @@ module.exports = () => ({
             ],
           },
         ],
+        [require('../dist/babel-plugin-redwood-import-dir')],
       ],
     },
     // ** WEB **
@@ -131,15 +129,16 @@ module.exports = () => ({
         ],
       ],
     },
+    // ** Files ending in `Cell` **
     {
       test: /.+Cell.(js|tsx)$/,
-      plugins: [require('./babel-plugin-redwood-cell')],
+      plugins: [require('../dist/babel-plugin-redwood-cell')],
     },
-    // Automatically import files in `src/pages/*` in to
-    // the `src/Routes.[ts|jsx]` file.
+    // Automatically import files in `./web/src/pages/*` in to
+    // the `./web/src/Routes.[ts|jsx]` file.
     {
-      test: redwoodPaths.web.routes,
-      plugins: [require('./babel-plugin-routes-auto-loader')],
+      test: /\/web\/src\/Routes.(js|tsx)$/,
+      plugins: [require('../dist/babel-plugin-redwood-routes-auto-loader')],
     },
   ],
 })
