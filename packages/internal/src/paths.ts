@@ -33,6 +33,8 @@ export interface Paths {
 }
 
 export interface PagesDependency {
+  importName: string
+  importPath: string
   const: string
   path: string
   importStatement: string
@@ -145,7 +147,8 @@ export const processPagesDir = (
         // name (supported by: directory-named-webpack-plugin), so let's
         // construct the filename of the actual Page file.
         // `require.resolve` will throw if a module cannot be found.
-        require.resolve(path.join(webPagesDir, entry.name, entry.name))
+        const importPath = path.join(webPagesDir, entry.name, entry.name)
+        require.resolve(importPath)
 
         // If the Page exists, then construct the dependency object and push it
         // onto the deps array.
@@ -154,6 +157,8 @@ export const processPagesDir = (
         // `src/pages/<PageName>`
         const importFile = ['src', 'pages', ...prefix, basename].join('/')
         deps.push({
+          importName,
+          importPath,
           const: importName,
           path: path.join(webPagesDir, entry.name),
           importStatement: `const ${importName
