@@ -212,7 +212,7 @@ export const transformTSToJS = (filename, content) => {
         },
       ],
     ],
-    retainLines: true
+    retainLines: true,
   }).code
 
   return prettify(filename.replace(/\.ts$/, '.js'), result)
