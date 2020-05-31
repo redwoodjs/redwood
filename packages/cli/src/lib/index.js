@@ -13,6 +13,7 @@ import execa from 'execa'
 import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import { format } from 'prettier'
+import * as babel from '@babel/core'
 
 import c from './colors'
 
@@ -127,6 +128,10 @@ export const generateTemplate = (templateFilename, { name, root, ...rest }) => {
     ...rest,
   })
 
+  return prettify(templateFilename, renderedTemplate)
+}
+
+export const prettify = (templateFilename, renderedTemplate) => {
   // We format .js and .css templates, we need to tell prettier which parser
   // we're using.
   // https://prettier.io/docs/en/options.html#parser
@@ -188,6 +193,29 @@ export const prettierOptions = () => {
   } catch (e) {
     return undefined
   }
+}
+
+// TODO: Move this into `generateTemplate` when all templates have TS support
+/*
+ * Convert a generated TS template file into JS.
+ */
+export const transformTSToJS = (filename, content) => {
+  const result = babel.transform(content, {
+    filename,
+    configFile: false,
+    plugins: [
+      [
+        '@babel/plugin-transform-typescript',
+        {
+          isTSX: true,
+          allExtensions: true,
+        },
+      ],
+    ],
+    retainLines: true
+  }).code
+
+  return prettify(filename.replace(/\.ts$/, '.js'), result)
 }
 
 /**
