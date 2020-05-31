@@ -5,11 +5,15 @@ import { processPagesDir, resolveFile } from '../paths'
 describe('paths', () => {
   describe('processPagesDir', () => {
     it('it accurately finds the pages', () => {
-      const deps = processPagesDir(
-        path.resolve(__dirname, './fixtures/web/pages/')
+      const pagesDir = path.resolve(__dirname, './fixtures/web/src/pages')
+
+      const pages = processPagesDir(pagesDir)
+      expect(pages[0].importPath).toEqual(
+        path.join(pagesDir, 'Admin/MargleTheWorld/MargleTheWorld')
       )
-      expect(deps[0].const).toEqual('AdminMargleTheWorld')
-      expect(deps[1].const).toEqual('HelloWorld')
+      expect(pages[1].importPath).toEqual(
+        path.join(pagesDir, 'HelloWorld/HelloWorld')
+      )
     })
   })
 
