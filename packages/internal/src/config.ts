@@ -2,6 +2,7 @@ import fs from 'fs'
 
 import merge from 'deepmerge'
 import toml from 'toml'
+import findUp from 'findup-sync'
 
 import { getConfigPath } from './paths'
 
@@ -10,6 +11,11 @@ export enum TargetEnum {
   BROWSER = 'browser',
   REACT_NATIVE = 'react-native',
   ELECTRON = 'electron',
+}
+
+export enum LanguageEnum {
+  TYPESCRIPT = 'typescript',
+  JAVASCRIPT = 'javascript',
 }
 
 export interface NodeTargetConfig {
@@ -31,12 +37,17 @@ interface BrowserTargetConfig {
   apiProxyPath: string
 }
 
+interface LanguageTargetConfig {
+  language: LanguageEnum
+}
+
 export interface Config {
   web: BrowserTargetConfig
   api: NodeTargetConfig
   browser: {
     open: boolean | string
   }
+  project: LanguageTargetConfig
 }
 
 const DEFAULT_CONFIG: Config = {
@@ -57,6 +68,11 @@ const DEFAULT_CONFIG: Config = {
   browser: {
     open: true,
   },
+  project: {
+    language: findUp('tsconfig.json')
+      ? LanguageEnum.TYPESCRIPT
+      : LanguageEnum.JAVASCRIPT,
+  },
 }
 
 /**
@@ -69,5 +85,15 @@ export const getConfig = (configPath = getConfigPath()): Config => {
     return merge(DEFAULT_CONFIG, toml.parse(rawConfig))
   } catch (e) {
     throw new Error(`Could not parse "${configPath}": ${e}`)
+  }
+}
+
+/**
+ * Check a project's language and redwood.toml target (if given)
+ */
+export const getLanguage = (): unknown => {
+  return {
+    default: DEFAULT_CONFIG.project.language,
+    target: getConfig().project.language,
   }
 }
