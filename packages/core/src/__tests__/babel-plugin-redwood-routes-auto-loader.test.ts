@@ -17,7 +17,7 @@ jest.mock('@redwoodjs/internal', () => ({
     return [
       {
         importName: 'APage',
-        importFile: 'src/pages/APage',
+        importPath: 'src/pages/APage',
         const: 'APage',
         path: '/Users/peterp/x/redwoodjs/example-blog/web/src/pages/APage',
         importStatement:
@@ -25,7 +25,7 @@ jest.mock('@redwoodjs/internal', () => ({
       },
       {
         importName: 'BPage',
-        importFile: 'src/pages/BPage',
+        importPath: 'src/pages/BPage',
         const: 'BPage',
         path: '/Users/peterp/x/redwoodjs/example-blog/web/src/pages/BPage',
         importStatement:
@@ -34,7 +34,7 @@ jest.mock('@redwoodjs/internal', () => ({
 
       {
         importName: 'NestedCPage',
-        importFile: 'src/pages/Nested/NestedCPage',
+        importPath: 'src/pages/Nested/NestedCPage',
         const: 'BPage',
         path: '/Users/peterp/x/redwoodjs/example-blog/web/src/pages/BPage',
         importStatement:
@@ -46,6 +46,6 @@ jest.mock('@redwoodjs/internal', () => ({
 
 pluginTester({
   plugin,
-  pluginName: 'babel-plugin-redwood-import-dir',
+  pluginName: 'babel-plugin-redwood-routes-auto-loader',
   fixtures: path.join(__dirname, '__fixtures__/routes-auto-loader'),
 })
