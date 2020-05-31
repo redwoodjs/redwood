@@ -11,13 +11,22 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
       // because when one is present, the user is requesting that the module be
       // included in the main bundle.
       ImportDeclaration(p) {
+        if (pages.length === 0) {
+          return
+        }
         const declaredImports = p.node.specifiers.map(
           (specifier) => specifier.local.name
         )
         pages = pages.filter((dep) => !declaredImports.includes(dep.const))
       },
       Program: {
+        enter() {
+          pages = processPagesDir()
+        },
         exit(p) {
+          if (pages.length === 0) {
+            return
+          }
           const nodes = []
           // Prepend all imports to the top of the file
           for (const { importName, importPath } of pages) {
@@ -45,7 +54,6 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
               ])
             )
           }
-
           // Insert at the top of the file
           p.node.body.unshift(...nodes)
         },
