@@ -1,7 +1,7 @@
 export const config = {
   imports: [
     { import: '* as firebase', from: 'firebase/app' },
-    { import: '', from: 'firebase/auth' },
+    { import: null, from: 'firebase/auth' },
   ],
   init: `const config = {
     apiKey: process.env.FIREBASE_API_KEY,
@@ -12,7 +12,7 @@ export const config = {
     messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
     appId: process.env.FIREBASE_APP_ID,
   }
-  // This is generated.
+
   const firebaseClient = ((config) => {
     firebase.initializeApp(config)
     return firebase
