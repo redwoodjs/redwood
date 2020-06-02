@@ -1,17 +1,19 @@
 import type { default as GoTrue, User as GoTrueUser } from 'gotrue-js'
 import type { Auth0Client as Auth0 } from '@auth0/auth0-spa-js'
 import type NetlifyIdentityNS from 'netlify-identity-widget'
+import * as firebase from 'firebase/app'
 import type { Magic, MagicUserMetadata } from 'magic-sdk'
 // TODO: Can also return an Auth0 user which doesn't have a definition.
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Auth0User {}
 export type { GoTrueUser }
 export type NetlifyIdentity = typeof NetlifyIdentityNS
+export type FirebaseClient = typeof firebase
 export type MagicLinks = Magic
 export type MagicUser = MagicUserMetadata
 
-export type SupportedAuthClients = Auth0 | GoTrue | NetlifyIdentity | MagicLinks
-export type SupportedAuthTypes = 'auth0' | 'gotrue' | 'netlify' | 'magic.link'
+export type SupportedAuthClients = Auth0 | GoTrue | NetlifyIdentity | MagicLinks | FirebaseClient
+export type SupportedAuthTypes = 'auth0' | 'gotrue' | 'netlify' | 'magic.link' | 'firebase'
 
 export interface AuthClient {
   restoreAuthState?(): void | Promise<any>
@@ -120,6 +122,21 @@ const mapAuthClientNetlify = (client: NetlifyIdentity): AuthClient => {
   }
 }
 
+const mapAuthClientFirebase = (client: FirebaseClient): AuthClient => {
+  return {
+    type: 'firebase',
+    client,
+    restoreAuthState: () => client.auth().getRedirectResult(),
+    login: async () => {
+      const provider = new client.auth.GoogleAuthProvider()
+      return client.auth().signInWithRedirect(provider)
+    },
+    logout: () => client.auth().signOut(),
+    getToken: async () => client.auth().currentUser?.getIdToken() ?? null,
+    currentUser: async () => client.auth().currentUser,
+  }
+}
+
 const mapAuthClientMagicLinks = (client: MagicLinks): MagicLinksClient => {
   return {
     type: 'magic.link',
@@ -140,6 +157,8 @@ export const createAuthClient = (
   type: SupportedAuthTypes
 ): AuthClient => {
   switch (type) {
+    case 'firebase':
+      return mapAuthClientFirebase(client as FirebaseClient)
     case 'auth0':
       return mapAuthClientAuth0(client as Auth0)
     case 'gotrue':

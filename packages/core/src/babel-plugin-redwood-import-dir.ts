@@ -49,7 +49,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         const dirFiles = glob.sync(p.node.source.value, { cwd })
         for (const filePath of dirFiles) {
           const fileName = path.basename(filePath).split('.')[0]
-          // + import * as <importName_fileName> from <filePath>
+          // + import * as <importName>_<fileName> from <filePath>
           nodes.push(
             t.importDeclaration(
               [
