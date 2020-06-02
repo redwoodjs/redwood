@@ -37,67 +37,56 @@ const PostsList = ({ posts }) => {
   }
 
   return (
-    <div className="bg-white text-gray-900 border rounded-lg overflow-x-scroll">
-      <table className="table-auto w-full min-w-3xl text-sm">
+    <div className="rw-segment rw-table-wrapper-responsive">
+      <table className="rw-table">
         <thead>
-          <tr className="bg-gray-300 text-gray-700">
-            <th className="font-semibold text-left p-3">id</th>
-            <th className="font-semibold text-left p-3">title</th>
-            <th className="font-semibold text-left p-3">slug</th>
-            <th className="font-semibold text-left p-3">author</th>
-            <th className="font-semibold text-left p-3">body</th>
-            <th className="font-semibold text-left p-3">image</th>
-            <th className="font-semibold text-left p-3">isPinned</th>
-            <th className="font-semibold text-left p-3">postedAt</th>
-            <th className="font-semibold text-left p-3">&nbsp;</th>
+          <tr>
+            <th>id</th>
+            <th>title</th>
+            <th>slug</th>
+            <th>author</th>
+            <th>body</th>
+            <th>image</th>
+            <th>isPinned</th>
+            <th>postedAt</th>
+            <th>&nbsp;</th>
           </tr>
         </thead>
         <tbody>
           {posts.map((post) => (
-            <tr
-              key={post.id}
-              className="odd:bg-gray-100 even:bg-white border-t"
-            >
-              <td className="p-3">{truncate(post.id)}</td>
-              <td className="p-3">{truncate(post.title)}</td>
-              <td className="p-3">{truncate(post.slug)}</td>
-              <td className="p-3">{truncate(post.author)}</td>
-              <td className="p-3">{truncate(post.body)}</td>
-              <td className="p-3">{truncate(post.image)}</td>
-              <td className="p-3">{truncate(post.isPinned)}</td>
-              <td className="p-3">{timeTag(post.postedAt)}</td>
-              <td className="p-3 pr-4 text-right whitespace-no-wrap">
-                <nav>
-                  <ul>
-                    <li className="inline-block">
-                      <Link
-                        to={routes.post({ id: post.id })}
-                        title={'Show post ' + post.id + ' detail'}
-                        className="text-xs bg-gray-100 text-gray-600 hover:bg-gray-600 hover:text-white rounded-sm px-2 py-1 uppercase font-semibold tracking-wide"
-                      >
-                        Show
-                      </Link>
-                    </li>
-                    <li className="inline-block">
-                      <Link
-                        to={routes.editPost({ id: post.id })}
-                        title={'Edit post ' + post.id}
-                        className="text-xs bg-gray-100 text-blue-600 hover:bg-blue-600 hover:text-white rounded-sm px-2 py-1 uppercase font-semibold tracking-wide"
-                      >
-                        Edit
-                      </Link>
-                    </li>
-                    <li className="inline-block">
-                      <a
-                        href="#"
-                        title={'Delete post ' + post.id}
-                        className="text-xs bg-gray-100 text-red-600 hover:bg-red-600 hover:text-white rounded-sm px-2 py-1 uppercase font-semibold tracking-wide"
-                        onClick={() => onDeleteClick(post.id)}
-                      >
-                        Delete
-                      </a>
-                    </li>
-                  </ul>
+            <tr key={post.id}>
+              <td>{truncate(post.id)}</td>
+              <td>{truncate(post.title)}</td>
+              <td>{truncate(post.slug)}</td>
+              <td>{truncate(post.author)}</td>
+              <td>{truncate(post.body)}</td>
+              <td>{truncate(post.image)}</td>
+              <td>{truncate(post.isPinned)}</td>
+              <td>{timeTag(post.postedAt)}</td>
+              <td>
+                <nav className="rw-table-actions">
+                  <Link
+                    to={routes.post({ id: post.id })}
+                    title={'Show post ' + post.id + ' detail'}
+                    className="rw-button rw-button-small"
+                  >
+                    Show
+                  </Link>
+                  <Link
+                    to={routes.editPost({ id: post.id })}
+                    title={'Edit post ' + post.id}
+                    className="rw-button rw-button-small rw-button-blue"
+                  >
+                    Edit
+                  </Link>
+                  <a
+                    href="#"
+                    title={'Delete post ' + post.id}
+                    className="rw-button rw-button-small rw-button-red"
+                    onClick={() => onDeleteClick(post.id)}
+                  >
+                    Delete
+                  </a>
                 </nav>
               </td>
             </tr>

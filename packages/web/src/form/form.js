@@ -117,19 +117,21 @@ const FormError = ({
       {messages && (
         <div className={wrapperClassName} style={wrapperStyle}>
           <p className={titleClassName} style={titleStyle}>
-            {rootMessage}
+            {rootMessage !== '' ? rootMessage : 'Something went wrong.'}
           </p>
-          <ul className={listClassName} style={listStyle}>
-            {messages.map((message, index) => (
-              <li
-                key={index}
-                className={listItemClassName}
-                style={listItemStyle}
-              >
-                {message}
-              </li>
-            ))}
-          </ul>
+          {messages.length > 0 && (
+            <ul className={listClassName} style={listStyle}>
+              {messages.map((message, index) => (
+                <li
+                  key={index}
+                  className={listItemClassName}
+                  style={listItemStyle}
+                >
+                  {message}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       )}
     </>
