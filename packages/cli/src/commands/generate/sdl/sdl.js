@@ -7,6 +7,7 @@ import pluralize from 'pluralize'
 
 import {
   generateTemplate,
+  transformTSToJS,
   getSchema,
   getPaths,
   writeFilesTask,
@@ -105,7 +106,7 @@ const sdlFromSchemaModel = async (name) => {
   }
 }
 
-export const files = async ({ name, crud }) => {
+export const files = async ({ name, crud, typescript, javascript }) => {
   const {
     query,
     createInput,
@@ -115,8 +116,8 @@ export const files = async ({ name, crud }) => {
     enums,
   } = await sdlFromSchemaModel(pascalcase(pluralize.singular(name)))
 
-  const template = generateTemplate(
-    path.join('sdl', 'templates', 'sdl.js.template'),
+  let template = generateTemplate(
+    path.join('sdl', 'templates', `sdl.ts.template`),
     {
       name,
       crud,
@@ -128,13 +129,19 @@ export const files = async ({ name, crud }) => {
     }
   )
 
-  const outputPath = path.join(
+  const extension = typescript === true ? 'ts' : 'js'
+  let outputPath = path.join(
     getPaths().api.graphql,
-    `${camelcase(pluralize(name))}.sdl.js`
+    `${camelcase(pluralize(name))}.sdl.${extension}`
   )
+
+  if (javascript && !typescript) {
+    template = transformTSToJS(outputPath, template)
+  }
+
   return {
     [outputPath]: template,
-    ...(await serviceFiles({ name, crud, relations })),
+    ...(await serviceFiles({ name, crud, relations, typescript, javascript })),
   }
 }
 
@@ -144,15 +151,23 @@ export const builder = {
   services: { type: 'boolean', default: true },
   crud: { type: 'boolean', default: false },
   force: { type: 'boolean', default: false },
+  javascript: { type: 'boolean', default: true },
+  typescript: { type: 'boolean', default: false },
 }
 // TODO: Add --dry-run command
-export const handler = async ({ model, crud, force }) => {
+export const handler = async ({
+  model,
+  crud,
+  force,
+  typescript,
+  javascript,
+}) => {
   const tasks = new Listr(
     [
       {
         title: 'Generating SDL files...',
         task: async () => {
-          const f = await files({ name: model, crud })
+          const f = await files({ name: model, crud, typescript, javascript })
           return writeFilesTask(f, { overwriteExisting: force })
         },
       },
