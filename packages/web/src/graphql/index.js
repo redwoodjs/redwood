@@ -19,9 +19,6 @@ export const createGraphQLClient = (config) => {
 /**
  * A GraphQL provider that instantiates a client automatically.
  */
-export const GraphQLProvider = ({
-  client = createGraphQLClient(),
-  ...rest
-}) => {
-  return <ApolloProvider client={client} {...rest} />
+export const GraphQLProvider = ({ config, ...rest }) => {
+  return <ApolloProvider client={createGraphQLClient(config)} {...rest} />
 }

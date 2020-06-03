@@ -77,6 +77,7 @@ module.exports = () => ({
             ],
           },
         ],
+        [require('../dist/babel-plugin-redwood-import-dir')],
       ],
     },
     // ** WEB **
@@ -128,9 +129,16 @@ module.exports = () => ({
         ],
       ],
     },
+    // ** Files ending in `Cell` **
     {
       test: /.+Cell.(js|tsx)$/,
-      plugins: [require('./babel-plugin-redwood-cell')],
+      plugins: [require('../dist/babel-plugin-redwood-cell')],
+    },
+    // Automatically import files in `./web/src/pages/*` in to
+    // the `./web/src/Routes.[ts|jsx]` file.
+    {
+      test: /\/web\/src\/Routes.(js|tsx)$/,
+      plugins: [require('../dist/babel-plugin-redwood-routes-auto-loader')],
     },
   ],
 })

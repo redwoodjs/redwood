@@ -30,7 +30,8 @@
   },
   "eslintIgnore": [
     "dist",
-    "packages/api/importAll.macro.js"
+    "packages/api/importAll.macro.js",
+    "packages/core/src/__tests__/__fixtures__"
   ],
   "scripts": {
     "build": "yarn build:clean && yarn build:js && yarn build:types",

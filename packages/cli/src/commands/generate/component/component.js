@@ -1,3 +1,5 @@
+import { transformTSToJS } from 'src/lib'
+
 import {
   templateForComponentFile,
   createYargsForComponentGeneration,
@@ -5,19 +7,21 @@ import {
 
 const REDWOOD_WEB_PATH_NAME = 'components'
 
-export const files = ({ name }) => {
+export const files = ({ name, typescript, javascript }) => {
+  const isJavascript = javascript && !typescript
   const componentFile = templateForComponentFile({
     name,
     webPathSection: REDWOOD_WEB_PATH_NAME,
+    extension: isJavascript ? '.js' : '.tsx',
     generator: 'component',
-    templatePath: 'component.js.template',
+    templatePath: 'component.tsx.template',
   })
   const testFile = templateForComponentFile({
     name,
-    extension: '.test.js',
+    extension: `.test.${isJavascript ? 'js' : 'tsx'}`,
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'component',
-    templatePath: 'test.js.template',
+    templatePath: 'test.tsx.template',
   })
 
   // Returns
@@ -26,19 +30,20 @@ export const files = ({ name }) => {
   //    "path/to/fileB": "<<<template>>>",
   // }
   return [componentFile, testFile].reduce((acc, [outputPath, content]) => {
+    const template = isJavascript
+      ? transformTSToJS(outputPath, content)
+      : content
+
     return {
-      [outputPath]: content,
+      [outputPath]: template,
       ...acc,
     }
   }, {})
 }
 
-export const {
-  command,
-  desc,
-  builder,
-  handler,
-} = createYargsForComponentGeneration({
+export const desc = 'Generate a component.'
+
+export const { command, builder, handler } = createYargsForComponentGeneration({
   componentName: 'component',
   filesFn: files,
 })

@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/internal",
-  "version": "0.6.0",
+  "version": "0.8.2",
   "main": "dist/main.js",
   "files": [
     "dist"
@@ -8,6 +8,7 @@
   "types": "./dist/main.d.ts",
   "license": "MIT",
   "dependencies": {
+    "deepmerge": "^4.2.2",
     "findup-sync": "^4.0.0",
     "toml": "^3.0.0"
   },
@@ -26,5 +27,5 @@
     "test": "jest",
     "test:watch": "yarn test --watch"
   },
-  "gitHead": "2801c132f40263f9fcfbdac8b1750d2e423eb649"
+  "gitHead": "1cb7c8d1085147787209af423c33a9c91c3e6517"
 }

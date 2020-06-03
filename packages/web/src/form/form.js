@@ -1,5 +1,6 @@
 import { useForm, FormContext, useFormContext } from 'react-hook-form'
 import { useContext, useEffect } from 'react'
+import pascalcase from 'pascalcase'
 
 const DEFAULT_MESSAGES = {
   required: 'is required',
@@ -10,6 +11,30 @@ const DEFAULT_MESSAGES = {
   max: 'is too low',
   validate: 'is not valid',
 }
+const INPUT_TYPES = [
+  'button',
+  'checkbox',
+  'color',
+  'date',
+  'datetime-local',
+  'email',
+  'file',
+  'hidden',
+  'image',
+  'month',
+  'number',
+  'password',
+  'radio',
+  'range',
+  'reset',
+  'search',
+  'submit',
+  'tel',
+  'text',
+  'time',
+  'url',
+  'week',
+]
 
 // Massages a hash of props depending on whether the given named field has
 // any errors on it
@@ -92,19 +117,21 @@ const FormError = ({
       {messages && (
         <div className={wrapperClassName} style={wrapperStyle}>
           <p className={titleClassName} style={titleStyle}>
-            {rootMessage}
+            {rootMessage !== '' ? rootMessage : 'Something went wrong.'}
           </p>
-          <ul className={listClassName} style={listStyle}>
-            {messages.map((message, index) => (
-              <li
-                key={index}
-                className={listItemClassName}
-                style={listItemStyle}
-              >
-                {message}
-              </li>
-            ))}
-          </ul>
+          {messages.length > 0 && (
+            <ul className={listClassName} style={listStyle}>
+              {messages.map((message, index) => (
+                <li
+                  key={index}
+                  className={listItemClassName}
+                  style={listItemStyle}
+                >
+                  {message}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       )}
     </>
@@ -165,21 +192,6 @@ const FieldError = (props) => {
   return validationError ? <span {...props}>{errorMessage}</span> : null
 }
 
-// Renders an <input type="hidden"> field
-
-const HiddenField = (props) => {
-  const { register } = useFormContext()
-
-  return (
-    <input
-      {...props}
-      type="hidden"
-      id={props.id || props.name}
-      ref={register(props.validation || { required: false })}
-    />
-  )
-}
-
 // Renders a <textarea> field
 
 const TextAreaField = (props) => {
@@ -189,52 +201,6 @@ const TextAreaField = (props) => {
   return (
     <textarea
       {...tagProps}
-      id={props.id || props.name}
-      ref={register(props.validation || { required: false })}
-    />
-  )
-}
-
-// Renders an <input type="text"> field
-
-const TextField = (props) => {
-  const { register } = useFormContext()
-  const tagProps = inputTagProps(props)
-
-  return (
-    <input
-      {...tagProps}
-      type={props.type || 'text'}
-      id={props.id || props.name}
-      ref={register(props.validation || { required: false })}
-    />
-  )
-}
-
-// Renders an <input type="radio"> field
-const RadioField = (props) => {
-  const { register } = useFormContext()
-  const tagProps = inputTagProps(props)
-
-  return (
-    <input
-      {...tagProps}
-      type="radio"
-      id={props.id || props.name}
-      ref={register(props.validation || { required: false })}
-    />
-  )
-}
-
-// Renders an <input type="checkbox"> field
-const CheckBox = (props) => {
-  const { register } = useFormContext()
-  const tagProps = inputTagProps(props)
-
-  return (
-    <input
-      {...tagProps}
-      type="checkbox"
       id={props.id || props.name}
       ref={register(props.validation || { required: false })}
     />
@@ -257,9 +223,38 @@ const SelectField = (props) => {
 }
 
 // Renders a <button type="submit">
+
 const Submit = React.forwardRef((props, ref) => (
   <button ref={ref} type="submit" {...props} />
 ))
+
+// Create a component for each type of Input.
+//
+// Uses a bit of Javascript metaprogramming to create the functions with a dynamic
+// name rather than having to write out each and every component definition. In
+// simple terms it creates an object with the key being the current value of `type`
+// and then immediately returns the value, which is the component function definition.
+//
+// In the end we end up with `inputComponents.TextField` and all the others. Export those
+// and we're good to go.
+
+let inputComponents = {}
+INPUT_TYPES.forEach((type) => {
+  inputComponents[`${pascalcase(type)}Field`] = (props) => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const { register } = useFormContext()
+    const tagProps = inputTagProps(props)
+
+    return (
+      <input
+        type={type}
+        id={props.id || props.name}
+        ref={register(props.validation || { required: false })}
+        {...tagProps}
+      />
+    )
+  }
+})
 
 export {
   Form,
@@ -267,11 +262,32 @@ export {
   FormError,
   FieldError,
   Label,
-  HiddenField,
   TextAreaField,
-  TextField,
-  RadioField,
-  CheckBox,
   SelectField,
   Submit,
 }
+
+export const {
+  ButtonField,
+  CheckboxField,
+  ColorField,
+  DateField,
+  DatetimeLocalField,
+  EmailField,
+  FileField,
+  HiddenField,
+  ImageField,
+  MonthField,
+  NumberField,
+  PasswordField,
+  RadioField,
+  RangeField,
+  ResetField,
+  SearchField,
+  SubmitField,
+  TelField,
+  TextField,
+  TimeField,
+  UrlField,
+  WeekField,
+} = inputComponents

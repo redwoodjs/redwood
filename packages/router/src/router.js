@@ -21,29 +21,29 @@ const Route = () => {
 /**
  * `Routes` nested in `Private` require authentication.
  * When a user is not authenticated and attempts to visit this route they will be
- * redirected to `unauthorized` route.
+ * redirected to `unauthenticated` route.
  */
 const Private = () => {
   return null
 }
 Private.propTypes = {
   /**
-   * The "page name" where a user should be redirected when unauthenticated.
+   * The page name where a user will be redirected when not authenticated.
    */
-  unauthorized: PropTypes.string.isRequired,
+  unauthenticated: PropTypes.string.isRequired,
 }
 
-const PrivatePageLoader = ({ useAuth, unauthorizedRoute, children }) => {
-  const { loading, authenticated } = useAuth()
+const PrivatePageLoader = ({ useAuth, unauthenticatedRoute, children }) => {
+  const { loading, isAuthenticated } = useAuth()
 
   if (loading) {
     return null
   }
 
-  if (authenticated) {
+  if (isAuthenticated) {
     return children
   } else {
-    return <Redirect to={unauthorizedRoute()} />
+    return <Redirect to={unauthenticatedRoute()} />
   }
 }
 
@@ -95,15 +95,15 @@ const RouterImpl = ({
   // Find `Private` components, mark their children `Route` components as private,
   // and merge them into a single array.
   const privateRoutes =
-    children
+    React.Children.toArray(children)
       .filter((child) => child.type === Private)
       .map((privateElement) => {
         // Set `Route` props
-        const { unauthorized, children } = privateElement.props
+        const { unauthenticated, children } = privateElement.props
         return React.Children.toArray(children).map((route) =>
           React.cloneElement(route, {
             private: true,
-            unauthorizedRedirect: unauthorized,
+            unauthenticatedRedirect: unauthenticated,
           })
         )
       })
@@ -162,7 +162,9 @@ const RouterImpl = ({
           return (
             <PrivatePageLoader
               useAuth={useAuth}
-              unauthorizedRoute={namedRoutes[route.props.unauthorizedRedirect]}
+              unauthenticatedRoute={
+                namedRoutes[route.props.unauthenticatedRedirect]
+              }
             >
               <Loaders />
             </PrivatePageLoader>

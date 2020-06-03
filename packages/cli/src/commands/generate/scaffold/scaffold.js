@@ -15,6 +15,7 @@ import {
   writeFile,
   asyncForEach,
   getSchema,
+  getDefaultArgs,
   getPaths,
   writeFilesTask,
   addRoutesToRouterTask,
@@ -22,8 +23,11 @@ import {
 import c from 'src/lib/colors'
 
 import { relationsForModel, intForeignKeysForModel } from '../helpers'
-import { files as sdlFiles } from '../sdl/sdl'
-import { files as serviceFiles } from '../service/service'
+import { files as sdlFiles, builder as sdlBuilder } from '../sdl/sdl'
+import {
+  files as serviceFiles,
+  builder as serviceBuilder,
+} from '../service/service'
 
 const NON_EDITABLE_COLUMNS = ['id', 'createdAt', 'updatedAt']
 const ASSETS = fs.readdirSync(
@@ -46,15 +50,29 @@ const getIdType = (model) => {
   return model.fields.find((field) => field.isId)?.type
 }
 
-export const files = async ({ model: name, path: scaffoldPath = '' }) => {
+export const files = async ({
+  model: name,
+  path: scaffoldPath = '',
+  typescript,
+  javascript,
+}) => {
   const model = await getSchema(pascalcase(pluralize.singular(name)))
 
   return {
-    ...(await sdlFiles({ name, crud: true })),
+    ...(await sdlFiles({
+      ...getDefaultArgs(sdlBuilder),
+      name,
+      crud: true,
+      typescript,
+      javascript,
+    })),
     ...(await serviceFiles({
+      ...getDefaultArgs(serviceBuilder),
       name,
       crud: true,
       relations: relationsForModel(model),
+      typescript,
+      javascript,
     })),
     ...assetFiles(name),
     ...layoutFiles(name, scaffoldPath),
@@ -313,35 +331,41 @@ const addScaffoldImport = () => {
   return 'Added scaffold import to index.js'
 }
 
-export const command = 'scaffold <pathSlashModel>'
-export const desc = 'Generate pages, SDL, and a services object.'
-export const builder = {
-  force: { type: 'boolean', default: false },
-  // So the user can specify a path to nest the generated files under.
-  // E.g. yarn rw g scaffold post --path=admin
-  path: { type: 'string', default: false },
+export const defaults = {
+  force: {
+    default: false,
+    type: 'boolean',
+  },
+  typescript: {
+    type: 'boolean',
+    default: false,
+    desc: 'Generate TypeScript files',
+  },
+  javascript: {
+    type: 'boolean',
+    default: true,
+    desc: 'Generate JavaScript files',
+  },
 }
-// The user can also specify a path in the argument.
-// E.g. yarn rw g scaffold admin/post
-export const handler = async ({ pathSlashModel, force, path: pathFlag }) => {
-  let path
-  // If path is specified by both pathSlashModel and pathFlag,
-  // we give pathFlag precedence.
-  pathFlag
-    ? (path = pathFlag)
-    : (path = pathSlashModel.split('/').slice(0, -1).join('/'))
-
-  // This code will work whether or not there's a path in pathSlashModel
-  // E.g. if pathSlashModel is just 'post',
-  // path.split('/') will return ['post'].
-  const model = pathSlashModel.split('/').pop()
-
-  const tasks = new Listr(
+export const command = 'scaffold <model>'
+export const desc =
+  'Generate Pages, SDL, and Services files based on a given DB schema Model. Also accepts <path/model>.'
+export const builder = (yargs) => {
+  yargs.positional('model', {
+    description:
+      "Model to scaffold. You can also use <path/model> to nest files by type at the given path directory (or directories). For example, 'rw g scaffold admin/post'.",
+  })
+  Object.entries(defaults).forEach(([option, config]) => {
+    yargs.option(option, config)
+  })
+}
+const tasks = ({ model, path, force, typescript, javascript }) => {
+  return new Listr(
     [
       {
         title: 'Generating scaffold files...',
         task: async () => {
-          const f = await files({ model, path })
+          const f = await files({ model, path, typescript, javascript })
           return writeFilesTask(f, { overwriteExisting: force })
         },
       },
@@ -358,9 +382,30 @@ export const handler = async ({ pathSlashModel, force, path: pathFlag }) => {
     ],
     { collapse: false, exitOnError: true }
   )
+}
+
+export const handler = async ({
+  model: modelArg,
+  force,
+  typescript,
+  javascript,
+}) => {
+  const { model, path } = splitPathAndModel(modelArg)
+
+  const t = tasks({ model, path, force, typescript, javascript })
   try {
-    await tasks.run()
+    await t.run()
   } catch (e) {
     console.log(c.error(e.message))
   }
+}
+
+export const splitPathAndModel = (pathSlashModel) => {
+  const path = pathSlashModel.split('/').slice(0, -1).join('/')
+  // This code will work whether or not there's a path in model
+  // E.g. if model is just 'post',
+  // path.split('/') will return ['post'].
+  const model = pathSlashModel.split('/').pop()
+
+  return { model, path }
 }

@@ -6,10 +6,12 @@ name: Publish canaray packages to npm
 on:
   push:
     branches: [master]
-    tags-ignore: [v*] # We do not want to publish a canary release when we're publish an actual release
+    tags-ignore:
+      - v0.*
 
 jobs:
   build:
+    if: github.repository == 'redwoodjs/redwood'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

@@ -1,0 +1,14 @@
+import { render, cleanup } from '@redwoodjs/testing'
+
+import ${pascalName} from './${pascalName}'
+
+describe('${pascalName}', () => {
+  afterEach(() => {
+    cleanup()
+  })
+  it('renders successfully', () => {
+    expect(() => {
+      render(<${pascalName} />)
+    }).not.toThrow()
+  })
+})
