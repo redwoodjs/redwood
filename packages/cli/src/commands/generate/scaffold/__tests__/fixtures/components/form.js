@@ -4,7 +4,7 @@ import {
   FieldError,
   Label,
   TextField,
-  CheckBox,
+  CheckboxField,
   Submit,
 } from '@redwoodjs/web'
 
@@ -110,9 +110,9 @@ const PostForm = (props) => {
         >
           Is pinned
         </Label>
-        <CheckBox
+        <CheckboxField
           name="isPinned"
-          defaultValue={props.post?.isPinned}
+          defaultChecked={props.post?.isPinned}
           className={CSS.input}
           errorClassName={CSS.inputError}
           validation={{ required: true }}
