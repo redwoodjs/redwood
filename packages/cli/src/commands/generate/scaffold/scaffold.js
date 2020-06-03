@@ -206,7 +206,7 @@ const componentFiles = async (name, scaffoldPath = '') => {
     .map((column) => ({
       ...column,
       label: humanize(column.name),
-      component: fieldComponents[column['type']] || 'TextField',
+      component: fieldComponents[column.type] || 'TextField',
     }))
 
   const pascalScaffoldPath =
