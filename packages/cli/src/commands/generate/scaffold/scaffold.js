@@ -198,7 +198,7 @@ const componentFiles = async (name, scaffoldPath = '') => {
   const intForeignKeys = intForeignKeysForModel(model)
   let fileList = {}
   const fieldComponents = {
-    Boolean: 'CheckBox',
+    Boolean: 'CheckboxField',
     String: 'TextField',
   }
   const editableColumns = columns
