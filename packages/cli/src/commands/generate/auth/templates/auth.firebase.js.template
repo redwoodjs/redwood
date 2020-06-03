@@ -22,18 +22,10 @@ const config = {
 
 const adminApp = admin.initializeApp(config)
 
-export const getCurrentUser = (token) =>
-  adminApp
-    .auth()
-    .verifyIdToken(token)
-    .then(({ email, uid }) =>
-      db.user
-        .findMany({
-          first: 1,
-          where: { OR: [{ email }, { uid }] },
-        })
-        .then(([user]) => user ?? 'User not found')
-    )
+export const getCurrentUser = async (token) => {
+  const { email, uid } = await adminApp.auth().verifyToken(token)
+  return { email, uid }
+}
 
 // Use this function in your services to check that a user is logged in, and
 // optionally raise an error if they're not.
