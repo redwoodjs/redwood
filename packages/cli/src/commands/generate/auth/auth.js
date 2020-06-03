@@ -20,7 +20,7 @@ const SUPPORTED_PROVIDERS = fs
 // returns the content of index.js with import statements added
 const addWebImports = (content, imports) => {
   const importStatements = imports.map((imp) => {
-    const importWithFrom = null !== imp.import ? `${imp.import} from` : ''
+    const importWithFrom = imp.import === null ? '' : `${imp.import} from`
     return `import ${importWithFrom} '${imp.from}'`
   })
 
