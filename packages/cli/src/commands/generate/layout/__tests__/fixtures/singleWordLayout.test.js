@@ -1,4 +1,4 @@
-import { render, cleanup } from '@testing-library/react'
+import { render, cleanup } from '@redwoodjs/testing'
 
 import AppLayout from './AppLayout'
 

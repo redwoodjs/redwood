@@ -13,6 +13,7 @@ import execa from 'execa'
 import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import { format } from 'prettier'
+import * as babel from '@babel/core'
 
 import c from './colors'
 
@@ -24,7 +25,7 @@ export const asyncForEach = async (array, callback) => {
 
 /**
  * Returns the database schema for the given `name` database table parsed from
- * the schema.prisma of the target applicaiton. If no `name` is given then the
+ * the schema.prisma of the target application. If no `name` is given then the
  * entire schema is returned.
  */
 export const getSchema = async (name) => {
@@ -127,13 +128,18 @@ export const generateTemplate = (templateFilename, { name, root, ...rest }) => {
     ...rest,
   })
 
+  return prettify(templateFilename, renderedTemplate)
+}
+
+export const prettify = (templateFilename, renderedTemplate) => {
   // We format .js and .css templates, we need to tell prettier which parser
   // we're using.
   // https://prettier.io/docs/en/options.html#parser
   const parser = {
     '.css': 'css',
     '.js': 'babel',
-  }[path.extname(templateFilename)]
+    '.ts': 'babel-ts',
+  }[path.extname(templateFilename.replace('.template', ''))]
 
   if (typeof parser === 'undefined') {
     return renderedTemplate
@@ -147,7 +153,34 @@ export const generateTemplate = (templateFilename, { name, root, ...rest }) => {
 
 export const readFile = (target) => fs.readFileSync(target)
 
-export const writeFile = async (
+export const deleteFile = (file) => {
+  const extension = path.extname(file)
+  if (['.js', '.ts'].includes(extension)) {
+    const baseFile = getBaseFile(file)
+    const files = [baseFile + '.js', baseFile + '.ts']
+    files.forEach((f) => {
+      if (fs.existsSync(f)) {
+        fs.unlinkSync(f)
+      }
+    })
+  } else {
+    fs.unlinkSync(file)
+  }
+}
+
+const getBaseFile = (file) => file.replace(/\.\w*$/, '')
+
+const existsAnyExtensionSync = (file) => {
+  const extension = path.extname(file)
+  if (['.js', '.ts'].includes(extension)) {
+    const baseFile = getBaseFile(file)
+    return fs.existsSync(`${baseFile}.js`) || fs.existsSync(`${baseFile}.ts`)
+  }
+
+  return fs.existsSync(file)
+}
+
+export const writeFile = (
   target,
   contents,
   { overwriteExisting = false } = {}
@@ -188,6 +221,19 @@ export const prettierOptions = () => {
   }
 }
 
+// TODO(@jmreidy): Move this into `generateTemplate` when all templates have TS support
+/*
+ * Convert a generated TS template file into JS.
+ */
+export const transformTSToJS = (filename, content) => {
+  content = babel.transform(content, {
+    filename,
+    configFile: false,
+    plugins: ['@babel/plugin-transform-typescript'],
+  }).code
+  return prettify(filename.replace(/\.ts$/, '.js'), content)
+}
+
 /**
  * Creates a list of tasks that write files to the disk.
  *
@@ -207,6 +253,55 @@ export const writeFilesTask = (files, options) => {
 }
 
 /**
+ * Creates a list of tasks that delete files from the disk.
+ *
+ * @param files - {[filepath]: contents}
+ */
+export const deleteFilesTask = (files) => {
+  const { base } = getPaths()
+
+  return new Listr([
+    ...Object.keys(files).map((file) => {
+      return {
+        title: `Destroying \`./${path.relative(base, getBaseFile(file))}\`...`,
+        skip: () => !existsAnyExtensionSync(file) && `File doesn't exist`,
+        task: () => deleteFile(file),
+      }
+    }),
+    {
+      title: 'Cleaning up empty directories...',
+      task: () => cleanupEmptyDirsTask(files),
+    },
+  ])
+}
+
+/**
+ * @param files - {[filepath]: contents}
+ */
+export const cleanupEmptyDirsTask = (files) => {
+  const { base } = getPaths()
+  const allDirs = Object.keys(files).map((file) => path.dirname(file))
+  const uniqueDirs = [...new Set(allDirs)]
+  return new Listr(
+    uniqueDirs.map((dir) => {
+      return {
+        title: `Removing empty \`./${path.relative(base, dir)}\`...`,
+        task: () => fs.rmdirSync(dir),
+        skip: () => {
+          if (!fs.existsSync(dir)) {
+            return `Doesn't exist`
+          }
+          if (fs.readdirSync(dir).length > 0) {
+            return 'Not empty'
+          }
+          return false
+        },
+      }
+    })
+  )
+}
+
+/**
  * Update the project's routes file.
  */
 export const addRoutesToRouterTask = (routes) => {
@@ -218,6 +313,24 @@ export const addRoutesToRouterTask = (routes) => {
     }
     return content.replace(/(\s*)\<Router\>/, `$1<Router>$1  ${route}`)
   }, routesContent)
+  writeFile(redwoodPaths.web.routes, newRoutesContent, {
+    overwriteExisting: true,
+  })
+}
+
+/**
+ * Remove named routes from the project's routes file.
+ *
+ * @param {string[]} routes - Route names
+ */
+export const removeRoutesFromRouterTask = (routes) => {
+  const redwoodPaths = getPaths()
+  const routesContent = readFile(redwoodPaths.web.routes).toString()
+  const newRoutesContent = routes.reduce((content, route) => {
+    const matchRouteByName = new RegExp(`\\s*<Route[^>]*name="${route}"[^>]*/>`)
+    return content.replace(matchRouteByName, '')
+  }, routesContent)
+
   writeFile(redwoodPaths.web.routes, newRoutesContent, {
     overwriteExisting: true,
   })
@@ -251,4 +364,14 @@ export const runCommandTask = async (commands, { verbose }) => {
     console.log(c.error(e.message))
     return false
   }
+}
+
+/*
+ * Extract default CLI args from an exported builder
+ */
+export const getDefaultArgs = (builder) => {
+  return Object.entries(builder).reduce((agg, [k, v]) => {
+    agg[k] = v.default
+    return agg
+  }, {})
 }
