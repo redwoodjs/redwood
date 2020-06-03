@@ -32,10 +32,10 @@ const ${singularPascalName}Form = (props) => {
         </Label>
         <<%= column.component %>
           name="<%= column.name %>"
-          defaultValue={props.${singularCamelName}?.<%= column.name %>}
+          default<%= column.component.startsWith('Checkbox') ? 'Checked' : 'Value' %>={props.${singularCamelName}?.<%= column.name %>}
           className="rw-input"
-          errorClassName="rw-input rw-input-error"
-          validation={{ required: true }}
+          errorClassName="rw-input rw-input-error"<%= column.component.startsWith('Checkbox') ? '' : `
+          validation={{ required: true }}` %>
         />
         <FieldError name="<%= column.name %>" className="rw-field-error" />
 <% }) %>
