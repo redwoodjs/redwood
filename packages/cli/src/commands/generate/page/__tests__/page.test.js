@@ -1,4 +1,5 @@
 global.__dirname = __dirname
+import path from 'path'
 import { loadGeneratorFixture } from 'src/lib/test'
 
 import * as page from '../page'
@@ -16,20 +17,26 @@ test('returns exactly 2 files', () => {
 
 test('creates a page component', () => {
   expect(
-    singleWordFiles['/path/to/project/web/src/pages/HomePage/HomePage.js']
+    singleWordFiles[
+      path.normalize('/path/to/project/web/src/pages/HomePage/HomePage.js')
+    ]
   ).toEqual(loadGeneratorFixture('page', 'singleWordPage.js'))
 })
 
 test('creates a page test', () => {
   expect(
-    singleWordFiles['/path/to/project/web/src/pages/HomePage/HomePage.test.js']
+    singleWordFiles[
+      path.normalize('/path/to/project/web/src/pages/HomePage/HomePage.test.js')
+    ]
   ).toEqual(loadGeneratorFixture('page', 'singleWordPage.test.js'))
 })
 
 test('creates a page component', () => {
   expect(
     multiWordFiles[
-      '/path/to/project/web/src/pages/ContactUsPage/ContactUsPage.js'
+      path.normalize(
+        '/path/to/project/web/src/pages/ContactUsPage/ContactUsPage.js'
+      )
     ]
   ).toEqual(loadGeneratorFixture('page', 'multiWordPage.js'))
 })
@@ -37,7 +44,9 @@ test('creates a page component', () => {
 test('creates a page test', () => {
   expect(
     multiWordFiles[
-      '/path/to/project/web/src/pages/ContactUsPage/ContactUsPage.test.js'
+      path.normalize(
+        '/path/to/project/web/src/pages/ContactUsPage/ContactUsPage.test.js'
+      )
     ]
   ).toEqual(loadGeneratorFixture('page', 'multiWordPage.test.js'))
 })
