@@ -105,19 +105,18 @@ const PostForm = (props) => {
 
         <Label
           name="isPinned"
-          className={CSS.label}
-          errorClassName={CSS.labelError}
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
         >
           Is pinned
         </Label>
         <CheckboxField
           name="isPinned"
           defaultChecked={props.post?.isPinned}
-          className={CSS.input}
-          errorClassName={CSS.inputError}
-          validation={{ required: true }}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
         />
-        <FieldError name="isPinned" className={CSS.errorMessage} />
+        <FieldError name="isPinned" className="rw-field-error" />
 
         <Label
           name="postedAt"
