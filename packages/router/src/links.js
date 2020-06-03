@@ -1,4 +1,4 @@
-import { forwardRef, useContext, useEffect } from 'react'
+import { forwardRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 import { navigate, matchPath, useLocation } from './internal'

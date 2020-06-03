@@ -46,7 +46,7 @@ const Location = ({ children }) => (
 )
 
 const useLocation = () => {
-  const location = useContext(LocationContext)
+  const location = React.useContext(LocationContext)
   return location
 }
 
