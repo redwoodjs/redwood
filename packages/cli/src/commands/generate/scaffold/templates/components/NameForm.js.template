@@ -3,8 +3,8 @@ import {
   FormError,
   FieldError,
   Label,
-  TextField,${editableColumns.map((c) => c.component).includes('CheckBox') ? `
-  CheckBox,` : ''}
+  TextField,${editableColumns.map((c) => c.component).includes('CheckboxField') ? `
+  CheckboxField,` : ''}
   Submit,
 } from '@redwoodjs/web'
 
