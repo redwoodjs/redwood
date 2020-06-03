@@ -1,5 +1,22 @@
 global.__dirname = __dirname
+
+import fs from 'fs'
+
+import 'src/lib/test'
+
+import { getDefaultArgs } from 'src/lib'
+
+import { builder, files } from '../../../generate/service/service'
+import { tasks } from '../service'
+
 jest.mock('fs')
+jest.mock('@babel/core', () => {
+  return {
+    transform: () => ({
+      code: '',
+    }),
+  }
+})
 jest.mock('src/lib', () => {
   return {
     ...require.requireActual('src/lib'),
@@ -7,30 +24,68 @@ jest.mock('src/lib', () => {
   }
 })
 
-import fs from 'fs'
+describe('rw destory service', () => {
+  afterEach(() => {
+    fs.__setMockFiles({})
+    jest.spyOn(fs, 'unlinkSync').mockClear()
+  })
 
-import 'src/lib/test'
+  describe('for javascript files', () => {
+    beforeEach(async () => {
+      fs.__setMockFiles(
+        await files({ ...getDefaultArgs(builder), name: 'User' })
+      )
+    })
+    test('destroys service files', async () => {
+      const unlinkSpy = jest.spyOn(fs, 'unlinkSync')
+      const t = tasks({
+        componentName: 'service',
+        filesFn: files,
+        name: 'User',
+      })
+      t.setRenderer('silent')
 
-import { files } from '../../../generate/service/service'
-import { tasks } from '../service'
+      return t.run().then(async () => {
+        const generatedFiles = Object.keys(
+          await files({ ...getDefaultArgs(builder), name: 'User' })
+        )
+        expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
+        generatedFiles.forEach((f) => expect(unlinkSpy).toHaveBeenCalledWith(f))
+      })
+    })
+  })
 
-beforeEach(async () => {
-  fs.__setMockFiles(await files({ name: 'User' }))
-})
+  describe('for typescript files', () => {
+    beforeEach(async () => {
+      fs.__setMockFiles(
+        await files({
+          ...getDefaultArgs(builder),
+          typescript: true,
+          name: 'User',
+        })
+      )
+    })
 
-afterEach(() => {
-  fs.__setMockFiles({})
-  jest.spyOn(fs, 'unlinkSync').mockClear()
-})
+    test('destroys service files', async () => {
+      const unlinkSpy = jest.spyOn(fs, 'unlinkSync')
+      const t = tasks({
+        componentName: 'service',
+        filesFn: files,
+        name: 'User',
+      })
+      t.setRenderer('silent')
 
-test('destroys service files', async () => {
-  const unlinkSpy = jest.spyOn(fs, 'unlinkSync')
-  const t = tasks({ componentName: 'service', filesFn: files, name: 'User' })
-  t.setRenderer('silent')
-
-  return t.run().then(async () => {
-    const generatedFiles = Object.keys(await files({ name: 'User' }))
-    expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
-    generatedFiles.forEach((f) => expect(unlinkSpy).toHaveBeenCalledWith(f))
+      return t.run().then(async () => {
+        const generatedFiles = Object.keys(
+          await files({
+            ...getDefaultArgs(builder),
+            typescript: true,
+            name: 'User',
+          })
+        )
+        expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
+        generatedFiles.forEach((f) => expect(unlinkSpy).toHaveBeenCalledWith(f))
+      })
+    })
   })
 })
