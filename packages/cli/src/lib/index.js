@@ -221,17 +221,27 @@ export const prettierOptions = () => {
   }
 }
 
-// TODO(@jmreidy): Move this into `generateTemplate` when all templates have TS support
+// TODO: Move this into `generateTemplate` when all templates have TS support
 /*
  * Convert a generated TS template file into JS.
  */
 export const transformTSToJS = (filename, content) => {
-  content = babel.transform(content, {
+  const result = babel.transform(content, {
     filename,
     configFile: false,
-    plugins: ['@babel/plugin-transform-typescript'],
+    plugins: [
+      [
+        '@babel/plugin-transform-typescript',
+        {
+          isTSX: true,
+          allExtensions: true,
+        },
+      ],
+    ],
+    retainLines: true,
   }).code
-  return prettify(filename.replace(/\.ts$/, '.js'), content)
+
+  return prettify(filename.replace(/\.ts$/, '.js'), result)
 }
 
 /**
