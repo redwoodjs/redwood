@@ -1,3 +1,4 @@
+import gql from 'graphql-tag'
 export const schema = gql`
   type UserProfile {
     id: Int!

@@ -62,19 +62,20 @@ export const pathName = (path, name) => {
 export const createYargsForComponentGeneration = ({
   componentName,
   filesFn,
+  builder = { force: { type: 'boolean', default: false } },
 }) => {
   return {
     command: `${componentName} <name>`,
     desc: `Generate a ${componentName} component.`,
-    builder: { force: { type: 'boolean', default: false } },
-    handler: async ({ force, ...rest }) => {
+    builder,
+    handler: async (options) => {
       const tasks = new Listr(
         [
           {
             title: `Generating ${componentName} files...`,
             task: async () => {
-              const f = await filesFn(rest)
-              return writeFilesTask(f, { overwriteExisting: force })
+              const f = await filesFn(options)
+              return writeFilesTask(f, { overwriteExisting: options.force })
             },
           },
         ],

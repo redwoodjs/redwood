@@ -14,7 +14,7 @@ export const tasks = ({ model }) =>
       {
         title: 'Destroying GraphQL schema and service object files...',
         task: async () => {
-          const f = await files({ name: model, crud: false })
+          const f = await files({ name: model })
           return deleteFilesTask(f)
         },
       },
