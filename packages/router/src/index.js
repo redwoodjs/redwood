@@ -7,6 +7,7 @@ export {
   Route,
   Private,
   Link,
+  useLocation,
   NavLink,
   useMatch,
   Redirect,
