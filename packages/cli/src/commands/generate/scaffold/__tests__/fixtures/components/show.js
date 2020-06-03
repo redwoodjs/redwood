@@ -27,29 +27,37 @@ const Post = ({ post }) => {
     <>
       <div className="rw-segment">
         <header className="rw-segment-header">
-          <h2 className="rw-heading rw-heading-secondary">Post {post.id} Detail</h2>
+          <h2 className="rw-heading rw-heading-secondary">
+            Post {post.id} Detail
+          </h2>
         </header>
         <table className="rw-table">
           <tbody>
             <tr>
               <th>id</th>
               <td>{post.id}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>title</th>
               <td>{post.title}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>slug</th>
               <td>{post.slug}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>author</th>
               <td>{post.author}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>body</th>
               <td>{post.body}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>image</th>
               <td>{post.image}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>postedAt</th>
               <td>{post.postedAt}</td>
             </tr>

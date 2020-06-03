@@ -5,17 +5,11 @@ const PostsLayout = (props) => {
     <div className="rw-scaffold">
       <header className="rw-header">
         <h1 className="rw-heading rw-heading-primary">
-          <Link
-            to={routes.posts()}
-            className="rw-link"
-          >
+          <Link to={routes.posts()} className="rw-link">
             Posts
           </Link>
         </h1>
-        <Link
-          to={routes.newPost()}
-          className="rw-button rw-button-green"
-        >
+        <Link to={routes.newPost()} className="rw-button rw-button-green">
           <div className="rw-button-icon">+</div> New Post
         </Link>
       </header>
