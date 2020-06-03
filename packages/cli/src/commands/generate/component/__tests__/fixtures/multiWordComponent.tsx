@@ -2,7 +2,7 @@ const UserProfile = () => {
   return (
     <div>
       <h2>{'UserProfile'}</h2>
-      <p>{'Find me in ./web/src/components/UserProfile/UserProfile.js'}</p>
+      <p>{'Find me in ./web/src/components/UserProfile/UserProfile.tsx'}</p>
     </div>
   )
 }
