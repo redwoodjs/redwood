@@ -15,6 +15,7 @@ import {
   writeFile,
   asyncForEach,
   getSchema,
+  getDefaultArgs,
   getPaths,
   writeFilesTask,
   addRoutesToRouterTask,
@@ -22,8 +23,11 @@ import {
 import c from 'src/lib/colors'
 
 import { relationsForModel, intForeignKeysForModel } from '../helpers'
-import { files as sdlFiles } from '../sdl/sdl'
-import { files as serviceFiles } from '../service/service'
+import { files as sdlFiles, builder as sdlBuilder } from '../sdl/sdl'
+import {
+  files as serviceFiles,
+  builder as serviceBuilder,
+} from '../service/service'
 
 const NON_EDITABLE_COLUMNS = ['id', 'createdAt', 'updatedAt']
 const ASSETS = fs.readdirSync(
@@ -46,15 +50,29 @@ const getIdType = (model) => {
   return model.fields.find((field) => field.isId)?.type
 }
 
-export const files = async ({ model: name, path: scaffoldPath = '' }) => {
+export const files = async ({
+  model: name,
+  path: scaffoldPath = '',
+  typescript,
+  javascript,
+}) => {
   const model = await getSchema(pascalcase(pluralize.singular(name)))
 
   return {
-    ...(await sdlFiles({ name, crud: true })),
+    ...(await sdlFiles({
+      ...getDefaultArgs(sdlBuilder),
+      name,
+      crud: true,
+      typescript,
+      javascript,
+    })),
     ...(await serviceFiles({
+      ...getDefaultArgs(serviceBuilder),
       name,
       crud: true,
       relations: relationsForModel(model),
+      typescript,
+      javascript,
     })),
     ...assetFiles(name),
     ...layoutFiles(name, scaffoldPath),
@@ -313,6 +331,22 @@ const addScaffoldImport = () => {
   return 'Added scaffold import to index.js'
 }
 
+export const defaults = {
+  force: {
+    default: false,
+    type: 'boolean',
+  },
+  typescript: {
+    type: 'boolean',
+    default: false,
+    desc: 'Generate TypeScript files',
+  },
+  javascript: {
+    type: 'boolean',
+    default: true,
+    desc: 'Generate JavaScript files',
+  },
+}
 export const command = 'scaffold <model>'
 export const desc =
   'Generate Pages, SDL, and Services files based on a given DB schema Model. Also accepts <path/model>.'
@@ -321,18 +355,17 @@ export const builder = (yargs) => {
     description:
       "Model to scaffold. You can also use <path/model> to nest files by type at the given path directory (or directories). For example, 'rw g scaffold admin/post'.",
   })
-  yargs.option('force', {
-    default: false,
-    type: 'boolean',
+  Object.entries(defaults).forEach(([option, config]) => {
+    yargs.option(option, config)
   })
 }
-const tasks = ({ model, path, force }) => {
+const tasks = ({ model, path, force, typescript, javascript }) => {
   return new Listr(
     [
       {
         title: 'Generating scaffold files...',
         task: async () => {
-          const f = await files({ model, path })
+          const f = await files({ model, path, typescript, javascript })
           return writeFilesTask(f, { overwriteExisting: force })
         },
       },
@@ -351,10 +384,15 @@ const tasks = ({ model, path, force }) => {
   )
 }
 
-export const handler = async ({ model: modelArg, force }) => {
+export const handler = async ({
+  model: modelArg,
+  force,
+  typescript,
+  javascript,
+}) => {
   const { model, path } = splitPathAndModel(modelArg)
 
-  const t = tasks({ model, path, force })
+  const t = tasks({ model, path, force, typescript, javascript })
   try {
     await t.run()
   } catch (e) {

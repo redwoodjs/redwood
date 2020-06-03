@@ -1,4 +1,5 @@
 import gql from 'graphql-tag'
+
 export const schema = gql`
   type UserProfile {
     id: Int!
@@ -9,6 +10,7 @@ export const schema = gql`
 
   type Query {
     userProfiles: [UserProfile!]!
+    userProfile(id: Int!): UserProfile!
   }
 
   input CreateUserProfileInput {
@@ -19,5 +21,11 @@ export const schema = gql`
   input UpdateUserProfileInput {
     username: String
     userId: Int
+  }
+
+  type Mutation {
+    createUserProfile(input: CreateUserProfileInput!): UserProfile!
+    updateUserProfile(id: Int!, input: UpdateUserProfileInput!): UserProfile!
+    deleteUserProfile(id: Int!): UserProfile!
   }
 `
