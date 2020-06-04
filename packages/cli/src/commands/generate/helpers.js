@@ -39,7 +39,10 @@ export const templateForComponentFile = ({
     path.join(generator, 'templates', templatePath),
     {
       name,
-      outputPath: `./${path.relative(getPaths().base, componentOutputPath)}`,
+      outputPath: `.${path.sep}${path.relative(
+        getPaths().base,
+        componentOutputPath
+      )}`.replace(/\\/g, '/'),
       ...templateVars,
     }
   )
