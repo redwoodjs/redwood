@@ -1,4 +1,4 @@
-import { useMutation } from '@redwoodjs/web'
+import { useMutation, useFlash } from '@redwoodjs/web'
 import { navigate, routes } from '@redwoodjs/router'
 import UserProfileForm from 'src/components/UserProfileForm'
 
@@ -30,6 +30,7 @@ export const Success = ({ userProfile }) => {
     {
       onCompleted: () => {
         navigate(routes.userProfiles())
+        addMessage('UserProfile updated.', { classes: 'rw-flash-success' })
       },
     }
   )

@@ -1,4 +1,4 @@
-import { useMutation } from '@redwoodjs/web'
+import { useMutation, useFlash } from '@redwoodjs/web'
 import { navigate, routes } from '@redwoodjs/router'
 import PostForm from 'src/components/PostForm'
 
@@ -29,6 +29,7 @@ export const Success = ({ post }) => {
   const [updatePost, { loading, error }] = useMutation(UPDATE_POST_MUTATION, {
     onCompleted: () => {
       navigate(routes.posts())
+      addMessage('Post updated.', { classes: 'rw-flash-success' })
     },
   })
 

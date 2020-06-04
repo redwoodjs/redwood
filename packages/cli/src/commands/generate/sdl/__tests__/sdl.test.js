@@ -1,4 +1,5 @@
 global.__dirname = __dirname
+import path from 'path'
 
 import { loadGeneratorFixture } from 'src/lib/test'
 import { getDefaultArgs } from 'src/lib'
@@ -29,10 +30,14 @@ const itCreatesAService = (baseArgs = {}) => {
     const extension = extensionForBaseArgs(baseArgs)
 
     expect(files).toHaveProperty([
-      `/path/to/project/api/src/services/users/users.${extension}`,
+      path.normalize(
+        `/path/to/project/api/src/services/users/users.${extension}`
+      ),
     ])
     expect(files).toHaveProperty([
-      `/path/to/project/api/src/services/users/users.test.${extension}`,
+      path.normalize(
+        `/path/to/project/api/src/services/users/users.test.${extension}`
+      ),
     ])
   })
 }
@@ -43,7 +48,11 @@ const itCreatesASingleWordSDLFile = (baseArgs = {}) => {
     const extension = extensionForBaseArgs(baseArgs)
 
     expect(
-      files[`/path/to/project/api/src/graphql/users.sdl.${extension}`]
+      files[
+        path.normalize(
+          `/path/to/project/api/src/graphql/users.sdl.${extension}`
+        )
+      ]
     ).toEqual(loadGeneratorFixture('sdl', `singleWordSdl.${extension}`))
   })
 }
@@ -57,7 +66,11 @@ const itCreatesAMultiWordSDLFile = (baseArgs = {}) => {
     const extension = extensionForBaseArgs(baseArgs)
 
     expect(
-      files[`/path/to/project/api/src/graphql/userProfiles.sdl.${extension}`]
+      files[
+        path.normalize(
+          `/path/to/project/api/src/graphql/userProfiles.sdl.${extension}`
+        )
+      ]
     ).toEqual(loadGeneratorFixture('sdl', `multiWordSdl.${extension}`))
   })
 }
@@ -68,7 +81,11 @@ const itCreatesASingleWordSDLFileWithCRUD = (baseArgs = {}) => {
     const extension = extensionForBaseArgs(baseArgs)
 
     expect(
-      files[`/path/to/project/api/src/graphql/posts.sdl.${extension}`]
+      files[
+        path.normalize(
+          `/path/to/project/api/src/graphql/posts.sdl.${extension}`
+        )
+      ]
     ).toEqual(loadGeneratorFixture('sdl', `singleWordSdlCrud.${extension}`))
   })
 }
@@ -83,7 +100,11 @@ const itCreateAMultiWordSDLFileWithCRUD = (baseArgs = {}) => {
     const extension = extensionForBaseArgs(baseArgs)
 
     expect(
-      files[`/path/to/project/api/src/graphql/userProfiles.sdl.${extension}`]
+      files[
+        path.normalize(
+          `/path/to/project/api/src/graphql/userProfiles.sdl.${extension}`
+        )
+      ]
     ).toEqual(loadGeneratorFixture('sdl', `multiWordSdlCrud.${extension}`))
   })
 }
@@ -94,13 +115,17 @@ const itCreatesASDLFileWithEnumDefinitions = (baseArgs = {}) => {
     const extension = extensionForBaseArgs(baseArgs)
 
     expect(
-      files[`/path/to/project/api/src/graphql/shoes.sdl.${extension}`]
+      files[
+        path.normalize(
+          `/path/to/project/api/src/graphql/shoes.sdl.${extension}`
+        )
+      ]
     ).toEqual(loadGeneratorFixture('sdl', `enumGeneratedSdl.${extension}`))
   })
 }
 
 describe('in javascript mode', () => {
-  const baseArgs = getDefaultArgs(sdl.builder)
+  const baseArgs = getDefaultArgs(sdl.defaults)
 
   itReturnsExactlyThreeFiles(baseArgs)
   itCreatesAService(baseArgs)
@@ -112,7 +137,7 @@ describe('in javascript mode', () => {
 })
 
 describe('in typescript mode', () => {
-  const baseArgs = { ...getDefaultArgs(sdl.builder), typescript: true }
+  const baseArgs = { ...getDefaultArgs(sdl.defaults), typescript: true }
 
   itReturnsExactlyThreeFiles(baseArgs)
   itCreatesAService(baseArgs)

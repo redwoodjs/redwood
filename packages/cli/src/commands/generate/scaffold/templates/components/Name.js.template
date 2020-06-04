@@ -1,4 +1,4 @@
-import { useMutation } from '@redwoodjs/web'
+import { useMutation, useFlash } from '@redwoodjs/web'
 import { Link, routes, navigate } from '@redwoodjs/router'
 
 const DELETE_${singularConstantName}_MUTATION = gql`
@@ -13,7 +13,7 @@ const ${singularPascalName} = ({ ${singularCamelName} }) => {
   const [delete${singularPascalName}] = useMutation(DELETE_${singularConstantName}_MUTATION, {
     onCompleted: () => {
       navigate(routes.${pluralRouteName}())
-      location.reload()
+      addMessage('${singularPascalName} deleted.', { classes: 'rw-flash-success' })
     },
   })
 

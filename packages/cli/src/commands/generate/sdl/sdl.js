@@ -4,6 +4,7 @@ import Listr from 'listr'
 import camelcase from 'camelcase'
 import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
+import terminalLink from 'terminal-link'
 
 import {
   generateTemplate,
@@ -145,14 +146,50 @@ export const files = async ({ name, crud, typescript, javascript }) => {
   }
 }
 
+export const defaults = {
+  crud: {
+    default: false,
+    description: 'Also generate mutations',
+    type: 'boolean',
+  },
+  force: {
+    alias: 'f',
+    default: false,
+    description: 'Overwrite existing files',
+    type: 'boolean',
+  },
+  javascript: {
+    alias: 'js',
+    default: true,
+    description: 'Generate JavaScript files',
+    type: 'boolean',
+  },
+  typescript: {
+    alias: 'ts',
+    default: false,
+    description: 'Generate TypeScript files',
+    type: 'boolean',
+  },
+}
+
 export const command = 'sdl <model>'
-export const desc = 'Generate a GraphQL schema and service object.'
-export const builder = {
-  services: { type: 'boolean', default: true },
-  crud: { type: 'boolean', default: false },
-  force: { type: 'boolean', default: false },
-  javascript: { type: 'boolean', default: true },
-  typescript: { type: 'boolean', default: false },
+export const description =
+  'Generate a GraphQL schema and service component based on a given DB schema Model'
+export const builder = (yargs) => {
+  yargs
+    .positional('model', {
+      description: 'Model to generate the sdl for',
+      type: 'string',
+    })
+    .epilogue(
+      `Also see the ${terminalLink(
+        'Redwood CLI Reference',
+        'https://redwoodjs.com/reference/command-line-interface#generate-sdl'
+      )}`
+    )
+  Object.entries(defaults).forEach(([option, config]) => {
+    yargs.option(option, config)
+  })
 }
 // TODO: Add --dry-run command
 export const handler = async ({
