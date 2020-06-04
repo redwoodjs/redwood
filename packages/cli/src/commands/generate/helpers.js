@@ -62,7 +62,21 @@ export const pathName = (path, name) => {
 export const createYargsForComponentGeneration = ({
   componentName,
   filesFn,
-  builder = { force: { type: 'boolean', default: false } },
+  builder = {
+    force: { type: 'boolean', default: false },
+    typescript: {
+      type: 'boolean',
+      default: false,
+      describe: 'Generate TypeScript files',
+      alias: 'ts',
+    },
+    javascript: {
+      type: 'boolean',
+      default: true,
+      describe: 'Generate JavaScript files',
+      alias: 'js',
+    },
+  },
 }) => {
   return {
     command: `${componentName} <name>`,
