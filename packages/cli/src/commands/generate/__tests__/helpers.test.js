@@ -9,9 +9,7 @@ const PAGE_TEMPLATE_OUTPUT = `const FooBarPage = () => {
   return (
     <div>
       <h1>FooBarPage</h1>
-      <p>Find me in ./${path.normalize(
-        'web/src/pages/FooBarPage/FooBarPage.js'
-      )}</p>
+      <p>Find me in ./web/src/pages/FooBarPage/FooBarPage.js</p>
     </div>
   )
 }
@@ -101,7 +99,7 @@ test('templateForComponentFile can override output path', () => {
     generator: 'function',
     templatePath: 'function.js.template',
     templateVars: { name: 'func' },
-    outputPath: '/path/to/project/api/src/functions/func.js',
+    outputPath: path.normalize('/path/to/project/api/src/functions/func.js'),
   })
 
   expect(output[0]).toEqual(

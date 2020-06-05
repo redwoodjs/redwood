@@ -1,4 +1,6 @@
 global.__dirname = __dirname
+import path from 'path'
+
 import { loadGeneratorFixture } from 'src/lib/test'
 
 import * as functionGenerator from '../function'
@@ -16,9 +18,9 @@ test('creates a single word function file', async () => {
     name: 'Foo',
   })
 
-  expect(files['/path/to/project/api/src/functions/foo.js']).toEqual(
-    loadGeneratorFixture('function', 'singleWord.js')
-  )
+  expect(
+    files[path.normalize('/path/to/project/api/src/functions/foo.js')]
+  ).toEqual(loadGeneratorFixture('function', 'singleWord.js'))
 })
 
 test('creates a multi word function file', async () => {
@@ -26,7 +28,7 @@ test('creates a multi word function file', async () => {
     name: 'SendMail',
   })
 
-  expect(files['/path/to/project/api/src/functions/sendMail.js']).toEqual(
-    loadGeneratorFixture('function', 'multiWord.js')
-  )
+  expect(
+    files[path.normalize('/path/to/project/api/src/functions/sendMail.js')]
+  ).toEqual(loadGeneratorFixture('function', 'multiWord.js'))
 })
