@@ -1,4 +1,6 @@
 global.__dirname = __dirname
+import path from 'path'
+
 import { loadGeneratorFixture } from 'src/lib/test'
 
 import * as cell from '../cell'
@@ -16,14 +18,18 @@ test('returns exactly 2 files', () => {
 
 test('creates a cell component with a single word name', () => {
   expect(
-    singleWordFiles['/path/to/project/web/src/components/UserCell/UserCell.js']
+    singleWordFiles[
+      path.normalize('/path/to/project/web/src/components/UserCell/UserCell.js')
+    ]
   ).toEqual(loadGeneratorFixture('cell', 'singleWordCell.js'))
 })
 
 test('creates a cell test with a single word name', () => {
   expect(
     singleWordFiles[
-      '/path/to/project/web/src/components/UserCell/UserCell.test.js'
+      path.normalize(
+        '/path/to/project/web/src/components/UserCell/UserCell.test.js'
+      )
     ]
   ).toEqual(loadGeneratorFixture('cell', 'singleWordCell.test.js'))
 })
@@ -31,7 +37,9 @@ test('creates a cell test with a single word name', () => {
 test('creates a cell component with a multi word name', () => {
   expect(
     multiWordFiles[
-      '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.js'
+      path.normalize(
+        '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.js'
+      )
     ]
   ).toEqual(loadGeneratorFixture('cell', 'multiWordCell.js'))
 })
@@ -39,7 +47,9 @@ test('creates a cell component with a multi word name', () => {
 test('creates a cell test with a multi word name', () => {
   expect(
     multiWordFiles[
-      '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.test.js'
+      path.normalize(
+        '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.test.js'
+      )
     ]
   ).toEqual(loadGeneratorFixture('cell', 'multiWordCell.test.js'))
 })

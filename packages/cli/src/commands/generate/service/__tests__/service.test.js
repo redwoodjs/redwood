@@ -1,4 +1,5 @@
 global.__dirname = __dirname
+import path from 'path'
 
 import { loadGeneratorFixture } from 'src/lib/test'
 import { getDefaultArgs } from 'src/lib'
@@ -27,7 +28,11 @@ const itCreatesASingleWordServiceFile = (baseArgs) => {
     const extension = extensionForBaseArgs(baseArgs)
 
     expect(
-      files[`/path/to/project/api/src/services/users/users.${extension}`]
+      files[
+        path.normalize(
+          `/path/to/project/api/src/services/users/users.${extension}`
+        )
+      ]
     ).toEqual(loadGeneratorFixture('service', `singleWord.${extension}`))
   })
 }
@@ -40,7 +45,11 @@ const itCreatesASingleWordServiceTestFile = (baseArgs) => {
     const extension = extensionForBaseArgs(baseArgs)
 
     expect(
-      files[`/path/to/project/api/src/services/users/users.test.${extension}`]
+      files[
+        path.normalize(
+          `/path/to/project/api/src/services/users/users.test.${extension}`
+        )
+      ]
     ).toEqual(loadGeneratorFixture('service', `singleWord.test.${extension}`))
   })
 }
@@ -55,7 +64,9 @@ const itCreatesAMultiWordServiceFile = (baseArgs) => {
 
     expect(
       files[
-        `/path/to/project/api/src/services/userProfiles/userProfiles.${extension}`
+        path.normalize(
+          `/path/to/project/api/src/services/userProfiles/userProfiles.${extension}`
+        )
       ]
     ).toEqual(loadGeneratorFixture('service', `multiWord.${extension}`))
   })
@@ -71,7 +82,9 @@ const itCreatesAMultiWordServiceTestFile = (baseArgs) => {
 
     expect(
       files[
-        `/path/to/project/api/src/services/userProfiles/userProfiles.test.${extension}`
+        path.normalize(
+          `/path/to/project/api/src/services/userProfiles/userProfiles.test.${extension}`
+        )
       ]
     ).toEqual(loadGeneratorFixture('service', `multiWord.test.${extension}`))
   })
@@ -87,7 +100,11 @@ const itCreatesASingleWordServiceFileWithCRUDActions = (baseArgs) => {
     const extension = extensionForBaseArgs(baseArgs)
 
     expect(
-      files[`/path/to/project/api/src/services/posts/posts.${extension}`]
+      files[
+        path.normalize(
+          `/path/to/project/api/src/services/posts/posts.${extension}`
+        )
+      ]
     ).toEqual(loadGeneratorFixture('service', `singleWord_crud.${extension}`))
   })
 }
@@ -102,7 +119,11 @@ const itCreatesASingleWordServiceTestFileWithCRUDActions = (baseArgs) => {
     const extension = extensionForBaseArgs(baseArgs)
 
     expect(
-      files[`/path/to/project/api/src/services/posts/posts.test.${extension}`]
+      files[
+        path.normalize(
+          `/path/to/project/api/src/services/posts/posts.test.${extension}`
+        )
+      ]
     ).toEqual(
       loadGeneratorFixture('service', `singleWord_crud.test.${extension}`)
     )
@@ -120,7 +141,9 @@ const itCreatesAMultiWordServiceFileWithCRUDActions = (baseArgs) => {
 
     expect(
       files[
-        `/path/to/project/api/src/services/userProfiles/userProfiles.${extension}`
+        path.normalize(
+          `/path/to/project/api/src/services/userProfiles/userProfiles.${extension}`
+        )
       ]
     ).toEqual(loadGeneratorFixture('service', `multiWord_crud.${extension}`))
   })
@@ -136,7 +159,9 @@ const itCreatesAMultiWordServiceTestFileWithCRUDActions = (baseArgs) => {
 
     expect(
       files[
-        `/path/to/project/api/src/services/userProfiles/userProfiles.test.${extension}`
+        path.normalize(
+          `/path/to/project/api/src/services/userProfiles/userProfiles.test.${extension}`
+        )
       ]
     ).toEqual(
       loadGeneratorFixture('service', `multiWord_crud.test.${extension}`)
@@ -154,7 +179,11 @@ const itCreatesASingleWordServiceFileWithAHasManyRelation = (baseArgs) => {
     const extension = extensionForBaseArgs(baseArgs)
 
     expect(
-      files[`/path/to/project/api/src/services/users/users.${extension}`]
+      files[
+        path.normalize(
+          `/path/to/project/api/src/services/users/users.${extension}`
+        )
+      ]
     ).toEqual(
       loadGeneratorFixture('service', `singleWord_hasMany.${extension}`)
     )
@@ -171,7 +200,11 @@ const itCreatesASingleWordServiceFileWithABelongsToRelation = (baseArgs) => {
     const extension = extensionForBaseArgs(baseArgs)
 
     expect(
-      files[`/path/to/project/api/src/services/users/users.${extension}`]
+      files[
+        path.normalize(
+          `/path/to/project/api/src/services/users/users.${extension}`
+        )
+      ]
     ).toEqual(
       loadGeneratorFixture('service', `singleWord_belongsTo.${extension}`)
     )
@@ -188,7 +221,11 @@ const itCreatesASingleWordServiceFileWithMultipleRelations = (baseArgs) => {
     const extension = extensionForBaseArgs(baseArgs)
 
     expect(
-      files[`/path/to/project/api/src/services/users/users.${extension}`]
+      files[
+        path.normalize(
+          `/path/to/project/api/src/services/users/users.${extension}`
+        )
+      ]
     ).toEqual(
       loadGeneratorFixture('service', `singleWord_multiple.${extension}`)
     )

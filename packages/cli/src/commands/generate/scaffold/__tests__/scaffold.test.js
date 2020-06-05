@@ -82,7 +82,9 @@ describe('in javascript (defualt) mode', () => {
 
   test('creates a index page', async () => {
     expect(
-      files['/path/to/project/web/src/pages/PostsPage/PostsPage.js']
+      files[
+        path.normalize('/path/to/project/web/src/pages/PostsPage/PostsPage.js')
+      ]
     ).toEqual(
       loadGeneratorFixture('scaffold', path.join('pages', 'indexPage.js'))
     )
@@ -90,7 +92,11 @@ describe('in javascript (defualt) mode', () => {
 
   test('creates a new page', async () => {
     expect(
-      files['/path/to/project/web/src/pages/NewPostPage/NewPostPage.js']
+      files[
+        path.normalize(
+          '/path/to/project/web/src/pages/NewPostPage/NewPostPage.js'
+        )
+      ]
     ).toEqual(
       loadGeneratorFixture('scaffold', path.join('pages', 'newPage.js'))
     )
@@ -122,7 +128,11 @@ describe('in javascript (defualt) mode', () => {
 
   test('creates an index cell', async () => {
     expect(
-      files['/path/to/project/web/src/components/PostsCell/PostsCell.js']
+      files[
+        path.normalize(
+          '/path/to/project/web/src/components/PostsCell/PostsCell.js'
+        )
+      ]
     ).toEqual(
       loadGeneratorFixture('scaffold', path.join('components', 'indexCell.js'))
     )
@@ -155,7 +165,11 @@ describe('in javascript (defualt) mode', () => {
   })
 
   test('creates an index component', async () => {
-    expect(files['/path/to/project/web/src/components/Posts/Posts.js']).toEqual(
+    expect(
+      files[
+        path.normalize('/path/to/project/web/src/components/Posts/Posts.js')
+      ]
+    ).toEqual(
       loadGeneratorFixture('scaffold', path.join('components', 'index.js'))
     )
   })
@@ -353,7 +367,9 @@ describe('in typescript mode', () => {
 
   test('creates a index page', async () => {
     expect(
-      files['/path/to/project/web/src/pages/PostsPage/PostsPage.js']
+      files[
+        path.normalize('/path/to/project/web/src/pages/PostsPage/PostsPage.js')
+      ]
     ).toEqual(
       loadGeneratorFixture('scaffold', path.join('pages', 'indexPage.js'))
     )
@@ -361,7 +377,11 @@ describe('in typescript mode', () => {
 
   test('creates a new page', async () => {
     expect(
-      files['/path/to/project/web/src/pages/NewPostPage/NewPostPage.js']
+      files[
+        path.normalize(
+          '/path/to/project/web/src/pages/NewPostPage/NewPostPage.js'
+        )
+      ]
     ).toEqual(
       loadGeneratorFixture('scaffold', path.join('pages', 'newPage.js'))
     )
@@ -393,7 +413,11 @@ describe('in typescript mode', () => {
 
   test('creates an index cell', async () => {
     expect(
-      files['/path/to/project/web/src/components/PostsCell/PostsCell.js']
+      files[
+        path.normalize(
+          '/path/to/project/web/src/components/PostsCell/PostsCell.js'
+        )
+      ]
     ).toEqual(
       loadGeneratorFixture('scaffold', path.join('components', 'indexCell.js'))
     )
@@ -426,7 +450,11 @@ describe('in typescript mode', () => {
   })
 
   test('creates an index component', async () => {
-    expect(files['/path/to/project/web/src/components/Posts/Posts.js']).toEqual(
+    expect(
+      files[
+        path.normalize('/path/to/project/web/src/components/Posts/Posts.js')
+      ]
+    ).toEqual(
       loadGeneratorFixture('scaffold', path.join('components', 'index.js'))
     )
   })
