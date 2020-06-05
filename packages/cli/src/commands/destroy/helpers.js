@@ -20,7 +20,13 @@ const tasks = ({ componentName, filesFn, name }) =>
 export const createYargsForComponentDestroy = ({ componentName, filesFn }) => {
   return {
     command: `${componentName} <name>`,
-    desc: `Destroy a ${componentName} component.`,
+    description: `Destroy a ${componentName} component`,
+    builder: (yargs) => {
+      yargs.positional('name', {
+        description: `Name of the ${componentName}`,
+        type: 'string',
+      })
+    },
     handler: async ({ name }) => {
       const t = tasks({ componentName, filesFn, name })
 

@@ -41,7 +41,7 @@ export const files = ({ name, typescript, javascript }) => {
   }, {})
 }
 
-export const desc = 'Generate a component.'
+export const description = 'Generate a component'
 
 export const { command, builder, handler } = createYargsForComponentGeneration({
   componentName: 'component',

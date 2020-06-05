@@ -26,10 +26,10 @@ describe('db commands', () => {
   })
 
   it('some commands have a verbose flag', () => {
-    expect(up.builder.verbose).toBeDefined()
-    expect(down.builder.verbose).toBeDefined()
-    expect(generate.builder.verbose).toBeDefined()
-    expect(introspect.builder.verbose).toBeDefined()
+    expect(up.builder.toString()).toMatch('verbose')
+    expect(down.builder.toString()).toMatch('verbose')
+    expect(generate.builder.toString()).toMatch('verbose')
+    expect(introspect.builder.toString()).toMatch('verbose')
   })
 
   it('runs the command as expected', async () => {
