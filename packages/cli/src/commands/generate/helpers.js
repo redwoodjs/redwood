@@ -39,6 +39,7 @@ export const templateForComponentFile = ({
     path.join(generator, 'templates', templatePath),
     {
       name,
+      // Complexity here is for Windows support
       outputPath: `.${path.sep}${path.relative(
         getPaths().base,
         componentOutputPath
