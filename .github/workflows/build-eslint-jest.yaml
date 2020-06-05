@@ -8,12 +8,13 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os: [ubuntu-latest, windows-latest]
         node-version: ['12', '14']
       fail-fast: false
-    name: ubuntu-latest | Node ${{ matrix.node-version }} latest
+    name: ${{ matrix.os }} | Node ${{ matrix.node-version }} latest
     steps:
       - uses: actions/checkout@v2
       - name: Setup node
