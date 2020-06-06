@@ -1,7 +1,7 @@
 export const config = {
   imports: [
     `import * as firebase from 'firebase/app'`,
-    `import 'firebase/auth'`
+    `import 'firebase/auth'`,
   ],
   init: `const config = {
     apiKey: process.env.FIREBASE_API_KEY,

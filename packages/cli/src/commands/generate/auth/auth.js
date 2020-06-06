@@ -56,9 +56,16 @@ const addWebRender = (content, authProvider) => {
 }
 
 // the files to create to support auth
-export const files = () => {
+export const files = (provider) => {
+  let file = TEMPLATE
+  try {
+    let providerTemplatePath = path.resolve(__dirname, 'templates', `auth.js.template_${provider}`)
+    file = fs.readFileSync(providerTemplatePath).toString()
+  } catch {
+    file = TEMPLATE
+  }
   return {
-    [OUTPUT_PATH]: TEMPLATE,
+    [OUTPUT_PATH]: file,
   }
 }
 
@@ -158,7 +165,7 @@ export const handler = async ({ provider, force }) => {
         title: 'Generating auth lib...',
         task: (_ctx, task) => {
           if (apiSrcDoesExist()) {
-            return writeFilesTask(files(), { overwriteExisting: force })
+            return writeFilesTask(files(provider), { overwriteExisting: force })
           } else {
             task.skip('api/src not found, skipping')
           }
