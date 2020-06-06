@@ -5,6 +5,7 @@ import pluralize from 'pluralize'
 import Listr from 'listr'
 import pascalcase from 'pascalcase'
 import { paramCase } from 'param-case'
+import terminalLink from 'terminal-link'
 
 import { generateTemplate, getPaths, writeFilesTask } from 'src/lib'
 import c from 'src/lib/colors'
@@ -39,7 +40,11 @@ export const templateForComponentFile = ({
     path.join(generator, 'templates', templatePath),
     {
       name,
-      outputPath: `./${path.relative(getPaths().base, componentOutputPath)}`,
+      // Complexity here is for Windows support
+      outputPath: `.${path.sep}${path.relative(
+        getPaths().base,
+        componentOutputPath
+      )}`.replace(/\\/g, '/'),
       ...templateVars,
     }
   )
@@ -62,19 +67,54 @@ export const pathName = (path, name) => {
 export const createYargsForComponentGeneration = ({
   componentName,
   filesFn,
+  builderObj = {
+    force: {
+      alias: 'f',
+      default: false,
+      description: 'Overwrite existing files',
+      type: 'boolean',
+    },
+    javascript: {
+      alias: 'js',
+      default: true,
+      description: 'Generate JavaScript files',
+      type: 'boolean',
+    },
+    typescript: {
+      alias: 'ts',
+      default: false,
+      description: 'Generate TypeScript files',
+      type: 'boolean',
+    },
+  },
 }) => {
   return {
     command: `${componentName} <name>`,
-    desc: `Generate a ${componentName} component.`,
-    builder: { force: { type: 'boolean', default: false } },
-    handler: async ({ force, ...rest }) => {
+    description: `Generate a ${componentName} component`,
+    builder: (yargs) => {
+      yargs
+        .positional('name', {
+          description: `Name of the ${componentName}`,
+          type: 'string',
+        })
+        .epilogue(
+          `Also see the ${terminalLink(
+            'Redwood CLI Reference',
+            `https://redwoodjs.com/reference/command-line-interface#generate-${componentName}`
+          )}`
+        )
+      Object.entries(builderObj).forEach(([option, config]) => {
+        yargs.option(option, config)
+      })
+    },
+    handler: async (options) => {
       const tasks = new Listr(
         [
           {
             title: `Generating ${componentName} files...`,
             task: async () => {
-              const f = await filesFn(rest)
-              return writeFilesTask(f, { overwriteExisting: force })
+              const f = await filesFn(options)
+              return writeFilesTask(f, { overwriteExisting: options.force })
             },
           },
         ],

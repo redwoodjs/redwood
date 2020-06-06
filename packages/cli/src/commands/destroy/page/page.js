@@ -8,7 +8,17 @@ import { pathName } from '../../generate/helpers'
 import { files as pageFiles } from '../../generate/page/page'
 
 export const command = 'page <name> [path]'
-export const desc = 'Destroy a page component.'
+export const description = 'Destroy a page and route component'
+export const builder = (yargs) => {
+  yargs.positional('name', {
+    description: 'Name of the page',
+    type: 'string',
+  })
+  yargs.positional('path', {
+    description: 'URL path to the page. Defaults to name',
+    type: 'string',
+  })
+}
 
 export const tasks = ({ name, path }) =>
   new Listr(
