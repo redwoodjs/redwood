@@ -1,5 +1,7 @@
-import { gql } from 'apollo-server-lambda'
+import type { IResolvers } from 'apollo-server-lambda'
+import gql from 'graphql-tag'
 import { GraphQLDate, GraphQLTime, GraphQLDateTime } from 'graphql-iso-date'
+import GraphQLJSON, { GraphQLJSONObject } from 'graphql-type-json'
 
 // @ts-ignore
 import apiPackageJson from 'src/../package.json'
@@ -13,9 +15,12 @@ export const schema = gql`
   scalar Date
   scalar Time
   scalar DateTime
+  scalar JSON
+  scalar JSONObject
 
   type Redwood {
     version: String
+    currentUser: GraphQLJSON
   }
 
   type Query {
@@ -27,9 +32,12 @@ export const resolvers = {
   Date: GraphQLDate,
   Time: GraphQLTime,
   DateTime: GraphQLDateTime,
+  JSON: GraphQLJSON,
+  JSONObject: GraphQLJSONObject,
   Query: {
     redwood: () => ({
       version: apiPackageJson.version,
+      currentUser: ({ context }) => context?.currentUser,
     }),
   },
 }
