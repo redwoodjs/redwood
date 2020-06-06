@@ -20,14 +20,9 @@ const SUPPORTED_PROVIDERS = fs
 
 // returns the content of index.js with import statements added
 const addWebImports = (content, imports) => {
-  const importStatements = imports.map((imp) => {
-    const importWithFrom = imp.import === null ? '' : `${imp.import} from`
-    return `import ${importWithFrom} '${imp.from}'`
-  })
-
   return (
     `import { AuthProvider } from '@redwoodjs/auth'\n` +
-    importStatements.join('\n') +
+    imports.join('\n') +
     '\n' +
     content
   )
@@ -115,7 +110,7 @@ export const description = 'Generate an auth configuration'
 export const builder = (yargs) => {
   yargs
     .positional('provider', {
-      choices: ['netlify', 'auth0', 'magic-link'],
+      choices: ['netlify', 'auth0', 'magic-link', 'firebase'],
       description: 'Auth provider to configure',
       type: 'string',
     })
