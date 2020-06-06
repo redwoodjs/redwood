@@ -38,6 +38,31 @@ module.exports = (webpackEnv) => {
   const getStyleLoaders = () => {
     return [
       {
+        test: /\.module\.scss$/,
+        loader: [
+          isEnvProduction ? MiniCssExtractPlugin.loader : 'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true,
+            },
+          },
+          'sass-loader',
+        ],
+      },
+      {
+        test: /\.module\.css$/,
+        loader: [
+          isEnvProduction ? MiniCssExtractPlugin.loader : 'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true,
+            },
+          },
+        ],
+      },
+      {
         test: /\.scss$/,
         use: [
           isEnvProduction ? MiniCssExtractPlugin.loader : 'style-loader',
