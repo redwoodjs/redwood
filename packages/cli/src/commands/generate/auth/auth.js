@@ -59,7 +59,11 @@ const addWebRender = (content, authProvider) => {
 export const files = (provider) => {
   let file = TEMPLATE
   try {
-    let providerTemplatePath = path.resolve(__dirname, 'templates', `auth.js.template_${provider}`)
+    let providerTemplatePath = path.resolve(
+      __dirname,
+      'templates',
+      `auth.js.template_${provider}`
+    )
     file = fs.readFileSync(providerTemplatePath).toString()
   } catch {
     file = TEMPLATE
