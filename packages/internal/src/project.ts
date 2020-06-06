@@ -12,7 +12,7 @@ export enum SidesEnum {
 /**
  * Returns array of a project's existing sides
  */
-export const getSides = () => {
+export const getSides = (): string[] => {
   const sides = []
   for (const side of Object.values(SidesEnum)) {
     if (fs.existsSync(path.join(getPaths().base, side))) {
