@@ -45,6 +45,7 @@ module.exports = (webpackEnv) => {
             loader: 'css-loader',
             options: {
               modules: true,
+              sourceMap: !isEnvProduction,
             },
           },
           'sass-loader',
@@ -58,6 +59,7 @@ module.exports = (webpackEnv) => {
             loader: 'css-loader',
             options: {
               modules: true,
+              sourceMap: !isEnvProduction,
             },
           },
         ],
