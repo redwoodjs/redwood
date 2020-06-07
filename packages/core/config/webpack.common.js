@@ -36,6 +36,8 @@ module.exports = (webpackEnv) => {
   const isEnvProduction = webpackEnv === 'production'
 
   const getStyleLoaders = () => {
+    // Obscured classnames in production, more expressive classnames in development.
+    const localIdentName = isEnvProduction ? '[hash:base64]' : '[path][name]__[local]--[hash:base64:5]'
     return [
       {
         test: /\.module\.scss$/,
@@ -44,7 +46,9 @@ module.exports = (webpackEnv) => {
           {
             loader: 'css-loader',
             options: {
-              modules: true,
+              modules: {
+                localIdentName,
+              },
               sourceMap: !isEnvProduction,
             },
           },
@@ -58,7 +62,9 @@ module.exports = (webpackEnv) => {
           {
             loader: 'css-loader',
             options: {
-              modules: true,
+              modules: {
+                localIdentName,
+              },
               sourceMap: !isEnvProduction,
             },
           },
