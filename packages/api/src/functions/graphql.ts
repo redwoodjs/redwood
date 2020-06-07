@@ -15,7 +15,7 @@ export type GetCurrentUser = (
  * We use Apollo Server's `context` option as an entry point for constructing our own
  * global context object.
  *
- * Context explained Apollo's Docs:
+ * Context explained by Apollo's Docs:
  * Context is an object shared by all resolvers in a particular query,
  * and is used to contain per-request state, including authentication information,
  * dataloader instances, and anything else that should be taken into account when

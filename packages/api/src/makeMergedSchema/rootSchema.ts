@@ -1,4 +1,5 @@
-import type { IResolvers } from 'apollo-server-lambda'
+import type { Context } from 'src/globalContext'
+
 import gql from 'graphql-tag'
 import { GraphQLDate, GraphQLTime, GraphQLDateTime } from 'graphql-iso-date'
 import GraphQLJSON, { GraphQLJSONObject } from 'graphql-type-json'
@@ -7,9 +8,8 @@ import GraphQLJSON, { GraphQLJSONObject } from 'graphql-type-json'
 import apiPackageJson from 'src/../package.json'
 
 /**
- * This adds scalar types for dealing with Date, Time, and DateTime,
- * and adds a root Query type which is needed to start the GraphQL server on a
- * fresh install.
+ * This adds scalar types for dealing with Date, Time, DateTime, and JSON.
+ * This also adds a root Query type which is needed to start the GraphQL server on a fresh install.
  */
 export const schema = gql`
   scalar Date
@@ -20,7 +20,7 @@ export const schema = gql`
 
   type Redwood {
     version: String
-    currentUser: GraphQLJSON
+    currentUser: JSON
   }
 
   type Query {
@@ -37,7 +37,9 @@ export const resolvers = {
   Query: {
     redwood: () => ({
       version: apiPackageJson.version,
-      currentUser: ({ context }) => context?.currentUser,
+      currentUser: (_args: any, context: Context) => {
+        return context?.currentUser
+      }
     }),
   },
 }
