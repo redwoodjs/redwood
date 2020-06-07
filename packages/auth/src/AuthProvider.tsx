@@ -1,19 +1,17 @@
 import React from 'react'
 
 import type {
+  AuthClient,
   SupportedAuthTypes,
   SupportedAuthClients,
-  Auth0User,
-  GoTrueUser,
-  AuthClient,
-  MagicUser,
-} from './authClient'
-import { createAuthClient } from './authClient'
+  SupportedAuthUsers,
+} from './authClients'
+import { createAuthClient } from './authClients'
 
 export interface AuthContextInterface {
   loading: boolean
   isAuthenticated: boolean
-  currentUser: null | GoTrueUser | Auth0User | MagicUser
+  currentUser: null | SupportedAuthUsers
   logIn(): Promise<void>
   logOut(): Promise<void>
   getToken(): Promise<null | string>
@@ -33,7 +31,7 @@ type AuthProviderProps = {
 type AuthProviderState = {
   loading: boolean
   isAuthenticated: boolean
-  currentUser: null | Auth0User | GoTrueUser
+  currentUser: null | SupportedAuthUsers
 }
 /**
  * @example

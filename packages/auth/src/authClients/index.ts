@@ -26,14 +26,14 @@ export type SupportedAuthTypes =
 export type { Auth0User }
 export type { GoTrueUser }
 export type { MagicUser }
-export type SupportedAuthUsers = null | Auth0User | GoTrueUser | MagicUser
+export type SupportedAuthUsers = Auth0User | GoTrueUser | MagicUser
 
 export interface AuthClient {
   restoreAuthState?(): void | Promise<any>
   login(options?: any): Promise<any>
   logout(): void | Promise<void>
   getToken(): Promise<null | string>
-  currentUser(): Promise<SupportedAuthUsers>
+  currentUser(): Promise<null | SupportedAuthUsers>
   client: SupportedAuthClients
   type: SupportedAuthTypes
 }
