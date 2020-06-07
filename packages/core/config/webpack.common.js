@@ -37,7 +37,9 @@ module.exports = (webpackEnv) => {
 
   const getStyleLoaders = () => {
     // Obscured classnames in production, more expressive classnames in development.
-    const localIdentName = isEnvProduction ? '[hash:base64]' : '[path][name]__[local]--[hash:base64:5]'
+    const localIdentName = isEnvProduction
+      ? '[hash:base64]'
+      : '[path][name]__[local]--[hash:base64:5]'
     return [
       {
         test: /\.module\.scss$/,
