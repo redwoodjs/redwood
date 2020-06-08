@@ -2428,33 +2428,33 @@
   dependencies:
     "@types/node" ">= 8"
 
-"@prisma/cli@2.0.0-alpha.1311":
-  version "2.0.0-alpha.1311"
-  resolved "https://registry.yarnpkg.com/@prisma/cli/-/cli-2.0.0-alpha.1311.tgz#6682646ef19dce2bbe1b8255ccc99ea4ef53b7c4"
-  integrity sha512-SZjSiucmvAthB6T5G94zfBT2cbkGf8U8tTmkZjN9oi+TawWf3lNBXgTSAmF6a/HFrFaLbeBEhYu2NvId1KJ2ZQ==
+"@prisma/cli@2.0.0-beta.8":
+  version "2.0.0-beta.8"
+  resolved "https://registry.yarnpkg.com/@prisma/cli/-/cli-2.0.0-beta.8.tgz#18356d5464040339c9c01cdf9a4241c1bccc5dea"
+  integrity sha512-l1bHUmPzjdOF87MzIkcE55AkGLDKV2apmS2D9ZuYM+7hWWMk7lcJjjquDr9RAtSDMN8nuvYQcXnFFg7JP4DUxw==
 
-"@prisma/client@2.0.0-alpha.1311":
-  version "2.0.0-alpha.1311"
-  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-2.0.0-alpha.1311.tgz#5cd2a91a1bd409eac49f15519c638e39ce101db6"
-  integrity sha512-x4lUn62lXYtGS7jHJk3NBcBDEY2gtbZeqCIl6uANwikUUNHBs0oLsxgm7NxhCKY/XihiSJm6y3WD+/JdJC34lA==
+"@prisma/client@2.0.0-beta.8":
+  version "2.0.0-beta.8"
+  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-2.0.0-beta.8.tgz#1f2effb3b377fab4453fef894a04cc16bf46ef8f"
+  integrity sha512-MOUYJ5IRsmufhEoBs+sBNlmkxkUcsE0ONY/RcvQ+F1svU8iKeGi7UNFUxKwzYCe15mmAfvhh/ZaJ34/tUkpBeQ==
   dependencies:
     pkg-up "^3.1.0"
 
-"@prisma/debug@2.0.0-beta.9":
-  version "2.0.0-beta.9"
-  resolved "https://registry.yarnpkg.com/@prisma/debug/-/debug-2.0.0-beta.9.tgz#2da4acf7bd78f0dcb19ed7014d9c1cd8b28a0112"
-  integrity sha512-OVm3Ufp7cCeM63FB1s/D6Ga2dHzHMEeQQJIEuFOv9A+PhGrSFfCaO3MdkspDCAgwtaBP2vhcRs0bsQHp2eE4jA==
+"@prisma/debug@2.0.0-beta.8":
+  version "2.0.0-beta.8"
+  resolved "https://registry.yarnpkg.com/@prisma/debug/-/debug-2.0.0-beta.8.tgz#35a91c076c420dc95d9376b4e313d1aa0cc3a634"
+  integrity sha512-IISanL4LaC+WCdxvTKa08K0Ud6HveXBMy/GKXduWCQ3E8IKr3423RqDYS0C8ZaK3z9OZkFuzpcN+RTe4oruspA==
   dependencies:
     debug "^4.1.1"
 
-"@prisma/engine-core@2.0.0-beta.9":
-  version "2.0.0-beta.9"
-  resolved "https://registry.yarnpkg.com/@prisma/engine-core/-/engine-core-2.0.0-beta.9.tgz#be91b1462d32d0587efb28407b3f19318ddbbe6d"
-  integrity sha512-j3LjQVA69jZHHFDrnXWxf8a9zWSc2Fg7YLF0mC6An7PKdPf8T+NWPJFztwieOormL96Gg0eVdwNyb0O4YyNSbA==
+"@prisma/engine-core@2.0.0-beta.8":
+  version "2.0.0-beta.8"
+  resolved "https://registry.yarnpkg.com/@prisma/engine-core/-/engine-core-2.0.0-beta.8.tgz#ce27c6d3c025820667431e322442a6c86418ecd5"
+  integrity sha512-EbW8ajW9Q1z5r3n3qq3jN7WgTtr1QBhF0ZDZWVeTiXWaER7hcO+9E5wpCsX6FxgOadxeJ2yy6bePoLZFPosr7g==
   dependencies:
-    "@prisma/debug" "2.0.0-beta.9"
-    "@prisma/generator-helper" "2.0.0-beta.9"
-    "@prisma/get-platform" "2.0.0-beta.9"
+    "@prisma/debug" "2.0.0-beta.8"
+    "@prisma/generator-helper" "2.0.0-beta.8"
+    "@prisma/get-platform" "2.0.0-beta.8"
     bent "^7.1.2"
     chalk "^3.0.0"
     cross-fetch "^3.0.4"
@@ -2466,17 +2466,18 @@
     terminal-link "^2.1.1"
     undici mcollina/undici
 
-"@prisma/fetch-engine@2.0.0-beta.9":
-  version "2.0.0-beta.9"
-  resolved "https://registry.yarnpkg.com/@prisma/fetch-engine/-/fetch-engine-2.0.0-beta.9.tgz#9f026c0a039575bd5a7d5a39b5cc2f7d4e83b7e4"
-  integrity sha512-l51N18xzy7si695NFuZjj6Xm9VKPCmhWju0e4pkq7bRIvhxLZmtAtMkjXV0+TjCwI2/1QtGxzjsR1zzLQbhb/g==
+"@prisma/fetch-engine@2.0.0-beta.8":
+  version "2.0.0-beta.8"
+  resolved "https://registry.yarnpkg.com/@prisma/fetch-engine/-/fetch-engine-2.0.0-beta.8.tgz#e2e70358fbe371f458c97527811f90cac758ee76"
+  integrity sha512-OZyE/o1AVeEinnnKo/9IuG3eG3yuBYyDpoJHGiBOQ4qRoXU/c5l0HEKOSMTrSm7PX/m3bJyiw6LffNKoknpWnA==
   dependencies:
-    "@prisma/debug" "2.0.0-beta.9"
-    "@prisma/get-platform" "2.0.0-beta.9"
+    "@prisma/debug" "2.0.0-beta.8"
+    "@prisma/get-platform" "2.0.0-beta.8"
     chalk "^4.0.0"
     execa "^4.0.0"
     find-cache-dir "^3.3.1"
     hasha "^5.2.0"
+    htmlparser2 "^4.1.0"
     http-proxy-agent "^4.0.1"
     https-proxy-agent "^5.0.0"
     make-dir "^3.0.2"
@@ -2488,34 +2489,34 @@
     rimraf "^3.0.2"
     tempy "^0.5.0"
 
-"@prisma/generator-helper@2.0.0-beta.9":
-  version "2.0.0-beta.9"
-  resolved "https://registry.yarnpkg.com/@prisma/generator-helper/-/generator-helper-2.0.0-beta.9.tgz#5d3b430423629cf0f77b7a3f38528d709227041c"
-  integrity sha512-nn0u0SPP+EAQ5raOLBXnpeFG6YhxSECi/B1EmU8vAfBbcGpuHKtzZO0QxPvz94gcBeqqy8ubc5vkOJ2soEor/g==
+"@prisma/generator-helper@2.0.0-beta.8":
+  version "2.0.0-beta.8"
+  resolved "https://registry.yarnpkg.com/@prisma/generator-helper/-/generator-helper-2.0.0-beta.8.tgz#c7b72f50fcc35d7f9d76e85ffbcc0160274446cd"
+  integrity sha512-wvzuh8J7hqVuHAWz8H68zOiOVHJAoJWGUKnpei8k6f8ryUZsO4BDKz4Z5JHVtqka0GM2CMyyguTUd78BgKu12g==
   dependencies:
-    "@prisma/debug" "2.0.0-beta.9"
+    "@prisma/debug" "2.0.0-beta.8"
     "@types/cross-spawn" "^6.0.1"
     chalk "^3.0.0"
     cross-spawn "^7.0.2"
 
-"@prisma/get-platform@2.0.0-beta.9":
-  version "2.0.0-beta.9"
-  resolved "https://registry.yarnpkg.com/@prisma/get-platform/-/get-platform-2.0.0-beta.9.tgz#830677e6340e0aa99f4440b04ebd60c82d740476"
-  integrity sha512-G2euAm/7361Hu2KSpCr+/akS7dxQ9xYBCbTM1mNuTSymqbZQOW/6caHd4dzQUiHZ9qdQRvBPoyLQiENYunTp8A==
+"@prisma/get-platform@2.0.0-beta.8":
+  version "2.0.0-beta.8"
+  resolved "https://registry.yarnpkg.com/@prisma/get-platform/-/get-platform-2.0.0-beta.8.tgz#3d86fa27c4052c54ae6521d793c050de28f48f62"
+  integrity sha512-gptrd0jCf3iCkyvNIMT1KdugdFF+dB/0lUL0I4utwdoWBoNq4l1ToyUgewYqhewnhpcd1orbxz6JKxLtHM+axw==
   dependencies:
-    "@prisma/debug" "2.0.0-beta.9"
+    "@prisma/debug" "2.0.0-beta.8"
 
-"@prisma/sdk@^2.0.0-alpha.1311":
-  version "2.0.0-beta.9"
-  resolved "https://registry.yarnpkg.com/@prisma/sdk/-/sdk-2.0.0-beta.9.tgz#49ab0954718297b7072c5e6f8002333a2dde4ba0"
-  integrity sha512-7ByPjwkEoa0f5uLpmTr0gPljCvR6PMSQBDikT1N9GasPT6PQN26wmg6GcNhEtJrS0JBUrfWMDMxgjuEZKc393A==
+"@prisma/sdk@^2.0.0-beta.8":
+  version "2.0.0-beta.8"
+  resolved "https://registry.yarnpkg.com/@prisma/sdk/-/sdk-2.0.0-beta.8.tgz#44fef14dd940676732cf6ab380567301c388522e"
+  integrity sha512-XMMq/vmaFx4heFDaLMe4UCGDwpalm+kxdoVZRev5JEYsKVrV3UMpdhE+ZJvIJG6e932Is9qWZy1toModd0ObqA==
   dependencies:
     "@apexearth/copy" "^1.4.5"
-    "@prisma/debug" "2.0.0-beta.9"
-    "@prisma/engine-core" "2.0.0-beta.9"
-    "@prisma/fetch-engine" "2.0.0-beta.9"
-    "@prisma/generator-helper" "2.0.0-beta.9"
-    "@prisma/get-platform" "2.0.0-beta.9"
+    "@prisma/debug" "2.0.0-beta.8"
+    "@prisma/engine-core" "2.0.0-beta.8"
+    "@prisma/fetch-engine" "2.0.0-beta.8"
+    "@prisma/generator-helper" "2.0.0-beta.8"
+    "@prisma/get-platform" "2.0.0-beta.8"
     archiver "^4.0.0"
     arg "^4.1.3"
     chalk "3.0.0"
@@ -6651,7 +6652,7 @@ dom-converter@^0.2:
   dependencies:
     utila "~0.4"
 
-dom-serializer@0:
+dom-serializer@0, dom-serializer@^0.2.1:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/dom-serializer/-/dom-serializer-0.2.2.tgz#1afb81f533717175d478655debc5e332d9f9bb51"
   integrity sha512-2/xPb3ORsQ42nHYiSunXkDjPLBaEj/xTwUO4B7XCZQTRk7EBtTOPaygh10YAAh2OI1Qrp6NWfpAhzswj0ydt9g==
@@ -6693,6 +6694,13 @@ domhandler@^2.3.0:
   dependencies:
     domelementtype "1"
 
+domhandler@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/domhandler/-/domhandler-3.0.0.tgz#51cd13efca31da95bbb0c5bee3a48300e333b3e9"
+  integrity sha512-eKLdI5v9m67kbXQbJSNn1zjh0SDzvzWVWtX+qEI3eMjZw8daH9k8rlj1FZY9memPwjiskQFbe7vHVVJIAqoEhw==
+  dependencies:
+    domelementtype "^2.0.1"
+
 domutils@1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/domutils/-/domutils-1.5.1.tgz#dcd8488a26f563d61079e48c9f7b7e32373682cf"
@@ -6708,6 +6716,15 @@ domutils@^1.5.1:
   dependencies:
     dom-serializer "0"
     domelementtype "1"
+
+domutils@^2.0.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/domutils/-/domutils-2.1.0.tgz#7ade3201af43703fde154952e3a868eb4b635f16"
+  integrity sha512-CD9M0Dm1iaHfQ1R/TI+z3/JWp/pgub0j4jIQKH89ARR4ATAV2nbaOQS5XxU9maJP5jHaPdDDQSEHuE2UmpUTKg==
+  dependencies:
+    dom-serializer "^0.2.1"
+    domelementtype "^2.0.1"
+    domhandler "^3.0.0"
 
 dot-case@^3.0.3:
   version "3.0.3"
@@ -8764,6 +8781,16 @@ htmlparser2@^3.3.0:
     entities "^1.1.1"
     inherits "^2.0.1"
     readable-stream "^3.1.1"
+
+htmlparser2@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/htmlparser2/-/htmlparser2-4.1.0.tgz#9a4ef161f2e4625ebf7dfbe6c0a2f52d18a59e78"
+  integrity sha512-4zDq1a1zhE4gQso/c5LP1OtrhYTncXNSpvJYtWJBtXAETPlMfi3IFNjGuQbYLuVY4ZR0QMqRVvo4Pdy9KLyP8Q==
+  dependencies:
+    domelementtype "^2.0.1"
+    domhandler "^3.0.0"
+    domutils "^2.0.0"
+    entities "^2.0.0"
 
 http-cache-semantics@^3.8.1:
   version "3.8.1"
@@ -15462,9 +15489,9 @@ undefsafe@^2.0.2:
   dependencies:
     debug "^2.2.0"
 
-"undici@github:mcollina/undici":
-  version "1.0.1"
-  resolved "https://codeload.github.com/mcollina/undici/tar.gz/4a54988c5451db8506fd2f954da2bc70d9b799ad"
+undici@mcollina/undici:
+  version "1.0.0"
+  resolved "https://codeload.github.com/mcollina/undici/tar.gz/c3ce60a8256d80f8c9ba42604b59edeedec39076"
   dependencies:
     http-parser-js "^0.5.2"
 
