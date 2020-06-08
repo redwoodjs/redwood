@@ -2,17 +2,30 @@ import fs from 'fs'
 import path from 'path'
 
 import concurrently from 'concurrently'
+import terminalLink from 'terminal-link'
 
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 
-export const command = 'dev [app..]'
-export const desc = 'Run development servers for db, api, and web.'
-export const builder = {
-  app: { choices: ['db', 'api', 'web'], default: ['db', 'api', 'web'] },
+export const command = 'dev [side..]'
+export const description = 'Start development servers for api, db, and web'
+export const builder = (yargs) => {
+  yargs
+    .positional('side', {
+      choices: ['api', 'db', 'web'],
+      default: ['api', 'db', 'web'],
+      description: 'Which dev server(s) to start',
+      type: 'array',
+    })
+    .epilogue(
+      `Also see the ${terminalLink(
+        'Redwood CLI Reference',
+        'https://redwoodjs.com/reference/command-line-interface#dev'
+      )}`
+    )
 }
 
-export const handler = async ({ app = ['db', 'api', 'web'] }) => {
+export const handler = async ({ side = ['api', 'db', 'web'] }) => {
   // We use BASE_DIR when we need to effectively set the working dir
   const BASE_DIR = getPaths().base
   // For validation, e.g. dirExists?, we use these
@@ -50,7 +63,7 @@ export const handler = async ({ app = ['db', 'api', 'web'] }) => {
 
   concurrently(
     Object.keys(jobs)
-      .map((n) => app.includes(n) && jobs[n])
+      .map((n) => side.includes(n) && jobs[n])
       .filter((job) => job && job.runWhen()),
     {
       restartTries: 3,

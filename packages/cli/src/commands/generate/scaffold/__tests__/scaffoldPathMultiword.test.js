@@ -39,7 +39,9 @@ describe('adminPages/post', () => {
 
     test('creates a layout', async () => {
       expect(filesMultiwordLower).toHaveProperty([
-        '/path/to/project/web/src/layouts/AdminPages/PostsLayout/PostsLayout.js',
+        path.normalize(
+          '/path/to/project/web/src/layouts/AdminPages/PostsLayout/PostsLayout.js'
+        ),
       ])
     })
 
@@ -47,14 +49,18 @@ describe('adminPages/post', () => {
 
     test('creates a edit page', async () => {
       expect(filesMultiwordLower).toHaveProperty([
-        '/path/to/project/web/src/pages/AdminPages/EditPostPage/EditPostPage.js',
+        path.normalize(
+          '/path/to/project/web/src/pages/AdminPages/EditPostPage/EditPostPage.js'
+        ),
       ])
     })
 
     test('the edit page correctly imports the edit cell', async () => {
       expect(
         filesMultiwordLower[
-          '/path/to/project/web/src/pages/AdminPages/EditPostPage/EditPostPage.js'
+          path.normalize(
+            '/path/to/project/web/src/pages/AdminPages/EditPostPage/EditPostPage.js'
+          )
         ]
       ).toMatch(
         `import EditPostCell from 'src/components/AdminPages/EditPostCell'`
@@ -63,42 +69,54 @@ describe('adminPages/post', () => {
 
     test('creates a index page', async () => {
       expect(filesMultiwordLower).toHaveProperty([
-        '/path/to/project/web/src/pages/AdminPages/PostsPage/PostsPage.js',
+        path.normalize(
+          '/path/to/project/web/src/pages/AdminPages/PostsPage/PostsPage.js'
+        ),
       ])
     })
 
     test('the index page correctly imports the index cell', async () => {
       expect(
         filesMultiwordLower[
-          '/path/to/project/web/src/pages/AdminPages/PostsPage/PostsPage.js'
+          path.normalize(
+            '/path/to/project/web/src/pages/AdminPages/PostsPage/PostsPage.js'
+          )
         ]
       ).toMatch(`import PostsCell from 'src/components/AdminPages/PostsCell'`)
     })
 
     test('creates a new page', async () => {
       expect(filesMultiwordLower).toHaveProperty([
-        '/path/to/project/web/src/pages/AdminPages/NewPostPage/NewPostPage.js',
+        path.normalize(
+          '/path/to/project/web/src/pages/AdminPages/NewPostPage/NewPostPage.js'
+        ),
       ])
     })
 
     test('the new page correctly imports the new component', async () => {
       expect(
         filesMultiwordLower[
-          '/path/to/project/web/src/pages/AdminPages/NewPostPage/NewPostPage.js'
+          path.normalize(
+            '/path/to/project/web/src/pages/AdminPages/NewPostPage/NewPostPage.js'
+          )
         ]
       ).toMatch(`import NewPost from 'src/components/AdminPages/NewPost'`)
     })
 
     test('creates a show page', async () => {
       expect(filesMultiwordLower).toHaveProperty([
-        '/path/to/project/web/src/pages/AdminPages/PostPage/PostPage.js',
+        path.normalize(
+          '/path/to/project/web/src/pages/AdminPages/PostPage/PostPage.js'
+        ),
       ])
     })
 
     test('the show page correctly imports the show cell', async () => {
       expect(
         filesMultiwordLower[
-          '/path/to/project/web/src/pages/AdminPages/PostPage/PostPage.js'
+          path.normalize(
+            '/path/to/project/web/src/pages/AdminPages/PostPage/PostPage.js'
+          )
         ]
       ).toMatch(`import PostCell from 'src/components/AdminPages/PostCell'`)
     })
@@ -107,42 +125,54 @@ describe('adminPages/post', () => {
 
     test('creates an edit cell', async () => {
       expect(filesMultiwordLower).toHaveProperty([
-        '/path/to/project/web/src/components/AdminPages/EditPostCell/EditPostCell.js',
+        path.normalize(
+          '/path/to/project/web/src/components/AdminPages/EditPostCell/EditPostCell.js'
+        ),
       ])
     })
 
     test('the edit cell correctly imports the form', async () => {
       expect(
         filesMultiwordLower[
-          '/path/to/project/web/src/components/AdminPages/EditPostCell/EditPostCell.js'
+          path.normalize(
+            '/path/to/project/web/src/components/AdminPages/EditPostCell/EditPostCell.js'
+          )
         ]
       ).toMatch(`import PostForm from 'src/components/AdminPages/PostForm'`)
     })
 
     test('creates an index cell', async () => {
       expect(filesMultiwordLower).toHaveProperty([
-        '/path/to/project/web/src/components/AdminPages/PostsCell/PostsCell.js',
+        path.normalize(
+          '/path/to/project/web/src/components/AdminPages/PostsCell/PostsCell.js'
+        ),
       ])
     })
 
     test('the index cell correctly imports the index component', async () => {
       expect(
         filesMultiwordLower[
-          '/path/to/project/web/src/components/AdminPages/PostsCell/PostsCell.js'
+          path.normalize(
+            '/path/to/project/web/src/components/AdminPages/PostsCell/PostsCell.js'
+          )
         ]
       ).toMatch(`import Posts from 'src/components/AdminPages/Posts'`)
     })
 
     test('creates a show cell', async () => {
       expect(filesMultiwordLower).toHaveProperty([
-        '/path/to/project/web/src/components/AdminPages/PostCell/PostCell.js',
+        path.normalize(
+          '/path/to/project/web/src/components/AdminPages/PostCell/PostCell.js'
+        ),
       ])
     })
 
     test('the show cell correctly imports the show component', async () => {
       expect(
         filesMultiwordLower[
-          '/path/to/project/web/src/components/AdminPages/PostCell/PostCell.js'
+          path.normalize(
+            '/path/to/project/web/src/components/AdminPages/PostCell/PostCell.js'
+          )
         ]
       ).toMatch(`import Post from 'src/components/AdminPages/Post'`)
     })
@@ -151,26 +181,34 @@ describe('adminPages/post', () => {
 
     test('creates a form component', async () => {
       expect(filesMultiwordLower).toHaveProperty([
-        '/path/to/project/web/src/components/AdminPages/PostForm/PostForm.js',
+        path.normalize(
+          '/path/to/project/web/src/components/AdminPages/PostForm/PostForm.js'
+        ),
       ])
     })
 
     test('creates an index component', async () => {
       expect(filesMultiwordLower).toHaveProperty([
-        '/path/to/project/web/src/components/AdminPages/Posts/Posts.js',
+        path.normalize(
+          '/path/to/project/web/src/components/AdminPages/Posts/Posts.js'
+        ),
       ])
     })
 
     test('creates a new component', async () => {
       expect(filesMultiwordLower).toHaveProperty([
-        '/path/to/project/web/src/components/AdminPages/NewPost/NewPost.js',
+        path.normalize(
+          '/path/to/project/web/src/components/AdminPages/NewPost/NewPost.js'
+        ),
       ])
     })
 
     test('the new component correctly imports the form', async () => {
       expect(
         filesMultiwordLower[
-          '/path/to/project/web/src/components/AdminPages/NewPost/NewPost.js'
+          path.normalize(
+            '/path/to/project/web/src/components/AdminPages/NewPost/NewPost.js'
+          )
         ]
       ).toMatch(`import PostForm from 'src/components/AdminPages/PostForm'`)
     })
@@ -237,7 +275,9 @@ describe('adminPages/post', () => {
 
       const cell =
         userProfileFiles[
-          '/path/to/project/web/src/components/AdminPages/UserProfileCell/UserProfileCell.js'
+          path.normalize(
+            '/path/to/project/web/src/components/AdminPages/UserProfileCell/UserProfileCell.js'
+          )
         ]
 
       const query = cell.match(/(userProfile.*?\})/s)[1]
@@ -253,7 +293,9 @@ describe('adminPages/post', () => {
 
       const cell =
         userProfileFiles[
-          '/path/to/project/web/src/components/AdminPages/EditUserProfileCell/EditUserProfileCell.js'
+          path.normalize(
+            '/path/to/project/web/src/components/AdminPages/EditUserProfileCell/EditUserProfileCell.js'
+          )
         ]
 
       const query = cell.match(/(userProfile.*?\})/s)[1]
@@ -270,7 +312,9 @@ describe('adminPages/post', () => {
       })
 
       expect(foreignKeyFiles).toHaveProperty([
-        '/path/to/project/web/src/components/AdminPages/NewUserProfile/NewUserProfile.js',
+        path.normalize(
+          '/path/to/project/web/src/components/AdminPages/NewUserProfile/NewUserProfile.js'
+        ),
       ])
     })
 
@@ -281,7 +325,9 @@ describe('adminPages/post', () => {
       })
 
       expect(foreignKeyFiles).toHaveProperty([
-        '/path/to/project/web/src/components/AdminPages/EditUserProfileCell/EditUserProfileCell.js',
+        path.normalize(
+          '/path/to/project/web/src/components/AdminPages/EditUserProfileCell/EditUserProfileCell.js'
+        ),
       ])
     })
   })
@@ -297,7 +343,9 @@ describe('AdminPages/Post', () => {
 
     test('creates a layout', async () => {
       expect(filesMultiwordLower).toHaveProperty([
-        '/path/to/project/web/src/layouts/AdminPages/PostsLayout/PostsLayout.js',
+        path.normalize(
+          '/path/to/project/web/src/layouts/AdminPages/PostsLayout/PostsLayout.js'
+        ),
       ])
     })
 
@@ -305,14 +353,18 @@ describe('AdminPages/Post', () => {
 
     test('creates a edit page', async () => {
       expect(filesMultiwordUpper).toHaveProperty([
-        '/path/to/project/web/src/pages/AdminPages/EditPostPage/EditPostPage.js',
+        path.normalize(
+          '/path/to/project/web/src/pages/AdminPages/EditPostPage/EditPostPage.js'
+        ),
       ])
     })
 
     test('the edit page correctly imports the edit cell', async () => {
       expect(
         filesMultiwordUpper[
-          '/path/to/project/web/src/pages/AdminPages/EditPostPage/EditPostPage.js'
+          path.normalize(
+            '/path/to/project/web/src/pages/AdminPages/EditPostPage/EditPostPage.js'
+          )
         ]
       ).toMatch(
         `import EditPostCell from 'src/components/AdminPages/EditPostCell'`
@@ -321,42 +373,54 @@ describe('AdminPages/Post', () => {
 
     test('creates a index page', async () => {
       expect(filesMultiwordUpper).toHaveProperty([
-        '/path/to/project/web/src/pages/AdminPages/PostsPage/PostsPage.js',
+        path.normalize(
+          '/path/to/project/web/src/pages/AdminPages/PostsPage/PostsPage.js'
+        ),
       ])
     })
 
     test('the index page correctly imports the index cell', async () => {
       expect(
         filesMultiwordUpper[
-          '/path/to/project/web/src/pages/AdminPages/PostsPage/PostsPage.js'
+          path.normalize(
+            '/path/to/project/web/src/pages/AdminPages/PostsPage/PostsPage.js'
+          )
         ]
       ).toMatch(`import PostsCell from 'src/components/AdminPages/PostsCell'`)
     })
 
     test('creates a new page', async () => {
       expect(filesMultiwordUpper).toHaveProperty([
-        '/path/to/project/web/src/pages/AdminPages/NewPostPage/NewPostPage.js',
+        path.normalize(
+          '/path/to/project/web/src/pages/AdminPages/NewPostPage/NewPostPage.js'
+        ),
       ])
     })
 
     test('the new page correctly imports the new component', async () => {
       expect(
         filesMultiwordUpper[
-          '/path/to/project/web/src/pages/AdminPages/NewPostPage/NewPostPage.js'
+          path.normalize(
+            '/path/to/project/web/src/pages/AdminPages/NewPostPage/NewPostPage.js'
+          )
         ]
       ).toMatch(`import NewPost from 'src/components/AdminPages/NewPost'`)
     })
 
     test('creates a show page', async () => {
       expect(filesMultiwordUpper).toHaveProperty([
-        '/path/to/project/web/src/pages/AdminPages/PostPage/PostPage.js',
+        path.normalize(
+          '/path/to/project/web/src/pages/AdminPages/PostPage/PostPage.js'
+        ),
       ])
     })
 
     test('the show page correctly imports the show cell', async () => {
       expect(
         filesMultiwordUpper[
-          '/path/to/project/web/src/pages/AdminPages/PostPage/PostPage.js'
+          path.normalize(
+            '/path/to/project/web/src/pages/AdminPages/PostPage/PostPage.js'
+          )
         ]
       ).toMatch(`import PostCell from 'src/components/AdminPages/PostCell'`)
     })
@@ -365,42 +429,54 @@ describe('AdminPages/Post', () => {
 
     test('creates an edit cell', async () => {
       expect(filesMultiwordUpper).toHaveProperty([
-        '/path/to/project/web/src/components/AdminPages/EditPostCell/EditPostCell.js',
+        path.normalize(
+          '/path/to/project/web/src/components/AdminPages/EditPostCell/EditPostCell.js'
+        ),
       ])
     })
 
     test('the edit cell correctly imports the form', async () => {
       expect(
         filesMultiwordUpper[
-          '/path/to/project/web/src/components/AdminPages/EditPostCell/EditPostCell.js'
+          path.normalize(
+            '/path/to/project/web/src/components/AdminPages/EditPostCell/EditPostCell.js'
+          )
         ]
       ).toMatch(`import PostForm from 'src/components/AdminPages/PostForm'`)
     })
 
     test('creates an index cell', async () => {
       expect(filesMultiwordUpper).toHaveProperty([
-        '/path/to/project/web/src/components/AdminPages/PostsCell/PostsCell.js',
+        path.normalize(
+          '/path/to/project/web/src/components/AdminPages/PostsCell/PostsCell.js'
+        ),
       ])
     })
 
     test('the index cell correctly imports the index component', async () => {
       expect(
         filesMultiwordUpper[
-          '/path/to/project/web/src/components/AdminPages/PostsCell/PostsCell.js'
+          path.normalize(
+            '/path/to/project/web/src/components/AdminPages/PostsCell/PostsCell.js'
+          )
         ]
       ).toMatch(`import Posts from 'src/components/AdminPages/Posts'`)
     })
 
     test('creates a show cell', async () => {
       expect(filesMultiwordUpper).toHaveProperty([
-        '/path/to/project/web/src/components/AdminPages/PostCell/PostCell.js',
+        path.normalize(
+          '/path/to/project/web/src/components/AdminPages/PostCell/PostCell.js'
+        ),
       ])
     })
 
     test('the show cell correctly imports the show component', async () => {
       expect(
         filesMultiwordUpper[
-          '/path/to/project/web/src/components/AdminPages/PostCell/PostCell.js'
+          path.normalize(
+            '/path/to/project/web/src/components/AdminPages/PostCell/PostCell.js'
+          )
         ]
       ).toMatch(`import Post from 'src/components/AdminPages/Post'`)
     })
@@ -409,26 +485,34 @@ describe('AdminPages/Post', () => {
 
     test('creates a form component', async () => {
       expect(filesMultiwordUpper).toHaveProperty([
-        '/path/to/project/web/src/components/AdminPages/PostForm/PostForm.js',
+        path.normalize(
+          '/path/to/project/web/src/components/AdminPages/PostForm/PostForm.js'
+        ),
       ])
     })
 
     test('creates an index component', async () => {
       expect(filesMultiwordUpper).toHaveProperty([
-        '/path/to/project/web/src/components/AdminPages/Posts/Posts.js',
+        path.normalize(
+          '/path/to/project/web/src/components/AdminPages/Posts/Posts.js'
+        ),
       ])
     })
 
     test('creates a new component', async () => {
       expect(filesMultiwordUpper).toHaveProperty([
-        '/path/to/project/web/src/components/AdminPages/NewPost/NewPost.js',
+        path.normalize(
+          '/path/to/project/web/src/components/AdminPages/NewPost/NewPost.js'
+        ),
       ])
     })
 
     test('the new component correctly imports the form', async () => {
       expect(
         filesMultiwordUpper[
-          '/path/to/project/web/src/components/AdminPages/NewPost/NewPost.js'
+          path.normalize(
+            '/path/to/project/web/src/components/AdminPages/NewPost/NewPost.js'
+          )
         ]
       ).toMatch(`import PostForm from 'src/components/AdminPages/PostForm'`)
     })
@@ -495,7 +579,9 @@ describe('AdminPages/Post', () => {
 
       const cell =
         userProfileFiles[
-          '/path/to/project/web/src/components/AdminPages/UserProfileCell/UserProfileCell.js'
+          path.normalize(
+            '/path/to/project/web/src/components/AdminPages/UserProfileCell/UserProfileCell.js'
+          )
         ]
 
       const query = cell.match(/(userProfile.*?\})/s)[1]
@@ -511,7 +597,9 @@ describe('AdminPages/Post', () => {
 
       const cell =
         userProfileFiles[
-          '/path/to/project/web/src/components/AdminPages/EditUserProfileCell/EditUserProfileCell.js'
+          path.normalize(
+            '/path/to/project/web/src/components/AdminPages/EditUserProfileCell/EditUserProfileCell.js'
+          )
         ]
 
       const query = cell.match(/(userProfile.*?\})/s)[1]
@@ -528,7 +616,9 @@ describe('AdminPages/Post', () => {
       })
 
       expect(foreignKeyFiles).toHaveProperty([
-        '/path/to/project/web/src/components/AdminPages/NewUserProfile/NewUserProfile.js',
+        path.normalize(
+          '/path/to/project/web/src/components/AdminPages/NewUserProfile/NewUserProfile.js'
+        ),
       ])
     })
 
@@ -539,7 +629,9 @@ describe('AdminPages/Post', () => {
       })
 
       expect(foreignKeyFiles).toHaveProperty([
-        '/path/to/project/web/src/components/AdminPages/EditUserProfileCell/EditUserProfileCell.js',
+        path.normalize(
+          '/path/to/project/web/src/components/AdminPages/EditUserProfileCell/EditUserProfileCell.js'
+        ),
       ])
     })
   })
@@ -555,7 +647,9 @@ describe('admin-pages/post', () => {
 
     test('creates a layout', async () => {
       expect(filesMultiwordLower).toHaveProperty([
-        '/path/to/project/web/src/layouts/AdminPages/PostsLayout/PostsLayout.js',
+        path.normalize(
+          '/path/to/project/web/src/layouts/AdminPages/PostsLayout/PostsLayout.js'
+        ),
       ])
     })
 
@@ -563,14 +657,18 @@ describe('admin-pages/post', () => {
 
     test('creates a edit page', async () => {
       expect(filesMultiwordDash).toHaveProperty([
-        '/path/to/project/web/src/pages/AdminPages/EditPostPage/EditPostPage.js',
+        path.normalize(
+          '/path/to/project/web/src/pages/AdminPages/EditPostPage/EditPostPage.js'
+        ),
       ])
     })
 
     test('the edit page correctly imports the edit cell', async () => {
       expect(
         filesMultiwordDash[
-          '/path/to/project/web/src/pages/AdminPages/EditPostPage/EditPostPage.js'
+          path.normalize(
+            '/path/to/project/web/src/pages/AdminPages/EditPostPage/EditPostPage.js'
+          )
         ]
       ).toMatch(
         `import EditPostCell from 'src/components/AdminPages/EditPostCell'`
@@ -579,42 +677,54 @@ describe('admin-pages/post', () => {
 
     test('creates a index page', async () => {
       expect(filesMultiwordDash).toHaveProperty([
-        '/path/to/project/web/src/pages/AdminPages/PostsPage/PostsPage.js',
+        path.normalize(
+          '/path/to/project/web/src/pages/AdminPages/PostsPage/PostsPage.js'
+        ),
       ])
     })
 
     test('the index page correctly imports the index cell', async () => {
       expect(
         filesMultiwordDash[
-          '/path/to/project/web/src/pages/AdminPages/PostsPage/PostsPage.js'
+          path.normalize(
+            '/path/to/project/web/src/pages/AdminPages/PostsPage/PostsPage.js'
+          )
         ]
       ).toMatch(`import PostsCell from 'src/components/AdminPages/PostsCell'`)
     })
 
     test('creates a new page', async () => {
       expect(filesMultiwordDash).toHaveProperty([
-        '/path/to/project/web/src/pages/AdminPages/NewPostPage/NewPostPage.js',
+        path.normalize(
+          '/path/to/project/web/src/pages/AdminPages/NewPostPage/NewPostPage.js'
+        ),
       ])
     })
 
     test('the new page correctly imports the new component', async () => {
       expect(
         filesMultiwordDash[
-          '/path/to/project/web/src/pages/AdminPages/NewPostPage/NewPostPage.js'
+          path.normalize(
+            '/path/to/project/web/src/pages/AdminPages/NewPostPage/NewPostPage.js'
+          )
         ]
       ).toMatch(`import NewPost from 'src/components/AdminPages/NewPost'`)
     })
 
     test('creates a show page', async () => {
       expect(filesMultiwordDash).toHaveProperty([
-        '/path/to/project/web/src/pages/AdminPages/PostPage/PostPage.js',
+        path.normalize(
+          '/path/to/project/web/src/pages/AdminPages/PostPage/PostPage.js'
+        ),
       ])
     })
 
     test('the show page correctly imports the show cell', async () => {
       expect(
         filesMultiwordDash[
-          '/path/to/project/web/src/pages/AdminPages/PostPage/PostPage.js'
+          path.normalize(
+            '/path/to/project/web/src/pages/AdminPages/PostPage/PostPage.js'
+          )
         ]
       ).toMatch(`import PostCell from 'src/components/AdminPages/PostCell'`)
     })
@@ -623,42 +733,54 @@ describe('admin-pages/post', () => {
 
     test('creates an edit cell', async () => {
       expect(filesMultiwordDash).toHaveProperty([
-        '/path/to/project/web/src/components/AdminPages/EditPostCell/EditPostCell.js',
+        path.normalize(
+          '/path/to/project/web/src/components/AdminPages/EditPostCell/EditPostCell.js'
+        ),
       ])
     })
 
     test('the edit cell correctly imports the form', async () => {
       expect(
         filesMultiwordDash[
-          '/path/to/project/web/src/components/AdminPages/EditPostCell/EditPostCell.js'
+          path.normalize(
+            '/path/to/project/web/src/components/AdminPages/EditPostCell/EditPostCell.js'
+          )
         ]
       ).toMatch(`import PostForm from 'src/components/AdminPages/PostForm'`)
     })
 
     test('creates an index cell', async () => {
       expect(filesMultiwordDash).toHaveProperty([
-        '/path/to/project/web/src/components/AdminPages/PostsCell/PostsCell.js',
+        path.normalize(
+          '/path/to/project/web/src/components/AdminPages/PostsCell/PostsCell.js'
+        ),
       ])
     })
 
     test('the index cell correctly imports the index component', async () => {
       expect(
         filesMultiwordDash[
-          '/path/to/project/web/src/components/AdminPages/PostsCell/PostsCell.js'
+          path.normalize(
+            '/path/to/project/web/src/components/AdminPages/PostsCell/PostsCell.js'
+          )
         ]
       ).toMatch(`import Posts from 'src/components/AdminPages/Posts'`)
     })
 
     test('creates a show cell', async () => {
       expect(filesMultiwordDash).toHaveProperty([
-        '/path/to/project/web/src/components/AdminPages/PostCell/PostCell.js',
+        path.normalize(
+          '/path/to/project/web/src/components/AdminPages/PostCell/PostCell.js'
+        ),
       ])
     })
 
     test('the show cell correctly imports the show component', async () => {
       expect(
         filesMultiwordDash[
-          '/path/to/project/web/src/components/AdminPages/PostCell/PostCell.js'
+          path.normalize(
+            '/path/to/project/web/src/components/AdminPages/PostCell/PostCell.js'
+          )
         ]
       ).toMatch(`import Post from 'src/components/AdminPages/Post'`)
     })
@@ -667,26 +789,34 @@ describe('admin-pages/post', () => {
 
     test('creates a form component', async () => {
       expect(filesMultiwordDash).toHaveProperty([
-        '/path/to/project/web/src/components/AdminPages/PostForm/PostForm.js',
+        path.normalize(
+          '/path/to/project/web/src/components/AdminPages/PostForm/PostForm.js'
+        ),
       ])
     })
 
     test('creates an index component', async () => {
       expect(filesMultiwordDash).toHaveProperty([
-        '/path/to/project/web/src/components/AdminPages/Posts/Posts.js',
+        path.normalize(
+          '/path/to/project/web/src/components/AdminPages/Posts/Posts.js'
+        ),
       ])
     })
 
     test('creates a new component', async () => {
       expect(filesMultiwordDash).toHaveProperty([
-        '/path/to/project/web/src/components/AdminPages/NewPost/NewPost.js',
+        path.normalize(
+          '/path/to/project/web/src/components/AdminPages/NewPost/NewPost.js'
+        ),
       ])
     })
 
     test('the new component correctly imports the form', async () => {
       expect(
         filesMultiwordDash[
-          '/path/to/project/web/src/components/AdminPages/NewPost/NewPost.js'
+          path.normalize(
+            '/path/to/project/web/src/components/AdminPages/NewPost/NewPost.js'
+          )
         ]
       ).toMatch(`import PostForm from 'src/components/AdminPages/PostForm'`)
     })
@@ -753,7 +883,9 @@ describe('admin-pages/post', () => {
 
       const cell =
         userProfileFiles[
-          '/path/to/project/web/src/components/AdminPages/UserProfileCell/UserProfileCell.js'
+          path.normalize(
+            '/path/to/project/web/src/components/AdminPages/UserProfileCell/UserProfileCell.js'
+          )
         ]
 
       const query = cell.match(/(userProfile.*?\})/s)[1]
@@ -769,7 +901,9 @@ describe('admin-pages/post', () => {
 
       const cell =
         userProfileFiles[
-          '/path/to/project/web/src/components/AdminPages/EditUserProfileCell/EditUserProfileCell.js'
+          path.normalize(
+            '/path/to/project/web/src/components/AdminPages/EditUserProfileCell/EditUserProfileCell.js'
+          )
         ]
 
       const query = cell.match(/(userProfile.*?\})/s)[1]
@@ -786,7 +920,9 @@ describe('admin-pages/post', () => {
       })
 
       expect(foreignKeyFiles).toHaveProperty([
-        '/path/to/project/web/src/components/AdminPages/NewUserProfile/NewUserProfile.js',
+        path.normalize(
+          '/path/to/project/web/src/components/AdminPages/NewUserProfile/NewUserProfile.js'
+        ),
       ])
     })
 
@@ -797,7 +933,9 @@ describe('admin-pages/post', () => {
       })
 
       expect(foreignKeyFiles).toHaveProperty([
-        '/path/to/project/web/src/components/AdminPages/EditUserProfileCell/EditUserProfileCell.js',
+        path.normalize(
+          '/path/to/project/web/src/components/AdminPages/EditUserProfileCell/EditUserProfileCell.js'
+        ),
       ])
     })
   })
@@ -813,7 +951,9 @@ describe('admin_pages/post', () => {
 
     test('creates a layout', async () => {
       expect(filesMultiwordLower).toHaveProperty([
-        '/path/to/project/web/src/layouts/AdminPages/PostsLayout/PostsLayout.js',
+        path.normalize(
+          '/path/to/project/web/src/layouts/AdminPages/PostsLayout/PostsLayout.js'
+        ),
       ])
     })
 
@@ -821,14 +961,18 @@ describe('admin_pages/post', () => {
 
     test('creates a edit page', async () => {
       expect(filesMultiwordUnderscore).toHaveProperty([
-        '/path/to/project/web/src/pages/AdminPages/EditPostPage/EditPostPage.js',
+        path.normalize(
+          '/path/to/project/web/src/pages/AdminPages/EditPostPage/EditPostPage.js'
+        ),
       ])
     })
 
     test('the edit page correctly imports the edit cell', async () => {
       expect(
         filesMultiwordUnderscore[
-          '/path/to/project/web/src/pages/AdminPages/EditPostPage/EditPostPage.js'
+          path.normalize(
+            '/path/to/project/web/src/pages/AdminPages/EditPostPage/EditPostPage.js'
+          )
         ]
       ).toMatch(
         `import EditPostCell from 'src/components/AdminPages/EditPostCell'`
@@ -837,42 +981,54 @@ describe('admin_pages/post', () => {
 
     test('creates a index page', async () => {
       expect(filesMultiwordUnderscore).toHaveProperty([
-        '/path/to/project/web/src/pages/AdminPages/PostsPage/PostsPage.js',
+        path.normalize(
+          '/path/to/project/web/src/pages/AdminPages/PostsPage/PostsPage.js'
+        ),
       ])
     })
 
     test('the index page correctly imports the index cell', async () => {
       expect(
         filesMultiwordUnderscore[
-          '/path/to/project/web/src/pages/AdminPages/PostsPage/PostsPage.js'
+          path.normalize(
+            '/path/to/project/web/src/pages/AdminPages/PostsPage/PostsPage.js'
+          )
         ]
       ).toMatch(`import PostsCell from 'src/components/AdminPages/PostsCell'`)
     })
 
     test('creates a new page', async () => {
       expect(filesMultiwordUnderscore).toHaveProperty([
-        '/path/to/project/web/src/pages/AdminPages/NewPostPage/NewPostPage.js',
+        path.normalize(
+          '/path/to/project/web/src/pages/AdminPages/NewPostPage/NewPostPage.js'
+        ),
       ])
     })
 
     test('the new page correctly imports the new component', async () => {
       expect(
         filesMultiwordUnderscore[
-          '/path/to/project/web/src/pages/AdminPages/NewPostPage/NewPostPage.js'
+          path.normalize(
+            '/path/to/project/web/src/pages/AdminPages/NewPostPage/NewPostPage.js'
+          )
         ]
       ).toMatch(`import NewPost from 'src/components/AdminPages/NewPost'`)
     })
 
     test('creates a show page', async () => {
       expect(filesMultiwordUnderscore).toHaveProperty([
-        '/path/to/project/web/src/pages/AdminPages/PostPage/PostPage.js',
+        path.normalize(
+          '/path/to/project/web/src/pages/AdminPages/PostPage/PostPage.js'
+        ),
       ])
     })
 
     test('the show page correctly imports the show cell', async () => {
       expect(
         filesMultiwordUnderscore[
-          '/path/to/project/web/src/pages/AdminPages/PostPage/PostPage.js'
+          path.normalize(
+            '/path/to/project/web/src/pages/AdminPages/PostPage/PostPage.js'
+          )
         ]
       ).toMatch(`import PostCell from 'src/components/AdminPages/PostCell'`)
     })
@@ -881,42 +1037,54 @@ describe('admin_pages/post', () => {
 
     test('creates an edit cell', async () => {
       expect(filesMultiwordUnderscore).toHaveProperty([
-        '/path/to/project/web/src/components/AdminPages/EditPostCell/EditPostCell.js',
+        path.normalize(
+          '/path/to/project/web/src/components/AdminPages/EditPostCell/EditPostCell.js'
+        ),
       ])
     })
 
     test('the edit cell correctly imports the form', async () => {
       expect(
         filesMultiwordUnderscore[
-          '/path/to/project/web/src/components/AdminPages/EditPostCell/EditPostCell.js'
+          path.normalize(
+            '/path/to/project/web/src/components/AdminPages/EditPostCell/EditPostCell.js'
+          )
         ]
       ).toMatch(`import PostForm from 'src/components/AdminPages/PostForm'`)
     })
 
     test('creates an index cell', async () => {
       expect(filesMultiwordUnderscore).toHaveProperty([
-        '/path/to/project/web/src/components/AdminPages/PostsCell/PostsCell.js',
+        path.normalize(
+          '/path/to/project/web/src/components/AdminPages/PostsCell/PostsCell.js'
+        ),
       ])
     })
 
     test('the index cell correctly imports the index component', async () => {
       expect(
         filesMultiwordUnderscore[
-          '/path/to/project/web/src/components/AdminPages/PostsCell/PostsCell.js'
+          path.normalize(
+            '/path/to/project/web/src/components/AdminPages/PostsCell/PostsCell.js'
+          )
         ]
       ).toMatch(`import Posts from 'src/components/AdminPages/Posts'`)
     })
 
     test('creates a show cell', async () => {
       expect(filesMultiwordUnderscore).toHaveProperty([
-        '/path/to/project/web/src/components/AdminPages/PostCell/PostCell.js',
+        path.normalize(
+          '/path/to/project/web/src/components/AdminPages/PostCell/PostCell.js'
+        ),
       ])
     })
 
     test('the show cell correctly imports the show component', async () => {
       expect(
         filesMultiwordUnderscore[
-          '/path/to/project/web/src/components/AdminPages/PostCell/PostCell.js'
+          path.normalize(
+            '/path/to/project/web/src/components/AdminPages/PostCell/PostCell.js'
+          )
         ]
       ).toMatch(`import Post from 'src/components/AdminPages/Post'`)
     })
@@ -925,26 +1093,34 @@ describe('admin_pages/post', () => {
 
     test('creates a form component', async () => {
       expect(filesMultiwordUnderscore).toHaveProperty([
-        '/path/to/project/web/src/components/AdminPages/PostForm/PostForm.js',
+        path.normalize(
+          '/path/to/project/web/src/components/AdminPages/PostForm/PostForm.js'
+        ),
       ])
     })
 
     test('creates an index component', async () => {
       expect(filesMultiwordUnderscore).toHaveProperty([
-        '/path/to/project/web/src/components/AdminPages/Posts/Posts.js',
+        path.normalize(
+          '/path/to/project/web/src/components/AdminPages/Posts/Posts.js'
+        ),
       ])
     })
 
     test('creates a new component', async () => {
       expect(filesMultiwordUnderscore).toHaveProperty([
-        '/path/to/project/web/src/components/AdminPages/NewPost/NewPost.js',
+        path.normalize(
+          '/path/to/project/web/src/components/AdminPages/NewPost/NewPost.js'
+        ),
       ])
     })
 
     test('the new component correctly imports the form', async () => {
       expect(
         filesMultiwordUnderscore[
-          '/path/to/project/web/src/components/AdminPages/NewPost/NewPost.js'
+          path.normalize(
+            '/path/to/project/web/src/components/AdminPages/NewPost/NewPost.js'
+          )
         ]
       ).toMatch(`import PostForm from 'src/components/AdminPages/PostForm'`)
     })
@@ -1011,7 +1187,9 @@ describe('admin_pages/post', () => {
 
       const cell =
         userProfileFiles[
-          '/path/to/project/web/src/components/AdminPages/UserProfileCell/UserProfileCell.js'
+          path.normalize(
+            '/path/to/project/web/src/components/AdminPages/UserProfileCell/UserProfileCell.js'
+          )
         ]
 
       const query = cell.match(/(userProfile.*?\})/s)[1]
@@ -1027,7 +1205,9 @@ describe('admin_pages/post', () => {
 
       const cell =
         userProfileFiles[
-          '/path/to/project/web/src/components/AdminPages/EditUserProfileCell/EditUserProfileCell.js'
+          path.normalize(
+            '/path/to/project/web/src/components/AdminPages/EditUserProfileCell/EditUserProfileCell.js'
+          )
         ]
 
       const query = cell.match(/(userProfile.*?\})/s)[1]
@@ -1044,7 +1224,9 @@ describe('admin_pages/post', () => {
       })
 
       expect(foreignKeyFiles).toHaveProperty([
-        '/path/to/project/web/src/components/AdminPages/NewUserProfile/NewUserProfile.js',
+        path.normalize(
+          '/path/to/project/web/src/components/AdminPages/NewUserProfile/NewUserProfile.js'
+        ),
       ])
     })
 
@@ -1055,7 +1237,9 @@ describe('admin_pages/post', () => {
       })
 
       expect(foreignKeyFiles).toHaveProperty([
-        '/path/to/project/web/src/components/AdminPages/EditUserProfileCell/EditUserProfileCell.js',
+        path.normalize(
+          '/path/to/project/web/src/components/AdminPages/EditUserProfileCell/EditUserProfileCell.js'
+        ),
       ])
     })
   })

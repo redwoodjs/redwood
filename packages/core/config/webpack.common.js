@@ -36,20 +36,65 @@ module.exports = (webpackEnv) => {
   const isEnvProduction = webpackEnv === 'production'
 
   const getStyleLoaders = () => {
+    // Obscured classnames in production, more expressive classnames in development.
+    const localIdentName = isEnvProduction
+      ? '[hash:base64]'
+      : '[path][name]__[local]--[hash:base64:5]'
     return [
       {
-        test: /\.scss$/,
-        use: [
+        test: /\.module\.scss$/,
+        loader: [
           isEnvProduction ? MiniCssExtractPlugin.loader : 'style-loader',
-          'css-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              modules: {
+                localIdentName,
+              },
+              sourceMap: !isEnvProduction,
+            },
+          },
+          'sass-loader',
+        ],
+      },
+      {
+        test: /\.module\.css$/,
+        loader: [
+          isEnvProduction ? MiniCssExtractPlugin.loader : 'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              modules: {
+                localIdentName,
+              },
+              sourceMap: !isEnvProduction,
+            },
+          },
+        ],
+      },
+      {
+        test: /\.scss$/,
+        loader: [
+          isEnvProduction ? MiniCssExtractPlugin.loader : 'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: !isEnvProduction,
+            },
+          },
           'sass-loader',
         ],
       },
       {
         test: /\.css$/,
-        use: [
+        loader: [
           isEnvProduction ? MiniCssExtractPlugin.loader : 'style-loader',
-          'css-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: !isEnvProduction,
+            },
+          },
         ],
       },
     ]
