@@ -28,6 +28,10 @@ const WEB_SRC_INDEX_PATH = path.join(getPaths().web.src, 'index.js')
 const SUPPORTED_PROVIDERS = fs
   .readdirSync(path.resolve(__dirname, 'providers'))
   .map((file) => path.basename(file, '.js'))
+const SUPPORTED_PROVIDERS_OPTIONS = fs
+  .readdirSync(path.resolve(__dirname, 'providers'))
+  .map((file) => path.basename(file, '.js'))
+  .filter((file) => file !== 'README.md')
 
 // returns the content of index.js with import statements added
 const addWebImports = (content, imports) => {
@@ -122,7 +126,7 @@ export const description = 'Generate an auth configuration'
 export const builder = (yargs) => {
   yargs
     .positional('provider', {
-      choices: ['netlify', 'auth0', 'magic-link', 'firebase'],
+      choices: SUPPORTED_PROVIDERS_OPTIONS,
       description: 'Auth provider to configure',
       type: 'string',
     })
