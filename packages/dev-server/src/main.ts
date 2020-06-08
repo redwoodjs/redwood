@@ -6,6 +6,7 @@ import type { NodeTargetPaths } from '@redwoodjs/internal'
 import { server, setLambdaFunctions } from './http'
 import { watchFunctions } from './watchApiSide'
 import { requestHandler } from './requestHandlers/awsLambda'
+import { handleError } from './error'
 
 // TODO: Expand the sides once that concept is introduced.
 export const getArgsForSide = (
@@ -45,9 +46,14 @@ try {
         console.log(`Done. Took ${new Date().getTime() - startBuild}ms.`)
         setLambdaFunctions(functions)
       },
+      onException: async (e) => {
+        console.log(await handleError(e))
+      },
     })
   })
 } catch (e) {
-  console.error(e.message)
-  process.exit(1)
+  handleError(e).then((m) => {
+    console.log(m)
+    process.exit(1)
+  })
 }
