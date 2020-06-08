@@ -10,8 +10,19 @@ import c from 'src/lib/colors'
 
 const API_GRAPHQL_PATH = path.join(getPaths().api.functions, 'graphql.js')
 const API_SRC_PATH = path.join(getPaths().api.src)
-const TEMPLATE_PATH = path.resolve(__dirname, 'templates', 'auth.js.template')
-const TEMPLATE = fs.readFileSync(TEMPLATE_PATH).toString()
+const TEMPLATES = fs
+  .readdirSync(path.resolve(__dirname, 'templates'))
+  .reduce((templates, file) => {
+    if (file === 'auth.js.template') {
+      return { ...templates, 'base': path.resolve(__dirname, 'templates', file) }
+    } else {
+      const provider = file.replace('auth.js.template_', '')
+      return {
+        ...templates,
+        [provider]: path.resolve(__dirname, 'templates', file),
+      }
+    }
+  }, {})
 const OUTPUT_PATH = path.join(getPaths().api.lib, 'auth.js')
 const WEB_SRC_INDEX_PATH = path.join(getPaths().web.src, 'index.js')
 const SUPPORTED_PROVIDERS = fs
@@ -57,19 +68,9 @@ const addWebRender = (content, authProvider) => {
 
 // the files to create to support auth
 export const files = (provider) => {
-  let file = TEMPLATE
-  try {
-    let providerTemplatePath = path.resolve(
-      __dirname,
-      'templates',
-      `auth.js.template_${provider}`
-    )
-    file = fs.readFileSync(providerTemplatePath).toString()
-  } catch {
-    file = TEMPLATE
-  }
+  const template = TEMPLATES[provider] ?? TEMPLATES.base
   return {
-    [OUTPUT_PATH]: file,
+    [OUTPUT_PATH]: fs.readFileSync(template).toString(),
   }
 }
 
