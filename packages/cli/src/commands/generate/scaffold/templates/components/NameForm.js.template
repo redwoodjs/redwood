@@ -24,20 +24,20 @@ const ${singularPascalName}Form = (props) => {
         />
 <% editableColumns.forEach(column => { %>
         <Label
-          name="<%= column.name %>"
+          name="${column.name}"
           className="rw-label"
           errorClassName="rw-label rw-label-error"
         >
-          <%= column.label %>
+          ${column.label}
         </Label>
-        <<%= column.component %>
-          name="<%= column.name %>"
+        <${column.component}
+          name="${column.name}"
           default<%= column.component.startsWith('Checkbox') ? 'Checked' : 'Value' %>={props.${singularCamelName}?.<%= column.name %>}
           className="rw-input"
           errorClassName="rw-input rw-input-error"<%= column.component.startsWith('Checkbox') ? '' : `
           validation={{ required: true }}` %>
         />
-        <FieldError name="<%= column.name %>" className="rw-field-error" />
+        <FieldError name="${column.name}" className="rw-field-error" />
 <% }) %>
         <div className="rw-button-group">
           <Submit
