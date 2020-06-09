@@ -14,7 +14,7 @@ const TEMPLATES = fs
   .readdirSync(path.resolve(__dirname, 'templates'))
   .reduce((templates, file) => {
     if (file === 'auth.js.template') {
-      return { ...templates, 'base': path.resolve(__dirname, 'templates', file) }
+      return { ...templates, base: path.resolve(__dirname, 'templates', file) }
     } else {
       const provider = file.replace('auth.js.template_', '')
       return {
