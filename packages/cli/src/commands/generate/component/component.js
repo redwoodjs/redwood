@@ -7,8 +7,8 @@ import {
 
 const REDWOOD_WEB_PATH_NAME = 'components'
 
-export const files = ({ name, typescript, javascript }) => {
-  const isJavascript = javascript && !typescript
+export const files = ({ name, ...options }) => {
+  const isJavascript = options.javascript && !options.typescript
   const componentFile = templateForComponentFile({
     name,
     webPathSection: REDWOOD_WEB_PATH_NAME,
