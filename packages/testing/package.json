@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/testing",
   "description": "Tools, wrappers and defaults for testing a Redwood project.",
-  "version": "0.8.2",
+  "version": "0.9.1",
   "files": [
     "dist"
   ],
@@ -12,8 +12,8 @@
     "react": "*"
   },
   "dependencies": {
-    "@redwoodjs/internal": "^0.8.2",
-    "@redwoodjs/web": "^0.8.2",
+    "@redwoodjs/internal": "^0.9.1",
+    "@redwoodjs/web": "^0.9.1",
     "@testing-library/react": "^10.0.4"
   },
   "scripts": {

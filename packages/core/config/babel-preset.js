@@ -137,7 +137,7 @@ module.exports = () => ({
     // Automatically import files in `./web/src/pages/*` in to
     // the `./web/src/Routes.[ts|jsx]` file.
     {
-      test: /\/web\/src\/Routes.(js|tsx)$/,
+      test: ['./web/src/Routes.js', './web/src/Routes.tsx'],
       plugins: [require('../dist/babel-plugin-redwood-routes-auto-loader')],
     },
   ],
