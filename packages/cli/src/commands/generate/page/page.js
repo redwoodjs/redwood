@@ -1,6 +1,7 @@
 import Listr from 'listr'
 import camelcase from 'camelcase'
 import pascalcase from 'pascalcase'
+import terminalLink from 'terminal-link'
 
 import { writeFilesTask, addRoutesToRouterTask } from 'src/lib'
 import c from 'src/lib/colors'
@@ -51,8 +52,30 @@ export const routes = ({ name, path }) => {
 }
 
 export const command = 'page <name> [path]'
-export const desc = 'Generate a page component.'
-export const builder = { force: { type: 'boolean', default: false } }
+export const description = 'Generate a page and route component'
+export const builder = (yargs) => {
+  yargs
+    .positional('name', {
+      description: 'Name of the page',
+      type: 'string',
+    })
+    .positional('path', {
+      description: 'URL path to the page. Defaults to name',
+      type: 'string',
+    })
+    .option('force', {
+      alias: 'f',
+      default: false,
+      description: 'Overwrite existing files',
+      type: 'boolean',
+    })
+    .epilogue(
+      `Also see the ${terminalLink(
+        'Redwood CLI Reference',
+        'https://redwoodjs.com/reference/command-line-interface#generate-page'
+      )}`
+    )
+}
 
 export const handler = async ({ name, path, force }) => {
   const tasks = new Listr(

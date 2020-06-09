@@ -10,7 +10,15 @@ import {
 } from '../../generate/scaffold/scaffold'
 
 export const command = 'scaffold <model>'
-export const desc = 'Destroy pages, SDL, and a services object.'
+export const description =
+  'Destroy pages, SDL, and Services files based on a given DB schema Model'
+
+export const builder = (yargs) => {
+  yargs.positional('model', {
+    description: 'Model to destroy the scaffold of',
+    type: 'string',
+  })
+}
 
 export const tasks = ({ model, path }) =>
   new Listr(
