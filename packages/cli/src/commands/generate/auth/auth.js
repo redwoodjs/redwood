@@ -16,7 +16,7 @@ const TEMPLATES = fs
     if (file === 'auth.js.template') {
       return { ...templates, base: path.resolve(__dirname, 'templates', file) }
     } else {
-      const provider = file.replace('auth.js.template_', '')
+      const provider = file.replace('.auth.js.template', '')
       return {
         ...templates,
         [provider]: path.resolve(__dirname, 'templates', file),
@@ -26,9 +26,6 @@ const TEMPLATES = fs
 const OUTPUT_PATH = path.join(getPaths().api.lib, 'auth.js')
 const WEB_SRC_INDEX_PATH = path.join(getPaths().web.src, 'index.js')
 const SUPPORTED_PROVIDERS = fs
-  .readdirSync(path.resolve(__dirname, 'providers'))
-  .map((file) => path.basename(file, '.js'))
-const SUPPORTED_PROVIDERS_OPTIONS = fs
   .readdirSync(path.resolve(__dirname, 'providers'))
   .map((file) => path.basename(file, '.js'))
   .filter((file) => file !== 'README.md')
@@ -126,7 +123,7 @@ export const description = 'Generate an auth configuration'
 export const builder = (yargs) => {
   yargs
     .positional('provider', {
-      choices: SUPPORTED_PROVIDERS_OPTIONS,
+      choices: SUPPORTED_PROVIDERS,
       description: 'Auth provider to configure',
       type: 'string',
     })
