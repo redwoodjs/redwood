@@ -1,4 +1,4 @@
-const SinglePageLayout = ({ children }: { children?: React.ReactNode }) => {
+const SinglePageLayout: React.FunctionComponent = ({ children }) => {
   return <>{children}</>
 }
 

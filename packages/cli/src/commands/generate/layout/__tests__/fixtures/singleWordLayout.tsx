@@ -1,4 +1,4 @@
-const AppLayout = ({ children }: { children?: React.ReactNode }) => {
+const AppLayout: React.FunctionComponent = ({ children }) => {
   return <>{children}</>
 }
 
