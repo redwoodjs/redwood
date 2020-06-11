@@ -16,7 +16,7 @@ FlashContext provides update functions which allow subscribed components to send
 
 ### Consume messages
 
-Of course, we'll want a way to display messages to the user. That's easy...
+Of course, we'll want a way to display messages to the user. That's easy:
 
 ```js
 import { useFlash } from '@redwoodjs/web'
@@ -70,7 +70,7 @@ const MyMessageButton = () => {
 
 ```
 
-`addMessage()` takes two parameters; `text` (string) and `options` (object)
+[`addMessage()`](#addmessage) takes two parameters; `text` (string) and `options` (object)
 
 The `options` object has the following structure:
 
