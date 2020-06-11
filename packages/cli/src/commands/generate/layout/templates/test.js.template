@@ -1,11 +1,8 @@
-import { render, cleanup } from '@redwoodjs/testing'
+import { render } from '@redwoodjs/testing'
 
 import ${pascalName}Layout from './${pascalName}Layout'
 
 describe('${pascalName}Layout', () => {
-  afterEach(() => {
-    cleanup()
-  })
   it('renders successfully', () => {
     expect(() => {
       render(<${pascalName}Layout />)
