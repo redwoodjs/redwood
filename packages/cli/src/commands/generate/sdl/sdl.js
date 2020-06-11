@@ -16,6 +16,7 @@ import {
 } from 'src/lib'
 import c from 'src/lib/colors'
 
+import { yargsDefaults } from '../../generate'
 import { files as serviceFiles } from '../service/service'
 import { relationsForModel } from '../helpers'
 
@@ -147,27 +148,10 @@ export const files = async ({ name, crud, typescript, javascript }) => {
 }
 
 export const defaults = {
+  ...yargsDefaults,
   crud: {
     default: false,
     description: 'Also generate mutations',
-    type: 'boolean',
-  },
-  force: {
-    alias: 'f',
-    default: false,
-    description: 'Overwrite existing files',
-    type: 'boolean',
-  },
-  javascript: {
-    alias: 'js',
-    default: true,
-    description: 'Generate JavaScript files',
-    type: 'boolean',
-  },
-  typescript: {
-    alias: 'ts',
-    default: false,
-    description: 'Generate TypeScript files',
     type: 'boolean',
   },
 }

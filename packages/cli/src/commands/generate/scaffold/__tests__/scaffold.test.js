@@ -4,6 +4,7 @@ import path from 'path'
 import { loadGeneratorFixture } from 'src/lib/test'
 import { getDefaultArgs } from 'src/lib'
 
+import { yargsDefaults as defaults } from '../../../generate'
 import * as scaffold from '../scaffold'
 
 describe('in javascript (defualt) mode', () => {
@@ -11,7 +12,7 @@ describe('in javascript (defualt) mode', () => {
 
   beforeAll(async () => {
     files = await scaffold.files({
-      ...getDefaultArgs(scaffold.defaults),
+      ...getDefaultArgs(defaults),
       model: 'Post',
     })
   })
@@ -295,7 +296,7 @@ describe('in typescript mode', () => {
 
   beforeAll(async () => {
     files = await scaffold.files({
-      ...getDefaultArgs(scaffold.defaults),
+      ...getDefaultArgs(defaults),
       model: 'Post',
       typescript: true,
     })
