@@ -1,12 +1,8 @@
-import { render, cleanup, screen } from '@redwoodjs/testing'
+import { render, screen } from '@redwoodjs/testing'
 
 import { Loading, Empty, Failure, Success } from './UserCell'
 
 describe('UserCell', () => {
-  afterEach(() => {
-    cleanup()
-  })
-
   it('Loading renders successfully', () => {
     render(<Loading />)
     // Use screen.debug() to see output.
