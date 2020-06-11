@@ -23,6 +23,7 @@ import {
 } from 'src/lib'
 import c from 'src/lib/colors'
 
+import { yargsDefaults } from '../../generate'
 import { relationsForModel, intForeignKeysForModel } from '../helpers'
 import { files as sdlFiles, builder as sdlBuilder } from '../sdl/sdl'
 import {
@@ -332,26 +333,6 @@ const addScaffoldImport = () => {
   return 'Added scaffold import to index.js'
 }
 
-export const defaults = {
-  force: {
-    alias: 'f',
-    default: false,
-    description: 'Overwrite existing files',
-    type: 'boolean',
-  },
-  javascript: {
-    alias: 'js',
-    default: true,
-    description: 'Generate JavaScript files',
-    type: 'boolean',
-  },
-  typescript: {
-    alias: 'ts',
-    default: false,
-    description: 'Generate TypeScript files',
-    type: 'boolean',
-  },
-}
 export const command = 'scaffold <model>'
 export const description =
   'Generate Pages, SDL, and Services files based on a given DB schema Model. Also accepts <path/model>'
@@ -367,7 +348,7 @@ export const builder = (yargs) => {
         'https://redwoodjs.com/reference/command-line-interface#generate-scaffold'
       )}`
     )
-  Object.entries(defaults).forEach(([option, config]) => {
+  Object.entries(yargsDefaults).forEach(([option, config]) => {
     yargs.option(option, config)
   })
 }

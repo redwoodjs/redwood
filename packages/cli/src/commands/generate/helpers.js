@@ -10,6 +10,8 @@ import terminalLink from 'terminal-link'
 import { generateTemplate, getPaths, writeFilesTask } from 'src/lib'
 import c from 'src/lib/colors'
 
+import { yargsDefaults } from '../generate'
+
 /**
  * Reduces boilerplate for generating an output path and content to write to disk
  * for a component.
@@ -67,26 +69,7 @@ export const pathName = (path, name) => {
 export const createYargsForComponentGeneration = ({
   componentName,
   filesFn,
-  builderObj = {
-    force: {
-      alias: 'f',
-      default: false,
-      description: 'Overwrite existing files',
-      type: 'boolean',
-    },
-    javascript: {
-      alias: 'js',
-      default: true,
-      description: 'Generate JavaScript files',
-      type: 'boolean',
-    },
-    typescript: {
-      alias: 'ts',
-      default: false,
-      description: 'Generate TypeScript files',
-      type: 'boolean',
-    },
-  },
+  builderObj = yargsDefaults,
 }) => {
   return {
     command: `${componentName} <name>`,

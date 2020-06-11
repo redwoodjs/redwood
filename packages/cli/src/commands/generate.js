@@ -13,3 +13,24 @@ export const builder = (yargs) =>
         'https://redwoodjs.com/reference/command-line-interface#generate-alias-g'
       )}`
     )
+
+export const yargsDefaults = {
+  force: {
+    alias: 'f',
+    default: false,
+    description: 'Overwrite existing files',
+    type: 'boolean',
+  },
+  javascript: {
+    alias: 'js',
+    default: true,
+    description: 'Generate JavaScript files',
+    type: 'boolean',
+  },
+  typescript: {
+    alias: 'ts',
+    default: false,
+    description: 'Generate TypeScript files',
+    type: 'boolean',
+  },
+}

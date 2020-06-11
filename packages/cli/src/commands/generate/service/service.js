@@ -3,6 +3,7 @@ import pluralize from 'pluralize'
 import terminalLink from 'terminal-link'
 
 import { transformTSToJS } from '../../../lib'
+import { yargsDefaults } from '../../generate'
 import {
   templateForComponentFile,
   createYargsForComponentGeneration,
@@ -55,27 +56,10 @@ export const files = async ({
 }
 
 export const defaults = {
+  ...yargsDefaults,
   crud: {
     default: false,
     description: 'Create CRUD functions',
-    type: 'boolean',
-  },
-  force: {
-    alias: 'f',
-    default: false,
-    description: 'Overwrite existing files',
-    type: 'boolean',
-  },
-  javascript: {
-    alias: 'js',
-    default: true,
-    description: 'Generate JavaScript files',
-    type: 'boolean',
-  },
-  typescript: {
-    alias: 'ts',
-    default: false,
-    description: 'Generate TypeScript files',
     type: 'boolean',
   },
 }
