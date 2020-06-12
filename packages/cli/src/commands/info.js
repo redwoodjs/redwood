@@ -1,9 +1,18 @@
 // inspired by gatsby/packages/gatsby-cli/src/create-cli.js and
 // and gridsome/packages/cli/lib/commands/info.js
 import envinfo from 'envinfo'
+import terminalLink from 'terminal-link'
 
 export const command = 'info'
-export const desc = 'Prints your system environment information'
+export const description = 'Print your system environment information'
+export const builder = (yargs) => {
+  yargs.epilogue(
+    `Also see the ${terminalLink(
+      'Redwood CLI Reference',
+      'https://redwoodjs.com/reference/command-line-interface#info'
+    )}`
+  )
+}
 export const handler = async () => {
   try {
     const output = await envinfo.run({

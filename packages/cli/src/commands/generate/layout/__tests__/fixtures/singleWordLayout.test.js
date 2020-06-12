@@ -1,11 +1,8 @@
-import { render, cleanup } from '@testing-library/react'
+import { render } from '@redwoodjs/testing'
 
 import AppLayout from './AppLayout'
 
 describe('AppLayout', () => {
-  afterEach(() => {
-    cleanup()
-  })
   it('renders successfully', () => {
     expect(() => {
       render(<AppLayout />)

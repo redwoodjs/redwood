@@ -1,12 +1,8 @@
-import { render, cleanup, screen } from '@testing-library/react'
+import { render, screen } from '@redwoodjs/testing'
 
 import { Loading, Empty, Failure, Success } from './UserCell'
 
 describe('UserCell', () => {
-  afterEach(() => {
-    cleanup()
-  })
-
   it('Loading renders successfully', () => {
     render(<Loading />)
     // Use screen.debug() to see output.
@@ -24,9 +20,7 @@ describe('UserCell', () => {
   })
 
   it('Success renders successfully', () => {
-    render(
-      <Success userExample={{ user: { objectKey: 'objectValue' } }} />
-    )
+    render(<Success userExample={{ user: { objectKey: 'objectValue' } }} />)
     expect(
       screen.queryByText('{"user":{"objectKey":"objectValue"}}')
     ).toBeInTheDocument()

@@ -6,15 +6,23 @@ import c from 'src/lib/colors'
 import { files } from '../../generate/sdl/sdl'
 
 export const command = 'sdl <model>'
-export const desc = 'Destroy a GraphQL schema and service object.'
+export const description =
+  'Destroy a GraphQL schema and service component based on a given DB schema Model'
+
+export const builder = (yargs) => {
+  yargs.positional('model', {
+    description: 'Model to destroy the sdl of',
+    type: 'string',
+  })
+}
 
 export const tasks = ({ model }) =>
   new Listr(
     [
       {
-        title: 'Destroying GraphQL schema and service object files...',
+        title: 'Destroying GraphQL schema and service component files...',
         task: async () => {
-          const f = await files({ name: model, crud: false })
+          const f = await files({ name: model })
           return deleteFilesTask(f)
         },
       },

@@ -1,11 +1,8 @@
-import { render, cleanup } from '@testing-library/react'
+import { render } from '@redwoodjs/testing'
 
 import HomePage from './HomePage'
 
 describe('HomePage', () => {
-  afterEach(() => {
-    cleanup()
-  })
   it('renders successfully', () => {
     expect(() => {
       render(<HomePage />)

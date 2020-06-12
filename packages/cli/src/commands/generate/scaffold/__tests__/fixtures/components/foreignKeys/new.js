@@ -11,23 +11,26 @@ const CREATE_USER_PROFILE_MUTATION = gql`
 `
 
 const NewUserProfile = () => {
-  const [createUserProfile, { loading, error }] = useMutation(CREATE_USER_PROFILE_MUTATION, {
-    onCompleted: () => {
-      navigate(routes.userProfiles())
-    },
-  })
+  const [createUserProfile, { loading, error }] = useMutation(
+    CREATE_USER_PROFILE_MUTATION,
+    {
+      onCompleted: () => {
+        navigate(routes.userProfiles())
+      },
+    }
+  )
 
   const onSave = (input) => {
-    const castInput = Object.assign(input, { userId: parseInt(input.userId), })
+    const castInput = Object.assign(input, { userId: parseInt(input.userId) })
     createUserProfile({ variables: { input: castInput } })
   }
 
   return (
-    <div className="bg-white border rounded-lg overflow-hidden">
-      <header className="bg-gray-300 text-gray-700 py-3 px-4">
-        <h2 className="text-sm font-semibold">New UserProfile</h2>
+    <div className="rw-segment">
+      <header className="rw-segment-header">
+        <h2 className="rw-heading rw-heading-secondary">New UserProfile</h2>
       </header>
-      <div className="bg-gray-100 p-4">
+      <div className="rw-segment-main">
         <UserProfileForm onSave={onSave} loading={loading} error={error} />
       </div>
     </div>

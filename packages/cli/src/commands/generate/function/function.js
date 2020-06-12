@@ -1,6 +1,7 @@
 import path from 'path'
 
 import camelcase from 'camelcase'
+import terminalLink from 'terminal-link'
 
 import { getPaths } from 'src/lib'
 
@@ -24,10 +25,26 @@ export const files = async ({ name, ...rest }) => {
   return { [file[0]]: file[1] }
 }
 
-export const desc = 'Generate a function'
+export const description = 'Generate a Function'
 
-export const builder = {
-  force: { type: 'boolean', default: false },
+export const builder = (yargs) => {
+  yargs
+    .positional('name', {
+      description: 'Name of the Function',
+      type: 'string',
+    })
+    .option('force', {
+      alias: 'f',
+      default: false,
+      description: 'Overwrite existing files',
+      type: 'boolean',
+    })
+    .epilogue(
+      `Also see the ${terminalLink(
+        'Redwood CLI Reference',
+        'https://redwoodjs.com/reference/command-line-interface#generate-function'
+      )}`
+    )
 }
 
 export const { command, handler } = createYargsForComponentGeneration({

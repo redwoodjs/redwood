@@ -1,21 +1,26 @@
 import type { default as GoTrue, User as GoTrueUser } from 'gotrue-js'
 import type { Auth0Client as Auth0 } from '@auth0/auth0-spa-js'
 import type NetlifyIdentityNS from 'netlify-identity-widget'
+import * as firebase from 'firebase/app'
+import type { Magic, MagicUserMetadata } from 'magic-sdk'
 // TODO: Can also return an Auth0 user which doesn't have a definition.
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Auth0User {}
 export type { GoTrueUser }
 export type NetlifyIdentity = typeof NetlifyIdentityNS
+export type FirebaseClient = typeof firebase
+export type MagicLinks = Magic
+export type MagicUser = MagicUserMetadata
 
-export type SupportedAuthClients = Auth0 | GoTrue | NetlifyIdentity
-export type SupportedAuthTypes = 'auth0' | 'gotrue' | 'netlify'
+export type SupportedAuthClients = Auth0 | GoTrue | NetlifyIdentity | MagicLinks | FirebaseClient
+export type SupportedAuthTypes = 'auth0' | 'gotrue' | 'netlify' | 'magic.link' | 'firebase'
 
 export interface AuthClient {
   restoreAuthState?(): void | Promise<any>
   login(options?: any): Promise<any>
   logout(): void | Promise<void>
   getToken(): Promise<null | string>
-  currentUser(): Promise<null | Auth0User | GoTrueUser>
+  currentUser(): Promise<null | Auth0User | GoTrueUser | MagicUser>
   client: SupportedAuthClients
   type: SupportedAuthTypes
 }
@@ -29,6 +34,10 @@ export interface AuthClientGoTrue extends AuthClient {
     remember?: boolean
   }): Promise<GoTrueUser>
   client: GoTrue
+}
+
+export interface MagicLinksClient extends AuthClient {
+  login(options: { email: string; showUI?: boolean })
 }
 
 const mapAuthClientAuth0 = (client: Auth0): AuthClientAuth0 => {
@@ -102,6 +111,7 @@ const mapAuthClientNetlify = (client: NetlifyIdentity): AuthClient => {
         client.on('error', reject)
       })
     },
+
     getToken: async () => {
       const user = await client.currentUser()
       return user?.token?.access_token || null
@@ -112,17 +122,51 @@ const mapAuthClientNetlify = (client: NetlifyIdentity): AuthClient => {
   }
 }
 
+const mapAuthClientFirebase = (client: FirebaseClient): AuthClient => {
+  return {
+    type: 'firebase',
+    client,
+    restoreAuthState: () => client.auth().getRedirectResult(),
+    login: async () => {
+      const provider = new client.auth.GoogleAuthProvider()
+      return client.auth().signInWithRedirect(provider)
+    },
+    logout: () => client.auth().signOut(),
+    getToken: async () => client.auth().currentUser?.getIdToken() ?? null,
+    currentUser: async () => client.auth().currentUser,
+  }
+}
+
+const mapAuthClientMagicLinks = (client: MagicLinks): MagicLinksClient => {
+  return {
+    type: 'magic.link',
+    client,
+    login: async ({ email, showUI }) =>
+      await client.auth.loginWithMagicLink({ email: email, showUI: showUI }),
+    logout: async () => {
+      await client.user.logout()
+    },
+    getToken: async () => await client.user.getIdToken(),
+    currentUser: async () =>
+      (await client.user.isLoggedIn()) ? await client.user.getMetadata() : null,
+  }
+}
+
 export const createAuthClient = (
   client: SupportedAuthClients,
   type: SupportedAuthTypes
 ): AuthClient => {
   switch (type) {
+    case 'firebase':
+      return mapAuthClientFirebase(client as FirebaseClient)
     case 'auth0':
       return mapAuthClientAuth0(client as Auth0)
     case 'gotrue':
       return mapAuthClientGoTrue(client as GoTrue)
     case 'netlify':
       return mapAuthClientNetlify(client as NetlifyIdentity)
+    case 'magic.link':
+      return mapAuthClientMagicLinks(client as MagicLinks)
     default:
       throw new Error(
         `The ${type} auth client is not currently supported, please consider adding it.`

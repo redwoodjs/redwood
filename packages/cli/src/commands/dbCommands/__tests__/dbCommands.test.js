@@ -11,7 +11,7 @@ jest.mock('src/lib', () => {
   return {
     ...require.requireActual('src/lib'),
     runCommandTask: jest.fn((commands) => {
-      return commands.map(({ cmd, args }) => `${cmd} ${args.join(' ')}`)
+      return commands.map(({ cmd, args }) => `${cmd} ${args?.join(' ')}`)
     }),
     getPaths: () => ({
       api: {},
@@ -26,10 +26,10 @@ describe('db commands', () => {
   })
 
   it('some commands have a verbose flag', () => {
-    expect(up.builder.verbose).toBeDefined()
-    expect(down.builder.verbose).toBeDefined()
-    expect(generate.builder.verbose).toBeDefined()
-    expect(introspect.builder.verbose).toBeDefined()
+    expect(up.builder.toString()).toMatch('verbose')
+    expect(down.builder.toString()).toMatch('verbose')
+    expect(generate.builder.toString()).toMatch('verbose')
+    expect(introspect.builder.toString()).toMatch('verbose')
   })
 
   it('runs the command as expected', async () => {
@@ -38,7 +38,8 @@ describe('db commands', () => {
       'yarn prisma migrate up --experimental --create-db',
     ])
     expect(runCommandTask.mock.results[1].value).toEqual([
-      'yarn prisma generate',
+      //TODO: use mock fs for getPaths().api.dbSchema
+      'echo "no schema.prisma file found" undefined',
     ])
 
     await down.handler({})
@@ -53,7 +54,8 @@ describe('db commands', () => {
 
     await generate.handler({})
     expect(runCommandTask.mock.results[4].value).toEqual([
-      'yarn prisma generate',
+      //TODO: use mock fs for getPaths().api.dbSchema
+      'echo "no schema.prisma file found" undefined',
     ])
 
     await introspect.handler({})
