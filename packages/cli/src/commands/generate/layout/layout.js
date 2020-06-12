@@ -38,7 +38,7 @@ export const files = ({ name }) => {
 
 export const {
   command,
-  desc,
+  description,
   builder,
   handler,
 } = createYargsForComponentGeneration({

@@ -2,6 +2,8 @@ import type { APIGatewayProxyResult, APIGatewayProxyEvent } from 'aws-lambda'
 import type { Response, Request } from 'express'
 import qs from 'qs'
 
+import { handleError } from '../error'
+
 export const parseBody = (rawBody: string | Buffer) => {
   if (typeof rawBody === 'string') {
     return { body: rawBody, isBase64Encoded: false }
@@ -34,42 +36,62 @@ const expressResponseForLambdaResult = (
   lambdaResult: APIGatewayProxyResult
 ) => {
   const { statusCode = 200, headers, body = '' } = lambdaResult
+
   if (headers) {
     Object.keys(headers).forEach((headerName) => {
       const headerValue: any = headers[headerName]
       expressResFn.setHeader(headerName, headerValue)
     })
   }
-  expressResFn.statusCode = statusCode
+  expressResFn.status(statusCode)
+
+  // We're using this to log GraphQL errors, this isn't the right place.
+  // I can't seem to get the express middleware to play nicely.
+  if (statusCode === 400) {
+    try {
+      const b = JSON.parse(body)
+      if (b?.errors?.[0]) {
+        const { message } = b.errors[0]
+        const e = new Error(message)
+        e.stack = ''
+        handleError(e).then(console.log)
+      }
+    } catch (e) {
+      // do nothing
+    }
+  }
+
   // The AWS lambda docs specify that the response object must be
   // compatible with `JSON.stringify`, but the type definition specifices that
   // it must be a string.
-  return expressResFn.end(
-    typeof body === 'string' ? body : JSON.stringify(body)
-  )
+  if (typeof body === 'string') {
+    expressResFn.send(body)
+  } else {
+    expressResFn.json(body)
+  }
 }
 
 const expressResponseForLambdaError = (
   expressResFn: Response,
   error: Error
 ) => {
-  console.error(error)
-  expressResFn.status(500).send(error)
+  handleError(error).then(console.log)
+  expressResFn.status(500).send()
 }
 
 export const requestHandler = async (
   req: Request,
   res: Response,
-  lambdaFunction?: any
+  lambdaFunction: any
 ) => {
   const { routeName } = req.params
-
   const { handler } = lambdaFunction
 
+  // TODO: Move this to http.
   if (typeof handler !== 'function') {
     const errorMessage = `"${routeName}" does not export a function named "handler"`
     console.error(errorMessage)
-    return res.status(500).send(errorMessage)
+    res.status(500).send(errorMessage)
   }
 
   // We take the express request object and convert it into a lambda function event.
@@ -80,9 +102,11 @@ export const requestHandler = async (
     lambdaResult: APIGatewayProxyResult
   ) => {
     if (error) {
-      return expressResponseForLambdaError(expressResFn, error)
+      expressResponseForLambdaError(expressResFn, error)
+      return
     }
-    return expressResponseForLambdaResult(expressResFn, lambdaResult)
+
+    expressResponseForLambdaResult(expressResFn, lambdaResult)
   }
 
   // Execute the lambda function.

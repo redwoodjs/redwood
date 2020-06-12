@@ -94,10 +94,29 @@ export const createGraphQLHandler = (
    * */
   db?: any
 ) => {
+  const isDevEnv = process.env.NODE_ENV !== 'production'
   const handler = new ApolloServer({
-    playground: process.env.NODE_ENV !== 'production',
-    ...options,
+    // Turn off playground in production
+    debug: isDevEnv,
+    playground: isDevEnv,
+    // Log the errors in the console
+    formatError: (error) => {
+      if (isDevEnv) {
+        // I want the dev-server to pick this up!?
+        // TODO: Move the error handling into a separate package
+        // @ts-ignore
+        import('@redwoodjs/dev-server/dist/error')
+          .then(({ handleError }) => {
+            return handleError(error.originalError)
+          })
+          .then(console.log)
+          .catch(() => {})
+      }
+      return error
+    },
+    // Wrap the user's context function in our own
     context: createContextHandler(context, getCurrentUser),
+    ...options,
   }).createHandler()
 
   return (

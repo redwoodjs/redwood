@@ -1,4 +1,6 @@
-import { files } from '../../generate/service/service'
+import { getDefaultArgs } from 'src/lib'
+
+import { builder, files } from '../../generate/service/service'
 import { createYargsForComponentDestroy } from '../helpers'
 
 // This function wraps files(), so we can pass templateVars. templateVars
@@ -13,9 +15,12 @@ export const filesWithTemplateVars = (templateVars) => {
   return (args) => files({ ...args, ...templateVars })
 }
 
-export const { command, desc, handler, tasks } = createYargsForComponentDestroy(
-  {
-    componentName: 'service',
-    filesFn: filesWithTemplateVars({ crud: false }),
-  }
-)
+export const {
+  command,
+  description,
+  handler,
+  tasks,
+} = createYargsForComponentDestroy({
+  componentName: 'service',
+  filesFn: filesWithTemplateVars(getDefaultArgs(builder)),
+})

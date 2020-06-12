@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/dev-server",
   "description": "Redwood's HTTP server for serverless Functions",
-  "version": "0.8.2",
+  "version": "0.10.0",
   "bin": {
     "redwood-http-server": "./dist/main.js",
     "dev-server": "./dist/main.js"
@@ -12,14 +12,16 @@
   "license": "MIT",
   "dependencies": {
     "@babel/register": "^7.9.0",
-    "@redwoodjs/internal": "^0.8.2",
+    "@redwoodjs/internal": "^0.10.0",
     "body-parser": "^1.19.0",
     "chokidar": "^3.3.1",
     "express": "^4.17.1",
     "morgan": "^1.10.0",
     "qs": "^6.9.3",
     "require-dir": "^1.2.0",
-    "yargs": "^15.3.1"
+    "yargs": "^15.3.1",
+    "youch": "^2.0.10",
+    "youch-terminal": "^1.0.0"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.46",
