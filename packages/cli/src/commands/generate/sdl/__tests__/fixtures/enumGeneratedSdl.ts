@@ -14,7 +14,7 @@ export const schema = gql`
 
   type Query {
     shoes: [Shoe!]!
-    shoe(id: Int!): Shoe!
+    shoe(id: Int!): Shoe
   }
 
   input CreateShoeInput {
