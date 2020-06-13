@@ -5,6 +5,8 @@ import yargs from 'yargs'
 import { getPaths } from '@redwoodjs/internal'
 import { config } from 'dotenv-defaults'
 
+import versionCheck from './lib/version-check/index.js'
+
 config({
   path: path.join(getPaths().base, '.env'),
   encoding: 'utf8',
@@ -20,4 +22,5 @@ yargs
     "\"Create a page component named 'Home' at path '/'\""
   )
   .demandCommand()
+  .middleware([versionCheck.init])
   .strict().argv

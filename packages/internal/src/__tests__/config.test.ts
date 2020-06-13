@@ -18,6 +18,9 @@ describe('getConfig', () => {
         "browser": Object {
           "open": true,
         },
+        "cli": Object {
+          "checkVersion": true,
+        },
         "web": Object {
           "apiProxyPath": "/.netlify/functions",
           "apiProxyPort": 8911,

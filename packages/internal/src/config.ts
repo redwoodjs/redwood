@@ -37,6 +37,9 @@ export interface Config {
   browser: {
     open: boolean | string
   }
+  cli: {
+    checkVersion: boolean | string
+  }
 }
 
 const DEFAULT_CONFIG: Config = {
@@ -56,6 +59,9 @@ const DEFAULT_CONFIG: Config = {
   },
   browser: {
     open: true,
+  },
+  cli: {
+    checkVersion: true,
   },
 }
 
