@@ -7,15 +7,12 @@ export * from '@testing-library/react'
 export { customRender as render } from './render'
 
 export * from 'msw'
-
-interface GraphQLMock {
+export { server }
+export interface GraphQLMock {
   query(...args: Parameters<typeof originalGraphql['query']>): void
   mutation(...args: Parameters<typeof originalGraphql['mutation']>): void
 }
-
-const graphql: GraphQLMock = {
+export const graphql: GraphQLMock = {
   query: (...args) => server.use(originalGraphql.query(...args)),
   mutation: (...args) => server.use(originalGraphql.mutation(...args)),
 }
-
-export { server, graphql }
