@@ -1,4 +1,4 @@
-import { useContext, createRef } from 'react'
+import { useContext } from 'react'
 
 import { createNamedContext, LocationContext } from './internal'
 
@@ -32,7 +32,9 @@ const RouteAnnouncer = () => {
       role="alert"
       aria-live="assertive"
       aria-atomic="true"
-    >{announcement}</div>
+    >
+      {announcement}
+    </div>
   )
 }
 
