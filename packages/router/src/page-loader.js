@@ -1,10 +1,40 @@
-import { useContext } from 'react'
+import { useContext, createRef } from 'react'
 
-import { createNamedContext } from './internal'
+import { createNamedContext, LocationContext } from './internal'
 
 export const PageLoadingContext = createNamedContext('PageLoading')
 
 export const usePageLoadingContext = () => useContext(PageLoadingContext)
+
+/**
+ * This is a WIP; the location of this component will most likely change
+ * (we'll probably move it up the tree).
+ * The majority of this code was copied from
+ * https://github.com/gatsbyjs/gatsby/blob/5b15471e793aa16d8e63ad920d0f8c4c4f46052f/packages/gatsby/cache-dir/navigation.js#L161-L208
+ * Blog post explaining this code here:
+ * https://www.gatsbyjs.org/blog/2020-02-10-accessible-client-side-routing-improvements/ */
+const RouteAnnouncer = () => {
+  const location = useContext(LocationContext)
+  const announcement = `New page at ${location.pathname}`
+
+  return (
+    <div
+      style={{
+        position: `absolute`,
+        width: 1,
+        height: 1,
+        padding: 0,
+        overflow: `hidden`,
+        clip: `rect(0, 0, 0, 0)`,
+        whiteSpace: `nowrap`,
+        border: 0,
+      }}
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
+    >{announcement}</div>
+  )
+}
 
 export class PageLoader extends React.PureComponent {
   state = {
@@ -63,6 +93,7 @@ export class PageLoader extends React.PureComponent {
           value={{ loading: this.state.slowModuleImport }}
         >
           <Page {...this.state.params} />
+          <RouteAnnouncer />
         </PageLoadingContext.Provider>
       )
     } else {
