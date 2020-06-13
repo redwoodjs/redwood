@@ -5,11 +5,12 @@ import { loadGeneratorFixture } from 'src/lib/test'
 
 import * as page from '../page'
 
-let singleWordFiles, multiWordFiles
+let singleWordFiles, multiWordFiles, pluralWordFiles
 
 beforeAll(() => {
   singleWordFiles = page.files({ name: 'Home' })
   multiWordFiles = page.files({ name: 'ContactUs' })
+  pluralWordFiles = page.files({ name: 'Cats' })
 })
 
 test('returns exactly 2 files', () => {
@@ -50,6 +51,14 @@ test('creates a page test', () => {
       )
     ]
   ).toEqual(loadGeneratorFixture('page', 'multiWordPage.test.js'))
+})
+
+test('creates a page component with a plural word for name', () => {
+  expect(
+    pluralWordFiles[
+      path.normalize('/path/to/project/web/src/pages/CatsPage/CatsPage.js')
+    ]
+  ).toEqual(loadGeneratorFixture('page', 'pluralWordPage.js'))
 })
 
 test('creates a single-word route name', () => {
