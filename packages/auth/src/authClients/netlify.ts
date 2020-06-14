@@ -31,12 +31,11 @@ export const mapAuthClientNetlify = (client: NetlifyIdentity): AuthClient => {
         client.on('error', reject)
       })
     },
-
     getToken: async () => {
       const user = await client.currentUser()
       return user?.token?.access_token || null
     },
-    currentUser: async () => {
+    getUserMetadata: async () => {
       return client.currentUser()
     },
   }

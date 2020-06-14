@@ -16,6 +16,6 @@ export const mapAuthClientFirebase = (client: FirebaseClient): AuthClient => {
     },
     logout: () => client.auth().signOut(),
     getToken: async () => client.auth().currentUser?.getIdToken() ?? null,
-    currentUser: async () => client.auth().currentUser,
+    getUserMetadata: async () => client.auth().currentUser,
   }
 }

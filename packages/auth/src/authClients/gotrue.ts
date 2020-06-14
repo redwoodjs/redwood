@@ -13,9 +13,9 @@ export interface AuthClientGoTrue extends AuthClient {
   client: GoTrue
 }
 
-export const mapAuthClientGoTrue = (client: GoTrue): AuthClientGoTrue => {
+export const goTrue = (client: GoTrue): AuthClientGoTrue => {
   return {
-    type: 'gotrue',
+    type: 'goTrue',
     client,
     login: async ({ email, password, remember }) =>
       client.login(email, password, remember),
@@ -27,6 +27,6 @@ export const mapAuthClientGoTrue = (client: GoTrue): AuthClientGoTrue => {
       const user = await client.currentUser()
       return user?.jwt() || null
     },
-    currentUser: async () => client.currentUser(),
+    getUserMetadata: async () => client.currentUser(),
   }
 }

@@ -9,11 +9,9 @@ export interface AuthClientMagicLink extends AuthClient {
   login(options: { email: string; showUI?: boolean })
 }
 
-export const mapAuthClientMagicLink = (
-  client: MagicLink
-): AuthClientMagicLink => {
+export const magicLink = (client: MagicLink): AuthClientMagicLink => {
   return {
-    type: 'magic.link',
+    type: 'magicLink',
     client,
     login: async ({ email, showUI }) =>
       await client.auth.loginWithMagicLink({ email: email, showUI: showUI }),
@@ -21,7 +19,7 @@ export const mapAuthClientMagicLink = (
       await client.user.logout()
     },
     getToken: async () => await client.user.getIdToken(),
-    currentUser: async () =>
+    getUserMetadata: async () =>
       (await client.user.isLoggedIn()) ? await client.user.getMetadata() : null,
   }
 }

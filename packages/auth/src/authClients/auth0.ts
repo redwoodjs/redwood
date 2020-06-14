@@ -9,7 +9,7 @@ export type { Auth0 }
 // TODO: Map out this user properly.
 export interface Auth0User {}
 
-export const mapAuthClientAuth0 = (client: Auth0): AuthClientAuth0 => {
+export const auth0 = (client: Auth0): AuthClientAuth0 => {
   return {
     type: 'auth0',
     client,
@@ -28,7 +28,7 @@ export const mapAuthClientAuth0 = (client: Auth0): AuthClientAuth0 => {
     login: async () => client.loginWithRedirect(),
     logout: () => client.logout(),
     getToken: async () => client.getTokenSilently(),
-    currentUser: async () => {
+    getUserMetadata: async () => {
       const user = await client.getUser()
       return user || null
     },
