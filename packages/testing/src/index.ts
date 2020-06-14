@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { graphql as originalGraphql, rest as originalRest } from 'msw'
 
 import server from './mockServer'

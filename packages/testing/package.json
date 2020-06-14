@@ -24,5 +24,10 @@
     "build:types": "tsc --build --clean && tsc --build",
     "prepublishOnly": "yarn build",
     "build:watch": "nodemon --watch src --ext 'js,ts,tsx' --ignore dist --exec 'yarn build'"
+  },
+  "devDependencies": {
+    "apollo-server-testing": "^2.14.4",
+    "isomorphic-unfetch": "^3.0.0",
+    "unfetch": "^4.1.0"
   }
 }

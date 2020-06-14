@@ -21,6 +21,11 @@ module.exports = {
      * Make sure modules that require different versions of these
      * dependencies end up using the same one.
      */
+    '^node-request-interceptor$': path.join(
+      '@redwoodjs/testing/RequestInterceptor'
+    ),
+    '^@prisma/(.*)': path.join(NODE_MODULES_PATH, '@prisma/$1'),
+    '^\\.prisma/(.*)': path.join(NODE_MODULES_PATH, '.prisma/$1'),
     '^react$': path.join(NODE_MODULES_PATH, 'react'),
     '^react-dom$': path.join(NODE_MODULES_PATH, 'react-dom'),
     '^@apollo/react-common$': path.join(

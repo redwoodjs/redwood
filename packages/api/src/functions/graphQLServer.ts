@@ -27,7 +27,8 @@ export const createContextHandler = (
 ) => {
   return async ({
     event,
-    context,
+    // @ts-ignore
+    context = { callbackWaitsForEmptyEventLoop: false },
   }: {
     event: APIGatewayProxyEvent
     context: LambdaContext & { [key: string]: any }
@@ -57,6 +58,40 @@ export const createContextHandler = (
       ...userContext,
     })
   }
+}
+
+export function createGraphQLServer({
+  context,
+  getCurrentUser,
+  ...options
+}: GraphQLHandlerOptions) {
+  const isDevEnv = process.env.NODE_ENV !== 'production'
+
+  return new ApolloServer({
+    // Turn off playground in production
+    debug: isDevEnv,
+    playground: isDevEnv,
+    // Log the errors in the console
+    formatError: (error) => {
+      console.log('EEHEHEHEHEROR', error, process.env.NODE_ENV)
+      if (isDevEnv) {
+        // I want the dev-server to pick this up!?
+        // TODO: Move the error handling into a separate package
+        // @ts-ignore
+        import('@redwoodjs/dev-server/dist/error')
+          .then(({ handleError }) => {
+            // @ts-ignore
+            return handleError(error.originalError)
+          })
+          .then(console.log)
+          .catch(() => {})
+      }
+      return error
+    },
+    // Wrap the user's context function in our own
+    context: createContextHandler(context, getCurrentUser),
+    ...options,
+  })
 }
 
 interface GraphQLHandlerOptions extends Config {
@@ -94,28 +129,10 @@ export const createGraphQLHandler = (
    * */
   db?: any
 ) => {
-  const isDevEnv = process.env.NODE_ENV !== 'production'
-  const handler = new ApolloServer({
-    // Turn off playground in production
-    debug: isDevEnv,
-    playground: isDevEnv,
-    // Log the errors in the console
-    formatError: (error) => {
-      if (isDevEnv) {
-        // I want the dev-server to pick this up!?
-        // TODO: Move the error handling into a separate package
-        // @ts-ignore
-        import('@redwoodjs/dev-server/dist/error')
-          .then(({ handleError }) => {
-            return handleError(error.originalError)
-          })
-          .then(console.log)
-          .catch(() => {})
-      }
-      return error
-    },
-    // Wrap the user's context function in our own
-    context: createContextHandler(context, getCurrentUser),
+  console.log({ context, getCurrentUser, onException, options })
+  const handler = createGraphQLServer({
+    context,
+    getCurrentUser,
     ...options,
   }).createHandler()
 
