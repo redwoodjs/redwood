@@ -22,7 +22,8 @@ module.exports = {
      * dependencies end up using the same one.
      */
     '^node-request-interceptor$': path.join(
-      '@redwoodjs/testing/RequestInterceptor'
+      NODE_MODULES_PATH,
+      '@redwoodjs/testing/dist/RequestInterceptor'
     ),
     '^@prisma/(.*)': path.join(NODE_MODULES_PATH, '@prisma/$1'),
     '^\\.prisma/(.*)': path.join(NODE_MODULES_PATH, '.prisma/$1'),

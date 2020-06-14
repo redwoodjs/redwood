@@ -2,17 +2,14 @@
 
 import path from 'path'
 
-import gql from 'graphql-tag'
 import { setupServer } from 'msw/node'
-import { graphqlContext } from 'msw'
+import { restContext } from 'msw'
 import {
   createGraphQLServer,
   makeMergedSchema,
   makeServices,
 } from '@redwoodjs/api'
 import { createTestClient } from 'apollo-server-testing'
-
-import { RequestInterceptor } from './RequestInterceptor'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { getPaths } = require('@redwoodjs/internal')
@@ -48,28 +45,29 @@ export const graphQLServer = createGraphQLServer({
 
 const testClient = createTestClient(graphQLServer)
 
-const interceptor = new RequestInterceptor()
-
-interceptor.use(async (req) => {
-  const body = JSON.parse(req.body)
-
-  if (!body.query) return
-
-  const result = await testClient.query({
-    query: body.query,
-    variables: body.variables,
-  })
-
+const withApi = (resolver) => {
   return {
-    status: 200,
-    body: JSON.stringify({ data: result.data }),
+    predicate: () => true,
+    resolver,
+    defineContext() {
+      return restContext
+    },
   }
-})
+}
 
-// function withApi(resolver) {
-//   return {
-//     resolver
-//   }
-// }
+const server = setupServer(
+  withApi(async (req, res, ctx) => {
+    const { body } = req
 
-export default {}
+    if (!body.query) return
+
+    const result = await testClient.query({
+      query: body.query,
+      variables: body.variables,
+    })
+
+    return res(ctx.json({ data: result.data }))
+  })
+)
+
+export default server
