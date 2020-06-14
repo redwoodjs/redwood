@@ -2,7 +2,7 @@ import type { NetlifyIdentity } from './netlify'
 import type { Auth0, Auth0User } from './auth0'
 import type { GoTrue, GoTrueUser } from './gotrue'
 import type { MagicLink, MagicUser } from './magicLink'
-import type { FirebaseClient } from './firebase'
+import type { Firebase } from './firebase'
 //
 import { netlify } from './netlify'
 import { auth0 } from './auth0'
@@ -16,7 +16,7 @@ const typesToClients = {
   goTrue,
   magicLink,
   firebase,
-  /** We don't support your auth client? No problem, define your own using `custom`! */
+  /** Don't we support your auth client? No problem, define your own using `custom`! */
   custom: (c) => c,
 }
 
@@ -25,7 +25,7 @@ export type SupportedAuthClients =
   | GoTrue
   | NetlifyIdentity
   | MagicLink
-  | FirebaseClient
+  | Firebase
 
 export type SupportedAuthTypes = keyof typeof typesToClients
 

@@ -1,10 +1,10 @@
-import type * as firebase from 'firebase/app'
+import type * as Firebase from 'firebase/app'
 
-export type FirebaseClient = typeof firebase
+export type Firebase = typeof Firebase
 
 import { AuthClient } from './'
 
-export const mapAuthClientFirebase = (client: FirebaseClient): AuthClient => {
+export const firebase = (client: Firebase): AuthClient => {
   return {
     type: 'firebase',
     client,

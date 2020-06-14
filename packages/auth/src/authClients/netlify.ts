@@ -4,7 +4,7 @@ import type { AuthClient } from './'
 
 export type NetlifyIdentity = typeof NetlifyIdentityNS
 
-export const mapAuthClientNetlify = (client: NetlifyIdentity): AuthClient => {
+export const netlify = (client: NetlifyIdentity): AuthClient => {
   return {
     type: 'netlify',
     client,
