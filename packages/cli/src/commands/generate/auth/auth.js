@@ -3,6 +3,7 @@ import path from 'path'
 
 import execa from 'execa'
 import Listr from 'listr'
+import terminalLink from 'terminal-link'
 
 import { getPaths, writeFilesTask } from 'src/lib'
 import c from 'src/lib/colors'
@@ -109,9 +110,26 @@ export const graphFunctionDoesExist = () => {
 }
 
 export const command = 'auth <provider>'
-export const desc = 'Generates auth configuration.'
-export const builder = {
-  force: { type: 'boolean', default: false },
+export const description = 'Generate an auth configuration'
+export const builder = (yargs) => {
+  yargs
+    .positional('provider', {
+      choices: ['netlify', 'auth0', 'magic-link'],
+      description: 'Auth provider to configure',
+      type: 'string',
+    })
+    .option('force', {
+      alias: 'f',
+      default: false,
+      description: 'Overwrite existing configuration',
+      type: 'boolean',
+    })
+    .epilogue(
+      `Also see the ${terminalLink(
+        'Redwood CLI Reference',
+        'https://redwoodjs.com/reference/command-line-interface#generate-auth'
+      )}`
+    )
 }
 
 export const handler = async ({ provider, force }) => {

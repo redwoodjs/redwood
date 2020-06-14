@@ -35,10 +35,12 @@ export const watchFunctions = ({
   paths,
   onChange,
   onImport,
+  onException,
 }: {
   paths: NodeTargetPaths
   onChange: (event: string, path: string) => void
   onImport: (functions: Functions) => void
+  onException: (e: Error) => void
 }): void => {
   // Use babel-register to add a require hook:
   // > The require hook will bind itself to node's require and automatically
@@ -54,8 +56,12 @@ export const watchFunctions = ({
     cache: false,
   })
 
-  const functions = importFreshFunctions(paths.functions)
-  onImport(functions)
+  try {
+    const functions = importFreshFunctions(paths.functions)
+    onImport(functions)
+  } catch (e) {
+    onException(e)
+  }
 
   const watcher = chokidar.watch(paths.base, {
     ignored: (file: string) =>
@@ -65,8 +71,13 @@ export const watchFunctions = ({
   watcher.on('ready', () => {
     watcher.on('all', (event, path) => {
       onChange(event, path)
-      const functions = importFreshFunctions(paths.functions)
-      onImport(functions)
+      try {
+        const functions = importFreshFunctions(paths.functions)
+        onImport(functions)
+      } catch (e) {
+        console.log()
+        onException(e)
+      }
     })
   })
 }

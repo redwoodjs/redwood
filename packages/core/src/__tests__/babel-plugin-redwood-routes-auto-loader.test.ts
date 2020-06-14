@@ -8,6 +8,7 @@ jest.mock('@redwoodjs/internal', () => ({
   getPaths: () => {
     return {
       web: {
+        base: '/path/to/example/web',
         pages: '/path/to/example/web/src/pages',
       },
     }
@@ -15,77 +16,29 @@ jest.mock('@redwoodjs/internal', () => ({
   processPagesDir: () => {
     return [
       {
-        const: 'AboutPage',
-        path: '/Users/peterp/x/redwoodjs/example-blog/web/src/pages/AboutPage',
+        importName: 'APage',
+        importPath: 'src/pages/APage',
+        const: 'APage',
+        path: '/Users/peterp/x/redwoodjs/example-blog/web/src/pages/APage',
         importStatement:
-          "const AboutPage = { name: 'AboutPage', loader: () => import('src/pages/AboutPage') }",
+          "const AboutPage = { name: 'APage', loader: () => import('src/pages/APage') }",
       },
       {
-        const: 'AdminEditPostPage',
-        path:
-          '/Users/peterp/x/redwoodjs/example-blog/web/src/pages/Admin/EditPostPage',
+        importName: 'BPage',
+        importPath: 'src/pages/BPage',
+        const: 'BPage',
+        path: '/Users/peterp/x/redwoodjs/example-blog/web/src/pages/BPage',
         importStatement:
-          "const AdminEditPostPage = { name: 'AdminEditPostPage', loader: () => import('src/pages/Admin/EditPostPage') }",
+          "const AdminEditPostPage = { name: 'BPage', loader: () => import('src/pages/BPage') }",
       },
+
       {
-        const: 'AdminNewPostPage',
-        path:
-          '/Users/peterp/x/redwoodjs/example-blog/web/src/pages/Admin/NewPostPage',
+        importName: 'NestedCPage',
+        importPath: 'src/pages/Nested/NestedCPage',
+        const: 'BPage',
+        path: '/Users/peterp/x/redwoodjs/example-blog/web/src/pages/BPage',
         importStatement:
-          "const AdminNewPostPage = { name: 'AdminNewPostPage', loader: () => import('src/pages/Admin/NewPostPage') }",
-      },
-      {
-        const: 'AdminPostsPage',
-        path:
-          '/Users/peterp/x/redwoodjs/example-blog/web/src/pages/Admin/PostsPage',
-        importStatement:
-          "const AdminPostsPage = { name: 'AdminPostsPage', loader: () => import('src/pages/Admin/PostsPage') }",
-      },
-      {
-        const: 'ContactPage',
-        path:
-          '/Users/peterp/x/redwoodjs/example-blog/web/src/pages/ContactPage',
-        importStatement:
-          "const ContactPage = { name: 'ContactPage', loader: () => import('src/pages/ContactPage') }",
-      },
-      {
-        const: 'FatalErrorPage',
-        path:
-          '/Users/peterp/x/redwoodjs/example-blog/web/src/pages/FatalErrorPage',
-        importStatement:
-          "const FatalErrorPage = { name: 'FatalErrorPage', loader: () => import('src/pages/FatalErrorPage') }",
-      },
-      {
-        const: 'HomePage',
-        path: '/Users/peterp/x/redwoodjs/example-blog/web/src/pages/HomePage',
-        importStatement:
-          "const HomePage = { name: 'HomePage', loader: () => import('src/pages/HomePage') }",
-      },
-      {
-        const: 'NotFoundPage',
-        path:
-          '/Users/peterp/x/redwoodjs/example-blog/web/src/pages/NotFoundPage',
-        importStatement:
-          "const NotFoundPage = { name: 'NotFoundPage', loader: () => import('src/pages/NotFoundPage') }",
-      },
-      {
-        const: 'PostPage',
-        path: '/Users/peterp/x/redwoodjs/example-blog/web/src/pages/PostPage',
-        importStatement:
-          "const PostPage = { name: 'PostPage', loader: () => import('src/pages/PostPage') }",
-      },
-      {
-        const: 'SearchPage',
-        path: '/Users/peterp/x/redwoodjs/example-blog/web/src/pages/SearchPage',
-        importStatement:
-          "const SearchPage = { name: 'SearchPage', loader: () => import('src/pages/SearchPage') }",
-      },
-      {
-        const: 'TaggedPostsPage',
-        path:
-          '/Users/peterp/x/redwoodjs/example-blog/web/src/pages/TaggedPostsPage',
-        importStatement:
-          "const TaggedPostsPage = { name: 'TaggedPostsPage', loader: () => import('src/pages/TaggedPostsPage') }",
+          "const AdminEditPostPage = { name: 'BPage', loader: () => import('src/pages/BPage') }",
       },
     ]
   },
@@ -93,6 +46,6 @@ jest.mock('@redwoodjs/internal', () => ({
 
 pluginTester({
   plugin,
-  pluginName: 'babel-plugin-redwood-import-dir',
+  pluginName: 'babel-plugin-redwood-routes-auto-loader',
   fixtures: path.join(__dirname, '__fixtures__/routes-auto-loader'),
 })

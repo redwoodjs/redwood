@@ -1,13 +1,32 @@
 import fs from 'fs'
 import path from 'path'
 
+import terminalLink from 'terminal-link'
+
 import { runCommandTask, getPaths } from 'src/lib'
 
 export const command = 'generate'
-export const desc = 'Generate the Prisma client.'
-export const builder = {
-  verbose: { type: 'boolean', default: true, alias: ['v'] },
-  force: { type: 'boolean', default: true, alias: ['f'] },
+export const description = 'Generate the Prisma client'
+export const builder = (yargs) => {
+  yargs
+    .option('force', {
+      alias: 'f',
+      default: true,
+      description: 'Overwrite existing Client',
+      type: 'boolean',
+    })
+    .option('verbose', {
+      alias: 'v',
+      default: true,
+      description: 'Print more',
+      type: 'boolean',
+    })
+    .epilogue(
+      `Also see the ${terminalLink(
+        'Redwood CLI Reference',
+        'https://redwoodjs.com/reference/command-line-interface#db-generate'
+      )}`
+    )
 }
 export const handler = async ({ verbose = true, force = false }) => {
   const schemaExists = fs.existsSync(getPaths().api.dbSchema)

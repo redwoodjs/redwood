@@ -1,17 +1,40 @@
+import terminalLink from 'terminal-link'
+
 import { runCommandTask } from 'src/lib'
 
-export const command = 'down'
-export const desc = 'Migrate your database down.'
-export const builder = {
-  verbose: { type: 'boolean', default: true, alias: ['v'] },
+export const command = 'down [decrement]'
+export const description = 'Migrate your database down'
+export const builder = (yargs) => {
+  yargs
+    .positional('decrement', {
+      default: 1,
+      description: 'Number of backwards migrations to apply',
+      type: 'number',
+    })
+    .option('verbose', {
+      alias: 'v',
+      default: true,
+      description: 'Print more',
+      type: 'boolean',
+    })
+    .epilogue(
+      `Also see the ${terminalLink(
+        'Redwood CLI Reference',
+        'https://redwoodjs.com/reference/command-line-interface#db-down'
+      )}`
+    )
 }
-export const handler = async ({ verbose = true }) => {
+export const handler = async ({ decrement, verbose = true }) => {
   await runCommandTask(
     [
       {
         title: 'Migrate database down...',
         cmd: 'yarn prisma',
-        args: ['migrate down', '--experimental'],
+        args: [
+          'migrate down',
+          decrement && `${decrement}`,
+          '--experimental',
+        ].filter(Boolean),
       },
     ],
     {

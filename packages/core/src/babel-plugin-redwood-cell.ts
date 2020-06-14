@@ -60,7 +60,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
           }
 
           // Insert at the top of the file:
-          // `import { withCell } from '@redwoodjs/web'`
+          // + import { withCell } from '@redwoodjs/web'
           path.node.body.unshift(
             t.importDeclaration(
               [
@@ -74,7 +74,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
           )
 
           // Insert at the bottom of the file:
-          // export default withCell({ QUERY?, Loading?, Succes?, Failure?, Empty?, beforeQuery?, afterQuery? })
+          // + export default withCell({ QUERY?, Loading?, Succes?, Failure?, Empty?, beforeQuery?, afterQuery? })
           path.node.body.push(
             t.exportDefaultDeclaration(
               t.callExpression(t.identifier('withCell'), [

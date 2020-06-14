@@ -224,7 +224,7 @@ You can avoid having to provide `RW_PATH` by defining an environment variable on
 
 ### copy:watch (alias cpw)
 
-Watch the Redwood Framework path for changes and copy them over to this project.
+Watch the Redwood Framework path for changes and copy them over to this project.  
 
 ```terminal
 yarn rwt cpw [RW_PATH]

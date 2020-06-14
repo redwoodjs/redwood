@@ -1,6 +1,7 @@
 import { gql } from 'apollo-server-lambda'
 import { GraphQLDate, GraphQLTime, GraphQLDateTime } from 'graphql-iso-date'
 
+// @ts-ignore
 import apiPackageJson from 'src/../package.json'
 
 /**

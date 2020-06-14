@@ -5,5 +5,6 @@ export const users = () => {
 }
 
 export const User = {
-  userProfiles: (_obj, { root }) => db.user.findOne({ where: { id: root.id } }).userProfiles(),
+  userProfiles: (_obj, { root }) =>
+    db.user.findOne({ where: { id: root.id } }).userProfiles(),
 }

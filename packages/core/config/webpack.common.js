@@ -36,20 +36,65 @@ module.exports = (webpackEnv) => {
   const isEnvProduction = webpackEnv === 'production'
 
   const getStyleLoaders = () => {
+    // Obscured classnames in production, more expressive classnames in development.
+    const localIdentName = isEnvProduction
+      ? '[hash:base64]'
+      : '[path][name]__[local]--[hash:base64:5]'
     return [
       {
-        test: /\.scss$/,
-        use: [
+        test: /\.module\.css$/,
+        loader: [
           isEnvProduction ? MiniCssExtractPlugin.loader : 'style-loader',
-          'css-loader',
-          'sass-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              modules: {
+                localIdentName,
+              },
+              sourceMap: !isEnvProduction,
+            },
+          },
         ],
       },
       {
         test: /\.css$/,
-        use: [
+        loader: [
           isEnvProduction ? MiniCssExtractPlugin.loader : 'style-loader',
-          'css-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: !isEnvProduction,
+            },
+          },
+        ],
+      },
+      {
+        test: /\.module\.scss$/,
+        loader: [
+          isEnvProduction ? MiniCssExtractPlugin.loader : 'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              modules: {
+                localIdentName,
+              },
+              sourceMap: !isEnvProduction,
+            },
+          },
+          'sass-loader',
+        ],
+      },
+      {
+        test: /\.scss$/,
+        loader: [
+          isEnvProduction ? MiniCssExtractPlugin.loader : 'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: !isEnvProduction,
+            },
+          },
+          'sass-loader',
         ],
       },
     ]
@@ -115,12 +160,16 @@ module.exports = (webpackEnv) => {
     ].filter(Boolean),
     module: {
       rules: [
+        // ** NOTE ** People usually overwrite these loaders via index,
+        // so it's important to try and keep those indexes stable.
         {
           oneOf: [
+            // (0)
             {
               loader: 'null-loader',
               test: /\.(md|test\.js|stories\.js)$/,
             },
+            // (1)
             {
               test: /\.(png|jpg|gif)$/,
               use: [
@@ -133,21 +182,22 @@ module.exports = (webpackEnv) => {
                 },
               ],
             },
+            // (2)
             {
               test: /\.(js|jsx|ts|tsx)$/,
               exclude: /(node_modules)/,
               use: {
                 loader: 'babel-loader',
-                options: {
-                  cacheDirectory: true,
-                },
               },
             },
+            // (3)
             {
               test: /\.svg$/,
               loader: 'svg-react-loader',
             },
+            // .module.css (4), .css (5), .module.scss (6), .scss (7)
             ...getStyleLoaders(),
+            // (8)
             {
               loader: 'file-loader',
               exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
