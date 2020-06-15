@@ -228,6 +228,21 @@ const Submit = React.forwardRef((props, ref) => (
   <button ref={ref} type="submit" {...props} />
 ))
 
+// Renders a <input>
+
+const InputField = (props) => {
+  const { register } = useFormContext()
+  const tagProps = inputTagProps(props)
+
+  return (
+    <input
+      id={props.id || props.name}
+      ref={register(props.validation || { required: false })}
+      {...tagProps}
+    />
+  )
+}
+
 // Create a component for each type of Input.
 //
 // Uses a bit of Javascript metaprogramming to create the functions with a dynamic
@@ -240,20 +255,9 @@ const Submit = React.forwardRef((props, ref) => (
 
 let inputComponents = {}
 INPUT_TYPES.forEach((type) => {
-  inputComponents[`${pascalcase(type)}Field`] = (props) => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const { register } = useFormContext()
-    const tagProps = inputTagProps(props)
-
-    return (
-      <input
-        type={type}
-        id={props.id || props.name}
-        ref={register(props.validation || { required: false })}
-        {...tagProps}
-      />
-    )
-  }
+  inputComponents[`${pascalcase(type)}Field`] = (props) => (
+    <InputField type={type} {...props} />
+  )
 })
 
 export {
@@ -261,6 +265,7 @@ export {
   FieldErrorContext,
   FormError,
   FieldError,
+  InputField,
   Label,
   TextAreaField,
   SelectField,
