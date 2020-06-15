@@ -32,7 +32,7 @@ export const AuthContext = React.createContext<Partial<AuthContextInterface>>(
 )
 
 type AuthProviderProps = {
-  client: AuthClient
+  client: SupportedAuthClients
   type: SupportedAuthTypes
   skipFetchCurrentUser?: boolean
 }
@@ -70,7 +70,7 @@ export class AuthProvider extends React.Component<
 
   rwClient: AuthClient
 
-  constructor(props) {
+  constructor(props: AuthProviderProps) {
     super(props)
     this.rwClient = createAuthClient(props.client, props.type)
   }
@@ -124,7 +124,7 @@ export class AuthProvider extends React.Component<
     })
   }
 
-  logIn = async (options?) => {
+  logIn = async (options?: any) => {
     await this.rwClient.login(options)
     return this.setAuthState()
   }

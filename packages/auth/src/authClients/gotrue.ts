@@ -1,8 +1,9 @@
-import type { default as GoTrue, User as GoTrueUser } from 'gotrue-js'
+import type { default as GoTrue } from 'gotrue-js'
+import type { User } from 'gotrue-js'
 
 import type { AuthClient } from './index'
-
-export type { GoTrue, GoTrueUser }
+export type GoTrueUser = User
+export type { GoTrue }
 
 export interface AuthClientGoTrue extends AuthClient {
   login(options: {

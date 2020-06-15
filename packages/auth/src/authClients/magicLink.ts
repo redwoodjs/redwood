@@ -6,7 +6,7 @@ export type MagicUser = MagicUserMetadata
 import type { AuthClient } from './'
 
 export interface AuthClientMagicLink extends AuthClient {
-  login(options: { email: string; showUI?: boolean })
+  login(options: { email: string; showUI?: boolean }): Promise<any>
 }
 
 export const magicLink = (client: MagicLink): AuthClientMagicLink => {

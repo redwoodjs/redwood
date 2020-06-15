@@ -39,7 +39,7 @@
     "packages/core/src/__tests__/__fixtures__"
   ],
   "scripts": {
-    "build": "yarn build:clean && yarn build:js && yarn build:types",
+    "build": "yarn build:clean && yarn build:js",
     "build:clean": "lerna run build:clean",
     "build:js": "cross-env NODE_ENV=production lerna run build",
     "build:types": "tsc --build --clean && tsc --build",

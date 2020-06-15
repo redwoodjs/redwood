@@ -1,4 +1,4 @@
-import type NetlifyIdentityNS from 'netlify-identity-widget'
+import type * as NetlifyIdentityNS from 'netlify-identity-widget'
 
 import type { AuthClient } from './'
 
