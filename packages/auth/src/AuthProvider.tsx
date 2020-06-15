@@ -129,8 +129,8 @@ export class AuthProvider extends React.Component<
     return this.setAuthState()
   }
 
-  logOut = async () => {
-    await this.rwClient.logout()
+  logOut = async (options?: any) => {
+    await this.rwClient.logout(options)
     this.setState({
       userMetadata: null,
       currentUser: null,

@@ -40,7 +40,7 @@ export type SupportedUserMetadata = Auth0User | GoTrueUser | MagicUser
 export interface AuthClient {
   restoreAuthState?(): void | Promise<any>
   login(options?: any): Promise<any>
-  logout(): void | Promise<void>
+  logout(options?: any): void | Promise<void>
   getToken(): Promise<null | string>
   /** The user's data from the AuthProvider */
   getUserMetadata(): Promise<null | SupportedUserMetadata>
