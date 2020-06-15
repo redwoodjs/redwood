@@ -1,14 +1,14 @@
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import type { Config } from 'apollo-server-lambda'
 import type { Context, ContextFunction } from 'apollo-server-core'
-import type { AuthTokenType } from 'src/auth/authHeaders'
+import type { AuthToken } from 'src/auth/authHeaders'
 //
 import { ApolloServer } from 'apollo-server-lambda'
 import { getAuthProviderType, decodeAuthToken } from 'src/auth/authHeaders'
 import { setContext } from 'src/globalContext'
 
 export type GetCurrentUser = (
-  authToken?: AuthTokenType
+  token: AuthToken
 ) => Promise<null | object | string>
 
 /**
