@@ -6,31 +6,17 @@
 - [Auth0](https://github.com/auth0/auth0-spa-js)
 - [Netlify GoTrue-JS](https://github.com/netlify/gotrue-js)
 - [Magic Links - Magic.js](https://github.com/MagicHQ/magic-js)
+- [Firebase GoogleAuthProvider](https://firebase.google.com/docs/reference/js/firebase.auth.GoogleAuthProvider)
 - [Contribute](#contributing) one, it's SuperEasy™!
 
 ## Installation
 
 ### CLI Auth Generator
 The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
-```bash
+```terminal
 yarn rw g auth [provider]
 ```
-*`[provider]` values can be either "netlify" or "auth0".*
-
-### Manual Install
-#### Netlify Identity Widget
-
-```bash
-cd web
-yarn add @redwoodjs/auth netlify-identity-widget
-```
-
-#### Auth0
-
-```bash
-cd web
-yarn add @redwoodjs/auth @auth0/auth0-spa-js
-```
+*`[provider]` values can be either "netlify", "auth0", "magicLink", or "firebase"
 
 ## Setup
 
@@ -89,7 +75,7 @@ ReactDOM.render(
 )
 ```
 
-### For Magic.Link
+### For magic.link
 
 To get your application keys, go to [dashboard.magic.link](https://dashboard.magic.link/) then navigate to the API keys add them to your .env
 
@@ -101,7 +87,43 @@ const m = new Magic(process.env.MAGICLINK_PUBLIC)
 
 ReactDOM.render(
   <FatalErrorBoundary page={FatalErrorPage}>
-    <AuthProvider client={m} type="magic.link">
+    <AuthProvider client={m} type="magicLink">
+      <RedwoodProvider>
+        <Routes />
+      </RedwoodProvider>
+    </AuthProvider>
+  </FatalErrorBoundary>,
+  document.getElementById('redwood-app')
+)
+```
+
+### For Firebase
+
+We're using [https://firebase.google.com/docs/auth/web/google-signin](Firebase Google Sign-In), so you'll have to follow the ["Before you begin"](https://firebase.google.com/docs/auth/web/google-signin#before_you_begin) steps in this guide. Only follow the "before you begin" parts.
+
+```js
+// web/src/index.js
+import * as firebase from 'firebase/app'
+import 'firebase/auth'
+
+const firebaseClientConfig = {
+  apiKey: process.env.FIREBASE_API_KEY,
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+  databaseURL: process.env.FIREBASE_DATABASE_URL,
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.FIREBASE_APP_ID,
+}
+
+const firebaseClient = ((config) => {
+  firebase.initializeApp(config)
+  return firebase
+})(firebaseClientConfig)
+
+ReactDOM.render(
+  <FatalErrorBoundary page={FatalErrorPage}>
+    <AuthProvider client={firebaseClient} type="firebase">
       <RedwoodProvider>
         <Routes />
       </RedwoodProvider>
@@ -225,6 +247,10 @@ export const getCurrentUser = async (authToken) => {
 }
 ```
 
+### Firebase
+
+You must follow the ["Before you begin"](https://firebase.google.com/docs/auth/web/google-signin) part of the "Authenticate Using Google Sign-In with JavaScript" guide.
+
 ---
 
 ### Routes
@@ -252,7 +278,7 @@ Adding a new auth provider is easier than you may expect. The main objective is 
 Here is the implementation for Auth0:
 
 ```ts
-// authClients.ts
+// authClients/auth0.ts
 const mapAuthClientAuth0 = (client: Auth0): AuthClientAuth0 => {
   return {
     type: 'auth0',
@@ -283,7 +309,6 @@ const mapAuthClientAuth0 = (client: Auth0): AuthClientAuth0 => {
 You'll need to import the type definition for you client and add it to the supported auth types:
 
 ```ts
-// authClients.ts
+// authClients/index.ts
 export type SupportedAuthClients = Auth0 | GoTrue | NetlifyIdentity | MagicLinks
-export type SupportedAuthTypes = 'auth0' | 'gotrue' | 'netlify' | 'magic.link'
 ```
