@@ -10,23 +10,31 @@ import c from 'src/lib/colors'
 
 const API_GRAPHQL_PATH = path.join(getPaths().api.functions, 'graphql.js')
 const API_SRC_PATH = path.join(getPaths().api.src)
-const TEMPLATE_PATH = path.resolve(__dirname, 'templates', 'auth.js.template')
-const TEMPLATE = fs.readFileSync(TEMPLATE_PATH).toString()
+const TEMPLATES = fs
+  .readdirSync(path.resolve(__dirname, 'templates'))
+  .reduce((templates, file) => {
+    if (file === 'auth.js.template') {
+      return { ...templates, base: path.resolve(__dirname, 'templates', file) }
+    } else {
+      const provider = file.replace('.auth.js.template', '')
+      return {
+        ...templates,
+        [provider]: path.resolve(__dirname, 'templates', file),
+      }
+    }
+  }, {})
 const OUTPUT_PATH = path.join(getPaths().api.lib, 'auth.js')
 const WEB_SRC_INDEX_PATH = path.join(getPaths().web.src, 'index.js')
 const SUPPORTED_PROVIDERS = fs
   .readdirSync(path.resolve(__dirname, 'providers'))
   .map((file) => path.basename(file, '.js'))
+  .filter((file) => file !== 'README.md')
 
 // returns the content of index.js with import statements added
 const addWebImports = (content, imports) => {
-  const importStatements = imports.map((imp) => {
-    return `import ${imp.import} from '${imp.from}'`
-  })
-
   return (
     `import { AuthProvider } from '@redwoodjs/auth'\n` +
-    importStatements.join('\n') +
+    imports.join('\n') +
     '\n' +
     content
   )
@@ -60,9 +68,10 @@ const addWebRender = (content, authProvider) => {
 }
 
 // the files to create to support auth
-export const files = () => {
+export const files = (provider) => {
+  const template = TEMPLATES[provider] ?? TEMPLATES.base
   return {
-    [OUTPUT_PATH]: TEMPLATE,
+    [OUTPUT_PATH]: fs.readFileSync(template).toString(),
   }
 }
 
@@ -114,7 +123,7 @@ export const description = 'Generate an auth configuration'
 export const builder = (yargs) => {
   yargs
     .positional('provider', {
-      choices: ['netlify', 'auth0', 'magic-link'],
+      choices: SUPPORTED_PROVIDERS,
       description: 'Auth provider to configure',
       type: 'string',
     })
@@ -162,7 +171,7 @@ export const handler = async ({ provider, force }) => {
         title: 'Generating auth lib...',
         task: (_ctx, task) => {
           if (apiSrcDoesExist()) {
-            return writeFilesTask(files(), { overwriteExisting: force })
+            return writeFilesTask(files(provider), { overwriteExisting: force })
           } else {
             task.skip('api/src not found, skipping')
           }
