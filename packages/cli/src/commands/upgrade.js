@@ -1,25 +1,40 @@
 import execa from 'execa'
 import Listr from 'listr'
+import terminalLink from 'terminal-link'
 
 import c from 'src/lib/colors'
 
 export const command = 'upgrade'
-export const desc = 'Upgrade all @redwoodjs packages via interactive CLI'
+export const description = 'Upgrade all @redwoodjs packages via interactive CLI'
 
 export const builder = (yargs) => {
   yargs
     .option('dry-run', {
       alias: 'd',
-      type: 'boolean',
       description: 'Check for outdated packages without upgrading',
+      type: 'boolean',
     })
     .option('tag', {
       alias: 't',
       choices: ['canary', 'rc'],
       description:
-        'WARNING: Unstable releases. Force upgrades packages to most recent version for the given --tag.',
+        'WARNING: Unstable releases! Force upgrades packages to the most recent version for the given --tag',
+      type: 'string',
     })
-    .strict()
+    .epilogue(
+      `Also see the ${terminalLink(
+        'Redwood CLI Reference',
+        'https://redwoodjs.com/reference/command-line-interface#upgrade'
+      )}`
+    )
+    // Just to make an empty line
+    .epilogue('')
+    .epilogue(
+      `We are < v1.0.0, so breaking changes occur frequently. For more information on the current release, see the ${terminalLink(
+        'release page',
+        'https://github.com/redwoodjs/redwood/releases'
+      )}`
+    )
 }
 
 const rwPackages =

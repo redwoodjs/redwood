@@ -16,7 +16,28 @@ The following CLI command will install required packages and generate boilerplat
 ```terminal
 yarn rw g auth [provider]
 ```
-*`[provider]` values can be either "netlify", "auth0", "magicLink", or "firebase"
+*`[provider]` values can be either "netlify", "auth0" or "magic-link".*
+
+### Manual Install
+#### Netlify Identity Widget
+
+```bash
+cd web
+yarn add @redwoodjs/auth netlify-identity-widget
+```
+
+#### Auth0
+
+```bash
+cd web
+yarn add @redwoodjs/auth @auth0/auth0-spa-js
+```
+#### Magic.Link
+
+```bash
+cd web
+yarn add @redwoodjs/auth magic-sdk
+```
 
 ## Setup
 

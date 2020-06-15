@@ -3,7 +3,7 @@ import { createYargsForComponentDestroy } from '../helpers'
 
 export const {
   command,
-  desc,
+  description,
   builder,
   handler,
   tasks,
