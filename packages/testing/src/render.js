@@ -1,6 +1,7 @@
 import React from 'react'
 import { getPaths } from '@redwoodjs/internal'
 import { render } from '@testing-library/react'
+import { RedwoodProvider } from '@redwoodjs/web'
 
 // Import the user's Router from `./web/src/Router.js`.
 // We use the `children` from this Router that are rendered via
@@ -9,10 +10,10 @@ const { default: UserRouterWithRoutes } = require(getPaths().web.routes)
 
 const AllTheProviders = ({ children }) => {
   return (
-    <>
+    <RedwoodProvider>
       <UserRouterWithRoutes />
       {children}
-    </>
+    </RedwoodProvider>
   )
 }
 
