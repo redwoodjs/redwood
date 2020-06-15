@@ -1,24 +1,30 @@
 import React from 'react'
 
 import type {
+  AuthClient,
   SupportedAuthTypes,
   SupportedAuthClients,
-  Auth0User,
-  GoTrueUser,
-  AuthClient,
-  MagicUser,
-} from './authClient'
-import { createAuthClient } from './authClient'
+  SupportedUserMetadata,
+} from './authClients'
+import { createAuthClient } from './authClients'
+
+export interface CurrentUser {}
 
 export interface AuthContextInterface {
+  /** Determining your current authentication state */
   loading: boolean
   isAuthenticated: boolean
-  currentUser: null | GoTrueUser | Auth0User | MagicUser
+  /** The current user data from the `getCurrentUser` function on the api side */
+  currentUser: null | CurrentUser
+  /** The user's metadata from the auth provider */
+  userMetadata: null | SupportedUserMetadata
   logIn(): Promise<void>
   logOut(): Promise<void>
   getToken(): Promise<null | string>
-  client: null | SupportedAuthClients
-  type: null | SupportedAuthTypes
+  /** Get the current user from the `getCurrentUser` function on the api side */
+  getCurrentUser(): Promise<null | CurrentUser>
+  client: SupportedAuthClients
+  type: SupportedAuthTypes
 }
 
 export const AuthContext = React.createContext<Partial<AuthContextInterface>>(
@@ -26,21 +32,23 @@ export const AuthContext = React.createContext<Partial<AuthContextInterface>>(
 )
 
 type AuthProviderProps = {
-  client: AuthClient
+  client: SupportedAuthClients
   type: SupportedAuthTypes
+  skipFetchCurrentUser?: boolean
 }
 
 type AuthProviderState = {
   loading: boolean
   isAuthenticated: boolean
-  currentUser: null | Auth0User | GoTrueUser
+  userMetadata: null | object
+  currentUser: null | undefined | CurrentUser
 }
 /**
  * @example
  * ```js
  *  const client = new Auth0Client(options)
  *  // ...
- *  <AuthProvider client={client} type="auth0">
+ *  <AuthProvider client={client} type="auth0" skipFetchCurrentUser={true}>
  *    {children}
  *  </AuthProvider>
  * ```
@@ -49,37 +57,85 @@ export class AuthProvider extends React.Component<
   AuthProviderProps,
   AuthProviderState
 > {
+  static defaultProps = {
+    skipFetchCurrentUser: false,
+  }
+
   state: AuthProviderState = {
     loading: true,
     isAuthenticated: false,
+    userMetadata: null,
     currentUser: null,
   }
 
-  rwClient: SupportedAuthClients
+  rwClient: AuthClient
 
-  constructor(props) {
+  constructor(props: AuthProviderProps) {
     super(props)
     this.rwClient = createAuthClient(props.client, props.type)
   }
 
   async componentDidMount() {
     await this.rwClient.restoreAuthState?.()
-    const currentUser = await this.rwClient.currentUser()
+    return this.setAuthState()
+  }
+
+  getCurrentUser = async () => {
+    if (this.props.skipFetchCurrentUser) {
+      return undefined
+    }
+
+    const token = await this.rwClient.getToken()
+    const response = await window.fetch(
+      `${window.__REDWOOD__API_PROXY_PATH}/graphql`,
+      {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          'auth-provider': this.rwClient.type,
+          authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          query:
+            'query __REDWOOD__AUTH_GET_CURRENT_USER { redwood { currentUser } }',
+        }),
+      }
+    )
+    if (response.ok) {
+      const { data } = await response.json()
+      return data?.redwood?.currentUser
+    }
+  }
+
+  setAuthState = async () => {
+    const userMetadata = await this.rwClient.getUserMetadata()
+    const isAuthenticated = userMetadata !== null
+
+    let currentUser = null
+    if (isAuthenticated) {
+      currentUser = await this.getCurrentUser()
+    }
+
     this.setState({
+      userMetadata,
       currentUser,
-      isAuthenticated: currentUser !== null,
+      isAuthenticated,
       loading: false,
     })
   }
 
-  logIn = async (options?) => {
-    const currentUser = await this.rwClient.login(options)
-    this.setState({ currentUser, isAuthenticated: currentUser !== null })
+  logIn = async (options?: any) => {
+    await this.rwClient.login(options)
+    return this.setAuthState()
   }
 
-  logOut = async (options?) => {
+  logOut = async (options?: any) => {
     await this.rwClient.logout(options)
-    this.setState({ currentUser: null, isAuthenticated: false })
+    this.setState({
+      userMetadata: null,
+      currentUser: null,
+      isAuthenticated: false,
+    })
   }
 
   render() {
@@ -92,8 +148,9 @@ export class AuthProvider extends React.Component<
           logIn: this.logIn,
           logOut: this.logOut,
           getToken: this.rwClient.getToken,
-          client: client,
-          type: type,
+          getCurrentUser: this.getCurrentUser,
+          client,
+          type,
         }}
       >
         {children}
