@@ -8,15 +8,37 @@
 - [FAQ](#FAQ)
 
 ## Purpose and Vision
-Summarise the project's values, purpose, and aspirational vision.
+
+This package provides a GraphQL serverless Function with some defaults:
+
+The GraphQL Function includes a Date, Datetime and JSON scalar types,
+the ability to merge schemas, a place to store resolvers in services, and authentication.
 
 ## Package Lead
-Identify the decision maker and/or go-to for questions.
+- https://github.com/peterp/
 
 ## Roadmap
-Similar to Purpose and Vision, but more concrete, comprising near-term priorities and long-term goals.
+
+### GraphQL serverless Function
+
+- Connect to a "Redwood universal logging service" for exceptions and info.
+
+### Services layer
+
+- What does Middleware for services look like?
+- What does RBAC look like?
+- Can we improve the Authentication experience?
+
+### Schema definitions
+
+- The ability to export TypeScript definitions that are usable on the web side.
+
+### Authentication
+
+- What does RBAC look like?
 
 ## Contributing
+
 Explains how to contribute by addressing the following three points:
 
 1) Core technologies a contributor should be a familiar with.

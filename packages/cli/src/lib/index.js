@@ -153,12 +153,14 @@ export const prettify = (templateFilename, renderedTemplate) => {
 
 export const readFile = (target) => fs.readFileSync(target)
 
+const SUPPORTED_EXTENSIONS = ['.js', '.ts', '.tsx']
+
 export const deleteFile = (file) => {
   const extension = path.extname(file)
-  if (['.js', '.ts'].includes(extension)) {
+  if (SUPPORTED_EXTENSIONS.includes(extension)) {
     const baseFile = getBaseFile(file)
-    const files = [baseFile + '.js', baseFile + '.ts']
-    files.forEach((f) => {
+    SUPPORTED_EXTENSIONS.forEach((ext) => {
+      const f = baseFile + ext
       if (fs.existsSync(f)) {
         fs.unlinkSync(f)
       }
@@ -172,9 +174,9 @@ const getBaseFile = (file) => file.replace(/\.\w*$/, '')
 
 const existsAnyExtensionSync = (file) => {
   const extension = path.extname(file)
-  if (['.js', '.ts'].includes(extension)) {
+  if (SUPPORTED_EXTENSIONS.includes(extension)) {
     const baseFile = getBaseFile(file)
-    return fs.existsSync(`${baseFile}.js`) || fs.existsSync(`${baseFile}.ts`)
+    return SUPPORTED_EXTENSIONS.some((ext) => fs.existsSync(baseFile + ext))
   }
 
   return fs.existsSync(file)
