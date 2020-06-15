@@ -72,7 +72,7 @@ module.exports = (webpackEnv) => {
           loader: 'postcss-loader',
           options: {
             config: {
-              path: './config',
+              path: redwoodPaths.web.postcss,
             },
           },
         }
