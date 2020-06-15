@@ -1,6 +1,6 @@
 import { createContextHandler, context } from '../main'
 
-describe('graphQLServer createContextHandler', () => {
+describe('graphql createContextHandler', () => {
   it('merges the context correctly', async () => {
     const handler = createContextHandler({ a: 1 })
     // @ts-ignore

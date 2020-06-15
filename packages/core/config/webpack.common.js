@@ -162,14 +162,11 @@ module.exports = (webpackEnv) => {
         React: 'react',
         PropTypes: 'prop-types',
         gql: ['@redwoodjs/web', 'gql'],
-        __REDWOOD__: ['@redwoodjs/web', '__REDWOOD__'],
       }),
       // The define plugin will replace these keys with their values during build
       // time.
       new webpack.DefinePlugin({
-        __REDWOOD__API_PROXY_PATH: JSON.stringify(
-          redwoodConfig.web.apiProxyPath
-        ),
+        __RW__API_PROXY_PATH: JSON.stringify(redwoodConfig.web.apiProxyPath),
         ...getEnvVars(),
       }),
       new Dotenv({
