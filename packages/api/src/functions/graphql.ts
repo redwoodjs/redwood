@@ -2,6 +2,7 @@ import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import type { Config } from 'apollo-server-lambda'
 import type { Context, ContextFunction } from 'apollo-server-core'
 import type { AuthToken } from 'src/auth/authHeaders'
+import type { GlobalContext } from 'src/globalContext'
 //
 import { ApolloServer } from 'apollo-server-lambda'
 import { getAuthProviderType, decodeAuthToken } from 'src/auth/authHeaders'
@@ -30,7 +31,7 @@ export const createContextHandler = (
     context,
   }: {
     event: APIGatewayProxyEvent
-    context: LambdaContext & { [key: string]: any }
+    context: GlobalContext & LambdaContext
   }) => {
     // Prevent the Lambda function from waiting for all resources,
     // such as database connections, to be released before returning a reponse.
