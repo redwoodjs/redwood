@@ -21,6 +21,16 @@ const Link = forwardRef(({ to, ...rest }, ref) => (
     ref={ref}
     {...rest}
     onClick={(event) => {
+      if (
+        event.button !== 0 ||
+        event.altKey ||
+        event.ctrlKey ||
+        event.metaKey ||
+        event.shiftKey
+      ) {
+        return
+      }
+
       event.preventDefault()
       navigate(to)
     }}
@@ -41,6 +51,16 @@ const NavLink = forwardRef(
         className={theClassName}
         {...rest}
         onClick={(event) => {
+          if (
+            event.button !== 0 ||
+            event.altKey ||
+            event.ctrlKey ||
+            event.metaKey ||
+            event.shiftKey
+          ) {
+            return
+          }
+
           event.preventDefault()
           navigate(to)
         }}
