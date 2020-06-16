@@ -16,11 +16,16 @@
     "@babel/runtime-corejs3": "^7.9.2",
     "babel-plugin-auto-import": "^1.0.5",
     "babel-plugin-module-resolver": "^4.0.0",
+    "bundlesize": "^0.18.0",
     "cross-env": "^7.0.2",
     "jest": "^25.2.3",
     "lerna": "^3.20.2",
     "nodemon": "^2.0.2",
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "@testing-library/react": "10.2.1",
+    "@testing-library/jest-dom": "5.10.0",
+    "msw": "0.19.3",
+    "whatwg-fetch": "3.0.0"
   },
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config",
@@ -34,7 +39,7 @@
     "packages/core/src/__tests__/__fixtures__"
   ],
   "scripts": {
-    "build": "yarn build:clean && yarn build:js && yarn build:types",
+    "build": "yarn build:clean && yarn build:js",
     "build:clean": "lerna run build:clean",
     "build:js": "cross-env NODE_ENV=production lerna run build",
     "build:types": "tsc --build --clean && tsc --build",
