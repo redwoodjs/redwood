@@ -43,7 +43,7 @@ const downloadFile = async (sourceUrl, targetFile) => {
 
 const { _: args } = yargs
   .scriptName(name)
-  .usage('Usage: $0 [project directory]')
+  .usage('Usage: $0 <project directory>')
   .example('$0 newapp')
   .version(version)
   .strict().argv
