@@ -15,7 +15,8 @@
     "decompress": "^4.2.0",
     "execa": "^4.0.0",
     "listr": "^0.14.3",
-    "tmp": "^0.1.0"
+    "tmp": "^0.1.0",
+    "yargs": "^15.3.1"
   },
   "scripts": {
     "build": "yarn cross-env NODE_ENV=production babel src -d dist --delete-dir-on-start",
