@@ -42,7 +42,7 @@ const downloadFile = async (sourceUrl, targetFile) => {
 
 const [, , ...args] = process.argv
 
-const helpInfo = `Usage: ${name} <target-dir> [options]\n\n Available options\n\n --help, -h\n -- version, -v`
+const helpInfo = `Usage: ${name} <target-dir> [options]\n\n Available options\n\n --help, -h\n --version, -v`
 
 if (args[0].startsWith('-')) {
   if (['-h', '--help'].includes(args[0])) {
