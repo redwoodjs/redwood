@@ -1,6 +1,6 @@
 // the lines that need to be added to index.js
 export const config = {
-  imports: [{ import: 'netlifyIdentity', from: 'netlify-identity-widget' }],
+  imports: [`import netlifyIdentity from 'netlify-identity-widget'`],
   init: 'netlifyIdentity.init()',
   authProvider: {
     client: 'netlifyIdentity',
