@@ -126,16 +126,14 @@ yarn rw build
 
 lives in [./src/commands/build.js](https://github.com/redwoodjs/redwood/blob/master/packages/cli/src/commands/build.js).
 
-<!-- [todo] -->
-<!-- Add alias here? Not required tho -->
 To make a command using the advanced api, yargs requires that you export [four constants](https://github.com/yargs/yargs/blob/master/docs/advanced.md#providing-a-command-module):
 
-|Constant|Type|Description|
-|:-|:-|:-|
-|`command`|string|A yargs command definition. You specify the command's name and arguments here|
-|`description`|string|A description of the command; shown in the help message|
-|`builder`|function|Effectively "builds" the command's arguments/options|
-|`handler`|function|The function invoked by the command; does all the work|
+| Constant      | Type     | Description                                                                   |
+| :------------ | :------- | :---------------------------------------------------------------------------- |
+| `command`     | string   | A yargs command definition. You specify the command's name and arguments here |
+| `description` | string   | A description of the command; shown in the help message                       |
+| `builder`     | function | Effectively "builds" the command's arguments/options                          |
+| `handler`     | function | The function invoked by the command; does all the work                        |
 
 We'll continue to use the build command as an example as we discuss each of these individually.
 
@@ -149,8 +147,6 @@ The command for `build` is:
 export const command = 'build [side..]'
 ```
 
-<!-- [todo] -->
-<!-- Maybe the wording could be improved? -->
 `'build'` specifies the name of the command and `'[side..]'` indicates that `build` takes an optional positional argument (named `side`&mdash;relevant for `builder` and `handler`). The dots (`..`) trailing `side` indicate that you can provide an array of strings (see [Variadic Positional Arguments](https://github.com/yargs/yargs/blob/master/docs/advanced.md#variadic-positional-arguments)):
 
 ```terminal
@@ -354,8 +350,6 @@ src/commands/generate/page
 
 Since a typical generator writes files, needs templates to do so, and needs tests to ensure it works, we use this command-in-a-directory structure to keep things organized.
 
-<!-- [todo] -->
-<!-- A better way to say named after? -->
 The templates for the files created by generators go in `templates`. They should be named after the file they create and end in `.template` to avoid being compiled by Babel:
 
 ```terminal
@@ -502,9 +496,6 @@ export const builder = (yargs) => {
 
 If you're adding a generator or modifying an existing one, you're gonna wanna test it. (Well, at least we want you to.)
 
-<!-- [todo]
-We use [Jest](https://jestjs.io/docs/en/getting-started.html), so you'll want to be familiar with its api. -->
-
 Along with a command file and a `templates` directory, most generators have a `__tests__` directory:
 
 ```terminal
@@ -538,9 +529,6 @@ test('creates a page component', () => {
   ).toEqual(loadGeneratorFixture('page', 'singleWordPage.js'))
 })
 ```
-
-<!-- [todo] -->
-<!-- The tests have some structure to them... -->
 
 #### Adding a Destroyer
 
@@ -637,7 +625,6 @@ If you're converting a generator, read the _Goals_ section of tracking issue [#5
 
 Some of the generators have already been converted; use them as a reference (linking to the PRs here):
 
-<!-- linking to PRs... -->
 - [component](https://github.com/redwoodjs/redwood/pull/632)
 - [sdl](https://github.com/redwoodjs/redwood/pull/515)
 - [services](https://github.com/redwoodjs/redwood/pull/515)
@@ -681,8 +668,6 @@ But it's distinct from the others in that it's the only one that has a shebang a
 
 We also use methods that we want to affect all commands here, like `demandCommand` and `strict`.
 
-<!-- [todo] -->
-<!-- Are there plans for this? -->
 #### src/lib/colors.js
 
 [colors.js](https://github.com/redwoodjs/redwood/blob/master/packages/cli/src/lib/colors.js) provides a declarative way of coloring output to the console using [chalk](https://github.com/chalk/chalk#styles). You'll see it imported like:
@@ -718,16 +703,6 @@ export default {
 }
 ```
 
-<!-- #### src/lib/index.js
-[todo]
-
-Basically a giant helpers file that provides more task-based functionality, like writeFilesTask, which actually does the work of writing files to disk. -->
-
-<!-- #### src/lib/test.js
-[todo]
-
-Mainly for loading fixtures. -->
-
 ## FAQ
 
 ### I want to alias `yarn rw`
@@ -740,50 +715,3 @@ Not yet, but we're talking about it! See the ongoing dicussions in these issues:
 
 - Investigate integrating or replacing generators with Plop [#653](https://github.com/redwoodjs/redwood/issues/653)
 - BYO Components to Scaffold Generator [#473](https://github.com/redwoodjs/redwood/issues/473)
-
-<!-- Archive -->
-
-<!-- ### Setting up your local dev environment -->
-<!-- [todo]--the other way rob mentions? -->
-<!-- > We built a command line tool just for contributing! Check out the top-level [contributing](https://github.com/redwoodjs/redwood/blob/master/packages/cli/README.md) guide to set up your local development environment. -->
-
-<!-- ### builder and testing
-
-While we want you to export `builder` as a function, you can use a `builderObject` to define the argumentioptions.
-
-We recommend doing this esp. for testing purposes, since you can import your builderObject in tests and use it to mock an object...
-
-export const builder = (yargs) => {
-  positional...
-} -->
-
-<!-- typescript -->
-
-<!-- All template, tests, fixtures, should be converted to typescript, with the `tsx` extension:
-
-- The `<generator>/templates/ files should be to TS
-
-```terminal
-src/commands/generate/page/template
-├── page.tsx.template
-└── test.tsx.template
-```
-
-You'll want to add the following options. You can copy and paste them, but note that if you don't need to customize the options past this... you can just use the builder returned from
-
-If you choose to export the builder instead of getting it from the function, you'll want to make sure you add these options (they shouldn't change, so you can copy and paste them):
-
-```javascript
-  javascript: {
-    alias: 'js',
-    default: true,
-    description: 'Generate JavaScript files',
-    type: 'boolean',
-  },
-  typescript: {
-    alias: 'ts',
-    default: false,
-    description: 'Generate TypeScript files',
-    type: 'boolean',
-  },
-``` -->
