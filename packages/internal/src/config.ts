@@ -55,7 +55,7 @@ const DEFAULT_CONFIG: Config = {
     target: TargetEnum.NODE,
   },
   browser: {
-    open: true,
+    open: false,
   },
 }
 
