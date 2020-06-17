@@ -12,8 +12,8 @@ export const description = 'Start development servers for api, db, and web'
 export const builder = (yargs) => {
   yargs
     .positional('side', {
-      choices: ['api', 'db', 'web'],
-      default: ['api', 'db', 'web'],
+      choices: ['api', 'web'],
+      default: ['api', 'web'],
       description: 'Which dev server(s) to start',
       type: 'array',
     })
@@ -25,14 +25,13 @@ export const builder = (yargs) => {
     )
 }
 
-export const handler = async ({ side = ['api', 'db', 'web'] }) => {
+export const handler = async ({ side = ['api', 'web'] }) => {
   // We use BASE_DIR when we need to effectively set the working dir
   const BASE_DIR = getPaths().base
   // For validation, e.g. dirExists?, we use these
   // note: getPaths().web|api.base returns undefined on Windows
   const API_DIR_SRC = getPaths().api.src
   const WEB_DIR_SRC = getPaths().web.src
-  const PRISMA_SCHEMA = getPaths().api.dbSchema
 
   const jobs = {
     api: {
@@ -40,15 +39,6 @@ export const handler = async ({ side = ['api', 'db', 'web'] }) => {
       command: `cd "${path.join(BASE_DIR, 'api')}" && yarn dev-server`,
       prefixColor: 'cyan',
       runWhen: () => fs.existsSync(API_DIR_SRC),
-    },
-    db: {
-      name: ' db', // prefixed with ` ` to match output indentation.
-      command: `cd "${path.join(
-        BASE_DIR,
-        'api'
-      )}" && yarn prisma generate --watch`,
-      prefixColor: 'magenta',
-      runWhen: () => fs.existsSync(PRISMA_SCHEMA),
     },
     web: {
       name: 'web',
