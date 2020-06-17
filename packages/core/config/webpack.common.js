@@ -36,21 +36,87 @@ module.exports = (webpackEnv) => {
   const isEnvProduction = webpackEnv === 'production'
 
   const getStyleLoaders = () => {
+    const styleOrExtractLoader = isEnvProduction
+      ? MiniCssExtractPlugin.loader
+      : 'style-loader'
+
+    const cssLoader = (withModules, importLoaders) => {
+      // Obscured classnames in production, more expressive classnames in development.
+      const localIdentName = isEnvProduction
+        ? '[hash:base64]'
+        : '[path][name]__[local]--[hash:base64:5]'
+
+      const loaderConfig = {
+        loader: 'css-loader',
+        options: {
+          sourceMap: !isEnvProduction,
+          importLoaders,
+        },
+      }
+
+      // Enables CSS modules
+      if (withModules) {
+        loaderConfig.options.modules = { localIdentName }
+      }
+
+      return loaderConfig
+    }
+
+    const redwoodPaths = getPaths()
+    const hasPostCssConfig = existsSync(redwoodPaths.web.postcss)
+
+    // We only use the postcss-loader if there is a postcss config file
+    // at web/config/postcss.config.js
+    const postCssLoader = hasPostCssConfig
+      ? {
+          loader: 'postcss-loader',
+          options: {
+            config: {
+              path: redwoodPaths.web.postcss,
+            },
+          },
+        }
+      : null
+
+    const numImportLoadersForCSS = hasPostCssConfig ? 1 : 0
+    const numImportLoadersForSCSS = hasPostCssConfig ? 2 : 1
+
     return [
       {
-        test: /\.scss$/,
-        use: [
-          isEnvProduction ? MiniCssExtractPlugin.loader : 'style-loader',
-          'css-loader',
-          'sass-loader',
-        ],
+        test: /\.module\.css$/,
+        loader: [
+          styleOrExtractLoader,
+          cssLoader(true, numImportLoadersForCSS),
+          postCssLoader,
+        ].filter(Boolean),
       },
       {
         test: /\.css$/,
-        use: [
-          isEnvProduction ? MiniCssExtractPlugin.loader : 'style-loader',
-          'css-loader',
-        ],
+        loader: [
+          styleOrExtractLoader,
+          cssLoader(false, numImportLoadersForCSS),
+          postCssLoader,
+        ].filter(Boolean),
+        sideEffects: true,
+      },
+      {
+        test: /\.module\.scss$/,
+        loader: [
+          styleOrExtractLoader,
+          cssLoader(true, numImportLoadersForSCSS),
+          postCssLoader,
+          'sass-loader',
+        ].filter(Boolean),
+      },
+      {
+        test: /\.scss$/,
+        loader: [
+          styleOrExtractLoader,
+          cssLoader(false, numImportLoadersForSCSS),
+          postCssLoader,
+          'sass-loader',
+        ].filter(Boolean),
+        sideEffects: true,
       },
     ]
   }
@@ -96,14 +162,11 @@ module.exports = (webpackEnv) => {
         React: 'react',
         PropTypes: 'prop-types',
         gql: ['@redwoodjs/web', 'gql'],
-        __REDWOOD__: ['@redwoodjs/web', '__REDWOOD__'],
       }),
       // The define plugin will replace these keys with their values during build
       // time.
       new webpack.DefinePlugin({
-        __REDWOOD__API_PROXY_PATH: JSON.stringify(
-          redwoodConfig.web.apiProxyPath
-        ),
+        __RW__API_PROXY_PATH: JSON.stringify(redwoodConfig.web.apiProxyPath),
         ...getEnvVars(),
       }),
       new Dotenv({
@@ -115,12 +178,16 @@ module.exports = (webpackEnv) => {
     ].filter(Boolean),
     module: {
       rules: [
+        // ** NOTE ** People usually overwrite these loaders via index,
+        // so it's important to try and keep those indexes stable.
         {
           oneOf: [
+            // (0)
             {
               loader: 'null-loader',
               test: /\.(md|test\.js|stories\.js)$/,
             },
+            // (1)
             {
               test: /\.(png|jpg|gif)$/,
               use: [
@@ -133,6 +200,7 @@ module.exports = (webpackEnv) => {
                 },
               ],
             },
+            // (2)
             {
               test: /\.(js|jsx|ts|tsx)$/,
               exclude: /(node_modules)/,
@@ -140,11 +208,14 @@ module.exports = (webpackEnv) => {
                 loader: 'babel-loader',
               },
             },
+            // (3)
             {
               test: /\.svg$/,
               loader: 'svg-react-loader',
             },
+            // .module.css (4), .css (5), .module.scss (6), .scss (7)
             ...getStyleLoaders(),
+            // (8)
             {
               loader: 'file-loader',
               exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],

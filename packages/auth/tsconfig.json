@@ -5,8 +5,6 @@
     "baseUrl": ".",
     "outDir": "dist",
     "rootDir": "src",
-    // gotrue-js does not return types for `removeSavedSession` and `recoverSession`
-    "noImplicitAny": false,
   },
   "include": ["src"]
 }

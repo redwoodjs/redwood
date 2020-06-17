@@ -40,6 +40,8 @@ We offer two workflows for making this possible: "copy and watch", which has som
 
 ### Copy and Watch
 
+> Are you on Windows? If so, you most likely first have to [install rsync](https://tlundberg.com/blog/2020-06-15/installing-rsync-on-windows/). Also, unfortunately you can't use "copy and watch". You'll have to manually run `yarn rwt cp ../path/to/redwood` when you've made changes to the Redwood Framework (this is tracked in [issue #701](https://github.com/redwoodjs/redwood/issues/701)).
+
 First, build-and-watch files in the Redwood Framework for changes:
 
 ```terminal
@@ -52,7 +54,7 @@ create-redwood-app: $ nodemon --ignore dist --exec 'yarn build'
 @redwoodjs/eslint-plugin-redwood: $ nodemon --ignore dist --exec 'yarn build'
 ```
 
-Then, watch-and-copy those changes into your Redwood App or example app (here, [example-invoice](https://github.com/redwoodjs/example-invoice)):
+Then, copy-and-watch those changes into your Redwood App or example app (here, [example-invoice](https://github.com/redwoodjs/example-invoice)):
 
 ```terminal
 cd example-invoice
@@ -224,7 +226,7 @@ You can avoid having to provide `RW_PATH` by defining an environment variable on
 
 ### copy:watch (alias cpw)
 
-Watch the Redwood Framework path for changes and copy them over to this project.
+Watch the Redwood Framework path for changes and copy them over to this project.  
 
 ```terminal
 yarn rwt cpw [RW_PATH]

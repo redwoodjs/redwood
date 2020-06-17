@@ -1,7 +1,9 @@
 import camelcase from 'camelcase'
 import pluralize from 'pluralize'
+import terminalLink from 'terminal-link'
 
 import { transformTSToJS } from '../../../lib'
+import { yargsDefaults } from '../../generate'
 import {
   templateForComponentFile,
   createYargsForComponentGeneration,
@@ -53,23 +55,37 @@ export const files = async ({
   }, {})
 }
 
-export const builder = {
-  crud: { type: 'boolean', default: false, desc: 'Create CRUD functions' },
-  force: { type: 'boolean', default: false },
-  typescript: {
-    type: 'boolean',
+export const defaults = {
+  ...yargsDefaults,
+  crud: {
     default: false,
-    desc: 'Generate TypeScript files',
-  },
-  javascript: {
+    description: 'Create CRUD functions',
     type: 'boolean',
-    default: true,
-    desc: 'Generate JavaScript files',
   },
 }
 
-export const { command, desc, handler } = createYargsForComponentGeneration({
+export const builder = (yargs) => {
+  yargs
+    .positional('name', {
+      description: 'Name of the service',
+      type: 'string',
+    })
+    .epilogue(
+      `Also see the ${terminalLink(
+        'Redwood CLI Reference',
+        'https://redwoodjs.com/reference/command-line-interface#generate-service'
+      )}`
+    )
+  Object.entries(defaults).forEach(([option, config]) => {
+    yargs.option(option, config)
+  })
+}
+
+export const {
+  command,
+  description,
+  handler,
+} = createYargsForComponentGeneration({
   componentName: 'service',
   filesFn: files,
-  builder,
 })

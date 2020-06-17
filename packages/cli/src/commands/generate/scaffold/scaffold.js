@@ -7,6 +7,7 @@ import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 import { paramCase } from 'param-case'
 import humanize from 'humanize-string'
+import terminalLink from 'terminal-link'
 
 import {
   generateTemplate,
@@ -22,6 +23,7 @@ import {
 } from 'src/lib'
 import c from 'src/lib/colors'
 
+import { yargsDefaults } from '../../generate'
 import { relationsForModel, intForeignKeysForModel } from '../helpers'
 import { files as sdlFiles, builder as sdlBuilder } from '../sdl/sdl'
 import {
@@ -336,31 +338,22 @@ const addScaffoldImport = () => {
   return 'Added scaffold import to index.js'
 }
 
-export const defaults = {
-  force: {
-    default: false,
-    type: 'boolean',
-  },
-  typescript: {
-    type: 'boolean',
-    default: false,
-    desc: 'Generate TypeScript files',
-  },
-  javascript: {
-    type: 'boolean',
-    default: true,
-    desc: 'Generate JavaScript files',
-  },
-}
 export const command = 'scaffold <model>'
-export const desc =
-  'Generate Pages, SDL, and Services files based on a given DB schema Model. Also accepts <path/model>.'
+export const description =
+  'Generate Pages, SDL, and Services files based on a given DB schema Model. Also accepts <path/model>'
 export const builder = (yargs) => {
-  yargs.positional('model', {
-    description:
-      "Model to scaffold. You can also use <path/model> to nest files by type at the given path directory (or directories). For example, 'rw g scaffold admin/post'.",
-  })
-  Object.entries(defaults).forEach(([option, config]) => {
+  yargs
+    .positional('model', {
+      description:
+        "Model to scaffold. You can also use <path/model> to nest files by type at the given path directory (or directories). For example, 'rw g scaffold admin/post'",
+    })
+    .epilogue(
+      `Also see the ${terminalLink(
+        'Redwood CLI Reference',
+        'https://redwoodjs.com/reference/command-line-interface#generate-scaffold'
+      )}`
+    )
+  Object.entries(yargsDefaults).forEach(([option, config]) => {
     yargs.option(option, config)
   })
 }
