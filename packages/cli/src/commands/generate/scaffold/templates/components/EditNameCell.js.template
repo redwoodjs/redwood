@@ -1,4 +1,4 @@
-import { useMutation } from '@redwoodjs/web'
+import { useMutation, useFlash } from '@redwoodjs/web'
 import { navigate, routes } from '@redwoodjs/router'
 import ${singularPascalName}Form from 'src/components/${pascalScaffoldPath}${singularPascalName}Form'
 
@@ -23,6 +23,7 @@ export const Success = ({ ${singularCamelName} }) => {
   const [update${singularPascalName}, { loading, error }] = useMutation(UPDATE_${singularConstantName}_MUTATION, {
     onCompleted: () => {
       navigate(routes.${pluralRouteName}())
+      addMessage('${singularPascalName} updated.', { classes: 'rw-flash-success' })
     },
   })
 
