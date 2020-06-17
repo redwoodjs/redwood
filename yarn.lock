@@ -15640,9 +15640,9 @@ undefsafe@^2.0.2:
   dependencies:
     debug "^2.2.0"
 
-"undici@github:mcollina/undici":
-  version "1.0.2"
-  resolved "https://codeload.github.com/mcollina/undici/tar.gz/259efa1dc490cff577cb3e668d02b51069b8c149"
+undici@mcollina/undici:
+  version "1.0.3"
+  resolved "https://codeload.github.com/mcollina/undici/tar.gz/df7bade8b8e06ef13936520d5126cbf93889a356"
   dependencies:
     http-parser-js "^0.5.2"
 
