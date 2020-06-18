@@ -2447,33 +2447,33 @@
   resolved "https://registry.npmjs.org/@open-draft/until/-/until-1.0.3.tgz#db9cc719191a62e7d9200f6e7bab21c5b848adca"
   integrity sha512-Aq58f5HiWdyDlFffbbSjAlv596h/cOnt2DO1w3DOC7OJ5EHs0hd/nycJfiu9RJbT6Yk6F1knnRRXNSpxoIVZ9Q==
 
-"@prisma/cli@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.npmjs.org/@prisma/cli/-/cli-2.0.0.tgz#d5638c627e98faaa93230359185072a19e17a020"
-  integrity sha512-RID4fOX6Y+2uHrBiFsoVt+F9oa7Z7IaO+AbwA+uepyYcjWjIhvl1cgml2mStGLyig8uuYmTOJGmh8XDkOyo10g==
+"@prisma/cli@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@prisma/cli/-/cli-2.0.1.tgz#ae67f3485c7c843c7de34926bd3e85379ee2e511"
+  integrity sha512-AXSvuXzmI8CfTk3MOgiDMAFCqw+r2QKV64WHJ2B6Z0Mpb+PihsdD6BCteWDu2GlGwNNluNDYKlfLkXxgvzH2mw==
 
-"@prisma/client@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.npmjs.org/@prisma/client/-/client-2.0.0.tgz#755ca8be2f2be5446fc44e92e58f782b7416b890"
-  integrity sha512-3Ejs4qmyM0bsLdZbKZWrngYLZMupbHRScBmPdikupTCFraq8I9aLb5CuSCsROf1C8tWwWcDaH6RdIS7I+EiESQ==
+"@prisma/client@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-2.0.1.tgz#f0e9a52424c92511e8bd87b7358802001400c849"
+  integrity sha512-9TaIp72H/mhTkkUUQ3bE+1NTWfwJcanAdfUt6dDH0G57r1suTyz0YUbhCOH4hJrtCADumIi9bvGw+wAk1CstaA==
   dependencies:
     pkg-up "^3.1.0"
 
-"@prisma/debug@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.npmjs.org/@prisma/debug/-/debug-2.0.0.tgz#ad65a1744dad7ebaf00230f086ba0b511c95f678"
-  integrity sha512-ze3HgPnuRI01YvBGlqnaYm5Nel/mrWclUdBFaLAke/1PZuvlnhpK1092G+7VMKeGS7AEHd3w7tC/kI/9c5qY7g==
+"@prisma/debug@2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@prisma/debug/-/debug-2.0.1.tgz#a10d771fab6a23a29a7064deba828a1b6d7fe903"
+  integrity sha512-+SIotqeQCraimAzYNHjN6wu3cOSh7D9/Srz+8lX5R7bif4KxT7bUIVDFbLeeMGHUkTCoFxEyeE/HOS79GJ/IwQ==
   dependencies:
     debug "^4.1.1"
 
-"@prisma/engine-core@2.0.0-1":
-  version "2.0.0-1"
-  resolved "https://registry.npmjs.org/@prisma/engine-core/-/engine-core-2.0.0-1.tgz#27c06b238018952b71f10121fc0053df271a37d6"
-  integrity sha512-5owNIri995dyjK7XW1HAl917pwBJ558C8LI+hhE3ouw0MCHUQ9SH3Pbl4MmciNCB2a7BALh6qHXwxaygJznWlA==
+"@prisma/engine-core@2.0.1-1":
+  version "2.0.1-1"
+  resolved "https://registry.yarnpkg.com/@prisma/engine-core/-/engine-core-2.0.1-1.tgz#0550b595017627dc25bd928c51ab70159259aa61"
+  integrity sha512-YgeOJrzmv+t5WsdKTdRyyGLeyIcS46JkesnRCv7gPkE60muK2YrPksr9CX28CKr/qnqNPgT4dYVGJA5mGmppuA==
   dependencies:
-    "@prisma/debug" "2.0.0"
-    "@prisma/generator-helper" "2.0.0"
-    "@prisma/get-platform" "2.0.0"
+    "@prisma/debug" "2.0.1"
+    "@prisma/generator-helper" "2.0.1"
+    "@prisma/get-platform" "2.0.1"
     bent "^7.1.2"
     chalk "^3.0.0"
     cross-fetch "^3.0.4"
@@ -2485,13 +2485,13 @@
     terminal-link "^2.1.1"
     undici mcollina/undici
 
-"@prisma/fetch-engine@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.npmjs.org/@prisma/fetch-engine/-/fetch-engine-2.0.0.tgz#cc206b8f24a37d8fb22b01397b201ae19a1c3967"
-  integrity sha512-75AO1wjjp1ezzSUNyo+zSgH2oA4DIy87by0yKiNUMLJcfCX9yP2dbtPzNr61SrBwYNXex5194J5kcrs2j+Wwew==
+"@prisma/fetch-engine@2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@prisma/fetch-engine/-/fetch-engine-2.0.1.tgz#2a9a2cc70d017294a83492a30069afafffa45128"
+  integrity sha512-QqcgwygrWTmYMo7gg+oCwqmU7fFAtbggEF1QLyJtqWE5Y11+Fu50doohz2m1svA3Y2fnQO0A1e/p9nLV/podzA==
   dependencies:
-    "@prisma/debug" "2.0.0"
-    "@prisma/get-platform" "2.0.0"
+    "@prisma/debug" "2.0.1"
+    "@prisma/get-platform" "2.0.1"
     chalk "^4.0.0"
     execa "^4.0.0"
     find-cache-dir "^3.3.1"
@@ -2508,34 +2508,34 @@
     rimraf "^3.0.2"
     tempy "^0.5.0"
 
-"@prisma/generator-helper@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.npmjs.org/@prisma/generator-helper/-/generator-helper-2.0.0.tgz#8c42416ffaf919682c6abf16993c7eb6cd64bbd5"
-  integrity sha512-AnX2F5tkIvt/mebRuNlzEwL641dDDquoTiFpN7J9oy5hD/cT2eyn30oqbgwn6vjypWsLUlD37byjGh/zGCK/Wg==
+"@prisma/generator-helper@2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@prisma/generator-helper/-/generator-helper-2.0.1.tgz#fbb61a27a8f90723d5d4ff8e011abe6677a09a92"
+  integrity sha512-aiDT+G+NcOkQtbLD+pH+Dg/CjP6s8ym+8f/enIVTxm8+UyITmFySWk/AinaSCAKrBIVovmTswG3R8DysJ0c+3A==
   dependencies:
-    "@prisma/debug" "2.0.0"
+    "@prisma/debug" "2.0.1"
     "@types/cross-spawn" "^6.0.1"
     chalk "^3.0.0"
     cross-spawn "^7.0.2"
 
-"@prisma/get-platform@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.npmjs.org/@prisma/get-platform/-/get-platform-2.0.0.tgz#a0d8c4f053b74400b27818db148d6baa641931f0"
-  integrity sha512-J9O7cAW1aHRMir660stP0kVg3jUL7gGw/LIJkontPIsXbjAfUZQwmdm8OrfgJar7qJ2KDYjtSD9vT4VE7cPI2Q==
+"@prisma/get-platform@2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@prisma/get-platform/-/get-platform-2.0.1.tgz#a3124b4365e9fd9d9428f263c6eb67cda85d37ce"
+  integrity sha512-Q7SvNx3QXpYcVgo1aTjAhX7eKJ5HU2YZ7rGPMXhjhMvgKpvT8IHgU9aiK8EYQQVeOme9uHMHn5pLnxdqUyyZ5g==
   dependencies:
-    "@prisma/debug" "2.0.0"
+    "@prisma/debug" "2.0.1"
 
-"@prisma/sdk@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.npmjs.org/@prisma/sdk/-/sdk-2.0.0.tgz#aa0d52106cf497937d7b16108375837b82a4e8cc"
-  integrity sha512-wvweyvjVldoW2QB+8TyQVfk14v5CnqMFxd20rF5Z8PFERnjVwjWqTQmvbdOwEiTyQqy2OY5WVFYwuyP72lOaWw==
+"@prisma/sdk@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@prisma/sdk/-/sdk-2.0.1.tgz#14c6f44ddce54af17d8981c50cf80b9e5d2a88d6"
+  integrity sha512-vPLHsuiFKpLqhj8HfOUrSYyWUMzbgAv5JIKtUldRUyXjoBgoGCB4E0vXxV3/M7aYLKk9SkdsxjWWE+HZrnD65A==
   dependencies:
     "@apexearth/copy" "^1.4.5"
-    "@prisma/debug" "2.0.0"
-    "@prisma/engine-core" "2.0.0-1"
-    "@prisma/fetch-engine" "2.0.0"
-    "@prisma/generator-helper" "2.0.0"
-    "@prisma/get-platform" "2.0.0"
+    "@prisma/debug" "2.0.1"
+    "@prisma/engine-core" "2.0.1-1"
+    "@prisma/fetch-engine" "2.0.1"
+    "@prisma/generator-helper" "2.0.1"
+    "@prisma/get-platform" "2.0.1"
     archiver "^4.0.0"
     arg "^4.1.3"
     chalk "3.0.0"
@@ -15640,7 +15640,7 @@ undefsafe@^2.0.2:
   dependencies:
     debug "^2.2.0"
 
-undici@mcollina/undici:
+"undici@github:mcollina/undici":
   version "1.0.3"
   resolved "https://codeload.github.com/mcollina/undici/tar.gz/df7bade8b8e06ef13936520d5126cbf93889a356"
   dependencies:
