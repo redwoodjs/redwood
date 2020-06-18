@@ -16,7 +16,7 @@ describe('getConfig', () => {
           "target": "node",
         },
         "browser": Object {
-          "open": true,
+          "open": false,
         },
         "web": Object {
           "apiProxyPath": "/.netlify/functions",
