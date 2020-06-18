@@ -8,5 +8,10 @@
     "resolveJsonModule": true
   },
   "include": ["src", "src/../package.json"],
-  "exclude": ["**/__tests__", "**/__mocks__"]
+  "exclude": ["**/__tests__", "**/__mocks__"],
+  "references": [
+    {
+      "path": "../auth"
+    }
+  ]
 }

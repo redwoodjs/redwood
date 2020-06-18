@@ -17,6 +17,11 @@ export const builder = (yargs) => {
       description: 'Generate the Prisma client',
       type: 'boolean',
     })
+    .option('autoApprove', {
+      default: false,
+      description: 'Skip interactive approval before migrating',
+      type: 'boolean',
+    })
     .option('verbose', {
       alias: 'v',
       default: true,
@@ -33,6 +38,7 @@ export const builder = (yargs) => {
 
 export const handler = async ({
   increment,
+  autoApprove = false,
   verbose = true,
   dbClient = true,
 }) => {
@@ -46,6 +52,7 @@ export const handler = async ({
           increment && `${increment}`,
           '--experimental',
           '--create-db',
+          autoApprove && '--auto-approve',
         ].filter(Boolean),
       },
     ],

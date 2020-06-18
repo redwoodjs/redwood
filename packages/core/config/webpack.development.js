@@ -28,8 +28,7 @@ const baseConfig = merge(webpackConfig('development'), {
     },
     inline: true,
     overlay: true,
-    // checks for override in redwood.toml, defaults to true
-    open: redwoodConfig.browser ? redwoodConfig.browser.open : false,
+    open: redwoodConfig.browser.open,
   },
   optimization: {
     removeAvailableModules: false,

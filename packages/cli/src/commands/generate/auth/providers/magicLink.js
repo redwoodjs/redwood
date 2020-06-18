@@ -1,9 +1,9 @@
 export const config = {
-  imports: [{ import: '{ Magic }', from: 'magic-sdk' }],
+  imports: [`import { Magic } from 'magic-sdk'`],
   init: 'const m = new Magic(process.env.MAGICLINK_PUBLIC)',
   authProvider: {
     client: 'm',
-    type: 'magic.link',
+    type: 'magicLink',
   },
 }
 
