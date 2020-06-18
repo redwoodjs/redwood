@@ -11,6 +11,7 @@ const CREATE_${singularConstantName}_MUTATION = gql`
 `
 
 const New${singularPascalName} = () => {
+  const { addMessage } = useFlash()
   const [create${singularPascalName}, { loading, error }] = useMutation(CREATE_${singularConstantName}_MUTATION, {
     onCompleted: () => {
       navigate(routes.${pluralRouteName}())

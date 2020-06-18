@@ -20,6 +20,7 @@ const UPDATE_${singularConstantName}_MUTATION = gql`
 export const Loading = () => <div>Loading...</div>
 
 export const Success = ({ ${singularCamelName} }) => {
+  const { addMessage } = useFlash()
   const [update${singularPascalName}, { loading, error }] = useMutation(UPDATE_${singularConstantName}_MUTATION, {
     onCompleted: () => {
       navigate(routes.${pluralRouteName}())

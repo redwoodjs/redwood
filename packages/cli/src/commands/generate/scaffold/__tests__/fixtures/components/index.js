@@ -28,6 +28,7 @@ const timeTag = (datetime) => {
 }
 
 const PostsList = ({ posts }) => {
+  const { addMessage } = useFlash()
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
     onCompleted: () => {
       addMessage('Post deleted.', { classes: 'rw-flash-success' })

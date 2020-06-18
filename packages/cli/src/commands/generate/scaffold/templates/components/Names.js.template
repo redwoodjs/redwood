@@ -28,6 +28,7 @@ const timeTag = (datetime) => {
 }
 
 const ${pluralPascalName}List = ({ ${pluralCamelName} }) => {
+  const { addMessage } = useFlash()
   const [delete${singularPascalName}] = useMutation(DELETE_${singularConstantName}_MUTATION, {
     onCompleted: () => {
       addMessage('${singularPascalName} deleted.', { classes: 'rw-flash-success' })

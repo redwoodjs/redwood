@@ -20,6 +20,7 @@ describe('Flash', () => {
       if (messages) {
         messages.forEach((msg) => addMessage(msg.text, msg))
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [messages])
 
     return <Flash timeout={timeout} />
