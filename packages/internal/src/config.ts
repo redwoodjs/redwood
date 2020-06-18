@@ -39,6 +39,8 @@ export interface Config {
   }
 }
 
+// Note that web's includeEnvironmentVariables is handled in `webpack.common.js`
+// https://github.com/redwoodjs/redwood/blob/d51ade08118c17459cebcdb496197ea52485364a/packages/core/config/webpack.common.js#L19
 const DEFAULT_CONFIG: Config = {
   web: {
     host: 'localhost',
