@@ -3,8 +3,7 @@ import {
   FormError,
   FieldError,
   Label,
-  TextField,${editableColumns.map((c) => c.component).includes('CheckboxField') ? `
-  CheckboxField,` : ''}
+  ${fieldsToImport.join(',\n  ')},
   Submit,
 } from '@redwoodjs/web'
 
@@ -32,10 +31,10 @@ const ${singularPascalName}Form = (props) => {
         </Label>
         <${column.component}
           name="${column.name}"
-          default<%= column.component.startsWith('Checkbox') ? 'Checked' : 'Value' %>={props.${singularCamelName}?.<%= column.name %>}
+          ${column.defaultProp}={props.${singularCamelName}?.<%= column.name %>}
           className="rw-input"
-          errorClassName="rw-input rw-input-error"<%= column.component.startsWith('Checkbox') ? '' : `
-          validation={{ required: true }}` %>
+          errorClassName="rw-input rw-input-error"<%= !column.validation ? '' : `
+          validation=${column.validation}` %>
         />
         <FieldError name="${column.name}" className="rw-field-error" />
 <% }) %>

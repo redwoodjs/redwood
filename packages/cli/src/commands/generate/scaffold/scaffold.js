@@ -198,8 +198,16 @@ const componentFiles = async (name, scaffoldPath = '') => {
   const intForeignKeys = intForeignKeysForModel(model)
   let fileList = {}
   const fieldComponents = {
-    Boolean: 'CheckboxField',
-    String: 'TextField',
+    Boolean: {
+      name: 'CheckboxField',
+      defaultProp: 'defaultChecked',
+      validation: false,
+    },
+    String: {
+      name: 'TextField',
+      defaultProp: 'defaultValue',
+      validation: '{{ required: true }}',
+    },
   }
   const editableColumns = columns
     .filter((column) => {
@@ -208,8 +216,21 @@ const componentFiles = async (name, scaffoldPath = '') => {
     .map((column) => ({
       ...column,
       label: humanize(column.name),
-      component: fieldComponents[column.type] || 'TextField',
+      component:
+        fieldComponents[column.type]?.name || fieldComponents.String.name,
+      defaultProp:
+        fieldComponents[column.type]?.defaultProp ||
+        fieldComponents.String.defaultProp,
+      validation:
+        fieldComponents[column.type]?.validation ??
+        fieldComponents.String.validation,
     }))
+  const fieldsToImport = Object.keys(
+    editableColumns.reduce((accumulator, column) => {
+      accumulator[column.component] = true
+      return accumulator
+    }, {})
+  )
 
   const pascalScaffoldPath =
     scaffoldPath === ''
@@ -254,6 +275,7 @@ const componentFiles = async (name, scaffoldPath = '') => {
       {
         name,
         columns,
+        fieldsToImport,
         editableColumns,
         idType,
         intForeignKeys,
