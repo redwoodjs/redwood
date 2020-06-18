@@ -7,6 +7,7 @@ const FlashMessage = ({ message, timeout }) => {
 
   useEffect(() => {
     cycleMessage(message.id)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -15,6 +16,7 @@ const FlashMessage = ({ message, timeout }) => {
         dismissMessage(message.id)
       }, timeout)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

@@ -10,6 +10,7 @@ const DELETE_POST_MUTATION = gql`
 `
 
 const Post = ({ post }) => {
+  const { addMessage } = useFlash()
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
     onCompleted: () => {
       navigate(routes.posts())

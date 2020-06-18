@@ -11,6 +11,7 @@ const CREATE_USER_PROFILE_MUTATION = gql`
 `
 
 const NewUserProfile = () => {
+  const { addMessage } = useFlash()
   const [createUserProfile, { loading, error }] = useMutation(
     CREATE_USER_PROFILE_MUTATION,
     {
