@@ -54,7 +54,7 @@ describe('db commands', () => {
 
     await save.handler({ name: 'my-migration' })
     expect(runCommandTask.mock.results[5].value).toEqual([
-      'yarn prisma migrate save --name my-migration --experimental',
+      'yarn prisma migrate save --name my-migration --create-db --experimental',
     ])
 
     await generate.handler({})

@@ -13,7 +13,7 @@
     "dist"
   ],
   "dependencies": {
-    "@prisma/sdk": "^2.0.0",
+    "@prisma/sdk": "^2.0.1",
     "@redwoodjs/internal": "^0.10.0",
     "camelcase": "^5.3.1",
     "chalk": "^3.0.0",
@@ -41,7 +41,7 @@
   },
   "scripts": {
     "build": "yarn build:js && yarn build:clean-dist",
-    "build:js": "yarn cross-env NODE_ENV=production yarn babel src -d dist --delete-dir-on-start --copy-files --no-copy-ignored",
+    "build:js": "yarn cross-env NODE_ENV=production yarn babel src -d dist --extensions \".js,.ts\" --delete-dir-on-start --copy-files --no-copy-ignored",
     "build:clean-dist": "yarn rimraf 'dist/**/__tests__'",
     "prepublishOnly": "yarn build",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
