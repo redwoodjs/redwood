@@ -3351,18 +3351,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*":
-  version "16.9.36"
-  resolved "https://registry.npmjs.org/@types/react/-/react-16.9.36.tgz#ade589ff51e2a903e34ee4669e05dbfa0c1ce849"
-  integrity sha512-mGgUb/Rk/vGx4NCvquRuSH0GHBQKb1OqpGS9cT9lFxlTLHZgkksgI60TuIxubmn7JuCb+sENHhQciqa0npm0AQ==
-  dependencies:
-    "@types/prop-types" "*"
-    csstype "^2.2.0"
-
-"@types/react@16.9.35":
-  version "16.9.35"
-  resolved "https://registry.npmjs.org/@types/react/-/react-16.9.35.tgz#a0830d172e8aadd9bd41709ba2281a3124bbd368"
-  integrity sha512-q0n0SsWcGc8nDqH2GJfWQWUOmZSJhXV64CjVN5SvcNti3TdEaA3AH0D8DwNmMdzjMAC/78tB8nAZIlV8yTz+zQ==
+"@types/react@*", "@types/react@16.9.38":
+  version "16.9.38"
+  resolved "https://registry.npmjs.org/@types/react/-/react-16.9.38.tgz#868405dace93a4095d3e054f4c4a1de7a1ac0680"
+  integrity sha512-pHAeZbjjNRa/hxyNuLrvbxhhnKyKNiLC6I5fRF2Zr/t/S6zS41MiyzH4+c+1I9vVfvuRt1VS2Lodjr4ZWnxrdA==
   dependencies:
     "@types/prop-types" "*"
     csstype "^2.2.0"
@@ -15640,9 +15632,9 @@ undefsafe@^2.0.2:
   dependencies:
     debug "^2.2.0"
 
-"undici@github:mcollina/undici":
+undici@mcollina/undici:
   version "1.0.3"
-  resolved "https://codeload.github.com/mcollina/undici/tar.gz/df7bade8b8e06ef13936520d5126cbf93889a356"
+  resolved "https://codeload.github.com/mcollina/undici/tar.gz/28c189b431be4358df87c690d70d81b55f3fa714"
   dependencies:
     http-parser-js "^0.5.2"
 
