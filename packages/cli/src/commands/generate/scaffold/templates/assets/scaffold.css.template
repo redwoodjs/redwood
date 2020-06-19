@@ -237,6 +237,10 @@
   border-radius: 0.25rem;
   outline: none;
 }
+.rw-input[type='checkbox'] {
+  width: initial;
+  margin-left: 0;
+}
 .rw-input:focus {
   border-color: #a0aec0;
 }

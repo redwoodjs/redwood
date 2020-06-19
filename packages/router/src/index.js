@@ -12,6 +12,7 @@ export {
   Redirect,
   routes,
   useParams,
+  useLocation,
   navigate,
   PageLoadingContext,
 } from './internal'
