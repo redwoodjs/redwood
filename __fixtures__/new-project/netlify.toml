@@ -1,5 +1,5 @@
 [build]
-  command = "yarn rw db up --no-db-client && yarn rw build"
+  command = "yarn rw db up --no-db-client --auto-approve && yarn rw build"
   publish = "web/dist"
   functions = "api/dist/functions"
 

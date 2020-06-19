@@ -7,7 +7,7 @@
     ]
   },
   "devDependencies": {
-    "@redwoodjs/core": "^0.10.1-canary.29",
+    "@redwoodjs/core": "^0.11.0",
     "netlify-plugin-prisma-provider": "^0.3.0"
   },
   "eslintConfig": {

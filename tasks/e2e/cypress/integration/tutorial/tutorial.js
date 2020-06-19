@@ -10,30 +10,16 @@ import Step4_1_DbSchema from './codemods/Step4_1_DbSchema'
 import Step5_1_ComponentsCellBlogPost from './codemods/Step5_1_ComponentsCellBlogPost'
 import Step5_2_PagesHome from './codemods/Step5_2_PagesHome'
 
-// PATH TO REFERENCE PROJECT
-const REFERENCE_REDWOOD_PROJECT = path.join(
-  Cypress.config('fixturesFolder'),
-  '../../../../__fixtures__/new-project'
-)
+// TODO: Break these up so that they can be run individually.
+const BASE_DIR = '/tmp/redwood/new-project/'
 
 describe('The Redwood Tutorial - Golden path edition', () => {
-  before(() => {
-    // cy.exec(`cd ${BASE_DIR}; yarn install`)
-  })
-
-  after(() => {
-    // Remove untrack files and directories
-    // We leave ignored files, since we don't want to remove `node_module`
-    // cy.exec(`cd ${BASE_DIR}; git clean -f -d`)
-    // cy.exec(`cd ${BASE_DIR}; git checkout .`)
-  })
-
   // TODO: https://redwoodjs.com/tutorial/routing-params
   // TODO: https://redwoodjs.com/tutorial/everyone-s-favorite-thing-to-build-forms
   // TODO: https://redwoodjs.com/tutorial/saving-data
   // TODO: https://redwoodjs.com/tutorial/administration
 
-  it('0. Installation & Starting Development', () => {
+  it('0. Starting Development', () => {
     // https://redwoodjs.com/tutorial/installation-starting-development
     cy.visit('http://localhost:8910')
     cy.get('h1 > span').contains('Welcome to RedwoodJS!')
@@ -93,18 +79,13 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       path.join(BASE_DIR, 'api/prisma/schema.prisma'),
       Step4_1_DbSchema
     )
-
-    // TODO: Change to our own command, we need to support `--create-db`
     cy.exec(`rm ${BASE_DIR}/api/prisma/dev.db`, { failOnNonZeroExit: false })
-    cy.exec(
-      `cd ${BASE_DIR}/api; yarn prisma migrate save --create-db --experimental --name ""`,
-      {
-        env: {
-          DATABASE_URL: 'file:./dev.db',
-          BINARY_TARGET: 'native',
-        },
-      }
-    )
+    cy.exec(`cd ${BASE_DIR}; yarn rw db save --name tutorial`, {
+      env: {
+        DATABASE_URL: 'file:./dev.db',
+        BINARY_TARGET: 'native',
+      },
+    })
 
     cy.exec(`cd ${BASE_DIR}; yarn rw db up`)
     cy.exec(`cd ${BASE_DIR}; yarn rw g scaffold post`)

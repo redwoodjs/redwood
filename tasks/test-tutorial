@@ -1,7 +1,22 @@
 #!/bin/bash
 set -e
 
-mkdir -p /tmp/redwood/e2e-test-tutorial
-rsync -r ../__fixtures__/new-project /tmp/redwood
-cd /tmp/redwood/e2e-test-tutorial
-yarn install --check-files
+
+SCRIPT=`realpath $0`
+SCRIPTPATH=`dirname $SCRIPT`
+
+SRC="$SCRIPTPATH/../__fixtures__/new-project/"
+DST=/tmp/redwood/new-project/
+
+# Install the dependencies for the e2e tests
+cd "$SCRIPTPATH/e2e"
+yarn install
+
+# Copy the fixture to a temporary location. This is so that the modifications
+# made to `new-project` aren't in the repo.
+mkdir -p $DST
+rsync -avhW --delete --compress-level=0 --progress $SRC $DST
+cd $DST
+yarn install
+yarn rw db up
+yarn rw dev & cd "$SCRIPTPATH/e2e"; yarn test:tutorial
