@@ -1,0 +1,7 @@
+#!/bin/bash
+set -e
+
+mkdir -p /tmp/redwood/e2e-test-tutorial
+rsync -r ../__fixtures__/new-project /tmp/redwood
+cd /tmp/redwood/e2e-test-tutorial
+yarn install --check-files

@@ -1,0 +1,15 @@
+{
+  "name": "Redwood Cypress e2e tests",
+  "description": "",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "// we should be able to test the packages in this folder": "",
+    "// we should be able to test the canary and current releases": "",
+    "test:tutorial": "cd cypress/fixtures/new-redwood-project && yarn rw dev & yarn cypress open"
+  },
+  "devDependencies": {
+    "cypress": "^4.8.0"
+  },
+  "dependencies": {}
+}
