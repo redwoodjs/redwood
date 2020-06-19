@@ -1,0 +1,5 @@
+const ${singularPascalName}Layout: React.FunctionComponent = ({ children }) => {
+  return <>{children}</>
+}
+
+export default ${singularPascalName}Layout
