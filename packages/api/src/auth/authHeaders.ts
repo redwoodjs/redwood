@@ -70,16 +70,22 @@ export const decodeAuthToken = async ({
       decoded = await verifyAuth0Token(token)
       break
     }
-    // These tokens require a 3rd party library for decoding that we don't want to
-    // bundle with each installation. We'll cover it in the documentation.
-    case 'custom':
+
     case 'firebase':
     case 'magicLink': {
       decoded = token
       break
     }
-    default:
-      throw new Error(`Auth-Provider of type "${type}" is not supported.`)
+
+    // These tokens require a 3rd party library for decoding that we don't want to
+    // bundle with each installation. We'll cover it in the documentation.
+    default: {
+      decoded = {
+        type,
+        token,
+      }
+      break
+    }
   }
 
   if (decoded === null) {
