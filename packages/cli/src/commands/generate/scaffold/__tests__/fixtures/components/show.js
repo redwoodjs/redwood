@@ -1,4 +1,4 @@
-import { useMutation } from '@redwoodjs/web'
+import { useMutation, useFlash } from '@redwoodjs/web'
 import { Link, routes, navigate } from '@redwoodjs/router'
 
 const DELETE_POST_MUTATION = gql`
@@ -10,10 +10,11 @@ const DELETE_POST_MUTATION = gql`
 `
 
 const Post = ({ post }) => {
+  const { addMessage } = useFlash()
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
     onCompleted: () => {
       navigate(routes.posts())
-      location.reload()
+      addMessage('Post deleted.', { classes: 'rw-flash-success' })
     },
   })
 

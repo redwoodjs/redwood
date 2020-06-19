@@ -1,4 +1,4 @@
-import { useMutation } from '@redwoodjs/web'
+import { useMutation, useFlash } from '@redwoodjs/web'
 import { Link, routes } from '@redwoodjs/router'
 
 const DELETE_POST_MUTATION = gql`
@@ -28,7 +28,12 @@ const timeTag = (datetime) => {
 }
 
 const PostsList = ({ posts }) => {
-  const [deletePost] = useMutation(DELETE_POST_MUTATION)
+  const { addMessage } = useFlash()
+  const [deletePost] = useMutation(DELETE_POST_MUTATION, {
+    onCompleted: () => {
+      addMessage('Post deleted.', { classes: 'rw-flash-success' })
+    },
+  })
 
   const onDeleteClick = (id) => {
     if (confirm('Are you sure you want to delete post ' + id + '?')) {

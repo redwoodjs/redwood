@@ -120,7 +120,7 @@ ReactDOM.render(
 
 ### For Firebase
 
-We're using [https://firebase.google.com/docs/auth/web/google-signin](Firebase Google Sign-In), so you'll have to follow the ["Before you begin"](https://firebase.google.com/docs/auth/web/google-signin#before_you_begin) steps in this guide. Only follow the "before you begin" parts.
+We're using [Firebase Google Sign-In](https://firebase.google.com/docs/auth/web/google-signin), so you'll have to follow the ["Before you begin"](https://firebase.google.com/docs/auth/web/google-signin#before_you_begin) steps in this guide. **Only** follow the "Before you begin" parts.
 
 ```js
 // web/src/index.js
