@@ -15,11 +15,9 @@ const FlashMessage = ({ message, timeout }) => {
   useEffect(() => {
     let fadeOutTimer
     if (timeout) {
-      fadeOutTimer = () =>
-        setTimeout(() => {
-          setClasses('rw-slide-up')
-        }, timeout)
-      fadeOutTimer()
+      fadeOutTimer = setTimeout(() => {
+        setClasses('rw-slide-up')
+      }, timeout)
     }
     return () => clearTimeout(fadeOutTimer)
   }, [timeout])
