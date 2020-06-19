@@ -40,7 +40,7 @@ const downloadFile = async (sourceUrl, targetFile) => {
   })
 }
 
-const [, , ...args] = process.argv
+const [_arg1, _arg2, ...args] = process.argv
 
 const helpInfo = `Usage: ${name} <target-dir> [options]\n\n Available options\n\n --help, -h\n --version, -v`
 
