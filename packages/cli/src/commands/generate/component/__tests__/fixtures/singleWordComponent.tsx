@@ -1,4 +1,4 @@
-const User = () => {
+const User: React.FunctionComponent = () => {
   return (
     <div>
       <h2>{'User'}</h2>
