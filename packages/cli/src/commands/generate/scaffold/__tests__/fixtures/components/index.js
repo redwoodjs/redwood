@@ -28,6 +28,7 @@ const timeTag = (datetime) => {
 }
 
 const PostsList = ({ posts }) => {
+  const { addMessage } = useFlash()
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
     onCompleted: () => {
       addMessage('Post deleted.', { classes: 'rw-flash-success' })
@@ -51,6 +52,7 @@ const PostsList = ({ posts }) => {
             <th>author</th>
             <th>body</th>
             <th>image</th>
+            <th>isPinned</th>
             <th>postedAt</th>
             <th>&nbsp;</th>
           </tr>
@@ -64,6 +66,7 @@ const PostsList = ({ posts }) => {
               <td>{truncate(post.author)}</td>
               <td>{truncate(post.body)}</td>
               <td>{truncate(post.image)}</td>
+              <td>{truncate(post.isPinned)}</td>
               <td>{timeTag(post.postedAt)}</td>
               <td>
                 <nav className="rw-table-actions">

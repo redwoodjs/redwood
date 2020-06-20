@@ -10,6 +10,7 @@ const DELETE_${singularConstantName}_MUTATION = gql`
 `
 
 const ${singularPascalName} = ({ ${singularCamelName} }) => {
+  const { addMessage } = useFlash()
   const [delete${singularPascalName}] = useMutation(DELETE_${singularConstantName}_MUTATION, {
     onCompleted: () => {
       navigate(routes.${pluralRouteName}())

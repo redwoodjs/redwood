@@ -189,10 +189,12 @@ The following values are available from the `useAuth` hook:
 * async `logIn()`: Differs based on the client library, with Netlify Identity a pop-up is shown, and with Auth0 the user is redirected
 * async `logOut()`: Log out the current user
 * `currentUser`: an object containing information about the current user, or `null` if the user is not authenticated
+* async `reauthenticate()`: Refetch the authentication data and populate the state.
 * async `getToken()`: returns a jwt
 * `client`: Access the instance of the client which you passed into `AuthProvider`
 * `isAuthenticated`: used to determine if the current user has authenticated
 * `loading`: The auth state is restored asynchronously when the user visits the site for the first time, use this to determine if you have the correct state
+
 
 ## Usage in Redwood
 

@@ -11,6 +11,7 @@ const CREATE_POST_MUTATION = gql`
 `
 
 const NewPost = () => {
+  const { addMessage } = useFlash()
   const [createPost, { loading, error }] = useMutation(CREATE_POST_MUTATION, {
     onCompleted: () => {
       navigate(routes.posts())

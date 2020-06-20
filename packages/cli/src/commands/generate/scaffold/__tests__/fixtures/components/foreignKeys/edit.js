@@ -25,6 +25,7 @@ const UPDATE_USER_PROFILE_MUTATION = gql`
 export const Loading = () => <div>Loading...</div>
 
 export const Success = ({ userProfile }) => {
+  const { addMessage } = useFlash()
   const [updateUserProfile, { loading, error }] = useMutation(
     UPDATE_USER_PROFILE_MUTATION,
     {

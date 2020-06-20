@@ -1,7 +1,7 @@
-import { forwardRef, useContext, useEffect } from 'react'
+import { forwardRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
-import { navigate, matchPath, LocationContext } from './internal'
+import { navigate, matchPath, useLocation } from './internal'
 
 /**
  * Returns true if the URL for the given "route" value matches the current URL.
@@ -9,7 +9,7 @@ import { navigate, matchPath, LocationContext } from './internal'
  * <NavLink>.
  */
 const useMatch = (route) => {
-  const location = useContext(LocationContext)
+  const location = useLocation()
   const matchInfo = matchPath(route, location.pathname)
 
   return matchInfo

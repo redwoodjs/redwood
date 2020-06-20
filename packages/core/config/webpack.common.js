@@ -166,7 +166,12 @@ module.exports = (webpackEnv) => {
       // The define plugin will replace these keys with their values during build
       // time.
       new webpack.DefinePlugin({
-        __RW__API_PROXY_PATH: JSON.stringify(redwoodConfig.web.apiProxyPath),
+        // Flag to determine if we're in a Redwood Project
+        __REDWOOD__: JSON.stringify(true),
+        // The Path to the Serverless Functions
+        __REDWOOD__API_PROXY_PATH: JSON.stringify(
+          redwoodConfig.web.apiProxyPath
+        ),
         ...getEnvVars(),
       }),
       new Dotenv({

@@ -11,6 +11,7 @@ export const QUERY = gql`
       author
       body
       image
+      isPinned
       postedAt
     }
   }
@@ -26,6 +27,7 @@ const UPDATE_POST_MUTATION = gql`
 export const Loading = () => <div>Loading...</div>
 
 export const Success = ({ post }) => {
+  const { addMessage } = useFlash()
   const [updatePost, { loading, error }] = useMutation(UPDATE_POST_MUTATION, {
     onCompleted: () => {
       navigate(routes.posts())

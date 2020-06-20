@@ -1,4 +1,4 @@
-const ${pascalName} = () => {
+const ${pascalName}: React.FunctionComponent = () => {
   return (
     <div>
       <h2>{'${pascalName}'}</h2>
