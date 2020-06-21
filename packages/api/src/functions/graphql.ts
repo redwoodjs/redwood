@@ -74,7 +74,6 @@ export function createGraphQLServer({
     playground: isDevEnv,
     // Log the errors in the console
     formatError: (error) => {
-      console.log('EEHEHEHEHEROR', error, process.env.NODE_ENV)
       if (isDevEnv) {
         // I want the dev-server to pick this up!?
         // TODO: Move the error handling into a separate package
@@ -130,7 +129,6 @@ export const createGraphQLHandler = (
    * */
   db?: any
 ) => {
-  console.log({ context, getCurrentUser, onException, options })
   const handler = createGraphQLServer({
     context,
     getCurrentUser,

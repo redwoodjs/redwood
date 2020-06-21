@@ -35,7 +35,6 @@
     "babel-plugin-tester": "^9.0.0",
     "del-cli": "^3.0.0",
     "gotrue-js": "^0.9.25",
-    "graphql-tag": "^2.10.3",
     "move-cli": "^1.2.1"
   },
   "jest": {
