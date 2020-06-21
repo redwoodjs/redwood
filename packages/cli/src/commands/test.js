@@ -41,7 +41,6 @@ export const handler = async ({ side }) => {
       args: [
         '--passWithNoTests',
         '--config ../node_modules/@redwoodjs/core/config/jest.config.web.js',
-        '--detectOpenHandles',
       ],
     },
   }

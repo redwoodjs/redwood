@@ -18,7 +18,7 @@ const redwoodPaths = getPaths()
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { PrismaClient } = require('@prisma/client')
-const db = new PrismaClient()
+export const db = new PrismaClient()
 
 const schemas = [
   require(path.join(redwoodPaths.api.base, 'dist', 'graphql', 'posts.sdl.js')),
@@ -55,7 +55,7 @@ const withApi = (resolver) => {
   }
 }
 
-const server = setupServer(
+export const server = setupServer(
   withApi(async (req, res, ctx) => {
     const { body } = req
 
@@ -69,5 +69,3 @@ const server = setupServer(
     return res(ctx.json({ data: result.data }))
   })
 )
-
-export default server
