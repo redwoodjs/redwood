@@ -42,28 +42,33 @@ describe('db commands', () => {
       'echo "no schema.prisma file found" undefined',
     ])
 
-    await down.handler({})
+    await up.handler({ dbClient: true, autoApprove: true })
     expect(runCommandTask.mock.results[2].value).toEqual([
+      'yarn prisma migrate up --experimental --create-db --auto-approve',
+    ])
+
+    await down.handler({})
+    expect(runCommandTask.mock.results[4].value).toEqual([
       'yarn prisma migrate down --experimental',
     ])
 
     await save.handler({ name: 'my-migration' })
-    expect(runCommandTask.mock.results[3].value).toEqual([
-      'yarn prisma migrate save --name my-migration --experimental',
+    expect(runCommandTask.mock.results[5].value).toEqual([
+      'yarn prisma migrate save --name my-migration --create-db --experimental',
     ])
 
     await generate.handler({})
-    expect(runCommandTask.mock.results[4].value).toEqual([
+    expect(runCommandTask.mock.results[6].value).toEqual([
       //TODO: use mock fs for getPaths().api.dbSchema
       'echo "no schema.prisma file found" undefined',
     ])
 
     await introspect.handler({})
-    expect(runCommandTask.mock.results[5].value).toEqual([
+    expect(runCommandTask.mock.results[7].value).toEqual([
       'yarn prisma introspect',
     ])
 
     await seed.handler({})
-    expect(runCommandTask.mock.results[6].value).toEqual(['node seeds.js'])
+    expect(runCommandTask.mock.results[8].value).toEqual(['node seeds.js'])
   })
 })

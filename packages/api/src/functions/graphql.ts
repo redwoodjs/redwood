@@ -1,21 +1,22 @@
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import type { Config } from 'apollo-server-lambda'
 import type { Context, ContextFunction } from 'apollo-server-core'
-import type { AuthTokenType } from 'src/auth/authHeaders'
+import type { AuthToken } from 'src/auth/authHeaders'
+import type { GlobalContext } from 'src/globalContext'
 //
 import { ApolloServer } from 'apollo-server-lambda'
 import { getAuthProviderType, decodeAuthToken } from 'src/auth/authHeaders'
 import { setContext } from 'src/globalContext'
 
 export type GetCurrentUser = (
-  authToken?: AuthTokenType
+  token: AuthToken
 ) => Promise<null | object | string>
 
 /**
  * We use Apollo Server's `context` option as an entry point for constructing our own
  * global context object.
  *
- * Context explained Apollo's Docs:
+ * Context explained by Apollo's Docs:
  * Context is an object shared by all resolvers in a particular query,
  * and is used to contain per-request state, including authentication information,
  * dataloader instances, and anything else that should be taken into account when
@@ -31,7 +32,7 @@ export const createContextHandler = (
     context = { callbackWaitsForEmptyEventLoop: false },
   }: {
     event: APIGatewayProxyEvent
-    context: LambdaContext & { [key: string]: any }
+    context: GlobalContext & LambdaContext
   }) => {
     // Prevent the Lambda function from waiting for all resources,
     // such as database connections, to be released before returning a reponse.
