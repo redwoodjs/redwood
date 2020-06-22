@@ -1,0 +1,28 @@
+#!/bin/bash
+set -e
+
+SCRIPT=`realpath $0`
+SCRIPTPATH=`dirname $SCRIPT`
+USE_LOCAL_BUILD=true
+if [ "$1" = "--no-local" ]; then
+  USE_LOCAL_BUILD=false
+fi
+SRC="$SCRIPTPATH/../__fixtures__/new-project/"
+DST=/tmp/redwood/new-project/
+
+# Install the dependencies required to run the e2e tests.
+cd "$SCRIPTPATH/e2e"
+yarn install
+
+# Copy the fixture to a temporary location. This is so that the modifications
+# made to `new-project` aren't in the repo.
+mkdir -p $DST
+rsync -avhW --delete --compress-level=0 --progress $SRC $DST
+cd $DST
+yarn install
+if [ "$USE_LOCAL_BUILD" = true ]; then
+  echo "Copying built packages from $SCRIPTPATH/../ to $DST"
+  yarn rwt cp "$SCRIPTPATH/../"
+fi
+yarn rw db up
+yarn rw dev & cd "$SCRIPTPATH/e2e"; yarn test:tutorial
