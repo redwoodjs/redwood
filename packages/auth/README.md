@@ -2,23 +2,28 @@
 
 `@redwoodjs/auth` is a lightweight wrapper around popular SPA authentication libraries. We currently support the following authentication providers:
 
+Check out the [Auth Playground](https://github.com/redwoodjs/playground-auth).
+
 - [Netlify Identity Widget](https://github.com/netlify/netlify-identity-widget)
 - [Auth0](https://github.com/auth0/auth0-spa-js)
 - [Netlify GoTrue-JS](https://github.com/netlify/gotrue-js)
 - [Magic Links - Magic.js](https://github.com/MagicHQ/magic-js)
-- [Firebase GoogleAuthProvider](https://firebase.google.com/docs/reference/js/firebase.auth.GoogleAuthProvider)
-- [Contribute](#contributing) one, it's SuperEasy™!
+- [Firebase's GoogleAuthProvider](https://firebase.google.com/docs/reference/js/firebase.auth.GoogleAuthProvider)
+- [Contribute one](#contributing), it's SuperEasy™!
 
 ## Installation
 
 ### CLI Auth Generator
 The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
+
 ```terminal
 yarn rw g auth [provider]
 ```
-*`[provider]` values can be either "netlify", "auth0" or "magic-link".*
+*`[provider]` values can be either "netlify", "auth0", "magic-link" or "firebase".*
+
 
 ### Manual Install
+
 #### Netlify Identity Widget
 
 ```bash
@@ -32,6 +37,7 @@ yarn add @redwoodjs/auth netlify-identity-widget
 cd web
 yarn add @redwoodjs/auth @auth0/auth0-spa-js
 ```
+
 #### Magic.Link
 
 ```bash
