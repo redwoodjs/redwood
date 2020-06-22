@@ -17,6 +17,7 @@ model Post {
   author   String
   body     String
   image    String?
+  isPinned Boolean @default(false)
   postedAt DateTime?
 }
 

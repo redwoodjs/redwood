@@ -3,7 +3,7 @@ name: Netlify deploy hook to add new docs on Redwoodjs.com
 on:
   push:
     branches:
-      - master
+      - main
   release:
     types:
       - published

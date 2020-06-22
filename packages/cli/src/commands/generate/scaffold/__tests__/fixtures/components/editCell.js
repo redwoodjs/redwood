@@ -11,6 +11,7 @@ export const QUERY = gql`
       author
       body
       image
+      isPinned
       postedAt
     }
   }
