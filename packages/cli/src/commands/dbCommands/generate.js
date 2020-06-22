@@ -49,8 +49,9 @@ export const handler = async ({ verbose = true, force = true }) => {
       ))
       // eslint-disable-next-line
       new PrismaClient()
+      return // Client exists, so abort.
     } catch (e) {
-      // Swallow your pain.
+      // Swallow your pain, and generate.
     }
   }
 
