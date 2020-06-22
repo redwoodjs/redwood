@@ -6,9 +6,10 @@ import Listr from 'listr'
 import pascalcase from 'pascalcase'
 import { paramCase } from 'param-case'
 import terminalLink from 'terminal-link'
-
+import type { CommandModule } from 'yargs'
 import { generateTemplate, getPaths, writeFilesTask } from 'src/lib'
 import c from 'src/lib/colors'
+import type { Paths } from '@redwoodjs/internal'
 
 import { yargsDefaults } from '../generate'
 
@@ -29,6 +30,17 @@ export const templateForComponentFile = ({
   templateVars,
   componentName,
   outputPath,
+}: {
+  name: string
+  suffix?: string
+  extension?: string
+  webPathSection?: keyof Paths['web']
+  apiPathSection?: keyof Paths['api']
+  generator: string
+  templatePath: string
+  templateVars?: {}
+  componentName?: string
+  outputPath?: string
 }) => {
   const basePath = webPathSection
     ? getPaths().web[webPathSection]
@@ -57,7 +69,7 @@ export const templateForComponentFile = ({
  * Creates a route path, either returning the existing path if passed, otherwise
  * creates one based on the name
  */
-export const pathName = (path, name) => {
+export const pathName = (path: string | null, name: string): string => {
   return path ?? `/${paramCase(name)}`
 }
 
@@ -70,7 +82,11 @@ export const createYargsForComponentGeneration = ({
   componentName,
   filesFn,
   builderObj = yargsDefaults,
-}) => {
+}: {
+  componentName: 'cell' | 'component' | 'function' | 'layout' | 'service'
+  filesFn: Function
+  builderObj: { [key: string]: any }
+}): CommandModule => {
   return {
     command: `${componentName} <name>`,
     description: `Generate a ${componentName} component`,
@@ -114,7 +130,7 @@ export const createYargsForComponentGeneration = ({
 }
 
 // Returns all relations to other models
-export const relationsForModel = (model) => {
+export const relationsForModel = (model: { fields: any[] }) => {
   return model.fields
     .filter((f) => f.relationName)
     .map((field) => {
@@ -124,7 +140,7 @@ export const relationsForModel = (model) => {
 }
 
 // Returns only relations that are of datatype Int
-export const intForeignKeysForModel = (model) => {
+export const intForeignKeysForModel = (model: { fields: any[] }) => {
   return model.fields
     .filter((f) => f.name.match(/Id$/) && f.type === 'Int')
     .map((f) => f.name)

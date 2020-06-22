@@ -65,6 +65,11 @@ export const generatorsRootPath = path.join(
   'generate'
 )
 
+// Returns the contents of a text file suffixed with ".fixture"
+export const loadFixture = (filepath: string) => {
+  return fs.readFileSync(filepath).toString()
+}
+
 // Loads the fixture for a generator by assuming a lot of the path structure automatically:
 //
 //   loadGeneratorFixture('scaffold', 'NamePage.js')
@@ -72,7 +77,7 @@ export const generatorsRootPath = path.join(
 // will return the contents of:
 //
 //   cli/src/commands/generate/scaffold/test/fixtures/NamePage.js.fixture
-export const loadGeneratorFixture = (generator, name) => {
+export const loadGeneratorFixture = (generator: string, name: string) => {
   return loadFixture(
     path.join(
       __dirname,
@@ -85,9 +90,4 @@ export const loadGeneratorFixture = (generator, name) => {
       name
     )
   )
-}
-
-// Returns the contents of a text file suffixed with ".fixture"
-export const loadFixture = (filepath) => {
-  return fs.readFileSync(filepath).toString()
 }
