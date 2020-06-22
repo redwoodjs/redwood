@@ -21,6 +21,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
 
   it('0. Starting Development', () => {
     // https://redwoodjs.com/tutorial/installation-starting-development
+    // ** NOTE ** This test can fail if the repo is not in a completely empty state.
     cy.visit('http://localhost:8910')
     cy.get('h1 > span').contains('Welcome to RedwoodJS!')
   })
@@ -111,7 +112,10 @@ describe('The Redwood Tutorial - Golden path edition', () => {
 
     // DELETE
     cy.get('a').contains('Delete').click()
+
     // No more posts, so it should be in the empty state.
+    cy.get('div').contains('Post deleted.')
+
     cy.get('a').contains('Create one?').click()
     cy.get('input#title').type('Second post')
     cy.get('input#body').type('Hello world!')
