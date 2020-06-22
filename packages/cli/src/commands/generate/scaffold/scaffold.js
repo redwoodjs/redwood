@@ -206,7 +206,7 @@ const componentFiles = async (name, scaffoldPath = '') => {
     DateTime: {
       displayFunction: 'timeTag',
     },
-    String: {
+    default: {
       name: 'TextField',
       defaultProp: 'defaultValue',
       validation: '{{ required: true }}',
@@ -219,16 +219,16 @@ const componentFiles = async (name, scaffoldPath = '') => {
       ...column,
       label: humanize(column.name),
       component:
-        componentMetadata[column.type]?.name || componentMetadata.String.name,
+        componentMetadata[column.type]?.name || componentMetadata.default.name,
       defaultProp:
         componentMetadata[column.type]?.defaultProp ||
-        componentMetadata.String.defaultProp,
+        componentMetadata.default.defaultProp,
       validation:
         componentMetadata[column.type]?.validation ??
-        componentMetadata.String.validation,
+        componentMetadata.default.validation,
       displayFunction:
         componentMetadata[column.type]?.displayFunction ||
-        componentMetadata.String.displayFunction,
+        componentMetadata.default.displayFunction,
     }))
   const editableColumns = columns.filter((column) => {
     return NON_EDITABLE_COLUMNS.indexOf(column.name) === -1
