@@ -6,6 +6,7 @@ import terminalLink from 'terminal-link'
 
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
+import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
 
 export const command = 'dev [side..]'
 export const description = 'Start development servers for api, db, and web'
@@ -32,6 +33,14 @@ export const handler = async ({ side = ['api', 'web'] }) => {
   // note: getPaths().web|api.base returns undefined on Windows
   const API_DIR_SRC = getPaths().api.src
   const WEB_DIR_SRC = getPaths().web.src
+
+  if (side.includes('api')) {
+    try {
+      await generatePrismaClient({ verbose: false, force: false })
+    } catch (e) {
+      console.log(c.error(e.message))
+    }
+  }
 
   const jobs = {
     api: {
