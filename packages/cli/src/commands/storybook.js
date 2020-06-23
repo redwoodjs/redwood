@@ -12,7 +12,9 @@ export const handler = () => {
     cmd,
     [
       '--config-dir ../node_modules/@redwoodjs/core/config/storybook',
-      '--port 7910',
+      '--port 7910', // this should be configurable?
+      '--no-version-updates', // we'll handle upgrades
+      '--ci', // do not open browser window.
     ],
     {
       stdio: 'inherit',
