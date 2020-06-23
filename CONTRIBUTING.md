@@ -14,6 +14,7 @@ Before interacting with the Redwood community, please read and understand our [C
     - [Publishing a Package](#publishing-a-package)
     - [Installing Published Packages in Your Redwood App](#installing-published-packages-in-your-redwood-app)
 - [Running Your Redwood App's Local Server(s)](#running-your-redwood-apps-local-servers)
+- [Integration Tests](#integration-tests)
 - [Releases](#releases)
   - [Troubleshooting](#troubleshooting)
 - [CLI Reference: redwood-tools](#cli-reference-redwood-tools)
@@ -180,6 +181,22 @@ yarn rw dev api
 yarn rw dev web
 ```
 
+## Integration tests
+
+We're using Cypress to test the steps that we recommend in the tutorial. To run the command by doing the following:
+```terminal
+yarn build
+./tasks/test-tutorial
+```
+
+This tests against the built packages in Redwood, it uses the base project in `__fixtures/new-project`, so any modifications to that project will also be reflected in the Cypress tests.
+If you would like to test against the packages specified in `/__fixtures__/new-project` you can start it with the following:
+```terminal
+./tasks/test-tutorial --no-local
+```
+
+The command for this is written in bash and will not work on Windows.
+
 ## Releases
 
 To publish a new version of Redwood to NPM run the following commands:
@@ -226,7 +243,7 @@ You can avoid having to provide `RW_PATH` by defining an environment variable on
 
 ### copy:watch (alias cpw)
 
-Watch the Redwood Framework path for changes and copy them over to this project.  
+Watch the Redwood Framework path for changes and copy them over to this project.
 
 ```terminal
 yarn rwt cpw [RW_PATH]

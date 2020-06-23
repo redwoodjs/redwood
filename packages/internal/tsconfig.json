@@ -6,6 +6,6 @@
     "rootDir": "src",
     "outDir": "dist"
   },
-  "include": ["src"],
+  "include": ["src", "./ambient.d.ts"],
   "exclude": ["**/__tests__", "**/__mocks__"]
 }

@@ -3,9 +3,11 @@ import path from 'path'
 
 import concurrently from 'concurrently'
 import terminalLink from 'terminal-link'
+import { getConfig, shutdownPort } from '@redwoodjs/internal'
 
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
+import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
 
 export const command = 'dev [side..]'
 export const description = 'Start development servers for api, db, and web'
@@ -33,6 +35,33 @@ export const handler = async ({ side = ['api', 'web'] }) => {
   const API_DIR_SRC = getPaths().api.src
   const WEB_DIR_SRC = getPaths().web.src
 
+  if (side.includes('api')) {
+    try {
+      // This command will check if the api side has a `prisma.schema` file.
+      await generatePrismaClient({ verbose: false, force: false })
+    } catch (e) {
+      console.error(c.error(e.message))
+    }
+
+    try {
+      await shutdownPort(getConfig().api.port)
+    } catch (e) {
+      console.error(
+        `Error whilst shutting down "api" port: ${c.error(e.message)}`
+      )
+    }
+  }
+
+  if (side.includes('web')) {
+    try {
+      await shutdownPort(getConfig().web.port)
+    } catch (e) {
+      console.error(
+        `Error whilst shutting down "web" port: ${c.error(e.message)}`
+      )
+    }
+  }
+
   const jobs = {
     api: {
       name: 'api',
@@ -56,12 +85,12 @@ export const handler = async ({ side = ['api', 'web'] }) => {
       .map((n) => side.includes(n) && jobs[n])
       .filter((job) => job && job.runWhen()),
     {
-      restartTries: 3,
-      restartDelay: 1000,
       prefix: '{name} |',
       timestampFormat: 'HH:mm:ss',
     }
   ).catch((e) => {
-    console.log(c.error(e.message))
+    if (typeof e?.message !== 'undefined') {
+      console.log(c.error(e.message))
+    }
   })
 }

@@ -28,8 +28,15 @@ export const builder = (yargs) => {
       )}`
     )
 }
-export const handler = async ({ verbose = true, force = false }) => {
-  const schemaExists = fs.existsSync(getPaths().api.dbSchema)
+export const handler = async ({ verbose = true, force = true }) => {
+  if (!fs.existsSync(getPaths().api.dbSchema)) {
+    console.log(
+      `Skipping database and Prisma client generation, no \`schema.prisma\` file found: \`${
+        getPaths().api.dbSchema
+      }\``
+    )
+    return
+  }
 
   // Do not generate the Prisma client if it exists.
   if (!force) {
@@ -40,25 +47,19 @@ export const handler = async ({ verbose = true, force = false }) => {
         getPaths().base,
         'node_modules/.prisma/client'
       ))
-      if (schemaExists) {
-        // eslint-disable-next-line
-        new PrismaClient()
-      }
-      return undefined
+      // eslint-disable-next-line
+      new PrismaClient()
+      return // Client exists, so abort.
     } catch (e) {
-      // Swallow your pain.
+      // Swallow your pain, and generate.
     }
   }
 
   return await runCommandTask(
     [
       {
-        title: schemaExists
-          ? 'Generating the Prisma client...'
-          : 'Skipping Prisma Client: no schema.prisma found',
-        cmd: schemaExists
-          ? 'yarn prisma generate'
-          : 'echo "no schema.prisma file found"',
+        title: 'Generating the Prisma client...',
+        cmd: 'yarn prisma generate',
       },
     ],
     {

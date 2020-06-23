@@ -331,3 +331,15 @@
 .rw-text-center {
   text-align: center;
 }
+.rw-slide-up {
+  animation: slideUp 0.5s 1 ease;
+  animation-fill-mode: forwards;
+  overflow-y: hidden;
+}
+@keyframes slideUp {
+  100% {
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
