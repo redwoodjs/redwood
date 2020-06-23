@@ -206,6 +206,16 @@ const componentFiles = async (name, scaffoldPath = '') => {
     DateTime: {
       displayFunction: 'timeTag',
     },
+    Int: {
+      name: 'NumberField',
+    },
+    Json: {
+      name: 'TextArea',
+      displayFunction: '',
+    },
+    Float: {
+      validation: "{{ required: true, type: 'Float' }}",
+    },
     default: {
       name: 'TextField',
       defaultProp: 'defaultValue',
