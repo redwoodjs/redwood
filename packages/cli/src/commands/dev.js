@@ -46,7 +46,7 @@ export const handler = async ({ side = ['api', 'db', 'web'] }) => {
       command: `cd "${path.join(
         BASE_DIR,
         'api'
-      )}" yarn prisma generate --watch`,
+      )}" && yarn prisma generate --watch`,
       prefixColor: 'magenta',
       runWhen: () => fs.existsSync(PRISMA_SCHEMA),
     },
