@@ -4,7 +4,7 @@ const { getPaths } = require('@redwoodjs/internal')
 const { getStyleLoaders, getSharedPlugins } = require('../webpack.common')
 
 module.exports = {
-  stories: [`${getPaths().web.src}/**/*.stories.[tj]s`],
+  stories: [`${getPaths().web.src}/**/*.stories.{tsx,jsx,js}`],
   webpackFinal: (storyBookConfig, { configType }) => {
     const ourWebpackConfig =
       configType === 'development'
