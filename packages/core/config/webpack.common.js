@@ -30,75 +30,100 @@ const getEnvVars = () => {
   return redwoodEnvKeys
 }
 
+const getStyleLoaders = (isEnvProduction) => {
+  // Obscured classnames in production, more expressive classnames in development.
+  const localIdentName = isEnvProduction
+    ? '[hash:base64]'
+    : '[path][name]__[local]--[hash:base64:5]'
+  return [
+    {
+      test: /\.module\.css$/,
+      loader: [
+        isEnvProduction ? MiniCssExtractPlugin.loader : 'style-loader',
+        {
+          loader: 'css-loader',
+          options: {
+            modules: {
+              localIdentName,
+            },
+            sourceMap: !isEnvProduction,
+          },
+        },
+      ],
+    },
+    {
+      test: /\.css$/,
+      loader: [
+        isEnvProduction ? MiniCssExtractPlugin.loader : 'style-loader',
+        {
+          loader: 'css-loader',
+          options: {
+            sourceMap: !isEnvProduction,
+          },
+        },
+      ],
+    },
+    {
+      test: /\.module\.scss$/,
+      loader: [
+        isEnvProduction ? MiniCssExtractPlugin.loader : 'style-loader',
+        {
+          loader: 'css-loader',
+          options: {
+            modules: {
+              localIdentName,
+            },
+            sourceMap: !isEnvProduction,
+          },
+        },
+        'sass-loader',
+      ],
+    },
+    {
+      test: /\.scss$/,
+      loader: [
+        isEnvProduction ? MiniCssExtractPlugin.loader : 'style-loader',
+        {
+          loader: 'css-loader',
+          options: {
+            sourceMap: !isEnvProduction,
+          },
+        },
+        'sass-loader',
+      ],
+    },
+  ]
+}
+
+const getSharedPlugins = (isEnvProduction) => {
+  return [
+    isEnvProduction &&
+      new MiniCssExtractPlugin({
+        filename: 'static/css/[name].[contenthash:8].css',
+        chunkFilename: 'static/css/[name].[contenthash:8].css',
+      }),
+    new webpack.ProvidePlugin({
+      React: 'react',
+      PropTypes: 'prop-types',
+      gql: ['@redwoodjs/web', 'gql'],
+    }),
+    // The define plugin will replace these keys with their values during build
+    // time.
+    new webpack.DefinePlugin({
+      __RW__API_PROXY_PATH: JSON.stringify(redwoodConfig.web.apiProxyPath),
+      ...getEnvVars(),
+    }),
+    new Dotenv({
+      path: path.resolve(redwoodPaths.base, '.env'),
+      silent: true,
+    }),
+  ].filter(Boolean)
+}
+
 // I've borrowed and learnt extensively from the `create-react-app` repo:
 // https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/config/webpack.config.js
 module.exports = (webpackEnv) => {
   const isEnvProduction = webpackEnv === 'production'
-
-  const getStyleLoaders = () => {
-    // Obscured classnames in production, more expressive classnames in development.
-    const localIdentName = isEnvProduction
-      ? '[hash:base64]'
-      : '[path][name]__[local]--[hash:base64:5]'
-    return [
-      {
-        test: /\.module\.css$/,
-        loader: [
-          isEnvProduction ? MiniCssExtractPlugin.loader : 'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              modules: {
-                localIdentName,
-              },
-              sourceMap: !isEnvProduction,
-            },
-          },
-        ],
-      },
-      {
-        test: /\.css$/,
-        loader: [
-          isEnvProduction ? MiniCssExtractPlugin.loader : 'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              sourceMap: !isEnvProduction,
-            },
-          },
-        ],
-      },
-      {
-        test: /\.module\.scss$/,
-        loader: [
-          isEnvProduction ? MiniCssExtractPlugin.loader : 'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              modules: {
-                localIdentName,
-              },
-              sourceMap: !isEnvProduction,
-            },
-          },
-          'sass-loader',
-        ],
-      },
-      {
-        test: /\.scss$/,
-        loader: [
-          isEnvProduction ? MiniCssExtractPlugin.loader : 'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              sourceMap: !isEnvProduction,
-            },
-          },
-          'sass-loader',
-        ],
-      },
-    ]
-  }
 
   return {
     mode: isEnvProduction ? 'production' : 'development',
@@ -125,11 +150,6 @@ module.exports = (webpackEnv) => {
       },
     },
     plugins: [
-      isEnvProduction &&
-        new MiniCssExtractPlugin({
-          filename: 'static/css/[name].[contenthash:8].css',
-          chunkFilename: 'static/css/[name].[contenthash:8].css',
-        }),
       !isEnvProduction && new webpack.HotModuleReplacementPlugin(),
       new HtmlWebpackPlugin({
         title: path.basename(redwoodPaths.base),
@@ -137,23 +157,8 @@ module.exports = (webpackEnv) => {
         inject: true,
         chunks: 'all',
       }),
-      new webpack.ProvidePlugin({
-        React: 'react',
-        PropTypes: 'prop-types',
-        gql: ['@redwoodjs/web', 'gql'],
-      }),
-      // The define plugin will replace these keys with their values during build
-      // time.
-      new webpack.DefinePlugin({
-        __RW__API_PROXY_PATH: JSON.stringify(redwoodConfig.web.apiProxyPath),
-        ...getEnvVars(),
-      }),
-      new Dotenv({
-        path: path.resolve(redwoodPaths.base, '.env'),
-        silent: true,
-      }),
-      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
       new CopyPlugin([{ from: 'public/', to: '', ignore: ['README.md'] }]),
+      ...getSharedPlugins(isEnvProduction),
     ].filter(Boolean),
     module: {
       rules: [
@@ -193,7 +198,7 @@ module.exports = (webpackEnv) => {
               loader: 'svg-react-loader',
             },
             // .module.css (4), .css (5), .module.scss (6), .scss (7)
-            ...getStyleLoaders(),
+            ...getStyleLoaders(isEnvProduction),
             // (8)
             {
               loader: 'file-loader',
@@ -235,7 +240,7 @@ module.exports = (webpackEnv) => {
   }
 }
 
-module.exports['mergeUserWebpackConfig'] = (mode, baseConfig) => {
+module.exports.mergeUserWebpackConfig = (mode, baseConfig) => {
   const redwoodPaths = getPaths()
   const hasCustomConfig = existsSync(redwoodPaths.web.webpack)
   if (!hasCustomConfig) {
@@ -251,3 +256,5 @@ module.exports['mergeUserWebpackConfig'] = (mode, baseConfig) => {
 }
 
 module.exports.getEnvVars = getEnvVars
+module.exports.getSharedPlugins = getSharedPlugins
+module.exports.getStyleLoaders = getStyleLoaders
