@@ -1,15 +1,7 @@
-const path = require('path')
-
-const webpack = require('webpack')
 const DirectoryNamedWebpackPlugin = require('directory-named-webpack-plugin')
-const Dotenv = require('dotenv-webpack')
 const { getPaths } = require('@redwoodjs/internal')
 
 const { getStyleLoaders, getSharedPlugins } = require('../webpack.common')
-
-console.log('----------------------------------------------')
-console.log('hello')
-console.log('----------------------------------------------')
 
 module.exports = {
   stories: [`${getPaths().web.src}/**/*.stories.[tj]s`],
@@ -18,10 +10,6 @@ module.exports = {
       configType === 'development'
         ? require('../webpack.development')
         : require('../webpack.production')
-
-    console.log('~~~~~~~~~~~~~~~~~~~~~~ custom webpack')
-    console.log('pew pew pew')
-    console.log('~~~~~~~~~~~~~~~~~~~~~~')
 
     // Replace Storybook Config's rules:
     const babelLoader = ourWebpackConfig.module.rules[0].oneOf[2]

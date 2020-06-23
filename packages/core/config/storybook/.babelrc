@@ -2,7 +2,4 @@ const path = require('path')
 
 const { getPaths } = require('@redwoodjs/internal')
 
-console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~ custom babel ~~~~~~~~~~~~~~~~')
-
 module.export = require(path.join(getPaths().web.base, '.babelrc.js'))
-
