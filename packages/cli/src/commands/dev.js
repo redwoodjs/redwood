@@ -3,12 +3,9 @@ import path from 'path'
 
 import concurrently from 'concurrently'
 import terminalLink from 'terminal-link'
-import { getConfig } from '@redwoodjs/internal'
 
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
-
-const redwoodConfig = getConfig()
 
 export const command = 'dev [side..]'
 export const description = 'Start development servers for api, db, and web'
@@ -46,9 +43,10 @@ export const handler = async ({ side = ['api', 'db', 'web'] }) => {
     },
     db: {
       name: ' db', // prefixed with ` ` to match output indentation.
-      command: `cd "${path.join(BASE_DIR, 'api')}" && DATABASE_URL=${
-        redwoodConfig.databases.dev.url
-      } yarn prisma generate --watch`,
+      command: `cd "${path.join(
+        BASE_DIR,
+        'api'
+      )}" yarn prisma generate --watch`,
       prefixColor: 'magenta',
       runWhen: () => fs.existsSync(PRISMA_SCHEMA),
     },

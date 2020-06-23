@@ -2,12 +2,9 @@ import execa from 'execa'
 import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
-import { getConfig } from '@redwoodjs/internal'
 
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
-
-const redwoodConfig = getConfig()
 
 export const command = 'test [side..]'
 export const description = 'Run Jest tests for api and web'
@@ -30,10 +27,12 @@ export const builder = (yargs) => {
 export const handler = async ({ side }) => {
   const { base: BASE_DIR } = getPaths()
 
+  const DB_URL = process.env.TEST_DATABASE_URL || 'file:/test.db'
+
   const execCommands = {
     api: {
       cwd: `${BASE_DIR}/api`,
-      cmd: `DATABASE_URL=${redwoodConfig.databases.test.url} yarn rw db up && yarn jest`,
+      cmd: `DATABASE_URL=${DB_URL} yarn rw db up && yarn jest`,
       args: [
         '--passWithNoTests',
         '--config ../node_modules/@redwoodjs/core/config/jest.config.api.js',

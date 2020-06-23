@@ -37,16 +37,6 @@ export interface Config {
   browser: {
     open: boolean | string
   }
-  databases: {
-    dev: {
-      provider: string
-      url: string
-    }
-    test: {
-      provider: string
-      url: string
-    }
-  }
 }
 
 const DEFAULT_CONFIG: Config = {
@@ -66,16 +56,6 @@ const DEFAULT_CONFIG: Config = {
   },
   browser: {
     open: true,
-  },
-  databases: {
-    dev: {
-      provider: 'sqlite',
-      url: 'file:./dev.db',
-    },
-    test: {
-      provider: 'sqlite',
-      url: 'file:./test.db',
-    },
   },
 }
 
