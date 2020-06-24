@@ -1,93 +1,82 @@
-// Include at the top of your tests. Automatically mocks out the file system
-//
-// import { loadComponentFixture } from 'src/lib/test'
-//
-// test('true is true', () => {
-//   expect('some output').toEqual(loadComponentFixture('component', 'filename.js'))
-// })
-
-import fs from 'fs'
 import path from 'path'
+import fs from 'fs'
 
-jest.mock('@redwoodjs/internal', () => {
-  const path = require('path')
-  return {
-    ...require.requireActual('@redwoodjs/internal'),
-    getPaths: () => {
-      const BASE_PATH = '/path/to/project'
-      return {
-        base: BASE_PATH,
-        api: {
-          db: path.join(global.__dirname, 'fixtures'), // this folder
-          src: path.join(BASE_PATH, './api/src'),
-          services: path.join(BASE_PATH, './api/src/services'),
-          graphql: path.join(BASE_PATH, './api/src/graphql'),
-          functions: path.join(BASE_PATH, './api/src/functions'),
-        },
-        web: {
-          src: path.join(BASE_PATH, './web/src'),
-          routes: path.join(BASE_PATH, 'web/src/Routes.js'),
-          components: path.join(BASE_PATH, '/web/src/components'),
-          layouts: path.join(BASE_PATH, '/web/src/layouts'),
-          pages: path.join(BASE_PATH, '/web/src/pages'),
-        },
-      }
-    },
-  }
-})
+import execa from 'execa'
+import Listr from 'listr'
+import VerboseRenderer from 'listr-verbose-renderer'
+import terminalLink from 'terminal-link'
 
-global.__prettierPath = path.resolve(
-  __dirname,
-  './__tests__/fixtures/prettier.config.js'
-)
+import { getPaths } from 'src/lib'
+import c from 'src/lib/colors'
 
-jest.mock('path', () => {
-  const path = jest.requireActual('path')
-  return {
-    ...path,
-    join: (...paths) => {
-      if (
-        paths &&
-        paths[0] === '/path/to/project' &&
-        paths[1] === 'prettier.config.js'
-      ) {
-        return global.__prettierPath
-      }
-      return path.join(...paths)
-    },
-  }
-})
-
-export const generatorsRootPath = path.join(
-  __dirname,
-  '..',
-  'commands',
-  'generate'
-)
-
-// Loads the fixture for a generator by assuming a lot of the path structure automatically:
-//
-//   loadGeneratorFixture('scaffold', 'NamePage.js')
-//
-// will return the contents of:
-//
-//   cli/src/commands/generate/scaffold/test/fixtures/NamePage.js.fixture
-export const loadGeneratorFixture = (generator, name) => {
-  return loadFixture(
-    path.join(
-      __dirname,
-      '..',
-      'commands',
-      'generate',
-      generator,
-      '__tests__',
-      'fixtures',
-      name
+export const command = 'test [side..]'
+export const description = 'Run Jest tests for api and web'
+export const builder = (yargs) => {
+  yargs
+    .positional('side', {
+      choices: ['api', 'web'],
+      default: ['api', 'web'],
+      description: 'Which side(s) to test',
+      type: 'array',
+    })
+    .epilogue(
+      `Also see the ${terminalLink(
+        'Redwood CLI Reference',
+        'https://redwoodjs.com/reference/command-line-interface#test'
+      )}`
     )
-  )
 }
 
-// Returns the contents of a text file suffixed with ".fixture"
-export const loadFixture = (filepath) => {
-  return fs.readFileSync(filepath).toString()
+export const handler = async ({ side }) => {
+  const { base: BASE_DIR } = getPaths()
+
+  const execCommands = {
+    api: {
+      cwd: `${BASE_DIR}/api`,
+      cmd: `yarn rw db up && yarn jest`,
+      args: [
+        '--passWithNoTests',
+        '--config ../node_modules/@redwoodjs/core/config/jest.config.api.js',
+      ],
+      env: {
+        DATABASE_URL:
+          process.env.TEST_DATABASE_URL ||
+          `file:${path.join(getPaths().cache, 'test.sqlite')}`,
+      },
+    },
+    web: {
+      cwd: `${BASE_DIR}/web`,
+      cmd: 'yarn jest',
+      args: [
+        '--passWithNoTests',
+        '--config ../node_modules/@redwoodjs/core/config/jest.config.web.js',
+      ],
+    },
+  }
+
+  const tasks = new Listr(
+    side.map((sideName) => {
+      const { cmd, args, cwd, env } = execCommands[sideName]
+      return {
+        title: `Running '${sideName}' jest tests`,
+        task: () => {
+          return execa(cmd, args, {
+            stdio: 'inherit',
+            shell: true,
+            cwd,
+            env,
+          })
+        },
+      }
+    }),
+    {
+      renderer: VerboseRenderer,
+    }
+  )
+
+  try {
+    await tasks.run()
+  } catch (e) {
+    console.log(c.error(e.message))
+  }
 }
