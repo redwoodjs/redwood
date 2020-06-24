@@ -24,9 +24,11 @@ export interface BrowserTargetPaths {
   layouts: string
   config: string
   webpack: string
+  postcss: string
 }
 
 export interface Paths {
+  cache: string
   base: string
   web: BrowserTargetPaths
   api: NodeTargetPaths
@@ -57,6 +59,7 @@ const PATH_WEB_DIR_COMPONENTS = 'web/src/components'
 const PATH_WEB_DIR_SRC = 'web/src'
 const PATH_WEB_DIR_CONFIG = 'web/config'
 const PATH_WEB_DIR_CONFIG_WEBPACK = 'web/config/webpack.config.js'
+const PATH_WEB_DIR_CONFIG_POSTCSS = 'web/config/postcss.config.js'
 
 /**
  * Search the parent directories for the Redwood configuration file.
@@ -101,8 +104,17 @@ export const resolveFile = (
 export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
   const routes = resolveFile(path.join(BASE_DIR, PATH_WEB_ROUTES)) as string
 
+  // We store ambient type declerations and our test database over here.
+  const cache = path.join(BASE_DIR, 'node_modules', '.redwood')
+  try {
+    fs.mkdirSync(cache)
+  } catch (e) {
+    // noop
+  }
+
   return {
     base: BASE_DIR,
+    cache,
     api: {
       base: path.join(BASE_DIR, 'api'),
       db: path.join(BASE_DIR, PATH_API_DIR_DB),
@@ -123,6 +135,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       src: path.join(BASE_DIR, PATH_WEB_DIR_SRC),
       config: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG),
       webpack: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG_WEBPACK),
+      postcss: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG_POSTCSS),
     },
   }
 }
