@@ -58,10 +58,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
           const parsedPath = path.parse(filePath)
 
           // Do it this way to allow double dots e.g. service/payment/payment.utils.ts
-          const filePathWithoutExtension = path.join(
-            parsedPath.dir,
-            parsedPath.name
-          )
+          const filePathWithoutExtension = `${parsedPath.dir}/${parsedPath.name}`
 
           nodes.push(
             t.importDeclaration(
