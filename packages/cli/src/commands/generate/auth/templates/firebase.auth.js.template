@@ -23,7 +23,7 @@ const config = {
 const adminApp = admin.initializeApp(config)
 
 export const getCurrentUser = async (token) => {
-  const { email, uid } = await adminApp.auth().verifyToken(token)
+  const { email, uid } = await adminApp.auth().verifyIdToken(token)
   return { email, uid }
 }
 

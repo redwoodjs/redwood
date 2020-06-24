@@ -16,6 +16,7 @@ import execa from 'execa'
 import tmp from 'tmp'
 import checkNodeVersion from 'check-node-version'
 import chalk from 'chalk'
+import yargs from 'yargs'
 
 import { name, version } from '../package'
 
@@ -40,20 +41,12 @@ const downloadFile = async (sourceUrl, targetFile) => {
   })
 }
 
-const [_arg1, _arg2, ...args] = process.argv
-
-const helpInfo = `Usage: ${name} <target-dir> [options]\n\n Available options\n\n --help, -h\n --version, -v`
-
-if (args[0].startsWith('-')) {
-  if (['-h', '--help'].includes(args[0])) {
-    console.log(helpInfo)
-  } else if (['-v', '--version'].includes(args[0])) {
-    console.log(version)
-  } else {
-    console.error(`Invalid option, use ${name} --help to know more`)
-  }
-  process.exit(0)
-}
+const { _: args } = yargs
+  .scriptName(name)
+  .usage('Usage: $0 <project directory>')
+  .example('$0 newapp')
+  .version(version)
+  .strict().argv
 
 const targetDir = String(args).replace(/,/g, '-')
 if (!targetDir) {

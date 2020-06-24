@@ -3,7 +3,7 @@ import {
   FormError,
   FieldError,
   Label,
-  TextField,
+  ${fieldsToImport.join(',\n  ')},
   Submit,
 } from '@redwoodjs/web'
 
@@ -23,20 +23,20 @@ const ${singularPascalName}Form = (props) => {
         />
 <% editableColumns.forEach(column => { %>
         <Label
-          name="<%= column.name %>"
+          name="${column.name}"
           className="rw-label"
           errorClassName="rw-label rw-label-error"
         >
-          <%= column.label %>
+          ${column.label}
         </Label>
-        <TextField
-          name="<%= column.name %>"
-          defaultValue={props.${singularCamelName}?.<%= column.name %>}
+        <${column.component}
+          name="${column.name}"
+          ${column.defaultProp}={props.${singularCamelName}?.<%= column.name %>}
           className="rw-input"
-          errorClassName="rw-input rw-input-error"
-          validation={{ required: true }}
+          errorClassName="rw-input rw-input-error"<%= !column.validation ? '' : `
+          validation=${column.validation}` %>
         />
-        <FieldError name="<%= column.name %>" className="rw-field-error" />
+        <FieldError name="${column.name}" className="rw-field-error" />
 <% }) %>
         <div className="rw-button-group">
           <Submit
