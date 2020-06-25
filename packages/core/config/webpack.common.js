@@ -169,11 +169,11 @@ module.exports = (webpackEnv) => {
             // (0)
             {
               loader: 'null-loader',
-              test: /\.(md|test\.js|stories\.js)$/,
+              test: /\.(md|test\.*|stories\.*)$/,
             },
             // (1)
             {
-              test: /\.(png|jpg|gif)$/,
+              test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
               use: [
                 {
                   loader: 'url-loader',
@@ -186,23 +186,23 @@ module.exports = (webpackEnv) => {
             },
             // (2)
             {
-              test: /\.(js|jsx|ts|tsx)$/,
+              test: /\.(js|mjs|jsx|ts|tsx)$/,
               exclude: /(node_modules)/,
               use: {
                 loader: 'babel-loader',
               },
             },
             // (3)
-            {
-              test: /\.svg$/,
-              loader: 'svg-react-loader',
-            },
+            // {
+            //   test: /\.svg$/,
+            //   loader: 'svg-react-loader',
+            // },
             // .module.css (4), .css (5), .module.scss (6), .scss (7)
             ...getStyleLoaders(isEnvProduction),
             // (8)
             {
+              test: /\.(svg|ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|pdf)(\?.*)?$/,
               loader: 'file-loader',
-              exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
               options: {
                 name: 'static/media/[name].[hash:8].[ext]',
               },

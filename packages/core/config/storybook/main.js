@@ -1,36 +1,50 @@
-const DirectoryNamedWebpackPlugin = require('directory-named-webpack-plugin')
 const { getPaths } = require('@redwoodjs/internal')
 
-const { getStyleLoaders, getSharedPlugins } = require('../webpack.common')
+const { getSharedPlugins } = require('../webpack.common')
 
 module.exports = {
   stories: [`${getPaths().web.src}/**/*.stories.{tsx,jsx,js}`],
   webpackFinal: (storyBookConfig, { configType }) => {
-    const ourWebpackConfig =
-      configType === 'development'
-        ? require('../webpack.development')
-        : require('../webpack.production')
+    const isEnvProduction = configType === 'production'
 
-    // Replace Storybook Config's rules:
-    const babelLoader = ourWebpackConfig.module.rules[0].oneOf[2]
-    storyBookConfig.module.rules[0] = babelLoader
-    storyBookConfig.module.rules = [
-      ...storyBookConfig.module.rules,
-      ...getStyleLoaders(configType === 'production'),
-    ]
+    const ourWebpackConfig = isEnvProduction
+      ? require('../webpack.production')
+      : require('../webpack.development')
 
-    storyBookConfig.resolve.plugins = [
-      new DirectoryNamedWebpackPlugin({
-        honorIndex: true,
-        exclude: /node_modules/,
-      }),
-    ]
+    const { mode, bail, devtool, entry, output, optimization } = storyBookConfig
 
-    storyBookConfig.plugins = [
+    const newConfig = {
+      ...ourWebpackConfig,
+      mode,
+      bail,
+      devtool,
+      entry,
+      output,
+      optimization,
+    }
+
+    // ** PLUGINS **
+
+    newConfig.plugins = [
       ...storyBookConfig.plugins,
-      ...getSharedPlugins(configType === 'production'),
+      ...getSharedPlugins(isEnvProduction),
     ]
 
-    return storyBookConfig
+    // ** LOADERS ***
+
+    // Remove null-loader
+    const nullLoaderIndex = newConfig.module.rules[0].oneOf.findIndex(
+      ({ loader }) => loader === 'null-loader'
+    )
+    if (nullLoaderIndex >= 0) {
+      newConfig.module.rules[0].oneOf.splice(nullLoaderIndex, 1)
+    }
+    // Add markdown-loader
+    const mdxModuleRule = storyBookConfig.module.rules.filter(({ test }) => {
+      return '.md'.match(test)
+    })?.[0]
+    newConfig.module.rules[0].oneOf.unshift(mdxModuleRule)
+
+    return newConfig
   },
 }
