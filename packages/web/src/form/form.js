@@ -37,9 +37,9 @@ const INPUT_TYPES = [
 ]
 const COERCION_FUNCTIONS = {
   Boolean: (value) => !!value,
-  NumberField: (value) => parseInt(value, 10),
-  Int: (value) => parseInt(value, 10),
   Float: (value) => parseFloat(value),
+  Int: (value) => parseInt(value, 10),
+  NumberField: (value) => parseInt(value, 10),
 }
 
 // Massages a hash of props depending on whether the given named field has
