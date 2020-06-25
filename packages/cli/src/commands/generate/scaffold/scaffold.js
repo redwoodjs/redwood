@@ -214,7 +214,7 @@ const componentFiles = async (name, scaffoldPath = '') => {
       displayFunction: '',
     },
     Float: {
-      validation: "{{ required: true, type: 'Float' }}",
+      dataType: 'Float',
     },
     default: {
       name: 'TextField',

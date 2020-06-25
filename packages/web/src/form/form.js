@@ -154,9 +154,8 @@ const coerceValues = (data, children) => {
       ([_, componentConstructor]) => componentConstructor === child.type
     ) || [undefined, undefined]
 
-    const validationType = child.props.validation?.type
-
-    const coercionFunction = COERCION_FUNCTIONS[validationType || componentName]
+    const coercionFunction =
+      COERCION_FUNCTIONS[child.props?.dataType || componentName]
 
     if (coercionFunction) {
       coercedData[childName] = coercionFunction(data[childName])
