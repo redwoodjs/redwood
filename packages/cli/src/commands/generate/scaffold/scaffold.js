@@ -194,17 +194,51 @@ const componentFiles = async (name, scaffoldPath = '') => {
   const singularName = pascalcase(pluralize.singular(name))
   const model = await getSchema(singularName)
   const idType = getIdType(model)
-  const columns = model.fields.filter((field) => field.kind !== 'object')
   const intForeignKeys = intForeignKeysForModel(model)
   let fileList = {}
-  const editableColumns = columns
-    .filter((column) => {
-      return NON_EDITABLE_COLUMNS.indexOf(column.name) === -1
-    })
+  const componentMetadata = {
+    Boolean: {
+      name: 'CheckboxField',
+      defaultProp: 'defaultChecked',
+      validation: false,
+      displayFunction: 'checkboxInputTag',
+    },
+    DateTime: {
+      displayFunction: 'timeTag',
+    },
+    String: {
+      name: 'TextField',
+      defaultProp: 'defaultValue',
+      validation: '{{ required: true }}',
+      displayFunction: 'truncate',
+    },
+  }
+  const columns = model.fields
+    .filter((field) => field.kind !== 'object')
     .map((column) => ({
       ...column,
       label: humanize(column.name),
+      component:
+        componentMetadata[column.type]?.name || componentMetadata.String.name,
+      defaultProp:
+        componentMetadata[column.type]?.defaultProp ||
+        componentMetadata.String.defaultProp,
+      validation:
+        componentMetadata[column.type]?.validation ??
+        componentMetadata.String.validation,
+      displayFunction:
+        componentMetadata[column.type]?.displayFunction ||
+        componentMetadata.String.displayFunction,
     }))
+  const editableColumns = columns.filter((column) => {
+    return NON_EDITABLE_COLUMNS.indexOf(column.name) === -1
+  })
+  const fieldsToImport = Object.keys(
+    editableColumns.reduce((accumulator, column) => {
+      accumulator[column.component] = true
+      return accumulator
+    }, {})
+  )
 
   const pascalScaffoldPath =
     scaffoldPath === ''
@@ -249,6 +283,7 @@ const componentFiles = async (name, scaffoldPath = '') => {
       {
         name,
         columns,
+        fieldsToImport,
         editableColumns,
         idType,
         intForeignKeys,

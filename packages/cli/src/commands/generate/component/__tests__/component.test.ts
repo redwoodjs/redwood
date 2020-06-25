@@ -1,16 +1,15 @@
 global.__dirname = __dirname
 import path from 'path'
-import { loadGeneratorFixture } from 'src/lib/test'
 
 // TODO: Revert to import from '../component' when it gets types.
-import * as component from 'src/commands/generate/component/component'
+import { loadGeneratorFixture } from 'src/lib/test'
 
-type WordFilesType = { [key: string]: string }
+import * as component from '../component'
 
-let singleWordDefaultFiles: WordFilesType
-let multiWordDefaultFiles: WordFilesType
-let javascriptFiles: WordFilesType
-let typescriptFiles: WordFilesType
+let singleWordDefaultFiles,
+  multiWordDefaultFiles,
+  javascriptFiles,
+  typescriptFiles
 
 beforeAll(() => {
   singleWordDefaultFiles = component.files({ name: 'User' })

@@ -2,26 +2,28 @@
 
 Love Redwood and want to get involved? You’re in the right place!
 
-Before interacting with the Redwood community, please read and understand our [Code of Conduct](https://github.com/redwoodjs/redwood/blob/master/CODE_OF_CONDUCT.md).
+Before interacting with the Redwood community, please read and understand our [Code of Conduct](https://github.com/redwoodjs/redwood/blob/main/CODE_OF_CONDUCT.md).
 
 **Table of Contents**
 
-- [Local Development](#local-development)
-  - [Copy and Watch](#copy-and-watch)
-    - [Specifying a RW_PATH](#specifying-a-rwpath)
-  - [Local Package Registry Emulation](#local-package-registry-emulation)
-    - [Setting Up and Running a Local NPM Registry](#setting-up-and-running-a-local-npm-registry)
-    - [Publishing a Package](#publishing-a-package)
-    - [Installing Published Packages in Your Redwood App](#installing-published-packages-in-your-redwood-app)
-- [Running Your Redwood App's Local Server(s)](#running-your-redwood-apps-local-servers)
-- [Releases](#releases)
-  - [Troubleshooting](#troubleshooting)
-- [CLI Reference: redwood-tools](#cli-reference-redwood-tools)
-  - [redwood-tools (alias rwt)](#redwood-tools-alias-rwt)
-  - [copy (alias cp)](#copy-alias-cp)
-  - [copy:watch (alias cpw)](#copywatch-alias-cpw)
-  - [fix-bins (alias fix)](#fix-bins-alias-fix)
-  - [install (alias i)](#install-alias-i)
+- [Contributing](#contributing)
+  - [Local Development](#local-development)
+    - [Copy and Watch](#copy-and-watch)
+      - [Specifying a RW_PATH](#specifying-a-rw_path)
+    - [Local Package Registry Emulation](#local-package-registry-emulation)
+      - [Setting Up and Running a Local NPM Registry](#setting-up-and-running-a-local-npm-registry)
+      - [Publishing a Package](#publishing-a-package)
+      - [Installing Published Packages in Your Redwood App](#installing-published-packages-in-your-redwood-app)
+  - [Running Your Redwood App's Local Server(s)](#running-your-redwood-apps-local-servers)
+  - [Integration tests](#integration-tests)
+  - [Releases](#releases)
+    - [Troubleshooting](#troubleshooting)
+  - [CLI Reference: `redwood-tools`](#cli-reference-redwood-tools)
+    - [redwood-tools (alias rwt)](#redwood-tools-alias-rwt)
+    - [copy (alias cp)](#copy-alias-cp)
+    - [copy:watch (alias cpw)](#copywatch-alias-cpw)
+    - [fix-bins (alias fix)](#fix-bins-alias-fix)
+    - [install (alias i)](#install-alias-i)
 
 ## Local Development
 
@@ -180,6 +182,22 @@ yarn rw dev api
 yarn rw dev web
 ```
 
+## Integration tests
+
+We're using Cypress to test the steps that we recommend in the tutorial. To run the command by doing the following:
+```terminal
+yarn build
+./tasks/test-tutorial
+```
+
+This tests against the built packages in Redwood, it uses the base project in `__fixtures/new-project`, so any modifications to that project will also be reflected in the Cypress tests.
+If you would like to test against the packages specified in `/__fixtures__/new-project` you can start it with the following:
+```terminal
+./tasks/test-tutorial --no-local
+```
+
+The command for this is written in bash and will not work on Windows.
+
 ## Releases
 
 To publish a new version of Redwood to NPM run the following commands:
@@ -222,17 +240,17 @@ Copy the Redwood Framework path to this project.
 yarn rwt cp [RW_PATH]
 ```
 
-You can avoid having to provide `RW_PATH` by defining an environment variable on your system. See [Specifying a RW_PATH](https://github.com/redwoodjs/redwood/blob/master/CONTRIBUTING.md#specifying-a-rw_path).
+You can avoid having to provide `RW_PATH` by defining an environment variable on your system. See [Specifying a RW_PATH](https://github.com/redwoodjs/redwood/blob/main/CONTRIBUTING.md#specifying-a-rw_path).
 
 ### copy:watch (alias cpw)
 
-Watch the Redwood Framework path for changes and copy them over to this project.  
+Watch the Redwood Framework path for changes and copy them over to this project.
 
 ```terminal
 yarn rwt cpw [RW_PATH]
 ```
 
-You can avoid having to provide `RW_PATH` by defining an environment variable on your system. See [Specifying a RW_PATH](https://github.com/redwoodjs/redwood/blob/master/CONTRIBUTING.md#specifying-a-rw_path).
+You can avoid having to provide `RW_PATH` by defining an environment variable on your system. See [Specifying a RW_PATH](https://github.com/redwoodjs/redwood/blob/main/CONTRIBUTING.md#specifying-a-rw_path).
 
 ### fix-bins (alias fix)
 
@@ -260,4 +278,4 @@ Install a package from your local NPM registry.
 yarn rwt i <packageName>
 ```
 
-You'll use this command if you're testing the full package-development workflow. See [Local Package Registry Emulation](https://github.com/redwoodjs/redwood/blob/master/CONTRIBUTING.md#local-package-registry-emulation).
+You'll use this command if you're testing the full package-development workflow. See [Local Package Registry Emulation](https://github.com/redwoodjs/redwood/blob/main/CONTRIBUTING.md#local-package-registry-emulation).

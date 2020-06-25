@@ -45,4 +45,9 @@ const Location = ({ children }) => (
   </LocationContext.Consumer>
 )
 
-export { Location, LocationProvider, LocationContext }
+const useLocation = () => {
+  const location = React.useContext(LocationContext)
+  return location
+}
+
+export { Location, LocationProvider, LocationContext, useLocation }

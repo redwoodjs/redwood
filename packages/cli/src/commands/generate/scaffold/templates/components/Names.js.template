@@ -27,6 +27,10 @@ const timeTag = (datetime) => {
   )
 }
 
+const checkboxInputTag = (checked) => {
+  return <input type="checkbox" checked={checked} disabled />
+}
+
 const ${pluralPascalName}List = ({ ${pluralCamelName} }) => {
   const { addMessage } = useFlash()
   const [delete${singularPascalName}] = useMutation(DELETE_${singularConstantName}_MUTATION, {
@@ -53,7 +57,7 @@ const ${pluralPascalName}List = ({ ${pluralCamelName} }) => {
         <tbody>
           {${pluralCamelName}.map((${singularCamelName}) => (
             <tr key={${singularCamelName}.id}><% columns.forEach(column => { %>
-              <td>{<% if (column.type === 'DateTime') { %>timeTag<% } else { %>truncate<% } %>(${singularCamelName}.<%= column.name %>)}</td><% }) %>
+              <td>{${column.displayFunction}(${singularCamelName}.${column.name})}</td><% }) %>
               <td>
                 <nav className="rw-table-actions">
                   <Link

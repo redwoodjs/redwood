@@ -59,6 +59,10 @@ const Post = ({ post }) => {
               <td>{post.image}</td>
             </tr>
             <tr>
+              <th>isPinned</th>
+              <td>{post.isPinned}</td>
+            </tr>
+            <tr>
               <th>postedAt</th>
               <td>{post.postedAt}</td>
             </tr>
