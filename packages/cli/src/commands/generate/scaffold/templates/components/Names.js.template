@@ -50,7 +50,7 @@ const ${pluralPascalName}List = ({ ${pluralCamelName} }) => {
       <table className="rw-table">
         <thead>
           <tr><% columns.forEach(column => { %>
-            <th><%= column.name %></th><% }) %>
+            <th>${column.label}</th><% }) %>
             <th>&nbsp;</th>
           </tr>
         </thead>
