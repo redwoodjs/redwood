@@ -198,7 +198,7 @@ const componentFiles = async (name, scaffoldPath = '') => {
   let fileList = {}
   const componentMetadata = {
     Boolean: {
-      name: 'CheckboxField',
+      componentName: 'CheckboxField',
       defaultProp: 'defaultChecked',
       validation: false,
       displayFunction: 'checkboxInputTag',
@@ -207,17 +207,17 @@ const componentFiles = async (name, scaffoldPath = '') => {
       displayFunction: 'timeTag',
     },
     Int: {
-      name: 'NumberField',
+      componentName: 'NumberField',
     },
     Json: {
-      name: 'TextArea',
+      componentName: 'TextArea',
       displayFunction: '',
     },
     Float: {
       dataType: 'Float',
     },
     default: {
-      name: 'TextField',
+      componentName: 'TextField',
       defaultProp: 'defaultValue',
       validation: '{{ required: true }}',
       displayFunction: 'truncate',
@@ -229,7 +229,8 @@ const componentFiles = async (name, scaffoldPath = '') => {
       ...column,
       label: humanize(column.name),
       component:
-        componentMetadata[column.type]?.name || componentMetadata.default.name,
+        componentMetadata[column.type]?.componentName ||
+        componentMetadata.default.componentName,
       defaultProp:
         componentMetadata[column.type]?.defaultProp ||
         componentMetadata.default.defaultProp,
