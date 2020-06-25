@@ -201,6 +201,37 @@ const SomeDeeplyNestedComponent = () => {
 
 In the above example, we've pulled in the `id` route parameter without needing to have it passed in to us from anywhere.
 
+## useLocation
+
+If you'd like to get access to the current URL, `useLocation` returns a read-only location object representing it. The location object has three properties, [pathname](https://developer.mozilla.org/en-US/docs/Web/API/Location/pathname), [search](https://developer.mozilla.org/en-US/docs/Web/API/Location/search), and [hash](https://developer.mozilla.org/en-US/docs/Web/API/Location/hash), that update when the URL changes. This makes it easy to fire off navigation side effects or use the URL as if it were state:
+
+```js
+import { useLocation } from '@redwoodjs/router'
+
+const App = () => {
+  const { pathname, search, hash } = useLocation()
+
+  // log the URL when the pathname changes
+  React.useEffect(() => {
+    myLogger(pathname)
+  }, [pathname])
+
+  // initiate a query state with the search val
+  const [query, setQuery] = React.useState(search)
+
+  // conditionally render based on hash
+  if ( hash === "#ping" ) {
+    return <Pong />
+  }
+
+  return (
+    <>...</>
+  )
+
+}
+
+```
+
 ## navigate
 
 If you'd like to programmatically navigate to a different page, you can simply use the `navigate` function:
