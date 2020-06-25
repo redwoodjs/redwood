@@ -39,6 +39,7 @@ const COERCION_FUNCTIONS = {
   Boolean: (value) => !!value,
   Float: (value) => parseFloat(value),
   Int: (value) => parseInt(value, 10),
+  Json: (value) => JSON.parse(value),
   NumberField: (value) => parseInt(value, 10),
 }
 
