@@ -33,6 +33,7 @@ module.exports = {
       NODE_MODULES_PATH,
       '@redwoodjs/testing/dist/MockRouter.js'
     ),
+    '~__REDWOOD__USER_ROUTES_FOR_MOCK': getPaths().web.routes,
     /**
      * Mock out files that aren't particularly useful in tests. See fileMock.js for more info.
      */
