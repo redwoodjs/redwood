@@ -13,6 +13,7 @@ module.exports = {
   // NOTE: We run the tests with a `cwd` argument that's `getPaths().web.base`
   rootDir: process.cwd(),
   globals: {
+    __REDWOOD__: true,
     __REDWOOD__API_PROXY_PATH: '/',
   },
   setupFilesAfterEnv: [path.resolve(__dirname, './jest.setup.web.js')],
