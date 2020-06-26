@@ -24,8 +24,8 @@ beforeAll(() => {
   })
 })
 
-test('returns exactly 2 files', () => {
-  expect(Object.keys(singleWordDefaultFiles).length).toEqual(2)
+test('returns exactly 3 files', () => {
+  expect(Object.keys(singleWordDefaultFiles).length).toEqual(3)
 })
 
 test('creates a single word component', () => {
@@ -42,6 +42,18 @@ test('creates a single word component test', () => {
       path.normalize('/path/to/project/web/src/components/User/User.test.tsx')
     ]
   ).toEqual(loadGeneratorFixture('component', 'singleWordComponent.test.tsx'))
+})
+
+test('creates a single word component story', () => {
+  expect(
+    singleWordDefaultFiles[
+      path.normalize(
+        '/path/to/project/web/src/components/User/User.stories.tsx'
+      )
+    ]
+  ).toEqual(
+    loadGeneratorFixture('component', 'singleWordComponent.stories.tsx')
+  )
 })
 
 test('creates a multi word component', () => {
@@ -62,6 +74,16 @@ test('creates a multi word component test', () => {
       )
     ]
   ).toEqual(loadGeneratorFixture('component', 'multiWordComponent.test.tsx'))
+})
+
+test('creates a multi word component story', () => {
+  expect(
+    multiWordDefaultFiles[
+      path.normalize(
+        '/path/to/project/web/src/components/UserProfile/UserProfile.stories.tsx'
+      )
+    ]
+  ).toEqual(loadGeneratorFixture('component', 'multiWordComponent.stories.tsx'))
 })
 
 test('creates JS component files if javacript = true', () => {
