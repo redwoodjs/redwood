@@ -1,0 +1,3 @@
+{
+  "ignoreTestFiles": ["**/codemods/*.js"]
+}

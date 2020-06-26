@@ -31,66 +31,87 @@ const getEnvVars = () => {
 }
 
 const getStyleLoaders = (isEnvProduction) => {
-  // Obscured classnames in production, more expressive classnames in development.
-  const localIdentName = isEnvProduction
-    ? '[hash:base64]'
-    : '[path][name]__[local]--[hash:base64:5]'
+  const styleOrExtractLoader = isEnvProduction
+    ? MiniCssExtractPlugin.loader
+    : 'style-loader'
+
+  const cssLoader = (withModules, importLoaders) => {
+    // Obscured classnames in production, more expressive classnames in development.
+    const localIdentName = isEnvProduction
+      ? '[hash:base64]'
+      : '[path][name]__[local]--[hash:base64:5]'
+
+    const loaderConfig = {
+      loader: 'css-loader',
+      options: {
+        sourceMap: !isEnvProduction,
+        importLoaders,
+      },
+    }
+
+    // Enables CSS modules
+    if (withModules) {
+      loaderConfig.options.modules = { localIdentName }
+    }
+
+    return loaderConfig
+  }
+
+  const redwoodPaths = getPaths()
+  const hasPostCssConfig = existsSync(redwoodPaths.web.postcss)
+
+  // We only use the postcss-loader if there is a postcss config file
+  // at web/config/postcss.config.js
+  const postCssLoader = hasPostCssConfig
+    ? {
+      loader: 'postcss-loader',
+      options: {
+        config: {
+          path: redwoodPaths.web.postcss,
+        },
+      },
+    }
+    : null
+
+  const numImportLoadersForCSS = hasPostCssConfig ? 1 : 0
+  const numImportLoadersForSCSS = hasPostCssConfig ? 2 : 1
+
   return [
     {
       test: /\.module\.css$/,
       loader: [
-        isEnvProduction ? MiniCssExtractPlugin.loader : 'style-loader',
-        {
-          loader: 'css-loader',
-          options: {
-            modules: {
-              localIdentName,
-            },
-            sourceMap: !isEnvProduction,
-          },
-        },
-      ],
+        styleOrExtractLoader,
+        cssLoader(true, numImportLoadersForCSS),
+        postCssLoader,
+      ].filter(Boolean),
     },
     {
       test: /\.css$/,
       loader: [
-        isEnvProduction ? MiniCssExtractPlugin.loader : 'style-loader',
-        {
-          loader: 'css-loader',
-          options: {
-            sourceMap: !isEnvProduction,
-          },
-        },
-      ],
+        styleOrExtractLoader,
+        cssLoader(false, numImportLoadersForCSS),
+        postCssLoader,
+      ].filter(Boolean),
+      sideEffects: true,
     },
     {
       test: /\.module\.scss$/,
       loader: [
-        isEnvProduction ? MiniCssExtractPlugin.loader : 'style-loader',
-        {
-          loader: 'css-loader',
-          options: {
-            modules: {
-              localIdentName,
-            },
-            sourceMap: !isEnvProduction,
-          },
-        },
+        styleOrExtractLoader,
+        cssLoader(true, numImportLoadersForSCSS),
+        postCssLoader,
         'sass-loader',
-      ],
+      ].filter(Boolean),
     },
     {
       test: /\.scss$/,
       loader: [
-        isEnvProduction ? MiniCssExtractPlugin.loader : 'style-loader',
-        {
-          loader: 'css-loader',
-          options: {
-            sourceMap: !isEnvProduction,
-          },
-        },
+        styleOrExtractLoader,
+        cssLoader(false, numImportLoadersForSCSS),
+        postCssLoader,
         'sass-loader',
-      ],
+      ].filter(Boolean),
+      sideEffects: true,
     },
   ]
 }
@@ -110,6 +131,7 @@ const getSharedPlugins = (isEnvProduction) => {
     // The define plugin will replace these keys with their values during build
     // time.
     new webpack.DefinePlugin({
+      __REDWOOD__: JSON.stringify(true),
       __RW__API_PROXY_PATH: JSON.stringify(redwoodConfig.web.apiProxyPath),
       ...getEnvVars(),
     }),

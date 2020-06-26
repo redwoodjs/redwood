@@ -47,9 +47,19 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
 
         const cwd = path.dirname(state.file.opts.filename)
         const dirFiles = glob.sync(p.node.source.value, { cwd })
-        for (const filePath of dirFiles) {
+
+        const sourceFilesOnly = dirFiles.filter(
+          (dirFile) => !dirFile.includes('.test.')
+        )
+        for (const filePath of sourceFilesOnly) {
           const fileName = path.basename(filePath).split('.')[0]
           // + import * as <importName>_<fileName> from <filePath>
+
+          const parsedPath = path.parse(filePath)
+
+          // Do it this way to allow double dots e.g. service/payment/payment.utils.ts
+          const filePathWithoutExtension = `${parsedPath.dir}/${parsedPath.name}`
+
           nodes.push(
             t.importDeclaration(
               [
@@ -57,7 +67,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
                   t.identifier(importName + '_' + fileName)
                 ),
               ],
-              t.stringLiteral(filePath)
+              t.stringLiteral(filePathWithoutExtension)
             )
           )
 

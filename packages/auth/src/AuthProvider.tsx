@@ -11,18 +11,21 @@ import { createAuthClient } from './authClients'
 export interface CurrentUser {}
 
 export interface AuthContextInterface {
-  /** Determining your current authentication state */
+  /* Determining your current authentication state */
   loading: boolean
   isAuthenticated: boolean
-  /** The current user data from the `getCurrentUser` function on the api side */
+  /* The current user data from the `getCurrentUser` function on the api side */
   currentUser: null | CurrentUser
-  /** The user's metadata from the auth provider */
+  /* The user's metadata from the auth provider */
   userMetadata: null | SupportedUserMetadata
   logIn(): Promise<void>
   logOut(): Promise<void>
   getToken(): Promise<null | string>
-  /** Get the current user from the `getCurrentUser` function on the api side */
+  /* Fetches the "currentUser" from the api side, but does not update the current user state. */
   getCurrentUser(): Promise<null | CurrentUser>
+  /* Redetermine the users authentication state and update the state. */
+  reauthenticate(): Promise<void>
+  /* A reference to the client that you originall passed into the `AuthProvider` during initialization. */
   client: SupportedAuthClients
   type: SupportedAuthTypes
 }
@@ -53,6 +56,7 @@ type AuthProviderState = {
  *  </AuthProvider>
  * ```
  */
+// TODO: Determine what should be done when fetching the current user fails
 export class AuthProvider extends React.Component<
   AuthProviderProps,
   AuthProviderState
@@ -77,7 +81,7 @@ export class AuthProvider extends React.Component<
 
   async componentDidMount() {
     await this.rwClient.restoreAuthState?.()
-    return this.setAuthState()
+    return this.reauthenticate()
   }
 
   getCurrentUser = async () => {
@@ -107,7 +111,7 @@ export class AuthProvider extends React.Component<
     }
   }
 
-  setAuthState = async () => {
+  reauthenticate = async () => {
     const userMetadata = await this.rwClient.getUserMetadata()
     const isAuthenticated = userMetadata !== null
 
@@ -126,7 +130,7 @@ export class AuthProvider extends React.Component<
 
   logIn = async (options?: any) => {
     await this.rwClient.login(options)
-    return this.setAuthState()
+    return this.reauthenticate()
   }
 
   logOut = async (options?: any) => {
@@ -149,6 +153,7 @@ export class AuthProvider extends React.Component<
           logOut: this.logOut,
           getToken: this.rwClient.getToken,
           getCurrentUser: this.getCurrentUser,
+          reauthenticate: this.reauthenticate,
           client,
           type,
         }}

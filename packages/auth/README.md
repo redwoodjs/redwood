@@ -2,23 +2,28 @@
 
 `@redwoodjs/auth` is a lightweight wrapper around popular SPA authentication libraries. We currently support the following authentication providers:
 
+Check out the [Auth Playground](https://github.com/redwoodjs/playground-auth).
+
 - [Netlify Identity Widget](https://github.com/netlify/netlify-identity-widget)
 - [Auth0](https://github.com/auth0/auth0-spa-js)
 - [Netlify GoTrue-JS](https://github.com/netlify/gotrue-js)
 - [Magic Links - Magic.js](https://github.com/MagicHQ/magic-js)
-- [Firebase GoogleAuthProvider](https://firebase.google.com/docs/reference/js/firebase.auth.GoogleAuthProvider)
-- [Contribute](#contributing) one, it's SuperEasy™!
+- [Firebase's GoogleAuthProvider](https://firebase.google.com/docs/reference/js/firebase.auth.GoogleAuthProvider)
+- [Contribute one](#contributing), it's SuperEasy™!
 
 ## Installation
 
 ### CLI Auth Generator
 The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
+
 ```terminal
 yarn rw g auth [provider]
 ```
-*`[provider]` values can be either "netlify", "auth0" or "magic-link".*
+*`[provider]` values can be either "netlify", "auth0", "magic-link" or "firebase".*
+
 
 ### Manual Install
+
 #### Netlify Identity Widget
 
 ```bash
@@ -32,6 +37,7 @@ yarn add @redwoodjs/auth netlify-identity-widget
 cd web
 yarn add @redwoodjs/auth @auth0/auth0-spa-js
 ```
+
 #### Magic.Link
 
 ```bash
@@ -120,7 +126,7 @@ ReactDOM.render(
 
 ### For Firebase
 
-We're using [https://firebase.google.com/docs/auth/web/google-signin](Firebase Google Sign-In), so you'll have to follow the ["Before you begin"](https://firebase.google.com/docs/auth/web/google-signin#before_you_begin) steps in this guide. Only follow the "before you begin" parts.
+We're using [Firebase Google Sign-In](https://firebase.google.com/docs/auth/web/google-signin), so you'll have to follow the ["Before you begin"](https://firebase.google.com/docs/auth/web/google-signin#before_you_begin) steps in this guide. **Only** follow the "Before you begin" parts.
 
 ```js
 // web/src/index.js
@@ -189,10 +195,12 @@ The following values are available from the `useAuth` hook:
 * async `logIn()`: Differs based on the client library, with Netlify Identity a pop-up is shown, and with Auth0 the user is redirected
 * async `logOut()`: Log out the current user
 * `currentUser`: an object containing information about the current user, or `null` if the user is not authenticated
+* async `reauthenticate()`: Refetch the authentication data and populate the state.
 * async `getToken()`: returns a jwt
 * `client`: Access the instance of the client which you passed into `AuthProvider`
 * `isAuthenticated`: used to determine if the current user has authenticated
 * `loading`: The auth state is restored asynchronously when the user visits the site for the first time, use this to determine if you have the correct state
+
 
 ## Usage in Redwood
 

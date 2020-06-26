@@ -33,6 +33,7 @@ export const handler = async ({ name, verbose = true }) => {
         args: [
           'migrate save',
           name.length && `--name ${name}`,
+          '--create-db',
           '--experimental',
         ].filter(Boolean),
       },
