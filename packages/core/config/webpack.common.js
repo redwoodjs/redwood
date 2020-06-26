@@ -64,13 +64,13 @@ const getStyleLoaders = (isEnvProduction) => {
   // at web/config/postcss.config.js
   const postCssLoader = hasPostCssConfig
     ? {
-      loader: 'postcss-loader',
-      options: {
-        config: {
-          path: redwoodPaths.web.postcss,
+        loader: 'postcss-loader',
+        options: {
+          config: {
+            path: redwoodPaths.web.postcss,
+          },
         },
-      },
-    }
+      }
     : null
 
   const numImportLoadersForCSS = hasPostCssConfig ? 1 : 0
@@ -132,7 +132,7 @@ const getSharedPlugins = (isEnvProduction) => {
     // time.
     new webpack.DefinePlugin({
       __REDWOOD__: JSON.stringify(true),
-      __RW__API_PROXY_PATH: JSON.stringify(redwoodConfig.web.apiProxyPath),
+      __REDWOOD__API_PROXY_PATH: JSON.stringify(redwoodConfig.web.apiProxyPath),
       ...getEnvVars(),
     }),
     new Dotenv({
