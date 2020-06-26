@@ -16,7 +16,7 @@ export const Router: React.FunctionComponent = ({ children }) => {
     children
   ) as React.ReactElement[]) {
     const { name } = route.props
-    routes[name] = jest.fn(() => name)
+    routes[name] = () => name
   }
   return <></>
 }
