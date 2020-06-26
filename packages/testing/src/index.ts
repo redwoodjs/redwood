@@ -6,6 +6,8 @@ import server from './mockServer'
 export * from '@testing-library/react'
 export { customRender as render } from './customRender'
 
+export { MockProviders } from './MockProviders'
+
 export * from 'msw'
 export { server }
 export interface GraphQLMock {
