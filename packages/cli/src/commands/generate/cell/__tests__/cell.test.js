@@ -13,7 +13,7 @@ beforeAll(() => {
 })
 
 test('returns exactly 2 files', () => {
-  expect(Object.keys(singleWordFiles).length).toEqual(2)
+  expect(Object.keys(singleWordFiles).length).toEqual(3)
 })
 
 test('creates a cell component with a single word name', () => {
@@ -34,6 +34,16 @@ test('creates a cell test with a single word name', () => {
   ).toEqual(loadGeneratorFixture('cell', 'singleWordCell.test.js'))
 })
 
+test('creates a cell stories with a single word name', () => {
+  expect(
+    singleWordFiles[
+      path.normalize(
+        '/path/to/project/web/src/components/UserCell/UserCell.stories.js'
+      )
+    ]
+  ).toEqual(loadGeneratorFixture('cell', 'singleWordCell.stories.js'))
+})
+
 test('creates a cell component with a multi word name', () => {
   expect(
     multiWordFiles[
@@ -52,4 +62,14 @@ test('creates a cell test with a multi word name', () => {
       )
     ]
   ).toEqual(loadGeneratorFixture('cell', 'multiWordCell.test.js'))
+})
+
+test('creates a cell stories with a multi word name', () => {
+  expect(
+    multiWordFiles[
+      path.normalize(
+        '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.stories.js'
+      )
+    ]
+  ).toEqual(loadGeneratorFixture('cell', 'multiWordCell.stories.js'))
 })
