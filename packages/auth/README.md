@@ -14,13 +14,14 @@ Check out the [Auth Playground](https://github.com/redwoodjs/playground-auth).
 ## Installation
 
 ### CLI Auth Generator
+
 The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
 
 ```terminal
 yarn rw g auth [provider]
 ```
-*`[provider]` values can be either "netlify", "auth0", "magic-link" or "firebase".*
 
+*`[provider]` values can be either "netlify", "auth0", "magicLink" or "firebase".*
 
 ### Manual Install
 
@@ -200,7 +201,6 @@ The following values are available from the `useAuth` hook:
 * `client`: Access the instance of the client which you passed into `AuthProvider`
 * `isAuthenticated`: used to determine if the current user has authenticated
 * `loading`: The auth state is restored asynchronously when the user visits the site for the first time, use this to determine if you have the correct state
-
 
 ## Usage in Redwood
 
