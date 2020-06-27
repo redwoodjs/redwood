@@ -12,7 +12,7 @@ beforeAll(() => {
   multiWordFiles = cell.files({ name: 'UserProfile' })
 })
 
-test('returns exactly 2 files', () => {
+test('returns exactly 3 files', () => {
   expect(Object.keys(singleWordFiles).length).toEqual(3)
 })
 
