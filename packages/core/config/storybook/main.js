@@ -17,12 +17,12 @@ module.exports = {
       ? require('../webpack.production')
       : require('../webpack.development')
 
-    const { mode, bail, devtool, entry, output, optimization } = storyBookConfig
+    const { mode, devtool, entry, output, optimization } = storyBookConfig
 
     const newConfig = {
       ...ourWebpackConfig,
+      bail: false,
       mode,
-      bail,
       devtool,
       entry,
       output,
