@@ -4,4 +4,4 @@ export const generated = () => {
   return <User />
 }
 
-export default { title: 'User' }
+export default { title: 'Components/User' }

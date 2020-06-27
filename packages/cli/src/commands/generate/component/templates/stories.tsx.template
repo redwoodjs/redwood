@@ -4,4 +4,4 @@ export const generated = () => {
   return <${pascalName} />
 }
 
-export default { title: '${pascalName}' }
+export default { title: 'Components/${pascalName}' }
