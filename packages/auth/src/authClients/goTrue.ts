@@ -18,9 +18,9 @@ export const goTrue = (client: GoTrue): AuthClientGoTrue => {
   return {
     type: 'goTrue',
     client,
-    login: async ({ email, password, remember }) =>
+    logIn: async ({ email, password, remember }) =>
       client.login(email, password, remember),
-    logout: async () => {
+    logOut: async () => {
       const user = await client.currentUser()
       return user?.logout()
     },
