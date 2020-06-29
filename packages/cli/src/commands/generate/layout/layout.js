@@ -27,22 +27,33 @@ export const files = ({ name, ...options }) => {
     generator: 'layout',
     templatePath: 'test.tsx.template',
   })
+  const storyFile = templateForComponentFile({
+    name,
+    suffix: COMPONENT_SUFFIX,
+    extension: `.stories.${isJavascript ? 'js' : 'tsx'}`,
+    webPathSection: REDWOOD_WEB_PATH_NAME,
+    generator: 'layout',
+    templatePath: 'stories.tsx.template',
+  })
 
   // Returns
   // {
   //    "path/to/fileA": "<<<template>>>",
   //    "path/to/fileB": "<<<template>>>",
   // }
-  return [layoutFile, testFile].reduce((acc, [outputPath, content]) => {
-    const template = isJavascript
-      ? transformTSToJS(outputPath, content)
-      : content
+  return [layoutFile, testFile, storyFile].reduce(
+    (acc, [outputPath, content]) => {
+      const template = isJavascript
+        ? transformTSToJS(outputPath, content)
+        : content
 
-    return {
-      [outputPath]: template,
-      ...acc,
-    }
-  }, {})
+      return {
+        [outputPath]: template,
+        ...acc,
+      }
+    },
+    {}
+  )
 }
 
 export const {
