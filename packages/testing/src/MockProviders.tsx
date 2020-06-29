@@ -4,7 +4,6 @@
 import React from 'react'
 // ts-ignore
 import { RedwoodProvider } from '@redwoodjs/web'
-//import { getPaths } from '@redwoodjs/internal'
 
 // Import the user's Router from `./web/src/Router.js`,
 // we pass the `children` from the user's Router in `./MockRouter.Router`,
