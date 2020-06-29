@@ -3,13 +3,12 @@ import type {
   Context as LambdaContext,
   ClientContext,
 } from 'aws-lambda'
+import type { SupportedAuthTypes } from '@redwoodjs/auth'
 //
 import jwt from 'jsonwebtoken'
 import { AuthenticationError } from 'apollo-server-lambda'
 
 import { verifyAuth0Token } from './verifyAuth0Token'
-
-export type SupportedAuthTypes = 'auth0' | 'netlify' | 'gotrue' | 'magic.link' | 'firebase'
 
 // This is shared by `@redwoodjs/web`
 const AUTH_PROVIDER_HEADER = 'auth-provider'
@@ -24,7 +23,7 @@ type NewClientContext = ClientContext & {
   user?: object
 }
 
-export type AuthTokenType = null | object | string
+export type AuthToken = null | object | string
 
 /**
  * Redwood supports multiple authentication providers. We add headers to the client
@@ -45,42 +44,48 @@ export const decodeAuthToken = async ({
   type: SupportedAuthTypes
   event: APIGatewayProxyEvent
   context: LambdaContext
-}): Promise<AuthTokenType> => {
+}): Promise<AuthToken> => {
   const token = event.headers?.authorization?.split(' ')?.[1]
   if (!token && token.length === 0) {
     throw new Error('Empty authorization token')
   }
 
-  let decoded: AuthTokenType = null
+  let decoded: AuthToken = null
   switch (type) {
-    case 'gotrue':
+    case 'goTrue':
     case 'netlify': {
-      // Netlify verifies and decodes a JWT before the request hits the lambda
-      // function handler so the decoded jwt is already available.
+      // Netlify verifies and decodes a JWT before the request hits the Serverless
+      // function so the decoded jwt is already available in production
       if (process.env.NODE_ENV === 'production') {
         const clientContext = context.clientContext as NewClientContext
         decoded = clientContext?.user || null
       } else {
         // We emualate the native Netlify experience in development mode.
-        // We decode it since we don't have the signing key.
+        // We just decode it since we don't have the signing key.
         decoded = jwt.decode(token)
       }
       break
     }
-    case 'firebase':
-      decoded = token
-      break
     case 'auth0': {
       decoded = await verifyAuth0Token(token)
       break
     }
-    // The tokens here include a custom library for decoding. The user receives a "raw token" which they have to decode themselves.
-    case 'magic.link': {
+
+    case 'firebase':
+    case 'magicLink': {
       decoded = token
       break
     }
-    default:
-      throw new Error(`Auth-Provider of type "${type}" is not supported.`)
+
+    // These tokens require a 3rd party library for decoding that we don't want to
+    // bundle with each installation. We'll cover it in the documentation.
+    default: {
+      decoded = {
+        type,
+        token,
+      }
+      break
+    }
   }
 
   if (decoded === null) {

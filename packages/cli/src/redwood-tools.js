@@ -66,6 +66,16 @@ export const fixProjectBinaries = (PROJECT_PATH) => {
 
 export const copyFiles = async (src, dest) => {
   // TODO: Figure out if we need to only run based on certain events.
+
+  if (process.platform === 'win32') {
+    // rsync doesn't do Windows paths, so we need to change them to posix paths
+    const srcDrive = src[0].toLowerCase()
+    const destDrive = dest[0].toLowerCase()
+
+    src = `/${srcDrive}/${src.substring(3).replace(/\\/g, '/')}`
+    dest = `/${destDrive}/${dest.substring(3).replace(/\\/g, '/')}`
+  }
+
   await execa('rsync', ['-rtvu --delete', `'${src}'`, `'${dest}'`], {
     shell: true,
     stdio: 'inherit',

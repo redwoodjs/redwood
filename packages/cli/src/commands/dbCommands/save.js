@@ -33,7 +33,7 @@ export const handler = async ({ name = 'migration', verbose = true }) => {
         cmd: 'yarn prisma',
         args: [
           'migrate save',
-          `--name ${name}`,
+          name.length && `--name ${name}`,
           '--create-db',
           '--experimental',
         ].filter(Boolean),

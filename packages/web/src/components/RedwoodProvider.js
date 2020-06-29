@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 
+import { FlashProvider } from 'src/flash'
 import { GraphQLProvider } from 'src/graphql'
 
 const GraphQLProviderWithAuth = ({
@@ -76,7 +77,7 @@ const RedwoodProvider = ({
   if (typeof useAuth === 'undefined') {
     return (
       <GraphQLProvider config={graphQLClientConfig} {...rest}>
-        {children}
+        <FlashProvider>{children}</FlashProvider>
       </GraphQLProvider>
     )
   }
@@ -87,7 +88,7 @@ const RedwoodProvider = ({
       config={graphQLClientConfig}
       {...rest}
     >
-      {children}
+      <FlashProvider>{children}</FlashProvider>
     </GraphQLProviderWithAuth>
   )
 }

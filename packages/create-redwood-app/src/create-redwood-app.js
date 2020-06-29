@@ -16,6 +16,9 @@ import execa from 'execa'
 import tmp from 'tmp'
 import checkNodeVersion from 'check-node-version'
 import chalk from 'chalk'
+import yargs from 'yargs'
+
+import { name, version } from '../package'
 
 const RELEASE_URL =
   'https://api.github.com/repos/redwoodjs/create-redwood-app/releases/latest'
@@ -38,7 +41,14 @@ const downloadFile = async (sourceUrl, targetFile) => {
   })
 }
 
-const targetDir = String(process.argv.slice(2)).replace(/,/g, '-')
+const { _: args } = yargs
+  .scriptName(name)
+  .usage('Usage: $0 <project directory>')
+  .example('$0 newapp')
+  .version(version)
+  .strict().argv
+
+const targetDir = String(args).replace(/,/g, '-')
 if (!targetDir) {
   console.error('Please specify the project directory')
   console.log(

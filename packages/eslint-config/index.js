@@ -57,7 +57,12 @@ module.exports = {
         'prettier/@typescript-eslint',
       ],
       rules: {
+        '@typescript-eslint/no-var-requires': 'off',
         '@typescript-eslint/explicit-function-return-type': 'off',
+        '@typescript-eslint/no-empty-interface': 'off',
+        'typescript-eslint/no-empty-function': 'off',
+        'no-empty-function': 'off',
+        '@typescript-eslint/no-empty-function': 'off',
       },
     },
     supportRedwoodAutoPageImports,
@@ -87,8 +92,6 @@ module.exports = {
   globals: {
     gql: 'readonly',
     React: 'readonly',
-    __REDWOOD__: 'readonly',
-    __REDWOOD__API_PROXY_PATH: 'readonly',
   },
   rules: {
     'prettier/prettier': 'error',
