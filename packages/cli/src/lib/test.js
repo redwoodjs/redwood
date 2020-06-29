@@ -1,5 +1,4 @@
 import path from 'path'
-import fs from 'fs'
 
 import execa from 'execa'
 import Listr from 'listr'
