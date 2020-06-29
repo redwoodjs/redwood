@@ -190,11 +190,6 @@ module.exports = (webpackEnv) => {
           oneOf: [
             // (0)
             {
-              loader: 'null-loader',
-              test: /\.(md|test\.*|stories\.*)$/,
-            },
-            // (1)
-            {
               test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
               use: [
                 {
@@ -206,7 +201,7 @@ module.exports = (webpackEnv) => {
                 },
               ],
             },
-            // (2)
+            // (1)
             {
               test: /\.(js|mjs|jsx|ts|tsx)$/,
               exclude: /(node_modules)/,
@@ -214,14 +209,14 @@ module.exports = (webpackEnv) => {
                 loader: 'babel-loader',
               },
             },
-            // (3)
-            // {
-            //   test: /\.svg$/,
-            //   loader: 'svg-react-loader',
-            // },
-            // .module.css (4), .css (5), .module.scss (6), .scss (7)
+            // (2)
+            {
+              test: /\.svg$/,
+              loader: 'svg-react-loader',
+            },
+            // .module.css (3), .css (4), .module.scss (5), .scss (6)
             ...getStyleLoaders(isEnvProduction),
-            // (8)
+            // (7)
             {
               test: /\.(svg|ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|pdf)(\?.*)?$/,
               loader: 'file-loader',
