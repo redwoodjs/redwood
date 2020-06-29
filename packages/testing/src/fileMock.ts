@@ -3,4 +3,4 @@
  * Usually, these files aren't particularly useful in tests so we can safely mock them out.
  * https://jestjs.io/docs/en/webpack#handling-static-assets
  */
-module.exports = 'fileMock'
+export default 'fileMock'

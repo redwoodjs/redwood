@@ -57,6 +57,7 @@ module.exports = {
         'prettier/@typescript-eslint',
       ],
       rules: {
+        '@typescript-eslint/no-var-requires': 'off',
         '@typescript-eslint/explicit-function-return-type': 'off',
         '@typescript-eslint/no-empty-interface': 'off',
         'typescript-eslint/no-empty-function': 'off',

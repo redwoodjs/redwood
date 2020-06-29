@@ -23,8 +23,8 @@ beforeAll(() => {
   })
 })
 
-test('returns exactly 2 files', () => {
-  expect(Object.keys(singleWordDefaultFiles).length).toEqual(2)
+test('returns exactly 3 files', () => {
+  expect(Object.keys(singleWordDefaultFiles).length).toEqual(3)
 })
 
 test('creates a single word layout component', () => {
@@ -45,6 +45,16 @@ test('creates a single word layout test', () => {
   ).toEqual(loadGeneratorFixture('layout', 'singleWordLayout.test.tsx'))
 })
 
+test('creates a single word layout stories', () => {
+  expect(
+    singleWordDefaultFiles[
+      path.normalize(
+        '/path/to/project/web/src/layouts/AppLayout/AppLayout.stories.tsx'
+      )
+    ]
+  ).toEqual(loadGeneratorFixture('layout', 'singleWordLayout.stories.tsx'))
+})
+
 test('creates a multi word layout component', () => {
   expect(
     multiWordDefaultFiles[
@@ -63,6 +73,16 @@ test('creates a multi word layout test', () => {
       )
     ]
   ).toEqual(loadGeneratorFixture('layout', 'multiWordLayout.test.tsx'))
+})
+
+test('creates a multi word layout test', () => {
+  expect(
+    multiWordDefaultFiles[
+      path.normalize(
+        '/path/to/project/web/src/layouts/SinglePageLayout/SinglePageLayout.stories.tsx'
+      )
+    ]
+  ).toEqual(loadGeneratorFixture('layout', 'multiWordLayout.stories.tsx'))
 })
 
 test('creates JS layout components if javacript = true', () => {

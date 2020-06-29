@@ -1,0 +1,7 @@
+import ${singularPascalName}Layout from './${pascalName}Layout'
+
+export const generated = () => {
+  return <${singularPascalName}Layout />
+}
+
+export default { title: 'Layouts/${singularPascalName}Layout' }

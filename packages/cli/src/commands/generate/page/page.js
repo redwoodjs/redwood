@@ -29,18 +29,30 @@ export const files = ({ name, ...rest }) => {
     templatePath: 'test.js.template',
     templateVars: rest,
   })
+  const storiesFile = templateForComponentFile({
+    name,
+    suffix: COMPONENT_SUFFIX,
+    extension: '.stories.js',
+    webPathSection: REDWOOD_WEB_PATH_NAME,
+    generator: 'page',
+    templatePath: 'stories.js.template',
+    templateVars: rest,
+  })
 
   // Returns
   // {
   //    "path/to/fileA": "<<<template>>>",
   //    "path/to/fileB": "<<<template>>>",
   // }
-  return [pageFile, testFile].reduce((acc, [outputPath, content]) => {
-    return {
-      [outputPath]: content,
-      ...acc,
-    }
-  }, {})
+  return [pageFile, testFile, storiesFile].reduce(
+    (acc, [outputPath, content]) => {
+      return {
+        [outputPath]: content,
+        ...acc,
+      }
+    },
+    {}
+  )
 }
 
 export const routes = ({ name, path }) => {
