@@ -21,7 +21,7 @@ The following CLI command will install required packages and generate boilerplat
 yarn rw g auth [provider]
 ```
 
-*`[provider]` values can be either "netlify", "auth0", "magicLink" or "firebase".*
+*`[provider]` values can be either "netlify", "goTrue", "auth0", "magicLink" or "firebase".*
 
 ### Manual Install
 
@@ -30,6 +30,13 @@ yarn rw g auth [provider]
 ```bash
 cd web
 yarn add @redwoodjs/auth netlify-identity-widget
+```
+
+#### GoTrue-JS
+
+```bash
+cd web
+yarn add @redwoodjs/auth gotrue-js
 ```
 
 #### Auth0
@@ -74,18 +81,20 @@ ReactDOM.render(
 
 ### For GoTrue-JS
 
-Add GoTrue-JS to the web side:
+You will need to enable Identity on your Netlify site. See [Netlify Identity Setup](https://redwoodjs.com/tutorial/authentication#netlify-identity-setup).
 
-```terminal
+Add the GoTrue-JS package to the web side:
+
+```bash
 yarn workspace web add gotrue-js
 ```
 
-Then instantiate GoTrue with your configuration and pass it to AuthProvider:
+Instantiate GoTrue and pass in your configuration. Be sure to set APIUrl to the API endpoint found in your Netlify site's Identity tab:
 
 ```js
 // web/src/index.js
 import { AuthProvider } from '@redwoodjs/auth'
-import GoTrue from 'GoTrue'
+import GoTrue from 'gotrue-js'
 
 const goTrue = new GoTrue({
   APIUrl: 'https://MYAPP.netlify.app/.netlify/identity',
