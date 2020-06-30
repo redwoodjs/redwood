@@ -72,6 +72,39 @@ ReactDOM.render(
 )
 ```
 
+### For GoTrue-JS
+
+Add GoTrue-JS to the web side:
+
+```terminal
+yarn workspace web add gotrue-js
+```
+
+Then instantiate GoTrue with your configuration and pass it to AuthProvider:
+
+```js
+// web/src/index.js
+import { AuthProvider } from '@redwoodjs/auth'
+import GoTrue from 'GoTrue'
+
+const goTrue = new GoTrue({
+  APIUrl: 'https://MYAPP.netlify.app/.netlify/identity',
+  setCookie: true,
+})
+
+// in your JSX component
+ReactDOM.render(
+  <FatalErrorBoundary page={FatalErrorPage}>
+    <AuthProvider client={goTrue} type="goTrue">
+      <RedwoodProvider>
+        <Routes />
+      </RedwoodProvider>
+    </AuthProvider>
+  </FatalErrorBoundary>,
+  document.getElementById('redwood-app')
+)
+```
+
 ### For Auth0
 
 To get your application keys, only complete the ["Configure Auth0"](https://auth0.com/docs/quickstart/spa/react#get-your-application-keys) section of the SPA Quickstart guide.
