@@ -1,9 +1,15 @@
+import { Link } from '@redwoodjs/router'
+
 const ${pascalName}Page = () => {
   return (
-    <div>
+    <>
       <h1>${pascalName}Page</h1>
-      <p>Find me in ${outputPath}</p>
-    </div>
+      <p>Find me in "${outputPath}"</p>
+      <p>
+        My default route is named "${camelName}",
+        link to me with `<Link to="${camelName}">routes.${camelName}()</Link>`
+      </p>
+    </>
   )
 }
 

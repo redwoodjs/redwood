@@ -1,0 +1,7 @@
+import ${pascalName}Page from './${pascalName}Page'
+
+export const generated = () => {
+  return <${pascalName}Page />
+}
+
+export default { title: 'Pages/${pascalName}Page' }

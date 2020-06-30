@@ -297,6 +297,9 @@
 .rw-table tbody tr:nth-child(even) {
   background-color: #fff;
 }
+.rw-table input {
+  margin-left: 0;
+}
 .rw-table-actions {
   display: flex;
   justify-content: flex-end;

@@ -27,7 +27,7 @@ const modelFieldToSDL = (field, required = true, types = {}) => {
     field.type =
       field.kind === 'object' ? idType(types[field.type]) : field.type
   }
-  return `${field.name}: ${field.type}${
+  return `${field.name}: ${field.type}${field.isList ? '[]' : ''}${
     field.isRequired && required ? '!' : ''
   }`
 }

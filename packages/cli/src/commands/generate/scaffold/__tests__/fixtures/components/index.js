@@ -27,6 +27,10 @@ const timeTag = (datetime) => {
   )
 }
 
+const checkboxInputTag = (checked) => {
+  return <input type="checkbox" checked={checked} disabled />
+}
+
 const PostsList = ({ posts }) => {
   const { addMessage } = useFlash()
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
@@ -46,14 +50,14 @@ const PostsList = ({ posts }) => {
       <table className="rw-table">
         <thead>
           <tr>
-            <th>id</th>
-            <th>title</th>
-            <th>slug</th>
-            <th>author</th>
-            <th>body</th>
-            <th>image</th>
-            <th>isPinned</th>
-            <th>postedAt</th>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Slug</th>
+            <th>Author</th>
+            <th>Body</th>
+            <th>Image</th>
+            <th>Is pinned</th>
+            <th>Posted at</th>
             <th>&nbsp;</th>
           </tr>
         </thead>
@@ -66,7 +70,7 @@ const PostsList = ({ posts }) => {
               <td>{truncate(post.author)}</td>
               <td>{truncate(post.body)}</td>
               <td>{truncate(post.image)}</td>
-              <td>{truncate(post.isPinned)}</td>
+              <td>{checkboxInputTag(post.isPinned)}</td>
               <td>{timeTag(post.postedAt)}</td>
               <td>
                 <nav className="rw-table-actions">

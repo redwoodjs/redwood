@@ -1,9 +1,6 @@
 # Redwood's HTTP server for serverless Functions
 
-The dev server looks for "lambda functions" in the directory
-(default: `./api/src/functions`) specified by your `redwood.toml`
-configuration file.
-
+The dev server looks for "lambda functions" in `./api/src/functions`.
 Each lambda function is mapped to a URI based on their filename, as
 an example: `./api/src/functions/graphql.js` would be accessible
 at `http://localhost:8911/graphql`.
