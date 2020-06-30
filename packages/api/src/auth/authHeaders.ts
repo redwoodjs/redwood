@@ -103,7 +103,6 @@ export const decodeAuthToken = async ({
       decoded = {
         type,
         token,
-        authToken: null,
       }
       break
     }
