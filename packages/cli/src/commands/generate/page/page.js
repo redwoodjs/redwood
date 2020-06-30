@@ -1,3 +1,5 @@
+import { execSync } from 'child_process'
+
 import Listr from 'listr'
 import camelcase from 'camelcase'
 import pascalcase from 'pascalcase'
@@ -90,6 +92,33 @@ export const builder = (yargs) => {
 }
 
 export const handler = async ({ name, path, force }) => {
+  if (process.platform === 'win32') {
+    // running `yarn rw g page home /` on Windows using GitBash
+    // POSIX-to-Windows path conversion will kick in.
+    // See https://github.com/git-for-windows/build-extra/blob/d715c9e/ReleaseNotes.md
+    // As a workaround we try to detect when this has happened, and reverse
+    // the action
+
+    try {
+      // `cygpath -m /` will return something like 'C:/Program Files/Git/\n'
+      const slashPath = execSync('cygpath -m /', {
+        stdio: ['ignore', 'pipe', 'ignore'],
+      })
+        .toString()
+        .trim()
+
+      // `yarn rw g page home /` =>
+      //   page === 'C:/Program Files/Git'
+      // `yarn rw g page about /about` =>
+      //   page === 'C:/Program Files/Git/about'
+      // Sometimes there is a / after 'Git' to match, sometimes there isn't
+      path = path.replace(new RegExp(`^${slashPath}?`), '/')
+    } catch {
+      // probably using PowerShell or cmd, in which case no special handling
+      // is needed
+    }
+  }
+
   const tasks = new Listr(
     [
       {
