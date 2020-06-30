@@ -6,7 +6,7 @@ export const schema = gql`
     name: String
     email: String!
     isAdmin: Boolean!
-    profiles: [UserProfile]
+    profiles: [UserProfile]!
   }
 
   type Query {

@@ -30,7 +30,7 @@ const modelFieldToSDL = (field, required = true, types = {}) => {
 
   return `${field.name}: ${field.isList ? '[' : ''}${field.type}${
     field.isList ? ']' : ''
-  }${field.isRequired && required ? '!' : ''}`
+  }${(field.isRequired && required) | field.isList ? '!' : ''}`
 }
 
 const querySDL = (model) => {
