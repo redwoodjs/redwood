@@ -4,7 +4,7 @@
     "paths": {
       "src/*": ["./src/*"]
     },
-    "jsx": "preserve",
+    "jsx": "preserve"
   },
   "include": ["src/**/*"]
 }
