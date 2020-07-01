@@ -85,8 +85,8 @@ test('creates a single-word route name', () => {
   const names = ['Home', 'home']
 
   names.forEach((name) => {
-    expect(page.routes({ name: name, path: 'home' })).toEqual([
-      '<Route path="home" page={HomePage} name="home" />',
+    expect(page.routes({ name: name, path: '/' })).toEqual([
+      '<Route path="/" page={HomePage} name="home" />',
     ])
   })
 })
