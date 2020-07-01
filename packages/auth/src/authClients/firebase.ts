@@ -6,6 +6,7 @@ export type Firebase = typeof Firebase
 
 export interface AuthClientFirebase extends AuthClient {
   createUser(options: { email: string; password: string }): Promise<any>
+  login(options: {email?: string, password?: string}): Promise<any>
 }
 
 export const firebase = (client: Firebase): AuthClientFirebase => {
@@ -17,7 +18,10 @@ export const firebase = (client: Firebase): AuthClientFirebase => {
     },
     restoreAuthState: () => client.auth().getRedirectResult(),
     // TODO: Allow the user to define the `AuthProvider`
-    login: async () => {
+    login: async ({email, password}) => {
+      if(email && password){
+        return client.auth().signInWithEmailAndPassword(email, password)
+      }
       const provider = new client.auth.GoogleAuthProvider()
       return client.auth().signInWithRedirect(provider)
     },
