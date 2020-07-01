@@ -28,6 +28,7 @@ export interface BrowserTargetPaths {
 }
 
 export interface Paths {
+  cache: string
   base: string
   web: BrowserTargetPaths
   api: NodeTargetPaths
@@ -103,8 +104,17 @@ export const resolveFile = (
 export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
   const routes = resolveFile(path.join(BASE_DIR, PATH_WEB_ROUTES)) as string
 
+  // We store ambient type declerations and our test database over here.
+  const cache = path.join(BASE_DIR, 'node_modules', '.redwood')
+  try {
+    fs.mkdirSync(cache)
+  } catch (e) {
+    // noop
+  }
+
   return {
     base: BASE_DIR,
+    cache,
     api: {
       base: path.join(BASE_DIR, 'api'),
       db: path.join(BASE_DIR, PATH_API_DIR_DB),

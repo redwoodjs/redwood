@@ -8,7 +8,8 @@ export const builder = (yargs) => {
   yargs
     .positional('name', {
       description: 'Name of the migration',
-      type: 'array',
+      type: 'string',
+      default: 'migration',
     })
     .option('verbose', {
       alias: 'v',
@@ -24,7 +25,7 @@ export const builder = (yargs) => {
     )
 }
 
-export const handler = async ({ name, verbose = true }) => {
+export const handler = async ({ name = 'migration', verbose = true }) => {
   await runCommandTask(
     [
       {
