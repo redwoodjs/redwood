@@ -25,9 +25,9 @@ export const builder = (yargs) => {
 }
 
 export const handler = async ({ side }) => {
-  const { base: BASE_DIR } = getPaths()
+  const { base: BASE_DIR, cache: CACHE_DIR } = getPaths()
 
-  const DB_URL = process.env.TEST_DATABASE_URL || 'file:/test.db'
+  const DB_URL = process.env.TEST_DATABASE_URL || `file:${CACHE_DIR}/test.db`
 
   const execCommands = {
     api: {
