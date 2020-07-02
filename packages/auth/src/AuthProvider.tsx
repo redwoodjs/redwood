@@ -18,7 +18,7 @@ export interface AuthContextInterface {
   currentUser: null | CurrentUser
   /* The user's metadata from the auth provider */
   userMetadata: null | SupportedUserMetadata
-  createUser(): Promise<void>
+  signUp(): Promise<void>
   logIn(): Promise<void>
   logOut(): Promise<void>
   getToken(): Promise<null | string>
@@ -134,8 +134,8 @@ export class AuthProvider extends React.Component<
     return this.reauthenticate()
   }
 
-  createUser = async (options?: any) => {
-    return this.rwClient.createUser?.(options)
+  signUp = async (options?: any) => {
+    return this.rwClient.signUp?.(options)
   }
 
   logOut = async (options?: any) => {
@@ -156,7 +156,7 @@ export class AuthProvider extends React.Component<
           ...this.state,
           logIn: this.logIn,
           logOut: this.logOut,
-          createUser: this.createUser,
+          signUp: this.signUp,
           getToken: this.rwClient.getToken,
           getCurrentUser: this.getCurrentUser,
           reauthenticate: this.reauthenticate,

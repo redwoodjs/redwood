@@ -5,7 +5,7 @@ import { AuthClient } from './'
 export type Firebase = typeof Firebase
 
 export interface AuthClientFirebase extends AuthClient {
-  createUser(options: { email: string; password: string }): Promise<any>
+  signUp(options: { email: string; password: string }): Promise<any>
   login(options: {email?: string, password?: string}): Promise<any>
 }
 
@@ -13,7 +13,7 @@ export const firebase = (client: Firebase): AuthClientFirebase => {
   return {
     type: 'firebase',
     client,
-    createUser: ({ email, password }) => {
+    signUp: ({ email, password }) => {
       return client.auth().createUserWithEmailAndPassword(email, password)
     },
     restoreAuthState: () => client.auth().getRedirectResult(),
