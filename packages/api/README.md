@@ -10,7 +10,7 @@
     - [Authentication](#authentication)
   - [Contributing](#contributing)
     - [Overview](#overview)
-    - [`importAll`](#importall)
+    - [`schemas` and `services` imports](#schemas-and-services-imports)
     - [`makeServices`](#makeservices)
     - [`makeMergedSchema`](#makemergedschema)
     - [`createGraphQLHandler`](#creategraphqlhandler)
@@ -71,25 +71,38 @@ Remember, files in this directory (`api/src/functions`) are serverless functions
 3. The sdl and resolvers are merged/stitched into a schema
 4. The ApolloServer is instantiated with said merged/stitched schema and context
 
-These four steps map quite nicely to these four functions, some of which are doing a little more under-the-hood than others:
+These four steps map quite nicely to these four "code" steps, some of which are doing a little more under-the-hood than others:
 
-1. `importAll`
-2. `makeServices`
-3. `makeMergedSchema`
-4. `createGraphQLHandler`
+1. `schema` and `services` imports
+1. `makeServices`
+2. `makeMergedSchema`
+3. `createGraphQLHandler`
 
-### `importAll`
+### `schemas` and `services` imports
 
 In Redwood Apps, the resolvers are mapped automatically. The schemas are in the `./api/src/graphql` directory and the resolvers are in the `./api/src/services` directory, and as long as you export the right things with the right names from the right files, they get merged together.
 
-All of that magic actually happens in your Redwood App, in `./api/src/functions/graphql.js`. And since everything’s separated, the first thing Redwood does is import it all. And `importAll` does just that.
+All of that magic actually happens in your Redwood App, in `./api/src/functions/graphql.js`. And since everything’s separated, the first thing Redwood does is import it all.
 
-`importAll` is a [babel macro](https://babeljs.io/blog/2017/09/11/zero-config-with-babel-macros). This one in particular imports files that match a glob ([thanks to Kent C. Dodds](https://github.com/kentcdodds/import-all.macro)). The difference between Kent’s and ours is that we normalize the keys for the files that are found:
+Using a babel plugin ([redwood-import-dir](https://github.com/redwoodjs/redwood/blob/687abc207a83bf078df3944cdff00697efa3bf17/packages/core/src/babel-plugin-redwood-import-dir.ts)), we can use regular-looking import statements to import all the schemas and services:
 
 ```javascript
-const services = importAll('api', 'services')
+import schemas from 'src/graphql/**/*.{js,ts}'
+import services from 'src/services/**/*.{js,ts}'
+```
 
-// services = { 'todo': { // services/todos.js exports } }
+Using `services` as an example, `services` will be an obejct that contains all the imports of all the matched files in the specified directory (here, services). It's the equivalent of running:
+
+```javascript
+let services = {}
+import * as services_a from '../__fixtures__/a'
+services.a = services_a
+import * as services_b from '../__fixtures__/b'
+services.b = services_b
+import * as services_c_sdl from '../__fixtures__/c.sdl'
+services.c_sdl = services_c_sdl
+import * as services_nested_d from '../__fixtures__/nested/d'
+services.nested_d = services_nested_d
 ```
 
 ### `makeServices`
@@ -123,7 +136,7 @@ Note that this is very much just an example.
 
 Everything's imported, but the services are still services. They need to be wrapped into resolvers.
 
-`importAll` doesn’t try to figure out which of your services are supposed to be resolvers. Instead it quite literally imports it all and lets `mergeResolversWithServices` figure it out.
+The babel-plugin imports don't try to figure out which of your services are supposed to be resolvers. Instead, they import everything and let `mergeResolversWithServices` figure it out.
 
 > Ever noticed that in GraphiQL you can query "redwood"? This’s defined in the root schema.
 
