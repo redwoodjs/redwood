@@ -1,4 +1,3 @@
-// import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import type { SupportedAuthTypes } from '@redwoodjs/auth'
 
 import { netlify } from './netlify'

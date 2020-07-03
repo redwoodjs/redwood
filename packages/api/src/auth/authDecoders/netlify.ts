@@ -1,9 +1,18 @@
+import type {
+  APIGatewayProxyEvent,
+  Context as LambdaContext,
+  ClientContext,
+} from 'aws-lambda'
 import { AuthenticationError } from 'apollo-server-lambda'
 import jwt from 'jsonwebtoken'
 import { accessToken } from 'src/auth/accessToken'
 
 import type { AuthDecoder } from './'
 export type AuthDecoderNetlify = AuthDecoder
+
+type NewClientContext = ClientContext & {
+  user?: object
+}
 
 export const decode = async ({
   event,

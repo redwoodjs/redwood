@@ -1,8 +1,4 @@
-import type {
-  APIGatewayProxyEvent,
-  Context as LambdaContext,
-  ClientContext,
-} from 'aws-lambda'
+import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import type { SupportedAuthTypes } from '@redwoodjs/auth'
 
 import type { AuthToken } from './authDecoders'
@@ -16,10 +12,6 @@ export const getAuthProviderType = (
   event: APIGatewayProxyEvent
 ): SupportedAuthTypes => {
   return event?.headers[AUTH_PROVIDER_HEADER] as SupportedAuthTypes
-}
-
-type NewClientContext = ClientContext & {
-  user?: object
 }
 
 /**
