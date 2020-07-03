@@ -1,6 +1,6 @@
 import { AuthenticationError } from 'apollo-server-lambda'
 import { verifyAuth0Token } from 'src/auth/verifyAuth0Token'
-import { accessToken } from 'src/auth/accessToken'
+import { getAuthorization } from 'src/auth/authHeaders'
 
 import type { AuthDecoder } from './'
 export type AuthDecoderAuth0 = AuthDecoder
@@ -11,7 +11,8 @@ export const decode = async ({
   event: APIGatewayProxyEvent
 }): Promise<AuthToken> => {
   try {
-    const token = await accessToken(event)
+    const authorization = getAuthorization(event)
+    const token = authorization['token']
     const decoded = await verifyAuth0Token(token)
 
     return decoded

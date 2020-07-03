@@ -1,8 +1,8 @@
 import { AuthenticationError } from 'apollo-server-lambda'
-import { accessToken } from 'src/auth/accessToken'
+import { getAuthorization } from 'src/auth/authHeaders'
 
 import type { AuthDecoder } from './'
-export type AuthDecoderFirebase = AuthDecoder
+export type AuthDecoderToken = AuthDecoder
 
 export const decode = async ({
   event,
@@ -12,7 +12,8 @@ export const decode = async ({
 }): Promise<AuthToken> => {
   try {
     let decoded: AuthToken = null
-    decoded = await accessToken(event)
+    const authorization = getAuthorization(event)
+    decoded = authorization['token']
 
     return decoded
   } catch {
@@ -22,9 +23,9 @@ export const decode = async ({
   }
 }
 
-export const firebase = (): AuthDecoderFirebase => {
+export const token = (): AuthDecoderToken => {
   return {
-    type: 'firebase',
+    type: 'token',
     decodeToken: async ({ event }) => {
       return decode({ event })
     },

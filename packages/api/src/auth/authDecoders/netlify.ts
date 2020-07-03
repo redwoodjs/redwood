@@ -5,7 +5,7 @@ import type {
 } from 'aws-lambda'
 import { AuthenticationError } from 'apollo-server-lambda'
 import jwt from 'jsonwebtoken'
-import { accessToken } from 'src/auth/accessToken'
+import { getAuthorization } from 'src/auth/authHeaders'
 
 import type { AuthDecoder } from './'
 export type AuthDecoderNetlify = AuthDecoder
@@ -32,7 +32,8 @@ export const decode = async ({
     } else {
       // We emulate the native Netlify experience in development mode.
       // We just decode it since we don't have the signing key.
-      const token = await accessToken(event)
+      const authorization = getAuthorization(event)
+      const token = authorization['token']
       decoded = jwt.decode(token)
     }
 

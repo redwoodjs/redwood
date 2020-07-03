@@ -2,19 +2,16 @@ import type { SupportedAuthTypes } from '@redwoodjs/auth'
 
 import { netlify } from './netlify'
 import { auth0 } from './auth0'
-import { goTrue } from './goTrue'
-import { magicLink } from './magicLink'
-import { firebase } from './firebase'
-import { custom } from './custom'
+import { token } from './token'
 
 const typesToDecoders = {
-  netlify,
-  auth0,
-  goTrue,
-  magicLink,
-  firebase,
-  /** Don't we support your auth client? No problem, define your own the `custom` type! */
-  custom,
+  netlify: netlify,
+  auth0: auth0,
+  goTrue: netlify,
+  magicLink: token,
+  firebase: token,
+  /** Don't we support your auth client? Use the auth token in your own the `custom` client! */
+  custom: token,
 }
 
 export type AuthToken = null | object | string

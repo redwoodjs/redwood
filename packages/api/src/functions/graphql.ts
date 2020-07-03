@@ -5,8 +5,11 @@ import type { AuthToken } from 'src/auth/authHeaders'
 import type { GlobalContext } from 'src/globalContext'
 //
 import { ApolloServer } from 'apollo-server-lambda'
-import { getAuthProviderType, decodeAuthToken } from 'src/auth/authHeaders'
-import { accessToken } from 'src/auth/accessToken'
+import {
+  decodeAuthToken,
+  getAuthProviderType,
+  getAuthorization,
+} from 'src/auth/authHeaders'
 import { setContext } from 'src/globalContext'
 
 export type GetCurrentUser = (
@@ -42,7 +45,8 @@ export const createContextHandler = (
     const type = getAuthProviderType(event)
     if (typeof type !== 'undefined') {
       const decoded = await decodeAuthToken({ type, event, context })
-      const token = await accessToken(event)
+      const authorization = getAuthorization(event)
+      const token = authorization['token']
       context.currentUser =
         typeof getCurrentUser == 'function'
           ? await getCurrentUser(decoded, {
