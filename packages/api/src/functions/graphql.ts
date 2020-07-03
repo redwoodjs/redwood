@@ -5,11 +5,8 @@ import type { AuthToken } from 'src/auth/authHeaders'
 import type { GlobalContext } from 'src/globalContext'
 //
 import { ApolloServer } from 'apollo-server-lambda'
-import {
-  getAuthProviderType,
-  accessToken,
-  decodeAuthToken,
-} from 'src/auth/authHeaders'
+import { getAuthProviderType, decodeAuthToken } from 'src/auth/authHeaders'
+import { accessToken } from 'src/auth/accessToken'
 import { setContext } from 'src/globalContext'
 
 export type GetCurrentUser = (
