@@ -34,7 +34,8 @@ const ${singularPascalName}Form = (props) => {
           ${column.defaultProp}={props.${singularCamelName}?.<%= column.name %>}
           className="rw-input"
           errorClassName="rw-input rw-input-error"<%= !column.validation ? '' : `
-          validation=${column.validation}` %>
+          validation=${column.validation}` %><%= !column.dataType ? '' : `
+          dataType=${column.dataType}` %>
         />
         <FieldError name="${column.name}" className="rw-field-error" />
 <% }) %>

@@ -77,6 +77,9 @@ const inputTagProps = (props) => {
     }
   }
 
+  // dataType shouldn't be passed to the underlying HTML element
+  delete tagProps.dataType
+
   return tagProps
 }
 

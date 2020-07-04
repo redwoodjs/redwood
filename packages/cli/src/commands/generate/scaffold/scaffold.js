@@ -221,6 +221,7 @@ const componentFiles = async (name, scaffoldPath = '') => {
       defaultProp: 'defaultValue',
       validation: '{{ required: true }}',
       displayFunction: 'truncate',
+      dataType: undefined,
     },
   }
   const columns = model.fields
@@ -240,6 +241,9 @@ const componentFiles = async (name, scaffoldPath = '') => {
       displayFunction:
         componentMetadata[column.type]?.displayFunction ||
         componentMetadata.default.displayFunction,
+      dataType:
+        componentMetadata[column.type]?.dataType ||
+        componentMetadata.default.dataType,
     }))
   const editableColumns = columns.filter((column) => {
     return NON_EDITABLE_COLUMNS.indexOf(column.name) === -1
