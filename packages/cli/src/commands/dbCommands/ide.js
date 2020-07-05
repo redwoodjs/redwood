@@ -34,7 +34,7 @@ export const handler = async () => {
   await runCommandTask(
     [
       {
-        title: 'Migrate database up...',
+        title: 'Starting Prisma Studio...',
         cmd: 'yarn prisma',
         args: ['studio', '--experimental'],
       },
