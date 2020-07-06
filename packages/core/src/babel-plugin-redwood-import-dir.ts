@@ -4,21 +4,21 @@ import glob from 'glob'
 import type { PluginObj, types } from '@babel/core'
 
 /**
- * This babel plugin will search for import statements that include a star "*",
- * the source part of the statement is a glob, the files that are matched are imported,
+ * This babel plugin will search for import statements that include star `*`
+ * in the source part of the statement is a glob, the files that are matched are imported,
  * and appended to an object.
  *
  * @example:
- * Given a directory "src/services" that contains "a.js" and "b.ts", will produce
- * the following results
- * ```
- * import services from 'src/services/*.{js,ts}'
+ * Given a directory "src/services" that contains "a.js" and "b.ts", "nested/c.js",
+ * will produce the following results:
+ * ```js
+ * import services from 'src/services/**\/*.{js,ts}'
  * console.log(services)
  * // services.a = require('src/services/a.js')
  * // services.b = require('src/services/b.ts')
+ * // services.nested_c = require('src/services/nested/c.js')
  * ```
  *
- * @todo We **do not** support nested directories.
  * @todo Generate ambient declerations for TypeScript of imported files.
  */
 export default function ({ types: t }: { types: typeof types }): PluginObj {
@@ -26,7 +26,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
     name: 'babel-plugin-redwood-import-dir',
     visitor: {
       ImportDeclaration(p, state: { file?: any }) {
-        // This code will only run when we find an import statement that includes a "*".
+        // This code will only run when we find an import statement that includes a `*`.
         if (!p.node.source.value.includes('*')) {
           return
         }
@@ -45,42 +45,49 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
           ])
         )
 
+        const importGlob = p.node.source.value
         const cwd = path.dirname(state.file.opts.filename)
-        const dirFiles = glob.sync(p.node.source.value, { cwd })
+        const dirFiles = glob
+          .sync(importGlob, { cwd })
+          .filter((n) => !n.includes('.test.')) // ignore `*.test.*` files.
 
-        const sourceFilesOnly = dirFiles.filter(
-          (dirFile) => !dirFile.includes('.test.')
-        )
-        for (const filePath of sourceFilesOnly) {
-          const fileName = path.basename(filePath).split('.')[0]
-          // + import * as <importName>_<fileName> from <filePath>
+        const staticGlob = importGlob.split('*')[0]
+        const filePathToVarName = (filePath: string) => {
+          return filePath
+            .replace(staticGlob, '')
+            .replace(/.(js|ts)/, '')
+            .replace(/[^a-zA-Z0-9]/g, '_')
+        }
 
-          const parsedPath = path.parse(filePath)
+        for (const filePath of dirFiles) {
+          const { dir: fileDir, name: fileName } = path.parse(filePath)
+          const filePathWithoutExtension = fileDir + '/' + fileName
+          const fpVarName = filePathToVarName(filePath)
 
-          // Do it this way to allow double dots e.g. service/payment/payment.utils.ts
-          const filePathWithoutExtension = `${parsedPath.dir}/${parsedPath.name}`
-
+          // + import * as <importName>_<fpVarName> from <filePathWithoutExtension>
+          // import * as a from './services/a.j
           nodes.push(
             t.importDeclaration(
               [
                 t.importNamespaceSpecifier(
-                  t.identifier(importName + '_' + fileName)
+                  t.identifier(importName + '_' + fpVarName)
                 ),
               ],
               t.stringLiteral(filePathWithoutExtension)
             )
           )
 
-          // + <importName>.<fileName> = <importName_fileName>
+          // + <importName>.<fpVarName> = <importName_fpVarName>
+          // services.a = a
           nodes.push(
             t.expressionStatement(
               t.assignmentExpression(
                 '=',
                 t.memberExpression(
                   t.identifier(importName),
-                  t.identifier(fileName)
+                  t.identifier(fpVarName)
                 ),
-                t.identifier(importName + '_' + fileName)
+                t.identifier(importName + '_' + fpVarName)
               )
             )
           )
