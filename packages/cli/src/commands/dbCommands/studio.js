@@ -19,14 +19,15 @@ export const builder = (yargs) => {
 }
 
 export const handler = async () => {
-  // No database, no migrations, no studio.
-  const FILE_DB = path.join(getPaths().api.db, 'dev.db')
-  const DIR_MIGRATIONS = path.join(getPaths().api.db, 'migrations')
-
-  if (!fs.existsSync(FILE_DB) && !fs.existsSync(DIR_MIGRATIONS)) {
+  // No schema, no studio.
+  if (!fs.existsSync(getPaths().api.dbSchema)) {
     console.log(
-      // eslint-disable-next-line
-      `${c.warning('[warning]')} your app doesn't have a Database (${c.info('api/prisma/dev.db')}) and/or Migrations (${c.info('api/prisma/migrations')}). ${c.green('Save and up')} before starting Studio.`
+      `${c.warning(
+        '[warning]'
+      )} cannot start Prisma Studio; schema missing (${c.info(
+        // So we're not hard coding schema.prisma's relative location
+        path.relative(getPaths().base, getPaths().api.dbSchema)
+      )}).`
     )
     return
   }
