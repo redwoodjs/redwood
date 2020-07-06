@@ -14,10 +14,14 @@ import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import { format } from 'prettier'
 import * as babel from '@babel/core'
+import { Command } from 'src/types'
 
 import c from './colors'
 
-export const asyncForEach = async (array: any[], callback: Function) => {
+export const asyncForEach = async <T>(
+  array: T[],
+  callback: (item: T, index: number, array: T[]) => void
+) => {
   for (let index = 0; index < array.length; index++) {
     await callback(array[index], index, array)
   }
@@ -145,10 +149,18 @@ export const nameVariants = (name: string) => {
 
 export const templateRoot = path.resolve(__dirname, '../commands/generate')
 
+function getTemplateFileNameExtension(templateFilename: string) {
+  const extension = path.extname(templateFilename.replace('.template', ''))
+  if (extension === '.css' || extension === '.js') return extension
+  throw new Error(`Unknown extension in template file: ${templateFilename}`)
+}
+
 export const prettify = (
   templateFilename: string,
   renderedTemplate: string
 ) => {
+  const extension = getTemplateFileNameExtension(templateFilename)
+
   // We format .js and .css templates, we need to tell prettier which parser
   // we're using.
   // https://prettier.io/docs/en/options.html#parser
@@ -156,7 +168,7 @@ export const prettify = (
     '.css': 'css',
     '.js': 'babel',
     '.ts': 'babel-ts',
-  }[path.extname(templateFilename.replace('.template', '')) as '.css' | '.js']
+  }[extension]
 
   if (typeof parser === 'undefined') {
     return renderedTemplate
@@ -170,7 +182,7 @@ export const prettify = (
 
 export const generateTemplate = (
   templateFilename: string,
-  { name, root, ...rest }: { [key: string]: any }
+  { name, root, ...rest }: Record<string, any>
 ) => {
   const templatePath = path.join(root || templateRoot, templateFilename)
   const template = lodash.template(readFile(templatePath).toString())
@@ -278,7 +290,9 @@ export const writeFilesTask = (
 /**
  * @param files - {[filepath]: contents}
  */
-export const cleanupEmptyDirsTask = (files: object) => {
+export const cleanupEmptyDirsTask = (
+  files: Record<string, string | object>
+) => {
   const { base } = getPaths()
   const allDirs = Object.keys(files).map((file) => path.dirname(file))
   const uniqueDirs = [...new Set(allDirs)]
@@ -306,7 +320,7 @@ export const cleanupEmptyDirsTask = (files: object) => {
  *
  * @param files - {[filepath]: contents}
  */
-export const deleteFilesTask = (files: object) => {
+export const deleteFilesTask = (files: Record<string, string | object>) => {
   const { base } = getPaths()
 
   return new Listr([
@@ -360,12 +374,7 @@ export const removeRoutesFromRouterTask = (routes: string[]) => {
 }
 
 export const runCommandTask = async (
-  commands: {
-    title: string
-    cmd: string
-    args: string[]
-    opts: execa.Options
-  }[],
+  commands: Command[],
   { verbose }: { verbose: boolean }
 ) => {
   const tasks = new Listr(
@@ -384,7 +393,7 @@ export const runCommandTask = async (
     })),
     {
       renderer: verbose && VerboseRenderer,
-      // @ts-ignore TODO dateFormat comes from listr-verbose-renderer
+      // @ts-expect-error TODO dateFormat comes from listr-verbose-renderer
       dateFormat: false,
     }
   )
@@ -402,8 +411,8 @@ export const runCommandTask = async (
  * Extract default CLI args from an exported builder
  */
 export const getDefaultArgs = (builder: object) => {
-  return Object.entries(builder).reduce((agg, [k, v]) => {
+  return Object.entries(builder).reduce<Record<string, any>>((agg, [k, v]) => {
     agg[k] = v.default
     return agg
-  }, {} as { [key: string]: any })
+  }, {})
 }
