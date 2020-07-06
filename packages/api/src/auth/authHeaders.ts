@@ -96,6 +96,6 @@ export const getAuthenticationContext = async ({
 
     return [decoded, { type, token }]
   } else {
-    return [null, { type: null, token: null }]
+    return [null, { type: undefined, token: null }]
   }
 }
