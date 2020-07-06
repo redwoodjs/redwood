@@ -73,3 +73,29 @@ export const decodeAuthToken = async ({
 
   return decoded
 }
+
+/**
+ * Get the authorization information from the request headers and request context.
+ * @returns [decoded, { type, token }]
+ **/
+export const getAuthenticationContext = async ({
+  event,
+  context,
+}: {
+  event: APIGatewayProxyEvent
+  context: GlobalContext & LambdaContext
+}) => {
+  const type = getAuthProviderType(event)
+
+  // if type is undefined, then not using an auth provider
+  // ie, not "logged in"
+  if (typeof type !== 'undefined') {
+    const decoded = await decodeAuthToken({ type, event, context })
+    const authorization = getAuthorization(event)
+    const token = authorization['token']
+
+    return [decoded, { type, token }]
+  } else {
+    return [null, { type: null, token: null }]
+  }
+}
