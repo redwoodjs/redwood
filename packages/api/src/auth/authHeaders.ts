@@ -87,15 +87,16 @@ export const getAuthenticationContext = async ({
 }) => {
   const type = getAuthProviderType(event)
 
+  let decoded = null
+  let token = null
+
   // if type is undefined, then not using an auth provider
   // ie, not "logged in"
   if (typeof type !== 'undefined') {
-    const decoded = await decodeAuthToken({ type, event, context })
+    decoded = await decodeAuthToken({ type, event, context })
     const authorization = getAuthorization(event)
-    const token = authorization['token']
-
-    return [decoded, { type, token }]
-  } else {
-    return [null, { type: undefined, token: null }]
+    token = authorization['token']
   }
+
+  return [decoded, { type, token }]
 }
