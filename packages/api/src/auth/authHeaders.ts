@@ -30,19 +30,15 @@ export const getAuthorization = (event: {
   event: APIGatewayProxyEvent
 }): AuthorizationHeader => {
   try {
-    const authorizationHeader: AuthorizationHeader = {
-      schema: null,
-      token: null,
-    }
-    const mechanism = event.headers?.authorization?.split(' ')
-    authorizationHeader.schema = mechanism?.[0]
-    authorizationHeader.token = mechanism?.[1]
+    const [schema, token] = event.headers?.authorization?.split(' ')
 
-    if (!mechanism.length === 2 || authorizationHeader.token.length === 0) {
-      throw new Error('Empty authorization token')
+    if (!schema.length || !token.length) {
+      throw new Error(
+        'We could not get the `schema` and `token` from the Authorization header.'
+      )
     }
 
-    return authorizationHeader
+    return { schema, token }
   } catch {
     throw new Error('Error getting Authorization header')
   }

@@ -12,8 +12,7 @@ export const decode = async ({
 }): Promise<AuthToken> => {
   try {
     const authorization = getAuthorization(event)
-    const token = authorization['token']
-    const decoded = await verifyAuth0Token(token)
+    const decoded = await verifyAuth0Token(authorization.token)
 
     return decoded
   } catch {

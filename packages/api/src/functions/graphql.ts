@@ -46,8 +46,8 @@ export const createContextHandler = (
       context.currentUser =
         typeof getCurrentUser == 'function'
           ? await getCurrentUser(decoded, {
-              token,
               authType: type,
+              token,
             })
           : decoded
     }
