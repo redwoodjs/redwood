@@ -4,8 +4,6 @@ export const config = {
   init: `const auth0 = new Auth0Client({
     domain: process.env.AUTH0_DOMAIN,
     client_id: process.env.AUTH0_CLIENT_ID,
-    redirect_uri: 'http://localhost:8910/',
-    cacheLocation: 'localstorage',
     audience: process.env.AUTH0_AUDIENCE,
   })`,
   authProvider: {
@@ -15,11 +13,15 @@ export const config = {
 }
 
 // required packages to install
-export const packages = ['@auth0/auth0-spa-js']
+export const webPackages = ['@auth0/auth0-spa-js']
+export const apiPackages = ['auth0']
 
 // any notes to print out when the job is done
 export const notes = [
   'You will need to create several environment variables with your Auth0 config options.',
   'Check out web/src/index.js for the variables you need to add.',
   'See: https://auth0.com/docs/quickstart/spa/react#get-your-application-keys',
+  "You must also Create an API and set the audience parameter, or you'll",
+  'receive an opaque token instead of the required JWT token.',
+  'See: https://auth0.com/docs/quickstart/spa/react/02-calling-an-api#create-an-api',
 ]

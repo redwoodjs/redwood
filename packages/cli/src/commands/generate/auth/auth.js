@@ -147,7 +147,7 @@ export const handler = async ({ provider, force }) => {
   const tasks = new Listr(
     [
       {
-        title: 'Adding required packages...',
+        title: 'Adding required web packages...',
         task: async () => {
           if (!isProviderSupported(provider)) {
             throw new Error(`Unknown auth provider '${provider}'`)
@@ -156,9 +156,26 @@ export const handler = async ({ provider, force }) => {
             'workspace',
             'web',
             'add',
-            ...providerData.packages,
+            ...providerData.webPackages,
             '@redwoodjs/auth',
           ])
+        },
+      },
+      {
+        title: 'Adding required api packages...',
+        task: async () => {
+          if (!isProviderSupported(provider)) {
+            throw new Error(`Unknown auth provider '${provider}'`)
+          }
+
+          if (providerData.apiPackages.length) {
+            await execa('yarn', [
+              'workspace',
+              'api',
+              'add',
+              ...providerData.apiPackages,
+            ])
+          }
         },
       },
       {

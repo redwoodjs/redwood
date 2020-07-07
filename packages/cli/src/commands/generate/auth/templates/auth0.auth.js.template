@@ -1,0 +1,101 @@
+// Define what you want `currentUser` to return throughout your app.
+// This uses Auth0's AuthenticationClient to fetch the userProfile
+// for the Auth0 Management API and uses it to create a User record
+
+// Define what you want `currentUser` to return throughout your app. For example,
+// to return a real user from your database given the sub claim is your user id
+// you could do something like:
+//
+//
+// const user = await db.user.findOne({
+//   where: {
+//     userId: decoded.sub,
+//  },
+// })
+
+// Once you have the sub, you can user that to find the existing User
+// in the database, call the Auth0 Management API to fetch the full profile
+// and create a new User with its userProfile info and then return the user
+//
+// Note: be wary of calling the database or Auth0 API for *every* request
+//
+// try {
+//   const user = await db.user.findOne({
+//     where: {
+//       userId: decoded.sub,
+//     },
+//   })
+//
+//   if (!user && token) {
+//     const auth0User = await auth0.getProfile(token)
+//     const userProfile = {
+//       email: auth0User.email,
+//       emailVerified: auth0User.emailVerified,
+//       lastIp: auth0User.lastIp,
+//       lastLogin: auth0User.lastLogin,
+//       loginsCount: auth0User.loginsCount,
+//       name: auth0User.name,
+//       nickname: auth0User.nickname,
+//       picture: auth0User.picture,
+//       userId: auth0User.sub,
+//     }
+//
+//     const userWithProfile = await db.user.create({
+//       data: userProfile,
+//     })
+//
+//     // set the currentUser in context to include its userProfile info
+//     const currentUser = context.currentUser
+//     context.currentUser = { currentUser, ...userProfile }
+//
+//     return userWithProfile
+//   }
+//
+//   return user
+// } catch (error) {
+//   return decoded
+// }
+
+// To reduce API calls, you may want to set the currentUser in context
+// to include its userProfile info
+// const currentUser = context.currentUser
+// context.currentUser = { currentUser, ...userProfile }
+
+// so that you can shortcut getCurrentUser() to return the populated
+// currentUser right away
+// if (context.currentUser?.userId) {
+//    return context.currentUser
+//}
+
+import { AuthenticationClient } from 'auth0'
+import { AuthenticationError } from '@redwoodjs/api'
+import { context } from '@redwoodjs/api/dist/globalContext'
+
+import { db } from 'src/lib/db'
+
+const auth0 = new AuthenticationClient({
+  domain: process.env.AUTH0_DOMAIN,
+  clientId: process.env.AUTH0_CLIENT_ID,
+})
+
+export const getCurrentUser = async (decoded, { authType, token }) => {
+  // do we have an accessToken from auth0 and an userId from the decoded JWT?
+  if (!token || authType != 'auth0' || !decoded?.sub) {
+    return decoded
+  }
+
+  // find the existing User ..
+  // or create a new User with its userProfile info
+  // return user
+
+  return decoded
+}
+
+// Use this function in your services to check that a user is logged in, and
+// optionally raise an error if they're not.
+
+export const requireAuth = () => {
+  if (!context.currentUser) {
+    throw new AuthenticationError("You don't have permission to do that.")
+  }
+}
