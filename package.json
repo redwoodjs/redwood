@@ -28,10 +28,7 @@
     "whatwg-fetch": "3.0.0"
   },
   "eslintConfig": {
-    "extends": "@redwoodjs/eslint-config",
-    "ignorePatterns": [
-      "fixtures"
-    ]
+    "extends": "@redwoodjs/eslint-config"
   },
   "scripts": {
     "build": "yarn build:clean && yarn build:js",
