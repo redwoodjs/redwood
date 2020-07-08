@@ -140,5 +140,16 @@ module.exports = () => ({
       test: ['./web/src/Routes.js', './web/src/Routes.tsx'],
       plugins: [require('../dist/babel-plugin-redwood-routes-auto-loader')],
     },
+    /**
+     * Automatically import services
+     * So we can do
+     *   import { contacts } from 'src/services/contacts
+     * Instead of:
+     *   import { contacts } from 'src/services/contacts/contacts
+     */
+    // {
+    // test: //
+    // plugins: [require('../dist/babel-plugin-directory-named')]
+    // }
   ],
 })
