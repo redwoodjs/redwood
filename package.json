@@ -24,11 +24,14 @@
     "babel-jest": "^26.1.0",
     "lerna": "^3.20.2",
     "nodemon": "^2.0.2",
-    "typescript": "^3.8.3",
+    "typescript": "^3.9.6",
     "@testing-library/react": "10.2.1",
     "@testing-library/jest-dom": "5.10.0",
     "msw": "0.19.3",
     "whatwg-fetch": "3.0.0"
+  },
+  "resolutions": {
+    "@types/react": "16.9.38"
   },
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config"

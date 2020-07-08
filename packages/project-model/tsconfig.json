@@ -5,13 +5,17 @@
     "baseUrl": ".",
     "rootDir": "src",
     "outDir": "dist",
+    "experimentalDecorators": true,
+    "noImplicitReturns": false,
+    "noImplicitAny": false,
+    "noUnusedLocals": false,
   },
   "include": [
-    "src"
+    "src",
   ],
   "references": [
     {
-      "path": "../internal",
-    }
-  ]
+      "path": "../internal"
+    },
+  ],
 }

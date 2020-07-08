@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@redwoodjs/auth": "^0.12.0",
-    "@types/graphql-iso-date": "^3.3.3",
+    "@types/graphql-iso-date": "^3.4.0",
     "@types/graphql-type-json": "^0.3.2",
     "@types/jsonwebtoken": "^8.3.9",
     "@types/lodash.merge": "^4.6.6",
@@ -46,6 +46,7 @@
   "scripts": {
     "build": "yarn build:clean && yarn build:js",
     "build:js": "yarn cross-env NODE_ENV=production babel src -d dist --extensions \".js,.ts\" --source-maps inline && yarn move-cli ./dist/importAll.macro.js ./importAll.macro.js",
+    "build:types": "tsc --build --clean && tsc --build",
     "build:clean": "yarn del-cli dist importAll.macro.js",
     "prepublishOnly": "yarn build",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --ignore importAll.macro.js --exec \"yarn build\"",
