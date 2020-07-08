@@ -37,7 +37,10 @@ import { Query } from '@apollo/react-components'
  * }
  */
 export const withCell = ({
-  beforeQuery = (props) => ({ variables: props }),
+  beforeQuery = (props) => ({
+    variables: props,
+    fetchPolicy: 'cache-and-network',
+  }),
   QUERY,
   afterQuery = (data) => ({ ...data }),
   Loading = () => 'Loading...',
