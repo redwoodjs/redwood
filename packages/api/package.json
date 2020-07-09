@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@redwoodjs/auth": "^0.12.0",
-    "@types/graphql-iso-date": "^3.3.3",
+    "@types/graphql-iso-date": "^3.4.0",
     "@types/graphql-type-json": "^0.3.2",
     "@types/jsonwebtoken": "^8.3.9",
     "@types/lodash.merge": "^4.6.6",

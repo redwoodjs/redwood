@@ -108,7 +108,7 @@ export const createGraphQLHandler = (
         // @ts-expect-error
         import('@redwoodjs/dev-server/dist/error')
           .then(({ handleError }) => {
-            return handleError(error.originalError)
+            return handleError(error.originalError as Error)
           })
           .then(console.log)
           .catch(() => {})

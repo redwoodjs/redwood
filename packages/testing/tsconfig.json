@@ -9,10 +9,6 @@
   "include": [
     "src"
   ],
-  "exclude": [
-    "**/__tests__",
-    "**/__mocks__"
-  ],
   "references": [
     {
       "path": "../internal",

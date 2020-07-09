@@ -35,6 +35,13 @@ const INPUT_TYPES = [
   'url',
   'week',
 ]
+const COERCION_FUNCTIONS = {
+  Boolean: (value) => !!value,
+  Float: (value) => parseFloat(value),
+  Int: (value) => parseInt(value, 10),
+  Json: (value) => JSON.parse(value),
+  NumberField: (value) => parseInt(value, 10),
+}
 
 // Massages a hash of props depending on whether the given named field has
 // any errors on it
@@ -69,6 +76,9 @@ const inputTagProps = (props) => {
       tagProps.style = errorStyle
     }
   }
+
+  // dataType shouldn't be passed to the underlying HTML element
+  delete tagProps.dataType
 
   return tagProps
 }
@@ -138,6 +148,27 @@ const FormError = ({
   )
 }
 
+const coerceValues = (data, children) => {
+  const coercedData = { ...data }
+
+  children.forEach((child) => {
+    const childName = child.props.name
+
+    const [componentName] = Object.entries(inputComponents).find(
+      ([_, componentConstructor]) => componentConstructor === child.type
+    ) || [undefined, undefined]
+
+    const coercionFunction =
+      COERCION_FUNCTIONS[child.props?.dataType || componentName]
+
+    if (coercionFunction) {
+      coercedData[childName] = coercionFunction(data[childName])
+    }
+  })
+
+  return coercedData
+}
+
 // Renders a containing <form> tag with required contexts
 
 const Form = (props) => {
@@ -153,7 +184,12 @@ const Form = (props) => {
   const formMethods = propFormMethods || useFormMethods
 
   return (
-    <form {...formProps} onSubmit={formMethods.handleSubmit(onSubmit)}>
+    <form
+      {...formProps}
+      onSubmit={formMethods.handleSubmit((data, event) =>
+        onSubmit(coerceValues(data, props.children), event)
+      )}
+    >
       <FieldErrorContext.Provider
         value={
           errorProps?.graphQLErrors[0]?.extensions?.exception?.messages || {}

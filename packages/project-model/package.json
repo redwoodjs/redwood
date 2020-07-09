@@ -1,0 +1,59 @@
+{
+  "name": "@redwoodjs/project-model",
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "@redwoodjs/internal": "^0.8.2",
+    "@prisma/sdk": "^2.1.1",
+    "camelcase": "^6.0.0",
+    "deepmerge": "^4.2.2",
+    "findup-sync": "^4.0.0",
+    "graphql": "^15.1.0",
+    "lazy-get-decorator": "^2.2.0",
+    "enquirer": "2.3.6",
+    "lodash": "^4.17.15",
+    "lodash-decorators": "^6.0.1",
+    "lru-cache": "^5.1.1",
+    "proxyquire": "^2.1.3",
+    "toml": "^3.0.0",
+    "ts-morph": "^7.1.1",
+    "vscode-languageserver": "^6.1.1",
+    "vscode-languageserver-textdocument": "^1.0.1",
+    "vscode-languageserver-types": "^3.15.1"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^9.0.1",
+    "@types/lodash": "^4.14.157",
+    "@types/lru-cache": "^5.1.0",
+    "@types/node": "^12.12.0",
+    "@types/vscode": "^1.46.0"
+  },
+  "eslintConfig": {
+    "extends": "@redwoodjs/eslint-config",
+    "rules": {
+      "import/order": "off",
+      "@typescript-eslint/no-this-alias": "off",
+      "@typescript-eslint/no-non-null-assertion": "off",
+      "no-case-declarations": "off",
+      "prefer-const": "off",
+      "no-unused-expressions": "off"
+    }
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/fixtures/",
+      "/dist/"
+    ]
+  },
+  "scripts": {
+    "build": "yarn cross-env NODE_ENV=production babel src -d dist --extensions \".js,.ts,.tsx\" --delete-dir-on-start",
+    "build:types": "tsc --build --clean && tsc --build",
+    "test": "jest",
+    "test:watch": "yarn test --watch",
+    "prettier": "prettier --write './src/**/*.{ts,tsx}'"
+  }
+}

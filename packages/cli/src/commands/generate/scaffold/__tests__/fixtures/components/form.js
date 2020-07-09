@@ -5,6 +5,7 @@ import {
   Label,
   TextField,
   CheckboxField,
+  NumberField,
   Submit,
 } from '@redwoodjs/web'
 
@@ -117,6 +118,39 @@ const PostForm = (props) => {
           errorClassName="rw-input rw-input-error"
         />
         <FieldError name="isPinned" className="rw-field-error" />
+
+        <Label
+          name="readTime"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
+        >
+          Read time
+        </Label>
+        <NumberField
+          name="readTime"
+          defaultValue={props.post?.readTime}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+          validation={{ required: true }}
+        />
+        <FieldError name="readTime" className="rw-field-error" />
+
+        <Label
+          name="rating"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
+        >
+          Rating
+        </Label>
+        <TextField
+          name="rating"
+          defaultValue={props.post?.rating}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+          validation={{ required: true }}
+          dataType="Float"
+        />
+        <FieldError name="rating" className="rw-field-error" />
 
         <Label
           name="postedAt"
