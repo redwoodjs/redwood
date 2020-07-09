@@ -118,8 +118,7 @@ export const relationsForModel = (model) => {
   return model.fields
     .filter((f) => f.relationName)
     .map((field) => {
-      const relationName = camelcase(field.type)
-      return field.isList ? pluralize(relationName) : relationName
+      return field.name
     })
 }
 
