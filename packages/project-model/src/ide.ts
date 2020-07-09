@@ -167,7 +167,8 @@ export abstract class BaseNode {
 export abstract class FileNode extends BaseNode {
   abstract get filePath(): string
   @lazy() get uri(): string {
-    return `file://${this.filePath}`
+    // use the URL constructor to make sure this works with windows paths as well
+    return new URL(`file://${this.filePath}`).href //?
   }
   /**
    * the ID of a FileNode is its file:// uri.

@@ -1,6 +1,7 @@
 import { basename, resolve } from 'path'
 import { DefaultHost } from '../../ide'
 import { RWProject } from '../RWProject'
+import {join} from "path"
 
 describe('Redwood Project Model', () => {
   it('can process example-todo-main', async () => {
@@ -27,7 +28,7 @@ describe('Redwood Project Model', () => {
     project.sdls.length //?
     const ds = await project.collectDiagnostics()
     ds.length //?
-    const uri = `file://${projectRoot}/api/src/graphql/todos.sdl.js`
+    const uri = new URL("file://" +  join(projectRoot, 'api/src/graphql/todos.sdl.js')).href //?
     const node = await project.findNode(uri)
     expect(node).toBeDefined()
     expect(node.id).toEqual(uri)

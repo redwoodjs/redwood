@@ -44,8 +44,8 @@ export class RWProject extends BaseNode {
     return this.opts.projectRoot
   }
 
-  get id() {
-    return 'file://' + this.projectRoot
+  @lazy() get id() {
+    return new URL('file://' + this.projectRoot).href
   }
 
   children() {
