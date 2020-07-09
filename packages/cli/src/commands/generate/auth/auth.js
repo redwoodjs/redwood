@@ -8,7 +8,10 @@ import terminalLink from 'terminal-link'
 import { getPaths, writeFilesTask } from 'src/lib'
 import c from 'src/lib/colors'
 
-const API_GRAPHQL_PATH = path.join(getPaths().api.functions, 'graphql.js')
+const API_GRAPHQL_PATH = resolveFile(
+  path.join(getPaths().api.functions, 'graphql')
+)
+
 const API_SRC_PATH = path.join(getPaths().api.src)
 const TEMPLATES = fs
   .readdirSync(path.resolve(__dirname, 'templates'))
