@@ -63,6 +63,14 @@ const Post = ({ post }) => {
               <td>{post.isPinned}</td>
             </tr>
             <tr>
+              <th>readTime</th>
+              <td>{post.readTime}</td>
+            </tr>
+            <tr>
+              <th>rating</th>
+              <td>{post.rating}</td>
+            </tr>
+            <tr>
               <th>postedAt</th>
               <td>{post.postedAt}</td>
             </tr>

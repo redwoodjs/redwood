@@ -57,6 +57,8 @@ const PostsList = ({ posts }) => {
             <th>Body</th>
             <th>Image</th>
             <th>Is pinned</th>
+            <th>Read time</th>
+            <th>Rating</th>
             <th>Posted at</th>
             <th>&nbsp;</th>
           </tr>
@@ -71,6 +73,8 @@ const PostsList = ({ posts }) => {
               <td>{truncate(post.body)}</td>
               <td>{truncate(post.image)}</td>
               <td>{checkboxInputTag(post.isPinned)}</td>
+              <td>{truncate(post.readTime)}</td>
+              <td>{truncate(post.rating)}</td>
               <td>{timeTag(post.postedAt)}</td>
               <td>
                 <nav className="rw-table-actions">
