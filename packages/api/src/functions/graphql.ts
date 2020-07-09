@@ -47,12 +47,17 @@ export const createContextHandler = (
           : authToken
     }
 
-    if (typeof userContext === 'function') {
-      userContext = await userContext({ event, context })
-    }
-
     // Sets the **global** context object, which can be imported with:
     // import { context } from '@redwoodjs/api'
+    if (typeof userContext === 'function') {
+      // if userContext is a function, run that and return just the result
+      const userContextData = await userContext({ event, context })
+      return setContext({
+        ...context,
+        ...userContextData,
+      })
+    }
+
     return setContext({
       ...context,
       ...userContext,

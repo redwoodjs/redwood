@@ -44,7 +44,8 @@ Since the CLI is the entry point to Redwood, as Redwood continues to grow&mdash;
 
 - [@cannikin](https://github.com/cannikin)
 - [@peterp](https://github.com/peterp)
-[@thedavidprice](https://github.com/thedavidprice)
+- [@thedavidprice](https://github.com/thedavidprice)
+
 ## Roadmap
 
 ### Coming Soon

@@ -41,6 +41,7 @@ To create a route to a normal Page, you'll pass three props: `path`, `page`, and
 The `path` prop specifies the URL path to match, starting with the beginning slash. The `page` prop specifies the Page component to render when the path is matched. The `name` prop is used to specify the name of the _named route function_.
 
 ## Private Routes
+
 Some pages should only be visible to authenticated users.
 
 All `Routes` nested in `<Private>` require authentication.

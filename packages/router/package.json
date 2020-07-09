@@ -2,9 +2,11 @@
   "name": "@redwoodjs/router",
   "version": "0.12.0",
   "files": [
-    "dist"
+    "dist",
+    "src/index.d.ts"
   ],
   "main": "dist/index.js",
+  "types": "src/index.d.ts",
   "license": "MIT",
   "dependencies": {
     "core-js": "3.6.4"

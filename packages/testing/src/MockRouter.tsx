@@ -5,16 +5,18 @@ import React from 'react'
 // See: ./packages/core/config/jest.config.web.js
 export * from '@redwoodjs/router/dist/index'
 
-export const routes = {}
+export const routes: { [routeName: string]: () => string } = {}
 
 /**
  * This is used in place of the real router during tests.
  * It populates the `routes.<pagename>()` utility object.
  */
-export const Router = ({ children }) => {
-  for (let route of React.Children.toArray(children)) {
+export const Router: React.FunctionComponent = ({ children }) => {
+  for (const route of React.Children.toArray(
+    children
+  ) as React.ReactElement[]) {
     const { name } = route.props
-    routes[name] = jest.fn(() => name)
+    routes[name] = () => name
   }
   return <></>
 }

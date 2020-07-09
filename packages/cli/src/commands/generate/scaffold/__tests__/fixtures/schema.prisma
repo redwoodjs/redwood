@@ -18,6 +18,8 @@ model Post {
   body     String
   image    String?
   isPinned Boolean @default(false)
+  readTime Int
+  rating   Float?
   postedAt DateTime?
 }
 
