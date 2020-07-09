@@ -1,7 +1,5 @@
 import path from 'path'
 
-import camelcase from 'camelcase'
-import pluralize from 'pluralize'
 import Listr from 'listr'
 import pascalcase from 'pascalcase'
 import { paramCase } from 'param-case'
