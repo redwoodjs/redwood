@@ -37,16 +37,21 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
       },
       ExportNamedDeclaration(path) {
         const declaration = path.node.declaration
+
+        if (!declaration) {
+          return
+        }
+
         let name
         if (declaration.type === 'VariableDeclaration') {
-          name = declaration.declarations[0].id.name
+          const id = declaration.declarations[0].id as types.Identifier
+          name = id.name as string
         }
-
         if (declaration.type === 'FunctionDeclaration') {
-          name = declaration.id.name
+          name = declaration?.id?.name
         }
 
-        if (EXPECTED_EXPORTS_FROM_CELL.includes(name)) {
+        if (name && EXPECTED_EXPORTS_FROM_CELL.includes(name)) {
           exportNames.push(name)
         }
       },

@@ -1,0 +1,21 @@
+{
+  "extends": "../../tsconfig.compilerOption.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
+    "baseUrl": ".",
+    "rootDir": "src",
+    "outDir": "dist",
+    "experimentalDecorators": true,
+    "noImplicitReturns": false,
+    "noImplicitAny": false,
+    "noUnusedLocals": false,
+  },
+  "include": [
+    "src",
+  ],
+  "references": [
+    {
+      "path": "../internal"
+    },
+  ],
+}
