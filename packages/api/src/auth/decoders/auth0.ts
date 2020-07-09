@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken'
 import jwksClient from 'jwks-rsa'
 
-// https://auth0.com/docs/api-auth/tutorials/verify-access-token
 /**
  * This takes an auth0 jwt and verifies it. It returns something like this:
  * ```js
@@ -16,7 +15,7 @@ import jwksClient from 'jwks-rsa'
  * }
  * ```
  *
- * You can use `sub` as a stable reference to your user, buti f you want the email
+ * You can use `sub` as a stable reference to your user, but  if you want the email
  * addres you can set a context object[^0] in rules[^1]:
  *
  * ^0: https://auth0.com/docs/rules/references/context-object
@@ -58,4 +57,8 @@ export const verifyAuth0Token = (
       }
     )
   })
+}
+
+export const auth0 = async (token: string): Promise<null | object> => {
+  return verifyAuth0Token(token)
 }

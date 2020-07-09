@@ -1,7 +1,8 @@
+import type { GlobalContext } from 'src/globalContext'
 import gql from 'graphql-tag'
 import { GraphQLDate, GraphQLTime, GraphQLDateTime } from 'graphql-iso-date'
 import GraphQLJSON, { GraphQLJSONObject } from 'graphql-type-json'
-import type { GlobalContext } from 'src/globalContext'
+
 
 // @ts-ignore - not inside the <rootDir>
 import apiPackageJson from 'src/../package.json'

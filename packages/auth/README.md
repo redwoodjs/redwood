@@ -274,8 +274,8 @@ Our recommendation is to create a `src/lib/auth.js|ts` file that exports a `getC
 ```js
 import { getCurrentUser } from 'src/lib/auth'
 // Example:
-//  export const getCurrentUser = async (authToken: { email }) => {
-//    return await db.user.findOne({ where: { email } })
+//  export const getCurrentUser = async (decoded) => {
+//    return await db.user.findOne({ where: { decoded.email } })
 //  }
 ``
 
@@ -306,13 +306,13 @@ Magic.link recommends using the issuer as the userID.
 // redwood/api/src/lib/auth.ts
 import { Magic } from '@magic-sdk/admin'
 
-export const getCurrentUser = async (authToken) => {
+export const getCurrentUser = async (_decoded, { token }) => {
   const mAdmin = new Magic(process.env.MAGICLINK_SECRET)
   const {
     email,
     publicAddress,
     issuer,
-  } = await mAdmin.users.getMetadataByToken(authToken)
+  } = await mAdmin.users.getMetadataByToken(token)
 
   return await db.user.findOne({ where: { issuer } })
 }
@@ -381,5 +381,5 @@ You'll need to import the type definition for you client and add it to the suppo
 
 ```ts
 // authClients/index.ts
-export type SupportedAuthClients = Auth0 | GoTrue | NetlifyIdentity | MagicLinks
+export type SupportedAuthClients = Auth0 | GoTrue | NetlifyIdentity | MagicLink
 ```
