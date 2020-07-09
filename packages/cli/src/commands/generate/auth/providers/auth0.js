@@ -5,6 +5,11 @@ export const config = {
     domain: process.env.AUTH0_DOMAIN,
     client_id: process.env.AUTH0_CLIENT_ID,
     redirect_uri: process.env.AUTH0_REDIRECT_URI,
+    // ** NOTE ** Storing tokens in browser local storage provides persistence across page refreshes and browser tabs.
+    // However, if an attacker can achieve running JavaScript in the SPA using a cross-site scripting (XSS) attack,
+    // they can retrieve the tokens stored in local storage.
+    // https://auth0.com/docs/libraries/auth0-spa-js#change-storage-options
+    cacheLocation: 'localstorage',
     audience: process.env.AUTH0_AUDIENCE,
   })`,
   authProvider: {
@@ -22,7 +27,7 @@ export const notes = [
   'You will need to create several environment variables with your Auth0 config options.',
   'Check out web/src/index.js for the variables you need to add.',
   'See: https://auth0.com/docs/quickstart/spa/react#get-your-application-keys',
-  "You must also Create an API and set the audience parameter, or you'll",
+  "You must also create an API and set the audience parameter, or you'll",
   'receive an opaque token instead of the required JWT token.',
   'See: https://auth0.com/docs/quickstart/spa/react/02-calling-an-api#create-an-api',
 ]
