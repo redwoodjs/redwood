@@ -7,7 +7,7 @@
 
 import { AuthenticationError } from '@redwoodjs/api'
 
-export const getCurrentUser = async (decoded, { token, authType }) => {
+export const getCurrentUser = async (decoded, { token, type }) => {
   return decoded
 }
 
