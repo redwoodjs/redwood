@@ -1,6 +1,7 @@
-import { RWProject } from '../model'
+import { URL_file } from 'src/x/URL'
 import { FileNode } from '../ide'
-import { OutlineItem, Icon } from './types'
+import { RWProject } from '../model'
+import { Icon, OutlineItem } from './types'
 
 /*
 - all items have icons. in vscode you can create items without icons but
@@ -16,7 +17,7 @@ export function getOutline(project: RWProject): OutlineItem {
         {
           label: 'pages',
           onAdd: 'rw g page',
-          link: `file://${project.pathHelper.web.pages}`,
+          link: URL_file(project.pathHelper.web.pages),
           async children() {
             return fromFiles(project.pages)
           },
@@ -40,7 +41,7 @@ export function getOutline(project: RWProject): OutlineItem {
         {
           label: 'components',
           onAdd: 'rw g component',
-          link: `file://${project.pathHelper.web.components}`,
+          link: URL_file(project.pathHelper.web.components),
           async children() {
             return fromFiles(project.components)
           },
@@ -48,7 +49,7 @@ export function getOutline(project: RWProject): OutlineItem {
         {
           label: 'layouts',
           onAdd: 'rw g layout',
-          link: `file://${project.pathHelper.web.layouts}`,
+          link: URL_file(project.pathHelper.web.layouts),
           async children() {
             return fromFiles(project.layouts)
           },
@@ -56,7 +57,7 @@ export function getOutline(project: RWProject): OutlineItem {
         {
           label: 'cells',
           onAdd: 'rw g cell',
-          link: `file://${project.pathHelper.web.components}`,
+          link: URL_file(project.pathHelper.web.components),
           async children() {
             return fromFiles(project.cells)
           },
@@ -64,7 +65,7 @@ export function getOutline(project: RWProject): OutlineItem {
         {
           label: 'services',
           onAdd: 'rw g service',
-          link: `file://${project.pathHelper.api.services}`,
+          link: URL_file(project.pathHelper.api.services),
           async children() {
             return fromFiles(project.services)
           },
@@ -72,14 +73,14 @@ export function getOutline(project: RWProject): OutlineItem {
         {
           label: 'functions',
           onAdd: 'rw g function',
-          link: `file://${project.pathHelper.api.functions}`,
+          link: URL_file(project.pathHelper.api.functions),
           async children() {
             return fromFiles(project.functions)
           },
         },
         {
           label: 'schema.prisma',
-          link: `file://${project.pathHelper.api.dbSchema}`,
+          link: URL_file(project.pathHelper.api.dbSchema),
           async children() {
             const dmmf = await project.prismaDMMF()
             return dmmf.datamodel.models.map((model) => {
