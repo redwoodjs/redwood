@@ -1,5 +1,4 @@
-import type { Context } from 'src/globalContext'
-
+import type { GlobalContext } from 'src/globalContext'
 import gql from 'graphql-tag'
 import { GraphQLDate, GraphQLTime, GraphQLDateTime } from 'graphql-iso-date'
 import GraphQLJSON, { GraphQLJSONObject } from 'graphql-type-json'
@@ -37,9 +36,9 @@ export const resolvers = {
   Query: {
     redwood: () => ({
       version: apiPackageJson.version,
-      currentUser: (_args: any, context: Context) => {
+      currentUser: (_args: any, context: GlobalContext) => {
         return context?.currentUser
-      }
+      },
     }),
   },
 }

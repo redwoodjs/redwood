@@ -11,5 +11,6 @@
     "statusBar.foreground": "#e7e7e7",
     "statusBar.border": "#b85833"
   },
-  "peacock.color": "#b85833"
+  "peacock.color": "#b85833",
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
