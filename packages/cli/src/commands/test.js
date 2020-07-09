@@ -1,6 +1,5 @@
 import execa from 'execa'
 import terminalLink from 'terminal-link'
-import createJestConfig from '@redwoodjs/core/config/jest.config'
 
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
@@ -8,14 +7,7 @@ import c from 'src/lib/colors'
 const jest = require('jest')
 
 // TODO: Get from redwood.toml
-const sides = {
-  web: {
-    target: 'browser',
-  },
-  api: {
-    target: 'node',
-  },
-}
+const sides = ['web', 'api']
 
 // https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/scripts/test.js#L39
 function isInGitRepository() {
@@ -40,8 +32,7 @@ export const command = 'test [side..]'
 export const description = 'Run Jest tests for api and web'
 export const builder = (yargs) => {
   yargs
-    .choices('side', Object.keys(sides))
-    .default('side', Object.keys(sides))
+    .choices('side', sides)
     .option('watch', {
       type: 'boolean',
     })
@@ -59,13 +50,9 @@ export const builder = (yargs) => {
     )
 }
 
-export const handler = async ({
-  side: sides,
-  watch,
-  watchAll,
-  collectCoverage,
-}) => {
+export const handler = async ({ side, watch, watchAll, collectCoverage }) => {
   const { cache: CACHE_DIR } = getPaths()
+  const sides = [].concat(side).filter(Boolean)
 
   const args = [
     '--passWithNoTests',
@@ -75,22 +62,23 @@ export const handler = async ({
   ].filter(Boolean)
 
   // Watch unless on CI or explicitly running all tests
-  if (!process.env.CI && !watchAll) {
+  if (!process.env.CI && !watchAll && !collectCoverage) {
     // https://github.com/facebook/create-react-app/issues/5210
     const hasSourceControl = isInGitRepository() || isInMercurialRepository()
     args.push(hasSourceControl ? '--watch' : '--watchAll')
   }
 
-  // Dynamically build Jest config for all sides
-  const jestConfig = createJestConfig({ sides })
-  args.push('--config', JSON.stringify(jestConfig))
+  args.push('--config', './node_modules/@redwoodjs/core/config/jest.config.js')
+
+  if (sides.length > 0) {
+    args.push('--projects', ...sides)
+  }
 
   try {
     /**
      * Migrate test database. This should be moved to somehow be done on a
      * per-side basis if possible.
      */
-
     const DATABASE_URL =
       process.env.TEST_DATABASE_URL || `file:${CACHE_DIR}/test.db`
 

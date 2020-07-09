@@ -8,8 +8,13 @@ const redwoodPaths = getPaths()
 
 const NODE_MODULES_PATH = path.join(redwoodPaths.base, 'node_modules')
 
-module.exports = function createBrowserConfig(overrides) {
+export function getBrowserJestConfig() {
   return {
+    displayName: {
+      color: 'blueBright',
+      name: 'browser',
+    },
+
     resolver: 'jest-directory-named-resolver',
     // NOTE: We run the tests with a `cwd` argument that's `getPaths().web.base`
     // testMatch,
@@ -47,6 +52,5 @@ module.exports = function createBrowserConfig(overrides) {
       '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|css)$':
         '@redwoodjs/testing/dist/fileMock.js',
     },
-    ...overrides,
   }
 }
