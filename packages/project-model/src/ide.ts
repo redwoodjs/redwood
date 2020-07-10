@@ -8,6 +8,7 @@ import { ArrayLike, ArrayLike_normalize } from './x/Array'
 import { lazy, memo } from './x/decorators'
 import { basenameNoExt } from './x/path'
 import { createTSMSourceFile_cached } from './x/ts-morph'
+import { URL_file } from './x/URL'
 import { ExtendedDiagnostic } from './x/vscode-languageserver-types'
 
 export type NodeID = string
@@ -152,7 +153,7 @@ export abstract class BaseNode {
    */
   @memo()
   async findNode(id: NodeID): Promise<BaseNode | undefined> {
-    if (id.startsWith('/')) id = `file://${id}`
+    id = URL_file(id)
     if (this.id === id) return this
     if (id.startsWith(this.id))
       for (const c of await this._children()) {
@@ -167,8 +168,7 @@ export abstract class BaseNode {
 export abstract class FileNode extends BaseNode {
   abstract get filePath(): string
   @lazy() get uri(): string {
-    // use the URL constructor to make sure this works with windows paths as well
-    return new URL(`file://${this.filePath}`).href //?
+    return URL_file(this.filePath)
   }
   /**
    * the ID of a FileNode is its file:// uri.
@@ -214,7 +214,7 @@ export class HostWithDocumentsStore implements Host {
   defaultHost = new DefaultHost()
   constructor(public documents: TextDocuments<TextDocument>) {}
   readFileSync(path: string) {
-    const uri = `file://${path}`
+    const uri = URL_file(path)
     const doc = this.documents.get(uri)
     if (doc) return doc.getText()
     return this.defaultHost.readFileSync(path)
