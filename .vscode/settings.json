@@ -12,6 +12,7 @@
     "statusBar.border": "#b85833"
   },
   "search.exclude": {
+    "**/dist": true,
     "**/node_modules": true,
     "**/__fixtures__": true
   }
