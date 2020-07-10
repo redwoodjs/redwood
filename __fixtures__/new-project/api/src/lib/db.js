@@ -1,4 +1,4 @@
-// See https://github.com/prisma/prisma2/blob/master/docs/prisma-client-js/api.md#constructor
+// See https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/constructor
 // for options.
 
 import { PrismaClient } from '@prisma/client'

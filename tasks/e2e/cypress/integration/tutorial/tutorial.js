@@ -40,14 +40,14 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       path.join(BASE_DIR, 'web/src/pages/HomePage/HomePage.js'),
       Step2_1_PagesHome
     )
-    cy.get('a').contains('About').click()
+    cy.contains('About').click()
     cy.get('h1').should('contain', 'AboutPage')
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/pages/AboutPage/AboutPage.js'),
       Step2_2_PagesAbout
     )
     cy.get('h1').should('contain', 'AboutPage')
-    cy.get('a').contains('Return home').click()
+    cy.contains('Return home').click()
   })
 
   it('3. Layouts', () => {
@@ -60,14 +60,14 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       path.join(BASE_DIR, 'web/src/pages/HomePage/HomePage.js'),
       Step3_2_PagesHome
     )
-    cy.get('h1 a').contains('Redwood Blog').click()
+    cy.contains('Redwood Blog').click()
     cy.get('main').should('contain', 'Home')
 
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/pages/AboutPage/AboutPage.js'),
       Step3_3_PagesAbout
     )
-    cy.get('a').contains('About').click()
+    cy.contains('About').click()
     cy.get('p').should(
       'contain',
       'This site was created to demonstrate my mastery of Redwood: Look on my works, ye mighty, and despair!'
@@ -81,7 +81,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       Step4_1_DbSchema
     )
     cy.exec(`rm ${BASE_DIR}/api/prisma/dev.db`, { failOnNonZeroExit: false })
-    cy.exec(`cd ${BASE_DIR}; yarn rw db save --name tutorial`, {
+    cy.exec(`cd ${BASE_DIR}; yarn rw db save`, {
       env: {
         DATABASE_URL: 'file:./dev.db',
         BINARY_TARGET: 'native',
@@ -94,7 +94,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     cy.visit('http://localhost:8910/posts')
 
     cy.get('h1').should('contain', 'Posts')
-    cy.get('a').contains(' New Post').click()
+    cy.contains(' New Post').click()
     cy.get('h2').should('contain', 'New Post')
 
     // SAVE
@@ -105,18 +105,18 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     cy.get('td').contains('First post')
 
     // EDIT
-    cy.get('a').contains('Edit').click()
+    cy.contains('Edit').click()
     cy.get('input#body').clear().type('No, Margle the World!')
     cy.get('button').contains('Save').click()
     cy.get('td').contains('No, Margle the World!')
 
     // DELETE
-    cy.get('a').contains('Delete').click()
+    cy.contains('Delete').click()
 
     // No more posts, so it should be in the empty state.
-    cy.get('div').contains('Post deleted.')
+    cy.contains('Post deleted.')
 
-    cy.get('a').contains('Create one?').click()
+    cy.contains('Create one?').click()
     cy.get('input#title').type('Second post')
     cy.get('input#body').type('Hello world!')
     cy.get('button').contains('Save').click()
