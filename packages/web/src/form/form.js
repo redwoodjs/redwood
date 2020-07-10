@@ -47,7 +47,6 @@ const COERCION_FUNCTIONS = {
 // any errors on it
 
 const inputTagProps = (props) => {
-  console.log(props);
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { errors, setError } = useFormContext()
 
@@ -67,7 +66,7 @@ const inputTagProps = (props) => {
   // any errors on this field
   const validationError = errors[props.name]
 
-  // get errorStyle/errorClassName and replace style/className if present
+  // get error/validStyle and error/validClassName and replace style/className if present
   const { errorClassName, errorStyle, validClassName, validStyle, ...tagProps } = props
   if (validationError) {
     if (errorClassName) {
@@ -76,7 +75,7 @@ const inputTagProps = (props) => {
     if (errorStyle) {
       tagProps.style = errorStyle
     }
-  } else if(!validationError && props.value) {
+  } else if (!validationError && props.value) {
     if (validClassName) {
       tagProps.className = validClassName
     }
