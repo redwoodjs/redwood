@@ -20,6 +20,8 @@ describe('MockRouter', () => {
       </Router>
     )
 
-    expect(Object.keys(routes)).toEqual(['a', 'b', 'c', 'd'])
+    expect(Object.keys(routes)).toEqual(
+      expect.arrayContaining(['a', 'b', 'c', 'd'])
+    )
   })
 })
