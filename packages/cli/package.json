@@ -15,6 +15,7 @@
   "dependencies": {
     "@prisma/sdk": "^2.1.1",
     "@redwoodjs/internal": "^0.13.0",
+    "@redwoodjs/structure": "0.13.0",
     "camelcase": "^5.3.1",
     "chalk": "^3.0.0",
     "concurrently": "^5.1.0",
