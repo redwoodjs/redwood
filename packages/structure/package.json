@@ -1,5 +1,6 @@
 {
-  "name": "@redwoodjs/project-model",
+  "name": "@redwoodjs/structure",
+  "description": "noun: the arrangement of and relations between the parts or elements of something complex",
   "version": "0.13.0",
   "license": "MIT",
   "main": "dist/index.js",
