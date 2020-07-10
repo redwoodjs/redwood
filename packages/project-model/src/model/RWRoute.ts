@@ -7,10 +7,11 @@ import { validateRoutePath } from '../util'
 import { lazy } from '../x/decorators'
 import {
   err,
-  LocationLike_toLink,
+  LocationLike_toTerminalLink,
   LocationLike_toLocation,
   Location_fromFilePath,
   Location_fromNode,
+  LocationLike_toHashLink,
 } from '../x/vscode-languageserver-types'
 import { RWRouter } from './RWRouter'
 
@@ -62,7 +63,8 @@ export class RWRoute extends BaseNode {
   }
 
   @lazy() get outlineLink(): string {
-    return LocationLike_toLink(this.location)
+    return LocationLike_toHashLink(this.location)
+    //return LocationLike_toTerminalLink(this.location)
   }
 
   /**

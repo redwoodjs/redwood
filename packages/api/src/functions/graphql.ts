@@ -42,7 +42,7 @@ export const createContextHandler = (
     const authContext = await getAuthenticationContext({ event, context })
     if (authContext) {
       context.currentUser = getCurrentUser
-        ? getCurrentUser(authContext[0], authContext[1])
+        ? await getCurrentUser(authContext[0], authContext[1])
         : authContext
     }
 

@@ -1,3 +1,4 @@
+import { normalize } from 'path'
 import {
   CodeAction,
   createConnection,
@@ -65,7 +66,7 @@ export class RWLanguageServer {
       const folders = await connection.workspace.getWorkspaceFolders()
       if (folders) {
         for (const folder of folders) {
-          this.projectRoot = folder.uri.substr(7) // remove file://
+          this.projectRoot = normalize(folder.uri.substr(7)) // remove file://
         }
       }
 
