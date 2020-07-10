@@ -2,13 +2,14 @@ import React from 'react'
 // Bypass the `main` field in `package.json` because we alias `@redwoodjs/router`
 // for jest and Storybook. Not doing so would cause an infinite loop.
 // See: ./packages/core/config/jest.config.web.js
+// @ts-ignore
 import { Private, Route } from '@redwoodjs/router/dist/index'
 export * from '@redwoodjs/router/dist/index'
 
 export const routes: { [routeName: string]: () => string } = {}
 
-const getPrivateRoutes = (children) =>
-  React.Children.toArray(children)
+const getPrivateRoutes = (children: React.ReactNode) =>
+  (React.Children.toArray(children) as React.ReactElement[])
     .filter((child) => child.type === Private)
     .map((child) => child.props.children)
     .flat(Infinity)
@@ -21,9 +22,9 @@ export const Router: React.FunctionComponent = ({ children }) => {
   // get all children from <Private> blocks.
   const privateRoutes = getPrivateRoutes(children)
 
-  const normalRoutes = React.Children.toArray(children).filter(
-    (child) => child.type === Route
-  )
+  const normalRoutes = (React.Children.toArray(
+    children
+  ) as React.ReactElement[]).filter((child) => child.type === Route)
 
   for (const child of [...privateRoutes, ...normalRoutes]) {
     const { name } = child.props
