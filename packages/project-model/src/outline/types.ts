@@ -1,8 +1,19 @@
-// TODO: icons will come later
 export enum Icon {
   redwood = 'redwood',
-  route = 'route',
-  route_private = 'route_private',
+  page = 'page',
+  pages = 'pages',
+  layouts = 'layouts',
+  netlify = 'netlify',
+  prisma = 'prisma',
+  storybook = 'storybook',
+  services = 'services',
+  graphql = 'graphql',
+  play = 'play',
+  components = 'components',
+  rw_cli = 'rw_cli',
+  functions = 'functions',
+  cells = 'cells',
+  model = 'model',
 }
 
 export interface OutlineItem {
@@ -61,6 +72,7 @@ export type OutlineItemJSON = Omit<OutlineItem, 'children'> & {
 export async function outlineToJSON(
   item: OutlineItem
 ): Promise<OutlineItemJSON> {
+  if (!item.children) return { ...item, children: undefined }
   const cs = item.children ? await item.children() : []
   const css = await Promise.all(cs.map(outlineToJSON))
   return { ...item, children: css }

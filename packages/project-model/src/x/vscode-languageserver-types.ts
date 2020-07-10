@@ -58,7 +58,7 @@ export function Location_fromFilePath(filePath: string): Location {
  * ex: "file:///foo.ts:2:3"
  * @param loc
  */
-export function LocationLike_toLink(loc: LocationLike): string {
+export function LocationLike_toTerminalLink(loc: LocationLike): string {
   const {
     uri,
     range: {
@@ -66,6 +66,21 @@ export function LocationLike_toLink(loc: LocationLike): string {
     },
   } = LocationLike_toLocation(loc)
   return `${uri}:${line + 1}:${character + 1}`
+}
+
+/**
+ * returns vscode-terminal-friendly (clickable) link with line/column information
+ * ex: "file:///foo.ts:2:3"
+ * @param loc
+ */
+export function LocationLike_toHashLink(loc: LocationLike): string {
+  const {
+    uri,
+    range: {
+      start: { line, character },
+    },
+  } = LocationLike_toLocation(loc)
+  return `${uri}#${line + 1}:${character + 1}`
 }
 
 export type LocationLike = tsm.Node | string | Location | ExtendedDiagnostic

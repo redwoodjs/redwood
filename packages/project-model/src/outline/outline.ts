@@ -12,11 +12,14 @@ export function getOutline(project: RWProject): OutlineItem {
   return {
     label: 'Redwood.js',
     icon: Icon.redwood,
+    expanded: false,
     async children() {
       return [
         {
           label: 'pages',
+          icon: Icon.pages,
           onAdd: 'rw g page',
+          expaded: true,
           link: URL_file(project.pathHelper.web.pages),
           async children() {
             return fromFiles(project.pages)
@@ -25,6 +28,7 @@ export function getOutline(project: RWProject): OutlineItem {
         {
           label: 'Routes.js',
           link: project.router.uri,
+          icon: Icon.pages,
           onAdd: 'rw g page',
           async children() {
             return project.router.routes.map((route) => {
@@ -33,7 +37,7 @@ export function getOutline(project: RWProject): OutlineItem {
                 label: route.outlineLabel,
                 description: route.outlineDescription,
                 link: route.outlineLink,
-                icon: route.isAuthenticated ? Icon.route_private : Icon.route,
+                icon: route.isAuthenticated ? Icon.page : Icon.page,
               }
             })
           },
@@ -41,6 +45,7 @@ export function getOutline(project: RWProject): OutlineItem {
         {
           label: 'components',
           onAdd: 'rw g component',
+          icon: Icon.components,
           link: URL_file(project.pathHelper.web.components),
           async children() {
             return fromFiles(project.components)
@@ -49,6 +54,7 @@ export function getOutline(project: RWProject): OutlineItem {
         {
           label: 'layouts',
           onAdd: 'rw g layout',
+          icon: Icon.layouts,
           link: URL_file(project.pathHelper.web.layouts),
           async children() {
             return fromFiles(project.layouts)
@@ -73,6 +79,7 @@ export function getOutline(project: RWProject): OutlineItem {
         {
           label: 'functions',
           onAdd: 'rw g function',
+          icon: Icon.functions,
           link: URL_file(project.pathHelper.api.functions),
           async children() {
             return fromFiles(project.functions)
@@ -80,6 +87,7 @@ export function getOutline(project: RWProject): OutlineItem {
         },
         {
           label: 'schema.prisma',
+          icon: Icon.prisma,
           link: URL_file(project.pathHelper.api.dbSchema),
           async children() {
             const dmmf = await project.prismaDMMF()
@@ -93,12 +101,14 @@ export function getOutline(project: RWProject): OutlineItem {
                   const actions: OutlineItem[] = [
                     {
                       label: 'generate sdl',
+                      icon: Icon.rw_cli,
                       description:
                         'create graphql interface to access this model',
                       link: `rw g sdl ${model.name}`,
                     },
                     {
                       label: 'generate scaffold',
+                      icon: Icon.rw_cli,
                       description:
                         'generate pages, SDL, and a services object for this model',
                       link: `rw g scaffold ${model.name}`,
