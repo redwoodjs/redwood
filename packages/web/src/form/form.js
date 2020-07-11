@@ -148,11 +148,29 @@ const FormError = ({
   )
 }
 
+function flattenChildren(children) {
+  let allChildren = []
+
+  if (children) {
+    if (children.forEach) {
+      children.forEach((child) => {
+        allChildren.push(child)
+
+        allChildren = allChildren.concat(flattenChildren(child.props?.children))
+      })
+    } else {
+      allChildren.push(children)
+    }
+  }
+
+  return allChildren
+}
+
 const coerceValues = (data, children) => {
   const coercedData = { ...data }
 
-  children.forEach((child) => {
-    const childName = child.props.name
+  flattenChildren(children).forEach((child) => {
+    const childName = child.props?.name
 
     const [componentName] = Object.entries(inputComponents).find(
       ([_, componentConstructor]) => componentConstructor === child.type
