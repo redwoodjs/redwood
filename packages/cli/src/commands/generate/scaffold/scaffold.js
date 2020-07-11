@@ -210,7 +210,7 @@ const componentFiles = async (name, scaffoldPath = '') => {
       componentName: 'NumberField',
     },
     Json: {
-      componentName: 'TextArea',
+      componentName: 'TextAreaField',
       dataType: 'Json',
     },
     Float: {
