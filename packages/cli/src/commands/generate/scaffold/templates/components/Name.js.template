@@ -34,7 +34,7 @@ const ${singularPascalName} = ({ ${singularCamelName} }) => {
           <tbody>
             <% columns.forEach(column => { %><tr>
               <th><%= column.name %></th>
-              <td>{${singularCamelName}.<%= column.name %>}</td>
+              <td>{${column.deserilizeFunction && column.deserilizeFunction + '('}${singularCamelName}.<%= column.name %>${column.deserilizeFunction && ')'}}</td>
             </tr><% }) %>
           </tbody>
         </table>
