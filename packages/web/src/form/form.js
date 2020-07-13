@@ -1,6 +1,7 @@
 import { useForm, FormContext, useFormContext } from 'react-hook-form'
 import { useContext, useEffect } from 'react'
 import pascalcase from 'pascalcase'
+
 import { CoercionContextProvider, useCoercion } from './coercion'
 
 const DEFAULT_MESSAGES = {
@@ -225,7 +226,7 @@ const TextAreaField = (props) => {
 
   React.useEffect(() => {
     setCoercion({ name: props.name, dataType: props.dataType })
-  }, [props.name, props.dataType])
+  }, [setCoercion, props.name, props.dataType])
 
   const tagProps = inputTagProps(props)
 
@@ -271,7 +272,7 @@ const InputField = (props) => {
       type: props.type,
       dataType: props.dataType,
     })
-  }, [props.name, props.type, props.dataType])
+  }, [setCoercion, props.name, props.type, props.dataType])
 
   const tagProps = inputTagProps(props)
 
