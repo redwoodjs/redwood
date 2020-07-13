@@ -25,18 +25,24 @@ const inputTypeToDataTypeMapping = {
 export const useCoercion = () => {
   const coercionContext = React.useContext(CoercionContext)
 
-  const coerce = (name, value) => coercionContext.coercions[name](value)
+  const coerce = React.useCallback(
+    (name, value) => coercionContext.coercions[name](value),
+    [coercionContext.coercions]
+  )
 
-  const setCoercion = ({ name, type, dataType }) => {
-    const coercionFunction =
-      COERCION_FUNCTIONS[dataType || inputTypeToDataTypeMapping[type]] ||
-      ((value) => value)
+  const setCoercion = React.useCallback(
+    ({ name, type, dataType }) => {
+      const coercionFunction =
+        COERCION_FUNCTIONS[dataType || inputTypeToDataTypeMapping[type]] ||
+        ((value) => value)
 
-    coercionContext.setCoercions((coercions) => ({
-      ...coercions,
-      [name]: coercionFunction,
-    }))
-  }
+      coercionContext.setCoercions.call(null, (coercions) => ({
+        ...coercions,
+        [name]: coercionFunction,
+      }))
+    },
+    [coercionContext.setCoercions]
+  )
 
   return { coerce, setCoercion }
 }
