@@ -96,7 +96,7 @@ export const addApiConfig = () => {
   // add import statement
   content = content.replace(
     /^(.*services.*)$/m,
-    `$1\n\nimport { getCurrentUser } from 'src/lib/auth.js'`
+    `$1\n\nimport { getCurrentUser } from 'src/lib/auth'`
   )
   // add object to handler
   content = content.replace(
