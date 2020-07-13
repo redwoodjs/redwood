@@ -4,11 +4,13 @@
   - [Purpose and Vision](#purpose-and-vision)
   - [Package Lead](#package-lead)
   - [Roadmap](#roadmap)
+    - [Coming Soon](#coming-soon)
+    - [Coming Later](#coming-later)
   - [Contributing](#contributing)
-    - [How Client-side Routing Works](#how-client-side-routing-works)
+    - [How Client-side Routing Works (Briefly)](#how-client-side-routing-works-briefly)
       - [Location](#location)
       - [History](#history)
-    - [Putting it all together](#putting-it-all-together)
+    - [Putting it Together](#putting-it-together)
 
 ## Purpose and Vision
 
@@ -26,13 +28,19 @@ Redwood Router (RR from now on) is designed to list all routes in a single file,
 
 @todo
 
+<!-- @todo Rename files to camelCase for consistency -->
+<!-- @todo Rollback internal.js importing -->
+
+### Coming Soon
+
 - Type / convert to TypeScript (in progress at [#791](https://github.com/redwoodjs/redwood/issues/791))
 - Fix layout rerendering ([#267](https://github.com/redwoodjs/redwood/issues/267))
 - Add prerendering (in discussion at https://community.redwoodjs.com/t/prerender-proposal/849)
 - Make named-routes function at build time
 
-<!-- @todo Rename files to camelCase for consistency -->
-<!-- @todo Rollback internal.js importing -->
+### Coming Later
+
+- Use tree-based route-matching algorithm
 
 ## Contributing
 
