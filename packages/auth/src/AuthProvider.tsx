@@ -84,6 +84,10 @@ export class AuthProvider extends React.Component<
     return this.reauthenticate()
   }
 
+  componentWillUnmount() {
+    this.setState(this.state)
+  }
+
   getCurrentUser = async () => {
     if (this.props.skipFetchCurrentUser) {
       return undefined
