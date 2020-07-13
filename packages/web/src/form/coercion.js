@@ -3,19 +3,8 @@ const CoercionContext = React.createContext()
 export const CoercionContextProvider = ({ children }) => {
   const [coercions, setCoercions] = React.useState({})
 
-  const setCoercion = React.useCallback(
-    (name, type) => {
-      setCoercions((coercions) => ({ ...coercions, [name]: type }))
-    },
-    [setCoercions]
-  )
-
-  const coerce = React.useCallback((name, value) => coercions[name](value), [
-    coercions,
-  ])
-
   return (
-    <CoercionContext.Provider value={{ setCoercion, coerce }}>
+    <CoercionContext.Provider value={{ coercions, setCoercions }}>
       {children}
     </CoercionContext.Provider>
   )
@@ -36,15 +25,18 @@ const inputTypeToDataTypeMapping = {
 export const useCoercion = () => {
   const coercionContext = React.useContext(CoercionContext)
 
+  const coerce = (name, value) => coercionContext.coercions[name](value)
+
   const setCoercion = (name, type, dataType) => {
     const coercionFunction =
       COERCION_FUNCTIONS[dataType || inputTypeToDataTypeMapping[type]] ||
       ((value) => value)
 
-    coercionContext.setCoercion(name, coercionFunction)
+    coercionContext.setCoercions((coercions) => ({
+      ...coercions,
+      [name]: coercionFunction,
+    }))
   }
 
-  const coerce = coercionContext.coerce
-
-  return { setCoercion, coerce }
+  return { coerce, setCoercion }
 }
