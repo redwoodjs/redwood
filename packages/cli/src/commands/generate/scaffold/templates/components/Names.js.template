@@ -19,6 +19,10 @@ const truncate = (text) => {
   return output
 }
 
+const jsonFormat = (obj) => {
+  return truncate(JSON.stringify(obj, null, 2))
+}
+
 const timeTag = (datetime) => {
   return (
     <time dateTime={datetime} title={datetime}>

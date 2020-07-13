@@ -212,7 +212,7 @@ const componentFiles = async (name, scaffoldPath = '') => {
     Json: {
       componentName: 'TextAreaField',
       dataType: 'Json',
-      displayFunction: '((obj) => truncate(JSON.stringify(obj)))',
+      displayFunction: 'jsonFormat',
       deserilizeFunction: 'JSON.stringify',
     },
     Float: {
