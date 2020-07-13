@@ -221,6 +221,12 @@ const FieldError = (props) => {
 
 const TextAreaField = (props) => {
   const { register } = useFormContext()
+  const { setCoercion } = useCoercion()
+
+  React.useEffect(() => {
+    setCoercion({ name: props.name, dataType: props.dataType })
+  }, [props.name, props.dataType])
+
   const tagProps = inputTagProps(props)
 
   return (
@@ -260,7 +266,11 @@ const InputField = (props) => {
   const { setCoercion } = useCoercion()
 
   React.useEffect(() => {
-    setCoercion(props.name, props.type, props.dataType)
+    setCoercion({
+      name: props.name,
+      type: props.type,
+      dataType: props.dataType,
+    })
   }, [props.name, props.type, props.dataType])
 
   const tagProps = inputTagProps(props)

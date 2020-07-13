@@ -12,6 +12,7 @@ import {
   TextField,
   NumberField,
   CheckboxField,
+  TextAreaField,
   Submit,
 } from 'src/form/form'
 
@@ -23,6 +24,17 @@ describe('Form', () => {
         <NumberField name="nf" defaultValue="42" />
         <TextField name="ff" defaultValue="3.14" dataType="Float" />
         <CheckboxField name="cf" defaultChecked={true} />
+        <TextAreaField
+          name="jf"
+          dataType="Json"
+          defaultValue={`
+            {
+              "key_one": "value1",
+              "key_two": 2,
+              "false": false
+            }
+          `}
+        />
         <Submit>Save</Submit>
       </Form>
     )
@@ -75,6 +87,11 @@ describe('Form', () => {
         nf: 4224, // i.e. NOT "4224"
         ff: 3.141592,
         cf: true,
+        jf: {
+          key_one: 'value1',
+          key_two: 2,
+          false: false,
+        },
       },
       expect.anything() // event that triggered the onSubmit call
     )

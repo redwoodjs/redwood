@@ -27,7 +27,7 @@ export const useCoercion = () => {
 
   const coerce = (name, value) => coercionContext.coercions[name](value)
 
-  const setCoercion = (name, type, dataType) => {
+  const setCoercion = ({ name, type, dataType }) => {
     const coercionFunction =
       COERCION_FUNCTIONS[dataType || inputTypeToDataTypeMapping[type]] ||
       ((value) => value)
