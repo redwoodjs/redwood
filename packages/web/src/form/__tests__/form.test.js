@@ -28,6 +28,18 @@ describe('Form', () => {
     )
   }
 
+  const TestComponentWithWrappedFormElements = ({ onSubmit = () => {} }) => {
+    return (
+      <Form onSubmit={onSubmit}>
+        <p>Some text</p>
+        <div className="field">
+          <TextField name="wrapped-ff" defaultValue="3.14" dataType="Float" />
+        </div>
+        <Submit>Save</Submit>
+      </Form>
+    )
+  }
+
   afterEach(() => {
     cleanup()
   })
@@ -64,6 +76,20 @@ describe('Form', () => {
         ff: 3.141592,
         cf: true,
       },
+      expect.anything() // event that triggered the onSubmit call
+    )
+  })
+
+  it('finds nested form fields to coerce', async () => {
+    const mockFn = jest.fn()
+
+    render(<TestComponentWithWrappedFormElements onSubmit={mockFn} />)
+
+    fireEvent.click(screen.getByText('Save'))
+
+    await waitFor(() => expect(mockFn).toHaveBeenCalledTimes(1))
+    expect(mockFn).toBeCalledWith(
+      { 'wrapped-ff': 3.14 },
       expect.anything() // event that triggered the onSubmit call
     )
   })
