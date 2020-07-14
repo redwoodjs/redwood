@@ -24,25 +24,33 @@ export const resetMockData = () => {
  * ```
  */
 export const mockData = (data: any, name?: MockName) => {
+  console.log('----------> ', name, data)
+
   if (!name) {
     return data
   }
+
   if (MOCK_DATA[name]) {
     throw new Error(`A mock with "${name}" already exists.`)
   }
 
+  console.log('name', name)
+
   MOCK_DATA[name] = data
   return data
 }
-export const __RW__mockData = mockData
 
 /**
  * Get the mock data associated to `name`
  */
 export const getMockData = (name: MockName) => {
   if (!MOCK_DATA[name]) {
+    // The user might be trying to retrieve a key that they've set themselves.
+    const originalName = name.split(':')[1]
+    if (MOCK_DATA[originalName]) {
+      return MOCK_DATA[originalName]
+    }
     throw new Error(`A mock with "${name}" does not exist.`)
   }
   return MOCK_DATA[name]
 }
-export const __RW__getMockData = getMockData
