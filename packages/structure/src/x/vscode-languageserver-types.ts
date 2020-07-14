@@ -190,3 +190,50 @@ export function Range_equals(r1: Range, r2: Range): boolean {
     return [r.start.line, r.start.character, r.end.line, r.end.character]
   }
 }
+
+function DiagnosticSeverity_getLabel(severity?: DiagnosticSeverity): string {
+  const { Information, Error, Hint, Warning } = DiagnosticSeverity
+  const labels = {
+    [Information]: 'info',
+    [Error]: 'error',
+    [Hint]: 'hint',
+    [Warning]: 'warning',
+  }
+  return labels[severity ?? Information]
+}
+
+export type GetSeverityLabelFunction = typeof DiagnosticSeverity_getLabel
+
+interface ExtendedDiagnosticFormatOpts {
+  cwd?: string
+  getSeverityLabel?: GetSeverityLabelFunction
+}
+
+/**
+ * Returns a string representation of a diagnostic.
+ * TSC style single-line errors:
+ * ex: "b.ts:1:2: error: this is a message"
+ * ex: "/path/to/app/b.ts:1:2: info: this is a message"
+ */
+export function ExtendedDiagnostic_format(
+  d: ExtendedDiagnostic,
+  opts?: ExtendedDiagnosticFormatOpts
+) {
+  const {
+    diagnostic: { severity, message, code },
+  } = d
+  const cwd = opts?.cwd
+  const getSeverityLabel = opts?.getSeverityLabel ?? DiagnosticSeverity_getLabel
+
+  let base = 'file://'
+  if (cwd) base = URL_file(cwd)
+  if (!base.endsWith('/')) base += '/'
+  const file = LocationLike_toTerminalLink(d).substr(base.length)
+
+  const severityLabel = getSeverityLabel(severity)
+
+  const errorCode = code ? ` (${code})` : ''
+
+  const str = `${file}: ${severityLabel}${errorCode}: ${message}`
+  return str
+}
