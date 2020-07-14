@@ -11,7 +11,7 @@ export const StorybookLoader = ({ storyFn }) => {
 
   useEffect(() => {
     const init = async () => {
-      await msw.startServer()
+      await msw.start()
       // Import all the `*.mock.*` files.
       const reqs = require.context(
         '~__REDWOOD__USER_WEB_SRC',
