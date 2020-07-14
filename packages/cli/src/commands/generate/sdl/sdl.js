@@ -28,7 +28,7 @@ const modelFieldToSDL = (field, required = true, types = {}) => {
       field.kind === 'object' ? idType(types[field.type]) : field.type
   }
 
-  let dictionary = {
+  const dictionary = {
     Json: 'JSON',
   }
 
