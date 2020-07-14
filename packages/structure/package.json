@@ -1,20 +1,21 @@
 {
-  "name": "@redwoodjs/project-model",
-  "version": "0.1.0",
+  "name": "@redwoodjs/structure",
+  "description": "noun: the arrangement of and relations between the parts or elements of something complex",
+  "version": "0.13.0",
   "license": "MIT",
   "main": "dist/index.js",
   "files": [
     "dist"
   ],
   "dependencies": {
-    "@redwoodjs/internal": "^0.8.2",
     "@prisma/sdk": "^2.1.1",
+    "@redwoodjs/internal": "^0.8.2",
     "camelcase": "^6.0.0",
     "deepmerge": "^4.2.2",
+    "enquirer": "2.3.6",
     "findup-sync": "^4.0.0",
     "graphql": "^15.1.0",
     "lazy-get-decorator": "^2.2.0",
-    "enquirer": "2.3.6",
     "lodash": "^4.17.15",
     "lodash-decorators": "^6.0.1",
     "lru-cache": "^5.1.1",

@@ -2,6 +2,7 @@ import {
   FieldDefinitionNode,
   ObjectTypeDefinitionNode,
 } from 'graphql/language/ast'
+import { URL_file } from 'src/x/URL'
 import {
   CodeAction,
   DiagnosticSeverity,
@@ -82,7 +83,7 @@ export const ${this.field.name.value} = ({${params}}) => {
     const { service } = this.parent
     const change = new WorkspaceChange({ documentChanges: [] })
     let insertPosition = Position.create(0, 0)
-    let uri = 'file://' + this.parent.serviceFilePath
+    let uri = URL_file(this.parent.serviceFilePath)
     if (service) {
       // we'll insert into the end of an existing file
       const lastLine = service.sf.getEndLineNumber()

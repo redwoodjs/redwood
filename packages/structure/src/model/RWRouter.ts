@@ -1,3 +1,4 @@
+import { URL_file } from 'src/x/URL'
 import * as tsm from 'ts-morph'
 import {
   CodeAction,
@@ -96,7 +97,7 @@ export class RWRouter extends FileNode {
   @lazy() get quickFix_addNotFoundpage() {
     if (!this.jsxNode) return undefined
     const change = new WorkspaceChange({ documentChanges: [] })
-    let uri = `file://${this.parent.defaultNotFoundPageFilePath}`
+    let uri = URL_file(this.parent.defaultNotFoundPageFilePath)
     const p = this.parent.pages.find((p) => p.basenameNoExt === 'NotFoundPage')
     if (p) {
       uri = p.uri
@@ -132,7 +133,7 @@ export class RWRouter extends FileNode {
   *diagnostics() {
     if (!this.fileExists) {
       // should we assign this error to the project? to redwood.toml?
-      const uri = `file://${this.parent.projectRoot}/redwood.toml`
+      const uri = URL_file(this.parent.projectRoot, 'redwood.toml')
       const message = `Routes.js does not exist`
       yield err(uri, message)
       // TODO: add quickFix (create a simple Routes.js)

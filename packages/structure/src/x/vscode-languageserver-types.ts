@@ -10,6 +10,7 @@ import {
   Position,
   Range,
 } from 'vscode-languageserver-types'
+import { URL_file } from './URL'
 
 export function Range_contains(range: Range, pos: Position): boolean {
   if (Position_compare(range.start, pos) === 'greater') return false
@@ -43,13 +44,13 @@ export function Range_fromNode(node: tsm.Node): Range {
 
 export function Location_fromNode(node: tsm.Node): Location {
   return {
-    uri: 'file://' + node.getSourceFile().getFilePath(),
+    uri: URL_file(node.getSourceFile().getFilePath()),
     range: Range_fromNode(node),
   }
 }
 
 export function Location_fromFilePath(filePath: string): Location {
-  return { uri: `file://${filePath}`, range: Range.create(0, 0, 0, 0) }
+  return { uri: URL_file(filePath), range: Range.create(0, 0, 0, 0) }
 }
 
 /**
@@ -57,7 +58,7 @@ export function Location_fromFilePath(filePath: string): Location {
  * ex: "file:///foo.ts:2:3"
  * @param loc
  */
-export function LocationLike_toLink(loc: LocationLike): string {
+export function LocationLike_toTerminalLink(loc: LocationLike): string {
   const {
     uri,
     range: {
@@ -67,12 +68,26 @@ export function LocationLike_toLink(loc: LocationLike): string {
   return `${uri}:${line + 1}:${character + 1}`
 }
 
+/**
+ * returns vscode-terminal-friendly (clickable) link with line/column information
+ * ex: "file:///foo.ts:2:3"
+ * @param loc
+ */
+export function LocationLike_toHashLink(loc: LocationLike): string {
+  const {
+    uri,
+    range: {
+      start: { line, character },
+    },
+  } = LocationLike_toLocation(loc)
+  return `${uri}#${line + 1}:${character + 1}`
+}
+
 export type LocationLike = tsm.Node | string | Location | ExtendedDiagnostic
 
 export function LocationLike_toLocation(x: LocationLike): Location {
   if (typeof x === 'string') {
-    if (x.startsWith('/')) x = 'file://' + x
-    return { uri: x, range: Range.create(0, 0, 0, 0) }
+    return { uri: URL_file(x), range: Range.create(0, 0, 0, 0) }
   }
   if (typeof x === 'object') {
     if (x instanceof tsm.Node) return Location_fromNode(x)
@@ -174,4 +189,51 @@ export function Range_equals(r1: Range, r2: Range): boolean {
   function toArr(r: Range) {
     return [r.start.line, r.start.character, r.end.line, r.end.character]
   }
+}
+
+function DiagnosticSeverity_getLabel(severity?: DiagnosticSeverity): string {
+  const { Information, Error, Hint, Warning } = DiagnosticSeverity
+  const labels = {
+    [Information]: 'info',
+    [Error]: 'error',
+    [Hint]: 'hint',
+    [Warning]: 'warning',
+  }
+  return labels[severity ?? Information]
+}
+
+export type GetSeverityLabelFunction = typeof DiagnosticSeverity_getLabel
+
+interface ExtendedDiagnosticFormatOpts {
+  cwd?: string
+  getSeverityLabel?: GetSeverityLabelFunction
+}
+
+/**
+ * Returns a string representation of a diagnostic.
+ * TSC style single-line errors:
+ * ex: "b.ts:1:2: error: this is a message"
+ * ex: "/path/to/app/b.ts:1:2: info: this is a message"
+ */
+export function ExtendedDiagnostic_format(
+  d: ExtendedDiagnostic,
+  opts?: ExtendedDiagnosticFormatOpts
+) {
+  const {
+    diagnostic: { severity, message, code },
+  } = d
+  const cwd = opts?.cwd
+  const getSeverityLabel = opts?.getSeverityLabel ?? DiagnosticSeverity_getLabel
+
+  let base = 'file://'
+  if (cwd) base = URL_file(cwd)
+  if (!base.endsWith('/')) base += '/'
+  const file = LocationLike_toTerminalLink(d).substr(base.length)
+
+  const severityLabel = getSeverityLabel(severity)
+
+  const errorCode = code ? ` (${code})` : ''
+
+  const str = `${file}: ${severityLabel}${errorCode}: ${message}`
+  return str
 }
