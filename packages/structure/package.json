@@ -8,7 +8,7 @@
     "dist"
   ],
   "dependencies": {
-    "@prisma/sdk": "~2.2.1",
+    "@prisma/sdk": "~2.2.2",
     "@redwoodjs/internal": "^0.8.2",
     "camelcase": "^6.0.0",
     "deepmerge": "^4.2.2",
