@@ -1,8 +1,6 @@
-import { graphql } from './msw'
-
 export type MockName = string
 
-let MOCK_DATA: Record<MockName, any> = {}
+export let MOCK_DATA: Record<MockName, any> = {}
 
 export const resetMockData = () => {
   MOCK_DATA = {}
@@ -36,14 +34,7 @@ export const mockData = (data: any, name?: MockName) => {
   if (MOCK_DATA[name]) {
     throw new Error(`A mock with "${name}" already exists.`)
   }
-
   MOCK_DATA[name] = data
-
-  // Set an automated response for query and mutation graphql requests
-  const echoResolver = (req, res, ctx) => res(ctx.data(data))
-  graphql.query(name, echoResolver)
-  //graphql.mutation(name, echoResolver)
-
   return data
 }
 
