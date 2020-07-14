@@ -96,6 +96,8 @@ module.exports = {
   globals: {
     gql: 'readonly',
     React: 'readonly',
+    mockData: 'readonly',
+    getMockData: 'readonly',
   },
   rules: {
     'prettier/prettier': 'error',
