@@ -74,6 +74,10 @@ const Post = ({ post }) => {
               <th>postedAt</th>
               <td>{post.postedAt}</td>
             </tr>
+            <tr>
+              <th>metadata</th>
+              <td>{JSON.stringify(post.metadata)}</td>
+            </tr>
           </tbody>
         </table>
       </div>
