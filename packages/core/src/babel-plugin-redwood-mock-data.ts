@@ -2,11 +2,12 @@ import path from 'path'
 
 import type { PluginObj, types } from '@babel/core'
 
-const cleanFileName = (f) => path.dirname(f).split('/').slice(-3).join('/')
+const cleanFileName = (f: string) =>
+  path.dirname(f).split('/').slice(-3).join('/')
 
 /**
- * When developing with Storybook or Jest you'll need a way to mock data, and
- * network requests.
+ * When developing with Storybook or Jest you'll need a way to mock data
+ * and network requests.
  *
  * We provides two functions `mockData` and `getMockData` to store and
  * retrieve mock data.
@@ -37,8 +38,8 @@ const cleanFileName = (f) => path.dirname(f).split('/').slice(-3).join('/')
  * // MyCell/MyCell.mock.js
  * export const standard = mockData({ answer: 42 }, 'GetUniversalConstant')
  * ```
- * Any GraphQL queries named "GetUniversalConstant" will now use the mocked
- * response `{ answer: 42 }` in Storybook and Jest.
+ * Any GraphQL queries or mutations named "GetUniversalConstant" will now use the
+ * mocked response `{ answer: 42 }` in Storybook and Jest.
  */
 export default function ({ types: t }: { types: typeof types }): PluginObj {
   return {
@@ -52,7 +53,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
 
         const init = declaration.declarations[0]?.init as types.CallExpression
         const calleeName = (init?.callee as types.Identifier)?.name
-        // Is this export calling `mockData`?
+        // Only run for named exports that call `mockData`
         if (calleeName !== 'mockData') {
           return
         }
@@ -64,8 +65,8 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         p.insertAfter(
           t.expressionStatement(
             t.callExpression(t.identifier('__RW__mockData'), [
-              t.stringLiteral(dirName + ':' + exportName),
               init.arguments[0],
+              t.stringLiteral(dirName + ':' + exportName),
             ])
           )
         )

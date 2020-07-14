@@ -140,5 +140,11 @@ module.exports = () => ({
       test: ['./web/src/Routes.js', './web/src/Routes.tsx'],
       plugins: [require('../dist/babel-plugin-redwood-routes-auto-loader')],
     },
+    // Automatically determine keys for saving and retrieving mock data.
+    // ** Files ending in .mock, .stories, .test **
+    {
+      test: /.+(stories|mock|test).(js|ts|tsx|jsx)$/,
+      plugins: [require('../dist/babel-plugin-redwood-mock-data')],
+    },
   ],
 })
