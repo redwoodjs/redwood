@@ -40,6 +40,20 @@ describe('Form', () => {
     )
   }
 
+  const NumberFieldsWrapper = () => (
+    <div>
+      <h4>This is a wrapped form field header</h4>
+      <div>
+        <label htmlFor="wrapped-nf-1">Wrapped NumberField</label>
+        <NumberField name="wrapped-nf-1" defaultValue="0101" />
+      </div>
+      <div>
+        <label htmlFor="wrapped-nf-2">Wrapped NumberField</label>
+        <NumberField name="wrapped-nf-2" defaultValue="0102" />
+      </div>
+    </div>
+  )
+
   const TestComponentWithWrappedFormElements = ({ onSubmit = () => {} }) => {
     return (
       <Form onSubmit={onSubmit}>
@@ -47,6 +61,7 @@ describe('Form', () => {
         <div className="field">
           <TextField name="wrapped-ff" defaultValue="3.14" dataType="Float" />
         </div>
+        <NumberFieldsWrapper />
         <Submit>Save</Submit>
       </Form>
     )
@@ -106,7 +121,7 @@ describe('Form', () => {
 
     await waitFor(() => expect(mockFn).toHaveBeenCalledTimes(1))
     expect(mockFn).toBeCalledWith(
-      { 'wrapped-ff': 3.14 },
+      { 'wrapped-ff': 3.14, 'wrapped-nf-1': 101, 'wrapped-nf-2': 102 },
       expect.anything() // event that triggered the onSubmit call
     )
   })
