@@ -1,3 +1,5 @@
+import { graphql } from './msw'
+
 export type MockName = string
 
 let MOCK_DATA: Record<MockName, any> = {}
@@ -10,22 +12,23 @@ export const resetMockData = () => {
  * Save mock data in a global store.
  *
  * `mockData` can be a bit magical because it's supported by a Redwood babel-plugin
- * that automatically determines the name from the named export and file location.
+ * that automatically determines the name (to associate the mock against)
+ * from the named export and file location.
  *
- * @example: Magical-mock-data
+ * @example:
  * ```js
  * // ComponentName/ComponentName.mock.js
  * export const standard = mockData({ answer: 42 })
  *
  * // ComponentName/ComponentName.stories.js
  * export const generated = () => {
- *    return <ComponentName {...mockData('standard')} />
+ *    return <ComponentName {...getMockData('standard')} />
  * }
  * ```
+ * @todo - generate types
+ * @todo - allow user to overwrite default response.
  */
 export const mockData = (data: any, name?: MockName) => {
-  console.log('----------> ', name, data)
-
   if (!name) {
     return data
   }
@@ -34,9 +37,13 @@ export const mockData = (data: any, name?: MockName) => {
     throw new Error(`A mock with "${name}" already exists.`)
   }
 
-  console.log('name', name)
-
   MOCK_DATA[name] = data
+
+  // Set an automated response for query and mutation graphql requests
+  const echoResolver = (req, res, ctx) => res(ctx.data(data))
+  graphql.query(name, echoResolver)
+  //graphql.mutation(name, echoResolver)
+
   return data
 }
 
