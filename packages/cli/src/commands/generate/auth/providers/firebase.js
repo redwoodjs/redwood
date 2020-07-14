@@ -21,7 +21,8 @@ const firebaseClient = ((config) => {
   authProvider: { client: 'firebaseClient', type: 'firebase' },
 }
 
-export const packages = ['firebase']
+export const webPackages = ['firebase']
+export const apiPackages = []
 
 export const notes = [
   'You will need to create several environment variables with your Firebase config options.',

@@ -25,7 +25,7 @@ declare module '@redwoodjs/router' {
      * they will be redirected to the route name passed to `unauthenticated`.
      */
     unauthenticated: namedRoute
-    children: typeof Route[]
+    children: Array<typeof Route>
   }>
 
   const Router: React.FunctionComponent<{

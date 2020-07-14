@@ -35,6 +35,12 @@ module.exports = {
         },
       },
     ],
+    /**
+     * NOTE
+     * Experimental decorators are used in `@redwoodjs/project-model`.
+     * https://github.com/tc39/proposal-decorators
+     **/
+    ['@babel/plugin-proposal-decorators', { legacy: true }],
     ['@babel/plugin-proposal-class-properties', { loose: true }],
     [
       '@babel/plugin-transform-runtime',
@@ -46,7 +52,7 @@ module.exports = {
         // Transform-runtime assumes that @babel/runtime@7.0.0 is installed.
         // Specifying the version can result in a smaller bundle size.
         // TODO: Grab version for package.json
-        version: '^7.8.3',
+        version: '^7.10.4',
       },
     ],
   ],
