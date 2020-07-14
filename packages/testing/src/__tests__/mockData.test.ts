@@ -16,7 +16,7 @@ it('throws when you try to save a key twice', () => {
   expect(() =>
     mockData({ answer: 42 }, 'TheUniversalConstant')
   ).toThrowErrorMatchingInlineSnapshot(
-    `"A mock with \\"TheUniversalConstant\\" already exists."`
+    `"Mock data for \\"TheUniversalConstant\\" already exists."`
   )
 })
 
@@ -24,6 +24,6 @@ it('throws when retrieving a key that does not exist', () => {
   expect(() =>
     getMockData('TheUniversalConstant')
   ).toThrowErrorMatchingInlineSnapshot(
-    `"A mock with \\"TheUniversalConstant\\" does not exist."`
+    `"No mock data available for \\"TheUniversalConstant\\"."`
   )
 })
