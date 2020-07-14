@@ -9,6 +9,18 @@ const DELETE_POST_MUTATION = gql`
   }
 `
 
+const timeTag = (datetime) => {
+  return (
+    <time dateTime={datetime} title={datetime}>
+      {new Date(datetime).toUTCString()}
+    </time>
+  )
+}
+
+const checkboxInputTag = (checked) => {
+  return <input type="checkbox" checked={checked} disabled />
+}
+
 const Post = ({ post }) => {
   const { addMessage } = useFlash()
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
@@ -35,44 +47,44 @@ const Post = ({ post }) => {
         <table className="rw-table">
           <tbody>
             <tr>
-              <th>id</th>
+              <th>Id</th>
               <td>{post.id}</td>
             </tr>
             <tr>
-              <th>title</th>
+              <th>Title</th>
               <td>{post.title}</td>
             </tr>
             <tr>
-              <th>slug</th>
+              <th>Slug</th>
               <td>{post.slug}</td>
             </tr>
             <tr>
-              <th>author</th>
+              <th>Author</th>
               <td>{post.author}</td>
             </tr>
             <tr>
-              <th>body</th>
+              <th>Body</th>
               <td>{post.body}</td>
             </tr>
             <tr>
-              <th>image</th>
+              <th>Image</th>
               <td>{post.image}</td>
             </tr>
             <tr>
-              <th>isPinned</th>
-              <td>{post.isPinned}</td>
+              <th>Is pinned</th>
+              <td>{checkboxInputTag(post.isPinned)}</td>
             </tr>
             <tr>
-              <th>readTime</th>
+              <th>Read time</th>
               <td>{post.readTime}</td>
             </tr>
             <tr>
-              <th>rating</th>
+              <th>Rating</th>
               <td>{post.rating}</td>
             </tr>
             <tr>
-              <th>postedAt</th>
-              <td>{post.postedAt}</td>
+              <th>Posted at</th>
+              <td>{timeTag(post.postedAt)}</td>
             </tr>
           </tbody>
         </table>
