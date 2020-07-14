@@ -35,3 +35,5 @@ export const rest: RestMock = {
   patch: (...args) => server.use(originalRest.patch(...args)),
   options: (...args) => server.use(originalRest.options(...args)),
 }
+
+export * from './mockData'
