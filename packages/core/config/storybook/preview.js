@@ -9,5 +9,7 @@ const { StorybookLoader } = require('@redwoodjs/core/dist/storybook')
 require('~__REDWOOD__USER_WEB_DEFAULT_CSS')
 
 addDecorator(
-  (storyFn) => React.createElement(StorybookLoader, { storyFn })
+  (storyFn, { id }) => {
+    return React.createElement(StorybookLoader, { storyFn, id })
+  }
 )
