@@ -12,6 +12,7 @@ import {
   TextField,
   NumberField,
   CheckboxField,
+  TextAreaField,
   Submit,
 } from 'src/form/form'
 
@@ -23,6 +24,44 @@ describe('Form', () => {
         <NumberField name="nf" defaultValue="42" />
         <TextField name="ff" defaultValue="3.14" dataType="Float" />
         <CheckboxField name="cf" defaultChecked={true} />
+        <TextAreaField
+          name="jf"
+          dataType="Json"
+          defaultValue={`
+            {
+              "key_one": "value1",
+              "key_two": 2,
+              "false": false
+            }
+          `}
+        />
+        <Submit>Save</Submit>
+      </Form>
+    )
+  }
+
+  const NumberFieldsWrapper = () => (
+    <div>
+      <h4>This is a wrapped form field header</h4>
+      <div>
+        <label htmlFor="wrapped-nf-1">Wrapped NumberField</label>
+        <NumberField name="wrapped-nf-1" defaultValue="0101" />
+      </div>
+      <div>
+        <label htmlFor="wrapped-nf-2">Wrapped NumberField</label>
+        <NumberField name="wrapped-nf-2" defaultValue="0102" />
+      </div>
+    </div>
+  )
+
+  const TestComponentWithWrappedFormElements = ({ onSubmit = () => {} }) => {
+    return (
+      <Form onSubmit={onSubmit}>
+        <p>Some text</p>
+        <div className="field">
+          <TextField name="wrapped-ff" defaultValue="3.14" dataType="Float" />
+        </div>
+        <NumberFieldsWrapper />
         <Submit>Save</Submit>
       </Form>
     )
@@ -63,7 +102,26 @@ describe('Form', () => {
         nf: 4224, // i.e. NOT "4224"
         ff: 3.141592,
         cf: true,
+        jf: {
+          key_one: 'value1',
+          key_two: 2,
+          false: false,
+        },
       },
+      expect.anything() // event that triggered the onSubmit call
+    )
+  })
+
+  it('finds nested form fields to coerce', async () => {
+    const mockFn = jest.fn()
+
+    render(<TestComponentWithWrappedFormElements onSubmit={mockFn} />)
+
+    fireEvent.click(screen.getByText('Save'))
+
+    await waitFor(() => expect(mockFn).toHaveBeenCalledTimes(1))
+    expect(mockFn).toBeCalledWith(
+      { 'wrapped-ff': 3.14, 'wrapped-nf-1': 101, 'wrapped-nf-2': 102 },
       expect.anything() // event that triggered the onSubmit call
     )
   })
