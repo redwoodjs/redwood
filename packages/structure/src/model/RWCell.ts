@@ -87,6 +87,8 @@ export class RWCell extends RWComponent {
       yield {
         uri: this.uri,
         diagnostic: {
+          // TODO: Try to figure out if we can point directly to the syntax error.
+          range: Range_fromNode(this.sf.getVariableDeclaration('QUERY')!),
           message: e.message,
           severity: DiagnosticSeverity.Error,
         },
