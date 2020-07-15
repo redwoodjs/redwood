@@ -5,7 +5,8 @@
     { "path": "packages/dev-server" },
     { "path": "packages/internal" },
     { "path": "packages/auth" },
-    { "path": "packages/testing" }
+    { "path": "packages/testing" },
+    { "path": "packages/project-model" }
   ],
   "files": []
 }

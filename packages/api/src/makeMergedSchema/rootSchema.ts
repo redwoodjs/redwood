@@ -1,10 +1,10 @@
-import type { Context } from 'src/globalContext'
-
+import type { GlobalContext } from 'src/globalContext'
 import gql from 'graphql-tag'
 import { GraphQLDate, GraphQLTime, GraphQLDateTime } from 'graphql-iso-date'
 import GraphQLJSON, { GraphQLJSONObject } from 'graphql-type-json'
 
-// @ts-ignore
+
+// @ts-ignore - not inside the <rootDir>
 import apiPackageJson from 'src/../package.json'
 
 /**
@@ -28,7 +28,16 @@ export const schema = gql`
   }
 `
 
-export const resolvers = {
+export interface Resolvers {
+  Date: typeof GraphQLDate
+  Time: typeof GraphQLTime
+  DateTime: typeof GraphQLDateTime
+  JSON: typeof GraphQLJSON
+  JSONObject: typeof GraphQLJSONObject
+  Query: {}
+}
+
+export const resolvers: Resolvers = {
   Date: GraphQLDate,
   Time: GraphQLTime,
   DateTime: GraphQLDateTime,
@@ -37,9 +46,9 @@ export const resolvers = {
   Query: {
     redwood: () => ({
       version: apiPackageJson.version,
-      currentUser: (_args: any, context: Context) => {
+      currentUser: (_args: any, context: GlobalContext) => {
         return context?.currentUser
-      }
+      },
     }),
   },
 }
