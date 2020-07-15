@@ -144,10 +144,13 @@ const FormError = ({
 }
 
 const coerceValues = (data, coerce) => {
-  // TODO: ie11 compat?
-  return Object.fromEntries(
-    Object.entries(data).map(([name, value]) => [name, coerce(name, value)])
-  )
+  const coercedData = {}
+
+  Object.keys(data).forEach((name) => {
+    coercedData[name] = coerce(name, data[name])
+  })
+
+  return coercedData
 }
 
 const FormWithCoercionContext = (props) => {
