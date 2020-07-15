@@ -52,7 +52,8 @@ describe('Redwood Project Model', () => {
     expect(dss.length).toBeGreaterThan(0)
   })
 })
-describe('Cells', () => {
+
+describe.only('Cells', () => {
   it('Correctly determines a Cell component vs a normal component', () => {
     const projectRoot = getFixtureDir('example-todo-main-with-errors')
     const project = new RWProject({ projectRoot, host: new DefaultHost() })
@@ -61,6 +62,12 @@ describe('Cells', () => {
     expect(cells.map((cell) => basename(cell.filePath))).not.toContain(
       'TableCell.js'
     )
+  })
+
+  it('Can get the operating name of the QUERY', () => {
+    const projectRoot = getFixtureDir('example-todo-main')
+    const project = new RWProject({ projectRoot, host: new DefaultHost() })
+    expect(project.cells[0].queryOperationName).toMatch('TodoListCell_GetTodos')
   })
 })
 
