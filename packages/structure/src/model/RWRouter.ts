@@ -1,4 +1,4 @@
-import { URL_file } from 'src/x/URL'
+import { URL_file } from '../x/URL'
 import * as tsm from 'ts-morph'
 import {
   CodeAction,
