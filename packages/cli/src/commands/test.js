@@ -1,5 +1,3 @@
-import path from 'path'
-
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
