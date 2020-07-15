@@ -5,6 +5,7 @@ import execa from 'execa'
 import { getPaths } from '@redwoodjs/internal'
 
 export const command = 'storybook'
+export const aliases = ['sb']
 export const description =
   'Launch Storybook, an isolated component development environment'
 

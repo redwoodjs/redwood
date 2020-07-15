@@ -2,7 +2,7 @@ import {
   FieldDefinitionNode,
   ObjectTypeDefinitionNode,
 } from 'graphql/language/ast'
-import { URL_file } from 'src/x/URL'
+import { URL_file } from '../x/URL'
 import {
   CodeAction,
   DiagnosticSeverity,
