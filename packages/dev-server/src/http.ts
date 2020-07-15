@@ -37,8 +37,7 @@ export const server = ({
     `)
   })
 
-  app.all(
-    '/:routeName',
+  const lambdaHandler =
     async (req: Request, res: Response): Promise<void> => {
       const { routeName } = req.params
       const lambdaFunction = LAMBDA_FUNCTIONS[routeName]
@@ -50,7 +49,9 @@ export const server = ({
       }
       await requestHandler(req, res, lambdaFunction)
     }
-  )
+
+  app.all('/:routeName', lambdaHandler)
+  app.all('/:routeName/*', lambdaHandler)
 
   return app
 }
