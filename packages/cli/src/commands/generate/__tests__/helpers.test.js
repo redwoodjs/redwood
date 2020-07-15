@@ -248,7 +248,7 @@ test('relationsForModel returns related field names from a has-many relationship
     uniqueFields: [],
   }
 
-  expect(helpers.relationsForModel(model)).toEqual(['userProfiles'])
+  expect(helpers.relationsForModel(model)).toEqual(['profiles'])
 })
 
 test('intForeignKeysForModel returns names of foreign keys that are Int datatypes', () => {
