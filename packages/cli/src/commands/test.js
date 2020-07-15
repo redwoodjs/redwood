@@ -1,5 +1,6 @@
 import execa from 'execa'
 import terminalLink from 'terminal-link'
+import { getProject } from '@redwoodjs/structure'
 
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
@@ -7,7 +8,7 @@ import c from 'src/lib/colors'
 const jest = require('jest')
 
 // TODO: Get from redwood.toml
-const sides = ['web', 'api']
+const sides = getProject().sides
 
 // https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/scripts/test.js#L39
 function isInGitRepository() {

@@ -25,10 +25,7 @@ export default function getBrowserJestConfig() {
       __REDWOOD__API_PROXY_PATH: '/',
     },
     // transform: { '\\.js$': ['babel-jest', { rootMode: 'upward' }] },
-    setupFilesAfterEnv: [
-      path.resolve(__dirname, './jest.setup.js'),
-      '<rootDir>/jest.setup.js',
-    ],
+    setupFilesAfterEnv: [path.resolve(__dirname, './jest.setup.js')],
     moduleNameMapper: {
       /**
        * Make sure modules that require different versions of these
