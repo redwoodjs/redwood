@@ -154,6 +154,10 @@ export class RWProject extends BaseNode {
       })
   }
 
+  @lazy() get sides() {
+    return ['web', 'api']
+  }
+
   /**
    * A "Cell" is a component that ends in `Cell.{js, jsx, tsx}`, but does not
    * have a default export AND does not export `QUERY`
