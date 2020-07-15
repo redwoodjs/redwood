@@ -12,12 +12,6 @@ const TARGETS_NODE = '12.16.1'
 // were added in minor core-js releases.
 const CORE_JS_VERSION = '3.6'
 
-const path = require('path')
-
-const { getPaths } = require('@redwoodjs/internal')
-
-const redwoodPaths = getPaths()
-
 module.exports = () => ({
   presets: ['@babel/preset-react', '@babel/preset-typescript'],
   plugins: [
@@ -63,7 +57,7 @@ module.exports = () => ({
           'babel-plugin-module-resolver',
           {
             alias: {
-              src: path.join(redwoodPaths.api.base, 'src'),
+              src: './src',
             },
           },
         ],
@@ -107,7 +101,7 @@ module.exports = () => ({
           'babel-plugin-module-resolver',
           {
             alias: {
-              src: path.join(redwoodPaths.web.base, 'src'),
+              src: './src',
             },
           },
         ],
