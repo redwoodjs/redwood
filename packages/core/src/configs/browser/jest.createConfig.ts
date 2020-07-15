@@ -8,10 +8,12 @@ const redwoodPaths = getPaths()
 
 const NODE_MODULES_PATH = path.join(redwoodPaths.base, 'node_modules')
 
-export function getBrowserJestConfig() {
+export default function getBrowserJestConfig() {
   return {
     displayName: {
       color: 'blueBright',
+
+      // TODO: Detect which side this is and name it that instead
       name: 'browser',
     },
 
@@ -23,7 +25,10 @@ export function getBrowserJestConfig() {
       __REDWOOD__API_PROXY_PATH: '/',
     },
     // transform: { '\\.js$': ['babel-jest', { rootMode: 'upward' }] },
-    setupFilesAfterEnv: [path.resolve(__dirname, './jest.setup.browser.js')],
+    setupFilesAfterEnv: [
+      path.resolve(__dirname, './jest.setup.js'),
+      '<rootDir>/jest.setup.js',
+    ],
     moduleNameMapper: {
       /**
        * Make sure modules that require different versions of these

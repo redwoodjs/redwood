@@ -1,3 +1,5 @@
+import path from 'path'
+
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
@@ -29,7 +31,7 @@ function isInMercurialRepository() {
 }
 
 export const command = 'test [side..]'
-export const description = 'Run Jest tests for api and web'
+export const description = 'Run Jest tests'
 export const builder = (yargs) => {
   yargs
     .choices('side', sides)
@@ -68,7 +70,10 @@ export const handler = async ({ side, watch, watchAll, collectCoverage }) => {
     args.push(hasSourceControl ? '--watch' : '--watchAll')
   }
 
-  args.push('--config', './node_modules/@redwoodjs/core/config/jest.config.js')
+  const jestConfigLocation = require.resolve(
+    '@redwoodjs/core/config/jest.config.js'
+  )
+  args.push('--config', jestConfigLocation)
 
   if (sides.length > 0) {
     args.push('--projects', ...sides)
