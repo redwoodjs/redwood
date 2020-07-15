@@ -1,47 +1,20 @@
 import execa from 'execa'
+import Listr from 'listr'
+import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
-import { getProject } from '@redwoodjs/structure'
 
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 
-const jest = require('jest')
-
-// TODO: Get from redwood.toml
-const sides = getProject().sides
-
-// https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/scripts/test.js#L39
-function isInGitRepository() {
-  try {
-    execa.commandSync('git rev-parse --is-inside-work-tree')
-    return true
-  } catch (e) {
-    return false
-  }
-}
-
-function isInMercurialRepository() {
-  try {
-    execa.commandSync('hg --cwd . root')
-    return true
-  } catch (e) {
-    return false
-  }
-}
-
 export const command = 'test [side..]'
-export const description = 'Run Jest tests'
+export const description = 'Run Jest tests for api and web'
 export const builder = (yargs) => {
   yargs
-    .choices('side', sides)
-    .option('watch', {
-      type: 'boolean',
-    })
-    .option('watchAll', {
-      type: 'boolean',
-    })
-    .option('collectCoverage', {
-      type: 'boolean',
+    .positional('side', {
+      choices: ['api', 'web'],
+      default: ['api', 'web'],
+      description: 'Which side(s) to test',
+      type: 'array',
     })
     .epilogue(
       `Also see the ${terminalLink(
@@ -51,48 +24,51 @@ export const builder = (yargs) => {
     )
 }
 
-export const handler = async ({ side, watch, watchAll, collectCoverage }) => {
-  const { cache: CACHE_DIR } = getPaths()
-  const sides = [].concat(side).filter(Boolean)
+export const handler = async ({ side }) => {
+  const { base: BASE_DIR, cache: CACHE_DIR } = getPaths()
 
-  const args = [
-    '--passWithNoTests',
-    watch && '--watch',
-    collectCoverage && '--collectCoverage',
-    watchAll && '--watchAll',
-  ].filter(Boolean)
+  const DB_URL = process.env.TEST_DATABASE_URL || `file:${CACHE_DIR}/test.db`
 
-  // Watch unless on CI or explicitly running all tests
-  if (!process.env.CI && !watchAll && !collectCoverage) {
-    // https://github.com/facebook/create-react-app/issues/5210
-    const hasSourceControl = isInGitRepository() || isInMercurialRepository()
-    args.push(hasSourceControl ? '--watch' : '--watchAll')
+  const execCommands = {
+    api: {
+      cwd: `${BASE_DIR}/api`,
+      cmd: `DATABASE_URL=${DB_URL} yarn rw db up && yarn jest`,
+      args: [
+        '--passWithNoTests',
+        '--config ../node_modules/@redwoodjs/core/config/jest.config.api.js',
+      ],
+    },
+    web: {
+      cwd: `${BASE_DIR}/web`,
+      cmd: 'yarn jest',
+      args: [
+        '--passWithNoTests',
+        '--config ../node_modules/@redwoodjs/core/config/jest.config.web.js',
+      ],
+    },
   }
 
-  const jestConfigLocation = require.resolve(
-    '@redwoodjs/core/config/jest.config.js'
+  const tasks = new Listr(
+    side.map((sideName) => {
+      const { cmd, args, cwd } = execCommands[sideName]
+      return {
+        title: `Running '${sideName}' jest tests`,
+        task: () => {
+          return execa(cmd, args, {
+            stdio: 'inherit',
+            shell: true,
+            cwd,
+          })
+        },
+      }
+    }),
+    {
+      renderer: VerboseRenderer,
+    }
   )
-  args.push('--config', jestConfigLocation)
-
-  if (sides.length > 0) {
-    args.push('--projects', ...sides)
-  }
 
   try {
-    /**
-     * Migrate test database. This should be moved to somehow be done on a
-     * per-side basis if possible.
-     */
-    const DATABASE_URL =
-      process.env.TEST_DATABASE_URL || `file:${CACHE_DIR}/test.db`
-
-    await execa.command(`yarn rw db up`, {
-      stdio: 'inherit',
-      shell: true,
-      env: { DATABASE_URL },
-    })
-
-    jest.run(args)
+    await tasks.run()
   } catch (e) {
     console.log(c.error(e.message))
   }

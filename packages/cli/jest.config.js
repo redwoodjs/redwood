@@ -4,5 +4,4 @@ module.exports = {
   moduleNameMapper: {
     'src/(.*)': '<rootDir>/src/$1',
   },
-  testTimeout: 15000,
 }
