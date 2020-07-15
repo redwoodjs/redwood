@@ -64,7 +64,7 @@ describe('Cells', () => {
     )
   })
 
-  it('Can get the operating name of the QUERY', () => {
+  it('Can get the operation name of the QUERY', () => {
     const projectRoot = getFixtureDir('example-todo-main')
     const project = new RWProject({ projectRoot, host: new DefaultHost() })
     const cell = project.cells.find((x) => x.uri.endsWith('TodoListCell.js'))
