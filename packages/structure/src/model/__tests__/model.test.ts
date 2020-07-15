@@ -53,7 +53,7 @@ describe('Redwood Project Model', () => {
   })
 })
 
-describe.only('Cells', () => {
+describe('Cells', () => {
   it('Correctly determines a Cell component vs a normal component', () => {
     const projectRoot = getFixtureDir('example-todo-main-with-errors')
     const project = new RWProject({ projectRoot, host: new DefaultHost() })
@@ -67,7 +67,20 @@ describe.only('Cells', () => {
   it('Can get the operating name of the QUERY', () => {
     const projectRoot = getFixtureDir('example-todo-main')
     const project = new RWProject({ projectRoot, host: new DefaultHost() })
-    expect(project.cells[0].queryOperationName).toMatch('TodoListCell_GetTodos')
+    const cell = project.cells.find((x) => x.uri.endsWith('TodoListCell.js'))
+    expect(cell.queryOperationName).toMatch('TodoListCell_GetTodos')
+  })
+
+  it('Warns you when you do not supply a name to QUERY', async (done) => {
+    const projectRoot = getFixtureDir('example-todo-main-with-errors')
+    const project = new RWProject({ projectRoot, host: new DefaultHost() })
+
+    const cell = project.cells.find((x) => x.uri.endsWith('TodoListCell.js'))
+    const x = await cell.collectDiagnostics()
+    expect(x.map((e) => e.diagnostic.message)).toContain(
+      'We recommend that you name your query operation'
+    )
+    done()
   })
 })
 

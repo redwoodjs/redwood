@@ -84,6 +84,13 @@ export class RWCell extends RWComponent {
       }
     } catch (e) {
       // Maybe the AST has a syntax error...
+      yield {
+        uri: this.uri,
+        diagnostic: {
+          message: e.message,
+          severity: DiagnosticSeverity.Error,
+        },
+      }
     }
 
     // TODO: check that exported QUERY is semantically valid GraphQL (fields exist)
