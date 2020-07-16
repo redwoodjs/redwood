@@ -31,7 +31,7 @@ class Runner {
         cmd: 'yarn redwood ' + cmd,
       })
     }
-    function isInterceptable(cmd: string) {
+    function isInterceptable(_cmd: string) {
       return false // <--- TODO: remove this once we fix the dry run
       // if (!cmd.startsWith('generate')) return false
       // if (cmd.startsWith('generate sdl')) return false
