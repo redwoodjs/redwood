@@ -198,19 +198,33 @@ const componentFiles = async (name, scaffoldPath = '') => {
   let fileList = {}
   const componentMetadata = {
     Boolean: {
-      name: 'CheckboxField',
+      componentName: 'CheckboxField',
       defaultProp: 'defaultChecked',
       validation: false,
+      listDisplayFunction: 'checkboxInputTag',
       displayFunction: 'checkboxInputTag',
     },
     DateTime: {
+      listDisplayFunction: 'timeTag',
       displayFunction: 'timeTag',
     },
-    String: {
-      name: 'TextField',
+    Int: {
+      componentName: 'NumberField',
+    },
+    Json: {
+      componentName: 'TextArea',
+      dataType: 'Json',
+    },
+    Float: {
+      dataType: 'Float',
+    },
+    default: {
+      componentName: 'TextField',
       defaultProp: 'defaultValue',
       validation: '{{ required: true }}',
-      displayFunction: 'truncate',
+      displayFunction: undefined,
+      listDisplayFunction: 'truncate',
+      dataType: undefined,
     },
   }
   const columns = model.fields
@@ -219,16 +233,23 @@ const componentFiles = async (name, scaffoldPath = '') => {
       ...column,
       label: humanize(column.name),
       component:
-        componentMetadata[column.type]?.name || componentMetadata.String.name,
+        componentMetadata[column.type]?.componentName ||
+        componentMetadata.default.componentName,
       defaultProp:
         componentMetadata[column.type]?.defaultProp ||
-        componentMetadata.String.defaultProp,
+        componentMetadata.default.defaultProp,
       validation:
         componentMetadata[column.type]?.validation ??
-        componentMetadata.String.validation,
+        componentMetadata.default.validation,
+      listDisplayFunction:
+        componentMetadata[column.type]?.listDisplayFunction ||
+        componentMetadata.default.listDisplayFunction,
       displayFunction:
         componentMetadata[column.type]?.displayFunction ||
-        componentMetadata.String.displayFunction,
+        componentMetadata.default.displayFunction,
+      dataType:
+        componentMetadata[column.type]?.dataType ||
+        componentMetadata.default.dataType,
     }))
   const editableColumns = columns.filter((column) => {
     return NON_EDITABLE_COLUMNS.indexOf(column.name) === -1

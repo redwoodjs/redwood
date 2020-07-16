@@ -2,6 +2,8 @@ import { useForm, FormContext, useFormContext } from 'react-hook-form'
 import { useContext, useEffect } from 'react'
 import pascalcase from 'pascalcase'
 
+import { CoercionContextProvider, useCoercion } from './coercion'
+
 const DEFAULT_MESSAGES = {
   required: 'is required',
   pattern: 'is not formatted correctly',
@@ -69,6 +71,9 @@ const inputTagProps = (props) => {
       tagProps.style = errorStyle
     }
   }
+
+  // dataType shouldn't be passed to the underlying HTML element
+  delete tagProps.dataType
 
   return tagProps
 }
@@ -138,9 +143,17 @@ const FormError = ({
   )
 }
 
-// Renders a containing <form> tag with required contexts
+const coerceValues = (data, coerce) => {
+  const coercedData = {}
 
-const Form = (props) => {
+  Object.keys(data).forEach((name) => {
+    coercedData[name] = coerce(name, data[name])
+  })
+
+  return coercedData
+}
+
+const FormWithCoercionContext = (props) => {
   // deconstruct some props we care about and keep the remaining `formProps` to
   // pass to the <form> tag
   const {
@@ -151,9 +164,15 @@ const Form = (props) => {
   } = props
   const useFormMethods = useForm(props.validation)
   const formMethods = propFormMethods || useFormMethods
+  const { coerce } = useCoercion()
 
   return (
-    <form {...formProps} onSubmit={formMethods.handleSubmit(onSubmit)}>
+    <form
+      {...formProps}
+      onSubmit={formMethods.handleSubmit((data, event) =>
+        onSubmit(coerceValues(data, coerce), event)
+      )}
+    >
       <FieldErrorContext.Provider
         value={
           errorProps?.graphQLErrors[0]?.extensions?.exception?.messages || {}
@@ -162,6 +181,16 @@ const Form = (props) => {
         <FormContext {...formMethods}>{props.children}</FormContext>
       </FieldErrorContext.Provider>
     </form>
+  )
+}
+
+// Renders a containing <form> tag with required contexts
+
+const Form = (props) => {
+  return (
+    <CoercionContextProvider>
+      <FormWithCoercionContext {...props} />
+    </CoercionContextProvider>
   )
 }
 
@@ -196,6 +225,12 @@ const FieldError = (props) => {
 
 const TextAreaField = (props) => {
   const { register } = useFormContext()
+  const { setCoercion } = useCoercion()
+
+  React.useEffect(() => {
+    setCoercion({ name: props.name, dataType: props.dataType })
+  }, [setCoercion, props.name, props.dataType])
+
   const tagProps = inputTagProps(props)
 
   return (
@@ -232,6 +267,16 @@ const Submit = React.forwardRef((props, ref) => (
 
 const InputField = (props) => {
   const { register } = useFormContext()
+  const { setCoercion } = useCoercion()
+
+  React.useEffect(() => {
+    setCoercion({
+      name: props.name,
+      type: props.type,
+      dataType: props.dataType,
+    })
+  }, [setCoercion, props.name, props.type, props.dataType])
+
   const tagProps = inputTagProps(props)
 
   return (

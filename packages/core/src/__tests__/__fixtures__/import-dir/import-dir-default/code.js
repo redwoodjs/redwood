@@ -1,2 +1,2 @@
 /* eslint-disable */
-import services from '../__fixtures__/*.{js,ts}'
+import services from '../__fixtures__/**/*.{js,ts}'

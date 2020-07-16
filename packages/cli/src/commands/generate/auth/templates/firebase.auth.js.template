@@ -22,7 +22,7 @@ const config = {
 
 const adminApp = admin.initializeApp(config)
 
-export const getCurrentUser = async (token) => {
+export const getCurrentUser = async (decoded, { token, type }) => {
   const { email, uid } = await adminApp.auth().verifyIdToken(token)
   return { email, uid }
 }
