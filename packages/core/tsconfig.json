@@ -10,5 +10,6 @@
   "references": [
     { "path": "../internal" },
     { "path": "../testing" },
+    { "path": "../structure" },
   ]
 }
