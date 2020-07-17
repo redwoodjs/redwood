@@ -85,7 +85,6 @@ const mockGraphQL = (
         fn: (...args: T) => U
       ) => {
         return (...args: T): U => {
-          console.log('transform captured?')
           const resTransform = fn(...args)
           responseTransforms = [...responseTransforms, resTransform]
           return resTransform
@@ -125,4 +124,8 @@ export const mockGraphQLMutation = (
   data: DataFunction | {}
 ) => {
   return mockGraphQL('mutation', operation, data)
+}
+
+export const mockCellData = (data: DataFunction | {}) => {
+  return data
 }
