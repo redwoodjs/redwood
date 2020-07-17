@@ -4,5 +4,4 @@ export { customRender as render } from './customRender'
 
 export { MockProviders } from './MockProviders'
 
-export * from './mockData'
 export * from './mockRequests'
