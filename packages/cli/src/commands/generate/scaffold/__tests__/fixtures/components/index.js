@@ -19,7 +19,7 @@ const truncate = (text) => {
   return output
 }
 
-const jsonFormat = (obj) => {
+const jsonTruncate = (obj) => {
   return truncate(JSON.stringify(obj, null, 2))
 }
 
@@ -81,7 +81,7 @@ const PostsList = ({ posts }) => {
               <td>{truncate(post.readTime)}</td>
               <td>{truncate(post.rating)}</td>
               <td>{timeTag(post.postedAt)}</td>
-              <td>{jsonFormat(post.metadata)}</td>
+              <td>{jsonTruncate(post.metadata)}</td>
               <td>
                 <nav className="rw-table-actions">
                   <Link
