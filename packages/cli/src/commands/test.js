@@ -1,3 +1,5 @@
+import path from 'path'
+
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 import { getProject } from '@redwoodjs/structure'
@@ -84,7 +86,7 @@ export const handler = async ({ side, watch, watchAll, collectCoverage }) => {
      * per-side basis if possible.
      */
     const DATABASE_URL =
-      process.env.TEST_DATABASE_URL || `file:${CACHE_DIR}/test.db`
+      process.env.TEST_DATABASE_URL || `file:${path.join(CACHE_DIR, 'test.db')}`
 
     await execa.command(`yarn rw db up`, {
       stdio: 'inherit',
