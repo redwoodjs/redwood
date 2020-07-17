@@ -1,5 +1,6 @@
 import * as fs from 'fs-extra'
 import glob from 'glob'
+import { basename } from 'path'
 import * as tsm from 'ts-morph'
 import { TextDocuments } from 'vscode-languageserver'
 import { TextDocument } from 'vscode-languageserver-textdocument'
@@ -192,6 +193,9 @@ export abstract class FileNode extends BaseNode {
   }
   @lazy() get basenameNoExt() {
     return basenameNoExt(this.filePath)
+  }
+  @lazy() get basename() {
+    return basename(this.filePath)
   }
 }
 
