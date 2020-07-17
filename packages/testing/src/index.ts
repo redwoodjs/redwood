@@ -5,5 +5,4 @@ export { customRender as render } from './customRender'
 export { MockProviders } from './MockProviders'
 
 export * from './mockData'
-import * as msw from './msw'
-export { msw }
+export * from './mockRequests'
