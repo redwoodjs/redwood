@@ -1,4 +1,4 @@
-export const standard = mockData({
+export const standard = mockCellData({
   todos: [
     {
       id: 1,

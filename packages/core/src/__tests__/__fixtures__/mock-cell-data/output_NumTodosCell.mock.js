@@ -1,4 +1,4 @@
-export const standard = mockData({
+export const standard = mockGraphQLQuery('TodoListCell_GetTodos', {
   todos: [
     {
       id: 1,
