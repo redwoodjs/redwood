@@ -5,7 +5,7 @@ import execa from 'execa'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
 
-import { getPaths, runCommandTask } from 'src/lib'
+import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 
 const MODEL = `model DataMigration {
