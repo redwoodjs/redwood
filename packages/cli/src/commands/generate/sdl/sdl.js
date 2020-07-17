@@ -20,7 +20,7 @@ import { yargsDefaults } from '../../generate'
 import { files as serviceFiles } from '../service/service'
 import { relationsForModel } from '../helpers'
 
-const IGNORE_FIELDS_FOR_INPUT = ['id', 'createdAt']
+const IGNORE_FIELDS_FOR_INPUT = ['id', 'createdAt', 'updatedAt']
 
 const modelFieldToSDL = (field, required = true, types = {}) => {
   if (Object.entries(types).length) {
