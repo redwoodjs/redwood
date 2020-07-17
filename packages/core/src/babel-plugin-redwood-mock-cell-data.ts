@@ -1,5 +1,4 @@
 import path from 'path'
-import fs from 'fs'
 
 import type { PluginObj, types } from '@babel/core'
 // TODO: Figure out why Wallaby doesn't work with a normal import.
