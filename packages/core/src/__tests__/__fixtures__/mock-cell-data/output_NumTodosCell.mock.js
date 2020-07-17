@@ -1,9 +1,3 @@
-export const standard = mockGraphQLQuery('TodoListCell_GetTodos', {
-  todos: [
-    {
-      id: 1,
-      body: 'Cheese',
-      status: '',
-    },
-  ],
+export const standard = mockGraphQLQuery('NumTodosCell_GetCount', {
+  todosCount: 42,
 })
