@@ -9,7 +9,7 @@ import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 
 const MODEL = `model DataMigration {
-  revision    Int      @default(autoincrement()) @id
+  version     Int      @default(autoincrement()) @id
   name        String
   started_at  DateTime
   finished_at DateTime
@@ -73,12 +73,12 @@ export const handler = async () => {
         task: await save,
       },
       {
-        title: 'Migrate database',
+        title: 'One more thing...',
         task: (_ctx, task) => {
           task.title = `Next steps:\n   ${POST_INSTALL_INSTRUCTIONS}`
         },
       },
-    ].filter(Boolean),
+    ],
     { collapse: false, exitOnError: true }
   )
 
