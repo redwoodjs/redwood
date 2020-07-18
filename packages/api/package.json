@@ -11,7 +11,7 @@
   "dependencies": {
     "@prisma/client": "^2.1.1",
     "@redwoodjs/internal": "^0.13.0",
-    "apollo-server-lambda": "2.14.2",
+    "apollo-server-lambda": "2.16.0",
     "babel-plugin-macros": "^2.8.0",
     "core-js": "3.6.4",
     "glob": "^7.1.6",

@@ -1,6 +1,5 @@
 import { normalize } from 'path'
 import {
-  CodeAction,
   createConnection,
   InitializeParams,
   ProposedFeatures,
@@ -8,17 +7,25 @@ import {
   TextDocumentSyncKind,
 } from 'vscode-languageserver'
 import { TextDocument } from 'vscode-languageserver-textdocument'
+import { CodeAction } from 'vscode-languageserver-types'
+import { WorkDoneProgress } from 'vscode-languageserver/lib/progress'
 import { HostWithDocumentsStore } from '../ide'
-import { buildAndRunWithVSCodeUI } from '../interactive_cli'
+import { command_builder } from '../interactive_cli/command_builder'
+import { redwood_gen_dry_run as dry_run } from '../interactive_cli/dry_run'
+import { RedwoodCommandString } from '../interactive_cli/RedwoodCommandString'
+import { VSCodeWindowUI } from '../interactive_cli/ui'
 import { RWProject } from '../model'
 import { getOutline, outlineToJSON } from '../outline'
 import { iter } from '../x/Array'
 import { debounce, lazy, memo } from '../x/decorators'
+import { URL_toFile } from '../x/URL'
 import { VSCodeWindowMethods_fromConnection } from '../x/vscode'
 import {
   ExtendedDiagnostic_findRelevantQuickFixes,
   ExtendedDiagnostic_groupByUri,
+  FileSet_fromTextDocuments,
   Range_contains,
+  WorkspaceEdit_fromFileSet,
 } from '../x/vscode-languageserver-types'
 
 const REFRESH_DIAGNOSTICS_INTERVAL = 5000
@@ -48,7 +55,10 @@ export class RWLanguageServer {
           definitionProvider: true,
           codeActionProvider: true,
           codeLensProvider: { resolveProvider: false },
-          executeCommandProvider: { commands: ['redwoodjs/cli'] },
+          executeCommandProvider: {
+            commands: ['redwoodjs/cli'],
+            workDoneProgress: true,
+          },
         },
       }
     })
@@ -132,20 +142,11 @@ export class RWLanguageServer {
       })
     })
 
-    connection.onExecuteCommand(async (params) => {
+    connection.onExecuteCommand(async (params, token, workDoneProgress) => {
       if (params.command === 'redwoodjs/cli') {
-        let argss = { projectRoot: this.projectRoot!, args: {} }
-        if (params.arguments && params.arguments.length > 0)
-          argss = params.arguments[0]
-        const { projectRoot, args } = argss
-        //args = { _0: "generate", _1: "sdl" };
-        const { vscodeWindowMethods, host } = this
-        const project = new RWProject({ projectRoot, host })
-        return await buildAndRunWithVSCodeUI({
-          args,
-          project,
-          vscodeWindowMethods,
-        })
+        const [cmd, cwd] = params.arguments ?? []
+        workDoneProgress?.begin('rwjs cli', undefined, 'rwjs cli message')
+        await this.command__redwoodjs_cli(cmd, cwd, workDoneProgress)
       }
     })
 
@@ -156,6 +157,60 @@ export class RWLanguageServer {
     // Listen on the connection
     connection.listen()
   }
+
+  private async command__redwoodjs_cli(
+    cmdString?: string,
+    cwd?: string,
+    workDoneProgress?: WorkDoneProgress
+  ) {
+    const { vscodeWindowMethods, host } = this
+    cwd = cwd ?? this.projectRoot
+    if (!cwd) return // we need a cwd to run the CLI
+    // parse the cmd. this will do some checks and throw
+    let cmd = new RedwoodCommandString(cmdString ?? '...')
+    if (!cmd.isComplete) {
+      // if the command is incomplete, we need to build it interactively
+      const project = new RWProject({ projectRoot: cwd, host })
+      // the interactive builder needs a UI to prompt the user
+      const ui = new VSCodeWindowUI(vscodeWindowMethods)
+      const cmd2 = await command_builder({ cmd, project, ui })
+      if (!cmd2) return // user cancelled the interactive process
+      cmd = cmd2
+    }
+    // run the command
+    if (cmd.isInterceptable) {
+      // run using dry_run so we can intercept the generated files
+      const fileOverrides = FileSet_fromTextDocuments(this.documents)
+      // const progress =
+      //   workDoneProgress ??
+      //   (await this.connection.window.createWorkDoneProgress())
+      // false && progress.begin('yarn redwood ' + cmd.processed)
+      workDoneProgress?.report('yarn redwood ' + cmd.processed)
+      const { stdout, files } = await dry_run({
+        cmd,
+        cwd,
+        fileOverrides,
+      })
+      const edit = WorkspaceEdit_fromFileSet(files, (f) => {
+        if (!host.existsSync(URL_toFile(f))) return undefined
+        return host.readFileSync(URL_toFile(f))
+      })
+      await this.connection.workspace.applyEdit({
+        label: 'redwood ' + cmd.processed,
+        edit,
+      })
+      workDoneProgress?.done()
+      // false && progress.done()
+    } else {
+      // if it can't be intercepted, just run in the terminal
+      vscodeWindowMethods.createTerminal2({
+        name: 'Redwood',
+        cwd,
+        cmd: 'yarn redwood ' + cmd.processed,
+      })
+    }
+  }
+
   projectRoot: string | undefined
   getProject() {
     if (!this.projectRoot) return undefined

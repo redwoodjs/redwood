@@ -1,5 +1,7 @@
 import { groupBy, mapValues } from 'lodash'
 import * as tsm from 'ts-morph'
+import { TextDocuments } from 'vscode-languageserver'
+import { TextDocument } from 'vscode-languageserver-textdocument'
 import {
   CodeAction,
   CodeActionContext,
@@ -9,6 +11,8 @@ import {
   Location,
   Position,
   Range,
+  WorkspaceChange,
+  WorkspaceEdit,
 } from 'vscode-languageserver-types'
 import { URL_file } from './URL'
 
@@ -100,6 +104,7 @@ export function LocationLike_toLocation(x: LocationLike): Location {
 
 export function ExtendedDiagnostic_is(x: any): x is ExtendedDiagnostic {
   if (typeof x !== 'object') return false
+  if (typeof x === 'undefined') return false
   if (typeof x.uri !== 'string') return false
   if (!Diagnostic.is(x.diagnostic)) return false
   return true
@@ -236,4 +241,55 @@ export function ExtendedDiagnostic_format(
 
   const str = `${file}: ${severityLabel}${errorCode}: ${message}`
   return str
+}
+
+/**
+ * a value of "null" means this file needs to be deleted
+ */
+export type FileSet = { [fileURI: string]: string | null }
+
+export function FileSet_fromTextDocuments(
+  documents: TextDocuments<TextDocument>
+) {
+  const files: FileSet = {}
+  for (const uri of documents.keys()) files[uri] = documents.get(uri)!.getText()
+  return files
+}
+
+export function WorkspaceEdit_fromFileSet(
+  files: FileSet,
+  getExistingFileText?: (fileURI: string) => string | undefined
+): WorkspaceEdit {
+  const change = new WorkspaceChange({ documentChanges: [] })
+  for (const uri of Object.keys(files)) {
+    const content = files[uri]
+    if (typeof content !== 'string') {
+      change.deleteFile(uri, { ignoreIfNotExists: true })
+      continue
+    } else {
+      const text = getExistingFileText?.(uri)
+      if (text) {
+        // file exists
+        //change.createFile(uri, { overwrite: true })
+        change
+          .getTextEditChange({ uri, version: null })
+          .replace(Range_full(text), content)
+      } else {
+        change.createFile(uri)
+        change
+          .getTextEditChange({ uri, version: null })
+          .insert(Position.create(0, 0), content)
+      }
+    }
+  }
+  return change.edit
+}
+
+export function Range_full(text: string, cr = '\n'): Range {
+  if (text === '') return Range.create(0, 0, 0, 0)
+  const lines = text.split(cr)
+  if (lines.length === 0) return Range.create(0, 0, 0, 0)
+  const start = Position.create(0, 0)
+  const end = Position.create(lines.length - 1, lines[lines.length - 1].length)
+  return Range.create(start, end)
 }
