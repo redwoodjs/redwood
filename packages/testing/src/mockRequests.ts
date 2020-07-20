@@ -35,8 +35,6 @@ export const startMSW = async () => {
 
 export const setupRequestHandlers = () => {
   SERVER_INSTANCE.resetHandlers()
-
-  console.log('setup request handlers')
   // Register all the handlers that are stored in the queue.
   for (const handler of REQUEST_HANDLER_QUEUE) {
     SERVER_INSTANCE.use(handler)
@@ -124,8 +122,4 @@ export const mockGraphQLMutation = (
   data: DataFunction | {}
 ) => {
   return mockGraphQL('mutation', operation, data)
-}
-
-export const mockCellData = (data: DataFunction | {}) => {
-  return data
 }

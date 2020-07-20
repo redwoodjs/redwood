@@ -1,6 +1,6 @@
 import { afterQuery } from './'
 export const standard = afterQuery(
-  mockGraphQLQuery('TodoListCell_GetTodos', {
+  mockGraphQLQuery('TodoListCell_GetTodos', () => ({
     todos: [
       {
         id: 1,
@@ -8,5 +8,5 @@ export const standard = afterQuery(
         status: '',
       },
     ],
-  })
+  }))
 )

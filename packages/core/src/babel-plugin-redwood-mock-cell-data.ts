@@ -4,20 +4,37 @@ import type { PluginObj, types } from '@babel/core'
 // TODO: Figure out why Wallaby doesn't work with a normal import.
 import { getBaseDirFromFile } from '@redwoodjs/internal/dist/paths'
 import { getProject } from '@redwoodjs/structure'
+import { KnownArgumentNamesOnDirectives } from 'graphql/validation/rules/KnownArgumentNames'
 
 export default function ({ types: t }: { types: typeof types }): PluginObj {
+  let nodesToRemove: any[] = []
+  let nodesToInsert: any[] = []
+
   return {
     name: 'babel-plugin-redwood-mock-cell-data',
+
     visitor: {
+      Program: {
+        enter(p) {
+          nodesToRemove = []
+          nodesToInsert = []
+        },
+        exit(p) {
+          for (const n of nodesToRemove) {
+            n.remove()
+          }
+          // Insert at the top of the file
+          p.node.body.unshift(...nodesToInsert)
+        },
+      },
       ExportNamedDeclaration(p, state: { file?: any }) {
-        // This converts a call of "mockCellData" into a "mockGraphQLQuery" by automatically:
+        // This converts a standard export into a "mockGraphQLQuery" by automatically:
         // Determining the query operation name for `QUERY` and,
         // wrapping the exported data in `afterQuery`
         //
         // Rules:
-        // 0. Must be a *.mock.[ts,js] file.
-        // 1. That has a named export called "standard".
-        // 2. That calls "mockCellData".
+        // 1. Must be a *.mock.[ts,js] file.
+        // 2. That has a named export called "standard".
         // 3. That are adjacent to a Cell.
         // 4. The Cell has a operation name for the QUERY export.
 
@@ -33,9 +50,8 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
           return
         }
 
-        const init = vd?.init as types.CallExpression
-        const calleeName = (init?.callee as types.Identifier)?.name
-        if (calleeName !== 'mockCellData') {
+        const init = vd?.init
+        if (!init) {
           return
         }
 
@@ -53,20 +69,24 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         }
 
         // export const standard
-        const exportStandard = (init: types.CallExpression) =>
+        const exportStandard = (ex: types.CallExpression) =>
           t.exportNamedDeclaration(
             t.variableDeclaration('const', [
-              t.variableDeclarator(t.identifier('standard'), init),
+              t.variableDeclarator(t.identifier('standard'), ex),
             ])
           )
 
         // mockGraphQLQuery(<operationName>, <data>)
         const mockGraphQLCall = t.callExpression(
           t.identifier('mockGraphQLQuery'),
-          [t.stringLiteral(cell.queryOperationName), init.arguments[0]]
+          [t.stringLiteral(cell.queryOperationName), init]
         )
 
+        // Delete original "export const standard"
+        nodesToRemove = [...nodesToRemove, p]
+
         // + import { afterQuery } from './'
+        // + export const standard = afterQuery(...)
         if (cell.exportedSymbols.has('afterQuery')) {
           const importAfterQuery = t.importDeclaration(
             [
@@ -77,34 +97,19 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
             ],
             t.stringLiteral('./')
           )
-          p.insertBefore(importAfterQuery)
 
-          p.replaceWith(
+          nodesToInsert = [
+            ...nodesToInsert,
+            importAfterQuery,
             exportStandard(
               t.callExpression(t.identifier('afterQuery'), [mockGraphQLCall])
-            )
-          )
+            ),
+          ]
         } else {
-          p.replaceWith(exportStandard(mockGraphQLCall))
+          // + export const standard = mo
+          nodesToInsert = [...nodesToInsert, exportStandard(mockGraphQLCall)]
         }
-
-        // - export const standard = mockData(<data>)
-        // p.remove()
       },
-      // CallExpression(p, state: { file?: any }) {
-      //   if ((p.node.callee as types.Identifier)?.name !== 'getMockData') {
-      //     return
-      //   }
-      //   const dirName = cleanFileName(state.file.opts.filename)
-      //   const key = (p.node.arguments[0] as types.StringLiteral)?.value
-      //   // - getMockData(<key>)
-      //   // + __RW__AUTO_getMockData(`${dirName}:${exportName}`)
-      //   p.replaceWith(
-      //     t.callExpression(t.identifier('__RW__getMockData'), [
-      //       t.stringLiteral(dirName + ':' + key),
-      //     ])
-      //   )
-      // },
     },
   }
 }
