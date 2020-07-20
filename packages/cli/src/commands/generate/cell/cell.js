@@ -54,13 +54,21 @@ export const files = ({ name }) => {
     generator: 'cell',
     templatePath: 'stories.js.template',
   })
+  const mockFile = templateForComponentFile({
+    name,
+    suffix: COMPONENT_SUFFIX,
+    extension: '.mock.js',
+    webPathSection: REDWOOD_WEB_PATH_NAME,
+    generator: 'cell',
+    templatePath: 'mock.js.template',
+  })
 
   // Returns
   // {
   //    "path/to/fileA": "<<<template>>>",
   //    "path/to/fileB": "<<<template>>>",
   // }
-  return [cellFile, testFile, storiesFile].reduce(
+  return [cellFile, testFile, storiesFile, mockFile].reduce(
     (acc, [outputPath, content]) => {
       return {
         [outputPath]: content,

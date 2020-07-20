@@ -14,7 +14,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
 
     visitor: {
       Program: {
-        enter(p) {
+        enter() {
           nodesToRemove = []
           nodesToInsert = []
         },
