@@ -6,7 +6,7 @@
     { "path": "packages/internal" },
     { "path": "packages/auth" },
     { "path": "packages/testing" },
-    { "path": "packages/project-model" }
+    { "path": "packages/structure" }
   ],
   "files": []
 }
