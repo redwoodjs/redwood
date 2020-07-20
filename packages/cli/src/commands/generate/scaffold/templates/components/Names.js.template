@@ -57,7 +57,7 @@ const ${pluralPascalName}List = ({ ${pluralCamelName} }) => {
         <tbody>
           {${pluralCamelName}.map((${singularCamelName}) => (
             <tr key={${singularCamelName}.id}><% columns.forEach(column => { %>
-              <td>{${column.displayFunction}(${singularCamelName}.${column.name})}</td><% }) %>
+              <td>{${column.listDisplayFunction}(${singularCamelName}.${column.name})}</td><% }) %>
               <td>
                 <nav className="rw-table-actions">
                   <Link
