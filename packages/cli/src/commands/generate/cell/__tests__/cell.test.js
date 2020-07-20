@@ -3,6 +3,14 @@ import path from 'path'
 
 import { loadGeneratorFixture } from 'src/lib/test'
 
+jest.mock('@redwoodjs/structure', () => {
+  return {
+    getProject: () => ({
+      cells: [{ queryOperationName: undefined }],
+    }),
+  }
+})
+
 import * as cell from '../cell'
 
 let singleWordFiles, multiWordFiles
