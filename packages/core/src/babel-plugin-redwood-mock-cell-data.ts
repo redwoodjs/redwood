@@ -4,7 +4,6 @@ import type { PluginObj, types } from '@babel/core'
 // TODO: Figure out why Wallaby doesn't work with a normal import.
 import { getBaseDirFromFile } from '@redwoodjs/internal/dist/paths'
 import { getProject } from '@redwoodjs/structure'
-import { KnownArgumentNamesOnDirectives } from 'graphql/validation/rules/KnownArgumentNames'
 
 export default function ({ types: t }: { types: typeof types }): PluginObj {
   let nodesToRemove: any[] = []
