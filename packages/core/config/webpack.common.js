@@ -207,10 +207,6 @@ module.exports = (webpackEnv) => {
               exclude: /(node_modules)/,
               use: {
                 loader: 'babel-loader',
-                options: {
-                  cacheDirectory: true,
-                  cacheCompression: false,
-                },
               },
             },
             // (2)
