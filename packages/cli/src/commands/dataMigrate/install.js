@@ -9,10 +9,10 @@ import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 
 const MODEL = `model DataMigration {
-  version     Int      @default(autoincrement()) @id
-  name        String
-  started_at  DateTime
-  finished_at DateTime
+  version    String   @id
+  name       String
+  startedAt  DateTime
+  finishedAt DateTime
 }`
 
 const POST_INSTALL_INSTRUCTIONS = `${c.warning(
