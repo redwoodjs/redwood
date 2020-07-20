@@ -10,7 +10,7 @@ const jest = require('jest')
 // TODO: Get from redwood.toml
 const sides = getProject().sides
 
-// https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/scripts/test.js#L39
+// https://github.com/facebook/create-react-app/blob/cbad256a4aacfc3084be7ccf91aad87899c63564/packages/react-scripts/scripts/test.js#L39
 function isInGitRepository() {
   try {
     execa.commandSync('git rev-parse --is-inside-work-tree')
