@@ -80,10 +80,12 @@ export class RWRouter extends FileNode {
         location = Location_fromNode(this.routes[0].jsxNode)
         const codeLens: CodeLens = {
           range: location.range,
-          command: Command.create('Create Page...', 'redwoodjs/cli', {
-            projectRoot: this.parent.projectRoot,
-            args: { _0: 'generate', _1: 'page' },
-          }),
+          command: Command.create(
+            'Create Page...',
+            'redwoodjs/cli',
+            'generate page...',
+            this.parent.projectRoot
+          ),
         }
         yield {
           kind: 'CodeLens',

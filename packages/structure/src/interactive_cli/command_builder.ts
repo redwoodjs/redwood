@@ -1,17 +1,19 @@
 import camelcase from 'camelcase'
 import { RWProject } from '../model/RWProject'
 import { validateRoutePath } from '../util'
-import { memo } from '../x/decorators'
-import { YargsStyleArgs } from '../x/yargs'
+import { lazy, memo } from '../x/decorators'
+import { RedwoodCommandString } from './RedwoodCommandString'
 import { UI } from './ui'
 
 export interface Opts {
-  args: YargsStyleArgs
+  cmd: RedwoodCommandString
   project: RWProject
   ui: UI
 }
 
-export function build(opts: Opts): Promise<string | undefined> {
+export function command_builder(
+  opts: Opts
+): Promise<RedwoodCommandString | undefined> {
   return new CommandBuilder(opts).buildCommand()
 }
 
@@ -19,7 +21,18 @@ class CommandBuilder {
   constructor(private opts: Opts) {}
 
   @memo()
-  async buildCommand(): Promise<string | undefined> {
+  async buildCommand(): Promise<RedwoodCommandString | undefined> {
+    if (this.opts.cmd.isComplete) {
+      // there is no need to build it interactively
+      return this.opts.cmd
+    }
+    // else, the command is interactive. we run the interactive builder to complete it
+    const str = await this.buildCommandString()
+    return str ? new RedwoodCommandString(str) : undefined
+  }
+
+  @memo()
+  private async buildCommandString(): Promise<string | undefined> {
     try {
       switch (await this.arg_command()) {
         case 'generate':
@@ -38,6 +51,10 @@ class CommandBuilder {
       if (e.message === 'break') return
       throw e
     }
+  }
+
+  @lazy() get args() {
+    return this.opts.cmd.parsed._
   }
 
   private async generate(type: string) {
@@ -75,31 +92,27 @@ class CommandBuilder {
 
   @memo()
   async arg_command(): Promise<string> {
-    return this.opts.args['_0'] ?? breakIfNull(await this.prompts.command())
+    return this.args[0] ?? breakIfNull(await this.prompts.command())
   }
   @memo()
   async arg_generate_type(): Promise<string> {
-    return (
-      this.opts.args['_1'] ?? breakIfNull(await this.prompts.generate_type())
-    )
+    return this.args[1] ?? breakIfNull(await this.prompts.generate_type())
   }
   @memo()
   async arg_db_operation(): Promise<string> {
-    return (
-      this.opts.args['_1'] ?? breakIfNull(await this.prompts.db_operations())
-    )
+    return this.args[1] ?? breakIfNull(await this.prompts.db_operations())
   }
   @memo()
   async arg_generate_sdl_modelName(): Promise<string> {
     return (
-      this.opts.args['_2'] ??
+      this.args[2] ??
       breakIfNull(await this.prompts.model('Choose Model for SDL...'))
     )
   }
   @memo()
   async arg_generate_scaffold_modelName(): Promise<string> {
     return (
-      this.opts.args['_2'] ??
+      this.args[2] ??
       breakIfNull(await this.prompts.model('Choose Model to Scaffold...'))
     )
   }

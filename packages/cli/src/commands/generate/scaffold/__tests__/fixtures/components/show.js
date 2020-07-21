@@ -9,6 +9,14 @@ const DELETE_POST_MUTATION = gql`
   }
 `
 
+const jsonDisplay = (obj) => {
+  return (
+    <pre>
+      <code>{JSON.stringify(obj, null, 2)}</code>
+    </pre>
+  )
+}
+
 const timeTag = (datetime) => {
   return (
     <time dateTime={datetime} title={datetime}>
@@ -85,6 +93,10 @@ const Post = ({ post }) => {
             <tr>
               <th>Posted at</th>
               <td>{timeTag(post.postedAt)}</td>
+            </tr>
+            <tr>
+              <th>Metadata</th>
+              <td>{jsonDisplay(post.metadata)}</td>
             </tr>
           </tbody>
         </table>
