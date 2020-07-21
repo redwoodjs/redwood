@@ -97,7 +97,7 @@ const mockGraphQL = (
         data: captureTransform(ctx.data),
       }
 
-      d = data(req.params, {
+      d = data(req.variables, {
         req,
         ctx: newCtx,
       })
