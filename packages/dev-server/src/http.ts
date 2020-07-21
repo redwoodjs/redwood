@@ -32,7 +32,7 @@ export const server = ({
         ${Object.keys(LAMBDA_FUNCTIONS)
           .sort()
           .map((name) => `<li><a href="/${name}">/${name}</a></li>`)
-          .join()}
+          .join('')}
       </ol>
     `)
   })
