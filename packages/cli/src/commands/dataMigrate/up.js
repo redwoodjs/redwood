@@ -27,6 +27,10 @@ const sortMigrations = (migrations) => {
 const getMigrations = async () => {
   const basePath = path.join(getPaths().api.dataMigrations)
 
+  if (!fs.existsSync(basePath)) {
+    return []
+  }
+
   // gets all migrations present in the app
   const files = fs
     .readdirSync(basePath)
