@@ -1,6 +1,6 @@
 import path from 'path'
-import fs from 'fs'
 
+import fs from 'fs-extra'
 import execa from 'execa'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
@@ -24,8 +24,9 @@ const POST_INSTALL_INSTRUCTIONS = `${c.warning(
 
 // Creates dataMigrations directory
 const createPath = () => {
-  return fs.closeSync(
-    fs.openSync(path.join(getPaths().api.db, 'dataMigrations', '.keep'), 'w')
+  return fs.outputFileSync(
+    path.join(getPaths().api.dataMigrations, '.keep'),
+    ''
   )
 }
 
