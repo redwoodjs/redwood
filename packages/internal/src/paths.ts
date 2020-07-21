@@ -5,6 +5,7 @@ import findUp from 'findup-sync'
 
 export interface NodeTargetPaths {
   base: string
+  dataMigrations: string
   db: string
   dbSchema: string
   src: string
@@ -46,6 +47,7 @@ const CONFIG_FILE_NAME = 'redwood.toml'
 
 const PATH_API_DIR_FUNCTIONS = 'api/src/functions'
 const PATH_API_DIR_GRAPHQL = 'api/src/graphql'
+const PATH_API_DIR_DATA_MIGRATIONS = 'api/prisma/dataMigrations'
 const PATH_API_DIR_DB = 'api/prisma'
 const PATH_API_DIR_DB_SCHEMA = 'api/prisma/schema.prisma'
 const PATH_API_DIR_CONFIG = 'api/src/config'
@@ -117,6 +119,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
     cache,
     api: {
       base: path.join(BASE_DIR, 'api'),
+      dataMigrations: path.join(BASE_DIR, PATH_API_DIR_DATA_MIGRATIONS),
       db: path.join(BASE_DIR, PATH_API_DIR_DB),
       dbSchema: path.join(BASE_DIR, PATH_API_DIR_DB_SCHEMA),
       functions: path.join(BASE_DIR, PATH_API_DIR_FUNCTIONS),
