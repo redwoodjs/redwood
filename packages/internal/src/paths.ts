@@ -197,3 +197,27 @@ export const processPagesDir = (
   })
   return deps
 }
+
+/**
+ * Converts Windows-style paths to Posix-style
+ * C:\Users\Bob\dev\Redwood -> /c/Users/Bob/dev/Redwood
+ *
+ * The conversion only happens on Windows systems, and only for paths that are
+ * not already Posix-style
+ *
+ * @param path Filesystem path
+ */
+export const ensurePosixPath = (path: string) => {
+  let posixPath = path
+
+  if (process.platform === 'win32') {
+    if (/^[A-Z]:\\/.test(path)) {
+      const drive = path[0].toLowerCase()
+      posixPath = `/${drive}/${path.substring(3)}`
+    }
+
+    posixPath = posixPath.replace(/\\/g, '/')
+  }
+
+  return posixPath
+}
