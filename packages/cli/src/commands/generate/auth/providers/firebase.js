@@ -22,7 +22,7 @@ const firebaseClient = ((config) => {
 }
 
 export const webPackages = ['firebase']
-export const apiPackages = []
+export const apiPackages = ['firebase-admin']
 
 export const notes = [
   'You will need to create several environment variables with your Firebase config options.',
