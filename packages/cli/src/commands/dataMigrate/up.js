@@ -25,7 +25,7 @@ const sortMigrations = (migrations) => {
 
 // Return the list of migrations that haven't run against the database yet
 const getMigrations = async () => {
-  const basePath = path.join(getPaths().api.db, 'dataMigrations')
+  const basePath = path.join(getPaths().api.dataMigrations)
 
   // gets all migrations present in the app
   const files = fs

@@ -21,16 +21,11 @@ const TEMPLATE_PATH = path.resolve(
   'dataMigration.js.template'
 )
 
-// the files to create to support auth
 export const files = ({ name }) => {
   const now = new Date().toISOString()
   const timestamp = now.split('.')[0].replace(/\D/g, '')
   const outputFilename = `${timestamp}-${paramCase(name)}.js`
-  const outputPath = path.join(
-    getPaths().api.db,
-    'dataMigrations',
-    outputFilename
-  )
+  const outputPath = path.join(getPaths().api.dataMigrations, outputFilename)
 
   return {
     [outputPath]: fs.readFileSync(TEMPLATE_PATH).toString(),
