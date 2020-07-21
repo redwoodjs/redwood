@@ -41,6 +41,12 @@ model Shoe {
   color    Color
 }
 
+model Photo {
+  id       Int    @id @default(autoincrement())
+  name     String
+  metadata Json
+}
+
 enum Color {
   RED
   GREEN

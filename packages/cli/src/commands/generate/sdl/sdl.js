@@ -28,9 +28,15 @@ const modelFieldToSDL = (field, required = true, types = {}) => {
       field.kind === 'object' ? idType(types[field.type]) : field.type
   }
 
-  return `${field.name}: ${field.isList ? '[' : ''}${field.type}${
-    field.isList ? ']' : ''
-  }${(field.isRequired && required) | field.isList ? '!' : ''}`
+  const dictionary = {
+    Json: 'JSON',
+  }
+
+  return `${field.name}: ${field.isList ? '[' : ''}${
+    dictionary[field.type] || field.type
+  }${field.isList ? ']' : ''}${
+    (field.isRequired && required) | field.isList ? '!' : ''
+  }`
 }
 
 const querySDL = (model) => {
