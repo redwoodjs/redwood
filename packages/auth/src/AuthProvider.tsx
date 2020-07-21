@@ -56,7 +56,6 @@ type AuthProviderState = {
  *  </AuthProvider>
  * ```
  */
-// TODO: Determine what should be done when fetching the current user fails
 export class AuthProvider extends React.Component<
   AuthProviderProps,
   AuthProviderState
@@ -90,24 +89,31 @@ export class AuthProvider extends React.Component<
     }
 
     const token = await this.rwClient.getToken()
-    const response = await window.fetch(
-      `${window.__REDWOOD__API_PROXY_PATH}/graphql`,
-      {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-          'auth-provider': this.rwClient.type,
-          authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          query:
-            'query __REDWOOD__AUTH_GET_CURRENT_USER { redwood { currentUser } }',
-        }),
+
+    try {
+      const response = await window.fetch(
+        `${window.__REDWOOD__API_PROXY_PATH}/graphql`,
+        {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+            'auth-provider': this.rwClient.type,
+            authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            query:
+              'query __REDWOOD__AUTH_GET_CURRENT_USER { redwood { currentUser } }',
+          }),
+        }
+      )
+
+      if (response.ok) {
+        const { data } = await response.json()
+        return data?.redwood?.currentUser
+      } else {
       }
-    )
-    if (response.ok) {
-      const { data } = await response.json()
-      return data?.redwood?.currentUser
+    } catch (e) {
+      e //?
     }
   }
 
@@ -117,6 +123,7 @@ export class AuthProvider extends React.Component<
 
     let currentUser = null
     if (isAuthenticated) {
+      // If we're unable to fetch the current user we should try again
       currentUser = await this.getCurrentUser()
     }
 
