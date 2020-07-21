@@ -3,7 +3,7 @@ import path from 'path'
 import type { PluginObj, types } from '@babel/core'
 // TODO: Figure out why Wallaby doesn't work with a normal import.
 import { getBaseDirFromFile } from '@redwoodjs/internal/dist/paths'
-import { getProject } from '@redwoodjs/structure'
+import { getProject, URL_file } from '@redwoodjs/structure'
 
 export default function ({ types: t }: { types: typeof types }): PluginObj {
   let nodesToRemove: any[] = []
@@ -56,9 +56,9 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
 
         // Find the model of the Cell that is in the same directory.
         const filename = state.file.opts.filename
-        const dir = path.dirname(state.file.opts.filename)
+        const dir = URL_file(path.dirname(state.file.opts.filename))
         const project = getProject(getBaseDirFromFile(filename))
-        const cell = project.cells.find((x) => x.filePath.startsWith(dir))
+        const cell = project.cells.find((x) => x.uri.startsWith(dir))
         if (!cell) {
           return
         }
