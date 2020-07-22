@@ -315,6 +315,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "m-leon",
+      "name": "Max Leon",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/745236?v=4",
+      "profile": "https://maxleon.net/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
