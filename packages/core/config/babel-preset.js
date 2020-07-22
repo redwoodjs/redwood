@@ -129,7 +129,7 @@ module.exports = () => ({
         ],
       ],
     },
-    // ** Files ending in `Cell` **
+    // ** Files ending in `Cell.[js,ts]` **
     {
       test: /.+Cell.(js|tsx)$/,
       plugins: [require('../dist/babel-plugin-redwood-cell')],
@@ -139,6 +139,12 @@ module.exports = () => ({
     {
       test: ['./web/src/Routes.js', './web/src/Routes.tsx'],
       plugins: [require('../dist/babel-plugin-redwood-routes-auto-loader')],
+    },
+    // ** Files ending in `Cell.mock.[js,ts]` **
+    // Automatically determine keys for saving and retrieving mock data.
+    {
+      test: /.+Cell.mock.(js|ts)$/,
+      plugins: [require('../dist/babel-plugin-redwood-mock-cell-data')],
     },
   ],
 })
