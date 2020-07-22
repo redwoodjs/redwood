@@ -117,6 +117,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "aldonline",
+      "name": "Aldo Bucchi",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/154884?v=4",
+      "profile": "https://github.com/aldonline",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
