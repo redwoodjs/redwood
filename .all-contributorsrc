@@ -63,6 +63,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Tobbe",
+      "name": "Tobbe Lundberg",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/30793?v=4",
+      "profile": "http://tlundberg.com/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
