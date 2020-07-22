@@ -190,5 +190,3 @@ for my nascent web app framework. Namely:
   framework. Can a web framework do the same?
 
 And there you have it.
-
-## Contributors
