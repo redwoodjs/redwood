@@ -513,6 +513,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "gizmoGremlin",
+      "name": "Nick Gill",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/42254038?v=4",
+      "profile": "https://www.nickgilldev.com/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
