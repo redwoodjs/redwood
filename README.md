@@ -193,7 +193,7 @@ And there you have it.
 
 ## Contributors
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-47-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-48-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
@@ -260,6 +260,7 @@ And there you have it.
     <td align="center"><a href="https://github.com/leibowitz"><img src="https://avatars0.githubusercontent.com/u/1508563?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Gianni Moschini</b></sub></a><br /><a href="https://github.com/redwoodjs/redwood/commits?author=leibowitz" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/gielcobben"><img src="https://avatars0.githubusercontent.com/u/2663212?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Giel</b></sub></a><br /><a href="https://github.com/redwoodjs/redwood/commits?author=gielcobben" title="Code">💻</a></td>
     <td align="center"><a href="https://pnfc.re/"><img src="https://avatars3.githubusercontent.com/u/24176136?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Hampus Kraft</b></sub></a><br /><a href="https://github.com/redwoodjs/redwood/commits?author=pnfcre" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/janimo"><img src="https://avatars2.githubusercontent.com/u/50138?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jani Monoses</b></sub></a><br /><a href="https://github.com/redwoodjs/redwood/commits?author=janimo" title="Code">💻</a></td>
   </tr>
 </table>
 
