@@ -333,6 +333,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "nexneo",
+      "name": "Niket Patel",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/794?v=4",
+      "profile": "https://twitter.com/nexneo",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
