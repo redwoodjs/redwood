@@ -193,7 +193,7 @@ And there you have it.
 
 ## Contributors
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-64-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-65-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
@@ -283,6 +283,7 @@ And there you have it.
   </tr>
   <tr>
     <td align="center"><a href="http://taylormilliman.me/"><img src="https://avatars3.githubusercontent.com/u/15217013?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Taylor Milliman</b></sub></a><br /><a href="https://github.com/redwoodjs/redwood/commits?author=twmilli" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/zhammer"><img src="https://avatars0.githubusercontent.com/u/6956487?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Zach Hammer</b></sub></a><br /><a href="https://github.com/redwoodjs/redwood/commits?author=zhammer" title="Code">💻</a></td>
   </tr>
 </table>
 
