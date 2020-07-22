@@ -110,6 +110,8 @@ Then, in your local copy of the Redwood Framework, run:
 
 This starts Verdaccio (http://localhost:4873) with our configuration file.
 
+> Note for Windows users: you will need to use WSL 2 for the above to work.
+
 #### Publishing a Package
 
 To build, unpublish, and publish all the Redwood packages to your local NPM registry with a "dev" tag, run:
