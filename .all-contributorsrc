@@ -18,6 +18,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "thedavidprice",
+      "name": "David Price",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/2951?v=4",
+      "profile": "http://thedavidprice.com/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
