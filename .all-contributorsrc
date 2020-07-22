@@ -252,6 +252,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "adrianmg",
+      "name": "Adrian Mato",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/589285?v=4",
+      "profile": "http://adrianmato.com/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
