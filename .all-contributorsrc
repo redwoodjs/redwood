@@ -270,6 +270,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "benmccann",
+      "name": "Ben McCann",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/322311?v=4",
+      "profile": "http://www.benmccann.com/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
