@@ -162,6 +162,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Idered",
+      "name": "Kasper Mikiewicz",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/230404?v=4",
+      "profile": "http://kasper.io/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7

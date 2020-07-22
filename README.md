@@ -193,7 +193,7 @@ And there you have it.
 
 ## Contributors
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-17-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-18-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
@@ -222,6 +222,7 @@ And there you have it.
     <td align="center"><a href="https://brettjackson.org/"><img src="https://avatars0.githubusercontent.com/u/47246?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Brett Jackson</b></sub></a><br /><a href="https://github.com/redwoodjs/redwood/commits?author=bjackson" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/gfpacheco"><img src="https://avatars0.githubusercontent.com/u/3705660?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Guilherme Pacheco</b></sub></a><br /><a href="https://github.com/redwoodjs/redwood/commits?author=gfpacheco" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/noire-munich"><img src="https://avatars2.githubusercontent.com/u/10271407?v=4?s=100" width="100px;" alt=""/><br /><sub><b>noire.munich</b></sub></a><br /><a href="https://github.com/redwoodjs/redwood/commits?author=noire-munich" title="Code">💻</a></td>
+    <td align="center"><a href="http://kasper.io/"><img src="https://avatars0.githubusercontent.com/u/230404?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Kasper Mikiewicz</b></sub></a><br /><a href="https://github.com/redwoodjs/redwood/commits?author=Idered" title="Code">💻</a></td>
   </tr>
 </table>
 
