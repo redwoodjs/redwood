@@ -46,10 +46,16 @@ const AuthConsumer = () => {
     userMetadata,
     currentUser,
     reauthenticate,
+    hasError,
+    error,
   } = useAuth()
 
   if (loading) {
     return <>Loading...</>
+  }
+
+  if (hasError) {
+    return <>{error.message}</>
   }
 
   return (
@@ -242,7 +248,7 @@ test('A user can be reauthenticated to update the "auth state"', async (done) =>
   done()
 })
 
-test.only('When the current user cannot be fetched the user is not authenticated', async (done) => {
+test('When the current user cannot be fetched the user is not authenticated', async (done) => {
   server.use(
     graphql.query('__REDWOOD__AUTH_GET_CURRENT_USER', (_req, res, ctx) => {
       return res(ctx.status(404))
@@ -273,51 +279,9 @@ test.only('When the current user cannot be fetched the user is not authenticated
   // We're booting up!
   expect(screen.getByText('Loading...')).toBeInTheDocument()
 
-  // The user is not authenticated
-  await waitFor(() => screen.getByText('Log Out'))
-
-  screen.debug()
+  await waitFor(() =>
+    screen.getByText('Could not fetch current user: Not Found (404)')
+  )
 
   done()
 })
-
-// test('Authentication flow (logged out -> login -> logged in -> logout) works as expected', async (done) => {
-//   const mockAuthClient: AuthClient = {
-//     login: async () => {
-//       return true
-//     },
-//     logout: async () => {},
-//     getToken: async () => 'hunter2',
-//     getUserMetadata: jest.fn(async () => {
-//       return null
-//     }),
-//     client: () => {},
-//     type: 'custom',
-//   }
-
-//   render(
-//     <AuthProvider client={mockAuthClient} type="custom">
-//       <AuthConsumer />
-//     </AuthProvider>
-//   )
-
-//   // Check that you're logged in!
-//   await waitFor(() => screen.getByText('Log Out'))
-//   expect(mockAuthClient.getUserMetadata).toBeCalledTimes(1)
-//   expect(
-//     screen.getByText(
-//       'userMetadata: {"sub":"abcdefg|123456","username":"peterp"}'
-//     )
-//   ).toBeInTheDocument()
-//   expect(
-//     screen.getByText(
-//       'currentUser: {"name":"Peter Pistorius","email":"nospam@example.net"}'
-//     )
-//   ).toBeInTheDocument()
-
-//   // Log out
-//   fireEvent.click(screen.getByText('Log Out'))
-//   await waitFor(() => screen.getByText('Log In'))
-
-//   done()
-// })
