@@ -351,6 +351,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "cephalization",
+      "name": "Anthony Powell",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/8948924?v=4",
+      "profile": "https://github.com/cephalization",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7

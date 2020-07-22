@@ -193,7 +193,7 @@ And there you have it.
 
 ## Contributors
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-38-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-39-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
@@ -249,6 +249,7 @@ And there you have it.
     <td align="center"><a href="https://github.com/maximgeerinck"><img src="https://avatars1.githubusercontent.com/u/615509?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Maxim Geerinck</b></sub></a><br /><a href="https://github.com/redwoodjs/redwood/commits?author=maximgeerinck" title="Code">💻</a></td>
     <td align="center"><a href="https://twitter.com/nexneo"><img src="https://avatars2.githubusercontent.com/u/794?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Niket Patel</b></sub></a><br /><a href="https://github.com/redwoodjs/redwood/commits?author=nexneo" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/0xflotus"><img src="https://avatars3.githubusercontent.com/u/26602940?v=4?s=100" width="100px;" alt=""/><br /><sub><b>0xflotus</b></sub></a><br /><a href="https://github.com/redwoodjs/redwood/commits?author=0xflotus" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/cephalization"><img src="https://avatars1.githubusercontent.com/u/8948924?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Anthony Powell</b></sub></a><br /><a href="https://github.com/redwoodjs/redwood/commits?author=cephalization" title="Code">💻</a></td>
   </tr>
 </table>
 
