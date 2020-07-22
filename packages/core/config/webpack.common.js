@@ -127,6 +127,8 @@ const getSharedPlugins = (isEnvProduction) => {
       React: 'react',
       PropTypes: 'prop-types',
       gql: ['@redwoodjs/web', 'gql'],
+      mockGraphQLQuery: ['@redwoodjs/testing', 'mockGraphQLQuery'],
+      mockGraphQLMutation: ['@redwoodjs/testing', 'mockGraphQLMutation'],
     }),
     // The define plugin will replace these keys with their values during build
     // time.

@@ -30,3 +30,5 @@ export async function printDiagnostics(
     console.log('runtime error: ' + e.message)
   }
 }
+
+export { URL_file } from './x/URL'

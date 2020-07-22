@@ -96,6 +96,8 @@ module.exports = {
   globals: {
     gql: 'readonly',
     React: 'readonly',
+    mockGraphQLQuery: 'readonly',
+    mockGraphQLMutation: 'readonly',
   },
   rules: {
     'prettier/prettier': 'error',
