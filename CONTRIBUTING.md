@@ -33,7 +33,7 @@ Here we'll call this codebase a "Redwood App"--it’s the fullstack-to-Jamstack 
 As a contributor, you'll have to gain familiarity with one more codebase: the Redwood Framework.
 The Redwood Framework lives in the monorepo redwoodjs/redwood; it contains all the packages that make Redwood Apps work the way they do.
 
-While you'll be making most of your changes in the Redwood Framework, you'll probably want to see your changes “running live" in one of your own Redwood Apps or in one of our example apps.
+While you'll be making most of your changes in the Redwood Framework, you'll probably want to see your changes "running live" in one of your own Redwood Apps or in one of our example apps.
 We offer two workflows for making this possible: "copy and watch", which has some restrictions, and "local package registry emulation", which doesn't.
 
 **How to choose which one to use?** If you've installed or upgraded a dependency, use the "local package registry emulation" workflow; otherwise, use "copy and watch".
@@ -78,7 +78,7 @@ _On Linux_
 Add the following line to your `~/.bashrc`:
 
 ```terminal
-export RW_PATH=”$HOME/path/to/redwood/framework”
+export RW_PATH="$HOME/path/to/redwood/framework"
 ```
 
 Where /path/to/redwood/framework is replaced by the path to your local copy of the Redwood Framework.
@@ -96,7 +96,7 @@ _On Mac_
 Add the following line to your `~/.bash_profile`:
 
 ```terminal
-export RW_PATH=”$HOME/path/to/redwood/framework”
+export RW_PATH="$HOME/path/to/redwood/framework"
 ```
 
 Where /path/to/redwood/framework is replaced by the path to your local copy of the Redwood Framework.
