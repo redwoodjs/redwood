@@ -387,6 +387,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "evanmoncuso",
+      "name": "Evan Moncuso",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/12928071?v=4",
+      "profile": "https://github.com/evanmoncuso",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
