@@ -38,7 +38,7 @@ We offer two workflows for making this possible: "copy and watch", which has som
 
 **How to choose which one to use?** If you've installed or upgraded a dependency, use the "local package registry emulation" workflow; otherwise, use "copy and watch".
 
-> Both workflows use `redwood-tools` (alias `rwt`), Redwood's companion CLI development tool.
+> Both workflows use `redwood-tools` (alias `rwt`), Redwood's companion CLI development tool, which is included in `@redwoodjs/core`.
 
 ### Copy and Watch
 
