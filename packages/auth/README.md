@@ -15,28 +15,21 @@ Check out the [Auth Playground](https://github.com/redwoodjs/playground-auth).
 
 ### CLI Auth Generator
 
-The following CLI command will install required packages, generate boilerplate code and files for Redwood Projects:
+The following CLI command will install required packages, generate boilerplate code, and files for Redwood Projects:
 
 ```terminal
 yarn rw g auth [provider]
 ```
 
-*`[provider]` values can be either "netlify", "goTrue", "auth0", "magicLink" or "firebase".*
+*`[provider]` can be one of: "auth0", "custom", "firebase", "goTrue", "magicLink", or "netlify".
 
-### Manual Install
+### Manual Installation
 
 #### Netlify Identity Widget
 
 ```bash
 cd web
 yarn add @redwoodjs/auth netlify-identity-widget
-```
-
-#### GoTrue-JS
-
-```bash
-cd web
-yarn add @redwoodjs/auth gotrue-js
 ```
 
 #### Auth0
@@ -53,11 +46,20 @@ cd web
 yarn add @redwoodjs/auth magic-sdk
 ```
 
+#### GoTrue-JS
+
+```bash
+cd web
+yarn add @redwoodjs/auth gotrue-js
+```
+
 ## Setup
 
-Instantiate your authentication library and pass it to the `AuthProvider`:
+Instantiate your authentication client, and pass it to the `<AuthProvider>`:
 
 ### For Netlify Identity Widget
+
+You will need to enable Identity on your Netlify site. See [Netlify Identity Setup](https://redwoodjs.com/tutorial/authentication#netlify-identity-setup).
 
 ```js
 // web/src/index.js
@@ -85,7 +87,7 @@ You will need to enable Identity on your Netlify site. See [Netlify Identity Set
 
 Add the GoTrue-JS package to the web side:
 
-```bash
+```terminal
 yarn workspace web add gotrue-js
 ```
 
@@ -210,7 +212,6 @@ const UserAuthTools = () => {
   const { loading, isAuthenticated, logIn, logOut } = useAuth()
 
   if (loading) {
-    // auth is rehydrating
     return null
   }
 
