@@ -68,26 +68,6 @@ building file list ... done
 
 Now any changes made in the framework will be copied into your app!
 
-#### Specifying a RW_PATH
-
-You can create a `RW_PATH` environment variable so you don't have to specify the path in the `copy:watch` command.
-
-Add the following line to your `~/.bashrc`:
-
-```terminal
-export RW_PATH="$HOME/path/to/redwood/framework"
-```
-
-Where `/path/to/redwood/framework` is replaced by the path to your local copy of the Redwood Framework.
-
-Then, in your Redwood App or example app, you can just run:
-
-```terminal
-yarn rwt copy:watch
-```
-
-And see your changes copied!
-
 
 ### Local Package Registry Emulation
 
@@ -199,6 +179,22 @@ yarn rwt <command>
 ```
 
 For `redwood` options, see the [CLI Reference on redwoodjs.com](https://redwoodjs.com/reference/command-line-interface).
+
+##### Specifying a RW_PATH
+
+You can create a `RW_PATH` environment variable so you don't have to pass the path explicitely each time you run a command.
+
+Add the following line to your `~/.bashrc`:
+
+```terminal
+export RW_PATH="$HOME/path/to/redwood/framework"
+```
+
+With the above you can run:
+
+```terminal
+yarn rwt copy:watch
+```
 
 ### copy (`cp`)
 
