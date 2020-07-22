@@ -423,6 +423,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "pnfcre",
+      "name": "Hampus Kraft",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/24176136?v=4",
+      "profile": "https://pnfc.re/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
