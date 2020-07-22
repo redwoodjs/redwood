@@ -137,7 +137,7 @@ For example, if you've made changes to the `@redwoodjs/dev-server` package, you 
 
 #### Installing Published Packages in Your Redwood App
 
-The last step is to install the package into your Redwood App. The CLI command `redwood-tools` (alias `rwt`) makes installing local NPM packages easy:
+The last step is to install the package into your Redwood App.
 
 ```terminal
 yarn rwt install @redwoodjs/dev-server
