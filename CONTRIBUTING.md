@@ -42,7 +42,7 @@ We offer two workflows for making this possible: "copy and watch", which has som
 
 ### Copy and Watch
 
-> Unfortunately you can't use "copy and watch". You'll have to manually run `yarn rwt cp ../path/to/redwood` when you've made changes to the Redwood Framework (this is tracked in [issue #701](https://github.com/redwoodjs/redwood/issues/701)).
+> Note for Windows users: there is an ongoing issue with `yarn rwt copy:watch`, more details available in [#701](https://github.com/redwoodjs/redwood/issues/701).
 
 First, build-and-watch files in the Redwood Framework for changes:
 
