@@ -7,14 +7,14 @@ Before interacting with the Redwood community, please read and understand our [C
 **Table of Contents**
 
 - [Contributing](#contributing)
-  - [Local Development](#local-development)
-    - [Copy and Watch](#copy-and-watch)
-      - [Specifying a RW_PATH](#specifying-a-rw_path)
-    - [Local Package Registry Emulation](#local-package-registry-emulation)
-      - [Setting Up and Running a Local NPM Registry](#setting-up-and-running-a-local-npm-registry)
-      - [Publishing a Package](#publishing-a-package)
-      - [Installing Published Packages in Your Redwood App](#installing-published-packages-in-your-redwood-app)
-  - [Running Your Redwood App's Local Server(s)](#running-your-redwood-apps-local-servers)
+  - [Local development](#local-development)
+    - [Building the app](#building-the-app)
+    - [Installing local Redwood in your app](#installing-local-redwood-in-your-app)
+      - [Copy on source change](#copy-on-source-change)
+      - [Local package registry emulation](#local-package-registry-emulation)
+        - [Publishing a package](#publishing-a-package)
+        - [Installing published packages in your app](#installing-published-packages-in-your-app)
+  - [Running your Redwood app](#running-your-redwood-app)
   - [Integration tests](#integration-tests)
   - [Releases](#releases)
     - [Troubleshooting](#troubleshooting)
@@ -24,7 +24,7 @@ Before interacting with the Redwood community, please read and understand our [C
     - [fix-bins (`fix`)](#fix-bins-fix)
     - [install (`i`)](#install-i)
 
-## Local Development
+## Local development
 
 As a Redwood user, you're already familiar with the codebase `yarn create redwood-app` creates.
 Here we'll call this codebase a "Redwood App"--it’s the fullstack-to-Jamstack solution you already know and love.
@@ -32,48 +32,53 @@ Here we'll call this codebase a "Redwood App"--it’s the fullstack-to-Jamstack 
 As a contributor, you'll have to gain familiarity with one more codebase: the Redwood Framework.
 The Redwood Framework lives in the monorepo redwoodjs/redwood; it contains all the packages that make Redwood Apps work the way they do.
 
-While you'll be making most of your changes in the Redwood Framework, you'll probably want to see your changes "running live" in one of your own Redwood Apps or in one of our example apps.
-We offer two workflows for making this possible: "copy and watch", which has some restrictions, and "local package registry emulation", which doesn't.
+### Building the app
+You can build the Redwood Framework using:
+```terminal
+cd redwood
+yarn build
+```
 
-**How to choose which one to use?** If you've installed or upgraded a dependency, use the "local package registry emulation" workflow; otherwise, use "copy and watch".
-
-> Both workflows use `redwood-tools` (alias `rwt`), Redwood's companion CLI development tool, which is included in `@redwoodjs/core`.
-
-### Copy and Watch
-
-> Note for Windows users: there is an ongoing issue with `yarn rwt copy:watch`, more details available in [#701](https://github.com/redwoodjs/redwood/issues/701).
-
-First, build-and-watch files in the Redwood Framework for changes:
+Or you can trigger the building process on source files' change:
 
 ```terminal
 cd redwood
 yarn build:watch
-
+```
+Which is equivilant to running:
+```
 @redwoodjs/api: $ nodemon --watch src -e ts,js --ignore dist --exec 'yarn build'
 @redwoodjs/core: $ nodemon --ignore dist --exec 'yarn build'
 create-redwood-app: $ nodemon --ignore dist --exec 'yarn build'
 @redwoodjs/eslint-plugin-redwood: $ nodemon --ignore dist --exec 'yarn build'
 ```
 
-Then, copy-and-watch those changes into your Redwood App or example app (here, [example-invoice](https://github.com/redwoodjs/example-invoice)):
+### Installing local Redwood in your app
+
+While you'll be making most of your changes in the Redwood Framework, you'll probably want to see your changes "running live" in one of your own Redwood Apps or in one of our example apps.
+
+We offer two workflows for making this possible. **How to choose which one to use?**
+
+If you've installed or upgraded a dependency, use the "[local package registry emulation](#local-package-registry-emulation)" workflow; otherwise, use "[copy on source change](#copy-on-source-change)".
+
+> Both workflows use `redwood-tools` (alias `rwt`), Redwood's companion CLI development tool, which is included in `@redwoodjs/core`.
+
+#### Copy on source change
+
+> Note for Windows users: there is an ongoing issue with `yarn rwt copy:watch`, more details available in [#701](https://github.com/redwoodjs/redwood/issues/701).
+
+You can make Redwood watch changes in the source code to trigger build automatically:
 
 ```terminal
-cd example-invoice
+cd redwood-app
 yarn rwt copy:watch ../path/to/redwood
-
-Redwood Framework Path:  /Users/peterp/Personal/redwoodjs/redwood
-Trigger event:  add
-building file list ... done
 ```
 
 Now any changes made in the framework will be copied into your app!
 
-
-### Local Package Registry Emulation
+#### Local package registry emulation
 
 Sometimes you'll want to test the full package-development workflow: building, publishing, and installing in your Redwood App. We facilitate this using a local NPM registry called [Verdaccio](https://github.com/verdaccio/verdaccio).
-
-#### Setting Up and Running a Local NPM Registry
 
 First, install Verdaccio:
 
@@ -91,45 +96,44 @@ This starts Verdaccio (http://localhost:4873) with our configuration file.
 
 > Note for Windows users: you will need to use WSL 2 for the above to work.
 
-#### Publishing a Package
+##### Publishing a package
 
-To build, unpublish, and publish all the Redwood packages to your local NPM registry with a "dev" tag, run:
+To push all the Redwood's core packages to your local NPM registry run:
 
 ```terminal
 ./tasks/publish-local
 ```
 
-> Note: this script is equivalent to running:
->
-> ```terminal
-> npm unpublish --tag dev --registry http://localhost:4873/ --force
-> npm publish --tag dev --registry http://localhost:4873/ --force
-> ```
-
-You can build a particular package by specifying the path to the package: `./tasks/publish-local ./packages/api`.
-
-For example, if you've made changes to the `@redwoodjs/dev-server` package, you would run:
+Which is equivalent to running:
 
 ```terminal
-./tasks/publish-local ./packages/dev-server
+npm unpublish --tag dev --registry http://localhost:4873/ --force
+npm publish --tag dev --registry http://localhost:4873/ --force
 ```
 
-#### Installing Published Packages in Your Redwood App
-
-The last step is to install the package into your Redwood App.
+You can also publish a specific package by passing the package path to `publish-local`:
 
 ```terminal
+./tasks/publish-local ./packages/api
+```
+
+##### Installing published packages in your app
+
+The last step is to install the package into your Redwood App. If you want to install multiple packages you need to do this one by one.
+
+```terminal
+cd redwood-app
 yarn rwt install @redwoodjs/dev-server
 ```
 
-> Note: this is equivalent to running:
->
-> ```terminal
-> rm -rf <APP_PATH>/node_modules/@redwoodjs/dev-server
-> yarn upgrade @redwoodjs/dev-server@dev --no-lockfile --registry http://localhost:4873/
-> ```
+Which is equivalent to running:
 
-## Running Your Redwood App's Local Server(s)
+```terminal
+rm -rf ./node_modules/@redwoodjs/dev-server
+yarn upgrade @redwoodjs/dev-server@dev --no-lockfile --registry http://localhost:4873/
+```
+
+## Running your Redwood app
 
 When developing Redwood Apps, you’re probably used to running both the API and Web servers with `yarn rw dev` and seeing your changes included immediately.
 But for local package development, your changes won’t be included automatically--you'll need to manually stop/start the respective server to include them.
