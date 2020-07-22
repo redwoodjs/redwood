@@ -19,7 +19,6 @@ Before interacting with the Redwood community, please read and understand our [C
   - [Releases](#releases)
     - [Troubleshooting](#troubleshooting)
   - [CLI Reference: `redwood-tools`](#cli-reference-redwood-tools)
-    - [redwood-tools (alias rwt)](#redwood-tools-alias-rwt)
     - [copy (alias cp)](#copy-alias-cp)
     - [copy:watch (alias cpw)](#copywatch-alias-cpw)
     - [fix-bins (alias fix)](#fix-bins-alias-fix)
@@ -193,22 +192,13 @@ If something went wrong you can use `yarn lerna publish from-package` to publish
 
 ## CLI Reference: `redwood-tools`
 
-This CLI Reference section covers the `redwood-tools` command options. For `redwood` options, see the [CLI Reference on redwoodjs.com](https://redwoodjs.com/reference/command-line-interface).
-
-### redwood-tools (alias rwt)
-
-Redwood's companion CLI development tool. You'll be using this if you're contributing to Redwood.
+This CLI Reference section covers the `redwood-tools` command options:
 
 ```
 yarn rwt <command>
 ```
 
-|Command | Description|
-|:-|:-|
-|`copy` | Copy the Redwood Framework path to this project.|
-|`copy:watch` | Watch the Redwood Framework path for changes and copy them over to this project.|
-|`fix-bins` | Fix Redwood symlinks and permissions.|
-|`install` | Install a package from your local NPM registry.|
+For `redwood` options, see the [CLI Reference on redwoodjs.com](https://redwoodjs.com/reference/command-line-interface).
 
 ### copy (alias cp)
 
