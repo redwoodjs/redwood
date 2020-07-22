@@ -193,7 +193,7 @@ And there you have it.
 
 ## Contributors
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-61-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-62-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
@@ -278,6 +278,7 @@ And there you have it.
     <td align="center"><a href="http://www.getalma.eu/"><img src="https://avatars0.githubusercontent.com/u/314079?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Olivier Lance</b></sub></a><br /><a href="https://github.com/redwoodjs/redwood/commits?author=olance" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/dnprock"><img src="https://avatars2.githubusercontent.com/u/497205?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Phuoc Do</b></sub></a><br /><a href="https://github.com/redwoodjs/redwood/commits?author=dnprock" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/rockymeza"><img src="https://avatars1.githubusercontent.com/u/21784?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Rocky Meza</b></sub></a><br /><a href="https://github.com/redwoodjs/redwood/commits?author=rockymeza" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/sharcastic"><img src="https://avatars1.githubusercontent.com/u/11964820?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Sharan Kumar S</b></sub></a><br /><a href="https://github.com/redwoodjs/redwood/commits?author=sharcastic" title="Code">💻</a></td>
   </tr>
 </table>
 
