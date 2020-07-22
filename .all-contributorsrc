@@ -135,6 +135,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "bjackson",
+      "name": "Brett Jackson",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/47246?v=4",
+      "profile": "https://brettjackson.org/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
