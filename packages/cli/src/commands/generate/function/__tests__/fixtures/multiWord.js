@@ -3,6 +3,6 @@ export const handler = async (event, context) => {
     statusCode: 200,
     body: JSON.stringify({
       data: 'sendMail function',
-    })
+    }),
   }
 }
