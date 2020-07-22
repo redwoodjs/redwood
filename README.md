@@ -193,7 +193,7 @@ And there you have it.
 
 ## Contributors
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-53-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-54-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
@@ -268,6 +268,7 @@ And there you have it.
     <td align="center"><a href="https://github.com/leonardoelias"><img src="https://avatars2.githubusercontent.com/u/1995213?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Leonardo Elias</b></sub></a><br /><a href="https://github.com/redwoodjs/redwood/commits?author=leonardoelias" title="Code">💻</a></td>
     <td align="center"><a href="https://loganhoup.com/"><img src="https://avatars0.githubusercontent.com/u/17230438?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Logan Houp</b></sub></a><br /><a href="https://github.com/redwoodjs/redwood/commits?author=hu0p" title="Code">💻</a></td>
     <td align="center"><a href="http://lorensr.me/"><img src="https://avatars2.githubusercontent.com/u/251288?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Loren ☺️</b></sub></a><br /><a href="https://github.com/redwoodjs/redwood/commits?author=lorensr" title="Code">💻</a></td>
+    <td align="center"><a href="https://markpollmann.com/"><img src="https://avatars2.githubusercontent.com/u/5286559?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Mark Pollmann</b></sub></a><br /><a href="https://github.com/redwoodjs/redwood/commits?author=MarkPollmann" title="Code">💻</a></td>
   </tr>
 </table>
 
