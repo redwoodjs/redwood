@@ -1,0 +1,24 @@
+{
+  "projectName": "redwood",
+  "projectOwner": "redwoodjs",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "commitConvention": "none",
+  "contributors": [
+    {
+      "login": "peterp",
+      "name": "Peter Pistorius",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/44849?v=4",
+      "profile": "http://peterp.org/",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7
+}
