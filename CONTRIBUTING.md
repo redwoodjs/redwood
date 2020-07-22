@@ -176,8 +176,6 @@ If you would like to test against the packages specified in `/__fixtures__/new-p
 ./tasks/test-tutorial --no-local
 ```
 
-The command for this is written in bash and will not work on Windows.
-
 ## Releases
 
 To publish a new version of Redwood to NPM run the following commands:
