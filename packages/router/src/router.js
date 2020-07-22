@@ -33,7 +33,12 @@ Private.propTypes = {
   unauthenticated: PropTypes.string.isRequired,
 }
 
-const PrivatePageLoader = ({ useAuth, unauthenticatedRoute, children }) => {
+const PrivatePageLoader = ({
+  useAuth,
+  unauthenticatedRoute,
+  redirectTo,
+  children,
+}) => {
   const { loading, isAuthenticated } = useAuth()
 
   if (loading) {
@@ -43,7 +48,9 @@ const PrivatePageLoader = ({ useAuth, unauthenticatedRoute, children }) => {
   if (isAuthenticated) {
     return children
   } else {
-    return <Redirect to={unauthenticatedRoute()} />
+    return (
+      <Redirect to={`${unauthenticatedRoute()}?redirectTo=${redirectTo}`} />
+    )
   }
 }
 
@@ -103,6 +110,7 @@ const RouterImpl = ({
         return React.Children.toArray(children).map((route) =>
           React.cloneElement(route, {
             private: true,
+            redirectTo: null,
             unauthenticatedRedirect: unauthenticated,
           })
         )
@@ -165,6 +173,7 @@ const RouterImpl = ({
               unauthenticatedRoute={
                 namedRoutes[route.props.unauthenticatedRedirect]
               }
+              redirectTo={route.props.path}
             >
               <Loaders />
             </PrivatePageLoader>
