@@ -73,15 +73,13 @@ Now any changes made in the framework will be copied into your app!
 
 You can create a `RW_PATH` environment variable so you don't have to specify the path in the `copy:watch` command.
 
-_On Linux_
-
 Add the following line to your `~/.bashrc`:
 
 ```terminal
 export RW_PATH="$HOME/path/to/redwood/framework"
 ```
 
-Where /path/to/redwood/framework is replaced by the path to your local copy of the Redwood Framework.
+Where `/path/to/redwood/framework` is replaced by the path to your local copy of the Redwood Framework.
 
 Then, in your Redwood App or example app, you can just run:
 
@@ -91,23 +89,6 @@ yarn rwt copy:watch
 
 And see your changes copied!
 
-_On Mac_
-
-Add the following line to your `~/.bash_profile`:
-
-```terminal
-export RW_PATH="$HOME/path/to/redwood/framework"
-```
-
-Where /path/to/redwood/framework is replaced by the path to your local copy of the Redwood Framework.
-
-Then, in your Redwood App or example app, you can just run:
-
-```terminal
-yarn rwt copy:watch
-```
-
-And see your changes copied!
 
 ### Local Package Registry Emulation
 
