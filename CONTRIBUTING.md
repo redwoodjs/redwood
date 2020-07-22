@@ -32,6 +32,8 @@ Here we'll call this codebase a "Redwood App"--it’s the fullstack-to-Jamstack 
 As a contributor, you'll have to gain familiarity with one more codebase: the Redwood Framework.
 The Redwood Framework lives in the monorepo redwoodjs/redwood; it contains all the packages that make Redwood Apps work the way they do.
 
+If you don't want to create any custom app for sake of working on Redwood's core you can use one of example apps: [invoice](https://github.com/redwoodjs/example-invoice), [blog](https://github.com/redwoodjs/example-blog), [todo](https://github.com/redwoodjs/example-todo).
+
 ### Building the app
 You can build the Redwood Framework using:
 ```terminal
