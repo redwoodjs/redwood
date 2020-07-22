@@ -18,11 +18,11 @@ Before interacting with the Redwood community, please read and understand our [C
   - [Integration tests](#integration-tests)
   - [Releases](#releases)
     - [Troubleshooting](#troubleshooting)
-  - [CLI Reference: `redwood-tools`](#cli-reference-redwood-tools)
-    - [copy (alias cp)](#copy-alias-cp)
-    - [copy:watch (alias cpw)](#copywatch-alias-cpw)
-    - [fix-bins (alias fix)](#fix-bins-alias-fix)
-    - [install (alias i)](#install-alias-i)
+  - [CLI Reference: `redwood-tools` (alias `rwt`)](#cli-reference-redwood-tools-alias-rwt)
+    - [copy (`cp`)](#copy-cp)
+    - [copy:watch (`cpw`)](#copywatch-cpw)
+    - [fix-bins (`fix`)](#fix-bins-fix)
+    - [install (`i`)](#install-i)
 
 ## Local Development
 
@@ -190,7 +190,7 @@ The changes the version of **all the packages** (even those that haven't changed
 
 If something went wrong you can use `yarn lerna publish from-package` to publish the packages that aren't already in the registry.
 
-## CLI Reference: `redwood-tools`
+## CLI Reference: `redwood-tools` (alias `rwt`)
 
 This CLI Reference section covers the `redwood-tools` command options:
 
@@ -200,7 +200,7 @@ yarn rwt <command>
 
 For `redwood` options, see the [CLI Reference on redwoodjs.com](https://redwoodjs.com/reference/command-line-interface).
 
-### copy (alias cp)
+### copy (`cp`)
 
 Copy the Redwood Framework path to this project.
 
@@ -210,7 +210,7 @@ yarn rwt cp [RW_PATH]
 
 You can avoid having to provide `RW_PATH` by defining an environment variable on your system. See [Specifying a RW_PATH](https://github.com/redwoodjs/redwood/blob/main/CONTRIBUTING.md#specifying-a-rw_path).
 
-### copy:watch (alias cpw)
+### copy:watch (`cpw`)
 
 Watch the Redwood Framework path for changes and copy them over to this project.
 
@@ -220,7 +220,7 @@ yarn rwt cpw [RW_PATH]
 
 You can avoid having to provide `RW_PATH` by defining an environment variable on your system. See [Specifying a RW_PATH](https://github.com/redwoodjs/redwood/blob/main/CONTRIBUTING.md#specifying-a-rw_path).
 
-### fix-bins (alias fix)
+### fix-bins (`fix`)
 
 Fix Redwood symlinks and permissions.
 
@@ -238,7 +238,7 @@ The Redwood CLI has the following binaries:
 
 When you're contributing, the permissions of these binaries can sometimes get mixed up. This makes them executable again.
 
-### install (alias i)
+### install (`i`)
 
 Install a package from your local NPM registry.
 
