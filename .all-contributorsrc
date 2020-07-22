@@ -207,6 +207,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "snormore",
+      "name": "Steven Normore",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/182290?v=4",
+      "profile": "http://twitter.com/snormore",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
