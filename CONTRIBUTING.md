@@ -109,9 +109,6 @@ yarn rwt copy:watch
 
 And see your changes copied!
 
-_On Windows_
-[Todo: please contribute a PR if you can help add instructions here.]
-
 ### Local Package Registry Emulation
 
 Sometimes you'll want to test the full package-development workflow: building, publishing, and installing in your Redwood App. We facilitate this using a local NPM registry called [Verdaccio](https://github.com/verdaccio/verdaccio).
