@@ -576,6 +576,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "twmilli",
+      "name": "Taylor Milliman",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/15217013?v=4",
+      "profile": "http://taylormilliman.me/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
