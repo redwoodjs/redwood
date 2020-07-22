@@ -450,6 +450,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "jeliasson",
+      "name": "Johan Eliasson",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/865493?v=4",
+      "profile": "https://github.com/jeliasson",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
