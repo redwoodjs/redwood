@@ -54,6 +54,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "cannikin",
+      "name": "Rob Cameron",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/300?v=4",
+      "profile": "http://ridingtheclutch.com/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
