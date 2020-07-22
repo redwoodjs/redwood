@@ -441,6 +441,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "redstab",
+      "name": "Jens Lindström",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/26380995?v=4",
+      "profile": "https://github.com/redstab",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
