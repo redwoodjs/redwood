@@ -6,9 +6,4 @@
     "rootDir": "src",
     "outDir": "dist",
   },
-  "references": [
-    {
-      "path": "../testing"
-    }
-  ]
 }
