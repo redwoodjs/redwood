@@ -1,8 +1,15 @@
 const React = require('react')
 const { addDecorator } = require('@storybook/react')
+
+// The StorybookLoader is responsible for importing all the mock files and booting
+// up the mock service workers.
+const { StorybookLoader } = require('@redwoodjs/core/dist/storybook')
+
+// Import the user's default CSS file
 require('~__REDWOOD__USER_WEB_DEFAULT_CSS')
 
-// ** NOTE ** HMR doesn't work if you don't import the MockProviders directly.
-const { MockProviders } = require('@redwoodjs/testing/dist/MockProviders')
-
-addDecorator((storyFn) => React.createElement(MockProviders, null, storyFn()))
+addDecorator(
+  (storyFn, { id }) => {
+    return React.createElement(StorybookLoader, { storyFn, id })
+  }
+)
