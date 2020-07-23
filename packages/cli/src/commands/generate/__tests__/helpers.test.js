@@ -5,7 +5,7 @@ import {} from 'src/lib/test'
 
 import * as helpers from '../helpers'
 
-const PAGE_TEMPLATE_OUTPUT = `import { Link } from '@redwoodjs/router'
+const PAGE_TEMPLATE_OUTPUT = `import { Link, routes } from '@redwoodjs/router'
 
 const FooBarPage = () => {
   return (
@@ -14,7 +14,7 @@ const FooBarPage = () => {
       <p>Find me in "./web/src/pages/FooBarPage/FooBarPage.js"</p>
       <p>
         My default route is named "fooBar", link to me with \`
-        <Link to="fooBar">routes.fooBar()</Link>\`
+        <Link to={routes.fooBar()}>FooBar</Link>\`
       </p>
     </>
   )
@@ -139,6 +139,26 @@ test('pathName creates path based on name if path is null', () => {
   names.forEach((name) => {
     expect(helpers.pathName(null, name)).toEqual('/foo-bar')
   })
+})
+
+test('pathName creates path based on name if path is just a route parameter', () => {
+  expect(helpers.pathName('{id}', 'post')).toEqual('/post/{id}')
+  expect(helpers.pathName('{id:Int}', 'post')).toEqual('/post/{id:Int}')
+})
+
+test('pathName supports paths with route params', () => {
+  expect(helpers.pathName('/post/{id:Int}/edit', 'EditPost')).toEqual(
+    '/post/{id:Int}/edit'
+  )
+})
+
+test('getParam returns undefined for no params', () => {
+  expect(helpers.getParam('/')).toEqual(undefined)
+  expect(helpers.getParam('/post/edit')).toEqual(undefined)
+})
+
+test('getParam finds the param in the middle of the path', () => {
+  expect(helpers.getParam('/post/{id:Int}/edit')).toEqual('{id:Int}')
 })
 
 test('relationsForModel returns related field names from a belongs-to relationship', () => {

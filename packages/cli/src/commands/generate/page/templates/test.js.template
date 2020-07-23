@@ -5,7 +5,7 @@ import ${pascalName}Page from './${pascalName}Page'
 describe('${pascalName}Page', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<${pascalName}Page />)
+      render(<${pascalName}Page <%= typeof param !== 'undefined' && param ? param.replace(/{([^:}]+)(:[^}]+)?}/, '$1={42} ') : '' %>/>)
     }).not.toThrow()
   })
 })

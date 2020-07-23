@@ -1,14 +1,17 @@
-import { Link } from '@redwoodjs/router'
+import { Link, routes } from '@redwoodjs/router'
 
-const ${pascalName}Page = () => {
+const ${pascalName}Page = (<%= typeof param !== 'undefined' && param ? param.replace(/:[^}]+/, '') : '' %>) => {
   return (
     <>
       <h1>${pascalName}Page</h1>
       <p>Find me in "${outputPath}"</p>
       <p>
-        My default route is named "${camelName}",
-        link to me with `<Link to="${camelName}">routes.${camelName}()</Link>`
-      </p>
+        My default route is named "${camelName}", link to me with `
+        <Link to={routes.${camelName}(<%= typeof param !== 'undefined' && param ? param.replace(/(:[^}]+)?}/, ': 42 }') : '' %>)}>${pascalName}<%= typeof param !== 'undefined' && param ? ' 42' : '' %></Link>`
+      </p><% if (typeof param !== 'undefined' && param) { %>
+      <p>
+        The parameter passed to me is <%= param.replace(/:[^}]+/, '') %>
+      </p><% } %>
     </>
   )
 }

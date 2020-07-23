@@ -5,12 +5,13 @@ import { loadGeneratorFixture } from 'src/lib/test'
 
 import * as page from '../page'
 
-let singleWordFiles, multiWordFiles, pluralWordFiles
+let singleWordFiles, multiWordFiles, pluralWordFiles, paramFiles
 
 beforeAll(() => {
   singleWordFiles = page.files({ name: 'Home' })
   multiWordFiles = page.files({ name: 'ContactUs' })
   pluralWordFiles = page.files({ name: 'Cats' })
+  paramFiles = page.files({ name: 'Post', param: '{id:Int}' })
 })
 
 test('returns exactly 3 files', () => {
@@ -33,7 +34,7 @@ test('creates a page test', () => {
   ).toEqual(loadGeneratorFixture('page', 'singleWordPage.test.js'))
 })
 
-test('creates a page test', () => {
+test('creates a page story', () => {
   expect(
     singleWordFiles[
       path.normalize(
@@ -53,7 +54,7 @@ test('creates a page component', () => {
   ).toEqual(loadGeneratorFixture('page', 'multiWordPage.js'))
 })
 
-test('creates a page test', () => {
+test('creates a test for a component with multiple words for a name', () => {
   expect(
     multiWordFiles[
       path.normalize(
@@ -79,6 +80,22 @@ test('creates a page component with a plural word for name', () => {
       path.normalize('/path/to/project/web/src/pages/CatsPage/CatsPage.js')
     ]
   ).toEqual(loadGeneratorFixture('page', 'pluralWordPage.js'))
+})
+
+test('creates a page component with params', () => {
+  expect(
+    paramFiles[
+      path.normalize('/path/to/project/web/src/pages/PostPage/PostPage.js')
+    ]
+  ).toEqual(loadGeneratorFixture('page', 'paramPage.js'))
+})
+
+test('creates a test for page component with params', () => {
+  expect(
+    paramFiles[
+      path.normalize('/path/to/project/web/src/pages/PostPage/PostPage.test.js')
+    ]
+  ).toEqual(loadGeneratorFixture('page', 'paramPage.test.js'))
 })
 
 test('creates a single-word route name', () => {

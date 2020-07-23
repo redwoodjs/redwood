@@ -8,7 +8,7 @@ import terminalLink from 'terminal-link'
 import { writeFilesTask, addRoutesToRouterTask } from 'src/lib'
 import c from 'src/lib/colors'
 
-import { templateForComponentFile, pathName } from '../helpers'
+import { templateForComponentFile, pathName, getParam } from '../helpers'
 
 const COMPONENT_SUFFIX = 'Page'
 const REDWOOD_WEB_PATH_NAME = 'pages'
@@ -74,7 +74,7 @@ export const builder = (yargs) => {
       type: 'string',
     })
     .positional('path', {
-      description: 'URL path to the page. Defaults to name',
+      description: 'URL path to the page, or just {param}. Defaults to name',
       type: 'string',
     })
     .option('force', {
@@ -124,7 +124,8 @@ export const handler = async ({ name, path, force }) => {
       {
         title: 'Generating page files...',
         task: async () => {
-          const f = await files({ name, path: pathName(path, name) })
+          path = pathName(path, name)
+          const f = await files({ name, path, param: getParam(path) })
           return writeFilesTask(f, { overwriteExisting: force })
         },
       },
