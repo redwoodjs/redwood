@@ -7,6 +7,7 @@
     "README.md"
   ],
   "imageSize": 100,
+  "contributorTemplate": "<a href=\"<%= contributor.profile %>\"><img src=\"<%= contributor.avatar_url %>\" width=\"<%= options.imageSize %>px;\" alt=\"\"/><br /><sub><b><%= contributor.name %></b></sub></a>",
   "commit": true,
   "commitConvention": "none",
   "contributors": [
@@ -127,7 +128,7 @@
         "code"
       ]
     },
-        {
+    {
       "login": "Terris",
       "name": "Terris Kremer",
       "avatar_url": "https://avatars0.githubusercontent.com/u/458233?v=4",
