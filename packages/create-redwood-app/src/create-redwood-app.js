@@ -113,6 +113,8 @@ const createProjectTasks = ({ newAppDir }) => {
             path.join(newAppDir, '.gitignore.app'),
             path.join(newAppDir, '.gitignore')
           )
+
+          fs.unlinkSync(path.join(newAppDir, '.all-contributorsrc'))
         } catch (e) {
           throw new Error('Could not move project files')
         }
