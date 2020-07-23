@@ -2,8 +2,6 @@
 
 `@redwoodjs/auth` is a lightweight wrapper around popular SPA authentication libraries. We currently support the following authentication providers:
 
-Check out the [Auth Playground](https://github.com/redwoodjs/playground-auth).
-
 - [Netlify Identity Widget](https://github.com/netlify/netlify-identity-widget)
 - [Auth0](https://github.com/auth0/auth0-spa-js)
 - [Netlify GoTrue-JS](https://github.com/netlify/gotrue-js)
@@ -11,32 +9,27 @@ Check out the [Auth Playground](https://github.com/redwoodjs/playground-auth).
 - [Firebase's GoogleAuthProvider](https://firebase.google.com/docs/reference/js/firebase.auth.GoogleAuthProvider)
 - [Contribute one](#contributing), it's SuperEasy™!
 
+Check out the [Auth Playground](https://github.com/redwoodjs/playground-auth).
+
 ## Installation
 
 ### CLI Auth Generator
 
-The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
+The following CLI command will install required packages, generate boilerplate code, and files for Redwood Projects:
 
 ```terminal
 yarn rw g auth [provider]
 ```
 
-*`[provider]` values can be either "netlify", "goTrue", "auth0", "magicLink" or "firebase".*
+*`[provider]` can be one of: "auth0", "custom", "firebase", "goTrue", "magicLink", or "netlify".
 
-### Manual Install
+### Manual Installation
 
 #### Netlify Identity Widget
 
 ```bash
 cd web
 yarn add @redwoodjs/auth netlify-identity-widget
-```
-
-#### GoTrue-JS
-
-```bash
-cd web
-yarn add @redwoodjs/auth gotrue-js
 ```
 
 #### Auth0
@@ -53,11 +46,20 @@ cd web
 yarn add @redwoodjs/auth magic-sdk
 ```
 
+#### GoTrue-JS
+
+```bash
+cd web
+yarn add @redwoodjs/auth gotrue-js
+```
+
 ## Setup
 
-Instantiate your authentication library and pass it to the `AuthProvider`:
+Instantiate your authentication client, and pass it to the `<AuthProvider>`:
 
 ### For Netlify Identity Widget
+
+You will need to enable Identity on your Netlify site. See [Netlify Identity Setup](https://redwoodjs.com/tutorial/authentication#netlify-identity-setup).
 
 ```js
 // web/src/index.js
@@ -85,7 +87,7 @@ You will need to enable Identity on your Netlify site. See [Netlify Identity Set
 
 Add the GoTrue-JS package to the web side:
 
-```bash
+```terminal
 yarn workspace web add gotrue-js
 ```
 
@@ -210,7 +212,6 @@ const UserAuthTools = () => {
   const { loading, isAuthenticated, logIn, logOut } = useAuth()
 
   if (loading) {
-    // auth is rehydrating
     return null
   }
 

@@ -30,7 +30,7 @@ class VSCodeWindowMethodsWrapper implements VSCodeWindowMethods {
   createTerminal2(props: { name: string; cwd: string; cmd: string }): void {
     return this.connection.sendRequest('xxx/createTerminal2', [props])
   }
-  withProgress(options: any, task: () => void) {
+  withProgress(_options: any, task: () => void) {
     // TODO:
     return task()
   }
