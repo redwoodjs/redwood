@@ -5,8 +5,8 @@
     "dist",
     "importAll.macro.js"
   ],
-  "main": "./dist/main.js",
-  "types": "./dist/main.d.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
     "@prisma/client": "^2.1.1",

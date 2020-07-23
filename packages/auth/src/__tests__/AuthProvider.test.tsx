@@ -4,9 +4,10 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 import { setupServer } from 'msw/node'
 import { graphql } from 'msw'
-import type { AuthClient } from 'src/authClients'
-import { AuthProvider } from 'src/AuthProvider'
-import { useAuth } from 'src/useAuth'
+
+import { useAuth } from '../useAuth'
+import { AuthProvider } from '../AuthProvider'
+import type { AuthClient } from '../authClients'
 
 let CURRENT_USER_DATA = {
   name: 'Peter Pistorius',
@@ -29,6 +30,7 @@ beforeAll(() => server.listen())
 afterAll(() => server.close())
 
 beforeEach(() => {
+  server.resetHandlers()
   CURRENT_USER_DATA = {
     name: 'Peter Pistorius',
     email: 'nospam@example.net',
@@ -44,10 +46,16 @@ const AuthConsumer = () => {
     userMetadata,
     currentUser,
     reauthenticate,
+    hasError,
+    error,
   } = useAuth()
 
   if (loading) {
     return <>Loading...</>
+  }
+
+  if (hasError) {
+    return <>{error.message}</>
   }
 
   return (
@@ -79,7 +87,7 @@ const AuthConsumer = () => {
 /**
  * A logged out user can login, view their personal account information and logout.
  */
-test('Authentication flow (logged out -> login -> logged in -> logout) works as expected', async () => {
+test('Authentication flow (logged out -> login -> logged in -> logout) works as expected', async (done) => {
   const mockAuthClient: AuthClient = {
     login: async () => {
       return true
@@ -132,9 +140,11 @@ test('Authentication flow (logged out -> login -> logged in -> logout) works as 
   // Log out
   fireEvent.click(screen.getByText('Log Out'))
   await waitFor(() => screen.getByText('Log In'))
+
+  done()
 })
 
-test('Fetching the current user can be skipped', async () => {
+test('Fetching the current user can be skipped', async (done) => {
   const mockAuthClient: AuthClient = {
     login: async () => {
       return true
@@ -177,12 +187,13 @@ test('Fetching the current user can be skipped', async () => {
   // Log out
   fireEvent.click(screen.getByText('Log Out'))
   await waitFor(() => screen.getByText('Log In'))
+  done()
 })
 
 /**
  * This is especially helpful if you want to update the currentUser state.
  */
-test('A user can be reauthenticated to update the "auth state"', async () => {
+test('A user can be reauthenticated to update the "auth state"', async (done) => {
   const mockAuthClient: AuthClient = {
     login: async () => {
       return true
@@ -225,12 +236,52 @@ test('A user can be reauthenticated to update the "auth state"', async () => {
     )
   ).toBeInTheDocument()
 
-  // Sometime changes over...
-  CURRENT_USER_DATA.name = 'Rambo'
+  CURRENT_USER_DATA = { ...CURRENT_USER_DATA, name: 'Rambo' }
   fireEvent.click(screen.getByText('Update auth data'))
-  waitFor(() =>
+
+  await waitFor(() =>
     screen.getByText(
       'currentUser: {"name":"Rambo","email":"nospam@example.net"}'
     )
   )
+
+  done()
+})
+
+test('When the current user cannot be fetched the user is not authenticated', async (done) => {
+  server.use(
+    graphql.query('__REDWOOD__AUTH_GET_CURRENT_USER', (_req, res, ctx) => {
+      return res(ctx.status(404))
+    })
+  )
+
+  const mockAuthClient: AuthClient = {
+    login: async () => {
+      return true
+    },
+    logout: async () => {},
+    getToken: async () => 'hunter2',
+    getUserMetadata: jest.fn(async () => {
+      return {
+        sub: 'abcdefg|123456',
+        username: 'peterp',
+      }
+    }),
+    client: () => {},
+    type: 'custom',
+  }
+  render(
+    <AuthProvider client={mockAuthClient} type="custom">
+      <AuthConsumer />
+    </AuthProvider>
+  )
+
+  // We're booting up!
+  expect(screen.getByText('Loading...')).toBeInTheDocument()
+
+  await waitFor(() =>
+    screen.getByText('Could not fetch current user: Not Found (404)')
+  )
+
+  done()
 })

@@ -1,6 +1,7 @@
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 import { getProject } from '@redwoodjs/structure'
+import { ensurePosixPath } from '@redwoodjs/internal'
 
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
@@ -10,7 +11,7 @@ const jest = require('jest')
 // TODO: Get from redwood.toml
 const sides = getProject().sides
 
-// https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/scripts/test.js#L39
+// https://github.com/facebook/create-react-app/blob/cbad256a4aacfc3084be7ccf91aad87899c63564/packages/react-scripts/scripts/test.js#L39
 function isInGitRepository() {
   try {
     execa.commandSync('git rev-parse --is-inside-work-tree')
@@ -83,8 +84,8 @@ export const handler = async ({ side, watch, watchAll, collectCoverage }) => {
      * Migrate test database. This should be moved to somehow be done on a
      * per-side basis if possible.
      */
-    const DATABASE_URL =
-      process.env.TEST_DATABASE_URL || `file:${CACHE_DIR}/test.db`
+    const cacheDirDb = `file:${ensurePosixPath(CACHE_DIR)}/test.db`
+    const DATABASE_URL = process.env.TEST_DATABASE_URL || cacheDirDb
 
     await execa.command(`yarn rw db up`, {
       stdio: 'inherit',

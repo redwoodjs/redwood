@@ -115,7 +115,7 @@ module.exports = () => ({
                 path: 'react',
               },
               {
-                // import { PropTypes } from 'prop-types'
+                // import PropTypes from 'prop-types'
                 default: 'PropTypes',
                 path: 'prop-types',
               },
@@ -123,6 +123,11 @@ module.exports = () => ({
                 // import gql from 'graphql-tag'
                 default: 'gql',
                 path: 'graphql-tag',
+              },
+              {
+                // import { mockGraphQLQuery, mockGraphQLMutation } from '@redwoodjs/testing'
+                members: ['mockGraphQLQuery', 'mockGraphQLMutation'],
+                path: '@redwoodjs/testing',
               },
             ],
           },
