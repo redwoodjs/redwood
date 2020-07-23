@@ -1,0 +1,30 @@
+{
+  "name": "@redwoodjs/forms",
+  "version": "0.14.0",
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.js",
+  "license": "MIT",
+  "dependencies": {
+    "core-js": "3.6.4",
+    "pascalcase": "1.0.0",
+    "react-hook-form": "^5.1.3"
+  },
+  "devDependencies": {
+    "react": "16.13.1",
+    "@testing-library/react": "10.4.7",
+    "@testing-library/user-event": "12.0.12"
+  },
+  "peerDependencies": {
+    "react": "*"
+  },
+  "scripts": {
+    "build": "yarn cross-env NODE_ENV=production babel src -d dist --extensions \".js,.ts,.tsx\" --delete-dir-on-start",
+    "build:types": "tsc --build --clean && tsc --build",
+    "prepublishOnly": "yarn build",
+    "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
+    "test": "jest",
+    "test:watch": "yarn test --watch"
+  }
+}

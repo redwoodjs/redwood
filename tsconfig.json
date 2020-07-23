@@ -8,6 +8,7 @@
     { "path": "packages/dev-server" },
     { "path": "packages/auth" },
     { "path": "packages/web" },
+    { "path": "packages/forms" },
   ],
   "files": []
 }
