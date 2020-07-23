@@ -52,5 +52,12 @@ export const createAuthClient = (
   client: SupportedAuthClients,
   type: SupportedAuthTypes
 ): AuthClient => {
+  if (!typesToClients[type]) {
+    throw new Error(
+      `Your client ${type} is not supported, we only support ${Object.keys(
+        typesToClients
+      ).join(', ')}`
+    )
+  }
   return typesToClients[type](client)
 }

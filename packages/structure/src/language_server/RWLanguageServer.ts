@@ -142,7 +142,7 @@ export class RWLanguageServer {
       })
     })
 
-    connection.onExecuteCommand(async (params, token, workDoneProgress) => {
+    connection.onExecuteCommand(async (params, _token, workDoneProgress) => {
       if (params.command === 'redwoodjs/cli') {
         const [cmd, cwd] = params.arguments ?? []
         workDoneProgress?.begin('rwjs cli', undefined, 'rwjs cli message')
