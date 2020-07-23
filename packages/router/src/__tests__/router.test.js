@@ -29,6 +29,12 @@ it('inits routes and navigates as expected', async () => {
       <Private unauthenticated="home">
         <Route path="/private" page={PrivatePage} name="private" />
       </Private>
+
+      <Route
+        path="/param-test/:value"
+        page={({ value }) => <div>param {value}</div>}
+        name="params"
+      />
     </Router>
   )
   const screen = render(<TestRouter />)
@@ -63,4 +69,11 @@ it('inits routes and navigates as expected', async () => {
     expect(screen.getByText(/Private Page/)).toBeTruthy()
     expect(screen.queryByText(/Home Page/)).toBeNull()
   })
+
+  mockAuth(false)
+  act(() => navigate(routes.params({ value: 'one' })))
+  await waitFor(() => screen.getByText(/param one/i))
+
+  act(() => navigate(routes.params({ value: 'two' })))
+  await waitFor(() => screen.getByText(/param two/i))
 })
