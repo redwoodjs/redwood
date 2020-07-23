@@ -1,4 +1,4 @@
-import { render, waitFor } from '@testing-library/react'
+import { render, waitFor, act } from '@testing-library/react'
 
 import { Router, Route, Private, Redirect, navigate, routes } from '../'
 
@@ -31,37 +31,36 @@ it('inits routes and navigates as expected', async () => {
       </Private>
     </Router>
   )
-  const { getByText, queryByText } = render(<TestRouter />)
+  const screen = render(<TestRouter />)
+
   // starts on home page
-  await waitFor(() => {
-    expect(getByText(/Home Page/)).toBeTruthy()
-  })
+  await waitFor(() => screen.getByText(/Home Page/i))
+
   // navigate to about page
-  navigate(routes.about())
-  await waitFor(() => {
-    expect(getByText(/About Page/)).toBeTruthy()
-  })
+  act(() => navigate(routes.about()))
+
+  await waitFor(() => screen.getByText(/About Page/i))
   // navigate to private page
   // should redirect to home
-  navigate(routes.private())
+  act(() => navigate(routes.private()))
   await waitFor(() => {
-    expect(queryByText(/Private Page/)).toBeNull()
-    expect(getByText(/Home Page/)).toBeTruthy()
+    expect(screen.queryByText(/Private Page/i)).toBeNull()
+    screen.getByText(/Home Page/i)
   })
   // navigate to redirect page
   // should redirect to about
-  navigate(routes.redirect())
+  act(() => navigate(routes.redirect()))
   await waitFor(() => {
-    expect(queryByText(/Redirect Page/)).toBeNull()
-    expect(queryByText(/About Page/)).toBeTruthy()
+    expect(screen.queryByText(/Redirect Page/)).toBeNull()
+    expect(screen.queryByText(/About Page/)).toBeTruthy()
   })
   // mock log in
   // navigate to private page
   // should not redirect
   mockAuth(true)
-  navigate(routes.private())
+  act(() => navigate(routes.private()))
   await waitFor(() => {
-    expect(getByText(/Private Page/)).toBeTruthy()
-    expect(queryByText(/Home Page/)).toBeNull()
+    expect(screen.getByText(/Private Page/)).toBeTruthy()
+    expect(screen.queryByText(/Home Page/)).toBeNull()
   })
 })
