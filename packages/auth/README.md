@@ -239,7 +239,7 @@ When using the Auth0 client, `login` and `logout` take `options` that can be use
 * `returnTo`: a permitted logout url set in Auth0
 * `redirectTo`: a target url after login
 
-The latter is helpful when an unauthenticated user visits a Private route, but then is redirected to the `unauthenticated` route. The Redwood router will place the previous requested path in the pathname as a `redirectTo` parameter which can be extracted and set in the Auth0 `appState`. That way, after successfully loggin in, the user will be directed to this `targetUrl` rather than the config's callback.
+The latter is helpful when an unauthenticated user visits a Private route, but then is redirected to the `unauthenticated` route. The Redwood router will place the previous requested path in the pathname as a `redirectTo` parameter which can be extracted and set in the Auth0 `appState`. That way, after successfully logging in, the user will be directed to this `targetUrl` rather than the config's callback.
 
 ```js
 const UserAuthTools = () => {
