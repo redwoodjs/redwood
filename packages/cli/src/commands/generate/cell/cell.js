@@ -1,3 +1,4 @@
+import pascalcase from 'pascalcase'
 import { getProject } from '@redwoodjs/structure'
 
 import {
@@ -17,7 +18,10 @@ const getCellOperationNames = () => {
 }
 
 const uniqueOperationName = (name, index = 1) => {
-  let operationName = index <= 1 ? `${name}Query` : `${name}Query_${index}`
+  let operationName =
+    index <= 1
+      ? `${pascalcase(name)}Query`
+      : `${pascalcase(name)}Query_${index}`
   if (!getCellOperationNames().includes(operationName)) {
     return operationName
   }
