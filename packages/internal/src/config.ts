@@ -44,7 +44,7 @@ export interface Config {
 const DEFAULT_CONFIG: Config = {
   web: {
     host: 'localhost',
-    port: 8910,
+    port: process.env.PORT ? Number(process.env.PORT) : 8910,
     path: './web',
     target: TargetEnum.BROWSER,
     apiProxyPath: '/.netlify/functions',
