@@ -5,9 +5,11 @@ export * from '@redwoodjs/forms'
  */
 export const Form = () => {
   console.warn(`
-  Deprecation notice for forms:
-    import { Form } from "@redwoodjs/web" has been deprecated.
-    Please import from '@redwoodjs/forms'
+  Deprecation notice, forms have moved:
+    Pleas use:
+    'import { Form } from "@redwoodjs/forms"'
+    instead of:
+    'import { Form } from "@redwoodjs/web"'
   `)
   return Form
 }

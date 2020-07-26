@@ -1,3 +1,4 @@
+import React from 'react'
 const CoercionContext = React.createContext()
 
 export const CoercionContextProvider = ({ children }) => {
