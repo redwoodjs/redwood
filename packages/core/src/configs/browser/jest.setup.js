@@ -9,8 +9,8 @@ const {
   mockGraphQLQuery,
 } = require('@redwoodjs/testing')
 
-globalThis.mockGraphQLQuery = mockGraphQLQuery
-globalThis.mockGraphQLMutation = mockGraphQLMutation
+global.mockGraphQLQuery = mockGraphQLQuery
+global.mockGraphQLMutation = mockGraphQLMutation
 
 beforeEach(async () => {
   // Import the global mocks.
