@@ -88,7 +88,7 @@ export const handler = async ({
 
   try {
     // Create a test database
-    if (side.includes('api')) {
+    if (sides.includes('api')) {
       const cacheDirDb = `file:${ensurePosixPath(CACHE_DIR)}/test.db`
       const DATABASE_URL = process.env.TEST_DATABASE_URL || cacheDirDb
       await execa.command(`yarn rw db up`, {
