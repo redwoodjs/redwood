@@ -158,6 +158,11 @@ export class RWProject extends BaseNode {
     return ['web', 'api']
   }
 
+  // TODO: Wrap these in a real model.
+  @lazy() get mocks() {
+    return this.host.globSync(this.pathHelper.web.base + '/**/*.mock.{js,ts}')
+  }
+
   /**
    * A "Cell" is a component that ends in `Cell.{js, jsx, tsx}`, but does not
    * have a default export AND does not export `QUERY`

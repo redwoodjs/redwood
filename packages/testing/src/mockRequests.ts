@@ -6,7 +6,7 @@ import * as msw from 'msw'
 // a queue that is drained once the server is started.
 let REQUEST_HANDLER_QUEUE: msw.RequestHandler[] = []
 
-export let SERVER_INSTANCE: any
+let SERVER_INSTANCE: any
 
 /**
  * This will import the correct runtime (node/ browser) of MSW,
@@ -23,12 +23,13 @@ export const startMSW = async () => {
   if (typeof global.process === 'undefined') {
     const { setupWorker } = require('msw')
     SERVER_INSTANCE = setupWorker()
+    await SERVER_INSTANCE.start()
   } else {
     const { setupServer } = require('msw/node')
     SERVER_INSTANCE = setupServer()
+    await SERVER_INSTANCE.listen()
   }
 
-  await SERVER_INSTANCE.start()
   setupRequestHandlers()
   return SERVER_INSTANCE
 }
