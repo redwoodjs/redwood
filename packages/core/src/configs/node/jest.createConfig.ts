@@ -4,9 +4,7 @@ export default function getNodeJestConfig() {
   return {
     displayName: {
       color: 'redBright',
-
-      // TODO: Detect which side this is and name it that instead
-      name: 'node',
+      name: 'api',
     },
 
     resolver: 'jest-directory-named-resolver',
