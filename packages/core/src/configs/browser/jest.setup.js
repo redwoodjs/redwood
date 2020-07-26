@@ -1,12 +1,14 @@
 require('@testing-library/jest-dom')
 require('whatwg-fetch')
 
-const { server } = require('@redwoodjs/testing')
+const { startMSW, SERVER_INSTANCE } = require('@redwoodjs/testing')
+
+// TODO: Import all mock files.
 
 beforeAll(() => {
-  server.listen()
+  startMSW()
 })
 
 afterAll(() => {
-  server.close()
+  SERVER_INSTANCE?.close()
 })

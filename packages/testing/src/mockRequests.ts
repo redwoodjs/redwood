@@ -6,7 +6,7 @@ import * as msw from 'msw'
 // a queue that is drained once the server is started.
 let REQUEST_HANDLER_QUEUE: msw.RequestHandler[] = []
 
-let SERVER_INSTANCE: any
+export let SERVER_INSTANCE: any
 
 /**
  * This will import the correct runtime (node/ browser) of MSW,
