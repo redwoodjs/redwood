@@ -88,12 +88,17 @@ export const createYargsForComponentGeneration = ({
       })
     },
     handler: async (options) => {
+      const f = await filesFn(options)
+      if (options.json) {
+        console.log(JSON.stringify(f, 2))
+        return
+      }
+
       const tasks = new Listr(
         [
           {
             title: `Generating ${componentName} files...`,
             task: async () => {
-              const f = await filesFn(options)
               return writeFilesTask(f, { overwriteExisting: options.force })
             },
           },
