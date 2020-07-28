@@ -21,8 +21,30 @@ jest.mock('@redwoodjs/internal', () => {
           db: path.join(global.__dirname, 'fixtures'), // this folder
           src: path.join(BASE_PATH, './api/src'),
           services: path.join(BASE_PATH, './api/src/services'),
-          graphql: path.join(BASE_PATH, './api/src/graphql'),
+          graphql: path.join(BASE_PATH, './api/src/graphql.js'),
           functions: path.join(BASE_PATH, './api/src/functions'),
+          lib: path.join(BASE_PATH, './api/src/lib'),
+        },
+        web: {
+          src: path.join(BASE_PATH, './web/src'),
+          routes: path.join(BASE_PATH, 'web/src/Routes.js'),
+          components: path.join(BASE_PATH, '/web/src/components'),
+          layouts: path.join(BASE_PATH, '/web/src/layouts'),
+          pages: path.join(BASE_PATH, '/web/src/pages'),
+        },
+      }
+    },
+    resolve: () => {
+      const BASE_PATH = '/path/to/project'
+      return {
+        base: BASE_PATH,
+        api: {
+          db: path.join(global.__dirname, 'fixtures'), // this folder
+          src: path.join(BASE_PATH, './api/src'),
+          services: path.join(BASE_PATH, './api/src/services'),
+          graphql: path.join(BASE_PATH, './api/src/graphql.js'),
+          functions: path.join(BASE_PATH, './api/src/functions'),
+          lib: path.join(BASE_PATH, './api/src/lib'),
         },
         web: {
           src: path.join(BASE_PATH, './web/src'),
@@ -40,9 +62,25 @@ global.__prettierPath = path.resolve(
   __dirname,
   './__tests__/fixtures/prettier.config.js'
 )
+jest.mock('fs', () => {
+  const fs = jest.requireActual('fs')
 
+  return {
+    ...fs,
+    readFileSync: (fileName) => {
+      if (fileName === '/path/to/project/web/src/index.js') {
+        return '<RedwoodProvider>.*</RedwoodProvider>'
+      }
+      return 'test'
+    },
+    writeFileSync: () => {
+      return
+    },
+  }
+})
 jest.mock('path', () => {
   const path = jest.requireActual('path')
+
   return {
     ...path,
     join: (...paths) => {
@@ -53,6 +91,7 @@ jest.mock('path', () => {
       ) {
         return global.__prettierPath
       }
+
       return path.join(...paths)
     },
   }

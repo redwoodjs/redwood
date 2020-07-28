@@ -9,11 +9,6 @@ import { resolveFile } from '@redwoodjs/internal'
 import { getPaths, writeFilesTask } from 'src/lib'
 import c from 'src/lib/colors'
 
-const API_GRAPHQL_PATH = resolveFile(
-  path.join(getPaths().api.functions, 'graphql')
-)
-
-const API_SRC_PATH = path.join(getPaths().api.src)
 const TEMPLATES = fs
   .readdirSync(path.resolve(__dirname, 'templates'))
   .reduce((templates, file) => {
@@ -27,8 +22,7 @@ const TEMPLATES = fs
       }
     }
   }, {})
-const OUTPUT_PATH = path.join(getPaths().api.lib, 'auth.js')
-const WEB_SRC_INDEX_PATH = path.join(getPaths().web.src, 'index.js')
+
 const SUPPORTED_PROVIDERS = fs
   .readdirSync(path.resolve(__dirname, 'providers'))
   .map((file) => path.basename(file, '.js'))
@@ -74,6 +68,8 @@ const addWebRender = (content, authProvider) => {
 // the files to create to support auth
 export const files = (provider) => {
   const template = TEMPLATES[provider] ?? TEMPLATES.base
+  const OUTPUT_PATH = path.join(getPaths().api.lib, 'auth.js')
+
   return {
     [OUTPUT_PATH]: fs.readFileSync(template).toString(),
   }
@@ -81,8 +77,8 @@ export const files = (provider) => {
 
 // actually inserts the required config lines into index.js
 export const addConfigToIndex = (config) => {
+  const WEB_SRC_INDEX_PATH = path.join(getPaths().web.src, 'index.js')
   let content = fs.readFileSync(WEB_SRC_INDEX_PATH).toString()
-
   content = addWebImports(content, config.imports)
   content = addWebInit(content, config.init)
   content = addWebRender(content, config.authProvider)
@@ -91,6 +87,10 @@ export const addConfigToIndex = (config) => {
 }
 
 export const addApiConfig = () => {
+  const API_GRAPHQL_PATH = resolveFile(
+    path.join(getPaths().api.functions, 'graphql')
+  )
+
   let content = fs.readFileSync(API_GRAPHQL_PATH).toString()
 
   // add import statement
@@ -111,14 +111,19 @@ export const isProviderSupported = (provider) => {
 }
 
 export const apiSrcDoesExist = () => {
+  const API_SRC_PATH = path.join(getPaths().api.src)
   return fs.existsSync(API_SRC_PATH)
 }
 
 export const webIndexDoesExist = () => {
+  const WEB_SRC_INDEX_PATH = path.join(getPaths().web.src, 'index.js')
   return fs.existsSync(WEB_SRC_INDEX_PATH)
 }
 
 export const graphFunctionDoesExist = () => {
+  const API_GRAPHQL_PATH = resolveFile(
+    path.join(getPaths().api.functions, 'graphql')
+  )
   return fs.existsSync(API_GRAPHQL_PATH)
 }
 
