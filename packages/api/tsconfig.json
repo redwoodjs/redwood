@@ -5,12 +5,10 @@
     "baseUrl": ".",
     "rootDir": "src",
     "outDir": "dist",
-    "resolveJsonModule": true
   },
   "include": ["src", "src/../package.json"],
   "references": [
-    {
-      "path": "../auth"
-    }
+    { "path": "../auth", },
+    { "path": "../dev-server", }
   ]
 }

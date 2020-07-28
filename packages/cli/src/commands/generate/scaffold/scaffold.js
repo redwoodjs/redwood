@@ -201,17 +201,22 @@ const componentFiles = async (name, scaffoldPath = '') => {
       componentName: 'CheckboxField',
       defaultProp: 'defaultChecked',
       validation: false,
+      listDisplayFunction: 'checkboxInputTag',
       displayFunction: 'checkboxInputTag',
     },
     DateTime: {
+      listDisplayFunction: 'timeTag',
       displayFunction: 'timeTag',
     },
     Int: {
       componentName: 'NumberField',
     },
     Json: {
-      componentName: 'TextArea',
+      componentName: 'TextAreaField',
       dataType: 'Json',
+      displayFunction: 'jsonDisplay',
+      listDisplayFunction: 'jsonTruncate',
+      deserilizeFunction: 'JSON.stringify',
     },
     Float: {
       dataType: 'Float',
@@ -219,8 +224,10 @@ const componentFiles = async (name, scaffoldPath = '') => {
     default: {
       componentName: 'TextField',
       defaultProp: 'defaultValue',
+      deserilizeFunction: '',
       validation: '{{ required: true }}',
-      displayFunction: 'truncate',
+      displayFunction: undefined,
+      listDisplayFunction: 'truncate',
       dataType: undefined,
     },
   }
@@ -235,9 +242,15 @@ const componentFiles = async (name, scaffoldPath = '') => {
       defaultProp:
         componentMetadata[column.type]?.defaultProp ||
         componentMetadata.default.defaultProp,
+      deserilizeFunction:
+        componentMetadata[column.type]?.deserilizeFunction ||
+        componentMetadata.default.deserilizeFunction,
       validation:
         componentMetadata[column.type]?.validation ??
         componentMetadata.default.validation,
+      listDisplayFunction:
+        componentMetadata[column.type]?.listDisplayFunction ||
+        componentMetadata.default.listDisplayFunction,
       displayFunction:
         componentMetadata[column.type]?.displayFunction ||
         componentMetadata.default.displayFunction,

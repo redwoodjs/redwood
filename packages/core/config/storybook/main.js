@@ -29,6 +29,16 @@ module.exports = {
     // ** LOADERS **
     sbConfig.module.rules = rwConfig.module.rules
 
+    // Performance Improvements:
+    // https://webpack.js.org/guides/build-performance/#avoid-extra-optimization-steps
+    sbConfig.optimization = {
+      removeAvailableModules: false,
+      removeEmptyChunks: false,
+      splitChunks: false,
+    }
+    // https://webpack.js.org/guides/build-performance/#output-without-path-info
+    sbConfig.output.pathinfo = false
+
     return sbConfig
   },
 }

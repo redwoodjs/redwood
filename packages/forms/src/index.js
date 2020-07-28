@@ -1,6 +1,8 @@
+import React, { useContext, useEffect } from 'react'
 import { useForm, FormContext, useFormContext } from 'react-hook-form'
-import { useContext, useEffect } from 'react'
 import pascalcase from 'pascalcase'
+
+import { CoercionContextProvider, useCoercion } from './coercion'
 
 const DEFAULT_MESSAGES = {
   required: 'is required',
@@ -35,13 +37,6 @@ const INPUT_TYPES = [
   'url',
   'week',
 ]
-const COERCION_FUNCTIONS = {
-  Boolean: (value) => !!value,
-  Float: (value) => parseFloat(value),
-  Int: (value) => parseInt(value, 10),
-  Json: (value) => JSON.parse(value),
-  NumberField: (value) => parseInt(value, 10),
-}
 
 // Massages a hash of props depending on whether the given named field has
 // any errors on it
@@ -148,30 +143,17 @@ const FormError = ({
   )
 }
 
-const coerceValues = (data, children) => {
-  const coercedData = { ...data }
+const coerceValues = (data, coerce) => {
+  const coercedData = {}
 
-  children.forEach((child) => {
-    const childName = child.props.name
-
-    const [componentName] = Object.entries(inputComponents).find(
-      ([_, componentConstructor]) => componentConstructor === child.type
-    ) || [undefined, undefined]
-
-    const coercionFunction =
-      COERCION_FUNCTIONS[child.props?.dataType || componentName]
-
-    if (coercionFunction) {
-      coercedData[childName] = coercionFunction(data[childName])
-    }
+  Object.keys(data).forEach((name) => {
+    coercedData[name] = coerce(name, data[name])
   })
 
   return coercedData
 }
 
-// Renders a containing <form> tag with required contexts
-
-const Form = (props) => {
+const FormWithCoercionContext = (props) => {
   // deconstruct some props we care about and keep the remaining `formProps` to
   // pass to the <form> tag
   const {
@@ -182,12 +164,13 @@ const Form = (props) => {
   } = props
   const useFormMethods = useForm(props.validation)
   const formMethods = propFormMethods || useFormMethods
+  const { coerce } = useCoercion()
 
   return (
     <form
       {...formProps}
       onSubmit={formMethods.handleSubmit((data, event) =>
-        onSubmit(coerceValues(data, props.children), event)
+        onSubmit(coerceValues(data, coerce), event)
       )}
     >
       <FieldErrorContext.Provider
@@ -198,6 +181,16 @@ const Form = (props) => {
         <FormContext {...formMethods}>{props.children}</FormContext>
       </FieldErrorContext.Provider>
     </form>
+  )
+}
+
+// Renders a containing <form> tag with required contexts
+
+const Form = (props) => {
+  return (
+    <CoercionContextProvider>
+      <FormWithCoercionContext {...props} />
+    </CoercionContextProvider>
   )
 }
 
@@ -232,6 +225,12 @@ const FieldError = (props) => {
 
 const TextAreaField = (props) => {
   const { register } = useFormContext()
+  const { setCoercion } = useCoercion()
+
+  React.useEffect(() => {
+    setCoercion({ name: props.name, dataType: props.dataType })
+  }, [setCoercion, props.name, props.dataType])
+
   const tagProps = inputTagProps(props)
 
   return (
@@ -268,6 +267,16 @@ const Submit = React.forwardRef((props, ref) => (
 
 const InputField = (props) => {
   const { register } = useFormContext()
+  const { setCoercion } = useCoercion()
+
+  React.useEffect(() => {
+    setCoercion({
+      name: props.name,
+      type: props.type,
+      dataType: props.dataType,
+    })
+  }, [setCoercion, props.name, props.type, props.dataType])
+
   const tagProps = inputTagProps(props)
 
   return (

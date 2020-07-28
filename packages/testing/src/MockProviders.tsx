@@ -3,6 +3,7 @@
  * because it's also used by Storybook in the browser.
  */
 import React from 'react'
+// @ts-expect-error
 import { RedwoodProvider } from '@redwoodjs/web'
 
 // Import the user's Router from `./web/src/Router.{tsx,js}`,

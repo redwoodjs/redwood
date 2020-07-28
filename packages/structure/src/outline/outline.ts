@@ -1,35 +1,21 @@
-import { URL_file } from 'src/x/URL'
 import { FileNode } from '../ide'
 import { RWProject } from '../model'
+import { URL_file } from '../x/URL'
 import { Icon, OutlineItem } from './types'
-
-/*
-- all items have icons. in vscode you can create items without icons but
-  they introduce layout consistency issues.
-*/
 
 export function getOutline(project: RWProject): OutlineItem {
   return {
     label: 'Redwood.js',
     icon: Icon.redwood,
-    expanded: false,
+    expanded: true,
     async children() {
       return [
         {
-          label: 'pages',
-          icon: Icon.pages,
-          onAdd: 'rw g page',
-          expaded: true,
-          link: URL_file(project.pathHelper.web.pages),
-          async children() {
-            return fromFiles(project.pages)
-          },
-        },
-        {
           label: 'Routes.js',
           link: project.router.uri,
+          doc: `${DOCS}/redwood-router`,
           icon: Icon.pages,
-          onAdd: 'rw g page',
+          add: 'rw generate page ...',
           async children() {
             return project.router.routes.map((route) => {
               return {
@@ -37,14 +23,40 @@ export function getOutline(project: RWProject): OutlineItem {
                 label: route.outlineLabel,
                 description: route.outlineDescription,
                 link: route.outlineLink,
-                icon: route.isAuthenticated ? Icon.page : Icon.page,
+                icon: Icon.page,
+              }
+            })
+          },
+        },
+        {
+          label: 'pages',
+          icon: Icon.pages,
+          onAdd: 'rw generate page ...',
+          link: URL_file(project.pathHelper.web.pages),
+          async children() {
+            return project.pages.map((page) => {
+              return {
+                id: page.id,
+                label: page.basename,
+                link: page.uri,
+                icon: Icon.page,
+                description: page.route?.path,
+                async children() {
+                  return [
+                    rw_commands({
+                      label: 'destroy',
+                      cmd: 'rw destroy page ' + page.basenameNoExt,
+                      tooltip: '',
+                    }),
+                  ]
+                },
               }
             })
           },
         },
         {
           label: 'components',
-          onAdd: 'rw g component',
+          add: 'rw generate component ...',
           icon: Icon.components,
           link: URL_file(project.pathHelper.web.components),
           async children() {
@@ -53,7 +65,7 @@ export function getOutline(project: RWProject): OutlineItem {
         },
         {
           label: 'layouts',
-          onAdd: 'rw g layout',
+          add: 'rw generate layout ...',
           icon: Icon.layouts,
           link: URL_file(project.pathHelper.web.layouts),
           async children() {
@@ -62,7 +74,8 @@ export function getOutline(project: RWProject): OutlineItem {
         },
         {
           label: 'cells',
-          onAdd: 'rw g cell',
+          add: 'rw generate cell ...',
+          icon: Icon.cells,
           link: URL_file(project.pathHelper.web.components),
           async children() {
             return fromFiles(project.cells)
@@ -70,7 +83,8 @@ export function getOutline(project: RWProject): OutlineItem {
         },
         {
           label: 'services',
-          onAdd: 'rw g service',
+          add: 'rw generate service ...',
+          icon: Icon.services,
           link: URL_file(project.pathHelper.api.services),
           async children() {
             return fromFiles(project.services)
@@ -78,9 +92,12 @@ export function getOutline(project: RWProject): OutlineItem {
         },
         {
           label: 'functions',
-          onAdd: 'rw g function',
+          add: 'rw generate function ...',
+          doc: `${DOCS}/serverless-functions`,
           icon: Icon.functions,
           link: URL_file(project.pathHelper.api.functions),
+          // TODO: link to published function
+          // http://localhost:8911/graphql
           async children() {
             return fromFiles(project.functions)
           },
@@ -91,37 +108,91 @@ export function getOutline(project: RWProject): OutlineItem {
           link: URL_file(project.pathHelper.api.dbSchema),
           async children() {
             const dmmf = await project.prismaDMMF()
-            return dmmf.datamodel.models.map((model) => {
+            const models = dmmf.datamodel.models.map((model) => {
               return {
                 label: model.name,
+                icon: Icon.model,
                 async children() {
                   const fields = model.fields.map((f) => {
                     return { label: f.name, description: `:${f.type}` }
                   })
-                  const actions: OutlineItem[] = [
+                  const commands = rw_commands(
                     {
                       label: 'generate sdl',
-                      icon: Icon.rw_cli,
-                      description:
-                        'create graphql interface to access this model',
-                      link: `rw g sdl ${model.name}`,
+                      tooltip: 'create graphql interface to access this model',
+                      cmd: `generate sdl ${model.name}`,
                     },
                     {
                       label: 'generate scaffold',
-                      icon: Icon.rw_cli,
-                      description:
+                      cmd: `generate scaffold ${model.name}`,
+                      tooltip:
                         'generate pages, SDL, and a services object for this model',
-                      link: `rw g scaffold ${model.name}`,
-                    },
-                  ]
-                  return [...fields, ...actions]
+                    }
+                  )
+                  return [...fields, commands]
                 },
               }
             })
+            const commands = rw_commands(
+              {
+                cmd: 'db save',
+                tooltip: 'save migration file with new changes',
+              },
+              {
+                cmd: 'db up',
+                tooltip: 'apply migrations',
+              }
+            )
+            return [...models, commands]
           },
         },
+        {
+          label: 'redwood.toml',
+          icon: Icon.redwood,
+          link: URL_file(project.pathHelper.base, 'redwood.toml'),
+        },
+        rw_commands({
+          cmd: 'generate ...',
+          tooltip: 'start interactive redwood generator',
+        }),
       ]
     },
+  }
+}
+
+const DOCS = 'https://redwoodjs.com/docs'
+
+// TODO: add link to docs https://redwoodjs.com/docs/serverless-functions
+
+interface RWOpts {
+  cmd: string
+  label?: string
+  tooltip: string
+}
+
+function rw_commands(...opts: RWOpts[]): OutlineItem {
+  return {
+    label: '',
+    key: 'actions',
+    tooltip: 'Redwood CLI actions',
+    icon: Icon.rw_cli,
+    async children() {
+      return opts.map(rw_command)
+    },
+  }
+}
+
+function rw_command(opts: RWOpts) {
+  const { cmd, label, tooltip } = opts
+  let link = cmd
+  if (!(cmd.startsWith('rw') || cmd.startsWith('redwood'))) {
+    link = 'redwood ' + cmd
+  }
+  return {
+    label: label ?? cmd,
+    description: label ? cmd : '',
+    tooltip,
+    link,
   }
 }
 
@@ -132,26 +203,7 @@ function fromFiles(fileNodes: FileNode[]): OutlineItem[] {
 function fromFile(fileNode: FileNode): OutlineItem {
   return {
     key: fileNode.id,
-    label: fileNode.basenameNoExt,
+    label: fileNode.basename,
     link: fileNode.uri,
-  }
-}
-
-/**
- * this is used for
- * @param uri
- * @param root
- */
-export async function findOutlineItemForFile(
-  uri: string,
-  root: OutlineItem
-): Promise<OutlineItem | undefined> {
-  if (root.link === uri) return root
-  // bail out early on branches are not potential parents
-  if (root.link) if (!uri.startsWith(root.link)) return undefined
-  const children = root.children ? await root.children() : []
-  for (const c of children) {
-    const ff = await findOutlineItemForFile(uri, c)
-    if (ff) return ff
   }
 }

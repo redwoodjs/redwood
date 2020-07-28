@@ -1,17 +1,17 @@
 {
   "name": "@redwoodjs/api",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "files": [
     "dist",
     "importAll.macro.js"
   ],
-  "main": "./dist/main.js",
-  "types": "./dist/main.d.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
     "@prisma/client": "~2.2.2",
-    "@redwoodjs/internal": "^0.13.0",
-    "apollo-server-lambda": "2.14.2",
+    "@redwoodjs/internal": "^0.14.0",
+    "apollo-server-lambda": "2.16.0",
     "babel-plugin-macros": "^2.8.0",
     "core-js": "3.6.4",
     "glob": "^7.1.6",
@@ -26,7 +26,7 @@
     "merge-graphql-schemas": "^1.7.6"
   },
   "devDependencies": {
-    "@redwoodjs/auth": "^0.13.0",
+    "@redwoodjs/auth": "^0.14.0",
     "@types/graphql-iso-date": "^3.4.0",
     "@types/graphql-type-json": "^0.3.2",
     "@types/jsonwebtoken": "^8.3.9",

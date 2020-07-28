@@ -37,7 +37,7 @@ module.exports = {
     ],
     /**
      * NOTE
-     * Experimental decorators are used in `@redwoodjs/project-model`.
+     * Experimental decorators are used in `@redwoodjs/structure`.
      * https://github.com/tc39/proposal-decorators
      **/
     ['@babel/plugin-proposal-decorators', { legacy: true }],

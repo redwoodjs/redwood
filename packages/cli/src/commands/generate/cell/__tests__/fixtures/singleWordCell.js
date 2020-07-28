@@ -1,5 +1,5 @@
 export const QUERY = gql`
-  query {
+  query UserQuery {
     user {
       id
     }

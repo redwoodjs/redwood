@@ -1,20 +1,50 @@
 import execa from 'execa'
-import Listr from 'listr'
-import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
+import { getProject } from '@redwoodjs/structure'
+import { ensurePosixPath } from '@redwoodjs/internal'
 
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 
+// https://github.com/facebook/create-react-app/blob/cbad256a4aacfc3084be7ccf91aad87899c63564/packages/react-scripts/scripts/test.js#L39
+function isInGitRepository() {
+  try {
+    execa.commandSync('git rev-parse --is-inside-work-tree')
+    return true
+  } catch (e) {
+    return false
+  }
+}
+
+function isInMercurialRepository() {
+  try {
+    execa.commandSync('hg --cwd . root')
+    return true
+  } catch (e) {
+    return false
+  }
+}
+
 export const command = 'test [side..]'
-export const description = 'Run Jest tests for api and web'
+export const description = 'Run Jest tests'
 export const builder = (yargs) => {
   yargs
-    .positional('side', {
-      choices: ['api', 'web'],
-      default: ['api', 'web'],
-      description: 'Which side(s) to test',
-      type: 'array',
+    .choices('side', getProject().sides)
+    .option('watch', {
+      type: 'boolean',
+      default: false,
+    })
+    .option('watchAll', {
+      type: 'boolean',
+      default: false,
+    })
+    .option('collectCoverage', {
+      type: 'boolean',
+      default: false,
+    })
+    .option('clearCache', {
+      type: 'boolean',
+      default: false,
     })
     .epilogue(
       `Also see the ${terminalLink(
@@ -24,51 +54,58 @@ export const builder = (yargs) => {
     )
 }
 
-export const handler = async ({ side }) => {
-  const { base: BASE_DIR, cache: CACHE_DIR } = getPaths()
+export const handler = async ({
+  side,
+  watch = false,
+  watchAll = false,
+  collectCoverage = false,
+}) => {
+  const { cache: CACHE_DIR } = getPaths()
+  const sides = [].concat(side).filter(Boolean)
 
-  const DB_URL = process.env.TEST_DATABASE_URL || `file:${CACHE_DIR}/test.db`
+  const args = [
+    '--passWithNoTests',
+    watch && '--watch',
+    collectCoverage && '--collectCoverage',
+    watchAll && '--watchAll',
+  ].filter(Boolean)
 
-  const execCommands = {
-    api: {
-      cwd: `${BASE_DIR}/api`,
-      cmd: `DATABASE_URL=${DB_URL} yarn rw db up && yarn jest`,
-      args: [
-        '--passWithNoTests',
-        '--config ../node_modules/@redwoodjs/core/config/jest.config.api.js',
-      ],
-    },
-    web: {
-      cwd: `${BASE_DIR}/web`,
-      cmd: 'yarn jest',
-      args: [
-        '--passWithNoTests',
-        '--config ../node_modules/@redwoodjs/core/config/jest.config.web.js',
-      ],
-    },
+  // If you don't pass any arguments we enter "watch mode" as the default.
+  if (!process.env.CI && !watchAll && !collectCoverage) {
+    // https://github.com/facebook/create-react-app/issues/5210
+    const hasSourceControl = isInGitRepository() || isInMercurialRepository()
+    args.push(hasSourceControl ? '--watch' : '--watchAll')
   }
 
-  const tasks = new Listr(
-    side.map((sideName) => {
-      const { cmd, args, cwd } = execCommands[sideName]
-      return {
-        title: `Running '${sideName}' jest tests`,
-        task: () => {
-          return execa(cmd, args, {
-            stdio: 'inherit',
-            shell: true,
-            cwd,
-          })
-        },
-      }
-    }),
-    {
-      renderer: VerboseRenderer,
-    }
+  args.push(
+    '--config',
+    require.resolve('@redwoodjs/core/config/jest.config.js')
   )
 
+  if (sides.length > 0) {
+    args.push('--projects', ...sides)
+  }
+
   try {
-    await tasks.run()
+    // Create a test database
+    if (sides.includes('api')) {
+      const cacheDirDb = `file:${ensurePosixPath(CACHE_DIR)}/test.db`
+      const DATABASE_URL = process.env.TEST_DATABASE_URL || cacheDirDb
+      await execa.command(`yarn rw db up`, {
+        stdio: 'inherit',
+        shell: true,
+        env: { DATABASE_URL },
+      })
+    }
+
+    // **NOTE** There is no official way to run Jest programatically,
+    // so we're running it via execa, since `jest.run()` is a bit unstable.
+    // https://github.com/facebook/jest/issues/5048
+    execa('yarn jest', args, {
+      cwd: getPaths().base,
+      shell: true,
+      stdio: 'inherit',
+    })
   } catch (e) {
     console.log(c.error(e.message))
   }

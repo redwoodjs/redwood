@@ -1,4 +1,5 @@
-import { createContextHandler, context } from '../main'
+import { createContextHandler } from '../functions/graphql'
+import { context } from '../globalContext'
 
 describe('graphql createContextHandler', () => {
   it('merges the context correctly', async () => {

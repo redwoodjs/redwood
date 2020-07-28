@@ -105,7 +105,6 @@ export const createGraphQLHandler = (
       if (isDevEnv) {
         // I want the dev-server to pick this up!?
         // TODO: Move the error handling into a separate package
-        // @ts-expect-error
         import('@redwoodjs/dev-server/dist/error')
           .then(({ handleError }) => {
             return handleError(error.originalError as Error)
