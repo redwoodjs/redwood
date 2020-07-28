@@ -7,6 +7,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const DirectoryNamedWebpackPlugin = require('directory-named-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
+const { RetryChunkLoadPlugin } = require('webpack-retry-chunk-load-plugin')
 const Dotenv = require('dotenv-webpack')
 const { getConfig, getPaths } = require('@redwoodjs/internal')
 const merge = require('webpack-merge')
@@ -182,6 +183,15 @@ module.exports = (webpackEnv) => {
         chunks: 'all',
       }),
       new CopyPlugin([{ from: 'public/', to: '', ignore: ['README.md'] }]),
+      isEnvProduction &&
+        new RetryChunkLoadPlugin({
+          cacheBust: `function() {
+					return Date.now();
+				}`,
+          maxRetries: 5,
+          // @TODO: Add redirect to fatalErrorPage
+          // lastResortScript: "window.location.href='/500.html';"
+        }),
       ...getSharedPlugins(isEnvProduction),
     ].filter(Boolean),
     module: {

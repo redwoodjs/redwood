@@ -59,7 +59,8 @@
     "webpack-bundle-analyzer": "^3.6.1",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3",
-    "webpack-merge": "^4.2.2"
+    "webpack-merge": "^4.2.2",
+    "webpack-retry-chunk-load-plugin": "^1.4.0"
   },
   "gitHead": "1cb7c8d1085147787209af423c33a9c91c3e6517",
   "scripts": {
