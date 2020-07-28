@@ -19,6 +19,12 @@ export const builder = (yargs) => {
       description: 'Which dev server(s) to start',
       type: 'array',
     })
+    .positional('webpackConfig', {
+      alias: 'wpc',
+      description:
+        'Optional string of Webpack DevServer config options, e.g. `--wpc="--port=1234"`',
+      type: 'string',
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -27,7 +33,10 @@ export const builder = (yargs) => {
     )
 }
 
-export const handler = async ({ side = ['api', 'web'] }) => {
+export const handler = async ({
+  side = ['api', 'web'],
+  webpackConfig = '',
+}) => {
   // We use BASE_DIR when we need to effectively set the working dir
   const BASE_DIR = getPaths().base
   // For validation, e.g. dirExists?, we use these
@@ -74,7 +83,7 @@ export const handler = async ({ side = ['api', 'web'] }) => {
       command: `cd "${path.join(
         BASE_DIR,
         'web'
-      )}" && yarn webpack-dev-server --config ../node_modules/@redwoodjs/core/config/webpack.development.js`,
+      )}" && yarn webpack-dev-server --config ../node_modules/@redwoodjs/core/config/webpack.development.js ${webpackConfig}`,
       prefixColor: 'blue',
       runWhen: () => fs.existsSync(WEB_DIR_SRC),
     },
