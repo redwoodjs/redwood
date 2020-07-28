@@ -9,7 +9,7 @@
   ],
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@prisma/sdk": "~2.2.2",
+    "@prisma/sdk": "~2.3.0",
     "@redwoodjs/internal": "^0.8.2",
     "camelcase": "^6.0.0",
     "deepmerge": "^4.2.2",

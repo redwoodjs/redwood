@@ -9,7 +9,7 @@
   "types": "./dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@prisma/client": "~2.2.2",
+    "@prisma/client": "~2.3.0",
     "@redwoodjs/internal": "^0.14.0",
     "apollo-server-lambda": "2.16.0",
     "babel-plugin-macros": "^2.8.0",
