@@ -1,3 +1,5 @@
+import React from 'react'
+import userEvent from '@testing-library/user-event'
 import {
   screen,
   render,
@@ -5,7 +7,6 @@ import {
   fireEvent,
   waitFor,
 } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
 
 import {
   Form,
@@ -14,7 +15,7 @@ import {
   CheckboxField,
   TextAreaField,
   Submit,
-} from 'src/form/form'
+} from '../index'
 
 describe('Form', () => {
   const TestComponent = ({ onSubmit = () => {} }) => {

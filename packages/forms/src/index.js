@@ -1,5 +1,5 @@
+import React, { useContext, useEffect } from 'react'
 import { useForm, FormContext, useFormContext } from 'react-hook-form'
-import { useContext, useEffect } from 'react'
 import pascalcase from 'pascalcase'
 
 import { CoercionContextProvider, useCoercion } from './coercion'
