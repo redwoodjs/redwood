@@ -33,4 +33,9 @@ export const yargsDefaults = {
     description: 'Generate TypeScript files',
     type: 'boolean',
   },
+  json: {
+    description: 'Output as JSON',
+    type: 'boolean',
+    default: false,
+  },
 }
