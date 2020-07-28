@@ -1,4 +1,4 @@
-import { groupBy, mapValues } from 'lodash'
+import { groupBy, mapValues, uniqBy } from 'lodash'
 import * as tsm from 'ts-morph'
 import { TextDocuments } from 'vscode-languageserver'
 import { TextDocument } from 'vscode-languageserver-textdocument'
@@ -35,6 +35,25 @@ export function Position_compare(
   if (p1.character > p2.character) return 'greater'
   if (p2.character > p1.character) return 'smaller'
   return 'equal'
+}
+
+/**
+ * Create a new position relative to this position.
+ *
+ * @param lineDelta Delta value for the line value, default is `0`.
+ * @param characterDelta Delta value for the character value, default is `0`.
+ * @return A position which line and character is the sum of the current line and
+ * character and the corresponding deltas.
+ */
+export function Position_translate(
+  pos: Position,
+  lineDelta = 0,
+  characterDelta = 0
+): Position {
+  return {
+    line: pos.line + lineDelta,
+    character: pos.character + characterDelta,
+  }
 }
 
 export function Range_fromNode(node: tsm.Node): Range {
@@ -114,7 +133,11 @@ export function ExtendedDiagnostic_groupByUri(
   ds: ExtendedDiagnostic[]
 ): { [uri: string]: Diagnostic[] } {
   const grouped = groupBy(ds, (d) => d.uri)
-  return mapValues(grouped, (xds) => xds.map((xd) => xd.diagnostic))
+  const dss = mapValues(grouped, (xds) => {
+    const dd = xds.map((xd) => xd.diagnostic)
+    return uniqBy(dd, JSON.stringify) // dedupe
+  })
+  return dss
 }
 
 export async function ExtendedDiagnostic_findRelevantQuickFixes(
@@ -273,7 +296,7 @@ export function WorkspaceEdit_fromFileSet(
         //change.createFile(uri, { overwrite: true })
         change
           .getTextEditChange({ uri, version: null })
-          .replace(Range_full(text), content)
+          .replace(Range_full(text), content) // TODO: we could be more granular here
       } else {
         change.createFile(uri)
         change
