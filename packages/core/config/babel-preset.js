@@ -5,6 +5,8 @@
 const { getPaths } = require('@redwoodjs/internal')
 
 const TARGETS_NODE = '12.16.1'
+// Warning! Use the minor core-js version: "corejs: '3.6'", instead of "corejs: 3",
+// because we want to include the features added in the minor version.
 // https://github.com/zloirock/core-js/blob/master/README.md#babelpreset-env
 // Warning! Recommended to specify used minor core-js version, like corejs: '3.6',
 // instead of corejs: 3, since with corejs: 3 will not be injected modules which
