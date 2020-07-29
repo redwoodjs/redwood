@@ -231,7 +231,7 @@ export class HostWithDocumentsStore implements Host {
     if (doc) return doc.getText()
     return this.defaultHost.readFileSync(path)
   }
-  writeFileSync(path: string, contents: string) {
+  writeFileSync() {
     // NOOP - Not sure what to do here :)
   }
   mkdirSync(path) {

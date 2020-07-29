@@ -11,6 +11,7 @@
   "dependencies": {
     "@prisma/sdk": "^2.1.1",
     "@redwoodjs/internal": "^0.8.2",
+    "pascalcase": "1.0.0",
     "camelcase": "^6.0.0",
     "deepmerge": "^4.2.2",
     "enquirer": "2.3.6",
