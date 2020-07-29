@@ -8,7 +8,7 @@ import terminalLink from 'terminal-link'
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 
-const MODEL = `model DataMigration {
+const MODEL = `model RW_DataMigration {
   version    String   @id
   name       String
   startedAt  DateTime
@@ -30,7 +30,7 @@ const createPath = () => {
   )
 }
 
-// Appends _DataMigration model to schema.prisma
+// Appends RW_DataMigration model to schema.prisma
 const appendModel = () => {
   const schemaPath = getPaths().api.dbSchema
   const schema = fs.readFileSync(schemaPath).toString()
@@ -48,7 +48,7 @@ const save = async () => {
 }
 
 export const command = 'install'
-export const description = 'Add the DataMigration model to your schema'
+export const description = 'Add the RW_DataMigration model to your schema'
 export const builder = (yargs) => {
   yargs.epilogue(
     `Also see the ${terminalLink(
@@ -66,7 +66,7 @@ export const handler = async () => {
         task: createPath,
       },
       {
-        title: 'Adding DataMigration model to schema.prisma...',
+        title: 'Adding RW_DataMigration model to schema.prisma...',
         task: await appendModel,
       },
       {

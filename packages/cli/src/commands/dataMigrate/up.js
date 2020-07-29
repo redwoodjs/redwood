@@ -42,7 +42,7 @@ const getMigrations = async () => {
     })
 
   // gets all migration versions that have already run against the database
-  const ranMigrations = await db.dataMigration.findMany({
+  const ranMigrations = await db.rW_DataMigration.findMany({
     orderBy: { version: 'asc' },
   })
   const ranVersions = ranMigrations.map((migration) =>
@@ -58,7 +58,7 @@ const getMigrations = async () => {
 
 // adds data for completed migrations to the DB
 const record = async ({ version, name, startedAt, finishedAt }) => {
-  await db.dataMigration.create({
+  await db.rW_DataMigration.create({
     data: { version, name, startedAt, finishedAt },
   })
 }
