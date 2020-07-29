@@ -12,9 +12,11 @@ const {
 global.mockGraphQLQuery = mockGraphQLQuery
 global.mockGraphQLMutation = mockGraphQLMutation
 
+const project = getProject()
+
 beforeEach(async () => {
   // Import the global mocks.
-  for (const m of getProject().mocks) {
+  for (const m of project.mocks) {
     require(m)
   }
   await startMSW()
