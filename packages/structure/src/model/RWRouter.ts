@@ -12,6 +12,8 @@ import { RWError } from '../errors'
 import { CodeLensX, FileNode } from '../ide'
 import { iter } from '../x/Array'
 import { lazy, memo } from '../x/decorators'
+import pascalcase from 'pascalcase'
+import camelcase from 'camelcase'
 import {
   err,
   ExtendedDiagnostic,
@@ -45,7 +47,6 @@ export class RWRouter extends FileNode {
   /**
    * the <Router> tag
    */
-
   @lazy() private get jsxNode() {
     return this.sf
       .getDescendantsOfKind(tsm.SyntaxKind.JsxOpeningElement)
@@ -55,7 +56,6 @@ export class RWRouter extends FileNode {
   /**
    * One per <Route>
    */
-
   @lazy() get routes() {
     const self = this
     return iter(function* () {
@@ -70,9 +70,33 @@ export class RWRouter extends FileNode {
       }
     })
   }
+
+  /**
+   * Create a JSX string for insertion into the Router.
+   */
+  createRouteString = (name: string, path: string): string => {
+    name = camelcase(name)
+    const page = pascalcase(name) + 'Page'
+    return `<Route path="${path}" page={${page}} name="${name}" />`
+  }
+
+  /**
+   * Insert an array of routes into the Router. Used by the generators.
+   */
+  createRouterString = (routes: string[]): string => {
+    let content = this.text
+    for (const r of routes.reverse()) {
+      if (!content.includes(r)) {
+        content = content.replace(/(\s*)\<Router\>/, `$1<Router>$1  ${r}`)
+      }
+    }
+    return content
+  }
+
   @lazy() private get numNotFoundPages(): number {
     return this.routes.filter((r) => r.isNotFound).length
   }
+
   *ideInfo() {
     if (this.jsxNode) {
       let location = Location_fromNode(this.jsxNode)

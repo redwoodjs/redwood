@@ -84,6 +84,35 @@ describe('Cells', () => {
   })
 })
 
+describe('Router', () => {
+  const projectRoot = getFixtureDir('example-todo-main-with-errors')
+  const project = new RWProject({ projectRoot, host: new DefaultHost() })
+  it('Can generate the JSX string for a new route', () => {
+    expect(
+      project.router.createRouteString('testName', 'testPath')
+    ).toMatchInlineSnapshot(
+      `"<Route path=\\"testPath\\" page={TestNamePage} name=\\"testName\\" />"`
+    )
+  })
+
+  it('Can insert new routes into the correct place', () => {
+    const routes = [
+      project.router.createRouteString('test1Name', 'test1Path'),
+      project.router.createRouteString('test2Name', 'test2Path'),
+      project.router.createRouteString('test3Name', 'test3Path'),
+    ]
+    const newRouter = project.router.createRouterString(routes)
+
+    expect(newRouter).toContain(routes[0])
+    expect(newRouter).toContain(routes[1])
+    expect(newRouter).toContain(routes[2])
+
+    const rr = newRouter.split('\n').map((x) => x.trim())
+    // insert in reverse order:
+    expect(rr.indexOf(routes[2])).toBeLessThan(rr.indexOf(routes[0]))
+  })
+})
+
 function getFixtureDir(
   name: 'example-todo-main-with-errors' | 'example-todo-main'
 ) {
