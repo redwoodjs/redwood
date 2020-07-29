@@ -1,4 +1,3 @@
-import { URL_file } from '../x/URL'
 import * as tsm from 'ts-morph'
 import {
   CodeAction,
@@ -12,6 +11,7 @@ import { RWError } from '../errors'
 import { CodeLensX, FileNode } from '../ide'
 import { iter } from '../x/Array'
 import { lazy, memo } from '../x/decorators'
+import { URL_file } from '../x/URL'
 import {
   err,
   ExtendedDiagnostic,
@@ -82,7 +82,7 @@ export class RWRouter extends FileNode {
           range: location.range,
           command: Command.create(
             'Create Page...',
-            'redwoodjs/cli',
+            'redwoodjs.cli',
             'generate page...',
             this.parent.projectRoot
           ),
