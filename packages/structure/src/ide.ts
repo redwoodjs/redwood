@@ -22,7 +22,9 @@ export type NodeID = string
 export interface Host {
   existsSync(path: string): boolean
   readFileSync(path: string): string
+  writeFileSync(path: string, contents: string): void
   readdirSync(path: string): string[]
+  mkdirSync(path: string): void
   globSync(pattern: string): string[]
 }
 
@@ -206,6 +208,12 @@ export class DefaultHost implements Host {
   readFileSync(path: string) {
     return fs.readFileSync(path, { encoding: 'utf8' }).toString()
   }
+  writeFileSync(path: string, contents: string) {
+    return fs.writeFileSync(path, contents)
+  }
+  mkdirSync(path: string) {
+    return fs.mkdirSync(path, { recursive: true })
+  }
   readdirSync(path: string) {
     return fs.readdirSync(path)
   }
@@ -222,6 +230,12 @@ export class HostWithDocumentsStore implements Host {
     const doc = this.documents.get(uri)
     if (doc) return doc.getText()
     return this.defaultHost.readFileSync(path)
+  }
+  writeFileSync(path: string, contents: string) {
+    // NOOP - Not sure what to do here :)
+  }
+  mkdirSync(path) {
+    return this.defaultHost.mkdirSync(path)
   }
   existsSync(path: string) {
     return this.defaultHost.existsSync(path)
