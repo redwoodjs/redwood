@@ -28,10 +28,10 @@ export const templateForComponentFile = ({
   templateVars,
   componentName,
   outputPath,
-}) => {
+}, pathHelper = getPaths()) => {
   const basePath = webPathSection
-    ? getPaths().web[webPathSection]
-    : getPaths().api[apiPathSection]
+    ? pathHelper.web[webPathSection]
+    : pathHelper.api[apiPathSection]
   const outputComponentName =
     componentName || pascalcase(paramCase(name)) + suffix
   const componentOutputPath =
@@ -42,7 +42,7 @@ export const templateForComponentFile = ({
     {
       name,
       outputPath: ensurePosixPath(
-        `./${path.relative(getPaths().base, componentOutputPath)}`
+        `./${path.relative(pathHelper.base, componentOutputPath)}`
       ),
       ...templateVars,
     }
