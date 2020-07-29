@@ -31,18 +31,33 @@ Private.propTypes = {
    * The page name where a user will be redirected when not authenticated.
    */
   unauthenticated: PropTypes.string.isRequired,
+  role: PropTypes.string,
 }
 
-const PrivatePageLoader = ({ useAuth, unauthenticatedRoute, children }) => {
-  const { loading, isAuthenticated } = useAuth()
+const PrivatePageLoader = ({
+  useAuth,
+  unauthenticatedRoute,
+  role,
+  children,
+}) => {
+  const { loading, isAuthenticated, hasRole } = useAuth()
 
   if (loading) {
     return null
   }
 
-  if (isAuthenticated) {
+  console.log(`>>> PrivatePageLoader role = ${role}`)
+  if (
+    (isAuthenticated && !role) ||
+    (isAuthenticated && role && hasRole(role))
+  ) {
+    console.log('>>> PrivatePageLoader render children')
     return children
   } else {
+    console.log(
+      `>>> PrivatePageLoader render redirect to: ${unauthenticatedRoute()}`
+    )
+
     return (
       <Redirect
         to={`${unauthenticatedRoute()}?redirectTo=${window.location.pathname}`}
@@ -103,11 +118,12 @@ const RouterImpl = ({
       .filter((child) => child.type === Private)
       .map((privateElement) => {
         // Set `Route` props
-        const { unauthenticated, children } = privateElement.props
+        const { unauthenticated, role, children } = privateElement.props
         return React.Children.toArray(children).map((route) =>
           React.cloneElement(route, {
             private: true,
             unauthenticatedRedirect: unauthenticated,
+            role: role,
           })
         )
       })
@@ -169,6 +185,7 @@ const RouterImpl = ({
               unauthenticatedRoute={
                 namedRoutes[route.props.unauthenticatedRedirect]
               }
+              role={route.props.role}
             >
               <Loaders />
             </PrivatePageLoader>

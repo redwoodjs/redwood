@@ -27,6 +27,11 @@ export interface AuthContextInterface {
    **/
   getCurrentUser(): Promise<null | CurrentUser>
   /**
+   * Checks if the "currentUser" from the api side
+   * is assigned a role
+   **/
+  hasRole(): Promise<boolean>
+  /**
    * Redetermine authentication state and update the state.
    */
   reauthenticate(): Promise<void>
@@ -128,6 +133,10 @@ export class AuthProvider extends React.Component<
     }
   }
 
+  hasRole = (role: string) => {
+    return this.state.currentUser?.roles?.includes(role)
+  }
+
   reauthenticate = async () => {
     const notAuthenticatedState: AuthProviderState = {
       isAuthenticated: false,
@@ -186,6 +195,7 @@ export class AuthProvider extends React.Component<
           logOut: this.logOut,
           getToken: this.rwClient.getToken,
           getCurrentUser: this.getCurrentUser,
+          hasRole: this.hasRole,
           reauthenticate: this.reauthenticate,
           client,
           type,

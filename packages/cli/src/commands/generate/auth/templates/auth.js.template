@@ -4,6 +4,69 @@
 //   export const getCurrentUser = async ({ email }) => {
 //     return await db.user.findOne({ where: { email } })
 //   }
+//
+// If you want to enforce role-based access, you'll need to set the
+// currentUser's roles attributes to the collection of roles as defined by your app.
+//
+// This allows `hasRole(role)` to check if the user is assigned a given role or not.
+//
+// How you set the currentUser's roles depends on your auth provider and its implementation.
+//
+// If for example, your decoded JWT stores `roles` in its `app_metadata`:
+//
+// {
+//   'https://example.com/app_metadata': { authorization: { roles: ['admin'] } },
+//   'https://example.com/user_metadata': {},
+//   iss: 'https://app.us.auth0.com/',
+//   sub: 'email|1234',
+//   aud: [
+//     'https://example.com',
+//     'https://app.us.auth0.com/userinfo'
+//   ],
+//   iat: 1596481520,
+//   exp: 1596567920,
+//   azp: '1l0w6JXXXXL880T',
+//   scope: 'openid profile email'
+// }
+//
+// Then you will want to extract the roles from the token app_metadata which may or may
+// not be namespaced based on the auth provider.
+//
+// In some cases, roles will be set on an authorization attribute in app_metadata.
+//
+//   const NAMESPACE = 'https://example.com'
+//
+//   const appMetadata = (decoded) => {
+//     return decoded[`${NAMESPACE}/app_metadata`] || {}
+//   }
+//
+//   const roles = (decoded) => {
+//     return appMetadata(decoded).authorization?.roles || []
+//   }
+//
+// You have options how to fetch the currentUser and set roles based on your app implemention:
+//
+//   export const getCurrentUser = async ({ decoded }) => {
+//     return { ...decoded, roles: roles(decoded) }
+//   }
+//
+
+//
+//   export const getCurrentUser = async ({ decoded }) => {
+//     const currentUser = await db.user.findOne({ where: { email: decoded.email } })
+//     return { ...currentUser, roles: roles(decoded) }
+//   }
+//
+// ... or
+//
+//   const getCurrentUser = async (decoded) => {
+//     const currentUser = await db.user.findOne({ where: { userIdentity: decoded.sub } })
+//     return { ...currentUser, roles: roles(decoded) }
+//   }
+//
+// Whichever implemententaion, your currentUser should have a collection of roles:
+//
+// currentUser.roles = []
 
 import { AuthenticationError } from '@redwoodjs/api'
 
@@ -12,10 +75,19 @@ export const getCurrentUser = async (decoded, { token, type }) => {
 }
 
 // Use this function in your services to check that a user is logged in, and
-// optionally raise an error if they're not.
+// raise an error if they're not.
 
 export const requireAuth = () => {
   if (!context.currentUser) {
+    throw new AuthenticationError("You don't have permission to do that.")
+  }
+}
+
+// Use this function in your services to check whether a user is assigned a role, and
+// raise an error if they have not.
+
+export const hasRole = (role) => {
+  if (!context.currentUser.roles?.includes(role)) {
     throw new AuthenticationError("You don't have permission to do that.")
   }
 }

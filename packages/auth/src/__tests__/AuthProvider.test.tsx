@@ -47,6 +47,7 @@ const AuthConsumer = () => {
     currentUser,
     reauthenticate,
     hasError,
+    hasRole,
     error,
   } = useAuth()
 
@@ -76,6 +77,8 @@ const AuthConsumer = () => {
             {(currentUser && JSON.stringify(currentUser)) ||
               'no current user data'}
           </p>
+          <p>Has Admin: {hasRole('admin') && 'yes'}</p>
+          <p>Has Super User: {hasRole('superuser') && 'yes'}</p>
 
           <button onClick={() => reauthenticate()}>Update auth data</button>
         </>
@@ -282,6 +285,69 @@ test('When the current user cannot be fetched the user is not authenticated', as
   await waitFor(() =>
     screen.getByText('Could not fetch current user: Not Found (404)')
   )
+
+  done()
+})
+
+/**
+ * Check role access
+ */
+test('Authenticated user has role access as expected', async (done) => {
+  const mockAuthClient: AuthClient = {
+    login: async () => {
+      return true
+    },
+    logout: async () => {},
+    getToken: async () => 'hunter2',
+    getUserMetadata: jest.fn(async () => {
+      return null
+    }),
+    hasRole: jest.fn(async () => {
+      return null
+    }),
+    client: () => {},
+    type: 'custom',
+  }
+
+  render(
+    <AuthProvider client={mockAuthClient} type="custom">
+      <AuthConsumer />
+    </AuthProvider>
+  )
+
+  // We're booting up!
+  expect(screen.getByText('Loading...')).toBeInTheDocument()
+
+  // The user is not authenticated
+  await waitFor(() => screen.getByText('Log In'))
+
+  expect(screen.queryByText('Has Admin:')).not.toBeInTheDocument()
+  expect(screen.queryByText('Has Super User:')).not.toBeInTheDocument()
+
+  // Replace "getUserMetadata" with actual data, and login!
+  mockAuthClient.getUserMetadata = jest.fn(async () => {
+    return {
+      sub: 'abcdefg|123456',
+      username: 'peterp',
+    }
+  })
+  fireEvent.click(screen.getByText('Log In'))
+
+  // Check that you're logged in!
+  await waitFor(() => screen.getByText('Log Out'))
+
+  mockAuthClient.hasRole = jest.fn(async () => {
+    return true
+  })
+
+  // expect(mockAuthClient.hasRole).toBeCalledTimes(2)
+
+  expect(screen.getByText('Has Admin: yes')).toBeInTheDocument()
+  expect(screen.getByText('Has Super User: yes')).toBeInTheDocument()
+
+  // Log out
+  fireEvent.click(screen.getByText('Log Out'))
+  await waitFor(() => screen.getByText('Log In'))
 
   done()
 })

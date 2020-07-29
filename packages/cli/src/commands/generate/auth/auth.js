@@ -96,12 +96,12 @@ export const addApiConfig = () => {
   // add import statement
   content = content.replace(
     /^(.*services.*)$/m,
-    `$1\n\nimport { getCurrentUser } from 'src/lib/auth'`
+    `$1\n\nimport { getCurrentUser, hasRole } from 'src/lib/auth'`
   )
   // add object to handler
   content = content.replace(
     /^(\s*)(schema: makeMergedSchema)(.*)$/m,
-    `$1getCurrentUser,\n$1$2$3`
+    `$1getCurrentUser,\nhasRole,\n$1$2$3`
   )
   fs.writeFileSync(API_GRAPHQL_PATH, content)
 }
