@@ -1,0 +1,73 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`page generator creates the correct templates: /web/src/Routes.js 1`] = `
+"// In this file, all Page components from 'src/pages\` are auto-imported. Nested
+// directories are supported, and should be uppercase. Each subdirectory will be
+// prepended onto the component name.
+//
+// Examples:
+//
+// 'src/pages/HomePage/HomePage.js'         -> HomePage
+// 'src/pages/Admin/BooksPage/BooksPage.js' -> AdminBooksPage
+
+import { Router, Route } from '@redwoodjs/router'
+
+const Routes = () => {
+  return (
+    <Router>
+      <Route path=\\"/home\\" page={HomePage} name=\\"home\\" />
+      <Route path=\\"/\\" page={HomePage} name=\\"home\\" />
+      <Route notfound page={NotFoundPage} />
+    </Router>
+  )
+}
+
+export default Routes
+"
+`;
+
+exports[`page generator creates the correct templates: /web/src/pages/HomePage/HomePage.js 1`] = `
+"import { Link } from \\"@redwoodjs/router\\";
+
+const HomePage = () => {
+  return (
+    <>
+      <h1>HomePage</h1>
+      <p>Find me in \\"./web/src/pages/HomePage/HomePage.js\\"</p>
+      <p>
+        My default route is named \\"home\\", link to me with \`
+        <Link to=\\"home\\">routes.home()</Link>\`
+      </p>
+    </>
+  );
+};
+
+export default HomePage;
+"
+`;
+
+exports[`page generator creates the correct templates: /web/src/pages/HomePage/HomePage.stories.js 1`] = `
+"import HomePage from \\"./HomePage\\";
+
+export const generated = () => {
+  return <HomePage />;
+};
+
+export default { title: \\"Pages/HomePage\\" };
+"
+`;
+
+exports[`page generator creates the correct templates: /web/src/pages/HomePage/HomePage.test.js 1`] = `
+"import { render } from \\"@redwoodjs/testing\\";
+
+import HomePage from \\"./HomePage\\";
+
+describe(\\"HomePage\\", () => {
+  it(\\"renders successfully\\", () => {
+    expect(() => {
+      render(<HomePage />);
+    }).not.toThrow();
+  });
+});
+"
+`;
