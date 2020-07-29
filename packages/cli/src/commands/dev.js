@@ -19,10 +19,10 @@ export const builder = (yargs) => {
       description: 'Which dev server(s) to start',
       type: 'array',
     })
-    .positional('webpackConfig', {
-      alias: 'wpc',
+    .positional('forward', {
+      alias: 'fwd',
       description:
-        'Optional string of Webpack DevServer config options, e.g. `--wpc="--port=1234"`',
+        'String of one or more Webpack DevServer config options, for example: `--fwd="--port=1234 --open=false"`',
       type: 'string',
     })
     .epilogue(
@@ -33,10 +33,7 @@ export const builder = (yargs) => {
     )
 }
 
-export const handler = async ({
-  side = ['api', 'web'],
-  webpackConfig = '',
-}) => {
+export const handler = async ({ side = ['api', 'web'], forward = '' }) => {
   // We use BASE_DIR when we need to effectively set the working dir
   const BASE_DIR = getPaths().base
   // For validation, e.g. dirExists?, we use these
@@ -83,7 +80,7 @@ export const handler = async ({
       command: `cd "${path.join(
         BASE_DIR,
         'web'
-      )}" && yarn webpack-dev-server --config ../node_modules/@redwoodjs/core/config/webpack.development.js ${webpackConfig}`,
+      )}" && yarn webpack-dev-server --config ../node_modules/@redwoodjs/core/config/webpack.development.js ${forward}`,
       prefixColor: 'blue',
       runWhen: () => fs.existsSync(WEB_DIR_SRC),
     },
