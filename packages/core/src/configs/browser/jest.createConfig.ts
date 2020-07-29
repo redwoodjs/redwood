@@ -4,19 +4,16 @@ const path = require('path')
 
 const { getPaths } = require('@redwoodjs/internal')
 
-const redwoodPaths = getPaths()
-
-const NODE_MODULES_PATH = path.join(redwoodPaths.base, 'node_modules')
-
 export default function getBrowserJestConfig() {
+  const redwoodPaths = getPaths()
+  const NODE_MODULES_PATH = path.join(redwoodPaths.base, 'node_modules')
+
   return {
     displayName: {
       color: 'blueBright',
       name: 'web',
     },
     resolver: 'jest-directory-named-resolver',
-    // NOTE: We run the tests with a `cwd` argument that's `getPaths().web.base`
-    // testMatch,
     globals: {
       __REDWOOD__: true,
       __REDWOOD__API_PROXY_PATH: '/',
