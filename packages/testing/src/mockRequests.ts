@@ -23,12 +23,13 @@ export const startMSW = async () => {
   if (typeof global.process === 'undefined') {
     const { setupWorker } = require('msw')
     SERVER_INSTANCE = setupWorker()
+    await SERVER_INSTANCE.start()
   } else {
     const { setupServer } = require('msw/node')
     SERVER_INSTANCE = setupServer()
+    await SERVER_INSTANCE.listen()
   }
 
-  await SERVER_INSTANCE.start()
   setupRequestHandlers()
   return SERVER_INSTANCE
 }

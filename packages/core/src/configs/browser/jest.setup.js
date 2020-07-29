@@ -1,12 +1,24 @@
 require('@testing-library/jest-dom')
 require('whatwg-fetch')
 
-const { server } = require('@redwoodjs/testing')
+const { getProject } = require('@redwoodjs/structure')
+const {
+  startMSW,
+  setupRequestHandlers,
+  mockGraphQLMutation,
+  mockGraphQLQuery,
+} = require('@redwoodjs/testing')
 
-beforeAll(() => {
-  server.listen()
-})
+global.mockGraphQLQuery = mockGraphQLQuery
+global.mockGraphQLMutation = mockGraphQLMutation
 
-afterAll(() => {
-  server.close()
+const project = getProject()
+
+beforeEach(async () => {
+  // Import the global mocks.
+  for (const m of project.mocks) {
+    require(m)
+  }
+  await startMSW()
+  setupRequestHandlers() // reset the handlers in each test.
 })

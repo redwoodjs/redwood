@@ -43,7 +43,7 @@
     "build:js": "cross-env NODE_ENV=production lerna run build",
     "build:types": "tsc --build --clean && tsc --build",
     "build:watch": "lerna run build:watch --parallel",
-    "test": "lerna run test --stream -- --colors",
+    "test": "lerna run test --stream -- --colors --maxWorkers=4",
     "lint": "yarn eslint packages",
     "lint:fix": "yarn eslint --fix packages"
   }
