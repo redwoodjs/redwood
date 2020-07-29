@@ -182,6 +182,9 @@ const existsAnyExtensionSync = (file) => {
   return fs.existsSync(file)
 }
 
+/**
+ * @deprecated please use x/listr/writeFilesTask instead.
+ */
 export const writeFile = (
   target,
   contents,
@@ -253,6 +256,7 @@ export const transformTSToJS = (filename, content) => {
  * Creates a list of tasks that write files to the disk.
  *
  * @param files - {[filepath]: contents}
+ * @deprecated please use src/x/listr/writeFilesTask
  */
 export const writeFilesTask = (files, options) => {
   const { base } = getPaths()
@@ -314,23 +318,6 @@ export const cleanupEmptyDirsTask = (files) => {
       }
     })
   )
-}
-
-/**
- * Update the project's routes file.
- */
-export const addRoutesToRouterTask = (routes) => {
-  const redwoodPaths = getPaths()
-  const routesContent = readFile(redwoodPaths.web.routes).toString()
-  const newRoutesContent = routes.reverse().reduce((content, route) => {
-    if (content.includes(route)) {
-      return content
-    }
-    return content.replace(/(\s*)\<Router\>/, `$1<Router>$1  ${route}`)
-  }, routesContent)
-  writeFile(redwoodPaths.web.routes, newRoutesContent, {
-    overwriteExisting: true,
-  })
 }
 
 /**
