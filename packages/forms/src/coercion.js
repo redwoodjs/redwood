@@ -1,3 +1,4 @@
+import React from 'react'
 const CoercionContext = React.createContext()
 
 export const CoercionContextProvider = ({ children }) => {
@@ -26,7 +27,10 @@ export const useCoercion = () => {
   const coercionContext = React.useContext(CoercionContext)
 
   const coerce = React.useCallback(
-    (name, value) => coercionContext.coercions[name](value),
+    (name, value) =>
+      coercionContext.coercions[name]
+        ? coercionContext.coercions[name](value)
+        : value,
     [coercionContext.coercions]
   )
 

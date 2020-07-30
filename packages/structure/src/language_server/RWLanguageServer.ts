@@ -8,28 +8,18 @@ import {
 } from 'vscode-languageserver'
 import { TextDocument } from 'vscode-languageserver-textdocument'
 import { CodeAction } from 'vscode-languageserver-types'
-import { WorkDoneProgress } from 'vscode-languageserver/lib/progress'
-import { HostWithDocumentsStore } from '../ide'
-import { command_builder } from '../interactive_cli/command_builder'
-import { redwood_gen_dry_run as dry_run } from '../interactive_cli/dry_run'
-import { RedwoodCommandString } from '../interactive_cli/RedwoodCommandString'
-import { VSCodeWindowUI } from '../interactive_cli/ui'
+import { HostWithDocumentsStore, IDEInfo } from '../ide'
 import { RWProject } from '../model'
-import { getOutline, outlineToJSON } from '../outline'
-import { iter } from '../x/Array'
-import { debounce, lazy, memo } from '../x/decorators'
-import { URL_toFile } from '../x/URL'
+import { lazy, memo } from '../x/decorators'
 import { VSCodeWindowMethods_fromConnection } from '../x/vscode'
 import {
   ExtendedDiagnostic_findRelevantQuickFixes,
-  ExtendedDiagnostic_groupByUri,
-  FileSet_fromTextDocuments,
   Range_contains,
-  WorkspaceEdit_fromFileSet,
 } from '../x/vscode-languageserver-types'
-
-const REFRESH_DIAGNOSTICS_INTERVAL = 5000
-const REFRESH_DIAGNOSTICS_DEBOUNCE = 500
+import { CommandsManager } from './commands'
+import { DiagnosticsManager } from './diagnostics'
+import { OutlineManager } from './outline'
+import { XMethodsManager } from './xmethods'
 
 export class RWLanguageServer {
   initializeParams!: InitializeParams
@@ -48,73 +38,51 @@ export class RWLanguageServer {
             openClose: true,
             change: TextDocumentSyncKind.Full,
           },
-          // completionProvider: {
-          //   resolveProvider: true,
-          // },
           implementationProvider: true,
           definitionProvider: true,
           codeActionProvider: true,
           codeLensProvider: { resolveProvider: false },
-          executeCommandProvider: {
-            commands: ['redwoodjs/cli'],
-            workDoneProgress: true,
-          },
+          executeCommandProvider: this.commands.options,
+          documentLinkProvider: { resolveProvider: false },
+          hoverProvider: true,
         },
       }
     })
 
     connection.onInitialized(async () => {
-      // this is a custom method for decoupled studio
-      connection.onRequest('getOutline', async () => {
-        const project = this.getProject()
-        if (!project) return
-        return await outlineToJSON(getOutline(project))
-      })
-
-      connection.console.log('onInitialized')
-      setInterval(() => this.refreshDiagnostics(), REFRESH_DIAGNOSTICS_INTERVAL)
+      connection.console.log('Redwood.js Language Server onInitialized()')
       const folders = await connection.workspace.getWorkspaceFolders()
       if (folders) {
         for (const folder of folders) {
           this.projectRoot = normalize(folder.uri.substr(7)) // remove file://
         }
       }
-
-      if (this.hasWorkspaceFolderCapability) {
-        connection.workspace.onDidChangeWorkspaceFolders(() => {
-          connection.console.log('Workspace folder change event received.')
-        })
-      }
-    })
-    // The content of a text document has changed. This event is emitted
-    // when the text document first opened or when its content has changed.
-    documents.onDidChangeContent(() => {
-      this.refreshDiagnostics()
-    })
-    connection.onDidChangeWatchedFiles(() => {
-      this.refreshDiagnostics()
+      this.diagnostics.start()
+      this.commands.start()
+      this.outline.start()
+      this.xmethods.start()
     })
 
-    connection.onImplementation(async (params) => {
-      const info = await this.collectIDEInfo(params.textDocument.uri)
+    connection.onImplementation(async ({ textDocument: { uri }, position }) => {
+      const info = await this.info(uri, 'Implementation')
       for (const i of info) {
-        if (i.kind === 'Implementation') {
-          if (Range_contains(i.location.range, params.position)) {
-            return i.target
-          }
+        if (Range_contains(i.location.range, position)) {
+          return i.target
         }
       }
     })
 
-    connection.onDefinition(async (params) => {
-      const info = await this.collectIDEInfo(params.textDocument.uri)
+    connection.onDefinition(async ({ textDocument: { uri }, position }) => {
+      const info = await this.info(uri, 'Definition')
       for (const i of info) {
-        if (i.kind === 'Definition') {
-          if (Range_contains(i.location.range, params.position)) {
-            return i.target
-          }
+        if (Range_contains(i.location.range, position)) {
+          return i.target
         }
       }
+    })
+
+    connection.onDocumentLinks(async ({ textDocument: { uri } }) => {
+      return (await this.info(uri, 'DocumentLink')).map((i) => i.link)
     })
 
     connection.onCodeAction(async ({ context, textDocument: { uri } }) => {
@@ -136,79 +104,36 @@ export class RWLanguageServer {
     })
 
     connection.onCodeLens(async ({ textDocument: { uri } }) => {
-      const info = await this.collectIDEInfo(uri)
-      return iter(function* () {
-        for (const i of info) if (i.kind === 'CodeLens') yield i.codeLens
-      })
+      return (await this.info(uri, 'CodeLens')).map((i) => i.codeLens)
     })
 
-    connection.onExecuteCommand(async (params, _token, workDoneProgress) => {
-      if (params.command === 'redwoodjs/cli') {
-        const [cmd, cwd] = params.arguments ?? []
-        workDoneProgress?.begin('rwjs cli', undefined, 'rwjs cli message')
-        await this.command__redwoodjs_cli(cmd, cwd, workDoneProgress)
+    connection.onHover(async ({ textDocument: { uri }, position }) => {
+      const info = await this.info(uri, 'Hover')
+      for (const i of info) {
+        if (Range_contains(i.hover.range!, position)) {
+          return i.hover
+        }
       }
     })
 
-    // Make the text document manager listen on the connection
-    // for open, change and close text document events
     documents.listen(connection)
-
-    // Listen on the connection
     connection.listen()
   }
 
-  private async command__redwoodjs_cli(
-    cmdString?: string,
-    cwd?: string,
-    workDoneProgress?: WorkDoneProgress
-  ) {
-    const { vscodeWindowMethods, host } = this
-    cwd = cwd ?? this.projectRoot
-    if (!cwd) return // we need a cwd to run the CLI
-    // parse the cmd. this will do some checks and throw
-    let cmd = new RedwoodCommandString(cmdString ?? '...')
-    if (!cmd.isComplete) {
-      // if the command is incomplete, we need to build it interactively
-      const project = new RWProject({ projectRoot: cwd, host })
-      // the interactive builder needs a UI to prompt the user
-      const ui = new VSCodeWindowUI(vscodeWindowMethods)
-      const cmd2 = await command_builder({ cmd, project, ui })
-      if (!cmd2) return // user cancelled the interactive process
-      cmd = cmd2
-    }
-    // run the command
-    if (cmd.isInterceptable) {
-      // run using dry_run so we can intercept the generated files
-      const fileOverrides = FileSet_fromTextDocuments(this.documents)
-      // const progress =
-      //   workDoneProgress ??
-      //   (await this.connection.window.createWorkDoneProgress())
-      // false && progress.begin('yarn redwood ' + cmd.processed)
-      workDoneProgress?.report('yarn redwood ' + cmd.processed)
-      const { stdout, files } = await dry_run({
-        cmd,
-        cwd,
-        fileOverrides,
-      })
-      const edit = WorkspaceEdit_fromFileSet(files, (f) => {
-        if (!host.existsSync(URL_toFile(f))) return undefined
-        return host.readFileSync(URL_toFile(f))
-      })
-      await this.connection.workspace.applyEdit({
-        label: 'redwood ' + cmd.processed,
-        edit,
-      })
-      workDoneProgress?.done()
-      // false && progress.done()
-    } else {
-      // if it can't be intercepted, just run in the terminal
-      vscodeWindowMethods.createTerminal2({
-        name: 'Redwood',
-        cwd,
-        cmd: 'yarn redwood ' + cmd.processed,
-      })
-    }
+  @lazy() get diagnostics() {
+    return new DiagnosticsManager(this)
+  }
+  @lazy() get commands() {
+    return new CommandsManager(this)
+  }
+  @lazy() get outline() {
+    return new OutlineManager(this)
+  }
+  @lazy() get xmethods() {
+    return new XMethodsManager(this)
+  }
+  @lazy() get host() {
+    return new HostWithDocumentsStore(this.documents)
   }
 
   projectRoot: string | undefined
@@ -224,29 +149,18 @@ export class RWLanguageServer {
     if (!node) return []
     return await node.collectIDEInfo()
   }
-  @lazy() get host() {
-    return new HostWithDocumentsStore(this.documents)
+  async info<T extends IDEInfo['kind']>(
+    uri: string,
+    kind: T
+  ): Promise<(IDEInfo & { kind: T })[]> {
+    return (await this.collectIDEInfo(uri)).filter(
+      (i) => i.kind === kind
+    ) as any
   }
+
   get hasWorkspaceFolderCapability() {
     return (
       this.initializeParams.capabilities.workspace?.workspaceFolders === true
     )
-  }
-
-  private refreshDiagnostics_previousURIs: string[] = []
-  @debounce(REFRESH_DIAGNOSTICS_DEBOUNCE)
-  private async refreshDiagnostics() {
-    const project = this.getProject()
-    if (project) {
-      const ds = await project.collectDiagnostics()
-      const dss = ExtendedDiagnostic_groupByUri(ds)
-      const newURIs = Object.keys(dss)
-      const allURIs = newURIs.concat(this.refreshDiagnostics_previousURIs)
-      this.refreshDiagnostics_previousURIs = newURIs
-      for (const uri of allURIs) {
-        const diagnostics = dss[uri] ?? []
-        this.connection.sendDiagnostics({ uri, diagnostics })
-      }
-    }
   }
 }

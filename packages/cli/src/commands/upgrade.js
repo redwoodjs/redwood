@@ -38,14 +38,14 @@ export const builder = (yargs) => {
 }
 
 const rwPackages =
-  '@redwoodjs/core @redwoodjs/api @redwoodjs/web @redwoodjs/router @redwoodjs/auth'
+  '@redwoodjs/core @redwoodjs/api @redwoodjs/web @redwoodjs/router @redwoodjs/auth @redwoodjs/forms'
 
 // yarn upgrade-interactive does not allow --tags, so we resort to this mess
 // @redwoodjs/auth may not be installed so we add check
 const installTags = (tag, isAuth) => {
   const mainString = `yarn upgrade @redwoodjs/core@${tag} \
   && yarn workspace api upgrade @redwoodjs/api@${tag} \
-  && yarn workspace web upgrade @redwoodjs/web@${tag} @redwoodjs/router@${tag}`
+  && yarn workspace web upgrade @redwoodjs/web@${tag} @redwoodjs/router@${tag} @redwoodjs/forms@${tag}`
 
   const authString = ` @redwoodjs/auth@${tag}`
 
