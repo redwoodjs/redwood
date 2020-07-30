@@ -179,6 +179,24 @@ new Listr(
     console.log(
       'Inside that directory you can run `yarn rw dev` to start the development server.'
     )
+    console.log()
+    console.log(
+      `${chalk.hex('#bf4722')(
+        '* Join our Discord server'
+      )}: https://discord.gg/jjSYEQd`
+    )
+
+    console.log(
+      `${chalk.hex('#bf4722')(
+        '* Join our Discourse Community'
+      )}: https://community.redwoodjs.com`
+    )
+
+    console.log(
+      `${chalk.hex('#bf4722')(
+        '* Signup to the Newsletter'
+      )}: https://www.redwoodjs.com`
+    )
   })
   .catch((e) => {
     console.log()

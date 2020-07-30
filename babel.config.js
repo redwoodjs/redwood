@@ -59,7 +59,12 @@ module.exports = {
   overrides: [
     // ** WEB PACKAGES **
     {
-      test: ['./packages/router', './packages/web/', './packages/auth/'],
+      test: [
+        './packages/router',
+        './packages/web/',
+        './packages/auth/',
+        './packages/forms/',
+      ],
       presets: [
         [
           '@babel/preset-env',

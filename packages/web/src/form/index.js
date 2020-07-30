@@ -1,9 +1,11 @@
 export * from '@redwoodjs/forms'
 
+import { Form as RealForm } from '@redwoodjs/forms'
+
 /**
  * @deprecated Please import from "@redwoodjs/forms"
  */
-export const Form = () => {
+export const Form = (props) => {
   console.warn(`
   Deprecation notice, forms have moved:
     Pleas use:
@@ -11,5 +13,5 @@ export const Form = () => {
     instead of:
     'import { Form } from "@redwoodjs/web"'
   `)
-  return Form
+  return <RealForm {...props} />
 }

@@ -18,6 +18,7 @@ jest.mock('@redwoodjs/internal', () => {
       return {
         base: BASE_PATH,
         api: {
+          dataMigrations: path.join(BASE_PATH, './api/prisma/dataMigrations'),
           db: path.join(global.__dirname, 'fixtures'), // this folder
           src: path.join(BASE_PATH, './api/src'),
           services: path.join(BASE_PATH, './api/src/services'),
