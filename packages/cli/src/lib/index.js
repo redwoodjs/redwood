@@ -211,7 +211,7 @@ export const getPaths = () => {
     return getRedwoodPaths()
   } catch (e) {
     console.error(c.error(e.message))
-    process.exit(0)
+    process.exit(1)
   }
 }
 
@@ -220,9 +220,9 @@ export const getPaths = () => {
  */
 export const prettierOptions = () => {
   try {
-    return require(path.join(getPaths().base, 'prettier.config.js'))
+    return require(path.join(getRedwoodPaths().base, 'prettier.config.js'))
   } catch (e) {
-    return undefined
+    return
   }
 }
 
