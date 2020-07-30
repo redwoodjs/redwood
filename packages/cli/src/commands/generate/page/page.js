@@ -4,7 +4,7 @@ import Listr from 'listr'
 import terminalLink from 'terminal-link'
 import { getProject } from '@redwoodjs/structure'
 import paramCase from 'param-case'
-import { writeFilesTask } from 'src/x/listr/writeFilesTask'
+import { writeFilesTask, actionsToJSON } from 'src/lib/actions'
 
 import c from 'src/lib/colors'
 
@@ -13,10 +13,7 @@ import { templateForComponentFile } from '../helpers'
 const COMPONENT_SUFFIX = 'Page'
 const REDWOOD_WEB_PATH_NAME = 'pages'
 
-export const templates = (
-  { name, path, routes },
-  { project = getProject() } = {}
-) => {
+export const getActions = ({ name, path, routes }, project) => {
   const page = templateForComponentFile(
     {
       name,
@@ -26,7 +23,7 @@ export const templates = (
       templatePath: 'page.js.template',
       templateVars: { path },
     },
-    project.pathHelper
+    project
   )
   const test = templateForComponentFile(
     {
@@ -38,7 +35,7 @@ export const templates = (
       templatePath: 'test.js.template',
       templateVars: { path },
     },
-    project.pathHelper
+    project
   )
   const stories = templateForComponentFile(
     {
@@ -50,27 +47,29 @@ export const templates = (
       templatePath: 'stories.js.template',
       templateVars: { path },
     },
-    project.pathHelper
+    project
   )
 
   return [
     {
+      action: 'create',
       path: stories[0],
       contents: stories[1],
     },
     {
+      action: 'create',
       path: test[0],
       contents: test[1],
     },
     {
+      action: 'create',
       path: page[0],
       contents: page[1],
     },
     {
+      action: 'replace',
       path: project.pathHelper.web.routes,
       contents: project.router.createRouterString(routes),
-      overwrite: true, // file exists
-      doNotDelete: true, // do not delete
     },
   ]
 }
@@ -140,17 +139,17 @@ export const handler = async ({ name, path, force, json }) => {
   path = path ?? `/${paramCase(name)}`
 
   const newRoute = getProject().router.createRouteString(name, path)
-  const files = await templates({ name, path, routes: [newRoute] })
+  const actions = await getActions({ name, path, routes: [newRoute] })
 
   if (json) {
-    console.log(JSON.stringify(files, 2))
+    console.log(actionsToJSON(actions))
   } else {
     const tasks = new Listr(
       [
         {
           title: 'Generating page files...',
           task: async () => {
-            return writeFilesTask(files, { overwrite: force })
+            return writeFilesTask(actions, { overwrite: force })
           },
         },
       ].filter(Boolean),

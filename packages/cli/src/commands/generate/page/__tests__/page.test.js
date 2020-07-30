@@ -1,35 +1,35 @@
-import path from 'path'
+import { join } from 'path'
 
 import { getProject } from '@redwoodjs/structure'
 
-import { templates } from '../page'
+import { getActions } from '../page'
 
 describe('page generator', () => {
-  const fx = path.resolve(
-    __dirname,
-    '../../../../../../../__fixtures__/example-todo-main'
-  )
-  const project = getProject(fx)
+  test('creates the correct templates', () => {
+    const project = getProject(global.FIXTURE_PATH)
 
-  it('creates the correct templates', () => {
     const name = 'Home'
     const path = '/home'
     const route = project.router.createRouteString(name, path)
-    const newTemplates = templates({ name, path, routes: [route] }, { project })
+    const newTemplates = getActions({ name, path, routes: [route] }, project)
     // Test the path output.
-    expect(newTemplates.map((t) => t.path.replace(fx, '')))
+    expect(newTemplates.map((t) => global.stripFixturePath(t.path)))
       .toMatchInlineSnapshot(`
-    Array [
-      "/web/src/pages/HomePage/HomePage.stories.js",
-      "/web/src/pages/HomePage/HomePage.test.js",
-      "/web/src/pages/HomePage/HomePage.js",
-      "/web/src/Routes.js",
-    ]
-  `)
-
+      Array [
+        "/web/src/pages/HomePage/HomePage.stories.js",
+        "/web/src/pages/HomePage/HomePage.test.js",
+        "/web/src/pages/HomePage/HomePage.js",
+        "/web/src/Routes.js",
+      ]
+    `)
     // write a snapshot for each generated template.
     for (const t of newTemplates) {
-      expect(t.contents).toMatchSnapshot(t.path.replace(fx, ''))
+      const snapshotPath = join(
+        __dirname,
+        '__snapshots__',
+        global.stripFixturePath(t.path).replaceAll('/', '_')
+      )
+      expect(t.contents).toMatchFile(snapshotPath)
     }
   })
 })

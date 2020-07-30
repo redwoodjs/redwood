@@ -5,8 +5,9 @@ import pascalcase from 'pascalcase'
 import { paramCase } from 'param-case'
 import terminalLink from 'terminal-link'
 import { ensurePosixPath } from '@redwoodjs/internal'
+import { getProject } from '@redwoodjs/structure'
 
-import { generateTemplate, getPaths, writeFilesTask } from 'src/lib'
+import { generateTemplate, writeFilesTask } from 'src/lib'
 import c from 'src/lib/colors'
 
 import { yargsDefaults } from '../generate'
@@ -17,21 +18,26 @@ import { yargsDefaults } from '../generate'
  */
 // TODO: Make this read all the files in a template directory instead of
 // manually passing in each file.
-export const templateForComponentFile = ({
-  name,
-  suffix = '',
-  extension = '.js',
-  webPathSection,
-  apiPathSection,
-  generator,
-  templatePath,
-  templateVars,
-  componentName,
-  outputPath,
-}, pathHelper = getPaths()) => {
+export const templateForComponentFile = (
+  {
+    name,
+    suffix = '',
+    extension = '.js',
+    webPathSection,
+    apiPathSection,
+    generator,
+    templatePath,
+    templateVars,
+    componentName,
+    outputPath,
+  },
+  project = getProject()
+) => {
+  const paths = project.pathHelper
+
   const basePath = webPathSection
-    ? pathHelper.web[webPathSection]
-    : pathHelper.api[apiPathSection]
+    ? paths.web[webPathSection]
+    : paths.api[apiPathSection]
   const outputComponentName =
     componentName || pascalcase(paramCase(name)) + suffix
   const componentOutputPath =
@@ -42,7 +48,7 @@ export const templateForComponentFile = ({
     {
       name,
       outputPath: ensurePosixPath(
-        `./${path.relative(pathHelper.base, componentOutputPath)}`
+        `./${path.relative(paths.base, componentOutputPath)}`
       ),
       ...templateVars,
     }
