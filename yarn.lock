@@ -2717,12 +2717,12 @@
   resolved "https://registry.yarnpkg.com/@open-draft/until/-/until-1.0.3.tgz#db9cc719191a62e7d9200f6e7bab21c5b848adca"
   integrity sha512-Aq58f5HiWdyDlFffbbSjAlv596h/cOnt2DO1w3DOC7OJ5EHs0hd/nycJfiu9RJbT6Yk6F1knnRRXNSpxoIVZ9Q==
 
-"@prisma/cli@^2.1.1":
+"@prisma/cli@~2.3.0":
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/@prisma/cli/-/cli-2.3.0.tgz#ddc89de63c2fcb88199fdd1b490a7616a2d32de1"
   integrity sha512-S84VeeUR3I2Z1fkBh3x42KmVyFgiX4USzIN5N5EDyoWC8BSlMVs2eHeLlhHOtx68sDz5oNo/YEIM2bkU8cUZKA==
 
-"@prisma/client@^2.1.1":
+"@prisma/client@~2.3.0":
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/@prisma/client/-/client-2.3.0.tgz#3979d973e0eececad5387c791aa1dd63316fc690"
   integrity sha512-mlXV/VdOKjEEoZPOmFOy7KJPecYGV5XSVXGsti0F1kkShpGcMvhPkpKhNOwIb/8muUTeN5NoNqEGqKDD5XKw3w==
@@ -2797,7 +2797,7 @@
   dependencies:
     "@prisma/debug" "2.3.0"
 
-"@prisma/sdk@^2.1.1":
+"@prisma/sdk@~2.3.0":
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/@prisma/sdk/-/sdk-2.3.0.tgz#a9ec72fd6fbcda13d968a6cb908c3977491cc70d"
   integrity sha512-bFFDrLhG/reJXONa47QQcQ+9PECxO2ArOSMF4W1+xNOpvui1XM3EwZqdQVA+HeMm95H0l0dpNndihnTyNhGIzw==
