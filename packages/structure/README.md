@@ -2,7 +2,7 @@
 
 # Overview
 
-- The @redwoodjs/structure package lets you build, validate and inspect an AST-like representation of a complete Redwood project
+- The @redwoodjs/structure package lets you build, validate and inspect an object graph that represents a complete Redwood project
 - It is used by the CLI and by VSCode extensions to provide IDE features such as diagnostics, code-fixes, etc.
 - **IMPORTANT:** This is an **internal** and **development-time only** package
   - You **cannot** "import it" into a normal redwood app
