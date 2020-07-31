@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/router",
-  "version": "0.15.0",
+  "version": "0.15.3",
   "files": [
     "dist",
     "src/index.d.ts"
