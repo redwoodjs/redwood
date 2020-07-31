@@ -5,7 +5,7 @@ import {
   setupRequestHandlers,
 } from '@redwoodjs/testing'
 
-export const StorybookLoader: React.FunctionComponent<{
+export const StorybookProvider: React.FunctionComponent<{
   storyFn: Function
   id: string
 }> = ({ storyFn, id }) => {
