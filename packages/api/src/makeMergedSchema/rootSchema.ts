@@ -1,7 +1,12 @@
 import type { GlobalContext } from 'src/globalContext'
 import gql from 'graphql-tag'
-import { DateResolver, TimeResolver, DateTimeResolver } from 'graphql-scalars'
-import GraphQLJSON, { GraphQLJSONObject } from 'graphql-type-json'
+import {
+  DateResolver,
+  TimeResolver,
+  DateTimeResolver,
+  JSONResolver,
+  JSONObjectResolver,
+} from 'graphql-scalars'
 
 // @ts-ignore - not inside the <rootDir>
 import apiPackageJson from 'src/../package.json'
@@ -31,8 +36,8 @@ export interface Resolvers {
   Date: typeof DateResolver
   Time: typeof TimeResolver
   DateTime: typeof DateTimeResolver
-  JSON: typeof GraphQLJSON
-  JSONObject: typeof GraphQLJSONObject
+  JSON: typeof JSONResolver
+  JSONObject: typeof JSONObjectResolver
   Query: {}
 }
 
@@ -40,8 +45,8 @@ export const resolvers: Resolvers = {
   Date: DateResolver,
   Time: TimeResolver,
   DateTime: DateTimeResolver,
-  JSON: GraphQLJSON,
-  JSONObject: GraphQLJSONObject,
+  JSON: JSONResolver,
+  JSONObject: JSONObjectResolver,
   Query: {
     redwood: () => ({
       version: apiPackageJson.version,

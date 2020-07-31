@@ -18,7 +18,6 @@
     "graphql": "^14.6.0",
     "graphql-scalars": "^1.2.6",
     "graphql-tools": "4.0.7",
-    "graphql-type-json": "^0.3.1",
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^1.8.0",
     "lodash.merge": "^4.6.2",
@@ -27,7 +26,6 @@
   },
   "devDependencies": {
     "@redwoodjs/auth": "^0.15.3",
-    "@types/graphql-type-json": "^0.3.2",
     "@types/jsonwebtoken": "^8.3.9",
     "@types/lodash.merge": "^4.6.6",
     "@types/lodash.omitby": "^4.6.6",
