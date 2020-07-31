@@ -1,11 +1,19 @@
+**IMPORTANT:** This is an **internal** and **development-time only** package :exclamation:
+
 # Overview
 
-- The @redwoodjs/struture package lets you build, validate and inspect an AST-like representation of a complete Redwood project
+- The @redwoodjs/structure package lets you build, validate and inspect an AST-like representation of a complete Redwood project
+- It is used by the CLI and by VSCode extensions to provide IDE features such as diagnostics, code-fixes, etc.
+- **IMPORTANT:** This is an **internal** and **development-time only** package
+  - You **cannot** "import it" into a normal redwood app
+  - A good analogy is this:
+    - If Redwood is TypeScript, then this is the TypeScript compiler.
+      **You can't import** the compiler into your TypeScript projects, but it is used by IDEs and other tools to improve your editing experience.
 
 ## Code
 
 - `/model/*`: The main API and classes (such as RWProject, RWPage, RWService, etc)
-- `/language_server/*`: A [Language Server Protocol](https://microsoft.github.io/language-server-protocol/) implementation that wraps the `model` classes. Currently used by the Decoupled Studio VSCode extension.
+- `/language_server/*`: A [Language Server Protocol](https://microsoft.github.io/language-server-protocol/) implementation that wraps the `model` classes. More info [here](./src/language_server/README.md)
 - We use [vscode-languageserver-types](https://www.npmjs.com/package/vscode-languageserver-types) where possible (to represent Document URIs, Positions, Ranges, Diagnostics, etc)
 
 # Usage
