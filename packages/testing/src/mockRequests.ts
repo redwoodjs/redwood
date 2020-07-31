@@ -1,12 +1,18 @@
 // MSW is shared by Jest (NodeJS) and Storybook (Webpack)
-import * as msw from 'msw'
+import {
+  setupWorker,
+  graphql,
+  RequestHandler,
+  GraphQLMockedContext,
+  GraphQLMockedRequest,
+} from 'msw'
+import { SetupWorkerApi } from 'msw/lib/types/setupWorker/setupWorker'
 
 // Allow users to call "mockGraphQLQuery" and "mockGraphQLMutation"
 // before the server has started. We store the request handlers in
 // a queue that is drained once the server is started.
-let REQUEST_HANDLER_QUEUE: msw.RequestHandler[] = []
-
-let SERVER_INSTANCE: any
+let REQUEST_HANDLER_QUEUE: RequestHandler[] = []
+let SERVER_INSTANCE: SetupWorkerApi | any
 
 /**
  * This will import the correct runtime (node/ browser) of MSW,
@@ -21,7 +27,6 @@ export const startMSW = async () => {
   }
 
   if (typeof global.process === 'undefined') {
-    const { setupWorker } = require('msw')
     SERVER_INSTANCE = setupWorker()
     await SERVER_INSTANCE.start()
   } else {
@@ -30,7 +35,6 @@ export const startMSW = async () => {
     await SERVER_INSTANCE.listen()
   }
 
-  setupRequestHandlers()
   return SERVER_INSTANCE
 }
 
@@ -42,7 +46,7 @@ export const setupRequestHandlers = () => {
   }
 }
 
-export const registerHandler = (handler: any) => {
+export const registerHandler = (handler: RequestHandler) => {
   if (!SERVER_INSTANCE) {
     // The server hasn't started yet, so add the request handler to the queue.
     // The queue will be drained once the server has started.
@@ -58,8 +62,8 @@ export type DataFunction = (
     req,
     ctx,
   }: {
-    req: msw.GraphQLMockedRequest
-    ctx: msw.GraphQLMockedContext<{}>
+    req: GraphQLMockedRequest
+    ctx: GraphQLMockedContext<{}>
   }
 ) => {}
 
@@ -69,9 +73,9 @@ const mockGraphQL = (
   data: DataFunction | {}
 ) => {
   const resolver = (
-    req: msw.GraphQLMockedRequest,
+    req: GraphQLMockedRequest,
     res: Function,
-    ctx: msw.GraphQLMockedContext<{}>
+    ctx: GraphQLMockedContext<{}>
   ) => {
     let d = data
     let responseTransforms: any[] = []
@@ -89,7 +93,7 @@ const mockGraphQL = (
           return resTransform
         }
       }
-      const newCtx: msw.GraphQLMockedContext<{}> = {
+      const newCtx: GraphQLMockedContext<{}> = {
         status: captureTransform(ctx.status),
         delay: captureTransform(ctx.delay),
         errors: captureTransform(ctx.errors),
@@ -107,7 +111,8 @@ const mockGraphQL = (
     return res(ctx.data(d), ...responseTransforms)
   }
 
-  registerHandler(msw.graphql[type](operation, resolver))
+  //@ts-expect-error
+  registerHandler(graphql[type](operation, resolver))
   return data
 }
 
