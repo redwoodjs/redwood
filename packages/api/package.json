@@ -49,7 +49,7 @@
     "build:types": "tsc --build --clean && tsc --build",
     "build:clean": "yarn del-cli dist importAll.macro.js",
     "prepublishOnly": "yarn build",
-    "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --ignore importAll.macro.js --exec \"yarn build\"",
+    "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --ignore importAll.macro.js --exec \"yarn build:js\"",
     "test": "yarn jest",
     "test:watch": "yarn test --watch"
   },
