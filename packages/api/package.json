@@ -16,7 +16,7 @@
     "core-js": "3.6.4",
     "glob": "^7.1.6",
     "graphql": "^14.6.0",
-    "graphql-iso-date": "^3.6.1",
+    "graphql-scalars": "^1.2.6",
     "graphql-tools": "4.0.7",
     "graphql-type-json": "^0.3.1",
     "jsonwebtoken": "^8.5.1",
@@ -27,7 +27,6 @@
   },
   "devDependencies": {
     "@redwoodjs/auth": "^0.15.3",
-    "@types/graphql-iso-date": "^3.4.0",
     "@types/graphql-type-json": "^0.3.2",
     "@types/jsonwebtoken": "^8.3.9",
     "@types/lodash.merge": "^4.6.6",
