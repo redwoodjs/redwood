@@ -5,7 +5,7 @@
     "dist"
   ],
   "main": "dist/index.js",
-  "types": "dist/global.web-auto-imports.d.ts",
+  "types": "src/index.d.ts",
   "license": "MIT",
   "dependencies": {
     "@apollo/react-components": "^3.1.3",
