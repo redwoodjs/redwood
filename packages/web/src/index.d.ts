@@ -65,8 +65,8 @@ declare module '@redwoodjs/web' {
   }
   const Flash: _React.FC<FlashProps>
 
-  const FlashProvider: unknown
-  const GraphQLProvider: unknown
-  const createGraphQLClient: unknown
-  const withCell: unknown
+  const FlashProvider: any
+  const GraphQLProvider: any
+  const createGraphQLClient: any
+  const withCell: any
 }
