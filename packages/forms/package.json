@@ -5,6 +5,7 @@
     "dist"
   ],
   "main": "dist/index.js",
+  "types": "src/index.d.ts",
   "license": "MIT",
   "dependencies": {
     "core-js": "3.6.4",
