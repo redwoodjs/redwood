@@ -1,3 +1,6 @@
+/* eslint-disable no-undef */
+/*eslint no-redeclare: [2, { "builtinGlobals": false }]*/
+
 import type _React from 'react'
 import type _gql from 'graphql-tag'
 import type _PropTypes from 'prop-types'
@@ -62,8 +65,8 @@ declare module '@redwoodjs/web' {
   }
   const Flash: _React.FC<FlashProps>
 
-  const FlashProvider: any
-  const GraphQLProvider: any
-  const createGraphQLClient: any
-  const withCell: any
+  const FlashProvider: unknown
+  const GraphQLProvider: unknown
+  const createGraphQLClient: unknown
+  const withCell: unknown
 }
