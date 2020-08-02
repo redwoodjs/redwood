@@ -134,7 +134,7 @@ If a route has route parameters, then its named route function will take an obje
 
 ```js
 // SomePage.js
-<Link to={routes.user({ id: 7 })} />...</Link>
+<Link to={routes.user({ id: 7 })}>...</Link>
 ```
 
 All parameters will be converted to strings before being inserted into the generated URL. If you don't like the default JavaScript behavior of how this conversion happens, make sure to convert to a string before passing it into the named route function.
