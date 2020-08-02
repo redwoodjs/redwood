@@ -56,7 +56,6 @@ Since the CLI is the entry point to Redwood, as Redwood continues to grow&mdash;
 ### Coming Later
 
 - [Multiple database support](https://github.com/redwoodjs/redwood/issues/507)
-- [Prisma studio](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-studio#overview)
 - [Storybook generators](https://github.com/redwoodjs/redwood/issues/231)
 - [Support for dynamic sides and targets](https://github.com/redwoodjs/redwood/pull/355)
 
