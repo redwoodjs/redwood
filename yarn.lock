@@ -3950,20 +3950,6 @@
   dependencies:
     "@types/node" "*"
 
-"@types/graphql-iso-date@^3.4.0":
-  version "3.4.0"
-  resolved "https://registry.yarnpkg.com/@types/graphql-iso-date/-/graphql-iso-date-3.4.0.tgz#b6710b21e3b0bfdb1a0529b285148d98eac18b1f"
-  integrity sha512-V3jITHTsoI2E8TGt9+/HPDz6LWt3z9/HYnPJYWI6WwiLRexsngg7KzaQlCgQkA4jkEbGPROUD0hJFc9F02W9WA==
-  dependencies:
-    graphql "^15.1.0"
-
-"@types/graphql-type-json@^0.3.2":
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/@types/graphql-type-json/-/graphql-type-json-0.3.2.tgz#1a7105e6546fc1630a5db4834bfbc0eb554986e4"
-  integrity sha512-c1cq4o8EhY0Z39ua8UXwG8uBs23xBYA/Uw0tXFl6SuTUpkVv/IJqf6pHQbfdC7nwFRhX2ifTOV/UIg0Q/IJsbg==
-  dependencies:
-    graphql "^14.5.3"
-
 "@types/graphql-upload@^8.0.0":
   version "8.0.3"
   resolved "https://registry.yarnpkg.com/@types/graphql-upload/-/graphql-upload-8.0.3.tgz#b371edb5f305a2a1f7b7843a890a2a7adc55c3ec"
@@ -10536,10 +10522,10 @@ graphql-extensions@^0.12.4:
     apollo-server-env "^2.4.5"
     apollo-server-types "^0.5.1"
 
-graphql-iso-date@^3.6.1:
-  version "3.6.1"
-  resolved "https://registry.yarnpkg.com/graphql-iso-date/-/graphql-iso-date-3.6.1.tgz#bd2d0dc886e0f954cbbbc496bbf1d480b57ffa96"
-  integrity sha512-AwFGIuYMJQXOEAgRlJlFL4H1ncFM8n8XmoVDTNypNOZyQ8LFDG2ppMFlsS862BSTCDcSUfHp8PD3/uJhv7t59Q==
+graphql-scalars@^1.2.6:
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/graphql-scalars/-/graphql-scalars-1.2.6.tgz#a934ed63c91054db00cde41b9beeddb09b606729"
+  integrity sha512-k/88kZVXIuUKQuVLokokkKU2lnFEZ9aTn7O0fDweJpISd0pP5fQU1wzPN0jarH4Lnadr4092PfyIUtCcKzkeAw==
 
 graphql-tag@^2.10.3, graphql-tag@^2.4.2, graphql-tag@^2.9.2:
   version "2.10.4"
@@ -10581,11 +10567,6 @@ graphql-tools@^4.0.0:
     deprecated-decorator "^0.1.6"
     iterall "^1.1.3"
     uuid "^3.1.0"
-
-graphql-type-json@^0.3.1:
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/graphql-type-json/-/graphql-type-json-0.3.2.tgz#f53a851dbfe07bd1c8157d24150064baab41e115"
-  integrity sha512-J+vjof74oMlCWXSvt0DOf2APEdZOCdubEvGDUAlqH//VBYcOYsGgRW7Xzorr44LvkjiuvecWc8fChxuZZbChtg==
 
 graphql-upload@^8.0.2:
   version "8.1.0"
