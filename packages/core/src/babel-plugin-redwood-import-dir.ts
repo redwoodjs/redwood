@@ -4,12 +4,17 @@ import glob from 'glob'
 import type { PluginObj, types } from '@babel/core'
 import type { Host } from '@redwoodjs/structure'
 
-export const generateTypes = (modulePath: string, typeExports: string[]) => {
-  return `declare module '${modulePath}' {
-    export default {
-      ${typeExports.join('\n')}
-    }
-  }`
+export const generateTypes = (modulePath: string) => {
+  // TODO:
+  // This implementation is a bit lacking:
+  // 1. We receive the resolved path instead of the aliases path,
+  // so we monkey patch it by replacing `../` with `src/`.
+  // 2. We don't provide any types beyond the module, which is fine since
+  // people aren't going to be using those.
+  return `// @ts-expect-error\ndeclare module '${modulePath.replace(
+    '../',
+    'src/'
+  )}';`
 }
 
 /**
@@ -70,7 +75,6 @@ export default function (
             .replace(/[^a-zA-Z0-9]/g, '_')
         }
 
-        let typeExports: string[] = []
         for (const filePath of dirFiles) {
           const { dir: fileDir, name: fileName } = path.parse(filePath)
           const filePathWithoutExtension = fileDir + '/' + fileName
@@ -91,7 +95,6 @@ export default function (
 
           // + <importName>.<fpVarName> = <importName_fpVarName>
           // services.a = a
-          typeExports = [...typeExports, `${fpVarName}: any`]
           nodes.push(
             t.expressionStatement(
               t.assignmentExpression(
@@ -118,7 +121,7 @@ export default function (
               options.generateTypesPath,
               `import-dir-${importName}.d.ts`
             ),
-            generateTypes(importGlob, typeExports)
+            generateTypes(importGlob)
           )
         }
       },

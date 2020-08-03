@@ -15,15 +15,9 @@ describe('babel plugin redwood import dir', () => {
             '__fixtures__/import-dir/import-dir-services.d.ts'
           )
           expect(contents.replace(/\s/g, '')).toMatch(
-            `
-            declare module '../__fixtures__/**/*.{js,ts}' {
-              export default {
-                a: any
-                b: any
-                c_sdl: any
-                nested_d: any
-              }
-            }`.replace(/\s/g, '')
+            `// @ts-expect-error
+            declare module 'src/__fixtures__/**/*.{js,ts}';
+            `.replace(/\s/g, '')
           )
         },
       },

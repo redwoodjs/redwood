@@ -1,3 +1,5 @@
+const fs = require('fs')
+
 /**
  * This is the babel preset used `create-redwood-app`
  */
@@ -11,6 +13,8 @@ const TARGETS_NODE = '12.16.1'
 const CORE_JS_VERSION = '3.6'
 
 module.exports = () => {
+  const paths = getPaths()
+
   return {
     presets: ['@babel/preset-react', '@babel/preset-typescript'],
     plugins: [
@@ -58,9 +62,7 @@ module.exports = () => {
                 src:
                   // Jest monorepo and multi project runner is not correctly determining
                   // the `cwd`: https://github.com/facebook/jest/issues/7359
-                  process.env.NODE_ENV !== 'test'
-                    ? './src'
-                    : getPaths().api.src,
+                  process.env.NODE_ENV !== 'test' ? './src' : paths.api.src,
               },
             },
           ],
@@ -80,7 +82,15 @@ module.exports = () => {
               ],
             },
           ],
-          [require('../dist/babel-plugin-redwood-import-dir')],
+          [
+            require('../dist/babel-plugin-redwood-import-dir'),
+            {
+              generateTypesPath: paths.types,
+              host: {
+                writeFileSync: fs.writeFileSync,
+              },
+            },
+          ],
         ],
       },
       // ** WEB **
@@ -107,9 +117,7 @@ module.exports = () => {
                 src:
                   // Jest monorepo and multi project runner is not correctly determining
                   // the `cwd`: https://github.com/facebook/jest/issues/7359
-                  process.env.NODE_ENV !== 'test'
-                    ? './src'
-                    : getPaths().web.src,
+                  process.env.NODE_ENV !== 'test' ? './src' : paths.web.src,
               },
             },
           ],
