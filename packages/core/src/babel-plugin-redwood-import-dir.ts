@@ -2,6 +2,20 @@ import path from 'path'
 
 import glob from 'glob'
 import type { PluginObj, types } from '@babel/core'
+import type { Host } from '@redwoodjs/structure'
+
+export const generateTypes = (modulePath: string) => {
+  // TODO:
+  // This implementation is a bit lacking:
+  // 1. We receive the resolved path instead of the aliases path,
+  // so we monkey patch it by replacing `../` with `src/`.
+  // 2. We don't provide any types beyond the module, which is fine since
+  // people aren't going to be using those.
+  return `// @ts-expect-error\ndeclare module '${modulePath.replace(
+    '../',
+    'src/'
+  )}';`
+}
 
 /**
  * This babel plugin will search for import statements that include star `*`
@@ -18,10 +32,11 @@ import type { PluginObj, types } from '@babel/core'
  * // services.b = require('src/services/b.ts')
  * // services.nested_c = require('src/services/nested/c.js')
  * ```
- *
- * @todo Generate ambient declerations for TypeScript of imported files.
  */
-export default function ({ types: t }: { types: typeof types }): PluginObj {
+export default function (
+  { types: t }: { types: typeof types },
+  options: { generateTypesPath: string; host: Host }
+): PluginObj {
   return {
     name: 'babel-plugin-redwood-import-dir',
     visitor: {
@@ -46,6 +61,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         )
 
         const importGlob = p.node.source.value
+
         const cwd = path.dirname(state.file.opts.filename)
         const dirFiles = glob
           .sync(importGlob, { cwd })
@@ -98,6 +114,16 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         }
         // - import importName from "dirPath"
         p.remove()
+
+        if (options.host.writeFileSync) {
+          options.host.writeFileSync(
+            path.join(
+              options.generateTypesPath,
+              `import-dir-${importName}.d.ts`
+            ),
+            generateTypes(importGlob)
+          )
+        }
       },
     },
   }
