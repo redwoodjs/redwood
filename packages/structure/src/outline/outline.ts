@@ -5,6 +5,8 @@ import { RWRoute } from '../model/RWRoute'
 import { URL_file } from '../x/URL'
 import { Command_cli, Command_open, TreeItem2 } from '../x/vscode'
 
+const DOCS = 'https://redwoodjs.com/docs'
+
 export function getOutline(project: RWProject): TreeItem2 {
   return {
     children: () => [
@@ -24,20 +26,25 @@ export function getOutline(project: RWProject): TreeItem2 {
         ),
         menu: {
           kind: 'withDoc',
-          doc: Command_open(
-            'https://redwoodjs.com/docs/app-configuration-redwood-toml'
-          ),
+          doc: Command_open(`${DOCS}/app-configuration-redwood-toml`),
         },
       } as TreeItem2,
       {
         label: 'open graphql playground',
         command: Command_open('http://localhost:8911/graphql'),
         iconPath: 'x-graphql',
+        menu: {
+          kind: 'withDoc',
+          doc: Command_open(
+            'https://www.apollographql.com/docs/apollo-server/testing/graphql-playground/'
+          ),
+        },
       } as TreeItem2,
       {
         label: 'open storybook',
         command: Command_cli('rw storybook --open'),
         iconPath: 'x-storybook',
+        // TODO: add link to rw storybook docs when available
       } as TreeItem2,
       _rwcli_command_group(
         {
@@ -62,8 +69,8 @@ function _router(project: RWProject): TreeItem2 {
     children: () => router.routes.map(_router_route),
     menu: {
       kind: 'group',
-      doc: Command_open(`${DOCS}/redwood-router`),
       add: Command_cli('rw generate page ...'),
+      doc: Command_open(`${DOCS}/redwood-router`),
     },
   }
 }
@@ -119,6 +126,7 @@ function _components(project: RWProject): TreeItem2 {
     menu: {
       kind: 'group',
       add: Command_cli('rw generate component ...'),
+      doc: Command_open(`${DOCS}/cli-commands.html#component`),
     },
   }
 }
@@ -157,6 +165,7 @@ function _services(project: RWProject): TreeItem2 {
     menu: {
       kind: 'group',
       add: Command_cli('rw generate service ...'),
+      doc: Command_open(`${DOCS}/cli-commands.html#service`),
     },
   }
 }
@@ -180,6 +189,12 @@ function _schema(project: RWProject): TreeItem2 {
   return {
     label: 'schema.prisma',
     iconPath: 'x-prisma',
+    menu: {
+      kind: 'withDoc',
+      doc: Command_open(
+        `https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-schema`
+      ),
+    },
     ...resourceUriAndCommandFor(project.pathHelper.api.dbSchema),
     async children() {
       const dmmf = await project.prismaDMMF()
@@ -224,10 +239,6 @@ function _schema(project: RWProject): TreeItem2 {
   }
 }
 
-const DOCS = 'https://redwoodjs.com/docs'
-
-// TODO: add link to docs https://redwoodjs.com/docs/serverless-functions
-
 interface RWOpts {
   cmd: string
   tooltip: string
@@ -242,7 +253,7 @@ function _rwcli_command_group(...opts: RWOpts[]): TreeItem2 {
     children: () => opts.map(_rwcli_command),
     menu: {
       kind: 'withDoc',
-      doc: Command_open('https://redwoodjs.com/docs/cli-commands'),
+      doc: Command_open(`${DOCS}/cli-commands`),
     },
   }
 }
