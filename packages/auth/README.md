@@ -232,7 +232,7 @@ const UserAuthTools = () => {
 }
 ```
 
-### Auth0 Login an Logout Options
+### Auth0 Login and Logout Options
 
 When using the Auth0 client, `login` and `logout` take `options` that can be used to override the client config:
 
@@ -280,6 +280,7 @@ The following values are available from the `useAuth` hook:
 * async `getToken()`: returns a jwt
 * `client`: Access the instance of the client which you passed into `AuthProvider`
 * `isAuthenticated`: used to determine if the current user has authenticated
+* `hasRole`: used to determine if the current user is asigned a role
 * `loading`: The auth state is restored asynchronously when the user visits the site for the first time, use this to determine if you have the correct state
 
 ## Usage in Redwood
@@ -307,15 +308,36 @@ console.log(context.currentUser)
 
 You can map the "raw decoded JWT" into a real user object by passing a `getCurrentUser` function to `createCreateGraphQLHandler`
 
-Our recommendation is to create a `src/lib/auth.js|ts` file that exports a `getCurrentUser` function (You may already have a stub function.)
+Our recommendation is to create a `src/lib/auth.js|ts` file that exports a `getCurrentUser` as well as a `hasRole` function (You may already have stub functions.)
 
 ```js
-import { getCurrentUser } from 'src/lib/auth'
+import { getCurrentUser, hasRole } from 'src/lib/auth'
 // Example:
 //  export const getCurrentUser = async (decoded) => {
 //    return await db.user.findOne({ where: { decoded.email } })
 //  }
-``
+//
+// Example for hasRole and RBAC
+//
+//  const appMetadata = (decoded) => {
+//    return decoded[`https://example.com/app_metadata`] || {}
+//  }
+//
+//  const roles = (decoded) => {
+//    return appMetadata(decoded).authorization?.roles || []
+//  }
+//
+//  export const getCurrentUser = async (decoded) => {
+//    const user = await db.user.findOne({ where: { decoded.email } })
+//    return { ...user, roles: roles(decoded) }
+//  }
+//
+//  export const hasRole = (role) => {
+//    if (!context.currentUser.roles?.includes(role)) {
+//      throw new AuthenticationError("You don't have permission to do that.")
+//    }
+//  }
+
 
 export const handler = createGraphQLHandler({
   schema: makeMergedSchema({
@@ -323,16 +345,250 @@ export const handler = createGraphQLHandler({
     services: makeServices({ services }),
   }),
   getCurrentUser,
+  hasRole, // if role access
 })
 ```
 
 The value returned by `getCurrentUser` is available in `context.currentUser`
+
+The `hasRole` function is generated and defined in `api/src/lib/auth.js`
+
+```js
+export const hasRole = (role) => {
+  if (!context.currentUser.roles?.includes(role)) {
+    throw new AuthenticationError("You don't have permission to do that.")
+  }
+}
+```
 
 ### API Specific Intergration
 
 ### Auth0
 
 If you're using Auth0 you must also [create an API](https://auth0.com/docs/quickstart/spa/react/02-calling-an-api#create-an-api) and set the audience parameter, or you'll receive an opaque token instead of a JWT token, and Redwood expects to receive a JWT token.
+
+#### Role-based access control (RBAC)
+
+[Role-based access control (RBAC)](https://auth0.com/docs/authorization/concepts/rbac) refers to the idea of assigning permissions to users based on their role within an organization. It provides fine-grained control and offers a simple, manageable approach to access management that is less prone to error than assigning permissions to users individually.
+
+Essentially, a role is a collection of permissions that you can apply to users. A role might be "admin", "editor" or "publisher". This differs from permissions an example of which might be "publish:blog".
+
+#### App metadata
+
+Auth0 stores information (such as, support plan subscriptions, security roles, or access control groups) in "App metadata". Data stored in `app_metadata` cannot be edited by users.
+
+Create and manage roles for your application in Auth0's "User & Role" management views. You can then assign these roles to users.
+
+However, that info is not immediately available on the user's App metadata or to RedwoodJS when authenticating.
+
+If you assinger your user the "admin" role in Auth0, you will want you user's app_metadata to look like:
+
+```
+{
+  "roles": [
+    "admin"
+  ]
+}
+```
+
+To set this information and make it available to redwoodJS, you can to use [Auth0 Rules](https://auth0.com/docs/rules)..
+
+#### Auth0 Rules for App Metadata
+
+RedwoodJS needs the `app_metadata` to 1) contain the role information and 2) be present in the JWT that is decoded.
+
+To accomplish these tasks, you can use [Auth0 Rules](https://auth0.com/docs/rules) to add them as custom claims on your JWT.
+
+##### Add Authorization Roles to AppMetadata Rule
+
+Your first rule will `Add Authorization Roles to AppMetadata`.
+
+```js
+/// Add Authorization Roles to AppMetadata
+function (user, context, callback) {
+    auth0.users.updateAppMetadata(user.user_id, context.authorization)
+      .then(function(){
+          callback(null, user, context);
+      })
+      .catch(function(err){
+          callback(err);
+      });
+  }
+```
+
+Auth0 maintains user role assignments `context.authorization`. This rule simply copies thate information into the user's `app_metadata`, such as:
+
+```
+{
+  "roles": [
+    "admin"
+  ]
+}
+```
+
+But, now you must include the `app_metdata` on the user's JWT that RedwoodJS will decode.
+
+##### Add AppMetadata to JWT Rule
+
+Therefore, your second rule will `Add AppMetadata to JWT`.
+
+You can add `app_metadata` to the `idToken` or `accessToken`.
+
+Adding to `idToken` will make the make App metadta accessible to RedwoodJS `getuserMetadata` which for Auth0 calls the auth client's `getUser`.
+
+Adding to `accessToken` will make the make App metadta accessible to RedwoodJS when decoding the JWT via `getToken`.
+
+While adding to `idToken` is optional. you *must* add to `accessToken`.
+
+To keep your custom claims from colliding with any reserved claims or claims from other resources, you must give them a [globally unique name using a namespaced format](https://auth0.com/docs/tokens/guides/create-namespaced-custom-claims). Otherwise, Auth0 will *not* add the infomration to the token(s).
+
+Therefore, with a namespace of "https://example.com", the app_metadata on your token should look like:
+
+```js
+"https://example.com/app_metadata": {
+  "authorization": {
+    "roles": [
+      "admin"
+    ]
+  }
+},
+```
+
+To set this namespace information, use the following function in your rule:
+
+```js
+function (user, context, callback) {
+  var namespace = 'https://example.com/';
+
+  // adds to idToken, ie userMetadata in RedwoodJS
+  context.idToken[namespace + 'app_metadata'] = {};
+  context.idToken[namespace + 'app_metadata'].authorization = {
+    groups: user.app_metadata.groups,
+    roles: user.app_metadata.roles,
+    permissions: user.app_metadata.permissions
+  };
+
+  context.idToken[namespace + 'user_metadata'] = {};
+
+  // accessToken, ie the decoded JWT in RedwoodJS
+  context.accessToken[namespace + 'app_metadata'] = {};
+  context.accessToken[namespace + 'app_metadata'].authorization = {
+    groups: user.app_metadata.groups,
+    roles: user.app_metadata.roles,
+    permissions: user.app_metadata.permissions
+  };
+
+   context.accessToken[namespace + 'user_metadata'] = {};
+
+  return callback(null, user, context);
+}
+```
+
+Now, your `app_metadata` with `authorization` and `role` information will be on the user's JWT after logging in.
+
+#### Add Application hasRole Support
+
+In order to support `hasRole` you will need to defined the `hasRole()` function in `api/src/lib/auth.js` and then modify `graphql`.
+
+in your `api/src/lib/auth.js` you need to 1) extract `roles` 2) set these roles on `currentUser` and 3) define `hasRole()` to check if the current user is assigned the specified role.
+
+```js
+// api/src/lib/auth.js`
+const NAMESPACE = 'https://example.com'
+
+const appMetadata = (decoded) => {
+  return decoded[`${NAMESPACE}/app_metadata`] || {}
+}
+
+const roles = (decoded) => {
+  return appMetadata(decoded).authorization?.roles || []
+}
+
+const currentUserWithRoles = async (decoded) => {
+  const user = await db.user.findOne({ where: { decoded.email } })
+  return { ...user, roles: roles(decoded) }
+}
+
+const requireAccessToken = (decoded, { type, token }) => {
+  if (token || type === 'auth0' || decoded?.sub) {
+    return
+  } else {
+    throw new Error('Invalid token')
+  }
+}
+
+export const getCurrentUser = async (decoded, { type, token }) => {
+  try {
+    requireAccessToken(decoded, { type, token })
+    return currentUserWithRoles(decoded)
+  } catch (error) {
+    return decoded
+  }
+}
+
+export const hasRole = (role) => {
+  if (!context.currentUser.roles?.includes(role)) {
+    throw new AuthenticationError("You don't have permission to do that.")
+  }
+}
+```
+
+Next, import `hasRole` from `src/lib/auth.js` just as you do `getCurrentUser` and add it to `createGraphQLHandler`.
+
+```js
+// api/src/functions/graphql.js
+import { getCurrentUser, hasRole } from 'src/lib/auth.js'
+import { db } from 'src/lib/db'
+
+export const handler = createGraphQLHandler({
+  getCurrentUser,
+  hasRole,
+  schema: makeMergedSchema({
+    schemas,
+    services: makeServices({ services }),
+  }),
+  db,
+})
+```
+
+##### Role Protection on Fucntions, Services and Web
+
+You can then use `hasRole(role)` to protect for functions and services:
+
+```js
+export const myThings = () => {
+  requireAuth()
+  hasRole('admin')
+
+  return db.user.findOne({ where: { id: context.currentUser.id } }).things()
+}
+
+You can also protect routes:
+
+```
+<Router>
+
+  <Private unauthenticated="forbidden" role="admin">
+    <Route path="/settings" page={SettingsPage} name="settings" />
+    <Route path="/admin" page={AdminPage} name="sites" />
+  </Private>
+
+  <Route notfound page={NotFoundPage} />
+  <Route path="/forbidden" page={ForbiddenPage} name="forbidden" />
+</Router>
+```
+
+And also protect content in pages or components via the `userAuth()` hook:
+
+```
+const { isAuthenticated, hasRole } = useAuth()
+
+...
+
+{hasRole('admin') && (
+  <Link to={routes.admin()}>Admin</Link>
+)}
+```
 
 ### Magic Links
 
@@ -364,7 +620,7 @@ You must follow the ["Before you begin"](https://firebase.google.com/docs/auth/w
 
 ### Routes
 
-Routes can require authentication by wrapping them in a `<Private>` component. An  unauthenticated user will be redirected to the page specified in`unauthenticated`.
+Routes can require authentication by wrapping them in a `<Private>` component. An unauthenticated user will be redirected to the page specified in`unauthenticated`.
 
 ```js
 import { Router, Route, Private } from "@redwoodjs/router"
@@ -376,6 +632,26 @@ import { Router, Route, Private } from "@redwoodjs/router"
   <Private unauthenticated="login">
     <Route path="/admin" page={AdminPage} name="admin" />
     <Route path="/secret-page" page={SecretPage} name="secret" />
+  </Private>
+</Router>
+```
+
+Routes can also be restirected by role by specifying `hasRole(roleName)` in the `<Private>` component. A  user not assigned the role will be redirected to the page specified in`unauthenticated`.
+
+```js
+import { Router, Route, Private } from "@redwoodjs/router"
+
+<Router>
+  <Route path="/" page={HomePage} name="home" />
+  <Route path="/login" page={LoginPage} name="login" />
+  <Route path="/forbidden" page={ForbiddenPage} name="login" />
+
+  <Private unauthenticated="login">
+    <Route path="/secret-page" page={SecretPage} name="secret" />
+  </Private>
+
+  <Private unauthenticated="forbidd4n" hasRole="admin">
+    <Route path="/admin" page={AdminPage} name="admin" />
   </Private>
 </Router>
 ```
