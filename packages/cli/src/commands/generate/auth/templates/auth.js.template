@@ -46,13 +46,13 @@
 //
 // You have options how to fetch the currentUser and set roles based on your app implemention:
 //
-//   export const getCurrentUser = async ({ decoded }) => {
+//   export const getCurrentUser = async (decoded) => {
 //     return { ...decoded, roles: roles(decoded) }
 //   }
 //
 
 //
-//   export const getCurrentUser = async ({ decoded }) => {
+//   export const getCurrentUser = async (decoded) => {
 //     const currentUser = await db.user.findOne({ where: { email: decoded.email } })
 //     return { ...currentUser, roles: roles(decoded) }
 //   }
@@ -68,7 +68,7 @@
 //
 // currentUser.roles = []
 
-import { AuthenticationError } from '@redwoodjs/api'
+import { AuthenticationError, ForbiddenError } from '@redwoodjs/api'
 
 export const getCurrentUser = async (decoded, { token, type }) => {
   return decoded
@@ -88,6 +88,6 @@ export const requireAuth = () => {
 
 export const hasRole = (role) => {
   if (!context.currentUser.roles?.includes(role)) {
-    throw new AuthenticationError("You don't have permission to do that.")
+    throw new ForbiddenError("You don't have access to do that.")
   }
 }

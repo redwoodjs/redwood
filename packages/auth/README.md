@@ -280,7 +280,7 @@ The following values are available from the `useAuth` hook:
 * async `getToken()`: returns a jwt
 * `client`: Access the instance of the client which you passed into `AuthProvider`
 * `isAuthenticated`: used to determine if the current user has authenticated
-* `hasRole`: used to determine if the current user is asigned a role
+* `hasRole`: used to determine if the current user is assigned a role
 * `loading`: The auth state is restored asynchronously when the user visits the site for the first time, use this to determine if you have the correct state
 
 ## Usage in Redwood
@@ -356,7 +356,7 @@ The `hasRole` function is generated and defined in `api/src/lib/auth.js`
 ```js
 export const hasRole = (role) => {
   if (!context.currentUser.roles?.includes(role)) {
-    throw new AuthenticationError("You don't have permission to do that.")
+    throw new ForbiddenError("You don't have access to do that.")
   }
 }
 ```
@@ -528,7 +528,7 @@ export const getCurrentUser = async (decoded, { type, token }) => {
 
 export const hasRole = (role) => {
   if (!context.currentUser.roles?.includes(role)) {
-    throw new AuthenticationError("You don't have permission to do that.")
+    throw new Forbiddenerror("You don't have access to do that.")
   }
 }
 ```
