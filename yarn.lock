@@ -2758,33 +2758,38 @@
   resolved "https://registry.yarnpkg.com/@open-draft/until/-/until-1.0.3.tgz#db9cc719191a62e7d9200f6e7bab21c5b848adca"
   integrity sha512-Aq58f5HiWdyDlFffbbSjAlv596h/cOnt2DO1w3DOC7OJ5EHs0hd/nycJfiu9RJbT6Yk6F1knnRRXNSpxoIVZ9Q==
 
-"@prisma/cli@~2.3.0":
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/@prisma/cli/-/cli-2.3.0.tgz#ddc89de63c2fcb88199fdd1b490a7616a2d32de1"
-  integrity sha512-S84VeeUR3I2Z1fkBh3x42KmVyFgiX4USzIN5N5EDyoWC8BSlMVs2eHeLlhHOtx68sDz5oNo/YEIM2bkU8cUZKA==
+"@prisma/ci-info@2.1.2":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@prisma/ci-info/-/ci-info-2.1.2.tgz#3da64f54584bde0aaf4b42f298a6c63f025aeb3f"
+  integrity sha512-RhAHY+wp6Nqu89Tp3zfUVkpGfqk4TfngeOWaMGgmhP7mB2ASDtOl8dkwxHmI8eN4edo+luyjPmbJBC4kST321A==
 
-"@prisma/client@~2.3.0":
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-2.3.0.tgz#3979d973e0eececad5387c791aa1dd63316fc690"
-  integrity sha512-mlXV/VdOKjEEoZPOmFOy7KJPecYGV5XSVXGsti0F1kkShpGcMvhPkpKhNOwIb/8muUTeN5NoNqEGqKDD5XKw3w==
+"@prisma/cli@2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@prisma/cli/-/cli-2.4.0.tgz#865a21cd8b072340d4d7b5fda888815b5692956e"
+  integrity sha512-+ybn21k+nAwoyILP5I0+VzRmMLfLmCfnJsJmBktg1FgKIWr9ppcM28Fu8LAohb7kQlKNRhv2eJmC5pdZC6unMw==
+
+"@prisma/client@2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-2.4.0.tgz#221ef0074c63bb9079c92a169bb177ba6fb7cea2"
+  integrity sha512-kFWCVJ8Ux8IsUjaIOlEQ7n3H2rf9MqxkLwM2bOt7LL7P50WraK0dJ7if8KU/Ui9/QYwUIe/5wATi1bfJSrVIAg==
   dependencies:
     pkg-up "^3.1.0"
 
-"@prisma/debug@2.3.0":
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/@prisma/debug/-/debug-2.3.0.tgz#612bf5e8917ec0095bfc0ba7bde366a15eb1a0a2"
-  integrity sha512-b/pkhAL3flv5Vof8V7J8E1oqHuoYySQdAgzEsSdGzOOMRqFQhpXVbmt2/pYf+zgvaeGvqMiP7CMXasa1JotuhQ==
+"@prisma/debug@2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@prisma/debug/-/debug-2.4.0.tgz#a947cb609cd3db73042fe87bcda6b09eabd222a9"
+  integrity sha512-GbVlZvcd5EJoY8fdpL6BZLeGpOaZM+nhxSntd2J5cmHTbCf////GrhLNzwPd249A0CqNvDxhKIpfgKeXfjwKVQ==
   dependencies:
     debug "^4.1.1"
 
-"@prisma/engine-core@2.3.0":
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/@prisma/engine-core/-/engine-core-2.3.0.tgz#37ce2428ce8ab1f0b937d07f78a6e2c7683c8741"
-  integrity sha512-8fCA7UF29MLaaihWrvfrUYgwkjD6ePWpNzO3pxMW52mcyxc6BE/AXQTKhgl6uSmP6xMUw2tPBp3VEs4+8hDQ9A==
+"@prisma/engine-core@2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@prisma/engine-core/-/engine-core-2.4.0.tgz#90365469cbb807793a09c5f348499c4f25952362"
+  integrity sha512-AzTk2ofy3nTQVzJwyvb7ylaRBHjlZ45lc3barmcmxyOJvy3l1IYZsjMQqh+f6Cjswm/ahlNUS6x/cX44yXmsRA==
   dependencies:
-    "@prisma/debug" "2.3.0"
-    "@prisma/generator-helper" "2.3.0"
-    "@prisma/get-platform" "2.3.0"
+    "@prisma/debug" "2.4.0"
+    "@prisma/generator-helper" "2.4.0"
+    "@prisma/get-platform" "2.4.0"
     bent "^7.1.2"
     chalk "^4.0.0"
     cross-fetch "^3.0.4"
@@ -2797,13 +2802,13 @@
     terminal-link "^2.1.1"
     undici "1.1.0"
 
-"@prisma/fetch-engine@2.3.0":
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/@prisma/fetch-engine/-/fetch-engine-2.3.0.tgz#aaeebe53a02353013eabec280899b575d7c90d3c"
-  integrity sha512-wmEfkwGa0u2MksUR51Eako/3zSUN1a95XLDbPowvvre1yyDFjajsKJKA7TcgaYWH8bHF1UCSB3ED4FhcOCA48w==
+"@prisma/fetch-engine@2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@prisma/fetch-engine/-/fetch-engine-2.4.0.tgz#6dc0045528943990949e046656be5842cea6a236"
+  integrity sha512-QM0S4I60SuB/T9cRYJI51wATEfTwUWtZaQl34Xq1Bb9Z0J1qP5s/beL68lyU2oqNMsnSf8Ee5JH4XebAcDFkyA==
   dependencies:
-    "@prisma/debug" "2.3.0"
-    "@prisma/get-platform" "2.3.0"
+    "@prisma/debug" "2.4.0"
+    "@prisma/get-platform" "2.4.0"
     chalk "^4.0.0"
     execa "^4.0.0"
     find-cache-dir "^3.3.1"
@@ -2821,38 +2826,38 @@
     temp-dir "^2.0.0"
     tempy "^0.5.0"
 
-"@prisma/generator-helper@2.3.0":
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/@prisma/generator-helper/-/generator-helper-2.3.0.tgz#62e7eb666aa92a57eb6f308792e2addabac017eb"
-  integrity sha512-DL+9fpBSkLxic4VxA2U0N5leGV6o+E0LOgzlDIDpQsTVzwYiGWX0xSM2PJLKJv/sqY2B9ayeJBSYGfa6/79D3w==
+"@prisma/generator-helper@2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@prisma/generator-helper/-/generator-helper-2.4.0.tgz#c56652b3a53e97c81a29b98a32caf61a8559bc8f"
+  integrity sha512-ckUmB9YjY6Pr1Ea8XQD5mM3yH3t4EvVTJf7WVjpUAopQUpu6zRKP+Nf65f9SqhxnGd4crizrJ8S7XrcMtl4y5Q==
   dependencies:
-    "@prisma/debug" "2.3.0"
+    "@prisma/debug" "2.4.0"
     "@types/cross-spawn" "^6.0.1"
     chalk "^4.0.0"
     cross-spawn "^7.0.2"
 
-"@prisma/get-platform@2.3.0":
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/@prisma/get-platform/-/get-platform-2.3.0.tgz#bc7ee2e427808356ca89b531a2aa9a1b2a32c7fe"
-  integrity sha512-2ZMuFuPevBTqiX0SHQwIpLczPPV0Cgh5+XsgIyQ4b/sD0J7o5b+JPQOTkoQGXZ2bV4HjdlwJqYg7+F+08tl6gw==
+"@prisma/get-platform@2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@prisma/get-platform/-/get-platform-2.4.0.tgz#4e19f7c7234870d2adf0cd6bee13be2cb6868526"
+  integrity sha512-PNyaCsCOmJzN5Wz0K9ksjqevr/naScI2cVapYR0xBA72PjxM5xyyT+GjcZ1t5QEJ4FugtcR2s6501cFo+IvotA==
   dependencies:
-    "@prisma/debug" "2.3.0"
+    "@prisma/debug" "2.4.0"
 
-"@prisma/sdk@~2.3.0":
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/@prisma/sdk/-/sdk-2.3.0.tgz#a9ec72fd6fbcda13d968a6cb908c3977491cc70d"
-  integrity sha512-bFFDrLhG/reJXONa47QQcQ+9PECxO2ArOSMF4W1+xNOpvui1XM3EwZqdQVA+HeMm95H0l0dpNndihnTyNhGIzw==
+"@prisma/sdk@2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@prisma/sdk/-/sdk-2.4.0.tgz#9db3c67c5a24b75328e9371c845058225efe16f2"
+  integrity sha512-2bjCV/+TuijQ6qElzE/47XB80Rj2/WPlbgv/r8GissSI4YLGAQSO906DdUKJ29bm58UfV3rxGWkLV/wRb1323Q==
   dependencies:
     "@apexearth/copy" "^1.4.5"
-    "@prisma/debug" "2.3.0"
-    "@prisma/engine-core" "2.3.0"
-    "@prisma/fetch-engine" "2.3.0"
-    "@prisma/generator-helper" "2.3.0"
-    "@prisma/get-platform" "2.3.0"
+    "@prisma/debug" "2.4.0"
+    "@prisma/engine-core" "2.4.0"
+    "@prisma/fetch-engine" "2.4.0"
+    "@prisma/generator-helper" "2.4.0"
+    "@prisma/get-platform" "2.4.0"
     archiver "^4.0.0"
     arg "^4.1.3"
     chalk "4.1.0"
-    checkpoint-client "1.1.2"
+    checkpoint-client "1.1.6"
     cli-truncate "^2.1.0"
     execa "^4.0.0"
     globby "^11.0.0"
@@ -2936,15 +2941,6 @@
     invariant "^2.2.3"
     prop-types "^15.6.1"
     react-lifecycles-compat "^3.0.4"
-
-"@redwoodjs/internal@^0.8.2":
-  version "0.8.2"
-  resolved "https://registry.yarnpkg.com/@redwoodjs/internal/-/internal-0.8.2.tgz#7b61c5f9bc142b6d40205901f0cc641509de7661"
-  integrity sha512-K5j7npyg8mr/r8AHYwaztyhmeKKEzztPheI2ftObuLSVV+EBWh6slFn80dZhWAIlsDuy7irZcb0eiRW8U+Wuew==
-  dependencies:
-    deepmerge "^4.2.2"
-    findup-sync "^4.0.0"
-    toml "^3.0.0"
 
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.0"
@@ -6806,11 +6802,12 @@ check-types@^8.0.3:
   resolved "https://registry.yarnpkg.com/check-types/-/check-types-8.0.3.tgz#3356cca19c889544f2d7a95ed49ce508a0ecf552"
   integrity sha512-YpeKZngUmG65rLudJ4taU7VLkOCTMhNl/u4ctNC56LQS/zJTyNH0Lrtwm1tfTsbLlwvlfsA2d1c8vCf/Kh2KwQ==
 
-checkpoint-client@1.1.2:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/checkpoint-client/-/checkpoint-client-1.1.2.tgz#2f78f11d5e2f69366d296134deaca877052843d0"
-  integrity sha512-Nvwpf7qi5bJD8+HAZ8HWzdHZBQJxi+Sw33OI8ahx1H0yby8nPcpP+h4bYYhl+8z0XrjBaUz5p6xQeTinzUi/Qw==
+checkpoint-client@1.1.6:
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/checkpoint-client/-/checkpoint-client-1.1.6.tgz#5552256007cb46ad6e4b7ed472f788717ccbefdb"
+  integrity sha512-/sl6b1CJq/eKarfO/bi5f1akpZzJemn9bQqzDGjSo0ZdN9KI2hpqJyd19YA4w/oalEsJ915jhOkCtYnoYwE0Jg==
   dependencies:
+    "@prisma/ci-info" "2.1.2"
     cross-spawn "7.0.3"
     env-paths "2.2.0"
     fast-write-atomic "0.2.1"
