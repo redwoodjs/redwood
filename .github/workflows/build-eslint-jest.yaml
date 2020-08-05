@@ -7,17 +7,95 @@ on:
     types: [opened, edited, synchronize, reopened]
 
 jobs:
-  build:
-    runs-on: ${{ matrix.os }}
+
+  ## LINUX
+  dependency_cache_linux:
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: ['ubuntu-latest']
+        node-version: ['14']
+      fail-fast: true
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Cache "node_modules"
+        uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --check-files
+
+  lint_build_test_linux:
+    needs: dependency_cache_linux
+    strategy:
+      matrix:
+        os: ['ubuntu-latest']
         node-version: ['12', '14']
       fail-fast: true
+    runs-on: ${{ matrix.os }}
     name: ${{ matrix.os }} | Node ${{ matrix.node-version }} latest
     steps:
       - uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Cache "node_modules"
+        uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --check-files
+      - name: Run ESLint
+        run: yarn lint
+        env:
+          CI: true
+      - name: Build
+        run: yarn build
+      - name: Run tests
+        run: yarn test
+        env:
+          CI: true
 
+
+  ## WINDOWS
+  dependency_cache_windows:
+    strategy:
+      matrix:
+        os: ['windows-latest']
+        node-version: ['14']
+      fail-fast: true
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Cache "node_modules"
+        uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --check-files
+  lint_build_test_windows:
+    needs: dependency_cache_windows
+    strategy:
+      matrix:
+        os: ['windows-latest']
+        node-version: ['12', '14']
+      fail-fast: true
+    runs-on: ${{ matrix.os }}
+    name: ${{ matrix.os }} | Node ${{ matrix.node-version }} latest
+    steps:
+      - uses: actions/checkout@v2
       - name: Setup node
         uses: actions/setup-node@v1
         with:
