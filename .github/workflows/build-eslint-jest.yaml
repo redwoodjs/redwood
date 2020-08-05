@@ -22,24 +22,19 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-
-      - name: Cache node_modules
-      - uses: actions/cache@v2
+      - name: Cache "node_modules"
+        uses: actions/cache@v2
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-
       - name: Install dependencies
         run: yarn install --frozen-lockfile --check-files
-
       - name: Run ESLint
         run: yarn lint
         env:
           CI: true
-
       - name: Build
         run: yarn build
-
       - name: Run tests
         run: yarn test
         env:
