@@ -19,9 +19,8 @@
     "yargs": "^15.3.1"
   },
   "scripts": {
-    "build": "yarn cross-env NODE_ENV=production babel src -d dist --delete-dir-on-start",
-    "prepublishOnly": "yarn build",
-    "build:watch": "nodemon --ignore dist --exec \"yarn build\""
+    "build": "babel src -d dist --delete-dir-on-start",
+    "prepublishOnly": "yarn cross-env NODE_ENV=production yarn build"
   },
   "gitHead": "1cb7c8d1085147787209af423c33a9c91c3e6517"
 }

@@ -30,7 +30,8 @@
     "msw": "0.20.0",
     "nodemon": "^2.0.2",
     "typescript": "^3.9.6",
-    "whatwg-fetch": "3.0.0"
+    "whatwg-fetch": "3.0.0",
+    "rimraf": "^3.0.2"
   },
   "resolutions": {
     "@types/react": "16.9.38"
@@ -39,13 +40,12 @@
     "extends": "@redwoodjs/eslint-config"
   },
   "scripts": {
-    "build": "yarn build:clean && yarn build:js",
-    "build:clean": "lerna run build:clean",
-    "build:js": "cross-env NODE_ENV=production lerna run build",
+    "build": "yarn build:js && yarn build:types",
+    "build:js": "lerna run build:js",
     "build:types": "tsc --build --clean && tsc --build",
     "build:watch": "lerna run build:watch --parallel",
     "test": "lerna run test --stream -- --colors --maxWorkers=4",
-    "lint": "yarn eslint packages",
-    "lint:fix": "yarn eslint --fix packages"
+    "lint": "eslint packages",
+    "lint:fix": "eslint --fix packages"
   }
 }

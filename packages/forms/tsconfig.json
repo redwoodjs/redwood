@@ -6,4 +6,7 @@
     "rootDir": "src",
     "outDir": "dist",
   },
+  "files": [
+    "src/types.d.ts"
+  ]
 }
