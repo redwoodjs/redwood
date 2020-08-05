@@ -77,8 +77,8 @@ const AuthConsumer = () => {
             {(currentUser && JSON.stringify(currentUser)) ||
               'no current user data'}
           </p>
-          <p>Has Admin: {hasRole('admin') && 'yes'}</p>
-          <p>Has Super User: {hasRole('superuser') && 'yes'}</p>
+          <p>Has Admin: {hasRole('admin') ? 'yes' : 'no'}</p>
+          <p>Has Super User: {hasRole('superuser') ? 'yes' : 'no'}</p>
 
           <button onClick={() => reauthenticate()}>Update auth data</button>
         </>
@@ -290,9 +290,9 @@ test('When the current user cannot be fetched the user is not authenticated', as
 })
 
 /**
- * Check role access
+ * Check assigned role access
  */
-test('Authenticated user has role access as expected', async (done) => {
+test('Authenticated user has assigned role access as expected', async (done) => {
   const mockAuthClient: AuthClient = {
     login: async () => {
       return true
@@ -307,6 +307,12 @@ test('Authenticated user has role access as expected', async (done) => {
     }),
     client: () => {},
     type: 'custom',
+  }
+
+  CURRENT_USER_DATA = {
+    name: 'Peter Pistorius',
+    email: 'nospam@example.net',
+    roles: [],
   }
 
   render(
@@ -340,10 +346,142 @@ test('Authenticated user has role access as expected', async (done) => {
     return true
   })
 
-  // expect(mockAuthClient.hasRole).toBeCalledTimes(2)
+  expect(screen.getByText('Has Admin: no')).toBeInTheDocument()
+  expect(screen.getByText('Has Super User: no')).toBeInTheDocument()
+
+  // Log out
+  fireEvent.click(screen.getByText('Log Out'))
+  await waitFor(() => screen.getByText('Log In'))
+
+  done()
+})
+
+/**
+ * Check unassigned role access
+ */
+test('Authenticated user has not been assigned role access as expected', async (done) => {
+  const mockAuthClient: AuthClient = {
+    login: async () => {
+      return true
+    },
+    logout: async () => {},
+    getToken: async () => 'hunter2',
+    getUserMetadata: jest.fn(async () => {
+      return null
+    }),
+    hasRole: jest.fn(async () => {
+      return null
+    }),
+    client: () => {},
+    type: 'custom',
+  }
+
+  CURRENT_USER_DATA = {
+    name: 'Peter Pistorius',
+    email: 'nospam@example.net',
+    roles: ['admin', 'superuser'],
+  }
+
+  render(
+    <AuthProvider client={mockAuthClient} type="custom">
+      <AuthConsumer />
+    </AuthProvider>
+  )
+
+  // We're booting up!
+  expect(screen.getByText('Loading...')).toBeInTheDocument()
+
+  // The user is not authenticated
+  await waitFor(() => screen.getByText('Log In'))
+
+  expect(screen.queryByText('Has Admin:')).not.toBeInTheDocument()
+  expect(screen.queryByText('Has Super User:')).not.toBeInTheDocument()
+
+  // Replace "getUserMetadata" with actual data, and login!
+  mockAuthClient.getUserMetadata = jest.fn(async () => {
+    return {
+      sub: 'abcdefg|123456',
+      username: 'peterp',
+    }
+  })
+  fireEvent.click(screen.getByText('Log In'))
+
+  // Check that you're logged in!
+  await waitFor(() => screen.getByText('Log Out'))
+
+  mockAuthClient.hasRole = jest.fn(async () => {
+    return true
+  })
 
   expect(screen.getByText('Has Admin: yes')).toBeInTheDocument()
   expect(screen.getByText('Has Super User: yes')).toBeInTheDocument()
+
+  // Log out
+  fireEvent.click(screen.getByText('Log Out'))
+  await waitFor(() => screen.getByText('Log In'))
+
+  done()
+})
+
+/**
+ * Check some unassigned role access
+ */
+test('Authenticated user has not been assigned some role access but not others as expected', async (done) => {
+  const mockAuthClient: AuthClient = {
+    login: async () => {
+      return true
+    },
+    logout: async () => {},
+    getToken: async () => 'hunter2',
+    getUserMetadata: jest.fn(async () => {
+      return null
+    }),
+    hasRole: jest.fn(async () => {
+      return null
+    }),
+    client: () => {},
+    type: 'custom',
+  }
+
+  CURRENT_USER_DATA = {
+    name: 'Peter Pistorius',
+    email: 'nospam@example.net',
+    roles: ['admin'],
+  }
+
+  render(
+    <AuthProvider client={mockAuthClient} type="custom">
+      <AuthConsumer />
+    </AuthProvider>
+  )
+
+  // We're booting up!
+  expect(screen.getByText('Loading...')).toBeInTheDocument()
+
+  // The user is not authenticated
+  await waitFor(() => screen.getByText('Log In'))
+
+  expect(screen.queryByText('Has Admin:')).not.toBeInTheDocument()
+  expect(screen.queryByText('Has Super User:')).not.toBeInTheDocument()
+
+  // Replace "getUserMetadata" with actual data, and login!
+  mockAuthClient.getUserMetadata = jest.fn(async () => {
+    return {
+      sub: 'abcdefg|123456',
+      username: 'peterp',
+    }
+  })
+  fireEvent.click(screen.getByText('Log In'))
+
+  // Check that you're logged in!
+  await waitFor(() => screen.getByText('Log Out'))
+
+  mockAuthClient.hasRole = jest.fn(async () => {
+    return true
+  })
+
+  expect(screen.getByText('Has Admin: yes')).toBeInTheDocument()
+  expect(screen.getByText('Has Super User: no')).toBeInTheDocument()
 
   // Log out
   fireEvent.click(screen.getByText('Log Out'))

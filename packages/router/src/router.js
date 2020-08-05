@@ -46,18 +46,12 @@ const PrivatePageLoader = ({
     return null
   }
 
-  console.log(`>>> PrivatePageLoader role = ${role}`)
   if (
     (isAuthenticated && !role) ||
     (isAuthenticated && role && hasRole(role))
   ) {
-    console.log('>>> PrivatePageLoader render children')
     return children
   } else {
-    console.log(
-      `>>> PrivatePageLoader render redirect to: ${unauthenticatedRoute()}`
-    )
-
     return (
       <Redirect
         to={`${unauthenticatedRoute()}?redirectTo=${window.location.pathname}`}
