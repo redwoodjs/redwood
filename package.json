@@ -40,9 +40,7 @@
     "extends": "@redwoodjs/eslint-config"
   },
   "scripts": {
-    "build": "yarn build:js && yarn build:types",
-    "build:js": "lerna run build:js",
-    "build:types": "tsc --build --clean && tsc --build",
+    "build": "lerna run build",
     "build:watch": "lerna run build:watch --parallel",
     "test": "lerna run test --stream -- --colors --maxWorkers=4",
     "lint": "eslint packages",
