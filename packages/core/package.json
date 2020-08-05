@@ -71,8 +71,9 @@
   "scripts": {
     "build": "yarn build:js && yarn build:types",
     "prepublishOnly": "yarn build",
-    "build:js": "yarn babel src -d dist --extensions \".js,.ts,.tsx\" --delete-dir-on-start",
-    "build:types": "tsc --build --clean && tsc --build",
+    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\" --delete-dir-on-start",
+    "build:types": "tsc --build --verbose && yarn postbuild:types",
+    "postbuild:types": "rsync -avhW --inplace .buildcache/* dist/",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build\"",
     "test": "jest",
     "test:watch": "yarn test --watch"
