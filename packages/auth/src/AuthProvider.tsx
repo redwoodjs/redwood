@@ -30,7 +30,7 @@ export interface AuthContextInterface {
    * Checks if the "currentUser" from the api side
    * is assigned a role
    **/
-  hasRole(): Promise<boolean>
+  hasRole(): boolean
   /**
    * Redetermine authentication state and update the state.
    */

@@ -311,41 +311,12 @@ You can map the "raw decoded JWT" into a real user object by passing a `getCurre
 Our recommendation is to create a `src/lib/auth.js|ts` file that exports a `getCurrentUser`. (Note: You may already have stub functions.)
 
 ```js
-import { getCurrentUser, hasRole } from 'src/lib/auth'
+import { getCurrentUser } from 'src/lib/auth'
 // Example:
 //  export const getCurrentUser = async (decoded) => {
 //    return await db.user.findOne({ where: { decoded.email } })
 //  }
 //
-// Example for hasRole and RBAC
-//
-//  const appMetadata = (decoded) => {
-//    return decoded[`https://example.com/app_metadata`] || {}
-//  }
-//
-//  const roles = (decoded) => {
-//    return appMetadata(decoded).authorization?.roles || []
-//  }
-//
-//  export const getCurrentUser = async (decoded) => {
-//    const user = await db.user.findOne({ where: { decoded.email } })
-//    return { ...user, roles: roles(decoded) }
-//  }
-//
-// Use this function in your services to check that a user is logged in,
-// whether or not they are assigned a role, and optionally raise an
-// error if they're not.
-//
-//  export const requireAuth = ({ role }) => {
-//    if (!context.currentUser) {
-//      throw new AuthenticationError("You don't have permission to do that.")
-//    }
-//
-//    if (!context.currentUser.roles?.includes(role)) {
-//      throw new ForbiddenError("You don't have access to do that.")
-//    }
-//  }
-
 
 export const handler = createGraphQLHandler({
   schema: makeMergedSchema({
@@ -353,20 +324,29 @@ export const handler = createGraphQLHandler({
     services: makeServices({ services }),
   }),
   getCurrentUser,
-  hasRole, // if role access
 })
 ```
 
 The value returned by `getCurrentUser` is available in `context.currentUser`
 
-The `hasRole` function is generated and defined in `api/src/lib/auth.js`
+Use `requireAuth` in your services to check that a user is logged in,
+whether or not they are assigned a role, and optionally raise an
+error if they're not.
 
 ```js
-export const hasRole = (role) => {
-  if (!context.currentUser.roles?.includes(role)) {
+export const requireAuth = ({ role }) => {
+  if (!context.currentUser) {
+    throw new AuthenticationError("You don't have permission to do that.")
+  }
+
+  if (
+    typeof role !== 'undefined' &&
+    !context.currentUser.roles?.includes(role)
+  ) {
     throw new ForbiddenError("You don't have access to do that.")
   }
 }
+
 ```
 
 ### API Specific Intergration
@@ -496,32 +476,19 @@ Now, your `app_metadata` with `authorization` and `role` information will be on 
 
 #### Add Application hasRole Support
 
-In order to support `hasRole` you will need to defined the `hasRole()` function in `api/src/lib/auth.js` and then modify `graphql`.
+If you intend to support, RBAC then in your `api/src/lib/auth.js` you need to extract `roles` using the `parseJWT` utility and set these roles on `currentUser`.
 
-in your `api/src/lib/auth.js` you need to 1) extract `roles` 2) set these roles on `currentUser` and 3) define `hasRole()` to check if the current user is assigned the specified role.
+If your roles are on a namespaced app_metadata claim, then `parseJWT` provides an option to provide this value.
 
 ```js
 // api/src/lib/auth.js`
 const NAMESPACE = 'https://example.com'
 
-const appMetadata = (decoded) => {
-  return decoded[`${NAMESPACE}/app_metadata`] || {}
-}
-
-const roles = (decoded) => {
-  return appMetadata(decoded).authorization?.roles || []
-}
-
 const currentUserWithRoles = async (decoded) => {
-  const user = await db.user.findOne({ where: { decoded.email } })
-  return { ...user, roles: roles(decoded) }
-}
-
-const requireAccessToken = (decoded, { type, token }) => {
-  if (token || type === 'auth0' || decoded?.sub) {
-    return
-  } else {
-    throw new Error('Invalid token')
+  const currentUser = await userByUserId(decoded.sub)
+  return {
+    ...currentUser,
+    roles: parseJWT({ decoded: decoded, namespace: NAMESPACE }).roles,
   }
 }
 
@@ -533,40 +500,15 @@ export const getCurrentUser = async (decoded, { type, token }) => {
     return decoded
   }
 }
-
-export const hasRole = (role) => {
-  if (!context.currentUser.roles?.includes(role)) {
-    throw new Forbiddenerror("You don't have access to do that.")
-  }
-}
-```
-
-Next, import `hasRole` from `src/lib/auth.js` just as you do `getCurrentUser` and add it to `createGraphQLHandler`.
-
-```js
-// api/src/functions/graphql.js
-import { getCurrentUser, hasRole } from 'src/lib/auth.js'
-import { db } from 'src/lib/db'
-
-export const handler = createGraphQLHandler({
-  getCurrentUser,
-  hasRole,
-  schema: makeMergedSchema({
-    schemas,
-    services: makeServices({ services }),
-  }),
-  db,
-})
 ```
 
 ##### Role Protection on Fucntions, Services and Web
 
-You can then use `hasRole(role)` to protect for functions and services:
+You can specify an optional role in `requireAuth` to check if the user is both authenticated and is assigned the role:
 
 ```js
 export const myThings = () => {
-  requireAuth()
-  hasRole('admin')
+  requireAuth({ role: 'admin'})
 
   return db.user.findOne({ where: { id: context.currentUser.id } }).things()
 }

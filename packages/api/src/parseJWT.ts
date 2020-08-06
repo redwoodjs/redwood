@@ -11,7 +11,6 @@ const appMetadata = (token: DecodedToken): { appMetadata: object } => {
 }
 
 const roles = (token: DecodedToken): { roles: string[] } => {
-  console.log(token)
   const metadata = appMetadata(token)
   return (
     token.decoded?.roles ||

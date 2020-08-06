@@ -5,15 +5,17 @@
 //     return await db.user.findOne({ where: { email } })
 //   }
 //
-// If you want to enforce role-based access, you'll need to set the
-// currentUser's roles attributes to the collection of roles as defined by your app.
+// If you want to enforce role-based access ...
+//
+// You'll need to set the currentUser's roles attributes to the
+// collection of roles as defined by your app.
 //
 // This allows requireAuth() on the api side and hasRole() in the useAuth() hook on the web side
 // to check if the user is assigned a given role or not.
 //
 // How you set the currentUser's roles depends on your auth provider and its implementation.
 //
-// If for example, your decoded JWT stores `roles` in its `app_metadata`:
+// For example, your decoded JWT may store `roles` in it namespaced `app_metadata`:
 //
 // {
 //   'https://example.com/app_metadata': { authorization: { roles: ['admin'] } },
@@ -30,7 +32,6 @@
 //   scope: 'openid profile email'
 // }
 //
-// Roles are defined in the decoded token's app_metadata.
 // The parseJWT utility will extract the roles from decoded token.
 //
 // The app_medata claim may or may not be namespaced based on the auth provider.
@@ -42,67 +43,91 @@
 // 'app_metadata': { authorization: { roles: ['publisher'] } }
 // 'https://example.com/app_metadata': { authorization: { roles: ['publisher'] } }
 //
-// other providers may include roles simply within app_metadata
+// Other providers may include roles simply within app_metadata:
 //
 // 'app_metadata': { roles: ['author'] }
 // 'https://example.com/app_metadata': { roles: ['author'] }
 //
-// and yet other may define roles as a custom claim at the root of the decoded token.
+// And yet other may define roles as a custom claim at the root of the decoded token:
 //
 // roles: ['admin']
 //
-// You have options how to fetch the currentUser and set roles based on your app implemention:
-//
-//   export const getCurrentUser = async (decoded) => {
-//     return {
-//       ...decoded,
-//       roles: parseJWT({ decoded: decoded }).roles,
-//     }
-//   }
-//
-// ... or
-//
-//   export const getCurrentUser = async (decoded) => {
-//     const currentUser = await db.user.findOne({ where: { email: decoded.email } })
-//
-//     return {
-//       ...currentUser,
-//       roles: parseJWT({ decoded: decoded, namespace: NAMESPACE }).roles,
-//     }
-//   }
-//
-// ... or
-//
-//   const getCurrentUser = async (decoded) => {
-//     const currentUser = await db.user.findOne({ where: { userIdentity: decoded.sub } })
-//     return {
-//       ...currentUser,
-//       roles: parseJWT({ decoded: decoded }).roles,
-//     }
-//   }
-//
-// Whichever implementation you require, your currentUser should have a collection of roles
-// so that requireAuth() on the api side and hasRole() in useAuth() on the web side
-// can check currentUser for role assignment
-//
-//   currentUser.roles = []
+// The function `getCurrentUser` should return the user information
+// together with a collection of roles to check for role assignment:
 
 import { AuthenticationError, ForbiddenError, parseJWT } from '@redwoodjs/api'
 
+/**
+ * Use requireAuth in your services to check that a user is logged in,
+ * whether or not they are assigned a role, and optionally raise an
+ * error if they're not.
+ *
+ * @param {string=} role - An optional role
+ *
+ * @example - No role-based access control.
+ *
+ * export const getCurrentUser = async (decoded) => {
+ *   return await db.user.findOne({ where: { decoded.email } })
+ * }
+ *
+ * @example - User info is conatined in the decoded token and roles extracted
+ *
+ * export const getCurrentUser = async (decoded, { _token, _type }) => {
+ *   return { decoded, roles: parseJWT({ decoded }).roles }
+ * }
+ *
+ * @example - User record query by email with namespaced app_metadata roles
+ *
+ * export const getCurrentUser = async (decoded) => {
+ *   const currentUser = await db.user.findOne({ where: { email: decoded.email } })
+ *
+ *   return {
+ *     ...currentUser,
+ *     roles: parseJWT({ decoded: decoded, namespace: NAMESPACE }).roles,
+ *   }
+ * }
+ *
+ * @example - User record query by an identity with app_metadata roles
+ *
+ * const getCurrentUser = async (decoded) => {
+ *   const currentUser = await db.user.findOne({ where: { userIdentity: decoded.sub } })
+ *   return {
+ *     ...currentUser,
+ *     roles: parseJWT({ decoded: decoded }).roles,
+ *   }
+ * }
+ */
 export const getCurrentUser = async (decoded, { _token, _type }) => {
-  return decoded
+  return { decoded, roles: parseJWT({ decoded }).roles }
 }
 
-// Use requireAuth in your services to check that a user is logged in,
-// whether or not they are assigned a role, and optionally raise an
-// error if they're not.
-
-export const requireAuth = ({ role }) => {
+/**
+ * Use requireAuth in your services to check that a user is logged in,
+ * whether or not they are assigned a role, and optionally raise an
+ * error if they're not.
+ *
+ * @param {string=} role - An optional role
+ *
+ * @example
+ *
+ * // checks if currentUser is authenticated
+ * requireAuth()
+ *
+ * @example
+ *
+ * // checks if currentUser is authenticated and assigned a role
+ * requireAuth({ role: 'admin' })
+ *
+ */
+export const requireAuth = ({ role } = {}) => {
   if (!context.currentUser) {
     throw new AuthenticationError("You don't have permission to do that.")
   }
 
-  if (role && !context.currentUser.roles?.includes(role)) {
+  if (
+    typeof role !== 'undefined' &&
+    !context.currentUser.roles?.includes(role)
+  ) {
     throw new ForbiddenError("You don't have access to do that.")
   }
 }

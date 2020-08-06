@@ -12,8 +12,6 @@ export type GetCurrentUser = (
   raw: AuthContextPayload[1]
 ) => Promise<null | object | string>
 
-export type HasRole = (role: string) => Promise<boolean>
-
 /**
  * We use Apollo Server's `context` option as an entry point to construct our
  * own global context.
@@ -26,8 +24,7 @@ export type HasRole = (role: string) => Promise<boolean>
  */
 export const createContextHandler = (
   userContext?: Context | ContextFunction,
-  getCurrentUser?: GetCurrentUser,
-  hasRole?: HasRole
+  getCurrentUser?: GetCurrentUser
 ) => {
   return async ({
     event,
@@ -47,7 +44,6 @@ export const createContextHandler = (
       context.currentUser = getCurrentUser
         ? await getCurrentUser(authContext[0], authContext[1])
         : authContext
-      context.hasRole = hasRole
     }
 
     let customUserContext = userContext
@@ -76,10 +72,6 @@ interface GraphQLHandlerOptions extends Config {
    */
   getCurrentUser?: GetCurrentUser
   /**
-   * A function that checks if the currentUser is assigned a role
-   */
-  hasRole?: hasRole
-  /**
    * A callback when an unhandled exception occurs. Use this to disconnect your prisma instance.
    */
   onException?: () => void
@@ -95,7 +87,6 @@ export const createGraphQLHandler = (
   {
     context,
     getCurrentUser,
-    hasRole,
     onException,
     ...options
   }: GraphQLHandlerOptions = {},
@@ -125,7 +116,7 @@ export const createGraphQLHandler = (
       return error
     },
     // Wrap the user's context function in our own
-    context: createContextHandler(context, getCurrentUser, hasRole),
+    context: createContextHandler(context, getCurrentUser),
     ...options,
   }).createHandler()
 
