@@ -70,7 +70,7 @@
 
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/api'
 
-export const getCurrentUser = async (decoded, { token, type }) => {
+export const getCurrentUser = async (decoded, { _token, _type }) => {
   return decoded
 }
 

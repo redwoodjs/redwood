@@ -101,7 +101,7 @@ export const addApiConfig = () => {
   // add object to handler
   content = content.replace(
     /^(\s*)(schema: makeMergedSchema)(.*)$/m,
-    `$1getCurrentUser,\nhasRole,\n$1$2$3`
+    `$1getCurrentUser,\n$1hasRole,\n$1$2$3`
   )
   fs.writeFileSync(API_GRAPHQL_PATH, content)
 }
