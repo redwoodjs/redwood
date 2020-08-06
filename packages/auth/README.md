@@ -308,7 +308,7 @@ console.log(context.currentUser)
 
 You can map the "raw decoded JWT" into a real user object by passing a `getCurrentUser` function to `createCreateGraphQLHandler`
 
-Our recommendation is to create a `src/lib/auth.js|ts` file that exports a `getCurrentUser` as well as a `hasRole` function (You may already have stub functions.)
+Our recommendation is to create a `src/lib/auth.js|ts` file that exports a `getCurrentUser`. (Note: You may already have stub functions.)
 
 ```js
 import { getCurrentUser, hasRole } from 'src/lib/auth'
@@ -332,9 +332,17 @@ import { getCurrentUser, hasRole } from 'src/lib/auth'
 //    return { ...user, roles: roles(decoded) }
 //  }
 //
-//  export const hasRole = (role) => {
-//    if (!context.currentUser.roles?.includes(role)) {
+// Use this function in your services to check that a user is logged in,
+// whether or not they are assigned a role, and optionally raise an
+// error if they're not.
+//
+//  export const requireAuth = ({ role }) => {
+//    if (!context.currentUser) {
 //      throw new AuthenticationError("You don't have permission to do that.")
+//    }
+//
+//    if (!context.currentUser.roles?.includes(role)) {
+//      throw new ForbiddenError("You don't have access to do that.")
 //    }
 //  }
 

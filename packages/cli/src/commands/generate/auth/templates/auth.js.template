@@ -8,7 +8,8 @@
 // If you want to enforce role-based access, you'll need to set the
 // currentUser's roles attributes to the collection of roles as defined by your app.
 //
-// This allows `hasRole(role)` to check if the user is assigned a given role or not.
+// This allows requireAuth() on the api side and hasRole() in the useAuth() hook on the web side
+// to check if the user is assigned a given role or not.
 //
 // How you set the currentUser's roles depends on your auth provider and its implementation.
 //
@@ -29,44 +30,62 @@
 //   scope: 'openid profile email'
 // }
 //
-// Then you will want to extract the roles from the token app_metadata which may or may
-// not be namespaced based on the auth provider.
+// Roles are defined in the decoded token's app_metadata.
+// The parseJWT utility will extract the roles from decoded token.
 //
-// In some cases, roles will be set on an authorization attribute in app_metadata.
+// The app_medata claim may or may not be namespaced based on the auth provider.
+// Note: Auth0 requires namespacing custom JWT claims
 //
-//   const NAMESPACE = 'https://example.com'
+// Some providers, such as with Auth0, will set roles an authorization
+// attribute in app_metadata (namespaced or not):
 //
-//   const appMetadata = (decoded) => {
-//     return decoded[`${NAMESPACE}/app_metadata`] || {}
-//   }
+// 'app_metadata': { authorization: { roles: ['publisher'] } }
+// 'https://example.com/app_metadata': { authorization: { roles: ['publisher'] } }
 //
-//   const roles = (decoded) => {
-//     return appMetadata(decoded).authorization?.roles || []
-//   }
+// other providers may include roles simply within app_metadata
+//
+// 'app_metadata': { roles: ['author'] }
+// 'https://example.com/app_metadata': { roles: ['author'] }
+//
+// and yet other may define roles as a custom claim at the root of the decoded token.
+//
+// roles: ['admin']
 //
 // You have options how to fetch the currentUser and set roles based on your app implemention:
 //
 //   export const getCurrentUser = async (decoded) => {
-//     return { ...decoded, roles: roles(decoded) }
+//     return {
+//       ...decoded,
+//       roles: parseJWT({ decoded: decoded }).roles,
+//     }
 //   }
 //
-
+// ... or
 //
 //   export const getCurrentUser = async (decoded) => {
 //     const currentUser = await db.user.findOne({ where: { email: decoded.email } })
-//     return { ...currentUser, roles: roles(decoded) }
+//
+//     return {
+//       ...currentUser,
+//       roles: parseJWT({ decoded: decoded, namespace: NAMESPACE }).roles,
+//     }
 //   }
 //
 // ... or
 //
 //   const getCurrentUser = async (decoded) => {
 //     const currentUser = await db.user.findOne({ where: { userIdentity: decoded.sub } })
-//     return { ...currentUser, roles: roles(decoded) }
+//     return {
+//       ...currentUser,
+//       roles: parseJWT({ decoded: decoded }).roles,
+//     }
 //   }
 //
-// Whichever implemententaion, your currentUser should have a collection of roles:
+// Whichever implementation you require, your currentUser should have a collection of roles
+// so that requireAuth() on the api side and hasRole() in useAuth() on the web side
+// can check currentUser for role assignment
 //
-// currentUser.roles = []
+//   currentUser.roles = []
 
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/api'
 
@@ -74,20 +93,16 @@ export const getCurrentUser = async (decoded, { _token, _type }) => {
   return decoded
 }
 
-// Use this function in your services to check that a user is logged in, and
-// raise an error if they're not.
+// Use requireAuth in your services to check that a user is logged in,
+// whether or not they are assigned a role, and optionally raise an
+// error if they're not.
 
-export const requireAuth = () => {
+export const requireAuth = ({ role }) => {
   if (!context.currentUser) {
     throw new AuthenticationError("You don't have permission to do that.")
   }
-}
 
-// Use this function in your services to check whether a user is assigned a role, and
-// raise an error if they have not.
-
-export const hasRole = (role) => {
-  if (!context.currentUser.roles?.includes(role)) {
+  if (role && !context.currentUser.roles?.includes(role)) {
     throw new ForbiddenError("You don't have access to do that.")
   }
 }
