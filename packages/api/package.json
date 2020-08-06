@@ -5,7 +5,7 @@
     "dist"
   ],
   "main": "./dist/index.js",
-  "types": "./distTypes/index.d.ts",
+  "types": "./dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
     "@prisma/client": "2.4.0",
