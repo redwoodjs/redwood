@@ -1,8 +1,10 @@
-/* eslint-disable no-redeclare,  no-undef */
+/* eslint-disable @typescript-eslint/ban-ts-ignore */
+/* eslint-disable no-redeclare */
+/* eslint-disable no-undef */
 import type _React from 'react'
 import type _gql from 'graphql-tag'
 import type _PropTypes from 'prop-types'
-import {
+import type {
   mockGraphQLMutation as _mockGraphQLMutation,
   mockGraphQLQuery as _mockGraphQLQuery,
 } from '@redwoodjs/testing'

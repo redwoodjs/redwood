@@ -96,9 +96,9 @@ module.exports = {
       ],
     },
   ],
-  // Do not build tests or mocks in production.
+  // Ignore test directories when we're not testing
   ignore:
-    process.env.NODE_ENV === 'production'
-      ? [/\.test\.(js|ts)/, '**/__tests__', '**/__mocks__']
-      : [],
+    process.env.NODE_ENV === 'test'
+      ? []
+      : [/\.test\.(js|ts)/, '**/__tests__', '**/__mocks__'],
 }
