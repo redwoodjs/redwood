@@ -7,7 +7,6 @@
     "emitDeclarationOnly": true,
     "sourceMap": true,
     "composite": true,
-    "incremental": true,
     "strict": true,
     "esModuleInterop": true,
     "noUnusedLocals": true,
@@ -17,8 +16,8 @@
     "jsx": "preserve",
   },
   "exclude": [
-    "node_modules",
     "dist",
+    "node_modules",
     "**/__tests__",
     "**/__mocks__",
     "**/*.test.*",

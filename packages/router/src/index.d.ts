@@ -52,9 +52,14 @@ declare module '@redwoodjs/router' {
    */
   function navigate(nameOfRoute: namedRoute)
 
-  // TODO: Redirect
-  // TODO: Link
-  // TODO: NavLink
-  // TODO: navigate, route
-  // TODO: useLocation, useParams, useMatch, usePageLoadingContext
+  // TODO Convert any types to correct typings
+  const Redirect: any
+  const Link: any
+  const NavLink: any
+  const route: any
+  const routes: any
+  const useLocation: any
+  const useParams: any
+  const useMatch: any
+  const usePageLoadingContext: any
 }
