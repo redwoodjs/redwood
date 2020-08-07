@@ -85,7 +85,7 @@ const RedwoodProvider = ({
   return (
     <GraphQLProviderWithAuth
       useAuth={useAuth}
-      config={graphQLClientConfig}
+      graphQLClientConfig={graphQLClientConfig}
       {...rest}
     >
       <FlashProvider>{children}</FlashProvider>

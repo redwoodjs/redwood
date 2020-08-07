@@ -1,8 +1,8 @@
-// import type React from 'react'
+/* eslint-disable no-redeclare,  no-undef */
 import type _React from 'react'
 import type _gql from 'graphql-tag'
 import type _PropTypes from 'prop-types'
-import {
+import type {
   mockGraphQLMutation as _mockGraphQLMutation,
   mockGraphQLQuery as _mockGraphQLQuery,
 } from '@redwoodjs/testing'
@@ -14,13 +14,17 @@ import type {
   useApolloClient as _useApolloClient,
 } from '@apollo/react-hooks'
 
-declare module '@redwoodjs/web' {
+declare global {
+  // We reduce the number of imports that a user has to do by making them
+  // globals via `Webpack.ProvidePlugin`
   const React: typeof _React
   const gql: typeof _gql
   const PropTypes: typeof _PropTypes
   const mockGraphQLQuery: typeof _mockGraphQLQuery
   const mockGraphQLMutation: typeof _mockGraphQLMutation
+}
 
+declare module '@redwoodjs/web' {
   const useQuery: typeof _useQuery
   const useMutation: typeof _useMutation
   const useLazyQuery: typeof _useLazyQuery
@@ -62,5 +66,6 @@ declare module '@redwoodjs/web' {
   const FlashProvider: any
   const GraphQLProvider: any
   const createGraphQLClient: any
-  const withCell: any
+
+  // TODO: RedwoodProvider
 }

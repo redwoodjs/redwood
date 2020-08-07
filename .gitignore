@@ -2,7 +2,7 @@
 .DS_Store
 node_modules
 dist
-packages/api/importAll.macro.js
+.buildcache
 lerna-debug.log
 yarn-error.log
 **/*.tsbuildinfo

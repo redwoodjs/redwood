@@ -24,11 +24,13 @@
     "babel-plugin-module-resolver": "^4.0.0",
     "babel-plugin-remove-code": "^0.0.6",
     "bundlesize": "^0.18.0",
+    "cp-cli": "^2.0.0",
     "cross-env": "^7.0.2",
     "jest": "^26.1.0",
     "lerna": "^3.20.2",
     "msw": "0.20.0",
     "nodemon": "^2.0.2",
+    "rimraf": "^3.0.2",
     "typescript": "^3.9.6",
     "whatwg-fetch": "3.0.0"
   },
@@ -39,13 +41,10 @@
     "extends": "@redwoodjs/eslint-config"
   },
   "scripts": {
-    "build": "yarn build:clean && yarn build:js",
-    "build:clean": "lerna run build:clean",
-    "build:js": "cross-env NODE_ENV=production lerna run build",
-    "build:types": "tsc --build --clean && tsc --build",
+    "build": "lerna run build",
     "build:watch": "lerna run build:watch --parallel",
     "test": "lerna run test --stream -- --colors --maxWorkers=4",
-    "lint": "yarn eslint packages",
-    "lint:fix": "yarn eslint --fix packages"
+    "lint": "eslint packages",
+    "lint:fix": "eslint --fix packages"
   }
 }
