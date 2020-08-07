@@ -1,11 +1,11 @@
 {
   "name": "@redwoodjs/internal",
   "version": "0.15.3",
-  "main": "dist/index.js",
   "files": [
     "dist"
   ],
-  "types": "./dist/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
     "deepmerge": "^4.2.2",

@@ -31,7 +31,7 @@
     "msw": "0.20.0",
     "nodemon": "^2.0.2",
     "rimraf": "^3.0.2",
-    "typescript": "^3.9.6",
+    "typescript": "^3.9.7",
     "whatwg-fetch": "3.0.0"
   },
   "resolutions": {
