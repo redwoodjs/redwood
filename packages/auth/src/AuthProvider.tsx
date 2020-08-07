@@ -136,7 +136,7 @@ export class AuthProvider extends React.Component<
   }
 
   hasRole = (role: string): boolean => {
-    return this.state.currentUser?.roles?.includes(role)
+    return this.state.currentUser?.roles?.includes(role) || false
   }
 
   reauthenticate = async () => {
