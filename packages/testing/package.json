@@ -6,7 +6,6 @@
     "dist"
   ],
   "main": "dist/index.js",
-  "types": "src/index.d.ts",
   "license": "MIT",
   "dependencies": {
     "@redwoodjs/internal": "^0.15.3",
