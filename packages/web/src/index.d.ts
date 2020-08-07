@@ -3,10 +3,6 @@ import type _React from 'react'
 import type _gql from 'graphql-tag'
 import type _PropTypes from 'prop-types'
 import type {
-  mockGraphQLMutation as _mockGraphQLMutation,
-  mockGraphQLQuery as _mockGraphQLQuery,
-} from '@redwoodjs/testing'
-import type {
   useSubscription as _useSubscription,
   useLazyQuery as _useLazyQuery,
   useQuery as _useQuery,
@@ -20,8 +16,6 @@ declare global {
   const React: typeof _React
   const gql: typeof _gql
   const PropTypes: typeof _PropTypes
-  const mockGraphQLQuery: typeof _mockGraphQLQuery
-  const mockGraphQLMutation: typeof _mockGraphQLMutation
 }
 
 declare module '@redwoodjs/web' {
