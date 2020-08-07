@@ -3,10 +3,10 @@
   "version": "0.15.3",
   "files": [
     "dist",
-    "src/global.web-auto-imports.d.ts"
+    "src/index.d.ts"
   ],
   "main": "dist/index.js",
-  "types": "src/global.web-auto-imports.d.ts",
+  "types": "src/index.d.ts",
   "license": "MIT",
   "dependencies": {
     "@apollo/react-components": "^3.1.3",
