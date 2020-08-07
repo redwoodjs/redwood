@@ -41,8 +41,9 @@
     "extends": "@redwoodjs/eslint-config"
   },
   "scripts": {
-    "build": "tsc --build && lerna run build",
-    "build:watch": "lerna run build:watch --parallel",
+    "build": "tsc --build --verbose && lerna run build:js",
+    "build:clean": "rimraf ./packages/**/dist",
+    "build:watch": "tsc --build && lerna run build:watch --parallel",
     "test": "lerna run test --stream -- --colors --maxWorkers=4",
     "lint": "eslint packages",
     "lint:fix": "eslint --fix packages"
