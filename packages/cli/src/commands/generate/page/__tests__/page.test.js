@@ -1,7 +1,46 @@
 global.__dirname = __dirname
+
+let mockFs = false
+let mockFiles = {}
+
+jest.mock('fs', () => {
+  const actual = jest.requireActual('fs')
+
+  return {
+    ...actual,
+    existsSync: (...args) => {
+      if (!mockFs) {
+        return actual.existsSync.apply(null, args)
+      }
+      return false
+    },
+    mkdirSync: (...args) => {
+      if (!mockFs) {
+        return actual.mkdirSync.apply(null, args)
+      }
+    },
+    writeFileSync: (target, contents) => {
+      if (!mockFs) {
+        return actual.writeFileSync.call(null, target, contents)
+      }
+    },
+    readFileSync: (path) => {
+      if (!mockFs) {
+        return actual.readFileSync.call(null, path)
+      }
+
+      const mockedContent = mockFiles[path]
+
+      return mockedContent || actual.readFileSync.call(null, path)
+    },
+  }
+})
+
 import path from 'path'
+import fs from 'fs'
 
 import { loadGeneratorFixture } from 'src/lib/test'
+import { getPaths } from 'src/lib'
 
 import * as page from '../page'
 
@@ -122,4 +161,130 @@ test('creates a path equal to passed path', () => {
   expect(page.routes({ name: 'FooBar', path: 'fooBar-baz' })).toEqual([
     '<Route path="fooBar-baz" page={FooBarPage} name="fooBar" />',
   ])
+})
+
+test('file generation', async () => {
+  mockFiles = {
+    [getPaths().web.routes]: [
+      "import { Router, Route } from '@redwoodjs/router'",
+      '',
+      'const Routes = () => {',
+      '  return (',
+      '    <Router>',
+      '      <Route path="/about" page={AboutPage} name="about" />',
+      '      <Route notfound page={NotFoundPage} />',
+      '    </Router>',
+      '  )',
+      '}',
+      '',
+      'export default Routes',
+    ].join('\n'),
+  }
+
+  const spy = jest.spyOn(fs, 'writeFileSync')
+  mockFs = true
+
+  await page.handler({ name: 'home', path: '', force: false })
+
+  expect(spy).toHaveBeenCalledWith(
+    path.normalize('/path/to/project/web/src/pages/HomePage/HomePage.js'),
+    loadGeneratorFixture('page', 'singleWordPage.js')
+  )
+
+  expect(spy).toHaveBeenCalledWith(
+    path.normalize('/path/to/project/web/src/pages/HomePage/HomePage.test.js'),
+    loadGeneratorFixture('page', 'singleWordPage.test.js')
+  )
+
+  expect(spy).toHaveBeenCalledWith(
+    path.normalize(
+      '/path/to/project/web/src/pages/HomePage/HomePage.stories.js'
+    ),
+    loadGeneratorFixture('page', 'singleWordPage.stories.js')
+  )
+
+  expect(spy).toHaveBeenCalledWith(
+    path.normalize('/path/to/project/web/src/Routes.js'),
+    [
+      "import { Router, Route } from '@redwoodjs/router'",
+      '',
+      'const Routes = () => {',
+      '  return (',
+      '    <Router>',
+      '      <Route path="/home" page={HomePage} name="home" />',
+      '      <Route path="/about" page={AboutPage} name="about" />',
+      '      <Route notfound page={NotFoundPage} />',
+      '    </Router>',
+      '  )',
+      '}',
+      '',
+      'export default Routes',
+    ].join('\n')
+  )
+
+  mockFs = false
+  spy.mockRestore()
+})
+
+test('file generation with route params', async () => {
+  mockFiles = {
+    [getPaths().web.routes]: [
+      "import { Router, Route } from '@redwoodjs/router'",
+      '',
+      'const Routes = () => {',
+      '  return (',
+      '    <Router>',
+      '      <Route path="/about" page={AboutPage} name="about" />',
+      '      <Route notfound page={NotFoundPage} />',
+      '    </Router>',
+      '  )',
+      '}',
+      '',
+      'export default Routes',
+    ].join('\n'),
+  }
+
+  const spy = jest.spyOn(fs, 'writeFileSync')
+  mockFs = true
+
+  await page.handler({ name: 'post', path: '{id}', force: false })
+
+  expect(spy).toHaveBeenCalledWith(
+    path.normalize('/path/to/project/web/src/pages/PostPage/PostPage.js'),
+    loadGeneratorFixture('page', 'paramPage.js')
+  )
+
+  expect(spy).toHaveBeenCalledWith(
+    path.normalize('/path/to/project/web/src/pages/PostPage/PostPage.test.js'),
+    loadGeneratorFixture('page', 'paramPage.test.js')
+  )
+
+  expect(spy).toHaveBeenCalledWith(
+    path.normalize(
+      '/path/to/project/web/src/pages/PostPage/PostPage.stories.js'
+    ),
+    loadGeneratorFixture('page', 'paramPage.stories.js')
+  )
+
+  expect(spy).toHaveBeenCalledWith(
+    path.normalize('/path/to/project/web/src/Routes.js'),
+    [
+      "import { Router, Route } from '@redwoodjs/router'",
+      '',
+      'const Routes = () => {',
+      '  return (',
+      '    <Router>',
+      '      <Route path="/post/{id}" page={PostPage} name="post" />',
+      '      <Route path="/about" page={AboutPage} name="about" />',
+      '      <Route notfound page={NotFoundPage} />',
+      '    </Router>',
+      '  )',
+      '}',
+      '',
+      'export default Routes',
+    ].join('\n')
+  )
+
+  mockFs = false
+  spy.mockRestore()
 })
