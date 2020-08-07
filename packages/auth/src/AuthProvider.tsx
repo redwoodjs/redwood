@@ -8,7 +8,9 @@ import type {
 } from './authClients'
 import { createAuthClient } from './authClients'
 
-export interface CurrentUser {}
+export interface CurrentUser {
+  roles?: Array<string>
+}
 
 export interface AuthContextInterface {
   /* Determining your current authentication state */
@@ -133,7 +135,7 @@ export class AuthProvider extends React.Component<
     }
   }
 
-  hasRole = (role: string) => {
+  hasRole = (role: string): boolean => {
     return this.state.currentUser?.roles?.includes(role)
   }
 
