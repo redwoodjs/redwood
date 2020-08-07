@@ -1,10 +1,8 @@
-/* eslint-disable no-undef */
-/*eslint no-redeclare: [2, { "builtinGlobals": false }]*/
-
+/* eslint-disable no-redeclare,  no-undef */
 import type _React from 'react'
 import type _gql from 'graphql-tag'
 import type _PropTypes from 'prop-types'
-import {
+import type {
   mockGraphQLMutation as _mockGraphQLMutation,
   mockGraphQLQuery as _mockGraphQLQuery,
 } from '@redwoodjs/testing'
@@ -68,5 +66,6 @@ declare module '@redwoodjs/web' {
   const FlashProvider: any
   const GraphQLProvider: any
   const createGraphQLClient: any
-  const withCell: any
+
+  // TODO: RedwoodProvider
 }
