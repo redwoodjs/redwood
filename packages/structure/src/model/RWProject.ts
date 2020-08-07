@@ -1,6 +1,6 @@
 import { getDMMF } from '@prisma/sdk'
 // TODO: re-implement a higher quality version of these in ./project
-import { getPaths, processPagesDir } from '@redwoodjs/internal/dist/paths'
+import { getPaths, processPagesDir } from '@redwoodjs/internal'
 import { join } from 'path'
 import { URL_file } from '../x/URL'
 import { BaseNode, Host } from '../ide'
