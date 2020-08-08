@@ -5,7 +5,7 @@ import {} from 'src/lib/test'
 
 import * as helpers from '../helpers'
 
-const PAGE_TEMPLATE_OUTPUT = `import { Link } from '@redwoodjs/router'
+const PAGE_TEMPLATE_OUTPUT = `import { Link, routes } from '@redwoodjs/router'
 
 const FooBarPage = () => {
   return (
@@ -14,7 +14,7 @@ const FooBarPage = () => {
       <p>Find me in "./web/src/pages/FooBarPage/FooBarPage.js"</p>
       <p>
         My default route is named "fooBar", link to me with \`
-        <Link to="fooBar">routes.fooBar()</Link>\`
+        <Link to={routes.fooBar()}>routes.fooBar()</Link>\`
       </p>
     </>
   )

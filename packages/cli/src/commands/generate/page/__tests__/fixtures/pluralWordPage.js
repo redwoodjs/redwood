@@ -1,4 +1,4 @@
-import { Link } from '@redwoodjs/router'
+import { Link, routes } from '@redwoodjs/router'
 
 const CatsPage = () => {
   return (
@@ -7,7 +7,7 @@ const CatsPage = () => {
       <p>Find me in "./web/src/pages/CatsPage/CatsPage.js"</p>
       <p>
         My default route is named "cats", link to me with `
-        <Link to="cats">routes.cats()</Link>`
+        <Link to={routes.cats()}>routes.cats()</Link>`
       </p>
     </>
   )
