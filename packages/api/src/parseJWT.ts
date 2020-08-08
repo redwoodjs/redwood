@@ -3,14 +3,24 @@ interface DecodedToken {
   namespace?: string
 }
 
-const appMetadata = (token: DecodedToken): { appMetadata: object } => {
+interface AppMetadata {
+  roles?: string[]
+  authorization?: string
+}
+
+interface ParsedJWT {
+  appMetadata: AppMetadata
+  roles: string[]
+}
+
+const appMetadata = (token: DecodedToken): { appMetadata: AppMetadata } => {
   const claim = token.namespace
     ? `${token.namespace}/app_metadata`
     : 'app_metadata'
   return token.decoded?.[claim] || {}
 }
 
-const roles = (token: DecodedToken): { roles: string[] } => {
+const roles = (token: DecodedToken): { roles?: string[] } => {
   const metadata = appMetadata(token)
   return (
     token.decoded?.roles ||
@@ -20,9 +30,7 @@ const roles = (token: DecodedToken): { roles: string[] } => {
   )
 }
 
-export const parseJWT = (
-  token: DecodedToken
-): { appMetadata: object; roles: string[] } => {
+export const parseJWT = (token: DecodedToken): { ParsedJWT } => {
   return {
     appMetadata: appMetadata(token),
     roles: roles(token),
