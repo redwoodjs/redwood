@@ -309,9 +309,9 @@ const InputField = forwardRef((props, ref) => {
 
 let inputComponents = {}
 INPUT_TYPES.forEach((type) => {
-  inputComponents[`${pascalcase(type)}Field`] = (props) => (
-    <InputField type={type} {...props} />
-  )
+  inputComponents[`${pascalcase(type)}Field`] = forwardRef((props, ref) => (
+    <InputField ref={ref} type={type} {...props} />
+  ))
 })
 
 export {
