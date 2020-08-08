@@ -31,7 +31,7 @@
     "msw": "0.20.0",
     "nodemon": "^2.0.2",
     "rimraf": "^3.0.2",
-    "typescript": "^3.9.6",
+    "typescript": "^3.9.7",
     "whatwg-fetch": "3.0.0"
   },
   "resolutions": {
@@ -41,8 +41,9 @@
     "extends": "@redwoodjs/eslint-config"
   },
   "scripts": {
-    "build": "lerna run build",
-    "build:watch": "lerna run build:watch --parallel",
+    "build": "tsc --build --verbose && lerna run build:js",
+    "build:clean": "rimraf ./packages/**/dist",
+    "build:watch": "tsc --build && lerna run build:watch --parallel",
     "test": "lerna run test --stream -- --colors --maxWorkers=4",
     "lint": "eslint packages",
     "lint:fix": "eslint --fix packages"

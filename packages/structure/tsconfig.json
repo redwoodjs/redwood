@@ -3,8 +3,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "rootDir": "src",
-    "tsBuildInfoFile": ".buildcache/tsconfig.tsbuildinfo",
-    "outDir": ".buildcache",
+    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
+    "outDir": "dist",
     "experimentalDecorators": true,
     "noImplicitReturns": false,
     "noImplicitAny": false,
