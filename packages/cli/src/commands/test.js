@@ -26,23 +26,30 @@ function isInMercurialRepository() {
 }
 
 export const command = 'test [side..]'
-export const description = 'Run Jest tests'
+export const description = 'Run Jest tests. Defaults to watch mode'
 export const builder = (yargs) => {
   yargs
     .choices('side', getProject().sides)
     .option('watch', {
+      describe:
+        'Run tests related to changed files based on hg/git. Specify the name or path to a file to focus on a specific set of tests',
       type: 'boolean',
       default: false,
     })
     .option('watchAll', {
+      describe: 'Run all tests',
       type: 'boolean',
       default: false,
     })
     .option('collectCoverage', {
+      describe:
+        'Show test coverage summary and output info to coverage directory',
       type: 'boolean',
       default: false,
     })
     .option('clearCache', {
+      describe:
+        'Delete the Jest cache directory and exit without running tests',
       type: 'boolean',
       default: false,
     })
