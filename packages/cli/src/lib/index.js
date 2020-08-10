@@ -326,7 +326,7 @@ export const addRoutesToRouterTask = (routes) => {
     if (content.includes(route)) {
       return content
     }
-    return content.replace(/(\s*)\<Router\>/, `$1<Router>$1  ${route}`)
+    return content.replace(/<Router>(\s*)/, `<Router>$1${route}$1`)
   }, routesContent)
   writeFile(redwoodPaths.web.routes, newRoutesContent, {
     overwriteExisting: true,
