@@ -1,4 +1,4 @@
-import { useMutation } from '@redwoodjs/web'
+import { useMutation, useFlash } from '@redwoodjs/web'
 import { Link, routes } from '@redwoodjs/router'
 
 const DELETE_${singularConstantName}_MUTATION = gql`
@@ -19,6 +19,10 @@ const truncate = (text) => {
   return output
 }
 
+const jsonTruncate = (obj) => {
+  return truncate(JSON.stringify(obj, null, 2))
+}
+
 const timeTag = (datetime) => {
   return (
     <time dateTime={datetime} title={datetime}>
@@ -27,8 +31,17 @@ const timeTag = (datetime) => {
   )
 }
 
+const checkboxInputTag = (checked) => {
+  return <input type="checkbox" checked={checked} disabled />
+}
+
 const ${pluralPascalName}List = ({ ${pluralCamelName} }) => {
-  const [delete${singularPascalName}] = useMutation(DELETE_${singularConstantName}_MUTATION)
+  const { addMessage } = useFlash()
+  const [delete${singularPascalName}] = useMutation(DELETE_${singularConstantName}_MUTATION, {
+    onCompleted: () => {
+      addMessage('${singularPascalName} deleted.', { classes: 'rw-flash-success' })
+    },
+  })
 
   const onDeleteClick = (id) => {
     if (confirm('Are you sure you want to delete ${singularCamelName} ' + id + '?')) {
@@ -41,14 +54,14 @@ const ${pluralPascalName}List = ({ ${pluralCamelName} }) => {
       <table className="rw-table">
         <thead>
           <tr><% columns.forEach(column => { %>
-            <th><%= column.name %></th><% }) %>
+            <th>${column.label}</th><% }) %>
             <th>&nbsp;</th>
           </tr>
         </thead>
         <tbody>
           {${pluralCamelName}.map((${singularCamelName}) => (
             <tr key={${singularCamelName}.id}><% columns.forEach(column => { %>
-              <td>{<% if (column.type === 'DateTime') { %>timeTag<% } else { %>truncate<% } %>(${singularCamelName}.<%= column.name %>)}</td><% }) %>
+              <td>{${column.listDisplayFunction}(${singularCamelName}.${column.name})}</td><% }) %>
               <td>
                 <nav className="rw-table-actions">
                   <Link

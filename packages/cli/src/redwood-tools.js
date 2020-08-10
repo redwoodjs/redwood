@@ -3,7 +3,7 @@ import path from 'path'
 import fs from 'fs'
 
 import yargs from 'yargs'
-import { getPaths } from '@redwoodjs/internal'
+import { getPaths, ensurePosixPath } from '@redwoodjs/internal'
 import execa from 'execa'
 import chokidar from 'chokidar'
 import _ from 'lodash'
@@ -66,6 +66,10 @@ export const fixProjectBinaries = (PROJECT_PATH) => {
 
 export const copyFiles = async (src, dest) => {
   // TODO: Figure out if we need to only run based on certain events.
+
+  src = ensurePosixPath(src)
+  dest = ensurePosixPath(dest)
+
   await execa('rsync', ['-rtvu --delete', `'${src}'`, `'${dest}'`], {
     shell: true,
     stdio: 'inherit',

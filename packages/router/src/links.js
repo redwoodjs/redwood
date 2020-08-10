@@ -1,7 +1,7 @@
-import { forwardRef, useContext, useEffect } from 'react'
+import { forwardRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
-import { navigate, matchPath, LocationContext } from './internal'
+import { navigate, matchPath, useLocation } from './internal'
 
 /**
  * Returns true if the URL for the given "route" value matches the current URL.
@@ -9,7 +9,7 @@ import { navigate, matchPath, LocationContext } from './internal'
  * <NavLink>.
  */
 const useMatch = (route) => {
-  const location = useContext(LocationContext)
+  const location = useLocation()
   const matchInfo = matchPath(route, location.pathname)
 
   return matchInfo
@@ -21,6 +21,16 @@ const Link = forwardRef(({ to, ...rest }, ref) => (
     ref={ref}
     {...rest}
     onClick={(event) => {
+      if (
+        event.button !== 0 ||
+        event.altKey ||
+        event.ctrlKey ||
+        event.metaKey ||
+        event.shiftKey
+      ) {
+        return
+      }
+
       event.preventDefault()
       navigate(to)
     }}
@@ -41,6 +51,16 @@ const NavLink = forwardRef(
         className={theClassName}
         {...rest}
         onClick={(event) => {
+          if (
+            event.button !== 0 ||
+            event.altKey ||
+            event.ctrlKey ||
+            event.metaKey ||
+            event.shiftKey
+          ) {
+            return
+          }
+
           event.preventDefault()
           navigate(to)
         }}

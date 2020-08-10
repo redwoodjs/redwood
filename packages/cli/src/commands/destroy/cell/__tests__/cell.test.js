@@ -2,8 +2,16 @@ global.__dirname = __dirname
 jest.mock('fs')
 jest.mock('src/lib', () => {
   return {
-    ...require.requireActual('src/lib'),
+    ...jest.requireActual('src/lib'),
     generateTemplate: () => '',
+  }
+})
+
+jest.mock('@redwoodjs/structure', () => {
+  return {
+    getProject: () => ({
+      cells: [{ queryOperationName: undefined }],
+    }),
   }
 })
 

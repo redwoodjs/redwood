@@ -194,17 +194,79 @@ const componentFiles = async (name, scaffoldPath = '') => {
   const singularName = pascalcase(pluralize.singular(name))
   const model = await getSchema(singularName)
   const idType = getIdType(model)
-  const columns = model.fields.filter((field) => field.kind !== 'object')
   const intForeignKeys = intForeignKeysForModel(model)
   let fileList = {}
-  const editableColumns = columns
-    .filter((column) => {
-      return NON_EDITABLE_COLUMNS.indexOf(column.name) === -1
-    })
+  const componentMetadata = {
+    Boolean: {
+      componentName: 'CheckboxField',
+      defaultProp: 'defaultChecked',
+      validation: false,
+      listDisplayFunction: 'checkboxInputTag',
+      displayFunction: 'checkboxInputTag',
+    },
+    DateTime: {
+      listDisplayFunction: 'timeTag',
+      displayFunction: 'timeTag',
+    },
+    Int: {
+      componentName: 'NumberField',
+    },
+    Json: {
+      componentName: 'TextAreaField',
+      dataType: 'Json',
+      displayFunction: 'jsonDisplay',
+      listDisplayFunction: 'jsonTruncate',
+      deserilizeFunction: 'JSON.stringify',
+    },
+    Float: {
+      dataType: 'Float',
+    },
+    default: {
+      componentName: 'TextField',
+      defaultProp: 'defaultValue',
+      deserilizeFunction: '',
+      validation: '{{ required: true }}',
+      displayFunction: undefined,
+      listDisplayFunction: 'truncate',
+      dataType: undefined,
+    },
+  }
+  const columns = model.fields
+    .filter((field) => field.kind !== 'object')
     .map((column) => ({
       ...column,
       label: humanize(column.name),
+      component:
+        componentMetadata[column.type]?.componentName ||
+        componentMetadata.default.componentName,
+      defaultProp:
+        componentMetadata[column.type]?.defaultProp ||
+        componentMetadata.default.defaultProp,
+      deserilizeFunction:
+        componentMetadata[column.type]?.deserilizeFunction ||
+        componentMetadata.default.deserilizeFunction,
+      validation:
+        componentMetadata[column.type]?.validation ??
+        componentMetadata.default.validation,
+      listDisplayFunction:
+        componentMetadata[column.type]?.listDisplayFunction ||
+        componentMetadata.default.listDisplayFunction,
+      displayFunction:
+        componentMetadata[column.type]?.displayFunction ||
+        componentMetadata.default.displayFunction,
+      dataType:
+        componentMetadata[column.type]?.dataType ||
+        componentMetadata.default.dataType,
     }))
+  const editableColumns = columns.filter((column) => {
+    return NON_EDITABLE_COLUMNS.indexOf(column.name) === -1
+  })
+  const fieldsToImport = Object.keys(
+    editableColumns.reduce((accumulator, column) => {
+      accumulator[column.component] = true
+      return accumulator
+    }, {})
+  )
 
   const pascalScaffoldPath =
     scaffoldPath === ''
@@ -249,6 +311,7 @@ const componentFiles = async (name, scaffoldPath = '') => {
       {
         name,
         columns,
+        fieldsToImport,
         editableColumns,
         idType,
         intForeignKeys,

@@ -1,5 +1,5 @@
 datasource DS {
-  provider = "sqlite"
+  provider = "postgresql"
   url = env("DB_HOST")
 }
 
@@ -17,7 +17,11 @@ model Post {
   author   String
   body     String
   image    String?
+  isPinned Boolean @default(false)
+  readTime Int
+  rating   Float?
   postedAt DateTime?
+  metadata Json
 }
 
 model User {

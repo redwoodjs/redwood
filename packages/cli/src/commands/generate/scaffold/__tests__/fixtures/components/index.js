@@ -1,4 +1,4 @@
-import { useMutation } from '@redwoodjs/web'
+import { useMutation, useFlash } from '@redwoodjs/web'
 import { Link, routes } from '@redwoodjs/router'
 
 const DELETE_POST_MUTATION = gql`
@@ -19,6 +19,10 @@ const truncate = (text) => {
   return output
 }
 
+const jsonTruncate = (obj) => {
+  return truncate(JSON.stringify(obj, null, 2))
+}
+
 const timeTag = (datetime) => {
   return (
     <time dateTime={datetime} title={datetime}>
@@ -27,8 +31,17 @@ const timeTag = (datetime) => {
   )
 }
 
+const checkboxInputTag = (checked) => {
+  return <input type="checkbox" checked={checked} disabled />
+}
+
 const PostsList = ({ posts }) => {
-  const [deletePost] = useMutation(DELETE_POST_MUTATION)
+  const { addMessage } = useFlash()
+  const [deletePost] = useMutation(DELETE_POST_MUTATION, {
+    onCompleted: () => {
+      addMessage('Post deleted.', { classes: 'rw-flash-success' })
+    },
+  })
 
   const onDeleteClick = (id) => {
     if (confirm('Are you sure you want to delete post ' + id + '?')) {
@@ -41,13 +54,17 @@ const PostsList = ({ posts }) => {
       <table className="rw-table">
         <thead>
           <tr>
-            <th>id</th>
-            <th>title</th>
-            <th>slug</th>
-            <th>author</th>
-            <th>body</th>
-            <th>image</th>
-            <th>postedAt</th>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Slug</th>
+            <th>Author</th>
+            <th>Body</th>
+            <th>Image</th>
+            <th>Is pinned</th>
+            <th>Read time</th>
+            <th>Rating</th>
+            <th>Posted at</th>
+            <th>Metadata</th>
             <th>&nbsp;</th>
           </tr>
         </thead>
@@ -60,7 +77,11 @@ const PostsList = ({ posts }) => {
               <td>{truncate(post.author)}</td>
               <td>{truncate(post.body)}</td>
               <td>{truncate(post.image)}</td>
+              <td>{checkboxInputTag(post.isPinned)}</td>
+              <td>{truncate(post.readTime)}</td>
+              <td>{truncate(post.rating)}</td>
               <td>{timeTag(post.postedAt)}</td>
+              <td>{jsonTruncate(post.metadata)}</td>
               <td>
                 <nav className="rw-table-actions">
                   <Link

@@ -5,12 +5,18 @@ import {} from 'src/lib/test'
 
 import * as helpers from '../helpers'
 
-const PAGE_TEMPLATE_OUTPUT = `const FooBarPage = () => {
+const PAGE_TEMPLATE_OUTPUT = `import { Link } from '@redwoodjs/router'
+
+const FooBarPage = () => {
   return (
-    <div>
+    <>
       <h1>FooBarPage</h1>
-      <p>Find me in ./web/src/pages/FooBarPage/FooBarPage.js</p>
-    </div>
+      <p>Find me in "./web/src/pages/FooBarPage/FooBarPage.js"</p>
+      <p>
+        My default route is named "fooBar", link to me with \`
+        <Link to="fooBar">routes.fooBar()</Link>\`
+      </p>
+    </>
   )
 }
 
@@ -242,7 +248,7 @@ test('relationsForModel returns related field names from a has-many relationship
     uniqueFields: [],
   }
 
-  expect(helpers.relationsForModel(model)).toEqual(['userProfiles'])
+  expect(helpers.relationsForModel(model)).toEqual(['profiles'])
 })
 
 test('intForeignKeysForModel returns names of foreign keys that are Int datatypes', () => {

@@ -1,16 +1,15 @@
 global.__dirname = __dirname
 import path from 'path'
-import { loadGeneratorFixture } from 'src/lib/test'
 
 // TODO: Revert to import from '../component' when it gets types.
-import * as component from 'src/commands/generate/component/component'
+import { loadGeneratorFixture } from 'src/lib/test'
 
-type WordFilesType = { [key: string]: string }
+import * as component from '../component'
 
-let singleWordDefaultFiles: WordFilesType
-let multiWordDefaultFiles: WordFilesType
-let javascriptFiles: WordFilesType
-let typescriptFiles: WordFilesType
+let singleWordDefaultFiles,
+  multiWordDefaultFiles,
+  javascriptFiles,
+  typescriptFiles
 
 beforeAll(() => {
   singleWordDefaultFiles = component.files({ name: 'User' })
@@ -25,8 +24,8 @@ beforeAll(() => {
   })
 })
 
-test('returns exactly 2 files', () => {
-  expect(Object.keys(singleWordDefaultFiles).length).toEqual(2)
+test('returns exactly 3 files', () => {
+  expect(Object.keys(singleWordDefaultFiles).length).toEqual(3)
 })
 
 test('creates a single word component', () => {
@@ -43,6 +42,18 @@ test('creates a single word component test', () => {
       path.normalize('/path/to/project/web/src/components/User/User.test.tsx')
     ]
   ).toEqual(loadGeneratorFixture('component', 'singleWordComponent.test.tsx'))
+})
+
+test('creates a single word component story', () => {
+  expect(
+    singleWordDefaultFiles[
+      path.normalize(
+        '/path/to/project/web/src/components/User/User.stories.tsx'
+      )
+    ]
+  ).toEqual(
+    loadGeneratorFixture('component', 'singleWordComponent.stories.tsx')
+  )
 })
 
 test('creates a multi word component', () => {
@@ -63,6 +74,16 @@ test('creates a multi word component test', () => {
       )
     ]
   ).toEqual(loadGeneratorFixture('component', 'multiWordComponent.test.tsx'))
+})
+
+test('creates a multi word component story', () => {
+  expect(
+    multiWordDefaultFiles[
+      path.normalize(
+        '/path/to/project/web/src/components/UserProfile/UserProfile.stories.tsx'
+      )
+    ]
+  ).toEqual(loadGeneratorFixture('component', 'multiWordComponent.stories.tsx'))
 })
 
 test('creates JS component files if javacript = true', () => {

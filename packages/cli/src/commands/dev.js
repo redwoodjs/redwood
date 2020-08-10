@@ -3,19 +3,27 @@ import path from 'path'
 
 import concurrently from 'concurrently'
 import terminalLink from 'terminal-link'
+import { getConfig, shutdownPort } from '@redwoodjs/internal'
 
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
+import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
 
 export const command = 'dev [side..]'
 export const description = 'Start development servers for api, db, and web'
 export const builder = (yargs) => {
   yargs
     .positional('side', {
-      choices: ['api', 'db', 'web'],
-      default: ['api', 'db', 'web'],
+      choices: ['api', 'web'],
+      default: ['api', 'web'],
       description: 'Which dev server(s) to start',
       type: 'array',
+    })
+    .positional('forward', {
+      alias: 'fwd',
+      description:
+        'String of one or more Webpack DevServer config options, for example: `--fwd="--port=1234 --open=false"`',
+      type: 'string',
     })
     .epilogue(
       `Also see the ${terminalLink(
@@ -25,14 +33,40 @@ export const builder = (yargs) => {
     )
 }
 
-export const handler = async ({ side = ['api', 'db', 'web'] }) => {
+export const handler = async ({ side = ['api', 'web'], forward = '' }) => {
   // We use BASE_DIR when we need to effectively set the working dir
   const BASE_DIR = getPaths().base
   // For validation, e.g. dirExists?, we use these
   // note: getPaths().web|api.base returns undefined on Windows
   const API_DIR_SRC = getPaths().api.src
   const WEB_DIR_SRC = getPaths().web.src
-  const PRISMA_SCHEMA = getPaths().api.dbSchema
+
+  if (side.includes('api')) {
+    try {
+      // This command will check if the api side has a `prisma.schema` file.
+      await generatePrismaClient({ verbose: false, force: false })
+    } catch (e) {
+      console.error(c.error(e.message))
+    }
+
+    try {
+      await shutdownPort(getConfig().api.port)
+    } catch (e) {
+      console.error(
+        `Error whilst shutting down "api" port: ${c.error(e.message)}`
+      )
+    }
+  }
+
+  if (side.includes('web')) {
+    try {
+      await shutdownPort(getConfig().web.port)
+    } catch (e) {
+      console.error(
+        `Error whilst shutting down "web" port: ${c.error(e.message)}`
+      )
+    }
+  }
 
   const jobs = {
     api: {
@@ -41,21 +75,12 @@ export const handler = async ({ side = ['api', 'db', 'web'] }) => {
       prefixColor: 'cyan',
       runWhen: () => fs.existsSync(API_DIR_SRC),
     },
-    db: {
-      name: ' db', // prefixed with ` ` to match output indentation.
-      command: `cd "${path.join(
-        BASE_DIR,
-        'api'
-      )}" && yarn prisma generate --watch`,
-      prefixColor: 'magenta',
-      runWhen: () => fs.existsSync(PRISMA_SCHEMA),
-    },
     web: {
       name: 'web',
       command: `cd "${path.join(
         BASE_DIR,
         'web'
-      )}" && yarn webpack-dev-server --config ../node_modules/@redwoodjs/core/config/webpack.development.js`,
+      )}" && yarn webpack-dev-server --config ../node_modules/@redwoodjs/core/config/webpack.development.js ${forward}`,
       prefixColor: 'blue',
       runWhen: () => fs.existsSync(WEB_DIR_SRC),
     },
@@ -66,12 +91,12 @@ export const handler = async ({ side = ['api', 'db', 'web'] }) => {
       .map((n) => side.includes(n) && jobs[n])
       .filter((job) => job && job.runWhen()),
     {
-      restartTries: 3,
-      restartDelay: 1000,
       prefix: '{name} |',
       timestampFormat: 'HH:mm:ss',
     }
   ).catch((e) => {
-    console.log(c.error(e.message))
+    if (typeof e?.message !== 'undefined') {
+      console.log(c.error(e.message))
+    }
   })
 }

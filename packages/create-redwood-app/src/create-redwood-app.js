@@ -16,6 +16,9 @@ import execa from 'execa'
 import tmp from 'tmp'
 import checkNodeVersion from 'check-node-version'
 import chalk from 'chalk'
+import yargs from 'yargs'
+
+import { name, version } from '../package'
 
 const RELEASE_URL =
   'https://api.github.com/repos/redwoodjs/create-redwood-app/releases/latest'
@@ -38,7 +41,14 @@ const downloadFile = async (sourceUrl, targetFile) => {
   })
 }
 
-const targetDir = String(process.argv.slice(2)).replace(/,/g, '-')
+const { _: args } = yargs
+  .scriptName(name)
+  .usage('Usage: $0 <project directory>')
+  .example('$0 newapp')
+  .version(version)
+  .strict().argv
+
+const targetDir = String(args).replace(/,/g, '-')
 if (!targetDir) {
   console.error('Please specify the project directory')
   console.log(
@@ -103,6 +113,10 @@ const createProjectTasks = ({ newAppDir }) => {
             path.join(newAppDir, '.gitignore.app'),
             path.join(newAppDir, '.gitignore')
           )
+
+          if (fs.existsSync(path.join(newAppDir, '.all-contributorsrc'))) {
+            fs.unlinkSync(path.join(newAppDir, '.all-contributorsrc'))
+          }
         } catch (e) {
           throw new Error('Could not move project files')
         }
@@ -168,6 +182,24 @@ new Listr(
     console.log()
     console.log(
       'Inside that directory you can run `yarn rw dev` to start the development server.'
+    )
+    console.log()
+    console.log(
+      `${chalk.hex('#bf4722')(
+        '* Join our Discord server'
+      )}: https://discord.gg/jjSYEQd`
+    )
+
+    console.log(
+      `${chalk.hex('#bf4722')(
+        '* Join our Discourse Community'
+      )}: https://community.redwoodjs.com`
+    )
+
+    console.log(
+      `${chalk.hex('#bf4722')(
+        '* Signup to the Newsletter'
+      )}: https://www.redwoodjs.com`
     )
   })
   .catch((e) => {

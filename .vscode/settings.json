@@ -11,5 +11,9 @@
     "statusBar.foreground": "#e7e7e7",
     "statusBar.border": "#b85833"
   },
-  "peacock.color": "#b85833"
+  "search.exclude": {
+    "**/dist": true,
+    "**/node_modules": true,
+    "**/__fixtures__": true
+  }
 }

@@ -2,35 +2,29 @@ import { createNamedContext, gHistory } from './internal'
 
 const LocationContext = createNamedContext('Location')
 
-class LocationProvider extends React.Component {
-  static defaultProps = {
-    location: window.location,
-  }
-
-  state = {
-    context: this.getContext(),
-  }
-
-  getContext() {
-    const { pathname, search, hash } = this.props.location
+const LocationProvider = ({ location = window.location, children }) => {
+  const getContext = React.useCallback(() => {
+    const { pathname, search, hash } = location
     return { pathname, search, hash }
-  }
+  }, [location])
 
-  componentDidMount() {
+  const [context, setContext] = React.useState(getContext())
+
+  React.useEffect(() => {
+    let isMounted = true
     gHistory.listen(() => {
-      this.setState(() => ({ context: this.getContext() }))
+      if (isMounted) setContext(() => getContext())
     })
-  }
+    return () => {
+      isMounted = false
+    }
+  }, [getContext])
 
-  render() {
-    let { children } = this.props
-    let { context } = this.state
-    return (
-      <LocationContext.Provider value={context}>
-        {typeof children === 'function' ? children(context) : children || null}
-      </LocationContext.Provider>
-    )
-  }
+  return (
+    <LocationContext.Provider value={context}>
+      {typeof children === 'function' ? children(context) : children || null}
+    </LocationContext.Provider>
+  )
 }
 
 const Location = ({ children }) => (
@@ -45,4 +39,9 @@ const Location = ({ children }) => (
   </LocationContext.Consumer>
 )
 
-export { Location, LocationProvider, LocationContext }
+const useLocation = () => {
+  const location = React.useContext(LocationContext)
+  return location
+}
+
+export { Location, LocationProvider, LocationContext, useLocation }

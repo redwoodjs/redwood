@@ -11,14 +11,14 @@ export const QUERY = gql`
       author
       body
       image
+      isPinned
+      readTime
+      rating
       postedAt
+      metadata
     }
   }
 `
-
-export const beforeQuery = (props) => {
-  return { variables: props, fetchPolicy: 'cache-and-network' }
-}
 
 export const Loading = () => <div>Loading...</div>
 

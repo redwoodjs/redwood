@@ -1,12 +1,10 @@
 {
   "extends": "../../tsconfig.compilerOption.json",
   "compilerOptions": {
-    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
     "baseUrl": ".",
-    "outDir": "dist",
     "rootDir": "src",
-    // gotrue-js does not return types for `removeSavedSession` and `recoverSession`
-    "noImplicitAny": false,
+    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
+    "outDir": "dist",
   },
-  "include": ["src"]
+  "include": ["src"],
 }

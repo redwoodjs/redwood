@@ -4,8 +4,11 @@ import {
   FieldError,
   Label,
   TextField,
+  CheckboxField,
+  NumberField,
+  TextAreaField,
   Submit,
-} from '@redwoodjs/web'
+} from '@redwoodjs/forms'
 
 const PostForm = (props) => {
   const onSubmit = (data) => {
@@ -103,6 +106,54 @@ const PostForm = (props) => {
         <FieldError name="image" className="rw-field-error" />
 
         <Label
+          name="isPinned"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
+        >
+          Is pinned
+        </Label>
+        <CheckboxField
+          name="isPinned"
+          defaultChecked={props.post?.isPinned}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+        />
+        <FieldError name="isPinned" className="rw-field-error" />
+
+        <Label
+          name="readTime"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
+        >
+          Read time
+        </Label>
+        <NumberField
+          name="readTime"
+          defaultValue={props.post?.readTime}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+          validation={{ required: true }}
+        />
+        <FieldError name="readTime" className="rw-field-error" />
+
+        <Label
+          name="rating"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
+        >
+          Rating
+        </Label>
+        <TextField
+          name="rating"
+          defaultValue={props.post?.rating}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+          validation={{ required: true }}
+          dataType="Float"
+        />
+        <FieldError name="rating" className="rw-field-error" />
+
+        <Label
           name="postedAt"
           className="rw-label"
           errorClassName="rw-label rw-label-error"
@@ -117,6 +168,23 @@ const PostForm = (props) => {
           validation={{ required: true }}
         />
         <FieldError name="postedAt" className="rw-field-error" />
+
+        <Label
+          name="metadata"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
+        >
+          Metadata
+        </Label>
+        <TextAreaField
+          name="metadata"
+          defaultValue={JSON.stringify(props.post?.metadata)}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+          validation={{ required: true }}
+          dataType="Json"
+        />
+        <FieldError name="metadata" className="rw-field-error" />
 
         <div className="rw-button-group">
           <Submit disabled={props.loading} className="rw-button rw-button-blue">

@@ -1,0 +1,13 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "eamodio.gitlens",
+    "ofhumanbondage.react-proptypes-intellisense",
+    "mgmcdermott.vscode-language-babel",
+    "wix.vscode-import-cost",
+    "pflannery.vscode-versionlens",
+    "editorconfig.editorconfig",
+    "prisma.prisma"
+  ],
+  "unwantedRecommendations": []
+}

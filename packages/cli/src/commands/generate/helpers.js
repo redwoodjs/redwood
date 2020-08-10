@@ -1,11 +1,10 @@
 import path from 'path'
 
-import camelcase from 'camelcase'
-import pluralize from 'pluralize'
 import Listr from 'listr'
 import pascalcase from 'pascalcase'
 import { paramCase } from 'param-case'
 import terminalLink from 'terminal-link'
+import { ensurePosixPath } from '@redwoodjs/internal'
 
 import { generateTemplate, getPaths, writeFilesTask } from 'src/lib'
 import c from 'src/lib/colors'
@@ -42,11 +41,9 @@ export const templateForComponentFile = ({
     path.join(generator, 'templates', templatePath),
     {
       name,
-      // Complexity here is for Windows support
-      outputPath: `.${path.sep}${path.relative(
-        getPaths().base,
-        componentOutputPath
-      )}`.replace(/\\/g, '/'),
+      outputPath: ensurePosixPath(
+        `./${path.relative(getPaths().base, componentOutputPath)}`
+      ),
       ...templateVars,
     }
   )
@@ -118,8 +115,7 @@ export const relationsForModel = (model) => {
   return model.fields
     .filter((f) => f.relationName)
     .map((field) => {
-      const relationName = camelcase(field.type)
-      return field.isList ? pluralize(relationName) : relationName
+      return field.name
     })
 }
 

@@ -9,7 +9,7 @@ import * as introspect from '../introspect'
 
 jest.mock('src/lib', () => {
   return {
-    ...require.requireActual('src/lib'),
+    ...jest.requireActual('src/lib'),
     runCommandTask: jest.fn((commands) => {
       return commands.map(({ cmd, args }) => `${cmd} ${args?.join(' ')}`)
     }),
@@ -37,9 +37,10 @@ describe('db commands', () => {
     expect(runCommandTask.mock.results[0].value).toEqual([
       'yarn prisma migrate up --experimental --create-db',
     ])
+
+    await up.handler({ dbClient: true, autoApprove: true })
     expect(runCommandTask.mock.results[1].value).toEqual([
-      //TODO: use mock fs for getPaths().api.dbSchema
-      'echo "no schema.prisma file found" undefined',
+      'yarn prisma migrate up --experimental --create-db --auto-approve',
     ])
 
     await down.handler({})
@@ -49,21 +50,15 @@ describe('db commands', () => {
 
     await save.handler({ name: 'my-migration' })
     expect(runCommandTask.mock.results[3].value).toEqual([
-      'yarn prisma migrate save --name my-migration --experimental',
-    ])
-
-    await generate.handler({})
-    expect(runCommandTask.mock.results[4].value).toEqual([
-      //TODO: use mock fs for getPaths().api.dbSchema
-      'echo "no schema.prisma file found" undefined',
+      'yarn prisma migrate save --name my-migration --create-db --experimental',
     ])
 
     await introspect.handler({})
-    expect(runCommandTask.mock.results[5].value).toEqual([
+    expect(runCommandTask.mock.results[4].value).toEqual([
       'yarn prisma introspect',
     ])
 
     await seed.handler({})
-    expect(runCommandTask.mock.results[6].value).toEqual(['node seeds.js'])
+    expect(runCommandTask.mock.results[5].value).toEqual(['node seeds.js'])
   })
 })
