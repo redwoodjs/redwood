@@ -7,8 +7,8 @@
 
 import { AuthenticationError } from '@redwoodjs/api'
 
-export const getCurrentUser = async (jwt) => {
-  return jwt
+export const getCurrentUser = async (decoded, { token, type }) => {
+  return decoded
 }
 
 // Use this function in your services to check that a user is logged in, and

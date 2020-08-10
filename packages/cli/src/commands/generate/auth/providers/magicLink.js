@@ -7,7 +7,8 @@ export const config = {
   },
 }
 
-export const packages = ['magic-sdk']
+export const webPackages = ['magic-sdk']
+export const apiPackages = []
 
 export const notes = [
   'To get your application keys, go to https://dashboard.magic.link/login ',

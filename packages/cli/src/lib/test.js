@@ -12,12 +12,13 @@ import path from 'path'
 jest.mock('@redwoodjs/internal', () => {
   const path = require('path')
   return {
-    ...require.requireActual('@redwoodjs/internal'),
+    ...jest.requireActual('@redwoodjs/internal'),
     getPaths: () => {
       const BASE_PATH = '/path/to/project'
       return {
         base: BASE_PATH,
         api: {
+          dataMigrations: path.join(BASE_PATH, './api/prisma/dataMigrations'),
           db: path.join(global.__dirname, 'fixtures'), // this folder
           src: path.join(BASE_PATH, './api/src'),
           services: path.join(BASE_PATH, './api/src/services'),

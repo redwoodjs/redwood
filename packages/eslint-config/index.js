@@ -63,6 +63,10 @@ module.exports = {
         'typescript-eslint/no-empty-function': 'off',
         'no-empty-function': 'off',
         '@typescript-eslint/no-empty-function': 'off',
+        camelcase: 'off',
+        '@typescript-eslint/camelcase': 'off',
+        'no-use-before-define': 'off',
+        '@typescript-eslint/no-use-before-define': 'off',
       },
     },
     supportRedwoodAutoPageImports,
@@ -74,10 +78,6 @@ module.exports = {
     },
   ].filter(Boolean),
   settings: {
-    // This is used to support our `import/order` configuration.
-    'import/resolver': {
-      'eslint-import-resolver-babel-module': {},
-    },
     react: {
       version: 'detect',
     },
@@ -92,6 +92,8 @@ module.exports = {
   globals: {
     gql: 'readonly',
     React: 'readonly',
+    mockGraphQLQuery: 'readonly',
+    mockGraphQLMutation: 'readonly',
   },
   rules: {
     'prettier/prettier': 'error',
@@ -109,20 +111,6 @@ module.exports = {
     'no-unused-vars': [
       'error',
       { varsIgnorePattern: '^_', argsIgnorePattern: '^_' },
-    ],
-    'import/order': [
-      'warn',
-      {
-        groups: [
-          'builtin',
-          'external',
-          'internal',
-          'parent',
-          'sibling',
-          'index',
-        ],
-        'newlines-between': 'always',
-      },
     ],
     // React rules
     'react/prop-types': [

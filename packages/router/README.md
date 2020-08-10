@@ -41,11 +41,12 @@ To create a route to a normal Page, you'll pass three props: `path`, `page`, and
 The `path` prop specifies the URL path to match, starting with the beginning slash. The `page` prop specifies the Page component to render when the path is matched. The `name` prop is used to specify the name of the _named route function_.
 
 ## Private Routes
+
 Some pages should only be visible to authenticated users.
 
 All `Routes` nested in `<Private>` require authentication.
 When a user is not authenticated and attempts to visit this route,
-they will be redirected to the route passed as the `unauthenticated` prop.
+they will be redirected to the route passed as the `unauthenticated` prop and the orignally requested route's path will be added to the querystring in a `redirectTo` param. This lets you send the user to the originally requested once logged in.
 
 ```js
 // Routes.js
@@ -133,10 +134,18 @@ If a route has route parameters, then its named route function will take an obje
 
 ```js
 // SomePage.js
-<Link to={routes.user({ id: 7 })} />
+<Link to={routes.user({ id: 7 })}>...</Link>
 ```
 
 All parameters will be converted to strings before being inserted into the generated URL. If you don't like the default JavaScript behavior of how this conversion happens, make sure to convert to a string before passing it into the named route function.
+
+If you specify parameters to the named route function that do not correspond to parameters defined on the route, they will be appended to the end of the generated URL as search params in `key=val` format:
+
+```js
+// SomePage.js
+<Link to={routes.users({ sort: 'desc', filter: 'all' })}>...</Link>
+// => "/users?sort=desc&filter=all"
+```
 
 ## Route parameter types
 

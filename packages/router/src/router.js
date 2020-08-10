@@ -43,7 +43,11 @@ const PrivatePageLoader = ({ useAuth, unauthenticatedRoute, children }) => {
   if (isAuthenticated) {
     return children
   } else {
-    return <Redirect to={unauthenticatedRoute()} />
+    return (
+      <Redirect
+        to={`${unauthenticatedRoute()}?redirectTo=${window.location.pathname}`}
+      />
+    )
   }
 }
 

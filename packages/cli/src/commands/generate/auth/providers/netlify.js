@@ -9,7 +9,8 @@ export const config = {
 }
 
 // required packages to install
-export const packages = ['netlify-identity-widget']
+export const webPackages = ['netlify-identity-widget']
+export const apiPackages = []
 
 // any notes to print out when the job is done
 export const notes = [

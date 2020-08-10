@@ -72,7 +72,7 @@ export const handler = async ({
       // must use path.join() here, and for 'web' below, to support Windows
       cwd: path.join(getPaths().base, 'api'),
       cmd:
-        'yarn cross-env NODE_ENV=production babel src --out-dir dist --extensions .ts,.js',
+        "yarn cross-env NODE_ENV=production babel src --out-dir dist --delete-dir-on-start --extensions .ts,.js --ignore '**/*.test.ts,**/*.test.js,**/__tests__'",
     },
     web: {
       cwd: path.join(getPaths().base, 'web'),

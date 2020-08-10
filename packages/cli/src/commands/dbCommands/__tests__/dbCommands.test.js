@@ -9,7 +9,7 @@ import * as introspect from '../introspect'
 
 jest.mock('src/lib', () => {
   return {
-    ...require.requireActual('src/lib'),
+    ...jest.requireActual('src/lib'),
     runCommandTask: jest.fn((commands) => {
       return commands.map(({ cmd, args }) => `${cmd} ${args?.join(' ')}`)
     }),

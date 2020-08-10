@@ -2,8 +2,6 @@
 
 `@redwoodjs/auth` is a lightweight wrapper around popular SPA authentication libraries. We currently support the following authentication providers:
 
-Check out the [Auth Playground](https://github.com/redwoodjs/playground-auth).
-
 - [Netlify Identity Widget](https://github.com/netlify/netlify-identity-widget)
 - [Auth0](https://github.com/auth0/auth0-spa-js)
 - [Netlify GoTrue-JS](https://github.com/netlify/gotrue-js)
@@ -11,32 +9,27 @@ Check out the [Auth Playground](https://github.com/redwoodjs/playground-auth).
 - [Firebase's GoogleAuthProvider](https://firebase.google.com/docs/reference/js/firebase.auth.GoogleAuthProvider)
 - [Contribute one](#contributing), it's SuperEasy™!
 
+Check out the [Auth Playground](https://github.com/redwoodjs/playground-auth).
+
 ## Installation
 
 ### CLI Auth Generator
 
-The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
+The following CLI command will install required packages, generate boilerplate code, and files for Redwood Projects:
 
 ```terminal
 yarn rw g auth [provider]
 ```
 
-*`[provider]` values can be either "netlify", "goTrue", "auth0", "magicLink" or "firebase".*
+*`[provider]` can be one of: "auth0", "custom", "firebase", "goTrue", "magicLink", or "netlify".
 
-### Manual Install
+### Manual Installation
 
 #### Netlify Identity Widget
 
 ```bash
 cd web
 yarn add @redwoodjs/auth netlify-identity-widget
-```
-
-#### GoTrue-JS
-
-```bash
-cd web
-yarn add @redwoodjs/auth gotrue-js
 ```
 
 #### Auth0
@@ -53,11 +46,20 @@ cd web
 yarn add @redwoodjs/auth magic-sdk
 ```
 
+#### GoTrue-JS
+
+```bash
+cd web
+yarn add @redwoodjs/auth gotrue-js
+```
+
 ## Setup
 
-Instantiate your authentication library and pass it to the `AuthProvider`:
+Instantiate your authentication client, and pass it to the `<AuthProvider>`:
 
 ### For Netlify Identity Widget
+
+You will need to enable Identity on your Netlify site. See [Netlify Identity Setup](https://redwoodjs.com/tutorial/authentication#netlify-identity-setup).
 
 ```js
 // web/src/index.js
@@ -85,7 +87,7 @@ You will need to enable Identity on your Netlify site. See [Netlify Identity Set
 
 Add the GoTrue-JS package to the web side:
 
-```bash
+```terminal
 yarn workspace web add gotrue-js
 ```
 
@@ -210,7 +212,6 @@ const UserAuthTools = () => {
   const { loading, isAuthenticated, logIn, logOut } = useAuth()
 
   if (loading) {
-    // auth is rehydrating
     return null
   }
 
@@ -222,6 +223,43 @@ const UserAuthTools = () => {
           navigate('/')
         } else {
           await logIn()
+        }
+      }}
+    >
+      {isAuthenticated ? 'Log out' : 'Log in'}
+    </Button>
+  )
+}
+```
+
+### Auth0 Login an Logout Options
+
+When using the Auth0 client, `login` and `logout` take `options` that can be used to override the client config:
+
+* `returnTo`: a permitted logout url set in Auth0
+* `redirectTo`: a target url after login
+
+The latter is helpful when an unauthenticated user visits a Private route, but then is redirected to the `unauthenticated` route. The Redwood router will place the previous requested path in the pathname as a `redirectTo` parameter which can be extracted and set in the Auth0 `appState`. That way, after successfully logging in, the user will be directed to this `targetUrl` rather than the config's callback.
+
+```js
+const UserAuthTools = () => {
+  const { loading, isAuthenticated, logIn, logOut } = useAuth()
+
+  if (loading) {
+    // auth is rehydrating
+    return null
+  }
+
+  return (
+    <Button
+      onClick={async () => {
+        if (isAuthenticated) {
+          await logOut({ returnTo: process.env.AUTH0_REDIRECT_URI })
+        } else {
+          const searchParams = new URLSearchParams(window.location.search)
+          await logIn({
+            appState: { targetUrl: searchParams.get('redirectTo') },
+          })
         }
       }}
     >
@@ -274,8 +312,8 @@ Our recommendation is to create a `src/lib/auth.js|ts` file that exports a `getC
 ```js
 import { getCurrentUser } from 'src/lib/auth'
 // Example:
-//  export const getCurrentUser = async (authToken: { email }) => {
-//    return await db.user.findOne({ where: { email } })
+//  export const getCurrentUser = async (decoded) => {
+//    return await db.user.findOne({ where: { decoded.email } })
 //  }
 ``
 
@@ -306,13 +344,13 @@ Magic.link recommends using the issuer as the userID.
 // redwood/api/src/lib/auth.ts
 import { Magic } from '@magic-sdk/admin'
 
-export const getCurrentUser = async (authToken) => {
+export const getCurrentUser = async (_decoded, { token }) => {
   const mAdmin = new Magic(process.env.MAGICLINK_SECRET)
   const {
     email,
     publicAddress,
     issuer,
-  } = await mAdmin.users.getMetadataByToken(authToken)
+  } = await mAdmin.users.getMetadataByToken(token)
 
   return await db.user.findOne({ where: { issuer } })
 }
@@ -366,8 +404,8 @@ const mapAuthClientAuth0 = (client: Auth0): AuthClientAuth0 => {
         )
       }
     },
-    logIn: async () => client.loginWithRedirect(),
-    logOut: () => client.logout(),
+    logIn: async (options?) => client.loginWithRedirect(options),
+    logOut: (options?) => client.logout(options),
     getToken: async () => client.getTokenSilently(),
     currentUser: async () => {
       const user = await client.getUser()
@@ -381,5 +419,5 @@ You'll need to import the type definition for you client and add it to the suppo
 
 ```ts
 // authClients/index.ts
-export type SupportedAuthClients = Auth0 | GoTrue | NetlifyIdentity | MagicLinks
+export type SupportedAuthClients = Auth0 | GoTrue | NetlifyIdentity | MagicLink
 ```

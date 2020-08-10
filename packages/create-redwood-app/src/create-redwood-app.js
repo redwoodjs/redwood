@@ -113,6 +113,10 @@ const createProjectTasks = ({ newAppDir }) => {
             path.join(newAppDir, '.gitignore.app'),
             path.join(newAppDir, '.gitignore')
           )
+
+          if (fs.existsSync(path.join(newAppDir, '.all-contributorsrc'))) {
+            fs.unlinkSync(path.join(newAppDir, '.all-contributorsrc'))
+          }
         } catch (e) {
           throw new Error('Could not move project files')
         }
@@ -178,6 +182,24 @@ new Listr(
     console.log()
     console.log(
       'Inside that directory you can run `yarn rw dev` to start the development server.'
+    )
+    console.log()
+    console.log(
+      `${chalk.hex('#bf4722')(
+        '* Join our Discord server'
+      )}: https://discord.gg/jjSYEQd`
+    )
+
+    console.log(
+      `${chalk.hex('#bf4722')(
+        '* Join our Discourse Community'
+      )}: https://community.redwoodjs.com`
+    )
+
+    console.log(
+      `${chalk.hex('#bf4722')(
+        '* Signup to the Newsletter'
+      )}: https://www.redwoodjs.com`
     )
   })
   .catch((e) => {

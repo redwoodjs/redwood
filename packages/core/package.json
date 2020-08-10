@@ -1,11 +1,13 @@
 {
   "name": "@redwoodjs/core",
-  "version": "0.12.0",
+  "version": "0.15.3",
   "license": "MIT",
   "files": [
     "config",
     "dist"
   ],
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "dependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.9.0",
@@ -16,12 +18,13 @@
     "@babel/preset-react": "^7.9.4",
     "@babel/preset-typescript": "^7.9.0",
     "@babel/runtime-corejs3": "^7.9.2",
-    "@prisma/cli": "^2.1.1",
-    "@redwoodjs/cli": "^0.12.0",
-    "@redwoodjs/dev-server": "^0.12.0",
-    "@redwoodjs/eslint-config": "^0.12.0",
-    "@redwoodjs/internal": "^0.12.0",
-    "@redwoodjs/testing": "^0.12.0",
+    "@prisma/cli": "2.4.0",
+    "@redwoodjs/cli": "^0.15.3",
+    "@redwoodjs/dev-server": "^0.15.3",
+    "@redwoodjs/eslint-config": "^0.15.3",
+    "@redwoodjs/internal": "^0.15.3",
+    "@redwoodjs/testing": "^0.15.3",
+    "@storybook/react": "^5.3.19",
     "@testing-library/jest-dom": "^5.8.0",
     "@types/jest": "^25.1.4",
     "@types/node": "^13.9.5",
@@ -44,7 +47,7 @@
     "graphql": "^14.6.0",
     "graphql-tag": "^2.10.3",
     "html-webpack-plugin": "^4.0.2",
-    "jest": "^25.2.3",
+    "jest": "^26.1.0",
     "jest-directory-named-resolver": "^0.3.0",
     "lodash.escaperegexp": "^4.1.2",
     "mini-css-extract-plugin": "^0.9.0",
@@ -56,20 +59,23 @@
     "webpack-bundle-analyzer": "^3.6.1",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3",
-    "webpack-merge": "^4.2.2"
-  },
-  "gitHead": "1cb7c8d1085147787209af423c33a9c91c3e6517",
-  "scripts": {
-    "build": "yarn cross-env NODE_ENV=production babel src --out-dir dist  --extensions \".js,.ts,.tsx\" --delete-dir-on-start",
-    "prepublishOnly": "yarn build",
-    "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
-    "test": "jest",
-    "test:watch": "yarn test --watch"
+    "webpack-merge": "^4.2.2",
+    "webpack-retry-chunk-load-plugin": "^1.4.0"
   },
   "devDependencies": {
     "@types/babel-core": "^6.25.6",
     "@types/babel-plugin-tester": "^9.0.0",
     "babel-plugin-tester": "^9.0.1",
     "whatwg-fetch": "^3.0.0"
+  },
+  "gitHead": "1cb7c8d1085147787209af423c33a9c91c3e6517",
+  "scripts": {
+    "build": "yarn build:js && yarn build:types",
+    "prepublishOnly": "yarn build",
+    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
+    "build:types": "tsc --build --verbose",
+    "build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build\"",
+    "test": "jest",
+    "test:watch": "yarn test --watch"
   }
 }
