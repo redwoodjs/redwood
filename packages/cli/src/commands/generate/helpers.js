@@ -37,16 +37,14 @@ export const templateForComponentFile = ({
   const componentOutputPath =
     outputPath ||
     path.join(basePath, outputComponentName, outputComponentName + extension)
-  const content = generateTemplate(
-    path.join(generator, 'templates', templatePath),
-    {
-      name,
-      outputPath: ensurePosixPath(
-        `./${path.relative(getPaths().base, componentOutputPath)}`
-      ),
-      ...templateVars,
-    }
-  )
+  const fullTemplatePath = path.join(generator, 'templates', templatePath)
+  const content = generateTemplate(fullTemplatePath, {
+    name,
+    outputPath: ensurePosixPath(
+      `./${path.relative(getPaths().base, componentOutputPath)}`
+    ),
+    ...templateVars,
+  })
   return [componentOutputPath, content]
 }
 
@@ -67,10 +65,6 @@ export const pathName = (path, name) => {
   }
 
   return routePath
-}
-
-export const getParam = (path) => {
-  return path.match(/(\{[\w:]+\})/)?.[1]
 }
 
 /**

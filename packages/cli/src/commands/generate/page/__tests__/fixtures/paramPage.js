@@ -7,7 +7,7 @@ const PostPage = ({ id }) => {
       <p>Find me in "./web/src/pages/PostPage/PostPage.js"</p>
       <p>
         My default route is named "post", link to me with `
-        <Link to={routes.post({ id: 42 })}>Post 42</Link>`
+        <Link to={routes.post({ id: '42' })}>Post 42</Link>`
       </p>
       <p>The parameter passed to me is {id}</p>
     </>

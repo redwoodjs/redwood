@@ -42,15 +42,28 @@ import fs from 'fs'
 import { loadGeneratorFixture } from 'src/lib/test'
 import { getPaths } from 'src/lib'
 
+import { pathName } from '../../helpers'
 import * as page from '../page'
 
 let singleWordFiles, multiWordFiles, pluralWordFiles, paramFiles
 
 beforeAll(() => {
-  singleWordFiles = page.files({ name: 'Home' })
-  multiWordFiles = page.files({ name: 'ContactUs' })
-  pluralWordFiles = page.files({ name: 'Cats' })
-  paramFiles = page.files({ name: 'Post', param: '{id:Int}' })
+  singleWordFiles = page.files({
+    name: 'Home',
+    ...page.paramVariants(pathName(undefined, 'home')),
+  })
+  multiWordFiles = page.files({
+    name: 'ContactUs',
+    ...page.paramVariants(pathName(undefined, 'contact-us')),
+  })
+  pluralWordFiles = page.files({
+    name: 'Cats',
+    ...page.paramVariants(pathName(undefined, 'cats')),
+  })
+  paramFiles = page.files({
+    name: 'Post',
+    ...page.paramVariants(pathName('{id}', 'post')),
+  })
 })
 
 test('returns exactly 3 files', () => {
@@ -161,6 +174,47 @@ test('creates a path equal to passed path', () => {
   expect(page.routes({ name: 'FooBar', path: 'fooBar-baz' })).toEqual([
     '<Route path="fooBar-baz" page={FooBarPage} name="fooBar" />',
   ])
+})
+
+test('paramVariants returns empty string for no params', () => {
+  expect(page.paramVariants()).toEqual({
+    propParam: '',
+    propValueParam: '',
+    argumentParam: '',
+    paramName: '',
+    paramValue: '',
+  })
+  expect(page.paramVariants('')).toEqual({
+    propParam: '',
+    propValueParam: '',
+    argumentParam: '',
+    paramName: '',
+    paramValue: '',
+  })
+  expect(page.paramVariants('/')).toEqual({
+    propParam: '',
+    propValueParam: '',
+    argumentParam: '',
+    paramName: '',
+    paramValue: '',
+  })
+  expect(page.paramVariants('/post/edit')).toEqual({
+    propParam: '',
+    propValueParam: '',
+    argumentParam: '',
+    paramName: '',
+    paramValue: '',
+  })
+})
+
+test('paramVariants finds the param in the middle of the path', () => {
+  expect(page.paramVariants('/post/{id:Int}/edit')).toEqual({
+    propParam: '{ id }',
+    propValueParam: 'id="42" ',
+    argumentParam: "{ id: '42' }",
+    paramName: 'id',
+    paramValue: ' 42',
+  })
 })
 
 test('file generation', async () => {

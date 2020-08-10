@@ -1,16 +1,16 @@
 import { Link, routes } from '@redwoodjs/router'
 
-const ${pascalName}Page = (<%= typeof param !== 'undefined' && param ? param.replace(/:[^}]+/, '') : '' %>) => {
+const ${pascalName}Page = (${propParam}) => {
   return (
     <>
       <h1>${pascalName}Page</h1>
       <p>Find me in "${outputPath}"</p>
       <p>
         My default route is named "${camelName}", link to me with `
-        <Link to={routes.${camelName}(<%= typeof param !== 'undefined' && param ? param.replace(/(:[^}]+)?}/, ': 42 }') : '' %>)}>${pascalName}<%= typeof param !== 'undefined' && param ? ' 42' : '' %></Link>`
-      </p><% if (typeof param !== 'undefined' && param) { %>
+        <Link to={routes.${camelName}(${ argumentParam })}>${pascalName}<%= argumentParam !== '' ? ' 42' : '' %></Link>`
+      </p><% if (paramName !== '') { %>
       <p>
-        The parameter passed to me is <%= param.replace(/:[^}]+/, '') %>
+        The parameter passed to me is {${ paramName }}
       </p><% } %>
     </>
   )

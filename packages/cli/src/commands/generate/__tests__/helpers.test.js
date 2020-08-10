@@ -4,6 +4,7 @@ global.__dirname = __dirname
 import {} from 'src/lib/test'
 
 import * as helpers from '../helpers'
+import * as page from '../page/page'
 
 const PAGE_TEMPLATE_OUTPUT = `import { Link, routes } from '@redwoodjs/router'
 
@@ -33,6 +34,7 @@ test('templateForComponentFile creates a proper output path for files', () => {
       webPathSection: 'pages',
       generator: 'page',
       templatePath: 'page.js.template',
+      templateVars: page.paramVariants(helpers.pathName(undefined, name)),
     })
 
     expect(output[0]).toEqual(
@@ -48,6 +50,7 @@ test('templateForComponentFile can create a path in /web', () => {
     webPathSection: 'pages',
     generator: 'page',
     templatePath: 'page.js.template',
+    templateVars: page.paramVariants(helpers.pathName(undefined, 'Home')),
   })
 
   expect(output[0]).toEqual(
@@ -62,6 +65,7 @@ test('templateForComponentFile can create a path in /api', () => {
     apiPathSection: 'services',
     generator: 'page',
     templatePath: 'page.js.template',
+    templateVars: page.paramVariants(helpers.pathName(undefined, 'Home')),
   })
 
   expect(output[0]).toEqual(
@@ -76,6 +80,7 @@ test('templateForComponentFile can override generated component name', () => {
     webPathSection: 'pages',
     generator: 'page',
     templatePath: 'page.js.template',
+    templateVars: page.paramVariants(helpers.pathName(undefined, 'Home')),
   })
 
   expect(output[0]).toEqual(
@@ -91,6 +96,7 @@ test('templateForComponentFile can override file extension', () => {
     webPathSection: 'pages',
     generator: 'page',
     templatePath: 'page.js.template',
+    templateVars: page.paramVariants(helpers.pathName(undefined, 'Home')),
   })
 
   expect(output[0]).toEqual(
@@ -120,6 +126,7 @@ test('templateForComponentFile creates a template', () => {
     webPathSection: 'pages',
     generator: 'page',
     templatePath: 'page.js.template',
+    templateVars: page.paramVariants(helpers.pathName(undefined, 'fooBar')),
   })
 
   expect(output[1]).toEqual(PAGE_TEMPLATE_OUTPUT)
@@ -150,15 +157,6 @@ test('pathName supports paths with route params', () => {
   expect(helpers.pathName('/post/{id:Int}/edit', 'EditPost')).toEqual(
     '/post/{id:Int}/edit'
   )
-})
-
-test('getParam returns undefined for no params', () => {
-  expect(helpers.getParam('/')).toEqual(undefined)
-  expect(helpers.getParam('/post/edit')).toEqual(undefined)
-})
-
-test('getParam finds the param in the middle of the path', () => {
-  expect(helpers.getParam('/post/{id:Int}/edit')).toEqual('{id:Int}')
 })
 
 test('relationsForModel returns related field names from a belongs-to relationship', () => {

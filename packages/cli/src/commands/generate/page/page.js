@@ -8,10 +8,33 @@ import terminalLink from 'terminal-link'
 import { writeFilesTask, addRoutesToRouterTask } from 'src/lib'
 import c from 'src/lib/colors'
 
-import { templateForComponentFile, pathName, getParam } from '../helpers'
+import { templateForComponentFile, pathName } from '../helpers'
 
 const COMPONENT_SUFFIX = 'Page'
 const REDWOOD_WEB_PATH_NAME = 'pages'
+
+export const paramVariants = (path) => {
+  const param = path?.match(/(\{[\w:]+\})/)?.[1]
+  const paramName = param?.replace(/:[^}]+/, '').slice(1, -1)
+
+  if (param === undefined) {
+    return {
+      propParam: '',
+      propValueParam: '',
+      argumentParam: '',
+      paramName: '',
+      paramValue: '',
+    }
+  }
+
+  return {
+    propParam: `{ ${paramName} }`,
+    propValueParam: `${paramName}="42" `,
+    argumentParam: `{ ${paramName}: '42' }`,
+    paramName,
+    paramValue: ' 42',
+  }
+}
 
 export const files = ({ name, ...rest }) => {
   const pageFile = templateForComponentFile({
@@ -125,7 +148,7 @@ export const handler = async ({ name, path, force }) => {
         title: 'Generating page files...',
         task: async () => {
           path = pathName(path, name)
-          const f = await files({ name, path, param: getParam(path) })
+          const f = await files({ name, path, ...paramVariants(path) })
           return writeFilesTask(f, { overwriteExisting: force })
         },
       },
