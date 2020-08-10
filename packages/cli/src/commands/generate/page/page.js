@@ -27,6 +27,8 @@ export const paramVariants = (path) => {
     }
   }
 
+  // "42" is just a value used for demonstrating parameter usage in the
+  // generated page-, test-, and story-files.
   return {
     propParam: `{ ${paramName} }`,
     propValueParam: `${paramName}="42" `,
