@@ -36,9 +36,14 @@ export const useCoercion = () => {
 
   const setCoercion = React.useCallback(
     ({ name, type, dataType }) => {
-      const coercionFunction =
-        COERCION_FUNCTIONS[dataType || inputTypeToDataTypeMapping[type]] ||
-        ((value) => value)
+      let coercionFunction
+      if (typeof dataType === 'function') {
+        coercionFunction = dataType
+      } else {
+        coercionFunction =
+          COERCION_FUNCTIONS[dataType || inputTypeToDataTypeMapping[type]] ||
+          ((value) => value)
+      }
 
       coercionContext.setCoercions.call(null, (coercions) => ({
         ...coercions,

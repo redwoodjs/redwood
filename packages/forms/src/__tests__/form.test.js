@@ -150,4 +150,28 @@ describe('Form', () => {
       expect(input).toHaveFocus()
     })
   })
+
+  it('lets users pass custom coercion functions', async () => {
+    const mockFn = jest.fn()
+    const coercionFunction = (value) => parseInt(value.replace('_', ''), 10)
+
+    render(
+      <Form onSubmit={mockFn}>
+        <TextField
+          name="tf"
+          defaultValue="123_456"
+          dataType={coercionFunction}
+        />
+        <Submit>Save</Submit>
+      </Form>
+    )
+
+    fireEvent.click(screen.getByText('Save'))
+
+    await waitFor(() => expect(mockFn).toHaveBeenCalledTimes(1))
+    expect(mockFn).toBeCalledWith(
+      { tf: 123456 },
+      expect.anything() // event that triggered the onSubmit call
+    )
+  })
 })
