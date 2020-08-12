@@ -2,29 +2,41 @@ import { createNamedContext, gHistory } from './internal'
 
 const LocationContext = createNamedContext('Location')
 
-const LocationProvider = ({ location = window.location, children }) => {
-  const getContext = React.useCallback(() => {
-    const { pathname, search, hash } = location
+class LocationProvider extends React.Component {
+  HISTORY_LISTENER_ID = undefined
+
+  static defaultProps = {
+    location: window.location,
+  }
+
+  state = {
+    context: this.getContext(),
+  }
+
+  getContext() {
+    const { pathname, search, hash } = this.props.location
     return { pathname, search, hash }
-  }, [location])
+  }
 
-  const [context, setContext] = React.useState(getContext())
-
-  React.useEffect(() => {
-    let isMounted = true
-    gHistory.listen(() => {
-      if (isMounted) setContext(() => getContext())
+  componentDidMount() {
+    this.HISTORY_LISTENER_ID = gHistory.listen(() => {
+      this.setState(() => ({ context: this.getContext() }))
     })
-    return () => {
-      isMounted = false
-    }
-  }, [getContext])
+  }
 
-  return (
-    <LocationContext.Provider value={context}>
-      {typeof children === 'function' ? children(context) : children || null}
-    </LocationContext.Provider>
-  )
+  componentWillUnmount() {
+    gHistory.remove(this.HISTORY_LISTENER_ID)
+  }
+
+  render() {
+    let { children } = this.props
+    let { context } = this.state
+    return (
+      <LocationContext.Provider value={context}>
+        {typeof children === 'function' ? children(context) : children || null}
+      </LocationContext.Provider>
+    )
+  }
 }
 
 const Location = ({ children }) => (
