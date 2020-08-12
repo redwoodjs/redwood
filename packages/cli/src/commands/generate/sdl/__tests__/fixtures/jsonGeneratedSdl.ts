@@ -7,7 +7,7 @@ export const schema = gql`
 
   type Query {
     photos: [Photo!]!
-    photo(id: Int!): Photo!
+    photo(id: Int!): Photo
   }
 
   input CreatePhotoInput {
