@@ -118,12 +118,15 @@ export default function (
         if (options.host.writeFileSync) {
           const dName = `import-dir-${importName}.d.ts`
 
-          const newTypesPath = path.join(options.generateTypesPath, dName) //?
+          const newTypesPath = path.join(options.generateTypesPath, dName)
           options.host.writeFileSync(newTypesPath, generateTypes(importGlob))
 
-          const x = path.join(options.generateTypesPath, 'index.d.ts') //?
-
-          appendFileUnique(x, `<reference path="${dName}" />`, options.host)
+          const indexFile = path.join(options.generateTypesPath, 'index.d.ts')
+          appendFileUnique(
+            indexFile,
+            `/// <reference path="${dName}" />\n`,
+            options.host
+          )
         }
       },
     },

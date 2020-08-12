@@ -10,7 +10,6 @@ export const appendFileUnique = (
 ) => {
   let oldContents = ''
   if (host.existsSync(path)) {
-    console.log('file does exits.')
     oldContents = host.readFileSync(path)
   }
 
