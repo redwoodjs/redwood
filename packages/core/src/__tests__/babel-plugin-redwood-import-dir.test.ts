@@ -10,10 +10,15 @@ describe('babel plugin redwood import dir', () => {
     pluginOptions: {
       generateTypesPath: '__fixtures__/import-dir',
       host: {
-        writeFileSync: (p, contents) => {
-          expect(p).toEqual(
-            path.join('__fixtures__/import-dir/import-dir-services.d.ts')
+        readFileSync: () => '',
+        appendFileSync: (p, contents) => {
+          expect(p).toEqual('__fixtures__/import-dir/index.d.ts')
+          expect(contents).toEqual(
+            `<reference path="import-dir-services.d.ts" />`
           )
+        },
+        writeFileSync: (p, contents) => {
+          expect(p).toEqual('__fixtures__/import-dir/import-dir-services.d.ts')
           expect(contents.replace(/\s/g, '')).toMatch(
             `// @ts-expect-error
             declare module 'src/__fixtures__/**/*.{js,ts}';

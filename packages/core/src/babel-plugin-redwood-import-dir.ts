@@ -2,7 +2,7 @@ import path from 'path'
 
 import glob from 'glob'
 import type { PluginObj, types } from '@babel/core'
-import type { Host } from '@redwoodjs/structure'
+import { Host, appendFileUnique } from '@redwoodjs/structure'
 
 export const generateTypes = (modulePath: string) => {
   // TODO:
@@ -116,13 +116,14 @@ export default function (
         p.remove()
 
         if (options.host.writeFileSync) {
-          options.host.writeFileSync(
-            path.join(
-              options.generateTypesPath,
-              `import-dir-${importName}.d.ts`
-            ),
-            generateTypes(importGlob)
-          )
+          const dName = `import-dir-${importName}.d.ts`
+
+          const newTypesPath = path.join(options.generateTypesPath, dName) //?
+          options.host.writeFileSync(newTypesPath, generateTypes(importGlob))
+
+          const x = path.join(options.generateTypesPath, 'index.d.ts') //?
+
+          appendFileUnique(x, `<reference path="${dName}" />`, options.host)
         }
       },
     },

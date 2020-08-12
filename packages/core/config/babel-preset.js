@@ -1,4 +1,4 @@
-const fs = require('fs')
+const DefaultHost = require('@redwoodjs/structure')
 
 /**
  * This is the babel preset used `create-redwood-app`
@@ -14,6 +14,8 @@ const CORE_JS_VERSION = '3.6'
 
 module.exports = () => {
   const paths = getPaths()
+
+  const host = new DefaultHost()
 
   return {
     presets: ['@babel/preset-react', '@babel/preset-typescript'],
@@ -85,10 +87,9 @@ module.exports = () => {
           [
             require('../dist/babel-plugin-redwood-import-dir'),
             {
+              // TODO: Make this part of structure.
               generateTypesPath: paths.types,
-              host: {
-                writeFileSync: fs.writeFileSync,
-              },
+              host,
             },
           ],
         ],
