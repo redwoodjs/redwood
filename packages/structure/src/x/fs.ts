@@ -1,5 +1,4 @@
-import { Host, DefaultHost } from 'src/ide'
-import os from 'os'
+import { Host, DefaultHost } from '../ide'
 
 /**
  * Ensures that the contents appended to the file are unique.
@@ -9,7 +8,13 @@ export const appendFileUnique = (
   contents: any,
   host: Host = new DefaultHost()
 ) => {
-  const oldContents = host.readFileSync(path)
+  let oldContents = ''
+  if (host.existsSync(path)) {
+    console.log('file does exits.')
+    oldContents = host.readFileSync(path)
+  }
+
+  // already has this content, abort.
   if (oldContents.includes(contents)) {
     return
   }

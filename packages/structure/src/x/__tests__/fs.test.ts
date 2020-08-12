@@ -6,6 +6,7 @@ describe('appendFileUnique', () => {
   const myHost = {
     readFileSync: () => CONTENTS,
     appendFileSync: (_path, contents) => (CONTENTS += contents),
+    existsSync: () => true,
   }
 
   beforeEach(() => {
