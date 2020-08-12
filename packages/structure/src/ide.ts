@@ -32,6 +32,7 @@ export interface Host {
   globSync(pattern: string): string[]
   // TODO: Make non-optional once it's implemented.
   writeFileSync?(path: string, contents: string): void
+  appendFileSync?(path: string, contents: string): void
 }
 
 export type IDEInfo =
@@ -260,6 +261,12 @@ export class DefaultHost implements Host {
   }
   globSync(pattern: string) {
     return glob.sync(pattern)
+  }
+  writeFileSync(path: string, contents: string) {
+    return fs.writeFileSync(path, contents)
+  }
+  appendFileSync(path: string, contents: string) {
+    return fs.appendFileSync(path, contents)
   }
 }
 
