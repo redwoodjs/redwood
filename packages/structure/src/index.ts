@@ -32,3 +32,4 @@ export async function printDiagnostics(
 }
 
 export { URL_file } from './x/URL'
+export { appendFileUnique } from './x/fs'
