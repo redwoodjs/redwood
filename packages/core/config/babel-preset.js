@@ -1,10 +1,9 @@
-const DefaultHost = require('@redwoodjs/structure')
-
 /**
  * This is the babel preset used `create-redwood-app`
  */
 
 const { getPaths } = require('@redwoodjs/internal')
+const { DefaultHost } = require('@redwoodjs/structure')
 
 const TARGETS_NODE = '12.16.1'
 // Warning! Use the minor core-js version: "corejs: '3.6'", instead of "corejs: 3",
