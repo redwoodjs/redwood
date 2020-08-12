@@ -82,6 +82,24 @@ describe('Cells', () => {
     )
     done()
   })
+
+  describe('Router', () => {
+    it('is able to generate typescript definitions', async () => {
+      const projectRoot = getFixtureDir('example-todo-main')
+      const project = new RWProject({ projectRoot, host: new DefaultHost() })
+
+      const t = await project.router.generateTypesForRoutes()
+      expect(t).toMatchInlineSnapshot(`
+        "
+        import type { AvailableRoutes } from '@redwoodjs/router'
+        declare module '@redwoodjs/router' {
+          interface AvailableRoutes {
+            home: () => \\"/\\"
+          }
+        }"
+      `)
+    })
+  })
 })
 
 function getFixtureDir(

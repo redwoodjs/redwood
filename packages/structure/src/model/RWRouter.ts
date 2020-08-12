@@ -20,6 +20,7 @@ import {
 } from '../x/vscode-languageserver-types'
 import { RWProject } from './RWProject'
 import { RWRoute } from './RWRoute'
+import { rangeRight } from 'lodash'
 
 /**
  * one per Routes.js
@@ -131,6 +132,21 @@ export class RWRouter extends FileNode {
       edit: change.edit,
     } as CodeAction
   }
+
+  generateTypesForRoutes = () => {
+    // TODO: Associate params
+    const dts = this.routes
+      .filter((r) => !r.isNotFound)
+      .map((r) => `${r.name}: () => "${r.path}"`)
+
+    return `
+import type { AvailableRoutes } from '@redwoodjs/router'
+declare module '@redwoodjs/router' {
+  interface AvailableRoutes {
+    ${dts.join('\n')}
+  }
+}`
+  };
 
   *diagnostics() {
     if (!this.fileExists) {
