@@ -8,7 +8,9 @@ import type {
 } from './authClients'
 import { createAuthClient } from './authClients'
 
-export interface CurrentUser {}
+export interface CurrentUser {
+  roles?: Array<string>
+}
 
 export interface AuthContextInterface {
   /* Determining your current authentication state */
@@ -27,6 +29,11 @@ export interface AuthContextInterface {
    * but does not update the current user state.
    **/
   getCurrentUser(): Promise<null | CurrentUser>
+  /**
+   * Checks if the "currentUser" from the api side
+   * is assigned a role
+   **/
+  hasRole(role: string): boolean
   /**
    * Redetermine authentication state and update the state.
    */
@@ -129,6 +136,10 @@ export class AuthProvider extends React.Component<
     }
   }
 
+  hasRole = (role: string): boolean => {
+    return this.state.currentUser?.roles?.includes(role) || false
+  }
+
   reauthenticate = async () => {
     const notAuthenticatedState: AuthProviderState = {
       isAuthenticated: false,
@@ -192,6 +203,7 @@ export class AuthProvider extends React.Component<
           signUp: this.signUp,
           getToken: this.rwClient.getToken,
           getCurrentUser: this.getCurrentUser,
+          hasRole: this.hasRole,
           reauthenticate: this.reauthenticate,
           client,
           type,

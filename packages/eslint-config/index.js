@@ -96,7 +96,7 @@ module.exports = {
     mockGraphQLMutation: 'readonly',
   },
   rules: {
-    'prettier/prettier': 'error',
+    'prettier/prettier': 'warn',
     'no-console': 'off',
     'prefer-object-spread': 'warn',
     'prefer-spread': 'warn',

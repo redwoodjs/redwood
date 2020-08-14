@@ -5,7 +5,7 @@ import ${pascalName}Page from './${pascalName}Page'
 describe('${pascalName}Page', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<${pascalName}Page />)
+      render(<${pascalName}Page ${propValueParam}/>)
     }).not.toThrow()
   })
 })
