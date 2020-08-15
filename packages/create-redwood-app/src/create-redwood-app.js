@@ -43,8 +43,13 @@ const downloadFile = async (sourceUrl, targetFile) => {
 
 const { _: args } = yargs
   .scriptName(name)
-  .usage('Usage: $0 <project directory>')
+  .usage('Usage: $0 <project directory> [option]')
   .example('$0 newapp')
+  .option('yarn-install', {
+    boolean: true,
+    default: 'true',
+    describe: 'Skip yarn-install with --no-yarn-install',
+  })
   .version(version)
   .strict().argv
 
@@ -149,6 +154,11 @@ const installNodeModulesTasks = ({ newAppDir }) => {
     },
     {
       title: 'Running `yarn install`... (This could take a while)',
+      skip: () => {
+        if (!args.yarnInstall) {
+          return 'skipped on request'
+        }
+      },
       task: () => {
         return execa('yarn install', {
           shell: true,
