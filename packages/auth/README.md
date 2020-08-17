@@ -25,39 +25,43 @@ yarn rw g auth [provider]
 
 ### Manual Installation
 
-#### Netlify Identity Widget
++++ Netlify Identity Widget
 
 ```bash
 cd web
 yarn add @redwoodjs/auth netlify-identity-widget
 ```
++++
 
-#### Auth0
++++ Auth0
 
 ```bash
 cd web
 yarn add @redwoodjs/auth @auth0/auth0-spa-js
 ```
++++
 
-#### Magic.Link
++++ Magic.Link
 
 ```bash
 cd web
 yarn add @redwoodjs/auth magic-sdk
 ```
++++
 
-#### GoTrue-JS
++++ GoTrue-JS
 
 ```bash
 cd web
 yarn add @redwoodjs/auth gotrue-js
 ```
++++
 
 ## Setup
 
 Instantiate your authentication client, and pass it to the `<AuthProvider>`:
 
-### For Netlify Identity Widget
++++ For Netlify Identity Widget
 
 You will need to enable Identity on your Netlify site. See [Netlify Identity Setup](https://redwoodjs.com/tutorial/authentication#netlify-identity-setup).
 
@@ -80,8 +84,9 @@ ReactDOM.render(
   document.getElementById('redwood-app')
 )
 ```
++++
 
-### For GoTrue-JS
++++ For GoTrue-JS
 
 You will need to enable Identity on your Netlify site. See [Netlify Identity Setup](https://redwoodjs.com/tutorial/authentication#netlify-identity-setup).
 
@@ -115,8 +120,9 @@ ReactDOM.render(
   document.getElementById('redwood-app')
 )
 ```
++++
 
-### For Auth0
++++ For Auth0
 
 To get your application keys, only complete the ["Configure Auth0"](https://auth0.com/docs/quickstart/spa/react#get-your-application-keys) section of the SPA Quickstart guide.
 
@@ -146,8 +152,9 @@ ReactDOM.render(
   document.getElementById('redwood-app')
 )
 ```
++++
 
-### For magic.link
++++ For magic.link
 
 To get your application keys, go to [dashboard.magic.link](https://dashboard.magic.link/) then navigate to the API keys add them to your .env
 
@@ -168,8 +175,9 @@ ReactDOM.render(
   document.getElementById('redwood-app')
 )
 ```
++++
 
-### For Firebase
++++ For Firebase
 
 We're using [Firebase Google Sign-In](https://firebase.google.com/docs/auth/web/google-signin), so you'll have to follow the ["Before you begin"](https://firebase.google.com/docs/auth/web/google-signin#before_you_begin) steps in this guide. **Only** follow the "Before you begin" parts.
 
@@ -231,6 +239,7 @@ const UserAuthTools = () => {
   )
 }
 ```
++++
 
 ### Auth0 Login and Logout Options
 
