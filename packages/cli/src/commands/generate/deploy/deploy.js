@@ -19,7 +19,7 @@ const updateProxyPath = (newProxyPath) => {
 
   if (redwoodToml.match(/apiProxyPath/)) {
     newRedwoodToml = newRedwoodToml.replace(
-      /apiProxyPath.*/,
+      /apiProxyPath.*/g,
       `apiProxyPath = "${newProxyPath}"`
     )
   } else if (redwoodToml.match(/\[web\]/)) {
