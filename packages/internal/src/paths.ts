@@ -113,7 +113,13 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
 
   // We store our test database over here:
   const cache = path.join(BASE_DIR, 'node_modules', '.redwoodjs')
-  const types = path.join(BASE_DIR, 'node_modules', '@types', '@redwoodjs')
+  const types = path.join(
+    BASE_DIR,
+    'node_modules',
+    '@types',
+    '@redwoodjs',
+    'generated'
+  )
   fs.mkdirSync(cache, { recursive: true })
   fs.mkdirSync(types, { recursive: true })
 
