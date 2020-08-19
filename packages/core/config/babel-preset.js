@@ -13,7 +13,6 @@ const CORE_JS_VERSION = '3.6'
 
 module.exports = () => {
   const paths = getPaths()
-
   const host = new DefaultHost()
 
   return {
@@ -84,7 +83,7 @@ module.exports = () => {
             },
           ],
           [
-            require('../dist/babel-plugin-redwood-import-dir'),
+            require('../dist/babelPlugins/babel-plugin-redwood-import-dir'),
             {
               // TODO: Make this part of structure.
               generateTypesPath: paths.types,
@@ -153,19 +152,25 @@ module.exports = () => {
       // ** Files ending in `Cell.[js,ts]` **
       {
         test: /.+Cell.(js|tsx)$/,
-        plugins: [require('../dist/babel-plugin-redwood-cell')],
+        plugins: [
+          require('../dist/babelPlugins/babel-plugin-redwood-cellod-cell'),
+        ],
       },
       // Automatically import files in `./web/src/pages/*` in to
       // the `./web/src/Routes.[ts|jsx]` file.
       {
         test: ['./web/src/Routes.js', './web/src/Routes.tsx'],
-        plugins: [require('../dist/babel-plugin-redwood-routes-auto-loader')],
+        plugins: [
+          require('../dist/babelPlugins/babel-plugin-redwood-routes-auto-loader'),
+        ],
       },
       // ** Files ending in `Cell.mock.[js,ts]` **
       // Automatically determine keys for saving and retrieving mock data.
       {
         test: /.+Cell.mock.(js|ts)$/,
-        plugins: [require('../dist/babel-plugin-redwood-mock-cell-data')],
+        plugins: [
+          require('../dist/babelPlugins/babel-plugin-redwood-mock-cell-data'),
+        ],
       },
     ],
   }
