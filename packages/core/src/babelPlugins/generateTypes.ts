@@ -1,34 +1,23 @@
 import path from 'path'
 
-import { Paths, getPaths } from '@redwoodjs/internal'
-import { Host, DefaultHost } from '@redwoodjs/structure'
-
-interface HostWithPath {
-  host: Host
-  genTypesPath: string
-}
+import { DefaultHost } from '@redwoodjs/structure'
 
 /**
- * Babel plugins place type definitions in `node_modules/@types/@redwoodjs/generated`.
- * This function traverses that directory and includes references to them
- * in `node_modules/@types/@redwoodjs/index.d.ts`
+ * Searches `node_modules/@types/@redwoodjs/generated` for files ending with `.d.ts`
+ * and references them in `node_modules/@types/@redwoodjs/index.d.ts`
  */
-export const generateTypeDefIndex = (
-  { host, paths }: HostWithPath = {
-    host: new DefaultHost(),
-    genTypesPath: getPaths().types,
-  }
-) => {
-  const genTypesPath = paths.types
+export const generateTypeDefIndex = () => {
+  const host = new DefaultHost()
 
   const indexDefFile = []
-  for (const typeDefFile of host.readdirSync(genTypesPath)) {
+  for (const typeDefFile of host
+    .readdirSync(host.paths.types)
+    .filter((name) => name.endsWith('.d.ts'))) {
     indexDefFile.push(`/// <reference path="./generated/${typeDefFile}" />`)
   }
 
-  // @ts-expect-error
   host.writeFileSync(
-    path.resolve(genTypesPath, '../index.d.ts'),
+    path.resolve(host.paths.types, '../index.d.ts'),
     indexDefFile.join('\n')
   )
 }
@@ -36,14 +25,7 @@ export const generateTypeDefIndex = (
 /**
  * Generate a type definition
  */
-export const generateTypeDef = (
-  filename: string,
-  contents: string,
-  { host, genTypesPath }: HostWithPath = {
-    host: new DefaultHost(),
-    genTypesPath: getPaths().types,
-  }
-) => {
-  // @ts-expect-error
-  host.writeFileSync(path.join(genTypesPath, filename), contents)
+export const generateTypeDef = (filename: string, contents: string) => {
+  const host = new DefaultHost()
+  host.writeFileSync(path.join(host.paths.types, filename), contents)
 }
