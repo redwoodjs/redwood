@@ -17,8 +17,6 @@ import { URL_file } from './x/URL'
 import { ExtendedDiagnostic } from './x/vscode-languageserver-types'
 import { Host, DefaultHost } from './hosts'
 
-export { Host, DefaultHost }
-
 export type NodeID = string
 
 export type IDEInfo =
