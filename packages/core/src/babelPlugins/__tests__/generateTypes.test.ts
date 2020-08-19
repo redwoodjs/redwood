@@ -10,8 +10,7 @@ test('that it reads the generated types and writes the index file correctly', ()
   generateTypeDefIndex({
     // @ts-expect-error
     host: fakeHost,
-    // @ts-expect-error
-    paths: { types: '/fake/project/node_modules/@types/@redwoodjs/generated' },
+    genTypesPath: '/fake/project/node_modules/@types/@redwoodjs/generated',
   })
 
   expect(fakeHost.writeFileSync).toBeCalledTimes(1)
