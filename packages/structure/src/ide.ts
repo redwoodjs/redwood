@@ -11,6 +11,7 @@ import {
   Range,
   Hover,
 } from 'vscode-languageserver-types'
+import { Paths, getPaths } from '@redwoodjs/internal'
 import { ArrayLike, ArrayLike_normalize } from './x/Array'
 import { lazy, memo } from './x/decorators'
 import { basenameNoExt } from './x/path'
@@ -30,9 +31,8 @@ export interface Host {
   readFileSync(path: string): string
   readdirSync(path: string): string[]
   globSync(pattern: string): string[]
-  // TODO: Make non-optional once it's implemented.
-  writeFileSync?(path: string, contents: string): void
-  appendFileSync?(path: string, contents: string): void
+  writeFileSync(path: string, contents: string): void
+  paths: Paths
 }
 
 export type IDEInfo =
@@ -265,8 +265,9 @@ export class DefaultHost implements Host {
   writeFileSync(path: string, contents: string) {
     return fs.writeFileSync(path, contents)
   }
-  appendFileSync(path: string, contents: string) {
-    return fs.appendFileSync(path, contents)
+  @lazy()
+  get paths() {
+    return getPaths()
   }
 }
 
@@ -287,5 +288,11 @@ export class HostWithDocumentsStore implements Host {
   }
   globSync(pattern: string) {
     return this.defaultHost.globSync(pattern)
+  }
+  writeFileSync(path: string, contents: string) {
+    return this.defaultHost.writeFileSync(path, contents)
+  }
+  get paths() {
+    return this.defaultHost.paths
   }
 }
