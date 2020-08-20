@@ -33,21 +33,33 @@ export default function (
         enter() {
           pages = processPagesDir()
 
-          // Produces: `
+          // Produces:
           // routes.home: () => "/home"
           // routes.aboutUs: () => "/about-us"
-          // `
           const availableRoutes = project.router.routes
             .filter((r) => !r.isNotFound)
             .map((r) => `${r.name}: () => "${r.path}"`)
 
+          const pageImports = pages.map(
+            (page) => `import type ${page.const}Type from '${page.importPath}'`
+          )
+          const pageGlobals = pages.map(
+            (page) => `const ${page.const}: typeof ${page.const}Type`
+          )
+
           const typeDefContent = `
-            import type { AvailableRoutes } from '@redwoodjs/router'
-              declare module '@redwoodjs/router' {
-                interface AvailableRoutes {
-                  ${availableRoutes.join('\n')}
-                }
-              }`
+            declare module '@redwoodjs/router' {
+              interface AvailableRoutes {
+                ${availableRoutes.join('\n')}
+              }
+            }
+
+            // I hate that these have to be globals
+            ${pageImports.join('\n')}
+            declare global {
+              ${pageGlobals.join('\n')}
+            }
+          `
 
           generateTypeDef('routes.d.ts', typeDefContent)
           generateTypeDefIndex()
