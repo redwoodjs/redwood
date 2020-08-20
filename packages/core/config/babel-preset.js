@@ -144,19 +144,19 @@ module.exports = () => {
       // ** Files ending in `Cell.[js,ts]` **
       {
         test: /.+Cell.(js|tsx)$/,
-        plugins: [
-          require('../dist/babelPlugins/babel-plugin-redwood-cellod-cell'),
-        ],
+        plugins: [require('../dist/babelPlugins/babel-plugin-redwood-cell')],
       },
       // Automatically import files in `./web/src/pages/*` in to
       // the `./web/src/Routes.[ts|jsx]` file.
       {
         test: ['./web/src/Routes.js', './web/src/Routes.tsx'],
         plugins: [
-          require('../dist/babelPlugins/babel-plugin-redwood-routes-auto-loader'),
-          {
-            project,
-          },
+          [
+            require('../dist/babelPlugins/babel-plugin-redwood-routes-auto-loader'),
+            {
+              project,
+            },
+          ],
         ],
       },
       // ** Files ending in `Cell.mock.[js,ts]` **

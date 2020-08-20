@@ -3,7 +3,8 @@ import { getDMMF } from '@prisma/sdk'
 import { getPaths, processPagesDir } from '@redwoodjs/internal/dist/paths'
 import { join } from 'path'
 import { URL_file } from '../x/URL'
-import { BaseNode, Host } from '../ide'
+import { BaseNode } from '../ide'
+import type { Host } from '../hosts'
 import { lazy, memo } from '../x/decorators'
 import {
   followsDirNameConvention,
