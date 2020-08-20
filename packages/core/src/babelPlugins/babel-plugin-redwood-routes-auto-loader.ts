@@ -1,7 +1,17 @@
 import type { PluginObj, types } from '@babel/core'
-import { processPagesDir } from '@redwoodjs/internal'
 
-export default function ({ types: t }: { types: typeof types }): PluginObj {
+import { processPagesDir } from '@redwoodjs/internal'
+import { generateTypeDef, generateTypeDefIndex } from './generateTypes'
+import { RWProject } from '@redwoodjs/structure'
+
+interface PluginOptions {
+  project: RWProject
+}
+
+export default function (
+  { types: t }: { types: typeof types },
+  { project }: PluginOptions
+): PluginObj {
   let pages = processPagesDir()
 
   return {
@@ -22,6 +32,25 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
       Program: {
         enter() {
           pages = processPagesDir()
+
+          // Produces: `
+          // routes.home: () => "/home"
+          // routes.aboutUs: () => "/about-us"
+          // `
+          const availableRoutes = project.router.routes
+            .filter((r) => !r.isNotFound)
+            .map((r) => `${r.name}: () => "${r.path}"`)
+
+          const typeDefContent = `
+            import type { AvailableRoutes } from '@redwoodjs/router'
+              declare module '@redwoodjs/router' {
+                interface AvailableRoutes {
+                  ${availableRoutes.join('\n')}
+                }
+              }`
+
+          generateTypeDef('routes.d.ts', typeDefContent)
+          generateTypeDefIndex()
         },
         exit(p) {
           if (pages.length === 0) {
