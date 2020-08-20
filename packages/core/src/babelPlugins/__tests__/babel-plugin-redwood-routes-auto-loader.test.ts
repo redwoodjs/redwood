@@ -76,26 +76,12 @@ describe('routes auto loader', () => {
   })
 
   afterAll(() => {
-    expect(mockWriteFileSync.mock.calls[0][0]).toMatchInlineSnapshot(
-      `/fake/project/node_modules/@types/@redwoodjs/generated/routes.d.ts`
-    )
-
-    expect(mockWriteFileSync.mock.calls[0][1]).toMatchInlineSnapshot(`
-
-                  import type { AvailableRoutes } from '@redwoodjs/router'
-                    declare module '@redwoodjs/router' {
-                      interface AvailableRoutes {
-                        home: () => "/"
-                      }
-                    }
-    `)
-    expect(mockWriteFileSync.mock.calls[1][0]).toMatchInlineSnapshot(
-      `/fake/project/node_modules/@types/@redwoodjs/index.d.ts`
-    )
-    expect(mockWriteFileSync.mock.calls[1][1]).toMatchInlineSnapshot(
+    expect(mockWriteFileSync.mock.calls[0][0]).toContain(`routes.d.ts`)
+    expect(mockWriteFileSync.mock.calls[0][1]).toContain(`home: () => "/"`)
+    expect(mockWriteFileSync.mock.calls[1][0]).toContain(`index.d.ts`)
+    expect(mockWriteFileSync.mock.calls[1][1]).toContain(
       `/// <reference path="./generated/routes.d.ts" />`
     )
-
     jest.clearAllMocks()
   })
 })

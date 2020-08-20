@@ -2,8 +2,7 @@
  * This is the babel preset used `create-redwood-app`
  */
 
-const { getPaths } = require('@redwoodjs/internal')
-const { DefaultHost } = require('@redwoodjs/structure')
+const { getProject } = require('@redwoodjs/structure')
 
 const TARGETS_NODE = '12.16.1'
 // Warning! Use the minor core-js version: "corejs: '3.6'", instead of "corejs: 3",
@@ -12,8 +11,8 @@ const TARGETS_NODE = '12.16.1'
 const CORE_JS_VERSION = '3.6'
 
 module.exports = () => {
-  const paths = getPaths()
-  const host = new DefaultHost()
+  const project = getProject()
+  const paths = project.host.paths
 
   return {
     presets: ['@babel/preset-react', '@babel/preset-typescript'],
@@ -82,14 +81,7 @@ module.exports = () => {
               ],
             },
           ],
-          [
-            require('../dist/babelPlugins/babel-plugin-redwood-import-dir'),
-            {
-              // TODO: Make this part of structure.
-              generateTypesPath: paths.types,
-              host,
-            },
-          ],
+          [require('../dist/babelPlugins/babel-plugin-redwood-import-dir')],
         ],
       },
       // ** WEB **
@@ -99,7 +91,7 @@ module.exports = () => {
           [
             '@babel/preset-env',
             {
-              // the targets are set in web/package.json
+              // the targets are set in <userProject>/web/package.json
               useBuiltIns: 'usage',
               corejs: {
                 version: CORE_JS_VERSION,
@@ -162,6 +154,9 @@ module.exports = () => {
         test: ['./web/src/Routes.js', './web/src/Routes.tsx'],
         plugins: [
           require('../dist/babelPlugins/babel-plugin-redwood-routes-auto-loader'),
+          {
+            project,
+          },
         ],
       },
       // ** Files ending in `Cell.mock.[js,ts]` **
