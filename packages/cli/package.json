@@ -16,6 +16,7 @@
     "@prisma/sdk": "2.4.0",
     "@redwoodjs/internal": "^0.16.0",
     "@redwoodjs/structure": "^0.16.0",
+    "boxen": "^4.2.0",
     "camelcase": "^5.3.1",
     "chalk": "^3.0.0",
     "concurrently": "^5.1.0",
