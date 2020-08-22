@@ -622,6 +622,60 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "forresthayes",
+      "name": "Forrest Hayes",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/44448047?v=4",
+      "profile": "https://github.com/forresthayes",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "hemildesai",
+      "name": "Hemil Desai",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/8195444?v=4",
+      "profile": "https://hd10.dev/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "MontelAle",
+      "name": "Alessio Montel",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/38809793?v=4",
+      "profile": "https://github.com/MontelAle",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "amorriscode",
+      "name": "Anthony Morris",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/16005567?v=4",
+      "profile": "https://anthonymorris.dev/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "betocmn",
+      "name": "Beto",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1548368?v=4",
+      "profile": "https://betocmn.com/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "turadg",
+      "name": "Turadg Aleahmad",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/21505?v=4",
+      "profile": "http://turadg.aleahmad.net/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7

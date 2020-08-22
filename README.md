@@ -284,10 +284,18 @@ And there you have it.
     <td align="center"><a href="http://taylormilliman.me/"><img src="https://avatars3.githubusercontent.com/u/15217013?v=4" width="100px;" alt=""/><br /><sub><b>Taylor Milliman</b></sub></a></td>
     <td align="center"><a href="https://github.com/zhammer"><img src="https://avatars0.githubusercontent.com/u/6956487?v=4" width="100px;" alt=""/><br /><sub><b>Zach Hammer</b></sub></a></td>
     <td align="center"><a href="https://github.com/biphobe"><img src="https://avatars2.githubusercontent.com/u/1573875?v=4" width="100px;" alt=""/><br /><sub><b>Przemyslaw T</b></sub></a></td>
+    <td align="center"><a href="https://github.com/forresthayes"><img src="https://avatars0.githubusercontent.com/u/44448047?v=4" width="100px;" alt=""/><br /><sub><b>Forrest Hayes</b></sub></a></td>
+    <td align="center"><a href="https://hd10.dev/"><img src="https://avatars2.githubusercontent.com/u/8195444?v=4" width="100px;" alt=""/><br /><sub><b>Hemil Desai</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/MontelAle"><img src="https://avatars0.githubusercontent.com/u/38809793?v=4" width="100px;" alt=""/><br /><sub><b>Alessio Montel</b></sub></a></td>
+    <td align="center"><a href="https://anthonymorris.dev/"><img src="https://avatars2.githubusercontent.com/u/16005567?v=4" width="100px;" alt=""/><br /><sub><b>Anthony Morris</b></sub></a></td>
+    <td align="center"><a href="https://betocmn.com/"><img src="https://avatars3.githubusercontent.com/u/1548368?v=4" width="100px;" alt=""/><br /><sub><b>Beto</b></sub></a></td>
+    <td align="center"><a href="http://turadg.aleahmad.net/"><img src="https://avatars1.githubusercontent.com/u/21505?v=4" width="100px;" alt=""/><br /><sub><b>Turadg Aleahmad</b></sub></a></td>
   </tr>
 </table>
 
-<!-- markdownlint-enable -->
+<!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
