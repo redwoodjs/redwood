@@ -10,6 +10,7 @@ import { createAuthClient } from './authClients'
 
 export interface CurrentUser {
   roles?: Array<string>
+  user?: any
 }
 
 export interface AuthContextInterface {
