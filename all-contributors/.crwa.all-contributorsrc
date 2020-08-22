@@ -1,0 +1,43 @@
+{
+  "projectName": "create-redwood-app",
+  "projectOwner": "redwoodjs",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "all-contributors/README.md"
+  ],
+  "imageSize": 100,
+  "contributorTemplate": "<a href=\"<%= contributor.profile %>\"><img src=\"<%= contributor.avatar_url %>\" width=\"<%= options.imageSize %>px;\" alt=\"\"/><br /><sub><b><%= contributor.name %></b></sub></a>",
+  "commit": false,
+  "commitConvention": "none",
+  "contributors": [
+    {
+      "login": "peterp",
+      "name": "Peter Pistorius",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/44849?v=4",
+      "profile": "http://peterp.org/",
+      "contributions": [
+        "tool"
+      ]
+    },
+    {
+      "login": "thedavidprice",
+      "name": "David Price",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/2951?v=4",
+      "profile": "http://thedavidprice.com/",
+      "contributions": [
+        "tool"
+      ]
+    },
+    {
+      "login": "cannikin",
+      "name": "Rob Cameron",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/300?v=4",
+      "profile": "http://ridingtheclutch.com/",
+      "contributions": [
+        "tool"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7
+}
