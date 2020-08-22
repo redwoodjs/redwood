@@ -8,7 +8,7 @@ import {
   NumberField,
   TextAreaField,
   Submit,
-} from '@redwoodjs/web'
+} from '@redwoodjs/forms'
 
 const PostForm = (props) => {
   const onSubmit = (data) => {

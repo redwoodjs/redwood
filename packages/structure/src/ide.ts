@@ -4,7 +4,13 @@ import { basename } from 'path'
 import * as tsm from 'ts-morph'
 import { TextDocuments } from 'vscode-languageserver'
 import { TextDocument } from 'vscode-languageserver-textdocument'
-import { CodeLens, Location } from 'vscode-languageserver-types'
+import {
+  CodeLens,
+  DocumentLink,
+  Location,
+  Range,
+  Hover,
+} from 'vscode-languageserver-types'
 import { ArrayLike, ArrayLike_normalize } from './x/Array'
 import { lazy, memo } from './x/decorators'
 import { basenameNoExt } from './x/path'
@@ -24,6 +30,8 @@ export interface Host {
   readFileSync(path: string): string
   readdirSync(path: string): string[]
   globSync(pattern: string): string[]
+  // TODO: Make non-optional once it's implemented.
+  writeFileSync?(path: string, contents: string): void
 }
 
 export type IDEInfo =
@@ -31,7 +39,9 @@ export type IDEInfo =
   | Implementation
   | Reference
   | CodeLensX
-  | Hover
+  | HoverX
+  | Decoration
+  | DocumentLinkX
 
 export interface Definition {
   kind: 'Definition'
@@ -57,10 +67,26 @@ export interface CodeLensX {
   codeLens: CodeLens
 }
 
-export interface Hover {
+export interface HoverX {
   kind: 'Hover'
   location: Location
-  text: string
+  hover: Hover
+}
+
+export interface Decoration {
+  kind: 'Decoration'
+  location: Location
+  style:
+    | 'path_punctuation'
+    | 'path_parameter'
+    | 'path_slash'
+    | 'path_parameter_type'
+}
+
+export interface DocumentLinkX {
+  kind: 'DocumentLink'
+  location: Location
+  link: DocumentLink
 }
 
 export abstract class BaseNode {
@@ -119,14 +145,18 @@ export abstract class BaseNode {
 
   @memo()
   async collectIDEInfo(): Promise<IDEInfo[]> {
-    // TODO: catch runtime errors and add them as diagnostics
-    // TODO: we can parallelize this further
-    const d1 = await this._ideInfo()
-    const dd = await Promise.all(
-      (await this._children()).map((c) => c.collectIDEInfo())
-    )
-    const d2 = dd.flat()
-    return [...d1, ...d2]
+    try {
+      const d1 = await this._ideInfo()
+      const dd = await Promise.all(
+        (await this._children()).map((c) => c.collectIDEInfo())
+      )
+      const d2 = dd.flat()
+      return [...d1, ...d2]
+    } catch (e) {
+      // TODO: this diagnostic is also interesting
+      console.log(e)
+      return []
+    }
   }
 
   /**
@@ -137,12 +167,31 @@ export abstract class BaseNode {
   async collectDiagnostics(): Promise<ExtendedDiagnostic[]> {
     // TODO: catch runtime errors and add them as diagnostics
     // TODO: we can parallelize this further
-    const d1 = await this._diagnostics()
-    const dd = await Promise.all(
-      (await this._children()).map((c) => c.collectDiagnostics())
-    )
-    const d2 = dd.flat()
-    return [...d1, ...d2]
+    try {
+      const d1 = await this._diagnostics()
+      const dd = await Promise.all(
+        (await this._children()).map((c) => c.collectDiagnostics())
+      )
+      const d2 = dd.flat()
+      return [...d1, ...d2]
+    } catch (e) {
+      const uri = this.closestContainingUri
+      if (!uri) throw e
+      const range = Range.create(0, 0, 0, 0)
+      return [
+        {
+          uri,
+          diagnostic: { message: e + '', range },
+        },
+      ]
+    }
+  }
+
+  @lazy() get closestContainingUri(): string | undefined {
+    const { uri } = this as any
+    if (uri) return uri
+    if (this.parent) return this.parent.closestContainingUri
+    return undefined
   }
 
   /**

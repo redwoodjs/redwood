@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/cli",
   "description": "The Redwood Command Line",
-  "version": "0.14.0",
+  "version": "0.16.0",
   "license": "MIT",
   "bin": {
     "redwood": "./dist/index.js",
@@ -13,9 +13,9 @@
     "dist"
   ],
   "dependencies": {
-    "@prisma/sdk": "^2.1.1",
-    "@redwoodjs/internal": "^0.14.0",
-    "@redwoodjs/structure": "^0.14.0",
+    "@prisma/sdk": "2.4.0",
+    "@redwoodjs/internal": "^0.16.0",
+    "@redwoodjs/structure": "^0.16.0",
     "camelcase": "^5.3.1",
     "chalk": "^3.0.0",
     "concurrently": "^5.1.0",
@@ -25,6 +25,7 @@
     "dotenv-defaults": "^1.1.1",
     "envinfo": "^7.5.1",
     "execa": "^4.0.0",
+    "fs-extra": "^9.0.1",
     "humanize-string": "^2.1.0",
     "listr": "^0.14.3",
     "listr-verbose-renderer": "^0.6.0",
@@ -37,14 +38,13 @@
     "yargs": "^15.3.1"
   },
   "devDependencies": {
-    "@types/node-fetch": "^2.5.5",
-    "rimraf": "^3.0.2"
+    "@types/node-fetch": "^2.5.5"
   },
   "scripts": {
     "build": "yarn build:js && yarn build:clean-dist",
-    "build:js": "yarn cross-env NODE_ENV=production yarn babel src -d dist --extensions \".js,.ts\" --delete-dir-on-start --copy-files --no-copy-ignored",
-    "build:clean-dist": "yarn rimraf 'dist/**/__tests__'",
     "prepublishOnly": "yarn build",
+    "build:clean-dist": "yarn rimraf 'dist/**/__tests__'",
+    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\" --copy-files --no-copy-ignored",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build\"",
     "test": "jest",
     "test:watch": "yarn test --watch"

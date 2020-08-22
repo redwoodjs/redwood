@@ -15,10 +15,11 @@ cycles choosing and re-choosing various technologies and configurations. Plus,
 because Redwood is a proper framework, you benefit from continued performance
 and feature upgrades over time and with minimum effort.
 
-> **WARNING:** Redwood is still in the **alpha** phase of development. We do not
-> recommend that you use Redwood applications in production at this time. That said,
-> your input can have a huge impact during this period, and we welcome your feedback
-> and ideas! Check out the [Redwood Community
+> **WARNING:** RedwoodJS software has not reached a stable version 1.0 and should
+> not be considered suitable for production use. In the "make it work; make it
+> right; make it fast" paradigm, Redwood is in the later stages of the "make it
+> work" phase. That said, your input can have a huge impact during this period,
+> and we welcome your feedback and ideas! Check out the [Redwood Community
 > Forum](https://community.redwoodjs.com/) to join in.
 
 > **TUTORIAL:** The best way to get to know Redwood is by going through the extensive
