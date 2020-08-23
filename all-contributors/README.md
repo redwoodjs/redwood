@@ -25,7 +25,7 @@ In general, this is a three-part process:
 _note: this file is also used for all aggregated contributors_  
 - `.all-contributorsrc`
 
-CRWA `redwoodjs/create-redwood-app` project:
+**CRWA** `redwoodjs/create-redwood-app` project:
 - `.crwa.all-contributorsrc`
 
 **Website** `redwoodjs/redwoodjs.com` project:
