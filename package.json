@@ -23,13 +23,16 @@
     "babel-jest": "^26.1.0",
     "babel-plugin-auto-import": "^1.0.5",
     "babel-plugin-module-resolver": "^4.0.0",
+    "babel-plugin-remove-code": "^0.0.6",
     "bundlesize": "^0.18.0",
+    "cp-cli": "^2.0.0",
     "cross-env": "^7.0.2",
     "jest": "^26.1.0",
     "lerna": "^3.20.2",
-    "msw": "0.19.3",
+    "msw": "0.20.0",
     "nodemon": "^2.0.2",
-    "typescript": "^3.9.6",
+    "rimraf": "^3.0.2",
+    "typescript": "^3.9.7",
     "whatwg-fetch": "3.0.0"
   },
   "resolutions": {
@@ -39,13 +42,11 @@
     "extends": "@redwoodjs/eslint-config"
   },
   "scripts": {
-    "build": "yarn build:clean && yarn build:js",
-    "build:clean": "lerna run build:clean",
-    "build:js": "cross-env NODE_ENV=production lerna run build",
-    "build:types": "tsc --build --clean && tsc --build",
-    "build:watch": "lerna run build:watch --parallel",
-    "test": "lerna run test --stream -- --colors",
-    "lint": "yarn eslint packages",
-    "lint:fix": "yarn eslint --fix packages"
+    "build": "tsc --build --verbose && lerna run build:js",
+    "build:clean": "rimraf ./packages/**/dist",
+    "build:watch": "tsc --build && lerna run build:watch --parallel",
+    "test": "lerna run test --stream -- --colors --maxWorkers=4",
+    "lint": "eslint packages",
+    "lint:fix": "eslint --fix packages"
   }
 }

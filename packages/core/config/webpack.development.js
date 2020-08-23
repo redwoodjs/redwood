@@ -20,9 +20,12 @@ const baseConfig = merge(webpackConfig('development'), {
     port: redwoodConfig.web.port,
     proxy: {
       [redwoodConfig.web.apiProxyPath]: {
-        target: `http://localhost:${redwoodConfig.api.port}`,
+        target: `http://[::1]:${redwoodConfig.api.port}`,
         pathRewrite: {
           [`^${escapeRegExp(redwoodConfig.web.apiProxyPath)}`]: '',
+        },
+        headers: {
+          Connection: 'keep-alive',
         },
       },
     },

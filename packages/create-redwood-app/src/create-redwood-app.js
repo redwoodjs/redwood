@@ -41,10 +41,14 @@ const downloadFile = async (sourceUrl, targetFile) => {
   })
 }
 
-const { _: args } = yargs
+const { _: args, 'yarn-install': yarnInstall } = yargs
   .scriptName(name)
-  .usage('Usage: $0 <project directory>')
+  .usage('Usage: $0 <project directory> [option]')
   .example('$0 newapp')
+  .option('yarn-install', {
+    default: true,
+    describe: 'Skip yarn install with --no-yarn-install',
+  })
   .version(version)
   .strict().argv
 
@@ -114,7 +118,9 @@ const createProjectTasks = ({ newAppDir }) => {
             path.join(newAppDir, '.gitignore')
           )
 
-          fs.unlinkSync(path.join(newAppDir, '.all-contributorsrc'))
+          if (fs.existsSync(path.join(newAppDir, '.all-contributorsrc'))) {
+            fs.unlinkSync(path.join(newAppDir, '.all-contributorsrc'))
+          }
         } catch (e) {
           throw new Error('Could not move project files')
         }
@@ -147,6 +153,11 @@ const installNodeModulesTasks = ({ newAppDir }) => {
     },
     {
       title: 'Running `yarn install`... (This could take a while)',
+      skip: () => {
+        if (yarnInstall === false) {
+          return 'skipped on request'
+        }
+      },
       task: () => {
         return execa('yarn install', {
           shell: true,
@@ -180,6 +191,24 @@ new Listr(
     console.log()
     console.log(
       'Inside that directory you can run `yarn rw dev` to start the development server.'
+    )
+    console.log()
+    console.log(
+      `${chalk.hex('#bf4722')(
+        '* Join our Discord server'
+      )}: https://discord.gg/jjSYEQd`
+    )
+
+    console.log(
+      `${chalk.hex('#bf4722')(
+        '* Join our Discourse Community'
+      )}: https://community.redwoodjs.com`
+    )
+
+    console.log(
+      `${chalk.hex('#bf4722')(
+        '* Signup to the Newsletter'
+      )}: https://www.redwoodjs.com`
     )
   })
   .catch((e) => {
