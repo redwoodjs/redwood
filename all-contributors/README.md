@@ -28,7 +28,7 @@ _note: this file is also used for all aggregated contributors_
 CRWA `redwoodjs/create-redwood-app` project:
 - `.crwa.all-contributorsrc`
 
-Website `redwoodjs/redwoodjs.com` project:
+**Website** `redwoodjs/redwoodjs.com` project:
 - `.rwjs.com.all-contributorsrc`
 
 >When adding contributors, use this "type" key for specific repos:
