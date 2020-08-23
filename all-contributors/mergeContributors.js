@@ -4,14 +4,19 @@
 
 const fs = require('fs')
 
-const mainContribFile = JSON.parse(fs.readFileSync('./.all-contributorsrc'))
+const targetFile = '.all-contributorsrc'
+
+const mainContribFile = JSON.parse(fs.readFileSync(targetFile))
 
 const contribFiles = [
-  './.crwa.all-contributorsrc',
-  './.rwjs.com.all-contributorsrc',
+  '.crwa.all-contributorsrc',
+  '.rwjs.com.all-contributorsrc',
 ]
 
 async function main() {
+  console.log(
+    'Initial count of contributors: ' + mainContribFile.contributors.length
+  )
   for (file of contribFiles) {
     let currentFile = JSON.parse(fs.readFileSync(file))
     for (contributor of currentFile.contributors) {
@@ -34,11 +39,11 @@ async function main() {
       }
     }
   }
-
-  await fs.writeFileSync(
-    './test.json',
-    JSON.stringify(mainContribFile, null, 2)
+  console.log(
+    'Updated count of contributors: ' + mainContribFile.contributors.length
   )
+  await fs.writeFileSync(targetFile, JSON.stringify(mainContribFile, null, 2))
+  console.log(`Successfully updated "${targetFile}"`)
 }
 
 main()
