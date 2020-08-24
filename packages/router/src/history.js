@@ -1,16 +1,29 @@
 const createHistory = () => {
-  const listeners = []
+  const listeners = {}
 
   return {
     listen: (listener) => {
-      listeners.push(listener)
-      window.addEventListener('popstate', () => {
-        listener()
-      })
+      const listenerId = 'RW_HISTORY_LISTENER_ID_' + Date.now()
+      listeners[listenerId] = listener
+      window.addEventListener('popstate', listener)
+      return listenerId
     },
     navigate: (to) => {
       window.history.pushState({}, null, to)
-      listeners.forEach((listener) => listener())
+      for (const listener of Object.values(listeners)) {
+        listener()
+      }
+    },
+    remove: (listenerId) => {
+      if (listeners[listenerId]) {
+        const listener = listeners[listenerId]
+        window.removeEventListener('popstate', listener)
+        delete listeners[listenerId]
+      } else {
+        console.warn(
+          'History Listener with ID: ' + listenerId + ' does not exist.'
+        )
+      }
     },
   }
 }

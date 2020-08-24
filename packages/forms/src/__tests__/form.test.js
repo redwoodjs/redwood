@@ -8,6 +8,9 @@ import {
   waitFor,
 } from '@testing-library/react'
 
+import { toHaveFocus } from '@testing-library/jest-dom/matchers'
+expect.extend({ toHaveFocus })
+
 import {
   Form,
   TextField,
@@ -64,6 +67,18 @@ describe('Form', () => {
         </div>
         <NumberFieldsWrapper />
         <Submit>Save</Submit>
+      </Form>
+    )
+  }
+
+  const TestComponentWithRef = () => {
+    const inputEl = React.useRef(null)
+    React.useEffect(() => {
+      inputEl.current.focus()
+    })
+    return (
+      <Form>
+        <TextField name="tf" defaultValue="text" ref={inputEl} />
       </Form>
     )
   }
@@ -125,5 +140,14 @@ describe('Form', () => {
       { 'wrapped-ff': 3.14, 'wrapped-nf-1': 101, 'wrapped-nf-2': 102 },
       expect.anything() // event that triggered the onSubmit call
     )
+  })
+
+  it('supports ref forwarding', async () => {
+    render(<TestComponentWithRef />)
+    const input = screen.getByDisplayValue('text')
+
+    await waitFor(() => {
+      expect(input).toHaveFocus()
+    })
   })
 })
