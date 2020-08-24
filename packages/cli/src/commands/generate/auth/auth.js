@@ -4,11 +4,15 @@ import path from 'path'
 import execa from 'execa'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
+import { resolveFile } from '@redwoodjs/internal'
 
 import { getPaths, writeFilesTask } from 'src/lib'
 import c from 'src/lib/colors'
 
-const API_GRAPHQL_PATH = path.join(getPaths().api.functions, 'graphql.js')
+const API_GRAPHQL_PATH = resolveFile(
+  path.join(getPaths().api.functions, 'graphql')
+)
+
 const API_SRC_PATH = path.join(getPaths().api.src)
 const TEMPLATES = fs
   .readdirSync(path.resolve(__dirname, 'templates'))
@@ -91,8 +95,8 @@ export const addApiConfig = () => {
 
   // add import statement
   content = content.replace(
-    /^(.*importAll.*)$/m,
-    `$1\n\nimport { getCurrentUser } from 'src/lib/auth.js'`
+    /^(.*services.*)$/m,
+    `$1\n\nimport { getCurrentUser } from 'src/lib/auth'`
   )
   // add object to handler
   content = content.replace(
@@ -147,27 +151,6 @@ export const handler = async ({ provider, force }) => {
   const tasks = new Listr(
     [
       {
-        title: 'Adding required packages...',
-        task: async () => {
-          if (!isProviderSupported(provider)) {
-            throw new Error(`Unknown auth provider '${provider}'`)
-          }
-          await execa('yarn', [
-            'workspace',
-            'web',
-            'add',
-            ...providerData.packages,
-            '@redwoodjs/auth',
-          ])
-        },
-      },
-      {
-        title: 'Installing packages...',
-        task: async () => {
-          await execa('yarn', ['install'])
-        },
-      },
-      {
         title: 'Generating auth lib...',
         task: (_ctx, task) => {
           if (apiSrcDoesExist()) {
@@ -195,6 +178,41 @@ export const handler = async ({ provider, force }) => {
           } else {
             task.skip('GraphQL function not found, skipping')
           }
+        },
+      },
+      {
+        title: 'Adding required web packages...',
+        task: async () => {
+          if (!isProviderSupported(provider)) {
+            throw new Error(`Unknown auth provider '${provider}'`)
+          }
+          await execa('yarn', [
+            'workspace',
+            'web',
+            'add',
+            ...providerData.webPackages,
+            '@redwoodjs/auth',
+          ])
+        },
+      },
+      providerData.apiPackages.length > 0 && {
+        title: 'Adding required api packages...',
+        task: async () => {
+          if (!isProviderSupported(provider)) {
+            throw new Error(`Unknown auth provider '${provider}'`)
+          }
+          await execa('yarn', [
+            'workspace',
+            'api',
+            'add',
+            ...providerData.apiPackages,
+          ])
+        },
+      },
+      {
+        title: 'Installing packages...',
+        task: async () => {
+          await execa('yarn', ['install'])
         },
       },
       {

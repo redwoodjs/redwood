@@ -9,6 +9,26 @@ const DELETE_${singularConstantName}_MUTATION = gql`
   }
 `
 
+const jsonDisplay = (obj) => {
+  return (
+    <pre>
+      <code>{JSON.stringify(obj, null, 2)}</code>
+    </pre>
+  )
+}
+
+const timeTag = (datetime) => {
+  return (
+    <time dateTime={datetime} title={datetime}>
+      {new Date(datetime).toUTCString()}
+    </time>
+  )
+}
+
+const checkboxInputTag = (checked) => {
+  return <input type="checkbox" checked={checked} disabled />
+}
+
 const ${singularPascalName} = ({ ${singularCamelName} }) => {
   const { addMessage } = useFlash()
   const [delete${singularPascalName}] = useMutation(DELETE_${singularConstantName}_MUTATION, {
@@ -33,8 +53,12 @@ const ${singularPascalName} = ({ ${singularCamelName} }) => {
         <table className="rw-table">
           <tbody>
             <% columns.forEach(column => { %><tr>
-              <th><%= column.name %></th>
-              <td>{${singularCamelName}.<%= column.name %>}</td>
+              <th><%= column.label %></th><%
+              if (column.displayFunction) { %>
+              <td>{${column.displayFunction}(${singularCamelName}.${column.name})}</td><%
+              } else { %>
+              <td>{${singularCamelName}.${column.name}}</td><%
+              } %>
             </tr><% }) %>
           </tbody>
         </table>

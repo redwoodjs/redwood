@@ -1,11 +1,10 @@
 import path from 'path'
 
-import camelcase from 'camelcase'
-import pluralize from 'pluralize'
 import Listr from 'listr'
 import pascalcase from 'pascalcase'
 import { paramCase } from 'param-case'
 import terminalLink from 'terminal-link'
+import { ensurePosixPath } from '@redwoodjs/internal'
 
 import { generateTemplate, getPaths, writeFilesTask } from 'src/lib'
 import c from 'src/lib/colors'
@@ -38,27 +37,34 @@ export const templateForComponentFile = ({
   const componentOutputPath =
     outputPath ||
     path.join(basePath, outputComponentName, outputComponentName + extension)
-  const content = generateTemplate(
-    path.join(generator, 'templates', templatePath),
-    {
-      name,
-      // Complexity here is for Windows support
-      outputPath: `.${path.sep}${path.relative(
-        getPaths().base,
-        componentOutputPath
-      )}`.replace(/\\/g, '/'),
-      ...templateVars,
-    }
-  )
+  const fullTemplatePath = path.join(generator, 'templates', templatePath)
+  const content = generateTemplate(fullTemplatePath, {
+    name,
+    outputPath: ensurePosixPath(
+      `./${path.relative(getPaths().base, componentOutputPath)}`
+    ),
+    ...templateVars,
+  })
   return [componentOutputPath, content]
 }
 
 /**
  * Creates a route path, either returning the existing path if passed, otherwise
- * creates one based on the name
+ * creates one based on the name. If the passed path is just a route parameter
+ * a new path based on the name is created, with the parameter appended to it
  */
 export const pathName = (path, name) => {
-  return path ?? `/${paramCase(name)}`
+  let routePath = path
+
+  if (path && path.startsWith('{') && path.endsWith('}')) {
+    routePath = `/${paramCase(name)}/${path}`
+  }
+
+  if (!routePath) {
+    routePath = `/${paramCase(name)}`
+  }
+
+  return routePath
 }
 
 /**
@@ -118,8 +124,7 @@ export const relationsForModel = (model) => {
   return model.fields
     .filter((f) => f.relationName)
     .map((field) => {
-      const relationName = camelcase(field.type)
-      return field.isList ? pluralize(relationName) : relationName
+      return field.name
     })
 }
 

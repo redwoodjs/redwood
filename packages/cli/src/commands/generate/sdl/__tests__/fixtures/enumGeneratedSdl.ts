@@ -1,5 +1,3 @@
-import gql from 'graphql-tag'
-
 export const schema = gql`
   type Shoe {
     id: Int!
@@ -14,7 +12,7 @@ export const schema = gql`
 
   type Query {
     shoes: [Shoe!]!
-    shoe(id: Int!): Shoe!
+    shoe(id: Int!): Shoe
   }
 
   input CreateShoeInput {

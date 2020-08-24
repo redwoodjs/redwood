@@ -16,12 +16,12 @@ export const config = {
 const firebaseClient = ((config) => {
   firebase.initializeApp(config)
   return firebase
-})(firebaseClientConfig)
-  `,
+})(firebaseClientConfig)`,
   authProvider: { client: 'firebaseClient', type: 'firebase' },
 }
 
-export const packages = ['firebase']
+export const webPackages = ['firebase']
+export const apiPackages = ['firebase-admin']
 
 export const notes = [
   'You will need to create several environment variables with your Firebase config options.',

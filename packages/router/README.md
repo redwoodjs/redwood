@@ -2,7 +2,7 @@
 
 This is the built-in router for Redwood apps. It takes inspiration from Ruby on Rails, React Router, and Reach Router, but is very opinionated in its own way.
 
-> WARNING: This software is in alpha and should not be considered suitable for production use. In the "make it work; make it right; make it fast" paradigm, RR is in the later stages of the "make it work" phase.
+> **WARNING:** RedwoodJS software has not reached a stable version 1.0 and should not be considered suitable for production use. In the "make it work; make it right; make it fast" paradigm, Redwood is in the later stages of the "make it work" phase.
 
 Redwood Router (RR from now on) is designed to list all routes in a single file, without any nesting. We prefer this design, as it makes it very easy to track which routes map to which pages.
 
@@ -46,7 +46,7 @@ Some pages should only be visible to authenticated users.
 
 All `Routes` nested in `<Private>` require authentication.
 When a user is not authenticated and attempts to visit this route,
-they will be redirected to the route passed as the `unauthenticated` prop.
+they will be redirected to the route passed as the `unauthenticated` prop and the orignally requested route's path will be added to the querystring in a `redirectTo` param. This lets you send the user to the originally requested once logged in.
 
 ```js
 // Routes.js
@@ -134,10 +134,18 @@ If a route has route parameters, then its named route function will take an obje
 
 ```js
 // SomePage.js
-<Link to={routes.user({ id: 7 })} />
+<Link to={routes.user({ id: 7 })}>...</Link>
 ```
 
 All parameters will be converted to strings before being inserted into the generated URL. If you don't like the default JavaScript behavior of how this conversion happens, make sure to convert to a string before passing it into the named route function.
+
+If you specify parameters to the named route function that do not correspond to parameters defined on the route, they will be appended to the end of the generated URL as search params in `key=val` format:
+
+```js
+// SomePage.js
+<Link to={routes.users({ sort: 'desc', filter: 'all' })}>...</Link>
+// => "/users?sort=desc&filter=all"
+```
 
 ## Route parameter types
 

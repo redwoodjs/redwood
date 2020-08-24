@@ -12,7 +12,10 @@ export const QUERY = gql`
       body
       image
       isPinned
+      readTime
+      rating
       postedAt
+      metadata
     }
   }
 `

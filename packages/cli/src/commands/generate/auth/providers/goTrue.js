@@ -12,7 +12,8 @@ export const config = {
 }
 
 // required packages to install
-export const packages = ['gotrue-js']
+export const webPackages = ['gotrue-js']
+export const apiPackages = []
 
 // any notes to print out when the job is done
 export const notes = [

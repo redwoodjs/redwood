@@ -1,5 +1,3 @@
-import gql from 'graphql-tag'
-
 export const schema = gql`
   type Post {
     id: Int!
@@ -13,7 +11,7 @@ export const schema = gql`
 
   type Query {
     posts: [Post!]!
-    post(id: Int!): Post!
+    post(id: Int!): Post
   }
 
   input CreatePostInput {
