@@ -68,7 +68,7 @@ functions:
 
 export const preRequisites = [
   {
-    command: ['which', ['serverless']],
+    command: ['serverless'],
     errorMessage: [
       'Looks like serverless is not installed.',
       'Please follow the steps at https://www.serverless.com/framework/docs/providers/aws/guide/installation/ to install serverless.',
