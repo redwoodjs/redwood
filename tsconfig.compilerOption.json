@@ -16,8 +16,8 @@
     "jsx": "preserve",
   },
   "exclude": [
-    "node_modules",
     "dist",
+    "node_modules",
     "**/__tests__",
     "**/__mocks__",
     "**/*.test.*",

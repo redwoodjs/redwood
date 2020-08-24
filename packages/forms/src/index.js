@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, forwardRef } from 'react'
 import { useForm, FormContext, useFormContext } from 'react-hook-form'
 import pascalcase from 'pascalcase'
 
@@ -223,7 +223,7 @@ const FieldError = (props) => {
 
 // Renders a <textarea> field
 
-const TextAreaField = (props) => {
+const TextAreaField = forwardRef((props, ref) => {
   const { register } = useFormContext()
   const { setCoercion } = useCoercion()
 
@@ -237,14 +237,17 @@ const TextAreaField = (props) => {
     <textarea
       {...tagProps}
       id={props.id || props.name}
-      ref={register(props.validation || { required: false })}
+      ref={(e) => {
+        register(e, props.validation || { required: false })
+        if (ref) ref.current = e
+      }}
     />
   )
-}
+})
 
 // Renders a <select> field
 
-const SelectField = (props) => {
+const SelectField = forwardRef((props, ref) => {
   const { register } = useFormContext()
   const tagProps = inputTagProps(props)
 
@@ -252,20 +255,23 @@ const SelectField = (props) => {
     <select
       {...tagProps}
       id={props.id || props.name}
-      ref={register(props.validation || { required: false })}
+      ref={(e) => {
+        register(e, props.validation || { required: false })
+        if (ref) ref.current = e
+      }}
     />
   )
-}
+})
 
 // Renders a <button type="submit">
 
-const Submit = React.forwardRef((props, ref) => (
+const Submit = forwardRef((props, ref) => (
   <button ref={ref} type="submit" {...props} />
 ))
 
 // Renders a <input>
 
-const InputField = (props) => {
+const InputField = forwardRef((props, ref) => {
   const { register } = useFormContext()
   const { setCoercion } = useCoercion()
 
@@ -281,12 +287,15 @@ const InputField = (props) => {
 
   return (
     <input
-      id={props.id || props.name}
-      ref={register(props.validation || { required: false })}
       {...tagProps}
+      id={props.id || props.name}
+      ref={(e) => {
+        register(e, props.validation || { required: false })
+        if (ref) ref.current = e
+      }}
     />
   )
-}
+})
 
 // Create a component for each type of Input.
 //
@@ -300,9 +309,9 @@ const InputField = (props) => {
 
 let inputComponents = {}
 INPUT_TYPES.forEach((type) => {
-  inputComponents[`${pascalcase(type)}Field`] = (props) => (
-    <InputField type={type} {...props} />
-  )
+  inputComponents[`${pascalcase(type)}Field`] = forwardRef((props, ref) => (
+    <InputField ref={ref} type={type} {...props} />
+  ))
 })
 
 export {

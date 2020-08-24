@@ -1,13 +1,14 @@
 import {
+  DiagnosticSeverity,
   Position,
   Range,
-  DiagnosticSeverity,
 } from 'vscode-languageserver-types'
 import {
-  Position_compare,
-  Range_contains,
   ExtendedDiagnostic,
   ExtendedDiagnostic_format,
+  Position_compare,
+  Position_fromOffset,
+  Range_contains,
 } from '../vscode-languageserver-types'
 
 describe('Position_compare', () => {
@@ -65,5 +66,25 @@ describe('ExtendedDiagnostic_format', () => {
       getSeverityLabel: (s) => `<${s}>`,
     })
     expect(str3).toEqual('/path/to/app/b.ts:2:3: <1>: this is a message')
+  })
+})
+
+describe('Position_fromOffset', () => {
+  test('it works', () => {
+    x(0, 'foo', 0, 0)
+    x(1, 'foo', 0, 1)
+    x(3, 'foo\nbar', 0, 3)
+    x(4, 'foo\nbar', 1, 0)
+    expect(Position_fromOffset(1000, 'foo')).toBeUndefined()
+    function x(
+      offset: number,
+      text: string,
+      expectedLine: number,
+      expectedCharacter: number
+    ) {
+      const pos = Position_fromOffset(offset, text)
+      pos //?
+      expect(pos).toEqual({ line: expectedLine, character: expectedCharacter })
+    }
   })
 })
