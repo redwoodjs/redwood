@@ -2,7 +2,6 @@ import { getDMMF } from '@prisma/sdk'
 // TODO: re-implement a higher quality version of these in ./project
 import { getPaths, processPagesDir } from '@redwoodjs/internal/dist/paths'
 import { join } from 'path'
-import { URL_file } from '../x/URL'
 import { BaseNode, Host } from '../ide'
 import { lazy, memo } from '../x/decorators'
 import {
@@ -10,8 +9,10 @@ import {
   isCellFileName,
   isLayoutFileName,
 } from '../x/path'
+import { URL_file } from '../x/URL'
 import { RWCell } from './RWCell'
 import { RWComponent } from './RWComponent'
+import { RWEnvHelper } from './RWEnvHelper'
 import { RWFunction } from './RWFunction'
 import { RWLayout } from './RWLayout'
 import { RWPage } from './RWPage'
@@ -58,6 +59,7 @@ export class RWProject extends BaseNode {
       ...this.sdls,
       ...this.layouts,
       ...this.components,
+      this.envHelper,
     ]
   }
 
@@ -172,5 +174,9 @@ export class RWProject extends BaseNode {
       .globSync(this.pathHelper.web.components + '/**/*Cell.{js,jsx,tsx}')
       .map((file) => new RWCell(file, this))
       .filter((file) => file.isCell)
+  }
+
+  @lazy() get envHelper(): RWEnvHelper {
+    return new RWEnvHelper(this)
   }
 }
