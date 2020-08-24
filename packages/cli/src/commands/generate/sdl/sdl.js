@@ -20,7 +20,7 @@ import { yargsDefaults } from '../../generate'
 import { files as serviceFiles } from '../service/service'
 import { relationsForModel } from '../helpers'
 
-const IGNORE_FIELDS_FOR_INPUT = ['id', 'createdAt']
+const IGNORE_FIELDS_FOR_INPUT = ['id', 'createdAt', 'updatedAt']
 
 const modelFieldToSDL = (field, required = true, types = {}) => {
   if (Object.entries(types).length) {
@@ -28,9 +28,15 @@ const modelFieldToSDL = (field, required = true, types = {}) => {
       field.kind === 'object' ? idType(types[field.type]) : field.type
   }
 
-  return `${field.name}: ${field.isList ? '[' : ''}${field.type}${
-    field.isList ? ']' : ''
-  }${(field.isRequired && required) | field.isList ? '!' : ''}`
+  const dictionary = {
+    Json: 'JSON',
+  }
+
+  return `${field.name}: ${field.isList ? '[' : ''}${
+    dictionary[field.type] || field.type
+  }${field.isList ? ']' : ''}${
+    (field.isRequired && required) | field.isList ? '!' : ''
+  }`
 }
 
 const querySDL = (model) => {

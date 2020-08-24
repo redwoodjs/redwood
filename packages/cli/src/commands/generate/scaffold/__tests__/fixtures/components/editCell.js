@@ -15,6 +15,7 @@ export const QUERY = gql`
       readTime
       rating
       postedAt
+      metadata
     }
   }
 `

@@ -13,6 +13,31 @@ import { templateForComponentFile, pathName } from '../helpers'
 const COMPONENT_SUFFIX = 'Page'
 const REDWOOD_WEB_PATH_NAME = 'pages'
 
+export const paramVariants = (path) => {
+  const param = path?.match(/(\{[\w:]+\})/)?.[1]
+  const paramName = param?.replace(/:[^}]+/, '').slice(1, -1)
+
+  if (param === undefined) {
+    return {
+      propParam: '',
+      propValueParam: '',
+      argumentParam: '',
+      paramName: '',
+      paramValue: '',
+    }
+  }
+
+  // "42" is just a value used for demonstrating parameter usage in the
+  // generated page-, test-, and story-files.
+  return {
+    propParam: `{ ${paramName} }`,
+    propValueParam: `${paramName}="42" `,
+    argumentParam: `{ ${paramName}: '42' }`,
+    paramName,
+    paramValue: ' 42',
+  }
+}
+
 export const files = ({ name, ...rest }) => {
   const pageFile = templateForComponentFile({
     name,
@@ -74,7 +99,7 @@ export const builder = (yargs) => {
       type: 'string',
     })
     .positional('path', {
-      description: 'URL path to the page. Defaults to name',
+      description: 'URL path to the page, or just {param}. Defaults to name',
       type: 'string',
     })
     .option('force', {
@@ -124,7 +149,8 @@ export const handler = async ({ name, path, force }) => {
       {
         title: 'Generating page files...',
         task: async () => {
-          const f = await files({ name, path: pathName(path, name) })
+          path = pathName(path, name)
+          const f = await files({ name, path, ...paramVariants(path) })
           return writeFilesTask(f, { overwriteExisting: force })
         },
       },

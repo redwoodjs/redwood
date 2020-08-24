@@ -1,7 +1,7 @@
 import ${pascalName}Page from './${pascalName}Page'
 
 export const generated = () => {
-  return <${pascalName}Page />
+  return <${pascalName}Page ${propValueParam}/>
 }
 
 export default { title: 'Pages/${pascalName}Page' }

@@ -228,8 +228,11 @@ export const prettierOptions = () => {
  * Convert a generated TS template file into JS.
  */
 export const transformTSToJS = (filename, content) => {
-  const result = babel.transform(content, {
+  const { code } = babel.transform(content, {
     filename,
+    // If you ran `yarn rw generate` in `./web` transformSync would import the `.babelrc.js` file,
+    // in `./web`? despite us setting `configFile: false`.
+    cwd: process.env.NODE_ENV === 'test' ? undefined : getPaths().base,
     configFile: false,
     plugins: [
       [
@@ -241,9 +244,9 @@ export const transformTSToJS = (filename, content) => {
       ],
     ],
     retainLines: true,
-  }).code
+  })
 
-  return prettify(filename.replace(/\.ts$/, '.js'), result)
+  return prettify(filename.replace(/\.ts$/, '.js'), code)
 }
 
 /**
@@ -323,7 +326,7 @@ export const addRoutesToRouterTask = (routes) => {
     if (content.includes(route)) {
       return content
     }
-    return content.replace(/(\s*)\<Router\>/, `$1<Router>$1  ${route}`)
+    return content.replace(/<Router>(\s*)/, `<Router>$1${route}$1`)
   }, routesContent)
   writeFile(redwoodPaths.web.routes, newRoutesContent, {
     overwriteExisting: true,

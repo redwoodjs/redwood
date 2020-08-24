@@ -5,7 +5,7 @@ import {
   Label,
   ${fieldsToImport.join(',\n  ')},
   Submit,
-} from '@redwoodjs/web'
+} from '@redwoodjs/forms'
 
 const ${singularPascalName}Form = (props) => {
   const onSubmit = (data) => {
@@ -31,7 +31,7 @@ const ${singularPascalName}Form = (props) => {
         </Label>
         <${column.component}
           name="${column.name}"
-          ${column.defaultProp}={props.${singularCamelName}?.<%= column.name %>}
+          ${column.defaultProp}={${column.deserilizeFunction && column.deserilizeFunction + '('}props.${singularCamelName}?.<%= column.name %>${column.deserilizeFunction && ')'}}
           className="rw-input"
           errorClassName="rw-input rw-input-error"<%= !column.validation ? '' : `
           validation=${column.validation}` %><%= !column.dataType ? '' : `

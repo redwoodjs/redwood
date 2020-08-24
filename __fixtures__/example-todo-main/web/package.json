@@ -1,0 +1,14 @@
+{
+  "private": true,
+  "name": "web",
+  "version": "0.0.0",
+  "dependencies": {
+    "@redwoodjs/router": "0.7.0",
+    "@redwoodjs/web": "0.7.0",
+    "prop-types": "^15.7.2",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-is": "^16.8.0",
+    "styled-components": "^5.1.0"
+  }
+}

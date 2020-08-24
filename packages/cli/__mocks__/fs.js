@@ -1,7 +1,7 @@
 import { isString } from 'lodash'
 
 const fs = {
-  ...require.requireActual('fs'),
+  ...jest.requireActual('fs'),
 }
 
 // This is a custom function that our tests can use during setup to specify

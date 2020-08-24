@@ -12,12 +12,13 @@ import path from 'path'
 jest.mock('@redwoodjs/internal', () => {
   const path = require('path')
   return {
-    ...require.requireActual('@redwoodjs/internal'),
+    ...jest.requireActual('@redwoodjs/internal'),
     getPaths: () => {
       const BASE_PATH = '/path/to/project'
       return {
         base: BASE_PATH,
         api: {
+          dataMigrations: path.join(BASE_PATH, './api/prisma/dataMigrations'),
           db: path.join(global.__dirname, 'fixtures'), // this folder
           src: path.join(BASE_PATH, './api/src'),
           services: path.join(BASE_PATH, './api/src/services'),
@@ -65,13 +66,16 @@ export const generatorsRootPath = path.join(
   'generate'
 )
 
-// Loads the fixture for a generator by assuming a lot of the path structure automatically:
-//
-//   loadGeneratorFixture('scaffold', 'NamePage.js')
-//
-// will return the contents of:
-//
-//   cli/src/commands/generate/scaffold/test/fixtures/NamePage.js.fixture
+/**
+ * Loads the fixture for a generator by assuming a lot of the path structure
+ * automatically:
+ *
+ *   `loadGeneratorFixture('scaffold', 'NamePage.js')`
+ *
+ * will return the contents of:
+ *
+ *   `cli/src/commands/generate/scaffold/__tests__/fixtures/NamePage.js`
+ */
 export const loadGeneratorFixture = (generator, name) => {
   return loadFixture(
     path.join(
@@ -87,7 +91,9 @@ export const loadGeneratorFixture = (generator, name) => {
   )
 }
 
-// Returns the contents of a text file suffixed with ".fixture"
+/**
+ * Returns the contents of a text file in a `fixtures` directory
+ */
 export const loadFixture = (filepath) => {
   return fs.readFileSync(filepath).toString()
 }
