@@ -7,9 +7,9 @@ import { TextDocument } from 'vscode-languageserver-textdocument'
 import {
   CodeLens,
   DocumentLink,
+  Hover,
   Location,
   Range,
-  Hover,
 } from 'vscode-languageserver-types'
 import { ArrayLike, ArrayLike_normalize } from './x/Array'
 import { lazy, memo } from './x/decorators'
@@ -143,15 +143,18 @@ export abstract class BaseNode {
     return ArrayLike_normalize(this.ideInfo())
   }
 
-  @memo()
-  async collectIDEInfo(): Promise<IDEInfo[]> {
+  @memo(JSON.stringify)
+  async collectIDEInfo(uri?: string): Promise<IDEInfo[]> {
+    if (uri && this.bailOutOnCollection(uri)) return []
     try {
       const d1 = await this._ideInfo()
       const dd = await Promise.all(
-        (await this._children()).map((c) => c.collectIDEInfo())
+        (await this._children()).map((c) => c.collectIDEInfo(uri))
       )
       const d2 = dd.flat()
-      return [...d1, ...d2]
+      let all = [...d1, ...d2]
+      if (uri) all = all.filter((x) => x.location.uri === uri)
+      return all
     } catch (e) {
       // TODO: this diagnostic is also interesting
       console.log(e)
@@ -163,17 +166,20 @@ export abstract class BaseNode {
    * Collects diagnostics for this node and all descendants.
    * This is what you'll use to gather all the project diagnostics.
    */
-  @memo()
-  async collectDiagnostics(): Promise<ExtendedDiagnostic[]> {
+  @memo(JSON.stringify)
+  async collectDiagnostics(uri?: string): Promise<ExtendedDiagnostic[]> {
     // TODO: catch runtime errors and add them as diagnostics
     // TODO: we can parallelize this further
+    if (uri && this.bailOutOnCollection(uri)) return []
     try {
       const d1 = await this._diagnostics()
       const dd = await Promise.all(
-        (await this._children()).map((c) => c.collectDiagnostics())
+        (await this._children()).map((c) => c.collectDiagnostics(uri))
       )
       const d2 = dd.flat()
-      return [...d1, ...d2]
+      let all = [...d1, ...d2]
+      if (uri) all = all.filter((x) => x.uri === uri)
+      return all
     } catch (e) {
       const uri = this.closestContainingUri
       if (!uri) throw e
@@ -187,7 +193,14 @@ export abstract class BaseNode {
     }
   }
 
+  bailOutOnCollection(uri: string): boolean {
+    if (this.id === uri) return false
+    if (uri.startsWith(this.id)) return false
+    return true
+  }
+
   @lazy() get closestContainingUri(): string | undefined {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { uri } = this as any
     if (uri) return uri
     if (this.parent) return this.parent.closestContainingUri
