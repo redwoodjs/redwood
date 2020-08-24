@@ -3,7 +3,6 @@ import fs from 'fs'
 
 import { getPaths } from 'src/lib'
 
-export const apiProxyPath = '/api'
 
 const SERVERLESS_YML = `# See the full yml reference at https://www.serverless.com/framework/docs/providers/aws/guide/serverless.yml/
 service: app
@@ -44,7 +43,7 @@ functions:
       return `${basename}:
     description: ${basename} function deployed on AWS Lambda
     package:
-      artifact: dist/zipball/${basename}.zip # This is the default location of the zip file generated during the deploy command.
+      artifact: api/dist/zipball/${basename}.zip # This is the default location of the zip file generated during the deploy command.
     memorySize: 1024 # mb
     timeout: 25 # seconds (max: 29)
     tags: # Tags for this specific lambda function
@@ -82,7 +81,7 @@ export const apiPackages = [
 
 export const files = [
   {
-    path: path.join(getPaths().base, 'api', 'serverless.yml'),
+    path: path.join(getPaths().base, 'serverless.yml'),
     content: SERVERLESS_YML,
   },
 ]
