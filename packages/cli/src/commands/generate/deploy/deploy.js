@@ -96,7 +96,7 @@ export const handler = async ({ provider, force }) => {
           await execa('yarn', ['install'])
         },
       },
-      {
+      providerData.apiProxyPath && {
         title: 'Updating apiProxyPath...',
         task: async () => {
           updateProxyPath(providerData.apiProxyPath)

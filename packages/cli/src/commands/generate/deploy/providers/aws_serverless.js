@@ -2,6 +2,9 @@ import path from 'path'
 import fs from 'fs'
 
 import { getPaths } from 'src/lib'
+import { getConfig } from '@redwoodjs/internal'
+
+const config = getConfig()
 
 const SERVERLESS_YML = `# See the full yml reference at https://www.serverless.com/framework/docs/providers/aws/guide/serverless.yml/
 service: app
@@ -46,17 +49,17 @@ functions:
     memorySize: 1024 # mb
     timeout: 25 # seconds (max: 29)
     tags: # Tags for this specific lambda function
-      endpoint: /${basename}
+      endpoint: ${config.web.apiProxyPath}/${basename}
     # Uncomment this section to add environment variables either from the serverless dotenv plugin or using serverless params
     # environment:
     #   YOUR_FIRST_ENV_VARIABLE: \${env:YOUR_FIRST_ENV_VARIABLE}
     handler: ${basename}.handler
     events:
       - httpApi:
-          path: /${basename}
+          path: ${config.web.apiProxyPath}/${basename}
           method: GET
       - httpApi:
-          path: /${basename}
+          path: ${config.web.apiProxyPath}/${basename}
           method: POST
 `
     })
