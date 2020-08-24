@@ -69,6 +69,7 @@ use:
 - [Hot module replacement](https://webpack.js.org/concepts/hot-module-replacement/) (HMR) for faster development.
 - Database migrations (via Prisma 2).
 - First class JAMstack-style deployment to [Netlify](https://www.netlify.com/).
+- And all that's to come in our [Roadmap](https://redwoodjs.com/roadmap)
 
 ## The Redwood philosophy
 
