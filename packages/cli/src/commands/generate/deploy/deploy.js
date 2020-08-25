@@ -66,17 +66,23 @@ export const handler = async ({ provider, force }) => {
       providerData.preRequisites &&
         providerData.preRequisites.length > 0 && {
           title: 'Checking pre-requisites',
-          task: async () => {
-            for (const preReq of providerData.preRequisites) {
-              try {
-                await execa(...preReq.command)
-              } catch (error) {
-                error.message =
-                  error.message + '\n' + preReq.errorMessage.join(' ')
-                throw error
-              }
-            }
-          },
+          task: () =>
+            new Listr(
+              providerData.preRequisites.map((preReq) => {
+                return {
+                  title: preReq.title,
+                  task: async () => {
+                    try {
+                      await execa(...preReq.command)
+                    } catch (error) {
+                      error.message =
+                        error.message + '\n' + preReq.errorMessage.join(' ')
+                      throw error
+                    }
+                  },
+                }
+              })
+            ),
         },
       providerData.apiPackages.length > 0 && {
         title: 'Adding required api packages...',
