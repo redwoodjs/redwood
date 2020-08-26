@@ -18,7 +18,7 @@
     "apollo-cache": "^1.3.5",
     "apollo-link": "^1.2.14",
     "apollo-utilities": "^1.3.4",
-    "core-js": "3.6.5",
+    "core-js": "3.6.4",
     "graphql": "^14.6.0",
     "proptypes": "^1.1.0"
   },
