@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/core",
-  "version": "0.15.3",
+  "version": "0.16.0",
   "license": "MIT",
   "files": [
     "config",
@@ -19,15 +19,15 @@
     "@babel/preset-typescript": "^7.9.0",
     "@babel/runtime-corejs3": "^7.9.2",
     "@prisma/cli": "2.4.0",
-    "@redwoodjs/cli": "^0.15.3",
-    "@redwoodjs/dev-server": "^0.15.3",
-    "@redwoodjs/eslint-config": "^0.15.3",
-    "@redwoodjs/internal": "^0.15.3",
-    "@redwoodjs/testing": "^0.15.3",
+    "@redwoodjs/cli": "^0.16.0",
+    "@redwoodjs/dev-server": "^0.16.0",
+    "@redwoodjs/eslint-config": "^0.16.0",
+    "@redwoodjs/internal": "^0.16.0",
+    "@redwoodjs/testing": "^0.16.0",
     "@storybook/react": "^5.3.19",
     "@testing-library/jest-dom": "^5.8.0",
     "@types/jest": "^25.1.4",
-    "@types/node": "^13.9.5",
+    "@types/node": "^14.6.0",
     "@types/react": "16.9.38",
     "@types/react-dom": "16.9.8",
     "@types/webpack": "^4.41.11",
@@ -59,7 +59,7 @@
     "webpack-bundle-analyzer": "^3.6.1",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3",
-    "webpack-merge": "^4.2.2",
+    "webpack-merge": "^5.1.2",
     "webpack-retry-chunk-load-plugin": "^1.4.0"
   },
   "devDependencies": {

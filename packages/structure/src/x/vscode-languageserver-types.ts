@@ -1,3 +1,4 @@
+import lc from 'line-column'
 import { groupBy, mapValues, uniqBy } from 'lodash'
 import * as tsm from 'ts-morph'
 import { TextDocuments } from 'vscode-languageserver'
@@ -21,6 +22,21 @@ export function Range_contains(range: Range, pos: Position): boolean {
   if (Position_compare(range.end, pos) === 'smaller') return false
   return true
 }
+
+export function Range_overlaps(
+  range1: Range,
+  range2: Range,
+  consider0000: boolean
+): boolean {
+  if (consider0000) {
+    if (Range_is0000(range1) || Range_is0000(range2)) return true
+  }
+  const { start, end } = range2
+  if (Range_contains(range1, start)) return true
+  if (Range_contains(range2, end)) return true
+  return true
+}
+
 /**
  * p1 is greater|smaller|equal than/to p2
  * @param p1
@@ -121,6 +137,28 @@ export function LocationLike_toLocation(x: LocationLike): Location {
   throw new Error()
 }
 
+export function Location_overlaps(
+  loc1: Location,
+  loc2: Location,
+  consider0000 = false
+) {
+  if (loc1.uri !== loc2.uri) return false
+  return Range_overlaps(loc1.range, loc2.range, consider0000)
+}
+
+/**
+ * by convention, the range [0,0,0,0] means the complete document
+ * @param range
+ */
+function Range_is0000(range: Range): boolean {
+  const { start, end } = range
+  return Position_is00(start) && Position_is00(end)
+}
+
+function Position_is00(pos: Position): boolean {
+  return pos.character === 0 && pos.line === 0
+}
+
 export function ExtendedDiagnostic_is(x: any): x is ExtendedDiagnostic {
   if (typeof x !== 'object') return false
   if (typeof x === 'undefined') return false
@@ -167,6 +205,25 @@ export function Position_fromTSMorphOffset(
 ): Position {
   const { line, column } = sf.getLineAndColumnAtPos(offset)
   return { character: column - 1, line: line - 1 }
+}
+
+export function Position_fromOffset(
+  offset: number,
+  text: string
+): Position | undefined {
+  const res = lc(text).fromIndex(offset)
+  if (!res) return undefined
+  const { line, col } = res
+  return { character: col - 1, line: line - 1 }
+}
+
+export function Position_fromOffsetOrFail(
+  offset: number,
+  text: string
+): Position {
+  const p = Position_fromOffset(offset, text)
+  if (!p) throw new Error('Position_fromOffsetOrFail')
+  return p
 }
 
 /**
