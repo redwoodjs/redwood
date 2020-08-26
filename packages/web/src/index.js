@@ -7,7 +7,7 @@ export {
   useMutation,
   useSubscription,
   useApolloClient,
-} from '@apollo/react-hooks'
+} from '@apollo/client'
 
 export { default as FatalErrorBoundary } from 'src/components/FatalErrorBoundary'
 export { default as RedwoodProvider } from 'src/components/RedwoodProvider'

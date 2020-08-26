@@ -1,5 +1,5 @@
 import React from 'react'
-import { Query } from '@apollo/react-components'
+import { Query } from '@apollo/client'
 
 /**
  * Is a higher-order-component that executes a GraphQL query and automatically
