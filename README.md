@@ -3,7 +3,7 @@
   <h1 align="center">Redwood</h1>
 </p>
 
-_by Tom Preston-Werner, Peter Pistorius, and Rob Cameron._
+_by Tom Preston-Werner, Peter Pistorius, Rob Cameron, David Price, and more than a hundred amazing contributors (see end of file for a full list)._
 
 **Redwood is an opinionated, full-stack, serverless web application framework
 that will allow you to build and deploy JAMstack applications with ease.**
@@ -14,6 +14,8 @@ you get to work on what makes your application special, instead of wasting
 cycles choosing and re-choosing various technologies and configurations. Plus,
 because Redwood is a proper framework, you benefit from continued performance
 and feature upgrades over time and with minimum effort.
+
+Redwood is the latest open source project initiated by Tom Preston-Werner, cofounder of GitHub (most popular code host on the planet), creator of Jekyll (one of the first and most popular static site generators), author of the Semantic Versioning specification (powers the Node packaging ecosystem), and inventor of TOML (an obvious, minimal configuration language used by many projects).
 
 > **WARNING:** RedwoodJS software has not reached a stable version 1.0 and should
 > not be considered suitable for production use. In the "make it work; make it
