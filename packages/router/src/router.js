@@ -31,7 +31,7 @@ Private.propTypes = {
    * The page name where a user will be redirected when not authenticated.
    */
   unauthenticated: PropTypes.string.isRequired,
-  role: PropTypes.string,
+  role: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
 }
 
 const PrivatePageLoader = ({
