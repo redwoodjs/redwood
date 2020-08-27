@@ -36,7 +36,7 @@
     "babel-plugin-auto-import": "^1.0.5",
     "babel-plugin-graphql-tag": "^2.5.0",
     "babel-plugin-module-resolver": "^4.0.0",
-    "copy-webpack-plugin": "^5.1.1",
+    "copy-webpack-plugin": "^6.0.3",
     "core-js": "3.6.4",
     "css-loader": "^3.4.2",
     "directory-named-webpack-plugin": "^4.0.1",
