@@ -26,7 +26,7 @@ declare module '@redwoodjs/router' {
      * they will be redirected to the route name passed to `unauthenticated`.
      */
     unauthenticated: namedRoute
-    role: string | string[]
+    role?: string | string[]
     children: Array<typeof Route>
   }>
 
