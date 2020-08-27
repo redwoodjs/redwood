@@ -1,4 +1,4 @@
-import { ApolloClient, ApolloProvider } from '@apollo/client'
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
 
 export { withCell } from './withCell'
 
@@ -9,6 +9,7 @@ export { withCell } from './withCell'
 export const createGraphQLClient = (config) => {
   return new ApolloClient({
     uri: `${window.__REDWOOD__API_PROXY_PATH}/graphql`,
+    cache: new InMemoryCache(),
     ...config,
   })
 }
