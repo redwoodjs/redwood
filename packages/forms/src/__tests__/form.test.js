@@ -26,11 +26,11 @@ describe('Form', () => {
       <Form onSubmit={onSubmit}>
         <TextField name="tf" defaultValue="text" />
         <NumberField name="nf" defaultValue="42" />
-        <TextField name="ff" defaultValue="3.14" dataType="Float" />
+        <TextField name="ff" defaultValue="3.14" transformValue="Float" />
         <CheckboxField name="cf" defaultChecked={true} />
         <TextAreaField
           name="jf"
-          dataType="Json"
+          transformValue="Json"
           defaultValue={`
             {
               "key_one": "value1",
@@ -63,7 +63,11 @@ describe('Form', () => {
       <Form onSubmit={onSubmit}>
         <p>Some text</p>
         <div className="field">
-          <TextField name="wrapped-ff" defaultValue="3.14" dataType="Float" />
+          <TextField
+            name="wrapped-ff"
+            defaultValue="3.14"
+            transformValue="Float"
+          />
         </div>
         <NumberFieldsWrapper />
         <Submit>Save</Submit>
@@ -160,7 +164,7 @@ describe('Form', () => {
         <TextField
           name="tf"
           defaultValue="123_456"
-          dataType={coercionFunction}
+          transformValue={coercionFunction}
         />
         <Submit>Save</Submit>
       </Form>
@@ -173,5 +177,27 @@ describe('Form', () => {
       { tf: 123456 },
       expect.anything() // event that triggered the onSubmit call
     )
+  })
+
+  it('supports "dataType" prop on input fields with deprecation warning', async () => {
+    const spy = jest.spyOn(console, 'warn').mockImplementationOnce(() => {})
+    const mockFn = jest.fn()
+
+    render(
+      <Form onSubmit={mockFn}>
+        <TextField name="tf" defaultValue="3.14" dataType="Float" />
+        <Submit>Save</Submit>
+      </Form>
+    )
+
+    fireEvent.click(screen.getByText('Save'))
+
+    await waitFor(() => expect(console.warn).toHaveBeenCalledTimes(1))
+    expect(console.warn).toBeCalledWith(
+      'Using the "dataType" prop on form input fields is deprecated. Use "transformValue" instead.'
+    )
+    expect(mockFn).toHaveBeenCalledTimes(1)
+    expect(mockFn).toBeCalledWith({ tf: 3.14 }, expect.anything())
+    spy.mockRestore()
   })
 })
