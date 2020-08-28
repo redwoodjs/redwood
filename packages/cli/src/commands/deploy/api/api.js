@@ -89,5 +89,6 @@ export const handler = async ({ provider }) => {
     await deploy
   } catch (e) {
     console.log(c.error(e.message))
+    process.exit(1)
   }
 }
