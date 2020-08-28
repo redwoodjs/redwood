@@ -84,6 +84,19 @@ describe('Cells', () => {
   })
 })
 
+describe.skip('env vars', () => {
+  it('Warns if env vars are not ok', async () => {
+    const projectRoot = getFixtureDir('example-todo-main-with-errors')
+    const project = new RWProject({ projectRoot, host: new DefaultHost() })
+    project.envHelper.process_env_expressions.length //?
+    const env = project.envHelper
+    env.env //?
+    env.env_defaults //?
+    project.redwoodTOML.web_includeEnvironmentVariables //?
+    env.process_env_expressions //?
+  })
+})
+
 function getFixtureDir(
   name: 'example-todo-main-with-errors' | 'example-todo-main'
 ) {
