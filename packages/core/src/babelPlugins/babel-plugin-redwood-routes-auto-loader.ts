@@ -36,8 +36,9 @@ export default function (
           // Produces:
           // routes.home: () => "/home"
           // routes.aboutUs: () => "/about-us"
-          const availableRoutes = project.router.routes
-            .filter((r) => !r.isNotFound)
+          const availableRoutes = project
+            .getRouter()
+            .routes.filter((r) => !r.isNotFound)
             .map((r) => `${r.name}: () => "${r.path}"`)
 
           const pageImports = pages.map(
@@ -54,7 +55,6 @@ export default function (
               }
             }
 
-            // I hate that these have to be globals
             ${pageImports.join('\n')}
             declare global {
               ${pageGlobals.join('\n')}

@@ -94,6 +94,9 @@ export class RWProject extends BaseNode {
     return this.processPagesDir.map((p) => new RWPage(p.const, p.path, this))
   }
   @lazy() get router() {
+    return this.getRouter()
+  }
+  getRouter = () => {
     return new RWRouter(this.pathHelper.web.routes, this)
   }
 
