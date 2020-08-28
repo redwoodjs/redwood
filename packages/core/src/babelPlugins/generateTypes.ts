@@ -10,10 +10,11 @@ export const generateTypeDefIndex = () => {
   const host = new DefaultHost()
 
   const indexDefFile = []
+  indexDefFile.push(`// ${new Date().toISOString()}`)
   for (const typeDefFile of host
     .readdirSync(host.paths.types)
     .filter((name) => name.endsWith('.d.ts'))) {
-    indexDefFile.push(`/// <reference path="./generated/${typeDefFile}" />`)
+    indexDefFile.push(`/// <reference path="./types/${typeDefFile}" />`)
   }
 
   host.writeFileSync(
