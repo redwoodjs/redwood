@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, forwardRef } from 'react'
-import { useForm, FormContext, useFormContext } from 'react-hook-form'
+import { useForm, FormProvider, useFormContext } from 'react-hook-form'
 import pascalcase from 'pascalcase'
 
 import { CoercionContextProvider, useCoercion } from './coercion'
@@ -179,7 +179,7 @@ const FormWithCoercionContext = (props) => {
           errorProps?.graphQLErrors[0]?.extensions?.exception?.messages || {}
         }
       >
-        <FormContext {...formMethods}>{props.children}</FormContext>
+        <FormProvider {...formMethods}>{props.children}</FormProvider>
       </FieldErrorContext.Provider>
     </form>
   )
