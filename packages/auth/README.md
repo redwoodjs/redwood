@@ -31,6 +31,10 @@ const mapAuthClientAuth0 = (client: Auth0): AuthClientAuth0 => {
       const user = await client.getUser()
       return user || null
     },
+    getUserMetadata: async () => {
+      const user = await client.getUser()
+      return user || null
+    },
   }
 }
 ```
