@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
+import execa from 'execa'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
 
@@ -62,6 +63,51 @@ export const handler = async ({ provider, force }) => {
 
   const tasks = new Listr(
     [
+      providerData.preRequisites &&
+        providerData.preRequisites.length > 0 && {
+          title: 'Checking pre-requisites',
+          task: () =>
+            new Listr(
+              providerData.preRequisites.map((preReq) => {
+                return {
+                  title: preReq.title,
+                  task: async () => {
+                    try {
+                      await execa(...preReq.command)
+                    } catch (error) {
+                      error.message =
+                        error.message + '\n' + preReq.errorMessage.join(' ')
+                      throw error
+                    }
+                  },
+                }
+              })
+            ),
+        },
+      providerData.apiPackages.length > 0 && {
+        title: 'Adding required api packages...',
+        task: async () => {
+          await execa('yarn', [
+            'workspace',
+            'api',
+            'add',
+            '-D',
+            ...providerData.apiPackages,
+          ])
+        },
+      },
+      {
+        title: 'Installing packages...',
+        task: async () => {
+          await execa('yarn', ['install'])
+        },
+      },
+      providerData.apiProxyPath && {
+        title: 'Updating apiProxyPath...',
+        task: async () => {
+          updateProxyPath(providerData.apiProxyPath)
+        },
+      },
       providerData.files &&
         providerData.files.length > 0 && {
           title: 'Adding config...',
@@ -73,12 +119,30 @@ export const handler = async ({ provider, force }) => {
             return writeFilesTask(files, { overwriteExisting: force })
           },
         },
-      {
-        title: 'Updating apiProxyPath...',
-        task: async () => {
-          updateProxyPath(providerData.apiProxyPath)
+      providerData.gitIgnoreAdditions &&
+        providerData.gitIgnoreAdditions.length > 0 &&
+        fs.existsSync(path.resolve(getPaths().base, '.gitignore')) && {
+          title: 'Updating .gitignore...',
+          task: async (_ctx, task) => {
+            const gitIgnore = path.resolve(getPaths().base, '.gitignore')
+            const content = fs.readFileSync(gitIgnore).toString()
+
+            if (
+              providerData.gitIgnoreAdditions.every((item) =>
+                content.includes(item)
+              )
+            ) {
+              task.skip('.gitignore already includes the additions.')
+            }
+
+            fs.appendFileSync(
+              gitIgnore,
+              ['\n', '# Deployment', ...providerData.gitIgnoreAdditions].join(
+                '\n'
+              )
+            )
+          },
         },
-      },
       {
         title: 'One more thing...',
         task: (_ctx, task) => {
