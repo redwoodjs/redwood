@@ -62,7 +62,7 @@ import { AuthenticationError, ForbiddenError, parseJWT } from '@redwoodjs/api'
  * whether or not they are assigned a role, and optionally raise an
  * error if they're not.
  *
- * @param {string=} role - An optional role
+ * @param {string=, string[]=} role - An optional role
  *
  * @example - No role-based access control.
  *
@@ -106,8 +106,9 @@ export const getCurrentUser = async (decoded, { _token, _type }) => {
  * whether or not they are assigned a role, and optionally raise an
  * error if they're not.
  *
- * @param {string=} role - An optional role
- *
+ * @param {string=} roles - An optional role or list of roles
+ * @param {string[]=} roles - An optional list of roles
+
  * @example
  *
  * // checks if currentUser is authenticated
@@ -115,9 +116,10 @@ export const getCurrentUser = async (decoded, { _token, _type }) => {
  *
  * @example
  *
- * // checks if currentUser is authenticated and assigned a role
+ * // checks if currentUser is authenticated and assigned one of the given roles
  * requireAuth({ role: 'admin' })
- *
+ * requireAuth({ role: ['editor', 'author'] })
+ * requireAuth({ role: ['publisher'] })
  */
 export const requireAuth = ({ role } = {}) => {
   if (!context.currentUser) {
@@ -126,7 +128,16 @@ export const requireAuth = ({ role } = {}) => {
 
   if (
     typeof role !== 'undefined' &&
+    typeof role === 'string' &&
     !context.currentUser.roles?.includes(role)
+  ) {
+    throw new ForbiddenError("You don't have access to do that.")
+  }
+
+  if (
+    typeof role !== 'undefined' &&
+    Array.isArray(role) &&
+    !context.currentUser.roles?.some((r) => role.includes(r))
   ) {
     throw new ForbiddenError("You don't have access to do that.")
   }

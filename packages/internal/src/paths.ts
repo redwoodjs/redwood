@@ -111,9 +111,9 @@ export const resolveFile = (
 export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
   const routes = resolveFile(path.join(BASE_DIR, PATH_WEB_ROUTES)) as string
 
-  // We store ambient types and our test database over here:
-  const cache = path.join(BASE_DIR, 'node_modules', '.redwood')
-  const types = path.join(BASE_DIR, 'node_modules', '.redwood', 'types')
+  // We store our test database over here:
+  const cache = path.join(BASE_DIR, '.redwood')
+  const types = path.join(BASE_DIR, '.redwood', 'types')
   fs.mkdirSync(cache, { recursive: true })
   fs.mkdirSync(types, { recursive: true })
 

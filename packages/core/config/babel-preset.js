@@ -1,10 +1,8 @@
-const fs = require('fs')
-
 /**
  * This is the babel preset used `create-redwood-app`
  */
 
-const { getPaths } = require('@redwoodjs/internal')
+const { getProject } = require('@redwoodjs/structure')
 
 const TARGETS_NODE = '12.16.1'
 // Warning! Use the minor core-js version: "corejs: '3.6'", instead of "corejs: 3",
@@ -13,7 +11,8 @@ const TARGETS_NODE = '12.16.1'
 const CORE_JS_VERSION = '3.6'
 
 module.exports = () => {
-  const paths = getPaths()
+  const project = getProject()
+  const paths = project.host.paths
 
   return {
     presets: ['@babel/preset-react', '@babel/preset-typescript'],
@@ -82,15 +81,7 @@ module.exports = () => {
               ],
             },
           ],
-          [
-            require('../dist/babel-plugin-redwood-import-dir'),
-            {
-              generateTypesPath: paths.types,
-              host: {
-                writeFileSync: fs.writeFileSync,
-              },
-            },
-          ],
+          [require('../dist/babelPlugins/babel-plugin-redwood-import-dir')],
         ],
       },
       // ** WEB **
@@ -100,7 +91,7 @@ module.exports = () => {
           [
             '@babel/preset-env',
             {
-              // the targets are set in web/package.json
+              // the targets are set in <userProject>/web/package.json
               useBuiltIns: 'usage',
               corejs: {
                 version: CORE_JS_VERSION,
@@ -153,19 +144,28 @@ module.exports = () => {
       // ** Files ending in `Cell.[js,ts]` **
       {
         test: /.+Cell.(js|tsx)$/,
-        plugins: [require('../dist/babel-plugin-redwood-cell')],
+        plugins: [require('../dist/babelPlugins/babel-plugin-redwood-cell')],
       },
       // Automatically import files in `./web/src/pages/*` in to
       // the `./web/src/Routes.[ts|jsx]` file.
       {
         test: ['./web/src/Routes.js', './web/src/Routes.tsx'],
-        plugins: [require('../dist/babel-plugin-redwood-routes-auto-loader')],
+        plugins: [
+          [
+            require('../dist/babelPlugins/babel-plugin-redwood-routes-auto-loader'),
+            {
+              project,
+            },
+          ],
+        ],
       },
       // ** Files ending in `Cell.mock.[js,ts]` **
       // Automatically determine keys for saving and retrieving mock data.
       {
         test: /.+Cell.mock.(js|ts)$/,
-        plugins: [require('../dist/babel-plugin-redwood-mock-cell-data')],
+        plugins: [
+          require('../dist/babelPlugins/babel-plugin-redwood-mock-cell-data'),
+        ],
       },
     ],
   }

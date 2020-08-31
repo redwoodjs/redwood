@@ -1,6 +1,6 @@
 global.__dirname = __dirname
 
-let mockFs = false
+global.mockFs = false
 let mockFiles = {}
 
 jest.mock('fs', () => {
@@ -9,23 +9,23 @@ jest.mock('fs', () => {
   return {
     ...actual,
     existsSync: (...args) => {
-      if (!mockFs) {
+      if (!global.mockFs) {
         return actual.existsSync.apply(null, args)
       }
       return false
     },
     mkdirSync: (...args) => {
-      if (!mockFs) {
+      if (!global.mockFs) {
         return actual.mkdirSync.apply(null, args)
       }
     },
     writeFileSync: (target, contents) => {
-      if (!mockFs) {
+      if (!global.mockFs) {
         return actual.writeFileSync.call(null, target, contents)
       }
     },
     readFileSync: (path) => {
-      if (!mockFs) {
+      if (!global.mockFs) {
         return actual.readFileSync.call(null, path)
       }
 
@@ -236,7 +236,7 @@ test('file generation', async () => {
   }
 
   const spy = jest.spyOn(fs, 'writeFileSync')
-  mockFs = true
+  global.mockFs = true
 
   await page.handler({ name: 'home', path: '', force: false })
 
@@ -276,7 +276,7 @@ test('file generation', async () => {
     ].join('\n')
   )
 
-  mockFs = false
+  global.mockFs = false
   spy.mockRestore()
 })
 
@@ -299,7 +299,7 @@ test('file generation with route params', async () => {
   }
 
   const spy = jest.spyOn(fs, 'writeFileSync')
-  mockFs = true
+  global.mockFs = true
 
   await page.handler({ name: 'post', path: '{id}', force: false })
 
@@ -339,6 +339,6 @@ test('file generation with route params', async () => {
     ].join('\n')
   )
 
-  mockFs = false
+  global.mockFs = false
   spy.mockRestore()
 })

@@ -72,8 +72,9 @@ const inputTagProps = (props) => {
     }
   }
 
-  // dataType shouldn't be passed to the underlying HTML element
+  // dataType/transformValue shouldn't be passed to the underlying HTML element
   delete tagProps.dataType
+  delete tagProps.transformValue
 
   return tagProps
 }
@@ -228,8 +229,16 @@ const TextAreaField = forwardRef((props, ref) => {
   const { setCoercion } = useCoercion()
 
   React.useEffect(() => {
-    setCoercion({ name: props.name, dataType: props.dataType })
-  }, [setCoercion, props.name, props.dataType])
+    if (process.env.NODE_ENV !== 'production' && props.dataType !== undefined) {
+      console.warn(
+        'Using the "dataType" prop on form input fields is deprecated. Use "transformValue" instead.'
+      )
+    }
+    setCoercion({
+      name: props.name,
+      transformValue: props.transformValue || props.dataType,
+    })
+  }, [setCoercion, props.name, props.transformValue, props.dataType])
 
   const tagProps = inputTagProps(props)
 
@@ -274,14 +283,24 @@ const Submit = forwardRef((props, ref) => (
 const InputField = forwardRef((props, ref) => {
   const { register } = useFormContext()
   const { setCoercion } = useCoercion()
-
   React.useEffect(() => {
+    if (process.env.NODE_ENV !== 'production' && props.dataType !== undefined) {
+      console.warn(
+        'Using the "dataType" prop on form input fields is deprecated. Use "transformValue" instead.'
+      )
+    }
     setCoercion({
       name: props.name,
       type: props.type,
-      dataType: props.dataType,
+      transformValue: props.transformValue || props.dataType,
     })
-  }, [setCoercion, props.name, props.type, props.dataType])
+  }, [
+    setCoercion,
+    props.name,
+    props.type,
+    props.transformValue,
+    props.dataType,
+  ])
 
   const tagProps = inputTagProps(props)
 
