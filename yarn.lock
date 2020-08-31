@@ -3073,10 +3073,10 @@
   resolved "https://registry.yarnpkg.com/@prisma/ci-info/-/ci-info-2.1.2.tgz#3da64f54584bde0aaf4b42f298a6c63f025aeb3f"
   integrity sha512-RhAHY+wp6Nqu89Tp3zfUVkpGfqk4TfngeOWaMGgmhP7mB2ASDtOl8dkwxHmI8eN4edo+luyjPmbJBC4kST321A==
 
-"@prisma/cli@2.4.0":
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/@prisma/cli/-/cli-2.4.0.tgz#865a21cd8b072340d4d7b5fda888815b5692956e"
-  integrity sha512-+ybn21k+nAwoyILP5I0+VzRmMLfLmCfnJsJmBktg1FgKIWr9ppcM28Fu8LAohb7kQlKNRhv2eJmC5pdZC6unMw==
+"@prisma/cli@2.5.1":
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/@prisma/cli/-/cli-2.5.1.tgz#fef4da2ed1b7f032b3a9bcce97d0a119b148ceb1"
+  integrity sha512-cu7YiskmiXZ6FXNf/8gfkzB10AjoHiCIHUgBOPNnS6lXJPU1Krh6TQOEXH6tNTB19XeUXO7KetTcqKGW48IkMQ==
 
 "@prisma/client@2.4.0":
   version "2.4.0"
