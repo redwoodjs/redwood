@@ -8,6 +8,7 @@ on:
 
 jobs:
   all:
+    if: github.event.pull_request.merged == false
     strategy:
       matrix:
         os: ['ubuntu-latest', 'windows-latest']
@@ -30,7 +31,7 @@ jobs:
           key: node_modules_${{ runner.os }}_${{ hashFiles('**/yarn.lock') }}
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile --check-files
+        run: yarn install --frozen-lockfile
 
       - name: Run ESLint
         run: yarn lint
