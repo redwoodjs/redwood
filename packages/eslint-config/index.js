@@ -18,7 +18,7 @@ try {
   // building the framework and don't need this plugin.
   require.resolve('@redwoodjs/eslint-plugin-redwood')
   supportRedwoodAutoPageImports = {
-    files: ['web/src/Routes.js', 'web/src/Routes.ts'],
+    files: ['web/src/Routes.js', 'web/src/Routes.tsx'],
     rules: {
       'no-undef': 'off',
       '@redwoodjs/redwood/no-unavailable-pages': 'error',

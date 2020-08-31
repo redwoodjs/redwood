@@ -2,23 +2,11 @@ import path from 'path'
 
 import glob from 'glob'
 import type { PluginObj, types } from '@babel/core'
-import type { Host } from '@redwoodjs/structure'
 
-export const generateTypes = (modulePath: string) => {
-  // TODO:
-  // This implementation is a bit lacking:
-  // 1. We receive the resolved path instead of the aliases path,
-  // so we monkey patch it by replacing `../` with `src/`.
-  // 2. We don't provide any types beyond the module, which is fine since
-  // people aren't going to be using those.
-  return `// @ts-expect-error\ndeclare module '${modulePath.replace(
-    '../',
-    'src/'
-  )}';`
-}
+import { generateTypeDef, generateTypeDefIndex } from './generateTypes'
 
 /**
- * This babel plugin will search for import statements that include star `*`
+ * This babel plugin will search for import statements that include star `**`
  * in the source part of the statement is a glob, the files that are matched are imported,
  * and appended to an object.
  *
@@ -33,16 +21,13 @@ export const generateTypes = (modulePath: string) => {
  * // services.nested_c = require('src/services/nested/c.js')
  * ```
  */
-export default function (
-  { types: t }: { types: typeof types },
-  options: { generateTypesPath: string; host: Host }
-): PluginObj {
+export default function ({ types: t }: { types: typeof types }): PluginObj {
   return {
     name: 'babel-plugin-redwood-import-dir',
     visitor: {
       ImportDeclaration(p, state: { file?: any }) {
-        // This code will only run when we find an import statement that includes a `*`.
-        if (!p.node.source.value.includes('*')) {
+        // This code will only run when we find an import statement that includes a `**`.
+        if (!p.node.source.value.includes('**')) {
           return
         }
 
@@ -115,15 +100,13 @@ export default function (
         // - import importName from "dirPath"
         p.remove()
 
-        if (options.host.writeFileSync) {
-          options.host.writeFileSync(
-            path.join(
-              options.generateTypesPath,
-              `import-dir-${importName}.d.ts`
-            ),
-            generateTypes(importGlob)
-          )
-        }
+        // GenerateTypes
+        const typeDefContent = `
+          // @ts-expect-error
+          declare module '${importGlob.replace('../', 'src/')}';
+        `
+        generateTypeDef(`import-dir-${importName}.d.ts`, typeDefContent)
+        generateTypeDefIndex()
       },
     },
   }

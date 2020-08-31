@@ -20,6 +20,7 @@ import {
 } from '../x/vscode-languageserver-types'
 import { RWProject } from './RWProject'
 import { RWRoute } from './RWRoute'
+import { rangeRight } from 'lodash'
 
 /**
  * one per Routes.js
