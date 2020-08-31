@@ -20,12 +20,8 @@ jest.mock('@redwoodjs/structure', () => {
 
 test('generates index.d.ts file correctly', () => {
   generateTypeDefIndex()
-
-  expect(mockWriteFileSync.mock.calls[0][0]).toMatchInlineSnapshot(
-    `"/fake/project/node_modules/@types/@redwoodjs/index.d.ts"`
+  expect(mockWriteFileSync.mock.calls[0][0]).toContain('index.d.ts')
+  expect(mockWriteFileSync.mock.calls[0][1]).toContain(
+    `import-dir-service.d.ts`
   )
-  expect(mockWriteFileSync.mock.calls[0][1]).toMatchInlineSnapshot(`
-    "/// <reference path=\\"./generated/import-dir-service.d.ts\\" />
-    /// <reference path=\\"./generated/import-dir-graphql.d.ts\\" />"
-  `)
 })

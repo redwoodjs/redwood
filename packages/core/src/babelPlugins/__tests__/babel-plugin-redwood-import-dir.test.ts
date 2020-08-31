@@ -28,23 +28,20 @@ describe('babel plugin redwood import dir', () => {
   })
 
   afterAll(() => {
-    expect(mockWriteFileSync.mock.calls[0]).toMatchInlineSnapshot(`
-      Array [
-        /fake/project/node_modules/@types/@redwoodjs/generated/import-dir-services.d.ts,
-        
-                // @ts-expect-error
-                declare module 'src/__fixtures__/**/*.{js,ts}';
-              ,
-      ]
-    `)
+    expect(mockWriteFileSync.mock.calls[0][1]).toContain(
+      `/fake/project/node_modules/@types/@redwoodjs/generated/import-dir-services.d.ts`
+    )
 
-    expect(mockWriteFileSync.mock.calls[1]).toMatchInlineSnapshot(`
-      Array [
-        /fake/project/node_modules/@types/@redwoodjs/index.d.ts,
-        /// <reference path="./generated/import-dir-services.d.ts" />
-      /// <reference path="./generated/import-dir-graphql.d.ts" />,
-      ]
-    `)
+    expect(mockWriteFileSync.mock.calls[0][1]).toContain(
+      `declare module 'src/__fixtures__/**/*.{js,ts}'`
+    )
+
+    expect(mockWriteFileSync.mock.calls[1][0]).toContain(
+      `/fake/project/node_modules/@types/@redwoodjs/index.d.ts`
+    )
+    expect(mockWriteFileSync.mock.calls[1][1]).toContain(
+      `/// <reference path="./types/import-dir-services.d.ts" />`
+    )
 
     jest.clearAllMocks()
   })
