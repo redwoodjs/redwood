@@ -1,5 +1,5 @@
 import { basename, resolve } from 'path'
-import { DefaultHost } from '../../ide'
+import { DefaultHost } from '../../hosts'
 import { URL_file } from '../../x/URL'
 import { RWProject } from '../RWProject'
 
