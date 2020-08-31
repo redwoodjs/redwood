@@ -35,10 +35,16 @@ export const useCoercion = () => {
   )
 
   const setCoercion = React.useCallback(
-    ({ name, type, dataType }) => {
-      const coercionFunction =
-        COERCION_FUNCTIONS[dataType || inputTypeToDataTypeMapping[type]] ||
-        ((value) => value)
+    ({ name, type, transformValue }) => {
+      let coercionFunction
+      if (typeof transformValue === 'function') {
+        coercionFunction = transformValue
+      } else {
+        coercionFunction =
+          COERCION_FUNCTIONS[
+            transformValue || inputTypeToDataTypeMapping[type]
+          ] || ((value) => value)
+      }
 
       coercionContext.setCoercions.call(null, (coercions) => ({
         ...coercions,

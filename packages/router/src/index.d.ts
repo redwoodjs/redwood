@@ -21,10 +21,12 @@ declare module '@redwoodjs/router' {
    */
   const Private: React.FunctionComponent<{
     /**
-     * When a user is not authenticated and attempts to visit a route within private,
+     * When a user is not authenticated or is not assigned a role
+     * and attempts to visit a route within private,
      * they will be redirected to the route name passed to `unauthenticated`.
      */
     unauthenticated: namedRoute
+    role?: string | string[]
     children: Array<typeof Route>
   }>
 
