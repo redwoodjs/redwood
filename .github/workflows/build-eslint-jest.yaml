@@ -8,6 +8,7 @@ on:
 
 jobs:
   all:
+    if: github.event.pull_request.merged == false
     strategy:
       matrix:
         os: ['ubuntu-latest', 'windows-latest']
