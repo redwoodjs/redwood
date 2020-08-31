@@ -1,7 +1,17 @@
 import type { PluginObj, types } from '@babel/core'
-import { processPagesDir } from '@redwoodjs/internal'
 
-export default function ({ types: t }: { types: typeof types }): PluginObj {
+import { processPagesDir } from '@redwoodjs/internal'
+import { generateTypeDef, generateTypeDefIndex } from './generateTypes'
+import { RWProject } from '@redwoodjs/structure'
+
+interface PluginOptions {
+  project: RWProject
+}
+
+export default function (
+  { types: t }: { types: typeof types },
+  { project }: PluginOptions
+): PluginObj {
   let pages = processPagesDir()
 
   return {
@@ -22,6 +32,37 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
       Program: {
         enter() {
           pages = processPagesDir()
+
+          // Produces:
+          // routes.home: () => "/home"
+          // routes.aboutUs: () => "/about-us"
+          const availableRoutes = project
+            .getRouter()
+            .routes.filter((r) => !r.isNotFound)
+            .map((r) => `${r.name}: () => "${r.path}"`)
+
+          const pageImports = pages.map(
+            (page) => `import type ${page.const}Type from '${page.importPath}'`
+          )
+          const pageGlobals = pages.map(
+            (page) => `const ${page.const}: typeof ${page.const}Type`
+          )
+
+          const typeDefContent = `
+            declare module '@redwoodjs/router' {
+              interface AvailableRoutes {
+                ${availableRoutes.join('\n')}
+              }
+            }
+
+            ${pageImports.join('\n')}
+            declare global {
+              ${pageGlobals.join('\n')}
+            }
+          `
+
+          generateTypeDef('routes.d.ts', typeDefContent)
+          generateTypeDefIndex()
         },
         exit(p) {
           if (pages.length === 0) {

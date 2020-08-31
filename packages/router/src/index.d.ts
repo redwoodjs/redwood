@@ -3,6 +3,9 @@ import type React from 'react'
 declare module '@redwoodjs/router' {
   type namedRoute = string
 
+  interface AvailableRoutes {}
+  const routes: AvailableRoutes
+
   const Route: React.FunctionComponent<{
     /** The URL path to match, starting with the beginning slash */
     path: string
@@ -59,7 +62,7 @@ declare module '@redwoodjs/router' {
   const Link: any
   const NavLink: any
   const route: any
-  const routes: any
+
   const useLocation: any
   const useParams: any
   const useMatch: any
