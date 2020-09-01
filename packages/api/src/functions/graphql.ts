@@ -131,7 +131,7 @@ export const createGraphQLHandler = (
       onException && onException()
       // Disconnect from the database (recommended by Prisma), this step will be
       // removed in future releases.
-      db && db.disconnect()
+      db && db.$disconnect()
       throw e
     }
   }
