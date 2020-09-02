@@ -24,7 +24,6 @@ export const supabase = (client: Supabase): AuthClientSupabase => {
     getToken: async () => {
       const supabaseJson = localStorage.getItem('supabase.auth.token')
       const supabaseData = supabaseJson ? JSON.parse(supabaseJson) : null
-      console.log(supabaseData?.accessToken)
       return supabaseData?.accessToken || null
     },
     getUserMetadata: async () => client.auth.user(),
