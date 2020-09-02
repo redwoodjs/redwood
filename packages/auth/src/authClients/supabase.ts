@@ -16,10 +16,10 @@ export const supabase = (client: Supabase): AuthClientSupabase => {
   return {
     type: 'supabase',
     client,
-    login: async ({ email, password }) =>
+    login: ({ email, password }) =>
       client.auth.login(email, password),
-    logout: async () => {
-      return client.auth.logout()
+    logout: () => {
+      client.auth.logout()
     },
     getToken: async () => {
       const supabaseJson = localStorage.getItem('supabase.auth.token')
