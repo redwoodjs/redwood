@@ -38,7 +38,7 @@ export type { MagicUser }
 export type SupportedUserMetadata = Auth0User | GoTrueUser | MagicUser
 
 export interface AuthClient {
-  signUp?(options: { email: string, password: string }): Promise<any>
+  signUp?(options?: Record<'email' | 'password', string>): void | Promise<any>
   restoreAuthState?(): void | Promise<any>
   login(options?: any): Promise<any>
   logout(options?: any): void | Promise<void>

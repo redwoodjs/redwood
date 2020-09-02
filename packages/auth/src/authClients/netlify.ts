@@ -8,6 +8,9 @@ export const netlify = (client: NetlifyIdentity): AuthClient => {
   return {
     type: 'netlify',
     client,
+    signUp: () => {
+      return client.open('signup')
+    },
     login: () => {
       return new Promise((resolve, reject) => {
         let autoClosedModal = false

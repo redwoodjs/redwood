@@ -1,6 +1,6 @@
 import type * as Firebase from 'firebase/app'
 
-import { AuthClient } from './'
+import type { AuthClient } from './'
 
 export type Firebase = typeof Firebase
 

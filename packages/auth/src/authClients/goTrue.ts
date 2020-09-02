@@ -1,7 +1,7 @@
 import type { default as GoTrue } from 'gotrue-js'
 import type { User } from 'gotrue-js'
 
-import type { AuthClient } from './index'
+import type { AuthClient } from './'
 export type GoTrueUser = User
 export type { GoTrue }
 
@@ -18,6 +18,9 @@ export const goTrue = (client: GoTrue): AuthClientGoTrue => {
   return {
     type: 'goTrue',
     client,
+    signUp: ({ email, password }) => {
+      return client.signup(email, password)
+    },
     login: async ({ email, password, remember }) =>
       client.login(email, password, remember),
     logout: async () => {
