@@ -18,6 +18,8 @@ export const magicLink = (client: MagicLink): AuthClientMagicLink => {
     logout: async () => {
       await client.user.logout()
     },
+    signup: async ({ email, showUI }) =>
+      await client.auth.loginWithMagicLink({ email: email, showUI: showUI }),
     getToken: async () => await client.user.getIdToken(),
     getUserMetadata: async () =>
       (await client.user.isLoggedIn()) ? await client.user.getMetadata() : null,

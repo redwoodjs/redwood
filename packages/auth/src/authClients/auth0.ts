@@ -27,6 +27,7 @@ export const auth0 = (client: Auth0): AuthClientAuth0 => {
     },
     login: async (options?) => client.loginWithRedirect(options),
     logout: (options?) => client.logout(options),
+    signup: async (options?) => client.loginWithRedirect(options),
     getToken: async () => client.getTokenSilently(),
     getUserMetadata: async () => {
       const user = await client.getUser()

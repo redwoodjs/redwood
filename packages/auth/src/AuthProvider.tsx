@@ -20,8 +20,9 @@ export interface AuthContextInterface {
   currentUser: null | CurrentUser
   /* The user's metadata from the auth provider */
   userMetadata: null | SupportedUserMetadata
-  logIn(): Promise<void>
-  logOut(): Promise<void>
+  logIn(options?: any): Promise<void>
+  logOut(options?: any): Promise<void>
+  signUp(options?: any): Promise<void>
   getToken(): Promise<null | string>
   /**
    * Fetches the "currentUser" from the api side,
@@ -213,6 +214,11 @@ export class AuthProvider extends React.Component<
       hasError: false,
       error: undefined,
     })
+  }
+
+  signUp = async (options?: any) => {
+    await this.rwClient.signup(options)
+    return this.reauthenticate()
   }
 
   render() {
