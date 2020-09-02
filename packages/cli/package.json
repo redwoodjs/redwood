@@ -34,7 +34,7 @@
     "param-case": "^3.0.3",
     "pascalcase": "^1.0.0",
     "pluralize": "^8.0.0",
-    "prettier": "^2.0.2",
+    "prettier": "^2.1.1",
     "terminal-link": "^2.1.1",
     "yargs": "^15.3.1"
   },
