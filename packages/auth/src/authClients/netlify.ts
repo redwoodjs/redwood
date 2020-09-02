@@ -34,12 +34,9 @@ export const netlify = (client: NetlifyIdentity): AuthClient => {
     signup: () => {
       return new Promise((resolve, reject) => {
         client.open('signup')
-        client.on('open', () => {
-          return resolve(null)
+        client.on('close', () => {
+          resolve(null)
         })
-        // client.on('close', () => {
-        //   resolve(null)
-        // })
         client.on('error', reject)
       })
     },

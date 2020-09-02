@@ -230,6 +230,7 @@ export class AuthProvider extends React.Component<
           ...this.state,
           logIn: this.logIn,
           logOut: this.logOut,
+          signUp: this.signUp,
           getToken: this.rwClient.getToken,
           getCurrentUser: this.getCurrentUser,
           hasRole: this.hasRole,
