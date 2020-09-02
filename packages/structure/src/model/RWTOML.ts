@@ -16,6 +16,9 @@ export class RWTOML extends FileNode {
   @lazy() get parsedTOML() {
     return parseTOML(this.text)
   }
+  @lazy() get web_includeEnvironmentVariables(): string[] | undefined {
+    return this.parsedTOML?.web?.includeEnvironmentVariables ?? []
+  }
   *diagnostics() {
     try {
       this.parsedTOML
@@ -27,8 +30,8 @@ export class RWTOML extends FileNode {
       return
     }
     // at this point we know that the TOML was parsed successfully
-    this.parsedTOML //?
-    const allowedTopElements = ['web', 'api']
+    //this.parsedTOML //?
+    //const allowedTopElements = ['web', 'api']
     // TODO: check that schema is correct
   }
 }

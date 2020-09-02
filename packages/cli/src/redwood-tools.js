@@ -3,7 +3,7 @@ import path from 'path'
 import fs from 'fs'
 
 import yargs from 'yargs'
-import { getPaths } from '@redwoodjs/internal'
+import { getPaths, ensurePosixPath } from '@redwoodjs/internal'
 import execa from 'execa'
 import chokidar from 'chokidar'
 import _ from 'lodash'
@@ -14,6 +14,7 @@ const RW_BINS = {
   'redwood-tools': 'cli/dist/redwood-tools.js',
   rwt: 'cli/dist/redwood-tools.js',
   'dev-server': 'dev-server/dist/main.js',
+  'api-server': 'api-server/dist/index.js',
 }
 
 export const resolveFrameworkPath = (RW_PATH) => {
@@ -67,14 +68,8 @@ export const fixProjectBinaries = (PROJECT_PATH) => {
 export const copyFiles = async (src, dest) => {
   // TODO: Figure out if we need to only run based on certain events.
 
-  if (process.platform === 'win32') {
-    // rsync doesn't do Windows paths, so we need to change them to posix paths
-    const srcDrive = src[0].toLowerCase()
-    const destDrive = dest[0].toLowerCase()
-
-    src = `/${srcDrive}/${src.substring(3).replace(/\\/g, '/')}`
-    dest = `/${destDrive}/${dest.substring(3).replace(/\\/g, '/')}`
-  }
+  src = ensurePosixPath(src)
+  dest = ensurePosixPath(dest)
 
   await execa('rsync', ['-rtvu --delete', `'${src}'`, `'${dest}'`], {
     shell: true,

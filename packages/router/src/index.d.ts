@@ -3,6 +3,9 @@ import type React from 'react'
 declare module '@redwoodjs/router' {
   type namedRoute = string
 
+  interface AvailableRoutes {}
+  const routes: AvailableRoutes
+
   const Route: React.FunctionComponent<{
     /** The URL path to match, starting with the beginning slash */
     path: string
@@ -21,10 +24,12 @@ declare module '@redwoodjs/router' {
    */
   const Private: React.FunctionComponent<{
     /**
-     * When a user is not authenticated and attempts to visit a route within private,
+     * When a user is not authenticated or is not assigned a role
+     * and attempts to visit a route within private,
      * they will be redirected to the route name passed to `unauthenticated`.
      */
     unauthenticated: namedRoute
+    role?: string | string[]
     children: Array<typeof Route>
   }>
 
@@ -52,9 +57,14 @@ declare module '@redwoodjs/router' {
    */
   function navigate(nameOfRoute: namedRoute)
 
-  // TODO: Redirect
-  // TODO: Link
-  // TODO: NavLink
-  // TODO: navigate, route
-  // TODO: useLocation, useParams, useMatch, usePageLoadingContext
+  // TODO Convert any types to correct typings
+  const Redirect: any
+  const Link: any
+  const NavLink: any
+  const route: any
+
+  const useLocation: any
+  const useParams: any
+  const useMatch: any
+  const usePageLoadingContext: any
 }

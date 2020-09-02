@@ -1,5 +1,5 @@
 import { basename, resolve } from 'path'
-import { DefaultHost } from '../../ide'
+import { DefaultHost } from '../../hosts'
 import { URL_file } from '../../x/URL'
 import { RWProject } from '../RWProject'
 
@@ -52,6 +52,7 @@ describe('Redwood Project Model', () => {
     expect(dss.length).toBeGreaterThan(0)
   })
 })
+
 describe('Cells', () => {
   it('Correctly determines a Cell component vs a normal component', () => {
     const projectRoot = getFixtureDir('example-todo-main-with-errors')
@@ -61,6 +62,38 @@ describe('Cells', () => {
     expect(cells.map((cell) => basename(cell.filePath))).not.toContain(
       'TableCell.js'
     )
+  })
+
+  it('Can get the operation name of the QUERY', () => {
+    const projectRoot = getFixtureDir('example-todo-main')
+    const project = new RWProject({ projectRoot, host: new DefaultHost() })
+    const cell = project.cells.find((x) => x.uri.endsWith('TodoListCell.js'))
+    expect(cell.queryOperationName).toMatch('TodoListCell_GetTodos')
+  })
+
+  it('Warns you when you do not supply a name to QUERY', async (done) => {
+    const projectRoot = getFixtureDir('example-todo-main-with-errors')
+    const project = new RWProject({ projectRoot, host: new DefaultHost() })
+
+    const cell = project.cells.find((x) => x.uri.endsWith('TodoListCell.js'))
+    const x = await cell.collectDiagnostics()
+    expect(x.map((e) => e.diagnostic.message)).toContain(
+      'We recommend that you name your query operation'
+    )
+    done()
+  })
+})
+
+describe.skip('env vars', () => {
+  it('Warns if env vars are not ok', async () => {
+    const projectRoot = getFixtureDir('example-todo-main-with-errors')
+    const project = new RWProject({ projectRoot, host: new DefaultHost() })
+    project.envHelper.process_env_expressions.length //?
+    const env = project.envHelper
+    env.env //?
+    env.env_defaults //?
+    project.redwoodTOML.web_includeEnvironmentVariables //?
+    env.process_env_expressions //?
   })
 })
 

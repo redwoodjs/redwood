@@ -24,12 +24,20 @@ export const decodeToken = async (
   }
 ): Promise<null | string | object> => {
   if (!typesToDecoders[type]) {
-    throw new Error(
-      `The auth type "${type}" is not supported, we currently support: ${Object.keys(
-        typesToDecoders
-      ).join(', ')}`
-    )
+    // Make this a warning, instead of a hard error
+    // Allow users to have multiple custom types if they choose to
+    if (process.env.NODE_ENV === 'development') {
+      console.warn(
+        `The auth type "${type}" is not officially supported, we currently support: ${Object.keys(
+          typesToDecoders
+        ).join(', ')}`
+      )
+
+      console.warn(
+        'Please ensure you have handlers for your custom auth in getCurrentUser in src/lib/auth.{js,ts}'
+      )
+    }
   }
-  const decoder = typesToDecoders[type]
+  const decoder = typesToDecoders[type] || noop
   return decoder(token, req)
 }

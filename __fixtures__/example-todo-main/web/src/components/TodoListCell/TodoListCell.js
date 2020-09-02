@@ -3,7 +3,7 @@ import TodoItem from 'src/components/TodoItem'
 import { useMutation } from '@redwoodjs/web'
 
 export const QUERY = gql`
-  {
+  query TodoListCell_GetTodos {
     todos {
       id
       body
@@ -11,6 +11,9 @@ export const QUERY = gql`
     }
   }
 `
+// This is a no-op used for testing the mock-data-cell babel-plugin.
+export const afterQuery = (d) => d
+
 const UPDATE_TODO_STATUS = gql`
   mutation TodoListCell_CheckTodo($id: Int!, $status: String!) {
     updateTodoStatus(id: $id, status: $status) {

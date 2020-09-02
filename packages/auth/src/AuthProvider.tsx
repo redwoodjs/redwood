@@ -8,26 +8,45 @@ import type {
 } from './authClients'
 import { createAuthClient } from './authClients'
 
-export interface CurrentUser {}
+export interface CurrentUser {
+  roles?: Array<string>
+}
 
 export interface AuthContextInterface {
   /* Determining your current authentication state */
   loading: boolean
   isAuthenticated: boolean
-  /* The current user data from the `getCurrentUser` function on the api side */
+  /* The current user's data from the `getCurrentUser` function on the api side */
   currentUser: null | CurrentUser
   /* The user's metadata from the auth provider */
   userMetadata: null | SupportedUserMetadata
   logIn(): Promise<void>
   logOut(): Promise<void>
   getToken(): Promise<null | string>
-  /* Fetches the "currentUser" from the api side, but does not update the current user state. */
+  /**
+   * Fetches the "currentUser" from the api side,
+   * but does not update the current user state.
+   **/
   getCurrentUser(): Promise<null | CurrentUser>
-  /* Redetermine the users authentication state and update the state. */
+  /**
+   * Checks if the "currentUser" from the api side
+   * is assigned a role or one of a list of roles.
+   * If the user is assigned any of the provided list of roles,
+   * the hasRole is considered to be true.
+   **/
+  hasRole(role: string | string[]): boolean
+  /**
+   * Redetermine authentication state and update the state.
+   */
   reauthenticate(): Promise<void>
-  /* A reference to the client that you originall passed into the `AuthProvider` during initialization. */
+  /**
+   * A reference to the client that you passed into the `AuthProvider`,
+   * which is useful if we do not support some specific functionality.
+   */
   client: SupportedAuthClients
   type: SupportedAuthTypes
+  hasError: boolean
+  error: Error
 }
 
 export const AuthContext = React.createContext<Partial<AuthContextInterface>>(
@@ -45,6 +64,8 @@ type AuthProviderState = {
   isAuthenticated: boolean
   userMetadata: null | object
   currentUser: null | undefined | CurrentUser
+  hasError: boolean
+  error?: Error
 }
 /**
  * @example
@@ -56,7 +77,6 @@ type AuthProviderState = {
  *  </AuthProvider>
  * ```
  */
-// TODO: Determine what should be done when fetching the current user fails
 export class AuthProvider extends React.Component<
   AuthProviderProps,
   AuthProviderState
@@ -70,6 +90,7 @@ export class AuthProvider extends React.Component<
     isAuthenticated: false,
     userMetadata: null,
     currentUser: null,
+    hasError: false,
   }
 
   rwClient: AuthClient
@@ -105,27 +126,77 @@ export class AuthProvider extends React.Component<
         }),
       }
     )
+
     if (response.ok) {
       const { data } = await response.json()
       return data?.redwood?.currentUser
+    } else {
+      throw new Error(
+        `Could not fetch current user: ${response.statusText} (${response.status})`
+      )
     }
   }
 
-  reauthenticate = async () => {
-    const userMetadata = await this.rwClient.getUserMetadata()
-    const isAuthenticated = userMetadata !== null
+  /**
+   * @example
+   * ```js
+   *  hasRole("editor")
+   *  hasRole(["editor"])
+   *  hasRole(["editor", "author"])
+   * ```
+   *
+   * Checks if the "currentUser" from the api side
+   * is assigned a role or one of a list of roles.
+   * If the user is assigned any of the provided list of roles,
+   * the hasRole is considered to be true.
+   */
+  hasRole = (role: string | string[]): boolean => {
+    if (
+      typeof role !== 'undefined' &&
+      this.state.currentUser &&
+      this.state.currentUser.roles
+    ) {
+      if (typeof role === 'string') {
+        return this.state.currentUser.roles?.includes(role) || false
+      }
 
-    let currentUser = null
-    if (isAuthenticated) {
-      currentUser = await this.getCurrentUser()
+      if (Array.isArray(role)) {
+        return this.state.currentUser.roles.some((r) => role.includes(r))
+      }
     }
 
-    this.setState({
-      userMetadata,
-      currentUser,
-      isAuthenticated,
+    return false
+  }
+
+  reauthenticate = async () => {
+    const notAuthenticatedState: AuthProviderState = {
+      isAuthenticated: false,
+      currentUser: null,
+      userMetadata: null,
       loading: false,
-    })
+      hasError: false,
+    }
+
+    try {
+      const userMetadata = await this.rwClient.getUserMetadata()
+      if (!userMetadata) {
+        this.setState(notAuthenticatedState)
+      } else {
+        const currentUser = await this.getCurrentUser()
+        this.setState({
+          userMetadata,
+          currentUser,
+          isAuthenticated: true,
+          loading: false,
+        })
+      }
+    } catch (e) {
+      this.setState({
+        ...notAuthenticatedState,
+        hasError: true,
+        error: e,
+      })
+    }
   }
 
   logIn = async (options?: any) => {
@@ -139,6 +210,8 @@ export class AuthProvider extends React.Component<
       userMetadata: null,
       currentUser: null,
       isAuthenticated: false,
+      hasError: false,
+      error: undefined,
     })
   }
 
@@ -153,6 +226,7 @@ export class AuthProvider extends React.Component<
           logOut: this.logOut,
           getToken: this.rwClient.getToken,
           getCurrentUser: this.getCurrentUser,
+          hasRole: this.hasRole,
           reauthenticate: this.reauthenticate,
           client,
           type,

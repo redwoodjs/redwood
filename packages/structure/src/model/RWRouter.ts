@@ -1,4 +1,3 @@
-import { URL_file } from 'src/x/URL'
 import * as tsm from 'ts-morph'
 import {
   CodeAction,
@@ -12,6 +11,7 @@ import { RWError } from '../errors'
 import { CodeLensX, FileNode } from '../ide'
 import { iter } from '../x/Array'
 import { lazy, memo } from '../x/decorators'
+import { URL_file } from '../x/URL'
 import {
   err,
   ExtendedDiagnostic,
@@ -20,6 +20,7 @@ import {
 } from '../x/vscode-languageserver-types'
 import { RWProject } from './RWProject'
 import { RWRoute } from './RWRoute'
+import { rangeRight } from 'lodash'
 
 /**
  * one per Routes.js
@@ -80,10 +81,12 @@ export class RWRouter extends FileNode {
         location = Location_fromNode(this.routes[0].jsxNode)
         const codeLens: CodeLens = {
           range: location.range,
-          command: Command.create('Create Page...', 'redwoodjs/cli', {
-            projectRoot: this.parent.projectRoot,
-            args: { _0: 'generate', _1: 'page' },
-          }),
+          command: Command.create(
+            'Create Page...',
+            'redwoodjs.cli',
+            'generate page...',
+            this.parent.projectRoot
+          ),
         }
         yield {
           kind: 'CodeLens',

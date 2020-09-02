@@ -7,6 +7,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const DirectoryNamedWebpackPlugin = require('directory-named-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
+const { RetryChunkLoadPlugin } = require('webpack-retry-chunk-load-plugin')
 const Dotenv = require('dotenv-webpack')
 const { getConfig, getPaths } = require('@redwoodjs/internal')
 const merge = require('webpack-merge')
@@ -127,6 +128,8 @@ const getSharedPlugins = (isEnvProduction) => {
       React: 'react',
       PropTypes: 'prop-types',
       gql: ['@redwoodjs/web', 'gql'],
+      mockGraphQLQuery: ['@redwoodjs/testing', 'mockGraphQLQuery'],
+      mockGraphQLMutation: ['@redwoodjs/testing', 'mockGraphQLMutation'],
     }),
     // The define plugin will replace these keys with their values during build
     // time.
@@ -179,7 +182,20 @@ module.exports = (webpackEnv) => {
         inject: true,
         chunks: 'all',
       }),
-      new CopyPlugin([{ from: 'public/', to: '', ignore: ['README.md'] }]),
+      new CopyPlugin({
+        patterns: [
+          { from: 'public/', to: '', globOptions: { ignore: ['README.md'] } },
+        ],
+      }),
+      isEnvProduction &&
+        new RetryChunkLoadPlugin({
+          cacheBust: `function() {
+					return Date.now();
+				}`,
+          maxRetries: 5,
+          // @TODO: Add redirect to fatalErrorPage
+          // lastResortScript: "window.location.href='/500.html';"
+        }),
       ...getSharedPlugins(isEnvProduction),
     ].filter(Boolean),
     module: {

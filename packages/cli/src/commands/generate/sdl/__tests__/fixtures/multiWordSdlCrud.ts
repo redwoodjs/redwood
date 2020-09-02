@@ -1,5 +1,3 @@
-import gql from 'graphql-tag'
-
 export const schema = gql`
   type UserProfile {
     id: Int!
@@ -10,7 +8,7 @@ export const schema = gql`
 
   type Query {
     userProfiles: [UserProfile!]!
-    userProfile(id: Int!): UserProfile!
+    userProfile(id: Int!): UserProfile
   }
 
   input CreateUserProfileInput {

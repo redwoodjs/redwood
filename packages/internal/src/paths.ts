@@ -5,6 +5,7 @@ import findUp from 'findup-sync'
 
 export interface NodeTargetPaths {
   base: string
+  dataMigrations: string
   db: string
   dbSchema: string
   src: string
@@ -29,6 +30,7 @@ export interface BrowserTargetPaths {
 
 export interface Paths {
   cache: string
+  types: string
   base: string
   web: BrowserTargetPaths
   api: NodeTargetPaths
@@ -46,6 +48,7 @@ const CONFIG_FILE_NAME = 'redwood.toml'
 
 const PATH_API_DIR_FUNCTIONS = 'api/src/functions'
 const PATH_API_DIR_GRAPHQL = 'api/src/graphql'
+const PATH_API_DIR_DATA_MIGRATIONS = 'api/prisma/dataMigrations'
 const PATH_API_DIR_DB = 'api/prisma'
 const PATH_API_DIR_DB_SCHEMA = 'api/prisma/schema.prisma'
 const PATH_API_DIR_CONFIG = 'api/src/config'
@@ -64,8 +67,8 @@ const PATH_WEB_DIR_CONFIG_POSTCSS = 'web/config/postcss.config.js'
 /**
  * Search the parent directories for the Redwood configuration file.
  */
-export const getConfigPath = (): string => {
-  const configPath = findUp(CONFIG_FILE_NAME)
+export const getConfigPath = (cwd: string = __dirname): string => {
+  const configPath = findUp(CONFIG_FILE_NAME, { cwd })
   if (!configPath) {
     throw new Error(
       `Could not find a "${CONFIG_FILE_NAME}" file, are you sure you're in a Redwood project?`
@@ -79,6 +82,10 @@ export const getConfigPath = (): string => {
  */
 export const getBaseDir = (configPath: string = getConfigPath()): string => {
   return path.dirname(configPath)
+}
+
+export const getBaseDirFromFile = (file: string) => {
+  return getBaseDir(getConfigPath(path.dirname(file)))
 }
 
 /**
@@ -104,19 +111,19 @@ export const resolveFile = (
 export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
   const routes = resolveFile(path.join(BASE_DIR, PATH_WEB_ROUTES)) as string
 
-  // We store ambient type declerations and our test database over here.
-  const cache = path.join(BASE_DIR, 'node_modules', '.redwood')
-  try {
-    fs.mkdirSync(cache)
-  } catch (e) {
-    // noop
-  }
+  // We store our test database over here:
+  const cache = path.join(BASE_DIR, '.redwood')
+  const types = path.join(BASE_DIR, '.redwood', 'types')
+  fs.mkdirSync(cache, { recursive: true })
+  fs.mkdirSync(types, { recursive: true })
 
   return {
     base: BASE_DIR,
     cache,
+    types,
     api: {
       base: path.join(BASE_DIR, 'api'),
+      dataMigrations: path.join(BASE_DIR, PATH_API_DIR_DATA_MIGRATIONS),
       db: path.join(BASE_DIR, PATH_API_DIR_DB),
       dbSchema: path.join(BASE_DIR, PATH_API_DIR_DB_SCHEMA),
       functions: path.join(BASE_DIR, PATH_API_DIR_FUNCTIONS),
@@ -192,4 +199,28 @@ export const processPagesDir = (
     }
   })
   return deps
+}
+
+/**
+ * Converts Windows-style paths to Posix-style
+ * C:\Users\Bob\dev\Redwood -> /c/Users/Bob/dev/Redwood
+ *
+ * The conversion only happens on Windows systems, and only for paths that are
+ * not already Posix-style
+ *
+ * @param path Filesystem path
+ */
+export const ensurePosixPath = (path: string) => {
+  let posixPath = path
+
+  if (process.platform === 'win32') {
+    if (/^[A-Z]:\\/.test(path)) {
+      const drive = path[0].toLowerCase()
+      posixPath = `/${drive}/${path.substring(3)}`
+    }
+
+    posixPath = posixPath.replace(/\\/g, '/')
+  }
+
+  return posixPath
 }

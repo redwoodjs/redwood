@@ -25,4 +25,18 @@ Explains how to contribute by addressing the following three points:
 
 ## FAQ
 
-Answers to frequently asked questions.
+### How to run create redwood-app script locally
+
+After making changes to `create-redwood-app.js`:
+
+```
+node -r esm ./redwood/packages/create-redwood-app/src/create-redwood-app.js ../path/to/new-project`
+```
+
+If running from within the current redwood source directory, be sure your target app path is outside.
+
+Note: Assumes that
+
+```
+npm install --save esm
+```

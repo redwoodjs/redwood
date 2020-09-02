@@ -1,21 +1,27 @@
+**IMPORTANT:** This is an **internal** and **development-time only** package :exclamation:
+
 # Overview
 
-- Main validation layer/model for Redwood (used by the Redwood CLI and other tools)
-- Used by Decoupled Studio and other tools to provide IDE features
-
-## Structure
+- The @redwoodjs/structure package lets you build, validate and inspect an object graph that represents a complete Redwood project
+- It is used by the CLI and by VSCode extensions to provide IDE features such as diagnostics, code-fixes, etc.
+- **IMPORTANT:** This is an **internal** and **development-time only** package
+  - You **cannot** "import it" into a normal redwood app
+## Code
 
 - `/model/*`: The main API and classes (such as RWProject, RWPage, RWService, etc)
-- `/language_server/*`: A [Language Server Protocol](https://microsoft.github.io/language-server-protocol/) implementation that wraps the `model` classes.
+- `/language_server/*`: A [Language Server Protocol](https://microsoft.github.io/language-server-protocol/) implementation that wraps the `model` classes. More info [here](./src/language_server/README.md)
+- We use [vscode-languageserver-types](https://www.npmjs.com/package/vscode-languageserver-types) where possible (to represent Document URIs, Positions, Ranges, Diagnostics, etc)
 
 # Usage
 
-The most common use-case is getting the diagnostics of a complete redwood project:
+## Diagnostics
+
+The most common use-case is getting the diagnostics of a complete Redwood project:
 
 ```ts
-import { getProject } from '@redwoodjs/project-model'
+import { getProject } from '@redwoodjs/structure'
 async function test() {
-  const project = getProject('/path/to/app')
+  const project = getProject('/path/to/app') // or "file:///path/to/app"
   for (const d of await project.collectDiagnostics()) {
     console.log(d.diagnostic.severity + ': ' + d.diagnostic.message)
   }
@@ -30,15 +36,20 @@ async function test() {
 ```
 
 Note: Gathering _all_ diagnostics is expensive. It will trigger the creation of the complete project graph.
-You can also traverse the graph to get more specific information.
 
-For example: Iterating over the routes of a redwood project:
+## Exploration
+
+You can also traverse the graph to get more detailed information on multiple aspects of your app.
+
+For example, iterating over the routes of a Redwood project:
 
 ```ts
-import { getProject } from '@redwoodjs/project-model'
-const project = getProject('/path/to/app')
-for (const route of project.router.routes) {
-  console.log(route.path + (route.isPrivate ? ' (private)' : ''))
+import { getProject } from '@redwoodjs/structure'
+async function test() {
+  const project = getProject('/path/to/app')
+  for (const route of project.router.routes) {
+    console.log(route.path + (route.isPrivate ? ' (private)' : ''))
+  }
 }
 // /
 // /about
@@ -48,16 +59,26 @@ for (const route of project.router.routes) {
 
 # Design Notes
 
-- The project is represented by an AST of sorts
-- Nodes are created lazily as the user traverses properties
+- The project is represented by an AST of sorts (via the RWProject, RWRoute, etc classes)
+- While it can be explored as a graph, it is effectively a **tree** (via the children/parent properties) with stable IDs for each node
+- Nodes are created lazily as the user traverses properties.
 - There is extensive caching going on under the hood. **If the underlying project changes, you need to create a new project**
 
-## id
+## ids
 
 - Each node in the graph has an `id` property.
 - ids are unique and stable
-- They are organized in a hierarchical fashion (so the graph can be flattened as a tree)
+- They are organized in a hierarchical fashion (so that `child.id.startsWith(parent.id) === true`)
 - Requesting a node using its id will not require the complete project to be processed. Only the subset that is needed (usually only the node's ancestors). This is important to enable efficient IDE-like tooling to interact with the project graph and get diagnostics for quickly changing files.
+
+```ts
+import { getProject } from '@redwoodjs/structure'
+async function test() {
+  const project = getProject('/path/to/app')
+  const router = await project.findNode('file:///path/to/app/web/src/Routes.js')
+  console.log(router.routes.length)
+}
+```
 
 Here are some examples of ids:
 
@@ -77,15 +98,47 @@ Anatomy of an id:
 - the first component is always a file URI (or folder URI).
 - The rest are optional, and only exist when the node is internal to a file.
 
-## Mutations
-
-- The project graph is immutable: If the underlying files change, you must create a new project.
-- This allows us to keep the logic clean and focused on capturing the "rules" that are unique to a Redwood app (most importantly, diagnostics). Other concerns such as change management, reactivity, etc, can be added on top
-
 ## Abstracting File System Access
 
 To allow use cases like dealing with unsaved files in IDEs, some filesystem methods can be overriden via the Host interface.
 
+```ts
+import { Host, getProject } from '@redwoodjs/structure'
+const myHost: Host {
+  readFileSync(path:string){
+    // ...
+  }
+  // ...
+}
+const project = getProject('/path/to/project', myHost)
+```
+
 ## Sync VS Async
 
 When possible, the project graph is constructed synchronously. There are only a few exceptions. This simplifies the domain logic and validations, which is the main driver behind the project model itself.
+
+## Parsing Invalid Projects
+
+- It is possible to obtain a graph for an invalid/malformed Redwood project. This is by design since one of the main goals of this package is to provide a foundation for IDEs, which must support projects in invalid states
+- If you want to check for structural validity, gather all diagnostics and look for errors.
+
+```ts
+import { getProject, DiagnosticSeverity } from '@redwoodjs/structure'
+async function test() {
+  try {
+    const project = getProject('/path/to/app')
+    const diagnostics = await project.collectDiagnostics()
+    const hasErrors = diagnostics.some(
+      (d) => d.diagnostic.severity === DiagnosticSeverity.Error
+    )
+  } catch (e) {
+    // we caught a runtime error
+    // in some cases this is the desired behavior
+    // but in MOST cases we SHOULD turn this into a diagnostic error
+    // please file an issue if you believe this should be the case
+    throw e
+  }
+}
+```
+
+NOTE: It is possible (and very likely at this point) that this package will sometimes fail with a runtime error (for example, it will try to read a file that doesn't exist).
