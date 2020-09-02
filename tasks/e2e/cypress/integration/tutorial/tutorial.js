@@ -1,6 +1,8 @@
+/* eslint-disable no-undef, camelcase */
 /// <reference types="cypress" />
 import path from 'path'
 
+import Step1_1_Routes from './codemods/Step1_1_Routes'
 import Step2_1_PagesHome from './codemods/Step2_1_PagesHome'
 import Step2_2_PagesAbout from './codemods/Step2_2_PagesAbout'
 import Step3_1_LayoutsBlog from './codemods/Step3_1_LayoutsBlog'
@@ -10,8 +12,7 @@ import Step4_1_DbSchema from './codemods/Step4_1_DbSchema'
 import Step5_1_ComponentsCellBlogPost from './codemods/Step5_1_ComponentsCellBlogPost'
 import Step5_2_PagesHome from './codemods/Step5_2_PagesHome'
 
-// TODO: Break these up so that they can be run individually.
-const BASE_DIR = '/tmp/redwood/new-project/'
+const BASE_DIR = Cypress.env('RW_PATH')
 
 describe('The Redwood Tutorial - Golden path edition', () => {
   // TODO: https://redwoodjs.com/tutorial/routing-params
@@ -21,7 +22,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
 
   it('0. Starting Development', () => {
     // https://redwoodjs.com/tutorial/installation-starting-development
-    // ** NOTE ** This test can fail if the repo is not in a completely empty state.
+    cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step1_1_Routes)
     cy.visit('http://localhost:8910')
     cy.get('h1 > span').contains('Welcome to RedwoodJS!')
   })
@@ -89,7 +90,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     })
 
     cy.exec(`cd ${BASE_DIR}; yarn rw db up`)
-    cy.exec(`cd ${BASE_DIR}; yarn rw g scaffold post`)
+    cy.exec(`cd ${BASE_DIR}; yarn rw g scaffold post --force`)
 
     cy.visit('http://localhost:8910/posts')
 
