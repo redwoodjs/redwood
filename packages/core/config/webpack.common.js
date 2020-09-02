@@ -183,7 +183,9 @@ module.exports = (webpackEnv) => {
         chunks: 'all',
       }),
       new CopyPlugin({
-        patterns: [{ from: 'public/', to: '', ignore: ['README.md'] }],
+        patterns: [
+          { from: 'public/', to: '', globOptions: { ignore: ['README.md'] } },
+        ],
       }),
       isEnvProduction &&
         new RetryChunkLoadPlugin({
