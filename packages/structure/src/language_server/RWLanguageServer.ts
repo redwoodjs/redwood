@@ -144,10 +144,8 @@ export class RWLanguageServer {
   get vscodeWindowMethods() {
     return VSCodeWindowMethods_fromConnection(this.connection)
   }
-  async collectIDEInfo(uri: string) {
-    const node = await this.getProject()?.findNode(uri)
-    if (!node) return []
-    return await node.collectIDEInfo()
+  async collectIDEInfo(uri?: string) {
+    return (await this.getProject()?.collectIDEInfo(uri)) ?? []
   }
   async info<T extends IDEInfo['kind']>(
     uri: string,

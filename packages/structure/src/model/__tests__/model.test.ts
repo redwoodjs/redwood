@@ -1,5 +1,5 @@
 import { basename, resolve } from 'path'
-import { DefaultHost } from '../../ide'
+import { DefaultHost } from '../../hosts'
 import { URL_file } from '../../x/URL'
 import { RWProject } from '../RWProject'
 
@@ -81,6 +81,19 @@ describe('Cells', () => {
       'We recommend that you name your query operation'
     )
     done()
+  })
+})
+
+describe.skip('env vars', () => {
+  it('Warns if env vars are not ok', async () => {
+    const projectRoot = getFixtureDir('example-todo-main-with-errors')
+    const project = new RWProject({ projectRoot, host: new DefaultHost() })
+    project.envHelper.process_env_expressions.length //?
+    const env = project.envHelper
+    env.env //?
+    env.env_defaults //?
+    project.redwoodTOML.web_includeEnvironmentVariables //?
+    env.process_env_expressions //?
   })
 })
 

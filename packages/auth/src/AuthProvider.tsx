@@ -31,9 +31,11 @@ export interface AuthContextInterface {
   getCurrentUser(): Promise<null | CurrentUser>
   /**
    * Checks if the "currentUser" from the api side
-   * is assigned a role
+   * is assigned a role or one of a list of roles.
+   * If the user is assigned any of the provided list of roles,
+   * the hasRole is considered to be true.
    **/
-  hasRole(role: string): boolean
+  hasRole(role: string | string[]): boolean
   /**
    * Redetermine authentication state and update the state.
    */
@@ -136,8 +138,35 @@ export class AuthProvider extends React.Component<
     }
   }
 
-  hasRole = (role: string): boolean => {
-    return this.state.currentUser?.roles?.includes(role) || false
+  /**
+   * @example
+   * ```js
+   *  hasRole("editor")
+   *  hasRole(["editor"])
+   *  hasRole(["editor", "author"])
+   * ```
+   *
+   * Checks if the "currentUser" from the api side
+   * is assigned a role or one of a list of roles.
+   * If the user is assigned any of the provided list of roles,
+   * the hasRole is considered to be true.
+   */
+  hasRole = (role: string | string[]): boolean => {
+    if (
+      typeof role !== 'undefined' &&
+      this.state.currentUser &&
+      this.state.currentUser.roles
+    ) {
+      if (typeof role === 'string') {
+        return this.state.currentUser.roles?.includes(role) || false
+      }
+
+      if (Array.isArray(role)) {
+        return this.state.currentUser.roles.some((r) => role.includes(r))
+      }
+    }
+
+    return false
   }
 
   reauthenticate = async () => {

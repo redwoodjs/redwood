@@ -1,8 +1,23 @@
 import path from 'path'
-
 import pluginTester from 'babel-plugin-tester'
-
 import plugin from '../babel-plugin-redwood-routes-auto-loader'
+import { getProject } from '@redwoodjs/structure'
+
+const mockReaddirSync = jest.fn(() => ['routes.d.ts'])
+const mockWriteFileSync = jest.fn()
+
+jest.mock('@redwoodjs/structure', () => {
+  return {
+    ...jest.requireActual('@redwoodjs/structure'),
+    DefaultHost: jest.fn().mockImplementation(() => ({
+      readdirSync: mockReaddirSync,
+      writeFileSync: mockWriteFileSync,
+      paths: {
+        types: '/fake/project/node_modules/@types/@redwoodjs/generated',
+      },
+    })),
+  }
+})
 
 jest.mock('@redwoodjs/internal', () => ({
   getPaths: () => {
@@ -44,8 +59,29 @@ jest.mock('@redwoodjs/internal', () => ({
   },
 }))
 
-pluginTester({
-  plugin,
-  pluginName: 'babel-plugin-redwood-routes-auto-loader',
-  fixtures: path.join(__dirname, '__fixtures__/routes-auto-loader'),
+describe('routes auto loader', () => {
+  const exampleTodoPath = path.resolve(
+    __dirname,
+    '../../../../../__fixtures__/example-todo-main'
+  )
+  const project = getProject(exampleTodoPath)
+
+  pluginTester({
+    plugin,
+    pluginName: 'babel-plugin-redwood-routes-auto-loader',
+    pluginOptions: {
+      project,
+    },
+    fixtures: path.join(__dirname, '__fixtures__/routes-auto-loader'),
+  })
+
+  afterAll(() => {
+    expect(mockWriteFileSync.mock.calls[0][0]).toContain(`routes.d.ts`)
+    expect(mockWriteFileSync.mock.calls[0][1]).toContain(`home: () => "/"`)
+    expect(mockWriteFileSync.mock.calls[1][0]).toContain(`index.d.ts`)
+    expect(mockWriteFileSync.mock.calls[1][1]).toContain(
+      `/// <reference path="./generated/routes.d.ts" />`
+    )
+    jest.clearAllMocks()
+  })
 })

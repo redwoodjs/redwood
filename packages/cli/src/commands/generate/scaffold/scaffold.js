@@ -8,6 +8,8 @@ import pluralize from 'pluralize'
 import { paramCase } from 'param-case'
 import humanize from 'humanize-string'
 import terminalLink from 'terminal-link'
+import boxen from 'boxen'
+import chalk from 'chalk'
 
 import {
   generateTemplate,
@@ -449,8 +451,26 @@ export const handler = async ({
   const { model, path } = splitPathAndModel(modelArg)
 
   const t = tasks({ model, path, force, typescript, javascript })
+  const schema = await getSchema(pascalcase(pluralize.singular(model)))
+  const line1 =
+    chalk.bold.yellow('WARNING') +
+    `: Because the data model "${pascalcase(model)}" contains a`
+  const line2 = 'Prisma @relation, the generated CRUD code must be manually'
+  const line3 = 'modified to work correctly. See this doc for more info:'
+  const line4 = chalk.underline.blue(
+    'https://redwoodjs.com/docs/schema-relations'
+  )
   try {
     await t.run()
+    if (relationsForModel(schema).length) {
+      console.log(
+        boxen(line1 + '\n' + line2 + '\n' + line3 + '\n' + line4, {
+          padding: 1,
+          margin: 1,
+          borderStyle: 'single',
+        })
+      )
+    }
   } catch (e) {
     console.log(c.error(e.message))
   }
