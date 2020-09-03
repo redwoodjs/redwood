@@ -63,28 +63,27 @@ export const handler = async ({ provider, force }) => {
 
   const tasks = new Listr(
     [
-      providerData.preRequisites &&
-        providerData.preRequisites.length > 0 && {
-          title: 'Checking pre-requisites',
-          task: () =>
-            new Listr(
-              providerData.preRequisites.map((preReq) => {
-                return {
-                  title: preReq.title,
-                  task: async () => {
-                    try {
-                      await execa(...preReq.command)
-                    } catch (error) {
-                      error.message =
-                        error.message + '\n' + preReq.errorMessage.join(' ')
-                      throw error
-                    }
-                  },
-                }
-              })
-            ),
-        },
-      providerData.apiPackages.length > 0 && {
+      providerData?.preRequisites?.length && {
+        title: 'Checking pre-requisites',
+        task: () =>
+          new Listr(
+            providerData.preRequisites.map((preReq) => {
+              return {
+                title: preReq.title,
+                task: async () => {
+                  try {
+                    await execa(...preReq.command)
+                  } catch (error) {
+                    error.message =
+                      error.message + '\n' + preReq.errorMessage.join(' ')
+                    throw error
+                  }
+                },
+              }
+            })
+          ),
+      },
+      providerData?.apiPackages?.length && {
         title: 'Adding required api packages...',
         task: async () => {
           await execa('yarn', [
@@ -102,25 +101,23 @@ export const handler = async ({ provider, force }) => {
           await execa('yarn', ['install'])
         },
       },
-      providerData.apiProxyPath && {
+      providerData?.apiProxyPath && {
         title: 'Updating apiProxyPath...',
         task: async () => {
           updateProxyPath(providerData.apiProxyPath)
         },
       },
-      providerData.files &&
-        providerData.files.length > 0 && {
-          title: 'Adding config...',
-          task: async () => {
-            let files = {}
-            providerData.files.forEach((fileData) => {
-              files[fileData.path] = fileData.content
-            })
-            return writeFilesTask(files, { overwriteExisting: force })
-          },
+      providerData?.files?.length && {
+        title: 'Adding config...',
+        task: async () => {
+          let files = {}
+          providerData.files.forEach((fileData) => {
+            files[fileData.path] = fileData.content
+          })
+          return writeFilesTask(files, { overwriteExisting: force })
         },
-      providerData.gitIgnoreAdditions &&
-        providerData.gitIgnoreAdditions.length > 0 &&
+      },
+      providerData?.gitIgnoreAdditions?.length &&
         fs.existsSync(path.resolve(getPaths().base, '.gitignore')) && {
           title: 'Updating .gitignore...',
           task: async (_ctx, task) => {
