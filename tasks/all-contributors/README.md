@@ -20,9 +20,9 @@ In general, this is a three-part process:
 2. Merge changes into the main `.all-contributorsrc` file
 3. Update README.md#Contributors with changes
 
-**FILES**  
-**Framework** `redwoodjs/redwood` project:  
-_note: this file is also used for all aggregated contributors_  
+**FILES**
+**Framework** `redwoodjs/redwood` project:
+_note: this file is also used for all aggregated contributors_
 - `.all-contributorsrc`
 
 **CRWA** `redwoodjs/create-redwood-app` project:
@@ -40,31 +40,33 @@ _note: this file is also used for all aggregated contributors_
 
 ### Step 1: Check for new contributors and add to `*rc` files
 
+'cd tasks/all-contributors'
+
 #### Framework
 ```js
-yarn all-contributors check --config ./all-contributors/.all-contributorsrc
+yarn all-contributors check --config .all-contributorsrc
 
 // For each contributor listed in output, repeat the following:
 
-yarn all-contributors add --config ./all-contributors/.all-contributorsrc <contributor> code
+yarn all-contributors add --config .all-contributorsrc <contributor> code
 ```
 
 #### Redwoodjs.com
 ```js
-yarn all-contributors check --config ./all-contributors/.rwjs.com.all-contributorsrc
+yarn all-contributors check --config .rwjs.com.all-contributorsrc
 
 // For each contributor listed in output, repeat the following:
 
-yarn all-contributors add --config ./all-contributors/.rwjs.com.all-contributorsrc <contributor> doc
+yarn all-contributors add --config .rwjs.com.all-contributorsrc <contributor> doc
 ```
 
 #### Create-Redwood-App
 ```js
-yarn all-contributors check --config ./all-contributors/.crwa.all-contributorsrc
+yarn all-contributors check --config .crwa.all-contributorsrc
 
 // For each contributor listed in output, repeat the following:
 
-yarn all-contributors add --config ./all-contributors/.crwa.all-contributorsrc <contributor> tool
+yarn all-contributors add --config .crwa.all-contributorsrc <contributor> tool
 ```
 
 ### Step 2: Merge contributors into main file
@@ -76,7 +78,7 @@ node mergeContributors.js
 
 ### Step 3: Update the content in README.md#Contributors
 ```bash
-yarn all-contributors generate --config all-contributors/.all-contributorsrc
+yarn all-contributors generate --config .all-contributorsrc
 ```
 
 Don't forget to commit and PR changes.
