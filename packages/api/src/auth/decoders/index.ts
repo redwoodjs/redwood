@@ -12,6 +12,7 @@ const typesToDecoders: Record<SupportedAuthTypes, Function> = {
   goTrue: netlify,
   magicLink: noop,
   firebase: noop,
+  supabase: noop,
   custom: noop,
 }
 
