@@ -21,8 +21,8 @@ In general, this is a three-part process:
 3. Update README.md#Contributors with changes
 
 **FILES**  
-**Framework** `redwoodjs/redwood` project:
-_note: this file is also used for all aggregated contributors_
+**Framework** `redwoodjs/redwood` project:  
+_note: this file is also used for all aggregated contributors_  
 - `.all-contributorsrc`
 
 **CRWA** `redwoodjs/create-redwood-app` project:
