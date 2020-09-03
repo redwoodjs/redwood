@@ -4,7 +4,7 @@
   "repoType": "github",
   "repoHost": "https://github.com",
   "files": [
-    "all-contributors/README.md"
+    "README.md"
   ],
   "imageSize": 100,
   "contributorTemplate": "<a href=\"<%= contributor.profile %>\"><img src=\"<%= contributor.avatar_url %>\" width=\"<%= options.imageSize %>px;\" alt=\"\"/><br /><sub><b><%= contributor.name %></b></sub></a>",
@@ -151,6 +151,24 @@
       "name": "guledali",
       "avatar_url": "https://avatars1.githubusercontent.com/u/20647282?v=4",
       "profile": "https://github.com/guledali",
+      "contributions": [
+        "tool"
+      ]
+    },
+    {
+      "login": "amorriscode",
+      "name": "Anthony Morris",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/16005567?v=4",
+      "profile": "https://anthonymorris.dev/",
+      "contributions": [
+        "tool"
+      ]
+    },
+    {
+      "login": "zackmckenna",
+      "name": "Zachary McKenna",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/31899931?v=4",
+      "profile": "https://zackmckenna.com/",
       "contributions": [
         "tool"
       ]

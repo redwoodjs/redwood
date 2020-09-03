@@ -1,11 +1,11 @@
 {
-  "name": "e2e",
+  "name": "redwoodjs-all-contributors",
   "description": "",
   "version": "0.0.0",
   "private": true,
 
   "devDependencies": {
-    "cypress": "^5.1.0"
+    "all-contributors-cli": "^6.17.2"
   },
   "dependencies": {}
 }
