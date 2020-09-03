@@ -14,7 +14,7 @@
     "core-js": "3.6.4",
     "graphql": "^14.6.0",
     "graphql-scalars": "^1.2.6",
-    "graphql-tools": "6.0.18",
+    "graphql-tools": "6.2.0",
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^1.8.1",
     "lodash.merge": "^4.6.2",
