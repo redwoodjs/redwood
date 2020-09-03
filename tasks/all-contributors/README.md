@@ -20,7 +20,7 @@ In general, this is a three-part process:
 2. Merge changes into the main `.all-contributorsrc` file
 3. Update README.md#Contributors with changes
 
-**FILES**
+**FILES**  
 **Framework** `redwoodjs/redwood` project:
 _note: this file is also used for all aggregated contributors_
 - `.all-contributorsrc`
