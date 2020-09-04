@@ -14,7 +14,7 @@ export const getAuthProviderHeader = (
 }
 
 export interface AuthorizationHeader {
-  schema: 'Bearer' | 'Basic'
+  schema: 'Bearer' | 'Basic' | string
   token: string
 }
 /**
@@ -27,12 +27,11 @@ export const parseAuthorizationHeader = (
   if (!schema.length || !token.length) {
     throw new Error('The `Authorization` header is not valid.')
   }
-  // @ts-expect-error
   return { schema, token }
 }
 
 export type AuthContextPayload = [
-  string | object | null,
+  string | Record<string, unknown> | null,
   { type: SupportedAuthTypes } & AuthorizationHeader,
   { event: APIGatewayProxyEvent; context: GlobalContext & LambdaContext }
 ]

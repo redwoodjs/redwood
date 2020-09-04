@@ -24,7 +24,9 @@ export function getOutline(project: RWProject): TreeItem2 {
         ),
         menu: {
           kind: 'withDoc',
-          doc: Command_open('https://redwoodjs.com/docs/app-configuration-redwood-toml'),
+          doc: Command_open(
+            'https://redwoodjs.com/docs/app-configuration-redwood-toml'
+          ),
         },
       } as TreeItem2,
       {
@@ -129,7 +131,9 @@ function _components(project: RWProject): TreeItem2 {
     menu: {
       kind: 'group',
       add: Command_cli('rw generate component ...'),
-      doc: Command_open('https://redwoodjs.com/docs/cli-commands.html#component'),
+      doc: Command_open(
+        'https://redwoodjs.com/docs/cli-commands.html#component'
+      ),
     },
   }
 }

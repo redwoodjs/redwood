@@ -10,7 +10,7 @@ import { setContext } from 'src/globalContext'
 export type GetCurrentUser = (
   decoded: AuthContextPayload[0],
   raw: AuthContextPayload[1]
-) => Promise<null | object | string>
+) => Promise<null | Record<string, unknown> | string>
 
 /**
  * We use Apollo Server's `context` option as an entry point to construct our
