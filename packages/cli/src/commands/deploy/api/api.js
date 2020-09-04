@@ -46,7 +46,11 @@ export const handler = async ({ provider }) => {
                   title: preReq.title,
                   task: async () => {
                     try {
-                      await execa(...preReq.command)
+                      if (preReq.jsFunction) {
+                        preReq.jsFunction()
+                      } else {
+                        await execa(...preReq.command)
+                      }
                     } catch (error) {
                       error.message =
                         error.message + '\n' + preReq.errorMessage.join(' ')
