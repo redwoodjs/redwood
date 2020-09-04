@@ -1,5 +1,5 @@
 declare module '@babel/register' {
-  export default function (options: any): void
+  export default function (options: unknown): void
 }
 
 declare module 'youch' {

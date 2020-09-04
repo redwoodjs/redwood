@@ -63,7 +63,7 @@ type AuthProviderProps = {
 type AuthProviderState = {
   loading: boolean
   isAuthenticated: boolean
-  userMetadata: null | Record<string, unknown>
+  userMetadata: null | Record<string, any>
   currentUser: null | undefined | CurrentUser
   hasError: boolean
   error?: Error
