@@ -1,5 +1,5 @@
-import React, { useContext, useEffect } from 'react'
-import { useForm, FormContext, useFormContext } from 'react-hook-form'
+import React, { useContext, useEffect, forwardRef } from 'react'
+import { useForm, FormProvider, useFormContext } from 'react-hook-form'
 import pascalcase from 'pascalcase'
 
 import { CoercionContextProvider, useCoercion } from './coercion'
@@ -72,8 +72,9 @@ const inputTagProps = (props) => {
     }
   }
 
-  // dataType shouldn't be passed to the underlying HTML element
+  // dataType/transformValue shouldn't be passed to the underlying HTML element
   delete tagProps.dataType
+  delete tagProps.transformValue
 
   return tagProps
 }
@@ -178,7 +179,7 @@ const FormWithCoercionContext = (props) => {
           errorProps?.graphQLErrors[0]?.extensions?.exception?.messages || {}
         }
       >
-        <FormContext {...formMethods}>{props.children}</FormContext>
+        <FormProvider {...formMethods}>{props.children}</FormProvider>
       </FieldErrorContext.Provider>
     </form>
   )
@@ -223,13 +224,21 @@ const FieldError = (props) => {
 
 // Renders a <textarea> field
 
-const TextAreaField = (props) => {
+const TextAreaField = forwardRef((props, ref) => {
   const { register } = useFormContext()
   const { setCoercion } = useCoercion()
 
   React.useEffect(() => {
-    setCoercion({ name: props.name, dataType: props.dataType })
-  }, [setCoercion, props.name, props.dataType])
+    if (process.env.NODE_ENV !== 'production' && props.dataType !== undefined) {
+      console.warn(
+        'Using the "dataType" prop on form input fields is deprecated. Use "transformValue" instead.'
+      )
+    }
+    setCoercion({
+      name: props.name,
+      transformValue: props.transformValue || props.dataType,
+    })
+  }, [setCoercion, props.name, props.transformValue, props.dataType])
 
   const tagProps = inputTagProps(props)
 
@@ -237,14 +246,17 @@ const TextAreaField = (props) => {
     <textarea
       {...tagProps}
       id={props.id || props.name}
-      ref={register(props.validation || { required: false })}
+      ref={(e) => {
+        register(e, props.validation || { required: false })
+        if (ref) ref.current = e
+      }}
     />
   )
-}
+})
 
 // Renders a <select> field
 
-const SelectField = (props) => {
+const SelectField = forwardRef((props, ref) => {
   const { register } = useFormContext()
   const tagProps = inputTagProps(props)
 
@@ -252,41 +264,57 @@ const SelectField = (props) => {
     <select
       {...tagProps}
       id={props.id || props.name}
-      ref={register(props.validation || { required: false })}
+      ref={(e) => {
+        register(e, props.validation || { required: false })
+        if (ref) ref.current = e
+      }}
     />
   )
-}
+})
 
 // Renders a <button type="submit">
 
-const Submit = React.forwardRef((props, ref) => (
+const Submit = forwardRef((props, ref) => (
   <button ref={ref} type="submit" {...props} />
 ))
 
 // Renders a <input>
 
-const InputField = (props) => {
+const InputField = forwardRef((props, ref) => {
   const { register } = useFormContext()
   const { setCoercion } = useCoercion()
-
   React.useEffect(() => {
+    if (process.env.NODE_ENV !== 'production' && props.dataType !== undefined) {
+      console.warn(
+        'Using the "dataType" prop on form input fields is deprecated. Use "transformValue" instead.'
+      )
+    }
     setCoercion({
       name: props.name,
       type: props.type,
-      dataType: props.dataType,
+      transformValue: props.transformValue || props.dataType,
     })
-  }, [setCoercion, props.name, props.type, props.dataType])
+  }, [
+    setCoercion,
+    props.name,
+    props.type,
+    props.transformValue,
+    props.dataType,
+  ])
 
   const tagProps = inputTagProps(props)
 
   return (
     <input
-      id={props.id || props.name}
-      ref={register(props.validation || { required: false })}
       {...tagProps}
+      id={props.id || props.name}
+      ref={(e) => {
+        register(e, props.validation || { required: false })
+        if (ref) ref.current = e
+      }}
     />
   )
-}
+})
 
 // Create a component for each type of Input.
 //
@@ -300,9 +328,9 @@ const InputField = (props) => {
 
 let inputComponents = {}
 INPUT_TYPES.forEach((type) => {
-  inputComponents[`${pascalcase(type)}Field`] = (props) => (
-    <InputField type={type} {...props} />
-  )
+  inputComponents[`${pascalcase(type)}Field`] = forwardRef((props, ref) => (
+    <InputField ref={ref} type={type} {...props} />
+  ))
 })
 
 export {

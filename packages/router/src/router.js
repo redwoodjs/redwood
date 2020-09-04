@@ -31,16 +31,25 @@ Private.propTypes = {
    * The page name where a user will be redirected when not authenticated.
    */
   unauthenticated: PropTypes.string.isRequired,
+  role: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
 }
 
-const PrivatePageLoader = ({ useAuth, unauthenticatedRoute, children }) => {
-  const { loading, isAuthenticated } = useAuth()
+const PrivatePageLoader = ({
+  useAuth,
+  unauthenticatedRoute,
+  role,
+  children,
+}) => {
+  const { loading, isAuthenticated, hasRole } = useAuth()
 
   if (loading) {
     return null
   }
 
-  if (isAuthenticated) {
+  if (
+    (isAuthenticated && !role) ||
+    (isAuthenticated && role && hasRole(role))
+  ) {
     return children
   } else {
     return (
@@ -108,29 +117,36 @@ const RouterImpl = ({
   children,
   useAuth = window.__REDWOOD__USE_AUTH,
 }) => {
-  // Find `Private` components, mark their children `Route` components as private,
-  // and merge them into a single array.
-  const privateRoutes =
-    React.Children.toArray(children)
-      .filter((child) => child.type === Private)
-      .map((privateElement) => {
-        // Set `Route` props
-        const { unauthenticated, children } = privateElement.props
-        return React.Children.toArray(children).map((route) =>
-          React.cloneElement(route, {
-            private: true,
-            unauthenticatedRedirect: unauthenticated,
-          })
-        )
-      })
-      .reduce((a, b) => a.concat(b), []) || []
+  const routes = React.useMemo(() => {
+    // Find `Private` components, mark their children `Route` components as private,
+    // and merge them into a single array.
+    const privateRoutes =
+      React.Children.toArray(children)
+        .filter((child) => child.type === Private)
+        .map((privateElement) => {
+          // Set `Route` props
+          const { unauthenticated, role, children } = privateElement.props
+          return React.Children.toArray(children).map((route) =>
+            React.cloneElement(route, {
+              private: true,
+              unauthenticatedRedirect: unauthenticated,
+              role: role,
+            })
+          )
+        })
+        .reduce((a, b) => a.concat(b), []) || []
 
-  const routes = [
-    ...privateRoutes,
-    ...React.Children.toArray(children).filter((child) => child.type === Route),
-  ]
+    const routes = [
+      ...privateRoutes,
+      ...React.Children.toArray(children).filter(
+        (child) => child.type === Route
+      ),
+    ]
 
-  const namedRoutes = mapNamedRoutes(routes)
+    return routes
+  }, [children])
+
+  const namedRoutes = React.useMemo(() => mapNamedRoutes(routes), [routes])
 
   let NotFoundPage
 
@@ -169,6 +185,7 @@ const RouterImpl = ({
               unauthenticatedRoute={
                 namedRoutes[route.props.unauthenticatedRedirect]
               }
+              role={route.props.role}
             >
               <Loaders
                 allParams={allParams}

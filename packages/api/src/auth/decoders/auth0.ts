@@ -24,7 +24,7 @@ import jwksClient from 'jwks-rsa'
  */
 export const verifyAuth0Token = (
   bearerToken: string
-): Promise<null | object> => {
+): Promise<null | Record<string, unknown>> => {
   return new Promise((resolve, reject) => {
     const { AUTH0_DOMAIN, AUTH0_AUDIENCE } = process.env
     if (!AUTH0_DOMAIN || !AUTH0_AUDIENCE) {
@@ -53,12 +53,18 @@ export const verifyAuth0Token = (
         if (verifyError) {
           return reject(verifyError)
         }
-        resolve(typeof decoded !== 'undefined' ? decoded : null)
+        resolve(
+          typeof decoded === 'undefined'
+            ? null
+            : (decoded as Record<string, unknown>)
+        )
       }
     )
   })
 }
 
-export const auth0 = async (token: string): Promise<null | object> => {
+export const auth0 = async (
+  token: string
+): Promise<null | Record<string, unknown>> => {
   return verifyAuth0Token(token)
 }

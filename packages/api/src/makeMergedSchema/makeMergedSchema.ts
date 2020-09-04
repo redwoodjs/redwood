@@ -111,7 +111,10 @@ const mergeResolversWithServices = ({
 }
 
 const mergeResolvers = (schemas: {
-  [key: string]: { schema: object; resolvers: object }
+  [key: string]: {
+    schema: Record<string, unknown>
+    resolvers: Record<string, unknown>
+  }
 }) =>
   omitBy(
     merge(
@@ -143,7 +146,12 @@ export const makeMergedSchema = ({
   services,
   schemaDirectives,
 }: {
-  schemas: { [key: string]: { schema: object; resolvers: object } }
+  schemas: {
+    [key: string]: {
+      schema: Record<string, unknown>
+      resolvers: Record<string, unknown>
+    }
+  }
   services: Services
   schemaDirectives?: IExecutableSchemaDefinition['schemaDirectives']
 }) => {

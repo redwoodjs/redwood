@@ -18,7 +18,7 @@ try {
   // building the framework and don't need this plugin.
   require.resolve('@redwoodjs/eslint-plugin-redwood')
   supportRedwoodAutoPageImports = {
-    files: ['web/src/Routes.js', 'web/src/Routes.ts'],
+    files: ['web/src/Routes.js', 'web/src/Routes.tsx'],
     rules: {
       'no-undef': 'off',
       '@redwoodjs/redwood/no-unavailable-pages': 'error',
@@ -60,7 +60,8 @@ module.exports = {
         '@typescript-eslint/no-var-requires': 'off',
         '@typescript-eslint/explicit-function-return-type': 'off',
         '@typescript-eslint/no-empty-interface': 'off',
-        'typescript-eslint/no-empty-function': 'off',
+        '@typescript-eslint/explicit-module-boundary-types': 'off',
+        '@typescript-eslint/ban-types': 'warn',
         'no-empty-function': 'off',
         '@typescript-eslint/no-empty-function': 'off',
         camelcase: 'off',
@@ -96,7 +97,7 @@ module.exports = {
     mockGraphQLMutation: 'readonly',
   },
   rules: {
-    'prettier/prettier': 'error',
+    'prettier/prettier': 'warn',
     'no-console': 'off',
     'prefer-object-spread': 'warn',
     'prefer-spread': 'warn',

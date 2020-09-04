@@ -8,7 +8,7 @@ export const schema = gql`
 
   type Query {
     userProfiles: [UserProfile!]!
-    userProfile(id: Int!): UserProfile!
+    userProfile(id: Int!): UserProfile
   }
 
   input CreateUserProfileInput {

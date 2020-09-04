@@ -71,5 +71,6 @@ export const handler = async (args) => {
     await tasks.run()
   } catch (e) {
     console.log(c.error(e.message))
+    process.exit(1)
   }
 }
