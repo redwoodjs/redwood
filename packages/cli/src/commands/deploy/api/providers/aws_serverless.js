@@ -32,7 +32,7 @@ export const preRequisites = [
     },
     errorMessage: [
       'Looks like rhel-openssl-1.0.x is not a binary target for the prisma client generator.',
-      'Add it to binaryTargets in the generator section of your prisma schema.',
+      'Add it to binaryTargets in the generator section of your prisma schema as so -> binaryTargets = ["native", "rhel-openssl-1.0.x"].',
     ],
   },
 ]
