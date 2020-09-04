@@ -1,10 +1,12 @@
 /**
- * This is the babel preset used `create-redwood-app`
+ * This is the babel preset used in `create-redwood-app`
  */
 
 const { getProject } = require('@redwoodjs/structure')
 
-const TARGETS_NODE = '12.16.1'
+const packageJSON = require('../package.json')
+
+const TARGETS_NODE = '12.16'
 // Warning! Use the minor core-js version: "corejs: '3.6'", instead of "corejs: 3",
 // because we want to include the features added in the minor version.
 // https://github.com/zloirock/core-js/blob/master/README.md#babelpreset-env
@@ -27,8 +29,7 @@ module.exports = () => {
           // https://babeljs.io/docs/en/babel-plugin-transform-runtime/#version
           // Transform-runtime assumes that @babel/runtime@7.0.0 is installed.
           // Specifying the version can result in a smaller bundle size.
-          // TODO: Grab version for package.json
-          version: '^7.8.3',
+          version: packageJSON.devDependencies['@babel/runtime-corejs3'],
         },
       ],
       ['babel-plugin-graphql-tag'],
