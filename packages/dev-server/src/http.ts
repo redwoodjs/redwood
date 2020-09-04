@@ -37,18 +37,17 @@ export const server = ({
     `)
   })
 
-  const lambdaHandler =
-    async (req: Request, res: Response): Promise<void> => {
-      const { routeName } = req.params
-      const lambdaFunction = LAMBDA_FUNCTIONS[routeName]
-      if (!lambdaFunction) {
-        const errorMessage = `Function "${routeName}" was not found.`
-        console.error(errorMessage)
-        res.status(404).send(errorMessage)
-        return
-      }
-      await requestHandler(req, res, lambdaFunction)
+  const lambdaHandler = async (req: Request, res: Response): Promise<void> => {
+    const { routeName } = req.params
+    const lambdaFunction = LAMBDA_FUNCTIONS[routeName]
+    if (!lambdaFunction) {
+      const errorMessage = `Function "${routeName}" was not found.`
+      console.error(errorMessage)
+      res.status(404).send(errorMessage)
+      return
     }
+    await requestHandler(req, res, lambdaFunction)
+  }
 
   app.all('/:routeName', lambdaHandler)
   app.all('/:routeName/*', lambdaHandler)
