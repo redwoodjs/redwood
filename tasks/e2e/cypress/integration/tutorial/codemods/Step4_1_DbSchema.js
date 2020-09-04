@@ -8,7 +8,7 @@ datasource DS {
 
 generator client {
   provider      = "prisma-client-js"
-  binaryTargets = env("BINARY_TARGET")
+  binaryTargets = "native"
 }
 
 model Post {

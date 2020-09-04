@@ -66,6 +66,18 @@ use:
 - Database migrations (via Prisma 2).
 - First class JAMstack-style deployment to [Netlify](https://www.netlify.com/).
 
+## Quickstart
+- Yarn is required to create a basic structure. (node: ">=12", yarn: ">=1.15")
+  ```
+    yarn create redwood-app ./redwoodblog
+  ```
+- Start the development server
+  ```cd redwoodblog
+      yarn redwood dev
+  ```
+- A browser should automatically open to http://localhost:8910 and you will see the Redwood welcome page.
+- To learn more please visit the redwood docs here: [RedwoodJS](https://redwoodjs.com/tutorial/prerequisites)
+
 ## The Redwood philosophy
 
 Redwood believes that [JAMstack](https://jamstack.org/) is a huge leap forward in how we can write web
@@ -341,6 +353,7 @@ And there you have it.
     <td align="center"><a href="https://github.com/stephanvd"><img src="https://avatars1.githubusercontent.com/u/1248040?v=4" width="100px;" alt=""/><br /><sub><b>Stephan van Diepen</b></sub></a></td>
     <td align="center"><a href="https://github.com/bpenno"><img src="https://avatars0.githubusercontent.com/u/10125593?v=4" width="100px;" alt=""/><br /><sub><b>bpenno</b></sub></a></td>
     <td align="center"><a href="https://github.com/tctrautman"><img src="https://avatars0.githubusercontent.com/u/4513085?v=4" width="100px;" alt=""/><br /><sub><b>Tim Trautman</b></sub></a></td>
+    <td align="center"><a href="https://zackmckenna.com/"><img src="https://avatars1.githubusercontent.com/u/31899931?v=4" width="100px;" alt=""/><br /><sub><b>Zachary McKenna</b></sub></a></td>
   </tr>
 </table>
 
