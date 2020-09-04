@@ -46,6 +46,7 @@
       "@typescript-eslint/no-non-null-assertion": "off",
       "no-case-declarations": "off",
       "prefer-const": "off",
+      "no-empty": "warn",
       "no-unused-expressions": "off"
     }
   },
