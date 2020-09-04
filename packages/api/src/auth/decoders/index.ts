@@ -22,7 +22,7 @@ export const decodeToken = async (
     event: APIGatewayProxyEvent
     context: GlobalContext & LambdaContext
   }
-): Promise<null | string | object> => {
+): Promise<null | string | Record<string, unknown>> => {
   if (!typesToDecoders[type]) {
     // Make this a warning, instead of a hard error
     // Allow users to have multiple custom types if they choose to

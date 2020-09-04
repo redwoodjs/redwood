@@ -5,10 +5,10 @@ declare module '@babel/register' {
 declare module 'youch' {
   export default class {
     constructor(error: Error)
-    toJSON(): object
+    toJSON(): Record<string, unknown>
   }
 }
 
 declare module 'youch-terminal' {
-  export default function (json: object): string
+  export default function (json: Record<string, unknown>): string
 }
