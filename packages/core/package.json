@@ -44,7 +44,7 @@
     "error-overlay-webpack-plugin": "^0.4.1",
     "file-loader": "^6.0.0",
     "findup-sync": "^4.0.0",
-    "graphql": "^14.6.0",
+    "graphql": "^15.3.0",
     "graphql-tag": "^2.10.3",
     "html-webpack-plugin": "^4.0.2",
     "jest": "^26.1.0",
