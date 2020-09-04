@@ -88,8 +88,9 @@ export const handler = async ({ provider }) => {
     console.log(c.green(providerData.deployCommand.title))
     const deploy = execa(...providerData.deployCommand.command, {
       cwd: BASE_DIR,
+      stdio: 'inherit',
     })
-    deploy.stdout.pipe(process.stdout)
+
     await deploy
   } catch (e) {
     console.log(c.error(e.message))
