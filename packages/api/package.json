@@ -11,7 +11,7 @@
     "@prisma/client": "2.6.1",
     "@redwoodjs/internal": "^0.17.2",
     "apollo-server-lambda": "2.16.0",
-    "core-js": "3.6.4",
+    "core-js": "3.6.5",
     "graphql": "^14.6.0",
     "graphql-scalars": "^1.2.6",
     "graphql-tools": "6.2.0",
