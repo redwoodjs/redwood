@@ -40,6 +40,10 @@ jobs:
           powershell Start-Process -PassThru -Wait PowerShell -ArgumentList \
             "'-Command Set-MpPreference -DisableRealtimeMonitoring \$true'";
 
+      - name: Set Windows package registry
+        if: matrix.os == 'windows-latest'
+        run: yarn config set registry "http://registry.npmjs.org"     
+
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
