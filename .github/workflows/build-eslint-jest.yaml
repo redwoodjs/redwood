@@ -15,8 +15,9 @@ jobs:
       fail-fast: true
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.os }} | Node ${{ matrix.node-version }} latest
-    if: github.event.pull_request.merged == 'false'
     steps:
+      - if: github.event.pull_request.merged == 'false'
+        
       - uses: actions/checkout@v2
 
       - name: Setup node
