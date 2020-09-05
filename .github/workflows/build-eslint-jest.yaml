@@ -30,10 +30,16 @@ jobs:
           path: '**/node_modules'
           key: node_modules_${{ runner.os }}_${{ hashFiles('**/yarn.lock') }}
       
-      - name: Set Windows Yarn Registry
+      - name: Disable Windows Defender Realtime Monitoring
         if: matrix.os == 'windows-latest'
-        run: yarn config set registry "http://registry.npmjs.org"
-        
+        run: |
+          powershell Start-Process -PassThru -Wait PowerShell -ArgumentList \
+            "'-Command Set-MpPreference -DisableArchiveScanning \$true'";
+          powershell Start-Process -PassThru -Wait PowerShell -ArgumentList \
+            "'-Command Set-MpPreference -DisableBehaviorMonitoring \$true'";
+          powershell Start-Process -PassThru -Wait PowerShell -ArgumentList \
+            "'-Command Set-MpPreference -DisableRealtimeMonitoring \$true'";
+
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
