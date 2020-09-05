@@ -5724,6 +5724,13 @@ axios@^0.19.0, axios@^0.19.2:
   dependencies:
     follow-redirects "1.5.10"
 
+axios@^0.20.0:
+  version "0.20.0"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.20.0.tgz#057ba30f04884694993a8cd07fa394cff11c50bd"
+  integrity sha512-ANA4rr2BDcmmAQLOKft2fufrtuvlqR+cXNNinUmvfeSNCOF98PZL+7M/v1zIdGo7OLjEA9J2gXJL+j4zGsl0bA==
+  dependencies:
+    follow-redirects "^1.10.0"
+
 axobject-query@^2.1.2:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/axobject-query/-/axobject-query-2.2.0.tgz#943d47e10c0b704aa42275e20edf3722648989be"
@@ -9739,10 +9746,10 @@ follow-redirects@1.5.10:
   dependencies:
     debug "=3.1.0"
 
-follow-redirects@^1.0.0:
-  version "1.12.1"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.12.1.tgz#de54a6205311b93d60398ebc01cf7015682312b6"
-  integrity sha512-tmRv0AVuR7ZyouUHLeNSiO6pqulF7dYa3s19c6t+wz9LD69/uSzdMxJ2S91nTI9U3rt/IldxpzMOFejp6f0hjg==
+follow-redirects@^1.0.0, follow-redirects@^1.10.0:
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.13.0.tgz#b42e8d93a2a7eea5ed88633676d6597bc8e384db"
+  integrity sha512-aq6gF1BEKje4a9i9+5jimNFIpq4Q1WiwBToeRK5NvZBd/TRsmW8BsJfOEGkr76TbOyPVD3OVDN910EcUNtRYEA==
 
 for-in@^0.1.3:
   version "0.1.8"
@@ -15629,9 +15636,9 @@ react-helmet-async@^1.0.2:
     shallowequal "^1.1.0"
 
 react-hook-form@^6.5.3:
-  version "6.7.1"
-  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-6.7.1.tgz#58f1ce3ba6b0f3cb05b665a4cc268d0623ea9e1a"
-  integrity sha512-0I6NUPxdCVWIAbDhhmChusikDD70uUN9mXwtF4qClne8ECwlfhWZ4CBLMyPKjS1B5SmPAVMDWH8zhA3jTpzz+Q==
+  version "6.7.2"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-6.7.2.tgz#a6a498bff188cfead9fd8e4a1404bd53e0ebe66e"
+  integrity sha512-nZakWdvKqAuoz96UD463/lWND4/yMZIr4xTRdkyeN2JDnXbrWgCeVjwP6/mLw33WajMCHSdFW4tvJTq+bM9dzg==
 
 react-hotkeys@2.0.0:
   version "2.0.0"
