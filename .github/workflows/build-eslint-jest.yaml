@@ -8,7 +8,6 @@ on:
 
 jobs:
   all:
-    if: github.event.pull_request.merged == 'false'
     strategy:
       matrix:
         os: ['ubuntu-latest', 'windows-latest']
@@ -16,6 +15,7 @@ jobs:
       fail-fast: true
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.os }} | Node ${{ matrix.node-version }} latest
+    if: github.event.pull_request.merged == false
     steps:        
       - uses: actions/checkout@v2
 
