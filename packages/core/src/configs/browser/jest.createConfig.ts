@@ -13,7 +13,6 @@ export default function getBrowserJestConfig() {
       color: 'blueBright',
       name: 'web',
     },
-    resolver: 'jest-directory-named-resolver',
     globals: {
       __REDWOOD__: true,
       __REDWOOD__API_PROXY_PATH: '/',
