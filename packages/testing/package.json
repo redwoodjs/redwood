@@ -10,7 +10,7 @@
   "dependencies": {
     "@redwoodjs/internal": "^0.17.2",
     "@redwoodjs/web": "^0.17.2",
-    "@testing-library/react": "^10.0.4",
+    "@testing-library/react": "^11.0.2",
     "@types/react": "16.9.38",
     "msw": "^0.20.0"
   },

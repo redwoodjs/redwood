@@ -23,7 +23,7 @@
     "core-js": "3.6.5",
     "cross-env": "^7.0.2",
     "decamelize": "^4.0.0",
-    "dotenv-defaults": "^1.1.1",
+    "dotenv-defaults": "^2.0.1",
     "envinfo": "^7.5.1",
     "execa": "^4.0.0",
     "fs-extra": "^9.0.1",
