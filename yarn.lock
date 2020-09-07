@@ -1273,7 +1273,7 @@
     core-js-pure "^3.0.0"
     regenerator-runtime "^0.13.4"
 
-"@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2", "@babel/runtime@^7.10.2", "@babel/runtime@^7.10.3", "@babel/runtime@^7.10.5", "@babel/runtime@^7.3.1", "@babel/runtime@^7.5.0", "@babel/runtime@^7.5.5", "@babel/runtime@^7.7.2", "@babel/runtime@^7.7.6", "@babel/runtime@^7.8.4", "@babel/runtime@^7.9.2", "@babel/runtime@^7.9.6":
+"@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2", "@babel/runtime@^7.10.2", "@babel/runtime@^7.10.3", "@babel/runtime@^7.10.5", "@babel/runtime@^7.11.2", "@babel/runtime@^7.3.1", "@babel/runtime@^7.5.0", "@babel/runtime@^7.5.5", "@babel/runtime@^7.7.2", "@babel/runtime@^7.7.6", "@babel/runtime@^7.8.4", "@babel/runtime@^7.9.2", "@babel/runtime@^7.9.6":
   version "7.11.2"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.11.2.tgz#f549c13c754cc40b87644b9fa9f09a6a95fe0736"
   integrity sha512-TeWkU52so0mPtDcaCTxNBI/IHiz0pZgr8VEFqXFtZWpYD08ZB6FaSwVAS8MKRQAP3bYKiVjwysOJgMFY28o6Tw==
@@ -3876,25 +3876,16 @@
   dependencies:
     defer-to-connect "^1.0.1"
 
-"@testing-library/dom@^7.17.1", "@testing-library/dom@^7.9.0":
-  version "7.21.7"
-  resolved "https://registry.yarnpkg.com/@testing-library/dom/-/dom-7.21.7.tgz#23c57c361db5e961afa3e6f3f15bd57fbda01187"
-  integrity sha512-GVNrLAt0yq7Squz1HrW8IiDVKP5jeWSv9cpgQJsfmXYXLFPpaFoRxn+H/NcUitVXyb0J62PkpVWjMe5b0fvYrQ==
+"@testing-library/dom@^7.23.0":
+  version "7.24.1"
+  resolved "https://registry.yarnpkg.com/@testing-library/dom/-/dom-7.24.1.tgz#0e8acd042070f2c1b183fbfe5c0d38b3194ad3c0"
+  integrity sha512-TemHWY59gvzcScGiE5eooZpzYk9GaED0TuuK4WefbIc/DQg0L5wOpnj7MIEeAGF3B7Ekf1kvmVnQ97vwz4Lmhg==
   dependencies:
+    "@babel/code-frame" "^7.10.4"
     "@babel/runtime" "^7.10.3"
     "@types/aria-query" "^4.2.0"
     aria-query "^4.2.2"
-    dom-accessibility-api "^0.4.6"
-    pretty-format "^25.5.0"
-
-"@testing-library/dom@^7.22.3":
-  version "7.22.6"
-  resolved "https://registry.yarnpkg.com/@testing-library/dom/-/dom-7.22.6.tgz#a9466c564e9cccb56175ad2ff471aa4ba43ef0b7"
-  integrity sha512-8703SWfapsEMwG10/c8AV7qK33zyy0NMDs0SbX9uEZnHWnxaNA5SnODuWS1PvFEjoNjBxfoxVZtw6uQAXO7tJw==
-  dependencies:
-    "@babel/runtime" "^7.10.3"
-    "@types/aria-query" "^4.2.0"
-    aria-query "^4.2.2"
+    chalk "^4.1.0"
     dom-accessibility-api "^0.5.1"
     pretty-format "^26.4.2"
 
@@ -3912,29 +3903,13 @@
     lodash "^4.17.15"
     redent "^3.0.0"
 
-"@testing-library/react@10.2.1":
-  version "10.2.1"
-  resolved "https://registry.yarnpkg.com/@testing-library/react/-/react-10.2.1.tgz#f0c5ac9072ad54c29672150943f35d6617263f26"
-  integrity sha512-pv2jZhiZgN1/alz1aImhSasZAOPg3er2Kgcfg9fzuw7aKPLxVengqqR1n0CJANeErR1DqORauQaod+gGUgAJOQ==
+"@testing-library/react@11.0.2", "@testing-library/react@^11.0.2":
+  version "11.0.2"
+  resolved "https://registry.yarnpkg.com/@testing-library/react/-/react-11.0.2.tgz#4588cc537085907bd1d98b531eb247dbbf57b1cc"
+  integrity sha512-iOuNNHt4ZgMH5trSKC4kaWDcKzUOf7e7KQIcu7xvGCd68/w1EegbW89F9T5sZ4IjS0gAXdvOfZbG9ESZ7YjOug==
   dependencies:
-    "@babel/runtime" "^7.10.2"
-    "@testing-library/dom" "^7.9.0"
-
-"@testing-library/react@10.4.9":
-  version "10.4.9"
-  resolved "https://registry.yarnpkg.com/@testing-library/react/-/react-10.4.9.tgz#9faa29c6a1a217bf8bbb96a28bd29d7a847ca150"
-  integrity sha512-pHZKkqUy0tmiD81afs8xfiuseXfU/N7rAX3iKjeZYje86t9VaB0LrxYVa+OOsvkrveX5jCK3IjajVn2MbePvqA==
-  dependencies:
-    "@babel/runtime" "^7.10.3"
-    "@testing-library/dom" "^7.22.3"
-
-"@testing-library/react@^10.0.4":
-  version "10.4.7"
-  resolved "https://registry.yarnpkg.com/@testing-library/react/-/react-10.4.7.tgz#fc14847fb70a5e93576b8f7f0d1490ead02a9061"
-  integrity sha512-hUYbum3X2f1ZKusKfPaooKNYqE/GtPiQ+D2HJaJ4pkxeNJQFVUEvAvEh9+3QuLdBeTWkDMNY5NSijc5+pGdM4Q==
-  dependencies:
-    "@babel/runtime" "^7.10.3"
-    "@testing-library/dom" "^7.17.1"
+    "@babel/runtime" "^7.11.2"
+    "@testing-library/dom" "^7.23.0"
 
 "@testing-library/user-event@12.1.3":
   version "12.1.3"
@@ -8400,11 +8375,6 @@ doctrine@^3.0.0:
   integrity sha512-yS+Q5i3hBf7GBkd4KG8a7eBNNWNGLTaEwwYWUijIYM7zrlYDM0BFXHjjPWlWZ1Rg7UaddZeIDmi9jF3HmqiQ2w==
   dependencies:
     esutils "^2.0.2"
-
-dom-accessibility-api@^0.4.6:
-  version "0.4.7"
-  resolved "https://registry.yarnpkg.com/dom-accessibility-api/-/dom-accessibility-api-0.4.7.tgz#31d01c113af49f323409b3ed09e56967aba485a8"
-  integrity sha512-5+GzhTpCQYHz4NjL8loYTDVBnXIjNLBadWQBKxXk+osFEplLt3EsSYBu2YZcdZ8QqrvCHgW6TSMGMbmgfhrn2g==
 
 dom-accessibility-api@^0.5.1:
   version "0.5.1"
