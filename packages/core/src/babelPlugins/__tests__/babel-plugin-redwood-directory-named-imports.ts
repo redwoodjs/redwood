@@ -23,6 +23,24 @@ const testCases = [
     output:
       'export { pew } from "./__fixtures__/directory-named-imports/indexModule"',
   },
+  // Supports "*.ts"
+  {
+    input: 'export { pew } from "./__fixtures__/directory-named-imports/TS"',
+    output:
+      'export { pew } from "./__fixtures__/directory-named-imports/TS/TS"',
+  },
+  // Supports "*.tsx"
+  {
+    input: 'export { pew } from "./__fixtures__/directory-named-imports/TSX"',
+    output:
+      'export { pew } from "./__fixtures__/directory-named-imports/TSX/TSX"',
+  },
+  // Supports "*.jsx"
+  {
+    input: 'export { pew } from "./__fixtures__/directory-named-imports/JSX"',
+    output:
+      'export { pew } from "./__fixtures__/directory-named-imports/JSX/JSX"',
+  },
 ]
 
 describe('directory named imports', () => {
