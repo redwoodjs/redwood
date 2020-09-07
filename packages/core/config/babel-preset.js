@@ -33,6 +33,9 @@ module.exports = () => {
         },
       ],
       ['babel-plugin-graphql-tag'],
+      [
+        require('../dist/babelPlugins/babel-plugin-redwood-directory-named-import'),
+      ],
     ],
     overrides: [
       // ** API **
