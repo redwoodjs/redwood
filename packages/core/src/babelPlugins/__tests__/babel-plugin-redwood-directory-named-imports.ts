@@ -3,16 +3,25 @@ import * as babel from '@babel/core'
 import namedDirectory from '../babel-plugin-redwood-directory-named-import'
 
 const testCases = [
+  // Directory named exports
   {
     input: 'import pew from "./__fixtures__/directory-named-imports/Module"',
     output:
       'import pew from "./__fixtures__/directory-named-imports/Module/Module"',
   },
+  // Directory named exports
   {
     input:
       'export { pew } from "./__fixtures__/directory-named-imports/Module"',
     output:
       'export { pew } from "./__fixtures__/directory-named-imports/Module/Module"',
+  },
+  // Gives preferences to `index.*`
+  {
+    input:
+      'export { pew } from "./__fixtures__/directory-named-imports/indexModule"',
+    output:
+      'export { pew } from "./__fixtures__/directory-named-imports/indexModule"',
   },
 ]
 
