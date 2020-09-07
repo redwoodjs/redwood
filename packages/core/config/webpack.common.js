@@ -4,7 +4,6 @@ const { existsSync } = require('fs')
 
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const DirectoryNamedWebpackPlugin = require('directory-named-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 const { RetryChunkLoadPlugin } = require('webpack-retry-chunk-load-plugin')
@@ -157,13 +156,7 @@ module.exports = (webpackEnv) => {
       app: path.resolve(redwoodPaths.base, 'web/src/index'),
     },
     resolve: {
-      extensions: ['.ts', '.tsx', '.js', '.json'],
-      plugins: [
-        new DirectoryNamedWebpackPlugin({
-          honorIndex: true,
-          exclude: /node_modules/,
-        }),
-      ],
+      extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
       alias: {
         // https://www.styled-components.com/docs/faqs#duplicated-module-in-node_modules
         'styled-components': path.resolve(
