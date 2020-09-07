@@ -2,9 +2,7 @@ import path from 'path'
 
 import type { PluginObj, types } from '@babel/core'
 
-import { resolveFile } from '@redwoodjs/internal'
-
-const getNewPath = (value, filename) => {
+const getNewPath = (value: string, filename: string) => {
   const dirname = path.dirname(value)
   const basename = path.basename(value)
 
@@ -35,17 +33,19 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
           // CONTINUE...
         }
 
-        const newPath = getNewPath(value, filename)
+        const newPath = getNewPath(value, <string>filename)
         if (!newPath) return
         const newSource = t.stringLiteral(value.replace(value, newPath))
         p.node.source = newSource
       },
 
       ExportDeclaration(p, state) {
+        // @ts-expect-error - TypeDef must be outdated.
         if (!p?.node?.source) {
           return
         }
 
+        // @ts-expect-error - TypeDef must be outdated.
         const { value } = p.node.source
         const { filename } = state.file.opts
 
@@ -59,9 +59,10 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
           // CONTINUE...
         }
 
-        const newPath = getNewPath(value, filename)
+        const newPath = getNewPath(value, <string>filename)
         if (!newPath) return
         const newSource = t.stringLiteral(value.replace(value, newPath))
+        // @ts-expect-error - TypeDef must be outdated.
         p.node.source = newSource
       },
     },
