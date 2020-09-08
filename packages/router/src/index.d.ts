@@ -57,10 +57,20 @@ declare module '@redwoodjs/router' {
    */
   function navigate(nameOfRoute: namedRoute)
 
-  // TODO Convert any types to correct typings
-  const Redirect: any
-  const Link: any
-  const NavLink: any
+  /**
+   * If you want to declaratively redirect to a different page,
+   * use the `<Redirect>` component.
+   * @example
+   * ```js
+   * // SomePage.js
+   * import { Redirect, routes } from '@redwoodjs/router'
+   *
+   * const SomePage = () => {
+   *   <Redirect to={routes.home()}/>
+   * }
+   * ```
+   **/
+  const Redirect: React.FunctionComponent<{ to: namedRoute }>
   const route: any
 
   const useLocation: any
