@@ -71,6 +71,22 @@ declare module '@redwoodjs/router' {
    * ```
    **/
   const Redirect: React.FunctionComponent<{ to: namedRoute }>
+
+  /**
+   * When it comes to routing, matching URLs to Pages is only half the equation.
+   * The other half is generating links to your pages.
+   * Redwood makes this really simple without having to hardcode URL paths.
+   *
+   * @example
+   * ```js
+   * // SomePage.js
+   * import { Link, routes } from '@redwoodjs/router'
+   *
+   * // Given the route in the last section, this produces: <a href="/">
+   * const SomePage = () => <Link to={routes.home()} />
+   * ```
+   */
+  const Link: React.FunctionComponent<{ to: namedRoute }>
   const route: any
 
   const useLocation: any
