@@ -6,8 +6,6 @@ export default function getNodeJestConfig() {
       color: 'redBright',
       name: 'api',
     },
-
-    resolver: 'jest-directory-named-resolver',
     setupFilesAfterEnv: [path.resolve(__dirname, './jest.setup.js')],
   }
 }

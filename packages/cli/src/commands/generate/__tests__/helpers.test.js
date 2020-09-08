@@ -12,9 +12,11 @@ const FooBarPage = () => {
   return (
     <>
       <h1>FooBarPage</h1>
-      <p>Find me in "./web/src/pages/FooBarPage/FooBarPage.js"</p>
       <p>
-        My default route is named "fooBar", link to me with \`
+        Find me in <tt>./web/src/pages/FooBarPage/FooBarPage.js</tt>
+      </p>
+      <p>
+        My default route is named <tt>fooBar</tt>, link to me with \`
         <Link to={routes.fooBar()}>FooBar</Link>\`
       </p>
     </>

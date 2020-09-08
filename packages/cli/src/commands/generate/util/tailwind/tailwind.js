@@ -3,6 +3,7 @@ import path from 'path'
 
 import Listr from 'listr'
 import execa from 'execa'
+import chalk from 'chalk'
 
 import c from 'src/lib/colors'
 import { getPaths, writeFile } from 'src/lib'
@@ -18,15 +19,23 @@ export const builder = (yargs) => {
   })
 }
 
-const notes = [
-  'Add the following directives to your ./web/src/index.css:',
-  '',
-  '@tailwind base;',
-  '@tailwind components;',
-  '@tailwind utilities;',
-  '',
-  "And don't forget to read the docs: https://tailwindcss.com/",
+const tailwindImportsAndNotes = [
+  '/**',
+  ' * START --- TAILWIND GENERATOR EDIT',
+  ' *',
+  ' * `yarn rw g util tailwind` placed these imports here',
+  " * to inject Tailwind's styles into your CSS.",
+  ' * For more information, see: https://tailwindcss.com/docs/installation#add-tailwind-to-your-css',
+  ' */',
+  '@import "tailwindcss/base";',
+  '@import "tailwindcss/components";',
+  '@import "tailwindcss/utilities";',
+  '/**',
+  ' * END --- TAILWIND GENERATOR EDIT',
+  ' */\n',
 ]
+
+const INDEX_CSS_PATH = path.join(getPaths().web.src, 'index.css')
 
 export const handler = async ({ force }) => {
   const tasks = new Listr([
@@ -66,7 +75,7 @@ export const handler = async ({ force }) => {
       },
     },
     {
-      title: 'Initializing Tailwind...',
+      title: 'Initializing Tailwind CSS...',
       task: async () => {
         /**
          * If it doesn't already exist,
@@ -87,12 +96,22 @@ export const handler = async ({ force }) => {
       },
     },
     {
+      title: 'Adding imports to index.css...',
+      task: () => {
+        /**
+         * Add tailwind imports and notes to the top of index.css
+         */
+        let indexCSS = fs.readFileSync(INDEX_CSS_PATH)
+        indexCSS = tailwindImportsAndNotes.join('\n') + indexCSS
+        fs.writeFileSync(INDEX_CSS_PATH, indexCSS)
+      },
+    },
+    {
       title: 'One more thing...',
       task: (_ctx, task) => {
-        /**
-         * Instruct users to copy-paste the tailwind directives into web/src/index.css
-         */
-        task.title = `One more thing...\n\n   ${notes.join('\n   ')}\n`
+        task.title = `One more thing...\n\n   ${chalk.hex('#bf4722')(
+          'Quick link to the docs: '
+        )}https://tailwindcss.com/\n`
       },
     },
   ])

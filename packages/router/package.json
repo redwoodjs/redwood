@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/router",
-  "version": "0.16.0",
+  "version": "0.17.2",
   "files": [
     "dist",
     "src/index.d.ts"
@@ -9,7 +9,7 @@
   "types": "src/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "core-js": "3.6.4"
+    "core-js": "3.6.5"
   },
   "peerDependencies": {
     "prop-types": "*",

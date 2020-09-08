@@ -3,7 +3,7 @@
   <h1 align="center">Redwood</h1>
 </p>
 
-_by Tom Preston-Werner, Peter Pistorius, and Rob Cameron._
+_by Tom Preston-Werner, Peter Pistorius, Rob Cameron, David Price, and more than a hundred amazing contributors (see end of file for a full list)._
 
 **Redwood is an opinionated, full-stack, serverless web application framework
 that will allow you to build and deploy JAMstack applications with ease.**
@@ -14,6 +14,8 @@ you get to work on what makes your application special, instead of wasting
 cycles choosing and re-choosing various technologies and configurations. Plus,
 because Redwood is a proper framework, you benefit from continued performance
 and feature upgrades over time and with minimum effort.
+
+Redwood is the latest open source project initiated by Tom Preston-Werner, cofounder of GitHub (most popular code host on the planet), creator of Jekyll (one of the first and most popular static site generators), author of the Semantic Versioning specification (powers the Node packaging ecosystem), and inventor of TOML (an obvious, minimal configuration language used by many projects).
 
 > **WARNING:** RedwoodJS software has not reached a stable version 1.0 and should
 > not be considered suitable for production use. In the "make it work; make it
@@ -63,6 +65,18 @@ use:
 - [Hot module replacement](https://webpack.js.org/concepts/hot-module-replacement/) (HMR) for faster development.
 - Database migrations (via Prisma 2).
 - First class JAMstack-style deployment to [Netlify](https://www.netlify.com/).
+
+## Quickstart
+- Yarn is required to create a basic structure. (node: ">=12", yarn: ">=1.15")
+  ```
+    yarn create redwood-app ./redwoodblog
+  ```
+- Start the development server
+  ```cd redwoodblog
+      yarn redwood dev
+  ```
+- A browser should automatically open to http://localhost:8910 and you will see the Redwood welcome page.
+- To learn more please visit the redwood docs here: [RedwoodJS](https://redwoodjs.com/tutorial/prerequisites)
 
 ## The Redwood philosophy
 
@@ -339,6 +353,7 @@ And there you have it.
     <td align="center"><a href="https://github.com/stephanvd"><img src="https://avatars1.githubusercontent.com/u/1248040?v=4" width="100px;" alt=""/><br /><sub><b>Stephan van Diepen</b></sub></a></td>
     <td align="center"><a href="https://github.com/bpenno"><img src="https://avatars0.githubusercontent.com/u/10125593?v=4" width="100px;" alt=""/><br /><sub><b>bpenno</b></sub></a></td>
     <td align="center"><a href="https://github.com/tctrautman"><img src="https://avatars0.githubusercontent.com/u/4513085?v=4" width="100px;" alt=""/><br /><sub><b>Tim Trautman</b></sub></a></td>
+    <td align="center"><a href="https://zackmckenna.com/"><img src="https://avatars1.githubusercontent.com/u/31899931?v=4" width="100px;" alt=""/><br /><sub><b>Zachary McKenna</b></sub></a></td>
   </tr>
 </table>
 

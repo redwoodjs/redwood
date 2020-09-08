@@ -20,8 +20,9 @@ export interface AuthContextInterface {
   currentUser: null | CurrentUser
   /* The user's metadata from the auth provider */
   userMetadata: null | SupportedUserMetadata
-  logIn(): Promise<void>
-  logOut(): Promise<void>
+  logIn(options?: any): Promise<void>
+  logOut(options?: any): Promise<void>
+  signUp(options?: any): Promise<void>
   getToken(): Promise<null | string>
   /**
    * Fetches the "currentUser" from the api side,
@@ -30,9 +31,11 @@ export interface AuthContextInterface {
   getCurrentUser(): Promise<null | CurrentUser>
   /**
    * Checks if the "currentUser" from the api side
-   * is assigned a role
+   * is assigned a role or one of a list of roles.
+   * If the user is assigned any of the provided list of roles,
+   * the hasRole is considered to be true.
    **/
-  hasRole(role: string): boolean
+  hasRole(role: string | string[]): boolean
   /**
    * Redetermine authentication state and update the state.
    */
@@ -60,7 +63,7 @@ type AuthProviderProps = {
 type AuthProviderState = {
   loading: boolean
   isAuthenticated: boolean
-  userMetadata: null | object
+  userMetadata: null | Record<string, any>
   currentUser: null | undefined | CurrentUser
   hasError: boolean
   error?: Error
@@ -135,8 +138,35 @@ export class AuthProvider extends React.Component<
     }
   }
 
-  hasRole = (role: string): boolean => {
-    return this.state.currentUser?.roles?.includes(role) || false
+  /**
+   * @example
+   * ```js
+   *  hasRole("editor")
+   *  hasRole(["editor"])
+   *  hasRole(["editor", "author"])
+   * ```
+   *
+   * Checks if the "currentUser" from the api side
+   * is assigned a role or one of a list of roles.
+   * If the user is assigned any of the provided list of roles,
+   * the hasRole is considered to be true.
+   */
+  hasRole = (role: string | string[]): boolean => {
+    if (
+      typeof role !== 'undefined' &&
+      this.state.currentUser &&
+      this.state.currentUser.roles
+    ) {
+      if (typeof role === 'string') {
+        return this.state.currentUser.roles?.includes(role) || false
+      }
+
+      if (Array.isArray(role)) {
+        return this.state.currentUser.roles.some((r) => role.includes(r))
+      }
+    }
+
+    return false
   }
 
   reauthenticate = async () => {
@@ -186,6 +216,11 @@ export class AuthProvider extends React.Component<
     })
   }
 
+  signUp = async (options?: any) => {
+    await this.rwClient.signup(options)
+    return this.reauthenticate()
+  }
+
   render() {
     const { client, type, children } = this.props
 
@@ -195,6 +230,7 @@ export class AuthProvider extends React.Component<
           ...this.state,
           logIn: this.logIn,
           logOut: this.logOut,
+          signUp: this.signUp,
           getToken: this.rwClient.getToken,
           getCurrentUser: this.getCurrentUser,
           hasRole: this.hasRole,

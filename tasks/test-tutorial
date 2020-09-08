@@ -1,28 +1,39 @@
 #!/bin/bash
 set -e
 
+realpath() {
+  path=`eval echo "$1"`
+  folder=$(dirname "$path")
+  echo $(cd "$folder"; pwd)/$(basename "$path");
+}
+
 SCRIPT=`realpath $0`
 SCRIPTPATH=`dirname $SCRIPT`
-USE_LOCAL_BUILD=true
-if [ "$1" = "--no-local" ]; then
-  USE_LOCAL_BUILD=false
-fi
-SRC="$SCRIPTPATH/../__fixtures__/new-project/"
-DST=/tmp/redwood/new-project/
 
 # Install the dependencies required to run the e2e tests.
 cd "$SCRIPTPATH/e2e"
 yarn install
 
-# Copy the fixture to a temporary location. This is so that the modifications
-# made to `new-project` aren't in the repo.
-mkdir -p $DST
-rsync -avhW --delete --compress-level=0 --progress $SRC $DST
-cd $DST
-yarn install
-if [ "$USE_LOCAL_BUILD" = true ]; then
-  echo "Copying built packages from $SCRIPTPATH/../ to $DST"
-  yarn rwt cp "$SCRIPTPATH/../"
+
+if [ -z "$1" ]
+  then
+  echo "You have not supplied a path to a Redwood project."
+  echo "We will create one for you."
+  echo "We will run `yarn create redwood-app` and `yarn rw upgrade --tag canary`"
+  TMP_DIR=$(mktemp -d -t redwood)
+  echo $TMP_DIR
+
+  cd $TMP_DIR
+  yarn create redwood-app my-rw-app
+  cd my-rw-app
+  yarn rw upgrade --tag canary
+  TMP_DIR="$TMP_DIR/my-rw-app"
+else
+  echo "You have supplied a path $1, we will not create a new "
+  echo "Redwood project, we will use the app you have specified."
+  TMP_DIR=$1
 fi
-yarn rw db up
-yarn rw dev & cd "$SCRIPTPATH/e2e"; yarn test:tutorial
+
+cd $TMP_DIR
+
+yarn rw dev --fwd="--open=false" & cd "$SCRIPTPATH/e2e"; yarn cypress open --env RW_PATH=$TMP_DIR

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import type { GlobalContext } from 'src/globalContext'
 import gql from 'graphql-tag'
 import {
@@ -38,7 +39,7 @@ export interface Resolvers {
   DateTime: typeof DateTimeResolver
   JSON: typeof JSONResolver
   JSONObject: typeof JSONObjectResolver
-  Query: {}
+  Query: Record<string, unknown>
 }
 
 export const resolvers: Resolvers = {
