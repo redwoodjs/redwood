@@ -116,4 +116,7 @@ declare module '@redwoodjs/router' {
   /** A hook that returns the current location */
   function useLocation(): string
 
+  /** A hook that returns the current pages parameters */
+  function useParams(): Record<string, unknown>
+
 }
