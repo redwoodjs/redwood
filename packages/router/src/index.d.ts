@@ -126,4 +126,29 @@ declare module '@redwoodjs/router' {
    */
   function useMatch(route: namedRoute): boolean
 
+  /**
+   * Because lazily-loaded pages can take a non-negligible amount of time to
+   * load (depending on bundle size and network connection),
+   * you may want to show a loading indicator
+   * to signal to the user that something is happening after they click a link.
+   * RR makes this really easy with `usePageLoadingContext`:
+   *
+   * @example
+   * ```js
+   * // SomeLayout.js
+   *
+   * import { usePageLoadingContext } from '@redwoodjs/router'
+   *
+   * const SomeLayout = (props) => {
+   * const { loading } = usePageLoadingContext()
+   * return (
+   *   <div>
+   *     {loading && <div>Loading...</div>}
+   *     <main>{props.children}</main>
+   *   </div>
+   *   )
+   * }
+   * ```
+   */
+  function usePageLoadingContext(route: namedRoute): { loading: boolean }
 }
