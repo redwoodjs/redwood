@@ -7,7 +7,10 @@ declare module '@redwoodjs/router' {
   const routes: AvailableRoutes
 
   const Route: React.FunctionComponent<{
-    /** The URL path to match, starting with the beginning slash */
+    /**
+     * The URL path to match, starting with the beginning slash,
+     * should not end with a slash.
+     **/
     path: string
     /** The Page component to render when the path is matched. */
     page: React.ReactElement
@@ -25,7 +28,7 @@ declare module '@redwoodjs/router' {
   const Private: React.FunctionComponent<{
     /**
      * When a user is not authenticated or is not assigned a role
-     * and attempts to visit a route within private,
+     * and attempts to visit a route within <Private />,
      * they will be redirected to the route name passed to `unauthenticated`.
      */
     unauthenticated: namedRoute
@@ -111,7 +114,6 @@ declare module '@redwoodjs/router' {
   }>
 
   const route: any
-
   const useLocation: any
   const useParams: any
   const useMatch: any
