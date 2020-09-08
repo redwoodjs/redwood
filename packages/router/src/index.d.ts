@@ -113,9 +113,7 @@ declare module '@redwoodjs/router' {
     activeClassName: string
   }>
 
-  const route: any
-  const useLocation: any
-  const useParams: any
-  const useMatch: any
-  const usePageLoadingContext: any
+  /** A hook that returns the current location */
+  function useLocation(): string
+
 }
