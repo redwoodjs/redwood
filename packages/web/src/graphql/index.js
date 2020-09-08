@@ -3,7 +3,7 @@ import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
 export { withCell } from './withCell'
 
 /**
- * Creates a GraphQL Client (Apollo) that points to the `apiProxyPath` that's
+ * Create a GraphQL Client (Apollo) that points to the `apiProxyPath` that's
  * specified in `redwood.toml`.
  */
 export const createGraphQLClient = (config) => {
