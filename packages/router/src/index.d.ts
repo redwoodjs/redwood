@@ -119,4 +119,11 @@ declare module '@redwoodjs/router' {
   /** A hook that returns the current pages parameters */
   function useParams(): Record<string, unknown>
 
+  /**
+   * A hook that returns true if the URL for the given "route" value matches the current URL.
+   * This is useful for components that need to know "active" state, e.g.
+   * <NavLink>.
+   */
+  function useMatch(route: namedRoute): boolean
+
 }
