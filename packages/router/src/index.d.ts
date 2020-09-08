@@ -8,7 +8,7 @@ declare module '@redwoodjs/router' {
 
   const Route: React.FunctionComponent<{
     /**
-     * The URL path to match, starting with the beginning slash,
+     * The URL path to match, starting with the beginning slash and
      * should not end with a slash.
      **/
     path: string
