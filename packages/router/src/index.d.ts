@@ -87,6 +87,29 @@ declare module '@redwoodjs/router' {
    * ```
    */
   const Link: React.FunctionComponent<{ to: namedRoute }>
+
+  /**
+   * `NavLink` is a special version of `Link` that will add an `activeClassName`
+   * to the rendered element when it matches the current URL.
+   *
+   * @example
+   * ```js
+   * // MainMenu.js
+   * import { NavLink, routes } from '@redwoodjs/router'
+   *
+   * // Will render <a href="/" className="link activeLink"> when on the home page
+   * const MainMenu = () =>
+   *  <NavLink className="link" activeClassName="activeLink" to={routes.home()}>
+   *    Home
+   *  </NavLink>
+   * ```
+   */
+  const NavLink: React.FunctionComponent<{
+    to: namedRoute
+    className: string
+    activeClassName: string
+  }>
+
   const route: any
 
   const useLocation: any
