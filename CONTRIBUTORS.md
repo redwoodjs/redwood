@@ -10,6 +10,6 @@ First, read the [Contributing Doc](https://redwoodjs.com/docs/contributing). And
 ## Managing Redwood All-Contributors
 Redwood projects (mostly) follow the [all-contributions](https://allcontributors.org/) specification using the `all-contributors` CLI tool. This allows us to:
 - track the [Framework](https://github.com/redwoodjs/redwood), [create-redwood-app](https://github.com/redwoodjs/create-redwood-app), and [Redwoodjs.com](https://github.com/redwoodjs/redwoodjs.com) project contributors
-- display the aggregated list of contributors
+- display the aggregated list of contributors  
 
 For more information and related code, see ['tasks/all-contributors/README.md'](https://github.com/redwoodjs/redwood/tree/main/tasks/all-contributors/README.md)
