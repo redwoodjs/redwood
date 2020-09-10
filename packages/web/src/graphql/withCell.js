@@ -1,5 +1,5 @@
 import React from 'react'
-import { Query } from '@apollo/react-components'
+import { Query } from '@apollo/client/react/components'
 
 /**
  * Is a higher-order-component that executes a GraphQL query and automatically
@@ -74,7 +74,7 @@ export const withCell = ({
           if (Failure) {
             return <Failure error={error} {...queryRest} {...props} />
           } else {
-            console.error(error)
+            throw new Error(error)
           }
         } else if (loading) {
           return <Loading {...queryRest} {...props} />
@@ -85,7 +85,9 @@ export const withCell = ({
             return <Success {...afterQuery(data)} {...queryRest} {...props} />
           }
         } else {
-          throw 'Cannot render cell: graphQL success but `data` is null'
+          throw new Error(
+            'Cannot render cell: graphQL success but `data` is null'
+          )
         }
       }}
     </Query>
