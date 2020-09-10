@@ -148,6 +148,7 @@ const getSharedPlugins = (isEnvProduction) => {
 // https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/config/webpack.config.js
 module.exports = (webpackEnv) => {
   const isEnvProduction = webpackEnv === 'production'
+  const isEnvDevelopment = !isEnvProduction
 
   return {
     mode: isEnvProduction ? 'production' : 'development',
@@ -225,6 +226,13 @@ module.exports = (webpackEnv) => {
             },
             // .module.css (3), .css (4), .module.scss (5), .scss (6)
             ...getStyleLoaders(isEnvProduction),
+            isEnvProduction && {
+              test: path.join(
+                redwoodPaths.base,
+                'node_modules/@redwoodjs/router/dist/splash-page'
+              ),
+              use: 'null-loader',
+            },
             // (7)
             {
               test: /\.(svg|ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|pdf)(\?.*)?$/,
@@ -233,7 +241,7 @@ module.exports = (webpackEnv) => {
                 name: 'static/media/[name].[hash:8].[ext]',
               },
             },
-          ],
+          ].filter(Boolean),
         },
       ],
     },
