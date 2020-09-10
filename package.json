@@ -33,7 +33,7 @@
     "nodemon": "^2.0.2",
     "rimraf": "^3.0.2",
     "typescript": "^4.0.2",
-    "whatwg-fetch": "3.4.0"
+    "whatwg-fetch": "3.4.1"
   },
   "resolutions": {
     "@types/react": "16.9.38"
