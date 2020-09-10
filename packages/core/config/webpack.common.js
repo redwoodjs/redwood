@@ -126,7 +126,7 @@ const getSharedPlugins = (isEnvProduction) => {
     new webpack.ProvidePlugin({
       React: 'react',
       PropTypes: 'prop-types',
-      gql: ['@redwoodjs/web', 'gql'],
+      gql: 'graphql-tag',
       mockGraphQLQuery: ['@redwoodjs/testing', 'mockGraphQLQuery'],
       mockGraphQLMutation: ['@redwoodjs/testing', 'mockGraphQLMutation'],
     }),
