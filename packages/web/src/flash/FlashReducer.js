@@ -13,6 +13,7 @@ export default (state, action) => {
           {
             id: state.messages.length,
             text: action.payload.text,
+            style: action.payload.style || {},
             classes: action.payload.classes || '',
             persist: action.payload.persist || false,
             viewed: action.payload.viewed || false,
