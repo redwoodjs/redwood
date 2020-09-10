@@ -148,7 +148,6 @@ const getSharedPlugins = (isEnvProduction) => {
 // https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/config/webpack.config.js
 module.exports = (webpackEnv) => {
   const isEnvProduction = webpackEnv === 'production'
-  const isEnvDevelopment = !isEnvProduction
 
   return {
     mode: isEnvProduction ? 'production' : 'development',
