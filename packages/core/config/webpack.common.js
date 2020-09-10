@@ -66,8 +66,8 @@ const getStyleLoaders = (isEnvProduction) => {
     ? {
         loader: 'postcss-loader',
         options: {
-          config: {
-            path: redwoodPaths.web.postcss,
+          postcssOptions: {
+            config: redwoodPaths.web.postcss,
           },
         },
       }
