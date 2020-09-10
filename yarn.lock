@@ -30,10 +30,10 @@
     tslib "^1.10.0"
     zen-observable "^0.8.14"
 
-"@apollo/client@^3.1.4":
-  version "3.1.4"
-  resolved "https://registry.yarnpkg.com/@apollo/client/-/client-3.1.4.tgz#2848a9f29619275df9af55966c4f5984e31cea6e"
-  integrity sha512-XPZ2eL+0GN25FazEOAVAvEyAzWPVsHeo+DgG/45d4Rb+srzPN+vmRgpQL5TdX2BYJoPd04J/g8OZwYUEKL8laA==
+"@apollo/client@^3.1.5":
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/@apollo/client/-/client-3.1.5.tgz#5865f5c32f061cd520459c5809e8debea6f4886c"
+  integrity sha512-nU/KpqzKN27iwVQwGvPaCkTH/+rNGPoXKr60ki02I8jPBIKXyePPov85Ro9phGxuBhLNqGYeP0uAUN0S+HlF1Q==
   dependencies:
     "@types/zen-observable" "^0.8.0"
     "@wry/context" "^0.5.2"
@@ -141,29 +141,7 @@
     invariant "^2.2.4"
     semver "^5.5.0"
 
-"@babel/core@^7.0.0", "@babel/core@^7.1.0", "@babel/core@^7.11.1", "@babel/core@^7.4.5", "@babel/core@^7.7.5", "@babel/core@^7.9.6":
-  version "7.11.5"
-  resolved "https://registry.yarnpkg.com/@babel/core/-/core-7.11.5.tgz#6ad96e2f71899ea3f9b651f0a911e85205d1ff6d"
-  integrity sha512-fsEANVOcZHzrsV6dMVWqpSeXClq3lNbYrfFGme6DE25FQWe7pyeYpXyx9guqUnpy466JLzZ8z4uwSr2iv60V5Q==
-  dependencies:
-    "@babel/code-frame" "^7.10.4"
-    "@babel/generator" "^7.11.5"
-    "@babel/helper-module-transforms" "^7.11.0"
-    "@babel/helpers" "^7.10.4"
-    "@babel/parser" "^7.11.5"
-    "@babel/template" "^7.10.4"
-    "@babel/traverse" "^7.11.5"
-    "@babel/types" "^7.11.5"
-    convert-source-map "^1.7.0"
-    debug "^4.1.0"
-    gensync "^1.0.0-beta.1"
-    json5 "^2.1.2"
-    lodash "^4.17.19"
-    resolve "^1.3.2"
-    semver "^5.4.1"
-    source-map "^0.6.1"
-
-"@babel/core@^7.11.6":
+"@babel/core@^7.0.0", "@babel/core@^7.1.0", "@babel/core@^7.11.1", "@babel/core@^7.11.6", "@babel/core@^7.4.5", "@babel/core@^7.7.5", "@babel/core@^7.9.6":
   version "7.11.6"
   resolved "https://registry.yarnpkg.com/@babel/core/-/core-7.11.6.tgz#3a9455dc7387ff1bac45770650bc13ba04a15651"
   integrity sha512-Wpcv03AGnmkgm6uS6k8iwhIwTrcP0m17TL1n1sy7qD0qelDu4XNeW0dN0mHfa+Gei211yDaLoEe/VlbXQzM4Bg==
@@ -2994,18 +2972,18 @@
     npmlog "^4.1.2"
     write-file-atomic "^2.3.0"
 
-"@magic-sdk/provider@^2.6.0":
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/@magic-sdk/provider/-/provider-2.6.0.tgz#8c5d068961e852cf9e43f957b64244850e1aa8bd"
-  integrity sha512-8W2HjKNOz62iPSZfhcgTb5Z5gwy42uf+rtTbUXbvYwUb6C59Gh/lt8rLx1ge2PrLgWT5GE0FEl1o76ExXCVW6g==
+"@magic-sdk/provider@^2.6.1":
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/@magic-sdk/provider/-/provider-2.6.1.tgz#8f1ebbca5068a59bd3d38d2bbcc5ee461abd117d"
+  integrity sha512-ht4VMBLSYaNg5p4jYFlDg/Qfi5dYOBs/QaSMap6jOC6bh8U/dd895Gh1cSPsZ9RLBlXGzR8VhqNdm2dTB8zWWA==
   dependencies:
-    "@magic-sdk/types" "^1.4.8"
+    "@magic-sdk/types" "^1.4.9"
     eventemitter3 "^4.0.4"
 
-"@magic-sdk/types@^1.4.8":
-  version "1.4.8"
-  resolved "https://registry.yarnpkg.com/@magic-sdk/types/-/types-1.4.8.tgz#194b70e4e041ecbec26e1bda30f9d3b259a7ab97"
-  integrity sha512-IPtIG7q8KYJoB1KbOL0Xw0D4q1j662mRj8gKSG580W5H6YFBaHoAbupHipYHlcvqGJqjE8tEW7LpXxB1Q2bwpQ==
+"@magic-sdk/types@^1.4.9":
+  version "1.4.9"
+  resolved "https://registry.yarnpkg.com/@magic-sdk/types/-/types-1.4.9.tgz#b34dd1c0ebddf7144b7362be500e74860af00f9d"
+  integrity sha512-kP6SJwFjPBeFSd1BsVHrxUBud95NaI/UUfpgj5Gw3Ta57h1vpsV4insqE/yJMO0/zfQsxvDaZde6omOBd5a4uQ==
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
@@ -3344,15 +3322,6 @@
     invariant "^2.2.3"
     prop-types "^15.6.1"
     react-lifecycles-compat "^3.0.4"
-
-"@redwoodjs/forms@^0.17.2":
-  version "0.17.2"
-  resolved "https://registry.yarnpkg.com/@redwoodjs/forms/-/forms-0.17.2.tgz#5bbcc6cd0a64f074e956d38e2e6389fab19382f5"
-  integrity sha512-aWig3OQKsaNGlTL0vdrBvNQdeQhIZNR2kJQnGbixuK6ob6QocjEF7SrAMRhwW+rHAmok67Vc4fv2i6qHGF6d4w==
-  dependencies:
-    core-js "3.6.4"
-    pascalcase "1.0.0"
-    react-hook-form "^6.5.3"
 
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.1"
@@ -5140,7 +5109,7 @@ apollo-server-caching@^0.5.2:
   dependencies:
     lru-cache "^5.0.0"
 
-apollo-server-core@^2.16.0:
+apollo-server-core@^2.17.0:
   version "2.17.0"
   resolved "https://registry.yarnpkg.com/apollo-server-core/-/apollo-server-core-2.17.0.tgz#6af697ffe4968e74add01cd1efd2a8fb33299cf3"
   integrity sha512-rjAkBbKSrGLDfg/g5bohnPlQahmkAxgEBuMDVsoF3aa+RaEPXPUMYrLbOxntl0LWeLbPiMa/IyFF43dvlGqV7w==
@@ -5181,14 +5150,14 @@ apollo-server-errors@^2.4.2:
   resolved "https://registry.yarnpkg.com/apollo-server-errors/-/apollo-server-errors-2.4.2.tgz#1128738a1d14da989f58420896d70524784eabe5"
   integrity sha512-FeGxW3Batn6sUtX3OVVUm7o56EgjxDlmgpTLNyWcLb0j6P8mw9oLNyAm3B+deHA4KNdNHO5BmHS2g1SJYjqPCQ==
 
-apollo-server-lambda@2.16.0:
-  version "2.16.0"
-  resolved "https://registry.yarnpkg.com/apollo-server-lambda/-/apollo-server-lambda-2.16.0.tgz#35ef5eb10e7f625d528d1fbdf9f75946c67047be"
-  integrity sha512-PkmDNI9DJ5RC20wxr7pHHoceQC/o3KD1AEJmY13ZFa6Y43yJrB7afnz9DonpNeHEZG1AYb972cXfozALDBdV+w==
+apollo-server-lambda@2.17.0:
+  version "2.17.0"
+  resolved "https://registry.yarnpkg.com/apollo-server-lambda/-/apollo-server-lambda-2.17.0.tgz#2e3e432f818abc30c77b6ce823471cee4e4b8526"
+  integrity sha512-kOTrlUjmpWhKTOarTkwRdWjU9vnp4niV+743iIrlbqxZ4XWENK1lD9Mbvp2kb//zE1mZy/EF4/+dga1DZjBqjA==
   dependencies:
     "@apollographql/graphql-playground-html" "1.6.26"
     "@types/aws-lambda" "^8.10.31"
-    apollo-server-core "^2.16.0"
+    apollo-server-core "^2.17.0"
     apollo-server-env "^2.4.5"
     apollo-server-types "^0.5.1"
     graphql-tools "^4.0.0"
@@ -7424,11 +7393,6 @@ core-js-pure@^3.0.0, core-js-pure@^3.0.1:
   version "3.6.5"
   resolved "https://registry.yarnpkg.com/core-js-pure/-/core-js-pure-3.6.5.tgz#c79e75f5e38dbc85a662d91eea52b8256d53b813"
   integrity sha512-lacdXOimsiD0QyNf9BC/mxivNJ/ybBGJXQFKzRekp1WTHoVUWsUHEn+2T8GJAzzIhyOuXA+gOxCVN3l+5PLPUA==
-
-core-js@3.6.4:
-  version "3.6.4"
-  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.6.4.tgz#440a83536b458114b9cb2ac1580ba377dc470647"
-  integrity sha512-4paDGScNgZP2IXXilaffL9X7968RuvwlkK3xWtZRVqgd8SYNiVKRJvkFd1aqqEuPfN7E68ZHEp9hDj6lHj4Hyw==
 
 core-js@3.6.5, core-js@^3.0.1, core-js@^3.0.4, core-js@^3.2.1, core-js@^3.6.5:
   version "3.6.5"
@@ -12996,14 +12960,14 @@ macos-release@^2.2.0:
   integrity sha512-H/QHeBIN1fIGJX517pvK8IEK53yQOW7YcEI55oYtgjDdoCQQz7eJS94qt5kNrscReEyuD/JcdFCm2XBEcGOITg==
 
 magic-sdk@^2.5.0:
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/magic-sdk/-/magic-sdk-2.5.0.tgz#83756a6437e7580d77f24e870dca0e237efda208"
-  integrity sha512-VkNgBwnMQOJXJoOv0ZCrYUwTOlj9sOpC9horIaE5qKw73GDlQXylqnBFRYI8p8TA6TOJKA7yCUdr3ttbNti22g==
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/magic-sdk/-/magic-sdk-2.5.1.tgz#c043ef79d5661e79fb8b5a2ee3e1da55fbf3a250"
+  integrity sha512-jpRGTAUwDDzrZdoWHROpWPeXoeTGVet9HlG50jsBZMWkCcihGNaUvGN/mpZNHDPfQqR2AWvVmmE/PQ1iKKts+w==
   dependencies:
     "@babel/core" "^7.9.6"
     "@babel/runtime" "^7.9.6"
-    "@magic-sdk/provider" "^2.6.0"
-    "@magic-sdk/types" "^1.4.8"
+    "@magic-sdk/provider" "^2.6.1"
+    "@magic-sdk/types" "^1.4.9"
     localforage "^1.7.4"
     localforage-driver-memory "^1.0.5"
     regenerator-runtime "0.13.5"
