@@ -91,7 +91,7 @@ quickly.
 
 Redwood believes that traditional, relational databases like PostgreSQL and
 MySQL are still the workhorses of today's web applications and should be first-class
-citizens. However, Redwood also shines with NoSQL databases.
+citizens. However, Redwood also shines with NoSQL databases like [FaunaDB](https://fauna.com/).
 
 Redwood believes that, as much as possible, you should be able to operate in a
 serverless mindset and deploy to a generic computational grid. This helps unlock
