@@ -37,25 +37,34 @@ export const templateForComponentFile = ({
   const componentOutputPath =
     outputPath ||
     path.join(basePath, outputComponentName, outputComponentName + extension)
-  const content = generateTemplate(
-    path.join(generator, 'templates', templatePath),
-    {
-      name,
-      outputPath: ensurePosixPath(
-        `./${path.relative(getPaths().base, componentOutputPath)}`
-      ),
-      ...templateVars,
-    }
-  )
+  const fullTemplatePath = path.join(generator, 'templates', templatePath)
+  const content = generateTemplate(fullTemplatePath, {
+    name,
+    outputPath: ensurePosixPath(
+      `./${path.relative(getPaths().base, componentOutputPath)}`
+    ),
+    ...templateVars,
+  })
   return [componentOutputPath, content]
 }
 
 /**
  * Creates a route path, either returning the existing path if passed, otherwise
- * creates one based on the name
+ * creates one based on the name. If the passed path is just a route parameter
+ * a new path based on the name is created, with the parameter appended to it
  */
 export const pathName = (path, name) => {
-  return path ?? `/${paramCase(name)}`
+  let routePath = path
+
+  if (path && path.startsWith('{') && path.endsWith('}')) {
+    routePath = `/${paramCase(name)}/${path}`
+  }
+
+  if (!routePath) {
+    routePath = `/${paramCase(name)}`
+  }
+
+  return routePath
 }
 
 /**

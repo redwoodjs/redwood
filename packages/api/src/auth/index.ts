@@ -14,7 +14,7 @@ export const getAuthProviderHeader = (
 }
 
 export interface AuthorizationHeader {
-  schema: 'Bearer' | 'Basic'
+  schema: 'Bearer' | 'Basic' | string
   token: string
 }
 /**
@@ -27,18 +27,18 @@ export const parseAuthorizationHeader = (
   if (!schema.length || !token.length) {
     throw new Error('The `Authorization` header is not valid.')
   }
-  // @ts-expect-error
   return { schema, token }
 }
 
 export type AuthContextPayload = [
-  string | object | null,
-  { type: SupportedAuthTypes; token: string }
+  string | Record<string, unknown> | null,
+  { type: SupportedAuthTypes } & AuthorizationHeader,
+  { event: APIGatewayProxyEvent; context: GlobalContext & LambdaContext }
 ]
 
 /**
  * Get the authorization information from the request headers and request context.
- * @returns [decoded, { type, token }]
+ * @returns [decoded, { type, schema, token }, { event, context }]
  **/
 export const getAuthenticationContext = async ({
   event,
@@ -55,7 +55,7 @@ export const getAuthenticationContext = async ({
   }
 
   let decoded = null
-  const { token } = parseAuthorizationHeader(event)
+  const { schema, token } = parseAuthorizationHeader(event)
   decoded = await decodeToken(type, token, { event, context })
-  return [decoded, { type, token }]
+  return [decoded, { type, schema, token }, { event, context }]
 }

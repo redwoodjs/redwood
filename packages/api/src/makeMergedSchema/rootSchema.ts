@@ -1,8 +1,13 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import type { GlobalContext } from 'src/globalContext'
 import gql from 'graphql-tag'
-import { GraphQLDate, GraphQLTime, GraphQLDateTime } from 'graphql-iso-date'
-import GraphQLJSON, { GraphQLJSONObject } from 'graphql-type-json'
-
+import {
+  DateResolver,
+  TimeResolver,
+  DateTimeResolver,
+  JSONResolver,
+  JSONObjectResolver,
+} from 'graphql-scalars'
 
 // @ts-ignore - not inside the <rootDir>
 import apiPackageJson from 'src/../package.json'
@@ -29,20 +34,20 @@ export const schema = gql`
 `
 
 export interface Resolvers {
-  Date: typeof GraphQLDate
-  Time: typeof GraphQLTime
-  DateTime: typeof GraphQLDateTime
-  JSON: typeof GraphQLJSON
-  JSONObject: typeof GraphQLJSONObject
-  Query: {}
+  Date: typeof DateResolver
+  Time: typeof TimeResolver
+  DateTime: typeof DateTimeResolver
+  JSON: typeof JSONResolver
+  JSONObject: typeof JSONObjectResolver
+  Query: Record<string, unknown>
 }
 
 export const resolvers: Resolvers = {
-  Date: GraphQLDate,
-  Time: GraphQLTime,
-  DateTime: GraphQLDateTime,
-  JSON: GraphQLJSON,
-  JSONObject: GraphQLJSONObject,
+  Date: DateResolver,
+  Time: TimeResolver,
+  DateTime: DateTimeResolver,
+  JSON: JSONResolver,
+  JSONObject: JSONObjectResolver,
   Query: {
     redwood: () => ({
       version: apiPackageJson.version,

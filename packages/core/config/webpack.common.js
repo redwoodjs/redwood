@@ -4,9 +4,9 @@ const { existsSync } = require('fs')
 
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const DirectoryNamedWebpackPlugin = require('directory-named-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
+const { RetryChunkLoadPlugin } = require('webpack-retry-chunk-load-plugin')
 const Dotenv = require('dotenv-webpack')
 const { getConfig, getPaths } = require('@redwoodjs/internal')
 const merge = require('webpack-merge')
@@ -66,8 +66,8 @@ const getStyleLoaders = (isEnvProduction) => {
     ? {
         loader: 'postcss-loader',
         options: {
-          config: {
-            path: redwoodPaths.web.postcss,
+          postcssOptions: {
+            config: redwoodPaths.web.postcss,
           },
         },
       }
@@ -156,13 +156,7 @@ module.exports = (webpackEnv) => {
       app: path.resolve(redwoodPaths.base, 'web/src/index'),
     },
     resolve: {
-      extensions: ['.ts', '.tsx', '.js', '.json'],
-      plugins: [
-        new DirectoryNamedWebpackPlugin({
-          honorIndex: true,
-          exclude: /node_modules/,
-        }),
-      ],
+      extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
       alias: {
         // https://www.styled-components.com/docs/faqs#duplicated-module-in-node_modules
         'styled-components': path.resolve(
@@ -181,7 +175,20 @@ module.exports = (webpackEnv) => {
         inject: true,
         chunks: 'all',
       }),
-      new CopyPlugin([{ from: 'public/', to: '', ignore: ['README.md'] }]),
+      new CopyPlugin({
+        patterns: [
+          { from: 'public/', to: '', globOptions: { ignore: ['README.md'] } },
+        ],
+      }),
+      isEnvProduction &&
+        new RetryChunkLoadPlugin({
+          cacheBust: `function() {
+					return Date.now();
+				}`,
+          maxRetries: 5,
+          // @TODO: Add redirect to fatalErrorPage
+          // lastResortScript: "window.location.href='/500.html';"
+        }),
       ...getSharedPlugins(isEnvProduction),
     ].filter(Boolean),
     module: {

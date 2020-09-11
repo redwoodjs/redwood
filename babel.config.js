@@ -1,8 +1,10 @@
-const TARGETS_NODE = '12.13.0'
+const packageJSON = require('./package.json')
+
+const TARGETS_NODE = '12.16'
 const TARGETS_BROWSERS = 'defaults'
 // Warning! Recommended to specify used minor core-js version, like corejs: '3.6',
-// instead of corejs: 3, since with corejs: 3 will not be injected modules which
-// were added in minor core-js releases.
+// instead of corejs: '3', since with '3' it will not be injected modules
+// which were added in minor core-js releases.
 // https://github.com/zloirock/core-js/blob/master/README.md#babelpreset-env
 const CORE_JS_VERSION = '3.6'
 
@@ -51,8 +53,7 @@ module.exports = {
         // https://babeljs.io/docs/en/babel-plugin-transform-runtime/#version
         // Transform-runtime assumes that @babel/runtime@7.0.0 is installed.
         // Specifying the version can result in a smaller bundle size.
-        // TODO: Grab version for package.json
-        version: '^7.10.4',
+        version: packageJSON.devDependencies['@babel/runtime-corejs3'],
       },
     ],
   ],
@@ -96,9 +97,9 @@ module.exports = {
       ],
     },
   ],
-  // Do not build tests or mocks in production.
+  // Ignore test directories when we're not testing
   ignore:
-    process.env.NODE_ENV === 'production'
-      ? [/\.test\.(js|ts)/, '**/__tests__', '**/__mocks__']
-      : [],
+    process.env.NODE_ENV === 'test'
+      ? []
+      : [/\.test\.(js|ts)/, '**/__tests__', '**/__mocks__'],
 }

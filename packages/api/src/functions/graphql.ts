@@ -10,7 +10,7 @@ import { setContext } from 'src/globalContext'
 export type GetCurrentUser = (
   decoded: AuthContextPayload[0],
   raw: AuthContextPayload[1]
-) => Promise<null | object | string>
+) => Promise<null | Record<string, unknown> | string>
 
 /**
  * We use Apollo Server's `context` option as an entry point to construct our
@@ -105,6 +105,8 @@ export const createGraphQLHandler = (
       if (isDevEnv) {
         // I want the dev-server to pick this up!?
         // TODO: Move the error handling into a separate package
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         import('@redwoodjs/dev-server/dist/error')
           .then(({ handleError }) => {
             return handleError(error.originalError as Error)
@@ -130,7 +132,7 @@ export const createGraphQLHandler = (
       onException && onException()
       // Disconnect from the database (recommended by Prisma), this step will be
       // removed in future releases.
-      db && db.disconnect()
+      db && db.$disconnect()
       throw e
     }
   }

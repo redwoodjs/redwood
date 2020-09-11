@@ -6,9 +6,8 @@
     { "path": "packages/testing" },
     { "path": "packages/api" },
     { "path": "packages/dev-server" },
+    { "path": "packages/api-server" },
     { "path": "packages/auth" },
-    { "path": "packages/web" },
-    { "path": "packages/forms" },
   ],
   "files": []
 }

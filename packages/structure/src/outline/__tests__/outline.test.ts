@@ -1,5 +1,5 @@
 import { resolve } from 'path'
-import { DefaultHost } from '../../ide'
+import { DefaultHost } from '../../hosts'
 import { getOutline } from '../outline'
 import { RWProject } from '../../model'
 import { outlineToJSON } from '../types'

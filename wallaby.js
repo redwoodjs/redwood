@@ -1,4 +1,4 @@
-module.exports = function (wallaby) {
+module.exports = function () {
   return {
     testFramework: 'jest',
   }
