@@ -26,14 +26,15 @@ export const handler = async ({ force }) => {
     {
       title: 'Installing packages...',
       task: async () => {
-        /**
-         * Install postcss-loader, tailwindcss, and autoprefixer
-         */
         await execa('yarn', [
           'workspace',
           'web',
           'add',
-          '-D', 'i18n', 'i18next', 'i18next-browser-languagedetector', 'i18next-http-backend',
+          '-D',
+          'i18n',
+          'i18next',
+          'i18next-browser-languagedetector',
+          'i18next-http-backend',
           'react-i18next'
         ])
       },
@@ -54,6 +55,12 @@ export const handler = async ({ force }) => {
           { overwriteExisting: force }
         )
       },
+    },
+    {
+      title: 'Adding locale file for \'site\' namespace',
+      task () {
+        return writeFile(getPaths().web.src + '/locales/en/site.json')
+      }
     },
     {
       title: 'Adding import to index.js...',
