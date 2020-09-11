@@ -9,10 +9,11 @@ import {
   ParamsContext,
   navigate,
   mapNamedRoutes,
-  SplashPage,
   PageLoader,
   Redirect,
 } from './internal'
+
+import { SplashPage } from './splash-page'
 
 const Route = () => {
   return null

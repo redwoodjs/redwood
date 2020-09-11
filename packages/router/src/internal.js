@@ -1,7 +1,6 @@
 export * from './util'
 export * from './history'
 export * from './location'
-export * from './splash-page'
 export * from './named-routes'
 export * from './router'
 export * from './params'

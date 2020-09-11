@@ -126,7 +126,7 @@ const getSharedPlugins = (isEnvProduction) => {
     new webpack.ProvidePlugin({
       React: 'react',
       PropTypes: 'prop-types',
-      gql: ['@redwoodjs/web', 'gql'],
+      gql: 'graphql-tag',
       mockGraphQLQuery: ['@redwoodjs/testing', 'mockGraphQLQuery'],
       mockGraphQLMutation: ['@redwoodjs/testing', 'mockGraphQLMutation'],
     }),
@@ -225,6 +225,17 @@ module.exports = (webpackEnv) => {
             },
             // .module.css (3), .css (4), .module.scss (5), .scss (6)
             ...getStyleLoaders(isEnvProduction),
+            isEnvProduction && {
+              test: path.join(
+                redwoodPaths.base,
+                'node_modules/@redwoodjs/router/dist/splash-page'
+              ),
+              use: 'null-loader',
+            },
+            {
+              test: path.join(redwoodPaths.base, 'node_modules/graphql-tag'),
+              use: 'null-loader',
+            },
             // (7)
             {
               test: /\.(svg|ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|pdf)(\?.*)?$/,
@@ -233,7 +244,7 @@ module.exports = (webpackEnv) => {
                 name: 'static/media/[name].[hash:8].[ext]',
               },
             },
-          ],
+          ].filter(Boolean),
         },
       ],
     },
