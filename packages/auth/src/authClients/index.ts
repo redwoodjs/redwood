@@ -46,6 +46,7 @@ export interface AuthClient {
   restoreAuthState?(): void | Promise<any>
   login(options?: any): Promise<any>
   logout(options?: any): void | Promise<void>
+  signup(options?: any): void | Promise<any>
   getToken(): Promise<null | string>
   /** The user's data from the AuthProvider */
   getUserMetadata(): Promise<null | SupportedUserMetadata>

@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/structure",
   "description": "noun: the arrangement of and relations between the parts or elements of something complex",
-  "version": "0.17.2",
+  "version": "0.18.0",
   "license": "MIT",
   "main": "dist/index.js",
   "files": [
@@ -9,15 +9,15 @@
   ],
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@prisma/sdk": "2.6.1",
-    "@redwoodjs/internal": "^0.17.2",
+    "@prisma/sdk": "2.6.2",
+    "@redwoodjs/internal": "^0.18.0",
     "@types/line-column": "^1.0.0",
     "camelcase": "^6.0.0",
     "deepmerge": "^4.2.2",
     "dotenv-defaults": "^2.0.1",
     "enquirer": "2.3.6",
     "findup-sync": "^4.0.0",
-    "graphql": "^15.1.0",
+    "graphql": "^15.3.0",
     "lazy-get-decorator": "^2.2.0",
     "line-column": "^1.0.2",
     "lodash": "^4.17.19",

@@ -8,7 +8,7 @@ import type {
   useQuery as _useQuery,
   useMutation as _useMutation,
   useApolloClient as _useApolloClient,
-} from '@apollo/react-hooks'
+} from '@apollo/client'
 
 declare global {
   // We reduce the number of imports that a user has to do by making them

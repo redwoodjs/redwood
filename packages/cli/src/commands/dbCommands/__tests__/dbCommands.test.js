@@ -50,7 +50,7 @@ describe('db commands', () => {
 
     await save.handler({ name: 'my-migration' })
     expect(runCommandTask.mock.results[3].value).toEqual([
-      'yarn prisma migrate save --name my-migration --create-db --experimental',
+      'yarn prisma migrate save --name "my-migration" --create-db --experimental',
     ])
 
     await introspect.handler({})

@@ -13,7 +13,6 @@ export default function getBrowserJestConfig() {
       color: 'blueBright',
       name: 'web',
     },
-    resolver: 'jest-directory-named-resolver',
     globals: {
       __REDWOOD__: true,
       __REDWOOD__API_PROXY_PATH: '/',
@@ -26,9 +25,9 @@ export default function getBrowserJestConfig() {
        */
       '^react$': path.join(NODE_MODULES_PATH, 'react'),
       '^react-dom$': path.join(NODE_MODULES_PATH, 'react-dom'),
-      '^@apollo/react-common$': path.join(
+      '^@apollo/client/react$': path.join(
         NODE_MODULES_PATH,
-        '@apollo/react-common'
+        '@apollo/client/react'
       ),
       // We replace imports to "@redwoodjs/router" with our own implementation.
       '^@redwoodjs/router$': path.join(
