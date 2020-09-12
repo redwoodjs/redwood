@@ -21,7 +21,7 @@ describe('${pascalName}Cell', () => {
 
   it('Success renders successfully', () => {
     render(
-      <Success userExample={{ ${camelName}: { objectKey: 'objectValue' } }} />
+      <Success ${camelName}={{ ${camelName}: { objectKey: 'objectValue' } }} />
     )
     expect(
       screen.queryByText('{"${camelName}":{"objectKey":"objectValue"}}')
