@@ -3,7 +3,8 @@ import { printDiagnostics, DiagnosticSeverity } from '@redwoodjs/structure'
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 
-export const command = 'diagnostics'
+export const command = 'check'
+export const aliases = ['diagnostics']
 export const description =
   'Get structural diagnostics for a Redwood project (experimental)'
 
