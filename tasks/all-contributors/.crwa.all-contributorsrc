@@ -12,51 +12,6 @@
   "commitConvention": "none",
   "contributors": [
     {
-      "login": "peterp",
-      "name": "Peter Pistorius",
-      "avatar_url": "https://avatars0.githubusercontent.com/u/44849?v=4",
-      "profile": "http://peterp.org/",
-      "contributions": [
-        "tool"
-      ]
-    },
-    {
-      "login": "thedavidprice",
-      "name": "David Price",
-      "avatar_url": "https://avatars0.githubusercontent.com/u/2951?v=4",
-      "profile": "http://thedavidprice.com/",
-      "contributions": [
-        "tool"
-      ]
-    },
-    {
-      "login": "cannikin",
-      "name": "Rob Cameron",
-      "avatar_url": "https://avatars1.githubusercontent.com/u/300?v=4",
-      "profile": "http://ridingtheclutch.com/",
-      "contributions": [
-        "tool"
-      ]
-    },
-    {
-      "login": "mojombo",
-      "name": "Tom Preston-Werner",
-      "avatar_url": "https://avatars0.githubusercontent.com/u/1?v=4",
-      "profile": "http://tom.preston-werner.com/",
-      "contributions": [
-        "tool"
-      ]
-    },
-    {
-      "login": "jtoar",
-      "name": "Dominic Saadi",
-      "avatar_url": "https://avatars2.githubusercontent.com/u/32992335?v=4",
-      "profile": "https://github.com/jtoar",
-      "contributions": [
-        "tool"
-      ]
-    },
-    {
       "login": "Terris",
       "name": "Terris Kremer",
       "avatar_url": "https://avatars0.githubusercontent.com/u/458233?v=4",
@@ -115,15 +70,6 @@
       "name": "Nikolas",
       "avatar_url": "https://avatars1.githubusercontent.com/u/4058327?v=4",
       "profile": "https://twitter.com/nikolasburk",
-      "contributions": [
-        "tool"
-      ]
-    },
-    {
-      "login": "RobertBroersma",
-      "name": "Robert",
-      "avatar_url": "https://avatars0.githubusercontent.com/u/4519828?v=4",
-      "profile": "https://github.com/RobertBroersma",
       "contributions": [
         "tool"
       ]
