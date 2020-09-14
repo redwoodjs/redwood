@@ -21,16 +21,4 @@ export const yargsDefaults = {
     description: 'Overwrite existing files',
     type: 'boolean',
   },
-  javascript: {
-    alias: 'js',
-    default: true,
-    description: 'Generate JavaScript files',
-    type: 'boolean',
-  },
-  typescript: {
-    alias: 'ts',
-    default: false,
-    description: 'Generate TypeScript files',
-    type: 'boolean',
-  },
 }
