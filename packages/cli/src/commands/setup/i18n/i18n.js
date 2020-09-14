@@ -14,7 +14,7 @@ export const builder = (yargs) => {
   yargs.option('force', {
     alias: 'f',
     default: false,
-    description: 'Setup i18n.',
+    description: 'Overwrite existing configuration',
     type: 'boolean',
   })
 }
