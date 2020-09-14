@@ -3,7 +3,6 @@ import Listr from 'listr'
 import terminalLink from 'terminal-link'
 import { getConfig, shutdownPort } from '@redwoodjs/internal'
 
-
 import c from 'src/lib/colors'
 
 export const command = 'upgrade'
@@ -64,7 +63,7 @@ const shutdownApi = () => {
   return [
     {
       title: '...',
-      task: async (ctx, task) => {
+      task: async (_ctx, _task) => {
         try {
           await shutdownPort(getConfig().api.port)
         } catch (e) {
@@ -72,8 +71,8 @@ const shutdownApi = () => {
             `Error whilst shutting down "api" port: ${c.error(e.message)}`
           )
         }
-      }
-    }
+      },
+    },
   ]
 }
 
@@ -155,7 +154,7 @@ export const handler = async ({ d, tag }) => {
     [
       {
         title: 'Shutting down the api dev server...',
-        task: () => new Listr(shutdownApi())
+        task: () => new Listr(shutdownApi()),
       },
       {
         title: 'Checking installed packages',
