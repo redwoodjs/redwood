@@ -4431,9 +4431,9 @@
     source-map "^0.6.1"
 
 "@types/vscode@^1.46.0":
-  version "1.48.0"
-  resolved "https://registry.yarnpkg.com/@types/vscode/-/vscode-1.48.0.tgz#c1841ccf80086d53b35a9d7f2eb3b4d949bd2d2f"
-  integrity sha512-sZJKzsJz1gSoFXcOJWw3fnKl2sseUgZmvB4AJZS+Fea+bC/jfGPVhmFL/FfQHld/TKtukVONsmoD3Pkyx9iadg==
+  version "1.49.0"
+  resolved "https://registry.yarnpkg.com/@types/vscode/-/vscode-1.49.0.tgz#f3731d97d7e8b2697510eb26f6e6d04ee8c17352"
+  integrity sha512-wfNQmLmm1VdMBr6iuNdprWmC1YdrgZ9dQzadv+l2eSjJlElOdJw8OTm4RU4oGTBcfvG6RZI2jOcppkdSS18mZw==
 
 "@types/webpack-env@^1.15.0":
   version "1.15.2"
