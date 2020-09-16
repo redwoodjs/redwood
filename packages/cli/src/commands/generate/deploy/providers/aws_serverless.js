@@ -91,6 +91,19 @@ export const files = [
 
 export const gitIgnoreAdditions = ['.serverless']
 
+export const prismaBinaryTargetAdditions = () => {
+  const content = fs.readFileSync(getPaths().api.dbSchema).toString()
+
+  if (!content.includes("rhel-openssl-1.0.x")) {
+    const result = content.replace(
+      /binaryTargets =.*\n/,
+      `binaryTargets = ["native", "rhel-openssl-1.0.x"]\n`
+    )
+
+    fs.writeFileSync(getPaths().api.dbSchema, result)
+  }
+}
+
 // any notes to print out when the job is done
 export const notes = [
   'You are ready to deploy to AWS using serverless!',
