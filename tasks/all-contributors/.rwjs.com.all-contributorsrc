@@ -12,42 +12,6 @@
   "commitConvention": "none",
   "contributors": [
     {
-      "login": "cannikin",
-      "name": "Rob Cameron",
-      "avatar_url": "https://avatars1.githubusercontent.com/u/300?v=4",
-      "profile": "http://ridingtheclutch.com/",
-      "contributions": [
-        "doc"
-      ]
-    },
-    {
-      "login": "thedavidprice",
-      "name": "David Price",
-      "avatar_url": "https://avatars0.githubusercontent.com/u/2951?v=4",
-      "profile": "http://thedavidprice.com/",
-      "contributions": [
-        "doc"
-      ]
-    },
-    {
-      "login": "jtoar",
-      "name": "Dominic Saadi",
-      "avatar_url": "https://avatars2.githubusercontent.com/u/32992335?v=4",
-      "profile": "https://github.com/jtoar",
-      "contributions": [
-        "doc"
-      ]
-    },
-    {
-      "login": "peterp",
-      "name": "Peter Pistorius",
-      "avatar_url": "https://avatars0.githubusercontent.com/u/44849?v=4",
-      "profile": "http://peterp.org/",
-      "contributions": [
-        "doc"
-      ]
-    },
-    {
       "login": "Tobbe",
       "name": "Tobbe Lundberg",
       "avatar_url": "https://avatars1.githubusercontent.com/u/30793?v=4",
@@ -79,15 +43,6 @@
       "name": "Forrest Hayes",
       "avatar_url": "https://avatars0.githubusercontent.com/u/44448047?v=4",
       "profile": "https://github.com/forresthayes",
-      "contributions": [
-        "doc"
-      ]
-    },
-    {
-      "login": "dthyresson",
-      "name": "David Thyresson",
-      "avatar_url": "https://avatars2.githubusercontent.com/u/1051633?v=4",
-      "profile": "https://github.com/dthyresson",
       "contributions": [
         "doc"
       ]
@@ -151,15 +106,6 @@
       "name": "Ted Stoychev",
       "avatar_url": "https://avatars1.githubusercontent.com/u/1466111?v=4",
       "profile": "https://github.com/tedstoychev",
-      "contributions": [
-        "doc"
-      ]
-    },
-    {
-      "login": "mojombo",
-      "name": "Tom Preston-Werner",
-      "avatar_url": "https://avatars0.githubusercontent.com/u/1?v=4",
-      "profile": "http://tom.preston-werner.com/",
       "contributions": [
         "doc"
       ]
@@ -556,6 +502,15 @@
       "name": "Tim Trautman",
       "avatar_url": "https://avatars0.githubusercontent.com/u/4513085?v=4",
       "profile": "https://github.com/tctrautman",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "qooqu",
+      "name": "qooqu",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/23623824?v=4",
+      "profile": "https://github.com/qooqu",
       "contributions": [
         "doc"
       ]

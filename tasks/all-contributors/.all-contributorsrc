@@ -7,75 +7,11 @@
     "../../README.md"
   ],
   "imageSize": 100,
+  "contributorsPerLine": 5,
   "contributorTemplate": "<a href=\"<%= contributor.profile %>\"><img src=\"<%= contributor.avatar_url %>\" width=\"<%= options.imageSize %>px;\" alt=\"\"/><br /><sub><b><%= contributor.name %></b></sub></a>",
   "commit": false,
   "commitConvention": "none",
   "contributors": [
-    {
-      "login": "peterp",
-      "name": "Peter Pistorius",
-      "avatar_url": "https://avatars0.githubusercontent.com/u/44849?v=4",
-      "profile": "http://peterp.org/",
-      "contributions": [
-        "code",
-        "tool",
-        "doc"
-      ]
-    },
-    {
-      "login": "thedavidprice",
-      "name": "David Price",
-      "avatar_url": "https://avatars0.githubusercontent.com/u/2951?v=4",
-      "profile": "http://thedavidprice.com/",
-      "contributions": [
-        "code",
-        "tool",
-        "doc"
-      ]
-    },
-    {
-      "login": "jtoar",
-      "name": "Dominic Saadi",
-      "avatar_url": "https://avatars2.githubusercontent.com/u/32992335?v=4",
-      "profile": "https://github.com/jtoar",
-      "contributions": [
-        "code",
-        "tool",
-        "doc"
-      ]
-    },
-    {
-      "login": "mojombo",
-      "name": "Tom Preston-Werner",
-      "avatar_url": "https://avatars0.githubusercontent.com/u/1?v=4",
-      "profile": "http://tom.preston-werner.com/",
-      "contributions": [
-        "code",
-        "tool",
-        "doc"
-      ]
-    },
-    {
-      "login": "RobertBroersma",
-      "name": "Robert",
-      "avatar_url": "https://avatars0.githubusercontent.com/u/4519828?v=4",
-      "profile": "https://github.com/RobertBroersma",
-      "contributions": [
-        "code",
-        "tool"
-      ]
-    },
-    {
-      "login": "cannikin",
-      "name": "Rob Cameron",
-      "avatar_url": "https://avatars1.githubusercontent.com/u/300?v=4",
-      "profile": "http://ridingtheclutch.com/",
-      "contributions": [
-        "code",
-        "tool",
-        "doc"
-      ]
-    },
     {
       "login": "Tobbe",
       "name": "Tobbe Lundberg",
@@ -121,16 +57,6 @@
       "profile": "https://twitter.com/kimadeline_m",
       "contributions": [
         "code"
-      ]
-    },
-    {
-      "login": "dthyresson",
-      "name": "David Thyresson",
-      "avatar_url": "https://avatars2.githubusercontent.com/u/1051633?v=4",
-      "profile": "https://github.com/dthyresson",
-      "contributions": [
-        "code",
-        "doc"
       ]
     },
     {
@@ -196,15 +122,6 @@
       "name": "Kasper Mikiewicz",
       "avatar_url": "https://avatars0.githubusercontent.com/u/230404?v=4",
       "profile": "http://kasper.io/",
-      "contributions": [
-        "code"
-      ]
-    },
-    {
-      "login": "dac09",
-      "name": "Daniel Choudhury",
-      "avatar_url": "https://avatars0.githubusercontent.com/u/1521877?v=4",
-      "profile": "https://edamame.studio/",
       "contributions": [
         "code"
       ]
@@ -1051,6 +968,42 @@
       "contributions": [
         "code",
         "tool"
+      ]
+    },
+    {
+      "login": "RyannosaurusRex",
+      "name": "Ryan Hayes",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/438357?v=4",
+      "profile": "http://ryanhayes.net/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "evan",
+      "name": "Evan Weaver",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/210?v=4",
+      "profile": "https://faunadb.com/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "CR1AT0RS",
+      "name": "cr1at0rs",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/4299288?v=4",
+      "profile": "https://github.com/CR1AT0RS",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "qooqu",
+      "name": "qooqu",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/23623824?v=4",
+      "profile": "https://github.com/qooqu",
+      "contributions": [
+        "doc"
       ]
     }
   ],
