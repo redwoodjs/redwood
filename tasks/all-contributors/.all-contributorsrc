@@ -7,6 +7,7 @@
     "../../README.md"
   ],
   "imageSize": 100,
+  "contributorsPerLine": 5,
   "contributorTemplate": "<a href=\"<%= contributor.profile %>\"><img src=\"<%= contributor.avatar_url %>\" width=\"<%= options.imageSize %>px;\" alt=\"\"/><br /><sub><b><%= contributor.name %></b></sub></a>",
   "commit": false,
   "commitConvention": "none",
@@ -121,15 +122,6 @@
       "name": "Kasper Mikiewicz",
       "avatar_url": "https://avatars0.githubusercontent.com/u/230404?v=4",
       "profile": "http://kasper.io/",
-      "contributions": [
-        "code"
-      ]
-    },
-    {
-      "login": "dac09",
-      "name": "Daniel Choudhury",
-      "avatar_url": "https://avatars0.githubusercontent.com/u/1521877?v=4",
-      "profile": "https://edamame.studio/",
       "contributions": [
         "code"
       ]
