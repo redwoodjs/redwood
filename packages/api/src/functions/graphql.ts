@@ -97,8 +97,9 @@ export const createGraphQLHandler = (
 ) => {
   const isDevEnv = process.env.NODE_ENV !== 'production'
   const handler = new ApolloServer({
-    // Turn off playground in production
+    // Turn off playground, introspection and debug in production.
     debug: isDevEnv,
+    introspection: isDevEnv,
     playground: isDevEnv,
     // Log the errors in the console
     formatError: (error) => {
