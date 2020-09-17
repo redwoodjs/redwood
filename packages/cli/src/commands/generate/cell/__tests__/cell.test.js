@@ -19,12 +19,12 @@ let singleWordFiles,
   kebabCaseWordFiles,
   camelCaseWordFiles
 
-beforeAll(() => {
-  singleWordFiles = cell.files({ name: 'User' })
-  multiWordFiles = cell.files({ name: 'UserProfile' })
-  snakeCaseWordFiles = cell.files({ name: 'user_profile' })
-  kebabCaseWordFiles = cell.files({ name: 'user-profile' })
-  camelCaseWordFiles = cell.files({ name: 'userProfile' })
+beforeAll(async () => {
+  singleWordFiles = await cell.files({ name: 'User' })
+  multiWordFiles = await cell.files({ name: 'UserProfile' })
+  snakeCaseWordFiles = await cell.files({ name: 'user_profile' })
+  kebabCaseWordFiles = await cell.files({ name: 'user-profile' })
+  camelCaseWordFiles = await cell.files({ name: 'userProfile' })
 })
 
 // Single Word Scenario: User
