@@ -75,6 +75,9 @@ interface GraphQLHandlerOptions extends Config {
    * A callback when an unhandled exception occurs. Use this to disconnect your prisma instance.
    */
   onException?: () => void
+
+  cors?: CreateHandlerOptions['cors']
+  onHealthCheck?: CreateHandlerOptions['onHealthCheck']
 }
 /**
  * Creates an Apollo GraphQL Server.
@@ -120,7 +123,7 @@ export const createGraphQLHandler = (
     // Wrap the user's context function in our own
     context: createContextHandler(context, getCurrentUser),
     ...options,
-  }).createHandler()
+  }).createHandler({ cors, onHealthCheck })
 
   return (
     event: APIGatewayProxyEvent,
