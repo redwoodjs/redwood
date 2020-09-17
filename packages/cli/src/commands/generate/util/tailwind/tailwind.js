@@ -87,6 +87,17 @@ export const handler = async ({ force }) => {
 
         if (!configExists || force) {
           await execa('yarn', ['tailwindcss', 'init'])
+
+          // opt-in to upcoming change
+          const config = fs.readFileSync('tailwind.config.js', {
+            encoding: 'utf-8',
+          })
+          const newConfig = config.replace(
+            /\/\/ (removeDeprecatedGapUtilities)/,
+            '$1'
+          )
+          fs.writeFileSync('tailwind.config.js', newConfig)
+
           /**
            * Later, when we can tell the vscode extension where to look for the config,
            * we can put it in web/config/
