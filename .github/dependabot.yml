@@ -6,10 +6,6 @@ updates:
       interval: daily
       time: "09:00"
       timezone: America/New_York
-      ignored_updates:
-      - match:
-          dependency_name: "core-js"
-          dependency_name: "@babel*"
       automerged_updates:
       - match:
           dependency_type: "all"
