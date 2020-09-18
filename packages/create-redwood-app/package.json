@@ -10,7 +10,7 @@
     "@babel/runtime-corejs3": "^7.9.2",
     "@redwoodjs/internal": "^0.18.0",
     "axios": "^0.20.0",
-    "chalk": "^3.0.0",
+    "chalk": "^4.1.0",
     "check-node-version": "^4.0.2",
     "decompress": "^4.2.0",
     "execa": "^4.0.0",
