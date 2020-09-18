@@ -18,7 +18,7 @@
     "@redwoodjs/structure": "^0.18.0",
     "boxen": "^4.2.0",
     "camelcase": "^6.0.0",
-    "chalk": "^3.0.0",
+    "chalk": "^4.1.0",
     "concurrently": "^5.1.0",
     "core-js": "3.6.5",
     "cross-env": "^7.0.2",
@@ -36,7 +36,7 @@
     "pluralize": "^8.0.0",
     "prettier": "^2.1.1",
     "terminal-link": "^2.1.1",
-    "yargs": "^15.3.1"
+    "yargs": "^16.0.3"
   },
   "devDependencies": {
     "@types/node-fetch": "^2.5.5"

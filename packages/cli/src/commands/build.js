@@ -10,20 +10,20 @@ import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
 
-const apiExists = fs.existsSync(getPaths().api.src)
-const webExists = fs.existsSync(getPaths().web.src)
-
-const optionDefault = (apiExists, webExists) => {
-  let options = []
-  if (apiExists) options.push('api')
-  if (webExists) options.push('web')
-  return options
-}
-
 export const command = 'build [side..]'
 export const description = 'Build for production'
 
 export const builder = (yargs) => {
+  const apiExists = fs.existsSync(getPaths().api.src)
+  const webExists = fs.existsSync(getPaths().web.src)
+
+  const optionDefault = (apiExists, webExists) => {
+    let options = []
+    if (apiExists) options.push('api')
+    if (webExists) options.push('web')
+    return options
+  }
+
   yargs
     .positional('side', {
       choices: ['api', 'web'],

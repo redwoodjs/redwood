@@ -1,5 +1,5 @@
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
-import type { Config } from 'apollo-server-lambda'
+import type { Config, CreateHandlerOptions } from 'apollo-server-lambda'
 import type { Context, ContextFunction } from 'apollo-server-core'
 import type { GlobalContext } from 'src/globalContext'
 import type { AuthContextPayload } from 'src/auth'
@@ -75,6 +75,9 @@ interface GraphQLHandlerOptions extends Config {
    * A callback when an unhandled exception occurs. Use this to disconnect your prisma instance.
    */
   onException?: () => void
+
+  cors?: CreateHandlerOptions['cors']
+  onHealthCheck?: CreateHandlerOptions['onHealthCheck']
 }
 /**
  * Creates an Apollo GraphQL Server.
@@ -83,22 +86,19 @@ interface GraphQLHandlerOptions extends Config {
  * export const handler = createGraphQLHandler({ schema, context, getCurrentUser })
  * ```
  */
-export const createGraphQLHandler = (
-  {
-    context,
-    getCurrentUser,
-    onException,
-    ...options
-  }: GraphQLHandlerOptions = {},
-  /**
-   * @deprecated please use onException instead to disconnect your database.
-   * */
-  db?: any
-) => {
+export const createGraphQLHandler = ({
+  context,
+  getCurrentUser,
+  onException,
+  cors,
+  onHealthCheck,
+  ...options
+}: GraphQLHandlerOptions = {}) => {
   const isDevEnv = process.env.NODE_ENV !== 'production'
   const handler = new ApolloServer({
-    // Turn off playground in production
+    // Turn off playground, introspection and debug in production.
     debug: isDevEnv,
+    introspection: isDevEnv,
     playground: isDevEnv,
     // Log the errors in the console
     formatError: (error) => {
@@ -119,7 +119,7 @@ export const createGraphQLHandler = (
     // Wrap the user's context function in our own
     context: createContextHandler(context, getCurrentUser),
     ...options,
-  }).createHandler()
+  }).createHandler({ cors, onHealthCheck })
 
   return (
     event: APIGatewayProxyEvent,
@@ -130,9 +130,6 @@ export const createGraphQLHandler = (
       handler(event, context, callback)
     } catch (e) {
       onException && onException()
-      // Disconnect from the database (recommended by Prisma), this step will be
-      // removed in future releases.
-      db && db.$disconnect()
       throw e
     }
   }
