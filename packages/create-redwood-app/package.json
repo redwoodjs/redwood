@@ -16,7 +16,7 @@
     "execa": "^4.0.0",
     "listr": "^0.14.3",
     "tmp": "^0.2.1",
-    "yargs": "^15.3.1"
+    "yargs": "^16.0.3"
   },
   "scripts": {
     "build": "babel src -d dist",
