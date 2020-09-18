@@ -1,7 +1,7 @@
+import terminalLink from 'terminal-link'
 export const command = 'setup <type>'
 export const aliases = ['g']
 export const description = 'Execute some setup logic'
-import terminalLink from 'terminal-link'
 
 export const builder = (yargs) =>
   yargs
