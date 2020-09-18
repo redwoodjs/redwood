@@ -67,7 +67,7 @@
     "babel-plugin-tester": "^9.0.1",
     "whatwg-fetch": "^3.0.0"
   },
-  "gitHead": "1cb7c8d1085147787209af423c33a9c91c3e6517",
+  "gitHead": "c235e7d7186e5e258764699c0e0e1d5cc0fdd0b5",
   "scripts": {
     "build": "yarn build:js && yarn build:types",
     "prepublishOnly": "yarn build",
