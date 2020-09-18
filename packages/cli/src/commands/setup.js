@@ -1,6 +1,5 @@
 import terminalLink from 'terminal-link'
 export const command = 'setup <type>'
-export const aliases = ['g']
 export const description = 'Execute some setup logic'
 
 export const builder = (yargs) =>
@@ -10,7 +9,7 @@ export const builder = (yargs) =>
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/reference/command-line-interface#generate-alias-g'
+        'https://redwoodjs.com/reference/command-line-interface#setting-up'
       )}`
     )
 

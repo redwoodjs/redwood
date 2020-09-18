@@ -19,9 +19,9 @@ export const builder = (yargs) => {
   })
 }
 
-const INDEX_JS_PATH = path.join(getPaths().web.src, 'index.js')
 
 export const handler = async ({ force }) => {
+  const INDEX_JS_PATH = path.join(getPaths().web.src, 'index.js')
   const tasks = new Listr([
     {
       title: 'Installing packages...',
@@ -45,7 +45,7 @@ export const handler = async ({ force }) => {
          * Write i18n.js in web/src
          */
         return writeFile(
-          getPaths().web.src,
+          path.join(getPaths().web.src, 'i18n.js'),
           fs
             .readFileSync(
               path.resolve(__dirname, 'templates', 'i18n.js.template')
