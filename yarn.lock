@@ -5726,9 +5726,9 @@ babel-plugin-emotion@^10.0.20, babel-plugin-emotion@^10.0.27:
     source-map "^0.5.7"
 
 babel-plugin-graphql-tag@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/babel-plugin-graphql-tag/-/babel-plugin-graphql-tag-3.0.0.tgz#b1617ae708641c4dc5d0899a9b5c69e51e116f53"
-  integrity sha512-v9cNN/csE0IFH0Mb9rJHqgU9IzDz3DjSITfjvt1WlcRIVa5rZwWSV1dje6DUqdLGMAm84t9tbAnOLKrXYYHcFA==
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/babel-plugin-graphql-tag/-/babel-plugin-graphql-tag-3.1.0.tgz#8c8e61fdfc976654a4924ffdd223ce5c964e10b7"
+  integrity sha512-NuFBZ0Gr7zmf5dbImFBkYIxhu8VriU/86MRYxjShlldleiRVjcZ+rYEzanQAQlH2Q7kNGqaeXvpM7uqUForsng==
   dependencies:
     "@babel/helper-plugin-utils" "^7.0.0"
     "@babel/parser" "^7.3.2"
