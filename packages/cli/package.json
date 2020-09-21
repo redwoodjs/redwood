@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/cli",
   "description": "The Redwood Command Line",
-  "version": "0.18.0",
+  "version": "0.19.1",
   "license": "MIT",
   "bin": {
     "redwood": "./dist/index.js",
@@ -14,8 +14,8 @@
   ],
   "dependencies": {
     "@prisma/sdk": "2.6.2",
-    "@redwoodjs/internal": "^0.18.0",
-    "@redwoodjs/structure": "^0.18.0",
+    "@redwoodjs/internal": "^0.19.1",
+    "@redwoodjs/structure": "^0.19.1",
     "boxen": "^4.2.0",
     "camelcase": "^6.0.0",
     "chalk": "^4.1.0",
@@ -50,5 +50,5 @@
     "test": "jest",
     "test:watch": "yarn test --watch"
   },
-  "gitHead": "1cb7c8d1085147787209af423c33a9c91c3e6517"
+  "gitHead": "c235e7d7186e5e258764699c0e0e1d5cc0fdd0b5"
 }
