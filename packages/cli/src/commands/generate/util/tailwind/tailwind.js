@@ -88,14 +88,12 @@ export const handler = async ({ force }) => {
         if (!configExists || force) {
           await execa('yarn', ['tailwindcss', 'init'])
 
-          // opt-in to upcoming change
-          const config = fs.readFileSync('tailwind.config.js', {
-            encoding: 'utf-8',
-          })
-          const newConfig = config.replace(
-            /\/\/ (removeDeprecatedGapUtilities)/,
-            '$1'
-          )
+          // opt-in to upcoming changes
+          const config = fs.readFileSync('tailwind.config.js', 'utf-8')
+
+          const uncommentFlags = (str) => str.replace(/\/{2} /g, '')
+          const newConfig = config.replace(/future: {[^]*}/, uncommentFlags)
+
           fs.writeFileSync('tailwind.config.js', newConfig)
 
           /**
