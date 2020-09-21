@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/api-server",
   "description": "Redwood's HTTP server for Serverless Functions",
-  "version": "0.19.0",
+  "version": "0.19.1",
   "bin": {
     "api-server": "./dist/index.js"
   },
