@@ -216,7 +216,6 @@ new Listr(
       `${style.redwood(' ⮡  Find a Good First Issue')}: https://redwoodjs.com/good-first-issue`,
       ''
     ].map((item) => console.log(item))
-    console.log()
   })
   .catch((e) => {
     console.log()
