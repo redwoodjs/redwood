@@ -52,5 +52,3 @@ node ./dist/create-redwood-app.js /path/to/new/redwood-app
 # Run without installing yarn dependencies
 node ./dist/create-redwood-app.js --no-yarn-install /path/to/new/redwood-app
 ```
-
-_Note: In above example we are creating the app in the parent directory in folder `create-redwood-app-test`._
