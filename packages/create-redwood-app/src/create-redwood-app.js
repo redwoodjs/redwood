@@ -169,12 +169,12 @@ const installNodeModulesTasks = ({ newAppDir }) => {
 const style = {
   error: chalk.bold.red,
   warning: chalk.keyword('orange'),
-  success: chalk.hex('#c3e88d'),
+  success: chalk.greenBright,
   info: chalk.grey,
   header: chalk.bold.underline.hex('##e8e8e8'),
   cmd: chalk.hex('#808080'),
   redwood: chalk.hex('#ff845e'),
-  love: chalk.reset.hex('#de1d10'),
+  love: chalk.redBright,
 }
 
 new Listr(
