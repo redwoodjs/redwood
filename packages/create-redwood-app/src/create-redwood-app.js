@@ -164,25 +164,6 @@ const installNodeModulesTasks = ({ newAppDir }) => {
   ]
 }
 
-const displaySuccessMessage = () => {
-  const items = displaySuccessMessageItems
-
-  return Object.keys(items).forEach((key) => {
-    const section = items[key]
-
-    if (section.header) {
-      console.log(`\n${section.header}\n`)
-    }
-
-    section.rows.forEach((row) => {
-      const text = row.text
-      const url = typeof row.url !== 'undefined' ? `: ${row.url}` : ''
-
-      console.log(`${text}${url}`)
-    })
-  })
-}
-
 // Inspiration from from @redwood/cli
 // https://github.com/redwoodjs/redwood/blob/main/packages/cli/src/lib/colors.js
 const style = {
@@ -194,65 +175,6 @@ const style = {
   cmd: chalk.hex('#808080'),
   redwood: chalk.hex('#ff845e'),
   love: chalk.reset.hex('#de1d10'),
-}
-
-const displaySuccessMessageItems = {
-  start: {
-    header: style.success('Thanks for trying out Redwood!'),
-    rows: [
-      {
-        text: `We've created your app in '${style.cmd(newAppDir)}'`,
-      },
-      {
-        text: `Enter the directory and run '${style.cmd(
-          'yarn rw dev'
-        )}' to start the development server.`,
-      },
-    ],
-  },
-  help: {
-    header: style.header('Join the Community and Get Help'),
-    rows: [
-      {
-        text: style.redwood(' ⮡  Join our Forums'),
-        url: 'https://community.redwoodjs.com',
-      },
-      {
-        text: style.redwood(' ⮡  Join our Chat'),
-        url: 'https://discord.gg/redwoodjs',
-      },
-      {
-        text: style.redwood(' ⮡  Read the Documentation'),
-        url: 'https://redwoodjs.com/docs/',
-      },
-    ],
-  },
-  updated: {
-    header: style.header('Keep updated'),
-    rows: [
-      {
-        text: style.redwood(' ⮡  Newsletter signup'),
-        url: 'https://www.redwoodjs.com',
-      },
-      {
-        text: style.redwood(' ⮡  Follow on Twitter'),
-        url: 'https://twitter.com/redwoodjs',
-      },
-    ],
-  },
-  contribute: {
-    header: `${style.header(`Become a Contributor`)} ${style.love('❤')}`,
-    rows: [
-      {
-        text: style.redwood(' ⮡  Learn how to get started'),
-        url: 'https://redwoodjs.com/docs/contributing',
-      },
-      {
-        text: style.redwood(' ⮡  Find a Good First Issue'),
-        url: 'https://redwoodjs.com/good-first-issue',
-      }
-    ],
-  },
 }
 
 new Listr(
@@ -270,7 +192,30 @@ new Listr(
 )
   .run()
   .then(() => {
-    displaySuccessMessage()
+    [
+      '',
+      style.success('Thanks for trying out Redwood!'),
+      '',
+      `We've created your app in '${style.cmd(newAppDir)}'`,
+      `Enter the directory and run '${style.cmd("yarn rw dev")}' to start the development server.`,
+      '',
+      style.header('Join the Community and Get Help'),
+      '',
+      `${style.redwood(' ⮡  Join our Forums')}: https://community.redwoodjs.com`,
+      `${style.redwood(' ⮡  Join our Chat')}: https://discord.gg/redwoodjs`,
+      `${style.redwood(' ⮡  Read the Documentation')}: https://redwoodjs.com/docs`,
+      '',
+      style.header('Keep updated'),
+      '',
+      `${style.redwood(' ⮡  Newsletter signup')}: https://www.redwoodjs.com`,
+      `${style.redwood(' ⮡  Follow on Twitter')}: https://twitter.com/redwoodjs`,
+      '',
+      `${style.header(`Become a Contributor`)} ${style.love('❤')}`,
+      '',
+      `${style.redwood(' ⮡  Learn how to get started')}: https://redwoodjs.com/docs/contributing`,
+      `${style.redwood(' ⮡  Find a Good First Issue')}: https://redwoodjs.com/good-first-issue`,
+      ''
+    ].map((item) => console.log(item))
     console.log()
   })
   .catch((e) => {
