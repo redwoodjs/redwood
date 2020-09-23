@@ -31,23 +31,26 @@ Explains how to contribute by addressing the following three points:
 
 ### How to run create redwood-app script locally
 
-Install [`esm`](https://www.npmjs.com/package/esm);
+Step into the `create-redwood-app` package:
 
 ```bash
-yarn workspace add --dev create-redwood-app
+cd packages/create-redwood-app
 ```
 
-After making changes to `create-redwood-app.js`, do one of the following;
+Watch for changes to the package:
+
+```bash
+yarn build:watch
+```
+
+In a new terminal, when you make a change to e.g. `create-redwood-app.js`, run it:
 
 ```bash
 # Run and install yarn dependencies
-node -r esm ./packages/create-redwood-app/src/create-redwood-app.js ../create-redwood-app-test
+node ./dist/create-redwood-app.js /path/to/new/redwood-app
 
 # Run without installing yarn dependencies
-node -r esm ./packages/create-redwood-app/src/create-redwood-app.js --no-yarn-install ../create-redwood-app-test
-
-# For the lazy; forcefully delete ../create-redwood-app-test and then run without installing yarn dependencies
-rm -rf ../create-redwood-app-test && node -r esm ./packages/create-redwood-app/src/create-redwood-app.js --no-yarn-install ../create-redwood-app-test
+node ./dist/create-redwood-app.js --no-yarn-install /path/to/new/redwood-app
 ```
 
 _Note: In above example we are creating the app in the parent directory in folder `create-redwood-app-test`._
