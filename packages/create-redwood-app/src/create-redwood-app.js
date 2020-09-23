@@ -171,7 +171,7 @@ const style = {
   warning: chalk.keyword('orange'),
   success: chalk.greenBright,
   info: chalk.grey,
-  header: chalk.bold.underline.hex('##e8e8e8'),
+  header: chalk.bold.underline.hex('#e8e8e8'),
   cmd: chalk.hex('#808080'),
   redwood: chalk.hex('#ff845e'),
   love: chalk.redBright,
