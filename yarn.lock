@@ -2,16 +2,6 @@
 # yarn lockfile v1
 
 
-"@apexearth/copy@^1.4.5":
-  version "1.4.5"
-  resolved "https://registry.yarnpkg.com/@apexearth/copy/-/copy-1.4.5.tgz#966716249c831a168ef51eb224f53e0bb642ab79"
-  integrity sha512-Zws+jNVT54YUjBuNfDKje2uyoTQRYpIPMHDf6v6EI019ZqXnwYxb4/gZMlDjv+O+LnZbBn2Sc8DC5KAbcBNiaQ==
-  dependencies:
-    commander "^2.19.0"
-    mkdirp "^1.0.4"
-    prettysize "^2.0.0"
-    sleep-promise "^8.0.1"
-
 "@apollo/client@^3.0.2":
   version "3.1.3"
   resolved "https://registry.yarnpkg.com/@apollo/client/-/client-3.1.3.tgz#4ea9c3818bd2836a3dbe26088227c3d8cb46ad2b"
@@ -3157,21 +3147,21 @@
   dependencies:
     pkg-up "^3.1.0"
 
-"@prisma/debug@2.6.2":
-  version "2.6.2"
-  resolved "https://registry.yarnpkg.com/@prisma/debug/-/debug-2.6.2.tgz#2542896fef25d15ad3972dff516f6293693e9a00"
-  integrity sha512-FQroN5vk6nqm/8FAP4t29VfFF8Dmx/XT3Gm13fcOzJqlydHsKHEo2PpiNeRlXCnqmJqvz6x8DUr7e8CD9XdG5Q==
+"@prisma/debug@2.7.1":
+  version "2.7.1"
+  resolved "https://registry.yarnpkg.com/@prisma/debug/-/debug-2.7.1.tgz#8ac51f9735fe07bc5e29ef247ff18625ccb96c4a"
+  integrity sha512-qF9xBjNWtf7yZBAKtHJB+Sp0kxdF/K5rUyVk9VoMNNgTrIFkaOcDY68DUlldxh+txjydUT4YacR5P4qXZocsqg==
   dependencies:
     debug "^4.1.1"
 
-"@prisma/engine-core@2.6.2":
-  version "2.6.2"
-  resolved "https://registry.yarnpkg.com/@prisma/engine-core/-/engine-core-2.6.2.tgz#851dde890309ef959dd91b67a1d36a4f8486bacc"
-  integrity sha512-b3IhgBCJaeu6oUUcY8BPRHJC7xdFjDIQEdHxTzYcUTyYRdGzgZcVOQfQpfHdey+FpPJdyKPQOndopF8zun+cww==
+"@prisma/engine-core@2.7.1":
+  version "2.7.1"
+  resolved "https://registry.yarnpkg.com/@prisma/engine-core/-/engine-core-2.7.1.tgz#87dd6deba49508e3475bc668c3ede2060d782b31"
+  integrity sha512-vbNeKBl6Nl1KJuwCCwva8v4BXuv/jydA/Yl5Jnrf11KGM3BSCRavDGj4N1rxdxXpnp+L4Icb2OkxXYgdEWKPdA==
   dependencies:
-    "@prisma/debug" "2.6.2"
-    "@prisma/generator-helper" "2.6.2"
-    "@prisma/get-platform" "2.6.2"
+    "@prisma/debug" "2.7.1"
+    "@prisma/generator-helper" "2.7.1"
+    "@prisma/get-platform" "2.7.1"
     chalk "^4.0.0"
     cross-fetch "^3.0.4"
     execa "^4.0.2"
@@ -3182,13 +3172,13 @@
     terminal-link "^2.1.1"
     undici "git://github.com/nodejs/undici.git#e76f6a37836537f08c2d9b7d8805d6ff21d1e744"
 
-"@prisma/fetch-engine@2.6.2":
-  version "2.6.2"
-  resolved "https://registry.yarnpkg.com/@prisma/fetch-engine/-/fetch-engine-2.6.2.tgz#f63de5e4d6247469fd67db360375204e0b95dc8a"
-  integrity sha512-ZzqFpMK4PGLNMs1Ez+KUF2G22hh+wTvdIn3eZmbb8prJZjQ0JgRm+3FF/5+VNx3QI2DSIAFVSea4ra+ZuQC53w==
+"@prisma/fetch-engine@2.7.1":
+  version "2.7.1"
+  resolved "https://registry.yarnpkg.com/@prisma/fetch-engine/-/fetch-engine-2.7.1.tgz#855a32cdcb22e3c105b5f10e5490e25b7a96d02a"
+  integrity sha512-BmJW8RGQCMAtYSgmCOH3X4trdzzejum4yuutruDKJQDP67fPmd8Waq/SRlnDcjhDs+2ZI6lKMaj6qTCU9Qd+MQ==
   dependencies:
-    "@prisma/debug" "2.6.2"
-    "@prisma/get-platform" "2.6.2"
+    "@prisma/debug" "2.7.1"
+    "@prisma/get-platform" "2.7.1"
     chalk "^4.0.0"
     execa "^4.0.0"
     find-cache-dir "^3.3.1"
@@ -3206,45 +3196,46 @@
     temp-dir "^2.0.0"
     tempy "^0.6.0"
 
-"@prisma/generator-helper@2.6.2":
-  version "2.6.2"
-  resolved "https://registry.yarnpkg.com/@prisma/generator-helper/-/generator-helper-2.6.2.tgz#fc484254079461d32d831a13bcac9d9ff0736034"
-  integrity sha512-Q6Yc4JvYt4leL9/6UO139eVv4P6sjNFVhX1hBxK3Fp3tDgABZcZskrwW+gS1HjrVLdivBMtr8PnGoktR3eP++A==
+"@prisma/generator-helper@2.7.1":
+  version "2.7.1"
+  resolved "https://registry.yarnpkg.com/@prisma/generator-helper/-/generator-helper-2.7.1.tgz#31158537cb79777f42ec2b15e71943edd6c39924"
+  integrity sha512-gG2BRDefyIIXSx6uMFTof8Nd0jkZjPs6ExvTcra7xi36+oqkdgjOmq1vp6x3+VfC+EXzY1qReBZViuZZSFH4Cg==
   dependencies:
-    "@prisma/debug" "2.6.2"
+    "@prisma/debug" "2.7.1"
     "@types/cross-spawn" "^6.0.1"
     chalk "^4.0.0"
     cross-spawn "^7.0.2"
 
-"@prisma/get-platform@2.6.2":
-  version "2.6.2"
-  resolved "https://registry.yarnpkg.com/@prisma/get-platform/-/get-platform-2.6.2.tgz#aced41b5e33e90b0cb9fb80e9c0797c5ce5610b4"
-  integrity sha512-/k7Vl+kNCKhpDVZpK4/XX+G3b80FbhxE7qYEuYBUc09FPVN3t2P4mK1eWHUTK+cwngb9mnWuX2Z7gyQYJwRsKQ==
+"@prisma/get-platform@2.7.1":
+  version "2.7.1"
+  resolved "https://registry.yarnpkg.com/@prisma/get-platform/-/get-platform-2.7.1.tgz#3da81ad3ea96c7ff8bed7cb3a4058c1f919dd123"
+  integrity sha512-2G/dbvIUC8rC4pKR+MX9jdcqnTbdSvYvhTLhc99y5Z2pI2dV+/vb3dWSXHWqmLWsmY482n9X+HngxQGnX4V4bQ==
   dependencies:
-    "@prisma/debug" "2.6.2"
+    "@prisma/debug" "2.7.1"
 
-"@prisma/sdk@2.6.2":
-  version "2.6.2"
-  resolved "https://registry.yarnpkg.com/@prisma/sdk/-/sdk-2.6.2.tgz#6eb5ea7e7841908cacbc83b42c3f5cd4a669890e"
-  integrity sha512-sYeaC3o31aVf9u+uaBbVespLF7A6gGdylRtH5/9NbPoI1W52XpkiT45JQgvKIRuS6hlnLX6Um7w345Aebeo4NA==
+"@prisma/sdk@2.7.1":
+  version "2.7.1"
+  resolved "https://registry.yarnpkg.com/@prisma/sdk/-/sdk-2.7.1.tgz#cb3f33ef74e335dc0741dcc0b89fbb4c8c8508e0"
+  integrity sha512-vXPxcoxVuxXkNcMOx9+Bx89uiTfTDSJ/dOiNjWKV3Y7NaQj5kphik7wdt76QQees7Zu3cG6MwHRY7Awbkc6ZLw==
   dependencies:
-    "@apexearth/copy" "^1.4.5"
-    "@prisma/debug" "2.6.2"
-    "@prisma/engine-core" "2.6.2"
-    "@prisma/fetch-engine" "2.6.2"
-    "@prisma/generator-helper" "2.6.2"
-    "@prisma/get-platform" "2.6.2"
+    "@prisma/debug" "2.7.1"
+    "@prisma/engine-core" "2.7.1"
+    "@prisma/fetch-engine" "2.7.1"
+    "@prisma/generator-helper" "2.7.1"
+    "@prisma/get-platform" "2.7.1"
+    "@timsuchanek/copy" "^1.4.5"
     archiver "^4.0.0"
     arg "^4.1.3"
     chalk "4.1.0"
     checkpoint-client "1.1.11"
     cli-truncate "^2.1.0"
+    dotenv "^8.2.0"
     execa "^4.0.0"
     global-dirs "^2.0.1"
     globby "^11.0.0"
     has-yarn "^2.1.0"
     make-dir "^3.0.2"
-    node-fetch "2.6.0"
+    node-fetch "2.6.1"
     p-map "^4.0.0"
     read-pkg-up "^7.0.1"
     resolve-pkg "^2.0.0"
@@ -3844,6 +3835,21 @@
   integrity sha512-vd5s43lNfyq/JEr8ndQmS+An6dEVUmjW9zqtpmMHU+rrPMaHLrUIlWZ9wDE8ALS/dFMsu6U00A5X/7Dv/2tWnw==
   dependencies:
     "@babel/runtime" "^7.10.2"
+
+"@timsuchanek/copy@^1.4.5":
+  version "1.4.5"
+  resolved "https://registry.yarnpkg.com/@timsuchanek/copy/-/copy-1.4.5.tgz#8e9658c056e24e1928a88bed45f9eac6a72b7c40"
+  integrity sha512-N4+2/DvfwzQqHYL/scq07fv8yXbZc6RyUxKJoE8Clm14JpLOf9yNI4VB4D6RsV3h9zgzZ4loJUydHKM7pp3blw==
+  dependencies:
+    "@timsuchanek/sleep-promise" "^8.0.1"
+    commander "^2.19.0"
+    mkdirp "^1.0.4"
+    prettysize "^2.0.0"
+
+"@timsuchanek/sleep-promise@^8.0.1":
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/@timsuchanek/sleep-promise/-/sleep-promise-8.0.1.tgz#81c0754b345138a519b51c2059771eb5f9b97818"
+  integrity sha512-cxHYbrXfnCWsklydIHSw5GCMHUPqpJ/enxWSyVHNOgNe61sit/+aOXTTI+VOdWkvVaJsI2vsB9N4+YDNITawOQ==
 
 "@tootallnate/once@1":
   version "1.1.2"
@@ -13752,6 +13758,11 @@ node-fetch@2.6.0:
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.0.tgz#e633456386d4aa55863f676a7ab0daa8fdecb0fd"
   integrity sha512-8dG4H5ujfvFiqDmVu9fQ5bOHUC15JMjMY/Zumv26oOvvVJjM67KF8koCWIabKQ1GJIa9r2mMZscBq/TbdOcmNA==
 
+node-fetch@2.6.1, node-fetch@^2.1.2, node-fetch@^2.2.0, node-fetch@^2.3.0, node-fetch@^2.5.0, node-fetch@^2.6.0:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.1.tgz#045bd323631f76ed2e2b55573394416b639a0052"
+  integrity sha512-V4aYg89jEoVRxRb2fJdAg8FHvI7cEyYdVAh94HH0UIK8oJxUfkjlDQN9RbMx+bEjP7+ggMiFRprSti032Oipxw==
+
 node-fetch@^1.0.1:
   version "1.7.3"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-1.7.3.tgz#980f6f72d85211a5347c6b2bc18c5b84c3eb47ef"
@@ -13759,11 +13770,6 @@ node-fetch@^1.0.1:
   dependencies:
     encoding "^0.1.11"
     is-stream "^1.0.1"
-
-node-fetch@^2.1.2, node-fetch@^2.2.0, node-fetch@^2.3.0, node-fetch@^2.5.0, node-fetch@^2.6.0:
-  version "2.6.1"
-  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.1.tgz#045bd323631f76ed2e2b55573394416b639a0052"
-  integrity sha512-V4aYg89jEoVRxRb2fJdAg8FHvI7cEyYdVAh94HH0UIK8oJxUfkjlDQN9RbMx+bEjP7+ggMiFRprSti032Oipxw==
 
 node-forge@0.9.0:
   version "0.9.0"
@@ -16587,11 +16593,6 @@ slash@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/slash/-/slash-3.0.0.tgz#6539be870c165adbd5240220dbe361f1bc4d4634"
   integrity sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==
-
-sleep-promise@^8.0.1:
-  version "8.0.1"
-  resolved "https://registry.yarnpkg.com/sleep-promise/-/sleep-promise-8.0.1.tgz#8d795a27ea23953df6b52b91081e5e22665993c5"
-  integrity sha1-jXlaJ+ojlT32tSuRCB5eImZZk8U=
 
 slice-ansi@0.0.4:
   version "0.0.4"
