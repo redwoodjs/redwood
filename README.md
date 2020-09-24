@@ -22,7 +22,7 @@ Redwood is the latest open source project initiated by Tom Preston-Werner, cofou
 > right; make it fast" paradigm, Redwood is in the later stages of the "make it
 > work" phase. That said, your input can have a huge impact during this period,
 > and we welcome your feedback and ideas! Check out the [Redwood Community
-> Forum](https://community.redwoodjs.com/) to join in.
+> Forum](https://community.redwoodjs.com/) to join in.  
 
 > **TUTORIAL:** The best way to get to know Redwood is by going through the extensive
 > [Redwood Tutorial](https://redwoodjs.com/tutorial). Have fun!
