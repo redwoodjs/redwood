@@ -1568,10 +1568,10 @@
   dependencies:
     "@firebase/app-types" "0.6.1"
 
-"@firebase/database@0.6.12", "@firebase/database@^0.6.10":
-  version "0.6.12"
-  resolved "https://registry.yarnpkg.com/@firebase/database/-/database-0.6.12.tgz#60b484d34add1c0aad4999e2b1cb58b8f2b707c6"
-  integrity sha512-OLUxp8TkXiML4X5LWM5IACsSDvo3fcf4mTbTe5RF+N6TRFv0Svzlet5OgGIa3ET1dQvNiisrMX7zzRa0OTLs7Q==
+"@firebase/database@0.6.13", "@firebase/database@^0.6.10":
+  version "0.6.13"
+  resolved "https://registry.yarnpkg.com/@firebase/database/-/database-0.6.13.tgz#b96fe0c53757dd6404ee085fdcb45c0f9f525c17"
+  integrity sha512-NommVkAPzU7CKd1gyehmi3lz0K78q0KOfiex7Nfy7MBMwknLm7oNqKovXSgQV1PCLvKXvvAplDSFhDhzIf9obA==
   dependencies:
     "@firebase/auth-interop-types" "0.1.5"
     "@firebase/component" "0.1.19"
@@ -1581,24 +1581,24 @@
     faye-websocket "0.11.3"
     tslib "^1.11.1"
 
-"@firebase/firestore-types@1.12.1":
-  version "1.12.1"
-  resolved "https://registry.yarnpkg.com/@firebase/firestore-types/-/firestore-types-1.12.1.tgz#67e999798043d1b3156d0a2c52d4299a92345deb"
-  integrity sha512-CpWcDriYnGDoAl0D9DcSuwX0b/fXqi7qOwuuTI1M0SYxau48G8cqhVjzjqPDgEM3kDGYJTnPN3ALS0Z4cnwERQ==
+"@firebase/firestore-types@1.13.0":
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/@firebase/firestore-types/-/firestore-types-1.13.0.tgz#4ab9c40e1e66e8193a929460d64507acd07d9230"
+  integrity sha512-QF5CAuYOHE6Zbsn1uEg6wkl836iP+i6C0C/Zs3kF60eebxZvTWp8JSZk19Ar+jj4w+ye8/7H5olu5CqDNjWpEA==
 
-"@firebase/firestore@1.16.7":
-  version "1.16.7"
-  resolved "https://registry.yarnpkg.com/@firebase/firestore/-/firestore-1.16.7.tgz#046da8e129205538335f261b804273ec04c6df42"
-  integrity sha512-MrX7te1eUib2pUzD3dLWdRuM7EPcCxtPwO4M9og3IFYr1U3XlxybD7kxyYswltHcUm6+kba3VKL1rvkqZ1sn2g==
+"@firebase/firestore@1.17.0":
+  version "1.17.0"
+  resolved "https://registry.yarnpkg.com/@firebase/firestore/-/firestore-1.17.0.tgz#f452b6387749d74a66173c74654fdf915a1241d4"
+  integrity sha512-ZELQC7nC0Ueexxy/K9zk0lqFuGs7LatEK9Ybr2BwH6KbkvNUovToTiaRUhSOv5IDxjrEu2k6sY1xwnxE4qpqMA==
   dependencies:
     "@firebase/component" "0.1.19"
-    "@firebase/firestore-types" "1.12.1"
+    "@firebase/firestore-types" "1.13.0"
     "@firebase/logger" "0.2.6"
     "@firebase/util" "0.3.2"
     "@firebase/webchannel-wrapper" "0.3.0"
     "@grpc/grpc-js" "^1.0.0"
     "@grpc/proto-loader" "^0.5.0"
-    node-fetch "2.6.0"
+    node-fetch "2.6.1"
     tslib "^1.11.1"
 
 "@firebase/functions-types@0.3.17":
@@ -9561,16 +9561,16 @@ firebase-admin@^9.1.1:
     "@google-cloud/storage" "^5.0.0"
 
 firebase@^7.14.5:
-  version "7.20.0"
-  resolved "https://registry.yarnpkg.com/firebase/-/firebase-7.20.0.tgz#ac1557a0962070d19d61d150c69421a5503710ec"
-  integrity sha512-ijgiUPB93UGWw2P2kgUQgghu5WOn/WR2J8C/V6ZSeI1PQqiEwsfn0kvw4iMJeqLQpA/FVeZz/+p0ubE5kzqhBA==
+  version "7.21.0"
+  resolved "https://registry.yarnpkg.com/firebase/-/firebase-7.21.0.tgz#bb64f99fad2e1fe755e321a42b1377da537081e5"
+  integrity sha512-aERVRK3oxll+lzcDUzOFjww39G1h1dRlEdCqZEl5NL/3CC4GcVhX64At1RdDKcNoW/5jAtHaIvKFaNgC2B91EA==
   dependencies:
     "@firebase/analytics" "0.5.0"
     "@firebase/app" "0.6.11"
     "@firebase/app-types" "0.6.1"
     "@firebase/auth" "0.14.9"
-    "@firebase/database" "0.6.12"
-    "@firebase/firestore" "1.16.7"
+    "@firebase/database" "0.6.13"
+    "@firebase/firestore" "1.17.0"
     "@firebase/functions" "0.4.51"
     "@firebase/installations" "0.4.17"
     "@firebase/messaging" "0.7.1"
