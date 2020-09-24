@@ -15,7 +15,7 @@ jobs:
       fail-fast: true
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.os }} | Node ${{ matrix.node-version }} latest
-    if: github.event.push.ref == 'refs/heads/main'
+    if: github.event.pull_request || github.event.push.ref == 'refs/heads/main'
     steps:        
       - uses: actions/checkout@v2
 
