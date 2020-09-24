@@ -69,7 +69,7 @@ const PATH_WEB_DIR_CONFIG_POSTCSS = 'web/config/postcss.config.js'
 /**
  * Search the parent directories for the Redwood configuration file.
  */
-export const getConfigPath = (cwd: string = __dirname): string => {
+export const getConfigPath = (cwd: string = process.cwd()): string => {
   const configPath = findUp(CONFIG_FILE_NAME, { cwd })
   if (!configPath) {
     throw new Error(
