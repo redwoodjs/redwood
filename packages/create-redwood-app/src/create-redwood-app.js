@@ -20,6 +20,32 @@ import yargs from 'yargs'
 
 import { name, version } from '../package'
 
+/**
+ * To keep a consistent color/style palette between cli packages, such as
+ * @redwood/create-redwood-app and @redwood/cli, please keep them compatible
+ * with one and another. We'll might split up and refactor these into a
+ * separate package when there is a strong motivation behind it.
+ *
+ * Current files:
+ *
+ * - packages/cli/src/lib/colors.js
+ * - packages/create-redwood-app/src/create-redwood-app.js (this file)
+ *
+ */
+const style = {
+  error: chalk.bold.red,
+  warning: chalk.keyword('orange'),
+  success: chalk.greenBright,
+  info: chalk.grey,
+
+  header: chalk.bold.underline.hex('#e8e8e8'),
+  cmd: chalk.hex('#808080'),
+  redwood: chalk.hex('#ff845e'),
+  love: chalk.redBright,
+
+  green: chalk.green,
+}
+
 const RELEASE_URL =
   'https://api.github.com/repos/redwoodjs/create-redwood-app/releases/latest'
 
@@ -162,19 +188,6 @@ const installNodeModulesTasks = ({ newAppDir }) => {
       },
     },
   ]
-}
-
-// Inspiration from from @redwood/cli
-// https://github.com/redwoodjs/redwood/blob/main/packages/cli/src/lib/colors.js
-const style = {
-  error: chalk.bold.red,
-  warning: chalk.keyword('orange'),
-  success: chalk.greenBright,
-  info: chalk.grey,
-  header: chalk.bold.underline.hex('#e8e8e8'),
-  cmd: chalk.hex('#808080'),
-  redwood: chalk.hex('#ff845e'),
-  love: chalk.redBright,
 }
 
 new Listr(
