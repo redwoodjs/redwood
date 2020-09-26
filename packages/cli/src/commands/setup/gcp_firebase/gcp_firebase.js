@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { compile } from 'handlebars'
+import { template as lt } from 'lodash'
 import Listr from 'listr'
 
 import c from 'src/lib/colors'
@@ -61,7 +61,7 @@ export const handler = async ({
         /**
          * Write .firebaserc to root.
          */
-        const template = compile(
+        const template = lt(
           fs.readFileSync(
             path.resolve(__dirname, 'templates', 'firebaserc.template'),
             'utf8'
@@ -80,7 +80,7 @@ export const handler = async ({
         /**
          * Write .firebaserc to root.
          */
-        const template = compile(
+        const template = lt(
           fs.readFileSync(
             path.resolve(__dirname, 'templates', 'firebase.json.template'),
             'utf8'

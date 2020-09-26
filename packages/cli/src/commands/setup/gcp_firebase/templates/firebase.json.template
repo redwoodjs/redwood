@@ -8,15 +8,13 @@
       "**/node_modules/**"
     ],
     "rewrites": [
-      {{#each apiRoutes}}
-      {
-        "source" : "{{this}}",
+      <% for (let i = 0, apiRoute; (apiRoute = apiRoutes[i]) !== undefined; i++) { %>{
+        "source" : "${apiRoute}",
         "run" : {
-          "serviceId" : "{{../containerName}}",
-          "region": "{{../region}}"
+          "serviceId" : "${containerName}",
+          "region": "${region}"
         }
-      },
-      {{/each}}
+      },<% } %>
       {
         "source": "**",
         "destination": "/index.html"
