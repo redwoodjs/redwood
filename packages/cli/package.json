@@ -27,6 +27,7 @@
     "envinfo": "^7.7.3",
     "execa": "^4.0.0",
     "fs-extra": "^9.0.1",
+    "handlebars": "^4.7.6",
     "humanize-string": "^2.1.0",
     "listr": "^0.14.3",
     "listr-verbose-renderer": "^0.6.0",
