@@ -19,6 +19,7 @@ export const builder = (yargs) => {
   })
 }
 
+
 export const handler = async ({ force }) => {
   const INDEX_JS_PATH = path.join(getPaths().web.src, 'index.js')
   const tasks = new Listr([
@@ -33,7 +34,7 @@ export const handler = async ({ force }) => {
           'i18next',
           'i18next-browser-languagedetector',
           'i18next-http-backend',
-          'react-i18next',
+          'react-i18next'
         ])
       },
     },
@@ -55,10 +56,10 @@ export const handler = async ({ force }) => {
       },
     },
     {
-      title: "Adding locale file for 'site' namespace",
-      task() {
+      title: 'Adding locale file for \'site\' namespace',
+      task () {
         return writeFile(getPaths().web.src + '/locales/en/site.json')
-      },
+      }
     },
     {
       title: 'Adding import to index.js...',
