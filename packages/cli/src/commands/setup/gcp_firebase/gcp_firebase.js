@@ -32,6 +32,16 @@ export const builder = (yargs) => {
       default: 'redwood-api',
       type: 'string',
     })
+    .option('db-name', {
+      description: 'Name of Cloud SQL PostgreSQL database',
+      demand: true,
+      type: 'string',
+    })
+    .option('db-password', {
+      description: 'Password to use in Cloud SQL connection string',
+      demand: true,
+      type: 'string',
+    })
     .option('region', {
       description: 'Region Cloud Run container is running in',
       default: 'us-central1',
@@ -50,6 +60,8 @@ export const handler = async ({
   force,
   apiRoutes,
   containerName,
+  dbName,
+  dbPassword,
   project,
   region,
   site,
@@ -58,9 +70,6 @@ export const handler = async ({
     {
       title: 'Configuring firebase project aliases...',
       task: () => {
-        /**
-         * Write .firebaserc to root.
-         */
         const template = lt(
           fs.readFileSync(
             path.resolve(__dirname, 'templates', 'firebaserc.template'),
@@ -77,9 +86,6 @@ export const handler = async ({
     {
       title: 'Configuring firebase project...',
       task: () => {
-        /**
-         * Write .firebaserc to root.
-         */
         const template = lt(
           fs.readFileSync(
             path.resolve(__dirname, 'templates', 'firebase.json.template'),
@@ -91,6 +97,74 @@ export const handler = async ({
           template({ apiRoutes, containerName, project, region, site }),
           { overwriteExisting: force }
         )
+      },
+    },
+    {
+      title: 'Generating cloudbuild.yaml for deployment',
+      task: () => {
+        /**
+         * Write .firebaserc to root.
+         */
+        const template = lt(
+          fs.readFileSync(
+            path.resolve(__dirname, 'templates', 'cloudbuild.yaml.template'),
+            'utf8'
+          )
+        )
+        return writeFile(
+          path.join(getPaths().base, 'cloudbuild.yaml'),
+          template({
+            apiRoutes,
+            containerName,
+            databaseSubstitution: '${_DATABASE_URL}',
+            dbName,
+            project,
+            region,
+            site,
+          }),
+          { overwriteExisting: force }
+        )
+      },
+    },
+    {
+      title: 'Generate .env file with DB connection string',
+      task: () => {
+        /**
+         * Write .firebaserc to root.
+         */
+        const template = lt(
+          fs.readFileSync(
+            path.resolve(__dirname, 'templates', 'env.template'),
+            'utf8'
+          )
+        )
+        return writeFile(
+          path.join(getPaths().base, '.env'),
+          template({
+            apiRoutes,
+            containerName,
+            dbPassword,
+            dbName,
+            project,
+            region,
+            site,
+          }),
+          { overwriteExisting: force }
+        )
+      },
+    },
+    {
+      title: 'Generate Dockerfile for building container...',
+      task: () => {
+        const template = lt(
+          fs.readFileSync(
+            path.resolve(__dirname, 'templates', 'Dockerfile.template'),
+            'utf8'
+          )
+        )
+        return writeFile(path.join(getPaths().base, 'Dockerfile'), template(), {
+          overwriteExisting: force,
+        })
       },
     },
   ])

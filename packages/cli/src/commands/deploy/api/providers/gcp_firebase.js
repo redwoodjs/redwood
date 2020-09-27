@@ -23,5 +23,13 @@ export const buildCommands = [
 
 export const deployCommand = {
   title: 'Deploying...',
-  command: ['serverless', ['deploy']],
+  command: [
+    'gcloud',
+    [
+      'builds',
+      'submit',
+      `--project=${process.env.GOOGLE_CLOUD_PROJECT}`,
+      `--substitutions=_DATABASE_URL=${process.env.DATABASE_URL}`,
+    ],
+  ],
 }
