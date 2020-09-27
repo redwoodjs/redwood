@@ -102,9 +102,6 @@ export const handler = async ({
     {
       title: 'Generating cloudbuild.yaml for deployment',
       task: () => {
-        /**
-         * Write .firebaserc to root.
-         */
         const template = lt(
           fs.readFileSync(
             path.resolve(__dirname, 'templates', 'cloudbuild.yaml.template'),
@@ -129,9 +126,6 @@ export const handler = async ({
     {
       title: 'Generate .env file with DB connection string',
       task: () => {
-        /**
-         * Write .firebaserc to root.
-         */
         const template = lt(
           fs.readFileSync(
             path.resolve(__dirname, 'templates', 'env.template'),
