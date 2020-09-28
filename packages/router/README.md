@@ -46,7 +46,7 @@ Some pages should only be visible to authenticated users.
 
 All `Routes` nested in `<Private>` require authentication.
 When a user is not authenticated and attempts to visit this route,
-they will be redirected to the route passed as the `unauthenticated` prop and the orignally requested route's path will be added to the querystring in a `redirectTo` param. This lets you send the user to the originally requested once logged in.
+they will be redirected to the route passed as the `unauthenticated` prop and the originally requested route's path will be added to the querystring in a `redirectTo` param. This lets you send the user to the originally requested once logged in.
 
 ```js
 // Routes.js
