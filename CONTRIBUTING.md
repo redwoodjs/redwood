@@ -8,6 +8,7 @@ Before interacting with the Redwood community, please read and understand our [C
 
 - [Contributing](#contributing)
   - [Local Development](#local-development)
+    - [Install Dependencies](#install-dependencies)
     - [Copy and Watch](#copy-and-watch)
       - [Specifying a RW_PATH](#specifying-a-rw_path)
     - [Local Package Registry Emulation](#local-package-registry-emulation)
@@ -39,6 +40,14 @@ We offer two workflows for making this possible: "copy and watch", which has som
 **How to choose which one to use?** If you've installed or upgraded a dependency, use the "local package registry emulation" workflow; otherwise, use "copy and watch".
 
 > Both workflows use `redwood-tools` (alias `rwt`), Redwood's companion CLI development tool.
+
+### Install Dependencies
+Before running the application for the first time you should run `yarn` in the root directory to install the necessary dependencies. 
+
+```terminal 
+cd redwood
+yarn
+```
 
 ### Copy and Watch
 
