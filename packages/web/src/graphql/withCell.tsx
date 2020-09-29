@@ -1,5 +1,24 @@
 import React from 'react'
 import { Query } from '@apollo/client/react/components/Query'
+import { DocumentNode } from 'graphql'
+import {
+  BaseQueryOptions,
+  OperationVariables,
+  QueryResult,
+} from '@apollo/client'
+
+type DataObjectType = { [key: string]: string }
+
+type QueryResultType = QueryResult<any, Record<string, any>>
+
+type CellFailureStateType = Omit<QueryResultType, 'data' | 'loading'>
+type CellLoadingEmptyStateType = Omit<
+  QueryResultType,
+  'error' | 'loading' | 'data'
+>
+type CellSuccessStateType =
+  | Omit<QueryResultType, 'error' | 'loading' | 'data'>
+  | DataObjectType
 
 /**
  * Is a higher-order-component that executes a GraphQL query and automatically
@@ -43,45 +62,58 @@ export const withCell = ({
   }),
   QUERY,
   afterQuery = (data) => ({ ...data }),
-  Loading = () => 'Loading...',
+  Loading = () => <div>Loading...</div>,
   Failure,
   Empty,
   Success,
+}: {
+  beforeQuery: (props: OperationVariables) => BaseQueryOptions
+  QUERY: DocumentNode | ((before: BaseQueryOptions) => DocumentNode)
+  afterQuery: (data: DataObjectType) => DataObjectType
+  Loading: React.FC<CellLoadingEmptyStateType>
+  Failure?: React.FC<CellFailureStateType>
+  Empty?: React.FC<CellLoadingEmptyStateType>
+  Success?: React.FC<CellSuccessStateType>
 }) => {
-  const isDataNull = (data) => {
+  const isDataNull = (data: DataObjectType) => {
     return dataField(data) === null
   }
 
-  const isDataEmptyArray = (data) => {
+  const isDataEmptyArray = (data: DataObjectType) => {
     return Array.isArray(dataField(data)) && dataField(data).length === 0
   }
 
-  const dataField = (data) => {
+  const dataField = (data: DataObjectType) => {
     return data[Object.keys(data)[0]]
   }
 
-  const isEmpty = (data) => {
+  const isEmpty = (data: DataObjectType) => {
     return isDataNull(data) || isDataEmptyArray(data)
   }
 
-  return (props) => (
+  return (props: OperationVariables) => (
     <Query
       query={typeof QUERY === 'function' ? QUERY(beforeQuery(props)) : QUERY}
       {...beforeQuery(props)}
     >
-      {({ error, loading, data, ...queryRest }) => {
+      {({
+        error,
+        loading,
+        data,
+        ...queryRest
+      }: QueryResult<any, Record<string, any>>) => {
         if (error) {
           if (Failure) {
             return <Failure error={error} {...queryRest} {...props} />
           } else {
-            throw new Error(error)
+            throw new Error((error as unknown) as string)
           }
         } else if (loading) {
           return <Loading {...queryRest} {...props} />
         } else if (data) {
           if (typeof Empty !== 'undefined' && isEmpty(data)) {
             return <Empty {...queryRest} {...props} />
-          } else {
+          } else if (typeof Success !== 'undefined') {
             return <Success {...afterQuery(data)} {...queryRest} {...props} />
           }
         } else {
@@ -89,6 +121,7 @@ export const withCell = ({
             'Cannot render cell: graphQL success but `data` is null'
           )
         }
+        return null
       }}
     </Query>
   )
