@@ -4,6 +4,11 @@ export const command = 'util <util>'
 export const aliases = ['u']
 export const description = 'Quality of life utilities'
 
+// ********
+// Deprecated as of September 2020
+// Use "setup" command
+// ********
+
 export const builder = (yargs) =>
   yargs
     .commandDir('./util', { recurse: true, exclude: /util.js/ })

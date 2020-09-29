@@ -44,15 +44,16 @@ export const handler = async ({ force }) => {
       task: async () => {
         /**
          * Install postcss-loader, tailwindcss, and autoprefixer
+         * RedwoodJS currently uses PostCSS v7; postcss-loader and autoprefixers pinned for compatibility
          */
         await execa('yarn', [
           'workspace',
           'web',
           'add',
           '-D',
-          'postcss-loader',
+          'postcss-loader@4.0.2',
           'tailwindcss',
-          'autoprefixer',
+          'autoprefixer@9.8.6',
         ])
       },
     },
