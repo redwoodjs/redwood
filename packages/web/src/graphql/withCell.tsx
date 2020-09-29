@@ -7,18 +7,18 @@ import {
   QueryResult,
 } from '@apollo/client'
 
-type DataObject = { [key: string]: string }
+type DataObjectType = { [key: string]: string }
 
-type QueryResultAlias = QueryResult<any, Record<string, any>>
+type QueryResultType = QueryResult<any, Record<string, any>>
 
-type CellFailureStateComponent = Omit<QueryResultAlias, 'data' | 'loading'>
-type CellLoadingEmptyStateComponent = Omit<
-  QueryResultAlias,
+type CellFailureStateType = Omit<QueryResultType, 'data' | 'loading'>
+type CellLoadingEmptyStateType = Omit<
+  QueryResultType,
   'error' | 'loading' | 'data'
 >
-type CellSuccessStateComponent =
-  | Omit<QueryResultAlias, 'error' | 'loading' | 'data'>
-  | DataObject
+type CellSuccessStateType =
+  | Omit<QueryResultType, 'error' | 'loading' | 'data'>
+  | DataObjectType
 
 /**
  * Is a higher-order-component that executes a GraphQL query and automatically
@@ -69,25 +69,25 @@ export const withCell = ({
 }: {
   beforeQuery: (props: OperationVariables) => BaseQueryOptions
   QUERY: DocumentNode | ((before: BaseQueryOptions) => DocumentNode)
-  afterQuery: (data: DataObject) => DataObject
-  Loading: React.FC<CellLoadingEmptyStateComponent>
-  Failure?: React.FC<CellFailureStateComponent>
-  Empty?: React.FC<CellLoadingEmptyStateComponent>
-  Success: React.FC<CellSuccessStateComponent>
+  afterQuery: (data: DataObjectType) => DataObjectType
+  Loading: React.FC<CellLoadingEmptyStateType>
+  Failure?: React.FC<CellFailureStateType>
+  Empty?: React.FC<CellLoadingEmptyStateType>
+  Success?: React.FC<CellSuccessStateType>
 }) => {
-  const isDataNull = (data: DataObject) => {
+  const isDataNull = (data: DataObjectType) => {
     return dataField(data) === null
   }
 
-  const isDataEmptyArray = (data: DataObject) => {
+  const isDataEmptyArray = (data: DataObjectType) => {
     return Array.isArray(dataField(data)) && dataField(data).length === 0
   }
 
-  const dataField = (data: DataObject) => {
+  const dataField = (data: DataObjectType) => {
     return data[Object.keys(data)[0]]
   }
 
-  const isEmpty = (data: DataObject) => {
+  const isEmpty = (data: DataObjectType) => {
     return isDataNull(data) || isDataEmptyArray(data)
   }
 
