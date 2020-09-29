@@ -96,12 +96,7 @@ export const withCell = ({
       query={typeof QUERY === 'function' ? QUERY(beforeQuery(props)) : QUERY}
       {...beforeQuery(props)}
     >
-      {({
-        error,
-        loading,
-        data,
-        ...queryRest
-      }: QueryResult<any, Record<string, any>>) => {
+      {({ error, loading, data, ...queryRest }: QueryResultAlias) => {
         if (error) {
           if (Failure) {
             return <Failure error={error} {...queryRest} {...props} />
