@@ -12,7 +12,6 @@ export { default as FatalErrorBoundary } from 'src/components/FatalErrorBoundary
 // @ts-expect-error - no defs
 export { default as RedwoodProvider } from 'src/components/RedwoodProvider'
 
-// @ts-expect-error - no defs
 export * from './graphql'
 // @ts-expect-error - no defs
 export * from './flash'
