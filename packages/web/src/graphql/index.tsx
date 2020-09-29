@@ -6,6 +6,7 @@ import {
 import { ApolloProvider } from '@apollo/client/react'
 import { ApolloProviderProps } from '@apollo/client/react/context'
 
+// @ts-expect-error - no defs
 export { withCell } from './withCell'
 
 type GraphQLClientConfig = Omit<
