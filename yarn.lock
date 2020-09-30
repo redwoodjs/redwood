@@ -4262,9 +4262,9 @@
     "@types/node" "*"
 
 "@types/netlify-identity-widget@^1.4.1":
-  version "1.4.2"
-  resolved "https://registry.yarnpkg.com/@types/netlify-identity-widget/-/netlify-identity-widget-1.4.2.tgz#82b7dfdf4f38fa6ec0c19df22f5c1a515ce01a8e"
-  integrity sha512-zcPUO9Oo2om0nnYH12wF6suwj83Tqi7FYDyht7TSjnALwaNeN8vf6/pnaAqSEZygHenZgHiN1B8GDAoIVDsYrA==
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/@types/netlify-identity-widget/-/netlify-identity-widget-1.9.0.tgz#b7628eb5c76228aa9477f1b6caef9f1f16e6e4aa"
+  integrity sha512-2g5N3v2sOsLCiDrtGQfZwnmTkikMPUKb5VtsJ5BTPsBDHLfxsCsFEE6MnZHKavAK/nTJWh0MkqylkhnyjoWU5Q==
 
 "@types/node-fetch@2.5.7", "@types/node-fetch@^2.5.5":
   version "2.5.7"
