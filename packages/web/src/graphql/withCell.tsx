@@ -62,7 +62,7 @@ export const withCell = ({
   }),
   QUERY,
   afterQuery = (data) => ({ ...data }),
-  Loading = () => <div>Loading...</div>,
+  Loading = () => <>Loading...</>,
   Failure,
   Empty,
   Success,
