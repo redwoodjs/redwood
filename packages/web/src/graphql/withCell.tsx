@@ -102,7 +102,7 @@ export const withCell = ({
           if (Failure) {
             return <Failure error={error} {...queryRest} {...props} />
           } else {
-            throw new Error((error as unknown) as string)
+            throw error
           }
         } else if (loading) {
           return <Loading {...queryRest} {...props} />
