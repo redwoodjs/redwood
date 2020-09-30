@@ -7,7 +7,7 @@ import {
   QueryResult,
 } from '@apollo/client'
 
-type DataObject = { [key: string]: string }
+type DataObject = { [key: string]: unknown }
 
 type QueryResultAlias = QueryResult<any, Record<string, any>>
 
@@ -80,7 +80,8 @@ export const withCell = ({
   }
 
   const isDataEmptyArray = (data: DataObject) => {
-    return Array.isArray(dataField(data)) && dataField(data).length === 0
+    const field = dataField(data)
+    return Array.isArray(field) && field.length === 0
   }
 
   const dataField = (data: DataObject) => {
