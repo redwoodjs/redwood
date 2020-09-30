@@ -7,16 +7,19 @@ import {
   QueryResult,
 } from '@apollo/client'
 
-type DataObject = { [key: string]: unknown }
+export type DataObject = { [key: string]: unknown }
 
-type QueryResultAlias = QueryResult<any, Record<string, any>>
+export type QueryResultAlias = QueryResult<any, Record<string, any>>
 
-type CellFailureStateComponent = Omit<QueryResultAlias, 'data' | 'loading'>
-type CellLoadingEmptyStateComponent = Omit<
+export type CellFailureStateComponent = Omit<
+  QueryResultAlias,
+  'data' | 'loading'
+>
+export type CellLoadingEmptyStateComponent = Omit<
   QueryResultAlias,
   'error' | 'loading' | 'data'
 >
-type CellSuccessStateComponent =
+export type CellSuccessStateComponent =
   | Omit<QueryResultAlias, 'error' | 'loading' | 'data'>
   | DataObject
 
