@@ -73,7 +73,7 @@ export const withCell = ({
   Loading: React.FC<CellLoadingEmptyStateComponent>
   Failure?: React.FC<CellFailureStateComponent>
   Empty?: React.FC<CellLoadingEmptyStateComponent>
-  Success?: React.FC<CellSuccessStateComponent>
+  Success: React.FC<CellSuccessStateComponent>
 }) => {
   const isDataNull = (data: DataObject) => {
     return dataField(data) === null
@@ -108,7 +108,7 @@ export const withCell = ({
         } else if (data) {
           if (typeof Empty !== 'undefined' && isEmpty(data)) {
             return <Empty {...queryRest} {...props} />
-          } else if (typeof Success !== 'undefined') {
+          } else {
             return <Success {...afterQuery(data)} {...queryRest} {...props} />
           }
         } else {
