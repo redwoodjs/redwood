@@ -67,10 +67,10 @@ export const withCell = ({
   Empty,
   Success,
 }: {
-  beforeQuery: (props: OperationVariables) => BaseQueryOptions
+  beforeQuery?: (props: OperationVariables) => BaseQueryOptions
   QUERY: DocumentNode | ((before: BaseQueryOptions) => DocumentNode)
-  afterQuery: (data: DataObject) => DataObject
-  Loading: React.FC<CellLoadingEmptyStateComponent>
+  afterQuery?: (data: DataObject) => DataObject
+  Loading?: React.FC<CellLoadingEmptyStateComponent>
   Failure?: React.FC<CellFailureStateComponent>
   Empty?: React.FC<CellLoadingEmptyStateComponent>
   Success: React.FC<CellSuccessStateComponent>
