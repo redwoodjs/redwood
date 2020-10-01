@@ -13,6 +13,8 @@ const API_GRAPHQL_PATH = resolveFile(
   path.join(getPaths().api.functions, 'graphql')
 )
 
+const AUTH_PROVIDER_IMPORT = `import { AuthProvider } from '@redwoodjs/auth'`
+
 const API_SRC_PATH = path.join(getPaths().api.src)
 const TEMPLATES = fs
   .readdirSync(path.resolve(__dirname, 'templates'))
@@ -37,7 +39,7 @@ const SUPPORTED_PROVIDERS = fs
 // returns the content of index.js with import statements added
 const addWebImports = (content, imports) => {
   return (
-    `import { AuthProvider } from '@redwoodjs/auth'\n` +
+    `${AUTH_PROVIDER_IMPORT}\n` +
     imports.join('\n') +
     '\n' +
     content
@@ -69,6 +71,15 @@ const addWebRender = (content, authProvider) => {
     /\s+<RedwoodProvider>.*<\/RedwoodProvider>/s,
     renderContent
   )
+}
+
+// check to make sure AuthProvider doesn't exist
+const checkAuthProviderExists = () => {
+  const content = fs.readFileSync(WEB_SRC_INDEX_PATH).toString()
+
+  if (content.includes(AUTH_PROVIDER_IMPORT)) {
+    throw new Error('Existing auth provider found')
+  }
 }
 
 // the files to create to support auth
@@ -228,6 +239,7 @@ export const handler = async ({ provider, force }) => {
   )
 
   try {
+    checkAuthProviderExists()
     await tasks.run()
   } catch (e) {
     console.log(c.error(e.message))
