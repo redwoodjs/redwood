@@ -23,10 +23,11 @@ export const handler = async ({ force }) => {
     ? 'yarn rw setup tailwind --force'
     : 'yarn rw setup tailwind'
   try {
-    console.log(c.warning('WARNING: deprecated "util" command'))
+    console.log(c.warning('\n' + 'WARNING: deprecated "util" command'))
     console.log(
       c.green('See "setup" command: ') +
-        'https://redwoodjs.com/reference/command-line-interface#setup'
+        'https://redwoodjs.com/reference/command-line-interface#setup' +
+        '\n'
     )
     await execa(cmd, {
       stdio: 'inherit',

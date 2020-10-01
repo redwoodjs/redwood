@@ -1,7 +1,6 @@
 import terminalLink from 'terminal-link'
 export const command = 'setup <option>'
-export const description =
-  'Initialize project configuration with one-time setup commands.'
+export const description = 'Initialize project config and install packages'
 
 export const builder = (yargs) =>
   yargs
