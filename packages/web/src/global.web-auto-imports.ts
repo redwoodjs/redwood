@@ -7,4 +7,7 @@ declare global {
   const React: typeof _React
   const PropTypes: typeof _PropTypes
   const gql: typeof _gql
+
+  // Extend the existing `window` interface.
+  interface Window { __REDWOOD__API_PROXY_PATH: string }
 }
