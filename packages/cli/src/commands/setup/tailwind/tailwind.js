@@ -9,7 +9,7 @@ import c from 'src/lib/colors'
 import { getPaths, writeFile } from 'src/lib'
 
 export const command = 'tailwind'
-export const description = 'Setup tailwindcss'
+export const description = 'Setup tailwindcss and PostCSS'
 export const builder = (yargs) => {
   yargs.option('force', {
     alias: 'f',
@@ -44,15 +44,16 @@ export const handler = async ({ force }) => {
       task: async () => {
         /**
          * Install postcss-loader, tailwindcss, and autoprefixer
+         * RedwoodJS currently uses PostCSS v7; postcss-loader and autoprefixers pinned for compatibility
          */
         await execa('yarn', [
           'workspace',
           'web',
           'add',
           '-D',
-          'postcss-loader',
+          'postcss-loader@4.0.2',
           'tailwindcss',
-          'autoprefixer',
+          'autoprefixer@9.8.6',
         ])
       },
     },
