@@ -51,22 +51,6 @@ const addWebInit = (content, init) => {
   return content.replace(/ReactDOM.render/, `${init}\n\nReactDOM.render`)
 }
 
-// returns the content of index.js without the old auth init
-const removeOldWebInit = async (content) => {
-  const [_, currentAuthProvider] = content.match(
-    /<AuthProvider client={.*} type="(.*)">/s
-  )
-
-  let currentAuthProviderData;
-  try {
-    currentAuthProviderData = await import(`./providers/${currentAuthProvider}`)
-  } catch (e) {
-    throw new Error('Could not replace existing auth provider init')
-  }
-
-  return content.replace(currentAuthProviderData.config.init, '')
-}
-
 // returns the content of index.js with <AuthProvider> added
 const addWebRender = (content, authProvider) => {
   const [_, indent, redwoodProvider] = content.match(
@@ -98,6 +82,38 @@ const updateWebRender = (content, authProvider) => {
   )
 }
 
+// returns the content of index.js without the old auth import
+const removeOldWebImports = (content, imports) => {
+  return content.replace(imports.join('\n'), '')
+}
+
+// returns the content of index.js without the old auth init
+const removeOldWebInit = (content, init) => {
+  return content.replace(init, '')
+}
+
+// returns content with old auth provider removes
+const removeOldAuthProvider = async (content) => {
+  // get the current auth provider
+  const [_, currentAuthProvider] = content.match(
+    /<AuthProvider client={.*} type="(.*)">/s
+  )
+
+  let oldAuthProvider;
+  try {
+    oldAuthProvider = await import(`./providers/${currentAuthProvider}`)
+  } catch (e) {
+    throw new Error('Could not replace existing auth provider init')
+  }
+
+  content = removeOldWebImports(content, oldAuthProvider.config.imports)
+  content = removeOldWebInit(content, oldAuthProvider.config.init)
+
+  return content
+}
+
+
+
 // check to make sure AuthProvider doesn't exist
 const checkAuthProviderExists = () => {
   const content = fs.readFileSync(WEB_SRC_INDEX_PATH).toString()
@@ -121,7 +137,7 @@ export const addConfigToIndex = async (config, force) => {
 
   // update existing AuthProvider if --force else add new AuthProvider
   if (content.includes(AUTH_PROVIDER_IMPORT) && force) {
-    content = await removeOldWebInit(content)
+    content = await removeOldAuthProvider(content)
     content = addWebInit(content, config.init)
     content = updateWebRender(content, config.authProvider)
   } else {
