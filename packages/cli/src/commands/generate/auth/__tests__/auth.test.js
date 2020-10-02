@@ -36,7 +36,7 @@ test('throws an error if auth provider exists', async () => {
 
   auth.handler({ provider: 'netlify' })
   await waitFor(() => expect(console.log).toHaveBeenCalledTimes(1))
-  expect(console.log).toHaveBeenCalledWith(chalk.bold.red('Existing auth provider found'))
+  expect(console.log).toHaveBeenCalledWith(chalk.bold.red('Existing auth provider found\nUse --force to override existing provider.'))
 
   // Restore mocks
   fsSpy.mockRestore()
