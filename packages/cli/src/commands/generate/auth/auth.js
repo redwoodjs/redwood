@@ -51,6 +51,22 @@ const addWebInit = (content, init) => {
   return content.replace(/ReactDOM.render/, `${init}\n\nReactDOM.render`)
 }
 
+// returns the content of index.js without the old auth init
+const removeOldWebInit = async (content) => {
+  const [_, currentAuthProvider] = content.match(
+    /<AuthProvider client={.*} type="(.*)">/s
+  )
+
+  let currentAuthProviderData;
+  try {
+    currentAuthProviderData = await import(`./providers/${currentAuthProvider}`)
+  } catch (e) {
+    throw new Error('Could not replace existing auth provider init')
+  }
+
+  return content.replace(currentAuthProviderData.config.init, '')
+}
+
 // returns the content of index.js with <AuthProvider> added
 const addWebRender = (content, authProvider) => {
   const [_, indent, redwoodProvider] = content.match(
@@ -73,12 +89,21 @@ const addWebRender = (content, authProvider) => {
   )
 }
 
+// returns the content of index.js with <AuthProvider> updated
+const updateWebRender = (content, authProvider) => {
+  const renderContent =`<AuthProvider client={${authProvider.client}} type="${authProvider.type}">`
+  return content.replace(
+    /<AuthProvider client={.*} type=".*">/s,
+    renderContent
+  )
+}
+
 // check to make sure AuthProvider doesn't exist
 const checkAuthProviderExists = () => {
   const content = fs.readFileSync(WEB_SRC_INDEX_PATH).toString()
 
   if (content.includes(AUTH_PROVIDER_IMPORT)) {
-    throw new Error('Existing auth provider found')
+    throw new Error('Existing auth provider found.\nUse --force to override existing provider.')
   }
 }
 
@@ -91,12 +116,19 @@ export const files = (provider) => {
 }
 
 // actually inserts the required config lines into index.js
-export const addConfigToIndex = (config) => {
+export const addConfigToIndex = async (config, force) => {
   let content = fs.readFileSync(WEB_SRC_INDEX_PATH).toString()
 
-  content = addWebImports(content, config.imports)
-  content = addWebInit(content, config.init)
-  content = addWebRender(content, config.authProvider)
+  // update existing AuthProvider if --force else add new AuthProvider
+  if (content.includes(AUTH_PROVIDER_IMPORT) && force) {
+    content = await removeOldWebInit(content)
+    content = addWebInit(content, config.init)
+    content = updateWebRender(content, config.authProvider)
+  } else {
+    content = addWebImports(content, config.imports)
+    content = addWebInit(content, config.init)
+    content = addWebRender(content, config.authProvider)
+  }
 
   fs.writeFileSync(WEB_SRC_INDEX_PATH, content)
 }
@@ -175,7 +207,7 @@ export const handler = async ({ provider, force }) => {
         title: 'Adding auth config to web...',
         task: (_ctx, task) => {
           if (webIndexDoesExist()) {
-            addConfigToIndex(providerData.config)
+            addConfigToIndex(providerData.config, force)
           } else {
             task.skip('web/src/index.js not found, skipping')
           }
@@ -239,7 +271,11 @@ export const handler = async ({ provider, force }) => {
   )
 
   try {
-    checkAuthProviderExists()
+    // Don't throw existing provider error when --force exists
+    if (!force) {
+      checkAuthProviderExists()
+    }
+
     await tasks.run()
   } catch (e) {
     console.log(c.error(e.message))
