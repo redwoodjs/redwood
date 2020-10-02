@@ -13,7 +13,7 @@
     "dist"
   ],
   "dependencies": {
-    "@prisma/sdk": "2.7.1",
+    "@prisma/sdk": "2.8.0",
     "@redwoodjs/internal": "^0.19.1",
     "@redwoodjs/structure": "^0.19.1",
     "boxen": "^4.2.0",
