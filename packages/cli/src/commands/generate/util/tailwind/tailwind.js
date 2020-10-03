@@ -91,8 +91,10 @@ export const handler = async ({ force }) => {
           // opt-in to upcoming changes
           const config = fs.readFileSync('tailwind.config.js', 'utf-8')
 
-          const uncommentFlags = (str) => str.replace(/\/{2} /g, '')
-          const newConfig = config.replace(/future: {[^]*}/, uncommentFlags)
+          const uncommentFlags = (str) =>
+            str.replace(/\/{2} ([\w-]+: true)/g, '$1')
+
+          const newConfig = config.replace(/future.*purge/s, uncommentFlags)
 
           fs.writeFileSync('tailwind.config.js', newConfig)
 
