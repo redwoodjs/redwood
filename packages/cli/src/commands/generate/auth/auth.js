@@ -143,18 +143,23 @@ export const addConfigToIndex = async (config, force) => {
 
 export const addApiConfig = () => {
   let content = fs.readFileSync(API_GRAPHQL_PATH).toString()
+  const [_, hasAuthImport] = content.match(
+    /(import {.*} from 'src\/lib\/auth.*')/s
+  )
 
-  // add import statement
-  content = content.replace(
-    /^(.*services.*)$/m,
-    `$1\n\nimport { getCurrentUser } from 'src/lib/auth'`
-  )
-  // add object to handler
-  content = content.replace(
-    /^(\s*)(schema: makeMergedSchema)(.*)$/m,
-    `$1getCurrentUser,\n$1$2$3`
-  )
-  fs.writeFileSync(API_GRAPHQL_PATH, content)
+  if (!hasAuthImport) {
+    // add import statement
+    content = content.replace(
+      /^(.*services.*)$/m,
+      `$1\n\nimport { getCurrentUser } from 'src/lib/auth'`
+    )
+    // add object to handler
+    content = content.replace(
+      /^(\s*)(schema: makeMergedSchema)(.*)$/m,
+      `$1getCurrentUser,\n$1$2$3`
+    )
+    fs.writeFileSync(API_GRAPHQL_PATH, content)
+  }
 }
 
 export const isProviderSupported = (provider) => {
