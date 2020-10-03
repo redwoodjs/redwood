@@ -61,7 +61,6 @@ export type CellSuccessStateComponent =
 export const withCell = ({
   beforeQuery = (props) => ({
     variables: props,
-    fetchPolicy: 'cache-and-network',
   }),
   QUERY,
   afterQuery = (data) => ({ ...data }),
