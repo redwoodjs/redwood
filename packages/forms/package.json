@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/forms",
-  "version": "0.18.0",
+  "version": "0.19.1",
   "files": [
     "dist",
     "src/index.d.ts"
@@ -16,7 +16,7 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "11.0.2",
-    "@testing-library/user-event": "12.1.4",
+    "@testing-library/user-event": "12.1.6",
     "react": "16.13.1"
   },
   "peerDependencies": {
@@ -30,5 +30,5 @@
     "test": "jest",
     "test:watch": "yarn test --watch"
   },
-  "gitHead": "1cb7c8d1085147787209af423c33a9c91c3e6517"
+  "gitHead": "c235e7d7186e5e258764699c0e0e1d5cc0fdd0b5"
 }

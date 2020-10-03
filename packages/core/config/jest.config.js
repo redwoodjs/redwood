@@ -15,4 +15,8 @@ module.exports = {
   coverageDirectory: path.join(redwoodPaths.base, 'coverage'),
   rootDir: redwoodPaths.base,
   projects: ['<rootDir>/{,!(node_modules)/**/}jest.config.js'],
+  watchPlugins: [
+    'jest-watch-typeahead/filename',
+    'jest-watch-typeahead/testname',
+  ],
 }
