@@ -57,11 +57,14 @@ export class RWLanguageServer {
           this.projectRoot = normalize(folder.uri.substr(7)) // remove file://
         }
       }
-      this.diagnostics.start()
-      this.commands.start()
-      this.outline.start()
-      this.xmethods.start()
     })
+
+    // initialize these early on to prevent "unhandled methods"
+    // they are smart enough to short-circuit if this.projectRoot is not ready
+    this.diagnostics.start()
+    this.commands.start()
+    this.outline.start()
+    this.xmethods.start()
 
     connection.onImplementation(async ({ textDocument: { uri }, position }) => {
       const info = await this.info(uri, 'Implementation')
