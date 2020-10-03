@@ -38,12 +38,7 @@ const SUPPORTED_PROVIDERS = fs
 
 // returns the content of index.js with import statements added
 const addWebImports = (content, imports) => {
-  return (
-    `${AUTH_PROVIDER_IMPORT}\n` +
-    imports.join('\n') +
-    '\n' +
-    content
-  )
+  return `${AUTH_PROVIDER_IMPORT}\n` + imports.join('\n') + '\n' + content
 }
 
 // returns the content of index.js with init lines added
@@ -75,11 +70,8 @@ const addWebRender = (content, authProvider) => {
 
 // returns the content of index.js with <AuthProvider> updated
 const updateWebRender = (content, authProvider) => {
-  const renderContent =`<AuthProvider client={${authProvider.client}} type="${authProvider.type}">`
-  return content.replace(
-    /<AuthProvider client={.*} type=".*">/s,
-    renderContent
-  )
+  const renderContent = `<AuthProvider client={${authProvider.client}} type="${authProvider.type}">`
+  return content.replace(/<AuthProvider client={.*} type=".*">/s, renderContent)
 }
 
 // returns the content of index.js without the old auth import
@@ -99,7 +91,7 @@ const removeOldAuthProvider = async (content) => {
     /<AuthProvider client={.*} type="(.*)">/s
   )
 
-  let oldAuthProvider;
+  let oldAuthProvider
   try {
     oldAuthProvider = await import(`./providers/${currentAuthProvider}`)
   } catch (e) {
@@ -112,14 +104,14 @@ const removeOldAuthProvider = async (content) => {
   return content
 }
 
-
-
 // check to make sure AuthProvider doesn't exist
 const checkAuthProviderExists = () => {
   const content = fs.readFileSync(WEB_SRC_INDEX_PATH).toString()
 
   if (content.includes(AUTH_PROVIDER_IMPORT)) {
-    throw new Error('Existing auth provider found.\nUse --force to override existing provider.')
+    throw new Error(
+      'Existing auth provider found.\nUse --force to override existing provider.'
+    )
   }
 }
 
