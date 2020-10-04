@@ -90,7 +90,11 @@ export class RWProject extends BaseNode {
     return new RWTOML(join(this.projectRoot, 'redwood.toml'), this)
   }
   @lazy() private get processPagesDir() {
-    return processPagesDir(this.pathHelper.web.pages)
+    try {
+      return processPagesDir(this.pathHelper.web.pages)
+    } catch (e) {
+      return []
+    }
   }
   @lazy() get pages(): RWPage[] {
     return this.processPagesDir.map((p) => new RWPage(p.const, p.path, this))
