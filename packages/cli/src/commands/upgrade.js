@@ -16,9 +16,8 @@ export const builder = (yargs) => {
     })
     .option('tag', {
       alias: 't',
-      choices: ['canary', 'rc'],
       description:
-        'WARNING: Unstable releases! Force upgrades packages to the most recent version for the given --tag',
+        '[choices: "canary", "rc", or specific-version] WARNING: "canary" and "rc" tags are unstable releases!',
       type: 'string',
     })
     .epilogue(
