@@ -121,9 +121,14 @@ export const handler = async ({ force }) => {
     {
       title: 'One more thing...',
       task: (_ctx, task) => {
-        task.title = `One more thing...\n\n   ${chalk.hex('#bf4722')(
-          'Quick link to the docs: '
-        )}https://tailwindcss.com/\n`
+        task.title = `One more thing...\n
+          ${c.green(
+            'Tailwind configured with "upcoming change" opt-in enabled'
+          )}\n
+          ${chalk.hex('#e8e8e8')(
+            'See this doc for info: https://tailwindcss.com/docs/upcoming-changes'
+          )}
+        `
       },
     },
   ])
