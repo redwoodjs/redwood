@@ -11,7 +11,7 @@ export const builder = (yargs) => {
   yargs
     .example(
       'rw upgrade -t 0.20.1-canary.5',
-      'Specify a version. Version History:\nhttps://www.npmjs.com/package/@redwoodjs/core'
+      'Specify a version. URL for Version History:\nhttps://www.npmjs.com/package/@redwoodjs/core'
     )
     .option('dry-run', {
       alias: 'd',
