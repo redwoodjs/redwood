@@ -9,6 +9,10 @@ export const description = 'Upgrade all @redwoodjs packages via interactive CLI'
 
 export const builder = (yargs) => {
   yargs
+    .example(
+      'rw upgrade -t 0.20.1-canary.5',
+      'Specify a version. Version History:\nhttps://www.npmjs.com/package/@redwoodjs/core'
+    )
     .option('dry-run', {
       alias: 'd',
       description: 'Check for outdated packages without upgrading',
@@ -20,10 +24,6 @@ export const builder = (yargs) => {
         '[choices: "canary", "rc", or specific-version (see example below)] WARNING: "canary" and "rc" tags are unstable releases!',
       type: 'string',
     })
-    .example([
-    ['rw upgrade -t 0.19.2-canary.35'],
-    ['Version History: https://www.npmjs.com/package/@redwoodjs/core?activeTab=versions']
-    ])
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
