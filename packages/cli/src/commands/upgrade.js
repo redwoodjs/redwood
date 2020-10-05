@@ -17,9 +17,13 @@ export const builder = (yargs) => {
     .option('tag', {
       alias: 't',
       description:
-        '[choices: "canary", "rc", or specific-version] WARNING: "canary" and "rc" tags are unstable releases!',
+        '[choices: "canary", "rc", or specific-version (see example below)] WARNING: "canary" and "rc" tags are unstable releases!',
       type: 'string',
     })
+    .example([
+    ['rw upgrade -t 0.19.2-canary.35'],
+    ['Version History: https://www.npmjs.com/package/@redwoodjs/core?activeTab=versions']
+    ])
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
