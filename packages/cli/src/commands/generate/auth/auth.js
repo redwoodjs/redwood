@@ -76,7 +76,7 @@ const updateWebRender = (content, authProvider) => {
 
 // returns the content of index.js without the old auth import
 const removeOldWebImports = (content, imports) => {
-  return content.replace(imports.join('\n'), '')
+  return content.replace(`${AUTH_PROVIDER_IMPORT}\n` + imports.join('\n'), '')
 }
 
 // returns the content of index.js without the old auth init
@@ -130,13 +130,13 @@ export const addConfigToIndex = async (config, force) => {
   // update existing AuthProvider if --force else add new AuthProvider
   if (content.includes(AUTH_PROVIDER_IMPORT) && force) {
     content = await removeOldAuthProvider(content)
-    content = addWebInit(content, config.init)
     content = updateWebRender(content, config.authProvider)
   } else {
-    content = addWebImports(content, config.imports)
-    content = addWebInit(content, config.init)
     content = addWebRender(content, config.authProvider)
   }
+
+  content = addWebImports(content, config.imports)
+  content = addWebInit(content, config.init)
 
   fs.writeFileSync(WEB_SRC_INDEX_PATH, content)
 }
