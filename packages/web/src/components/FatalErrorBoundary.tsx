@@ -2,13 +2,13 @@ type PropsInfallibleErrorBoundary = Partial<{
   children: React.ReactNode
 }>
 
-type StateInfallibleErrorBoundary = {
+type State = {
   hasError: boolean
 }
 
 class InfallibleErrorBoundary extends React.Component<
   PropsInfallibleErrorBoundary,
-  StateInfallibleErrorBoundary
+  State
 > {
   state = { hasError: false }
 
@@ -30,13 +30,9 @@ type PropsFatalErrorBoundary = {
   page: React.ComponentType
 }
 
-type StateFatalErrorBoundary = {
-  hasError: boolean
-}
-
 class FatalErrorBoundary extends React.Component<
   PropsFatalErrorBoundary,
-  StateFatalErrorBoundary
+  State
 > {
   state = { hasError: false }
 
