@@ -7,7 +7,7 @@
     "../../README.md"
   ],
   "imageSize": 100,
-  "contributorsPerLine": 7,
+  "contributorsPerLine": 5,
   "contributorTemplate": "<a href=\"<%= contributor.profile %>\"><img src=\"<%= contributor.avatar_url %>\" width=\"<%= options.imageSize %>px;\" alt=\"\"/><br /><sub><b><%= contributor.name %></b></sub></a>",
   "commit": false,
   "commitConvention": "none",
