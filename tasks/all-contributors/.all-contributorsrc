@@ -56,7 +56,8 @@
       "avatar_url": "https://avatars3.githubusercontent.com/u/51720070?v=4",
       "profile": "https://twitter.com/kimadeline_m",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -266,7 +267,8 @@
       "profile": "https://github.com/Thieffen",
       "contributions": [
         "code",
-        "doc"
+        "doc",
+        "tool"
       ]
     },
     {
@@ -1005,7 +1007,87 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "androiddevnotes",
+      "name": "Android Dev Notes",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/66256957?v=4",
+      "profile": "https://www.youtube.com/c/awesomedevnotes",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "jwkratz",
+      "name": "Jeremy Kratz",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1337020?v=4",
+      "profile": "http://jeremykratz.com/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "KrisCoulson",
+      "name": "Kris Coulson",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/6943688?v=4",
+      "profile": "http://kriscoulson.com/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "M0nica",
+      "name": "Monica Powell",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/6998954?v=4",
+      "profile": "https://www.aboutmonica.com/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "bboygary",
+      "name": "Ganesh Rane",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/65660344?v=4",
+      "profile": "https://github.com/bboygary",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "ryanmdoyle",
+      "name": "Ryan Doyle",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/20651020?v=4",
+      "profile": "https://github.com/ryanmdoyle",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "ajcwebdev",
+      "name": "Anthony Campolo",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/12433465?v=4",
+      "profile": "https://ajcwebdev.substack.com/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "matthewcarlreetz",
+      "name": "Matt Reetz",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/1760821?v=4",
+      "profile": "https://github.com/matthewcarlreetz",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "punitcodes",
+      "name": "Punit Makwana",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/16760252?v=4",
+      "profile": "https://in.linkedin.com/in/punit-makwana/",
+      "contributions": [
+        "doc"
+      ]
     }
-  ],
-  "contributorsPerLine": 7
+  ]
 }
