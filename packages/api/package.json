@@ -10,7 +10,7 @@
   "dependencies": {
     "@prisma/client": "2.7.1",
     "@redwoodjs/internal": "^0.19.1",
-    "apollo-server-lambda": "2.17.0",
+    "apollo-server-lambda": "2.18.1",
     "core-js": "3.6.5",
     "graphql": "^15.3.0",
     "graphql-scalars": "^1.2.7",
