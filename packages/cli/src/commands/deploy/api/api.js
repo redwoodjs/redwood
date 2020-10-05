@@ -8,14 +8,14 @@ import Listr from 'listr'
 import c from 'src/lib/colors'
 import { getPaths } from 'src/lib'
 
-const SUPPORTED_PROVIDERS = fs
-  .readdirSync(path.resolve(__dirname, 'providers'))
-  .map((file) => path.basename(file, '.js'))
-  .filter((file) => file !== 'README.md')
-
 export const command = 'api <provider>'
 export const description = 'Deploy the API using the selected provider'
 export const builder = (yargs) => {
+  const SUPPORTED_PROVIDERS = fs
+    .readdirSync(path.resolve(__dirname, 'providers'))
+    .map((file) => path.basename(file, '.js'))
+    .filter((file) => file !== 'README.md')
+
   yargs
     .positional('provider', {
       choices: SUPPORTED_PROVIDERS,

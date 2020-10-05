@@ -9,7 +9,7 @@ const CopyPlugin = require('copy-webpack-plugin')
 const { RetryChunkLoadPlugin } = require('webpack-retry-chunk-load-plugin')
 const Dotenv = require('dotenv-webpack')
 const { getConfig, getPaths } = require('@redwoodjs/internal')
-const merge = require('webpack-merge')
+const { merge } = require('webpack-merge')
 
 const redwoodConfig = getConfig()
 const redwoodPaths = getPaths()
