@@ -97,6 +97,15 @@ describe('Uses correct Auth decoder', () => {
     expect(output).toEqual(MOCKED_JWT)
   })
 
+  it('returns undecoded token for supabase', async () => {
+    const output = await decodeToken('supabase', MOCKED_JWT, {
+      event: mockedAPIGatewayProxyEvent,
+      context: {},
+    })
+
+    expect(output).toEqual(MOCKED_JWT)
+  })
+
   it('returns undecoded token for unknown values', async () => {
     const output = await decodeToken('SOMETHING_ELSE!', MOCKED_JWT, {
       event: mockedAPIGatewayProxyEvent,

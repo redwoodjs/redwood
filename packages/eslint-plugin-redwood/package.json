@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/eslint-plugin-redwood",
-  "version": "0.16.0",
+  "version": "0.19.2",
   "description": "eslint plugin for Redwood rules.",
   "files": [
     "dist"
@@ -9,7 +9,7 @@
   "repository": "https://github.com/redwoodjs/redwood",
   "author": "Tom Preston-Werner",
   "license": "MIT",
-  "gitHead": "1cb7c8d1085147787209af423c33a9c91c3e6517",
+  "gitHead": "c235e7d7186e5e258764699c0e0e1d5cc0fdd0b5",
   "scripts": {
     "build": "yarn build:js",
     "prepublishOnly": "yarn cross-env NODE_ENV=production yarn build",

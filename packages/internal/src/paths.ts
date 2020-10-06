@@ -19,6 +19,7 @@ export interface NodeTargetPaths {
 export interface BrowserTargetPaths {
   base: string
   src: string
+  index: string
   routes: string
   pages: string
   components: string
@@ -60,6 +61,7 @@ const PATH_WEB_DIR_LAYOUTS = 'web/src/layouts/'
 const PATH_WEB_DIR_PAGES = 'web/src/pages/'
 const PATH_WEB_DIR_COMPONENTS = 'web/src/components'
 const PATH_WEB_DIR_SRC = 'web/src'
+const PATH_WEB_DIR_SRC_INDEX = 'web/src/index' // .js|.tsx
 const PATH_WEB_DIR_CONFIG = 'web/config'
 const PATH_WEB_DIR_CONFIG_WEBPACK = 'web/config/webpack.config.js'
 const PATH_WEB_DIR_CONFIG_POSTCSS = 'web/config/postcss.config.js'
@@ -67,7 +69,7 @@ const PATH_WEB_DIR_CONFIG_POSTCSS = 'web/config/postcss.config.js'
 /**
  * Search the parent directories for the Redwood configuration file.
  */
-export const getConfigPath = (cwd: string = __dirname): string => {
+export const getConfigPath = (cwd: string = process.cwd()): string => {
   const configPath = findUp(CONFIG_FILE_NAME, { cwd })
   if (!configPath) {
     throw new Error(
@@ -94,7 +96,7 @@ export const getBaseDirFromFile = (file: string) => {
  */
 export const resolveFile = (
   filePath: string,
-  extensions: string[] = ['.js', '.tsx', '.ts']
+  extensions: string[] = ['.js', '.jsx', '.tsx', '.ts']
 ): string | null => {
   for (const extension of extensions) {
     const p = `${filePath}${extension}`
@@ -111,9 +113,9 @@ export const resolveFile = (
 export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
   const routes = resolveFile(path.join(BASE_DIR, PATH_WEB_ROUTES)) as string
 
-  // We store ambient types and our test database over here:
-  const cache = path.join(BASE_DIR, 'node_modules', '.redwood')
-  const types = path.join(BASE_DIR, 'node_modules', '.redwood', 'types')
+  // We store our test database over here:
+  const cache = path.join(BASE_DIR, '.redwood')
+  const types = path.join(BASE_DIR, '.redwood', 'types')
   fs.mkdirSync(cache, { recursive: true })
   fs.mkdirSync(types, { recursive: true })
 
@@ -140,6 +142,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       components: path.join(BASE_DIR, PATH_WEB_DIR_COMPONENTS),
       layouts: path.join(BASE_DIR, PATH_WEB_DIR_LAYOUTS),
       src: path.join(BASE_DIR, PATH_WEB_DIR_SRC),
+      index: path.join(BASE_DIR, PATH_WEB_DIR_SRC_INDEX),
       config: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG),
       webpack: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG_WEBPACK),
       postcss: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG_POSTCSS),

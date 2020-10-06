@@ -12,6 +12,7 @@ import { HostWithDocumentsStore, IDEInfo } from '../ide'
 import { RWProject } from '../model'
 import { lazy, memo } from '../x/decorators'
 import { VSCodeWindowMethods_fromConnection } from '../x/vscode'
+import { Connection_suppressErrors } from '../x/vscode-languageserver'
 import {
   ExtendedDiagnostic_findRelevantQuickFixes,
   Range_contains,
@@ -24,12 +25,16 @@ import { XMethodsManager } from './xmethods'
 export class RWLanguageServer {
   initializeParams!: InitializeParams
   documents = new TextDocuments(TextDocument)
-  connection = createConnection(ProposedFeatures.all)
+  @lazy() get connection() {
+    const c = createConnection(ProposedFeatures.all)
+    Connection_suppressErrors(c)
+    return c
+  }
   @memo() start() {
     const { connection, documents } = this
     connection.onInitialize((params) => {
       connection.console.log(
-        `Redwood.js Language Server onInitialize(), PID=${process.pid}`
+        `Redwood Language Server onInitialize(), PID=${process.pid}`
       )
       this.initializeParams = params
       return {
@@ -50,18 +55,21 @@ export class RWLanguageServer {
     })
 
     connection.onInitialized(async () => {
-      connection.console.log('Redwood.js Language Server onInitialized()')
+      connection.console.log('Redwood Language Server onInitialized()')
       const folders = await connection.workspace.getWorkspaceFolders()
       if (folders) {
         for (const folder of folders) {
           this.projectRoot = normalize(folder.uri.substr(7)) // remove file://
         }
       }
-      this.diagnostics.start()
-      this.commands.start()
-      this.outline.start()
-      this.xmethods.start()
     })
+
+    // initialize these early on to prevent "unhandled methods"
+    // they are smart enough to short-circuit if this.projectRoot is not ready
+    this.diagnostics.start()
+    this.commands.start()
+    this.outline.start()
+    this.xmethods.start()
 
     connection.onImplementation(async ({ textDocument: { uri }, position }) => {
       const info = await this.info(uri, 'Implementation')
@@ -144,10 +152,8 @@ export class RWLanguageServer {
   get vscodeWindowMethods() {
     return VSCodeWindowMethods_fromConnection(this.connection)
   }
-  async collectIDEInfo(uri: string) {
-    const node = await this.getProject()?.findNode(uri)
-    if (!node) return []
-    return await node.collectIDEInfo()
+  async collectIDEInfo(uri?: string) {
+    return (await this.getProject()?.collectIDEInfo(uri)) ?? []
   }
   async info<T extends IDEInfo['kind']>(
     uri: string,

@@ -4,13 +4,12 @@ const { existsSync } = require('fs')
 
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const DirectoryNamedWebpackPlugin = require('directory-named-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 const { RetryChunkLoadPlugin } = require('webpack-retry-chunk-load-plugin')
 const Dotenv = require('dotenv-webpack')
 const { getConfig, getPaths } = require('@redwoodjs/internal')
-const merge = require('webpack-merge')
+const { merge } = require('webpack-merge')
 
 const redwoodConfig = getConfig()
 const redwoodPaths = getPaths()
@@ -67,8 +66,8 @@ const getStyleLoaders = (isEnvProduction) => {
     ? {
         loader: 'postcss-loader',
         options: {
-          config: {
-            path: redwoodPaths.web.postcss,
+          postcssOptions: {
+            config: redwoodPaths.web.postcss,
           },
         },
       }
@@ -127,7 +126,7 @@ const getSharedPlugins = (isEnvProduction) => {
     new webpack.ProvidePlugin({
       React: 'react',
       PropTypes: 'prop-types',
-      gql: ['@redwoodjs/web', 'gql'],
+      gql: 'graphql-tag',
       mockGraphQLQuery: ['@redwoodjs/testing', 'mockGraphQLQuery'],
       mockGraphQLMutation: ['@redwoodjs/testing', 'mockGraphQLMutation'],
     }),
@@ -157,13 +156,7 @@ module.exports = (webpackEnv) => {
       app: path.resolve(redwoodPaths.base, 'web/src/index'),
     },
     resolve: {
-      extensions: ['.ts', '.tsx', '.js', '.json'],
-      plugins: [
-        new DirectoryNamedWebpackPlugin({
-          honorIndex: true,
-          exclude: /node_modules/,
-        }),
-      ],
+      extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
       alias: {
         // https://www.styled-components.com/docs/faqs#duplicated-module-in-node_modules
         'styled-components': path.resolve(
@@ -182,7 +175,11 @@ module.exports = (webpackEnv) => {
         inject: true,
         chunks: 'all',
       }),
-      new CopyPlugin([{ from: 'public/', to: '', ignore: ['README.md'] }]),
+      new CopyPlugin({
+        patterns: [
+          { from: 'public/', to: '', globOptions: { ignore: ['README.md'] } },
+        ],
+      }),
       isEnvProduction &&
         new RetryChunkLoadPlugin({
           cacheBust: `function() {
@@ -228,6 +225,13 @@ module.exports = (webpackEnv) => {
             },
             // .module.css (3), .css (4), .module.scss (5), .scss (6)
             ...getStyleLoaders(isEnvProduction),
+            isEnvProduction && {
+              test: path.join(
+                redwoodPaths.base,
+                'node_modules/@redwoodjs/router/dist/splash-page'
+              ),
+              use: 'null-loader',
+            },
             // (7)
             {
               test: /\.(svg|ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|pdf)(\?.*)?$/,
@@ -236,7 +240,7 @@ module.exports = (webpackEnv) => {
                 name: 'static/media/[name].[hash:8].[ext]',
               },
             },
-          ],
+          ].filter(Boolean),
         },
       ],
     },

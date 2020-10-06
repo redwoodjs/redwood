@@ -4,9 +4,11 @@ const ContactUsPage = () => {
   return (
     <>
       <h1>ContactUsPage</h1>
-      <p>Find me in "./web/src/pages/ContactUsPage/ContactUsPage.js"</p>
       <p>
-        My default route is named "contactUs", link to me with `
+        Find me in <code>./web/src/pages/ContactUsPage/ContactUsPage.js</code>
+      </p>
+      <p>
+        My default route is named <code>contactUs</code>, link to me with `
         <Link to={routes.contactUs()}>ContactUs</Link>`
       </p>
     </>

@@ -9,10 +9,11 @@ import {
   ParamsContext,
   navigate,
   mapNamedRoutes,
-  SplashPage,
   PageLoader,
   Redirect,
 } from './internal'
+
+import { SplashPage } from './splash-page'
 
 const Route = () => {
   return null
@@ -31,7 +32,7 @@ Private.propTypes = {
    * The page name where a user will be redirected when not authenticated.
    */
   unauthenticated: PropTypes.string.isRequired,
-  role: PropTypes.string,
+  role: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
 }
 
 const PrivatePageLoader = ({
@@ -105,30 +106,36 @@ const RouterImpl = ({
   children,
   useAuth = window.__REDWOOD__USE_AUTH,
 }) => {
-  // Find `Private` components, mark their children `Route` components as private,
-  // and merge them into a single array.
-  const privateRoutes =
-    React.Children.toArray(children)
-      .filter((child) => child.type === Private)
-      .map((privateElement) => {
-        // Set `Route` props
-        const { unauthenticated, role, children } = privateElement.props
-        return React.Children.toArray(children).map((route) =>
-          React.cloneElement(route, {
-            private: true,
-            unauthenticatedRedirect: unauthenticated,
-            role: role,
-          })
-        )
-      })
-      .reduce((a, b) => a.concat(b), []) || []
+  const routes = React.useMemo(() => {
+    // Find `Private` components, mark their children `Route` components as private,
+    // and merge them into a single array.
+    const privateRoutes =
+      React.Children.toArray(children)
+        .filter((child) => child.type === Private)
+        .map((privateElement) => {
+          // Set `Route` props
+          const { unauthenticated, role, children } = privateElement.props
+          return React.Children.toArray(children).map((route) =>
+            React.cloneElement(route, {
+              private: true,
+              unauthenticatedRedirect: unauthenticated,
+              role: role,
+            })
+          )
+        })
+        .reduce((a, b) => a.concat(b), []) || []
 
-  const routes = [
-    ...privateRoutes,
-    ...React.Children.toArray(children).filter((child) => child.type === Route),
-  ]
+    const routes = [
+      ...privateRoutes,
+      ...React.Children.toArray(children).filter(
+        (child) => child.type === Route
+      ),
+    ]
 
-  const namedRoutes = mapNamedRoutes(routes)
+    return routes
+  }, [children])
+
+  const namedRoutes = React.useMemo(() => mapNamedRoutes(routes), [routes])
 
   let NotFoundPage
 

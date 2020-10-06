@@ -63,19 +63,19 @@ export type DataFunction = (
     ctx,
   }: {
     req: GraphQLMockedRequest
-    ctx: GraphQLMockedContext<{}>
+    ctx: GraphQLMockedContext<Record<string, any>>
   }
-) => {}
+) => Record<string, unknown>
 
 const mockGraphQL = (
   type: 'query' | 'mutation',
   operation: string,
-  data: DataFunction | {}
+  data: DataFunction | Record<string, any>
 ) => {
   const resolver = (
     req: GraphQLMockedRequest,
     res: Function,
-    ctx: GraphQLMockedContext<{}>
+    ctx: GraphQLMockedContext<Record<string, any>>
   ) => {
     let d = data
     let responseTransforms: any[] = []
@@ -93,7 +93,7 @@ const mockGraphQL = (
           return resTransform
         }
       }
-      const newCtx: GraphQLMockedContext<{}> = {
+      const newCtx: GraphQLMockedContext<Record<string, any>> = {
         status: captureTransform(ctx.status),
         delay: captureTransform(ctx.delay),
         errors: captureTransform(ctx.errors),
@@ -111,6 +111,7 @@ const mockGraphQL = (
     return res(ctx.data(d), ...responseTransforms)
   }
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   //@ts-expect-error
   registerHandler(graphql[type](operation, resolver))
   return data
@@ -118,14 +119,14 @@ const mockGraphQL = (
 
 export const mockGraphQLQuery = (
   operation: string,
-  data: DataFunction | {}
+  data: DataFunction | Record<string, unknown>
 ) => {
   return mockGraphQL('query', operation, data)
 }
 
 export const mockGraphQLMutation = (
   operation: string,
-  data: DataFunction | {}
+  data: DataFunction | Record<string, unknown>
 ) => {
   return mockGraphQL('mutation', operation, data)
 }

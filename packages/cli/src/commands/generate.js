@@ -1,11 +1,15 @@
+import terminalLink from 'terminal-link'
 export const command = 'generate <type>'
 export const aliases = ['g']
 export const description = 'Save time by generating boilerplate code'
-import terminalLink from 'terminal-link'
 
 export const builder = (yargs) =>
   yargs
-    .commandDir('./generate', { recurse: true })
+    /**
+     * Like generate, util is an entry point command,
+     * so we can't have generate going through its subdirectories
+     */
+    .commandDir('./generate', { recurse: true, exclude: /\/util\// })
     .demandCommand()
     .epilogue(
       `Also see the ${terminalLink(

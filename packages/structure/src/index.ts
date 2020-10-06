@@ -1,6 +1,6 @@
-export { DefaultHost, Host } from './ide'
+export { DefaultHost, Host } from './hosts'
 export { RWProject } from './model'
-import { DefaultHost } from './ide'
+import { DefaultHost } from './hosts'
 import { RWProject } from './model'
 import {
   ExtendedDiagnostic_format,

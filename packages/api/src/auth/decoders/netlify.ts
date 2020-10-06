@@ -2,7 +2,7 @@ import type { Context as LambdaContext, ClientContext } from 'aws-lambda'
 import jwt from 'jsonwebtoken'
 
 type NetlifyContext = ClientContext & {
-  user?: object
+  user?: Record<string, unknown>
 }
 
 export const netlify = (token: string, req: { context: LambdaContext }) => {

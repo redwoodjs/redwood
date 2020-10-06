@@ -1,0 +1,11 @@
+{
+  "name": "redwoodjs-all-contributors",
+  "description": "",
+  "version": "0.0.0",
+  "private": true,
+
+  "devDependencies": {
+    "all-contributors-cli": "^6.17.2"
+  },
+  "dependencies": {}
+}

@@ -46,7 +46,7 @@ Some pages should only be visible to authenticated users.
 
 All `Routes` nested in `<Private>` require authentication.
 When a user is not authenticated and attempts to visit this route,
-they will be redirected to the route passed as the `unauthenticated` prop and the orignally requested route's path will be added to the querystring in a `redirectTo` param. This lets you send the user to the originally requested once logged in.
+they will be redirected to the route passed as the `unauthenticated` prop and the originally requested route's path will be added to the querystring in a `redirectTo` param. This lets you send the user to the originally requested once logged in.
 
 ```js
 // Routes.js
@@ -289,6 +289,8 @@ import HomePage from 'src/pages/HomePage'
 Redwood will detect your explicit import and refrain from splitting that page into a separate bundle. Be careful with this feature, as you can easily bloat the size of your main bundle to the point where your initial page load time becomes unacceptable.
 
 ## PageLoadingContext
+
+> **VIDEO:** If you'd prefer to watch a video, there's one accompanying this section: https://www.youtube.com/watch?v=BVkyXjUQADs&feature=youtu.be
 
 Because lazily-loaded pages can take a non-negligible amount of time to load (depending on bundle size and network connection), you may want to show a loading indicator to signal to the user that something is happening after they click a link. RR makes this really easy with `usePageLoadingContext`:
 

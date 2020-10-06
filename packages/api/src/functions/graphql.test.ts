@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { context } from '../globalContext'
 
 import { createContextHandler } from './graphql'
