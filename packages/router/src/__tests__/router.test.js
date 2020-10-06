@@ -31,7 +31,7 @@ it('inits routes and navigates as expected', async () => {
       </Private>
 
       <Route
-        path="/param-test/:value"
+        path="/param-test/{value}"
         page={({ value }) => <div>param {value}</div>}
         name="params"
       />

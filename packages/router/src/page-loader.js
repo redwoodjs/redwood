@@ -13,12 +13,22 @@ export class PageLoader extends React.PureComponent {
     slowModuleImport: false,
   }
 
+  shouldRerender = (p1, p2) => {
+    if (p1.spec.name !== p2.spec.name) {
+      return true
+    }
+    if (JSON.stringify(p1.params) !== JSON.stringify(p2.params)) {
+      return true
+    }
+    return false
+  }
+
   componentDidMount() {
     this.startPageLoadTransition()
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.spec.name !== this.props.spec.name) {
+    if (this.shouldRerender(prevProps, this.props)) {
       this.clearLoadingTimeout()
       this.startPageLoadTransition()
     }
