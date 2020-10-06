@@ -5,10 +5,10 @@ const PostPage = ({ id }) => {
     <>
       <h1>PostPage</h1>
       <p>
-        Find me in <tt>./web/src/pages/PostPage/PostPage.js</tt>
+        Find me in <code>./web/src/pages/PostPage/PostPage.js</code>
       </p>
       <p>
-        My default route is named <tt>post</tt>, link to me with `
+        My default route is named <code>post</code>, link to me with `
         <Link to={routes.post({ id: '42' })}>Post 42</Link>`
       </p>
       <p>The parameter passed to me is {id}</p>
