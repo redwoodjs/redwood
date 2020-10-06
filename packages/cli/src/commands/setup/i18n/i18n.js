@@ -19,7 +19,6 @@ export const builder = (yargs) => {
   })
 }
 
-
 export const handler = async ({ force }) => {
   const INDEX_JS_PATH = path.join(getPaths().web.src, 'index.js')
   const tasks = new Listr([
@@ -34,7 +33,7 @@ export const handler = async ({ force }) => {
           'i18next',
           'i18next-browser-languagedetector',
           'i18next-http-backend',
-          'react-i18next'
+          'react-i18next',
         ])
       },
     },
@@ -56,10 +55,10 @@ export const handler = async ({ force }) => {
       },
     },
     {
-      title: 'Adding locale file for \'site\' namespace',
-      task () {
+      title: "Adding locale file for 'site' namespace",
+      task() {
         return writeFile(getPaths().web.src + '/locales/en/site.json')
-      }
+      },
     },
     {
       title: 'Adding import to index.js...',
@@ -75,9 +74,15 @@ export const handler = async ({ force }) => {
     {
       title: 'One more thing...',
       task: (_ctx, task) => {
-        task.title = `One more thing...\n\n   ${chalk.hex('#bf4722')(
-          'Quick link to the docs: '
-        )}\n - https://react.i18next.com/guides/quick-start/\n - https://github.com/i18next/i18next-browser-languageDetector\n`
+        task.title = `One more thing...\n
+          ${c.green('Quick link to the docs:')}\n
+          ${chalk.hex('#e8e8e8')(
+            'https://react.i18next.com/guides/quick-start/'
+          )}
+          ${chalk.hex('#e8e8e8')(
+            'https://github.com/i18next/i18next-browser-languageDetector\n'
+          )}
+        `
       },
     },
   ])
