@@ -143,9 +143,10 @@ export const addConfigToIndex = async (config, force) => {
 
 export const addApiConfig = () => {
   let content = fs.readFileSync(API_GRAPHQL_PATH).toString()
-  const [_, hasAuthImport] = content.match(
-    /(import {.*} from 'src\/lib\/auth.*')/s
-  )
+
+  // default to an array to avoid destructure errors
+  const [_, hasAuthImport] =
+    content.match(/(import {.*} from 'src\/lib\/auth.*')/s) || []
 
   if (!hasAuthImport) {
     // add import statement
