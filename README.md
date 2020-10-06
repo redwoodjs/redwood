@@ -49,7 +49,7 @@ use:
 - [Prisma](https://www.prisma.io/)
 - [Jest](https://jestjs.io/) (coming soon)
 - [Storybook](https://storybook.js.org/) (coming soon)
-- [Babel](https://babeljs.io/)
+- [Babel](https://babeljs.io/)  
 - [Webpack](https://webpack.js.org/)
 
 ## Features
