@@ -8,7 +8,7 @@ import { ApolloProviderProps } from '@apollo/client/react/context'
 
 export { withCell } from './withCell'
 
-type GraphQLClientConfig = Omit<
+export type GraphQLClientConfig = Omit<
   ApolloClientOptions<InMemoryCache>,
   'uri' | 'cache'
 >
