@@ -37,7 +37,7 @@ export const handler = async () => {
       {
         title: 'Starting Prisma Studio...',
         cmd: 'yarn prisma',
-        args: ['studio', '--experimental'],
+        args: ['studio'],
       },
     ],
     { verbose: true }
