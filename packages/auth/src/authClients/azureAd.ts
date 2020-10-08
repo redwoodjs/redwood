@@ -1,8 +1,9 @@
-import { UserAgentApplication } from 'msal'
+import { UserAgentApplication as AzureAd } from 'msal'
 
-export type AzureAdClient = typeof UserAgentApplication
+export type { AzureAd }
+import type { AuthClient } from './'
 
-import { AuthClient } from './'
+export type AzureAdClient = AzureAd
 
 export const azureAd = (client: AzureAdClient): AuthClient => {
   return {
