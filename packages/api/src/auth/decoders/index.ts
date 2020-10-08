@@ -4,11 +4,12 @@ import type { SupportedAuthTypes } from '@redwoodjs/auth'
 
 import { netlify } from './netlify'
 import { auth0 } from './auth0'
+import { azureAd } from './azureAd'
 const noop = (token: string) => token
 
 const typesToDecoders: Record<SupportedAuthTypes, Function> = {
   auth0: auth0,
-  azureAd: noop,
+  azureAd: azureAd,
   netlify: netlify,
   goTrue: netlify,
   magicLink: noop,
