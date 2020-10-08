@@ -42,8 +42,8 @@ export const handler = async ({ force }) => {
         task.title = `One more thing...\n
           ${c.green(
             'Quick link to the docs on configuring custom webpack config:'
-          )}\n
-          ${terminalLink(
+          )}
+          ${chalk.hex('#e8e8e8')(
             'https://redwoodjs.com/docs/webpack-configuration#configuring-webpack'
           )}
         `
