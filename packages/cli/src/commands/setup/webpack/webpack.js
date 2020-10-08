@@ -1,7 +1,7 @@
 import fs from 'fs'
 import Listr from 'listr'
 import path from 'path'
-import terminalLink from 'terminal-link'
+import chalk from 'chalk'
 
 import c from 'src/lib/colors'
 import { getPaths, writeFile } from 'src/lib'
