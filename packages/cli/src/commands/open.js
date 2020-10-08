@@ -1,5 +1,5 @@
-import execa from 'execa'
 import { getConfig } from '@redwoodjs/internal'
+import execa from 'execa'
 import terminalLink from 'terminal-link'
 
 export const command = 'open'

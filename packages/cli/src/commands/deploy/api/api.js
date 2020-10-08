@@ -1,12 +1,12 @@
 import fs from 'fs'
 import path from 'path'
 
-import terminalLink from 'terminal-link'
 import execa from 'execa'
 import Listr from 'listr'
+import terminalLink from 'terminal-link'
 
-import c from 'src/lib/colors'
 import { getPaths } from 'src/lib'
+import c from 'src/lib/colors'
 
 export const command = 'api <provider>'
 export const description = 'Deploy the API using the selected provider'

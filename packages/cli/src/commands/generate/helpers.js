@@ -1,15 +1,15 @@
 import path from 'path'
 
-import Listr from 'listr'
-import pascalcase from 'pascalcase'
-import { paramCase } from 'param-case'
-import terminalLink from 'terminal-link'
 import { ensurePosixPath } from '@redwoodjs/internal'
+import Listr from 'listr'
+import { paramCase } from 'param-case'
+import pascalcase from 'pascalcase'
+import terminalLink from 'terminal-link'
+
+import { yargsDefaults } from '../generate'
 
 import { generateTemplate, getPaths, writeFilesTask } from 'src/lib'
 import c from 'src/lib/colors'
-
-import { yargsDefaults } from '../generate'
 
 /**
  * Reduces boilerplate for generating an output path and content to write to disk

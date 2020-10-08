@@ -9,13 +9,13 @@
 import fs from 'fs'
 import path from 'path'
 
-import decompress from 'decompress'
 import axios from 'axios'
-import Listr from 'listr'
-import execa from 'execa'
-import tmp from 'tmp'
-import checkNodeVersion from 'check-node-version'
 import chalk from 'chalk'
+import checkNodeVersion from 'check-node-version'
+import decompress from 'decompress'
+import execa from 'execa'
+import Listr from 'listr'
+import tmp from 'tmp'
 import yargs from 'yargs'
 
 import { name, version } from '../package'
@@ -205,29 +205,41 @@ new Listr(
 )
   .run()
   .then(() => {
-    [
+    ;[
       '',
       style.success('Thanks for trying out Redwood!'),
       '',
       `We've created your app in '${style.cmd(newAppDir)}'`,
-      `Enter the directory and run '${style.cmd("yarn rw dev")}' to start the development server.`,
+      `Enter the directory and run '${style.cmd(
+        'yarn rw dev'
+      )}' to start the development server.`,
       '',
       style.header('Join the Community and Get Help'),
       '',
-      `${style.redwood(' ⮡  Join our Forums')}: https://community.redwoodjs.com`,
+      `${style.redwood(
+        ' ⮡  Join our Forums'
+      )}: https://community.redwoodjs.com`,
       `${style.redwood(' ⮡  Join our Chat')}: https://discord.gg/redwoodjs`,
-      `${style.redwood(' ⮡  Read the Documentation')}: https://redwoodjs.com/docs`,
+      `${style.redwood(
+        ' ⮡  Read the Documentation'
+      )}: https://redwoodjs.com/docs`,
       '',
       style.header('Keep updated'),
       '',
       `${style.redwood(' ⮡  Newsletter signup')}: https://www.redwoodjs.com`,
-      `${style.redwood(' ⮡  Follow on Twitter')}: https://twitter.com/redwoodjs`,
+      `${style.redwood(
+        ' ⮡  Follow on Twitter'
+      )}: https://twitter.com/redwoodjs`,
       '',
       `${style.header(`Become a Contributor`)} ${style.love('❤')}`,
       '',
-      `${style.redwood(' ⮡  Learn how to get started')}: https://redwoodjs.com/docs/contributing`,
-      `${style.redwood(' ⮡  Find a Good First Issue')}: https://redwoodjs.com/good-first-issue`,
-      ''
+      `${style.redwood(
+        ' ⮡  Learn how to get started'
+      )}: https://redwoodjs.com/docs/contributing`,
+      `${style.redwood(
+        ' ⮡  Find a Good First Issue'
+      )}: https://redwoodjs.com/good-first-issue`,
+      '',
     ].map((item) => console.log(item))
   })
   .catch((e) => {

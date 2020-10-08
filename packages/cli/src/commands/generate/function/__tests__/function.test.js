@@ -1,9 +1,9 @@
 global.__dirname = __dirname
 import path from 'path'
 
-import { loadGeneratorFixture } from 'src/lib/test'
-
 import * as functionGenerator from '../function'
+
+import { loadGeneratorFixture } from 'src/lib/test'
 
 test('returns exactly 1 file', async () => {
   const files = await functionGenerator.files({

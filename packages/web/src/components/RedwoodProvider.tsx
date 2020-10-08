@@ -1,5 +1,7 @@
-import type { AuthContextInterface } from '@redwoodjs/auth'
 import { ComponentProps, useEffect, useState } from 'react'
+
+import type { AuthContextInterface } from '@redwoodjs/auth'
+
 import { FlashProvider } from '../flash'
 import { GraphQLProvider } from '../graphql'
 

@@ -18,7 +18,6 @@ export const firebase = (client: Firebase): AuthClient => {
     signup: async () => {
       const provider = new client.auth.GoogleAuthProvider()
       return client.auth().signInWithRedirect(provider)
-
     },
     getToken: async () => client.auth().currentUser?.getIdToken() ?? null,
     getUserMetadata: async () => client.auth().currentUser,

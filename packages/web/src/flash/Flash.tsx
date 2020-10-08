@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 
 import type { FlashMessage } from './Flash.types'
-
 import { useFlash } from './FlashContext'
 
 interface FlashMessageProps {

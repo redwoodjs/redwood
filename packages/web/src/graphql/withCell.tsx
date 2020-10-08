@@ -1,11 +1,12 @@
 import React from 'react'
-import { Query } from '@apollo/client/react/components/Query'
-import { DocumentNode } from 'graphql'
+
 import {
   BaseQueryOptions,
   OperationVariables,
   QueryResult,
 } from '@apollo/client'
+import { Query } from '@apollo/client/react/components/Query'
+import { DocumentNode } from 'graphql'
 
 export type DataObject = { [key: string]: unknown }
 

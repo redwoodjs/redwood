@@ -4,6 +4,7 @@
  * making it hard to type, and susceptible to hard to debug issues
  */
 import React from 'react'
+
 import type { AuthContextInterface } from '@redwoodjs/auth'
 
 import {
@@ -18,7 +19,6 @@ import {
   Redirect,
 } from './internal'
 import { LocationContext } from './location'
-
 import { SplashPage } from './splash-page'
 
 type RouteProps = {

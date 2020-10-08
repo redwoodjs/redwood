@@ -1,7 +1,7 @@
+import bodyParser from 'body-parser'
 import type { Response, Request } from 'express'
 import express from 'express'
 import morgan from 'morgan'
-import bodyParser from 'body-parser'
 
 export interface Lambdas {
   [path: string]: any

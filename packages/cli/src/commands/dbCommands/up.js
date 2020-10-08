@@ -1,7 +1,7 @@
 import terminalLink from 'terminal-link'
 
-import { runCommandTask } from 'src/lib'
 import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
+import { runCommandTask } from 'src/lib'
 
 export const command = 'up [increment]'
 export const description = 'Generate the Prisma client and apply migrations'

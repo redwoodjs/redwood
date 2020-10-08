@@ -1,5 +1,6 @@
 import React from 'react'
-import userEvent from '@testing-library/user-event'
+
+import { toHaveFocus } from '@testing-library/jest-dom/matchers'
 import {
   screen,
   render,
@@ -7,8 +8,8 @@ import {
   fireEvent,
   waitFor,
 } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 
-import { toHaveFocus } from '@testing-library/jest-dom/matchers'
 expect.extend({ toHaveFocus })
 
 import {

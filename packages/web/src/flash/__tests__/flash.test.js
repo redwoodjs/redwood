@@ -1,8 +1,9 @@
 import { useEffect } from 'react'
+
+import { toHaveClass, toHaveStyle } from '@testing-library/jest-dom/matchers'
 import { render, cleanup, fireEvent } from '@testing-library/react'
 import { renderHook } from '@testing-library/react-hooks'
 // TODO: Remove when jest configs are in place
-import { toHaveClass, toHaveStyle } from '@testing-library/jest-dom/matchers'
 expect.extend({ toHaveClass, toHaveStyle })
 
 import Flash from '../Flash'

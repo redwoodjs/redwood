@@ -1,9 +1,9 @@
-import { transformTSToJS } from 'src/lib'
-
 import {
   templateForComponentFile,
   createYargsForComponentGeneration,
 } from '../helpers'
+
+import { transformTSToJS } from 'src/lib'
 
 const COMPONENT_SUFFIX = 'Layout'
 const REDWOOD_WEB_PATH_NAME = 'layouts'

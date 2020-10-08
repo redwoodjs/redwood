@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 import path from 'path'
-import yargs from 'yargs'
+
 import requireDir from 'require-dir'
+import yargs from 'yargs'
 
 import { server, setLambdaFunctions } from './http'
 import { requestHandler } from './requestHandlers/awsLambda'

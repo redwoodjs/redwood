@@ -8,7 +8,6 @@ import type {
 } from 'aws-lambda'
 
 import { getAuthenticationContext, AuthContextPayload } from '../auth'
-
 import type { GlobalContext } from '../globalContext'
 import { setContext } from '../globalContext'
 

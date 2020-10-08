@@ -1,4 +1,3 @@
-import gql from 'graphql-tag'
 import {
   DateResolver,
   TimeResolver,
@@ -6,11 +5,12 @@ import {
   JSONResolver,
   JSONObjectResolver,
 } from 'graphql-scalars'
+import gql from 'graphql-tag'
 
+import apiPackageJson from '../../package.json'
 import type { GlobalContext } from '../globalContext'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import apiPackageJson from '../../package.json'
 
 /**
  * This adds scalar types for dealing with Date, Time, DateTime, and JSON.

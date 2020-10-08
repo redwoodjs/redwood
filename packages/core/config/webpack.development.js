@@ -1,7 +1,7 @@
-const { merge } = require('webpack-merge')
-const escapeRegExp = require('lodash.escaperegexp')
 const { getConfig } = require('@redwoodjs/internal')
 const ErrorOverlayPlugin = require('error-overlay-webpack-plugin')
+const escapeRegExp = require('lodash.escaperegexp')
+const { merge } = require('webpack-merge')
 
 const webpackConfig = require('./webpack.common')
 

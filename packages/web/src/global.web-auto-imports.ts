@@ -1,6 +1,7 @@
 /* eslint-disable no-redeclare,  no-undef */
-import type _gql from 'graphql-tag'
 import type _React from 'react'
+
+import type _gql from 'graphql-tag'
 import type _PropTypes from 'prop-types'
 
 declare global {

@@ -1,7 +1,7 @@
 import path from 'path'
 
-import glob from 'glob'
 import type { PluginObj, types } from '@babel/core'
+import glob from 'glob'
 
 import { generateTypeDef, generateTypeDefIndex } from './generateTypes'
 

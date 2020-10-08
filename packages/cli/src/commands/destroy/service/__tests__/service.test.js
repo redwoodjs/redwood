@@ -4,10 +4,10 @@ import fs from 'fs'
 
 import 'src/lib/test'
 
-import { getDefaultArgs } from 'src/lib'
-
 import { builder, files } from '../../../generate/service/service'
 import { tasks } from '../service'
+
+import { getDefaultArgs } from 'src/lib'
 
 jest.mock('fs')
 jest.mock('@babel/core', () => {

@@ -1,9 +1,9 @@
 global.__dirname = __dirname
 import path from 'path'
 
-import { loadGeneratorFixture } from 'src/lib/test'
-
 import * as layout from '../layout'
+
+import { loadGeneratorFixture } from 'src/lib/test'
 
 let singleWordDefaultFiles,
   multiWordDefaultFiles,

@@ -1,6 +1,6 @@
+import { toHaveClass, toHaveStyle } from '@testing-library/jest-dom/matchers'
 import { render } from '@testing-library/react'
 // TODO: Remove when jest configs are in place
-import { toHaveClass, toHaveStyle } from '@testing-library/jest-dom/matchers'
 expect.extend({ toHaveClass, toHaveStyle })
 
 import { NavLink, useMatch, Link } from '../links'

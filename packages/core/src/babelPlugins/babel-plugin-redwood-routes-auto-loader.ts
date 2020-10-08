@@ -1,8 +1,8 @@
 import type { PluginObj, types } from '@babel/core'
-
 import { processPagesDir } from '@redwoodjs/internal'
-import { generateTypeDef, generateTypeDefIndex } from './generateTypes'
 import { RWProject } from '@redwoodjs/structure'
+
+import { generateTypeDef, generateTypeDefIndex } from './generateTypes'
 
 interface PluginOptions {
   project: RWProject
