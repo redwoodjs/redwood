@@ -124,5 +124,35 @@ module.exports = {
     'react/display-name': 'off',
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
+    // 'import/order': [
+    //   'error',
+    //   {
+    //     'newlines-between': 'always',
+    //     pathGroupsExcludedImportTypes: ['react'],
+    //     pathGroups: [
+    //       {
+    //         pattern: 'react',
+    //         group: 'external',
+    //         position: 'before',
+    //       },
+    //       { pattern: 'services/**', group: 'sibling' },
+    //       { pattern: 'components/**', group: 'sibling' },
+    //       { pattern: 'store/**', group: 'sibling' },
+    //       { pattern: 'utils/**', group: 'sibling' },
+    //     ],
+    //     alphabetize: {
+    //       order: 'asc',
+    //       caseInsensitive: true,
+    //     },
+    //   },
+    /// ],
+    'no-restricted-imports': [
+      'error',
+      {
+        patterns: [
+          'src/*', // Typescript doesn't change import paths, which leads to broken .d.ts files without bundling. Use relative.
+        ],
+      },
+    ],
   },
 }

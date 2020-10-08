@@ -1,3 +1,8 @@
+/**
+ * ! typing and design-wise this module could use some attention.
+ * Proposal:
+ * @link https://community.redwoodjs.com/t/proposal-dont-magically-wrap-auth-providers/1264
+ */
 import type { NetlifyIdentity } from './netlify'
 import type { Auth0, Auth0User } from './auth0'
 import type { GoTrue, GoTrueUser } from './goTrue'
@@ -5,7 +10,7 @@ import type { MagicLink, MagicUser } from './magicLink'
 import type { Firebase } from './firebase'
 import type { Supabase, SupabaseUser } from './supabase'
 import type { Custom } from './custom'
-//
+
 import { netlify } from './netlify'
 import { auth0 } from './auth0'
 import { goTrue } from './goTrue'
@@ -21,26 +26,35 @@ const typesToClients = {
   magicLink,
   firebase,
   supabase,
-  /** Don't we support your auth client? No problem, define your own the `custom` type! */
   custom,
+  /** Don't we support your auth client? No problem, define your own the `custom` type! */
+} as const
+
+export type CreatedClients = typeof typesToClients
+
+export type SupportedAuthClientsMap = {
+  netlify: NetlifyIdentity
+  auth0: Auth0
+  goTrue: GoTrue
+  magicLink: MagicLink
+  firebase: Firebase
+  supabase: Supabase
+  custom: Custom
 }
 
-export type SupportedAuthClients =
-  | Auth0
-  | GoTrue
-  | NetlifyIdentity
-  | MagicLink
-  | Firebase
-  | Supabase
-  | Custom
+export type SupportedAuthTypes = keyof SupportedAuthClientsMap
 
-export type SupportedAuthTypes = keyof typeof typesToClients
+export type SupportedAuthClients = SupportedAuthClientsMap[SupportedAuthTypes]
 
 export type { Auth0User }
 export type { GoTrueUser }
 export type { MagicUser }
 export type { SupabaseUser }
-export type SupportedUserMetadata = Auth0User | GoTrueUser | MagicUser | SupabaseUser
+export type SupportedUserMetadata =
+  | Auth0User
+  | GoTrueUser
+  | MagicUser
+  | SupabaseUser
 
 export interface AuthClient {
   restoreAuthState?(): void | Promise<any>
@@ -54,10 +68,18 @@ export interface AuthClient {
   type: SupportedAuthTypes
 }
 
-export const createAuthClient = (
+export function createAuthClient<Client extends AuthClient>(
+  client: Client,
+  type: 'custom'
+): Client
+export function createAuthClient<T extends SupportedAuthTypes>(
+  client: SupportedAuthClientsMap[T],
+  type: T
+): ReturnType<typeof typesToClients[T]>
+export function createAuthClient(
   client: SupportedAuthClients,
   type: SupportedAuthTypes
-): AuthClient => {
+): AuthClient {
   if (!typesToClients[type]) {
     throw new Error(
       `Your client ${type} is not supported, we only support ${Object.keys(
@@ -65,5 +87,7 @@ export const createAuthClient = (
       ).join(', ')}`
     )
   }
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
   return typesToClients[type](client)
 }

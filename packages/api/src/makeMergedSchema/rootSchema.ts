@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-import type { GlobalContext } from 'src/globalContext'
 import gql from 'graphql-tag'
 import {
   DateResolver,
@@ -9,8 +7,10 @@ import {
   JSONObjectResolver,
 } from 'graphql-scalars'
 
-// @ts-ignore - not inside the <rootDir>
-import apiPackageJson from 'src/../package.json'
+import type { GlobalContext } from '../globalContext'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import apiPackageJson from '../../package.json'
 
 /**
  * This adds scalar types for dealing with Date, Time, DateTime, and JSON.
@@ -51,7 +51,7 @@ export const resolvers: Resolvers = {
   Query: {
     redwood: () => ({
       version: apiPackageJson.version,
-      currentUser: (_args: any, context: GlobalContext) => {
+      currentUser: (_args: unknown, context: GlobalContext) => {
         return context?.currentUser
       },
     }),

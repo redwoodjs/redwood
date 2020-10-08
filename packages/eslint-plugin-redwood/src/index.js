@@ -1,4 +1,4 @@
-import noUnavailablePages from 'src/no-unavailable-pages'
+import noUnavailablePages from './no-unavailable-pages'
 
 module.exports = {
   rules: {

@@ -1,11 +1,16 @@
-import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
-import type { Config, CreateHandlerOptions } from 'apollo-server-lambda'
 import type { Context, ContextFunction } from 'apollo-server-core'
-import type { GlobalContext } from 'src/globalContext'
-import type { AuthContextPayload } from 'src/auth'
+import type { Config, CreateHandlerOptions } from 'apollo-server-lambda'
 import { ApolloServer } from 'apollo-server-lambda'
-import { getAuthenticationContext } from 'src/auth'
-import { setContext } from 'src/globalContext'
+import type {
+  APIGatewayProxyEvent,
+  Context as LambdaContext,
+  APIGatewayProxyCallback,
+} from 'aws-lambda'
+
+import { getAuthenticationContext, AuthContextPayload } from '../auth'
+
+import type { GlobalContext } from '../globalContext'
+import { setContext } from '../globalContext'
 
 export type GetCurrentUser = (
   decoded: AuthContextPayload[0],
@@ -105,8 +110,6 @@ export const createGraphQLHandler = ({
       if (isDevEnv) {
         // I want the dev-server to pick this up!?
         // TODO: Move the error handling into a separate package
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         import('@redwoodjs/dev-server/dist/error')
           .then(({ handleError }) => {
             return handleError(error.originalError as Error)
@@ -124,7 +127,7 @@ export const createGraphQLHandler = ({
   return (
     event: APIGatewayProxyEvent,
     context: LambdaContext,
-    callback: any
+    callback: APIGatewayProxyCallback
   ): void => {
     try {
       handler(event, context, callback)

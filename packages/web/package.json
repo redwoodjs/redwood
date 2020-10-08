@@ -16,7 +16,8 @@
   },
   "peerDependencies": {
     "prop-types": "*",
-    "react": "*"
+    "react": "*",
+    "@redwoodjs/auth": "^0.19.2"
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",

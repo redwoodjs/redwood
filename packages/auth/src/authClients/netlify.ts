@@ -1,10 +1,8 @@
 import type * as NetlifyIdentityNS from 'netlify-identity-widget'
 
-import type { AuthClient } from './'
-
 export type NetlifyIdentity = typeof NetlifyIdentityNS
 
-export const netlify = (client: NetlifyIdentity): AuthClient => {
+export const netlify = (client: NetlifyIdentity) => {
   return {
     type: 'netlify',
     client,
@@ -47,5 +45,5 @@ export const netlify = (client: NetlifyIdentity): AuthClient => {
     getUserMetadata: async () => {
       return client.currentUser()
     },
-  }
+  } as const
 }

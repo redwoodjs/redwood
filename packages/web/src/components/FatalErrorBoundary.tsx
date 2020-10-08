@@ -14,7 +14,9 @@ class InfallibleErrorBoundary extends React.Component {
   }
 }
 
-class FatalErrorBoundary extends React.Component {
+class FatalErrorBoundary extends React.Component<{
+  page: React.ComponentType
+}> {
   state = { hasError: false }
 
   static getDerivedStateFromError() {

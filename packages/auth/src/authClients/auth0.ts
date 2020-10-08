@@ -1,15 +1,15 @@
-import type { Auth0Client as Auth0 } from '@auth0/auth0-spa-js'
-
-import type { AuthClient } from './'
-
-export type AuthClientAuth0 = AuthClient
+import type {
+  Auth0Client as Auth0,
+  LogoutOptions,
+  RedirectLoginOptions,
+} from '@auth0/auth0-spa-js'
 
 export type { Auth0 }
 
 // TODO: Map out this user properly.
 export interface Auth0User {}
 
-export const auth0 = (client: Auth0): AuthClientAuth0 => {
+export const auth0 = (client: Auth0) => {
   return {
     type: 'auth0',
     client,
@@ -25,18 +25,19 @@ export const auth0 = (client: Auth0): AuthClientAuth0 => {
         )
       }
     },
-    login: async (options?) => client.loginWithRedirect(options),
-    logout: (options?) => client.logout(options),
-    signup: async (options?) =>
+    login: (options?: RedirectLoginOptions) =>
+      client.loginWithRedirect(options),
+    logout: (options?: LogoutOptions) => client.logout(options),
+    signup: (options?: RedirectLoginOptions) =>
       client.loginWithRedirect({
         ...options,
         screen_hint: 'signup',
         prompt: 'login',
       }),
-    getToken: async () => client.getTokenSilently(),
+    getToken: () => client.getTokenSilently(),
     getUserMetadata: async () => {
       const user = await client.getUser()
       return user || null
     },
-  }
+  } as const
 }

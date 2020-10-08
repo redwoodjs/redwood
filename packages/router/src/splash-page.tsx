@@ -1,4 +1,4 @@
-const SplashPage = ({ isRedwood }) => (
+const SplashPage = ({ isRedwood }: { isRedwood: boolean }) => (
   <main>
     <section>
       <style

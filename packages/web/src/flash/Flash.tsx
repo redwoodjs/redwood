@@ -1,8 +1,15 @@
 import { useEffect, useState } from 'react'
 
-import { useFlash } from 'src/flash/FlashContext'
+import type { FlashMessage } from './Flash.types'
 
-const FlashMessage = ({ message, timeout }) => {
+import { useFlash } from './FlashContext'
+
+interface FlashMessageProps {
+  message: FlashMessage
+  timeout: number
+}
+
+const FlashMessageView = ({ message, timeout }: FlashMessageProps) => {
   const { dismissMessage, cycleMessage } = useFlash()
   const [classes, setClasses] = useState('')
 
@@ -13,13 +20,13 @@ const FlashMessage = ({ message, timeout }) => {
   }, [message.id])
 
   useEffect(() => {
-    let fadeOutTimer
     if (timeout) {
-      fadeOutTimer = setTimeout(() => {
+      const fadeOutTimer = setTimeout(() => {
         setClasses('rw-slide-up')
       }, timeout)
+      return () => clearTimeout(fadeOutTimer)
     }
-    return () => clearTimeout(fadeOutTimer)
+    return
   }, [timeout])
 
   return (
@@ -40,7 +47,11 @@ const FlashMessage = ({ message, timeout }) => {
   )
 }
 
-const Flash = ({ timeout }) => {
+interface FlashProps {
+  timeout: number
+}
+
+const Flash = ({ timeout }: FlashProps) => {
   const { messages } = useFlash()
 
   if (!messages.length) {
@@ -50,7 +61,7 @@ const Flash = ({ timeout }) => {
   return (
     <div className="rw-flash" data-testid="flash">
       {messages.map((msg) => (
-        <FlashMessage key={msg.id} message={msg} timeout={timeout} />
+        <FlashMessageView key={msg.id} message={msg} timeout={timeout} />
       ))}
     </div>
   )

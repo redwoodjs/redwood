@@ -3,7 +3,7 @@ import { render, fireEvent } from '@testing-library/react'
 import { toHaveClass } from '@testing-library/jest-dom/matchers'
 expect.extend({ toHaveClass })
 
-import { FlashProvider, useFlash } from 'src/flash/FlashContext'
+import { FlashProvider, useFlash } from '../FlashContext'
 
 const testMessages = {
   basic: { text: 'A basic message.', classes: 'last but-not-least', id: 0 },

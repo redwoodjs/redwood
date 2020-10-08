@@ -7,6 +7,10 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "license": "MIT",
+  "peerDependency": {
+    "react": "*",
+    "magic-sdk": "^2.5.0"
+  },
   "devDependencies": {
     "@auth0/auth0-spa-js": "^1.7.0",
     "@supabase/supabase-js": "^0.36.4",

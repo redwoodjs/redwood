@@ -1,5 +1,3 @@
-/* eslint-disable no-redeclare */
-/* eslint-disable no-undef */
 import type {
   mockGraphQLQuery as _mockGraphQLQuery,
   mockGraphQLMutation as _mockGraphQLMutation,

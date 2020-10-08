@@ -1,16 +1,25 @@
 import { useEffect } from 'react'
 import { render, cleanup, fireEvent } from '@testing-library/react'
+import { renderHook } from '@testing-library/react-hooks'
 // TODO: Remove when jest configs are in place
 import { toHaveClass, toHaveStyle } from '@testing-library/jest-dom/matchers'
 expect.extend({ toHaveClass, toHaveStyle })
 
-import Flash from 'src/flash/Flash'
-import { FlashProvider, useFlash } from 'src/flash/FlashContext'
+import Flash from '../Flash'
+import { FlashProvider, useFlash } from '../FlashContext'
 
 const testMessages = [
   { text: 'A basic message', classes: 'error' },
   { text: 'Another message', classes: 'success' },
 ]
+
+describe('useFlash', () => {
+  it('throws Error when not called in FlashContext', () => {
+    expect(renderHook(() => useFlash()).result.error).toEqual(
+      Error('`useFlash` can only be used inside a `FlashProvider`')
+    )
+  })
+})
 
 describe('Flash', () => {
   const TestComponent = ({ messages, timeout }) => {
@@ -20,8 +29,7 @@ describe('Flash', () => {
       if (messages) {
         messages.forEach((msg) => addMessage(msg.text, msg))
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [messages])
+    }, [addMessage, messages])
 
     return <Flash timeout={timeout} />
   }

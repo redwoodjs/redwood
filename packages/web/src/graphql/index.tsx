@@ -17,7 +17,7 @@ type GraphQLClientConfig = Omit<
  * Create a GraphQL Client (Apollo) that points to the `apiProxyPath` that's
  * specified in `redwood.toml`.
  */
-export const createGraphQLClient = (config: GraphQLClientConfig) => {
+export const createGraphQLClient = (config?: GraphQLClientConfig) => {
   return new ApolloClient({
     uri: `${window.__REDWOOD__API_PROXY_PATH}/graphql`,
     cache: new InMemoryCache(),
@@ -25,14 +25,14 @@ export const createGraphQLClient = (config: GraphQLClientConfig) => {
   })
 }
 
+export interface GraphQLProviderProps
+  extends Omit<ApolloProviderProps<unknown>, 'client'> {
+  config?: GraphQLClientConfig
+}
+
 /**
  * A GraphQL provider that instantiates a client automatically.
  */
-export const GraphQLProvider = ({
-  config,
-  ...rest
-}: {
-  config: GraphQLClientConfig
-} & Omit<ApolloProviderProps<any>, 'client'>) => {
-  return <ApolloProvider client={createGraphQLClient(config)} {...rest} />
-}
+export const GraphQLProvider = ({ config, ...rest }: GraphQLProviderProps) => (
+  <ApolloProvider client={createGraphQLClient(config)} {...rest} />
+)

@@ -98,6 +98,9 @@ export class AuthProvider extends React.Component<
 
   constructor(props: AuthProviderProps) {
     super(props)
+    //? how about just passing `createXYClient(client)` in props instead
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     this.rwClient = createAuthClient(props.client, props.type)
   }
 

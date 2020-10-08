@@ -1,6 +1,8 @@
+import { createContext } from 'react'
+
 /** Create a React Context with the given name. */
-const createNamedContext = (name, defaultValue) => {
-  const Ctx = React.createContext(defaultValue)
+const createNamedContext = <T>(name: string, defaultValue?: T) => {
+  const Ctx = createContext(defaultValue)
   Ctx.displayName = name
   return Ctx
 }
@@ -10,7 +12,7 @@ const createNamedContext = (name, defaultValue) => {
  *
  *  '/blog/{year}/{month}/{day:Int}' => [['year'], ['month'], ['day', 'Int']]
  */
-const paramsForRoute = (route) => {
+const paramsForRoute = (route: string) => {
   // Match the strings between `{` and `}`.
   const params = [...route.matchAll(/\{([^}]+)\}/g)]
   return params
@@ -47,7 +49,7 @@ const coreParamTypes = {
  *  matchPath('/post/{id:Int}', '/post/7')
  *  => { match: true, params: { id: 7 }}
  */
-const matchPath = (route, pathname, paramTypes) => {
+function matchPath(route: string, pathname: string, paramTypes?: any) {
   // Get the names and the transform types for the given route.
   const routeParams = paramsForRoute(route)
   const allParamTypes = { ...coreParamTypes, ...paramTypes }
@@ -71,7 +73,7 @@ const matchPath = (route, pathname, paramTypes) => {
   }
 
   // Does the `pathname` match the route?
-  const matches = [...pathname.matchAll(`^${typeConstrainedRoute}$`)]
+  const matches = [...pathname.matchAll(RegExp(`^${typeConstrainedRoute}$`))]
 
   if (matches.length === 0) {
     return { match: false }
@@ -108,7 +110,9 @@ const matchPath = (route, pathname, paramTypes) => {
  * @fixme
  * This utility ignores keys with multiple values such as `?foo=1&foo=2`.
  */
-const parseSearch = (search) => {
+function parseSearch(
+  search?: string | string[][] | Record<string, string> | URLSearchParams
+) {
   const searchParams = new URLSearchParams(search)
 
   return [...searchParams.keys()].reduce(
@@ -125,7 +129,7 @@ const parseSearch = (search) => {
  * are found, a descriptive Error will be thrown, as problems with routes are
  * critical enough to be considered fatal.
  */
-const validatePath = (path) => {
+function validatePath(path: string) {
   // Check that path begins with a slash.
   if (!path.startsWith('/')) {
     throw new Error(`Route path does not begin with a slash: "${path}"`)
@@ -137,7 +141,7 @@ const validatePath = (path) => {
 
   // Check for duplicate named params.
   const matches = path.matchAll(/\{([^}]+)\}/g)
-  let memo = {}
+  const memo: Record<string, boolean> = {}
   for (const match of matches) {
     // Extract the param's name to make sure there aren't any duplicates
     const param = match[1].split(':')[0]
@@ -159,7 +163,7 @@ const validatePath = (path) => {
  *   replaceParams('/tags/{tag}', { tag: 'code', extra: 'foo' })
  *   => '/tags/code?extra=foo
  */
-const replaceParams = (path, args = {}) => {
+function replaceParams(path: string, args: Record<string, string> = {}) {
   // Split the path apart and replace named parameters with those sent in,
   // then join it back together.
   const parts = path.split('/')
@@ -179,10 +183,9 @@ const replaceParams = (path, args = {}) => {
     .join('/')
 
   // Prepare any unnamed params to be be appended as search params.
-  const queryParams = []
-  Object.keys(args).forEach((key) => {
-    queryParams.push(`${key}=${args[key]}`)
-  })
+  const queryParams: string[] = Object.keys(args).map(
+    (key) => `${key}=${args[key]}`
+  )
 
   // Append any unnamed params as search params.
   if (queryParams.length) {

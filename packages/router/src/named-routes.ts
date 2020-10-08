@@ -3,14 +3,19 @@ import { validatePath, replaceParams } from './internal'
 // The first time the routes are loaded, iterate through them and create the named
 // route functions.
 
-let namedRoutes = {}
+const namedRoutes: Record<
+  string,
+  (args?: Record<string, string>) => string
+> = {}
 let namedRoutesDone = false
 
-const mapNamedRoutes = (routes) => {
+function mapNamedRoutes<
+  P extends { path: string; name: string; notfound?: boolean }
+>(routes: React.ReactElement<P>[]) {
   if (namedRoutesDone) {
     return namedRoutes
   }
-  for (let route of routes) {
+  for (const route of routes) {
     const { path, name, notfound } = route.props
 
     // Skip the notfound route.
@@ -22,7 +27,8 @@ const mapNamedRoutes = (routes) => {
     validatePath(path)
 
     // Create the named route function for this route.
-    namedRoutes[name] = (args = {}) => replaceParams(path, args)
+    namedRoutes[name] = (args: Record<string, string> = {}) =>
+      replaceParams(path, args)
   }
 
   // Only need to do this once.
