@@ -1,5 +1,6 @@
 import type { NetlifyIdentity } from './netlify'
 import type { Auth0, Auth0User } from './auth0'
+import type { AzureAd, AzureAdUser } from './azureAd'
 import type { GoTrue, GoTrueUser } from './goTrue'
 import type { MagicLink, MagicUser } from './magicLink'
 import type { Firebase } from './firebase'
@@ -8,6 +9,7 @@ import type { Custom } from './custom'
 //
 import { netlify } from './netlify'
 import { auth0 } from './auth0'
+import { azureAd } from './azureAd'
 import { goTrue } from './goTrue'
 import { magicLink } from './magicLink'
 import { firebase } from './firebase'
@@ -17,6 +19,7 @@ import { custom } from './custom'
 const typesToClients = {
   netlify,
   auth0,
+  azureAd,
   goTrue,
   magicLink,
   firebase,
@@ -27,6 +30,7 @@ const typesToClients = {
 
 export type SupportedAuthClients =
   | Auth0
+  | AzureAd
   | GoTrue
   | NetlifyIdentity
   | MagicLink
@@ -37,10 +41,11 @@ export type SupportedAuthClients =
 export type SupportedAuthTypes = keyof typeof typesToClients
 
 export type { Auth0User }
+export type { AzureAdUser }
 export type { GoTrueUser }
 export type { MagicUser }
 export type { SupabaseUser }
-export type SupportedUserMetadata = Auth0User | GoTrueUser | MagicUser | SupabaseUser
+export type SupportedUserMetadata = Auth0User | AzureAdUser | GoTrueUser | MagicUser | SupabaseUser
 
 export interface AuthClient {
   restoreAuthState?(): void | Promise<any>
