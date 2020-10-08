@@ -100,13 +100,11 @@ const DEFAULT_PAGE_LOADING_DELAY = 1000 // milliseconds
 
 const Loaders = ({ allParams, Page, pageLoadingDelay }) => {
   return (
-    <ParamsContext.Provider value={allParams}>
-      <PageLoader
-        spec={normalizePage(Page)}
-        delay={pageLoadingDelay}
-        params={allParams}
-      />
-    </ParamsContext.Provider>
+    <PageLoader
+      spec={normalizePage(Page)}
+      delay={pageLoadingDelay}
+      params={allParams}
+    />
   )
 }
 

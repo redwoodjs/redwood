@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 
-import { createNamedContext } from './internal'
+import { createNamedContext, ParamsContext } from './internal'
 
 export const PageLoadingContext = createNamedContext('PageLoading')
 
@@ -13,7 +13,7 @@ export class PageLoader extends React.PureComponent {
     slowModuleImport: false,
   }
 
-  shouldRerender = (p1, p2) => {
+  shouldActivate = (p1, p2) => {
     if (p1.spec.name !== p2.spec.name) {
       return true
     }
@@ -28,7 +28,7 @@ export class PageLoader extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.shouldRerender(prevProps, this.props)) {
+    if (this.shouldActivate(prevProps, this.props)) {
       this.clearLoadingTimeout()
       this.startPageLoadTransition()
     }
@@ -69,11 +69,13 @@ export class PageLoader extends React.PureComponent {
     const { Page } = this.state
     if (Page) {
       return (
-        <PageLoadingContext.Provider
-          value={{ loading: this.state.slowModuleImport }}
-        >
-          <Page {...this.state.params} />
-        </PageLoadingContext.Provider>
+        <ParamsContext.Provider value={this.state.params}>
+          <PageLoadingContext.Provider
+            value={{ loading: this.state.slowModuleImport }}
+          >
+            <Page {...this.state.params} />
+          </PageLoadingContext.Provider>
+        </ParamsContext.Provider>
       )
     } else {
       return null
