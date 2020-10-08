@@ -4,6 +4,7 @@ export type { AzureAd }
 import type { AuthClient } from './'
 
 export type AzureAdClient = AzureAd
+export interface AzureAdUser {}
 
 export const azureAd = (client: AzureAdClient): AuthClient => {
   return {

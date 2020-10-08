@@ -1,6 +1,6 @@
 import type { NetlifyIdentity } from './netlify'
 import type { Auth0, Auth0User } from './auth0'
-import type { AzureAd } from './azureAd'
+import type { AzureAd, AzureAdUser } from './azureAd'
 import type { GoTrue, GoTrueUser } from './goTrue'
 import type { MagicLink, MagicUser } from './magicLink'
 import type { Firebase } from './firebase'
