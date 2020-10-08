@@ -1,5 +1,5 @@
 export const command = 'deploy <command>'
-export const description = 'Deploy your Redwood project.'
+export const description = 'Deploy your Redwood project'
 import terminalLink from 'terminal-link'
 
 export const builder = (yargs) =>

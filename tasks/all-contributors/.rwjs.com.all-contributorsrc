@@ -514,6 +514,60 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "bboygary",
+      "name": "Ganesh Rane",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/65660344?v=4",
+      "profile": "https://github.com/bboygary",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "ryanmdoyle",
+      "name": "Ryan Doyle",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/20651020?v=4",
+      "profile": "https://github.com/ryanmdoyle",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "ajcwebdev",
+      "name": "Anthony Campolo",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/12433465?v=4",
+      "profile": "https://ajcwebdev.substack.com/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "kimadeline",
+      "name": "Kim-Adeline Miguel",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/51720070?v=4",
+      "profile": "https://twitter.com/kimadeline_m",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "matthewcarlreetz",
+      "name": "Matt Reetz",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/1760821?v=4",
+      "profile": "https://github.com/matthewcarlreetz",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "punitcodes",
+      "name": "Punit Makwana",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/16760252?v=4",
+      "profile": "https://in.linkedin.com/in/punit-makwana/",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7
