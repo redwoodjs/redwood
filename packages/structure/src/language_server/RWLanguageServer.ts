@@ -1,4 +1,3 @@
-import { URL_toFile } from 'src/x/URL'
 import {
   createConnection,
   InitializeParams,
@@ -11,6 +10,7 @@ import { CodeAction } from 'vscode-languageserver-types'
 import { HostWithDocumentsStore, IDEInfo } from '../ide'
 import { RWProject } from '../model'
 import { lazy, memo } from '../x/decorators'
+import { URL_toFile } from '../x/URL'
 import { VSCodeWindowMethods_fromConnection } from '../x/vscode'
 import { Connection_suppressErrors } from '../x/vscode-languageserver'
 import {
