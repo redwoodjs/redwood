@@ -1,4 +1,4 @@
-import { normalize } from 'path'
+import { URL_toFile } from 'src/x/URL'
 import {
   createConnection,
   InitializeParams,
@@ -59,7 +59,7 @@ export class RWLanguageServer {
       const folders = await connection.workspace.getWorkspaceFolders()
       if (folders) {
         for (const folder of folders) {
-          this.projectRoot = normalize(folder.uri.substr(7)) // remove file://
+          this.projectRoot = URL_toFile(folder.uri)
         }
       }
     })
