@@ -1,11 +1,17 @@
-import { basename, sep, normalize } from 'path'
+import { existsSync } from 'fs'
+import { basename, normalize, sep } from 'path'
 
-export function directoryNameResolver(dirName: string): string {
+export function directoryNameResolver(dirName: string): string | undefined {
   dirName = normalize(dirName)
   const parts = dirName.split(sep)
   const pp = parts[parts.length - 1]
   parts.push(pp)
-  return parts.join(sep) + '.js'
+  const extensions = ['.js', '.jsx', '.ts', '.tsx']
+  const pathNoExt = parts.join(sep)
+  for (const ext of extensions) {
+    const path = pathNoExt + ext
+    if (existsSync(path)) return path
+  }
 }
 
 export function followsDirNameConvention(filePath: string): boolean {
