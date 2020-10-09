@@ -6,14 +6,14 @@ export const PageLoadingContext = createNamedContext('PageLoading')
 
 export const usePageLoadingContext = () => useContext(PageLoadingContext)
 
-export class PageLoader extends React.PureComponent {
+export class PageLoader extends React.Component {
   state = {
     Page: undefined,
     pageName: undefined,
     slowModuleImport: false,
   }
 
-  shouldActivate = (p1, p2) => {
+  propsChanged = (p1, p2) => {
     if (p1.spec.name !== p2.spec.name) {
       return true
     }
@@ -23,14 +23,37 @@ export class PageLoader extends React.PureComponent {
     return false
   }
 
+  stateChanged = (s1, s2) => {
+    if (s1.pageName !== s2.pageName) {
+      return true
+    }
+    if (JSON.stringify(s1.params) !== JSON.stringify(s2.params)) {
+      return true
+    }
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.propsChanged(this.props, nextProps)) {
+      this.clearLoadingTimeout()
+      this.startPageLoadTransition(nextProps)
+      return false
+    }
+
+    if (this.stateChanged(this.state, nextState)) {
+      return true
+    }
+
+    return true
+  }
+
   componentDidMount() {
-    this.startPageLoadTransition()
+    this.startPageLoadTransition(this.props)
   }
 
   componentDidUpdate(prevProps) {
-    if (this.shouldActivate(prevProps, this.props)) {
+    if (this.propsChanged(prevProps, this.props)) {
       this.clearLoadingTimeout()
-      this.startPageLoadTransition()
+      this.startPageLoadTransition(this.props)
     }
   }
 
@@ -38,8 +61,8 @@ export class PageLoader extends React.PureComponent {
     clearTimeout(this.loadingTimeout)
   }
 
-  startPageLoadTransition = async () => {
-    const { spec, delay } = this.props
+  startPageLoadTransition = async (props) => {
+    const { spec, delay } = props
     const { loader, name } = spec
 
     // Update the context if importing the page is taking longer
@@ -61,7 +84,7 @@ export class PageLoader extends React.PureComponent {
       pageName: name,
       Page: module.default,
       slowModuleImport: false,
-      params: this.props.params,
+      params: props.params,
     })
   }
 
