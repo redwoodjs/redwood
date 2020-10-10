@@ -1,18 +1,18 @@
 {
   "name": "@redwoodjs/testing",
   "description": "Tools, wrappers and configuration for testing a Redwood project.",
-  "version": "0.18.0",
+  "version": "0.19.3",
   "files": [
     "dist"
   ],
   "main": "dist/index.js",
   "license": "MIT",
   "dependencies": {
-    "@redwoodjs/internal": "^0.18.0",
-    "@redwoodjs/web": "^0.18.0",
+    "@redwoodjs/internal": "^0.19.3",
+    "@redwoodjs/web": "^0.19.3",
     "@testing-library/react": "^11.0.2",
     "@types/react": "16.9.38",
-    "msw": "^0.20.0"
+    "msw": "^0.21.2"
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",
@@ -22,5 +22,6 @@
     "build:watch": "nodemon --watch src --ext 'js,ts,tsx' --ignore dist --exec 'yarn build'",
     "test": "jest",
     "test:watch": "yarn test --watch"
-  }
+  },
+  "gitHead": "c235e7d7186e5e258764699c0e0e1d5cc0fdd0b5"
 }

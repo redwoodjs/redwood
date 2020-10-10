@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/api",
-  "version": "0.18.0",
+  "version": "0.19.3",
   "files": [
     "dist"
   ],
@@ -8,13 +8,13 @@
   "types": "./dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "apollo-server-lambda": "2.17.0",
-    "@prisma/client": "2.6.2",
-    "@redwoodjs/internal": "^0.18.0",
+    "@prisma/client": "2.8.1",
+    "@redwoodjs/internal": "^0.19.3",
+    "apollo-server-lambda": "2.18.2",
     "core-js": "3.6.5",
     "graphql": "^15.3.0",
     "graphql-scalars": "^1.2.7",
-    "graphql-tools": "6.2.1",
+    "graphql-tools": "6.2.4",
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^1.8.1",
     "lodash.merge": "^4.6.2",
@@ -22,8 +22,8 @@
     "merge-graphql-schemas": "^1.7.6"
   },
   "devDependencies": {
-    "@redwoodjs/auth": "^0.18.0",
-    "@redwoodjs/dev-server": "^0.18.0",
+    "@redwoodjs/auth": "^0.19.3",
+    "@redwoodjs/dev-server": "^0.19.3",
     "@types/jsonwebtoken": "^8.3.9",
     "@types/lodash.merge": "^4.6.6",
     "@types/lodash.omitby": "^4.6.6"
@@ -42,5 +42,5 @@
     "test": "jest",
     "test:watch": "yarn test --watch"
   },
-  "gitHead": "1cb7c8d1085147787209af423c33a9c91c3e6517"
+  "gitHead": "c235e7d7186e5e258764699c0e0e1d5cc0fdd0b5"
 }

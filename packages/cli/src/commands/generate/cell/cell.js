@@ -1,5 +1,4 @@
 import pascalcase from 'pascalcase'
-import { getProject } from '@redwoodjs/structure'
 
 import {
   templateForComponentFile,
@@ -9,7 +8,9 @@ import {
 const COMPONENT_SUFFIX = 'Cell'
 const REDWOOD_WEB_PATH_NAME = 'components'
 
-const getCellOperationNames = () => {
+const getCellOperationNames = async () => {
+  const { getProject } = await import('@redwoodjs/structure')
+
   return getProject()
     .cells.map((x) => {
       return x.queryOperationName
@@ -17,20 +18,22 @@ const getCellOperationNames = () => {
     .filter(Boolean)
 }
 
-const uniqueOperationName = (name, index = 1) => {
+const uniqueOperationName = async (name, index = 1) => {
   let operationName =
     index <= 1
       ? `${pascalcase(name)}Query`
       : `${pascalcase(name)}Query_${index}`
-  if (!getCellOperationNames().includes(operationName)) {
+
+  const cellOperationNames = await getCellOperationNames()
+  if (!cellOperationNames.includes(operationName)) {
     return operationName
   }
   return uniqueOperationName(name, index + 1)
 }
 
-export const files = ({ name }) => {
+export const files = async ({ name }) => {
   // Create a unique operation name.
-  const operationName = uniqueOperationName(name)
+  const operationName = await uniqueOperationName(name)
 
   const cellFile = templateForComponentFile({
     name,

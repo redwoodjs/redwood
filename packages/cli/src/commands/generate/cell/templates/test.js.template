@@ -1,30 +1,26 @@
 import { render, screen } from '@redwoodjs/testing'
-
 import { Loading, Empty, Failure, Success } from './${pascalName}Cell'
+import { standard } from './${pascalName}Cell.mock'
 
 describe('${pascalName}Cell', () => {
-  it('Loading renders successfully', () => {
+  test('Loading renders successfully', () => {
     render(<Loading />)
-    // Use screen.debug() to see output.
-    expect(screen.queryByText('Loading...')).toBeInTheDocument()
+    // Use screen.debug() to see output
+    expect(screen.getByText('Loading...')).toBeInTheDocument()
   })
 
-  it('Empty renders successfully', () => {
+  test('Empty renders successfully', async () => {
     render(<Empty />)
-    expect(screen.queryByText('Empty')).toBeInTheDocument()
+    expect(screen.getByText('Empty')).toBeInTheDocument()
   })
 
-  it('Failure renders successfully', () => {
-    render(<Failure error={{ message: 'Oh no!' }} />)
-    expect(screen.queryByText('Error: Oh no!')).toBeInTheDocument()
+  test('Failure renders successfully', async () => {
+    render(<Failure error={new Error('Oh no')} />)
+    expect(screen.getByText(/Oh no/i)).toBeInTheDocument()
   })
 
-  it('Success renders successfully', () => {
-    render(
-      <Success userExample={{ ${camelName}: { objectKey: 'objectValue' } }} />
-    )
-    expect(
-      screen.queryByText('{"${camelName}":{"objectKey":"objectValue"}}')
-    ).toBeInTheDocument()
+  test('Success renders successfully', async () => {
+    render(<Success ${camelName}={standard().${camelName}} />)
+    expect(screen.getByText(/42/i)).toBeInTheDocument()
   })
 })

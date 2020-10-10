@@ -140,6 +140,10 @@ export const handler = async ({ provider, force }) => {
             )
           },
         },
+      providerData?.prismaBinaryTargetAdditions && {
+        title: 'Adding necessary Prisma binaries...',
+        task: () => providerData.prismaBinaryTargetAdditions()
+      },
       {
         title: 'One more thing...',
         task: (_ctx, task) => {
