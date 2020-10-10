@@ -1,16 +1,29 @@
 import { useState, useEffect } from 'react'
 
-import { FlashProvider } from 'src/flash'
-import { GraphQLProvider } from 'src/graphql'
+import type { AuthContextInterface } from '@redwoodjs/auth'
 
-const GraphQLProviderWithAuth = ({
+// @ts-expect-error - no defs
+import { FlashProvider } from 'src/flash'
+import {
+  GraphQLClientConfig,
+  GraphQLProvider,
+  GraphQLProviderProps,
+} from 'src/graphql'
+
+type RedwoodProviderProps = {
+  useAuth: () => AuthContextInterface
+  graphQLClientConfig: GraphQLClientConfig
+  children: React.ReactNode | React.ReactNode[] | null
+} & Omit<GraphQLProviderProps, 'config' | 'children'>
+
+const GraphQLProviderWithAuth: React.FC<RedwoodProviderProps> = ({
   useAuth,
   graphQLClientConfig = { headers: {} },
   children,
   ...rest
 }) => {
   const { loading, isAuthenticated, getToken, type } = useAuth()
-  const [authToken, setAuthToken] = useState()
+  const [authToken, setAuthToken] = useState<string | null>()
 
   useEffect(() => {
     const fetchAuthToken = async () => {
@@ -68,7 +81,7 @@ const GraphQLProviderWithAuth = ({
  * When `AuthProvider` is instantiated this component will automatically add
  * Authorization headers to each request.
  */
-const RedwoodProvider = ({
+const RedwoodProvider: React.FC<RedwoodProviderProps> = ({
   useAuth = window.__REDWOOD__USE_AUTH,
   graphQLClientConfig,
   children,
