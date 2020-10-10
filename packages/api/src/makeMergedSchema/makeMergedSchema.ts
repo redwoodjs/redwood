@@ -4,7 +4,7 @@ import {
   IResolvers,
   IExecutableSchemaDefinition,
 } from 'apollo-server-lambda'
-import { mergeTypes } from 'merge-graphql-schemas'
+import { mergeTypeDefs } from 'graphql-tools'
 import merge from 'lodash.merge'
 import omitBy from 'lodash.omitby'
 import { GraphQLSchema, GraphQLFieldMap } from 'graphql'
@@ -155,7 +155,7 @@ export const makeMergedSchema = ({
   services: Services
   schemaDirectives?: IExecutableSchemaDefinition['schemaDirectives']
 }) => {
-  const typeDefs = mergeTypes(
+  const typeDefs = mergeTypeDefs(
     [rootSchema.schema, ...Object.values(schemas).map(({ schema }) => schema)],
     { all: true }
   )
