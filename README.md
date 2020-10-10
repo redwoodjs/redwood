@@ -28,7 +28,7 @@ Redwood is the latest open source project initiated by Tom Preston-Werner, cofou
 > [Redwood Tutorial](https://redwoodjs.com/tutorial). Have fun!
 
 **EXAMPLES:** If you'd like to see some examples of what a Redwood application looks
-like, take a look at the following projects:
+like, take a look at the following projects:  
 
 - [Todo](https://github.com/redwoodjs/example-todo)
 - [Blog](https://github.com/redwoodjs/example-blog)
