@@ -18,8 +18,7 @@
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^1.8.1",
     "lodash.merge": "^4.6.2",
-    "lodash.omitby": "^4.6.0",
-    "merge-graphql-schemas": "^1.7.6"
+    "lodash.omitby": "^4.6.0"
   },
   "devDependencies": {
     "@redwoodjs/auth": "^0.19.3",
