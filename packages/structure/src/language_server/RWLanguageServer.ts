@@ -1,4 +1,3 @@
-import { normalize } from 'path'
 import {
   createConnection,
   InitializeParams,
@@ -11,6 +10,7 @@ import { CodeAction } from 'vscode-languageserver-types'
 import { HostWithDocumentsStore, IDEInfo } from '../ide'
 import { RWProject } from '../model'
 import { lazy, memo } from '../x/decorators'
+import { URL_toFile } from '../x/URL'
 import { VSCodeWindowMethods_fromConnection } from '../x/vscode'
 import { Connection_suppressErrors } from '../x/vscode-languageserver'
 import {
@@ -59,7 +59,7 @@ export class RWLanguageServer {
       const folders = await connection.workspace.getWorkspaceFolders()
       if (folders) {
         for (const folder of folders) {
-          this.projectRoot = normalize(folder.uri.substr(7)) // remove file://
+          this.projectRoot = URL_toFile(folder.uri)
         }
       }
     })
