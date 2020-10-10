@@ -61,8 +61,7 @@ const installTags = (tag, isAuth) => {
 }
 
 const shutdownApi = () => {
-  /** This is necessary to avoid weird prisma related
-   * crashes on upgrades when the server is running. */
+  /** Relates to prisma/client issue, @see: https://github.com/redwoodjs/redwood/issues/1083 */
   return [
     {
       title: '...',
@@ -72,6 +71,49 @@ const shutdownApi = () => {
         } catch (e) {
           console.error(
             `Error whilst shutting down "api" port: ${c.error(e.message)}`
+          )
+        }
+      },
+    },
+  ]
+}
+
+const prismaUpdate = () => {
+  /** Relates to prisma/client issue, @see: https://github.com/redwoodjs/redwood/issues/1083
+   * Here we specifically regenerate @prisma/client using prisma's own magic.*/
+  return [
+    {
+      title: '...',
+      task: async (_ctx, _task) => {
+        try {
+          const { stdout } = await execa.command(
+            'yarn rw db up'
+          )
+        } catch (e) {
+          console.error(
+            `Error whilst updating @prisma/client (./node_modules/.prisma): ${c.error(e.message)}`
+          )
+        }
+      },
+    },
+  ]
+}
+
+const rebootDev = () => {
+  /** Relates to prisma/client issue, @see: https://github.com/redwoodjs/redwood/issues/1083
+   * Here we reboot the dev server so it uses the newly generated @prisma/client. Usually that does the trick! */
+  return [
+    {
+      title: '...',
+      task: async (_ctx, _task) => {
+        try {
+          const { stdout } = await execa.command(
+            'yarn rw dev'
+          )
+        } catch (e) {
+          console.error(
+            `Error whilst rebooting the dev server: ${c.error(e.message)}
+            \n\nYou may wish to do it manually.`
           )
         }
       },
@@ -167,6 +209,15 @@ export const handler = async ({ d, tag }) => {
         title: 'Running upgrade command',
         task: () => new Listr(runUpgrade({ d, tag })),
       },
+      {
+        title: 'Running prisma client update',
+        task: () => new Listr(prismaUpdate({ d, tag })),
+      },
+      {
+        title: 'Restarting the dev server',
+        task: () => new Listr(rebootDev({ d, tag })),
+      },
+
     ],
     { collapse: false }
   )
