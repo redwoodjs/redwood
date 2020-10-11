@@ -64,15 +64,19 @@ const updateInputSDL = (model, types = {}) => {
   return inputSDL(model, false, types)
 }
 
-const idType = (model) => {
+const idType = (model, crud) => {
+  if (!crud) {
+    return undefined
+  }
+
   const idField = model.fields.find((field) => field.isId)
   if (!idField) {
-    throw new Error('Cannot generate SDL without an `id` database column')
+    throw new Error('Cannot generate CRUD SDL without an `id` database column')
   }
   return idField.type
 }
 
-const sdlFromSchemaModel = async (name) => {
+const sdlFromSchemaModel = async (name, crud) => {
   const model = await getSchema(name)
 
   if (model) {
@@ -104,7 +108,7 @@ const sdlFromSchemaModel = async (name) => {
       query: querySDL(model).join('\n    '),
       createInput: createInputSDL(model, types).join('\n    '),
       updateInput: updateInputSDL(model, types).join('\n    '),
-      idType: idType(model),
+      idType: idType(model, crud),
       relations: relationsForModel(model),
       enums,
     }
@@ -123,7 +127,7 @@ export const files = async ({ name, crud, typescript, javascript }) => {
     idType,
     relations,
     enums,
-  } = await sdlFromSchemaModel(pascalcase(pluralize.singular(name)))
+  } = await sdlFromSchemaModel(pascalcase(pluralize.singular(name)), crud)
 
   let template = generateTemplate(
     path.join('sdl', 'templates', `sdl.ts.template`),
