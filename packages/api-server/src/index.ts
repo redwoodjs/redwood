@@ -2,9 +2,17 @@
 import path from 'path'
 import yargs from 'yargs'
 import requireDir from 'require-dir'
+import { getPaths } from '@redwoodjs/internal'
+import { config } from 'dotenv-defaults'
 
 import { server, setLambdaFunctions } from './http'
 import { requestHandler } from './requestHandlers/awsLambda'
+
+config({
+  path: path.join(getPaths().base, '.env'),
+  encoding: 'utf8',
+  defaults: path.join(getPaths().base, '.env.defaults'),
+})
 
 const { port, functions } = yargs
   .option('port', { default: 8911, type: 'number' })
