@@ -158,8 +158,6 @@ export class RWRoute extends BaseNode {
         this.jsxNode!,
         "The 'Not Found' page cannot be within a <Private> tag"
       )
-    if (this.isAuthenticated && this.isNotFound)
-      yield err(this.jsxNode!, "The 'Not Found' page cannot be authenticated")
     if (this.isNotFound && this.path)
       yield err(
         this.path_literal_node!,
