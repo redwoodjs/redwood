@@ -7,9 +7,21 @@ const getNewPath = (value: string, filename: string) => {
   const dirname = path.dirname(value)
   const basename = path.basename(value)
 
-  const newImportPath = [dirname, basename, basename].join('/')
+  const indexImportPath = [dirname, basename, 'index'].join('/')
 
-  return resolveFile(path.join(path.dirname(filename), newImportPath))
+  const indexImportPathResolved = resolveFile(
+    path.join(path.dirname(filename), indexImportPath)
+  )
+
+  if (indexImportPathResolved) {
+    // If babel can resolve this path with the index file
+    return indexImportPathResolved
+  } else {
+    // If there isn't a index file
+    const newImportPath = [dirname, basename, basename].join('/')
+
+    return resolveFile(path.join(path.dirname(filename), newImportPath))
+  }
 }
 
 export default function ({ types: t }: { types: typeof types }): PluginObj {

@@ -19,11 +19,16 @@ const testCases = [
       'export { pew } from "./__fixtures__/directory-named-imports/Module"',
     output: `export { pew } from "${__dirname}/__fixtures__/directory-named-imports/Module/Module.js";`,
   },
-  // // Gives preferences to `index.*`
+  // Gives preferences to `index.*`
   {
     input:
       'export { pew } from "./__fixtures__/directory-named-imports/indexModule"',
     output: `export { pew } from "${__dirname}/__fixtures__/directory-named-imports/indexModule/index.js";`,
+  },
+  {
+    input:
+      'export { pew } from "./__fixtures__/directory-named-imports/TSWithIndex"',
+    output: `export { pew } from "${__dirname}/__fixtures__/directory-named-imports/TSWithIndex/index.js";`,
   },
   // Supports "*.ts"
   {
