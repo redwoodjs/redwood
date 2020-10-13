@@ -1,3 +1,4 @@
+import { resolveFile } from '@redwoodjs/internal'
 import path from 'path'
 
 import type { PluginObj, types } from '@babel/core'
@@ -9,7 +10,16 @@ const getNewPath = (value: string, filename: string) => {
   const newImportPath = [dirname, basename, basename].join('/')
 
   try {
-    require.resolve(path.resolve(path.dirname(filename), newImportPath))
+    const fullFilePath = resolveFile(
+      path.resolve(path.dirname(filename), newImportPath)
+    )
+
+    if (!fullFilePath) {
+      throw new Error('Unable to resolve ${fileName}')
+    }
+
+    require.resolve(fullFilePath)
+
     return newImportPath
   } catch (e) {
     return null
