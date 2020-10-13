@@ -1,26 +1,55 @@
 import { useContext } from 'react'
+import isEqual from 'lodash.isequal'
 
-import { createNamedContext } from './internal'
+import { createNamedContext, ParamsContext } from './internal'
 
 export const PageLoadingContext = createNamedContext('PageLoading')
 
 export const usePageLoadingContext = () => useContext(PageLoadingContext)
 
-export class PageLoader extends React.PureComponent {
+export class PageLoader extends React.Component {
   state = {
     Page: undefined,
     pageName: undefined,
     slowModuleImport: false,
   }
 
+  propsChanged = (p1, p2) => {
+    if (p1.spec.name !== p2.spec.name) {
+      return true
+    }
+    return !isEqual(p1.params, p2.params)
+  }
+
+  stateChanged = (s1, s2) => {
+    if (s1.pageName !== s2.pageName) {
+      return true
+    }
+    return !isEqual(s1.params, s2.params)
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.propsChanged(this.props, nextProps)) {
+      this.clearLoadingTimeout()
+      this.startPageLoadTransition(nextProps)
+      return false
+    }
+
+    if (this.stateChanged(this.state, nextState)) {
+      return true
+    }
+
+    return true
+  }
+
   componentDidMount() {
-    this.startPageLoadTransition()
+    this.startPageLoadTransition(this.props)
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.spec.name !== this.props.spec.name) {
+    if (this.propsChanged(prevProps, this.props)) {
       this.clearLoadingTimeout()
-      this.startPageLoadTransition()
+      this.startPageLoadTransition(this.props)
     }
   }
 
@@ -28,8 +57,8 @@ export class PageLoader extends React.PureComponent {
     clearTimeout(this.loadingTimeout)
   }
 
-  startPageLoadTransition = async () => {
-    const { spec, delay } = this.props
+  startPageLoadTransition = async (props) => {
+    const { spec, delay } = props
     const { loader, name } = spec
 
     // Update the context if importing the page is taking longer
@@ -51,7 +80,7 @@ export class PageLoader extends React.PureComponent {
       pageName: name,
       Page: module.default,
       slowModuleImport: false,
-      params: this.props.params,
+      params: props.params,
     })
   }
 
@@ -59,11 +88,13 @@ export class PageLoader extends React.PureComponent {
     const { Page } = this.state
     if (Page) {
       return (
-        <PageLoadingContext.Provider
-          value={{ loading: this.state.slowModuleImport }}
-        >
-          <Page {...this.state.params} />
-        </PageLoadingContext.Provider>
+        <ParamsContext.Provider value={this.state.params}>
+          <PageLoadingContext.Provider
+            value={{ loading: this.state.slowModuleImport }}
+          >
+            <Page {...this.state.params} />
+          </PageLoadingContext.Provider>
+        </ParamsContext.Provider>
       )
     } else {
       return null
