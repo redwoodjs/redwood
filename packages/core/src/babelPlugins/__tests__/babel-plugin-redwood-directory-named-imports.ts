@@ -3,11 +3,16 @@ import * as babel from '@babel/core'
 import namedDirectory from '../babel-plugin-redwood-directory-named-import'
 
 const testCases = [
-  // Directory named exports
+  // Directory named imports
   {
     input: 'import pew from "./__fixtures__/directory-named-imports/Module"',
     output:
       'import pew from "./__fixtures__/directory-named-imports/Module/Module"',
+  },
+  // Directory named imports TSX
+  {
+    input: 'import pew from "./__fixtures__/directory-named-imports/TSX"',
+    output: 'import pew from "./__fixtures__/directory-named-imports/TSX/TSX"',
   },
   // Directory named exports
   {
