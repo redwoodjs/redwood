@@ -1,4 +1,4 @@
-import { resolveFile } from '@redwoodjs/internal'
+import { resolveFile, ensurePosixPath } from '@redwoodjs/internal'
 import path from 'path'
 
 import type { PluginObj, types } from '@babel/core'
@@ -43,7 +43,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
 
         const newPath = getNewPath(value, <string>filename)
         if (!newPath) return
-        const newSource = t.stringLiteral(value.replace(value, newPath))
+        const newSource = t.stringLiteral(ensurePosixPath(newPath))
         p.node.source = newSource
       },
 
@@ -69,7 +69,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
 
         const newPath = getNewPath(value, <string>filename)
         if (!newPath) return
-        const newSource = t.stringLiteral(value.replace(value, newPath))
+        const newSource = t.stringLiteral(ensurePosixPath(newPath))
         // @ts-expect-error - TypeDef must be outdated.
         p.node.source = newSource
       },
