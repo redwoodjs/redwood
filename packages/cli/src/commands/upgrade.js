@@ -141,15 +141,12 @@ const validateTag = (tag) => {
     SEMVER_REGEX.test(tag)
 
   if (!isTagValid) {
-    // Output is quite long, this highlights the error a little bit
-    console.log(
+    // Stop execution
+    throw new Error(
       c.error(
-        'Invalid tag supplied. Supported values: rc, canary or valid semver version'
+        'Invalid tag supplied. Supported values: rc, canary, latest, or valid semver version\n'
       )
     )
-
-    // Stop execution
-    throw new Error('Invalid tag')
   }
 
   return tag
