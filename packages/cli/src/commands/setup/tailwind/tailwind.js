@@ -41,19 +41,36 @@ export const handler = async ({ force }) => {
   const tasks = new Listr([
     {
       title: 'Installing packages...',
-      task: async () => {
-        /**
-         * Install postcss-loader, tailwindcss, and autoprefixer
-         * RedwoodJS currently uses PostCSS v7; postcss-loader and autoprefixers pinned for compatibility
-         */
-        await execa('yarn', [
-          'workspace',
-          'web',
-          'add',
-          '-D',
-          'postcss-loader@4.0.2',
-          'tailwindcss',
-          'autoprefixer@9.8.6',
+      task: () => {
+        return new Listr([
+          {
+            title: 'Install postcss-loader, tailwindcss, and autoprefixer',
+            task: async () => {
+              /**
+               * Install postcss-loader, tailwindcss, and autoprefixer
+               * RedwoodJS currently uses PostCSS v7; postcss-loader and autoprefixers pinned for compatibility
+               */
+              // await execa('yarn', [
+              //   'workspace',
+              //   'web',
+              //   'add',
+              //   '-D',
+              //   'postcss-loader@4.0.2',
+              //   'tailwindcss',
+              //   'autoprefixer@9.8.6',
+              // ])
+            },
+          },
+          {
+            title: 'Sync yarn.lock and node_modules',
+            task: async () => {
+              /**
+               * Sync yarn.lock file and node_modules folder.
+               * Refer https://github.com/redwoodjs/redwood/issues/1301 for more details.
+               */
+              // await execa('yarn', ['install', '--check-files'])
+            },
+          },
         ])
       },
     },
