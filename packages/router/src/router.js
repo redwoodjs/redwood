@@ -117,8 +117,8 @@ const RouterImpl = ({
           const { unauthenticated, role, children } = privateElement.props
           return (
             React.Children.toArray(children)
-              // Make sure only valid objects are considered
-              .filter((x) => typeof x === 'object')
+              // Make sure only valid routes are considered
+              .filter((route) => route.type === Route)
               .map((route) =>
                 React.cloneElement(route, {
                   private: true,
