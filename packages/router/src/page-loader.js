@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import isEqual from 'lodash.isequal'
 
 import { createNamedContext, ParamsContext } from './internal'
 
@@ -17,19 +18,14 @@ export class PageLoader extends React.Component {
     if (p1.spec.name !== p2.spec.name) {
       return true
     }
-    if (JSON.stringify(p1.params) !== JSON.stringify(p2.params)) {
-      return true
-    }
-    return false
+    return !isEqual(p1.params, p2.params)
   }
 
   stateChanged = (s1, s2) => {
     if (s1.pageName !== s2.pageName) {
       return true
     }
-    if (JSON.stringify(s1.params) !== JSON.stringify(s2.params)) {
-      return true
-    }
+    return !isEqual(s1.params, s2.params)
   }
 
   shouldComponentUpdate(nextProps, nextState) {
