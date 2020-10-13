@@ -18,6 +18,8 @@ const UPDATE_USER_PROFILE_MUTATION = gql`
   ) {
     updateUserProfile(id: $id, input: $input) {
       id
+      username
+      userId
     }
   }
 `
