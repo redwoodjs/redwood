@@ -134,7 +134,7 @@ const runUpgrade = ({ d: dryRun, tag }) => {
 
 const SEMVER_REGEX = /(?<=^v?|\sv?)(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*)(?:\.(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*))*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?(?=$|\s)/gi
 const validateTag = (tag) => {
-  const isTagValid = tag === 'rc' || tag === 'canary' || SEMVER_REGEX.test(tag)
+  const isTagValid = tag === 'rc' || tag === 'canary' || tag === 'latest' || SEMVER_REGEX.test(tag)
 
   if (!isTagValid) {
     // Output is quite long, this highlights the error a little bit
