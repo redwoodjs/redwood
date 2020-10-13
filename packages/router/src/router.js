@@ -115,12 +115,17 @@ const RouterImpl = ({
         .map((privateElement) => {
           // Set `Route` props
           const { unauthenticated, role, children } = privateElement.props
-          return React.Children.toArray(children).map((route) =>
-            React.cloneElement(route, {
-              private: true,
-              unauthenticatedRedirect: unauthenticated,
-              role: role,
-            })
+          return (
+            React.Children.toArray(children)
+              // Make sure only valid routes are considered
+              .filter((route) => route.type === Route)
+              .map((route) =>
+                React.cloneElement(route, {
+                  private: true,
+                  unauthenticatedRedirect: unauthenticated,
+                  role: role,
+                })
+              )
           )
         })
         .reduce((a, b) => a.concat(b), []) || []
