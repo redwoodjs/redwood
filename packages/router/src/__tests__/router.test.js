@@ -31,7 +31,7 @@ it('inits routes and navigates as expected', async () => {
       </Private>
 
       <Route
-        path="/param-test/:value"
+        path="/param-test/{value}"
         page={({ value }) => <div>param {value}</div>}
         name="params"
       />
@@ -76,4 +76,28 @@ it('inits routes and navigates as expected', async () => {
 
   act(() => navigate(routes.params({ value: 'two' })))
   await waitFor(() => screen.getByText(/param two/i))
+})
+
+it('inits routes two private routes with a space in between and loads as expected', async () => {
+  const TestRouter = () => (
+    <Router>
+      <Route path="/" page={HomePage} name="home" />
+      <Route path="/about" page={AboutPage} name="about" />
+      <Route path="/redirect" page={RedirectPage} name="redirect" />
+      <Private unauthenticated="home">
+        <Route path="/private" page={PrivatePage} name="private" />{' '}
+        <Route path="/another-private" page={PrivatePage} name="private" />
+      </Private>
+
+      <Route
+        path="/param-test/:value"
+        page={({ value }) => <div>param {value}</div>}
+        name="params"
+      />
+    </Router>
+  )
+  const screen = render(<TestRouter />)
+
+  // starts on home page
+  await waitFor(() => screen.getByText(/Home Page/i))
 })
