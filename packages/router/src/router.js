@@ -98,6 +98,16 @@ const normalizePage = (specOrPage) => {
 
 const DEFAULT_PAGE_LOADING_DELAY = 1000 // milliseconds
 
+const Loaders = ({ allParams, Page, pageLoadingDelay }) => {
+  return (
+    <PageLoader
+      spec={normalizePage(Page)}
+      delay={pageLoadingDelay}
+      params={allParams}
+    />
+  )
+}
+
 const RouterImpl = ({
   pathname,
   search,
@@ -167,18 +177,6 @@ const RouterImpl = ({
           </RouterImpl>
         )
       } else {
-        const Loaders = () => {
-          return (
-            <ParamsContext.Provider value={allParams}>
-              <PageLoader
-                spec={normalizePage(Page)}
-                delay={pageLoadingDelay}
-                params={allParams}
-              />
-            </ParamsContext.Provider>
-          )
-        }
-
         if (route?.props?.private) {
           if (typeof useAuth === 'undefined') {
             throw new Error(
@@ -193,12 +191,22 @@ const RouterImpl = ({
               }
               role={route.props.role}
             >
-              <Loaders />
+              <Loaders
+                allParams={allParams}
+                Page={Page}
+                pageLoadingDelay={pageLoadingDelay}
+              />
             </PrivatePageLoader>
           )
         }
 
-        return <Loaders />
+        return (
+          <Loaders
+            allParams={allParams}
+            Page={Page}
+            pageLoadingDelay={pageLoadingDelay}
+          />
+        )
       }
     }
   }
