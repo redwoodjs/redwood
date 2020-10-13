@@ -9,21 +9,7 @@ const getNewPath = (value: string, filename: string) => {
 
   const newImportPath = [dirname, basename, basename].join('/')
 
-  try {
-    const fullFilePath = resolveFile(
-      path.resolve(path.dirname(filename), newImportPath)
-    )
-
-    if (!fullFilePath) {
-      throw new Error('Unable to resolve ${fileName}')
-    }
-
-    require.resolve(fullFilePath)
-
-    return newImportPath
-  } catch (e) {
-    return null
-  }
+  return resolveFile(path.join(path.dirname(filename), newImportPath))
 }
 
 export default function ({ types: t }: { types: typeof types }): PluginObj {

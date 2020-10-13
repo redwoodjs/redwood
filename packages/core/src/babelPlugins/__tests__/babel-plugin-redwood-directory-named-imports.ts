@@ -6,45 +6,39 @@ const testCases = [
   // Directory named imports
   {
     input: 'import pew from "./__fixtures__/directory-named-imports/Module"',
-    output:
-      'import pew from "./__fixtures__/directory-named-imports/Module/Module"',
+    output: `import pew from "${__dirname}/__fixtures__/directory-named-imports/Module/Module.js";`,
   },
   // Directory named imports TSX
   {
     input: 'import pew from "./__fixtures__/directory-named-imports/TSX"',
-    output: 'import pew from "./__fixtures__/directory-named-imports/TSX/TSX"',
+    output: `import pew from "${__dirname}/__fixtures__/directory-named-imports/TSX/TSX.tsx";`,
   },
   // Directory named exports
   {
     input:
       'export { pew } from "./__fixtures__/directory-named-imports/Module"',
-    output:
-      'export { pew } from "./__fixtures__/directory-named-imports/Module/Module"',
+    output: `export { pew } from "${__dirname}/__fixtures__/directory-named-imports/Module/Module.js";`,
   },
-  // Gives preferences to `index.*`
+  // // Gives preferences to `index.*`
   {
     input:
       'export { pew } from "./__fixtures__/directory-named-imports/indexModule"',
-    output:
-      'export { pew } from "./__fixtures__/directory-named-imports/indexModule"',
+    output: `export { pew } from "${__dirname}/__fixtures__/directory-named-imports/indexModule/index.js";`,
   },
   // Supports "*.ts"
   {
     input: 'export { pew } from "./__fixtures__/directory-named-imports/TS"',
-    output:
-      'export { pew } from "./__fixtures__/directory-named-imports/TS/TS"',
+    output: `export { pew } from "${__dirname}/__fixtures__/directory-named-imports/TS/TS.ts";`,
   },
   // Supports "*.tsx"
   {
     input: 'export { pew } from "./__fixtures__/directory-named-imports/TSX"',
-    output:
-      'export { pew } from "./__fixtures__/directory-named-imports/TSX/TSX"',
+    output: `export { pew } from "${__dirname}/__fixtures__/directory-named-imports/TSX/TSX.tsx";`,
   },
   // Supports "*.jsx"
   {
     input: 'export { pew } from "./__fixtures__/directory-named-imports/JSX"',
-    output:
-      'export { pew } from "./__fixtures__/directory-named-imports/JSX/JSX"',
+    output: `export { pew } from "${__dirname}/__fixtures__/directory-named-imports/JSX/JSX.jsx";`,
   },
 ]
 
