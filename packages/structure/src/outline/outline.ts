@@ -85,7 +85,7 @@ function _router_route(route: RWRoute): TreeItem2 {
     label: route.outlineLabel,
     description: route.outlineDescription,
     command: Command_open(route.location),
-    iconPath: route.isAuthenticated ? 'gist-secret' : 'gist',
+    iconPath: route.isPrivate ? 'gist-secret' : 'gist',
     menu: {
       kind: 'route',
       openComponent: route.page ? Command_open(route.page.uri) : undefined,

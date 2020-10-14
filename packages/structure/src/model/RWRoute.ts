@@ -47,10 +47,6 @@ export class RWRoute extends BaseNode {
     return tagText === 'Private'
   }
 
-  @lazy() get isAuthenticated() {
-    return false // TODO
-  }
-
   @lazy() get hasParameters(): boolean {
     if (!this.path) return false
     // KLUDGE: we need a good path parsing library here
