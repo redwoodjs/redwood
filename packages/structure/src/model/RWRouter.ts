@@ -77,23 +77,20 @@ export class RWRouter extends FileNode {
   *ideInfo() {
     if (this.jsxNode) {
       let location = Location_fromNode(this.jsxNode)
-      if (this.routes.length > 0) {
-        location = Location_fromNode(this.routes[0].jsxNode)
-        const codeLens: CodeLens = {
-          range: location.range,
-          command: Command.create(
-            'Create Page...',
-            'redwoodjs.cli',
-            'generate page...',
-            this.parent.projectRoot
-          ),
-        }
-        yield {
-          kind: 'CodeLens',
-          location,
-          codeLens,
-        } as CodeLensX
+      const codeLens: CodeLens = {
+        range: location.range,
+        command: Command.create(
+          'Create Page...',
+          'redwoodjs.cli',
+          'generate page...',
+          this.parent.projectRoot
+        ),
       }
+      yield {
+        kind: 'CodeLens',
+        location,
+        codeLens,
+      } as CodeLensX
     }
   }
 
