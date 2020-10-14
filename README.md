@@ -67,7 +67,7 @@ use:
 - First class JAMstack-style deployment to [Netlify](https://www.netlify.com/).
 
 ## Quickstart
-- Yarn (>=1.15) and Node.js (>=12) are required to create the basic file structure. (To learn more about Yarn and Node.js requirements, visit the [Node.js and Yarn Versions section](https://redwoodjs.com/tutorial/prerequisites#nodejs-and-yarn-versions) in the Tutorial Prerequisites).
+- Yarn (>=1.15) and Node.js (>=12) are required to create the basic file structure. (To learn more about Yarn and Node.js requirements, visit the [Node.js and Yarn Versions section](https://redwoodjs.com/tutorial/prerequisites#nodejs-and-yarn-versions) in the Tutorial Prerequisites.)
   ```
     yarn create redwood-app ./redwoodblog
   ```
