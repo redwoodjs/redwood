@@ -96,7 +96,7 @@ export const getBaseDirFromFile = (file: string) => {
  */
 export const resolveFile = (
   filePath: string,
-  extensions: string[] = ['.tsx', '.ts', '.js', '.jsx']
+  extensions: string[] = ['.js', '.tsx', '.ts', '.jsx']
 ): string | null => {
   for (const extension of extensions) {
     const p = `${filePath}${extension}`
