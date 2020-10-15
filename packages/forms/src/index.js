@@ -54,7 +54,7 @@ const inputTagProps = (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     if (contextError) {
-      setError(props.name, 'server', contextError)
+      setError(props.name, { type: 'server', message: contextError })
     }
   }, [contextError, props.name, setError])
 
