@@ -1,27 +1,25 @@
-import { resolveFile, ensurePosixPath } from '@redwoodjs/internal'
+import { resolveFile } from '@redwoodjs/internal'
 import path from 'path'
 
 import type { PluginObj, types } from '@babel/core'
 
-const getNewPath = (value: string, filename: string) => {
+const getNewPath = (value: string, filename: string): string | null => {
   const dirname = path.dirname(value)
   const basename = path.basename(value)
 
+  // We try to resolve `index.[js*|ts*]` modules first,
+  // since that's the desired default behaviour
   const indexImportPath = [dirname, basename, 'index'].join('/')
-
-  const indexImportPathResolved = resolveFile(
-    path.join(path.dirname(filename), indexImportPath)
-  )
-
-  if (indexImportPathResolved) {
-    // If babel can resolve this path with the index file
-    return indexImportPathResolved
+  if (resolveFile(path.resolve(path.dirname(filename), indexImportPath))) {
+    return indexImportPath
   } else {
-    // If there isn't a index file
-    const newImportPath = [dirname, basename, basename].join('/')
-
-    return resolveFile(path.join(path.dirname(filename), newImportPath))
+    // No index file found, so try to import the directory-named-module instead
+    const dirnameImportPath = [dirname, basename, basename].join('/')
+    if (resolveFile(path.resolve(path.dirname(filename), dirnameImportPath))) {
+      return dirnameImportPath
+    }
   }
+  return null
 }
 
 export default function ({ types: t }: { types: typeof types }): PluginObj {
@@ -43,7 +41,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
 
         const newPath = getNewPath(value, <string>filename)
         if (!newPath) return
-        const newSource = t.stringLiteral(ensurePosixPath(newPath))
+        const newSource = t.stringLiteral(newPath)
         p.node.source = newSource
       },
 
@@ -62,14 +60,14 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         // We only need this plugin in the module could not be found.
         try {
           require.resolve(value)
-          return // ABORT
+          return // ABORT, since the file was resolved
         } catch {
           // CONTINUE...
         }
 
         const newPath = getNewPath(value, <string>filename)
         if (!newPath) return
-        const newSource = t.stringLiteral(ensurePosixPath(newPath))
+        const newSource = t.stringLiteral(newPath)
         // @ts-expect-error - TypeDef must be outdated.
         p.node.source = newSource
       },
