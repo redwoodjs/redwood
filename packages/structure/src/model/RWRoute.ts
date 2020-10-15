@@ -38,8 +38,13 @@ export class RWRoute extends BaseNode {
     return LocationLike_toLocation(this.jsxNode)
   }
 
-  @lazy() get isAuthenticated() {
-    return false // TODO
+  @lazy() get isPrivate() {
+    const tagText = this.jsxNode
+      .getParentIfKind(tsm.SyntaxKind.JsxElement)
+      ?.getOpeningElement()
+      ?.getTagNameNode()
+      ?.getText()
+    return tagText === 'Private'
   }
 
   @lazy() get hasParameters(): boolean {
@@ -144,8 +149,11 @@ export class RWRoute extends BaseNode {
       )
     if (this.hasPathCollision)
       yield err(this.path_literal_node!, 'Duplicate Path')
-    if (this.isAuthenticated && this.isNotFound)
-      yield err(this.jsxNode!, "The 'Not Found' page cannot be authenticated")
+    if (this.isPrivate && this.isNotFound)
+      yield err(
+        this.jsxNode!,
+        "The 'Not Found' page cannot be within a <Private> tag"
+      )
     if (this.isNotFound && this.path)
       yield err(
         this.path_literal_node!,

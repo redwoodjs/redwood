@@ -5,7 +5,9 @@ const { getPaths } = require('@redwoodjs/internal')
 const { getSharedPlugins } = require('../webpack.common')
 
 module.exports = {
-  stories: [`${getPaths().web.src}/**/*.stories.{tsx,jsx,js}`],
+  stories: [
+    `${getPaths().web.src}/**/*.stories.{tsx,jsx,js}`.replace(/\\/g, '/'),
+  ],
   webpackFinal: (sbConfig, { configType }) => {
     const isEnvProduction = configType === 'production'
 

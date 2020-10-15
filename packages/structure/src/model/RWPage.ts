@@ -14,7 +14,12 @@ export class RWPage extends FileNode {
     super()
   }
   @lazy() get filePath() {
-    return directoryNameResolver(this.path)
+    const f = directoryNameResolver(this.path)
+    if (!f)
+      throw new Error(
+        `could not resolve index filename for directory '${this.path}' using dirname convention`
+      )
+    return f
   }
   @lazy() get route() {
     return this.parent.router.routes.find(

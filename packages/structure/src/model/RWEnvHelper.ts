@@ -74,7 +74,7 @@ export class RWEnvHelper extends BaseNode {
   private env_default_merged_filtered(include: string[]): EnvVarMap {
     return pickBy(
       this.env_default_merged,
-      (k) => k.startsWith('REDWOOD_ENV_') || include?.includes(k)
+      (_v, k) => k.startsWith('REDWOOD_ENV_') || include?.includes(k)
     )
   }
 

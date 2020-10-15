@@ -23,6 +23,16 @@ export type CellSuccessStateComponent =
   | Omit<QueryResultAlias, 'error' | 'loading' | 'data'>
   | DataObject
 
+export type WithCellProps = {
+  beforeQuery?: (props: OperationVariables) => BaseQueryOptions
+  QUERY: DocumentNode | ((before: BaseQueryOptions) => DocumentNode)
+  afterQuery?: (data: DataObject) => DataObject
+  Loading?: React.FC<CellLoadingEmptyStateComponent>
+  Failure?: React.FC<CellFailureStateComponent>
+  Empty?: React.FC<CellLoadingEmptyStateComponent>
+  Success: React.FC<CellSuccessStateComponent>
+}
+
 /**
  * Is a higher-order-component that executes a GraphQL query and automatically
  * manages the lifecycle of that query. If you export named parameters that match
@@ -68,15 +78,7 @@ export const withCell = ({
   Failure,
   Empty,
   Success,
-}: {
-  beforeQuery?: (props: OperationVariables) => BaseQueryOptions
-  QUERY: DocumentNode | ((before: BaseQueryOptions) => DocumentNode)
-  afterQuery?: (data: DataObject) => DataObject
-  Loading?: React.FC<CellLoadingEmptyStateComponent>
-  Failure?: React.FC<CellFailureStateComponent>
-  Empty?: React.FC<CellLoadingEmptyStateComponent>
-  Success: React.FC<CellSuccessStateComponent>
-}) => {
+}: WithCellProps) => {
   const isDataNull = (data: DataObject) => {
     return dataField(data) === null
   }

@@ -70,7 +70,7 @@ import { AuthenticationError, ForbiddenError, parseJWT } from '@redwoodjs/api'
  *   return await db.user.findOne({ where: { decoded.email } })
  * }
  *
- * @example - User info is conatined in the decoded token and roles extracted
+ * @example - User info is contained in the decoded token and roles extracted
  *
  * export const getCurrentUser = async (decoded, { _token, _type }) => {
  *   return { ...decoded, roles: parseJWT({ decoded }).roles }
