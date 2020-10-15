@@ -28,7 +28,7 @@ Redwood is the latest open source project initiated by Tom Preston-Werner, cofou
 > [Redwood Tutorial](https://redwoodjs.com/tutorial). Have fun!
 
 **EXAMPLES:** If you'd like to see some examples of what a Redwood application looks
-like, take a look at the following projects:  
+like, take a look at the following projects:
 
 - [Todo](https://github.com/redwoodjs/example-todo)
 - [Blog](https://github.com/redwoodjs/example-blog)
@@ -49,7 +49,7 @@ use:
 - [Prisma](https://www.prisma.io/)
 - [Jest](https://jestjs.io/) (coming soon)
 - [Storybook](https://storybook.js.org/) (coming soon)
-- [Babel](https://babeljs.io/)  
+- [Babel](https://babeljs.io/)
 - [Webpack](https://webpack.js.org/)
 
 ## Features
@@ -67,7 +67,7 @@ use:
 - First class JAMstack-style deployment to [Netlify](https://www.netlify.com/).
 
 ## Quickstart
-- Yarn is required to create a basic structure. (node: ">=12", yarn: ">=1.15")
+- Yarn (>=1.15) and Node.js (>=12) are required to create the basic file structure. (To learn more about Yarn and Node.js requirements, visit the [Node.js and Yarn Versions section](https://redwoodjs.com/tutorial/prerequisites#nodejs-and-yarn-versions) in the Tutorial Prerequisites.)
   ```
     yarn create redwood-app ./redwoodblog
   ```
@@ -76,7 +76,6 @@ use:
       yarn redwood dev
   ```
 - A browser should automatically open to http://localhost:8910 and you will see the Redwood welcome page.
-- To learn more please visit the redwood docs here: [RedwoodJS](https://redwoodjs.com/tutorial/prerequisites)
 
 ## The Redwood philosophy
 
