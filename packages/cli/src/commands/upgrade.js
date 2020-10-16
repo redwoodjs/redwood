@@ -1,6 +1,7 @@
 import execa from 'execa'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
+import { runCommandTask } from 'src/lib'
 import { getConfig, shutdownPort } from '@redwoodjs/internal'
 
 import c from 'src/lib/colors'
@@ -58,24 +59,6 @@ const installTags = (tag, isAuth) => {
   } else {
     return mainString
   }
-}
-
-const shutdownApi = () => {
-  /** Relates to prisma/client issue, @see: https://github.com/redwoodjs/redwood/issues/1083 */
-  return [
-    {
-      title: '...',
-      task: async (_ctx, _task) => {
-        try {
-          await shutdownPort(getConfig().api.port)
-        } catch (e) {
-          console.error(
-            `Error whilst shutting down "api" port: ${c.error(e.message)}`
-          )
-        }
-      },
-    },
-  ]
 }
 
 const prismaUpdate = () => {
@@ -197,10 +180,6 @@ export const handler = async ({ d, tag }) => {
   // structuring as nested tasks to avoid bug with task.title causing duplicates
   const tasks = new Listr(
     [
-      {
-        title: 'Shutting down the api dev server...',
-        task: () => new Listr(shutdownApi()),
-      },
       {
         title: 'Checking installed packages',
         task: () => new Listr(checkInstalled()),
