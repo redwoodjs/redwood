@@ -8,6 +8,7 @@
   "types": "./dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
+    "@graphql-tools/merge": "^6.2.4",
     "@prisma/client": "2.8.1",
     "@redwoodjs/internal": "^0.19.3",
     "apollo-server-lambda": "2.18.2",
