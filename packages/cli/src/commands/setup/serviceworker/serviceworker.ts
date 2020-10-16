@@ -20,25 +20,25 @@ export const builder = (yargs) => {
 const writeTemplateTo = (
     filename: string,
     dir: string = getPaths().web.public,
-    force: boolean = false
-) : void => writeFile(
-  path.join(dir, filename),
-  fs
-    .readFileSync(
-      path.resolve(__dirname, 'templates', `${filename}.template`)
+    force = false
+): void =>
+    writeFile(
+        path.join(dir, filename),
+        fs
+            .readFileSync(
+                path.resolve(__dirname, 'templates', `${filename}.template`)
+            )
+            .toString(),
+        { overwriteExisting: force }
     )
-    .toString(),
-  { overwriteExisting: force }
-)
 
 const writeTemplatesTo = (
     files: string[],
     dir?: string,
     force?: boolean
-) : void => files
-    .forEach( file => writeTemplateTo( file, dir, force ) )
+): void => files.forEach((file) => writeTemplateTo(file, dir, force))
 
-async function updateIndex(INDEX_PATH: string) : Promise<void> {
+async function updateIndex(INDEX_PATH: string): Promise<void> {
   let index = await fs.readFileSync(INDEX_PATH)
 
   const manifestString = `
@@ -63,22 +63,33 @@ async function updateIndex(INDEX_PATH: string) : Promise<void> {
 export const handler = async ({ force }: { force: boolean }) => {
   const INDEX_PATH = path.join(getPaths().web.src, 'index.html')
 
-  const tasks = new Listr([{
-    title: `Copying template files to ${getPaths().web.public}`,
-    task: () => writeTemplatesTo( ['manifest.json', 'offline.html', 'sw.js'], getPaths().web.public, force )
-  }, {
-    title: `Updating ${getPaths().web.src}/index.html`,
-    task: () => updateIndex( INDEX_PATH )
-  }, {
-    title: 'One more thing...',
-    task: (_ctx: unknown, task: unknown) => {
-      task.title = `One more thing...\n
-          ${c.green('Quick link to some seriously helping post for a first timer:')}\n
-          ${chalk.hex('#e8e8e8')(
-          'https://gomakethings.com/writing-your-first-service-worker-with-vanilla-js/'
-      )}`
+  const tasks = new Listr([
+    {
+      title: `Copying template files to ${getPaths().web.public}`,
+      task: () =>
+          writeTemplatesTo(
+              ['manifest.json', 'offline.html', 'sw.js'],
+              getPaths().web.public,
+              force
+          ),
     },
-  }])
+    {
+      title: `Updating ${getPaths().web.src}/index.html`,
+      task: () => updateIndex(INDEX_PATH),
+    },
+    {
+      title: 'One more thing...',
+      task: (_ctx: unknown, task: unknown) => {
+        task.title = `One more thing...\n
+          ${c.green(
+            'Quick link to some seriously helping post for a first timer:'
+        )}\n
+          ${chalk.hex('#e8e8e8')(
+            'https://gomakethings.com/writing-your-first-service-worker-with-vanilla-js/'
+        )}`
+      },
+    },
+  ])
 
   try {
     await tasks.run()
