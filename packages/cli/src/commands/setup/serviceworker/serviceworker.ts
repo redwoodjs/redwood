@@ -38,8 +38,8 @@ const writeTemplatesTo = (
     force?: boolean
 ): void => files.forEach((file) => writeTemplateTo(file, dir, force))
 
-async function updateIndex(INDEX_PATH: string): Promise<void> {
-  let index = await fs.readFileSync(INDEX_PATH)
+function updateIndex(INDEX_PATH: string): void {
+  let index = fs.readFileSync(INDEX_PATH).toString()
 
   const manifestString = `
   <link href="/manifest.json" rel="manifest"/>
