@@ -9,7 +9,7 @@ import c from 'src/lib/colors'
 import { getPaths, writeFile } from 'src/lib'
 
 export const command = 'tailwind'
-export const description = 'Setup tailwindcss'
+export const description = 'Setup tailwindcss and PostCSS'
 export const builder = (yargs) => {
   yargs.option('force', {
     alias: 'f',
@@ -23,7 +23,7 @@ const tailwindImportsAndNotes = [
   '/**',
   ' * START --- TAILWIND GENERATOR EDIT',
   ' *',
-  ' * `yarn rw generate util tailwind` placed these imports here',
+  ' * `yarn rw setup tailwind` placed these imports here',
   " * to inject Tailwind's styles into your CSS.",
   ' * For more information, see: https://tailwindcss.com/docs/installation#add-tailwind-to-your-css',
   ' */',
@@ -44,15 +44,16 @@ export const handler = async ({ force }) => {
       task: async () => {
         /**
          * Install postcss-loader, tailwindcss, and autoprefixer
+         * RedwoodJS currently uses PostCSS v7; postcss-loader and autoprefixers pinned for compatibility
          */
         await execa('yarn', [
           'workspace',
           'web',
           'add',
           '-D',
-          'postcss-loader',
+          'postcss-loader@4.0.2',
           'tailwindcss',
-          'autoprefixer',
+          'autoprefixer@9.8.6',
         ])
       },
     },
@@ -87,6 +88,17 @@ export const handler = async ({ force }) => {
 
         if (!configExists || force) {
           await execa('yarn', ['tailwindcss', 'init'])
+
+          // opt-in to upcoming changes
+          const config = fs.readFileSync('tailwind.config.js', 'utf-8')
+
+          const uncommentFlags = (str) =>
+            str.replace(/\/{2} ([\w-]+: true)/g, '$1')
+
+          const newConfig = config.replace(/future.*purge/s, uncommentFlags)
+
+          fs.writeFileSync('tailwind.config.js', newConfig)
+
           /**
            * Later, when we can tell the vscode extension where to look for the config,
            * we can put it in web/config/
@@ -109,9 +121,14 @@ export const handler = async ({ force }) => {
     {
       title: 'One more thing...',
       task: (_ctx, task) => {
-        task.title = `One more thing...\n\n   ${chalk.hex('#bf4722')(
-          'Quick link to the docs: '
-        )}https://tailwindcss.com/\n`
+        task.title = `One more thing...\n
+          ${c.green(
+            'Tailwind configured with "upcoming change" opt-in enabled'
+          )}\n
+          ${chalk.hex('#e8e8e8')(
+            'See this doc for info: https://tailwindcss.com/docs/upcoming-changes'
+          )}
+        `
       },
     },
   ])

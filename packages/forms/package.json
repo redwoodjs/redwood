@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/forms",
-  "version": "0.19.1",
+  "version": "0.19.4",
   "files": [
     "dist",
     "src/index.d.ts"
@@ -15,8 +15,8 @@
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "11.0.2",
-    "@testing-library/user-event": "12.1.6",
+    "@testing-library/react": "11.0.4",
+    "@testing-library/user-event": "12.1.7",
     "react": "16.13.1"
   },
   "peerDependencies": {

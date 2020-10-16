@@ -4,9 +4,9 @@ const ${pascalName}Page = (${propParam}) => {
   return (
     <>
       <h1>${pascalName}Page</h1>
-      <p>Find me in <tt>${outputPath}</tt></p>
+      <p>Find me in <code>${outputPath}</code></p>
       <p>
-        My default route is named <tt>${camelName}</tt>, link to me with `
+        My default route is named <code>${camelName}</code>, link to me with `
         <Link to={routes.${camelName}(${ argumentParam })}>${pascalName}<%= argumentParam !== '' ? ' 42' : '' %></Link>`
       </p><% if (paramName !== '') { %>
       <p>

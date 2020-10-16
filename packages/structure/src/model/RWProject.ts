@@ -79,18 +79,29 @@ export class RWProject extends BaseNode {
   }
   // TODO: do we move this to a separate node? (ex: RWDatabase)
   @memo() async prismaDMMF() {
-    return await getDMMF({
-      datamodel: this.host.readFileSync(this.pathHelper.api.dbSchema),
-    })
+    try {
+      // consider case where dmmf doesn't exist (or fails to parse)
+      return await getDMMF({
+        datamodel: this.host.readFileSync(this.pathHelper.api.dbSchema),
+      })
+    } catch (e) {
+      return undefined
+    }
   }
   @memo() async prismaDMMFModelNames() {
-    return (await this.prismaDMMF()).datamodel.models.map((m) => m.name)
+    const dmmf = await this.prismaDMMF()
+    if (!dmmf) return []
+    return dmmf.datamodel.models.map((m) => m.name)
   }
   @lazy() get redwoodTOML(): RWTOML {
     return new RWTOML(join(this.projectRoot, 'redwood.toml'), this)
   }
   @lazy() private get processPagesDir() {
-    return processPagesDir(this.pathHelper.web.pages)
+    try {
+      return processPagesDir(this.pathHelper.web.pages)
+    } catch (e) {
+      return []
+    }
   }
   @lazy() get pages(): RWPage[] {
     return this.processPagesDir.map((p) => new RWPage(p.const, p.path, this))

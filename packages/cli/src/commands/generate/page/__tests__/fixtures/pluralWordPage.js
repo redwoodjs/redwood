@@ -5,10 +5,10 @@ const CatsPage = () => {
     <>
       <h1>CatsPage</h1>
       <p>
-        Find me in <tt>./web/src/pages/CatsPage/CatsPage.js</tt>
+        Find me in <code>./web/src/pages/CatsPage/CatsPage.js</code>
       </p>
       <p>
-        My default route is named <tt>cats</tt>, link to me with `
+        My default route is named <code>cats</code>, link to me with `
         <Link to={routes.cats()}>Cats</Link>`
       </p>
     </>

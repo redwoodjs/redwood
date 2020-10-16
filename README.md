@@ -67,7 +67,7 @@ use:
 - First class JAMstack-style deployment to [Netlify](https://www.netlify.com/).
 
 ## Quickstart
-- Yarn is required to create a basic structure. (node: ">=12", yarn: ">=1.15")
+- Yarn (>=1.15) and Node.js (>=12) are required to create the basic file structure. (To learn more about Yarn and Node.js requirements, visit the [Node.js and Yarn Versions section](https://redwoodjs.com/tutorial/prerequisites#nodejs-and-yarn-versions) in the Tutorial Prerequisites.)
   ```
     yarn create redwood-app ./redwoodblog
   ```
@@ -76,7 +76,6 @@ use:
       yarn redwood dev
   ```
 - A browser should automatically open to http://localhost:8910 and you will see the Redwood welcome page.
-- To learn more please visit the redwood docs here: [RedwoodJS](https://redwoodjs.com/tutorial/prerequisites)
 
 ## The Redwood philosophy
 
@@ -392,6 +391,19 @@ And there you have it.
   <tr>
     <td align="center"><a href="https://github.com/CR1AT0RS"><img src="https://avatars1.githubusercontent.com/u/4299288?v=4" width="100px;" alt=""/><br /><sub><b>cr1at0rs</b></sub></a></td>
     <td align="center"><a href="https://github.com/qooqu"><img src="https://avatars0.githubusercontent.com/u/23623824?v=4" width="100px;" alt=""/><br /><sub><b>qooqu</b></sub></a></td>
+    <td align="center"><a href="https://www.youtube.com/c/awesomedevnotes"><img src="https://avatars2.githubusercontent.com/u/66256957?v=4" width="100px;" alt=""/><br /><sub><b>Android Dev Notes</b></sub></a></td>
+    <td align="center"><a href="http://jeremykratz.com/"><img src="https://avatars3.githubusercontent.com/u/1337020?v=4" width="100px;" alt=""/><br /><sub><b>Jeremy Kratz</b></sub></a></td>
+    <td align="center"><a href="http://kriscoulson.com/"><img src="https://avatars3.githubusercontent.com/u/6943688?v=4" width="100px;" alt=""/><br /><sub><b>Kris Coulson</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://www.aboutmonica.com/"><img src="https://avatars0.githubusercontent.com/u/6998954?v=4" width="100px;" alt=""/><br /><sub><b>Monica Powell</b></sub></a></td>
+    <td align="center"><a href="https://github.com/bboygary"><img src="https://avatars0.githubusercontent.com/u/65660344?v=4" width="100px;" alt=""/><br /><sub><b>Ganesh Rane</b></sub></a></td>
+    <td align="center"><a href="https://github.com/ryanmdoyle"><img src="https://avatars2.githubusercontent.com/u/20651020?v=4" width="100px;" alt=""/><br /><sub><b>Ryan Doyle</b></sub></a></td>
+    <td align="center"><a href="https://ajcwebdev.substack.com/"><img src="https://avatars0.githubusercontent.com/u/12433465?v=4" width="100px;" alt=""/><br /><sub><b>Anthony Campolo</b></sub></a></td>
+    <td align="center"><a href="https://github.com/matthewcarlreetz"><img src="https://avatars0.githubusercontent.com/u/1760821?v=4" width="100px;" alt=""/><br /><sub><b>Matt Reetz</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://in.linkedin.com/in/punit-makwana/"><img src="https://avatars1.githubusercontent.com/u/16760252?v=4" width="100px;" alt=""/><br /><sub><b>Punit Makwana</b></sub></a></td>
   </tr>
 </table>
 

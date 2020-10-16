@@ -1,6 +1,6 @@
+export const command = 'setup <commmand>'
+export const description = 'Initialize project config and install packages'
 import terminalLink from 'terminal-link'
-export const command = 'setup <type>'
-export const description = 'Execute some setup logic'
 
 export const builder = (yargs) =>
   yargs
@@ -9,15 +9,6 @@ export const builder = (yargs) =>
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/reference/command-line-interface#setting-up'
+        'https://redwoodjs.com/reference/command-line-interface#setup'
       )}`
     )
-
-export const yargsDefaults = {
-  force: {
-    alias: 'f',
-    default: false,
-    description: 'Overwrite existing files',
-    type: 'boolean',
-  },
-}

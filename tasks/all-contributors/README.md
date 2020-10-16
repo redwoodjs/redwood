@@ -20,9 +20,11 @@ In general, this is a three-part process:
 2. Merge changes into the main `.all-contributorsrc` file
 3. Update README.md#Contributors with changes
 
-**FILES**  
-**Framework** `redwoodjs/redwood` project:  
-_note: this file is also used for all aggregated contributors_  
+**FILES**
+
+**Framework** `redwoodjs/redwood` project:
+
+_note: this file is also used for all aggregated contributors_
 - `.all-contributorsrc`
 
 **CRWA** `redwoodjs/create-redwood-app` project:
@@ -78,7 +80,7 @@ node mergeContributors.js
 
 ### Step 3: Update the content in README.md#Contributors
 ```bash
-yarn all-contributors generate --config .all-contributorsrc
+yarn all-contributors generate --contributorsPerLine 5 --config .all-contributorsrc
 ```
 
 Don't forget to commit and PR changes.

@@ -13,10 +13,10 @@ const FooBarPage = () => {
     <>
       <h1>FooBarPage</h1>
       <p>
-        Find me in <tt>./web/src/pages/FooBarPage/FooBarPage.js</tt>
+        Find me in <code>./web/src/pages/FooBarPage/FooBarPage.js</code>
       </p>
       <p>
-        My default route is named <tt>fooBar</tt>, link to me with \`
+        My default route is named <code>fooBar</code>, link to me with \`
         <Link to={routes.fooBar()}>FooBar</Link>\`
       </p>
     </>

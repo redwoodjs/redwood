@@ -85,7 +85,7 @@ function _router_route(route: RWRoute): TreeItem2 {
     label: route.outlineLabel,
     description: route.outlineDescription,
     command: Command_open(route.location),
-    iconPath: route.isAuthenticated ? 'gist-secret' : 'gist',
+    iconPath: route.isPrivate ? 'gist-secret' : 'gist',
     menu: {
       kind: 'route',
       openComponent: route.page ? Command_open(route.page.uri) : undefined,
@@ -205,6 +205,7 @@ function _schema(project: RWProject): TreeItem2 {
     ...resourceUriAndCommandFor(project.pathHelper.api.dbSchema),
     async children() {
       const dmmf = await project.prismaDMMF()
+      if (!dmmf) return []
       const models = dmmf.datamodel.models.map((model) => {
         return {
           label: model.name,

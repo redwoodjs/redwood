@@ -2,7 +2,12 @@ import terminalLink from 'terminal-link'
 
 export const command = 'util <util>'
 export const aliases = ['u']
-export const description = 'Quality of life utilities'
+export const description = 'WARNING: deprecated. Use "yarn rw setup" command.'
+
+// ********
+// Deprecated as of September 2020
+// Use "setup" command
+// ********
 
 export const builder = (yargs) =>
   yargs
@@ -11,6 +16,6 @@ export const builder = (yargs) =>
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/reference/command-line-interface'
+        'https://redwoodjs.com/reference/command-line-interface#setup'
       )}`
     )
