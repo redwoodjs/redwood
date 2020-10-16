@@ -13,7 +13,7 @@
     "@babel/register": "^7.9.0",
     "@redwoodjs/internal": "^0.19.4",
     "body-parser": "^1.19.0",
-    "chokidar": "^3.4.0",
+    "chokidar": "^3.4.3",
     "express": "^4.17.1",
     "morgan": "^1.10.0",
     "qs": "^6.9.3",
