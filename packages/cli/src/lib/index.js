@@ -185,8 +185,11 @@ const existsAnyExtensionSync = (file) => {
 export const writeFile = (
   target,
   contents,
-  { overwriteExisting = false } = {}
+  { overwriteExisting = false } = {},
+  task = {}
 ) => {
+  const { base } = getPaths()
+  task.title = `Writing \`./${path.relative(base, target)}\``
   if (!overwriteExisting && fs.existsSync(target)) {
     throw new Error(`${target} already exists.`)
   }
@@ -195,6 +198,7 @@ export const writeFile = (
   const targetDir = target.replace(filename, '')
   fs.mkdirSync(targetDir, { recursive: true })
   fs.writeFileSync(target, contents)
+  task.title = `Successfully wrote file \`./${path.relative(base, target)}\``
 }
 
 export const bytes = (contents) => Buffer.byteLength(contents, 'utf8')
@@ -260,8 +264,8 @@ export const writeFilesTask = (files, options) => {
     Object.keys(files).map((file) => {
       const contents = files[file]
       return {
-        title: `Writing \`./${path.relative(base, file)}\`...`,
-        task: () => writeFile(file, contents, options),
+        title: `...waiting to write file \`./${path.relative(base, file)}\`...`,
+        task: (ctx, task) => writeFile(file, contents, options, task),
       }
     })
   )
