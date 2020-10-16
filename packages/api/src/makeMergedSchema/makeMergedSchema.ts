@@ -4,7 +4,7 @@ import {
   IResolvers,
   IExecutableSchemaDefinition,
 } from 'apollo-server-lambda'
-import { mergeTypeDefs } from 'graphql-tools'
+import { mergeTypeDefs } from '@graphql-tools/merge'
 import merge from 'lodash.merge'
 import omitBy from 'lodash.omitby'
 import { GraphQLSchema, GraphQLFieldMap } from 'graphql'
