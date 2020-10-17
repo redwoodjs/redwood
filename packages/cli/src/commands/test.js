@@ -1,9 +1,11 @@
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 import { ensurePosixPath } from '@redwoodjs/internal'
-
+import fs from 'fs'
+import path from 'path'
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
+import axios from 'axios'
 
 // https://github.com/facebook/create-react-app/blob/cbad256a4aacfc3084be7ccf91aad87899c63564/packages/react-scripts/scripts/test.js#L39
 function isInGitRepository() {
@@ -21,6 +23,51 @@ function isInMercurialRepository() {
     return true
   } catch (e) {
     return false
+  }
+}
+
+async function downloadConfigFile(sourceUrl) {
+  try {
+    const response = await axios.get(sourceUrl, {
+      responseType: 'document',
+    })
+    const configFile = response.data
+    return configFile
+  } catch (error) {
+    console.error('Error downloading file: ', error)
+  }
+}
+
+// Creates /api/jest.config.js and /web/jest.config.js if they don't exist
+async function createJestConfigsIfTheyDontExist() {
+  const { api, web } = getPaths()
+  const apiConfigPath = path.join(api.base, 'jest.config.js')
+  const webConfigPath = path.join(web.base, 'jest.config.js')
+  const apiConfigExists = fs.existsSync(apiConfigPath)
+  const webConfigExists = fs.existsSync(webConfigPath)
+  if (!apiConfigExists) {
+    console.log('creating api/jest.config.js ...')
+    const apiConfigFile = await downloadConfigFile(
+      'https://raw.githubusercontent.com/redwoodjs/create-redwood-app/main/api/jest.config.js',
+      apiConfigPath
+    )
+    try {
+      fs.writeFileSync(apiConfigPath, apiConfigFile)
+    } catch (error) {
+      console.error('Error writing API Jest.config file: ', error)
+    }
+  }
+  if (!webConfigExists) {
+    console.log('creating web/jest.config.js ...')
+    const webConfigFile = await downloadConfigFile(
+      'https://raw.githubusercontent.com/redwoodjs/create-redwood-app/main/web/jest.config.js',
+      webConfigPath
+    )
+    try {
+      fs.writeFileSync(webConfigPath, webConfigFile)
+    } catch (error) {
+      console.error('Error writing Web Jest.config file: ', error)
+    }
   }
 }
 
@@ -67,6 +114,8 @@ export const handler = async ({
   watchAll = false,
   collectCoverage = false,
 }) => {
+  await createJestConfigsIfTheyDontExist()
+
   const { cache: CACHE_DIR } = getPaths()
   const sides = [].concat(side).filter(Boolean)
 
