@@ -4810,16 +4810,6 @@ ajv@^6.1.0, ajv@^6.10.0, ajv@^6.10.2, ajv@^6.12.3, ajv@^6.12.4, ajv@^6.12.5:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-ajv@^6.12.5:
-  version "6.12.6"
-  resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.12.6.tgz#baf5a62e802b07d977034586f8c3baf5adf26df4"
-  integrity sha512-j3fVLgvTo527anyYyJOGTYJbG+vnnQYvE0m5mmkc1TK+nxAppkCLMIL0aZ4dblVCNoGShhm+kzE4ZUykBoMg4g==
-  dependencies:
-    fast-deep-equal "^3.1.1"
-    fast-json-stable-stringify "^2.0.0"
-    json-schema-traverse "^0.4.1"
-    uri-js "^4.2.2"
-
 ansi-align@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/ansi-align/-/ansi-align-3.0.0.tgz#b536b371cf687caaef236c18d3e21fe3797467cb"
@@ -6671,7 +6661,7 @@ chokidar@2.1.8, chokidar@^2.0.4, chokidar@^2.1.8:
   optionalDependencies:
     fsevents "^1.2.7"
 
-chokidar@^3.2.2, chokidar@^3.4.0, chokidar@^3.4.1, chokidar@^3.4.2:
+chokidar@^3.2.2, chokidar@^3.4.0, chokidar@^3.4.1, chokidar@^3.4.2, chokidar@^3.4.3:
   version "3.4.3"
   resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.4.3.tgz#c1df38231448e45ca4ac588e6c79573ba6a57d5b"
   integrity sha512-DtM3g7juCXQxFVSNPNByEC2+NImtBuxQQvWlHunpJIS5Ocr0lG306cC7FCi7cEA0fzmybPUIl4txBIobk1gGOQ==
@@ -15192,9 +15182,9 @@ query-string@^4.1.0:
     strict-uri-encode "^1.0.0"
 
 query-string@^6.12.1:
-  version "6.13.5"
-  resolved "https://registry.yarnpkg.com/query-string/-/query-string-6.13.5.tgz#99e95e2fb7021db90a6f373f990c0c814b3812d8"
-  integrity sha512-svk3xg9qHR39P3JlHuD7g3nRnyay5mHbrPctEBDUxUkHRifPHXJDhBUycdCC0NBjXoDf44Gb+IsOZL1Uwn8M/Q==
+  version "6.13.6"
+  resolved "https://registry.yarnpkg.com/query-string/-/query-string-6.13.6.tgz#e5ac7c74f2a5da43fbca0b883b4f0bafba439966"
+  integrity sha512-/WWZ7d9na6s2wMEGdVCVgKWE9Rt7nYyNIf7k8xmHXcesPMlEzicWo3lbYwHyA4wBktI2KrXxxZeACLbE84hvSQ==
   dependencies:
     decode-uri-component "^0.2.0"
     split-on-first "^1.0.0"
