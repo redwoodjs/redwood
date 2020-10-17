@@ -1,7 +1,6 @@
 {
   "name": "@redwoodjs/web",
   "version": "0.19.4",
-  "sideEffects": false,
   "files": [
     "dist"
   ],

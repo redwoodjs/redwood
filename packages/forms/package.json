@@ -13,15 +13,6 @@
     "pascalcase": "1.0.0",
     "react-hook-form": "^6.5.3"
   },
-  "devDependencies": {
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "11.0.4",
-    "@testing-library/user-event": "12.1.7",
-    "react": "16.13.1"
-  },
-  "peerDependencies": {
-    "react": "*"
-  },
   "scripts": {
     "build": "yarn build:js",
     "prepublishOnly": "yarn cross-env NODE_ENV=production yarn build",
