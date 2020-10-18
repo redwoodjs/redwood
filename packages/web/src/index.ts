@@ -9,9 +9,9 @@ export {
   useApolloClient,
 } from '@apollo/client'
 
-export { default as FatalErrorBoundary } from 'src/components/FatalErrorBoundary'
-export { default as RedwoodProvider } from 'src/components/RedwoodProvider'
+export { default as FatalErrorBoundary } from './components/FatalErrorBoundary'
+export { default as RedwoodProvider } from './components/RedwoodProvider'
 
 export * from './graphql'
-// @ts-expect-error - no defs
+// @ts-expect-error JS Modules.
 export * from './flash'
