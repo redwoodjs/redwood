@@ -20,9 +20,9 @@ export interface AuthContextInterface {
   currentUser: null | CurrentUser
   /* The user's metadata from the auth provider */
   userMetadata: null | SupportedUserMetadata
-  logIn(options?: any): Promise<void>
-  logOut(options?: any): Promise<void>
-  signUp(options?: any): Promise<void>
+  logIn(options?: unknown): Promise<void>
+  logOut(options?: unknown): Promise<void>
+  signUp(options?: unknown): Promise<void>
   getToken(): Promise<null | string>
   /**
    * Fetches the "currentUser" from the api side,
@@ -47,7 +47,7 @@ export interface AuthContextInterface {
   client: SupportedAuthClients
   type: SupportedAuthTypes
   hasError: boolean
-  error: Error
+  error?: Error
 }
 
 export const AuthContext = React.createContext<Partial<AuthContextInterface>>(
