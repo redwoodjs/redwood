@@ -13,5 +13,6 @@ export { default as FatalErrorBoundary } from './components/FatalErrorBoundary'
 export { default as RedwoodProvider } from './components/RedwoodProvider'
 
 export * from './graphql'
-// @ts-expect-error JS Modules.
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 export * from './flash'

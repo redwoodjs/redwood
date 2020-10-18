@@ -42,7 +42,7 @@
     "extends": "@redwoodjs/eslint-config"
   },
   "scripts": {
-    "build": "tsc --build --verbose && lerna run build:js",
+    "build": "lerna run build:js && tsc --build --verbose",
     "build:clean": "rimraf ./packages/**/dist",
     "build:watch": "tsc --build && lerna run build:watch --parallel",
     "test": "lerna run test --stream -- --colors --maxWorkers=4",

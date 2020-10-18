@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 
 import type { AuthContextInterface } from '@redwoodjs/auth'
-
-// @ts-expect-error JS modules
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import { FlashProvider } from '../flash'
 
 import {

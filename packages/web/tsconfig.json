@@ -5,6 +5,10 @@
     "rootDir": "src",
     "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
     "outDir": "dist",
+    "allowJs": true
   },
   "include": ["src"],
+  "references": [
+    { "path": "../auth" },
+  ]
 }

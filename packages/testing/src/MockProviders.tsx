@@ -4,7 +4,7 @@
  */
 import React from 'react'
 import { RedwoodProvider } from '@redwoodjs/web'
-import { AuthContextInterface } from '@redwoodjs/auth'
+import type { AuthContextInterface } from '@redwoodjs/auth'
 
 // Import the user's Router from `./web/src/Router.{tsx,js}`,
 // we pass the `children` from the user's Router to `./MockRouter.Router`
