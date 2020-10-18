@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 
-export const azureAd = (token: string) => {
+export const azureActiveDirectory = (token: string) => {
   // @todo: JWT validation
   const decoded = jwt.decode(token)
   return decoded

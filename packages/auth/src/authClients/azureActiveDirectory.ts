@@ -1,14 +1,14 @@
-import { UserAgentApplication as AzureAd } from 'msal'
+import { UserAgentApplication as AzureActiveDirectory } from 'msal'
 
-export type { AzureAd }
+export type { AzureActiveDirectory }
 import type { AuthClient } from './'
 
-export type AzureAdClient = AzureAd
-export interface AzureAdUser {}
+export type AzureActiveDirectoryClient = AzureActiveDirectory
+export interface AzureActiveDirectoryUser {}
 
-export const azureAd = (client: AzureAdClient): AuthClient => {
+export const azureActiveDirectory = (client: AzureActiveDirectoryClient): AuthClient => {
   return {
-    type: 'azureAd',
+    type: 'azureActiveDirectory',
     client,
     restoreAuthState: async () => {},
     login: async (options?) => {

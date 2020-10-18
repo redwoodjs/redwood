@@ -1,17 +1,17 @@
 // the lines that need to be added to index.js
 export const config = {
   imports: [`import { UserAgentApplication } from 'msal'`],
-  init: `const azureAdClient = new UserAgentApplication({
+  init: `const azureActiveDirectoryClient = new UserAgentApplication({
     auth: {
-      clientId: process.env.AZUREAD_CLIENT_ID,
-      authority: process.env.AZUREAD_AUTHORITY,
-      redirectUri: process.env.AZUREAD_REDIRECT_URI,
-      postLogoutRedirectUri: process.env.AZUREAD_LOGOUT_REDIRECT_URI,
+      clientId: process.env.AZURE_ACTIVE_DIRECTORY_CLIENT_ID,
+      authority: process.env.AZURE_ACTIVE_DIRECTORY_AUTHORITY,
+      redirectUri: process.env.AZURE_ACTIVE_DIRECTORY_REDIRECT_URI,
+      postLogoutRedirectUri: process.env.AZURE_ACTIVE_DIRECTORY_LOGOUT_REDIRECT_URI,
     },
   })`,
   authProvider: {
-    client: 'azureAdClient',
-    type: 'azureAd',
+    client: 'azureActiveDirectoryClient',
+    type: 'azureActiveDirectory',
   },
 }
 
