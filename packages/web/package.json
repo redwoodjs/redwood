@@ -14,6 +14,9 @@
     "graphql": "^15.3.0",
     "proptypes": "^1.1.0"
   },
+  "devDependencies": {
+    "@redwoodjs/auth": "^0.19.4"
+  },
   "peerDependencies": {
     "react": "*"
   },
@@ -21,7 +24,7 @@
     "build": "yarn build:js && yarn build:types",
     "prepublishOnly": "yarn cross-env NODE_ENV=production yarn build",
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
-    "build:types": "tsc --build --verbose",
+    "build:types": "tsc --build --verbose && node ./scripts/postBuild.js",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "test": "jest",
     "test:watch": "yarn test --watch"

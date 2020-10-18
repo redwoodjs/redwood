@@ -10,9 +10,8 @@ import { useQuery } from '@apollo/client'
 
 /**
  * Graciously borrowed from Apollo. We'll move over to a hooks version.
- *
  */
-// @ts-expect-error - no.
+// @ts-expect-error Temporary.
 const Query = ({ children, query, ...rest }) => {
   const result = useQuery(query, rest)
   return children && result ? children(result) : null
