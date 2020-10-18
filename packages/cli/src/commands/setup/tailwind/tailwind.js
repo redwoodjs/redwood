@@ -37,6 +37,20 @@ const tailwindImportsAndNotes = [
 
 const INDEX_CSS_PATH = path.join(getPaths().web.src, 'index.css')
 
+const tailwindImportsDoesExist = (indexCSS) => {
+  let content = indexCSS.toString()
+
+  const hasBaseImport = () => /@import "tailwindcss\/base"/.test(content)
+
+  const hasComponentsImport = () =>
+    /@import "tailwindcss\/components"/.test(content)
+
+  const hasUtilitiesImport = () =>
+    /@import "tailwindcss\/utilities"/.test(content)
+
+  return hasBaseImport() && hasComponentsImport() && hasUtilitiesImport()
+}
+
 export const handler = async ({ force }) => {
   const tasks = new Listr([
     {
@@ -126,13 +140,20 @@ export const handler = async ({ force }) => {
     },
     {
       title: 'Adding imports to index.css...',
-      task: () => {
+      task: (_ctx, task) => {
         /**
          * Add tailwind imports and notes to the top of index.css
          */
         let indexCSS = fs.readFileSync(INDEX_CSS_PATH)
-        indexCSS = tailwindImportsAndNotes.join('\n') + indexCSS
-        fs.writeFileSync(INDEX_CSS_PATH, indexCSS)
+
+        const tailwindImportsExist = tailwindImportsDoesExist(indexCSS)
+
+        if (tailwindImportsExist) {
+          task.skip('Imports already exist in index.css')
+        } else {
+          indexCSS = tailwindImportsAndNotes.join('\n') + indexCSS
+          fs.writeFileSync(INDEX_CSS_PATH, indexCSS)
+        }
       },
     },
     {
