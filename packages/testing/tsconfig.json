@@ -5,13 +5,13 @@
     "rootDir": "src",
     "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
     "outDir": "dist",
+    "noImplicitAny": false
   },
   "include": [
     "src"
   ],
   "references": [
-    {
-      "path": "../internal",
-    }
+    { "path": "../internal" },
+    { "path": "../web" }
   ]
 }
