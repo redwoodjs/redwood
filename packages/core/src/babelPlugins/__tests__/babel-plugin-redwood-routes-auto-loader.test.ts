@@ -1,7 +1,9 @@
 import path from 'path'
-import pluginTester from 'babel-plugin-tester'
-import plugin from '../babel-plugin-redwood-routes-auto-loader'
+
 import { getProject } from '@redwoodjs/structure'
+import pluginTester from 'babel-plugin-tester'
+
+import plugin from '../babel-plugin-redwood-routes-auto-loader'
 
 const mockReaddirSync = jest.fn(() => ['routes.d.ts'])
 const mockWriteFileSync = jest.fn()

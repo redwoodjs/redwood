@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
 
 import type { AuthContextInterface } from '@redwoodjs/auth'
+
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { FlashProvider } from '../flash'
-
 import {
   GraphQLClientConfig,
   GraphQLProvider,

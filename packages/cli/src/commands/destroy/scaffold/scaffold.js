@@ -1,13 +1,13 @@
 import Listr from 'listr'
 
-import { deleteFilesTask, removeRoutesFromRouterTask } from 'src/lib'
-import c from 'src/lib/colors'
-
 import {
   files,
   routes as scaffoldRoutes,
   splitPathAndModel,
 } from '../../generate/scaffold/scaffold'
+
+import { deleteFilesTask, removeRoutesFromRouterTask } from 'src/lib'
+import c from 'src/lib/colors'
 
 export const command = 'scaffold <model>'
 export const description =

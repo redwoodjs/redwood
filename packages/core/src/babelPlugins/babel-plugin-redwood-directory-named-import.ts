@@ -1,7 +1,7 @@
-import { resolveFile } from '@redwoodjs/internal'
 import path from 'path'
 
 import type { PluginObj, types } from '@babel/core'
+import { resolveFile } from '@redwoodjs/internal'
 
 const getNewPath = (value: string, filename: string): string | null => {
   const dirname = path.dirname(value)

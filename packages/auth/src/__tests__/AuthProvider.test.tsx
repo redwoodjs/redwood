@@ -2,12 +2,12 @@ require('whatwg-fetch')
 
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
-import { setupServer } from 'msw/node'
 import { graphql } from 'msw'
+import { setupServer } from 'msw/node'
 
-import { useAuth } from '../useAuth'
-import { AuthProvider } from '../AuthProvider'
 import type { AuthClient } from '../authClients'
+import { AuthProvider } from '../AuthProvider'
+import { useAuth } from '../useAuth'
 
 let CURRENT_USER_DATA = {
   name: 'Peter Pistorius',

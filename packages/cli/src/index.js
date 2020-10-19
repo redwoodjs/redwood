@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 import path from 'path'
 
-import yargs from 'yargs'
 import { getPaths } from '@redwoodjs/internal'
 import { config } from 'dotenv-defaults'
+import yargs from 'yargs'
 
 config({
   path: path.join(getPaths().base, '.env'),

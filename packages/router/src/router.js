@@ -12,7 +12,6 @@ import {
   PageLoader,
   Redirect,
 } from './internal'
-
 import { SplashPage } from './splash-page'
 
 const Route = () => {

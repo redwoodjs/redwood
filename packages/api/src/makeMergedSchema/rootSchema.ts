@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import type { GlobalContext } from 'src/globalContext'
-import gql from 'graphql-tag'
 import {
   DateResolver,
   TimeResolver,
@@ -8,9 +6,11 @@ import {
   JSONResolver,
   JSONObjectResolver,
 } from 'graphql-scalars'
-
+import gql from 'graphql-tag'
 // @ts-ignore - not inside the <rootDir>
 import apiPackageJson from 'src/../package.json'
+
+import type { GlobalContext } from 'src/globalContext'
 
 /**
  * This adds scalar types for dealing with Date, Time, DateTime, and JSON.

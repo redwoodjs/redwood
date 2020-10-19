@@ -1,12 +1,12 @@
 #!/usr/bin/env node
-import yargs from 'yargs'
 import { getConfig, getPaths } from '@redwoodjs/internal'
 import type { NodeTargetPaths } from '@redwoodjs/internal'
+import yargs from 'yargs'
 
-import { server, setLambdaFunctions } from './http'
-import { watchFunctions } from './watchApiSide'
-import { requestHandler } from './requestHandlers/awsLambda'
 import { handleError } from './error'
+import { server, setLambdaFunctions } from './http'
+import { requestHandler } from './requestHandlers/awsLambda'
+import { watchFunctions } from './watchApiSide'
 
 // TODO: Expand the sides once that concept is introduced.
 export const getArgsForSide = (

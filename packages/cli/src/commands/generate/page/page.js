@@ -1,14 +1,14 @@
 import { execSync } from 'child_process'
 
-import Listr from 'listr'
 import camelcase from 'camelcase'
+import Listr from 'listr'
 import pascalcase from 'pascalcase'
 import terminalLink from 'terminal-link'
 
+import { templateForComponentFile, pathName } from '../helpers'
+
 import { writeFilesTask, addRoutesToRouterTask } from 'src/lib'
 import c from 'src/lib/colors'
-
-import { templateForComponentFile, pathName } from '../helpers'
 
 const COMPONENT_SUFFIX = 'Page'
 const REDWOOD_WEB_PATH_NAME = 'pages'

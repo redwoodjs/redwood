@@ -1,11 +1,11 @@
 global.__dirname = __dirname
 import path from 'path'
 
-import { loadGeneratorFixture } from 'src/lib/test'
-import { getDefaultArgs } from 'src/lib'
-
 import { yargsDefaults as defaults } from '../../../generate'
 import * as scaffold from '../scaffold'
+
+import { getDefaultArgs } from 'src/lib'
+import { loadGeneratorFixture } from 'src/lib/test'
 
 describe('in javascript (default) mode', () => {
   let files

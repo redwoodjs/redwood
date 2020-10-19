@@ -1,8 +1,8 @@
-import type { GlobalContext } from 'src/globalContext'
-import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import type { SupportedAuthTypes } from '@redwoodjs/auth'
+import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 
 import { decodeToken } from './decoders'
+import type { GlobalContext } from 'src/globalContext'
 
 // This is shared by `@redwoodjs/web`
 const AUTH_PROVIDER_HEADER = 'auth-provider'

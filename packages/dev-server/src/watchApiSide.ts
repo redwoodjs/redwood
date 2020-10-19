@@ -6,9 +6,9 @@
 
 import path from 'path'
 
+import babelRequireHook from '@babel/register'
 import type { NodeTargetPaths } from '@redwoodjs/internal'
 import chokidar from 'chokidar'
-import babelRequireHook from '@babel/register'
 import requireDir from 'require-dir'
 
 const WATCHER_IGNORE_EXTENSIONS = ['.db', '.sqlite', '-journal']

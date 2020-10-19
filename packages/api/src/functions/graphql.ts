@@ -1,10 +1,11 @@
-import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
-import type { Config, CreateHandlerOptions } from 'apollo-server-lambda'
 import type { Context, ContextFunction } from 'apollo-server-core'
-import type { GlobalContext } from 'src/globalContext'
-import type { AuthContextPayload } from 'src/auth'
+import type { Config, CreateHandlerOptions } from 'apollo-server-lambda'
 import { ApolloServer } from 'apollo-server-lambda'
+import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
+
+import type { AuthContextPayload } from 'src/auth'
 import { getAuthenticationContext } from 'src/auth'
+import type { GlobalContext } from 'src/globalContext'
 import { setContext } from 'src/globalContext'
 
 export type GetCurrentUser = (

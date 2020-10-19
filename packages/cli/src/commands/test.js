@@ -1,6 +1,6 @@
+import { ensurePosixPath } from '@redwoodjs/internal'
 import execa from 'execa'
 import terminalLink from 'terminal-link'
-import { ensurePosixPath } from '@redwoodjs/internal'
 
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'

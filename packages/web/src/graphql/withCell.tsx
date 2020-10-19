@@ -1,12 +1,12 @@
-import type { DocumentNode } from 'graphql'
+import React from 'react'
+
 import type {
   BaseQueryOptions,
   OperationVariables,
   QueryResult,
 } from '@apollo/client'
-
-import React from 'react'
 import { useQuery } from '@apollo/client'
+import type { DocumentNode } from 'graphql'
 
 /**
  * Graciously borrowed from Apollo. We'll move over to a hooks version.

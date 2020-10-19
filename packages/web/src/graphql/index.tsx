@@ -1,11 +1,10 @@
-import type { ApolloProviderProps } from '@apollo/client/react/context'
-
 import {
   ApolloClient,
   ApolloClientOptions,
   InMemoryCache,
   ApolloProvider,
 } from '@apollo/client'
+import type { ApolloProviderProps } from '@apollo/client/react/context'
 
 export { withCell } from './withCell'
 
