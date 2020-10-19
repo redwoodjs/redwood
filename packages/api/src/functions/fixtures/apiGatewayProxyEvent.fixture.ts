@@ -1,6 +1,6 @@
 import type { APIGatewayProxyEvent } from 'aws-lambda'
 
-export const mockedAPIGatewayProxyEvent: APIGatewayProxyEvent = {
+export default {
   body: 'MOCKED_BODY',
   headers: {},
   multiValueHeaders: {},
@@ -41,6 +41,4 @@ export const mockedAPIGatewayProxyEvent: APIGatewayProxyEvent = {
     resourcePath: 'MOCKED_RESOURCE_PATH',
   },
   resource: 'MOCKED_RESOURCE',
-}
-
-export default mockedAPIGatewayProxyEvent
+} as APIGatewayProxyEvent

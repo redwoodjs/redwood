@@ -1,12 +1,13 @@
-import type { GlobalContext } from 'src/globalContext'
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import type { SupportedAuthTypes } from '@redwoodjs/auth'
+import type { GlobalContext } from '../../globalContext'
 
-import { netlify } from './netlify'
 import { auth0 } from './auth0'
+import { netlify } from './netlify'
+
 const noop = (token: string) => token
 
-const typesToDecoders: Record<SupportedAuthTypes, Function> = {
+const typesToDecoders = {
   auth0: auth0,
   netlify: netlify,
   goTrue: netlify,
@@ -14,7 +15,7 @@ const typesToDecoders: Record<SupportedAuthTypes, Function> = {
   firebase: noop,
   supabase: noop,
   custom: noop,
-}
+} as const
 
 export const decodeToken = async (
   type: SupportedAuthTypes,

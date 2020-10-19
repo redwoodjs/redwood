@@ -22,7 +22,7 @@ import jwksClient from 'jwks-rsa'
  * ^1: https://manage.auth0.com/#/rules/new
  *
  */
-export const verifyAuth0Token = (
+export const auth0 = (
   bearerToken: string
 ): Promise<null | Record<string, unknown>> => {
   return new Promise((resolve, reject) => {
@@ -61,10 +61,4 @@ export const verifyAuth0Token = (
       }
     )
   })
-}
-
-export const auth0 = async (
-  token: string
-): Promise<null | Record<string, unknown>> => {
-  return verifyAuth0Token(token)
 }

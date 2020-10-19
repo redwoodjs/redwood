@@ -1,16 +1,15 @@
-import type { GlobalContext } from 'src/globalContext'
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import type { SupportedAuthTypes } from '@redwoodjs/auth'
+
+import type { GlobalContext } from '../globalContext'
 
 import { decodeToken } from './decoders'
 
 // This is shared by `@redwoodjs/web`
 const AUTH_PROVIDER_HEADER = 'auth-provider'
 
-export const getAuthProviderHeader = (
-  event: APIGatewayProxyEvent
-): SupportedAuthTypes => {
-  return event?.headers[AUTH_PROVIDER_HEADER] as SupportedAuthTypes
+export const getAuthProviderHeader = (event: APIGatewayProxyEvent) => {
+  return event?.headers[AUTH_PROVIDER_HEADER] as SupportedAuthTypes | undefined
 }
 
 export interface AuthorizationHeader {
@@ -23,7 +22,7 @@ export interface AuthorizationHeader {
 export const parseAuthorizationHeader = (
   event: APIGatewayProxyEvent
 ): AuthorizationHeader => {
-  const [schema, token] = event.headers?.authorization?.split(' ')
+  const [schema, token] = (event.headers?.authorization ?? '').split(' ')
   if (!schema.length || !token.length) {
     throw new Error('The `Authorization` header is not valid.')
   }
