@@ -1,32 +1,36 @@
-const appMetadata = (token: {
-  decoded: { [index: string]: Record<string, unknown> }
+type MetaDataBase = { roles?: string[]; authorization?: { roles?: string[] } }
+
+function appMetadata(token: {
+  decoded: { [index: string]: any }
   namespace?: string
-}): any => {
+}): MetaDataBase {
   const claim = token.namespace
     ? `${token.namespace}/app_metadata`
     : 'app_metadata'
   return token.decoded?.[claim] || {}
 }
 
-const roles = (token: {
-  decoded: { [index: string]: Record<string, unknown> }
-  namespace?: string
-}): any => {
-  const metadata = appMetadata(token)
+function roles(
+  token: {
+    decoded: { [index: string]: any }
+  },
+  metadata: MetaDataBase
+): string[] {
   return (
-    token.decoded?.roles ||
+    ((token.decoded?.roles as unknown) as string[]) ||
     metadata?.roles ||
     metadata.authorization?.roles ||
     []
   )
 }
 
-export const parseJWT = (token: {
-  decoded: { [index: string]: Record<string, unknown> }
+export function parseJWT(token: {
+  decoded: { [index: string]: any }
   namespace?: string
-}): any => {
+}) {
+  const appMetaData = appMetadata(token)
   return {
-    appMetadata: appMetadata(token),
-    roles: roles(token),
+    appMetadata: appMetaData,
+    roles: roles(token, appMetaData),
   }
 }
