@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import mockedAPIGatewayProxyEvent from './fixtures/apiGatewayProxyEvent.fixture'
 import * as auth0Decoder from './../auth/decoders/auth0'
 import * as netlifyDecoder from './../auth/decoders/netlify'
@@ -25,7 +26,7 @@ describe('Uses correct Auth decoder', () => {
   it('handles auth0', async () => {
     const output = await decodeToken('auth0', MOCKED_JWT, {
       event: mockedAPIGatewayProxyEvent,
-      context: {},
+      context: {} as any,
     })
 
     expect(auth0Decoder.auth0).toHaveBeenCalledWith(
@@ -41,7 +42,7 @@ describe('Uses correct Auth decoder', () => {
   it('decodes goTrue with netlify decoder', async () => {
     const output = await decodeToken('goTrue', MOCKED_JWT, {
       event: mockedAPIGatewayProxyEvent,
-      context: {},
+      context: {} as any,
     })
 
     expect(netlifyDecoder.netlify).toHaveBeenCalledWith(
@@ -57,7 +58,7 @@ describe('Uses correct Auth decoder', () => {
   it('decodes netlify with netlify decoder', async () => {
     const output = await decodeToken('netlify', MOCKED_JWT, {
       event: mockedAPIGatewayProxyEvent,
-      context: {},
+      context: {} as any,
     })
 
     expect(netlifyDecoder.netlify).toHaveBeenCalledWith(
@@ -73,7 +74,7 @@ describe('Uses correct Auth decoder', () => {
   it('returns undecoded token for custom', async () => {
     const output = await decodeToken('custom', MOCKED_JWT, {
       event: mockedAPIGatewayProxyEvent,
-      context: {},
+      context: {} as any,
     })
 
     expect(output).toEqual(MOCKED_JWT)
@@ -82,7 +83,7 @@ describe('Uses correct Auth decoder', () => {
   it('returns undecoded token for magicLink', async () => {
     const output = await decodeToken('magicLink', MOCKED_JWT, {
       event: mockedAPIGatewayProxyEvent,
-      context: {},
+      context: {} as any,
     })
 
     expect(output).toEqual(MOCKED_JWT)
@@ -91,7 +92,7 @@ describe('Uses correct Auth decoder', () => {
   it('returns undecoded token for firebase', async () => {
     const output = await decodeToken('firebase', MOCKED_JWT, {
       event: mockedAPIGatewayProxyEvent,
-      context: {},
+      context: {} as any,
     })
 
     expect(output).toEqual(MOCKED_JWT)
@@ -100,16 +101,16 @@ describe('Uses correct Auth decoder', () => {
   it('returns undecoded token for supabase', async () => {
     const output = await decodeToken('supabase', MOCKED_JWT, {
       event: mockedAPIGatewayProxyEvent,
-      context: {},
+      context: {} as any,
     })
 
     expect(output).toEqual(MOCKED_JWT)
   })
 
   it('returns undecoded token for unknown values', async () => {
-    const output = await decodeToken('SOMETHING_ELSE!', MOCKED_JWT, {
+    const output = await decodeToken('SOMETHING_ELSE!' as any, MOCKED_JWT, {
       event: mockedAPIGatewayProxyEvent,
-      context: {},
+      context: {} as any,
     })
 
     expect(output).toEqual(MOCKED_JWT)

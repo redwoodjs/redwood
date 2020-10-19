@@ -1,16 +1,22 @@
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import type { Config, CreateHandlerOptions } from 'apollo-server-lambda'
 import type { Context, ContextFunction } from 'apollo-server-core'
-import type { GlobalContext } from 'src/globalContext'
-import type { AuthContextPayload } from 'src/auth'
+import type { GlobalContext } from '../globalContext'
+import type { AuthContextPayload } from '../auth'
+import type { APIGatewayProxyCallback } from 'aws-lambda'
 import { ApolloServer } from 'apollo-server-lambda'
-import { getAuthenticationContext } from 'src/auth'
-import { setContext } from 'src/globalContext'
+import { getAuthenticationContext } from '../auth'
+import { setContext } from '../globalContext'
 
 export type GetCurrentUser = (
   decoded: AuthContextPayload[0],
   raw: AuthContextPayload[1]
 ) => Promise<null | Record<string, unknown> | string>
+
+type ContextProps = {
+  event: APIGatewayProxyEvent
+  context: GlobalContext & LambdaContext
+}
 
 /**
  * We use Apollo Server's `context` option as an entry point to construct our
@@ -22,17 +28,11 @@ export type GetCurrentUser = (
  * dataloader instances, and anything else that should be taken into account when
  * resolving the query.
  */
-export const createContextHandler = (
-  userContext?: Context | ContextFunction,
+export function createContextHandler<T>(
+  userContext?: Context<T> | ContextFunction<ContextProps, T>,
   getCurrentUser?: GetCurrentUser
-) => {
-  return async ({
-    event,
-    context,
-  }: {
-    event: APIGatewayProxyEvent
-    context: GlobalContext & LambdaContext
-  }) => {
+) {
+  return async ({ event, context }: ContextProps) => {
     // Prevent the Serverless function from waiting for all resources (db connections)
     // to be released before returning a reponse.
     context.callbackWaitsForEmptyEventLoop = false
@@ -46,11 +46,13 @@ export const createContextHandler = (
         : authContext
     }
 
-    let customUserContext = userContext
-    if (typeof userContext === 'function') {
-      // if userContext is a function, run that and return just the result
-      customUserContext = await userContext({ event, context })
-    }
+    const customUserContext =
+      typeof userContext === 'function'
+        ? await (userContext as ContextFunction<ContextProps, T>)({
+            event,
+            context,
+          })
+        : userContext
 
     // Sets the **global** context object, which can be imported with:
     // import { context } from '@redwoodjs/api'
@@ -86,14 +88,14 @@ interface GraphQLHandlerOptions extends Config {
  * export const handler = createGraphQLHandler({ schema, context, getCurrentUser })
  * ```
  */
-export const createGraphQLHandler = ({
+export function createGraphQLHandler({
   context,
   getCurrentUser,
   onException,
   cors,
   onHealthCheck,
   ...options
-}: GraphQLHandlerOptions = {}) => {
+}: GraphQLHandlerOptions = {}) {
   const isDevEnv = process.env.NODE_ENV !== 'production'
   const handler = new ApolloServer({
     // Turn off playground, introspection and debug in production.
@@ -124,7 +126,7 @@ export const createGraphQLHandler = ({
   return (
     event: APIGatewayProxyEvent,
     context: LambdaContext,
-    callback: any
+    callback: APIGatewayProxyCallback
   ): void => {
     try {
       handler(event, context, callback)
