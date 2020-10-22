@@ -17,6 +17,11 @@ const New${singularPascalName} = () => {
       navigate(routes.${pluralRouteName}())
       addMessage('${singularPascalName} created.', { classes: 'rw-flash-success' })
     },
+    // This refetches the query on the list page. Read more about other ways to
+    // update the cache over here:
+    // https://www.apollographql.com/docs/react/data/mutations/#making-all-other-cache-updates
+    refetchQueries: ['${pluralConstantName}'],
+    awaitRefetchQueries: true,
   })
 
   const onSave = (input) => {<% if (intForeignKeys.length) { %>
