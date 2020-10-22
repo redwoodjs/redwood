@@ -211,6 +211,7 @@ new Listr(
       '',
       `We've created your app in '${style.cmd(newAppDir)}'`,
       `Enter the directory and run '${style.cmd("yarn rw dev")}' to start the development server.`,
+      'Get up and running fast with this Quick Start guide: https://redwoodjs.com/docs/quick-start',
       '',
       style.header('Join the Community'),
       '',
