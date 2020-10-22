@@ -1,6 +1,8 @@
 import { useMutation, useFlash } from '@redwoodjs/web'
 import { Link, routes, navigate } from '@redwoodjs/router'
 
+import { QUERY } from 'src/components/PostsCell'
+
 const DELETE_POST_MUTATION = gql`
   mutation DeletePostMutation($id: Int!) {
     deletePost(id: $id) {
@@ -39,7 +41,7 @@ const Post = ({ post }) => {
     // This refetches the query on the list page. Read more about other ways to
     // update the cache over here:
     // https://www.apollographql.com/docs/react/data/mutations/#making-all-other-cache-updates
-    refetchQueries: ['POSTS'],
+    refetchQueries: [{ query: QUERY }],
     awaitRefetchQueries: true,
   })
 
