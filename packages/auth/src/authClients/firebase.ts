@@ -1,10 +1,6 @@
-import type * as Firebase from 'firebase/app'
+import * as client from 'firebase/app'
 
-export type Firebase = typeof Firebase
-
-import { AuthClient } from './'
-
-export const firebase = (client: Firebase): AuthClient => {
+export const firebase = () => {
   return {
     type: 'firebase',
     client,
@@ -18,7 +14,6 @@ export const firebase = (client: Firebase): AuthClient => {
     signup: async () => {
       const provider = new client.auth.GoogleAuthProvider()
       return client.auth().signInWithRedirect(provider)
-
     },
     getToken: async () => client.auth().currentUser?.getIdToken() ?? null,
     getUserMetadata: async () => client.auth().currentUser,

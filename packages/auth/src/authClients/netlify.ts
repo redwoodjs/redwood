@@ -1,15 +1,11 @@
-import type * as NetlifyIdentityNS from 'netlify-identity-widget'
+import * as client from 'netlify-identity-widget'
 
-import type { AuthClient } from './'
-
-export type NetlifyIdentity = typeof NetlifyIdentityNS
-
-export const netlify = (client: NetlifyIdentity): AuthClient => {
+export function netlify() {
   return {
     type: 'netlify',
     client,
     login: () => {
-      return new Promise((resolve, reject) => {
+      return new Promise<client.User | null>((resolve, reject) => {
         let autoClosedModal = false
         client.open('login')
         client.on('login', (user) => {
@@ -25,27 +21,22 @@ export const netlify = (client: NetlifyIdentity): AuthClient => {
       })
     },
     logout: () => {
-      return new Promise((resolve, reject) => {
+      return new Promise<void>((resolve, reject) => {
         client.logout()
         client.on('logout', resolve)
         client.on('error', reject)
       })
     },
     signup: () => {
-      return new Promise((resolve, reject) => {
+      return new Promise<void>((resolve, reject) => {
         client.open('signup')
         client.on('close', () => {
-          resolve(null)
+          resolve()
         })
         client.on('error', reject)
       })
     },
-    getToken: async () => {
-      const user = await client.currentUser()
-      return user?.token?.access_token || null
-    },
-    getUserMetadata: async () => {
-      return client.currentUser()
-    },
+    getToken: () => client.currentUser()?.token?.access_token || null,
+    getUserMetadata: client.currentUser,
   }
 }

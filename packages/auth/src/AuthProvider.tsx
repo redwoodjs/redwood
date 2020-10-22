@@ -1,34 +1,30 @@
 import React from 'react'
 
-import type {
-  AuthClient,
-  SupportedAuthTypes,
-  SupportedAuthClients,
-  SupportedUserMetadata,
-} from './authClients'
-import { createAuthClient } from './authClients'
-
 export interface CurrentUser {
   roles?: Array<string>
 }
 
-export interface AuthContextInterface {
+type PromiseValue<T> = T extends Promise<infer R> ? R : T
+
+export interface AuthContextInterface<WrappedClient extends AuthClient> {
   /* Determining your current authentication state */
   loading: boolean
   isAuthenticated: boolean
   /* The current user's data from the `getCurrentUser` function on the api side */
   currentUser: null | CurrentUser
   /* The user's metadata from the auth provider */
-  userMetadata: null | SupportedUserMetadata
-  logIn(options?: unknown): Promise<void>
-  logOut(options?: unknown): Promise<void>
-  signUp(options?: unknown): Promise<void>
+  userMetadata: null | PromiseValue<
+    ReturnType<WrappedClient['getUserMetadata']>
+  >
+  logIn: WrappedClient['logIn']
+  logOut: WrappedClient['logOut']
+  signUp: WrappedClient['signUp']
   getToken(): Promise<null | string>
   /**
    * Fetches the "currentUser" from the api side,
    * but does not update the current user state.
    **/
-  getCurrentUser(): Promise<null | CurrentUser>
+  getCurrentUser(): WrappedClient['getUserMetadata']
   /**
    * Checks if the "currentUser" from the api side
    * is assigned a role or one of a list of roles.
@@ -44,26 +40,37 @@ export interface AuthContextInterface {
    * A reference to the client that you passed into the `AuthProvider`,
    * which is useful if we do not support some specific functionality.
    */
-  client: SupportedAuthClients
-  type: SupportedAuthTypes
+  client: WrappedClient['client']
+  type: WrappedClient['type']
   hasError: boolean
   error?: Error
 }
 
-export const AuthContext = React.createContext<Partial<AuthContextInterface>>(
-  {}
-)
+export const AuthContext = React.createContext<
+  AuthContextInterface<AuthClient> | undefined
+>(undefined)
 
-type AuthProviderProps = {
-  client: SupportedAuthClients
-  type: SupportedAuthTypes
+export interface AuthClient {
+  restoreAuthState?(): void | Promise<unknown>
+  logIn(options?: unknown): Promise<unknown>
+  logOut(options?: unknown): void | Promise<void>
+  signUp(options?: unknown): void | Promise<unknown>
+  getToken(): Promise<null | string>
+  /** The user's data from the AuthProvider */
+  getUserMetadata(): Promise<unknown> | unknown
+  type: string
+  client?: unknown
+}
+
+type AuthProviderProps<Client extends AuthClient> = {
+  client: Client
   skipFetchCurrentUser?: boolean
 }
 
-type AuthProviderState = {
+type AuthProviderState<Client extends AuthClient> = {
   loading: boolean
   isAuthenticated: boolean
-  userMetadata: null | Record<string, any>
+  userMetadata: null | PromiseValue<ReturnType<Client['getUserMetadata']>>
   currentUser: null | undefined | CurrentUser
   hasError: boolean
   error?: Error
@@ -78,15 +85,15 @@ type AuthProviderState = {
  *  </AuthProvider>
  * ```
  */
-export class AuthProvider extends React.Component<
-  AuthProviderProps,
-  AuthProviderState
+export class AuthProvider<Client extends AuthClient> extends React.Component<
+  AuthProviderProps<Client>,
+  AuthProviderState<Client>
 > {
   static defaultProps = {
     skipFetchCurrentUser: false,
   }
 
-  state: AuthProviderState = {
+  state: AuthProviderState<Client> = {
     loading: true,
     isAuthenticated: false,
     userMetadata: null,
@@ -94,11 +101,11 @@ export class AuthProvider extends React.Component<
     hasError: false,
   }
 
-  rwClient: AuthClient
+  rwClient: Client
 
-  constructor(props: AuthProviderProps) {
+  constructor(props: AuthProviderProps<Client>) {
     super(props)
-    this.rwClient = createAuthClient(props.client, props.type)
+    this.rwClient = this.props.client
   }
 
   async componentDidMount() {
@@ -170,7 +177,7 @@ export class AuthProvider extends React.Component<
   }
 
   reauthenticate = async () => {
-    const notAuthenticatedState: AuthProviderState = {
+    const notAuthenticatedState: AuthProviderState<Client> = {
       isAuthenticated: false,
       currentUser: null,
       userMetadata: null,
@@ -201,12 +208,12 @@ export class AuthProvider extends React.Component<
   }
 
   logIn = async (options?: any) => {
-    await this.rwClient.login(options)
+    await this.rwClient.logIn(options)
     return this.reauthenticate()
   }
 
   logOut = async (options?: any) => {
-    await this.rwClient.logout(options)
+    await this.rwClient.logOut(options)
     this.setState({
       userMetadata: null,
       currentUser: null,
@@ -217,7 +224,7 @@ export class AuthProvider extends React.Component<
   }
 
   signUp = async (options?: any) => {
-    await this.rwClient.signup(options)
+    await this.rwClient.signUp(options)
     return this.reauthenticate()
   }
 

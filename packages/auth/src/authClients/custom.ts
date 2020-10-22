@@ -1,10 +1,5 @@
-export type Custom = any
+import { AuthClient } from '../AuthProvider'
 
-import { AuthClient } from './'
-
-export interface AuthClientCustom extends AuthClient {
-  client: Custom
-  type: 'custom'
+export function custom<T extends AuthClient>(authClient: T) {
+  return authClient
 }
-
-export const custom = (authClient: AuthClientCustom) => authClient
