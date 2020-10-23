@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/api",
-  "version": "0.19.4",
+  "version": "0.20.0",
   "files": [
     "dist"
   ],
@@ -9,7 +9,7 @@
   "license": "MIT",
   "dependencies": {
     "@prisma/client": "2.9.0",
-    "@redwoodjs/internal": "^0.19.4",
+    "@redwoodjs/internal": "^0.20.0",
     "apollo-server-lambda": "2.18.2",
     "core-js": "3.6.5",
     "graphql": "^15.3.0",
@@ -22,8 +22,8 @@
     "merge-graphql-schemas": "^1.7.6"
   },
   "devDependencies": {
-    "@redwoodjs/auth": "^0.19.4",
-    "@redwoodjs/dev-server": "^0.19.4",
+    "@redwoodjs/auth": "^0.20.0",
+    "@redwoodjs/dev-server": "^0.20.0",
     "@types/jsonwebtoken": "^8.3.9",
     "@types/lodash.merge": "^4.6.6",
     "@types/lodash.omitby": "^4.6.6"
