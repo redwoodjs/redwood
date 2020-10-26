@@ -19,8 +19,14 @@ describe('UserCell', () => {
     expect(screen.getByText(/Oh no/i)).toBeInTheDocument()
   })
 
+  // When you're ready to test the actual output of your component render
+  // you could test that, for example, certain text is present:
+  //
+  //   expect(screen.getByText('Hello, world')).toBeInTheDocument()
+
   test('Success renders successfully', async () => {
-    render(<Success user={standard().user} />)
-    expect(screen.getByText(/42/i)).toBeInTheDocument()
+    expect(() => {
+      render(<Success user={standard().user} />)
+    }).not.toThrow()
   })
 })
