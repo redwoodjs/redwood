@@ -3954,6 +3954,11 @@
     "@types/qs" "*"
     "@types/serve-static" "*"
 
+"@types/facebook-js-sdk@^3.3.1":
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/@types/facebook-js-sdk/-/facebook-js-sdk-3.3.1.tgz#1aec89b8530b9b313f73d9efe088c9d378a716d3"
+  integrity sha512-jRVPdOu237QxDDoBjc9/xzGsDz75FmdvcwVZdCEg1AjHAQxGmXoHfACUyUVtz7DSWA4E+jgj5MQME4snjGwOng==
+
 "@types/findup-sync@^2.0.2":
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/@types/findup-sync/-/findup-sync-2.0.2.tgz#3fff6e72b8bbec258c64208a8d64c861fec63ea7"
@@ -9161,6 +9166,11 @@ faye-websocket@^0.10.0:
   integrity sha1-TkkvjQTftviQA1B/btvy1QHnxvQ=
   dependencies:
     websocket-driver ">=0.5.1"
+
+fb-sdk-wrapper@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/fb-sdk-wrapper/-/fb-sdk-wrapper-1.1.0.tgz#3b47c413aceb67dec10a5c03fa7128cd44ba5005"
+  integrity sha512-66peeFF3epjeQR5l+aaB03aF8bEI+bQf+wMq3fjnUEyQ1d6qR+Z6rGHq9bSxuu2kzEtWG+0PfU5x2SiVEcYy0w==
 
 fb-watchman@^2.0.0:
   version "2.0.1"
