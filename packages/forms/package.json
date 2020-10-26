@@ -11,7 +11,7 @@
   "dependencies": {
     "core-js": "3.6.5",
     "pascalcase": "1.0.0",
-    "react-hook-form": "^6.5.3"
+    "react-hook-form": "^6.9.5"
   },
   "scripts": {
     "build": "yarn build:js",
