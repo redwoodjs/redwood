@@ -8621,10 +8621,10 @@ eslint-config-prettier@^6.11.0:
   dependencies:
     get-stdin "^6.0.0"
 
-eslint-import-resolver-babel-module@^5.1.2:
-  version "5.1.2"
-  resolved "https://registry.yarnpkg.com/eslint-import-resolver-babel-module/-/eslint-import-resolver-babel-module-5.1.2.tgz#3d5599d49f641f9c832f001ccf7087a70a3c8c1b"
-  integrity sha512-pzKE6UzXgT1Opp4N2P2yoE7OY29+LX3FNX6bqAjmGV+btR/ZYnE/oQFoGzL2/3RkLYRTBYRFwvrphRy5wEAUwg==
+eslint-import-resolver-babel-module@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/eslint-import-resolver-babel-module/-/eslint-import-resolver-babel-module-5.2.0.tgz#0d328bd8e5968daebcb4d705e0cfec0819a4c23f"
+  integrity sha512-BoVKAfaveJSzKGI1wIaomg/lEbE7Zr08+fDSCWccgYrE9wRQjCbtYIQsNRNYFCcwbFv48/y+Qa19FwOv0B5g5A==
   dependencies:
     pkg-up "^2.0.0"
     resolve "^1.10.0"
@@ -10144,10 +10144,10 @@ graphql-extensions@^0.12.5:
     apollo-server-env "^2.4.5"
     apollo-server-types "^0.6.0"
 
-graphql-scalars@^1.2.7:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/graphql-scalars/-/graphql-scalars-1.4.0.tgz#6753ee66f8060cdf42dd75119702430959308049"
-  integrity sha512-Owm8vcbPFJnYhHAyLP/M5WX1CGZD1rW/sImDkI/+zgU+l6nGK8V27R1c0DiY4WgXaIYWxndqkDY3pZIisn7YHA==
+graphql-scalars@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/graphql-scalars/-/graphql-scalars-1.4.1.tgz#d4179af696c8d1420da5e7a14c5e033f434a71a4"
+  integrity sha512-QCT9sHYkEns9jp3fYqzmoUtS7GiWn+IKrWvSKYDrGOEqlUVP66DDtR0HQmebIbnaSuww239drYnq6JNP0VIDTg==
 
 graphql-tag@^2.10.3, graphql-tag@^2.11.0, graphql-tag@^2.9.2:
   version "2.11.0"
@@ -15364,10 +15364,10 @@ react-helmet-async@^1.0.2:
     react-fast-compare "^3.2.0"
     shallowequal "^1.1.0"
 
-react-hook-form@^6.5.3:
-  version "6.9.3"
-  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-6.9.3.tgz#26a56f5ce505dc401afc2d2500d07788cbdb9cdd"
-  integrity sha512-OmE1LMlGc3xXEB9ed9oezaGdVZtRwcz0Ck6XQxXDhOX1I1/s+WSXgXIiv0M7b96jmXg6CdwzYG3qvtCBeapcWg==
+react-hook-form@^6.9.5:
+  version "6.9.5"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-6.9.5.tgz#a700ff55987c4409d938f3609f06bd516e8a86d7"
+  integrity sha512-kkUm6b4u1Iy3wCdHA0fal23sjGQMg8BBRAT3KBG9PEdls5e+7OX2Df20oBPgpXxo/GaIwk2Lh5DeVv5OeVjKsg==
 
 react-hotkeys@2.0.0:
   version "2.0.0"
