@@ -21,6 +21,11 @@ describe('${pascalName}Cell', () => {
     }).not.toThrow()
   })
 
+  // When you're ready to test the actual output of your component render
+  // you could test that, for example, certain text is present:
+  //
+  //   expect(screen.getByText('Hello, world')).toBeInTheDocument()
+
   test('Success renders successfully', async () => {
     expect(() => {
       render(<Success ${camelName}={standard().${camelName}} />)
