@@ -13,7 +13,7 @@
     "apollo-server-lambda": "2.18.2",
     "core-js": "3.6.5",
     "graphql": "^15.3.0",
-    "graphql-scalars": "^1.2.7",
+    "graphql-scalars": "^1.4.1",
     "graphql-tools": "6.2.4",
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^1.8.1",
