@@ -106,7 +106,7 @@ export const handler = async ({ force }) => {
          */
         if (!force && postCSSConfigExists()) {
           throw new Error(
-            'PostCSS config already exists.\nUse --force to override existing PostCSS config.'
+            'PostCSS config already exists.\nUse --force to override existing config.'
           )
         } else {
           return writeFile(
@@ -136,7 +136,11 @@ export const handler = async ({ force }) => {
           path.join(getPaths().web.base, 'tailwind.config.js')
         )
 
-        if (!configExists || force) {
+        if (!force && configExists) {
+          throw new Error(
+            'Tailwindcss config already exists.\nUse --force to override existing config.'
+          )
+        } else {
           await execa('yarn', ['tailwindcss', 'init'])
 
           // opt-in to upcoming changes
