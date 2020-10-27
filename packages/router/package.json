@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/router",
-  "version": "0.19.3",
+  "version": "0.20.0",
   "files": [
     "dist",
     "src/index.d.ts"
@@ -9,7 +9,8 @@
   "types": "src/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "core-js": "3.6.5"
+    "core-js": "3.6.5",
+    "lodash.isequal": "^4.5.0"
   },
   "peerDependencies": {
     "prop-types": "*",

@@ -1,11 +1,21 @@
-import React from 'react'
-import { Query } from '@apollo/client/react/components/Query'
-import { DocumentNode } from 'graphql'
-import {
+import type { DocumentNode } from 'graphql'
+import type {
   BaseQueryOptions,
   OperationVariables,
   QueryResult,
 } from '@apollo/client'
+
+import React from 'react'
+import { useQuery } from '@apollo/client'
+
+/**
+ * Graciously borrowed from Apollo. We'll move over to a hooks version.
+ */
+// @ts-expect-error Temporary.
+const Query = ({ children, query, ...rest }) => {
+  const result = useQuery(query, rest)
+  return children && result ? children(result) : null
+}
 
 export type DataObject = { [key: string]: unknown }
 

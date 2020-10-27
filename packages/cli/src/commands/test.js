@@ -26,8 +26,8 @@ function isInMercurialRepository() {
 
 export const command = 'test [side..]'
 export const description = 'Run Jest tests. Defaults to watch mode'
-export const builder = async (yargs) => {
-  const { getProject } = await import('@redwoodjs/structure')
+export const builder = (yargs) => {
+  const { getProject } = require('@redwoodjs/structure')
   yargs
     .choices('side', getProject().sides)
     .option('watch', {
@@ -69,30 +69,25 @@ export const handler = async ({
 }) => {
   const { cache: CACHE_DIR } = getPaths()
   const sides = [].concat(side).filter(Boolean)
-
   const args = [
     '--passWithNoTests',
     watch && '--watch',
     collectCoverage && '--collectCoverage',
     watchAll && '--watchAll',
   ].filter(Boolean)
-
   // If you don't pass any arguments we enter "watch mode" as the default.
   if (!process.env.CI && !watchAll && !collectCoverage) {
     // https://github.com/facebook/create-react-app/issues/5210
     const hasSourceControl = isInGitRepository() || isInMercurialRepository()
     args.push(hasSourceControl ? '--watch' : '--watchAll')
   }
-
   args.push(
     '--config',
     require.resolve('@redwoodjs/core/config/jest.config.js')
   )
-
   if (sides.length > 0) {
     args.push('--projects', ...sides)
   }
-
   try {
     // Create a test database
     if (sides.includes('api')) {
@@ -104,7 +99,6 @@ export const handler = async ({
         env: { DATABASE_URL },
       })
     }
-
     // **NOTE** There is no official way to run Jest programatically,
     // so we're running it via execa, since `jest.run()` is a bit unstable.
     // https://github.com/facebook/jest/issues/5048

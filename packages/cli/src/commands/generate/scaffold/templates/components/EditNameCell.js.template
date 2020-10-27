@@ -11,8 +11,8 @@ export const QUERY = gql`
 `
 const UPDATE_${singularConstantName}_MUTATION = gql`
   mutation Update${singularPascalName}Mutation($id: ${idType}!, $input: Update${singularPascalName}Input!) {
-    update${singularPascalName}(id: $id, input: $input) {
-      id
+    update${singularPascalName}(id: $id, input: $input) {<% columns.forEach(column => { %>
+      <%= column.name %><% }) %>
     }
   }
 `
