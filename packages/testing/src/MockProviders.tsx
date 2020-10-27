@@ -3,8 +3,8 @@
  * because it's also used by Storybook in the browser.
  */
 import React from 'react'
-// @ts-expect-error - We do some magic here, and this error is expected.
 import { RedwoodProvider } from '@redwoodjs/web'
+import type { AuthContextInterface } from '@redwoodjs/auth'
 
 // Import the user's Router from `./web/src/Router.{tsx,js}`,
 // we pass the `children` from the user's Router to `./MockRouter.Router`
@@ -13,9 +13,26 @@ const {
   default: UserRouterWithRoutes,
 } = require('~__REDWOOD__USER_ROUTES_FOR_MOCK')
 
+const fakeUseAuth = (): AuthContextInterface => ({
+  loading: false,
+  isAuthenticated: false,
+  currentUser: null,
+  userMetadata: null,
+  logIn: async () => undefined,
+  logOut: async () => undefined,
+  signUp: async () => undefined,
+  getToken: async () => null,
+  getCurrentUser: async () => null,
+  hasRole: () => false,
+  reauthenticate: async () => undefined,
+  client: null,
+  type: 'custom',
+  hasError: false,
+})
+
 export const MockProviders: React.FunctionComponent = ({ children }) => {
   return (
-    <RedwoodProvider>
+    <RedwoodProvider useAuth={fakeUseAuth}>
       <UserRouterWithRoutes />
       {children}
     </RedwoodProvider>
