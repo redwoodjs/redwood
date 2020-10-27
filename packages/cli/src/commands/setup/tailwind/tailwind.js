@@ -11,12 +11,18 @@ import { getPaths, writeFile } from 'src/lib'
 export const command = 'tailwind'
 export const description = 'Setup tailwindcss and PostCSS'
 export const builder = (yargs) => {
-  yargs.option('force', {
-    alias: 'f',
-    default: false,
-    description: 'Overwrite existing configuration',
-    type: 'boolean',
-  })
+  yargs
+    .option('force', {
+      alias: 'f',
+      default: false,
+      description: 'Overwrite existing configuration',
+      type: 'boolean',
+    })
+    .option('ui', {
+      default: false,
+      description: 'Install TailwindUI as well',
+      type: 'boolean',
+    })
 }
 
 const tailwindImportsAndNotes = [
