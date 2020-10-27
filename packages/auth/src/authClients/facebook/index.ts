@@ -1,17 +1,18 @@
 import * as FB from 'fb-sdk-wrapper'
-
-export type Facebook = typeof FB
-
 import { AuthClient } from '../'
 
-export type FacebookUser = facebook.AuthResponse
+export type Facebook = typeof FB
+export interface FacebookUser {
+  name: string
+  id: string
+}
 
 export interface AuthClientFacebook extends AuthClient {
   login(options?: facebook.LoginOptions): Promise<facebook.StatusResponse>
   logout(): Promise<facebook.StatusResponse>
   signup(options?: facebook.LoginOptions): Promise<facebook.StatusResponse>
   getToken(force?: boolean): Promise<null | string>
-  getUserMetadata(force?: boolean): Promise<null | FacebookUser>
+  getUserMetadata(): Promise<null | FacebookUser>
 }
 
 export const facebook = (client: Facebook): AuthClientFacebook => {
@@ -32,15 +33,19 @@ export const facebook = (client: Facebook): AuthClientFacebook => {
     },
 
     async getToken(force = false) {
-      const authResponse = await this.getUserMetadata(force)
-      return authResponse?.accessToken || null
+      const statusResponse = await client.getLoginStatus(force)
+      if (statusResponse.status === 'connected') {
+        return statusResponse.authResponse.accessToken
+      } else {
+        return null
+      }
     },
 
     /** The user's data from the AuthProvider */
-    async getUserMetadata(force = false) {
-      const statusResponse = await client.getLoginStatus(force)
+    async getUserMetadata() {
+      const statusResponse = await client.getLoginStatus()
       if (statusResponse.status === 'connected') {
-        return statusResponse.authResponse
+        return await client.api('/me')
       } else {
         return null
       }
