@@ -68,15 +68,15 @@ export const handler = async ({ force }) => {
                * Install postcss-loader, tailwindcss, and autoprefixer
                * RedwoodJS currently uses PostCSS v7; postcss-loader and autoprefixers pinned for compatibility
                */
-              // await execa('yarn', [
-              //   'workspace',
-              //   'web',
-              //   'add',
-              //   '-D',
-              //   'postcss-loader@4.0.2',
-              //   'tailwindcss',
-              //   'autoprefixer@9.8.6',
-              // ])
+              await execa('yarn', [
+                'workspace',
+                'web',
+                'add',
+                '-D',
+                'postcss-loader@4.0.2',
+                'tailwindcss',
+                'autoprefixer@9.8.6',
+              ])
             },
           },
           {
@@ -86,7 +86,7 @@ export const handler = async ({ force }) => {
                * Sync yarn.lock file and node_modules folder.
                * Refer https://github.com/redwoodjs/redwood/issues/1301 for more details.
                */
-              // await execa('yarn', ['install', '--check-files'])
+              await execa('yarn', ['install', '--check-files'])
             },
           },
         ])
