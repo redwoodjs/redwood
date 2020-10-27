@@ -1,10 +1,11 @@
+import type { ApolloProviderProps } from '@apollo/client/react/context'
+
 import {
   ApolloClient,
   ApolloClientOptions,
   InMemoryCache,
+  ApolloProvider,
 } from '@apollo/client'
-import { ApolloProvider } from '@apollo/client/react'
-import { ApolloProviderProps } from '@apollo/client/react/context'
 
 export { withCell } from './withCell'
 
@@ -14,7 +15,7 @@ export type GraphQLClientConfig = Omit<
 >
 
 export type GraphQLProviderProps = {
-  config: GraphQLClientConfig
+  config?: GraphQLClientConfig
 } & Omit<ApolloProviderProps<any>, 'client'> &
   Record<string, any>
 
@@ -34,7 +35,7 @@ export const createGraphQLClient = (config: GraphQLClientConfig) => {
  * A GraphQL provider that instantiates a client automatically.
  */
 export const GraphQLProvider: React.FC<GraphQLProviderProps> = ({
-  config,
+  config = {},
   ...rest
 }) => {
   return <ApolloProvider client={createGraphQLClient(config)} {...rest} />

@@ -1,18 +1,19 @@
 import { useState, useEffect } from 'react'
 
 import type { AuthContextInterface } from '@redwoodjs/auth'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { FlashProvider } from '../flash'
 
-// @ts-expect-error - no defs
-import { FlashProvider } from 'src/flash'
 import {
   GraphQLClientConfig,
   GraphQLProvider,
   GraphQLProviderProps,
-} from 'src/graphql'
+} from '../graphql'
 
 type RedwoodProviderProps = {
   useAuth: () => AuthContextInterface
-  graphQLClientConfig: GraphQLClientConfig
+  graphQLClientConfig?: GraphQLClientConfig
   children: React.ReactNode | React.ReactNode[] | null
 } & Omit<GraphQLProviderProps, 'config' | 'children'>
 

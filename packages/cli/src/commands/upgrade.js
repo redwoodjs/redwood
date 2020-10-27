@@ -24,6 +24,7 @@ export const builder = (yargs) => {
         '[choices: "canary", "rc", or specific-version (see example below)] WARNING: "canary" and "rc" tags are unstable releases!',
       type: 'string',
     })
+    .coerce('tag', validateTag)
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -89,12 +90,12 @@ const checkInstalled = () => {
 
 // yargs allows passing the 'dry-run' alias 'd' here,
 // which we need to use because babel fails on 'dry-run'
-const runUpgrade = ({ d, tag }) => {
+const runUpgrade = ({ d: dryRun, tag }) => {
   return [
     {
       title: '...',
       task: (ctx, task) => {
-        if (d) {
+        if (dryRun) {
           task.title = tag
             ? 'The --dry-run option is not supported for --tags'
             : 'Checking available upgrades for @redwoodjs packages'
@@ -129,6 +130,26 @@ const runUpgrade = ({ d, tag }) => {
       },
     },
   ]
+}
+
+const SEMVER_REGEX = /(?<=^v?|\sv?)(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*)(?:\.(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*))*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?(?=$|\s)/gi
+const validateTag = (tag) => {
+  const isTagValid =
+    tag === 'rc' ||
+    tag === 'canary' ||
+    tag === 'latest' ||
+    SEMVER_REGEX.test(tag)
+
+  if (!isTagValid) {
+    // Stop execution
+    throw new Error(
+      c.error(
+        'Invalid tag supplied. Supported values: rc, canary, latest, or valid semver version\n'
+      )
+    )
+  }
+
+  return tag
 }
 
 export const handler = async ({ d, tag }) => {
