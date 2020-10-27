@@ -51,6 +51,10 @@ const tailwindImportsDoesExist = (indexCSS) => {
   return hasBaseImport() && hasComponentsImport() && hasUtilitiesImport()
 }
 
+const postCSSConfigExists = () => {
+  return fs.existsSync(getPaths().web.postcss)
+}
+
 export const handler = async ({ force }) => {
   const tasks = new Listr([
     {
@@ -95,15 +99,30 @@ export const handler = async ({ force }) => {
          * Make web/config if it doesn't exist
          * and write postcss.config.js there
          */
-        return writeFile(
-          getPaths().web.postcss,
-          fs
-            .readFileSync(
-              path.resolve(__dirname, 'templates', 'postcss.config.js.template')
-            )
-            .toString(),
-          { overwriteExisting: force }
-        )
+
+        /**
+         * Check if PostCSS config already exists.
+         * If it exists, throw an error.
+         */
+        if (!force && postCSSConfigExists()) {
+          throw new Error(
+            'PostCSS config already exists.\nUse --force to override existing PostCSS config.'
+          )
+        } else {
+          return writeFile(
+            getPaths().web.postcss,
+            fs
+              .readFileSync(
+                path.resolve(
+                  __dirname,
+                  'templates',
+                  'postcss.config.js.template'
+                )
+              )
+              .toString(),
+            { overwriteExisting: force }
+          )
+        }
       },
     },
     {
