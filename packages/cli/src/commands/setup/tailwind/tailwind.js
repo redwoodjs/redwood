@@ -61,7 +61,7 @@ const postCSSConfigExists = () => {
   return fs.existsSync(getPaths().web.postcss)
 }
 
-export const handler = async ({ force }) => {
+export const handler = async ({ force, ui }) => {
   const tasks = new Listr([
     {
       title: 'Installing packages...',
@@ -71,18 +71,20 @@ export const handler = async ({ force }) => {
             title: 'Install postcss-loader, tailwindcss, and autoprefixer',
             task: async () => {
               /**
-               * Install postcss-loader, tailwindcss, and autoprefixer
+               * Install postcss-loader, tailwindcss, and autoprefixer. Add TailwindUI if requested.
                * RedwoodJS currently uses PostCSS v7; postcss-loader and autoprefixers pinned for compatibility
                */
-              await execa('yarn', [
-                'workspace',
-                'web',
-                'add',
-                '-D',
-                'postcss-loader@4.0.2',
-                'tailwindcss',
-                'autoprefixer@9.8.6',
-              ])
+              let packages = [
+          'postcss-loader@4.0.2',
+          'tailwindcss',
+          'autoprefixer@9.8.6',
+        ]
+
+        if (ui) {
+          packages.push('@tailwindcss/ui')
+        }
+
+        await execa('yarn', ['workspace', 'web', 'add', '-D', ...packages])
             },
           },
           {
