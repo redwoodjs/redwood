@@ -75,16 +75,22 @@ export const handler = async ({ force, ui }) => {
                * RedwoodJS currently uses PostCSS v7; postcss-loader and autoprefixers pinned for compatibility
                */
               let packages = [
-          'postcss-loader@4.0.2',
-          'tailwindcss',
-          'autoprefixer@9.8.6',
-        ]
+                'postcss-loader@4.0.2',
+                'tailwindcss',
+                'autoprefixer@9.8.6',
+              ]
 
-        if (ui) {
-          packages.push('@tailwindcss/ui')
-        }
+              if (ui) {
+                packages.push('@tailwindcss/ui')
+              }
 
-        await execa('yarn', ['workspace', 'web', 'add', '-D', ...packages])
+              await execa('yarn', [
+                'workspace',
+                'web',
+                'add',
+                '-D',
+                ...packages,
+              ])
             },
           },
           {
@@ -151,13 +157,21 @@ export const handler = async ({ force, ui }) => {
         } else {
           await execa('yarn', ['tailwindcss', 'init'])
 
-          // opt-in to upcoming changes
           const config = fs.readFileSync('tailwind.config.js', 'utf-8')
 
+          // opt-in to upcoming changes
           const uncommentFlags = (str) =>
             str.replace(/\/{2} ([\w-]+: true)/g, '$1')
 
-          const newConfig = config.replace(/future.*purge/s, uncommentFlags)
+          let newConfig = config.replace(/future.*purge/s, uncommentFlags)
+
+          // add TailwindUI plugin if requested
+          if (ui) {
+            newConfig = newConfig.replace(
+              /plugins:\W*\[\W*]/s,
+              "plugins: [require('@tailwindcss/ui')]"
+            )
+          }
 
           fs.writeFileSync('tailwind.config.js', newConfig)
 
