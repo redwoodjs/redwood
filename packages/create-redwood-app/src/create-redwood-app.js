@@ -205,6 +205,8 @@ new Listr(
 )
   .run()
   .then(() => {
+    // zOMG the semicolon below is a real Prettier thing. What??
+    // https://prettier.io/docs/en/rationale.html#semicolons
     ;[
       '',
       style.success('Thanks for trying out Redwood!'),
