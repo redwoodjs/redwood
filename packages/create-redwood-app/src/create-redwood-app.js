@@ -44,6 +44,7 @@ const style = {
   love: chalk.redBright,
 
   green: chalk.green,
+  brightGreen: chalk.greenBright
 }
 
 const RELEASE_URL =
@@ -209,10 +210,10 @@ new Listr(
       '',
       style.success('Thanks for trying out Redwood!'),
       '',
-      `We've created your app in '${style.cmd(newAppDir)}'`,
-      `Enter the directory and run '${style.cmd("yarn rw dev")}' to start the development server.`,
+      `We've created your app in '${style.brightGreen(newAppDir)}'`,
+      `Enter the directory and run '${style.brightGreen("yarn rw dev")}' to start the development server.`,
       '',
-      `${style.redwood(' ☄ Get up and running fast with this Quick Start guide')}: https://redwoodjs.com/docs/quick-start`,
+      `${style.redwood(' ⚡️ Get up and running fast with this Quick Start guide')}: https://redwoodjs.com/docs/quick-start`,
       '',
       style.header('Join the Community'),
       '',
