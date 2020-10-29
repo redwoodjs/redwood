@@ -81,6 +81,10 @@ export const handler = async ({
     const hasSourceControl = isInGitRepository() || isInMercurialRepository()
     args.push(hasSourceControl ? '--watch' : '--watchAll')
   }
+  // if no sides declared with yargs, default to all sides
+  if (!sides.length) {
+    getProject().sides.forEach(side => sides.push(side))
+  }
   args.push(
     '--config',
     require.resolve('@redwoodjs/core/config/jest.config.js')
