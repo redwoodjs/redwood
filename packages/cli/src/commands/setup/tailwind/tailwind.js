@@ -37,7 +37,7 @@ const tailwindImportsAndNotes = [
 
 const INDEX_CSS_PATH = path.join(getPaths().web.src, 'index.css')
 
-const tailwindImportsDoesExist = (indexCSS) => {
+const tailwindImportsExist = (indexCSS) => {
   let content = indexCSS.toString()
 
   const hasBaseImport = () => /@import "tailwindcss\/base"/.test(content)
