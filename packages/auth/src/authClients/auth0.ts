@@ -1,19 +1,10 @@
-import type { Auth0Client as Auth0 } from '@auth0/auth0-spa-js'
+import type { Auth0Client, RedirectLoginOptions } from '@auth0/auth0-spa-js'
 
-import type { AuthClient } from './'
-
-export type AuthClientAuth0 = AuthClient
-
-export type { Auth0 }
-
-// TODO: Map out this user properly.
-export interface Auth0User {}
-
-export const auth0 = (client: Auth0): AuthClientAuth0 => {
+export const auth0 = (client: Auth0Client) => {
   return {
     type: 'auth0',
     client,
-    restoreAuthState: async () => {
+    async restoreAuthState() {
       if (window.location.search.includes('code=')) {
         const { appState } = await client.handleRedirectCallback()
         window.history.replaceState(
@@ -25,18 +16,15 @@ export const auth0 = (client: Auth0): AuthClientAuth0 => {
         )
       }
     },
-    login: async (options?) => client.loginWithRedirect(options),
-    logout: (options?) => client.logout(options),
-    signup: async (options?) =>
+    login: client.loginWithRedirect,
+    logout: client.logout,
+    signup: async (options?: RedirectLoginOptions) =>
       client.loginWithRedirect({
         ...options,
         screen_hint: 'signup',
         prompt: 'login',
       }),
     getToken: async () => client.getTokenSilently(),
-    getUserMetadata: async () => {
-      const user = await client.getUser()
-      return user || null
-    },
+    getUserMetadata: client.getUser,
   }
 }
