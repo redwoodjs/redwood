@@ -3,11 +3,12 @@
 // vscode is a compile-time only dependency
 // we only use it in type declarations
 // (we can't use "import type" since we need to do use it in some typeof expressions)
+import { memoize } from 'lodash'
 import * as vscode from 'vscode'
 import { Connection as LSPConnection } from 'vscode-languageserver'
 import { Command, Location } from 'vscode-languageserver-types'
+
 import { lazy, memo } from '../x/decorators'
-import { memoize } from 'lodash'
 
 export type VSCodeWindowMethods = Pick<
   typeof vscode.window,

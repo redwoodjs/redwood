@@ -1,7 +1,9 @@
 import camelcase from 'camelcase'
+
 import { RWProject } from '../model/RWProject'
 import { validateRoutePath } from '../util'
 import { lazy, memo } from '../x/decorators'
+
 import { RedwoodCommandString } from './RedwoodCommandString'
 import { UI } from './ui'
 
