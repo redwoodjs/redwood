@@ -2,6 +2,8 @@ import { useMutation, useFlash } from '@redwoodjs/web'
 import { navigate, routes } from '@redwoodjs/router'
 import UserProfileForm from 'src/components/UserProfileForm'
 
+import { QUERY } from 'src/components/UserProfilesCell'
+
 const CREATE_USER_PROFILE_MUTATION = gql`
   mutation CreateUserProfileMutation($input: CreateUserProfileInput!) {
     createUserProfile(input: $input) {
@@ -19,6 +21,11 @@ const NewUserProfile = () => {
         navigate(routes.userProfiles())
         addMessage('UserProfile created.', { classes: 'rw-flash-success' })
       },
+      // This refetches the query on the list page. Read more about other ways to
+      // update the cache over here:
+      // https://www.apollographql.com/docs/react/data/mutations/#making-all-other-cache-updates
+      refetchQueries: [{ query: QUERY }],
+      awaitRefetchQueries: true,
     }
   )
 
