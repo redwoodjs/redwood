@@ -41,7 +41,6 @@
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config",
     "rules": {
-      "import/order": "off",
       "@typescript-eslint/no-this-alias": "off",
       "@typescript-eslint/no-non-null-assertion": "off",
       "no-case-declarations": "off",
