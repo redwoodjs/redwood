@@ -169,9 +169,7 @@ export const handler = async ({ force }) => {
          */
         let indexCSS = fs.readFileSync(INDEX_CSS_PATH)
 
-        const tailwindImportsExist = tailwindImportsDoesExist(indexCSS)
-
-        if (tailwindImportsExist) {
+        if (tailwindImportsExist(indexCSS)) {
           task.skip('Imports already exist in index.css')
         } else {
           indexCSS = tailwindImportsAndNotes.join('\n') + indexCSS
