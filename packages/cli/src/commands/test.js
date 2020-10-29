@@ -75,19 +75,23 @@ export const handler = async ({
     collectCoverage && '--collectCoverage',
     watchAll && '--watchAll',
   ].filter(Boolean)
-  // If you don't pass any arguments we enter "watch mode" as the default.
-  if (!process.env.CI && !watchAll && !collectCoverage) {
-    // https://github.com/facebook/create-react-app/issues/5210
+  
+  // If the user wants to watch, set the proper watch flag based on what kind of repo this is
+  // because of https://github.com/facebook/create-react-app/issues/5210
+  if ((watch || watchAll) && !process.env.CI && !watchAll && !collectCoverage) {
     const hasSourceControl = isInGitRepository() || isInMercurialRepository()
     args.push(hasSourceControl ? '--watch' : '--watchAll')
   }
+  
   args.push(
     '--config',
     require.resolve('@redwoodjs/core/config/jest.config.js')
   )
+  
   if (sides.length > 0) {
     args.push('--projects', ...sides)
   }
+  
   try {
     // Create a test database
     if (sides.includes('api')) {
