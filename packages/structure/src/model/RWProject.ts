@@ -186,7 +186,7 @@ export class RWProject extends BaseNode {
    **/
   @lazy() get cells(): RWCell[] {
     return this.host
-      .globSync(this.pathHelper.web.components + '/**/*Cell.{js,jsx,tsx}')
+      .globSync(this.pathHelper.web.base + '/**/*Cell.{js,jsx,tsx}')
       .map((file) => new RWCell(file, this))
       .filter((file) => file.isCell)
   }

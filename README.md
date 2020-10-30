@@ -27,6 +27,10 @@ Redwood is the latest open source project initiated by Tom Preston-Werner, cofou
 > **TUTORIAL:** The best way to get to know Redwood is by going through the extensive
 > [Redwood Tutorial](https://redwoodjs.com/tutorial). Have fun!
 
+> **QUICK START:** You can install and run a full-stack Redwood application on your
+> machine with only a couple commands. Check out the [Quick Start](https://redwoodjs.com/docs/quick-start)
+> guide to get started.
+
 **EXAMPLES:** If you'd like to see some examples of what a Redwood application looks
 like, take a look at the following projects:
 
@@ -65,17 +69,6 @@ use:
 - [Hot module replacement](https://webpack.js.org/concepts/hot-module-replacement/) (HMR) for faster development.
 - Database migrations (via Prisma 2).
 - First class JAMstack-style deployment to [Netlify](https://www.netlify.com/).
-
-## Quickstart
-- Yarn (>=1.15) and Node.js (>=12) are required to create the basic file structure. (To learn more about Yarn and Node.js requirements, visit the [Node.js and Yarn Versions section](https://redwoodjs.com/tutorial/prerequisites#nodejs-and-yarn-versions) in the Tutorial Prerequisites.)
-  ```
-    yarn create redwood-app ./redwoodblog
-  ```
-- Start the development server
-  ```cd redwoodblog
-      yarn redwood dev
-  ```
-- A browser should automatically open to http://localhost:8910 and you will see the Redwood welcome page.
 
 ## The Redwood philosophy
 

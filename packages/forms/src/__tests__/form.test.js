@@ -7,7 +7,6 @@ import {
   fireEvent,
   waitFor,
 } from '@testing-library/react'
-
 import { toHaveFocus } from '@testing-library/jest-dom/matchers'
 expect.extend({ toHaveFocus })
 
