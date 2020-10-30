@@ -1,6 +1,7 @@
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 import { ensurePosixPath } from '@redwoodjs/internal'
+const { getProject } = require('@redwoodjs/structure')
 
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
@@ -27,7 +28,6 @@ function isInMercurialRepository() {
 export const command = 'test [side..]'
 export const description = 'Run Jest tests. Defaults to watch mode'
 export const builder = (yargs) => {
-  const { getProject } = require('@redwoodjs/structure')
   yargs
     .choices('side', getProject().sides)
     .option('watch', {
@@ -80,6 +80,10 @@ export const handler = async ({
     // https://github.com/facebook/create-react-app/issues/5210
     const hasSourceControl = isInGitRepository() || isInMercurialRepository()
     args.push(hasSourceControl ? '--watch' : '--watchAll')
+  }
+  // if no sides declared with yargs, default to all sides
+  if (!sides.length) {
+    getProject().sides.forEach(side => sides.push(side))
   }
   args.push(
     '--config',
