@@ -2,7 +2,8 @@ import execa from 'execa'
 import terminalLink from 'terminal-link'
 import { ensurePosixPath } from '@redwoodjs/internal'
 const { getProject } = require('@redwoodjs/structure')
-
+import fs from 'fs'
+import path from 'path'
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 
@@ -23,6 +24,15 @@ function isInMercurialRepository() {
   } catch (e) {
     return false
   }
+}
+
+function jestConfigsExist() {
+  const { api, web } = getPaths()
+  const apiConfigPath = path.join(api.base, 'jest.config.js')
+  const webConfigPath = path.join(web.base, 'jest.config.js')
+  const apiConfigExists = fs.existsSync(apiConfigPath)
+  const webConfigExists = fs.existsSync(webConfigPath)
+  return apiConfigExists && webConfigExists
 }
 
 export const command = 'test [side..]'
@@ -83,7 +93,7 @@ export const handler = async ({
   }
   // if no sides declared with yargs, default to all sides
   if (!sides.length) {
-    getProject().sides.forEach(side => sides.push(side))
+    getProject().sides.forEach((side) => sides.push(side))
   }
   args.push(
     '--config',
@@ -106,12 +116,19 @@ export const handler = async ({
     // **NOTE** There is no official way to run Jest programatically,
     // so we're running it via execa, since `jest.run()` is a bit unstable.
     // https://github.com/facebook/jest/issues/5048
-    execa('yarn jest', args, {
+    await execa('yarn jest', args, {
       cwd: getPaths().base,
       shell: true,
       stdio: 'inherit',
     })
   } catch (e) {
     console.log(c.error(e.message))
+    if (!jestConfigsExist()) {
+      console.log(
+        `You seem to be missing Jest config files...\n` +
+          `It may help to run: ` +
+          c.green(`yarn rw setup jest`)
+      )
+    }
   }
 }
