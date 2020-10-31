@@ -3,6 +3,8 @@ import fs from 'fs'
 
 import findUp from 'findup-sync'
 
+import { getConfig } from './config'
+
 export interface NodeTargetPaths {
   base: string
   dataMigrations: string
@@ -49,9 +51,9 @@ const CONFIG_FILE_NAME = 'redwood.toml'
 
 const PATH_API_DIR_FUNCTIONS = 'api/src/functions'
 const PATH_API_DIR_GRAPHQL = 'api/src/graphql'
-const PATH_API_DIR_DATA_MIGRATIONS = 'api/prisma/dataMigrations'
-const PATH_API_DIR_DB = 'api/prisma'
-const PATH_API_DIR_DB_SCHEMA = 'api/prisma/schema.prisma'
+// const PATH_API_DIR_DATA_MIGRATIONS = 'api/db/dataMigrations'
+// const PATH_API_DIR_DB = 'api/db'
+// const PATH_API_DIR_DB_SCHEMA = 'api/db/schema.prisma'
 const PATH_API_DIR_CONFIG = 'api/src/config'
 const PATH_API_DIR_LIB = 'api/src/lib'
 const PATH_API_DIR_SERVICES = 'api/src/services'
@@ -112,6 +114,7 @@ export const resolveFile = (
  */
 export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
   const routes = resolveFile(path.join(BASE_DIR, PATH_WEB_ROUTES)) as string
+  const { dbPath } = getConfig(getConfigPath()).api
 
   // We store our test database over here:
   const cache = path.join(BASE_DIR, '.redwood')
@@ -125,9 +128,9 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
     types,
     api: {
       base: path.join(BASE_DIR, 'api'),
-      dataMigrations: path.join(BASE_DIR, PATH_API_DIR_DATA_MIGRATIONS),
-      db: path.join(BASE_DIR, PATH_API_DIR_DB),
-      dbSchema: path.join(BASE_DIR, PATH_API_DIR_DB_SCHEMA),
+      dataMigrations: path.join(BASE_DIR, dbPath, 'dataMigrations'),
+      db: path.join(BASE_DIR, dbPath),
+      dbSchema: path.join(BASE_DIR, dbPath, 'schema.prisma'),
       functions: path.join(BASE_DIR, PATH_API_DIR_FUNCTIONS),
       graphql: path.join(BASE_DIR, PATH_API_DIR_GRAPHQL),
       lib: path.join(BASE_DIR, PATH_API_DIR_LIB),
