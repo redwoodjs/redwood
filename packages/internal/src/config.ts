@@ -18,7 +18,7 @@ export interface NodeTargetConfig {
   port: number
   path: string
   target: TargetEnum.NODE
-  dbPath: string
+  schemaPath: string
 }
 
 interface BrowserTargetConfig {
