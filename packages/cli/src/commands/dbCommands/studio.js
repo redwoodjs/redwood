@@ -10,12 +10,19 @@ export const command = 'studio'
 export const description = 'Start Prisma Studio'
 
 export const builder = (yargs) => {
-  yargs.epilogue(
-    `Also see the ${terminalLink(
-      'Redwood CLI Reference',
-      'https://redwoodjs.com/reference/command-line-interface#studio'
-    )}`
-  )
+  yargs
+    .option('schema', {
+      alias: 's',
+      default: true,
+      description: 'Overwrite Prisma schema path',
+      type: 'string',
+    })
+    .epilogue(
+      `Also see the ${terminalLink(
+        'Redwood CLI Reference',
+        'https://redwoodjs.com/reference/command-line-interface#studio'
+      )}`
+    )
 }
 
 export const handler = async () => {
@@ -37,7 +44,7 @@ export const handler = async () => {
       {
         title: 'Starting Prisma Studio...',
         cmd: 'yarn prisma',
-        args: ['studio'],
+        args: ['studio', `--schema=${getPaths().api.dbSchema}`],
       },
     ],
     { verbose: true }

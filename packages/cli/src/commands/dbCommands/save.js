@@ -1,6 +1,6 @@
 import terminalLink from 'terminal-link'
 
-import { runCommandTask } from 'src/lib'
+import { getPaths, runCommandTask } from 'src/lib'
 
 export const command = 'save [name..]'
 export const description = 'Create a new migration'
@@ -16,6 +16,12 @@ export const builder = (yargs) => {
       default: true,
       description: 'Print more',
       type: 'boolean',
+    })
+    .option('schema', {
+      alias: 's',
+      default: true,
+      description: 'Overwrite Prisma schema path',
+      type: 'string',
     })
     .epilogue(
       `Also see the ${terminalLink(
@@ -36,6 +42,7 @@ export const handler = async ({ name = 'migration', verbose = true }) => {
           name.length && `--name "${name}"`,
           '--create-db',
           '--experimental',
+          `--schema=${getPaths().api.dbSchema}`,
         ].filter(Boolean),
       },
     ],

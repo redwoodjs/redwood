@@ -21,6 +21,12 @@ export const builder = (yargs) => {
       description: 'Print more',
       type: 'boolean',
     })
+    .option('schema', {
+      alias: 's',
+      default: true,
+      description: 'Overwrite Prisma schema path',
+      type: 'string',
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -60,6 +66,7 @@ export const handler = async ({ verbose = true, force = true }) => {
       {
         title: 'Generating the Prisma client...',
         cmd: 'yarn prisma generate',
+        args: [`--schema=${getPaths().api.dbSchema}`],
       },
     ],
     {

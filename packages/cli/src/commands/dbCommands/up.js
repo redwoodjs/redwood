@@ -1,6 +1,6 @@
 import terminalLink from 'terminal-link'
 
-import { runCommandTask } from 'src/lib'
+import { getPaths, runCommandTask } from 'src/lib'
 import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
 
 export const command = 'up [increment]'
@@ -28,6 +28,12 @@ export const builder = (yargs) => {
       description: 'Print more',
       type: 'boolean',
     })
+    .option('schema', {
+      alias: 's',
+      default: true,
+      description: 'Overwrite Prisma schema path',
+      type: 'string',
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -53,6 +59,7 @@ export const handler = async ({
           '--experimental',
           '--create-db',
           autoApprove && '--auto-approve',
+          `--schema=${getPaths().api.dbSchema}`,
         ].filter(Boolean),
       },
     ],
