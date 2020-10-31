@@ -61,8 +61,6 @@ export const handler = async ({ verbose = true, force = true }) => {
     }
   }
 
-  console.log('SCHEMA:', getPaths().api.dbSchema)
-
   return await runCommandTask(
     [
       {
