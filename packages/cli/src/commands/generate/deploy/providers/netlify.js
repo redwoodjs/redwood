@@ -25,5 +25,5 @@ export const apiProxyPath = '/.netlify/functions'
 // any notes to print out when the job is done
 export const notes = [
   'You are ready to deploy to Netlify!',
-  'See: https://redwoodjs.com/docs/deploy#netlify',
+  'See: https://redwoodjs.com/docs/deploy#netlify-deploy',
 ]
