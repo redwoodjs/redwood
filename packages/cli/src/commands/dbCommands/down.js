@@ -1,6 +1,6 @@
 import terminalLink from 'terminal-link'
 
-import { runCommandTask } from 'src/lib'
+import { runCommandTask, getPaths } from 'src/lib'
 
 export const command = 'down [decrement]'
 export const description = 'Migrate your database down'
@@ -34,6 +34,7 @@ export const handler = async ({ decrement, verbose = true }) => {
           'migrate down',
           decrement && `${decrement}`,
           '--experimental',
+          `--schema=${getPaths().api.dbSchema}`,
         ].filter(Boolean),
       },
     ],
