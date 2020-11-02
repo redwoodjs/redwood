@@ -1,12 +1,8 @@
 import type { DocumentNode } from 'graphql'
-import type {
-  BaseQueryOptions,
-  OperationVariables,
-  QueryResult,
-} from '@apollo/client'
 
 import React from 'react'
-import { useQuery } from '@apollo/client'
+import { useQuery } from './useQuery'
+import { BaseQueryOptions, OperationVariables, QueryResult } from '.'
 
 /**
  * Graciously borrowed from Apollo. We'll move over to a hooks version.
@@ -19,7 +15,7 @@ const Query = ({ children, query, ...rest }) => {
 
 export type DataObject = { [key: string]: unknown }
 
-export type QueryResultAlias = QueryResult<any, Record<string, any>>
+export type QueryResultAlias = QueryResult<any>
 
 export type CellFailureStateComponent = Omit<
   QueryResultAlias,

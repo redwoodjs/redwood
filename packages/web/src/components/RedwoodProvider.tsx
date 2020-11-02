@@ -5,23 +5,16 @@ import type { AuthContextInterface } from '@redwoodjs/auth'
 // @ts-ignore
 import { FlashProvider } from '../flash'
 
-import {
-  GraphQLClientConfig,
-  GraphQLProvider,
-  GraphQLProviderProps,
-} from '../graphql'
+import { GraphQLProvider } from '../graphql'
 
 type RedwoodProviderProps = {
   useAuth: () => AuthContextInterface
-  graphQLClientConfig?: GraphQLClientConfig
   children: React.ReactNode | React.ReactNode[] | null
-} & Omit<GraphQLProviderProps, 'config' | 'children'>
+}
 
 const GraphQLProviderWithAuth: React.FC<RedwoodProviderProps> = ({
   useAuth,
-  graphQLClientConfig = { headers: {} },
   children,
-  ...rest
 }) => {
   const { loading, isAuthenticated, getToken, type } = useAuth()
   const [authToken, setAuthToken] = useState<string | null>()
@@ -46,7 +39,7 @@ const GraphQLProviderWithAuth: React.FC<RedwoodProviderProps> = ({
 
   if (!isAuthenticated) {
     return (
-      <GraphQLProvider config={graphQLClientConfig} {...rest}>
+      <GraphQLProvider>
         {children}
       </GraphQLProvider>
     )
@@ -60,14 +53,10 @@ const GraphQLProviderWithAuth: React.FC<RedwoodProviderProps> = ({
 
   return (
     <GraphQLProvider
-      config={{
-        ...graphQLClientConfig,
-        headers: {
-          /** `auth-provider` is used by the API to determine how to decode the token */
-          'auth-provider': type,
-          authorization: `Bearer ${authToken}`,
-          ...graphQLClientConfig.headers,
-        },
+      headers={{
+        /** `auth-provider` is used by the API to determine how to decode the token */
+        'auth-provider': type,
+        authorization: `Bearer ${authToken}`,
       }}
     >
       {children}
@@ -84,13 +73,12 @@ const GraphQLProviderWithAuth: React.FC<RedwoodProviderProps> = ({
  */
 const RedwoodProvider: React.FC<RedwoodProviderProps> = ({
   useAuth = window.__REDWOOD__USE_AUTH,
-  graphQLClientConfig,
   children,
   ...rest
 }) => {
   if (typeof useAuth === 'undefined') {
     return (
-      <GraphQLProvider config={graphQLClientConfig} {...rest}>
+      <GraphQLProvider>
         <FlashProvider>{children}</FlashProvider>
       </GraphQLProvider>
     )
@@ -99,7 +87,6 @@ const RedwoodProvider: React.FC<RedwoodProviderProps> = ({
   return (
     <GraphQLProviderWithAuth
       useAuth={useAuth}
-      graphQLClientConfig={graphQLClientConfig}
       {...rest}
     >
       <FlashProvider>{children}</FlashProvider>

@@ -1,42 +1,40 @@
-import type { ApolloProviderProps } from '@apollo/client/react/context'
+import { GraphQLError } from 'graphql'
 
-import {
-  ApolloClient,
-  ApolloClientOptions,
-  InMemoryCache,
-  ApolloProvider,
-} from '@apollo/client'
+export declare type OperationVariables = Record<string, any>
 
-export { withCell } from './withCell'
+export declare class GqlError extends Error {
+  message: string
+  graphQLErrors: ReadonlyArray<GraphQLError>
+  extraInfo?: any
 
-export type GraphQLClientConfig = Omit<
-  ApolloClientOptions<InMemoryCache>,
-  'uri' | 'cache'
->
-
-export type GraphQLProviderProps = {
-  config?: GraphQLClientConfig
-} & Omit<ApolloProviderProps<any>, 'client'> &
-  Record<string, any>
-
-/**
- * Create a GraphQL Client (Apollo) that points to the `apiProxyPath` that's
- * specified in `redwood.toml`.
- */
-export const createGraphQLClient = (config: GraphQLClientConfig) => {
-  return new ApolloClient({
-    uri: `${window.__REDWOOD__API_PROXY_PATH}/graphql`,
-    cache: new InMemoryCache(),
-    ...config,
+  constructor({
+    graphQLErrors,
+    errorMessage,
+    extraInfo,
+  }: {
+    graphQLErrors?: ReadonlyArray<GraphQLError>
+    errorMessage?: string
+    extraInfo?: any
   })
 }
 
-/**
- * A GraphQL provider that instantiates a client automatically.
- */
-export const GraphQLProvider: React.FC<GraphQLProviderProps> = ({
-  config = {},
-  ...rest
-}) => {
-  return <ApolloProvider client={createGraphQLClient(config)} {...rest} />
+export interface QueryResult<TData = any> {
+  data: TData | undefined
+  error?: GqlError
+  loading: boolean
 }
+
+export interface MutationResult<TData = any> {
+  data?: TData | null
+  error?: GqlError
+  loading: boolean
+}
+
+export interface BaseQueryOptions<TVariables = OperationVariables> {
+  variables?: TVariables
+}
+
+export * from './GraphQLContext'
+export * from './useQuery'
+export * from './useMutation'
+export { withCell } from './withCell'
