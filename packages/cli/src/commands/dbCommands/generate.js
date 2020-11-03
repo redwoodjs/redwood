@@ -23,7 +23,7 @@ export const builder = (yargs) => {
     })
     .option('schema', {
       default: true,
-      description: 'Overwrite Prisma schema path',
+      description: 'Specify the Prisma schema location',
       type: 'string',
     })
     .epilogue(
