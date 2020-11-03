@@ -22,7 +22,6 @@ export const builder = (yargs) => {
       type: 'boolean',
     })
     .option('schema', {
-      alias: 's',
       default: true,
       description: 'Overwrite Prisma schema path',
       type: 'string',
