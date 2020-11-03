@@ -4,7 +4,7 @@ import { getPaths } from 'src/lib'
 
 interface Option {
   alias?: string
-  default: boolean | number
+  default?: boolean | number | string
   description: string
   type: string
 }
@@ -14,6 +14,17 @@ export const force = (): Option => ({
   default: true,
   description: 'Overwrite existing Client',
   type: 'boolean',
+})
+
+export const name = (): Option => ({
+  default: 'migration',
+  description: 'Name of the migration',
+  type: 'string',
+})
+
+export const increment = (): Option => ({
+  description: 'Number of forward migrations to apply. Defaults to the latest',
+  type: 'number',
 })
 
 export const decrement = (): Option => ({

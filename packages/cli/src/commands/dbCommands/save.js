@@ -1,15 +1,16 @@
 import { getPaths, runCommandTask } from 'src/lib'
-import { verbose, schema, epilogue } from 'src/commands/dbCommands/options'
+import {
+  name,
+  verbose,
+  schema,
+  epilogue,
+} from 'src/commands/dbCommands/options'
 
 export const command = 'save [name..]'
 export const description = 'Create a new migration'
 export const builder = (yargs) => {
   yargs
-    .positional('name', {
-      description: 'Name of the migration',
-      type: 'string',
-      default: 'migration',
-    })
+    .positional('name', name())
     .option('verbose', verbose())
     .option('schema', schema())
     .epilogue(epilogue())

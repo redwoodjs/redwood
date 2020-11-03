@@ -1,6 +1,7 @@
 import { getPaths, runCommandTask } from 'src/lib'
 import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
 import {
+  increment,
   autoApprove,
   dbClient,
   verbose,
@@ -12,11 +13,7 @@ export const command = 'up [increment]'
 export const description = 'Generate the Prisma client and apply migrations'
 export const builder = (yargs) => {
   yargs
-    .positional('increment', {
-      description:
-        'Number of forward migrations to apply. Defaults to the latest',
-      type: 'number',
-    })
+    .positional('increment', increment())
     .option('dbClient', dbClient())
     .option('autoApprove', autoApprove())
     .option('verbose', verbose())
