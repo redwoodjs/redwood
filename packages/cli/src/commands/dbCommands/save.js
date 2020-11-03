@@ -1,7 +1,5 @@
-import terminalLink from 'terminal-link'
-
 import { getPaths, runCommandTask } from 'src/lib'
-import { verbose, schema } from 'src/commands/dbCommands/options'
+import { verbose, schema, epilogue } from 'src/commands/dbCommands/options'
 
 export const command = 'save [name..]'
 export const description = 'Create a new migration'
@@ -14,12 +12,7 @@ export const builder = (yargs) => {
     })
     .option('verbose', verbose())
     .option('schema', schema())
-    .epilogue(
-      `Also see the ${terminalLink(
-        'Redwood CLI Reference',
-        'https://redwoodjs.com/reference/command-line-interface#db-save'
-      )}`
-    )
+    .epilogue(epilogue())
 }
 
 export const handler = async ({ name = 'migration', verbose = true }) => {

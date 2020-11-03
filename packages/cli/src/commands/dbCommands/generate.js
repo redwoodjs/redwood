@@ -1,10 +1,13 @@
 import fs from 'fs'
 import path from 'path'
 
-import terminalLink from 'terminal-link'
-
 import { runCommandTask, getPaths } from 'src/lib'
-import { force, verbose, schema } from 'src/commands/dbCommands/options'
+import {
+  force,
+  verbose,
+  schema,
+  epilogue,
+} from 'src/commands/dbCommands/options'
 
 export const command = 'generate'
 export const description = 'Generate the Prisma client'
@@ -13,12 +16,7 @@ export const builder = (yargs) => {
     .option('force', force())
     .option('verbose', verbose())
     .option('schema', schema())
-    .epilogue(
-      `Also see the ${terminalLink(
-        'Redwood CLI Reference',
-        'https://redwoodjs.com/reference/command-line-interface#db-generate'
-      )}`
-    )
+    .epilogue(epilogue())
 }
 export const handler = async ({ verbose = true, force = true }) => {
   if (!fs.existsSync(getPaths().api.dbSchema)) {

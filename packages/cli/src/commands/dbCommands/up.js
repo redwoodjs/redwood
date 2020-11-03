@@ -1,8 +1,12 @@
-import terminalLink from 'terminal-link'
-
 import { getPaths, runCommandTask } from 'src/lib'
 import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
-import { verbose, schema } from 'src/commands/dbCommands/options'
+import {
+  autoApprove,
+  dbClient,
+  verbose,
+  schema,
+  epilogue,
+} from 'src/commands/dbCommands/options'
 
 export const command = 'up [increment]'
 export const description = 'Generate the Prisma client and apply migrations'
@@ -13,24 +17,11 @@ export const builder = (yargs) => {
         'Number of forward migrations to apply. Defaults to the latest',
       type: 'number',
     })
-    .option('dbClient', {
-      default: true,
-      description: 'Generate the Prisma client',
-      type: 'boolean',
-    })
-    .option('autoApprove', {
-      default: false,
-      description: 'Skip interactive approval before migrating',
-      type: 'boolean',
-    })
+    .option('dbClient', dbClient())
+    .option('autoApprove', autoApprove())
     .option('verbose', verbose())
     .option('schema', schema())
-    .epilogue(
-      `Also see the ${terminalLink(
-        'Redwood CLI Reference',
-        'https://redwoodjs.com/reference/command-line-interface#db-up'
-      )}`
-    )
+    .epilogue(epilogue())
 }
 
 export const handler = async ({

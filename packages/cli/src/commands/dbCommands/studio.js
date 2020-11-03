@@ -1,24 +1,15 @@
 import path from 'path'
 import fs from 'fs'
 
-import terminalLink from 'terminal-link'
-
 import { runCommandTask, getPaths } from 'src/lib'
-import { schema } from 'src/commands/dbCommands/options'
+import { schema, epilogue } from 'src/commands/dbCommands/options'
 import c from 'src/lib/colors'
 
 export const command = 'studio'
 export const description = 'Start Prisma Studio'
 
 export const builder = (yargs) => {
-  yargs
-    .option('schema', schema())
-    .epilogue(
-      `Also see the ${terminalLink(
-        'Redwood CLI Reference',
-        'https://redwoodjs.com/reference/command-line-interface#studio'
-      )}`
-    )
+  yargs.option('schema', schema()).epilogue(epilogue())
 }
 
 export const handler = async () => {

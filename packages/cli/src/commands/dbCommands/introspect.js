@@ -1,7 +1,5 @@
-import terminalLink from 'terminal-link'
-
 import { getPaths, runCommandTask } from 'src/lib'
-import { verbose, schema } from 'src/commands/dbCommands/options'
+import { verbose, schema, epilogue } from 'src/commands/dbCommands/options'
 
 export const command = 'introspect'
 export const description =
@@ -10,12 +8,7 @@ export const builder = (yargs) => {
   yargs
     .option('verbose', verbose())
     .option('schema', schema())
-    .epilogue(
-      `Also see the ${terminalLink(
-        'Redwood CLI Reference',
-        'https://redwoodjs.com/reference/command-line-interface#db-introspect'
-      )}`
-    )
+    .epilogue(epilogue())
 }
 
 export const handler = async ({ verbose = true }) => {
