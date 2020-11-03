@@ -47,6 +47,6 @@ export const handler = async ({
   )
 
   if (success && dbClient) {
-    await generatePrismaClient({ force: true, verbose })
+    await generatePrismaClient({ force: true, verbose, schema })
   }
 }

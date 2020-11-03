@@ -50,8 +50,7 @@ export const handler = async ({ verbose = true, force = true, schema }) => {
       {
         title: 'Generating the Prisma client...',
         cmd: 'yarn prisma',
-        // The schema argument will be undefined when prisma generate is run automatically following prisma migrate up
-        args: ['generate', `--schema=${schema ? schema : schema()}`],
+        args: ['generate', `--schema=${schema}`],
       },
     ],
     {
