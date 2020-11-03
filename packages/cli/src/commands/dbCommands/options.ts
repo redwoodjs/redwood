@@ -7,6 +7,13 @@ interface Option {
   type: string
 }
 
+export const force = (): Option => ({
+  alias: 'f',
+  default: true,
+  description: 'Overwrite existing Client',
+  type: 'boolean',
+})
+
 export const verbose = (): Option => ({
   alias: 'v',
   default: true,
