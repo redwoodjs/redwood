@@ -1,6 +1,7 @@
 import terminalLink from 'terminal-link'
 
 import { getPaths, runCommandTask } from 'src/lib'
+import { schema } from 'src/commands/dbCommands/options'
 
 export const command = 'save [name..]'
 export const description = 'Create a new migration'
@@ -17,12 +18,7 @@ export const builder = (yargs) => {
       description: 'Print more',
       type: 'boolean',
     })
-    .option('schema', {
-      alias: 's',
-      default: true,
-      description: 'Overwrite Prisma schema path',
-      type: 'string',
-    })
+    .option('schema', schema())
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',

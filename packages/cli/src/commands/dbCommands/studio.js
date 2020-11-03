@@ -5,18 +5,14 @@ import terminalLink from 'terminal-link'
 
 import { runCommandTask, getPaths } from 'src/lib'
 import c from 'src/lib/colors'
+import { schema } from 'src/commands/dbCommands/options'
 
 export const command = 'studio'
 export const description = 'Start Prisma Studio'
 
 export const builder = (yargs) => {
   yargs
-    .option('schema', {
-      alias: 's',
-      default: true,
-      description: 'Overwrite Prisma schema path',
-      type: 'string',
-    })
+    .option('schema', schema())
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
