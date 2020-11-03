@@ -4,7 +4,7 @@ import path from 'path'
 import terminalLink from 'terminal-link'
 
 import { runCommandTask, getPaths } from 'src/lib'
-import { schema } from 'src/commands/dbCommands/options'
+import { verbose, schema } from 'src/commands/dbCommands/options'
 
 export const command = 'generate'
 export const description = 'Generate the Prisma client'
@@ -16,12 +16,7 @@ export const builder = (yargs) => {
       description: 'Overwrite existing Client',
       type: 'boolean',
     })
-    .option('verbose', {
-      alias: 'v',
-      default: true,
-      description: 'Print more',
-      type: 'boolean',
-    })
+    .option('verbose', verbose())
     .option('schema', schema())
     .epilogue(
       `Also see the ${terminalLink(

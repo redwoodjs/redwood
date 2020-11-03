@@ -1,7 +1,7 @@
 import terminalLink from 'terminal-link'
 
 import { getPaths, runCommandTask } from 'src/lib'
-import { schema } from 'src/commands/dbCommands/options'
+import { verbose, schema } from 'src/commands/dbCommands/options'
 
 export const command = 'save [name..]'
 export const description = 'Create a new migration'
@@ -12,12 +12,7 @@ export const builder = (yargs) => {
       type: 'string',
       default: 'migration',
     })
-    .option('verbose', {
-      alias: 'v',
-      default: true,
-      description: 'Print more',
-      type: 'boolean',
-    })
+    .option('verbose', verbose())
     .option('schema', schema())
     .epilogue(
       `Also see the ${terminalLink(

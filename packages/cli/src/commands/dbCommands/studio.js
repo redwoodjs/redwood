@@ -4,8 +4,8 @@ import fs from 'fs'
 import terminalLink from 'terminal-link'
 
 import { runCommandTask, getPaths } from 'src/lib'
-import c from 'src/lib/colors'
 import { schema } from 'src/commands/dbCommands/options'
+import c from 'src/lib/colors'
 
 export const command = 'studio'
 export const description = 'Start Prisma Studio'

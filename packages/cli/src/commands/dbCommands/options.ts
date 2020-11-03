@@ -7,6 +7,13 @@ interface Option {
   type: string
 }
 
+export const verbose = (): Option => ({
+  alias: 'v',
+  default: true,
+  description: 'Print more',
+  type: 'boolean',
+})
+
 export const schema = (): Option => ({
   default: getPaths().api.dbSchema,
   description: 'Specify the Prisma schema location',

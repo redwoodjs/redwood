@@ -1,7 +1,7 @@
 import terminalLink from 'terminal-link'
 
 import { runCommandTask, getPaths } from 'src/lib'
-import { schema } from 'src/commands/dbCommands/options'
+import { verbose, schema } from 'src/commands/dbCommands/options'
 
 export const command = 'down [decrement]'
 export const description = 'Migrate your database down'
@@ -12,12 +12,7 @@ export const builder = (yargs) => {
       description: 'Number of backwards migrations to apply',
       type: 'number',
     })
-    .option('verbose', {
-      alias: 'v',
-      default: true,
-      description: 'Print more',
-      type: 'boolean',
-    })
+    .option('verbose', verbose())
     .option('schema', schema())
     .epilogue(
       `Also see the ${terminalLink(

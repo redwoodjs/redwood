@@ -1,19 +1,14 @@
 import terminalLink from 'terminal-link'
 
 import { getPaths, runCommandTask } from 'src/lib'
-import { schema } from 'src/commands/dbCommands/options'
+import { verbose, schema } from 'src/commands/dbCommands/options'
 
 export const command = 'introspect'
 export const description =
   'Introspect your database and generate models in ./api/prisma/schema.prisma, overwriting existing models'
 export const builder = (yargs) => {
   yargs
-    .option('verbose', {
-      alias: 'v',
-      default: true,
-      description: 'Print more',
-      type: 'boolean',
-    })
+    .option('verbose', verbose())
     .option('schema', schema())
     .epilogue(
       `Also see the ${terminalLink(

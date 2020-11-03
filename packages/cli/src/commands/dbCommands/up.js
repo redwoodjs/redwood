@@ -2,7 +2,7 @@ import terminalLink from 'terminal-link'
 
 import { getPaths, runCommandTask } from 'src/lib'
 import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
-import { schema } from 'src/commands/dbCommands/options'
+import { verbose, schema } from 'src/commands/dbCommands/options'
 
 export const command = 'up [increment]'
 export const description = 'Generate the Prisma client and apply migrations'
@@ -23,12 +23,7 @@ export const builder = (yargs) => {
       description: 'Skip interactive approval before migrating',
       type: 'boolean',
     })
-    .option('verbose', {
-      alias: 'v',
-      default: true,
-      description: 'Print more',
-      type: 'boolean',
-    })
+    .option('verbose', verbose())
     .option('schema', schema())
     .epilogue(
       `Also see the ${terminalLink(
