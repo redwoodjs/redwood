@@ -1115,7 +1115,8 @@
       "avatar_url": "https://avatars1.githubusercontent.com/u/743527?v=4",
       "profile": "https://github.com/AntonioMeireles",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -1124,7 +1125,8 @@
       "avatar_url": "https://avatars0.githubusercontent.com/u/16427929?v=4",
       "profile": "https://github.com/brentguf",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -1168,6 +1170,81 @@
       "name": "lumenCodes",
       "avatar_url": "https://avatars3.githubusercontent.com/u/60603806?v=4",
       "profile": "https://github.com/lumenCodes",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "robobunny",
+      "name": "_robobunny",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/62807704?v=4",
+      "profile": "https://robobunny.surge.sh/",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "kevPo",
+      "name": "Kevin Poston",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/2813592?v=4",
+      "profile": "https://github.com/kevPo",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "dhausser",
+      "name": "Davy Hausser",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/24432220?v=4",
+      "profile": "https://github.com/dhausser",
+      "contributions": [
+        "code",
+        "tool"
+      ]
+    },
+    {
+      "login": "mohinderps",
+      "name": "Mohinder Saluja",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/16372215?v=4",
+      "profile": "https://github.com/mohinderps",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "guillaumeLamanda",
+      "name": "Lamanda ",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/10440081?v=4",
+      "profile": "https://github.com/guillaumeLamanda",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ryancwalsh",
+      "name": "ryancwalsh",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/2086493?v=4",
+      "profile": "https://github.com/ryancwalsh",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "njjkgeerts",
+      "name": "Nick Geerts",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/504749?v=4",
+      "profile": "https://github.com/njjkgeerts",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "miku86",
+      "name": "miku86",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/7271016?v=4",
+      "profile": "https://miku86.com/",
       "contributions": [
         "doc"
       ]
