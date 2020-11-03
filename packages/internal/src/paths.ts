@@ -112,6 +112,7 @@ export const resolveFile = (
 export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
   const routes = resolveFile(path.join(BASE_DIR, PATH_WEB_ROUTES)) as string
   const { schemaPath } = getConfig(getConfigPath()).api
+  const schemaDir = path.parse(schemaPath).dir
 
   // We store our test database over here:
   const cache = path.join(BASE_DIR, '.redwood')
@@ -125,9 +126,9 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
     types,
     api: {
       base: path.join(BASE_DIR, 'api'),
-      dataMigrations: path.join(BASE_DIR, schemaPath, 'dataMigrations'),
-      db: path.join(BASE_DIR, schemaPath),
-      dbSchema: path.join(BASE_DIR, schemaPath, 'schema.prisma'),
+      dataMigrations: path.join(BASE_DIR, schemaDir, 'dataMigrations'),
+      db: path.join(BASE_DIR, schemaDir),
+      dbSchema: path.join(BASE_DIR, schemaPath),
       functions: path.join(BASE_DIR, PATH_API_DIR_FUNCTIONS),
       graphql: path.join(BASE_DIR, PATH_API_DIR_GRAPHQL),
       lib: path.join(BASE_DIR, PATH_API_DIR_LIB),
