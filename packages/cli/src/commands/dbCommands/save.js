@@ -1,4 +1,4 @@
-import { getPaths, runCommandTask } from 'src/lib'
+import { runCommandTask } from 'src/lib'
 import {
   name,
   verbose,
@@ -16,7 +16,11 @@ export const builder = (yargs) => {
     .epilogue(epilogue())
 }
 
-export const handler = async ({ name = 'migration', verbose = true }) => {
+export const handler = async ({
+  name = 'migration',
+  verbose = true,
+  schema,
+}) => {
   await runCommandTask(
     [
       {
@@ -27,7 +31,7 @@ export const handler = async ({ name = 'migration', verbose = true }) => {
           name.length && `--name "${name}"`,
           '--create-db',
           '--experimental',
-          `--schema=${getPaths().api.dbSchema}`,
+          `--schema=${schema}`,
         ].filter(Boolean),
       },
     ],

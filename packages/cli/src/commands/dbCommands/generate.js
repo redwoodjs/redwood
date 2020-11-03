@@ -18,7 +18,7 @@ export const builder = (yargs) => {
     .option('schema', schema())
     .epilogue(epilogue())
 }
-export const handler = async ({ verbose = true, force = true }) => {
+export const handler = async ({ verbose = true, force = true, schema }) => {
   if (!fs.existsSync(getPaths().api.dbSchema)) {
     console.log(
       `Skipping database and Prisma client generation, no \`schema.prisma\` file found: \`${
@@ -50,7 +50,7 @@ export const handler = async ({ verbose = true, force = true }) => {
       {
         title: 'Generating the Prisma client...',
         cmd: 'yarn prisma',
-        args: ['generate', `--schema=${getPaths().api.dbSchema}`],
+        args: ['generate', `--schema=${schema}`],
       },
     ],
     {

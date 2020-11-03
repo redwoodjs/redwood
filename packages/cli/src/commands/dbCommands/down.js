@@ -1,4 +1,4 @@
-import { runCommandTask, getPaths } from 'src/lib'
+import { runCommandTask } from 'src/lib'
 import {
   decrement,
   verbose,
@@ -15,7 +15,7 @@ export const builder = (yargs) => {
     .option('schema', schema())
     .epilogue(epilogue())
 }
-export const handler = async ({ decrement, verbose = true }) => {
+export const handler = async ({ decrement, verbose = true, schema }) => {
   await runCommandTask(
     [
       {
@@ -25,7 +25,7 @@ export const handler = async ({ decrement, verbose = true }) => {
           'migrate down',
           decrement && `${decrement}`,
           '--experimental',
-          `--schema=${getPaths().api.dbSchema}`,
+          `--schema=${schema}`,
         ].filter(Boolean),
       },
     ],

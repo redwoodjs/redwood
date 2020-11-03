@@ -12,15 +12,15 @@ export const builder = (yargs) => {
   yargs.option('schema', schema()).epilogue(epilogue())
 }
 
-export const handler = async () => {
+export const handler = async ({ schema }) => {
   // No schema, no studio.
-  if (!fs.existsSync(getPaths().api.dbSchema)) {
+  if (!fs.existsSync(schema())) {
     console.log(
       `${c.warning(
         '[warning]'
       )} cannot start Prisma Studio; schema missing (${c.info(
         // So we're not hard coding schema.prisma's relative location
-        path.relative(getPaths().base, getPaths().api.dbSchema)
+        path.relative(getPaths().base, schema())
       )}).`
     )
     return
@@ -31,7 +31,7 @@ export const handler = async () => {
       {
         title: 'Starting Prisma Studio...',
         cmd: 'yarn prisma',
-        args: ['studio', `--schema=${getPaths().api.dbSchema}`],
+        args: ['studio', `--schema=${schema}`],
       },
     ],
     { verbose: true }

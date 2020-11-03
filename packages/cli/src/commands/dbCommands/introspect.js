@@ -11,13 +11,13 @@ export const builder = (yargs) => {
     .epilogue(epilogue())
 }
 
-export const handler = async ({ verbose = true }) => {
+export const handler = async ({ verbose = true, schema }) => {
   return await runCommandTask(
     [
       {
         title: 'Introspecting your database...',
         cmd: 'yarn prisma',
-        args: ['introspect', `--schema=${getPaths().api.dbSchema}`],
+        args: ['introspect', `--schema=${schema}`],
         opts: { cwd: getPaths().api.db },
       },
     ],

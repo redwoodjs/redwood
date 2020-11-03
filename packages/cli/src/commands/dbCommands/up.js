@@ -1,4 +1,4 @@
-import { getPaths, runCommandTask } from 'src/lib'
+import { runCommandTask } from 'src/lib'
 import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
 import {
   increment,
@@ -26,6 +26,7 @@ export const handler = async ({
   autoApprove = false,
   verbose = true,
   dbClient = true,
+  schema,
 }) => {
   const success = await runCommandTask(
     [
@@ -38,7 +39,7 @@ export const handler = async ({
           '--experimental',
           '--create-db',
           autoApprove && '--auto-approve',
-          `--schema=${getPaths().api.dbSchema}`,
+          `--schema=${schema}`,
         ].filter(Boolean),
       },
     ],
