@@ -22,7 +22,7 @@ export const builder = (yargs) => {
       type: 'boolean',
     })
     .option('schema', {
-      default: true,
+      default: getPaths().api.dbSchema,
       description: 'Specify the Prisma schema location',
       type: 'string',
     })
