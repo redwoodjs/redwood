@@ -19,11 +19,9 @@ export const builder = (yargs) => {
     .epilogue(epilogue())
 }
 export const handler = async ({ verbose = true, force = true, schema }) => {
-  if (!fs.existsSync(getPaths().api.dbSchema)) {
+  if (!fs.existsSync(schema)) {
     console.log(
-      `Skipping database and Prisma client generation, no \`schema.prisma\` file found: \`${
-        getPaths().api.dbSchema
-      }\``
+      `Skipping database and Prisma client generation, no \`schema.prisma\` file found: \`${schema}\``
     )
     return
   }
