@@ -58,8 +58,7 @@ export const builder = (yargs) => {
 
 export const handler = async ({
   side,
-  watch = false,
-  watchAll = false,
+  watch = true,
   collectCoverage = false,
 }) => {
   const { cache: CACHE_DIR } = getPaths()
