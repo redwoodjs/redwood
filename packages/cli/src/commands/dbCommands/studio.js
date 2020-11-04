@@ -31,7 +31,7 @@ export const handler = async ({ schema }) => {
       {
         title: 'Starting Prisma Studio...',
         cmd: 'yarn prisma',
-        args: ['studio', `--schema=${schema}`],
+        args: ['studio', schema && `--schema=${schema}`],
       },
     ],
     { verbose: true }

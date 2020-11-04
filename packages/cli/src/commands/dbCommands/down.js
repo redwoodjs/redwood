@@ -24,7 +24,7 @@ export const handler = async ({ decrement, verbose = true, schema }) => {
           'migrate down',
           decrement && `${decrement}`,
           '--experimental',
-          `--schema=${schema}`,
+          schema && `--schema=${schema}`,
         ].filter(Boolean),
       },
     ],

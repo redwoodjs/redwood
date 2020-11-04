@@ -30,7 +30,7 @@ export const handler = async ({
           name.length && `--name "${name}"`,
           '--create-db',
           '--experimental',
-          `--schema=${schema}`,
+          schema && `--schema=${schema}`,
         ].filter(Boolean),
       },
     ],
