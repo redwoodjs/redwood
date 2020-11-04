@@ -4,46 +4,10 @@ import { getPaths } from 'src/lib'
 
 interface Option {
   alias?: string
-  default?: boolean | number | string
+  default: boolean | string
   description: string
   type: string
 }
-
-export const force = (): Option => ({
-  alias: 'f',
-  default: true,
-  description: 'Overwrite existing Client',
-  type: 'boolean',
-})
-
-export const name = (): Option => ({
-  default: 'migration',
-  description: 'Name of the migration',
-  type: 'string',
-})
-
-export const increment = (): Option => ({
-  description: 'Number of forward migrations to apply. Defaults to the latest',
-  type: 'number',
-})
-
-export const decrement = (): Option => ({
-  default: 1,
-  description: 'Number of backwards migrations to apply',
-  type: 'number',
-})
-
-export const autoApprove = () => ({
-  default: false,
-  description: 'Skip interactive approval before migrating',
-  type: 'boolean',
-})
-
-export const dbClient = (): Option => ({
-  default: true,
-  description: 'Generate the Prisma client',
-  type: 'boolean',
-})
 
 export const verbose = (): Option => ({
   alias: 'v',

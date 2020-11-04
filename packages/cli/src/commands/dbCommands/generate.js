@@ -2,18 +2,18 @@ import fs from 'fs'
 import path from 'path'
 
 import { runCommandTask, getPaths } from 'src/lib'
-import {
-  force,
-  verbose,
-  schema,
-  epilogue,
-} from 'src/commands/dbCommands/options'
+import { verbose, schema, epilogue } from 'src/commands/dbCommands/options'
 
 export const command = 'generate'
 export const description = 'Generate the Prisma client'
 export const builder = (yargs) => {
   yargs
-    .option('force', force())
+    .option('force', {
+      alias: 'f',
+      default: true,
+      description: 'Overwrite existing Client',
+      type: 'boolean',
+    })
     .option('verbose', verbose())
     .option('schema', schema())
     .epilogue(epilogue())
