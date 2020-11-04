@@ -3,7 +3,7 @@ import {
   FormError,
   FieldError,
   Label,
-  ${fieldsToImport.join(',\n  ')},
+  ${fieldsToImport.length > 0 ? (fieldsToImport.join(',\n  ') + ',') : null}
   Submit,
 } from '@redwoodjs/forms'
 
