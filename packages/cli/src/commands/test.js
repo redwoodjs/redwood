@@ -34,12 +34,7 @@ export const builder = (yargs) => {
       describe:
         'Run tests related to changed files based on hg/git. Specify the name or path to a file to focus on a specific set of tests',
       type: 'boolean',
-      default: false,
-    })
-    .option('watchAll', {
-      describe: 'Run all tests',
-      type: 'boolean',
-      default: false,
+      default: true,
     })
     .option('collectCoverage', {
       describe:
@@ -71,14 +66,12 @@ export const handler = async ({
   const sides = [].concat(side).filter(Boolean)
   const args = [
     '--passWithNoTests',
-    watch && '--watch',
     collectCoverage && '--collectCoverage',
-    watchAll && '--watchAll',
   ].filter(Boolean)
   
   // If the user wants to watch, set the proper watch flag based on what kind of repo this is
   // because of https://github.com/facebook/create-react-app/issues/5210
-  if (watch && !watchAll && !process.env.CI && !collectCoverage) {
+  if (watch && !process.env.CI && !collectCoverage) {
     const hasSourceControl = isInGitRepository() || isInMercurialRepository()
     args.push(hasSourceControl ? '--watch' : '--watchAll')
   }
