@@ -1,14 +1,14 @@
 import { getPaths, runCommandTask } from 'src/lib'
-import { verbose, schema, epilogue } from 'src/commands/dbCommands/options'
+import * as options from 'src/commands/dbCommands/options'
 
 export const command = 'introspect'
 export const description =
   'Introspect your database and generate models in ./api/prisma/schema.prisma, overwriting existing models'
 export const builder = (yargs) => {
   yargs
-    .option('verbose', verbose())
-    .option('schema', schema())
-    .epilogue(epilogue())
+    .option('verbose', options.verbose())
+    .option('schema', options.schema())
+    .epilogue(options.epilogue())
 }
 
 export const handler = async ({ verbose = true, schema }) => {

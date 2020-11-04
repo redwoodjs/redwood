@@ -1,5 +1,5 @@
 import { runCommandTask } from 'src/lib'
-import { verbose, schema, epilogue } from 'src/commands/dbCommands/options'
+import * as options from 'src/commands/dbCommands/options'
 
 export const command = 'down [decrement]'
 export const description = 'Migrate your database down'
@@ -10,9 +10,9 @@ export const builder = (yargs) => {
       description: 'Number of backwards migrations to apply',
       type: 'number',
     })
-    .option('verbose', verbose())
-    .option('schema', schema())
-    .epilogue(epilogue())
+    .option('verbose', options.verbose())
+    .option('schema', options.schema())
+    .epilogue(options.epilogue())
 }
 export const handler = async ({ decrement, verbose = true, schema }) => {
   await runCommandTask(

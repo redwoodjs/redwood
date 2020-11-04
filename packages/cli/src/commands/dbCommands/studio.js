@@ -2,14 +2,14 @@ import path from 'path'
 import fs from 'fs'
 
 import { runCommandTask, getPaths } from 'src/lib'
-import { schema, epilogue } from 'src/commands/dbCommands/options'
+import * as options from 'src/commands/dbCommands/options'
 import c from 'src/lib/colors'
 
 export const command = 'studio'
 export const description = 'Start Prisma Studio'
 
 export const builder = (yargs) => {
-  yargs.option('schema', schema()).epilogue(epilogue())
+  yargs.option('schema', options.schema()).epilogue(options.epilogue())
 }
 
 export const handler = async ({ schema }) => {

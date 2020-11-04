@@ -1,6 +1,6 @@
 import { runCommandTask } from 'src/lib'
 import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
-import { verbose, schema, epilogue } from 'src/commands/dbCommands/options'
+import * as options from 'src/commands/dbCommands/options'
 
 export const command = 'up [increment]'
 export const description = 'Generate the Prisma client and apply migrations'
@@ -21,9 +21,9 @@ export const builder = (yargs) => {
       description: 'Skip interactive approval before migrating',
       type: 'boolean',
     })
-    .option('verbose', verbose())
-    .option('schema', schema())
-    .epilogue(epilogue())
+    .option('verbose', options.verbose())
+    .option('schema', options.schema())
+    .epilogue(options.epilogue())
 }
 
 export const handler = async ({
