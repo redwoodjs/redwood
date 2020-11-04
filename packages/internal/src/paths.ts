@@ -111,7 +111,7 @@ export const resolveFile = (
  */
 export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
   const routes = resolveFile(path.join(BASE_DIR, PATH_WEB_ROUTES)) as string
-  const { schemaPath } = getConfig(getConfigPath()).api
+  const { schemaPath } = getConfig().api
   const schemaDir = path.dirname(schemaPath)
 
   // We store our test database over here:
