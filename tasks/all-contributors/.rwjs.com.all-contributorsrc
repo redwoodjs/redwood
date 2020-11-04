@@ -622,6 +622,69 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "brentguf",
+      "name": "Brent Guffens",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/16427929?v=4",
+      "profile": "https://github.com/brentguf",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "ryancwalsh",
+      "name": "ryancwalsh",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/2086493?v=4",
+      "profile": "https://github.com/ryancwalsh",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "kevPo",
+      "name": "Kevin Poston",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/2813592?v=4",
+      "profile": "https://github.com/kevPo",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "AntonioMeireles",
+      "name": "António Meireles",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/743527?v=4",
+      "profile": "https://github.com/AntonioMeireles",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "njjkgeerts",
+      "name": "Nick Geerts",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/504749?v=4",
+      "profile": "https://github.com/njjkgeerts",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "robobunny",
+      "name": "_robobunny",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/62807704?v=4",
+      "profile": "https://robobunny.surge.sh/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "miku86",
+      "name": "miku86",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/7271016?v=4",
+      "profile": "https://miku86.com/",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7
