@@ -30,18 +30,6 @@ export const server = ({
   )
   app.use(morgan('dev'))
 
-  app.all('/', (_, res) => {
-    return res.send(`
-      <p>The following serverless Functions are available:</p>
-      <ol>
-        ${Object.keys(LAMBDA_FUNCTIONS)
-          .sort()
-          .map((name) => `<li><a href="/${name}">/${name}</a></li>`)
-          .join('')}
-      </ol>
-    `)
-  })
-
   const lambdaHandler = async (req: Request, res: Response): Promise<void> => {
     const { routeName } = req.params
     const lambdaFunction = LAMBDA_FUNCTIONS[routeName]
