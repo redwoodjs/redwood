@@ -31,7 +31,7 @@ export const server = ({
       <ol>
         ${Object.keys(LAMBDA_FUNCTIONS)
           .sort()
-          .map((name) => `<li><a href="/${name}">/${name}</a></li>`)
+          .map((name) => `<li><a href="${name}">${name}</a></li>`)
           .join('')}
       </ol>
     `)
