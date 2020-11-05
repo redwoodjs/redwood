@@ -22,7 +22,6 @@ model Post {
   rating   Float?
   postedAt DateTime?
   metadata Json
-  groups Group[]
 }
 
 model User {
@@ -43,5 +42,4 @@ model UserProfile {
 model Group {
   id        String    @id @default(uuid())
   createdAt DateTime  @default(now())
-  users User[]
 }

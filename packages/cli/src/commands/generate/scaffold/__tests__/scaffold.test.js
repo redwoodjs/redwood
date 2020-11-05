@@ -165,6 +165,18 @@ describe('in javascript (default) mode', () => {
     )
   })
 
+  test('creates a group form component', async () => {
+    expect(
+      files[
+        path.normalize(
+          '/path/to/project/web/src/components/GroupForm/GroupForm.js'
+        )
+      ]
+    ).toEqual(
+      loadGeneratorFixture('scaffold', path.join('components', 'groupForm.js'))
+    )
+  })
+
   test('creates an index component', async () => {
     expect(
       files[
@@ -447,6 +459,18 @@ describe('in typescript mode', () => {
       ]
     ).toEqual(
       loadGeneratorFixture('scaffold', path.join('components', 'form.js'))
+    )
+  })
+
+  test('creates a group form component', async () => {
+    expect(
+      files[
+        path.normalize(
+          '/path/to/project/web/src/components/GroupForm/GroupForm.js'
+        )
+      ]
+    ).toEqual(
+      loadGeneratorFixture('scaffold', path.join('components', 'groupForm.js'))
     )
   })
 
