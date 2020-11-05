@@ -53,7 +53,7 @@ export const resolvers: Resolvers = {
   Query: {
     redwood: () => ({
       version: apiPackageJson.version,
-      prismaVersion: PrismaClient.prismaVersion.client,
+      prismaVersion: () => PrismaClient.prismaVersion,
       currentUser: (_args: any, context: GlobalContext) => {
         return context?.currentUser
       },
