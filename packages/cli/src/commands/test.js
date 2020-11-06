@@ -66,7 +66,6 @@ export const handler = async ({
   const args = [
     '--passWithNoTests',
     collectCoverage && '--collectCoverage',
-    '--runInBand'
   ].filter(Boolean)
   
   // If the user wants to watch, set the proper watch flag based on what kind of repo this is
@@ -80,7 +79,11 @@ export const handler = async ({
   if (!sides.length) {
     getProject().sides.forEach(side => sides.push(side))
   }
-
+  
+  if (sides.includes('api')) {
+    args.push('--runInBand')
+  }
+  
   args.push(
     '--config',
     require.resolve('@redwoodjs/core/config/jest.config.js')
