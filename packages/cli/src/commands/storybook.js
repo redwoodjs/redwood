@@ -1,7 +1,8 @@
 import path from 'path'
 
-import { getPaths } from '@redwoodjs/internal'
 import execa from 'execa'
+
+import { getPaths } from '@redwoodjs/internal'
 
 export const command = 'storybook'
 export const aliases = ['sb']

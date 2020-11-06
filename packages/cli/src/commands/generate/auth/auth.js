@@ -1,10 +1,11 @@
 import fs from 'fs'
 import path from 'path'
 
-import { resolveFile } from '@redwoodjs/internal'
 import execa from 'execa'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
+
+import { resolveFile } from '@redwoodjs/internal'
 
 import { getPaths, writeFilesTask } from 'src/lib'
 import c from 'src/lib/colors'

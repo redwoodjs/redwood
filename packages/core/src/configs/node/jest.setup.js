@@ -1,7 +1,8 @@
 const path = require('path')
 
-const { getPaths } = require('@redwoodjs/internal')
 const camelCase = require('lodash/camelCase')
+
+const { getPaths } = require('@redwoodjs/internal')
 
 const redwoodPaths = getPaths()
 

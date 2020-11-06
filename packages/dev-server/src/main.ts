@@ -1,7 +1,8 @@
 #!/usr/bin/env node
+import yargs from 'yargs'
+
 import { getConfig, getPaths } from '@redwoodjs/internal'
 import type { NodeTargetPaths } from '@redwoodjs/internal'
-import yargs from 'yargs'
 
 import { handleError } from './error'
 import { server, setLambdaFunctions } from './http'

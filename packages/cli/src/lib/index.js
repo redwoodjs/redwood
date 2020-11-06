@@ -3,7 +3,6 @@ import path from 'path'
 
 import * as babel from '@babel/core'
 import { getDMMF } from '@prisma/sdk'
-import { getPaths as getRedwoodPaths } from '@redwoodjs/internal'
 import camelcase from 'camelcase'
 import decamelize from 'decamelize'
 import execa from 'execa'
@@ -14,6 +13,8 @@ import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 import { format } from 'prettier'
+
+import { getPaths as getRedwoodPaths } from '@redwoodjs/internal'
 
 import c from './colors'
 

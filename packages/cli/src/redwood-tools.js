@@ -2,11 +2,12 @@
 import fs from 'fs'
 import path from 'path'
 
-import { getPaths, ensurePosixPath } from '@redwoodjs/internal'
 import chokidar from 'chokidar'
 import execa from 'execa'
 import _ from 'lodash'
 import yargs from 'yargs'
+
+import { getPaths, ensurePosixPath } from '@redwoodjs/internal'
 
 const RW_BINS = {
   redwood: 'cli/dist/index.js',

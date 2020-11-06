@@ -1,7 +1,8 @@
 import path from 'path'
 
-import { getProject } from '@redwoodjs/structure'
 import pluginTester from 'babel-plugin-tester'
+
+import { getProject } from '@redwoodjs/structure'
 
 import plugin from '../babel-plugin-redwood-routes-auto-loader'
 

@@ -2,7 +2,6 @@
 const { existsSync } = require('fs')
 const path = require('path')
 
-const { getConfig, getPaths } = require('@redwoodjs/internal')
 const CopyPlugin = require('copy-webpack-plugin')
 const Dotenv = require('dotenv-webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -10,6 +9,8 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const webpack = require('webpack')
 const { merge } = require('webpack-merge')
 const { RetryChunkLoadPlugin } = require('webpack-retry-chunk-load-plugin')
+
+const { getConfig, getPaths } = require('@redwoodjs/internal')
 
 const redwoodConfig = getConfig()
 const redwoodPaths = getPaths()

@@ -1,9 +1,10 @@
 import fs from 'fs'
 import path from 'path'
 
-import { getConfig, shutdownPort } from '@redwoodjs/internal'
 import concurrently from 'concurrently'
 import terminalLink from 'terminal-link'
+
+import { getConfig, shutdownPort } from '@redwoodjs/internal'
 
 import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
 import { getPaths } from 'src/lib'

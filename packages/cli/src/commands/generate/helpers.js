@@ -1,10 +1,11 @@
 import path from 'path'
 
-import { ensurePosixPath } from '@redwoodjs/internal'
 import Listr from 'listr'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import terminalLink from 'terminal-link'
+
+import { ensurePosixPath } from '@redwoodjs/internal'
 
 import { generateTemplate, getPaths, writeFilesTask } from 'src/lib'
 import c from 'src/lib/colors'

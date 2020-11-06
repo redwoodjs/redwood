@@ -1,4 +1,5 @@
 import type { PluginObj, types } from '@babel/core'
+
 import { processPagesDir } from '@redwoodjs/internal'
 import { RWProject } from '@redwoodjs/structure'
 

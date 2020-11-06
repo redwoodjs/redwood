@@ -1,5 +1,6 @@
-import type { SupportedAuthTypes } from '@redwoodjs/auth'
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
+
+import type { SupportedAuthTypes } from '@redwoodjs/auth'
 
 import type { GlobalContext } from 'src/globalContext'
 
