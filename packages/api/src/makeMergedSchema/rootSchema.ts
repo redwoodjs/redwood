@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
+import { PrismaClient } from '@prisma/client'
 import {
   DateResolver,
   TimeResolver,
@@ -7,6 +7,7 @@ import {
   JSONObjectResolver,
 } from 'graphql-scalars'
 import gql from 'graphql-tag'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore - not inside the <rootDir>
 import apiPackageJson from 'src/../package.json'
 
@@ -26,6 +27,7 @@ export const schema = gql`
   type Redwood {
     version: String
     currentUser: JSON
+    prismaVersion: String
   }
 
   type Query {
@@ -51,6 +53,7 @@ export const resolvers: Resolvers = {
   Query: {
     redwood: () => ({
       version: apiPackageJson.version,
+      prismaVersion: () => PrismaClient.prismaVersion,
       currentUser: (_args: any, context: GlobalContext) => {
         return context?.currentUser
       },

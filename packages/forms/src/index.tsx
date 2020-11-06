@@ -1,9 +1,20 @@
 import React, { useContext, useEffect, forwardRef } from 'react'
 
 import pascalcase from 'pascalcase'
-import { useForm, FormProvider, useFormContext } from 'react-hook-form'
+import {
+  useForm,
+  FormProvider,
+  useFormContext,
+  ValidationRules,
+  UseFormMethods,
+  UseFormOptions,
+} from 'react-hook-form'
 
-import { CoercionContextProvider, useCoercion } from './coercion'
+import {
+  CoercionContextProvider,
+  TDefinedCoercionFunctions,
+  useCoercion,
+} from './coercion'
 
 const DEFAULT_MESSAGES = {
   required: 'is required',
@@ -14,35 +25,52 @@ const DEFAULT_MESSAGES = {
   max: 'is too low',
   validate: 'is not valid',
 }
-const INPUT_TYPES = [
-  'button',
-  'checkbox',
-  'color',
-  'date',
-  'datetime-local',
-  'email',
-  'file',
-  'hidden',
-  'image',
-  'month',
-  'number',
-  'password',
-  'radio',
-  'range',
-  'reset',
-  'search',
-  'submit',
-  'tel',
-  'text',
-  'time',
-  'url',
-  'week',
-]
+
+enum INPUT_TYPES {
+  BUTTON = 'button',
+  COLOR = 'color',
+  DATE = 'date',
+  DATETIME_LOCAL = 'datetime-local',
+  EMAIL = 'email',
+  FILE = 'file',
+  HIDDEN = 'hidden',
+  IMAGE = 'image',
+  MONTH = 'month',
+  NUMBER = 'number',
+  PASSWORD = 'password',
+  RADIO = 'radio',
+  RANGE = 'range',
+  RESET = 'reset',
+  SEARCH = 'search',
+  SUBMIT = 'submit',
+  TEL = 'tel',
+  TEXT = 'text',
+  TIME = 'time',
+  URL = 'url',
+  WEEK = 'week',
+}
 
 // Massages a hash of props depending on whether the given named field has
 // any errors on it
 
-const inputTagProps = (props) => {
+interface InputTagProps {
+  name: string
+  errorClassName?: string
+  errorStyle?: React.CSSProperties
+  dataType?: TDefinedCoercionFunctions
+  transformValue?: ((value: string) => any) | TDefinedCoercionFunctions
+  className?: string
+  style?: React.CSSProperties
+}
+
+interface ValidatableFieldProps extends InputTagProps {
+  validation?: ValidationRules
+  defaultValue?: string
+}
+
+const inputTagProps = <T extends InputTagProps>(
+  props: T
+): Omit<T, 'dataType' | 'transformValue' | 'errorClassName' | 'errorStyle'> => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { errors, setError } = useFormContext()
 
@@ -63,7 +91,14 @@ const inputTagProps = (props) => {
   const validationError = errors[props.name]
 
   // get errorStyle/errorClassName and replace style/className if present
-  const { errorClassName, errorStyle, ...tagProps } = props
+  // Also remove dataType and transformValue from tagProps
+  const {
+    errorClassName,
+    errorStyle,
+    dataType,
+    transformValue,
+    ...tagProps
+  } = props
   if (validationError) {
     if (errorClassName) {
       tagProps.className = errorClassName
@@ -73,19 +108,29 @@ const inputTagProps = (props) => {
     }
   }
 
-  // dataType/transformValue shouldn't be passed to the underlying HTML element
-  delete tagProps.dataType
-  delete tagProps.transformValue
-
   return tagProps
 }
 
 // Context for keeping track of errors from the server
-
-const FieldErrorContext = React.createContext()
+interface FieldErrorContextProps {
+  [key: string]: string
+}
+const FieldErrorContext = React.createContext({} as FieldErrorContextProps)
 
 // Big error message at the top of the page explaining everything that's wrong
 // with the form fields in this form
+
+interface FormErrorProps {
+  error: any
+  wrapperClassName: string
+  wrapperStyle: React.CSSProperties
+  titleClassName: string
+  titleStyle: React.CSSProperties
+  listClassName: string
+  listStyle: React.CSSProperties
+  listItemClassName: string
+  listItemStyle: React.CSSProperties
+}
 
 const FormError = ({
   error,
@@ -97,7 +142,7 @@ const FormError = ({
   listStyle,
   listItemClassName,
   listItemStyle,
-}) => {
+}: FormErrorProps) => {
   let rootMessage = null
   let messages = null
   const hasGraphQLError = !!error?.graphQLErrors[0]
@@ -107,15 +152,15 @@ const FormError = ({
     const errors = error.graphQLErrors[0].extensions.exception.messages
     rootMessage = error.graphQLErrors[0].message
     messages = []
-    for (let e in errors) {
-      errors[e].map((fieldError) => {
+    for (const e in errors) {
+      errors[e].map((fieldError: any) => {
         messages.push(`${e} ${fieldError}`)
       })
     }
   } else if (hasNetworkError) {
     rootMessage = 'An error has occurred'
     messages = error.networkError.result.errors.map(
-      (error) => error.message.split(';')[1]
+      (error: any) => error.message.split(';')[1]
     )
   }
 
@@ -128,7 +173,7 @@ const FormError = ({
           </p>
           {messages.length > 0 && (
             <ul className={listClassName} style={listStyle}>
-              {messages.map((message, index) => (
+              {messages.map((message: string, index: number) => (
                 <li
                   key={index}
                   className={listItemClassName}
@@ -145,8 +190,11 @@ const FormError = ({
   )
 }
 
-const coerceValues = (data, coerce) => {
-  const coercedData = {}
+const coerceValues = (
+  data: Record<string, string>,
+  coerce: (name: string, value: string) => any
+) => {
+  const coercedData: Record<string, any> = {}
 
   Object.keys(data).forEach((name) => {
     coercedData[name] = coerce(name, data[name])
@@ -155,7 +203,18 @@ const coerceValues = (data, coerce) => {
   return coercedData
 }
 
-const FormWithCoercionContext = (props) => {
+interface FormWithCoercionContext
+  extends Omit<React.HTMLProps<HTMLFormElement>, 'onSubmit'> {
+  error?: any
+  formMethods?: UseFormMethods
+  validation?: UseFormOptions
+  onSubmit?: (
+    values: Record<string, any>,
+    event: React.BaseSyntheticEvent<object, any, any> | undefined
+  ) => void
+}
+
+const FormWithCoercionContext: React.FC<FormWithCoercionContext> = (props) => {
   // deconstruct some props we care about and keep the remaining `formProps` to
   // pass to the <form> tag
   const {
@@ -172,7 +231,7 @@ const FormWithCoercionContext = (props) => {
     <form
       {...formProps}
       onSubmit={formMethods.handleSubmit((data, event) =>
-        onSubmit(coerceValues(data, coerce), event)
+        onSubmit?.(coerceValues(data, coerce), event)
       )}
     >
       <FieldErrorContext.Provider
@@ -188,7 +247,7 @@ const FormWithCoercionContext = (props) => {
 
 // Renders a containing <form> tag with required contexts
 
-const Form = (props) => {
+const Form: React.FC<FormWithCoercionContext> = (props) => {
   return (
     <CoercionContextProvider>
       <FormWithCoercionContext {...props} />
@@ -199,7 +258,15 @@ const Form = (props) => {
 // Renders a <label> tag that can be styled differently if errors are present
 // on the related fields
 
-const Label = (props) => {
+interface LabelProps {
+  name: string
+  errorClassName?: string
+  errorStyle?: React.CSSProperties
+}
+
+const Label: React.FC<
+  LabelProps & React.LabelHTMLAttributes<HTMLLabelElement>
+> = (props) => {
   const tagProps = inputTagProps(props)
 
   return (
@@ -212,24 +279,33 @@ const Label = (props) => {
 // Renders a <span> with a validation error message if there is an error on this
 // field
 
-const FieldError = (props) => {
+interface FieldErrorProps extends React.HTMLProps<HTMLSpanElement> {
+  name: string
+}
+
+const FieldError = (props: FieldErrorProps) => {
   const { errors } = useFormContext()
   const validationError = errors[props.name]
   const errorMessage =
     validationError &&
     (validationError.message ||
-      `${props.name} ${DEFAULT_MESSAGES[validationError.type]}`)
+      `${props.name} ${
+        DEFAULT_MESSAGES[validationError.type as keyof typeof DEFAULT_MESSAGES]
+      }`)
 
   return validationError ? <span {...props}>{errorMessage}</span> : null
 }
 
 // Renders a <textarea> field
 
-const TextAreaField = forwardRef((props, ref) => {
+const TextAreaField = forwardRef<
+  HTMLTextAreaElement,
+  ValidatableFieldProps & React.TextareaHTMLAttributes<HTMLTextAreaElement>
+>((props, ref) => {
   const { register } = useFormContext()
   const { setCoercion } = useCoercion()
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (process.env.NODE_ENV !== 'production' && props.dataType !== undefined) {
       console.warn(
         'Using the "dataType" prop on form input fields is deprecated. Use "transformValue" instead.'
@@ -247,9 +323,14 @@ const TextAreaField = forwardRef((props, ref) => {
     <textarea
       {...tagProps}
       id={props.id || props.name}
-      ref={(e) => {
-        register(e, props.validation || { required: false })
-        if (ref) ref.current = e
+      ref={(element) => {
+        register(element, props.validation || { required: false })
+
+        if (typeof ref === 'function') {
+          ref(element)
+        } else if (ref) {
+          ref.current = element
+        }
       }}
     />
   )
@@ -257,7 +338,10 @@ const TextAreaField = forwardRef((props, ref) => {
 
 // Renders a <select> field
 
-const SelectField = forwardRef((props, ref) => {
+const SelectField = forwardRef<
+  HTMLSelectElement,
+  ValidatableFieldProps & React.SelectHTMLAttributes<HTMLSelectElement>
+>((props, ref) => {
   const { register } = useFormContext()
   const tagProps = inputTagProps(props)
 
@@ -265,9 +349,62 @@ const SelectField = forwardRef((props, ref) => {
     <select
       {...tagProps}
       id={props.id || props.name}
-      ref={(e) => {
-        register(e, props.validation || { required: false })
-        if (ref) ref.current = e
+      ref={(element) => {
+        register(element, props.validation || { required: false })
+
+        if (typeof ref === 'function') {
+          ref(element)
+        } else if (ref) {
+          ref.current = element
+        }
+      }}
+    />
+  )
+})
+
+// Renders a <input type="checkbox"> field
+
+interface CheckboxFieldProps
+  extends Omit<ValidatableFieldProps, 'defaultValue'> {
+  defaultChecked?: boolean
+}
+
+export const CheckboxField = forwardRef<
+  HTMLInputElement,
+  CheckboxFieldProps & React.InputHTMLAttributes<HTMLInputElement>
+>((props, ref) => {
+  const { register } = useFormContext()
+  const { setCoercion } = useCoercion()
+  const type = 'checkbox'
+
+  React.useEffect(() => {
+    if (process.env.NODE_ENV !== 'production' && props.dataType !== undefined) {
+      console.warn(
+        'Using the "dataType" prop on form input fields is deprecated. Use "transformValue" instead.'
+      )
+    }
+    setCoercion({
+      name: props.name,
+      type,
+      transformValue: props.transformValue || props.dataType,
+    })
+  }, [setCoercion, props.name, type, props.transformValue, props.dataType])
+
+  const tagProps = inputTagProps(props)
+
+  return (
+    <input
+      type="checkbox"
+      {...tagProps}
+      id={props.id || props.name}
+      ref={(element) => {
+        register(element, props.validation || { required: false })
+
+        if (typeof ref === 'function') {
+          ref(element)
+        } else if (ref) {
+          ref.current = element
+        }
       }}
     />
   )
@@ -275,13 +412,21 @@ const SelectField = forwardRef((props, ref) => {
 
 // Renders a <button type="submit">
 
-const Submit = forwardRef((props, ref) => (
-  <button ref={ref} type="submit" {...props} />
-))
+const Submit = forwardRef<
+  HTMLButtonElement,
+  React.ComponentPropsWithoutRef<'button'>
+>((props, ref) => <button ref={ref} type="submit" {...props} />)
 
 // Renders a <input>
 
-const InputField = forwardRef((props, ref) => {
+interface InputFieldProps extends ValidatableFieldProps {
+  type?: INPUT_TYPES
+}
+
+const InputField = forwardRef<
+  HTMLInputElement,
+  InputFieldProps & React.InputHTMLAttributes<HTMLInputElement>
+>((props, ref) => {
   const { register } = useFormContext()
   const { setCoercion } = useCoercion()
   React.useEffect(() => {
@@ -309,9 +454,14 @@ const InputField = forwardRef((props, ref) => {
     <input
       {...tagProps}
       id={props.id || props.name}
-      ref={(e) => {
-        register(e, props.validation || { required: false })
-        if (ref) ref.current = e
+      ref={(element) => {
+        register(element, props.validation || { required: false })
+
+        if (typeof ref === 'function') {
+          ref(element)
+        } else if (ref) {
+          ref.current = element
+        }
       }}
     />
   )
@@ -327,11 +477,19 @@ const InputField = forwardRef((props, ref) => {
 // In the end we end up with `inputComponents.TextField` and all the others. Export those
 // and we're good to go.
 
-let inputComponents = {}
-INPUT_TYPES.forEach((type) => {
-  inputComponents[`${pascalcase(type)}Field`] = forwardRef((props, ref) => (
-    <InputField ref={ref} type={type} {...props} />
-  ))
+const inputComponents: Record<
+  string,
+  React.ForwardRefExoticComponent<
+    InputFieldProps &
+      React.InputHTMLAttributes<HTMLInputElement> &
+      React.RefAttributes<HTMLInputElement>
+  >
+> = {}
+Object.values(INPUT_TYPES).forEach((type) => {
+  inputComponents[`${pascalcase(type)}Field`] = forwardRef<
+    HTMLInputElement,
+    InputFieldProps & React.InputHTMLAttributes<HTMLInputElement>
+  >((props, ref) => <InputField ref={ref} type={type} {...props} />)
 })
 
 export {
@@ -348,7 +506,6 @@ export {
 
 export const {
   ButtonField,
-  CheckboxField,
   ColorField,
   DateField,
   DatetimeLocalField,
