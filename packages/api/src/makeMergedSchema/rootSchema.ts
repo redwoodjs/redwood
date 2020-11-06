@@ -52,7 +52,7 @@ export const resolvers: Resolvers = {
   JSONObject: JSONObjectResolver,
   Query: {
     redwood: () => ({
-      version: apiPackageJson.version,
+      version: apiPackageJson.version as string, // cast because TS will forget
       prismaVersion: () => PrismaClient.prismaVersion,
       currentUser: (_args: any, context: GlobalContext) => {
         return context?.currentUser
