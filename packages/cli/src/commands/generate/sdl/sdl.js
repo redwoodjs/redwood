@@ -6,10 +6,6 @@ import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 import terminalLink from 'terminal-link'
 
-import { yargsDefaults } from '../../generate'
-import { relationsForModel } from '../helpers'
-import { files as serviceFiles } from '../service/service'
-
 import {
   generateTemplate,
   transformTSToJS,
@@ -19,6 +15,9 @@ import {
   getEnum,
 } from 'src/lib'
 import c from 'src/lib/colors'
+import { yargsDefaults } from '../../generate'
+import { relationsForModel } from '../helpers'
+import { files as serviceFiles } from '../service/service'
 
 const IGNORE_FIELDS_FOR_INPUT = ['id', 'createdAt', 'updatedAt']
 
