@@ -15,6 +15,11 @@
             "position": "after"
           },
           {
+            "pattern": "@redwoodjs/**",
+            "group": "external",
+            "position": "after"
+          },
+          {
             "pattern": "src/**",
             "group": "parent",
             "position": "before"
