@@ -27,6 +27,10 @@ Redwood is the latest open source project initiated by Tom Preston-Werner, cofou
 > **TUTORIAL:** The best way to get to know Redwood is by going through the extensive
 > [Redwood Tutorial](https://redwoodjs.com/tutorial). Have fun!
 
+> **QUICK START:** You can install and run a full-stack Redwood application on your
+> machine with only a couple commands. Check out the [Quick Start](https://redwoodjs.com/docs/quick-start)
+> guide to get started.
+
 **EXAMPLES:** If you'd like to see some examples of what a Redwood application looks
 like, take a look at the following projects:
 
@@ -65,17 +69,6 @@ use:
 - [Hot module replacement](https://webpack.js.org/concepts/hot-module-replacement/) (HMR) for faster development.
 - Database migrations (via Prisma 2).
 - First class JAMstack-style deployment to [Netlify](https://www.netlify.com/).
-
-## Quickstart
-- Yarn (>=1.15) and Node.js (>=12) are required to create the basic file structure. (To learn more about Yarn and Node.js requirements, visit the [Node.js and Yarn Versions section](https://redwoodjs.com/tutorial/prerequisites#nodejs-and-yarn-versions) in the Tutorial Prerequisites.)
-  ```
-    yarn create redwood-app ./redwoodblog
-  ```
-- Start the development server
-  ```cd redwoodblog
-      yarn redwood dev
-  ```
-- A browser should automatically open to http://localhost:8910 and you will see the Redwood welcome page.
 
 ## The Redwood philosophy
 
@@ -416,6 +409,18 @@ And there you have it.
     <td align="center"><a href="https://github.com/jchlu"><img src="https://avatars2.githubusercontent.com/u/496597?v=4" width="100px;" alt=""/><br /><sub><b>Johnny Choudhury-Lucas</b></sub></a></td>
     <td align="center"><a href="http://stevenmichael.almeroth.net/"><img src="https://avatars0.githubusercontent.com/u/204645?v=4" width="100px;" alt=""/><br /><sub><b>Steven Almeroth</b></sub></a></td>
     <td align="center"><a href="https://github.com/lumenCodes"><img src="https://avatars3.githubusercontent.com/u/60603806?v=4" width="100px;" alt=""/><br /><sub><b>lumenCodes</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://robobunny.surge.sh/"><img src="https://avatars2.githubusercontent.com/u/62807704?v=4" width="100px;" alt=""/><br /><sub><b>_robobunny</b></sub></a></td>
+    <td align="center"><a href="https://github.com/kevPo"><img src="https://avatars1.githubusercontent.com/u/2813592?v=4" width="100px;" alt=""/><br /><sub><b>Kevin Poston</b></sub></a></td>
+    <td align="center"><a href="https://github.com/dhausser"><img src="https://avatars1.githubusercontent.com/u/24432220?v=4" width="100px;" alt=""/><br /><sub><b>Davy Hausser</b></sub></a></td>
+    <td align="center"><a href="https://github.com/mohinderps"><img src="https://avatars3.githubusercontent.com/u/16372215?v=4" width="100px;" alt=""/><br /><sub><b>Mohinder Saluja</b></sub></a></td>
+    <td align="center"><a href="https://github.com/guillaumeLamanda"><img src="https://avatars0.githubusercontent.com/u/10440081?v=4" width="100px;" alt=""/><br /><sub><b>Lamanda </b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/ryancwalsh"><img src="https://avatars2.githubusercontent.com/u/2086493?v=4" width="100px;" alt=""/><br /><sub><b>ryancwalsh</b></sub></a></td>
+    <td align="center"><a href="https://github.com/njjkgeerts"><img src="https://avatars0.githubusercontent.com/u/504749?v=4" width="100px;" alt=""/><br /><sub><b>Nick Geerts</b></sub></a></td>
+    <td align="center"><a href="https://miku86.com/"><img src="https://avatars3.githubusercontent.com/u/7271016?v=4" width="100px;" alt=""/><br /><sub><b>miku86</b></sub></a></td>
   </tr>
 </table>
 
