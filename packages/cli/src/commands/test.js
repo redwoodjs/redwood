@@ -66,6 +66,7 @@ export const handler = async ({
   const args = [
     '--passWithNoTests',
     collectCoverage && '--collectCoverage',
+    '--runInBand'
   ].filter(Boolean)
   
   // If the user wants to watch, set the proper watch flag based on what kind of repo this is
