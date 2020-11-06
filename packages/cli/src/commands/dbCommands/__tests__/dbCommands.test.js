@@ -1,11 +1,11 @@
+import { runCommandTask } from 'src/lib'
+
 import * as down from '../down'
 import * as generate from '../generate'
 import * as introspect from '../introspect'
 import * as save from '../save'
 import * as seed from '../seed'
 import * as up from '../up'
-
-import { runCommandTask } from 'src/lib'
 
 jest.mock('src/lib', () => {
   return {

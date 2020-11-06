@@ -1,9 +1,9 @@
 import Listr from 'listr'
 
-import { files } from '../../generate/sdl/sdl'
-
 import { deleteFilesTask } from 'src/lib'
 import c from 'src/lib/colors'
+
+import { files } from '../../generate/sdl/sdl'
 
 export const command = 'sdl <model>'
 export const description =

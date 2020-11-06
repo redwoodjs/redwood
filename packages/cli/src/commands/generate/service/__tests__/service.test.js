@@ -1,10 +1,10 @@
 global.__dirname = __dirname
 import path from 'path'
 
-import * as service from '../service'
-
 import { getDefaultArgs } from 'src/lib'
 import { loadGeneratorFixture } from 'src/lib/test'
+
+import * as service from '../service'
 
 const extensionForBaseArgs = (baseArgs) =>
   baseArgs && baseArgs.typescript ? 'ts' : 'js'

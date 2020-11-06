@@ -1,7 +1,7 @@
+import { getDefaultArgs } from 'src/lib'
+
 import { builder, files } from '../../generate/service/service'
 import { createYargsForComponentDestroy } from '../helpers'
-
-import { getDefaultArgs } from 'src/lib'
 
 // This function wraps files(), so we can pass templateVars. templateVars
 // referenced in a file template must be defined, otherwise template rendering

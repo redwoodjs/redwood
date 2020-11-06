@@ -3,12 +3,12 @@ import path from 'path'
 import camelcase from 'camelcase'
 import terminalLink from 'terminal-link'
 
+import { getPaths } from 'src/lib'
+
 import {
   templateForComponentFile,
   createYargsForComponentGeneration,
 } from '../helpers'
-
-import { getPaths } from 'src/lib'
 
 export const files = async ({ name, ...rest }) => {
   const functionName = camelcase(name)

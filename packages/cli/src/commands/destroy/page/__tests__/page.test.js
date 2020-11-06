@@ -11,10 +11,10 @@ import fs from 'fs'
 
 import 'src/lib/test'
 
+import { getPaths } from 'src/lib'
+
 import { files } from '../../../generate/page/page'
 import { tasks } from '../page'
-
-import { getPaths } from 'src/lib'
 
 beforeEach(() => {
   fs.__setMockFiles({

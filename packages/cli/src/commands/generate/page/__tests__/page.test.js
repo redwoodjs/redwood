@@ -39,11 +39,11 @@ jest.mock('fs', () => {
 import fs from 'fs'
 import path from 'path'
 
-import { pathName } from '../../helpers'
-import * as page from '../page'
-
 import { getPaths } from 'src/lib'
 import { loadGeneratorFixture } from 'src/lib/test'
+
+import { pathName } from '../../helpers'
+import * as page from '../page'
 
 let singleWordFiles, multiWordFiles, pluralWordFiles, paramFiles
 

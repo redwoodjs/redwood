@@ -4,11 +4,11 @@ import fs from 'fs'
 
 import 'src/lib/test'
 
+import { getPaths, getDefaultArgs } from 'src/lib'
+
 import { yargsDefaults as defaults } from '../../../generate'
 import { files } from '../../../generate/scaffold/scaffold'
 import { tasks } from '../scaffold'
-
-import { getPaths, getDefaultArgs } from 'src/lib'
 
 jest.mock('fs')
 jest.mock('@babel/core', () => {

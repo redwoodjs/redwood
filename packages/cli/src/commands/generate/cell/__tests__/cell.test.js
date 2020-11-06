@@ -9,9 +9,9 @@ jest.mock('@redwoodjs/structure', () => {
   }
 })
 
-import * as cell from '../cell'
-
 import { loadGeneratorFixture } from 'src/lib/test'
+
+import * as cell from '../cell'
 
 let singleWordFiles,
   multiWordFiles,

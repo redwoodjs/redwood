@@ -9,8 +9,9 @@ import merge from 'lodash.merge'
 import omitBy from 'lodash.omitby'
 import { mergeTypes } from 'merge-graphql-schemas'
 
-import * as rootSchema from './rootSchema'
 import { Services, GraphQLTypeWithFields } from 'src/types'
+
+import * as rootSchema from './rootSchema'
 
 const mapFieldsToService = ({
   fields = {},

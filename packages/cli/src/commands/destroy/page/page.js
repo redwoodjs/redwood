@@ -1,14 +1,14 @@
 import camelcase from 'camelcase'
 import Listr from 'listr'
 
+import { deleteFilesTask, removeRoutesFromRouterTask } from 'src/lib'
+import c from 'src/lib/colors'
+
 import { pathName } from '../../generate/helpers'
 import {
   files as pageFiles,
   paramVariants as templateVars,
 } from '../../generate/page/page'
-
-import { deleteFilesTask, removeRoutesFromRouterTask } from 'src/lib'
-import c from 'src/lib/colors'
 
 export const command = 'page <name> [path]'
 export const description = 'Destroy a page and route component'

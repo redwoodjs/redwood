@@ -1,10 +1,10 @@
 global.__dirname = __dirname
 import path from 'path'
 
-import * as sdl from '../sdl'
-
 import { getDefaultArgs } from 'src/lib'
 import { loadGeneratorFixture } from 'src/lib/test'
+
+import * as sdl from '../sdl'
 
 afterEach(() => {
   jest.clearAllMocks()

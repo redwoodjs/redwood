@@ -2,9 +2,9 @@ global.__dirname = __dirname
 import path from 'path'
 
 // TODO: Revert to import from '../component' when it gets types.
-import * as component from '../component'
-
 import { loadGeneratorFixture } from 'src/lib/test'
+
+import * as component from '../component'
 
 let singleWordDefaultFiles,
   multiWordDefaultFiles,

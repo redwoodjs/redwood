@@ -11,14 +11,6 @@ import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 import terminalLink from 'terminal-link'
 
-import { yargsDefaults } from '../../generate'
-import { relationsForModel, intForeignKeysForModel } from '../helpers'
-import { files as sdlFiles, builder as sdlBuilder } from '../sdl/sdl'
-import {
-  files as serviceFiles,
-  builder as serviceBuilder,
-} from '../service/service'
-
 import {
   generateTemplate,
   templateRoot,
@@ -32,6 +24,14 @@ import {
   addRoutesToRouterTask,
 } from 'src/lib'
 import c from 'src/lib/colors'
+
+import { yargsDefaults } from '../../generate'
+import { relationsForModel, intForeignKeysForModel } from '../helpers'
+import { files as sdlFiles, builder as sdlBuilder } from '../sdl/sdl'
+import {
+  files as serviceFiles,
+  builder as serviceBuilder,
+} from '../service/service'
 
 const NON_EDITABLE_COLUMNS = ['id', 'createdAt', 'updatedAt']
 const ASSETS = fs.readdirSync(
