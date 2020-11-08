@@ -10,8 +10,7 @@
     "src"
   ],
   "references": [
-    {
-      "path": "../internal",
-    }
+    { "path": "../internal" },
+    { "path": "../web" }
   ]
 }

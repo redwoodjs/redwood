@@ -204,7 +204,7 @@ This creates a new project in a tmp directory using `yarn create redwood-app ...
 
 
 ```terminal
-./tasks/test-turial /path/to/app
+./tasks/test-tutorial /path/to/app
 ```
 
 Use this `path/to/app` option to run the same Cypress E2E tests against a local project. In this case, the command will _not_ upgrade the project to the `canary` release — it will use the project's installed packages. Chose this option if you have modified code (and packages) you want to test locally.
