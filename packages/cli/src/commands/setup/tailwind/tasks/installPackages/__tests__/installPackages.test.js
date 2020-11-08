@@ -3,9 +3,7 @@ import execa from 'execa'
 import 'src/lib/test'
 import installPackages from '..'
 
-jest.mock('execa', () => {
-  return jest.fn()
-})
+jest.mock('execa', () => jest.fn())
 
 describe('rw setup tailwind - installPackages task', () => {
   const yarnArgs = ['workspace', 'web', 'add', '-D']
