@@ -205,29 +205,53 @@ new Listr(
 )
   .run()
   .then(() => {
-    [
+    // zOMG the semicolon below is a real Prettier thing. What??
+    // https://prettier.io/docs/en/rationale.html#semicolons
+    ;[
       '',
       style.success('Thanks for trying out Redwood!'),
       '',
-      `We've created your app in '${style.cmd(newAppDir)}'`,
-      `Enter the directory and run '${style.cmd("yarn rw dev")}' to start the development server.`,
+      `We've created your app in '${style.green(newAppDir)}'`,
+      `Enter the directory and run '${style.green(
+        'yarn rw dev'
+      )}' to start the development server.`,
       '',
-      style.header('Join the Community and Get Help'),
+      ` ⚡️ ${style.redwood(
+        'Get up and running fast with this Quick Start guide'
+      )}: https://redwoodjs.com/docs/quick-start`,
       '',
-      `${style.redwood(' ⮡  Join our Forums')}: https://community.redwoodjs.com`,
-      `${style.redwood(' ⮡  Join our Chat')}: https://discord.gg/redwoodjs`,
-      `${style.redwood(' ⮡  Read the Documentation')}: https://redwoodjs.com/docs`,
+      style.header('Join the Community'),
       '',
-      style.header('Keep updated'),
+      `${style.redwood(' ❖ Join our Forums')}: https://community.redwoodjs.com`,
+      `${style.redwood(' ❖ Join our Chat')}: https://discord.gg/redwoodjs`,
       '',
-      `${style.redwood(' ⮡  Newsletter signup')}: https://www.redwoodjs.com`,
-      `${style.redwood(' ⮡  Follow on Twitter')}: https://twitter.com/redwoodjs`,
+      style.header('Get some help'),
+      '',
+      `${style.redwood(
+        ' ❖ Get started with the Tutorial'
+      )}: https://redwoodjs.com/tutorial`,
+      `${style.redwood(
+        ' ❖ Read the Documentation'
+      )}: https://redwoodjs.com/docs`,
+      '',
+      style.header('Stay updated'),
+      '',
+      `${style.redwood(
+        ' ❖ Sign up for our Newsletter'
+      )}: https://www.redwoodjs.com/newsletter`,
+      `${style.redwood(
+        ' ❖ Follow us on Twitter'
+      )}: https://twitter.com/redwoodjs`,
       '',
       `${style.header(`Become a Contributor`)} ${style.love('❤')}`,
       '',
-      `${style.redwood(' ⮡  Learn how to get started')}: https://redwoodjs.com/docs/contributing`,
-      `${style.redwood(' ⮡  Find a Good First Issue')}: https://redwoodjs.com/good-first-issue`,
-      ''
+      `${style.redwood(
+        ' ❖ Learn how to get started'
+      )}: https://redwoodjs.com/docs/contributing`,
+      `${style.redwood(
+        ' ❖ Find a Good First Issue'
+      )}: https://redwoodjs.com/good-first-issue`,
+      '',
     ].map((item) => console.log(item))
   })
   .catch((e) => {

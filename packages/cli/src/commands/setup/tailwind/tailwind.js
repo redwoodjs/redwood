@@ -37,23 +37,58 @@ const tailwindImportsAndNotes = [
 
 const INDEX_CSS_PATH = path.join(getPaths().web.src, 'index.css')
 
+const tailwindImportsExist = (indexCSS) => {
+  let content = indexCSS.toString()
+
+  const hasBaseImport = () => /@import "tailwindcss\/base"/.test(content)
+
+  const hasComponentsImport = () =>
+    /@import "tailwindcss\/components"/.test(content)
+
+  const hasUtilitiesImport = () =>
+    /@import "tailwindcss\/utilities"/.test(content)
+
+  return hasBaseImport() && hasComponentsImport() && hasUtilitiesImport()
+}
+
+const postCSSConfigExists = () => {
+  return fs.existsSync(getPaths().web.postcss)
+}
+
 export const handler = async ({ force }) => {
   const tasks = new Listr([
     {
       title: 'Installing packages...',
-      task: async () => {
-        /**
-         * Install postcss-loader, tailwindcss, and autoprefixer
-         * RedwoodJS currently uses PostCSS v7; postcss-loader and autoprefixers pinned for compatibility
-         */
-        await execa('yarn', [
-          'workspace',
-          'web',
-          'add',
-          '-D',
-          'postcss-loader@4.0.2',
-          'tailwindcss',
-          'autoprefixer@9.8.6',
+      task: () => {
+        return new Listr([
+          {
+            title: 'Install postcss-loader, tailwindcss, and autoprefixer',
+            task: async () => {
+              /**
+               * Install postcss-loader, tailwindcss, and autoprefixer
+               * RedwoodJS currently uses PostCSS v7; postcss-loader and autoprefixers pinned for compatibility
+               */
+              await execa('yarn', [
+                'workspace',
+                'web',
+                'add',
+                '-D',
+                'postcss-loader@4.0.2',
+                'tailwindcss',
+                'autoprefixer@9.8.6',
+              ])
+            },
+          },
+          {
+            title: 'Sync yarn.lock and node_modules',
+            task: async () => {
+              /**
+               * Sync yarn.lock file and node_modules folder.
+               * Refer https://github.com/redwoodjs/redwood/issues/1301 for more details.
+               */
+              await execa('yarn', ['install', '--check-files'])
+            },
+          },
         ])
       },
     },
@@ -64,15 +99,30 @@ export const handler = async ({ force }) => {
          * Make web/config if it doesn't exist
          * and write postcss.config.js there
          */
-        return writeFile(
-          getPaths().web.postcss,
-          fs
-            .readFileSync(
-              path.resolve(__dirname, 'templates', 'postcss.config.js.template')
-            )
-            .toString(),
-          { overwriteExisting: force }
-        )
+
+        /**
+         * Check if PostCSS config already exists.
+         * If it exists, throw an error.
+         */
+        if (!force && postCSSConfigExists()) {
+          throw new Error(
+            'PostCSS config already exists.\nUse --force to override existing config.'
+          )
+        } else {
+          return writeFile(
+            getPaths().web.postcss,
+            fs
+              .readFileSync(
+                path.resolve(
+                  __dirname,
+                  'templates',
+                  'postcss.config.js.template'
+                )
+              )
+              .toString(),
+            { overwriteExisting: force }
+          )
+        }
       },
     },
     {
@@ -86,7 +136,11 @@ export const handler = async ({ force }) => {
           path.join(getPaths().web.base, 'tailwind.config.js')
         )
 
-        if (!configExists || force) {
+        if (!force && configExists) {
+          throw new Error(
+            'Tailwindcss config already exists.\nUse --force to override existing config.'
+          )
+        } else {
           await execa('yarn', ['tailwindcss', 'init'])
 
           // opt-in to upcoming changes
@@ -109,13 +163,18 @@ export const handler = async ({ force }) => {
     },
     {
       title: 'Adding imports to index.css...',
-      task: () => {
+      task: (_ctx, task) => {
         /**
          * Add tailwind imports and notes to the top of index.css
          */
         let indexCSS = fs.readFileSync(INDEX_CSS_PATH)
-        indexCSS = tailwindImportsAndNotes.join('\n') + indexCSS
-        fs.writeFileSync(INDEX_CSS_PATH, indexCSS)
+
+        if (tailwindImportsExist(indexCSS)) {
+          task.skip('Imports already exist in index.css')
+        } else {
+          indexCSS = tailwindImportsAndNotes.join('\n') + indexCSS
+          fs.writeFileSync(INDEX_CSS_PATH, indexCSS)
+        }
       },
     },
     {

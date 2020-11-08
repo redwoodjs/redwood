@@ -3,43 +3,50 @@ import * as babel from '@babel/core'
 import namedDirectory from '../babel-plugin-redwood-directory-named-import'
 
 const testCases = [
-  // Directory named exports
+  // Directory named imports
   {
-    input: 'import pew from "./__fixtures__/directory-named-imports/Module"',
+    input:
+      'import { ImpModule } from "./__fixtures__/directory-named-imports/Module"',
     output:
-      'import pew from "./__fixtures__/directory-named-imports/Module/Module"',
+      'import { ImpModule } from "./__fixtures__/directory-named-imports/Module/Module";',
+  },
+  // Directory named imports TSX
+  {
+    input:
+      'import { ImpTSX } from "./__fixtures__/directory-named-imports/TSX"',
+    output: `import { ImpTSX } from "./__fixtures__/directory-named-imports/TSX/TSX";`,
   },
   // Directory named exports
   {
     input:
-      'export { pew } from "./__fixtures__/directory-named-imports/Module"',
-    output:
-      'export { pew } from "./__fixtures__/directory-named-imports/Module/Module"',
+      'export { ExpModule } from "./__fixtures__/directory-named-imports/Module"',
+    output: `export { ExpModule } from "./__fixtures__/directory-named-imports/Module/Module";`,
   },
   // Gives preferences to `index.*`
   {
     input:
-      'export { pew } from "./__fixtures__/directory-named-imports/indexModule"',
-    output:
-      'export { pew } from "./__fixtures__/directory-named-imports/indexModule"',
+      'export { ExpIndex } from "./__fixtures__/directory-named-imports/indexModule"',
+    output: `export { ExpIndex } from "./__fixtures__/directory-named-imports/indexModule/index";`,
+  },
+  {
+    input:
+      'export { TSWithIndex } from "./__fixtures__/directory-named-imports/TSWithIndex"',
+    output: `export { TSWithIndex } from "./__fixtures__/directory-named-imports/TSWithIndex/index";`,
   },
   // Supports "*.ts"
   {
     input: 'export { pew } from "./__fixtures__/directory-named-imports/TS"',
-    output:
-      'export { pew } from "./__fixtures__/directory-named-imports/TS/TS"',
+    output: `export { pew } from "./__fixtures__/directory-named-imports/TS/TS";`,
   },
   // Supports "*.tsx"
   {
     input: 'export { pew } from "./__fixtures__/directory-named-imports/TSX"',
-    output:
-      'export { pew } from "./__fixtures__/directory-named-imports/TSX/TSX"',
+    output: `export { pew } from "./__fixtures__/directory-named-imports/TSX/TSX";`,
   },
   // Supports "*.jsx"
   {
     input: 'export { pew } from "./__fixtures__/directory-named-imports/JSX"',
-    output:
-      'export { pew } from "./__fixtures__/directory-named-imports/JSX/JSX"',
+    output: `export { pew } from "./__fixtures__/directory-named-imports/JSX/JSX";`,
   },
 ]
 
