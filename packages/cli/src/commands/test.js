@@ -94,10 +94,11 @@ export const handler = async ({
   }
   
   try {
+    const cacheDirDb = `file:${ensurePosixPath(CACHE_DIR)}/test.db`
+    const DATABASE_URL = process.env.TEST_DATABASE_URL || cacheDirDb
+      
     // Create a test database
     if (sides.includes('api')) {
-      const cacheDirDb = `file:${ensurePosixPath(CACHE_DIR)}/test.db`
-      const DATABASE_URL = process.env.TEST_DATABASE_URL || cacheDirDb
       await execa.command(`yarn rw db up`, {
         stdio: 'inherit',
         shell: true,
@@ -111,6 +112,7 @@ export const handler = async ({
       cwd: getPaths().base,
       shell: true,
       stdio: 'inherit',
+      env: { DATABASE_URL },
     })
   } catch (e) {
     console.log(c.error(e.message))
