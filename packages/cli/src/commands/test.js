@@ -34,12 +34,7 @@ export const builder = (yargs) => {
       describe:
         'Run tests related to changed files based on hg/git. Specify the name or path to a file to focus on a specific set of tests',
       type: 'boolean',
-      default: false,
-    })
-    .option('watchAll', {
-      describe: 'Run all tests',
-      type: 'boolean',
-      default: false,
+      default: true,
     })
     .option('collectCoverage', {
       describe:
@@ -63,40 +58,43 @@ export const builder = (yargs) => {
 
 export const handler = async ({
   side,
-  watch = false,
-  watchAll = false,
+  watch = true,
   collectCoverage = false,
 }) => {
   const { cache: CACHE_DIR } = getPaths()
   const sides = [].concat(side).filter(Boolean)
   const args = [
     '--passWithNoTests',
-    watch && '--watch',
     collectCoverage && '--collectCoverage',
-    watchAll && '--watchAll',
   ].filter(Boolean)
-  // If you don't pass any arguments we enter "watch mode" as the default.
-  if (!process.env.CI && !watchAll && !collectCoverage) {
-    // https://github.com/facebook/create-react-app/issues/5210
+  
+  // If the user wants to watch, set the proper watch flag based on what kind of repo this is
+  // because of https://github.com/facebook/create-react-app/issues/5210
+  if (watch && !process.env.CI && !collectCoverage) {
     const hasSourceControl = isInGitRepository() || isInMercurialRepository()
     args.push(hasSourceControl ? '--watch' : '--watchAll')
   }
+
   // if no sides declared with yargs, default to all sides
   if (!sides.length) {
     getProject().sides.forEach(side => sides.push(side))
   }
+
   args.push(
     '--config',
     require.resolve('@redwoodjs/core/config/jest.config.js')
   )
+  
   if (sides.length > 0) {
     args.push('--projects', ...sides)
   }
+  
   try {
+    const cacheDirDb = `file:${ensurePosixPath(CACHE_DIR)}/test.db`
+    const DATABASE_URL = process.env.TEST_DATABASE_URL || cacheDirDb
+      
     // Create a test database
     if (sides.includes('api')) {
-      const cacheDirDb = `file:${ensurePosixPath(CACHE_DIR)}/test.db`
-      const DATABASE_URL = process.env.TEST_DATABASE_URL || cacheDirDb
       await execa.command(`yarn rw db up`, {
         stdio: 'inherit',
         shell: true,
@@ -110,6 +108,7 @@ export const handler = async ({
       cwd: getPaths().base,
       shell: true,
       stdio: 'inherit',
+      env: { DATABASE_URL },
     })
   } catch (e) {
     console.log(c.error(e.message))
