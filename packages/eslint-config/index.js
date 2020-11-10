@@ -95,6 +95,8 @@ module.exports = {
     React: 'readonly',
     mockGraphQLQuery: 'readonly',
     mockGraphQLMutation: 'readonly',
+    testWithFixtures: 'readonly',
+    itWithFixtures: 'readonly',
   },
   rules: {
     'prettier/prettier': 'warn',

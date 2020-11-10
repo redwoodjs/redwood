@@ -6,4 +6,6 @@ import type {
 declare global {
   const mockGraphQLQuery: typeof _mockGraphQLQuery
   const mockGraphQLMutation: typeof _mockGraphQLMutation
+  const testWithFixtures: (name: string, fn?: () => void) => void
+  const itWithFixtures: (name: string, fn?: () => void) => void
 }
