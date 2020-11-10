@@ -9,9 +9,9 @@ Before interacting with the Redwood community, please read and understand our [C
 - [Contributing](#contributing)
   - [Local Development](#local-development)
     - [Install Dependencies](#install-dependencies)
-    - [Copy and Watch](#copy-and-watch)
+    - [Copy and Watch](#option-a:-copy-and-watch)
       - [Specifying a RW_PATH](#specifying-a-rw_path)
-    - [Local Package Registry Emulation](#local-package-registry-emulation)
+    - [Local Package Registry Emulation](#op[tion-b:-local-package-registry-emulation)
       - [Setting Up and Running a Local NPM Registry](#setting-up-and-running-a-local-npm-registry)
       - [Publishing a Package](#publishing-a-package)
       - [Installing Published Packages in Your Redwood App](#installing-published-packages-in-your-redwood-app)
@@ -26,6 +26,8 @@ Before interacting with the Redwood community, please read and understand our [C
     - [fix-bins (alias fix)](#fix-bins-alias-fix)
     - [install (alias i)](#install-alias-i)
 
+---
+
 ## Local Development
 
 As a Redwood user, you're already familiar with the codebase `yarn create redwood-app` creates.
@@ -35,21 +37,25 @@ As a contributor, you'll have to gain familiarity with one more codebase: the Re
 The Redwood Framework lives in the monorepo redwoodjs/redwood; it contains all the packages that make Redwood Apps work the way they do.
 
 While you'll be making most of your changes in the Redwood Framework, you'll probably want to see your changes “running live" in one of your own Redwood Apps or in one of our example apps.
-We offer two workflows for making this possible: "copy and watch", which has some restrictions, and "local package registry emulation", which doesn't.
 
-**How to choose which one to use?** If you've installed or upgraded a dependency, use the "local package registry emulation" workflow; otherwise, use "copy and watch".
+We offer two workflows for making this possible: "copy and watch", which has some restrictions, and "local package registry emulation", which doesn't.
 
 > Both workflows use `redwood-tools` (alias `rwt`), Redwood's companion CLI development tool.
 
 ### Install Dependencies
-Before running the application for the first time you should run `yarn` in the root directory to install the necessary dependencies. 
+Before running the application for the first time you should run `yarn` in the root directory to install the necessary dependencies.
 
-```terminal 
+```terminal
 cd redwood
 yarn
 ```
 
-### Copy and Watch
+### Option A: Copy and Watch
+<details>
+
+<summary>This is the easier option, use this unless you've installed or upgraded a dependency. Click to expand</summary>
+
+<br/>
 
 > Are you on Windows? If so, you most likely first have to [install rsync](https://tlundberg.com/blog/2020-06-15/installing-rsync-on-windows/). Also, unfortunately you can't use "copy and watch". You'll have to manually run `yarn rwt cp ../path/to/redwood` when you've made changes to the Redwood Framework (this is tracked in [issue #701](https://github.com/redwoodjs/redwood/issues/701)).
 
@@ -121,9 +127,17 @@ And see your changes copied!
 _On Windows_
 [Todo: please contribute a PR if you can help add instructions here.]
 
-### Local Package Registry Emulation
+</details>
 
-Sometimes you'll want to test the full package-development workflow: building, publishing, and installing in your Redwood App. We facilitate this using a local NPM registry called [Verdaccio](https://github.com/verdaccio/verdaccio).
+### Option B: Local Package Registry Emulation
+
+<details>
+
+<summary>Sometimes you'll want to test the full package-development workflow: building, publishing, and installing in your Redwood App. Click to expand</summary>
+
+<br/>
+
+We facilitate this using a local NPM registry called [Verdaccio](https://github.com/verdaccio/verdaccio).
 
 #### Setting Up and Running a Local NPM Registry
 
@@ -191,6 +205,10 @@ yarn rw dev api
 yarn rw dev web
 ```
 
+</details>
+
+---
+
 ## Integration tests
 
 We're using Cypress to test the steps that we recommend in the tutorial. Run the command by doing the following:
@@ -212,6 +230,8 @@ Use this `path/to/app` option to run the same Cypress E2E tests against a local 
 
 > Windows Not Supported: The command for this is written in bash and will not work on Windows.
 
+---
+
 ## Releases
 
 To publish a new version of Redwood to NPM run the following commands:
@@ -223,9 +243,12 @@ yarn lerna publish from-package
 
 The changes the version of **all the packages** (even those that haven't changed) and publishes it to NPM.
 
+
 ### Troubleshooting
 
 If something went wrong you can use `yarn lerna publish from-package` to publish the packages that aren't already in the registry.
+
+---
 
 ## CLI Reference: `redwood-tools`
 
