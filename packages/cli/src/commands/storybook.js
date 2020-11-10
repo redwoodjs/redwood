@@ -8,7 +8,21 @@ export const aliases = ['sb']
 export const description =
   'Launch Storybook, an isolated component development environment'
 
-export const handler = () => {
+export const builder = (yargs) => {
+  yargs
+    .option('open', {
+      describe: 'Open storybooks in your browser on start',
+      type: 'boolean',
+      default: false,
+    })
+    .option('port', {
+      describe: 'Which port to run storybooks on',
+      type: 'integer',
+      default: 7910,
+    })
+}
+
+export const handler = ({ open, port }) => {
   const cmd = 'yarn start-storybook'
   const cwd = getPaths().web.base
 
@@ -21,19 +35,20 @@ export const handler = () => {
     cwd,
   })
 
-  execa(
-    cmd,
-    [
-      '--config-dir ../node_modules/@redwoodjs/core/config/storybook',
-      '--port 7910', // this should be configurable?
-      '--no-version-updates', // we'll handle upgrades
-      '--ci', // do not open browser window.
-      `--static-dir ${staticAssetsFolder}`,
-    ],
-    {
-      stdio: 'inherit',
-      shell: true,
-      cwd,
-    }
-  )
+  const options = [
+    '--config-dir ../node_modules/@redwoodjs/core/config/storybook',
+    `--port ${port}`, // this should be configurable?
+    '--no-version-updates', // we'll handle upgrades
+    `--static-dir ${staticAssetsFolder}`,
+  ]
+
+  if (!open) {
+    options.push('--ci')
+  }
+
+  execa(cmd, options, {
+    stdio: 'inherit',
+    shell: true,
+    cwd,
+  })
 }
