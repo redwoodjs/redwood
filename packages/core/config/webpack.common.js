@@ -3,13 +3,14 @@ const path = require('path')
 const { existsSync } = require('fs')
 
 const webpack = require('webpack')
+const Dotenv = require('dotenv-webpack')
+const { getConfig, getPaths } = require('@redwoodjs/internal')
+const { merge } = require('webpack-merge')
+
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 const { RetryChunkLoadPlugin } = require('webpack-retry-chunk-load-plugin')
-const Dotenv = require('dotenv-webpack')
-const { getConfig, getPaths } = require('@redwoodjs/internal')
-const { merge } = require('webpack-merge')
 
 const redwoodConfig = getConfig()
 const redwoodPaths = getPaths()
@@ -149,6 +150,9 @@ const getSharedPlugins = (isEnvProduction) => {
 module.exports = (webpackEnv) => {
   const isEnvProduction = webpackEnv === 'production'
 
+  const shouldIncludeFastRefresh =
+    redwoodConfig.web.experimentalFastRefresh && !isEnvProduction
+
   return {
     mode: isEnvProduction ? 'production' : 'development',
     devtool: isEnvProduction ? 'source-map' : 'cheap-module-source-map',
@@ -216,6 +220,12 @@ module.exports = (webpackEnv) => {
               exclude: /(node_modules)/,
               use: {
                 loader: 'babel-loader',
+                options: {
+                  plugins: [
+                    shouldIncludeFastRefresh &&
+                      require.resolve('react-refresh/babel'),
+                  ].filter(Boolean),
+                },
               },
             },
             // (2)

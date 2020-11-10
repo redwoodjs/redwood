@@ -29,6 +29,7 @@ interface BrowserTargetConfig {
   // TODO: apiProxyHost: string
   apiProxyPort: number
   apiProxyPath: string
+  experimentalFastRefresh?: boolean
 }
 
 export interface Config {
