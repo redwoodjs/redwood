@@ -118,6 +118,7 @@ const getStyleLoaders = (isEnvProduction) => {
   ]
 }
 
+// Shared with storybook, as well as the RW app
 const getSharedPlugins = (isEnvProduction) => {
   const shouldIncludeFastRefresh =
     redwoodConfig.web.experimentalFastRefresh && !isEnvProduction
