@@ -138,7 +138,8 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     )
     cy.get('main').should(
       'contain',
-      '[{"title":"Second post","body":"Hello world!","__typename":"Post"}]'
+      // [{"title":"Second post","body":"Hello world!","__typename":"Post"}]
+      '"body":"Hello world!"'
     )
   })
 })
