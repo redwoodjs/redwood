@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import type { GlobalContext } from 'src/globalContext'
-import { PrismaClient } from '@prisma/client'
+const { prismaVersion } = require('@prisma/client')
 import gql from 'graphql-tag'
 import {
   DateResolver,
@@ -53,7 +53,7 @@ export const resolvers: Resolvers = {
   Query: {
     redwood: () => ({
       version: apiPackageJson.version,
-      prismaVersion: () => PrismaClient.prismaVersion,
+      prismaVersion: () => prismaVersion.client,
       currentUser: (_args: any, context: GlobalContext) => {
         return context?.currentUser
       },
