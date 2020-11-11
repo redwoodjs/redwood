@@ -3,8 +3,6 @@ const escapeRegExp = require('lodash.escaperegexp')
 const { getConfig } = require('@redwoodjs/internal')
 const ErrorOverlayPlugin = require('error-overlay-webpack-plugin')
 
-const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
-
 const webpackConfig = require('./webpack.common')
 
 const { mergeUserWebpackConfig } = webpackConfig
@@ -40,11 +38,7 @@ const baseConfig = merge(webpackConfig('development'), {
     removeEmptyChunks: false,
     splitChunks: false,
   },
-  plugins: [
-    new ErrorOverlayPlugin(),
-    redwoodConfig.web.experimentalFastRefresh &&
-      new ReactRefreshWebpackPlugin(),
-  ].filter(Boolean),
+  plugins: [new ErrorOverlayPlugin()].filter(Boolean),
 })
 
 module.exports = mergeUserWebpackConfig('development', baseConfig)

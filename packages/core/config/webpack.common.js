@@ -11,6 +11,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 const { RetryChunkLoadPlugin } = require('webpack-retry-chunk-load-plugin')
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 
 const redwoodConfig = getConfig()
 const redwoodPaths = getPaths()
@@ -117,13 +118,18 @@ const getStyleLoaders = (isEnvProduction) => {
   ]
 }
 
+// Shared with storybook, as well as the RW app
 const getSharedPlugins = (isEnvProduction) => {
+  const shouldIncludeFastRefresh =
+    redwoodConfig.web.experimentalFastRefresh && !isEnvProduction
+
   return [
     isEnvProduction &&
       new MiniCssExtractPlugin({
         filename: 'static/css/[name].[contenthash:8].css',
         chunkFilename: 'static/css/[name].[contenthash:8].css',
       }),
+    shouldIncludeFastRefresh && new ReactRefreshWebpackPlugin(),
     new webpack.ProvidePlugin({
       React: 'react',
       PropTypes: 'prop-types',
