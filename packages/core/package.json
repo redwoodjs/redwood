@@ -57,7 +57,7 @@
     "svg-react-loader": "^0.4.6",
     "typescript": "^4.0.2",
     "url-loader": "4.1.0",
-    "webpack": "^4.42.1",
+    "webpack": "^5.4.0",
     "webpack-bundle-analyzer": "^3.6.1",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3",
