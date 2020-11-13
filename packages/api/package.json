@@ -16,7 +16,7 @@
     "graphql-scalars": "^1.4.1",
     "graphql-tools": "6.2.4",
     "jsonwebtoken": "^8.5.1",
-    "jwks-rsa": "^1.8.1",
+    "jwks-rsa": "^1.11.0",
     "lodash.merge": "^4.6.2",
     "lodash.omitby": "^4.6.0",
     "merge-graphql-schemas": "^1.7.6"
