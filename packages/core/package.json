@@ -67,7 +67,7 @@
   "devDependencies": {
     "@types/babel-core": "^6.25.6",
     "@types/babel-plugin-tester": "^9.0.0",
-    "babel-plugin-tester": "^9.0.1",
+    "babel-plugin-tester": "^10.0.0",
     "whatwg-fetch": "^3.0.0"
   },
   "gitHead": "c235e7d7186e5e258764699c0e0e1d5cc0fdd0b5",
