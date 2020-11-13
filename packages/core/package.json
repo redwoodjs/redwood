@@ -40,7 +40,7 @@
     "copy-webpack-plugin": "^6.1.0",
     "core-js": "3.6.5",
     "css-loader": "^4.2.2",
-    "dotenv-webpack": "^2.0.0",
+    "dotenv-webpack": "^5.1.0",
     "error-overlay-webpack-plugin": "^0.4.1",
     "file-loader": "^6.0.0",
     "findup-sync": "^4.0.0",

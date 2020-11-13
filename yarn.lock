@@ -8221,7 +8221,7 @@ dotenv-defaults@^1.0.2:
   dependencies:
     dotenv "^6.2.0"
 
-dotenv-defaults@^2.0.0, dotenv-defaults@^2.0.1:
+dotenv-defaults@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/dotenv-defaults/-/dotenv-defaults-2.0.1.tgz#ea6f9632b3b5cc55e48b736760def5561f1cb7c0"
   integrity sha512-ugFCyBF7ILuwpmznduHPQZBMucHHJ8T4OBManTEVjemxCm2+nqifSuW2lD2SNKdiKSH1E324kZSdJ8M04b4I/A==
@@ -8240,12 +8240,12 @@ dotenv-webpack@^1.7.0:
   dependencies:
     dotenv-defaults "^1.0.2"
 
-dotenv-webpack@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/dotenv-webpack/-/dotenv-webpack-2.0.0.tgz#064ae42dbb214778d8aff0c76dc97253594f9ec3"
-  integrity sha512-Omo5IpVl7XRgWXeZjxdfqOBEApJPxGLMOIx3F/w/W7ppUKgYMOXrk4eczlQrErPD4X0YRESlyGJek3O4uobRnw==
+dotenv-webpack@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/dotenv-webpack/-/dotenv-webpack-5.1.0.tgz#cbbb7dff98cbe5897aef0b824a3b9ce08284bee6"
+  integrity sha512-QVdpf+oa2DGnR9jqbLTofTZIuNZUIJ11PsU6/oMKVmu8zNmKnV8WaKnP1CT6Q3L4q7BIRmNsQ21WHvhQ/awJQQ==
   dependencies:
-    dotenv-defaults "^2.0.0"
+    dotenv-defaults "^2.0.1"
 
 dotenv@^6.2.0:
   version "6.2.0"
