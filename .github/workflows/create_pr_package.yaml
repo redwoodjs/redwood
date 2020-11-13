@@ -1,0 +1,63 @@
+name: Create PR packages
+
+on: pull_request_target
+
+jobs:
+  create_pkg:
+    name: Create PR packages
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build
+        run: yarn build
+
+      - name: Create packages
+        run: |
+          mkdir bin
+          for d in packages/*/ ; do
+            (cd "$d" && tgz=$(npm pack) && cp $tgz ../../bin/)
+          done
+
+      - name: copy files to s3
+        env:
+          aws_key_id: ${{ secrets.AWS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET }}
+        run: |
+          sudo apt-get update && sudo apt-get -y install awscli
+          aws configure set aws_access_key_id $aws_key_id
+          aws configure set aws_secret_access_key $aws_secret_access_key
+          aws configure set default.region us-east-1
+          aws s3 cp --recursive ./bin/ s3://rw-pr/${{ github.event.number }}/
+
+      - name: Create comment msg
+        id: comment_msg
+        run: |
+          msg="📦 Packages for this PR can be downloaded from%0A"
+          for p in bin/*; do
+            msg+="https://rw-pr.s3.amazonaws.com/${{ github.event.number }}/${p#bin/}%0A"
+          done
+          msg+="%0AInstall locally with yarn, e.g. \`yarn workspace web add <url>\`"
+          echo "::set-output name=msg::$msg"
+
+      - name: Comment on PR
+        uses: mshick/add-pr-comment@v1
+        with:
+          message: ${{ steps.comment_msg.outputs.msg }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          allow-repeats: false # The links don't change (but the file they link to does). So no need to repost
