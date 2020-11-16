@@ -1,93 +1,103 @@
 const path = require('path')
-
 const { getPaths } = require('@redwoodjs/internal')
-
-const redwoodPaths = getPaths()
-
-const { db } = require(path.join(redwoodPaths.api.src, 'lib', 'db'))
+const { db } = require(path.join(getPaths().api.src, 'lib', 'db'))
+const DEFAULT_SCENARIO = 'standard'
+const PRISMA_RESERVED = ['create', 'connect']
 
 const findNestedModels = (data) => {
   let models = []
 
   for (const [field, value] of Object.entries(data)) {
     if (typeof value === 'object') {
-      if (models.indexOf(field) === -1) {
+      if (!models.includes(field) && !PRISMA_RESERVED.includes(field)) {
         models.push(field)
       }
-      models = models.concat(findNestedModels(field))
+      models = models.concat(findNestedModels(value))
     }
   }
 
   return models
 }
 
-window.jestIt = window.it
-window.it = (...args) => {
-  return window.jestIt(args[0], async (done) => {
-    let scenarioName = 'standard'
-    let testFunc = args[2]
-    // is the second param a function (default `test` call) or is an options argument
-    // included with the name of the scenario to use
-    if (typeof args[1] === 'function') {
-      testFunc = args[1]
-    } else {
-      scenarioName = args[1]['scenario']
+const seedFixtures = async (scenario) => {
+  if (scenario) {
+    const fixtures = {}
+    for (const [model, namedFixtures] of Object.entries(scenario)) {
+      fixtures[model] = {}
+      for (const [name, data] of Object.entries(namedFixtures)) {
+        fixtures[model][name] = await db[model].create({ data })
+      }
     }
+    return fixtures
+  } else {
+    return {}
+  }
+}
 
+const removeFixtures = async (scenario) => {
+  if (scenario) {
+    let models = []
+
+    for (const [model, namedFixtures] of Object.entries(scenario)) {
+      models.push(model)
+      for (const [_name, data] of Object.entries(namedFixtures)) {
+        models = models.concat(findNestedModels(data))
+      }
+    }
+    models = Array.from(new Set(models))
+
+    for (const model of models) {
+      await db.$queryRaw(`DELETE FROM ${model}`)
+    }
+  }
+}
+
+window.scenario = (...args) => {
+  let scenarioName, testName, testFunc
+
+  if (args.length === 3) {
+    ;[scenarioName, testName, testFunc] = args
+  } else {
+    scenarioName = DEFAULT_SCENARIO
+    ;[testName, testFunc] = args
+  }
+
+  return window.it(testName, async () => {
     const path = require('path')
     const testFileDir = path.parse(window.jasmine.testPath)
     const testFilePath = `${testFileDir.dir}/${
       testFileDir.name.split('.')[0]
     }.fixtures`
-    const fixtures = {}
-    let usingScenarios = true
-    let allFixtures
-    let teardownModels = []
+    let allFixtures, scenario, result
 
     try {
       allFixtures = require(testFilePath)
     } catch (e) {
-      usingScenarios = false
+      // no fixture file found, ignore
     }
 
-    if (usingScenarios) {
-      const scenario = allFixtures[scenarioName]
-
-      if (typeof scenario === 'undefined') {
+    if (allFixtures) {
+      if (allFixtures[scenarioName]) {
+        scenario = allFixtures[scenarioName]
+      } else {
         throw (
-          ('UndefinedFixture',
+          ('UndefinedScenario',
           `There is no scenario named "${scenarioName}" in ${testFilePath}.js`)
         )
       }
-
-      // seed fixtures
-      for (const [model, namedFixtures] of Object.entries(scenario)) {
-        fixtures[model] = {}
-        teardownModels.push(model)
-        for (const [name, data] of Object.entries(namedFixtures)) {
-          teardownModels = teardownModels.concat(findNestedModels(data))
-          fixtures[model][name] = await db[model].create({ data })
-        }
-      }
-
-      // uniqify the list of models we need to delete from
-      teardownModels = Array.from(new Set(teardownModels))
     }
 
-    // run actual test
-    await testFunc(fixtures, done)
-
-    // delete fixtures
-    if (usingScenarios) {
-      for (const model of teardownModels) {
-        await db.$queryRaw(`DELETE FROM ${model}`)
-      }
+    const fixtures = await seedFixtures(scenario)
+    try {
+      result = await testFunc(fixtures)
+    } finally {
+      // if the test fails this makes sure we still remove fixtures
+      await removeFixtures(scenario)
     }
 
-    done()
+    return result
   })
 }
-window.test = window.it
 
 afterAll(async () => {
   await db.$disconnect()
