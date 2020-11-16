@@ -24,9 +24,7 @@ export default ({ force }) => () => {
     return writeFile(
       getPaths().web.postcss,
       fs
-        .readFileSync(
-          path.resolve(__dirname, 'templates', 'postcss.config.js.template')
-        )
+        .readFileSync(path.resolve(__dirname, 'postcss.config.template.js'))
         .toString(),
       { overwriteExisting: force }
     )
