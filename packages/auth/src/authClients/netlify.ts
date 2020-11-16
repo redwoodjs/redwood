@@ -8,7 +8,7 @@ export const netlify = (client: NetlifyIdentity): AuthClient => {
   return {
     type: 'netlify',
     client,
-    login: () => {
+    login: (redirectUrl) => {
       return new Promise((resolve, reject) => {
         let autoClosedModal = false
         client.open('login')
@@ -16,6 +16,9 @@ export const netlify = (client: NetlifyIdentity): AuthClient => {
           // This closes the modal which pops-up immediately after you login.
           autoClosedModal = true
           client.close()
+          if (typeof redirectUrl != "undefined" && redirectUrl != null) {
+            window.location.href = redirectUrl;
+          }
           return resolve(user)
         })
         client.on('close', () => {
