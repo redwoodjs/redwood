@@ -6,9 +6,9 @@ import yarnCheckFiles from '..'
 jest.mock('execa', () => jest.fn())
 
 describe('rw setup tailwind - yarnCheckFiles task', () => {
-  test('it calls yarn install --check-files', () => {
+  test('it calls yarn install --check-files', async () => {
     const task = yarnCheckFiles()
-    task()
+    await task()
 
     expect(execa).toHaveBeenCalledWith('yarn', ['install', '--check-files'])
   })

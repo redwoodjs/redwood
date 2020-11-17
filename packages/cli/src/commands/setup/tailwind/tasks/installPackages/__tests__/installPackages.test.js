@@ -14,18 +14,18 @@ describe('rw setup tailwind - installPackages task', () => {
   ]
 
   describe('without the --ui flag', () => {
-    test('it installs postcss, tailwindcss & autoprefixer', () => {
+    test('it installs postcss, tailwindcss & autoprefixer', async () => {
       const task = installPackages({ ui: false })
-      task()
+      await task()
 
       expect(execa).toHaveBeenCalledWith('yarn', [...yarnArgs, ...basePackages])
     })
   })
 
   describe('with the --ui flag', () => {
-    test('it installs @tailwindcss/ui along with base packages', () => {
+    test('it installs @tailwindcss/ui along with base packages', async () => {
       const task = installPackages({ ui: true })
-      task()
+      await task()
 
       expect(execa).toHaveBeenCalledWith('yarn', [
         ...yarnArgs,
