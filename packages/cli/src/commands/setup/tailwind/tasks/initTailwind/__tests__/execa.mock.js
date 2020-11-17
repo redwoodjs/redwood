@@ -4,14 +4,14 @@ import fs from 'fs'
 import path from 'path'
 
 import { isEqual } from 'lodash'
-import { getPaths } from 'src/lib'
+import * as lib from 'src/lib'
 
 const tailwindConfig = jest
   .requireActual('fs')
   .readFileSync(path.join(global.__dirname, 'fixtures', 'tailwind.config.js'))
   .toString()
 
-const configPath = path.join(getPaths().web.base, 'tailwind.config.js')
+const configPath = path.join(lib.getPaths().web.base, 'tailwind.config.js')
 
 export default function mockExeca(cmd, args) {
   if (cmd === 'yarn' && isEqual(args, ['tailwindcss', 'init'])) {
