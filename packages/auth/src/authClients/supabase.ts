@@ -1,22 +1,33 @@
 import type {
-  SupabaseAuthUser,
-  SupabaseClient as Supabase,
-  SupabaseAuthResponse,
-} from '@supabase/supabase-js'
+  GoTrueClient
+} from '@supabase/gotrue-js'
+// import type { default as GoTrue, User } from 'gotrue-js'
 
 import type { AuthClient } from './index'
-export type SupabaseUser = SupabaseAuthUser
-export type { Supabase }
+export type SupabaseUser = GoTrueClient
 
+export interface SupabaseClient extends GoTrueClient {
+  auth: {
+    user: () => any
+    signIn: (options: {email: string, password: string, remember?: boolean}) => any
+    signOut: () => any
+    signUp: (options: {email: string, password: string, remember?: boolean}) => any
+  }
+}
 export interface AuthClientSupabase extends AuthClient {
   login(options: {
     email: string
     password: string
-  }): Promise<SupabaseAuthResponse>
-  client: Supabase
+  }): Promise<SupabaseUser>
+  signup(options: {
+    email: string
+    password: string
+    remember?: boolean
+  }): Promise<SupabaseUser>
+  client: GoTrueClient
 }
 
-export const supabase = (client: Supabase): AuthClientSupabase => {
+export const supabase = (client: SupabaseClient): AuthClientSupabase => {
   return {
     type: 'supabase',
     client,
