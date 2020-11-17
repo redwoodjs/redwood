@@ -14,7 +14,7 @@ export default ({ force, ui }) => async () => {
 
   if (!force && configExists) {
     throw new Error(
-      'Tailwindcss config already exists.\nUse --force to override existing config.'
+      'TailwindCSS config already exists.\nUse --force to override existing config.'
     )
   } else {
     await execa('yarn', ['tailwindcss', 'init'])
@@ -24,13 +24,13 @@ export default ({ force, ui }) => async () => {
     // opt-in to upcoming changes
     const uncommentFlags = (str) => str.replace(/\/{2} ([\w-]+: true)/g, '$1')
 
-    let newConfig = config.replace(/future.*purge/s, uncommentFlags)
+    let newConfig = config.replace(/future: {[^}]*},/g, uncommentFlags)
 
     // add TailwindUI plugin if requested
     if (ui) {
       newConfig = newConfig.replace(
-        /plugins:\W*\[\W*]/s,
-        "plugins: [require('@tailwindcss/ui')]"
+        /plugins\s*:[^\[]*\[/s,
+        "plugins: [require('@tailwindcss/ui'),"
       )
     }
 
