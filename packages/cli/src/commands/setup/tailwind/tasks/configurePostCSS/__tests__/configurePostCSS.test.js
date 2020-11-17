@@ -71,11 +71,11 @@ describe('rw setup tailwind - configurePostCSS task', () => {
       ///
     ])('when a PostCSS file %s', (testLabel, fileExists) => {
       const testLabelMap = {
-        exists: 'overwrites',
-        'does not exist': 'writes',
+        true: 'overwrites',
+        false: 'writes',
       }
 
-      it(`${testLabelMap[testLabel]} the config file from template`, () => {
+      it(`${testLabelMap[fileExists]} the config file from template`, () => {
         fs.existsSync.mockImplementation(() => fileExists)
 
         task()
