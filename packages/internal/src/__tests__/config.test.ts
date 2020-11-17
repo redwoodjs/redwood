@@ -13,7 +13,7 @@ describe('getConfig', () => {
           "host": "localhost",
           "path": "./api",
           "port": 8911,
-          "schemaPath": "./api/db/schema.prisma",
+          "schemaPath": "./api/prisma/schema.prisma",
           "target": "node",
         },
         "browser": Object {
