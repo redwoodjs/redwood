@@ -19,7 +19,7 @@ export const parseSchema = async (model) => {
   let foreignKeys = []
 
   // aggregate the plain String, Int and DateTime fields
-  const scalarFields = schema.fields.filter((field) => {
+  let scalarFields = schema.fields.filter((field) => {
     if (field.relationFromFields) {
       // only build relations for those that are required
       if (field.isRequired) {
@@ -31,9 +31,13 @@ export const parseSchema = async (model) => {
     return (
       field.isRequired &&
       !field.hasDefaultValue && // don't include fields that the database will default
-      !field.relationName && // this field isn't a relation (ie. comment.post)
-      !foreignKeys.includes(field.name) // this field isn't a foreign key to another field (ie. comment.postId)
+      !field.relationName // this field isn't a relation (ie. comment.post)
     )
+  })
+
+  // remove scalars that are foriegn keys
+  scalarFields = scalarFields.filter((field) => {
+    return !foreignKeys.includes(field.name)
   })
 
   return { scalarFields, relations }
