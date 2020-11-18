@@ -44,6 +44,7 @@ const removeScenario = async (scenario) => {
         models = models.concat(findNestedModels(data))
       }
     }
+    // get unique model names only
     models = Array.from(new Set(models))
 
     for (const model of models) {
