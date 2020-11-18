@@ -18,6 +18,7 @@ export interface NodeTargetConfig {
   port: number
   path: string
   target: TargetEnum.NODE
+  schemaPath: string
 }
 
 interface BrowserTargetConfig {
@@ -29,6 +30,7 @@ interface BrowserTargetConfig {
   // TODO: apiProxyHost: string
   apiProxyPort: number
   apiProxyPath: string
+  experimentalFastRefresh?: boolean
 }
 
 export interface Config {
@@ -55,6 +57,7 @@ const DEFAULT_CONFIG: Config = {
     port: 8911,
     path: './api',
     target: TargetEnum.NODE,
+    schemaPath: './api/prisma/schema.prisma',
   },
   browser: {
     open: false,
