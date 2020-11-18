@@ -19,22 +19,22 @@ const findNestedModels = (data) => {
   return models
 }
 
-const seedFixtures = async (scenario) => {
+const seedScenario = async (scenario) => {
   if (scenario) {
-    const fixtures = {}
+    const scenarios = {}
     for (const [model, namedFixtures] of Object.entries(scenario)) {
-      fixtures[model] = {}
+      scenarios[model] = {}
       for (const [name, data] of Object.entries(namedFixtures)) {
-        fixtures[model][name] = await db[model].create({ data })
+        scenarios[model][name] = await db[model].create({ data })
       }
     }
-    return fixtures
+    return scenarios
   } else {
     return {}
   }
 }
 
-const removeFixtures = async (scenario) => {
+const removeScenario = async (scenario) => {
   if (scenario) {
     let models = []
 
@@ -67,18 +67,18 @@ window.scenario = (...args) => {
     const testFileDir = path.parse(window.jasmine.testPath)
     const testFilePath = `${testFileDir.dir}/${
       testFileDir.name.split('.')[0]
-    }.fixtures`
-    let allFixtures, scenario, result
+    }.scenarios`
+    let allScenarios, scenario, result
 
     try {
-      allFixtures = require(testFilePath)
+      allScenarios = require(testFilePath)
     } catch (e) {
-      // no fixture file found, ignore
+      // no scenario file found, ignore
     }
 
-    if (allFixtures) {
-      if (allFixtures[scenarioName]) {
-        scenario = allFixtures[scenarioName]
+    if (allScenarios) {
+      if (allScenarios[scenarioName]) {
+        scenario = allScenarios[scenarioName]
       } else {
         throw (
           ('UndefinedScenario',
@@ -87,12 +87,12 @@ window.scenario = (...args) => {
       }
     }
 
-    const fixtures = await seedFixtures(scenario)
+    const scenarioData = await seedScenario(scenario)
     try {
-      result = await testFunc(fixtures)
+      result = await testFunc(scenarioData)
     } finally {
-      // if the test fails this makes sure we still remove fixtures
-      await removeFixtures(scenario)
+      // if the test fails this makes sure we still remove scenario data
+      await removeScenario(scenario)
     }
 
     return result
