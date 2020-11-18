@@ -21,8 +21,10 @@ export const parseSchema = async (model) => {
   // aggregate the plain String, Int and DateTime fields
   const scalarFields = schema.fields.filter((field) => {
     if (field.relationFromFields) {
-      // TODO: only include *required* relations to avoid infinite loop
-      relations[field.name] = field.relationFromFields
+      // only build relations for those that are required
+      if (field.isRequired) {
+        relations[field.name] = field.relationFromFields
+      }
       foreignKeys = foreignKeys.concat(field.relationFromFields)
     }
 
@@ -57,8 +59,6 @@ export const fieldsToScenario = async (scalarFields, relations) => {
     data[field.name] = scenarioFieldValue(field)
   })
 
-  console.info('Done adding scalar fields')
-
   // relations
   for (const [relation, _foreignKeys] of Object.entries(relations)) {
     const relationModelName = pascalcase(pluralize.singular(relation))
@@ -66,8 +66,6 @@ export const fieldsToScenario = async (scalarFields, relations) => {
       scalarFields: relScalarFields,
       relations: relRelations,
     } = await parseSchema(relationModelName)
-
-    console.info(`About to find fields for relation ${relation}`)
 
     data[relation] = {
       create: await fieldsToScenario(relScalarFields, relRelations),
@@ -87,7 +85,6 @@ export const buildScenario = async (model) => {
 
   // turn scalar fields into actual scenario data
   await asyncForEach(DEFAULT_SCENARIO_NAMES, async (name) => {
-    console.info(`About to call fieldsToScenario for ${name}`)
     standardScenario[scenarioModelName][name] = await fieldsToScenario(
       scalarFields,
       relations
