@@ -9,14 +9,14 @@ import * as service from '../service'
 const extensionForBaseArgs = (baseArgs) =>
   baseArgs && baseArgs.typescript ? 'ts' : 'js'
 
-const itReturnsExactly2Files = (baseArgs) => {
-  test('returns exactly 2 files', async () => {
+const itReturnsExactly3Files = (baseArgs) => {
+  test('returns exactly 3 files', async () => {
     const files = await service.files({
       ...baseArgs,
       name: 'User',
     })
 
-    expect(Object.keys(files).length).toEqual(2)
+    expect(Object.keys(files).length).toEqual(3)
   })
 }
 const itCreatesASingleWordServiceFile = (baseArgs) => {
@@ -235,7 +235,7 @@ const itCreatesASingleWordServiceFileWithMultipleRelations = (baseArgs) => {
 describe('in javascript mode', () => {
   const baseArgs = getDefaultArgs(service.defaults)
 
-  itReturnsExactly2Files(baseArgs)
+  itReturnsExactly3Files(baseArgs)
   itCreatesASingleWordServiceFile(baseArgs)
   itCreatesASingleWordServiceTestFile(baseArgs)
   itCreatesAMultiWordServiceFile(baseArgs)
@@ -252,7 +252,7 @@ describe('in javascript mode', () => {
 describe('in typescript mode', () => {
   const baseArgs = { ...getDefaultArgs(service.defaults), typescript: true }
 
-  itReturnsExactly2Files(baseArgs)
+  itReturnsExactly3Files(baseArgs)
   itCreatesASingleWordServiceFile(baseArgs)
   itCreatesASingleWordServiceTestFile(baseArgs)
   itCreatesAMultiWordServiceFile(baseArgs)
