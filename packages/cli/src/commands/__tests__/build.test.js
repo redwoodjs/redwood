@@ -25,7 +25,7 @@ import { handler } from '../build'
 test('The build command runs the correct commands.', async () => {
   await handler({})
   expect(runCommandTask.mock.results[0].value[0]).toEqual(
-    'yarn prisma generate --schema=../../__fixtures__/example-todo-main/api/prisma'
+    'yarn prisma generate --schema="../../__fixtures__/example-todo-main/api/prisma"'
   )
 
   expect(execa.mock.results[0].value).toEqual(

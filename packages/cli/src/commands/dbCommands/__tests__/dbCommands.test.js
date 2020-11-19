@@ -37,12 +37,12 @@ describe('db commands', () => {
   it('runs the command as expected', async () => {
     await up.handler({ dbClient: true, schema })
     expect(runCommandTask.mock.results[0].value).toEqual([
-      `yarn prisma migrate up --experimental --create-db --schema=${schema}`,
+      `yarn prisma migrate up --experimental --create-db --schema="${schema}"`,
     ])
 
     await up.handler({ dbClient: true, autoApprove: true, schema })
     expect(runCommandTask.mock.results[1].value).toEqual([
-      `yarn prisma migrate up --experimental --create-db --auto-approve --schema=${schema}`,
+      `yarn prisma migrate up --experimental --create-db --auto-approve --schema="${schema}"`,
     ])
 
     await down.handler({ schema })
