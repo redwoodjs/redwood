@@ -8,12 +8,12 @@
   "workbench.colorCustomizations": {
     "statusBar.background": "#b85833",
     "statusBarItem.hoverBackground": "#ce7350",
-    "statusBar.foreground": "#e7e7e7"
+    "statusBar.foreground": "#e7e7e7",
+    "statusBar.border": "#b85833"
   },
   "search.exclude": {
     "**/dist": true,
     "**/node_modules": true,
     "**/__fixtures__": true
-  },
-  "peacock.color": "#b85833"
+  }
 }
