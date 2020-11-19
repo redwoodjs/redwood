@@ -47,17 +47,17 @@ describe('db commands', () => {
 
     await down.handler({ schema })
     expect(runCommandTask.mock.results[2].value).toEqual([
-      `yarn prisma migrate down --experimental --schema=${schema}`,
+      `yarn prisma migrate down --experimental --schema="${schema}"`,
     ])
 
     await save.handler({ name: 'my-migration', schema })
     expect(runCommandTask.mock.results[3].value).toEqual([
-      `yarn prisma migrate save --name "my-migration" --create-db --experimental --schema=${schema}`,
+      `yarn prisma migrate save --name "my-migration" --create-db --experimental --schema="${schema}"`,
     ])
 
     await introspect.handler({ schema })
     expect(runCommandTask.mock.results[4].value).toEqual([
-      `yarn prisma introspect --schema=${schema}`,
+      `yarn prisma introspect --schema="${schema}"`,
     ])
 
     await seed.handler({})
