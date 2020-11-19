@@ -1,74 +1,25 @@
-import { useState, useEffect } from 'react'
+import { FetchConfigProvider, useFetchConfig } from './FetchConfigProvider'
 
-import type { AuthContextInterface } from '@redwoodjs/auth'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { FlashProvider } from '../flash'
+import { GraphQLProvider, GraphQLClientConfig } from '../graphql'
 
-import {
-  GraphQLClientConfig,
-  GraphQLProvider,
-  GraphQLProviderProps,
-} from '../graphql'
-
-type RedwoodProviderProps = {
-  useAuth: () => AuthContextInterface
-  graphQLClientConfig?: GraphQLClientConfig
-  children: React.ReactNode | React.ReactNode[] | null
-} & Omit<GraphQLProviderProps, 'config' | 'children'>
-
-const GraphQLProviderWithAuth: React.FC<RedwoodProviderProps> = ({
-  useAuth,
-  graphQLClientConfig = { headers: {} },
-  children,
-  ...rest
-}) => {
-  const { loading, isAuthenticated, getToken, type } = useAuth()
-  const [authToken, setAuthToken] = useState<string | null>()
-
-  useEffect(() => {
-    const fetchAuthToken = async () => {
-      const token = await getToken()
-      setAuthToken(token)
-    }
-
-    if (isAuthenticated) {
-      fetchAuthToken()
-    }
-  }, [isAuthenticated, getToken])
-
-  // This really sucks because rendering is completely blocked whilst we're
-  // restoring authentication. In a lot of cases that's OK since the token is stored
-  // in localstorage or a secure cookie.
-  if (loading) {
-    return null
-  }
-
-  if (!isAuthenticated) {
-    return (
-      <GraphQLProvider config={graphQLClientConfig} {...rest}>
-        {children}
-      </GraphQLProvider>
-    )
-  }
-
-  // The user is authenticated, so we have to wait for the auth token to be retrieved
-  // before continueing.
-  if (!authToken) {
-    return null
-  }
+const GraphQLProviderWithFetchConfig: React.FunctionComponent<{
+  config?: GraphQLClientConfig
+  children: React.ReactNode
+}> = ({ config = {}, children, ...rest }) => {
+  const authConfig = useFetchConfig()
 
   return (
     <GraphQLProvider
-      config={{
-        ...graphQLClientConfig,
-        headers: {
-          /** `auth-provider` is used by the API to determine how to decode the token */
-          'auth-provider': type,
-          authorization: `Bearer ${authToken}`,
-          ...graphQLClientConfig.headers,
-        },
-      }}
+      config={
+        {
+          ...authConfig,
+          ...config,
+        } as GraphQLClientConfig
+      }
+      {...rest}
     >
       {children}
     </GraphQLProvider>
@@ -82,28 +33,15 @@ const GraphQLProviderWithAuth: React.FC<RedwoodProviderProps> = ({
  * When `AuthProvider` is instantiated this component will automatically add
  * Authorization headers to each request.
  */
-const RedwoodProvider: React.FC<RedwoodProviderProps> = ({
-  useAuth = window.__REDWOOD__USE_AUTH,
-  graphQLClientConfig,
-  children,
-  ...rest
-}) => {
-  if (typeof useAuth === 'undefined') {
-    return (
-      <GraphQLProvider config={graphQLClientConfig} {...rest}>
-        <FlashProvider>{children}</FlashProvider>
-      </GraphQLProvider>
-    )
-  }
-
+const RedwoodProvider: React.FunctionComponent<{
+  graphQLClientConfig?: GraphQLClientConfig
+}> = ({ graphQLClientConfig, children }) => {
   return (
-    <GraphQLProviderWithAuth
-      useAuth={useAuth}
-      graphQLClientConfig={graphQLClientConfig}
-      {...rest}
-    >
-      <FlashProvider>{children}</FlashProvider>
-    </GraphQLProviderWithAuth>
+    <FetchConfigProvider>
+      <GraphQLProviderWithFetchConfig config={graphQLClientConfig}>
+        <FlashProvider>{children}</FlashProvider>
+      </GraphQLProviderWithFetchConfig>
+    </FetchConfigProvider>
   )
 }
 
