@@ -44,7 +44,7 @@ export const handler = async ({
           '--experimental',
           '--create-db',
           autoApprove && '--auto-approve',
-          schema && `--schema=\"${schema}\"`,
+          schema && `--schema="${schema}"`,
         ].filter(Boolean),
       },
     ],
