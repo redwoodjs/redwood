@@ -1,4 +1,5 @@
 global.__dirname = __dirname
+import { loadGeneratorFixture as _loadGeneratorFixture } from 'src/lib/test'
 
 import fs from 'fs'
 
