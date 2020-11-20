@@ -1,41 +1,30 @@
 import type { DocumentNode } from 'graphql'
-import type {
-  BaseQueryOptions,
-  OperationVariables,
-  QueryResult,
-} from '@apollo/client'
 
-import React from 'react'
-import { useQuery } from '@apollo/client'
+import { useQuery, QueryResult } from './QueryHooksProvider'
 
-/**
- * Graciously borrowed from Apollo. We'll move over to a hooks version.
- */
-// @ts-expect-error Temporary.
-const Query = ({ children, query, ...rest }) => {
+const Query: React.FunctionComponent<{
+  query: DocumentNode
+  children: (result: QueryResult) => React.ReactElement
+}> = ({ children, query, ...rest }) => {
   const result = useQuery(query, rest)
   return children && result ? children(result) : null
 }
 
 export type DataObject = { [key: string]: unknown }
 
-export type QueryResultAlias = QueryResult<any, Record<string, any>>
-
-export type CellFailureStateComponent = Omit<
-  QueryResultAlias,
-  'data' | 'loading'
->
+export type CellFailureStateComponent = Omit<QueryResult, 'data' | 'loading'>
 export type CellLoadingEmptyStateComponent = Omit<
-  QueryResultAlias,
+  QueryResult,
   'error' | 'loading' | 'data'
 >
 export type CellSuccessStateComponent =
-  | Omit<QueryResultAlias, 'error' | 'loading' | 'data'>
+  | Omit<QueryResult, 'error' | 'loading' | 'data'>
   | DataObject
 
-export type WithCellProps = {
-  beforeQuery?: (props: OperationVariables) => BaseQueryOptions
-  QUERY: DocumentNode | ((before: BaseQueryOptions) => DocumentNode)
+export interface WithCellProps {
+  beforeQuery?: <TProps>(props: TProps) => { variables: TProps }
+  // @ts-expect-error We do not know, and even really care, what they are here.
+  QUERY: DocumentNode | (({ variables: unknown }) => DocumentNode)
   afterQuery?: (data: DataObject) => DataObject
   Loading?: React.FC<CellLoadingEmptyStateComponent>
   Failure?: React.FC<CellFailureStateComponent>
@@ -106,12 +95,12 @@ export const withCell = ({
     return isDataNull(data) || isDataEmptyArray(data)
   }
 
-  return (props: OperationVariables) => (
+  return (props: Record<string, unknown>) => (
     <Query
       query={typeof QUERY === 'function' ? QUERY(beforeQuery(props)) : QUERY}
       {...beforeQuery(props)}
     >
-      {({ error, loading, data, ...queryRest }: QueryResultAlias) => {
+      {({ error, loading, data, ...queryRest }) => {
         if (error) {
           if (Failure) {
             return <Failure error={error} {...queryRest} {...props} />
@@ -128,10 +117,9 @@ export const withCell = ({
           }
         } else {
           throw new Error(
-            'Cannot render cell: graphQL success but `data` is null'
+            'Cannot render cell: GraphQL success but `data` is null'
           )
         }
-        return null
       }}
     </Query>
   )

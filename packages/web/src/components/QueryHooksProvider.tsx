@@ -13,7 +13,7 @@
 import type { DocumentNode } from 'graphql'
 
 export interface QueryHookOptions {
-  variables: Record<string, any>
+  variables?: Record<string, any>
 }
 export interface QueryResult<TData = any> {
   data: TData | undefined

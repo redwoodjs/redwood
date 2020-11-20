@@ -29,7 +29,6 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   return <ApolloProvider client={client}>{children}</ApolloProvider>
 }
 
-// TODO: Add graphqlClientConfig
 export const RedwoodApolloProvider: React.FunctionComponent<{
   graphQLClientConfig?: Omit<ApolloClientOptions<InMemoryCache>, 'cache'>
 }> = ({ graphQLClientConfig, children }) => {
