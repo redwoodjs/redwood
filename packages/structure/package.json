@@ -9,7 +9,7 @@
   ],
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@prisma/sdk": "2.9.0",
+    "@prisma/sdk": "2.11.0",
     "@redwoodjs/internal": "^0.20.0",
     "@types/line-column": "^1.0.0",
     "camelcase": "^6.0.0",
