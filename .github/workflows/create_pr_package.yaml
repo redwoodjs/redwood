@@ -33,6 +33,11 @@ jobs:
           for d in packages/*/ ; do
             (cd "$d" && tgz=$(npm pack) && cp $tgz ../../bin/)
           done
+          cd bin
+          sha="${{ github.event.pull_request.head.sha }}"
+          for f in * ; do
+            mv -- "$f" "${f%.tgz}-${sha:0:7}.tgz"
+          done
 
       - name: copy files to s3
         env:
@@ -55,9 +60,24 @@ jobs:
           msg+="%0AInstall locally with yarn, e.g. \`yarn workspace web add <url>\`"
           echo "::set-output name=msg::$msg"
 
-      - name: Comment on PR
-        uses: mshick/add-pr-comment@v1
+      - name: Find Comment
+        uses: peter-evans/find-comment@v1
+        id: fc
         with:
-          message: ${{ steps.comment_msg.outputs.msg }}
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          allow-repeats: false # The links don't change (but the file they link to does). So no need to repost
+          issue-number: ${{ github.event.number }}
+          comment-author: 'github-actions[bot]'
+
+      - name: Create comment
+        if: ${{ steps.fc.outputs.comment-id == 0 }}
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          issue-number: ${{ github.event.number }}
+          body: ${{ steps.comment_msg.outputs.msg }}
+
+      - name: Update comment
+        if: ${{ steps.fc.outputs.comment-id != 0 }}
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          body: ${{ steps.comment_msg.outputs.msg }}
+          edit-mode: replace

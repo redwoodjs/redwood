@@ -17,7 +17,7 @@ export const handler = async ({ verbose = true, schema }) => {
       {
         title: 'Introspecting your database...',
         cmd: 'yarn prisma',
-        args: ['introspect', schema && `--schema=${schema}`],
+        args: ['introspect', schema && `--schema="${schema}"`],
         opts: { cwd: getPaths().api.db },
       },
     ],
