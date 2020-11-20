@@ -9,12 +9,13 @@ export const FetchConfigContext = React.createContext<FetchConfig>({
 })
 
 /**
- * The `FetchConfigProvider` understands Redwood's Auth Module and determines the
- * correct request-headers required for authenticated and unauthenticated users.
+ * The `FetchConfigProvider` understands Redwood's Auth and determines the
+ * correct request-headers based on a user's authentication state.
  *
  * @param renderLoading
- * This provider blocks rendering whilst trying to figure out if the user is authenticated,
- * use this prop to render something custom instead of a blank screen.
+ * This provider blocks rendering (returns null) whilst determining
+ * if the user is authenticated, use this prop to render a custom view instead
+ * of a blank screen.
  */
 export const FetchConfigProvider: React.FunctionComponent<{
   useAuth?: () => AuthContextInterface

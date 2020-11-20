@@ -1,5 +1,5 @@
 import type { AuthContextInterface } from '@redwoodjs/auth'
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 
 window.__REDWOOD__API_PROXY_PATH = 'https://api.example.com'
