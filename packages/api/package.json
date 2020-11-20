@@ -8,7 +8,7 @@
   "types": "./dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@prisma/client": "2.9.0",
+    "@prisma/client": "2.11.0",
     "@redwoodjs/internal": "^0.20.0",
     "apollo-server-lambda": "2.18.2",
     "core-js": "3.6.5",
