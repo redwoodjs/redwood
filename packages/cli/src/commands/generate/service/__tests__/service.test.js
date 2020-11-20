@@ -54,6 +54,21 @@ const itCreatesASingleWordServiceTestFile = (baseArgs) => {
   })
 }
 
+const itCreatesASingleWordServiceScenarioFile = (baseArgs) => {
+  test('creates a single word service scenario file', async () => {
+    const files = await service.files({
+      ...baseArgs,
+      name: 'User',
+    })
+    const extension = extensionForBaseArgs(baseArgs)
+    const filePath = path.normalize(
+      `/path/to/project/api/src/services/users/users.scenarios.${extension}`
+    )
+
+    expect(Object.keys(files)).toContain(filePath)
+  })
+}
+
 const itCreatesAMultiWordServiceFile = (baseArgs) => {
   test('creates a multi word service file', async () => {
     const files = await service.files({
@@ -117,16 +132,11 @@ const itCreatesASingleWordServiceTestFileWithCRUDActions = (baseArgs) => {
       crud: true,
     })
     const extension = extensionForBaseArgs(baseArgs)
-
-    expect(
-      files[
-        path.normalize(
-          `/path/to/project/api/src/services/posts/posts.test.${extension}`
-        )
-      ]
-    ).toEqual(
-      loadGeneratorFixture('service', `singleWord_crud.test.${extension}`)
+    const filePath = path.normalize(
+      `/path/to/project/api/src/services/posts/posts.test.${extension}`
     )
+
+    expect(Object.keys(files)).toContain(filePath)
   })
 }
 
@@ -138,14 +148,11 @@ const itCreatesAMultiWordServiceFileWithCRUDActions = (baseArgs) => {
       crud: true,
     })
     const extension = extensionForBaseArgs(baseArgs)
+    const filePath = path.normalize(
+      `/path/to/project/api/src/services/userProfiles/userProfiles.${extension}`
+    )
 
-    expect(
-      files[
-        path.normalize(
-          `/path/to/project/api/src/services/userProfiles/userProfiles.${extension}`
-        )
-      ]
-    ).toEqual(loadGeneratorFixture('service', `multiWord_crud.${extension}`))
+    expect(Object.keys(files)).toContain(filePath)
   })
 }
 const itCreatesAMultiWordServiceTestFileWithCRUDActions = (baseArgs) => {
@@ -156,16 +163,11 @@ const itCreatesAMultiWordServiceTestFileWithCRUDActions = (baseArgs) => {
       crud: true,
     })
     const extension = extensionForBaseArgs(baseArgs)
-
-    expect(
-      files[
-        path.normalize(
-          `/path/to/project/api/src/services/userProfiles/userProfiles.test.${extension}`
-        )
-      ]
-    ).toEqual(
-      loadGeneratorFixture('service', `multiWord_crud.test.${extension}`)
+    const filePath = path.normalize(
+      `/path/to/project/api/src/services/userProfiles/userProfiles.test.${extension}`
     )
+
+    expect(Object.keys(files)).toContain(filePath)
   })
 }
 
@@ -238,6 +240,7 @@ describe('in javascript mode', () => {
   itReturnsExactly3Files(baseArgs)
   itCreatesASingleWordServiceFile(baseArgs)
   itCreatesASingleWordServiceTestFile(baseArgs)
+  itCreatesASingleWordServiceScenarioFile(baseArgs)
   itCreatesAMultiWordServiceFile(baseArgs)
   itCreatesAMultiWordServiceTestFile(baseArgs)
   itCreatesASingleWordServiceFileWithCRUDActions(baseArgs)
@@ -255,6 +258,7 @@ describe('in typescript mode', () => {
   itReturnsExactly3Files(baseArgs)
   itCreatesASingleWordServiceFile(baseArgs)
   itCreatesASingleWordServiceTestFile(baseArgs)
+  itCreatesASingleWordServiceScenarioFile(baseArgs)
   itCreatesAMultiWordServiceFile(baseArgs)
   itCreatesAMultiWordServiceTestFile(baseArgs)
   itCreatesASingleWordServiceFileWithCRUDActions(baseArgs)

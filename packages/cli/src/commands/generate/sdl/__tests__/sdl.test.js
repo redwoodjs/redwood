@@ -14,10 +14,10 @@ const extensionForBaseArgs = (baseArgs) =>
   baseArgs && baseArgs.typescript ? 'ts' : 'js'
 
 const itReturnsExactlyThreeFiles = (baseArgs = {}) => {
-  test('returns exactly 3 files', async () => {
+  test('returns exactly 4 files', async () => {
     const files = await sdl.files({ ...baseArgs, name: 'Post', crud: false })
 
-    expect(Object.keys(files).length).toEqual(3)
+    expect(Object.keys(files).length).toEqual(4)
   })
 }
 
