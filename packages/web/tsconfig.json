@@ -7,7 +7,7 @@
     "outDir": "dist",
     "allowJs": true
   },
-  "include": ["src"],
+  "include": ["./src/**/*"],
   "references": [
     { "path": "../auth" },
   ]
