@@ -29,7 +29,7 @@ export const handler = ({ open, port }) => {
   const staticAssetsFolder = path.join(getPaths().web.base, 'public')
 
   // Create the `MockServiceWorker.js` file.
-  execa(`yarn msw init ${staticAssetsFolder}`, undefined, {
+  execa(`yarn msw init "${staticAssetsFolder}"`, undefined, {
     stdio: 'inherit',
     shell: true,
     cwd,
@@ -39,7 +39,7 @@ export const handler = ({ open, port }) => {
     '--config-dir ../node_modules/@redwoodjs/core/config/storybook',
     `--port ${port}`, // this should be configurable?
     '--no-version-updates', // we'll handle upgrades
-    `--static-dir ${staticAssetsFolder}`,
+    `--static-dir "${staticAssetsFolder}"`,
   ]
 
   if (!open) {
