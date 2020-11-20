@@ -1,3 +1,4 @@
+import type { AuthContextInterface } from '@redwoodjs/auth'
 import {
   ApolloProvider,
   ApolloClientOptions,
@@ -31,9 +32,10 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
 
 export const RedwoodApolloProvider: React.FunctionComponent<{
   graphQLClientConfig?: Omit<ApolloClientOptions<InMemoryCache>, 'cache'>
-}> = ({ graphQLClientConfig, children }) => {
+  useAuth: () => AuthContextInterface
+}> = ({ graphQLClientConfig, useAuth, children }) => {
   return (
-    <FetchConfigProvider>
+    <FetchConfigProvider useAuth={useAuth}>
       <ApolloProviderWithFetchConfig config={graphQLClientConfig}>
         <QueryHooksProvider registerUseQueryHook={useQuery}>
           <FlashProvider>{children}</FlashProvider>

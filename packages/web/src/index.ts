@@ -2,7 +2,7 @@ import './global.web-auto-imports'
 import './config'
 
 export { default as FatalErrorBoundary } from './components/FatalErrorBoundary'
-export { RedwoodApolloProvider } from './components/RedwoodApolloProvider'
+export { RedwoodApolloProvider as RedwoodProvider } from './components/RedwoodApolloProvider'
 export {
   FetchConfigProvider,
   useFetchConfig,
