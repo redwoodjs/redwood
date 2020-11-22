@@ -32,7 +32,7 @@ export const QueryHooksContext = React.createContext<QueryHooks>({
   },
   mapUseMutationHook: () => {
     throw new Error(
-      'You must register a useQuery hook via the `QueryHooksProvider`'
+      'You must register a useMutation hook via the `QueryHooksProvider`'
     )
   },
 })
