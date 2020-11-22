@@ -40,7 +40,7 @@ export const QueryHooksContext = React.createContext<QueryHooks>({
 /**
  * QueryHooksProvider stores a standard `useQuery` hook for Redwood
  * that can be mapped to your GraphQL library of choice's own `useQuery`
- * implementation.
+ * and `useMutation` implementation.
  *
  * @todo Let the user pass in the additional type for options.
  */
