@@ -3,21 +3,26 @@ import type { DocumentNode } from 'graphql'
 export interface QueryHookOptions {
   variables?: Record<string, any>
 }
-export interface QueryResult<TData = any> {
-  data: TData | undefined
+export interface OperationResult<TData = any> {
+  data?: TData | undefined
   loading: boolean
   error?: Error
 }
+
+export type MutationOperationResult<TData = any> = [
+  (options?: any) => Promise<TData>,
+  OperationResult<TData>
+]
 
 export interface QueryHooks {
   mapUseQueryHook: (
     query: DocumentNode,
     options?: QueryHookOptions
-  ) => QueryResult
+  ) => OperationResult
   mapUseMutationHook: (
-    query: DocumentNode,
+    mutation: DocumentNode,
     options?: QueryHookOptions
-  ) => QueryResult
+  ) => MutationOperationResult
 }
 export const QueryHooksContext = React.createContext<QueryHooks>({
   mapUseQueryHook: () => {
@@ -37,17 +42,17 @@ export const QueryHooksContext = React.createContext<QueryHooks>({
  * that can be mapped to your GraphQL library of choice's own `useQuery`
  * implementation.
  *
- * @todo Let the user pass in the additional option types.
+ * @todo Let the user pass in the additional type for options.
  */
 export const QueryHooksProvider: React.FunctionComponent<{
   registerUseQueryHook: (
     query: DocumentNode,
     options?: QueryHookOptions
-  ) => QueryResult
+  ) => OperationResult
   registerUseMutationHook: (
-    query: DocumentNode,
+    mutation: DocumentNode,
     options?: QueryHookOptions
-  ) => QueryResult
+  ) => MutationOperationResult
 }> = ({ registerUseQueryHook, registerUseMutationHook, children }) => {
   return (
     <QueryHooksContext.Provider
@@ -64,13 +69,16 @@ export const QueryHooksProvider: React.FunctionComponent<{
 export function useQuery<TData = any>(
   query: DocumentNode,
   options?: QueryHookOptions
-): QueryResult<TData> {
+): OperationResult<TData> {
   return React.useContext(QueryHooksContext).mapUseQueryHook(query, options)
 }
 
 export function useMutation<TData = any>(
-  query: DocumentNode,
+  mutation: DocumentNode,
   options?: QueryHookOptions
-): QueryResult<TData> {
-  return React.useContext(QueryHooksContext).mapUseMutationHook(query, options)
+): MutationOperationResult<TData> {
+  return React.useContext(QueryHooksContext).mapUseMutationHook(
+    mutation,
+    options
+  )
 }

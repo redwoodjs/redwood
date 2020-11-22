@@ -5,6 +5,7 @@ import {
   ApolloClient,
   InMemoryCache,
   useQuery,
+  useMutation,
 } from '@apollo/client'
 
 import {
@@ -36,7 +37,10 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
   return (
     <FetchConfigProvider useAuth={useAuth}>
       <ApolloProviderWithFetchConfig config={graphQLClientConfig}>
-        <QueryHooksProvider registerUseQueryHook={useQuery}>
+        <QueryHooksProvider
+          registerUseQueryHook={useQuery}
+          registerUseMutationHook={useMutation}
+        >
           <FlashProvider>{children}</FlashProvider>
         </QueryHooksProvider>
       </ApolloProviderWithFetchConfig>
