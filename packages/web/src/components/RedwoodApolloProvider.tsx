@@ -19,7 +19,6 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
 }> = ({ config = {}, children }) => {
   const { uri, headers } = useFetchConfig()
 
-  // TODO: Wrap in useMemo.
   const client = new ApolloClient({
     cache: new InMemoryCache(),
     uri,

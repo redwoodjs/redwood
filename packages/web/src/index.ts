@@ -7,7 +7,11 @@ export {
   FetchConfigProvider,
   useFetchConfig,
 } from './components/FetchConfigProvider'
-export { QueryHooksProvider, useQuery } from './components/QueryHooksProvider'
+export {
+  QueryHooksProvider,
+  useQuery,
+  useMutation,
+} from './components/QueryHooksProvider'
 export { withCell } from './components/withCellHOC'
 
 export { FlashProvider, useFlash, Flash } from './flash'

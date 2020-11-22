@@ -1,15 +1,3 @@
-// Operation: GQL thingum.
-// Variables,
-// Other options.
-
-/**
- * The QueryHooksProvider allows you to register and map a 3rd party `useQuery` hook
- * in Redwood. You supply the hook by mapping the arguments and the return values
- * to what we expect in Redwood.
- *
- *
- */
-
 import type { DocumentNode } from 'graphql'
 
 export interface QueryHookOptions {
@@ -26,10 +14,21 @@ export interface QueryHooks {
     query: DocumentNode,
     options?: QueryHookOptions
   ) => QueryResult
+  mapUseMutationHook: (
+    query: DocumentNode,
+    options?: QueryHookOptions
+  ) => QueryResult
 }
 export const QueryHooksContext = React.createContext<QueryHooks>({
   mapUseQueryHook: () => {
-    throw new Error('You must register a useQuery via the `QueryHooksProvider`')
+    throw new Error(
+      'You must register a useQuery hook via the `QueryHooksProvider`'
+    )
+  },
+  mapUseMutationHook: () => {
+    throw new Error(
+      'You must register a useQuery hook via the `QueryHooksProvider`'
+    )
   },
 })
 
@@ -45,10 +44,17 @@ export const QueryHooksProvider: React.FunctionComponent<{
     query: DocumentNode,
     options?: QueryHookOptions
   ) => QueryResult
-}> = ({ registerUseQueryHook, children }) => {
+  registerUseMutationHook: (
+    query: DocumentNode,
+    options?: QueryHookOptions
+  ) => QueryResult
+}> = ({ registerUseQueryHook, registerUseMutationHook, children }) => {
   return (
     <QueryHooksContext.Provider
-      value={{ mapUseQueryHook: registerUseQueryHook }}
+      value={{
+        mapUseQueryHook: registerUseQueryHook,
+        mapUseMutationHook: registerUseMutationHook,
+      }}
     >
       {children}
     </QueryHooksContext.Provider>
@@ -60,4 +66,11 @@ export function useQuery<TData = any>(
   options?: QueryHookOptions
 ): QueryResult<TData> {
   return React.useContext(QueryHooksContext).mapUseQueryHook(query, options)
+}
+
+export function useMutation<TData = any>(
+  query: DocumentNode,
+  options?: QueryHookOptions
+): QueryResult<TData> {
+  return React.useContext(QueryHooksContext).mapUseMutationHook(query, options)
 }
