@@ -6,3 +6,4 @@ declare namespace NodeJS {
 
 // TODO: Remove the following declarations when these files get types.
 declare module 'src/lib/test'
+declare module 'src/lib'

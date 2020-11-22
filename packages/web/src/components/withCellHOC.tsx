@@ -70,6 +70,8 @@ export interface WithCellProps {
 export const withCell = ({
   beforeQuery = (props) => ({
     variables: props,
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'cache-first',
   }),
   QUERY,
   afterQuery = (data) => ({ ...data }),

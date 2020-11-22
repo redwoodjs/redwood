@@ -13,6 +13,7 @@ describe('getConfig', () => {
           "host": "localhost",
           "path": "./api",
           "port": 8911,
+          "schemaPath": "./api/prisma/schema.prisma",
           "target": "node",
         },
         "browser": Object {
@@ -21,6 +22,7 @@ describe('getConfig', () => {
         "web": Object {
           "apiProxyPath": "/.netlify/functions",
           "apiProxyPort": 8911,
+          "experimentalFastRefresh": false,
           "host": "localhost",
           "path": "./web",
           "port": 8910,
