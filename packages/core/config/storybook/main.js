@@ -42,6 +42,9 @@ module.exports = {
     // ** LOADERS **
     sbConfig.module.rules = rwConfig.module.rules
 
+    // ** NODE **
+    sbConfig.node = rwConfig.node
+
     // Performance Improvements:
     // https://webpack.js.org/guides/build-performance/#avoid-extra-optimization-steps
     sbConfig.optimization = {

@@ -51,6 +51,7 @@ const DEFAULT_CONFIG: Config = {
     target: TargetEnum.BROWSER,
     apiProxyPath: '/.netlify/functions',
     apiProxyPort: 8911,
+    experimentalFastRefresh: false,
   },
   api: {
     host: 'localhost',

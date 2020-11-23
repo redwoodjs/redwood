@@ -77,7 +77,7 @@ export const handler = async ({
     '--passWithNoTests',
     collectCoverage && '--collectCoverage',
   ].filter(Boolean)
-  
+
   // If the user wants to watch, set the proper watch flag based on what kind of repo this is
   // because of https://github.com/facebook/create-react-app/issues/5210
   if (watch && !process.env.CI && !collectCoverage) {
@@ -89,24 +89,24 @@ export const handler = async ({
   if (!sides.length) {
     getProject().sides.forEach((side) => sides.push(side))
   }
-  
+
   if (sides.includes('api')) {
     args.push('--runInBand')
   }
-  
+
   args.push(
     '--config',
-    require.resolve('@redwoodjs/core/config/jest.config.js')
+    `"${require.resolve('@redwoodjs/core/config/jest.config.js')}"`
   )
-  
+
   if (sides.length > 0) {
     args.push('--projects', ...sides)
   }
-  
+
   try {
     const cacheDirDb = `file:${ensurePosixPath(CACHE_DIR)}/test.db`
     const DATABASE_URL = process.env.TEST_DATABASE_URL || cacheDirDb
-      
+
     // Create a test database
     if (sides.includes('api')) {
       await execa.command(`yarn rw db up`, {
