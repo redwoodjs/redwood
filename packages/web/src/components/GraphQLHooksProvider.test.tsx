@@ -2,7 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 
 import {
-  QueryHooksProvider,
+  GraphQLHooksProvider,
   useQuery,
   useMutation,
 } from './GraphQLHooksProvider'
@@ -40,12 +40,12 @@ describe('QueryHooksProvider', () => {
       return { loading: false, data: { answer: 42 } }
     }
     render(
-      <QueryHooksProvider
+      <GraphQLHooksProvider
         registerUseQueryHook={myUseQueryHook}
         registerUseMutationHook={null}
       >
         <TestUseQueryHook />
-      </QueryHooksProvider>
+      </GraphQLHooksProvider>
     )
   })
 
@@ -59,26 +59,26 @@ describe('QueryHooksProvider', () => {
       return { loading: false, data: { answer: 42 } }
     }
     render(
-      <QueryHooksProvider
+      <GraphQLHooksProvider
         registerUseQueryHook={null}
         registerUseMutationHook={myUseMutationHook}
       >
         <TestUseMutationHook />
-      </QueryHooksProvider>
+      </GraphQLHooksProvider>
     )
   })
 
   test('useQueryHook returns the correct result', async () => {
-    const myUseQueryHook = (query, options) => {
+    const myUseQueryHook = () => {
       return { loading: false, data: { answer: 42 } }
     }
     render(
-      <QueryHooksProvider
+      <GraphQLHooksProvider
         registerUseQueryHook={myUseQueryHook}
         registerUseMutationHook={null}
       >
         <TestUseQueryHook />
-      </QueryHooksProvider>
+      </GraphQLHooksProvider>
     )
     await waitFor(() =>
       screen.getByText('{"loading":false,"data":{"answer":42}}')
@@ -86,16 +86,16 @@ describe('QueryHooksProvider', () => {
   })
 
   test('useMutationHook returns the correct result', async () => {
-    const myUseMutationHook = (query, options) => {
+    const myUseMutationHook = () => {
       return { loading: false, data: { answer: 42 } }
     }
     render(
-      <QueryHooksProvider
+      <GraphQLHooksProvider
         registerUseQueryHook={null}
         registerUseMutationHook={myUseMutationHook}
       >
         <TestUseMutationHook />
-      </QueryHooksProvider>
+      </GraphQLHooksProvider>
     )
     await waitFor(() =>
       screen.getByText('{"loading":false,"data":{"answer":42}}')
