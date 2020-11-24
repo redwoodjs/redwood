@@ -15,22 +15,22 @@ export type MutationOperationResult<TData = any> = [
 ]
 
 export interface GraphQLHooks {
-  mapUseQueryHook: (
+  useQuery: (
     query: DocumentNode,
     options?: GraphQLHookOptions
   ) => OperationResult
-  mapUseMutationHook: (
+  useMutation: (
     mutation: DocumentNode,
     options?: GraphQLHookOptions
   ) => MutationOperationResult
 }
 export const GraphQLHooksContext = React.createContext<GraphQLHooks>({
-  mapUseQueryHook: () => {
+  useQuery: () => {
     throw new Error(
       'You must register a useQuery hook via the `GraphQLHooksProvider`'
     )
   },
-  mapUseMutationHook: () => {
+  useMutation: () => {
     throw new Error(
       'You must register a useMutation hook via the `GraphQLHooksProvider`'
     )
@@ -45,20 +45,20 @@ export const GraphQLHooksContext = React.createContext<GraphQLHooks>({
  * @todo Let the user pass in the additional type for options.
  */
 export const GraphQLHooksProvider: React.FunctionComponent<{
-  registerUseQueryHook: (
+  useQuery: (
     query: DocumentNode,
     options?: GraphQLHookOptions
   ) => OperationResult
-  registerUseMutationHook: (
+  useMutation: (
     mutation: DocumentNode,
     options?: GraphQLHookOptions
   ) => MutationOperationResult
-}> = ({ registerUseQueryHook, registerUseMutationHook, children }) => {
+}> = ({ useQuery, useMutation, children }) => {
   return (
     <GraphQLHooksContext.Provider
       value={{
-        mapUseQueryHook: registerUseQueryHook,
-        mapUseMutationHook: registerUseMutationHook,
+        useQuery,
+        useMutation,
       }}
     >
       {children}
@@ -70,15 +70,12 @@ export function useQuery<TData = any>(
   query: DocumentNode,
   options?: GraphQLHookOptions
 ): OperationResult<TData> {
-  return React.useContext(GraphQLHooksContext).mapUseQueryHook(query, options)
+  return React.useContext(GraphQLHooksContext).useQuery(query, options)
 }
 
 export function useMutation<TData = any>(
   mutation: DocumentNode,
   options?: GraphQLHookOptions
 ): MutationOperationResult<TData> {
-  return React.useContext(GraphQLHooksContext).mapUseMutationHook(
-    mutation,
-    options
-  )
+  return React.useContext(GraphQLHooksContext).useMutation(mutation, options)
 }

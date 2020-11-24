@@ -37,10 +37,7 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
   return (
     <FetchConfigProvider useAuth={useAuth}>
       <ApolloProviderWithFetchConfig config={graphQLClientConfig}>
-        <GraphQLHooksProvider
-          registerUseQueryHook={useQuery}
-          registerUseMutationHook={useMutation}
-        >
+        <GraphQLHooksProvider useQuery={useQuery} useMutation={useMutation}>
           <FlashProvider>{children}</FlashProvider>
         </GraphQLHooksProvider>
       </ApolloProviderWithFetchConfig>

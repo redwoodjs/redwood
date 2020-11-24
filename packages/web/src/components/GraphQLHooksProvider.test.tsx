@@ -40,10 +40,7 @@ describe('QueryHooksProvider', () => {
       return { loading: false, data: { answer: 42 } }
     }
     render(
-      <GraphQLHooksProvider
-        registerUseQueryHook={myUseQueryHook}
-        registerUseMutationHook={null}
-      >
+      <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
         <TestUseQueryHook />
       </GraphQLHooksProvider>
     )
@@ -59,10 +56,7 @@ describe('QueryHooksProvider', () => {
       return { loading: false, data: { answer: 42 } }
     }
     render(
-      <GraphQLHooksProvider
-        registerUseQueryHook={null}
-        registerUseMutationHook={myUseMutationHook}
-      >
+      <GraphQLHooksProvider useQuery={null} useMutation={myUseMutationHook}>
         <TestUseMutationHook />
       </GraphQLHooksProvider>
     )
@@ -73,10 +67,7 @@ describe('QueryHooksProvider', () => {
       return { loading: false, data: { answer: 42 } }
     }
     render(
-      <GraphQLHooksProvider
-        registerUseQueryHook={myUseQueryHook}
-        registerUseMutationHook={null}
-      >
+      <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
         <TestUseQueryHook />
       </GraphQLHooksProvider>
     )
@@ -90,10 +81,7 @@ describe('QueryHooksProvider', () => {
       return { loading: false, data: { answer: 42 } }
     }
     render(
-      <GraphQLHooksProvider
-        registerUseQueryHook={null}
-        registerUseMutationHook={myUseMutationHook}
-      >
+      <GraphQLHooksProvider useQuery={null} useMutation={myUseMutationHook}>
         <TestUseMutationHook />
       </GraphQLHooksProvider>
     )
