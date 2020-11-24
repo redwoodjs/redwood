@@ -4,7 +4,7 @@ export interface GraphQLHookOptions {
   variables?: Record<string, any>
 }
 export interface OperationResult<TData = any> {
-  data?: TData | undefined
+  data?: TData
   loading: boolean
   error?: Error
 }
