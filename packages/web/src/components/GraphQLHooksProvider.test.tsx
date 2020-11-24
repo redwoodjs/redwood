@@ -1,7 +1,11 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 
-import { QueryHooksProvider, useQuery, useMutation } from './QueryHooksProvider'
+import {
+  QueryHooksProvider,
+  useQuery,
+  useMutation,
+} from './GraphQLHooksProvider'
 
 const TestUseQueryHook: React.FunctionComponent = () => {
   // @ts-expect-error - Purposefully not passing in a DocumentNode type here.

@@ -1,6 +1,6 @@
 import type { DocumentNode } from 'graphql'
 
-import { useQuery, OperationResult } from './QueryHooksProvider'
+import { useQuery, OperationResult } from './GraphQLHooksProvider'
 
 const Query: React.FunctionComponent<{
   query: DocumentNode

@@ -12,7 +12,7 @@ import {
   FetchConfigProvider,
   useFetchConfig,
 } from 'src/components/FetchConfigProvider'
-import { QueryHooksProvider } from 'src/components/QueryHooksProvider'
+import { GraphQLHooksProvider } from 'src/components/GraphQLHooksProvider'
 import { FlashProvider } from 'src/flash'
 
 const ApolloProviderWithFetchConfig: React.FunctionComponent<{
@@ -37,12 +37,12 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
   return (
     <FetchConfigProvider useAuth={useAuth}>
       <ApolloProviderWithFetchConfig config={graphQLClientConfig}>
-        <QueryHooksProvider
+        <GraphQLHooksProvider
           registerUseQueryHook={useQuery}
           registerUseMutationHook={useMutation}
         >
           <FlashProvider>{children}</FlashProvider>
-        </QueryHooksProvider>
+        </GraphQLHooksProvider>
       </ApolloProviderWithFetchConfig>
     </FetchConfigProvider>
   )

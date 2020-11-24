@@ -8,10 +8,10 @@ export {
   useFetchConfig,
 } from './components/FetchConfigProvider'
 export {
-  QueryHooksProvider,
+  GraphQLHooksProvider as QueryHooksProvider,
   useQuery,
   useMutation,
-} from './components/QueryHooksProvider'
+} from './components/GraphQLHooksProvider'
 export { withCell } from './components/withCellHOC'
 
 export { FlashProvider, useFlash, Flash } from './flash'
