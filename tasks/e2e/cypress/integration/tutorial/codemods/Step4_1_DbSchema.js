@@ -1,5 +1,5 @@
 export default `
-// api/prisma/schema.prisma
+// api/db/schema.prisma
 
 datasource DS {
   provider = "sqlite"

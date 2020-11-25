@@ -77,11 +77,8 @@ describe('The Redwood Tutorial - Golden path edition', () => {
 
   it('4. Getting Dynamic', () => {
     // https://redwoodjs.com/tutorial/getting-dynamic
-    cy.writeFile(
-      path.join(BASE_DIR, 'api/prisma/schema.prisma'),
-      Step4_1_DbSchema
-    )
-    cy.exec(`rm ${BASE_DIR}/api/prisma/dev.db`, { failOnNonZeroExit: false })
+    cy.writeFile(path.join(BASE_DIR, 'api/db/schema.prisma'), Step4_1_DbSchema)
+    cy.exec(`rm ${BASE_DIR}/api/db/dev.db`, { failOnNonZeroExit: false })
     cy.exec(`cd ${BASE_DIR}; yarn rw db save`, {
       env: {
         DATABASE_URL: 'file:./dev.db',
