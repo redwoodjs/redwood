@@ -31,7 +31,8 @@ export const handler = ({ open, port, build }) => {
   const cwd = getPaths().web.base
 
   const staticAssetsFolder = path.join(getPaths().web.base, 'public')
-  // Create the `MockServiceWorker.js` file.
+  // Create the `MockServiceWorker.js` file
+  // https://mswjs.io/docs/cli/init
   execa(`yarn msw init "${staticAssetsFolder}"`, undefined, {
     stdio: 'inherit',
     shell: true,
@@ -42,10 +43,10 @@ export const handler = ({ open, port, build }) => {
     `yarn ${build ? 'build' : 'start'}-storybook`,
     [
       '--config-dir ../node_modules/@redwoodjs/core/config/storybook',
-      `--port ${port}`,
-      '--no-version-updates',
+      !build && `--port ${port}`,
+      !build && '--no-version-updates',
       `--static-dir "${staticAssetsFolder}"`,
-      !open && '--ci',
+      open && '--ci',
     ].filter(Boolean),
     {
       stdio: 'inherit',
