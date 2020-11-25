@@ -6,7 +6,7 @@ import { getPaths } from '@redwoodjs/internal'
 export const command = 'storybook'
 export const aliases = ['sb']
 export const description =
-  'Launch Storybook: An isolate component development environment.'
+  'Launch Storybook: An isolated component development environment'
 
 export const builder = (yargs) => {
   yargs
