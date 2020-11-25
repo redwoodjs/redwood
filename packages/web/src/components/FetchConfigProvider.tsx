@@ -21,7 +21,8 @@ export const FetchConfigProvider: React.FunctionComponent<{
   useAuth?: () => AuthContextInterface
   renderLoading?: () => React.ReactElement
 }> = ({
-  useAuth = window.__REDWOOD__USE_AUTH,
+  useAuth = window.__REDWOOD__USE_AUTH ??
+    (() => ({ loading: false, isAuthenticated: false })),
   renderLoading = () => null,
   ...rest
 }) => {
@@ -38,10 +39,6 @@ export const FetchConfigProvider: React.FunctionComponent<{
 
   const fetchConfigValue: FetchConfig = {
     uri: `${window.__REDWOOD__API_PROXY_PATH}/graphql`,
-  }
-
-  if (typeof useAuth === 'undefined') {
-    return <FetchConfigContext.Provider value={fetchConfigValue} {...rest} />
   }
 
   // We block all rendering until auth has booted up.
