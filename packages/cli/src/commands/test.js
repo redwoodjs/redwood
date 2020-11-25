@@ -81,9 +81,13 @@ export const handler = async ({
     getProject().sides.forEach((side) => sides.push(side))
   }
 
+  if (sides.includes('api')) {
+    args.push('--runInBand')
+  }
+
   args.push(
     '--config',
-    require.resolve('@redwoodjs/core/config/jest.config.js')
+    `"${require.resolve('@redwoodjs/core/config/jest.config.js')}"`
   )
 
   if (sides.length > 0) {

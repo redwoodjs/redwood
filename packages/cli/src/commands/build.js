@@ -60,7 +60,11 @@ export const handler = async ({
 }) => {
   if (side.includes('api')) {
     try {
-      await generatePrismaClient({ verbose, force: true })
+      await generatePrismaClient({
+        verbose,
+        force: true,
+        schema: getPaths().api.dbSchema,
+      })
     } catch (e) {
       console.log(c.error(e.message))
       process.exit(1)

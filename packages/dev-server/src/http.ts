@@ -22,7 +22,7 @@ export const server = ({
       type: ['text/*', 'application/json', 'multipart/form-data'],
     })
   )
-  app.use(bodyParser.raw({ type: '*/*' }))
+  app.use(bodyParser.raw({ type: '*/*', limit: process.env.BODY_PARSER_LIMIT }))
   app.use(morgan('dev'))
 
   app.all('/', (_, res) => {
@@ -31,7 +31,7 @@ export const server = ({
       <ol>
         ${Object.keys(LAMBDA_FUNCTIONS)
           .sort()
-          .map((name) => `<li><a href="/${name}">/${name}</a></li>`)
+          .map((name) => `<li><a href="${name}">${name}</a></li>`)
           .join('')}
       </ol>
     `)

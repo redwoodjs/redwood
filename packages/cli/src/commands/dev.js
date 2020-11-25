@@ -45,7 +45,11 @@ export const handler = async ({ side = ['api', 'web'], forward = '' }) => {
   if (side.includes('api')) {
     try {
       // This command will check if the api side has a `prisma.schema` file.
-      await generatePrismaClient({ verbose: false, force: false })
+      await generatePrismaClient({
+        verbose: false,
+        force: false,
+        schema: getPaths().api.dbSchema,
+      })
     } catch (e) {
       console.error(c.error(e.message))
     }

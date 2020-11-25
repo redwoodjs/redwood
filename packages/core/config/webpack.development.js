@@ -39,7 +39,7 @@ const baseConfig = merge(webpackConfig('development'), {
     removeEmptyChunks: false,
     splitChunks: false,
   },
-  plugins: [new ErrorOverlayPlugin()],
+  plugins: [new ErrorOverlayPlugin()].filter(Boolean),
 })
 
 module.exports = mergeUserWebpackConfig('development', baseConfig)
