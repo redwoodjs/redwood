@@ -1,8 +1,9 @@
 global.__dirname = __dirname
 import path from 'path'
 
-import { getDefaultArgs } from 'src/lib'
 import { loadGeneratorFixture } from 'src/lib/test'
+
+import { getDefaultArgs } from 'src/lib'
 
 import * as sdl from '../sdl'
 

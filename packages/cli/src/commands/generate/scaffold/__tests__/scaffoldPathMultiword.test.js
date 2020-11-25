@@ -1,9 +1,9 @@
 global.__dirname = __dirname
 import path from 'path'
 
-import * as scaffold from '../scaffold'
+import 'src/lib/test'
 
-import { loadGeneratorFixture } from 'src/lib/test' // eslint-disable-line
+import * as scaffold from '../scaffold'
 
 let filesMultiwordLower,
   filesMultiwordUpper,

@@ -39,8 +39,9 @@ jest.mock('fs', () => {
 import fs from 'fs'
 import path from 'path'
 
-import { getPaths } from 'src/lib'
 import { loadGeneratorFixture } from 'src/lib/test'
+
+import { getPaths } from 'src/lib'
 
 import { pathName } from '../../helpers'
 import * as page from '../page'

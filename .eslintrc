@@ -20,6 +20,11 @@
             "position": "after"
           },
           {
+            "pattern": "src/lib/test",
+            "group": "parent",
+            "position": "before"
+          },
+          {
             "pattern": "src/**",
             "group": "parent",
             "position": "before"
