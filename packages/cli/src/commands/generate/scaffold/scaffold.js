@@ -1,15 +1,15 @@
 import fs from 'fs'
 import path from 'path'
 
-import Listr from 'listr'
+import boxen from 'boxen'
 import camelcase from 'camelcase'
+import chalk from 'chalk'
+import humanize from 'humanize-string'
+import Listr from 'listr'
+import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
-import { paramCase } from 'param-case'
-import humanize from 'humanize-string'
 import terminalLink from 'terminal-link'
-import boxen from 'boxen'
-import chalk from 'chalk'
 
 import {
   generateTemplate,

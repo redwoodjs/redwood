@@ -64,9 +64,10 @@ export const useCoercion = () => {
         if (transformValue) {
           coercionFunction = COERCION_FUNCTIONS[transformValue]
         } else if (type && inputTypeToDataTypeMapping[type]) {
-          coercionFunction = COERCION_FUNCTIONS[inputTypeToDataTypeMapping[type]]
+          coercionFunction =
+            COERCION_FUNCTIONS[inputTypeToDataTypeMapping[type]]
         } else {
-          coercionFunction = ((value) => value)
+          coercionFunction = (value) => value
         }
       }
 

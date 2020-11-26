@@ -1,9 +1,5 @@
 jest.mock('execa', () => jest.fn((cmd) => cmd))
 
-import execa from 'execa'
-
-import { runCommandTask } from '../../lib/index'
-
 jest.mock('src/lib', () => {
   return {
     ...jest.requireActual('src/lib'),
@@ -19,6 +15,10 @@ jest.mock('src/lib', () => {
     }),
   }
 })
+
+import execa from 'execa'
+
+import { runCommandTask } from 'src/lib'
 
 import { handler } from '../build'
 

@@ -1,7 +1,8 @@
 import execa from 'execa'
 import terminalLink from 'terminal-link'
+
 import { ensurePosixPath } from '@redwoodjs/internal'
-const { getProject } = require('@redwoodjs/structure')
+import { getProject } from '@redwoodjs/structure'
 
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'

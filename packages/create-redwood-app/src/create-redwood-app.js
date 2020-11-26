@@ -9,13 +9,13 @@
 import fs from 'fs'
 import path from 'path'
 
-import decompress from 'decompress'
 import axios from 'axios'
-import Listr from 'listr'
-import execa from 'execa'
-import tmp from 'tmp'
-import checkNodeVersion from 'check-node-version'
 import chalk from 'chalk'
+import checkNodeVersion from 'check-node-version'
+import decompress from 'decompress'
+import execa from 'execa'
+import Listr from 'listr'
+import tmp from 'tmp'
 import yargs from 'yargs'
 
 import { name, version } from '../package'

@@ -1,18 +1,18 @@
-import type { NetlifyIdentity } from './netlify'
 import type { Auth0, Auth0User } from './auth0'
-import type { GoTrue, GoTrueUser } from './goTrue'
-import type { MagicLink, MagicUser } from './magicLink'
-import type { Firebase } from './firebase'
-import type { Supabase, SupabaseUser } from './supabase'
-import type { Custom } from './custom'
-//
-import { netlify } from './netlify'
 import { auth0 } from './auth0'
-import { goTrue } from './goTrue'
-import { magicLink } from './magicLink'
-import { firebase } from './firebase'
-import { supabase } from './supabase'
+import type { Custom } from './custom'
 import { custom } from './custom'
+import type { Firebase } from './firebase'
+import { firebase } from './firebase'
+import type { GoTrue, GoTrueUser } from './goTrue'
+import { goTrue } from './goTrue'
+import type { MagicLink, MagicUser } from './magicLink'
+import { magicLink } from './magicLink'
+import type { NetlifyIdentity } from './netlify'
+import { netlify } from './netlify'
+import type { Supabase, SupabaseUser } from './supabase'
+//
+import { supabase } from './supabase'
 
 const typesToClients = {
   netlify,
@@ -40,7 +40,11 @@ export type { Auth0User }
 export type { GoTrueUser }
 export type { MagicUser }
 export type { SupabaseUser }
-export type SupportedUserMetadata = Auth0User | GoTrueUser | MagicUser | SupabaseUser
+export type SupportedUserMetadata =
+  | Auth0User
+  | GoTrueUser
+  | MagicUser
+  | SupabaseUser
 
 export interface AuthClient {
   restoreAuthState?(): void | Promise<any>

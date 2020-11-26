@@ -1,7 +1,7 @@
-import mockedAPIGatewayProxyEvent from './fixtures/apiGatewayProxyEvent.fixture'
 import * as auth0Decoder from './../auth/decoders/auth0'
-import * as netlifyDecoder from './../auth/decoders/netlify'
 import { decodeToken } from './../auth/decoders/index'
+import * as netlifyDecoder from './../auth/decoders/netlify'
+import mockedAPIGatewayProxyEvent from './fixtures/apiGatewayProxyEvent.fixture'
 
 jest.mock('./../auth/decoders/auth0', () => {
   return {

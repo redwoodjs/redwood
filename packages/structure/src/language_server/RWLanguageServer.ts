@@ -7,6 +7,7 @@ import {
 } from 'vscode-languageserver'
 import { TextDocument } from 'vscode-languageserver-textdocument'
 import { CodeAction } from 'vscode-languageserver-types'
+
 import { HostWithDocumentsStore, IDEInfo } from '../ide'
 import { RWProject } from '../model'
 import { lazy, memo } from '../x/decorators'
@@ -17,6 +18,7 @@ import {
   ExtendedDiagnostic_findRelevantQuickFixes,
   Range_contains,
 } from '../x/vscode-languageserver-types'
+
 import { CommandsManager } from './commands'
 import { DiagnosticsManager } from './diagnostics'
 import { OutlineManager } from './outline'

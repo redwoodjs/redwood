@@ -1,7 +1,7 @@
 global.__dirname = __dirname
 import path from 'path'
 
-import { loadGeneratorFixture } from 'src/lib/test' // eslint-disable-line
+import 'src/lib/test'
 
 import * as scaffold from '../scaffold'
 
