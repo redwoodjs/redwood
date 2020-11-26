@@ -3558,14 +3558,14 @@
     telejson "^3.2.0"
     util-deprecate "^1.0.2"
 
-"@supabase/gotrue-js@^1.7.1":
-  version "1.7.1"
-  resolved "https://registry.yarnpkg.com/@supabase/gotrue-js/-/gotrue-js-1.7.1.tgz#96b9aa7162a8d31dc7d5917456d9750edefe5cab"
-  integrity sha512-EebUhGRf+5s+HjBmbiBXEk4yP2zp0HOwZFLwRFXvJVyixx4jE/FDeXghJrnhoG/zlxWXcHTGHOdVfJ1k6rWMTA==
+"@supabase/gotrue-js@^1.7.2":
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/@supabase/gotrue-js/-/gotrue-js-1.7.2.tgz#b023068eafcde9494039a5a267a6525155be1e97"
+  integrity sha512-zr1gf12Mni7k6rpwiXqMMs2qKfC3yHhWGPEcD59kxTgfveMCL5+OgCp+Ji7JmQ89I2bhfuJtKYlnq9SfDOV8dw==
   dependencies:
     cross-fetch "^3.0.6"
 
-"@supabase/postgrest-js@^0.21.1":
+"@supabase/postgrest-js@^0.21.2":
   version "0.21.2"
   resolved "https://registry.yarnpkg.com/@supabase/postgrest-js/-/postgrest-js-0.21.2.tgz#047a37b8b8585ed0d0b13d6754dab2209e948c24"
   integrity sha512-ww7aa4GHu788T2QxZlLiRfi+MHJ+EXbNurzTgaG/3nWmOEEy/gmNTLwgyHUAO92MRE2IrLiZyln3QJDZwGQwrw==
@@ -3581,13 +3581,13 @@
     query-string "^6.12.1"
     websocket "^1.0.31"
 
-"@supabase/supabase-js@^1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@supabase/supabase-js/-/supabase-js-1.0.3.tgz#8d83558e91fd1c59646eb8ed81a5affec23224ea"
-  integrity sha512-+nMs03NFuSYCv22Ap3xbZ+iAvNHglb+T3wYyfNc+b/R6jzwu2PrHA+NVgr6lJo60LqiWTrUm9KlhgPRS8Ejf+w==
+"@supabase/supabase-js@^1.0.6":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@supabase/supabase-js/-/supabase-js-1.0.6.tgz#968e57b2086fbc4a6594a3e63d569752da87a7ad"
+  integrity sha512-OYX5dYSAepi81+ZSVCBdl8KvgDxsdxAGu+ezF/UktG9AHy+NQw2Q8NeLGh1Ba4gvCTUhtQXbZq308JmRK++FAg==
   dependencies:
-    "@supabase/gotrue-js" "^1.7.1"
-    "@supabase/postgrest-js" "^0.21.1"
+    "@supabase/gotrue-js" "^1.7.2"
+    "@supabase/postgrest-js" "^0.21.2"
     "@supabase/realtime-js" "^1.0.6"
 
 "@svgr/babel-plugin-add-jsx-attribute@^4.2.0":
