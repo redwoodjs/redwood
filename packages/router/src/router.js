@@ -40,12 +40,13 @@ const PrivatePageLoader = ({
   useAuth,
   unauthenticatedRoute,
   role,
+  whileLoading = () => null,
   children,
 }) => {
   const { loading, isAuthenticated, hasRole } = useAuth()
 
   if (loading) {
-    return null
+    return whileLoading()
   }
 
   if (
@@ -190,6 +191,7 @@ const RouterImpl = ({
               unauthenticatedRoute={
                 namedRoutes[route.props.unauthenticatedRedirect]
               }
+              whileLoading={route.props.whileLoading}
               role={route.props.role}
             >
               <Loaders
