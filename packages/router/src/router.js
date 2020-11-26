@@ -1,6 +1,8 @@
 // The guts of the router implementation.
 import PropTypes from 'prop-types'
 
+import { useAuth as useAuthHook } from '@redwoodjs/auth'
+
 import {
   Location,
   parseSearch,
@@ -113,7 +115,7 @@ const RouterImpl = ({
   paramTypes,
   pageLoadingDelay = DEFAULT_PAGE_LOADING_DELAY,
   children,
-  useAuth = window.__REDWOOD__USE_AUTH,
+  useAuth = useAuthHook,
 }) => {
   const routes = React.useMemo(() => {
     // Find `Private` components, mark their children `Route` components as private,
