@@ -1,6 +1,8 @@
 // The guts of the router implementation.
 import PropTypes from 'prop-types'
 
+import { useAuth as useAuthHook } from '@redwoodjs/auth'
+
 import {
   Location,
   parseSearch,
@@ -38,12 +40,13 @@ const PrivatePageLoader = ({
   useAuth,
   unauthenticatedRoute,
   role,
+  whileLoading = () => null,
   children,
 }) => {
   const { loading, isAuthenticated, hasRole } = useAuth()
 
   if (loading) {
-    return null
+    return whileLoading()
   }
 
   if (
@@ -54,7 +57,9 @@ const PrivatePageLoader = ({
   } else {
     return (
       <Redirect
-        to={`${unauthenticatedRoute()}?redirectTo=${window.location.pathname}`}
+        to={`${unauthenticatedRoute()}?redirectTo=${
+          window.location.pathname
+        }${encodeURIComponent(window.location.search)}`}
       />
     )
   }
@@ -113,7 +118,7 @@ const RouterImpl = ({
   paramTypes,
   pageLoadingDelay = DEFAULT_PAGE_LOADING_DELAY,
   children,
-  useAuth = window.__REDWOOD__USE_AUTH,
+  useAuth = useAuthHook,
 }) => {
   const routes = React.useMemo(() => {
     // Find `Private` components, mark their children `Route` components as private,
@@ -188,6 +193,7 @@ const RouterImpl = ({
               unauthenticatedRoute={
                 namedRoutes[route.props.unauthenticatedRedirect]
               }
+              whileLoading={route.props.whileLoading}
               role={route.props.role}
             >
               <Loaders
