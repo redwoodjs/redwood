@@ -39,7 +39,7 @@ describe('FetchConfigProvider', () => {
           ({
             loading: false,
             isAuthenticated: true,
-            getToken: async () => 'margle the world',
+            authToken: 'margle the world',
             type: 'custom',
           } as AuthContextInterface)
         }
@@ -52,22 +52,5 @@ describe('FetchConfigProvider', () => {
         '{"uri":"https://api.example.com/graphql","headers":{"auth-provider":"custom","authorization":"Bearer margle the world"}}'
       )
     )
-  })
-
-  test('Loading screen is rendered', async () => {
-    render(
-      <FetchConfigProvider
-        renderLoading={() => <>I am loading...</>}
-        useAuth={() =>
-          ({
-            loading: true,
-            isAuthenticated: false,
-          } as AuthContextInterface)
-        }
-      >
-        <FetchConfigToString />
-      </FetchConfigProvider>
-    )
-    await waitFor(() => screen.getByText('I am loading...'))
   })
 })

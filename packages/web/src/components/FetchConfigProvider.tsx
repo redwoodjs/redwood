@@ -11,52 +11,31 @@ export const FetchConfigContext = React.createContext<FetchConfig>({
 /**
  * The `FetchConfigProvider` understands Redwood's Auth and determines the
  * correct request-headers based on a user's authentication state.
- *
- * @param renderLoading
- * This provider blocks rendering (returns null) whilst determining
- * if the user is authenticated, use this prop to render a custom view instead
- * of a blank screen.
  */
 export const FetchConfigProvider: React.FunctionComponent<{
   useAuth?: () => AuthContextInterface
-  renderLoading?: () => React.ReactElement
 }> = ({
   useAuth = window.__REDWOOD__USE_AUTH ??
     (() => ({ loading: false, isAuthenticated: false })),
-  renderLoading = () => null,
   ...rest
 }) => {
-  const { loading, isAuthenticated, getToken, type } = useAuth()
-  const [authToken, setAuthToken] = React.useState<string | null>()
+  const { isAuthenticated, authToken, type } = useAuth()
 
-  React.useEffect(() => {
-    const updateAuthToken = async () => {
-      const token = await getToken()
-      setAuthToken(token)
-    }
-    isAuthenticated && updateAuthToken()
-  }, [isAuthenticated, getToken])
-
-  const fetchConfigValue: FetchConfig = {
-    uri: `${window.__REDWOOD__API_PROXY_PATH}/graphql`,
-  }
-
-  // We block all rendering until auth has booted up.
-  if (loading) {
-    return renderLoading()
-  }
-
-  if (!isAuthenticated) {
-    return <FetchConfigContext.Provider value={fetchConfigValue} {...rest} />
-  } else if (!authToken) {
-    // Wait for authToken to be retrieved before rendering.
-    return renderLoading()
+  // Even though the user may be authenticated and we may require `authToken` to continue
+  // This should be handled by the `Private` route.
+  if (!isAuthenticated || !authToken) {
+    return (
+      <FetchConfigContext.Provider
+        value={{ uri: `${window.__REDWOOD__API_PROXY_PATH}/graphql` }}
+        {...rest}
+      />
+    )
   }
 
   return (
     <FetchConfigContext.Provider
       value={{
-        ...fetchConfigValue,
+        uri: `${window.__REDWOOD__API_PROXY_PATH}/graphql`,
         headers: {
           'auth-provider': type,
           authorization: `Bearer ${authToken}`,
