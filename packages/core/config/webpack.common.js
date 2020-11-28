@@ -166,7 +166,7 @@ module.exports = (webpackEnv) => {
       app: path.resolve(redwoodPaths.base, 'web/src/index'),
     },
     resolve: {
-      extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
+      extensions: ['.wasm', '.mjs', '.js', '.jsx', '.ts', '.tsx', '.json'],
       alias: {
         // https://www.styled-components.com/docs/faqs#duplicated-module-in-node_modules
         'styled-components': path.resolve(
