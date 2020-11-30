@@ -1,6 +1,7 @@
 import { render, waitFor, act } from '@testing-library/react'
 
 import { Router, Route, Private, Redirect, navigate, routes } from '../'
+import { resetNamedRoutes } from '../named-routes'
 
 // SETUP
 const HomePage = () => <h1>Home Page</h1>
@@ -17,6 +18,7 @@ const mockAuth = (isAuthenticated = false) => {
 
 beforeEach(() => {
   window.history.pushState({}, null, '/')
+  resetNamedRoutes()
 })
 
 test('inits routes and navigates as expected', async () => {
@@ -98,7 +100,7 @@ test('unauthenticated user is redirected including search params', async () => {
       <Route path="/" page={HomePage} name="home" />
       <Route path="/login" page={LoginPage} name="login" />
       <Private unauthenticated="login">
-        <Route path="/private" page={PrivatePage} name="xxx" />
+        <Route path="/private" page={PrivatePage} name="private" />
       </Private>
     </Router>
   )
@@ -109,7 +111,7 @@ test('unauthenticated user is redirected including search params', async () => {
 
   // navigate to private page
   // should redirect to login
-  act(() => navigate(routes.xxx({ bazinga: 'yeah' })))
+  act(() => navigate(routes.private({ bazinga: 'yeah' })))
 
   await waitFor(() => {
     expect(screen.queryByText(/Private Page/i)).toBeNull()

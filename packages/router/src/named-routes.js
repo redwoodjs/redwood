@@ -6,6 +6,10 @@ import { validatePath, replaceParams } from './internal'
 let namedRoutes = {}
 let namedRoutesDone = false
 
+export const resetNamedRoutes = () => {
+  namedRoutesDone = false
+}
+
 const mapNamedRoutes = (routes) => {
   if (namedRoutesDone) {
     return namedRoutes
