@@ -98,7 +98,7 @@ test('unauthenticated user is redirected including search params', async () => {
       <Route path="/" page={HomePage} name="home" />
       <Route path="/login" page={LoginPage} name="login" />
       <Private unauthenticated="login">
-        <Route path="/private" page={PrivatePage} name="private" />
+        <Route path="/private" page={PrivatePage} name="xxx" />
       </Private>
     </Router>
   )
@@ -109,7 +109,7 @@ test('unauthenticated user is redirected including search params', async () => {
 
   // navigate to private page
   // should redirect to login
-  act(() => navigate(routes.private({ bazinga: 'yeah' })))
+  act(() => navigate(routes.xxx({ bazinga: 'yeah' })))
 
   await waitFor(() => {
     expect(screen.queryByText(/Private Page/i)).toBeNull()
