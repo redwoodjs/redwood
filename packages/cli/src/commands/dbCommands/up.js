@@ -1,6 +1,6 @@
-import { runCommandTask } from 'src/lib'
 import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
 import * as options from 'src/commands/dbCommands/options'
+import { runCommandTask } from 'src/lib'
 
 export const command = 'up [increment]'
 export const description = 'Generate the Prisma client and apply migrations'

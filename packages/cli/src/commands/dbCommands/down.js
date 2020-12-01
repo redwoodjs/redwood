@@ -1,5 +1,5 @@
-import { runCommandTask } from 'src/lib'
 import * as options from 'src/commands/dbCommands/options'
+import { runCommandTask } from 'src/lib'
 
 export const command = 'down [decrement]'
 export const description = 'Migrate your database down'

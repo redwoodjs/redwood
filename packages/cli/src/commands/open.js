@@ -1,6 +1,7 @@
 import execa from 'execa'
-import { getConfig } from '@redwoodjs/internal'
 import terminalLink from 'terminal-link'
+
+import { getConfig } from '@redwoodjs/internal'
 
 export const command = 'open'
 export const description = 'Open your project in your browser'

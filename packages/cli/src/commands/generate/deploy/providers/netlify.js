@@ -1,4 +1,5 @@
 import path from 'path'
+
 import { getPaths } from 'src/lib'
 
 const NETLIFY_TOML = `[build]

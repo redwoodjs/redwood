@@ -1,12 +1,12 @@
 import fs from 'fs'
 import path from 'path'
 
-import Listr from 'listr'
-import execa from 'execa'
 import chalk from 'chalk'
+import execa from 'execa'
+import Listr from 'listr'
 
-import c from 'src/lib/colors'
 import { getPaths, writeFile } from 'src/lib'
+import c from 'src/lib/colors'
 
 export const command = 'tailwind'
 export const description = 'Setup tailwindcss and PostCSS'

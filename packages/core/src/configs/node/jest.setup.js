@@ -1,4 +1,5 @@
 const path = require('path')
+
 const { getPaths } = require('@redwoodjs/internal')
 const { db } = require(path.join(getPaths().api.src, 'lib', 'db'))
 const DEFAULT_SCENARIO = 'standard'

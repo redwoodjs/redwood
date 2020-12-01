@@ -1,9 +1,11 @@
-import type { GlobalContext } from 'src/globalContext'
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
+
 import type { SupportedAuthTypes } from '@redwoodjs/auth'
 
-import { netlify } from './netlify'
+import type { GlobalContext } from 'src/globalContext'
+
 import { auth0 } from './auth0'
+import { netlify } from './netlify'
 const noop = (token: string) => token
 
 const typesToDecoders: Record<SupportedAuthTypes, Function> = {

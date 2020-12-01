@@ -1,7 +1,7 @@
 import { execSync } from 'child_process'
 
-import Listr from 'listr'
 import camelcase from 'camelcase'
+import Listr from 'listr'
 import pascalcase from 'pascalcase'
 import terminalLink from 'terminal-link'
 

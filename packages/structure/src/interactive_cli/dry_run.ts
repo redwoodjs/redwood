@@ -1,7 +1,10 @@
-import { outputFileSync } from 'fs-extra'
 import { join } from 'path'
+
+import { outputFileSync } from 'fs-extra'
 import proxyquire from 'proxyquire'
+
 import { spawnCancellable } from '../x/child_process'
+
 import { RedwoodCommandString } from './RedwoodCommandString'
 
 export type FileSet = { [filePath: string]: string | null }
