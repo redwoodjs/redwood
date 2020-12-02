@@ -1,18 +1,27 @@
-import type {
-  SupabaseAuthUser,
-  SupabaseClient as Supabase,
-  SupabaseAuthResponse,
-} from '@supabase/supabase-js'
+import { Session, User, Provider } from '@supabase/gotrue-js/dist/main/lib/types'
+import type SupabaseClient from '@supabase/supabase-js/dist/main/SupabaseClient'
 
 import type { AuthClient } from './index'
-export type SupabaseUser = SupabaseAuthUser
-export type { Supabase }
+export type Supabase = SupabaseClient
+export type SupabaseUser = User
 
 export interface AuthClientSupabase extends AuthClient {
   login(options: {
     email: string
     password: string
-  }): Promise<SupabaseAuthResponse>
+  }): Promise<{
+    data: Session | null;
+    user: User | null;
+    provider?: Provider;
+    url?: string | null;
+    error: Error | null;
+  }>
+  logout(): Promise<{ error: Error | null }>
+  signup(options: { email: string; password: string }): Promise<{
+    data: Session | null;
+    user: User | null;
+    error: Error | null;
+  }>
   client: Supabase
 }
 
@@ -20,11 +29,9 @@ export const supabase = (client: Supabase): AuthClientSupabase => {
   return {
     type: 'supabase',
     client,
-    login: ({ email, password }) => client.auth.login(email, password),
-    logout: () => {
-      client.auth.logout()
-    },
-    signup: ({ email, password }) => client.auth.signup(email, password),
+    login: ({ email, password }) => client.auth.signIn({ email, password }),
+    logout: () => client.auth.signOut(),
+    signup: ({ email, password }) => client.auth.signUp({ email, password }),
     getToken: async () => {
       const supabaseJson = localStorage.getItem('supabase.auth.token')
       const supabaseData = supabaseJson ? JSON.parse(supabaseJson) : null
