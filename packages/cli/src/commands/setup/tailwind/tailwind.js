@@ -74,7 +74,7 @@ export const handler = async ({ force }) => {
                 'add',
                 '-D',
                 'postcss-loader@4.0.2',
-                'tailwindcss',
+                'tailwindcss@npm:@tailwindcss/postcss7-compat',
                 'autoprefixer@9.8.6',
               ])
             },
