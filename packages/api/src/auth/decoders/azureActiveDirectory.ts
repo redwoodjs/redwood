@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import jwksClient from 'jwks-rsa'
 
-export const verifyAzureActiveDirectoryToken = (
+const verifyAzureActiveDirectoryToken = (
   bearerToken: string
 ): Promise<null | Record<string, unknown>> => {
   return new Promise((resolve, reject) => {
