@@ -8,7 +8,7 @@ export {
   useFetchConfig,
 } from './components/FetchConfigProvider'
 export {
-  GraphQLHooksProvider as QueryHooksProvider,
+  GraphQLHooksProvider,
   useQuery,
   useMutation,
 } from './components/GraphQLHooksProvider'

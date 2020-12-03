@@ -1,8 +1,11 @@
 import { dirname } from 'path'
+
 import * as tsm from 'ts-morph'
+
 import { FileNode } from '../ide'
 import { lazy } from '../x/decorators'
 import { directoryNameResolver } from '../x/path'
+
 import { RWProject } from './RWProject'
 
 export class RWPage extends FileNode {

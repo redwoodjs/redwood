@@ -1,8 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 
-import { runCommandTask, getPaths } from 'src/lib'
 import * as options from 'src/commands/dbCommands/options'
+import { runCommandTask, getPaths } from 'src/lib'
 
 export const command = 'generate'
 export const description = 'Generate the Prisma client'

@@ -1,4 +1,3 @@
-import type { AuthContextInterface } from '@redwoodjs/auth'
 import {
   ApolloProvider,
   ApolloClientOptions,
@@ -7,6 +6,8 @@ import {
   useQuery,
   useMutation,
 } from '@apollo/client'
+
+import type { AuthContextInterface } from '@redwoodjs/auth'
 
 import {
   FetchConfigProvider,

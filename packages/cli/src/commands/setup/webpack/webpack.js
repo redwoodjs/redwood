@@ -1,10 +1,11 @@
 import fs from 'fs'
-import Listr from 'listr'
 import path from 'path'
-import chalk from 'chalk'
 
-import c from 'src/lib/colors'
+import chalk from 'chalk'
+import Listr from 'listr'
+
 import { getPaths, writeFile } from 'src/lib'
+import c from 'src/lib/colors'
 
 export const command = 'webpack'
 export const description =

@@ -1,6 +1,8 @@
 import * as tsm from 'ts-morph'
+
 import { FileNode } from '../ide'
 import { lazy } from '../x/decorators'
+
 import { RWProject } from './RWProject'
 
 export class RWComponent extends FileNode {

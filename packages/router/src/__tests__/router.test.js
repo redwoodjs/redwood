@@ -7,22 +7,21 @@ const HomePage = () => <h1>Home Page</h1>
 const AboutPage = () => <h1>About Page</h1>
 const PrivatePage = () => <h1>Private Page</h1>
 const RedirectPage = () => <Redirect to="/about" />
-const mockAuth = (loggedIn = false) => {
-  window.__REDWOOD__USE_AUTH = jest.fn(() => ({
+const mockAuth = (isAuthenticated = false) => {
+  window.__REDWOOD__USE_AUTH = () => ({
     loading: false,
-    isAuthenticated: loggedIn,
-  }))
+    isAuthenticated,
+  })
 }
 
 beforeEach(() => {
   window.history.pushState({}, null, '/')
-  mockAuth(false)
 })
 
-// <Router />
-it('inits routes and navigates as expected', async () => {
+test('inits routes and navigates as expected', async () => {
+  mockAuth(false)
   const TestRouter = () => (
-    <Router>
+    <Router useAuth={window.__REDWOOD__USE_AUTH}>
       <Route path="/" page={HomePage} name="home" />
       <Route path="/about" page={AboutPage} name="about" />
       <Route path="/redirect" page={RedirectPage} name="redirect" />
@@ -37,6 +36,7 @@ it('inits routes and navigates as expected', async () => {
       />
     </Router>
   )
+
   const screen = render(<TestRouter />)
 
   // starts on home page
@@ -44,15 +44,8 @@ it('inits routes and navigates as expected', async () => {
 
   // navigate to about page
   act(() => navigate(routes.about()))
-
   await waitFor(() => screen.getByText(/About Page/i))
-  // navigate to private page
-  // should redirect to home
-  act(() => navigate(routes.private()))
-  await waitFor(() => {
-    expect(screen.queryByText(/Private Page/i)).toBeNull()
-    screen.getByText(/Home Page/i)
-  })
+
   // navigate to redirect page
   // should redirect to about
   act(() => navigate(routes.redirect()))
@@ -60,17 +53,7 @@ it('inits routes and navigates as expected', async () => {
     expect(screen.queryByText(/Redirect Page/)).toBeNull()
     expect(screen.queryByText(/About Page/)).toBeTruthy()
   })
-  // mock log in
-  // navigate to private page
-  // should not redirect
-  mockAuth(true)
-  act(() => navigate(routes.private()))
-  await waitFor(() => {
-    expect(screen.getByText(/Private Page/)).toBeTruthy()
-    expect(screen.queryByText(/Home Page/)).toBeNull()
-  })
 
-  mockAuth(false)
   act(() => navigate(routes.params({ value: 'one' })))
   await waitFor(() => screen.getByText(/param one/i))
 
@@ -78,9 +61,87 @@ it('inits routes and navigates as expected', async () => {
   await waitFor(() => screen.getByText(/param two/i))
 })
 
-it('inits routes two private routes with a space in between and loads as expected', async () => {
+test('unauthenticated user is redirected away from private page', async () => {
+  mockAuth(false)
   const TestRouter = () => (
-    <Router>
+    <Router useAuth={window.__REDWOOD__USE_AUTH}>
+      <Route path="/" page={HomePage} name="home" />
+      <Route path="/about" page={AboutPage} name="about" />
+      <Private unauthenticated="home">
+        <Route path="/private" page={PrivatePage} name="private" />
+      </Private>
+    </Router>
+  )
+  const screen = render(<TestRouter />)
+
+  // starts on home page
+  await waitFor(() => screen.getByText(/Home Page/i))
+
+  // navigate to private page
+  // should redirect to home
+  act(() => navigate(routes.private()))
+  await waitFor(() => {
+    expect(screen.queryByText(/Private Page/i)).toBeNull()
+    screen.getByText(/Home Page/i)
+  })
+})
+
+test('authenticated user can access private page', async () => {
+  mockAuth(true)
+  const TestRouter = () => (
+    <Router useAuth={window.__REDWOOD__USE_AUTH}>
+      <Route path="/" page={HomePage} name="home" />
+      <Private unauthenticated="home">
+        <Route path="/private" page={PrivatePage} name="private" />
+      </Private>
+    </Router>
+  )
+  const screen = render(<TestRouter />)
+
+  // starts on home page
+  await waitFor(() => screen.getByText(/Home Page/i))
+
+  // navigate to private page
+  // should not redirect
+  act(() => navigate(routes.private()))
+  await waitFor(() => {
+    expect(screen.getByText(/Private Page/)).toBeTruthy()
+    expect(screen.queryByText(/Home Page/)).toBeNull()
+  })
+})
+
+test('can display a loading screen whilst waiting for auth', async () => {
+  const TestRouter = () => (
+    <Router useAuth={() => ({ loading: true })}>
+      <Route path="/" page={HomePage} name="home" />
+      <Private unauthenticated="home">
+        <Route
+          path="/private"
+          page={PrivatePage}
+          name="private"
+          whileLoading={() => 'Loading...'}
+        />
+      </Private>
+    </Router>
+  )
+  const screen = render(<TestRouter />)
+
+  // starts on home page
+  await waitFor(() => screen.getByText(/Home Page/i))
+
+  // navigate to private page
+  // should not redirect
+  act(() => navigate(routes.private()))
+  await waitFor(() => {
+    expect(screen.getByText(/Loading.../)).toBeTruthy()
+    expect(screen.queryByText(/Home Page/)).toBeNull()
+  })
+})
+
+test('inits routes two private routes with a space in between and loads as expected', async () => {
+  mockAuth(false)
+  const TestRouter = () => (
+    <Router useAuth={window.__REDWOOD__USE_AUTH}>
       <Route path="/" page={HomePage} name="home" />
       <Route path="/about" page={AboutPage} name="about" />
       <Route path="/redirect" page={RedirectPage} name="redirect" />
