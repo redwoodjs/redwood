@@ -16,9 +16,7 @@ export const azureActiveDirectory = (client: AzureActiveDirectoryClient): AuthCl
     signup: async (options?) => {
       await client.loginPopup(options)
     },
-    getToken: async () => {
-      return sessionStorage.getItem('msal.idtoken')
-    },
+    getToken: async () => sessionStorage.getItem('msal.idtoken'),
     getUserMetadata: async () => {
       const user = await client.getAccount()
       return user || null
