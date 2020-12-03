@@ -12,7 +12,7 @@ export const verifyAzureActiveDirectoryToken = (
       )
     }
 
-    // @docs:   https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-protocols-oidc#sample-response
+    /** @docs:  https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-protocols-oidc#sample-response */
     const client = jwksClient({
       jwksUri: `${AZURE_ACTIVE_DIRECTORY_AUTHORITY}/discovery/v2.0/keys`,
     })
