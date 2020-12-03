@@ -13,9 +13,7 @@ export const azureActiveDirectory = (client: AzureActiveDirectoryClient): AuthCl
     restoreAuthState: async () => {},
     login: async (options?) => await client.loginPopup(options),
     logout: (options?) => client.logout(options),
-    signup: async (options?) => {
-      await client.loginPopup(options)
-    },
+    signup: async (options?) => await client.loginPopup(options),
     getToken: async () => sessionStorage.getItem('msal.idtoken'),
     getUserMetadata: async () => (await client.getAccount()) || null,
   }
