@@ -8,7 +8,7 @@ export const verifyAzureActiveDirectoryToken = (
     const { AZURE_ACTIVE_DIRECTORY_AUTHORITY } = process.env
     if (!AZURE_ACTIVE_DIRECTORY_AUTHORITY) {
       throw new Error(
-        '`AZURE_ACTIVE_DIRECTORY_AUTHORITY` env vars are not set.'
+        '`AZURE_ACTIVE_DIRECTORY_AUTHORITY` env var is not set.'
       )
     }
 
