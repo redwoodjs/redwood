@@ -5,6 +5,7 @@ import type { SupportedAuthTypes } from '@redwoodjs/auth'
 import type { GlobalContext } from 'src/globalContext'
 
 import { auth0 } from './auth0'
+import { azureActiveDirectory } from './azureActiveDirectory'
 import { netlify } from './netlify'
 import { supabase } from './supabase'
 const noop = (token: string) => token
@@ -22,6 +23,7 @@ const typesToDecoders: Record<
   | ((token: string, req: Req) => Decoded | Promise<Decoded>)
 > = {
   auth0: auth0,
+  azureActiveDirectory: azureActiveDirectory,
   netlify: netlify,
   goTrue: netlify,
   magicLink: noop,
