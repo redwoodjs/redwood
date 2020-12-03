@@ -1,24 +1,17 @@
 import type { Auth0, Auth0User } from './auth0'
 import { auth0 } from './auth0'
-
 import type { AzureActiveDirectory, AzureActiveDirectoryUser } from './azureActiveDirectory'
 import { azureActiveDirectory } from './azureActiveDirectory'
-
 import type { Custom } from './custom'
 import { custom } from './custom'
-
 import type { Firebase } from './firebase'
 import { firebase } from './firebase'
-
 import type { GoTrue, GoTrueUser } from './goTrue'
 import { goTrue } from './goTrue'
-
 import type { MagicLink, MagicUser } from './magicLink'
 import { magicLink } from './magicLink'
-
 import type { NetlifyIdentity } from './netlify'
 import { netlify } from './netlify'
-
 import type { Supabase, SupabaseUser } from './supabase'
 import { supabase } from './supabase'
 
