@@ -10,7 +10,6 @@ export const azureActiveDirectory = (client: AzureActiveDirectoryClient): AuthCl
   return {
     type: 'azureActiveDirectory',
     client,
-    restoreAuthState: async () => {},
     login: async (options?) => await client.loginPopup(options),
     logout: (options?) => client.logout(options),
     signup: async (options?) => await client.loginPopup(options),
