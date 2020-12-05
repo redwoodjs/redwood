@@ -38,7 +38,9 @@ provider:
 package:
   individually: true
 
-functions:
+  ${
+    fs.existsSync(path.resolve(getPaths().api.functions))
+      ? `functions:
   ${fs
     .readdirSync(path.resolve(getPaths().api.functions))
     .map((file) => {
@@ -64,7 +66,9 @@ functions:
           method: POST
 `
     })
-    .join('  ')}
+    .join('  ')}`
+      : ''
+  }
 `
 
 export const preRequisites = [
