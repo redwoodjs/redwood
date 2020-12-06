@@ -22,9 +22,16 @@ export const builder = (yargs) => {
       alias: 't',
       description:
         '[choices: "canary", "rc", or specific-version (see example below)] WARNING: "canary" and "rc" tags are unstable releases!',
+      requiresArg: true,
+      type: 'string',
+      coerce: validateTag,
+    })
+    .option('pr', {
+      description: 'Installs packages for the given PR',
+      requiresArg: true,
       type: 'string',
     })
-    .coerce('tag', validateTag)
+    .conflicts('tag', 'pr')
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -41,8 +48,14 @@ export const builder = (yargs) => {
     )
 }
 
-const rwPackages =
-  '@redwoodjs/core @redwoodjs/api @redwoodjs/web @redwoodjs/router @redwoodjs/auth @redwoodjs/forms'
+const rwPackages = [
+  '@redwoodjs/core',
+  '@redwoodjs/api',
+  '@redwoodjs/web',
+  '@redwoodjs/router',
+  '@redwoodjs/auth',
+  '@redwoodjs/forms',
+].join(' ')
 
 // yarn upgrade-interactive does not allow --tags, so we resort to this mess
 // @redwoodjs/auth may not be installed so we add check
@@ -52,6 +65,30 @@ const installTags = (tag, isAuth) => {
   && yarn workspace web upgrade @redwoodjs/web@${tag} @redwoodjs/router@${tag} @redwoodjs/forms@${tag}`
 
   const authString = ` @redwoodjs/auth@${tag}`
+
+  if (isAuth) {
+    return mainString + authString
+  } else {
+    return mainString
+  }
+}
+
+/** `pr` example: 1454:0.21.0-d3b0abd */
+const installPr = (pr, isAuth) => {
+  const packageUrl = (pkg) => {
+    const baseUrl = 'https://rw-pr-redwoodjs-com.s3.amazonaws.com/'
+    const [prNbr, vSha] = pr.split(':')
+
+    return `${baseUrl}${prNbr}/redwoodjs-${pkg}-${vSha}.tgz`
+  }
+
+  const mainString =
+    `yarn add -DW ${packageUrl('core')} ${packageUrl('cli')} ` +
+    `&& yarn workspace api add ${packageUrl('api')} ` +
+    `&& yarn workspace web add ${packageUrl('web')} ` +
+    `${packageUrl('router')} ${packageUrl('forms')}`
+
+  const authString = ` ${packageUrl('auth')}`
 
   if (isAuth) {
     return mainString + authString
@@ -90,15 +127,16 @@ const checkInstalled = () => {
 
 // yargs allows passing the 'dry-run' alias 'd' here,
 // which we need to use because babel fails on 'dry-run'
-const runUpgrade = ({ d: dryRun, tag }) => {
+const runUpgrade = ({ d: dryRun, tag, pr }) => {
   return [
     {
       title: '...',
       task: (ctx, task) => {
         if (dryRun) {
-          task.title = tag
-            ? 'The --dry-run option is not supported for --tags'
-            : 'Checking available upgrades for @redwoodjs packages'
+          task.title =
+            tag || pr
+              ? 'The --dry-run option is not supported for --tag or --pr'
+              : 'Checking available upgrades for @redwoodjs packages'
           // 'yarn outdated --scope @redwoodjs' will include netlify plugin
           // so we have to use hardcoded list,
           // which will NOT display info for uninstalled packages
@@ -113,6 +151,12 @@ const runUpgrade = ({ d: dryRun, tag }) => {
         } else if (tag) {
           task.title = `Force upgrading @redwoodjs packages to latest ${tag} release`
           execa.command(installTags(tag, ctx.auth), {
+            stdio: 'inherit',
+            shell: true,
+          })
+        } else if (pr) {
+          task.title = `Installs packages from PR ${pr}`
+          execa.command(installPr(pr, ctx.auth), {
             stdio: 'inherit',
             shell: true,
           })
@@ -152,7 +196,7 @@ const validateTag = (tag) => {
   return tag
 }
 
-export const handler = async ({ d, tag }) => {
+export const handler = async ({ d, tag, pr }) => {
   // structuring as nested tasks to avoid bug with task.title causing duplicates
   const tasks = new Listr(
     [
@@ -162,7 +206,7 @@ export const handler = async ({ d, tag }) => {
       },
       {
         title: 'Running upgrade command',
-        task: () => new Listr(runUpgrade({ d, tag })),
+        task: () => new Listr(runUpgrade({ d, tag, pr })),
       },
     ],
     { collapse: false }
