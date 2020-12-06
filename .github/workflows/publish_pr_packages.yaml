@@ -45,11 +45,12 @@ jobs:
         run: |
           pr_number=${{ steps.pr_number.outputs.pr_number }}
           cd pr-packages/$pr_number
+          v_sha=$(ls | grep "\.tgz$" | sed 's/\.tgz$//' | head -n1 | awk -F"-" '{ print $(NF-1)"-"$NF }')
           msg="📦 Packages for this PR can be downloaded from%0A"
           for p in *; do
             msg+="https://rw-pr-redwoodjs-com.s3.amazonaws.com/$pr_number/$p%0A"
           done
-          msg+="%0AInstall locally with yarn, e.g. \`yarn workspace web add <url>\`"
+          msg+="%0AInstall this PR by running \`yarn rw upgrade --pr $pr_number:$v_sha\`"
           echo "::set-output name=msg::$msg"
 
       - name: Find Comment
