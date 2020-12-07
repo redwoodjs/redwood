@@ -15,6 +15,7 @@ export const QUERY = gql`
       readTime
       rating
       postedAt
+      metadata
     }
   }
 `
@@ -22,6 +23,16 @@ const UPDATE_POST_MUTATION = gql`
   mutation UpdatePostMutation($id: Int!, $input: UpdatePostInput!) {
     updatePost(id: $id, input: $input) {
       id
+      title
+      slug
+      author
+      body
+      image
+      isPinned
+      readTime
+      rating
+      postedAt
+      metadata
     }
   }
 `

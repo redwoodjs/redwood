@@ -1,7 +1,7 @@
 import { execSync } from 'child_process'
 
-import Listr from 'listr'
 import camelcase from 'camelcase'
+import Listr from 'listr'
 import pascalcase from 'pascalcase'
 import terminalLink from 'terminal-link'
 
@@ -13,7 +13,32 @@ import { templateForComponentFile, pathName } from '../helpers'
 const COMPONENT_SUFFIX = 'Page'
 const REDWOOD_WEB_PATH_NAME = 'pages'
 
-export const files = ({ name, ...rest }) => {
+export const paramVariants = (path) => {
+  const param = path?.match(/(\{[\w:]+\})/)?.[1]
+  const paramName = param?.replace(/:[^}]+/, '').slice(1, -1)
+
+  if (param === undefined) {
+    return {
+      propParam: '',
+      propValueParam: '',
+      argumentParam: '',
+      paramName: '',
+      paramValue: '',
+    }
+  }
+
+  // "42" is just a value used for demonstrating parameter usage in the
+  // generated page-, test-, and story-files.
+  return {
+    propParam: `{ ${paramName} }`,
+    propValueParam: `${paramName}="42" `,
+    argumentParam: `{ ${paramName}: '42' }`,
+    paramName,
+    paramValue: ' 42',
+  }
+}
+
+export const files = ({ name, tests, stories, ...rest }) => {
   const pageFile = templateForComponentFile({
     name,
     suffix: COMPONENT_SUFFIX,
@@ -41,20 +66,27 @@ export const files = ({ name, ...rest }) => {
     templateVars: rest,
   })
 
+  const files = [pageFile]
+
+  if (tests) {
+    files.push(testFile)
+  }
+
+  if (stories) {
+    files.push(storiesFile)
+  }
+
   // Returns
   // {
   //    "path/to/fileA": "<<<template>>>",
   //    "path/to/fileB": "<<<template>>>",
   // }
-  return [pageFile, testFile, storiesFile].reduce(
-    (acc, [outputPath, content]) => {
-      return {
-        [outputPath]: content,
-        ...acc,
-      }
-    },
-    {}
-  )
+  return files.reduce((acc, [outputPath, content]) => {
+    return {
+      [outputPath]: content,
+      ...acc,
+    }
+  }, {})
 }
 
 export const routes = ({ name, path }) => {
@@ -74,7 +106,7 @@ export const builder = (yargs) => {
       type: 'string',
     })
     .positional('path', {
-      description: 'URL path to the page. Defaults to name',
+      description: 'URL path to the page, or just {param}. Defaults to name',
       type: 'string',
     })
     .option('force', {
@@ -82,6 +114,16 @@ export const builder = (yargs) => {
       default: false,
       description: 'Overwrite existing files',
       type: 'boolean',
+    })
+    .option('tests', {
+      description: 'Generate test files',
+      type: 'boolean',
+      default: true,
+    })
+    .option('stories', {
+      description: 'Generate storybook files',
+      type: 'boolean',
+      default: true,
     })
     .epilogue(
       `Also see the ${terminalLink(
@@ -91,7 +133,13 @@ export const builder = (yargs) => {
     )
 }
 
-export const handler = async ({ name, path, force }) => {
+export const handler = async ({
+  name,
+  path,
+  force,
+  tests = true,
+  stories = true,
+}) => {
   if (process.platform === 'win32') {
     // running `yarn rw g page home /` on Windows using GitBash
     // POSIX-to-Windows path conversion will kick in.
@@ -124,7 +172,14 @@ export const handler = async ({ name, path, force }) => {
       {
         title: 'Generating page files...',
         task: async () => {
-          const f = await files({ name, path: pathName(path, name) })
+          path = pathName(path, name)
+          const f = await files({
+            name,
+            path,
+            tests,
+            stories,
+            ...paramVariants(path),
+          })
           return writeFilesTask(f, { overwriteExisting: force })
         },
       },

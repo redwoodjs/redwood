@@ -1,4 +1,5 @@
 import { Loading, Empty, Failure, Success } from './${pascalName}Cell'
+import { standard } from './${pascalName}Cell.mock'
 
 export const loading = () => {
   return Loading ? <Loading /> : null
@@ -13,7 +14,7 @@ export const failure = () => {
 }
 
 export const success = () => {
-  return Success ? <Success ${camelName}={{ mock: 'data' }} /> : null
+  return Success ? <Success {...standard()} /> : null
 }
 
 export default { title: 'Cells/${pascalName}Cell' }

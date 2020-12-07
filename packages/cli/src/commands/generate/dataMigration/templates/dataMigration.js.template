@@ -1,0 +1,3 @@
+export default async ({ db }) => {
+  // Migration here...
+}

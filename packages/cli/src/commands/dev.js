@@ -3,11 +3,12 @@ import path from 'path'
 
 import concurrently from 'concurrently'
 import terminalLink from 'terminal-link'
+
 import { getConfig, shutdownPort } from '@redwoodjs/internal'
 
+import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
-import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
 
 export const command = 'dev [side..]'
 export const description = 'Start development servers for api, db, and web'
@@ -19,6 +20,12 @@ export const builder = (yargs) => {
       description: 'Which dev server(s) to start',
       type: 'array',
     })
+    .positional('forward', {
+      alias: 'fwd',
+      description:
+        'String of one or more Webpack DevServer config options, for example: `--fwd="--port=1234 --open=false"`',
+      type: 'string',
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -27,7 +34,7 @@ export const builder = (yargs) => {
     )
 }
 
-export const handler = async ({ side = ['api', 'web'] }) => {
+export const handler = async ({ side = ['api', 'web'], forward = '' }) => {
   // We use BASE_DIR when we need to effectively set the working dir
   const BASE_DIR = getPaths().base
   // For validation, e.g. dirExists?, we use these
@@ -38,7 +45,11 @@ export const handler = async ({ side = ['api', 'web'] }) => {
   if (side.includes('api')) {
     try {
       // This command will check if the api side has a `prisma.schema` file.
-      await generatePrismaClient({ verbose: false, force: false })
+      await generatePrismaClient({
+        verbose: false,
+        force: false,
+        schema: getPaths().api.dbSchema,
+      })
     } catch (e) {
       console.error(c.error(e.message))
     }
@@ -74,7 +85,7 @@ export const handler = async ({ side = ['api', 'web'] }) => {
       command: `cd "${path.join(
         BASE_DIR,
         'web'
-      )}" && yarn webpack-dev-server --config ../node_modules/@redwoodjs/core/config/webpack.development.js`,
+      )}" && yarn webpack-dev-server --config ../node_modules/@redwoodjs/core/config/webpack.development.js ${forward}`,
       prefixColor: 'blue',
       runWhen: () => fs.existsSync(WEB_DIR_SRC),
     },

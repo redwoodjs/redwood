@@ -5,10 +5,17 @@ import execa from 'execa'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
 
+import { resolveFile } from '@redwoodjs/internal'
+
 import { getPaths, writeFilesTask } from 'src/lib'
 import c from 'src/lib/colors'
 
-const API_GRAPHQL_PATH = path.join(getPaths().api.functions, 'graphql.js')
+const API_GRAPHQL_PATH = resolveFile(
+  path.join(getPaths().api.functions, 'graphql')
+)
+
+const AUTH_PROVIDER_IMPORT = `import { AuthProvider } from '@redwoodjs/auth'`
+
 const API_SRC_PATH = path.join(getPaths().api.src)
 const TEMPLATES = fs
   .readdirSync(path.resolve(__dirname, 'templates'))
@@ -32,12 +39,7 @@ const SUPPORTED_PROVIDERS = fs
 
 // returns the content of index.js with import statements added
 const addWebImports = (content, imports) => {
-  return (
-    `import { AuthProvider } from '@redwoodjs/auth'\n` +
-    imports.join('\n') +
-    '\n' +
-    content
-  )
+  return `${AUTH_PROVIDER_IMPORT}\n` + imports.join('\n') + '\n' + content
 }
 
 // returns the content of index.js with init lines added
@@ -67,6 +69,53 @@ const addWebRender = (content, authProvider) => {
   )
 }
 
+// returns the content of index.js with <AuthProvider> updated
+const updateWebRender = (content, authProvider) => {
+  const renderContent = `<AuthProvider client={${authProvider.client}} type="${authProvider.type}">`
+  return content.replace(/<AuthProvider client={.*} type=".*">/s, renderContent)
+}
+
+// returns the content of index.js without the old auth import
+const removeOldWebImports = (content, imports) => {
+  return content.replace(`${AUTH_PROVIDER_IMPORT}\n` + imports.join('\n'), '')
+}
+
+// returns the content of index.js without the old auth init
+const removeOldWebInit = (content, init) => {
+  return content.replace(init, '')
+}
+
+// returns content with old auth provider removes
+const removeOldAuthProvider = async (content) => {
+  // get the current auth provider
+  const [_, currentAuthProvider] = content.match(
+    /<AuthProvider client={.*} type="(.*)">/s
+  )
+
+  let oldAuthProvider
+  try {
+    oldAuthProvider = await import(`./providers/${currentAuthProvider}`)
+  } catch (e) {
+    throw new Error('Could not replace existing auth provider init')
+  }
+
+  content = removeOldWebImports(content, oldAuthProvider.config.imports)
+  content = removeOldWebInit(content, oldAuthProvider.config.init)
+
+  return content
+}
+
+// check to make sure AuthProvider doesn't exist
+const checkAuthProviderExists = () => {
+  const content = fs.readFileSync(WEB_SRC_INDEX_PATH).toString()
+
+  if (content.includes(AUTH_PROVIDER_IMPORT)) {
+    throw new Error(
+      'Existing auth provider found.\nUse --force to override existing provider.'
+    )
+  }
+}
+
 // the files to create to support auth
 export const files = (provider) => {
   const template = TEMPLATES[provider] ?? TEMPLATES.base
@@ -76,12 +125,19 @@ export const files = (provider) => {
 }
 
 // actually inserts the required config lines into index.js
-export const addConfigToIndex = (config) => {
+export const addConfigToIndex = async (config, force) => {
   let content = fs.readFileSync(WEB_SRC_INDEX_PATH).toString()
+
+  // update existing AuthProvider if --force else add new AuthProvider
+  if (content.includes(AUTH_PROVIDER_IMPORT) && force) {
+    content = await removeOldAuthProvider(content)
+    content = updateWebRender(content, config.authProvider)
+  } else {
+    content = addWebRender(content, config.authProvider)
+  }
 
   content = addWebImports(content, config.imports)
   content = addWebInit(content, config.init)
-  content = addWebRender(content, config.authProvider)
 
   fs.writeFileSync(WEB_SRC_INDEX_PATH, content)
 }
@@ -89,17 +145,23 @@ export const addConfigToIndex = (config) => {
 export const addApiConfig = () => {
   let content = fs.readFileSync(API_GRAPHQL_PATH).toString()
 
-  // add import statement
-  content = content.replace(
-    /^(.*importAll.*)$/m,
-    `$1\n\nimport { getCurrentUser } from 'src/lib/auth.js'`
-  )
-  // add object to handler
-  content = content.replace(
-    /^(\s*)(schema: makeMergedSchema)(.*)$/m,
-    `$1getCurrentUser,\n$1$2$3`
-  )
-  fs.writeFileSync(API_GRAPHQL_PATH, content)
+  // default to an array to avoid destructure errors
+  const [_, hasAuthImport] =
+    content.match(/(import {.*} from 'src\/lib\/auth.*')/s) || []
+
+  if (!hasAuthImport) {
+    // add import statement
+    content = content.replace(
+      /^(.*services.*)$/m,
+      `$1\n\nimport { getCurrentUser } from 'src/lib/auth'`
+    )
+    // add object to handler
+    content = content.replace(
+      /^(\s*)(schema: makeMergedSchema)(.*)$/m,
+      `$1getCurrentUser,\n$1$2$3`
+    )
+    fs.writeFileSync(API_GRAPHQL_PATH, content)
+  }
 }
 
 export const isProviderSupported = (provider) => {
@@ -147,27 +209,6 @@ export const handler = async ({ provider, force }) => {
   const tasks = new Listr(
     [
       {
-        title: 'Adding required packages...',
-        task: async () => {
-          if (!isProviderSupported(provider)) {
-            throw new Error(`Unknown auth provider '${provider}'`)
-          }
-          await execa('yarn', [
-            'workspace',
-            'web',
-            'add',
-            ...providerData.packages,
-            '@redwoodjs/auth',
-          ])
-        },
-      },
-      {
-        title: 'Installing packages...',
-        task: async () => {
-          await execa('yarn', ['install'])
-        },
-      },
-      {
         title: 'Generating auth lib...',
         task: (_ctx, task) => {
           if (apiSrcDoesExist()) {
@@ -181,7 +222,7 @@ export const handler = async ({ provider, force }) => {
         title: 'Adding auth config to web...',
         task: (_ctx, task) => {
           if (webIndexDoesExist()) {
-            addConfigToIndex(providerData.config)
+            addConfigToIndex(providerData.config, force)
           } else {
             task.skip('web/src/index.js not found, skipping')
           }
@@ -198,6 +239,41 @@ export const handler = async ({ provider, force }) => {
         },
       },
       {
+        title: 'Adding required web packages...',
+        task: async () => {
+          if (!isProviderSupported(provider)) {
+            throw new Error(`Unknown auth provider '${provider}'`)
+          }
+          await execa('yarn', [
+            'workspace',
+            'web',
+            'add',
+            ...providerData.webPackages,
+            '@redwoodjs/auth',
+          ])
+        },
+      },
+      providerData.apiPackages.length > 0 && {
+        title: 'Adding required api packages...',
+        task: async () => {
+          if (!isProviderSupported(provider)) {
+            throw new Error(`Unknown auth provider '${provider}'`)
+          }
+          await execa('yarn', [
+            'workspace',
+            'api',
+            'add',
+            ...providerData.apiPackages,
+          ])
+        },
+      },
+      {
+        title: 'Installing packages...',
+        task: async () => {
+          await execa('yarn', ['install'])
+        },
+      },
+      {
         title: 'One more thing...',
         task: (_ctx, task) => {
           task.title = `One more thing...\n\n   ${providerData.notes.join(
@@ -210,6 +286,11 @@ export const handler = async ({ provider, force }) => {
   )
 
   try {
+    // Don't throw existing provider error when --force exists
+    if (!force) {
+      checkAuthProviderExists()
+    }
+
     await tasks.run()
   } catch (e) {
     console.log(c.error(e.message))

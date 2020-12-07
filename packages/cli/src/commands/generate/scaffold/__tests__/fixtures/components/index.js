@@ -1,6 +1,8 @@
 import { useMutation, useFlash } from '@redwoodjs/web'
 import { Link, routes } from '@redwoodjs/router'
 
+import { QUERY } from 'src/components/PostsCell'
+
 const DELETE_POST_MUTATION = gql`
   mutation DeletePostMutation($id: Int!) {
     deletePost(id: $id) {
@@ -17,6 +19,10 @@ const truncate = (text) => {
     output = output.substring(0, MAX_STRING_LENGTH) + '...'
   }
   return output
+}
+
+const jsonTruncate = (obj) => {
+  return truncate(JSON.stringify(obj, null, 2))
 }
 
 const timeTag = (datetime) => {
@@ -37,11 +43,16 @@ const PostsList = ({ posts }) => {
     onCompleted: () => {
       addMessage('Post deleted.', { classes: 'rw-flash-success' })
     },
+    // This refetches the query on the list page. Read more about other ways to
+    // update the cache over here:
+    // https://www.apollographql.com/docs/react/data/mutations/#making-all-other-cache-updates
+    refetchQueries: [{ query: QUERY }],
+    awaitRefetchQueries: true,
   })
 
   const onDeleteClick = (id) => {
     if (confirm('Are you sure you want to delete post ' + id + '?')) {
-      deletePost({ variables: { id }, refetchQueries: ['POSTS'] })
+      deletePost({ variables: { id } })
     }
   }
 
@@ -60,6 +71,7 @@ const PostsList = ({ posts }) => {
             <th>Read time</th>
             <th>Rating</th>
             <th>Posted at</th>
+            <th>Metadata</th>
             <th>&nbsp;</th>
           </tr>
         </thead>
@@ -76,6 +88,7 @@ const PostsList = ({ posts }) => {
               <td>{truncate(post.readTime)}</td>
               <td>{truncate(post.rating)}</td>
               <td>{timeTag(post.postedAt)}</td>
+              <td>{jsonTruncate(post.metadata)}</td>
               <td>
                 <nav className="rw-table-actions">
                   <Link

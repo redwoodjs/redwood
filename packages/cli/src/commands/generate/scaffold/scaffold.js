@@ -1,12 +1,14 @@
 import fs from 'fs'
 import path from 'path'
 
-import Listr from 'listr'
+import boxen from 'boxen'
 import camelcase from 'camelcase'
+import chalk from 'chalk'
+import humanize from 'humanize-string'
+import Listr from 'listr'
+import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
-import { paramCase } from 'param-case'
-import humanize from 'humanize-string'
 import terminalLink from 'terminal-link'
 
 import {
@@ -201,17 +203,22 @@ const componentFiles = async (name, scaffoldPath = '') => {
       componentName: 'CheckboxField',
       defaultProp: 'defaultChecked',
       validation: false,
+      listDisplayFunction: 'checkboxInputTag',
       displayFunction: 'checkboxInputTag',
     },
     DateTime: {
+      listDisplayFunction: 'timeTag',
       displayFunction: 'timeTag',
     },
     Int: {
       componentName: 'NumberField',
     },
     Json: {
-      componentName: 'TextArea',
+      componentName: 'TextAreaField',
       dataType: 'Json',
+      displayFunction: 'jsonDisplay',
+      listDisplayFunction: 'jsonTruncate',
+      deserilizeFunction: 'JSON.stringify',
     },
     Float: {
       dataType: 'Float',
@@ -219,8 +226,10 @@ const componentFiles = async (name, scaffoldPath = '') => {
     default: {
       componentName: 'TextField',
       defaultProp: 'defaultValue',
+      deserilizeFunction: '',
       validation: '{{ required: true }}',
-      displayFunction: 'truncate',
+      displayFunction: undefined,
+      listDisplayFunction: 'truncate',
       dataType: undefined,
     },
   }
@@ -235,9 +244,15 @@ const componentFiles = async (name, scaffoldPath = '') => {
       defaultProp:
         componentMetadata[column.type]?.defaultProp ||
         componentMetadata.default.defaultProp,
+      deserilizeFunction:
+        componentMetadata[column.type]?.deserilizeFunction ||
+        componentMetadata.default.deserilizeFunction,
       validation:
         componentMetadata[column.type]?.validation ??
         componentMetadata.default.validation,
+      listDisplayFunction:
+        componentMetadata[column.type]?.listDisplayFunction ||
+        componentMetadata.default.listDisplayFunction,
       displayFunction:
         componentMetadata[column.type]?.displayFunction ||
         componentMetadata.default.displayFunction,
@@ -436,8 +451,26 @@ export const handler = async ({
   const { model, path } = splitPathAndModel(modelArg)
 
   const t = tasks({ model, path, force, typescript, javascript })
+  const schema = await getSchema(pascalcase(pluralize.singular(model)))
+  const line1 =
+    chalk.bold.yellow('WARNING') +
+    `: Because the data model "${pascalcase(model)}" contains a`
+  const line2 = 'Prisma @relation, the generated CRUD code must be manually'
+  const line3 = 'modified to work correctly. See this doc for more info:'
+  const line4 = chalk.underline.blue(
+    'https://redwoodjs.com/docs/schema-relations'
+  )
   try {
     await t.run()
+    if (relationsForModel(schema).length) {
+      console.log(
+        boxen(line1 + '\n' + line2 + '\n' + line3 + '\n' + line4, {
+          padding: 1,
+          margin: 1,
+          borderStyle: 'single',
+        })
+      )
+    }
   } catch (e) {
     console.log(c.error(e.message))
   }

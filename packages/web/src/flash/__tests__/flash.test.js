@@ -1,8 +1,9 @@
 import { useEffect } from 'react'
+
+import { toHaveClass, toHaveStyle } from '@testing-library/jest-dom/matchers'
 import { render, cleanup, fireEvent } from '@testing-library/react'
 // TODO: Remove when jest configs are in place
-import { toHaveClass } from '@testing-library/jest-dom/matchers'
-expect.extend({ toHaveClass })
+expect.extend({ toHaveClass, toHaveStyle })
 
 import Flash from 'src/flash/Flash'
 import { FlashProvider, useFlash } from 'src/flash/FlashContext'
@@ -59,6 +60,23 @@ describe('Flash', () => {
     expect(getByText(testMessages[0].text)).toBeTruthy()
     expect(queryAllByTestId('message')[0]).toHaveClass(testMessages[0].classes)
     expect(queryAllByTestId('message')[1]).toHaveClass(testMessages[1].classes)
+  })
+
+  it('supports styling messages with a style object', () => {
+    const msg = [
+      {
+        text: 'A basic message',
+        style: { backgroundColor: 'green', color: 'white' },
+      },
+    ]
+    const { getByText, queryByTestId, queryAllByTestId } = render(
+      <FlashProvider>
+        <TestComponent messages={msg} />
+      </FlashProvider>
+    )
+    expect(queryByTestId('flash')).toBeTruthy()
+    expect(getByText(testMessages[0].text)).toBeTruthy()
+    expect(queryAllByTestId('message')[0]).toHaveStyle(msg[0].style)
   })
 
   it('dismisses messages on close button click', () => {

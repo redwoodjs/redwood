@@ -1,11 +1,19 @@
-import type { Context } from 'src/globalContext'
-
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import {
+  DateResolver,
+  TimeResolver,
+  DateTimeResolver,
+  JSONResolver,
+  JSONObjectResolver,
+} from 'graphql-scalars'
 import gql from 'graphql-tag'
-import { GraphQLDate, GraphQLTime, GraphQLDateTime } from 'graphql-iso-date'
-import GraphQLJSON, { GraphQLJSONObject } from 'graphql-type-json'
-
-// @ts-ignore
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore - not inside the <rootDir>
 import apiPackageJson from 'src/../package.json'
+
+import type { GlobalContext } from 'src/globalContext'
+
+const { prismaVersion } = require('@prisma/client')
 
 /**
  * This adds scalar types for dealing with Date, Time, DateTime, and JSON.
@@ -21,6 +29,7 @@ export const schema = gql`
   type Redwood {
     version: String
     currentUser: JSON
+    prismaVersion: String
   }
 
   type Query {
@@ -28,18 +37,28 @@ export const schema = gql`
   }
 `
 
-export const resolvers = {
-  Date: GraphQLDate,
-  Time: GraphQLTime,
-  DateTime: GraphQLDateTime,
-  JSON: GraphQLJSON,
-  JSONObject: GraphQLJSONObject,
+export interface Resolvers {
+  Date: typeof DateResolver
+  Time: typeof TimeResolver
+  DateTime: typeof DateTimeResolver
+  JSON: typeof JSONResolver
+  JSONObject: typeof JSONObjectResolver
+  Query: Record<string, unknown>
+}
+
+export const resolvers: Resolvers = {
+  Date: DateResolver,
+  Time: TimeResolver,
+  DateTime: DateTimeResolver,
+  JSON: JSONResolver,
+  JSONObject: JSONObjectResolver,
   Query: {
     redwood: () => ({
-      version: apiPackageJson.version,
-      currentUser: (_args: any, context: Context) => {
+      version: apiPackageJson.version as string,
+      prismaVersion: () => prismaVersion.client,
+      currentUser: (_args: any, context: GlobalContext) => {
         return context?.currentUser
-      }
+      },
     }),
   },
 }

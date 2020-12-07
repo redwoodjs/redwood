@@ -1,56 +1,46 @@
 {
   "name": "@redwoodjs/api",
-  "version": "0.12.0",
+  "version": "0.21.0",
   "files": [
-    "dist",
-    "importAll.macro.js"
+    "dist"
   ],
-  "main": "./dist/main.js",
-  "types": "./dist/main.d.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@prisma/client": "^2.1.1",
-    "@redwoodjs/internal": "^0.12.0",
-    "apollo-server-lambda": "2.14.2",
-    "babel-plugin-macros": "^2.8.0",
-    "core-js": "3.6.4",
-    "glob": "^7.1.6",
-    "graphql": "^14.6.0",
-    "graphql-iso-date": "^3.6.1",
-    "graphql-tools": "4.0.7",
-    "graphql-type-json": "^0.3.1",
+    "@prisma/client": "2.11.0",
+    "@redwoodjs/internal": "^0.21.0",
+    "apollo-server-lambda": "2.18.2",
+    "core-js": "3.6.5",
+    "graphql": "^15.3.0",
+    "graphql-scalars": "^1.4.1",
+    "graphql-tools": "6.2.4",
     "jsonwebtoken": "^8.5.1",
-    "jwks-rsa": "^1.8.0",
+    "jwks-rsa": "^1.8.1",
     "lodash.merge": "^4.6.2",
     "lodash.omitby": "^4.6.0",
     "merge-graphql-schemas": "^1.7.6"
   },
   "devDependencies": {
-    "@redwoodjs/auth": "^0.12.0",
-    "@types/graphql-iso-date": "^3.3.3",
-    "@types/graphql-type-json": "^0.3.2",
+    "@redwoodjs/auth": "^0.21.0",
+    "@redwoodjs/dev-server": "^0.21.0",
     "@types/jsonwebtoken": "^8.3.9",
     "@types/lodash.merge": "^4.6.6",
-    "@types/lodash.omitby": "^4.6.6",
-    "babel-plugin-tester": "^9.0.0",
-    "del-cli": "^3.0.0",
-    "gotrue-js": "^0.9.25",
-    "move-cli": "^1.2.1"
+    "@types/lodash.omitby": "^4.6.6"
   },
   "jest": {
     "testPathIgnorePatterns": [
-      "/fixtures/",
       "/dist/"
     ]
   },
   "scripts": {
-    "build": "yarn build:clean && yarn build:js",
-    "build:js": "yarn cross-env NODE_ENV=production babel src -d dist --extensions \".js,.ts\" --source-maps inline && yarn move-cli ./dist/importAll.macro.js ./importAll.macro.js",
-    "build:clean": "yarn del-cli dist importAll.macro.js",
-    "prepublishOnly": "yarn build",
-    "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --ignore importAll.macro.js --exec \"yarn build\"",
-    "test": "yarn jest",
+    "build": "yarn build:js && yarn build:types",
+    "prepublishOnly": "yarn cross-env NODE_ENV=production yarn build",
+    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
+    "build:types": "ttsc --build --verbose",
+    "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
+    "test": "jest",
     "test:watch": "yarn test --watch"
   },
-  "gitHead": "1cb7c8d1085147787209af423c33a9c91c3e6517"
+  "gitHead": "c235e7d7186e5e258764699c0e0e1d5cc0fdd0b5"
 }

@@ -1,8 +1,7 @@
-import path from 'path'
 import fs from 'fs'
+import path from 'path'
 
-import terminalLink from 'terminal-link'
-
+import * as options from 'src/commands/dbCommands/options'
 import { runCommandTask, getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 
@@ -10,23 +9,18 @@ export const command = 'studio'
 export const description = 'Start Prisma Studio'
 
 export const builder = (yargs) => {
-  yargs.epilogue(
-    `Also see the ${terminalLink(
-      'Redwood CLI Reference',
-      'https://redwoodjs.com/reference/command-line-interface#db-studio'
-    )}`
-  )
+  yargs.option('schema', options.schema()).epilogue(options.epilogue())
 }
 
-export const handler = async () => {
+export const handler = async ({ schema }) => {
   // No schema, no studio.
-  if (!fs.existsSync(getPaths().api.dbSchema)) {
+  if (!fs.existsSync(schema)) {
     console.log(
       `${c.warning(
         '[warning]'
       )} cannot start Prisma Studio; schema missing (${c.info(
         // So we're not hard coding schema.prisma's relative location
-        path.relative(getPaths().base, getPaths().api.dbSchema)
+        path.relative(getPaths().base, schema)
       )}).`
     )
     return
@@ -37,7 +31,7 @@ export const handler = async () => {
       {
         title: 'Starting Prisma Studio...',
         cmd: 'yarn prisma',
-        args: ['studio', '--experimental'],
+        args: ['studio', schema && `--schema="${schema}"`],
       },
     ],
     { verbose: true }

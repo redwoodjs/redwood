@@ -1,11 +1,14 @@
 {
   "references": [
-    { "path": "packages/api" },
-    { "path": "packages/core" },
-    { "path": "packages/dev-server" },
     { "path": "packages/internal" },
+    { "path": "packages/structure" },
+    { "path": "packages/core" },
+    { "path": "packages/testing" },
+    { "path": "packages/api" },
+    { "path": "packages/dev-server" },
+    { "path": "packages/api-server" },
     { "path": "packages/auth" },
-    { "path": "packages/testing" }
+    { "path": "packages/web" },
   ],
   "files": []
 }

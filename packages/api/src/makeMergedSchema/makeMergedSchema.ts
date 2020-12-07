@@ -4,10 +4,11 @@ import {
   IResolvers,
   IExecutableSchemaDefinition,
 } from 'apollo-server-lambda'
-import { mergeTypes } from 'merge-graphql-schemas'
+import { GraphQLSchema, GraphQLFieldMap } from 'graphql'
 import merge from 'lodash.merge'
 import omitBy from 'lodash.omitby'
-import { GraphQLSchema, GraphQLFieldMap } from 'graphql'
+import { mergeTypes } from 'merge-graphql-schemas'
+
 import { Services, GraphQLTypeWithFields } from 'src/types'
 
 import * as rootSchema from './rootSchema'
@@ -111,7 +112,10 @@ const mergeResolversWithServices = ({
 }
 
 const mergeResolvers = (schemas: {
-  [key: string]: { schema: object; resolvers: object }
+  [key: string]: {
+    schema: Record<string, unknown>
+    resolvers: Record<string, unknown>
+  }
 }) =>
   omitBy(
     merge(
@@ -143,7 +147,12 @@ export const makeMergedSchema = ({
   services,
   schemaDirectives,
 }: {
-  schemas: { [key: string]: { schema: object; resolvers: object } }
+  schemas: {
+    [key: string]: {
+      schema: Record<string, unknown>
+      resolvers: Record<string, unknown>
+    }
+  }
   services: Services
   schemaDirectives?: IExecutableSchemaDefinition['schemaDirectives']
 }) => {

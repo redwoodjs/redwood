@@ -6,24 +6,24 @@ import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
 
+import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
-import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
-
-const apiExists = fs.existsSync(getPaths().api.src)
-const webExists = fs.existsSync(getPaths().web.src)
-
-const optionDefault = (apiExists, webExists) => {
-  let options = []
-  if (apiExists) options.push('api')
-  if (webExists) options.push('web')
-  return options
-}
 
 export const command = 'build [side..]'
 export const description = 'Build for production'
 
 export const builder = (yargs) => {
+  const apiExists = fs.existsSync(getPaths().api.src)
+  const webExists = fs.existsSync(getPaths().web.src)
+
+  const optionDefault = (apiExists, webExists) => {
+    let options = []
+    if (apiExists) options.push('api')
+    if (webExists) options.push('web')
+    return options
+  }
+
   yargs
     .positional('side', {
       choices: ['api', 'web'],
@@ -60,7 +60,11 @@ export const handler = async ({
 }) => {
   if (side.includes('api')) {
     try {
-      await generatePrismaClient({ verbose, force: true })
+      await generatePrismaClient({
+        verbose,
+        force: true,
+        schema: getPaths().api.dbSchema,
+      })
     } catch (e) {
       console.log(c.error(e.message))
       process.exit(1)

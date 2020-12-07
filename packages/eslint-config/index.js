@@ -18,7 +18,7 @@ try {
   // building the framework and don't need this plugin.
   require.resolve('@redwoodjs/eslint-plugin-redwood')
   supportRedwoodAutoPageImports = {
-    files: ['web/src/Routes.js', 'web/src/Routes.ts'],
+    files: ['web/src/Routes.js', 'web/src/Routes.tsx'],
     rules: {
       'no-undef': 'off',
       '@redwoodjs/redwood/no-unavailable-pages': 'error',
@@ -60,9 +60,14 @@ module.exports = {
         '@typescript-eslint/no-var-requires': 'off',
         '@typescript-eslint/explicit-function-return-type': 'off',
         '@typescript-eslint/no-empty-interface': 'off',
-        'typescript-eslint/no-empty-function': 'off',
+        '@typescript-eslint/explicit-module-boundary-types': 'off',
+        '@typescript-eslint/ban-types': 'warn',
         'no-empty-function': 'off',
         '@typescript-eslint/no-empty-function': 'off',
+        camelcase: 'off',
+        '@typescript-eslint/camelcase': 'off',
+        'no-use-before-define': 'off',
+        '@typescript-eslint/no-use-before-define': 'off',
       },
     },
     supportRedwoodAutoPageImports,
@@ -74,10 +79,6 @@ module.exports = {
     },
   ].filter(Boolean),
   settings: {
-    // This is used to support our `import/order` configuration.
-    'import/resolver': {
-      'eslint-import-resolver-babel-module': {},
-    },
     react: {
       version: 'detect',
     },
@@ -92,9 +93,11 @@ module.exports = {
   globals: {
     gql: 'readonly',
     React: 'readonly',
+    mockGraphQLQuery: 'readonly',
+    mockGraphQLMutation: 'readonly',
   },
   rules: {
-    'prettier/prettier': 'error',
+    'prettier/prettier': 'warn',
     'no-console': 'off',
     'prefer-object-spread': 'warn',
     'prefer-spread': 'warn',
@@ -109,20 +112,6 @@ module.exports = {
     'no-unused-vars': [
       'error',
       { varsIgnorePattern: '^_', argsIgnorePattern: '^_' },
-    ],
-    'import/order': [
-      'warn',
-      {
-        groups: [
-          'builtin',
-          'external',
-          'internal',
-          'parent',
-          'sibling',
-          'index',
-        ],
-        'newlines-between': 'always',
-      },
     ],
     // React rules
     'react/prop-types': [

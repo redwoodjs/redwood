@@ -31,6 +31,15 @@ export const netlify = (client: NetlifyIdentity): AuthClient => {
         client.on('error', reject)
       })
     },
+    signup: () => {
+      return new Promise((resolve, reject) => {
+        client.open('signup')
+        client.on('close', () => {
+          resolve(null)
+        })
+        client.on('error', reject)
+      })
+    },
     getToken: async () => {
       const user = await client.currentUser()
       return user?.token?.access_token || null

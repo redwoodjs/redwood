@@ -25,6 +25,7 @@ const FlashMessage = ({ message, timeout }) => {
   return (
     <div
       className={`rw-flash-message ${message.classes} ${classes}`}
+      style={message.style}
       data-testid="message"
     >
       <div className="rw-flash-message-text">{message.text}</div>

@@ -2,6 +2,8 @@ import { useMutation, useFlash } from '@redwoodjs/web'
 import { navigate, routes } from '@redwoodjs/router'
 import ${singularPascalName}Form from 'src/components/${pascalScaffoldPath}${singularPascalName}Form'
 
+import { QUERY } from 'src/components/${pascalScaffoldPath}${pluralPascalName}Cell'
+
 const CREATE_${singularConstantName}_MUTATION = gql`
   mutation Create${singularPascalName}Mutation($input: Create${singularPascalName}Input!) {
     create${singularPascalName}(input: $input) {

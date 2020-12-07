@@ -1,0 +1,14 @@
+.idea
+node_modules
+dist
+yarn-error.log
+.docz
+.env
+.DS_Store
+.wip
+
+api/prisma/dev.sqlite
+packages/photon/runtime
+packages/photon/index.js
+packages/photon/index.d.ts
+

@@ -8,6 +8,7 @@ Before interacting with the Redwood community, please read and understand our [C
 
 - [Contributing](#contributing)
   - [Local Development](#local-development)
+    - [Install Dependencies](#install-dependencies)
     - [Copy and Watch](#copy-and-watch)
       - [Specifying a RW_PATH](#specifying-a-rw_path)
     - [Local Package Registry Emulation](#local-package-registry-emulation)
@@ -39,6 +40,14 @@ We offer two workflows for making this possible: "copy and watch", which has som
 **How to choose which one to use?** If you've installed or upgraded a dependency, use the "local package registry emulation" workflow; otherwise, use "copy and watch".
 
 > Both workflows use `redwood-tools` (alias `rwt`), Redwood's companion CLI development tool.
+
+### Install Dependencies
+Before running the application for the first time you should run `yarn` in the root directory to install the necessary dependencies. 
+
+```terminal 
+cd redwood
+yarn
+```
 
 ### Copy and Watch
 
@@ -184,19 +193,24 @@ yarn rw dev web
 
 ## Integration tests
 
-We're using Cypress to test the steps that we recommend in the tutorial. To run the command by doing the following:
+We're using Cypress to test the steps that we recommend in the tutorial. Run the command by doing the following:
+
 ```terminal
 yarn build
 ./tasks/test-tutorial
 ```
 
-This tests against the built packages in Redwood, it uses the base project in `__fixtures/new-project`, so any modifications to that project will also be reflected in the Cypress tests.
-If you would like to test against the packages specified in `/__fixtures__/new-project` you can start it with the following:
+This creates a new project in a tmp directory using `yarn create redwood-app ...` Once installed, it then upgrades the project to the most recent `canary` release, which means it will use the current code in the `main` branch. Once the upgrade is complete (and successful), it will start Cypress for the E2E tests.
+
+
 ```terminal
-./tasks/test-tutorial --no-local
+./tasks/test-tutorial /path/to/app
 ```
 
-The command for this is written in bash and will not work on Windows.
+Use this `path/to/app` option to run the same Cypress E2E tests against a local project. In this case, the command will _not_ upgrade the project to the `canary` release — it will use the project's installed packages. Chose this option if you have modified code (and packages) you want to test locally.
+
+
+> Windows Not Supported: The command for this is written in bash and will not work on Windows.
 
 ## Releases
 

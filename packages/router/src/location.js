@@ -3,6 +3,8 @@ import { createNamedContext, gHistory } from './internal'
 const LocationContext = createNamedContext('Location')
 
 class LocationProvider extends React.Component {
+  HISTORY_LISTENER_ID = undefined
+
   static defaultProps = {
     location: window.location,
   }
@@ -17,9 +19,13 @@ class LocationProvider extends React.Component {
   }
 
   componentDidMount() {
-    gHistory.listen(() => {
+    this.HISTORY_LISTENER_ID = gHistory.listen(() => {
       this.setState(() => ({ context: this.getContext() }))
     })
+  }
+
+  componentWillUnmount() {
+    gHistory.remove(this.HISTORY_LISTENER_ID)
   }
 
   render() {

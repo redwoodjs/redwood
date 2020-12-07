@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/cli",
   "description": "The Redwood Command Line",
-  "version": "0.12.0",
+  "version": "0.21.0",
   "license": "MIT",
   "bin": {
     "redwood": "./dist/index.js",
@@ -13,40 +13,42 @@
     "dist"
   ],
   "dependencies": {
-    "@prisma/sdk": "^2.1.1",
-    "@redwoodjs/internal": "^0.12.0",
-    "camelcase": "^5.3.1",
-    "chalk": "^3.0.0",
+    "@prisma/sdk": "2.11.0",
+    "@redwoodjs/internal": "^0.21.0",
+    "@redwoodjs/structure": "^0.21.0",
+    "boxen": "^4.2.0",
+    "camelcase": "^6.0.0",
+    "chalk": "^4.1.0",
     "concurrently": "^5.1.0",
-    "core-js": "3.6.4",
+    "core-js": "3.6.5",
     "cross-env": "^7.0.2",
     "decamelize": "^4.0.0",
-    "dotenv-defaults": "^1.1.1",
-    "envinfo": "^7.5.1",
-    "execa": "^4.0.0",
+    "dotenv-defaults": "^2.0.1",
+    "envinfo": "^7.7.3",
+    "execa": "^4.1.0",
+    "fs-extra": "^9.0.1",
     "humanize-string": "^2.1.0",
     "listr": "^0.14.3",
     "listr-verbose-renderer": "^0.6.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "param-case": "^3.0.3",
     "pascalcase": "^1.0.0",
     "pluralize": "^8.0.0",
-    "prettier": "^2.0.2",
+    "prettier": "^2.1.1",
     "terminal-link": "^2.1.1",
-    "yargs": "^15.3.1"
+    "yargs": "^16.0.3"
   },
   "devDependencies": {
-    "@types/node-fetch": "^2.5.5",
-    "rimraf": "^3.0.2"
+    "@types/node-fetch": "^2.5.5"
   },
   "scripts": {
     "build": "yarn build:js && yarn build:clean-dist",
-    "build:js": "yarn cross-env NODE_ENV=production yarn babel src -d dist --extensions \".js,.ts\" --delete-dir-on-start --copy-files --no-copy-ignored",
-    "build:clean-dist": "yarn rimraf 'dist/**/__tests__'",
     "prepublishOnly": "yarn build",
+    "build:clean-dist": "yarn rimraf 'dist/**/__tests__'",
+    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\" --copy-files --no-copy-ignored",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build\"",
     "test": "jest",
     "test:watch": "yarn test --watch"
   },
-  "gitHead": "1cb7c8d1085147787209af423c33a9c91c3e6517"
+  "gitHead": "c235e7d7186e5e258764699c0e0e1d5cc0fdd0b5"
 }

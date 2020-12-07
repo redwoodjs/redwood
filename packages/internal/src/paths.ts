@@ -1,10 +1,13 @@
-import path from 'path'
 import fs from 'fs'
+import path from 'path'
 
 import findUp from 'findup-sync'
 
+import { getConfig } from './config'
+
 export interface NodeTargetPaths {
   base: string
+  dataMigrations: string
   db: string
   dbSchema: string
   src: string
@@ -18,6 +21,7 @@ export interface NodeTargetPaths {
 export interface BrowserTargetPaths {
   base: string
   src: string
+  index: string
   routes: string
   pages: string
   components: string
@@ -29,6 +33,7 @@ export interface BrowserTargetPaths {
 
 export interface Paths {
   cache: string
+  types: string
   base: string
   web: BrowserTargetPaths
   api: NodeTargetPaths
@@ -46,8 +51,6 @@ const CONFIG_FILE_NAME = 'redwood.toml'
 
 const PATH_API_DIR_FUNCTIONS = 'api/src/functions'
 const PATH_API_DIR_GRAPHQL = 'api/src/graphql'
-const PATH_API_DIR_DB = 'api/prisma'
-const PATH_API_DIR_DB_SCHEMA = 'api/prisma/schema.prisma'
 const PATH_API_DIR_CONFIG = 'api/src/config'
 const PATH_API_DIR_LIB = 'api/src/lib'
 const PATH_API_DIR_SERVICES = 'api/src/services'
@@ -57,6 +60,7 @@ const PATH_WEB_DIR_LAYOUTS = 'web/src/layouts/'
 const PATH_WEB_DIR_PAGES = 'web/src/pages/'
 const PATH_WEB_DIR_COMPONENTS = 'web/src/components'
 const PATH_WEB_DIR_SRC = 'web/src'
+const PATH_WEB_DIR_SRC_INDEX = 'web/src/index' // .js|.tsx
 const PATH_WEB_DIR_CONFIG = 'web/config'
 const PATH_WEB_DIR_CONFIG_WEBPACK = 'web/config/webpack.config.js'
 const PATH_WEB_DIR_CONFIG_POSTCSS = 'web/config/postcss.config.js'
@@ -64,8 +68,8 @@ const PATH_WEB_DIR_CONFIG_POSTCSS = 'web/config/postcss.config.js'
 /**
  * Search the parent directories for the Redwood configuration file.
  */
-export const getConfigPath = (): string => {
-  const configPath = findUp(CONFIG_FILE_NAME)
+export const getConfigPath = (cwd: string = process.cwd()): string => {
+  const configPath = findUp(CONFIG_FILE_NAME, { cwd })
   if (!configPath) {
     throw new Error(
       `Could not find a "${CONFIG_FILE_NAME}" file, are you sure you're in a Redwood project?`
@@ -81,13 +85,17 @@ export const getBaseDir = (configPath: string = getConfigPath()): string => {
   return path.dirname(configPath)
 }
 
+export const getBaseDirFromFile = (file: string) => {
+  return getBaseDir(getConfigPath(path.dirname(file)))
+}
+
 /**
  * Use this to resolve files when the path to the file is known, but the extension
  * is not.
  */
 export const resolveFile = (
   filePath: string,
-  extensions: string[] = ['.js', '.tsx', '.ts']
+  extensions: string[] = ['.js', '.tsx', '.ts', '.jsx']
 ): string | null => {
   for (const extension of extensions) {
     const p = `${filePath}${extension}`
@@ -103,22 +111,24 @@ export const resolveFile = (
  */
 export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
   const routes = resolveFile(path.join(BASE_DIR, PATH_WEB_ROUTES)) as string
+  const { schemaPath } = getConfig(getConfigPath(BASE_DIR)).api
+  const schemaDir = path.dirname(schemaPath)
 
-  // We store ambient type declerations and our test database over here.
-  const cache = path.join(BASE_DIR, 'node_modules', '.redwood')
-  try {
-    fs.mkdirSync(cache)
-  } catch (e) {
-    // noop
-  }
+  // We store our test database over here:
+  const cache = path.join(BASE_DIR, '.redwood')
+  const types = path.join(BASE_DIR, '.redwood', 'types')
+  fs.mkdirSync(cache, { recursive: true })
+  fs.mkdirSync(types, { recursive: true })
 
   return {
     base: BASE_DIR,
     cache,
+    types,
     api: {
       base: path.join(BASE_DIR, 'api'),
-      db: path.join(BASE_DIR, PATH_API_DIR_DB),
-      dbSchema: path.join(BASE_DIR, PATH_API_DIR_DB_SCHEMA),
+      dataMigrations: path.join(BASE_DIR, schemaDir, 'dataMigrations'),
+      db: path.join(BASE_DIR, schemaDir),
+      dbSchema: path.join(BASE_DIR, schemaPath),
       functions: path.join(BASE_DIR, PATH_API_DIR_FUNCTIONS),
       graphql: path.join(BASE_DIR, PATH_API_DIR_GRAPHQL),
       lib: path.join(BASE_DIR, PATH_API_DIR_LIB),
@@ -133,6 +143,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       components: path.join(BASE_DIR, PATH_WEB_DIR_COMPONENTS),
       layouts: path.join(BASE_DIR, PATH_WEB_DIR_LAYOUTS),
       src: path.join(BASE_DIR, PATH_WEB_DIR_SRC),
+      index: path.join(BASE_DIR, PATH_WEB_DIR_SRC_INDEX),
       config: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG),
       webpack: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG_WEBPACK),
       postcss: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG_POSTCSS),
@@ -192,4 +203,28 @@ export const processPagesDir = (
     }
   })
   return deps
+}
+
+/**
+ * Converts Windows-style paths to Posix-style
+ * C:\Users\Bob\dev\Redwood -> /c/Users/Bob/dev/Redwood
+ *
+ * The conversion only happens on Windows systems, and only for paths that are
+ * not already Posix-style
+ *
+ * @param path Filesystem path
+ */
+export const ensurePosixPath = (path: string) => {
+  let posixPath = path
+
+  if (process.platform === 'win32') {
+    if (/^[A-Z]:\\/.test(path)) {
+      const drive = path[0].toLowerCase()
+      posixPath = `/${drive}/${path.substring(3)}`
+    }
+
+    posixPath = posixPath.replace(/\\/g, '/')
+  }
+
+  return posixPath
 }

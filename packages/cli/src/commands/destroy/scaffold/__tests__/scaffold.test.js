@@ -3,6 +3,7 @@ global.__dirname = __dirname
 import fs from 'fs'
 
 import 'src/lib/test'
+
 import { getPaths, getDefaultArgs } from 'src/lib'
 
 import { yargsDefaults as defaults } from '../../../generate'
@@ -20,7 +21,7 @@ jest.mock('@babel/core', () => {
 jest.mock('src/lib', () => {
   const path = require('path')
   return {
-    ...require.requireActual('src/lib'),
+    ...jest.requireActual('src/lib'),
     generateTemplate: () => '',
     getSchema: () =>
       require(path.join(global.__dirname, 'fixtures', 'post.json')),

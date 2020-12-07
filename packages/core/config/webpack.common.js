@@ -1,15 +1,17 @@
 /* eslint-disable import/no-extraneous-dependencies */
-const path = require('path')
 const { existsSync } = require('fs')
+const path = require('path')
 
-const webpack = require('webpack')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const DirectoryNamedWebpackPlugin = require('directory-named-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 const Dotenv = require('dotenv-webpack')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const webpack = require('webpack')
+const { merge } = require('webpack-merge')
+const { RetryChunkLoadPlugin } = require('webpack-retry-chunk-load-plugin')
+
 const { getConfig, getPaths } = require('@redwoodjs/internal')
-const merge = require('webpack-merge')
 
 const redwoodConfig = getConfig()
 const redwoodPaths = getPaths()
@@ -66,8 +68,8 @@ const getStyleLoaders = (isEnvProduction) => {
     ? {
         loader: 'postcss-loader',
         options: {
-          config: {
-            path: redwoodPaths.web.postcss,
+          postcssOptions: {
+            config: redwoodPaths.web.postcss,
           },
         },
       }
@@ -116,17 +118,24 @@ const getStyleLoaders = (isEnvProduction) => {
   ]
 }
 
+// Shared with storybook, as well as the RW app
 const getSharedPlugins = (isEnvProduction) => {
+  const shouldIncludeFastRefresh =
+    redwoodConfig.web.experimentalFastRefresh && !isEnvProduction
+
   return [
     isEnvProduction &&
       new MiniCssExtractPlugin({
         filename: 'static/css/[name].[contenthash:8].css',
         chunkFilename: 'static/css/[name].[contenthash:8].css',
       }),
+    shouldIncludeFastRefresh && new ReactRefreshWebpackPlugin(),
     new webpack.ProvidePlugin({
       React: 'react',
       PropTypes: 'prop-types',
-      gql: ['@redwoodjs/web', 'gql'],
+      gql: 'graphql-tag',
+      mockGraphQLQuery: ['@redwoodjs/testing', 'mockGraphQLQuery'],
+      mockGraphQLMutation: ['@redwoodjs/testing', 'mockGraphQLMutation'],
     }),
     // The define plugin will replace these keys with their values during build
     // time.
@@ -147,6 +156,9 @@ const getSharedPlugins = (isEnvProduction) => {
 module.exports = (webpackEnv) => {
   const isEnvProduction = webpackEnv === 'production'
 
+  const shouldIncludeFastRefresh =
+    redwoodConfig.web.experimentalFastRefresh && !isEnvProduction
+
   return {
     mode: isEnvProduction ? 'production' : 'development',
     devtool: isEnvProduction ? 'source-map' : 'cheap-module-source-map',
@@ -154,13 +166,7 @@ module.exports = (webpackEnv) => {
       app: path.resolve(redwoodPaths.base, 'web/src/index'),
     },
     resolve: {
-      extensions: ['.ts', '.tsx', '.js', '.json'],
-      plugins: [
-        new DirectoryNamedWebpackPlugin({
-          honorIndex: true,
-          exclude: /node_modules/,
-        }),
-      ],
+      extensions: ['.wasm', '.mjs', '.js', '.jsx', '.ts', '.tsx', '.json'],
       alias: {
         // https://www.styled-components.com/docs/faqs#duplicated-module-in-node_modules
         'styled-components': path.resolve(
@@ -179,7 +185,20 @@ module.exports = (webpackEnv) => {
         inject: true,
         chunks: 'all',
       }),
-      new CopyPlugin([{ from: 'public/', to: '', ignore: ['README.md'] }]),
+      new CopyPlugin({
+        patterns: [
+          { from: 'public/', to: '', globOptions: { ignore: ['README.md'] } },
+        ],
+      }),
+      isEnvProduction &&
+        new RetryChunkLoadPlugin({
+          cacheBust: `function() {
+					return Date.now();
+				}`,
+          maxRetries: 5,
+          // @TODO: Add redirect to fatalErrorPage
+          // lastResortScript: "window.location.href='/500.html';"
+        }),
       ...getSharedPlugins(isEnvProduction),
     ].filter(Boolean),
     module: {
@@ -207,6 +226,12 @@ module.exports = (webpackEnv) => {
               exclude: /(node_modules)/,
               use: {
                 loader: 'babel-loader',
+                options: {
+                  plugins: [
+                    shouldIncludeFastRefresh &&
+                      require.resolve('react-refresh/babel'),
+                  ].filter(Boolean),
+                },
               },
             },
             // (2)
@@ -216,6 +241,13 @@ module.exports = (webpackEnv) => {
             },
             // .module.css (3), .css (4), .module.scss (5), .scss (6)
             ...getStyleLoaders(isEnvProduction),
+            isEnvProduction && {
+              test: path.join(
+                redwoodPaths.base,
+                'node_modules/@redwoodjs/router/dist/splash-page'
+              ),
+              use: 'null-loader',
+            },
             // (7)
             {
               test: /\.(svg|ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|pdf)(\?.*)?$/,
@@ -224,7 +256,7 @@ module.exports = (webpackEnv) => {
                 name: 'static/media/[name].[hash:8].[ext]',
               },
             },
-          ],
+          ].filter(Boolean),
         },
       ],
     },

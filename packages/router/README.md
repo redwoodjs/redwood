@@ -2,7 +2,7 @@
 
 This is the built-in router for Redwood apps. It takes inspiration from Ruby on Rails, React Router, and Reach Router, but is very opinionated in its own way.
 
-> WARNING: This software is in alpha and should not be considered suitable for production use. In the "make it work; make it right; make it fast" paradigm, RR is in the later stages of the "make it work" phase.
+> **WARNING:** RedwoodJS software has not reached a stable version 1.0 and should not be considered suitable for production use. In the "make it work; make it right; make it fast" paradigm, Redwood is in the later stages of the "make it work" phase.
 
 Redwood Router (RR from now on) is designed to list all routes in a single file, without any nesting. We prefer this design, as it makes it very easy to track which routes map to which pages.
 
@@ -46,7 +46,7 @@ Some pages should only be visible to authenticated users.
 
 All `Routes` nested in `<Private>` require authentication.
 When a user is not authenticated and attempts to visit this route,
-they will be redirected to the route passed as the `unauthenticated` prop.
+they will be redirected to the route passed as the `unauthenticated` prop and the originally requested route's path will be added to the querystring in a `redirectTo` param. This lets you send the user to the originally requested once logged in.
 
 ```js
 // Routes.js
@@ -134,10 +134,18 @@ If a route has route parameters, then its named route function will take an obje
 
 ```js
 // SomePage.js
-<Link to={routes.user({ id: 7 })} />
+<Link to={routes.user({ id: 7 })}>...</Link>
 ```
 
 All parameters will be converted to strings before being inserted into the generated URL. If you don't like the default JavaScript behavior of how this conversion happens, make sure to convert to a string before passing it into the named route function.
+
+If you specify parameters to the named route function that do not correspond to parameters defined on the route, they will be appended to the end of the generated URL as search params in `key=val` format:
+
+```js
+// SomePage.js
+<Link to={routes.users({ sort: 'desc', filter: 'all' })}>...</Link>
+// => "/users?sort=desc&filter=all"
+```
 
 ## Route parameter types
 
@@ -184,7 +192,7 @@ const userRouteParamTypes = {
 
 Here we've created a custom `slug` route parameter type. It is defined by a `constraint` and a `transform`. Both are optional; the default constraint is `/[^/]+/` and the default transform is `(param) => param`.
 
-In the route we've specified a route parameter of `{name:slug}` which will invoke our custom route parameter type and if we have a requst for `/post/redwood-router`, the resulting `name` prop delivered to `PostPage` will be `['redwood', 'router']`.
+In the route we've specified a route parameter of `{name:slug}` which will invoke our custom route parameter type and if we have a request for `/post/redwood-router`, the resulting `name` prop delivered to `PostPage` will be `['redwood', 'router']`.
 
 ## useParams
 
@@ -281,6 +289,8 @@ import HomePage from 'src/pages/HomePage'
 Redwood will detect your explicit import and refrain from splitting that page into a separate bundle. Be careful with this feature, as you can easily bloat the size of your main bundle to the point where your initial page load time becomes unacceptable.
 
 ## PageLoadingContext
+
+> **VIDEO:** If you'd prefer to watch a video, there's one accompanying this section: https://www.youtube.com/watch?v=BVkyXjUQADs&feature=youtu.be
 
 Because lazily-loaded pages can take a non-negligible amount of time to load (depending on bundle size and network connection), you may want to show a loading indicator to signal to the user that something is happening after they click a link. RR makes this really easy with `usePageLoadingContext`:
 

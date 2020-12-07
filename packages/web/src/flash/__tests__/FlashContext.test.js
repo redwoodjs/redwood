@@ -1,6 +1,6 @@
+import { toHaveClass } from '@testing-library/jest-dom/matchers'
 import { render, fireEvent } from '@testing-library/react'
 // TODO: Remove when jest configs are in place
-import { toHaveClass } from '@testing-library/jest-dom/matchers'
 expect.extend({ toHaveClass })
 
 import { FlashProvider, useFlash } from 'src/flash/FlashContext'

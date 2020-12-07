@@ -1,0 +1,38 @@
+{
+  "name": "@redwoodjs/api-server",
+  "description": "Redwood's HTTP server for Serverless Functions",
+  "version": "0.21.0",
+  "bin": {
+    "api-server": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@babel/register": "^7.9.0",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0",
+    "qs": "^6.9.3",
+    "require-dir": "^1.2.0",
+    "yargs": "^16.0.3",
+    "youch": "^2.1.1",
+    "youch-terminal": "^1.0.1"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.46",
+    "@types/express": "^4.17.3",
+    "@types/morgan": "^1.9.0",
+    "@types/qs": "^6.9.1",
+    "@types/require-dir": "^1.0.1",
+    "@types/stack-trace": "^0.0.29"
+  },
+  "scripts": {
+    "build": "yarn build:js",
+    "prepublishOnly": "yarn cross-env NODE_ENV=production yarn build",
+    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
+    "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\""
+  },
+  "gitHead": "c235e7d7186e5e258764699c0e0e1d5cc0fdd0b5"
+}

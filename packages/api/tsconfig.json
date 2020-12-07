@@ -1,17 +1,17 @@
 {
   "extends": "../../tsconfig.compilerOption.json",
   "compilerOptions": {
-    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
     "baseUrl": ".",
     "rootDir": "src",
+    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
     "outDir": "dist",
-    "resolveJsonModule": true
+    "paths": {
+      "src/*": ["./src/*"]
+    }
   },
   "include": ["src", "src/../package.json"],
-  "exclude": ["**/__tests__", "**/__mocks__"],
   "references": [
-    {
-      "path": "../auth"
-    }
+    { "path": "../auth" },
+    { "path": "../dev-server" }
   ]
 }

@@ -2,6 +2,7 @@ global.__dirname = __dirname
 import path from 'path'
 
 import { loadGeneratorFixture } from 'src/lib/test'
+
 import { getDefaultArgs } from 'src/lib'
 
 import * as sdl from '../sdl'
@@ -124,6 +125,21 @@ const itCreatesASDLFileWithEnumDefinitions = (baseArgs = {}) => {
   })
 }
 
+const itCreatesASDLFileWithJsonDefinitions = (baseArgs = {}) => {
+  test('creates a sdl file with json definitions', async () => {
+    const files = await sdl.files({ ...baseArgs, name: 'Photo', crud: true })
+    const extension = extensionForBaseArgs(baseArgs)
+
+    expect(
+      files[
+        path.normalize(
+          `/path/to/project/api/src/graphql/photos.sdl.${extension}`
+        )
+      ]
+    ).toEqual(loadGeneratorFixture('sdl', `jsonGeneratedSdl.${extension}`))
+  })
+}
+
 describe('in javascript mode', () => {
   const baseArgs = getDefaultArgs(sdl.defaults)
 
@@ -134,6 +150,7 @@ describe('in javascript mode', () => {
   itCreatesASingleWordSDLFileWithCRUD(baseArgs)
   itCreateAMultiWordSDLFileWithCRUD(baseArgs)
   itCreatesASDLFileWithEnumDefinitions(baseArgs)
+  itCreatesASDLFileWithJsonDefinitions(baseArgs)
 })
 
 describe('in typescript mode', () => {
@@ -146,4 +163,5 @@ describe('in typescript mode', () => {
   itCreatesASingleWordSDLFileWithCRUD(baseArgs)
   itCreateAMultiWordSDLFileWithCRUD(baseArgs)
   itCreatesASDLFileWithEnumDefinitions(baseArgs)
+  itCreatesASDLFileWithJsonDefinitions(baseArgs)
 })

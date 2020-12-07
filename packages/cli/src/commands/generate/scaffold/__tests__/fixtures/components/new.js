@@ -2,6 +2,8 @@ import { useMutation, useFlash } from '@redwoodjs/web'
 import { navigate, routes } from '@redwoodjs/router'
 import PostForm from 'src/components/PostForm'
 
+import { QUERY } from 'src/components/PostsCell'
+
 const CREATE_POST_MUTATION = gql`
   mutation CreatePostMutation($input: CreatePostInput!) {
     createPost(input: $input) {

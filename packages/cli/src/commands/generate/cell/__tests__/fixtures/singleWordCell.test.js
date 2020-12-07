@@ -1,28 +1,34 @@
 import { render, screen } from '@redwoodjs/testing'
-
 import { Loading, Empty, Failure, Success } from './UserCell'
+import { standard } from './UserCell.mock'
 
 describe('UserCell', () => {
-  it('Loading renders successfully', () => {
-    render(<Loading />)
-    // Use screen.debug() to see output.
-    expect(screen.queryByText('Loading...')).toBeInTheDocument()
+  test('Loading renders successfully', () => {
+    expect(() => {
+      render(<Loading />)
+    }).not.toThrow()
   })
 
-  it('Empty renders successfully', () => {
-    render(<Empty />)
-    expect(screen.queryByText('Empty')).toBeInTheDocument()
+  test('Empty renders successfully', async () => {
+    expect(() => {
+      render(<Empty />)
+    }).not.toThrow()
   })
 
-  it('Failure renders successfully', () => {
-    render(<Failure error={{ message: 'Oh no!' }} />)
-    expect(screen.queryByText('Error: Oh no!')).toBeInTheDocument()
+  test('Failure renders successfully', async () => {
+    expect(() => {
+      render(<Failure error={new Error('Oh no')} />)
+    }).not.toThrow()
   })
 
-  it('Success renders successfully', () => {
-    render(<Success userExample={{ user: { objectKey: 'objectValue' } }} />)
-    expect(
-      screen.queryByText('{"user":{"objectKey":"objectValue"}}')
-    ).toBeInTheDocument()
+  // When you're ready to test the actual output of your component render
+  // you could test that, for example, certain text is present:
+  //
+  //   expect(screen.getByText('Hello, world')).toBeInTheDocument()
+
+  test('Success renders successfully', async () => {
+    expect(() => {
+      render(<Success user={standard().user} />)
+    }).not.toThrow()
   })
 })

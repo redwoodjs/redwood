@@ -1,0 +1,11 @@
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: 'Inconsolata', monospace;
+}
+
+@import url('https://fonts.googleapis.com/css?family=Inconsolata:400,700');
