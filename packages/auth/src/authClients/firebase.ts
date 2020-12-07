@@ -14,6 +14,14 @@ export type oAuthProvider =
   | 'microsoft.com'
   | 'apple.com'
 
+export type PasswordProvider = { email: string; password: string }
+
+const isPasswordProvider = (
+  usingProvider: oAuthProvider | PasswordProvider
+): usingProvider is PasswordProvider => {
+  return (usingProvider as PasswordProvider).email !== undefined
+}
+
 export const firebase = (client: Firebase): AuthClient => {
   // Use a function to allow us to extend for non-oauth providers in the future
   const getProvider = (providerId: oAuthProvider) => {
@@ -24,12 +32,34 @@ export const firebase = (client: Firebase): AuthClient => {
     type: 'firebase',
     client,
     restoreAuthState: () => client.auth().getRedirectResult(),
-    login: async (usingProvider: oAuthProvider = 'google.com') => {
+    login: async (
+      usingProvider: oAuthProvider | PasswordProvider = 'google.com'
+    ) => {
+      if (isPasswordProvider(usingProvider)) {
+        return client
+          .auth()
+          .signInWithEmailAndPassword(
+            usingProvider.email,
+            usingProvider.password
+          )
+      }
+
       const provider = getProvider(usingProvider)
       return client.auth().signInWithPopup(provider)
     },
     logout: () => client.auth().signOut(),
-    signup: async (usingProvider: oAuthProvider = 'google.com') => {
+    signup: async (
+      usingProvider: oAuthProvider | PasswordProvider = 'google.com'
+    ) => {
+      if (isPasswordProvider(usingProvider)) {
+        return client
+          .auth()
+          .createUserWithEmailAndPassword(
+            usingProvider.email,
+            usingProvider.password
+          )
+      }
+
       const provider = getProvider(usingProvider)
       return client.auth().signInWithPopup(provider)
     },
