@@ -38,7 +38,7 @@ export const paramVariants = (path) => {
   }
 }
 
-export const files = ({ name, ...rest }) => {
+export const files = ({ name, tests, stories, ...rest }) => {
   const pageFile = templateForComponentFile({
     name,
     suffix: COMPONENT_SUFFIX,
@@ -66,20 +66,27 @@ export const files = ({ name, ...rest }) => {
     templateVars: rest,
   })
 
+  const files = [pageFile]
+
+  if (tests) {
+    files.push(testFile)
+  }
+
+  if (stories) {
+    files.push(storiesFile)
+  }
+
   // Returns
   // {
   //    "path/to/fileA": "<<<template>>>",
   //    "path/to/fileB": "<<<template>>>",
   // }
-  return [pageFile, testFile, storiesFile].reduce(
-    (acc, [outputPath, content]) => {
-      return {
-        [outputPath]: content,
-        ...acc,
-      }
-    },
-    {}
-  )
+  return files.reduce((acc, [outputPath, content]) => {
+    return {
+      [outputPath]: content,
+      ...acc,
+    }
+  }, {})
 }
 
 export const routes = ({ name, path }) => {
@@ -108,6 +115,16 @@ export const builder = (yargs) => {
       description: 'Overwrite existing files',
       type: 'boolean',
     })
+    .option('tests', {
+      description: 'Generate test files',
+      type: 'boolean',
+      default: true,
+    })
+    .option('stories', {
+      description: 'Generate storybook files',
+      type: 'boolean',
+      default: true,
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -116,7 +133,13 @@ export const builder = (yargs) => {
     )
 }
 
-export const handler = async ({ name, path, force }) => {
+export const handler = async ({
+  name,
+  path,
+  force,
+  tests = true,
+  stories = true,
+}) => {
   if (process.platform === 'win32') {
     // running `yarn rw g page home /` on Windows using GitBash
     // POSIX-to-Windows path conversion will kick in.
@@ -150,7 +173,13 @@ export const handler = async ({ name, path, force }) => {
         title: 'Generating page files...',
         task: async () => {
           path = pathName(path, name)
-          const f = await files({ name, path, ...paramVariants(path) })
+          const f = await files({
+            name,
+            path,
+            tests,
+            stories,
+            ...paramVariants(path),
+          })
           return writeFilesTask(f, { overwriteExisting: force })
         },
       },

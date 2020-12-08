@@ -270,3 +270,17 @@ describe('in typescript mode', () => {
   itCreatesASingleWordServiceFileWithABelongsToRelation(baseArgs)
   itCreatesASingleWordServiceFileWithMultipleRelations(baseArgs)
 })
+
+test("doesn't include test file when --tests is set to false", async () => {
+  const baseArgs = { ...getDefaultArgs(service.defaults), javascript: true }
+
+  const files = await service.files({
+    ...baseArgs,
+    name: 'User',
+    tests: false,
+  })
+
+  expect(Object.keys(files)).toEqual([
+    path.normalize('/path/to/project/api/src/services/users/users.js'),
+  ])
+})

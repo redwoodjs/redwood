@@ -1,6 +1,7 @@
 import * as auth0Decoder from './../auth/decoders/auth0'
 import { decodeToken } from './../auth/decoders/index'
 import * as netlifyDecoder from './../auth/decoders/netlify'
+import * as supabaseDecoder from './../auth/decoders/supabase'
 import mockedAPIGatewayProxyEvent from './fixtures/apiGatewayProxyEvent.fixture'
 
 jest.mock('./../auth/decoders/auth0', () => {
@@ -15,6 +16,14 @@ jest.mock('./../auth/decoders/netlify', () => {
   return {
     netlify: jest.fn().mockImplementation(async () => {
       return { decodedWith: 'netlify', fakeDecodedToken: true }
+    }),
+  }
+})
+
+jest.mock('./../auth/decoders/supabase', () => {
+  return {
+    supabase: jest.fn().mockImplementation(async () => {
+      return { decodedWith: 'supabase', fakeDecodedToken: true }
     }),
   }
 })
@@ -97,13 +106,20 @@ describe('Uses correct Auth decoder', () => {
     expect(output).toEqual(MOCKED_JWT)
   })
 
-  it('returns undecoded token for supabase', async () => {
+  it('decodes supabase with supabase decoder', async () => {
     const output = await decodeToken('supabase', MOCKED_JWT, {
       event: mockedAPIGatewayProxyEvent,
       context: {},
     })
 
-    expect(output).toEqual(MOCKED_JWT)
+    expect(supabaseDecoder.supabase).toHaveBeenCalledWith(
+      MOCKED_JWT,
+      expect.anything()
+    )
+    expect(output).toEqual({
+      decodedWith: 'supabase',
+      fakeDecodedToken: true,
+    })
   })
 
   it('returns undecoded token for unknown values', async () => {

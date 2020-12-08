@@ -1,8 +1,10 @@
 import camelcase from 'camelcase'
-import pluralize from 'pluralize'
 import pascalcase from 'pascalcase'
+import pluralize from 'pluralize'
 import terminalLink from 'terminal-link'
+
 import { getSchema, asyncForEach } from 'src/lib'
+
 import { transformTSToJS } from '../../../lib'
 import { yargsDefaults } from '../../generate'
 import {
@@ -100,6 +102,7 @@ export const buildScenario = async (model) => {
 
 export const files = async ({
   name,
+  tests = true,
   relations,
   javascript,
   typescript,
@@ -139,29 +142,37 @@ export const files = async ({
     },
   })
 
+  const files = [serviceFile]
+  if (tests) {
+    files.push(testFile)
+    files.push(scenariosFile)
+  }
+
   // Returns
   // {
   //    "path/to/fileA": "<<<template>>>",
   //    "path/to/fileB": "<<<template>>>",
   // }
-  return [serviceFile, testFile, scenariosFile].reduce(
-    (acc, [outputPath, content]) => {
-      if (javascript && !typescript) {
-        content = transformTSToJS(outputPath, content)
-        outputPath = outputPath.replace('.ts', '.js')
-      }
+  return files.reduce((acc, [outputPath, content]) => {
+    if (javascript && !typescript) {
+      content = transformTSToJS(outputPath, content)
+      outputPath = outputPath.replace('.ts', '.js')
+    }
 
-      return {
-        [outputPath]: content,
-        ...acc,
-      }
-    },
-    {}
-  )
+    return {
+      [outputPath]: content,
+      ...acc,
+    }
+  }, {})
 }
 
 export const defaults = {
   ...yargsDefaults,
+  tests: {
+    default: true,
+    description: 'Generate test files',
+    type: 'boolean',
+  },
   crud: {
     default: false,
     description: 'Create CRUD functions',
