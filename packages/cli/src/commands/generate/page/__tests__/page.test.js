@@ -36,33 +36,59 @@ jest.mock('fs', () => {
   }
 })
 
-import path from 'path'
 import fs from 'fs'
+import path from 'path'
 
 import { loadGeneratorFixture } from 'src/lib/test'
+
 import { getPaths } from 'src/lib'
 
 import { pathName } from '../../helpers'
 import * as page from '../page'
 
-let singleWordFiles, multiWordFiles, pluralWordFiles, paramFiles
+let singleWordFiles,
+  multiWordFiles,
+  pluralWordFiles,
+  paramFiles,
+  noTestsFiles,
+  noStoriesFiles
 
 beforeAll(() => {
   singleWordFiles = page.files({
     name: 'Home',
+    tests: true,
+    stories: true,
     ...page.paramVariants(pathName(undefined, 'home')),
   })
   multiWordFiles = page.files({
     name: 'ContactUs',
+    tests: true,
+    stories: true,
     ...page.paramVariants(pathName(undefined, 'contact-us')),
   })
   pluralWordFiles = page.files({
     name: 'Cats',
+    tests: true,
+    stories: true,
     ...page.paramVariants(pathName(undefined, 'cats')),
   })
   paramFiles = page.files({
     name: 'Post',
+    tests: true,
+    stories: true,
     ...page.paramVariants(pathName('{id}', 'post')),
+  })
+  noTestsFiles = page.files({
+    name: 'NoTests',
+    tests: false,
+    stories: true,
+    ...page.paramVariants(pathName(undefined, 'no-tests')),
+  })
+  noStoriesFiles = page.files({
+    name: 'NoStories',
+    tests: true,
+    stories: false,
+    ...page.paramVariants(pathName(undefined, 'no-stories')),
   })
 })
 
@@ -148,6 +174,26 @@ test('creates a test for page component with params', () => {
       path.normalize('/path/to/project/web/src/pages/PostPage/PostPage.test.js')
     ]
   ).toEqual(loadGeneratorFixture('page', 'paramPage.test.js'))
+})
+
+test('doesnt create a test for page component when tests=false', () => {
+  expect(Object.keys(noTestsFiles)).toEqual([
+    path.normalize(
+      '/path/to/project/web/src/pages/NoTestsPage/NoTestsPage.stories.js'
+    ),
+    path.normalize('/path/to/project/web/src/pages/NoTestsPage/NoTestsPage.js'),
+  ])
+})
+
+test('doesnt create a story for page component when stories=false', () => {
+  expect(Object.keys(noStoriesFiles)).toEqual([
+    path.normalize(
+      '/path/to/project/web/src/pages/NoStoriesPage/NoStoriesPage.test.js'
+    ),
+    path.normalize(
+      '/path/to/project/web/src/pages/NoStoriesPage/NoStoriesPage.js'
+    ),
+  ])
 })
 
 test('creates a single-word route name', () => {

@@ -1,9 +1,10 @@
 import path from 'path'
 
 import Listr from 'listr'
-import pascalcase from 'pascalcase'
 import { paramCase } from 'param-case'
+import pascalcase from 'pascalcase'
 import terminalLink from 'terminal-link'
+
 import { ensurePosixPath } from '@redwoodjs/internal'
 
 import { generateTemplate, getPaths, writeFilesTask } from 'src/lib'
@@ -92,6 +93,16 @@ export const createYargsForComponentGeneration = ({
             `https://redwoodjs.com/reference/command-line-interface#generate-${componentName}`
           )}`
         )
+        .option('tests', {
+          description: 'Generate test files',
+          type: 'boolean',
+          default: true,
+        })
+        .option('stories', {
+          description: 'Generate storybook files',
+          type: 'boolean',
+          default: true,
+        })
       Object.entries(builderObj).forEach(([option, config]) => {
         yargs.option(option, config)
       })

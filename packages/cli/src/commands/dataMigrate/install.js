@@ -1,7 +1,7 @@
 import path from 'path'
 
-import fs from 'fs-extra'
 import execa from 'execa'
+import fs from 'fs-extra'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
 

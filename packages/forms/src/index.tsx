@@ -1,4 +1,6 @@
 import React, { useContext, useEffect, forwardRef } from 'react'
+
+import pascalcase from 'pascalcase'
 import {
   useForm,
   FormProvider,
@@ -7,7 +9,6 @@ import {
   UseFormMethods,
   UseFormOptions,
 } from 'react-hook-form'
-import pascalcase from 'pascalcase'
 
 import {
   CoercionContextProvider,

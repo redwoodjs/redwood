@@ -11,6 +11,7 @@ import {
 
 export const files = async ({
   name,
+  tests = true,
   relations,
   javascript,
   typescript,
@@ -37,12 +38,17 @@ export const files = async ({
     templateVars: { relations: relations || [], ...rest },
   })
 
+  const files = [serviceFile]
+  if (tests) {
+    files.push(testFile)
+  }
+
   // Returns
   // {
   //    "path/to/fileA": "<<<template>>>",
   //    "path/to/fileB": "<<<template>>>",
   // }
-  return [serviceFile, testFile].reduce((acc, [outputPath, content]) => {
+  return files.reduce((acc, [outputPath, content]) => {
     if (javascript && !typescript) {
       content = transformTSToJS(outputPath, content)
       outputPath = outputPath.replace('.ts', '.js')
@@ -57,6 +63,11 @@ export const files = async ({
 
 export const defaults = {
   ...yargsDefaults,
+  tests: {
+    default: true,
+    description: 'Generate test files',
+    type: 'boolean',
+  },
   crud: {
     default: false,
     description: 'Create CRUD functions',

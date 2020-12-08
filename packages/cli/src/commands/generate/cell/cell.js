@@ -31,7 +31,7 @@ const uniqueOperationName = async (name, index = 1) => {
   return uniqueOperationName(name, index + 1)
 }
 
-export const files = async ({ name }) => {
+export const files = async ({ name, tests = true, stories = true }) => {
   // Create a unique operation name.
   const operationName = await uniqueOperationName(name)
 
@@ -70,20 +70,31 @@ export const files = async ({ name }) => {
     templatePath: 'mock.js.template',
   })
 
+  const files = [cellFile]
+
+  if (stories) {
+    files.push(storiesFile)
+  }
+
+  if (tests) {
+    files.push(testFile)
+  }
+
+  if (stories || tests) {
+    files.push(mockFile)
+  }
+
   // Returns
   // {
   //    "path/to/fileA": "<<<template>>>",
   //    "path/to/fileB": "<<<template>>>",
   // }
-  return [cellFile, testFile, storiesFile, mockFile].reduce(
-    (acc, [outputPath, content]) => {
-      return {
-        [outputPath]: content,
-        ...acc,
-      }
-    },
-    {}
-  )
+  return files.reduce((acc, [outputPath, content]) => {
+    return {
+      [outputPath]: content,
+      ...acc,
+    }
+  }, {})
 }
 
 export const {

@@ -1,5 +1,5 @@
-import { runCommandTask } from 'src/lib'
 import * as options from 'src/commands/dbCommands/options'
+import { runCommandTask } from 'src/lib'
 
 export const command = 'save [name..]'
 export const description = 'Create a new migration'
