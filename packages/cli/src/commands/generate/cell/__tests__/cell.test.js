@@ -17,7 +17,10 @@ let singleWordFiles,
   multiWordFiles,
   snakeCaseWordFiles,
   kebabCaseWordFiles,
-  camelCaseWordFiles
+  camelCaseWordFiles,
+  withoutTestFiles,
+  withoutStoryFiles,
+  withoutTestAndStoryFiles
 
 beforeAll(async () => {
   singleWordFiles = await cell.files({ name: 'User' })
@@ -25,6 +28,13 @@ beforeAll(async () => {
   snakeCaseWordFiles = await cell.files({ name: 'user_profile' })
   kebabCaseWordFiles = await cell.files({ name: 'user-profile' })
   camelCaseWordFiles = await cell.files({ name: 'userProfile' })
+  withoutTestFiles = await cell.files({ name: 'User', tests: false })
+  withoutStoryFiles = await cell.files({ name: 'User', stories: false })
+  withoutTestAndStoryFiles = await cell.files({
+    name: 'User',
+    tests: false,
+    stories: false,
+  })
 })
 
 // Single Word Scenario: User
@@ -232,4 +242,34 @@ test('creates a cell mock with a camelCase word name', () => {
       )
     ]
   ).toEqual(loadGeneratorFixture('cell', 'camelCaseWordCell.mock.js'))
+})
+
+test("doesn't include test file when --tests is set to false", () => {
+  expect(Object.keys(withoutTestFiles)).toEqual([
+    path.normalize(
+      '/path/to/project/web/src/components/UserCell/UserCell.mock.js'
+    ),
+    path.normalize(
+      '/path/to/project/web/src/components/UserCell/UserCell.stories.js'
+    ),
+    path.normalize('/path/to/project/web/src/components/UserCell/UserCell.js'),
+  ])
+})
+
+test("doesn't include storybook file when --stories is set to false", () => {
+  expect(Object.keys(withoutStoryFiles)).toEqual([
+    path.normalize(
+      '/path/to/project/web/src/components/UserCell/UserCell.mock.js'
+    ),
+    path.normalize(
+      '/path/to/project/web/src/components/UserCell/UserCell.test.js'
+    ),
+    path.normalize('/path/to/project/web/src/components/UserCell/UserCell.js'),
+  ])
+})
+
+test("doesn't include storybook and test files when --stories and --tests is set to false", () => {
+  expect(Object.keys(withoutTestAndStoryFiles)).toEqual([
+    path.normalize('/path/to/project/web/src/components/UserCell/UserCell.js'),
+  ])
 })

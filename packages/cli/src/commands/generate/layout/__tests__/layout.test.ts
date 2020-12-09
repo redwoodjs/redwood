@@ -8,7 +8,9 @@ import * as layout from '../layout'
 let singleWordDefaultFiles,
   multiWordDefaultFiles,
   javascriptFiles,
-  typescriptFiles
+  typescriptFiles,
+  withoutTestFiles,
+  withoutStoryFiles
 
 beforeAll(() => {
   singleWordDefaultFiles = layout.files({ name: 'App' })
@@ -20,6 +22,16 @@ beforeAll(() => {
   typescriptFiles = layout.files({
     name: 'TypescriptPage',
     typescript: true,
+  })
+  withoutTestFiles = layout.files({
+    name: 'withoutTests',
+    javascript: true,
+    tests: false
+  })
+  withoutStoryFiles = layout.files({
+    name: 'withoutStories',
+    javascript: true,
+    stories: false
   })
 })
 
@@ -117,4 +129,26 @@ test('creates TS layout components if typescript = true', () => {
       )
     ]
   ).not.toBeUndefined()
+})
+
+test("doesn't include storybook file when --stories is set to false", () => {
+  expect(Object.keys(withoutStoryFiles)).toEqual([
+    path.normalize(
+      '/path/to/project/web/src/layouts/WithoutStoriesLayout/WithoutStoriesLayout.test.js'
+    ),
+    path.normalize(
+      '/path/to/project/web/src/layouts/WithoutStoriesLayout/WithoutStoriesLayout.js'
+    ),
+  ])
+})
+
+test("doesn't include test file when --tests is set to false", () => {
+  expect(Object.keys(withoutTestFiles)).toEqual([
+    path.normalize(
+      '/path/to/project/web/src/layouts/WithoutTestsLayout/WithoutTestsLayout.stories.js'
+    ),
+    path.normalize(
+      '/path/to/project/web/src/layouts/WithoutTestsLayout/WithoutTestsLayout.js'
+    ),
+  ])
 })

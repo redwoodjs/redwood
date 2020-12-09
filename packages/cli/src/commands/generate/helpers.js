@@ -93,6 +93,16 @@ export const createYargsForComponentGeneration = ({
             `https://redwoodjs.com/reference/command-line-interface#generate-${componentName}`
           )}`
         )
+        .option('tests', {
+          description: 'Generate test files',
+          type: 'boolean',
+          default: true,
+        })
+        .option('stories', {
+          description: 'Generate storybook files',
+          type: 'boolean',
+          default: true,
+        })
       Object.entries(builderObj).forEach(([option, config]) => {
         yargs.option(option, config)
       })
