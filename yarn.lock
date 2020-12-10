@@ -13496,6 +13496,13 @@ ms@2.1.2, ms@^2.0.0, ms@^2.1.1, ms@^2.1.2:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
   integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
 
+msal@^1.4.1:
+  version "1.4.4"
+  resolved "https://registry.yarnpkg.com/msal/-/msal-1.4.4.tgz#3f9b5a4442aa711c12ab8e88b8ed89b293f99711"
+  integrity sha512-aOBD/L6jAsizDFzKxxvXxH0FEDjp6Inr3Ufi/Y2o7KCFKN+akoE2sLeszEb/0Y3VxHxK0F0ea7xQ/HHTomKivw==
+  dependencies:
+    tslib "^1.9.3"
+
 msw@0.21.2, msw@^0.21.2:
   version "0.21.2"
   resolved "https://registry.yarnpkg.com/msw/-/msw-0.21.2.tgz#74ed10b8eb224325652a3c3812b5460dac297bd8"
