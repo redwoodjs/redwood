@@ -3674,7 +3674,7 @@
     query-string "^6.12.1"
     websocket "^1.0.31"
 
-"@supabase/supabase-js@^1.0.7":
+"@supabase/supabase-js@^1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@supabase/supabase-js/-/supabase-js-1.1.1.tgz#9ed353794665b789054885fc90a1c8d6fe561bee"
   integrity sha512-BsLugIfTgfKVJC1H/fWHqV1QKK+2EFE2AYbS51XRwF0fBKV885RG6Tiq9vZidNeO/Mw8TZKpZ9pD8tQ8FIbLAQ==
