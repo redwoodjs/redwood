@@ -4192,10 +4192,10 @@
   dependencies:
     "@types/node" "*"
 
-"@types/netlify-identity-widget@^1.4.1":
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/@types/netlify-identity-widget/-/netlify-identity-widget-1.9.0.tgz#b7628eb5c76228aa9477f1b6caef9f1f16e6e4aa"
-  integrity sha512-2g5N3v2sOsLCiDrtGQfZwnmTkikMPUKb5VtsJ5BTPsBDHLfxsCsFEE6MnZHKavAK/nTJWh0MkqylkhnyjoWU5Q==
+"@types/netlify-identity-widget@^1.9.1":
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/@types/netlify-identity-widget/-/netlify-identity-widget-1.9.1.tgz#12de68a25bae286211bd38eaaeb5cde92f39b710"
+  integrity sha512-xpFJL+1lQN2L+TLuX2tKyUlAcXhZuTEFGzsmaqjtm/sVY8YdPjMhT/iHoxJqeZQYZ5TtKtAlZqqdbEAIUvJwHQ==
 
 "@types/node-fetch@2.5.7", "@types/node-fetch@^2.5.5":
   version "2.5.7"
