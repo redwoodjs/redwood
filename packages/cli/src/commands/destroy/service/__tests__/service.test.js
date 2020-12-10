@@ -1,6 +1,4 @@
 global.__dirname = __dirname
-import { loadGeneratorFixture as _loadGeneratorFixture } from 'src/lib/test'
-
 import fs from 'fs'
 
 import 'src/lib/test'
@@ -19,9 +17,12 @@ jest.mock('@babel/core', () => {
   }
 })
 jest.mock('src/lib', () => {
+  const path = require('path')
   return {
     ...jest.requireActual('src/lib'),
     generateTemplate: () => '',
+    getSchema: () =>
+      require(path.join(global.__dirname, 'fixtures', 'post.json')),
   }
 })
 
