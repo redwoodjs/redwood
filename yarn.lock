@@ -17880,10 +17880,10 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript-transform-paths@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/typescript-transform-paths/-/typescript-transform-paths-2.0.2.tgz#7040eab666f1921fb4b08ee0a0f21d77403187df"
-  integrity sha512-LRGd/pf73zN275t6Zz6TA3N1jeEHYRnHuiNHUwrGZmFuwt+dmiWeNklz+/e1IcCc5dA6LDI+F+ALe5NyyVFSVQ==
+typescript-transform-paths@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/typescript-transform-paths/-/typescript-transform-paths-2.1.0.tgz#3d5c492910c59ce1a7bb762d3078185cbd11940d"
+  integrity sha512-xBzFzS5LTfTjyuT4fuqIk3MLDWsrJTNFs3y17CwVR54G6G/KtTZcVc9UjChgDTuoBffd+Q3oD99UtyDXRpuy/g==
 
 typescript@^4.0.2, typescript@~4.0.2:
   version "4.0.3"
