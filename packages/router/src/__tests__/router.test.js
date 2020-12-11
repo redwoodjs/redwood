@@ -2,9 +2,11 @@ import { render, waitFor, act } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 
 import { Router, Route, Private, Redirect, navigate, routes } from '../'
+import { resetNamedRoutes } from '../named-routes'
 
 // SETUP
 const HomePage = () => <h1>Home Page</h1>
+const LoginPage = () => <h1>Login Page</h1>
 const AboutPage = () => <h1>About Page</h1>
 const PrivatePage = () => <h1>Private Page</h1>
 const RedirectPage = () => <Redirect to="/about" />
@@ -17,6 +19,7 @@ const mockAuth = (isAuthenticated = false) => {
 
 beforeEach(() => {
   window.history.pushState({}, null, '/')
+  resetNamedRoutes()
 })
 
 test('inits routes and navigates as expected', async () => {
@@ -67,8 +70,9 @@ test('unauthenticated user is redirected away from private page', async () => {
   const TestRouter = () => (
     <Router useAuth={window.__REDWOOD__USE_AUTH}>
       <Route path="/" page={HomePage} name="home" />
+      <Route path="/login" page={LoginPage} name="login" />
       <Route path="/about" page={AboutPage} name="about" />
-      <Private unauthenticated="home">
+      <Private unauthenticated="login">
         <Route path="/private" page={PrivatePage} name="private" />
       </Private>
     </Router>
@@ -79,11 +83,44 @@ test('unauthenticated user is redirected away from private page', async () => {
   await waitFor(() => screen.getByText(/Home Page/i))
 
   // navigate to private page
-  // should redirect to home
+  // should redirect to login
   act(() => navigate(routes.private()))
+
   await waitFor(() => {
     expect(screen.queryByText(/Private Page/i)).not.toBeInTheDocument()
-    screen.getByText(/Home Page/i)
+    expect(window.location.pathname).toBe('/login')
+    expect(window.location.search).toBe('?redirectTo=/private')
+    screen.getByText(/Login Page/i)
+  })
+})
+
+test('unauthenticated user is redirected including search params', async () => {
+  mockAuth(false)
+  const TestRouter = () => (
+    <Router useAuth={window.__REDWOOD__USE_AUTH}>
+      <Route path="/" page={HomePage} name="home" />
+      <Route path="/login" page={LoginPage} name="login" />
+      <Private unauthenticated="login">
+        <Route path="/private" page={PrivatePage} name="private" />
+      </Private>
+    </Router>
+  )
+  const screen = render(<TestRouter />)
+
+  // starts on home page
+  await waitFor(() => screen.getByText(/Home Page/i))
+
+  // navigate to private page
+  // should redirect to login
+  act(() => navigate(routes.private({ bazinga: 'yeah' })))
+
+  await waitFor(() => {
+    expect(screen.queryByText(/Private Page/i)).not.toBeInTheDocument()
+    expect(window.location.pathname).toBe('/login')
+    expect(window.location.search).toBe(
+      `?redirectTo=/private${encodeURIComponent('?bazinga=yeah')}`
+    )
+    screen.getByText(/Login Page/i)
   })
 })
 
