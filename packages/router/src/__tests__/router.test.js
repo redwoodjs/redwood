@@ -87,7 +87,7 @@ test('unauthenticated user is redirected away from private page', async () => {
   act(() => navigate(routes.private()))
 
   await waitFor(() => {
-    expect(screen.queryByText(/Private Page/i)).toBeNull()
+    expect(screen.queryByText(/Private Page/i)).not.toBeInTheDocument()
     expect(window.location.pathname).toBe('/login')
     expect(window.location.search).toBe('?redirectTo=/private')
     screen.getByText(/Login Page/i)
