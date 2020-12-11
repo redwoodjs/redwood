@@ -115,6 +115,7 @@ export class AuthProvider extends React.Component<
   }
 
   getCurrentUser = async (): Promise<Record<string, unknown>> => {
+    const authToken = await this.getToken()
     const response = await window.fetch(
       `${window.__REDWOOD__API_PROXY_PATH}/graphql`,
       {
@@ -122,7 +123,7 @@ export class AuthProvider extends React.Component<
         headers: {
           'content-type': 'application/json',
           'auth-provider': this.rwClient.type,
-          authorization: `Bearer ${this.state.authToken}`,
+          authorization: `Bearer ${authToken}`,
         },
         body: JSON.stringify({
           query:
