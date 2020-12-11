@@ -24,7 +24,7 @@ export const StorybookProvider: React.FunctionComponent<{
         reqs(r)
       })
 
-      await startMSW()
+      await startMSW('browsers')
       setupRequestHandlers()
       setLoading(false)
     }

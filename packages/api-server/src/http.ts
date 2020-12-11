@@ -28,7 +28,7 @@ export const server = ({
       limit: process.env.BODY_PARSER_LIMIT,
     })
   )
-  app.use(morgan('dev'))
+  app.use(morgan<Request, Response>('dev'))
 
   const lambdaHandler = async (req: Request, res: Response): Promise<void> => {
     const { routeName } = req.params

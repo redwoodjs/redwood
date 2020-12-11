@@ -19,6 +19,6 @@ beforeEach(async () => {
   for (const m of project.mocks) {
     require(m)
   }
-  await startMSW()
+  await startMSW('node')
   setupRequestHandlers() // reset the handlers in each test.
 })
