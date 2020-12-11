@@ -58,6 +58,7 @@ export const AuthContext = React.createContext<AuthContextInterface>({
   authToken: null,
   userMetadata: null,
   currentUser: null,
+  hasRole: () => false,
 })
 
 type AuthProviderProps = {
