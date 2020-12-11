@@ -47,7 +47,7 @@ describe('Flash', () => {
         <TestComponent />
       </FlashProvider>
     )
-    expect(queryByTestId('comp-flash')).toBeNull()
+    expect(queryByTestId('comp-flash')).not.toBeInTheDocument()
   })
 
   it('renders and displays messages with proper classes', () => {
@@ -92,10 +92,10 @@ describe('Flash', () => {
     // view and dismiss the first message
     expect(msgOne).toBeTruthy()
     fireEvent.click(btnOne)
-    expect(queryByText(testMessages[0].text)).toBeNull()
+    expect(queryByText(testMessages[0].text)).not.toBeInTheDocument()
     // view and dismiss the second message
     expect(msgTwo).toBeTruthy()
     fireEvent.click(btnTwo)
-    expect(queryByText(testMessages[1].text)).toBeNull()
+    expect(queryByText(testMessages[1].text)).not.toBeInTheDocument()
   })
 })

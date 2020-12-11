@@ -73,7 +73,7 @@ describe('<FlashProvider />', () => {
     expect(basicMessage).toHaveClass(testMessages.basic.classes)
     // dismiss the message
     fireEvent.click(basicMessage)
-    expect(queryByText(testMessages.basic.text)).toBeNull()
+    expect(queryByText(testMessages.basic.text)).not.toBeInTheDocument()
   })
 
   it('cycles messages correctly', () => {
@@ -94,7 +94,7 @@ describe('<FlashProvider />', () => {
     expect(getByText(testMessages.persisted.text)).toBeTruthy()
     // cycle the messages again (remove viewed)
     fireEvent.click(cycleButton)
-    expect(queryByText(testMessages.basic.text)).toBeNull()
+    expect(queryByText(testMessages.basic.text)).not.toBeInTheDocument()
     // but persisted messages should... persist
     expect(getByText(testMessages.persisted.text)).toBeTruthy()
   })
