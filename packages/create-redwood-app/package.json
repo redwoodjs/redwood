@@ -13,7 +13,7 @@
     "chalk": "^4.1.0",
     "check-node-version": "^4.0.2",
     "decompress": "^4.2.0",
-    "execa": "^4.1.0",
+    "execa": "^5.0.0",
     "listr": "^0.14.3",
     "tmp": "^0.2.1",
     "yargs": "^16.0.3"
