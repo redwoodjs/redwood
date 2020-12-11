@@ -62,7 +62,7 @@
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3",
     "webpack-merge": "^5.1.2",
-    "webpack-retry-chunk-load-plugin": "^1.4.0"
+    "webpack-retry-chunk-load-plugin": "^2.0.0"
   },
   "devDependencies": {
     "@types/babel-core": "^6.25.6",
