@@ -1,6 +1,7 @@
 {
   "scripts": {
     "build": "lerna run build:js && ttsc --build --verbose",
+    "build:types": "ttsc --build --verbose",
     "build:clean": "rimraf ./packages/**/dist",
     "build:watch": "ttsc --build && lerna run build:watch --parallel",
     "test": "lerna run test --stream -- --colors --maxWorkers=4",
