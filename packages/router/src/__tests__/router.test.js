@@ -1,4 +1,5 @@
 import { render, waitFor, act } from '@testing-library/react'
+import '@testing-library/jest-dom/extend-expect'
 
 import { Router, Route, Private, Redirect, navigate, routes } from '../'
 

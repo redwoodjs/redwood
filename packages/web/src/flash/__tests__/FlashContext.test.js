@@ -1,5 +1,7 @@
 import { toHaveClass } from '@testing-library/jest-dom/matchers'
 import { render, fireEvent } from '@testing-library/react'
+import '@testing-library/jest-dom/extend-expect'
+
 // TODO: Remove when jest configs are in place
 expect.extend({ toHaveClass })
 

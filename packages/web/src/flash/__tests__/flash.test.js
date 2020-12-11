@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 
+import '@testing-library/jest-dom/extend-expect'
 import { toHaveClass, toHaveStyle } from '@testing-library/jest-dom/matchers'
 import { render, cleanup, fireEvent } from '@testing-library/react'
 // TODO: Remove when jest configs are in place
