@@ -23,7 +23,7 @@ export const server = ({
     })
   )
   app.use(bodyParser.raw({ type: '*/*', limit: process.env.BODY_PARSER_LIMIT }))
-  app.use(morgan('dev'))
+  app.use(morgan<any, any>('dev'))
 
   app.all('/', (_, res) => {
     return res.send(`
