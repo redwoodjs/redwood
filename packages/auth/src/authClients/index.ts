@@ -56,6 +56,7 @@ export interface AuthClient {
   getUserMetadata(): Promise<null | SupportedUserMetadata>
   client: SupportedAuthClients
   type: SupportedAuthTypes
+  onTokenChange?(callback: () => void): void
 }
 
 export const createAuthClient = (

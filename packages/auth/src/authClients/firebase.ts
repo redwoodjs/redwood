@@ -35,5 +35,6 @@ export const firebase = (client: Firebase): AuthClient => {
     },
     getToken: async () => client.auth().currentUser?.getIdToken() ?? null,
     getUserMetadata: async () => client.auth().currentUser,
+    onTokenChange: client.auth().onIdTokenChanged,
   }
 }

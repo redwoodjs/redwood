@@ -107,6 +107,15 @@ export class AuthProvider extends React.Component<
   constructor(props: AuthProviderProps) {
     super(props)
     this.rwClient = createAuthClient(props.client, props.type)
+
+    // Add observer if the auth client supports it
+    // @TODO: Do we need to worry about cancelling the event handler?
+    // I don't think AuthProvider ever unmounts
+    if (this.rwClient.onTokenChange) {
+      this.rwClient.onTokenChange(() => {
+        this.getToken()
+      })
+    }
   }
 
   async componentDidMount() {
