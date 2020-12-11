@@ -9,7 +9,9 @@ import * as component from '../component'
 let singleWordDefaultFiles,
   multiWordDefaultFiles,
   javascriptFiles,
-  typescriptFiles
+  typescriptFiles,
+  withoutTestFiles,
+  withoutStoryFiles
 
 beforeAll(() => {
   singleWordDefaultFiles = component.files({ name: 'User' })
@@ -21,6 +23,16 @@ beforeAll(() => {
   typescriptFiles = component.files({
     name: 'TypescriptUser',
     typescript: true,
+  })
+  withoutTestFiles = component.files({
+    name: 'withoutTests',
+    javascript: true,
+    tests: false
+  })
+  withoutStoryFiles = component.files({
+    name: 'withoutStories',
+    javascript: true,
+    stories: false
   })
 })
 
@@ -118,4 +130,26 @@ test('creates TS component files if typescript = true', () => {
       )
     ]
   ).not.toBeUndefined()
+})
+
+test("doesn't include storybook file when --stories is set to false", () => {
+  expect(Object.keys(withoutStoryFiles)).toEqual([
+    path.normalize(
+      '/path/to/project/web/src/components/WithoutStories/WithoutStories.test.js'
+    ),
+    path.normalize(
+      '/path/to/project/web/src/components/WithoutStories/WithoutStories.js'
+    ),
+  ])
+})
+
+test("doesn't include test file when --tests is set to false", () => {
+  expect(Object.keys(withoutTestFiles)).toEqual([
+    path.normalize(
+      '/path/to/project/web/src/components/WithoutTests/WithoutTests.stories.js'
+    ),
+    path.normalize(
+      '/path/to/project/web/src/components/WithoutTests/WithoutTests.js'
+    ),
+  ])
 })

@@ -1,4 +1,5 @@
 import { render, waitFor, act } from '@testing-library/react'
+import '@testing-library/jest-dom/extend-expect'
 
 import { Router, Route, Private, Redirect, navigate, routes } from '../'
 import { resetNamedRoutes } from '../named-routes'
@@ -53,7 +54,7 @@ test('inits routes and navigates as expected', async () => {
   // should redirect to about
   act(() => navigate(routes.redirect()))
   await waitFor(() => {
-    expect(screen.queryByText(/Redirect Page/)).toBeNull()
+    expect(screen.queryByText(/Redirect Page/)).not.toBeInTheDocument()
     expect(screen.queryByText(/About Page/)).toBeTruthy()
   })
 
@@ -114,7 +115,7 @@ test('unauthenticated user is redirected including search params', async () => {
   act(() => navigate(routes.private({ bazinga: 'yeah' })))
 
   await waitFor(() => {
-    expect(screen.queryByText(/Private Page/i)).toBeNull()
+    expect(screen.queryByText(/Private Page/i)).not.toBeInTheDocument()
     expect(window.location.pathname).toBe('/login')
     expect(window.location.search).toBe(
       `?redirectTo=/private${encodeURIComponent('?bazinga=yeah')}`
@@ -143,7 +144,7 @@ test('authenticated user can access private page', async () => {
   act(() => navigate(routes.private()))
   await waitFor(() => {
     expect(screen.getByText(/Private Page/)).toBeTruthy()
-    expect(screen.queryByText(/Home Page/)).toBeNull()
+    expect(screen.queryByText(/Home Page/)).not.toBeInTheDocument()
   })
 })
 
@@ -171,7 +172,7 @@ test('can display a loading screen whilst waiting for auth', async () => {
   act(() => navigate(routes.private()))
   await waitFor(() => {
     expect(screen.getByText(/Loading.../)).toBeTruthy()
-    expect(screen.queryByText(/Home Page/)).toBeNull()
+    expect(screen.queryByText(/Home Page/)).not.toBeInTheDocument()
   })
 })
 
