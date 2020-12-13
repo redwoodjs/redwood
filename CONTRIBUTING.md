@@ -20,16 +20,16 @@ Before interacting with the Redwood community, please read and understand our [C
   - [Releases](#releases)
     - [Troubleshooting](#troubleshooting)
   - [CLI Reference: `redwood-tools`](#cli-reference-redwood-tools)
-    - [redwood-tools (alias rwt)](#redwood-tools-alias-rwt)
-    - [copy (alias cp)](#copy-alias-cp)
-    - [copy:watch (alias cpw)](#copywatch-alias-cpw)
-    - [fix-bins (alias fix)](#fix-bins-alias-fix)
-    - [install (alias i)](#install-alias-i)
+    - [redwood-tools (rwt)](#redwood-tools-rwt)
+    - [copy (cp)](#copy-cp)
+    - [copy:watch (cpw)](#copywatch-cpw)
+    - [fix-bins (fix)](#fix-bins-fix)
+    - [install (i)](#install-i)
 
 ## Local Development
 
 As a Redwood user, you're already familiar with the codebase `yarn create redwood-app` creates.
-Here we'll call this codebase a "Redwood App"--it’s the fullstack-to-Jamstack solution you already know and love.
+Here we'll call this codebase a "Redwood App"&mdash;it’s the fullstack-to-Jamstack solution you already know and love.
 
 As a contributor, you'll have to gain familiarity with one more codebase: the Redwood Framework.
 The Redwood Framework lives in the monorepo redwoodjs/redwood; it contains all the packages that make Redwood Apps work the way they do.
@@ -37,23 +37,29 @@ The Redwood Framework lives in the monorepo redwoodjs/redwood; it contains all t
 While you'll be making most of your changes in the Redwood Framework, you'll probably want to see your changes “running live" in one of your own Redwood Apps or in one of our example apps.
 We offer two workflows for making this possible: "copy and watch", which has some restrictions, and "local package registry emulation", which doesn't.
 
-**How to choose which one to use?** If you've installed or upgraded a dependency, use the "local package registry emulation" workflow; otherwise, use "copy and watch".
+**How do I choose which one to use?** If you've installed or upgraded a dependency, use the "local package registry emulation" workflow; otherwise, use "copy and watch".
 
-> Both workflows use `redwood-tools` (alias `rwt`), Redwood's companion CLI development tool.
+> Both workflows use `redwood-tools` (`rwt`), Redwood's companion CLI development tool.
 
-### Install Dependencies
-Before running the application for the first time you should run `yarn` in the root directory to install the necessary dependencies. 
+### Installing Dependencies
 
-```terminal 
+Before you do anything, you should run `yarn install` in the root directory of your local-copy of the Redwood Framework to install the necessary dependencies.
+
+```terminal
 cd redwood
-yarn
+yarn install
+```
+
+You'll also want to upgrade your Redwood App to the canary so you can be sure you're testing your contribution with all the most recent changes:
+
+```terminal
+cd redwood-app # wherever your redwood-app happens to be, whether it's one of our templates or your own
+yarn rw upgrade -t canary
 ```
 
 ### Copy and Watch
 
-> Are you on Windows? If so, you most likely first have to [install rsync](https://tlundberg.com/blog/2020-06-15/installing-rsync-on-windows/). Also, unfortunately you can't use "copy and watch". You'll have to manually run `yarn rwt cp ../path/to/redwood` when you've made changes to the Redwood Framework (this is tracked in [issue #701](https://github.com/redwoodjs/redwood/issues/701)).
-
-First, build-and-watch files in the Redwood Framework for changes:
+Ok. Now that everything's up-to-date, you'll want to build-and-watch files in the Redwood Framework for changes:
 
 ```terminal
 cd redwood
@@ -66,6 +72,8 @@ create-redwood-app: $ nodemon --ignore dist --exec 'yarn build'
 ```
 
 Then, copy-and-watch those changes into your Redwood App or example app (here, [example-invoice](https://github.com/redwoodjs/example-invoice)):
+
+> Wait! Are you on Windows? If so, you most likely first have to [install rsync](https://tlundberg.com/blog/2020-06-15/installing-rsync-on-windows/). Also, unfortunately you can't use "copy and watch". You'll have to manually run `yarn rwt cp ../path/to/redwood` when you've made changes to the Redwood Framework (this is tracked in [issue #701](https://github.com/redwoodjs/redwood/issues/701)).
 
 ```terminal
 cd example-invoice
@@ -123,9 +131,11 @@ _On Windows_
 
 ### Local Package Registry Emulation
 
-Sometimes you'll want to test the full package-development workflow: building, publishing, and installing in your Redwood App. We facilitate this using a local NPM registry called [Verdaccio](https://github.com/verdaccio/verdaccio).
+Sometimes you'll want to test the full package-development workflow: building, publishing, and installing in your Redwood App. We accomodate this using a local NPM registry called [Verdaccio](https://github.com/verdaccio/verdaccio).
 
-#### Setting Up and Running a Local NPM Registry
+You might also have to use this workflow if you've installed or upgraded one of Redwood's dependencies.
+
+#### Running a Local NPM Registry
 
 First, install Verdaccio:
 
@@ -156,9 +166,7 @@ To build, unpublish, and publish all the Redwood packages to your local NPM regi
 > npm publish --tag dev --registry http://localhost:4873/ --force
 > ```
 
-You can build a particular package by specifying the path to the package: `./tasks/publish-local ./packages/api`.
-
-For example, if you've made changes to the `@redwoodjs/dev-server` package, you would run:
+Note that you can build a particular package by specifying the path to the package: `./tasks/publish-local ./packages/api`. For example, if you've made changes to the `@redwoodjs/dev-server` package, you would run:
 
 ```terminal
 ./tasks/publish-local ./packages/dev-server
@@ -166,7 +174,7 @@ For example, if you've made changes to the `@redwoodjs/dev-server` package, you 
 
 #### Installing Published Packages in Your Redwood App
 
-The last step is to install the package into your Redwood App. The CLI command `redwood-tools` (alias `rwt`) makes installing local NPM packages easy:
+The last step is to install the package into your Redwood App. The CLI command `redwood-tools` (`rwt`) makes installing local NPM packages easy:
 
 ```terminal
 yarn rwt install @redwoodjs/dev-server
@@ -182,7 +190,7 @@ yarn rwt install @redwoodjs/dev-server
 ## Running Your Redwood App's Local Server(s)
 
 When developing Redwood Apps, you’re probably used to running both the API and Web servers with `yarn rw dev` and seeing your changes included immediately.
-But for local package development, your changes won’t be included automatically--you'll need to manually stop/start the respective server to include them.
+But for local package development, your changes won’t be included automatically&mdash;you'll need to manually stop/start the respective server to include them.
 
 In this case you might find it more convenient to run the servers for each of the yarn workspaces independently:
 
@@ -231,7 +239,7 @@ If something went wrong you can use `yarn lerna publish from-package` to publish
 
 This CLI Reference section covers the `redwood-tools` command options. For `redwood` options, see the [CLI Reference on redwoodjs.com](https://redwoodjs.com/reference/command-line-interface).
 
-### redwood-tools (alias rwt)
+### redwood-tools (rwt)
 
 Redwood's companion CLI development tool. You'll be using this if you're contributing to Redwood.
 
@@ -246,7 +254,7 @@ yarn rwt <command>
 |`fix-bins` | Fix Redwood symlinks and permissions.|
 |`install` | Install a package from your local NPM registry.|
 
-### copy (alias cp)
+### copy (cp)
 
 Copy the Redwood Framework path to this project.
 
@@ -256,7 +264,7 @@ yarn rwt cp [RW_PATH]
 
 You can avoid having to provide `RW_PATH` by defining an environment variable on your system. See [Specifying a RW_PATH](https://github.com/redwoodjs/redwood/blob/main/CONTRIBUTING.md#specifying-a-rw_path).
 
-### copy:watch (alias cpw)
+### copy:watch (cpw)
 
 Watch the Redwood Framework path for changes and copy them over to this project.
 
@@ -266,7 +274,7 @@ yarn rwt cpw [RW_PATH]
 
 You can avoid having to provide `RW_PATH` by defining an environment variable on your system. See [Specifying a RW_PATH](https://github.com/redwoodjs/redwood/blob/main/CONTRIBUTING.md#specifying-a-rw_path).
 
-### fix-bins (alias fix)
+### fix-bins (fix)
 
 Fix Redwood symlinks and permissions.
 
@@ -284,7 +292,7 @@ The Redwood CLI has the following binaries:
 
 When you're contributing, the permissions of these binaries can sometimes get mixed up. This makes them executable again.
 
-### install (alias i)
+### install (i)
 
 Install a package from your local NPM registry.
 
