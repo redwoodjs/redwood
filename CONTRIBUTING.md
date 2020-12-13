@@ -50,7 +50,7 @@ cd redwood
 yarn install
 ```
 
-You'll also want to upgrade your Redwood App to the canary so you can be sure you're testing your contribution with all the most recent changes:
+You'll also want to upgrade your Redwood App to the canary or so, just so you can be sure you're testing your contribution with all the most recent changes:
 
 ```terminal
 cd redwood-app # wherever your redwood-app happens to be, whether it's one of our templates or your own
