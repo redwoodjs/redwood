@@ -73,7 +73,7 @@ create-redwood-app: $ nodemon --ignore dist --exec 'yarn build'
 
 Then, copy-and-watch those changes into your Redwood App or example app (here, [example-invoice](https://github.com/redwoodjs/example-invoice)):
 
-> Wait! Are you on Windows? If so, you most likely first have to [install rsync](https://tlundberg.com/blog/2020-06-15/installing-rsync-on-windows/). Also, unfortunately you can't use "copy and watch". You'll have to manually run `yarn rwt cp ../path/to/redwood` when you've made changes to the Redwood Framework (this is tracked in [issue #701](https://github.com/redwoodjs/redwood/issues/701)).
+> Wait! Are you on Windows (and not using WSL)? If so, you most likely first have to [install rsync](https://tlundberg.com/blog/2020-06-15/installing-rsync-on-windows/). Also, unfortunately you can't use "copy and watch". You'll have to manually run `yarn rwt cp ../path/to/redwood` when you've made changes to the Redwood Framework (this is tracked in [issue #701](https://github.com/redwoodjs/redwood/issues/701)).
 
 ```terminal
 cd example-invoice
