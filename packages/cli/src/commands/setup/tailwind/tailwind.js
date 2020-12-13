@@ -157,7 +157,7 @@ export const handler = async ({ force }) => {
            * Later, when we can tell the vscode extension where to look for the config,
            * we can put it in web/config/
            */
-          await execa('mv', ['tailwind.config.js', 'web/'])
+          fs.renameSync('tailwind.config.js', 'web/tailwind.config.js')
         }
       },
     },
