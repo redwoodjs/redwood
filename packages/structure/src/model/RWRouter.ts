@@ -1,4 +1,3 @@
-import { rangeRight } from 'lodash'
 import * as tsm from 'ts-morph'
 import {
   CodeAction,

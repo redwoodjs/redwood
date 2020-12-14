@@ -1,6 +1,9 @@
 import type { Auth0, Auth0User } from './auth0'
 import { auth0 } from './auth0'
-import type { AzureActiveDirectory, AzureActiveDirectoryUser } from './azureActiveDirectory'
+import type {
+  AzureActiveDirectory,
+  AzureActiveDirectoryUser,
+} from './azureActiveDirectory'
 import { azureActiveDirectory } from './azureActiveDirectory'
 import type { Custom } from './custom'
 import { custom } from './custom'
