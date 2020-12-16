@@ -6,7 +6,9 @@ import type { AuthClient } from './'
 export type AzureActiveDirectoryClient = AzureActiveDirectory
 export interface AzureActiveDirectoryUser {}
 
-export const azureActiveDirectory = (client: AzureActiveDirectoryClient): AuthClient => {
+export const azureActiveDirectory = (
+  client: AzureActiveDirectoryClient
+): AuthClient => {
   return {
     type: 'azureActiveDirectory',
     client,

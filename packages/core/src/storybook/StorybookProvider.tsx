@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { ReactNode, ReactPortal, useEffect, useState } from 'react'
 
 import {
   MockProviders,
@@ -7,7 +7,7 @@ import {
 } from '@redwoodjs/testing'
 
 export const StorybookProvider: React.FunctionComponent<{
-  storyFn: Function
+  storyFn: () => ReactNode | ReactPortal
   id: string
 }> = ({ storyFn, id }) => {
   const [loading, setLoading] = useState(true)
