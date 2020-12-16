@@ -1,4 +1,5 @@
 import { render } from '@testing-library/react'
+import '@testing-library/jest-dom/extend-expect'
 
 import { LocationProvider, useLocation } from '../location'
 
@@ -33,8 +34,8 @@ describe('useLocation', () => {
         '{"pathname":"/dunder-mifflin","search":"?facts=bears","hash":"#woof"}'
       )
     ).toBeTruthy()
-    expect(getByTestId('pathname').value).toEqual('/dunder-mifflin')
-    expect(getByTestId('search').value).toEqual('?facts=bears')
-    expect(getByTestId('hash').value).toEqual('#woof')
+    expect(getByTestId('pathname')).toHaveValue('/dunder-mifflin')
+    expect(getByTestId('search')).toHaveValue('?facts=bears')
+    expect(getByTestId('hash')).toHaveValue('#woof')
   })
 })

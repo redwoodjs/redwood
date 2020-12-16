@@ -27,5 +27,5 @@ export const notes = [
   'https://redwoodjs.com/docs/authentication#azure-ad',
   '\n',
   'MSAL.js Documentation:',
-  'https://docs.microsoft.com/en-us/azure/active-directory/develop/msal-js-initializing-client-applications'
+  'https://docs.microsoft.com/en-us/azure/active-directory/develop/msal-js-initializing-client-applications',
 ]

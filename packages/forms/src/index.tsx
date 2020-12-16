@@ -96,8 +96,8 @@ const inputTagProps = <T extends InputTagProps>(
   const {
     errorClassName,
     errorStyle,
-    dataType,
-    transformValue,
+    dataType, // eslint-disable-line @typescript-eslint/no-unused-vars
+    transformValue, // eslint-disable-line @typescript-eslint/no-unused-vars
     ...tagProps
   } = props
   if (validationError) {
@@ -138,7 +138,7 @@ interface FormWithCoercionContext
   validation?: UseFormOptions
   onSubmit?: (
     values: Record<string, any>,
-    event: React.BaseSyntheticEvent<object, any, any> | undefined
+    event?: React.BaseSyntheticEvent
   ) => void
 }
 
