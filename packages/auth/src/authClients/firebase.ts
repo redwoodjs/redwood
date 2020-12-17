@@ -14,12 +14,13 @@ export type oAuthProvider =
   | 'microsoft.com'
   | 'apple.com'
 
-export type PasswordProvider = { email: string; password: string }
+export type PasswordCreds = { email: string; password: string }
 
-const isPasswordProvider = (
-  usingProvider: oAuthProvider | PasswordProvider
-): usingProvider is PasswordProvider => {
-  return (usingProvider as PasswordProvider).email !== undefined
+const isPasswordCreds = (
+  withCreds: oAuthProvider | PasswordCreds
+): withCreds is PasswordCreds => {
+  const creds = withCreds as PasswordCreds
+  return creds.email !== undefined && creds.password !== undefined
 }
 
 export const firebase = (client: Firebase): AuthClient => {
@@ -33,34 +34,34 @@ export const firebase = (client: Firebase): AuthClient => {
     client,
     restoreAuthState: () => client.auth().getRedirectResult(),
     login: async (
-      usingProvider: oAuthProvider | PasswordProvider = 'google.com'
+      withAuth: oAuthProvider | PasswordCreds = 'google.com'
     ) => {
-      if (isPasswordProvider(usingProvider)) {
+      if (isPasswordCreds(withAuth)) {
         return client
           .auth()
           .signInWithEmailAndPassword(
-            usingProvider.email,
-            usingProvider.password
+            withAuth.email,
+            withAuth.password
           )
       }
 
-      const provider = getProvider(usingProvider)
+      const provider = getProvider(withAuth)
       return client.auth().signInWithPopup(provider)
     },
     logout: () => client.auth().signOut(),
     signup: async (
-      usingProvider: oAuthProvider | PasswordProvider = 'google.com'
+      withAuth: oAuthProvider | PasswordCreds = 'google.com'
     ) => {
-      if (isPasswordProvider(usingProvider)) {
+      if (isPasswordCreds(withAuth)) {
         return client
           .auth()
           .createUserWithEmailAndPassword(
-            usingProvider.email,
-            usingProvider.password
+            withAuth.email,
+            withAuth.password
           )
       }
 
-      const provider = getProvider(usingProvider)
+      const provider = getProvider(withAuth)
       return client.auth().signInWithPopup(provider)
     },
     getToken: async () => client.auth().currentUser?.getIdToken() ?? null,
