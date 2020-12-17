@@ -8,6 +8,7 @@ declare global {
   const mockGraphQLQuery: typeof _mockGraphQLQuery
   const mockGraphQLMutation: typeof _mockGraphQLMutation
   const mockCurrentUser: typeof _mockCurrentUser
-  const mockedCurrentUser: any
+  // eslint-disable-next-line
+  var mockedCurrentUser: null | Record<string, unknown>
   const scenario: (name: string, fn: () => void) => void
 }

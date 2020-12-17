@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * NOTE: This module should not contain any nodejs functionality,
  * because it's also used by Storybook in the browser.

@@ -1,4 +1,3 @@
-// @ts-nocheck
 // MSW is shared by Jest (NodeJS) and Storybook (Webpack)
 import {
   setupWorker,
