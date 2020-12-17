@@ -8,6 +8,8 @@ import { AuthProvider } from '@redwoodjs/auth'
 import type { AuthContextInterface } from '@redwoodjs/auth'
 import { RedwoodProvider } from '@redwoodjs/web'
 
+import { mockedUserMeta } from './mockRequests'
+
 // Import the user's Router from `./web/src/Router.{tsx,js}`,
 // we pass the `children` from the user's Router to `./MockRouter.Router`
 // so that we can populate the `routes object` in Storybook and tests.
@@ -42,7 +44,7 @@ export const mockAuthClient = {
     return 'token'
   },
   getUserMetadata: () => {
-    return global.mockedCurrentUser
+    return mockedUserMeta.currentUser
   },
   client: 'Custom',
   type: 'custom',
