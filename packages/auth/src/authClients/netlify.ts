@@ -25,7 +25,7 @@ export const netlify = (client: NetlifyIdentity): AuthClient => {
       })
     },
     logout: () => {
-      return new Promise((resolve, reject) => {
+      return new Promise<void>((resolve, reject) => {
         client.logout()
         client.on('logout', resolve)
         client.on('error', reject)

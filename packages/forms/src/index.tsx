@@ -15,6 +15,7 @@ import {
   TDefinedCoercionFunctions,
   useCoercion,
 } from './coercion'
+import FormError from './FormError'
 
 const DEFAULT_MESSAGES = {
   required: 'is required',
@@ -95,8 +96,8 @@ const inputTagProps = <T extends InputTagProps>(
   const {
     errorClassName,
     errorStyle,
-    dataType,
-    transformValue,
+    dataType, // eslint-disable-line @typescript-eslint/no-unused-vars
+    transformValue, // eslint-disable-line @typescript-eslint/no-unused-vars
     ...tagProps
   } = props
   if (validationError) {
@@ -116,79 +117,6 @@ interface FieldErrorContextProps {
   [key: string]: string
 }
 const FieldErrorContext = React.createContext({} as FieldErrorContextProps)
-
-// Big error message at the top of the page explaining everything that's wrong
-// with the form fields in this form
-
-interface FormErrorProps {
-  error: any
-  wrapperClassName: string
-  wrapperStyle: React.CSSProperties
-  titleClassName: string
-  titleStyle: React.CSSProperties
-  listClassName: string
-  listStyle: React.CSSProperties
-  listItemClassName: string
-  listItemStyle: React.CSSProperties
-}
-
-const FormError = ({
-  error,
-  wrapperClassName,
-  wrapperStyle,
-  titleClassName,
-  titleStyle,
-  listClassName,
-  listStyle,
-  listItemClassName,
-  listItemStyle,
-}: FormErrorProps) => {
-  let rootMessage = null
-  let messages = null
-  const hasGraphQLError = !!error?.graphQLErrors[0]
-  const hasNetworkError = !!error?.networkError?.result?.errors
-
-  if (hasGraphQLError) {
-    const errors = error.graphQLErrors[0].extensions.exception.messages
-    rootMessage = error.graphQLErrors[0].message
-    messages = []
-    for (const e in errors) {
-      errors[e].map((fieldError: any) => {
-        messages.push(`${e} ${fieldError}`)
-      })
-    }
-  } else if (hasNetworkError) {
-    rootMessage = 'An error has occurred'
-    messages = error.networkError.result.errors.map(
-      (error: any) => error.message.split(';')[1]
-    )
-  }
-
-  return (
-    <>
-      {messages && (
-        <div className={wrapperClassName} style={wrapperStyle}>
-          <p className={titleClassName} style={titleStyle}>
-            {rootMessage !== '' ? rootMessage : 'Something went wrong.'}
-          </p>
-          {messages.length > 0 && (
-            <ul className={listClassName} style={listStyle}>
-              {messages.map((message: string, index: number) => (
-                <li
-                  key={index}
-                  className={listItemClassName}
-                  style={listItemStyle}
-                >
-                  {message}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      )}
-    </>
-  )
-}
 
 const coerceValues = (
   data: Record<string, string>,
@@ -210,7 +138,7 @@ interface FormWithCoercionContext
   validation?: UseFormOptions
   onSubmit?: (
     values: Record<string, any>,
-    event: React.BaseSyntheticEvent<object, any, any> | undefined
+    event?: React.BaseSyntheticEvent
   ) => void
 }
 
