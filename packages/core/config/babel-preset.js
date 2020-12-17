@@ -136,8 +136,13 @@ module.exports = () => {
                   path: 'graphql-tag',
                 },
                 {
-                  // import { mockGraphQLQuery, mockGraphQLMutation } from '@redwoodjs/testing'
-                  members: ['mockGraphQLQuery', 'mockGraphQLMutation'],
+                  // import { mockGraphQLQuery, mockGraphQLMutation, mockCurrentUser } from '@redwoodjs/testing'
+                  members: [
+                    'mockGraphQLQuery',
+                    'mockGraphQLMutation',
+                    'mockCurrentUser',
+                    'mockedCurrentUser',
+                  ],
                   path: '@redwoodjs/testing',
                 },
               ],

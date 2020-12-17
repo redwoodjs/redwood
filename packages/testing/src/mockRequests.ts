@@ -1,3 +1,4 @@
+// @ts-nocheck
 // MSW is shared by Jest (NodeJS) and Storybook (Webpack)
 import {
   setupWorker,
@@ -128,4 +129,15 @@ export const mockGraphQLMutation = (
   data: DataFunction | Record<string, unknown>
 ) => {
   return mockGraphQL('mutation', operation, data)
+}
+
+export const mockCurrentUser = (user: null | Record<string, unknown>) => {
+  global.mockedCurrentUser = user
+  mockGraphQLQuery('__REDWOOD__AUTH_GET_CURRENT_USER', () => {
+    return {
+      redwood: {
+        currentUser: user,
+      },
+    }
+  })
 }
