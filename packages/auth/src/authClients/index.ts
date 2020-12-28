@@ -17,6 +17,8 @@ import type { NetlifyIdentity } from './netlify'
 import { netlify } from './netlify'
 import type { Supabase, SupabaseUser } from './supabase'
 import { supabase } from './supabase'
+import type { Ethereum, EthereumUser } from './ethereum'
+import { ethereum } from './ethereum'
 
 const typesToClients = {
   netlify,
@@ -26,6 +28,7 @@ const typesToClients = {
   magicLink,
   firebase,
   supabase,
+  ethereum,
   /** Don't we support your auth client? No problem, define your own the `custom` type! */
   custom,
 }
@@ -38,6 +41,7 @@ export type SupportedAuthClients =
   | MagicLink
   | Firebase
   | Supabase
+  | Ethereum
   | Custom
 
 export type SupportedAuthTypes = keyof typeof typesToClients
@@ -47,12 +51,14 @@ export type { AzureActiveDirectoryUser }
 export type { GoTrueUser }
 export type { MagicUser }
 export type { SupabaseUser }
+export type { EthereumUser }
 export type SupportedUserMetadata =
   | Auth0User
   | AzureActiveDirectoryUser
   | GoTrueUser
   | MagicUser
   | SupabaseUser
+  | EthereumUser
 
 export interface AuthClient {
   restoreAuthState?(): void | Promise<any>
