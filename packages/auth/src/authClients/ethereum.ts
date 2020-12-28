@@ -1,9 +1,12 @@
-// import type { Ethereum, EthereumUser } from 'ethereumAuthClient'
-export type Ethereum = any
-export type EthereumUser = any
-
-export interface EthereumUser {
+export type EthereumUser = {
   address: string | null
+}
+
+export type Ethereum = {
+  login(): Promise<any>
+  logout(): Promise<any>
+  getToken(): Promise<null | string>
+  getUserMetadata(): Promise<null | EthereumUser>
 }
 
 import type { AuthClient } from './'
