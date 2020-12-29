@@ -7,6 +7,8 @@ import type {
 import { azureActiveDirectory } from './azureActiveDirectory'
 import type { Custom } from './custom'
 import { custom } from './custom'
+import type { Ethereum, EthereumUser } from './ethereum'
+import { ethereum } from './ethereum'
 import type { Firebase } from './firebase'
 import { firebase } from './firebase'
 import type { GoTrue, GoTrueUser } from './goTrue'
@@ -17,8 +19,6 @@ import type { NetlifyIdentity } from './netlify'
 import { netlify } from './netlify'
 import type { Supabase, SupabaseUser } from './supabase'
 import { supabase } from './supabase'
-import type { Ethereum, EthereumUser } from './ethereum'
-import { ethereum } from './ethereum'
 
 const typesToClients = {
   netlify,
