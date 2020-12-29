@@ -29,6 +29,7 @@ const typesToDecoders: Record<
   magicLink: noop,
   firebase: noop,
   supabase: supabase,
+  ethereum: noop,
   custom: noop,
 }
 
