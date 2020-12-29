@@ -6,6 +6,7 @@ import type { GlobalContext } from 'src/globalContext'
 
 import { auth0 } from './auth0'
 import { azureActiveDirectory } from './azureActiveDirectory'
+import { ethereum } from './ethereum'
 import { netlify } from './netlify'
 import { supabase } from './supabase'
 const noop = (token: string) => token
@@ -29,7 +30,7 @@ const typesToDecoders: Record<
   magicLink: noop,
   firebase: noop,
   supabase: supabase,
-  ethereum: noop,
+  ethereum: ethereum,
   custom: noop,
 }
 
