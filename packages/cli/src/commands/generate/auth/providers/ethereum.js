@@ -11,7 +11,11 @@ export const config = {
       cache: new InMemoryCache(),
       uri: \`\${window.__REDWOOD__API_PROXY_PATH}/graphql\`,
     })
-    ethereum = new EthereumAuthClient({ graphQLClient })
+    const makeRequest = graphQLClient.mutate
+    ethereum = new EthereumAuthClient({
+      makeRequest,
+      debug: process.NODE_ENV !== 'production',
+    })
   } catch (e) {
     console.log(e)
   }
