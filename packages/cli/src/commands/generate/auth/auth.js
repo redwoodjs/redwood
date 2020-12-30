@@ -57,11 +57,15 @@ const addWebRender = (content, authProvider) => {
   })
   const renderContent =
     indent +
+    (authProvider.render ? `<${authProvider.render}>` : '') +
+    indent +
     `<AuthProvider client={${authProvider.client}} type="${authProvider.type}">` +
     indent +
     redwoodProviderLines.join('\n') +
     indent +
-    `</AuthProvider>`
+    `</AuthProvider>` +
+    indent +
+    (authProvider.render ? `</${authProvider.render}>` : '')
 
   return content.replace(
     /\s+<RedwoodProvider>.*<\/RedwoodProvider>/s,
