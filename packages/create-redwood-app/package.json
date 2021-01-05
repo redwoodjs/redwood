@@ -9,7 +9,7 @@
   "dependencies": {
     "@babel/runtime-corejs3": "^7.9.2",
     "@redwoodjs/internal": "^0.21.0",
-    "axios": "^0.20.0",
+    "axios": "^0.21.1",
     "chalk": "^4.1.0",
     "check-node-version": "^4.0.2",
     "decompress": "^4.2.0",
