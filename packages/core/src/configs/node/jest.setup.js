@@ -77,7 +77,6 @@ window.scenario = (...args) => {
       allScenarios = require(testFilePath)
     } catch (e) {
       // no scenario file found, ignore
-      console.error('no scenario found', e)
     }
 
     if (allScenarios) {
