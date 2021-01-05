@@ -8,5 +8,4 @@ declare global {
   const mockGraphQLQuery: typeof _mockGraphQLQuery
   const mockGraphQLMutation: typeof _mockGraphQLMutation
   const mockCurrentUser: typeof _mockCurrentUser
-  const scenario: (name: string, fn: () => void) => void
 }
