@@ -26,12 +26,12 @@ beforeAll(() => {
   withoutTestFiles = layout.files({
     name: 'withoutTests',
     javascript: true,
-    tests: false
+    tests: false,
   })
   withoutStoryFiles = layout.files({
     name: 'withoutStories',
     javascript: true,
-    stories: false
+    stories: false,
   })
 })
 

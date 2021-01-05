@@ -14,6 +14,15 @@ export type oAuthProvider =
   | 'microsoft.com'
   | 'apple.com'
 
+export type PasswordCreds = { email: string; password: string }
+
+const isPasswordCreds = (
+  withCreds: oAuthProvider | PasswordCreds
+): withCreds is PasswordCreds => {
+  const creds = withCreds as PasswordCreds
+  return creds.email !== undefined && creds.password !== undefined
+}
+
 export const firebase = (client: Firebase): AuthClient => {
   // Use a function to allow us to extend for non-oauth providers in the future
   const getProvider = (providerId: oAuthProvider) => {
@@ -24,13 +33,35 @@ export const firebase = (client: Firebase): AuthClient => {
     type: 'firebase',
     client,
     restoreAuthState: () => client.auth().getRedirectResult(),
-    login: async (usingProvider: oAuthProvider = 'google.com') => {
-      const provider = getProvider(usingProvider)
+    login: async (
+      withAuth: oAuthProvider | PasswordCreds = 'google.com'
+    ) => {
+      if (isPasswordCreds(withAuth)) {
+        return client
+          .auth()
+          .signInWithEmailAndPassword(
+            withAuth.email,
+            withAuth.password
+          )
+      }
+
+      const provider = getProvider(withAuth)
       return client.auth().signInWithPopup(provider)
     },
     logout: () => client.auth().signOut(),
-    signup: async (usingProvider: oAuthProvider = 'google.com') => {
-      const provider = getProvider(usingProvider)
+    signup: async (
+      withAuth: oAuthProvider | PasswordCreds = 'google.com'
+    ) => {
+      if (isPasswordCreds(withAuth)) {
+        return client
+          .auth()
+          .createUserWithEmailAndPassword(
+            withAuth.email,
+            withAuth.password
+          )
+      }
+
+      const provider = getProvider(withAuth)
       return client.auth().signInWithPopup(provider)
     },
     getToken: async () => client.auth().currentUser?.getIdToken() ?? null,

@@ -19,7 +19,14 @@ const mapFieldsToService = ({
   services,
 }: {
   fields: GraphQLFieldMap<any, any>
-  resolvers: { [key: string]: Function }
+  resolvers: {
+    [key: string]: (
+      root: unknown,
+      args: unknown,
+      context: unknown,
+      info: unknown
+    ) => any
+  }
   services: Services
 }) =>
   Object.keys(fields).reduce((resolvers, name) => {
