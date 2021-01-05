@@ -97,6 +97,7 @@ module.exports = {
     mockGraphQLMutation: 'readonly',
     mockCurrentUser: 'readonly',
     scenario: 'readonly',
+    defineScenario: 'readonly',
   },
   rules: {
     'prettier/prettier': 'warn',

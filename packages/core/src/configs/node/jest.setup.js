@@ -1,6 +1,7 @@
 const path = require('path')
 
 const { getPaths } = require('@redwoodjs/internal')
+const { defineScenario } = require('@redwoodjs/testing/dist/scenario')
 const { db } = require(path.join(getPaths().api.src, 'lib', 'db'))
 const DEFAULT_SCENARIO = 'standard'
 const PRISMA_RESERVED = ['create', 'connect']
@@ -76,6 +77,7 @@ window.scenario = (...args) => {
       allScenarios = require(testFilePath)
     } catch (e) {
       // no scenario file found, ignore
+      console.error('no scenario found', e)
     }
 
     if (allScenarios) {
@@ -100,6 +102,8 @@ window.scenario = (...args) => {
     return result
   })
 }
+
+window.defineScenario = defineScenario
 
 afterAll(async () => {
   await db.$disconnect()
