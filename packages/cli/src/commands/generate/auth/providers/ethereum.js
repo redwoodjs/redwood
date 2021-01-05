@@ -3,17 +3,35 @@ export const config = {
   imports: [
     `import EthereumAuthClient from '@oneclickdapp/ethereum-auth'`,
     `import { ApolloClient, InMemoryCache } from '@apollo/client'`,
+    `import { FetchConfigProvider, useFetchConfig } from '@redwoodjs/web'`,
   ],
   init: `const ApolloInjector = ({ children }) => {
+  const { uri, headers } = useFetchConfig()
   let ethereum
   try {
     const graphQLClient = new ApolloClient({
       cache: new InMemoryCache(),
-      uri: \`\${window.__REDWOOD__API_PROXY_PATH}/graphql\`,
+      uri,
+      headers,
     })
-    const makeRequest = graphQLClient.mutate
+    // Default option using Apollo Client
+    const makeRequest = (mutation, variables) =>
+      graphQLClient.mutate({
+        mutation,
+        variables,
+      })
+
+    // Alternative option using graphql-hooks
+    // You'll also need to modify graphQLClient
+    // const makeRequest = (query, variables) =>
+    //   graphQLClient.request({
+    //     query,
+    //     variables,
+    //   })
+
     ethereum = new EthereumAuthClient({
       makeRequest,
+      // Note: you must set NODE_ENV manually when using Netlify
       debug: process.NODE_ENV !== 'production',
     })
   } catch (e) {
@@ -24,7 +42,7 @@ export const config = {
   authProvider: {
     client: 'ethereum',
     type: 'ethereum',
-    render: 'ApolloInjector',
+    render: ['FetchConfigProvider', 'ApolloInjector'],
   },
 }
 
