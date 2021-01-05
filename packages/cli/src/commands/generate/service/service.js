@@ -3,7 +3,7 @@ import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 import terminalLink from 'terminal-link'
 
-import { getSchema, asyncForEach } from 'src/lib'
+import { getSchema } from 'src/lib'
 
 import { transformTSToJS } from '../../../lib'
 import { yargsDefaults } from '../../generate'
@@ -90,12 +90,12 @@ export const buildScenario = async (model) => {
   const { scalarFields, relations } = await parseSchema(model)
 
   // turn scalar fields into actual scenario data
-  await asyncForEach(DEFAULT_SCENARIO_NAMES, async (name) => {
+  for (const name of DEFAULT_SCENARIO_NAMES) {
     standardScenario[scenarioModelName][name] = await fieldsToScenario(
       scalarFields,
       relations
     )
-  })
+  }
 
   return standardScenario
 }
