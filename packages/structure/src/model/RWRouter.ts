@@ -7,6 +7,7 @@ import {
   Position,
   WorkspaceChange,
 } from 'vscode-languageserver-types'
+
 import { RWError } from '../errors'
 import { CodeLensX, FileNode } from '../ide'
 import { iter } from '../x/Array'
@@ -18,9 +19,9 @@ import {
   LocationLike_toLocation,
   Location_fromNode,
 } from '../x/vscode-languageserver-types'
+
 import { RWProject } from './RWProject'
 import { RWRoute } from './RWRoute'
-import { rangeRight } from 'lodash'
 
 /**
  * one per Routes.js

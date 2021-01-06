@@ -1,5 +1,5 @@
-const path = require('path')
 const fs = require('fs')
+const path = require('path')
 
 console.warn(
   'warning, remove this file "scripts/postBuild.js" once Flash is converted to TypeScript'

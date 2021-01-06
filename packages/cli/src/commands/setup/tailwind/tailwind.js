@@ -1,12 +1,12 @@
 import fs from 'fs'
 import path from 'path'
 
-import Listr from 'listr'
-import execa from 'execa'
 import chalk from 'chalk'
+import execa from 'execa'
+import Listr from 'listr'
 
-import c from 'src/lib/colors'
 import { getPaths, writeFile } from 'src/lib'
+import c from 'src/lib/colors'
 
 export const command = 'tailwind'
 export const description = 'Setup tailwindcss and PostCSS'
@@ -74,7 +74,7 @@ export const handler = async ({ force }) => {
                 'add',
                 '-D',
                 'postcss-loader@4.0.2',
-                'tailwindcss',
+                'tailwindcss@npm:@tailwindcss/postcss7-compat',
                 'autoprefixer@9.8.6',
               ])
             },
@@ -157,7 +157,7 @@ export const handler = async ({ force }) => {
            * Later, when we can tell the vscode extension where to look for the config,
            * we can put it in web/config/
            */
-          await execa('mv', ['tailwind.config.js', 'web/'])
+          fs.renameSync('tailwind.config.js', 'web/tailwind.config.js')
         }
       },
     },

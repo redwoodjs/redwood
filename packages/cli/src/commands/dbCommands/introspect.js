@@ -1,5 +1,5 @@
-import { getPaths, runCommandTask } from 'src/lib'
 import * as options from 'src/commands/dbCommands/options'
+import { getPaths, runCommandTask } from 'src/lib'
 
 export const command = 'introspect'
 export const description =

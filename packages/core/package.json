@@ -26,7 +26,7 @@
     "@redwoodjs/internal": "^0.21.0",
     "@redwoodjs/testing": "^0.21.0",
     "@storybook/react": "^5.3.19",
-    "@testing-library/jest-dom": "^5.8.0",
+    "@testing-library/jest-dom": "5.11.6",
     "@types/jest": "^26.0.10",
     "@types/node": "^14.6.0",
     "@types/react": "16.9.53",
@@ -75,7 +75,7 @@
     "build": "yarn build:js && yarn build:types",
     "prepublishOnly": "yarn build",
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
-    "build:types": "tsc --build --verbose",
+    "build:types": "ttsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build\"",
     "test": "jest",
     "test:watch": "yarn test --watch"

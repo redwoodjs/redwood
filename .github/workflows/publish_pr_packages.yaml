@@ -1,43 +1,33 @@
-name: Create PR packages
+name: Publish PR packages
 
-on: pull_request_target
+on:
+  workflow_run:
+    workflows: ["Create PR Artifact"]
+    types:
+      - completed
 
 jobs:
-  create_pkg:
-    name: Create PR packages
+  publish_pr_packages:
+    name: Publish PR packages
     runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash
 
     steps:
-      - name: Checkout PR
-        uses: actions/checkout@v2
+      - name: Download artifact
+        uses: dawidd6/action-download-artifact@v2
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          workflow: ${{ github.event.workflow_run.workflow_id }}
+          workflow_conclusion: success
 
-      - name: Setup node
-        uses: actions/setup-node@v1
-        with:
-          node-version: 14
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-
-      - name: Build
-        run: yarn build
-
-      - name: Create packages
+      - name: Get PR number
+        id: pr_number
         run: |
-          mkdir bin
-          for d in packages/*/ ; do
-            (cd "$d" && tgz=$(npm pack) && cp $tgz ../../bin/)
-          done
-          cd bin
-          sha="${{ github.event.pull_request.head.sha }}"
-          for f in * ; do
-            mv -- "$f" "${f%.tgz}-${sha:0:7}.tgz"
-          done
+          ls -R
+          pr_number=$(ls pr-packages)
+          echo $pr_number
+          echo "::set-output name=pr_number::$pr_number"
 
       - name: copy files to s3
         env:
@@ -48,30 +38,33 @@ jobs:
           aws configure set aws_access_key_id $aws_key_id
           aws configure set aws_secret_access_key $aws_secret_access_key
           aws configure set default.region us-east-1
-          aws s3 cp --recursive ./bin/ s3://rw-pr-redwoodjs-com/${{ github.event.number }}/
+          aws s3 cp --recursive ./pr-packages/ s3://rw-pr-redwoodjs-com/
 
       - name: Create comment msg
         id: comment_msg
         run: |
+          pr_number=${{ steps.pr_number.outputs.pr_number }}
+          cd pr-packages/$pr_number
+          v_sha=$(ls | grep "\.tgz$" | sed 's/\.tgz$//' | head -n1 | awk -F"-" '{ print $(NF-1)"-"$NF }')
           msg="📦 Packages for this PR can be downloaded from%0A"
-          for p in bin/*; do
-            msg+="https://rw-pr-redwoodjs-com.s3.amazonaws.com/${{ github.event.number }}/${p#bin/}%0A"
+          for p in *; do
+            msg+="https://rw-pr-redwoodjs-com.s3.amazonaws.com/$pr_number/$p%0A"
           done
-          msg+="%0AInstall locally with yarn, e.g. \`yarn workspace web add <url>\`"
+          msg+="%0AInstall this PR by running \`yarn rw upgrade --pr $pr_number:$v_sha\`"
           echo "::set-output name=msg::$msg"
 
       - name: Find Comment
         uses: peter-evans/find-comment@v1
         id: fc
         with:
-          issue-number: ${{ github.event.number }}
+          issue-number: ${{ steps.pr_number.outputs.pr_number }}
           comment-author: 'github-actions[bot]'
 
       - name: Create comment
         if: ${{ steps.fc.outputs.comment-id == 0 }}
         uses: peter-evans/create-or-update-comment@v1
         with:
-          issue-number: ${{ github.event.number }}
+          issue-number: ${{ steps.pr_number.outputs.pr_number }}
           body: ${{ steps.comment_msg.outputs.msg }}
 
       - name: Update comment

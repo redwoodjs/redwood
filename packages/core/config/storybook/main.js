@@ -9,7 +9,8 @@ module.exports = {
     '../../../../web/src/**/*.stories.{tsx,jsx,js}',
   ],
   webpackFinal: (sbConfig, { configType }) => {
-    const isEnvProduction = configType === 'production'
+    // configType is 'PRODUCTION' or 'DEVELOPMENT', why shout?
+    const isEnvProduction = configType?.toLowerCase() === 'production'
 
     const rwConfig = isEnvProduction
       ? require('../webpack.production')

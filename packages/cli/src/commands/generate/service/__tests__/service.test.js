@@ -2,6 +2,7 @@ global.__dirname = __dirname
 import path from 'path'
 
 import { loadGeneratorFixture } from 'src/lib/test'
+
 import { getDefaultArgs } from 'src/lib'
 
 import * as service from '../service'
@@ -264,4 +265,18 @@ describe('in typescript mode', () => {
   itCreatesASingleWordServiceFileWithAHasManyRelation(baseArgs)
   itCreatesASingleWordServiceFileWithABelongsToRelation(baseArgs)
   itCreatesASingleWordServiceFileWithMultipleRelations(baseArgs)
+})
+
+test("doesn't include test file when --tests is set to false", async () => {
+  const baseArgs = { ...getDefaultArgs(service.defaults), javascript: true }
+
+  const files = await service.files({
+    ...baseArgs,
+    name: 'User',
+    tests: false,
+  })
+
+  expect(Object.keys(files)).toEqual([
+    path.normalize('/path/to/project/api/src/services/users/users.js'),
+  ])
 })

@@ -1,12 +1,10 @@
 import { parse as parseGraphQL } from 'graphql'
 import * as tsm from 'ts-morph'
 import { DiagnosticSeverity } from 'vscode-languageserver-types'
+
 import { lazy } from '../x/decorators'
-import {
-  err,
-  ExtendedDiagnostic,
-  Range_fromNode,
-} from '../x/vscode-languageserver-types'
+import { err, Range_fromNode } from '../x/vscode-languageserver-types'
+
 import { RWComponent } from './RWComponent'
 
 export class RWCell extends RWComponent {

@@ -3,6 +3,7 @@ global.__dirname = __dirname
 import fs from 'fs'
 
 import 'src/lib/test'
+
 import { getPaths, getDefaultArgs } from 'src/lib'
 
 import { yargsDefaults as defaults } from '../../../generate'

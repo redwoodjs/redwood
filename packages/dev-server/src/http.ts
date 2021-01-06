@@ -1,7 +1,7 @@
+import bodyParser from 'body-parser'
 import type { Response, Request } from 'express'
 import express from 'express'
 import morgan from 'morgan'
-import bodyParser from 'body-parser'
 
 export interface Lambdas {
   [path: string]: any
@@ -23,7 +23,7 @@ export const server = ({
     })
   )
   app.use(bodyParser.raw({ type: '*/*', limit: process.env.BODY_PARSER_LIMIT }))
-  app.use(morgan('dev'))
+  app.use(morgan<Request, Response>('dev'))
 
   app.all('/', (_, res) => {
     return res.send(`

@@ -4,10 +4,11 @@ import {
   IResolvers,
   IExecutableSchemaDefinition,
 } from 'apollo-server-lambda'
-import { mergeTypes } from 'merge-graphql-schemas'
+import { GraphQLSchema, GraphQLFieldMap } from 'graphql'
 import merge from 'lodash.merge'
 import omitBy from 'lodash.omitby'
-import { GraphQLSchema, GraphQLFieldMap } from 'graphql'
+import { mergeTypes } from 'merge-graphql-schemas'
+
 import { Services, GraphQLTypeWithFields } from 'src/types'
 
 import * as rootSchema from './rootSchema'
@@ -18,7 +19,14 @@ const mapFieldsToService = ({
   services,
 }: {
   fields: GraphQLFieldMap<any, any>
-  resolvers: { [key: string]: Function }
+  resolvers: {
+    [key: string]: (
+      root: unknown,
+      args: unknown,
+      context: unknown,
+      info: unknown
+    ) => any
+  }
   services: Services
 }) =>
   Object.keys(fields).reduce((resolvers, name) => {
