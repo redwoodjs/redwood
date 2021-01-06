@@ -6,7 +6,7 @@ const { getSharedPlugins } = require('../webpack.common')
 
 module.exports = {
   stories: [
-    `${getPaths().web.src}/**/*.stories.{tsx,jsx,js}`.replace(/\\/g, '/'),
+    '../../../../web/src/**/*.stories.{tsx,jsx,js}',
   ],
   webpackFinal: (sbConfig, { configType }) => {
     // configType is 'PRODUCTION' or 'DEVELOPMENT', why shout?
