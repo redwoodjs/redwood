@@ -60,9 +60,11 @@ window.scenario = (...args) => {
 
   if (args.length === 3) {
     ;[scenarioName, testName, testFunc] = args
-  } else {
+  } else if (args.length === 2) {
     scenarioName = DEFAULT_SCENARIO
     ;[testName, testFunc] = args
+  } else {
+    throw new Error('scenario() requires 2 or 3 arguments')
   }
 
   return window.it(testName, async () => {
