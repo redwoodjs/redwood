@@ -1,4 +1,4 @@
-<%if (crud || relations.length > 0) { %>import {
+<% if (crud || relations.length > 0) { %>import {
   ${singularPascalName}WhereUniqueInput,<% if (crud) { %>
   ${singularPascalName}CreateInput,
   ${singularPascalName}UpdateInput,<% } %>
