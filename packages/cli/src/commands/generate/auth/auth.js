@@ -55,18 +55,15 @@ const addWebRender = (content, authProvider) => {
   const redwoodProviderLines = redwoodProvider.split('\n').map((line) => {
     return '  ' + line
   })
-  const customRenderOpen = authProvider.render
-    ? authProvider.render.reduce(
-        (acc, component) => acc + indent + `<${component}>`,
-        ''
-      )
-    : ''
-  const customRenderClose = authProvider.render
-    ? authProvider.render.reduce(
-        (acc, component) => indent + `</${component}>` + acc,
-        ''
-      )
-    : ''
+  const customRenderOpen = (authProvider.render || []).reduce(
+    (acc, component) => acc + indent + `<${component}>`,
+    ''
+  )
+
+  const customRenderClose = (authProvider.render || []).reduce(
+    (acc, component) => indent + `</${component}>` + acc,
+    ''
+  )
 
   const renderContent =
     customRenderOpen +
