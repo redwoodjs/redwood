@@ -78,7 +78,10 @@ window.scenario = (...args) => {
     try {
       allScenarios = require(testFilePath)
     } catch (e) {
-      // no scenario file found, ignore
+      // ignore error if scenario file not found, otherwise re-throw
+      if (e.code !== 'MODULE_NOT_FOUND') {
+        throw e
+      }
     }
 
     if (allScenarios) {
