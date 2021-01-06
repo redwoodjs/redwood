@@ -36,7 +36,7 @@ export const StorybookProvider: React.FunctionComponent<{
   }
 
   // default to a non-existent user at the beginning of each story
-  window.mockCurrentUser(null)
+  mockCurrentUser(null)
 
   return <MockProviders>{storyFn()}</MockProviders>
 }
