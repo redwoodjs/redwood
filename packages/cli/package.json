@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/cli",
   "description": "The Redwood Command Line",
-  "version": "0.22.0",
+  "version": "0.22.1",
   "license": "MIT",
   "bin": {
     "redwood": "./dist/index.js",
@@ -14,8 +14,8 @@
   ],
   "dependencies": {
     "@prisma/sdk": "2.12.1",
-    "@redwoodjs/internal": "^0.22.0",
-    "@redwoodjs/structure": "^0.22.0",
+    "@redwoodjs/internal": "^0.22.1",
+    "@redwoodjs/structure": "^0.22.1",
     "boxen": "^4.2.0",
     "camelcase": "^6.0.0",
     "chalk": "^4.1.0",
