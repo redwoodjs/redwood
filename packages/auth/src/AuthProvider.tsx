@@ -16,10 +16,10 @@ export interface AuthContextInterface {
   /* Determining your current authentication state */
   loading: boolean
   isAuthenticated: boolean
- /**
-  * @deprecated auth tokens are now refreshed when they expire, and this value will be removed from the context in the next few releases: https://github.com/redwoodjs/redwood/pull/1609
-  */
-  authToken: string | null // @WARN! to be depracated
+  /**
+   * @deprecated auth tokens are now refreshed when they expire, use getToken() instead. authToken will be removed from this context in future releases
+   */
+  authToken: string | null // @WARN! deprecated, will always be null
   /* The current user's data from the `getCurrentUser` function on the api side */
   currentUser: null | CurrentUser
   /* The user's metadata from the auth provider */
@@ -28,8 +28,6 @@ export interface AuthContextInterface {
   logOut(options?: unknown): Promise<void>
   signUp(options?: unknown): Promise<void>
   getToken(): Promise<null | string>
-  // To be removed once authToken is removed
-  getFreshToken(): Promise<null | string>
   /**
    * Fetches the "currentUser" from the api side,
    * but does not update the current user state.
@@ -60,7 +58,7 @@ export interface AuthContextInterface {
 export const AuthContext = React.createContext<AuthContextInterface>({
   loading: true,
   isAuthenticated: false,
-  authToken: null, // @WARN! to be depracated
+  authToken: null, // @WARN! deprecated, will always be null
   userMetadata: null,
   currentUser: null,
 })
@@ -74,7 +72,7 @@ type AuthProviderProps = {
 type AuthProviderState = {
   loading: boolean
   isAuthenticated: boolean
-  authToken: string | null // @WARN! to be depracated
+  authToken: string | null // @WARN! deprecated, will always be null
   userMetadata: null | Record<string, any>
   currentUser: null | CurrentUser
   hasError: boolean
@@ -101,7 +99,7 @@ export class AuthProvider extends React.Component<
   state: AuthProviderState = {
     loading: true,
     isAuthenticated: false,
-    authToken: null, // @WARN! to be depracated
+    authToken: null, // @WARN! deprecated, will always be null
     userMetadata: null,
     currentUser: null,
     hasError: false,
@@ -180,22 +178,13 @@ export class AuthProvider extends React.Component<
   }
 
   getToken = async () => {
-    const authToken = await this.rwClient.getToken()
-    this.setState({ ...this.state, authToken })
-    return authToken
-  }
-
-  // Note: Used by apollo middleware to get a fresh token
-  // State isn't changed, to prevent infinite loops
-  // Remove this, and call getToken when AuthProviderState.authToken is removed
-  getFreshToken = async () => {
     return this.rwClient.getToken()
   }
 
   reauthenticate = async () => {
     const notAuthenticatedState: AuthProviderState = {
       isAuthenticated: false,
-      authToken: null, // @WARN! to be depracated
+      authToken: null, // @WARN! deprecated, will always be null
       currentUser: null,
       userMetadata: null,
       loading: false,
@@ -267,7 +256,6 @@ export class AuthProvider extends React.Component<
           getCurrentUser: this.getCurrentUser,
           hasRole: this.hasRole,
           reauthenticate: this.reauthenticate,
-          getFreshToken: this.getFreshToken,
           client,
           type,
         }}

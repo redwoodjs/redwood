@@ -23,10 +23,10 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   config?: Omit<ApolloClientOptions<InMemoryCache>, 'cache'>
 }> = ({ config = {}, children }) => {
   const { uri, headers } = useFetchConfig()
-  const { getFreshToken, type: authProviderType } = useAuth()
+  const { getToken, type: authProviderType } = useAuth()
 
   const withToken = setContext(async () => {
-    const token = await getFreshToken()
+    const token = await getToken()
     return { token }
   })
 
@@ -36,7 +36,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
     operation.setContext(() => ({
       headers: {
         ...headers,
-        // Duped, because we may remove FetchContext at a later date
+        // Duped auth headers, because we may remove FetchContext at a later date
         'auth-provider': authProviderType,
         authorization: token ? `Bearer ${token}` : null,
       },

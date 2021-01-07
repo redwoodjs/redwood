@@ -24,7 +24,6 @@ const fakeUseAuth = (): AuthContextInterface => ({
   logOut: async () => undefined,
   signUp: async () => undefined,
   getToken: async () => null,
-  getFreshToken: async () => null,
   getCurrentUser: async () => null,
   hasRole: () => false,
   reauthenticate: async () => undefined,
