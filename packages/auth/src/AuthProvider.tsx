@@ -16,6 +16,9 @@ export interface AuthContextInterface {
   /* Determining your current authentication state */
   loading: boolean
   isAuthenticated: boolean
+ /**
+  * @deprecated auth tokens are now refreshed when they expire, and this value will be removed from the context in the next few releases: https://github.com/redwoodjs/redwood/pull/1609
+  */
   authToken: string | null // @WARN! to be depracated
   /* The current user's data from the `getCurrentUser` function on the api side */
   currentUser: null | CurrentUser
