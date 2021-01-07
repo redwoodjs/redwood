@@ -9,6 +9,8 @@ import type { AuthClient } from '../authClients'
 import { AuthProvider } from '../AuthProvider'
 import { useAuth } from '../useAuth'
 
+import { useEffect, useState } from 'react'
+
 let CURRENT_USER_DATA: { name: string; email: string; roles?: string[] } = {
   name: 'Peter Pistorius',
   email: 'nospam@example.net',
@@ -41,9 +43,9 @@ const AuthConsumer = () => {
   const {
     loading,
     isAuthenticated,
-    authToken,
     logOut,
     logIn,
+    getToken,
     userMetadata,
     currentUser,
     reauthenticate,
@@ -51,6 +53,17 @@ const AuthConsumer = () => {
     hasRole,
     error,
   } = useAuth()
+
+  const [authToken, setAuthToken] = useState(null)
+
+  const retrieveToken = async () => {
+    const token = await getToken()
+    setAuthToken(token)
+  }
+
+  useEffect(() => {
+    retrieveToken()
+  })
 
   if (loading) {
     return <>Loading...</>
