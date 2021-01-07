@@ -7,10 +7,12 @@ const {
   setupRequestHandlers,
   mockGraphQLMutation,
   mockGraphQLQuery,
+  mockCurrentUser,
 } = require('@redwoodjs/testing')
 
 global.mockGraphQLQuery = mockGraphQLQuery
 global.mockGraphQLMutation = mockGraphQLMutation
+global.mockCurrentUser = mockCurrentUser
 
 const project = getProject()
 

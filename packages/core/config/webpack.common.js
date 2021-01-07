@@ -136,6 +136,7 @@ const getSharedPlugins = (isEnvProduction) => {
       gql: 'graphql-tag',
       mockGraphQLQuery: ['@redwoodjs/testing', 'mockGraphQLQuery'],
       mockGraphQLMutation: ['@redwoodjs/testing', 'mockGraphQLMutation'],
+      mockCurrentUser: ['@redwoodjs/testing', 'mockCurrentUser'],
     }),
     // The define plugin will replace these keys with their values during build
     // time.
