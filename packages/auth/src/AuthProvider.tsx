@@ -16,7 +16,7 @@ export interface AuthContextInterface {
   /* Determining your current authentication state */
   loading: boolean
   isAuthenticated: boolean
-  authToken: string | null
+  authToken: string | null // @WARN! to be depracated
   /* The current user's data from the `getCurrentUser` function on the api side */
   currentUser: null | CurrentUser
   /* The user's metadata from the auth provider */
@@ -25,6 +25,8 @@ export interface AuthContextInterface {
   logOut(options?: unknown): Promise<void>
   signUp(options?: unknown): Promise<void>
   getToken(): Promise<null | string>
+  // To be removed once authToken is removed
+  getFreshToken(): Promise<null | string>
   /**
    * Fetches the "currentUser" from the api side,
    * but does not update the current user state.
@@ -55,7 +57,7 @@ export interface AuthContextInterface {
 export const AuthContext = React.createContext<AuthContextInterface>({
   loading: true,
   isAuthenticated: false,
-  authToken: null,
+  authToken: null, // @WARN! to be depracated
   userMetadata: null,
   currentUser: null,
 })
@@ -69,7 +71,7 @@ type AuthProviderProps = {
 type AuthProviderState = {
   loading: boolean
   isAuthenticated: boolean
-  authToken: string | null
+  authToken: string | null // @WARN! to be depracated
   userMetadata: null | Record<string, any>
   currentUser: null | CurrentUser
   hasError: boolean
@@ -96,7 +98,7 @@ export class AuthProvider extends React.Component<
   state: AuthProviderState = {
     loading: true,
     isAuthenticated: false,
-    authToken: null,
+    authToken: null, // @WARN! to be depracated
     userMetadata: null,
     currentUser: null,
     hasError: false,
@@ -115,6 +117,8 @@ export class AuthProvider extends React.Component<
   }
 
   getCurrentUser = async (): Promise<Record<string, unknown>> => {
+    // Always get a fresh token, rather than use the one in state
+    const token = await this.getToken()
     const response = await window.fetch(
       `${window.__REDWOOD__API_PROXY_PATH}/graphql`,
       {
@@ -122,7 +126,7 @@ export class AuthProvider extends React.Component<
         headers: {
           'content-type': 'application/json',
           'auth-provider': this.rwClient.type,
-          authorization: `Bearer ${this.state.authToken}`,
+          authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           query:
@@ -178,10 +182,17 @@ export class AuthProvider extends React.Component<
     return authToken
   }
 
+  // Note: Used by apollo middleware to get a fresh token
+  // State isn't changed, to prevent infinite loops
+  // Remove this, and call getToken when AuthProviderState.authToken is removed
+  getFreshToken = async () => {
+    return this.rwClient.getToken()
+  }
+
   reauthenticate = async () => {
     const notAuthenticatedState: AuthProviderState = {
       isAuthenticated: false,
-      authToken: null,
+      authToken: null, // @WARN! to be depracated
       currentUser: null,
       userMetadata: null,
       loading: false,
@@ -253,6 +264,7 @@ export class AuthProvider extends React.Component<
           getCurrentUser: this.getCurrentUser,
           hasRole: this.hasRole,
           reauthenticate: this.reauthenticate,
+          getFreshToken: this.getFreshToken,
           client,
           type,
         }}
