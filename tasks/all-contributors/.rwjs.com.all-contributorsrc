@@ -757,6 +757,78 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "noobling",
+      "name": "David Yu",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/23206864?v=4",
+      "profile": "https://github.com/noobling",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "jeliasson",
+      "name": "Johan Eliasson",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/865493?v=4",
+      "profile": "https://github.com/jeliasson",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "clairefro",
+      "name": "Claire Froelich",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/9841162?v=4",
+      "profile": "https://github.com/clairefro",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "adithyasunil26",
+      "name": "Adithya Sunil",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/51863389?v=4",
+      "profile": "https://github.com/adithyasunil26",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "byudaniel",
+      "name": "Daniel O'Neill",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/7226285?v=4",
+      "profile": "https://github.com/byudaniel",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "edjiang",
+      "name": "Edward Jiang",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/918770?v=4",
+      "profile": "https://edjiang.com/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "manukall",
+      "name": "Manuel Kallenbach",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/117418?v=4",
+      "profile": "http://manukall.de/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "NickSchmitt",
+      "name": "Nick Schmitt",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/23244885?v=4",
+      "profile": "https://github.com/NickSchmitt",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7
