@@ -29,6 +29,7 @@ export const handler = () => {
   const r = repl.start()
 
   // always await promises.
+  // source: https://github.com/nodejs/node/issues/13209#issuecomment-619526317
   const defaultEval = r.eval;
   r.eval = (cmd, context, filename, callback) => {
     defaultEval(cmd, context, filename, async (err, result) => {
