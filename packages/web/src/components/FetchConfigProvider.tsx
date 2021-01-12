@@ -2,7 +2,7 @@ import type { AuthContextInterface, SupportedAuthTypes } from '@redwoodjs/auth'
 
 export interface FetchConfig {
   uri: string
-  headers?: { 'auth-provider': SupportedAuthTypes; authorization?: string }
+  headers?: { 'auth-provider': SupportedAuthTypes; authorization: string }
 }
 export const FetchConfigContext = React.createContext<FetchConfig>({
   uri: `${window.__REDWOOD__API_PROXY_PATH}/graphql`,
@@ -19,11 +19,11 @@ export const FetchConfigProvider: React.FunctionComponent<{
     (() => ({ loading: false, isAuthenticated: false })),
   ...rest
 }) => {
-  const { isAuthenticated, type } = useAuth()
+  const { isAuthenticated, authToken, type } = useAuth()
 
   // Even though the user may be authenticated and we may require `authToken` to continue
   // This should be handled by the `Private` route.
-  if (!isAuthenticated) {
+  if (!isAuthenticated || !authToken) {
     return (
       <FetchConfigContext.Provider
         value={{ uri: `${window.__REDWOOD__API_PROXY_PATH}/graphql` }}
@@ -38,6 +38,7 @@ export const FetchConfigProvider: React.FunctionComponent<{
         uri: `${window.__REDWOOD__API_PROXY_PATH}/graphql`,
         headers: {
           'auth-provider': type,
+          authorization: `Bearer ${authToken}`,
         },
       }}
       {...rest}
