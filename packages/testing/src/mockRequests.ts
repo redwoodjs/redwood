@@ -129,3 +129,18 @@ export const mockGraphQLMutation = (
 ) => {
   return mockGraphQL('mutation', operation, data)
 }
+
+export const mockedUserMeta: { currentUser: Record<string, unknown> | null } = {
+  currentUser: null,
+}
+
+export const mockCurrentUser = (user: Record<string, unknown> | null) => {
+  mockedUserMeta.currentUser = user
+  mockGraphQLQuery('__REDWOOD__AUTH_GET_CURRENT_USER', () => {
+    return {
+      redwood: {
+        currentUser: user,
+      },
+    }
+  })
+}

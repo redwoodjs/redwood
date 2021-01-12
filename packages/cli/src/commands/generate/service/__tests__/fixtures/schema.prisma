@@ -1,0 +1,40 @@
+datasource DS {
+  provider = "postgresql"
+  url = env("DB_HOST")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Define your own models here and run yarn db:save to create
+// migrations for them.
+
+model Post {
+  id       Int      @id @default(autoincrement())
+  title    String
+  slug     String @unique
+  author   String
+  body     String
+  image    String?
+  isPinned Boolean @default(false)
+  readTime Int
+  rating   Float?
+  postedAt DateTime?
+  metadata Json
+}
+
+model User {
+  id       Int     @id @default(autoincrement())
+  name     String?
+  email    String  @unique
+  isAdmin  Boolean @default(false)
+  profiles UserProfile[]
+}
+
+model UserProfile {
+  id       Int    @id @default(autoincrement())
+  username String @unique
+  userId   Int
+  user     User   @relation(fields: [userId], references: [id])
+}

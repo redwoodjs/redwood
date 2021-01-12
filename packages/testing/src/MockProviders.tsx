@@ -4,8 +4,11 @@
  */
 import React from 'react'
 
+import { AuthProvider } from '@redwoodjs/auth'
 import type { AuthContextInterface } from '@redwoodjs/auth'
 import { RedwoodProvider } from '@redwoodjs/web'
+
+import { mockedUserMeta } from './mockRequests'
 
 // Import the user's Router from `./web/src/Router.{tsx,js}`,
 // we pass the `children` from the user's Router to `./MockRouter.Router`
@@ -32,11 +35,28 @@ const fakeUseAuth = (): AuthContextInterface => ({
   hasError: false,
 })
 
+export const mockAuthClient = {
+  restoreAuthState: () => {},
+  login: () => {},
+  logout: () => {},
+  signup: () => {},
+  getToken: () => {
+    return 'token'
+  },
+  getUserMetadata: () => {
+    return mockedUserMeta.currentUser
+  },
+  client: 'Custom',
+  type: 'custom',
+}
+
 export const MockProviders: React.FunctionComponent = ({ children }) => {
   return (
-    <RedwoodProvider useAuth={fakeUseAuth}>
-      <UserRouterWithRoutes />
-      {children}
-    </RedwoodProvider>
+    <AuthProvider client={mockAuthClient} type="custom">
+      <RedwoodProvider useAuth={fakeUseAuth}>
+        <UserRouterWithRoutes />
+        {children}
+      </RedwoodProvider>
+    </AuthProvider>
   )
 }
