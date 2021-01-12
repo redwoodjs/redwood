@@ -23,22 +23,35 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   config?: Omit<ApolloClientOptions<InMemoryCache>, 'cache'>
 }> = ({ config = {}, children }) => {
   const { uri, headers } = useFetchConfig()
-  const { getToken, type: authProviderType } = useAuth()
+  const { getToken, type: authProviderType, isAuthenticated } = useAuth()
 
   const withToken = setContext(async () => {
-    const token = await getToken()
-    return { token }
+    if (isAuthenticated && getToken) {
+      const token = await getToken()
+
+      return { token }
+    }
+
+    return { token: null }
   })
 
   const authMiddleware = new ApolloLink((operation, forward) => {
     const { token } = operation.getContext()
 
+    // Only add auth headers when token is present
+    // Token is null, when !isAuthenticated
+    const authHeaders = token
+      ? {
+          'auth-provider': authProviderType,
+          authorization: token ? `Bearer ${token}` : null,
+        }
+      : {}
+
     operation.setContext(() => ({
       headers: {
         ...headers,
         // Duped auth headers, because we may remove FetchContext at a later date
-        'auth-provider': authProviderType,
-        authorization: token ? `Bearer ${token}` : null,
+        ...authHeaders,
       },
     }))
     return forward(operation)
