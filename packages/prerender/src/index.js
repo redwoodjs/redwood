@@ -3,13 +3,9 @@ import React from 'react'
 
 import ReactDOMServer from 'react-dom/server'
 
-import TestComponent from './TestComponent'
-import TSGuy from './TSGuy'
-
-export const runPrerender = () => {
-  const output = ReactDOMServer.renderToStaticMarkup(<TestComponent />)
-  const tsOutput = ReactDOMServer.renderToStaticMarkup(<TSGuy />)
-  console.log(output)
-
-  console.log(tsOutput)
+export const runPrerender = async ({ input, output }) => {
+  const { default: PageToRender } = await import(input)
+  console.log(PageToRender)
+  const out = ReactDOMServer.renderToStaticMarkup(<PageToRender />)
+  console.log(out)
 }

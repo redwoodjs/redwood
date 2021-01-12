@@ -25,7 +25,9 @@
 	},
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
+		"build": "yarn build:js",
 		"build:js": "babel -d dist --extensions \".js,.ts,.tsx\" src ",
+    "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
 		"start": "babel-node --extensions \".js,.ts,.tsx\" src/index.js"
 	},
   "gitHead": "c235e7d7186e5e258764699c0e0e1d5cc0fdd0b5"
