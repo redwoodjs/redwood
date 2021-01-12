@@ -1,0 +1,32 @@
+{
+  "name": "@redwoodjs/prerender",
+  "description": "Redwood prerenter util",
+  "version": "0.22.1",
+  "license": "MIT",
+  "files": [
+    "dist"
+	],
+	"main": "dist/index.js",
+	"dependencies": {
+		"react": "^17.0.1",
+		"react-dom": "^17.0.1"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.12.10",
+		"@babel/node": "^7.12.10",
+		"@babel/plugin-proposal-class-properties": "^7.12.1",
+		"@babel/polyfill": "^7.12.1",
+		"@babel/preset-env": "^7.12.11",
+		"@babel/preset-react": "^7.12.10",
+		"@babel/preset-typescript": "^7.12.7",
+		"nodemon": "^2.0.7",
+		"webpack": "^5.12.0",
+		"webpack-cli": "^4.3.1"
+	},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"build:js": "babel -d dist --extensions \".js,.ts,.tsx\" src ",
+		"start": "babel-node --extensions \".js,.ts,.tsx\" src/index.js"
+	},
+  "gitHead": "c235e7d7186e5e258764699c0e0e1d5cc0fdd0b5"
+}
