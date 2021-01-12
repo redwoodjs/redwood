@@ -5,7 +5,7 @@ export const userProfiles = () => {
 }
 
 export const userProfile = ({ id }) => {
-  return db.userProfile.findOne({
+  return db.userProfile.findUnique({
     where: { id },
   })
 }
