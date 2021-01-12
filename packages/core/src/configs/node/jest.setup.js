@@ -1,5 +1,6 @@
 const path = require('path')
 
+const { setContext } = require('@redwoodjs/api')
 const { getPaths } = require('@redwoodjs/internal')
 const { defineScenario } = require('@redwoodjs/testing/dist/scenario')
 const { db } = require(path.join(getPaths().api.src, 'lib', 'db'))
@@ -108,6 +109,10 @@ window.scenario = (...args) => {
 }
 
 window.defineScenario = defineScenario
+
+window.mockCurrentUser = (currentUser) => {
+  setContext({ currentUser })
+}
 
 afterAll(async () => {
   await db.$disconnect()
