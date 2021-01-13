@@ -28,6 +28,25 @@ export const handler = () => {
 
   const r = repl.start()
 
+  // always await promises.
+  // source: https://github.com/nodejs/node/issues/13209#issuecomment-619526317
+  const defaultEval = r.eval;
+  r.eval = (cmd, context, filename, callback) => {
+    defaultEval(cmd, context, filename, async (err, result) => {
+      if (err) {
+        // propagate errors.
+        callback(err);
+      } else {
+        // await the promise and either return the result or error.
+        try {
+          callback(null, await Promise.resolve(result));
+        } catch (err) {
+          callback(err);
+        }
+      }
+    });
+  };
+
   // Make the project's db (i.e. Prisma Client) available
   mapDBToContext(r.context)
 }
