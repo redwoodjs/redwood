@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/web",
-  "version": "0.22.1",
+  "version": "0.23.0",
   "files": [
     "dist"
   ],
@@ -15,7 +15,7 @@
     "proptypes": "^1.1.0"
   },
   "devDependencies": {
-    "@redwoodjs/auth": "^0.22.1"
+    "@redwoodjs/auth": "^0.23.0"
   },
   "peerDependencies": {
     "react": "*"
