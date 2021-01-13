@@ -29,6 +29,7 @@ export interface BrowserTargetPaths {
   config: string
   webpack: string
   postcss: string
+  dist: string
 }
 
 export interface Paths {
@@ -64,6 +65,8 @@ const PATH_WEB_DIR_SRC_INDEX = 'web/src/index' // .js|.tsx
 const PATH_WEB_DIR_CONFIG = 'web/config'
 const PATH_WEB_DIR_CONFIG_WEBPACK = 'web/config/webpack.config.js'
 const PATH_WEB_DIR_CONFIG_POSTCSS = 'web/config/postcss.config.js'
+
+const PATH_WEB_DIR_DIST = 'web/dist'
 
 /**
  * Search the parent directories for the Redwood configuration file.
@@ -147,6 +150,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       config: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG),
       webpack: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG_WEBPACK),
       postcss: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG_POSTCSS),
+      dist: path.join(BASE_DIR, PATH_WEB_DIR_DIST),
     },
   }
 }
