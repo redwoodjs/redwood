@@ -10,7 +10,7 @@ export const userProfiles = () => {
 }
 
 export const userProfile = ({ id }: UserProfileWhereUniqueInput) => {
-  return db.userProfile.findOne({
+  return db.userProfile.findUnique({
     where: { id },
   })
 }

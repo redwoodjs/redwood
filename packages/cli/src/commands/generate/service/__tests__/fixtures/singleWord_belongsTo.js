@@ -6,5 +6,5 @@ export const users = () => {
 
 export const User = {
   identity: (_obj, { root }) =>
-    db.user.findOne({ where: { id: root.id } }).identity(),
+    db.user.findUnique({ where: { id: root.id } }).identity(),
 }
