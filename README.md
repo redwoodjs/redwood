@@ -433,23 +433,18 @@ And there you have it.
     <td align="center"><a href="https://github.com/dcgoodwin2112"><img src="https://avatars1.githubusercontent.com/u/4554388?v=4" width="100px;" alt=""/><br /><sub><b>dcgoodwin2112</b></sub></a></td>
     <td align="center"><a href="https://github.com/bennettrogers"><img src="https://avatars1.githubusercontent.com/u/933251?v=4" width="100px;" alt=""/><br /><sub><b>Bennett Rogers</b></sub></a></td>
     <td align="center"><a href="https://github.com/byudaniel"><img src="https://avatars0.githubusercontent.com/u/7226285?v=4" width="100px;" alt=""/><br /><sub><b>Daniel O'Neill</b></sub></a></td>
-    <td align="center"><a href="https://github.com/RobertBroersma"><img src="https://avatars0.githubusercontent.com/u/4519828?v=4" width="100px;" alt=""/><br /><sub><b>Robert</b></sub></a></td>
+    <td align="center"><a href="https://github.com/noobling"><img src="https://avatars2.githubusercontent.com/u/23206864?v=4" width="100px;" alt=""/><br /><sub><b>David Yu</b></sub></a></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://github.com/noobling"><img src="https://avatars2.githubusercontent.com/u/23206864?v=4" width="100px;" alt=""/><br /><sub><b>David Yu</b></sub></a></td>
-    <td align="center"><a href="https://github.com/clairefro"><img src="https://avatars1.githubusercontent.com/u/9841162?v=4" width="100px;" alt=""/><br /><sub><b>Claire Froelich</b></sub></a></td>
     <td align="center"><a href="https://github.com/adithyasunil26"><img src="https://avatars0.githubusercontent.com/u/51863389?v=4" width="100px;" alt=""/><br /><sub><b>Adithya Sunil</b></sub></a></td>
     <td align="center"><a href="https://edjiang.com/"><img src="https://avatars1.githubusercontent.com/u/918770?v=4" width="100px;" alt=""/><br /><sub><b>Edward Jiang</b></sub></a></td>
     <td align="center"><a href="http://manukall.de/"><img src="https://avatars0.githubusercontent.com/u/117418?v=4" width="100px;" alt=""/><br /><sub><b>Manuel Kallenbach</b></sub></a></td>
-  </tr>
-  <tr>
     <td align="center"><a href="https://github.com/NickSchmitt"><img src="https://avatars3.githubusercontent.com/u/23244885?v=4" width="100px;" alt=""/><br /><sub><b>Nick Schmitt</b></sub></a></td>
   </tr>
 </table>
 
 <!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
-
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 Redwood projects *(mostly)* follow the [all-contributions](https://allcontributors.org/) specification. Contributions of any kind are welcome.
