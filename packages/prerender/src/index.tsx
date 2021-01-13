@@ -30,15 +30,26 @@ export const runPrerender = async ({
 }: PrerenderParams) => {
   if (!globalThis.window) {
     // @ts-expect-error-next-line
-    globalThis.window = {}
+    globalThis.window = {
+      location: {
+        pathname: '',
+        search: '',
+      },
+      history: {},
+    }
   }
 
   const indexContent = fs.readFileSync(getRootHtmlPath()).toString()
 
   const { default: ComponentToPrerender } = await import(inputComponentPath)
+  const { default: Routes } = await import(getPaths().web.routes)
 
   const componentAsHtml = ReactDOMServer.renderToStaticMarkup(
-    <ComponentToPrerender />
+    <>
+      {/* Do this so that the @redwoodjs/router.routes object is populated */}
+      <Routes />
+      <ComponentToPrerender />
+    </>
   )
 
   const renderOutput = indexContent.replace('<server-markup/>', componentAsHtml)
