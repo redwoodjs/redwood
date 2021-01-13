@@ -440,6 +440,10 @@ And there you have it.
     <td align="center"><a href="https://edjiang.com/"><img src="https://avatars1.githubusercontent.com/u/918770?v=4" width="100px;" alt=""/><br /><sub><b>Edward Jiang</b></sub></a></td>
     <td align="center"><a href="http://manukall.de/"><img src="https://avatars0.githubusercontent.com/u/117418?v=4" width="100px;" alt=""/><br /><sub><b>Manuel Kallenbach</b></sub></a></td>
     <td align="center"><a href="https://github.com/NickSchmitt"><img src="https://avatars3.githubusercontent.com/u/23244885?v=4" width="100px;" alt=""/><br /><sub><b>Nick Schmitt</b></sub></a></td>
+    <td align="center"><a href="https://monoglot.dev/"><img src="https://avatars0.githubusercontent.com/u/13792200?v=4" width="100px;" alt=""/><br /><sub><b>Jon Meyers</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/mbush92"><img src="https://avatars0.githubusercontent.com/u/15862774?v=4" width="100px;" alt=""/><br /><sub><b>Matthew Bush</b></sub></a></td>
   </tr>
 </table>
 
