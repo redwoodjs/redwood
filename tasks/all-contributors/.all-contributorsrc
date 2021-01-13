@@ -405,7 +405,8 @@
       "avatar_url": "https://avatars2.githubusercontent.com/u/865493?v=4",
       "profile": "https://github.com/jeliasson",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -567,7 +568,8 @@
       "profile": "https://github.com/forresthayes",
       "contributions": [
         "code",
-        "doc"
+        "doc",
+        "tool"
       ]
     },
     {
@@ -1327,6 +1329,70 @@
       "name": "dcgoodwin2112",
       "avatar_url": "https://avatars1.githubusercontent.com/u/4554388?v=4",
       "profile": "https://github.com/dcgoodwin2112",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "bennettrogers",
+      "name": "Bennett Rogers",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/933251?v=4",
+      "profile": "https://github.com/bennettrogers",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "byudaniel",
+      "name": "Daniel O'Neill",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/7226285?v=4",
+      "profile": "https://github.com/byudaniel",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "noobling",
+      "name": "David Yu",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/23206864?v=4",
+      "profile": "https://github.com/noobling",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "adithyasunil26",
+      "name": "Adithya Sunil",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/51863389?v=4",
+      "profile": "https://github.com/adithyasunil26",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "edjiang",
+      "name": "Edward Jiang",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/918770?v=4",
+      "profile": "https://edjiang.com/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "manukall",
+      "name": "Manuel Kallenbach",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/117418?v=4",
+      "profile": "http://manukall.de/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "NickSchmitt",
+      "name": "Nick Schmitt",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/23244885?v=4",
+      "profile": "https://github.com/NickSchmitt",
       "contributions": [
         "doc"
       ]
