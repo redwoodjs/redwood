@@ -250,7 +250,8 @@
       "contributions": [
         "code",
         "doc",
-        "tool"
+        "tool",
+        "tutorial"
       ]
     },
     {
@@ -1395,6 +1396,24 @@
       "profile": "https://github.com/NickSchmitt",
       "contributions": [
         "doc"
+      ]
+    },
+    {
+      "login": "dijonmusters",
+      "name": "Jon Meyers",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/13792200?v=4",
+      "profile": "https://monoglot.dev/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "mbush92",
+      "name": "Matthew Bush",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/15862774?v=4",
+      "profile": "https://github.com/mbush92",
+      "contributions": [
+        "tutorial"
       ]
     }
   ]
