@@ -7,15 +7,24 @@ import ReactDOMServer from 'react-dom/server'
 
 import { getPaths } from '@redwoodjs/internal'
 
+// @TODO do we need to use path.join?
 const INDEX_FILE = `${getPaths().web.dist}/index.html`
+const DEFAULT_INDEX = `${getPaths().web.dist}/defaultIndex.html`
+
+const getRootHtmlPath = () => {
+  if (fs.existsSync(DEFAULT_INDEX)) {
+    return DEFAULT_INDEX
+  } else {
+    return INDEX_FILE
+  }
+}
 
 export const runPrerender = async ({ inputComponentPath, outputHtmlPath }) => {
   globalThis.window = {
     ssr: true,
   }
 
-  // @TODO do we need to use path.join?
-  const indexContent = fs.readFileSync(INDEX_FILE).toString()
+  const indexContent = fs.readFileSync(getRootHtmlPath()).toString()
 
   const { default: ComponentToPrerender } = await import(inputComponentPath)
 

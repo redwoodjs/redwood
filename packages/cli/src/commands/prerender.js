@@ -51,19 +51,14 @@ export const handler = async ({ input, output }) => {
       path: route.path,
       hasParams: route.hasParameters,
       id: route.id,
-      // importPath: route.page.importPath,
-      componentPath: route.page.path.replace(`${process.cwd()}/`, ''),
       filePath: route.page.filePath,
     }))
 
   console.log(prerenderRoutes)
 
-  // @TODO what we actually want to do is only render upto the layout
-  // This is to avoid various issues of not having variables like _REDWOOD_PROXY_PATH etc
-
-  // @TODO figure out how to use the directory import plugin here
-  // page.path is the absolute path to the folder, so we remove the cwd
-  // but even then its missing the full path, only points to the directory
+  // @TODO for <Private> routes only render whileLoading or the layout
+  // @TODO what do we do about Cells?
+  // @TODO how do we deal with the routes import from router?
 
   prerenderRoutes.map((routeToPrerender) => {
     const outputHtmlPath = mapRouterPathToHtml(routeToPrerender.path)
