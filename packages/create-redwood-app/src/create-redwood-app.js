@@ -6,16 +6,13 @@
 // Usage:
 // `$ yarn create redwood-app ./path/to/new-project`
 
-import fs from 'fs'
 import path from 'path'
 
-import axios from 'axios'
 import chalk from 'chalk'
 import checkNodeVersion from 'check-node-version'
-import decompress from 'decompress'
 import execa from 'execa'
+import fs from 'fs-extra'
 import Listr from 'listr'
-import tmp from 'tmp'
 import yargs from 'yargs'
 
 import { name, version } from '../package'
@@ -44,27 +41,6 @@ const style = {
   love: chalk.redBright,
 
   green: chalk.green,
-}
-
-const RELEASE_URL =
-  'https://api.github.com/repos/redwoodjs/create-redwood-app/releases/latest'
-
-const latestReleaseZipFile = async () => {
-  const response = await axios.get(RELEASE_URL)
-  return response.data.zipball_url
-}
-
-const downloadFile = async (sourceUrl, targetFile) => {
-  const writer = fs.createWriteStream(targetFile)
-  const response = await axios.get(sourceUrl, {
-    responseType: 'stream',
-  })
-  response.data.pipe(writer)
-
-  return new Promise((resolve, reject) => {
-    writer.on('finish', resolve)
-    writer.on('error', reject)
-  })
 }
 
 const { _: args, 'yarn-install': yarnInstall } = yargs
@@ -98,6 +74,7 @@ if (!targetDir) {
 
 const newAppDir = path.resolve(process.cwd(), targetDir)
 const appDirExists = fs.existsSync(newAppDir)
+const templateDir = path.resolve(__dirname, '../template')
 
 if (appDirExists && fs.readdirSync(newAppDir).length > 0) {
   console.error(`'${newAppDir}' already exists and is not empty.`)
@@ -105,28 +82,15 @@ if (appDirExists && fs.readdirSync(newAppDir).length > 0) {
 }
 
 const createProjectTasks = ({ newAppDir }) => {
-  const tmpDownloadPath = tmp.tmpNameSync({
-    prefix: 'redwood',
-    postfix: '.zip',
-  })
-
   return [
     {
       title: `${appDirExists ? 'Using' : 'Creating'} directory '${newAppDir}'`,
       task: () => {
-        fs.mkdirSync(newAppDir, { recursive: true })
+        fs.ensureDirSync(path.dirname(newAppDir))
+        if (!appDirExists) {
+          fs.copySync(templateDir, newAppDir)
+        }
       },
-    },
-    {
-      title: 'Downloading latest release',
-      task: async () => {
-        const url = await latestReleaseZipFile()
-        return downloadFile(url, tmpDownloadPath)
-      },
-    },
-    {
-      title: 'Extracting latest release',
-      task: () => decompress(tmpDownloadPath, newAppDir, { strip: 1 }),
     },
     {
       title: 'Clean up',

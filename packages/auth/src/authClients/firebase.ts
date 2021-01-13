@@ -33,32 +33,22 @@ export const firebase = (client: Firebase): AuthClient => {
     type: 'firebase',
     client,
     restoreAuthState: () => client.auth().getRedirectResult(),
-    login: async (
-      withAuth: oAuthProvider | PasswordCreds = 'google.com'
-    ) => {
+    login: async (withAuth: oAuthProvider | PasswordCreds = 'google.com') => {
       if (isPasswordCreds(withAuth)) {
         return client
           .auth()
-          .signInWithEmailAndPassword(
-            withAuth.email,
-            withAuth.password
-          )
+          .signInWithEmailAndPassword(withAuth.email, withAuth.password)
       }
 
       const provider = getProvider(withAuth)
       return client.auth().signInWithPopup(provider)
     },
     logout: () => client.auth().signOut(),
-    signup: async (
-      withAuth: oAuthProvider | PasswordCreds = 'google.com'
-    ) => {
+    signup: async (withAuth: oAuthProvider | PasswordCreds = 'google.com') => {
       if (isPasswordCreds(withAuth)) {
         return client
           .auth()
-          .createUserWithEmailAndPassword(
-            withAuth.email,
-            withAuth.password
-          )
+          .createUserWithEmailAndPassword(withAuth.email, withAuth.password)
       }
 
       const provider = getProvider(withAuth)
