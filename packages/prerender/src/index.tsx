@@ -19,9 +19,18 @@ const getRootHtmlPath = () => {
   }
 }
 
-export const runPrerender = async ({ inputComponentPath, outputHtmlPath }) => {
-  globalThis.window = {
-    ssr: true,
+interface PrerenderParams {
+  inputComponentPath: string // usually web/src/{components/pages}/*
+  outputHtmlPath: string // web/dist/{path}.html
+}
+
+export const runPrerender = async ({
+  inputComponentPath,
+  outputHtmlPath,
+}: PrerenderParams) => {
+  if (!globalThis.window) {
+    // @ts-expect-error-next-line
+    globalThis.window = {}
   }
 
   const indexContent = fs.readFileSync(getRootHtmlPath()).toString()
@@ -31,6 +40,7 @@ export const runPrerender = async ({ inputComponentPath, outputHtmlPath }) => {
   const componentAsHtml = ReactDOMServer.renderToStaticMarkup(
     <ComponentToPrerender />
   )
+
   const renderOutput = indexContent.replace('<server-markup/>', componentAsHtml)
 
   if (outputHtmlPath) {
