@@ -1,0 +1,8 @@
+.idea
+.DS_Store
+.redwood
+dist
+dist-babel
+node_modules
+yarn-error.log
+
