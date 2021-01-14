@@ -1,5 +1,8 @@
 import type { DocumentNode } from 'graphql'
 
+// @TODO why do I need to do /dist ?
+import { isPrerendering } from '@redwoodjs/prerender/dist/utils'
+
 import { useQuery, OperationResult } from './GraphQLHooksProvider'
 
 const Query: React.FunctionComponent<{
@@ -70,6 +73,24 @@ export interface WithCellProps {
  *  return <div><ExampleComponent /></div>
  * }
  */
+
+const isDataNull = (data: DataObject) => {
+  return dataField(data) === null
+}
+
+const isDataEmptyArray = (data: DataObject) => {
+  const field = dataField(data)
+  return Array.isArray(field) && field.length === 0
+}
+
+const dataField = (data: DataObject) => {
+  return data[Object.keys(data)[0]]
+}
+
+const isEmpty = (data: DataObject) => {
+  return isDataNull(data) || isDataEmptyArray(data)
+}
+
 export const withCell = ({
   beforeQuery = (props) => ({
     variables: props,
@@ -83,21 +104,10 @@ export const withCell = ({
   Empty,
   Success,
 }: WithCellProps) => {
-  const isDataNull = (data: DataObject) => {
-    return dataField(data) === null
-  }
-
-  const isDataEmptyArray = (data: DataObject) => {
-    const field = dataField(data)
-    return Array.isArray(field) && field.length === 0
-  }
-
-  const dataField = (data: DataObject) => {
-    return data[Object.keys(data)[0]]
-  }
-
-  const isEmpty = (data: DataObject) => {
-    return isDataNull(data) || isDataEmptyArray(data)
+  // @TODO check for prerendering here
+  if (isPrerendering()) {
+    console.log('🚡 Prerender mode enabled')
+    return (props: Record<string, unknown>) => <Loading {...props} />
   }
 
   return (props: Record<string, unknown>) => (

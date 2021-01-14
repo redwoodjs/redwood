@@ -15,7 +15,8 @@
     "proptypes": "^1.1.0"
   },
   "devDependencies": {
-    "@redwoodjs/auth": "^0.22.1"
+    "@redwoodjs/auth": "^0.22.1",
+    "@redwoodjs/prerender": "^0.22.1"
   },
   "peerDependencies": {
     "react": "*"

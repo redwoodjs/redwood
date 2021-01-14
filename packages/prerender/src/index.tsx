@@ -1,11 +1,10 @@
-// @ts-check
 import fs from 'fs'
 
 import React from 'react'
 
 import ReactDOMServer from 'react-dom/server'
 
-import { getPaths } from '@redwoodjs/internal'
+import { getConfig, getPaths } from '@redwoodjs/internal'
 
 // @TODO do we need to use path.join?
 const INDEX_FILE = `${getPaths().web.dist}/index.html`
@@ -24,20 +23,39 @@ interface PrerenderParams {
   outputHtmlPath: string // web/dist/{path}.html
 }
 
-export const runPrerender = async ({
-  inputComponentPath,
-  outputHtmlPath,
-}: PrerenderParams) => {
+// This will prevent SSR blowing up,
+// without needing us to change every bit of code
+// WARN! is a stop-gap solution
+const registerShims = () => {
   if (!globalThis.window) {
-    // @ts-expect-error-next-line
     globalThis.window = {
+      // @ts-expect-error-next-line
       location: {
         pathname: '',
         search: '',
       },
+      // @ts-expect-error-next-line
       history: {},
     }
   }
+
+  // @ts-expect-error-next-line
+  globalThis.__REDWOOD__API_PROXY_PATH = getConfig().web.apiProxyPath
+  // @ts-expect-error-next-line
+  globalThis.__REDWOOD__USE_AUTH = () => ({
+    loading: true, // This should 🤞🏽 just cause the whileLoading component to show up on Private routes
+    isAuthenticated: false,
+  })
+
+  // @ts-expect-error-next-line
+  globalThis.prerenderMode = true
+}
+
+export const runPrerender = async ({
+  inputComponentPath,
+  outputHtmlPath,
+}: PrerenderParams) => {
+  registerShims()
 
   const indexContent = fs.readFileSync(getRootHtmlPath()).toString()
 

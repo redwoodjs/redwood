@@ -1,14 +1,14 @@
 {
-  "name": "@redwoodjs/prerender",
-  "description": "Redwood prerenter util",
-  "version": "0.22.1",
-  "license": "MIT",
-  "files": [
-    "dist"
+	"name": "@redwoodjs/prerender",
+	"description": "Redwood prerenter util",
+	"version": "0.22.1",
+	"license": "MIT",
+	"files": [
+		"dist"
 	],
 	"main": "dist/index.js",
 	"peerDependencies": {
-    "react": "*",
+		"react": "*",
 		"react-dom": "*"
 	},
 	"devDependencies": {
@@ -19,16 +19,19 @@
 		"@babel/preset-env": "^7.12.11",
 		"@babel/preset-react": "^7.12.10",
 		"@babel/preset-typescript": "^7.12.7",
+		"babel-plugin-inline-react-svg": "^1.1.2",
 		"nodemon": "^2.0.7",
 		"webpack": "^5.12.0",
 		"webpack-cli": "^4.3.1"
 	},
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
-		"build": "yarn build:js",
-		"build:js": "babel -d dist --extensions \".js,.ts,.tsx\" src ",
-    "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
-		"start": "babel-node --extensions \".js,.ts,.tsx\" src/index.js"
+		"build": "yarn build:js && yarn build:types",
+		"prepublishOnly": "yarn build",
+		"build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
+		"build:types": "ttsc --build --verbose",
+		"build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build\"",
+		"test": "jest",
+		"test:watch": "yarn test --watch"
 	},
 	"externals": {
 		"react": "react",
