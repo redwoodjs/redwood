@@ -1,0 +1,1 @@
+export const standard = defineScenario(${JSON.stringify(scenario)})

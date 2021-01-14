@@ -1,0 +1,34 @@
+{
+  "projectName": "learn.redwoodjs.com",
+  "projectOwner": "redwoodjs",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "contributorTemplate": "<a href=\"<%= contributor.profile %>\"><img src=\"<%= contributor.avatar_url %>\" width=\"<%= options.imageSize %>px;\" alt=\"\"/><br /><sub><b><%= contributor.name %></b></sub></a>",
+  "commit": false,
+  "commitConvention": "none",
+  "contributors": [
+    {
+      "login": "mbush92",
+      "name": "Matthew Bush",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/15862774?v=4",
+      "profile": "https://github.com/mbush92",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "Thieffen",
+      "name": "Thieffen",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/847877?v=4",
+      "profile": "https://github.com/Thieffen",
+      "contributions": [
+        "tutorial"
+      ]
+    }
+  ],
+  "contributorsPerLine": 5
+}

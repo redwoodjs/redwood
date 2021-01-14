@@ -3,19 +3,19 @@ import { Loading, Empty, Failure, Success } from './UserProfileCell'
 import { standard } from './UserProfileCell.mock'
 
 describe('UserProfileCell', () => {
-  test('Loading renders successfully', () => {
+  it('renders Loading successfully', () => {
     expect(() => {
       render(<Loading />)
     }).not.toThrow()
   })
 
-  test('Empty renders successfully', async () => {
+  it('renders Empty successfully', async () => {
     expect(() => {
       render(<Empty />)
     }).not.toThrow()
   })
 
-  test('Failure renders successfully', async () => {
+  it('renders Failure successfully', async () => {
     expect(() => {
       render(<Failure error={new Error('Oh no')} />)
     }).not.toThrow()
@@ -26,7 +26,7 @@ describe('UserProfileCell', () => {
   //
   //   expect(screen.getByText('Hello, world')).toBeInTheDocument()
 
-  test('Success renders successfully', async () => {
+  it('renders Success successfully', async () => {
     expect(() => {
       render(<Success userProfile={standard().userProfile} />)
     }).not.toThrow()

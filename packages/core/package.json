@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/core",
-  "version": "0.21.0",
+  "version": "0.23.0",
   "license": "MIT",
   "files": [
     "config",
@@ -19,12 +19,12 @@
     "@babel/preset-typescript": "^7.10.4",
     "@babel/runtime-corejs3": "^7.11.2",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
-    "@prisma/cli": "2.11.0",
-    "@redwoodjs/cli": "^0.21.0",
-    "@redwoodjs/dev-server": "^0.21.0",
-    "@redwoodjs/eslint-config": "^0.21.0",
-    "@redwoodjs/internal": "^0.21.0",
-    "@redwoodjs/testing": "^0.21.0",
+    "@prisma/cli": "2.12.1",
+    "@redwoodjs/cli": "^0.23.0",
+    "@redwoodjs/dev-server": "^0.23.0",
+    "@redwoodjs/eslint-config": "^0.23.0",
+    "@redwoodjs/internal": "^0.23.0",
+    "@redwoodjs/testing": "^0.23.0",
     "@storybook/react": "^5.3.19",
     "@testing-library/jest-dom": "5.11.6",
     "@types/jest": "^26.0.10",
@@ -62,13 +62,13 @@
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3",
     "webpack-merge": "^5.1.2",
-    "webpack-retry-chunk-load-plugin": "^1.4.0"
+    "webpack-retry-chunk-load-plugin": "^1.4.0",
+    "whatwg-fetch": "^3.5.0"
   },
   "devDependencies": {
     "@types/babel-core": "^6.25.6",
     "@types/babel-plugin-tester": "^9.0.0",
-    "babel-plugin-tester": "^9.0.1",
-    "whatwg-fetch": "^3.0.0"
+    "babel-plugin-tester": "^9.0.1"
   },
   "gitHead": "c235e7d7186e5e258764699c0e0e1d5cc0fdd0b5",
   "scripts": {
