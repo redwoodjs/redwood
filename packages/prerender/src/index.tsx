@@ -7,6 +7,8 @@ import ReactDOMServer from 'react-dom/server'
 
 import { getConfig, getPaths } from '@redwoodjs/internal'
 
+// import customBabelPlugin from './custom-import'
+
 // @TODO do we need to use path.join?
 const INDEX_FILE = `${getPaths().web.dist}/index.html`
 const DEFAULT_INDEX = `${getPaths().web.dist}/defaultIndex.html`
@@ -15,7 +17,10 @@ const DEFAULT_INDEX = `${getPaths().web.dist}/defaultIndex.html`
 // Its honestly crazy confusing
 require('@babel/register')({
   extensions: ['.tsx', '.ts', '.jsx', '.js'],
-  plugins: ['inline-react-svg'],
+  plugins: [
+    ['inline-react-svg'],
+    ['ignore-html-and-css-imports'], // webpack/postcss handles CSS imports
+  ],
   // Setting this to false will disable the cache.
   // cache: false,
 })
@@ -34,9 +39,9 @@ interface PrerenderParams {
   dryRun: boolean
 }
 
-// This will prevent SSR blowing up,
-// without needing us to change every bit of code
 // WARN! is a stop-gap solution
+// This will prevent SSR blowing up,
+// remove this when all references to window from the codebase are removed
 const registerShims = () => {
   if (!globalThis.window) {
     globalThis.window = {

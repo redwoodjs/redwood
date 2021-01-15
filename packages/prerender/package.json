@@ -19,6 +19,7 @@
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-react": "^7.12.10",
     "@babel/preset-typescript": "^7.12.7",
+    "babel-plugin-ignore-html-and-css-imports": "^0.1.0",
     "babel-plugin-inline-react-svg": "^1.1.2",
     "nodemon": "^2.0.7",
     "webpack": "^5.12.0",

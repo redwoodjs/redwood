@@ -5962,6 +5962,11 @@ babel-plugin-graphql-tag@^3.0.0:
     babel-literal-to-ast "^2.1.0"
     debug "^4.1.1"
 
+babel-plugin-ignore-html-and-css-imports@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.npmjs.org/babel-plugin-ignore-html-and-css-imports/-/babel-plugin-ignore-html-and-css-imports-0.1.0.tgz#a164a607c0424e6f7c2639f79e96782d6b3170a7"
+  integrity sha512-1ayvecgwu98HyLVNe8iAR+cE7B+MBwEsNEJOJoARxzxtq6p0qCBULAQtuDS5/WH+bmxkjRg+uE3w+QSgkElKCw==
+
 babel-plugin-inline-react-svg@^1.1.2:
   version "1.1.2"
   resolved "https://registry.npmjs.org/babel-plugin-inline-react-svg/-/babel-plugin-inline-react-svg-1.1.2.tgz#f2090de7404982deaeb5d7ac9c16078a61ca6486"
