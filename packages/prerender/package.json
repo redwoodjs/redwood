@@ -1,40 +1,40 @@
 {
-	"name": "@redwoodjs/prerender",
-	"description": "Redwood prerenter util",
-	"version": "0.23.0",
-	"license": "MIT",
-	"files": [
-		"dist"
-	],
-	"main": "dist/index.js",
-	"peerDependencies": {
-		"react": "*",
-		"react-dom": "*"
-	},
-	"devDependencies": {
-		"@babel/core": "^7.12.10",
-		"@babel/node": "^7.12.10",
-		"@babel/plugin-proposal-class-properties": "^7.12.1",
-		"@babel/polyfill": "^7.12.1",
-		"@babel/preset-env": "^7.12.11",
-		"@babel/preset-react": "^7.12.10",
-		"@babel/preset-typescript": "^7.12.7",
-		"babel-plugin-inline-react-svg": "^1.1.2",
-		"nodemon": "^2.0.7",
-		"webpack": "^5.12.0",
-		"webpack-cli": "^4.3.1"
-	},
-	"scripts": {
-		"build": "yarn build:js && yarn build:types",
-		"prepublishOnly": "yarn build",
-		"build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
-		"build:types": "ttsc --build --verbose",
-		"build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build\"",
-		"test": "jest",
-		"test:watch": "yarn test --watch"
-	},
-	"externals": {
-		"react": "react",
-		"react-dom": "react-dom"
-	}
+  "name": "@redwoodjs/prerender",
+  "description": "Redwood prerenter util",
+  "version": "0.23.0",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.js",
+  "peerDependencies": {
+    "react": "*",
+    "react-dom": "*"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/node": "^7.12.10",
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@babel/polyfill": "^7.12.1",
+    "@babel/preset-env": "^7.12.11",
+    "@babel/preset-react": "^7.12.10",
+    "@babel/preset-typescript": "^7.12.7",
+    "babel-plugin-inline-react-svg": "^1.1.2",
+    "nodemon": "^2.0.7",
+    "webpack": "^5.12.0",
+    "webpack-cli": "^4.3.1"
+  },
+  "scripts": {
+    "build": "yarn build:js && yarn build:types",
+    "prepublishOnly": "yarn build",
+    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
+    "build:types": "ttsc --build --verbose",
+    "build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build\"",
+    "test": "jest",
+    "test:watch": "yarn test --watch"
+  },
+  "externals": {
+    "react": "react",
+    "react-dom": "react-dom"
+  }
 }

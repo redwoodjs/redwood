@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 
+/* Web side prerender utils, to be used on the browser */
+
 export const isPrerendering = (): boolean => {
-  // @ts-expect-error-next-line
-  return !!globalThis?.prerenderMode
+  return !!window?.prerenderMode
 }
 
 export const useIsBrowser = () => {
@@ -13,4 +14,10 @@ export const useIsBrowser = () => {
   }, [])
 
   return isBrowser
+}
+
+declare global {
+  interface Window {
+    prerenderMode: boolean
+  }
 }

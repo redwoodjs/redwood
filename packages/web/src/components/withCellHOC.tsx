@@ -1,7 +1,6 @@
 import type { DocumentNode } from 'graphql'
 
-// @TODO why do I need to do /dist ?
-import { isPrerendering } from '@redwoodjs/prerender/dist/utils'
+import { isPrerendering } from '../utils/prerender.utils'
 
 import { useQuery, OperationResult } from './GraphQLHooksProvider'
 

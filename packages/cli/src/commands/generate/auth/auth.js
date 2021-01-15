@@ -44,7 +44,7 @@ const addWebImports = (content, imports) => {
 
 // returns the content of index.js with init lines added
 const addWebInit = (content, init) => {
-  return content.replace(/ReactDOM.render/, `${init}\n\nReactDOM.render`)
+  return content.replace(/ReactDOM.hydrate/, `${init}\n\nReactDOM.hydrate`)
 }
 
 // returns the content of index.js with <AuthProvider> added
