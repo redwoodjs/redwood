@@ -36,6 +36,7 @@ const registerShims = () => {
       },
       // @ts-expect-error-next-line
       history: {},
+      __REDWOOD_PRERENDER_MODE: true,
     }
   }
 
@@ -47,8 +48,7 @@ const registerShims = () => {
     isAuthenticated: false,
   })
 
-  // @ts-expect-error-next-line
-  globalThis.prerenderMode = true
+  // globalThis.prerenderMode = true
 }
 
 export const runPrerender = async ({

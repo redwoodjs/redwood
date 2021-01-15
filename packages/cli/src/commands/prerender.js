@@ -1,5 +1,7 @@
 import { runPrerender } from '@redwoodjs/prerender'
-import { DefaultHost, getProject } from '@redwoodjs/structure'
+import { getProject } from '@redwoodjs/structure'
+
+import c from '../lib/colors'
 
 export const command = 'prerender'
 export const aliases = ['render']
@@ -54,14 +56,18 @@ export const handler = async ({ input, output }) => {
       filePath: route.page.filePath,
     }))
 
-  console.log(prerenderRoutes)
-
   // @TODO for <Private> routes only render whileLoading or the layout
   // @TODO what do we do about Cells?
   // @TODO how do we deal with the routes import from router?
 
   prerenderRoutes.map((routeToPrerender) => {
     const outputHtmlPath = mapRouterPathToHtml(routeToPrerender.path)
+
+    console.log(
+      `Starting prerender for ${c.green(routeToPrerender.name)} -> ${c.green(
+        outputHtmlPath
+      )}`
+    )
 
     runPrerender({
       inputComponentPath: routeToPrerender.filePath,

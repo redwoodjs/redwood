@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 /* Web side prerender utils, to be used on the browser */
 
 export const isPrerendering = (): boolean => {
-  return !!window?.prerenderMode
+  return !!window?.__REDWOOD_PRERENDER_MODE
 }
 
 export const useIsBrowser = () => {
@@ -18,6 +18,6 @@ export const useIsBrowser = () => {
 
 declare global {
   interface Window {
-    prerenderMode: boolean
+    __REDWOOD_PRERENDER_MODE: boolean
   }
 }
