@@ -11,6 +11,15 @@ import { getConfig, getPaths } from '@redwoodjs/internal'
 const INDEX_FILE = `${getPaths().web.dist}/index.html`
 const DEFAULT_INDEX = `${getPaths().web.dist}/defaultIndex.html`
 
+// @MARK: This loads our babel overrides for the prerender script
+// Its honestly crazy confusing
+require('@babel/register')({
+  extensions: ['.tsx', '.ts', '.jsx', '.js'],
+  plugins: ['inline-react-svg'],
+  // Setting this to false will disable the cache.
+  // cache: false,
+})
+
 const getRootHtmlPath = () => {
   if (fs.existsSync(DEFAULT_INDEX)) {
     return DEFAULT_INDEX
