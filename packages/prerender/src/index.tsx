@@ -2,6 +2,7 @@ import fs from 'fs'
 
 import React from 'react'
 
+import prettier from 'prettier'
 import ReactDOMServer from 'react-dom/server'
 
 import { getConfig, getPaths } from '@redwoodjs/internal'
@@ -21,6 +22,7 @@ const getRootHtmlPath = () => {
 interface PrerenderParams {
   inputComponentPath: string // usually web/src/{components/pages}/*
   outputHtmlPath: string // web/dist/{path}.html
+  dryRun: boolean
 }
 
 // This will prevent SSR blowing up,
@@ -54,6 +56,7 @@ const registerShims = () => {
 export const runPrerender = async ({
   inputComponentPath,
   outputHtmlPath,
+  dryRun,
 }: PrerenderParams) => {
   registerShims()
 
@@ -71,6 +74,16 @@ export const runPrerender = async ({
   )
 
   const renderOutput = indexContent.replace('<server-markup/>', componentAsHtml)
+
+  if (dryRun) {
+    console.log('::: Dry run, not writing changes :::')
+    console.log(`::: 🚀 Prerender output for ${inputComponentPath} ::: `)
+    const prettyOutput = prettier.format(renderOutput, { parser: 'html' })
+    console.log(prettyOutput)
+    console.log('::: --- ::: ')
+
+    return
+  }
 
   if (outputHtmlPath) {
     // Copy default index.html to defaultIndex.html first, like react-snap

@@ -21,6 +21,13 @@ export const builder = (yargs) => {
     description: 'Output path',
     type: 'string',
   })
+
+  yargs.option('dryrun', {
+    alias: 'd',
+    default: false,
+    description: 'Run prerender and output to console',
+    type: 'boolean',
+  })
 }
 
 const mapRouterPathToHtml = (routerPath) => {
@@ -31,11 +38,12 @@ const mapRouterPathToHtml = (routerPath) => {
   }
 }
 
-export const handler = async ({ input, output }) => {
-  if (input && output) {
+export const handler = async ({ input, output, dryrun }) => {
+  if (input) {
     runPrerender({
       inputComponentPath: input,
       outputHtmlPath: output,
+      dryRun: dryrun,
     })
 
     return
@@ -57,7 +65,6 @@ export const handler = async ({ input, output }) => {
     }))
 
   // @TODO for <Private> routes only render whileLoading or the layout
-  // @TODO what do we do about Cells?
   // @TODO how do we deal with the routes import from router?
 
   prerenderRoutes.map((routeToPrerender) => {
@@ -72,6 +79,7 @@ export const handler = async ({ input, output }) => {
     runPrerender({
       inputComponentPath: routeToPrerender.filePath,
       outputHtmlPath,
+      dryRun: dryrun,
     })
   })
 }
