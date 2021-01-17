@@ -9,11 +9,13 @@ describe('paths', () => {
 
       const pages = processPagesDir(pagesDir)
       expect(pages[0].importPath).toEqual(
-        path.join(pagesDir, 'Admin/MargleTheWorld/MargleTheWorld')
+        path.join(pagesDir, 'Admin/MargleTheWorldPage/MargleTheWorldPage')
       )
-      expect(pages[2].importPath).toEqual(path.join(pagesDir, 'TSX/TSX'))
       expect(pages[1].importPath).toEqual(
-        path.join(pagesDir, 'HelloWorld/HelloWorld')
+        path.join(pagesDir, 'HelloWorldPage/HelloWorldPage')
+      )
+      expect(pages[2].importPath).toEqual(
+        path.join(pagesDir, 'TSXPage/TSXPage')
       )
     })
   })
