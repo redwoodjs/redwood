@@ -5,8 +5,8 @@
     "build:clean": "rimraf ./packages/**/dist",
     "build:watch": "ttsc --build && lerna run build:watch --parallel",
     "test": "lerna run test --stream -- --colors --maxWorkers=4",
-    "lint": "eslint packages",
-    "lint:fix": "eslint --fix packages"
+    "lint": "eslint -c .eslintrc packages",
+    "lint:fix": "eslint -c .eslintrc --fix packages"
   },
   "private": true,
   "license": "MIT",
