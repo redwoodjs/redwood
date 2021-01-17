@@ -41,10 +41,15 @@ export interface Paths {
 }
 
 export interface PagesDependency {
+  /** the variable to which the import is assigned */
   importName: string
-  importPath: string
+  /** @alias importName */
   const: string
+  /** absolute path without extension */
+  importPath: string
+  /** absolute path with extension */
   path: string
+  /** const ${importName} = { ...data structure for async imports... } */
   importStatement: string
 }
 
@@ -161,7 +166,7 @@ export const processPagesDir = (
   const pagePaths = glob.sync('**/**/*Page.{js,jsx,tsx}', { cwd: webPagesDir })
   return pagePaths.map((pagePath) => {
     const p = path.parse(pagePath)
-    // converts `admin/DeleteUserPage` -> `adminDeleteUserPage`
+
     const importName = p.dir.replace(path.sep, '')
     const importPath = path.join(webPagesDir, p.dir, p.name)
     const importStatement = `const ${importName} = { name: '${importName}', loader: import('${importPath}') }`
@@ -169,7 +174,7 @@ export const processPagesDir = (
       importName,
       const: importName,
       importPath,
-      path: importPath,
+      path: path.join(webPagesDir, pagePath),
       importStatement,
     }
   })
