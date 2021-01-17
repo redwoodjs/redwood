@@ -8,7 +8,7 @@ type NetlifyContext = ClientContext & {
 export const netlify = (token: string, req: { context: LambdaContext }) => {
   // Netlify verifies and decodes the JWT before the request is passed to our Serverless
   // function, so the decoded JWT is already available in production.
-  if (process.env.NODE_ENV === 'production') {
+  if (process.env.NODE_ENV !== 'development') {
     const clientContext = req.context.clientContext as NetlifyContext
     return clientContext?.user || null
   } else {
