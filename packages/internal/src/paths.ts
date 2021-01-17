@@ -170,10 +170,13 @@ export const processPagesDir = (
         // Actual page js or tsx files reside in a directory of the same
         // name (supported by: directory-named-webpack-plugin), so let's
         // construct the filename of the actual Page file.
-        // `require.resolve` will throw if a module cannot be found.
-        const importPath = path.join(webPagesDir, entry.name, entry.name)
-        require.resolve(importPath)
 
+        const importPath = path.join(webPagesDir, entry.name, entry.name)
+        const resolvedImport = resolveFile(importPath)
+        // Note: I'm a bit concerned about throwing here, since this might cause an infinite loop in some scenarios.
+        if (resolvedImport === null) {
+          throw new Error('A Page import could not be found.')
+        }
         // If the Page exists, then construct the dependency object and push it
         // onto the deps array.
         const basename = path.posix.basename(entry.name)

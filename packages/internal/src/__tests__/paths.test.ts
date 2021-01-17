@@ -11,6 +11,7 @@ describe('paths', () => {
       expect(pages[0].importPath).toEqual(
         path.join(pagesDir, 'Admin/MargleTheWorld/MargleTheWorld')
       )
+      expect(pages[2].importPath).toEqual(path.join(pagesDir, 'TSX/TSX'))
       expect(pages[1].importPath).toEqual(
         path.join(pagesDir, 'HelloWorld/HelloWorld')
       )
