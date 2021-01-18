@@ -44,7 +44,10 @@ const addWebImports = (content, imports) => {
 
 // returns the content of index.js with init lines added
 const addWebInit = (content, init) => {
-  return content.replace(/ReactDOM.hydrate/, `${init}\n\nReactDOM.hydrate`)
+  return content.replace(
+    /const rootElement = document.getElementById('redwood-app')/,
+    `${init}\n\nconst rootElement = document.getElementById('redwood-app')`
+  )
 }
 
 // returns the content of index.js with <AuthProvider> added
