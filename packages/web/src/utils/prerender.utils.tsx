@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useMemo } from 'react'
 
 /* Web side prerender utils, to be used on the browser */
 
@@ -7,13 +7,17 @@ export const isPrerendering = (): boolean => {
 }
 
 export const useIsBrowser = () => {
-  const [isBrowser, setIsBrowser] = useState(false)
-  // Use effect only runs on the browser
-  useEffect(() => {
-    setIsBrowser(true)
+  return useMemo(() => {
+    return {
+      browser: !window?.__REDWOOD_PRERENDER_MODE,
+    }
   }, [])
+}
 
-  return isBrowser
+export const BrowserOnly = ({ children }: { children: React.ReactNode }) => {
+  const { browser } = useIsBrowser()
+
+  return browser && children
 }
 
 declare global {
