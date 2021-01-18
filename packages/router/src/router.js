@@ -55,13 +55,13 @@ const PrivatePageLoader = ({
   ) {
     return children
   } else {
-    return (
-      <Redirect
-        to={`${unauthenticatedRoute()}?redirectTo=${
+    const redirectUrl = window
+      ? `${unauthenticatedRoute()}?redirectTo=${
           window.location.pathname
-        }${encodeURIComponent(window.location.search)}`}
-      />
-    )
+        }${encodeURIComponent(window.location.search)}`
+      : null
+
+    return <Redirect to={redirectUrl} />
   }
 }
 

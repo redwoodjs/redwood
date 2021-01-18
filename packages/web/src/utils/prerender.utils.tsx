@@ -3,13 +3,13 @@ import { useMemo } from 'react'
 /* Web side prerender utils, to be used on the browser */
 
 export const isPrerendering = (): boolean => {
-  return !!window?.__REDWOOD_PRERENDER_MODE
+  return !!global?.__REDWOOD_PRERENDER_MODE
 }
 
 export const useIsBrowser = () => {
   return useMemo(() => {
     return {
-      browser: !window?.__REDWOOD_PRERENDER_MODE,
+      browser: !global?.__REDWOOD_PRERENDER_MODE,
     }
   }, [])
 }
@@ -19,9 +19,11 @@ export const BrowserOnly = ({ children }: { children: React.ReactNode }) => {
 
   return browser && children
 }
-
 declare global {
-  interface Window {
-    __REDWOOD_PRERENDER_MODE: boolean
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace NodeJS {
+    interface Global {
+      __REDWOOD_PRERENDER_MODE: boolean
+    }
   }
 }

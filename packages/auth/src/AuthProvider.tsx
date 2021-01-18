@@ -115,8 +115,11 @@ export class AuthProvider extends React.Component<
   }
 
   getCurrentUser = async (): Promise<Record<string, unknown>> => {
+    if (!window) {
+      return {}
+    }
     const response = await window.fetch(
-      `${window.__REDWOOD__API_PROXY_PATH}/graphql`,
+      `${global.__REDWOOD__API_PROXY_PATH}/graphql`,
       {
         method: 'POST',
         headers: {

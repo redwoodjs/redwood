@@ -5,16 +5,14 @@ const LocationContext = createNamedContext('Location')
 class LocationProvider extends React.Component {
   HISTORY_LISTENER_ID = undefined
 
-  static defaultProps = {
-    location: window.location,
-  }
-
   state = {
     context: this.getContext(),
   }
 
   getContext() {
-    const { pathname, search, hash } = this.props.location
+    const location = typeof window !== 'undefined' ? window.location : {}
+    const { pathname = '', search = '', hash = '' } =
+      this.props.location || location
     return { pathname, search, hash }
   }
 

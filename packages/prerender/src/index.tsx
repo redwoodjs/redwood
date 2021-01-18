@@ -43,28 +43,29 @@ interface PrerenderParams {
 // This will prevent SSR blowing up,
 // remove this when all references to window from the codebase are removed
 const registerShims = () => {
-  if (!globalThis.window) {
-    globalThis.window = {
-      // @ts-expect-error-next-line
-      location: {
-        pathname: '',
-        search: '',
-      },
-      // @ts-expect-error-next-line
-      history: {},
-      __REDWOOD_PRERENDER_MODE: true,
-    }
-  }
+  // if (!globalThis.window) {
+  //   globalThis.window = {
+  //     // @ts-expect-error-next-line
+  //     location: {
+  //       pathname: '',
+  //       search: '',
+  //     },
+  //     // @ts-expect-error-next-line
+  //     history: {},
+  //     __REDWOOD_PRERENDER_MODE: true,
+  //   }
+  // }
 
   // @ts-expect-error-next-line
-  globalThis.__REDWOOD__API_PROXY_PATH = getConfig().web.apiProxyPath
+  global.__REDWOOD__API_PROXY_PATH = getConfig().web.apiProxyPath
   // @ts-expect-error-next-line
-  globalThis.__REDWOOD__USE_AUTH = () => ({
+  global.__REDWOOD__USE_AUTH = () => ({
     loading: true, // This should 🤞🏽 just cause the whileLoading component to show up on Private routes
     isAuthenticated: false,
   })
 
-  // globalThis.prerenderMode = true
+  // @ts-expect-error-next-line
+  global.__REDWOOD_PRERENDER_MODE = true
 }
 
 export const runPrerender = async ({
