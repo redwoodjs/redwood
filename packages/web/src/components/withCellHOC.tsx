@@ -1,6 +1,6 @@
 import type { DocumentNode } from 'graphql'
 
-import { isPrerendering } from '../utils/prerender.utils'
+import { isPrerendering } from 'src/utils/prerender.utils'
 
 import { useQuery, OperationResult } from './GraphQLHooksProvider'
 
@@ -103,9 +103,8 @@ export const withCell = ({
   Empty,
   Success,
 }: WithCellProps) => {
-  // @TODO check for prerendering here
+  // If its prerendering, render the Cell's Loading component
   if (isPrerendering()) {
-    console.log('🚡 Prerender mode enabled')
     return (props: Record<string, unknown>) => <Loading {...props} />
   }
 

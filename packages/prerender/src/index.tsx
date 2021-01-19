@@ -1,29 +1,40 @@
 import fs from 'fs'
+import path from 'path'
 
 import React from 'react'
 
+import babelRequireHook from '@babel/register'
 import prettier from 'prettier'
 import ReactDOMServer from 'react-dom/server'
 
 import { getConfig, getPaths } from '@redwoodjs/internal'
 import { RedwoodProvider } from '@redwoodjs/web'
 
-// import customBabelPlugin from './custom-import'
+const INDEX_FILE = path.join(getPaths().web.dist, '/index.html')
+const DEFAULT_INDEX = path.join(getPaths().web.dist, '/defaultIndex.html')
 
-// @TODO do we need to use path.join?
-const INDEX_FILE = `${getPaths().web.dist}/index.html`
-const DEFAULT_INDEX = `${getPaths().web.dist}/defaultIndex.html`
+const rwWebPaths = getPaths().web
 
-// @MARK: This loads our babel overrides for the prerender script
-// Its honestly crazy confusing
-require('@babel/register')({
-  extensions: ['.tsx', '.ts', '.jsx', '.js'],
+// Prerender specific configuration
+// extends projects web/babelConfig
+babelRequireHook({
+  extends: path.join(rwWebPaths.base, '.babelrc.js'),
+  extensions: ['.js', '.ts', '.tsx', '.jsx'],
   plugins: [
     ['inline-react-svg'],
     ['ignore-html-and-css-imports'], // webpack/postcss handles CSS imports
+    [
+      'babel-plugin-module-resolver',
+      {
+        alias: {
+          src: rwWebPaths.src,
+        },
+      },
+    ],
   ],
-  // Setting this to false will disable the cache.
-  // cache: false,
+  only: [rwWebPaths.base],
+  ignore: ['node_modules'],
+  cache: false,
 })
 
 const getRootHtmlPath = () => {
@@ -44,19 +55,6 @@ interface PrerenderParams {
 // This will prevent SSR blowing up,
 // remove this when all references to window from the codebase are removed
 const registerShims = () => {
-  // if (!globalThis.window) {
-  //   globalThis.window = {
-  //     // @ts-expect-error-next-line
-  //     location: {
-  //       pathname: '',
-  //       search: '',
-  //     },
-  //     // @ts-expect-error-next-line
-  //     history: {},
-  //     __REDWOOD_PRERENDER_MODE: true,
-  //   }
-  // }
-
   global.__REDWOOD__API_PROXY_PATH = getConfig().web.apiProxyPath
 
   // @ts-expect-error-next-line

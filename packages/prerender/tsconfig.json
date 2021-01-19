@@ -10,7 +10,7 @@
     },
     "allowJs": true
   },
-  "include": ["./src/**/*"],
+	"include": ["./src/**/*", "ambient.d.ts"],
   "references": [
     { "path": "../auth" },
   ]
