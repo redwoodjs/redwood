@@ -31,7 +31,6 @@ export const config = {
 
     ethereum = new EthereumAuthClient({
       makeRequest,
-      // Note: you must set NODE_ENV manually when using Netlify
       debug: process.NODE_ENV === 'development',
     })
   } catch (e) {
