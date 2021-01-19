@@ -3,6 +3,7 @@ const { existsSync } = require('fs')
 const path = require('path')
 
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 const Dotenv = require('dotenv-webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -183,6 +184,9 @@ module.exports = (webpackEnv) => {
       new HtmlWebpackPlugin({
         title: path.basename(redwoodPaths.base),
         template: path.resolve(redwoodPaths.base, 'web/src/index.html'),
+        templateParameters: {
+          prerenderMarkup: '<server-markup></server-markup>',
+        },
         inject: true,
         chunks: 'all',
       }),
@@ -191,6 +195,7 @@ module.exports = (webpackEnv) => {
           { from: 'public/', to: '', globOptions: { ignore: ['README.md'] } },
         ],
       }),
+      isEnvProduction && new CleanWebpackPlugin(),
       isEnvProduction &&
         new RetryChunkLoadPlugin({
           cacheBust: `function() {

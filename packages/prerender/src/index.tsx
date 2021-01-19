@@ -89,7 +89,7 @@ export const runPrerender = async ({
       </>
     )
     const renderOutput = indexContent.replace(
-      '<server-markup/>',
+      '<server-markup></server-markup>',
       componentAsHtml
     )
 
