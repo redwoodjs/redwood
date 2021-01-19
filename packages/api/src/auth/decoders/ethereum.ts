@@ -2,12 +2,12 @@ import jwt from 'jsonwebtoken'
 
 export const ethereum = (token: string) => {
   if (process.env.NODE_ENV === 'production') {
-    if (!process.env.JWT_SECRET) {
+    if (!process.env.ETHEREUM_JWT_SECRET) {
       throw new Error('`JWT_SECRET` env var is not set.')
     }
 
     try {
-      const secret = process.env.JWT_SECRET as string
+      const secret = process.env.ETHEREUM_JWT_SECRET as string
       return Promise.resolve(
         jwt.verify(token, secret) as Record<string, unknown>
       )
