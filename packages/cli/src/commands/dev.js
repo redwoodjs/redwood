@@ -76,7 +76,7 @@ export const handler = async ({ side = ['api', 'web'], forward = '' }) => {
   const jobs = {
     api: {
       name: 'api',
-      command: `cd "${path.join(BASE_DIR, 'api')}" && yarn dev-server`,
+      command: `cd "${path.join(BASE_DIR, 'api')}" && cross-env NODE_ENV=development yarn dev-server`,
       prefixColor: 'cyan',
       runWhen: () => fs.existsSync(API_DIR_SRC),
     },
