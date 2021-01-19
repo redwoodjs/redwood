@@ -5,7 +5,9 @@ import {
   InMemoryCache,
   useQuery,
   useMutation,
+  HttpLink,
 } from '@apollo/client'
+import fetch from 'cross-fetch'
 
 import type { AuthContextInterface } from '@redwoodjs/auth'
 
@@ -25,6 +27,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
     cache: new InMemoryCache(),
     uri,
     headers,
+    link: new HttpLink({ uri, fetch }),
     ...config,
   })
 
@@ -33,7 +36,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
 
 export const RedwoodApolloProvider: React.FunctionComponent<{
   graphQLClientConfig?: Omit<ApolloClientOptions<InMemoryCache>, 'cache'>
-  useAuth: () => AuthContextInterface
+  useAuth?: () => AuthContextInterface
 }> = ({ graphQLClientConfig, useAuth, children }) => {
   return (
     <FetchConfigProvider useAuth={useAuth}>
