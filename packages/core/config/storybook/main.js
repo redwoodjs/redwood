@@ -10,7 +10,7 @@ module.exports = {
   ],
   webpackFinal: (sbConfig, { configType }) => {
     // configType is 'PRODUCTION' or 'DEVELOPMENT', why shout?
-    const isEnvProduction = configType?.toLowerCase() === 'production'
+    const isEnvProduction = configType && configType.toLowerCase() === 'production'
 
     const rwConfig = isEnvProduction
       ? require('../webpack.production')
