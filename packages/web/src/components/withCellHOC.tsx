@@ -104,6 +104,7 @@ export const withCell = ({
   Success,
 }: WithCellProps) => {
   // If its prerendering, render the Cell's Loading component
+  // @TODO: Determine if it's possible to do this via Babel at build time instead.
   if (isPrerendering()) {
     return (props: Record<string, unknown>) => <Loading {...props} />
   }
