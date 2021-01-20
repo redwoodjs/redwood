@@ -24,7 +24,10 @@
     "babel-plugin-inline-react-svg": "^1.1.2",
     "nodemon": "^2.0.7",
     "webpack": "^5.12.0",
-    "webpack-cli": "^4.3.1"
+    "webpack-cli": "^4.3.1",
+    "@redwoodjs/auth": "^0.23.0",
+    "@redwoodjs/web": "^0.23.0",
+    "@redwoodjs/internal": "^0.23.0"
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",
