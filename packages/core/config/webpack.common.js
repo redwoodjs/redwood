@@ -187,6 +187,7 @@ module.exports = (webpackEnv) => {
         templateParameters: {
           prerenderMarkup: '<server-markup></server-markup>',
         },
+        scriptLoading: 'defer', // show the prerendered markup, no need to wait
         inject: true,
         chunks: 'all',
       }),
