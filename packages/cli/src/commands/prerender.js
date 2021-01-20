@@ -66,19 +66,33 @@ export const handler = async ({ input, output, dryrun }) => {
     }))
 
   // @TODO for <Private> routes only render whileLoading or the layout
-  prerenderRoutes.map((routeToPrerender) => {
+  prerenderRoutes.map(async (routeToPrerender) => {
     const outputHtmlPath = mapRouterPathToHtml(routeToPrerender.path)
 
-    console.log(
-      `Starting prerender for ${c.green(routeToPrerender.name)} -> ${c.green(
-        outputHtmlPath
-      )}`
-    )
+    try {
+      await runPrerender({
+        inputComponentPath: routeToPrerender.filePath,
+        outputHtmlPath,
+        dryRun: dryrun,
+      })
 
-    runPrerender({
-      inputComponentPath: routeToPrerender.filePath,
-      outputHtmlPath,
-      dryRun: dryrun,
-    })
+      console.log(
+        `✅  ${c.green(routeToPrerender.path)} -> ${c.green(outputHtmlPath)}`
+      )
+    } catch (e) {
+      console.error(
+        `❌  ${c.error(routeToPrerender.name)} failed to rerender: ${c.info(
+          routeToPrerender.filePath
+        )}`
+      )
+      console.log(
+        c.warning(
+          `This means you won't get a prerendered page, but your Redwood app should still work fine. \nIt often means that a library you are using, or your code, is not optimised for SSR \n`
+        )
+      )
+      console.error(e)
+      console.log(c.info('------------------------------------------------'))
+      return
+    }
   })
 }

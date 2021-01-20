@@ -57,7 +57,7 @@ const registerShims = () => {
 
   global.__REDWOOD__USE_AUTH = () =>
     ({
-      loading: true, // This should 🤞🏽 just cause the whileLoading component to show up on Private routes
+      loading: true, // this should play nicely if the app waits for auth stuff to comeback first before render
       isAuthenticated: false,
     } as AuthContextInterface) // we only need a parital AuthContextInterface for prerender
 
@@ -90,43 +90,36 @@ export const runPrerender = async ({
   // ideally in next version of Router, we can directly support SSR,
   // and won't require getting componentToPrerender
   const { default: Routes } = await import(getPaths().web.routes)
+  const componentAsHtml = ReactDOMServer.renderToStaticMarkup(
+    <>
+      <RedwoodProvider>
+        <Routes />
+        <ComponentToPrerender />
+      </RedwoodProvider>
+    </>
+  )
+  const renderOutput = indexContent.replace(
+    '<server-markup></server-markup>',
+    componentAsHtml
+  )
 
-  try {
-    const componentAsHtml = ReactDOMServer.renderToStaticMarkup(
-      <>
-        <RedwoodProvider>
-          <Routes />
-          <ComponentToPrerender />
-        </RedwoodProvider>
-      </>
-    )
-    const renderOutput = indexContent.replace(
-      '<server-markup></server-markup>',
-      componentAsHtml
-    )
+  if (dryRun) {
+    console.log('::: Dry run, not writing changes :::')
+    console.log(`::: 🚀 Prerender output for ${inputComponentPath} ::: `)
+    const prettyOutput = prettier.format(renderOutput, { parser: 'html' })
+    console.log(prettyOutput)
+    console.log('::: --- ::: ')
 
-    if (dryRun) {
-      console.log('::: Dry run, not writing changes :::')
-      console.log(`::: 🚀 Prerender output for ${inputComponentPath} ::: `)
-      const prettyOutput = prettier.format(renderOutput, { parser: 'html' })
-      console.log(prettyOutput)
-      console.log('::: --- ::: ')
-
-      return
-    }
-
-    if (outputHtmlPath) {
-      // Copy default index.html to defaultIndex.html first
-      // This is to prevent recursively rendering the home page
-      if (outputHtmlPath === 'web/dist/index.html') {
-        fs.copyFileSync(outputHtmlPath, 'web/dist/defaultIndex.html')
-      }
-
-      writeToDist(outputHtmlPath, renderOutput)
-    }
-  } catch (e) {
-    console.log(`Failed to prerender ${inputComponentPath}`)
-    console.error(e)
     return
+  }
+
+  if (outputHtmlPath) {
+    // Copy default index.html to defaultIndex.html first
+    // This is to prevent recursively rendering the home page
+    if (outputHtmlPath === 'web/dist/index.html') {
+      fs.copyFileSync(outputHtmlPath, 'web/dist/defaultIndex.html')
+    }
+
+    writeToDist(outputHtmlPath, renderOutput)
   }
 }
