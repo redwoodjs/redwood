@@ -54,8 +54,9 @@ export const handler = async ({ input, output, dryrun }) => {
   const routes = rwProject.getRouter().routes
 
   const prerenderRoutes = routes
-    .filter((r) => !r.isNotFound)
-    .filter((r) => r.prerender)
+    .filter((route) => !route.isNotFound) // ignore notFound page
+    .filter((route) => !route.hasParameters) // ignore routes that take params
+    .filter((route) => route.prerender) // only select routes with prerender prop
     .map((route) => ({
       name: route.name,
       path: route.path,
@@ -65,8 +66,6 @@ export const handler = async ({ input, output, dryrun }) => {
     }))
 
   // @TODO for <Private> routes only render whileLoading or the layout
-  // @TODO how do we deal with the routes import from router?
-
   prerenderRoutes.map((routeToPrerender) => {
     const outputHtmlPath = mapRouterPathToHtml(routeToPrerender.path)
 

@@ -64,6 +64,16 @@ const registerShims = () => {
   global.__REDWOOD_PRERENDER_MODE = true
 }
 
+const writeToDist = (outputHtmlPath: string, renderOutput: string) => {
+  const dirName = path.dirname(outputHtmlPath)
+  const exist = fs.existsSync(dirName)
+  if (!exist) {
+    fs.mkdirSync(dirName, { recursive: true })
+  }
+
+  fs.writeFileSync(outputHtmlPath, renderOutput)
+}
+
 export const runPrerender = async ({
   inputComponentPath,
   outputHtmlPath,
@@ -106,11 +116,13 @@ export const runPrerender = async ({
     }
 
     if (outputHtmlPath) {
-      // Copy default index.html to defaultIndex.html first, like react-snap
+      // Copy default index.html to defaultIndex.html first
+      // This is to prevent recursively rendering the home page
       if (outputHtmlPath === 'web/dist/index.html') {
         fs.copyFileSync(outputHtmlPath, 'web/dist/defaultIndex.html')
       }
-      fs.writeFileSync(outputHtmlPath, renderOutput)
+
+      writeToDist(outputHtmlPath, renderOutput)
     }
   } catch (e) {
     console.log(`Failed to prerender ${inputComponentPath}`)
