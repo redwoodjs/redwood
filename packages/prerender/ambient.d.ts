@@ -1,3 +1,8 @@
-declare module '@babel/register' {
-  export default function (options: any): void
+export {}
+declare global {
+  namespace NodeJS {
+    interface Global {
+      __REDWOOD_PRERENDER_MODE: boolean
+    }
+  }
 }

@@ -7,6 +7,7 @@ import babelRequireHook from '@babel/register'
 import prettier from 'prettier'
 import ReactDOMServer from 'react-dom/server'
 
+import { AuthContextInterface } from '@redwoodjs/auth'
 import { getConfig, getPaths } from '@redwoodjs/internal'
 import { RedwoodProvider } from '@redwoodjs/web'
 
@@ -51,17 +52,14 @@ interface PrerenderParams {
   dryRun: boolean
 }
 
-// WARN! is a stop-gap solution
-// This will prevent SSR blowing up,
-// remove this when all references to window from the codebase are removed
 const registerShims = () => {
   global.__REDWOOD__API_PROXY_PATH = getConfig().web.apiProxyPath
 
-  // @ts-expect-error-next-line
-  global.__REDWOOD__USE_AUTH = () => ({
-    loading: true, // This should 🤞🏽 just cause the whileLoading component to show up on Private routes
-    isAuthenticated: false,
-  })
+  global.__REDWOOD__USE_AUTH = () =>
+    ({
+      loading: true, // This should 🤞🏽 just cause the whileLoading component to show up on Private routes
+      isAuthenticated: false,
+    } as AuthContextInterface) // we only need a parital AuthContextInterface for prerender
 
   global.__REDWOOD_PRERENDER_MODE = true
 }
@@ -76,12 +74,16 @@ export const runPrerender = async ({
   const indexContent = fs.readFileSync(getRootHtmlPath()).toString()
 
   const { default: ComponentToPrerender } = await import(inputComponentPath)
+
+  // @MARK
+  // we render <Routes> to build the list of routes e.g. routes.home()
+  // ideally in next version of Router, we can directly support SSR,
+  // and won't require getting componentToPrerender
   const { default: Routes } = await import(getPaths().web.routes)
 
   try {
     const componentAsHtml = ReactDOMServer.renderToStaticMarkup(
       <>
-        {/* Do this so that the @redwoodjs/router.routes object is populated */}
         <RedwoodProvider>
           <Routes />
           <ComponentToPrerender />
