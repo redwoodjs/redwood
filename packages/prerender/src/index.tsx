@@ -61,7 +61,7 @@ const registerShims = () => {
       isAuthenticated: false,
     } as AuthContextInterface) // we only need a parital AuthContextInterface for prerender
 
-  global.__REDWOOD_PRERENDER_MODE = true
+  global.__REDWOOD__PRERENDER_MODE = true
 }
 
 const writeToDist = (outputHtmlPath: string, renderOutput: string) => {

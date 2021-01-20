@@ -16,3 +16,5 @@ declare global {
     }
   }
 }
+
+global.__REDWOOD__USE_AUTH = useAuth
