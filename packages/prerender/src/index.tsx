@@ -90,7 +90,7 @@ export const runPrerender = async ({
   // ideally in next version of Router, we can directly support SSR,
   // and won't require getting componentToPrerender
   const { default: Routes } = await import(getPaths().web.routes)
-  const componentAsHtml = ReactDOMServer.renderToStaticMarkup(
+  const componentAsHtml = ReactDOMServer.renderToString(
     <>
       <RedwoodProvider>
         <Routes />
