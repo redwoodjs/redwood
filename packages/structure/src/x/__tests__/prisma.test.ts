@@ -1,5 +1,6 @@
-import { prisma_parseEnvExpressions } from '../prisma'
 import { Range } from 'vscode-languageserver'
+
+import { prisma_parseEnvExpressions } from '../prisma'
 
 describe('prisma_parseEnvExpressions', () => {
   it('can find env() expressions in a prisma schema', async () => {

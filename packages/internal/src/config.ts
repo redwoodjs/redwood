@@ -51,13 +51,14 @@ const DEFAULT_CONFIG: Config = {
     target: TargetEnum.BROWSER,
     apiProxyPath: '/.netlify/functions',
     apiProxyPort: 8911,
+    experimentalFastRefresh: false,
   },
   api: {
     host: 'localhost',
     port: 8911,
     path: './api',
     target: TargetEnum.NODE,
-    schemaPath: './api/db/schema.prisma',
+    schemaPath: './api/prisma/schema.prisma',
   },
   browser: {
     open: false,

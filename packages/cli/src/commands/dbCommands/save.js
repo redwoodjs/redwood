@@ -1,5 +1,5 @@
-import { runCommandTask } from 'src/lib'
 import * as options from 'src/commands/dbCommands/options'
+import { runCommandTask } from 'src/lib'
 
 export const command = 'save [name..]'
 export const description = 'Create a new migration'
@@ -30,7 +30,7 @@ export const handler = async ({
           name.length && `--name "${name}"`,
           '--create-db',
           '--experimental',
-          schema && `--schema=${schema}`,
+          schema && `--schema="${schema}"`,
         ].filter(Boolean),
       },
     ],

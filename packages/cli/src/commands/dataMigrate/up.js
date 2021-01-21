@@ -1,9 +1,9 @@
-import path from 'path'
 import fs from 'fs'
+import path from 'path'
 
 import Listr from 'listr'
-import terminalLink from 'terminal-link'
 import VerboseRenderer from 'listr-verbose-renderer'
+import terminalLink from 'terminal-link'
 
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'

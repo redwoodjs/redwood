@@ -3,6 +3,7 @@ import {
   Position,
   Range,
 } from 'vscode-languageserver-types'
+
 import {
   ExtendedDiagnostic,
   ExtendedDiagnostic_format,

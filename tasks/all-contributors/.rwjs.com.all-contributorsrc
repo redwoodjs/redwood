@@ -12,15 +12,6 @@
   "commitConvention": "none",
   "contributors": [
     {
-      "login": "Tobbe",
-      "name": "Tobbe Lundberg",
-      "avatar_url": "https://avatars1.githubusercontent.com/u/30793?v=4",
-      "profile": "http://tlundberg.com/",
-      "contributions": [
-        "doc"
-      ]
-    },
-    {
       "login": "cball",
       "name": "Chris Ball",
       "avatar_url": "https://avatars1.githubusercontent.com/u/14339?v=4",
@@ -250,15 +241,6 @@
       "name": "Chris Ellis",
       "avatar_url": "https://avatars1.githubusercontent.com/u/814405?v=4",
       "profile": "https://github.com/csellis",
-      "contributions": [
-        "doc"
-      ]
-    },
-    {
-      "login": "clairefro",
-      "name": "Claire Froelich",
-      "avatar_url": "https://avatars1.githubusercontent.com/u/9841162?v=4",
-      "profile": "https://github.com/clairefro",
       "contributions": [
         "doc"
       ]
@@ -534,15 +516,6 @@
       ]
     },
     {
-      "login": "ajcwebdev",
-      "name": "Anthony Campolo",
-      "avatar_url": "https://avatars0.githubusercontent.com/u/12433465?v=4",
-      "profile": "https://ajcwebdev.substack.com/",
-      "contributions": [
-        "doc"
-      ]
-    },
-    {
       "login": "kimadeline",
       "name": "Kim-Adeline Miguel",
       "avatar_url": "https://avatars3.githubusercontent.com/u/51720070?v=4",
@@ -685,7 +658,178 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "AsdethPrime",
+      "name": "Asdethprime",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/22416004?v=4",
+      "profile": "https://github.com/AsdethPrime",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "solon",
+      "name": "Brian Solon",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/48528?v=4",
+      "profile": "https://github.com/solon",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "ccchapman",
+      "name": "Chris Chapman",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/42548502?v=4",
+      "profile": "https://github.com/ccchapman",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "dhausser",
+      "name": "Davy Hausser",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/24432220?v=4",
+      "profile": "https://github.com/dhausser",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "Jolg42",
+      "name": "Joël Galeran",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1328733?v=4",
+      "profile": "https://twitter.com/Jolg42",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "mkhbragg",
+      "name": "Mariah",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/5139784?v=4",
+      "profile": "https://www.mariahbragg.com/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "ogdenstudios",
+      "name": "Tyler Scott Williams",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/29899554?v=4",
+      "profile": "https://ogdenstudios.xyz/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "qWici",
+      "name": "Vania Kucher",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/11472929?v=4",
+      "profile": "https://devkucher.com/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "virenb",
+      "name": "Viren Bhagat",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/10731287?v=4",
+      "profile": "https://virenb.cc/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "Chuloo",
+      "name": "William",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/22301208?v=4",
+      "profile": "https://github.com/Chuloo",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "dcgoodwin2112",
+      "name": "dcgoodwin2112",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/4554388?v=4",
+      "profile": "https://github.com/dcgoodwin2112",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "noobling",
+      "name": "David Yu",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/23206864?v=4",
+      "profile": "https://github.com/noobling",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "jeliasson",
+      "name": "Johan Eliasson",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/865493?v=4",
+      "profile": "https://github.com/jeliasson",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "adithyasunil26",
+      "name": "Adithya Sunil",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/51863389?v=4",
+      "profile": "https://github.com/adithyasunil26",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "byudaniel",
+      "name": "Daniel O'Neill",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/7226285?v=4",
+      "profile": "https://github.com/byudaniel",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "edjiang",
+      "name": "Edward Jiang",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/918770?v=4",
+      "profile": "https://edjiang.com/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "manukall",
+      "name": "Manuel Kallenbach",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/117418?v=4",
+      "profile": "http://manukall.de/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "NickSchmitt",
+      "name": "Nick Schmitt",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/23244885?v=4",
+      "profile": "https://github.com/NickSchmitt",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "dijonmusters",
+      "name": "Jon Meyers",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/13792200?v=4",
+      "profile": "https://monoglot.dev/",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
-  "contributorsPerLine": 7
+  "contributorsPerLine": 5
 }

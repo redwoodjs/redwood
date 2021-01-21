@@ -1,6 +1,7 @@
 import path from 'path'
 
 import type { PluginObj, types } from '@babel/core'
+
 // TODO: Figure out why Wallaby doesn't work with a normal import.
 import { getBaseDirFromFile } from '@redwoodjs/internal/dist/paths'
 import { getProject, URL_file } from '@redwoodjs/structure'

@@ -2,7 +2,7 @@
 // to return a real user from your database, you could do something like:
 //
 //   export const getCurrentUser = async ({ email }) => {
-//     return await db.user.findOne({ where: { email } })
+//     return await db.user.findUnique({ where: { email } })
 //   }
 //
 // If you want to enforce role-based access ...
@@ -67,7 +67,7 @@ import { AuthenticationError, ForbiddenError, parseJWT } from '@redwoodjs/api'
  * @example - No role-based access control.
  *
  * export const getCurrentUser = async (decoded) => {
- *   return await db.user.findOne({ where: { decoded.email } })
+ *   return await db.user.findUnique({ where: { decoded.email } })
  * }
  *
  * @example - User info is contained in the decoded token and roles extracted
@@ -79,7 +79,7 @@ import { AuthenticationError, ForbiddenError, parseJWT } from '@redwoodjs/api'
  * @example - User record query by email with namespaced app_metadata roles
  *
  * export const getCurrentUser = async (decoded) => {
- *   const currentUser = await db.user.findOne({ where: { email: decoded.email } })
+ *   const currentUser = await db.user.findUnique({ where: { email: decoded.email } })
  *
  *   return {
  *     ...currentUser,
@@ -90,7 +90,7 @@ import { AuthenticationError, ForbiddenError, parseJWT } from '@redwoodjs/api'
  * @example - User record query by an identity with app_metadata roles
  *
  * const getCurrentUser = async (decoded) => {
- *   const currentUser = await db.user.findOne({ where: { userIdentity: decoded.sub } })
+ *   const currentUser = await db.user.findUnique({ where: { userIdentity: decoded.sub } })
  *   return {
  *     ...currentUser,
  *     roles: parseJWT({ decoded: decoded }).roles,

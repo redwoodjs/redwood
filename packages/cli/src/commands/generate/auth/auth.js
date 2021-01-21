@@ -4,6 +4,7 @@ import path from 'path'
 import execa from 'execa'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
+
 import { resolveFile } from '@redwoodjs/internal'
 
 import { getPaths, writeFilesTask } from 'src/lib'
@@ -54,13 +55,25 @@ const addWebRender = (content, authProvider) => {
   const redwoodProviderLines = redwoodProvider.split('\n').map((line) => {
     return '  ' + line
   })
+  const customRenderOpen = (authProvider.render || []).reduce(
+    (acc, component) => acc + indent + `<${component}>`,
+    ''
+  )
+
+  const customRenderClose = (authProvider.render || []).reduce(
+    (acc, component) => indent + `</${component}>` + acc,
+    ''
+  )
+
   const renderContent =
+    customRenderOpen +
     indent +
     `<AuthProvider client={${authProvider.client}} type="${authProvider.type}">` +
     indent +
     redwoodProviderLines.join('\n') +
     indent +
-    `</AuthProvider>`
+    `</AuthProvider>` +
+    customRenderClose
 
   return content.replace(
     /\s+<RedwoodProvider>.*<\/RedwoodProvider>/s,

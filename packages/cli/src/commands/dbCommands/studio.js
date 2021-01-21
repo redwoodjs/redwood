@@ -1,8 +1,8 @@
-import path from 'path'
 import fs from 'fs'
+import path from 'path'
 
-import { runCommandTask, getPaths } from 'src/lib'
 import * as options from 'src/commands/dbCommands/options'
+import { runCommandTask, getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 
 export const command = 'studio'
@@ -31,7 +31,7 @@ export const handler = async ({ schema }) => {
       {
         title: 'Starting Prisma Studio...',
         cmd: 'yarn prisma',
-        args: ['studio', schema && `--schema=${schema}`],
+        args: ['studio', schema && `--schema="${schema}"`],
       },
     ],
     { verbose: true }

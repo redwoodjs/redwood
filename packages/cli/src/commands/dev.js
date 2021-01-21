@@ -3,11 +3,12 @@ import path from 'path'
 
 import concurrently from 'concurrently'
 import terminalLink from 'terminal-link'
+
 import { getConfig, shutdownPort } from '@redwoodjs/internal'
 
+import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
-import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
 
 export const command = 'dev [side..]'
 export const description = 'Start development servers for api, db, and web'
@@ -44,7 +45,11 @@ export const handler = async ({ side = ['api', 'web'], forward = '' }) => {
   if (side.includes('api')) {
     try {
       // This command will check if the api side has a `prisma.schema` file.
-      await generatePrismaClient({ verbose: false, force: false })
+      await generatePrismaClient({
+        verbose: false,
+        force: false,
+        schema: getPaths().api.dbSchema,
+      })
     } catch (e) {
       console.error(c.error(e.message))
     }
@@ -71,7 +76,7 @@ export const handler = async ({ side = ['api', 'web'], forward = '' }) => {
   const jobs = {
     api: {
       name: 'api',
-      command: `cd "${path.join(BASE_DIR, 'api')}" && yarn dev-server`,
+      command: `cd "${path.join(BASE_DIR, 'api')}" && cross-env NODE_ENV=development yarn dev-server`,
       prefixColor: 'cyan',
       runWhen: () => fs.existsSync(API_DIR_SRC),
     },

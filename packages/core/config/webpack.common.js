@@ -1,17 +1,17 @@
 /* eslint-disable import/no-extraneous-dependencies */
-const path = require('path')
 const { existsSync } = require('fs')
+const path = require('path')
 
-const webpack = require('webpack')
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
 const Dotenv = require('dotenv-webpack')
-const { getConfig, getPaths } = require('@redwoodjs/internal')
-const { merge } = require('webpack-merge')
-
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const CopyPlugin = require('copy-webpack-plugin')
+const webpack = require('webpack')
+const { merge } = require('webpack-merge')
 const { RetryChunkLoadPlugin } = require('webpack-retry-chunk-load-plugin')
-const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
+
+const { getConfig, getPaths } = require('@redwoodjs/internal')
 
 const redwoodConfig = getConfig()
 const redwoodPaths = getPaths()
@@ -136,6 +136,7 @@ const getSharedPlugins = (isEnvProduction) => {
       gql: 'graphql-tag',
       mockGraphQLQuery: ['@redwoodjs/testing', 'mockGraphQLQuery'],
       mockGraphQLMutation: ['@redwoodjs/testing', 'mockGraphQLMutation'],
+      mockCurrentUser: ['@redwoodjs/testing', 'mockCurrentUser'],
     }),
     // The define plugin will replace these keys with their values during build
     // time.
@@ -166,7 +167,7 @@ module.exports = (webpackEnv) => {
       app: path.resolve(redwoodPaths.base, 'web/src/index'),
     },
     resolve: {
-      extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
+      extensions: ['.wasm', '.mjs', '.js', '.jsx', '.ts', '.tsx', '.json'],
       alias: {
         // https://www.styled-components.com/docs/faqs#duplicated-module-in-node_modules
         'styled-components': path.resolve(

@@ -1,7 +1,6 @@
-import Listr from 'listr'
 import chalk from 'chalk'
+import Listr from 'listr'
 
-import c from 'src/lib/colors'
 import {
   configurePostCSS,
   installPackages,
@@ -9,6 +8,7 @@ import {
   initTailwind,
   addCSSImports,
 } from './tasks'
+import c from 'src/lib/colors'
 
 export const command = 'tailwind'
 export const description = 'Setup tailwindcss and PostCSS'
@@ -22,13 +22,13 @@ export const builder = (yargs) => {
     })
     .option('ui', {
       default: false,
-      description: 'Install TailwindUI as well',
+      description: 'Include TailwindUI Installation',
       type: 'boolean',
     })
 }
 
-const tasks = (args) =>
-  new Listr([
+export const handler = async (args) => {
+  const tasks = new Listr([
     {
       title: 'Installing packages...',
       task: () => {
@@ -71,7 +71,6 @@ const tasks = (args) =>
     },
   ])
 
-export const handler = async (args) => {
   try {
     await tasks(args).run()
   } catch (e) {
