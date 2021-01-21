@@ -63,7 +63,7 @@ const AuthConsumer = () => {
 
   useEffect(() => {
     retrieveToken()
-  })
+  }, [])
 
   if (loading) {
     return <>Loading...</>
