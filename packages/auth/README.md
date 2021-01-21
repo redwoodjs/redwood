@@ -60,5 +60,6 @@ export type SupportedAuthClients =
   | MagicLink
   | Firebase
   | Supabase
+  | Ethereum
   | Custom
 ```

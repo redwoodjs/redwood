@@ -48,13 +48,12 @@ jobs:
           v_sha=$(ls | grep "\.tgz$" | sed 's/\.tgz$//' | head -n1 | awk -F"-" '{ print $(NF-1)"-"$NF }')
           msg="### 📦 PR Packages%0A"
           msg+="%0A"
-          msg+="<details><summary>Click to Show Package Download Links</summary>"
+          msg+="<details><summary>Click to Show Package Download Links</summary>%0A"
           msg+="%0A"
           for p in *; do
             msg+="https://rw-pr-redwoodjs-com.s3.amazonaws.com/$pr_number/$p%0A"
           done
-          msg+="%0A"
-          msg+="</details>"
+          msg+="</details>%0A"
           msg+="%0A"
           msg+="Install this PR by running \`yarn rw upgrade --pr $pr_number:$v_sha\`"
           echo "::set-output name=msg::$msg"
