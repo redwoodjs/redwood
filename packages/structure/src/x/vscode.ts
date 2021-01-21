@@ -316,6 +316,7 @@ export function Command_cli(cmd: string, title = 'run...'): Command {
   return { command: 'redwoodjs.cli', arguments: [cmd], title }
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 type ReplacePropTypes<T extends {}, Replacements extends {}> = {
   [K in keyof T]: K extends keyof Replacements ? Replacements[K] : T[K]
 }

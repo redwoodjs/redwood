@@ -73,7 +73,7 @@ const mockGraphQL = (
 ) => {
   const resolver = (
     req: GraphQLMockedRequest,
-    res: Function,
+    res: (...args: unknown[]) => unknown,
     ctx: GraphQLMockedContext<Record<string, any>>
   ) => {
     let d = data

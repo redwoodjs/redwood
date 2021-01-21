@@ -4,7 +4,8 @@
   "license": "MIT",
   "bin": "./dist/create-redwood-app.js",
   "files": [
-    "dist"
+    "dist",
+    "template"
   ],
   "dependencies": {
     "@babel/runtime-corejs3": "^7.9.2",
@@ -14,6 +15,7 @@
     "check-node-version": "^4.0.2",
     "decompress": "^4.2.0",
     "execa": "^4.1.0",
+    "fs-extra": "^9.0.1",
     "listr": "^0.14.3",
     "tmp": "^0.2.1",
     "yargs": "^16.0.3"
