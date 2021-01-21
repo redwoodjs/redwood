@@ -10,7 +10,7 @@ export const posts = () => {
 }
 
 export const post = ({ id }: PostWhereUniqueInput) => {
-  return db.post.findOne({
+  return db.post.findUnique({
     where: { id },
   })
 }

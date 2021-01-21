@@ -11,7 +11,13 @@ describe('Redwood Project Model', () => {
 
     const pageNames = new Set(project.pages.map((p) => p.basenameNoExt))
     expect(pageNames).toEqual(
-      new Set(['FatalErrorPage', 'HomePage', 'NotFoundPage'])
+      new Set([
+        'FatalErrorPage',
+        'HomePage',
+        'NotFoundPage',
+        'TypeScriptPage',
+        'EditUserPage',
+      ])
     )
     for (const page of project.pages) {
       page.basenameNoExt //?
