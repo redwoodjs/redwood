@@ -14,11 +14,14 @@ export default () => (_ctx, task) => {
   /**
    * Add tailwind imports and notes to the top of index.css
    */
+
+  const INDEX_CSS_PATH = path.join(getPaths().web.src, 'index.css')
+
   const tailwindImportsAndNotes = fs
     .readFileSync(path.join(__dirname, 'css-imports.template.css'))
     .toString()
 
-  const cssPath = path.join(getPaths().web.src, 'index.css')
+  const cssPath = path.join(getPaths().web.src, 'INDEX_CSS_PATH')
   const cssContent = fs.readFileSync(cssPath).toString()
 
   if (tailwindImportsExist(cssContent)) {

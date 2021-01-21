@@ -8,38 +8,30 @@ export default ({ force, ui }) => async () => {
    * If it doesn't already exist,
    * initialize tailwind and move tailwind.config.js to web/
    */
-  const configExists = fs.existsSync(
-    path.join(getPaths().web.base, 'tailwind.config.js')
-  )
+  const basePath = getPaths().web.base
+  const tailwindConfigPath = path.join(basePath, 'tailwind.config.js')
+  const configExists = fs.existsSync(tailwindConfigPath)
 
-  if (!force && configExists) {
-    throw new Error(
-      'TailwindCSS config already exists.\nUse --force to override existing config.'
-    )
-  } else {
-    await execa('yarn', ['tailwindcss', 'init'])
-
-    const config = fs.readFileSync('tailwind.config.js', 'utf-8')
-
-    // opt-in to upcoming changes
-    const uncommentFlags = (str) => str.replace(/\/{2} ([\w-]+: true)/g, '$1')
-
-    let newConfig = config.replace(/future: {[^}]*},/g, uncommentFlags)
-
-    // add TailwindUI plugin if requested
-    if (ui) {
-      newConfig = newConfig.replace(
-        /plugins\s*:[^\[]*\[/s,
-        "plugins: [require('@tailwindcss/ui'),"
+  if (configExists) {
+    if (force) {
+      // yarn tailwindcss init will fail if the file already exists
+      fs.unlinkSync(tailwindConfigPath)
+    } else {
+      throw new Error(
+        'Tailwindcss config already exists.\nUse --force to override existing config.'
       )
     }
-
-    fs.writeFileSync('tailwind.config.js', newConfig)
-
-    /**
-     * Later, when we can tell the vscode extension where to look for the config,
-     * we can put it in web/config/
-     */
-    await execa('mv', ['tailwind.config.js', 'web/'])
   }
+
+  await execa('yarn', ['tailwindcss', 'init'], { cwd: basePath })
+
+  // opt-in to upcoming changes
+  const config = fs.readFileSync(tailwindConfigPath, 'utf-8')
+
+  const uncommentFlags = (str) =>
+    str.replace(/\/{2} ([\w-]+: true)/g, '$1')
+
+  const newConfig = config.replace(/future.*purge/s, uncommentFlags)
+
+  fs.writeFileSync(tailwindConfigPath, newConfig)
 }
