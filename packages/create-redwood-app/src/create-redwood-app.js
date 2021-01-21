@@ -76,20 +76,21 @@ const newAppDir = path.resolve(process.cwd(), targetDir)
 const appDirExists = fs.existsSync(newAppDir)
 const templateDir = path.resolve(__dirname, '../template')
 
-if (appDirExists && fs.readdirSync(newAppDir).length > 0) {
-  console.error(`'${newAppDir}' already exists and is not empty.`)
-  process.exit(1)
-}
-
 const createProjectTasks = ({ newAppDir }) => {
   return [
     {
       title: `${appDirExists ? 'Using' : 'Creating'} directory '${newAppDir}'`,
       task: () => {
-        fs.ensureDirSync(path.dirname(newAppDir))
-        if (!appDirExists) {
-          fs.copySync(templateDir, newAppDir)
+        if (appDirExists) {
+          // make sure that the target directory is empty
+          if (fs.readdirSync(newAppDir).length > 0) {
+            console.error(`'${newAppDir}' already exists and is not empty.`)
+            process.exit(1)
+          }
+        } else {
+          fs.ensureDirSync(path.dirname(newAppDir))
         }
+        fs.copySync(templateDir, newAppDir)
       },
     },
   ]
