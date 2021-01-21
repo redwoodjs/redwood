@@ -43,7 +43,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
     const authHeaders = token
       ? {
           'auth-provider': authProviderType,
-          authorization: token ? `Bearer ${token}` : null,
+          authorization: `Bearer ${token}`
         }
       : {}
 
