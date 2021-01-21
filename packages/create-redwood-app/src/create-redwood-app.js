@@ -92,26 +92,6 @@ const createProjectTasks = ({ newAppDir }) => {
         }
       },
     },
-    {
-      title: 'Clean up',
-      task: () => {
-        try {
-          fs.unlinkSync(path.join(newAppDir, 'README.md'))
-          fs.renameSync(
-            path.join(newAppDir, 'README_APP.md'),
-            path.join(newAppDir, 'README.md')
-          )
-
-          fs.unlinkSync(path.join(newAppDir, '.gitignore'))
-          fs.renameSync(
-            path.join(newAppDir, '.gitignore.app'),
-            path.join(newAppDir, '.gitignore')
-          )
-        } catch (e) {
-          throw new Error('Could not move project files')
-        }
-      },
-    },
   ]
 }
 
