@@ -15,27 +15,25 @@ if (!version) {
 /**
  * Iterates over Redwood dependencies in package.json files and updates the version.
  */
-const updatePackageVersion = (pkgPath, version, search = '@redwoodjs/') => {
+const updatePackageVersion = (pkgPath, version) => {
   const pkg = JSON.parse(
     fs.readFileSync(path.join(pkgPath, 'package.json'), 'utf-8')
   )
 
   if (pkg.dependencies) {
     for (const depName of Object.keys(pkg.dependencies).filter((x) =>
-      x.startsWith(search)
+      x.startsWith('@redwoodjs/')
     )) {
-      console.log(
-        `Updating ${depName}: ${pkg.dependencies[depName]} -> ^${version}`
-      )
+      console.log(` - ${depName}: ${pkg.dependencies[depName]} => ^${version}`)
       pkg.dependencies[depName] = `^${version}`
     }
   }
   if (pkg.devDependencies) {
     for (const depName of Object.keys(pkg.devDependencies).filter((x) =>
-      x.startsWith(search)
+      x.startsWith('@redwoodjs/')
     )) {
       console.log(
-        `Updating ${depName}: ${pkg.devDependencies[depName]} -> ^${version}`
+        ` - ${depName}: ${pkg.devDependencies[depName]} => ^${version}`
       )
       pkg.devDependencies[depName] = `^${version}`
     }
@@ -48,12 +46,32 @@ const updatePackageVersion = (pkgPath, version, search = '@redwoodjs/') => {
 }
 
 const cwd = path.join(__dirname, '../')
-child.execSync(['yarn lerna version', version, '--force-publish'], { cwd })
+const cmd = [
+  'yarn lerna version',
+  version,
+  '--force-publish',
+  '--no-push',
+  '--no-git-tag-version',
+  '--yes',
+].join(' ')
 
+console.log(`Running ${cmd}...`)
+child.execSync(cmd, {
+  cwd,
+  stdio: 'inherit',
+})
+console.log(' ')
+
+console.log('Updating template...')
+console.log('Changes: ')
 const templatePath = path.join(cwd, 'packages/create-redwood-app/template')
-
 updatePackageVersion(templatePath, version)
 updatePackageVersion(path.join(templatePath, 'api'), version)
 updatePackageVersion(path.join(templatePath, 'web'), version)
+console.log(' ')
 
-child.execSync(['yarn install'], { cwd })
+console.log('Updating `yarn.lock`...')
+child.execSync('yarn install --check-files --force', { cwd, stdio: 'inherit' })
+console.log()
+
+console.log('All done!')
