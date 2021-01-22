@@ -4,9 +4,16 @@ const child = require('child_process')
 const fs = require('fs')
 const path = require('path')
 
-const version = process.argv[3]
+const version = process.argv[3].toString()
+
+if (!version) {
+  console.error(
+    'You must supply a version.\nUsage ./update-package-versions [version]'
+  )
+  process.exit(1)
+}
 const cwd = path.join(__dirname, '../')
-child.execSync(['yarn lerna version', version, '--force-publish'], { cwd })
+//child.execSync(['yarn lerna version', version, '--force-publish'], { cwd })
 
 const templatePath = path.join(cwd, 'packages/create-redwood-app/template')
 
