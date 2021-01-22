@@ -1,5 +1,4 @@
-import { runPrerender } from '@redwoodjs/prerender'
-import { getProject } from '@redwoodjs/structure'
+import { runPrerender, detectPrerenderRoutes } from '@redwoodjs/prerender'
 
 import c from '../lib/colors'
 
@@ -49,21 +48,7 @@ export const handler = async ({ input, output, dryrun }) => {
     return
   }
 
-  // Prerendering without input/output defined
-  const rwProject = getProject(process.cwd())
-  const routes = rwProject.getRouter().routes
-
-  const prerenderRoutes = routes
-    .filter((route) => !route.isNotFound) // ignore notFound page
-    .filter((route) => !route.hasParameters) // ignore routes that take params
-    .filter((route) => route.prerender) // only select routes with prerender prop
-    .map((route) => ({
-      name: route.name,
-      path: route.path,
-      hasParams: route.hasParameters,
-      id: route.id,
-      filePath: route.page.filePath,
-    }))
+  const prerenderRoutes = detectPrerenderRoutes()
 
   // @TODO for <Private> routes only render whileLoading or the layout
   prerenderRoutes.map(async (routeToPrerender) => {
