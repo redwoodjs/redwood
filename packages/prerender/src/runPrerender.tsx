@@ -7,12 +7,16 @@ import babelRequireHook from '@babel/register'
 import prettier from 'prettier'
 import ReactDOMServer from 'react-dom/server'
 
-import { AuthContextInterface } from '@redwoodjs/auth'
-import { getConfig, getPaths } from '@redwoodjs/internal'
+import { getPaths } from '@redwoodjs/internal'
 import { RedwoodProvider } from '@redwoodjs/web'
 
-const INDEX_FILE = path.join(getPaths().web.dist, '/index.html')
-const DEFAULT_INDEX = path.join(getPaths().web.dist, '/defaultIndex.html')
+import { getRootHtmlPath, registerShims, writeToDist } from './internal'
+
+interface PrerenderParams {
+  inputComponentPath: string // usually web/src/{components/pages}/*
+  outputHtmlPath: string // web/dist/{path}.html
+  dryRun: boolean
+}
 
 const rwWebPaths = getPaths().web
 
@@ -37,42 +41,6 @@ babelRequireHook({
   ignore: ['node_modules'],
   cache: false,
 })
-
-const getRootHtmlPath = () => {
-  if (fs.existsSync(DEFAULT_INDEX)) {
-    return DEFAULT_INDEX
-  } else {
-    return INDEX_FILE
-  }
-}
-
-interface PrerenderParams {
-  inputComponentPath: string // usually web/src/{components/pages}/*
-  outputHtmlPath: string // web/dist/{path}.html
-  dryRun: boolean
-}
-
-const registerShims = () => {
-  global.__REDWOOD__API_PROXY_PATH = getConfig().web.apiProxyPath
-
-  global.__REDWOOD__USE_AUTH = () =>
-    ({
-      loading: true, // this should play nicely if the app waits for auth stuff to comeback first before render
-      isAuthenticated: false,
-    } as AuthContextInterface) // we only need a parital AuthContextInterface for prerender
-
-  global.__REDWOOD__PRERENDERING = true
-}
-
-const writeToDist = (outputHtmlPath: string, renderOutput: string) => {
-  const dirName = path.dirname(outputHtmlPath)
-  const exist = fs.existsSync(dirName)
-  if (!exist) {
-    fs.mkdirSync(dirName, { recursive: true })
-  }
-
-  fs.writeFileSync(outputHtmlPath, renderOutput)
-}
 
 export const runPrerender = async ({
   inputComponentPath,

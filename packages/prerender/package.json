@@ -4,9 +4,11 @@
   "version": "0.23.0",
   "license": "MIT",
   "files": [
-    "dist"
-  ],
-  "main": "dist/index.js",
+		"dist",
+		"dist/index.js",
+		"dist/browser.js"
+	],
+	"main": "dist/index.js",
   "peerDependencies": {
     "react": "*",
     "react-dom": "*"
