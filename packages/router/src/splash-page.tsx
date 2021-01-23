@@ -1,4 +1,8 @@
-const SplashPage = ({ isRedwood }) => (
+interface Props {
+  isRedwood: boolean
+}
+
+const SplashPage: React.VFC<Props> = ({ isRedwood }) => (
   <main>
     <section>
       <style
