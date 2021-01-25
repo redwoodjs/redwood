@@ -8,6 +8,7 @@ Note: open graph doesn't play nice with markup it seems
 
 EXISTING
 - [ ] Audit and complete or remove existing sections
+- [ ] Reference Contributing content from create-redwood-app repo
 
 # create-redwood-app
 
