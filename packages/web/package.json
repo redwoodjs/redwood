@@ -4,7 +4,11 @@
   "files": [
     "dist"
   ],
-  "main": "dist/index.js",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js",
+    "./apollo": "./dist/components/apollo.js"
+  },
   "types": "dist/index.d.ts",
   "license": "MIT",
   "dependencies": {

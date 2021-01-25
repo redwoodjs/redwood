@@ -6,7 +6,8 @@
     "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
     "outDir": "dist",
     "paths": {
-      "src/*": ["./src/*"]
+      "src/*": ["./src/*"],
+      "@redwoodjs/web/apollo": ["../web/dist/components/apollo"]
     }
   },
   "include": [
