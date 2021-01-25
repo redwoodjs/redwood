@@ -1,6 +1,6 @@
 import type { DocumentNode } from 'graphql'
 
-import { isPrerendering } from 'src/utils/prerender.utils'
+import { isPrerendering } from 'src/prerender.browser.utils'
 
 import { useQuery, OperationResult } from './GraphQLHooksProvider'
 
