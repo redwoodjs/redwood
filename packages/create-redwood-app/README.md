@@ -1,11 +1,24 @@
+INTRO
+Will be visible on NPM at https://www.npmjs.com/package/create-redwood-app
+Note: open graph doesn't play nice with markup it seems
+
+- [ ] Add RedwoodJS one-line description
+- [ ] Add getting started: use `yarn create ...`
+- [ ] quick links to website + tutorial and help
+
+EXISTING
+- [ ] Audit and complete or remove existing sections
+
 # create-redwood-app
 
 <!-- toc -->
-- [Purpose and Vision](#Purpose-and-Vision)
-- [Package Lead](#Package-Lead)
-- [Roadmap](#Roadmap)
-- [Contributing](#Contributing)
-- [FAQ](#FAQ)
+- [create-redwood-app](#create-redwood-app)
+  - [Purpose and Vision](#purpose-and-vision)
+  - [Package Lead](#package-lead)
+  - [Roadmap](#roadmap)
+  - [Contributing](#contributing)
+  - [FAQ](#faq)
+    - [How to run create redwood-app script locally](#how-to-run-create-redwood-app-script-locally)
 
 ## Purpose and Vision
 
