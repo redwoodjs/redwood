@@ -6,6 +6,8 @@ import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
 
+import { getConfig } from '@redwoodjs/internal'
+
 import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
@@ -93,24 +95,36 @@ export const handler = async ({
     )
   }
 
-  const tasks = new Listr(
-    side.map((sideName) => {
-      const { cwd, cmd } = execCommandsForSides[sideName]
-      return {
-        title: `Building "${sideName}"${(stats && ' for stats') || ''}...`,
-        task: () => {
-          return execa(cmd, undefined, {
-            stdio: verbose ? 'inherit' : 'pipe',
-            shell: true,
-            cwd,
-          })
-        },
-      }
-    }),
-    {
-      renderer: verbose && VerboseRenderer,
+  const listrTasks = side.map((sideName) => {
+    const { cwd, cmd } = execCommandsForSides[sideName]
+    return {
+      title: `Building "${sideName}"${(stats && ' for stats') || ''}...`,
+      task: () => {
+        return execa(cmd, undefined, {
+          stdio: verbose ? 'inherit' : 'pipe',
+          shell: true,
+          cwd,
+        })
+      },
     }
-  )
+  })
+
+  if (side.includes('web') && getConfig().web.experimentalPrerender) {
+    listrTasks.push({
+      title: 'Prerendering your RW app...',
+      task: () => {
+        return execa('yarn rw prerender', undefined, {
+          stdio: verbose ? 'inherit' : 'pipe',
+          shell: true,
+          cwd: getPaths().base,
+        })
+      },
+    })
+  }
+
+  const tasks = new Listr(listrTasks, {
+    renderer: verbose && VerboseRenderer,
+  })
 
   try {
     await tasks.run()

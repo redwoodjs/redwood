@@ -1,7 +1,8 @@
+import { getPaths } from '@redwoodjs/internal'
 import { getProject } from '@redwoodjs/structure'
 
 export const detectPrerenderRoutes = () => {
-  const rwProject = getProject(process.cwd())
+  const rwProject = getProject(getPaths().base)
   const routes = rwProject.getRouter().routes
 
   const prerenderRoutes = routes
