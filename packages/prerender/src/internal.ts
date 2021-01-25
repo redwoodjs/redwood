@@ -1,6 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 
+import fetch from 'node-fetch'
+
 import type { AuthContextInterface } from '@redwoodjs/auth'
 import { getConfig, getPaths } from '@redwoodjs/internal'
 
@@ -25,6 +27,13 @@ export const registerShims = () => {
     } as AuthContextInterface) // we only need a parital AuthContextInterface for prerender
 
   global.__REDWOOD__PRERENDERING = true
+
+  // We do this to avoid increasing the apollo client bundle size
+  if (!global.fetch) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore-next-line
+    global.fetch = fetch
+  }
 }
 
 export const writeToDist = (outputHtmlPath: string, renderOutput: string) => {

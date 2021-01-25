@@ -60,7 +60,7 @@ export const runPrerender = async ({
   const { default: Routes } = await import(getPaths().web.routes)
   const componentAsHtml = ReactDOMServer.renderToString(
     <>
-      <RedwoodProvider>
+      <RedwoodProvider useAuth={global.__REDWOOD__USE_AUTH}>
         <Routes />
         <ComponentToPrerender />
       </RedwoodProvider>
