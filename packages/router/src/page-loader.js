@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+
 import isEqual from 'lodash.isequal'
 
 import { createNamedContext, ParamsContext } from './internal'

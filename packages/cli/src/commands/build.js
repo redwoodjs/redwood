@@ -6,9 +6,9 @@ import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
 
+import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
-import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
 
 export const command = 'build [side..]'
 export const description = 'Build for production'
@@ -60,7 +60,11 @@ export const handler = async ({
 }) => {
   if (side.includes('api')) {
     try {
-      await generatePrismaClient({ verbose, force: true })
+      await generatePrismaClient({
+        verbose,
+        force: true,
+        schema: getPaths().api.dbSchema,
+      })
     } catch (e) {
       console.log(c.error(e.message))
       process.exit(1)

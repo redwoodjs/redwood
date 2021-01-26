@@ -3,24 +3,32 @@ import { Loading, Empty, Failure, Success } from './UserProfileCell'
 import { standard } from './UserProfileCell.mock'
 
 describe('UserProfileCell', () => {
-  test('Loading renders successfully', () => {
-    render(<Loading />)
-    // Use screen.debug() to see output
-    expect(screen.getByText('Loading...')).toBeInTheDocument()
+  it('renders Loading successfully', () => {
+    expect(() => {
+      render(<Loading />)
+    }).not.toThrow()
   })
 
-  test('Empty renders successfully', async () => {
-    render(<Empty />)
-    expect(screen.getByText('Empty')).toBeInTheDocument()
+  it('renders Empty successfully', async () => {
+    expect(() => {
+      render(<Empty />)
+    }).not.toThrow()
   })
 
-  test('Failure renders successfully', async () => {
-    render(<Failure error={new Error('Oh no')} />)
-    expect(screen.getByText(/Oh no/i)).toBeInTheDocument()
+  it('renders Failure successfully', async () => {
+    expect(() => {
+      render(<Failure error={new Error('Oh no')} />)
+    }).not.toThrow()
   })
 
-  test('Success renders successfully', async () => {
-    render(<Success userProfile={standard().userProfile} />)
-    expect(screen.getByText(/42/i)).toBeInTheDocument()
+  // When you're ready to test the actual output of your component render
+  // you could test that, for example, certain text is present:
+  //
+  //   expect(screen.getByText('Hello, world')).toBeInTheDocument()
+
+  it('renders Success successfully', async () => {
+    expect(() => {
+      render(<Success userProfile={standard().userProfile} />)
+    }).not.toThrow()
   })
 })

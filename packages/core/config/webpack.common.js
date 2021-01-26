@@ -1,15 +1,17 @@
 /* eslint-disable import/no-extraneous-dependencies */
-const path = require('path')
 const { existsSync } = require('fs')
+const path = require('path')
 
-const webpack = require('webpack')
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
+const Dotenv = require('dotenv-webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const CopyPlugin = require('copy-webpack-plugin')
-const { RetryChunkLoadPlugin } = require('webpack-retry-chunk-load-plugin')
-const Dotenv = require('dotenv-webpack')
-const { getConfig, getPaths } = require('@redwoodjs/internal')
+const webpack = require('webpack')
 const { merge } = require('webpack-merge')
+const { RetryChunkLoadPlugin } = require('webpack-retry-chunk-load-plugin')
+
+const { getConfig, getPaths } = require('@redwoodjs/internal')
 
 const redwoodConfig = getConfig()
 const redwoodPaths = getPaths()
@@ -116,19 +118,25 @@ const getStyleLoaders = (isEnvProduction) => {
   ]
 }
 
+// Shared with storybook, as well as the RW app
 const getSharedPlugins = (isEnvProduction) => {
+  const shouldIncludeFastRefresh =
+    redwoodConfig.web.experimentalFastRefresh && !isEnvProduction
+
   return [
     isEnvProduction &&
       new MiniCssExtractPlugin({
         filename: 'static/css/[name].[contenthash:8].css',
         chunkFilename: 'static/css/[name].[contenthash:8].css',
       }),
+    shouldIncludeFastRefresh && new ReactRefreshWebpackPlugin(),
     new webpack.ProvidePlugin({
       React: 'react',
       PropTypes: 'prop-types',
       gql: 'graphql-tag',
       mockGraphQLQuery: ['@redwoodjs/testing', 'mockGraphQLQuery'],
       mockGraphQLMutation: ['@redwoodjs/testing', 'mockGraphQLMutation'],
+      mockCurrentUser: ['@redwoodjs/testing', 'mockCurrentUser'],
     }),
     // The define plugin will replace these keys with their values during build
     // time.
@@ -149,6 +157,9 @@ const getSharedPlugins = (isEnvProduction) => {
 module.exports = (webpackEnv) => {
   const isEnvProduction = webpackEnv === 'production'
 
+  const shouldIncludeFastRefresh =
+    redwoodConfig.web.experimentalFastRefresh && !isEnvProduction
+
   return {
     mode: isEnvProduction ? 'production' : 'development',
     devtool: isEnvProduction ? 'source-map' : 'cheap-module-source-map',
@@ -156,13 +167,20 @@ module.exports = (webpackEnv) => {
       app: path.resolve(redwoodPaths.base, 'web/src/index'),
     },
     resolve: {
-      extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
+      extensions: ['.wasm', '.mjs', '.js', '.jsx', '.ts', '.tsx', '.json'],
       alias: {
         // https://www.styled-components.com/docs/faqs#duplicated-module-in-node_modules
         'styled-components': path.resolve(
           redwoodPaths.base,
           'node_modules',
           'styled-components'
+        ),
+        // This is needed because we don't yet have support for this:
+        // https://webpack.js.org/guides/package-exports/
+        '@redwoodjs/web/apollo': path.resolve(
+          redwoodPaths.base,
+          'node_modules',
+          '@redwoodjs/web/dist/components/apollo'
         ),
         react: path.resolve(redwoodPaths.base, 'node_modules', 'react'),
       },
@@ -216,6 +234,12 @@ module.exports = (webpackEnv) => {
               exclude: /(node_modules)/,
               use: {
                 loader: 'babel-loader',
+                options: {
+                  plugins: [
+                    shouldIncludeFastRefresh &&
+                      require.resolve('react-refresh/babel'),
+                  ].filter(Boolean),
+                },
               },
             },
             // (2)

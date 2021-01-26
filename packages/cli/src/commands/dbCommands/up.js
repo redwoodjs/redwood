@@ -1,7 +1,6 @@
-import terminalLink from 'terminal-link'
-
-import { runCommandTask } from 'src/lib'
 import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
+import * as options from 'src/commands/dbCommands/options'
+import { runCommandTask } from 'src/lib'
 
 export const command = 'up [increment]'
 export const description = 'Generate the Prisma client and apply migrations'
@@ -22,18 +21,9 @@ export const builder = (yargs) => {
       description: 'Skip interactive approval before migrating',
       type: 'boolean',
     })
-    .option('verbose', {
-      alias: 'v',
-      default: true,
-      description: 'Print more',
-      type: 'boolean',
-    })
-    .epilogue(
-      `Also see the ${terminalLink(
-        'Redwood CLI Reference',
-        'https://redwoodjs.com/reference/command-line-interface#db-up'
-      )}`
-    )
+    .option('verbose', options.verbose())
+    .option('schema', options.schema())
+    .epilogue(options.epilogue())
 }
 
 export const handler = async ({
@@ -41,6 +31,7 @@ export const handler = async ({
   autoApprove = false,
   verbose = true,
   dbClient = true,
+  schema,
 }) => {
   const success = await runCommandTask(
     [
@@ -53,6 +44,7 @@ export const handler = async ({
           '--experimental',
           '--create-db',
           autoApprove && '--auto-approve',
+          schema && `--schema="${schema}"`,
         ].filter(Boolean),
       },
     ],
@@ -60,6 +52,6 @@ export const handler = async ({
   )
 
   if (success && dbClient) {
-    await generatePrismaClient({ force: true, verbose })
+    await generatePrismaClient({ force: true, verbose, schema })
   }
 }

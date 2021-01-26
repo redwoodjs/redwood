@@ -1,8 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import terminalLink from 'terminal-link'
-
+import * as options from 'src/commands/dbCommands/options'
 import { runCommandTask, getPaths } from 'src/lib'
 
 export const command = 'generate'
@@ -15,25 +14,14 @@ export const builder = (yargs) => {
       description: 'Overwrite existing Client',
       type: 'boolean',
     })
-    .option('verbose', {
-      alias: 'v',
-      default: true,
-      description: 'Print more',
-      type: 'boolean',
-    })
-    .epilogue(
-      `Also see the ${terminalLink(
-        'Redwood CLI Reference',
-        'https://redwoodjs.com/reference/command-line-interface#db-generate'
-      )}`
-    )
+    .option('verbose', options.verbose())
+    .option('schema', options.schema())
+    .epilogue(options.epilogue())
 }
-export const handler = async ({ verbose = true, force = true }) => {
-  if (!fs.existsSync(getPaths().api.dbSchema)) {
+export const handler = async ({ verbose = true, force = true, schema }) => {
+  if (!fs.existsSync(schema)) {
     console.log(
-      `Skipping database and Prisma client generation, no \`schema.prisma\` file found: \`${
-        getPaths().api.dbSchema
-      }\``
+      `Skipping database and Prisma client generation, no \`schema.prisma\` file found: \`${schema}\``
     )
     return
   }
@@ -59,7 +47,8 @@ export const handler = async ({ verbose = true, force = true }) => {
     [
       {
         title: 'Generating the Prisma client...',
-        cmd: 'yarn prisma generate',
+        cmd: 'yarn prisma',
+        args: ['generate', schema && `--schema="${schema}"`],
       },
     ],
     {

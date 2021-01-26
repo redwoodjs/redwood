@@ -1,4 +1,5 @@
 import { ExecuteCommandOptions } from 'vscode-languageserver'
+
 import { command_builder } from '../interactive_cli/command_builder'
 import { redwood_gen_dry_run as dry_run } from '../interactive_cli/dry_run'
 import { RedwoodCommandString } from '../interactive_cli/RedwoodCommandString'
@@ -10,6 +11,7 @@ import {
   FileSet_fromTextDocuments,
   WorkspaceEdit_fromFileSet,
 } from '../x/vscode-languageserver-types'
+
 import { RWLanguageServer } from './RWLanguageServer'
 
 export const redwoodjs_commands = {

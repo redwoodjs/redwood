@@ -1,7 +1,10 @@
-import path from 'path'
 import fs from 'fs'
+import path from 'path'
 
 import findUp from 'findup-sync'
+import { glob } from 'glob'
+
+import { getConfig } from './config'
 
 export interface NodeTargetPaths {
   base: string
@@ -38,10 +41,15 @@ export interface Paths {
 }
 
 export interface PagesDependency {
+  /** the variable to which the import is assigned */
   importName: string
-  importPath: string
+  /** @alias importName */
   const: string
+  /** absolute path without extension */
+  importPath: string
+  /** absolute path with extension */
   path: string
+  /** const ${importName} = { ...data structure for async imports... } */
   importStatement: string
 }
 
@@ -49,9 +57,6 @@ const CONFIG_FILE_NAME = 'redwood.toml'
 
 const PATH_API_DIR_FUNCTIONS = 'api/src/functions'
 const PATH_API_DIR_GRAPHQL = 'api/src/graphql'
-const PATH_API_DIR_DATA_MIGRATIONS = 'api/prisma/dataMigrations'
-const PATH_API_DIR_DB = 'api/prisma'
-const PATH_API_DIR_DB_SCHEMA = 'api/prisma/schema.prisma'
 const PATH_API_DIR_CONFIG = 'api/src/config'
 const PATH_API_DIR_LIB = 'api/src/lib'
 const PATH_API_DIR_SERVICES = 'api/src/services'
@@ -112,6 +117,8 @@ export const resolveFile = (
  */
 export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
   const routes = resolveFile(path.join(BASE_DIR, PATH_WEB_ROUTES)) as string
+  const { schemaPath } = getConfig(getConfigPath(BASE_DIR)).api
+  const schemaDir = path.dirname(schemaPath)
 
   // We store our test database over here:
   const cache = path.join(BASE_DIR, '.redwood')
@@ -125,9 +132,9 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
     types,
     api: {
       base: path.join(BASE_DIR, 'api'),
-      dataMigrations: path.join(BASE_DIR, PATH_API_DIR_DATA_MIGRATIONS),
-      db: path.join(BASE_DIR, PATH_API_DIR_DB),
-      dbSchema: path.join(BASE_DIR, PATH_API_DIR_DB_SCHEMA),
+      dataMigrations: path.join(BASE_DIR, schemaDir, 'dataMigrations'),
+      db: path.join(BASE_DIR, schemaDir),
+      dbSchema: path.join(BASE_DIR, schemaPath),
       functions: path.join(BASE_DIR, PATH_API_DIR_FUNCTIONS),
       graphql: path.join(BASE_DIR, PATH_API_DIR_GRAPHQL),
       lib: path.join(BASE_DIR, PATH_API_DIR_LIB),
@@ -151,57 +158,26 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
 }
 
 /**
- * Recursively process the pages directory and return information useful for
- * automated imports.
+ * Process the pages directory and return information useful for automated imports.
  */
 export const processPagesDir = (
-  webPagesDir: string = getPaths().web.pages,
-  prefix: Array<string> = []
+  webPagesDir: string = getPaths().web.pages
 ): Array<PagesDependency> => {
-  const deps: Array<PagesDependency> = []
-  const entries = fs.readdirSync(webPagesDir, { withFileTypes: true })
+  const pagePaths = glob.sync('**/**/*Page.{js,jsx,tsx}', { cwd: webPagesDir })
+  return pagePaths.map((pagePath) => {
+    const p = path.parse(pagePath)
 
-  // Iterate over a dir's entries, recursing as necessary into
-  // subdirectories.
-  entries.forEach((entry) => {
-    if (entry.isDirectory()) {
-      try {
-        // Actual page js or tsx files reside in a directory of the same
-        // name (supported by: directory-named-webpack-plugin), so let's
-        // construct the filename of the actual Page file.
-        // `require.resolve` will throw if a module cannot be found.
-        const importPath = path.join(webPagesDir, entry.name, entry.name)
-        require.resolve(importPath)
-
-        // If the Page exists, then construct the dependency object and push it
-        // onto the deps array.
-        const basename = path.posix.basename(entry.name)
-        const importName = prefix.join() + basename
-        // `src/pages/<PageName>`
-        const importFile = ['src', 'pages', ...prefix, basename].join('/')
-        deps.push({
-          importName,
-          importPath,
-          const: importName,
-          path: path.join(webPagesDir, entry.name),
-          importStatement: `const ${importName
-            .split(',')
-            .join('')} = { name: '${importName
-            .split(',')
-            .join('')}', loader: () => import('${importFile}') }`,
-        })
-      } catch (e) {
-        // If the Page doesn't exist then we are in a directory of Page
-        // directories, so let's recurse into it and do the whole thing over
-        // again.
-        const newPrefix = [...prefix, entry.name]
-        deps.push(
-          ...processPagesDir(path.join(webPagesDir, entry.name), newPrefix)
-        )
-      }
+    const importName = p.dir.replace(path.sep, '')
+    const importPath = path.join(webPagesDir, p.dir, p.name)
+    const importStatement = `const ${importName} = { name: '${importName}', loader: import('${importPath}') }`
+    return {
+      importName,
+      const: importName,
+      importPath,
+      path: path.join(webPagesDir, pagePath),
+      importStatement,
     }
   })
-  return deps
 }
 
 /**

@@ -5,14 +5,26 @@ import { processPagesDir, resolveFile, ensurePosixPath } from '../paths'
 describe('paths', () => {
   describe('processPagesDir', () => {
     it('it accurately finds the pages', () => {
-      const pagesDir = path.resolve(__dirname, './fixtures/web/src/pages')
+      const pagesDir = path.resolve(
+        __dirname,
+        '../../../../__fixtures__/example-todo-main/web/src/pages'
+      )
 
       const pages = processPagesDir(pagesDir)
       expect(pages[0].importPath).toEqual(
-        path.join(pagesDir, 'Admin/MargleTheWorld/MargleTheWorld')
+        path.join(pagesDir, 'admin/EditUserPage/EditUserPage')
       )
       expect(pages[1].importPath).toEqual(
-        path.join(pagesDir, 'HelloWorld/HelloWorld')
+        path.join(pagesDir, 'FatalErrorPage/FatalErrorPage')
+      )
+      expect(pages[2].importPath).toEqual(
+        path.join(pagesDir, 'HomePage/HomePage')
+      )
+      expect(pages[3].importPath).toEqual(
+        path.join(pagesDir, 'NotFoundPage/NotFoundPage')
+      )
+      expect(pages[4].importPath).toEqual(
+        path.join(pagesDir, 'TypeScriptPage/TypeScriptPage')
       )
     })
   })

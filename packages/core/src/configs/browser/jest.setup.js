@@ -7,10 +7,12 @@ const {
   setupRequestHandlers,
   mockGraphQLMutation,
   mockGraphQLQuery,
+  mockCurrentUser,
 } = require('@redwoodjs/testing')
 
 global.mockGraphQLQuery = mockGraphQLQuery
 global.mockGraphQLMutation = mockGraphQLMutation
+global.mockCurrentUser = mockCurrentUser
 
 const project = getProject()
 
@@ -19,6 +21,6 @@ beforeEach(async () => {
   for (const m of project.mocks) {
     require(m)
   }
-  await startMSW()
+  await startMSW('node')
   setupRequestHandlers() // reset the handlers in each test.
 })

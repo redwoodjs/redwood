@@ -1,6 +1,17 @@
 {
+  "scripts": {
+    "build": "lerna run build:js && ttsc --build --verbose",
+    "build:types": "ttsc --build --verbose",
+    "build:clean": "rimraf ./packages/**/dist",
+    "build:watch": "ttsc --build && lerna run build:watch --parallel",
+    "test": "lerna run test --stream -- --colors --maxWorkers=4",
+    "lint": "eslint -c .eslintrc packages",
+    "lint:fix": "eslint -c .eslintrc --fix packages"
+  },
   "private": true,
   "license": "MIT",
+  "npmClient": "yarn",
+  "useWorkspaces": true,
   "workspaces": [
     "packages/*"
   ],
@@ -15,38 +26,29 @@
     "@babel/preset-react": "^7.10.4",
     "@babel/preset-typescript": "^7.10.4",
     "@babel/runtime-corejs3": "^7.11.2",
-    "core-js": "3.6.5",
-    "@testing-library/jest-dom": "5.11.4",
-    "@testing-library/react": "11.0.4",
-    "@testing-library/user-event": "^12.0.11",
-    "@types/jest": "^26.0.3",
-    "babel-jest": "^26.1.0",
+    "@testing-library/jest-dom": "5.11.6",
+    "@testing-library/react": "11.2.2",
+    "@testing-library/user-event": "12.5.0",
+    "@types/jest": "^26.0.14",
+    "babel-jest": "^26.5.2",
     "babel-plugin-auto-import": "^1.1.0",
     "babel-plugin-module-resolver": "^4.0.0",
     "babel-plugin-remove-code": "^0.0.6",
     "bundlesize": "^0.18.0",
+    "core-js": "3.6.5",
     "cp-cli": "^2.0.0",
     "cross-env": "^7.0.2",
-    "jest": "^26.1.0",
+    "jest": "^26.5.3",
     "lerna": "^3.20.2",
     "msw": "0.21.2",
-    "nodemon": "^2.0.2",
+    "nodemon": "^2.0.6",
     "rimraf": "^3.0.2",
+    "ttypescript": "^1.5.12",
     "typescript": "^4.0.2",
+    "typescript-transform-paths": "^2.0.2",
     "whatwg-fetch": "3.4.1"
   },
   "resolutions": {
-    "@types/react": "16.9.38"
-  },
-  "eslintConfig": {
-    "extends": "@redwoodjs/eslint-config"
-  },
-  "scripts": {
-    "build": "tsc --build --verbose && lerna run build:js",
-    "build:clean": "rimraf ./packages/**/dist",
-    "build:watch": "tsc --build && lerna run build:watch --parallel",
-    "test": "lerna run test --stream -- --colors --maxWorkers=4",
-    "lint": "eslint packages",
-    "lint:fix": "eslint --fix packages"
+    "@types/react": "16.9.53"
   }
 }

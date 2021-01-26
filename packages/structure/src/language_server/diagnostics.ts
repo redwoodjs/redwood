@@ -1,5 +1,6 @@
 import { debounce, memo } from '../x/decorators'
 import { ExtendedDiagnostic_groupByUri } from '../x/vscode-languageserver-types'
+
 import { RWLanguageServer } from './RWLanguageServer'
 
 const REFRESH_DIAGNOSTICS_INTERVAL = 5000

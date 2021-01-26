@@ -1,12 +1,12 @@
 import fs from 'fs'
 import path from 'path'
 
-import Listr from 'listr'
-import execa from 'execa'
 import chalk from 'chalk'
+import execa from 'execa'
+import Listr from 'listr'
 
-import c from 'src/lib/colors'
 import { getPaths, writeFile } from 'src/lib'
+import c from 'src/lib/colors'
 
 export const command = 'tailwind'
 export const description = 'Setup tailwindcss and PostCSS'
@@ -37,23 +37,58 @@ const tailwindImportsAndNotes = [
 
 const INDEX_CSS_PATH = path.join(getPaths().web.src, 'index.css')
 
+const tailwindImportsExist = (indexCSS) => {
+  let content = indexCSS.toString()
+
+  const hasBaseImport = () => /@import "tailwindcss\/base"/.test(content)
+
+  const hasComponentsImport = () =>
+    /@import "tailwindcss\/components"/.test(content)
+
+  const hasUtilitiesImport = () =>
+    /@import "tailwindcss\/utilities"/.test(content)
+
+  return hasBaseImport() && hasComponentsImport() && hasUtilitiesImport()
+}
+
+const postCSSConfigExists = () => {
+  return fs.existsSync(getPaths().web.postcss)
+}
+
 export const handler = async ({ force }) => {
   const tasks = new Listr([
     {
       title: 'Installing packages...',
-      task: async () => {
-        /**
-         * Install postcss-loader, tailwindcss, and autoprefixer
-         * RedwoodJS currently uses PostCSS v7; postcss-loader and autoprefixers pinned for compatibility
-         */
-        await execa('yarn', [
-          'workspace',
-          'web',
-          'add',
-          '-D',
-          'postcss-loader@4.0.2',
-          'tailwindcss',
-          'autoprefixer@9.8.6',
+      task: () => {
+        return new Listr([
+          {
+            title: 'Install postcss-loader, tailwindcss, and autoprefixer',
+            task: async () => {
+              /**
+               * Install postcss-loader, tailwindcss, and autoprefixer
+               * RedwoodJS currently uses PostCSS v7; postcss-loader and autoprefixers pinned for compatibility
+               */
+              await execa('yarn', [
+                'workspace',
+                'web',
+                'add',
+                '-D',
+                'postcss-loader@4.0.2',
+                'tailwindcss@npm:@tailwindcss/postcss7-compat',
+                'autoprefixer@9.8.6',
+              ])
+            },
+          },
+          {
+            title: 'Sync yarn.lock and node_modules',
+            task: async () => {
+              /**
+               * Sync yarn.lock file and node_modules folder.
+               * Refer https://github.com/redwoodjs/redwood/issues/1301 for more details.
+               */
+              await execa('yarn', ['install', '--check-files'])
+            },
+          },
         ])
       },
     },
@@ -64,58 +99,77 @@ export const handler = async ({ force }) => {
          * Make web/config if it doesn't exist
          * and write postcss.config.js there
          */
-        return writeFile(
-          getPaths().web.postcss,
-          fs
-            .readFileSync(
-              path.resolve(__dirname, 'templates', 'postcss.config.js.template')
-            )
-            .toString(),
-          { overwriteExisting: force }
-        )
+
+        /**
+         * Check if PostCSS config already exists.
+         * If it exists, throw an error.
+         */
+        if (!force && postCSSConfigExists()) {
+          throw new Error(
+            'PostCSS config already exists.\nUse --force to override existing config.'
+          )
+        } else {
+          return writeFile(
+            getPaths().web.postcss,
+            fs
+              .readFileSync(
+                path.resolve(
+                  __dirname,
+                  'templates',
+                  'postcss.config.js.template'
+                )
+              )
+              .toString(),
+            { overwriteExisting: force }
+          )
+        }
       },
     },
     {
       title: 'Initializing Tailwind CSS...',
       task: async () => {
-        /**
-         * If it doesn't already exist,
-         * initialize tailwind and move tailwind.config.js to web/
-         */
-        const configExists = fs.existsSync(
-          path.join(getPaths().web.base, 'tailwind.config.js')
-        )
+        const basePath = getPaths().web.base
+        const tailwindConfigPath = path.join(basePath, 'tailwind.config.js')
+        const configExists = fs.existsSync(tailwindConfigPath)
 
-        if (!configExists || force) {
-          await execa('yarn', ['tailwindcss', 'init'])
-
-          // opt-in to upcoming changes
-          const config = fs.readFileSync('tailwind.config.js', 'utf-8')
-
-          const uncommentFlags = (str) =>
-            str.replace(/\/{2} ([\w-]+: true)/g, '$1')
-
-          const newConfig = config.replace(/future.*purge/s, uncommentFlags)
-
-          fs.writeFileSync('tailwind.config.js', newConfig)
-
-          /**
-           * Later, when we can tell the vscode extension where to look for the config,
-           * we can put it in web/config/
-           */
-          await execa('mv', ['tailwind.config.js', 'web/'])
+        if (configExists) {
+          if (force) {
+            // yarn tailwindcss init will fail if the file already exists
+            fs.unlinkSync(tailwindConfigPath)
+          } else {
+            throw new Error(
+              'Tailwindcss config already exists.\nUse --force to override existing config.'
+            )
+          }
         }
+
+        await execa('yarn', ['tailwindcss', 'init'], { cwd: basePath })
+
+        // opt-in to upcoming changes
+        const config = fs.readFileSync(tailwindConfigPath, 'utf-8')
+
+        const uncommentFlags = (str) =>
+          str.replace(/\/{2} ([\w-]+: true)/g, '$1')
+
+        const newConfig = config.replace(/future.*purge/s, uncommentFlags)
+
+        fs.writeFileSync(tailwindConfigPath, newConfig)
       },
     },
     {
       title: 'Adding imports to index.css...',
-      task: () => {
+      task: (_ctx, task) => {
         /**
          * Add tailwind imports and notes to the top of index.css
          */
         let indexCSS = fs.readFileSync(INDEX_CSS_PATH)
-        indexCSS = tailwindImportsAndNotes.join('\n') + indexCSS
-        fs.writeFileSync(INDEX_CSS_PATH, indexCSS)
+
+        if (tailwindImportsExist(indexCSS)) {
+          task.skip('Imports already exist in index.css')
+        } else {
+          indexCSS = tailwindImportsAndNotes.join('\n') + indexCSS
+          fs.writeFileSync(INDEX_CSS_PATH, indexCSS)
+        }
       },
     },
     {
