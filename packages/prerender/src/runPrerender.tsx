@@ -8,7 +8,7 @@ import prettier from 'prettier'
 import ReactDOMServer from 'react-dom/server'
 
 import { getPaths } from '@redwoodjs/internal'
-import { RedwoodProvider } from '@redwoodjs/web'
+import { RedwoodApolloProvider } from '@redwoodjs/web/dist/components/RedwoodApolloProvider'
 
 import { getRootHtmlPath, registerShims, writeToDist } from './internal'
 
@@ -46,7 +46,7 @@ export const runPrerender = async ({
   inputComponentPath,
   outputHtmlPath,
   dryRun,
-}: PrerenderParams) => {
+}: PrerenderParams): Promise<string | void> => {
   registerShims()
 
   const indexContent = fs.readFileSync(getRootHtmlPath()).toString()
@@ -58,12 +58,15 @@ export const runPrerender = async ({
   // ideally in next version of Router, we can directly support SSR,
   // and won't require getting componentToPrerender
   const { default: Routes } = await import(getPaths().web.routes)
+
+  console.log('loaded routes', Routes)
+
   const componentAsHtml = ReactDOMServer.renderToString(
     <>
-      <RedwoodProvider useAuth={global.__REDWOOD__USE_AUTH}>
+      <RedwoodApolloProvider useAuth={global.__REDWOOD__USE_AUTH}>
         <Routes />
         <ComponentToPrerender />
-      </RedwoodProvider>
+      </RedwoodApolloProvider>
     </>
   )
   const renderOutput = indexContent.replace(
@@ -78,7 +81,7 @@ export const runPrerender = async ({
     console.log(prettyOutput)
     console.log('::: --- ::: ')
 
-    return
+    return prettyOutput
   }
 
   if (outputHtmlPath) {

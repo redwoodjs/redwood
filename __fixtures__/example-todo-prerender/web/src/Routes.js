@@ -8,7 +8,6 @@
 // 'src/pages/Admin/BooksPage/BooksPage.js' -> AdminBooksPage
 
 import { Router, Route } from '@redwoodjs/router'
-// import TypeScriptPage from './pages/TypeScriptPage/TypeScriptPage'
 
 const Routes = () => {
   return (
