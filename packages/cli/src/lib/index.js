@@ -14,7 +14,10 @@ import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 import { format } from 'prettier'
 
-import { getPaths as getRedwoodPaths } from '@redwoodjs/internal'
+import {
+  getPaths as getRedwoodPaths,
+  getConfig as getRedwoodConfig,
+} from '@redwoodjs/internal'
 
 import c from './colors'
 
@@ -211,6 +214,15 @@ export const bytes = (contents) => Buffer.byteLength(contents, 'utf8')
 export const getPaths = () => {
   try {
     return getRedwoodPaths()
+  } catch (e) {
+    console.error(c.error(e.message))
+    process.exit(0)
+  }
+}
+
+export const getConfig = () => {
+  try {
+    return getRedwoodConfig()
   } catch (e) {
     console.error(c.error(e.message))
     process.exit(0)

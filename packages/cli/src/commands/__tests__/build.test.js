@@ -1,5 +1,10 @@
 jest.mock('execa', () => jest.fn((cmd) => cmd))
 
+let mockedRedwoodConfig = {
+  api: {},
+  web: {},
+  browser: {},
+}
 jest.mock('src/lib', () => {
   return {
     ...jest.requireActual('src/lib'),
@@ -13,6 +18,9 @@ jest.mock('src/lib', () => {
       },
       web: {},
     }),
+    getConfig: () => {
+      return mockedRedwoodConfig
+    },
   }
 })
 
@@ -21,6 +29,10 @@ import execa from 'execa'
 import { runCommandTask } from 'src/lib'
 
 import { handler } from '../build'
+
+afterEach(() => {
+  jest.clearAllMocks()
+})
 
 test('The build command runs the correct commands.', async () => {
   await handler({})
@@ -35,4 +47,18 @@ test('The build command runs the correct commands.', async () => {
   expect(execa.mock.results[1].value).toEqual(
     `yarn webpack --config ../node_modules/@redwoodjs/core/config/webpack.production.js`
   )
+})
+
+test('Should run prerender for web, when experimental flag is on', async () => {
+  mockedRedwoodConfig = {
+    web: {
+      experimentalPrerender: true,
+    },
+  }
+  await handler({ side: ['web'] })
+  expect(execa.mock.results[0].value).toEqual(
+    'yarn webpack --config ../node_modules/@redwoodjs/core/config/webpack.production.js'
+  )
+
+  expect(execa.mock.results[1].value).toEqual('yarn rw prerender')
 })

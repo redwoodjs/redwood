@@ -6,10 +6,8 @@ import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
 
-import { getConfig } from '@redwoodjs/internal'
-
 import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
-import { getPaths } from 'src/lib'
+import { getPaths, getConfig } from 'src/lib'
 import c from 'src/lib/colors'
 
 export const command = 'build [side..]'
