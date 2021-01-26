@@ -281,11 +281,9 @@ const RouterImpl: React.FC<RouterImplProps & RouterProps> = ({
     }
   }
 
-  // If the router is being used in a Redwood app and only the notfound page is
-  // specified, show the Redwood splash page.
+  // If only the notfound page is specified, show the Redwood splash page.
   if (routes.length === 1 && NotFoundPage) {
-    const isRedwood = typeof __REDWOOD__ !== 'undefined'
-    return <SplashPage isRedwood={isRedwood} />
+    return <SplashPage />
   }
 
   return <PageLoader spec={normalizePage(NotFoundPage)} />
