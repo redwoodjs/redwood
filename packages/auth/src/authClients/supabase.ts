@@ -68,5 +68,6 @@ export const supabase = (client: Supabase): AuthClientSupabase => {
       return currentSession?.access_token || null
     },
     getUserMetadata: async () => await client.auth.user(),
+    restoreAuthState: async () => await client.auth.refreshSession(),
   }
 }
