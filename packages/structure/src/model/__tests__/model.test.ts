@@ -104,8 +104,37 @@ describe.skip('env vars', () => {
   })
 })
 
+describe('Redwood Route detection', () => {
+  it('detects routes with the prerender prop', async () => {
+    const projectRoot = getFixtureDir('example-todo-prerender')
+    const project = new RWProject({ projectRoot, host: new DefaultHost() })
+    const routes = project.getRouter().routes
+
+    const prerenderRoutes = routes
+      .filter((r) => r.prerender)
+      // Make it a little easier to read
+      .map(({ name, path }) => {
+        return { name, path }
+      })
+
+    expect(prerenderRoutes.length).toBe(3)
+    expect(prerenderRoutes).toContainEqual({ name: 'home', path: '/' })
+    expect(prerenderRoutes).toContainEqual({
+      name: 'typescriptPage',
+      path: '/typescript',
+    })
+    expect(prerenderRoutes).toContainEqual({
+      name: 'someOtherPage',
+      path: '/somewhereElse',
+    })
+  })
+})
+
 function getFixtureDir(
-  name: 'example-todo-main-with-errors' | 'example-todo-main'
+  name:
+    | 'example-todo-main-with-errors'
+    | 'example-todo-main'
+    | 'example-todo-prerender'
 ) {
   return resolve(__dirname, `../../../../../__fixtures__/${name}`)
 }
