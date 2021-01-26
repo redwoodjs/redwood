@@ -1,5 +1,7 @@
 require('whatwg-fetch')
 
+import { useEffect, useState } from 'react'
+
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 import { graphql } from 'msw'
@@ -41,9 +43,9 @@ const AuthConsumer = () => {
   const {
     loading,
     isAuthenticated,
-    authToken,
     logOut,
     logIn,
+    getToken,
     userMetadata,
     currentUser,
     reauthenticate,
@@ -51,6 +53,17 @@ const AuthConsumer = () => {
     hasRole,
     error,
   } = useAuth()
+
+  const [authToken, setAuthToken] = useState(null)
+
+  const retrieveToken = async () => {
+    const token = await getToken()
+    setAuthToken(token)
+  }
+
+  useEffect(() => {
+    retrieveToken()
+  }, [])
 
   if (loading) {
     return <>Loading...</>
