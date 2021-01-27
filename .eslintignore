@@ -2,3 +2,4 @@ dist
 fixtures
 packages/core/**/__fixtures__/**/*
 packages/core/config/storybook/**/*
+packages/create-redwood-app/template/**/*
