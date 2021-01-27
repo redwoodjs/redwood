@@ -14,7 +14,7 @@ export const auth0 = (client: Auth0): AuthClientAuth0 => {
     type: 'auth0',
     client,
     restoreAuthState: async () => {
-      if (window && window.location.search.includes('code=')) {
+      if (window?.location?.search?.includes('code=')) {
         const { appState } = await client.handleRedirectCallback()
         window.history.replaceState(
           {},
