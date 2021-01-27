@@ -47,5 +47,8 @@ export const netlify = (client: NetlifyIdentity): AuthClient => {
     getUserMetadata: async () => {
       return client.currentUser()
     },
+    restoreAuthState: async () => {
+      return client.currentUser()
+    },
   }
 }
