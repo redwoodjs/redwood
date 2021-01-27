@@ -1,19 +1,20 @@
 import fs from 'fs'
 import path from 'path'
 
-import lodash from 'lodash/string'
-import camelcase from 'camelcase'
-import pascalcase from 'pascalcase'
-import pluralize from 'pluralize'
-import decamelize from 'decamelize'
-import { paramCase } from 'param-case'
+import * as babel from '@babel/core'
 import { getDMMF } from '@prisma/sdk'
-import { getPaths as getRedwoodPaths } from '@redwoodjs/internal'
+import camelcase from 'camelcase'
+import decamelize from 'decamelize'
 import execa from 'execa'
 import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
+import lodash from 'lodash/string'
+import { paramCase } from 'param-case'
+import pascalcase from 'pascalcase'
+import pluralize from 'pluralize'
 import { format } from 'prettier'
-import * as babel from '@babel/core'
+
+import { getPaths as getRedwoodPaths } from '@redwoodjs/internal'
 
 import c from './colors'
 
@@ -74,7 +75,7 @@ export const getEnum = async (name) => {
 }
 
 /*
- * Returns the DMMF defined by `prisma` resolving the relevant `shema.prisma` path.
+ * Returns the DMMF defined by `prisma` resolving the relevant `schema.prisma` path.
  */
 export const getSchemaDefinitions = async () => {
   const schemaPath = path.join(getPaths().api.db, 'schema.prisma')
@@ -185,8 +186,11 @@ const existsAnyExtensionSync = (file) => {
 export const writeFile = (
   target,
   contents,
-  { overwriteExisting = false } = {}
+  { overwriteExisting = false } = {},
+  task = {}
 ) => {
+  const { base } = getPaths()
+  task.title = `Writing \`./${path.relative(base, target)}\``
   if (!overwriteExisting && fs.existsSync(target)) {
     throw new Error(`${target} already exists.`)
   }
@@ -195,6 +199,7 @@ export const writeFile = (
   const targetDir = target.replace(filename, '')
   fs.mkdirSync(targetDir, { recursive: true })
   fs.writeFileSync(target, contents)
+  task.title = `Successfully wrote file \`./${path.relative(base, target)}\``
 }
 
 export const bytes = (contents) => Buffer.byteLength(contents, 'utf8')
@@ -260,8 +265,8 @@ export const writeFilesTask = (files, options) => {
     Object.keys(files).map((file) => {
       const contents = files[file]
       return {
-        title: `Writing \`./${path.relative(base, file)}\`...`,
-        task: () => writeFile(file, contents, options),
+        title: `...waiting to write file \`./${path.relative(base, file)}\`...`,
+        task: (ctx, task) => writeFile(file, contents, options, task),
       }
     })
   )

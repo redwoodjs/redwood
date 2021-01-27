@@ -1,0 +1,11 @@
+.idea
+.DS_Store
+.env
+.netlify
+.redwood
+dev.db
+dist
+dist-babel
+node_modules
+yarn-error.log
+web/public/mockServiceWorker.js

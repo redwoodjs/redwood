@@ -5,13 +5,16 @@
     "rootDir": "src",
     "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
     "outDir": "dist",
+    "paths": {
+      "src/*": ["./src/*"],
+      "@redwoodjs/web/apollo": ["../web/dist/components/apollo"]
+    }
   },
   "include": [
     "src"
   ],
   "references": [
-    {
-      "path": "../internal",
-    }
+    { "path": "../internal" },
+    { "path": "../web" }
   ]
 }

@@ -1,5 +1,4 @@
-import terminalLink from 'terminal-link'
-
+import * as options from 'src/commands/dbCommands/options'
 import { runCommandTask } from 'src/lib'
 
 export const command = 'save [name..]'
@@ -7,25 +6,20 @@ export const description = 'Create a new migration'
 export const builder = (yargs) => {
   yargs
     .positional('name', {
+      default: 'migration',
       description: 'Name of the migration',
       type: 'string',
-      default: 'migration',
     })
-    .option('verbose', {
-      alias: 'v',
-      default: true,
-      description: 'Print more',
-      type: 'boolean',
-    })
-    .epilogue(
-      `Also see the ${terminalLink(
-        'Redwood CLI Reference',
-        'https://redwoodjs.com/reference/command-line-interface#db-save'
-      )}`
-    )
+    .option('verbose', options.verbose())
+    .option('schema', options.schema())
+    .epilogue(options.epilogue())
 }
 
-export const handler = async ({ name = 'migration', verbose = true }) => {
+export const handler = async ({
+  name = 'migration',
+  verbose = true,
+  schema,
+}) => {
   await runCommandTask(
     [
       {
@@ -36,6 +30,7 @@ export const handler = async ({ name = 'migration', verbose = true }) => {
           name.length && `--name "${name}"`,
           '--create-db',
           '--experimental',
+          schema && `--schema="${schema}"`,
         ].filter(Boolean),
       },
     ],

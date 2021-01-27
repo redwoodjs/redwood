@@ -52,5 +52,14 @@ If you want to use the useAuth hook `Sign Up` with Auth0 to default the UI to th
 
 ```ts
 // authClients/index.ts
-export type SupportedAuthClients = Auth0 | GoTrue | NetlifyIdentity | MagicLink
+export type SupportedAuthClients =
+  | Auth0
+  | AzureActiveDirectory
+  | GoTrue
+  | NetlifyIdentity
+  | MagicLink
+  | Firebase
+  | Supabase
+  | Ethereum
+  | Custom
 ```

@@ -1,7 +1,7 @@
 import path from 'path'
 
-import glob from 'glob'
 import type { PluginObj, types } from '@babel/core'
+import glob from 'glob'
 
 import { generateTypeDef, generateTypeDefIndex } from './generateTypes'
 
@@ -51,6 +51,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         const dirFiles = glob
           .sync(importGlob, { cwd })
           .filter((n) => !n.includes('.test.')) // ignore `*.test.*` files.
+          .filter((n) => !n.includes('.scenarios.')) // ignore `*.scenarios.*` files.
 
         const staticGlob = importGlob.split('*')[0]
         const filePathToVarName = (filePath: string) => {

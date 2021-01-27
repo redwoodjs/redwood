@@ -1,6 +1,8 @@
 // The guts of the router implementation.
 import PropTypes from 'prop-types'
 
+import { useAuth as useAuthHook } from '@redwoodjs/auth'
+
 import {
   Location,
   parseSearch,
@@ -12,7 +14,6 @@ import {
   PageLoader,
   Redirect,
 } from './internal'
-
 import { SplashPage } from './splash-page'
 
 const Route = () => {
@@ -39,12 +40,13 @@ const PrivatePageLoader = ({
   useAuth,
   unauthenticatedRoute,
   role,
+  whileLoading = () => null,
   children,
 }) => {
   const { loading, isAuthenticated, hasRole } = useAuth()
 
   if (loading) {
-    return null
+    return whileLoading()
   }
 
   if (
@@ -55,7 +57,9 @@ const PrivatePageLoader = ({
   } else {
     return (
       <Redirect
-        to={`${unauthenticatedRoute()}?redirectTo=${window.location.pathname}`}
+        to={`${unauthenticatedRoute()}?redirectTo=${
+          window.location.pathname
+        }${encodeURIComponent(window.location.search)}`}
       />
     )
   }
@@ -98,13 +102,23 @@ const normalizePage = (specOrPage) => {
 
 const DEFAULT_PAGE_LOADING_DELAY = 1000 // milliseconds
 
+const Loaders = ({ allParams, Page, pageLoadingDelay }) => {
+  return (
+    <PageLoader
+      spec={normalizePage(Page)}
+      delay={pageLoadingDelay}
+      params={allParams}
+    />
+  )
+}
+
 const RouterImpl = ({
   pathname,
   search,
   paramTypes,
   pageLoadingDelay = DEFAULT_PAGE_LOADING_DELAY,
   children,
-  useAuth = window.__REDWOOD__USE_AUTH,
+  useAuth = useAuthHook,
 }) => {
   const routes = React.useMemo(() => {
     // Find `Private` components, mark their children `Route` components as private,
@@ -115,12 +129,17 @@ const RouterImpl = ({
         .map((privateElement) => {
           // Set `Route` props
           const { unauthenticated, role, children } = privateElement.props
-          return React.Children.toArray(children).map((route) =>
-            React.cloneElement(route, {
-              private: true,
-              unauthenticatedRedirect: unauthenticated,
-              role: role,
-            })
+          return (
+            React.Children.toArray(children)
+              // Make sure only valid routes are considered
+              .filter((route) => route.type === Route)
+              .map((route) =>
+                React.cloneElement(route, {
+                  private: true,
+                  unauthenticatedRedirect: unauthenticated,
+                  role: role,
+                })
+              )
           )
         })
         .reduce((a, b) => a.concat(b), []) || []
@@ -162,18 +181,6 @@ const RouterImpl = ({
           </RouterImpl>
         )
       } else {
-        const Loaders = () => {
-          return (
-            <ParamsContext.Provider value={allParams}>
-              <PageLoader
-                spec={normalizePage(Page)}
-                delay={pageLoadingDelay}
-                params={allParams}
-              />
-            </ParamsContext.Provider>
-          )
-        }
-
         if (route?.props?.private) {
           if (typeof useAuth === 'undefined') {
             throw new Error(
@@ -186,14 +193,25 @@ const RouterImpl = ({
               unauthenticatedRoute={
                 namedRoutes[route.props.unauthenticatedRedirect]
               }
+              whileLoading={route.props.whileLoading}
               role={route.props.role}
             >
-              <Loaders />
+              <Loaders
+                allParams={allParams}
+                Page={Page}
+                pageLoadingDelay={pageLoadingDelay}
+              />
             </PrivatePageLoader>
           )
         }
 
-        return <Loaders />
+        return (
+          <Loaders
+            allParams={allParams}
+            Page={Page}
+            pageLoadingDelay={pageLoadingDelay}
+          />
+        )
       }
     }
   }

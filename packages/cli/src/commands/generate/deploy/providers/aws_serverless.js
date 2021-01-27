@@ -1,8 +1,9 @@
-import path from 'path'
 import fs from 'fs'
+import path from 'path'
+
+import { getConfig } from '@redwoodjs/internal'
 
 import { getPaths } from 'src/lib'
-import { getConfig } from '@redwoodjs/internal'
 
 const config = getConfig()
 
@@ -37,7 +38,9 @@ provider:
 package:
   individually: true
 
-functions:
+${
+  fs.existsSync(path.resolve(getPaths().api.functions))
+    ? `functions:
   ${fs
     .readdirSync(path.resolve(getPaths().api.functions))
     .map((file) => {
@@ -63,7 +66,9 @@ functions:
           method: POST
 `
     })
-    .join('  ')}
+    .join('  ')}`
+    : ''
+}
 `
 
 export const preRequisites = [
@@ -94,7 +99,7 @@ export const gitIgnoreAdditions = ['.serverless']
 export const prismaBinaryTargetAdditions = () => {
   const content = fs.readFileSync(getPaths().api.dbSchema).toString()
 
-  if (!content.includes("rhel-openssl-1.0.x")) {
+  if (!content.includes('rhel-openssl-1.0.x')) {
     const result = content.replace(
       /binaryTargets =.*\n/,
       `binaryTargets = ["native", "rhel-openssl-1.0.x"]\n`

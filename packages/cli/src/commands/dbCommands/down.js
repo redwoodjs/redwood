@@ -1,5 +1,4 @@
-import terminalLink from 'terminal-link'
-
+import * as options from 'src/commands/dbCommands/options'
 import { runCommandTask } from 'src/lib'
 
 export const command = 'down [decrement]'
@@ -11,20 +10,11 @@ export const builder = (yargs) => {
       description: 'Number of backwards migrations to apply',
       type: 'number',
     })
-    .option('verbose', {
-      alias: 'v',
-      default: true,
-      description: 'Print more',
-      type: 'boolean',
-    })
-    .epilogue(
-      `Also see the ${terminalLink(
-        'Redwood CLI Reference',
-        'https://redwoodjs.com/reference/command-line-interface#db-down'
-      )}`
-    )
+    .option('verbose', options.verbose())
+    .option('schema', options.schema())
+    .epilogue(options.epilogue())
 }
-export const handler = async ({ decrement, verbose = true }) => {
+export const handler = async ({ decrement, verbose = true, schema }) => {
   await runCommandTask(
     [
       {
@@ -34,6 +24,7 @@ export const handler = async ({ decrement, verbose = true }) => {
           'migrate down',
           decrement && `${decrement}`,
           '--experimental',
+          schema && `--schema="${schema}"`,
         ].filter(Boolean),
       },
     ],

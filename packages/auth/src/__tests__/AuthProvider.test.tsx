@@ -1,15 +1,17 @@
 require('whatwg-fetch')
 
+import { useEffect, useState } from 'react'
+
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
-import { setupServer } from 'msw/node'
 import { graphql } from 'msw'
+import { setupServer } from 'msw/node'
 
-import { useAuth } from '../useAuth'
-import { AuthProvider } from '../AuthProvider'
 import type { AuthClient } from '../authClients'
+import { AuthProvider } from '../AuthProvider'
+import { useAuth } from '../useAuth'
 
-let CURRENT_USER_DATA = {
+let CURRENT_USER_DATA: { name: string; email: string; roles?: string[] } = {
   name: 'Peter Pistorius',
   email: 'nospam@example.net',
 }
@@ -43,6 +45,7 @@ const AuthConsumer = () => {
     isAuthenticated,
     logOut,
     logIn,
+    getToken,
     userMetadata,
     currentUser,
     reauthenticate,
@@ -50,6 +53,17 @@ const AuthConsumer = () => {
     hasRole,
     error,
   } = useAuth()
+
+  const [authToken, setAuthToken] = useState(null)
+
+  const retrieveToken = async () => {
+    const token = await getToken()
+    setAuthToken(token)
+  }
+
+  useEffect(() => {
+    retrieveToken()
+  }, [])
 
   if (loading) {
     return <>Loading...</>
@@ -72,6 +86,7 @@ const AuthConsumer = () => {
       {isAuthenticated && (
         <>
           <p>userMetadata: {JSON.stringify(userMetadata)}</p>
+          <p>authToken: {authToken}</p>
           <p>
             currentUser:{' '}
             {(currentUser && JSON.stringify(currentUser)) ||
@@ -100,6 +115,7 @@ test('Authentication flow (logged out -> login -> logged in -> logout) works as 
     login: async () => {
       return true
     },
+    signup: async () => {},
     logout: async () => {},
     getToken: async () => 'hunter2',
     getUserMetadata: jest.fn(async () => {
@@ -144,6 +160,7 @@ test('Authentication flow (logged out -> login -> logged in -> logout) works as 
       'currentUser: {"name":"Peter Pistorius","email":"nospam@example.net"}'
     )
   ).toBeInTheDocument()
+  expect(screen.getByText('authToken: hunter2')).toBeInTheDocument()
 
   // Log out
   fireEvent.click(screen.getByText('Log Out'))
@@ -157,6 +174,7 @@ test('Fetching the current user can be skipped', async (done) => {
     login: async () => {
       return true
     },
+    signup: async () => {},
     logout: async () => {},
     getToken: async () => 'hunter2',
     getUserMetadata: jest.fn(async () => {
@@ -206,6 +224,7 @@ test('A user can be reauthenticated to update the "auth state"', async (done) =>
     login: async () => {
       return true
     },
+    signup: async () => {},
     logout: async () => {},
     getToken: async () => 'hunter2',
     getUserMetadata: jest.fn(async () => {
@@ -267,6 +286,7 @@ test('When the current user cannot be fetched the user is not authenticated', as
     login: async () => {
       return true
     },
+    signup: async () => {},
     logout: async () => {},
     getToken: async () => 'hunter2',
     getUserMetadata: jest.fn(async () => {
@@ -302,6 +322,7 @@ test('Authenticated user has assigned role access as expected', async (done) => 
     login: async () => {
       return true
     },
+    signup: async () => {},
     logout: async () => {},
     getToken: async () => 'hunter2',
     getUserMetadata: jest.fn(async () => {

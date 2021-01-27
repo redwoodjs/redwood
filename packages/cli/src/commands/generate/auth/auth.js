@@ -4,6 +4,7 @@ import path from 'path'
 import execa from 'execa'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
+
 import { resolveFile } from '@redwoodjs/internal'
 
 import { getPaths, writeFilesTask } from 'src/lib'
@@ -48,22 +49,36 @@ const addWebInit = (content, init) => {
 
 // returns the content of index.js with <AuthProvider> added
 const addWebRender = (content, authProvider) => {
-  const [_, indent, redwoodProvider] = content.match(
-    /(\s+)(<RedwoodProvider>.*<\/RedwoodProvider>)/s
+  const [_, indent, redwoodApolloProvider] = content.match(
+    /(\s+)(<RedwoodApolloProvider>.*<\/RedwoodApolloProvider>)/s
   )
-  const redwoodProviderLines = redwoodProvider.split('\n').map((line) => {
-    return '  ' + line
-  })
+  const redwoodApolloProviderLines = redwoodApolloProvider
+    .split('\n')
+    .map((line) => {
+      return '  ' + line
+    })
+  const customRenderOpen = (authProvider.render || []).reduce(
+    (acc, component) => acc + indent + `<${component}>`,
+    ''
+  )
+
+  const customRenderClose = (authProvider.render || []).reduce(
+    (acc, component) => indent + `</${component}>` + acc,
+    ''
+  )
+
   const renderContent =
+    customRenderOpen +
     indent +
     `<AuthProvider client={${authProvider.client}} type="${authProvider.type}">` +
     indent +
-    redwoodProviderLines.join('\n') +
+    redwoodApolloProviderLines.join('\n') +
     indent +
-    `</AuthProvider>`
+    `</AuthProvider>` +
+    customRenderClose
 
   return content.replace(
-    /\s+<RedwoodProvider>.*<\/RedwoodProvider>/s,
+    /\s+<RedwoodApolloProvider>.*<\/RedwoodApolloProvider>/s,
     renderContent
   )
 }

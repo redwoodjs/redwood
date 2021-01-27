@@ -1,0 +1,64 @@
+{
+  "extends": "@redwoodjs/eslint-config",
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "off",
+    "import/order": [
+      "error",
+      {
+        "newlines-between": "always",
+        "pathGroupsExcludedImportTypes": [
+          "react"
+        ],
+        "pathGroups": [
+          {
+            "pattern": "react",
+            "group": "builtin",
+            "position": "after"
+          },
+          {
+            "pattern": "@redwoodjs/**",
+            "group": "external",
+            "position": "after"
+          },
+          {
+            "pattern": "src/lib/test",
+            "group": "parent",
+            "position": "before"
+          },
+          {
+            "pattern": "src/**",
+            "group": "parent",
+            "position": "before"
+          }
+        ],
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        }
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/template/web/src/Routes.js"
+      ],
+      "rules": {
+        "no-undef": "off"
+      }
+    },
+    {
+      "files": [
+        "packages/structure/**"
+      ],
+      "rules": {
+        "@typescript-eslint/no-this-alias": "off",
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "no-case-declarations": "off",
+        "prefer-const": "off",
+        "no-empty": "warn",
+        "no-unused-expressions": "off"
+      }
+    }
+  ]
+}

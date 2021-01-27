@@ -1,6 +1,8 @@
 import { basename } from 'path'
+
 import * as tsm from 'ts-morph'
 import { Location, Range } from 'vscode-languageserver-types'
+
 import { RWError } from '../errors'
 import { BaseNode, Decoration, Definition, DocumentLinkX, HoverX } from '../ide'
 import { validateRoutePath } from '../util'
@@ -14,6 +16,7 @@ import {
   Position_translate,
   Range_fromNode,
 } from '../x/vscode-languageserver-types'
+
 import { RWRouter } from './RWRouter'
 import { advanced_path_parser } from './util/advanced_path_parser'
 
@@ -38,8 +41,13 @@ export class RWRoute extends BaseNode {
     return LocationLike_toLocation(this.jsxNode)
   }
 
-  @lazy() get isAuthenticated() {
-    return false // TODO
+  @lazy() get isPrivate() {
+    const tagText = this.jsxNode
+      .getParentIfKind(tsm.SyntaxKind.JsxElement)
+      ?.getOpeningElement()
+      ?.getTagNameNode()
+      ?.getText()
+    return tagText === 'Private'
   }
 
   @lazy() get hasParameters(): boolean {
@@ -144,8 +152,11 @@ export class RWRoute extends BaseNode {
       )
     if (this.hasPathCollision)
       yield err(this.path_literal_node!, 'Duplicate Path')
-    if (this.isAuthenticated && this.isNotFound)
-      yield err(this.jsxNode!, "The 'Not Found' page cannot be authenticated")
+    if (this.isPrivate && this.isNotFound)
+      yield err(
+        this.jsxNode!,
+        "The 'Not Found' page cannot be within a <Private> tag"
+      )
     if (this.isNotFound && this.path)
       yield err(
         this.path_literal_node!,

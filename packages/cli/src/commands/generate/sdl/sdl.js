@@ -1,7 +1,7 @@
 import path from 'path'
 
-import Listr from 'listr'
 import camelcase from 'camelcase'
+import Listr from 'listr'
 import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 import terminalLink from 'terminal-link'
@@ -17,8 +17,8 @@ import {
 import c from 'src/lib/colors'
 
 import { yargsDefaults } from '../../generate'
-import { files as serviceFiles } from '../service/service'
 import { relationsForModel } from '../helpers'
+import { files as serviceFiles } from '../service/service'
 
 const IGNORE_FIELDS_FOR_INPUT = ['id', 'createdAt', 'updatedAt']
 
@@ -64,15 +64,19 @@ const updateInputSDL = (model, types = {}) => {
   return inputSDL(model, false, types)
 }
 
-const idType = (model) => {
+const idType = (model, crud) => {
+  if (!crud) {
+    return undefined
+  }
+
   const idField = model.fields.find((field) => field.isId)
   if (!idField) {
-    throw new Error('Cannot generate SDL without an `id` database column')
+    throw new Error('Cannot generate CRUD SDL without an `id` database column')
   }
   return idField.type
 }
 
-const sdlFromSchemaModel = async (name) => {
+const sdlFromSchemaModel = async (name, crud) => {
   const model = await getSchema(name)
 
   if (model) {
@@ -104,7 +108,7 @@ const sdlFromSchemaModel = async (name) => {
       query: querySDL(model).join('\n    '),
       createInput: createInputSDL(model, types).join('\n    '),
       updateInput: updateInputSDL(model, types).join('\n    '),
-      idType: idType(model),
+      idType: idType(model, crud),
       relations: relationsForModel(model),
       enums,
     }
@@ -123,7 +127,7 @@ export const files = async ({ name, crud, typescript, javascript }) => {
     idType,
     relations,
     enums,
-  } = await sdlFromSchemaModel(pascalcase(pluralize.singular(name)))
+  } = await sdlFromSchemaModel(pascalcase(pluralize.singular(name)), crud)
 
   let template = generateTemplate(
     path.join('sdl', 'templates', `sdl.ts.template`),

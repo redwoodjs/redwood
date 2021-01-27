@@ -1,4 +1,5 @@
 import { sep } from 'path'
+
 import { URL_file, URL_toFile } from '../URL'
 
 describe('URL_fromFile', () => {
@@ -22,5 +23,8 @@ describe('URL_toFile', () => {
     const res = `${sep}a${sep}b.c`
     expect(URL_toFile(`/a/b.c`)).toEqual(res)
     expect(URL_toFile(`file:///a/b.c`)).toEqual(res)
+  })
+  it('works with urlencoded windows file URLs (vscode language server does it this way)', () => {
+    expect(URL_toFile(`file:///c%3A/a/b.c`, '\\')).toEqual('c:\\a\\b.c')
   })
 })

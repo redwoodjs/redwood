@@ -16,13 +16,17 @@ export interface AuthContextInterface {
   /* Determining your current authentication state */
   loading: boolean
   isAuthenticated: boolean
+  /**
+   * @deprecated auth tokens are now refreshed when they expire, use getToken() instead. authToken will be removed from this context in future releases
+   */
+  authToken: string | null // @WARN! deprecated, will always be null
   /* The current user's data from the `getCurrentUser` function on the api side */
   currentUser: null | CurrentUser
   /* The user's metadata from the auth provider */
   userMetadata: null | SupportedUserMetadata
-  logIn(options?: any): Promise<void>
-  logOut(options?: any): Promise<void>
-  signUp(options?: any): Promise<void>
+  logIn(options?: unknown): Promise<void>
+  logOut(options?: unknown): Promise<void>
+  signUp(options?: unknown): Promise<void>
   getToken(): Promise<null | string>
   /**
    * Fetches the "currentUser" from the api side,
@@ -47,12 +51,17 @@ export interface AuthContextInterface {
   client: SupportedAuthClients
   type: SupportedAuthTypes
   hasError: boolean
-  error: Error
+  error?: Error
 }
 
-export const AuthContext = React.createContext<Partial<AuthContextInterface>>(
-  {}
-)
+// @ts-expect-error - We do not supply default values for the functions.
+export const AuthContext = React.createContext<AuthContextInterface>({
+  loading: true,
+  isAuthenticated: false,
+  authToken: null, // @WARN! deprecated, will always be null
+  userMetadata: null,
+  currentUser: null,
+})
 
 type AuthProviderProps = {
   client: SupportedAuthClients
@@ -63,8 +72,9 @@ type AuthProviderProps = {
 type AuthProviderState = {
   loading: boolean
   isAuthenticated: boolean
+  authToken: string | null // @WARN! deprecated, will always be null
   userMetadata: null | Record<string, any>
-  currentUser: null | undefined | CurrentUser
+  currentUser: null | CurrentUser
   hasError: boolean
   error?: Error
 }
@@ -89,6 +99,7 @@ export class AuthProvider extends React.Component<
   state: AuthProviderState = {
     loading: true,
     isAuthenticated: false,
+    authToken: null, // @WARN! deprecated, will always be null
     userMetadata: null,
     currentUser: null,
     hasError: false,
@@ -106,12 +117,9 @@ export class AuthProvider extends React.Component<
     return this.reauthenticate()
   }
 
-  getCurrentUser = async () => {
-    if (this.props.skipFetchCurrentUser) {
-      return undefined
-    }
-
-    const token = await this.rwClient.getToken()
+  getCurrentUser = async (): Promise<Record<string, unknown>> => {
+    // Always get a fresh token, rather than use the one in state
+    const token = await this.getToken()
     const response = await window.fetch(
       `${window.__REDWOOD__API_PROXY_PATH}/graphql`,
       {
@@ -169,9 +177,14 @@ export class AuthProvider extends React.Component<
     return false
   }
 
+  getToken = async () => {
+    return this.rwClient.getToken()
+  }
+
   reauthenticate = async () => {
     const notAuthenticatedState: AuthProviderState = {
       isAuthenticated: false,
+      authToken: null, // @WARN! deprecated, will always be null
       currentUser: null,
       userMetadata: null,
       loading: false,
@@ -183,8 +196,14 @@ export class AuthProvider extends React.Component<
       if (!userMetadata) {
         this.setState(notAuthenticatedState)
       } else {
-        const currentUser = await this.getCurrentUser()
+        await this.getToken()
+
+        const currentUser = this.props.skipFetchCurrentUser
+          ? null
+          : await this.getCurrentUser()
+
         this.setState({
+          ...this.state,
           userMetadata,
           currentUser,
           isAuthenticated: true,
@@ -201,8 +220,10 @@ export class AuthProvider extends React.Component<
   }
 
   logIn = async (options?: any) => {
-    await this.rwClient.login(options)
-    return this.reauthenticate()
+    const loginOutput = await this.rwClient.login(options)
+    await this.reauthenticate()
+
+    return loginOutput
   }
 
   logOut = async (options?: any) => {
@@ -231,7 +252,7 @@ export class AuthProvider extends React.Component<
           logIn: this.logIn,
           logOut: this.logOut,
           signUp: this.signUp,
-          getToken: this.rwClient.getToken,
+          getToken: this.getToken,
           getCurrentUser: this.getCurrentUser,
           hasRole: this.hasRole,
           reauthenticate: this.reauthenticate,

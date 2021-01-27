@@ -7,6 +7,7 @@ import {
   Position,
   WorkspaceChange,
 } from 'vscode-languageserver-types'
+
 import { RWError } from '../errors'
 import { CodeLensX, FileNode } from '../ide'
 import { iter } from '../x/Array'
@@ -18,9 +19,9 @@ import {
   LocationLike_toLocation,
   Location_fromNode,
 } from '../x/vscode-languageserver-types'
+
 import { RWProject } from './RWProject'
 import { RWRoute } from './RWRoute'
-import { rangeRight } from 'lodash'
 
 /**
  * one per Routes.js
@@ -77,23 +78,20 @@ export class RWRouter extends FileNode {
   *ideInfo() {
     if (this.jsxNode) {
       let location = Location_fromNode(this.jsxNode)
-      if (this.routes.length > 0) {
-        location = Location_fromNode(this.routes[0].jsxNode)
-        const codeLens: CodeLens = {
-          range: location.range,
-          command: Command.create(
-            'Create Page...',
-            'redwoodjs.cli',
-            'generate page...',
-            this.parent.projectRoot
-          ),
-        }
-        yield {
-          kind: 'CodeLens',
-          location,
-          codeLens,
-        } as CodeLensX
+      const codeLens: CodeLens = {
+        range: location.range,
+        command: Command.create(
+          'Create Page...',
+          'redwoodjs.cli',
+          'generate page...',
+          this.parent.projectRoot
+        ),
       }
+      yield {
+        kind: 'CodeLens',
+        location,
+        codeLens,
+      } as CodeLensX
     }
   }
 

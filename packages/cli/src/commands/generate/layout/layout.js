@@ -8,7 +8,7 @@ import {
 const COMPONENT_SUFFIX = 'Layout'
 const REDWOOD_WEB_PATH_NAME = 'layouts'
 
-export const files = ({ name, ...options }) => {
+export const files = ({ name, tests = true, stories = true, ...options }) => {
   // TODO: Replace with check from https://github.com/redwoodjs/redwood/pull/633
   const isJavascript = options.javascript && !options.typescript
   const layoutFile = templateForComponentFile({
@@ -36,24 +36,30 @@ export const files = ({ name, ...options }) => {
     templatePath: 'stories.tsx.template',
   })
 
+  const files = [layoutFile]
+  if (stories) {
+    files.push(storyFile)
+  }
+
+  if (tests) {
+    files.push(testFile)
+  }
+
   // Returns
   // {
   //    "path/to/fileA": "<<<template>>>",
   //    "path/to/fileB": "<<<template>>>",
   // }
-  return [layoutFile, testFile, storyFile].reduce(
-    (acc, [outputPath, content]) => {
-      const template = isJavascript
-        ? transformTSToJS(outputPath, content)
-        : content
+  return files.reduce((acc, [outputPath, content]) => {
+    const template = isJavascript
+      ? transformTSToJS(outputPath, content)
+      : content
 
-      return {
-        [outputPath]: template,
-        ...acc,
-      }
-    },
-    {}
-  )
+    return {
+      [outputPath]: template,
+      ...acc,
+    }
+  }, {})
 }
 
 export const {
