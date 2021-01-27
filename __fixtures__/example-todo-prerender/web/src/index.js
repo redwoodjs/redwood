@@ -1,16 +1,14 @@
 import ReactDOM from 'react-dom'
-import { RedwoodProvider, FatalErrorBoundary } from '@redwoodjs/web'
-import FatalErrorPage from 'src/pages/FatalErrorPage'
 
-import Routes from './Routes'
+import App from './App'
 
 import './index.css'
+import './scaffold.css'
 
-ReactDOM.render(
-  <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider>
-      <Routes />
-    </RedwoodProvider>
-  </FatalErrorBoundary>,
-  document.getElementById('redwood-app')
-)
+const rootElement = document.getElementById('redwood-app')
+
+if (rootElement.hasChildNodes()) {
+  ReactDOM.hydrate(<App />, rootElement)
+} else {
+  ReactDOM.render(<App />, rootElement)
+}
