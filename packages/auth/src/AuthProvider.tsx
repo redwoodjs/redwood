@@ -16,7 +16,10 @@ export interface AuthContextInterface {
   /* Determining your current authentication state */
   loading: boolean
   isAuthenticated: boolean
-  authToken: string | null
+  /**
+   * @deprecated auth tokens are now refreshed when they expire, use getToken() instead. authToken will be removed from this context in future releases
+   */
+  authToken: string | null // @WARN! deprecated, will always be null
   /* The current user's data from the `getCurrentUser` function on the api side */
   currentUser: null | CurrentUser
   /* The user's metadata from the auth provider */
@@ -55,7 +58,7 @@ export interface AuthContextInterface {
 export const AuthContext = React.createContext<AuthContextInterface>({
   loading: true,
   isAuthenticated: false,
-  authToken: null,
+  authToken: null, // @WARN! deprecated, will always be null
   userMetadata: null,
   currentUser: null,
 })
@@ -69,7 +72,7 @@ type AuthProviderProps = {
 type AuthProviderState = {
   loading: boolean
   isAuthenticated: boolean
-  authToken: string | null
+  authToken: string | null // @WARN! deprecated, will always be null
   userMetadata: null | Record<string, any>
   currentUser: null | CurrentUser
   hasError: boolean
@@ -96,7 +99,7 @@ export class AuthProvider extends React.Component<
   state: AuthProviderState = {
     loading: true,
     isAuthenticated: false,
-    authToken: null,
+    authToken: null, // @WARN! deprecated, will always be null
     userMetadata: null,
     currentUser: null,
     hasError: false,
@@ -115,6 +118,8 @@ export class AuthProvider extends React.Component<
   }
 
   getCurrentUser = async (): Promise<Record<string, unknown>> => {
+    // Always get a fresh token, rather than use the one in state
+    const token = await this.getToken()
     const response = await global.fetch(
       `${global.__REDWOOD__API_PROXY_PATH}/graphql`,
       {
@@ -122,7 +127,7 @@ export class AuthProvider extends React.Component<
         headers: {
           'content-type': 'application/json',
           'auth-provider': this.rwClient.type,
-          authorization: `Bearer ${this.state.authToken}`,
+          authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           query:
@@ -173,15 +178,13 @@ export class AuthProvider extends React.Component<
   }
 
   getToken = async () => {
-    const authToken = await this.rwClient.getToken()
-    this.setState({ ...this.state, authToken })
-    return authToken
+    return this.rwClient.getToken()
   }
 
   reauthenticate = async () => {
     const notAuthenticatedState: AuthProviderState = {
       isAuthenticated: false,
-      authToken: null,
+      authToken: null, // @WARN! deprecated, will always be null
       currentUser: null,
       userMetadata: null,
       loading: false,
