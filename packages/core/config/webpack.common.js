@@ -192,9 +192,13 @@ module.exports = (webpackEnv) => {
         title: path.basename(redwoodPaths.base),
         template: path.resolve(redwoodPaths.base, 'web/src/index.html'),
         templateParameters: {
-          prerenderMarkup: '<server-markup></server-markup>',
+          prerenderMarkup: redwoodConfig.web.experiemntalPrerender
+            ? '<server-markup></server-markup>'
+            : '<!-- Redwood App Here -->', // this gets taken out by post processing anyway
         },
-        scriptLoading: 'defer', // show the prerendered markup, no need to wait
+        scriptLoading: redwoodConfig.web.experiemntalPrerender
+          ? 'defer' // show the prerendered markup, no need to wait
+          : 'blocking',
         inject: true,
         chunks: 'all',
       }),
