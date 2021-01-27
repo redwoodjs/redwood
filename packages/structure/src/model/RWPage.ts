@@ -1,4 +1,3 @@
-import { existsSync } from 'fs'
 import { dirname } from 'path'
 
 import * as tsm from 'ts-morph'
