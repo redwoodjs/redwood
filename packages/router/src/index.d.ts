@@ -58,7 +58,7 @@ declare module '@redwoodjs/router' {
    * )
    * ```
    */
-  function navigate(nameOfRoute: namedRoute)
+  function navigate(nameOfRoute: namedRoute): void
 
   /**
    * If you want to declaratively redirect to a different page,
@@ -111,6 +111,16 @@ declare module '@redwoodjs/router' {
     to: namedRoute
     className: string
     activeClassName: string
+  }>
+
+  /** typically not needed, but this lets us override the path the router is rendering at */
+  /** used in prerender */
+  const LocationProvider: React.FunctionComponent<{
+    location: {
+      pathname: string
+      search?: string
+      hash?: string
+    }
   }>
 
   /** A hook that returns the current location */

@@ -40,7 +40,7 @@ const mapRouterPathToHtml = (routerPath) => {
 export const handler = async ({ input, output, dryrun }) => {
   if (input) {
     runPrerender({
-      inputComponentPath: input,
+      routerPath: input,
       outputHtmlPath: output,
       dryRun: dryrun,
     })
@@ -56,7 +56,7 @@ export const handler = async ({ input, output, dryrun }) => {
 
     try {
       await runPrerender({
-        inputComponentPath: routeToPrerender.filePath,
+        routerPath: routeToPrerender.path,
         outputHtmlPath,
         dryRun: dryrun,
       })

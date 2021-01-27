@@ -6,8 +6,7 @@
   ],
   "main": "./dist/index.js",
   "exports": {
-		".": "./dist/index.js",
-		"./dist/components/RedwoodApolloProvider": "./dist/components/apollo.js",
+    ".": "./dist/index.js",
     "./apollo": "./dist/components/apollo.js"
   },
   "types": "dist/index.d.ts",

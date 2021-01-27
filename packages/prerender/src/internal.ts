@@ -28,6 +28,9 @@ export const registerShims = () => {
 
   global.__REDWOOD__PRERENDERING = true
 
+  // Let routes auto loader plugin know
+  process.env.__REDWOOD__PRERENDERING = 'true'
+
   // We do this to avoid increasing the apollo client bundle size
   if (!global.fetch) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment

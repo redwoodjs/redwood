@@ -5,11 +5,11 @@ const createHistory = () => {
     listen: (listener) => {
       const listenerId = 'RW_HISTORY_LISTENER_ID_' + Date.now()
       listeners[listenerId] = listener
-      window && window.addEventListener('popstate', listener)
+      window?.addEventListener('popstate', listener)
       return listenerId
     },
     navigate: (to) => {
-      window && window.history.pushState({}, null, to)
+      window?.history.pushState({}, null, to)
       for (const listener of Object.values(listeners)) {
         listener()
       }
@@ -17,7 +17,7 @@ const createHistory = () => {
     remove: (listenerId) => {
       if (listeners[listenerId]) {
         const listener = listeners[listenerId]
-        window && window.removeEventListener('popstate', listener)
+        window?.removeEventListener('popstate', listener)
         delete listeners[listenerId]
       } else {
         console.warn(

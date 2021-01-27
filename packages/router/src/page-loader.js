@@ -2,6 +2,8 @@ import { useContext } from 'react'
 
 import isEqual from 'lodash.isequal'
 
+import { isPrerendering } from '@redwoodjs/web'
+
 import { createNamedContext, ParamsContext } from './internal'
 
 export const PageLoadingContext = createNamedContext('PageLoading')
@@ -87,6 +89,19 @@ export class PageLoader extends React.Component {
 
   render() {
     const { Page } = this.state
+
+    if (isPrerendering()) {
+      // babel autoloader plugin imports all the pages when it builds Routes.js
+      // this allows us to syncronously load the module
+      const PageFromLoader = this.props.spec.loader().default
+
+      return (
+        <ParamsContext.Provider value={this.state.params}>
+          <PageFromLoader />
+        </ParamsContext.Provider>
+      )
+    }
+
     if (Page) {
       return (
         <ParamsContext.Provider value={this.state.params}>

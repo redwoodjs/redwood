@@ -7,11 +7,12 @@ import { generateTypeDef, generateTypeDefIndex } from './generateTypes'
 
 interface PluginOptions {
   project: RWProject
+  prerendering: boolean
 }
 
 export default function (
   { types: t }: { types: typeof types },
-  { project }: PluginOptions
+  { project, prerendering }: PluginOptions
 ): PluginObj {
   let pages = processPagesDir()
 
@@ -86,9 +87,14 @@ export default function (
                       t.identifier('loader'),
                       t.arrowFunctionExpression(
                         [],
-                        t.callExpression(t.identifier('import'), [
-                          t.stringLiteral(importPath),
-                        ])
+                        t.callExpression(
+                          // If prerendering, do a synchronous import with require
+                          // If clientside, create async import statement
+                          prerendering
+                            ? t.identifier('require')
+                            : t.identifier('import'),
+                          [t.stringLiteral(importPath)]
+                        )
                       )
                     ),
                   ])

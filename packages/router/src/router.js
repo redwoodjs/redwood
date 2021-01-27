@@ -59,7 +59,7 @@ const PrivatePageLoader = ({
       ? `${unauthenticatedRoute()}?redirectTo=${
           window.location.pathname
         }${encodeURIComponent(window.location.search)}`
-      : null
+      : undefined
 
     return <Redirect to={redirectUrl} />
   }

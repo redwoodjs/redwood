@@ -10,9 +10,10 @@ class LocationProvider extends React.Component {
   }
 
   getContext() {
-    const location = typeof window !== 'undefined' ? window.location : {}
+    const windowLocation = typeof window !== 'undefined' ? window.location : {}
     const { pathname = '', search = '', hash = '' } =
-      this.props.location || location
+      this.props.location || windowLocation
+
     return { pathname, search, hash }
   }
 

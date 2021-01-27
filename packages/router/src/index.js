@@ -15,6 +15,7 @@ export {
   useLocation,
   navigate,
   PageLoadingContext,
+  LocationProvider,
 } from './internal'
 
 export { usePageLoadingContext } from './page-loader'
