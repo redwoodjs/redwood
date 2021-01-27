@@ -8,14 +8,12 @@ export const isPrerendering = (): boolean => {
 
 export const useIsBrowser = () => {
   return useMemo(() => {
-    return {
-      browser: !global?.__REDWOOD__PRERENDERING,
-    }
+    return !global?.__REDWOOD__PRERENDERING
   }, [])
 }
 
 export const BrowserOnly = ({ children }: { children: React.ReactNode }) => {
-  const { browser } = useIsBrowser()
+  const isBrowser = useIsBrowser()
 
-  return browser && children
+  return isBrowser && children
 }
