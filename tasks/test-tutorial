@@ -14,20 +14,18 @@ SCRIPTPATH=`dirname $SCRIPT`
 cd "$SCRIPTPATH/e2e"
 yarn install
 
-
 if [ -z "$1" ]
   then
   echo "You have not supplied a path to a Redwood project."
   echo "We will create one for you."
-  echo "We will run `yarn create redwood-app` and `yarn rw upgrade --tag canary`"
+  echo "We will copy './packages/create-redwood-app/template' and run 'yarn rw upgrade --tag canary'"
+
   TMP_DIR=$(mktemp -d -t redwood)
-  echo $TMP_DIR
+  cd ../../packages/create-redwood-app
+  yarn babel-node dist/create-redwood-app.js $TMP_DIR
 
   cd $TMP_DIR
-  yarn create redwood-app my-rw-app
-  cd my-rw-app
   yarn rw upgrade --tag canary
-  TMP_DIR="$TMP_DIR/my-rw-app"
 else
   echo "You have supplied a path $1, we will not create a new "
   echo "Redwood project, we will use the app you have specified."
