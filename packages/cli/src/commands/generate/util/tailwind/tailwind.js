@@ -9,6 +9,6 @@ export const command = 'auth'
 export const description = 'WARNING: deprecated. Use "yarn rw setup" command.'
 
 export const handler = generateDepracatedHandler({
-  newCommand: 'yarn rw setup auth ${provider}',
+  newCommand: 'yarn rw setup tailwind',
   docsLink: 'https://redwoodjs.com/reference/command-line-interface#setup',
 })
