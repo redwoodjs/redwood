@@ -8,6 +8,7 @@
   "types": "./dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
+    "@graphql-tools/merge": "^6.2.4",
     "@prisma/client": "2.12.1",
     "@redwoodjs/internal": "^0.23.0",
     "apollo-server-lambda": "2.18.2",
@@ -18,8 +19,7 @@
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^1.8.1",
     "lodash.merge": "^4.6.2",
-    "lodash.omitby": "^4.6.0",
-    "merge-graphql-schemas": "^1.7.6"
+    "lodash.omitby": "^4.6.0"
   },
   "devDependencies": {
     "@redwoodjs/auth": "^0.23.0",

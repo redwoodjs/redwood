@@ -2,12 +2,15 @@ import {
   ApolloProvider,
   ApolloClientOptions,
   ApolloClient,
+  ApolloLink,
   InMemoryCache,
   useQuery,
   useMutation,
+  createHttpLink,
 } from '@apollo/client'
+import { setContext } from '@apollo/client/link/context'
 
-import type { AuthContextInterface } from '@redwoodjs/auth'
+import { AuthContextInterface, useAuth } from '@redwoodjs/auth'
 
 import {
   FetchConfigProvider,
@@ -20,12 +23,46 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   config?: Omit<ApolloClientOptions<InMemoryCache>, 'cache'>
 }> = ({ config = {}, children }) => {
   const { uri, headers } = useFetchConfig()
+  const { getToken, type: authProviderType, isAuthenticated } = useAuth()
+
+  const withToken = setContext(async () => {
+    if (isAuthenticated && getToken) {
+      const token = await getToken()
+
+      return { token }
+    }
+
+    return { token: null }
+  })
+
+  const authMiddleware = new ApolloLink((operation, forward) => {
+    const { token } = operation.getContext()
+
+    // Only add auth headers when token is present
+    // Token is null, when !isAuthenticated
+    const authHeaders = token
+      ? {
+          'auth-provider': authProviderType,
+          authorization: `Bearer ${token}`,
+        }
+      : {}
+
+    operation.setContext(() => ({
+      headers: {
+        ...headers,
+        // Duped auth headers, because we may remove FetchContext at a later date
+        ...authHeaders,
+      },
+    }))
+    return forward(operation)
+  })
+
+  const httpLink = createHttpLink({ uri })
 
   const client = new ApolloClient({
     cache: new InMemoryCache(),
-    uri,
-    headers,
     ...config,
+    link: ApolloLink.from([withToken, authMiddleware.concat(httpLink)]),
   })
 
   return <ApolloProvider client={client}>{children}</ApolloProvider>

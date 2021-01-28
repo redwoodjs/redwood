@@ -8,9 +8,7 @@ export const supabase = (token: string) => {
 
   try {
     const secret = process.env.SUPABASE_JWT_SECRET as string
-    return Promise.resolve(
-      jwt.verify(token, secret) as Record<string, unknown>
-    )
+    return Promise.resolve(jwt.verify(token, secret) as Record<string, unknown>)
   } catch (error) {
     return Promise.reject(error)
   }
