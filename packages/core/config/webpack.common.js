@@ -3,7 +3,6 @@ const { existsSync } = require('fs')
 const path = require('path')
 
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 const Dotenv = require('dotenv-webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -207,7 +206,6 @@ module.exports = (webpackEnv) => {
           { from: 'public/', to: '', globOptions: { ignore: ['README.md'] } },
         ],
       }),
-      isEnvProduction && new CleanWebpackPlugin(),
       isEnvProduction &&
         new RetryChunkLoadPlugin({
           cacheBust: `function() {
@@ -225,19 +223,20 @@ module.exports = (webpackEnv) => {
         // so it's important to try and keep those indexes stable.
         {
           oneOf: [
+            // @MARK: ⬇️ is this okay? Pretty fundamental change
             // (0)
-            {
-              test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
-              use: [
-                {
-                  loader: 'url-loader',
-                  options: {
-                    limit: '10000',
-                    name: 'static/media/[name].[hash:8].[ext]',
-                  },
-                },
-              ],
-            },
+            // {
+            //   test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
+            //   use: [
+            //     {
+            //       loader: 'url-loader',
+            //       options: {
+            //         limit: '10000',
+            //         name: 'static/media/[name].[hash:8].[ext]',
+            //       },
+            //     },
+            //   ],
+            // },
             // (1)
             {
               test: /\.(js|mjs|jsx|ts|tsx)$/,
@@ -253,10 +252,11 @@ module.exports = (webpackEnv) => {
               },
             },
             // (2)
-            {
-              test: /\.svg$/,
-              loader: 'svg-react-loader',
-            },
+            // @MARK: ⬇️ use babel's svg loader, to keep it consistent
+            // {
+            //   test: /\.svg$/,
+            //   loader: 'svg-react-loader',
+            // },
             // .module.css (3), .css (4), .module.scss (5), .scss (6)
             ...getStyleLoaders(isEnvProduction),
             isEnvProduction && {
@@ -267,13 +267,14 @@ module.exports = (webpackEnv) => {
               use: 'null-loader',
             },
             // (7)
-            {
-              test: /\.(svg|ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|pdf)(\?.*)?$/,
-              loader: 'file-loader',
-              options: {
-                name: 'static/media/[name].[hash:8].[ext]',
-              },
-            },
+            // @MARK: ⬇️ remove webpack plugin, in favour of similar babel plugin
+            // {
+            //   test: /\.(svg|ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|pdf)(\?.*)?$/,
+            //   loader: 'file-loader',
+            //   options: {
+            //     name: 'static/media/[name].[hash:8].[ext]',
+            //   },
+            // },
           ].filter(Boolean),
         },
       ],

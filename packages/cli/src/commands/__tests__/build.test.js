@@ -34,17 +34,24 @@ afterEach(() => {
   jest.clearAllMocks()
 })
 
+test('Should clean api and web dist directories, before build', async () => {
+  await handler({})
+  expect(execa.mock.results[0].value).toEqual(`rm -rf dist/*`)
+
+  expect(execa.mock.results[1].value).toEqual(`rm -rf dist/*`)
+})
+
 test('The build command runs the correct commands.', async () => {
   await handler({})
   expect(runCommandTask.mock.results[0].value[0]).toEqual(
     'yarn prisma generate --schema="../../__fixtures__/example-todo-main/api/prisma"'
   )
 
-  expect(execa.mock.results[0].value).toEqual(
+  expect(execa.mock.results[2].value).toEqual(
     `yarn cross-env NODE_ENV=production babel src --out-dir dist --delete-dir-on-start --extensions .ts,.js --ignore '**/*.test.ts,**/*.test.js,**/__tests__'`
   )
 
-  expect(execa.mock.results[1].value).toEqual(
+  expect(execa.mock.results[3].value).toEqual(
     `yarn webpack --config ../node_modules/@redwoodjs/core/config/webpack.production.js`
   )
 })
@@ -56,9 +63,9 @@ test('Should run prerender for web, when experimental flag is on', async () => {
     },
   }
   await handler({ side: ['web'] })
-  expect(execa.mock.results[0].value).toEqual(
+  expect(execa.mock.results[1].value).toEqual(
     'yarn webpack --config ../node_modules/@redwoodjs/core/config/webpack.production.js'
   )
 
-  expect(execa.mock.results[1].value).toEqual('yarn rw prerender')
+  expect(execa.mock.results[2].value).toEqual('yarn rw prerender')
 })

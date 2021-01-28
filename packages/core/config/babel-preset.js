@@ -147,6 +147,31 @@ module.exports = () => {
               ],
             },
           ],
+          [
+            'import-static-files',
+            {
+              baseDir: '/dist/static/media',
+              hash: true,
+              extensions: [
+                // ignore svgs, handled separately
+                '.ico',
+                '.jpg',
+                '.jpeg',
+                '.png',
+                '.gif',
+                '.eot',
+                '.otf',
+                '.webp',
+                '.ttf',
+                '.woff',
+                '.woff2',
+                '.cur',
+                '.ani',
+                '.pdf',
+              ],
+            },
+          ],
+          ['inline-react-svg'],
         ],
       },
       // ** Files ending in `Cell.[js,ts]` **

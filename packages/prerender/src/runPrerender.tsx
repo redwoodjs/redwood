@@ -26,7 +26,6 @@ babelRequireHook({
   extends: path.join(rwWebPaths.base, '.babelrc.js'),
   extensions: ['.js', '.ts', '.tsx', '.jsx'],
   plugins: [
-    ['inline-react-svg'],
     ['ignore-html-and-css-imports'], // webpack/postcss handles CSS imports
     [
       'babel-plugin-module-resolver',
