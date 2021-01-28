@@ -102,7 +102,7 @@ export const buildScenario = async (model) => {
 
 // outputs fields necessary to create an object in the test file
 export const fieldsToInput = async (model) => {
-  const { scalarFields, relations } = await parseSchema(model)
+  const { scalarFields, _relations } = await parseSchema(model)
   const inputObj = {}
 
   scalarFields.forEach((field) => {
