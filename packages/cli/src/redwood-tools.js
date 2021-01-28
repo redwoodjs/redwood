@@ -72,11 +72,19 @@ export const copyFiles = async (src, dest) => {
   src = ensurePosixPath(src)
   dest = ensurePosixPath(dest)
 
-  await execa('rsync', ['-rtvu --delete', `'${src}'`, `'${dest}'`], {
-    shell: true,
-    stdio: 'inherit',
-    cleanup: true,
-  })
+  await execa(
+    'rsync',
+    [
+      `-rtvu --delete --exclude "create-redwood-app/template"`,
+      `'${src}'`,
+      `'${dest}'`,
+    ],
+    {
+      shell: true,
+      stdio: 'inherit',
+      cleanup: true,
+    }
+  )
   // when rsync is run modify the permission to make binaries executable.
   fixProjectBinaries(getPaths().base)
 }
