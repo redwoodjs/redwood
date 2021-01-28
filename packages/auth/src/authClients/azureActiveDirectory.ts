@@ -20,15 +20,16 @@ export const azureActiveDirectory = (
         scopes: [process.env.AZURE_ACTIVE_DIRECTORY_CLIENT_ID],
       }
 
+      // The recommended call pattern is to first try to call AcquireTokenSilent,
+      // and if it fails with a MsalUiRequiredException, call AcquireTokenXYZ
+      // https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/wiki/AcquireTokenSilentAsync-using-a-cached-token
+      // NOTE: We are not catching by the `MsalUiRequiredException`, perhaps we can branch off `error.name`
+      // if this strategy doesn't work properly.
       try {
         const response = await client.acquireTokenSilent(renewIdTokenRequest)
         return response?.idToken?.rawIdToken || null
       } catch (error) {
-        if (error.name === 'InteractionRequiredAuthError') {
-          client.acquireTokenRedirect(renewIdTokenRequest)
-        } else {
-          console.error(`azureActiveDirectory: Uncaught exception`, error)
-        }
+        client.acquireTokenRedirect(renewIdTokenRequest)
       }
 
       return null
