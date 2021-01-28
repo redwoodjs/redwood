@@ -7,13 +7,19 @@ import yargs from 'yargs'
 import { server, setLambdaFunctions } from './http'
 import { requestHandler } from './requestHandlers/awsLambda'
 
-const { port, functions } = yargs
+const { port, functions, routePrefix } = yargs
   .option('port', { default: 8911, type: 'number' })
   .option('functions', {
     alias: 'f',
     required: true,
     type: 'string',
-    desc: 'The path where your Serverless Functions are stored',
+    desc: 'Path where your Serverless Functions are stored',
+  })
+  .option('routePrefix', {
+    default: '/',
+    type: 'string',
+    desc:
+      'Route prefix where your Serverless Functions are served',
   }).argv
 
 if (process.env.NODE_ENV !== 'production') {
@@ -43,4 +49,8 @@ try {
 } catch (e) {
   console.error(e)
   process.exit(1)
+}
+
+export {
+  routePrefix
 }
