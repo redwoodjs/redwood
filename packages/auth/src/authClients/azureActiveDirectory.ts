@@ -1,7 +1,4 @@
-import {
-  UserAgentApplication as AzureActiveDirectory,
-  InteractionRequiredAuthError,
-} from 'msal'
+import type { UserAgentApplication as AzureActiveDirectory } from 'msal'
 
 export type { AzureActiveDirectory }
 import type { AuthClient } from './'
@@ -27,7 +24,7 @@ export const azureActiveDirectory = (
         const response = await client.acquireTokenSilent(renewIdTokenRequest)
         return response?.idToken?.rawIdToken || null
       } catch (error) {
-        if (error instanceof InteractionRequiredAuthError) {
+        if (error.name === 'InteractionRequiredAuthError') {
           client.acquireTokenRedirect(renewIdTokenRequest)
         } else {
           console.error(`azureActiveDirectory: Uncaught exception`, error)
