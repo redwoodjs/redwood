@@ -44,8 +44,10 @@ try {
     setLambdaFunctions(serverlessFunctions)
   })
 
-  app.close(() => {
-    if (socket) rmSync(socket)
+  process.on('exit', () => {
+    app.close(() => {
+      if (socket) rmSync(socket)
+    })
   })
 } catch (e) {
   console.error(e)
