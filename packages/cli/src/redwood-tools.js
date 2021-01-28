@@ -114,6 +114,7 @@ yargs
         .watch(src, {
           persistent: true,
           recursive: true,
+          ignored: [path.join(src, 'packages/create-redwood-app/template')],
         })
         .on(
           'all',

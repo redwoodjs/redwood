@@ -21,9 +21,10 @@
     "yargs": "^16.0.3"
   },
   "scripts": {
-    "build": "babel src -d dist",
+    "build": "yarn build:js",
+    "build:js": "babel src -d dist",
     "prepublishOnly": "yarn cross-env NODE_ENV=production yarn build",
-    "build:watch": "nodemon --watch src --ignore dist --exec \"yarn build\""
+    "build:watch": "nodemon --watch src --ignore dist,template --exec \"yarn build\""
   },
   "gitHead": "c235e7d7186e5e258764699c0e0e1d5cc0fdd0b5"
 }
