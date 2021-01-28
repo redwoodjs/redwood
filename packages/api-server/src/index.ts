@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { rmSync } from 'fs'
 import path from 'path'
 
 import requireDir from 'require-dir'
@@ -37,10 +38,14 @@ const serverlessFunctions = requireDir(path.join(process.cwd(), functions), {
 })
 
 try {
-  server({ requestHandler }).listen(socket || port, () => {
+  const app = server({ requestHandler }).listen(socket || port, () => {
     if (socket) console.log(socket)
     else console.log(`http://localhost:${port}`)
     setLambdaFunctions(serverlessFunctions)
+  })
+
+  app.close(() => {
+    if (socket) rmSync(socket)
   })
 } catch (e) {
   console.error(e)
