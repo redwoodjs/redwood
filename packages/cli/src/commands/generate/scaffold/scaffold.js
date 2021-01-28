@@ -455,8 +455,9 @@ export const handler = async ({
   const line1 =
     chalk.bold.yellow('WARNING') +
     `: Because the data model "${pascalcase(model)}" contains a`
-  const line2 = 'Prisma @relation, the generated CRUD code must be manually'
-  const line3 = 'modified to work correctly. See this doc for more info:'
+  const line2 = 'Prisma @relation, the generated CRUD code and test must be'
+  const line3 =
+    'manually modified to work correctly. See this doc for more info:'
   const line4 = chalk.underline.blue(
     'https://redwoodjs.com/docs/schema-relations'
   )
