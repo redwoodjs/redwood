@@ -2,13 +2,10 @@
   "name": "@redwoodjs/web",
   "version": "0.23.0",
   "files": [
-    "dist"
+    "dist",
+    "apollo"
   ],
   "main": "./dist/index.js",
-  "exports": {
-    ".": "./dist/index.js",
-    "./apollo": "./dist/components/apollo.js"
-  },
   "types": "dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
