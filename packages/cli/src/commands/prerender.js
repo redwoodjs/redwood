@@ -7,10 +7,10 @@ export const aliases = ['render']
 export const description = 'Prerender pages of a redwood app (experimental)'
 
 export const builder = (yargs) => {
-  yargs.option('input', {
-    alias: 'input',
+  yargs.option('path', {
+    alias: 'path',
     default: false,
-    description: 'Input file to prerender',
+    description: 'Router path to prerender',
     type: 'string',
   })
 
@@ -37,10 +37,10 @@ const mapRouterPathToHtml = (routerPath) => {
   }
 }
 
-export const handler = async ({ input, output, dryrun }) => {
-  if (input) {
+export const handler = async ({ path, output, dryrun }) => {
+  if (path) {
     runPrerender({
-      routerPath: input,
+      routerPath: path,
       outputHtmlPath: output,
       dryRun: dryrun,
     })
@@ -50,7 +50,6 @@ export const handler = async ({ input, output, dryrun }) => {
 
   const prerenderRoutes = detectPrerenderRoutes()
 
-  // @TODO for <Private> routes only render whileLoading or the layout
   prerenderRoutes.map(async (routeToPrerender) => {
     const outputHtmlPath = mapRouterPathToHtml(routeToPrerender.path)
 
@@ -72,7 +71,12 @@ export const handler = async ({ input, output, dryrun }) => {
       )
       console.log(
         c.warning(
-          `This means you won't get a prerendered page, but your Redwood app should still work fine. \nIt often means that a library you are using, or your code, is not optimised for SSR \n`
+          `This means you won't get a prerendered page, but your Redwood app should still work fine.`
+        )
+      )
+      console.log(
+        c.warning(
+          `It often means that a library you are using, or your code, is not optimised for SSR \n`
         )
       )
       console.error(e)
