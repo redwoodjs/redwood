@@ -1,4 +1,6 @@
-import Listr from 'listr'
+import Listr, { ListrTask } from 'listr'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore-next-line
 import VerboseRenderer from 'listr-verbose-renderer'
 import { Argv } from 'yargs'
 
@@ -57,6 +59,36 @@ const mapRouterPathToHtml = (routerPath: string) => {
   }
 }
 
+// This can be used directly in build.js for nested ListrTasks
+export const getListrTasks = (dryrun: boolean) => {
+  const prerenderRoutes = detectPrerenderRoutes()
+
+  if (prerenderRoutes.length < 1) {
+    return
+  }
+
+  const listrTasks: ListrTask<() => Promise<void>>[] = prerenderRoutes
+    .filter((route) => route.path)
+    .map((routeToPrerender) => {
+      const outputHtmlPath = mapRouterPathToHtml(
+        routeToPrerender.path as string
+      )
+
+      return {
+        title: `Prerendering ${routeToPrerender.path} -> ${outputHtmlPath}`,
+        task: () => {
+          return runPrerender({
+            routerPath: routeToPrerender.path as string,
+            outputHtmlPath,
+            dryRun: dryrun,
+          })
+        },
+      }
+    })
+
+  return listrTasks
+}
+
 export const handler = async ({ path, output, dryrun, verbose }: CliArgs) => {
   if (path) {
     await runPrerender({
@@ -68,56 +100,34 @@ export const handler = async ({ path, output, dryrun, verbose }: CliArgs) => {
     return
   }
 
-  const prerenderRoutes = detectPrerenderRoutes()
-
-  const listrTasks = prerenderRoutes
-    .map((routeToPrerender) => {
-      if (!routeToPrerender.path) {
-        // Skip if path not specified
-        return
-      }
-
-      const outputHtmlPath = mapRouterPathToHtml(routeToPrerender.path)
-
-      return {
-        title: `Prerendering ${routeToPrerender.path} -> ${outputHtmlPath}`,
-        task: async () => {
-          try {
-            await runPrerender({
-              routerPath: routeToPrerender.path as string,
-              outputHtmlPath,
-              dryRun: dryrun,
-            })
-            return
-          } catch (e) {
-            console.error(
-              `❌  ${c.error(
-                routeToPrerender.name
-              )} failed to rerender: ${c.info(routeToPrerender.filePath)}`
-            )
-            console.log(
-              c.warning(
-                `This means you won't get a prerendered page, but your Redwood app should still work fine.`
-              )
-            )
-            console.log(
-              c.warning(
-                `It often means that a library you are using, or your code, is not optimised for SSR \n`
-              )
-            )
-            console.error(e)
-            console.log(
-              c.info('------------------------------------------------')
-            )
-          }
-        },
-      }
-    })
-    .filter(Boolean)
+  const listrTasks = getListrTasks(dryrun)
 
   const tasks = new Listr(listrTasks, {
     renderer: verbose && VerboseRenderer,
+    concurrent: true,
   })
 
-  await tasks.run()
+  try {
+    await tasks.run()
+  } catch (e) {
+    console.log(c.warning('\nNot all routes were succesfully prerendered'))
+    console.log(
+      c.info(
+        `You won't get a prerendered page, but your Redwood app should still work fine.`
+      )
+    )
+    console.log(
+      c.info(
+        `It often means that a library you are using, or your code, is not optimised for SSR \n`
+      )
+    )
+
+    if (verbose) {
+      // Don't colourise as it truncates the error
+      console.error(e)
+    }
+
+    // To make sure yarn rw build fails, if pages can't be prererendered
+    process.exit(1)
+  }
 }
