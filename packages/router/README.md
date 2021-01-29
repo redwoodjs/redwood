@@ -53,7 +53,7 @@ they will be redirected to the route passed as the `unauthenticated` prop and th
 <Router>
   <Route path="/" page={HomePage} name="home" />
   <Private unauthenticated="home">
-    <Routes path="/admin" page={AdminPage} name="admin" />
+    <Route path="/admin" page={AdminPage} name="admin" />
   </Private>
 </Router>
 ```
