@@ -58,19 +58,6 @@ export const handler = async ({
   verbose = false,
   stats = false,
 }) => {
-  if (side.includes('api')) {
-    try {
-      await generatePrismaClient({
-        verbose,
-        force: true,
-        schema: getPaths().api.dbSchema,
-      })
-    } catch (e) {
-      console.log(c.error(e.message))
-      process.exit(1)
-    }
-  }
-
   const execCommandsForSides = {
     api: {
       // must use path.join() here, and for 'web' below, to support Windows
@@ -107,14 +94,51 @@ export const handler = async ({
     }
   })
 
-  if (side.includes('web') && getConfig().web.experimentalPrerender) {
-    listrTasks.push({
-      title: 'Prerendering your RW app...',
+  // Additional tasks, apart from build
+  if (side.includes('api')) {
+    try {
+      await generatePrismaClient({
+        verbose,
+        force: true,
+        schema: getPaths().api.dbSchema,
+      })
+    } catch (e) {
+      console.log(c.error(e.message))
+      process.exit(1)
+    }
+
+    listrTasks.unshift({
+      title: 'Cleaning api/dist',
       task: () => {
-        return execa('yarn rw prerender', undefined, {
+        return execa('rimraf dist/*', undefined, {
           stdio: verbose ? 'inherit' : 'pipe',
           shell: true,
-          cwd: getPaths().base,
+          cwd: path.join(getPaths().base, 'api'),
+        })
+      },
+    })
+  }
+
+  if (side.includes('web')) {
+    if (getConfig().web.experimentalPrerender) {
+      listrTasks.push({
+        title: 'Prerendering your RW app...',
+        task: () => {
+          return execa('yarn rw prerender', undefined, {
+            stdio: verbose ? 'inherit' : 'pipe',
+            shell: true,
+            cwd: getPaths().base,
+          })
+        },
+      })
+    }
+    listrTasks.unshift({
+      title: 'Cleaning web/dist',
+      task: () => {
+        return execa('rimraf dist/*', undefined, {
+          stdio: verbose ? 'inherit' : 'pipe',
+          shell: true,
+          cwd: path.join(getPaths().base, 'web'),
         })
       },
     })

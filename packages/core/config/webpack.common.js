@@ -3,12 +3,12 @@ const { existsSync } = require('fs')
 const path = require('path')
 
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 const Dotenv = require('dotenv-webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const webpack = require('webpack')
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin')
 const { merge } = require('webpack-merge')
 const { RetryChunkLoadPlugin } = require('webpack-retry-chunk-load-plugin')
 
@@ -207,7 +207,6 @@ module.exports = (webpackEnv) => {
           { from: 'public/', to: '', globOptions: { ignore: ['README.md'] } },
         ],
       }),
-      isEnvProduction && new CleanWebpackPlugin(),
       isEnvProduction &&
         new RetryChunkLoadPlugin({
           cacheBust: `function() {
@@ -217,6 +216,7 @@ module.exports = (webpackEnv) => {
           // @TODO: Add redirect to fatalErrorPage
           // lastResortScript: "window.location.href='/500.html';"
         }),
+      isEnvProduction && new WebpackManifestPlugin(),
       ...getSharedPlugins(isEnvProduction),
     ].filter(Boolean),
     module: {
