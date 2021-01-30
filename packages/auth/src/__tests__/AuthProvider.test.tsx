@@ -56,14 +56,13 @@ const AuthConsumer = () => {
 
   const [authToken, setAuthToken] = useState(null)
 
-  const retrieveToken = async () => {
-    const token = await getToken()
-    setAuthToken(token)
-  }
-
   useEffect(() => {
+    const retrieveToken = async () => {
+      const token = await getToken()
+      setAuthToken(token)
+    }
     retrieveToken()
-  }, [])
+  }, [getToken])
 
   if (loading) {
     return <>Loading...</>

@@ -11,6 +11,7 @@ export {
   useQuery,
   useMutation,
 } from './components/GraphQLHooksProvider'
+
 export { withCell } from './components/withCellHOC'
 
 export { FlashProvider, useFlash, Flash } from './flash'

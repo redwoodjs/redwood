@@ -37,7 +37,7 @@ export const parseSchema = async (model) => {
     )
   })
 
-  // remove scalars that are foriegn keys
+  // remove scalars that are foreign keys
   scalarFields = scalarFields.filter((field) => {
     return !foreignKeys.includes(field.name)
   })
@@ -100,6 +100,45 @@ export const buildScenario = async (model) => {
   return standardScenario
 }
 
+// outputs fields necessary to create an object in the test file
+export const fieldsToInput = async (model) => {
+  const { scalarFields, _relations } = await parseSchema(model)
+  const inputObj = {}
+
+  scalarFields.forEach((field) => {
+    inputObj[field.name] = scenarioFieldValue(field)
+  })
+
+  return inputObj
+}
+
+export const fieldsToUpdate = async (model) => {
+  const { scalarFields } = await parseSchema(model)
+  const field = scalarFields[0]
+  const value = scenarioFieldValue(field)
+  let newValue = value
+
+  // depending on the field type, append/update the value to something different
+  switch (field.type) {
+    case 'String': {
+      newValue = newValue + '2'
+      break
+    }
+    case 'Int': {
+      newValue = newValue + 1
+      break
+    }
+    case 'DateTime': {
+      let date = new Date()
+      date.setDate(date.getDate() + 1)
+      newValue = date.toISOString().replace(/\.\d{3}/, '')
+      break
+    }
+  }
+
+  return { [field.name]: newValue }
+}
+
 export const files = async ({
   name,
   tests = true,
@@ -127,7 +166,12 @@ export const files = async ({
     apiPathSection: 'services',
     generator: 'service',
     templatePath: `test.${extension}.template`,
-    templateVars: { relations: relations || [], ...rest },
+    templateVars: {
+      relations: relations || [],
+      input: await fieldsToInput(model),
+      update: await fieldsToUpdate(model),
+      ...rest,
+    },
   })
   const scenariosFile = templateForComponentFile({
     name,
