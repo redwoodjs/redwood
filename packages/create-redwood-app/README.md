@@ -15,6 +15,7 @@
 <!-- prettier-ignore-end -->
 <br>
 <h1 align="center">Bringing full-stack to the Jamstack</h1>
+
 <h2 align="center">An opinionated, edge-ready framework for modern multi-client applications. <br>Built on React, GraphQL, and Prisma.</h2>
 
 Do you love the Jamstack philosophy but need a database-backed web app? Want great developer experience and easy scaling? Redwood is here! Redwood works with the components and development workflow you love but with simple conventions and helpers to make your experience even better.
@@ -22,6 +23,7 @@ Do you love the Jamstack philosophy but need a database-backed web app? Want gre
 <br>
 
 <h2>Quick Start</h2>
+
 Redwood requires Node.js v12 and Yarn v1.15 (or newer).
 ```console
 yarn create redwood-app redwood-project
@@ -30,6 +32,7 @@ yarn redwood dev
 ```
 
 <h3>Resources</h3>
+
 - The [Redwood Tutorial](https://redwoodjs.com/tutorial): The best way to learn Redwood
 - The [Redwood CLI](https://redwoodjs.com/docs/cli-commands): code generators, DB helpers setup commands, and more
 - [Documentation](https://redwoodjs.com/docs) and [Cookbooks](https://redwoodjs.com/cookbook/custom-function)
@@ -50,7 +53,7 @@ _Contributors are Welcome! Get started [here](https://redwoodjs.com/docs/contrib
   - [Installation Script](#installation-script)
   - [Template Codebase](#template-codebase)
   - [How to run create-redwood-app and create a project](#how-to-run-create-redwood-app-and-create-a-project)
-  - [Develop](#develop)
+  - [Develop using the new project](#develop-using-the-new-project)
 
 ## Description
 
@@ -93,15 +96,15 @@ This will create a new project using the local `template/` codebase
 
 > Note: the new project will install with the most recent stable Redwood package version by default
 
-### Develop
+### Develop using the new project
 There are three options for developing with the installed project:
 
-**1. Upgrade the project to use the latest canary release:**
+**1. Upgrade the project to use the latest canary release**
 ```bash
 cd /path/to/new/redwood-app
 yarn rw upgrade -t canary
 ```
-**2. Install packages specific to a PR, for example:**
+**2. Install packages specific to a PR, for example**
 ```bash
 cd /path/to/new/redwood-app
 yarn rw upgrade --pr 1703:0.23.0-b06dd35
