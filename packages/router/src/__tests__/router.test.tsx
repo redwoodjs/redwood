@@ -1,8 +1,32 @@
 import { render, waitFor, act } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 
+import { AuthContextInterface } from '@redwoodjs/auth'
+
 import { Router, Route, Private, Redirect, navigate, routes } from '../'
 import { resetNamedRoutes } from '../named-routes'
+
+function createDummyAuthContextValues(partial: Partial<AuthContextInterface>) {
+  const authContextValues: AuthContextInterface = {
+    loading: true,
+    isAuthenticated: false,
+    authToken: null,
+    userMetadata: null,
+    currentUser: null,
+    logIn: () => null,
+    logOut: () => null,
+    signUp: () => null,
+    getToken: () => null,
+    getCurrentUser: () => null,
+    hasRole: () => false,
+    reauthenticate: () => null,
+    client: null,
+    type: 'custom',
+    hasError: false,
+  }
+
+  return { ...authContextValues, ...partial }
+}
 
 // SETUP
 const HomePage = () => <h1>Home Page</h1>
@@ -11,10 +35,11 @@ const AboutPage = () => <h1>About Page</h1>
 const PrivatePage = () => <h1>Private Page</h1>
 const RedirectPage = () => <Redirect to="/about" />
 const mockAuth = (isAuthenticated = false) => {
-  window.__REDWOOD__USE_AUTH = () => ({
-    loading: false,
-    isAuthenticated,
-  })
+  window.__REDWOOD__USE_AUTH = () =>
+    createDummyAuthContextValues({
+      loading: false,
+      isAuthenticated,
+    })
 }
 
 beforeEach(() => {
@@ -35,7 +60,7 @@ test('inits routes and navigates as expected', async () => {
 
       <Route
         path="/param-test/{value}"
-        page={({ value }) => <div>param {value}</div>}
+        page={({ value }: { value: string }) => <div>param {value}</div>}
         name="params"
       />
     </Router>
@@ -150,7 +175,7 @@ test('authenticated user can access private page', async () => {
 
 test('can display a loading screen whilst waiting for auth', async () => {
   const TestRouter = () => (
-    <Router useAuth={() => ({ loading: true })}>
+    <Router useAuth={() => createDummyAuthContextValues({ loading: true })}>
       <Route path="/" page={HomePage} name="home" />
       <Private unauthenticated="home">
         <Route
