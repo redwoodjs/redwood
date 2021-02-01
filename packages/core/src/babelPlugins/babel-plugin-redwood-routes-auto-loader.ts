@@ -27,8 +27,8 @@ export default function (
           return
         }
 
-				// Remove Page imports in prerender mode
-				// This is to make sure that the router receives Pages consistently
+        // Remove Page imports in prerender mode
+        // This is to make sure that the router receives Pages consistently
         if (prerendering) {
           const rwPageImportPaths = pages.map((page) => page.importPath)
 
