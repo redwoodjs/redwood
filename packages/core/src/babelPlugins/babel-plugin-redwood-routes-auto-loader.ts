@@ -26,9 +26,26 @@ export default function (
         if (pages.length === 0) {
           return
         }
+
+				// Remove Page imports in prerender mode
+				// This is to make sure that the router receives Pages consistently
+        if (prerendering) {
+          const rwPageImportPaths = pages.map((page) => page.importPath)
+
+          // Match import paths, const name could be different
+          const userImportPath = p.node.source?.value
+
+          if (rwPageImportPaths.includes(userImportPath)) {
+            p.remove()
+          }
+
+          return
+        }
+
         const declaredImports = p.node.specifiers.map(
           (specifier) => specifier.local.name
         )
+
         pages = pages.filter((dep) => !declaredImports.includes(dep.const))
       },
       Program: {
