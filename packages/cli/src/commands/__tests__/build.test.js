@@ -36,9 +36,9 @@ afterEach(() => {
 
 test('Should clean api and web dist directories, before build', async () => {
   await handler({})
-  expect(execa.mock.results[0].value).toEqual(`rm -rf dist/*`)
+  expect(execa.mock.results[0].value).toEqual(`rimraf dist/*`)
 
-  expect(execa.mock.results[1].value).toEqual(`rm -rf dist/*`)
+  expect(execa.mock.results[1].value).toEqual(`rimraf dist/*`)
 })
 
 test('The build command runs the correct commands.', async () => {
