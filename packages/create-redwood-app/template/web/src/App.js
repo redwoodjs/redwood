@@ -1,14 +1,14 @@
 import { FatalErrorBoundary } from '@redwoodjs/web'
-import { RedwoodApolloProvider as RedwoodProvider } from '@redwoodjs/web/apollo'
+import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
 import FatalErrorPage from 'src/pages/FatalErrorPage'
 import Routes from 'src/Routes'
 
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider>
+    <RedwoodApolloProvider>
       <Routes />
-    </RedwoodProvider>
+    </RedwoodApolloProvider>
   </FatalErrorBoundary>
 )
 
