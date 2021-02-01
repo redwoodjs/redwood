@@ -16,8 +16,8 @@ export const azureActiveDirectory = (
     logout: (options?) => client.logout(options),
     signup: async (options?) => await client.loginPopup(options),
     getToken: async (options?: any) => {
-      const renewIdTokenRequest = options || {
-        scopes: [process.env.AZURE_ACTIVE_DIRECTORY_CLIENT_ID],
+      const authRequest = options || {
+        scopes: ['openid', 'profile'],
       }
 
       // The recommended call pattern is to first try to call AcquireTokenSilent,
@@ -26,10 +26,10 @@ export const azureActiveDirectory = (
       // NOTE: We are not catching by the `MsalUiRequiredException`, perhaps we can branch off `error.name`
       // if this strategy doesn't work properly.
       try {
-        const response = await client.acquireTokenSilent(renewIdTokenRequest)
+        const response = await client.acquireTokenSilent(authRequest)
         return response?.idToken?.rawIdToken || null
       } catch (error) {
-        client.acquireTokenRedirect(renewIdTokenRequest)
+        client.acquireTokenRedirect(authRequest)
       }
 
       return null

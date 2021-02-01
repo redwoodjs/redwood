@@ -14,7 +14,6 @@ export default function getBrowserJestConfig() {
       name: 'web',
     },
     globals: {
-      __REDWOOD__: true,
       __REDWOOD__API_PROXY_PATH: '/',
     },
     setupFilesAfterEnv: [path.resolve(__dirname, './jest.setup.js')],
