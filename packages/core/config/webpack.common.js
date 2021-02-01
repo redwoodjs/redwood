@@ -176,13 +176,6 @@ module.exports = (webpackEnv) => {
           'node_modules',
           'styled-components'
         ),
-        // This is needed because we don't yet have support for this:
-        // https://webpack.js.org/guides/package-exports/
-        '@redwoodjs/web/apollo': path.resolve(
-          redwoodPaths.base,
-          'node_modules',
-          '@redwoodjs/web/dist/components/apollo'
-        ),
         react: path.resolve(redwoodPaths.base, 'node_modules', 'react'),
       },
     },

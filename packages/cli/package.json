@@ -45,10 +45,10 @@
     "@types/node-fetch": "^2.5.5"
   },
   "scripts": {
-    "build": "yarn build:js && yarn build:clean-dist",
+    "build": "yarn build:js",
     "prepublishOnly": "yarn build",
     "build:clean-dist": "yarn rimraf 'dist/**/__tests__'",
-    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\" --copy-files --no-copy-ignored",
+    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\" --copy-files --no-copy-ignored && yarn build:clean-dist",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build\"",
     "test": "jest",
     "test:watch": "yarn test --watch"
