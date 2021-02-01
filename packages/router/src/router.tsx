@@ -23,7 +23,7 @@ interface RouteProps {
   path?: string
   name?: string
   notfound?: Spec | React.ComponentType
-  redicect?: string
+  redirect?: string
   whileLoading?: () => ReactChild | null
 }
 
