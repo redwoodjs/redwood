@@ -1,9 +1,21 @@
+import React from 'react'
+
 import { createNamedContext, gHistory } from './internal'
 
-const LocationContext = createNamedContext('Location')
+export interface LocationContextType {
+  pathname: string
+  search: string
+  hash: string
+}
 
-class LocationProvider extends React.Component {
-  HISTORY_LISTENER_ID = undefined
+const LocationContext = createNamedContext<LocationContextType>('Location')
+
+interface LocationProviderProps {
+  location: typeof window.location
+}
+
+class LocationProvider extends React.Component<LocationProviderProps> {
+  HISTORY_LISTENER_ID: string | undefined = undefined
 
   static defaultProps = {
     location: window.location,
@@ -25,12 +37,15 @@ class LocationProvider extends React.Component {
   }
 
   componentWillUnmount() {
-    gHistory.remove(this.HISTORY_LISTENER_ID)
+    if (this.HISTORY_LISTENER_ID) {
+      gHistory.remove(this.HISTORY_LISTENER_ID)
+    }
   }
 
   render() {
-    let { children } = this.props
-    let { context } = this.state
+    const { children } = this.props
+    const { context } = this.state
+
     return (
       <LocationContext.Provider value={context}>
         {typeof children === 'function' ? children(context) : children || null}
@@ -39,7 +54,11 @@ class LocationProvider extends React.Component {
   }
 }
 
-const Location = ({ children }) => (
+interface LocationProps {
+  children: (context: LocationContextType) => React.ReactChild
+}
+
+const Location = ({ children }: LocationProps) => (
   <LocationContext.Consumer>
     {(context) =>
       context ? (

@@ -6,11 +6,27 @@ expect.extend({ toHaveClass, toHaveStyle })
 import { NavLink, useMatch, Link } from '../links'
 import { LocationProvider } from '../location'
 
+function createDummyLocation(pathname: string) {
+  return {
+    pathname,
+    hash: '',
+    host: '',
+    hostname: '',
+    href: '',
+    ancestorOrigins: null,
+    assign: () => null,
+    reload: () => null,
+    replace: () => null,
+    origin: '',
+    port: '',
+    protocol: '',
+    search: '',
+  }
+}
+
 describe('<NavLink />', () => {
   it('receives active class on the same path', () => {
-    const mockLocation = {
-      pathname: '/dunder-mifflin',
-    }
+    const mockLocation = createDummyLocation('/dunder-mifflin')
 
     const { getByText } = render(
       <LocationProvider location={mockLocation}>
@@ -24,9 +40,7 @@ describe('<NavLink />', () => {
   })
 
   it('does NOT receive active class on different path', () => {
-    const mockLocation = {
-      pathname: '/staples',
-    }
+    const mockLocation = createDummyLocation('/staples')
 
     const { getByText } = render(
       <LocationProvider location={mockLocation}>
@@ -54,9 +68,7 @@ describe('useMatch', () => {
   }
 
   it('returns a match on the same path', () => {
-    const mockLocation = {
-      pathname: '/dunder-mifflin',
-    }
+    const mockLocation = createDummyLocation('/dunder-mifflin')
 
     const { getByText } = render(
       <LocationProvider location={mockLocation}>
@@ -68,9 +80,7 @@ describe('useMatch', () => {
   })
 
   it('does NOT receive active class on different path', () => {
-    const mockLocation = {
-      pathname: '/staples',
-    }
+    const mockLocation = createDummyLocation('/staples')
 
     const { getByText } = render(
       <LocationProvider location={mockLocation}>

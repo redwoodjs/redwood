@@ -141,7 +141,6 @@ const getSharedPlugins = (isEnvProduction) => {
     // The define plugin will replace these keys with their values during build
     // time.
     new webpack.DefinePlugin({
-      __REDWOOD__: JSON.stringify(true),
       __REDWOOD__API_PROXY_PATH: JSON.stringify(redwoodConfig.web.apiProxyPath),
       ...getEnvVars(),
     }),
@@ -174,13 +173,6 @@ module.exports = (webpackEnv) => {
           redwoodPaths.base,
           'node_modules',
           'styled-components'
-        ),
-        // This is needed because we don't yet have support for this:
-        // https://webpack.js.org/guides/package-exports/
-        '@redwoodjs/web/apollo': path.resolve(
-          redwoodPaths.base,
-          'node_modules',
-          '@redwoodjs/web/dist/components/apollo'
         ),
         react: path.resolve(redwoodPaths.base, 'node_modules', 'react'),
       },
