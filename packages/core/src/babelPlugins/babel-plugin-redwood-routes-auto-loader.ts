@@ -15,6 +15,7 @@ export default function (
   { project, prerendering }: PluginOptions
 ): PluginObj {
   let pages = processPagesDir()
+	const rwPageImportPaths = pages.map((page) => page.importPath)
 
   return {
     name: 'babel-plugin-redwood-routes-auto-loader',
@@ -30,8 +31,6 @@ export default function (
         // Remove Page imports in prerender mode
         // This is to make sure that the router receives Pages consistently
         if (prerendering) {
-          const rwPageImportPaths = pages.map((page) => page.importPath)
-
           // Match import paths, const name could be different
           const userImportPath = p.node.source?.value
 

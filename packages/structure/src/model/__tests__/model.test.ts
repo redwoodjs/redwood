@@ -106,7 +106,7 @@ describe.skip('env vars', () => {
 
 describe('Redwood Route detection', () => {
   it('detects routes with the prerender prop', async () => {
-    const projectRoot = getFixtureDir('example-todo-prerender')
+    const projectRoot = getFixtureDir('example-todo-main')
     const project = new RWProject({ projectRoot, host: new DefaultHost() })
     const routes = project.getRouter().routes
 
@@ -134,7 +134,6 @@ function getFixtureDir(
   name:
     | 'example-todo-main-with-errors'
     | 'example-todo-main'
-    | 'example-todo-prerender'
 ) {
   return resolve(__dirname, `../../../../../__fixtures__/${name}`)
 }
