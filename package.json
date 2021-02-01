@@ -49,6 +49,7 @@
     "whatwg-fetch": "3.4.1"
   },
   "resolutions": {
-    "@types/react": "16.9.53"
+    "@types/react": "17.0.0",
+    "prop-types": "15.7.2"
   }
 }
