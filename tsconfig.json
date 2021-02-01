@@ -9,6 +9,7 @@
     { "path": "packages/api-server" },
     { "path": "packages/auth" },
     { "path": "packages/web" },
+    { "path": "packages/router" },
   ],
   "files": []
 }

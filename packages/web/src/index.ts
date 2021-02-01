@@ -2,7 +2,6 @@ import './global.web-auto-imports'
 import './config'
 
 export { default as FatalErrorBoundary } from './components/FatalErrorBoundary'
-export { RedwoodApolloProvider as RedwoodProvider } from './components/RedwoodApolloProvider'
 export {
   FetchConfigProvider,
   useFetchConfig,
@@ -12,6 +11,7 @@ export {
   useQuery,
   useMutation,
 } from './components/GraphQLHooksProvider'
+
 export { withCell } from './components/withCellHOC'
 
 export { FlashProvider, useFlash, Flash } from './flash'

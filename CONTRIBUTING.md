@@ -8,11 +8,11 @@ Before interacting with the Redwood community, please read and understand our [C
 
 - [Contributing](#contributing)
   - [Local Development](#local-development)
-    - [Install Dependencies](#install-dependencies)
+    - [Installing Dependencies](#installing-dependencies)
     - [Copy and Watch](#copy-and-watch)
       - [Specifying a RW_PATH](#specifying-a-rw_path)
     - [Local Package Registry Emulation](#local-package-registry-emulation)
-      - [Setting Up and Running a Local NPM Registry](#setting-up-and-running-a-local-npm-registry)
+      - [Running a Local NPM Registry](#running-a-local-npm-registry)
       - [Publishing a Package](#publishing-a-package)
       - [Installing Published Packages in Your Redwood App](#installing-published-packages-in-your-redwood-app)
   - [Running Your Redwood App's Local Server(s)](#running-your-redwood-apps-local-servers)
@@ -224,12 +224,20 @@ Use this `path/to/app` option to run the same Cypress E2E tests against a local 
 
 To publish a new version of Redwood to NPM run the following commands:
 
+> NOTE: `<version>` should be formatted `v0.24.0` (for example)
+
 ```bash
-yarn lerna version --force-publish
+git clean -dfx
+yarn install
+./tasks/update-package-versions <version>
+git commit -am "<version>"
+git tag <version>
+git push && git push --tags
+yarn build
 yarn lerna publish from-package
 ```
 
-The changes the version of **all the packages** (even those that haven't changed) and publishes it to NPM.
+This 1) changes the version of **all the packages** (even those that haven't changed), 2) changes the version of the packages within the CRWA Template, 3) Commits, Tags, and Pushes to GH, and 4) publishes all packages to NPM.
 
 ### Troubleshooting
 
