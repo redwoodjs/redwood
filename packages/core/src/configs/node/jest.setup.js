@@ -51,7 +51,7 @@ const removeScenario = async (scenario) => {
     models = Array.from(new Set(models))
 
     for (const model of models) {
-      await db.$queryRaw(`DELETE FROM ${model}`)
+      await db[model].deleteMany()
     }
   }
 }
