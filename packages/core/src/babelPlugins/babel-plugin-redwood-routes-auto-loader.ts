@@ -7,12 +7,12 @@ import { generateTypeDef, generateTypeDefIndex } from './generateTypes'
 
 interface PluginOptions {
   project: RWProject
-  prerendering: boolean
+  useStaticImports?: boolean
 }
 
 export default function (
   { types: t }: { types: typeof types },
-  { project, prerendering }: PluginOptions
+  { project, useStaticImports = false }: PluginOptions
 ): PluginObj {
   let pages = processPagesDir()
   const rwPageImportPaths = pages.map((page) => page.importPath)
@@ -28,9 +28,9 @@ export default function (
           return
         }
 
-        // Remove Page imports in prerender mode
+        // Remove Page imports in prerender mode (see babel-preset)
         // This is to make sure that the router receives Pages consistently
-        if (prerendering) {
+        if (useStaticImports) {
           // Match import paths, const name could be different
           const userImportPath = p.node.source?.value
 
@@ -104,9 +104,9 @@ export default function (
                       t.arrowFunctionExpression(
                         [],
                         t.callExpression(
-                          // If prerendering, do a synchronous import with require
-                          // If clientside, create async import statement
-                          prerendering
+                          // If useStaticImports, do a synchronous import with require (ssr/prerender)
+                          // otherwise do a dynamic import (browser)
+                          useStaticImports
                             ? t.identifier('require')
                             : t.identifier('import'),
                           [t.stringLiteral(importPath)]
