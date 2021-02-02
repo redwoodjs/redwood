@@ -829,6 +829,51 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "mbush92",
+      "name": "Matthew Bush",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15862774?v=4",
+      "profile": "https://github.com/mbush92",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "pi0neerpat",
+      "name": "Patrick Gallagher",
+      "avatar_url": "https://avatars.githubusercontent.com/u/35622595?v=4",
+      "profile": "https://patrickgallagher.dev/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "msutkowski",
+      "name": "Matt Sutkowski",
+      "avatar_url": "https://avatars.githubusercontent.com/u/784953?v=4",
+      "profile": "https://github.com/msutkowski",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "jetheredge",
+      "name": "Justin Etheredge",
+      "avatar_url": "https://avatars.githubusercontent.com/u/64120?v=4",
+      "profile": "http://www.simplethread.com/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "zainfathoni",
+      "name": "Zain Fathoni",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6315466?v=4",
+      "profile": "https://zainf.dev/",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 5
