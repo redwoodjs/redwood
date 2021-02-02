@@ -250,12 +250,7 @@ module.exports = (webpackEnv) => {
                 },
               },
             },
-            // (2)
-            {
-              test: /\.svg$/,
-              loader: 'svg-react-loader',
-            },
-            // .module.css (3), .css (4), .module.scss (5), .scss (6)
+            // .module.css (2), .css (3), .module.scss (4), .scss (5)
             ...getStyleLoaders(isEnvProduction),
             isEnvProduction && {
               test: path.join(
@@ -264,7 +259,7 @@ module.exports = (webpackEnv) => {
               ),
               use: 'null-loader',
             },
-            // (7)
+            // (6)
             {
               test: /\.(svg|ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|pdf)(\?.*)?$/,
               loader: 'file-loader',

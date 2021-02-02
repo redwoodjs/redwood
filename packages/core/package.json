@@ -36,6 +36,7 @@
     "babel-loader": "^8.1.0",
     "babel-plugin-auto-import": "^1.1.0",
     "babel-plugin-graphql-tag": "^3.0.0",
+    "babel-plugin-inline-react-svg": "^1.1.2",
     "babel-plugin-module-resolver": "^4.0.0",
     "copy-webpack-plugin": "^6.1.0",
     "core-js": "3.6.5",
