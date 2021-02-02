@@ -106,17 +106,6 @@ export const handler = async ({
       console.log(c.error(e.message))
       process.exit(1)
     }
-
-    listrTasks.unshift({
-      title: 'Cleaning api/dist',
-      task: () => {
-        return execa('rimraf dist/*', undefined, {
-          stdio: verbose ? 'inherit' : 'pipe',
-          shell: true,
-          cwd: path.join(getPaths().base, 'api'),
-        })
-      },
-    })
   }
 
   if (side.includes('web')) {

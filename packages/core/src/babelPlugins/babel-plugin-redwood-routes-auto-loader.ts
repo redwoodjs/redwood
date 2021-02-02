@@ -15,7 +15,7 @@ export default function (
   { project, prerendering }: PluginOptions
 ): PluginObj {
   let pages = processPagesDir()
-	const rwPageImportPaths = pages.map((page) => page.importPath)
+  const rwPageImportPaths = pages.map((page) => page.importPath)
 
   return {
     name: 'babel-plugin-redwood-routes-auto-loader',

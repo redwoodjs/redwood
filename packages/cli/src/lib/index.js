@@ -216,7 +216,7 @@ export const getPaths = () => {
     return getRedwoodPaths()
   } catch (e) {
     console.error(c.error(e.message))
-    process.exit(0)
+    process.exit(1)
   }
 }
 
@@ -225,7 +225,7 @@ export const getConfig = () => {
     return getRedwoodConfig()
   } catch (e) {
     console.error(c.error(e.message))
-    process.exit(0)
+    process.exit(1)
   }
 }
 
