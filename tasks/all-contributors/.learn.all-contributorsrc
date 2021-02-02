@@ -28,6 +28,24 @@
       "contributions": [
         "tutorial"
       ]
+    },
+    {
+      "login": "ShrillShrestha",
+      "name": "Shrill Shrestha",
+      "avatar_url": "https://avatars.githubusercontent.com/u/43284212?v=4",
+      "profile": "https://shrill-shrestha-portfolio.herokuapp.com/",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "M0nica",
+      "name": "Monica Powell",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6998954?v=4",
+      "profile": "https://www.aboutmonica.com/",
+      "contributions": [
+        "tutorial"
+      ]
     }
   ],
   "contributorsPerLine": 5
