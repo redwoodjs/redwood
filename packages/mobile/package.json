@@ -8,13 +8,17 @@
   "types": "./dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@redwoodjs/internal": "^0.24.0"
+    "@redwoodjs/internal": "^0.24.0",
+    "react-native": "^0.63.4"
   },
   "devDependencies": {},
   "jest": {
     "testPathIgnorePatterns": [
       "/dist/"
     ]
+  },
+  "peerDependencies": {
+    "react": "*"
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",
