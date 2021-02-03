@@ -10,6 +10,7 @@ export const PageLoadingContext = createNamedContext('PageLoading')
 
 export const usePageLoadingContext = () => useContext(PageLoadingContext)
 
+type synchonousLoaderSpec = () => { default: React.ComponentType }
 interface State {
   Page?: React.ComponentType
   pageName?: string
@@ -108,9 +109,11 @@ export class PageLoader extends React.Component<Props> {
     const { Page } = this.state
 
     if (isPrerendering()) {
-      // babel autoloader plugin imports all the pages when it builds Routes.js
-      // this allows us to syncronously load the module
-      const PageFromLoader = this.props.spec.loader().default
+      // babel autoloader plugin uses withStaticImport in prerender mode
+      // override the types for this condition
+      const syncPageLoader = (this.props.spec
+        .loader as unknown) as synchonousLoaderSpec
+      const PageFromLoader = syncPageLoader().default
 
       return (
         <ParamsContext.Provider value={this.state.params}>

@@ -4,14 +4,18 @@ import { createNamedContext, gHistory } from './internal'
 
 export interface LocationContextType {
   pathname: string
-  search: string
-  hash: string
+  search?: string
+  hash?: string
 }
 
 const LocationContext = createNamedContext<LocationContextType>('Location')
 
 interface LocationProviderProps {
-  location: typeof window.location
+  location?: {
+    pathname: string
+    search?: string
+    hash?: string
+  }
 }
 
 class LocationProvider extends React.Component<LocationProviderProps> {
@@ -22,9 +26,11 @@ class LocationProvider extends React.Component<LocationProviderProps> {
   }
 
   getContext() {
-    const windowLocation = typeof window !== 'undefined' ? window.location : {}
-    const { pathname = '', search = '', hash = '' } =
-      this.props.location || windowLocation
+    const windowLocation =
+      typeof window !== 'undefined'
+        ? window.location
+        : { pathname: '', search: '', hash: '' }
+    const { pathname, search, hash } = this.props.location || windowLocation
 
     return { pathname, search, hash }
   }
