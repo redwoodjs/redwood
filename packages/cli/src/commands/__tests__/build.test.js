@@ -37,8 +37,6 @@ afterEach(() => {
 test('Should clean api and web dist directories, before build', async () => {
   await handler({})
   expect(execa.mock.results[0].value).toEqual(`rimraf dist/*`)
-
-  expect(execa.mock.results[1].value).toEqual(`rimraf dist/*`)
 })
 
 test('The build command runs the correct commands.', async () => {
@@ -47,11 +45,11 @@ test('The build command runs the correct commands.', async () => {
     'yarn prisma generate --schema="../../__fixtures__/example-todo-main/api/prisma"'
   )
 
-  expect(execa.mock.results[2].value).toEqual(
+  expect(execa.mock.results[1].value).toEqual(
     `yarn cross-env NODE_ENV=production babel src --out-dir dist --delete-dir-on-start --extensions .ts,.js --ignore '**/*.test.ts,**/*.test.js,**/__tests__'`
   )
 
-  expect(execa.mock.results[3].value).toEqual(
+  expect(execa.mock.results[2].value).toEqual(
     `yarn webpack --config ../node_modules/@redwoodjs/core/config/webpack.production.js`
   )
 })
