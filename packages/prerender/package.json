@@ -6,13 +6,12 @@
   "files": [
     "dist",
     "dist/index.js",
-		"dist/browerUtils/index.js"
+    "dist/browerUtils/index.js"
   ],
   "main": "dist/index.js",
   "peerDependencies": {
     "react": "*",
     "react-dom": "*"
-
   },
   "dependencies": {
     "@babel/register": "^7.9.0",

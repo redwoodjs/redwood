@@ -3,9 +3,10 @@ import { extname, basename, join } from 'path'
 import type { PluginObj, types, NodePath } from '@babel/core'
 
 import { getPaths } from '@redwoodjs/internal'
-// import generate from '@babel/generator'
 
 const defaultOptions = {
+  // This list of extensions matches config for file-loader in
+  // packages/core/config/webpack.common.js
   extensions: [
     '.ico',
     '.jpg',
@@ -32,6 +33,7 @@ function getVariableName(p: NodePath<types.ImportDeclaration>) {
   return null
 }
 
+// Blank single pixel for url-loaded images
 const BLANK_IMG_DATA_SRC =
   'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='
 
@@ -62,11 +64,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
               t.variableDeclaration('const', [
                 t.variableDeclarator(
                   t.identifier(importConstName),
-                  t.stringLiteral(
-                    processedFilePath ||
-                      // Blank single pixel for url-loaded images
-                      'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='
-                  )
+                  t.stringLiteral(processedFilePath || BLANK_IMG_DATA_SRC)
                 ),
               ])
             )
