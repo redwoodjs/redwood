@@ -1,37 +1,52 @@
-import { useContext } from 'react'
+import React, { useContext } from 'react'
 
 import isEqual from 'lodash.isequal'
 
 import { isPrerendering } from '@redwoodjs/web'
 
-import { createNamedContext, ParamsContext } from './internal'
+import { createNamedContext, ParamsContext, Spec } from './internal'
 
 export const PageLoadingContext = createNamedContext('PageLoading')
 
 export const usePageLoadingContext = () => useContext(PageLoadingContext)
 
-export class PageLoader extends React.Component {
-  state = {
+interface State {
+  Page?: React.ComponentType
+  pageName?: string
+  slowModuleImport: boolean
+  params?: Record<string, string>
+}
+
+interface Props {
+  spec: Spec
+  delay?: number
+  params?: Record<string, string>
+}
+
+export class PageLoader extends React.Component<Props> {
+  state: State = {
     Page: undefined,
     pageName: undefined,
     slowModuleImport: false,
   }
 
-  propsChanged = (p1, p2) => {
+  loadingTimeout?: number = undefined
+
+  propsChanged = (p1: Props, p2: Props) => {
     if (p1.spec.name !== p2.spec.name) {
       return true
     }
     return !isEqual(p1.params, p2.params)
   }
 
-  stateChanged = (s1, s2) => {
+  stateChanged = (s1: State, s2: State) => {
     if (s1.pageName !== s2.pageName) {
       return true
     }
     return !isEqual(s1.params, s2.params)
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps: Props, nextState: State) {
     if (this.propsChanged(this.props, nextProps)) {
       this.clearLoadingTimeout()
       this.startPageLoadTransition(nextProps)
@@ -49,7 +64,7 @@ export class PageLoader extends React.Component {
     this.startPageLoadTransition(this.props)
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps: Props) {
     if (this.propsChanged(prevProps, this.props)) {
       this.clearLoadingTimeout()
       this.startPageLoadTransition(this.props)
@@ -57,10 +72,12 @@ export class PageLoader extends React.Component {
   }
 
   clearLoadingTimeout = () => {
-    clearTimeout(this.loadingTimeout)
+    if (this.loadingTimeout) {
+      clearTimeout(this.loadingTimeout)
+    }
   }
 
-  startPageLoadTransition = async (props) => {
+  startPageLoadTransition = async (props: Props) => {
     const { spec, delay } = props
     const { loader, name } = spec
 

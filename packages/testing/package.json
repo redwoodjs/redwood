@@ -9,9 +9,9 @@
   "types": "dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@redwoodjs/router": "^0.24.0",
     "@redwoodjs/auth": "^0.24.0",
     "@redwoodjs/internal": "^0.24.0",
+    "@redwoodjs/router": "^0.24.0",
     "@redwoodjs/web": "^0.24.0",
     "@testing-library/react": "11.2.2",
     "@types/react": "16.9.53",

@@ -444,6 +444,16 @@ And there you have it.
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/mbush92"><img src="https://avatars0.githubusercontent.com/u/15862774?v=4" width="100px;" alt=""/><br /><sub><b>Matthew Bush</b></sub></a></td>
+    <td align="center"><a href="https://patrickgallagher.dev/"><img src="https://avatars.githubusercontent.com/u/35622595?v=4" width="100px;" alt=""/><br /><sub><b>Patrick Gallagher</b></sub></a></td>
+    <td align="center"><a href="https://github.com/himankpathak"><img src="https://avatars.githubusercontent.com/u/26011845?v=4" width="100px;" alt=""/><br /><sub><b>Himank Pathak</b></sub></a></td>
+    <td align="center"><a href="https://morganmspencer.com/"><img src="https://avatars.githubusercontent.com/u/10109983?v=4" width="100px;" alt=""/><br /><sub><b>Morgan Spencer</b></sub></a></td>
+    <td align="center"><a href="http://www.ppinera.es/"><img src="https://avatars.githubusercontent.com/u/663605?v=4" width="100px;" alt=""/><br /><sub><b>Pedro Piñera Buendía</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/msutkowski"><img src="https://avatars.githubusercontent.com/u/784953?v=4" width="100px;" alt=""/><br /><sub><b>Matt Sutkowski</b></sub></a></td>
+    <td align="center"><a href="http://www.simplethread.com/"><img src="https://avatars.githubusercontent.com/u/64120?v=4" width="100px;" alt=""/><br /><sub><b>Justin Etheredge</b></sub></a></td>
+    <td align="center"><a href="https://zainf.dev/"><img src="https://avatars.githubusercontent.com/u/6315466?v=4" width="100px;" alt=""/><br /><sub><b>Zain Fathoni</b></sub></a></td>
+    <td align="center"><a href="https://shrill-shrestha-portfolio.herokuapp.com/"><img src="https://avatars.githubusercontent.com/u/43284212?v=4" width="100px;" alt=""/><br /><sub><b>Shrill Shrestha</b></sub></a></td>
   </tr>
 </table>
 
