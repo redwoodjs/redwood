@@ -32,12 +32,15 @@ function getVariableName(p: NodePath<types.ImportDeclaration>) {
   return null
 }
 
+const BLANK_IMG_DATA_SRC =
+  'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='
+
 export default function ({ types: t }: { types: typeof types }): PluginObj {
   const manifestPath = join(getPaths().web.dist, 'manifest.json')
   const webpackManifest = require(manifestPath)
 
   return {
-    name: 'babel-plugin-redwood-process-img',
+    name: 'babel-plugin-redwood-prerender-media-imports',
     visitor: {
       ImportDeclaration(p, state) {
         const ext = extname(p.node.source.value)
@@ -47,8 +50,6 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         }
 
         if (ext && options.extensions.includes(ext)) {
-          console.log('Processing :: ', p.node.source.value)
-
           const importConstName = getVariableName(p)
           const webpackManifestKey = `static/media/${basename(
             p.node.source.value

@@ -10,7 +10,7 @@ import ReactDOMServer from 'react-dom/server'
 import { getPaths } from '@redwoodjs/internal'
 import { LocationProvider } from '@redwoodjs/router'
 
-import mediaImportsPlugin from './babel-plugin-redwood-prerender-process-media-imports'
+import mediaImportsPlugin from './babelPlugins/babel-plugin-redwood-prerender-media-imports'
 import { getRootHtmlPath, registerShims, writeToDist } from './internal'
 
 interface PrerenderParams {
