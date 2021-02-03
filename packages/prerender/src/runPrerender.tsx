@@ -8,7 +8,9 @@ import prettier from 'prettier'
 import ReactDOMServer from 'react-dom/server'
 
 import { getPaths } from '@redwoodjs/internal'
-import { LocationProvider } from '@redwoodjs/router'
+// @MARK: I had to do this to stop typescript from complaining
+// This is caused by the Router TS rewrite
+import { LocationProvider } from '@redwoodjs/router/dist/index'
 
 import { getRootHtmlPath, registerShims, writeToDist } from './internal'
 

@@ -163,7 +163,7 @@ module.exports = () => {
             require('../dist/babelPlugins/babel-plugin-redwood-routes-auto-loader'),
             {
               project,
-              useStaticImports: process.env.__REDWOOD__PRERENDERING === 'true',
+              useStaticImports: !!process.env.__REDWOOD__PRERENDERING,
             },
           ],
         ],
