@@ -9,6 +9,7 @@ on:
 jobs:
   publish_pr_packages:
     name: Publish PR packages
+    if: github.repository == 'redwoodjs/redwood'
     runs-on: ubuntu-latest
     defaults:
       run:
