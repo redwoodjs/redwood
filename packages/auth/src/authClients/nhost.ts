@@ -8,16 +8,6 @@ export type NhostUser = {
 
 import { AuthClient } from './'
 
-export type oAuthProvider =
-  | 'google'
-  | 'facebook'
-  | 'github'
-  | 'twitter'
-  | 'microsoft'
-  | 'apple'
-  | 'linkedin'
-  | 'spotify'
-
 export const nhost = (client: Nhost): AuthClient => {
   return {
     type: 'nhost',
