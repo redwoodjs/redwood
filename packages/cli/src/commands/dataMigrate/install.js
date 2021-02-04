@@ -19,7 +19,7 @@ const POST_INSTALL_INSTRUCTIONS = `${c.warning(
   "Don't forget to apply your migration when ready:"
 )}
 
-     yarn rw db up
+    yarn rw dataMigrate up
 `
 
 // Creates dataMigrations directory
