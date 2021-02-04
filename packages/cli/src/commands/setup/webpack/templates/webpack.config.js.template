@@ -1,5 +1,5 @@
-module.exports = (config, { env }) => {
-  if (env === 'development') {
+module.exports = (config, { mode }) => {
+  if (mode === 'development') {
     // Add dev plugin
   }
 
