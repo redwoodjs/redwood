@@ -23,10 +23,6 @@ export const nhost = (client: Nhost): AuthClient => {
     type: 'nhost',
     client,
     login: async ({ email, password, provider }) => {
-      console.log('email: ', email)
-      console.log('password: ', password)
-      console.log('provider: ', provider)
-
       if (email && password) {
         return await client.auth.login(email, password)
       }
