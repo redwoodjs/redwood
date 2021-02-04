@@ -1017,7 +1017,8 @@
       "avatar_url": "https://avatars0.githubusercontent.com/u/6998954?v=4",
       "profile": "https://www.aboutmonica.com/",
       "contributions": [
-        "code"
+        "code",
+        "tutorial"
       ]
     },
     {
@@ -1412,6 +1413,80 @@
       "name": "Matthew Bush",
       "avatar_url": "https://avatars0.githubusercontent.com/u/15862774?v=4",
       "profile": "https://github.com/mbush92",
+      "contributions": [
+        "tutorial",
+        "doc"
+      ]
+    },
+    {
+      "login": "pi0neerpat",
+      "name": "Patrick Gallagher",
+      "avatar_url": "https://avatars.githubusercontent.com/u/35622595?v=4",
+      "profile": "https://patrickgallagher.dev/",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "himankpathak",
+      "name": "Himank Pathak",
+      "avatar_url": "https://avatars.githubusercontent.com/u/26011845?v=4",
+      "profile": "https://github.com/himankpathak",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "morganmspencer",
+      "name": "Morgan Spencer",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10109983?v=4",
+      "profile": "https://morganmspencer.com/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "pepibumur",
+      "name": "Pedro Piñera Buendía",
+      "avatar_url": "https://avatars.githubusercontent.com/u/663605?v=4",
+      "profile": "http://www.ppinera.es/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "msutkowski",
+      "name": "Matt Sutkowski",
+      "avatar_url": "https://avatars.githubusercontent.com/u/784953?v=4",
+      "profile": "https://github.com/msutkowski",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "jetheredge",
+      "name": "Justin Etheredge",
+      "avatar_url": "https://avatars.githubusercontent.com/u/64120?v=4",
+      "profile": "http://www.simplethread.com/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "zainfathoni",
+      "name": "Zain Fathoni",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6315466?v=4",
+      "profile": "https://zainf.dev/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "ShrillShrestha",
+      "name": "Shrill Shrestha",
+      "avatar_url": "https://avatars.githubusercontent.com/u/43284212?v=4",
+      "profile": "https://shrill-shrestha-portfolio.herokuapp.com/",
       "contributions": [
         "tutorial"
       ]
