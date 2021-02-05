@@ -6,7 +6,6 @@
     "src/index.d.ts"
   ],
   "main": "dist/index.js",
-  "types": "src/index.d.ts",
   "license": "MIT",
   "dependencies": {
     "@redwoodjs/auth": "^0.24.0",
