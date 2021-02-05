@@ -170,7 +170,9 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
 export const processPagesDir = (
   webPagesDir: string = getPaths().web.pages
 ): Array<PagesDependency> => {
-  const pagePaths = glob.sync('**/**/*Page.{js,jsx,tsx}', { cwd: webPagesDir })
+  const pagePaths = glob.sync('**/**/*Page.{js,jsx,ts,tsx}', {
+    cwd: webPagesDir,
+  })
   return pagePaths.map((pagePath) => {
     const p = path.parse(pagePath)
 

@@ -2,9 +2,7 @@ import { join } from 'path'
 
 import { getDMMF } from '@prisma/sdk'
 
-// @TODO, if we use proper imports, it breaks auto-loader test
-// Fix this later
-import { getPaths, processPagesDir } from '@redwoodjs/internal/dist/paths'
+import { getPaths, processPagesDir } from '@redwoodjs/internal'
 
 import { Host } from '../hosts'
 import { BaseNode } from '../ide'
