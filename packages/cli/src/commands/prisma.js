@@ -8,7 +8,7 @@ import { getPaths } from '@redwoodjs/internal'
 import c from 'src/lib/colors'
 
 export const command = 'prisma [...commands]'
-export const description = 'Run Prisma CLI with built-in helpers'
+export const description = 'Run Prisma CLI with experimental features'
 
 export const builder = (yargs) => {
   const argv = process.argv.slice(3)
