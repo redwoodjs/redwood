@@ -6,7 +6,7 @@ import terminalLink from 'terminal-link'
 
 import { getConfig, shutdownPort } from '@redwoodjs/internal'
 
-import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
+import { generatePrismaClient } from 'src/commands/prisma/generate'
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 
