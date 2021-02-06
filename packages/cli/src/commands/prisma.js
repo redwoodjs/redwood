@@ -50,8 +50,11 @@ export const builder = (yargs) => {
       )}`
     )
 
+  // TO DO: let's find a better way, shall we?
   let autoFlags = []
   if (['migrate', 'db'].includes(argv[0])) {
+    // this is safe as is if a user also adds --preview-feature
+    // TO DO might be nice to message user in case of ^^
     autoFlags.push('--preview-feature')
   }
   if (argv.includes('dev')) {
@@ -61,7 +64,18 @@ export const builder = (yargs) => {
     autoFlags.push('--create-only')
   }
   if (['generate', 'introspect', 'db', 'migrate', 'studio'].includes(argv[0])) {
-    autoFlags.push('--schema', paths.api.dbSchema)
+    if (argv.some((x) => x.includes('--schema'))) {
+      console.log(
+        c.error("The 'redwood prisma' command does not accept '--schema'.")
+      )
+      console.log("Manage the Schema path in 'redwood.toml' instead. \n")
+      console.log(
+        "If you know what you're doing and need '--schema', use the native 'yarn prisma' command.\n"
+      )
+      process.exit(1)
+    } else {
+      autoFlags.push('--schema', paths.api.dbSchema)
+    }
 
     if (!fs.existsSync(paths.api.dbSchema)) {
       console.log(c.error('\n Cannot run command. No Prisma Schema found.\n'))
