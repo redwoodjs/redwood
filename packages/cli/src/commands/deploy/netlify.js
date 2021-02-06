@@ -49,7 +49,7 @@ export const handler = async ({ build, prisma, dm: dataMigrate }) => {
   execa(commandSet.join(' && '), {
     shell: true,
     stdio: 'inherit',
-    cwd: paths.api.base,
+    cwd: paths.base,
     extendEnv: true,
     cleanup: true,
   })
