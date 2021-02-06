@@ -1,7 +1,7 @@
 import { deployBuilder, deployHandler } from './helpers/helpers'
 
-export const command = 'netlify [...commands]'
-export const description = 'Build command for Netlify deploy'
+export const command = 'vercel [...commands]'
+export const description = 'Build command for Vercel deploy'
 
 export const builder = (yargs) => deployBuilder(yargs)
 
