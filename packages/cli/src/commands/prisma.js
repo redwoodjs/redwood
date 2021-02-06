@@ -54,6 +54,12 @@ export const builder = (yargs) => {
   if (['migrate', 'db'].includes(argv[0])) {
     autoFlags.push('--preview-feature')
   }
+  if (argv.includes('dev')) {
+    autoFlags.push('--name', 'migration')
+  }
+  if (argv.includes('--create-only')) {
+    autoFlags.push('--create-only')
+  }
   if (['generate', 'introspect', 'db', 'migrate', 'studio'].includes(argv[0])) {
     autoFlags.push('--schema', paths.api.dbSchema)
 
