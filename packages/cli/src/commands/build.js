@@ -6,7 +6,7 @@ import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
 
-import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
+import { generatePrismaClient } from 'src/commands/prisma/generate'
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 
