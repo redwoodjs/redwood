@@ -17,10 +17,10 @@ import type { MagicLink, MagicUser } from './magicLink'
 import { magicLink } from './magicLink'
 import type { NetlifyIdentity } from './netlify'
 import { netlify } from './netlify'
+import type { Nhost, NhostUser } from './nhost'
+import { nhost } from './nhost'
 import type { Supabase, SupabaseUser } from './supabase'
 import { supabase } from './supabase'
-import type { Nhost, NhostUser } from "./nhost"
-import { nhost } from "./nhost"
 
 const typesToClients = {
   netlify,

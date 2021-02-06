@@ -1,10 +1,7 @@
-import type { NhostClient } from 'nhost-js-sdk'
+import type { NhostClient, NhostUser } from 'nhost-js-sdk'
 
 export type Nhost = NhostClient
-
-export type NhostUser = {
-  id: string | null
-}
+export type { NhostUser }
 
 import { AuthClient } from './'
 
@@ -14,11 +11,11 @@ export const nhost = (client: Nhost): AuthClient => {
     client,
     login: async ({ email, password, provider }) => {
       if (email && password) {
-        return await client.auth.login(email, password)
+        return await client.auth.login({ email, password })
       }
 
       if (provider) {
-        return await client.auth.loginOAuth(provider)
+        return await client.auth.login({ provider })
       }
 
       throw new Error(
@@ -39,5 +36,8 @@ export const nhost = (client: Nhost): AuthClient => {
     getUserMetadata: async () => {
       return await client.auth.user()
     },
+    restoreAuthState: async () => {
+      return await client.auth.refreshToken()
+    }
   }
 }
