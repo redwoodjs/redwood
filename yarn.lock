@@ -3609,17 +3609,17 @@
     telejson "^3.2.0"
     util-deprecate "^1.0.2"
 
-"@supabase/gotrue-js@^1.9.0":
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/@supabase/gotrue-js/-/gotrue-js-1.9.0.tgz#00fd43069977fb76c9d51c21e35fc25ed3f3a38c"
-  integrity sha512-2344TbP/a+9FpPDHo8tR8SWGgDS+TAl3N6mlxeTgnrOVudxRNGECr4zk5z9tv+TVzZsAgC/rSAqP+7XkNqt6zQ==
+"@supabase/gotrue-js@^1.10.4":
+  version "1.10.5"
+  resolved "https://registry.yarnpkg.com/@supabase/gotrue-js/-/gotrue-js-1.10.5.tgz#4b54d45f547eb521984e0f999f6d6e7945985d22"
+  integrity sha512-k1e4KgldneJmpIUJiUP+vSS4bByVpCQ9ZGpz2cn2U38C9N2RSP1z0O2i3D4RFVXEdc0oEvEFYm0PKV17RgUygQ==
   dependencies:
     cross-fetch "^3.0.6"
 
-"@supabase/postgrest-js@^0.21.2":
-  version "0.21.2"
-  resolved "https://registry.yarnpkg.com/@supabase/postgrest-js/-/postgrest-js-0.21.2.tgz#047a37b8b8585ed0d0b13d6754dab2209e948c24"
-  integrity sha512-ww7aa4GHu788T2QxZlLiRfi+MHJ+EXbNurzTgaG/3nWmOEEy/gmNTLwgyHUAO92MRE2IrLiZyln3QJDZwGQwrw==
+"@supabase/postgrest-js@^0.24.1":
+  version "0.24.1"
+  resolved "https://registry.yarnpkg.com/@supabase/postgrest-js/-/postgrest-js-0.24.1.tgz#43c2770bf95b6628330ddfaba592d7a1cc406953"
+  integrity sha512-uvS0v1zqVc3Y5GqnR3B2GBY1c4REdpcS/kiiOJJou3me6nuZptqV/8tUPhSOAWWt8S5XpOI9OK+aAozBdC7c5w==
   dependencies:
     cross-fetch "^3.0.6"
 
@@ -3632,13 +3632,13 @@
     query-string "^6.12.1"
     websocket "^1.0.31"
 
-"@supabase/supabase-js@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@supabase/supabase-js/-/supabase-js-1.1.1.tgz#9ed353794665b789054885fc90a1c8d6fe561bee"
-  integrity sha512-BsLugIfTgfKVJC1H/fWHqV1QKK+2EFE2AYbS51XRwF0fBKV885RG6Tiq9vZidNeO/Mw8TZKpZ9pD8tQ8FIbLAQ==
+"@supabase/supabase-js@^1.3.3":
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/@supabase/supabase-js/-/supabase-js-1.3.3.tgz#66bad9036fe6b6af63378611ba967a74c1e547c1"
+  integrity sha512-rp37myYXWTiliF/2Cf8DdTuULBRVbSUE2CyDnLesaxbvpvBdfRsMMbWpgsLZHdz3HyK1UbGr9m39kijrAt2P+Q==
   dependencies:
-    "@supabase/gotrue-js" "^1.9.0"
-    "@supabase/postgrest-js" "^0.21.2"
+    "@supabase/gotrue-js" "^1.10.4"
+    "@supabase/postgrest-js" "^0.24.1"
     "@supabase/realtime-js" "^1.0.6"
 
 "@svgr/babel-plugin-add-jsx-attribute@^4.2.0":
