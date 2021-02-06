@@ -5504,6 +5504,13 @@ axios@^0.20.0:
   dependencies:
     follow-redirects "^1.10.0"
 
+axios@^0.21.1:
+  version "0.21.1"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.1.tgz#22563481962f4d6bde9a76d516ef0e5d3c09b2b8"
+  integrity sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==
+  dependencies:
+    follow-redirects "^1.10.0"
+
 axobject-query@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/axobject-query/-/axobject-query-2.2.0.tgz#943d47e10c0b704aa42275e20edf3722648989be"
@@ -6062,13 +6069,6 @@ bl@^4.0.3:
     buffer "^5.5.0"
     inherits "^2.0.4"
     readable-stream "^3.4.0"
-
-blob@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/blob/-/blob-0.1.0.tgz#7e2fb624abe0253b3ce97d52d6fb986e97e54a64"
-  integrity sha512-k+GwK+4Rj+MPNT4qu+y6+kHp+mPmmNd+28zdrIo69QM9UvypK5Vhcw7jnRiY4KaOMAiOdn0NtPQGTb+Ox1Dtng==
-  dependencies:
-    esm "^3.2.25"
 
 bluebird@^3.3.5, bluebird@^3.5.1, bluebird@^3.5.3, bluebird@^3.5.5:
   version "3.7.2"
@@ -8896,11 +8896,6 @@ eslint@^7.12.1:
     table "^5.2.3"
     text-table "^0.2.0"
     v8-compile-cache "^2.0.3"
-
-esm@^3.2.25:
-  version "3.2.25"
-  resolved "https://registry.yarnpkg.com/esm/-/esm-3.2.25.tgz#342c18c29d56157688ba5ce31f8431fbb795cc10"
-  integrity sha512-U1suiZ2oDVWv4zPO56S0NcR5QriEahGtdN2OR6FiOG4WJvcjBVFB0qI4+eKoWFH483PKGuLuu6V8Z4T5g63UVA==
 
 espree@^7.3.0, espree@^7.3.1:
   version "7.3.1"
@@ -13740,15 +13735,15 @@ next-tick@~1.0.0:
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.0.0.tgz#ca86d1fe8828169b0120208e3dc8424b9db8342c"
   integrity sha1-yobR/ogoFpsBICCOPchCS524NCw=
 
-nhost-js-sdk@^2.3.4:
-  version "2.3.4"
-  resolved "https://registry.yarnpkg.com/nhost-js-sdk/-/nhost-js-sdk-2.3.4.tgz#225a088aea8f645574d0aadaf8c0669707923367"
-  integrity sha512-JcMhYtNSlYd6MCbbAvw4w/lG99Kd8jgfKPugH6LF2ICxvE5LfB2RRywaSij4yYlQtpHideV6G2+U/tFNHcJA8Q==
+nhost-js-sdk@^3.0.0-7:
+  version "3.0.0-7"
+  resolved "https://registry.yarnpkg.com/nhost-js-sdk/-/nhost-js-sdk-3.0.0-7.tgz#efba4315741cf906a0bb881c09b28f62d3c06d26"
+  integrity sha512-FLBVkitOFaBqwDrPice6qi3oJru9s5SKWFLhssSZ6yDr/LdDuobD3yXRGzr+m/W+9PfNnogPmKU/ThpifB6fZw==
   dependencies:
     "@types/jwt-decode" "^2.2.1"
-    axios "^0.19.2"
-    blob "^0.1.0"
+    axios "^0.21.1"
     jwt-decode "^2.2.0"
+    node-blob "git://github.com/elitan/node-blob.git"
     query-string "^6.13.1"
 
 nice-try@^1.0.4:
@@ -13770,6 +13765,10 @@ node-abi@^2.7.0:
   integrity sha512-9xZrlyfvKhWme2EXFKQhZRp1yNWT/uI1luYPr3sFl+H4keYY4xR+1jO7mvTTijIsHf1M+QDe9uWuKeEpLInIlg==
   dependencies:
     semver "^5.4.1"
+
+"node-blob@git://github.com/elitan/node-blob.git":
+  version "0.0.2"
+  resolved "git://github.com/elitan/node-blob.git#0382ee22c765fa4c85ae64219fbe4abba1b2a474"
 
 node-dir@^0.1.10:
   version "0.1.17"
