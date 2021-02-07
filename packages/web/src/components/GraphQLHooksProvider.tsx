@@ -1,10 +1,9 @@
 import type { DocumentNode } from 'graphql'
 
-
 export type PureQueryOptions = {
-  query: DocumentNode;
-  variables?: { [key: string]: any };
-  context?: any;
+  query: DocumentNode
+  variables?: { [key: string]: any }
+  context?: any
 }
 
 export interface GraphQLHookOptions {
