@@ -1,8 +1,17 @@
 import type { DocumentNode } from 'graphql'
 
+
+export type PureQueryOptions = {
+  query: DocumentNode;
+  variables?: { [key: string]: any };
+  context?: any;
+}
+
 export interface GraphQLHookOptions {
   variables?: Record<string, any>
+  refetchQueries?: Array<string | PureQueryOptions>
 }
+
 export interface OperationResult<TData = any> {
   data?: TData
   loading: boolean
