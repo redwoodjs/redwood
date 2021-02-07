@@ -1,7 +1,7 @@
-import type { NhostClient, NhostUser } from 'nhost-js-sdk'
+import type { NhostClient, User } from 'nhost-js-sdk'
 
 export type Nhost = NhostClient
-export type { NhostUser }
+export type NhostUser = User
 
 import { AuthClient } from './'
 
@@ -27,7 +27,7 @@ export const nhost = (client: Nhost): AuthClient => {
     },
     signup: async ({ email, password }) => {
       return await client.auth.register(email, password, {
-        display_name: email,
+        userData: { display_name: email },
       })
     },
     getToken: async () => {
@@ -37,7 +37,7 @@ export const nhost = (client: Nhost): AuthClient => {
       return await client.auth.user()
     },
     restoreAuthState: async () => {
-      return await client.auth.refreshToken()
-    }
+      return await client.auth.refreshSession()
+    },
   }
 }
