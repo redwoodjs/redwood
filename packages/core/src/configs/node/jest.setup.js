@@ -3,6 +3,9 @@ const path = require('path')
 const { setContext } = require('@redwoodjs/api')
 const { getPaths } = require('@redwoodjs/internal')
 const { defineScenario } = require('@redwoodjs/testing/dist/scenario')
+const {
+  nameVariants
+} = require('@redwoodjs/cli/dist/lib');
 const { db } = require(path.join(getPaths().api.src, 'lib', 'db'))
 const DEFAULT_SCENARIO = 'standard'
 const PRISMA_RESERVED = ['create', 'connect']
@@ -51,7 +54,11 @@ const removeScenario = async (scenario) => {
     models = Array.from(new Set(models))
 
     for (const model of models) {
-      await db[model].deleteMany()
+      // Casing must be exact in postgres.  We currently assume tables have
+      // PascalCasing, but should switch to exact table names when Prisma exposes
+      const pascalModel = nameVariants(model).pascalModel
+
+      await db.$queryRaw(`DELETE FROM "${pascalModel}"`);
     }
   }
 }
