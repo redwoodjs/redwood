@@ -74,7 +74,7 @@ export const builder = (yargs) => {
       )
       process.exit(1)
     } else {
-      autoFlags.push('--schema', paths.api.dbSchema)
+      autoFlags.push('--schema', `"${paths.api.dbSchema}"`)
     }
 
     if (!fs.existsSync(paths.api.dbSchema)) {
