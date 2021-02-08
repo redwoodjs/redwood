@@ -1,9 +1,11 @@
 import execa from 'execa'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
-import { runCommandTask } from 'src/lib'
+
 import { getConfig, shutdownPort } from '@redwoodjs/internal'
 
+import { generatePrismaClient } from 'src/commands/prisma/generate'
+import { getPaths, runCommandTask } from 'src/lib'
 import c from 'src/lib/colors'
 
 export const command = 'upgrade'
@@ -99,22 +101,24 @@ const installPr = (pr, isAuth) => {
   }
 }
 
-const rebootDev = () => {
-  /** Relates to prisma/client issue, @see: https://github.com/redwoodjs/redwood/issues/1083
-   * Here we reboot the dev server so it uses the newly generated @prisma/client. Usually that does the trick! */
+const refreshPrismaClient = () => {
+  /** Relates to prisma/client issue, @see: https://github.com/redwoodjs/redwood/issues/1083 */
   return [
     {
       title: '...',
       task: async (_ctx, _task) => {
         try {
-          const { stdout } = await execa.command(
-            'yarn rw dev'
-          )
+          await generatePrismaClient({
+            verbose: false,
+            force: false,
+            schema: getPaths().api.dbSchema,
+          })
         } catch (e) {
-          console.error(
-            `Error whilst rebooting the dev server: ${c.error(e.message)}
-            \n\nYou may wish to do it manually.`
+          task.skip('Refreshing the Prisma client caused an Error.')
+          console.log(
+            'You may need to update your prisma client manually: $ yarn rw prisma generate'
           )
+          console.log(c.error(e.message))
         }
       },
     },
@@ -233,8 +237,8 @@ export const handler = async ({ d, tag, pr }) => {
         task: () => new Listr(runUpgrade({ d, tag, pr })),
       },
       {
-        title: 'Restarting the dev server',
-        task: () => new Listr(rebootDev({ d, tag })),
+        title: 'Refreshing the Prisma client',
+        task: () => new Listr(refreshPrismaClient()),
       },
     ],
     { collapse: false }
