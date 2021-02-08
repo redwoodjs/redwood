@@ -1,7 +1,7 @@
 const path = require('path')
 
-const { getSchemaDefinitions } = require('@redwoodjs/cli/dist/lib');
 const { setContext } = require('@redwoodjs/api')
+const { getSchemaDefinitions } = require('@redwoodjs/cli/dist/lib')
 const { getPaths } = require('@redwoodjs/internal')
 const { defineScenario } = require('@redwoodjs/testing/dist/scenario')
 const { db } = require(path.join(getPaths().api.src, 'lib', 'db'))
@@ -51,10 +51,14 @@ const removeScenario = async (scenario) => {
     // get unique model names only
     models = Array.from(new Set(models))
 
-    const prismaModelNames = (await getSchemaDefinitions()).datamodel.models.map(m => m.name)
+    const prismaModelNames = (
+      await getSchemaDefinitions()
+    ).datamodel.models.map(m => m.name)
     const exactNameMapping = models.reduce((map, model) => {
       const lowerModel = model.toLowerCase()
-      const prismaModelName = prismaModelNames.find((prismaModel) => prismaModel.toLowerCase() === lowerModel)
+      const prismaModelName = prismaModelNames.find(
+        (prismaModel) => prismaModel.toLowerCase() === lowerModel
+      )
 
       map[model] = prismaModelName
 
