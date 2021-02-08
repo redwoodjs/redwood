@@ -49,7 +49,7 @@ export const builder = (yargs) => {
       console.error(c.error('\n Cannot run command. No Prisma Schema found.\n'))
       process.exit(1)
     }
-    autoFlags.push('--schema', paths.api.dbSchema)
+    autoFlags.push('--schema', `"${paths.api.dbSchema}"`)
   }
 
   execa(
