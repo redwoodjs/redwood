@@ -5,6 +5,9 @@ import path from 'path'
 
 import { runCommandTask, getPaths } from 'src/lib'
 
+/**
+ * Conditionally generate the prisma client, skip if it already exists.
+ */
 export const generatePrismaClient = async ({
   verbose = true,
   force = true,
