@@ -2,10 +2,8 @@ import execa from 'execa'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
 
-import { getConfig, shutdownPort } from '@redwoodjs/internal'
-
 import { generatePrismaClient } from 'src/commands/prisma/generate'
-import { getPaths, runCommandTask } from 'src/lib'
+import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 
 export const command = 'upgrade'
@@ -106,7 +104,7 @@ const refreshPrismaClient = () => {
   return [
     {
       title: '...',
-      task: async (_ctx, _task) => {
+      task: async (_ctx, task) => {
         try {
           await generatePrismaClient({
             verbose: false,
