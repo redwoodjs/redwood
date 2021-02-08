@@ -1,11 +1,9 @@
 const path = require('path')
 
+const { getSchemaDefinitions } = require('@redwoodjs/cli/dist/lib');
 const { setContext } = require('@redwoodjs/api')
 const { getPaths } = require('@redwoodjs/internal')
 const { defineScenario } = require('@redwoodjs/testing/dist/scenario')
-const {
-  nameVariants
-} = require('@redwoodjs/cli/dist/lib');
 const { db } = require(path.join(getPaths().api.src, 'lib', 'db'))
 const DEFAULT_SCENARIO = 'standard'
 const PRISMA_RESERVED = ['create', 'connect']
@@ -64,7 +62,7 @@ const removeScenario = async (scenario) => {
     }, {})
 
     for (const model of models) {
-      await db.$queryRaw(`DELETE FROM "${exactNameMapping[model]}"`);
+      await db.$queryRaw(`DELETE FROM "${exactNameMapping[model]}"`)
     }
   }
 }
