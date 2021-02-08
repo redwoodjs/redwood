@@ -24,8 +24,16 @@ export const builder = (yargs) => {
       alias: 't',
       description:
         '[choices: "canary", "rc", or specific-version (see example below)] WARNING: "canary" and "rc" tags are unstable releases!',
+      requiresArg: true,
+      type: 'string',
+      coerce: validateTag,
+    })
+    .option('pr', {
+      description: 'Installs packages for the given PR',
+      requiresArg: true,
       type: 'string',
     })
+    .conflicts('tag', 'pr')
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -42,8 +50,14 @@ export const builder = (yargs) => {
     )
 }
 
-const rwPackages =
-  '@redwoodjs/core @redwoodjs/api @redwoodjs/web @redwoodjs/router @redwoodjs/auth @redwoodjs/forms'
+const rwPackages = [
+  '@redwoodjs/core',
+  '@redwoodjs/api',
+  '@redwoodjs/web',
+  '@redwoodjs/router',
+  '@redwoodjs/auth',
+  '@redwoodjs/forms',
+].join(' ')
 
 // yarn upgrade-interactive does not allow --tags, so we resort to this mess
 // @redwoodjs/auth may not be installed so we add check
@@ -61,25 +75,28 @@ const installTags = (tag, isAuth) => {
   }
 }
 
-const prismaUpdate = () => {
-  /** Relates to prisma/client issue, @see: https://github.com/redwoodjs/redwood/issues/1083
-   * Here we specifically regenerate @prisma/client using prisma's own magic.*/
-  return [
-    {
-      title: '...',
-      task: async (_ctx, _task) => {
-        try {
-          const { stdout } = await execa.command(
-            'yarn rw db up'
-          )
-        } catch (e) {
-          console.error(
-            `Error whilst updating @prisma/client (./node_modules/.prisma): ${c.error(e.message)}`
-          )
-        }
-      },
-    },
-  ]
+/** `pr` example: 1454:0.21.0-d3b0abd */
+const installPr = (pr, isAuth) => {
+  const packageUrl = (pkg) => {
+    const baseUrl = 'https://rw-pr-redwoodjs-com.s3.amazonaws.com/'
+    const [prNbr, vSha] = pr.split(':')
+
+    return `${baseUrl}${prNbr}/redwoodjs-${pkg}-${vSha}.tgz`
+  }
+
+  const mainString =
+    `yarn add -DW ${packageUrl('core')} ${packageUrl('cli')} ` +
+    `&& yarn workspace api add ${packageUrl('api')} ` +
+    `&& yarn workspace web add ${packageUrl('web')} ` +
+    `${packageUrl('router')} ${packageUrl('forms')}`
+
+  const authString = ` ${packageUrl('auth')}`
+
+  if (isAuth) {
+    return mainString + authString
+  } else {
+    return mainString
+  }
 }
 
 const rebootDev = () => {
@@ -134,15 +151,16 @@ const checkInstalled = () => {
 
 // yargs allows passing the 'dry-run' alias 'd' here,
 // which we need to use because babel fails on 'dry-run'
-const runUpgrade = ({ d, tag }) => {
+const runUpgrade = ({ d: dryRun, tag, pr }) => {
   return [
     {
       title: '...',
       task: (ctx, task) => {
-        if (d) {
-          task.title = tag
-            ? 'The --dry-run option is not supported for --tags'
-            : 'Checking available upgrades for @redwoodjs packages'
+        if (dryRun) {
+          task.title =
+            tag || pr
+              ? 'The --dry-run option is not supported for --tag or --pr'
+              : 'Checking available upgrades for @redwoodjs packages'
           // 'yarn outdated --scope @redwoodjs' will include netlify plugin
           // so we have to use hardcoded list,
           // which will NOT display info for uninstalled packages
@@ -157,6 +175,12 @@ const runUpgrade = ({ d, tag }) => {
         } else if (tag) {
           task.title = `Force upgrading @redwoodjs packages to latest ${tag} release`
           execa.command(installTags(tag, ctx.auth), {
+            stdio: 'inherit',
+            shell: true,
+          })
+        } else if (pr) {
+          task.title = `Installs packages from PR ${pr}`
+          execa.command(installPr(pr, ctx.auth), {
             stdio: 'inherit',
             shell: true,
           })
@@ -176,7 +200,27 @@ const runUpgrade = ({ d, tag }) => {
   ]
 }
 
-export const handler = async ({ d, tag }) => {
+const SEMVER_REGEX = /(?<=^v?|\sv?)(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*)(?:\.(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*))*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?(?=$|\s)/gi
+const validateTag = (tag) => {
+  const isTagValid =
+    tag === 'rc' ||
+    tag === 'canary' ||
+    tag === 'latest' ||
+    SEMVER_REGEX.test(tag)
+
+  if (!isTagValid) {
+    // Stop execution
+    throw new Error(
+      c.error(
+        'Invalid tag supplied. Supported values: rc, canary, latest, or valid semver version\n'
+      )
+    )
+  }
+
+  return tag
+}
+
+export const handler = async ({ d, tag, pr }) => {
   // structuring as nested tasks to avoid bug with task.title causing duplicates
   const tasks = new Listr(
     [
@@ -186,17 +230,12 @@ export const handler = async ({ d, tag }) => {
       },
       {
         title: 'Running upgrade command',
-        task: () => new Listr(runUpgrade({ d, tag })),
-      },
-      {
-        title: 'Running prisma client update',
-        task: () => new Listr(prismaUpdate({ d, tag })),
+        task: () => new Listr(runUpgrade({ d, tag, pr })),
       },
       {
         title: 'Restarting the dev server',
         task: () => new Listr(rebootDev({ d, tag })),
       },
-
     ],
     { collapse: false }
   )

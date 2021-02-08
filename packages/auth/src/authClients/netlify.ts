@@ -25,7 +25,7 @@ export const netlify = (client: NetlifyIdentity): AuthClient => {
       })
     },
     logout: () => {
-      return new Promise((resolve, reject) => {
+      return new Promise<void>((resolve, reject) => {
         client.logout()
         client.on('logout', resolve)
         client.on('error', reject)
@@ -45,6 +45,9 @@ export const netlify = (client: NetlifyIdentity): AuthClient => {
       return user?.token?.access_token || null
     },
     getUserMetadata: async () => {
+      return client.currentUser()
+    },
+    restoreAuthState: async () => {
       return client.currentUser()
     },
   }

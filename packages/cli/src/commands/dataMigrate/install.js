@@ -1,7 +1,7 @@
 import path from 'path'
 
-import fs from 'fs-extra'
 import execa from 'execa'
+import fs from 'fs-extra'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
 
@@ -19,7 +19,7 @@ const POST_INSTALL_INSTRUCTIONS = `${c.warning(
   "Don't forget to apply your migration when ready:"
 )}
 
-     yarn rw db up
+    yarn rw dataMigrate up
 `
 
 // Creates dataMigrations directory

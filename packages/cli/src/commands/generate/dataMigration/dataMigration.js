@@ -1,8 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 
-import { paramCase } from 'param-case'
 import Listr from 'listr'
+import { paramCase } from 'param-case'
 import terminalLink from 'terminal-link'
 
 import { getPaths, writeFilesTask } from 'src/lib'

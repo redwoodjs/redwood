@@ -15,18 +15,17 @@ let REQUEST_HANDLER_QUEUE: RequestHandler[] = []
 let SERVER_INSTANCE: SetupWorkerApi | any
 
 /**
- * This will import the correct runtime (node/ browser) of MSW,
- * and start the functionality that captures requests.
+ * Plugs fetch for the correct target in order to capture requests.
  *
  * Request handlers can be registered lazily (via `mockGraphQL<Query|Mutation>`),
  * the queue will be drained and used.
  */
-export const startMSW = async () => {
+export const startMSW = async (target: 'node' | 'browsers') => {
   if (SERVER_INSTANCE) {
     return SERVER_INSTANCE
   }
 
-  if (typeof global.process === 'undefined') {
+  if (target === 'browsers') {
     SERVER_INSTANCE = setupWorker()
     await SERVER_INSTANCE.start()
   } else {
@@ -74,7 +73,7 @@ const mockGraphQL = (
 ) => {
   const resolver = (
     req: GraphQLMockedRequest,
-    res: Function,
+    res: (...args: unknown[]) => unknown,
     ctx: GraphQLMockedContext<Record<string, any>>
   ) => {
     let d = data
@@ -129,4 +128,19 @@ export const mockGraphQLMutation = (
   data: DataFunction | Record<string, unknown>
 ) => {
   return mockGraphQL('mutation', operation, data)
+}
+
+export const mockedUserMeta: { currentUser: Record<string, unknown> | null } = {
+  currentUser: null,
+}
+
+export const mockCurrentUser = (user: Record<string, unknown> | null) => {
+  mockedUserMeta.currentUser = user
+  mockGraphQLQuery('__REDWOOD__AUTH_GET_CURRENT_USER', () => {
+    return {
+      redwood: {
+        currentUser: user,
+      },
+    }
+  })
 }

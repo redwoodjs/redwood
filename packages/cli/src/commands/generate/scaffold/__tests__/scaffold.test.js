@@ -2,6 +2,7 @@ global.__dirname = __dirname
 import path from 'path'
 
 import { loadGeneratorFixture } from 'src/lib/test'
+
 import { getDefaultArgs } from 'src/lib'
 
 import { yargsDefaults as defaults } from '../../../generate'
@@ -17,8 +18,8 @@ describe('in javascript (default) mode', () => {
     })
   })
 
-  test('returns exactly 16 files', () => {
-    expect(Object.keys(files).length).toEqual(16)
+  test('returns exactly 17 files', () => {
+    expect(Object.keys(files).length).toEqual(17)
   })
 
   // SDL
@@ -302,8 +303,8 @@ describe('in typescript mode', () => {
     })
   })
 
-  test('returns exactly 16 files', () => {
-    expect(Object.keys(files).length).toEqual(16)
+  test('returns exactly 17 files', () => {
+    expect(Object.keys(files).length).toEqual(17)
   })
 
   // SDL

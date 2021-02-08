@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { ReactNode, ReactPortal, useEffect, useState } from 'react'
+
 import {
   MockProviders,
   startMSW,
@@ -6,7 +7,7 @@ import {
 } from '@redwoodjs/testing'
 
 export const StorybookProvider: React.FunctionComponent<{
-  storyFn: Function
+  storyFn: () => ReactNode | ReactPortal
   id: string
 }> = ({ storyFn, id }) => {
   const [loading, setLoading] = useState(true)
@@ -23,7 +24,7 @@ export const StorybookProvider: React.FunctionComponent<{
         reqs(r)
       })
 
-      await startMSW()
+      await startMSW('browsers')
       setupRequestHandlers()
       setLoading(false)
     }
@@ -33,6 +34,9 @@ export const StorybookProvider: React.FunctionComponent<{
   if (loading) {
     return null
   }
+
+  // default to a non-existent user at the beginning of each story
+  mockCurrentUser(null)
 
   return <MockProviders>{storyFn()}</MockProviders>
 }

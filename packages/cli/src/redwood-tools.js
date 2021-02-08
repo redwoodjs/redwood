@@ -1,12 +1,13 @@
 #!/usr/bin/env node
-import path from 'path'
 import fs from 'fs'
+import path from 'path'
 
-import yargs from 'yargs'
-import { getPaths, ensurePosixPath } from '@redwoodjs/internal'
-import execa from 'execa'
 import chokidar from 'chokidar'
+import execa from 'execa'
 import _ from 'lodash'
+import yargs from 'yargs'
+
+import { getPaths, ensurePosixPath } from '@redwoodjs/internal'
 
 const RW_BINS = {
   redwood: 'cli/dist/index.js',
@@ -71,11 +72,19 @@ export const copyFiles = async (src, dest) => {
   src = ensurePosixPath(src)
   dest = ensurePosixPath(dest)
 
-  await execa('rsync', ['-rtvu --delete', `'${src}'`, `'${dest}'`], {
-    shell: true,
-    stdio: 'inherit',
-    cleanup: true,
-  })
+  await execa(
+    'rsync',
+    [
+      `-rtvu --delete --exclude "create-redwood-app/template"`,
+      `'${src}'`,
+      `'${dest}'`,
+    ],
+    {
+      shell: true,
+      stdio: 'inherit',
+      cleanup: true,
+    }
+  )
   // when rsync is run modify the permission to make binaries executable.
   fixProjectBinaries(getPaths().base)
 }
@@ -113,6 +122,7 @@ yargs
         .watch(src, {
           persistent: true,
           recursive: true,
+          ignored: [path.join(src, 'packages/create-redwood-app/template')],
         })
         .on(
           'all',

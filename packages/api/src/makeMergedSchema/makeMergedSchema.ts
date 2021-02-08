@@ -1,13 +1,14 @@
+import { mergeTypeDefs } from '@graphql-tools/merge'
 import {
   addResolveFunctionsToSchema,
   makeExecutableSchema,
   IResolvers,
   IExecutableSchemaDefinition,
 } from 'apollo-server-lambda'
-import { mergeTypes } from 'merge-graphql-schemas'
+import { GraphQLSchema, GraphQLFieldMap } from 'graphql'
 import merge from 'lodash.merge'
 import omitBy from 'lodash.omitby'
-import { GraphQLSchema, GraphQLFieldMap } from 'graphql'
+
 import { Services, GraphQLTypeWithFields } from 'src/types'
 
 import * as rootSchema from './rootSchema'
@@ -18,7 +19,14 @@ const mapFieldsToService = ({
   services,
 }: {
   fields: GraphQLFieldMap<any, any>
-  resolvers: { [key: string]: Function }
+  resolvers: {
+    [key: string]: (
+      root: unknown,
+      args: unknown,
+      context: unknown,
+      info: unknown
+    ) => any
+  }
   services: Services
 }) =>
   Object.keys(fields).reduce((resolvers, name) => {
@@ -141,6 +149,35 @@ const mergeResolvers = (schemas: {
  * })
  * ```
  */
+
+/**
+ * Update January 2021
+ * Merge GraphQL Schemas has been replaced by @graphql-toolkit/schema-merging
+ * The following code proxies the original mergeTypes to the new mergeTypeDefs
+ * https://www.graphql-tools.com/docs/migration-from-merge-graphql-schemas/
+ **/
+
+type Config = Parameters<typeof mergeTypeDefs>[1]
+
+const mergeTypes = (
+  types: any[],
+  options?: { schemaDefinition?: boolean; all?: boolean } & Partial<Config>
+) => {
+  const schemaDefinition =
+    options && typeof options.schemaDefinition === 'boolean'
+      ? options.schemaDefinition
+      : true
+
+  return mergeTypeDefs(types, {
+    useSchemaDefinition: schemaDefinition,
+    forceSchemaDefinition: schemaDefinition,
+    throwOnConflict: true,
+    commentDescriptions: true,
+    reverseDirectives: true,
+    ...options,
+  })
+}
+
 export const makeMergedSchema = ({
   schemas,
   services,

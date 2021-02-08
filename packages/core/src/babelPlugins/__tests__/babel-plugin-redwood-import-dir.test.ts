@@ -1,5 +1,7 @@
 import path from 'path'
+
 import pluginTester from 'babel-plugin-tester'
+
 import plugin from '../babel-plugin-redwood-import-dir'
 
 const mockReaddirSync = jest.fn(() => [

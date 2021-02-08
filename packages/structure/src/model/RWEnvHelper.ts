@@ -1,20 +1,23 @@
+import { join } from 'path'
+
 import * as dotenv from 'dotenv-defaults'
 import { existsSync, readFileSync } from 'fs-extra'
 import { pickBy } from 'lodash'
-import { join } from 'path'
+import * as tsm from 'ts-morph'
+import { DiagnosticSeverity, Location, Range } from 'vscode-languageserver'
+
+import { BaseNode, CodeLensX, Definition, HoverX, Reference } from 'src/ide'
+import { lazy } from 'src/x/decorators'
 import { prisma_parseEnvExpressionsInFile } from 'src/x/prisma'
 import { URL_file } from 'src/x/URL'
 import { Command_open } from 'src/x/vscode'
-import * as tsm from 'ts-morph'
-import { DiagnosticSeverity, Location, Range } from 'vscode-languageserver'
-import { BaseNode, CodeLensX, Definition, HoverX, Reference } from '../ide'
-import { lazy } from '../x/decorators'
 import {
   ExtendedDiagnostic,
   ExtendedDiagnostic_is,
   LocationLike_toHashLink,
   LocationLike_toLocation,
-} from '../x/vscode-languageserver-types'
+} from 'src/x/vscode-languageserver-types'
+
 import { RWProject } from './RWProject'
 import { process_env_findAll } from './util/process_env'
 

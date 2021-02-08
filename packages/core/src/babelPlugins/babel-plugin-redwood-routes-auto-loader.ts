@@ -1,8 +1,9 @@
 import type { PluginObj, types } from '@babel/core'
 
 import { processPagesDir } from '@redwoodjs/internal'
-import { generateTypeDef, generateTypeDefIndex } from './generateTypes'
 import { RWProject } from '@redwoodjs/structure'
+
+import { generateTypeDef, generateTypeDefIndex } from './generateTypes'
 
 interface PluginOptions {
   project: RWProject
@@ -51,15 +52,20 @@ export default function (
           const typeDefContent = `
             declare module '@redwoodjs/router' {
               interface AvailableRoutes {
-                ${availableRoutes.join('\n')}
+                ${availableRoutes.join('\n    ')}
               }
             }
 
             ${pageImports.join('\n')}
+
             declare global {
-              ${pageGlobals.join('\n')}
+              ${pageGlobals.join('\n  ')}
             }
-          `
+            `
+            .split('\n')
+            .slice(1)
+            .map((line) => line.replace('            ', ''))
+            .join('\n')
 
           generateTypeDef('routes.d.ts', typeDefContent)
           generateTypeDefIndex()

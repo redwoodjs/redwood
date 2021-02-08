@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/cli",
   "description": "The Redwood Command Line",
-  "version": "0.19.3",
+  "version": "0.24.0",
   "license": "MIT",
   "bin": {
     "redwood": "./dist/index.js",
@@ -13,9 +13,9 @@
     "dist"
   ],
   "dependencies": {
-    "@prisma/sdk": "2.8.1",
-    "@redwoodjs/internal": "^0.19.3",
-    "@redwoodjs/structure": "^0.19.3",
+    "@prisma/sdk": "2.16.0",
+    "@redwoodjs/internal": "^0.24.0",
+    "@redwoodjs/structure": "^0.24.0",
     "boxen": "^4.2.0",
     "camelcase": "^6.0.0",
     "chalk": "^4.1.0",
@@ -25,7 +25,7 @@
     "decamelize": "^4.0.0",
     "dotenv-defaults": "^2.0.1",
     "envinfo": "^7.7.3",
-    "execa": "^4.0.0",
+    "execa": "^4.1.0",
     "fs-extra": "^9.0.1",
     "humanize-string": "^2.1.0",
     "listr": "^0.14.3",
@@ -42,10 +42,10 @@
     "@types/node-fetch": "^2.5.5"
   },
   "scripts": {
-    "build": "yarn build:js && yarn build:clean-dist",
+    "build": "yarn build:js",
     "prepublishOnly": "yarn build",
     "build:clean-dist": "yarn rimraf 'dist/**/__tests__'",
-    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\" --copy-files --no-copy-ignored",
+    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\" --copy-files --no-copy-ignored && yarn build:clean-dist",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build\"",
     "test": "jest",
     "test:watch": "yarn test --watch"

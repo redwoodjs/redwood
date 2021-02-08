@@ -1,18 +1,16 @@
 import { parse as parseGraphQL } from 'graphql'
 import * as tsm from 'ts-morph'
 import { DiagnosticSeverity } from 'vscode-languageserver-types'
+
 import { lazy } from '../x/decorators'
-import {
-  err,
-  ExtendedDiagnostic,
-  Range_fromNode,
-} from '../x/vscode-languageserver-types'
+import { err, Range_fromNode } from '../x/vscode-languageserver-types'
+
 import { RWComponent } from './RWComponent'
 
 export class RWCell extends RWComponent {
   /**
-   * A "Cell" is a component that ends in `Cell.{js, jsx, tsx}`, but does not
-   * have a default export AND does not export `QUERY`
+   * A "Cell" is a component that ends in `Cell.{js, jsx, tsx}`, has no
+   * default export AND exports `QUERY`
    **/
   @lazy() get isCell() {
     return !this.hasDefaultExport && this.exportedSymbols.has('QUERY')

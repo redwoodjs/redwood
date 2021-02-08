@@ -53,7 +53,7 @@ they will be redirected to the route passed as the `unauthenticated` prop and th
 <Router>
   <Route path="/" page={HomePage} name="home" />
   <Private unauthenticated="home">
-    <Routes path="/admin" page={AdminPage} name="admin" />
+    <Route path="/admin" page={AdminPage} name="admin" />
   </Private>
 </Router>
 ```
@@ -192,7 +192,7 @@ const userRouteParamTypes = {
 
 Here we've created a custom `slug` route parameter type. It is defined by a `constraint` and a `transform`. Both are optional; the default constraint is `/[^/]+/` and the default transform is `(param) => param`.
 
-In the route we've specified a route parameter of `{name:slug}` which will invoke our custom route parameter type and if we have a requst for `/post/redwood-router`, the resulting `name` prop delivered to `PostPage` will be `['redwood', 'router']`.
+In the route we've specified a route parameter of `{name:slug}` which will invoke our custom route parameter type and if we have a request for `/post/redwood-router`, the resulting `name` prop delivered to `PostPage` will be `['redwood', 'router']`.
 
 ## useParams
 

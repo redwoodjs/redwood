@@ -1,29 +1,44 @@
-import type { GlobalContext } from 'src/globalContext'
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
+
 import type { SupportedAuthTypes } from '@redwoodjs/auth'
 
-import { netlify } from './netlify'
+import type { GlobalContext } from 'src/globalContext'
+
 import { auth0 } from './auth0'
+import { azureActiveDirectory } from './azureActiveDirectory'
+import { ethereum } from './ethereum'
+import { netlify } from './netlify'
+import { supabase } from './supabase'
 const noop = (token: string) => token
 
-const typesToDecoders: Record<SupportedAuthTypes, Function> = {
+interface Req {
+  event: APIGatewayProxyEvent
+  context: GlobalContext & LambdaContext
+}
+
+type Decoded = null | string | Record<string, unknown>
+
+const typesToDecoders: Record<
+  SupportedAuthTypes,
+  | ((token: string) => Decoded | Promise<Decoded>)
+  | ((token: string, req: Req) => Decoded | Promise<Decoded>)
+> = {
   auth0: auth0,
+  azureActiveDirectory: azureActiveDirectory,
   netlify: netlify,
   goTrue: netlify,
   magicLink: noop,
   firebase: noop,
-  supabase: noop,
+  supabase: supabase,
+  ethereum: ethereum,
   custom: noop,
 }
 
 export const decodeToken = async (
   type: SupportedAuthTypes,
   token: string,
-  req: {
-    event: APIGatewayProxyEvent
-    context: GlobalContext & LambdaContext
-  }
-): Promise<null | string | Record<string, unknown>> => {
+  req: Req
+): Promise<Decoded> => {
   if (!typesToDecoders[type]) {
     // Make this a warning, instead of a hard error
     // Allow users to have multiple custom types if they choose to

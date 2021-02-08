@@ -1,6 +1,8 @@
-import { render, fireEvent } from '@testing-library/react'
-// TODO: Remove when jest configs are in place
 import { toHaveClass } from '@testing-library/jest-dom/matchers'
+import { render, fireEvent } from '@testing-library/react'
+import '@testing-library/jest-dom/extend-expect'
+
+// TODO: Remove when jest configs are in place
 expect.extend({ toHaveClass })
 
 import { FlashProvider, useFlash } from 'src/flash/FlashContext'
@@ -73,7 +75,7 @@ describe('<FlashProvider />', () => {
     expect(basicMessage).toHaveClass(testMessages.basic.classes)
     // dismiss the message
     fireEvent.click(basicMessage)
-    expect(queryByText(testMessages.basic.text)).toBeNull()
+    expect(queryByText(testMessages.basic.text)).not.toBeInTheDocument()
   })
 
   it('cycles messages correctly', () => {
@@ -94,7 +96,7 @@ describe('<FlashProvider />', () => {
     expect(getByText(testMessages.persisted.text)).toBeTruthy()
     // cycle the messages again (remove viewed)
     fireEvent.click(cycleButton)
-    expect(queryByText(testMessages.basic.text)).toBeNull()
+    expect(queryByText(testMessages.basic.text)).not.toBeInTheDocument()
     // but persisted messages should... persist
     expect(getByText(testMessages.persisted.text)).toBeTruthy()
   })

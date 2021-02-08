@@ -8,5 +8,5 @@ export const users = () => {
 
 export const User = {
   identity: (_obj, { root }: ResolverArgs<UserWhereUniqueInput>) =>
-    db.user.findOne({ where: { id: root.id } }).identity(),
+    db.user.findUnique({ where: { id: root.id } }).identity(),
 }

@@ -1,4 +1,4 @@
-<%if (crud || relations.length > 0) { %>import {
+<% if (crud || relations.length > 0) { %>import {
   ${singularPascalName}WhereUniqueInput,<% if (crud) { %>
   ${singularPascalName}CreateInput,
   ${singularPascalName}UpdateInput,<% } %>
@@ -11,7 +11,7 @@ export const ${pluralCamelName} = () => {
 }<% if (crud) { %>
 
 export const ${singularCamelName} = ({ id }: ${singularPascalName}WhereUniqueInput) => {
-  return db.${singularCamelName}.findOne({
+  return db.${singularCamelName}.findUnique({
     where: { id },
   })
 }
@@ -45,5 +45,5 @@ export const delete${singularPascalName} = ({ id }: ${singularPascalName}WhereUn
 }<% } %><% if (relations.length) { %>
 
 export const ${singularPascalName} = {<% relations.forEach(relation => { %>
-  ${relation}: (_obj, { root }: ResolverArgs<${singularPascalName}WhereUniqueInput>) => db.${singularCamelName}.findOne({ where: { id: root.id } }).${relation}(),<% }) %>
+  ${relation}: (_obj, { root }: ResolverArgs<${singularPascalName}WhereUniqueInput>) => db.${singularCamelName}.findUnique({ where: { id: root.id } }).${relation}(),<% }) %>
 }<% } %>
