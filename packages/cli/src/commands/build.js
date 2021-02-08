@@ -6,9 +6,9 @@ import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
 
-import { generatePrismaClient } from 'src/commands/prisma/generate'
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
+import { generatePrismaClient } from 'src/lib/generatePrismaClient'
 
 export const command = 'build [side..]'
 export const description = 'Build for production'

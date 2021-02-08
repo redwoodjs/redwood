@@ -6,9 +6,9 @@ import terminalLink from 'terminal-link'
 
 import { getConfig, shutdownPort } from '@redwoodjs/internal'
 
-import { generatePrismaClient } from 'src/commands/prisma/generate'
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
+import { generatePrismaClient } from 'src/lib/generatePrismaClient'
 
 export const command = 'dev [side..]'
 export const description = 'Start development servers for api, db, and web'
@@ -44,7 +44,6 @@ export const handler = async ({ side = ['api', 'web'], forward = '' }) => {
 
   if (side.includes('api')) {
     try {
-      // This command will check if the api side has a `prisma.schema` file.
       await generatePrismaClient({
         verbose: false,
         force: false,
