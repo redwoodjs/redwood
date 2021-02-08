@@ -53,7 +53,7 @@ const removeScenario = async (scenario) => {
 
     const prismaModelNames = (
       await getSchemaDefinitions()
-    ).datamodel.models.map(m => m.name)
+    ).datamodel.models.map((m) => m.name)
     const exactNameMapping = models.reduce((map, model) => {
       const lowerModel = model.toLowerCase()
       const prismaModelName = prismaModelNames.find(
