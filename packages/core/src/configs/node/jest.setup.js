@@ -53,12 +53,18 @@ const removeScenario = async (scenario) => {
     // get unique model names only
     models = Array.from(new Set(models))
 
-    for (const model of models) {
-      // Casing must be exact in postgres.  We currently assume tables have
-      // PascalCasing, but should switch to exact table names when Prisma exposes
-      const pascalModel = nameVariants(model).pascalModel
+    const prismaModelNames = (await getSchemaDefinitions()).datamodel.models.map(m => m.name)
+    const exactNameMapping = models.reduce((map, model) => {
+      const lowerModel = model.toLowerCase()
+      const prismaModelName = prismaModelNames.find((prismaModel) => prismaModel.toLowerCase() === lowerModel)
 
-      await db.$queryRaw(`DELETE FROM "${pascalModel}"`);
+      map[model] = prismaModelName
+
+      return map
+    }, {})
+
+    for (const model of models) {
+      await db.$queryRaw(`DELETE FROM "${exactNameMapping[model]}"`);
     }
   }
 }
