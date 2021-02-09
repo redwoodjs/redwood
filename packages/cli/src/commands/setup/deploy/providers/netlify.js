@@ -3,7 +3,7 @@ import path from 'path'
 import { getPaths } from 'src/lib'
 
 const NETLIFY_TOML = `[build]
-command = "yarn rw build && yarn rw db up --no-db-client --auto-approve && yarn rw dataMigrate up"
+command = "yarn rw deploy netlify"
 publish = "web/dist"
 functions = "api/dist/functions"
 
