@@ -42,16 +42,6 @@
       ]
     },
     {
-      "login": "kimadeline",
-      "name": "Kim-Adeline Miguel",
-      "avatar_url": "https://avatars3.githubusercontent.com/u/51720070?v=4",
-      "profile": "https://twitter.com/kimadeline_m",
-      "contributions": [
-        "code",
-        "doc"
-      ]
-    },
-    {
       "login": "Terris",
       "name": "Terris Kremer",
       "avatar_url": "https://avatars0.githubusercontent.com/u/458233?v=4",
@@ -560,17 +550,6 @@
         "code",
         "tool",
         "doc"
-      ]
-    },
-    {
-      "login": "forresthayes",
-      "name": "Forrest Hayes",
-      "avatar_url": "https://avatars0.githubusercontent.com/u/44448047?v=4",
-      "profile": "https://github.com/forresthayes",
-      "contributions": [
-        "code",
-        "doc",
-        "tool"
       ]
     },
     {
@@ -1487,6 +1466,61 @@
       "name": "Shrill Shrestha",
       "avatar_url": "https://avatars.githubusercontent.com/u/43284212?v=4",
       "profile": "https://shrill-shrestha-portfolio.herokuapp.com/",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "brentjanderson",
+      "name": "Brent Anderson",
+      "avatar_url": "https://avatars.githubusercontent.com/u/45031?v=4",
+      "profile": "https://www.brentjanderson.com/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "VinayaSathyanarayana",
+      "name": "Vinaya Sathyanarayana",
+      "avatar_url": "https://avatars.githubusercontent.com/u/16976677?v=4",
+      "profile": "https://github.com/VinayaSathyanarayana",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "wminshew",
+      "name": "Will Minshew",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9845502?v=4",
+      "profile": "https://www.willminshew.com/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "agiannelli",
+      "name": "Amanda Giannelli",
+      "avatar_url": "https://avatars.githubusercontent.com/u/53096355?v=4",
+      "profile": "https://github.com/agiannelli",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "TawfikYasser",
+      "name": "Tawfik Yasser",
+      "avatar_url": "https://avatars.githubusercontent.com/u/54971231?v=4",
+      "profile": "https://www.linkedin.com/in/tawfikyasser",
+      "contributions": [
+        "doc",
+        "tutorial"
+      ]
+    },
+    {
+      "login": "slorber",
+      "name": "Sébastien Lorber",
+      "avatar_url": "https://avatars.githubusercontent.com/u/749374?v=4",
+      "profile": "https://sebastienlorber.com/",
       "contributions": [
         "tutorial"
       ]
