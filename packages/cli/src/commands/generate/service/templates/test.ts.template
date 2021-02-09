@@ -15,22 +15,22 @@ describe('${pluralCamelName}', () => {
 
   scenario('creates a ${singularCamelName}', async (scenario) => {
     const result = await create${singularPascalName}({
-      input: ${JSON.stringify(input)},
+      input: ${JSON.stringify(input).replace(/["'](scenario\.[^ ]*?)["']/g, '$1')},
     })
 
     <% for (const [name, value] of Object.entries(input)) { %>
-    expect(result.${name}).toEqual(${JSON.stringify(value)})<% } %>
+    expect(result.${name}).toEqual(${JSON.stringify(value).replace(/["'](scenario\.[^ ]*?)["']/g, '$1')})<% } %>
   })
 
   scenario('updates a ${singularCamelName}', async (scenario) => {<% rand = parseInt(Math.random() * 10000000) %>
     const original = await ${singularCamelName}({ id: scenario.${singularCamelName}.one.id })
     const result = await update${singularPascalName}({
       id: original.id,
-      input: ${JSON.stringify(update)},
+      input: ${JSON.stringify(update).replace(/["'](scenario\.[^ ]*?)["']/g, '$1')},
     })
 
     <% for (const [name, value] of Object.entries(update)) { %>
-    expect(result.${name}).toEqual(${JSON.stringify(value)})<% } %>
+    expect(result.${name}).toEqual(${JSON.stringify(value).replace(/["'](scenario\.[^ ]*?)["']/g, '$1')})<% } %>
   })
 
   scenario('deletes a ${singularCamelName}', async (scenario) => {

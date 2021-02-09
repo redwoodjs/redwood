@@ -37,16 +37,12 @@ export const parseSchema = async (model) => {
     )
   })
 
-  // remove scalars that are foreign keys
-  scalarFields = scalarFields.filter((field) => {
-    return !foreignKeys.includes(field.name)
-  })
-
   return { scalarFields, relations }
 }
 
 export const scenarioFieldValue = (field) => {
   const rand = parseInt(Math.random() * 10000000)
+
   switch (field.type) {
     case 'String':
       return field.isUnique ? `String${rand}` : 'String'
@@ -59,14 +55,22 @@ export const scenarioFieldValue = (field) => {
 
 export const fieldsToScenario = async (scalarFields, relations) => {
   const data = {}
+  let foreignKeys = []
 
-  // scalars
-  scalarFields.forEach((field) => {
-    data[field.name] = scenarioFieldValue(field)
+  // get all foreign keys in this model
+  Object.entries(relations).forEach((relationship) => {
+    foreignKeys = foreignKeys.concat(relationship[1])
   })
 
-  // relations
-  for (const [relation, _foreignKeys] of Object.entries(relations)) {
+  // remove foreign keys from scalars
+  scalarFields.forEach((field) => {
+    if (!foreignKeys.includes(field.name)) {
+      data[field.name] = scenarioFieldValue(field)
+    }
+  })
+
+  // add back in related models and create them
+  for (const [relation, _foreignKey] of Object.entries(relations)) {
     const relationModelName = pascalcase(pluralize.singular(relation))
     const {
       scalarFields: relScalarFields,
@@ -102,38 +106,57 @@ export const buildScenario = async (model) => {
 
 // outputs fields necessary to create an object in the test file
 export const fieldsToInput = async (model) => {
-  const { scalarFields, _relations } = await parseSchema(model)
-  const inputObj = {}
+  const { scalarFields, relations } = await parseSchema(model)
+  let inputObj = {}
 
-  scalarFields.forEach((field) => {
-    inputObj[field.name] = scenarioFieldValue(field)
-  })
+  if (scalarFields.length) {
+    scalarFields.forEach((field) => {
+      inputObj[field.name] = scenarioFieldValue(field)
+    })
+  } else {
+    const modelName = camelcase(pluralize.singular(model))
+    for (const [_relation, foreignKeys] of Object.entries(relations)) {
+      inputObj[foreignKeys[0]] = `scenario.${modelName}.two.${foreignKeys[0]}`
+    }
+  }
 
   return inputObj
 }
 
 export const fieldsToUpdate = async (model) => {
-  const { scalarFields } = await parseSchema(model)
-  const field = scalarFields[0]
-  const value = scenarioFieldValue(field)
-  let newValue = value
+  const { scalarFields, relations } = await parseSchema(model)
+  let field = {}
+  let newValue
 
-  // depending on the field type, append/update the value to something different
-  switch (field.type) {
-    case 'String': {
-      newValue = newValue + '2'
-      break
+  if (scalarFields.length) {
+    // change scalar fields
+    field = scalarFields[0]
+    const value = scenarioFieldValue(field)
+    newValue = value
+
+    // depending on the field type, append/update the value to something different
+    switch (field.type) {
+      case 'String': {
+        newValue = newValue + '2'
+        break
+      }
+      case 'Int': {
+        newValue = newValue + 1
+        break
+      }
+      case 'DateTime': {
+        let date = new Date()
+        date.setDate(date.getDate() + 1)
+        newValue = date.toISOString().replace(/\.\d{3}/, '')
+        break
+      }
     }
-    case 'Int': {
-      newValue = newValue + 1
-      break
-    }
-    case 'DateTime': {
-      let date = new Date()
-      date.setDate(date.getDate() + 1)
-      newValue = date.toISOString().replace(/\.\d{3}/, '')
-      break
-    }
+  } else {
+    const modelName = camelcase(pluralize.singular(model))
+    // no scalar fields, change a relation field instead
+    // { post: [ 'postId' ], tag: [ 'tagId' ] }
+    field.name = Object.values(relations)[0]
+    newValue = `scenario.${modelName}.two.${field.name}`
   }
 
   return { [field.name]: newValue }
