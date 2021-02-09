@@ -6,9 +6,9 @@ import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
 
-import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
 import { getPaths, getConfig } from 'src/lib'
 import c from 'src/lib/colors'
+import { generatePrismaClient } from 'src/lib/generatePrismaClient'
 
 export const command = 'build [side..]'
 export const description = 'Build for production'
@@ -67,7 +67,7 @@ export const handler = async ({
     },
     web: {
       cwd: path.join(getPaths().base, 'web'),
-      cmd: `yarn webpack --config ../node_modules/@redwoodjs/core/config/webpack.${
+      cmd: `yarn cross-env NODE_ENV=production webpack --config ../node_modules/@redwoodjs/core/config/webpack.${
         stats ? 'stats' : 'production'
       }.js`,
     },

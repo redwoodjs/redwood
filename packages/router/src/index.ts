@@ -13,9 +13,9 @@ export {
   routes,
   useParams,
   useLocation,
+  LocationProvider,
   navigate,
   PageLoadingContext,
-  LocationProvider,
 } from './internal'
 
 export { usePageLoadingContext } from './page-loader'

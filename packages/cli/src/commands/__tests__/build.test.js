@@ -5,6 +5,7 @@ let mockedRedwoodConfig = {
   web: {},
   browser: {},
 }
+
 jest.mock('src/lib', () => {
   return {
     ...jest.requireActual('src/lib'),
@@ -34,7 +35,7 @@ afterEach(() => {
   jest.clearAllMocks()
 })
 
-test('Should clean api and web dist directories, before build', async () => {
+test('Should clean web dist directory, before build', async () => {
   await handler({})
   expect(execa.mock.results[0].value).toEqual(`rimraf dist/*`)
 })
@@ -50,7 +51,7 @@ test('The build command runs the correct commands.', async () => {
   )
 
   expect(execa.mock.results[2].value).toEqual(
-    `yarn webpack --config ../node_modules/@redwoodjs/core/config/webpack.production.js`
+    `yarn cross-env NODE_ENV=production webpack --config ../node_modules/@redwoodjs/core/config/webpack.production.js`
   )
 })
 
@@ -62,7 +63,7 @@ test('Should run prerender for web, when experimental flag is on', async () => {
   }
   await handler({ side: ['web'] })
   expect(execa.mock.results[1].value).toEqual(
-    'yarn webpack --config ../node_modules/@redwoodjs/core/config/webpack.production.js'
+    'yarn cross-env NODE_ENV=production webpack --config ../node_modules/@redwoodjs/core/config/webpack.production.js'
   )
 
   expect(execa.mock.results[2].value).toEqual('yarn rw prerender')
