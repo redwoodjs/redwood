@@ -10,8 +10,11 @@
     },
     "allowJs": true
   },
-	"include": ["./src/**/*", "ambient.d.ts"],
+  "include": ["./src/**/*", "ambient.d.ts"],
   "references": [
     { "path": "../auth" },
+    { "path": "../router" },
+    { "path": "../internal" },
+    { "path": "../web" }
   ]
 }
