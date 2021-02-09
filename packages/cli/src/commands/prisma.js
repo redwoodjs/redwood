@@ -52,15 +52,12 @@ export const builder = (yargs) => {
     autoFlags.push('--schema', `"${paths.api.dbSchema}"`)
   }
 
-  execa(
-    path.join(paths.base, 'node_modules/.bin/prisma'),
-    [...argv.filter((x) => ['--help'].includes(x)), ...autoFlags],
-    {
-      shell: true,
-      stdio: 'inherit',
-      cwd: paths.api.base,
-      extendEnv: true,
-      cleanup: true,
-    }
-  )
+  const args = [...argv.filter((x) => !['--help'].includes(x)), ...autoFlags]
+  execa(path.join(paths.base, 'node_modules/.bin/prisma'), args, {
+    shell: true,
+    stdio: 'inherit',
+    cwd: paths.api.base,
+    extendEnv: true,
+    cleanup: true,
+  })
 }
