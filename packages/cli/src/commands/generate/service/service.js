@@ -50,6 +50,13 @@ export const scenarioFieldValue = (field) => {
       return rand
     case 'DateTime':
       return new Date().toISOString().replace(/\.\d{3}/, '')
+    case 'Json':
+      return { foo: 'bar' }
+    default: {
+      if (field.kind === 'enum' && field.enumValues[0]) {
+        return field.enumValues[0].dbName || field.enumValues[0].name
+      }
+    }
   }
 }
 
@@ -62,7 +69,7 @@ export const fieldsToScenario = async (
 
   // remove foreign keys from scalars
   scalarFields.forEach((field) => {
-    if (!foreignKeys.includes(field.name)) {
+    if (!foreignKeys.length || !foreignKeys.includes(field.name)) {
       data[field.name] = scenarioFieldValue(field)
     }
   })
@@ -156,6 +163,20 @@ export const fieldsToUpdate = async (model) => {
         let date = new Date()
         date.setDate(date.getDate() + 1)
         newValue = date.toISOString().replace(/\.\d{3}/, '')
+        break
+      }
+      case 'Json': {
+        newValue = { foo: 'baz' }
+        break
+      }
+      default: {
+        if (
+          field.kind === 'enum' &&
+          field.enumValues[field.enumValues.length - 1]
+        ) {
+          const enumVal = field.enumValues[field.enumValues.length - 1]
+          newValue = enumVal.dbName || enumVal.name
+        }
         break
       }
     }
