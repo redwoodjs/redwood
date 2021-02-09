@@ -37,7 +37,7 @@ export const parseSchema = async (model) => {
     )
   })
 
-  return { scalarFields, relations }
+  return { scalarFields, relations, foreignKeys }
 }
 
 export const scenarioFieldValue = (field) => {
@@ -53,14 +53,12 @@ export const scenarioFieldValue = (field) => {
   }
 }
 
-export const fieldsToScenario = async (scalarFields, relations) => {
+export const fieldsToScenario = async (
+  scalarFields,
+  relations,
+  foreignKeys
+) => {
   const data = {}
-  let foreignKeys = []
-
-  // get all foreign keys in this model
-  Object.entries(relations).forEach((relationship) => {
-    foreignKeys = foreignKeys.concat(relationship[1])
-  })
 
   // remove foreign keys from scalars
   scalarFields.forEach((field) => {
@@ -69,16 +67,21 @@ export const fieldsToScenario = async (scalarFields, relations) => {
     }
   })
 
-  // add back in related models and create them
+  // add back in related models by name so they can be created with prisma create syntax
   for (const [relation, _foreignKey] of Object.entries(relations)) {
     const relationModelName = pascalcase(pluralize.singular(relation))
     const {
       scalarFields: relScalarFields,
       relations: relRelations,
+      foreignKeys: relForeignKeys,
     } = await parseSchema(relationModelName)
 
     data[relation] = {
-      create: await fieldsToScenario(relScalarFields, relRelations),
+      create: await fieldsToScenario(
+        relScalarFields,
+        relRelations,
+        relForeignKeys
+      ),
     }
   }
 
@@ -91,13 +94,14 @@ export const buildScenario = async (model) => {
   const standardScenario = {
     [scenarioModelName]: {},
   }
-  const { scalarFields, relations } = await parseSchema(model)
+  const { scalarFields, relations, foreignKeys } = await parseSchema(model)
 
   // turn scalar fields into actual scenario data
   for (const name of DEFAULT_SCENARIO_NAMES) {
     standardScenario[scenarioModelName][name] = await fieldsToScenario(
       scalarFields,
-      relations
+      relations,
+      foreignKeys
     )
   }
 
@@ -106,31 +110,35 @@ export const buildScenario = async (model) => {
 
 // outputs fields necessary to create an object in the test file
 export const fieldsToInput = async (model) => {
-  const { scalarFields, relations } = await parseSchema(model)
+  const { scalarFields, foreignKeys } = await parseSchema(model)
+  const modelName = camelcase(pluralize.singular(model))
   let inputObj = {}
 
-  if (scalarFields.length) {
-    scalarFields.forEach((field) => {
+  scalarFields.forEach((field) => {
+    if (foreignKeys.includes(field.name)) {
+      inputObj[field.name] = `scenario.${modelName}.two.${field.name}`
+    } else {
       inputObj[field.name] = scenarioFieldValue(field)
-    })
-  } else {
-    const modelName = camelcase(pluralize.singular(model))
-    for (const [_relation, foreignKeys] of Object.entries(relations)) {
-      inputObj[foreignKeys[0]] = `scenario.${modelName}.two.${foreignKeys[0]}`
     }
-  }
+  })
 
   return inputObj
 }
 
+// outputs fields necessary to update an object in the test file
 export const fieldsToUpdate = async (model) => {
-  const { scalarFields, relations } = await parseSchema(model)
-  let field = {}
+  const { scalarFields, relations, foreignKeys } = await parseSchema(model)
+  const modelName = camelcase(pluralize.singular(model))
+  let field = scalarFields[0]
   let newValue
 
-  if (scalarFields.length) {
+  if (foreignKeys.includes(field.name)) {
+    // no scalar fields, change a relation field instead
+    // { post: [ 'postId' ], tag: [ 'tagId' ] }
+    field.name = Object.values(relations)[0]
+    newValue = `scenario.${modelName}.two.${field.name}`
+  } else {
     // change scalar fields
-    field = scalarFields[0]
     const value = scenarioFieldValue(field)
     newValue = value
 
@@ -151,12 +159,6 @@ export const fieldsToUpdate = async (model) => {
         break
       }
     }
-  } else {
-    const modelName = camelcase(pluralize.singular(model))
-    // no scalar fields, change a relation field instead
-    // { post: [ 'postId' ], tag: [ 'tagId' ] }
-    field.name = Object.values(relations)[0]
-    newValue = `scenario.${modelName}.two.${field.name}`
   }
 
   return { [field.name]: newValue }
