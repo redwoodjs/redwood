@@ -1,10 +1,10 @@
 export const preRequisites = [
   {
-    title: 'Checking if serverless is installed...',
+    title: 'Checking if Serverless framework is installed...',
     command: ['serverless', ['--version']],
     errorMessage: [
-      'Looks like serverless is not installed.',
-      'Please follow the steps at https://www.serverless.com/framework/docs/providers/aws/guide/installation/ to install serverless.',
+      'Looks like Serverless is not installed.',
+      'Please follow the steps at https://www.serverless.com/framework/docs/providers/aws/guide/installation/ to install Serverless.',
     ],
   },
   {
@@ -12,7 +12,7 @@ export const preRequisites = [
     command: ['yarn', ['zip-it-and-ship-it', '--version']],
     errorMessage: [
       'Looks like @netlify/zip-it-and-ship-it is not installed.',
-      'Either run `yarn rw g deploy aws_serverless` or add it seperately as a dev dependency in the api workspace.',
+      'Either run `yarn rw setup aws-serverless` or add it seperately as a dev dependency in the api workspace.',
     ],
   },
 ]
