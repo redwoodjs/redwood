@@ -10,7 +10,8 @@ import Step3_2_PagesHome from './codemods/Step3_2_PagesHome'
 import Step3_3_PagesAbout from './codemods/Step3_3_PagesAbout'
 import Step4_1_DbSchema from './codemods/Step4_1_DbSchema'
 import Step5_1_ComponentsCellBlogPost from './codemods/Step5_1_ComponentsCellBlogPost'
-import Step5_2_PagesHome from './codemods/Step5_2_PagesHome'
+import Step5_2_ComponentsCellBlogPostTest from './codemods/Step5_2_ComponentsCellBlogPostTest'
+import Step5_3_PagesHome from './codemods/Step5_3_PagesHome'
 
 const BASE_DIR = Cypress.env('RW_PATH')
 
@@ -79,14 +80,13 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     // https://redwoodjs.com/tutorial/getting-dynamic
     cy.writeFile(path.join(BASE_DIR, 'api/db/schema.prisma'), Step4_1_DbSchema)
     cy.exec(`rm ${BASE_DIR}/api/db/dev.db`, { failOnNonZeroExit: false })
-    cy.exec(`cd ${BASE_DIR}; yarn rw db save`, {
+    cy.exec(`cd ${BASE_DIR}; yarn rw prisma migrate dev`, {
       env: {
         DATABASE_URL: 'file:./dev.db',
         BINARY_TARGET: 'native',
       },
     })
 
-    cy.exec(`cd ${BASE_DIR}; yarn rw db up`)
     cy.exec(`cd ${BASE_DIR}; yarn rw g scaffold post --force`)
 
     cy.visit('http://localhost:8910/posts')
@@ -130,8 +130,15 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       Step5_1_ComponentsCellBlogPost
     )
     cy.writeFile(
+      path.join(
+        BASE_DIR,
+        'web/src/components/BlogPostsCell/BlogPostsCell.test.js'
+      ),
+      Step5_2_ComponentsCellBlogPostTest
+    )
+    cy.writeFile(
       path.join(BASE_DIR, 'web/src/pages/HomePage/HomePage.js'),
-      Step5_2_PagesHome
+      Step5_3_PagesHome
     )
     cy.get('main').should(
       'contain',
