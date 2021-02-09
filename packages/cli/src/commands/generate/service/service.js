@@ -24,7 +24,7 @@ export const parseSchema = async (model) => {
   let scalarFields = schema.fields.filter((field) => {
     if (field.relationFromFields) {
       // only build relations for those that are required
-      if (field.isRequired) {
+      if (field.isRequired && field.relationFromFields.length !== 0) {
         relations[field.name] = field.relationFromFields
       }
       foreignKeys = foreignKeys.concat(field.relationFromFields)
