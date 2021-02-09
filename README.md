@@ -52,7 +52,7 @@ use:
 - [GraphQL](https://graphql.org/) ([Apollo](https://github.com/apollographql))
 - [Prisma](https://www.prisma.io/)
 - [Jest](https://jestjs.io/) (coming soon)
-- [Storybook](https://storybook.js.org/) (coming soon)
+- [Storybook](https://storybook.js.org/) 
 - [Babel](https://babeljs.io/)
 - [Webpack](https://webpack.js.org/)
 

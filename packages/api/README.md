@@ -91,7 +91,7 @@ import schemas from 'src/graphql/**/*.{js,ts}'
 import services from 'src/services/**/*.{js,ts}'
 ```
 
-Using `services` as an example, `services` will be an obejct that contains all the imports of all the matched files in the specified directory (here, services). It's the equivalent of running:
+Using `services` as an example, `services` will be an object that contains all the imports of all the matched files in the specified directory (here, services). It's the equivalent of running:
 
 ```javascript
 let services = {}

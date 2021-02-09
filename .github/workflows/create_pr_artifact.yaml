@@ -5,6 +5,7 @@ on: pull_request
 jobs:
   create_pr_artifact:
     name: Create PR Artifact
+    if: github.repository == 'redwoodjs/redwood'
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -37,6 +38,7 @@ jobs:
           for f in * ; do
             mv -- "$f" "${f%.tgz}-${sha:0:7}.tgz"
           done
+
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
