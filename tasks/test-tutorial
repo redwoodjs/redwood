@@ -32,7 +32,7 @@ fi
 
 cd "$SCRIPTPATH/../"
 # build all the packages
-yarn build
+yarn build:clean && yarn lerna run build:js
 
 cd $TMP_DIR
 
