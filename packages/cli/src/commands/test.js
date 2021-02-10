@@ -100,7 +100,7 @@ export const handler = async ({
 
     // Create a test database
     if (sides.includes('api')) {
-      await execa.command(`yarn rw prisma migrate dev`, {
+      await execa.command(`yarn rw prisma db push --force`, {
         stdio: 'inherit',
         shell: true,
         env: { DATABASE_URL },
