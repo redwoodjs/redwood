@@ -22,7 +22,8 @@ export const description = 'Run Prisma CLI with experimental features'
  * 3. __REDWOOD__CONFIG_PATH=../../__fixtures__/example-todo-main yarn node dist/index.js prisma <test commands>
  */
 export const builder = async (yargs: Argv) => {
-  const argv = process.argv.slice(3)
+  // accept either help or --help, which is the same behavior as all the other RW Yargs commands.
+  const argv = mapHelpCommandToFlag(process.argv.slice(3))
 
   // We dynamically create the `--options` that are passed to this command.
   // TODO: Figure out if there's a way to turn off yargs parsing.
@@ -54,7 +55,6 @@ export const builder = async (yargs: Argv) => {
   if (!hasHelpFlag) {
     if (['migrate', 'db'].includes(argv[0])) {
       // this is safe as is if a user also adds --preview-feature
-      // @TODO might be nice to message user in case of ^^
       autoFlags.push('--preview-feature')
     }
 
@@ -72,19 +72,7 @@ export const builder = async (yargs: Argv) => {
   }
 
   // Set prevents duplicate flags
-  // accept either help or --help, which is the same behavior as all the other RW Yargs commands.
-  const argsSet = new Set(
-    argv.some((x) => x.includes('help'))
-      ? [
-          ...argv.filter(
-            (x) => !['--help'].includes(x) && !['help'].includes(x)
-          ),
-          '--help',
-        ]
-      : [...argv, ...autoFlags]
-  )
-
-  const args = Array.from(argsSet)
+  const args = Array.from(new Set([...argv, ...autoFlags]))
 
   console.log(
     c.green(`Running prisma cli: \n`) +
@@ -115,10 +103,21 @@ export const builder = async (yargs: Argv) => {
       printRwWrapperInfo()
     }
   } catch (e) {
+    // Show stderr
+    console.log(e.stderr)
     // Prisma cli shows help on error
     printRwWrapperInfo()
     process.exit(1)
   }
+}
+
+const mapHelpCommandToFlag = (argv: string[]) => {
+  return argv.some((x) => x.includes('help'))
+    ? [
+        ...argv.filter((x) => !['--help'].includes(x) && !['help'].includes(x)),
+        '--help',
+      ]
+    : argv
 }
 
 const printRwWrapperInfo = () => {
