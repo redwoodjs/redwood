@@ -1,9 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import boxen from 'boxen'
 import camelcase from 'camelcase'
-import chalk from 'chalk'
 import humanize from 'humanize-string'
 import Listr from 'listr'
 import { paramCase } from 'param-case'
@@ -449,29 +447,10 @@ export const handler = async ({
   javascript,
 }) => {
   const { model, path } = splitPathAndModel(modelArg)
-
   const t = tasks({ model, path, force, typescript, javascript })
-  const schema = await getSchema(pascalcase(pluralize.singular(model)))
-  const line1 =
-    chalk.bold.yellow('WARNING') +
-    `: Because the data model "${pascalcase(model)}" contains a`
-  const line2 = 'Prisma @relation, the generated CRUD code and test must be'
-  const line3 =
-    'manually modified to work correctly. See this doc for more info:'
-  const line4 = chalk.underline.blue(
-    'https://redwoodjs.com/docs/schema-relations'
-  )
+
   try {
     await t.run()
-    if (relationsForModel(schema).length) {
-      console.log(
-        boxen(line1 + '\n' + line2 + '\n' + line3 + '\n' + line4, {
-          padding: 1,
-          margin: 1,
-          borderStyle: 'single',
-        })
-      )
-    }
   } catch (e) {
     console.log(c.error(e.message))
   }

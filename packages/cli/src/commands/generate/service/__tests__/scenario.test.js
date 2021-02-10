@@ -4,7 +4,7 @@ import { loadGeneratorFixture as _loadGeneratorFixture } from 'src/lib/test'
 import * as service from '../service'
 
 describe('the scenario generator', () => {
-  test('parseSchema returns an object with required, non-relation scalar fields', async () => {
+  test('parseSchema returns an object with required scalar fields', async () => {
     const { scalarFields } = await service.parseSchema('UserProfile')
 
     expect(scalarFields).toEqual([
@@ -21,6 +21,19 @@ describe('the scenario generator', () => {
         isGenerated: false,
         isUpdatedAt: false,
       },
+      {
+        hasDefaultValue: false,
+        isGenerated: false,
+        isId: false,
+        isList: false,
+        isReadOnly: true,
+        isRequired: true,
+        isUnique: false,
+        isUpdatedAt: false,
+        kind: 'scalar',
+        name: 'userId',
+        type: 'Int',
+      },
     ])
   })
 
@@ -34,6 +47,12 @@ describe('the scenario generator', () => {
     const { relations } = await service.parseSchema('UserProfile')
 
     expect(relations).toEqual({ user: ['userId'] })
+  })
+
+  test('parseSchema returns an object with foreign keys', async () => {
+    const { foreignKeys } = await service.parseSchema('UserProfile')
+
+    expect(foreignKeys).toEqual(['userId'])
   })
 
   test('scenarioFieldValue returns a plain string for non-unique String types', () => {
@@ -63,6 +82,38 @@ describe('the scenario generator', () => {
     expect(service.scenarioFieldValue(field)).toMatch(iso8601Regex)
   })
 
+  test('scenarioFieldValue returns JSON for Json types', () => {
+    const field = { type: 'Json' }
+
+    expect(service.scenarioFieldValue(field)).toEqual({ foo: 'bar' })
+  })
+
+  test('scenarioFieldValue returns the first enum option for enum kinds', () => {
+    const field = {
+      type: 'Color',
+      kind: 'enum',
+      enumValues: [
+        { name: 'Red', dbValue: null },
+        { name: 'Blue', dbValue: null },
+      ],
+    }
+
+    expect(service.scenarioFieldValue(field)).toEqual('Red')
+  })
+
+  test('scenarioFieldValue returns the dbName for enum types if present', () => {
+    const field = {
+      type: 'Color',
+      kind: 'enum',
+      enumValues: [
+        { name: 'Red', dbName: 'color-red' },
+        { name: 'Blue', dbName: 'color-blue' },
+      ],
+    }
+
+    expect(service.scenarioFieldValue(field)).toEqual('color-red')
+  })
+
   test('fieldsToScenario returns scenario data for scalarFields', async () => {
     const scalarFields = [
       {
@@ -76,7 +127,7 @@ describe('the scenario generator', () => {
         isUnique: true,
       },
     ]
-    const scenario = await service.fieldsToScenario(scalarFields, [])
+    const scenario = await service.fieldsToScenario(scalarFields, [], [])
 
     expect(Object.keys(scenario).length).toEqual(2)
     expect(scenario.firstName).toEqual(expect.any(String))
@@ -85,9 +136,15 @@ describe('the scenario generator', () => {
   })
 
   test('fieldsToScenario returns scenario data for nested relations', async () => {
-    const { scalarFields, relations } = await service.parseSchema('UserProfile')
+    const { scalarFields, relations, foreignKeys } = await service.parseSchema(
+      'UserProfile'
+    )
 
-    const scenario = await service.fieldsToScenario(scalarFields, relations)
+    const scenario = await service.fieldsToScenario(
+      scalarFields,
+      relations,
+      foreignKeys
+    )
 
     expect(scenario.user).toEqual(
       expect.objectContaining({
