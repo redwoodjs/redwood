@@ -1,9 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import boxen from 'boxen'
 import camelcase from 'camelcase'
-import chalk from 'chalk'
 import humanize from 'humanize-string'
 import Listr from 'listr'
 import { paramCase } from 'param-case'
