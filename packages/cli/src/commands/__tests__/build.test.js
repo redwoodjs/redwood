@@ -33,6 +33,6 @@ test('The build command runs the correct commands.', async () => {
   )
 
   expect(execa.mock.results[1].value).toEqual(
-    `yarn webpack --config ../node_modules/@redwoodjs/core/config/webpack.production.js`
+    `yarn cross-env NODE_ENV=production webpack --config ../node_modules/@redwoodjs/core/config/webpack.production.js`
   )
 })
