@@ -33,7 +33,7 @@ export const builder = (yargs) => {
         [cv]: {},
       }
     }, {})
-  yargs.help(false).option(options)
+  yargs.help(false).version(false).option(options)
 
   const paths = getPaths()
 
