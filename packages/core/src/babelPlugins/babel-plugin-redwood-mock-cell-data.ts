@@ -60,7 +60,8 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         const dir = URL_file(path.dirname(state.file.opts.filename))
         const project = getProject(getBaseDirFromFile(filename))
         const cell = project.cells.find((x) => x.uri.startsWith(dir))
-        if (!cell) {
+
+        if (!cell || !cell?.filePath) {
           return
         }
 
@@ -69,7 +70,9 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         }
 
         // export const standard
-        const exportStandard = (ex: types.CallExpression) =>
+        const exportStandard = (
+          ex: types.CallExpression | types.ArrowFunctionExpression
+        ) =>
           t.exportNamedDeclaration(
             t.variableDeclaration('const', [
               t.variableDeclarator(t.identifier('standard'), ex),
@@ -85,8 +88,8 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         // Delete original "export const standard"
         nodesToRemove = [...nodesToRemove, p]
 
-        // + import { afterQuery } from './'
-        // + export const standard = afterQuery(...)
+        // + import { afterQuery } from './${cellFileName}'
+        // + export const standard = () => afterQuery(...)
         if (cell.exportedSymbols.has('afterQuery')) {
           const importAfterQuery = t.importDeclaration(
             [
@@ -95,14 +98,19 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
                 t.identifier('afterQuery')
               ),
             ],
-            t.stringLiteral('./')
+            t.stringLiteral(`./${path.basename(cell.filePath)}`)
           )
 
           nodesToInsert = [
             ...nodesToInsert,
             importAfterQuery,
             exportStandard(
-              t.callExpression(t.identifier('afterQuery'), [mockGraphQLCall])
+              t.arrowFunctionExpression(
+                [],
+                t.callExpression(t.identifier('afterQuery'), [
+                  t.callExpression(mockGraphQLCall, []),
+                ])
+              )
             ),
           ]
         } else {
