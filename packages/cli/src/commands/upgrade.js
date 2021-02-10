@@ -2,9 +2,9 @@ import execa from 'execa'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
 
-import { generatePrismaClient } from 'src/commands/prisma/generate'
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
+import { generatePrismaClient } from 'src/lib/generatePrismaClient'
 
 export const command = 'upgrade'
 export const description = 'Upgrade all @redwoodjs packages via interactive CLI'
