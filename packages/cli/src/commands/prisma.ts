@@ -80,12 +80,11 @@ export const builder = async (yargs: Argv) => {
   )
 
   try {
-    const { stdout } = await execa(
+    const prismaCommand = execa(
       `"${path.join(paths.base, 'node_modules/.bin/prisma')}"`,
       args,
       {
         shell: true,
-        stdio: 'pipe',
         cwd: paths.api.base,
         extendEnv: true,
         cleanup: true,
@@ -95,16 +94,18 @@ export const builder = async (yargs: Argv) => {
         },
       }
     )
+    prismaCommand.stdout?.pipe(process.stdout)
+
+    // So we can check for yarn prisma in the output
+    const { stdout } = await prismaCommand
 
     // Show prisma cli output
-    console.log(stdout)
+    // console.log(stdout)
 
     if (hasHelpFlag || stdout.match('yarn prisma')) {
       printRwWrapperInfo()
     }
   } catch (e) {
-    // Show stderr
-    console.log(e.stderr)
     // Prisma cli shows help on error
     printRwWrapperInfo()
     process.exit(1)
