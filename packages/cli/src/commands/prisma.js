@@ -56,7 +56,13 @@ export const builder = (yargs) => {
     autoFlags.push('--schema', `"${paths.api.dbSchema}"`)
   }
 
-  const args = [...argv.filter((x) => !['--help'].includes(x)), ...autoFlags]
+  const args = argv.some((x) => x.includes('help'))
+    ? [
+        ...argv.filter((x) => !['--help'].includes(x) && !['help'].includes(x)),
+        '--help',
+      ]
+    : [...argv, ...autoFlags]
+
   execa(`"${path.join(paths.base, 'node_modules/.bin/prisma')}"`, args, {
     shell: true,
     stdio: 'inherit',
