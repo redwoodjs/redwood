@@ -80,7 +80,7 @@ export const handler = async ({
     },
     web: {
       cwd: path.join(getPaths().base, 'web'),
-      cmd: `yarn webpack --config ../node_modules/@redwoodjs/core/config/webpack.${
+      cmd: `yarn cross-env NODE_ENV=production webpack --config ../node_modules/@redwoodjs/core/config/webpack.${
         stats ? 'stats' : 'production'
       }.js`,
     },

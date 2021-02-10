@@ -10,7 +10,7 @@ const config = getConfig()
 const SERVERLESS_YML = `# See the full yml reference at https://www.serverless.com/framework/docs/providers/aws/guide/serverless.yml/
 service: app
 
-# Uncomment org and app if you want to integrate your deployment with the serverless dashboard. See https://www.serverless.com/framework/docs/dashboard/ for more details.
+# Uncomment org and app if you want to integrate your deployment with the Serverless dashboard. See https://www.serverless.com/framework/docs/dashboard/ for more details.
 # org: your-org
 # app: your-app
 
@@ -53,7 +53,7 @@ ${
     timeout: 25 # seconds (max: 29)
     tags: # Tags for this specific lambda function
       endpoint: ${config.web.apiProxyPath}/${basename}
-    # Uncomment this section to add environment variables either from the serverless dotenv plugin or using serverless params
+    # Uncomment this section to add environment variables either from the Serverless dotenv plugin or using Serverless params
     # environment:
     #   YOUR_FIRST_ENV_VARIABLE: \${env:YOUR_FIRST_ENV_VARIABLE}
     handler: ${basename}.handler
@@ -73,11 +73,11 @@ ${
 
 export const preRequisites = [
   {
-    title: 'Checking if serverless is installed...',
+    title: 'Checking if the Serverless framework is installed...',
     command: ['serverless', ['--version']],
     errorMessage: [
-      'Looks like serverless is not installed.',
-      'Please follow the steps at https://www.serverless.com/framework/docs/providers/aws/guide/installation/ to install serverless.',
+      'Looks like Serverless is not installed.',
+      'Please follow the steps at https://www.serverless.com/framework/docs/providers/aws/guide/installation/ to install Serverless.',
     ],
   },
 ]
@@ -111,7 +111,7 @@ export const prismaBinaryTargetAdditions = () => {
 
 // any notes to print out when the job is done
 export const notes = [
-  'You are ready to deploy to AWS using serverless!',
+  'You are ready to deploy to AWS using the Serverless framework!',
   'To configure AWS credentials, see https://www.serverless.com/framework/docs/providers/aws/guide/credentials/',
   'For a more detailed way to configure the credentials using the AWS CLI, see https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html',
   'To deploy, see https://redwoodjs.com/docs/deploy#aws_serverless',
