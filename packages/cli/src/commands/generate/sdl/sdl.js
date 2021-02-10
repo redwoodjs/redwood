@@ -38,7 +38,7 @@ const missingIdConsoleMessage = () => {
   console.error(
     boxen(line1 + '\n\n' + line2 + '\n' + line3 + '\n' + line4 + '\n' + line5, {
       padding: 1,
-      margin: 1,
+      margin: { top: 1, bottom: 3, right: 1, left: 2 },
       borderStyle: 'single',
     })
   )
