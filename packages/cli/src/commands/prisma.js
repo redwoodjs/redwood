@@ -57,7 +57,7 @@ export const builder = (yargs) => {
   }
 
   const args = [...argv.filter((x) => !['--help'].includes(x)), ...autoFlags]
-  execa(path.join(paths.base, 'node_modules/.bin/prisma'), args, {
+  execa(`"${path.join(paths.base, 'node_modules/.bin/prisma')}"`, args, {
     shell: true,
     stdio: 'inherit',
     cwd: paths.api.base,

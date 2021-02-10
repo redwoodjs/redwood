@@ -8,31 +8,38 @@ import terminalLink from 'terminal-link'
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 
-export const command = 'api <provider>'
-export const description = 'Deploy the API using the selected provider'
+export const command = 'aws [provider]'
+export const description = 'Deploy to AWS using the selected provider'
 export const builder = (yargs) => {
   const SUPPORTED_PROVIDERS = fs
-    .readdirSync(path.resolve(__dirname, 'providers'))
+    .readdirSync(path.resolve(__dirname, 'aws-providers'))
     .map((file) => path.basename(file, '.js'))
     .filter((file) => file !== 'README.md')
 
   yargs
     .positional('provider', {
       choices: SUPPORTED_PROVIDERS,
-      description: 'API Deploy provider to configure',
+      default: 'serverless',
+      description: 'AWS Deploy provider to configure',
       type: 'string',
+    })
+    .option('side', {
+      describe: 'which Side(s) to deploy',
+      choices: ['api'],
+      default: 'api',
+      type: 'array',
     })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/reference/command-line-interface#deploy-api'
-      )}`
+        'https://redwoodjs.com/docs/cli-commands#deploy'
+      )}\n`
     )
 }
 
 export const handler = async ({ provider }) => {
   const BASE_DIR = getPaths().base
-  const providerData = await import(`./providers/${provider}`)
+  const providerData = await import(`./aws-providers/${provider}`)
 
   const tasks = new Listr(
     [

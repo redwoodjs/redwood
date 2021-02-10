@@ -38,6 +38,17 @@ export const getSchema = async (name) => {
     })
 
     if (model) {
+      // look for any fields that are enums and attach the possible enum values
+      // so we can put them in generated test files
+      model.fields.forEach((field) => {
+        const fieldEnum = schema.datamodel.enums.find((e) => {
+          return field.type === e.name
+        })
+        if (fieldEnum) {
+          field.enumValues = fieldEnum.values
+        }
+      })
+
       return model
     } else {
       throw new Error(
