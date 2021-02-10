@@ -1,6 +1,8 @@
 import path from 'path'
 
+import boxen from 'boxen'
 import camelcase from 'camelcase'
+import chalk from 'chalk'
 import Listr from 'listr'
 import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
@@ -21,6 +23,26 @@ import { relationsForModel } from '../helpers'
 import { files as serviceFiles } from '../service/service'
 
 const IGNORE_FIELDS_FOR_INPUT = ['id', 'createdAt', 'updatedAt']
+
+const missingIdConsoleMessage = () => {
+  const line1 =
+    chalk.bold.yellow('WARNING') +
+    ': Cannot generate CRUD SDL without an `@id` database column.'
+  const line2 = 'If you are trying to generate for a many-to-many join table '
+  const line3 = "you'll need to update your schema definition to include"
+  const line4 = 'an `@id` column. Read more here: '
+  const line5 = chalk.underline.blue(
+    'https://redwoodjs.com/docs/schema-relations'
+  )
+
+  console.error(
+    boxen(line1 + '\n\n' + line2 + '\n' + line3 + '\n' + line4 + '\n' + line5, {
+      padding: 1,
+      margin: 1,
+      borderStyle: 'single',
+    })
+  )
+}
 
 const modelFieldToSDL = (field, required = true, types = {}) => {
   if (Object.entries(types).length) {
@@ -71,7 +93,8 @@ const idType = (model, crud) => {
 
   const idField = model.fields.find((field) => field.isId)
   if (!idField) {
-    throw new Error('Cannot generate CRUD SDL without an `id` database column')
+    missingIdConsoleMessage()
+    throw new Error('Failed: Could not generate SDL')
   }
   return idField.type
 }
