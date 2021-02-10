@@ -38,26 +38,13 @@ const seedScenario = async (scenario) => {
   }
 }
 
-const removeScenario = async (scenario) => {
-  if (scenario) {
-    let models = []
+const teardown = async () => {
+  const prismaModelNames = (
+    await getSchemaDefinitions()
+  ).datamodel.models.map((m) => m.name)
 
-    for (const [model, namedFixtures] of Object.entries(scenario)) {
-      models.push(model)
-      for (const [_name, data] of Object.entries(namedFixtures)) {
-        models = models.concat(findNestedModels(data))
-      }
-    }
-    // get unique model names only
-    models = Array.from(new Set(models))
-
-    const prismaModelNames = (
-      await getSchemaDefinitions()
-    ).datamodel.models.map((m) => m.name)
-
-    for (const model of prismaModelNames) {
-      await db.$queryRaw(`DELETE FROM "${model}"`)
-    }
+  for (const model of prismaModelNames) {
+    await db.$queryRaw(`DELETE FROM "${model}"`)
   }
 }
 
@@ -106,7 +93,7 @@ window.scenario = (...args) => {
       result = await testFunc(scenarioData)
     } finally {
       // if the test fails this makes sure we still remove scenario data
-      await removeScenario(scenario)
+      await teardown()
     }
 
     return result
