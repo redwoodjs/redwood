@@ -124,8 +124,8 @@ const mapHelpCommandToFlag = (argv: string[]) => {
 const printRwWrapperInfo = () => {
   const message = `
   ${c.bold('🦺 Redwood CLI Tip')}\n
-     Use the 'redwood' command with Prisma's CLI to automatically
-     pass your project's configuration flags. For example, just run:\n
+     Use 'redwood prisma' to automatically pass the options
+     '--schema=[path]' and '--preview-feature'. For example:\n
      ${c.green('yarn redwood prisma [command]')}\n
   🔍 Redwood Doc: ${c.underline(
     'https://redwoodjs.com/docs/cli-commands#prisma'
