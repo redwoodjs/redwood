@@ -1,24 +1,18 @@
+// helper used in Dev and Build commands
+
 import fs from 'fs'
 import path from 'path'
 
-import * as options from 'src/commands/dbCommands/options'
 import { runCommandTask, getPaths } from 'src/lib'
 
-export const command = 'generate'
-export const description = 'Generate the Prisma client'
-export const builder = (yargs) => {
-  yargs
-    .option('force', {
-      alias: 'f',
-      default: true,
-      description: 'Overwrite existing Client',
-      type: 'boolean',
-    })
-    .option('verbose', options.verbose())
-    .option('schema', options.schema())
-    .epilogue(options.epilogue())
-}
-export const handler = async ({ verbose = true, force = true, schema }) => {
+/**
+ * Conditionally generate the prisma client, skip if it already exists.
+ */
+export const generatePrismaClient = async ({
+  verbose = true,
+  force = true,
+  schema = getPaths().api.dbSchema,
+}) => {
   if (!fs.existsSync(schema)) {
     console.log(
       `Skipping database and Prisma client generation, no \`schema.prisma\` file found: \`${schema}\``
