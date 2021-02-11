@@ -18,7 +18,7 @@
     "magic-sdk": "^2.5.0",
     "msal": "^1.4.1",
     "netlify-identity-widget": "1.9.1",
-    "nhost-js-sdk": "^3.0.0-10",
+    "nhost-js-sdk": "^3.0.0-14",
     "react": "^16.13.1"
   },
   "bundlesize": [
