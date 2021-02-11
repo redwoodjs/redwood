@@ -17,4 +17,5 @@ export default {
   green: chalk.green,
   info: chalk.grey,
   bold: chalk.bold,
+  underline: chalk.underline,
 }
