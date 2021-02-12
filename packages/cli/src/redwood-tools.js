@@ -26,6 +26,21 @@ export const resolveFrameworkPath = (RW_PATH) => {
   return path.resolve(process.cwd(), RW_PATH)
 }
 
+export const fixBinaryPermissions = (PROJECT_PATH) => {
+  Object.keys(RW_BINS)
+    .map((name) => {
+      return path.join(PROJECT_PATH, 'node_modules/.bin/', name)
+    })
+    .forEach((binFile) => {
+      try {
+        fs.chmodSync(binFile, '755')
+      } catch (e) {
+        console.warn(`Warning: Could not chmod ${binFile}`)
+        console.log(e)
+      }
+    })
+}
+
 export const fixProjectBinaries = (PROJECT_PATH) => {
   Object.keys(RW_BINS)
     .map((name) => {
@@ -130,6 +145,35 @@ yargs
             // TODO: Figure out if we need to only run based on certain events.
             console.log('Trigger event: ', event)
             copyFiles(src, dest)
+          }, 500)
+        )
+    }
+  )
+  .command(
+    ['contribute [RW_PATH]', 'contribute'],
+    'Run your local version of redwood in this project',
+    {},
+    ({ RW_PATH = process.env.RW_PATH }) => {
+      RW_PATH = resolveFrameworkPath(RW_PATH)
+      // const packagesPath = `${RW_PATH}/packages`
+
+      console.log('Redwood Framework Path: ', RW_PATH)
+
+      // console.log('Linking your local Redwood packages..')
+      // execa(`ln -s ${packagesPath}`)
+
+      const frameworkOutput = `${RW_PATH}/packages/cli`
+
+      chokidar
+        .watch(frameworkOutput, {
+          persistent: true,
+          recursive: true,
+        })
+        .on(
+          'all',
+          _.debounce(() => {
+            console.log('Updating permissions')
+            fixBinaryPermissions(getPaths().base)
           }, 500)
         )
     }
