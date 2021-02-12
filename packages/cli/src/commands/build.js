@@ -127,7 +127,7 @@ export const handler = async ({
         return execa('rimraf dist/*', undefined, {
           stdio: verbose ? 'inherit' : 'pipe',
           shell: true,
-          cwd: path.join(getPaths().base, 'web'),
+          cwd: getPaths().web.base,
         })
       },
     })

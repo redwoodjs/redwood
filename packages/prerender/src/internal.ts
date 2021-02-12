@@ -6,8 +6,8 @@ import fetch from 'node-fetch'
 import type { AuthContextInterface } from '@redwoodjs/auth'
 import { getConfig, getPaths } from '@redwoodjs/internal'
 
-const INDEX_FILE = path.join(getPaths().web.dist, '/index.html')
-const DEFAULT_INDEX = path.join(getPaths().web.dist, '/defaultIndex.html')
+const INDEX_FILE = path.join(getPaths().web.dist, 'index.html')
+const DEFAULT_INDEX = path.join(getPaths().web.dist, 'defaultIndex.html')
 
 export const getRootHtmlPath = () => {
   if (fs.existsSync(DEFAULT_INDEX)) {

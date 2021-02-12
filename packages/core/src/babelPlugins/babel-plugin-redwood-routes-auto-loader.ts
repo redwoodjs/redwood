@@ -29,7 +29,8 @@ export default function (
         }
 
         // Remove Page imports in prerender mode (see babel-preset)
-        // This is to make sure that the router receives Pages consistently
+        // This is to make sure that all the imported "Page modules" are normal imports
+        // and not asynchronous ones.
         if (useStaticImports) {
           // Match import paths, const name could be different
           const userImportPath = p.node.source?.value
