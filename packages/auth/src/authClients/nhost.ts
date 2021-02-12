@@ -4,19 +4,21 @@ export type Nhost = NhostClient
 export type NhostUser = User
 
 import { AuthClient } from './'
+
+type NhostProvider = 'google' | 'github' | 'facebook' | 'linkedin'
 export interface AuthClientNhost extends AuthClient {
   /**
    * Log In an existing user with email/password or via a OAuth provider
    * Log In via a OAuth provider also registers the account in case it doesn't exist
    * @param options.email The user's email address
    * @param options.password The user's password
-   * @param { 'google' | 'github' | 'facebook' | 'linkedin' } options.provider Providers supported by Hasura-Backend-Plus
+   * @param options.provider One of NhostProvider
 
    */
   login(options: {
     email?: string
     password?: string
-    provider?: string
+    provider?: NhostProvider
   }): Promise<{
     session: Session | null
     user: NhostUser | null
