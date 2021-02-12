@@ -35,6 +35,7 @@
     "pascalcase": "^1.0.0",
     "pluralize": "^8.0.0",
     "prettier": "^2.1.1",
+    "prompts": "^2.4.0",
     "terminal-link": "^2.1.1",
     "yargs": "^16.0.3"
   },
@@ -46,7 +47,8 @@
     "prepublishOnly": "yarn build",
     "build:clean-dist": "yarn rimraf 'dist/**/__tests__'",
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\" --copy-files --no-copy-ignored && yarn build:clean-dist",
-    "build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build\"",
+    "fix:permissions": "chmod +x dist/index.js",
+    "build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build && yarn fix:permissions\"",
     "test": "jest",
     "test:watch": "yarn test --watch"
   },
