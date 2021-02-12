@@ -13,7 +13,6 @@ export interface AuthClientNhost extends AuthClient {
    * @param options.email The user's email address
    * @param options.password The user's password
    * @param options.provider One of NhostProvider
-
    */
   login(options: {
     email?: string
