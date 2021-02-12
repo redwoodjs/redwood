@@ -95,6 +95,7 @@ export const builder = async (yargs: Argv) => {
       }
     )
     prismaCommand.stdout?.pipe(process.stdout)
+    prismaCommand.stderr?.pipe(process.stderr)
 
     // So we can check for yarn prisma in the output
     const { stdout } = await prismaCommand
