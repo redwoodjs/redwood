@@ -5,6 +5,14 @@ export type NhostUser = User
 
 import { AuthClient } from './'
 export interface AuthClientNhost extends AuthClient {
+  /**
+   * Log In an existing user with email/password or via a OAuth provider
+   * Log In via a OAuth provider also registers the account in case it doesn't exist
+   * @param options.email The user's email address
+   * @param options.password The user's password
+   * @param { 'google' | 'github' | 'facebook' | 'linkedin' } options.provider Providers supported by Hasura-Backend-Plus
+
+   */
   login(options: {
     email?: string
     password?: string
@@ -17,6 +25,11 @@ export interface AuthClientNhost extends AuthClient {
     }
   }>
   logout(): Promise<void>
+  /**
+   * Creates a new user account
+   * @param options.email The user's email address
+   * @param options.password The user's password
+   */
   signup(options: {
     email: string
     password: string
@@ -29,6 +42,7 @@ export interface AuthClientNhost extends AuthClient {
     session: Session | null
     user: User | null
   }>
+
   getToken(): Promise<string | null>
   getUserMetadata(): Promise<NhostUser | null>
   restoreAuthState(): Promise<{
