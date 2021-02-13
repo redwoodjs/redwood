@@ -3,6 +3,8 @@ import type { Response, Request } from 'express'
 import express from 'express'
 import morgan from 'morgan'
 
+import { getRoutePrefix } from './helper'
+
 export interface Lambdas {
   [path: string]: any
 }
@@ -42,8 +44,8 @@ export const server = ({
     await requestHandler(req, res, lambdaFunction)
   }
 
-  app.all('/:routeName', lambdaHandler)
-  app.all('/:routeName/*', lambdaHandler)
+  app.all(`${getRoutePrefix()}:routeName`, lambdaHandler)
+  app.all(`${getRoutePrefix()}:routeName/*`, lambdaHandler)
 
   return app
 }
