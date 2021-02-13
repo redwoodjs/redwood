@@ -6,7 +6,7 @@ import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import type { AuthContextPayload } from 'src/auth'
 import { getAuthenticationContext } from 'src/auth'
 import type { GlobalContext } from 'src/globalContext'
-import { setContext } from 'src/globalContext'
+import { setContext, initGlobalContext } from 'src/globalContext'
 
 export type GetCurrentUser = (
   decoded: AuthContextPayload[0],
@@ -52,7 +52,6 @@ export const createContextHandler = (
       // if userContext is a function, run that and return just the result
       customUserContext = await userContext({ event, context })
     }
-
     // Sets the **global** context object, which can be imported with:
     // import { context } from '@redwoodjs/api'
     return setContext({
@@ -127,11 +126,26 @@ export const createGraphQLHandler = ({
     context: LambdaContext,
     callback: any
   ): void => {
-    try {
-      handler(event, context, callback)
-    } catch (e) {
-      onException && onException()
-      throw e
+    const localAsyncStorage = initGlobalContext()
+
+    if (localAsyncStorage) {
+      // Single thread self hosted context.
+      localAsyncStorage.run(new Map(), () => {
+        try {
+          handler(event, context, callback)
+        } catch (e) {
+          onException && onException()
+          throw e
+        }
+      })
+    } else {
+      // AWS Lambda context
+      try {
+        handler(event, context, callback)
+      } catch (e) {
+        onException && onException()
+        throw e
+      }
     }
   }
 }
