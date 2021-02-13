@@ -5,7 +5,6 @@ import { ensurePosixPath } from '@redwoodjs/internal'
 import { getProject } from '@redwoodjs/structure'
 
 import { getPaths } from 'src/lib'
-import c from 'src/lib/colors'
 
 // https://github.com/facebook/create-react-app/blob/cbad256a4aacfc3084be7ccf91aad87899c63564/packages/react-scripts/scripts/test.js#L39
 function isInGitRepository() {
