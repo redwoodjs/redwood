@@ -1,26 +1,11 @@
 const path = require('path')
 
 const { setContext } = require('@redwoodjs/api')
+const { getSchemaDefinitions } = require('@redwoodjs/cli/dist/lib')
 const { getPaths } = require('@redwoodjs/internal')
 const { defineScenario } = require('@redwoodjs/testing/dist/scenario')
 const { db } = require(path.join(getPaths().api.src, 'lib', 'db'))
 const DEFAULT_SCENARIO = 'standard'
-const PRISMA_RESERVED = ['create', 'connect']
-
-const findNestedModels = (data) => {
-  let models = []
-
-  for (const [field, value] of Object.entries(data)) {
-    if (typeof value === 'object') {
-      if (!models.includes(field) && !PRISMA_RESERVED.includes(field)) {
-        models.push(field)
-      }
-      models = models.concat(findNestedModels(value))
-    }
-  }
-
-  return models
-}
 
 const seedScenario = async (scenario) => {
   if (scenario) {
@@ -37,22 +22,13 @@ const seedScenario = async (scenario) => {
   }
 }
 
-const removeScenario = async (scenario) => {
-  if (scenario) {
-    let models = []
+const teardown = async () => {
+  const prismaModelNames = (await getSchemaDefinitions()).datamodel.models.map(
+    (m) => m.name
+  )
 
-    for (const [model, namedFixtures] of Object.entries(scenario)) {
-      models.push(model)
-      for (const [_name, data] of Object.entries(namedFixtures)) {
-        models = models.concat(findNestedModels(data))
-      }
-    }
-    // get unique model names only
-    models = Array.from(new Set(models))
-
-    for (const model of models) {
-      await db.$queryRaw(`DELETE FROM ${model}`)
-    }
+  for (const model of prismaModelNames) {
+    await db.$queryRaw(`DELETE FROM "${model}"`)
   }
 }
 
@@ -101,7 +77,7 @@ window.scenario = (...args) => {
       result = await testFunc(scenarioData)
     } finally {
       // if the test fails this makes sure we still remove scenario data
-      await removeScenario(scenario)
+      await teardown()
     }
 
     return result
