@@ -190,7 +190,7 @@ const rwtContrib = async ({ RW_PATH = process.env.RW_PATH }) => {
     })
 
     // Let workspaces do the link
-    await execa('yarn build', {
+    await execa('yarn install', {
       shell: true,
       stdio: 'inherit',
       cleanup: true,
@@ -205,24 +205,31 @@ const rwtContrib = async ({ RW_PATH = process.env.RW_PATH }) => {
 
   const src = `${RW_PATH}/packages/`
 
-  chokidar
-    .watch(src, {
-      persistent: true,
-      recursive: true,
-      ignored: [path.join(src, 'packages/create-redwood-app/template')],
-    })
-    .on(
-      'all',
-      _.debounce(() => {
-        execa('yarn build', {
-          shell: true,
-          stdio: 'inherit',
-          cleanup: true,
-          cwd: RW_PATH,
-        })
-        fixBinaryPermissions(getPaths().base)
-      }, 500)
-    )
+  execa('yarn build:watch', {
+    shell: true,
+    stdio: 'inherit',
+    cleanup: true,
+    cwd: RW_PATH,
+  })
+
+  // chokidar
+  //   .watch(src, {
+  //     persistent: true,
+  //     recursive: true,
+  //     ignored: [path.join(src, 'packages/create-redwood-app/template')],
+  //   })
+  //   .on(
+  //     'all',
+  //     _.debounce(() => {
+  //       execa('yarn build', {
+  //         shell: true,
+  //         stdio: 'inherit',
+  //         cleanup: true,
+  //         cwd: RW_PATH,
+  //       })
+  //       fixBinaryPermissions(getPaths().base)
+  //     }, 500)
+  //   )
 
   // const doSomeStuff = async () => {
   //   console.log('unwatch')
