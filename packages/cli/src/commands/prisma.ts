@@ -88,10 +88,7 @@ export const builder = async (yargs: Argv) => {
         cwd: paths.api.base,
         extendEnv: true,
         cleanup: true,
-        // Maintain colour formatting
-        env: {
-          FORCE_COLOR: '1',
-        },
+        stdio: 'inherit',
       }
     )
     prismaCommand.stdout?.pipe(process.stdout)
@@ -100,16 +97,11 @@ export const builder = async (yargs: Argv) => {
     // So we can check for yarn prisma in the output
     const { stdout } = await prismaCommand
 
-    // Show prisma cli output
-    // console.log(stdout)
-
-    if (hasHelpFlag || stdout.match('yarn prisma')) {
+    if (hasHelpFlag || stdout?.match('yarn prisma')) {
       printRwWrapperInfo()
     }
   } catch (e) {
-    // Prisma cli shows help on error
-    printRwWrapperInfo()
-    process.exit(1)
+    process.exit(e?.exitCode || 1)
   }
 }
 
@@ -136,7 +128,7 @@ const printRwWrapperInfo = () => {
     boxen(message, {
       padding: { top: 0, bottom: 0, right: 1, left: 1 },
       margin: 1,
-      borderStyle: 'single',
+      borderColor: 'gray',
     })
   )
 }
