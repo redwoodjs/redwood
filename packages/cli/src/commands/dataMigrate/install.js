@@ -43,10 +43,11 @@ const appendModel = () => {
 const save = async () => {
   return await execa(
     'yarn rw',
-    ['prisma migrate dev --create-only', '--name=create_data_migrations'],
+    ['prisma migrate dev', '--create-only', '--name=create_data_migrations'],
     {
       cwd: getPaths().base,
       shell: true,
+      stdio: 'inherit',
     }
   )
 }
@@ -91,5 +92,6 @@ export const handler = async () => {
     await tasks.run()
   } catch (e) {
     console.log(c.error(e.message))
+    process.exit(e?.exitCode || 1)
   }
 }
