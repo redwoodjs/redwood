@@ -308,5 +308,6 @@ export const handler = async ({ provider, force }) => {
     await tasks.run()
   } catch (e) {
     console.log(c.error(e.message))
+    process.exit(e?.exitCode || 1)
   }
 }

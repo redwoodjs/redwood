@@ -109,13 +109,14 @@ export const handler = async ({
     // **NOTE** There is no official way to run Jest programatically,
     // so we're running it via execa, since `jest.run()` is a bit unstable.
     // https://github.com/facebook/jest/issues/5048
-    execa('yarn jest', args, {
+    await execa('yarn jest', args, {
       cwd: getPaths().base,
       shell: true,
       stdio: 'inherit',
       env: { DATABASE_URL },
     })
   } catch (e) {
-    console.log(c.error(e.message))
+    // Errors already shown from execa inherited stderr
+    process.exit(e?.exitCode || 1)
   }
 }
