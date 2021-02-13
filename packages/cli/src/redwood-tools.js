@@ -7,6 +7,7 @@ import execa from 'execa'
 import _ from 'lodash'
 import prettier from 'prettier'
 import prompts from 'prompts'
+import rimraf from 'rimraf'
 import yargs from 'yargs'
 
 import { getPaths, ensurePosixPath } from '@redwoodjs/internal'
@@ -136,9 +137,17 @@ const rwtCopyWatch = ({ RW_PATH = process.env.RW_PATH }) => {
     )
 }
 
-const rwtContrib = async ({ RW_PATH = process.env.RW_PATH }) => {
-  RW_PATH = resolveFrameworkPath(RW_PATH)
-  console.log(`Redwood Framework Path: ${c.info(RW_PATH)}`)
+const rwtLink = async (yargs) => {
+  const RW_PATH = yargs.RW_PATH || process.env.RW_PATH
+  if (!RW_PATH) {
+    console.error(c.error('You must specify a path to your local redwood repo'))
+    process.exit(1)
+    return
+  }
+
+  const frameworkPath = resolveFrameworkPath(RW_PATH)
+
+  console.log(`Redwood Framework Path: ${c.info(frameworkPath)}`)
 
   // Check if /redwood included in workspaces
   const pkgJSONPath = path.join(getPaths().base, 'package.json')
@@ -148,7 +157,7 @@ const rwtContrib = async ({ RW_PATH = process.env.RW_PATH }) => {
   )
 
   if (!isRedwoodInWorkspaces) {
-    console.log('You dont have redwood in your workspace package, dude')
+    console.log(`You don't have redwood in your workspace package`)
     const { shouldAddWorkspacePath } = await prompts({
       type: 'confirm',
       name: 'shouldAddWorkspacePath',
@@ -179,23 +188,23 @@ const rwtContrib = async ({ RW_PATH = process.env.RW_PATH }) => {
     }
   }
 
-  const packagesPath = `${RW_PATH}/packages`
+  const packagesPath = `${frameworkPath}/packages`
   console.log(`Linking your local Redwood build from ${c.info(packagesPath)}`)
 
-  if (!fs.existsSync(path.join(getPaths().base, 'redwood'))) {
-    await execa(`ln -s ${packagesPath} redwood`, {
-      shell: true,
-      stdio: 'inherit',
-      cleanup: true,
-    })
+  await execa(`ln -sf ${packagesPath} redwood`, {
+    shell: true,
+    stdio: 'inherit',
+    cleanup: true,
+    cwd: getPaths().base,
+  })
 
-    // Let workspaces do the link
-    await execa('yarn install', {
-      shell: true,
-      stdio: 'inherit',
-      cleanup: true,
-    })
-  }
+  // Let workspaces do the link
+  await execa('yarn install', {
+    shell: true,
+    stdio: 'inherit',
+    cleanup: true,
+    cwd: getPaths().base,
+  })
 
   fixBinaryPermissions(getPaths().base)
 
@@ -203,42 +212,27 @@ const rwtContrib = async ({ RW_PATH = process.env.RW_PATH }) => {
     ` 🚀 ${c.green('Go forth and contribute!')}` + '\n' + ' Building redwood...'
   )
 
-  const src = `${RW_PATH}/packages/`
-
   execa('yarn build:watch', {
     shell: true,
     stdio: 'inherit',
     cleanup: true,
-    cwd: RW_PATH,
+    cwd: frameworkPath,
   })
+}
 
-  // chokidar
-  //   .watch(src, {
-  //     persistent: true,
-  //     recursive: true,
-  //     ignored: [path.join(src, 'packages/create-redwood-app/template')],
-  //   })
-  //   .on(
-  //     'all',
-  //     _.debounce(() => {
-  //       execa('yarn build', {
-  //         shell: true,
-  //         stdio: 'inherit',
-  //         cleanup: true,
-  //         cwd: RW_PATH,
-  //       })
-  //       fixBinaryPermissions(getPaths().base)
-  //     }, 500)
-  //   )
+const rwtRestore = () => {
+  const symLinkPath = path.join(getPaths().base, 'redwood')
 
-  // const doSomeStuff = async () => {
-  //   console.log('unwatch')
-  //   await watchHandle.unwatch(packagesWithBins)
-  //   fixBinaryPermissions(getPaths().base)
-  //   console.log('Fixed perms')
-  //   watchHandle.add(packagesWithBins)
-  //   console.log('Added watch')
-  // }
+  if (fs.existsSync(symLinkPath)) {
+    rimraf.sync(symLinkPath)
+  }
+
+  execa('yarn install', {
+    shell: true,
+    stdio: 'inherit',
+    cleanup: true,
+    cwd: getPaths().base,
+  })
 }
 
 const rwtInstall = ({ packageName }) => {
@@ -287,12 +281,18 @@ yargs
     {},
     rwtCopyWatch
   )
-  .command(
-    ['contrib [RW_PATH]', 'contrib'],
-    'Run your local version of redwood in this project',
-    {},
-    rwtContrib
-  )
+  .command({
+    command: 'link [RW_PATH]',
+    aliases: ['c'],
+    desc: 'Run your local version of redwood in this project',
+    handler: rwtLink,
+  })
+  .command({
+    command: 'restore',
+    desc:
+      'Unlink your local verison of redwood, and use the one specified in package.json',
+    handler: rwtRestore,
+  })
   .command(
     ['install [packageName]', 'i'],
     'Install a package from your local NPM registry',
@@ -307,6 +307,5 @@ yargs
       fixProjectBinaries(getPaths().base)
     }
   )
-  .command('bazinga')
   .demandCommand()
   .strict().argv
