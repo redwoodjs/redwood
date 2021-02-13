@@ -11,7 +11,7 @@ export interface AuthClientSupabase extends AuthClient {
    * @param options The user login details.
    * @param options.email The user's email address.
    * @param options.password The user's password.
-   * @param {'bitbucket' | 'github' | 'gitlab' | 'google' | 'azure'} options.provider One of the providers supported by GoTrue.
+   * @param { 'azure' | 'bitbucket' | 'facebook' | 'github' | 'gitlab' | 'google' } options.provider One of the providers supported by GoTrue.
    */
   login(options: {
     email?: string | undefined

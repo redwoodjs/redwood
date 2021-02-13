@@ -74,7 +74,9 @@ const PATH_WEB_DIR_CONFIG_POSTCSS = 'web/config/postcss.config.js'
 /**
  * Search the parent directories for the Redwood configuration file.
  */
-export const getConfigPath = (cwd: string = process.cwd()): string => {
+export const getConfigPath = (
+  cwd: string = process.env.__REDWOOD__CONFIG_PATH ?? process.cwd()
+): string => {
   const configPath = findUp(CONFIG_FILE_NAME, { cwd })
   if (!configPath) {
     throw new Error(
@@ -163,7 +165,9 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
 export const processPagesDir = (
   webPagesDir: string = getPaths().web.pages
 ): Array<PagesDependency> => {
-  const pagePaths = glob.sync('**/**/*Page.{js,jsx,tsx}', { cwd: webPagesDir })
+  const pagePaths = glob.sync('**/**/*Page.{js,jsx,ts,tsx}', {
+    cwd: webPagesDir,
+  })
   return pagePaths.map((pagePath) => {
     const p = path.parse(pagePath)
 

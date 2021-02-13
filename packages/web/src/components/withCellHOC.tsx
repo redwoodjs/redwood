@@ -26,8 +26,7 @@ export type CellSuccessStateComponent =
 
 export interface WithCellProps {
   beforeQuery?: <TProps>(props: TProps) => { variables: TProps }
-  // @ts-expect-error We do not know, and even really care, what they are here.
-  QUERY: DocumentNode | (({ variables: unknown }) => DocumentNode)
+  QUERY: DocumentNode | ((variables: Record<string, unknown>) => DocumentNode)
   afterQuery?: (data: DataObject) => DataObject
   Loading?: React.FC<CellLoadingEmptyStateComponent>
   Failure?: React.FC<CellFailureStateComponent>
@@ -100,32 +99,41 @@ export const withCell = ({
     return isDataNull(data) || isDataEmptyArray(data)
   }
 
-  return (props: Record<string, unknown>) => (
-    <Query
-      query={typeof QUERY === 'function' ? QUERY(beforeQuery(props)) : QUERY}
-      {...beforeQuery(props)}
-    >
-      {({ error, loading, data, ...queryRest }) => {
-        if (error) {
-          if (Failure) {
-            return <Failure error={error} {...queryRest} {...props} />
-          } else {
-            throw error
-          }
-        } else if (loading) {
-          return <Loading {...queryRest} {...props} />
-        } else if (data) {
-          if (typeof Empty !== 'undefined' && isEmpty(data)) {
-            return <Empty {...queryRest} {...props} />
-          } else {
-            return <Success {...afterQuery(data)} {...queryRest} {...props} />
-          }
-        } else {
-          throw new Error(
-            'Cannot render cell: GraphQL success but `data` is null'
-          )
+  return (props: Record<string, unknown>) => {
+    const {
+      children, // eslint-disable-line @typescript-eslint/no-unused-vars
+      ...variables
+    } = props
+
+    return (
+      <Query
+        query={
+          typeof QUERY === 'function' ? QUERY(beforeQuery(variables)) : QUERY
         }
-      }}
-    </Query>
-  )
+        {...beforeQuery(variables)}
+      >
+        {({ error, loading, data, ...queryRest }) => {
+          if (error) {
+            if (Failure) {
+              return <Failure error={error} {...queryRest} {...props} />
+            } else {
+              throw error
+            }
+          } else if (loading) {
+            return <Loading {...queryRest} {...props} />
+          } else if (data) {
+            if (typeof Empty !== 'undefined' && isEmpty(data)) {
+              return <Empty {...queryRest} {...props} />
+            } else {
+              return <Success {...afterQuery(data)} {...queryRest} {...props} />
+            }
+          } else {
+            throw new Error(
+              'Cannot render cell: GraphQL success but `data` is null'
+            )
+          }
+        }}
+      </Query>
+    )
+  }
 }

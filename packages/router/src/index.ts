@@ -13,6 +13,7 @@ export {
   routes,
   useParams,
   useLocation,
+  LocationProvider,
   navigate,
   PageLoadingContext,
 } from './internal'
