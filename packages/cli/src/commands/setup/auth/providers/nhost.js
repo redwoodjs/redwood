@@ -9,7 +9,6 @@ export const config = {
   authProvider: {
     client: 'nhostClient',
     type: 'nhost',
-    skipFetchCurrentUser: true,
   },
 }
 
