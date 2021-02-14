@@ -1,6 +1,8 @@
 import execa from 'execa'
 import Listr from 'listr'
 
+import c from 'src/lib/colors'
+
 export const command = 'a11y'
 export const description = 'Build accessible websites with this a11y setup'
 export const builder = (yargs) => {
@@ -12,7 +14,7 @@ export const builder = (yargs) => {
   })
 }
 
-export const handler = async ({ force }) => {
+export const handler = async () => {
   const tasks = new Listr([
     {
       title: 'Installing packages...',
