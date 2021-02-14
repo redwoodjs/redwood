@@ -61,7 +61,8 @@ const configureESLintPluginJSXA11yTask = {
 const configureAxeCoreReact = {
   title: 'Configuring @axe-core/react...',
   task: () => {
-    // somewhere in in web/index.js...
+    // somewhere, in web/index.js...
+    //
     // const React = require('react');
     // const ReactDOM = require('react-dom');
     //
@@ -75,7 +76,7 @@ const configureAxeCoreReact = {
 const configureStorybookAddonA11y = {
   title: 'Configuring @storybook/addon-a11y...',
   task: () => {
-    // add to main.js, in storybook config directory
+    // add this to main.js (in the storybook config directory):
     //
     // module.exports = {
     //   addons: ['@storybook/addon-a11y'],
@@ -83,9 +84,24 @@ const configureStorybookAddonA11y = {
   },
 }
 
-// Not sure what we need to do yet.
+// not sure what we need to do for this one yet.
 //
 // const configureJestAxe = {
 //   title 'Configuring Jest Axe',
 //   tasks: () => {}
 // }
+//
+// It'd probably be setting up this test:
+//
+// const React = require('react')
+// const { render } =  require('react-dom')
+// const App = require('./app')
+
+// const { axe, toHaveNoViolations } = require('jest-axe')
+// expect.extend(toHaveNoViolations)
+
+// it('should demonstrate this matcher`s usage with react', async () => {
+//   render(<App/>, document.body)
+//   const results = await axe(document.body)
+//   expect(results).toHaveNoViolations()
+// })
