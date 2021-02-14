@@ -1,5 +1,5 @@
-import Listr from 'listr'
 import execa from 'execa'
+import Listr from 'listr'
 
 export const command = 'a11y'
 export const description = 'Build accessible websites with this a11y setup'
