@@ -42,10 +42,10 @@ describe('Auth generator tests', () => {
     const fsSpy = jest.spyOn(fs, 'readFileSync').mockImplementation(() => '')
 
     // Mock process.exit to make sure CLI quites
-    const cSpy = jest.spyOn(console, 'log').mockImplementation(() => {})
+    const cSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
 
     await auth.handler({ provider: 'netlify' })
-    expect(console.log).not.toHaveBeenCalledWith(
+    expect(console.error).not.toHaveBeenCalledWith(
       chalk.bold.red(EXISTING_AUTH_PROVIDER_ERROR)
     )
 
@@ -65,10 +65,10 @@ describe('Auth generator tests', () => {
         () => `import { AuthProvider } from '@redwoodjs/auth'`
       )
 
-    const cSpy = jest.spyOn(console, 'log').mockImplementation(() => {})
+    const cSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
 
     await auth.handler({ provider: 'netlify' })
-    expect(console.log).toHaveBeenCalledWith(
+    expect(console.error).toHaveBeenCalledWith(
       chalk.bold.red(EXISTING_AUTH_PROVIDER_ERROR)
     )
 
