@@ -195,11 +195,14 @@ const rwtLink = async (yargs) => {
 
   console.log(`Linking your local Redwood build from ${c.info(packagesPath)}`)
 
-  await execa(`ln -sf ${packagesPath} ./redwood`, {
-    shell: true,
-    stdio: 'inherit',
-    cwd: getPaths().base,
-  })
+  if (!fs.statSync('./redwood').isDirectory()) {
+    await execa(`ln -sf ${packagesPath} ./redwood`, {
+      shell: true,
+      stdio: 'inherit',
+      cwd: getPaths().base,
+    })
+  }
+
 
   // Let workspaces do the link
   await execa('yarn install', {
