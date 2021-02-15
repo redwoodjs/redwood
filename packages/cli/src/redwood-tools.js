@@ -2,6 +2,7 @@
 import fs from 'fs'
 import path from 'path'
 
+import boxen from 'boxen'
 import chokidar from 'chokidar'
 import execa from 'execa'
 import _ from 'lodash'
@@ -139,6 +140,8 @@ const rwtCopyWatch = ({ RW_PATH = process.env.RW_PATH }) => {
 
 const rwtLink = async (yargs) => {
   const RW_PATH = yargs.RW_PATH || process.env.RW_PATH
+  const { clean } = yargs
+
   if (!RW_PATH) {
     console.error(c.error('You must specify a path to your local redwood repo'))
     process.exit(1)
@@ -188,13 +191,13 @@ const rwtLink = async (yargs) => {
     }
   }
 
-  const packagesPath = `${frameworkPath}/packages`
+  const packagesPath = path.join(frameworkPath, 'packages')
+
   console.log(`Linking your local Redwood build from ${c.info(packagesPath)}`)
 
-  await execa(`ln -sf ${packagesPath} redwood`, {
+  await execa(`ln -sf ${packagesPath} ./redwood`, {
     shell: true,
     stdio: 'inherit',
-    cleanup: true,
     cwd: getPaths().base,
   })
 
@@ -208,9 +211,29 @@ const rwtLink = async (yargs) => {
 
   fixBinaryPermissions(getPaths().base)
 
+  const message = `
+  ${c.bold('🚀  Go Forth and Contribute!')}\n
+  🏗  Building your local redwood repo..\n
+  Contributing doc: ${c.underline(
+    'https://github.com/redwoodjs/redwood/blob/main/CONTRIBUTING.md'
+  )}
+  `
   console.log(
-    ` 🚀 ${c.green('Go forth and contribute!')}` + '\n' + ' Building redwood...'
+    boxen(message, {
+      padding: { top: 0, bottom: 0, right: 1, left: 1 },
+      margin: 1,
+      borderColour: 'gray',
+    })
   )
+
+  if (clean) {
+    await execa('yarn build:clean', {
+      shell: true,
+      stdio: 'inherit',
+      cleanup: true,
+      cwd: frameworkPath,
+    })
+  }
 
   execa('yarn build:watch', {
     shell: true,
@@ -284,6 +307,14 @@ yargs
   .command({
     command: 'link [RW_PATH]',
     aliases: ['c'],
+    builder: (yargs) => {
+      return yargs.option('clean', {
+        alias: 'c',
+        type: 'boolean',
+        description: 'Clean the redwood dist folders first.',
+        default: true,
+      })
+    },
     desc: 'Run your local version of redwood in this project',
     handler: rwtLink,
   })
