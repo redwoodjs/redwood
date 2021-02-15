@@ -5,7 +5,7 @@
 
 // However when not in AWS Lambda, NodeJS is single-threaded, you must use the
 // per-request global context, otherwise you risk a race-condition
-// where one request overwrites another's  global context.
+// where one request overwrites another's global context.
 //
 // Alternatively only use the local `context` in a graphql resolver.
 
