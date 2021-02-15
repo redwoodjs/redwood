@@ -155,7 +155,6 @@ export const handler = async () => {
 
   try {
     await tasks.run()
-    process.exit(0)
   } catch (e) {
     process.exit(e?.exitCode || 1)
   } finally {
