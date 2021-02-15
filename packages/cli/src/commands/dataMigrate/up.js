@@ -155,10 +155,11 @@ export const handler = async () => {
 
   try {
     await tasks.run()
-  } catch (e) {
-    process.exit(e?.exitCode || 1)
-  } finally {
     await db.$disconnect()
     report(counters)
+  } catch (e) {
+    await db.$disconnect()
+    report(counters)
+    process.exit(e?.exitCode || 1)
   }
 }
