@@ -75,7 +75,7 @@ export const builder = async (yargs: Argv) => {
   const args = Array.from(new Set([...argv, ...autoFlags]))
 
   console.log(
-    c.green(`Running prisma cli: \n`) +
+    c.green(`Running Prisma CLI: \n`) +
       c.info(`yarn prisma ${args.join(' ')} \n`)
   )
 
@@ -95,6 +95,7 @@ export const builder = async (yargs: Argv) => {
     prismaCommand.stderr?.pipe(process.stderr)
 
     // So we can check for yarn prisma in the output
+    // e.g. yarn prisma introspect
     const { stdout } = await prismaCommand
 
     if (hasHelpFlag || stdout?.match('yarn prisma')) {
