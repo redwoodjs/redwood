@@ -13,7 +13,6 @@ jest.mock('listr')
 
 import fs from 'fs'
 
-import { waitFor } from '@testing-library/react'
 import chalk from 'chalk'
 import listr from 'listr'
 
