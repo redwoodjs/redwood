@@ -29,9 +29,11 @@ export const registerShims = () => {
   global.__REDWOOD__PRERENDERING = true
 
   // Let routes auto loader plugin know
-  process.env.__REDWOOD__PRERENDERING = 'true'
+  process.env.__REDWOOD__PRERENDERING = '1'
 
-  // We do this to avoid increasing the apollo client bundle size
+  // Shim fetch in the node.js context
+  // This is to avoid using cross-fetch when configuring apollo-client
+  // which would cause the client bundle size to increase
   if (!global.fetch) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore-next-line

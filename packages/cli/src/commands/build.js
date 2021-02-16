@@ -45,6 +45,11 @@ export const builder = (yargs) => {
       description: 'Print more',
       type: 'boolean',
     })
+    .option('prerender', {
+      default: true,
+      description: 'Pre-render after building web',
+      type: 'boolean',
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -57,6 +62,7 @@ export const handler = async ({
   side = ['api', 'web'],
   verbose = false,
   stats = false,
+  prerender,
 }) => {
   const execCommandsForSides = {
     api: {
@@ -109,7 +115,20 @@ export const handler = async ({
   }
 
   if (side.includes('web')) {
-    if (getConfig().web.experimentalPrerender) {
+    // Clean web dist folder, _before_ building
+    listrTasks.unshift({
+      title: 'Cleaning web/dist',
+      task: () => {
+        return execa('rimraf dist/*', undefined, {
+          stdio: verbose ? 'inherit' : 'pipe',
+          shell: true,
+          cwd: getPaths().web.base,
+        })
+      },
+    })
+
+    // Prerender _after_ web build
+    if (getConfig().web.experimentalPrerender && prerender) {
       listrTasks.push({
         title: 'Prerendering your RW app...',
         task: () => {
@@ -121,16 +140,6 @@ export const handler = async ({
         },
       })
     }
-    listrTasks.unshift({
-      title: 'Cleaning web/dist',
-      task: () => {
-        return execa('rimraf dist/*', undefined, {
-          stdio: verbose ? 'inherit' : 'pipe',
-          shell: true,
-          cwd: getPaths().web.base,
-        })
-      },
-    })
   }
 
   const tasks = new Listr(listrTasks, {
