@@ -75,8 +75,7 @@ export const builder = async (yargs: Argv) => {
   const args = Array.from(new Set([...argv, ...autoFlags]))
 
   console.log(
-    c.green(`Running Prisma CLI: \n`) +
-      c.info(`yarn prisma ${args.join(' ')} \n`)
+    c.green(`\nRunning Prisma CLI:\n`) + `yarn prisma ${args.join(' ')} \n`
   )
 
   try {
