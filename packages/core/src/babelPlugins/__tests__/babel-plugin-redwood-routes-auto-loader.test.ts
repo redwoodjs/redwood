@@ -9,6 +9,12 @@ import plugin from '../babel-plugin-redwood-routes-auto-loader'
 const mockReaddirSync = jest.fn(() => ['routes.d.ts'])
 const mockWriteFileSync = jest.fn()
 
+const pathToFixturesApp = path.resolve(
+  __dirname,
+  '../../../../../__fixtures__/example-todo-main'
+)
+process.env.__REDWOOD__CONFIG_PATH = path.join(pathToFixturesApp)
+
 jest.mock('@redwoodjs/structure', () => {
   return {
     ...jest.requireActual('@redwoodjs/structure'),
