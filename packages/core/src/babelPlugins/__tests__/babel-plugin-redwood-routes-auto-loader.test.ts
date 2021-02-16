@@ -46,11 +46,7 @@ describe('router auto loader pre-rendering', () => {
 })
 
 describe('routes auto loader', () => {
-  const exampleTodoPath = path.resolve(
-    __dirname,
-    '../../../../../__fixtures__/example-todo-main'
-  )
-  const project = getProject(exampleTodoPath)
+  const project = getProject(pathToFixturesApp)
 
   pluginTester({
     plugin,

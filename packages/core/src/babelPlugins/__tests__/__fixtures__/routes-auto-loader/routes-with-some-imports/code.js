@@ -1,1 +1,1 @@
-import APage from '/src/pages/APage'
+import APage from 'src/pages/APage'
