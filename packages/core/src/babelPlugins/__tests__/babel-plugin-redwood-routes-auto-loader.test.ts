@@ -28,71 +28,21 @@ jest.mock('@redwoodjs/structure', () => {
   }
 })
 
-jest.mock('@redwoodjs/internal', () => {
-  const pathRequired = require('path')
-  // __dirname not available
-  const __dirname = pathRequired.resolve()
-  return {
-    getPaths: jest.fn(() => {
-      const MOCK_BASE_WEB_DIR = pathRequired.join(
-        __dirname,
-        '../../__fixtures__/example-todo-main',
-        'web'
-      )
+describe('router auto loader pre-rendering', () => {
+  const project = getProject(pathToFixturesApp)
 
-      const MOCK_WEB_SRC = pathRequired.join(MOCK_BASE_WEB_DIR, 'src')
-      const MOCK_WEB_SRC_APP = pathRequired.join(
-        MOCK_BASE_WEB_DIR,
-        'src',
-        'App'
-      )
-      const MOCK_WEB_DIST = pathRequired.join(MOCK_BASE_WEB_DIR, 'dist')
-      const MOCK_ROUTES = pathRequired.join(
-        MOCK_BASE_WEB_DIR,
-        'src',
-        'Routes.js'
-      )
-
-      return {
-        web: {
-          base: MOCK_BASE_WEB_DIR,
-          app: MOCK_WEB_SRC_APP,
-          src: MOCK_WEB_SRC,
-          dist: MOCK_WEB_DIST,
-          routes: MOCK_ROUTES,
-        },
-      }
-    }),
-    processPagesDir: () => {
-      return [
-        {
-          importName: 'APage',
-          importPath: 'src/pages/APage',
-          const: 'APage',
-          path: '/Users/peterp/x/redwoodjs/example-blog/web/src/pages/APage',
-          importStatement:
-            "const AboutPage = { name: 'APage', loader: () => import('src/pages/APage') }",
-        },
-        {
-          importName: 'BPage',
-          importPath: 'src/pages/BPage',
-          const: 'BPage',
-          path: '/Users/peterp/x/redwoodjs/example-blog/web/src/pages/BPage',
-          importStatement:
-            "const AdminEditPostPage = { name: 'BPage', loader: () => import('src/pages/BPage') }",
-        },
-
-        {
-          importName: 'NestedCPage',
-          importPath: 'src/pages/Nested/NestedCPage',
-          const: 'BPage',
-          path: '/Users/peterp/x/redwoodjs/example-blog/web/src/pages/BPage',
-          importStatement:
-            "const AdminEditPostPage = { name: 'BPage', loader: () => import('src/pages/BPage') }",
-        },
-      ]
+  pluginTester({
+    plugin,
+    pluginName: 'babel-plugin-redwood-routes-auto-loader',
+    pluginOptions: {
+      project,
+      useStaticImports: true,
     },
-  }
+    fixtures: path.join(
+      __dirname,
+      '__fixtures__/routes-auto-loader-static-imports'
+    ),
+  })
 })
 
 describe('routes auto loader', () => {
