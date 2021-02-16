@@ -47,7 +47,6 @@ const save = async () => {
     {
       cwd: getPaths().base,
       shell: true,
-      stdio: 'inherit',
     }
   )
 }
