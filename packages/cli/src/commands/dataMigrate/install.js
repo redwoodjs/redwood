@@ -19,7 +19,7 @@ const POST_INSTALL_INSTRUCTIONS = `${c.warning(
   "Don't forget to apply your migration when ready:"
 )}
 
-    yarn rw prisma migrate dev
+    ${c.bold('yarn rw prisma migrate dev')}
 `
 
 // Creates dataMigrations directory
