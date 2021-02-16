@@ -69,8 +69,8 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
 
   /**
    * https://github.com/apollographql/apollo-client/issues/3967
-   * {} cannot be returned from connectionParams in case
-   * there is no user authenticated
+   * Only include the connectionParams property if
+   * isAuthenticated (token available) is true
    */
   let wsLinkOptions
   if (isAuthenticated) {
