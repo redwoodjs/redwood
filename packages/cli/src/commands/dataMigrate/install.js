@@ -43,7 +43,7 @@ const appendModel = () => {
 const save = async () => {
   return await execa(
     'yarn rw',
-    ['prisma migrate dev', '--create-only', '--name=create_data_migrations'],
+    ['prisma migrate dev', '--name create_data_migrations', '--create-only'],
     {
       cwd: getPaths().base,
       shell: true,
