@@ -42,6 +42,8 @@ test('Should clean web dist directory, before build', async () => {
 
 test('The build command runs the correct commands.', async () => {
   await handler({})
+
+  // Prisma command is inserted differently
   expect(runCommandTask.mock.results[0].value[0]).toEqual(
     'yarn prisma generate --schema="../../__fixtures__/example-todo-main/api/prisma"'
   )
@@ -61,7 +63,10 @@ test('Should run prerender for web, when experimental flag is on', async () => {
       experimentalPrerender: true,
     },
   }
-  await handler({ side: ['web'] })
+
+  // Prerender is true by default, when experimentalPrerender flag is enabled
+  await handler({ side: ['web'], prerender: true })
+
   expect(execa.mock.results[1].value).toEqual(
     'yarn cross-env NODE_ENV=production webpack --config ../node_modules/@redwoodjs/core/config/webpack.production.js'
   )
