@@ -130,7 +130,7 @@ export const handler = async ({
     // Prerender _after_ web build
     if (getConfig().web.experimentalPrerender && prerender) {
       listrTasks.push({
-        title: 'Prerendering your RW app...',
+        title: 'Prerendering web...',
         task: () => {
           return execa('yarn rw prerender', undefined, {
             stdio: verbose ? 'inherit' : 'pipe',
