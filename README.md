@@ -70,6 +70,13 @@ use:
 - Database migrations (via Prisma 2).
 - First class JAMstack-style deployment to [Netlify](https://www.netlify.com/).
 
+## Roadmap
+
+We intend to ship v1 in the first quarter of 2021.
+To see all the features we plan on including in Redwood's first major release, you can check out our [Roadmap](https://redwoodjs.com/roadmap).
+
+A framework like Redwood has a lot of moving parts; the Roadmap is a great way to get a high-level overview of where the framework is relative to where we want it to be. And since we link to all of our GitHub project boards, it's also a great way to get involved!
+
 ## The Redwood philosophy
 
 Redwood believes that [JAMstack](https://jamstack.org/) is a huge leap forward in how we can write web
