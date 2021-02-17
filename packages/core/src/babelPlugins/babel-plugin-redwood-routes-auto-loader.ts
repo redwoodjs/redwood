@@ -33,18 +33,9 @@ export default function (
         // and not asynchronous ones.
         if (useStaticImports) {
           // Match import paths, const name could be different
+          // NOTE: the userImportPath we receive at this point is the aboluste path
+          // because of babel-plugin-module-resolver that runs before
           const userImportPath = p.node.source?.value
-          // FIXME:
-          // `userImportPath` is `src/pages/HomePage/HomePage`
-          // `rwPageImportsPaths` are absolute, therefore the test to remove them will never run, see:
-          // https://github.com/redwoodjs/redwood/blob/82e87f84cb10005ca331dd3d8f6569f4c76615d7/packages/core/src/babelPlugins/__tests__/__fixtures__/routes-auto-loader-static-imports/routes-with-some-imports/output.js#L26-L27
-          // [
-          //   '/Users/peterp/gh/redwoodjs/redwood/__fixtures__/example-todo-main/web/src/pages/admin/EditUserPage/EditUserPage',
-          //   '/Users/peterp/gh/redwoodjs/redwood/__fixtures__/example-todo-main/web/src/pages/FatalErrorPage/FatalErrorPage',
-          //   '/Users/peterp/gh/redwoodjs/redwood/__fixtures__/example-todo-main/web/src/pages/HomePage/HomePage',
-          //   '/Users/peterp/gh/redwoodjs/redwood/__fixtures__/example-todo-main/web/src/pages/NotFoundPage/NotFoundPage',
-          //   '/Users/peterp/gh/redwoodjs/redwood/__fixtures__/example-todo-main/web/src/pages/TypeScriptPage/TypeScriptPage'
-          // ]
 
           if (rwPageImportPaths.includes(userImportPath)) {
             p.remove()

@@ -13,7 +13,7 @@ const pathToFixturesApp = path.resolve(
   __dirname,
   '../../../../../__fixtures__/example-todo-main'
 )
-process.env.__REDWOOD__CONFIG_PATH = path.join(pathToFixturesApp)
+// process.env.__REDWOOD__CONFIG_PATH = path.join(pathToFixturesApp)
 
 jest.mock('@redwoodjs/structure', () => {
   return {
@@ -21,6 +21,7 @@ jest.mock('@redwoodjs/structure', () => {
     DefaultHost: jest.fn().mockImplementation(() => ({
       readdirSync: mockReaddirSync,
       writeFileSync: mockWriteFileSync,
+      readFileSync: jest.fn(),
       paths: {
         types: '/fake/project/node_modules/@types/@redwoodjs/generated',
       },
@@ -28,22 +29,39 @@ jest.mock('@redwoodjs/structure', () => {
   }
 })
 
-describe('router auto loader pre-rendering', () => {
-  const project = getProject(pathToFixturesApp)
+jest.mock('@redwoodjs/internal', () => ({
+  ...jest.requireActual('@redwoodjs/internal'),
+  // Import path set to be absolute path, because babel-plugin-module-resolver runs before in the actual project
+  processPagesDir: () => {
+    return [
+      {
+        importName: 'APage',
+        importPath: 'src/pages/APage',
+        const: 'APage',
+        path: '/Users/peterp/x/redwoodjs/example-blog/web/src/pages/APage',
+        importStatement:
+          "const AboutPage = { name: 'APage', loader: () => import('src/pages/APage') }",
+      },
+      {
+        importName: 'BPage',
+        importPath: 'src/pages/BPage',
+        const: 'BPage',
+        path: '/Users/peterp/x/redwoodjs/example-blog/web/src/pages/BPage',
+        importStatement:
+          "const AdminEditPostPage = { name: 'BPage', loader: () => import('src/pages/BPage') }",
+      },
 
-  pluginTester({
-    plugin,
-    pluginName: 'babel-plugin-redwood-routes-auto-loader',
-    pluginOptions: {
-      project,
-      useStaticImports: true,
-    },
-    fixtures: path.join(
-      __dirname,
-      '__fixtures__/routes-auto-loader-static-imports'
-    ),
-  })
-})
+      {
+        importName: 'NestedCPage',
+        importPath: 'src/pages/Nested/NestedCPage',
+        const: 'BPage',
+        path: '/Users/peterp/x/redwoodjs/example-blog/web/src/pages/BPage',
+        importStatement:
+          "const AdminEditPostPage = { name: 'BPage', loader: () => import('src/pages/BPage') }",
+      },
+    ]
+  },
+}))
 
 describe('routes auto loader', () => {
   const project = getProject(pathToFixturesApp)
