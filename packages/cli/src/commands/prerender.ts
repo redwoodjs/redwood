@@ -17,7 +17,7 @@ export const description = 'Prerender pages of a redwood app (experimental)'
 interface CliArgs {
   path: string
   output: string
-  dryrun: boolean
+  dryRun: boolean // dry-run gets converted
   verbose?: boolean
 }
 
@@ -36,7 +36,7 @@ export const builder = (yargs: Argv<CliArgs>) => {
     type: 'string',
   })
 
-  yargs.option('dryrun', {
+  yargs.option('dry-run', {
     alias: 'd',
     default: false,
     description: 'Run prerender and output to console',
@@ -89,29 +89,29 @@ export const getListrTasks = (dryrun: boolean) => {
   return listrTasks
 }
 
-export const handler = async ({ path, output, dryrun, verbose }: CliArgs) => {
+export const handler = async ({ path, output, dryRun, verbose }: CliArgs) => {
   if (path) {
     await runPrerender({
       routerPath: path,
       outputHtmlPath: output,
-      dryRun: dryrun,
+      dryRun,
     })
 
     return
   }
 
-  const listrTasks = getListrTasks(dryrun)
+  const listrTasks = getListrTasks(dryRun)
 
   const tasks = new Listr(listrTasks, {
-    renderer: verbose && VerboseRenderer,
+    renderer: verbose ? VerboseRenderer : 'default',
     concurrent: true,
   })
 
   try {
     await tasks.run()
   } catch (e) {
-    console.log(c.warning('\nNot all routes were succesfully prerendered'))
-    console.log(
+    console.error(c.warning('\nNot all routes were succesfully prerendered'))
+    console.error(
       c.info(
         `You won't get a prerendered page, but your Redwood app should still work fine.`
       )
