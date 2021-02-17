@@ -9,6 +9,9 @@ Before interacting with the Redwood community, please read and understand our [C
 - [Contributing](#contributing)
   - [Local Development](#local-development)
     - [Installing Dependencies](#installing-dependencies)
+    - [yarn rwt link](#yarn-rwt-link)
+      - [Example: Contributing a Command](#example-contributing-a-command)
+      - [Working on a PR](#working-on-a-pr)
     - [Copy and Watch](#copy-and-watch)
       - [Specifying a RW_PATH](#specifying-a-rw_path)
     - [Local Package Registry Emulation](#local-package-registry-emulation)
@@ -35,31 +38,73 @@ As a contributor, you'll have to gain familiarity with one more codebase: the Re
 The Redwood Framework lives in the monorepo redwoodjs/redwood; it contains all the packages that make Redwood Apps work the way they do.
 
 While you'll be making most of your changes in the Redwood Framework, you'll probably want to see your changes “running live" in one of your own Redwood Apps or in one of our example apps.
-We offer two workflows for making this possible: "copy and watch", which has some restrictions, and "local package registry emulation", which doesn't.
+Since we're always looking for ways to make contributing to Redwood as easy as possible, there's a few workflows for making this possible, but the one you'll want to use `yarn rwt link`. You can fall back on the others if that one doesn't work, but it'll make contributing a breeze.
 
-**How do I choose which one to use?** If you've installed or upgraded a dependency, use the "local package registry emulation" workflow; otherwise, use "copy and watch".
+> **I've used `yarn rw` before but what's `yarn rwt`?**
+>
+> All workflows use `redwood-tools` (`rwt`), Redwood's companion CLI development tool.
 
-> Both workflows use `redwood-tools` (`rwt`), Redwood's companion CLI development tool.
+Let's go through the entire contributor workflow, from Redwood Framework to Redwood App.
 
 ### Installing Dependencies
 
-Before you do anything, you should run `yarn install` in the root directory of your local-copy of the Redwood Framework to install the necessary dependencies.
+First, in your local copy of the Redwood Framework, make sure you're on  `main` (via a `git pull`), then run `yarn install` in the root directory to install all the dependencies.
 
 ```terminal
 cd redwood
 yarn install
 ```
 
-You'll also want to upgrade your Redwood App to the canary or so, just so you can be sure you're testing your contribution with all the most recent changes:
+Then, in your Redwood App, which you've either just created using `yarn create redwood-app` or already had lying around somewhere, you'll want to upgrade to the canary&mdash;Redwood's bleeding edge&mdash;just so you can be sure you're testing your contribution with all the most recent changes:
 
 ```terminal
 cd redwood-app # wherever your redwood-app happens to be, whether it's one of our templates or your own
 yarn rw upgrade -t canary
 ```
 
+### yarn rwt link
+
+Ok, now that everything's up to date, in your Redwood App, run:
+
+```bash
+yarn rwt link [RW_PATH]
+```
+
+where [RW_PATH] is the path to your local copy of the Redwood Framework. For exmaple,
+
+```
+yarn rwt link ~/redwood
+```
+
+You'll be prompted to add the redwood workspace to your Redwood App; go ahead and say yes.
+
+Then you'll start seeing a ton of output&mdash;`yarn rwt link` is building the Redwood Framework, watching it for changes, and copying all that over into a `redwood` workspace in your Redwood App.
+
+Your Redwood App isn't using the packages in `node_modules/@redwoodjs` anymore, but the packages in this workspace, with your minute to minute changes.
+
+To see for yoruself, make a change in your local copy of the Redwood Framework and you'll see it live, propagated to your Redwood App. You can even install packakges. It really is that simple.
+
+Make sure at the end to
+
+```
+yarn rwt restore
+```
+
+This'll restore your Redwood App to it's original mundane state, stripping it of it's Redwood Framework powers. It's ok, it can enjoy those powers again when your contribution makes it into a release!
+
+#### Example: Contributing a Command
+
+[todo, mulling this; might be instructive]
+
+#### Working on a PR
+
+[todo, the `yarn rw upgrade --pr` command]
+
 ### Copy and Watch
 
-Ok. Now that everything's up-to-date, you'll want to build-and-watch files in the Redwood Framework for changes:
+`yarn rwt link` not working for you? That's ok&mdash;we have a few legacy contributing workflows that you can fall back on.
+
+Pkcing up from... now that everything's up-to-date, you'll want to build-and-watch files in the Redwood Framework for changes:
 
 ```terminal
 cd redwood
