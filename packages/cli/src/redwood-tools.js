@@ -193,16 +193,34 @@ const rwtLink = async (yargs) => {
 
   const packagesPath = path.join(frameworkPath, 'packages')
 
-  console.log(`Linking your local Redwood build from ${c.info(packagesPath)}`)
+  const symLinkPath = path.join(getPaths().base, 'redwood')
 
-  if (!fs.statSync('./redwood').isDirectory()) {
-    await execa(`ln -sf ${packagesPath} ./redwood`, {
-      shell: true,
-      stdio: 'inherit',
-      cwd: getPaths().base,
-    })
+  // Make sure we don't double create the symlink
+  // Also makes sure we use the latest path passed to link
+  if (fs.existsSync(symLinkPath)) {
+    if (fs.lstatSync(symLinkPath).isSymbolicLink()) {
+      console.log(c.info(' 🔗  Removing old symlink. Will recreate a new one'))
+      rimraf.sync(symLinkPath)
+    } else {
+      // Throw an error if it looks like there was a file/folder called redwood
+      console.error(
+        c.error(
+          '\n 🛑  Looks like theres something called `redwood` at the root of your project.'
+        ) +
+          '\n This is where we symlink redwood packages. Please remove this and rerun the command \n'
+      )
+
+      process.exit(1)
+    }
   }
 
+  console.log(`Linking your local Redwood build from ${c.info(packagesPath)}`)
+
+  await execa(`ln -s ${packagesPath} ./redwood`, {
+    shell: true,
+    stdio: 'inherit',
+    cwd: getPaths().base,
+  })
 
   // Let workspaces do the link
   await execa('yarn install', {
@@ -309,7 +327,7 @@ yargs
   )
   .command({
     command: 'link [RW_PATH]',
-    aliases: ['c'],
+    aliases: ['l'],
     builder: (yargs) => {
       return yargs.option('clean', {
         alias: 'c',
