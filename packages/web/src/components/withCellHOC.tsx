@@ -1,6 +1,6 @@
 import type { DocumentNode } from 'graphql'
 
-import { isPrerendering } from 'src/prerender-browser.utils'
+import { isPrerendering } from '@redwoodjs/prerender/browserUtils'
 
 import { useQuery, OperationResult } from './GraphQLHooksProvider'
 

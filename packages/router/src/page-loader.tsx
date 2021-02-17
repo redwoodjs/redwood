@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 
 import isEqual from 'lodash.isequal'
 
-import { isPrerendering } from '@redwoodjs/web'
+import { isPrerendering } from '@redwoodjs/prerender/browserUtils'
 
 import { createNamedContext, ParamsContext, Spec } from './internal'
 

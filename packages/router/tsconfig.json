@@ -12,5 +12,6 @@
   "include": ["src"],
   "references": [
     { "path": "../auth" },
+    { "path": "../prerender" },
   ]
 }
