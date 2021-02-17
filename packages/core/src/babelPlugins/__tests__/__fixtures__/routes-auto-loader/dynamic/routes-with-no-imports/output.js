@@ -1,36 +1,13 @@
 // This is an empty `Routes.js` file, the pages will be automatically imported
-const adminEditUserPage = {
-  name: 'adminEditUserPage',
-  loader: () =>
-    import(
-      '/Users/peterp/gh/redwoodjs/redwood/__fixtures__/example-todo-main/web/src/pages/admin/EditUserPage/EditUserPage'
-    ),
+const APage = {
+  name: 'APage',
+  loader: () => import('src/pages/APage'),
 }
-const FatalErrorPage = {
-  name: 'FatalErrorPage',
-  loader: () =>
-    import(
-      '/Users/peterp/gh/redwoodjs/redwood/__fixtures__/example-todo-main/web/src/pages/FatalErrorPage/FatalErrorPage'
-    ),
+const BPage = {
+  name: 'BPage',
+  loader: () => import('src/pages/BPage'),
 }
-const HomePage = {
-  name: 'HomePage',
-  loader: () =>
-    import(
-      '/Users/peterp/gh/redwoodjs/redwood/__fixtures__/example-todo-main/web/src/pages/HomePage/HomePage'
-    ),
-}
-const NotFoundPage = {
-  name: 'NotFoundPage',
-  loader: () =>
-    import(
-      '/Users/peterp/gh/redwoodjs/redwood/__fixtures__/example-todo-main/web/src/pages/NotFoundPage/NotFoundPage'
-    ),
-}
-const TypeScriptPage = {
-  name: 'TypeScriptPage',
-  loader: () =>
-    import(
-      '/Users/peterp/gh/redwoodjs/redwood/__fixtures__/example-todo-main/web/src/pages/TypeScriptPage/TypeScriptPage'
-    ),
+const NestedCPage = {
+  name: 'NestedCPage',
+  loader: () => import('src/pages/Nested/NestedCPage'),
 }
