@@ -51,7 +51,7 @@ export const runPrerender = async ({
 
   const indexContent = fs.readFileSync(getRootHtmlPath()).toString()
 
-  const { default: App } = await import(getPaths().web.app)
+  const { default: App } = await import(getPaths().web.index)
 
   const componentAsHtml = ReactDOMServer.renderToString(
     <LocationProvider

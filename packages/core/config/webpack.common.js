@@ -164,7 +164,7 @@ module.exports = (webpackEnv) => {
     mode: isEnvProduction ? 'production' : 'development',
     devtool: isEnvProduction ? 'source-map' : 'cheap-module-source-map',
     entry: {
-      app: path.resolve(redwoodPaths.base, 'web/src/index'),
+      app: path.resolve(redwoodPaths.base, 'web/src/entry'),
     },
     resolve: {
       extensions: ['.wasm', '.mjs', '.js', '.jsx', '.ts', '.tsx', '.json'],
