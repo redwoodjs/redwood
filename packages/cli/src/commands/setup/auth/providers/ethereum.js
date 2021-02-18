@@ -5,9 +5,10 @@ export const config = {
     `import { ApolloClient, InMemoryCache } from '@apollo/client'`,
     `import { FetchConfigProvider, useFetchConfig } from '@redwoodjs/web'`,
   ],
-  init: `const ApolloInjector = ({ children }) => {
+  init: `let ethereum
+
+  const ApolloInjector = ({ children }) => {
   const { uri, headers } = useFetchConfig()
-  let ethereum
   try {
     const graphQLClient = new ApolloClient({
       cache: new InMemoryCache(),
@@ -31,7 +32,7 @@ export const config = {
 
     ethereum = new EthereumAuthClient({
       makeRequest,
-      debug: process.NODE_ENV === 'development',
+      debug: process.NODE_ENV !== 'development',
     })
   } catch (e) {
     console.log(e)
