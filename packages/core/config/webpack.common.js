@@ -170,7 +170,7 @@ module.exports = (webpackEnv) => {
        * Now we've seperate them into `entry.js` (ReactDOM mounting) and `index.js` (top-level component)
        * We will eventually remove the `entry` file and make it transparent, but this is a good middle ground.
        */
-      app: redwoodPaths.web.entry ?? redwoodPaths.web.base,
+      app: redwoodPaths.web.entry ?? redwoodPaths.web.index,
     },
     resolve: {
       extensions: ['.wasm', '.mjs', '.js', '.jsx', '.ts', '.tsx', '.json'],
