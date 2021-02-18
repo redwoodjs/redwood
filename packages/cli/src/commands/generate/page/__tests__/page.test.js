@@ -284,7 +284,13 @@ test('file generation', async () => {
   const spy = jest.spyOn(fs, 'writeFileSync')
   global.mockFs = true
 
-  await page.handler({ name: 'home', path: '', force: false })
+  await page.handler({
+    name: 'home',
+    path: '',
+    force: false,
+    tests: true,
+    stories: true,
+  })
 
   expect(spy).toHaveBeenCalledWith(
     path.normalize('/path/to/project/web/src/pages/HomePage/HomePage.js'),
@@ -347,7 +353,13 @@ test('file generation with route params', async () => {
   const spy = jest.spyOn(fs, 'writeFileSync')
   global.mockFs = true
 
-  await page.handler({ name: 'post', path: '{id}', force: false })
+  await page.handler({
+    name: 'post',
+    path: '{id}',
+    force: false,
+    tests: true,
+    stories: true,
+  })
 
   expect(spy).toHaveBeenCalledWith(
     path.normalize('/path/to/project/web/src/pages/PostPage/PostPage.js'),

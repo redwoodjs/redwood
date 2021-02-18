@@ -5,6 +5,8 @@ import Listr from 'listr'
 import pascalcase from 'pascalcase'
 import terminalLink from 'terminal-link'
 
+import { getConfig } from '@redwoodjs/internal'
+
 import { writeFilesTask, addRoutesToRouterTask } from 'src/lib'
 import c from 'src/lib/colors'
 
@@ -118,12 +120,10 @@ export const builder = (yargs) => {
     .option('tests', {
       description: 'Generate test files',
       type: 'boolean',
-      default: true,
     })
     .option('stories', {
       description: 'Generate storybook files',
       type: 'boolean',
-      default: true,
     })
     .epilogue(
       `Also see the ${terminalLink(
@@ -133,13 +133,9 @@ export const builder = (yargs) => {
     )
 }
 
-export const handler = async ({
-  name,
-  path,
-  force,
-  tests = true,
-  stories = true,
-}) => {
+export const handler = async ({ name, path, force, tests, stories }) => {
+  if (tests === undefined) tests = getConfig().generate.tests
+  if (stories === undefined) stories = getConfig().generate.stories
   if (process.platform === 'win32') {
     // running `yarn rw g page home /` on Windows using GitBash
     // POSIX-to-Windows path conversion will kick in.
