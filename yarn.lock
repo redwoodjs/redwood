@@ -3377,11 +3377,6 @@
     prop-types "^15.6.1"
     react-lifecycles-compat "^3.0.4"
 
-"@redwoodjs/prerender@0.23.0-draft":
-  version "0.23.0-draft"
-  resolved "https://registry.yarnpkg.com/@redwoodjs/prerender/-/prerender-0.23.0-draft.tgz#2bbf09b0d2b6e3337744aad5efa3b68734a9c238"
-  integrity sha512-Pug4pm5ZPazu/9bVYSlja5KC06pNje8UurOXoCXyc1RAGGV8tOqGPNJLtZtM+sPbW+WLtHXsNsqIQhdhgCdWcg==
-
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/@samverschueren/stream-to-observable/-/stream-to-observable-0.3.1.tgz#a21117b19ee9be70c379ec1877537ef2e1c63301"
