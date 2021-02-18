@@ -5,7 +5,7 @@ import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import terminalLink from 'terminal-link'
 
-import { ensurePosixPath } from '@redwoodjs/internal'
+import { ensurePosixPath, getConfig } from '@redwoodjs/internal'
 
 import { generateTemplate, getPaths, writeFilesTask } from 'src/lib'
 import c from 'src/lib/colors'
@@ -96,18 +96,21 @@ export const createYargsForComponentGeneration = ({
         .option('tests', {
           description: 'Generate test files',
           type: 'boolean',
-          default: true,
         })
         .option('stories', {
           description: 'Generate storybook files',
           type: 'boolean',
-          default: true,
         })
       Object.entries(builderObj).forEach(([option, config]) => {
         yargs.option(option, config)
       })
     },
     handler: async (options) => {
+      if (options.tests === undefined)
+        options.tests = getConfig().generate.tests
+      if (options.stories === undefined)
+        options.stories = getConfig().generate.stories
+
       const tasks = new Listr(
         [
           {
