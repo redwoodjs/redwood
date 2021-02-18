@@ -1,27 +1,19 @@
-import Listr, { ListrTask } from 'listr'
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore-next-line
-import VerboseRenderer from 'listr-verbose-renderer'
-import { Argv } from 'yargs'
+import fs from 'fs'
+import path from 'path'
 
+import Listr from 'listr'
+import VerboseRenderer from 'listr-verbose-renderer'
+
+import { getPaths } from '@redwoodjs/internal'
 import { runPrerender, detectPrerenderRoutes } from '@redwoodjs/prerender'
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore-next-line
-import c from '../lib/colors'
+import c from 'src/lib/colors'
 
 export const command = 'prerender'
 export const aliases = ['render']
 export const description = 'Prerender pages of a redwood app (experimental)'
 
-interface CliArgs {
-  path: string
-  output: string
-  dryRun: boolean // dry-run gets converted
-  verbose?: boolean
-}
-
-export const builder = (yargs: Argv<CliArgs>) => {
+export const builder = (yargs) => {
   yargs.option('path', {
     alias: 'path',
     default: false,
@@ -51,7 +43,7 @@ export const builder = (yargs: Argv<CliArgs>) => {
   })
 }
 
-const mapRouterPathToHtml = (routerPath: string) => {
+const mapRouterPathToHtml = (routerPath) => {
   if (routerPath === '/') {
     return 'web/dist/index.html'
   } else {
@@ -60,25 +52,35 @@ const mapRouterPathToHtml = (routerPath: string) => {
 }
 
 // This can be used directly in build.js for nested ListrTasks
-export const getListrTasks = (dryrun: boolean) => {
+export const getTasks = (dryrun) => {
   const prerenderRoutes = detectPrerenderRoutes()
 
-  if (prerenderRoutes.length < 1) {
-    return
+  if (prerenderRoutes.length === 0) {
+    console.error(
+      'You have not marked any routes as `prerender` in `Routes.{js,tsx}`'
+    )
+    // TODO: Link to docs.
+    process.exit(1)
   }
 
-  const listrTasks: ListrTask<() => Promise<void>>[] = prerenderRoutes
+  if (!fs.existsSync(path.join(getPaths().web.dist), 'index.html')) {
+    console.error(
+      'You must run `yarn rw build web` before trying to prerender.'
+    )
+    process.exit(1)
+    // TODO: Run this automatically at this point.
+  }
+
+  const listrTasks = prerenderRoutes
     .filter((route) => route.path)
     .map((routeToPrerender) => {
-      const outputHtmlPath = mapRouterPathToHtml(
-        routeToPrerender.path as string
-      )
+      const outputHtmlPath = mapRouterPathToHtml(routeToPrerender.path)
 
       return {
         title: `Prerendering ${routeToPrerender.path} -> ${outputHtmlPath}`,
         task: () => {
           return runPrerender({
-            routerPath: routeToPrerender.path as string,
+            routerPath: routeToPrerender.path,
             outputHtmlPath,
             dryRun: dryrun,
           })
@@ -89,7 +91,7 @@ export const getListrTasks = (dryrun: boolean) => {
   return listrTasks
 }
 
-export const handler = async ({ path, output, dryRun, verbose }: CliArgs) => {
+export const handler = async ({ path, output, dryRun, verbose }) => {
   if (path) {
     await runPrerender({
       routerPath: path,
@@ -100,7 +102,7 @@ export const handler = async ({ path, output, dryRun, verbose }: CliArgs) => {
     return
   }
 
-  const listrTasks = getListrTasks(dryRun)
+  const listrTasks = getTasks(dryRun)
 
   const tasks = new Listr(listrTasks, {
     renderer: verbose ? VerboseRenderer : 'default',
@@ -110,24 +112,21 @@ export const handler = async ({ path, output, dryRun, verbose }: CliArgs) => {
   try {
     await tasks.run()
   } catch (e) {
-    console.error(c.warning('\nNot all routes were succesfully prerendered'))
+    console.log()
+    console.error(c.warning('Not all routes were succesfully prerendered'))
     console.error(
       c.info(
-        `You won't get a prerendered page, but your Redwood app should still work fine.`
+        `we could not prerender your page, but your Redwood app should still work fine.`
       )
     )
-    console.log(
+    console.error(
       c.info(
-        `It often means that a library you are using, or your code, is not optimised for SSR \n`
+        `This could mean that a library you're using does not support SSR.`
       )
     )
-
-    if (verbose) {
-      // Don't colourise as it truncates the error
-      console.error(e)
-    }
-
-    // To make sure yarn rw build fails, if pages can't be prererendered
+    console.log()
+    console.error(e)
+    console.log()
     process.exit(1)
   }
 }
