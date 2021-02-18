@@ -19,7 +19,7 @@
     "@babel/preset-typescript": "^7.10.4",
     "@babel/runtime-corejs3": "^7.11.2",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
-    "@prisma/cli": "2.16.1",
+    "prisma": "2.16.1",
     "@redwoodjs/cli": "^0.25.1",
     "@redwoodjs/dev-server": "^0.25.1",
     "@redwoodjs/eslint-config": "^0.25.1",
