@@ -13,24 +13,38 @@ let singleWordDefaultFiles,
   withoutStoryFiles
 
 beforeAll(() => {
-  singleWordDefaultFiles = layout.files({ name: 'App' })
-  multiWordDefaultFiles = layout.files({ name: 'SinglePage' })
+  singleWordDefaultFiles = layout.files({
+    name: 'App',
+    tests: true,
+    stories: true,
+  })
+  multiWordDefaultFiles = layout.files({
+    name: 'SinglePage',
+    tests: true,
+    stories: true,
+  })
   javascriptFiles = layout.files({
     name: 'JavascriptPage',
     javascript: true,
+    tests: true,
+    stories: true,
   })
   typescriptFiles = layout.files({
     name: 'TypescriptPage',
     typescript: true,
+    tests: true,
+    stories: true,
   })
   withoutTestFiles = layout.files({
     name: 'withoutTests',
     javascript: true,
     tests: false,
+    stories: true,
   })
   withoutStoryFiles = layout.files({
     name: 'withoutStories',
     javascript: true,
+    tests: true,
     stories: false,
   })
 })

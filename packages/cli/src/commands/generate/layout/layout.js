@@ -8,7 +8,7 @@ import {
 const COMPONENT_SUFFIX = 'Layout'
 const REDWOOD_WEB_PATH_NAME = 'layouts'
 
-export const files = ({ name, tests = true, stories = true, ...options }) => {
+export const files = ({ name, ...options }) => {
   // TODO: Replace with check from https://github.com/redwoodjs/redwood/pull/633
   const isJavascript = options.javascript && !options.typescript
   const layoutFile = templateForComponentFile({
@@ -37,11 +37,11 @@ export const files = ({ name, tests = true, stories = true, ...options }) => {
   })
 
   const files = [layoutFile]
-  if (stories) {
+  if (options.stories) {
     files.push(storyFile)
   }
 
-  if (tests) {
+  if (options.tests) {
     files.push(testFile)
   }
 
