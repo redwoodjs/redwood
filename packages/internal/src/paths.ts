@@ -22,6 +22,7 @@ export interface NodeTargetPaths {
 export interface BrowserTargetPaths {
   base: string
   src: string
+  entry: string | null
   index: string
   routes: string
   pages: string
@@ -30,6 +31,7 @@ export interface BrowserTargetPaths {
   config: string
   webpack: string
   postcss: string
+  dist: string
 }
 
 export interface Paths {
@@ -66,10 +68,13 @@ const PATH_WEB_DIR_LAYOUTS = 'web/src/layouts/'
 const PATH_WEB_DIR_PAGES = 'web/src/pages/'
 const PATH_WEB_DIR_COMPONENTS = 'web/src/components'
 const PATH_WEB_DIR_SRC = 'web/src'
+const PATH_WEB_DIR_SRC_ENTRY = 'web/src/entry'
 const PATH_WEB_DIR_SRC_INDEX = 'web/src/index' // .js|.tsx
 const PATH_WEB_DIR_CONFIG = 'web/config'
 const PATH_WEB_DIR_CONFIG_WEBPACK = 'web/config/webpack.config.js'
 const PATH_WEB_DIR_CONFIG_POSTCSS = 'web/config/postcss.config.js'
+
+const PATH_WEB_DIR_DIST = 'web/dist'
 
 /**
  * Search the parent directories for the Redwood configuration file.
@@ -151,10 +156,12 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       components: path.join(BASE_DIR, PATH_WEB_DIR_COMPONENTS),
       layouts: path.join(BASE_DIR, PATH_WEB_DIR_LAYOUTS),
       src: path.join(BASE_DIR, PATH_WEB_DIR_SRC),
-      index: path.join(BASE_DIR, PATH_WEB_DIR_SRC_INDEX),
+      entry: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_ENTRY)),
+      index: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_INDEX)) as string,
       config: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG),
       webpack: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG_WEBPACK),
       postcss: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG_POSTCSS),
+      dist: path.join(BASE_DIR, PATH_WEB_DIR_DIST),
     },
   }
 }
