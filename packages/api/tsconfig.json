@@ -11,6 +11,7 @@
   },
   "include": ["src", "src/../package.json"],
   "references": [
+    { "path": "../internal" },
     { "path": "../auth" },
     { "path": "../dev-server" }
   ]

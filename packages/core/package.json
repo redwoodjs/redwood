@@ -61,6 +61,7 @@
     "webpack-bundle-analyzer": "^3.6.1",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3",
+    "webpack-manifest-plugin": "^3.0.0",
     "webpack-merge": "^5.1.2",
     "webpack-retry-chunk-load-plugin": "^1.4.0",
     "whatwg-fetch": "^3.5.0"
