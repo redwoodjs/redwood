@@ -31,7 +31,7 @@ const uniqueOperationName = async (name, index = 1) => {
   return uniqueOperationName(name, index + 1)
 }
 
-export const files = async ({ name, tests = true, stories = true }) => {
+export const files = async ({ name, ...options }) => {
   // Create a unique operation name.
   const operationName = await uniqueOperationName(name)
 
@@ -72,15 +72,15 @@ export const files = async ({ name, tests = true, stories = true }) => {
 
   const files = [cellFile]
 
-  if (stories) {
+  if (options.stories) {
     files.push(storiesFile)
   }
 
-  if (tests) {
+  if (options.tests) {
     files.push(testFile)
   }
 
-  if (stories || tests) {
+  if (options.stories || options.tests) {
     files.push(mockFile)
   }
 
