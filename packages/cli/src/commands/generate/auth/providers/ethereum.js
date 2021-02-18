@@ -6,6 +6,7 @@ export const config = {
     `import { FetchConfigProvider, useFetchConfig } from '@redwoodjs/web'`,
   ],
   init: `let ethereum
+  
   const ApolloInjector = ({ children }) => {
   const { uri, headers } = useFetchConfig()
   try {
@@ -31,7 +32,7 @@ export const config = {
 
     ethereum = new EthereumAuthClient({
       makeRequest,
-      debug: process.NODE_ENV === 'development',
+      debug: process.NODE_ENV !== 'development',
     })
   } catch (e) {
     console.log(e)
