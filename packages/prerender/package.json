@@ -1,12 +1,12 @@
 {
   "name": "@redwoodjs/prerender",
-  "description": "Redwood prerenter util",
+  "description": "RedwoodJS prerender",
   "version": "0.25.1",
   "license": "MIT",
   "files": [
     "dist",
     "dist/index.js",
-    "dist/browser.js"
+		"dist/browerUtils/index.js"
   ],
   "main": "dist/index.js",
   "peerDependencies": {
@@ -14,27 +14,24 @@
     "react-dom": "*"
 
   },
-	"dependencies": {
-		"@babel/core": "^7.11.6",
-    "@babel/node": "^7.10.5",
-    "@babel/plugin-proposal-class-properties": "^7.10.4",
-    "@babel/polyfill": "^7.12.1",
-		"@babel/preset-env": "^7.11.5",
-    "@babel/preset-react": "^7.10.4",
-		"@babel/preset-typescript": "^7.10.4",
-    "@babel/register": "^7.12.10",
-		"@redwoodjs/auth": "^0.25.1",
-		"@redwoodjs/internal": "^0.25.1",
-		"@redwoodjs/router": "^0.25.1",
-		"@redwoodjs/web": "^0.25.1",
-		"babel-plugin-ignore-html-and-css-imports": "^0.1.0",
-		"babel-plugin-inline-react-svg": "^1.1.2",
-		"node-fetch": "^2.6.1"
-	},
+  "dependencies": {
+    "@babel/register": "^7.9.0",
+    "@redwoodjs/structure": "^0.25.1",
+    "@redwoodjs/auth": "^0.25.1",
+    "@redwoodjs/internal": "^0.25.1",
+    "@redwoodjs/router": "^0.25.1",
+    "@redwoodjs/web": "^0.25.1",
+    "babel-plugin-ignore-html-and-css-imports": "^0.1.0",
+    "babel-plugin-inline-react-svg": "^1.1.2",
+    "node-fetch": "^2.6.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  },
   "scripts": {
     "build": "yarn build:js && yarn build:types",
     "prepublishOnly": "yarn build",
-    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
+    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx,.jsx\"",
     "build:types": "ttsc --build --verbose",
 		"build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build\"",
 		"test": "jest",

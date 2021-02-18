@@ -9,7 +9,6 @@
   "license": "MIT",
   "dependencies": {
     "@redwoodjs/auth": "^0.25.1",
-    "@redwoodjs/web": "^0.25.1",
     "core-js": "3.6.5",
     "lodash.isequal": "^4.5.0"
   },

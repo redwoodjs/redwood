@@ -2,8 +2,6 @@ import React, { useContext } from 'react'
 
 import isEqual from 'lodash.isequal'
 
-import { isPrerendering } from '@redwoodjs/web'
-
 import { createNamedContext, ParamsContext, Spec } from './internal'
 
 export const PageLoadingContext = createNamedContext('PageLoading')
@@ -108,7 +106,7 @@ export class PageLoader extends React.Component<Props> {
   render() {
     const { Page } = this.state
 
-    if (isPrerendering()) {
+    if (global.__REDWOOD__PRERENDERING) {
       // babel autoloader plugin uses withStaticImport in prerender mode
       // override the types for this condition
       const syncPageLoader = (this.props.spec

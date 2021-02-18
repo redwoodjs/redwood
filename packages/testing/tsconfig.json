@@ -13,9 +13,9 @@
     "src"
   ],
   "references": [
+    { "path": "../router" },
     { "path": "../internal" },
     { "path": "../web" },
     { "path": "../auth" },
-    { "path": "../router" }
   ]
 }

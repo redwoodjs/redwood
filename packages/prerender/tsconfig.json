@@ -12,9 +12,10 @@
   },
   "include": ["./src/**/*", "ambient.d.ts"],
   "references": [
-    { "path": "../auth" },
+    { "path": "../web" },
     { "path": "../router" },
     { "path": "../internal" },
-    { "path": "../web" }
+    { "path": "../auth" },
+    { "path": "../structure" }
   ]
 }

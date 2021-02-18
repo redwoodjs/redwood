@@ -1,7 +1,5 @@
 import type { DocumentNode } from 'graphql'
 
-import { isPrerendering } from 'src/prerender-browser.utils'
-
 import { useQuery, OperationResult } from './GraphQLHooksProvider'
 
 const Query: React.FunctionComponent<{
@@ -103,8 +101,7 @@ export const withCell = ({
   Success,
 }: WithCellProps) => {
   // If its prerendering, render the Cell's Loading component
-  // @TODO: Determine if it's possible to do this via Babel at build time instead.
-  if (isPrerendering()) {
+  if (global.__REDWOOD__PRERENDERING) {
     return (props: Record<string, unknown>) => <Loading {...props} />
   }
 
