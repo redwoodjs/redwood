@@ -1,15 +1,15 @@
-import { FatalErrorBoundary } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
+import { FatalErrorBoundary } from '@redwoodjs/web'
 
-import FatalErrorPage from 'src/pages/FatalErrorPage'
 import Routes from 'src/Routes'
+import FatalErrorPage from 'src/pages/FatalErrorPage'
 
-const App = () => (
+import './index.css'
+
+export default () => (
   <FatalErrorBoundary page={FatalErrorPage}>
     <RedwoodApolloProvider>
       <Routes />
     </RedwoodApolloProvider>
   </FatalErrorBoundary>
 )
-
-export default App
