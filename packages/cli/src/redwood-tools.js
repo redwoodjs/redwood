@@ -140,7 +140,7 @@ const rwtCopyWatch = ({ RW_PATH = process.env.RW_PATH }) => {
 
 const rwtLink = async (yargs) => {
   const RW_PATH = yargs.RW_PATH || process.env.RW_PATH
-  const { clean } = yargs
+  const { clean, watch } = yargs
 
   if (!RW_PATH) {
     console.error(c.error('You must specify a path to your local redwood repo'))
@@ -256,7 +256,9 @@ const rwtLink = async (yargs) => {
     })
   }
 
-  execa('yarn build:watch', {
+  const buildCommand = watch ? 'yarn build:watch' : 'yarn build'
+
+  execa(buildCommand, {
     shell: true,
     stdio: 'inherit',
     cleanup: true,
@@ -264,7 +266,7 @@ const rwtLink = async (yargs) => {
   })
 }
 
-const rwtRestore = () => {
+const rwtUnlink = () => {
   const symLinkPath = path.join(getPaths().base, 'redwood')
 
   if (fs.existsSync(symLinkPath)) {
@@ -329,21 +331,28 @@ yargs
     command: 'link [RW_PATH]',
     aliases: ['l'],
     builder: (yargs) => {
-      return yargs.option('clean', {
-        alias: 'c',
-        type: 'boolean',
-        description: 'Clean the redwood dist folders first.',
-        default: true,
-      })
+      return yargs
+        .option('clean', {
+          alias: 'c',
+          type: 'boolean',
+          description: 'Clean the redwood dist folders first.',
+          default: true,
+        })
+        .option('watch', {
+          alias: 'w',
+          type: 'boolean',
+          description: 'Build and watch the supplied redwood repo',
+          default: true,
+        })
     },
     desc: 'Run your local version of redwood in this project',
     handler: rwtLink,
   })
   .command({
-    command: 'restore',
+    command: 'unlink',
     desc:
       'Unlink your local verison of redwood, and use the one specified in package.json',
-    handler: rwtRestore,
+    handler: rwtUnlink,
   })
   .command(
     ['install [packageName]', 'i'],
