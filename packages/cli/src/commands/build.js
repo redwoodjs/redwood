@@ -117,7 +117,7 @@ export const handler = async ({
   if (side.includes('web')) {
     // Clean web dist folder, _before_ building
     listrTasks.unshift({
-      title: 'Cleaning web/dist',
+      title: 'Cleaning "web"... (./web/dist/)',
       task: () => {
         return execa('rimraf dist/*', undefined, {
           stdio: verbose ? 'inherit' : 'pipe',
@@ -130,7 +130,7 @@ export const handler = async ({
     // Prerender _after_ web build
     if (getConfig().web.experimentalPrerender && prerender) {
       listrTasks.push({
-        title: 'Prerendering web...',
+        title: 'Prerendering "web"...',
         task: () => {
           return execa('yarn rw prerender', undefined, {
             stdio: verbose ? 'inherit' : 'pipe',
