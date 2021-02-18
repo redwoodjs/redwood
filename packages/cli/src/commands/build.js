@@ -6,7 +6,7 @@ import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
 
-import { getPaths } from 'src/lib'
+import { getPaths, getConfig } from 'src/lib'
 import c from 'src/lib/colors'
 import { generatePrismaClient } from 'src/lib/generatePrismaClient'
 
@@ -45,6 +45,11 @@ export const builder = (yargs) => {
       description: 'Print more',
       type: 'boolean',
     })
+    .option('prerender', {
+      default: true,
+      description: 'Prerender after building web',
+      type: 'boolean',
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -57,20 +62,8 @@ export const handler = async ({
   side = ['api', 'web'],
   verbose = false,
   stats = false,
+  prerender,
 }) => {
-  if (side.includes('api')) {
-    try {
-      await generatePrismaClient({
-        verbose,
-        force: true,
-        schema: getPaths().api.dbSchema,
-      })
-    } catch (e) {
-      console.log(c.error(e.message))
-      process.exit(1)
-    }
-  }
-
   const execCommandsForSides = {
     api: {
       // must use path.join() here, and for 'web' below, to support Windows
@@ -93,24 +86,65 @@ export const handler = async ({
     )
   }
 
-  const tasks = new Listr(
-    side.map((sideName) => {
-      const { cwd, cmd } = execCommandsForSides[sideName]
-      return {
-        title: `Building "${sideName}"${(stats && ' for stats') || ''}...`,
+  const listrTasks = side.map((sideName) => {
+    const { cwd, cmd } = execCommandsForSides[sideName]
+    return {
+      title: `Building "${sideName}"${(stats && ' for stats') || ''}...`,
+      task: () => {
+        return execa(cmd, undefined, {
+          stdio: verbose ? 'inherit' : 'pipe',
+          shell: true,
+          cwd,
+        })
+      },
+    }
+  })
+
+  // Additional tasks, apart from build
+  if (side.includes('api')) {
+    try {
+      await generatePrismaClient({
+        verbose,
+        force: true,
+        schema: getPaths().api.dbSchema,
+      })
+    } catch (e) {
+      console.log(c.error(e.message))
+      process.exit(1)
+    }
+  }
+
+  if (side.includes('web')) {
+    // Clean web dist folder, _before_ building
+    listrTasks.unshift({
+      title: 'Cleaning "web"... (./web/dist/)',
+      task: () => {
+        return execa('rimraf dist/*', undefined, {
+          stdio: verbose ? 'inherit' : 'pipe',
+          shell: true,
+          cwd: getPaths().web.base,
+        })
+      },
+    })
+
+    // Prerender _after_ web build
+    if (getConfig().web.experimentalPrerender && prerender) {
+      listrTasks.push({
+        title: 'Prerendering "web"...',
         task: () => {
-          return execa(cmd, undefined, {
+          return execa('yarn rw prerender', undefined, {
             stdio: verbose ? 'inherit' : 'pipe',
             shell: true,
-            cwd,
+            cwd: getPaths().base,
           })
         },
-      }
-    }),
-    {
-      renderer: verbose && VerboseRenderer,
+      })
     }
-  )
+  }
+
+  const tasks = new Listr(listrTasks, {
+    renderer: verbose && VerboseRenderer,
+  })
 
   try {
     await tasks.run()
