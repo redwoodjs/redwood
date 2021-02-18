@@ -1,5 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
-const { existsSync } = require('fs')
+const fs = require('fs')
 const path = require('path')
 
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
@@ -60,8 +60,8 @@ const getStyleLoaders = (isEnvProduction) => {
     return loaderConfig
   }
 
-  const redwoodPaths = getPaths()
-  const hasPostCssConfig = existsSync(redwoodPaths.web.postcss)
+  const paths = getPaths()
+  const hasPostCssConfig = fs.existsSync(paths.web.postcss)
 
   // We only use the postcss-loader if there is a postcss config file
   // at web/config/postcss.config.js
@@ -70,7 +70,7 @@ const getStyleLoaders = (isEnvProduction) => {
         loader: 'postcss-loader',
         options: {
           postcssOptions: {
-            config: redwoodPaths.web.postcss,
+            config: paths.web.postcss,
           },
         },
       }
@@ -164,7 +164,13 @@ module.exports = (webpackEnv) => {
     mode: isEnvProduction ? 'production' : 'development',
     devtool: isEnvProduction ? 'source-map' : 'cheap-module-source-map',
     entry: {
-      app: path.resolve(redwoodPaths.base, 'web/src/entry'),
+      /**
+       * Prerender requires a top-level component.
+       * Before we had `ReactDOM` and a top-level component in the same file (web/index.js).
+       * Now we've seperate them into `entry.js` (ReactDOM mounting) and `index.js` (top-level component)
+       * We will eventually remove the `entry` file and make it transparent, but this is a good middle ground.
+       */
+      app: redwoodPaths.web.entry ?? redwoodPaths.web.base,
     },
     resolve: {
       extensions: ['.wasm', '.mjs', '.js', '.jsx', '.ts', '.tsx', '.json'],
@@ -184,7 +190,7 @@ module.exports = (webpackEnv) => {
         title: path.basename(redwoodPaths.base),
         template: path.resolve(redwoodPaths.base, 'web/src/index.html'),
         templateParameters: {
-          prerenderMarkup: redwoodConfig.web.experimentalPrerender
+          prerenderPlaceholder: redwoodConfig.web.experimentalPrerender
             ? '<server-markup></server-markup>'
             : '<!-- Redwood App Here -->', // this gets taken out by post processing anyway
         },
@@ -301,7 +307,7 @@ module.exports = (webpackEnv) => {
 
 module.exports.mergeUserWebpackConfig = (mode, baseConfig) => {
   const redwoodPaths = getPaths()
-  const hasCustomConfig = existsSync(redwoodPaths.web.webpack)
+  const hasCustomConfig = fs.existsSync(redwoodPaths.web.webpack)
   if (!hasCustomConfig) {
     return baseConfig
   }
