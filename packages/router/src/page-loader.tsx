@@ -106,7 +106,7 @@ export class PageLoader extends React.Component<Props> {
   render() {
     const { Page } = this.state
 
-    if (process.env.__REDWOOD__PRERENDERING === '1') {
+    if (global.__REDWOOD__PRERENDERING) {
       // babel autoloader plugin uses withStaticImport in prerender mode
       // override the types for this condition
       const syncPageLoader = (this.props.spec

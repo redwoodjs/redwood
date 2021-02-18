@@ -101,7 +101,7 @@ export const withCell = ({
   Success,
 }: WithCellProps) => {
   // If its prerendering, render the Cell's Loading component
-  if (process.env.__REDWOOD__PRERENDERING === '1') {
+  if (global.__REDWOOD__PRERENDERING) {
     return (props: Record<string, unknown>) => <Loading {...props} />
   }
 
