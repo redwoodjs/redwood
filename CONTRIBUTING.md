@@ -35,20 +35,20 @@ As a Redwood user, you're already familiar with the codebase `yarn create redwoo
 Here we'll call this codebase a "Redwood App"&mdash;it’s the fullstack-to-Jamstack solution you already know and love.
 
 As a contributor, you'll have to gain familiarity with one more codebase: the Redwood Framework.
-The Redwood Framework lives in the monorepo redwoodjs/redwood; it contains all the packages that make Redwood Apps work the way they do.
+The Redwood Framework lives in the monorepo redwoodjs/redwood (where you're most likely reading this document); it contains all the packages that make Redwood Apps work the way they do. This is where you'll be making most of your changes. After you use `git clone` to make a local copy of course!
 
-While you'll be making most of your changes in the Redwood Framework, you'll probably want to see your changes “running live" in one of your own Redwood Apps or in one of our example apps.
-Since we're always looking for ways to make contributing to Redwood as easy as possible, there's a few workflows for making this possible, but the one you'll want to use `yarn rwt link`. You can fall back on the others if that one doesn't work, but it'll make contributing a breeze.
+You'll probably want to see your changes to your local copy of the Redwood Framework “running live" in one of your own Redwood Apps or in one of our example apps.
+Since we're always looking for ways to make contributing to Redwood easier, there's a few workflows we've come up with, but the one you'll want to use is `yarn rwt link`. You can fall back on any of the others if that one doesn't work, but it'll make contributing a breeze.
 
-> **I've used `yarn rw` before but what's `yarn rwt`?**
+> **I've used `yarn rw` before, but what's `yarn rwt`?**
 >
 > All workflows use `redwood-tools` (`rwt`), Redwood's companion CLI development tool.
 
-Let's go through the entire contributor workflow, from Redwood Framework to Redwood App.
+All right, let's go through the entire contributor workflow, from Redwood Framework to Redwood App.
 
 ### Installing Dependencies
 
-First, in your local copy of the Redwood Framework, make sure you're on  `main` (via a `git pull`), then run `yarn install` in the root directory to install all the dependencies.
+First, in your local copy of the Redwood Framework, make sure you've got the `main` branch's latest changes (via a `git pull`), then run `yarn install` in the root directory to install all the dependencies.
 
 ```terminal
 cd redwood
