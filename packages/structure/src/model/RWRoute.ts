@@ -173,7 +173,7 @@ export class RWRoute extends BaseNode {
     if (this.hasPreRenderInfo && !this.hasParameters)
       yield err(
         this.jsxNode!,
-        `Only routes with parameters can have associated pre-render information`
+        `Only routes with parameters can have associated prerender information`
       )
   }
   *ideInfo() {

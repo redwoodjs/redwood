@@ -47,7 +47,7 @@ export const builder = (yargs) => {
     })
     .option('prerender', {
       default: true,
-      description: 'Pre-render after building web',
+      description: 'Prerender after building web',
       type: 'boolean',
     })
     .epilogue(
