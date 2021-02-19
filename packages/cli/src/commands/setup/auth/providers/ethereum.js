@@ -32,7 +32,7 @@ export const config = {
 
     ethereum = new EthereumAuthClient({
       makeRequest,
-      debug: process.NODE_ENV !== 'development',
+      debug: process.NODE_ENV === 'development',
     })
   } catch (e) {
     console.log(e)
