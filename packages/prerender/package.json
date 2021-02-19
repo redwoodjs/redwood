@@ -5,8 +5,7 @@
   "license": "MIT",
   "files": [
     "dist",
-    "dist/index.js",
-    "dist/browerUtils/index.js"
+    "browserUtils"
   ],
   "main": "dist/index.js",
   "peerDependencies": {
@@ -21,8 +20,7 @@
     "@redwoodjs/router": "^0.25.1",
     "@redwoodjs/web": "^0.25.1",
     "babel-plugin-ignore-html-and-css-imports": "^0.1.0",
-    "node-fetch": "^2.6.1",
-    "nodemon": "^2.0.7"
+    "node-fetch": "^2.6.1"
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",
