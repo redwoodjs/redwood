@@ -7,7 +7,11 @@ import execa from 'execa'
 import _ from 'lodash'
 import yargs from 'yargs'
 
-import { getPaths, ensurePosixPath } from '@redwoodjs/internal'
+import {
+  getPaths,
+  ensurePosixPath,
+  convertTsProjectToJs,
+} from '@redwoodjs/internal'
 
 const RW_BINS = {
   redwood: 'cli/dist/index.js',
@@ -178,5 +182,8 @@ yargs
       fixProjectBinaries(getPaths().base)
     }
   )
+  .command(['ts-to-js'], 'Convert TS files in a project to JS', {}, () => {
+    convertTsProjectToJs(process.cwd())
+  })
   .demandCommand()
   .strict().argv
