@@ -196,7 +196,7 @@ export const fieldsToUpdate = async (model) => {
 
 export const files = async ({
   name,
-  tests = true,
+  tests,
   relations,
   javascript,
   typescript,
@@ -268,7 +268,6 @@ export const files = async ({
 export const defaults = {
   ...yargsDefaults,
   tests: {
-    default: true,
     description: 'Generate test files',
     type: 'boolean',
   },

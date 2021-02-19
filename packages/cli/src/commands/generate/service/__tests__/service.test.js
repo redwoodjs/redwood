@@ -236,7 +236,7 @@ const itCreatesASingleWordServiceFileWithMultipleRelations = (baseArgs) => {
 }
 
 describe('in javascript mode', () => {
-  const baseArgs = getDefaultArgs(service.defaults)
+  const baseArgs = { ...getDefaultArgs(service.defaults), tests: true }
 
   itReturnsExactly3Files(baseArgs)
   itCreatesASingleWordServiceFile(baseArgs)
@@ -254,7 +254,11 @@ describe('in javascript mode', () => {
 })
 
 describe('in typescript mode', () => {
-  const baseArgs = { ...getDefaultArgs(service.defaults), typescript: true }
+  const baseArgs = {
+    ...getDefaultArgs(service.defaults),
+    typescript: true,
+    tests: true,
+  }
 
   itReturnsExactly3Files(baseArgs)
   itCreatesASingleWordServiceFile(baseArgs)
@@ -404,7 +408,10 @@ describe('fieldsToScenario', () => {
 })
 
 test("doesn't include test file when --tests is set to false", async () => {
-  const baseArgs = { ...getDefaultArgs(service.defaults), javascript: true }
+  const baseArgs = {
+    ...getDefaultArgs(service.defaults),
+    javascript: true,
+  }
 
   const files = await service.files({
     ...baseArgs,
