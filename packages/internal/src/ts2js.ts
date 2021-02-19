@@ -8,11 +8,33 @@ import { format } from 'prettier'
 import { getPaths } from './paths'
 
 /**
+ * Converts all the TypeScript files in the `api` and `web` sides to JavaScript.
+ *
+ * @param {string} cwd - The base path to the project.
+ */
+export const convertTsProjectToJs = (cwd = getPaths().base) => {
+  const files = typeScriptSourceFiles()
+  for (const f of files) {
+    const code = transformTSToJS(f)
+    if (code) {
+      fs.writeFileSync(
+        path.join(cwd, f.replace('.tsx', '.js').replace('.ts', '.js')),
+        code,
+        'utf8'
+      )
+      fs.unlinkSync(path.join(cwd, f))
+    }
+  }
+}
+
+/**
  * Get all the source code from a Redwood application.
  */
-export const getSourceFiles = (cwd = getPaths().base) => {
-  return glob.sync('**/src/**/**.{ts,js,tsx,jsx}', {
-    cwd,
+export const typeScriptSourceFiles = () => {
+  // TODO: When sides are expanded read the `api` and `web` string instead
+  // of hard-coding them.
+  return glob.sync('{api,web}/src/**/*.{ts,tsx}', {
+    cwd: getPaths().base,
   })
 }
 
@@ -20,15 +42,15 @@ export const getSourceFiles = (cwd = getPaths().base) => {
  * Read the contents of a TypeScript, transpile it to JavaScript and leave the
  * JSX intact. Format via Prettier.
  *
- * @param {string} src
+ * @param {string} file - The path to the TypeScript file.
  */
-export const transformTSToJS = (src: string, cwd = getPaths().base) => {
-  const tsCode = fs.readFileSync(src, 'utf-8')
-  const filename = path.basename(src)
+export const transformTSToJS = (file: string) => {
+  const tsCode = fs.readFileSync(file, 'utf8')
+  const filename = path.basename(file)
 
   const result = transform(tsCode, {
     filename,
-    cwd,
+    cwd: getPaths().base,
     configFile: false,
     plugins: [
       [
@@ -42,15 +64,15 @@ export const transformTSToJS = (src: string, cwd = getPaths().base) => {
     retainLines: true,
   })
 
-  if (result?.code) {
-    return prettify(result.code, filename.replace(/\.ts$/, '.js'), cwd)
+  if (!result?.code) {
+    return undefined
   }
-  return undefined
+  return prettify(result.code, filename.replace(/\.ts$/, '.js'))
 }
 
-export const prettierConfig = (cwd = getPaths().base) => {
+export const prettierConfig = () => {
   try {
-    return require(path.join(cwd, 'prettier.config.js'))
+    return require(path.join(getPaths().base, 'prettier.config.js'))
   } catch (e) {
     return undefined
   }
@@ -83,19 +105,15 @@ const prettierParser = (filename: string) => {
  * @param {string} code
  * @param {string} filename
  */
-export const prettify = (
-  code: string,
-  filename: string,
-  cwd = getPaths().base
-) => {
+export const prettify = (code: string, filename: string) => {
   const parser = prettierParser(filename)
-  // Could not determine the parser, so return unformatted code.
+  // Return unformatted code if we could not determine the parser.
   if (typeof parser === 'undefined') {
     return code
   }
 
   return format(code, {
-    ...prettierConfig(cwd),
+    ...prettierConfig(),
     parser,
   })
 }
