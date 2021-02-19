@@ -226,3 +226,34 @@ export {
   validatePath,
   replaceParams,
 }
+
+/**
+ * gets the announcement for the new page.
+ * called in page-loader's `componentDidUpdate`.
+ *
+ * the order of priority is:
+ * 1. RouteAnnouncement
+ * 2. h1
+ * 3. document.title
+ * 4. location.pathname
+ */
+export const getAnnouncement = () => {
+  const routeAnnouncements = global?.document.querySelectorAll(
+    '[data-redwood-route-announcement]'
+  )
+
+  const pageHeading = global?.document.querySelector(`h1`)
+
+  if (routeAnnouncements.length) {
+    const routeAnnouncement = routeAnnouncements[
+      routeAnnouncements.length - 1
+    ] as HTMLDivElement
+    return routeAnnouncement.innerText || routeAnnouncement.textContent
+  } else if (pageHeading) {
+    return pageHeading.innerText || pageHeading.textContent
+  } else if (global?.document.title) {
+    return document.title
+  } else {
+    return `new page at ${global?.location.pathname}`
+  }
+}
