@@ -5,7 +5,7 @@ export interface FetchConfig {
   headers?: { 'auth-provider': SupportedAuthTypes; authorization: string }
 }
 export const FetchConfigContext = React.createContext<FetchConfig>({
-  uri: `${window.__REDWOOD__API_PROXY_PATH}/graphql`,
+  uri: `${global.__REDWOOD__API_PROXY_PATH}/graphql`,
 })
 
 /**
@@ -15,7 +15,7 @@ export const FetchConfigContext = React.createContext<FetchConfig>({
 export const FetchConfigProvider: React.FunctionComponent<{
   useAuth?: () => AuthContextInterface
 }> = ({
-  useAuth = window.__REDWOOD__USE_AUTH ??
+  useAuth = global.__REDWOOD__USE_AUTH ??
     (() => ({ loading: false, isAuthenticated: false })),
   ...rest
 }) => {
@@ -26,7 +26,7 @@ export const FetchConfigProvider: React.FunctionComponent<{
   if (!isAuthenticated || !authToken) {
     return (
       <FetchConfigContext.Provider
-        value={{ uri: `${window.__REDWOOD__API_PROXY_PATH}/graphql` }}
+        value={{ uri: `${global.__REDWOOD__API_PROXY_PATH}/graphql` }}
         {...rest}
       />
     )
@@ -35,7 +35,7 @@ export const FetchConfigProvider: React.FunctionComponent<{
   return (
     <FetchConfigContext.Provider
       value={{
-        uri: `${window.__REDWOOD__API_PROXY_PATH}/graphql`,
+        uri: `${global.__REDWOOD__API_PROXY_PATH}/graphql`,
         headers: {
           'auth-provider': type,
           authorization: `Bearer ${authToken}`,
