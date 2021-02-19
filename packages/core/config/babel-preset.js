@@ -147,6 +147,7 @@ module.exports = () => {
               ],
             },
           ],
+          ['inline-react-svg'],
         ],
       },
       // ** Files ending in `Cell.[js,ts]` **
