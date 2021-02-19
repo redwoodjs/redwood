@@ -7,13 +7,15 @@ import { generateTypeDef, generateTypeDefIndex } from './generateTypes'
 
 interface PluginOptions {
   project: RWProject
+  useStaticImports?: boolean
 }
 
 export default function (
   { types: t }: { types: typeof types },
-  { project }: PluginOptions
+  { project, useStaticImports = false }: PluginOptions
 ): PluginObj {
   let pages = processPagesDir()
+  const rwPageImportPaths = pages.map((page) => page.importPath)
 
   return {
     name: 'babel-plugin-redwood-routes-auto-loader',
@@ -25,9 +27,27 @@ export default function (
         if (pages.length === 0) {
           return
         }
+
+        // Remove Page imports in prerender mode (see babel-preset)
+        // This is to make sure that all the imported "Page modules" are normal imports
+        // and not asynchronous ones.
+        if (useStaticImports) {
+          // Match import paths, const name could be different
+          // NOTE: the userImportPath we receive at this point is the aboluste path
+          // because of babel-plugin-module-resolver that runs before
+          const userImportPath = p.node.source?.value
+
+          if (rwPageImportPaths.includes(userImportPath)) {
+            p.remove()
+          }
+
+          return
+        }
+
         const declaredImports = p.node.specifiers.map(
           (specifier) => specifier.local.name
         )
+
         pages = pages.filter((dep) => !declaredImports.includes(dep.const))
       },
       Program: {
@@ -91,9 +111,14 @@ export default function (
                       t.identifier('loader'),
                       t.arrowFunctionExpression(
                         [],
-                        t.callExpression(t.identifier('import'), [
-                          t.stringLiteral(importPath),
-                        ])
+                        t.callExpression(
+                          // If useStaticImports, do a synchronous import with require (ssr/prerender)
+                          // otherwise do a dynamic import (browser)
+                          useStaticImports
+                            ? t.identifier('require')
+                            : t.identifier('import'),
+                          [t.stringLiteral(importPath)]
+                        )
                       )
                     ),
                   ])
