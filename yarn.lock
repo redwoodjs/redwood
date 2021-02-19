@@ -3077,13 +3077,6 @@
     schema-utils "^2.6.5"
     source-map "^0.7.3"
 
-"@prisma/cli@2.16.1":
-  version "2.16.1"
-  resolved "https://registry.yarnpkg.com/@prisma/cli/-/cli-2.16.1.tgz#28a849c3e793472857fe123c48bfb038f7e80362"
-  integrity sha512-nVw8gs+o6bZ1CbaYzKmPcy2I4MJcP7FW7/4PkLgvy9v3/EWd9CKfSUX9b6cMq3uK9Jxa5kTejwNQkLHnihzxrg==
-  dependencies:
-    "@prisma/engines" "2.16.1-1.8b74ad57aaf2cc6c155f382a18a8e3ba95aceb03"
-
 "@prisma/client@2.16.1":
   version "2.16.1"
   resolved "https://registry.yarnpkg.com/@prisma/client/-/client-2.16.1.tgz#3aed1506f4090734735d1036bfdaee997032e793"
@@ -13951,6 +13944,22 @@ nodemon@^2.0.6:
     undefsafe "^2.0.3"
     update-notifier "^4.1.0"
 
+nodemon@^2.0.7:
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/nodemon/-/nodemon-2.0.7.tgz#6f030a0a0ebe3ea1ba2a38f71bf9bab4841ced32"
+  integrity sha512-XHzK69Awgnec9UzHr1kc8EomQh4sjTQ8oRf8TsGrSmHDx9/UmiGG9E/mM3BuTfNeFwdNBvrqQq/RHL0xIeyFOA==
+  dependencies:
+    chokidar "^3.2.2"
+    debug "^3.2.6"
+    ignore-by-default "^1.0.1"
+    minimatch "^3.0.4"
+    pstree.remy "^1.1.7"
+    semver "^5.7.1"
+    supports-color "^5.5.0"
+    touch "^3.1.0"
+    undefsafe "^2.0.3"
+    update-notifier "^4.1.0"
+
 noop-logger@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/noop-logger/-/noop-logger-0.1.1.tgz#94a2b1633c4f1317553007d8966fd0e841b6a4c2"
@@ -15097,6 +15106,13 @@ prettysize@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/prettysize/-/prettysize-2.0.0.tgz#902c02480d865d9cc0813011c9feb4fa02ce6996"
   integrity sha512-VVtxR7sOh0VsG8o06Ttq5TrI1aiZKmC+ClSn4eBPaNf4SHr5lzbYW+kYGX3HocBL/MfpVrRfFZ9V3vCbLaiplg==
+
+prisma@2.16.1:
+  version "2.16.1"
+  resolved "https://registry.yarnpkg.com/prisma/-/prisma-2.16.1.tgz#cf73322e5426aabcd084a42dac89866006f5823f"
+  integrity sha512-TniTihl4xwWY7Hy+1UUpZ6jxHyriRDUW4i7TChZNBZM88IG8kvR5cSX+/JY/lzWGMUR4ZDBzoIuNcdPx/7eWag==
+  dependencies:
+    "@prisma/engines" "2.16.1-1.8b74ad57aaf2cc6c155f382a18a8e3ba95aceb03"
 
 prismjs@^1.8.4:
   version "1.22.0"
