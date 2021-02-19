@@ -25,6 +25,15 @@ export const convertTsProjectToJs = (cwd = getPaths().base) => {
       fs.unlinkSync(path.join(cwd, f))
     }
   }
+
+  fs.renameSync(
+    path.join(cwd, 'api/tsconfig.json'),
+    path.join(cwd, 'api/jsconfig.json')
+  )
+  fs.renameSync(
+    path.join(cwd, 'web/tsconfig.json'),
+    path.join(cwd, 'web/jsconfig.json')
+  )
 }
 
 /**
