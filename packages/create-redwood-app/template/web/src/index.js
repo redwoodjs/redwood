@@ -6,10 +6,12 @@ import FatalErrorPage from 'src/pages/FatalErrorPage'
 
 import './index.css'
 
-export default () => (
+const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
     <RedwoodApolloProvider>
       <Routes />
     </RedwoodApolloProvider>
   </FatalErrorBoundary>
 )
+
+export default App
