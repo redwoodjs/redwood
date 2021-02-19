@@ -7,7 +7,7 @@ import App from './index'
  * prerendering. So React attaches event listeners to the existing markup
  * rather than replacing it.
  * https://reactjs.org/docs/react-dom.html#hydrate
-*/
+ */
 const rootElement = document.getElementById('redwood-app')
 
 if (rootElement.hasChildNodes()) {
