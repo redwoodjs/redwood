@@ -5,9 +5,10 @@ export const config = {
     `import { ApolloClient, InMemoryCache } from '@apollo/client'`,
     `import { FetchConfigProvider, useFetchConfig } from '@redwoodjs/web'`,
   ],
-  init: `const ApolloInjector = ({ children }) => {
+  init: `let ethereum
+
+  const ApolloInjector = ({ children }) => {
   const { uri, headers } = useFetchConfig()
-  let ethereum
   try {
     const graphQLClient = new ApolloClient({
       cache: new InMemoryCache(),

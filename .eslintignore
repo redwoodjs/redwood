@@ -2,4 +2,6 @@ dist
 fixtures
 packages/core/**/__fixtures__/**/*
 packages/core/config/storybook/**/*
-packages/create-redwood-app/template/**/*
+# We ignore these because the eslint plugin won't be able to find redwood.toml.
+packages/create-redwood-app/template/web/src/Routes.js
+packages/create-redwood-app/template/web/src/Routes.tsx
