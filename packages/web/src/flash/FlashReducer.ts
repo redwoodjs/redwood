@@ -52,8 +52,13 @@ export default (messages: FlashMessage[] = [], action: FlashAction) => {
       // if viewed and not persist, remove it
       // else mark as viewed
       return messages.reduce<FlashMessage[]>((acc, msg) => {
-        if (msg.id !== action.messageId) return [...acc, msg]
-        if (msg.viewed && !msg.persist) return acc
+        if (msg.id !== action.messageId) {
+          return [...acc, msg]
+        }
+        
+        if (msg.viewed && !msg.persist) {
+          return acc
+        }
 
         return [...acc, { ...msg, viewed: true }]
       }, [])
