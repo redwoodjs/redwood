@@ -47,7 +47,6 @@ export default (messages: FlashMessage[] = [], action: FlashAction) => {
     case 'DISMISS_MESSAGE': {
       return messages.filter((msg) => msg.id !== action.messageId)
     }
-
     case 'CYCLE_MESSAGE': {
       // find the message
       // if viewed and not persist, remove it
