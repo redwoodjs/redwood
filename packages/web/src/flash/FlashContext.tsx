@@ -63,9 +63,7 @@ export const FlashProvider: React.FunctionComponent = ({ children }) => {
 export const useFlash = () => {
   const flash = React.useContext(FlashContext)
   if (!flash) {
-    throw Error(
-      '`useFlash` should only be called in a children of a `FlashProvider`'
-    )
+    throw Error('useFlash must be used within a FlashProvider')
   }
   return flash
 }
