@@ -8,7 +8,7 @@
     "paths": {
       "src/*": ["./src/*"]
     },
-    "allowJs": true
+    "allowJs": false
   },
   "include": ["./src/**/*", "./global.d.ts"],
   "references": [
