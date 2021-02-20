@@ -1,24 +1,30 @@
 import { useEffect, useState } from 'react'
 
 import { useFlash } from 'src/flash/FlashContext'
+import { FlashMessage } from 'src/flash/FlashReducer'
 
-const FlashMessage = ({ message, timeout }) => {
+type FlashMessageProps = {
+  message: FlashMessage
+  timeout?: number
+}
+
+const FlashMessageComponent = ({ message, timeout }: FlashMessageProps) => {
   const { dismissMessage, cycleMessage } = useFlash()
   const [classes, setClasses] = useState('')
 
   useEffect(() => {
     cycleMessage(message.id)
     // cycleMessage should not trigger update
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [message.id])
+  }, [cycleMessage, message.id])
 
   useEffect(() => {
-    let fadeOutTimer
-    if (timeout) {
-      fadeOutTimer = setTimeout(() => {
-        setClasses('rw-slide-up')
-      }, timeout)
-    }
+    // avoid timeout = 0 early exit
+    if (timeout === undefined) return
+
+    const fadeOutTimer = setTimeout(() => {
+      setClasses('rw-slide-up')
+    }, timeout)
+
     return () => clearTimeout(fadeOutTimer)
   }, [timeout])
 
@@ -40,7 +46,7 @@ const FlashMessage = ({ message, timeout }) => {
   )
 }
 
-const Flash = ({ timeout }) => {
+const Flash = ({ timeout }: { timeout?: number }) => {
   const { messages } = useFlash()
 
   if (!messages.length) {
@@ -50,7 +56,7 @@ const Flash = ({ timeout }) => {
   return (
     <div className="rw-flash" data-testid="flash">
       {messages.map((msg) => (
-        <FlashMessage key={msg.id} message={msg} timeout={timeout} />
+        <FlashMessageComponent key={msg.id} message={msg} timeout={timeout} />
       ))}
     </div>
   )

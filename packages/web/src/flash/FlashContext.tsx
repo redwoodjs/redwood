@@ -1,0 +1,71 @@
+import React, { createContext, useReducer, useMemo } from 'react'
+
+import type { FlashMessage } from 'src/flash/FlashReducer'
+import FlashReducer from 'src/flash/FlashReducer'
+
+type Message = { id: number; text: string }
+type MessageOptions = Omit<FlashMessage, 'text' | 'id'>
+
+type FlashContext = {
+  messages: Message[]
+  addMessage(text: string, options?: MessageOptions): void
+  dismissMessage(messageId: number): void
+  cycleMessage(messageId: number): void
+}
+
+// create context
+export const FlashContext = createContext<FlashContext | null>(null)
+
+// providor component
+export const FlashProvider: React.FunctionComponent = ({ children }) => {
+  const [messages, dispatch] = useReducer(FlashReducer, [])
+
+  const actions = useMemo(() => {
+    // dispatch actions to reducer
+    function addMessage(text: string, options: MessageOptions = {}) {
+      const message = { text, ...options }
+      dispatch({
+        type: 'ADD_MESSAGE',
+        message,
+      })
+    }
+
+    function dismissMessage(messageId: number) {
+      dispatch({
+        type: 'DISMISS_MESSAGE',
+        messageId,
+      })
+    }
+
+    function cycleMessage(messageId: number) {
+      dispatch({
+        type: 'CYCLE_MESSAGE',
+        messageId,
+      })
+    }
+    return { addMessage, dismissMessage, cycleMessage }
+  }, [dispatch])
+
+  const flashContextValue = useMemo(() => ({ messages, ...actions }), [
+    messages,
+    actions,
+  ])
+
+  // render
+  return (
+    <FlashContext.Provider value={flashContextValue}>
+      {children}
+    </FlashContext.Provider>
+  )
+}
+
+// a hook to use flash values
+export const useFlash = () => {
+  const flash = React.useContext(FlashContext)
+  if (!flash) {
+    throw Error(
+      '`useFlash` should only be called in a children of a `FlashProvider`'
+    )
+  }
+  return flash
+}
