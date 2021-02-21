@@ -1,13 +1,11 @@
-const path = require('path')
 const fs = require('fs')
-
+const path = require('path')
+const { merge } = require('webpack-merge')
 const { getPaths } = require('@redwoodjs/internal')
 const { getSharedPlugins } = require('../webpack.common')
 
-module.exports = {
-  stories: [
-    '../../../../web/src/**/*.stories.{tsx,jsx,js}',
-  ],
+const baseConfig = {
+  stories: ['../../../../web/src/**/*.stories.{tsx,jsx,js}'],
   webpackFinal: (sbConfig, { configType }) => {
     // configType is 'PRODUCTION' or 'DEVELOPMENT', why shout?
     const isEnvProduction = configType && configType.toLowerCase() === 'production'
@@ -17,8 +15,13 @@ module.exports = {
       : require('../webpack.development')
 
     // We replace imports to "@redwoodjs/router" with our own implementation in "@redwoodjs/testing"
-    sbConfig.resolve.alias['@redwoodjs/router$'] = path.join(getPaths().base, 'node_modules/@redwoodjs/testing/dist/MockRouter.js')
-    sbConfig.resolve.alias['~__REDWOOD__USER_ROUTES_FOR_MOCK'] = getPaths().web.routes
+    sbConfig.resolve.alias['@redwoodjs/router$'] = path.join(
+      getPaths().base,
+      'node_modules/@redwoodjs/testing/dist/MockRouter.js'
+    )
+    sbConfig.resolve.alias[
+      '~__REDWOOD__USER_ROUTES_FOR_MOCK'
+    ] = getPaths().web.routes
     sbConfig.resolve.alias['~__REDWOOD__USER_WEB_SRC'] = getPaths().web.src
 
     // Determine the default storybook style file to use.
@@ -59,3 +62,17 @@ module.exports = {
     return sbConfig
   },
 }
+
+const mergeUserStorybookConfig = (baseConfig) => {
+  const redwoodPaths = getPaths()
+
+  const hasCustomConfig = fs.existsSync(redwoodPaths.web.storybook)
+  if (!hasCustomConfig) {
+    return baseConfig
+  }
+
+  const userStorybookConfig = require(redwoodPaths.web.storybook)
+  return merge(baseConfig, userStorybookConfig)
+}
+
+module.exports = mergeUserStorybookConfig(baseConfig)
