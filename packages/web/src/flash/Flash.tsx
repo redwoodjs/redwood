@@ -18,7 +18,9 @@ const FlashMessageComponent = ({ message, timeout }: FlashMessageProps) => {
   }, [cycleMessage, message.id])
 
   useEffect(() => {
-    if (timeout === undefined) return
+    if (timeout === undefined) {
+      return
+    }
 
     const fadeOutTimer = setTimeout(() => {
       setClasses('rw-slide-up')
