@@ -13,7 +13,6 @@ type FlashContext = {
   cycleMessage(messageId: number): void
 }
 
-// create context
 export const FlashContext = createContext<FlashContext | null>(null)
 
 // providor component
