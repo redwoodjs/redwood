@@ -90,7 +90,7 @@ Make sure at the end to
 yarn rwt restore
 ```
 
-This'll restore your Redwood App to it's original mundane state, stripping it of it's Redwood Framework powers. It's ok, it can enjoy those powers again when your contribution makes it into a release!
+This'll restore your Redwood App to it's original mundane state, stripping it of your local Redwood project - going back to the installed version of Redwood you orignally had in your project. Next time you want to contribute, just run `yarn rwt link` again!
 
 #### Example: Contributing a Command
 
