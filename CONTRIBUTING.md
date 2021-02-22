@@ -33,7 +33,7 @@ As a Redwood user, you're already familiar with the codebase `yarn create redwoo
 Here we'll call this codebase a "Redwood App"&mdash;it’s the fullstack-to-Jamstack solution you already know and love.
 
 As a contributor, you'll have to gain familiarity with one more codebase: the Redwood Framework.
-The Redwood Framework lives in the monorepo redwoodjs/redwood (where you're reading this); it contains all the packages that make Redwood Apps work the way they do.
+The Redwood Framework lives in the monorepo redwoodjs/redwood (which is where you're probably reading this); it contains all the packages that make Redwood Apps work the way they do.
 After you use `git clone` to make a local copy, this is where you'll be making most of your changes.
 
 You'll probably want to see your changes to your local copy of the Redwood Framework “running live" in one of your own Redwood Apps or in one of our example apps.
@@ -75,21 +75,19 @@ where [RW_PATH] is the path to your local copy of the Redwood Framework. For exa
 yarn rwt link ~/redwood
 ```
 
+> You can set an env var so that you don't have to specify this. See [Specifying a `RW_PATH`](#specifying-a-rw_path).
+
 You'll be prompted to add the redwood workspace to your Redwood App; go ahead and say yes.
 
-Then you'll start seeing a ton of output&mdash;`yarn rwt link` is building the Redwood Framework, watching it for changes, and copying all that over into the redwood workspace in your Redwood App.
+Then you'll start seeing a ton of output&mdash;`yarn rwt link` is building the Redwood Framework, watching it for changes, and copying all that over into the redwood workspace in your Redwood App. Your Redwood App isn't using the packages in `node_modules/@redwoodjs` anymore, but the packages in this workspace, with your local changes. You can even install packakges or upgrade dependencies&mdash;it really is that simple.
 
-Your Redwood App isn't using the packages in `node_modules/@redwoodjs` anymore, but the packages in this workspace, with your local changes.
-
-To see for yoruself, make a change in your local copy of the Redwood Framework and you'll see it live, propagated to your Redwood App. You can even install packakges. It really is that simple.
-
-When you're done, make sure to
+When you're done, make sure to `unlink` your Redwood App:
 
 ```
 yarn rwt unlink
 ```
 
-This'll restore your Redwood App to it's original state, stripping it of your local copy of the Redwood Framework, going back to the installed version of Redwood you orignally had in your project. Next time you want to contribute, just run `yarn rwt link` again!
+This'll restore your Redwood App to it's original state, going back to the installed version of Redwood it orignally had. Next time you want to contribute, just run `yarn rwt link` again!
 
 ### Copy and Watch
 
@@ -167,7 +165,7 @@ _On Windows_
 
 ### Local Package Registry Emulation
 
-Sometimes you'll want to test the full package-development workflow: building, publishing, and installing in your Redwood App. We accomodate this using a local NPM registry called [Verdaccio](https://github.com/verdaccio/verdaccio).
+Sometimes you'll want to test the full package-development workflow: building, publishing, and installing all the packages in your local copy of the Redwood Framework in your Redwood App. We accomodate this using a local NPM registry called [Verdaccio](https://github.com/verdaccio/verdaccio).
 
 You might also have to use this workflow if you've installed or upgraded one of Redwood's dependencies.
 
@@ -195,7 +193,7 @@ To build, unpublish, and publish all the Redwood packages to your local NPM regi
 ./tasks/publish-local
 ```
 
-> Note: this script is equivalent to running:
+> This script is equivalent to running:
 >
 > ```terminal
 > npm unpublish --tag dev --registry http://localhost:4873/ --force
@@ -210,13 +208,13 @@ Note that you can build a particular package by specifying the path to the packa
 
 #### Installing Published Packages in Your Redwood App
 
-The last step is to install the package into your Redwood App. The CLI command `redwood-tools` (`rwt`) makes installing local NPM packages easy:
+The last step is to install the package into your Redwood App.
 
 ```terminal
 yarn rwt install @redwoodjs/dev-server
 ```
 
-> Note: this is equivalent to running:
+> This is equivalent to running:
 >
 > ```terminal
 > rm -rf <APP_PATH>/node_modules/@redwoodjs/dev-server
