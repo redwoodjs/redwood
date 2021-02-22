@@ -55,7 +55,6 @@ export const FlashProvider: React.FunctionComponent = ({ children }) => {
   )
 }
 
-// a hook to use flash values
 export const useFlash = () => {
   const flash = React.useContext(FlashContext)
   if (!flash) {
