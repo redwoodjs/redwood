@@ -57,11 +57,13 @@ const addWebRender = (content, authProvider) => {
   const [_, indent, redwoodApolloProvider] = content.match(
     /(\s+)(<RedwoodApolloProvider>.*<\/RedwoodApolloProvider>)/s
   )
+
   const redwoodApolloProviderLines = redwoodApolloProvider
     .split('\n')
     .map((line) => {
       return '  ' + line
     })
+
   const customRenderOpen = (authProvider.render || []).reduce(
     (acc, component) => acc + indent + `<${component}>`,
     ''
