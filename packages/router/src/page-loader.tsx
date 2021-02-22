@@ -4,7 +4,12 @@ import isEqual from 'lodash.isequal'
 
 import { createNamedContext, ParamsContext, Spec } from './internal'
 
-export const PageLoadingContext = createNamedContext('PageLoading')
+export const PageLoadingContext = createNamedContext<{ loading: boolean }>(
+  'PageLoading',
+  {
+    loading: true,
+  }
+)
 
 export const usePageLoadingContext = () => useContext(PageLoadingContext)
 
