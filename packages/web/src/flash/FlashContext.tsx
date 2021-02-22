@@ -15,7 +15,6 @@ type FlashContext = {
 
 export const FlashContext = createContext<FlashContext | null>(null)
 
-// providor component
 export const FlashProvider: React.FunctionComponent = ({ children }) => {
   const [messages, dispatch] = useReducer(FlashReducer, [])
 
