@@ -10,8 +10,6 @@ Before interacting with the Redwood community, please read and understand our [C
   - [Local Development](#local-development)
     - [Installing Dependencies](#installing-dependencies)
     - [yarn rwt link](#yarn-rwt-link)
-      - [Example: Contributing a Command](#example-contributing-a-command)
-      - [Working on a PR](#working-on-a-pr)
     - [Copy and Watch](#copy-and-watch)
       - [Specifying a RW_PATH](#specifying-a-rw_path)
     - [Local Package Registry Emulation](#local-package-registry-emulation)
@@ -35,10 +33,11 @@ As a Redwood user, you're already familiar with the codebase `yarn create redwoo
 Here we'll call this codebase a "Redwood App"&mdash;it’s the fullstack-to-Jamstack solution you already know and love.
 
 As a contributor, you'll have to gain familiarity with one more codebase: the Redwood Framework.
-The Redwood Framework lives in the monorepo redwoodjs/redwood (where you're most likely reading this document); it contains all the packages that make Redwood Apps work the way they do. This is where you'll be making most of your changes. After you use `git clone` to make a local copy of course!
+The Redwood Framework lives in the monorepo redwoodjs/redwood (where you're reading this); it contains all the packages that make Redwood Apps work the way they do.
+After you use `git clone` to make a local copy, this is where you'll be making most of your changes.
 
 You'll probably want to see your changes to your local copy of the Redwood Framework “running live" in one of your own Redwood Apps or in one of our example apps.
-Since we're always looking for ways to make contributing to Redwood easier, there's a few workflows we've come up with, but the one you'll want to use is `yarn rwt link`. You can fall back on any of the others if that one doesn't work, but it'll make contributing a breeze.
+Since we're always looking for ways to make contributing to Redwood easier, there's a few workflows we've come up with, but the one you'll want to use is `yarn rwt link`. You can fall back on any of the others if that one doesn't work, but once you've tried `yarn rwt link`, you won't want to.
 
 > **I've used `yarn rw` before, but what's `yarn rwt`?**
 >
@@ -55,7 +54,7 @@ cd redwood
 yarn install
 ```
 
-Then, in your Redwood App, which you've either just created using `yarn create redwood-app` or already had lying around somewhere, you'll want to upgrade to the canary&mdash;Redwood's bleeding edge&mdash;just so you can be sure you're testing your contribution with all the most recent changes:
+Then, in your Redwood App, which you've either just created using `yarn create redwood-app` or already had lying around, you'll want to upgrade to the canary&mdash;Redwood's bleeding edge&mdash;just so you can be sure you're testing your contribution with all the most recent changes:
 
 ```terminal
 cd redwood-app # wherever your redwood-app happens to be, whether it's one of our templates or your own
@@ -70,7 +69,7 @@ Ok, now that everything's up to date, in your Redwood App, run:
 yarn rwt link [RW_PATH]
 ```
 
-where [RW_PATH] is the path to your local copy of the Redwood Framework. For exmaple,
+where [RW_PATH] is the path to your local copy of the Redwood Framework. For example,
 
 ```
 yarn rwt link ~/redwood
@@ -78,33 +77,25 @@ yarn rwt link ~/redwood
 
 You'll be prompted to add the redwood workspace to your Redwood App; go ahead and say yes.
 
-Then you'll start seeing a ton of output&mdash;`yarn rwt link` is building the Redwood Framework, watching it for changes, and copying all that over into a `redwood` workspace in your Redwood App.
+Then you'll start seeing a ton of output&mdash;`yarn rwt link` is building the Redwood Framework, watching it for changes, and copying all that over into the redwood workspace in your Redwood App.
 
-Your Redwood App isn't using the packages in `node_modules/@redwoodjs` anymore, but the packages in this workspace, with your minute to minute changes.
+Your Redwood App isn't using the packages in `node_modules/@redwoodjs` anymore, but the packages in this workspace, with your local changes.
 
 To see for yoruself, make a change in your local copy of the Redwood Framework and you'll see it live, propagated to your Redwood App. You can even install packakges. It really is that simple.
 
-Make sure at the end to
+When you're done, make sure to
 
 ```
-yarn rwt restore
+yarn rwt unlink
 ```
 
-This'll restore your Redwood App to it's original mundane state, stripping it of it's Redwood Framework powers. It's ok, it can enjoy those powers again when your contribution makes it into a release!
-
-#### Example: Contributing a Command
-
-[todo, mulling this; might be instructive]
-
-#### Working on a PR
-
-[todo, the `yarn rw upgrade --pr` command]
+This'll restore your Redwood App to it's original state, stripping it of your local copy of the Redwood Framework, going back to the installed version of Redwood you orignally had in your project. Next time you want to contribute, just run `yarn rwt link` again!
 
 ### Copy and Watch
 
 `yarn rwt link` not working for you? That's ok&mdash;we have a few legacy contributing workflows that you can fall back on.
 
-Pkcing up from... now that everything's up-to-date, you'll want to build-and-watch files in the Redwood Framework for changes:
+After you've [installed all your dependencies](#installing-dependencies), you'll want to build-and-watch files in the Redwood Framework for changes:
 
 ```terminal
 cd redwood
