@@ -38,7 +38,7 @@ As a contributor, you'll have to gain familiarity with one more codebase: the Re
 The Redwood Framework lives in the monorepo redwoodjs/redwood; it contains all the packages that make Redwood Apps work the way they do.
 
 While you'll be making most of your changes in the Redwood Framework, you'll probably want to see your changes “running live" in one of your own Redwood Apps or in one of our example apps.
-Since we're always looking for ways to make contributing to Redwood as easy as possible, there's a few workflows for making this possible, but the one you'll want to use `yarn rwt link`. You can fall back on the others if that one doesn't work, but it'll make contributing a breeze.
+Since we're always looking for ways to make contributing to Redwood as easy as possible, there's a few workflows for making this possible, but the one you'll want to use is `yarn rwt link`. You can fall back on the others if that one doesn't work, but it'll make contributing a breeze.
 
 > **I've used `yarn rw` before but what's `yarn rwt`?**
 >
