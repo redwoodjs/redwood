@@ -87,7 +87,7 @@ When you're done, make sure to `unlink` your Redwood App:
 yarn rwt unlink
 ```
 
-This'll restore your Redwood App to it's original state, reverting it to the version of Redwood that it orignally had installed. Next time you want to contribute, just run `yarn rwt link` again!
+This'll restore your Redwood App to its original state, reverting it to the version of Redwood that it originally had installed. Next time you want to contribute, just run `yarn rwt link` again!
 
 ### Copy and Watch
 
