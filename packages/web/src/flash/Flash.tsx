@@ -18,7 +18,6 @@ const FlashMessageComponent = ({ message, timeout }: FlashMessageProps) => {
   }, [cycleMessage, message.id])
 
   useEffect(() => {
-    // avoid timeout = 0 early exit
     if (timeout === undefined) return
 
     const fadeOutTimer = setTimeout(() => {
