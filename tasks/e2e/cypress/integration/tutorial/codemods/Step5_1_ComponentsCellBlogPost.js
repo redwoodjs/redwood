@@ -4,6 +4,7 @@ export default `
 export const QUERY = gql\`
 query {
   posts {
+    id
     title
     body
   }

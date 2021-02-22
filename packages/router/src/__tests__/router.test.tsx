@@ -54,6 +54,7 @@ test('inits routes and navigates as expected', async () => {
       <Route path="/" page={HomePage} name="home" />
       <Route path="/about" page={AboutPage} name="about" />
       <Route path="/redirect" page={RedirectPage} name="redirect" />
+      <Route path="/redirect2/{value}" redirect="/param-test/{value}" />
       <Private unauthenticated="home">
         <Route path="/private" page={PrivatePage} name="private" />
       </Private>
@@ -82,6 +83,9 @@ test('inits routes and navigates as expected', async () => {
     expect(screen.queryByText(/Redirect Page/)).not.toBeInTheDocument()
     expect(screen.queryByText(/About Page/)).toBeTruthy()
   })
+
+  act(() => navigate('/redirect2/redirected'))
+  await waitFor(() => screen.getByText(/param redirected/i))
 
   act(() => navigate(routes.params({ value: 'one' })))
   await waitFor(() => screen.getByText(/param one/i))

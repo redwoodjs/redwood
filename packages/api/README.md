@@ -185,7 +185,7 @@ Redwood uses Prisma, which currently supports the following databases: https://w
 
 ### Does Redwood Support SSR?
 
-We get this question a lot. And our answer is [we hope we don’t have to](https://community.redwoodjs.com/t/ssr-on-the-roadmap/251/2). We think our approach will be “pre-render” vs. “server-side render”.
+We get this question a lot. And our answer is [we hope we don’t have to](https://community.redwoodjs.com/t/ssr-on-the-roadmap/251/2). We think our approach will be “prerender” vs. “server-side render”.
 
 ### Can I use Redwood without an API/database?
 

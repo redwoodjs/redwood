@@ -56,6 +56,10 @@ export class RWRoute extends BaseNode {
     return this.path.includes('{')
   }
 
+  @lazy() get hasPrerender() {
+    return this.prerender
+  }
+
   @lazy() get hasPreRenderInfo() {
     // TODO: this is just a placeholder / reminder
     return false
@@ -123,6 +127,10 @@ export class RWRoute extends BaseNode {
   @lazy() get path(): string | undefined {
     return this.getStringAttr('path')
   }
+
+  @lazy() get prerender(): boolean {
+    return this.getBoolAttr('prerender')
+  }
   @lazy() get path_literal_node() {
     const a = this.jsxNode.getAttribute('path')
     if (!a) return undefined
@@ -165,7 +173,7 @@ export class RWRoute extends BaseNode {
     if (this.hasPreRenderInfo && !this.hasParameters)
       yield err(
         this.jsxNode!,
-        `Only routes with parameters can have associated pre-render information`
+        `Only routes with parameters can have associated prerender information`
       )
   }
   *ideInfo() {
@@ -226,6 +234,26 @@ export class RWRoute extends BaseNode {
       // foo/{bar}/baz --> foo/{}/baz
       return p
     }
+  }
+
+  private getBoolAttr(name: string) {
+    const a = this.jsxNode.getAttribute(name)
+    // No attribute
+    if (!a) return false
+
+    // Attribute exists
+    if (tsm.Node.isJsxAttribute(a)) {
+      const init = a.getInitializer()
+      // If it contains prerender="true"
+      if (tsm.Node.isStringLiteral(init!)) {
+        const literalValue = init.getLiteralValue()
+        return literalValue === 'true'
+      } else {
+        // If it contains just prerender
+        return true
+      }
+    }
+    return false
   }
 
   private getStringAttr(name: string) {
