@@ -21,7 +21,6 @@ type FlashAction =
       messageId: number
     }
 
-// the reducer
 export default (messages: FlashMessage[] = [], action: FlashAction) => {
   switch (action.type) {
     case 'ADD_MESSAGE': {
