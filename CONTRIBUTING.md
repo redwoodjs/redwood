@@ -204,7 +204,6 @@ yarn rw dev web
 We're using Cypress to test the steps that we recommend in the tutorial. Run the command by doing the following:
 
 ```terminal
-yarn build
 ./tasks/test-tutorial
 ```
 
