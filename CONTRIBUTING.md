@@ -48,7 +48,7 @@ Let's go through the entire contributor workflow, from Redwood Framework to Redw
 
 ### Installing Dependencies
 
-First, in your local copy of the Redwood Framework, make sure you're on  `main` (via a `git pull`), then run `yarn install` in the root directory to install all the dependencies.
+First, in your local copy of the Redwood Framework, make sure you're on `main` (via a `git pull`), then run `yarn install` in the root directory to install all the dependencies.
 
 ```terminal
 cd redwood
