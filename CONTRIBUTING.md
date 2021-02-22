@@ -79,7 +79,7 @@ yarn rwt link ~/redwood
 
 You'll be prompted to add the redwood workspace to your Redwood App; go ahead and say yes.
 
-Then you'll start seeing a ton of output&mdash;`yarn rwt link` is building the Redwood Framework, watching it for changes, and copying all that over into the redwood workspace in your Redwood App. Your Redwood App isn't using the packages in `node_modules/@redwoodjs` anymore, but the packages in this workspace, with your local changes. You can even install packakges or upgrade dependencies&mdash;it's really that simple.
+Then you'll start seeing a ton of output&mdash;`yarn rwt link` is building the Redwood Framework, watching it for changes, and copying all that over into the redwood workspace in your Redwood App. Your Redwood App isn't using the packages in `node_modules/@redwoodjs` anymore, but the packages in this workspace, with your local changes. You can even install packages or upgrade dependencies&mdash;it's really that simple.
 
 When you're done, make sure to `unlink` your Redwood App:
 
