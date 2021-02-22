@@ -5,7 +5,6 @@ import { ensurePosixPath } from '@redwoodjs/internal'
 import { getProject } from '@redwoodjs/structure'
 
 import { getPaths } from 'src/lib'
-import c from 'src/lib/colors'
 
 // https://github.com/facebook/create-react-app/blob/cbad256a4aacfc3084be7ccf91aad87899c63564/packages/react-scripts/scripts/test.js#L39
 function isInGitRepository() {
@@ -100,7 +99,7 @@ export const handler = async ({
 
     // Create a test database
     if (sides.includes('api')) {
-      await execa.command(`yarn rw prisma db push --force`, {
+      await execa(`yarn rw prisma db push --force`, {
         stdio: 'inherit',
         shell: true,
         env: { DATABASE_URL },
@@ -109,13 +108,14 @@ export const handler = async ({
     // **NOTE** There is no official way to run Jest programatically,
     // so we're running it via execa, since `jest.run()` is a bit unstable.
     // https://github.com/facebook/jest/issues/5048
-    execa('yarn jest', args, {
+    await execa('yarn jest', args, {
       cwd: getPaths().base,
       shell: true,
       stdio: 'inherit',
       env: { DATABASE_URL },
     })
   } catch (e) {
-    console.log(c.error(e.message))
+    // Errors already shown from execa inherited stderr
+    process.exit(e?.exitCode || 1)
   }
 }
