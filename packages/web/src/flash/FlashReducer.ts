@@ -28,7 +28,6 @@ export default (messages: FlashMessage[] = [], action: FlashAction) => {
       const newMessage = {
         ...action.message,
         id: messages.length,
-        style: action.message.style || {},
       }
 
       return [...messages, newMessage]
@@ -44,7 +43,7 @@ export default (messages: FlashMessage[] = [], action: FlashAction) => {
         if (msg.id !== action.messageId) {
           return [...acc, msg]
         }
-        
+
         if (msg.viewed && !msg.persist) {
           return acc
         }
