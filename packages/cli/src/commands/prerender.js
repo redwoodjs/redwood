@@ -56,11 +56,15 @@ export const getTasks = (dryrun) => {
   const prerenderRoutes = detectPrerenderRoutes()
 
   if (prerenderRoutes.length === 0) {
+    console.error('\nSkipping prerender...')
     console.error(
-      'You have not marked any routes as `prerender` in `Routes.{js,tsx}`'
+      c.warning(
+        'You have not marked any routes as `prerender` in `Routes.{js,tsx}` \n'
+      )
     )
-    // TODO: Link to docs.
-    process.exit(1)
+
+    // Don't error out
+    return []
   }
 
   if (!fs.existsSync(path.join(getPaths().web.dist), 'index.html')) {

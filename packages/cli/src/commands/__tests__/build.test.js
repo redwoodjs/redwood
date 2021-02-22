@@ -25,6 +25,13 @@ jest.mock('src/lib', () => {
   }
 })
 
+// let mockDetectPrerenderRoutes = jest.fn(() => [])
+let mockedPrerenderRoutes = ['Pretend', 'Some', 'Routes', 'Are', 'There']
+// For the prerender tests
+jest.mock('@redwoodjs/prerender', () => {
+  return { detectPrerenderRoutes: () => mockedPrerenderRoutes }
+})
+
 import execa from 'execa'
 
 import { runCommandTask } from 'src/lib'
@@ -72,4 +79,19 @@ test('Should run prerender for web, when experimental flag is on', async () => {
   )
 
   expect(execa.mock.results[2].value).toEqual('yarn rw prerender')
+})
+
+test('Should skip prerender if no prerender routes detection', async () => {
+  mockedRedwoodConfig = {
+    web: {
+      experimentalPrerender: true,
+    },
+  }
+
+  mockedPrerenderRoutes = []
+
+  // Prerender is true by default, when experimentalPrerender flag is enabled
+  await handler({ side: ['web'], prerender: true })
+
+  expect(execa.mock.results[2]).toBeFalsy()
 })

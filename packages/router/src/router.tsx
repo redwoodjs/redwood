@@ -22,8 +22,9 @@ interface RouteProps {
   page: Spec | React.ComponentType<unknown> | ((props: any) => JSX.Element)
   path?: string
   name?: string
-  notfound?: Spec | React.ComponentType
+  notfound?: boolean
   redirect?: string
+  prerender?: boolean
   whileLoading?: () => ReactChild | null
 }
 
