@@ -49,7 +49,6 @@ export const FlashProvider: React.FunctionComponent = ({ children }) => {
     actions,
   ])
 
-  // render
   return (
     <FlashContext.Provider value={flashContextValue}>
       {children}
