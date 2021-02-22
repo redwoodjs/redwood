@@ -181,17 +181,11 @@ describe('The Redwood Tutorial - Golden path edition', () => {
 
     // Detail Page
     cy.contains('Second post').click()
-    cy.get('main').should(
-      'contain',
-      'Hello world!'
-    )
+    cy.get('main').should('contain', 'Hello world!')
 
     cy.visit('http://localhost:8910/')
 
     cy.contains('Third post').click()
-    cy.get('main').should(
-      'contain',
-      'foo bar'
-    )
+    cy.get('main').should('contain', 'foo bar')
   })
 })
