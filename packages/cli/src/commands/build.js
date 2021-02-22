@@ -6,6 +6,8 @@ import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
 
+import { detectPrerenderRoutes } from '@redwoodjs/prerender'
+
 import { getPaths, getConfig } from 'src/lib'
 import c from 'src/lib/colors'
 import { generatePrismaClient } from 'src/lib/generatePrismaClient'
@@ -129,6 +131,8 @@ export const handler = async ({
 
     // Prerender _after_ web build
     if (getConfig().web.experimentalPrerender && prerender) {
+      const prerenderRoutes = detectPrerenderRoutes()
+
       listrTasks.push({
         title: 'Prerendering "web"...',
         task: () => {
@@ -137,6 +141,11 @@ export const handler = async ({
             shell: true,
             cwd: getPaths().base,
           })
+        },
+        skip: () => {
+          if (prerenderRoutes.length === 0) {
+            return 'You have not marked any routes as `prerender` in `Routes.{js,tsx}`'
+          }
         },
       })
     }

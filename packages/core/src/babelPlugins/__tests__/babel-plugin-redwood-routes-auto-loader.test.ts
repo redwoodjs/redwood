@@ -23,7 +23,8 @@ jest.mock('@redwoodjs/structure', () => {
       writeFileSync: mockWriteFileSync,
       readFileSync: jest.fn(),
       paths: {
-        types: '/fake/project/node_modules/@types/@redwoodjs/generated',
+        types: '/fake/project/.redwood/types',
+        globals: '/fake/project/.redwood/globals',
       },
     })),
   }
