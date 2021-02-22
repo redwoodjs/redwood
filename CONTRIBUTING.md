@@ -72,7 +72,7 @@ yarn rwt link [RW_PATH]
 where [RW_PATH] is the path to your local copy of the Redwood Framework. For example,
 
 ```
-yarn rwt link ~/redwood
+yarn rwt link ../path/to/redwood
 ```
 
 > You can set an env var so that you don't have to specify this. See [Specifying a `RW_PATH`](#specifying-a-rw_path).
