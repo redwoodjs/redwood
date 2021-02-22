@@ -19,7 +19,6 @@ export const FlashProvider: React.FunctionComponent = ({ children }) => {
   const [messages, dispatch] = useReducer(FlashReducer, [])
 
   const actions = useMemo(() => {
-    // dispatch actions to reducer
     function addMessage(text: string, options: MessageOptions = {}) {
       const message = { text, ...options }
       dispatch({
