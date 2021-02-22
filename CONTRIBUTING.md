@@ -36,7 +36,7 @@ As a contributor, you'll have to gain familiarity with one more codebase: the Re
 The Redwood Framework lives in the monorepo redwoodjs/redwood (which is where you're probably reading this); it contains all the packages that make Redwood Apps work the way they do.
 After you use `git clone` to make a local copy, this is where you'll be making most of your changes.
 
-You'll probably want to see your changes to your local copy of the Redwood Framework “running live" in one of your own Redwood Apps or in one of our example apps.
+You'll probably want to see your changes to your local copy of the Redwood Framework "running live" in one of your own Redwood Apps or in one of our example apps.
 Since we're always looking for ways to make contributing to Redwood easier, there's a few workflows we've come up with, but the one you'll want to use is `yarn rwt link`. You can fall back on any of the others if that one doesn't work, but once you've tried `yarn rwt link`, you won't want to.
 
 > **I've used `yarn rw` before, but what's `yarn rwt`?**
