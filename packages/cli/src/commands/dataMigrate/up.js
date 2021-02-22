@@ -17,8 +17,12 @@ const sortMigrations = (migrations) => {
     const aVersion = parseInt(Object.keys(a)[0])
     const bVersion = parseInt(Object.keys(b)[0])
 
-    if (aVersion > bVersion) return 1
-    if (aVersion < bVersion) return -1
+    if (aVersion > bVersion) {
+      return 1
+    }
+    if (aVersion < bVersion) {
+      return -1
+    }
     return 0
   })
 }

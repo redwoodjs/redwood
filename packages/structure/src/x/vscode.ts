@@ -104,7 +104,9 @@ export class TreeItem2Wrapper {
     public indexInParent: number = 0
   ) {}
   @lazy() get keys(): string[] {
-    if (!this.parent) return []
+    if (!this.parent) {
+      return []
+    }
     return [...(this.parent?.keys ?? []), this.key]
   }
   @lazy() get key(): string {
@@ -112,7 +114,9 @@ export class TreeItem2Wrapper {
       indexInParent,
       item: { key, label },
     } = this
-    if (key) return key
+    if (key) {
+      return key
+    }
     return (label ?? '') + '-' + indexInParent
   }
   @lazy() get id() {
@@ -132,11 +136,17 @@ export class TreeItem2Wrapper {
   }
   @memo()
   async findChild(key: string): Promise<TreeItem2Wrapper | undefined> {
-    for (const c of await this.children()) if (c.key === key) return c
+    for (const c of await this.children()) {
+      if (c.key === key) {
+        return c
+      }
+    }
   }
   @memo(JSON.stringify)
   async findChildRec(keys: string[]): Promise<TreeItem2Wrapper | undefined> {
-    if (keys.length === 0) return this
+    if (keys.length === 0) {
+      return this
+    }
     const [k, ...rest] = keys
     return await (await this.findChild(k))?.findChildRec(rest)
   }
@@ -206,7 +216,9 @@ export class RemoteTreeDataProviderImpl implements RemoteTreeDataProvider {
     this.refresh()
     setInterval(() => {
       this.refresh()
-      for (const l of this.listeners) l(undefined)
+      for (const l of this.listeners) {
+        l(undefined)
+      }
     }, this.refreshInterval)
   }
 
@@ -224,7 +236,9 @@ export class RemoteTreeDataProviderImpl implements RemoteTreeDataProvider {
     //console.log('getTreeItem', id)
     const keys = JSON.parse(id)
     const item = await this.root.findChildRec(keys)
-    if (!item) throw new Error(`item not found for id ${id}`)
+    if (!item) {
+      throw new Error(`item not found for id ${id}`)
+    }
     //console.log('--->', item.treeItemOverTheWire)
     return item.serializableTreeItem
   }
@@ -235,7 +249,9 @@ export class RemoteTreeDataProviderImpl implements RemoteTreeDataProvider {
     const keys = id ? JSON.parse(id) : []
     const self = await this.root.findChildRec(keys)
     const children = await self?.children()
-    if (!children) return []
+    if (!children) {
+      return []
+    }
     const res = children?.map((c) => c.id)
     //console.log('--->', res)
     return res
@@ -280,14 +296,22 @@ export function RemoteTreeDataProvider_publishOverLSPConnection(
 export async function ProviderResult_normalize<T>(
   x: vscode.ProviderResult<T>
 ): Promise<T | undefined> {
-  if (isThenable(x)) return await ProviderResult_normalize(await x)
-  if (x === null) return undefined
+  if (isThenable(x)) {
+    return await ProviderResult_normalize(await x)
+  }
+  if (x === null) {
+    return undefined
+  }
   return x
 }
 
 function isThenable(x: unknown): x is Thenable<unknown> {
-  if (typeof x !== 'object') return false
-  if (x === null) return false
+  if (typeof x !== 'object') {
+    return false
+  }
+  if (x === null) {
+    return false
+  }
   return typeof x['then'] === 'function'
 }
 
@@ -311,8 +335,9 @@ export function Command_open(uriOrLocation: string | Location): Command {
 
 export function Command_cli(cmd: string, title = 'run...'): Command {
   cmd = cmd.trim()
-  if (!(cmd.startsWith('rw') || cmd.startsWith('redwood')))
+  if (!(cmd.startsWith('rw') || cmd.startsWith('redwood'))) {
     cmd = 'redwood ' + cmd
+  }
   return { command: 'redwoodjs.cli', arguments: [cmd], title }
 }
 
