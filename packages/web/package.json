@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/web",
-  "version": "0.25.0",
+  "version": "0.25.1",
   "files": [
     "dist",
     "apollo"
@@ -10,13 +10,11 @@
   "license": "MIT",
   "dependencies": {
     "@apollo/client": "^3.2.5",
+    "@redwoodjs/auth": "^0.25.1",
     "@types/react": "16.9.53",
     "core-js": "3.6.5",
     "graphql": "^15.3.0",
     "proptypes": "^1.1.0"
-  },
-  "devDependencies": {
-    "@redwoodjs/auth": "^0.25.0"
   },
   "peerDependencies": {
     "react": "*"
