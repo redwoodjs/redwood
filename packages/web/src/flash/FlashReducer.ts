@@ -25,21 +25,10 @@ type FlashAction =
 export default (messages: FlashMessage[] = [], action: FlashAction) => {
   switch (action.type) {
     case 'ADD_MESSAGE': {
-      const {
-        text,
-        style = {},
-        classes = '',
-        persist = false,
-        viewed = false,
-      } = action.message
-
       const newMessage = {
+        ...action.message,
         id: messages.length,
-        text,
-        style,
-        classes,
-        persist,
-        viewed,
+        style: action.message.style || {},
       }
 
       return [...messages, newMessage]
