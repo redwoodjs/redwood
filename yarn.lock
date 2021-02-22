@@ -359,12 +359,12 @@
     chalk "^2.0.0"
     js-tokens "^4.0.0"
 
-"@babel/node@^7.10.5":
-  version "7.12.10"
-  resolved "https://registry.yarnpkg.com/@babel/node/-/node-7.12.10.tgz#2a78e1a3a98f08e0d5e8adbaba783bed5efb09ae"
-  integrity sha512-lJT1sXp1bEfAZ7B2ChEOOiUxaGbIWkcAixqZDpbHnJWUqIjoofOGo5ON1bJ9HOmtMdF7rqKiOoM7zZSI87El3g==
+"@babel/node@^7.12.17":
+  version "7.12.17"
+  resolved "https://registry.yarnpkg.com/@babel/node/-/node-7.12.17.tgz#f892e4a16a108a62f7d4cc327f1608d8dae0d556"
+  integrity sha512-NLe32pSqoweEFvCEHxvJq3DgBx3oBLtgNfdW5936pMEc5TE2P8jVmDiY6JXQccn/4tt9sBLMUuh+tF3VXWyMhA==
   dependencies:
-    "@babel/register" "^7.12.10"
+    "@babel/register" "^7.12.13"
     commander "^4.0.1"
     core-js "^3.2.1"
     lodash "^4.17.19"
@@ -1051,10 +1051,10 @@
     "@babel/helper-validator-option" "^7.12.1"
     "@babel/plugin-transform-typescript" "^7.12.1"
 
-"@babel/register@^7.12.10", "@babel/register@^7.9.0":
-  version "7.12.10"
-  resolved "https://registry.yarnpkg.com/@babel/register/-/register-7.12.10.tgz#19b87143f17128af4dbe7af54c735663b3999f60"
-  integrity sha512-EvX/BvMMJRAA3jZgILWgbsrHwBQvllC5T8B29McyME8DvkdOxk4ujESfrMvME8IHSDvWXrmMXxPvA/lx2gqPLQ==
+"@babel/register@^7.12.13", "@babel/register@^7.9.0":
+  version "7.12.13"
+  resolved "https://registry.yarnpkg.com/@babel/register/-/register-7.12.13.tgz#e9cb57618264f2944634da941ba9755088ef9ec5"
+  integrity sha512-fnCeRXj970S9seY+973oPALQg61TRvAaW0nRDe1f4ytKqM3fZgsNXewTZWmqZedg74LFIRpg/11dsrPZZvYs2g==
   dependencies:
     find-cache-dir "^2.0.0"
     lodash "^4.17.19"
@@ -13799,10 +13799,10 @@ next-tick@~1.0.0:
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.0.0.tgz#ca86d1fe8828169b0120208e3dc8424b9db8342c"
   integrity sha1-yobR/ogoFpsBICCOPchCS524NCw=
 
-nhost-js-sdk@^3.0.0-10:
-  version "3.0.0-10"
-  resolved "https://registry.yarnpkg.com/nhost-js-sdk/-/nhost-js-sdk-3.0.0-10.tgz#99c8261085910d2848ecaea3638d61dd878dadfe"
-  integrity sha512-hp7zCT1/7Z4Kb/wMiDqgUi5xHDLOOkkAdeY4IS3qNUh9AcXlPeGHg+6jxvgsQlv+wiR2f8vd1FZZNdCJyrAN4g==
+nhost-js-sdk@^3.0.0-14:
+  version "3.0.0-14"
+  resolved "https://registry.yarnpkg.com/nhost-js-sdk/-/nhost-js-sdk-3.0.0-14.tgz#6c0dab7b83874dd74952008e531138af7c134888"
+  integrity sha512-D+Jq/Ug7vnT2aZ5exV4/90m0209sanwANTOA2HPP+xjA+q/ay8BKqYsrTiBxyHJ+YLC+Mr2DbIETyTKU1x9wTA==
   dependencies:
     "@types/jwt-decode" "^2.2.1"
     axios "^0.21.1"
@@ -13964,22 +13964,6 @@ nodemon@^2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/nodemon/-/nodemon-2.0.6.tgz#1abe1937b463aaf62f0d52e2b7eaadf28cc2240d"
   integrity sha512-4I3YDSKXg6ltYpcnZeHompqac4E6JeAMpGm8tJnB9Y3T0ehasLa4139dJOcCrB93HHrUMsCrKtoAlXTqT5n4AQ==
-  dependencies:
-    chokidar "^3.2.2"
-    debug "^3.2.6"
-    ignore-by-default "^1.0.1"
-    minimatch "^3.0.4"
-    pstree.remy "^1.1.7"
-    semver "^5.7.1"
-    supports-color "^5.5.0"
-    touch "^3.1.0"
-    undefsafe "^2.0.3"
-    update-notifier "^4.1.0"
-
-nodemon@^2.0.7:
-  version "2.0.7"
-  resolved "https://registry.yarnpkg.com/nodemon/-/nodemon-2.0.7.tgz#6f030a0a0ebe3ea1ba2a38f71bf9bab4841ced32"
-  integrity sha512-XHzK69Awgnec9UzHr1kc8EomQh4sjTQ8oRf8TsGrSmHDx9/UmiGG9E/mM3BuTfNeFwdNBvrqQq/RHL0xIeyFOA==
   dependencies:
     chokidar "^3.2.2"
     debug "^3.2.6"
