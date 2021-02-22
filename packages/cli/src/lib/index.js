@@ -14,7 +14,10 @@ import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 import { format } from 'prettier'
 
-import { getPaths as getRedwoodPaths } from '@redwoodjs/internal'
+import {
+  getPaths as getRedwoodPaths,
+  getConfig as getRedwoodConfig,
+} from '@redwoodjs/internal'
 
 import c from './colors'
 
@@ -38,6 +41,17 @@ export const getSchema = async (name) => {
     })
 
     if (model) {
+      // look for any fields that are enums and attach the possible enum values
+      // so we can put them in generated test files
+      model.fields.forEach((field) => {
+        const fieldEnum = schema.datamodel.enums.find((e) => {
+          return field.type === e.name
+        })
+        if (fieldEnum) {
+          field.enumValues = fieldEnum.values
+        }
+      })
+
       return model
     } else {
       throw new Error(
@@ -213,7 +227,16 @@ export const getPaths = () => {
     return getRedwoodPaths()
   } catch (e) {
     console.error(c.error(e.message))
-    process.exit(0)
+    process.exit(1)
+  }
+}
+
+export const getConfig = () => {
+  try {
+    return getRedwoodConfig()
+  } catch (e) {
+    console.error(c.error(e.message))
+    process.exit(1)
   }
 }
 

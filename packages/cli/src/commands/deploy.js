@@ -1,14 +1,14 @@
-export const command = 'deploy <command>'
+export const command = 'deploy <target>'
 export const description = 'Deploy your Redwood project'
 import terminalLink from 'terminal-link'
 
 export const builder = (yargs) =>
   yargs
-    .commandDir('./deploy', { recurse: true })
+    .commandDir('./deploy', { recurse: false })
     .demandCommand()
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/reference/command-line-interface#deploy'
-      )}`
+        'https://redwoodjs.com/docs/cli-commands#deploy'
+      )}\n`
     )

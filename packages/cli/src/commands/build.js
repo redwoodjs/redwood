@@ -6,9 +6,11 @@ import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
 
-import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
-import { getPaths } from 'src/lib'
+import { detectPrerenderRoutes } from '@redwoodjs/prerender'
+
+import { getPaths, getConfig } from 'src/lib'
 import c from 'src/lib/colors'
+import { generatePrismaClient } from 'src/lib/generatePrismaClient'
 
 export const command = 'build [side..]'
 export const description = 'Build for production'
@@ -45,6 +47,11 @@ export const builder = (yargs) => {
       description: 'Print more',
       type: 'boolean',
     })
+    .option('prerender', {
+      default: true,
+      description: 'Prerender after building web',
+      type: 'boolean',
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -57,7 +64,45 @@ export const handler = async ({
   side = ['api', 'web'],
   verbose = false,
   stats = false,
+  prerender,
 }) => {
+  const execCommandsForSides = {
+    api: {
+      // must use path.join() here, and for 'web' below, to support Windows
+      cwd: path.join(getPaths().base, 'api'),
+      cmd:
+        "yarn cross-env NODE_ENV=production babel src --out-dir dist --delete-dir-on-start --extensions .ts,.js --ignore '**/*.test.ts,**/*.test.js,**/__tests__'",
+    },
+    web: {
+      cwd: path.join(getPaths().base, 'web'),
+      cmd: `yarn cross-env NODE_ENV=production webpack --config ../node_modules/@redwoodjs/core/config/webpack.${
+        stats ? 'stats' : 'production'
+      }.js`,
+    },
+  }
+
+  if (stats) {
+    side = ['web']
+    console.log(
+      ' ⏩ Skipping `api` build because stats only works for Webpack at the moment.'
+    )
+  }
+
+  const listrTasks = side.map((sideName) => {
+    const { cwd, cmd } = execCommandsForSides[sideName]
+    return {
+      title: `Building "${sideName}"${(stats && ' for stats') || ''}...`,
+      task: () => {
+        return execa(cmd, undefined, {
+          stdio: verbose ? 'inherit' : 'pipe',
+          shell: true,
+          cwd,
+        })
+      },
+    }
+  })
+
+  // Additional tasks, apart from build
   if (side.includes('api')) {
     try {
       await generatePrismaClient({
@@ -71,46 +116,44 @@ export const handler = async ({
     }
   }
 
-  const execCommandsForSides = {
-    api: {
-      // must use path.join() here, and for 'web' below, to support Windows
-      cwd: path.join(getPaths().base, 'api'),
-      cmd:
-        "yarn cross-env NODE_ENV=production babel src --out-dir dist --delete-dir-on-start --extensions .ts,.js --ignore '**/*.test.ts,**/*.test.js,**/__tests__'",
-    },
-    web: {
-      cwd: path.join(getPaths().base, 'web'),
-      cmd: `yarn webpack --config ../node_modules/@redwoodjs/core/config/webpack.${
-        stats ? 'stats' : 'production'
-      }.js`,
-    },
-  }
+  if (side.includes('web')) {
+    // Clean web dist folder, _before_ building
+    listrTasks.unshift({
+      title: 'Cleaning "web"... (./web/dist/)',
+      task: () => {
+        return execa('rimraf dist/*', undefined, {
+          stdio: verbose ? 'inherit' : 'pipe',
+          shell: true,
+          cwd: getPaths().web.base,
+        })
+      },
+    })
 
-  if (stats) {
-    side = ['web']
-    console.log(
-      ' ⏩ Skipping `api` build because stats only works for Webpack at the moment.'
-    )
-  }
+    // Prerender _after_ web build
+    if (getConfig().web.experimentalPrerender && prerender) {
+      const prerenderRoutes = detectPrerenderRoutes()
 
-  const tasks = new Listr(
-    side.map((sideName) => {
-      const { cwd, cmd } = execCommandsForSides[sideName]
-      return {
-        title: `Building "${sideName}"${(stats && ' for stats') || ''}...`,
+      listrTasks.push({
+        title: 'Prerendering "web"...',
         task: () => {
-          return execa(cmd, undefined, {
+          return execa('yarn rw prerender', undefined, {
             stdio: verbose ? 'inherit' : 'pipe',
             shell: true,
-            cwd,
+            cwd: getPaths().base,
           })
         },
-      }
-    }),
-    {
-      renderer: verbose && VerboseRenderer,
+        skip: () => {
+          if (prerenderRoutes.length === 0) {
+            return 'You have not marked any routes as `prerender` in `Routes.{js,tsx}`'
+          }
+        },
+      })
     }
-  )
+  }
+
+  const tasks = new Listr(listrTasks, {
+    renderer: verbose && VerboseRenderer,
+  })
 
   try {
     await tasks.run()
