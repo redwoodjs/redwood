@@ -102,7 +102,7 @@ export const builder = (yargs) => {
   yargs.epilogue(
     `Also see the ${terminalLink(
       'Redwood CLI Reference',
-      'https://redwoodjs.com/reference/command-line-interface#datMigrate-up'
+      'https://redwoodjs.com/docs/cli-commands#up'
     )}`
   )
 }
@@ -155,9 +155,11 @@ export const handler = async () => {
 
   try {
     await tasks.run()
-  } finally {
     await db.$disconnect()
     report(counters)
-    process.exit(0)
+  } catch (e) {
+    await db.$disconnect()
+    report(counters)
+    process.exit(e?.exitCode || 1)
   }
 }

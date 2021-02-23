@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/api-server",
   "description": "Redwood's HTTP server for Serverless Functions",
-  "version": "0.24.0",
+  "version": "0.25.1",
   "bin": {
     "api-server": "./dist/index.js"
   },
@@ -32,7 +32,8 @@
     "build": "yarn build:js",
     "prepublishOnly": "yarn cross-env NODE_ENV=production yarn build",
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
-    "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\""
+    "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build && yarn fix:permissions\"",
+    "fix:permissions": "chmod +x dist/index.js"
   },
   "gitHead": "c235e7d7186e5e258764699c0e0e1d5cc0fdd0b5"
 }

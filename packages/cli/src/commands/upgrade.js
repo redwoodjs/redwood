@@ -2,7 +2,9 @@ import execa from 'execa'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
 
+import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
+import { generatePrismaClient } from 'src/lib/generatePrismaClient'
 
 export const command = 'upgrade'
 export const description = 'Upgrade all @redwoodjs packages via interactive CLI'
@@ -95,6 +97,30 @@ const installPr = (pr, isAuth) => {
   } else {
     return mainString
   }
+}
+
+const refreshPrismaClient = () => {
+  /** Relates to prisma/client issue, @see: https://github.com/redwoodjs/redwood/issues/1083 */
+  return [
+    {
+      title: '...',
+      task: async (_ctx, task) => {
+        try {
+          await generatePrismaClient({
+            verbose: false,
+            force: false,
+            schema: getPaths().api.dbSchema,
+          })
+        } catch (e) {
+          task.skip('Refreshing the Prisma client caused an Error.')
+          console.log(
+            'You may need to update your prisma client manually: $ yarn rw prisma generate'
+          )
+          console.log(c.error(e.message))
+        }
+      },
+    },
+  ]
 }
 
 const checkInstalled = () => {
@@ -208,6 +234,10 @@ export const handler = async ({ d, tag, pr }) => {
         title: 'Running upgrade command',
         task: () => new Listr(runUpgrade({ d, tag, pr })),
       },
+      {
+        title: 'Refreshing the Prisma client',
+        task: () => new Listr(refreshPrismaClient()),
+      },
     ],
     { collapse: false }
   )
@@ -215,6 +245,7 @@ export const handler = async ({ d, tag, pr }) => {
   try {
     await tasks.run()
   } catch (e) {
-    console.log(c.error(e.message))
+    console.error(c.error(e.message))
+    process.exit(e?.exitCode || 1)
   }
 }

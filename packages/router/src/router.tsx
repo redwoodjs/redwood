@@ -9,7 +9,6 @@ import {
   parseSearch,
   replaceParams,
   matchPath,
-  navigate,
   mapNamedRoutes,
   PageLoader,
   Redirect,
@@ -22,8 +21,9 @@ interface RouteProps {
   page: Spec | React.ComponentType<unknown> | ((props: any) => JSX.Element)
   path?: string
   name?: string
-  notfound?: Spec | React.ComponentType
+  notfound?: boolean
   redirect?: string
+  prerender?: boolean
   whileLoading?: () => ReactChild | null
 }
 
@@ -238,12 +238,7 @@ const RouterImpl: React.FC<RouterImplProps & RouterProps> = ({
 
       if (redirect) {
         const newPath = replaceParams(redirect, pathParams)
-        navigate(newPath)
-        return (
-          <RouterImpl pathname={newPath} search={search}>
-            {children}
-          </RouterImpl>
-        )
+        return <Redirect to={newPath} />
       } else {
         if (privateRoute) {
           if (typeof useAuth === 'undefined') {
