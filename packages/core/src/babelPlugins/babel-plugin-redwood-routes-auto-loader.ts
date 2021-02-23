@@ -1,8 +1,9 @@
 import type { PluginObj, types } from '@babel/core'
 
-import { processPagesDir } from '@redwoodjs/internal'
+import { importStatementPath, processPagesDir } from '@redwoodjs/internal'
 import { RWProject } from '@redwoodjs/structure'
 
+import { generateGlobalsDef } from './generateGlobals'
 import { generateTypeDef, generateTypeDefIndex } from './generateTypes'
 
 interface PluginOptions {
@@ -35,7 +36,7 @@ export default function (
           // Match import paths, const name could be different
           // NOTE: the userImportPath we receive at this point is the aboluste path
           // because of babel-plugin-module-resolver that runs before
-          const userImportPath = p.node.source?.value
+          const userImportPath = importStatementPath(p.node.source?.value)
 
           if (rwPageImportPaths.includes(userImportPath)) {
             p.remove()
@@ -75,7 +76,13 @@ export default function (
                 ${availableRoutes.join('\n    ')}
               }
             }
+            `
+            .split('\n')
+            .slice(1)
+            .map((line) => line.replace('            ', ''))
+            .join('\n')
 
+          const globalsDefContent = `
             ${pageImports.join('\n')}
 
             declare global {
@@ -88,6 +95,7 @@ export default function (
             .join('\n')
 
           generateTypeDef('routes.d.ts', typeDefContent)
+          generateGlobalsDef('routes-globals.d.ts', globalsDefContent)
           generateTypeDefIndex()
         },
         exit(p) {

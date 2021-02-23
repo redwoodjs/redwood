@@ -8,7 +8,9 @@ import App from './index'
  * rather than replacing it.
  * https://reactjs.org/docs/react-dom.html#hydrate
  */
-if (document.getElementById('redwood-app').hasChildNodes()) {
+const rootElement = document.getElementById('redwood-app')
+
+if (rootElement.hasChildNodes()) {
   ReactDOM.hydrate(<App />, rootElement)
 } else {
   ReactDOM.render(<App />, rootElement)
