@@ -1,10 +1,10 @@
 import { ForbiddenError } from 'apollo-server-lambda'
 
 import {
-  WEBHOOK_SIGNTAURE_HEADER,
+  //WEBHOOK_SIGNTAURE_HEADER,
   sign,
   verifySignature,
-  verify,
+  //verify,
 } from './secureHandler'
 
 const body = 'No more secrets, Marty.'
