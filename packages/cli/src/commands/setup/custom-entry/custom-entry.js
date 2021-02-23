@@ -28,7 +28,9 @@ export const handler = async ({ force }) => {
       task: () => {
         // @TODO figure out how we're handling typescript
         // In this file, we're setting everything to js
-        const entryJsFile = `${getPaths().web.src}/entry.js`
+        // @Note, getPaths.web.entry is null, when it doesn't exist
+        const entryJsFile =
+          getPaths().web.entry ?? path.join(getPaths().web.src, 'entry.js')
 
         // Copy over the entry file that exists in package/web
         // This is the file that's normally used if a custome entry point doesnt exist
@@ -36,7 +38,10 @@ export const handler = async ({ force }) => {
           entryJsFile,
           fs
             .readFileSync(
-              path.resolve(__dirname, '../../../../../web/entry/index.js')
+              path.join(
+                getPaths().base,
+                'node_modules/@redwoodjs/web/entry/index.js'
+              )
             )
             .toString()
             // Remove the module alias to keep it simple
