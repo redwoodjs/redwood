@@ -2,14 +2,15 @@ import fs from 'fs'
 
 import { addConfigToIndex } from '../auth'
 
+// jest.mock('src/lib')
 jest.mock('src/lib', () => {
-  const path = require('path')
-  const __dirname = path.resolve()
+  // const path = require('path')
+  // const __dirname = path.resolve()
   return {
     getPaths: () => ({
       api: { functions: '', src: '', lib: '' },
       web: {
-        src: path.join(__dirname, '../create-redwood-app/template/web/src'),
+        src: '',
       },
     }),
   }
@@ -23,6 +24,15 @@ const writeFileSyncSpy = jest.fn((filePath, content) => {
 beforeEach(() => {
   jest.restoreAllMocks()
   jest.spyOn(fs, 'writeFileSync').mockImplementation(writeFileSyncSpy)
+  jest.spyOn(fs, 'readFileSync').mockImplementation(
+    () => `const App = () => (
+		<FatalErrorBoundary page={FatalErrorPage}>
+			<RedwoodApolloProvider>
+				<Routes />
+			</RedwoodApolloProvider>
+		</FatalErrorBoundary>
+	)`
+  )
 })
 
 describe('Should add config lines to index.js', () => {
@@ -66,5 +76,10 @@ describe('Should add config lines to index.js', () => {
   it('Matches supabase Snapshot', async () => {
     const supabaseData = await import(`../providers/supabase`)
     await addConfigToIndex(supabaseData.config, false)
+  })
+
+  it('Matches nhost Snapshot', async () => {
+    const nhostData = await import(`../providers/nhost`)
+    await addConfigToIndex(nhostData.config, false)
   })
 })
