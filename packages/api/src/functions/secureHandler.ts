@@ -56,7 +56,7 @@ class WebhookError extends Error {
    * Create a WebhookError.
    * @param {string} message - The error message
    * */
-  constructor(message) {
+  constructor(message: string) {
     super(message)
   }
 }
@@ -70,7 +70,7 @@ export class WebhookVerificationError extends WebhookError {
    * Create a WebhookVerificationError.
    * @param {string} message - The error message
    * */
-  constructor(message) {
+  constructor(message: string) {
     super(message)
   }
 }
