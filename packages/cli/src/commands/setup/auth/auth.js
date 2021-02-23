@@ -30,8 +30,10 @@ const TEMPLATES = fs
       }
     }
   }, {})
+
 const OUTPUT_PATH = path.join(getPaths().api.lib, 'auth.js')
 const WEB_SRC_INDEX_PATH = path.join(getPaths().web.src, 'index.js')
+
 const SUPPORTED_PROVIDERS = fs
   .readdirSync(path.resolve(__dirname, 'providers'))
   .map((file) => path.basename(file, '.js'))
@@ -44,7 +46,10 @@ const addWebImports = (content, imports) => {
 
 // returns the content of index.js with init lines added
 const addWebInit = (content, init) => {
-  return content.replace(/ReactDOM.render/, `${init}\n\nReactDOM.render`)
+  return content.replace(
+    'const App = () => (',
+    `${init}\n\nconst App = () => (`
+  )
 }
 
 // returns the content of index.js with <AuthProvider> added
@@ -307,6 +312,7 @@ export const handler = async ({ provider, force }) => {
 
     await tasks.run()
   } catch (e) {
-    console.log(c.error(e.message))
+    console.error(c.error(e.message))
+    process.exit(e?.exitCode || 1)
   }
 }

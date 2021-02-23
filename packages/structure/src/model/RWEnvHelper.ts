@@ -56,7 +56,7 @@ export class RWEnvHelper extends BaseNode {
     return this._dotenv('.env.defaults')
   }
 
-  @lazy() get api_pisma_env() {
+  @lazy() get api_prisma_env() {
     return this._dotenv('api/prisma/.env')
   }
 
