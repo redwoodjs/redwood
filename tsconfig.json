@@ -3,12 +3,14 @@
     { "path": "packages/internal" },
     { "path": "packages/structure" },
     { "path": "packages/core" },
-    { "path": "packages/testing" },
     { "path": "packages/api" },
     { "path": "packages/dev-server" },
     { "path": "packages/api-server" },
     { "path": "packages/auth" },
     { "path": "packages/web" },
+    { "path": "packages/router" },
+    { "path": "packages/testing" },
+    { "path": "packages/prerender" },
   ],
   "files": []
 }

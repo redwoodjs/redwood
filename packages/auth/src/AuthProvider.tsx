@@ -120,8 +120,8 @@ export class AuthProvider extends React.Component<
   getCurrentUser = async (): Promise<Record<string, unknown>> => {
     // Always get a fresh token, rather than use the one in state
     const token = await this.getToken()
-    const response = await window.fetch(
-      `${window.__REDWOOD__API_PROXY_PATH}/graphql`,
+    const response = await global.fetch(
+      `${global.__REDWOOD__API_PROXY_PATH}/graphql`,
       {
         method: 'POST',
         headers: {

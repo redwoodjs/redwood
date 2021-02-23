@@ -31,6 +31,7 @@ interface BrowserTargetConfig {
   apiProxyPort: number
   apiProxyPath: string
   experimentalFastRefresh?: boolean
+  experiemntalPrerender?: boolean
 }
 
 export interface Config {
