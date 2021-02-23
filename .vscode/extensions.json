@@ -1,7 +1,9 @@
 {
   "recommendations": [
+    "EditorConfig.EditorConfig",
+    "esbenp.prettier-vscode",
     "dbaeumer.vscode-eslint",
     "mgmcdermott.vscode-language-babel"
   ],
-  "unwantedRecommendations": []
+  "unwantedRecommendations": ["johnpapa.vscode-peacock"]
 }
