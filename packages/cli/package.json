@@ -48,7 +48,7 @@
   "scripts": {
     "build": "yarn build:js",
     "prepublishOnly": "yarn build",
-    "build:clean-dist": "yarn rimraf 'dist/**/__tests__'",
+    "build:clean-dist": "yarn rimraf 'dist/**/*/__tests__'",
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\" --copy-files --no-copy-ignored && yarn build:clean-dist",
     "fix:permissions": "chmod +x dist/index.js dist/redwood-tools.js",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build && yarn fix:permissions\"",

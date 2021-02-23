@@ -14,7 +14,7 @@ export const builder = (yargs) => {
     .option('open', {
       describe: 'Open storybooks in your browser on start',
       type: 'boolean',
-      default: false,
+      default: true,
     })
     .option('build', {
       describe: 'Build Storybook',
@@ -47,7 +47,7 @@ export const handler = ({ open, port, build }) => {
       !build && `--port ${port}`,
       !build && '--no-version-updates',
       `--static-dir "${staticAssetsFolder}"`,
-      open && '--ci',
+      !open && '--ci',
     ].filter(Boolean),
     {
       stdio: 'inherit',
