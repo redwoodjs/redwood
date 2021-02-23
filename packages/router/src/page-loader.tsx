@@ -4,9 +4,25 @@ import isEqual from 'lodash.isequal'
 
 import { createNamedContext, ParamsContext, Spec } from './internal'
 
-export const PageLoadingContext = createNamedContext('PageLoading')
+export interface PageLoadingContextInterface {
+  loading: boolean
+}
 
-export const usePageLoadingContext = () => useContext(PageLoadingContext)
+export const PageLoadingContext = createNamedContext<PageLoadingContextInterface>(
+  'PageLoading'
+)
+
+export const usePageLoadingContext = () => {
+  const pageLoadingContext = useContext(PageLoadingContext)
+
+  if (!pageLoadingContext) {
+    throw new Error(
+      'usePageLoadingContext must be used within a PageLoadingContext provider'
+    )
+  }
+
+  return pageLoadingContext
+}
 
 type synchonousLoaderSpec = () => { default: React.ComponentType }
 interface State {
@@ -115,7 +131,9 @@ export class PageLoader extends React.Component<Props> {
 
       return (
         <ParamsContext.Provider value={this.state.params}>
-          <PageFromLoader />
+          <PageLoadingContext.Provider value={{ loading: false }}>
+            <PageFromLoader {...this.state.params} />
+          </PageLoadingContext.Provider>
         </ParamsContext.Provider>
       )
     }
