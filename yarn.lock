@@ -13799,10 +13799,10 @@ next-tick@~1.0.0:
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.0.0.tgz#ca86d1fe8828169b0120208e3dc8424b9db8342c"
   integrity sha1-yobR/ogoFpsBICCOPchCS524NCw=
 
-nhost-js-sdk@^3.0.0-10:
-  version "3.0.0-10"
-  resolved "https://registry.yarnpkg.com/nhost-js-sdk/-/nhost-js-sdk-3.0.0-10.tgz#99c8261085910d2848ecaea3638d61dd878dadfe"
-  integrity sha512-hp7zCT1/7Z4Kb/wMiDqgUi5xHDLOOkkAdeY4IS3qNUh9AcXlPeGHg+6jxvgsQlv+wiR2f8vd1FZZNdCJyrAN4g==
+nhost-js-sdk@^3.0.0-14:
+  version "3.0.0-14"
+  resolved "https://registry.yarnpkg.com/nhost-js-sdk/-/nhost-js-sdk-3.0.0-14.tgz#6c0dab7b83874dd74952008e531138af7c134888"
+  integrity sha512-D+Jq/Ug7vnT2aZ5exV4/90m0209sanwANTOA2HPP+xjA+q/ay8BKqYsrTiBxyHJ+YLC+Mr2DbIETyTKU1x9wTA==
   dependencies:
     "@types/jwt-decode" "^2.2.1"
     axios "^0.21.1"
