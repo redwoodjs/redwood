@@ -119,7 +119,7 @@ const installNodeModulesTasks = ({ newAppDir }) => {
       },
     },
     {
-      title: 'Running `yarn install`... (This could take a while)',
+      title: "Running 'yarn install'... (This could take a while)",
       skip: () => {
         if (yarnInstall === false) {
           return 'skipped on request'

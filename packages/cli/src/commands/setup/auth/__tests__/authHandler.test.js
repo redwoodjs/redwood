@@ -8,44 +8,74 @@ jest.mock('src/lib', () => ({
   }),
 }))
 
+jest.mock('execa')
+jest.mock('listr')
+
 import fs from 'fs'
 
-import { waitFor } from '@testing-library/react'
 import chalk from 'chalk'
+import listr from 'listr'
 
 import * as auth from '../auth'
 
 const EXISTING_AUTH_PROVIDER_ERROR =
   'Existing auth provider found.\nUse --force to override existing provider.'
 
-test(`no error thrown when auth provider not found`, async () => {
-  // Mock process.exit to make sure CLI quites
-  const cSpy = jest.spyOn(console, 'log').mockImplementation(() => {})
+describe('Auth generator tests', () => {
+  const processExitSpy = jest
+    .spyOn(process, 'exit')
+    .mockImplementation(() => {})
 
-  auth.handler({ provider: 'netlify' })
-  await waitFor(() => expect(console.log).toHaveBeenCalledTimes(1))
-  expect(console.log).not.toHaveBeenCalledWith(
-    chalk.bold.red(EXISTING_AUTH_PROVIDER_ERROR)
-  )
+  const mockListrRun = jest.fn()
 
-  // Restore mocks
-  cSpy.mockRestore()
-})
+  listr.mockImplementation(() => {
+    return {
+      run: mockListrRun,
+    }
+  })
 
-test('throws an error if auth provider exists', async () => {
-  // Mock process.exit to make sure CLI quites
-  const fsSpy = jest
-    .spyOn(fs, 'readFileSync')
-    .mockImplementation(() => `import { AuthProvider } from '@redwoodjs/auth'`)
-  const cSpy = jest.spyOn(console, 'log').mockImplementation(() => {})
+  afterEach(() => {
+    processExitSpy.mockReset()
+  })
 
-  auth.handler({ provider: 'netlify' })
-  await waitFor(() => expect(console.log).toHaveBeenCalledTimes(1))
-  expect(console.log).toHaveBeenCalledWith(
-    chalk.bold.red(EXISTING_AUTH_PROVIDER_ERROR)
-  )
+  it(`no error thrown when auth provider not found`, async () => {
+    const fsSpy = jest.spyOn(fs, 'readFileSync').mockImplementation(() => '')
 
-  // Restore mocks
-  fsSpy.mockRestore()
-  cSpy.mockRestore()
+    // Mock process.exit to make sure CLI quites
+    const cSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
+
+    await auth.handler({ provider: 'netlify' })
+    expect(console.error).not.toHaveBeenCalledWith(
+      chalk.bold.red(EXISTING_AUTH_PROVIDER_ERROR)
+    )
+
+    expect(mockListrRun).toHaveBeenCalled()
+    expect(processExitSpy).not.toHaveBeenCalledWith(1)
+
+    // Restore mocks
+    fsSpy.mockRestore()
+    cSpy.mockRestore()
+  })
+
+  it('throws an error if auth provider exists', async () => {
+    // Mock process.exit to make sure CLI quites
+    const fsSpy = jest
+      .spyOn(fs, 'readFileSync')
+      .mockImplementation(
+        () => `import { AuthProvider } from '@redwoodjs/auth'`
+      )
+
+    const cSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
+
+    await auth.handler({ provider: 'netlify' })
+    expect(console.error).toHaveBeenCalledWith(
+      chalk.bold.red(EXISTING_AUTH_PROVIDER_ERROR)
+    )
+
+    expect(processExitSpy).toHaveBeenCalledWith(1)
+
+    // Restore mocks
+    fsSpy.mockRestore()
+    cSpy.mockRestore()
+  })
 })
