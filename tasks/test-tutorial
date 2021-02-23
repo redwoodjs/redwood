@@ -34,7 +34,7 @@ if [ -z "$1" ]
   then
   cd "$SCRIPTPATH/../"
   # build all the packages
-  yarn build:clean && yarn lerna run build:js
+  yarn build:clean && yarn build
 fi
 
 cd $TMP_DIR
