@@ -57,11 +57,13 @@ const addWebRender = (content, authProvider) => {
   const [_, indent, redwoodApolloProvider] = content.match(
     /(\s+)(<RedwoodApolloProvider>.*<\/RedwoodApolloProvider>)/s
   )
+
   const redwoodApolloProviderLines = redwoodApolloProvider
     .split('\n')
     .map((line) => {
       return '  ' + line
     })
+
   const customRenderOpen = (authProvider.render || []).reduce(
     (acc, component) => acc + indent + `<${component}>`,
     ''
@@ -312,6 +314,7 @@ export const handler = async ({ provider, force }) => {
 
     await tasks.run()
   } catch (e) {
-    console.log(c.error(e.message))
+    console.error(c.error(e.message))
+    process.exit(e?.exitCode || 1)
   }
 }
