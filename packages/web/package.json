@@ -3,7 +3,8 @@
   "version": "0.25.1",
   "files": [
     "dist",
-    "apollo"
+    "apollo",
+    "entry"
   ],
   "main": "./dist/index.js",
   "types": "dist/index.d.ts",
