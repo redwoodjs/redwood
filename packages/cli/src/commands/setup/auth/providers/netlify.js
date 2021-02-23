@@ -4,7 +4,7 @@ export const config = {
     `import netlifyIdentity from 'netlify-identity-widget'`,
     `import { isBrowser } from '@redwoodjs/prerender/browserUtils'`,
   ],
-  init: 'if (isBrowser) {\n  netlifyIdentity.init()\n}',
+  init: 'isBrowser && netlifyIdentity.init()',
   authProvider: {
     client: 'netlifyIdentity',
     type: 'netlify',

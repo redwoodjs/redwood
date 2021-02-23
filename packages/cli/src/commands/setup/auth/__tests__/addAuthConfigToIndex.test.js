@@ -2,37 +2,28 @@ import fs from 'fs'
 
 import { addConfigToIndex } from '../auth'
 
-// jest.mock('src/lib')
 jest.mock('src/lib', () => {
-  // const path = require('path')
-  // const __dirname = path.resolve()
+  const path = require('path')
+  const __dirname = path.resolve()
   return {
     getPaths: () => ({
       api: { functions: '', src: '', lib: '' },
       web: {
-        src: '',
+        src: path.join(__dirname, '../create-redwood-app/template/web/src'),
       },
     }),
   }
 })
 
 // This function checks output matches
-const writeFileSyncSpy = jest.fn((filePath, content) => {
+const writeFileSyncSpy = jest.fn((_, content) => {
+  // Line breaks cause an issue on windows snapshots
   expect(content).toMatchSnapshot()
 })
 
 beforeEach(() => {
   jest.restoreAllMocks()
   jest.spyOn(fs, 'writeFileSync').mockImplementation(writeFileSyncSpy)
-  jest.spyOn(fs, 'readFileSync').mockImplementation(
-    () => `const App = () => (
-		<FatalErrorBoundary page={FatalErrorPage}>
-			<RedwoodApolloProvider>
-				<Routes />
-			</RedwoodApolloProvider>
-		</FatalErrorBoundary>
-	)`
-  )
 })
 
 describe('Should add config lines to index.js', () => {

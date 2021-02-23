@@ -3,6 +3,14 @@
 exports[`Should add config lines to index.js Matches Auth0 Snapshot 1`] = `
 "import { AuthProvider } from '@redwoodjs/auth'
 import { Auth0Client } from '@auth0/auth0-spa-js'
+import { FatalErrorBoundary } from '@redwoodjs/web'
+import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
+
+import FatalErrorPage from 'src/pages/FatalErrorPage'
+import Routes from 'src/Routes'
+
+import './index.css'
+
 const auth0 = new Auth0Client({
   domain: process.env.AUTH0_DOMAIN,
   client_id: process.env.AUTH0_CLIENT_ID,
@@ -16,20 +24,31 @@ const auth0 = new Auth0Client({
 })
 
 const App = () => (
-		<FatalErrorBoundary page={FatalErrorPage}>
-			<AuthProvider client={auth0} type=\\"auth0\\">
-			  <RedwoodApolloProvider>
-  				<Routes />
-  			</RedwoodApolloProvider>
-			</AuthProvider>
-		</FatalErrorBoundary>
-	)"
+  <FatalErrorBoundary page={FatalErrorPage}>
+    <AuthProvider client={auth0} type=\\"auth0\\">
+      <RedwoodApolloProvider>
+        <Routes />
+      </RedwoodApolloProvider>
+    </AuthProvider>
+  </FatalErrorBoundary>
+)
+
+export default App
+"
 `;
 
 exports[`Should add config lines to index.js Matches Firebase Snapshot 1`] = `
 "import { AuthProvider } from '@redwoodjs/auth'
 import * as firebase from 'firebase/app'
 import 'firebase/auth'
+import { FatalErrorBoundary } from '@redwoodjs/web'
+import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
+
+import FatalErrorPage from 'src/pages/FatalErrorPage'
+import Routes from 'src/Routes'
+
+import './index.css'
+
 const firebaseClientConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
   authDomain: process.env.FIREBASE_AUTH_DOMAIN,
@@ -46,19 +65,30 @@ const firebaseClient = ((config) => {
 })(firebaseClientConfig)
 
 const App = () => (
-		<FatalErrorBoundary page={FatalErrorPage}>
-			<AuthProvider client={firebaseClient} type=\\"firebase\\">
-			  <RedwoodApolloProvider>
-  				<Routes />
-  			</RedwoodApolloProvider>
-			</AuthProvider>
-		</FatalErrorBoundary>
-	)"
+  <FatalErrorBoundary page={FatalErrorPage}>
+    <AuthProvider client={firebaseClient} type=\\"firebase\\">
+      <RedwoodApolloProvider>
+        <Routes />
+      </RedwoodApolloProvider>
+    </AuthProvider>
+  </FatalErrorBoundary>
+)
+
+export default App
+"
 `;
 
 exports[`Should add config lines to index.js Matches azureActiveDirectory Snapshot 1`] = `
 "import { AuthProvider } from '@redwoodjs/auth'
 import { UserAgentApplication } from 'msal'
+import { FatalErrorBoundary } from '@redwoodjs/web'
+import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
+
+import FatalErrorPage from 'src/pages/FatalErrorPage'
+import Routes from 'src/Routes'
+
+import './index.css'
+
 const azureActiveDirectoryClient = new UserAgentApplication({
     auth: {
       clientId: process.env.AZURE_ACTIVE_DIRECTORY_CLIENT_ID,
@@ -69,14 +99,17 @@ const azureActiveDirectoryClient = new UserAgentApplication({
   })
 
 const App = () => (
-		<FatalErrorBoundary page={FatalErrorPage}>
-			<AuthProvider client={azureActiveDirectoryClient} type=\\"azureActiveDirectory\\">
-			  <RedwoodApolloProvider>
-  				<Routes />
-  			</RedwoodApolloProvider>
-			</AuthProvider>
-		</FatalErrorBoundary>
-	)"
+  <FatalErrorBoundary page={FatalErrorPage}>
+    <AuthProvider client={azureActiveDirectoryClient} type=\\"azureActiveDirectory\\">
+      <RedwoodApolloProvider>
+        <Routes />
+      </RedwoodApolloProvider>
+    </AuthProvider>
+  </FatalErrorBoundary>
+)
+
+export default App
+"
 `;
 
 exports[`Should add config lines to index.js Matches ethereum Snapshot 1`] = `
@@ -84,6 +117,14 @@ exports[`Should add config lines to index.js Matches ethereum Snapshot 1`] = `
 import EthereumAuthClient from '@oneclickdapp/ethereum-auth'
 import { ApolloClient, InMemoryCache } from '@apollo/client'
 import { FetchConfigProvider, useFetchConfig } from '@redwoodjs/web'
+import { FatalErrorBoundary } from '@redwoodjs/web'
+import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
+
+import FatalErrorPage from 'src/pages/FatalErrorPage'
+import Routes from 'src/Routes'
+
+import './index.css'
+
 let ethereum
 
   const ApolloInjector = ({ children }) => {
@@ -120,77 +161,119 @@ let ethereum
 }
 
 const App = () => (
-		<FatalErrorBoundary page={FatalErrorPage}>
-			<FetchConfigProvider>
-			<ApolloInjector>
-			<AuthProvider client={ethereum} type=\\"ethereum\\">
-			  <RedwoodApolloProvider>
-  				<Routes />
-  			</RedwoodApolloProvider>
-			</AuthProvider>
-			</ApolloInjector>
-			</FetchConfigProvider>
-		</FatalErrorBoundary>
-	)"
+  <FatalErrorBoundary page={FatalErrorPage}>
+    <FetchConfigProvider>
+    <ApolloInjector>
+    <AuthProvider client={ethereum} type=\\"ethereum\\">
+      <RedwoodApolloProvider>
+        <Routes />
+      </RedwoodApolloProvider>
+    </AuthProvider>
+    </ApolloInjector>
+    </FetchConfigProvider>
+  </FatalErrorBoundary>
+)
+
+export default App
+"
 `;
 
 exports[`Should add config lines to index.js Matches goTrue Snapshot 1`] = `
 "import { AuthProvider } from '@redwoodjs/auth'
 import GoTrue from 'gotrue-js'
+import { FatalErrorBoundary } from '@redwoodjs/web'
+import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
+
+import FatalErrorPage from 'src/pages/FatalErrorPage'
+import Routes from 'src/Routes'
+
+import './index.css'
+
 const goTrueClient = new GoTrue({
   APIUrl: 'https://MYAPP.netlify.app/.netlify/identity',
   setCookie: true,
 })
 
 const App = () => (
-		<FatalErrorBoundary page={FatalErrorPage}>
-			<AuthProvider client={goTrueClient} type=\\"goTrue\\">
-			  <RedwoodApolloProvider>
-  				<Routes />
-  			</RedwoodApolloProvider>
-			</AuthProvider>
-		</FatalErrorBoundary>
-	)"
+  <FatalErrorBoundary page={FatalErrorPage}>
+    <AuthProvider client={goTrueClient} type=\\"goTrue\\">
+      <RedwoodApolloProvider>
+        <Routes />
+      </RedwoodApolloProvider>
+    </AuthProvider>
+  </FatalErrorBoundary>
+)
+
+export default App
+"
 `;
 
 exports[`Should add config lines to index.js Matches magicLink Snapshot 1`] = `
 "import { AuthProvider } from '@redwoodjs/auth'
 import { Magic } from 'magic-sdk'
+import { FatalErrorBoundary } from '@redwoodjs/web'
+import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
+
+import FatalErrorPage from 'src/pages/FatalErrorPage'
+import Routes from 'src/Routes'
+
+import './index.css'
+
 const m = new Magic(process.env.MAGICLINK_PUBLIC)
 
 const App = () => (
-		<FatalErrorBoundary page={FatalErrorPage}>
-			<AuthProvider client={m} type=\\"magicLink\\">
-			  <RedwoodApolloProvider>
-  				<Routes />
-  			</RedwoodApolloProvider>
-			</AuthProvider>
-		</FatalErrorBoundary>
-	)"
+  <FatalErrorBoundary page={FatalErrorPage}>
+    <AuthProvider client={m} type=\\"magicLink\\">
+      <RedwoodApolloProvider>
+        <Routes />
+      </RedwoodApolloProvider>
+    </AuthProvider>
+  </FatalErrorBoundary>
+)
+
+export default App
+"
 `;
 
 exports[`Should add config lines to index.js Matches netlify Snapshot 1`] = `
 "import { AuthProvider } from '@redwoodjs/auth'
 import netlifyIdentity from 'netlify-identity-widget'
 import { isBrowser } from '@redwoodjs/prerender/browserUtils'
-if (isBrowser) {
-  netlifyIdentity.init()
-}
+import { FatalErrorBoundary } from '@redwoodjs/web'
+import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
+
+import FatalErrorPage from 'src/pages/FatalErrorPage'
+import Routes from 'src/Routes'
+
+import './index.css'
+
+isBrowser && netlifyIdentity.init()
 
 const App = () => (
-		<FatalErrorBoundary page={FatalErrorPage}>
-			<AuthProvider client={netlifyIdentity} type=\\"netlify\\">
-			  <RedwoodApolloProvider>
-  				<Routes />
-  			</RedwoodApolloProvider>
-			</AuthProvider>
-		</FatalErrorBoundary>
-	)"
+  <FatalErrorBoundary page={FatalErrorPage}>
+    <AuthProvider client={netlifyIdentity} type=\\"netlify\\">
+      <RedwoodApolloProvider>
+        <Routes />
+      </RedwoodApolloProvider>
+    </AuthProvider>
+  </FatalErrorBoundary>
+)
+
+export default App
+"
 `;
 
 exports[`Should add config lines to index.js Matches nhost Snapshot 1`] = `
 "import { AuthProvider } from '@redwoodjs/auth'
 import { createClient } from 'nhost-js-sdk'
+import { FatalErrorBoundary } from '@redwoodjs/web'
+import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
+
+import FatalErrorPage from 'src/pages/FatalErrorPage'
+import Routes from 'src/Routes'
+
+import './index.css'
+
 const nhostClient = createClient({
   baseURL: process.env.NHOST_BACKEND_URL,
   autoLogin: false,
@@ -198,31 +281,45 @@ const nhostClient = createClient({
 
 
 const App = () => (
-		<FatalErrorBoundary page={FatalErrorPage}>
-			<AuthProvider client={nhostClient} type=\\"nhost\\">
-			  <RedwoodApolloProvider>
-  				<Routes />
-  			</RedwoodApolloProvider>
-			</AuthProvider>
-		</FatalErrorBoundary>
-	)"
+  <FatalErrorBoundary page={FatalErrorPage}>
+    <AuthProvider client={nhostClient} type=\\"nhost\\">
+      <RedwoodApolloProvider>
+        <Routes />
+      </RedwoodApolloProvider>
+    </AuthProvider>
+  </FatalErrorBoundary>
+)
+
+export default App
+"
 `;
 
 exports[`Should add config lines to index.js Matches supabase Snapshot 1`] = `
 "import { AuthProvider } from '@redwoodjs/auth'
 import { createClient } from '@supabase/supabase-js'
+import { FatalErrorBoundary } from '@redwoodjs/web'
+import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
+
+import FatalErrorPage from 'src/pages/FatalErrorPage'
+import Routes from 'src/Routes'
+
+import './index.css'
+
 const supabaseClient = createClient(
     process.env.SUPABASE_URL,
     process.env.SUPABASE_KEY
   )
 
 const App = () => (
-		<FatalErrorBoundary page={FatalErrorPage}>
-			<AuthProvider client={supabaseClient} type=\\"supabase\\">
-			  <RedwoodApolloProvider>
-  				<Routes />
-  			</RedwoodApolloProvider>
-			</AuthProvider>
-		</FatalErrorBoundary>
-	)"
+  <FatalErrorBoundary page={FatalErrorPage}>
+    <AuthProvider client={supabaseClient} type=\\"supabase\\">
+      <RedwoodApolloProvider>
+        <Routes />
+      </RedwoodApolloProvider>
+    </AuthProvider>
+  </FatalErrorBoundary>
+)
+
+export default App
+"
 `;
