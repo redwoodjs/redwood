@@ -1,7 +1,6 @@
 {
   "recommendations": [
     "EditorConfig.EditorConfig",
-    "esbenp.prettier-vscode",
     "dbaeumer.vscode-eslint",
     "mgmcdermott.vscode-language-babel"
   ],
