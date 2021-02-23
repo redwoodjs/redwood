@@ -5,5 +5,7 @@
     "dbaeumer.vscode-eslint",
     "mgmcdermott.vscode-language-babel"
   ],
-  "unwantedRecommendations": ["johnpapa.vscode-peacock"]
+  "unwantedRecommendations": [
+    "johnpapa.vscode-peacock" // not used, still tries to apply it's settings
+  ]
 }
