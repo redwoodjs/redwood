@@ -1,10 +1,9 @@
-import { ForbiddenError } from 'apollo-server-lambda'
-
 import {
-  //WEBHOOK_SIGNTAURE_HEADER,
+  WEBHOOK_SIGNTAURE_HEADER,
   sign,
   verifySignature,
-  //verify,
+  verify,
+  WebhookVerificationError,
 } from './secureHandler'
 
 const body = 'No more secrets, Marty.'
@@ -26,7 +25,7 @@ describe('secureHandler', () => {
       const signature = sign({ body, secret: 'WERNER_BRANDES' })
       expect(() => {
         verifySignature({ body, secret, signature })
-      }).toThrow(ForbiddenError)
+      }).toThrow(WebhookVerificationError)
     })
   })
 
@@ -40,22 +39,21 @@ describe('secureHandler', () => {
       })
       expect(() => {
         verifySignature({ body, secret, signature })
-      }).toThrow(ForbiddenError)
+      }).toThrow(WebhookVerificationError)
     })
   })
 
-  // describe('with an event', () => {
-  //   test('it validates the signature', () => {
-  //     console.log(process.env.WEBHOOK_SECRET) // cannot load env?
-  //     const signature = sign({
-  //       body,
-  //       secret,
-  //     })
+  describe('with an event', () => {
+    test('it validates the signature', () => {
+      const signature = sign({
+        body,
+        secret,
+      })
 
-  //     const event = { body, headers: {} }
-  //     event.headers[WEBHOOK_SIGNTAURE_HEADER.toLocaleLowerCase()] = signature
+      const event = { body, headers: {} }
+      event.headers[WEBHOOK_SIGNTAURE_HEADER.toLocaleLowerCase()] = signature
 
-  //     expect(verify({ event })).toBeTruthy()
-  //   })
-  // })
+      expect(verify({ event })).toBeTruthy()
+    })
+  })
 })

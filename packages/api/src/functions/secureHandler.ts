@@ -7,7 +7,6 @@ See: https://stripe.com/docs/webhooks/signatures
 
 import { createHmac } from 'crypto'
 
-import { ForbiddenError } from 'apollo-server-lambda'
 import type { APIGatewayProxyEvent } from 'aws-lambda'
 
 /**
@@ -28,7 +27,7 @@ const DEFAULT_TOLERANCE = FIVE_MINUTES
 /**
  * @const {string}
  */
-const WEBHOOK_SECRET = process.env['WEBHOOK_SECRET'] || ''
+const WEBHOOK_SECRET = process.env['WEBHOOK_SECRET'] ?? ''
 
 /**
  * @const {string}
@@ -49,6 +48,34 @@ export interface VerifyOptions {
 }
 
 /**
+ * Class representing a WebhookError
+ * @extends Error
+ */
+class WebhookError extends Error {
+  /**
+   * Create a WebhookError.
+   * @param {string} message - The error message
+   * */
+  constructor(message) {
+    super(message)
+  }
+}
+
+/**
+ * Class representing a WebhookVerificationError
+ * @extends WebhookError
+ */
+export class WebhookVerificationError extends WebhookError {
+  /**
+   * Create a WebhookVerificationError.
+   * @param {string} message - The error message
+   * */
+  constructor(message) {
+    super(message)
+  }
+}
+
+/**
  * Generates a hash-based message authentication code from a secret.
  *
  * @param {string} secret - Secret key used to sign
@@ -59,8 +86,8 @@ export interface VerifyOptions {
  *    getHmac({ secret: 'MY_SECRET' })
  */
 const getHmac = ({ secret }: { secret: string }) => {
-  if (secret === undefined || secret === '')
-    throw new ForbiddenError(ERROR_MESSAGE)
+  if (typeof secret === 'undefined' || secret === '')
+    throw new WebhookVerificationError(ERROR_MESSAGE)
   return createHmac('sha256', secret)
 }
 
@@ -123,7 +150,7 @@ export const sign = ({
  *
  * @param {APIGatewayProxyEvent} event - The event that incudes the request details, like headers.
  * @param {VerifyOptions} options - Options for verifying the timestamp leeway.
- * @return {boolean \ ForbiddenError} - Returns true if the signature is verified, or raises ForbiddenError.
+ * @return {boolean | WebhookVerificationError} - Returns true if the signature is verified, or raises WebhookVerificationError.
  *
  * @example
  *
@@ -135,7 +162,7 @@ export const verify = ({
 }: {
   event: APIGatewayProxyEvent
   options?: VerifyOptions
-}): boolean | ForbiddenError => {
+}): boolean | WebhookVerificationError => {
   const body = event.body || ''
   const signature = signatureFromEvent({ event })
 
@@ -166,7 +193,7 @@ export const verify = ({
  * @param {string} secret - The secret key used to sign. Defaults to WEBHOOK_SECRET.
  * @param {string} signature - The signature.
  * @param {VerifyOptions} options - Options for verifying the timestamp leeway.
- * @return {boolean \ ForbiddenError} - Returns true if the signature is verified, or raises ForbiddenError.
+ * @return {boolean \ WebhookVerificationError} - Returns true if the signature is verified, or raises WebhookVerificationError.
  *
  * @example
  *
@@ -185,10 +212,10 @@ export const verifySignature = ({
   secret: string
   signature: string
   options?: VerifyOptions
-}): boolean | ForbiddenError => {
+}): boolean | WebhookVerificationError => {
   const match = /t=(\d+),v1=([\da-f]+)/.exec(signature)
   if (!match) {
-    throw new ForbiddenError(ERROR_MESSAGE)
+    throw new WebhookVerificationError(ERROR_MESSAGE)
   }
 
   const signedStamp = Number(match[1])
@@ -200,7 +227,7 @@ export const verifySignature = ({
   const difference = Math.abs(timestamp - signedStamp)
 
   if (difference > tolerance) {
-    throw new ForbiddenError(ERROR_MESSAGE)
+    throw new WebhookVerificationError(ERROR_MESSAGE)
   }
 
   const hmac = getHmac({ secret })
@@ -210,5 +237,5 @@ export const verifySignature = ({
     return true
   }
 
-  throw new ForbiddenError(ERROR_MESSAGE)
+  throw new WebhookVerificationError(ERROR_MESSAGE)
 }
