@@ -29,7 +29,12 @@ export const command = 'test [side..]'
 export const description = 'Run Jest tests. Defaults to watch mode'
 export const builder = (yargs) => {
   yargs
-    .choices('side', getProject().sides)
+    .positional('side', {
+      choices: getProject().sides,
+      default: getProject().sides,
+      description: 'Which side(s) to test',
+      type: 'array',
+    })
     .option('watch', {
       describe:
         'Run tests related to changed files based on hg/git. Specify the name or path to a file to focus on a specific set of tests',
@@ -99,7 +104,8 @@ export const handler = async ({
 
     // Create a test database
     if (sides.includes('api')) {
-      await execa(`yarn rw prisma db push --force`, {
+      await execa(`yarn rw`, ['prisma db push', '--force'], {
+        cwd: getPaths().api.base,
         stdio: 'inherit',
         shell: true,
         env: { DATABASE_URL },

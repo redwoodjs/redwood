@@ -6,6 +6,8 @@ export const isPrerendering = (): boolean => {
   return global.__REDWOOD__PRERENDERING ?? false
 }
 
+export const isBrowser = !isPrerendering()
+
 export const useIsBrowser = () => {
   return useMemo(() => {
     return !global?.__REDWOOD__PRERENDERING

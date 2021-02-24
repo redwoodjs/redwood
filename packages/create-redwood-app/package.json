@@ -14,7 +14,7 @@
     "chalk": "^4.1.0",
     "check-node-version": "^4.0.2",
     "decompress": "^4.2.0",
-    "execa": "^4.1.0",
+    "execa": "^5.0.0",
     "fs-extra": "^9.0.1",
     "listr": "^0.14.3",
     "tmp": "^0.2.1",
@@ -24,7 +24,9 @@
     "build": "yarn build:js",
     "build:js": "babel src -d dist",
     "prepublishOnly": "yarn cross-env NODE_ENV=production yarn build",
-    "build:watch": "nodemon --watch src --ignore dist,template --exec \"yarn build\""
+    "build:watch": "nodemon --watch src --ignore dist,template --exec \"yarn build\"",
+    "test": "jest",
+    "test:watch": "yarn test --watch"
   },
   "gitHead": "c235e7d7186e5e258764699c0e0e1d5cc0fdd0b5"
 }
