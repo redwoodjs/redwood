@@ -21,8 +21,12 @@ export const builder = (yargs) => {
 
   const optionDefault = (apiExists, webExists) => {
     let options = []
-    if (apiExists) options.push('api')
-    if (webExists) options.push('web')
+    if (apiExists) {
+      options.push('api')
+    }
+    if (webExists) {
+      options.push('web')
+    }
     return options
   }
 
