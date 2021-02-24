@@ -10,7 +10,7 @@ import c from 'src/lib/colors'
 export const command = 'custom-entry'
 
 export const description =
-  'Setup a custom entry.js file, so you can customise how the redwood app is mounted in your browser'
+  'Setup a custom entry.js file, so you can customise how Redwood web is mounted in your browser'
 
 export const builder = (yargs) => {
   yargs.option('force', {
@@ -57,7 +57,7 @@ export const handler = async ({ force }) => {
           ${c.green(
             'Quick link to the docs on configuring a custom entry point for your RW app'
           )}
-          ${chalk.hex('#e8e8e8')('https://redwoodjs.com/docs/xxxxx')}
+          ${chalk.hex('#e8e8e8')('https://redwoodjs.com/docs/custom-entry')}
         `
       },
     },
