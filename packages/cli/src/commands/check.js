@@ -13,8 +13,12 @@ export const handler = async () => {
 
   printDiagnostics(getPaths().base, {
     getSeverityLabel: (severity) => {
-      if (severity === DiagnosticSeverity.Error) return c.error('error')
-      if (severity === DiagnosticSeverity.Warning) return c.warning('warning')
+      if (severity === DiagnosticSeverity.Error) {
+        return c.error('error')
+      }
+      if (severity === DiagnosticSeverity.Warning) {
+        return c.warning('warning')
+      }
       return c.info('info')
     },
   })

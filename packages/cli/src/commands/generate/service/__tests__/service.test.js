@@ -271,6 +271,138 @@ describe('in typescript mode', () => {
   itCreatesASingleWordServiceFileWithMultipleRelations(baseArgs)
 })
 
+describe('parseSchema', () => {
+  it('returns an empty array for models with no required scalars', async () => {
+    const { scalarFields } = await service.parseSchema('Product')
+
+    expect(scalarFields).toEqual([])
+  })
+
+  it('includes required scalar fields', async () => {
+    const { scalarFields } = await service.parseSchema('User')
+
+    expect(
+      scalarFields.find((field) => field.name === 'email')
+    ).not.toBeUndefined()
+  })
+
+  it('does not include non-required scalar fields', async () => {
+    const { scalarFields } = await service.parseSchema('User')
+
+    expect(scalarFields.find((field) => field.name === 'name')).toBeUndefined()
+  })
+
+  it('does not include required scalar fields with default values', async () => {
+    const { scalarFields } = await service.parseSchema('User')
+
+    expect(
+      scalarFields.find((field) => field.name === 'isAdmin')
+    ).toBeUndefined()
+  })
+
+  it('includes foreign key scalars', async () => {
+    const { scalarFields } = await service.parseSchema('UserProfile')
+
+    expect(
+      scalarFields.find((field) => field.name === 'userId')
+    ).not.toBeUndefined()
+  })
+
+  it('does not include prisma-generated helper fields', async () => {
+    const { scalarFields } = await service.parseSchema('UserProfile')
+
+    expect(scalarFields.find((field) => field.name === 'user')).toBeUndefined()
+  })
+
+  it('returns an empty object for models with no relations', async () => {
+    const { relations } = await service.parseSchema('User')
+
+    expect(relations).toEqual({})
+  })
+
+  it('returns relations', async () => {
+    const { relations } = await service.parseSchema('UserProfile')
+
+    expect(relations).toEqual({
+      user: { foreignKey: ['userId'], type: 'User' },
+    })
+  })
+
+  it('returns relations for join tables', async () => {
+    const { relations } = await service.parseSchema('TagsOnProducts')
+
+    expect(relations).toEqual({
+      tag: { foreignKey: ['tagId'], type: 'Tag' },
+      product: { foreignKey: ['productId'], type: 'Product' },
+    })
+  })
+
+  it('properly captures relationships with different field name than related model', async () => {
+    const { relations } = await service.parseSchema('Feature')
+
+    expect(relations).toEqual({
+      inventory: { foreignKey: ['inventoryId'], type: 'Product' },
+    })
+  })
+
+  it('returns an empty array for models with no foreign keys', async () => {
+    const { foreignKeys } = await service.parseSchema('User')
+
+    expect(foreignKeys).toEqual([])
+  })
+
+  it('returns foreign keys', async () => {
+    const { foreignKeys } = await service.parseSchema('UserProfile')
+
+    expect(foreignKeys).toEqual(['userId'])
+  })
+})
+
+describe('fieldsToScenario', () => {
+  it('includes scalar fields', async () => {
+    const output = await service.fieldsToScenario(
+      [{ name: 'email', type: 'String' }],
+      {},
+      []
+    )
+
+    expect(output).toEqual({ email: 'String' })
+  })
+
+  it('includes dependent relationships', async () => {
+    // fields for a Post model
+    const output = await service.fieldsToScenario(
+      [
+        { name: 'title', type: 'String' },
+        { name: 'userId', type: 'Integer' },
+      ],
+      { user: { foreignKey: 'userId', type: 'User' } },
+      ['userId']
+    )
+
+    expect(Object.keys(output)).toEqual(['title', 'user'])
+    expect(Object.keys(output.user)).toEqual(['create'])
+    expect(Object.keys(output.user.create)).toEqual(['email'])
+  })
+
+  it('properly looks up related models by type', async () => {
+    // fields for a Post model
+    const output = await service.fieldsToScenario(
+      [
+        { name: 'title', type: 'String' },
+        { name: 'userId', type: 'Integer' },
+      ],
+      // note that relationship name is "author" but datatype is "User"
+      { author: { foreignKey: 'authorId', type: 'User' } },
+      ['userId']
+    )
+
+    expect(Object.keys(output)).toEqual(['title', 'author'])
+    expect(Object.keys(output.author)).toEqual(['create'])
+    expect(Object.keys(output.author.create)).toEqual(['email'])
+  })
+})
+
 test("doesn't include test file when --tests is set to false", async () => {
   const baseArgs = { ...getDefaultArgs(service.defaults), javascript: true }
 
