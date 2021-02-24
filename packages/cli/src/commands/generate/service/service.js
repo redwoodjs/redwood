@@ -25,7 +25,10 @@ export const parseSchema = async (model) => {
     if (field.relationFromFields) {
       // only build relations for those that are required
       if (field.isRequired && field.relationFromFields.length !== 0) {
-        relations[field.name] = field.relationFromFields
+        relations[field.name] = {
+          foreignKey: field.relationFromFields,
+          type: field.type,
+        }
       }
       foreignKeys = foreignKeys.concat(field.relationFromFields)
     }
@@ -75,15 +78,15 @@ export const fieldsToScenario = async (
   })
 
   // add back in related models by name so they can be created with prisma create syntax
-  for (const [relation, _foreignKey] of Object.entries(relations)) {
-    const relationModelName = pascalcase(pluralize.singular(relation))
+  for (const [relationName, relData] of Object.entries(relations)) {
+    const relationModelName = relData.type
     const {
       scalarFields: relScalarFields,
       relations: relRelations,
       foreignKeys: relForeignKeys,
     } = await parseSchema(relationModelName)
 
-    data[relation] = {
+    data[relationName] = {
       create: await fieldsToScenario(
         relScalarFields,
         relRelations,
