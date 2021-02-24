@@ -25,24 +25,39 @@ export const handler = async ({ force }) => {
     {
       title: 'Installing packages...',
       task: async () => {
-        await execa('yarn', [
-          'workspace',
-          'web',
-          'add',
-          'i18n',
-          'i18next',
-          'i18next-browser-languagedetector',
-          'i18next-http-backend',
-          'react-i18next',
+        return new Listr([
+          {
+            title: 'Install i18n, i18next, and react-i18next',
+            task: async () => {
+              /**
+               * Install i18n, i18next, and react-i18next
+               */
+              await execa('yarn', [
+                'workspace',
+                'web',
+                'add',
+                'i18n',
+                'i18next',
+                'react-i18next',
+              ])
+            },
+          },
+          {
+            title: 'Sync yarn.lock and node_modules',
+            task: async () => {
+              /**
+               * Sync yarn.lock file and node_modules folder.
+               */
+              await execa('yarn', ['install', '--check-files'])
+            },
+          },
         ])
       },
     },
     {
       title: 'Configuring i18n...',
       task: () => {
-        /**
-         * Write i18n.js in web/src
-         */
+        // Write i18n.js in web/src
         return writeFile(
           path.join(getPaths().web.src, 'i18n.js'),
           fs
@@ -55,9 +70,33 @@ export const handler = async ({ force }) => {
       },
     },
     {
-      title: "Adding locale file for 'site' namespace",
+      title: 'Adding locale file for French...',
       task() {
-        return writeFile(getPaths().web.src + '/locales/en/site.json')
+        // Write fr.json in web/src/locales
+        return writeFile(
+          path.join(getPaths().web.src, '/locales/fr.json'),
+          fs
+            .readFileSync(
+              path.resolve(__dirname, 'templates', 'fr.json.template')
+            )
+            .toString(),
+          { overwriteExisting: force }
+        )
+      },
+    },
+    {
+      title: 'Adding locale file for English...',
+      task() {
+        // Write en.json in web/src/locales
+        return writeFile(
+          path.join(getPaths().web.src, '/locales/en.json'),
+          fs
+            .readFileSync(
+              path.resolve(__dirname, 'templates', 'en.json.template')
+            )
+            .toString(),
+          { overwriteExisting: force }
+        )
       },
     },
     {
@@ -78,9 +117,6 @@ export const handler = async ({ force }) => {
           ${c.green('Quick link to the docs:')}\n
           ${chalk.hex('#e8e8e8')(
             'https://react.i18next.com/guides/quick-start/'
-          )}
-          ${chalk.hex('#e8e8e8')(
-            'https://github.com/i18next/i18next-browser-languageDetector\n'
           )}
         `
       },
