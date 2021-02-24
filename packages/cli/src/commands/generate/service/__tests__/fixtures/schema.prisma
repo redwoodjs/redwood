@@ -38,3 +38,28 @@ model UserProfile {
   userId   Int
   user     User   @relation(fields: [userId], references: [id])
 }
+
+model Product {
+  id   Int @id @default(autoincrement())
+  tags TagsOnProducts[]
+}
+
+model TagsOnProducts {
+  id        Int @id @default(autoincrement())
+  tagId     Int
+  tag       Tag @relation(fields: [tagId], references: [id])
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+model Tag {
+  id       Int @id @default(autoincrement())
+  name     String
+  products TagsOnProducts[]
+}
+
+model Feature {
+  id          Int @id @default(autoincrement())
+  inventoryId Int
+  inventory   Product @relation(fields: [inventoryId], references: [id])
+}

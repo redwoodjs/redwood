@@ -35,6 +35,7 @@ module.exports = {
         },
       },
     ],
+    curly: 'error',
   },
   overrides: [
     {
