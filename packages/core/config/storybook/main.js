@@ -1,12 +1,14 @@
 const fs = require('fs')
 const path = require('path')
 const { merge } = require('webpack-merge')
-const { getPaths } = require('@redwoodjs/internal')
+const { getConfig, getPaths } = require('@redwoodjs/internal')
 const { getSharedPlugins } = require('../webpack.common')
+
+const config = getConfig()
 
 const baseConfig = {
   stories: ['../../../../web/src/**/*.stories.{tsx,jsx,js}'],
-  addons: ['@storybook/addon-a11y'],
+  addons: config.web.a11y ? ['@storybook/addon-a11y'] : undefined,
   webpackFinal: (sbConfig, { configType }) => {
     // configType is 'PRODUCTION' or 'DEVELOPMENT', why shout?
     const isEnvProduction = configType && configType.toLowerCase() === 'production'
