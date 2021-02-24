@@ -7,9 +7,15 @@ export type ArrayLike<T> =
   | null
 
 export async function ArrayLike_normalize<T>(x: ArrayLike<T>): Promise<T[]> {
-  if (x instanceof Promise) return x
-  if (x === null) return []
-  if (typeof x === 'undefined') return []
+  if (x instanceof Promise) {
+    return x
+  }
+  if (x === null) {
+    return []
+  }
+  if (typeof x === 'undefined') {
+    return []
+  }
   return [...x]
 }
 

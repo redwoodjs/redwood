@@ -21,11 +21,15 @@ export class RWSDL extends FileNode {
    */
   @lazy() get schemaStringNode() {
     const i = this.sf.getVariableDeclaration('schema')?.getInitializer()
-    if (!i) return undefined
+    if (!i) {
+      return undefined
+    }
     // TODO: do we allow other kinds of strings? or just tagged literals?
     if (tsm.Node.isTaggedTemplateExpression(i)) {
       const t = i.getTemplate() //?
-      if (tsm.Node.isNoSubstitutionTemplateLiteral(t)) return t
+      if (tsm.Node.isNoSubstitutionTemplateLiteral(t)) {
+        return t
+      }
     }
     return undefined
   }
@@ -46,13 +50,19 @@ export class RWSDL extends FileNode {
   @lazy() get implementableFields() {
     const self = this
     return iter(function* () {
-      if (!self.schemaString) return //?
+      if (!self.schemaString) {
+        return
+      } //?
       const ast = parseGraphQL(self.schemaString)
-      for (const def of ast.definitions)
-        if (def.kind === 'ObjectTypeDefinition')
-          if (def.name.value === 'Query' || def.name.value === 'Mutation')
-            for (const field of def.fields ?? [])
+      for (const def of ast.definitions) {
+        if (def.kind === 'ObjectTypeDefinition') {
+          if (def.name.value === 'Query' || def.name.value === 'Mutation') {
+            for (const field of def.fields ?? []) {
               yield new RWSDLField(def, field, self)
+            }
+          }
+        }
+      }
     })
   }
 

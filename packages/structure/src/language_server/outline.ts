@@ -13,12 +13,13 @@ export class OutlineManager {
   @memo() start() {
     const getRoot = () => {
       const p = this.server.getProject()
-      if (!p)
+      if (!p) {
         return {
           async children() {
             return [{ label: 'No Redwood.js project found...' }]
           },
         }
+      }
       return getOutline(p)
     }
     const tdp = new RemoteTreeDataProviderImpl(getRoot)

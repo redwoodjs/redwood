@@ -13,7 +13,9 @@ export function* prisma_parseEnvExpressionsInFile(
 ) {
   const uri = URL_file(prismaSchemaFilePath)
   const file = URL_toFile(uri) // convert back and forth in case someone passed a uri
-  if (!existsSync(file)) return [] // fail silently
+  if (!existsSync(file)) {
+    return []
+  } // fail silently
   const src = readFileSync(file).toString()
   const exprs = prisma_parseEnvExpressions(src)
   for (const { range, key } of exprs) {
