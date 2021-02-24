@@ -39,14 +39,19 @@ const serverlessFunctions = requireDir(path.join(process.cwd(), functions), {
 
 try {
   const app = server({ requestHandler }).listen(socket || port, () => {
-    if (socket) console.log(socket)
-    else console.log(`http://localhost:${port}`)
+    if (socket) {
+      console.log(socket)
+    } else {
+      console.log(`http://localhost:${port}`)
+    }
     setLambdaFunctions(serverlessFunctions)
   })
 
   process.on('exit', () => {
     app.close(() => {
-      if (socket) rmSync(socket)
+      if (socket) {
+        rmSync(socket)
+      }
     })
   })
 } catch (e) {

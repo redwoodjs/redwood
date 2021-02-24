@@ -31,7 +31,9 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         const { filename } = state.file.opts // the file where this import statement resides
 
         // We only operate in "userland," skip node_modules.
-        if (filename?.includes('/node_modules/')) return
+        if (filename?.includes('/node_modules/')) {
+          return
+        }
         // We only need this plugin in the module could not be found.
         try {
           require.resolve(value)
@@ -41,7 +43,9 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         }
 
         const newPath = getNewPath(value, <string>filename)
-        if (!newPath) return
+        if (!newPath) {
+          return
+        }
         const newSource = t.stringLiteral(newPath)
         p.node.source = newSource
       },
@@ -57,7 +61,9 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         const { filename } = state.file.opts
 
         // We only operate in "userland," skip node_modules.
-        if (filename?.includes('/node_modules/')) return
+        if (filename?.includes('/node_modules/')) {
+          return
+        }
         // We only need this plugin in the module could not be found.
         try {
           require.resolve(value)
@@ -67,7 +73,9 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         }
 
         const newPath = getNewPath(value, <string>filename)
-        if (!newPath) return
+        if (!newPath) {
+          return
+        }
         const newSource = t.stringLiteral(newPath)
         // @ts-expect-error - TypeDef must be outdated.
         p.node.source = newSource
