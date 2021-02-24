@@ -66,7 +66,7 @@ export const handler = async ({ force }) => {
          * If it exists, throw an error.
          */
         return writeFile(
-          getPaths().web.src,
+          path.join(getPaths().web.src, 'i18n.js'),
           fs
             .readFileSync(
               path.resolve(__dirname, 'templates', 'i18n.js.template')
@@ -89,10 +89,10 @@ export const handler = async ({ force }) => {
          * If it exists, throw an error.
          */
         return writeFile(
-          getPaths().web.src.locales,
+          path.join(getPaths().web.src, '/locales/fr.json'),
           fs
             .readFileSync(
-              path.resolve(__dirname, 'templates', 'fr.json..template')
+              path.resolve(__dirname, 'templates', 'fr.json.template')
             )
             .toString(),
           { overwriteExisting: force }
@@ -112,10 +112,10 @@ export const handler = async ({ force }) => {
          * If it exists, throw an error.
          */
         return writeFile(
-          getPaths().web.src.locales,
+          path.join(getPaths().web.src, '/locales/en.js'),
           fs
             .readFileSync(
-              path.resolve(__dirname, 'templates', 'en.json..template')
+              path.resolve(__dirname, 'templates', 'en.json.template')
             )
             .toString(),
           { overwriteExisting: force }
