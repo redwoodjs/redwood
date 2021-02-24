@@ -28,6 +28,7 @@
     "@redwoodjs/eslint-config": "^0.27.1",
     "@redwoodjs/internal": "^0.27.1",
     "@redwoodjs/testing": "^0.27.1",
+    "@storybook/addon-a11y": "^6.1.19",
     "@storybook/react": "^6.1.21",
     "@testing-library/jest-dom": "5.11.6",
     "@types/jest": "^26.0.10",
