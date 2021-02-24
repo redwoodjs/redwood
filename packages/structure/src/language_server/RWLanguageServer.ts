@@ -98,7 +98,9 @@ export class RWLanguageServer {
     connection.onCodeAction(async ({ context, textDocument: { uri } }) => {
       const actions: CodeAction[] = []
       const node = await this.getProject()?.findNode(uri)
-      if (!node) return []
+      if (!node) {
+        return []
+      }
       if (context.diagnostics.length > 0) {
         // find quick-fixes associated to diagnostics
         const xds = await node.collectDiagnostics()
@@ -107,7 +109,9 @@ export class RWLanguageServer {
             xd,
             context
           )
-          for (const a of as) actions.push(a)
+          for (const a of as) {
+            actions.push(a)
+          }
         }
       }
       return actions
@@ -148,7 +152,9 @@ export class RWLanguageServer {
 
   projectRoot: string | undefined
   getProject() {
-    if (!this.projectRoot) return undefined
+    if (!this.projectRoot) {
+      return undefined
+    }
     return new RWProject({ projectRoot: this.projectRoot, host: this.host })
   }
   get vscodeWindowMethods() {

@@ -8,9 +8,12 @@ import { isAbsolute, join, normalize, sep as path_sep } from 'path'
  * @param filePath
  */
 export function URL_file(filePath: string, ...parts: string[]): string {
-  if (filePath.startsWith(FILE_SCHEME))
+  if (filePath.startsWith(FILE_SCHEME)) {
     filePath = filePath.substr(FILE_SCHEME.length)
-  if (parts.length > 0) filePath = join(filePath, ...parts)
+  }
+  if (parts.length > 0) {
+    filePath = join(filePath, ...parts)
+  }
   return new URL(FILE_SCHEME + normalize(filePath)).href
 }
 
@@ -20,11 +23,16 @@ export function URL_file(filePath: string, ...parts: string[]): string {
  * @param sep separator string, defaults to `require('path').sep`
  */
 export function URL_toFile(uriOrFilePath: string, sep = path_sep): string {
-  if (typeof uriOrFilePath !== 'string') throw new Error('arg error')
-  if (uriOrFilePath.startsWith(FILE_SCHEME))
+  if (typeof uriOrFilePath !== 'string') {
+    throw new Error('arg error')
+  }
+  if (uriOrFilePath.startsWith(FILE_SCHEME)) {
     return fileUriToPath(uriOrFilePath, sep)
+  }
   const p = normalize(uriOrFilePath)
-  if (!isAbsolute(p)) throw new Error('absolute path expected: ' + p)
+  if (!isAbsolute(p)) {
+    throw new Error('absolute path expected: ' + p)
+  }
   return p!
 }
 
@@ -57,8 +65,12 @@ function fileUriToPath(uri: string, sep = path_sep): string {
   // As a special case, <host> can be the string "localhost" or the empty
   // string; this is interpreted as "the machine from which the URL is
   // being interpreted".
-  if (host === 'localhost') host = ''
-  if (host) host = sep + sep + host
+  if (host === 'localhost') {
+    host = ''
+  }
+  if (host) {
+    host = sep + sep + host
+  }
 
   // 3.2  Drives, drive letters, mount points, file system root
   // Drive letters are mapped into the top of a file URI in various ways,
@@ -74,7 +86,9 @@ function fileUriToPath(uri: string, sep = path_sep): string {
   // if the first segment is NOT a windows drive
   // we insert an extra empty segment
   // this will result in an initial slash (unix style)
-  if (!parts[0].includes(':')) parts.unshift('')
+  if (!parts[0].includes(':')) {
+    parts.unshift('')
+  }
 
   return parts.join(sep)
 }

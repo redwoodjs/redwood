@@ -56,7 +56,9 @@ export const supabase = (client: Supabase): AuthClientSupabase => {
         return await client.auth.signIn({ email, password })
       }
       // oauth, such as github, gitlab, bitbucket, google, azure etc.
-      if (provider) return await client.auth.signIn({ provider })
+      if (provider) {
+        return await client.auth.signIn({ provider })
+      }
       throw new Error(
         `You must provide either an email or a third-party provider.`
       )

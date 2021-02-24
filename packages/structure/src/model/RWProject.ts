@@ -93,7 +93,9 @@ export class RWProject extends BaseNode {
   }
   @memo() async prismaDMMFModelNames() {
     const dmmf = await this.prismaDMMF()
-    if (!dmmf) return []
+    if (!dmmf) {
+      return []
+    }
     return dmmf.datamodel.models.map((m) => m.name)
   }
   @lazy() get redwoodTOML(): RWTOML {
