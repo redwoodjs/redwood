@@ -45,7 +45,7 @@ const save = async () => {
     'yarn rw',
     ['prisma migrate dev', '--name create_data_migrations', '--create-only'],
     {
-      cwd: getPaths().base,
+      cwd: getPaths().api.base,
       shell: true,
     }
   )

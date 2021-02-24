@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
+import babelRequireHook from '@babel/register'
 import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
@@ -8,7 +9,14 @@ import terminalLink from 'terminal-link'
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 
-require('@babel/register')
+babelRequireHook({
+  extends: path.join(getPaths().api.base, '.babelrc.js'),
+  extensions: ['.js', '.ts', '.tsx', '.jsx'],
+  only: [getPaths().base],
+  ignore: ['node_modules'],
+  cache: false,
+})
+
 const { db } = require(path.join(getPaths().api.lib, 'db'))
 
 // sorts migrations by date, oldest first
