@@ -175,7 +175,7 @@ module.exports = (webpackEnv) => {
         redwoodPaths.web.entry ??
         path.join(
           redwoodPaths.base,
-          'node_modules/@redwoodjs/web/entry/index.js'
+          'node_modules/@redwoodjs/web/dist/entry/index.js'
         ),
     },
     resolve: {

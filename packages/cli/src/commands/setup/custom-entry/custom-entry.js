@@ -32,20 +32,14 @@ export const handler = async ({ force }) => {
         const entryJsFile =
           getPaths().web.entry ?? path.join(getPaths().web.src, 'entry.js')
 
-        // Copy over the entry file that exists in package/web
-        // This is the file that's normally used if a custome entry point doesnt exist
+        // @TODO Copy over the entry file that already exists in package/web
         return writeFile(
           entryJsFile,
           fs
             .readFileSync(
-              path.join(
-                getPaths().base,
-                'node_modules/@redwoodjs/web/entry/index.js'
-              )
+              path.resolve(__dirname, 'templates', 'entry.js.template')
             )
-            .toString()
-            // Remove the module alias to keep it simple
-            .replace('~redwood-app-index', './index'),
+            .toString(),
           { overwriteExisting: force }
         )
       },
