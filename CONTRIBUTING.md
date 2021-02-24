@@ -54,16 +54,9 @@ cd redwood
 yarn install
 ```
 
-Then, in your Redwood App, which you've either just created using `yarn create redwood-app` or already had lying around, you'll want to upgrade to the canary&mdash;Redwood's bleeding edge&mdash;just so you can be sure you're testing your contribution with all the most recent changes:
-
-```terminal
-cd redwood-app # wherever your redwood-app happens to be, whether it's one of our templates or your own
-yarn rw upgrade -t canary
-```
-
 ### yarn rwt link
 
-Ok, now that everything's up to date, in your Redwood App, run:
+Ok, now that everything's installed, in your Redwood App, run:
 
 ```bash
 yarn rwt link [RW_PATH]
