@@ -57,9 +57,16 @@ export const handler = async ({ force }) => {
     {
       title: 'Configuring i18n...',
       task: () => {
-        // Write i18n.js in web/src
+        /**
+         *  Write i18n.js in web/src
+         */
+        /**
+         * TODO:
+         * Check if i18n config already exists.
+         * If it exists, throw an error.
+         */
         return writeFile(
-          path.join(getPaths().web.src, 'i18n.js'),
+          getPaths().web.src,
           fs
             .readFileSync(
               path.resolve(__dirname, 'templates', 'i18n.js.template')
@@ -71,13 +78,21 @@ export const handler = async ({ force }) => {
     },
     {
       title: 'Adding locale file for French...',
-      task() {
-        // Write fr.json in web/src/locales
+      task: async () => {
+        /**
+         * Make web/src/locales if it doesn't exist
+         * and write fr.json there
+         */
+        /**
+         * TODO :
+         * Check if fr.json already exists.
+         * If it exists, throw an error.
+         */
         return writeFile(
-          path.join(getPaths().web.src, '/locales/fr.json'),
+          getPaths().web.src.locales,
           fs
             .readFileSync(
-              path.resolve(__dirname, 'templates', 'fr.json.template')
+              path.resolve(__dirname, 'templates', 'fr.json..template')
             )
             .toString(),
           { overwriteExisting: force }
@@ -86,13 +101,21 @@ export const handler = async ({ force }) => {
     },
     {
       title: 'Adding locale file for English...',
-      task() {
-        // Write en.json in web/src/locales
+      task: async () => {
+        /**
+         * Make web/src/locales if it doesn't exist
+         * and write en.json there
+         */
+        /**
+         * TODO :
+         * Check if en.json already exists.
+         * If it exists, throw an error.
+         */
         return writeFile(
-          path.join(getPaths().web.src, '/locales/en.json'),
+          getPaths().web.src.locales,
           fs
             .readFileSync(
-              path.resolve(__dirname, 'templates', 'en.json.template')
+              path.resolve(__dirname, 'templates', 'en.json..template')
             )
             .toString(),
           { overwriteExisting: force }
@@ -101,9 +124,14 @@ export const handler = async ({ force }) => {
     },
     {
       title: 'Adding import to index.js...',
-      task: () => {
+      task: async () => {
         /**
          * Add i18n import to the top of index.js
+         */
+        /**
+         * TODO :
+         * Check if i18n import already exists.
+         * If it exists, throw an error.
          */
         let indexJS = fs.readFileSync(INDEX_JS_PATH)
         indexJS = [`import './i18n'`, indexJS].join(`\n`)
