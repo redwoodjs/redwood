@@ -72,7 +72,7 @@ module.exports = {
     },
     // Entry.js rules
     {
-      files: ['packages/web/entry/index.js'],
+      files: ['packages/web/src/entry/index.js'],
       env: {
         es6: true,
         browser: true,
