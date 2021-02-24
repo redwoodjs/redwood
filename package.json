@@ -5,8 +5,8 @@
     "build:clean": "rimraf ./packages/**/dist",
     "build:watch": "ttsc --build && lerna run build:watch --parallel",
     "test": "lerna run test --stream -- --colors --maxWorkers=4",
-    "lint": "eslint -c .eslintrc packages",
-    "lint:fix": "eslint -c .eslintrc --fix packages"
+    "lint": "eslint -c .eslintrc.js packages",
+    "lint:fix": "eslint -c .eslintrc.js --fix packages"
   },
   "private": true,
   "license": "MIT",
@@ -34,7 +34,6 @@
     "babel-plugin-auto-import": "^1.1.0",
     "babel-plugin-module-resolver": "^4.0.0",
     "babel-plugin-remove-code": "^0.0.6",
-    "bundlesize": "^0.18.0",
     "core-js": "3.6.5",
     "cp-cli": "^2.0.0",
     "cross-env": "^7.0.2",
