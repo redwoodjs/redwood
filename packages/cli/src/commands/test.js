@@ -29,7 +29,12 @@ export const command = 'test [side..]'
 export const description = 'Run Jest tests. Defaults to watch mode'
 export const builder = (yargs) => {
   yargs
-    .choices('side', getProject().sides)
+    .positional('side', {
+      choices: getProject().sides,
+      default: getProject().sides,
+      description: 'Which side(s) to test',
+      type: 'array',
+    })
     .option('watch', {
       describe:
         'Run tests related to changed files based on hg/git. Specify the name or path to a file to focus on a specific set of tests',

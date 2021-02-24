@@ -1,4 +1,5 @@
-import { ReactNode, ReactPortal, useEffect, useState } from 'react'
+import type { ReactNode, ReactPortal } from 'react'
+import * as React from 'react'
 
 import {
   MockProviders,
@@ -10,9 +11,9 @@ export const StorybookProvider: React.FunctionComponent<{
   storyFn: () => ReactNode | ReactPortal
   id: string
 }> = ({ storyFn, id }) => {
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = React.useState(true)
 
-  useEffect(() => {
+  React.useEffect(() => {
     const init = async () => {
       // Import all the `*.mock.*` files.
       const reqs = require.context(
