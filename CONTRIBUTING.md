@@ -54,16 +54,9 @@ cd redwood
 yarn install
 ```
 
-Then, in your Redwood App, which you've either just created using `yarn create redwood-app` or already had lying around, you'll want to upgrade to the canary&mdash;Redwood's bleeding edge&mdash;just so you can be sure you're testing your contribution with all the most recent changes:
-
-```terminal
-cd redwood-app # wherever your redwood-app happens to be, whether it's one of our templates or your own
-yarn rw upgrade -t canary
-```
-
 ### yarn rwt link
 
-Ok, now that everything's up to date, in your Redwood App, run:
+Ok, now that everything's installed, in your Redwood App, run:
 
 ```bash
 yarn rwt link [RW_PATH]
@@ -105,12 +98,18 @@ create-redwood-app: $ nodemon --ignore dist --exec 'yarn build'
 @redwoodjs/eslint-plugin-redwood: $ nodemon --ignore dist --exec 'yarn build'
 ```
 
-Then, copy-and-watch those changes into your Redwood App or example app (here, [example-invoice](https://github.com/redwoodjs/example-invoice)):
+Then, in your Redwood App, you'll want to upgrade to the canary&mdash;Redwood's bleeding edge&mdash;just so you can be sure you're testing your contribution with all the most recent changes:
+
+```terminal
+cd redwood-app # wherever your redwood-app happens to be, whether it's one of our templates or your own
+yarn rw upgrade -t canary
+```
+
+Now run `copy:watch` to get the changes in your local copy of the Redwood Framework:
 
 > Wait! Are you on Windows (and not using WSL)? If so, you most likely first have to [install rsync](https://tlundberg.com/blog/2020-06-15/installing-rsync-on-windows/). Also, unfortunately you can't use "copy and watch". You'll have to manually run `yarn rwt cp ../path/to/redwood` when you've made changes to the Redwood Framework (this is tracked in [issue #701](https://github.com/redwoodjs/redwood/issues/701)).
 
 ```terminal
-cd example-invoice
 yarn rwt copy:watch ../path/to/redwood
 
 Redwood Framework Path:  /Users/peterp/Personal/redwoodjs/redwood

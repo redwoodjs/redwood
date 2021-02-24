@@ -21,6 +21,13 @@ import {
 
 import c from './colors'
 
+/**
+ * Used to memoize results from `getSchema` so we don't have to go through
+ * the work of open the file and parsing it from scratch each time getSchema()
+ * is called with the same model name.
+ */
+const schemaMemo = {}
+
 export const asyncForEach = async (array, callback) => {
   for (let index = 0; index < array.length; index++) {
     await callback(array[index], index, array)
@@ -33,34 +40,37 @@ export const asyncForEach = async (array, callback) => {
  * entire schema is returned.
  */
 export const getSchema = async (name) => {
-  const schema = await getSchemaDefinitions()
-
   if (name) {
-    const model = schema.datamodel.models.find((model) => {
-      return model.name === name
-    })
-
-    if (model) {
-      // look for any fields that are enums and attach the possible enum values
-      // so we can put them in generated test files
-      model.fields.forEach((field) => {
-        const fieldEnum = schema.datamodel.enums.find((e) => {
-          return field.type === e.name
-        })
-        if (fieldEnum) {
-          field.enumValues = fieldEnum.values
-        }
+    if (!schemaMemo[name]) {
+      const schema = await getSchemaDefinitions()
+      const model = schema.datamodel.models.find((model) => {
+        return model.name === name
       })
 
-      return model
-    } else {
-      throw new Error(
-        `No schema definition found for \`${name}\` in schema.prisma file`
-      )
-    }
-  }
+      if (model) {
+        // look for any fields that are enums and attach the possible enum values
+        // so we can put them in generated test files
+        model.fields.forEach((field) => {
+          const fieldEnum = schema.datamodel.enums.find((e) => {
+            return field.type === e.name
+          })
+          if (fieldEnum) {
+            field.enumValues = fieldEnum.values
+          }
+        })
 
-  return schema.metadata.datamodel
+        // memoize based on the model name
+        schemaMemo[name] = model
+      } else {
+        throw new Error(
+          `No schema definition found for \`${name}\` in schema.prisma file`
+        )
+      }
+    }
+    return schemaMemo[name]
+  } else {
+    return (await getSchemaDefinitions()).metadata.datamodel
+  }
 }
 
 /**
