@@ -1,7 +1,13 @@
 // This is the ESLint configuation used by Redwood projects.
+import { getConfig } from '@redwoodjs/internal'
+
+const config = getConfig()
 
 module.exports = {
-  extends: './shared.js',
+  extends: [
+    './shared.js',
+    config.web.a11y ? 'plugin:jsx-a11y/recommended' : undefined,
+  ],
 
   plugins: ['@redwoodjs/eslint-plugin-redwood'],
   overrides: [
