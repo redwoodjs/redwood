@@ -137,52 +137,58 @@ export const fieldsToUpdate = async (model) => {
   const { scalarFields, relations, foreignKeys } = await parseSchema(model)
   const modelName = camelcase(pluralize.singular(model))
   let field = scalarFields[0]
-  let newValue
 
-  if (foreignKeys.includes(field.name)) {
-    // no scalar fields, change a relation field instead
-    // { post: [ 'postId' ], tag: [ 'tagId' ] }
-    field.name = Object.values(relations)[0]
-    newValue = `scenario.${modelName}.two.${field.name}`
-  } else {
-    // change scalar fields
-    const value = scenarioFieldValue(field)
-    newValue = value
+  // if the model has no editable scalar fields, skip update test completely
+  if (field) {
+    let newValue
 
-    // depending on the field type, append/update the value to something different
-    switch (field.type) {
-      case 'String': {
-        newValue = newValue + '2'
-        break
-      }
-      case 'Int': {
-        newValue = newValue + 1
-        break
-      }
-      case 'DateTime': {
-        let date = new Date()
-        date.setDate(date.getDate() + 1)
-        newValue = date.toISOString().replace(/\.\d{3}/, '')
-        break
-      }
-      case 'Json': {
-        newValue = { foo: 'baz' }
-        break
-      }
-      default: {
-        if (
-          field.kind === 'enum' &&
-          field.enumValues[field.enumValues.length - 1]
-        ) {
-          const enumVal = field.enumValues[field.enumValues.length - 1]
-          newValue = enumVal.dbName || enumVal.name
+    if (foreignKeys.includes(field.name)) {
+      // no scalar fields, change a relation field instead
+      // { post: [ 'postId' ], tag: [ 'tagId' ] }
+      field.name = Object.values(relations)[0]
+      newValue = `scenario.${modelName}.two.${field.name}`
+    } else {
+      // change scalar fields
+      const value = scenarioFieldValue(field)
+      newValue = value
+
+      // depending on the field type, append/update the value to something different
+      switch (field.type) {
+        case 'String': {
+          newValue = newValue + '2'
+          break
         }
-        break
+        case 'Int': {
+          newValue = newValue + 1
+          break
+        }
+        case 'DateTime': {
+          let date = new Date()
+          date.setDate(date.getDate() + 1)
+          newValue = date.toISOString().replace(/\.\d{3}/, '')
+          break
+        }
+        case 'Json': {
+          newValue = { foo: 'baz' }
+          break
+        }
+        default: {
+          if (
+            field.kind === 'enum' &&
+            field.enumValues[field.enumValues.length - 1]
+          ) {
+            const enumVal = field.enumValues[field.enumValues.length - 1]
+            newValue = enumVal.dbName || enumVal.name
+          }
+          break
+        }
       }
     }
-  }
 
-  return { [field.name]: newValue }
+    return { [field.name]: newValue }
+  } else {
+    return null
+  }
 }
 
 export const files = async ({
