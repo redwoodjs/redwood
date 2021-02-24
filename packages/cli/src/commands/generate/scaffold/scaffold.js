@@ -9,6 +9,8 @@ import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 import terminalLink from 'terminal-link'
 
+import { getConfig } from '@redwoodjs/internal'
+
 import {
   generateTemplate,
   templateRoot,
@@ -55,6 +57,7 @@ const getIdType = (model) => {
 export const files = async ({
   model: name,
   path: scaffoldPath = '',
+  tests,
   typescript,
   javascript,
 }) => {
@@ -73,6 +76,7 @@ export const files = async ({
       name,
       crud: true,
       relations: relationsForModel(model),
+      tests,
       typescript,
       javascript,
     })),
@@ -405,6 +409,10 @@ export const builder = (yargs) => {
       description:
         "Model to scaffold. You can also use <path/model> to nest files by type at the given path directory (or directories). For example, 'rw g scaffold admin/post'",
     })
+    .option('tests', {
+      description: 'Generate test files',
+      type: 'boolean',
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -415,13 +423,13 @@ export const builder = (yargs) => {
     yargs.option(option, config)
   })
 }
-const tasks = ({ model, path, force, typescript, javascript }) => {
+const tasks = ({ model, path, force, tests, typescript, javascript }) => {
   return new Listr(
     [
       {
         title: 'Generating scaffold files...',
         task: async () => {
-          const f = await files({ model, path, typescript, javascript })
+          const f = await files({ model, path, tests, typescript, javascript })
           return writeFilesTask(f, { overwriteExisting: force })
         },
       },
@@ -443,11 +451,13 @@ const tasks = ({ model, path, force, typescript, javascript }) => {
 export const handler = async ({
   model: modelArg,
   force,
+  tests,
   typescript,
   javascript,
 }) => {
+  if (tests === undefined) tests = getConfig().generate.tests
   const { model, path } = splitPathAndModel(modelArg)
-  const t = tasks({ model, path, force, typescript, javascript })
+  const t = tasks({ model, path, force, tests, typescript, javascript })
 
   try {
     await t.run()
