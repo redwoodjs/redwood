@@ -134,7 +134,7 @@ export const handler = async ({
     })
 
     // Prerender _after_ web build
-    if (getConfig().web.experimentalPrerender && prerender) {
+    if (prerender) {
       const prerenderRoutes = detectPrerenderRoutes()
 
       listrTasks.push({
