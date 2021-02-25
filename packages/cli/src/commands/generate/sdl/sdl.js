@@ -8,6 +8,8 @@ import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 import terminalLink from 'terminal-link'
 
+import { getConfig } from '@redwoodjs/internal'
+
 import {
   generateTemplate,
   transformTSToJS,
@@ -142,7 +144,7 @@ const sdlFromSchemaModel = async (name, crud) => {
   }
 }
 
-export const files = async ({ name, crud, typescript, javascript }) => {
+export const files = async ({ name, crud, tests, typescript, javascript }) => {
   const {
     query,
     createInput,
@@ -177,7 +179,14 @@ export const files = async ({ name, crud, typescript, javascript }) => {
 
   return {
     [outputPath]: template,
-    ...(await serviceFiles({ name, crud, relations, typescript, javascript })),
+    ...(await serviceFiles({
+      name,
+      crud,
+      tests,
+      relations,
+      typescript,
+      javascript,
+    })),
   }
 }
 
@@ -199,6 +208,10 @@ export const builder = (yargs) => {
       description: 'Model to generate the sdl for',
       type: 'string',
     })
+    .option('tests', {
+      description: 'Generate test files',
+      type: 'boolean',
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -214,15 +227,23 @@ export const handler = async ({
   model,
   crud,
   force,
+  tests,
   typescript,
   javascript,
 }) => {
+  if (tests === undefined) tests = getConfig().generate.tests
   const tasks = new Listr(
     [
       {
         title: 'Generating SDL files...',
         task: async () => {
-          const f = await files({ name: model, crud, typescript, javascript })
+          const f = await files({
+            name: model,
+            tests,
+            crud,
+            typescript,
+            javascript,
+          })
           return writeFilesTask(f, { overwriteExisting: force })
         },
       },
