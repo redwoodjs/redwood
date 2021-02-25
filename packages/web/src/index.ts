@@ -1,10 +1,6 @@
 import './global.web-auto-imports'
 import './config'
 
-import toast from 'react-hot-toast'
-export { toast }
-export * from 'react-hot-toast'
-
 export { default as FatalErrorBoundary } from './components/FatalErrorBoundary'
 export {
   FetchConfigProvider,
@@ -20,3 +16,6 @@ export { withCell } from './components/withCellHOC'
 
 // deprecated
 export { useFlash, Flash } from './flash'
+
+export { default as toast } from 'react-hot-toast'
+export * from 'react-hot-toast'
