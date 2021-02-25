@@ -14,20 +14,20 @@ import {
 export const files = ({ name, ...rest }) => {
   // Taken from ../component; should be updated to take from the project's configuration
   const isJavascript = rest.javascript && !rest.typescript
+  const extension = isJavascript ? '.js' : '.ts'
 
   const functionName = camelcase(name)
   const file = templateForComponentFile({
     name: functionName,
     componentName: functionName,
-    extension: isJavascript ? '.js' : '.ts',
+    extension: extension,
     apiPathSection: 'functions',
     generator: 'function',
     templatePath: 'function.ts.template',
     templateVars: { ...rest },
-    outputPath: path.join(getPaths().api.functions, `${functionName}${isJavascript ? '.js' : '.ts'}`),
+    outputPath: path.join(getPaths().api.functions, `${functionName}${extension}`),
   })
 
-  // If --javascript=true convert TS->JS before returning
   const template = isJavascript ? transformTSToJS(file[0], file[1]) : file[1]
 
   return { [file[0]]: template }
