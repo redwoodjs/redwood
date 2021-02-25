@@ -70,6 +70,17 @@ module.exports = {
         window: 'off', // Developers should use `global` instead of window. Since window is undefined in NodeJS.
       },
     },
+    // Entry.js rules
+    {
+      files: ['packages/web/src/entry/index.js'],
+      env: {
+        es6: true,
+        browser: true,
+      },
+      globals: {
+        React: 'readonly',
+      },
+    },
     // NodeJS Context
     {
       files: [
