@@ -1,4 +1,4 @@
-import { useMutation, useFlash } from '@redwoodjs/web'
+import { useMutation, toast } from '@redwoodjs/web'
 import { Link, routes, navigate } from '@redwoodjs/router'
 
 import { QUERY } from 'src/components/${pascalScaffoldPath}${pluralPascalName}Cell'
@@ -32,11 +32,10 @@ const checkboxInputTag = (checked) => {
 }
 
 const ${singularPascalName} = ({ ${singularCamelName} }) => {
-  const { addMessage } = useFlash()
   const [delete${singularPascalName}] = useMutation(DELETE_${singularConstantName}_MUTATION, {
     onCompleted: () => {
+      toast.success('${singularPascalName} deleted')
       navigate(routes.${pluralRouteName}())
-      addMessage('${singularPascalName} deleted.', { classes: 'rw-flash-success' })
     },
   })
 
