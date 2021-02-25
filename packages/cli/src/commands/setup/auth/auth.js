@@ -32,7 +32,7 @@ const TEMPLATES = fs
   }, {})
 
 const OUTPUT_PATH = path.join(getPaths().api.lib, 'auth.js')
-const WEB_SRC_INDEX_PATH = path.join(getPaths().web.src, 'index.js')
+const WEB_SRC_APP_PATH = path.join(getPaths().web.src, 'App.js')
 
 const SUPPORTED_PROVIDERS = fs
   .readdirSync(path.resolve(__dirname, 'providers'))
@@ -128,7 +128,7 @@ const removeOldAuthProvider = async (content) => {
 
 // check to make sure AuthProvider doesn't exist
 const checkAuthProviderExists = () => {
-  const content = fs.readFileSync(WEB_SRC_INDEX_PATH).toString()
+  const content = fs.readFileSync(WEB_SRC_APP_PATH).toString()
 
   if (content.includes(AUTH_PROVIDER_IMPORT)) {
     throw new Error(
@@ -146,8 +146,8 @@ export const files = (provider) => {
 }
 
 // actually inserts the required config lines into index.js
-export const addConfigToIndex = async (config, force) => {
-  let content = fs.readFileSync(WEB_SRC_INDEX_PATH).toString()
+export const addConfigToApp = async (config, force) => {
+  let content = fs.readFileSync(WEB_SRC_APP_PATH).toString()
 
   // update existing AuthProvider if --force else add new AuthProvider
   if (content.includes(AUTH_PROVIDER_IMPORT) && force) {
@@ -160,7 +160,7 @@ export const addConfigToIndex = async (config, force) => {
   content = addWebImports(content, config.imports)
   content = addWebInit(content, config.init)
 
-  fs.writeFileSync(WEB_SRC_INDEX_PATH, content)
+  fs.writeFileSync(WEB_SRC_APP_PATH, content)
 }
 
 export const addApiConfig = () => {
@@ -194,7 +194,7 @@ export const apiSrcDoesExist = () => {
 }
 
 export const webIndexDoesExist = () => {
-  return fs.existsSync(WEB_SRC_INDEX_PATH)
+  return fs.existsSync(WEB_SRC_APP_PATH)
 }
 
 export const graphFunctionDoesExist = () => {
@@ -243,7 +243,7 @@ export const handler = async ({ provider, force }) => {
         title: 'Adding auth config to web...',
         task: (_ctx, task) => {
           if (webIndexDoesExist()) {
-            addConfigToIndex(providerData.config, force)
+            addConfigToApp(providerData.config, force)
           } else {
             task.skip('web/src/index.js not found, skipping')
           }
