@@ -86,8 +86,10 @@ export class WebhookVerificationError extends WebhookError {
  *    getHmac({ secret: 'MY_SECRET' })
  */
 const getHmac = ({ secret }: { secret: string }) => {
-  if (typeof secret === 'undefined' || secret === '')
+  if (typeof secret === 'undefined' || secret === '') {
     throw new WebhookVerificationError(ERROR_MESSAGE)
+  }
+
   return createHmac('sha256', secret)
 }
 
