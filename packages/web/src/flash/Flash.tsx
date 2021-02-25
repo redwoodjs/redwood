@@ -1,9 +1,6 @@
 // import { useEffect, useState } from 'react'
 
 import { Toaster } from 'react-hot-toast'
-import logging from 'webpack/lib/logging/runtime'
-
-const logger = logging.getLogger()
 
 // import { useFlash } from 'src/flash/FlashContext'
 // import type { FlashMessage } from 'src/flash/FlashReducer'
@@ -53,7 +50,7 @@ const logger = logging.getLogger()
 // }
 
 const Flash = () => {
-  logger.warn(
+  console.warn(
     'The <Flash> component is deprecated and will be removed in RedwoodJS v1.0. Please update your components to use <Toaster>: https://react-hot-toast.com/docs/toaster'
   )
   return <Toaster />
