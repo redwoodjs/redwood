@@ -106,10 +106,12 @@ export const createYargsForComponentGeneration = ({
       })
     },
     handler: async (options) => {
-      if (options.tests === undefined)
+      if (options.tests === undefined) {
         options.tests = getConfig().generate.tests
-      if (options.stories === undefined)
+      }
+      if (options.stories === undefined) {
         options.stories = getConfig().generate.stories
+      }
 
       const tasks = new Listr(
         [

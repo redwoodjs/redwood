@@ -455,7 +455,9 @@ export const handler = async ({
   typescript,
   javascript,
 }) => {
-  if (tests === undefined) tests = getConfig().generate.tests
+  if (tests === undefined) {
+    tests = getConfig().generate.tests
+  }
   const { model, path } = splitPathAndModel(modelArg)
   const t = tasks({ model, path, force, tests, typescript, javascript })
 

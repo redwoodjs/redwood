@@ -134,8 +134,12 @@ export const builder = (yargs) => {
 }
 
 export const handler = async ({ name, path, force, tests, stories }) => {
-  if (tests === undefined) tests = getConfig().generate.tests
-  if (stories === undefined) stories = getConfig().generate.stories
+  if (tests === undefined) {
+    tests = getConfig().generate.tests
+  }
+  if (stories === undefined) {
+    stories = getConfig().generate.stories
+  }
   if (process.platform === 'win32') {
     // running `yarn rw g page home /` on Windows using GitBash
     // POSIX-to-Windows path conversion will kick in.

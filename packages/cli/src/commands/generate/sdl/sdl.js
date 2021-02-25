@@ -231,7 +231,9 @@ export const handler = async ({
   typescript,
   javascript,
 }) => {
-  if (tests === undefined) tests = getConfig().generate.tests
+  if (tests === undefined) {
+    tests = getConfig().generate.tests
+  }
   const tasks = new Listr(
     [
       {
