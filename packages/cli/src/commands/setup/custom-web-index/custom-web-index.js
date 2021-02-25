@@ -43,7 +43,7 @@ export const handler = async ({ force }) => {
               )
             )
             .toString()
-            .replace('~redwood-app-index', './App'),
+            .replace('~redwood-app-root', './App'),
           { overwriteExisting: force }
         )
       },

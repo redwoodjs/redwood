@@ -187,7 +187,7 @@ module.exports = (webpackEnv) => {
           'node_modules',
           'styled-components'
         ),
-        '~redwood-app-index': path.resolve(redwoodPaths.web.index),
+        '~redwood-app-root': path.resolve(redwoodPaths.web.app),
         react: path.resolve(redwoodPaths.base, 'node_modules', 'react'),
       },
     },
