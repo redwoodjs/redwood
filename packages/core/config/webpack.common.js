@@ -168,11 +168,11 @@ module.exports = (webpackEnv) => {
       /**
        * Prerender requires a top-level component.
        * Before we had `ReactDOM` and a top-level component in the same file (web/index.js).
-       * If entry.js is defined in the user's project, use that, if not
+       * If index.js is defined in the user's project, use that, if not
        * use the one provided in web/dist/entry/index.js
        */
       app:
-        redwoodPaths.web.entry ??
+        redwoodPaths.web.index ??
         path.join(
           redwoodPaths.base,
           'node_modules/@redwoodjs/web/dist/entry/index.js'
