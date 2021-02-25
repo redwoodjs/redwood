@@ -1,4 +1,4 @@
-import { useMutation, useFlash } from '@redwoodjs/web'
+import { useMutation, toast } from '@redwoodjs/web'
 import { navigate, routes } from '@redwoodjs/router'
 import UserProfileForm from 'src/components/UserProfileForm'
 
@@ -27,13 +27,12 @@ const UPDATE_USER_PROFILE_MUTATION = gql`
 export const Loading = () => <div>Loading...</div>
 
 export const Success = ({ userProfile }) => {
-  const { addMessage } = useFlash()
   const [updateUserProfile, { loading, error }] = useMutation(
     UPDATE_USER_PROFILE_MUTATION,
     {
       onCompleted: () => {
+        toast.success('UserProfile updated')
         navigate(routes.userProfiles())
-        addMessage('UserProfile updated.', { classes: 'rw-flash-success' })
       },
     }
   )

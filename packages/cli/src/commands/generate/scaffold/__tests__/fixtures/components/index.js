@@ -1,4 +1,4 @@
-import { useMutation, useFlash } from '@redwoodjs/web'
+import { useMutation, toast } from '@redwoodjs/web'
 import { Link, routes } from '@redwoodjs/router'
 
 import { QUERY } from 'src/components/PostsCell'
@@ -38,10 +38,9 @@ const checkboxInputTag = (checked) => {
 }
 
 const PostsList = ({ posts }) => {
-  const { addMessage } = useFlash()
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
     onCompleted: () => {
-      addMessage('Post deleted.', { classes: 'rw-flash-success' })
+      toast.success('Post deleted')
     },
     // This refetches the query on the list page. Read more about other ways to
     // update the cache over here:

@@ -1,4 +1,4 @@
-import { useMutation, useFlash } from '@redwoodjs/web'
+import { useMutation, toast } from '@redwoodjs/web'
 import { Link, routes, navigate } from '@redwoodjs/router'
 
 import { QUERY } from 'src/components/PostsCell'
@@ -32,11 +32,10 @@ const checkboxInputTag = (checked) => {
 }
 
 const Post = ({ post }) => {
-  const { addMessage } = useFlash()
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
     onCompleted: () => {
+      toast.success('Post deleted')
       navigate(routes.posts())
-      addMessage('Post deleted.', { classes: 'rw-flash-success' })
     },
   })
 
