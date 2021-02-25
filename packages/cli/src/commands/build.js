@@ -8,7 +8,7 @@ import terminalLink from 'terminal-link'
 
 import { detectPrerenderRoutes } from '@redwoodjs/prerender'
 
-import { getPaths, getConfig } from 'src/lib'
+import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 import { generatePrismaClient } from 'src/lib/generatePrismaClient'
 
@@ -21,8 +21,12 @@ export const builder = (yargs) => {
 
   const optionDefault = (apiExists, webExists) => {
     let options = []
-    if (apiExists) options.push('api')
-    if (webExists) options.push('web')
+    if (apiExists) {
+      options.push('api')
+    }
+    if (webExists) {
+      options.push('web')
+    }
     return options
   }
 
@@ -130,7 +134,7 @@ export const handler = async ({
     })
 
     // Prerender _after_ web build
-    if (getConfig().web.experimentalPrerender && prerender) {
+    if (prerender) {
       const prerenderRoutes = detectPrerenderRoutes()
 
       listrTasks.push({

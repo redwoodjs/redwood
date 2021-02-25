@@ -21,18 +21,6 @@
     "nhost-js-sdk": "^3.0.0-14",
     "react": "^16.13.1"
   },
-  "bundlesize": [
-    {
-      "path": "./dist/AuthProvider.js",
-      "maxSize": "10 kB",
-      "compression": "none"
-    },
-    {
-      "path": "./dist/authClients/*.js",
-      "maxSize": "5 kB",
-      "compression": "none"
-    }
-  ],
   "scripts": {
     "build": "yarn build:js && yarn build:types",
     "prepublishOnly": "yarn cross-env NODE_ENV=production yarn build",
