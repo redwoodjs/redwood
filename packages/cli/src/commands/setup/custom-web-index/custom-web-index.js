@@ -7,7 +7,7 @@ import Listr from 'listr'
 import { getPaths, writeFile } from 'src/lib'
 import c from 'src/lib/colors'
 
-export const command = 'custom-entry'
+export const command = 'custom-web-index'
 
 export const description =
   'Setup a custom index.js file, so you can customise how Redwood web is mounted in your browser'
