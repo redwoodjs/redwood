@@ -10,13 +10,13 @@ import c from 'src/lib/colors'
 export const command = 'custom-entry'
 
 export const description =
-  'Setup a custom entry.js file, so you can customise how Redwood web is mounted in your browser'
+  'Setup a custom index.js file, so you can customise how Redwood web is mounted in your browser'
 
 export const builder = (yargs) => {
   yargs.option('force', {
     alias: 'f',
     default: false,
-    description: 'Overwrite existing entry.js file',
+    description: 'Overwrite existing index.js file',
     type: 'boolean',
   })
 }
@@ -24,7 +24,7 @@ export const builder = (yargs) => {
 export const handler = async ({ force }) => {
   const tasks = new Listr([
     {
-      title: 'Creating new entry point in `web/src/entry.js`.',
+      title: 'Creating new entry point in `web/src/index.js`.',
       task: () => {
         // @TODO figure out how we're handling typescript
         // In this file, we're setting everything to js
