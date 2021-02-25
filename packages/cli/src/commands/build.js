@@ -8,7 +8,7 @@ import terminalLink from 'terminal-link'
 
 import { detectPrerenderRoutes } from '@redwoodjs/prerender'
 
-import { getPaths, getConfig } from 'src/lib'
+import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 import { generatePrismaClient } from 'src/lib/generatePrismaClient'
 
