@@ -15,7 +15,8 @@
     "@types/react": "16.9.53",
     "core-js": "3.6.5",
     "graphql": "^15.3.0",
-    "proptypes": "^1.1.0"
+    "proptypes": "^1.1.0",
+    "react-hot-toast": "^1.0.2"
   },
   "peerDependencies": {
     "react": "*"
