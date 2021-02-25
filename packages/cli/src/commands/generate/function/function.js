@@ -25,7 +25,10 @@ export const files = ({ name, ...rest }) => {
     generator: 'function',
     templatePath: 'function.ts.template',
     templateVars: { ...rest },
-    outputPath: path.join(getPaths().api.functions, `${functionName}${extension}`),
+    outputPath: path.join(
+      getPaths().api.functions,
+      `${functionName}${extension}`
+    ),
   })
 
   const template = isJavascript ? transformTSToJS(file[0], file[1]) : file[1]
