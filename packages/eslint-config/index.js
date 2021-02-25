@@ -6,9 +6,8 @@ const config = getConfig()
 module.exports = {
   extends: [
     './shared.js',
-    config.web.a11y ? 'plugin:jsx-a11y/recommended' : undefined,
-  ],
-
+    config.web.a11y && 'plugin:jsx-a11y/recommended',
+  ].filter(Boolean),
   plugins: ['@redwoodjs/eslint-plugin-redwood'],
   overrides: [
     {
