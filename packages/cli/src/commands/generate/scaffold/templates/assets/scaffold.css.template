@@ -6,9 +6,6 @@
 .rw-scaffold ::after,
 .rw-scaffold ::before {
   box-sizing: inherit;
-  border-width: 0;
-  border-style: solid;
-  border-color: #e2e8f0;
 }
 .rw-scaffold main {
   color: #4a5568;
