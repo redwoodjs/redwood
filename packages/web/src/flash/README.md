@@ -1,5 +1,11 @@
 # Flash
 
+### DEPRECATED
+
+Redwood's custom `<Flash>` component and `addMessage()` functionality have been deprecated and will be removed in v1.0. We're now using [react-hot-toast]() directly. Import the features you need from `@redwoodjs/web` instead of `react-hot-toast`, but all other functionality remains identical.
+
+### Original README
+
 Pass temporary [`message`](#messages) objects between components.
 
 [FlashContext](#flashcontext) was created with post-action messaging in mind. Flash is particularly useful, for instance, when we want to alert the user that something they tried was successful or erroneous.
