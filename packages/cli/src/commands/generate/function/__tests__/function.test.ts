@@ -69,7 +69,7 @@ test('creates a .js file if --javascript=true', () => {
 test('creates a .ts file if --typescript=true', () => {
   expect(
     typescriptFiles[
-      path.normalize('/path/to/project/api/src/functions/typescriptFunction.js')
+      path.normalize('/path/to/project/api/src/functions/typescriptFunction.ts')
     ]
   ).toEqual(loadGeneratorFixture('function', 'tsFunc.ts'))
   // ^ TS-functions, on the other hand, retain the 'aws-lamda' import and type-declartions.
