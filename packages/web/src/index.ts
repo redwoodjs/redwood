@@ -14,4 +14,4 @@ export {
 
 export { withCell } from './components/withCellHOC'
 
-export { FlashProvider, useFlash, Flash } from './flash'
+export { useFlash, Flash } from './flash'

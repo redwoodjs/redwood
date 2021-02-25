@@ -1,4 +1,4 @@
 import Flash from './Flash'
-import { FlashProvider, useFlash } from './FlashContext'
+import { useFlash } from './FlashContext'
 
-export { FlashProvider, useFlash, Flash }
+export { useFlash, Flash }

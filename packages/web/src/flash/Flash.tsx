@@ -1,66 +1,62 @@
-import { useEffect, useState } from 'react'
+// import { useEffect, useState } from 'react'
 
-import { useFlash } from 'src/flash/FlashContext'
-import type { FlashMessage } from 'src/flash/FlashReducer'
+import { Toaster } from 'react-hot-toast'
+import logging from 'webpack/lib/logging/runtime'
 
-type FlashMessageProps = {
-  message: FlashMessage
-  timeout?: number
-}
+const logger = logging.getLogger()
 
-const FlashMessageComponent = ({ message, timeout }: FlashMessageProps) => {
-  const { dismissMessage, cycleMessage } = useFlash()
-  const [classes, setClasses] = useState('')
+// import { useFlash } from 'src/flash/FlashContext'
+// import type { FlashMessage } from 'src/flash/FlashReducer'
 
-  useEffect(() => {
-    cycleMessage(message.id)
-    // cycleMessage should not trigger update
-  }, [cycleMessage, message.id])
+// type FlashMessageProps = {
+//   message: FlashMessage
+//   timeout?: number
+// }
 
-  useEffect(() => {
-    if (timeout === undefined) {
-      return
-    }
+// const FlashMessageComponent = ({ message, timeout }: FlashMessageProps) => {
+//   const { dismissMessage, cycleMessage } = useFlash()
+//   const [classes, setClasses] = useState('')
 
-    const fadeOutTimer = setTimeout(() => {
-      setClasses('rw-slide-up')
-    }, timeout)
+//   useEffect(() => {
+//     cycleMessage(message.id)
+//     // cycleMessage should not trigger update
+//   }, [cycleMessage, message.id])
 
-    return () => clearTimeout(fadeOutTimer)
-  }, [timeout])
+//   useEffect(() => {
+//     if (timeout === undefined) {
+//       return
+//     }
 
-  return (
-    <div
-      className={`rw-flash-message ${message.classes} ${classes}`}
-      style={message.style}
-      data-testid="message"
-    >
-      <div className="rw-flash-message-text">{message.text}</div>
-      <div
-        className="rw-flash-message-dismiss"
-        data-testid="dismiss"
-        onClick={() => dismissMessage(message.id)}
-      >
-        +
-      </div>
-    </div>
+//     const fadeOutTimer = setTimeout(() => {
+//       setClasses('rw-slide-up')
+//     }, timeout)
+
+//     return () => clearTimeout(fadeOutTimer)
+//   }, [timeout])
+
+//   return (
+//     <div
+//       className={`rw-flash-message ${message.classes} ${classes}`}
+//       style={message.style}
+//       data-testid="message"
+//     >
+//       <div className="rw-flash-message-text">{message.text}</div>
+//       <div
+//         className="rw-flash-message-dismiss"
+//         data-testid="dismiss"
+//         onClick={() => dismissMessage(message.id)}
+//       >
+//         +
+//       </div>
+//     </div>
+//   )
+// }
+
+const Flash = () => {
+  logger.warn(
+    'The <Flash> component is deprecated and will be removed in RedwoodJS v1.0. Please update your components to use <Toaster>: https://react-hot-toast.com/docs/toaster'
   )
-}
-
-const Flash = ({ timeout }: { timeout?: number }) => {
-  const { messages } = useFlash()
-
-  if (!messages.length) {
-    return null
-  }
-
-  return (
-    <div className="rw-flash" data-testid="flash">
-      {messages.map((msg) => (
-        <FlashMessageComponent key={msg.id} message={msg} timeout={timeout} />
-      ))}
-    </div>
-  )
+  return <Toaster />
 }
 
 export default Flash
