@@ -31,7 +31,7 @@ export type CellLoadingEmptyStateComponent = Omit<
   'error' | 'loading' | 'data'
 >
 export type CellSuccessStateComponent =
-  | Omit<OperationResult, 'error' | 'loading' | 'data'>
+  | Omit<OperationResult, 'error' | 'data'>
   | DataObject
 
 export interface WithCellProps {
@@ -129,6 +129,8 @@ export const withCell = ({
         {...beforeQuery(variables)}
       >
         {({ error, loading, data, ...queryRest }) => {
+          const processedData = data && afterQuery(data)
+
           if (error) {
             if (Failure) {
               return <Failure error={error} {...queryRest} {...props} />
@@ -136,9 +138,17 @@ export const withCell = ({
               throw error
             }
           } else if (loading) {
-            return <Loading {...queryRest} {...props} />
+            return isEmpty(processedData) ? (
+              <Loading {...queryRest} {...props} />
+            ) : (
+              <Success
+                {...afterQuery(data)}
+                {...queryRest}
+                {...props}
+                loading={true}
+              />
+            )
           } else if (data) {
-            const processedData = afterQuery(data)
             if (typeof Empty !== 'undefined' && isEmpty(processedData)) {
               return <Empty {...queryRest} {...props} />
             } else {
