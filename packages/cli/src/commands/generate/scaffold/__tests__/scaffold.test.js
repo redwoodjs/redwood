@@ -172,7 +172,7 @@ describe('in javascript (default) mode', () => {
         path.normalize('/path/to/project/web/src/components/Posts/Posts.js')
       ]
     ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('components', 'App.js'))
+      loadGeneratorFixture('scaffold', path.join('components', 'index.js'))
     )
   })
 
@@ -457,7 +457,7 @@ describe('in typescript mode', () => {
         path.normalize('/path/to/project/web/src/components/Posts/Posts.js')
       ]
     ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('components', 'App.js'))
+      loadGeneratorFixture('scaffold', path.join('components', 'index.js'))
     )
   })
 
