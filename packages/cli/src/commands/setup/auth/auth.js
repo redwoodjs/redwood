@@ -32,19 +32,19 @@ const TEMPLATES = fs
   }, {})
 
 const OUTPUT_PATH = path.join(getPaths().api.lib, 'auth.js')
-const WEB_SRC_INDEX_PATH = path.join(getPaths().web.src, 'index.js')
+const WEB_SRC_APP_PATH = path.join(getPaths().web.src, 'App.js')
 
 const SUPPORTED_PROVIDERS = fs
   .readdirSync(path.resolve(__dirname, 'providers'))
   .map((file) => path.basename(file, '.js'))
   .filter((file) => file !== 'README.md')
 
-// returns the content of index.js with import statements added
+// returns the content of App.js with import statements added
 const addWebImports = (content, imports) => {
   return `${AUTH_PROVIDER_IMPORT}\n` + imports.join('\n') + '\n' + content
 }
 
-// returns the content of index.js with init lines added
+// returns the content of App.js with init lines added
 const addWebInit = (content, init) => {
   return content.replace(
     'const App = () => (',
@@ -52,16 +52,18 @@ const addWebInit = (content, init) => {
   )
 }
 
-// returns the content of index.js with <AuthProvider> added
+// returns the content of App.js with <AuthProvider> added
 const addWebRender = (content, authProvider) => {
   const [_, indent, redwoodApolloProvider] = content.match(
     /(\s+)(<RedwoodApolloProvider>.*<\/RedwoodApolloProvider>)/s
   )
+
   const redwoodApolloProviderLines = redwoodApolloProvider
     .split('\n')
     .map((line) => {
       return '  ' + line
     })
+
   const customRenderOpen = (authProvider.render || []).reduce(
     (acc, component) => acc + indent + `<${component}>`,
     ''
@@ -88,18 +90,18 @@ const addWebRender = (content, authProvider) => {
   )
 }
 
-// returns the content of index.js with <AuthProvider> updated
+// returns the content of App.js with <AuthProvider> updated
 const updateWebRender = (content, authProvider) => {
   const renderContent = `<AuthProvider client={${authProvider.client}} type="${authProvider.type}">`
   return content.replace(/<AuthProvider client={.*} type=".*">/s, renderContent)
 }
 
-// returns the content of index.js without the old auth import
+// returns the content of App.js without the old auth import
 const removeOldWebImports = (content, imports) => {
   return content.replace(`${AUTH_PROVIDER_IMPORT}\n` + imports.join('\n'), '')
 }
 
-// returns the content of index.js without the old auth init
+// returns the content of App.js without the old auth init
 const removeOldWebInit = (content, init) => {
   return content.replace(init, '')
 }
@@ -126,7 +128,7 @@ const removeOldAuthProvider = async (content) => {
 
 // check to make sure AuthProvider doesn't exist
 const checkAuthProviderExists = () => {
-  const content = fs.readFileSync(WEB_SRC_INDEX_PATH).toString()
+  const content = fs.readFileSync(WEB_SRC_APP_PATH).toString()
 
   if (content.includes(AUTH_PROVIDER_IMPORT)) {
     throw new Error(
@@ -143,9 +145,9 @@ export const files = (provider) => {
   }
 }
 
-// actually inserts the required config lines into index.js
-export const addConfigToIndex = async (config, force) => {
-  let content = fs.readFileSync(WEB_SRC_INDEX_PATH).toString()
+// actually inserts the required config lines into App.js
+export const addConfigToApp = async (config, force) => {
+  let content = fs.readFileSync(WEB_SRC_APP_PATH).toString()
 
   // update existing AuthProvider if --force else add new AuthProvider
   if (content.includes(AUTH_PROVIDER_IMPORT) && force) {
@@ -158,7 +160,7 @@ export const addConfigToIndex = async (config, force) => {
   content = addWebImports(content, config.imports)
   content = addWebInit(content, config.init)
 
-  fs.writeFileSync(WEB_SRC_INDEX_PATH, content)
+  fs.writeFileSync(WEB_SRC_APP_PATH, content)
 }
 
 export const addApiConfig = () => {
@@ -192,7 +194,7 @@ export const apiSrcDoesExist = () => {
 }
 
 export const webIndexDoesExist = () => {
-  return fs.existsSync(WEB_SRC_INDEX_PATH)
+  return fs.existsSync(WEB_SRC_APP_PATH)
 }
 
 export const graphFunctionDoesExist = () => {
@@ -241,9 +243,9 @@ export const handler = async ({ provider, force }) => {
         title: 'Adding auth config to web...',
         task: (_ctx, task) => {
           if (webIndexDoesExist()) {
-            addConfigToIndex(providerData.config, force)
+            addConfigToApp(providerData.config, force)
           } else {
-            task.skip('web/src/index.js not found, skipping')
+            task.skip('web/src/App.js not found, skipping')
           }
         },
       },
@@ -312,6 +314,7 @@ export const handler = async ({ provider, force }) => {
 
     await tasks.run()
   } catch (e) {
-    console.log(c.error(e.message))
+    console.error(c.error(e.message))
+    process.exit(e?.exitCode || 1)
   }
 }

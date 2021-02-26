@@ -1,7 +1,10 @@
-// the lines that need to be added to index.js
+// the lines that need to be added to App.js
 export const config = {
-  imports: [`import netlifyIdentity from 'netlify-identity-widget'`],
-  init: 'netlifyIdentity.init()',
+  imports: [
+    `import netlifyIdentity from 'netlify-identity-widget'`,
+    `import { isBrowser } from '@redwoodjs/prerender/browserUtils'`,
+  ],
+  init: 'isBrowser && netlifyIdentity.init()',
   authProvider: {
     client: 'netlifyIdentity',
     type: 'netlify',

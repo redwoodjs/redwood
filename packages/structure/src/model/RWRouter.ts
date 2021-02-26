@@ -40,7 +40,9 @@ export class RWRouter extends FileNode {
     // TODO: params
     const path = this.parent.pages.find((p) => p.filePath === filePath)?.route
       ?.path
-    if (path?.includes('{')) return
+    if (path?.includes('{')) {
+      return
+    }
     return path
   }
 
@@ -61,14 +63,18 @@ export class RWRouter extends FileNode {
   @lazy() get routes() {
     const self = this
     return iter(function* () {
-      if (!self.jsxNode) return
+      if (!self.jsxNode) {
+        return
+      }
       // TODO: make sure that they are nested within the <Router> tag
       // we are not checking it right now
       for (const x of self.sf.getDescendantsOfKind(
         tsm.SyntaxKind.JsxSelfClosingElement
       )) {
         const tagName = x.getTagNameNode().getText()
-        if (tagName === 'Route') yield new RWRoute(x, self)
+        if (tagName === 'Route') {
+          yield new RWRoute(x, self)
+        }
       }
     })
   }
@@ -96,7 +102,9 @@ export class RWRouter extends FileNode {
   }
 
   @lazy() get quickFix_addNotFoundpage() {
-    if (!this.jsxNode) return undefined
+    if (!this.jsxNode) {
+      return undefined
+    }
     const change = new WorkspaceChange({ documentChanges: [] })
     let uri = URL_file(this.parent.defaultNotFoundPageFilePath)
     const p = this.parent.pages.find((p) => p.basenameNoExt === 'NotFoundPage')
@@ -141,7 +149,9 @@ export class RWRouter extends FileNode {
       return // stop checking for errors if the file doesn't exist
     }
 
-    if (!this.jsxNode) return
+    if (!this.jsxNode) {
+      return
+    }
 
     if (this.numNotFoundPages === 0) {
       const { uri, range } = LocationLike_toLocation(this.jsxNode)

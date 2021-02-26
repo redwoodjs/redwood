@@ -1,3 +1,4 @@
+/* eslint-env jest */
 const path = require('path')
 
 const { setContext } = require('@redwoodjs/api')
@@ -32,7 +33,7 @@ const teardown = async () => {
   }
 }
 
-window.scenario = (...args) => {
+global.scenario = (...args) => {
   let scenarioName, testName, testFunc
 
   if (args.length === 3) {
@@ -44,9 +45,9 @@ window.scenario = (...args) => {
     throw new Error('scenario() requires 2 or 3 arguments')
   }
 
-  return window.it(testName, async () => {
+  return global.it(testName, async () => {
     const path = require('path')
-    const testFileDir = path.parse(window.jasmine.testPath)
+    const testFileDir = path.parse(global.jasmine.testPath)
     const testFilePath = `${testFileDir.dir}/${
       testFileDir.name.split('.')[0]
     }.scenarios`
@@ -79,9 +80,9 @@ window.scenario = (...args) => {
   })
 }
 
-window.defineScenario = defineScenario
+global.defineScenario = defineScenario
 
-window.mockCurrentUser = (currentUser) => {
+global.mockCurrentUser = (currentUser) => {
   setContext({ currentUser })
 }
 

@@ -10,6 +10,7 @@ import ReactDOMServer from 'react-dom/server'
 import { getPaths } from '@redwoodjs/internal'
 import { LocationProvider } from '@redwoodjs/router'
 
+import mediaImportsPlugin from './babelPlugins/babel-plugin-redwood-prerender-media-imports'
 import { getRootHtmlPath, registerShims, writeToDist } from './internal'
 
 interface PrerenderParams {
@@ -26,7 +27,6 @@ babelRequireHook({
   extends: path.join(rwWebPaths.base, '.babelrc.js'),
   extensions: ['.js', '.ts', '.tsx', '.jsx'],
   plugins: [
-    ['inline-react-svg'],
     ['ignore-html-and-css-imports'], // webpack/postcss handles CSS imports
     [
       'babel-plugin-module-resolver',
@@ -36,6 +36,7 @@ babelRequireHook({
         },
       },
     ],
+    [mediaImportsPlugin],
   ],
   only: [rwWebPaths.base],
   ignore: ['node_modules'],
@@ -51,7 +52,7 @@ export const runPrerender = async ({
 
   const indexContent = fs.readFileSync(getRootHtmlPath()).toString()
 
-  const { default: App } = await import(getPaths().web.index)
+  const { default: App } = await import(getPaths().web.app)
 
   const componentAsHtml = ReactDOMServer.renderToString(
     <LocationProvider

@@ -22,8 +22,8 @@ export interface NodeTargetPaths {
 export interface BrowserTargetPaths {
   base: string
   src: string
-  entry: string | null
-  index: string
+  app: string
+  index: string | null
   routes: string
   pages: string
   components: string
@@ -37,6 +37,7 @@ export interface BrowserTargetPaths {
 export interface Paths {
   cache: string
   types: string
+  globals: string
   base: string
   web: BrowserTargetPaths
   api: NodeTargetPaths
@@ -68,7 +69,7 @@ const PATH_WEB_DIR_LAYOUTS = 'web/src/layouts/'
 const PATH_WEB_DIR_PAGES = 'web/src/pages/'
 const PATH_WEB_DIR_COMPONENTS = 'web/src/components'
 const PATH_WEB_DIR_SRC = 'web/src'
-const PATH_WEB_DIR_SRC_ENTRY = 'web/src/entry'
+const PATH_WEB_DIR_SRC_APP = 'web/src/App'
 const PATH_WEB_DIR_SRC_INDEX = 'web/src/index' // .js|.tsx
 const PATH_WEB_DIR_CONFIG = 'web/config'
 const PATH_WEB_DIR_CONFIG_WEBPACK = 'web/config/webpack.config.js'
@@ -130,13 +131,16 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
   // We store our test database over here:
   const cache = path.join(BASE_DIR, '.redwood')
   const types = path.join(BASE_DIR, '.redwood', 'types')
+  const globals = path.join(BASE_DIR, '.redwood', 'globals')
   fs.mkdirSync(cache, { recursive: true })
   fs.mkdirSync(types, { recursive: true })
+  fs.mkdirSync(globals, { recursive: true })
 
   return {
     base: BASE_DIR,
     cache,
     types,
+    globals,
     api: {
       base: path.join(BASE_DIR, 'api'),
       dataMigrations: path.join(BASE_DIR, schemaDir, 'dataMigrations'),
@@ -156,8 +160,8 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       components: path.join(BASE_DIR, PATH_WEB_DIR_COMPONENTS),
       layouts: path.join(BASE_DIR, PATH_WEB_DIR_LAYOUTS),
       src: path.join(BASE_DIR, PATH_WEB_DIR_SRC),
-      entry: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_ENTRY)),
-      index: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_INDEX)) as string,
+      app: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_APP)) as string,
+      index: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_INDEX)),
       config: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG),
       webpack: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG_WEBPACK),
       postcss: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG_POSTCSS),
@@ -179,7 +183,9 @@ export const processPagesDir = (
     const p = path.parse(pagePath)
 
     const importName = p.dir.replace(path.sep, '')
-    const importPath = path.join(webPagesDir, p.dir, p.name)
+    const importPath = importStatementPath(
+      path.join(webPagesDir, p.dir, p.name)
+    )
     const importStatement = `const ${importName} = { name: '${importName}', loader: import('${importPath}') }`
     return {
       importName,
@@ -213,4 +219,22 @@ export const ensurePosixPath = (path: string) => {
   }
 
   return posixPath
+}
+
+/**
+ * Switches backslash to regular slash on Windows so the path works in
+ * import statements
+ * C:\Users\Bob\dev\Redwood\UserPage\UserPage ->
+ * C:/Users/Bob/dev/Redwood/UserPage/UserPage
+ *
+ * @param path Filesystem path
+ */
+export const importStatementPath = (path: string) => {
+  let importPath = path
+
+  if (process.platform === 'win32') {
+    importPath = importPath.replaceAll('\\', '/')
+  }
+
+  return importPath
 }

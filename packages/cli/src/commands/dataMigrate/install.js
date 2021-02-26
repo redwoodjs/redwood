@@ -45,7 +45,7 @@ const save = async () => {
     'yarn rw',
     ['prisma migrate dev', '--name create_data_migrations', '--create-only'],
     {
-      cwd: getPaths().base,
+      cwd: getPaths().api.base,
       shell: true,
     }
   )
@@ -90,7 +90,7 @@ export const handler = async () => {
   try {
     await tasks.run()
   } catch (e) {
-    console.log(c.error(e.message))
+    console.error(c.error(e.message))
     process.exit(e?.exitCode || 1)
   }
 }
