@@ -15,5 +15,6 @@
     "**/dist": true,
     "**/node_modules": true,
     "**/__fixtures__": true
-  }
+  },
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
