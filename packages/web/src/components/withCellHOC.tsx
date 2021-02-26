@@ -6,12 +6,12 @@ import type {
 } from './GraphQLHooksProvider'
 import { useQuery } from './GraphQLHooksProvider'
 
-type QueryParams = {
+type QueryProps = {
   query: DocumentNode
   children: (result: OperationResult) => React.ReactElement
 } & GraphQLHookOptions
 
-const Query: React.FunctionComponent<QueryParams> = ({
+const Query: React.FunctionComponent<QueryProps> = ({
   children,
   query,
   ...rest
