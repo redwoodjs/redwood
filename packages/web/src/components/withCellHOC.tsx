@@ -104,7 +104,7 @@ export const withCell = ({
     nextFetchPolicy: 'cache-first',
   }),
   QUERY,
-  afterQuery = (data) => ({ ...data }),
+  afterQuery = (data) => data,
   Loading = () => <>Loading...</>,
   Failure,
   Empty,
@@ -138,10 +138,11 @@ export const withCell = ({
           } else if (loading) {
             return <Loading {...queryRest} {...props} />
           } else if (data) {
-            if (typeof Empty !== 'undefined' && isEmpty(data)) {
+            const processedData = afterQuery(data)
+            if (typeof Empty !== 'undefined' && isEmpty(processedData)) {
               return <Empty {...queryRest} {...props} />
             } else {
-              return <Success {...afterQuery(data)} {...queryRest} {...props} />
+              return <Success {...processedData} {...queryRest} {...props} />
             }
           } else {
             throw new Error(
