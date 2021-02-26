@@ -1,4 +1,4 @@
-// the lines that need to be added to index.js
+// the lines that need to be added to App.js
 export const config = {
   imports: [
     `import EthereumAuthClient from '@oneclickdapp/ethereum-auth'`,
