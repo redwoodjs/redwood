@@ -32,7 +32,7 @@
     "@types/jest": "^26.0.14",
     "babel-jest": "^26.5.2",
     "babel-plugin-auto-import": "^1.1.0",
-    "babel-plugin-module-resolver": "^4.0.0",
+    "babel-plugin-module-resolver": "^4.1.0",
     "babel-plugin-remove-code": "^0.0.6",
     "core-js": "3.6.5",
     "cp-cli": "^2.0.0",
