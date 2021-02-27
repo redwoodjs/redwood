@@ -60,7 +60,7 @@
     "url-loader": "4.1.0",
     "webpack": "^4.42.1",
     "webpack-bundle-analyzer": "^3.6.1",
-    "webpack-cli": "^3.3.11",
+    "webpack-cli": "^4.5.0",
     "webpack-dev-server": "^3.10.3",
     "webpack-manifest-plugin": "^3.0.0",
     "webpack-merge": "^5.1.2",
