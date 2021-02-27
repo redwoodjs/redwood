@@ -2873,19 +2873,27 @@
     npmlog "^4.1.2"
     write-file-atomic "^2.3.0"
 
-"@magic-sdk/provider@^2.8.0":
-  version "2.8.0"
-  resolved "https://registry.yarnpkg.com/@magic-sdk/provider/-/provider-2.8.0.tgz#4b165b18b15e14040d1374327a81610661494c15"
-  integrity sha512-ZDijCeXy8T5WQw7CY6uXeuyY5hJ41+jTBBnfraDubqH9P9Z/ztJ+Bh/V3I7pfbolRUQecpnGOauVSE1Nr2kW4w==
+"@magic-sdk/commons@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@magic-sdk/commons/-/commons-1.1.0.tgz#253fbbb8846b79e8defacda68ac30b0ac3581e7c"
+  integrity sha512-10CHQg6lMzWALccugQ7LZC3jOYaKMaEOJTfugrjMMgVntBtRPLPrQBz8+Vw9fl4tbGWtjCWcxVsrx5Wela2DHg==
+
+"@magic-sdk/provider@^4.1.1":
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/@magic-sdk/provider/-/provider-4.1.1.tgz#65ce55b5dd4c74cf368616a644291c75f65d085b"
+  integrity sha512-GWEE7elROm6tJDD8FmuI0QnI3hIkN0u/ycJOPZv886BNAkWrHhBBOJ4N1f2IRPdh3hsSkKbzSewIv7GFM0qrQw==
   dependencies:
-    "@magic-sdk/types" "^1.6.0"
+    "@magic-sdk/types" "^3.0.1"
     eventemitter3 "^4.0.4"
     semver "^7.3.2"
+    tslib "^2.0.3"
 
-"@magic-sdk/types@^1.6.0":
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/@magic-sdk/types/-/types-1.6.0.tgz#b2a45be001194358b3d8fa0c63b649b73735660e"
-  integrity sha512-CvVUPTF9tSLNFA4JhcAFjheiqWyVp9r9ooy/AheK+0rWRZCxE5QCwc81d2FduDTqzEJZeUV9+9F9R0AplhnX7w==
+"@magic-sdk/types@^3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@magic-sdk/types/-/types-3.0.1.tgz#d7d8780fd7021029f3feec5183192058924bcd19"
+  integrity sha512-bTJECfZQQ+GaYGYcMUMDcKLxotEBiCdj/yhR8mOdiccJH7Oq5g/6AZKBOBaBy6iEmtQy39uz2N5rrdotoTGM9Q==
+  dependencies:
+    tslib "^2.0.3"
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
@@ -13165,18 +13173,20 @@ macos-release@^2.2.0:
   resolved "https://registry.yarnpkg.com/macos-release/-/macos-release-2.4.1.tgz#64033d0ec6a5e6375155a74b1a1eba8e509820ac"
   integrity sha512-H/QHeBIN1fIGJX517pvK8IEK53yQOW7YcEI55oYtgjDdoCQQz7eJS94qt5kNrscReEyuD/JcdFCm2XBEcGOITg==
 
-magic-sdk@^2.5.0:
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/magic-sdk/-/magic-sdk-2.7.0.tgz#645dd958b60a95db74d560c91a9f40ad73e7f959"
-  integrity sha512-KqzcLWhwAGlvmFSrQIrEPlOhOCpdvka/AOWGrK00qLHx8ph8RTpUJi0TB82i0Q9Cz2Q18Svw6YDZYXCWVLGPkw==
+magic-sdk@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/magic-sdk/-/magic-sdk-4.1.1.tgz#6e6142df0bd483a8a452f1bf273d7cb299dcd63c"
+  integrity sha512-quqF9ASG/dIrf4u/noeJ5JQoqbbagat9qojBdg8ep57uNmz6VyoaKAcw3TBzp6z5Qsx0E55duqw+XKf2fweKwQ==
   dependencies:
     "@babel/core" "^7.9.6"
     "@babel/runtime" "^7.9.6"
-    "@magic-sdk/provider" "^2.8.0"
-    "@magic-sdk/types" "^1.6.0"
+    "@magic-sdk/commons" "^1.1.0"
+    "@magic-sdk/provider" "^4.1.1"
+    "@magic-sdk/types" "^3.0.1"
     localforage "^1.7.4"
     localforage-driver-memory "^1.0.5"
     regenerator-runtime "0.13.5"
+    tslib "^2.0.3"
 
 make-dir@3.1.0, make-dir@^3.0.0, make-dir@^3.0.2, make-dir@^3.1.0:
   version "3.1.0"
