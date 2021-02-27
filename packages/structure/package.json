@@ -17,7 +17,7 @@
     "dotenv-defaults": "^2.0.1",
     "enquirer": "2.3.6",
     "findup-sync": "^4.0.0",
-    "graphql": "^15.3.0",
+    "graphql": "^15.5.0",
     "lazy-get-decorator": "^2.2.0",
     "line-column": "^1.0.2",
     "lodash": "^4.17.19",

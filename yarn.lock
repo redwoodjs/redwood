@@ -10467,10 +10467,10 @@ graphql-ws@2.0.1:
   resolved "https://registry.yarnpkg.com/graphql-ws/-/graphql-ws-2.0.1.tgz#36971e5453dbf0a59c5674460f7067011e7d6cd7"
   integrity sha512-K8eaR00TZHFMVw2viZfjDxLWdF1hUIR8xY9Zow6tLI2CLT3E4homJ4XZNRrxEoQjAXEQoUHPcmGkDDynWivNrQ==
 
-graphql@^15.3.0:
-  version "15.4.0"
-  resolved "https://registry.yarnpkg.com/graphql/-/graphql-15.4.0.tgz#e459dea1150da5a106486ba7276518b5295a4347"
-  integrity sha512-EB3zgGchcabbsU9cFe1j+yxdzKQKAbGUWRb13DsrsMN1yyfmmIq+2+L5MqVWcDCE4V89R5AyUOi7sMOGxdsYtA==
+graphql@^15.3.0, graphql@^15.5.0:
+  version "15.5.0"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-15.5.0.tgz#39d19494dbe69d1ea719915b578bf920344a69d5"
+  integrity sha512-OmaM7y0kaK31NKG31q4YbD2beNYa6jBBKtMFT6gLYJljHLJr42IqJ8KX08u3Li/0ifzTU5HjmoOOrwa5BRLeDA==
 
 growly@^1.3.0:
   version "1.3.0"
