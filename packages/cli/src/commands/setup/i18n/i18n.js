@@ -20,7 +20,7 @@ export const builder = (yargs) => {
 }
 
 export const handler = async ({ force }) => {
-  const INDEX_JS_PATH = path.join(getPaths().web.src, 'index.js')
+  const INDEX_JS_PATH = path.join(getPaths().web.src, 'App.js')
   const tasks = new Listr([
     {
       title: 'Installing packages...',
@@ -61,10 +61,10 @@ export const handler = async ({ force }) => {
       },
     },
     {
-      title: 'Adding import to index.js...',
+      title: 'Adding import to App.js...',
       task: () => {
         /**
-         * Add i18n import to the top of index.js
+         * Add i18n import to the top of App.js
          */
         let indexJS = fs.readFileSync(INDEX_JS_PATH)
         indexJS = [`import './i18n'`, indexJS].join(`\n`)
