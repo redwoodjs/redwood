@@ -8,10 +8,11 @@
     ]
   },
   "devDependencies": {
-    "@redwoodjs/core": "^0.25.1"
+    "@redwoodjs/core": "^0.26.2"
   },
   "eslintConfig": {
-    "extends": "@redwoodjs/eslint-config"
+    "extends": "@redwoodjs/eslint-config",
+    "root": true
   },
   "engines": {
     "node": ">=12",

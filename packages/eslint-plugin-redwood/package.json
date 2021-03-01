@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/eslint-plugin-redwood",
-  "version": "0.25.1",
+  "version": "0.26.2",
   "description": "eslint plugin for Redwood rules.",
   "files": [
     "dist"
@@ -14,6 +14,6 @@
     "build": "yarn build:js",
     "prepublishOnly": "yarn cross-env NODE_ENV=production yarn build",
     "build:js": "babel src -d dist",
-    "build:watch": "nodemon --ignore dist --exec \"yarn build\""
+    "build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build\""
   }
 }

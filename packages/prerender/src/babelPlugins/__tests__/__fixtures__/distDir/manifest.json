@@ -1,0 +1,10 @@
+{
+  "vendors.js": "/static/js/vendors.3faf0127.chunk.js",
+  "vendors.js.map": "/static/js/vendors.3faf0127.chunk.js.map",
+  "static/media/image1.jpg": "/static/media/myImageOne.hash.jpg",
+  "static/media/image2.jpeg": "/static/media/myImageTwo.hash.jpeg",
+  "static/media/image3.png": "/static/media/myImageThree.hash.png",
+  "static/media/image4.bmp": "/static/media/myImageFour.hash.bmp",
+  "static/media/terms.pdf": "/static/media/terms.pdf",
+  "static/media/nyan.gif": "/static/media/nyanKitty.gif"
+}

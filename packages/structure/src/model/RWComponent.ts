@@ -28,8 +28,11 @@ export class RWComponent extends FileNode {
     const ss = new Set<string>()
     for (const d of this.sf.getDescendantsOfKind(
       tsm.SyntaxKind.VariableDeclaration
-    ))
-      if (d.isExported()) ss.add(d.getName())
+    )) {
+      if (d.isExported()) {
+        ss.add(d.getName())
+      }
+    }
     return ss
   }
 }
