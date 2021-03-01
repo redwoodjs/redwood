@@ -22,8 +22,8 @@ export interface NodeTargetPaths {
 export interface BrowserTargetPaths {
   base: string
   src: string
-  entry: string | null
-  index: string
+  app: string
+  index: string | null
   routes: string
   pages: string
   components: string
@@ -69,7 +69,7 @@ const PATH_WEB_DIR_LAYOUTS = 'web/src/layouts/'
 const PATH_WEB_DIR_PAGES = 'web/src/pages/'
 const PATH_WEB_DIR_COMPONENTS = 'web/src/components'
 const PATH_WEB_DIR_SRC = 'web/src'
-const PATH_WEB_DIR_SRC_ENTRY = 'web/src/entry'
+const PATH_WEB_DIR_SRC_APP = 'web/src/App'
 const PATH_WEB_DIR_SRC_INDEX = 'web/src/index' // .js|.tsx
 const PATH_WEB_DIR_CONFIG = 'web/config'
 const PATH_WEB_DIR_CONFIG_WEBPACK = 'web/config/webpack.config.js'
@@ -160,8 +160,8 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       components: path.join(BASE_DIR, PATH_WEB_DIR_COMPONENTS),
       layouts: path.join(BASE_DIR, PATH_WEB_DIR_LAYOUTS),
       src: path.join(BASE_DIR, PATH_WEB_DIR_SRC),
-      entry: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_ENTRY)),
-      index: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_INDEX)) as string,
+      app: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_APP)) as string,
+      index: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_INDEX)),
       config: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG),
       webpack: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG_WEBPACK),
       postcss: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG_POSTCSS),

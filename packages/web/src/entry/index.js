@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom'
 
-import App from '~redwood-app-index'
+import App from '~redwood-app-root'
 /**
  * When `#redwood-app` isn't empty then it's very likely that you're using
  * prerendering. So React attaches event listeners to the existing markup

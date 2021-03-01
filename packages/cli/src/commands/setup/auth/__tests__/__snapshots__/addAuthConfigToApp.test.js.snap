@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Should add config lines to index.js Matches Auth0 Snapshot 1`] = `
+exports[`Should add config lines to App.js Matches Auth0 Snapshot 1`] = `
 "import { AuthProvider } from '@redwoodjs/auth'
 import { Auth0Client } from '@auth0/auth0-spa-js'
 import { FatalErrorBoundary } from '@redwoodjs/web'
@@ -37,7 +37,7 @@ export default App
 "
 `;
 
-exports[`Should add config lines to index.js Matches Firebase Snapshot 1`] = `
+exports[`Should add config lines to App.js Matches Firebase Snapshot 1`] = `
 "import { AuthProvider } from '@redwoodjs/auth'
 import * as firebase from 'firebase/app'
 import 'firebase/auth'
@@ -78,7 +78,7 @@ export default App
 "
 `;
 
-exports[`Should add config lines to index.js Matches azureActiveDirectory Snapshot 1`] = `
+exports[`Should add config lines to App.js Matches azureActiveDirectory Snapshot 1`] = `
 "import { AuthProvider } from '@redwoodjs/auth'
 import { UserAgentApplication } from 'msal'
 import { FatalErrorBoundary } from '@redwoodjs/web'
@@ -112,7 +112,7 @@ export default App
 "
 `;
 
-exports[`Should add config lines to index.js Matches ethereum Snapshot 1`] = `
+exports[`Should add config lines to App.js Matches ethereum Snapshot 1`] = `
 "import { AuthProvider } from '@redwoodjs/auth'
 import EthereumAuthClient from '@oneclickdapp/ethereum-auth'
 import { ApolloClient, InMemoryCache } from '@apollo/client'
@@ -178,7 +178,7 @@ export default App
 "
 `;
 
-exports[`Should add config lines to index.js Matches goTrue Snapshot 1`] = `
+exports[`Should add config lines to App.js Matches goTrue Snapshot 1`] = `
 "import { AuthProvider } from '@redwoodjs/auth'
 import GoTrue from 'gotrue-js'
 import { FatalErrorBoundary } from '@redwoodjs/web'
@@ -208,7 +208,7 @@ export default App
 "
 `;
 
-exports[`Should add config lines to index.js Matches magicLink Snapshot 1`] = `
+exports[`Should add config lines to App.js Matches magicLink Snapshot 1`] = `
 "import { AuthProvider } from '@redwoodjs/auth'
 import { Magic } from 'magic-sdk'
 import { FatalErrorBoundary } from '@redwoodjs/web'
@@ -235,7 +235,7 @@ export default App
 "
 `;
 
-exports[`Should add config lines to index.js Matches netlify Snapshot 1`] = `
+exports[`Should add config lines to App.js Matches netlify Snapshot 1`] = `
 "import { AuthProvider } from '@redwoodjs/auth'
 import netlifyIdentity from 'netlify-identity-widget'
 import { isBrowser } from '@redwoodjs/prerender/browserUtils'
@@ -263,7 +263,7 @@ export default App
 "
 `;
 
-exports[`Should add config lines to index.js Matches nhost Snapshot 1`] = `
+exports[`Should add config lines to App.js Matches nhost Snapshot 1`] = `
 "import { AuthProvider } from '@redwoodjs/auth'
 import { createClient } from 'nhost-js-sdk'
 import { FatalErrorBoundary } from '@redwoodjs/web'
@@ -294,7 +294,7 @@ export default App
 "
 `;
 
-exports[`Should add config lines to index.js Matches supabase Snapshot 1`] = `
+exports[`Should add config lines to App.js Matches supabase Snapshot 1`] = `
 "import { AuthProvider } from '@redwoodjs/auth'
 import { createClient } from '@supabase/supabase-js'
 import { FatalErrorBoundary } from '@redwoodjs/web'

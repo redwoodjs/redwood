@@ -7,16 +7,16 @@ import Listr from 'listr'
 import { getPaths, writeFile } from 'src/lib'
 import c from 'src/lib/colors'
 
-export const command = 'custom-entry'
+export const command = 'custom-web-index'
 
 export const description =
-  'Setup a custom entry.js file, so you can customise how Redwood web is mounted in your browser'
+  'Setup a custom index.js file, so you can customise how Redwood web is mounted in your browser'
 
 export const builder = (yargs) => {
   yargs.option('force', {
     alias: 'f',
     default: false,
-    description: 'Overwrite existing entry.js file',
+    description: 'Overwrite existing index.js file',
     type: 'boolean',
   })
 }
@@ -24,22 +24,26 @@ export const builder = (yargs) => {
 export const handler = async ({ force }) => {
   const tasks = new Listr([
     {
-      title: 'Creating new entry point in `web/src/entry.js`.',
+      title: 'Creating new entry point in `web/src/index.js`.',
       task: () => {
         // @TODO figure out how we're handling typescript
         // In this file, we're setting everything to js
-        // @Note, getPaths.web.entry is null, when it doesn't exist
-        const entryJsFile =
-          getPaths().web.entry ?? path.join(getPaths().web.src, 'entry.js')
+        // @Note, getPaths.web.index is null, when it doesn't exist
+        const entryPointFile =
+          getPaths().web.index ?? path.join(getPaths().web.src, 'index.js')
 
-        // @TODO Copy over the entry file that already exists in package/web
         return writeFile(
-          entryJsFile,
+          entryPointFile,
           fs
             .readFileSync(
-              path.resolve(__dirname, 'templates', 'entry.js.template')
+              path.join(
+                getPaths().base,
+                // NOTE we're copying over the index.js before babel transform
+                'node_modules/@redwoodjs/web/src/entry/index.js'
+              )
             )
-            .toString(),
+            .toString()
+            .replace('~redwood-app-root', './App'),
           { overwriteExisting: force }
         )
       },
@@ -51,7 +55,7 @@ export const handler = async ({ force }) => {
           ${c.green(
             'Quick link to the docs on configuring a custom entry point for your RW app'
           )}
-          ${chalk.hex('#e8e8e8')('https://redwoodjs.com/docs/custom-entry')}
+          ${chalk.hex('#e8e8e8')('https://redwoodjs.com/docs/custom-web-index')}
         `
       },
     },

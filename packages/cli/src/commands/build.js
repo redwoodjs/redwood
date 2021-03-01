@@ -8,7 +8,7 @@ import terminalLink from 'terminal-link'
 
 import { detectPrerenderRoutes } from '@redwoodjs/prerender'
 
-import { getPaths, getConfig } from 'src/lib'
+import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 import { generatePrismaClient } from 'src/lib/generatePrismaClient'
 
@@ -134,7 +134,7 @@ export const handler = async ({
     })
 
     // Prerender _after_ web build
-    if (getConfig().web.experimentalPrerender && prerender) {
+    if (prerender) {
       const prerenderRoutes = detectPrerenderRoutes()
 
       listrTasks.push({
