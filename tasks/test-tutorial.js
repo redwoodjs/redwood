@@ -50,8 +50,6 @@ const testTutorial = async () => {
     )
   }
 
-  // @TODO use rwt link here
-
   // Clean and build framework
   await execa('yarn build:clean && yarn lerna run build:js', {
     cwd: frameworkPath,
@@ -73,8 +71,6 @@ const testTutorial = async () => {
     stdio: 'inherit',
     cwd: projectPath,
   })
-
-  // end RWT link @TODO
 
   await execa('yarn rw dev --fwd="--open=false" &', {
     shell: true,
