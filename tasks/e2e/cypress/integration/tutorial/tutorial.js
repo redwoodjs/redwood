@@ -20,11 +20,13 @@ import Step6_4_BlogPost from './codemods/Step6_4_BlogPost'
 import Step6_4_BlogPostTest from './codemods/Step6_4_BlogPostTest'
 import Step6_5_BlogPostsCell from './codemods/Step6_5_BlogPostsCell'
 import Step6_5_BlogPostsCellMock from './codemods/Step6_5_BlogPostsCellMock'
+import Step7_1_BlogLayout from './codemods/Step7_1_BlogLayout'
+import Step7_2_ContactPage from './codemods/Step7_2_ContactPage'
+import Step7_3_Css from './codemods/Step7_3_Css'
 
 const BASE_DIR = Cypress.env('RW_PATH')
 
 describe('The Redwood Tutorial - Golden path edition', () => {
-  // TODO: https://redwoodjs.com/tutorial/everyone-s-favorite-thing-to-build-forms
   // TODO: https://redwoodjs.com/tutorial/saving-data
   // TODO: https://redwoodjs.com/tutorial/administration
 
@@ -210,5 +212,39 @@ describe('The Redwood Tutorial - Golden path edition', () => {
 
     cy.contains('Third post').click()
     cy.get('main').should('contain', 'foo bar')
+  })
+
+  it("7. Everyone's Favorite Thing to Build: Forms", () => {
+    // https://redwoodjs.com/tutorial/everyone-s-favorite-thing-to-build-forms
+    cy.exec(`cd ${BASE_DIR}; yarn rw g page contact --force`)
+    cy.writeFile(
+      path.join(BASE_DIR, 'web/src/layouts/BlogLayout/BlogLayout.js'),
+      Step7_1_BlogLayout
+    )
+    cy.writeFile(
+      path.join(BASE_DIR, 'web/src/pages/ContactPage/ContactPage.js'),
+      Step7_2_ContactPage
+    )
+    cy.writeFile(
+      path.join(BASE_DIR, 'web/src/index.css'),
+      Step7_3_Css
+    )
+
+    cy.contains('Contact').click()
+    cy.contains('Save').click()
+    cy.get('main').should('contain', 'name is required')
+    cy.get('main').should('contain', 'email is required')
+    cy.get('main').should('contain', 'message is required')
+
+    cy.get('input#email').type('foo bar')
+    cy.contains('Save').click()
+    cy.get('main').should('contain', 'Please enter a valid email address')
+
+    cy.get('input#name').type('test name')
+    cy.get('input#email').type('foo@bar.com')
+    cy.get('textarea#message').type('test message')
+    cy.contains('Save').click()
+    // console
+    // {name: "test name", email: "foo@bar.com", message: "test message"}
   })
 })
