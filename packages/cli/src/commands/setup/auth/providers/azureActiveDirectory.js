@@ -1,4 +1,4 @@
-// the lines that need to be added to index.js
+// the lines that need to be added to App.js
 export const config = {
   imports: [`import { UserAgentApplication } from 'msal'`],
   init: `const azureActiveDirectoryClient = new UserAgentApplication({
@@ -21,7 +21,7 @@ export const apiPackages = []
 
 // any notes to print out when the job is done
 export const notes = [
-  'You will need to create several environment variables with your Azure AD config options. Check out web/src/index.js for the variables you need to add.',
+  'You will need to create several environment variables with your Azure AD config options. Check out web/src/App.js for the variables you need to add.',
   '\n',
   'RedwoodJS specific Documentation:',
   'https://redwoodjs.com/docs/authentication#azure-ad',

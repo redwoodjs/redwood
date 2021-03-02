@@ -168,10 +168,15 @@ module.exports = (webpackEnv) => {
       /**
        * Prerender requires a top-level component.
        * Before we had `ReactDOM` and a top-level component in the same file (web/index.js).
-       * Now we've seperate them into `entry.js` (ReactDOM mounting) and `index.js` (top-level component)
-       * We will eventually remove the `entry` file and make it transparent, but this is a good middle ground.
+       * If index.js is defined in the user's project, use that, if not
+       * use the one provided in web/dist/entry/index.js
        */
-      app: redwoodPaths.web.entry ?? redwoodPaths.web.index,
+      app:
+        redwoodPaths.web.index ||
+        path.join(
+          redwoodPaths.base,
+          'node_modules/@redwoodjs/web/dist/entry/index.js'
+        ),
     },
     resolve: {
       extensions: ['.wasm', '.mjs', '.js', '.jsx', '.ts', '.tsx', '.json'],
@@ -182,6 +187,7 @@ module.exports = (webpackEnv) => {
           'node_modules',
           'styled-components'
         ),
+        '~redwood-app-root': path.resolve(redwoodPaths.web.app),
         react: path.resolve(redwoodPaths.base, 'node_modules', 'react'),
       },
     },
@@ -191,13 +197,9 @@ module.exports = (webpackEnv) => {
         title: path.basename(redwoodPaths.base),
         template: path.resolve(redwoodPaths.base, 'web/src/index.html'),
         templateParameters: {
-          prerenderPlaceholder: redwoodConfig.web.experimentalPrerender
-            ? '<server-markup></server-markup>'
-            : '<!-- Redwood App Here -->', // this gets taken out by post processing anyway
+          prerenderPlaceholder: '<server-markup></server-markup>',
         },
-        scriptLoading: redwoodConfig.web.experimentalPrerender
-          ? 'defer' // show the prerendered markup, no need to wait
-          : 'blocking',
+        scriptLoading: 'defer',
         inject: true,
         chunks: 'all',
       }),

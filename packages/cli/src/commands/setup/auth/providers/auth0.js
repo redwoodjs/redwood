@@ -1,4 +1,4 @@
-// the lines that need to be added to index.js
+// the lines that need to be added to App.js
 export const config = {
   imports: [`import { Auth0Client } from '@auth0/auth0-spa-js'`],
   init: `const auth0 = new Auth0Client({
@@ -25,7 +25,7 @@ export const apiPackages = []
 // any notes to print out when the job is done
 export const notes = [
   'You will need to create several environment variables with your Auth0 config options.',
-  'Check out web/src/index.js for the variables you need to add.',
+  'Check out web/src/App.js for the variables you need to add.',
   'See: https://auth0.com/docs/quickstart/spa/react#get-your-application-keys',
   '\n',
   "You must also create an API and set the audience parameter, or you'll",
