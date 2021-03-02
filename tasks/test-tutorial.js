@@ -26,7 +26,7 @@ const testTutorial = async () => {
 
   if (pathToProject) {
     console.log(
-      `\n 🗂️  You have supplied a path ${projectPath}, we will not create a new `
+      `\n 🗂️  You have supplied the path ${projectPath}, we will not create a new `
     )
     console.log('Redwood project, we will use the app you have specified.')
   } else {
@@ -60,11 +60,7 @@ const testTutorial = async () => {
   const packagesPath = path.join(frameworkPath, 'packages')
 
   // Link packages from framework
-  await execa(`ln -s ${packagesPath} ./packages`, {
-    shell: true,
-    stdio: 'inherit',
-    cwd: projectPath,
-  })
+  fs.symlinkSync(packagesPath, path.join(projectPath, 'packages'))
 
   await execa('yarn install', {
     shell: true,
