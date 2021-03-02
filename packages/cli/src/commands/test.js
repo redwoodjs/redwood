@@ -104,7 +104,7 @@ export const handler = async ({
 
     // Create a test database
     if (sides.includes('api')) {
-      await execa(`yarn rw`, ['prisma db push', '--force'], {
+      await execa(`yarn rw`, ['prisma db push', '--accept-data-loss'], {
         cwd: getPaths().api.base,
         stdio: 'inherit',
         shell: true,
