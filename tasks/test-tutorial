@@ -54,7 +54,6 @@ yarn install
 
 if [ -z "$CI" ]
   then
-  # TODO: Figure out how to run these automatically without opening the cypress runner.
   yarn rw dev --fwd="--open=false" & cd "$SCRIPTPATH/e2e"; yarn cypress open --env RW_PATH=$TMP_DIR
   else
   echo "CI env-var set skipping Cypress run."

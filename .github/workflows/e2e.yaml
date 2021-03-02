@@ -18,25 +18,32 @@ jobs:
       - name: Install framework modules
         run: yarn install --frozen-lockfile
 
+      - name: Create a temporary directory
+        id: createpath
+        run: |
+          project_path=$(mktemp -d -t redwood.XXXXXX)
+          echo "::set-output name=project_path::$project_path"
+
       - name: Create a RedwoodJS app
-        # NOTE: This path could be a problem if GitHub actions change something.
-        run: mkdir ./my-redwood-app && ./tasks/test-tutorial /home/runner/work/redwood/redwood/my-redwood-app
+        run: ./tasks/test-tutorial ${{ steps.createpath.outputs.project_path }}
         env:
           CREATE_RWJS_PROJECT: 1
           CI: 1
 
       - name: Start server in background
         run: yarn rw dev &
-        working-directory: /home/runner/work/redwood/redwood/my-redwood-app
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
 
       - name: Cypress run
         uses: cypress-io/github-action@v2
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CYPRESS_RW_PATH: "/home/runner/work/redwood/redwood/my-redwood-app"
-          CYPRESS_pageLoadTimeout: 100000
-          CYPRESS_defaultCommandTimeout: 100000
+          CYPRESS_RW_PATH:  "${{ steps.createpath.outputs.project_path }}"
+          CYPRESS_pageLoadTimeout: 300000
+          CYPRESS_defaultCommandTimeout: 300000
+          CYPRESS_requestTimeout: 300000
         with:
           browser: chrome
           env: true
