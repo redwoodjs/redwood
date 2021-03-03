@@ -31,7 +31,7 @@ export interface BrowserTargetPaths {
   config: string
   webpack: string
   postcss: string
-  storybook: string
+  storybookConfig: string
   dist: string
 }
 
