@@ -112,7 +112,7 @@ export const handler = async ({ force }) => {
          * If it exists, throw an error.
          */
         return writeFile(
-          path.join(getPaths().web.src, '/locales/en.js'),
+          path.join(getPaths().web.src, '/locales/en.json'),
           fs
             .readFileSync(
               path.resolve(__dirname, 'templates', 'en.json.template')
