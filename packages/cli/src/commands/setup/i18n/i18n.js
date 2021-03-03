@@ -78,7 +78,7 @@ export const handler = async ({ force }) => {
     },
     {
       title: 'Adding locale file for French...',
-      task: async () => {
+      task: () => {
         /**
          * Make web/src/locales if it doesn't exist
          * and write fr.json there
@@ -101,7 +101,7 @@ export const handler = async ({ force }) => {
     },
     {
       title: 'Adding locale file for English...',
-      task: async () => {
+      task: () => {
         /**
          * Make web/src/locales if it doesn't exist
          * and write en.json there
