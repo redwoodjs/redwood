@@ -175,7 +175,7 @@ export const handler = async ({ force }) => {
         task.title = `One more thing...\n
           ${c.green('Quick link to the docs:')}\n
           ${chalk.hex('#e8e8e8')(
-            'See this doc for info: https://react.i18next.com/guides/quick-start/'
+            'https://react.i18next.com/guides/quick-start/'
           )}
         `
       },
