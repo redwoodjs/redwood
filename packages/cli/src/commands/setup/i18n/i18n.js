@@ -19,18 +19,34 @@ export const builder = (yargs) => {
   })
 }
 
+const INDEX_JS_PATH = path.join(getPaths().web.src, 'App.js')
+
+const i18nImportsExist = (indexJS) => {
+  let content = indexJS.toString()
+
+  const hasBaseImport = () => /import '.\/i18n'/.test(content)
+
+  return hasBaseImport()
+}
+const i18nConfigExists = () => {
+  return fs.existsSync(path.join(getPaths().web.src, 'i18n.js'))
+}
+const localesExists = (lng) => {
+  return fs.existsSync(path.join(getPaths().web.src.locales, lng + '.json'))
+}
+
 export const handler = async ({ force }) => {
-  const INDEX_JS_PATH = path.join(getPaths().web.src, 'App.js')
   const tasks = new Listr([
     {
       title: 'Installing packages...',
       task: async () => {
         return new Listr([
           {
-            title: 'Install i18n, i18next, and react-i18next',
+            title:
+              'Install i18n, i18next, react-i18next and i18next-browser-languagedetector',
             task: async () => {
               /**
-               * Install i18n, i18next, and react-i18next
+               * Install i18n, i18next, react-i18next and i18next-browser-languagedetector
                */
               await execa('yarn', [
                 'workspace',
@@ -39,6 +55,7 @@ export const handler = async ({ force }) => {
                 'i18n',
                 'i18next',
                 'react-i18next',
+                'i18next-browser-languagedetector',
               ])
             },
           },
@@ -59,21 +76,25 @@ export const handler = async ({ force }) => {
       task: () => {
         /**
          *  Write i18n.js in web/src
-         */
-        /**
-         * TODO:
+         *
          * Check if i18n config already exists.
          * If it exists, throw an error.
          */
-        return writeFile(
-          path.join(getPaths().web.src, 'i18n.js'),
-          fs
-            .readFileSync(
-              path.resolve(__dirname, 'templates', 'i18n.js.template')
-            )
-            .toString(),
-          { overwriteExisting: force }
-        )
+        if (!force && i18nConfigExists()) {
+          throw new Error(
+            'i18n config already exists.\nUse --force to override existing config.'
+          )
+        } else {
+          return writeFile(
+            path.join(getPaths().web.src, 'i18n.js'),
+            fs
+              .readFileSync(
+                path.resolve(__dirname, 'templates', 'i18n.js.template')
+              )
+              .toString(),
+            { overwriteExisting: force }
+          )
+        }
       },
     },
     {
@@ -82,21 +103,25 @@ export const handler = async ({ force }) => {
         /**
          * Make web/src/locales if it doesn't exist
          * and write fr.json there
-         */
-        /**
-         * TODO :
+         *
          * Check if fr.json already exists.
          * If it exists, throw an error.
          */
-        return writeFile(
-          path.join(getPaths().web.src, '/locales/fr.json'),
-          fs
-            .readFileSync(
-              path.resolve(__dirname, 'templates', 'fr.json.template')
-            )
-            .toString(),
-          { overwriteExisting: force }
-        )
+        if (!force && localesExists('fr')) {
+          throw new Error(
+            'fr.json config already exists.\nUse --force to override existing config.'
+          )
+        } else {
+          return writeFile(
+            path.join(getPaths().web.src, '/locales/fr.json'),
+            fs
+              .readFileSync(
+                path.resolve(__dirname, 'templates', 'fr.json.template')
+              )
+              .toString(),
+            { overwriteExisting: force }
+          )
+        }
       },
     },
     {
@@ -105,37 +130,43 @@ export const handler = async ({ force }) => {
         /**
          * Make web/src/locales if it doesn't exist
          * and write en.json there
-         */
-        /**
-         * TODO :
+         *
          * Check if en.json already exists.
          * If it exists, throw an error.
          */
-        return writeFile(
-          path.join(getPaths().web.src, '/locales/en.json'),
-          fs
-            .readFileSync(
-              path.resolve(__dirname, 'templates', 'en.json.template')
-            )
-            .toString(),
-          { overwriteExisting: force }
-        )
+        if (!force && localesExists('en')) {
+          throw new Error(
+            'en.json already exists.\nUse --force to override existing config.'
+          )
+        } else {
+          return writeFile(
+            path.join(getPaths().web.src, '/locales/en.json'),
+            fs
+              .readFileSync(
+                path.resolve(__dirname, 'templates', 'en.json.template')
+              )
+              .toString(),
+            { overwriteExisting: force }
+          )
+        }
       },
     },
     {
       title: 'Adding import to App.js...',
-      task: () => {
+      task: (_ctx, task) => {
         /**
          * Add i18n import to the top of App.js
-         */
-        /**
-         * TODO :
+         *
          * Check if i18n import already exists.
          * If it exists, throw an error.
          */
         let indexJS = fs.readFileSync(INDEX_JS_PATH)
-        indexJS = [`import './i18n'`, indexJS].join(`\n`)
-        fs.writeFileSync(INDEX_JS_PATH, indexJS)
+        if (i18nImportsExist(indexJS)) {
+          task.skip('Imports already exist in index.css')
+        } else {
+          indexJS = [`import './i18n'`, indexJS].join(`\n`)
+          fs.writeFileSync(INDEX_JS_PATH, indexJS)
+        }
       },
     },
     {
@@ -144,7 +175,7 @@ export const handler = async ({ force }) => {
         task.title = `One more thing...\n
           ${c.green('Quick link to the docs:')}\n
           ${chalk.hex('#e8e8e8')(
-            'https://react.i18next.com/guides/quick-start/'
+            'See this doc for info: https://react.i18next.com/guides/quick-start/'
           )}
         `
       },
