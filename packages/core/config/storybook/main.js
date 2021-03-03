@@ -15,13 +15,8 @@ const baseConfig = {
       : require('../webpack.development')
 
     // We replace imports to "@redwoodjs/router" with our own implementation in "@redwoodjs/testing"
-    sbConfig.resolve.alias['@redwoodjs/router$'] = path.join(
-      getPaths().base,
-      'node_modules/@redwoodjs/testing/dist/MockRouter.js'
-    )
-    sbConfig.resolve.alias[
-      '~__REDWOOD__USER_ROUTES_FOR_MOCK'
-    ] = getPaths().web.routes
+    sbConfig.resolve.alias['@redwoodjs/router$'] = path.join(getPaths().base, 'node_modules/@redwoodjs/testing/dist/MockRouter.js')
+    sbConfig.resolve.alias['~__REDWOOD__USER_ROUTES_FOR_MOCK'] = getPaths().web.routes
     sbConfig.resolve.alias['~__REDWOOD__USER_WEB_SRC'] = getPaths().web.src
 
     // Determine the default storybook style file to use.
