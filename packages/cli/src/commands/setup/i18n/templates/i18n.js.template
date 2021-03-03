@@ -1,5 +1,6 @@
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
+import LanguageDetector from 'i18next-browser-languagedetector'
 import fr from './locales/fr.json'
 import en from './locales/en.json'
 
@@ -31,18 +32,22 @@ const HomePage = () => {
 
 export default HomePage
 */
-
-i18n.use(initReactI18next).init({
-  interpolation: { escapeValue: false }, // React already does escaping
-  lng: 'fr',
-  fallbackLng: 'en',
-  resources: {
-    en: {
-      translation: en,
+i18n
+  .use(initReactI18next)
+  // detect user language
+  // learn more: https://github.com/i18next/i18next-browser-languageDetector
+  .use(LanguageDetector)
+  .init({
+    interpolation: { escapeValue: false }, // React already does escaping
+    lng: 'en',
+    fallbackLng: 'en',
+    resources: {
+      en: {
+        translation: en,
+      },
+      fr: {
+        translation: fr,
+      },
     },
-    fr: {
-      translation: fr,
-    },
-  },
-})
+  })
 export default i18n
