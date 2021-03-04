@@ -2,7 +2,8 @@
   "name": "@redwoodjs/api",
   "version": "0.27.1",
   "files": [
-    "dist"
+    "dist",
+    "logger"
   ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
