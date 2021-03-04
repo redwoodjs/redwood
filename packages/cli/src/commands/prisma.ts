@@ -54,8 +54,10 @@ export const builder = async (yargs: Argv) => {
   // Only pass auto flags, when not running help
   if (!hasHelpFlag) {
     if (['migrate', 'db'].includes(argv[0])) {
-      // this is safe as is if a user also adds --preview-feature
-      autoFlags.push('--preview-feature')
+      if (['pull'].includes(argv[0])) {
+        // this is safe as is if a user also adds --preview-feature
+        autoFlags.push('--preview-feature')
+      }
     }
 
     if (
