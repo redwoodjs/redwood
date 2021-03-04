@@ -10,7 +10,8 @@ import { setContext } from 'src/globalContext'
 
 export type GetCurrentUser = (
   decoded: AuthContextPayload[0],
-  raw: AuthContextPayload[1]
+  raw: AuthContextPayload[1],
+  event: AuthContextPayload[2]
 ) => Promise<null | Record<string, unknown> | string>
 
 /**
