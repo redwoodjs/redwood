@@ -28,6 +28,7 @@ const testTutorial = async () => {
   let projectPath = pathToProject
   const frameworkPath = path.join(__dirname, '..')
   const e2ePath = path.join(frameworkPath, 'tasks/e2e')
+  const shouldCreateNewProject = process.env.CREATE_RWJS_PROJECT === '1'
 
   console.log(`📁 ~ projectPath`, projectPath)
   console.log(`🌲 ~ frameworkPath`, frameworkPath)
@@ -44,7 +45,7 @@ const testTutorial = async () => {
       console.log('🗂️  You have supplied the path "${projectPath}" \n')
 
       // For e2e tests in CI
-      if (process.env.CREATE_RWJS_PROJECT === '1') {
+      if (shouldCreateNewProject) {
         createNewRedwoodProject(projectPath, frameworkPath)
       } else {
         // Normally when a path is specified, no need to create a new project
@@ -77,8 +78,10 @@ const testTutorial = async () => {
 
     const packagesPath = path.join(frameworkPath, 'packages')
 
-    // Link packages from framework
-    fs.symlinkSync(packagesPath, path.join(projectPath, 'packages'))
+    // Link packages from framework, but only if creating a new one
+    if (!projectPath || shouldCreateNewProject) {
+      fs.symlinkSync(packagesPath, path.join(projectPath, 'packages'))
+    }
 
     await execa('yarn install', {
       shell: true,
