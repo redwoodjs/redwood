@@ -12,12 +12,21 @@ import Step4_1_DbSchema from './codemods/Step4_1_DbSchema'
 import Step5_1_ComponentsCellBlogPost from './codemods/Step5_1_ComponentsCellBlogPost'
 import Step5_2_ComponentsCellBlogPostTest from './codemods/Step5_2_ComponentsCellBlogPostTest'
 import Step5_3_PagesHome from './codemods/Step5_3_PagesHome'
+import Step6_1_Routes from './codemods/Step6_1_Routes'
+import Step6_2_BlogPostPage from './codemods/Step6_2_BlogPostPage'
+import Step6_3_BlogPostCell from './codemods/Step6_3_BlogPostCell'
+import Step6_3_BlogPostCellTest from './codemods/Step6_3_BlogPostCellTest'
+import Step6_4_BlogPost from './codemods/Step6_4_BlogPost'
+import Step6_4_BlogPostTest from './codemods/Step6_4_BlogPostTest'
+import Step6_5_BlogPostsCell from './codemods/Step6_5_BlogPostsCell'
+import Step6_5_BlogPostsCellMock from './codemods/Step6_5_BlogPostsCellMock'
+import Step7_1_BlogLayout from './codemods/Step7_1_BlogLayout'
+import Step7_2_ContactPage from './codemods/Step7_2_ContactPage'
+import Step7_3_Css from './codemods/Step7_3_Css'
 
 const BASE_DIR = Cypress.env('RW_PATH')
 
 describe('The Redwood Tutorial - Golden path edition', () => {
-  // TODO: https://redwoodjs.com/tutorial/routing-params
-  // TODO: https://redwoodjs.com/tutorial/everyone-s-favorite-thing-to-build-forms
   // TODO: https://redwoodjs.com/tutorial/saving-data
   // TODO: https://redwoodjs.com/tutorial/administration
 
@@ -80,6 +89,8 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     // https://redwoodjs.com/tutorial/getting-dynamic
     cy.writeFile(path.join(BASE_DIR, 'api/db/schema.prisma'), Step4_1_DbSchema)
     cy.exec(`rm ${BASE_DIR}/api/db/dev.db`, { failOnNonZeroExit: false })
+    // need to also handle case where Prisma Client be out of sync
+    cy.exec(`cd ${BASE_DIR}; yarn rw prisma migrate reset --skip-seed --force`)
     cy.exec(`cd ${BASE_DIR}; yarn rw prisma migrate dev`)
 
     cy.exec(`cd ${BASE_DIR}; yarn rw g scaffold post --force`)
@@ -140,5 +151,100 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       // [{"title":"Second post","body":"Hello world!","__typename":"Post"}]
       '"body":"Hello world!"'
     )
+  })
+
+  it('6. Routing Params', () => {
+    // https://redwoodjs.com/tutorial/routing-params
+    cy.exec(`cd ${BASE_DIR}; yarn rw g page BlogPost --force`)
+    cy.exec(`cd ${BASE_DIR}; yarn rw g cell BlogPost --force`)
+    cy.exec(`cd ${BASE_DIR}; yarn rw g component BlogPost --force`)
+
+    cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step6_1_Routes)
+    cy.writeFile(
+      path.join(BASE_DIR, 'web/src/pages/BlogPostPage/BlogPostPage.js'),
+      Step6_2_BlogPostPage
+    )
+    cy.writeFile(
+      path.join(BASE_DIR, 'web/src/components/BlogPostCell/BlogPostCell.js'),
+      Step6_3_BlogPostCell
+    )
+    cy.writeFile(
+      path.join(
+        BASE_DIR,
+        'web/src/components/BlogPostCell/BlogPostCell.test.js'
+      ),
+      Step6_3_BlogPostCellTest
+    )
+    cy.writeFile(
+      path.join(BASE_DIR, 'web/src/components/BlogPost/BlogPost.js'),
+      Step6_4_BlogPost
+    )
+    cy.writeFile(
+      path.join(BASE_DIR, 'web/src/components/BlogPost/BlogPost.test.js'),
+      Step6_4_BlogPostTest
+    )
+    cy.writeFile(
+      path.join(BASE_DIR, 'web/src/components/BlogPostsCell/BlogPostsCell.js'),
+      Step6_5_BlogPostsCell
+    )
+    cy.writeFile(
+      path.join(
+        BASE_DIR,
+        'web/src/components/BlogPostsCell/BlogPostsCell.mock.js'
+      ),
+      Step6_5_BlogPostsCellMock
+    )
+
+    // New entry
+    cy.visit('http://localhost:8910/posts')
+    cy.contains(' New Post').click()
+    cy.get('input#title').type('Third post')
+    cy.get('input#body').type('foo bar')
+    cy.get('button').contains('Save').click()
+
+    cy.visit('http://localhost:8910/')
+
+    // Detail Page
+    cy.contains('Second post').click()
+    cy.get('main').should('contain', 'Hello world!')
+
+    cy.visit('http://localhost:8910/')
+
+    cy.contains('Third post').click()
+    cy.get('main').should('contain', 'foo bar')
+  })
+
+  it("7. Everyone's Favorite Thing to Build: Forms", () => {
+    // https://redwoodjs.com/tutorial/everyone-s-favorite-thing-to-build-forms
+    cy.exec(`cd ${BASE_DIR}; yarn rw g page contact --force`)
+    cy.writeFile(
+      path.join(BASE_DIR, 'web/src/layouts/BlogLayout/BlogLayout.js'),
+      Step7_1_BlogLayout
+    )
+    cy.writeFile(
+      path.join(BASE_DIR, 'web/src/pages/ContactPage/ContactPage.js'),
+      Step7_2_ContactPage
+    )
+    cy.writeFile(
+      path.join(BASE_DIR, 'web/src/index.css'),
+      Step7_3_Css
+    )
+
+    cy.contains('Contact').click()
+    cy.contains('Save').click()
+    cy.get('main').should('contain', 'name is required')
+    cy.get('main').should('contain', 'email is required')
+    cy.get('main').should('contain', 'message is required')
+
+    cy.get('input#email').type('foo bar')
+    cy.contains('Save').click()
+    cy.get('main').should('contain', 'Please enter a valid email address')
+
+    cy.get('input#name').type('test name')
+    cy.get('input#email').type('foo@bar.com')
+    cy.get('textarea#message').type('test message')
+    cy.contains('Save').click()
+    // console
+    // {name: "test name", email: "foo@bar.com", message: "test message"}
   })
 })

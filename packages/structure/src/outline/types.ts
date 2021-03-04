@@ -95,7 +95,9 @@ export type OutlineItemJSON = Omit<OutlineItem, 'children'> & {
 export async function outlineToJSON(
   item: OutlineItem
 ): Promise<OutlineItemJSON> {
-  if (!item.children) return { ...item, children: undefined }
+  if (!item.children) {
+    return { ...item, children: undefined }
+  }
   const cs = item.children ? await item.children() : []
   const css = await Promise.all(cs.map(outlineToJSON))
   return { ...item, children: css }

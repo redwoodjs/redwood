@@ -147,6 +147,7 @@ module.exports = () => {
               ],
             },
           ],
+          ['inline-react-svg'],
         ],
       },
       // ** Files ending in `Cell.[js,ts]` **
@@ -163,6 +164,7 @@ module.exports = () => {
             require('../dist/babelPlugins/babel-plugin-redwood-routes-auto-loader'),
             {
               project,
+              useStaticImports: process.env.__REDWOOD__PRERENDERING === '1',
             },
           ],
         ],

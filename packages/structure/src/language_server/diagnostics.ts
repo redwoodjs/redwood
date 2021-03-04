@@ -39,7 +39,9 @@ export class DiagnosticsManager {
 
   private async getDiagnosticsGroupedByUri() {
     const project = this.server.getProject()
-    if (!project) return {}
+    if (!project) {
+      return {}
+    }
     const ds = await project.collectDiagnostics()
     return ExtendedDiagnostic_groupByUri(ds)
   }

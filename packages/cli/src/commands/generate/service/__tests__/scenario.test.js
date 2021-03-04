@@ -46,7 +46,9 @@ describe('the scenario generator', () => {
   test('parseSchema returns an object with relation fields', async () => {
     const { relations } = await service.parseSchema('UserProfile')
 
-    expect(relations).toEqual({ user: ['userId'] })
+    expect(relations).toEqual({
+      user: { foreignKey: ['userId'], type: 'User' },
+    })
   })
 
   test('parseSchema returns an object with foreign keys', async () => {
