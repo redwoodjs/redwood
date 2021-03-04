@@ -59,7 +59,7 @@ export const builder = async (yargs: Argv) => {
     }
 
     if (
-      ['generate', 'introspect', 'db', 'migrate', 'studio'].includes(argv[0])
+      ['generate', 'pull', 'push', 'db', 'migrate', 'studio'].includes(argv[0])
     ) {
       if (!fs.existsSync(paths.api.dbSchema)) {
         console.error(
@@ -94,7 +94,7 @@ export const builder = async (yargs: Argv) => {
     prismaCommand.stderr?.pipe(process.stderr)
 
     // So we can check for yarn prisma in the output
-    // e.g. yarn prisma introspect
+    // e.g. yarn prisma db pull
     const { stdout } = await prismaCommand
 
     if (hasHelpFlag || stdout?.match('yarn prisma')) {
