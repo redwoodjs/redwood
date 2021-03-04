@@ -76,17 +76,21 @@ const testTutorial = async () => {
     cwd: projectPath,
   })
 
-  await execa('yarn rw dev --fwd="--open=false" &', {
-    shell: true,
-    stdio: 'inherit',
-    cwd: projectPath,
-  })
+  // Make sure rw dev can run
+  fs.chmodSync(path.joins(projectPath, 'node_modules/.bin/rw'))
 
-  // @Note: using env to set RW_PATH does not work correctly
   if (process.env.CI) {
-    console.log('\n ⏩ Skipping cypress open, handled by github workflow')
-    // @TODO should we just use yarn cypress run?
+    console.log(
+      '\n ⏩ Skipping cypress and dev server launch, handled by github workflow'
+    )
   } else {
+    await execa('yarn rw dev --fwd="--open=false" &', {
+      shell: true,
+      stdio: 'inherit',
+      cwd: projectPath,
+    })
+
+    // @Note: using env to set RW_PATH does not work correctly
     await execa('yarn cypress', ['open', `--env RW_PATH=${projectPath}`], {
       shell: true,
       stdio: 'inherit',
