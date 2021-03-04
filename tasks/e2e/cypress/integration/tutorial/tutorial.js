@@ -90,7 +90,9 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     cy.writeFile(path.join(BASE_DIR, 'api/db/schema.prisma'), Step4_1_DbSchema)
     cy.exec(`rm ${BASE_DIR}/api/db/dev.db`, { failOnNonZeroExit: false })
     // need to also handle case where Prisma Client be out of sync
-    cy.exec(`cd ${BASE_DIR}; yarn rw prisma migrate reset --skip-seed --force`)
+    cy.exec(
+      `cd ${BASE_DIR}; yarn rimraf ./api/db/migrations && yarn rw prisma migrate reset --skip-seed --force`
+    )
     cy.exec(`cd ${BASE_DIR}; yarn rw prisma migrate dev`)
 
     cy.exec(`cd ${BASE_DIR}; yarn rw g scaffold post --force`)
@@ -225,10 +227,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       path.join(BASE_DIR, 'web/src/pages/ContactPage/ContactPage.js'),
       Step7_2_ContactPage
     )
-    cy.writeFile(
-      path.join(BASE_DIR, 'web/src/index.css'),
-      Step7_3_Css
-    )
+    cy.writeFile(path.join(BASE_DIR, 'web/src/index.css'), Step7_3_Css)
 
     cy.contains('Contact').click()
     cy.contains('Save').click()
