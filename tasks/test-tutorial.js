@@ -1,3 +1,5 @@
+/* eslint-env node, es6*/
+
 import fs from 'fs'
 import os from 'os'
 import path from 'path'
@@ -25,10 +27,11 @@ const testTutorial = async () => {
   })
 
   if (pathToProject) {
-    console.log(
-      `\n 🗂️  You have supplied the path ${projectPath}, we will not create a new `
-    )
-    console.log('Redwood project, we will use the app you have specified.')
+    console.log([
+       '🗂️  You have supplied the path "${projectPath}",'
+       'because of this we assume that there is a pre-existing Redwood project at this path,'
+       'so we will not create a new redwood project.'
+    ].join('\n'))
   } else {
     console.log('\n ℹ️  You have not supplied a path to a Redwood project.')
     console.log('We will create one for you. \n \n')
@@ -39,6 +42,7 @@ const testTutorial = async () => {
     // Use temporary project path, because no user supplied one
     projectPath = fs.mkdtempSync(path.join(os.tmpdir(), 'redwood-e2e-'))
 
+    console.log('------------------------ start create redwood app -------------------------')
     await execa(
       'yarn babel-node',
       ['src/create-redwood-app.js', projectPath, '--no-yarn-install'],
@@ -49,6 +53,8 @@ const testTutorial = async () => {
       }
     )
   }
+  
+  
 
   // Clean and build framework
   await execa('yarn build:clean && yarn lerna run build:js', {
