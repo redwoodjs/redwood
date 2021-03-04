@@ -6,6 +6,21 @@ import path from 'path'
 
 import execa from 'execa'
 
+const createNewRedwoodProject = async (projectPath, frameworkPath) => {
+  console.log(
+    '------------------------ start create redwood app -------------------------'
+  )
+  await execa(
+    'yarn babel-node',
+    ['src/create-redwood-app.js', projectPath, '--no-yarn-install'],
+    {
+      cwd: path.join(frameworkPath, 'packages/create-redwood-app'),
+      shell: true,
+      stdio: 'inherit',
+    }
+  )
+}
+
 const testTutorial = async () => {
   // First two args are "node" and path to script
   const [, , pathToProject] = process.argv
@@ -26,13 +41,20 @@ const testTutorial = async () => {
     })
 
     if (pathToProject) {
-      console.log(
-        [
-          '🗂️  You have supplied the path "${projectPath}"',
-          'because of this we assume that there is a pre-existing Redwood project at this path',
-          'so we will not create a new redwood project.',
-        ].join('\n')
-      )
+      console.log('🗂️  You have supplied the path "${projectPath}" \n')
+
+      // For e2e tests in CI
+      if (process.env.CREATE_RWJS_PROJECT === '1') {
+        createNewRedwoodProject(projectPath, frameworkPath)
+      } else {
+        // Normally when a path is specified, no need to create a new project
+        console.log(
+          [
+            'Assuming pre-existing Redwood project',
+            'Not creating a new one',
+          ].join('\n')
+        )
+      }
     } else {
       console.log('\n ℹ️  You have not supplied a path to a Redwood project.')
       console.log('We will create one for you. \n \n')
@@ -43,18 +65,7 @@ const testTutorial = async () => {
       // Use temporary project path, because no user supplied one
       projectPath = fs.mkdtempSync(path.join(os.tmpdir(), 'redwood-e2e-'))
 
-      console.log(
-        '------------------------ start create redwood app -------------------------'
-      )
-      await execa(
-        'yarn babel-node',
-        ['src/create-redwood-app.js', projectPath, '--no-yarn-install'],
-        {
-          cwd: path.join(frameworkPath, 'packages/create-redwood-app'),
-          shell: true,
-          stdio: 'inherit',
-        }
-      )
+      createNewRedwoodProject(projectPath, frameworkPath)
     }
 
     // Clean and build framework
