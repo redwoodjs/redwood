@@ -69,17 +69,16 @@ const testTutorial = async () => {
       createNewRedwoodProject(projectPath, frameworkPath)
     }
 
-    // Clean and build framework
-    await execa('yarn build:clean && yarn lerna run build:js', {
-      cwd: frameworkPath,
-      shell: true,
-      stdio: 'inherit',
-    })
-
     const packagesPath = path.join(frameworkPath, 'packages')
 
-    // Link packages from framework, but only if creating a new one
-    if (!projectPath || shouldCreateNewProject) {
+    // Clean, Build, and Link packages from framework, but only if creating a new one
+    if (!pathToProject || shouldCreateNewProject) {
+      await execa('yarn build:clean && yarn lerna run build:js', {
+        cwd: frameworkPath,
+        shell: true,
+        stdio: 'inherit',
+      })
+
       fs.symlinkSync(packagesPath, path.join(projectPath, 'packages'))
     }
 
