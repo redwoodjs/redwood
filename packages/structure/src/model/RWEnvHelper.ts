@@ -56,7 +56,7 @@ export class RWEnvHelper extends BaseNode {
     return this._dotenv('.env.defaults')
   }
 
-  @lazy() get api_pisma_env() {
+  @lazy() get api_prisma_env() {
     return this._dotenv('api/prisma/.env')
   }
 
@@ -83,7 +83,9 @@ export class RWEnvHelper extends BaseNode {
 
   private _dotenv(f: string) {
     const file = join(this.parent.projectRoot, f)
-    if (!existsSync(file)) return undefined
+    if (!existsSync(file)) {
+      return undefined
+    }
     return dotenv.parse(readFileSync(file))
   }
 
@@ -138,7 +140,9 @@ class ProcessDotEnvExpression extends BaseNode {
   }
 
   bailOutOnCollection(uri: string) {
-    if (this.location.uri !== uri) return true
+    if (this.location.uri !== uri) {
+      return true
+    }
     return false
   }
 
@@ -157,11 +161,19 @@ class ProcessDotEnvExpression extends BaseNode {
   }
 
   *ideInfo() {
-    for (const x of this.render()) if (!ExtendedDiagnostic_is(x)) yield x
+    for (const x of this.render()) {
+      if (!ExtendedDiagnostic_is(x)) {
+        yield x
+      }
+    }
   }
 
   *diagnostics() {
-    for (const x of this.render()) if (ExtendedDiagnostic_is(x)) yield x
+    for (const x of this.render()) {
+      if (ExtendedDiagnostic_is(x)) {
+        yield x
+      }
+    }
   }
 
   @lazy() get value_definition_file_basename() {
@@ -169,14 +181,20 @@ class ProcessDotEnvExpression extends BaseNode {
       key,
       parent: { env, env_defaults },
     } = this
-    if (env?.[key]) return '.env'
-    if (env_defaults?.[key]) return '.env.defaults'
+    if (env?.[key]) {
+      return '.env'
+    }
+    if (env_defaults?.[key]) {
+      return '.env.defaults'
+    }
     return undefined
   }
 
   @lazy() get value_definition_location(): Location | undefined {
     const x = this.value_definition_file_basename
-    if (!x) return undefined
+    if (!x) {
+      return undefined
+    }
     const file = join(this.parent.parent.projectRoot, x)
     const content = readFileSync(file).toString()
     const lines = content.split('\n')
@@ -188,7 +206,9 @@ class ProcessDotEnvExpression extends BaseNode {
   }
 
   @lazy() get value_as_available() {
-    if (this.side === 'web') return this.parent.env_available_to_web[this.key]
+    if (this.side === 'web') {
+      return this.parent.env_available_to_web[this.key]
+    }
     const v = this.parent.env_available_to_api[this.key]
     return v
   }
@@ -245,7 +265,9 @@ class ProcessDotEnvExpression extends BaseNode {
         // so the uri (string) is converted to a vscode.Uri
         // https://github.com/microsoft/vscode-languageserver-node/issues/495
         // eslint-disable-next-line no-constant-condition
-        if (false) yield codelens
+        if (false) {
+          yield codelens
+        }
       }
     }
 

@@ -1,9 +1,10 @@
 {
   "name": "@redwoodjs/web",
-  "version": "0.23.0",
+  "version": "0.26.2",
   "files": [
     "dist",
-    "apollo"
+    "apollo",
+    "src/entry"
   ],
   "main": "./dist/index.js",
   "types": "dist/index.d.ts",
@@ -11,12 +12,10 @@
   "dependencies": {
     "@apollo/client": "^3.2.5",
     "@types/react": "^17.0.0",
+    "@redwoodjs/auth": "^0.26.2",
     "core-js": "3.6.5",
     "graphql": "^15.3.0",
     "proptypes": "^1.1.0"
-  },
-  "devDependencies": {
-    "@redwoodjs/auth": "^0.23.0"
   },
   "peerDependencies": {
     "react": "^17.0.1"

@@ -2,8 +2,7 @@ import { join } from 'path'
 
 import { getDMMF } from '@prisma/sdk'
 
-// TODO: re-implement a higher quality version of these in ./project
-import { getPaths, processPagesDir } from '@redwoodjs/internal/dist/paths'
+import { getPaths, processPagesDir } from '@redwoodjs/internal'
 
 import { Host } from '../hosts'
 import { BaseNode } from '../ide'
@@ -94,7 +93,9 @@ export class RWProject extends BaseNode {
   }
   @memo() async prismaDMMFModelNames() {
     const dmmf = await this.prismaDMMF()
-    if (!dmmf) return []
+    if (!dmmf) {
+      return []
+    }
     return dmmf.datamodel.models.map((m) => m.name)
   }
   @lazy() get redwoodTOML(): RWTOML {

@@ -1,3 +1,4 @@
 {
-  "ignoreTestFiles": ["**/codemods/*.js"]
+  "ignoreTestFiles": ["**/codemods/*.js"],
+  "projectId": "ao5sqb"
 }

@@ -105,7 +105,11 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         const typeDefContent = `
           // @ts-expect-error
           declare module '${importGlob.replace('../', 'src/')}';
-        `
+          `
+          .split('\n')
+          .slice(1)
+          .map((line) => line.replace('          ', ''))
+          .join('\n')
         generateTypeDef(`import-dir-${importName}.d.ts`, typeDefContent)
         generateTypeDefIndex()
       },

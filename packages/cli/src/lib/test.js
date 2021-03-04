@@ -1,3 +1,5 @@
+/* eslint-env jest */
+
 // Include at the top of your tests. Automatically mocks out the file system
 //
 // import { loadComponentFixture } from 'src/lib/test'

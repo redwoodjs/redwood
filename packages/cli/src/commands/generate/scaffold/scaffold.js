@@ -1,9 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import boxen from 'boxen'
 import camelcase from 'camelcase'
-import chalk from 'chalk'
 import humanize from 'humanize-string'
 import Listr from 'listr'
 import { paramCase } from 'param-case'
@@ -382,20 +380,20 @@ export const routes = async ({ model: name, path: scaffoldPath = '' }) => {
 }
 
 const addScaffoldImport = () => {
-  const indexJsPath = path.join(getPaths().web.src, 'index.js')
-  let indexJsContents = readFile(indexJsPath).toString()
+  const appJsPath = path.join(getPaths().web.src, 'App.js')
+  let appJsContents = readFile(appJsPath).toString()
 
-  if (indexJsContents.match(SCAFFOLD_STYLE_PATH)) {
+  if (appJsContents.match(SCAFFOLD_STYLE_PATH)) {
     return 'Skipping scaffold style include'
   }
 
-  indexJsContents = indexJsContents.replace(
+  appJsContents = appJsContents.replace(
     "import Routes from 'src/Routes'\n",
     `import Routes from 'src/Routes'\n\nimport '${SCAFFOLD_STYLE_PATH}'`
   )
-  writeFile(indexJsPath, indexJsContents, { overwriteExisting: true })
+  writeFile(appJsPath, appJsContents, { overwriteExisting: true })
 
-  return 'Added scaffold import to index.js'
+  return 'Added scaffold import to App.js'
 }
 
 export const command = 'scaffold <model>'
@@ -449,29 +447,10 @@ export const handler = async ({
   javascript,
 }) => {
   const { model, path } = splitPathAndModel(modelArg)
-
   const t = tasks({ model, path, force, typescript, javascript })
-  const schema = await getSchema(pascalcase(pluralize.singular(model)))
-  const line1 =
-    chalk.bold.yellow('WARNING') +
-    `: Because the data model "${pascalcase(model)}" contains a`
-  const line2 = 'Prisma @relation, the generated CRUD code and test must be'
-  const line3 =
-    'manually modified to work correctly. See this doc for more info:'
-  const line4 = chalk.underline.blue(
-    'https://redwoodjs.com/docs/schema-relations'
-  )
+
   try {
     await t.run()
-    if (relationsForModel(schema).length) {
-      console.log(
-        boxen(line1 + '\n' + line2 + '\n' + line3 + '\n' + line4, {
-          padding: 1,
-          margin: 1,
-          borderStyle: 'single',
-        })
-      )
-    }
   } catch (e) {
     console.log(c.error(e.message))
   }

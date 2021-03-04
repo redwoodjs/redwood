@@ -5,7 +5,6 @@ import { ensurePosixPath } from '@redwoodjs/internal'
 import { getProject } from '@redwoodjs/structure'
 
 import { getPaths } from 'src/lib'
-import c from 'src/lib/colors'
 
 // https://github.com/facebook/create-react-app/blob/cbad256a4aacfc3084be7ccf91aad87899c63564/packages/react-scripts/scripts/test.js#L39
 function isInGitRepository() {
@@ -30,7 +29,12 @@ export const command = 'test [side..]'
 export const description = 'Run Jest tests. Defaults to watch mode'
 export const builder = (yargs) => {
   yargs
-    .choices('side', getProject().sides)
+    .positional('side', {
+      choices: getProject().sides,
+      default: getProject().sides,
+      description: 'Which side(s) to test',
+      type: 'array',
+    })
     .option('watch', {
       describe:
         'Run tests related to changed files based on hg/git. Specify the name or path to a file to focus on a specific set of tests',
@@ -100,22 +104,28 @@ export const handler = async ({
 
     // Create a test database
     if (sides.includes('api')) {
-      await execa.command(`yarn rw db up`, {
-        stdio: 'inherit',
-        shell: true,
-        env: { DATABASE_URL },
-      })
+      await execa(
+        `yarn rw`,
+        ['prisma db push', '--force-reset', '--accept-data-loss'],
+        {
+          cwd: getPaths().api.base,
+          stdio: 'inherit',
+          shell: true,
+          env: { DATABASE_URL },
+        }
+      )
     }
     // **NOTE** There is no official way to run Jest programatically,
     // so we're running it via execa, since `jest.run()` is a bit unstable.
     // https://github.com/facebook/jest/issues/5048
-    execa('yarn jest', args, {
+    await execa('yarn jest', args, {
       cwd: getPaths().base,
       shell: true,
       stdio: 'inherit',
       env: { DATABASE_URL },
     })
   } catch (e) {
-    console.log(c.error(e.message))
+    // Errors already shown from execa inherited stderr
+    process.exit(e?.exitCode || 1)
   }
 }

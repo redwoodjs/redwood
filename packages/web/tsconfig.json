@@ -8,9 +8,8 @@
     "paths": {
       "src/*": ["./src/*"]
     },
-    "allowJs": true
   },
-  "include": ["./src/**/*"],
+  "include": ["./src/**/*", "./global.d.ts"],
   "references": [
     { "path": "../auth" },
   ]

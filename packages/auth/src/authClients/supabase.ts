@@ -11,7 +11,7 @@ export interface AuthClientSupabase extends AuthClient {
    * @param options The user login details.
    * @param options.email The user's email address.
    * @param options.password The user's password.
-   * @param {'bitbucket' | 'github' | 'gitlab' | 'google' | 'azure'} options.provider One of the providers supported by GoTrue.
+   * @param { 'azure' | 'bitbucket' | 'facebook' | 'github' | 'gitlab' | 'google' } options.provider One of the providers supported by GoTrue.
    */
   login(options: {
     email?: string | undefined
@@ -56,7 +56,9 @@ export const supabase = (client: Supabase): AuthClientSupabase => {
         return await client.auth.signIn({ email, password })
       }
       // oauth, such as github, gitlab, bitbucket, google, azure etc.
-      if (provider) return await client.auth.signIn({ provider })
+      if (provider) {
+        return await client.auth.signIn({ provider })
+      }
       throw new Error(
         `You must provide either an email or a third-party provider.`
       )

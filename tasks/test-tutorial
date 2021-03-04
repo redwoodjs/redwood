@@ -16,22 +16,45 @@ yarn install
 
 if [ -z "$1" ]
   then
-  echo "You have not supplied a path to a Redwood project."
+  echo "You have not supplied a path to a RedwoodJS project."
   echo "We will create one for you."
-  echo "We will copy './packages/create-redwood-app/template' and run 'yarn rw upgrade --tag canary'"
-
+  echo "We will copy './packages/create-redwood-app/template' and the packages/*"
   TMP_DIR=$(mktemp -d -t redwood)
-  cd ../../packages/create-redwood-app
-  yarn babel-node dist/create-redwood-app.js $TMP_DIR
-
-  cd $TMP_DIR
-  yarn rw upgrade --tag canary
 else
   echo "You have supplied a path $1, we will not create a new "
   echo "Redwood project, we will use the app you have specified."
   TMP_DIR=$1
 fi
 
+if [[ -z "$1"  || "$CREATE_RWJS_PROJECT" == "1" ]]
+  then
+  echo "Creating new RedwoodJS Project..."
+  cd ../../packages/create-redwood-app
+  yarn babel-node src/create-redwood-app.js $TMP_DIR  --no-yarn-install
+fi
+
+if [[ -z "$1"  || "$CREATE_RWJS_PROJECT" == "1" ]]
+  then
+  cd "$SCRIPTPATH/../"
+  # build all the packages, but not the TypeScript
+  # since it is slow and we do not need it.
+  yarn build:clean && yarn lerna run build:js
+fi
+
 cd $TMP_DIR
 
-yarn rw dev --fwd="--open=false" & cd "$SCRIPTPATH/e2e"; yarn cypress open --env RW_PATH=$TMP_DIR
+if [[ -z "$1" || "$CREATE_RWJS_PROJECT" == "1" ]];
+  then
+  echo "Linking packages from $SCRIPTPATH"
+  # make the e2e tests use the packages from this Redwood Framework Repo.
+  ln -s "$SCRIPTPATH/../packages"
+fi
+
+yarn install
+
+if [ -z "$CI" ]
+  then
+  yarn rw dev --fwd="--open=false" & cd "$SCRIPTPATH/e2e"; yarn cypress open --env RW_PATH=$TMP_DIR
+  else
+  echo "CI env-var set skipping Cypress run."
+fi

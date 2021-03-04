@@ -19,8 +19,12 @@ import {
 import { URL_file } from './URL'
 
 export function Range_contains(range: Range, pos: Position): boolean {
-  if (Position_compare(range.start, pos) === 'greater') return false
-  if (Position_compare(range.end, pos) === 'smaller') return false
+  if (Position_compare(range.start, pos) === 'greater') {
+    return false
+  }
+  if (Position_compare(range.end, pos) === 'smaller') {
+    return false
+  }
   return true
 }
 
@@ -30,11 +34,17 @@ export function Range_overlaps(
   consider0000: boolean
 ): boolean {
   if (consider0000) {
-    if (Range_is0000(range1) || Range_is0000(range2)) return true
+    if (Range_is0000(range1) || Range_is0000(range2)) {
+      return true
+    }
   }
   const { start, end } = range2
-  if (Range_contains(range1, start)) return true
-  if (Range_contains(range2, end)) return true
+  if (Range_contains(range1, start)) {
+    return true
+  }
+  if (Range_contains(range2, end)) {
+    return true
+  }
   return true
 }
 
@@ -47,10 +57,18 @@ export function Position_compare(
   p1: Position,
   p2: Position
 ): 'greater' | 'smaller' | 'equal' {
-  if (p1.line > p2.line) return 'greater'
-  if (p2.line > p1.line) return 'smaller'
-  if (p1.character > p2.character) return 'greater'
-  if (p2.character > p1.character) return 'smaller'
+  if (p1.line > p2.line) {
+    return 'greater'
+  }
+  if (p2.line > p1.line) {
+    return 'smaller'
+  }
+  if (p1.character > p2.character) {
+    return 'greater'
+  }
+  if (p2.character > p1.character) {
+    return 'smaller'
+  }
   return 'equal'
 }
 
@@ -130,10 +148,15 @@ export function LocationLike_toLocation(x: LocationLike): Location {
     return { uri: URL_file(x), range: Range.create(0, 0, 0, 0) }
   }
   if (typeof x === 'object') {
-    if (x instanceof tsm.Node) return Location_fromNode(x)
-    if (Location.is(x)) return x
-    if (ExtendedDiagnostic_is(x))
+    if (x instanceof tsm.Node) {
+      return Location_fromNode(x)
+    }
+    if (Location.is(x)) {
+      return x
+    }
+    if (ExtendedDiagnostic_is(x)) {
       return { uri: x.uri, range: x.diagnostic.range }
+    }
   }
   throw new Error()
 }
@@ -143,7 +166,9 @@ export function Location_overlaps(
   loc2: Location,
   consider0000 = false
 ) {
-  if (loc1.uri !== loc2.uri) return false
+  if (loc1.uri !== loc2.uri) {
+    return false
+  }
   return Range_overlaps(loc1.range, loc2.range, consider0000)
 }
 
@@ -161,10 +186,18 @@ function Position_is00(pos: Position): boolean {
 }
 
 export function ExtendedDiagnostic_is(x: any): x is ExtendedDiagnostic {
-  if (typeof x !== 'object') return false
-  if (typeof x === 'undefined') return false
-  if (typeof x.uri !== 'string') return false
-  if (!Diagnostic.is(x.diagnostic)) return false
+  if (typeof x !== 'object') {
+    return false
+  }
+  if (typeof x === 'undefined') {
+    return false
+  }
+  if (typeof x.uri !== 'string') {
+    return false
+  }
+  if (!Diagnostic.is(x.diagnostic)) {
+    return false
+  }
   return true
 }
 
@@ -213,7 +246,9 @@ export function Position_fromOffset(
   text: string
 ): Position | undefined {
   const res = lc(text).fromIndex(offset)
-  if (!res) return undefined
+  if (!res) {
+    return undefined
+  }
   const { line, col } = res
   return { character: col - 1, line: line - 1 }
 }
@@ -223,7 +258,9 @@ export function Position_fromOffsetOrFail(
   text: string
 ): Position {
   const p = Position_fromOffset(offset, text)
-  if (!p) throw new Error('Position_fromOffsetOrFail')
+  if (!p) {
+    throw new Error('Position_fromOffsetOrFail')
+  }
   return p
 }
 
@@ -264,9 +301,15 @@ export function err(
 }
 
 export function Diagnostic_compare(d1: Diagnostic, d2: Diagnostic): boolean {
-  if (d1.code !== d2.code) return false
-  if (d1.message !== d2.message) return false
-  if (!Range_equals(d1.range, d2.range)) return false
+  if (d1.code !== d2.code) {
+    return false
+  }
+  if (d1.message !== d2.message) {
+    return false
+  }
+  if (!Range_equals(d1.range, d2.range)) {
+    return false
+  }
   return true
 }
 
@@ -312,8 +355,12 @@ export function ExtendedDiagnostic_format(
   const getSeverityLabel = opts?.getSeverityLabel ?? DiagnosticSeverity_getLabel
 
   let base = 'file://'
-  if (cwd) base = URL_file(cwd)
-  if (!base.endsWith('/')) base += '/'
+  if (cwd) {
+    base = URL_file(cwd)
+  }
+  if (!base.endsWith('/')) {
+    base += '/'
+  }
   const file = LocationLike_toTerminalLink(d).substr(base.length)
 
   const severityLabel = getSeverityLabel(severity)
@@ -333,7 +380,9 @@ export function FileSet_fromTextDocuments(
   documents: TextDocuments<TextDocument>
 ) {
   const files: FileSet = {}
-  for (const uri of documents.keys()) files[uri] = documents.get(uri)!.getText()
+  for (const uri of documents.keys()) {
+    files[uri] = documents.get(uri)!.getText()
+  }
   return files
 }
 
@@ -367,9 +416,13 @@ export function WorkspaceEdit_fromFileSet(
 }
 
 export function Range_full(text: string, cr = '\n'): Range {
-  if (text === '') return Range.create(0, 0, 0, 0)
+  if (text === '') {
+    return Range.create(0, 0, 0, 0)
+  }
   const lines = text.split(cr)
-  if (lines.length === 0) return Range.create(0, 0, 0, 0)
+  if (lines.length === 0) {
+    return Range.create(0, 0, 0, 0)
+  }
   const start = Position.create(0, 0)
   const end = Position.create(lines.length - 1, lines[lines.length - 1].length)
   return Range.create(start, end)
