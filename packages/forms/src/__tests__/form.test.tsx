@@ -17,6 +17,8 @@ import {
   NumberField,
   CheckboxField,
   TextAreaField,
+  DatetimeLocalField,
+  DateField,
   Submit,
 } from '../index'
 
@@ -24,12 +26,16 @@ describe('Form', () => {
   const TestComponent = ({ onSubmit = () => {} }) => {
     return (
       <Form onSubmit={onSubmit}>
-        <TextField name="tf" defaultValue="text" />
-        <NumberField name="nf" defaultValue="42" />
-        <TextField name="ff" defaultValue="3.14" transformValue="Float" />
-        <CheckboxField name="cf" defaultChecked={true} />
+        <TextField name="text" defaultValue="text" />
+        <NumberField name="number" defaultValue="42" />
+        <TextField
+          name="floatText"
+          defaultValue="3.14"
+          transformValue="Float"
+        />
+        <CheckboxField name="checkbox" defaultChecked={true} />
         <TextAreaField
-          name="jf"
+          name="json"
           transformValue="Json"
           defaultValue={`
             {
@@ -39,6 +45,11 @@ describe('Form', () => {
             }
           `}
         />
+        <DatetimeLocalField
+          name="datetimeLocal"
+          defaultValue="2021-04-16T12:34"
+        />
+        <DateField name="date" defaultValue="2021-04-16" />
         <Submit>Save</Submit>
       </Form>
     )
@@ -118,15 +129,17 @@ describe('Form', () => {
     await waitFor(() => expect(mockFn).toHaveBeenCalledTimes(1))
     expect(mockFn).toBeCalledWith(
       {
-        tf: 'texttext',
-        nf: 4224, // i.e. NOT "4224"
-        ff: 3.141592,
-        cf: true,
-        jf: {
+        text: 'texttext',
+        number: 4224, // i.e. NOT "4224"
+        floatText: 3.141592,
+        checkbox: true,
+        json: {
           key_one: 'value1',
           key_two: 2,
           false: false,
         },
+        datetimeLocal: new Date('2021-04-16T12:34').toISOString(),
+        date: new Date('2021-04-16').toISOString(),
       },
       expect.anything() // event that triggered the onSubmit call
     )
