@@ -12,13 +12,11 @@
     "core-js": "3.6.5",
     "lodash.isequal": "^4.5.0"
   },
-  "peerDependencies": {
-    "react": "*"
-  },
   "devDependencies": {
     "@types/lodash.isequal": "^4.5.5",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "prop-types": "^15.7.2",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",

@@ -1,6 +1,6 @@
 datasource DS {
   provider = "postgresql"
-  url = env("DB_HOST")
+  url      = env("DB_HOST")
 }
 
 generator client {
@@ -11,13 +11,13 @@ generator client {
 // migrations for them.
 
 model Post {
-  id       Int      @id @default(autoincrement())
+  id       Int       @id @default(autoincrement())
   title    String
-  slug     String @unique
+  slug     String    @unique
   author   String
   body     String
   image    String?
-  isPinned Boolean @default(false)
+  isPinned Boolean   @default(false)
   readTime Int
   rating   Float?
   postedAt DateTime?
@@ -25,10 +25,10 @@ model Post {
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
+  id       Int           @id @default(autoincrement())
   name     String?
-  email    String  @unique
-  isAdmin  Boolean @default(false)
+  email    String        @unique
+  isAdmin  Boolean       @default(false)
   profiles UserProfile[]
 }
 
@@ -40,26 +40,27 @@ model UserProfile {
 }
 
 model Product {
-  id   Int @id @default(autoincrement())
-  tags TagsOnProducts[]
+  id      Int              @id @default(autoincrement())
+  tags    TagsOnProducts[]
+  Feature Feature[]
 }
 
 model TagsOnProducts {
-  id        Int @id @default(autoincrement())
+  id        Int     @id @default(autoincrement())
   tagId     Int
-  tag       Tag @relation(fields: [tagId], references: [id])
+  tag       Tag     @relation(fields: [tagId], references: [id])
   productId Int
   product   Product @relation(fields: [productId], references: [id])
 }
 
 model Tag {
-  id       Int @id @default(autoincrement())
+  id       Int              @id @default(autoincrement())
   name     String
   products TagsOnProducts[]
 }
 
 model Feature {
-  id          Int @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   inventoryId Int
   inventory   Product @relation(fields: [inventoryId], references: [id])
 }
