@@ -19,10 +19,10 @@ export const builder = (yargs) => {
   })
 }
 
-const INDEX_JS_PATH = path.join(getPaths().web.src, 'App.js')
+const APP_JS_PATH = path.join(getPaths().web.src, 'App.js')
 
-const i18nImportsExist = (indexJS) => {
-  let content = indexJS.toString()
+const i18nImportsExist = (appJS) => {
+  let content = appJS.toString()
 
   const hasBaseImport = () => /import '.\/i18n'/.test(content)
 
@@ -160,12 +160,12 @@ export const handler = async ({ force }) => {
          * Check if i18n import already exists.
          * If it exists, throw an error.
          */
-        let indexJS = fs.readFileSync(INDEX_JS_PATH)
-        if (i18nImportsExist(indexJS)) {
+        let appJS = fs.readFileSync(APP_JS_PATH)
+        if (i18nImportsExist(appJS)) {
           task.skip('Imports already exist in index.css')
         } else {
-          indexJS = [`import './i18n'`, indexJS].join(`\n`)
-          fs.writeFileSync(INDEX_JS_PATH, indexJS)
+          appJS = [`import './i18n'`, appJS].join(`\n`)
+          fs.writeFileSync(APP_JS_PATH, appJS)
         }
       },
     },
