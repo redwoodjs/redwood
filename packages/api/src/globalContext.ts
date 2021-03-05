@@ -54,6 +54,8 @@ export const setContext = (newContext: GlobalContext): GlobalContext => {
   GLOBAL_CONTEXT = newContext
 
   if (usePerRequestContext()) {
+    // re-init the proxy, so that calls to `console.log(context)`is the full object
+    // not the one initilazed earlier.
     context = createContextProxy()
     const store = PER_REQUEST_CONTEXT?.getStore()
     if (!store) {
@@ -64,7 +66,6 @@ export const setContext = (newContext: GlobalContext): GlobalContext => {
     store.set('context', GLOBAL_CONTEXT)
   } else {
     context = GLOBAL_CONTEXT
-    // re-init the proxy.
   }
   return context
 }
