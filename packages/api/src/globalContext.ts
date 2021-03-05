@@ -23,10 +23,9 @@ let PER_REQUEST_CONTEXT:
   | AsyncLocalStorage<Map<string, GlobalContext>> = undefined
 
 export const usePerRequestContext = () =>
-  process.env.SAFE_GLOBAL_CONTEXT === '1'
+  process.env.SAFE_GLOBAL_CONTEXT !== '1'
 
 export const initPerRequestContext = () => {
-  // We have to convert "GLOBAL CONTEXT" to a proxy.
   GLOBAL_CONTEXT = {}
   PER_REQUEST_CONTEXT = new AsyncLocalStorage()
   return PER_REQUEST_CONTEXT
@@ -55,9 +54,6 @@ export const setContext = (newContext: GlobalContext): GlobalContext => {
   GLOBAL_CONTEXT = newContext
 
   if (usePerRequestContext()) {
-    context = GLOBAL_CONTEXT
-  } else {
-    // re-init the proxy.
     context = createContextProxy()
     const store = PER_REQUEST_CONTEXT?.getStore()
     if (!store) {
@@ -66,6 +62,9 @@ export const setContext = (newContext: GlobalContext): GlobalContext => {
       )
     }
     store.set('context', GLOBAL_CONTEXT)
+  } else {
+    context = GLOBAL_CONTEXT
+    // re-init the proxy.
   }
   return context
 }
