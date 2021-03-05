@@ -23,7 +23,7 @@
     "concurrently": "^5.1.0",
     "core-js": "3.6.5",
     "cross-env": "^7.0.2",
-    "decamelize": "^4.0.0",
+    "decamelize": "^5.0.0",
     "dotenv-defaults": "^2.0.1",
     "envinfo": "^7.7.3",
     "execa": "^5.0.0",
