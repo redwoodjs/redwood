@@ -5,8 +5,12 @@ import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 
 import type { AuthContextPayload } from 'src/auth'
 import { getAuthenticationContext } from 'src/auth'
-import { GlobalContext, initPerRequestContext } from 'src/globalContext'
-import { setContext, useStandardGlobalContext } from 'src/globalContext'
+import {
+  GlobalContext,
+  setContext,
+  initPerRequestContext,
+  usePerRequestContext,
+} from 'src/globalContext'
 
 export type GetCurrentUser = (
   decoded: AuthContextPayload[0],
@@ -126,7 +130,7 @@ export const createGraphQLHandler = ({
     context: LambdaContext,
     callback: any
   ): void => {
-    if (useStandardGlobalContext()) {
+    if (usePerRequestContext()) {
       // This must be used when you're self-hosting RedwoodJS.
       const localAsyncStorage = initPerRequestContext()
       localAsyncStorage.run(new Map(), () => {
