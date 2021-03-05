@@ -31,7 +31,7 @@
     "humanize-string": "^2.1.0",
     "listr": "^0.14.3",
     "listr-verbose-renderer": "^0.6.0",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "param-case": "^3.0.3",
     "pascalcase": "^1.0.0",
     "pluralize": "^8.0.0",
