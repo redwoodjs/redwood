@@ -1,0 +1,52 @@
+name: Cypress E2E tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  cypress-run:
+    if: github.repository == 'redwoodjs/redwood'
+    runs-on: ubuntu-16.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Install framework modules
+        run: yarn install --frozen-lockfile
+
+      - name: Create a temporary directory
+        id: createpath
+        run: |
+          project_path=$(mktemp -d -t redwood.XXXXXX)
+          echo "::set-output name=project_path::$project_path"
+
+      - name: Create a RedwoodJS app
+        run: ./tasks/test-tutorial ${{ steps.createpath.outputs.project_path }}
+        env:
+          CREATE_RWJS_PROJECT: 1
+          CI: 1
+
+      - name: Start server in background
+        run: yarn rw dev &
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CYPRESS_RW_PATH:  "${{ steps.createpath.outputs.project_path }}"
+          CYPRESS_pageLoadTimeout: 300000
+          CYPRESS_defaultCommandTimeout: 300000
+          CYPRESS_requestTimeout: 300000
+        with:
+          browser: chrome
+          env: true
+          wait-on: 'http://localhost:8910'
+          record: true
+          working-directory: ./tasks/e2e
