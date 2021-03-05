@@ -12,7 +12,7 @@ describe('global context handlers', () => {
     process.env.SAFE_GLOBAL_CONTEXT = '0'
   })
 
-  it('merges the apollo resovler and global context correctly', async () => {
+  it('merges the apollo resolver and global context correctly', async () => {
     const handler = createContextHandler({ a: 1 })
     // @ts-ignore
 
@@ -101,7 +101,7 @@ describe('per request context handlers', () => {
     })
   })
 
-  it('maintains seperate contexts for each request', (done) => {
+  it('maintains separate contexts for each request', (done) => {
     const localAsyncStorage = initPerRequestContext()
 
     // request 1 and request 2...

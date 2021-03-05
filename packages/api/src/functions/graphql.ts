@@ -142,7 +142,7 @@ export const createGraphQLHandler = ({
         }
       })
     } else {
-      // This is OK for AWS (Netlify/ Vercel) because each Lambda request
+      // This is OK for AWS (Netlify/Vercel) because each Lambda request
       // is handled individually.
       try {
         handler(event, context, callback)

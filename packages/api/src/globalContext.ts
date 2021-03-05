@@ -4,6 +4,7 @@
 // a process is not reused until a request is completed.
 //
 // Which means that each `global.context` is scoped to the lifetime of each request.
+// This makes it safe to use the global context for Redwood Functions.
 
 // However when not in AWS Lambda, NodeJS is single-threaded, you must use the
 // per-request global context, otherwise you risk a race-condition
@@ -54,8 +55,8 @@ export const setContext = (newContext: GlobalContext): GlobalContext => {
   GLOBAL_CONTEXT = newContext
 
   if (usePerRequestContext()) {
-    // re-init the proxy, so that calls to `console.log(context)`is the full object
-    // not the one initilazed earlier.
+    // re-init the proxy, so that calls to `console.log(context)` is the full object
+    // not the one initialized earlier.
     context = createContextProxy()
     const store = PER_REQUEST_CONTEXT?.getStore()
     if (!store) {
