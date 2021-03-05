@@ -32,7 +32,7 @@ const i18nConfigExists = () => {
   return fs.existsSync(path.join(getPaths().web.src, 'i18n.js'))
 }
 const localesExists = (lng) => {
-  return fs.existsSync(path.join(getPaths().web.src.locales, lng + '.json'))
+  return fs.existsSync(path.join(getPaths().web.src, 'locales', lng + '.json'))
 }
 
 export const handler = async ({ force }) => {
@@ -98,6 +98,7 @@ export const handler = async ({ force }) => {
          * Check if fr.json already exists.
          * If it exists, throw an error.
          */
+
         if (!force && localesExists('fr')) {
           throw new Error(
             'fr.json config already exists.\nUse --force to override existing config.'
