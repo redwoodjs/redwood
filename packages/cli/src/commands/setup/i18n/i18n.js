@@ -162,7 +162,7 @@ export const handler = async ({ force }) => {
          */
         let indexJS = fs.readFileSync(INDEX_JS_PATH)
         if (i18nImportsExist(indexJS)) {
-          task.skip('Imports already exist in index.css')
+          task.skip('Import already exists in App.js')
         } else {
           indexJS = [`import './i18n'`, indexJS].join(`\n`)
           fs.writeFileSync(INDEX_JS_PATH, indexJS)
