@@ -205,6 +205,8 @@ const componentFiles = async (name, scaffoldPath = '') => {
       displayFunction: 'checkboxInputTag',
     },
     DateTime: {
+      componentName: 'DatetimeLocalField',
+      deserilizeFunction: 'formatDatetime',
       listDisplayFunction: 'timeTag',
       displayFunction: 'timeTag',
     },
