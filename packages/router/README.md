@@ -6,10 +6,6 @@ This is the built-in router for Redwood apps. It takes inspiration from Ruby on 
 
 Redwood Router (RR from now on) is designed to list all routes in a single file, without any nesting. We prefer this design, as it makes it very easy to track which routes map to which pages.
 
-## Installation
-
-RR was designed for use in Redwood apps, and if you use `yarn create-redwood-app` it will be installed for you. The rest of the documentation here will use examples that are appropriate in that context.
-
 ## Router and Route
 
 The first thing you need is a `Router`. It will contain all of your routes. RR will attempt to match the current URL to each route in turn, stopping when it finds a match, and rendering that route only. The only exception to this is the `notfound` route, which can be placed anywhere in the list and only matches when no other routes do.
