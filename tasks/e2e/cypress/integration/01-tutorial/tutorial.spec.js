@@ -246,21 +246,4 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     // console
     // {name: "test name", email: "foo@bar.com", message: "test message"}
   })
-
-  it('Misc A. Should run tests successfully', async () => {
-    // Check if tests run
-    const { code, stdout, stderr } = await cy.exec(
-      `cd ${BASE_DIR}; yarn rw test --no-watch`
-    )
-
-    expect(code).should('eq', 0)
-    expect(stderr).should('be.empty')
-    expect(stdout).should('contain', '')
-
-    // // Check if build works
-    // cy.exec(`cd ${BASE_DIR}; yarn rw build --no-prerender`)
-
-    // // Check if prerender is working
-    // cy.exec(`cd ${BASE_DIR}; yarn rw prerender --dry-run`)
-  })
 })
