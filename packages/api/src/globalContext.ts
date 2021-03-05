@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+
 // AWS Lambda run each request in a new process,
 // a process is not reused until a request is completed.
 //
@@ -9,55 +11,61 @@
 //
 // Alternatively only use the local `context` in a graphql resolver.
 
+import { AsyncLocalStorage } from 'async_hooks'
+
 export interface GlobalContext {
   [key: string]: unknown
 }
 
-import { AsyncLocalStorage } from 'async_hooks'
+let GLOBAL_CONTEXT: GlobalContext = {}
+let PER_REQUEST_CONTEXT:
+  | undefined
+  | AsyncLocalStorage<Map<string, GlobalContext>> = undefined
 
-export let asyncLocalStorage:
-  | AsyncLocalStorage<Map<string, GlobalContext>>
-  | undefined = undefined
-export const initGlobalContext = () => {
-  if (process.env.SAFE_GLOBAL_CONTEXT !== '1') {
-    asyncLocalStorage = new AsyncLocalStorage()
-    return asyncLocalStorage
-  }
-  return undefined
+export const usePerRequestContext = () =>
+  process.env.SAFE_GLOBAL_CONTEXT === '1'
+
+export const initPerRequestContext = () => {
+  // We have to convert "GLOBAL CONTEXT" to a proxy.
+  GLOBAL_CONTEXT = {}
+  PER_REQUEST_CONTEXT = new AsyncLocalStorage()
+  return PER_REQUEST_CONTEXT
 }
 
-let GLOBAL_CONTEXT: GlobalContext = {}
-export const context = new Proxy<GlobalContext>(GLOBAL_CONTEXT, {
-  get: (_target, property: string) => {
-    if (process.env.SAFE_GLOBAL_CONTEXT === '1') {
-      return GLOBAL_CONTEXT[property]
-    } else {
-      const store = asyncLocalStorage?.getStore()
+export const createContextProxy = () => {
+  return new Proxy<GlobalContext>(GLOBAL_CONTEXT, {
+    get: (_target, property: string) => {
+      const store = PER_REQUEST_CONTEXT?.getStore()
       if (!store) {
         throw new Error(
           'Async local storage is not initialized. Call `initGlobalContext` before attempting to read from the store.'
         )
       }
       return store.get('context')?.[property]
-    }
-  },
-})
+    },
+  })
+}
+
+export let context: GlobalContext = {}
 
 /**
  * Replace the existing global context.
  */
 export const setContext = (newContext: GlobalContext): GlobalContext => {
-  if (process.env.SAFE_GLOBAL_CONTEXT === '1') {
-    GLOBAL_CONTEXT = newContext
+  GLOBAL_CONTEXT = newContext
+
+  if (usePerRequestContext()) {
+    context = GLOBAL_CONTEXT
   } else {
-    const store = asyncLocalStorage?.getStore()
+    // re-init the proxy.
+    context = createContextProxy()
+    const store = PER_REQUEST_CONTEXT?.getStore()
     if (!store) {
       throw new Error(
-        'Async local storage is not initialized. Call `initGlobalContext` before attempting to read from the store.'
+        'Per request context is not initialized, please use `initPerRequestContext`'
       )
     }
-    store.set('context', newContext)
+    store.set('context', GLOBAL_CONTEXT)
   }
-
-  return newContext
+  return context
 }

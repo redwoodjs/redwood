@@ -5,8 +5,8 @@ import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 
 import type { AuthContextPayload } from 'src/auth'
 import { getAuthenticationContext } from 'src/auth'
-import type { GlobalContext } from 'src/globalContext'
-import { setContext, initGlobalContext } from 'src/globalContext'
+import { GlobalContext, initPerRequestContext } from 'src/globalContext'
+import { setContext, useStandardGlobalContext } from 'src/globalContext'
 
 export type GetCurrentUser = (
   decoded: AuthContextPayload[0],
@@ -126,10 +126,9 @@ export const createGraphQLHandler = ({
     context: LambdaContext,
     callback: any
   ): void => {
-    const localAsyncStorage = initGlobalContext()
-
-    if (localAsyncStorage) {
-      // Single thread self hosted context.
+    if (useStandardGlobalContext()) {
+      // This must be used when you're self-hosting RedwoodJS.
+      const localAsyncStorage = initPerRequestContext()
       localAsyncStorage.run(new Map(), () => {
         try {
           handler(event, context, callback)
@@ -139,7 +138,8 @@ export const createGraphQLHandler = ({
         }
       })
     } else {
-      // AWS Lambda context
+      // This is OK for AWS (Netlify/ Vercel) because each Lambda request
+      // is handled individually.
       try {
         handler(event, context, callback)
       } catch (e) {
