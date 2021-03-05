@@ -109,12 +109,14 @@ describe('per request context handlers', () => {
     // request 2 is fast!
     // they should have different contexts.
 
+    let request2Complete = false
     localAsyncStorage.run(new Map(), async () => {
       const handler = createContextHandler({ request: 1 })
       // @ts-ignore
       await handler({ context: { favoriteFood: 'cheese' } })
       setTimeout(() => {
         expect(context).toMatchObject({ request: 1, favoriteFood: 'cheese' })
+        expect(request2Complete).toBeTruthy()
         done()
       }, 1)
     })
@@ -123,7 +125,7 @@ describe('per request context handlers', () => {
       const handler = createContextHandler({ request: 2 })
       // @ts-ignore
       await handler({ context: { favoriteFood: 'cake' } })
-      console.log('me first')
+      request2Complete = true
       expect(context).toMatchObject({ request: 2, favoriteFood: 'cake' })
     })
   })
