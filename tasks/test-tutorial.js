@@ -5,6 +5,7 @@ import os from 'os'
 import path from 'path'
 
 import execa from 'execa'
+import rimraf from 'rimraf'
 
 const createNewRedwoodProject = async (projectPath, frameworkPath) => {
   console.log(
@@ -70,6 +71,7 @@ const testTutorial = async () => {
     }
 
     const packagesPath = path.join(frameworkPath, 'packages')
+    const symlinkPath = path.join(projectPath, 'packages')
 
     // Clean, Build, and Link packages from framework, but only if creating a new one
     if (!pathToProject || shouldCreateNewProject) {
@@ -79,7 +81,15 @@ const testTutorial = async () => {
         stdio: 'inherit',
       })
 
-      fs.symlinkSync(packagesPath, path.join(projectPath, 'packages'))
+      if (
+        fs.existsSync(symlinkPath) &&
+        fs.lstatSync(symlinkPath).isSymbolicLink()
+      ) {
+        console.log('⚠️  Removing old symlink. Will recreate a new one')
+        rimraf.sync(symlinkPath)
+      }
+
+      fs.symlinkSync(packagesPath, symlinkPath)
     }
 
     await execa('yarn install', {
