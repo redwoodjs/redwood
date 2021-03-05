@@ -59,15 +59,6 @@ export const handler = async ({ force }) => {
               ])
             },
           },
-          {
-            title: 'Sync yarn.lock and node_modules',
-            task: async () => {
-              /**
-               * Sync yarn.lock file and node_modules folder.
-               */
-              await execa('yarn', ['install', '--check-files'])
-            },
-          },
         ])
       },
     },
@@ -162,7 +153,7 @@ export const handler = async ({ force }) => {
          */
         let appJS = fs.readFileSync(APP_JS_PATH)
         if (i18nImportsExist(appJS)) {
-          task.skip('Imports already exist in index.css')
+          task.skip('Import already exists in App.js')
         } else {
           appJS = [`import './i18n'`, appJS].join(`\n`)
           fs.writeFileSync(APP_JS_PATH, appJS)
