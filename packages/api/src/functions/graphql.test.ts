@@ -116,6 +116,7 @@ describe('per request context handlers', () => {
       await handler({ context: { favoriteFood: 'cheese' } })
       setTimeout(() => {
         expect(context).toMatchObject({ request: 1, favoriteFood: 'cheese' })
+        // If this isn't true, then we might need to increase the timeouts
         expect(request2Complete).toBeTruthy()
         done()
       }, 1)
