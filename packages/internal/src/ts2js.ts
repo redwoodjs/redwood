@@ -13,7 +13,7 @@ import { getPaths } from './paths'
  * @param {string} cwd - The base path to the project.
  */
 export const convertTsProjectToJs = (cwd = getPaths().base) => {
-  const files = typeScriptSourceFiles()
+  const files = typeScriptSourceFiles(cwd)
   for (const f of files) {
     const code = transformTSToJS(f)
     if (code) {
@@ -37,13 +37,13 @@ export const convertTsProjectToJs = (cwd = getPaths().base) => {
 }
 
 /**
- * Get all the source code from a Redwood application.
+ * Get all the source code from a Redwood app
  */
-export const typeScriptSourceFiles = () => {
+export const typeScriptSourceFiles = (cwd: string) => {
   // TODO: When sides are expanded read the `api` and `web` string instead
   // of hard-coding them.
   return glob.sync('{api,web}/src/**/*.{ts,tsx}', {
-    cwd: getPaths().base,
+    cwd,
   })
 }
 
