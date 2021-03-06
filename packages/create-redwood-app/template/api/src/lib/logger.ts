@@ -9,7 +9,7 @@ export const logger = createLogger({
 })
 
 /*
- * Examples oh how to configure and
+ * Examples of how to configure and
  * send to log transport streams
 /*
 
@@ -43,15 +43,13 @@ export const logger = createLogger({
 // })
 
 /**
- * Datadog example
+ * Stream logs to Datadog
  */
 // import datadog from 'pino-datadog'
-
 // /**
-//  * Creates a pino-logflare stream
+//  * Creates a synchronous pino-datadog stream
 //  *
-//  * @param {string} apiKey - Your logFlare API Key
-//  * @param {string} sourceToken - Your logFlare source token id
+//  * @param {object} options - Datadog options including your account's API Key
 //  *
 //  * @typedef {DestinationStream}
 //  */
@@ -68,15 +66,15 @@ export const logger = createLogger({
 // })
 
 /**
- * logFlare Example
+ * Stream logs to logFlare
  */
 // import { createWriteStream } from 'pino-logflare'
 
 // /**
 //  * Creates a pino-logflare stream
 //  *
-//  * @param {string} apiKey - Your logFlare API Key
-//  * @param {string} sourceToken - Your logFlare source token id
+//  * @param {object} options - logFlare options including
+//  * your account's logFlare API Key and source token id
 //  *
 //  * @typedef {DestinationStream}
 //  */
