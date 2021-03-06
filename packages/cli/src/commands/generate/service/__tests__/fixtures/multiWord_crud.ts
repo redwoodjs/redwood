@@ -1,22 +1,18 @@
-import {
-  UserProfileWhereUniqueInput,
-  UserProfileCreateInput,
-  UserProfileUpdateInput,
-} from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { db } from 'src/lib/db'
 
 export const userProfiles = () => {
   return db.userProfile.findMany()
 }
 
-export const userProfile = ({ id }: UserProfileWhereUniqueInput) => {
+export const userProfile = ({ id }: Prisma.UserProfileWhereUniqueInput) => {
   return db.userProfile.findUnique({
     where: { id },
   })
 }
 
 interface CreateUserProfileArgs {
-  input: UserProfileCreateInput
+  input: Prisma.UserProfileCreateInput
 }
 
 export const createUserProfile = ({ input }: CreateUserProfileArgs) => {
@@ -26,8 +22,8 @@ export const createUserProfile = ({ input }: CreateUserProfileArgs) => {
 }
 
 interface UpdateUserProfileArgs {
-  where: UserProfileWhereUniqueInput
-  input: UserProfileUpdateInput
+  where: Prisma.UserProfileWhereUniqueInput
+  input: Prisma.UserProfileUpdateInput
 }
 
 export const updateUserProfile = ({ id, input }: UpdateUserProfileArgs) => {
@@ -37,7 +33,7 @@ export const updateUserProfile = ({ id, input }: UpdateUserProfileArgs) => {
   })
 }
 
-export const deleteUserProfile = ({ id }: UserProfileWhereUniqueInput) => {
+export const deleteUserProfile = ({ id }: Prisma.UserProfileWhereUniqueInput) => {
   return db.userProfile.delete({
     where: { id },
   })
