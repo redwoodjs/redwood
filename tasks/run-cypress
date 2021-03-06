@@ -1,0 +1,180 @@
+#!/usr/bin/env node
+/* eslint-env node, es6*/
+
+const os = require('os')
+const path = require('path')
+
+const execa = require('execa')
+const fs = require('fs-extra')
+
+// CI workflow
+
+// Create a new project in a specific directory, do not install packages.
+// Build the RedwoodJS framework.
+// Copy the RedwoodJS packages.
+// Run yarn install.
+// Start up the dev-server
+// Let Cypress handle everything
+
+// User's workflow
+
+// a)
+// Run the script
+// Create a temporary directory
+// Copy the RedwoodJS packages
+// Run yarn install
+// Start the dev-server
+// Start Cypress' test runner.
+
+// b) --no-framework-files
+// Run the script with a directory specified.
+// Start the dev-server
+// Start the Cypress test-runner.
+
+const REDWOODJS_FRAMEWORK_PATH = path.resolve(__dirname, '..')
+
+const makeTmpDirectory = () => {
+  const tmpDir = path.join(os.tmpdir(), 'redwood-e2e', new Date().toISOString())
+  console.log(tmpDir)
+  fs.mkdirSync(tmpDir, { recursive: true })
+  return tmpDir
+}
+
+const buildRedwoodJSFramework = () => {
+  try {
+    execa.sync('yarn build:clean && yarn lerna run build:js', {
+      cwd: REDWOODJS_FRAMEWORK_PATH,
+      shell: true,
+      stdio: 'inherit',
+    })
+  } catch (e) {
+    console.error('Could not build RedwoodJS framework')
+    console.error(e)
+    process.exit(1)
+  }
+}
+
+const createRedwoodJSApp = (appPath) => {
+  try {
+    execa.sync(
+      'yarn babel-node src/create-redwood-app.js',
+      [appPath, '--no-yarn-install', '--no-javascript'],
+      {
+        cwd: path.join(REDWOODJS_FRAMEWORK_PATH, 'packages/create-redwood-app'),
+        shell: true,
+        stdio: 'inherit',
+      }
+    )
+  } catch (e) {
+    console.error('Could not build RedwoodJS framework')
+    console.error(e)
+    process.exit(1)
+  }
+}
+
+const copyFrameworkPackages = (appPath) => {
+  try {
+    console.log(
+      'cp -r',
+      path.join(REDWOODJS_FRAMEWORK_PATH, 'packages'),
+      path.join(appPath, 'packages')
+    )
+    execa.sync(
+      'cp',
+      [
+        '-r',
+        path.join(REDWOODJS_FRAMEWORK_PATH, 'packages'),
+        path.join(appPath, 'packages'),
+      ],
+      {
+        shell: true,
+        stdio: 'inherit',
+      }
+    )
+  } catch (e) {
+    console.error('We could not copy the RedwoodJS framework packages')
+    console.error(e)
+    process.exit(1)
+  }
+}
+
+const runYarnInstall = (appPath) => {
+  try {
+    execa.sync('yarn install', {
+      cwd: appPath,
+      shell: true,
+      stdio: 'inherit',
+    })
+  } catch (e) {
+    console.error('Could not run `yarn install`')
+    console.error(e)
+    process.exit(1)
+  }
+}
+
+const convertProjectToJavaScript = (appPath) => {
+  try {
+    execa.sync('yarn rwt ts-to-js', {
+      cwd: appPath,
+      shell: true,
+      stdio: 'inherit',
+    })
+  } catch (e) {
+    console.error('Could not convert the TypeScript app to JavaScript`')
+    console.error(e)
+    process.exit(1)
+  }
+}
+
+const runDevServerInBackground = (appPath) => {
+  execa.sync('yarn rw dev --fwd="--open=false" &', {
+    cwd: appPath,
+    shell: true,
+    stdio: 'inherit',
+  })
+}
+
+const runCypress = (appPath) => {
+  execa.sync('yarn cypress', ['open', `--env RW_PATH=${appPath}`], {
+    cwd: path.join(REDWOODJS_FRAMEWORK_PATH, 'tasks/e2e'),
+    shell: true,
+    stdio: 'inherit',
+    env: process.env,
+  })
+}
+
+// TODO: Use `yargs` to make this composable.
+
+console.log()
+const tmpDir = makeTmpDirectory()
+console.log()
+console.log('-'.repeat(80))
+console.log()
+buildRedwoodJSFramework()
+console.log()
+console.log('-'.repeat(80))
+console.log()
+createRedwoodJSApp(tmpDir)
+console.log()
+console.log('-'.repeat(80))
+console.log()
+copyFrameworkPackages(tmpDir)
+console.log()
+console.log('-'.repeat(80))
+console.log()
+runYarnInstall(tmpDir)
+console.log()
+console.log('-'.repeat(80))
+console.log()
+convertProjectToJavaScript(tmpDir)
+console.log()
+console.log('-'.repeat(80))
+console.log()
+runDevServerInBackground(tmpDir)
+console.log()
+console.log('-'.repeat(80))
+runCypress(tmpDir)
+console.log()
+console.log('-'.repeat(80))
+
+process.exit(0)
