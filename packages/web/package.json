@@ -4,6 +4,7 @@
   "files": [
     "dist",
     "apollo",
+    "toast",
     "src/entry"
   ],
   "main": "./dist/index.js",
