@@ -5,7 +5,7 @@ import path from 'path'
 import boxen from 'boxen'
 import chokidar from 'chokidar'
 import execa from 'execa'
-import _ from 'lodash'
+import _, { omit } from 'lodash'
 import prettier from 'prettier'
 import prompts from 'prompts'
 import rimraf from 'rimraf'
@@ -154,32 +154,9 @@ const rwtLink = async (yargs) => {
 
   const frameworkPath = resolveFrameworkPath(RW_PATH)
 
-  console.log(`Redwood Framework Path: ${c.info(frameworkPath)}`)
+  console.log(`\n Redwood Framework Path: ${c.info(frameworkPath)}`)
 
-  // Check if /redwood included in workspaces
-  const pkgJSONPath = path.join(getPaths().base, 'package.json')
-  const packageJSON = require(pkgJSONPath)
-  const frameworkRepoRwVersions = getRwPackageVersions(frameworkPath)
-
-  const updatedPackageJSON = {
-    ...packageJSON,
-    workspaces: {
-      packages: [...packageJSON.workspaces.packages, 'redwood/*'],
-    },
-    resolutions: {
-      ...packageJSON.resolutions,
-      ...frameworkRepoRwVersions,
-    },
-  }
-
-  fs.writeFileSync(
-    pkgJSONPath,
-    prettier.format(JSON.stringify(updatedPackageJSON), {
-      parser: 'json-stringify',
-    })
-  )
-
-  const packagesPath = path.join(frameworkPath, 'packages')
+  const frameworkPackagesPath = path.join(frameworkPath, 'packages')
 
   const symLinkPath = path.join(getPaths().base, 'redwood')
 
@@ -202,13 +179,15 @@ const rwtLink = async (yargs) => {
     }
   }
 
-  console.log(`Linking your local Redwood build from ${c.info(packagesPath)}`)
+  console.log(
+    `Linking your local Redwood build from ${c.info(frameworkPackagesPath)} \n`
+  )
 
-  await execa(`ln -s "${packagesPath}" ./redwood`, {
-    shell: true,
-    stdio: 'inherit',
-    cwd: getPaths().base,
-  })
+  fs.symlinkSync(frameworkPackagesPath, symLinkPath)
+  updateProjectWithResolutions(frameworkPath)
+
+  // Unlink framework repo, when process cancelled
+  process.on('SIGINT', rwtUnlink)
 
   // Let workspaces do the link
   await execa('yarn install', {
@@ -223,9 +202,7 @@ const rwtLink = async (yargs) => {
   const message = `
   ${c.bold('🚀 Go Forth and Contribute!')}\n
   🏗  Building your local redwood repo..\n
-  Contributing doc: ${c.underline(
-    'https://github.com/redwoodjs/redwood/blob/main/CONTRIBUTING.md'
-  )}
+  Contributing doc: ${c.underline('https://redwoodjs.com/docs/contributing')}
   `
   console.log(
     boxen(message, {
@@ -254,19 +231,43 @@ const rwtLink = async (yargs) => {
   })
 }
 
+// This should be synchronous
 const rwtUnlink = () => {
-  const symLinkPath = path.join(getPaths().base, 'redwood')
+  const message = `
+  🙏  Thanks for contributing..\n
+  Unlinking framework. \n
+  ${c.green('Re-run yarn install if this fails')}
+  `
+  console.log(
+    boxen(message, {
+      padding: { top: 0, bottom: 0, right: 1, left: 1 },
+      margin: 1,
+      borderColour: 'gray',
+    })
+  )
 
-  if (fs.existsSync(symLinkPath)) {
+  const symLinkPath = path.join(getPaths().base, 'redwood')
+  if (
+    fs.existsSync(symLinkPath) &&
+    fs.lstatSync(symLinkPath).isSymbolicLink()
+  ) {
+    // remove resolutions we added in link
+    updateProjectWithResolutions(
+      path.join(fs.readlinkSync(symLinkPath), '../'),
+      true
+    )
+
     rimraf.sync(symLinkPath)
   }
 
-  execa('yarn install', {
+  execa.sync('yarn install', {
     shell: true,
     stdio: 'inherit',
     cleanup: true,
     cwd: getPaths().base,
   })
+
+  return process.exit(0)
 }
 
 const rwtInstall = ({ packageName }) => {
@@ -301,13 +302,58 @@ const rwtInstall = ({ packageName }) => {
   )
 }
 
-const getRwPackageVersions = (frameworkPath) => {
-  const frameworkPkgJson = require(path.join(frameworkPath, 'package.json'))
+const getRwPackageResolutions = (frameworkPath) => {
+  const frameworkVersion = require(path.join(
+    frameworkPath,
+    'packages/cli/package.json'
+  )).version
   const packageFolders = fs.readdirSync(path.join(frameworkPath, 'packages'))
 
-  return packageFolders.map((packageFolder) => ({
-    [`@redwoodjs/${packageFolder.name}`]: frameworkPkgJson.version,
-  }))
+  const rwResolutions = {}
+  packageFolders
+    .filter((folderName) => folderName !== 'create-redwood-app')
+    .forEach((packageFolder) => {
+      rwResolutions[`@redwoodjs/${packageFolder}`] = frameworkVersion
+    })
+
+  return rwResolutions
+}
+
+const updateProjectWithResolutions = (frameworkPath, remove) => {
+  const pkgJSONPath = path.join(getPaths().base, 'package.json')
+  const packageJSON = require(pkgJSONPath)
+  const frameworkRepoResolutions = getRwPackageResolutions(frameworkPath)
+
+  let resolutions = packageJSON.resolutions
+  let packages = packageJSON.workspaces.packages
+
+  if (remove) {
+    resolutions = omit(resolutions, Object.keys(frameworkRepoResolutions))
+    packages = packages.filter(
+      (workspaceFolder) => workspaceFolder !== 'redwood/*'
+    )
+  } else {
+    resolutions = {
+      ...resolutions,
+      ...frameworkRepoResolutions,
+    }
+    packages.push('redwood/*')
+  }
+
+  const updatedPackageJSON = {
+    ...packageJSON,
+    workspaces: {
+      packages,
+    },
+    resolutions,
+  }
+
+  fs.writeFileSync(
+    pkgJSONPath,
+    prettier.format(JSON.stringify(updatedPackageJSON), {
+      parser: 'json-stringify',
+    })
+  )
 }
 
 // eslint-disable-next-line no-unused-expressions
