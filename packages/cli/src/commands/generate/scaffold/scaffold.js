@@ -382,7 +382,7 @@ export const routes = async ({ model: name, path: scaffoldPath = '' }) => {
 }
 
 const addScaffoldImport = () => {
-  const appJsPath = path.join(getPaths().web.app)
+  const appJsPath = getPaths().web.app
   let appJsContents = readFile(appJsPath).toString()
 
   if (appJsContents.match(SCAFFOLD_STYLE_PATH)) {

@@ -48,7 +48,7 @@ const createRedwoodJSApp = () => {
       }
     )
   } catch (e) {
-    console.error('Could not build RedwoodJS framework')
+    console.error('Could not create RedwoodJS project')
     console.error(e)
     process.exit(1)
   }
