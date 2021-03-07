@@ -1,4 +1,4 @@
-// the lines that need to be added to App.js
+// the lines that need to be added to App.{js,tsx}
 export const config = {
   imports: [`import { createClient } from '@supabase/supabase-js'`],
   init: `const supabaseClient = createClient(

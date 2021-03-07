@@ -32,19 +32,19 @@ const TEMPLATES = fs
   }, {})
 
 const OUTPUT_PATH = path.join(getPaths().api.lib, 'auth.js')
-const WEB_SRC_APP_PATH = path.join(getPaths().web.src, 'App.js')
+const WEB_SRC_APP_PATH = getPaths().web.app
 
 const SUPPORTED_PROVIDERS = fs
   .readdirSync(path.resolve(__dirname, 'providers'))
   .map((file) => path.basename(file, '.js'))
   .filter((file) => file !== 'README.md')
 
-// returns the content of App.js with import statements added
+// returns the content of App.{js,tsx} with import statements added
 const addWebImports = (content, imports) => {
   return `${AUTH_PROVIDER_IMPORT}\n` + imports.join('\n') + '\n' + content
 }
 
-// returns the content of App.js with init lines added
+// returns the content of App.{js,tsx} with init lines added
 const addWebInit = (content, init) => {
   return content.replace(
     'const App = () => (',
@@ -52,7 +52,7 @@ const addWebInit = (content, init) => {
   )
 }
 
-// returns the content of App.js with <AuthProvider> added
+// returns the content of App.{js,tsx} with <AuthProvider> added
 const addWebRender = (content, authProvider) => {
   const [_, indent, redwoodApolloProvider] = content.match(
     /(\s+)(<RedwoodApolloProvider>.*<\/RedwoodApolloProvider>)/s
@@ -90,18 +90,18 @@ const addWebRender = (content, authProvider) => {
   )
 }
 
-// returns the content of App.js with <AuthProvider> updated
+// returns the content of App.{js,tsx} with <AuthProvider> updated
 const updateWebRender = (content, authProvider) => {
   const renderContent = `<AuthProvider client={${authProvider.client}} type="${authProvider.type}">`
   return content.replace(/<AuthProvider client={.*} type=".*">/s, renderContent)
 }
 
-// returns the content of App.js without the old auth import
+// returns the content of App.{js,tsx} without the old auth import
 const removeOldWebImports = (content, imports) => {
   return content.replace(`${AUTH_PROVIDER_IMPORT}\n` + imports.join('\n'), '')
 }
 
-// returns the content of App.js without the old auth init
+// returns the content of App.{js,tsx} without the old auth init
 const removeOldWebInit = (content, init) => {
   return content.replace(init, '')
 }
@@ -145,7 +145,7 @@ export const files = (provider) => {
   }
 }
 
-// actually inserts the required config lines into App.js
+// actually inserts the required config lines into App.{js,tsx}
 export const addConfigToApp = async (config, force) => {
   let content = fs.readFileSync(WEB_SRC_APP_PATH).toString()
 
@@ -245,7 +245,7 @@ export const handler = async ({ provider, force }) => {
           if (webIndexDoesExist()) {
             addConfigToApp(providerData.config, force)
           } else {
-            task.skip('web/src/App.js not found, skipping')
+            task.skip('web/src/App.{js,tsx} not found, skipping')
           }
         },
       },
