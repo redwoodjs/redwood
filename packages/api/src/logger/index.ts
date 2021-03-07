@@ -8,16 +8,12 @@ import pino, {
 
 /**
  * Determines if log environment is development or test
- *
- * Boolean
  */
 const isDevelopment =
   process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
 
 /**
  * Determines if log environment is production by checking if not development
- *
- * Boolean
  */
 const isProduction = !isDevelopment
 
@@ -34,8 +30,6 @@ const isProduction = !isDevelopment
  *
  * One exception to this rule may be Netlify functions logging.
  * Its function logging output readability can benefeit from pretty-printing.
- *
- * Boolean
  */
 export const isPretty = isDevelopment
 
