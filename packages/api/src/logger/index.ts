@@ -33,7 +33,7 @@ const isProduction = !isDevelopment
  * See: https://github.com/pinojs/pino-pretty#programmatic-integration
  *
  * One exception to this rule may be Netlify functions logging.
- * Its function logging output readability can benfeit from pretty-printing.
+ * Its function logging output readability can benefeit from pretty-printing.
  *
  * Boolean
  */
