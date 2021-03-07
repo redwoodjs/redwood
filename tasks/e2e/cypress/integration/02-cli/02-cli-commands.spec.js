@@ -55,8 +55,5 @@ describe('Check Redwood cli commands against tutorial', () => {
       'contain',
       'This site was created to demonstrate my mastery of Redwood'
     )
-
-    // Check 404 existence
-    cy.readFile(`${WEB_DIST}/404.html`)
   })
 })

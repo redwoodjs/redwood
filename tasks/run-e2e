@@ -80,13 +80,17 @@ const copyFrameworkPackages = () => {
   }
 }
 
-const runYarnInstall = () => {
+const runYarnInstall = ({ preferOffline }) => {
   try {
-    execa.sync('yarn install', ['--prefer-offline'], {
-      cwd: REDWOOD_PROJECT_DIRECTORY,
-      shell: true,
-      stdio: 'inherit',
-    })
+    execa.sync(
+      'yarn install',
+      [preferOffline && '--prefer-offline'].filter(Boolean),
+      {
+        cwd: REDWOOD_PROJECT_DIRECTORY,
+        shell: true,
+        stdio: 'inherit',
+      }
+    )
   } catch (e) {
     console.error('Could not run `yarn install`')
     console.error(e)
@@ -136,6 +140,11 @@ const args = yargs
   .option('copy-framework', { default: true, type: 'boolean', alias: 'copy' })
   .option('js-project', { default: true, type: 'boolean', alias: 'js' })
   .option('auto-start', { default: true, type: 'boolean', alias: 'start' })
+  .option('prefer-offline', {
+    default: false,
+    type: 'boolean',
+    alias: 'offline',
+  })
   .scriptName('run-cypress')
   .example('run-cypress')
   .example('run-cypress /tmp/redwood-app --no-js-project')
@@ -167,7 +176,8 @@ const tasks = [
 
 for (const task of tasks) {
   console.log()
-  task()
+  // Also pass all args to each task
+  task(args)
   console.log()
   console.log('-'.repeat(80))
 }
