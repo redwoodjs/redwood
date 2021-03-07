@@ -26,6 +26,7 @@ const COERCION_FUNCTIONS = {
   Float: (value: string) => parseFloat(value),
   Int: (value: string) => parseInt(value, 10),
   Json: (value: string) => JSON.parse(value),
+  DateTime: (value: string) => new Date(value).toISOString(),
 }
 
 export type TDefinedCoercionFunctions = keyof typeof COERCION_FUNCTIONS
@@ -33,6 +34,8 @@ export type TDefinedCoercionFunctions = keyof typeof COERCION_FUNCTIONS
 const inputTypeToDataTypeMapping: Record<string, TDefinedCoercionFunctions> = {
   checkbox: 'Boolean',
   number: 'Int',
+  date: 'DateTime',
+  'datetime-local': 'DateTime',
 }
 
 export const useCoercion = () => {

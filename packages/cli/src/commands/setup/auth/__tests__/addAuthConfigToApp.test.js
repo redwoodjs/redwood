@@ -10,6 +10,10 @@ jest.mock('src/lib', () => {
       api: { functions: '', src: '', lib: '' },
       web: {
         src: path.join(__dirname, '../create-redwood-app/template/web/src'),
+        app: path.join(
+          __dirname,
+          '../create-redwood-app/template/web/src/App.tsx'
+        ),
       },
     }),
   }
@@ -26,7 +30,7 @@ beforeEach(() => {
   jest.spyOn(fs, 'writeFileSync').mockImplementation(writeFileSyncSpy)
 })
 
-describe('Should add config lines to App.js', () => {
+describe('Should add config lines to App.{js,tsx}', () => {
   it('Matches Auth0 Snapshot', async () => {
     const auth0Data = await import(`../providers/auth0`)
     await addConfigToApp(auth0Data.config, false)

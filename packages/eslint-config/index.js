@@ -48,7 +48,7 @@ module.exports = {
       files: [
         '*.test.*',
         '**/__mocks__/**',
-        '*.scenario.*',
+        '*.scenarios.*',
         '*.stories.*',
         '*.mock.*',
       ],

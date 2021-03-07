@@ -74,12 +74,7 @@ global.scenario = (...args) => {
     }
 
     const scenarioData = await seedScenario(scenario)
-    try {
-      result = await testFunc(scenarioData)
-    } finally {
-      // if the test fails this makes sure we still remove scenario data
-      await teardown()
-    }
+    result = await testFunc(scenarioData)
 
     return result
   })
@@ -93,4 +88,8 @@ global.mockCurrentUser = (currentUser) => {
 
 afterAll(async () => {
   await db.$disconnect()
+})
+
+afterEach(async () => {
+  await teardown()
 })

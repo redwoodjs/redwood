@@ -8,7 +8,7 @@
     ]
   },
   "devDependencies": {
-    "@redwoodjs/core": "^0.26.0"
+    "@redwoodjs/core": "^0.26.2"
   },
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config",
@@ -17,5 +17,9 @@
   "engines": {
     "node": ">=12",
     "yarn": ">=1.15"
+  },
+  "resolutions": {
+    "react": "17.0.1",
+    "react-dom": "17.0.1"
   }
 }
