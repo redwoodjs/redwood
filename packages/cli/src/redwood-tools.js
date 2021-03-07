@@ -11,7 +11,11 @@ import prompts from 'prompts'
 import rimraf from 'rimraf'
 import yargs from 'yargs'
 
-import { getPaths, ensurePosixPath } from '@redwoodjs/internal'
+import {
+  getPaths,
+  ensurePosixPath,
+  convertTsProjectToJs,
+} from '@redwoodjs/internal'
 
 import c from './lib/colors'
 
@@ -205,7 +209,7 @@ const rwtLink = async (yargs) => {
       // Throw an error if it looks like there was a file/folder called redwood
       console.error(
         c.error(
-          '\n 🛑  Looks like theres something called `redwood` at the root of your project.'
+          "\n 🛑  Looks like there's something called `redwood` at the root of your project."
         ) +
           '\n This is where we symlink redwood packages. Please remove this and rerun the command \n'
       )
@@ -216,7 +220,7 @@ const rwtLink = async (yargs) => {
 
   console.log(`Linking your local Redwood build from ${c.info(packagesPath)}`)
 
-  await execa(`ln -s ${packagesPath} ./redwood`, {
+  await execa(`ln -s "${packagesPath}" ./redwood`, {
     shell: true,
     stdio: 'inherit',
     cwd: getPaths().base,
@@ -233,7 +237,7 @@ const rwtLink = async (yargs) => {
   fixBinaryPermissions(getPaths().base)
 
   const message = `
-  ${c.bold('🚀  Go Forth and Contribute!')}\n
+  ${c.bold('🚀 Go Forth and Contribute!')}\n
   🏗  Building your local redwood repo..\n
   Contributing doc: ${c.underline(
     'https://github.com/redwoodjs/redwood/blob/main/CONTRIBUTING.md'
@@ -368,5 +372,8 @@ yargs
       fixProjectBinaries(getPaths().base)
     }
   )
+  .command(['ts-to-js'], 'Convert TS files in a project to JS', {}, () => {
+    convertTsProjectToJs(process.cwd())
+  })
   .demandCommand()
   .strict().argv

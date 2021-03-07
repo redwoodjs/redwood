@@ -77,7 +77,7 @@ export const nhost = (client: Nhost): AuthClient => {
       return await client.auth.register({
         email,
         password,
-        registrationOptions: { userData: { display_name: email } },
+        options: { userData: { display_name: email } },
       })
     },
     getToken: async () => {

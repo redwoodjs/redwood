@@ -104,12 +104,16 @@ export const handler = async ({
 
     // Create a test database
     if (sides.includes('api')) {
-      await execa(`yarn rw`, ['prisma db push', '--force'], {
-        cwd: getPaths().api.base,
-        stdio: 'inherit',
-        shell: true,
-        env: { DATABASE_URL },
-      })
+      await execa(
+        `yarn rw`,
+        ['prisma db push', '--force-reset', '--accept-data-loss'],
+        {
+          cwd: getPaths().api.base,
+          stdio: 'inherit',
+          shell: true,
+          env: { DATABASE_URL },
+        }
+      )
     }
     // **NOTE** There is no official way to run Jest programatically,
     // so we're running it via execa, since `jest.run()` is a bit unstable.

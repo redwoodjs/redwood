@@ -1,22 +1,18 @@
-import {
-  PostWhereUniqueInput,
-  PostCreateInput,
-  PostUpdateInput,
-} from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { db } from 'src/lib/db'
 
 export const posts = () => {
   return db.post.findMany()
 }
 
-export const post = ({ id }: PostWhereUniqueInput) => {
+export const post = ({ id }: Prisma.PostWhereUniqueInput) => {
   return db.post.findUnique({
     where: { id },
   })
 }
 
 interface CreatePostArgs {
-  input: PostCreateInput
+  input: Prisma.PostCreateInput
 }
 
 export const createPost = ({ input }: CreatePostArgs) => {
@@ -26,8 +22,8 @@ export const createPost = ({ input }: CreatePostArgs) => {
 }
 
 interface UpdatePostArgs {
-  where: PostWhereUniqueInput
-  input: PostUpdateInput
+  where: Prisma.PostWhereUniqueInput
+  input: Prisma.PostUpdateInput
 }
 
 export const updatePost = ({ id, input }: UpdatePostArgs) => {
@@ -37,7 +33,7 @@ export const updatePost = ({ id, input }: UpdatePostArgs) => {
   })
 }
 
-export const deletePost = ({ id }: PostWhereUniqueInput) => {
+export const deletePost = ({ id }: Prisma.PostWhereUniqueInput) => {
   return db.post.delete({
     where: { id },
   })
