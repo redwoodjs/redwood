@@ -26,18 +26,23 @@ export const convertTsProjectToJs = (cwd = getPaths().base) => {
     }
   }
 
-  fs.renameSync(
-    path.join(cwd, 'api/tsconfig.json'),
-    path.join(cwd, 'api/jsconfig.json')
-  )
-  fs.renameSync(
-    path.join(cwd, 'web/tsconfig.json'),
-    path.join(cwd, 'web/jsconfig.json')
-  )
+  try {
+    fs.renameSync(
+      path.join(cwd, 'api/tsconfig.json'),
+      path.join(cwd, 'api/jsconfig.json')
+    )
+    fs.renameSync(
+      path.join(cwd, 'web/tsconfig.json'),
+      path.join(cwd, 'web/jsconfig.json')
+    )
+  } catch (e) {
+    // I want the user to be able to run this command multiple times.
+    console.error(e)
+  }
 }
 
 /**
- * Get all the source code from a Redwood app
+ * Get all the source code from a Redwood project
  */
 export const typeScriptSourceFiles = (cwd: string) => {
   // TODO: When sides are expanded read the `api` and `web` string instead
@@ -48,8 +53,8 @@ export const typeScriptSourceFiles = (cwd: string) => {
 }
 
 /**
- * Read the contents of a TypeScript, transpile it to JavaScript and leave the
- * JSX intact. Format via Prettier.
+ * Read the contents of a TypeScript file, transpile it to JavaScript,
+ * but leave the JSX intact and format via Prettier.
  *
  * @param {string} file - The path to the TypeScript file.
  */
