@@ -159,41 +159,25 @@ const rwtLink = async (yargs) => {
   // Check if /redwood included in workspaces
   const pkgJSONPath = path.join(getPaths().base, 'package.json')
   const packageJSON = require(pkgJSONPath)
-  const isRedwoodInWorkspaces = packageJSON.workspaces?.packages.some(
-    (workspacePath) => workspacePath.match(/redwood\/?\*?/)
-  )
+  const frameworkRepoRwVersions = getRwPackageVersions(frameworkPath)
 
-  if (!isRedwoodInWorkspaces) {
-    console.log(`You don't have redwood in your workspace package`)
-    const { shouldAddWorkspacePath } = await prompts({
-      type: 'confirm',
-      name: 'shouldAddWorkspacePath',
-      message:
-        'Add redwood folder to your workspaces config? \n This will modify your package.json',
-    })
-
-    if (shouldAddWorkspacePath) {
-      const updatedPackageJSON = {
-        ...packageJSON,
-        workspaces: {
-          packages: [...packageJSON.workspaces.packages, 'redwood/*'],
-        },
-      }
-
-      fs.writeFileSync(
-        pkgJSONPath,
-        prettier.format(JSON.stringify(updatedPackageJSON), {
-          parser: 'json-stringify',
-        })
-      )
-
-      console.log('🎉 Done! Workspaces now has redwood/')
-    } else {
-      console.log('Cancelling contributor workflow...')
-
-      return
-    }
+  const updatedPackageJSON = {
+    ...packageJSON,
+    workspaces: {
+      packages: [...packageJSON.workspaces.packages, 'redwood/*'],
+    },
+    resolutions: {
+      ...packageJSON.resolutions,
+      ...frameworkRepoRwVersions,
+    },
   }
+
+  fs.writeFileSync(
+    pkgJSONPath,
+    prettier.format(JSON.stringify(updatedPackageJSON), {
+      parser: 'json-stringify',
+    })
+  )
 
   const packagesPath = path.join(frameworkPath, 'packages')
 
@@ -315,6 +299,15 @@ const rwtInstall = ({ packageName }) => {
       cleanup: true,
     }
   )
+}
+
+const getRwPackageVersions = (frameworkPath) => {
+  const frameworkPkgJson = require(path.join(frameworkPath, 'package.json'))
+  const packageFolders = fs.readdirSync(path.join(frameworkPath, 'packages'))
+
+  return packageFolders.map((packageFolder) => ({
+    [`@redwoodjs/${packageFolder.name}`]: frameworkPkgJson.version,
+  }))
 }
 
 // eslint-disable-next-line no-unused-expressions
