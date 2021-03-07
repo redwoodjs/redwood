@@ -2,7 +2,7 @@
 
 ### DEPRECATED
 
-Redwood's custom `<Flash>` component and `addMessage()` functionality have been deprecated and will be removed in v1.0. We're now using [react-hot-toast]() directly. Import the features you need from `@redwoodjs/web/toast` instead of `react-hot-toast`, but all other functionality remains identical.
+Redwood's custom `<Flash>` component and `addMessage()` functionality have been deprecated and will be removed in v1.0. We're now using [react-hot-toast](https://react-hot-toast.com/) directly. Import the features you need from `@redwoodjs/web/toast` instead of `react-hot-toast`, but all other functionality remains identical.
 
 ### Original README
 
