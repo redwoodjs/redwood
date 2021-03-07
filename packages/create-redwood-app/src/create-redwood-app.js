@@ -15,6 +15,8 @@ import fs from 'fs-extra'
 import Listr from 'listr'
 import yargs from 'yargs'
 
+import { convertTsProjectToJs } from '@redwoodjs/internal'
+
 import { name, version } from '../package'
 
 /**
@@ -43,13 +45,17 @@ const style = {
   green: chalk.green,
 }
 
-const { _: args, 'yarn-install': yarnInstall } = yargs
+const { _: args, 'yarn-install': yarnInstall, javascript } = yargs
   .scriptName(name)
   .usage('Usage: $0 <project directory> [option]')
   .example('$0 newapp')
   .option('yarn-install', {
     default: true,
     describe: 'Skip yarn install with --no-yarn-install',
+  })
+  .option('--javascript', {
+    default: true,
+    describe: 'Generate a JavaScript project',
   })
   .version(version)
   .strict().argv
@@ -144,6 +150,17 @@ new Listr(
     {
       title: 'Installing packages',
       task: () => new Listr(installNodeModulesTasks({ newAppDir })),
+    },
+    {
+      title: 'Convert TypeScript files to JavaScript',
+      skip: () => {
+        if (javascript === false) {
+          return 'skipped on request'
+        }
+      },
+      task: () => {
+        convertTsProjectToJs(newAppDir)
+      },
     },
   ],
   { collapse: false, exitOnError: true }
