@@ -7,14 +7,13 @@ import chokidar from 'chokidar'
 import execa from 'execa'
 import _, { omit } from 'lodash'
 import prettier from 'prettier'
-import prompts from 'prompts'
 import rimraf from 'rimraf'
 import yargs from 'yargs'
 
 import {
-  getPaths,
-  ensurePosixPath,
   convertTsProjectToJs,
+  ensurePosixPath,
+  getPaths,
 } from '@redwoodjs/internal'
 
 import c from './lib/colors'
