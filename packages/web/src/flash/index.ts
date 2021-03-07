@@ -1,4 +1,5 @@
-import Flash from './Flash'
-import { useFlash } from './FlashContext'
+export { default as Flash } from './Flash'
+export { useFlash } from './FlashContext'
 
-export { useFlash, Flash }
+export { default as toast } from 'react-hot-toast'
+export * from 'react-hot-toast'

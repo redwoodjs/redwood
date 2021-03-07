@@ -14,8 +14,6 @@ export {
 
 export { withCell } from './components/withCellHOC'
 
+// TODO: Remove these in v.10, people can import from `@redwoodjs/web/toast`
 // deprecated
 export { useFlash, Flash } from './flash'
-
-export { default as toast } from 'react-hot-toast'
-export * from 'react-hot-toast'
