@@ -25,7 +25,7 @@ jobs:
           echo "::set-output name=project_path::$project_path"
 
       - name: Create a RedwoodJS app
-        run: ./tasks/test-tutorial ${{ steps.createpath.outputs.project_path }} --no-start
+        run: ./tasks/run-e2e ${{ steps.createpath.outputs.project_path }} --no-start
 
       - name: Start server in background
         run: yarn rw dev &
