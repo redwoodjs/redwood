@@ -6,38 +6,20 @@ const path = require('path')
 
 const execa = require('execa')
 const fs = require('fs-extra')
+const yargs = require('yargs')
 
-// CI workflow
-
-// Create a new project in a specific directory, do not install packages.
-// Build the RedwoodJS framework.
-// Copy the RedwoodJS packages.
-// Run yarn install.
-// Start up the dev-server
-// Let Cypress handle everything
-
-// User's workflow
-
-// a)
-// Run the script
-// Create a temporary directory
-// Copy the RedwoodJS packages
-// Run yarn install
-// Start the dev-server
-// Start Cypress' test runner.
-
-// b) --no-framework-files
-// Run the script with a directory specified.
-// Start the dev-server
-// Start the Cypress test-runner.
-
-const REDWOODJS_FRAMEWORK_PATH = path.resolve(__dirname, '..')
-
-const makeTmpDirectory = () => {
-  const tmpDir = path.join(os.tmpdir(), 'redwood-e2e', new Date().toISOString())
-  console.log(tmpDir)
-  fs.mkdirSync(tmpDir, { recursive: true })
-  return tmpDir
+// This script sets up a blank RedwoodJS app into a directory.
+// It uses the packages from the RedwoodJS framework (../packages).
+// So, if you're making changes to the framework,
+// you can use the e2e tests to verify your changes.
+//
+// The steps are composable, so that it can work for the GitHub Workflow, and
+// us contributors.
+//
+const makeDirectory = () => {
+  console.log('mkdir', REDWOOD_PROJECT_DIRECTORY)
+  fs.mkdirSync(REDWOOD_PROJECT_DIRECTORY, { recursive: true })
+  return REDWOOD_PROJECT_DIRECTORY
 }
 
 const buildRedwoodJSFramework = () => {
@@ -54,11 +36,11 @@ const buildRedwoodJSFramework = () => {
   }
 }
 
-const createRedwoodJSApp = (appPath) => {
+const createRedwoodJSApp = () => {
   try {
     execa.sync(
       'yarn babel-node src/create-redwood-app.js',
-      [appPath, '--no-yarn-install', '--no-javascript'],
+      [REDWOOD_PROJECT_DIRECTORY, '--no-yarn-install', '--no-javascript'],
       {
         cwd: path.join(REDWOODJS_FRAMEWORK_PATH, 'packages/create-redwood-app'),
         shell: true,
@@ -72,19 +54,19 @@ const createRedwoodJSApp = (appPath) => {
   }
 }
 
-const copyFrameworkPackages = (appPath) => {
+const copyFrameworkPackages = () => {
   try {
     console.log(
       'cp -r',
       path.join(REDWOODJS_FRAMEWORK_PATH, 'packages'),
-      path.join(appPath, 'packages')
+      path.join(REDWOOD_PROJECT_DIRECTORY, 'packages')
     )
     execa.sync(
       'cp',
       [
         '-r',
         path.join(REDWOODJS_FRAMEWORK_PATH, 'packages'),
-        path.join(appPath, 'packages'),
+        path.join(REDWOOD_PROJECT_DIRECTORY, 'packages'),
       ],
       {
         shell: true,
@@ -98,10 +80,10 @@ const copyFrameworkPackages = (appPath) => {
   }
 }
 
-const runYarnInstall = (appPath) => {
+const runYarnInstall = () => {
   try {
-    execa.sync('yarn install', {
-      cwd: appPath,
+    execa.sync('yarn install', ['--prefer-offline'], {
+      cwd: REDWOOD_PROJECT_DIRECTORY,
       shell: true,
       stdio: 'inherit',
     })
@@ -112,10 +94,10 @@ const runYarnInstall = (appPath) => {
   }
 }
 
-const convertProjectToJavaScript = (appPath) => {
+const convertProjectToJavaScript = () => {
   try {
     execa.sync('yarn rwt ts-to-js', {
-      cwd: appPath,
+      cwd: REDWOOD_PROJECT_DIRECTORY,
       shell: true,
       stdio: 'inherit',
     })
@@ -126,55 +108,66 @@ const convertProjectToJavaScript = (appPath) => {
   }
 }
 
-const runDevServerInBackground = (appPath) => {
+const runDevServerInBackground = () => {
+  console.log('Starting RedwoodJS dev server...')
   execa.sync('yarn rw dev --fwd="--open=false" &', {
-    cwd: appPath,
+    cwd: REDWOOD_PROJECT_DIRECTORY,
     shell: true,
     stdio: 'inherit',
   })
 }
 
-const runCypress = (appPath) => {
-  execa.sync('yarn cypress', ['open', `--env RW_PATH=${appPath}`], {
-    cwd: path.join(REDWOODJS_FRAMEWORK_PATH, 'tasks/e2e'),
-    shell: true,
-    stdio: 'inherit',
-    env: process.env,
-  })
+const runCypress = () => {
+  console.log('Starting Cypress...')
+  execa.sync(
+    'yarn cypress',
+    ['open', `--env RW_PATH=${REDWOOD_PROJECT_DIRECTORY}`],
+    {
+      cwd: path.join(REDWOODJS_FRAMEWORK_PATH, 'tasks/e2e'),
+      shell: true,
+      stdio: 'inherit',
+      env: process.env,
+    }
+  )
 }
 
-// TODO: Use `yargs` to make this composable.
+const args = yargs
+  .option('create-project', { default: true, type: 'boolean', alias: 'create' })
+  .option('copy-framework', { default: true, type: 'boolean', alias: 'copy' })
+  .option('js-project', { default: true, type: 'boolean', alias: 'js' })
+  .option('auto-start', { default: true, type: 'boolean', alias: 'start' })
+  .scriptName('run-cypress')
+  .example('run-cypress')
+  .example('run-cypress /tmp/redwood-app --no-js-project')
+  .help()
+  .strict().argv
+
+const REDWOODJS_FRAMEWORK_PATH = path.resolve(__dirname, '..')
+let REDWOOD_PROJECT_DIRECTORY =
+  args._?.[0] || path.join(os.tmpdir(), 'redwood-e2e', new Date().toISOString())
 
 console.log()
-const tmpDir = makeTmpDirectory()
-console.log()
 console.log('-'.repeat(80))
 console.log()
-buildRedwoodJSFramework()
-console.log()
-console.log('-'.repeat(80))
-console.log()
-createRedwoodJSApp(tmpDir)
-console.log()
-console.log('-'.repeat(80))
-console.log()
-copyFrameworkPackages(tmpDir)
-console.log()
-console.log('-'.repeat(80))
-console.log()
-runYarnInstall(tmpDir)
-console.log()
-console.log('-'.repeat(80))
-console.log()
-convertProjectToJavaScript(tmpDir)
-console.log()
-console.log('-'.repeat(80))
-console.log()
-runDevServerInBackground(tmpDir)
-console.log()
-console.log('-'.repeat(80))
-runCypress(tmpDir)
+makeDirectory(REDWOOD_PROJECT_DIRECTORY)
 console.log()
 console.log('-'.repeat(80))
 
-process.exit(0)
+let { copyFramework, createProject, jsProject, autoStart } = args
+
+const tasks = [
+  copyFramework && buildRedwoodJSFramework,
+  createProject && createRedwoodJSApp,
+  copyFramework && copyFrameworkPackages,
+  copyFramework && runYarnInstall,
+  jsProject && convertProjectToJavaScript,
+  autoStart && runDevServerInBackground,
+  autoStart && runCypress,
+].filter(Boolean)
+
+for (const task of tasks) {
+  console.log()
+  task()
+  console.log()
+  console.log('-'.repeat(80))
+}
