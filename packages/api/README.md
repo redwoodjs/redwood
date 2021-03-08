@@ -52,6 +52,9 @@ We also plan to make Functions platform-agnostic. At the moment, we're targeting
 
 - What does RBAC look like?
 
+### Logging
+
+
 ## Contributing
 
 `@redwoodjs/api` uses a few things you should be familiar with:

@@ -63,6 +63,7 @@ export const redactionsList: string[] | redactOptions = [
   'accessToken',
   'access_token',
   'secret',
+  'password',
 ]
 
 /**
