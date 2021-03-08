@@ -120,7 +120,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     cy.contains('Delete').click()
 
     // No more posts, so it should be in the empty state.
-    cy.contains('Post deleted.')
+    cy.contains('Post deleted')
 
     cy.contains('Create one?').click()
     cy.get('input#title').type('Second post')
