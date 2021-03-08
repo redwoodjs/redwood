@@ -15,8 +15,6 @@ import fs from 'fs-extra'
 import Listr from 'listr'
 import yargs from 'yargs'
 
-import { convertTsProjectToJs } from '@redwoodjs/internal'
-
 import { name, version } from '../package'
 
 /**
@@ -159,7 +157,11 @@ new Listr(
         }
       },
       task: () => {
-        convertTsProjectToJs(newAppDir)
+        // TODO: Make this an ordinary RedwoodJS CLI command.
+        return execa('yarn rw ts-to-js', {
+          shell: true,
+          cwd: newAppDir,
+        })
       },
     },
   ],
