@@ -80,17 +80,13 @@ const copyFrameworkPackages = () => {
   }
 }
 
-const runYarnInstall = ({ preferOffline }) => {
+const runYarnInstall = () => {
   try {
-    execa.sync(
-      'yarn install',
-      [preferOffline && '--prefer-offline'].filter(Boolean),
-      {
-        cwd: REDWOOD_PROJECT_DIRECTORY,
-        shell: true,
-        stdio: 'inherit',
-      }
-    )
+    execa.sync('yarn install', {
+      cwd: REDWOOD_PROJECT_DIRECTORY,
+      shell: true,
+      stdio: 'inherit',
+    })
   } catch (e) {
     console.error('Could not run `yarn install`')
     console.error(e)
@@ -135,18 +131,14 @@ const runCypress = () => {
   )
 }
 
-const installTaskDeps = ({ preferOffline }) => {
+const installTaskDeps = () => {
   console.log('Installing dependencies for tasks/e2e')
-  execa.sync(
-    'yarn install',
-    [preferOffline && '--prefer-offline'].filter(Boolean),
-    {
-      cwd: path.join(REDWOODJS_FRAMEWORK_PATH, 'tasks/e2e'),
-      shell: true,
-      stdio: 'inherit',
-      env: process.env,
-    }
-  )
+  execa.sync('yarn install', {
+    cwd: path.join(REDWOODJS_FRAMEWORK_PATH, 'tasks/e2e'),
+    shell: true,
+    stdio: 'inherit',
+    env: process.env,
+  })
 }
 
 const args = yargs
@@ -154,11 +146,6 @@ const args = yargs
   .option('copy-framework', { default: true, type: 'boolean', alias: 'copy' })
   .option('js-project', { default: true, type: 'boolean', alias: 'js' })
   .option('auto-start', { default: true, type: 'boolean', alias: 'start' })
-  .option('prefer-offline', {
-    default: false,
-    type: 'boolean',
-    alias: 'offline',
-  })
   .scriptName('run-cypress')
   .example('run-cypress')
   .example('run-cypress /tmp/redwood-app --no-js-project')
@@ -201,8 +188,7 @@ const tasks = [
 
 for (const task of tasks) {
   console.log()
-  // Also pass all args to each task
-  task(args)
+  task()
   console.log()
   console.log('-'.repeat(80))
 }

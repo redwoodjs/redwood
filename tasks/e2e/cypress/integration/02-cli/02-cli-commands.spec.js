@@ -4,6 +4,8 @@
 const BASE_DIR = Cypress.env('RW_PATH')
 
 describe('Check Redwood cli commands against tutorial', () => {
+  // These tests aren't visual, as they only run on the CLI
+  // Disable taking screenshots/videos for this spec
   before(() => {
     Cypress.config('record', false)
   })
