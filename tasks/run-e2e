@@ -100,7 +100,7 @@ const runYarnInstall = ({ preferOffline }) => {
 
 const convertProjectToJavaScript = () => {
   try {
-    execa.sync('yarn rwt ts-to-js', {
+    execa.sync('yarn rw ts-to-js', {
       cwd: REDWOOD_PROJECT_DIRECTORY,
       shell: true,
       stdio: 'inherit',
