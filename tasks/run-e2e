@@ -165,11 +165,7 @@ let REDWOOD_PROJECT_DIRECTORY =
 console.log()
 console.log('-'.repeat(80))
 console.log()
-if (args._?.[0]) {
-  console.log('Using supplied directory \n', REDWOOD_PROJECT_DIRECTORY)
-} else {
-  makeDirectory(REDWOOD_PROJECT_DIRECTORY)
-}
+makeDirectory(REDWOOD_PROJECT_DIRECTORY)
 console.log()
 console.log('-'.repeat(80))
 
