@@ -11,11 +11,7 @@ import prompts from 'prompts'
 import rimraf from 'rimraf'
 import yargs from 'yargs'
 
-import {
-  getPaths,
-  ensurePosixPath,
-  convertTsProjectToJs,
-} from '@redwoodjs/internal'
+import { getPaths, ensurePosixPath } from '@redwoodjs/internal'
 
 import c from './lib/colors'
 
@@ -372,8 +368,5 @@ yargs
       fixProjectBinaries(getPaths().base)
     }
   )
-  .command(['ts-to-js'], 'Convert TS files in a project to JS', {}, () => {
-    convertTsProjectToJs(process.cwd())
-  })
   .demandCommand()
   .strict().argv
