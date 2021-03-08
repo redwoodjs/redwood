@@ -8,12 +8,18 @@ import pino, {
 
 /**
  * Determines if log environment is development or test
+ *
+ * @type {boolean}
+ *
  */
 const isDevelopment =
   process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
 
 /**
  * Determines if log environment is production by checking if not development
+ *
+ * @type {boolean}
+ *
  */
 const isProduction = !isDevelopment
 
@@ -78,26 +84,30 @@ export const redactionsList: string[] | redactOptions = [
  * You can pass `'silent'` to disable logging.
  *
  */
-export const logLevel: LevelWithSilent | string =
-  typeof process.env.LOG_LEVEL !== 'undefined'
-    ? process.env.LOG_LEVEL
-    : isProduction
-    ? 'warn'
-    : 'trace'
+export const logLevel: LevelWithSilent | string = (() => {
+  if (typeof process.env.LOG_LEVEL !== 'undefined') {
+    return process.env.LOG_LEVEL
+  } else if (isProduction) {
+    return 'warn'
+  } else {
+    return 'trace'
+  }
+})()
 
 /**
- * Defines an opinionated base logger configration how how to log and what to ignore.
+ * Defines an opinionated base logger configuration that defines
+ * how to log and what to ignore.
  *
  * Defaults are:
  *
- * Colorize output
- * Ingore some event attributes like hostname
- * Prefix the log output with log level
- * Use a shorted log message that omits server name
- * Humanize time in GMT
- * Set the default log level in dev or test to trace and warn in prod *or set via LOG_LEVEL)
- * Nest objects under an `api` key to avoid conflicts with pino properties
- * Redact the host
+ * * Colorize output
+ * * Ingore some event attributes like hostname
+ * * Prefix the log output with log level
+ * * Use a shorted log message that omits server name
+ * * Humanize time in GMT
+ * * Set the default log level in dev or test to trace and warn in prod *or set via LOG_LEVEL)
+ * * Nest objects under an `api` key to avoid conflicts with pino properties
+ * * Redact the host
  *
  * See: https://github.com/pinojs/pino/blob/master/docs/api.md
  *      https://github.com/pinojs/pino-pretty
