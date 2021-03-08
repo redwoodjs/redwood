@@ -1,4 +1,4 @@
 {
   "main": "./index.js",
-  "types": "../dist/flash/index.d.ts"
+  "types": "../dist/toast/index.d.ts"
 }
