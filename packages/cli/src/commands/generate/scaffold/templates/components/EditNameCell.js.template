@@ -1,5 +1,5 @@
 import { useMutation } from '@redwoodjs/web'
-import { toast } from '@redwodjs/web/toast'
+import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import ${singularPascalName}Form from 'src/components/${pascalScaffoldPath}${singularPascalName}Form'
 

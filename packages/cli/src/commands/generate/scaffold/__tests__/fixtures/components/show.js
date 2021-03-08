@@ -1,5 +1,5 @@
 import { useMutation } from '@redwoodjs/web'
-import { toast } from '@redwodjs/web/toast'
+import { toast } from '@redwoodjs/web/toast'
 import { Link, routes, navigate } from '@redwoodjs/router'
 
 import { QUERY } from 'src/components/PostsCell'
