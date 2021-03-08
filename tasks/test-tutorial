@@ -1,2 +1,0 @@
-#!/bin/bash
-yarn babel-node tasks/test-tutorial.js $1

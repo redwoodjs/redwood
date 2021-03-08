@@ -19,7 +19,7 @@ export const builder = (yargs) => {
   })
 }
 
-const APP_JS_PATH = path.join(getPaths().web.src, 'App.js')
+const APP_JS_PATH = getPaths().web.app
 
 const i18nImportsExist = (appJS) => {
   let content = appJS.toString()
@@ -144,10 +144,10 @@ export const handler = async ({ force }) => {
       },
     },
     {
-      title: 'Adding import to App.js...',
+      title: 'Adding import to App.{js,tsx}...',
       task: (_ctx, task) => {
         /**
-         * Add i18n import to the top of App.js
+         * Add i18n import to the top of App.{js,tsx}
          *
          * Check if i18n import already exists.
          * If it exists, throw an error.
