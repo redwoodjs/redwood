@@ -28,6 +28,14 @@ const i18nImportsExist = (appJS) => {
 
   return hasBaseImport()
 }
+const addI18nImport = (appJS) => {
+  var content = appJS.toString().split('\n').reverse()
+  const index = content.findIndex((value) => /import/.test(value))
+  content.splice(index, 0, "import './i18n'")
+  content.reverse().join('')
+  return content
+}
+
 const i18nConfigExists = () => {
   return fs.existsSync(path.join(getPaths().web.src, 'i18n.js'))
 }
@@ -147,7 +155,7 @@ export const handler = async ({ force }) => {
       title: 'Adding import to App.{js,tsx}...',
       task: (_ctx, task) => {
         /**
-         * Add i18n import to the top of App.{js,tsx}
+         * Add i18n import to the last import of App.{js,tsx}
          *
          * Check if i18n import already exists.
          * If it exists, throw an error.
@@ -156,7 +164,7 @@ export const handler = async ({ force }) => {
         if (i18nImportsExist(appJS)) {
           task.skip('Import already exists in App.js')
         } else {
-          appJS = [`import './i18n'`, appJS].join(`\n`)
+          appJS = addI18nImport(appJS).join(`\n`)
           fs.writeFileSync(APP_JS_PATH, appJS)
         }
       },
