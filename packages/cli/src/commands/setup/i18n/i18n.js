@@ -21,7 +21,7 @@ export const builder = (yargs) => {
 
 const APP_JS_PATH = getPaths().web.app
 
-const i18nImportsExist = (appJS) => {
+const i18nImportExist = (appJS) => {
   let content = appJS.toString()
 
   const hasBaseImport = () => /import '.\/i18n'/.test(content)
@@ -170,7 +170,7 @@ export const handler = async ({ force }) => {
          * If it exists, throw an error.
          */
         let appJS = fs.readFileSync(APP_JS_PATH)
-        if (i18nImportsExist(appJS)) {
+        if (i18nImportExist(appJS)) {
           task.skip('Import already exists in App.js')
         } else {
           fs.writeFileSync(APP_JS_PATH, addI18nImport(appJS))
