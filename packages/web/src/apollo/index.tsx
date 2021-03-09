@@ -22,7 +22,16 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   config?: Omit<ApolloClientOptions<InMemoryCache>, 'cache'>
 }> = ({ config = {}, children }) => {
   const { uri, headers } = useFetchConfig()
-  const { getToken, type: authProviderType, isAuthenticated } = useAuth()
+  const {
+    getToken,
+    type: authProviderType,
+    isAuthenticated,
+    loading,
+  } = useAuth()
+
+  if (loading) {
+    return null
+  }
 
   const withToken = setContext(async () => {
     if (isAuthenticated && getToken) {
