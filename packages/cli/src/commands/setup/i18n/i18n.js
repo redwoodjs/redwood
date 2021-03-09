@@ -32,8 +32,7 @@ const addI18nImport = (appJS) => {
   var content = appJS.toString().split('\n').reverse()
   const index = content.findIndex((value) => /import/.test(value))
   content.splice(index, 0, "import './i18n'")
-  content.reverse().join('')
-  return content
+  return content.reverse().join(`\n`)
 }
 
 const i18nConfigExists = () => {
@@ -164,8 +163,7 @@ export const handler = async ({ force }) => {
         if (i18nImportsExist(appJS)) {
           task.skip('Import already exists in App.js')
         } else {
-          appJS = addI18nImport(appJS).join(`\n`)
-          fs.writeFileSync(APP_JS_PATH, appJS)
+          fs.writeFileSync(APP_JS_PATH, addI18nImport(appJS))
         }
       },
     },
