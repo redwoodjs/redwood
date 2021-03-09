@@ -54,7 +54,7 @@ const expressResponseForLambdaResult = (
         const { message } = b.errors[0]
         const e = new Error(message)
         e.stack = ''
-        handleError(e).then(console.log)
+        handleError(e).then(console.error)
       }
     } catch (e) {
       // do nothing

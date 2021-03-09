@@ -10,7 +10,6 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@babel/register": "^7.9.0",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "morgan": "^1.10.0",
@@ -18,7 +17,10 @@
     "require-dir": "^1.2.0",
     "yargs": "^16.0.3",
     "youch": "^2.1.1",
-    "youch-terminal": "^1.0.1"
+    "youch-terminal": "^1.0.1",
+    "nodemon": "2.0.7",
+    "dotenv-defaults": "2.0.1",
+    "glob": "7.1.6"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.46",

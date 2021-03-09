@@ -15,7 +15,7 @@ export const server = ({
   requestHandler,
 }: {
   requestHandler: (req: Request, res: Response, lambdaFunction: any) => void
-}): any => {
+}) => {
   const app = express()
   app.use(
     bodyParser.text({

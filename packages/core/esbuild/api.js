@@ -8,7 +8,7 @@ const { getPaths } = require('@redwoodjs/internal')
 
 const rwjsPaths = getPaths()
 
-// Hello. Test this, like so:
+// Hello. Test this like so:
 // You're in the root of the RedwoodJS framework directory:
 // __REDWOOD__CONFIG_PATH=__fixtures__/example-todo-main node packages/core/esbuild/api.js
 
@@ -26,7 +26,8 @@ const filePathToVarName = (filePath, searchGlob) => {
 const globImports = {
   name: 'glob-imports',
   setup: (build) => {
-    // Find all files that match "src/<word>/*" and mark them as "glob-imports".
+    // Find all files that match "src/<word characters>/**",
+    // and mark them as "glob-imports".
     build.onResolve({ filter: /^src\/\w+\/\*\*/ }, (args) => {
       return {
         path: args.path,

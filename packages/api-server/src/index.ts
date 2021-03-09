@@ -2,43 +2,52 @@
 import { rmSync } from 'fs'
 import path from 'path'
 
-import requireDir from 'require-dir'
+import dotenv from 'dotenv-defaults'
+import glob from 'glob'
+import nodemon from 'nodemon'
 import yargs from 'yargs'
+
+import { getPaths } from '@redwoodjs/internal'
 
 import { server, setLambdaFunctions } from './http'
 import { requestHandler } from './requestHandlers/awsLambda'
 
-const { port, functions, socket } = yargs
-  .option('port', { default: 8911, type: 'number' })
+const { port, watch, socket } = yargs
+  .option('port', { default: 8911, type: 'number', alias: 'p' })
   .option('socket', { type: 'string' })
   .option('functions', {
     alias: 'f',
     required: true,
     type: 'string',
-    desc: 'The path where your Serverless Functions are stored',
+    desc: 'The path to your Serverless Functions',
+    deprecate: true,
+  })
+  .option('watch', {
+    default: false,
+    type: 'boolean',
+    alias: 'w',
+    description:
+      'Watch your serverless functions for changes. Restarting the web-server.',
   }).argv
 
-if (process.env.NODE_ENV !== 'production') {
-  console.info(`NODE_ENV ${process.env.NODE_ENV}`)
-  // Transpile files during development,
-  // this command has to be run from the "api" directory.
-  const babelRequireHook = require('@babel/register')
-  babelRequireHook({
-    extends: path.join(process.cwd(), '.babelrc.js'),
-    extensions: ['.js', '.ts'],
-    only: [process.cwd()],
-    ignore: ['node_modules'],
-    cache: false,
-  })
-}
+const rwjsPaths = getPaths()
 
-const serverlessFunctions = requireDir(path.join(process.cwd(), functions), {
-  recurse: false,
-  extensions: ['.js', '.ts'],
+const serverlessFunctions = glob.sync('src/functions/*.{ts,js}', {
+  cwd: rwjsPaths.api.base,
+  ignore: ['**/*.test.ts', '**/__fixtures__/**'],
 })
 
-try {
-  const app = server({ requestHandler }).listen(socket || port, () => {
+const app = server({ requestHandler })
+process.on('exit', () => {
+  app.close(() => {
+    if (socket) {
+      rmSync(socket)
+    }
+  })
+})
+
+if (!watch) {
+  app.listen(socket || port, () => {
     if (socket) {
       console.log(socket)
     } else {
@@ -46,15 +55,38 @@ try {
     }
     setLambdaFunctions(serverlessFunctions)
   })
-
-  process.on('exit', () => {
-    app.close(() => {
-      if (socket) {
-        rmSync(socket)
-      }
-    })
+} else {
+  dotenv.config({
+    path: rwjsPaths.base,
+    defaults: path.join(rwjsPaths.base, '.env.defaults'),
   })
-} catch (e) {
-  console.error(e)
-  process.exit(1)
+
+  nodemon({
+    verbose: true,
+    watch: rwjsPaths.api.base,
+    ignore: ['*.test.*', '*.scenarios.*', 'dist'],
+    env: process.env,
+    cwd: rwjsPaths.api.base,
+    ext: 'js ts',
+  })
+  nodemon
+    .on('start', function () {
+      app.listen(socket || port, () => {
+        if (socket) {
+          console.log(socket)
+        } else {
+          console.log(`http://localhost:${port}`)
+        }
+        setLambdaFunctions(serverlessFunctions)
+      })
+    })
+    .on('quit', function () {
+      console.log('App has quit')
+      process.exit()
+    })
+    .on('restart', function (files) {
+      console.log('App restarted due to: ', files)
+    })
+    .on('stderr', console.error)
+    .on('stdout', console.log)
 }
