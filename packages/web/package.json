@@ -4,6 +4,7 @@
   "files": [
     "dist",
     "apollo",
+    "toast",
     "src/entry"
   ],
   "main": "./dist/index.js",
@@ -15,7 +16,8 @@
     "@redwoodjs/auth": "^0.26.2",
     "core-js": "3.6.5",
     "graphql": "^15.3.0",
-    "proptypes": "^1.1.0"
+    "proptypes": "^1.1.0",
+    "react-hot-toast": "^1.0.2"
   },
   "peerDependencies": {
     "react": "^17.0.1"
