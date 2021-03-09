@@ -1,21 +1,32 @@
 import fs from 'fs'
 import path from 'path'
 
-import lodash from 'lodash/string'
-import camelcase from 'camelcase'
-import pascalcase from 'pascalcase'
-import pluralize from 'pluralize'
-import decamelize from 'decamelize'
-import { paramCase } from 'param-case'
+import * as babel from '@babel/core'
 import { getDMMF } from '@prisma/sdk'
-import { getPaths as getRedwoodPaths } from '@redwoodjs/internal'
+import camelcase from 'camelcase'
+import decamelize from 'decamelize'
 import execa from 'execa'
 import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
+import lodash from 'lodash/string'
+import { paramCase } from 'param-case'
+import pascalcase from 'pascalcase'
+import pluralize from 'pluralize'
 import { format } from 'prettier'
-import * as babel from '@babel/core'
+
+import {
+  getPaths as getRedwoodPaths,
+  getConfig as getRedwoodConfig,
+} from '@redwoodjs/internal'
 
 import c from './colors'
+
+/**
+ * Used to memoize results from `getSchema` so we don't have to go through
+ * the work of open the file and parsing it from scratch each time getSchema()
+ * is called with the same model name.
+ */
+const schemaMemo = {}
 
 export const asyncForEach = async (array, callback) => {
   for (let index = 0; index < array.length; index++) {
@@ -29,23 +40,37 @@ export const asyncForEach = async (array, callback) => {
  * entire schema is returned.
  */
 export const getSchema = async (name) => {
-  const schema = await getSchemaDefinitions()
-
   if (name) {
-    const model = schema.datamodel.models.find((model) => {
-      return model.name === name
-    })
+    if (!schemaMemo[name]) {
+      const schema = await getSchemaDefinitions()
+      const model = schema.datamodel.models.find((model) => {
+        return model.name === name
+      })
 
-    if (model) {
-      return model
-    } else {
-      throw new Error(
-        `No schema definition found for \`${name}\` in schema.prisma file`
-      )
+      if (model) {
+        // look for any fields that are enums and attach the possible enum values
+        // so we can put them in generated test files
+        model.fields.forEach((field) => {
+          const fieldEnum = schema.datamodel.enums.find((e) => {
+            return field.type === e.name
+          })
+          if (fieldEnum) {
+            field.enumValues = fieldEnum.values
+          }
+        })
+
+        // memoize based on the model name
+        schemaMemo[name] = model
+      } else {
+        throw new Error(
+          `No schema definition found for \`${name}\` in schema.prisma file`
+        )
+      }
     }
+    return schemaMemo[name]
+  } else {
+    return (await getSchemaDefinitions()).metadata.datamodel
   }
-
-  return schema.metadata.datamodel
 }
 
 /**
@@ -74,7 +99,7 @@ export const getEnum = async (name) => {
 }
 
 /*
- * Returns the DMMF defined by `prisma` resolving the relevant `shema.prisma` path.
+ * Returns the DMMF defined by `prisma` resolving the relevant `schema.prisma` path.
  */
 export const getSchemaDefinitions = async () => {
   const schemaPath = path.join(getPaths().api.db, 'schema.prisma')
@@ -185,8 +210,11 @@ const existsAnyExtensionSync = (file) => {
 export const writeFile = (
   target,
   contents,
-  { overwriteExisting = false } = {}
+  { overwriteExisting = false } = {},
+  task = {}
 ) => {
+  const { base } = getPaths()
+  task.title = `Writing \`./${path.relative(base, target)}\``
   if (!overwriteExisting && fs.existsSync(target)) {
     throw new Error(`${target} already exists.`)
   }
@@ -195,6 +223,7 @@ export const writeFile = (
   const targetDir = target.replace(filename, '')
   fs.mkdirSync(targetDir, { recursive: true })
   fs.writeFileSync(target, contents)
+  task.title = `Successfully wrote file \`./${path.relative(base, target)}\``
 }
 
 export const bytes = (contents) => Buffer.byteLength(contents, 'utf8')
@@ -208,7 +237,16 @@ export const getPaths = () => {
     return getRedwoodPaths()
   } catch (e) {
     console.error(c.error(e.message))
-    process.exit(0)
+    process.exit(1)
+  }
+}
+
+export const getConfig = () => {
+  try {
+    return getRedwoodConfig()
+  } catch (e) {
+    console.error(c.error(e.message))
+    process.exit(1)
   }
 }
 
@@ -228,8 +266,11 @@ export const prettierOptions = () => {
  * Convert a generated TS template file into JS.
  */
 export const transformTSToJS = (filename, content) => {
-  const result = babel.transform(content, {
+  const { code } = babel.transform(content, {
     filename,
+    // If you ran `yarn rw generate` in `./web` transformSync would import the `.babelrc.js` file,
+    // in `./web`? despite us setting `configFile: false`.
+    cwd: process.env.NODE_ENV === 'test' ? undefined : getPaths().base,
     configFile: false,
     plugins: [
       [
@@ -241,9 +282,9 @@ export const transformTSToJS = (filename, content) => {
       ],
     ],
     retainLines: true,
-  }).code
+  })
 
-  return prettify(filename.replace(/\.ts$/, '.js'), result)
+  return prettify(filename.replace(/\.ts$/, '.js'), code)
 }
 
 /**
@@ -257,8 +298,8 @@ export const writeFilesTask = (files, options) => {
     Object.keys(files).map((file) => {
       const contents = files[file]
       return {
-        title: `Writing \`./${path.relative(base, file)}\`...`,
-        task: () => writeFile(file, contents, options),
+        title: `...waiting to write file \`./${path.relative(base, file)}\`...`,
+        task: (ctx, task) => writeFile(file, contents, options, task),
       }
     })
   )
@@ -323,7 +364,7 @@ export const addRoutesToRouterTask = (routes) => {
     if (content.includes(route)) {
       return content
     }
-    return content.replace(/(\s*)\<Router\>/, `$1<Router>$1  ${route}`)
+    return content.replace(/<Router>(\s*)/, `<Router>$1${route}$1`)
   }, routesContent)
   writeFile(redwoodPaths.web.routes, newRoutesContent, {
     overwriteExisting: true,

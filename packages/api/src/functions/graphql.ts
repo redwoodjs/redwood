@@ -1,16 +1,21 @@
-import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
-import type { Config } from 'apollo-server-lambda'
 import type { Context, ContextFunction } from 'apollo-server-core'
-import type { GlobalContext } from 'src/globalContext'
-import type { AuthContextPayload } from 'src/auth'
+import type { Config, CreateHandlerOptions } from 'apollo-server-lambda'
 import { ApolloServer } from 'apollo-server-lambda'
+import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
+
+import type { AuthContextPayload } from 'src/auth'
 import { getAuthenticationContext } from 'src/auth'
-import { setContext } from 'src/globalContext'
+import {
+  GlobalContext,
+  setContext,
+  initPerRequestContext,
+  usePerRequestContext,
+} from 'src/globalContext'
 
 export type GetCurrentUser = (
   decoded: AuthContextPayload[0],
   raw: AuthContextPayload[1]
-) => Promise<null | object | string>
+) => Promise<null | Record<string, unknown> | string>
 
 /**
  * We use Apollo Server's `context` option as an entry point to construct our
@@ -51,7 +56,6 @@ export const createContextHandler = (
       // if userContext is a function, run that and return just the result
       customUserContext = await userContext({ event, context })
     }
-
     // Sets the **global** context object, which can be imported with:
     // import { context } from '@redwoodjs/api'
     return setContext({
@@ -75,6 +79,9 @@ interface GraphQLHandlerOptions extends Config {
    * A callback when an unhandled exception occurs. Use this to disconnect your prisma instance.
    */
   onException?: () => void
+
+  cors?: CreateHandlerOptions['cors']
+  onHealthCheck?: CreateHandlerOptions['onHealthCheck']
 }
 /**
  * Creates an Apollo GraphQL Server.
@@ -83,29 +90,27 @@ interface GraphQLHandlerOptions extends Config {
  * export const handler = createGraphQLHandler({ schema, context, getCurrentUser })
  * ```
  */
-export const createGraphQLHandler = (
-  {
-    context,
-    getCurrentUser,
-    onException,
-    ...options
-  }: GraphQLHandlerOptions = {},
-  /**
-   * @deprecated please use onException instead to disconnect your database.
-   * */
-  db?: any
-) => {
-  const isDevEnv = process.env.NODE_ENV !== 'production'
+export const createGraphQLHandler = ({
+  context,
+  getCurrentUser,
+  onException,
+  cors,
+  onHealthCheck,
+  ...options
+}: GraphQLHandlerOptions = {}) => {
+  const isDevEnv = process.env.NODE_ENV === 'development'
   const handler = new ApolloServer({
-    // Turn off playground in production
+    // Turn off playground, introspection and debug in production.
     debug: isDevEnv,
+    introspection: isDevEnv,
     playground: isDevEnv,
     // Log the errors in the console
     formatError: (error) => {
       if (isDevEnv) {
         // I want the dev-server to pick this up!?
         // TODO: Move the error handling into a separate package
-        // @ts-expect-error
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         import('@redwoodjs/dev-server/dist/error')
           .then(({ handleError }) => {
             return handleError(error.originalError as Error)
@@ -118,21 +123,33 @@ export const createGraphQLHandler = (
     // Wrap the user's context function in our own
     context: createContextHandler(context, getCurrentUser),
     ...options,
-  }).createHandler()
+  }).createHandler({ cors, onHealthCheck })
 
   return (
     event: APIGatewayProxyEvent,
     context: LambdaContext,
     callback: any
   ): void => {
-    try {
-      handler(event, context, callback)
-    } catch (e) {
-      onException && onException()
-      // Disconnect from the database (recommended by Prisma), this step will be
-      // removed in future releases.
-      db && db.disconnect()
-      throw e
+    if (usePerRequestContext()) {
+      // This must be used when you're self-hosting RedwoodJS.
+      const localAsyncStorage = initPerRequestContext()
+      localAsyncStorage.run(new Map(), () => {
+        try {
+          handler(event, context, callback)
+        } catch (e) {
+          onException && onException()
+          throw e
+        }
+      })
+    } else {
+      // This is OK for AWS (Netlify/Vercel) because each Lambda request
+      // is handled individually.
+      try {
+        handler(event, context, callback)
+      } catch (e) {
+        onException && onException()
+        throw e
+      }
     }
   }
 }

@@ -5,7 +5,10 @@ import { deleteFilesTask, removeRoutesFromRouterTask } from 'src/lib'
 import c from 'src/lib/colors'
 
 import { pathName } from '../../generate/helpers'
-import { files as pageFiles } from '../../generate/page/page'
+import {
+  files as pageFiles,
+  paramVariants as templateVars,
+} from '../../generate/page/page'
 
 export const command = 'page <name> [path]'
 export const description = 'Destroy a page and route component'
@@ -26,7 +29,12 @@ export const tasks = ({ name, path }) =>
       {
         title: 'Destroying page files...',
         task: async () => {
-          const f = pageFiles({ name, path: pathName(path, name) })
+          const p = pathName(path, name)
+          const f = pageFiles({
+            name,
+            path: p,
+            ...templateVars(p),
+          })
           return deleteFilesTask(f)
         },
       },

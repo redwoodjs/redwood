@@ -1,6 +1,9 @@
-import { useMutation, useFlash } from '@redwoodjs/web'
+import { useMutation } from '@redwoodjs/web'
+import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import PostForm from 'src/components/PostForm'
+
+import { QUERY } from 'src/components/PostsCell'
 
 const CREATE_POST_MUTATION = gql`
   mutation CreatePostMutation($input: CreatePostInput!) {
@@ -11,11 +14,10 @@ const CREATE_POST_MUTATION = gql`
 `
 
 const NewPost = () => {
-  const { addMessage } = useFlash()
   const [createPost, { loading, error }] = useMutation(CREATE_POST_MUTATION, {
     onCompleted: () => {
+      toast.success('Post created')
       navigate(routes.posts())
-      addMessage('Post created.', { classes: 'rw-flash-success' })
     },
   })
 

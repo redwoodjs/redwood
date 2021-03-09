@@ -1,6 +1,8 @@
-import type { GlobalContext } from 'src/globalContext'
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
+
 import type { SupportedAuthTypes } from '@redwoodjs/auth'
+
+import type { GlobalContext } from 'src/globalContext'
 
 import { decodeToken } from './decoders'
 
@@ -14,7 +16,7 @@ export const getAuthProviderHeader = (
 }
 
 export interface AuthorizationHeader {
-  schema: 'Bearer' | 'Basic'
+  schema: 'Bearer' | 'Basic' | string
   token: string
 }
 /**
@@ -23,22 +25,26 @@ export interface AuthorizationHeader {
 export const parseAuthorizationHeader = (
   event: APIGatewayProxyEvent
 ): AuthorizationHeader => {
-  const [schema, token] = event.headers?.authorization?.split(' ')
+  const parts = event.headers?.authorization?.split(' ')
+  if (parts?.length !== 2) {
+    throw new Error('The `Authorization` header is not valid.')
+  }
+  const [schema, token] = parts
   if (!schema.length || !token.length) {
     throw new Error('The `Authorization` header is not valid.')
   }
-  // @ts-expect-error
   return { schema, token }
 }
 
 export type AuthContextPayload = [
-  string | object | null,
-  { type: SupportedAuthTypes; token: string }
+  string | Record<string, unknown> | null,
+  { type: SupportedAuthTypes } & AuthorizationHeader,
+  { event: APIGatewayProxyEvent; context: GlobalContext & LambdaContext }
 ]
 
 /**
  * Get the authorization information from the request headers and request context.
- * @returns [decoded, { type, token }]
+ * @returns [decoded, { type, schema, token }, { event, context }]
  **/
 export const getAuthenticationContext = async ({
   event,
@@ -55,7 +61,7 @@ export const getAuthenticationContext = async ({
   }
 
   let decoded = null
-  const { token } = parseAuthorizationHeader(event)
+  const { schema, token } = parseAuthorizationHeader(event)
   decoded = await decodeToken(type, token, { event, context })
-  return [decoded, { type, token }]
+  return [decoded, { type, schema, token }, { event, context }]
 }

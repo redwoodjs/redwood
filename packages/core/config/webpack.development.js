@@ -1,7 +1,8 @@
-const merge = require('webpack-merge')
-const escapeRegExp = require('lodash.escaperegexp')
-const { getConfig } = require('@redwoodjs/internal')
 const ErrorOverlayPlugin = require('error-overlay-webpack-plugin')
+const escapeRegExp = require('lodash.escaperegexp')
+const { merge } = require('webpack-merge')
+
+const { getConfig } = require('@redwoodjs/internal')
 
 const webpackConfig = require('./webpack.common')
 
@@ -20,9 +21,12 @@ const baseConfig = merge(webpackConfig('development'), {
     port: redwoodConfig.web.port,
     proxy: {
       [redwoodConfig.web.apiProxyPath]: {
-        target: `http://localhost:${redwoodConfig.api.port}`,
+        target: `http://[::1]:${redwoodConfig.api.port}`,
         pathRewrite: {
           [`^${escapeRegExp(redwoodConfig.web.apiProxyPath)}`]: '',
+        },
+        headers: {
+          Connection: 'keep-alive',
         },
       },
     },
@@ -35,7 +39,7 @@ const baseConfig = merge(webpackConfig('development'), {
     removeEmptyChunks: false,
     splitChunks: false,
   },
-  plugins: [new ErrorOverlayPlugin()],
+  plugins: [new ErrorOverlayPlugin()].filter(Boolean),
 })
 
 module.exports = mergeUserWebpackConfig('development', baseConfig)

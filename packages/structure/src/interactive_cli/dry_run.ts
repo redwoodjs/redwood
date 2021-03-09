@@ -1,19 +1,46 @@
+import { join } from 'path'
+
 import { outputFileSync } from 'fs-extra'
 import proxyquire from 'proxyquire'
+
 import { spawnCancellable } from '../x/child_process'
 
-type FileOverrides = { [filePath: string]: string }
+import { RedwoodCommandString } from './RedwoodCommandString'
 
-// cmd = 'g cell foobar'
+export type FileSet = { [filePath: string]: string | null }
+
+interface Opts {
+  /**
+   * redwood project root (filepath)
+   */
+  cwd: string
+  /**
+   * Command to execute
+   */
+  cmd: RedwoodCommandString
+  /**
+   * Files to override
+   */
+  fileOverrides?: FileSet
+  /**
+   * directory to store the temporary generated JS script
+   */
+  tmpdir?: string
+}
+
 export async function redwood_gen_dry_run(
-  projectRoot: string,
-  cmd: string,
-  fileOverrides: FileOverrides = {}
-): Promise<{ stdout: string; files: [string, string][] }> {
+  opts: Opts
+): Promise<{ stdout: string; files: FileSet }> {
+  const { cwd, cmd, fileOverrides, tmpdir } = opts
+  if (!cmd.isComplete) {
+    throw new Error(
+      'cannot pass an interactive command straight to the redwood-cli. You must run it through the command_builder first'
+    )
+  }
   // eslint-disable-next-line
   const x = [proxyquire].length // we need to make sure this module is required. it will be used in a script we will generate dynamically
-  const ff = `.decoupled/tmp/rwcli.js`
-  const jsfile = projectRoot + '/' + ff
+  const tempDir = tmpdir ?? join(cwd, '.tmp')
+  const jsfile = join(tempDir, 'rwcli.js')
   let requireStatement = 'proxyquire'
   // if (extensionPath) {
   //   requireStatement = relative(
@@ -22,10 +49,11 @@ export async function redwood_gen_dry_run(
   //   );
   // }
   outputFileSync(jsfile, buildJS(fileOverrides, requireStatement))
-  const cmdargs = 'node ' + jsfile + ' ' + cmd
+  const cmdargs = 'node ' + jsfile + ' ' + cmd.processed
   const [cmd2, ...args] = cmdargs.split(' ')
+  // TODO: use execa?
   const { stdout: out, stderr } = await spawnCancellable(cmd2, args, {
-    cwd: projectRoot,
+    cwd,
   })
   if (stderr) {
     throw new Error(stderr)
@@ -38,35 +66,43 @@ export async function redwood_gen_dry_run(
 const separator = '---------===----===--------'
 
 function buildJS(
-  fileOverrides: FileOverrides = {},
+  fileOverrides: FileSet = {},
   proxyquireRequireStatement = 'proxyquire'
 ) {
-  let js = /*js*/ `
-  // redwood_gen_dry_run___generated_template.js
+  let js = `
   const proxyquire = require("proxyquire")
-  const fs = require("fs")
-  const files = []
+  const fs = require('fs')
+  const path = require('path')
+  const files = {}
   const fileOverrides = { FILE: "OVERRIDES" }
-  proxyquire("@redwoodjs/cli/dist", {
+  const FILE_SCHEME = 'file://'
+
+  function URL_file(f) {
+    if (f.startsWith(FILE_SCHEME))
+      f = f.substr(FILE_SCHEME.length)
+    return new URL(FILE_SCHEME + path.normalize(f)).href
+  }
+
+  proxyquire('@redwoodjs/cli/dist', {
     fs: {
       mkdir() {},
       mkdirSync(...args) {},
-      writeFile(...args) {
-        files.push(args)
+      writeFile(a, b) {
+        files[URL_file(a)] = b
       },
-      writeFileSync(...args) {
-        files.push(args)
+      writeFileSync(a, b) {
+        files[URL_file(a)] = b
       },
       readFileSync(...args) {
-        const path = args[0]
-        if (typeof path === "string")
-          if (fileOverrides[path]) return fileOverrides[path]
+        const f = URL_file(args[0])
+        if (fileOverrides[f]) return fileOverrides[f]
         return fs.readFileSync.apply(fs, args)
       },
-      "@global": true,
+      '@global': true,
     },
   })
-  process.on("exit", () => {
+
+  process.on('exit', () => {
     console.log("__SEPARATOR__")
     console.log(JSON.stringify(files, null, 2))
   })

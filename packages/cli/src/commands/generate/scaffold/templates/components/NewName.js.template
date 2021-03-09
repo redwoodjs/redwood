@@ -1,6 +1,9 @@
-import { useMutation, useFlash } from '@redwoodjs/web'
+import { useMutation } from '@redwoodjs/web'
+import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import ${singularPascalName}Form from 'src/components/${pascalScaffoldPath}${singularPascalName}Form'
+
+import { QUERY } from 'src/components/${pascalScaffoldPath}${pluralPascalName}Cell'
 
 const CREATE_${singularConstantName}_MUTATION = gql`
   mutation Create${singularPascalName}Mutation($input: Create${singularPascalName}Input!) {
@@ -11,11 +14,10 @@ const CREATE_${singularConstantName}_MUTATION = gql`
 `
 
 const New${singularPascalName} = () => {
-  const { addMessage } = useFlash()
   const [create${singularPascalName}, { loading, error }] = useMutation(CREATE_${singularConstantName}_MUTATION, {
     onCompleted: () => {
+      toast.success('${singularPascalName} created')
       navigate(routes.${pluralRouteName}())
-      addMessage('${singularPascalName} created.', { classes: 'rw-flash-success' })
     },
   })
 

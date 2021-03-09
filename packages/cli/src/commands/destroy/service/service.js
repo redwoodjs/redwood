@@ -22,5 +22,5 @@ export const {
   tasks,
 } = createYargsForComponentDestroy({
   componentName: 'service',
-  filesFn: filesWithTemplateVars(getDefaultArgs(builder)),
+  filesFn: filesWithTemplateVars({ ...getDefaultArgs(builder), crud: true }),
 })

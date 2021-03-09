@@ -7,6 +7,14 @@ jest.mock('src/lib', () => {
   }
 })
 
+jest.mock('@redwoodjs/structure', () => {
+  return {
+    getProject: () => ({
+      cells: [{ queryOperationName: undefined }],
+    }),
+  }
+})
+
 import fs from 'fs'
 
 import 'src/lib/test'

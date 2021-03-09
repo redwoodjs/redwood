@@ -1,7 +1,7 @@
 global.__dirname = __dirname
 import path from 'path'
 
-import { loadGeneratorFixture } from 'src/lib/test' // eslint-disable-line
+import 'src/lib/test'
 
 import * as scaffold from '../scaffold'
 
@@ -20,8 +20,8 @@ beforeAll(async () => {
 
 describe('admin/pages/post', () => {
   describe('creates the correct files with the correct imports', () => {
-    test('returns exactly 16 files', () => {
-      expect(Object.keys(filesNestedLower).length).toEqual(16)
+    test('returns exactly 17 files', () => {
+      expect(Object.keys(filesNestedLower).length).toEqual(17)
     })
 
     // Layout
@@ -324,8 +324,8 @@ describe('admin/pages/post', () => {
 
 describe('Admin/Pages/Post', () => {
   describe('creates the correct files with the correct imports', () => {
-    test('returns exactly 16 files', () => {
-      expect(Object.keys(filesNestedUpper).length).toEqual(16)
+    test('returns exactly 17 files', () => {
+      expect(Object.keys(filesNestedUpper).length).toEqual(17)
     })
 
     // Layout

@@ -6,8 +6,14 @@ import {
   TextField,
   CheckboxField,
   NumberField,
+  DatetimeLocalField,
+  TextAreaField,
   Submit,
-} from '@redwoodjs/web'
+} from '@redwoodjs/forms'
+
+const formatDatetime = (value) => {
+  return value.replace(/:\d{2}\.\d{3}\w/, '')
+}
 
 const PostForm = (props) => {
   const onSubmit = (data) => {
@@ -159,14 +165,31 @@ const PostForm = (props) => {
         >
           Posted at
         </Label>
-        <TextField
+        <DatetimeLocalField
           name="postedAt"
-          defaultValue={props.post?.postedAt}
+          defaultValue={formatDatetime(props.post?.postedAt)}
           className="rw-input"
           errorClassName="rw-input rw-input-error"
           validation={{ required: true }}
         />
         <FieldError name="postedAt" className="rw-field-error" />
+
+        <Label
+          name="metadata"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
+        >
+          Metadata
+        </Label>
+        <TextAreaField
+          name="metadata"
+          defaultValue={JSON.stringify(props.post?.metadata)}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+          validation={{ required: true }}
+          dataType="Json"
+        />
+        <FieldError name="metadata" className="rw-field-error" />
 
         <div className="rw-button-group">
           <Submit disabled={props.loading} className="rw-button rw-button-blue">

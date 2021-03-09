@@ -1,7 +1,8 @@
 import { resolve } from 'path'
-import { DefaultHost } from '../../ide'
-import { getOutline } from '../outline'
+
+import { DefaultHost } from '../../hosts'
 import { RWProject } from '../../model'
+import { getOutline } from '../outline'
 import { outlineToJSON } from '../types'
 
 describe('Redwood Project Outline', () => {

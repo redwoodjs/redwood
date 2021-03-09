@@ -1,5 +1,8 @@
-import { useMutation, useFlash } from '@redwoodjs/web'
+import { useMutation } from '@redwoodjs/web'
+import { toast } from '@redwoodjs/web/toast'
 import { Link, routes } from '@redwoodjs/router'
+
+import { QUERY } from 'src/components/${pascalScaffoldPath}${pluralPascalName}Cell'
 
 const DELETE_${singularConstantName}_MUTATION = gql`
   mutation Delete${singularPascalName}Mutation($id: ${idType}!) {
@@ -19,6 +22,10 @@ const truncate = (text) => {
   return output
 }
 
+const jsonTruncate = (obj) => {
+  return truncate(JSON.stringify(obj, null, 2))
+}
+
 const timeTag = (datetime) => {
   return (
     <time dateTime={datetime} title={datetime}>
@@ -32,16 +39,20 @@ const checkboxInputTag = (checked) => {
 }
 
 const ${pluralPascalName}List = ({ ${pluralCamelName} }) => {
-  const { addMessage } = useFlash()
   const [delete${singularPascalName}] = useMutation(DELETE_${singularConstantName}_MUTATION, {
     onCompleted: () => {
-      addMessage('${singularPascalName} deleted.', { classes: 'rw-flash-success' })
+      toast.success('${singularPascalName} deleted')
     },
+    // This refetches the query on the list page. Read more about other ways to
+    // update the cache over here:
+    // https://www.apollographql.com/docs/react/data/mutations/#making-all-other-cache-updates
+    refetchQueries: [{ query: QUERY }],
+    awaitRefetchQueries: true,
   })
 
   const onDeleteClick = (id) => {
     if (confirm('Are you sure you want to delete ${singularCamelName} ' + id + '?')) {
-      delete${singularPascalName}({ variables: { id }, refetchQueries: ['${pluralConstantName}'] })
+      delete${singularPascalName}({ variables: { id } })
     }
   }
 
@@ -57,7 +68,7 @@ const ${pluralPascalName}List = ({ ${pluralCamelName} }) => {
         <tbody>
           {${pluralCamelName}.map((${singularCamelName}) => (
             <tr key={${singularCamelName}.id}><% columns.forEach(column => { %>
-              <td>{${column.displayFunction}(${singularCamelName}.${column.name})}</td><% }) %>
+              <td>{${column.listDisplayFunction}(${singularCamelName}.${column.name})}</td><% }) %>
               <td>
                 <nav className="rw-table-actions">
                   <Link

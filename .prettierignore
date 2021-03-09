@@ -1,5 +1,4 @@
 **/dist
-packages/api/importAll.macro.js
 
 # Do not format Markdown files to allow easier documentation contribution
 *.md

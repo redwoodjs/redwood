@@ -1,5 +1,6 @@
 import * as tsm from 'ts-morph'
 import { DiagnosticSeverity } from 'vscode-languageserver-types'
+
 import { BaseNode } from '../ide'
 import { iter } from '../x/Array'
 import { lazy } from '../x/decorators'
@@ -7,6 +8,7 @@ import {
   ExtendedDiagnostic,
   Location_fromNode,
 } from '../x/vscode-languageserver-types'
+
 import { RWSDLField } from './RWSDLField'
 import { RWService } from './RWService'
 
@@ -60,7 +62,7 @@ export class RWServiceFunction extends BaseNode {
         const locationNode = this.node.getParameters()[0] ?? this.node
         const { uri, range } = Location_fromNode(locationNode)
         const message = `Parameter mismatch between SDL and implementation ("${p1}" !== "${p2}")`
-        yield {
+        const diagnostic = {
           uri,
           diagnostic: {
             range,
@@ -75,6 +77,8 @@ export class RWServiceFunction extends BaseNode {
             ],
           },
         } as ExtendedDiagnostic
+        // comment out for now (see https://github.com/redwoodjs/redwood/issues/943)
+        if (false) yield diagnostic // eslint-disable-line
       }
 
       // TODO: check that types match

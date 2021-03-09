@@ -10,6 +10,7 @@ jest.mock('src/lib', () => {
 import fs from 'fs'
 
 import 'src/lib/test'
+
 import { getPaths } from 'src/lib'
 
 import { files } from '../../../generate/page/page'

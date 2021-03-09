@@ -1,30 +1,34 @@
 import { render, screen } from '@redwoodjs/testing'
-
 import { Loading, Empty, Failure, Success } from './${pascalName}Cell'
+import { standard } from './${pascalName}Cell.mock'
 
 describe('${pascalName}Cell', () => {
-  it('Loading renders successfully', () => {
-    render(<Loading />)
-    // Use screen.debug() to see output.
-    expect(screen.queryByText('Loading...')).toBeInTheDocument()
+  it('renders Loading successfully', () => {
+    expect(() => {
+      render(<Loading />)
+    }).not.toThrow()
   })
 
-  it('Empty renders successfully', () => {
-    render(<Empty />)
-    expect(screen.queryByText('Empty')).toBeInTheDocument()
+  it('renders Empty successfully', async () => {
+    expect(() => {
+      render(<Empty />)
+    }).not.toThrow()
   })
 
-  it('Failure renders successfully', () => {
-    render(<Failure error={{ message: 'Oh no!' }} />)
-    expect(screen.queryByText('Error: Oh no!')).toBeInTheDocument()
+  it('renders Failure successfully', async () => {
+    expect(() => {
+      render(<Failure error={new Error('Oh no')} />)
+    }).not.toThrow()
   })
 
-  it('Success renders successfully', () => {
-    render(
-      <Success userExample={{ ${camelName}: { objectKey: 'objectValue' } }} />
-    )
-    expect(
-      screen.queryByText('{"${camelName}":{"objectKey":"objectValue"}}')
-    ).toBeInTheDocument()
+  // When you're ready to test the actual output of your component render
+  // you could test that, for example, certain text is present:
+  //
+  //   expect(screen.getByText('Hello, world')).toBeInTheDocument()
+
+  it('renders Success successfully', async () => {
+    expect(() => {
+      render(<Success ${camelName}={standard().${camelName}} />)
+    }).not.toThrow()
   })
 })

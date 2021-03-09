@@ -11,6 +11,11 @@ export interface AuthClientGoTrue extends AuthClient {
     password: string
     remember?: boolean
   }): Promise<GoTrueUser>
+  signup(options: {
+    email: string
+    password: string
+    remember?: boolean
+  }): Promise<GoTrueUser>
   client: GoTrue
 }
 
@@ -24,6 +29,8 @@ export const goTrue = (client: GoTrue): AuthClientGoTrue => {
       const user = await client.currentUser()
       return user?.logout()
     },
+    signup: async ({ email, password, remember }) =>
+      client.signup(email, password, remember),
     getToken: async () => {
       const user = await client.currentUser()
       return user?.jwt() || null

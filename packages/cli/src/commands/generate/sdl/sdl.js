@@ -1,7 +1,9 @@
 import path from 'path'
 
-import Listr from 'listr'
+import boxen from 'boxen'
 import camelcase from 'camelcase'
+import chalk from 'chalk'
+import Listr from 'listr'
 import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 import terminalLink from 'terminal-link'
@@ -17,10 +19,30 @@ import {
 import c from 'src/lib/colors'
 
 import { yargsDefaults } from '../../generate'
-import { files as serviceFiles } from '../service/service'
 import { relationsForModel } from '../helpers'
+import { files as serviceFiles } from '../service/service'
 
-const IGNORE_FIELDS_FOR_INPUT = ['id', 'createdAt']
+const IGNORE_FIELDS_FOR_INPUT = ['id', 'createdAt', 'updatedAt']
+
+const missingIdConsoleMessage = () => {
+  const line1 =
+    chalk.bold.yellow('WARNING') +
+    ': Cannot generate CRUD SDL without an `@id` database column.'
+  const line2 = 'If you are trying to generate for a many-to-many join table '
+  const line3 = "you'll need to update your schema definition to include"
+  const line4 = 'an `@id` column. Read more here: '
+  const line5 = chalk.underline.blue(
+    'https://redwoodjs.com/docs/schema-relations'
+  )
+
+  console.error(
+    boxen(line1 + '\n\n' + line2 + '\n' + line3 + '\n' + line4 + '\n' + line5, {
+      padding: 1,
+      margin: { top: 1, bottom: 3, right: 1, left: 2 },
+      borderStyle: 'single',
+    })
+  )
+}
 
 const modelFieldToSDL = (field, required = true, types = {}) => {
   if (Object.entries(types).length) {
@@ -28,9 +50,15 @@ const modelFieldToSDL = (field, required = true, types = {}) => {
       field.kind === 'object' ? idType(types[field.type]) : field.type
   }
 
-  return `${field.name}: ${field.isList ? '[' : ''}${field.type}${
-    field.isList ? ']' : ''
-  }${(field.isRequired && required) | field.isList ? '!' : ''}`
+  const dictionary = {
+    Json: 'JSON',
+  }
+
+  return `${field.name}: ${field.isList ? '[' : ''}${
+    dictionary[field.type] || field.type
+  }${field.isList ? ']' : ''}${
+    (field.isRequired && required) | field.isList ? '!' : ''
+  }`
 }
 
 const querySDL = (model) => {
@@ -58,15 +86,20 @@ const updateInputSDL = (model, types = {}) => {
   return inputSDL(model, false, types)
 }
 
-const idType = (model) => {
+const idType = (model, crud) => {
+  if (!crud) {
+    return undefined
+  }
+
   const idField = model.fields.find((field) => field.isId)
   if (!idField) {
-    throw new Error('Cannot generate SDL without an `id` database column')
+    missingIdConsoleMessage()
+    throw new Error('Failed: Could not generate SDL')
   }
   return idField.type
 }
 
-const sdlFromSchemaModel = async (name) => {
+const sdlFromSchemaModel = async (name, crud) => {
   const model = await getSchema(name)
 
   if (model) {
@@ -98,7 +131,7 @@ const sdlFromSchemaModel = async (name) => {
       query: querySDL(model).join('\n    '),
       createInput: createInputSDL(model, types).join('\n    '),
       updateInput: updateInputSDL(model, types).join('\n    '),
-      idType: idType(model),
+      idType: idType(model, crud),
       relations: relationsForModel(model),
       enums,
     }
@@ -117,7 +150,7 @@ export const files = async ({ name, crud, typescript, javascript }) => {
     idType,
     relations,
     enums,
-  } = await sdlFromSchemaModel(pascalcase(pluralize.singular(name)))
+  } = await sdlFromSchemaModel(pascalcase(pluralize.singular(name)), crud)
 
   let template = generateTemplate(
     path.join('sdl', 'templates', `sdl.ts.template`),
@@ -200,6 +233,7 @@ export const handler = async ({
   try {
     await tasks.run()
   } catch (e) {
-    console.log(c.error(e.message))
+    console.error(c.error(e.message))
+    process.exit(e?.exitCode || 1)
   }
 }

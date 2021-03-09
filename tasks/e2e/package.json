@@ -3,11 +3,8 @@
   "description": "",
   "version": "0.0.0",
   "private": true,
-  "scripts": {
-    "test:tutorial": "yarn cypress open"
-  },
+
   "devDependencies": {
-    "cypress": "^4.8.0"
-  },
-  "dependencies": {}
+    "cypress": "^5.1.0"
+  }
 }

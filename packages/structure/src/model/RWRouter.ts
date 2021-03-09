@@ -1,4 +1,3 @@
-import { URL_file } from 'src/x/URL'
 import * as tsm from 'ts-morph'
 import {
   CodeAction,
@@ -8,16 +7,19 @@ import {
   Position,
   WorkspaceChange,
 } from 'vscode-languageserver-types'
+
 import { RWError } from '../errors'
 import { CodeLensX, FileNode } from '../ide'
 import { iter } from '../x/Array'
 import { lazy, memo } from '../x/decorators'
+import { URL_file } from '../x/URL'
 import {
   err,
   ExtendedDiagnostic,
   LocationLike_toLocation,
   Location_fromNode,
 } from '../x/vscode-languageserver-types'
+
 import { RWProject } from './RWProject'
 import { RWRoute } from './RWRoute'
 
@@ -38,7 +40,9 @@ export class RWRouter extends FileNode {
     // TODO: params
     const path = this.parent.pages.find((p) => p.filePath === filePath)?.route
       ?.path
-    if (path?.includes('{')) return
+    if (path?.includes('{')) {
+      return
+    }
     return path
   }
 
@@ -59,14 +63,18 @@ export class RWRouter extends FileNode {
   @lazy() get routes() {
     const self = this
     return iter(function* () {
-      if (!self.jsxNode) return
+      if (!self.jsxNode) {
+        return
+      }
       // TODO: make sure that they are nested within the <Router> tag
       // we are not checking it right now
       for (const x of self.sf.getDescendantsOfKind(
         tsm.SyntaxKind.JsxSelfClosingElement
       )) {
         const tagName = x.getTagNameNode().getText()
-        if (tagName === 'Route') yield new RWRoute(x, self)
+        if (tagName === 'Route') {
+          yield new RWRoute(x, self)
+        }
       }
     })
   }
@@ -76,26 +84,27 @@ export class RWRouter extends FileNode {
   *ideInfo() {
     if (this.jsxNode) {
       let location = Location_fromNode(this.jsxNode)
-      if (this.routes.length > 0) {
-        location = Location_fromNode(this.routes[0].jsxNode)
-        const codeLens: CodeLens = {
-          range: location.range,
-          command: Command.create('Create Page...', 'redwoodjs/cli', {
-            projectRoot: this.parent.projectRoot,
-            args: { _0: 'generate', _1: 'page' },
-          }),
-        }
-        yield {
-          kind: 'CodeLens',
-          location,
-          codeLens,
-        } as CodeLensX
+      const codeLens: CodeLens = {
+        range: location.range,
+        command: Command.create(
+          'Create Page...',
+          'redwoodjs.cli',
+          'generate page...',
+          this.parent.projectRoot
+        ),
       }
+      yield {
+        kind: 'CodeLens',
+        location,
+        codeLens,
+      } as CodeLensX
     }
   }
 
   @lazy() get quickFix_addNotFoundpage() {
-    if (!this.jsxNode) return undefined
+    if (!this.jsxNode) {
+      return undefined
+    }
     const change = new WorkspaceChange({ documentChanges: [] })
     let uri = URL_file(this.parent.defaultNotFoundPageFilePath)
     const p = this.parent.pages.find((p) => p.basenameNoExt === 'NotFoundPage')
@@ -140,7 +149,9 @@ export class RWRouter extends FileNode {
       return // stop checking for errors if the file doesn't exist
     }
 
-    if (!this.jsxNode) return
+    if (!this.jsxNode) {
+      return
+    }
 
     if (this.numNotFoundPages === 0) {
       const { uri, range } = LocationLike_toLocation(this.jsxNode)

@@ -1,17 +1,22 @@
-import { getDMMF } from '@prisma/sdk'
-// TODO: re-implement a higher quality version of these in ./project
-import { getPaths, processPagesDir } from '@redwoodjs/internal/dist/paths'
 import { join } from 'path'
-import { URL_file } from 'src/x/URL'
-import { BaseNode, Host } from '../ide'
+
+import { getDMMF } from '@prisma/sdk'
+
+import { getPaths, processPagesDir } from '@redwoodjs/internal'
+
+import { Host } from '../hosts'
+import { BaseNode } from '../ide'
 import { lazy, memo } from '../x/decorators'
 import {
   followsDirNameConvention,
   isCellFileName,
   isLayoutFileName,
 } from '../x/path'
+import { URL_file } from '../x/URL'
+
 import { RWCell } from './RWCell'
 import { RWComponent } from './RWComponent'
+import { RWEnvHelper } from './RWEnvHelper'
 import { RWFunction } from './RWFunction'
 import { RWLayout } from './RWLayout'
 import { RWPage } from './RWPage'
@@ -58,6 +63,7 @@ export class RWProject extends BaseNode {
       ...this.sdls,
       ...this.layouts,
       ...this.components,
+      this.envHelper,
     ]
   }
 
@@ -76,23 +82,39 @@ export class RWProject extends BaseNode {
   }
   // TODO: do we move this to a separate node? (ex: RWDatabase)
   @memo() async prismaDMMF() {
-    return await getDMMF({
-      datamodel: this.host.readFileSync(this.pathHelper.api.dbSchema),
-    })
+    try {
+      // consider case where dmmf doesn't exist (or fails to parse)
+      return await getDMMF({
+        datamodel: this.host.readFileSync(this.pathHelper.api.dbSchema),
+      })
+    } catch (e) {
+      return undefined
+    }
   }
   @memo() async prismaDMMFModelNames() {
-    return (await this.prismaDMMF()).datamodel.models.map((m) => m.name)
+    const dmmf = await this.prismaDMMF()
+    if (!dmmf) {
+      return []
+    }
+    return dmmf.datamodel.models.map((m) => m.name)
   }
   @lazy() get redwoodTOML(): RWTOML {
     return new RWTOML(join(this.projectRoot, 'redwood.toml'), this)
   }
   @lazy() private get processPagesDir() {
-    return processPagesDir(this.pathHelper.web.pages)
+    try {
+      return processPagesDir(this.pathHelper.web.pages)
+    } catch (e) {
+      return []
+    }
   }
   @lazy() get pages(): RWPage[] {
     return this.processPagesDir.map((p) => new RWPage(p.const, p.path, this))
   }
   @lazy() get router() {
+    return this.getRouter()
+  }
+  getRouter = () => {
     return new RWRouter(this.pathHelper.web.routes, this)
   }
 
@@ -154,14 +176,27 @@ export class RWProject extends BaseNode {
       })
   }
 
+  @lazy() get sides() {
+    return ['web', 'api']
+  }
+
+  // TODO: Wrap these in a real model.
+  @lazy() get mocks() {
+    return this.host.globSync(this.pathHelper.web.base + '/**/*.mock.{js,ts}')
+  }
+
   /**
    * A "Cell" is a component that ends in `Cell.{js, jsx, tsx}`, but does not
    * have a default export AND does not export `QUERY`
    **/
   @lazy() get cells(): RWCell[] {
     return this.host
-      .globSync(this.pathHelper.web.components + '/**/*Cell.{js,jsx,tsx}')
+      .globSync(this.pathHelper.web.base + '/**/*Cell.{js,jsx,tsx}')
       .map((file) => new RWCell(file, this))
       .filter((file) => file.isCell)
+  }
+
+  @lazy() get envHelper(): RWEnvHelper {
+    return new RWEnvHelper(this)
   }
 }

@@ -1,4 +1,5 @@
 import { Loading, Empty, Failure, Success } from './UserCell'
+import { standard } from './UserCell.mock'
 
 export const loading = () => {
   return Loading ? <Loading /> : null
@@ -13,7 +14,7 @@ export const failure = () => {
 }
 
 export const success = () => {
-  return Success ? <Success user={{ mock: 'data' }} /> : null
+  return Success ? <Success {...standard()} /> : null
 }
 
 export default { title: 'Cells/UserCell' }

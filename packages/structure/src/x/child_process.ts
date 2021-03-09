@@ -1,6 +1,6 @@
 import * as child_process from 'child_process'
 
-export type SpawnOut = { stderr: string; stdout: string; code: number }
+export type SpawnOut = { stderr: string; stdout: string; code: number | null }
 
 export function spawnCancellable(
   cmd: string,
@@ -33,7 +33,9 @@ export function spawnCancellable(
   ;(promise as any).cancel = () => {
     try {
       cp.kill()
-    } catch (e) {}
+    } catch (e) {
+      // intentionally left empty
+    }
   }
   return promise as any
 }

@@ -1,9 +1,9 @@
-/*
 import { userProfiles } from './userProfiles'
-*/
 
 describe('userProfiles', () => {
-  it('returns true', () => {
-    expect(true).toBe(true)
+  scenario('returns all userProfiles', async (scenario) => {
+    const result = await userProfiles()
+
+    expect(result.length).toEqual(Object.keys(scenario.userProfile).length)
   })
 })

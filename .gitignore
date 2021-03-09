@@ -1,8 +1,11 @@
+.idea
 .DS_Store
 node_modules
 dist
-packages/api/importAll.macro.js
 lerna-debug.log
 yarn-error.log
 **/*.tsbuildinfo
 tasks/.verdaccio
+tasks/e2e/cypress/fixtures/example.json
+tmp/
+.vscode/*

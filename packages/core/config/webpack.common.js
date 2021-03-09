@@ -1,15 +1,19 @@
 /* eslint-disable import/no-extraneous-dependencies */
+const fs = require('fs')
 const path = require('path')
-const { existsSync } = require('fs')
 
-const webpack = require('webpack')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const DirectoryNamedWebpackPlugin = require('directory-named-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const Dotenv = require('dotenv-webpack')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const webpack = require('webpack')
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin')
+const { merge } = require('webpack-merge')
+const { RetryChunkLoadPlugin } = require('webpack-retry-chunk-load-plugin')
+
 const { getConfig, getPaths } = require('@redwoodjs/internal')
-const merge = require('webpack-merge')
 
 const redwoodConfig = getConfig()
 const redwoodPaths = getPaths()
@@ -57,8 +61,8 @@ const getStyleLoaders = (isEnvProduction) => {
     return loaderConfig
   }
 
-  const redwoodPaths = getPaths()
-  const hasPostCssConfig = existsSync(redwoodPaths.web.postcss)
+  const paths = getPaths()
+  const hasPostCssConfig = fs.existsSync(paths.web.postcss)
 
   // We only use the postcss-loader if there is a postcss config file
   // at web/config/postcss.config.js
@@ -66,8 +70,8 @@ const getStyleLoaders = (isEnvProduction) => {
     ? {
         loader: 'postcss-loader',
         options: {
-          config: {
-            path: redwoodPaths.web.postcss,
+          postcssOptions: {
+            config: paths.web.postcss,
           },
         },
       }
@@ -116,22 +120,29 @@ const getStyleLoaders = (isEnvProduction) => {
   ]
 }
 
+// Shared with storybook, as well as the RW app
 const getSharedPlugins = (isEnvProduction) => {
+  const shouldIncludeFastRefresh =
+    redwoodConfig.web.experimentalFastRefresh && !isEnvProduction
+
   return [
     isEnvProduction &&
       new MiniCssExtractPlugin({
         filename: 'static/css/[name].[contenthash:8].css',
         chunkFilename: 'static/css/[name].[contenthash:8].css',
       }),
+    shouldIncludeFastRefresh && new ReactRefreshWebpackPlugin(),
     new webpack.ProvidePlugin({
       React: 'react',
       PropTypes: 'prop-types',
-      gql: ['@redwoodjs/web', 'gql'],
+      gql: 'graphql-tag',
+      mockGraphQLQuery: ['@redwoodjs/testing', 'mockGraphQLQuery'],
+      mockGraphQLMutation: ['@redwoodjs/testing', 'mockGraphQLMutation'],
+      mockCurrentUser: ['@redwoodjs/testing', 'mockCurrentUser'],
     }),
     // The define plugin will replace these keys with their values during build
     // time.
     new webpack.DefinePlugin({
-      __REDWOOD__: JSON.stringify(true),
       __REDWOOD__API_PROXY_PATH: JSON.stringify(redwoodConfig.web.apiProxyPath),
       ...getEnvVars(),
     }),
@@ -147,20 +158,28 @@ const getSharedPlugins = (isEnvProduction) => {
 module.exports = (webpackEnv) => {
   const isEnvProduction = webpackEnv === 'production'
 
+  const shouldIncludeFastRefresh =
+    redwoodConfig.web.experimentalFastRefresh && !isEnvProduction
+
   return {
     mode: isEnvProduction ? 'production' : 'development',
     devtool: isEnvProduction ? 'source-map' : 'cheap-module-source-map',
     entry: {
-      app: path.resolve(redwoodPaths.base, 'web/src/index'),
+      /**
+       * Prerender requires a top-level component.
+       * Before we had `ReactDOM` and a top-level component in the same file (web/index.js).
+       * If index.js is defined in the user's project, use that, if not
+       * use the one provided in web/dist/entry/index.js
+       */
+      app:
+        redwoodPaths.web.index ||
+        path.join(
+          redwoodPaths.base,
+          'node_modules/@redwoodjs/web/dist/entry/index.js'
+        ),
     },
     resolve: {
-      extensions: ['.ts', '.tsx', '.js', '.json'],
-      plugins: [
-        new DirectoryNamedWebpackPlugin({
-          honorIndex: true,
-          exclude: /node_modules/,
-        }),
-      ],
+      extensions: ['.wasm', '.mjs', '.js', '.jsx', '.ts', '.tsx', '.json'],
       alias: {
         // https://www.styled-components.com/docs/faqs#duplicated-module-in-node_modules
         'styled-components': path.resolve(
@@ -168,6 +187,7 @@ module.exports = (webpackEnv) => {
           'node_modules',
           'styled-components'
         ),
+        '~redwood-app-root': path.resolve(redwoodPaths.web.app),
         react: path.resolve(redwoodPaths.base, 'node_modules', 'react'),
       },
     },
@@ -176,10 +196,28 @@ module.exports = (webpackEnv) => {
       new HtmlWebpackPlugin({
         title: path.basename(redwoodPaths.base),
         template: path.resolve(redwoodPaths.base, 'web/src/index.html'),
+        templateParameters: {
+          prerenderPlaceholder: '<server-markup></server-markup>',
+        },
+        scriptLoading: 'defer',
         inject: true,
         chunks: 'all',
       }),
-      new CopyPlugin([{ from: 'public/', to: '', ignore: ['README.md'] }]),
+      new CopyPlugin({
+        patterns: [
+          { from: 'public/', to: '', globOptions: { ignore: ['README.md'] } },
+        ],
+      }),
+      isEnvProduction &&
+        new RetryChunkLoadPlugin({
+          cacheBust: `function() {
+					return Date.now();
+				}`,
+          maxRetries: 5,
+          // @TODO: Add redirect to fatalErrorPage
+          // lastResortScript: "window.location.href='/500.html';"
+        }),
+      isEnvProduction && new WebpackManifestPlugin(),
       ...getSharedPlugins(isEnvProduction),
     ].filter(Boolean),
     module: {
@@ -207,16 +245,24 @@ module.exports = (webpackEnv) => {
               exclude: /(node_modules)/,
               use: {
                 loader: 'babel-loader',
+                options: {
+                  plugins: [
+                    shouldIncludeFastRefresh &&
+                      require.resolve('react-refresh/babel'),
+                  ].filter(Boolean),
+                },
               },
             },
-            // (2)
-            {
-              test: /\.svg$/,
-              loader: 'svg-react-loader',
-            },
-            // .module.css (3), .css (4), .module.scss (5), .scss (6)
+            // .module.css (2), .css (3), .module.scss (4), .scss (5)
             ...getStyleLoaders(isEnvProduction),
-            // (7)
+            isEnvProduction && {
+              test: path.join(
+                redwoodPaths.base,
+                'node_modules/@redwoodjs/router/dist/splash-page'
+              ),
+              use: 'null-loader',
+            },
+            // (6)
             {
               test: /\.(svg|ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|pdf)(\?.*)?$/,
               loader: 'file-loader',
@@ -224,7 +270,7 @@ module.exports = (webpackEnv) => {
                 name: 'static/media/[name].[hash:8].[ext]',
               },
             },
-          ],
+          ].filter(Boolean),
         },
       ],
     },
@@ -236,6 +282,7 @@ module.exports = (webpackEnv) => {
       runtimeChunk: {
         name: (entrypoint) => `runtime-${entrypoint.name}`,
       },
+      minimizer: [isEnvProduction && new CssMinimizerPlugin()].filter(Boolean),
     },
     output: {
       pathinfo: true,
@@ -259,7 +306,7 @@ module.exports = (webpackEnv) => {
 
 module.exports.mergeUserWebpackConfig = (mode, baseConfig) => {
   const redwoodPaths = getPaths()
-  const hasCustomConfig = existsSync(redwoodPaths.web.webpack)
+  const hasCustomConfig = fs.existsSync(redwoodPaths.web.webpack)
   if (!hasCustomConfig) {
     return baseConfig
   }

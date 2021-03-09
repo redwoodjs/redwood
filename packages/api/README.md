@@ -91,7 +91,7 @@ import schemas from 'src/graphql/**/*.{js,ts}'
 import services from 'src/services/**/*.{js,ts}'
 ```
 
-Using `services` as an example, `services` will be an obejct that contains all the imports of all the matched files in the specified directory (here, services). It's the equivalent of running:
+Using `services` as an example, `services` will be an object that contains all the imports of all the matched files in the specified directory (here, services). It's the equivalent of running:
 
 ```javascript
 let services = {}
@@ -185,7 +185,7 @@ Redwood uses Prisma, which currently supports the following databases: https://w
 
 ### Does Redwood Support SSR?
 
-We get this question a lot. And our answer is [we hope we don’t have to](https://community.redwoodjs.com/t/ssr-on-the-roadmap/251/2). We think our approach will be “pre-render” vs. “server-side render”.
+We get this question a lot. And our answer is [we hope we don’t have to](https://community.redwoodjs.com/t/ssr-on-the-roadmap/251/2). We think our approach will be “prerender” vs. “server-side render”.
 
 ### Can I use Redwood without an API/database?
 
