@@ -24,7 +24,7 @@ Note: RedwoodJS logging is setup for its api side only. For browser and web side
 
 ## Quick Start
 
-To start api-side logging, just
+To start 🌲🪓 api-side logging, just
 
 * import the logger in your service, function, or any other lib
 * use `logger` with the level just as you might have with `console`
@@ -42,7 +42,7 @@ logger.error(error, `Failed to save item`)
 
 That's it!
 
-## Features
+## Options aka How to Log
 
 In addition to the rich [features](https://github.com/pinojs/pino/blob/master/docs/api.md) that [pino](https://github.com/pinojs/pino) offers, RedwoodJS has added some sensible, practical defaults to make the logger DX first-rate.
 
@@ -70,7 +70,7 @@ We've included a default set called the `redactionList` that includes keys such 
 'password',
 ```
 
-You may wish to augment these defaults via the `redact` configuration setting, here adding a Social Security Number and Credit Card Number ket to the list.
+You may wish to augment these defaults via the `redact` configuration setting, here adding a Social Security Number and Credit Card Number key to the list.
 
 ```js
 /**
@@ -112,13 +112,15 @@ One can of course override this default in by setting a different `nestedKey` va
 nestedKey: 'log',
 ```
 
-### Transport Streams
+### Destination aka Where to Log
+
+#### Transport Streams
 
 Since each serverless function is ephemeral, its logging output is, too. Unless you monitor that funciton log just at the right time, you'll miss critical warnings, errors, or exceptions.
 
 
 
-### Log to File
+#### Log to File
 
 ### Prisma Logging
 

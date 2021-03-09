@@ -5,6 +5,7 @@ import pino, {
   LoggerOptions,
   redactOptions,
 } from 'pino'
+import * as prettyPrint from 'pino-pretty'
 
 /**
  * Determines if log environment is development or test
@@ -42,7 +43,7 @@ export const isPretty = isDevelopment
 /**
  * Defines the necessary pretty printing dependency
  */
-export const prettifier = require('pino-pretty')
+export const prettifier = prettyPrint
 
 /*
  * List of keys to redact from log

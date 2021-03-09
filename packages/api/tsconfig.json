@@ -9,7 +9,7 @@
       "src/*": ["./src/*"]
     }
   },
-  "include": ["src", "src/../package.json"],
+  "include": ["src", "src/../package.json", "ambient.d.ts"],
   "references": [
     { "path": "../internal" },
     { "path": "../auth" },
