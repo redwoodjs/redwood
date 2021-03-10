@@ -106,13 +106,13 @@ const diagnosticCheck = () => {
       ),
     },
     {
-      message: 'Duplicate React-Dom version found in web/node_modules',
+      message: 'Duplicate react-dom version found in web/node_modules',
       failure: fs.existsSync(
         path.join(getPaths().web.base, 'node_modules/react-dom')
       ),
     },
     {
-      message: 'Duplicate CoreJs version found in web/node_modules',
+      message: 'Duplicate core-js version found in web/node_modules',
       failure: fs.existsSync(
         path.join(getPaths().web.base, 'node_modules/core-js')
       ),
@@ -129,7 +129,7 @@ const diagnosticCheck = () => {
   if (checks.some((checks) => checks.failure)) {
     console.error(c.error('node_modules are being duplicated in `./web` \n'))
     console.log('⚠️  Issues found: ')
-    console.log('-'.repeat(30))
+    console.log('-'.repeat(50))
 
     checks
       .filter((check) => check.failure)
@@ -137,7 +137,7 @@ const diagnosticCheck = () => {
         console.log(`${i + 1}. ${check.message}`)
       })
 
-    console.log('-'.repeat(30))
+    console.log('-'.repeat(50))
 
     console.log(
       'Diagnostic check has found issues. See link for tips on possible resolutions:'
