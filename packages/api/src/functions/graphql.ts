@@ -15,7 +15,7 @@ import {
 export type GetCurrentUser = (
   decoded: AuthContextPayload[0],
   raw: AuthContextPayload[1],
-  event: AuthContextPayload[2]
+  options?: AuthContextPayload[2]
 ) => Promise<null | Record<string, unknown> | string>
 
 /**
