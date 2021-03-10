@@ -14,17 +14,13 @@ export const aliases = ['render']
 export const description = 'Prerender pages of a redwood app (experimental)'
 
 export const builder = (yargs) => {
+  yargs.showHelpOnFail(false)
+
   yargs.option('path', {
     alias: 'path',
     default: false,
     description: 'Router path to prerender',
     type: 'string',
-  })
-
-  yargs.option('check', {
-    default: true,
-    description: 'Run a diagnostic check on your project',
-    type: 'boolean',
   })
 
   yargs.option('output', {
@@ -101,10 +97,70 @@ export const getTasks = (dryrun) => {
   return listrTasks
 }
 
+const diagnosticCheck = () => {
+  const checks = [
+    {
+      message: 'Duplicate React version found in web/node_modules',
+      failure: fs.existsSync(
+        path.join(getPaths().web.base, 'node_modules/react')
+      ),
+    },
+    {
+      message: 'Duplicate React-Dom version found in web/node_modules',
+      failure: fs.existsSync(
+        path.join(getPaths().web.base, 'node_modules/react-dom')
+      ),
+    },
+    {
+      message: 'Duplicate CoreJs version found in web/node_modules',
+      failure: fs.existsSync(
+        path.join(getPaths().web.base, 'node_modules/core-js')
+      ),
+    },
+    {
+      message: 'Duplicate @redwoodjs/web version found in web/node_modules',
+      failure: fs.existsSync(
+        path.join(getPaths().web.base, 'node_modules/@redwoodjs/web')
+      ),
+    },
+  ]
+  console.log('Running diagnostic checks')
+
+  if (checks.some((checks) => checks.failure)) {
+    console.error(c.error('node_modules are being duplicated in `./web` \n'))
+    console.log('⚠️  Issues found: ')
+    console.log('-'.repeat(30))
+
+    checks
+      .filter((check) => check.failure)
+      .forEach((check, i) => {
+        console.log(`${i + 1}. ${check.message}`)
+      })
+
+    console.log('-'.repeat(30))
+
+    console.log(
+      'Diagnostic check has found issues. See link for tips on possible resolutions:'
+    )
+
+    console.log(
+      c.underline(
+        'https://community.redwoodjs.com/search?q=duplicate%20packages%20found'
+      )
+    )
+
+    console.log()
+
+    // Exit, no need to show other messages
+    process.exit(1)
+  } else {
+    console.log('✔ Diagnostics checks passed \n')
+  }
+}
+
 export const handler = async ({
   path: routerPath,
   output,
-  check,
   dryRun,
   verbose,
 }) => {
@@ -125,90 +181,30 @@ export const handler = async ({
     concurrent: true,
   })
 
-  const diagnosticCheck = new Listr([
-    {
-      title: 'Running diagnostic check',
-      task: () => {
-        const checks = [
-          {
-            message: 'Duplicate React version found in web/node_modules',
-            failure: fs.existsSync(
-              path.join(getPaths().web.base, 'node_modules/react')
-            ),
-          },
-          {
-            message: 'Duplicate React-Dom version found in web/node_modules',
-            failure: fs.existsSync(
-              path.join(getPaths().web.base, 'node_modules/react-dom')
-            ),
-          },
-          {
-            message: 'Duplicate CoreJs version found in web/node_modules',
-            failure: fs.existsSync(
-              path.join(getPaths().web.base, 'node_modules/core-js')
-            ),
-          },
-          {
-            message:
-              'Duplicate @redwoodjs/web version found in web/node_modules',
-            failure: fs.existsSync(
-              path.join(getPaths().web.base, 'node_modules/@redwoodjs/web')
-            ),
-          },
-        ]
-
-        if (checks.some((checks) => checks.failure)) {
-          console.error(
-            '\nDiagnostic check failed. Please check your react versions in package.json and web/package.json'
-          )
-
-          console.error(
-            'If they seem correct, consider removing all node_modules and reinstalling \n'
-          )
-
-          console.log('⚠️  Issues found: ')
-          console.log('-'.repeat(30))
-
-          checks
-            .filter((check) => check.failure)
-            .forEach((check, i) => {
-              console.log(`${i + 1}. ${check.message}`)
-            })
-
-          console.log('-'.repeat(30))
-
-          throw new Error('node_modules are being duplicated in web')
-        }
-      },
-    },
-  ])
-
-  if (check) {
-    try {
-      await diagnosticCheck.run()
-    } catch (e) {
-      process.exit(1)
-    }
-  }
-
   try {
     await tasks.run()
   } catch (e) {
     console.log()
-    console.error(c.warning('Not all routes were succesfully prerendered'))
-    console.error(
-      c.info(
-        `we could not prerender your page, but your Redwood app should still work fine.`
+    await diagnosticCheck()
+
+    console.log(
+      c.warning(
+        'Not all routes were succesfully prerendered. Run `yarn rw prerender --dry-run` for detailed logs'
       )
     )
-    console.error(
+    console.log(
+      c.info(
+        `We could not prerender all your pages, but your Redwood app should still work fine.`
+      )
+    )
+    console.log(
       c.info(
         `This could mean that a library you're using does not support SSR.`
       )
     )
+
     console.log()
-    console.error(e)
-    console.log()
+
     process.exit(1)
   }
 }
