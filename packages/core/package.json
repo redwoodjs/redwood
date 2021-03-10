@@ -4,7 +4,8 @@
   "license": "MIT",
   "files": [
     "config",
-    "dist"
+    "dist",
+    "esbuild"
   ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
