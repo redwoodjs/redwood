@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
+import type { Handler } from 'aws-lambda'
 import bodyParser from 'body-parser'
 import type { Response, Request } from 'express'
 import express from 'express'
@@ -12,7 +13,7 @@ const rwjsPaths = getPaths()
 
 import { requestHandler } from './requestHandlers/awsLambda'
 
-export type Lambdas = Record<string, Promise<unknown>>
+export type Lambdas = Record<string, Handler>
 const LAMBDA_FUNCTIONS: Lambdas = {}
 export const setLambdaFunctions = (foundFunctions: string[]) => {
   for (const fnPath of foundFunctions) {

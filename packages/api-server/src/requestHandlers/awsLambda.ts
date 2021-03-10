@@ -1,4 +1,8 @@
-import type { APIGatewayProxyResult, APIGatewayProxyEvent } from 'aws-lambda'
+import type {
+  APIGatewayProxyResult,
+  APIGatewayProxyEvent,
+  Handler,
+} from 'aws-lambda'
 import type { Response, Request } from 'express'
 import qs from 'qs'
 
@@ -82,7 +86,7 @@ const expressResponseForLambdaError = (
 export const requestHandler = async (
   req: Request,
   res: Response,
-  handler: unknown
+  handler: Handler
 ) => {
   // We take the express request object and convert it into a lambda function event.
   const event = lambdaEventForExpressRequest(req)
@@ -103,7 +107,8 @@ export const requestHandler = async (
   // https://docs.aws.amazon.com/lambda/latest/dg/nodejs-prog-model-handler.html
   const handlerPromise = handler(
     event,
-    {}, // TODO: Add support for context: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/0bb210867d16170c4a08d9ce5d132817651a0f80/types/aws-lambda/index.d.ts#L443-L467
+    // @ts-expect-error - Add support for context: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/0bb210867d16170c4a08d9ce5d132817651a0f80/types/aws-lambda/index.d.ts#L443-L467
+    {},
     handlerCallback(res)
   )
 
