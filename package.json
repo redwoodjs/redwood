@@ -3,7 +3,7 @@
     "build": "lerna run build:js && ttsc --build --verbose",
     "build:types": "ttsc --build --verbose",
     "build:clean": "rimraf ./packages/**/dist",
-    "build:watch": "ttsc --build && lerna run build:watch --parallel",
+    "build:watch": "lerna run build:watch --parallel; ttsc --build",
     "test": "lerna run test --stream -- --colors --maxWorkers=4",
     "lint": "eslint -c .eslintrc.js packages",
     "lint:fix": "eslint -c .eslintrc.js --fix packages"

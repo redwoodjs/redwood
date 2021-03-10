@@ -9,11 +9,21 @@ on:
 jobs:
   cypress-run:
     if: github.repository == 'redwoodjs/redwood'
-    runs-on: ubuntu-16.04
-
+    strategy:
+      matrix:
+        os: ['ubuntu-latest']
+        node-version: ['14']
+      fail-fast: true
+    runs-on: ${{ matrix.os }}
+    name: ${{ matrix.os }} | Node ${{ matrix.node-version }} latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
+
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
 
       - name: Install framework modules
         run: yarn install --frozen-lockfile
@@ -25,10 +35,7 @@ jobs:
           echo "::set-output name=project_path::$project_path"
 
       - name: Create a RedwoodJS app
-        run: ./tasks/test-tutorial ${{ steps.createpath.outputs.project_path }}
-        env:
-          CREATE_RWJS_PROJECT: 1
-          CI: 1
+        run: ./tasks/run-e2e ${{ steps.createpath.outputs.project_path }} --no-start
 
       - name: Start server in background
         run: yarn rw dev &
