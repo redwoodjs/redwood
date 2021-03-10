@@ -2,15 +2,12 @@
 
 const path = require('path')
 
+const esbuild = require('esbuild')
 const { glob } = require('glob')
 
 const { getPaths } = require('@redwoodjs/internal')
 
 const rwjsPaths = getPaths()
-
-// Hello. Test this like so:
-// You're in the root of the RedwoodJS framework directory:
-// __REDWOOD__CONFIG_PATH=__fixtures__/example-todo-main node packages/core/esbuild/api.js
 
 /**
  * Converts a files path into a variable name.
@@ -96,10 +93,8 @@ const foundFunctions = glob.sync('src/functions/*.{ts,js}', {
 const entryPoints = foundFunctions.map((f) => './' + f)
 const outdir = path.join(rwjsPaths.api.dist, 'functions')
 
-console.time('ESBuild bundle')
-
-require('esbuild')
-  .build({
+module.exports.build = (options) =>
+  esbuild.build({
     absWorkingDir: rwjsPaths.api.base,
     entryPoints,
     platform: 'node',
@@ -107,15 +102,7 @@ require('esbuild')
     format: 'cjs',
     bundle: true, // Create a single file.
     outdir,
-    plugins: [globImports, makeAllNodeModulesExternal, makeSrcAliasInternal],
+    plugins: [globImports, makeSrcAliasInternal, makeAllNodeModulesExternal],
     inject: [path.join(__dirname, './apiGlobals.js')],
-  })
-  .then(() => {
-    console.log()
-    console.timeEnd('ESBuild bundle')
-    console.log()
-  })
-  .catch((e) => {
-    console.error(e)
-    process.exit(1)
+    ...options,
   })
