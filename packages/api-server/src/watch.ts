@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { fork } from 'child_process'
 import path from 'path'
 
@@ -18,6 +20,14 @@ process.stdout.write('Building API...')
 build({ incremental: true }).then((buildResult) => {
   let chokidarReady = false
   let httpServer = fork(path.join(__dirname, 'index.js'))
+  process.on('SIGINT', () => {
+    console.log()
+    console.log('Shutting down... ')
+    console.log()
+    httpServer.kill()
+    buildResult.stop?.()
+    console.log('Fin.')
+  })
 
   chokidar
     .watch(rwjsPaths.api.base, {
