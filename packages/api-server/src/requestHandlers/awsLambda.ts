@@ -82,18 +82,8 @@ const expressResponseForLambdaError = (
 export const requestHandler = async (
   req: Request,
   res: Response,
-  lambdaFunction: any
+  handler: unknown
 ) => {
-  const { routeName } = req.params
-  const { handler } = lambdaFunction
-
-  // TODO: Move this to http.
-  if (typeof handler !== 'function') {
-    const errorMessage = `"${routeName}" does not export a function named "handler"`
-    console.error(errorMessage)
-    res.status(500).send(errorMessage)
-  }
-
   // We take the express request object and convert it into a lambda function event.
   const event = lambdaEventForExpressRequest(req)
 
