@@ -177,15 +177,37 @@ const rwtLink = async (yargs) => {
   console.log(
     `Linking your local Redwood build from ${c.info(frameworkPackagesPath)} \n`
   )
-
   fs.symlinkSync(frameworkPackagesPath, symLinkPath)
+
+  // Symlink the react in the user's project to react in framework
+  // This is to make sure the same instance of react is used
+  // The direction of the symlink is important, we always give preference
+  // to the user's react version
+  rimraf.sync(path.join(frameworkPath, 'node_modules/react'))
+  fs.symlinkSync(
+    path.join(getPaths().base, 'node_modules/react'),
+    path.join(frameworkPath, 'node_modules/react')
+  )
+
   updateProjectWithResolutions(frameworkPath)
 
   // Unlink framework repo, when process cancelled
-  process.on('SIGINT', rwtUnlink)
+  process.on('SIGINT', () => {
+    const message = `
+    🙏  Thanks for contributing..\n
+    Please run ${c.green('yarn rwt unlink')} to restore your project
+    `
+    console.log(
+      boxen(message, {
+        padding: { top: 0, bottom: 0, right: 1, left: 1 },
+        margin: 1,
+        borderColour: 'gray',
+      })
+    )
+  })
 
   // Let workspaces do the link
-  await execa('yarn install', {
+  await execa('yarn install', ['--pure-lockfile'], {
     shell: true,
     stdio: 'inherit',
     cleanup: true,
@@ -228,29 +250,27 @@ const rwtLink = async (yargs) => {
 
 // This should be synchronous
 const rwtUnlink = () => {
-  const message = `
-  🙏  Thanks for contributing..\n
-  Unlinking framework. \n
-  ${c.green('Re-run yarn install if this fails')}
-  `
-  console.log(
-    boxen(message, {
-      padding: { top: 0, bottom: 0, right: 1, left: 1 },
-      margin: 1,
-      borderColour: 'gray',
-    })
-  )
-
   const symLinkPath = path.join(getPaths().base, 'redwood')
   if (
     fs.existsSync(symLinkPath) &&
     fs.lstatSync(symLinkPath).isSymbolicLink()
   ) {
+    const frameworkPath = path.join(fs.readlinkSync(symLinkPath), '../')
     // remove resolutions we added in link
-    updateProjectWithResolutions(
-      path.join(fs.readlinkSync(symLinkPath), '../'),
-      true
-    )
+    updateProjectWithResolutions(frameworkPath, true)
+
+    rimraf.sync(path.join(getPaths().base, 'node_modules/@redwoodjs'))
+
+    // Remove symlinked react
+    rimraf.sync(path.join(frameworkPath, 'node_modules/react'))
+
+    // Run install in the framework
+    execa.sync('yarn install', ['--check-files'], {
+      shell: true,
+      stdio: 'inherit',
+      cleanup: true,
+      cwd: frameworkPath,
+    })
 
     rimraf.sync(symLinkPath)
   }
@@ -297,27 +317,32 @@ const rwtInstall = ({ packageName }) => {
   )
 }
 
-const getRwPackageResolutions = (frameworkPath) => {
-  const frameworkVersion = require(path.join(
-    frameworkPath,
-    'packages/cli/package.json'
-  )).version
+const getRwPackagesToLink = (frameworkPath) => {
   const packageFolders = fs.readdirSync(path.join(frameworkPath, 'packages'))
 
-  const rwResolutions = {}
-  packageFolders
+  return packageFolders
     .filter((folderName) => folderName !== 'create-redwood-app')
-    .forEach((packageFolder) => {
-      rwResolutions[`@redwoodjs/${packageFolder}`] = frameworkVersion
+    .map((packageFolder) => {
+      return `@redwoodjs/${packageFolder}`
     })
-
-  return rwResolutions
 }
 
 const updateProjectWithResolutions = (frameworkPath, remove) => {
   const pkgJSONPath = path.join(getPaths().base, 'package.json')
   const packageJSON = require(pkgJSONPath)
-  const frameworkRepoResolutions = getRwPackageResolutions(frameworkPath)
+
+  const frameworkVersion = require(path.join(
+    frameworkPath,
+    'packages/cli/package.json'
+  )).version
+
+  const frameworkRepoResolutions = getRwPackagesToLink(frameworkPath).reduce(
+    (resolutions, packageName) => {
+      resolutions[packageName] = frameworkVersion
+      return resolutions
+    },
+    {}
+  )
 
   let resolutions = packageJSON.resolutions
   let packages = packageJSON.workspaces.packages
