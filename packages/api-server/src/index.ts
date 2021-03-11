@@ -8,7 +8,7 @@ import yargs from 'yargs'
 import { server, setLambdaFunctions } from './http'
 import { requestHandler } from './requestHandlers/awsLambda'
 
-const { port, functions, routePrefix } = yargs
+const { port, functions, socket, routePrefix } = yargs
   .option('port', { default: 8911, type: 'number' })
   .option('socket', { type: 'string' })
   .option('functions', {
