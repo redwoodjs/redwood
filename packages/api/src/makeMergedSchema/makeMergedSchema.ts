@@ -5,7 +5,7 @@ import {
   IResolvers,
   IExecutableSchemaDefinition,
 } from 'apollo-server-lambda'
-import { GraphQLSchema, GraphQLFieldMap } from 'graphql'
+import type { GraphQLSchema, GraphQLFieldMap } from 'graphql'
 import merge from 'lodash.merge'
 import omitBy from 'lodash.omitby'
 
