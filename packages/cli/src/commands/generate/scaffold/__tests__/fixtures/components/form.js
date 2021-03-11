@@ -6,9 +6,14 @@ import {
   TextField,
   CheckboxField,
   NumberField,
+  DatetimeLocalField,
   TextAreaField,
   Submit,
 } from '@redwoodjs/forms'
+
+const formatDatetime = (value) => {
+  return value.replace(/:\d{2}\.\d{3}\w/, '')
+}
 
 const PostForm = (props) => {
   const onSubmit = (data) => {
@@ -160,9 +165,9 @@ const PostForm = (props) => {
         >
           Posted at
         </Label>
-        <TextField
+        <DatetimeLocalField
           name="postedAt"
-          defaultValue={props.post?.postedAt}
+          defaultValue={formatDatetime(props.post?.postedAt)}
           className="rw-input"
           errorClassName="rw-input rw-input-error"
           validation={{ required: true }}

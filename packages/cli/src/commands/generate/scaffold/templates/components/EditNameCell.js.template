@@ -1,4 +1,5 @@
-import { useMutation, useFlash } from '@redwoodjs/web'
+import { useMutation } from '@redwoodjs/web'
+import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import ${singularPascalName}Form from 'src/components/${pascalScaffoldPath}${singularPascalName}Form'
 
@@ -20,11 +21,10 @@ const UPDATE_${singularConstantName}_MUTATION = gql`
 export const Loading = () => <div>Loading...</div>
 
 export const Success = ({ ${singularCamelName} }) => {
-  const { addMessage } = useFlash()
   const [update${singularPascalName}, { loading, error }] = useMutation(UPDATE_${singularConstantName}_MUTATION, {
     onCompleted: () => {
+      toast.success('${singularPascalName} updated')
       navigate(routes.${pluralRouteName}())
-      addMessage('${singularPascalName} updated.', { classes: 'rw-flash-success' })
     },
   })
 

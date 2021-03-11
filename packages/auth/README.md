@@ -61,5 +61,6 @@ export type SupportedAuthClients =
   | Firebase
   | Supabase
   | Ethereum
+  | Nhost
   | Custom
 ```

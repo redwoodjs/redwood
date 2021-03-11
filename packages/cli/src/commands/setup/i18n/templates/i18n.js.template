@@ -1,64 +1,53 @@
 import i18n from 'i18next'
-import HttpApi from 'i18next-http-backend'
-import LanguageDetector from 'i18next-browser-languagedetector'
 import { initReactI18next } from 'react-i18next'
+import LanguageDetector from 'i18next-browser-languagedetector'
+import fr from './locales/fr.json'
+import en from './locales/en.json'
 
+// This is a simple i18n configuration with English and French translation.
+// You can find the translation on web/src/locales/{language}.json
+// see : https://react.i18next.com
+// Here an example of how to use it in your components, pages or layouts :
+/*
+import { Link, routes } from '@redwoodjs/router'
+import { useTranslation } from 'react-i18next'
+
+const HomePage = () => {
+  const { t, i18n } = useTranslation()
+  return (
+    <>
+      <h1>{t('HomePage.title')}</h1>
+      <button onClick={() => i18n.changeLanguage('fr')}>fr</button>
+      <button onClick={() => i18n.changeLanguage('en')}>en</button>
+      <p>
+        {t('HomePage.info')} <code>./web/src/pages/HomePage/HomePage.js</code>
+      </p>
+      <p>
+        {t('HomePage.route')} <code>home</code>, {t('HomePage.link')}`
+        <Link to={routes.home()}>Home</Link>`
+      </p>
+    </>
+  )
+}
+
+export default HomePage
+*/
 i18n
-  .use(HttpApi)
-  .use(LanguageDetector)
   .use(initReactI18next)
+  // detect user language
+  // learn more: https://github.com/i18next/i18next-browser-languageDetector
+  .use(LanguageDetector)
   .init({
-    backend: {
-      loadPath: '/locales/{{lng}}/{{ns}}.json',
-      addPath: '/locales/{{lng}}/{{ns}}.json',
-    },
-    load: 'all',
-    ns: ['site'],
-    defaultNS: 'site',
-    fallbackNS: 'site',
-    fallbackLng: 'en',
-    whitelist: ['en'],
-    preload: ['en'],
+    interpolation: { escapeValue: false }, // React already does escaping
     lng: 'en',
-    lowerCaseLng: true,
-    // saveMissing: true,
-    initImmediate: true,
-    detection: {
-      // order and from where user language should be detected
-      order: ['querystring', 'cookie', 'localStorage', 'sessionStorage', 'navigator', 'htmlTag', 'path', 'subdomain'],
-
-      // keys or params to lookup language from
-      lookupQuerystring: 'lng',
-      lookupCookie: 'i18next',
-      lookupLocalStorage: 'i18nextLng',
-      lookupSessionStorage: 'i18nextLng',
-      lookupFromPathIndex: 0,
-      lookupFromSubdomainIndex: 0,
-
-      // cache user language on
-      caches: ['localStorage', 'cookie'],
-      excludeCacheFor: ['cimode'], // languages to not persist (cookie, localStorage)
-
-      // optional expire and domain for set cookie
-      cookieMinutes: 10,
-      cookieDomain: 'myDomain',
-
-      // optional htmlTag with lang attribute, the default is:
-      htmlTag: document.documentElement,
-
-      // optional set cookie options, reference:[MDN Set-Cookie docs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie)
-      cookieOptions: { path: '/', sameSite: 'strict' }
+    fallbackLng: 'en',
+    resources: {
+      en: {
+        translation: en,
+      },
+      fr: {
+        translation: fr,
+      },
     },
-    react: {
-      wait: true,
-      useSuspense: false,
-      transSupportBasicHtmlNodes: true,
-    },
-    interpolation: {
-      escapeValue: false, // react already safes from xss
-    },
-    nsSeparator: ':',
-    keySeparator: '.',
   })
-
 export default i18n

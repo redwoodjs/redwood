@@ -1,6 +1,11 @@
 import path from 'path'
 
-import { processPagesDir, resolveFile, ensurePosixPath } from '../paths'
+import {
+  processPagesDir,
+  resolveFile,
+  ensurePosixPath,
+  importStatementPath,
+} from '../paths'
 
 describe('paths', () => {
   describe('processPagesDir', () => {
@@ -12,19 +17,25 @@ describe('paths', () => {
 
       const pages = processPagesDir(pagesDir)
       expect(pages[0].importPath).toEqual(
-        path.join(pagesDir, 'admin/EditUserPage/EditUserPage')
+        importStatementPath(
+          path.join(pagesDir, 'admin/EditUserPage/EditUserPage')
+        )
       )
       expect(pages[1].importPath).toEqual(
-        path.join(pagesDir, 'FatalErrorPage/FatalErrorPage')
+        importStatementPath(
+          path.join(pagesDir, 'FatalErrorPage/FatalErrorPage')
+        )
       )
       expect(pages[2].importPath).toEqual(
-        path.join(pagesDir, 'HomePage/HomePage')
+        importStatementPath(path.join(pagesDir, 'HomePage/HomePage'))
       )
       expect(pages[3].importPath).toEqual(
-        path.join(pagesDir, 'NotFoundPage/NotFoundPage')
+        importStatementPath(path.join(pagesDir, 'NotFoundPage/NotFoundPage'))
       )
       expect(pages[4].importPath).toEqual(
-        path.join(pagesDir, 'TypeScriptPage/TypeScriptPage')
+        importStatementPath(
+          path.join(pagesDir, 'TypeScriptPage/TypeScriptPage')
+        )
       )
     })
   })

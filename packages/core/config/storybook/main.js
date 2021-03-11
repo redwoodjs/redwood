@@ -1,13 +1,11 @@
-const path = require('path')
 const fs = require('fs')
-
+const path = require('path')
+const { merge } = require('webpack-merge')
 const { getPaths } = require('@redwoodjs/internal')
 const { getSharedPlugins } = require('../webpack.common')
 
-module.exports = {
-  stories: [
-    '../../../../web/src/**/*.stories.{tsx,jsx,js}',
-  ],
+const baseConfig = {
+  stories: ['../../../../web/src/**/*.stories.{tsx,jsx,js}'],
   webpackFinal: (sbConfig, { configType }) => {
     // configType is 'PRODUCTION' or 'DEVELOPMENT', why shout?
     const isEnvProduction = configType && configType.toLowerCase() === 'production'
@@ -59,3 +57,17 @@ module.exports = {
     return sbConfig
   },
 }
+
+const mergeUserStorybookConfig = (baseConfig) => {
+  const redwoodPaths = getPaths()
+
+  const hasCustomConfig = fs.existsSync(redwoodPaths.web.storybook)
+  if (!hasCustomConfig) {
+    return baseConfig
+  }
+
+  const userStorybookConfig = require(redwoodPaths.web.storybook)
+  return merge(baseConfig, userStorybookConfig)
+}
+
+module.exports = mergeUserStorybookConfig(baseConfig)

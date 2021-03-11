@@ -1,13 +1,14 @@
-// the lines that need to be added to index.js
+// the lines that need to be added to App.{js,tsx}
 export const config = {
   imports: [
     `import EthereumAuthClient from '@oneclickdapp/ethereum-auth'`,
     `import { ApolloClient, InMemoryCache } from '@apollo/client'`,
     `import { FetchConfigProvider, useFetchConfig } from '@redwoodjs/web'`,
   ],
-  init: `const ApolloInjector = ({ children }) => {
+  init: `let ethereum
+
+  const ApolloInjector = ({ children }) => {
   const { uri, headers } = useFetchConfig()
-  let ethereum
   try {
     const graphQLClient = new ApolloClient({
       cache: new InMemoryCache(),

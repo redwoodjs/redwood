@@ -17,7 +17,6 @@ import {
   useFetchConfig,
 } from 'src/components/FetchConfigProvider'
 import { GraphQLHooksProvider } from 'src/components/GraphQLHooksProvider'
-import { FlashProvider } from 'src/flash'
 
 const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   config?: Omit<ApolloClientOptions<InMemoryCache>, 'cache'>
@@ -76,7 +75,7 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
     <FetchConfigProvider useAuth={useAuth}>
       <ApolloProviderWithFetchConfig config={graphQLClientConfig}>
         <GraphQLHooksProvider useQuery={useQuery} useMutation={useMutation}>
-          <FlashProvider>{children}</FlashProvider>
+          {children}
         </GraphQLHooksProvider>
       </ApolloProviderWithFetchConfig>
     </FetchConfigProvider>
