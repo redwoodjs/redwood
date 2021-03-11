@@ -11,9 +11,13 @@ import { Connection } from 'vscode-languageserver'
  */
 export function Connection_suppressErrors<T extends Connection>(conn: T) {
   for (const k of Object.keys(conn)) {
-    if (!k.startsWith('on')) continue // only onHover, onCodeLens, etc?
+    if (!k.startsWith('on')) {
+      continue
+    } // only onHover, onCodeLens, etc?
     const v = conn[k]
-    if (typeof v !== 'function') continue
+    if (typeof v !== 'function') {
+      continue
+    }
     conn[k] = (...args) => {
       const args2 = args.map((arg) =>
         typeof arg === 'function'
@@ -46,9 +50,10 @@ function with_catch2(f, clause: CatchClause) {
   function catch2(f, clause2) {
     try {
       const res = f()
-      if (typeof res?.then === 'function')
+      if (typeof res?.then === 'function') {
         // promise
         return res.catch?.(clause2)
+      }
       return res
     } catch (e) {
       return clause2(e)

@@ -22,7 +22,7 @@ describe('${pluralCamelName}', () => {
     expect(result.${name}).toEqual(${JSON.stringify(value)})<% } %>
   })
 
-  scenario('updates a ${singularCamelName}', async (scenario) => {<% rand = parseInt(Math.random() * 10000000) %>
+  <% if (update) { %>scenario('updates a ${singularCamelName}', async (scenario) => {<% rand = parseInt(Math.random() * 10000000) %>
     const original = await ${singularCamelName}({ id: scenario.${singularCamelName}.one.id })
     const result = await update${singularPascalName}({
       id: original.id,
@@ -31,7 +31,7 @@ describe('${pluralCamelName}', () => {
 
     <% for (const [name, value] of Object.entries(update)) { %>
     expect(result.${name}).toEqual(${JSON.stringify(value)})<% } %>
-  })
+  })<% } %>
 
   scenario('deletes a ${singularCamelName}', async (scenario) => {
     const original = await delete${singularPascalName}({ id: scenario.${singularCamelName}.one.id })

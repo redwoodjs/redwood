@@ -12,5 +12,6 @@
   "references": [
     { "path": "../internal" },
     { "path": "../structure" },
+    { "path": "../prerender" },
   ]
 }
