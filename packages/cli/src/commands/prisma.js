@@ -3,7 +3,6 @@ import path from 'path'
 
 import boxen from 'boxen'
 import execa from 'execa'
-import { Argv } from 'yargs'
 
 import { getPaths } from '@redwoodjs/internal'
 
