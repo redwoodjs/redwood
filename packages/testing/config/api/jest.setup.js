@@ -1,4 +1,4 @@
-/* eslint-env jest */
+/* eslint-env node, jest */
 const path = require('path')
 
 const { setContext } = require('@redwoodjs/api')

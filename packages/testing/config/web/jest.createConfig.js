@@ -1,10 +1,14 @@
+/* eslint-env node, jest */
+
 // used by cli `rw test` command
 
 const path = require('path')
 
 const { getPaths } = require('@redwoodjs/internal')
 
-export default function getBrowserJestConfig() {
+export const setupFilesAfterEnv = [path.resolve(__dirname, './jest.setup.js')]
+
+export default function getBrowserJestConfig(options) {
   const redwoodPaths = getPaths()
   const NODE_MODULES_PATH = path.join(redwoodPaths.base, 'node_modules')
 
@@ -16,7 +20,7 @@ export default function getBrowserJestConfig() {
     globals: {
       __REDWOOD__API_PROXY_PATH: '/',
     },
-    setupFilesAfterEnv: [path.resolve(__dirname, './jest.setup.js')],
+    setupFilesAfterEnv,
     moduleNameMapper: {
       /**
        * Make sure modules that require different versions of these
@@ -43,7 +47,8 @@ export default function getBrowserJestConfig() {
        * Mock out files that aren't particularly useful in tests. See fileMock.js for more info.
        */
       '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|css)$':
-        '@redwoodjs/testing/dist/fileMock.js',
+        '@redwoodjs/testing/config/web/fileMock.js',
     },
+    ...options,
   }
 }

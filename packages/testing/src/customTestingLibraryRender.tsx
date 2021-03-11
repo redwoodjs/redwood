@@ -1,14 +1,14 @@
 import React from 'react'
 
-import type { RenderResult } from '@testing-library/react'
 import { render } from '@testing-library/react'
 
 import { MockProviders } from './MockProviders'
 
-export const customRender = (
-  ui: React.ReactElement,
-  options = {}
-): RenderResult => {
+type RenderParams = Parameters<typeof render>
+/**
+ * Wraps testing library's `render` function with our own MockProviders.
+ */
+export const customRender = (ui: RenderParams[0], options: RenderParams[1]) => {
   return render(ui, {
     wrapper: (props) => <MockProviders {...props} />,
     ...options,

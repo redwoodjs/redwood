@@ -1,4 +1,4 @@
-// used by cli `rw test` command
+// This is used by `rw test`
 
 const path = require('path')
 

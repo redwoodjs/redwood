@@ -20,6 +20,9 @@ let SERVER_INSTANCE: SetupWorkerApi | any
  * Request handlers can be registered lazily (via `mockGraphQL<Query|Mutation>`),
  * the queue will be drained and used.
  */
+
+// TODO: This code is shared by Storybook and Jest.
+// We should move it to a place that makes sense: @redwoodjs/mocks?
 export const startMSW = async (target: 'node' | 'browsers') => {
   if (SERVER_INSTANCE) {
     return SERVER_INSTANCE

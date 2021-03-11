@@ -1,4 +1,4 @@
-/* eslint-env jest */
+/* eslint-env node, jest */
 
 require('@testing-library/jest-dom')
 require('whatwg-fetch')
