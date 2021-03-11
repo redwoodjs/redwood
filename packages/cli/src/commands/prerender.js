@@ -140,12 +140,12 @@ const diagnosticCheck = () => {
     console.log('-'.repeat(50))
 
     console.log(
-      'Diagnostic check has found issues. See link for tips on possible resolutions:'
+      'Diagnostic check found issues. See the Redwood Forum link below for help:'
     )
 
     console.log(
       c.underline(
-        'https://community.redwoodjs.com/search?q=duplicate%20packages%20found'
+        'https://community.redwoodjs.com/search?q=duplicate%20package%20found'
       )
     )
 
