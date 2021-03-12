@@ -2,6 +2,9 @@ import bodyParser from 'body-parser'
 import type { Response, Request } from 'express'
 import express from 'express'
 import morgan from 'morgan'
+import supertokens from "supertokens-node";
+import emailpassword from "supertokens-node/recipe/emailpassword";
+import sessions from "supertokens-node/recipe/session";
 
 export interface Lambdas {
   [path: string]: any
@@ -16,6 +19,22 @@ export const server = ({
 }: {
   requestHandler: (req: Request, res: Response, lambdaFunction: any) => void
 }): any => {
+
+  supertokens.init({
+    appInfo: {
+      apiDomain: "http://localhost:8910/",
+      appName: "SuperTokens RedwoodJS",
+      websiteDomain: "http://localhost:8910/"
+    },
+    supertokens: {
+      connectionURI: "try.supertokens.io"
+    },
+    recipeList: [
+      emailpassword.init(),
+      sessions.init()
+    ]
+  });
+
   const app = express()
   app.use(
     bodyParser.text({
@@ -24,6 +43,8 @@ export const server = ({
   )
   app.use(bodyParser.raw({ type: '*/*', limit: process.env.BODY_PARSER_LIMIT }))
   app.use(morgan<Request, Response>('dev'))
+
+  app.use(supertokens.middleware());
 
   app.all('/', (_, res) => {
     return res.send(`
@@ -51,6 +72,8 @@ export const server = ({
 
   app.all('/:routeName', lambdaHandler)
   app.all('/:routeName/*', lambdaHandler)
+
+  app.use(supertokens.errorHandler())
 
   return app
 }
