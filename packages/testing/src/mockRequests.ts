@@ -5,7 +5,10 @@ import {
   RequestHandler,
   GraphQLMockedContext,
   GraphQLMockedRequest,
+  ResponseTransformer,
+  MockedResponse,
 } from 'msw'
+import { ResponseComposition } from 'msw/lib/types/response'
 import { SetupWorkerApi } from 'msw/lib/types/setupWorker/setupWorker'
 
 // Allow users to call "mockGraphQLQuery" and "mockGraphQLMutation"
@@ -66,14 +69,26 @@ export type DataFunction = (
   }
 ) => Record<string, unknown>
 
+// This should get exported from MSW
+type ResponseFunction<BodyType = any> = (
+  ...transformers: ResponseTransformer<BodyType>[]
+) => MockedResponse<BodyType>
+
+type ResponseEnhancers = {
+  once: ResponseFunction<any>
+  networkError: (message: string) => void
+}
+type ResponseEnhancer = keyof ResponseEnhancers
+
 const mockGraphQL = (
   type: 'query' | 'mutation',
   operation: string,
-  data: DataFunction | Record<string, any>
+  data: DataFunction | Record<string, any>,
+  responseMethod?: ResponseEnhancer
 ) => {
   const resolver = (
     req: GraphQLMockedRequest,
-    res: (...args: unknown[]) => unknown,
+    res: ResponseComposition<any>,
     ctx: GraphQLMockedContext<Record<string, any>>
   ) => {
     let d = data
@@ -107,7 +122,10 @@ const mockGraphQL = (
       })
     }
 
-    return res(ctx.data(d), ...responseTransforms)
+    return (responseMethod ? res[responseMethod] : res)(
+      ctx.data(d) as any,
+      ...responseTransforms
+    )
   }
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -118,16 +136,18 @@ const mockGraphQL = (
 
 export const mockGraphQLQuery = (
   operation: string,
-  data: DataFunction | Record<string, unknown>
+  data: DataFunction | Record<string, unknown>,
+  responseMethod?: ResponseEnhancer
 ) => {
-  return mockGraphQL('query', operation, data)
+  return mockGraphQL('query', operation, data, responseMethod)
 }
 
 export const mockGraphQLMutation = (
   operation: string,
-  data: DataFunction | Record<string, unknown>
+  data: DataFunction | Record<string, unknown>,
+  responseMethod?: ResponseEnhancer
 ) => {
-  return mockGraphQL('mutation', operation, data)
+  return mockGraphQL('mutation', operation, data, responseMethod)
 }
 
 export const mockedUserMeta: { currentUser: Record<string, unknown> | null } = {
