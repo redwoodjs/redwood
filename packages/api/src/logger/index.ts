@@ -102,14 +102,15 @@ export const logLevel: LevelWithSilent | string = (() => {
  *
  * Defaults are:
  *
- * * Colorize output
- * * Ingore some event attributes like hostname
+ * * Colorize output when pretty printing
+ * * Ignore certain event attributes like hostname and pid for cleaner log statements
  * * Prefix the log output with log level
  * * Use a shorted log message that omits server name
  * * Humanize time in GMT
- * * Set the default log level in dev or test to trace and warn in prod *or set via LOG_LEVEL)
+ * * Set the default log level in dev or test to trace and warn in prod
+ *   (or set via LOG_LEVEL environment variable)
  * * Nest objects under an `api` key to avoid conflicts with pino properties
- * * Redact the host
+ * * Redact the host and other keys via a set redactionList
  *
  * See: https://github.com/pinojs/pino/blob/master/docs/api.md
  *      https://github.com/pinojs/pino-pretty

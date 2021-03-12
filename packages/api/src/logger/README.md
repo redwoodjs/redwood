@@ -1,6 +1,6 @@
 # Logger
 
-RedwoodJS provides an opinionated logger with sensible, practical defaults that grants you visibility into the JAMstack applications you're developing and have deployed  -- with ease.
+RedwoodJS provides an opinionated logger with sensible, practical defaults that grants you visibility into the JAMStack applications you're developing and have deployed  -- with ease.
 
 Logging in the serverless ecosystem is not trivial and neither is its configuration.
 
@@ -8,9 +8,9 @@ When choosing a Node.js logger to add to the framework, RedwoodJS required that 
 
 * Have a low-overhead, and be fast
 * Output helpful, readable information in development
-* Be highly configuirable to set log levels, time formatting, and more
+* Be highly configurable to set log levels, time formatting, and more
 * Support key redaction to prevent passwords or tokens from leaking out
-* Save to a file in local (or other) environmesnts that can write to the file system
+* Save to a file in local (or other) environments that can write to the file system
 * Stream to third-party log and application monitoring services vital to production logging in serverless environments like [logFlare](https://logflare.app/) and [Datadog](https://www.datadoghq.com/)
 * Hook into [Prisma logging](https://www.prisma.io/docs/concepts/components/prisma-client/working-with-prismaclient/logging) to give visibility into connection issues, slow queries, and any unexpected errors
 * Have a solid Developer experience (DX) to get logging out-of-the-gate quickly
@@ -42,17 +42,30 @@ logger.error(error, `Failed to save item`)
 
 That's it!
 
+### Manual Setup for RedwoodJS Upgrade
+
+If you are upgrading an existing RedwoodJS app and would like to include logging, you simply need to copy over files from the "Create Redwood Application" template:
+
+* Copy `packages/create-redwood-app/template/api/src/lib/logger.ts` to `api/lib/logger.ts`. Required.
+* Copy `packages/create-redwood-app/template/api/src/lib/db.ts` to `api/lib/db.ts`. Optional.
+
+The first file `logger.ts` defines the logger instance. You will import `logger` and use in your services, functions or other libraries. You may then replace existing `console.log()` statements with `logger.info()` or `logger.debug()`.
+
+The second file `db.ts`  -- which is optional -- replaces how the `db` Prisma client instance is declares and exported. It configures Prisma logging, if desired. See below for more information of Prisma logging options.
+
 ## Options aka How to Log
 
 In addition to the rich [features](https://github.com/pinojs/pino/blob/master/docs/api.md) that [pino](https://github.com/pinojs/pino) offers, RedwoodJS has added some sensible, practical defaults to make the logger DX first-rate.
 
 ### Log Level
 
-The logger detects you current environment and will default an apporiate minumum log level.
+The logger detects you current environment and will default an appropriate minimum log level.
 
 In Development, the default is `trace` while in Production, the default is `warn`.
 
 This means that output in your dev server can be verbose, but when you deploy you won't miss out on critical issues.
+
+You can override the default log level via the `LOG_LEVEL` environment variable.
 
 ### Redaction
 
@@ -102,7 +115,7 @@ logger.warn({ missing: { name: item.name } }, `Item ${item.id} is missing values
 logger.error(error, `Failed to save item`)
 ```
 
-There could be cases where a key in that metadata colides with a key needed by pino or your thirs-party transport.
+There could be cases where a key in that metadata collides with a key needed by pino or your third-party transport.
 
 To prevent collisions and overwriting values, we nest your metadata in a `log` attribute by default.
 
@@ -114,37 +127,188 @@ nestedKey: 'log',
 
 ### Destination aka Where to Log
 
+The `destination` option allows you to specify where to send the api-side log statements: to standard output, file, or transport stream.
+
+### Dev Server
+
+When in your development environment, logs will be output to the dev servers standard output.
+
+### Log to File
+
+If in your development environment or another environment in which you have write access to the filesystem, can can set the `destination` to the location of your file.
+
+Note: logging to a file is not permitted if deployed to Netlify or Vercel.
+
+```js
+/**
+ * Log to a File
+ */
+export const logger = createLogger({
+  options: { ...defaultLoggerOptions },
+  destination: '/path/to/file/api.log',
+})
+```
+
 #### Transport Streams
 
-Since each serverless function is ephemeral, its logging output is, too. Unless you monitor that funciton log just at the right time, you'll miss critical warnings, errors, or exceptions.
+Since each serverless function is ephemeral, its logging output is, too. Unless you monitor that function log just at the right time, you'll miss critical warnings, errors, or exceptions.
+
+It's recommended then to log to a "transport" stream when deployed to production so that logs are stored and searchable.
+
+Pino offers [several transports](https://github.com/pinojs/pino/blob/HEAD/docs/transports.md#known-transports) that can send your logs to a remote destination. A ["transport"](https://github.com/pinojs/pino/blob/HEAD/docs/transports.md) for pino is a supplementary tool which consumes pino logs.
+
+See below for examples of how to configure Logflare and Datadog.
+
+Note that not all [known pino transports](https://github.com/pinojs/pino/blob/HEAD/docs/transports.md#known-transports) can be used in a serverless environment.
+
+## Default Configuration Overview
+
+RedwoodJS provides an opinionated logger with sensible, practical defaults. These include:
+
+ * Colorize output when pretty printing
+ * Ignore certain event attributes like hostname and pid for cleaner log statements
+ * Prefix the log output with log level
+ * Use a shorted log message that omits server name
+ * Humanize time in GMT
+ * Set the default log level in dev or test to trace
+ * Set the default log level warn in prod
+ * Note you may override the default log level via the LOG_LEVEL environment variable
+ * Nest objects under an `api` key to avoid conflicts with pino properties
+ * Redact the host and other keys via a set redactionList
+
+## Configuration Examples
+
+Some examples of common configurations and overrides demonstrate how you can have control over both how and where you log.
+### Override Log Level
+
+You can set the minimum level to log via the `level` option.
+
+```js
+/**
+ * Override minimum log level to warn
+ */
+export const logger = createLogger({
+  options: { ...defaultLoggerOptions, level: 'warn' },
+})
+```
+### Always Pretty Print
+
+In the situation where you want to force pretty printing even in Production, you can set the `prettyPrint` option to `true`.
+
+```js
+/**
+ * Always pretty print
+ */
+export const logger = createLogger({
+  options: { ...defaultLoggerOptions, prettyPrint: 'true' },
+})
+```
+
+### Customize a Redactions List
+
+While the logger provides default redaction list, you can specify additions keys to redact by either appending them to the list or setting the `redact` option to a new array of keys.
+
+Please see [pino's redaction documentation](https://github.com/pinojs/pino/blob/master/docs/redaction.md) for other `redact` options, such as removing both keys and values and path matching.
+
+```js
+/**
+ * Customize a redactions list to add `my_secret_key`
+ */
+import { redactionsList } from '@redwoodjs/api/logger'
+export const logger = createLogger({
+  options: { ...defaultLoggerOptions, redact: [...redactionsList, 'my_secret_key'] },
+})
+```
+
+### Log to a Physical File
+
+If in your development environment or another environment in which you have write access to the filesystem, can can set the `destination` to the location of your file.
+
+Note: logging to a file is not permitted if deployed to Netlify or Vercel.
+
+```js
+/**
+ * Log to a File
+ */
+export const logger = createLogger({
+  options: { ...defaultLoggerOptions },
+  destination: '/path/to/file/api.log',
+})
+```
+
+### Log to Datadog using a Transport Stream Destination
+
+To stream your logs to [Datadog](https://www.datadoghq.com/), you can
+
+* Install the [`pino-datadog`](https://www.npmjs.com/package/pino-datadog) package into `api`
+* Import `pino-datadog`
+* Configure the `stream` with your API key and [settings](https://github.com/ovhemert/pino-datadog/blob/master/docs/API.md)
+* Set the logger `destination` to the `stream`
+
+```js
+/**
+ * Stream logs to Datadog
+ */
+ import datadog from 'pino-datadog'
+ /**
+  * Creates a synchronous pino-datadog stream
+  *
+  * @param {object} options - Datadog options including your account's API Key
+  *
+  * @typedef {DestinationStream}
+  */
+ export const stream = datadog.createWriteStreamSync({
+   apiKey: process.env.DATADOG_API_KEY,
+   ddsource: 'my-source-name',
+   ddtags: 'tag,not,it',
+   service: 'my-service-name',
+   size: 1,
+ })
+
+ ...
+
+export const logger = createLogger({
+   options: { ...defaultLoggerOptions,
+   destination: stream},
+})
+```
+
+### Log to Logflare using a Transport Stream Destination
+
+* Install the [`pino-logflare`](https://www.npmjs.com/package/pino-logflare) package into `api`
+* Import `pino-logflare`
+* Configure the `stream` with your [API key and sourceToken](https://github.com/Logflare/pino-logflare/blob/master/docs/API.md)
+* Set the logger `destination` to the `stream`
 
 
+```js
+import { createWriteStream } from 'pino-logflare'
 
-#### Log to File
+/**
+ * Creates a pino-logflare stream
+ *
+ * @param {object} options - Logflare options including
+ * your account's API Key and source token id
+ *
+ * @typedef {DestinationStream}
+ */
+export const stream = createWriteStream({
+  apiKey: process.env.LOGFLARE_API_KEY,
+  sourceToken: process.env.LOGFLARE_SOURCE_TOKEN,
+})
+
+export const logger = createLogger({
+  options: { ...defaultLoggerOptions,
+  destination: stream},
+})
+```
 
 ### Prisma Logging
 
-## Defaults
+TODO
 
-### Recommendations
+### Advanced Use
 
-## Transport Streams
+#### Child Loggers
 
-## Manual Setup for RedwoodJS Upgrade
-
-* copy files
-
-## Examples
-
-## logger not console
-
-
-## Future
-
-### GraphQL Context
-
-### Enhancements
-
-#### Debug
-
-https://github.com/pinojs/pino/blob/master/docs/help.md#pino-with-debug
+TODO
