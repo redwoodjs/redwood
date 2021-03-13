@@ -17,7 +17,7 @@
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-react": "^7.12.13",
     "@babel/preset-typescript": "^7.10.4",
-    "@babel/runtime-corejs3": "^7.11.2",
+    "@babel/runtime-corejs3": "^7.13.10",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
     "@redwoodjs/cli": "^0.27.1",
     "@redwoodjs/dev-server": "^0.27.1",
