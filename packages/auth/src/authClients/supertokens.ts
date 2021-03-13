@@ -15,10 +15,6 @@ export const supertokens = (): AuthClient => {
   return {
     type: 'supertokens',
     client: undefined,
-    restoreAuthState: async () => {
-      // TODO: anythng here?
-    },
-
     // TODO: use lib's login with redirect function (need to create one)
     login: async () => window.location.href = "/auth",
 
