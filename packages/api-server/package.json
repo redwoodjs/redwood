@@ -24,7 +24,7 @@
     "@types/aws-lambda": "^8.10.46",
     "@types/express": "^4.17.3",
     "@types/morgan": "^1.9.0",
-    "@types/qs": "^6.9.1",
+    "@types/qs": "^6.9.6",
     "@types/require-dir": "^1.0.1",
     "@types/stack-trace": "^0.0.29"
   },
