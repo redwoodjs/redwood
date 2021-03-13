@@ -26,16 +26,23 @@ let PER_REQUEST_CONTEXT:
 export const usePerRequestContext = () =>
   process.env.SAFE_GLOBAL_CONTEXT !== '1'
 
+function getPerRequestContext() {
+  if (!PER_REQUEST_CONTEXT) {
+    PER_REQUEST_CONTEXT = new AsyncLocalStorage();
+  }
+
+  return PER_REQUEST_CONTEXT
+}
+
 export const initPerRequestContext = () => {
   GLOBAL_CONTEXT = {}
-  PER_REQUEST_CONTEXT = new AsyncLocalStorage()
-  return PER_REQUEST_CONTEXT
+  return getPerRequestContext()
 }
 
 export const createContextProxy = () => {
   return new Proxy<GlobalContext>(GLOBAL_CONTEXT, {
     get: (_target, property: string) => {
-      const store = PER_REQUEST_CONTEXT?.getStore()
+      const store = getPerRequestContext().getStore();
       if (!store) {
         throw new Error(
           'Async local storage is not initialized. Call `initGlobalContext` before attempting to read from the store.'
@@ -58,7 +65,7 @@ export const setContext = (newContext: GlobalContext): GlobalContext => {
     // re-init the proxy, so that calls to `console.log(context)` is the full object
     // not the one initialized earlier.
     context = createContextProxy()
-    const store = PER_REQUEST_CONTEXT?.getStore()
+    const store = getPerRequestContext().getStore();
     if (!store) {
       throw new Error(
         'Per request context is not initialized, please use `initPerRequestContext`'
