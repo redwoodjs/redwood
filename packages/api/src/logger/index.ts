@@ -36,7 +36,7 @@ const isProduction = !isDevelopment
  * See: https://github.com/pinojs/pino-pretty#programmatic-integration
  *
  * One exception to this rule may be Netlify functions logging.
- * Its function logging output readability can benefeit from pretty-printing.
+ * Its function logging output readability can benefit from pretty-printing.
  */
 export const isPretty = isDevelopment
 
@@ -68,7 +68,7 @@ export const redactionsList: string[] | redactOptions = [
 ]
 
 /**
- * Determines if log level based on envars and
+ * Determines if log level based on environment variables and
  * development or deployment environment defaults
  *
  * Set `LOG_LEVEL` env to the desired logging level. In order of priority, available levels are:

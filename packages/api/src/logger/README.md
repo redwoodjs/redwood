@@ -305,6 +305,21 @@ export const logger = createLogger({
 
 ### Prisma Logging
 
+Prisma is configures to log at the:
+
+* info
+* warn
+* error
+
+levels.
+
+One may also log *every* query.
+
+See: The Prisma Client References documentation on [Logging](https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#log).
+
+
+#### Slow Queries
+
 TODO
 
 ### Advanced Use
