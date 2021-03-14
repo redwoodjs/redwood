@@ -1,5 +1,5 @@
 // This is the ESLint configuation used by Redwood projects.
-import { getConfig } from '@redwoodjs/internal'
+const { getConfig } = require('@redwoodjs/internal')
 
 const config = getConfig()
 
