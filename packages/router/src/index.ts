@@ -18,4 +18,6 @@ export {
   PageLoadingContext,
 } from './internal'
 
+export * from './Set'
+
 export { usePageLoadingContext } from './page-loader'
