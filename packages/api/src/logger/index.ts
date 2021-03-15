@@ -13,7 +13,7 @@ import * as prettyPrint from 'pino-pretty'
  * @type {boolean}
  *
  */
-const isDevelopment =
+export const isDevelopment =
   process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
 
 /**
@@ -22,7 +22,7 @@ const isDevelopment =
  * @type {boolean}
  *
  */
-const isProduction = !isDevelopment
+export const isProduction = !isDevelopment
 
 /**
  * Determines if logs should be prettified.
