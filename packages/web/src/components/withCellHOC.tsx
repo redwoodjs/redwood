@@ -2,12 +2,14 @@ import type { DocumentNode } from 'graphql'
 
 import { useQuery, OperationResult } from './GraphQLHooksProvider'
 
-const Query: React.FunctionComponent<{
+interface QueryProps {
   query: DocumentNode
   children: (result: OperationResult) => React.ReactElement
-}> = ({ children, query, ...rest }) => {
+}
+
+const Query: React.FC<QueryProps> = ({ children, query, ...rest }) => {
   const result = useQuery(query, rest)
-  return children && result ? children(result) : null
+  return result ? children(result) : null
 }
 
 export type DataObject = { [key: string]: unknown }
