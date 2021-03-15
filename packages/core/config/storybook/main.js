@@ -61,12 +61,12 @@ const baseConfig = {
 const mergeUserStorybookConfig = (baseConfig) => {
   const redwoodPaths = getPaths()
 
-  const hasCustomConfig = fs.existsSync(redwoodPaths.web.storybook)
+  const hasCustomConfig = fs.existsSync(redwoodPaths.web.storybookConfig)
   if (!hasCustomConfig) {
     return baseConfig
   }
 
-  const userStorybookConfig = require(redwoodPaths.web.storybook)
+  const userStorybookConfig = require(redwoodPaths.web.storybookConfig)
   return merge(baseConfig, userStorybookConfig)
 }
 
