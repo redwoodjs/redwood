@@ -14179,15 +14179,14 @@ next-tick@~1.0.0:
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.0.0.tgz#ca86d1fe8828169b0120208e3dc8424b9db8342c"
   integrity sha1-yobR/ogoFpsBICCOPchCS524NCw=
 
-nhost-js-sdk@^3.0.0-14:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/nhost-js-sdk/-/nhost-js-sdk-3.0.0.tgz#d55bc95569b24525b2617cdd59350ec7c04337ea"
-  integrity sha512-teZIvwPstPWQdNmRBjJQw71/icfqvIxRS58sJuUvOyquW2goF/it9ag5rR1FDvh2Zdb9Hd306h+wjXWc11wbzQ==
+nhost-js-sdk@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/nhost-js-sdk/-/nhost-js-sdk-3.1.0.tgz#3c9cefe6a6184b91bacf7c97d68444b520ed0d71"
+  integrity sha512-DNEAUYJTQghuuYltGq8dUb/8wZaxsMgWR1IGl3lxQQ5BdUbg3Yre7U/O5dzm1JAG3kJbDKy3YnbIN9G8T/uIUw==
   dependencies:
     "@types/jwt-decode" "^2.2.1"
     axios "^0.21.1"
     jwt-decode "^2.2.0"
-    node-blob "git://github.com/elitan/node-blob.git"
     query-string "^6.13.1"
 
 nice-try@^1.0.4:
@@ -14202,10 +14201,6 @@ no-case@^3.0.4:
   dependencies:
     lower-case "^2.0.2"
     tslib "^2.0.3"
-
-"node-blob@git://github.com/elitan/node-blob.git":
-  version "0.0.2"
-  resolved "git://github.com/elitan/node-blob.git#0382ee22c765fa4c85ae64219fbe4abba1b2a474"
 
 node-dir@^0.1.10:
   version "0.1.17"
