@@ -65,7 +65,7 @@ const Route: React.VFC<RouteProps> = ({
   const { isPrivate, allowRender, unauthenticated } = usePrivate()
 
   if (notfound) {
-    // TODO: How should we handle `notfound`?
+    // The "notfound" route is handled by <NotFoundChecker>
     return null
   }
 
