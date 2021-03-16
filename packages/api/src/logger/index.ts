@@ -8,13 +8,20 @@ import pino, {
 import * as prettyPrint from 'pino-pretty'
 
 /**
- * Determines if log environment is development or test
+ * Determines if log environment is development
  *
  * @type {boolean}
  *
  */
-export const isDevelopment =
-  process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
+export const isDevelopment = process.env.NODE_ENV === 'development'
+
+/**
+ * Determines if log environment is test
+ *
+ * @type {boolean}
+ *
+ */
+export const isTest = process.env.NODE_ENV === 'test'
 
 /**
  * Determines if log environment is production by checking if not development
@@ -22,7 +29,7 @@ export const isDevelopment =
  * @type {boolean}
  *
  */
-export const isProduction = !isDevelopment
+export const isProduction = !isDevelopment && !isTest
 
 /**
  * Determines if logs should be prettified.
@@ -173,6 +180,7 @@ export const createLogger = ({
     console.log('Logger Configuration')
     console.log(`isProduction: ${isProduction}`)
     console.log(`isDevelopment: ${isDevelopment}`)
+    console.log(`isTest: ${isTest}`)
     console.log(`isPretty: ${isPretty}`)
     console.log(`isFile: ${isFile}`)
     console.log(`isStream: ${isStream}`)
@@ -190,7 +198,7 @@ export const createLogger = ({
 
     return pino(options, stream as DestinationStream)
   } else {
-    if (isStream && isDevelopment) {
+    if (isStream && isDevelopment && !isTest) {
       console.warn(
         'Logs will be sent to the transport stream in the current development environment.'
       )
