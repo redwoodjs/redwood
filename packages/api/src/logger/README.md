@@ -305,7 +305,9 @@ export const logger = createLogger({
 
 ### Prisma Logging
 
-Prisma is configures to log at the:
+Redwood declares an instance of the PrismaClient
+
+Prisma is configured to log at the:
 
 * info
 * warn
@@ -313,17 +315,61 @@ Prisma is configures to log at the:
 
 levels.
 
-One may also log *every* query.
+One may also log *every* query by adding the `query` level to the `defaultLogLevels`.
+
+If you wish to remove `info` logging, then you can define a set of levels, such as `['warn', 'error']`.
+
+```js
+export const db = createPrismaClient([...defaultLogLevels, 'query'])
+```
 
 See: The Prisma Client References documentation on [Logging](https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#log).
 
 
 #### Slow Queries
 
-TODO
+If `query` Prisma level logging is enabled and the `debug` level is enabled on the Logger then all query statements will be logged.
+
+Otherwise any query exceeding a threshold duration will be logged an the `warn` level.
+
+The duration is defined in `prisma.ts`:
+
+```js
+const SLOW_QUERY_THRESHOLD = 2 * 1000 // 2 seconds
+```
 
 ### Advanced Use
 
-#### Child Loggers
+There are situations when you may wish to add information to every log statement.
+
+This may be accomplished via [child loggers](https://github.com/pinojs/pino/blob/master/docs/child-loggers.md).
+
+#### GraphQL Service / Event Logger
 
 TODO
+#### Child Loggers
+
+```js
+import { db } from 'src/lib/db'
+import { logger } from 'src/lib/logger'
+
+export const userExamples = ({}, { info }) => {
+  const childLogger = logger.child({ path: info.fieldName })
+  childLogger.trace('I am in find many user examples resolver')
+  return db.userExample.findMany()
+}
+
+export const userExample = async ({ id }, { info }) => {
+  const childLogger = logger.child({ id, path: info.fieldName })
+  childLogger.trace('I am in the find a user example by id resolver')
+  const result = await db.userExample.findUnique({
+    where: { id },
+  })
+
+  childLogger.debug({ ...result }, 'This is the detail for the user')
+
+  return result
+}
+```
+
+See: [Child Loggers](https://github.com/pinojs/pino/blob/master/docs/child-loggers.md)

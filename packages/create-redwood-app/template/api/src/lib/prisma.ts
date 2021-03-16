@@ -11,7 +11,7 @@ const SLOW_QUERY_THRESHOLD = 2 * 1000 // 2 seconds
  *
  * See: https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#log
  */
-export const defaultLogLevels: Prisma.LogLevel[] = ['warn', 'error']
+export const defaultLogLevels: Prisma.LogLevel[] = ['info', 'warn', 'error']
 
 /*
  * Generates the Prisma Log Definitions from log levels
