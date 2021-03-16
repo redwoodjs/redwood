@@ -22,9 +22,12 @@ const verifyAzureActiveDirectoryToken = (
       (header, callback) => {
         client.getSigningKey(header.kid as string, (error, key) => {
           try {
-            callback(error, key.getPublicKey());
+            callback(error, key.getPublicKey())
           } catch (err) {
-            console.error('An error occured while trying to obtain signing key from Azure Active Directory. This might be a result of a outage. See https://status.azure.com/en-us/status for current status.', err)
+            console.error(
+              'An error occured while trying to obtain signing key from Azure Active Directory. This might be a result of a outage. See https://status.azure.com/en-us/status for current status.',
+              err
+            )
           }
         })
       },
