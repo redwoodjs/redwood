@@ -1,6 +1,6 @@
 // The guts of the router implementation.
 
-import React, { ReactChild } from 'react'
+import React from 'react'
 
 import {
   parseSearch,
@@ -49,7 +49,7 @@ interface RouteProps {
   notfound?: boolean
   redirect?: string
   prerender?: boolean
-  whileLoading?: () => ReactChild | null
+  whileLoading?: () => React.ReactElement | null
 }
 
 const Route: React.VFC<RouteProps> = ({
@@ -58,11 +58,11 @@ const Route: React.VFC<RouteProps> = ({
   name,
   redirect,
   notfound,
-  whileLoading,
+  whileLoading = () => null,
 }) => {
   const location = useLocation()
   const routerState = useRouterState()
-  const { isPrivate, allowRender, unauthenticated } = usePrivate()
+  const { isPrivate, unauthorized, unauthenticated } = usePrivate()
 
   if (notfound) {
     // The "notfound" route is handled by <NotFoundChecker>
@@ -90,10 +90,10 @@ const Route: React.VFC<RouteProps> = ({
     const { loading } = routerState.useAuth()
 
     if (loading) {
-      return <>{whileLoading?.() || null}</>
+      return whileLoading()
     }
 
-    if (!allowRender()) {
+    if (unauthorized()) {
       const currentLocation =
         global.location.pathname + encodeURIComponent(global.location.search)
 
@@ -114,7 +114,9 @@ const Route: React.VFC<RouteProps> = ({
   }
 
   if (!page || !name) {
-    return null
+    throw new Error(
+      "A route that's not a redirect or notfound route needs to specify both a `page` and a `name`"
+    )
   }
 
   return (
@@ -217,7 +219,10 @@ const NotFoundChecker: React.FC<{ children: React.ReactNode }> = ({
   let NotFoundPage: PageType | undefined = undefined
   const flatChildArray = flattenAll(children)
 
-  flatChildArray.forEach((child) => {
+  let i = 0;
+  while (i < flatChildArray.length && !foundMatchingRoute) {
+    const child = flatChildArray[i]
+
     if (isRoute(child)) {
       const { path } = child.props
 
@@ -237,7 +242,9 @@ const NotFoundChecker: React.FC<{ children: React.ReactNode }> = ({
         NotFoundPage = child.props.page
       }
     }
-  })
+
+    i++
+  }
 
   if (!foundMatchingRoute && NotFoundPage) {
     return (
