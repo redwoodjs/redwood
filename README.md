@@ -51,7 +51,7 @@ use:
 - [React](https://reactjs.org/)
 - [GraphQL](https://graphql.org/) ([Apollo](https://github.com/apollographql))
 - [Prisma](https://www.prisma.io/)
-- [Jest](https://jestjs.io/) (coming soon)
+- [Jest](https://jestjs.io/)
 - [Storybook](https://storybook.js.org/)
 - [Babel](https://babeljs.io/)
 - [Webpack](https://webpack.js.org/)
