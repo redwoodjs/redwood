@@ -26,21 +26,16 @@ export const handler = ({ fix }) => {
   const paths = getPaths()
   const webExists = fs.existsSync(paths.web.src)
   const apiExists = fs.existsSync(paths.api.src)
-  const options = []
 
-  if (fix) {
-    options.push('--fix')
-  }
-  if (webExists) {
-    options.push('web/src')
-  }
-  if (apiExists) {
-    options.push('api/src')
-  }
-
-  execa('yarn eslint', options, {
-    cwd: paths.base,
-    shell: true,
-    stdio: 'inherit',
-  })
+  execa(
+    'yarn eslint',
+    [fix && '--fix', webExists && 'web/src', apiExists && 'api/src'].filter(
+      Boolean
+    ),
+    {
+      cwd: paths.base,
+      shell: true,
+      stdio: 'inherit',
+    }
+  )
 }
