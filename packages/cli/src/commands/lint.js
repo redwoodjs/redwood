@@ -1,3 +1,5 @@
+import fs from 'fs'
+
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
@@ -21,8 +23,23 @@ export const builder = (yargs) => {
 }
 
 export const handler = ({ fix }) => {
-  execa('yarn eslint', [fix && '--fix', 'web/src', 'api/src'].filter(Boolean), {
-    cwd: getPaths().base,
+  const paths = getPaths()
+  const webExists = fs.existsSync(paths.web.src)
+  const apiExists = fs.existsSync(paths.api.src)
+  const options = []
+
+  if (fix) {
+    options.push('--fix')
+  }
+  if (webExists) {
+    options.push('web/src')
+  }
+  if (apiExists) {
+    options.push('api/src')
+  }
+
+  execa('yarn eslint', options, {
+    cwd: paths.base,
     shell: true,
     stdio: 'inherit',
   })
