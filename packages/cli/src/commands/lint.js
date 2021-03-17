@@ -23,17 +23,15 @@ export const builder = (yargs) => {
 }
 
 export const handler = ({ fix }) => {
-  const paths = getPaths()
-  const webExists = fs.existsSync(paths.web.src)
-  const apiExists = fs.existsSync(paths.api.src)
-
   execa(
     'yarn eslint',
-    [fix && '--fix', webExists && 'web/src', apiExists && 'api/src'].filter(
-      Boolean
-    ),
+    [
+      fix && '--fix',
+      fs.existsSync(getPaths().web.src) && 'web/src',
+      fs.existsSync(getPaths().api.src) && 'api/src',
+    ].filter(Boolean),
     {
-      cwd: paths.base,
+      cwd: getPaths().base,
       shell: true,
       stdio: 'inherit',
     }
