@@ -1,49 +1,91 @@
+import fs from 'fs'
+import path from 'path'
+
+import type { Handler } from 'aws-lambda'
 import bodyParser from 'body-parser'
 import type { Response, Request } from 'express'
 import express from 'express'
+import glob from 'glob'
+import escape from 'lodash.escape'
 import morgan from 'morgan'
 
-export interface Lambdas {
-  [path: string]: any
-}
-let LAMBDA_FUNCTIONS: Lambdas = {}
-export const setLambdaFunctions = (functions: Lambdas): void => {
-  LAMBDA_FUNCTIONS = functions
+import { getPaths } from '@redwoodjs/internal'
+const rwjsPaths = getPaths()
+
+import { requestHandler } from './requestHandlers/awsLambda'
+
+export type Lambdas = Record<string, Handler>
+const LAMBDA_FUNCTIONS: Lambdas = {}
+export const setLambdaFunctions = (foundFunctions: string[]) => {
+  for (const fnPath of foundFunctions) {
+    const routeName = path.basename(fnPath).replace('.js', '')
+    const { handler } = require(fnPath)
+    LAMBDA_FUNCTIONS[routeName] = handler
+    if (!handler) {
+      console.warn(
+        routeName,
+        'at',
+        fnPath,
+        'does not have a function called handler defined.'
+      )
+    }
+  }
 }
 
-export const server = ({
-  requestHandler,
+const lambdaRequestHandler = async (req: Request, res: Response) => {
+  const { routeName } = req.params
+  if (!LAMBDA_FUNCTIONS[routeName]) {
+    const errorMessage = `Function "${routeName}" was not found.`
+    console.error(errorMessage)
+    res.status(404).send(escape(errorMessage))
+    return
+  }
+  return requestHandler(req, res, LAMBDA_FUNCTIONS[routeName])
+}
+
+export const http = ({
+  port = 8911,
+  socket,
 }: {
-  requestHandler: (req: Request, res: Response, lambdaFunction: any) => void
-}): any => {
+  port: number
+  socket?: string
+}) => {
   const app = express()
+
   app.use(
     bodyParser.text({
       type: ['text/*', 'application/json', 'multipart/form-data'],
     })
   )
+
   app.use(
     bodyParser.raw({
       type: '*/*',
       limit: process.env.BODY_PARSER_LIMIT,
     })
   )
+
   app.use(morgan<Request, Response>('dev'))
 
-  const lambdaHandler = async (req: Request, res: Response): Promise<void> => {
-    const { routeName } = req.params
-    const lambdaFunction = LAMBDA_FUNCTIONS[routeName]
-    if (!lambdaFunction) {
-      const errorMessage = `Function "${routeName}" was not found.`
-      console.error(errorMessage)
-      res.status(404).send(errorMessage)
-      return
-    }
-    await requestHandler(req, res, lambdaFunction)
-  }
+  app.all('/:routeName', lambdaRequestHandler)
+  app.all('/:routeName/*', lambdaRequestHandler)
 
-  app.all('/:routeName', lambdaHandler)
-  app.all('/:routeName/*', lambdaHandler)
+  const server = app
+    .listen(socket || port, () => {
+      const ts = Date.now()
+      console.log('Importing API... ')
+      const apiFunctions = glob.sync('dist/functions/*.{ts,js}', {
+        cwd: rwjsPaths.api.base,
+        absolute: true,
+      })
+      setLambdaFunctions(apiFunctions)
+      console.log('Imported in', Date.now() - ts, 'ms')
+    })
+    .on('close', () => {
+      if (socket) {
+        fs.rmSync(socket)
+      }
+    })
 
-  return app
+  return server
 }
