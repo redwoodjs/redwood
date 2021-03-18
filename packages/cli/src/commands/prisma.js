@@ -3,7 +3,6 @@ import path from 'path'
 
 import boxen from 'boxen'
 import execa from 'execa'
-import { Argv } from 'yargs'
 
 import { getPaths } from '@redwoodjs/internal'
 
@@ -21,7 +20,7 @@ export const description = 'Run Prisma CLI with experimental features'
  * 2. cd packages/cli
  * 3. __REDWOOD__CONFIG_PATH=../../__fixtures__/example-todo-main yarn node dist/index.js prisma <test commands>
  */
-export const builder = async (yargs: Argv) => {
+export const builder = async (yargs) => {
   // accept either help or --help, which is the same behavior as all the other RW Yargs commands.
   const argv = mapHelpCommandToFlag(process.argv.slice(3))
 
@@ -53,12 +52,13 @@ export const builder = async (yargs: Argv) => {
 
   // Only pass auto flags, when not running help
   if (!hasHelpFlag) {
-    if (['migrate', 'db'].includes(argv[0])) {
+    if (['push', 'seed'].includes(argv[1])) {
       // this is safe as is if a user also adds --preview-feature
       autoFlags.push('--preview-feature')
     }
 
     if (
+      // `introspect` to be replaced by `db pull`; still valid as of prisma@2.19
       ['generate', 'introspect', 'db', 'migrate', 'studio'].includes(argv[0])
     ) {
       if (!fs.existsSync(paths.api.dbSchema)) {
@@ -94,7 +94,7 @@ export const builder = async (yargs: Argv) => {
     prismaCommand.stderr?.pipe(process.stderr)
 
     // So we can check for yarn prisma in the output
-    // e.g. yarn prisma introspect
+    // e.g. yarn prisma db pull
     const { stdout } = await prismaCommand
 
     if (hasHelpFlag || stdout?.match('yarn prisma')) {
@@ -105,7 +105,7 @@ export const builder = async (yargs: Argv) => {
   }
 }
 
-const mapHelpCommandToFlag = (argv: string[]) => {
+const mapHelpCommandToFlag = (argv) => {
   return argv.some((x) => x.includes('help'))
     ? [
         ...argv.filter((x) => !['--help'].includes(x) && !['help'].includes(x)),
