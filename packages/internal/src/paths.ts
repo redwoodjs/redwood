@@ -178,6 +178,8 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
 
 /**
  * Process the pages directory and return information useful for automated imports.
+ *
+ * Note: glob.sync returns posix style paths on Windows machines
  */
 export const processPagesDir = (
   webPagesDir: string = getPaths().web.pages
@@ -188,7 +190,7 @@ export const processPagesDir = (
   return pagePaths.map((pagePath) => {
     const p = path.parse(pagePath)
 
-    const importName = p.dir.replace(path.sep, '')
+    const importName = p.dir.replace('/', '')
     const importPath = importStatementPath(
       path.join(webPagesDir, p.dir, p.name)
     )
