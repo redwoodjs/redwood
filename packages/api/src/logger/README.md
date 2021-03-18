@@ -265,7 +265,7 @@ To stream your logs to [Datadog](https://www.datadoghq.com/), you can
    size: 1,
  })
 
- ...
+// ...
 
 export const logger = createLogger({
    options: { ...defaultLoggerOptions,
@@ -335,7 +335,7 @@ Otherwise any query exceeding a threshold duration will be logged an the `warn` 
 The duration is defined in `prisma.ts`:
 
 ```js
-const SLOW_QUERY_THRESHOLD = 2 * 1000 // 2 seconds
+const SLOW_QUERY_THRESHOLD = 2_000 // 2 seconds
 ```
 
 ### Advanced Use
