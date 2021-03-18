@@ -105,6 +105,7 @@ export const handler = async ({
   }
 
   if (esbuild) {
+    console.log('Using experimental esbuild...')
     execCommandsForSides.api.cmd = `yarn rimraf "${
       getPaths().api.dist
     }" && yarn cross-env NODE_ENV=production yarn rw-api-build`
