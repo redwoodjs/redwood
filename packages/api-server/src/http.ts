@@ -72,13 +72,13 @@ export const http = ({
   const server = app
     .listen(socket || port, () => {
       const ts = Date.now()
-      process.stdout.write('Importing API... ')
+      console.log('Importing API... ')
       const apiFunctions = glob.sync('dist/functions/*.{ts,js}', {
         cwd: rwjsPaths.api.base,
         absolute: true,
       })
       setLambdaFunctions(apiFunctions)
-      console.log(Date.now() - ts, 'ms')
+      console.log('Imported in', Date.now() - ts, 'ms')
     })
     .on('close', () => {
       if (socket) {

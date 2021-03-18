@@ -16,13 +16,14 @@ dotenv.config({
 })
 
 const tsInitialBuild = Date.now()
-process.stdout.write('Building API...')
+console.log('Building API...')
 build({ incremental: true }).then((buildResult) => {
   let chokidarReady = false
   let httpServer = fork(path.join(__dirname, 'index.js'))
+
   process.on('SIGINT', () => {
     console.log()
-    process.stdout.write('Shutting down... ')
+    console.log('Shutting down... ')
     httpServer.kill()
     buildResult.stop?.()
     console.log('Done.')
@@ -36,7 +37,7 @@ build({ incremental: true }).then((buildResult) => {
     })
     .on('ready', async () => {
       chokidarReady = true
-      console.log(Date.now() - tsInitialBuild, 'ms')
+      console.log('Built in', Date.now() - tsInitialBuild, 'ms')
     })
     .on('all', async (eventName, filePath) => {
       // Chokidar emits when it's initial booting up, let's ignore those.
@@ -50,6 +51,7 @@ build({ incremental: true }).then((buildResult) => {
       )
 
       const tsRebuild = Date.now()
+      console.log('Building API...')
       try {
         await buildResult?.rebuild?.()
         console.log('Built in', Date.now() - tsRebuild, 'ms')
