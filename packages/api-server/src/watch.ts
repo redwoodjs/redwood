@@ -22,11 +22,11 @@ build({ incremental: true }).then((buildResult) => {
   let httpServer = fork(path.join(__dirname, 'index.js'))
   process.on('SIGINT', () => {
     console.log()
-    console.log('Shutting down... ')
-    console.log()
+    process.stdout.write('Shutting down... ')
     httpServer.kill()
     buildResult.stop?.()
-    console.log('Fin.')
+    console.log('Done.')
+    process.exit(0)
   })
 
   chokidar
