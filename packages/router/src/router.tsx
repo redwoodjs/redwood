@@ -45,16 +45,34 @@ type PageType =
   | ((props: any) => JSX.Element)
 
 interface RouteProps {
-  path?: string
-  page?: PageType
-  name?: string
-  notfound?: boolean
-  redirect?: string
+  path: string
+  page: PageType
+  name: string
   prerender?: boolean
   whileLoading?: () => React.ReactElement | null
 }
 
-const Route: React.VFC<RouteProps> = ({
+interface RedirectRouteProps {
+  path: string
+  redirect: string
+}
+
+interface NotFoundRouteProps {
+  notfound: boolean
+  page: PageType
+}
+
+type InternalRouteProps = Partial<
+  RouteProps & RedirectRouteProps & NotFoundRouteProps
+>
+
+const Route: React.VFC<RouteProps | RedirectRouteProps | NotFoundRouteProps> = (
+  props
+) => {
+  return <InternalRoute {...props} />
+}
+
+const InternalRoute: React.VFC<InternalRouteProps> = ({
   path,
   page,
   name,
@@ -165,7 +183,7 @@ const Private: React.FC<PrivateProps> = ({
 
 function isRoute(
   node: React.ReactNode
-): node is React.ReactElement<RouteProps> {
+): node is React.ReactElement<InternalRouteProps> {
   return isReactElement(node) && node.type === Route
 }
 
