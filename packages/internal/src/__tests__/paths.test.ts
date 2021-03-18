@@ -9,7 +9,7 @@ import {
 
 describe('paths', () => {
   describe('processPagesDir', () => {
-    it('it accurately finds the pages', () => {
+    it('it accurately finds and names the pages', () => {
       const pagesDir = path.resolve(
         __dirname,
         '../../../../__fixtures__/example-todo-main/web/src/pages'
