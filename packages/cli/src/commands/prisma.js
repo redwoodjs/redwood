@@ -52,12 +52,13 @@ export const builder = async (yargs) => {
 
   // Only pass auto flags, when not running help
   if (!hasHelpFlag) {
-    if (['migrate', 'db'].includes(argv[0])) {
+    if (['push', 'seed'].includes(argv[1])) {
       // this is safe as is if a user also adds --preview-feature
       autoFlags.push('--preview-feature')
     }
 
     if (
+      // `introspect` to be replaced by `db pull`; still valid as of prisma@2.19
       ['generate', 'introspect', 'db', 'migrate', 'studio'].includes(argv[0])
     ) {
       if (!fs.existsSync(paths.api.dbSchema)) {
@@ -93,7 +94,7 @@ export const builder = async (yargs) => {
     prismaCommand.stderr?.pipe(process.stderr)
 
     // So we can check for yarn prisma in the output
-    // e.g. yarn prisma introspect
+    // e.g. yarn prisma db pull
     const { stdout } = await prismaCommand
 
     if (hasHelpFlag || stdout?.match('yarn prisma')) {
