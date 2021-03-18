@@ -9,7 +9,7 @@
   "license": "MIT",
   "dependencies": {
     "@graphql-tools/merge": "6.2.10",
-    "@prisma/client": "2.18.0",
+    "@prisma/client": "2.19.0",
     "apollo-server-lambda": "2.21.1",
     "@redwoodjs/internal": "^0.27.1",
     "core-js": "3.6.5",
