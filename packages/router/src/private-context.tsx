@@ -7,8 +7,9 @@ import { useRouterState } from './router-context'
  *                    component
  * @param unauthorized - Use this function to check if the user is allowed to
  *                       go to this route or not
- * @param unauthorized - Name of the route to go to if not authorized to visit
- *                       any of the routes in the containing `<Private>` block
+ * @param unauthenticated - Name of the route to go to if not authorized to
+ *                          visit any of the routes in the containing
+ *                          `<Private>` block
  */
 interface PrivateState {
   isPrivate: boolean
@@ -31,7 +32,12 @@ export const PrivateContextProvider: React.FC<ProviderProps> = ({
   unauthenticated,
 }) => {
   const routerState = useRouterState()
-  const { isAuthenticated, hasRole } = routerState.useAuth()
+  const isAuthenticated = routerState.useAuth
+    ? routerState.useAuth().isAuthenticated
+    : false
+  const hasRole = routerState.useAuth
+    ? routerState.useAuth().hasRole
+    : () => false
 
   const unauthorized = useCallback(() => {
     return !(isAuthenticated && (!role || hasRole(role)))
@@ -54,6 +60,6 @@ export const usePrivate = () => {
   return {
     isPrivate: !!context?.isPrivate,
     unauthorized,
-    unauthenticated
+    unauthenticated,
   }
 }
