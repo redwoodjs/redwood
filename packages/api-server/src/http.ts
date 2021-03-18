@@ -6,6 +6,7 @@ import bodyParser from 'body-parser'
 import type { Response, Request } from 'express'
 import express from 'express'
 import glob from 'glob'
+import escape from 'lodash.escape'
 import morgan from 'morgan'
 
 import { getPaths } from '@redwoodjs/internal'
@@ -36,7 +37,7 @@ const lambdaRequestHandler = async (req: Request, res: Response) => {
   if (!LAMBDA_FUNCTIONS[routeName]) {
     const errorMessage = `Function "${routeName}" was not found.`
     console.error(errorMessage)
-    res.status(404).send(errorMessage)
+    res.status(404).send(escape(errorMessage))
     return
   }
   return requestHandler(req, res, LAMBDA_FUNCTIONS[routeName])
