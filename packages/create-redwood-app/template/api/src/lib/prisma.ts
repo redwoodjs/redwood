@@ -4,7 +4,7 @@ import { logger } from './logger'
 
 // To help you identify particularly slow parameter values,
 // For example, Heroku outputs the slowest queries (that take 2 seconds or more)
-const SLOW_QUERY_THRESHOLD = 2 * 1000 // 2 seconds
+const SLOW_QUERY_THRESHOLD = 2_000 // 2 seconds
 
 /*
  * Determines the type and level of logging.
@@ -19,9 +19,9 @@ export const defaultLogLevels: Prisma.LogLevel[] = ['info', 'warn', 'error']
  * @return Prisma.LogDefinition[]
  */
 export const prismaLoggerOptions = (
-  logLevels: Prisma.LogLevel[]
+  setLogLevels: Prisma.LogLevel[]
 ): Prisma.LogDefinition[] => {
-  return logLevels?.map((level) => {
+  return setLogLevels?.map((level) => {
     return { emit: 'event', level } as Prisma.LogDefinition
   })
 }
@@ -33,11 +33,11 @@ export const prismaLoggerOptions = (
  *
  * https://www.prisma.io/docs/concepts/components/prisma-client/working-with-prismaclient/logging
  */
-export const setLogLevels = (
+export const configureLogLevels = (
   client: PrismaClient,
-  logLevels?: Prisma.LogLevel[]
+  setLogLevels?: Prisma.LogLevel[]
 ) => {
-  logLevels?.forEach((level) => {
+  setLogLevels?.forEach((level) => {
     if (level === 'query') {
       client.$on(level, (queryEvent: Prisma.QueryEvent) => {
         if (queryEvent.duration >= SLOW_QUERY_THRESHOLD) {
@@ -79,13 +79,13 @@ export const setLogLevels = (
  *
  * @return PrismaClient
  */
-export const createPrismaClient = (logLevels?: Prisma.LogLevel[]) => {
+export const createPrismaClient = (setLogLevels?: Prisma.LogLevel[]) => {
   const client = new PrismaClient({
-    log: prismaLoggerOptions(logLevels),
+    log: prismaLoggerOptions(setLogLevels),
     errorFormat: 'colorless',
   })
 
-  logLevels && setLogLevels(client, logLevels)
+  setLogLevels && configureLogLevels(client, setLogLevels)
 
   return client
 }

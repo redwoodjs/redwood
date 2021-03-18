@@ -1,7 +1,7 @@
 import { BaseLogger, LoggerOptions } from 'pino'
 import split from 'split2'
 
-import { createLogger, defaultLoggerOptions } from '../logger'
+import { createLogger } from '../logger'
 
 const once = (emitter, name) => {
   return new Promise((resolve, reject) => {
@@ -38,7 +38,7 @@ const setupLogger = (
   const logSinkData = once(stream, 'data')
 
   const logger = createLogger({
-    options: { ...defaultLoggerOptions, ...loggerOptions, prettyPrint: false },
+    options: { ...loggerOptions, prettyPrint: false },
     destination: stream,
     showConfig: false,
   })
@@ -47,6 +47,14 @@ const setupLogger = (
 }
 
 describe('logger', () => {
+  describe('creates a logger without options', () => {
+    test('it logs a trace message', async () => {
+      const logger = createLogger({})
+
+      expect(logger).toBeDefined()
+    })
+  })
+
   describe('supports various logging levels', () => {
     test('it logs a trace message', async () => {
       const { logger, logSinkData } = setupLogger()
@@ -116,30 +124,93 @@ describe('logger', () => {
       expect(logStatement).toHaveProperty('level')
       expect(logStatement).toHaveProperty('time')
       expect(logStatement).toHaveProperty('msg')
-      expect(logStatement).toHaveProperty('log')
-      expect(logStatement['log']).toHaveProperty('message')
+      expect(logStatement).toHaveProperty('message')
 
       expect(logStatement['level']).toEqual(50)
       expect(logStatement['msg']).toEqual('test of an error level message')
-      expect(logStatement['log']['message']).toEqual(
-        'something unexpected happened'
-      )
+      expect(logStatement['message']).toEqual('something unexpected happened')
     })
   })
 
   describe('supports key redaction', () => {
-    test('it redact the value of a given key', async () => {
+    test('it redacts defaults header authorization', async () => {
       const { logger, logSinkData } = setupLogger({
-        redact: ['log.redactedKey'],
+        redact: ['event.headers.authorization'],
+      })
+      const event = {
+        event: { headers: { authorization: 'Bearer access_token' } },
+      }
+
+      logger.info(event, 'test of an access token')
+      const logStatement = await logSinkData
+      expect(logStatement['msg']).toEqual('test of an access token')
+
+      expect(logStatement).toHaveProperty('event')
+      expect(logStatement['event']['headers']['authorization']).toEqual(
+        '[Redacted]'
+      )
+    })
+
+    test('it redacts the value of a given key', async () => {
+      const { logger, logSinkData } = setupLogger({
+        redact: ['redactedKey'],
       })
 
       logger.info({ redactedKey: 'you cannot see me' }, 'test of a redaction')
       const logStatement = await logSinkData
-
       expect(logStatement['msg']).toEqual('test of a redaction')
 
-      expect(logStatement['log']).toHaveProperty('redactedKey')
-      expect(logStatement['log']['redactedKey']).toEqual('[Redacted]')
+      expect(logStatement).toHaveProperty('redactedKey')
+      expect(logStatement['redactedKey']).toEqual('[Redacted]')
+    })
+
+    test('it redacts a JWT token key by default', async () => {
+      const { logger, logSinkData } = setupLogger()
+
+      logger.info(
+        {
+          jwt:
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
+        },
+        'test of a redacted JWT'
+      )
+      const logStatement = await logSinkData
+      expect(logStatement['msg']).toEqual('test of a redacted JWT')
+
+      expect(logStatement).toHaveProperty('jwt')
+      expect(logStatement['jwt']).toEqual('[Redacted]')
+    })
+
+    test('it redacts a password key by default', async () => {
+      const { logger, logSinkData } = setupLogger()
+
+      logger.info(
+        {
+          password: '123456',
+        },
+        'test of a redacted password'
+      )
+      const logStatement = await logSinkData
+      expect(logStatement['msg']).toEqual('test of a redacted password')
+
+      expect(logStatement).toHaveProperty('password')
+      expect(logStatement['password']).toEqual('[Redacted]')
+    })
+
+    test('it redacts the email key by default', async () => {
+      const { logger, logSinkData } = setupLogger()
+
+      logger.info(
+        {
+          email: 'alice@example.com',
+        },
+        'test of a redacted email'
+      )
+      const logStatement = await logSinkData
+      expect(logStatement['msg']).toEqual('test of a redacted email')
+
+      expect(logStatement).toHaveProperty('email')
+      expect(logStatement['email']).toEqual('[Redacted]')
     })
   })
 })

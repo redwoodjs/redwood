@@ -30,7 +30,20 @@ To start 🌲🪓 api-side logging, just
 * use `logger` with the level just as you might have with `console`
 
 ```js
+// api/lib/logger.ts
+
+import { createLogger } from '@redwoodjs/api/logger'
+
+/**
+ * Creates a logger. Options define how to log. Destination defines where to log.
+ * If no destination, std out.
+ */
+export const logger = createLogger({})
+
+// then, in your api service, lib, function file
 import { logger } from 'src/lib/logger'
+
+//...
 
 logger.trace(`>> items service -> About to save item ${item.name}`)
 logger.info(`Saving item ${item.name}`)
@@ -76,11 +89,16 @@ To redact sensitive information, you can supply paths to keys that hold sensitiv
 We've included a default set called the `redactionList` that includes keys such as
 
 ```
-'email',
-'accessToken',
-'access_token',
-'secret',
-'password',
+  'access_token',
+  'accessToken',
+  'DATABASE_URL',
+  'email',
+  'event.headers.authorization',
+  'host',
+  'jwt',
+  'JWT',
+  'password',
+  'secret',
 ```
 
 You may wish to augment these defaults via the `redact` configuration setting, here adding a Social Security Number and Credit Card Number key to the list.
@@ -90,11 +108,14 @@ You may wish to augment these defaults via the `redact` configuration setting, h
  * Custom redaction list
  */
 import { redactionsList } from '@redwoodjs/api/logger'
-...
+
+//...
+
 export const logger = createLogger({
-  options: { ...defaultLoggerOptions, redact: [...redactionsList, 'ssn,credit_card_number'] },
+  options: { redact: [...redactionsList, 'ssn,credit_card_number'] },
 })
 ```
+Note: Unless you provide the current `redactionsList` with the defaults, just the keys `'ssn,credit_card_number'` will be redacted.
 
 ### Pretty Printing
 
@@ -117,13 +138,15 @@ logger.error(error, `Failed to save item`)
 
 There could be cases where a key in that metadata collides with a key needed by pino or your third-party transport.
 
-To prevent collisions and overwriting values, we nest your metadata in a `log` attribute by default.
-
-One can of course override this default in by setting a different `nestedKey` value when configuring the logger options:
+To prevent collisions and overwriting values, you can nest your metadata in an `log` or `payload` or some other attribute.
 
 ```js
 nestedKey: 'log',
 ```
+
+Note: If you use `nestedKey` logging, you will have to manually set any `redact` options to include the `nestedKey` values as a prefix.
+
+For example, if your nestedKey is `'log`, then instead of redacting `email` you will have to redact `log.email`.
 
 ### Destination aka Where to Log
 
@@ -188,7 +211,7 @@ You can set the minimum level to log via the `level` option.
  * Override minimum log level to warn
  */
 export const logger = createLogger({
-  options: { ...defaultLoggerOptions, level: 'warn' },
+  options: { level: 'warn' },
 })
 ```
 ### Always Pretty Print
@@ -200,7 +223,7 @@ In the situation where you want to force pretty printing even in Production, you
  * Always pretty print
  */
 export const logger = createLogger({
-  options: { ...defaultLoggerOptions, prettyPrint: 'true' },
+  options: { prettyPrint: 'true' },
 })
 ```
 
@@ -215,8 +238,9 @@ Please see [pino's redaction documentation](https://github.com/pinojs/pino/blob/
  * Customize a redactions list to add `my_secret_key`
  */
 import { redactionsList } from '@redwoodjs/api/logger'
+
 export const logger = createLogger({
-  options: { ...defaultLoggerOptions, redact: [...redactionsList, 'my_secret_key'] },
+  options: { redact: [...redactionsList, 'my_secret_key'] },
 })
 ```
 

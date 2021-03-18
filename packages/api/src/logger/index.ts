@@ -66,12 +66,16 @@ export const prettifier = prettyPrint
  *      remove (Boolean): Optional. Instead of censoring the value, remove both the key and the value. Default: false
  */
 export const redactionsList: string[] | redactOptions = [
-  'host',
-  'email',
-  'accessToken',
   'access_token',
-  'secret',
+  'accessToken',
+  'DATABASE_URL',
+  'email',
+  'event.headers.authorization',
+  'host',
+  'jwt',
+  'JWT',
   'password',
+  'secret',
 ]
 
 /**
@@ -133,7 +137,7 @@ export const defaultLoggerOptions: LoggerOptions = {
   },
   prettifier: isPretty && prettifier,
   level: logLevel,
-  nestedKey: 'log',
+  // nestedKey: 'log',
   redact: redactionsList,
 }
 
@@ -149,7 +153,7 @@ export const defaultLoggerOptions: LoggerOptions = {
  * @property {boolean} showConfig - Display logger configuration on initialization
  */
 export interface RedwoodLoggerOptions {
-  options: LoggerOptions
+  options?: LoggerOptions
   destination?: string | DestinationStream
   showConfig?: boolean
 }
@@ -157,7 +161,9 @@ export interface RedwoodLoggerOptions {
 /**
  * Creates the logger
  *
- * @param {RedwoodLoggerOptions} options, destination - The logger configuration options and destination
+ * @param options {RedwoodLoggerOptions} - Override the default logger configuration
+ * @param destination {DestinationStream} - An optional destination stream
+ * @param showConfig {Boolean} - Show the logger configuration. Enabled by default in development.
  * @return {BaseLogger} - The configured logger
  *
  * @example
@@ -174,9 +180,9 @@ export const createLogger = ({
   const isStream = hasDestination && !isFile
   const stream = destination
 
+  options = { ...defaultLoggerOptions, ...options }
+
   if (showConfig) {
-    // @todo remove in release
-    // Currently for debug and sanity checking
     console.log('Logger Configuration')
     console.log(`isProduction: ${isProduction}`)
     console.log(`isDevelopment: ${isDevelopment}`)
@@ -196,7 +202,7 @@ export const createLogger = ({
       )
     }
 
-    return pino(options, stream as DestinationStream)
+    return pino({}, stream as DestinationStream)
   } else {
     if (isStream && isDevelopment && !isTest) {
       console.warn(
