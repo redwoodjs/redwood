@@ -50,13 +50,16 @@ build({ incremental: true }).then((buildResult) => {
       )
 
       const tsRebuild = Date.now()
-      process.stdout.write('Building API...')
-      await buildResult?.rebuild?.()
-      console.log(Date.now() - tsRebuild, 'ms')
+      try {
+        await buildResult?.rebuild?.()
+        console.log('Built in', Date.now() - tsRebuild, 'ms')
 
-      // Restart HTTP...
-      httpServer.emit('exit')
-      httpServer.kill()
-      httpServer = fork(path.join(__dirname, 'index.js'))
+        // Restart HTTP...
+        httpServer.emit('exit')
+        httpServer.kill()
+        httpServer = fork(path.join(__dirname, 'index.js'))
+      } catch (e) {
+        console.error(e)
+      }
     })
 })
