@@ -232,7 +232,7 @@ export {
  * called in page-loader's `componentDidUpdate`.
  *
  * the order of priority is:
- * 1. RouteAnnouncement
+ * 1. RouteAnnouncement (the most specific one)
  * 2. h1
  * 3. document.title
  * 4. location.pathname
@@ -242,15 +242,20 @@ export const getAnnouncement = () => {
     '[data-redwood-route-announcement]'
   )
 
-  const pageHeading = global?.document.querySelector(`h1`)
+  let routeAnnouncement
 
   if (routeAnnouncements.length) {
-    const routeAnnouncement = routeAnnouncements[
+    routeAnnouncement = routeAnnouncements[
       routeAnnouncements.length - 1
     ] as HTMLDivElement
-    return routeAnnouncement.innerText || routeAnnouncement.textContent
-  } else if (pageHeading) {
-    return pageHeading.innerText || pageHeading.textContent
+  }
+
+  const pageHeading = global?.document.querySelector(`h1`)
+
+  if (routeAnnouncement && routeAnnouncement.textContent) {
+    return routeAnnouncement.textContent
+  } else if (pageHeading && pageHeading.textContent) {
+    return pageHeading.textContent
   } else if (global?.document.title) {
     return document.title
   } else {

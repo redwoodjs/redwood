@@ -63,6 +63,18 @@ const NoH1OrTitlePage = () => (
   </html>
 )
 
+const EmptyH1Page = () => (
+  <html>
+    <head>
+      <title>title content</title>
+    </head>
+    <body>
+      <h1></h1>
+      <main>Empty H1 Page</main>
+    </body>
+  </html>
+)
+
 beforeEach(() => {
   window.history.pushState({}, null, '/')
   resetNamedRoutes()
@@ -87,7 +99,7 @@ test('route announcer renders with aria-live="assertive" and role="alert"', asyn
   })
 })
 
-test('getAnnouncement works', async () => {
+test('gets the announcement in the correct order of priority', async () => {
   const TestRouter = () => (
     <Router>
       <Route path="/" page={RouteAnnouncementPage} name="routeAnnouncement" />
@@ -129,5 +141,20 @@ test('getAnnouncement works', async () => {
   await waitFor(() => {
     screen.getByText(/NoH1OrTitle Page/i)
     expect(getAnnouncement()).toBe('new page at /noH1OrTitle')
+  })
+})
+
+test('getAnnouncement handles empty PageHeader', async () => {
+  const TestRouter = () => (
+    <Router>
+      <Route path="/" page={EmptyH1Page} name="emptyH1" />
+    </Router>
+  )
+
+  const screen = render(<TestRouter />)
+
+  await waitFor(() => {
+    screen.getByText(/Empty H1 Page/i)
+    expect(getAnnouncement()).toBe('title content')
   })
 })
