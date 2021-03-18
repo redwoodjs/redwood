@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/structure",
   "description": "noun: the arrangement of and relations between the parts or elements of something complex",
-  "version": "0.26.2",
+  "version": "0.27.1",
   "license": "MIT",
   "main": "dist/index.js",
   "files": [
@@ -9,8 +9,8 @@
   ],
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@prisma/sdk": "2.18.0",
-    "@redwoodjs/internal": "^0.26.2",
+    "@prisma/sdk": "2.19.0",
+    "@redwoodjs/internal": "^0.27.1",
     "@types/line-column": "^1.0.0",
     "camelcase": "^6.0.0",
     "deepmerge": "^4.2.2",

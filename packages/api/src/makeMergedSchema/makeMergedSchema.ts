@@ -5,7 +5,7 @@ import {
   IResolvers,
   IExecutableSchemaDefinition,
 } from 'apollo-server-lambda'
-import { GraphQLSchema, GraphQLFieldMap } from 'graphql'
+import type { GraphQLSchema, GraphQLFieldMap } from 'graphql'
 import merge from 'lodash.merge'
 import omitBy from 'lodash.omitby'
 
@@ -182,6 +182,7 @@ export const makeMergedSchema = ({
   schemas,
   services,
   schemaDirectives,
+  schemaOptions,
 }: {
   schemas: {
     [key: string]: {
@@ -190,7 +191,12 @@ export const makeMergedSchema = ({
     }
   }
   services: Services
+  /** @deprecated: Please use `schemaOptions` instead. */
   schemaDirectives?: IExecutableSchemaDefinition['schemaDirectives']
+  /**
+   * A list of options passed to [makeExecutableSchema](https://www.graphql-tools.com/docs/generate-schema/#makeexecutableschemaoptions).
+   */
+  schemaOptions?: IExecutableSchemaDefinition
 }) => {
   const typeDefs = mergeTypes(
     [rootSchema.schema, ...Object.values(schemas).map(({ schema }) => schema)],
@@ -200,6 +206,7 @@ export const makeMergedSchema = ({
   const schema = makeExecutableSchema({
     typeDefs,
     schemaDirectives,
+    ...schemaOptions,
   })
 
   const resolvers: IResolvers = mergeResolversWithServices({
