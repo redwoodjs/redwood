@@ -4,8 +4,12 @@
   "license": "MIT",
   "files": [
     "config",
-    "dist"
+    "dist",
+    "esbuild"
   ],
+  "bin": {
+    "rw-api-build": "esbuild/index.js"
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "dependencies": {
@@ -66,7 +70,9 @@
     "webpack-manifest-plugin": "^3.0.0",
     "webpack-merge": "^5.1.2",
     "webpack-retry-chunk-load-plugin": "^1.4.0",
-    "whatwg-fetch": "^3.5.0"
+    "whatwg-fetch": "^3.5.0",
+    "esbuild": "0.9.0",
+    "glob": "7.1.6"
   },
   "devDependencies": {
     "@types/babel-core": "^6.25.6",

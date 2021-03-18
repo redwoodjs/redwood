@@ -17,6 +17,7 @@ export interface NodeTargetPaths {
   lib: string
   services: string
   config: string
+  dist: string
 }
 
 export interface BrowserTargetPaths {
@@ -154,6 +155,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       config: path.join(BASE_DIR, PATH_API_DIR_CONFIG),
       services: path.join(BASE_DIR, PATH_API_DIR_SERVICES),
       src: path.join(BASE_DIR, PATH_API_DIR_SRC),
+      dist: path.join(BASE_DIR, 'api/dist'),
     },
     web: {
       routes,
