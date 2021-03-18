@@ -97,7 +97,7 @@ import { AuthenticationError, ForbiddenError, parseJWT } from '@redwoodjs/api'
  *   }
  * }
  *
- * @example - Cookies and other request information are available in the options paramter just in case
+ * @example - Cookies and other request information are available in the req parameter, just in case
  *
  * const getCurrentUser = async (_decoded, _raw, { event, _context }) => {
  *   const cookies = cookie(event.headers.cookies)
