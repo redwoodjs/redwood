@@ -115,10 +115,10 @@ export class PageLoader extends React.Component<Props> {
     // than `delay`.
     // Consumers of the context can show a loading indicator
     // to signal to the user that something is happening.
-    this.loadingTimeout = setTimeout(
+    this.loadingTimeout = (setTimeout(
       () => this.setState({ slowModuleImport: true }),
       delay
-    )
+    ) as unknown) as number
 
     // Wait to download and parse the page.
     const module = await loader()

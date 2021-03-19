@@ -18,6 +18,8 @@ export {
   PageLoadingContext,
 } from './internal'
 
+export * from './Set'
+
 export { usePageLoadingContext } from './page-loader'
 
 export { default as RouteAnnouncement } from './route-announcement'
