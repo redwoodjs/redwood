@@ -5,9 +5,12 @@ import { routePrefix } from './index'
  *
  * @return  string    Route prefix
  */
-export const getRoutePrefix = () => {
-  const lastCharacter = routePrefix.charAt(routePrefix.length - 1)
-  const prefix = lastCharacter === '/' ? routePrefix : `${routePrefix}/`
+export const getRoutePrefix = (): string => {
+  const prefix = routePrefix.charAt(0) !== '/' ? '/' : ''
+  const suffix = routePrefix.charAt(routePrefix.length - 1) !== '/' ? '/' : ''
 
-  return prefix
+  // Construct route prefix
+  const route = `${prefix}${routePrefix}${suffix}`
+
+  return route
 }
