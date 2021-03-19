@@ -23,12 +23,6 @@ export const builder = (yargs) => {
     type: 'string',
   })
 
-  yargs.option('check', {
-    default: true,
-    description: 'Run a diagnostic check on your project',
-    type: 'boolean',
-  })
-
   yargs.option('output', {
     alias: 'output',
     default: false,
@@ -186,72 +180,6 @@ export const handler = async ({
     renderer: verbose ? VerboseRenderer : 'default',
     concurrent: true,
   })
-
-  const diagnosticCheck = new Listr([
-    {
-      title: 'Running diagnostic check',
-      task: () => {
-        const checks = [
-          {
-            message: 'Duplicate React version found in web/node_modules',
-            failure: fs.existsSync(
-              path.join(getPaths().web.base, 'node_modules/react')
-            ),
-          },
-          {
-            message: 'Duplicate React-Dom version found in web/node_modules',
-            failure: fs.existsSync(
-              path.join(getPaths().web.base, 'node_modules/react-dom')
-            ),
-          },
-          {
-            message: 'Duplicate CoreJs version found in web/node_modules',
-            failure: fs.existsSync(
-              path.join(getPaths().web.base, 'node_modules/core-js')
-            ),
-          },
-          {
-            message:
-              'Duplicate @redwoodjs/web version found in web/node_modules',
-            failure: fs.existsSync(
-              path.join(getPaths().web.base, 'node_modules/@redwoodjs/web')
-            ),
-          },
-        ]
-
-        if (checks.some((checks) => checks.failure)) {
-          console.error(
-            '\nDiagnostic check failed. Please check your react versions in package.json and web/package.json'
-          )
-
-          console.error(
-            'If they seem correct, consider removing all node_modules and reinstalling \n'
-          )
-
-          console.log('⚠️  Issues found: ')
-          console.log('-'.repeat(30))
-
-          checks
-            .filter((check) => check.failure)
-            .forEach((check, i) => {
-              console.log(`${i + 1}. ${check.message}`)
-            })
-
-          console.log('-'.repeat(30))
-
-          throw new Error('node_modules are being duplicated in web')
-        }
-      },
-    },
-  ])
-
-  if (check) {
-    try {
-      await diagnosticCheck.run()
-    } catch (e) {
-      process.exit(1)
-    }
-  }
 
   try {
     await tasks.run()
