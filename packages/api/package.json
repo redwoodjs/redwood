@@ -13,7 +13,7 @@
     "@prisma/client": "2.19.0",
     "@redwoodjs/internal": "^0.27.1",
     "@types/pino": "^6.3.6",
-    "apollo-server-lambda": "2.18.2",
+    "apollo-server-lambda": "2.21.2",
     "core-js": "3.6.5",
     "graphql": "15.5.0",
     "graphql-scalars": "1.9.0",
