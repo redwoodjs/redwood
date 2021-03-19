@@ -96,8 +96,17 @@ import { AuthenticationError, ForbiddenError, parseJWT } from '@redwoodjs/api'
  *     roles: parseJWT({ decoded: decoded }).roles,
  *   }
  * }
+ *
+ * @example - Cookies and other request information are available in the req parameter, just in case
+ *
+ * const getCurrentUser = async (_decoded, _raw, { event, _context }) => {
+ *   const cookies = cookie(event.headers.cookies)
+ *   const session = cookies['my.cookie.name']
+ *   const currentUser = await db.sessions.findUnique({ where: { id: session } })
+ *   return currentUser
+ * }
  */
-export const getCurrentUser = async (decoded, { _token, _type }) => {
+export const getCurrentUser = async (decoded, { _token, _type }, { _event, _context }) => {
   return { ...decoded, roles: parseJWT({ decoded }).roles }
 }
 

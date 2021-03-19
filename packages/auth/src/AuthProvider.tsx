@@ -238,8 +238,9 @@ export class AuthProvider extends React.Component<
   }
 
   signUp = async (options?: any) => {
-    await this.rwClient.signup(options)
-    return this.reauthenticate()
+    const signupOutput = await this.rwClient.signup(options)
+    await this.reauthenticate()
+    return signupOutput
   }
 
   render() {
