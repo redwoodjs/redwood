@@ -79,7 +79,7 @@ export const fixProjectBinaries = (PROJECT_PATH) => {
     })
 }
 
-export const copyFiles = async (src, dest) => {
+export const copyFiles = async (src, dest, skipChmod) => {
   // TODO: Figure out if we need to only run based on certain events.
 
   src = ensurePosixPath(src)
@@ -99,7 +99,9 @@ export const copyFiles = async (src, dest) => {
     }
   )
   // when rsync is run modify the permission to make binaries executable.
-  fixProjectBinaries(getPaths().base)
+  if (!skipChmod) {
+    fixProjectBinaries(getPaths().base)
+  }
 }
 
 const rwtCopy = ({ RW_PATH = process.env.RW_PATH }) => {
@@ -141,6 +143,8 @@ const rwtLink = async (yargs) => {
   const RW_PATH = yargs.RW_PATH || process.env.RW_PATH
   const { clean, watch } = yargs
 
+  let watcherHandle = null
+
   if (!RW_PATH) {
     console.error(c.error('You must specify a path to your local redwood repo'))
     process.exit(1)
@@ -151,43 +155,14 @@ const rwtLink = async (yargs) => {
 
   console.log(`\n Redwood Framework Path: ${c.info(frameworkPath)}`)
 
-  const frameworkPackagesPath = path.join(frameworkPath, 'packages')
-
-  const symLinkPath = path.join(getPaths().base, 'redwood')
-
-  // Make sure we don't double create the symlink
-  // Also makes sure we use the latest path passed to link
-  if (fs.existsSync(symLinkPath)) {
-    if (fs.lstatSync(symLinkPath).isSymbolicLink()) {
-      console.log(c.info(' 🔗  Removing old symlink. Will recreate a new one'))
-      rimraf.sync(symLinkPath)
-    } else {
-      // Throw an error if it looks like there was a file/folder called redwood
-      console.error(
-        c.error(
-          "\n 🛑  Looks like there's something called `redwood` at the root of your project."
-        ) +
-          '\n This is where we symlink redwood packages. Please remove this and rerun the command \n'
-      )
-
-      process.exit(1)
-    }
-  }
+  const frameworkPackagesPath = path.join(frameworkPath, 'packages/')
+  const projectPackagesPath = path.join(getPaths().base, 'redwood')
 
   console.log(
-    `Linking your local Redwood build from ${c.info(frameworkPackagesPath)} \n`
+    `Copying your local Redwood build from ${c.info(frameworkPackagesPath)} \n`
   )
-  fs.symlinkSync(frameworkPackagesPath, symLinkPath)
 
-  // Symlink the react in the user's project to react in framework
-  // This is to make sure the same instance of react is used
-  // The direction of the symlink is important, we always give preference
-  // to the user's react version
-  rimraf.sync(path.join(frameworkPath, 'node_modules/react'))
-  fs.symlinkSync(
-    path.join(getPaths().base, 'node_modules/react'),
-    path.join(frameworkPath, 'node_modules/react')
-  )
+  copyFiles(frameworkPackagesPath, projectPackagesPath, true)
 
   updateProjectWithResolutions(frameworkPath)
 
@@ -204,6 +179,8 @@ const rwtLink = async (yargs) => {
         borderColour: 'gray',
       })
     )
+
+    watcherHandle?.close()
   })
 
   // Let workspaces do the link
@@ -215,6 +192,23 @@ const rwtLink = async (yargs) => {
   })
 
   fixBinaryPermissions(getPaths().base)
+
+  if (watch) {
+    watcherHandle = chokidar
+      .watch(frameworkPackagesPath, {
+        persistent: true,
+        recursive: true,
+        ignored: [path.join(frameworkPackagesPath, 'create-redwood-app/')],
+      })
+      .on(
+        'all',
+        _.debounce((event) => {
+          // TODO: Figure out if we need to only run based on certain events.
+          console.log('Trigger event: ', event)
+          copyFiles(frameworkPackagesPath, projectPackagesPath, true)
+        }, 500)
+      )
+  }
 
   const message = `
   ${c.bold('🚀 Go Forth and Contribute!')}\n
@@ -250,29 +244,15 @@ const rwtLink = async (yargs) => {
 
 // This should be synchronous
 const rwtUnlink = () => {
-  const symLinkPath = path.join(getPaths().base, 'redwood')
-  if (
-    fs.existsSync(symLinkPath) &&
-    fs.lstatSync(symLinkPath).isSymbolicLink()
-  ) {
-    const frameworkPath = path.join(fs.readlinkSync(symLinkPath), '../')
+  const linkedPackagesPath = path.join(getPaths().base, 'redwood')
+  if (fs.existsSync(linkedPackagesPath)) {
+    const frameworkPath = path.join(fs.readlinkSync(linkedPackagesPath), '../')
     // remove resolutions we added in link
     updateProjectWithResolutions(frameworkPath, true)
 
     rimraf.sync(path.join(getPaths().base, 'node_modules/@redwoodjs'))
 
-    // Remove symlinked react
-    rimraf.sync(path.join(frameworkPath, 'node_modules/react'))
-
-    // Run install in the framework
-    execa.sync('yarn install', ['--check-files'], {
-      shell: true,
-      stdio: 'inherit',
-      cleanup: true,
-      cwd: frameworkPath,
-    })
-
-    rimraf.sync(symLinkPath)
+    rimraf.sync(linkedPackagesPath)
   }
 
   execa.sync('yarn install', {
