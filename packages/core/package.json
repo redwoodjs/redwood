@@ -71,7 +71,7 @@
     "webpack-merge": "^5.1.2",
     "webpack-retry-chunk-load-plugin": "^1.4.0",
     "whatwg-fetch": "^3.5.0",
-    "esbuild": "0.9.0",
+    "esbuild": "0.9.3",
     "glob": "7.1.6"
   },
   "devDependencies": {
