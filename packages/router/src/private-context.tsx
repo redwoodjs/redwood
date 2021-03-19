@@ -32,12 +32,7 @@ export const PrivateContextProvider: React.FC<ProviderProps> = ({
   unauthenticated,
 }) => {
   const routerState = useRouterState()
-  const isAuthenticated = routerState.useAuth
-    ? routerState.useAuth().isAuthenticated
-    : false
-  const hasRole = routerState.useAuth
-    ? routerState.useAuth().hasRole
-    : () => false
+  const { isAuthenticated, hasRole } = routerState.useAuth()
 
   const unauthorized = useCallback(() => {
     return !(isAuthenticated && (!role || hasRole(role)))
