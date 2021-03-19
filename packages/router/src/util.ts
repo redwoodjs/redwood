@@ -238,27 +238,21 @@ export {
  * 4. location.pathname
  */
 export const getAnnouncement = () => {
-  const routeAnnouncements = global?.document.querySelectorAll(
+  const routeAnnouncement = global?.document.querySelectorAll(
     '[data-redwood-route-announcement]'
-  )
-
-  let routeAnnouncement
-
-  if (routeAnnouncements.length) {
-    routeAnnouncement = routeAnnouncements[
-      routeAnnouncements.length - 1
-    ] as HTMLDivElement
+  )?.[0]
+  if (routeAnnouncement?.textContent) {
+    return routeAnnouncement.textContent
   }
 
   const pageHeading = global?.document.querySelector(`h1`)
-
-  if (routeAnnouncement && routeAnnouncement.textContent) {
-    return routeAnnouncement.textContent
-  } else if (pageHeading && pageHeading.textContent) {
+  if (pageHeading?.textContent) {
     return pageHeading.textContent
-  } else if (global?.document.title) {
-    return document.title
-  } else {
-    return `new page at ${global?.location.pathname}`
   }
+
+  if (global?.document.title) {
+    return document.title
+  }
+
+  return `new page at ${global?.location.pathname}`
 }
