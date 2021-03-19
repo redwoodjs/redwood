@@ -1,6 +1,6 @@
 import React, { useReducer, createContext, useContext } from 'react'
 
-import type { useAuth } from '@redwoodjs/auth'
+import { useAuth } from '@redwoodjs/auth'
 
 import { ParamType } from './internal'
 
@@ -9,7 +9,7 @@ const DEFAULT_PAGE_LOADING_DELAY = 1000 // milliseconds
 export interface RouterState {
   paramTypes?: Record<string, ParamType>
   pageLoadingDelay?: number
-  useAuth?: typeof useAuth
+  useAuth: typeof useAuth
 }
 
 const RouterStateContext = createContext<RouterState | undefined>(undefined)
@@ -22,18 +22,22 @@ const RouterSetContext = createContext<
   React.Dispatch<Partial<RouterState>> | undefined
 >(undefined)
 
+interface ProviderProps extends Omit<RouterState, 'useAuth'> {
+  useAuth?: typeof useAuth
+}
+
 function stateReducer(state: RouterState, newState: Partial<RouterState>) {
   return { ...state, ...newState }
 }
 
-export const RouterContextProvider: React.FC<RouterState> = ({
-  useAuth,
+export const RouterContextProvider: React.FC<ProviderProps> = ({
+  useAuth: customUseAuth,
   paramTypes,
   pageLoadingDelay = DEFAULT_PAGE_LOADING_DELAY,
   children,
 }) => {
   const [state, setState] = useReducer(stateReducer, {
-    useAuth,
+    useAuth: customUseAuth || useAuth,
     paramTypes,
     pageLoadingDelay,
   })

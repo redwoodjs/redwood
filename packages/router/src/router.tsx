@@ -83,6 +83,7 @@ const InternalRoute: React.VFC<InternalRouteProps> = ({
   const location = useLocation()
   const routerState = useRouterState()
   const { isPrivate, unauthorized, unauthenticated } = usePrivate()
+  const { loading } = routerState.useAuth()
 
   if (notfound) {
     // The "notfound" route is handled by <NotFoundChecker>
@@ -107,14 +108,6 @@ const InternalRoute: React.VFC<InternalRouteProps> = ({
   }
 
   if (isPrivate) {
-    if (!routerState.useAuth) {
-      throw new Error(
-        'You need to pass `useAuth` to the router when using private routes'
-      )
-    }
-
-    const { loading } = routerState.useAuth()
-
     if (loading) {
       return whileLoading()
     }
