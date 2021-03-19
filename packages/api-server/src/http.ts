@@ -72,8 +72,6 @@ export const http = ({
   app.all(`${getRoutePrefix()}:routeName`, lambdaRequestHandler)
   app.all(`${getRoutePrefix()}:routeName/*`, lambdaRequestHandler)
 
-  console.log(`getRoutePrefix`, getRoutePrefix())
-
   const server = app
     .listen(socket || port, () => {
       const ts = Date.now()
