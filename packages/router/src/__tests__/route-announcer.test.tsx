@@ -1,14 +1,7 @@
 import { render, waitFor, act } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 
-import {
-  Router,
-  Route,
-  navigate,
-  routes,
-  resetNamedRoutes,
-  getAnnouncement,
-} from '../internal'
+import { Router, Route, navigate, routes, getAnnouncement } from '../internal'
 import RouteAnnouncement from '../route-announcement'
 
 // SETUP
@@ -77,7 +70,7 @@ const EmptyH1Page = () => (
 
 beforeEach(() => {
   window.history.pushState({}, null, '/')
-  resetNamedRoutes()
+  Object.keys(routes).forEach((key) => delete routes[key])
 })
 
 test('route announcer renders with aria-live="assertive" and role="alert"', async () => {
