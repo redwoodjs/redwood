@@ -35,7 +35,7 @@ export interface AuthClientSupabase extends AuthClient {
     email: string
     password: string
   }): Promise<{
-    data: Session | null
+    // data: Session | null
     user: User | null
     error: Error | null
   }>
