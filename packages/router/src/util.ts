@@ -248,3 +248,33 @@ export {
   isReactElement,
   flattenAll,
 }
+
+/**
+ * gets the announcement for the new page.
+ * called in page-loader's `componentDidUpdate`.
+ *
+ * the order of priority is:
+ * 1. RouteAnnouncement (the most specific one)
+ * 2. h1
+ * 3. document.title
+ * 4. location.pathname
+ */
+export const getAnnouncement = () => {
+  const routeAnnouncement = global?.document.querySelectorAll(
+    '[data-redwood-route-announcement]'
+  )?.[0]
+  if (routeAnnouncement?.textContent) {
+    return routeAnnouncement.textContent
+  }
+
+  const pageHeading = global?.document.querySelector(`h1`)
+  if (pageHeading?.textContent) {
+    return pageHeading.textContent
+  }
+
+  if (global?.document.title) {
+    return document.title
+  }
+
+  return `new page at ${global?.location.pathname}`
+}
