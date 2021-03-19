@@ -208,14 +208,14 @@ RedwoodJS provides an opinionated logger with sensible, practical defaults. Thes
 Some examples of common configurations and overrides demonstrate how you can have control over both how and where you log.
 ### Override Log Level
 
-You can set the minimum level to log via the `level` option.
+You can set the minimum level to log via the `level` option. This is useful if you need to override the default Production settings (just `warn` and `error`) to in this case `debug`.
 
 ```js
 /**
- * Override minimum log level to warn
+ * Override minimum log level to debug
  */
 export const logger = createLogger({
-  options: { level: 'warn' },
+  options: { level: 'debug' },
 })
 ```
 ### Always Pretty Print
