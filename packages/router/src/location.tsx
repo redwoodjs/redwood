@@ -19,6 +19,8 @@ interface LocationProviderProps {
 }
 
 class LocationProvider extends React.Component<LocationProviderProps> {
+  // When prerendering, there might be more than one level of location providers. Use the values from the one above.
+  static contextType = LocationContext
   HISTORY_LISTENER_ID: string | undefined = undefined
 
   state = {
@@ -29,7 +31,11 @@ class LocationProvider extends React.Component<LocationProviderProps> {
     const windowLocation =
       typeof window !== 'undefined'
         ? window.location
-        : { pathname: '', search: '', hash: '' }
+        : {
+            pathname: this.context?.pathname || '',
+            search: this.context?.search || '',
+            hash: this.context?.hash || '',
+          }
     const { pathname, search, hash } = this.props.location || windowLocation
 
     return { pathname, search, hash }
@@ -48,36 +54,22 @@ class LocationProvider extends React.Component<LocationProviderProps> {
   }
 
   render() {
-    const { children } = this.props
-    const { context } = this.state
-
     return (
-      <LocationContext.Provider value={context}>
-        {typeof children === 'function' ? children(context) : children || null}
+      <LocationContext.Provider value={this.state.context}>
+        {this.props.children}
       </LocationContext.Provider>
     )
   }
 }
 
-interface LocationProps {
-  children: (context: LocationContextType) => React.ReactChild
-}
-
-const Location = ({ children }: LocationProps) => (
-  <LocationContext.Consumer>
-    {(context) =>
-      context ? (
-        children(context)
-      ) : (
-        <LocationProvider>{children}</LocationProvider>
-      )
-    }
-  </LocationContext.Consumer>
-)
-
 const useLocation = () => {
   const location = React.useContext(LocationContext)
+
+  if (location === undefined) {
+    throw new Error('useLocation must be used within a LocationProvider')
+  }
+
   return location
 }
 
-export { Location, LocationProvider, LocationContext, useLocation }
+export { LocationProvider, LocationContext, useLocation }
