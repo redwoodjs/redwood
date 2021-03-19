@@ -7,6 +7,7 @@ import { AuthContextInterface } from '@redwoodjs/auth'
 
 import { Router, Route, Private, Redirect, navigate, routes, Link } from '../'
 import { Set } from '../Set'
+import { useParams } from '../params'
 
 function createDummyAuthContextValues(partial: Partial<AuthContextInterface>) {
   const authContextValues: AuthContextInterface = {
@@ -53,6 +54,17 @@ beforeEach(() => {
 test('inits routes and navigates as expected', async () => {
   mockAuth(false)
 
+  const ParamPage = ({ value, q}: { value: string; q: string}) => {
+    const { params } = useParams();
+
+    return (
+      <div>
+        <p>param {`${value}${q}`}</p>
+        <p>hookparams {`${params.value}?${params.q}`}</p>
+      </div>
+    );
+  }
+
   const TestRouter = () => (
     <Router useAuth={window.__REDWOOD__USE_AUTH}>
       <Route path="/" page={HomePage} name="home" />
@@ -62,13 +74,7 @@ test('inits routes and navigates as expected', async () => {
       <Private unauthenticated="home">
         <Route path="/private" page={PrivatePage} name="private" />
       </Private>
-      <Route
-        path="/param-test/{value}"
-        page={({ value, q }: { value: string; q: string }) => (
-          <div>param {`${value}${q}`}</div>
-        )}
-        name="params"
-      />
+      <Route path="/param-test/{value}" page={ParamPage} name="params" />
       <Route notfound page={NotFoundPage} />
     </Router>
   )
@@ -84,7 +90,10 @@ test('inits routes and navigates as expected', async () => {
 
   // passes search params to the page
   act(() => navigate(routes.params({ value: 'val', q: 'q' })))
-  await waitFor(() => screen.getByText('param valq'))
+  await waitFor(() => {
+    expect(screen.queryByText("param valq")).toBeTruthy()
+    expect(screen.queryByText("hookparams val?q")).toBeTruthy()
+  })
 
   // navigate to redirect page
   // should redirect to about
@@ -272,12 +281,6 @@ test('supports <Set>', async () => {
             name="anotherPrivate"
           />
         </Private>
-
-        <Route
-          path="/param-test/:value"
-          page={({ value }) => <div>param {value}</div>}
-          name="params"
-        />
       </Set>
     </Router>
   )

@@ -12,6 +12,7 @@ import {
   validatePath,
   LocationProvider,
 } from './internal'
+import { ParamsProvider } from './params'
 import { PrivateContextProvider, usePrivate } from './private-context'
 import {
   RouterContextProvider,
@@ -220,9 +221,11 @@ const Router: React.FC<RouterProps> = ({
       pageLoadingDelay={pageLoadingDelay}
     >
       <LocationProvider>
-        <NotFoundChecker>
-          <>{children}</>
-        </NotFoundChecker>
+        <ParamsProvider>
+          <NotFoundChecker>
+            {children}
+          </NotFoundChecker>
+        </ParamsProvider>
       </LocationProvider>
     </RouterContextProvider>
   )
