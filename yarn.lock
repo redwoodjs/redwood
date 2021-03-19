@@ -2608,19 +2608,27 @@
     npmlog "^4.1.2"
     write-file-atomic "^2.3.0"
 
-"@magic-sdk/provider@^2.8.0":
-  version "2.8.0"
-  resolved "https://registry.yarnpkg.com/@magic-sdk/provider/-/provider-2.8.0.tgz#4b165b18b15e14040d1374327a81610661494c15"
-  integrity sha512-ZDijCeXy8T5WQw7CY6uXeuyY5hJ41+jTBBnfraDubqH9P9Z/ztJ+Bh/V3I7pfbolRUQecpnGOauVSE1Nr2kW4w==
+"@magic-sdk/commons@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@magic-sdk/commons/-/commons-1.1.0.tgz#253fbbb8846b79e8defacda68ac30b0ac3581e7c"
+  integrity sha512-10CHQg6lMzWALccugQ7LZC3jOYaKMaEOJTfugrjMMgVntBtRPLPrQBz8+Vw9fl4tbGWtjCWcxVsrx5Wela2DHg==
+
+"@magic-sdk/provider@^4.2.0":
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/@magic-sdk/provider/-/provider-4.2.0.tgz#00fc181baa64be22249a549b5d7d129f16f18b99"
+  integrity sha512-ClJnyqhjefoWXmLHFjyTN1MtCZTIl80tFRV5NUUe3ubTOb8Pc8sFJYeHxl3n3NU+uSlr+khyiLZZycKoW0zfSg==
   dependencies:
-    "@magic-sdk/types" "^1.6.0"
+    "@magic-sdk/types" "^3.1.0"
     eventemitter3 "^4.0.4"
     semver "^7.3.2"
+    tslib "^2.0.3"
 
-"@magic-sdk/types@^1.6.0":
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/@magic-sdk/types/-/types-1.6.0.tgz#b2a45be001194358b3d8fa0c63b649b73735660e"
-  integrity sha512-CvVUPTF9tSLNFA4JhcAFjheiqWyVp9r9ooy/AheK+0rWRZCxE5QCwc81d2FduDTqzEJZeUV9+9F9R0AplhnX7w==
+"@magic-sdk/types@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@magic-sdk/types/-/types-3.1.0.tgz#be6fa99d3ad69a1d83eaf4957de04c23d758433b"
+  integrity sha512-hoajZxI+xvy4BQzimgRJsre6c11xQscKyArIirusBgsYwpCzLqVgUwmYRQiHi6ehmwt74CRKVt+uEScaq1ON2A==
+  dependencies:
+    tslib "^2.0.3"
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
@@ -9406,14 +9414,6 @@ flush-write-stream@^1.0.0:
     inherits "^2.0.3"
     readable-stream "^2.3.6"
 
-flush-write-stream@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/flush-write-stream/-/flush-write-stream-2.0.0.tgz#6f58e776154f5eefacff92a6e5a681c88ac50f7c"
-  integrity sha512-uXClqPxT4xW0lcdSBheb2ObVU+kuqUk3Jk64EwieirEXZx9XUrVwp/JuBfKAWaM4T5Td/VL7QLDWPXp/MvGm/g==
-  dependencies:
-    inherits "^2.0.3"
-    readable-stream "^3.1.1"
-
 focus-lock@^0.8.1:
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/focus-lock/-/focus-lock-0.8.1.tgz#bb36968abf77a2063fa173cb6c47b12ac8599d33"
@@ -12924,18 +12924,20 @@ macos-release@^2.2.0:
   resolved "https://registry.yarnpkg.com/macos-release/-/macos-release-2.4.1.tgz#64033d0ec6a5e6375155a74b1a1eba8e509820ac"
   integrity sha512-H/QHeBIN1fIGJX517pvK8IEK53yQOW7YcEI55oYtgjDdoCQQz7eJS94qt5kNrscReEyuD/JcdFCm2XBEcGOITg==
 
-magic-sdk@^2.5.0:
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/magic-sdk/-/magic-sdk-2.7.0.tgz#645dd958b60a95db74d560c91a9f40ad73e7f959"
-  integrity sha512-KqzcLWhwAGlvmFSrQIrEPlOhOCpdvka/AOWGrK00qLHx8ph8RTpUJi0TB82i0Q9Cz2Q18Svw6YDZYXCWVLGPkw==
+magic-sdk@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/magic-sdk/-/magic-sdk-4.2.0.tgz#4686d6475fc84732e38b20aa7a539484343086ba"
+  integrity sha512-H7UeOf05RT1Z724sXcsV/KJgSeQp8m51Kd96y9wbYN5HxWI/Ljb9l68bF3mLP/xeLbMjelLKjtEsIApzo4Awdw==
   dependencies:
     "@babel/core" "^7.9.6"
     "@babel/runtime" "^7.9.6"
-    "@magic-sdk/provider" "^2.8.0"
-    "@magic-sdk/types" "^1.6.0"
+    "@magic-sdk/commons" "^1.1.0"
+    "@magic-sdk/provider" "^4.2.0"
+    "@magic-sdk/types" "^3.1.0"
     localforage "^1.7.4"
     localforage-driver-memory "^1.0.5"
     regenerator-runtime "0.13.5"
+    tslib "^2.0.3"
 
 make-dir@3.1.0, make-dir@^3.0.0, make-dir@^3.0.2, make-dir@^3.1.0:
   version "3.1.0"
