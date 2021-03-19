@@ -2,7 +2,12 @@ import React, { useContext } from 'react'
 
 import isEqual from 'lodash.isequal'
 
-import { createNamedContext, ParamsContext, Spec } from './internal'
+import {
+  createNamedContext,
+  ParamsContext,
+  Spec,
+  getAnnouncement,
+} from './internal'
 
 export interface PageLoadingContextInterface {
   loading: boolean
@@ -79,10 +84,20 @@ export class PageLoader extends React.Component<Props> {
     this.startPageLoadTransition(this.props)
   }
 
-  componentDidUpdate(prevProps: Props) {
+  // for announcing the new page to screen readers
+  announcementRef = React.createRef<HTMLDivElement>()
+
+  componentDidUpdate(prevProps: Props, prevState: State) {
     if (this.propsChanged(prevProps, this.props)) {
       this.clearLoadingTimeout()
       this.startPageLoadTransition(this.props)
+    }
+
+    if (this.stateChanged(prevState, this.state)) {
+      global?.scrollTo(0, 0)
+      if (this.announcementRef.current) {
+        this.announcementRef.current.innerText = getAnnouncement()
+      }
     }
   }
 
@@ -100,10 +115,10 @@ export class PageLoader extends React.Component<Props> {
     // than `delay`.
     // Consumers of the context can show a loading indicator
     // to signal to the user that something is happening.
-    this.loadingTimeout = setTimeout(
+    this.loadingTimeout = (setTimeout(
       () => this.setState({ slowModuleImport: true }),
       delay
-    )
+    ) as unknown) as number
 
     // Wait to download and parse the page.
     const module = await loader()
@@ -145,6 +160,24 @@ export class PageLoader extends React.Component<Props> {
             value={{ loading: this.state.slowModuleImport }}
           >
             <Page {...this.state.params} />
+            <div
+              id="redwood-announcer"
+              style={{
+                position: 'absolute',
+                top: 0,
+                width: 1,
+                height: 1,
+                padding: 0,
+                overflow: 'hidden',
+                clip: 'rect(0, 0, 0, 0)',
+                whiteSpace: 'nowrap',
+                border: 0,
+              }}
+              role="alert"
+              aria-live="assertive"
+              aria-atomic="true"
+              ref={this.announcementRef}
+            ></div>
           </PageLoadingContext.Provider>
         </ParamsContext.Provider>
       )

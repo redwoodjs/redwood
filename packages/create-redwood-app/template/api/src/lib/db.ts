@@ -1,6 +1,9 @@
 // See https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/constructor
 // for options.
 
-import { PrismaClient } from '@prisma/client'
+import { createPrismaClient, defaultLogLevels } from 'src/lib/prisma'
 
-export const db = new PrismaClient()
+/*
+ * Instance of the Prisma Client
+ */
+export const db = createPrismaClient(defaultLogLevels)

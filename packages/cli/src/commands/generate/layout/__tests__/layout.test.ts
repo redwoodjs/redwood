@@ -10,7 +10,8 @@ let singleWordDefaultFiles,
   javascriptFiles,
   typescriptFiles,
   withoutTestFiles,
-  withoutStoryFiles
+  withoutStoryFiles,
+  withSkipLinkFiles
 
 beforeAll(() => {
   singleWordDefaultFiles = layout.files({ name: 'App' })
@@ -32,6 +33,10 @@ beforeAll(() => {
     name: 'withoutStories',
     javascript: true,
     stories: false,
+  })
+  withSkipLinkFiles = layout.files({
+    name: 'A11y',
+    skipLink: true,
   })
 })
 
@@ -151,4 +156,14 @@ test("doesn't include test file when --tests is set to false", () => {
       '/path/to/project/web/src/layouts/WithoutTestsLayout/WithoutTestsLayout.js'
     ),
   ])
+})
+
+test.only('includes skip link when --skipLink is set to true', () => {
+  expect(
+    withSkipLinkFiles[
+      path.normalize(
+        '/path/to/project/web/src/layouts/A11yLayout/A11yLayout.tsx'
+      )
+    ]
+  ).toEqual(loadGeneratorFixture('layout', 'withSkipLinkLayout.tsx'))
 })

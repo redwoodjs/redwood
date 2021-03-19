@@ -9,29 +9,34 @@ import {
 
 describe('paths', () => {
   describe('processPagesDir', () => {
-    it('it accurately finds the pages', () => {
+    it('it accurately finds and names the pages', () => {
       const pagesDir = path.resolve(
         __dirname,
         '../../../../__fixtures__/example-todo-main/web/src/pages'
       )
 
       const pages = processPagesDir(pagesDir)
+      expect(pages[0].importName).toEqual('adminEditUserPage')
       expect(pages[0].importPath).toEqual(
         importStatementPath(
           path.join(pagesDir, 'admin/EditUserPage/EditUserPage')
         )
       )
+      expect(pages[1].importName).toEqual('FatalErrorPage')
       expect(pages[1].importPath).toEqual(
         importStatementPath(
           path.join(pagesDir, 'FatalErrorPage/FatalErrorPage')
         )
       )
+      expect(pages[2].importName).toEqual('HomePage')
       expect(pages[2].importPath).toEqual(
         importStatementPath(path.join(pagesDir, 'HomePage/HomePage'))
       )
+      expect(pages[3].importName).toEqual('NotFoundPage')
       expect(pages[3].importPath).toEqual(
         importStatementPath(path.join(pagesDir, 'NotFoundPage/NotFoundPage'))
       )
+      expect(pages[4].importName).toEqual('TypeScriptPage')
       expect(pages[4].importPath).toEqual(
         importStatementPath(
           path.join(pagesDir, 'TypeScriptPage/TypeScriptPage')

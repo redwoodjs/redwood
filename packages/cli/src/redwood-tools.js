@@ -21,6 +21,8 @@ const RW_BINS = {
   rwt: 'cli/dist/redwood-tools.js',
   'dev-server': 'dev-server/dist/main.js',
   'api-server': 'api-server/dist/index.js',
+  'rw-api-server': 'api-server/dist/index.js',
+  'rw-api-build': 'core/esbuild/index.js',
 }
 
 export const resolveFrameworkPath = (RW_PATH) => {
