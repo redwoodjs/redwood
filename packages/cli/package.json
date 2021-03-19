@@ -21,7 +21,7 @@
     "camelcase": "^6.0.0",
     "chalk": "^4.1.0",
     "concurrently": "^5.1.0",
-    "core-js": "3.6.5",
+    "core-js": "3.9.1",
     "cross-env": "^7.0.2",
     "decamelize": "^4.0.0",
     "dotenv-defaults": "^2.0.1",
