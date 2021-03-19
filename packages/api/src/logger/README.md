@@ -60,11 +60,15 @@ That's it!
 If you are upgrading an existing RedwoodJS app and would like to include logging, you simply need to copy over files from the "Create Redwood Application" template:
 
 * Copy `packages/create-redwood-app/template/api/src/lib/logger.ts` to `api/lib/logger.ts`. Required.
+
+For optional Prisma logging:
+
 * Copy `packages/create-redwood-app/template/api/src/lib/db.ts` to `api/lib/db.ts`. Optional.
+* Copy `packages/create-redwood-app/template/api/src/lib/prisma.ts` to `api/lib/prisma.ts`. Optional.
 
 The first file `logger.ts` defines the logger instance. You will import `logger` and use in your services, functions or other libraries. You may then replace existing `console.log()` statements with `logger.info()` or `logger.debug()`.
 
-The second file `db.ts`  -- which is optional -- replaces how the `db` Prisma client instance is declares and exported. It configures Prisma logging, if desired. See below for more information of Prisma logging options.
+The second set of files `db.ts` and `prisma.ts` -- which are optional -- replace how the `db` Prisma client instance is declares and exported. It configures Prisma logging, if desired. See below for more information of Prisma logging options.
 
 ## Options aka How to Log
 
