@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Children, ReactElement, ReactNode } from 'react'
 
 /** Create a React Context with the given name. */
 const createNamedContext = <T extends unknown>(
@@ -219,10 +219,32 @@ const replaceParams = (path: string, args: Record<string, unknown> = {}) => {
   return newPath
 }
 
+function isReactElement(node: ReactNode): node is ReactElement {
+  return (
+    node !== undefined &&
+    node !== null &&
+    (node as ReactElement).type !== undefined
+  )
+}
+
+function flattenAll(children: ReactNode): ReactNode[] {
+  const childrenArray = Children.toArray(children)
+
+  return childrenArray.flatMap((child) => {
+    if (isReactElement(child) && child.props.children) {
+      return [child, ...flattenAll(child.props.children)]
+    }
+
+    return [child]
+  })
+}
+
 export {
   createNamedContext,
   matchPath,
   parseSearch,
   validatePath,
   replaceParams,
+  isReactElement,
+  flattenAll,
 }
