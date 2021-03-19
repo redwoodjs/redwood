@@ -9,11 +9,12 @@ import glob from 'glob'
 import escape from 'lodash.escape'
 import morgan from 'morgan'
 
-import { getRoutePrefix } from './helper'
 import { getPaths } from '@redwoodjs/internal'
-const rwjsPaths = getPaths()
 
+import { getRoutePrefix } from './helper'
 import { requestHandler } from './requestHandlers/awsLambda'
+
+const rwjsPaths = getPaths()
 
 export type Lambdas = Record<string, Handler>
 const LAMBDA_FUNCTIONS: Lambdas = {}
