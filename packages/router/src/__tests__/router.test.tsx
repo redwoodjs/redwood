@@ -55,7 +55,7 @@ test('inits routes and navigates as expected', async () => {
   mockAuth(false)
 
   const ParamPage = ({ value, q }: { value: string; q: string }) => {
-    const { params } = useParams()
+    const params = useParams()
 
     return (
       <div>

@@ -22,11 +22,11 @@ export const ParamsProvider: React.FC<{}> = ({ children }) => {
 }
 
 export const useParams = () => {
-  const params = useContext(ParamsContext)
+  const paramsContext = useContext(ParamsContext)
 
-  if (params === undefined) {
+  if (paramsContext === undefined) {
     throw new Error('useParams must be used within a ParamsProvider')
   }
 
-  return params
+  return paramsContext.params || {}
 }
