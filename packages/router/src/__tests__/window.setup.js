@@ -1,1 +1,0 @@
-window.scrollTo = jest.fn()
