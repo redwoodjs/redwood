@@ -11,7 +11,6 @@ const targetFile = '.all-contributorsrc'
 const mainContribFile = JSON.parse(fs.readFileSync(targetFile))
 
 const contribFiles = [
-  '.crwa.all-contributorsrc',
   '.rwjs.com.all-contributorsrc',
   '.learn.all-contributorsrc',
 ]

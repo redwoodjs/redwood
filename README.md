@@ -489,6 +489,15 @@ And there you have it.
   <tr>
     <td align="center"><a href="https://github.com/bl-ue"><img src="https://avatars.githubusercontent.com/u/54780737?v=4" width="100px;" alt=""/><br /><sub><b>bl-ue</b></sub></a></td>
     <td align="center"><a href="https://github.com/magicjuju"><img src="https://avatars.githubusercontent.com/u/19280122?v=4" width="100px;" alt=""/><br /><sub><b>juju</b></sub></a></td>
+    <td align="center"><a href="https://www.figma.com/@realstandal"><img src="https://avatars.githubusercontent.com/u/25166787?v=4" width="100px;" alt=""/><br /><sub><b>Ryan Lockard</b></sub></a></td>
+    <td align="center"><a href="https://github.com/svenhanssen"><img src="https://avatars.githubusercontent.com/u/445182?v=4" width="100px;" alt=""/><br /><sub><b>Sven Hanssen</b></sub></a></td>
+    <td align="center"><a href="https://mudssrali.github.io/"><img src="https://avatars.githubusercontent.com/u/24487349?v=4" width="100px;" alt=""/><br /><sub><b>Mudassar Ali</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/sangheestyle"><img src="https://avatars.githubusercontent.com/u/319490?v=4" width="100px;" alt=""/><br /><sub><b>SangHee Kim</b></sub></a></td>
+    <td align="center"><a href="http://loonyb.in/"><img src="https://avatars.githubusercontent.com/u/78673?v=4" width="100px;" alt=""/><br /><sub><b>Subhash Chandra</b></sub></a></td>
+    <td align="center"><a href="https://github.com/seonghyeonkimm"><img src="https://avatars.githubusercontent.com/u/13966404?v=4" width="100px;" alt=""/><br /><sub><b>KimSeonghyeon</b></sub></a></td>
+    <td align="center"><a href="https://github.com/origami-z"><img src="https://avatars.githubusercontent.com/u/5257855?v=4" width="100px;" alt=""/><br /><sub><b>Zhihao Cui</b></sub></a></td>
   </tr>
 </table>
 
