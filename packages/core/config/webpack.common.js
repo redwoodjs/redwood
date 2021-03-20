@@ -239,9 +239,21 @@ module.exports = (webpackEnv) => {
                 },
               ],
             },
-            // (1)
             {
-              test: /\.(js|mjs|jsx|ts|tsx)$/,
+              test: /\.(js|mjs|jsx)$/,
+              exclude: /(node_modules)/,
+              use: {
+                loader: 'babel-loader',
+                options: {
+                  plugins: [
+                    shouldIncludeFastRefresh &&
+                      require.resolve('react-refresh/babel'),
+                  ].filter(Boolean),
+                },
+              },
+            },
+            {
+              test: /\.(ts|tsx)$/,
               exclude: /(node_modules)/,
               use: {
                 loader: 'babel-loader',
