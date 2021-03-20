@@ -6,8 +6,8 @@ import '@testing-library/jest-dom/extend-expect'
 import { AuthContextInterface } from '@redwoodjs/auth'
 
 import { Router, Route, Private, Redirect, navigate, routes, Link } from '../'
-import { Set } from '../Set'
 import { useParams } from '../params'
+import { Set } from '../Set'
 
 function createDummyAuthContextValues(partial: Partial<AuthContextInterface>) {
   const authContextValues: AuthContextInterface = {
@@ -54,15 +54,15 @@ beforeEach(() => {
 test('inits routes and navigates as expected', async () => {
   mockAuth(false)
 
-  const ParamPage = ({ value, q}: { value: string; q: string}) => {
-    const { params } = useParams();
+  const ParamPage = ({ value, q }: { value: string; q: string }) => {
+    const { params } = useParams()
 
     return (
       <div>
         <p>param {`${value}${q}`}</p>
         <p>hookparams {`${params.value}?${params.q}`}</p>
       </div>
-    );
+    )
   }
 
   const TestRouter = () => (
@@ -91,8 +91,8 @@ test('inits routes and navigates as expected', async () => {
   // passes search params to the page
   act(() => navigate(routes.params({ value: 'val', q: 'q' })))
   await waitFor(() => {
-    expect(screen.queryByText("param valq")).toBeTruthy()
-    expect(screen.queryByText("hookparams val?q")).toBeTruthy()
+    expect(screen.queryByText('param valq')).toBeTruthy()
+    expect(screen.queryByText('hookparams val?q')).toBeTruthy()
   })
 
   // navigate to redirect page

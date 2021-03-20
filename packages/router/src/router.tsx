@@ -222,9 +222,7 @@ const Router: React.FC<RouterProps> = ({
     >
       <LocationProvider>
         <ParamsProvider>
-          <NotFoundChecker>
-            {children}
-          </NotFoundChecker>
+          <NotFoundChecker>{children}</NotFoundChecker>
         </ParamsProvider>
       </LocationProvider>
     </RouterContextProvider>
