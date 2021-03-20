@@ -173,7 +173,7 @@ export interface RedwoodLoggerOptions {
 export const createLogger = ({
   options,
   destination,
-  showConfig = isDevelopment,
+  showConfig = false,
 }: RedwoodLoggerOptions): BaseLogger => {
   const hasDestination = typeof destination !== 'undefined'
   const isFile = hasDestination && typeof destination === 'string'
