@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+/* eslint-disable no-undef */
+/* eslint-env node, es6*/
 
 // inspired by https://github.com/openclimatefix/merge-all-contributors
 

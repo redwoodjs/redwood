@@ -229,7 +229,7 @@ And there you have it.
 <tr>
     <td align="center"><a href="https://github.com/ajcwebdev"><img src="https://avatars0.githubusercontent.com/u/12433465?v=4" width="100px;" alt=""/><br /><sub><b>Anthony Campolo</b></sub></a><br /><sub>advocate</sub></td>
     <td align="center"><a href="https://github.com/clairefro"><img src="https://avatars1.githubusercontent.com/u/9841162?v=4" width="100px;" alt=""/><br /><sub><b>Claire Froelich</b></sub></a><br /><sub>maintainer</sub></td>
-    <td align="center"><a href="https://twitter.com/kimadeline_m"><img src="https://avatars3.githubusercontent.com/u/51720070?v=4" width="100px;" alt=""/><br /><sub><b>Kim-Adeline Miguel</b></sub></a><br /><sub>community</sub></td>
+    <td align="center"><a href="https://github.com/kimadeline"><img src="https://avatars3.githubusercontent.com/u/51720070?v=4" width="100px;" alt=""/><br /><sub><b>Kim-Adeline Miguel</b></sub></a><br /><sub>community</sub></td>
     <td align="center"><a href="https://github.com/forresthayes"><img src="https://avatars0.githubusercontent.com/u/44448047?v=4" width="100px;" alt=""/><br /><sub><b>Forrest Hayes</b></sub></a><br /><sub>community</sub></td>
 </tr>
 </table>
@@ -469,6 +469,26 @@ And there you have it.
     <td align="center"><a href="https://github.com/agiannelli"><img src="https://avatars.githubusercontent.com/u/53096355?v=4" width="100px;" alt=""/><br /><sub><b>Amanda Giannelli</b></sub></a></td>
     <td align="center"><a href="https://www.linkedin.com/in/tawfikyasser"><img src="https://avatars.githubusercontent.com/u/54971231?v=4" width="100px;" alt=""/><br /><sub><b>Tawfik Yasser</b></sub></a></td>
     <td align="center"><a href="https://sebastienlorber.com/"><img src="https://avatars.githubusercontent.com/u/749374?v=4" width="100px;" alt=""/><br /><sub><b>Sébastien Lorber</b></sub></a></td>
+    <td align="center"><a href="https://github.com/o0charlie0o"><img src="https://avatars.githubusercontent.com/u/1259226?v=4" width="100px;" alt=""/><br /><sub><b>Charlie Ray</b></sub></a></td>
+    <td align="center"><a href="https://github.com/jangxyz"><img src="https://avatars.githubusercontent.com/u/52015?v=4" width="100px;" alt=""/><br /><sub><b>Kim, Jang-hwan</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://simoncrypta.dev/"><img src="https://avatars.githubusercontent.com/u/18013532?v=4" width="100px;" alt=""/><br /><sub><b>Simon Gagnon</b></sub></a></td>
+    <td align="center"><a href="https://wafuwafu13.hateblo.jp/"><img src="https://avatars.githubusercontent.com/u/50798936?v=4" width="100px;" alt=""/><br /><sub><b>TagawaHirotaka</b></sub></a></td>
+    <td align="center"><a href="https://github.com/andrew-hwahin"><img src="https://avatars.githubusercontent.com/u/61768800?v=4" width="100px;" alt=""/><br /><sub><b>Andrew Lam</b></sub></a></td>
+    <td align="center"><a href="https://github.com/bdurette"><img src="https://avatars.githubusercontent.com/u/403387?v=4" width="100px;" alt=""/><br /><sub><b>Brandon DuRette</b></sub></a></td>
+    <td align="center"><a href="https://github.com/cjreimer"><img src="https://avatars.githubusercontent.com/u/51102303?v=4" width="100px;" alt=""/><br /><sub><b>Curtis Reimer</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://twitter.com/webstacker"><img src="https://avatars.githubusercontent.com/u/6331356?v=4" width="100px;" alt=""/><br /><sub><b>Kevin Brown</b></sub></a></td>
+    <td align="center"><a href="https://github.com/adriatic"><img src="https://avatars.githubusercontent.com/u/2712405?v=4" width="100px;" alt=""/><br /><sub><b>Nikolaj Ivancic</b></sub></a></td>
+    <td align="center"><a href="https://github.com/nunopato"><img src="https://avatars.githubusercontent.com/u/1523504?v=4" width="100px;" alt=""/><br /><sub><b>Nuno Pato</b></sub></a></td>
+    <td align="center"><a href="https://github.com/renansoares"><img src="https://avatars.githubusercontent.com/u/1657840?v=4" width="100px;" alt=""/><br /><sub><b>Renan Andrade</b></sub></a></td>
+    <td align="center"><a href="https://github.com/saideepesh000"><img src="https://avatars.githubusercontent.com/u/43727167?v=4" width="100px;" alt=""/><br /><sub><b>Sai Deepesh</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/bl-ue"><img src="https://avatars.githubusercontent.com/u/54780737?v=4" width="100px;" alt=""/><br /><sub><b>bl-ue</b></sub></a></td>
+    <td align="center"><a href="https://github.com/magicjuju"><img src="https://avatars.githubusercontent.com/u/19280122?v=4" width="100px;" alt=""/><br /><sub><b>juju</b></sub></a></td>
   </tr>
 </table>
 
