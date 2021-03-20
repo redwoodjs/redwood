@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react'
 
 import { createNamedContext } from './internal'
 
-interface ParamsContextProps {
+export interface ParamsContextProps {
   params: Record<string, string> | undefined
   setParams: (newParams: Record<string, string> | undefined) => void
 }
