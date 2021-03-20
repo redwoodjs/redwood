@@ -1,6 +1,6 @@
 # Logger
 
-RedwoodJS provides an opinionated logger with sensible, practical defaults that grants you visibility into the applications while you're developing then and after you have deployed them.
+RedwoodJS provides an opinionated logger with sensible, practical defaults that grants you visibility into the applications while you're developing and after you have deployed.
 
 Logging in the serverless ecosystem is not trivial and neither is its configuration. Redwood aims to make this easier.
 
