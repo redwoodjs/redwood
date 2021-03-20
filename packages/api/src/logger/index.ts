@@ -202,7 +202,7 @@ export const createLogger = ({
       )
     }
 
-    return pino({}, stream as DestinationStream)
+    return pino(options, stream as DestinationStream)
   } else {
     if (isStream && isDevelopment && !isTest) {
       console.warn(
