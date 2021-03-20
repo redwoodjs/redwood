@@ -14,3 +14,11 @@ require('~__REDWOOD__USER_WEB_DEFAULT_CSS')
 addDecorator((storyFn, { id }) => {
   return React.createElement(StorybookProvider, { storyFn, id })
 })
+
+try {
+  require('~__REDWOOD__USER_STORYBOOK_PREVIEW_CONFIG')
+} catch (e) {
+  if (e.code !== 'MODULE_NOT_FOUND') {
+    throw e
+  }
+}
