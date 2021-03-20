@@ -6,7 +6,11 @@ const { getSchemaDefinitions } = require('@redwoodjs/cli/dist/lib')
 const { getPaths } = require('@redwoodjs/internal')
 const { defineScenario } = require('@redwoodjs/testing/dist/scenario')
 const { db } = require(path.join(getPaths().api.src, 'lib', 'db'))
+
 const DEFAULT_SCENARIO = 'standard'
+
+// Disable per-request-context in testing.
+process.env.SAFE_GLOBAL_CONTEXT = '1'
 
 const seedScenario = async (scenario) => {
   if (scenario) {

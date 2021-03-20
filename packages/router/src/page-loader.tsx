@@ -50,6 +50,8 @@ export class PageLoader extends React.Component<Props> {
     slowModuleImport: false,
   }
 
+  static contextType = ParamsContext
+
   loadingTimeout?: number = undefined
 
   propsChanged = (p1: Props, p2: Props) => {
@@ -132,6 +134,8 @@ export class PageLoader extends React.Component<Props> {
       slowModuleImport: false,
       params: props.params,
     })
+
+    this.context.setParams(props.params)
   }
 
   render() {
@@ -145,41 +149,37 @@ export class PageLoader extends React.Component<Props> {
       const PageFromLoader = syncPageLoader().default
 
       return (
-        <ParamsContext.Provider value={this.state.params}>
-          <PageLoadingContext.Provider value={{ loading: false }}>
-            <PageFromLoader {...this.state.params} />
-          </PageLoadingContext.Provider>
-        </ParamsContext.Provider>
+        <PageLoadingContext.Provider value={{ loading: false }}>
+          <PageFromLoader {...this.state.params} />
+        </PageLoadingContext.Provider>
       )
     }
 
     if (Page) {
       return (
-        <ParamsContext.Provider value={this.state.params}>
-          <PageLoadingContext.Provider
-            value={{ loading: this.state.slowModuleImport }}
-          >
-            <Page {...this.state.params} />
-            <div
-              id="redwood-announcer"
-              style={{
-                position: 'absolute',
-                top: 0,
-                width: 1,
-                height: 1,
-                padding: 0,
-                overflow: 'hidden',
-                clip: 'rect(0, 0, 0, 0)',
-                whiteSpace: 'nowrap',
-                border: 0,
-              }}
-              role="alert"
-              aria-live="assertive"
-              aria-atomic="true"
-              ref={this.announcementRef}
-            ></div>
-          </PageLoadingContext.Provider>
-        </ParamsContext.Provider>
+        <PageLoadingContext.Provider
+          value={{ loading: this.state.slowModuleImport }}
+        >
+          <Page {...this.state.params} />
+          <div
+            id="redwood-announcer"
+            style={{
+              position: 'absolute',
+              top: 0,
+              width: 1,
+              height: 1,
+              padding: 0,
+              overflow: 'hidden',
+              clip: 'rect(0, 0, 0, 0)',
+              whiteSpace: 'nowrap',
+              border: 0,
+            }}
+            role="alert"
+            aria-live="assertive"
+            aria-atomic="true"
+            ref={this.announcementRef}
+          ></div>
+        </PageLoadingContext.Provider>
       )
     } else {
       return null
