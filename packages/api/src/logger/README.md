@@ -1,8 +1,8 @@
 # Logger
 
-RedwoodJS provides an opinionated logger with sensible, practical defaults that grants you visibility into the JAMStack applications you're developing and have deployed  -- with ease.
+RedwoodJS provides an opinionated logger with sensible, practical defaults that grants you visibility into the applications while you're developing then and after you have deployed them.
 
-Logging in the serverless ecosystem is not trivial and neither is its configuration.
+Logging in the serverless ecosystem is not trivial and neither is its configuration. Redwood aims to make this easier.
 
 When choosing a Node.js logger to add to the framework, RedwoodJS required that it:
 
@@ -20,7 +20,7 @@ With those criteria in mind, Redwood includes [pino](https://github.com/pinojs/p
 
 Plus ... pino means 🌲 pine tree! How perfect is that for RedwoodJS?
 
-Note: RedwoodJS logging is setup for its api side only. For browser and web side error reporting or exception handling, these features will be addressed in a future release.
+Note: RedwoodJS logging is setup for its api side only. For browser and web side error reporting or exception handling, these features will be considered in future releases.
 
 ## Quick Start
 
@@ -63,8 +63,8 @@ If you are upgrading an existing RedwoodJS app and would like to include logging
 
 For optional Prisma logging:
 
-* Copy `packages/create-redwood-app/template/api/src/lib/db.ts` to `api/lib/db.ts`. Optional.
-* Copy `packages/create-redwood-app/template/api/src/lib/prisma.ts` to `api/lib/prisma.ts`. Optional.
+* Copy `packages/create-redwood-app/template/api/src/lib/db.ts` to `api/src/lib/db.ts`. Optional.
+* Copy `packages/create-redwood-app/template/api/src/lib/prisma.ts` to `api/src/lib/prisma.ts`. Optional.
 
 The first file `logger.ts` defines the logger instance. You will import `logger` and use in your services, functions or other libraries. You may then replace existing `console.log()` statements with `logger.info()` or `logger.debug()`.
 
