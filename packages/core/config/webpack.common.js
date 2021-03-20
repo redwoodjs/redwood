@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 const fs = require('fs')
 const path = require('path')
 
@@ -242,28 +241,44 @@ module.exports = (webpackEnv) => {
             {
               test: /\.(js|mjs|jsx)$/,
               exclude: /(node_modules)/,
-              use: {
-                loader: 'babel-loader',
-                options: {
-                  plugins: [
-                    shouldIncludeFastRefresh &&
-                      require.resolve('react-refresh/babel'),
-                  ].filter(Boolean),
+              use: [
+                {
+                  loader: 'babel-loader',
+                  options: {
+                    plugins: [
+                      shouldIncludeFastRefresh &&
+                        require.resolve('react-refresh/babel'),
+                    ].filter(Boolean),
+                  },
                 },
-              },
+                {
+                  loader: 'esbuild-loader',
+                  options: {
+                    loader: 'jsx',
+                  },
+                },
+              ].filter(Boolean),
             },
             {
               test: /\.(ts|tsx)$/,
               exclude: /(node_modules)/,
-              use: {
-                loader: 'babel-loader',
-                options: {
-                  plugins: [
-                    shouldIncludeFastRefresh &&
-                      require.resolve('react-refresh/babel'),
-                  ].filter(Boolean),
+              use: [
+                {
+                  loader: 'babel-loader',
+                  options: {
+                    plugins: [
+                      shouldIncludeFastRefresh &&
+                        require.resolve('react-refresh/babel'),
+                    ].filter(Boolean),
+                  },
                 },
-              },
+                {
+                  loader: 'esbuild-loader',
+                  options: {
+                    loader: 'tsx',
+                  },
+                },
+              ].filter(Boolean),
             },
             // .module.css (2), .css (3), .module.scss (4), .scss (5)
             ...getStyleLoaders(isEnvProduction),
