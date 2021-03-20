@@ -106,6 +106,9 @@ export const handler = async ({
     jobs.api.name = 'api esbuild'
     jobs.api.command =
       'yarn cross-env NODE_ENV=development yarn rw-api-server-watch'
+
+    jobs.web.name = 'web esbuild'
+    jobs.web.command = 'yarn cross-env ESBUILD=1 ' + jobs.web.command
   }
 
   concurrently(
