@@ -14,7 +14,8 @@ import {
 
 export type GetCurrentUser = (
   decoded: AuthContextPayload[0],
-  raw: AuthContextPayload[1]
+  raw: AuthContextPayload[1],
+  req?: AuthContextPayload[2]
 ) => Promise<null | Record<string, unknown> | string>
 
 /**
@@ -47,7 +48,7 @@ export const createContextHandler = (
     const authContext = await getAuthenticationContext({ event, context })
     if (authContext) {
       context.currentUser = getCurrentUser
-        ? await getCurrentUser(authContext[0], authContext[1])
+        ? await getCurrentUser(authContext[0], authContext[1], authContext[2])
         : authContext
     }
 

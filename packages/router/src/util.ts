@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Children, ReactElement, ReactNode } from 'react'
 
 /** Create a React Context with the given name. */
 const createNamedContext = <T extends unknown>(
@@ -219,10 +219,62 @@ const replaceParams = (path: string, args: Record<string, unknown> = {}) => {
   return newPath
 }
 
+function isReactElement(node: ReactNode): node is ReactElement {
+  return (
+    node !== undefined &&
+    node !== null &&
+    (node as ReactElement).type !== undefined
+  )
+}
+
+function flattenAll(children: ReactNode): ReactNode[] {
+  const childrenArray = Children.toArray(children)
+
+  return childrenArray.flatMap((child) => {
+    if (isReactElement(child) && child.props.children) {
+      return [child, ...flattenAll(child.props.children)]
+    }
+
+    return [child]
+  })
+}
+
 export {
   createNamedContext,
   matchPath,
   parseSearch,
   validatePath,
   replaceParams,
+  isReactElement,
+  flattenAll,
+}
+
+/**
+ * gets the announcement for the new page.
+ * called in page-loader's `componentDidUpdate`.
+ *
+ * the order of priority is:
+ * 1. RouteAnnouncement (the most specific one)
+ * 2. h1
+ * 3. document.title
+ * 4. location.pathname
+ */
+export const getAnnouncement = () => {
+  const routeAnnouncement = global?.document.querySelectorAll(
+    '[data-redwood-route-announcement]'
+  )?.[0]
+  if (routeAnnouncement?.textContent) {
+    return routeAnnouncement.textContent
+  }
+
+  const pageHeading = global?.document.querySelector(`h1`)
+  if (pageHeading?.textContent) {
+    return pageHeading.textContent
+  }
+
+  if (global?.document.title) {
+    return document.title
+  }
+
+  return `new page at ${global?.location.pathname}`
 }
