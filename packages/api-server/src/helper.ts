@@ -5,7 +5,6 @@ import { routePrefix } from './index'
  *
  * @example
  *
- * --routePrefix /
  * --routePrefix api
  * --routePrefix api/
  * --routePrefix /api
