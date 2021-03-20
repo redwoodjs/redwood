@@ -160,6 +160,8 @@ module.exports = (webpackEnv) => {
   const shouldIncludeFastRefresh =
     redwoodConfig.web.experimentalFastRefresh && !isEnvProduction
 
+  const shouldUseEsbuild = process.env.ESBUILD === '1'
+
   return {
     mode: isEnvProduction ? 'production' : 'development',
     devtool: isEnvProduction ? 'source-map' : 'cheap-module-source-map',
@@ -251,7 +253,7 @@ module.exports = (webpackEnv) => {
                     ].filter(Boolean),
                   },
                 },
-                {
+                shouldUseEsbuild && {
                   loader: 'esbuild-loader',
                   options: {
                     loader: 'jsx',
@@ -272,7 +274,7 @@ module.exports = (webpackEnv) => {
                     ].filter(Boolean),
                   },
                 },
-                {
+                shouldUseEsbuild && {
                   loader: 'esbuild-loader',
                   options: {
                     loader: 'tsx',
