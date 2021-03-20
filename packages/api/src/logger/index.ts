@@ -196,9 +196,9 @@ export const createLogger = ({
   }
 
   if (isFile) {
-    if (!isDevelopment) {
+    if (isProduction) {
       console.warn(
-        'Please make certain that file system access is available when logging to a file in a non-development environment.'
+        'Please make certain that file system access is available when logging to a file in a production environment.'
       )
     }
 
