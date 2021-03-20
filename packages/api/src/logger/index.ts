@@ -163,7 +163,7 @@ export interface RedwoodLoggerOptions {
  *
  * @param options {RedwoodLoggerOptions} - Override the default logger configuration
  * @param destination {DestinationStream} - An optional destination stream
- * @param showConfig {Boolean} - Show the logger configuration. Enabled by default in development.
+ * @param showConfig {Boolean} - Show the logger configuration. This is off by default.
  * @return {BaseLogger} - The configured logger
  *
  * @example
