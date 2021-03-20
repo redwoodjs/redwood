@@ -17,7 +17,7 @@ const { port, socket, routePrefix } = yargs
   .option('routePrefix', {
     default: '/',
     type: 'string',
-    desc: 'Route prefix where your Serverless Functions are served',
+    desc: 'Route prefix where your api functions are served',
   }).argv
 
 http({ port, socket }).on('listening', () => {

@@ -1,12 +1,21 @@
 import { routePrefix } from './index'
 
 /**
- * Get route prefix that adds trailing slash (e.g. /api is treated as /api/)
+ * Get api route prefix from option --routePrefix and add start and ending slash (/)
  *
- * @return  string    Route prefix
+ * @example
+ *
+ * --routePrefix /
+ * --routePrefix api
+ * --routePrefix api/
+ * --routePrefix /api
+ * --routePrefix /api/
+ *
+ *   returns: /api/
+ *
+ * @return  string    Api route prefix with start and ending slash (/)
  */
 export const getRoutePrefix = (): string => {
-  // Make sure we start and end with /, e.g. /api/
   const prefix = routePrefix.charAt(0) !== '/' ? '/' : ''
   const suffix = routePrefix.charAt(routePrefix.length - 1) !== '/' ? '/' : ''
 
