@@ -375,6 +375,17 @@ This may be accomplished via [child loggers](https://github.com/pinojs/pino/blob
 #### GraphQL Service / Event Logger
 
 TODO
+
+#### Flushing the Log
+
+Flush the content of the buffer when an asynchronous destination:
+
+```js
+  logger.flush()
+```
+
+The use case is primarily for asynchronous logging, which may buffer log lines while others are being written.
+
 #### Child Loggers
 
 ```js
