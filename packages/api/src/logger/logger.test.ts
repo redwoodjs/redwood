@@ -1,5 +1,12 @@
+import { existsSync, readFileSync, statSync } from 'fs'
+import os from 'os'
+import { join } from 'path'
+
 import { BaseLogger, LoggerOptions } from 'pino'
 import split from 'split2'
+
+const pid = process.pid
+const hostname = os.hostname()
 
 import { createLogger } from '../logger'
 
@@ -16,7 +23,7 @@ const once = (emitter, name) => {
 }
 
 const sink = () => {
-  const result = split((data) => {
+  const logStatement = split((data) => {
     try {
       return JSON.parse(data)
     } catch (err) {
@@ -25,25 +32,58 @@ const sink = () => {
     }
   })
 
-  return result
+  return logStatement
+}
+
+const watchFileCreated = (filename) => {
+  return new Promise((resolve, reject) => {
+    const TIMEOUT = 800
+    const INTERVAL = 100
+    const threshold = TIMEOUT / INTERVAL
+    let counter = 0
+    const interval = setInterval(() => {
+      // On some CI runs file is created but not filled
+      if (existsSync(filename) && statSync(filename).size !== 0) {
+        clearInterval(interval)
+        resolve()
+      } else if (counter <= threshold) {
+        counter++
+      } else {
+        clearInterval(interval)
+        reject(new Error(`${filename} was not created.`))
+      }
+    }, INTERVAL)
+  })
 }
 
 const setupLogger = (
-  loggerOptions?: LoggerOptions
+  loggerOptions?: LoggerOptions,
+  destination?: string,
+  showConfig?: boolean
 ): {
   logger: BaseLogger
-  logSinkData: Promise<unknown>
+  logSinkData?: Promise<unknown>
 } => {
-  const stream = sink()
-  const logSinkData = once(stream, 'data')
+  if (destination) {
+    const logger = createLogger({
+      options: { ...loggerOptions, prettyPrint: false },
+      destination: destination,
+      showConfig,
+    })
 
-  const logger = createLogger({
-    options: { ...loggerOptions, prettyPrint: false },
-    destination: stream,
-    showConfig: false,
-  })
+    return { logger }
+  } else {
+    const stream = sink()
+    const logSinkData = once(stream, 'data')
 
-  return { logger, logSinkData }
+    const logger = createLogger({
+      options: { ...loggerOptions, prettyPrint: false },
+      destination: stream,
+      showConfig,
+    })
+
+    return { logger, logSinkData }
+  }
 }
 
 describe('logger', () => {
@@ -211,6 +251,28 @@ describe('logger', () => {
 
       expect(logStatement).toHaveProperty('email')
       expect(logStatement['email']).toEqual('[Redacted]')
+    })
+  })
+
+  describe('file logging', () => {
+    test('it creates a log file with a statement', async () => {
+      const tmp = join(
+        os.tmpdir(),
+        '_' + Math.random().toString(36).substr(2, 9)
+      )
+      const { logger } = setupLogger({}, tmp)
+      logger.info('logged a warning to a temp file')
+      await watchFileCreated(tmp)
+
+      const logStatement = JSON.parse(readFileSync(tmp).toString())
+      delete logStatement.time
+
+      expect(logStatement).toEqual({
+        pid,
+        hostname,
+        level: 30,
+        msg: 'logged a warning to a temp file',
+      })
     })
   })
 })

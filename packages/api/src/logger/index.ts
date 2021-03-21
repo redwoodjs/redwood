@@ -163,7 +163,7 @@ export interface RedwoodLoggerOptions {
  *
  * @param options {RedwoodLoggerOptions} - Override the default logger configuration
  * @param destination {DestinationStream} - An optional destination stream
- * @param showConfig {Boolean} - Show the logger configuration. Enabled by default in development.
+ * @param showConfig {Boolean} - Show the logger configuration. This is off by default.
  * @return {BaseLogger} - The configured logger
  *
  * @example
@@ -173,7 +173,7 @@ export interface RedwoodLoggerOptions {
 export const createLogger = ({
   options,
   destination,
-  showConfig = isDevelopment,
+  showConfig = false,
 }: RedwoodLoggerOptions): BaseLogger => {
   const hasDestination = typeof destination !== 'undefined'
   const isFile = hasDestination && typeof destination === 'string'
@@ -196,13 +196,13 @@ export const createLogger = ({
   }
 
   if (isFile) {
-    if (!isDevelopment) {
+    if (isProduction) {
       console.warn(
-        'Please make certain that file system access is available when logging to a file in a non-development environment.'
+        'Please make certain that file system access is available when logging to a file in a production environment.'
       )
     }
 
-    return pino({}, stream as DestinationStream)
+    return pino(options, stream as DestinationStream)
   } else {
     if (isStream && isDevelopment && !isTest) {
       console.warn(
