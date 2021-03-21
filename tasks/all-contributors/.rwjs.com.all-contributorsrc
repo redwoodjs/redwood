@@ -874,6 +874,78 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "realStandal",
+      "name": "Ryan Lockard",
+      "avatar_url": "https://avatars.githubusercontent.com/u/25166787?v=4",
+      "profile": "https://www.figma.com/@realstandal",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "nunopato",
+      "name": "Nuno Pato",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1523504?v=4",
+      "profile": "https://github.com/nunopato",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "svenhanssen",
+      "name": "Sven Hanssen",
+      "avatar_url": "https://avatars.githubusercontent.com/u/445182?v=4",
+      "profile": "https://github.com/svenhanssen",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "jangxyz",
+      "name": "Kim, Jang-hwan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/52015?v=4",
+      "profile": "https://github.com/jangxyz",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "mudssrali",
+      "name": "Mudassar Ali",
+      "avatar_url": "https://avatars.githubusercontent.com/u/24487349?v=4",
+      "profile": "https://mudssrali.github.io/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "sangheestyle",
+      "name": "SangHee Kim",
+      "avatar_url": "https://avatars.githubusercontent.com/u/319490?v=4",
+      "profile": "https://github.com/sangheestyle",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "TMaYaD",
+      "name": "Subhash Chandra",
+      "avatar_url": "https://avatars.githubusercontent.com/u/78673?v=4",
+      "profile": "http://loonyb.in/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "seonghyeonkimm",
+      "name": "KimSeonghyeon",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13966404?v=4",
+      "profile": "https://github.com/seonghyeonkimm",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 5

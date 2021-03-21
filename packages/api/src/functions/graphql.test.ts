@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { context, initPerRequestContext } from '../globalContext'
+import { context, getPerRequestContext } from '../globalContext'
 
 import { createContextHandler } from './graphql'
 
@@ -81,7 +81,7 @@ describe('global context handlers', () => {
 
 describe('per request context handlers', () => {
   it('merges the apollo resolver and global context correctly', async () => {
-    const localAsyncStorage = initPerRequestContext()
+    const localAsyncStorage = getPerRequestContext()
 
     localAsyncStorage.run(new Map(), async () => {
       const handler = createContextHandler({ a: 1 })
@@ -102,7 +102,7 @@ describe('per request context handlers', () => {
   })
 
   it('maintains separate contexts for each request', (done) => {
-    const localAsyncStorage = initPerRequestContext()
+    const localAsyncStorage = getPerRequestContext()
 
     // request 1 and request 2...
     // request 1 is slow...
