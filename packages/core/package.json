@@ -28,7 +28,7 @@
     "@redwoodjs/eslint-config": "^0.27.1",
     "@redwoodjs/internal": "^0.27.1",
     "@redwoodjs/testing": "^0.27.1",
-    "@storybook/react": "^5.3.19",
+    "@storybook/react": "^6.1.21",
     "@testing-library/jest-dom": "5.11.6",
     "@types/jest": "^26.0.10",
     "@types/node": "^14.6.0",
@@ -47,8 +47,10 @@
     "css-minimizer-webpack-plugin": "^1.2.0",
     "dotenv-webpack": "^2.0.0",
     "error-overlay-webpack-plugin": "^0.4.1",
+    "esbuild": "0.9.0",
     "file-loader": "^6.0.0",
     "findup-sync": "^4.0.0",
+    "glob": "7.1.6",
     "graphql": "^15.3.0",
     "graphql-tag": "^2.10.3",
     "html-webpack-plugin": "^4.0.2",
@@ -70,9 +72,7 @@
     "webpack-manifest-plugin": "^3.0.0",
     "webpack-merge": "^5.1.2",
     "webpack-retry-chunk-load-plugin": "^1.4.0",
-    "whatwg-fetch": "^3.5.0",
-    "esbuild": "0.9.0",
-    "glob": "7.1.6"
+    "whatwg-fetch": "^3.5.0"
   },
   "devDependencies": {
     "@types/babel-core": "^6.25.6",

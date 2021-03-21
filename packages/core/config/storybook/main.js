@@ -29,9 +29,10 @@ const baseConfig = {
       }
     }
 
-    if (fs.existsSync(getPaths().web.storybookPreviewConfig)) {
-      sbConfig.resolve.alias['~__REDWOOD__USER_STORYBOOK_PREVIEW_CONFIG'] = getPaths().web.storybookPreviewConfig
-    }
+    const userPreviewPath = fs.existsSync(getPaths().web.storybookPreviewConfig)
+      ? getPaths().web.storybookPreviewConfig
+      : './preview.example.js'
+    sbConfig.resolve.alias['~__REDWOOD__USER_STORYBOOK_PREVIEW_CONFIG'] = userPreviewPath
 
     sbConfig.resolve.extensions = rwConfig.resolve.extensions
     sbConfig.resolve.plugins = rwConfig.resolve.plugins // Directory Named Plugin
