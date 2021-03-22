@@ -11,8 +11,9 @@ import morgan from 'morgan'
 
 import { getPaths } from '@redwoodjs/internal'
 
-import { getRoutePrefix } from './helper'
 import { requestHandler } from './requestHandlers/awsLambda'
+
+import { rootPath } from './index'
 
 const rwjsPaths = getPaths()
 
@@ -69,8 +70,8 @@ export const http = ({
 
   app.use(morgan<Request, Response>('dev'))
 
-  app.all(`${getRoutePrefix()}:routeName`, lambdaRequestHandler)
-  app.all(`${getRoutePrefix()}:routeName/*`, lambdaRequestHandler)
+  app.all(`${rootPath}:routeName`, lambdaRequestHandler)
+  app.all(`${rootPath}:routeName/*`, lambdaRequestHandler)
 
   const server = app
     .listen(socket || port, () => {
