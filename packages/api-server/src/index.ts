@@ -20,7 +20,7 @@ const { port, socket, rootPath } = yargs
     desc: 'Root path where your api functions are served',
   })
   .coerce('root-path', (path) => {
-    // Make sure that we create a root path that start and ending slash (/)
+    // Make sure that we create a root path that starts and ends with a slash (/)
     const prefix = path.charAt(0) !== '/' ? '/' : ''
     const suffix = path.charAt(path.length - 1) !== '/' ? '/' : ''
 
