@@ -296,8 +296,8 @@ To stream your logs to [Datadog](https://www.datadoghq.com/), you can
 // ...
 
 export const logger = createLogger({
-   options: { ...defaultLoggerOptions,
-   destination: stream},
+   options: { ...defaultLoggerOptions },
+   destination: stream },
 })
 ```
 
@@ -326,8 +326,8 @@ export const stream = createWriteStream({
 })
 
 export const logger = createLogger({
-  options: { ...defaultLoggerOptions,
-  destination: stream},
+  options: { ...defaultLoggerOptions },
+  destination: stream },
 })
 ```
 
