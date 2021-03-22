@@ -2,16 +2,34 @@
 /// <reference types="cypress" />
 import path from 'path'
 
+import Step1_1_Routes from './codemods/Step1_1_Routes'
+import Step2_1_PagesHome from './codemods/Step2_1_PagesHome'
+import Step2_2_PagesAbout from './codemods/Step2_2_PagesAbout'
+import Step3_1_LayoutsBlog from './codemods/Step3_1_LayoutsBlog'
+import Step3_2_PagesHome from './codemods/Step3_2_PagesHome'
+import Step3_3_PagesAbout from './codemods/Step3_3_PagesAbout'
+import Step4_1_DbSchema from './codemods/Step4_1_DbSchema'
+import Step5_1_ComponentsCellBlogPost from './codemods/Step5_1_ComponentsCellBlogPost'
+import Step5_2_ComponentsCellBlogPostTest from './codemods/Step5_2_ComponentsCellBlogPostTest'
+import Step5_3_PagesHome from './codemods/Step5_3_PagesHome'
+import Step6_1_Routes from './codemods/Step6_1_Routes'
+import Step6_2_BlogPostPage from './codemods/Step6_2_BlogPostPage'
+import Step6_3_BlogPostCell from './codemods/Step6_3_BlogPostCell'
+import Step6_3_BlogPostCellTest from './codemods/Step6_3_BlogPostCellTest'
+import Step6_4_BlogPost from './codemods/Step6_4_BlogPost'
+import Step6_4_BlogPostTest from './codemods/Step6_4_BlogPostTest'
+import Step6_5_BlogPostsCell from './codemods/Step6_5_BlogPostsCell'
+import Step6_5_BlogPostsCellMock from './codemods/Step6_5_BlogPostsCellMock'
+import Step7_1_BlogLayout from './codemods/Step7_1_BlogLayout'
+import Step7_2_ContactPage from './codemods/Step7_2_ContactPage'
+import Step7_3_Css from './codemods/Step7_3_Css'
+
 const BASE_DIR = Cypress.env('RW_PATH')
 
-describe('The Redwood Storybook Integration', () => {
-  it('0. Run Storybook', () => {
-    cy.exec(`cd ${BASE_DIR}; yarn rw storybook --no-open`, {
-      timeout: 60000,
-    })
-      .its('code')
-      .should('eq', 0)
-  })
+describe('The Redwood Tutorial - Golden path edition', () => {
+  // TODO: https://redwoodjs.com/tutorial/saving-data
+  // TODO: https://redwoodjs.com/tutorial/administration
+
   it('0. Starting Development', () => {
     // https://redwoodjs.com/tutorial/installation-starting-development
     cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step1_1_Routes)
