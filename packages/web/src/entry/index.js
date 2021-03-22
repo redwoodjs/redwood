@@ -8,9 +8,10 @@ import App from '~redwood-app-root'
  * https://reactjs.org/docs/react-dom.html#hydrate
  */
 const rootElement = document.getElementById('redwood-app')
+const prerenderEl = document.getElementById('redwood-app-prerendered')
 
-if (rootElement.hasChildNodes()) {
-  ReactDOM.hydrate(<App />, rootElement)
+if (prerenderEl) {
+  ReactDOM.hydrate(<App />, prerenderEl)
 } else {
   ReactDOM.render(<App />, rootElement)
 }
