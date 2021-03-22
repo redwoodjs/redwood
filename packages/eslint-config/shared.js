@@ -99,6 +99,7 @@ module.exports = {
         es6: true,
         commonjs: true,
         jest: true,
+        'jest/globals': true,
       },
     },
     {

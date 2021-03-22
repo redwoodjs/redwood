@@ -64,7 +64,6 @@ module.exports = {
       env: {
         es6: true,
         browser: true,
-        'jest/globals': true,
       },
       globals: {
         React: 'readonly', // We auto-import React via Babel.
