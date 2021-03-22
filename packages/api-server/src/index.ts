@@ -21,10 +21,7 @@ const { port, socket, rootPath } = yargs
   })
   .coerce('root-path', (path) => {
     // Make sure that we create a root path that starts and ends with a slash (/)
-    const prefix = path.charAt(0) !== '/' ? '/' : ''
-    const suffix = path.charAt(path.length - 1) !== '/' ? '/' : ''
-
-    return `${prefix}${path}${suffix}`
+    return `/${path}/`.replaceAll('//', '/')
   }).argv
 
 http({ port, socket }).on('listening', () => {
