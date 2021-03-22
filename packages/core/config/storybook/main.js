@@ -8,11 +8,9 @@ const config = getConfig()
 
 const baseConfig = {
   stories: ['../../../../web/src/**/*.stories.{tsx,jsx,js}'],
-  // spreading false (like ...false) into an object -> nothing (i.e. {});
-  // great for when we don't wan't to include the property.
   addons: [
      config.web.a11y && '@storybook/addon-a11y'
-  ].filter(Boolean)
+  ].filter(Boolean),
   webpackFinal: (sbConfig, { configType }) => {
     // configType is 'PRODUCTION' or 'DEVELOPMENT', why shout?
     const isEnvProduction = configType && configType.toLowerCase() === 'production'
