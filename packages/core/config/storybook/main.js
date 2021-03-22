@@ -29,6 +29,11 @@ const baseConfig = {
       }
     }
 
+    const userPreviewPath = fs.existsSync(getPaths().web.storybookPreviewConfig)
+      ? getPaths().web.storybookPreviewConfig
+      : './preview.example.js'
+    sbConfig.resolve.alias['~__REDWOOD__USER_STORYBOOK_PREVIEW_CONFIG'] = userPreviewPath
+
     sbConfig.resolve.extensions = rwConfig.resolve.extensions
     sbConfig.resolve.plugins = rwConfig.resolve.plugins // Directory Named Plugin
 
@@ -61,12 +66,12 @@ const baseConfig = {
 const mergeUserStorybookConfig = (baseConfig) => {
   const redwoodPaths = getPaths()
 
-  const hasCustomConfig = fs.existsSync(redwoodPaths.web.storybook)
+  const hasCustomConfig = fs.existsSync(redwoodPaths.web.storybookConfig)
   if (!hasCustomConfig) {
     return baseConfig
   }
 
-  const userStorybookConfig = require(redwoodPaths.web.storybook)
+  const userStorybookConfig = require(redwoodPaths.web.storybookConfig)
   return merge(baseConfig, userStorybookConfig)
 }
 

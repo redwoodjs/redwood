@@ -3,19 +3,23 @@
   "description": "Redwood's HTTP server for Serverless Functions",
   "version": "0.27.1",
   "bin": {
-    "api-server": "./dist/index.js"
+    "api-server": "./dist/index.js",
+    "rw-api-server": "./dist/index.js",
+    "rw-api-server-watch": "./dist/watch.js"
   },
   "files": [
     "dist"
   ],
   "license": "MIT",
   "dependencies": {
-    "@babel/register": "^7.9.0",
     "body-parser": "^1.19.0",
+    "chokidar": "3.5.1",
+    "dotenv-defaults": "2.0.1",
     "express": "^4.17.1",
+    "glob": "7.1.6",
+    "lodash.escape": "^4.0.1",
     "morgan": "^1.10.0",
     "qs": "^6.9.3",
-    "require-dir": "^1.2.0",
     "yargs": "^16.0.3",
     "youch": "^2.1.1",
     "youch-terminal": "^1.0.1"
@@ -23,9 +27,9 @@
   "devDependencies": {
     "@types/aws-lambda": "^8.10.46",
     "@types/express": "^4.17.3",
+    "@types/lodash.escape": "^4.0.6",
     "@types/morgan": "^1.9.0",
     "@types/qs": "^6.9.1",
-    "@types/require-dir": "^1.0.1",
     "@types/stack-trace": "^0.0.29"
   },
   "scripts": {
@@ -33,7 +37,7 @@
     "prepublishOnly": "yarn cross-env NODE_ENV=production yarn build",
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build && yarn fix:permissions\"",
-    "fix:permissions": "chmod +x dist/index.js"
+    "fix:permissions": "chmod +x dist/index.js; chmod +x dist/watch.js"
   },
   "gitHead": "c235e7d7186e5e258764699c0e0e1d5cc0fdd0b5"
 }
