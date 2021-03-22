@@ -1,4 +1,4 @@
-// the lines that need to be added to index.js
+// the lines that need to be added to App.{js,tsx}
 export const config = {
   imports: [`import { Magic } from 'magic-sdk'`],
   init: 'const m = new Magic(process.env.MAGICLINK_PUBLIC)',

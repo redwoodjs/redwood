@@ -43,13 +43,17 @@ const style = {
   green: chalk.green,
 }
 
-const { _: args, 'yarn-install': yarnInstall } = yargs
+const { _: args, 'yarn-install': yarnInstall, javascript } = yargs
   .scriptName(name)
   .usage('Usage: $0 <project directory> [option]')
   .example('$0 newapp')
   .option('yarn-install', {
     default: true,
     describe: 'Skip yarn install with --no-yarn-install',
+  })
+  .option('--javascript', {
+    default: true,
+    describe: 'Generate a JavaScript project',
   })
   .version(version)
   .strict().argv
@@ -144,6 +148,20 @@ new Listr(
     {
       title: 'Installing packages',
       task: () => new Listr(installNodeModulesTasks({ newAppDir })),
+    },
+    {
+      title: 'Convert TypeScript files to JavaScript',
+      skip: () => {
+        if (javascript === false) {
+          return 'skipped on request'
+        }
+      },
+      task: () => {
+        return execa('yarn rw ts-to-js', {
+          shell: true,
+          cwd: newAppDir,
+        })
+      },
     },
   ],
   { collapse: false, exitOnError: true }

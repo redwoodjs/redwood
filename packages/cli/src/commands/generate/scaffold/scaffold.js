@@ -205,6 +205,8 @@ const componentFiles = async (name, scaffoldPath = '') => {
       displayFunction: 'checkboxInputTag',
     },
     DateTime: {
+      componentName: 'DatetimeLocalField',
+      deserilizeFunction: 'formatDatetime',
       listDisplayFunction: 'timeTag',
       displayFunction: 'timeTag',
     },
@@ -380,20 +382,20 @@ export const routes = async ({ model: name, path: scaffoldPath = '' }) => {
 }
 
 const addScaffoldImport = () => {
-  const indexJsPath = path.join(getPaths().web.src, 'index.js')
-  let indexJsContents = readFile(indexJsPath).toString()
+  const appJsPath = getPaths().web.app
+  let appJsContents = readFile(appJsPath).toString()
 
-  if (indexJsContents.match(SCAFFOLD_STYLE_PATH)) {
+  if (appJsContents.match(SCAFFOLD_STYLE_PATH)) {
     return 'Skipping scaffold style include'
   }
 
-  indexJsContents = indexJsContents.replace(
+  appJsContents = appJsContents.replace(
     "import Routes from 'src/Routes'\n",
     `import Routes from 'src/Routes'\n\nimport '${SCAFFOLD_STYLE_PATH}'`
   )
-  writeFile(indexJsPath, indexJsContents, { overwriteExisting: true })
+  writeFile(appJsPath, appJsContents, { overwriteExisting: true })
 
-  return 'Added scaffold import to index.js'
+  return 'Added scaffold import to App.{js,tsx}'
 }
 
 export const command = 'scaffold <model>'

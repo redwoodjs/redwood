@@ -8,7 +8,7 @@ import terminalLink from 'terminal-link'
 
 import { detectPrerenderRoutes } from '@redwoodjs/prerender'
 
-import { getPaths, getConfig } from 'src/lib'
+import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 import { generatePrismaClient } from 'src/lib/generatePrismaClient'
 
@@ -56,6 +56,16 @@ export const builder = (yargs) => {
       description: 'Prerender after building web',
       type: 'boolean',
     })
+    .option('prisma', {
+      type: 'boolean',
+      default: true,
+      description: 'Generate the Prisma client',
+    })
+    .option('esbuild', {
+      type: 'boolean',
+      required: false,
+      description: 'Use ESBuild for api side [experimental]',
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -68,6 +78,8 @@ export const handler = async ({
   side = ['api', 'web'],
   verbose = false,
   stats = false,
+  prisma = true,
+  esbuild = false,
   prerender,
 }) => {
   const execCommandsForSides = {
@@ -92,6 +104,13 @@ export const handler = async ({
     )
   }
 
+  if (esbuild) {
+    console.log('Using experimental esbuild...')
+    execCommandsForSides.api.cmd = `yarn rimraf "${
+      getPaths().api.dist
+    }" && yarn cross-env NODE_ENV=production yarn rw-api-build`
+  }
+
   const listrTasks = side.map((sideName) => {
     const { cwd, cmd } = execCommandsForSides[sideName]
     return {
@@ -107,7 +126,7 @@ export const handler = async ({
   })
 
   // Additional tasks, apart from build
-  if (side.includes('api')) {
+  if (side.includes('api') && prisma) {
     try {
       await generatePrismaClient({
         verbose,
@@ -134,7 +153,7 @@ export const handler = async ({
     })
 
     // Prerender _after_ web build
-    if (getConfig().web.experimentalPrerender && prerender) {
+    if (prerender) {
       const prerenderRoutes = detectPrerenderRoutes()
 
       listrTasks.push({

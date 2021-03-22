@@ -31,7 +31,7 @@ async function test() {
 // error: Duplicate path in router: '/about-us'
 // error: Parameter "id" in route '/product/{id}' does not exist on ProductPage
 // error: PostsCell is missing the "Success" exported const
-// error: Property "emial" does not exist on "User" model
+// error: Property "email" does not exist on "User" model
 // warning: Unused page AboutUs.js
 ```
 
@@ -95,7 +95,7 @@ Anatomy of an id:
 
 - An id is a string.
 - It has components separated by spaces.
-- the first component is always a file URI (or folder URI).
+- The first component is always a file URI (or folder URI).
 - The rest are optional, and only exist when the node is internal to a file.
 
 ## Abstracting File System Access

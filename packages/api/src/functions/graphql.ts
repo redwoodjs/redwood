@@ -5,12 +5,17 @@ import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 
 import type { AuthContextPayload } from 'src/auth'
 import { getAuthenticationContext } from 'src/auth'
-import type { GlobalContext } from 'src/globalContext'
-import { setContext } from 'src/globalContext'
+import {
+  GlobalContext,
+  setContext,
+  getPerRequestContext,
+  usePerRequestContext,
+} from 'src/globalContext'
 
 export type GetCurrentUser = (
   decoded: AuthContextPayload[0],
-  raw: AuthContextPayload[1]
+  raw: AuthContextPayload[1],
+  req?: AuthContextPayload[2]
 ) => Promise<null | Record<string, unknown> | string>
 
 /**
@@ -43,7 +48,7 @@ export const createContextHandler = (
     const authContext = await getAuthenticationContext({ event, context })
     if (authContext) {
       context.currentUser = getCurrentUser
-        ? await getCurrentUser(authContext[0], authContext[1])
+        ? await getCurrentUser(authContext[0], authContext[1], authContext[2])
         : authContext
     }
 
@@ -52,7 +57,6 @@ export const createContextHandler = (
       // if userContext is a function, run that and return just the result
       customUserContext = await userContext({ event, context })
     }
-
     // Sets the **global** context object, which can be imported with:
     // import { context } from '@redwoodjs/api'
     return setContext({
@@ -127,11 +131,26 @@ export const createGraphQLHandler = ({
     context: LambdaContext,
     callback: any
   ): void => {
-    try {
-      handler(event, context, callback)
-    } catch (e) {
-      onException && onException()
-      throw e
+    if (usePerRequestContext()) {
+      // This must be used when you're self-hosting RedwoodJS.
+      const localAsyncStorage = getPerRequestContext()
+      localAsyncStorage.run(new Map(), () => {
+        try {
+          handler(event, context, callback)
+        } catch (e) {
+          onException && onException()
+          throw e
+        }
+      })
+    } else {
+      // This is OK for AWS (Netlify/Vercel) because each Lambda request
+      // is handled individually.
+      try {
+        handler(event, context, callback)
+      } catch (e) {
+        onException && onException()
+        throw e
+      }
     }
   }
 }

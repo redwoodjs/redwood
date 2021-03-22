@@ -17,13 +17,14 @@ export interface NodeTargetPaths {
   lib: string
   services: string
   config: string
+  dist: string
 }
 
 export interface BrowserTargetPaths {
   base: string
   src: string
-  entry: string | null
-  index: string
+  app: string
+  index: string | null
   routes: string
   pages: string
   components: string
@@ -31,6 +32,8 @@ export interface BrowserTargetPaths {
   config: string
   webpack: string
   postcss: string
+  storybookConfig: string
+  storybookPreviewConfig: string
   dist: string
 }
 
@@ -69,11 +72,13 @@ const PATH_WEB_DIR_LAYOUTS = 'web/src/layouts/'
 const PATH_WEB_DIR_PAGES = 'web/src/pages/'
 const PATH_WEB_DIR_COMPONENTS = 'web/src/components'
 const PATH_WEB_DIR_SRC = 'web/src'
-const PATH_WEB_DIR_SRC_ENTRY = 'web/src/entry'
+const PATH_WEB_DIR_SRC_APP = 'web/src/App'
 const PATH_WEB_DIR_SRC_INDEX = 'web/src/index' // .js|.tsx
 const PATH_WEB_DIR_CONFIG = 'web/config'
 const PATH_WEB_DIR_CONFIG_WEBPACK = 'web/config/webpack.config.js'
 const PATH_WEB_DIR_CONFIG_POSTCSS = 'web/config/postcss.config.js'
+const PATH_WEB_DIR_CONFIG_STORYBOOK_CONFIG = 'web/config/storybook.config.js'
+const PATH_WEB_DIR_CONFIG_STORYBOOK_PREVIEW = 'web/config/storybook.preview.js'
 
 const PATH_WEB_DIR_DIST = 'web/dist'
 
@@ -152,6 +157,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       config: path.join(BASE_DIR, PATH_API_DIR_CONFIG),
       services: path.join(BASE_DIR, PATH_API_DIR_SERVICES),
       src: path.join(BASE_DIR, PATH_API_DIR_SRC),
+      dist: path.join(BASE_DIR, 'api/dist'),
     },
     web: {
       routes,
@@ -160,11 +166,19 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       components: path.join(BASE_DIR, PATH_WEB_DIR_COMPONENTS),
       layouts: path.join(BASE_DIR, PATH_WEB_DIR_LAYOUTS),
       src: path.join(BASE_DIR, PATH_WEB_DIR_SRC),
-      entry: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_ENTRY)),
-      index: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_INDEX)) as string,
+      app: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_APP)) as string,
+      index: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_INDEX)),
       config: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG),
       webpack: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG_WEBPACK),
       postcss: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG_POSTCSS),
+      storybookConfig: path.join(
+        BASE_DIR,
+        PATH_WEB_DIR_CONFIG_STORYBOOK_CONFIG
+      ),
+      storybookPreviewConfig: path.join(
+        BASE_DIR,
+        PATH_WEB_DIR_CONFIG_STORYBOOK_PREVIEW
+      ),
       dist: path.join(BASE_DIR, PATH_WEB_DIR_DIST),
     },
   }
@@ -172,6 +186,8 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
 
 /**
  * Process the pages directory and return information useful for automated imports.
+ *
+ * Note: glob.sync returns posix style paths on Windows machines
  */
 export const processPagesDir = (
   webPagesDir: string = getPaths().web.pages
@@ -182,7 +198,7 @@ export const processPagesDir = (
   return pagePaths.map((pagePath) => {
     const p = path.parse(pagePath)
 
-    const importName = p.dir.replace(path.sep, '')
+    const importName = p.dir.replace('/', '')
     const importPath = importStatementPath(
       path.join(webPagesDir, p.dir, p.name)
     )

@@ -50,18 +50,20 @@ describe('Detecting routes', () => {
     )
   })
 
-  it('Should ignore not found page', () => {
+  it('Should render notFoundPage as 404.html', () => {
     mockedRoutes = [
       {
-        name: 'bazinga',
-        path: '/bazinga',
+        name: undefined,
+        path: undefined,
         prerender: true,
         isNotFound: true,
       },
     ]
 
     const output = detectPrerenderRoutes()
-    expect(output.length).toBe(0)
+    expect(output.length).toBe(1)
+    expect(output[0].name).toBe('404')
+    expect(output[0].path).toBe('/404')
   })
 
   it('Should ignore routes with params', () => {

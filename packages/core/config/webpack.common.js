@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 const fs = require('fs')
 const path = require('path')
 
@@ -161,6 +160,8 @@ module.exports = (webpackEnv) => {
   const shouldIncludeFastRefresh =
     redwoodConfig.web.experimentalFastRefresh && !isEnvProduction
 
+  const shouldUseEsbuild = process.env.ESBUILD === '1'
+
   return {
     mode: isEnvProduction ? 'production' : 'development',
     devtool: isEnvProduction ? 'source-map' : 'cheap-module-source-map',
@@ -168,11 +169,11 @@ module.exports = (webpackEnv) => {
       /**
        * Prerender requires a top-level component.
        * Before we had `ReactDOM` and a top-level component in the same file (web/index.js).
-       * If entry.js is defined in the user's project, use that, if not
+       * If index.js is defined in the user's project, use that, if not
        * use the one provided in web/dist/entry/index.js
        */
       app:
-        redwoodPaths.web.entry ??
+        redwoodPaths.web.index ||
         path.join(
           redwoodPaths.base,
           'node_modules/@redwoodjs/web/dist/entry/index.js'
@@ -187,7 +188,7 @@ module.exports = (webpackEnv) => {
           'node_modules',
           'styled-components'
         ),
-        '~redwood-app-index': path.resolve(redwoodPaths.web.index),
+        '~redwood-app-root': path.resolve(redwoodPaths.web.app),
         react: path.resolve(redwoodPaths.base, 'node_modules', 'react'),
       },
     },
@@ -197,13 +198,9 @@ module.exports = (webpackEnv) => {
         title: path.basename(redwoodPaths.base),
         template: path.resolve(redwoodPaths.base, 'web/src/index.html'),
         templateParameters: {
-          prerenderPlaceholder: redwoodConfig.web.experimentalPrerender
-            ? '<server-markup></server-markup>'
-            : '<!-- Redwood App Here -->', // this gets taken out by post processing anyway
+          prerenderPlaceholder: '<server-markup></server-markup>',
         },
-        scriptLoading: redwoodConfig.web.experimentalPrerender
-          ? 'defer' // show the prerendered markup, no need to wait
-          : 'blocking',
+        scriptLoading: 'defer',
         inject: true,
         chunks: 'all',
       }),
@@ -243,19 +240,47 @@ module.exports = (webpackEnv) => {
                 },
               ],
             },
-            // (1)
             {
-              test: /\.(js|mjs|jsx|ts|tsx)$/,
+              test: /\.(js|mjs|jsx)$/,
               exclude: /(node_modules)/,
-              use: {
-                loader: 'babel-loader',
-                options: {
-                  plugins: [
-                    shouldIncludeFastRefresh &&
-                      require.resolve('react-refresh/babel'),
-                  ].filter(Boolean),
+              use: [
+                {
+                  loader: 'babel-loader',
+                  options: {
+                    plugins: [
+                      shouldIncludeFastRefresh &&
+                        require.resolve('react-refresh/babel'),
+                    ].filter(Boolean),
+                  },
                 },
-              },
+                shouldUseEsbuild && {
+                  loader: 'esbuild-loader',
+                  options: {
+                    loader: 'jsx',
+                  },
+                },
+              ].filter(Boolean),
+            },
+            {
+              test: /\.(ts|tsx)$/,
+              exclude: /(node_modules)/,
+              use: [
+                {
+                  loader: 'babel-loader',
+                  options: {
+                    plugins: [
+                      shouldIncludeFastRefresh &&
+                        require.resolve('react-refresh/babel'),
+                    ].filter(Boolean),
+                  },
+                },
+                shouldUseEsbuild && {
+                  loader: 'esbuild-loader',
+                  options: {
+                    loader: 'tsx',
+                  },
+                },
+              ].filter(Boolean),
             },
             // .module.css (2), .css (3), .module.scss (4), .scss (5)
             ...getStyleLoaders(isEnvProduction),

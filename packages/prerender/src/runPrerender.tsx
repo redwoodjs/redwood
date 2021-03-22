@@ -52,7 +52,7 @@ export const runPrerender = async ({
 
   const indexContent = fs.readFileSync(getRootHtmlPath()).toString()
 
-  const { default: App } = await import(getPaths().web.index)
+  const { default: App } = await import(getPaths().web.app)
 
   const componentAsHtml = ReactDOMServer.renderToString(
     <LocationProvider
@@ -81,10 +81,10 @@ export const runPrerender = async ({
   }
 
   if (outputHtmlPath) {
-    // Copy default index.html to defaultIndex.html first
+    // Copy default index.html to 200.html first
     // This is to prevent recursively rendering the home page
     if (outputHtmlPath === 'web/dist/index.html') {
-      fs.copyFileSync(outputHtmlPath, 'web/dist/defaultIndex.html')
+      fs.copyFileSync(outputHtmlPath, 'web/dist/200.html')
     }
 
     writeToDist(outputHtmlPath, renderOutput)

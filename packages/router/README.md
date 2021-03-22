@@ -4,15 +4,11 @@ This is the built-in router for Redwood apps. It takes inspiration from Ruby on 
 
 > **WARNING:** RedwoodJS software has not reached a stable version 1.0 and should not be considered suitable for production use. In the "make it work; make it right; make it fast" paradigm, Redwood is in the later stages of the "make it work" phase.
 
-Redwood Router (RR from now on) is designed to list all routes in a single file, without any nesting. We prefer this design, as it makes it very easy to track which routes map to which pages.
-
-## Installation
-
-RR was designed for use in Redwood apps, and if you use `yarn create-redwood-app` it will be installed for you. The rest of the documentation here will use examples that are appropriate in that context. That said, you can use RR outside of Redwood apps too! To learn more, see [Installation and use outside of a Redwood app](#installation-and-use-outside-of-a-redwood-app) at the end of this document.
+Redwood Router (RR from now on) is designed to list all routes in a single file, with limited nesting. We prefer this design, as it makes it very easy to track which routes map to which pages.
 
 ## Router and Route
 
-The first thing you need is a `Router`. It will contain all of your routes. RR will attempt to match the current URL to each route in turn, stopping when it finds a match, and rendering that route only. The only exception to this is the `notfound` route, which can be placed anywhere in the list and only matches when no other routes do.
+The first thing you need is a `Router`. It will contain all of your routes. RR will attempt to match the current URL to each route in turn, and only render those with a matching `path`. The only exception to this is the `notfound` route, which can be placed anywhere in the list and only matches when no other routes do.
 
 Each route is specified with a `Route`. Our first route will tell RR what to render when no other route matches:
 
@@ -274,7 +270,7 @@ const SomePage = () => {
 
 ## Code-splitting
 
-By default, RR (when used in a Redwood app) will code-split on every Page, creating a separate lazy-loaded webpack bundle for each. When navigating from page to page, RR will wait until the new Page module is loaded before re-rendering, thus preventing the "white-flash" effect.
+By default, RR will code-split on every Page, creating a separate lazy-loaded webpack bundle for each. When navigating from page to page, RR will wait until the new Page module is loaded before re-rendering, thus preventing the "white-flash" effect.
 
 ## Not code splitting
 
@@ -321,40 +317,3 @@ After adding this to your app you will probably not see it when navigating betwe
 ```
 
 Now the loader will show up after 500ms of load time. To see your loading indicator, you can set this value to 0 or, even better, [change the network speed](https://developers.google.com/web/tools/chrome-devtools/network#throttle) in developer tools to "Slow 3G" or another agonizingly slow connection speed.
-
-## Installation and use outside of a Redwood app
-
-If you'd like to use RR in a non-Redwood app, you can! Start by installing it:
-
-```terminal
-$ yarn add @redwoodjs/router
-```
-
-Then you can import and use the various RR components like normal. The only exception being that Redwood automatically takes care of making all your Pages available in the `Routes.js` file. When using RR outside that context, you'll need to do this on your own. By default, RR provides code splitting for every Page. To mimic this, you'll need to define each Page as an object, like so:
-
-```js
-const HomePage = {
-  name: 'HomePage',
-  loader: () => import('path/to/HomePage.js'),
-}
-
-...
-
-<Router>
-  <Route path="/" page={HomePage} name="home" />
-</Router>
-```
-
-Then RR will take care of the lazy loading for you. If you'd prefer to have some or all of your Pages included in the main webpack bundle, you can import them normally:
-
-```js
-import HomePage from 'path/to/HomePage.js'
-
-...
-
-<Router>
-  <Route path="/" page={HomePage} name="home" />
-</Router>
-```
-
-That's it! Everything else should work the same as it does inside a Redwood app!

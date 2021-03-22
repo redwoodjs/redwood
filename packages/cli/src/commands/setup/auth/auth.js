@@ -10,41 +10,45 @@ import { resolveFile } from '@redwoodjs/internal'
 import { getPaths, writeFilesTask } from 'src/lib'
 import c from 'src/lib/colors'
 
-const API_GRAPHQL_PATH = resolveFile(
-  path.join(getPaths().api.functions, 'graphql')
-)
-
 const AUTH_PROVIDER_IMPORT = `import { AuthProvider } from '@redwoodjs/auth'`
 
-const API_SRC_PATH = path.join(getPaths().api.src)
-const TEMPLATES = fs
-  .readdirSync(path.resolve(__dirname, 'templates'))
-  .reduce((templates, file) => {
-    if (file === 'auth.js.template') {
-      return { ...templates, base: path.resolve(__dirname, 'templates', file) }
-    } else {
-      const provider = file.replace('.auth.js.template', '')
-      return {
-        ...templates,
-        [provider]: path.resolve(__dirname, 'templates', file),
-      }
-    }
-  }, {})
-
 const OUTPUT_PATH = path.join(getPaths().api.lib, 'auth.js')
-const WEB_SRC_INDEX_PATH = path.join(getPaths().web.src, 'index.js')
 
-const SUPPORTED_PROVIDERS = fs
-  .readdirSync(path.resolve(__dirname, 'providers'))
-  .map((file) => path.basename(file, '.js'))
-  .filter((file) => file !== 'README.md')
+const getGraphqlPath = () =>
+  resolveFile(path.join(getPaths().api.functions, 'graphql'))
 
-// returns the content of index.js with import statements added
+const getWebAppPath = () => getPaths().web.app
+
+const getSupportedProviders = () =>
+  fs
+    .readdirSync(path.resolve(__dirname, 'providers'))
+    .map((file) => path.basename(file, '.js'))
+    .filter((file) => file !== 'README.md')
+
+const getTemplates = () =>
+  fs
+    .readdirSync(path.resolve(__dirname, 'templates'))
+    .reduce((templates, file) => {
+      if (file === 'auth.js.template') {
+        return {
+          ...templates,
+          base: path.resolve(__dirname, 'templates', file),
+        }
+      } else {
+        const provider = file.replace('.auth.js.template', '')
+        return {
+          ...templates,
+          [provider]: path.resolve(__dirname, 'templates', file),
+        }
+      }
+    }, {})
+
+// returns the content of App.{js,tsx} with import statements added
 const addWebImports = (content, imports) => {
   return `${AUTH_PROVIDER_IMPORT}\n` + imports.join('\n') + '\n' + content
 }
 
-// returns the content of index.js with init lines added
+// returns the content of App.{js,tsx} with init lines added
 const addWebInit = (content, init) => {
   return content.replace(
     'const App = () => (',
@@ -52,7 +56,7 @@ const addWebInit = (content, init) => {
   )
 }
 
-// returns the content of index.js with <AuthProvider> added
+// returns the content of App.{js,tsx} with <AuthProvider> added
 const addWebRender = (content, authProvider) => {
   const [_, indent, redwoodApolloProvider] = content.match(
     /(\s+)(<RedwoodApolloProvider>.*<\/RedwoodApolloProvider>)/s
@@ -90,18 +94,18 @@ const addWebRender = (content, authProvider) => {
   )
 }
 
-// returns the content of index.js with <AuthProvider> updated
+// returns the content of App.{js,tsx} with <AuthProvider> updated
 const updateWebRender = (content, authProvider) => {
   const renderContent = `<AuthProvider client={${authProvider.client}} type="${authProvider.type}">`
   return content.replace(/<AuthProvider client={.*} type=".*">/s, renderContent)
 }
 
-// returns the content of index.js without the old auth import
+// returns the content of App.{js,tsx} without the old auth import
 const removeOldWebImports = (content, imports) => {
   return content.replace(`${AUTH_PROVIDER_IMPORT}\n` + imports.join('\n'), '')
 }
 
-// returns the content of index.js without the old auth init
+// returns the content of App.{js,tsx} without the old auth init
 const removeOldWebInit = (content, init) => {
   return content.replace(init, '')
 }
@@ -128,7 +132,7 @@ const removeOldAuthProvider = async (content) => {
 
 // check to make sure AuthProvider doesn't exist
 const checkAuthProviderExists = () => {
-  const content = fs.readFileSync(WEB_SRC_INDEX_PATH).toString()
+  const content = fs.readFileSync(getWebAppPath()).toString()
 
   if (content.includes(AUTH_PROVIDER_IMPORT)) {
     throw new Error(
@@ -139,15 +143,18 @@ const checkAuthProviderExists = () => {
 
 // the files to create to support auth
 export const files = (provider) => {
-  const template = TEMPLATES[provider] ?? TEMPLATES.base
+  const templates = getTemplates()
+  const template = templates[provider] ?? templates.base
   return {
     [OUTPUT_PATH]: fs.readFileSync(template).toString(),
   }
 }
 
-// actually inserts the required config lines into index.js
-export const addConfigToIndex = async (config, force) => {
-  let content = fs.readFileSync(WEB_SRC_INDEX_PATH).toString()
+// actually inserts the required config lines into App.{js,tsx}
+export const addConfigToApp = async (config, force) => {
+  const webAppPath = getWebAppPath()
+
+  let content = fs.readFileSync(webAppPath).toString()
 
   // update existing AuthProvider if --force else add new AuthProvider
   if (content.includes(AUTH_PROVIDER_IMPORT) && force) {
@@ -160,11 +167,13 @@ export const addConfigToIndex = async (config, force) => {
   content = addWebImports(content, config.imports)
   content = addWebInit(content, config.init)
 
-  fs.writeFileSync(WEB_SRC_INDEX_PATH, content)
+  fs.writeFileSync(webAppPath, content)
 }
 
 export const addApiConfig = () => {
-  let content = fs.readFileSync(API_GRAPHQL_PATH).toString()
+  const graphqlPath = getGraphqlPath()
+
+  let content = fs.readFileSync(graphqlPath).toString()
 
   // default to an array to avoid destructure errors
   const [_, hasAuthImport] =
@@ -181,24 +190,24 @@ export const addApiConfig = () => {
       /^(\s*)(schema: makeMergedSchema)(.*)$/m,
       `$1getCurrentUser,\n$1$2$3`
     )
-    fs.writeFileSync(API_GRAPHQL_PATH, content)
+    fs.writeFileSync(graphqlPath, content)
   }
 }
 
 export const isProviderSupported = (provider) => {
-  return SUPPORTED_PROVIDERS.indexOf(provider) !== -1
+  return getSupportedProviders().indexOf(provider) !== -1
 }
 
 export const apiSrcDoesExist = () => {
-  return fs.existsSync(API_SRC_PATH)
+  return fs.existsSync(path.join(getPaths().api.src))
 }
 
 export const webIndexDoesExist = () => {
-  return fs.existsSync(WEB_SRC_INDEX_PATH)
+  return fs.existsSync(getWebAppPath())
 }
 
 export const graphFunctionDoesExist = () => {
-  return fs.existsSync(API_GRAPHQL_PATH)
+  return fs.existsSync(getGraphqlPath())
 }
 
 export const command = 'auth <provider>'
@@ -206,7 +215,7 @@ export const description = 'Generate an auth configuration'
 export const builder = (yargs) => {
   yargs
     .positional('provider', {
-      choices: SUPPORTED_PROVIDERS,
+      choices: getSupportedProviders(),
       description: 'Auth provider to configure',
       type: 'string',
     })
@@ -233,7 +242,9 @@ export const handler = async ({ provider, force }) => {
         title: 'Generating auth lib...',
         task: (_ctx, task) => {
           if (apiSrcDoesExist()) {
-            return writeFilesTask(files(provider), { overwriteExisting: force })
+            return writeFilesTask(files(provider), {
+              overwriteExisting: force,
+            })
           } else {
             task.skip('api/src not found, skipping')
           }
@@ -243,9 +254,9 @@ export const handler = async ({ provider, force }) => {
         title: 'Adding auth config to web...',
         task: (_ctx, task) => {
           if (webIndexDoesExist()) {
-            addConfigToIndex(providerData.config, force)
+            addConfigToApp(providerData.config, force)
           } else {
-            task.skip('web/src/index.js not found, skipping')
+            task.skip('web/src/App.{js,tsx} not found, skipping')
           }
         },
       },

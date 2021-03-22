@@ -6,7 +6,11 @@ const { getSchemaDefinitions } = require('@redwoodjs/cli/dist/lib')
 const { getPaths } = require('@redwoodjs/internal')
 const { defineScenario } = require('@redwoodjs/testing/dist/scenario')
 const { db } = require(path.join(getPaths().api.src, 'lib', 'db'))
+
 const DEFAULT_SCENARIO = 'standard'
+
+// Disable per-request-context in testing.
+process.env.SAFE_GLOBAL_CONTEXT = '1'
 
 const seedScenario = async (scenario) => {
   if (scenario) {
@@ -74,12 +78,7 @@ global.scenario = (...args) => {
     }
 
     const scenarioData = await seedScenario(scenario)
-    try {
-      result = await testFunc(scenarioData)
-    } finally {
-      // if the test fails this makes sure we still remove scenario data
-      await teardown()
-    }
+    result = await testFunc(scenarioData)
 
     return result
   })
@@ -93,4 +92,8 @@ global.mockCurrentUser = (currentUser) => {
 
 afterAll(async () => {
   await db.$disconnect()
+})
+
+afterEach(async () => {
+  await teardown()
 })
