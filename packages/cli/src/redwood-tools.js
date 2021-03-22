@@ -81,7 +81,7 @@ export const fixProjectBinaries = (PROJECT_PATH) => {
     })
 }
 
-export const copyFiles = async (src, dest, skipChmod) => {
+export const copyFiles = async (src, dest, { skipChmod, silent } = {}) => {
   // TODO: Figure out if we need to only run based on certain events.
 
   src = ensurePosixPath(src)
@@ -96,7 +96,7 @@ export const copyFiles = async (src, dest, skipChmod) => {
     ],
     {
       shell: true,
-      stdio: 'inherit',
+      stdio: silent ? 'ignore' : 'inherit',
       cleanup: true,
     }
   )
@@ -164,9 +164,14 @@ const rwtLink = async (yargs) => {
     `Copying your local Redwood build from ${c.info(frameworkPackagesPath)} \n`
   )
 
-  copyFiles(frameworkPackagesPath, projectPackagesPath, true)
+  copyFiles(frameworkPackagesPath, projectPackagesPath, {
+    skipChmod: true,
+    silent: true,
+  })
 
-  updateProjectWithResolutions(frameworkPath)
+  updateProjectWithResolutions(frameworkPackagesPath)
+
+  addRedwoodFolderToGitIgnore()
 
   // Unlink framework repo, when process cancelled
   process.on('SIGINT', () => {
@@ -184,6 +189,9 @@ const rwtLink = async (yargs) => {
 
     watcherHandle?.close()
   })
+
+  // Delete existing redwood folders in node_modules
+  rimraf.sync(path.join(getPaths().base, 'node_modules/@redwoodjs/'))
 
   // Let workspaces do the link
   await execa('yarn install', ['--pure-lockfile'], {
@@ -204,10 +212,12 @@ const rwtLink = async (yargs) => {
       })
       .on(
         'all',
-        _.debounce((event) => {
-          // TODO: Figure out if we need to only run based on certain events.
-          console.log('Trigger event: ', event)
-          copyFiles(frameworkPackagesPath, projectPackagesPath, true)
+        _.debounce(() => {
+          copyFiles(frameworkPackagesPath, projectPackagesPath, {
+            skipChmod: true,
+            silent: true,
+          })
+          fixBinaryPermissions(getPaths().base)
         }, 500)
       )
   }
@@ -248,16 +258,15 @@ const rwtLink = async (yargs) => {
 const rwtUnlink = () => {
   const linkedPackagesPath = path.join(getPaths().base, 'redwood')
   if (fs.existsSync(linkedPackagesPath)) {
-    const frameworkPath = path.join(fs.readlinkSync(linkedPackagesPath), '../')
     // remove resolutions we added in link
-    updateProjectWithResolutions(frameworkPath, true)
+    updateProjectWithResolutions(linkedPackagesPath, true)
 
     rimraf.sync(path.join(getPaths().base, 'node_modules/@redwoodjs'))
 
     rimraf.sync(linkedPackagesPath)
   }
 
-  execa.sync('yarn install', {
+  execa.sync('yarn install', ['--check-files'], {
     shell: true,
     stdio: 'inherit',
     cleanup: true,
@@ -299,32 +308,46 @@ const rwtInstall = ({ packageName }) => {
   )
 }
 
-const getRwPackagesToLink = (frameworkPath) => {
-  const packageFolders = fs.readdirSync(path.join(frameworkPath, 'packages'))
+const addRedwoodFolderToGitIgnore = () => {
+  const gitIgnore = fs.readFileSync(
+    path.join(getPaths().base, '.gitignore'),
+    'utf-8'
+  )
+
+  if (gitIgnore.includes('redwood/*')) {
+    console.log('Redwood folder already in gitignore')
+  } else {
+    console.log('Adding `redwood/*` to .gitignore...')
+    fs.appendFileSync(path.join(getPaths().base, '.gitignore'), 'redwood/*')
+  }
+}
+
+const getRwPackagesToLink = (packagesPath) => {
+  const packageFolders = fs.readdirSync(packagesPath)
 
   return packageFolders
     .filter((folderName) => folderName !== 'create-redwood-app')
+    .filter((item) => !/(^|\/)\.[^\/\.]/g.test(item)) // filter hidden files
     .map((packageFolder) => {
       return `@redwoodjs/${packageFolder}`
     })
 }
 
-const updateProjectWithResolutions = (frameworkPath, remove) => {
+const updateProjectWithResolutions = (redwoodPackagesPath, remove) => {
   const pkgJSONPath = path.join(getPaths().base, 'package.json')
   const packageJSON = require(pkgJSONPath)
 
   const frameworkVersion = require(path.join(
-    frameworkPath,
-    'packages/cli/package.json'
+    redwoodPackagesPath,
+    'cli/package.json'
   )).version
 
-  const frameworkRepoResolutions = getRwPackagesToLink(frameworkPath).reduce(
-    (resolutions, packageName) => {
-      resolutions[packageName] = frameworkVersion
-      return resolutions
-    },
-    {}
-  )
+  const frameworkRepoResolutions = getRwPackagesToLink(
+    redwoodPackagesPath
+  ).reduce((resolutions, packageName) => {
+    resolutions[packageName] = frameworkVersion
+    return resolutions
+  }, {})
 
   let resolutions = packageJSON.resolutions
   let packages = packageJSON.workspaces.packages
@@ -339,7 +362,9 @@ const updateProjectWithResolutions = (frameworkPath, remove) => {
       ...resolutions,
       ...frameworkRepoResolutions,
     }
-    packages.push('redwood/*')
+    if (!packages.includes('redwood/*')) {
+      packages.push('redwood/*')
+    }
   }
 
   const updatedPackageJSON = {
