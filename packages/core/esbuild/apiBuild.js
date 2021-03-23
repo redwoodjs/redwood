@@ -38,7 +38,13 @@ const globImports = {
       (args) => {
         const files = glob.sync(args.path, {
           cwd: rwjsPaths.api.base,
-          ignore: ['**/*.test.ts', '**/__fixtures__/**', '**/*.scenarios.ts'],
+          ignore: [
+            '**/__fixtures__/**',
+            '**/*.test.ts',
+            '**/*.test.js',
+            '**/*.scenarios.ts',
+            '**/*.scenarios.js',
+          ],
         })
 
         const imports = []
@@ -87,7 +93,7 @@ const makeSrcAliasInternal = {
 
 const foundFunctions = glob.sync('src/functions/*.{ts,js}', {
   cwd: rwjsPaths.api.base,
-  ignore: ['**/*.test.ts', '**/__fixtures__/**'],
+  ignore: ['**/*.test.ts', '**/*.test.js', '**/__fixtures__/**'],
 })
 
 const entryPoints = foundFunctions.map((f) => './' + f)
@@ -98,10 +104,11 @@ module.exports.build = (options) =>
     absWorkingDir: rwjsPaths.api.base,
     entryPoints,
     platform: 'node',
-    target: 'node12.21', // AWS Lambdas support NodeJS 12.x, (14.x also supported, but Netlify?)
+    target: process.env.NODE_ENV === 'development' ? 'esnext' : 'node12.21', // AWS Lambdas support NodeJS 12.x, (14.x also supported, but Netlify?)
     format: 'cjs',
-    bundle: true, // Create a single file.
+    bundle: true, // Create a single file, not ideal, but plugins do not work otherwise.
     outdir,
+    sourcemap: 'external',
     plugins: [globImports, makeSrcAliasInternal, makeAllNodeModulesExternal],
     inject: [path.join(__dirname, './apiGlobals.js')],
     ...options,

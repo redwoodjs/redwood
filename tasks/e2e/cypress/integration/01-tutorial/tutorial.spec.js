@@ -90,13 +90,19 @@ describe('The Redwood Storybook Integration', () => {
     cy.get('input#body').type('Hello world!')
     cy.get('button').contains('Save').click()
 
-    cy.get('td').contains('First post')
+    cy.contains('Post created')
+
+    cy.contains('Loading...').should('not.exist')
 
     // EDIT
     cy.contains('Edit').click()
+    cy.contains('Loading...').should('not.exist')
+    cy.get('h2').contains('Edit Post 1')
     cy.get('input#body').clear().type('No, Margle the World!')
     cy.get('button').contains('Save').click()
     cy.get('td').contains('No, Margle the World!')
+
+    cy.contains('Post updated')
 
     // DELETE
     cy.contains('Delete').click()

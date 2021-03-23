@@ -33,7 +33,20 @@ build({ incremental: true }).then((buildResult) => {
   chokidar
     .watch(rwjsPaths.api.base, {
       persistent: true,
-      ignored: ['*.test.*', '*.scenarios.*', rwjsPaths.api.dist],
+      ignoreInitial: true,
+      ignored: (file: string) =>
+        file.includes('node_modules') ||
+        file.includes(rwjsPaths.api.dist) ||
+        file.includes(rwjsPaths.api.db) ||
+        [
+          '.db',
+          '.sqlite',
+          '-journal',
+          '.test.js',
+          '.test.ts',
+          '.scenarios.ts',
+          '.scenarios.js',
+        ].some((ext) => file.endsWith(ext)),
     })
     .on('ready', async () => {
       chokidarReady = true
