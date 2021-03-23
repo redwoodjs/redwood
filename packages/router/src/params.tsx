@@ -9,9 +9,7 @@ export interface ParamsContextProps {
 
 export const ParamsContext = createNamedContext<ParamsContextProps>('Params')
 
-export const ParamsProvider: React.FC<Record<string, unknown>> = ({
-  children,
-}) => {
+export const ParamsProvider: React.FC = ({ children }) => {
   const [params, setParams] = useState<Record<string, string> | undefined>(
     undefined
   )
