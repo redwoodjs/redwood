@@ -93,13 +93,12 @@ module.exports = {
       },
     },
     {
-      files: ['*.test.*', '**/__mocks__/**'],
+      files: ['*.test.*', '**/__mocks__/**', '*.setup.*'],
       env: {
         node: true,
         es6: true,
         commonjs: true,
         jest: true,
-        'jest/globals': true,
       },
     },
     {
