@@ -13,14 +13,14 @@ describe('${pluralCamelName}', () => {
     expect(result).toEqual(scenario.${singularCamelName}.one)
   })
 
-  scenario('creates a ${singularCamelName}', async (scenario) => {
+  <% if (create) { %>scenario('creates a ${singularCamelName}', async (scenario) => {
     const result = await create${singularPascalName}({
-      input: ${JSON.stringify(input)},
+      input: ${JSON.stringify(create)},
     })
 
-    <% for (const [name, value] of Object.entries(input)) { %>
+    <% for (const [name, value] of Object.entries(create)) { %>
     expect(result.${name}).toEqual(${JSON.stringify(value)})<% } %>
-  })
+  })<% } %>
 
   <% if (update) { %>scenario('updates a ${singularCamelName}', async (scenario) => {<% rand = parseInt(Math.random() * 10000000) %>
     const original = await ${singularCamelName}({ id: scenario.${singularCamelName}.one.id })
