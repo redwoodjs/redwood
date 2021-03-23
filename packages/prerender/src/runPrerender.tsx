@@ -67,7 +67,7 @@ export const runPrerender = async ({
   // This is set by webpack by the html plugin
   const renderOutput = indexContent.replace(
     '<server-markup></server-markup>',
-    `<div id="redwood-app-prerendered">${componentAsHtml}</div>`
+    componentAsHtml
   )
 
   if (dryRun) {

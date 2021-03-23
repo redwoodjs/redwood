@@ -198,7 +198,9 @@ module.exports = (webpackEnv) => {
         title: path.basename(redwoodPaths.base),
         template: path.resolve(redwoodPaths.base, 'web/src/index.html'),
         templateParameters: {
-          prerenderPlaceholder: '<server-markup></server-markup>',
+          prerenderPlaceholder: isEnvProduction
+            ? '<server-markup></server-markup>'
+            : '<!-- Prerender placeholder -->',
         },
         scriptLoading: 'defer',
         inject: true,
