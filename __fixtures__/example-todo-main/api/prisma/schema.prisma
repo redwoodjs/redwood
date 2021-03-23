@@ -9,9 +9,8 @@ generator photonjs {
 
 // Define your own models here and run `yarn rw db save` to create
 // migrations for them.
-
 model Todo {
-  id     Int    @id @default(autoincrement())
+  id     Int    @default(autoincrement()) @id
   body   String @unique
   status String @default("off")
 }
