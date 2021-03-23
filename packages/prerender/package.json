@@ -20,6 +20,7 @@
     "@redwoodjs/structure": "^0.27.1",
     "@redwoodjs/web": "^0.27.1",
     "babel-plugin-ignore-html-and-css-imports": "^0.1.0",
+    "cheerio": "^1.0.0-rc.5",
     "node-fetch": "^2.6.1"
   },
   "scripts": {
