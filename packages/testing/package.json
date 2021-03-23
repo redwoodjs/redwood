@@ -15,7 +15,7 @@
     "@redwoodjs/web": "^0.27.1",
     "@testing-library/react": "11.2.2",
     "@types/react": "^17.0.2",
-    "msw": "^0.21.2"
+    "msw": "^0.27.1"
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",
@@ -26,5 +26,8 @@
     "test": "jest",
     "test:watch": "yarn test --watch"
   },
-  "gitHead": "c235e7d7186e5e258764699c0e0e1d5cc0fdd0b5"
+  "gitHead": "c235e7d7186e5e258764699c0e0e1d5cc0fdd0b5",
+  "devDependencies": {
+    "whatwg-fetch": "^3.6.2"
+  }
 }
