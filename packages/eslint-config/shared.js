@@ -93,7 +93,7 @@ module.exports = {
       },
     },
     {
-      files: ['*.test.*', '**/__mocks__/**', '*.setup.*'],
+      files: ['*.test.*', '**/__mocks__/**'],
       env: {
         node: true,
         es6: true,
@@ -102,10 +102,17 @@ module.exports = {
       },
     },
     {
-      files: ['.babelrc.js', 'babel.config.js', '.eslintrc.js', '*.config.js'],
+      files: [
+        '.babelrc.js',
+        'babel.config.js',
+        '.eslintrc.js',
+        '*.config.js',
+        'jest.setup.js',
+      ],
       env: {
         node: true,
         commonjs: true,
+        jest: true,
       },
     },
   ],
