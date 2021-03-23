@@ -1,8 +1,8 @@
 # Logger
 
-RedwoodJS provides an opinionated logger with sensible, practical defaults that grants you visibility into the JAMStack applications you're developing and have deployed  -- with ease.
+RedwoodJS provides an opinionated logger with sensible, practical defaults that grants you visibility into the applications while you're developing and after you have deployed.
 
-Logging in the serverless ecosystem is not trivial and neither is its configuration.
+Logging in the serverless ecosystem is not trivial and neither is its configuration. Redwood aims to make this easier.
 
 When choosing a Node.js logger to add to the framework, RedwoodJS required that it:
 
@@ -20,7 +20,7 @@ With those criteria in mind, Redwood includes [pino](https://github.com/pinojs/p
 
 Plus ... pino means 🌲 pine tree! How perfect is that for RedwoodJS?
 
-Note: RedwoodJS logging is setup for its api side only. For browser and web side error reporting or exception handling, these features will be addressed in a future release.
+Note: RedwoodJS logging is setup for its api side only. For browser and web side error reporting or exception handling, these features will be considered in future releases.
 
 ## Quick Start
 
@@ -60,11 +60,15 @@ That's it!
 If you are upgrading an existing RedwoodJS app and would like to include logging, you simply need to copy over files from the "Create Redwood Application" template:
 
 * Copy `packages/create-redwood-app/template/api/src/lib/logger.ts` to `api/lib/logger.ts`. Required.
-* Copy `packages/create-redwood-app/template/api/src/lib/db.ts` to `api/lib/db.ts`. Optional.
+
+For optional Prisma logging:
+
+* Copy `packages/create-redwood-app/template/api/src/lib/db.ts` to `api/src/lib/db.ts`. Optional.
+* Copy `packages/create-redwood-app/template/api/src/lib/prisma.ts` to `api/src/lib/prisma.ts`. Optional.
 
 The first file `logger.ts` defines the logger instance. You will import `logger` and use in your services, functions or other libraries. You may then replace existing `console.log()` statements with `logger.info()` or `logger.debug()`.
 
-The second file `db.ts`  -- which is optional -- replaces how the `db` Prisma client instance is declares and exported. It configures Prisma logging, if desired. See below for more information of Prisma logging options.
+The second set of files `db.ts` and `prisma.ts` -- which are optional -- replace how the `db` Prisma client instance is declares and exported. It configures Prisma logging, if desired. See below for more information of Prisma logging options.
 
 ## Options aka How to Log
 
@@ -204,14 +208,14 @@ RedwoodJS provides an opinionated logger with sensible, practical defaults. Thes
 Some examples of common configurations and overrides demonstrate how you can have control over both how and where you log.
 ### Override Log Level
 
-You can set the minimum level to log via the `level` option.
+You can set the minimum level to log via the `level` option. This is useful if you need to override the default Production settings (just `warn` and `error`) to in this case `debug`.
 
 ```js
 /**
- * Override minimum log level to warn
+ * Override minimum log level to debug
  */
 export const logger = createLogger({
-  options: { level: 'warn' },
+  options: { level: 'debug' },
 })
 ```
 ### Always Pretty Print
@@ -292,8 +296,8 @@ To stream your logs to [Datadog](https://www.datadoghq.com/), you can
 // ...
 
 export const logger = createLogger({
-   options: { ...defaultLoggerOptions,
-   destination: stream},
+   options: { ...defaultLoggerOptions },
+   destination: stream },
 })
 ```
 
@@ -322,8 +326,8 @@ export const stream = createWriteStream({
 })
 
 export const logger = createLogger({
-  options: { ...defaultLoggerOptions,
-  destination: stream},
+  options: { ...defaultLoggerOptions },
+  destination: stream },
 })
 ```
 
@@ -371,6 +375,17 @@ This may be accomplished via [child loggers](https://github.com/pinojs/pino/blob
 #### GraphQL Service / Event Logger
 
 TODO
+
+#### Flushing the Log
+
+Flush the content of the buffer when an asynchronous destination:
+
+```js
+  logger.flush()
+```
+
+The use case is primarily for asynchronous logging, which may buffer log lines while others are being written.
+
 #### Child Loggers
 
 ```js

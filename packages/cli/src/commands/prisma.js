@@ -59,7 +59,9 @@ export const builder = async (yargs) => {
 
     if (
       // `introspect` to be replaced by `db pull`; still valid as of prisma@2.19
-      ['generate', 'introspect', 'db', 'migrate', 'studio'].includes(argv[0])
+      ['generate', 'introspect', 'db', 'migrate', 'studio', 'format'].includes(
+        argv[0]
+      )
     ) {
       if (!fs.existsSync(paths.api.dbSchema)) {
         console.error(
