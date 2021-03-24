@@ -306,9 +306,10 @@ module.exports = (webpackEnv) => {
       ],
     },
     optimization: {
+      mergeDuplicateChunks: true,
       splitChunks: {
         chunks: 'all',
-        name: 'vendors',
+        minChunks: 2,
       },
       runtimeChunk: {
         name: (entrypoint) => `runtime-${entrypoint.name}`,
