@@ -200,7 +200,6 @@ RedwoodJS provides an opinionated logger with sensible, practical defaults. Thes
  * Set the default log level in dev or test to trace
  * Set the default log level warn in prod
  * Note you may override the default log level via the LOG_LEVEL environment variable
- * Nest objects under an `api` key to avoid conflicts with pino properties
  * Redact the host and other keys via a set redactionList
 
 ## Configuration Examples
@@ -228,6 +227,19 @@ In the situation where you want to force pretty printing even in Production, you
  */
 export const logger = createLogger({
   options: { prettyPrint: 'true' },
+})
+```
+
+### Customize Pretty Printing
+
+Pretty Print defaults can be overridden individually without losing other values.
+
+```js
+export const logger = createLogger({
+  options: {
+    prettyPrint: { translateTime: 'dddd, mmmm dS, yyyy, h:MM:ss TT' },
+  },
+  showConfig: true,
 })
 ```
 
