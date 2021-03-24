@@ -64,11 +64,10 @@ If you are upgrading an existing RedwoodJS app and would like to include logging
 For optional Prisma logging:
 
 * Copy `packages/create-redwood-app/template/api/src/lib/db.ts` to `api/src/lib/db.ts`. Optional.
-* Copy `packages/create-redwood-app/template/api/src/lib/prisma.ts` to `api/src/lib/prisma.ts`. Optional.
 
 The first file `logger.ts` defines the logger instance. You will import `logger` and use in your services, functions or other libraries. You may then replace existing `console.log()` statements with `logger.info()` or `logger.debug()`.
 
-The second set of files `db.ts` and `prisma.ts` -- which are optional -- replace how the `db` Prisma client instance is declares and exported. It configures Prisma logging, if desired. See below for more information of Prisma logging options.
+The second `db.ts` replaces how the `db` Prisma client instance is declares and exported. It configures Prisma logging, if desired. See below for more information of Prisma logging options.
 
 ## Options aka How to Log
 
@@ -102,6 +101,7 @@ We've included a default set called the `redactionList` that includes keys such 
   'jwt',
   'JWT',
   'password',
+  'params',
   'secret',
 ```
 
@@ -200,7 +200,6 @@ RedwoodJS provides an opinionated logger with sensible, practical defaults. Thes
  * Set the default log level in dev or test to trace
  * Set the default log level warn in prod
  * Note you may override the default log level via the LOG_LEVEL environment variable
- * Nest objects under an `api` key to avoid conflicts with pino properties
  * Redact the host and other keys via a set redactionList
 
 ## Configuration Examples
@@ -228,6 +227,19 @@ In the situation where you want to force pretty printing even in Production, you
  */
 export const logger = createLogger({
   options: { prettyPrint: 'true' },
+})
+```
+
+### Customize Pretty Printing
+
+Pretty Print defaults can be overridden individually without losing other values.
+
+```js
+export const logger = createLogger({
+  options: {
+    prettyPrint: { translateTime: 'dddd, mmmm dS, yyyy, h:MM:ss TT' },
+  },
+  showConfig: true,
 })
 ```
 
@@ -341,14 +353,36 @@ Prisma is configured to log at the:
 * warn
 * error
 
-levels.
+levels via `emitLogLevels`.
 
-One may also log *every* query by adding the `query` level to the `defaultLogLevels`.
+One may also log *every* query by adding the `query` level to
+
+```js
+log: emitLogLevels(['info', 'warn', 'error', 'query']),
+```
 
 If you wish to remove `info` logging, then you can define a set of levels, such as `['warn', 'error']`.
 
+To configure Prisma logging, you first create the client and set the `log` options to emit the levels you wish to be logged via `emitLogLevels`. Second, you instruct the `logger` to handle the events emitted by the Prisma client in `handlePrismaLogging` setting the instance of the Prisma Client you've created in `db`, the `logger` instances, and then the same levels you've told teh client to emit.
+
+
+Both `emitLogLevels` and `handlePrismaLogging` are `@redwoodjs/api/logger` package exports.
+
 ```js
-export const db = createPrismaClient([...defaultLogLevels, 'query'])
+/*
+ * Instance of the Prisma Client
+ */
+export const db = new PrismaClient({
+  log: emitLogLevels(['info', 'warn', 'error']),
+})
+
+handlePrismaLogging({
+  db,
+  logger,
+  logLevels: ['info', 'warn', 'error'],
+})
+
+
 ```
 
 See: The Prisma Client References documentation on [Logging](https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#log).
@@ -374,7 +408,7 @@ This may be accomplished via [child loggers](https://github.com/pinojs/pino/blob
 
 #### GraphQL Service / Event Logger
 
-TODO
+Examples to come.
 
 #### Flushing the Log
 
@@ -388,27 +422,43 @@ The use case is primarily for asynchronous logging, which may buffer log lines w
 
 #### Child Loggers
 
+A child logger let's you add information to every log statement output.
+
+See: [pino's Child Loggers documentation](https://github.com/pinojs/pino/blob/master/docs/child-loggers.md)
+
+For example:
+
 ```js
 import { db } from 'src/lib/db'
 import { logger } from 'src/lib/logger'
 
 export const userExamples = ({}, { info }) => {
+  // Adds path to the log
   const childLogger = logger.child({ path: info.fieldName })
   childLogger.trace('I am in find many user examples resolver')
   return db.userExample.findMany()
 }
 
 export const userExample = async ({ id }, { info }) => {
+  // Adds id and the path to the log
   const childLogger = logger.child({ id, path: info.fieldName })
   childLogger.trace('I am in the find a user example by id resolver')
   const result = await db.userExample.findUnique({
     where: { id },
   })
 
+  // Since this is the child logger, here id and path will be included as well
   childLogger.debug({ ...result }, 'This is the detail for the user')
 
   return result
 }
 ```
 
-See: [Child Loggers](https://github.com/pinojs/pino/blob/master/docs/child-loggers.md)
+The Redwood logger uses a child logger to inject the Prisma Client version into every Prisma log statement:
+
+```js
+  logger.child({
+    prisma: { clientVersion: db['_clientVersion'] },
+  })
+```
+
