@@ -13,8 +13,6 @@ import { getPaths } from '@redwoodjs/internal'
 
 import { requestHandler } from './requestHandlers/awsLambda'
 
-import { rootPath } from './index'
-
 const rwjsPaths = getPaths()
 
 export type Lambdas = Record<string, Handler>
@@ -49,9 +47,11 @@ const lambdaRequestHandler = async (req: Request, res: Response) => {
 export const http = ({
   port = 8911,
   socket,
+  rootPath,
 }: {
   port: number
   socket?: string
+  rootPath?: string
 }) => {
   const app = express()
 

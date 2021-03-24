@@ -14,17 +14,21 @@ if (process.argv0 === 'api-server') {
 const { port, socket, rootPath } = yargs
   .option('port', { default: 8911, type: 'number', alias: 'p' })
   .option('socket', { type: 'string' })
-  .option('root-path', {
+  .option('rootPath', {
+    alias: 'root-path',
     default: '/',
     type: 'string',
     desc: 'Root path where your api functions are served',
   })
-  .coerce('root-path', (path) => {
+  .coerce('rootPath', (path) => {
     // Make sure that we create a root path that starts and ends with a slash (/)
-    return `/${path}/`.replaceAll('//', '/')
+    const prefix = path.charAt(0) !== '/' ? '/' : ''
+    const suffix = path.charAt(path.length - 1) !== '/' ? '/' : ''
+
+    return `${prefix}${path}${suffix}`
   }).argv
 
-http({ port, socket }).on('listening', () => {
+http({ port, socket, rootPath }).on('listening', () => {
   if (socket) {
     console.log(`Listening on ${socket}`)
   } else {
@@ -32,5 +36,3 @@ http({ port, socket }).on('listening', () => {
   }
   console.log()
 })
-
-export { rootPath }
