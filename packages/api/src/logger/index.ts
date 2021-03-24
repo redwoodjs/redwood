@@ -167,6 +167,7 @@ export const defaultPrettyPrintOptions: PrettyOptions = {
  * - Redact the host and other keys via a set redactionList
  *
  * Pretty Printing Defaults defined in defaultPrettyPrintOptions
+ *
  * @see {@link https://github.com/pinojs/pino/blob/master/docs/api.md}
  * @see {@link https://github.com/pinojs/pino-pretty}
  */
