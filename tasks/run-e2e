@@ -117,6 +117,15 @@ const runDevServerInBackground = () => {
   })
 }
 
+const runStorybookInBackground = () => {
+  console.log('Starting Storybook ...')
+  execa.sync('yarn rw storybook --no-open &', {
+    cwd: REDWOOD_PROJECT_DIRECTORY,
+    shell: true,
+    stdio: 'inherit',
+  })
+}
+
 const runCypress = () => {
   console.log('Starting Cypress...')
   execa.sync(
@@ -146,6 +155,7 @@ const args = yargs
   .option('copy-framework', { default: true, type: 'boolean', alias: 'copy' })
   .option('js-project', { default: true, type: 'boolean', alias: 'js' })
   .option('auto-start', { default: true, type: 'boolean', alias: 'start' })
+  .option('storybook', { default: true, type: 'boolean', alias: 'sb' })
   .scriptName('run-cypress')
   .example('run-cypress')
   .example('run-cypress /tmp/redwood-app --no-js-project')
@@ -169,7 +179,7 @@ makeDirectory(REDWOOD_PROJECT_DIRECTORY)
 console.log()
 console.log('-'.repeat(80))
 
-let { copyFramework, createProject, jsProject, autoStart } = args
+let { copyFramework, createProject, jsProject, autoStart, storybook } = args
 
 const tasks = [
   copyFramework && buildRedwoodJSFramework,
@@ -178,6 +188,7 @@ const tasks = [
   copyFramework && runYarnInstall,
   jsProject && convertProjectToJavaScript,
   autoStart && runDevServerInBackground,
+  storybook && runStorybookInBackground,
   autoStart && installTaskDeps,
   autoStart && runCypress,
 ].filter(Boolean)
