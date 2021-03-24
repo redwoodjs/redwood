@@ -443,3 +443,24 @@ test('renders only active path', async () => {
   expect(screen.queryByText('About Layout')).not.toBeInTheDocument()
   expect(screen.queryByText('Login Layout')).toBeInTheDocument()
 })
+
+test('renders first matching route only', async () => {
+  const ParamPage = ({ param }: { param: string }) => <div>param {param}</div>
+
+  const TestRouter = () => (
+    <Router useAuth={window.__REDWOOD__USE_AUTH}>
+      <Route path="/" page={HomePage} name="home" />
+      <Route path="/about" page={AboutPage} name="about" />
+      <Route path="/{param}" page={ParamPage} name="param" />
+    </Router>
+  )
+
+  const screen = render(<TestRouter />)
+
+  await waitFor(() => screen.getByText(/Home Page/))
+
+  // go to about page, and make sure that's the only page rendered
+  act(() => navigate(routes.about()))
+  await waitFor(() => screen.getByText('About Page'))
+  expect(screen.queryByText(/param/)).not.toBeInTheDocument()
+})
