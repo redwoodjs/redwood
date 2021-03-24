@@ -32,6 +32,7 @@ interface BrowserTargetConfig {
   apiProxyPath: string
   experimentalFastRefresh?: boolean
   experiemntalPrerender?: boolean
+  a11y: boolean
 }
 
 export interface Config {
@@ -53,6 +54,7 @@ const DEFAULT_CONFIG: Config = {
     apiProxyPath: '/.netlify/functions',
     apiProxyPort: 8911,
     experimentalFastRefresh: false,
+    a11y: true,
   },
   api: {
     host: 'localhost',
