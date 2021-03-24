@@ -4,7 +4,7 @@
 const BASE_DIR = Cypress.env('RW_PATH')
 
 describe('Redwood Storybook Integration', () => {
-  it('0. Build Storybook Static Files', () => {
+  it('0.1 Build Storybook Static Files', () => {
     cy.exec(`cd ${BASE_DIR}; yarn rw storybook --build`, {
       timeout: 50000,
     })
@@ -12,9 +12,17 @@ describe('Redwood Storybook Integration', () => {
       .should('eq', 0)
   })
 
+  it('0.2 Serve Storybook Static Files with Dev Server', () => {
+    cy.exec(
+      `cd ${BASE_DIR}; mv web/storybook-static web/public/storybook-static`
+    )
+      .its('code')
+      .should('eq', 0)
+  })
+
   it('1. BlogPost Component', { baseUrl: null }, () => {
     cy.visit(
-      `/${BASE_DIR}/web/storybook-static/iframe.html?id=components-blogpost--generated&viewMode=story`
+      `http://localhost:8910/storybook-static/iframe.html?id=components-blogpost--generated&viewMode=story`
     )
     // TO DO: code mode to update mock
     cy.get('#error-message').should('contain.text', 'Cannot read property')
