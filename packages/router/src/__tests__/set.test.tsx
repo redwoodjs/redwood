@@ -35,7 +35,7 @@ test('wraps components in other components', async () => {
   const TestSet = () => (
     <Router useAuth={window.__REDWOOD__USE_AUTH}>
       <Set wrap={[CustomWrapper, GlobalLayout]}>
-        <Route path="/" page={ChildA} name="childa" />
+        <ChildA />
         <Set wrap={BLayout}>
           <Route path="/" page={ChildB} name="childb" />
         </Set>
@@ -61,13 +61,6 @@ test('wraps components in other components', async () => {
           <h1>
             ChildA
           </h1>
-          <div
-            aria-atomic="true"
-            aria-live="assertive"
-            id="redwood-announcer"
-            role="alert"
-            style="position: absolute; top: 0px; width: 1px; height: 1px; padding: 0px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border: 0px;"
-          />
           <div>
             <h1>
               Layout for B
