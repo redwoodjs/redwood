@@ -2,13 +2,19 @@ import { existsSync, readFileSync, statSync } from 'fs'
 import os from 'os'
 import { join } from 'path'
 
+import { PrismaClient } from '@prisma/client'
 import { BaseLogger, LoggerOptions } from 'pino'
 import split from 'split2'
 
 const pid = process.pid
 const hostname = os.hostname()
 
-import { createLogger } from '../logger'
+import {
+  createLogger,
+  emitLogLevels,
+  handlePrismaLogging,
+  LogLevel,
+} from '../logger'
 
 const once = (emitter, name) => {
   return new Promise((resolve, reject) => {
@@ -273,6 +279,29 @@ describe('logger', () => {
         level: 30,
         msg: 'logged a warning to a temp file',
       })
+    })
+  })
+
+  describe('handles Prisma Logging', () => {
+    test('it defines log levels to emit', () => {
+      const log = emitLogLevels(['info', 'warn', 'error'])
+
+      expect(log).toEqual([
+        { emit: 'event', level: 'info' },
+        { emit: 'event', level: 'warn' },
+        { emit: 'event', level: 'error' },
+      ])
+    })
+
+    test('it defines log levels with query events to emit', () => {
+      const log = emitLogLevels(['info', 'warn', 'error', 'query'])
+
+      expect(log).toEqual([
+        { emit: 'event', level: 'info' },
+        { emit: 'event', level: 'warn' },
+        { emit: 'event', level: 'error' },
+        { emit: 'event', level: 'query' },
+      ])
     })
   })
 })
