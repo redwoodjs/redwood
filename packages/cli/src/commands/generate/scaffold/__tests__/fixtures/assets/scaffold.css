@@ -206,7 +206,8 @@
   border-radius: 0.25rem;
   outline: none;
 }
-.rw-input[type='checkbox'], .rw-input[type='radio'] {
+.rw-input[type='checkbox'],
+.rw-input[type='radio'] {
   width: 1rem;
   margin-left: 0;
 }
