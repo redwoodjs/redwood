@@ -144,6 +144,10 @@ export const handler = async ({ provider, force }) => {
         title: 'Adding necessary Prisma binaries...',
         task: () => providerData.prismaBinaryTargetAdditions(),
       },
+      providerData?.prismaDataSourceEdit && {
+        title: 'Changing Prisma data source provider...',
+        task: () => providerData.prismaDataSourceEdit(),
+      },
       {
         title: 'One more thing...',
         task: (_ctx, task) => {
