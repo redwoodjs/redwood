@@ -90,7 +90,7 @@ The `wrap` prop accepts a single component or an array of components. Components
 <BlogContext>
   <BlogLayout>
     <Route path="/" page={HomePage} name="home" />
-    ...
+    // ...
   </BlogLayout>
 </BlogContext>
 ```
