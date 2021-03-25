@@ -61,7 +61,7 @@ Read more about authentication in redwood [here](https://redwoodjs.com/tutorial/
 
 You can group routes into sets using the `Set` component. `Set` allows you to wrap a set of Routes in another component or component(s)—usually a Context, a Layout, or both:
 
-```js{3,10,15}
+```js
 // Routes.js
 
 import { Router, Route, Set } from '@redwoodjs/router'
@@ -80,9 +80,11 @@ const Routes = () => {
     </Router>
   )
 }
+
+export default Routes
 ```
 
-The `wrap` prop accepts a single component or an array of components. Components are rendered in the same order they're passed, so in the exmaple above, Set expands to...
+The `wrap` prop accepts a single component or an array of components. Components are rendered in the same order they're passed, so in the exmaple above, Set expands to:
 
 ```js
 <BlogContext>
@@ -93,9 +95,9 @@ The `wrap` prop accepts a single component or an array of components. Components
 </BlogContext>
 ```
 
-Conceptually, this fits with how we think about Context and Layouts as things that wrap a page and contain content that’s outside of the scope of the page itself. Crucially, `BlogContext` and `BlogLayout` won't rerender across pages in the same set.
+Conceptually, this fits with how we think about Context and Layouts as things that wrap Pages and contain content that’s outside the scope of the Pages themselves. Crucially, since they're higher in the tree, `BlogContext` and `BlogLayout` won't rerender across Pages in the same Set.
 
-There's a lot of flexibility here. You can even nest `Sets` for nested layouts:
+There's a lot of flexibility here. You can even nest `Sets` to great effect:
 
 ```js
 // Routes.js
