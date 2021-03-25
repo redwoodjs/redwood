@@ -214,7 +214,15 @@ export const makeMergedSchema = ({
     resolvers: mergeResolvers(schemas),
     services,
   })
-  addResolveFunctionsToSchema({ schema, resolvers })
+
+  const { resolverValidationOptions, inheritResolversFromInterfaces } =
+    schemaOptions || {}
+  addResolveFunctionsToSchema({
+    schema,
+    resolvers,
+    resolverValidationOptions,
+    inheritResolversFromInterfaces,
+  })
 
   return schema
 }
