@@ -65,7 +65,7 @@ You can group Routes into sets using the `Set` component. `Set` allows you to wr
 // Routes.js
 
 import { Router, Route, Set } from '@redwoodjs/router'
-import BlogContext from 'src/components/BlogContext'
+import BlogContext from 'src/contexts/BlogContext'
 import BlogLayout from 'src/layouts/BlogLayout'
 
 const Routes = () => {
