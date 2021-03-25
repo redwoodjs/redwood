@@ -6,6 +6,7 @@ import '@testing-library/jest-dom/extend-expect'
 import { AuthContextInterface } from '@redwoodjs/auth'
 
 import { Router, Route, Private, Redirect, navigate, routes, Link } from '../'
+import { useParams } from '../params'
 import { Set } from '../Set'
 
 function createDummyAuthContextValues(partial: Partial<AuthContextInterface>) {
@@ -53,6 +54,17 @@ beforeEach(() => {
 test('inits routes and navigates as expected', async () => {
   mockAuth(false)
 
+  const ParamPage = ({ value, q }: { value: string; q: string }) => {
+    const params = useParams()
+
+    return (
+      <div>
+        <p>param {`${value}${q}`}</p>
+        <p>hookparams {`${params.value}?${params.q}`}</p>
+      </div>
+    )
+  }
+
   const TestRouter = () => (
     <Router useAuth={window.__REDWOOD__USE_AUTH}>
       <Route path="/" page={HomePage} name="home" />
@@ -62,13 +74,7 @@ test('inits routes and navigates as expected', async () => {
       <Private unauthenticated="home">
         <Route path="/private" page={PrivatePage} name="private" />
       </Private>
-      <Route
-        path="/param-test/{value}"
-        page={({ value, q }: { value: string; q: string }) => (
-          <div>param {`${value}${q}`}</div>
-        )}
-        name="params"
-      />
+      <Route path="/param-test/{value}" page={ParamPage} name="params" />
       <Route notfound page={NotFoundPage} />
     </Router>
   )
@@ -84,7 +90,10 @@ test('inits routes and navigates as expected', async () => {
 
   // passes search params to the page
   act(() => navigate(routes.params({ value: 'val', q: 'q' })))
-  await waitFor(() => screen.getByText('param valq'))
+  await waitFor(() => {
+    expect(screen.queryByText('param valq')).toBeTruthy()
+    expect(screen.queryByText('hookparams val?q')).toBeTruthy()
+  })
 
   // navigate to redirect page
   // should redirect to about
@@ -272,12 +281,6 @@ test('supports <Set>', async () => {
             name="anotherPrivate"
           />
         </Private>
-
-        <Route
-          path="/param-test/:value"
-          page={({ value }) => <div>param {value}</div>}
-          name="params"
-        />
       </Set>
     </Router>
   )
@@ -439,4 +442,25 @@ test('renders only active path', async () => {
   await waitFor(() => screen.getByText(/Login Page/))
   expect(screen.queryByText('About Layout')).not.toBeInTheDocument()
   expect(screen.queryByText('Login Layout')).toBeInTheDocument()
+})
+
+test('renders first matching route only', async () => {
+  const ParamPage = ({ param }: { param: string }) => <div>param {param}</div>
+
+  const TestRouter = () => (
+    <Router useAuth={window.__REDWOOD__USE_AUTH}>
+      <Route path="/" page={HomePage} name="home" />
+      <Route path="/about" page={AboutPage} name="about" />
+      <Route path="/{param}" page={ParamPage} name="param" />
+    </Router>
+  )
+
+  const screen = render(<TestRouter />)
+
+  await waitFor(() => screen.getByText(/Home Page/))
+
+  // go to about page, and make sure that's the only page rendered
+  act(() => navigate(routes.about()))
+  await waitFor(() => screen.getByText('About Page'))
+  expect(screen.queryByText(/param/)).not.toBeInTheDocument()
 })

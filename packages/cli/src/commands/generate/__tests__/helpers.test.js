@@ -111,13 +111,13 @@ test('templateForComponentFile can override output path', () => {
     name: 'func',
     apiPathSection: 'functions',
     generator: 'function',
-    templatePath: 'function.js.template',
+    templatePath: 'function.ts.template',
     templateVars: { name: 'func' },
-    outputPath: path.normalize('/path/to/project/api/src/functions/func.js'),
+    outputPath: path.normalize('/path/to/project/api/src/functions/func.ts'),
   })
 
   expect(output[0]).toEqual(
-    path.normalize('/path/to/project/api/src/functions/func.js')
+    path.normalize('/path/to/project/api/src/functions/func.ts')
   )
 })
 

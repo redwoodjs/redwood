@@ -1,7 +1,5 @@
 // The guts of the router implementation.
 
-import React from 'react'
-
 import {
   parseSearch,
   replaceParams,
@@ -12,7 +10,9 @@ import {
   validatePath,
   LocationProvider,
 } from './internal'
+import { ParamsProvider } from './params'
 import { PrivateContextProvider, usePrivate } from './private-context'
+import { RouteNameProvider, useRouteName } from './RouteNameContext'
 import {
   RouterContextProvider,
   RouterState,
@@ -82,6 +82,7 @@ const InternalRoute: React.VFC<InternalRouteProps> = ({
 }) => {
   const location = useLocation()
   const routerState = useRouterState()
+  const { routeName } = useRouteName()
   const { isPrivate, unauthorized, unauthenticated } = usePrivate()
   const { loading } = routerState.useAuth()
 
@@ -136,6 +137,14 @@ const InternalRoute: React.VFC<InternalRouteProps> = ({
     throw new Error(
       "A route that's not a redirect or notfound route needs to specify both a `page` and a `name`"
     )
+  }
+
+  if (name !== routeName) {
+    // This guards against rendering two pages when the current URL matches two paths
+    //   <Route path="/about" page={AboutPage} name="about" />
+    //   <Route path="/{param}" page={ParamPage} name="param" />
+    // If we go to /about, only the page with name "about" should be rendered
+    return null
   }
 
   return (
@@ -220,27 +229,26 @@ const Router: React.FC<RouterProps> = ({
       pageLoadingDelay={pageLoadingDelay}
     >
       <LocationProvider>
-        <NotFoundChecker>
-          <>{children}</>
-        </NotFoundChecker>
+        <ParamsProvider>
+          <RouteScanner>{children}</RouteScanner>
+        </ParamsProvider>
       </LocationProvider>
     </RouterContextProvider>
   )
 }
 
-const NotFoundChecker: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+const RouteScanner: React.FC = ({ children }) => {
   const location = useLocation()
   const routerState = useRouterState()
 
   let foundMatchingRoute = false
+  let routeName: string | undefined = undefined
   let NotFoundPage: PageType | undefined = undefined
   const flatChildArray = flattenAll(children)
 
   for (const child of flatChildArray) {
     if (isRoute(child)) {
-      const { path } = child.props
+      const { path, name } = child.props
 
       if (path) {
         const { match } = matchPath(
@@ -250,9 +258,11 @@ const NotFoundChecker: React.FC<{ children: React.ReactNode }> = ({
         )
 
         if (match) {
+          routeName = name // name is undefined for redirect routes
+
           foundMatchingRoute = true
-          // No need to loop further. As soon as we have a matching route we
-          // know we will not have to render the NotFound page
+          // No need to loop further. As soon as we have a matching route and a
+          // route name we have all the info we need
           break
         }
       }
@@ -263,16 +273,18 @@ const NotFoundChecker: React.FC<{ children: React.ReactNode }> = ({
     }
   }
 
-  if (!foundMatchingRoute && NotFoundPage) {
-    return (
-      <PageLoader
-        spec={normalizePage(NotFoundPage)}
-        delay={routerState.pageLoadingDelay}
-      />
-    )
-  }
-
-  return <>{children}</>
+  return (
+    <RouteNameProvider value={{ routeName }}>
+      {!foundMatchingRoute && NotFoundPage ? (
+        <PageLoader
+          spec={normalizePage(NotFoundPage)}
+          delay={routerState.pageLoadingDelay}
+        />
+      ) : (
+        children
+      )}
+    </RouteNameProvider>
+  )
 }
 
 function isSpec(specOrPage: Spec | React.ComponentType): specOrPage is Spec {
