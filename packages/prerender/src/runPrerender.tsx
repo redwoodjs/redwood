@@ -23,22 +23,29 @@ const rwWebPaths = getPaths().web
 
 // Prerender specific configuration
 // extends projects web/babelConfig
+
 babelRequireHook({
   extends: path.join(rwWebPaths.base, '.babelrc.js'),
   extensions: ['.js', '.ts', '.tsx', '.jsx'],
-  plugins: [
-    ['ignore-html-and-css-imports'], // webpack/postcss handles CSS imports
-    [
-      'babel-plugin-module-resolver',
-      {
-        alias: {
-          src: rwWebPaths.src,
-        },
-      },
-    ],
-    [mediaImportsPlugin],
+  overrides: [
+    {
+      plugins: [
+        ['ignore-html-and-css-imports'], // webpack/postcss handles CSS imports
+        [
+          'babel-plugin-module-resolver',
+          {
+            alias: {
+              src: rwWebPaths.src,
+            },
+            loglevel: 'silent',
+          },
+          'prerender-module-resolver', // add this, so it it doesn't over-write custom module resolvers in user's web/.babelrc
+        ],
+        [mediaImportsPlugin],
+      ],
+    },
   ],
-  only: [rwWebPaths.base],
+  only: [getPaths().base],
   ignore: ['node_modules'],
   cache: false,
 })
