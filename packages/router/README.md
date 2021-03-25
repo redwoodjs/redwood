@@ -59,7 +59,7 @@ Read more about authentication in redwood [here](https://redwoodjs.com/tutorial/
 
 ## Sets of Routes
 
-You can group routes into sets using the `Set` component. `Set` allows you to wrap a set of Routes in another component or component(s)—usually a Context, a Layout, or both:
+You can group Routes into sets using the `Set` component. `Set` allows you to wrap a set of Routes in another component or array of components—usually a Context, a Layout, or both:
 
 ```js
 // Routes.js
