@@ -103,7 +103,7 @@ There's a lot of flexibility here. You can even nest `Sets` to great effect:
 // Routes.js
 
 import { Router, Route, Set, Private } from '@redwoodjs/router'
-import BlogContext from 'src/components/BlogContext'
+import BlogContext from 'src/contexts/BlogContext'
 import BlogLayout from 'src/layouts/BlogLayout'
 import BlogNavLayout from 'src/layouts/BlogNavLayout'
 
