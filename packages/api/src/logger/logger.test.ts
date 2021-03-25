@@ -8,16 +8,17 @@ import split from 'split2'
 const pid = process.pid
 const hostname = os.hostname()
 
-import { createLogger } from '../logger'
+import { createLogger, emitLogLevels } from '../logger'
 
 const once = (emitter, name) => {
   return new Promise((resolve, reject) => {
     if (name !== 'error') {
       emitter.once('error', reject)
     }
-    emitter.once(name, (...args) => {
+
+    emitter.once(name, ({ ...args }) => {
       emitter.removeListener('error', reject)
-      resolve(...args)
+      resolve({ ...args })
     })
   })
 }
@@ -45,7 +46,7 @@ const watchFileCreated = (filename) => {
       // On some CI runs file is created but not filled
       if (existsSync(filename) && statSync(filename).size !== 0) {
         clearInterval(interval)
-        resolve()
+        resolve(null)
       } else if (counter <= threshold) {
         counter++
       } else {
@@ -66,7 +67,7 @@ const setupLogger = (
 } => {
   if (destination) {
     const logger = createLogger({
-      options: { ...loggerOptions, prettyPrint: false },
+      options: { prettyPrint: false, ...loggerOptions },
       destination: destination,
       showConfig,
     })
@@ -254,25 +255,97 @@ describe('logger', () => {
     })
   })
 
+  describe('when configuring pretty printing', () => {
+    test('it pretty prints', async () => {
+      const tmp = join(
+        os.tmpdir(),
+        '_' + Math.random().toString(36).substr(2, 9)
+      )
+
+      const { logger } = setupLogger({ prettyPrint: true }, tmp)
+
+      const message = 'logged with pretty printing on'
+
+      logger.info(message)
+
+      await watchFileCreated(tmp)
+
+      const logStatement = readFileSync(tmp).toString().trim()
+
+      expect(logStatement).toMatch(/INFO/)
+      expect(logStatement).toContain(message)
+    })
+
+    test('it allows setting translateTime ', async () => {
+      const tmp = join(
+        os.tmpdir(),
+        '_' + Math.random().toString(36).substr(2, 9)
+      )
+
+      const { logger } = setupLogger(
+        { prettyPrint: { translateTime: 'dddd, mmmm dS, yyyy, h:MM:ss TT' } },
+        tmp
+      )
+
+      const message = 'logged with pretty printing on'
+
+      logger.info(message)
+
+      await watchFileCreated(tmp)
+
+      const logStatement = readFileSync(tmp).toString().trim()
+      console.log(logStatement)
+      expect(logStatement).toMatch(/INFO/)
+      expect(logStatement).toContain(message)
+    })
+  })
+
   describe('file logging', () => {
     test('it creates a log file with a statement', async () => {
       const tmp = join(
         os.tmpdir(),
         '_' + Math.random().toString(36).substr(2, 9)
       )
+
       const { logger } = setupLogger({}, tmp)
-      logger.info('logged a warning to a temp file')
+
+      logger.warn('logged a warning to a temp file')
+
       await watchFileCreated(tmp)
 
       const logStatement = JSON.parse(readFileSync(tmp).toString())
+
       delete logStatement.time
 
       expect(logStatement).toEqual({
         pid,
         hostname,
-        level: 30,
+        level: 40,
         msg: 'logged a warning to a temp file',
       })
+    })
+  })
+
+  describe('handles Prisma Logging', () => {
+    test('it defines log levels to emit', () => {
+      const log = emitLogLevels(['info', 'warn', 'error'])
+
+      expect(log).toEqual([
+        { emit: 'event', level: 'info' },
+        { emit: 'event', level: 'warn' },
+        { emit: 'event', level: 'error' },
+      ])
+    })
+
+    test('it defines log levels with query events to emit', () => {
+      const log = emitLogLevels(['info', 'warn', 'error', 'query'])
+
+      expect(log).toEqual([
+        { emit: 'event', level: 'info' },
+        { emit: 'event', level: 'warn' },
+        { emit: 'event', level: 'error' },
+        { emit: 'event', level: 'query' },
+      ])
     })
   })
 })
