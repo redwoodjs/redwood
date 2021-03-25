@@ -1,11 +1,34 @@
+import { PrismaClient } from '@prisma/client'
 import pino, {
   BaseLogger,
   DestinationStream,
   LevelWithSilent,
   LoggerOptions,
+  PrettyOptions,
   redactOptions,
 } from 'pino'
 import * as prettyPrint from 'pino-pretty'
+
+export type LogLevel = 'info' | 'query' | 'warn' | 'error'
+
+type LogDefinition = {
+  level: LogLevel
+  emit: 'stdout' | 'event'
+}
+
+type QueryEvent = {
+  timestamp: Date
+  query: string
+  params: string
+  duration: number
+  target: string
+}
+
+type LogEvent = {
+  timestamp: Date
+  message: string
+  target: string
+}
 
 /**
  * Determines if log environment is development
@@ -75,6 +98,7 @@ export const redactionsList: string[] | redactOptions = [
   'jwt',
   'JWT',
   'password',
+  'params',
   'secret',
 ]
 
@@ -108,42 +132,54 @@ export const logLevel: LevelWithSilent | string = (() => {
 })()
 
 /**
+ * Defines default options when pretty printing.
+ * These can be overridden individually without losing other defaults.
+ *
+ * Defaults are:
+ *
+ * - Colorize output when pretty printing
+ * - Ignore certain event attributes like hostname and pid for cleaner log statements
+ * - Prefix the log output with log level
+ * - Use a shorted log message that omits server name
+ * - Humanize time in GMT
+ * */
+export const defaultPrettyPrintOptions: PrettyOptions = {
+  colorize: true,
+  ignore: 'hostname,pid',
+  levelFirst: true,
+  messageFormat: false,
+  translateTime: true,
+}
+
+/**
  * Defines an opinionated base logger configuration that defines
  * how to log and what to ignore.
  *
  * Defaults are:
  *
- * * Colorize output when pretty printing
- * * Ignore certain event attributes like hostname and pid for cleaner log statements
- * * Prefix the log output with log level
- * * Use a shorted log message that omits server name
- * * Humanize time in GMT
- * * Set the default log level in dev or test to trace and warn in prod
+ * - Colorize output when pretty printing
+ * - Ignore certain event attributes like hostname and pid for cleaner log statements
+ * - Prefix the log output with log level
+ * - Use a shorted log message that omits server name
+ * - Humanize time in GMT
+ * - Set the default log level in dev or test to trace and warn in prod
  *   (or set via LOG_LEVEL environment variable)
- * * Nest objects under an `api` key to avoid conflicts with pino properties
- * * Redact the host and other keys via a set redactionList
+ * - Redact the host and other keys via a set redactionList
  *
- * See: https://github.com/pinojs/pino/blob/master/docs/api.md
- *      https://github.com/pinojs/pino-pretty
+ * Pretty Printing Defaults defined in defaultPrettyPrintOptions
+ *
+ * @see {@link https://github.com/pinojs/pino/blob/master/docs/api.md}
+ * @see {@link https://github.com/pinojs/pino-pretty}
  */
-
 export const defaultLoggerOptions: LoggerOptions = {
-  prettyPrint: isPretty && {
-    colorize: true,
-    ignore: 'hostname,pid',
-    levelFirst: true,
-    messageFormat: false,
-    translateTime: true,
-  },
+  prettyPrint: isPretty && defaultPrettyPrintOptions,
   prettifier: isPretty && prettifier,
   level: logLevel,
-  // nestedKey: 'log',
   redact: redactionsList,
 }
 
 /**
- * RedwoodLoggerOptions
- * Defines custom logger options that extend those available in LoggerOptions
+ * RedwoodLoggerOptions defines custom logger options that extend those available in LoggerOptions
  * and can define a destination like a file or other supported pin log transport stream
  *
  * @typedef {Object} RedwoodLoggerOptions
@@ -164,11 +200,16 @@ export interface RedwoodLoggerOptions {
  * @param options {RedwoodLoggerOptions} - Override the default logger configuration
  * @param destination {DestinationStream} - An optional destination stream
  * @param showConfig {Boolean} - Show the logger configuration. This is off by default.
- * @return {BaseLogger} - The configured logger
  *
  * @example
+ * // Create the logger to log just at the error level
+ * createLogger({ options: { level: 'error' } })
  *
- *    createLogger({ options: { level: 'error' } })
+ * @example
+ * // Create the logger to log to a file
+ * createLogger({ destination: { 'var/logs/redwood-api.log' } })
+ *
+ * @return {BaseLogger} - The configured logger
  */
 export const createLogger = ({
   options,
@@ -180,7 +221,25 @@ export const createLogger = ({
   const isStream = hasDestination && !isFile
   const stream = destination
 
-  options = { ...defaultLoggerOptions, ...options }
+  // override, but retain default pretty print options
+  if (isPretty && options && options.prettyPrint) {
+    const prettyOptions = {
+      prettyPrint: {
+        ...(defaultLoggerOptions.prettyPrint as PrettyOptions),
+        ...(options.prettyPrint as PrettyOptions),
+      },
+    }
+
+    delete options.prettyPrint
+
+    options = {
+      ...defaultLoggerOptions,
+      ...prettyOptions,
+      ...options,
+    }
+  } else {
+    options = { ...defaultLoggerOptions, ...options }
+  }
 
   if (showConfig) {
     console.log('Logger Configuration')
@@ -218,4 +277,108 @@ export const createLogger = ({
 
     return pino(options, stream as DestinationStream)
   }
+}
+
+/**
+ * To help you identify particularly slow parameter values,
+ * For example, Heroku outputs the slowest queries (that take 2 seconds or more)
+ **/
+const SLOW_QUERY_THRESHOLD = 2_000 // 2 seconds
+
+/**
+ * Determines the type and level of logging.
+ *
+ * @see {@link https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#log}
+ */
+export const defaultLogLevels: LogLevel[] = ['info', 'warn', 'error']
+
+/**
+ * Generates the Prisma Log Definitions for the Prisma Client to emit
+ *
+ * @return Prisma.LogDefinition[]
+ */
+export const emitLogLevels = (setLogLevels: LogLevel[]): LogDefinition[] => {
+  return setLogLevels?.map((level) => {
+    return { emit: 'event', level } as LogDefinition
+  })
+}
+
+/**
+ * Defines what is needed to setup Prisma Client logging used in handlePrismaLogging
+ *
+ *
+ * @param db {PrismaClient} - The Prisma Client instance
+ * @param logger {BaseLogger} - The Redwood logger instance
+ * @param logLevels {LogLevel[]} - The log levels . Should match those set with emitLogLevels
+ *
+ * @see emitLogLevels
+ *
+ */
+interface PrismaLoggingConfig {
+  db: PrismaClient
+  logger: BaseLogger
+  logLevels: LogLevel[]
+}
+
+/**
+ * Sets up event-based logging on the Prisma client
+ *
+ * Sets emit to event for a specific log level, such as query
+ * using the $on() method to subscribe to the event
+ *
+ * @see {@link https://www.prisma.io/docs/concepts/components/prisma-client/working-with-prismaclient/logging}
+ *
+ * @param PrismaLoggingConfig
+ *
+ * @example
+ *
+ * handlePrismaLogging({
+ *  db,
+ *  logger,
+ *  logLevels: ['info', 'warn', 'error'],
+ * })
+ *
+ * @return {void}
+ *
+ */
+export const handlePrismaLogging = (config: PrismaLoggingConfig): void => {
+  const logger = config.logger.child({
+    prisma: { clientVersion: config.db['_clientVersion'] },
+  })
+
+  config.logLevels?.forEach((level) => {
+    if (level === 'query') {
+      config.db.$on(level, (queryEvent: QueryEvent) => {
+        if (queryEvent.duration >= SLOW_QUERY_THRESHOLD) {
+          logger.warn(
+            { ...queryEvent },
+            `Slow Query performed in ${queryEvent.duration} msec`
+          )
+        } else {
+          logger.debug(
+            { ...queryEvent },
+            `Query performed in ${queryEvent.duration} msec`
+          )
+        }
+      })
+    } else {
+      config.db.$on(level, (logEvent: LogEvent) => {
+        switch (level) {
+          case 'info':
+            logger.info({ ...logEvent }, logEvent.message)
+            break
+          case 'warn':
+            logger.warn({ ...logEvent }, logEvent.message)
+            break
+          case 'error':
+            logger.error({ ...logEvent }, logEvent.message)
+            break
+          default:
+            logger.info({ ...logEvent }, logEvent.message)
+        }
+      })
+    }
+  })
+
+  return
 }
