@@ -8554,10 +8554,10 @@ esbuild-loader@^2.10.0:
     type-fest "^0.21.3"
     webpack-sources "^2.2.0"
 
-esbuild@0.9.0:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.9.0.tgz#b8320df85048ed1637c6b59ee52abba248936d3c"
-  integrity sha512-IqYFO7ZKHf0y4uJpJfGqInmSRn8jMPMbyI1W0Y2PSjSjJcVP538tC8TleJAS4Y8QeqwajqBTwFKayWVzYlMIgg==
+esbuild@0.10.0:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.10.0.tgz#67dc5175930a0816802a5a6d35503d626a365889"
+  integrity sha512-g+/Fk18bP7GAx0eG2RTfvjbsdB6RSchvvrrokFX8UexrTtPo0ZF0R1KViUu5v0A4Uu8m3I7pZhEyZveiOk0/JA==
 
 esbuild@^0.9.2:
   version "0.9.6"
