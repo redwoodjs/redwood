@@ -1,0 +1,72 @@
+#!/usr/bin/env node
+/* eslint-env node, es6*/
+
+const fs = require('fs')
+const path = require('path')
+
+const esbuild = require('esbuild')
+const execa = require('execa')
+const { glob } = require('glob')
+const packlist = require('npm-packlist')
+const yargs = require('yargs')
+
+const { dest } = yargs.parse(process.argv)
+
+const CURRENT_DIR = process.cwd()
+const pkgJson = require(path.join(CURRENT_DIR, 'package.json'))
+const OUT_DIR = path.join(dest, `/${pkgJson.name.replace('/', '-')}`)
+
+const srcFiles = glob
+  .sync('src/**/*.{ts,js,tsx,jsx,json}', {
+    cwd: CURRENT_DIR,
+    ignore: [
+      '**/*.test.ts',
+      '**/*.test.js',
+      '**/__fixtures__/**',
+      '**/__tests__/**',
+    ],
+  })
+  .map((filePath) => `./${filePath}`)
+
+// console.log('xxx src files ->')
+// console.log(srcFiles)
+
+esbuild
+  .build({
+    absWorkingDir: CURRENT_DIR,
+    entryPoints: srcFiles,
+    platform: 'node',
+    target: 'node12.21', // AWS Lambdas support NodeJS 12.x, (14.x also supported, but Netlify?)
+    format: 'cjs',
+    bundle: false, // Create a single file, not ideal, but plugins do not work otherwise.
+    outdir: `${OUT_DIR}/dist`,
+    sourcemap: 'external',
+    loader: {
+      '.js': 'jsx',
+    },
+  })
+  .then(() => {
+    packlist({ path: CURRENT_DIR })
+      .then((files) => files.filter((fileName) => !fileName.match('dist/'))) //ignore dist
+      // .then((files) => {
+      //   return files.map((filePath) => path.join(CURRENT_DIR, `./${filePath}`))
+      // })
+      .then((files) => {
+        files.forEach((file) => {
+          copyToDest(file, OUT_DIR)
+        })
+      })
+  })
+
+// Creates folders where required, before copying
+const copyToDest = (src, dest) => {
+  const dirName = path.dirname(path.join(dest, `/${src}`))
+  const fileName = path.basename(src)
+
+  const exist = fs.existsSync(dirName)
+  if (!exist) {
+    fs.mkdirSync(dirName, { recursive: true })
+  }
+
+  fs.copyFileSync(src, path.join(dirName, fileName))
+}
