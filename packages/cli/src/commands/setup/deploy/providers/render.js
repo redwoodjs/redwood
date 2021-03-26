@@ -15,6 +15,8 @@ const RENDER_YAML = `services:
     fromDatabase:
       name: redwood-db
       property: connectionString
+  - key: NODE_VERSION
+    value: 14.16.0
 
 - type: web
   name: redwood-web
@@ -42,6 +44,8 @@ export const handler = async () => {
   }
 }
 `
+const NODE_VERSION = `14.16.0`
+
 // any packages to install
 export const apiPackages = ['@redwoodjs/api-server']
 
@@ -52,6 +56,7 @@ export const files = [
     path: path.join(getPaths().base, 'api/src/functions/healthz.js'),
     content: RENDER_HEALTH_CHECK,
   },
+  { path: path.join(getPaths().base, '.node-version'), content: NODE_VERSION },
 ]
 
 // any edits to Prisma data source
@@ -68,5 +73,5 @@ export const prismaDataSourceEdit = () => {
 // any notes to print out when the job is done
 export const notes = [
   'You are ready to deploy to Render!',
-  'Deploy to Render: https://render.com/deploy',
+  'Check out the docs at https://render.com/docs/deploy-redwood to get started',
 ]
