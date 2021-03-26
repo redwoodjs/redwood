@@ -9,7 +9,7 @@
   "types": "./dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@graphql-tools/merge": "6.2.10",
+    "@graphql-tools/merge": "6.2.11",
     "@prisma/client": "2.19.0",
     "@redwoodjs/internal": "^0.28.0",
     "@types/pino": "^6.3.6",
