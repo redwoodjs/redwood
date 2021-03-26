@@ -15,7 +15,7 @@
     "firebase": "^7.14.5",
     "firebase-admin": "^9.1.1",
     "gotrue-js": "^0.9.29",
-    "magic-sdk": "^2.5.0",
+    "magic-sdk": "^4.2.1",
     "msal": "^1.4.1",
     "netlify-identity-widget": "1.9.1",
     "nhost-js-sdk": "^3.0.0-14",
