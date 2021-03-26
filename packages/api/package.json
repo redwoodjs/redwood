@@ -18,7 +18,7 @@
     "graphql": "15.5.0",
     "graphql-scalars": "1.9.0",
     "jsonwebtoken": "^8.5.1",
-    "jwks-rsa": "^1.8.1",
+    "jwks-rsa": "^2.0.2",
     "lodash.merge": "^4.6.2",
     "lodash.omitby": "^4.6.0",
     "pino": "^6.11.1",
