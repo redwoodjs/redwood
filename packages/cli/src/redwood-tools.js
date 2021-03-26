@@ -216,24 +216,6 @@ const rwtLink = async (yargs) => {
       borderColour: 'gray',
     })
   )
-
-  if (clean) {
-    await execa('yarn build:clean', {
-      shell: true,
-      stdio: 'inherit',
-      cleanup: true,
-      cwd: frameworkPath,
-    })
-  }
-
-  const buildCommand = watch ? 'yarn build:watch' : 'yarn build'
-
-  execa(buildCommand, {
-    shell: true,
-    stdio: 'inherit',
-    cleanup: true,
-    cwd: frameworkPath,
-  })
 }
 
 // This should be synchronous
