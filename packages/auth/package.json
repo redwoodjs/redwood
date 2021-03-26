@@ -19,7 +19,7 @@
     "msal": "^1.4.1",
     "netlify-identity-widget": "1.9.1",
     "nhost-js-sdk": "^3.0.0-14",
-    "react": "^17.0.1"
+    "react": "^17.0.2"
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",
