@@ -7,14 +7,18 @@ import { isRoute } from './router'
 import { useRouterState } from './router-context'
 import { flattenAll, matchPath } from './util'
 
+type WrapperType<WTProps> = (
+  props: WTProps & { children: ReactNode }
+) => ReactElement | null
+
 type ReduceType = ReactElement | undefined
 
-interface SetProps {
-  wrap: unknown | unknown[]
+type SetProps<P> = P & {
+  wrap: WrapperType<P> | WrapperType<P>[]
   children: ReactNode
-  [_: string]: unknown
 }
-export function Set(props: SetProps) {
+
+export function Set<WrapperProps>(props: SetProps<WrapperProps>) {
   const { wrap, children, ...rest } = props
   const routerState = useRouterState()
   const location = useLocation()
@@ -55,7 +59,10 @@ export function Set(props: SetProps) {
       // Expand and nest the wrapped elements.
       return (
         wrappers.reduceRight<ReduceType>((acc, wrapper) => {
-          return React.createElement(wrapper, rest, acc ? acc : children)
+          return React.createElement(wrapper, {
+            ...rest,
+            children: acc ? acc : children,
+          } as SetProps<WrapperProps>)
         }, undefined) || null
       )
     }

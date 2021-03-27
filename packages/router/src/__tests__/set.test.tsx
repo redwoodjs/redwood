@@ -93,7 +93,6 @@ test('wraps components in other components', async () => {
 
 test('passes props to wrappers', async () => {
   interface Props {
-    children: React.ReactNode
     propOne: string
     propTwo: string
   }
