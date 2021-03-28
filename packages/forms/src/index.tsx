@@ -276,7 +276,7 @@ const SelectField = forwardRef<
   React.useEffect(() => {
     setCoercion({
       name: props.name,
-      transformValue: props.transformValue, // || props.dataType,
+      transformValue: props.transformValue,
     })
   }, [setCoercion, props.name, props.transformValue])
 
