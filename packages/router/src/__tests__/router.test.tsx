@@ -508,3 +508,39 @@ test('params should never be an empty object in Set', async (done) => {
   act(() => navigate('/test/1'))
   render(<TestRouter />)
 })
+
+test('Set is not rendered for unauthenticated user.', async () => {
+  // not authenticated.
+  mockAuth(false)
+
+  const ParamPage = () => {
+    // This should never be called. We should be redirect to login instead.
+    expect(false).toBe(true)
+    return null
+  }
+
+  const SetWithUseParams = ({ children }) => {
+    // This should never be called. We should be redirect to login instead.
+    expect(false).toBe(true)
+    return children
+  }
+
+  const TestRouter = () => (
+    // @ts-expect-error - Meh.
+    <Router useAuth={window.__REDWOOD__USE_AUTH}>
+      <Private unauthenticated="login">
+        <Set wrap={SetWithUseParams}>
+          <Route path="/test/{documentId}" page={ParamPage} name="param" />
+        </Set>
+      </Private>
+      <Route path="/" page={() => <div>home</div>} name="home" />
+      <Route path="/login" page={() => <div>auth thyself</div>} name="login" />
+    </Router>
+  )
+
+  const screen = render(<TestRouter />)
+  act(() => navigate('/'))
+  act(() => navigate('/test/1'))
+
+  await waitFor(() => screen.getByText(/auth thyself/))
+})
