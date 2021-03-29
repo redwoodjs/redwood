@@ -3,7 +3,7 @@ import React, { useState, useContext } from 'react'
 import { useLocation } from 'src/location'
 import { useRouterState } from 'src/router-context'
 
-import { createNamedContext, matchPath } from './internal'
+import { createNamedContext, matchPath, parseSearch } from './internal'
 
 export interface ParamsContextProps {
   params: Record<string, string>
@@ -16,7 +16,8 @@ export const ParamsProvider: React.FC = ({ children }) => {
   const { routes, paramTypes } = useRouterState()
   const location = useLocation()
 
-  let initialParams = {}
+  let initialParams = parseSearch(location.search)
+
   for (const route of routes) {
     if (route.path) {
       const { match, params } = matchPath(
@@ -24,8 +25,12 @@ export const ParamsProvider: React.FC = ({ children }) => {
         location.pathname,
         paramTypes
       )
-      if (match && params) {
-        initialParams = params
+
+      if (match) {
+        initialParams = {
+          ...initialParams,
+          ...params,
+        }
       }
     }
   }
