@@ -484,7 +484,7 @@ test('params should never be an empty object', async (done) => {
   render(<TestRouter />)
 })
 
-test.only('params should never be an empoty object in Set', async (done) => {
+test.only('params should never be an empty object in Set', async (done) => {
   const ParamPage = () => {
     return null
   }
