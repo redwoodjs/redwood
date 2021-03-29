@@ -128,8 +128,6 @@ export class PageLoader extends React.Component<Props> {
     // Remove the timeout because the page has loaded.
     this.clearLoadingTimeout()
 
-    this.context.setParams(props.params)
-
     this.setState({
       pageName: name,
       Page: module.default,
