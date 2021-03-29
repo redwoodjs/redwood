@@ -207,6 +207,8 @@ const Router: React.FC<RouterProps> = ({
     return <SplashPage />
   }
 
+  const routePaths: string[] = []
+
   flatChildArray.forEach((child) => {
     if (isRoute(child)) {
       const { name, path } = child.props
@@ -214,6 +216,8 @@ const Router: React.FC<RouterProps> = ({
       if (path) {
         // Check for issues with the path.
         validatePath(path)
+
+        routePaths.push(path)
 
         if (name && path) {
           namedRoutes[name] = (args = {}) => replaceParams(path, args)
@@ -229,7 +233,7 @@ const Router: React.FC<RouterProps> = ({
       pageLoadingDelay={pageLoadingDelay}
     >
       <LocationProvider>
-        <ParamsProvider>
+        <ParamsProvider routePaths={routePaths} paramTypes={paramTypes}>
           <RouteScanner>{children}</RouteScanner>
         </ParamsProvider>
       </LocationProvider>
