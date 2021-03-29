@@ -484,14 +484,13 @@ test('params should never be an empty object', async (done) => {
   render(<TestRouter />)
 })
 
-test.only('params should never be an empty object in Set', async (done) => {
+test('params should never be an empty object in Set', async (done) => {
   const ParamPage = () => {
     return null
   }
 
   const SetWithUseParams = ({ children }) => {
     const params = useParams()
-    params //?
     expect(params).not.toEqual({})
     done()
     return children
@@ -508,5 +507,4 @@ test.only('params should never be an empty object in Set', async (done) => {
 
   act(() => navigate('/test/1'))
   render(<TestRouter />)
-  //act(() => navigate(routes.param({ documentId: '1' })))
 })
