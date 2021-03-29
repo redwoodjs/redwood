@@ -12,7 +12,7 @@ export interface RouterState {
   paramTypes?: Record<string, ParamType>
   pageLoadingDelay?: number
   useAuth: typeof useAuth
-  routes: Array<{ name: string; path: string; page: PageType }>
+  routes: Array<{ name?: string; path?: string; page?: PageType }>
 }
 
 const RouterStateContext = createContext<RouterState | undefined>(undefined)
