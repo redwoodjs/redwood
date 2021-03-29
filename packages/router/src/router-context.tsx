@@ -47,8 +47,6 @@ export const RouterContextProvider: React.FC<ProviderProps> = ({
       return { name, path, page }
     })
 
-  // @ts-expect-error - Not sure what TS is complaining about here.
-  // Help. me.
   const [state, setState] = useReducer(stateReducer, {
     useAuth: customUseAuth || useAuth,
     paramTypes,
