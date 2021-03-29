@@ -464,3 +464,22 @@ test('renders first matching route only', async () => {
   await waitFor(() => screen.getByText('About Page'))
   expect(screen.queryByText(/param/)).not.toBeInTheDocument()
 })
+
+test('params should never be undefined', async (done) => {
+  const ParamPage = () => {
+    const params = useParams()
+    expect(params).not.toEqual({})
+    done()
+    return null
+  }
+
+  const TestRouter = () => (
+    // @ts-expect-error - Meh.
+    <Router useAuth={window.__REDWOOD__USE_AUTH}>
+      <Route path="/test/{documentId}" page={ParamPage} name="param" />
+    </Router>
+  )
+
+  render(<TestRouter />)
+  act(() => navigate(routes.param({ documentId: '1' })))
+})
