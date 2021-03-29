@@ -134,6 +134,8 @@ export class PageLoader extends React.Component<Props> {
       slowModuleImport: false,
       params: props.params,
     })
+
+    this.context.setParams(props.params)
   }
 
   render() {
