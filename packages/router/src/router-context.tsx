@@ -25,7 +25,7 @@ const RouterSetContext = createContext<
   React.Dispatch<Partial<RouterState>> | undefined
 >(undefined)
 
-interface ProviderProps extends Omit<RouterState, 'useAuth'> {
+interface ProviderProps extends Omit<RouterState, 'useAuth' | 'routes'> {
   useAuth?: typeof useAuth
 }
 

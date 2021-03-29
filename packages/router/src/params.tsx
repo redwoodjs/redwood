@@ -12,7 +12,7 @@ export interface ParamsContextProps {
 
 export const ParamsContext = createNamedContext<ParamsContextProps>('Params')
 
-export const ParamsProvider: React.FC = ({ children, ...x }) => {
+export const ParamsProvider: React.FC = ({ children }) => {
   const { routes, paramTypes } = useRouterState()
   const location = useLocation()
 
