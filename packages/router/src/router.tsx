@@ -326,4 +326,4 @@ const normalizePage = (specOrPage: Spec | React.ComponentType): Spec => {
   }
 }
 
-export { Router, Route, Private, namedRoutes as routes, isRoute }
+export { Router, Route, Private, namedRoutes as routes, isRoute, PageType }

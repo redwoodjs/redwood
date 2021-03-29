@@ -464,3 +464,47 @@ test('renders first matching route only', async () => {
   await waitFor(() => screen.getByText('About Page'))
   expect(screen.queryByText(/param/)).not.toBeInTheDocument()
 })
+
+test('params should never be an empty object', async (done) => {
+  const ParamPage = () => {
+    const params = useParams()
+    expect(params).not.toEqual({})
+    done()
+    return null
+  }
+
+  const TestRouter = () => (
+    // @ts-expect-error - Meh.
+    <Router useAuth={window.__REDWOOD__USE_AUTH}>
+      <Route path="/test/{documentId}" page={ParamPage} name="param" />
+    </Router>
+  )
+
+  act(() => navigate('/test/1'))
+  render(<TestRouter />)
+})
+
+test('params should never be an empty object in Set', async (done) => {
+  const ParamPage = () => {
+    return null
+  }
+
+  const SetWithUseParams = ({ children }) => {
+    const params = useParams()
+    expect(params).not.toEqual({})
+    done()
+    return children
+  }
+
+  const TestRouter = () => (
+    // @ts-expect-error - Meh.
+    <Router useAuth={window.__REDWOOD__USE_AUTH}>
+      <Set wrap={SetWithUseParams}>
+        <Route path="/test/{documentId}" page={ParamPage} name="param" />
+      </Set>
+    </Router>
+  )
+
+  act(() => navigate('/test/1'))
+  render(<TestRouter />)
+})
