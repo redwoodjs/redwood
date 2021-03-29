@@ -483,3 +483,29 @@ test('params should never be an empty object', async (done) => {
   render(<TestRouter />)
   act(() => navigate(routes.param({ documentId: '1' })))
 })
+
+test('params should never be an empoty object in Set', async (done) => {
+  const ParamPage = () => {
+    return null
+  }
+
+  const SetWithUseParams = ({ children }) => {
+    const params = useParams()
+    params //?
+    expect(params).not.toEqual({})
+    done()
+    return children
+  }
+
+  const TestRouter = () => (
+    // @ts-expect-error - Meh.
+    <Router useAuth={window.__REDWOOD__USE_AUTH}>
+      <Set wrap={SetWithUseParams}>
+        <Route path="/test/{documentId}" page={ParamPage} name="param" />
+      </Set>
+    </Router>
+  )
+
+  render(<TestRouter />)
+  act(() => navigate(routes.param({ documentId: '1' })))
+})
