@@ -465,10 +465,16 @@ test('renders first matching route only', async () => {
   expect(screen.queryByText(/param/)).not.toBeInTheDocument()
 })
 
-test('params should never be undefined', async (done) => {
+test.only('params should never be undefined', async (done) => {
   const ParamPage = () => {
+    // 1st render params: {}
+    // 2nd render params: { documentId: '1' }
     const params = useParams()
-    expect(params).not.toEqual({})
+
+    console.log(params)
+    // Note: Adding this expectation will not fail, and not cause the 2nd
+    // render to appear.
+    // expect(params).not.toEqual({})
     done()
     return null
   }
