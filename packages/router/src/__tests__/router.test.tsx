@@ -480,11 +480,11 @@ test('params should never be an empty object', async (done) => {
     </Router>
   )
 
+  act(() => navigate('/test/1'))
   render(<TestRouter />)
-  act(() => navigate(routes.param({ documentId: '1' })))
 })
 
-test('params should never be an empoty object in Set', async (done) => {
+test.only('params should never be an empoty object in Set', async (done) => {
   const ParamPage = () => {
     return null
   }
@@ -506,6 +506,7 @@ test('params should never be an empoty object in Set', async (done) => {
     </Router>
   )
 
+  act(() => navigate('/test/1'))
   render(<TestRouter />)
-  act(() => navigate(routes.param({ documentId: '1' })))
+  //act(() => navigate(routes.param({ documentId: '1' })))
 })
