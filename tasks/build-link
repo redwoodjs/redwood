@@ -4,17 +4,26 @@
 const fs = require('fs')
 const path = require('path')
 
-const esbuild = require('esbuild')
+const chokidar = require('chokidar')
 const execa = require('execa')
 const { glob } = require('glob')
+const _ = require('lodash')
 const packlist = require('npm-packlist')
 const yargs = require('yargs')
 
-const { dest } = yargs.parse(process.argv)
+const args = yargs
+  .option('watch', { default: false, type: 'boolean', alias: 'w' })
+  .option('dest', { required: true, type: 'string', alias: 'd' })
+  .command('build-link')
+  .example('build-link --dest /tmp/redwood-app/packages')
+  .help()
+  .strict().argv
+
+const { dest, watch } = args
 
 const CURRENT_DIR = process.cwd()
 const pkgJson = require(path.join(CURRENT_DIR, 'package.json'))
-const OUT_DIR = path.join(dest, `/${pkgJson.name.replace('/', '-')}`)
+const OUT_DIR = path.join(dest, `/${pkgJson.name.replace('@redwoodjs/', '')}`)
 
 const srcFiles = glob
   .sync('src/**/*.{ts,js,tsx,jsx,json}', {
@@ -28,34 +37,25 @@ const srcFiles = glob
   })
   .map((filePath) => `./${filePath}`)
 
-// console.log('xxx src files ->')
-// console.log(srcFiles)
-
-esbuild
-  .build({
-    absWorkingDir: CURRENT_DIR,
-    entryPoints: srcFiles,
-    platform: 'node',
-    target: 'node12.21', // AWS Lambdas support NodeJS 12.x, (14.x also supported, but Netlify?)
-    format: 'cjs',
-    bundle: false, // Create a single file, not ideal, but plugins do not work otherwise.
-    outdir: `${OUT_DIR}/dist`,
-    sourcemap: 'external',
-    loader: {
-      '.js': 'jsx',
-    },
-  })
-  .then(() => {
-    packlist({ path: CURRENT_DIR })
-      .then((files) => files.filter((fileName) => !fileName.match('dist/'))) //ignore dist
-      // .then((files) => {
-      //   return files.map((filePath) => path.join(CURRENT_DIR, `./${filePath}`))
-      // })
-      .then((files) => {
-        files.forEach((file) => {
-          copyToDest(file, OUT_DIR)
-        })
+const buildAndCopy = () =>
+  execa('yarn build', {
+    shell: true,
+    stdio: 'inherit',
+    cleanup: true,
+    cwd: CURRENT_DIR,
+  }).then(() => {
+    if ('bin' in pkgJson) {
+      // Chmod if package has bins
+      execa('yarn fix:permissions', {
+        cwd: CURRENT_DIR,
       })
+    }
+    return packlist({ path: CURRENT_DIR }).then((files) => {
+      files.forEach((file) => {
+        copyToDest(file, OUT_DIR)
+      })
+      return files
+    })
   })
 
 // Creates folders where required, before copying
@@ -69,4 +69,36 @@ const copyToDest = (src, dest) => {
   }
 
   fs.copyFileSync(src, path.join(dirName, fileName))
+}
+
+// Assigned if watch is true
+let watchHandle
+
+process.on('SIGINT', () => {
+  watchHandle?.cancel()
+})
+
+// @Note:
+// --watch flag starts the watcher, but won't build until change detected
+if (watch) {
+  // Start watcher
+  packlist({ path: CURRENT_DIR }).then((files) => {
+    const filesToWatch = [
+      ...srcFiles,
+      ...files.filter((fileName) => !fileName.match('dist/')),
+    ]
+
+    watchHandle = chokidar
+      .watch(filesToWatch, {
+        persistent: true,
+      })
+      .on(
+        'change',
+        _.debounce(() => {
+          buildAndCopy()
+        }, 500)
+      )
+  })
+} else {
+  buildAndCopy()
 }

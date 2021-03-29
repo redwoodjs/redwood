@@ -20,5 +20,9 @@
     "eslint-plugin-react-hooks": "^4.1.0",
     "prettier": "^2.1.1"
   },
+  "scripts": {
+    "build:link": "../../tasks/build-link",
+    "build": "echo 'Nothing to build..'"
+  },
   "gitHead": "c235e7d7186e5e258764699c0e0e1d5cc0fdd0b5"
 }

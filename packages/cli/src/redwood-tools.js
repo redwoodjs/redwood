@@ -81,7 +81,7 @@ export const fixProjectBinaries = (PROJECT_PATH) => {
     })
 }
 
-export const copyFiles = async (src, dest, { skipChmod, silent } = {}) => {
+export const copyFiles = async (src, dest) => {
   // TODO: Figure out if we need to only run based on certain events.
 
   src = ensurePosixPath(src)
@@ -96,14 +96,12 @@ export const copyFiles = async (src, dest, { skipChmod, silent } = {}) => {
     ],
     {
       shell: true,
-      stdio: silent ? 'ignore' : 'inherit',
+      stdio: 'inherit',
       cleanup: true,
     }
   )
   // when rsync is run modify the permission to make binaries executable.
-  if (!skipChmod) {
-    fixProjectBinaries(getPaths().base)
-  }
+  fixProjectBinaries(getPaths().base)
 }
 
 const rwtCopy = ({ RW_PATH = process.env.RW_PATH }) => {
@@ -162,19 +160,22 @@ const rwtLink = async (yargs) => {
     `Copying your local Redwood build from ${c.info(frameworkPackagesPath)} \n`
   )
 
-  fs.mkdirSync(projectPackagesPath)
+  if (!fs.existsSync(projectPackagesPath)) {
+    fs.mkdirSync(projectPackagesPath)
+  }
 
   updateProjectWithResolutions(frameworkPackagesPath)
 
   addRedwoodFolderToGitIgnore()
 
-  // Let workspaces do the link
-  await execa('yarn build:link', [' -- -- --dest', projectPackagesPath], {
-    shell: true,
-    stdio: 'inherit',
-    cleanup: true,
-    cwd: frameworkPath,
-  })
+  if (clean) {
+    await execa('yarn build:clean', {
+      shell: true,
+      stdio: 'inherit',
+      cleanup: true,
+      cwd: frameworkPath,
+    })
+  }
 
   // Unlink framework repo, when process cancelled
   process.on('SIGINT', () => {
@@ -194,6 +195,13 @@ const rwtLink = async (yargs) => {
   // Delete existing redwood folders in node_modules
   rimraf.sync(path.join(getPaths().base, 'node_modules/@redwoodjs/'))
 
+  await execa('yarn build:link', ['-- --', '--dest', projectPackagesPath], {
+    shell: true,
+    stdio: 'inherit',
+    cleanup: true,
+    cwd: frameworkPath,
+  })
+
   // Let workspaces do the link
   await execa('yarn install', ['--pure-lockfile'], {
     shell: true,
@@ -206,7 +214,7 @@ const rwtLink = async (yargs) => {
 
   const message = `
   ${c.bold('🚀 Go Forth and Contribute!')}\n
-  🏗  Building your local redwood repo..\n
+  🔗  Your project is linked!\n
   Contributing doc: ${c.underline('https://redwoodjs.com/docs/contributing')}
   `
   console.log(
@@ -216,6 +224,20 @@ const rwtLink = async (yargs) => {
       borderColour: 'gray',
     })
   )
+
+  if (watch) {
+    // Restart build:link scripts in watchmode
+    execa(
+      'yarn build:link',
+      ['-- --', '--dest', projectPackagesPath, '--watch'],
+      {
+        shell: true,
+        stdio: 'inherit',
+        cleanup: true,
+        cwd: frameworkPath,
+      }
+    )
+  }
 }
 
 // This should be synchronous
