@@ -10,7 +10,6 @@ export interface ParamsContextProps {
 export const ParamsContext = createNamedContext<ParamsContextProps>('Params')
 
 export const ParamsProvider: React.FC = ({ children }) => {
-  // TODO: Populate the params.
   const [params, setParams] = useState<Record<string, string> | undefined>()
 
   return (
