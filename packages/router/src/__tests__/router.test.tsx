@@ -465,7 +465,7 @@ test('renders first matching route only', async () => {
   expect(screen.queryByText(/param/)).not.toBeInTheDocument()
 })
 
-test('params should never be undefined', async (done) => {
+test('params should never be an empty object', async (done) => {
   const ParamPage = () => {
     const params = useParams()
     expect(params).not.toEqual({})
