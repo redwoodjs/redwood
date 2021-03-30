@@ -50,8 +50,6 @@ export class PageLoader extends React.Component<Props> {
     slowModuleImport: false,
   }
 
-  static contextType = ParamsContext
-
   loadingTimeout?: number = undefined
 
   propsChanged = (p1: Props, p2: Props) => {
