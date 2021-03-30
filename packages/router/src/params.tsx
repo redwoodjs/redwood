@@ -35,8 +35,8 @@ export const ParamsProvider: React.FC = ({ children }) => {
     <ParamsContext.Provider
       value={{
         params: {
-          ...searchParams,
           ...pathParams,
+          ...searchParams,
         },
       }}
     >
