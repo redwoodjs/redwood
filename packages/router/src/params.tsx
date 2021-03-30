@@ -26,7 +26,7 @@ export const ParamsProvider: React.FC = ({ children }) => {
 
       if (match) {
         params = {
-          ...params,
+          ...searchParams,
           ...pathParams,
         }
       }
