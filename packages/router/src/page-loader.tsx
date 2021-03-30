@@ -2,12 +2,7 @@ import React, { useContext } from 'react'
 
 import isEqual from 'lodash.isequal'
 
-import {
-  createNamedContext,
-  ParamsContext,
-  Spec,
-  getAnnouncement,
-} from './internal'
+import { createNamedContext, Spec, getAnnouncement } from './internal'
 
 export interface PageLoadingContextInterface {
   loading: boolean
@@ -49,8 +44,6 @@ export class PageLoader extends React.Component<Props> {
     pageName: undefined,
     slowModuleImport: false,
   }
-
-  static contextType = ParamsContext
 
   loadingTimeout?: number = undefined
 
@@ -103,6 +96,10 @@ export class PageLoader extends React.Component<Props> {
     }
   }
 
+  componentWillUnmount() {
+    this.setState = () => {} // Prevent updating state after component has been unmounted.
+  }
+
   clearLoadingTimeout = () => {
     if (this.loadingTimeout) {
       clearTimeout(this.loadingTimeout)
@@ -127,8 +124,6 @@ export class PageLoader extends React.Component<Props> {
 
     // Remove the timeout because the page has loaded.
     this.clearLoadingTimeout()
-
-    this.context.setParams(props.params)
 
     this.setState({
       pageName: name,
