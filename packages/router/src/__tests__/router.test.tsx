@@ -509,7 +509,7 @@ test('params should never be an empty object in Set', async (done) => {
   render(<TestRouter />)
 })
 
-test.only('params should never be an empty object in Set', async () => {
+test('params should never be an empty object in Set', async () => {
   const ParamPage = () => {
     const { documentId } = useParams()
     return 'documentId: ' + documentId
