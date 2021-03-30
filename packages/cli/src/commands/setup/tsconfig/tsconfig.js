@@ -1,9 +1,6 @@
-import fs from 'fs'
-import path from 'path'
-
 import chalk from 'chalk'
 import Listr from 'listr'
-
+import path from 'path'
 import {
   getInstalledRedwoodVersion,
   getPaths,
