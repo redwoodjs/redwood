@@ -236,11 +236,10 @@ export const saveRemoteFileToDisk = (
     throw new Error(`${localPath} already exists.`)
   }
 
-  const file = fs.createWriteStream(localPath)
   const downloadPromise = new Promise((resolve, reject) =>
     https.get(url, (response) => {
       if (response.statusCode === 200) {
-        response.pipe(file)
+        response.pipe(fs.createWriteStream(localPath))
         resolve()
       } else {
         reject(
