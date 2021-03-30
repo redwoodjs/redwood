@@ -11,6 +11,9 @@ interface PluginOptions {
   useStaticImports?: boolean
 }
 
+const RouteParameterTypeParser =
+  'type ParseRouteParameters<Route> = Route extends `${string}/{${infer Param}:${string}}/${infer Rest}` ? { [Entry in Param | keyof ParseRouteParameters<`/${Rest}`>]: string } : Route extends `${string}/{${infer Param}:${string}}` ? { [Entry in Param]: string } : Route extends `${string}/{${infer Param}}` ? { [Entry in Param]: string } : Record<string, string>'
+
 export default function (
   { types: t }: { types: typeof types },
   { project, useStaticImports = false }: PluginOptions
@@ -61,7 +64,10 @@ export default function (
           const availableRoutes = project
             .getRouter()
             .routes.filter((r) => !r.isNotFound)
-            .map((r) => `${r.name}: () => "${r.path}"`)
+            .map(
+              (r) =>
+                `${r.name}: (params?: ParseRouteParameters<"${r.path}">) => "${r.path}"`
+            )
 
           const pageImports = pages.map(
             (page) => `import type ${page.const}Type from '${page.importPath}'`
@@ -71,6 +77,10 @@ export default function (
           )
 
           const typeDefContent = `
+            import '@redwoodjs/router'
+
+            ${RouteParameterTypeParser}
+
             declare module '@redwoodjs/router' {
               interface AvailableRoutes {
                 ${availableRoutes.join('\n    ')}

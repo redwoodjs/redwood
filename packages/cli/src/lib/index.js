@@ -1,4 +1,5 @@
 import fs from 'fs'
+import https from 'https'
 import path from 'path'
 
 import * as babel from '@babel/core'
@@ -224,6 +225,42 @@ export const writeFile = (
   fs.mkdirSync(targetDir, { recursive: true })
   fs.writeFileSync(target, contents)
   task.title = `Successfully wrote file \`./${path.relative(base, target)}\``
+}
+
+export const saveRemoteFileToDisk = (
+  url,
+  localPath,
+  { overwriteExisting = false } = {}
+) => {
+  if (!overwriteExisting && fs.existsSync(localPath)) {
+    throw new Error(`${localPath} already exists.`)
+  }
+
+  const file = fs.createWriteStream(localPath)
+  const downloadPromise = new Promise((resolve, reject) =>
+    https.get(url, (response) => {
+      if (response.statusCode === 200) {
+        response.pipe(file)
+        resolve()
+      } else {
+        reject(
+          new Error(`${url} responded with status code ${response.statusCode}`)
+        )
+      }
+    })
+  )
+
+  return downloadPromise
+}
+
+export const getInstalledRedwoodVersion = () => {
+  try {
+    const packageJson = require('../../package.json')
+    return packageJson.version
+  } catch (e) {
+    console.error(c.error('Could not find installed redwood version'))
+    process.exit(1)
+  }
 }
 
 export const bytes = (contents) => Buffer.byteLength(contents, 'utf8')
