@@ -509,6 +509,37 @@ test('params should never be an empty object in Set', async (done) => {
   render(<TestRouter />)
 })
 
+test.only('params should never be an empty object in Set', async () => {
+  const ParamPage = () => {
+    const { documentId } = useParams()
+    return 'documentId: ' + documentId
+  }
+
+  const SetWithUseParams = ({ children }) => {
+    const params = useParams()
+    // 1st run: { documentId: '1' }
+    // 2nd run: {}
+    // 3rd run: { documentId: '2' }
+    expect(params).not.toEqual({})
+    return children
+  }
+
+  const TestRouter = () => (
+    // @ts-expect-error - Meh.
+    <Router useAuth={window.__REDWOOD__USE_AUTH}>
+      <Set wrap={SetWithUseParams}>
+        <Route path="/test/{documentId}" page={ParamPage} name="param" />
+      </Set>
+      <Route path="/" page={() => <Redirect to="/test/2" />} name="home" />
+    </Router>
+  )
+
+  act(() => navigate('/test/1'))
+  const screen = render(<TestRouter />)
+  act(() => navigate('/'))
+  await waitFor(() => screen.getByText(/documentId: 2/))
+})
+
 test('Set is not rendered for unauthenticated user.', async () => {
   // not authenticated.
   mockAuth(false)

@@ -103,6 +103,10 @@ export class PageLoader extends React.Component<Props> {
     }
   }
 
+  componentWillUnmount() {
+    this.setState = () => {}
+  }
+
   clearLoadingTimeout = () => {
     if (this.loadingTimeout) {
       clearTimeout(this.loadingTimeout)
@@ -127,8 +131,6 @@ export class PageLoader extends React.Component<Props> {
 
     // Remove the timeout because the page has loaded.
     this.clearLoadingTimeout()
-
-    this.context.setParams(props.params)
 
     this.setState({
       pageName: name,

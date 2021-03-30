@@ -1,13 +1,12 @@
-import React, { useState, useContext } from 'react'
+import React, { useContext } from 'react'
 
-import { useLocation } from 'src/location'
-import { useRouterState } from 'src/router-context'
-
-import { createNamedContext, matchPath, parseSearch } from './internal'
+import { parseSearch, createNamedContext } from './internal'
+import { useLocation } from './location'
+import { useRouterState } from './router-context'
+import { matchPath } from './util'
 
 export interface ParamsContextProps {
   params: Record<string, string>
-  setParams: (newParams: Record<string, string>) => void
 }
 
 export const ParamsContext = createNamedContext<ParamsContextProps>('Params')
@@ -16,7 +15,7 @@ export const ParamsProvider: React.FC = ({ children }) => {
   const { routes, paramTypes } = useRouterState()
   const location = useLocation()
 
-  let initialParams = parseSearch(location.search)
+  let routeParams = parseSearch(location.search)
 
   for (const route of routes) {
     if (route.path) {
@@ -27,18 +26,16 @@ export const ParamsProvider: React.FC = ({ children }) => {
       )
 
       if (match) {
-        initialParams = {
-          ...initialParams,
+        routeParams = {
+          ...routeParams,
           ...params,
         }
       }
     }
   }
 
-  const [params, setParams] = useState<Record<string, string>>(initialParams)
-
   return (
-    <ParamsContext.Provider value={{ params, setParams }}>
+    <ParamsContext.Provider value={{ params: routeParams }}>
       {children}
     </ParamsContext.Provider>
   )
