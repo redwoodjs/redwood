@@ -1,9 +1,8 @@
 import React, { useContext } from 'react'
 
-import { parseSearch, createNamedContext } from './internal'
+import { createNamedContext, matchPath, parseSearch } from './internal'
 import { useLocation } from './location'
 import { useRouterState } from './router-context'
-import { matchPath } from './util'
 
 export interface ParamsContextProps {
   params: Record<string, string>
