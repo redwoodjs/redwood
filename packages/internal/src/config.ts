@@ -30,7 +30,8 @@ interface BrowserTargetConfig {
   // TODO: apiProxyHost: string
   apiProxyPort: number
   apiProxyPath: string
-  fastRefresh: boolean
+  experimentalFastRefresh?: boolean
+  experiemntalPrerender?: boolean
   a11y: boolean
 }
 
@@ -52,7 +53,7 @@ const DEFAULT_CONFIG: Config = {
     target: TargetEnum.BROWSER,
     apiProxyPath: '/.netlify/functions',
     apiProxyPort: 8911,
-    fastRefresh: true,
+    experimentalFastRefresh: false,
     a11y: true,
   },
   api: {

@@ -1,4 +1,4 @@
-import React, { useContext, forwardRef } from 'react'
+import React, { useContext, useEffect, forwardRef } from 'react'
 
 import pascalcase from 'pascalcase'
 import {
@@ -82,7 +82,7 @@ const inputTagProps = <T extends InputTagProps>(
   const contextError = fieldErrorsContext[props.name]
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  React.useEffect(() => {
+  useEffect(() => {
     if (contextError) {
       setError(props.name, { type: 'server', message: contextError })
     }
@@ -233,7 +233,7 @@ const TextAreaField = forwardRef<
   const { register } = useFormContext()
   const { setCoercion } = useCoercion()
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (process.env.NODE_ENV !== 'production' && props.dataType !== undefined) {
       console.warn(
         'Using the "dataType" prop on form input fields is deprecated. Use "transformValue" instead.'
@@ -271,15 +271,6 @@ const SelectField = forwardRef<
   ValidatableFieldProps & React.SelectHTMLAttributes<HTMLSelectElement>
 >((props, ref) => {
   const { register } = useFormContext()
-  const { setCoercion } = useCoercion()
-
-  React.useEffect(() => {
-    setCoercion({
-      name: props.name,
-      transformValue: props.transformValue,
-    })
-  }, [setCoercion, props.name, props.transformValue])
-
   const tagProps = inputTagProps(props)
 
   return (
