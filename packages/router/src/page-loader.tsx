@@ -2,12 +2,7 @@ import React, { useContext } from 'react'
 
 import isEqual from 'lodash.isequal'
 
-import {
-  createNamedContext,
-  ParamsContext,
-  Spec,
-  getAnnouncement,
-} from './internal'
+import { createNamedContext, Spec, getAnnouncement } from './internal'
 
 export interface PageLoadingContextInterface {
   loading: boolean
