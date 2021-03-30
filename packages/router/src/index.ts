@@ -31,8 +31,8 @@ export * from './route-announcement'
  *
  * @example
  * interface AvailableRoutes {
- *   home: () => "/"
- *   test: () => "/test"
+ *   home: (params?: ParseRouteParameters<"/">) => "/"
+ *   post: (params?: ParseRouteParameters<"/posts/{id:Int}">) => "/posts/{id:Int}"
  * }
  */
 // Keep this in index.ts so it can be extended with declaration merging
