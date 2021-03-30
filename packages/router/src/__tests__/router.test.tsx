@@ -518,8 +518,7 @@ test('params should never be an empty object in Set', async () => {
   const SetWithUseParams = ({ children }) => {
     const params = useParams()
     // 1st run: { documentId: '1' }
-    // 2nd run: {}
-    // 3rd run: { documentId: '2' }
+    // 2rd run: { documentId: '2' }
     expect(params).not.toEqual({})
     return children
   }
