@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/web",
-  "version": "0.28.2",
+  "version": "0.28.3",
   "files": [
     "dist",
     "apollo",
@@ -12,7 +12,7 @@
   "license": "MIT",
   "dependencies": {
     "@apollo/client": "^3.3.11",
-    "@redwoodjs/auth": "^0.28.2",
+    "@redwoodjs/auth": "^0.28.3",
     "core-js": "3.6.5",
     "graphql": "^15.3.0",
     "proptypes": "^1.1.0",
