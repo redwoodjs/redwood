@@ -104,7 +104,7 @@ export class PageLoader extends React.Component<Props> {
   }
 
   componentWillUnmount() {
-    this.setState = () => {}
+    this.setState = () => {} // Prevent updating state after component has been unmounted.
   }
 
   clearLoadingTimeout = () => {

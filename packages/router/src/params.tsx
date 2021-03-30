@@ -15,27 +15,27 @@ export const ParamsProvider: React.FC = ({ children }) => {
   const { routes, paramTypes } = useRouterState()
   const location = useLocation()
 
-  let routeParams = parseSearch(location.search)
+  let params = parseSearch(location.search)
 
   for (const route of routes) {
     if (route.path) {
-      const { match, params } = matchPath(
+      const { match, params: pathParams } = matchPath(
         route.path,
         location.pathname,
         paramTypes
       )
 
       if (match) {
-        routeParams = {
-          ...routeParams,
+        params = {
           ...params,
+          ...pathParams,
         }
       }
     }
   }
 
   return (
-    <ParamsContext.Provider value={{ params: routeParams }}>
+    <ParamsContext.Provider value={{ params }}>
       {children}
     </ParamsContext.Provider>
   )
