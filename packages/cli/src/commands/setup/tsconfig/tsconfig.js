@@ -24,7 +24,12 @@ export const builder = (yargs) => {
 }
 
 export const handler = async ({ force }) => {
-  const CRWA_TEMPLATE_URL = `https://raw.githubusercontent.com/redwoodjs/redwood/v${getInstalledRedwoodVersion()}/packages/create-redwood-app/template`
+  const installedRwVersion = getInstalledRedwoodVersion()
+  const GITHUB_VERSION_TAG = installedRwVersion.match('canary')
+    ? 'main'
+    : `v${installedRwVersion}`
+
+  const CRWA_TEMPLATE_URL = `https://raw.githubusercontent.com/redwoodjs/redwood/${GITHUB_VERSION_TAG}/packages/create-redwood-app/template`
 
   const tasks = new Listr([
     {
