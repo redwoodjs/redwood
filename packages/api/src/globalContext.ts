@@ -14,11 +14,16 @@
 
 import { AsyncLocalStorage } from 'async_hooks'
 
+import type { CurrentUser } from '@redwoodjs/auth'
+
 export interface GlobalContext {
   [key: string]: unknown
+  currentUser: CurrentUser | null
 }
 
-let GLOBAL_CONTEXT: GlobalContext = {}
+let GLOBAL_CONTEXT: GlobalContext = {
+  currentUser: null,
+}
 let PER_REQUEST_CONTEXT:
   | undefined
   | AsyncLocalStorage<Map<string, GlobalContext>> = undefined

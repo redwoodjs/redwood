@@ -8,9 +8,7 @@ import type {
 } from './authClients'
 import { createAuthClient } from './authClients'
 
-export interface CurrentUser {
-  roles?: Array<string>
-}
+import type { CurrentUser } from './index'
 
 export interface AuthContextInterface {
   /* Determining your current authentication state */
