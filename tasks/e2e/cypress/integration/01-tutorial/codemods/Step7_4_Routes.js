@@ -6,6 +6,7 @@ const Routes = () => {
   return (
     <Router>
       <Set wrap={BlogLayout}>
+        <Route path="/contact" page={ContactPage} name="contact" />
         <Route path="/blog-post/{id:Int}" page={BlogPostPage} name="blogPost" />
         <Route path="/about" page={AboutPage} name="about" prerender/>
         <Route path="/" page={HomePage} name="home" prerender/>

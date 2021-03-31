@@ -6,8 +6,9 @@ import Step1_1_Routes from './codemods/Step1_1_Routes'
 import Step2_1_PagesHome from './codemods/Step2_1_PagesHome'
 import Step2_2_PagesAbout from './codemods/Step2_2_PagesAbout'
 import Step3_1_LayoutsBlog from './codemods/Step3_1_LayoutsBlog'
-import Step3_2_PagesHome from './codemods/Step3_2_PagesHome'
-import Step3_3_PagesAbout from './codemods/Step3_3_PagesAbout'
+import Step3_2_Routes from './codemods/Step3_2_Routes'
+import Step3_3_PagesHome from './codemods/Step3_3_PagesHome'
+import Step3_4_PagesAbout from './codemods/Step3_4_PagesAbout'
 import Step4_1_DbSchema from './codemods/Step4_1_DbSchema'
 import Step5_1_ComponentsCellBlogPost from './codemods/Step5_1_ComponentsCellBlogPost'
 import Step5_2_ComponentsCellBlogPostTest from './codemods/Step5_2_ComponentsCellBlogPostTest'
@@ -23,6 +24,7 @@ import Step6_5_BlogPostsCellMock from './codemods/Step6_5_BlogPostsCellMock'
 import Step7_1_BlogLayout from './codemods/Step7_1_BlogLayout'
 import Step7_2_ContactPage from './codemods/Step7_2_ContactPage'
 import Step7_3_Css from './codemods/Step7_3_Css'
+import Step7_4_Routes from './codemods/Step7_4_Routes'
 
 const BASE_DIR = Cypress.env('RW_PATH')
 
@@ -67,16 +69,17 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       path.join(BASE_DIR, 'web/src/layouts/BlogLayout/BlogLayout.js'),
       Step3_1_LayoutsBlog
     )
+    cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step3_2_Routes)
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/pages/HomePage/HomePage.js'),
-      Step3_2_PagesHome
+      Step3_3_PagesHome
     )
     cy.contains('Redwood Blog').click()
     cy.get('main').should('contain', 'Home')
 
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/pages/AboutPage/AboutPage.js'),
-      Step3_3_PagesAbout
+      Step3_4_PagesAbout
     )
     cy.contains('About').click()
     cy.get('p').should(
@@ -234,6 +237,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       Step7_2_ContactPage
     )
     cy.writeFile(path.join(BASE_DIR, 'web/src/index.css'), Step7_3_Css)
+    cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step7_4_Routes)
 
     cy.contains('Contact').click()
     cy.contains('Save').click()
