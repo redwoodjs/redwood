@@ -1,13 +1,21 @@
-/*
+/**
+ *
+ * Based on Stripe's secure webhook implementation
+ * @see https://stripe.com/docs/webhooks/signatures
+ *
+ * And GitHub's webhook payload validation
+ * @see https://docs.github.com/en/developers/webhooks-and-events/securing-your-webhooks
+ */
 
-Based on Stripe's secure webhook implementation
-See: https://stripe.com/docs/webhooks/signatures
-
-*/
-
-import { createHmac } from 'crypto'
+import { createHmac, timingSafeEqual } from 'crypto'
 
 import type { APIGatewayProxyEvent } from 'aws-lambda'
+
+// TODO
+export enum WebhookVerificationMethod {
+  'sha256',
+  'ts',
+}
 
 /**
  * @const {string}
@@ -32,7 +40,7 @@ const WEBHOOK_SECRET = process.env['WEBHOOK_SECRET'] ?? ''
 /**
  * @const {string}
  */
-export const WEBHOOK_SIGNTAURE_HEADER = 'RW-WEBHOOK-SIGNATURE'
+export const WEBHOOK_SIGNATURE_HEADER = 'RW-WEBHOOK-SIGNATURE'
 
 /**
  * VerifyOptions
@@ -97,7 +105,7 @@ const getHmac = ({ secret }: { secret: string }) => {
  * Extracts signature from Lambda Event.
  *
  * @param {APIGatewayProxyEvent} event - The event that incudes the request details, like headers
- * @return {string} - The header found in WEBHOOK_SIGNTAURE_HEADER
+ * @return {string} - The header found in WEBHOOK_SIGNATURE_HEADER
  *
  * @example
  *
@@ -108,7 +116,8 @@ const signatureFromEvent = ({
 }: {
   event: APIGatewayProxyEvent
 }): string => {
-  return event?.headers?.[WEBHOOK_SIGNTAURE_HEADER.toLocaleLowerCase()]
+  const header = WEBHOOK_SIGNATURE_HEADER.toLocaleLowerCase()
+  return event.headers[header] as string
 }
 
 /*
@@ -240,4 +249,34 @@ export const verifySignature = ({
   }
 
   throw new WebhookVerificationError(ERROR_MESSAGE)
+}
+
+interface webhookVerificationOptions {
+  signature: string
+  secret: string
+  payload: string
+}
+
+export const verifyWebhookSignature = ({
+  signature,
+  secret,
+  payload,
+}: webhookVerificationOptions): boolean => {
+  try {
+    const algorithm = signature.split('=')[0]
+    const webhookSignature = Buffer.from(signature || '', 'utf8')
+    const hmac = createHmac(algorithm, secret)
+    const digest = Buffer.from(
+      algorithm + '=' + hmac.update(payload).digest('hex'),
+      'utf8'
+    )
+
+    const verified =
+      webhookSignature.length !== digest.length ||
+      !timingSafeEqual(digest, webhookSignature)
+
+    return verified
+  } catch (error) {
+    throw new Error(`Unable to verify webhook signature: ${error.message}`)
+  }
 }
