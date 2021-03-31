@@ -14,5 +14,5 @@
     "types": ["jest"],
     "jsx": "preserve",
   },
-  "include": ["src", "../.redwood/globals"]
+  "include": ["src", "../.redwood/**/*"]
 }
