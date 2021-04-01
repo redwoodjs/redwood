@@ -57,6 +57,72 @@ they will be redirected to the route passed as the `unauthenticated` prop and th
 Redwood uses the `useAuth` hook under the hood to determine if the user is authenticated.
 Read more about authentication in redwood [here](https://redwoodjs.com/tutorial/authentication).
 
+## Sets of Routes
+
+You can group Routes into sets using the `Set` component. `Set` allows you to wrap a set of Routes in another component or array of components—usually a Context, a Layout, or both:
+
+```js
+// Routes.js
+
+import { Router, Route, Set } from '@redwoodjs/router'
+import BlogContext from 'src/contexts/BlogContext'
+import BlogLayout from 'src/layouts/BlogLayout'
+
+const Routes = () => {
+  return (
+    <Router>
+      <Set wrap={[BlogContext, BlogLayout]}>
+        <Route path="/" page={HomePage} name="home" />
+        <Route path="/about" page={AboutPage} name="about" />
+        <Route path="/contact" page={ContactPage} name="contact" />
+        <Route path="/blog-post/{id:Int}" page={BlogPostPage} name="blogPost" />
+      </Set>
+    </Router>
+  )
+}
+
+export default Routes
+```
+
+The `wrap` prop accepts a single component or an array of components. Components are rendered in the same order they're passed, so in the exmaple above, Set expands to:
+
+```js
+<BlogContext>
+  <BlogLayout>
+    <Route path="/" page={HomePage} name="home" />
+    // ...
+  </BlogLayout>
+</BlogContext>
+```
+
+Conceptually, this fits with how we think about Context and Layouts as things that wrap Pages and contain content that’s outside the scope of the Pages themselves. Crucially, since they're higher in the tree, `BlogContext` and `BlogLayout` won't rerender across Pages in the same Set.
+
+There's a lot of flexibility here. You can even nest `Sets` to great effect:
+
+```js
+// Routes.js
+
+import { Router, Route, Set, Private } from '@redwoodjs/router'
+import BlogContext from 'src/contexts/BlogContext'
+import BlogLayout from 'src/layouts/BlogLayout'
+import BlogNavLayout from 'src/layouts/BlogNavLayout'
+
+const Routes = () => {
+  return (
+    <Router>
+      <Set wrap={[BlogContext, BlogLayout]}>
+        <Route path="/" page={HomePage} name="home" />
+        <Route path="/about" page={AboutPage} name="about" />
+        <Route path="/contact" page={ContactPage} name="contact" />
+        <Set wrap={BlogNavLayout}>
+          <Route path="/blog-post/{id:Int}" page={BlogPostPage} name="blogPost" />
+        </Set>
+      </Set>
+    </Router>
+  )
+}
+```
+
 ## Link and named route functions
 
 When it comes to routing, matching URLs to Pages is only half the equation. The other half is generating links to your pages. RR makes this really simple without having to hardcode URL paths. In a Page component, you can do this (only relevant bits are shown in code samples from now on):

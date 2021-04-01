@@ -8,64 +8,41 @@ import RouteAnnouncement from '../route-announcement'
 const HomePage = () => <h1>Home Page</h1>
 
 const RouteAnnouncementPage = () => (
-  <html>
-    <head>
-      <title>title content</title>
-    </head>
-    <body>
-      <h1>RouteAnnouncement Page </h1>
-      <RouteAnnouncement visuallyHidden>
-        RouteAnnouncement content
-      </RouteAnnouncement>
-      <main>main content</main>
-    </body>
-  </html>
+  <>
+    <h1>RouteAnnouncement Page </h1>
+    <RouteAnnouncement visuallyHidden>
+      RouteAnnouncement content
+    </RouteAnnouncement>
+    <main>main content</main>
+  </>
 )
 
 const H1Page = () => (
-  <html>
-    <head>
-      <title>title content</title>
-    </head>
-    <body>
-      <h1>H1 Page</h1>
-      <main>main content</main>
-    </body>
-  </html>
+  <>
+    <h1>H1 Page</h1>
+    <main>main content</main>
+  </>
 )
 
 const NoH1Page = () => (
-  <html>
-    <head>
-      <title>title content</title>
-    </head>
-    <body>
-      <div>NoH1 Page</div>
-      <main>main content</main>
-    </body>
-  </html>
+  <>
+    <div>NoH1 Page</div>
+    <main>main content</main>
+  </>
 )
 
 const NoH1OrTitlePage = () => (
-  <html>
-    <head></head>
-    <body>
-      <div>NoH1OrTitle Page</div>
-      <main>main content</main>
-    </body>
-  </html>
+  <>
+    <div>NoH1OrTitle Page</div>
+    <main>main content</main>
+  </>
 )
 
 const EmptyH1Page = () => (
-  <html>
-    <head>
-      <title>title content</title>
-    </head>
-    <body>
-      <h1></h1>
-      <main>Empty H1 Page</main>
-    </body>
-  </html>
+  <>
+    <h1></h1>
+    <main>Empty H1 Page</main>
+  </>
 )
 
 beforeEach(() => {
@@ -124,7 +101,9 @@ test('gets the announcement in the correct order of priority', async () => {
   act(() => navigate(routes.noH1()))
   await waitFor(() => {
     screen.getByText(/NoH1 Page/i)
+    document.title = 'title content'
     expect(getAnnouncement()).toBe('title content')
+    document.title = ''
   })
 
   // navigate to noH1OrTitle.
@@ -148,6 +127,8 @@ test('getAnnouncement handles empty PageHeader', async () => {
 
   await waitFor(() => {
     screen.getByText(/Empty H1 Page/i)
+    document.title = 'title content'
     expect(getAnnouncement()).toBe('title content')
+    document.title = ''
   })
 })

@@ -4,6 +4,7 @@
     "build:types": "ttsc --build --verbose",
     "build:clean": "rimraf ./packages/**/dist",
     "build:watch": "lerna run build:watch --parallel; ttsc --build",
+    "build:link": "lerna run 'build:link' --parallel",
     "test": "lerna run test --stream -- --colors --maxWorkers=4",
     "lint": "cross-env __REDWOOD__CONFIG_PATH=packages/create-redwood-app/template eslint -c .eslintrc.js packages",
     "lint:fix": "cross-env __REDWOOD__CONFIG_PATH=packages/create-redwood-app/template eslint -c .eslintrc.js --fix packages"
@@ -41,6 +42,7 @@
     "lerna": "^3.20.2",
     "msw": "0.21.2",
     "nodemon": "^2.0.6",
+    "npm-packlist": "^2.1.5",
     "rimraf": "^3.0.2",
     "ttypescript": "^1.5.12",
     "typescript": "^4.1.3",
