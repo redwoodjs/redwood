@@ -11,14 +11,6 @@ describe('Redwood Storybook Integration', () => {
       .its('code')
       .should('eq', 0)
   })
-  // TO DO fix Storybook build command to output to public/
-  it('0.2 Serve Storybook Static Files with Dev Server', () => {
-    cy.exec(
-      `cd ${BASE_DIR}; mv web/storybook-static web/public/storybook-static`
-    )
-      .its('code')
-      .should('eq', 0)
-  })
 
   it('1. BlogPost Component', () => {
     cy.visit(
