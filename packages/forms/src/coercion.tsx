@@ -26,7 +26,8 @@ const COERCION_FUNCTIONS = {
   Float: (value: string) => parseFloat(value),
   Int: (value: string) => parseInt(value, 10),
   Json: (value: string) => JSON.parse(value),
-  DateTime: (value: string) => new Date(value).toISOString(),
+  DateTime: (value: string) =>
+    value.length ? new Date(value).toISOString() : null,
 }
 
 export type TDefinedCoercionFunctions = keyof typeof COERCION_FUNCTIONS
