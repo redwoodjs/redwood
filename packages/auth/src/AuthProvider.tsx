@@ -124,7 +124,10 @@ export class AuthProvider extends React.Component<
       `${global.__REDWOOD__API_PROXY_PATH}/graphql`,
       {
         method: 'POST',
-        headers: {
+        headers: token === null ? {
+          'content-type': 'application/json',
+          'auth-provider': this.rwClient.type,
+        } : {
           'content-type': 'application/json',
           'auth-provider': this.rwClient.type,
           authorization: `Bearer ${token}`,

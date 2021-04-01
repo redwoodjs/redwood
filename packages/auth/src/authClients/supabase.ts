@@ -67,7 +67,11 @@ export const supabase = (client: Supabase): AuthClientSupabase => {
       return await client.auth.signOut()
     },
     signup: async ({ email, password }) => {
-      return await client.auth.signUp({ email, password })
+      return await client.auth.signUp({ email, password }) as {
+        data: Session | null
+        user: User | null
+        error: Error | null
+      }
     },
 
     getToken: async () => {

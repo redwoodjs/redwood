@@ -18,7 +18,6 @@
     "morgan": "^1.10.0",
     "qs": "^6.9.3",
     "require-dir": "^1.2.0",
-    "supertokens-node": "github:supertokens/supertokens-node#redwood",
     "yargs": "^16.0.3",
     "youch": "^2.1.1",
     "youch-terminal": "^1.0.1"

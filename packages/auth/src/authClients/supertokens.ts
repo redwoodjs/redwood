@@ -1,7 +1,6 @@
-import sessions from "supertokens-auth-react/recipe/session";
+import Sessions from "supertokens-auth-react/recipe/session";
 
-// TODO: remove use of emailpassword like this
-import emailpassowrd from "supertokens-auth-react/recipe/emailpassword";
+import AuthRecipe from "supertokens-auth-react/lib/build/recipe/authRecipeModule";
 
 import { AuthClient } from './index';
 
@@ -11,25 +10,28 @@ export interface SuperTokensUser {
 }
 
 
-export const supertokens = (): AuthClient => {
+export const supertokens = <T, S, R, N>(client: {
+  authRecipe: AuthRecipe<T, S, R, N>,
+  sessions: typeof Sessions
+}): AuthClient => {
   return {
     type: 'supertokens',
     client: undefined,
     // TODO: use lib's login with redirect function (need to create one)
-    login: async () => window.location.href = "/auth",
+    login: async () => client.authRecipe.redirectToAuth("signin"),
 
-    logout: () => emailpassowrd.signOut(),
+    logout: () => client.authRecipe.signOut(),
 
     // TODO: specifically go to sign up
-    signup: async () => window.location.href = "/auth",
+    signup: async () => client.authRecipe.redirectToAuth("signup"),
 
-    getToken: async () => sessions.doesSessionExist() ? "" : null,
+    getToken: async () => null,
 
     getUserMetadata: async (): Promise<SuperTokensUser | null> => {
-      if (sessions.doesSessionExist()) {
+      if (client.sessions.doesSessionExist()) {
         return {
-          userId: sessions.getUserId(),
-          jwtPayload: await sessions.getJWTPayloadSecurely()
+          userId: client.sessions.getUserId(),
+          jwtPayload: await client.sessions.getJWTPayloadSecurely()
         }
       } else {
         return null;
