@@ -15,7 +15,7 @@ import { PrivateContextProvider, usePrivate } from './private-context'
 import { RouteNameProvider, useRouteName } from './RouteNameContext'
 import {
   RouterContextProvider,
-  RouterState,
+  RouterContextProviderProps,
   useRouterState,
 } from './router-context'
 import { SplashPage } from './splash-page'
@@ -177,7 +177,7 @@ function isRoute(
   return isReactElement(node) && node.type === Route
 }
 
-interface RouterProps extends RouterState {}
+interface RouterProps extends RouterContextProviderProps {}
 
 const Router: React.FC<RouterProps> = ({
   useAuth,
