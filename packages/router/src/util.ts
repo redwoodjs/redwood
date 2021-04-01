@@ -36,11 +36,11 @@ const coreParamTypes = {
     constraint: /\d+/,
     transform: Number,
   },
-  float: {
+  Float: {
     constraint: /[+-]?[0-9]*[.]?[0-9]+/,
     transform: Number,
   },
-  boolean: {
+  Boolean: {
     constraint: /true$|false$/,
     transform: (boolAsString: string) => boolAsString === 'true',
   },

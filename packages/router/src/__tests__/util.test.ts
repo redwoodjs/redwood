@@ -39,15 +39,15 @@ describe('matchPath', () => {
     })
   })
 
-  it('transforms a param for boolean', () => {
-    expect(matchPath('/signedUp/{status:boolean}', '/signedUp/true')).toEqual({
+  it('transforms a param for Boolean', () => {
+    expect(matchPath('/signedUp/{status:Boolean}', '/signedUp/true')).toEqual({
       match: true,
       params: {
         status: true,
       },
     })
 
-    expect(matchPath('/signedUp/{status:boolean}', '/signedUp/false')).toEqual({
+    expect(matchPath('/signedUp/{status:Boolean}', '/signedUp/false')).toEqual({
       match: true,
       params: {
         status: false,
@@ -55,7 +55,7 @@ describe('matchPath', () => {
     })
 
     expect(
-      matchPath('/signedUp/{status:boolean}', '/signedUp/somethingElse')
+      matchPath('/signedUp/{status:Boolean}', '/signedUp/somethingElse')
     ).toEqual({
       match: false,
     })
@@ -63,7 +63,7 @@ describe('matchPath', () => {
 
   it('transforms a param for floats', () => {
     expect(
-      matchPath('/version/{floatyMcFloat:float}', '/version/1.58')
+      matchPath('/version/{floatyMcFloat:Float}', '/version/1.58')
     ).toEqual({
       match: true,
       params: {
@@ -71,7 +71,7 @@ describe('matchPath', () => {
       },
     })
 
-    expect(matchPath('/version/{floatyMcFloat:float}', '/version/626')).toEqual(
+    expect(matchPath('/version/{floatyMcFloat:Float}', '/version/626')).toEqual(
       {
         match: true,
         params: {
@@ -81,7 +81,7 @@ describe('matchPath', () => {
     )
 
     expect(
-      matchPath('/version/{floatyMcFloat:float}', '/version/+0.92')
+      matchPath('/version/{floatyMcFloat:Float}', '/version/+0.92')
     ).toEqual({
       match: true,
       params: {
@@ -90,7 +90,7 @@ describe('matchPath', () => {
     })
 
     expect(
-      matchPath('/version/{floatyMcFloat:float}', '/version/-5.5')
+      matchPath('/version/{floatyMcFloat:Float}', '/version/-5.5')
     ).toEqual({
       match: true,
       params: {
@@ -99,7 +99,7 @@ describe('matchPath', () => {
     })
 
     expect(
-      matchPath('/version/{floatyMcFloat:float}', '/version/noMatchMe')
+      matchPath('/version/{floatyMcFloat:Float}', '/version/noMatchMe')
     ).toEqual({
       match: false,
     })
