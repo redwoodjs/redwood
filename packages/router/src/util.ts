@@ -31,12 +31,22 @@ export interface ParamType {
 }
 
 /** Definitions of the core param types. */
-const coreParamTypes: Record<string, ParamType> = {
+const coreParamTypes = {
   Int: {
     constraint: /\d+/,
     transform: Number,
   },
+  float: {
+    constraint: /[+-]?[0-9]*[.]?[0-9]+/,
+    transform: Number,
+  },
+  boolean: {
+    constraint: /true$|false$/,
+    transform: (boolAsString: string) => boolAsString === 'true',
+  },
 }
+
+type SupportedRouterParamTypes = keyof typeof coreParamTypes
 
 /**
  * Determine if the given route is a match for the given pathname. If so,
@@ -70,7 +80,10 @@ const matchPath = (
   // Map all params from the route to their type constraint regex to create a "type-constrained route" regexp
   for (const [name, type] of routeParams) {
     let typeRegex = '[^/]+'
-    const constraint = type && allParamTypes[type].constraint
+    // Undefined constraint if not supported
+    // So leaves it as string
+    const constraint =
+      type && allParamTypes[type as SupportedRouterParamTypes]?.constraint
 
     if (constraint) {
       // Get the type
@@ -98,7 +111,7 @@ const matchPath = (
   const params = providedParams.reduce<Record<string, unknown>>(
     (acc, value, index) => {
       const [name, transformName] = routeParams[index]
-      const typeInfo = allParamTypes[transformName]
+      const typeInfo = allParamTypes[transformName as SupportedRouterParamTypes]
 
       let transformedValue: string | unknown = value
       if (typeInfo && typeof typeInfo.transform === 'function') {

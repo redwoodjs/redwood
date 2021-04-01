@@ -11,8 +11,11 @@ interface PluginOptions {
   useStaticImports?: boolean
 }
 
+// Use ' because I don't want to escape `
 const RouteParameterTypeParser =
-  'type ParseRouteParameters<Route> = Route extends `${string}/{${infer Param}:${string}}/${infer Rest}` ? { [Entry in Param | keyof ParseRouteParameters<`/${Rest}`>]: string } : Route extends `${string}/{${infer Param}:${string}}` ? { [Entry in Param]: string } : Route extends `${string}/{${infer Param}}` ? { [Entry in Param]: string } : Record<string, string>'
+  'type ParamType<constraint> = constraint extends "Int" ? number : constraint extends "Boolean" ? boolean : constraint extends "Float" ? number : string;' +
+  '\n' +
+  'type RouteParams<Route> = Route extends `${string}/{${infer Param}:${infer Constraint}}/${infer Rest}` ? { [Entry in Param | keyof RouteParams<`/${Rest}`>]: ParamType<Constraint> } : Route extends `${string}/{${infer Param}:${infer Constraint}}` ? { [Entry in Param]: ParamType<Constraint> } : Route extends `${infer Constraint}/{${infer Param}}` ? { [Entry in Param]: ParamType<Constraint> } : Record<string, string | number>'
 
 export default function (
   { types: t }: { types: typeof types },
@@ -66,7 +69,7 @@ export default function (
             .routes.filter((r) => !r.isNotFound)
             .map(
               (r) =>
-                `${r.name}: (params?: ParseRouteParameters<"${r.path}">) => "${r.path}"`
+                `${r.name}: (params?: RouteParams<"${r.path}"> & QueryParams) => "${r.path}"`
             )
 
           const pageImports = pages.map(
@@ -80,6 +83,7 @@ export default function (
             import '@redwoodjs/router'
 
             ${RouteParameterTypeParser}
+            type QueryParams = Record<string | number, string | number | boolean>
 
             declare module '@redwoodjs/router' {
               interface AvailableRoutes {
