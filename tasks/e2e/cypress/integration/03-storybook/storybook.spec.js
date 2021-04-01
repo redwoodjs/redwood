@@ -4,7 +4,7 @@
 const BASE_DIR = Cypress.env('RW_PATH')
 
 describe('Redwood Storybook Integration', () => {
-  it('0.1 Build Storybook Static Files', () => {
+  it('0. Build Storybook Static Files', () => {
     cy.exec(`cd ${BASE_DIR}; yarn rw storybook --build`, {
       timeout: 50000,
     })
