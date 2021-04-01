@@ -7,7 +7,7 @@ jest.mock('jsonwebtoken', () => ({
   decode: jest.fn(),
 }))
 
-test.only('verify, and not decode, should be called in production', () => {
+test('verify, and not decode, should be called in production', () => {
   const { NODE_ENV } = process.env
   process.env.NODE_ENV = 'production'
   process.env.AUTH0_DOMAIN = 'redwoodjs.com'
