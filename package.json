@@ -4,9 +4,10 @@
     "build:types": "ttsc --build --verbose",
     "build:clean": "rimraf ./packages/**/dist",
     "build:watch": "lerna run build:watch --parallel; ttsc --build",
+    "build:link": "lerna run 'build:link' --parallel",
     "test": "lerna run test --stream -- --colors --maxWorkers=4",
-    "lint": "eslint -c .eslintrc.js packages",
-    "lint:fix": "eslint -c .eslintrc.js --fix packages"
+    "lint": "cross-env __REDWOOD__CONFIG_PATH=packages/create-redwood-app/template eslint -c .eslintrc.js packages",
+    "lint:fix": "cross-env __REDWOOD__CONFIG_PATH=packages/create-redwood-app/template eslint -c .eslintrc.js --fix packages"
   },
   "private": true,
   "license": "MIT",
@@ -41,6 +42,7 @@
     "lerna": "^3.20.2",
     "msw": "0.21.2",
     "nodemon": "^2.0.6",
+    "npm-packlist": "^2.1.5",
     "rimraf": "^3.0.2",
     "ttypescript": "^1.5.12",
     "typescript": "^4.1.3",
@@ -48,7 +50,7 @@
     "whatwg-fetch": "3.4.1"
   },
   "resolutions": {
-    "@types/react": "17.0.2",
+    "@types/react": "17.0.3",
     "prop-types": "15.7.2",
     "react-dom": "17.0.1",
     "react": "17.0.1",
