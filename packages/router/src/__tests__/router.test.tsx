@@ -31,7 +31,7 @@ function createDummyAuthContextValues(partial: Partial<AuthContextInterface>) {
   return { ...authContextValues, ...partial }
 }
 
-const useAuth = (isAuthenticated = false, loading = false) => () =>
+const mockUseAuth = (isAuthenticated = false, loading = false) => () =>
   createDummyAuthContextValues({ loading, isAuthenticated })
 
 // SETUP
@@ -60,7 +60,7 @@ test('inits routes and navigates as expected', async () => {
   }
 
   const TestRouter = () => (
-    <Router useAuth={useAuth()}>
+    <Router useAuth={mockUseAuth()}>
       <Route path="/" page={HomePage} name="home" />
       <Route path="/about" page={AboutPage} name="about" />
       <Route path="/redirect" page={RedirectPage} name="redirect" />
@@ -118,7 +118,7 @@ test('inits routes and navigates as expected', async () => {
 
 test('unauthenticated user is redirected away from private page', async () => {
   const TestRouter = () => (
-    <Router useAuth={useAuth()}>
+    <Router useAuth={mockUseAuth()}>
       <Route path="/" page={HomePage} name="home" />
       <Route path="/login" page={LoginPage} name="login" />
       <Route path="/about" page={AboutPage} name="about" />
@@ -146,7 +146,7 @@ test('unauthenticated user is redirected away from private page', async () => {
 
 test('unauthenticated user is redirected including search params', async () => {
   const TestRouter = () => (
-    <Router useAuth={useAuth()}>
+    <Router useAuth={mockUseAuth()}>
       <Route path="/" page={HomePage} name="home" />
       <Route path="/login" page={LoginPage} name="login" />
       <Private unauthenticated="login">
@@ -175,7 +175,7 @@ test('unauthenticated user is redirected including search params', async () => {
 
 test('authenticated user can access private page', async () => {
   const TestRouter = () => (
-    <Router useAuth={useAuth(true)}>
+    <Router useAuth={mockUseAuth(true)}>
       <Route path="/" page={HomePage} name="home" />
       <Private unauthenticated="home">
         <Route path="/private" page={PrivatePage} name="private" />
@@ -198,7 +198,7 @@ test('authenticated user can access private page', async () => {
 
 test('can display a loading screen whilst waiting for auth', async () => {
   const TestRouter = () => (
-    <Router useAuth={useAuth(true, true)}>
+    <Router useAuth={mockUseAuth(true, true)}>
       <Route path="/" page={HomePage} name="home" />
       <Private unauthenticated="home">
         <Route
@@ -226,7 +226,7 @@ test('can display a loading screen whilst waiting for auth', async () => {
 
 test('inits routes two private routes with a space in between and loads as expected', async () => {
   const TestRouter = () => (
-    <Router useAuth={useAuth()}>
+    <Router useAuth={mockUseAuth()}>
       <Route path="/" page={HomePage} name="home" />
       <Route path="/about" page={AboutPage} name="about" />
       <Route path="/redirect" page={RedirectPage} name="redirect" />
@@ -257,7 +257,7 @@ test('supports <Set>', async () => {
   )
 
   const TestRouter = () => (
-    <Router useAuth={useAuth()}>
+    <Router useAuth={mockUseAuth()}>
       <Set wrap={GlobalLayout}>
         <Route path="/" page={HomePage} name="home" />
         <Route path="/about" page={AboutPage} name="about" />
@@ -539,7 +539,7 @@ test('Set is not rendered for unauthenticated user.', async () => {
   }
 
   const TestRouter = () => (
-    <Router useAuth={useAuth()}>
+    <Router useAuth={mockUseAuth()}>
       <Private unauthenticated="login">
         <Set wrap={SetWithUseParams}>
           <Route path="/test/{documentId}" page={ParamPage} name="param" />
