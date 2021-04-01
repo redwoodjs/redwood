@@ -243,4 +243,26 @@ describe('Form', () => {
     expect(mockFn).toBeCalledWith({ tf: 3.14 }, expect.anything())
     spy.mockRestore()
   })
+
+  it('handles blank Date and DateTime values', async () => {
+    const mockFn = jest.fn()
+
+    render(
+      <Form onSubmit={mockFn}>
+        <DateField name="date" defaultValue="" />
+        <DatetimeLocalField name="datetime" defaultValue="" />
+        <Submit>Save</Submit>
+      </Form>
+    )
+    fireEvent.click(screen.getByText('Save'))
+
+    await waitFor(() => expect(mockFn).toHaveBeenCalledTimes(1))
+    expect(mockFn).toBeCalledWith(
+      {
+        date: null,
+        datetime: null,
+      },
+      expect.anything() // event that triggered the onSubmit call
+    )
+  })
 })
