@@ -25,7 +25,8 @@ const RouterSetContext = createContext<
   React.Dispatch<Partial<RouterState>> | undefined
 >(undefined)
 
-interface ProviderProps extends Omit<RouterState, 'useAuth' | 'routes'> {
+export interface RouterContextProviderProps
+  extends Omit<RouterState, 'useAuth' | 'routes'> {
   useAuth?: typeof useAuth
 }
 
@@ -33,7 +34,7 @@ function stateReducer(state: RouterState, newState: Partial<RouterState>) {
   return { ...state, ...newState }
 }
 
-export const RouterContextProvider: React.FC<ProviderProps> = ({
+export const RouterContextProvider: React.FC<RouterContextProviderProps> = ({
   useAuth: customUseAuth,
   paramTypes,
   pageLoadingDelay = DEFAULT_PAGE_LOADING_DELAY,
