@@ -29,7 +29,7 @@ export const builder = (yargs) => {
     .option('build-directory', {
       describe: 'Directory in web/ to store static files',
       type: 'string',
-      default: 'storybook-static',
+      default: 'public/storybook',
     })
 }
 
