@@ -12,5 +12,8 @@
     { "path": "packages/testing" },
     { "path": "packages/prerender" },
   ],
+  "compilerOptions": {
+    "skipLibCheck": true
+  },
   "files": []
 }
