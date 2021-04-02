@@ -113,6 +113,18 @@ describe('matchPath', () => {
       match: false,
     })
   })
+
+  it('handles multiple constrainted params', () => {
+    expect(
+      matchPath(
+        '/dashboard/document/{id:Int}/{version:Float}/edit/{edit:Boolean}',
+        '/dashboard/document/44/1.8/edit/false'
+      )
+    ).toEqual({
+      match: true,
+      params: { id: 44, version: 1.8, edit: false },
+    })
+  })
 })
 
 describe('validatePath', () => {
