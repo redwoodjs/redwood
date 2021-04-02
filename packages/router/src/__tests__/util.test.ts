@@ -114,7 +114,7 @@ describe('matchPath', () => {
     })
   })
 
-  it('handles multiple constrainted params', () => {
+  it('handles multiple typed params', () => {
     expect(
       matchPath(
         '/dashboard/document/{id:Int}/{version:Float}/edit/{edit:Boolean}',
