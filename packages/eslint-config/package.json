@@ -21,7 +21,6 @@
     "prettier": "^2.1.1"
   },
   "scripts": {
-
     "build": "echo 'Nothing to build..'"
   },
   "gitHead": "c235e7d7186e5e258764699c0e0e1d5cc0fdd0b5"
