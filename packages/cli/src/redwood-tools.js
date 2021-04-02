@@ -209,7 +209,7 @@ const rwtLink = async (yargs) => {
   )
 
   // Let workspaces do the link
-  await execa('yarn install', ['--pure-lockfile'], {
+  await execa('yarn install', ['--pure-lockfile', '--check-files'], {
     shell: true,
     stdio: 'inherit',
     cleanup: true,
