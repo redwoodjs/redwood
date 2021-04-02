@@ -1,4 +1,4 @@
-import React, { ReactElement, ReactNode, FunctionComponentElement } from 'react'
+import React, { ReactElement, ReactNode } from 'react'
 
 import { Redirect } from './links'
 import { useLocation } from './location'
@@ -7,19 +7,19 @@ import { isRoute } from './router'
 import { useRouterState } from './router-context'
 import { flattenAll, matchPath } from './util'
 
-interface PropsWithChildren {
+type WrapperType<WTProps> = (
+  props: WTProps & { children: ReactNode }
+) => ReactElement | null
+
+type ReduceType = ReactElement | undefined
+
+type SetProps<P> = P & {
+  wrap: WrapperType<P> | WrapperType<P>[]
   children: ReactNode
 }
 
-type WrapperType = (props: { children: any }) => ReactElement | null
-type ReduceType = FunctionComponentElement<PropsWithChildren> | undefined
-
-interface Props {
-  wrap: WrapperType | WrapperType[]
-  children: ReactNode
-}
-
-export const Set: React.FC<Props> = ({ children, wrap }) => {
+export function Set<WrapperProps>(props: SetProps<WrapperProps>) {
+  const { wrap, children, ...rest } = props
   const routerState = useRouterState()
   const location = useLocation()
   const { loading } = routerState.useAuth()
@@ -59,7 +59,10 @@ export const Set: React.FC<Props> = ({ children, wrap }) => {
       // Expand and nest the wrapped elements.
       return (
         wrappers.reduceRight<ReduceType>((acc, wrapper) => {
-          return React.createElement(wrapper, undefined, acc ? acc : children)
+          return React.createElement(wrapper, {
+            ...rest,
+            children: acc ? acc : children,
+          } as SetProps<WrapperProps>)
         }, undefined) || null
       )
     }

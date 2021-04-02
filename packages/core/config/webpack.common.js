@@ -122,7 +122,7 @@ const getStyleLoaders = (isEnvProduction) => {
 // Shared with storybook, as well as the RW app
 const getSharedPlugins = (isEnvProduction) => {
   const shouldIncludeFastRefresh =
-    redwoodConfig.web.experimentalFastRefresh && !isEnvProduction
+    redwoodConfig.web.fastRefresh !== false && !isEnvProduction
 
   return [
     isEnvProduction &&
@@ -306,9 +306,10 @@ module.exports = (webpackEnv) => {
       ],
     },
     optimization: {
+      mergeDuplicateChunks: true,
       splitChunks: {
         chunks: 'all',
-        name: 'vendors',
+        minChunks: 2,
       },
       runtimeChunk: {
         name: (entrypoint) => `runtime-${entrypoint.name}`,
