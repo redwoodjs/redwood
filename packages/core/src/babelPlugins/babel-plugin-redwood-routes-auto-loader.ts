@@ -15,7 +15,7 @@ interface PluginOptions {
 const RouteParameterTypeParser =
   'type ParamType<constraint> = constraint extends "Int" ? number : constraint extends "Boolean" ? boolean : constraint extends "Float" ? number : string;' +
   '\n' +
-  'type RouteParams<Route> = Route extends `${string}/{${infer Param}:${infer Constraint}}/${infer Rest}` ? { [Entry in Param | keyof RouteParams<`/${Rest}`>]: ParamType<Constraint> } : Route extends `${string}/{${infer Param}:${infer Constraint}}` ? { [Entry in Param]: ParamType<Constraint> } : Route extends `${infer Constraint}/{${infer Param}}` ? { [Entry in Param]: ParamType<Constraint> } : Record<string, string | number>'
+  'type RouteParams<Route> = Route extends `${string}/{${infer Param}:${infer Constraint}}/${infer Rest}` ? { [Entry in Param | keyof RouteParams<`/${Rest}`>]: ParamType<Constraint> } : Route extends `${string}/{${infer Param}:${infer Constraint}}` ? { [Entry in Param]: ParamType<Constraint> } : Route extends `${infer Constraint}/{${infer Param}}` ? { [Entry in Param]: ParamType<Constraint> } : {}'
 
 export default function (
   { types: t }: { types: typeof types },

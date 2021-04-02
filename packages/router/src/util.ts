@@ -37,11 +37,11 @@ const coreParamTypes = {
     transform: Number,
   },
   Float: {
-    constraint: /[+-]?[0-9]*[.]?[0-9]+/,
+    constraint: /[-+]?(?:\d*\.?\d+|\d+\.?\d*)(?:[eE][-+]?\d+)?/,
     transform: Number,
   },
   Boolean: {
-    constraint: /true$|false$/,
+    constraint: /true|false/,
     transform: (boolAsString: string) => boolAsString === 'true',
   },
 }
@@ -86,9 +86,8 @@ const matchPath = (
       type && allParamTypes[type as SupportedRouterParamTypes]?.constraint
 
     if (constraint) {
-      // Get the type
-      typeRegex = constraint.toString() || '/[^/]+/'
-      typeRegex = typeRegex.substring(1, typeRegex.length - 1)
+      // Get the regex as a string
+      typeRegex = constraint.source || '[^/]+'
     }
 
     typeConstrainedRoute = typeConstrainedRoute.replace(

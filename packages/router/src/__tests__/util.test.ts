@@ -61,7 +61,7 @@ describe('matchPath', () => {
     })
   })
 
-  it('transforms a param for floats', () => {
+  it('transforms a param for Floats', () => {
     expect(
       matchPath('/version/{floatyMcFloat:Float}', '/version/1.58')
     ).toEqual({
@@ -97,6 +97,15 @@ describe('matchPath', () => {
         floatyMcFloat: -5.5,
       },
     })
+
+    expect(matchPath('/version/{floatyMcFloat:Float}', '/version/4e8')).toEqual(
+      {
+        match: true,
+        params: {
+          floatyMcFloat: 4e8,
+        },
+      }
+    )
 
     expect(
       matchPath('/version/{floatyMcFloat:Float}', '/version/noMatchMe')
