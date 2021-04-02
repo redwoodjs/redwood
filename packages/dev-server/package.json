@@ -34,7 +34,6 @@
     "build": "yarn build:js",
     "prepublishOnly": "yarn cross-env NODE_ENV=production yarn build",
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
-    "build:link": "../../tasks/build-link",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build && yarn fix:permissions\"",
     "fix:permissions": "chmod +x dist/main.js"
   },

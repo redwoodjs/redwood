@@ -141,7 +141,7 @@ const rwtCopyWatch = ({ RW_PATH = process.env.RW_PATH }) => {
 
 const rwtLink = async (yargs) => {
   const RW_PATH = yargs.RW_PATH || process.env.RW_PATH
-  const { clean, watch } = yargs
+  const { clean, watch, only } = yargs
 
   if (!RW_PATH) {
     console.error(c.error('You must specify a path to your local redwood repo'))
@@ -195,15 +195,21 @@ const rwtLink = async (yargs) => {
   // Delete existing redwood folders in node_modules
   rimraf.sync(path.join(getPaths().base, 'node_modules/@redwoodjs/'))
 
-  await execa('yarn build:link', ['-- --', '--dest', projectPackagesPath], {
-    shell: true,
-    stdio: 'inherit',
-    cleanup: true,
-    cwd: frameworkPath,
-  })
+  const onlyParams = only ? ['--only', only] : []
+
+  await execa(
+    'yarn build:link',
+    ['--dest', projectPackagesPath, ...onlyParams],
+    {
+      shell: true,
+      stdio: 'inherit',
+      cleanup: true,
+      cwd: frameworkPath,
+    }
+  )
 
   // Let workspaces do the link
-  await execa('yarn install', ['--pure-lockfile'], {
+  await execa('yarn install', ['--pure-lockfile', '--check-files'], {
     shell: true,
     stdio: 'inherit',
     cleanup: true,
@@ -229,7 +235,7 @@ const rwtLink = async (yargs) => {
     // Restart build:link scripts in watchmode
     execa(
       'yarn build:link',
-      ['-- --', '--dest', projectPackagesPath, '--watch'],
+      ['--dest', projectPackagesPath, '--watch', ...onlyParams],
       {
         shell: true,
         stdio: 'inherit',
@@ -399,6 +405,11 @@ yargs
           type: 'boolean',
           description: 'Build and watch the supplied redwood repo',
           default: true,
+        })
+        .option('only', {
+          alias: 'only',
+          type: 'string',
+          description: 'Specify folder to link from RW_PATH/packages',
         })
     },
     desc: 'Run your local version of redwood in this project',
