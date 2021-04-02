@@ -195,7 +195,7 @@ const rwtLink = async (yargs) => {
   // Delete existing redwood folders in node_modules
   rimraf.sync(path.join(getPaths().base, 'node_modules/@redwoodjs/'))
 
-  await execa('yarn build:link', ['-- --', '--dest', projectPackagesPath], {
+  await execa('yarn build:link', ['--dest', projectPackagesPath], {
     shell: true,
     stdio: 'inherit',
     cleanup: true,
@@ -227,16 +227,12 @@ const rwtLink = async (yargs) => {
 
   if (watch) {
     // Restart build:link scripts in watchmode
-    execa(
-      'yarn build:link',
-      ['-- --', '--dest', projectPackagesPath, '--watch'],
-      {
-        shell: true,
-        stdio: 'inherit',
-        cleanup: true,
-        cwd: frameworkPath,
-      }
-    )
+    execa('yarn build:link', ['--dest', projectPackagesPath, '--watch'], {
+      shell: true,
+      stdio: 'inherit',
+      cleanup: true,
+      cwd: frameworkPath,
+    })
   }
 }
 
