@@ -123,11 +123,14 @@ process.on('SIGINT', () => {
 
 const runAsync = async () => {
   // STEP 1: Run build:types from root of framework
-  await buildAllTypes()
+
+  if (!only) {
+    await buildAllTypes()
+  }
   // STEP 2: Run yarn lerna run build --parallel, ignore types as they've just been built
   await build({
     packageFolderName: only,
-    types: false,
+    types: only ? true : false,
   })
 
   await copyDistFiles({
