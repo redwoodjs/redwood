@@ -50,8 +50,9 @@ export interface AuthClientSupabase extends AuthClient {
     data: Session | User | null // Deprecated
   }>
   /**
-   * Restore authentication when an OAuth or magiclink callback
-   * redirects back to site with access token and restore the session
+   * Restore Redwood authentication state when an OAuth or magiclink
+   * callback redirects back to site with access token
+   * by restoring the Supabase auth session
    *
    */
   restoreAuthState(): void
