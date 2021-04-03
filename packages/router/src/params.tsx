@@ -1,21 +1,45 @@
-import React, { useState, useContext } from 'react'
+import React, { useContext } from 'react'
 
-import { createNamedContext } from './internal'
+import { createNamedContext, matchPath, parseSearch } from './internal'
+import { useLocation } from './location'
+import { useRouterState } from './router-context'
 
 export interface ParamsContextProps {
-  params: Record<string, string> | undefined
-  setParams: (newParams: Record<string, string> | undefined) => void
+  params: Record<string, string>
 }
 
 export const ParamsContext = createNamedContext<ParamsContextProps>('Params')
 
 export const ParamsProvider: React.FC = ({ children }) => {
-  const [params, setParams] = useState<Record<string, string> | undefined>(
-    undefined
-  )
+  const { routes, paramTypes } = useRouterState()
+  const location = useLocation()
+
+  let pathParams = {}
+  const searchParams = parseSearch(location.search)
+
+  for (const route of routes) {
+    if (route.path) {
+      const { match, params } = matchPath(
+        route.path,
+        location.pathname,
+        paramTypes
+      )
+
+      if (match && typeof params !== 'undefined') {
+        pathParams = params
+      }
+    }
+  }
 
   return (
-    <ParamsContext.Provider value={{ params, setParams }}>
+    <ParamsContext.Provider
+      value={{
+        params: {
+          ...pathParams,
+          ...searchParams,
+        },
+      }}
+    >
       {children}
     </ParamsContext.Provider>
   )
@@ -28,5 +52,5 @@ export const useParams = () => {
     throw new Error('useParams must be used within a ParamsProvider')
   }
 
-  return paramsContext.params || {}
+  return paramsContext.params
 }

@@ -26,9 +26,14 @@ export const builder = (yargs) => {
       type: 'integer',
       default: 7910,
     })
+    .option('build-directory', {
+      describe: 'Directory in web/ to store static files',
+      type: 'string',
+      default: 'public/storybook',
+    })
 }
 
-export const handler = ({ open, port, build }) => {
+export const handler = ({ open, port, build, buildDirectory }) => {
   const cwd = getPaths().web.base
 
   const staticAssetsFolder = path.join(getPaths().web.base, 'public')
@@ -46,7 +51,9 @@ export const handler = ({ open, port, build }) => {
       '--config-dir ../node_modules/@redwoodjs/core/config/storybook',
       !build && `--port ${port}`,
       !build && '--no-version-updates',
-      `--static-dir "${staticAssetsFolder}"`,
+      !build && `--static-dir "${staticAssetsFolder}"`,
+      build &&
+        `--output-dir "${path.join(getPaths().web.base, buildDirectory)}"`,
       !open && '--ci',
     ].filter(Boolean),
     {

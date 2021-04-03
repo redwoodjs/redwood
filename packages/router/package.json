@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/router",
-  "version": "0.28.1",
+  "version": "0.28.4",
   "files": [
     "dist"
   ],
@@ -9,7 +9,7 @@
   "license": "MIT",
   "dependencies": {
     "@reach/skip-nav": "^0.13.2",
-    "@redwoodjs/auth": "^0.28.1",
+    "@redwoodjs/auth": "^0.28.4",
     "core-js": "3.6.5",
     "lodash.isequal": "^4.5.0"
   },
