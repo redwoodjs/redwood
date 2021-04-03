@@ -1,9 +1,6 @@
 // the lines that need to be added to App.{js,tsx}
 export const config = {
-  imports: [
-    `import firebase from 'firebase/app'`,
-    `import 'firebase/auth'`,
-  ],
+  imports: [`import firebase from 'firebase/app'`, `import 'firebase/auth'`],
   init: `const firebaseClientConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
   authDomain: process.env.FIREBASE_AUTH_DOMAIN,
