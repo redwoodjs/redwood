@@ -1,4 +1,4 @@
-import { withCell } from '@redwoodjs/web'
+import { createCell } from '@redwoodjs/web'
 export const QUERY = gql`
   query {
     posts {
@@ -22,7 +22,7 @@ export function Failure({ error }) {
 export const Success = ({ posts }) => {
   return JSON.stringify(posts, null, 2)
 }
-export default withCell({
+export default createCell({
   QUERY,
   beforeQuery,
   afterQuery,

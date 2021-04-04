@@ -12,7 +12,7 @@ export {
   useMutation,
 } from './components/GraphQLHooksProvider'
 
-export { withCell } from './components/withCellHOC'
+export { createCell } from './components/createCell'
 
 // TODO: Remove these in v.10, people can import from `@redwoodjs/web/toast`
 // deprecated

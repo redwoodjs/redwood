@@ -1,12 +1,12 @@
 import type { PluginObj, types } from '@babel/core'
 
-// This wraps a file that has a suffix of `Cell` in Redwood's `withCell` higher
+// This wraps a file that has a suffix of `Cell` in Redwood's `createCell` higher
 // order component. The HOC deals with the lifecycle methods during a GraphQL query.
 //
 // ```js
-// import { withCell } from '@redwoodjs/web'
+// import { createCell } from '@redwoodjs/web'
 // <YOUR CODE>
-// export default withCell({ QUERY, Loading, Succes, Failure, Empty, beforeQuery, afterQuery })
+// export default createCell({ QUERY, Loading, Success, Failure, Empty, beforeQuery, afterQuery })
 // ```
 
 // A cell can export the declarations below.
@@ -23,7 +23,7 @@ const EXPECTED_EXPORTS_FROM_CELL = [
 export default function ({ types: t }: { types: typeof types }): PluginObj {
   // This array will
   // - collect exports from the Cell file during ExportNamedDeclaration
-  // - collected exports will then be passed to `withCell`
+  // - collected exports will then be passed to `createCell`
   // - be cleared after Program exit to prepare for the next file
   let exportNames: string[] = []
   let hasDefaultExport = false
@@ -65,13 +65,13 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
           }
 
           // Insert at the top of the file:
-          // + import { withCell } from '@redwoodjs/web'
+          // + import { createCell } from '@redwoodjs/web'
           path.node.body.unshift(
             t.importDeclaration(
               [
                 t.importSpecifier(
-                  t.identifier('withCell'),
-                  t.identifier('withCell')
+                  t.identifier('createCell'),
+                  t.identifier('createCell')
                 ),
               ],
               t.stringLiteral('@redwoodjs/web')
@@ -79,10 +79,10 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
           )
 
           // Insert at the bottom of the file:
-          // + export default withCell({ QUERY?, Loading?, Succes?, Failure?, Empty?, beforeQuery?, afterQuery? })
+          // + export default createCell({ QUERY?, Loading?, Succes?, Failure?, Empty?, beforeQuery?, afterQuery? })
           path.node.body.push(
             t.exportDefaultDeclaration(
-              t.callExpression(t.identifier('withCell'), [
+              t.callExpression(t.identifier('createCell'), [
                 t.objectExpression(
                   exportNames.map((name) =>
                     t.objectProperty(
