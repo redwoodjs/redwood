@@ -65,8 +65,8 @@ const InternalRoute: React.VFC<InternalRouteProps> = ({
   name,
   redirect,
   notfound,
-  // @ts-expect-error - This prop is picked up by `<Set>`
-  whileLoading = () => null,
+  // @ts-expect-error - This prop is picked up by <Set>
+  whileLoading, // eslint-disable-line
 }) => {
   const location = useLocation()
   const routerState = useRouterState()

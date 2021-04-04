@@ -31,8 +31,15 @@ function createDummyAuthContextValues(partial: Partial<AuthContextInterface>) {
   return { ...authContextValues, ...partial }
 }
 
-const mockUseAuth = (isAuthenticated = false, loading = false) => () =>
-  createDummyAuthContextValues({ loading, isAuthenticated })
+const mockUseAuth = (
+  {
+    isAuthenticated = false,
+    loading = false,
+  }: { isAuthenticated?: boolean; loading?: boolean } = {
+    isAuthenticated: false,
+    loading: false,
+  }
+) => () => createDummyAuthContextValues({ loading, isAuthenticated })
 
 // SETUP
 const HomePage = () => <h1>Home Page</h1>
@@ -175,7 +182,7 @@ test('unauthenticated user is redirected including search params', async () => {
 
 test('authenticated user can access private page', async () => {
   const TestRouter = () => (
-    <Router useAuth={mockUseAuth(true)}>
+    <Router useAuth={mockUseAuth({ isAuthenticated: true })}>
       <Route path="/" page={HomePage} name="home" />
       <Private unauthenticated="home">
         <Route path="/private" page={PrivatePage} name="private" />
@@ -198,14 +205,14 @@ test('authenticated user can access private page', async () => {
 
 test('can display a loading screen whilst waiting for auth', async () => {
   const TestRouter = () => (
-    <Router useAuth={mockUseAuth(false, true)}>
+    <Router useAuth={mockUseAuth({ isAuthenticated: false, loading: true })}>
       <Route path="/" page={HomePage} name="home" />
       <Private unauthenticated="home">
         <Route
           path="/private"
           page={PrivatePage}
           name="private"
-          whileLoading={() => 'Loading...'}
+          whileLoading={() => <>Loading...</>}
         />
       </Private>
     </Router>
