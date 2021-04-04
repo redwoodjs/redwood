@@ -242,7 +242,11 @@ const TextAreaField = forwardRef<
   const { setCoercion } = useCoercion()
 
   React.useEffect(() => {
-    if (process.env.NODE_ENV !== 'production' && props.dataType !== undefined) {
+    if (
+      props.dataType !== undefined &&
+      (process.env.NODE_ENV === 'development' ||
+        process.env.NODE_ENV === 'test')
+    ) {
       console.warn(
         'Using the "dataType" prop on form input fields is deprecated. Use "transformValue" instead.'
       )
@@ -328,7 +332,7 @@ export const CheckboxField = forwardRef<
   const type = 'checkbox'
 
   React.useEffect(() => {
-    if (process.env.NODE_ENV !== 'production' && props.dataType !== undefined) {
+    if (props.dataType !== undefined) {
       console.warn(
         'Using the "dataType" prop on form input fields is deprecated. Use "transformValue" instead.'
       )
@@ -380,7 +384,11 @@ const InputField = forwardRef<
   const { register } = useFormContext()
   const { setCoercion } = useCoercion()
   React.useEffect(() => {
-    if (process.env.NODE_ENV !== 'production' && props.dataType !== undefined) {
+    if (
+      props.dataType !== undefined &&
+      (process.env.NODE_ENV === 'development' ||
+        process.env.NODE_ENV === 'test')
+    ) {
       console.warn(
         'Using the "dataType" prop on form input fields is deprecated. Use "transformValue" instead.'
       )

@@ -22,7 +22,10 @@ export const CoercionContextProvider: React.FC = ({ children }) => {
 }
 
 const coercionWarn = (type: string, value: string) => {
-  if (process.env.NODE_ENV !== 'production') {
+  if (
+    process.env.NODE_ENV === 'development' ||
+    process.env.NODE_ENV === 'test'
+  ) {
     console.warn(
       `Invalid ${type}. Form field validation not set.  Returning 'undefined' instead of '${value}'`
     )
@@ -102,7 +105,11 @@ export const useCoercion = () => {
       } else {
         if (transformValue) {
           coercionFunction = COERCION_FUNCTIONS[transformValue]
-          if (!coercionFunction && process.env.NODE_ENV !== 'production') {
+          if (
+            !coercionFunction &&
+            (process.env.NODE_ENV === 'development' ||
+              process.env.NODE_ENV === 'test')
+          ) {
             console.warn(
               'Form input ' + name + ' does not have a valid transformValue'
             )
