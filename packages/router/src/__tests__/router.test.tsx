@@ -198,7 +198,7 @@ test('authenticated user can access private page', async () => {
 
 test('can display a loading screen whilst waiting for auth', async () => {
   const TestRouter = () => (
-    <Router useAuth={mockUseAuth(true, true)}>
+    <Router useAuth={mockUseAuth(false, true)}>
       <Route path="/" page={HomePage} name="home" />
       <Private unauthenticated="home">
         <Route
@@ -540,11 +540,9 @@ test('Set is not rendered for unauthenticated user.', async () => {
 
   const TestRouter = () => (
     <Router useAuth={mockUseAuth()}>
-      <Private unauthenticated="login">
-        <Set wrap={SetWithUseParams}>
-          <Route path="/test/{documentId}" page={ParamPage} name="param" />
-        </Set>
-      </Private>
+      <Set private wrap={SetWithUseParams} unauthenticated="login">
+        <Route path="/test/{documentId}" page={ParamPage} name="param" />
+      </Set>
       <Route path="/" page={() => <div>home</div>} name="home" />
       <Route path="/login" page={() => <div>auth thyself</div>} name="login" />
     </Router>
