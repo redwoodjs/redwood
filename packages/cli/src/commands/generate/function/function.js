@@ -1,15 +1,14 @@
 import path from 'path'
 
 import camelcase from 'camelcase'
+import Listr from 'listr'
 import terminalLink from 'terminal-link'
 
-import { getPaths, transformTSToJS } from 'src/lib'
+import { getPaths, transformTSToJS, writeFilesTask } from 'src/lib'
+import c from 'src/lib/colors'
 
 import { yargsDefaults } from '../../generate'
-import {
-  templateForComponentFile,
-  createYargsForComponentGeneration,
-} from '../helpers'
+import { templateForComponentFile } from '../helpers'
 
 export const files = ({ name, ...rest }) => {
   // Taken from ../component; should be updated to take from the project's configuration
@@ -54,13 +53,44 @@ export const builder = (yargs) => {
         'https://redwoodjs.com/reference/command-line-interface#generate-function'
       )}`
     )
+
   // Add default options, includes '--typescript', '--javascript', '--force', ...
   Object.entries(yargsDefaults).forEach(([option, config]) => {
     yargs.option(option, config)
   })
 }
 
-export const { command, handler } = createYargsForComponentGeneration({
-  componentName: 'function',
-  filesFn: files,
-})
+export const handler = async ({ force = false }) => {
+  const tasks = new Listr(
+    [
+      {
+        title: `Generating function files...`,
+        task: async () => {
+          const f = await files({ componentName: 'function' })
+          return writeFilesTask(f, { overwriteExisting: force })
+        },
+      },
+    ],
+    { collapse: false, exitOnError: true }
+  )
+
+  try {
+    await tasks.run()
+
+    console.info(
+      c.bold(
+        'Important: When deployed, a custom serverless function is an open API endpoint and is your responsibility to secure appropriately.'
+      )
+    )
+    console.info(
+      c.info(`
+        Please consult the ${terminalLink(
+          'Serverless Function Considerations',
+          'https://redwoodjs.com/docs/serverless-functions#security-considerations'
+        )} in the RedwoodJS documentation for more information.`)
+    )
+  } catch (e) {
+    console.error(c.error(e.message))
+    process.exit(e?.exitCode || 1)
+  }
+}
