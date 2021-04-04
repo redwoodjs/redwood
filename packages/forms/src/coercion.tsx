@@ -102,7 +102,7 @@ export const useCoercion = () => {
       } else {
         if (transformValue) {
           coercionFunction = COERCION_FUNCTIONS[transformValue]
-          if (!coercionFunction) {
+          if (!coercionFunction && process.env.NODE_ENV !== 'production') {
             console.warn(
               'Form input ' + name + ' does not have a valid transformValue'
             )
