@@ -5,7 +5,7 @@ import {
   useForm,
   FormProvider,
   useFormContext,
-  ValidationRules,
+  RegisterOptions,
   UseFormMethods,
   UseFormOptions,
 } from 'react-hook-form'
@@ -65,7 +65,7 @@ interface InputTagProps {
 }
 
 interface ValidatableFieldProps extends InputTagProps {
-  validation?: ValidationRules
+  validation?: RegisterOptions
   defaultValue?: string
 }
 
@@ -224,6 +224,14 @@ const FieldError = (props: FieldErrorProps) => {
   return validationError ? <span {...props}>{errorMessage}</span> : null
 }
 
+const jsonValidation = (value: string) => {
+  try {
+    JSON.parse(value)
+  } catch (e) {
+    return e.message
+  }
+}
+
 // Renders a <textarea> field
 
 const TextAreaField = forwardRef<
@@ -246,13 +254,18 @@ const TextAreaField = forwardRef<
   }, [setCoercion, props.name, props.transformValue, props.dataType])
 
   const tagProps = inputTagProps(props)
+  // implements JSON validation if a transformValue of 'Json' is set
+  const validation = props.validation ? props.validation : { required: false }
+  if (!validation.validate && props.transformValue == 'Json') {
+    validation.validate = jsonValidation
+  }
 
   return (
     <textarea
       {...tagProps}
       id={props.id || props.name}
       ref={(element) => {
-        register(element, props.validation || { required: false })
+        register(element, validation)
 
         if (typeof ref === 'function') {
           ref(element)
