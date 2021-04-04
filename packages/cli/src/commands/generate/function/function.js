@@ -35,6 +35,7 @@ export const files = ({ name, ...rest }) => {
   return { [file[0]]: template }
 }
 
+export const command = 'function <name>'
 export const description = 'Generate a Function'
 
 // This could be built using createYargsForComponentGeneration;
@@ -46,6 +47,12 @@ export const builder = (yargs) => {
     .positional('name', {
       description: 'Name of the Function',
       type: 'string',
+    })
+    .option('force', {
+      alias: 'f',
+      default: false,
+      description: 'Overwrite existing files',
+      type: 'boolean',
     })
     .epilogue(
       `Also see the ${terminalLink(
@@ -60,13 +67,13 @@ export const builder = (yargs) => {
   })
 }
 
-export const handler = async ({ force = false }) => {
+export const handler = async ({ name, force }) => {
   const tasks = new Listr(
     [
       {
         title: `Generating function files...`,
         task: async () => {
-          const f = await files({ componentName: 'function' })
+          const f = await files({ name })
           return writeFilesTask(f, { overwriteExisting: force })
         },
       },
@@ -77,18 +84,27 @@ export const handler = async ({ force = false }) => {
   try {
     await tasks.run()
 
+    console.info('')
+
+    console.info(c.warning('⚠ Important:'))
+    console.info('')
     console.info(
       c.bold(
-        'Important: When deployed, a custom serverless function is an open API endpoint and is your responsibility to secure appropriately.'
+        'When deployed, a custom serverless function is an open API endpoint and is your responsibility to secure appropriately.'
       )
     )
+
+    console.info('')
+
     console.info(
-      c.info(`
-        Please consult the ${terminalLink(
+      c.info(
+        `Please consult the ${terminalLink(
           'Serverless Function Considerations',
           'https://redwoodjs.com/docs/serverless-functions#security-considerations'
-        )} in the RedwoodJS documentation for more information.`)
+        )} in the RedwoodJS documentation for more information.`
+      )
     )
+    console.info('')
   } catch (e) {
     console.error(c.error(e.message))
     process.exit(e?.exitCode || 1)
