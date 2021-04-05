@@ -3,72 +3,113 @@ import path from 'path'
 
 import { getPaths } from 'src/lib'
 
-const RENDER_YAML = `services:
-- type: web
-  name: redwood-api
-  env: node
-  plan: starter
-  buildCommand: yarn && yarn rw prisma migrate deploy && yarn rw build api
-  startCommand: cd api && yarn api-server --functions ./dist/functions
-  envVars:
-  - key: DATABASE_URL
-    fromDatabase:
-      name: redwood-db
-      property: connectionString
-  - key: NODE_VERSION
-    value: 14.16.0
+const PROJECT_NAME = getPaths().base.match(/[^/|\\]+$/)[0]
 
+const RENDER_YAML = (database) => {
+  return `services:
 - type: web
-  name: redwood-web
+  name: ${PROJECT_NAME}-web
   env: static
   buildCommand: yarn && yarn rw build web
   staticPublishPath: ./web/dist
   envVars:
-  - key: API_PROXY_HOST
-    fromService:
-      name: redwood-api
-      type: web
-      property: host
+  - key: NODE_VERSION
+    value: 14
   routes:
+  - type: rewrite
+    source: /.redwood/functions/*
+    destination: replace_me_with_api_url/*
   - type: rewrite
     source: /*
     destination: /index.html
 
-databases:
-- name: redwood-db
+- type: web
+  name: ${PROJECT_NAME}-api
+  env: node
+  buildCommand: yarn && yarn rw prisma migrate deploy && yarn rw build api
+  startCommand: cd api && yarn api-server --functions ./dist/functions
+  envVars:
+  - key: NODE_VERSION
+    value: 14
+${database}
 `
-const RENDER_HEALTH_CHECK = `
+}
+
+const POSTGRES_YAML = `  - key: DATABASE_URL
+  fromDatabase:
+    name: redwood-db
+    property: connectionString
+
+databases:
+  - name: ${PROJECT_NAME}-db
+`
+
+const SQLITE_YAML = `  - key: DATABASE_URL
+    value: file:./data/sqlite.db
+  disk:
+    name: sqlite-data
+    mountPath: /opt/render/project/src/api/db/data
+    sizeGB: 1`
+
+const RENDER_HEALTH_CHECK = `// render-health-check
 export const handler = async () => {
   return {
     statusCode: 200,
   }
 }
 `
-const NODE_VERSION = `14.16.0`
+// prisma data source check
+export const prismaDataSourceCheck = (database) => {
+  if (database == 'none') {
+    return {
+      path: path.join(getPaths().base, 'render.yaml'),
+      content: RENDER_YAML(''),
+    }
+  }
+  const content = fs.readFileSync(getPaths().api.dbSchema).toString()
+  const detectedDatabase = content.match(
+    /(?<=datasource DS.*\n\W*provider\W*)\w+/
+  )
+  if (detectedDatabase == database) {
+    switch (database) {
+      case 'postgres':
+        return {
+          path: path.join(getPaths().base, 'render.yaml'),
+          content: RENDER_YAML(POSTGRES_YAML),
+        }
+      case 'sqlite':
+        return {
+          path: path.join(getPaths().base, 'render.yaml'),
+          content: RENDER_YAML(SQLITE_YAML),
+        }
+      default:
+        throw new Error(`
+       Unexpected datasource provider found: ${database}`)
+    }
+  } else {
+    throw new Error(`
+    Prisma datasource provider is not ${database}.
+    Update your schema.prisma provider to be ${database}, then run
+    yarn rw prisma migrate dev`)
+  }
+}
 
-// any packages to install
-export const apiPackages = ['@redwoodjs/api-server']
+//any packages to install
+// export const apiPackages = ['@redwoodjs/api-server']
 
 // any files to create
 export const files = [
-  { path: path.join(getPaths().base, 'render.yaml'), content: RENDER_YAML },
+  // {
+  //   path: path.join(getPaths().base, 'render.yaml'),
+  //   content: RENDER_YAML(POSTGRES_YAML),
+  // },
   {
-    path: path.join(getPaths().base, 'api/src/functions/healthz.js'),
+    path: path.join(getPaths().base, 'api/src/functions/renderHealthz.js'),
     content: RENDER_HEALTH_CHECK,
   },
-  { path: path.join(getPaths().base, '.node-version'), content: NODE_VERSION },
 ]
 
-// any edits to Prisma data source
-export const prismaDataSourceEdit = () => {
-  const content = fs.readFileSync(getPaths().api.dbSchema).toString()
-
-  if (!content.includes('postgres')) {
-    const result = content.replace(/provider =.*\n/, `provider = "postgres"\n`)
-
-    fs.writeFileSync(getPaths().api.dbSchema, result)
-  }
-}
+export const apiProxyPath = '/.redwood/functions'
 
 // any notes to print out when the job is done
 export const notes = [

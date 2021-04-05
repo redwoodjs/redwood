@@ -50,6 +50,13 @@ export const builder = (yargs) => {
       description: 'Overwrite existing configuration',
       type: 'boolean',
     })
+    .option('database', {
+      alias: 'd',
+      choices: ['none', 'postgres', 'sqlite'],
+      default: 'postgres',
+      description: 'Set Prisma database provider',
+      type: 'string',
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -58,7 +65,7 @@ export const builder = (yargs) => {
     )
 }
 
-export const handler = async ({ provider, force }) => {
+export const handler = async ({ provider, force, database }) => {
   const providerData = await import(`./providers/${provider}`)
 
   const tasks = new Listr(
@@ -82,6 +89,15 @@ export const handler = async ({ provider, force }) => {
               }
             })
           ),
+      },
+      providerData?.prismaDataSourceCheck && {
+        title: 'Checking Prisma data source provider...',
+        task: () => {
+          const fileData = providerData.prismaDataSourceCheck(database)
+          let files = {}
+          files[fileData.path] = fileData.content
+          return writeFilesTask(files, { overwriteExisting: force })
+        },
       },
       providerData?.apiPackages?.length && {
         title: 'Adding required api packages...',
@@ -143,10 +159,6 @@ export const handler = async ({ provider, force }) => {
       providerData?.prismaBinaryTargetAdditions && {
         title: 'Adding necessary Prisma binaries...',
         task: () => providerData.prismaBinaryTargetAdditions(),
-      },
-      providerData?.prismaDataSourceEdit && {
-        title: 'Changing Prisma data source provider...',
-        task: () => providerData.prismaDataSourceEdit(),
       },
       {
         title: 'One more thing...',
