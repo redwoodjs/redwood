@@ -2,6 +2,9 @@ import type { DocumentNode } from 'graphql'
 
 export interface GraphQLHookOptions {
   variables?: Record<string, any>
+  refetchQueries?: { query: DocumentNode; variables?: Record<string, any> }[]
+  onCompleted?: (data: any) => void
+  [key: string]: any
 }
 export interface OperationResult<TData = any> {
   data?: TData
