@@ -12,6 +12,7 @@ const TARGETS_NODE = '12.16'
 // https://github.com/zloirock/core-js/blob/master/README.md#babelpreset-env
 const CORE_JS_VERSION = '3.6'
 
+/** @type {import('@babel/core').TransformOptions} */
 module.exports = () => {
   const project = getProject()
   const paths = project.host.paths
