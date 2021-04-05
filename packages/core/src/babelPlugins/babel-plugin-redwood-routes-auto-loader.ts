@@ -61,16 +61,11 @@ export default function (
         enter() {
           pages = processPagesDir()
 
-          // Produces:
-          // routes.home: () => "/home"
-          // routes.aboutUs: () => "/about-us"
-          const availableRoutes = project
-            .getRouter()
-            .routes.filter((r) => !r.isNotFound)
-            .map(
-              (r) =>
-                `${r.name}: (params?: RouteParams<"${r.path}"> & QueryParams) => "${r.path}"`
-            )
+          const routes = project.getRouter().routes.filter((r) => !r.isNotFound)
+          const availableRoutes = routes.map(
+            ({ name, path }) =>
+              `${name}: (params?: RouteParams<"${path}"> & QueryParams) => "${path}"`
+          )
 
           const pageImports = pages.map(
             (page) => `import type ${page.const}Type from '${page.importPath}'`
@@ -89,6 +84,12 @@ export default function (
               interface AvailableRoutes {
                 ${availableRoutes.join('\n    ')}
               }
+
+              // TODO: Split these between authenticated and unauthenticated route names,
+              // since these are mostly used in "unauthenticated".
+              type AvailableRouteNames = ${routes
+                .map(({ name }) => `"${name}"`)
+                .join(' | ')}
             }
             `
             .split('\n')
