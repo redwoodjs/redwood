@@ -46,6 +46,12 @@ export function Set<WrapperProps>(props: SetProps<WrapperProps>) {
   const location = useLocation()
   const { loading, isAuthenticated, hasRole } = routerState.useAuth()
 
+  if (privateSet && !unauthenticated) {
+    throw new Error(
+      'Private Sets need to specify what route to redirect unauthorized users to by setting the `unauthenticated` prop'
+    )
+  }
+
   const unauthorized = useCallback(() => {
     return !(isAuthenticated && (!role || hasRole(role)))
   }, [isAuthenticated, role, hasRole])
@@ -74,7 +80,11 @@ export function Set<WrapperProps>(props: SetProps<WrapperProps>) {
 
         const unauthenticatedPath = routerState.routes.filter(
           ({ name }) => unauthenticated === name
-        )[0]?.path || '/'
+        )[0]?.path
+
+        if (!unauthenticatedPath) {
+          throw new Error(`We could not find a route named ${unauthenticated}`)
+        }
 
         return (
           <Redirect
