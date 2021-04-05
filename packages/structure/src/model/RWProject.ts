@@ -78,7 +78,10 @@ export class RWProject extends BaseNode {
    * TODO: look for this file at the root? or within each side? (api/web)
    */
   @lazy() get isTypeScriptProject(): boolean {
-    return this.host.existsSync(join(this.projectRoot, 'tsconfig.json'))
+    return (
+      this.host.existsSync(join(this.pathHelper.web.base, 'tsconfig.json')) ||
+      this.host.existsSync(join(this.pathHelper.web.base, 'tsconfig.json'))
+    )
   }
   // TODO: do we move this to a separate node? (ex: RWDatabase)
   @memo() async prismaDMMF() {

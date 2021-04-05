@@ -11,6 +11,7 @@ import { detectPrerenderRoutes } from '@redwoodjs/prerender'
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 import { generatePrismaClient } from 'src/lib/generatePrismaClient'
+import runPreBuildTasks from 'src/lib/runPreBuildTasks'
 
 export const command = 'build [side..]'
 export const description = 'Build for production'
@@ -123,6 +124,14 @@ export const handler = async ({
         })
       },
     }
+  })
+
+  // Add prebuildTasks
+  listrTasks.unshift({
+    title: 'Running prebuild tasks',
+    task: () => {
+      runPreBuildTasks()
+    },
   })
 
   // Additional tasks, apart from build
