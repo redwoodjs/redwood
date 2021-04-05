@@ -260,7 +260,7 @@ const TextAreaField = forwardRef<
   const tagProps = inputTagProps(props)
   // implements JSON validation if a transformValue of 'Json' is set
   const validation = props.validation ? props.validation : { required: false }
-  if (!validation.validate && props.transformValue == 'Json') {
+  if (!validation.validate && props.transformValue === 'Json') {
     validation.validate = jsonValidation
   }
 
