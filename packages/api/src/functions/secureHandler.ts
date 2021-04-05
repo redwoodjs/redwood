@@ -111,7 +111,7 @@ const getHmac = ({ secret }: { secret: string }) => {
  *
  *    signatureFromEvent({ event: event })
  */
-const signatureFromEvent = ({
+export const signatureFromEvent = ({
   event,
 }: {
   event: APIGatewayProxyEvent
@@ -147,7 +147,7 @@ export const sign = ({
 }: {
   body: string
   secret: string
-  timestamp: number
+  timestamp?: number
 }): string => {
   const hmac = getHmac({ secret })
   hmac.update(timestamp + '.' + body)

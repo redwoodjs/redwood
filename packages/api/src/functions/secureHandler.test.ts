@@ -1,5 +1,7 @@
+import type { APIGatewayProxyEvent } from 'aws-lambda'
+
 import {
-  WEBHOOK_SIGNTAURE_HEADER,
+  WEBHOOK_SIGNATURE_HEADER,
   sign,
   verifySignature,
   verify,
@@ -35,10 +37,14 @@ describe('secureHandler', () => {
         body,
         secret,
         timestamp: Date.now() - 10 * 60 * 1000,
-        options: { tolerance: 5000 },
       })
       expect(() => {
-        verifySignature({ body, secret, signature })
+        verifySignature({
+          body,
+          secret,
+          signature,
+          options: { tolerance: 5000 },
+        })
       }).toThrow(WebhookVerificationError)
     })
   })
@@ -50,8 +56,8 @@ describe('secureHandler', () => {
         secret,
       })
 
-      const event = { body, headers: {} }
-      event.headers[WEBHOOK_SIGNTAURE_HEADER.toLocaleLowerCase()] = signature
+      const event = { body, headers: {} } as APIGatewayProxyEvent
+      event.headers[WEBHOOK_SIGNATURE_HEADER.toLocaleLowerCase()] = signature
 
       expect(verify({ event })).toBeTruthy()
     })
