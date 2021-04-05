@@ -8,7 +8,7 @@ import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 
 export const command = 'run side'
-export const description = 'Run servers for api, and web, in production'
+export const description = 'Run server for api in production'
 export const builder = (yargs) => {
   yargs
     .positional('side', {
