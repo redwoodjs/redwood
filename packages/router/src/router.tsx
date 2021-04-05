@@ -22,6 +22,9 @@ import { SplashPage } from './splash-page'
 import { flattenAll, isReactElement } from './util'
 
 import type { AvailableRoutes } from './index'
+// @ts-expect-error This "type" is declared in user-land. We do not declare it internally,
+// because we cannot redeclare types.
+import type { AvailableRouteNames } from './index'
 
 // namedRoutes is populated at run-time by iterating over the `<Route />`
 // components, and appending them to this object.
@@ -146,7 +149,7 @@ const InternalRoute: React.VFC<InternalRouteProps> = ({
 
 interface PrivateProps {
   /** The page name where a user will be redirected when not authenticated */
-  unauthenticated: string
+  unauthenticated: AvailableRouteNames
   role?: string | string[]
 }
 

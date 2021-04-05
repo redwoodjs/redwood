@@ -2,6 +2,10 @@ import React, { createContext, useCallback, useContext } from 'react'
 
 import { useRouterState } from './router-context'
 
+// @ts-expect-error This "type" is declared in user-land. We do not declare it internally,
+// because we cannot redeclare types.
+import type { AvailableRouteNames } from './index'
+
 /**
  * @param isPrivate - Always true for any children wrapped in a `<Private>`
  *                    component
@@ -14,7 +18,7 @@ import { useRouterState } from './router-context'
 interface PrivateState {
   isPrivate: boolean
   unauthorized: (role?: string | string[]) => boolean
-  unauthenticated: string
+  unauthenticated: AvailableRouteNames
 }
 
 const PrivateContext = createContext<PrivateState | undefined>(undefined)
@@ -22,7 +26,7 @@ const PrivateContext = createContext<PrivateState | undefined>(undefined)
 interface ProviderProps {
   isPrivate: boolean
   role?: string | string[]
-  unauthenticated: string
+  unauthenticated: AvailableRouteNames
 }
 
 export const PrivateContextProvider: React.FC<ProviderProps> = ({
