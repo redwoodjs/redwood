@@ -18,18 +18,12 @@ import { logger } from 'src/lib/logger'
  * function, and execution environment.
  */
 export const handler = async (event: APIGatewayEvent, context: Context) => {
-  try {
-    return {
-      statusCode: 200,
-      body: JSON.stringify({
-        data: '${name} function',
-      }),
-    }
-  } catch (error) {
-    logger.error({ error }, error.message)
+  logger.info('Invoked ${name} function')
 
-    return {
-      statusCode: 401,
-    }
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      data: '${name} function',
+    }),
   }
 }

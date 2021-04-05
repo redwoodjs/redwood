@@ -18,18 +18,12 @@ import { logger } from 'src/lib/logger'
  * function, and execution environment.
  */
 export const handler = async (event: APIGatewayEvent, context: Context) => {
-  try {
-    return {
-      statusCode: 200,
-      body: JSON.stringify({
-        data: 'typescriptFunction function',
-      }),
-    }
-  } catch (error) {
-    logger.error({ error }, error.message)
+  logger.info('Invoked typescriptFunction function')
 
-    return {
-      statusCode: 401,
-    }
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      data: 'typescriptFunction function',
+    }),
   }
 }

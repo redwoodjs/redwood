@@ -17,18 +17,12 @@ import { logger } from 'src/lib/logger'
  * function, and execution environment.
  */
 export const handler = async (event, context) => {
-  try {
-    return {
-      statusCode: 200,
-      body: JSON.stringify({
-        data: 'javascriptFunction function',
-      }),
-    }
-  } catch (error) {
-    logger.error({ error }, error.message)
+  logger.info('Invoked javascriptFunction function')
 
-    return {
-      statusCode: 401,
-    }
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      data: 'javascriptFunction function',
+    }),
   }
 }

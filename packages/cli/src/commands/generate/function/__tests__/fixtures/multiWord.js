@@ -17,18 +17,12 @@ import { logger } from 'src/lib/logger'
  * function, and execution environment.
  */
 export const handler = async (event, context) => {
-  try {
-    return {
-      statusCode: 200,
-      body: JSON.stringify({
-        data: 'sendMail function',
-      }),
-    }
-  } catch (error) {
-    logger.error({ error }, error.message)
+  logger.info('Invoked sendMail function')
 
-    return {
-      statusCode: 401,
-    }
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      data: 'sendMail function',
+    }),
   }
 }
