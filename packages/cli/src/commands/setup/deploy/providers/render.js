@@ -10,7 +10,7 @@ const RENDER_YAML = (database) => {
 - type: web
   name: ${PROJECT_NAME}-web
   env: static
-  buildCommand: yarn && yarn rw build web
+  buildCommand: yarn rw deploy render web
   staticPublishPath: ./web/dist
   envVars:
   - key: NODE_VERSION
@@ -26,7 +26,7 @@ const RENDER_YAML = (database) => {
 - type: web
   name: ${PROJECT_NAME}-api
   env: node
-  buildCommand: yarn && yarn rw prisma migrate deploy && yarn rw build api
+  buildCommand: yarn rw deploy render api
   startCommand: cd api && yarn api-server --functions ./dist/functions
   envVars:
   - key: NODE_VERSION

@@ -1,0 +1,66 @@
+import execa from 'execa'
+import terminalLink from 'terminal-link'
+
+import { getPaths } from 'src/lib'
+
+export const command = 'render <side> [...commands]'
+export const description = 'Build command for Render deploy'
+export const builder = (yargs) => {
+  yargs
+    .positional('side', {
+      choices: ['api', 'web'],
+      description: 'select side to build',
+      type: 'string',
+    })
+    .option('build', {
+      description: 'Build for production',
+      type: 'boolean',
+      default: 'true',
+    })
+    .option('prisma', {
+      description: 'Apply database migrations',
+      type: 'boolean',
+      default: 'true',
+    })
+    .option('data-migrate', {
+      description: 'Migrate the data in your database',
+      type: 'boolean',
+      default: 'true',
+      alias: 'dm',
+    })
+    .epilogue(
+      `For more commands, options, and examples, see ${terminalLink(
+        'Redwood CLI Reference',
+        'https://redwoodjs.com/docs/cli-commands#deploy'
+      )}`
+    )
+}
+
+export const handler = async ({ side, build, prisma, dm: dataMigrate }) => {
+  const paths = getPaths()
+  let commandSet = []
+  if (side == 'api') {
+    if (build) {
+      commandSet.push('yarn rw build api')
+    }
+    if (prisma) {
+      commandSet.push('yarn rw prisma migrate deploy')
+    }
+    if (dataMigrate) {
+      commandSet.push('yarn rw dataMigrate up')
+    }
+  } else if (side == 'web') {
+    if (build) {
+      commandSet.push('yarn')
+      commandSet.push('yarn rw build api')
+    }
+  }
+
+  execa(commandSet.join(' && '), {
+    shell: true,
+    stdio: 'inherit',
+    cwd: paths.base,
+    extendEnv: true,
+    cleanup: true,
+  })
+}
