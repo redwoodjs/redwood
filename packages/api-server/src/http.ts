@@ -10,9 +10,10 @@ import escape from 'lodash.escape'
 import morgan from 'morgan'
 
 import { getPaths } from '@redwoodjs/internal'
-const rwjsPaths = getPaths()
 
 import { requestHandler } from './requestHandlers/awsLambda'
+
+const rwjsPaths = getPaths()
 
 export type Lambdas = Record<string, Handler>
 const LAMBDA_FUNCTIONS: Lambdas = {}
@@ -46,9 +47,11 @@ const lambdaRequestHandler = async (req: Request, res: Response) => {
 export const http = ({
   port = 8911,
   socket,
+  rootPath,
 }: {
   port: number
   socket?: string
+  rootPath?: string
 }) => {
   const app = express()
 
@@ -67,8 +70,8 @@ export const http = ({
 
   app.use(morgan<Request, Response>('dev'))
 
-  app.all('/:routeName', lambdaRequestHandler)
-  app.all('/:routeName/*', lambdaRequestHandler)
+  app.all(`${rootPath}:routeName`, lambdaRequestHandler)
+  app.all(`${rootPath}:routeName/*`, lambdaRequestHandler)
 
   const server = app
     .listen(socket || port, () => {

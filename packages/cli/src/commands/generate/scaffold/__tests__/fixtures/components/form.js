@@ -12,7 +12,9 @@ import {
 } from '@redwoodjs/forms'
 
 const formatDatetime = (value) => {
-  return value.replace(/:\d{2}\.\d{3}\w/, '')
+  if (value) {
+    return value.replace(/:\d{2}\.\d{3}\w/, '')
+  }
 }
 
 const PostForm = (props) => {

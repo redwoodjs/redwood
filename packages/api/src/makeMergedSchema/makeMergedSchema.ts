@@ -196,7 +196,7 @@ export const makeMergedSchema = ({
   /**
    * A list of options passed to [makeExecutableSchema](https://www.graphql-tools.com/docs/generate-schema/#makeexecutableschemaoptions).
    */
-  schemaOptions?: IExecutableSchemaDefinition
+  schemaOptions?: Partial<IExecutableSchemaDefinition>
 }) => {
   const typeDefs = mergeTypes(
     [rootSchema.schema, ...Object.values(schemas).map(({ schema }) => schema)],
@@ -214,7 +214,15 @@ export const makeMergedSchema = ({
     resolvers: mergeResolvers(schemas),
     services,
   })
-  addResolveFunctionsToSchema({ schema, resolvers })
+
+  const { resolverValidationOptions, inheritResolversFromInterfaces } =
+    schemaOptions || {}
+  addResolveFunctionsToSchema({
+    schema,
+    resolvers,
+    resolverValidationOptions,
+    inheritResolversFromInterfaces,
+  })
 
   return schema
 }
