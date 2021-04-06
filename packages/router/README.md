@@ -4,11 +4,11 @@ This is the built-in router for Redwood apps. It takes inspiration from Ruby on 
 
 > **WARNING:** RedwoodJS software has not reached a stable version 1.0 and should not be considered suitable for production use. In the "make it work; make it right; make it fast" paradigm, Redwood is in the later stages of the "make it work" phase.
 
-Redwood Router (RR from now on) is designed to list all routes in a single file, without any nesting. We prefer this design, as it makes it very easy to track which routes map to which pages.
+Redwood Router (RR from now on) is designed to list all routes in a single file, with limited nesting. We prefer this design, as it makes it very easy to track which routes map to which pages.
 
 ## Router and Route
 
-The first thing you need is a `Router`. It will contain all of your routes. RR will attempt to match the current URL to each route in turn, stopping when it finds a match, and rendering that route only. The only exception to this is the `notfound` route, which can be placed anywhere in the list and only matches when no other routes do.
+The first thing you need is a `Router`. It will contain all of your routes. RR will attempt to match the current URL to each route in turn, and only render those with a matching `path`. The only exception to this is the `notfound` route, which can be placed anywhere in the list and only matches when no other routes do.
 
 Each route is specified with a `Route`. Our first route will tell RR what to render when no other route matches:
 
@@ -56,6 +56,72 @@ they will be redirected to the route passed as the `unauthenticated` prop and th
 
 Redwood uses the `useAuth` hook under the hood to determine if the user is authenticated.
 Read more about authentication in redwood [here](https://redwoodjs.com/tutorial/authentication).
+
+## Sets of Routes
+
+You can group Routes into sets using the `Set` component. `Set` allows you to wrap a set of Routes in another component or array of components—usually a Context, a Layout, or both:
+
+```js
+// Routes.js
+
+import { Router, Route, Set } from '@redwoodjs/router'
+import BlogContext from 'src/contexts/BlogContext'
+import BlogLayout from 'src/layouts/BlogLayout'
+
+const Routes = () => {
+  return (
+    <Router>
+      <Set wrap={[BlogContext, BlogLayout]}>
+        <Route path="/" page={HomePage} name="home" />
+        <Route path="/about" page={AboutPage} name="about" />
+        <Route path="/contact" page={ContactPage} name="contact" />
+        <Route path="/blog-post/{id:Int}" page={BlogPostPage} name="blogPost" />
+      </Set>
+    </Router>
+  )
+}
+
+export default Routes
+```
+
+The `wrap` prop accepts a single component or an array of components. Components are rendered in the same order they're passed, so in the exmaple above, Set expands to:
+
+```js
+<BlogContext>
+  <BlogLayout>
+    <Route path="/" page={HomePage} name="home" />
+    // ...
+  </BlogLayout>
+</BlogContext>
+```
+
+Conceptually, this fits with how we think about Context and Layouts as things that wrap Pages and contain content that’s outside the scope of the Pages themselves. Crucially, since they're higher in the tree, `BlogContext` and `BlogLayout` won't rerender across Pages in the same Set.
+
+There's a lot of flexibility here. You can even nest `Sets` to great effect:
+
+```js
+// Routes.js
+
+import { Router, Route, Set, Private } from '@redwoodjs/router'
+import BlogContext from 'src/contexts/BlogContext'
+import BlogLayout from 'src/layouts/BlogLayout'
+import BlogNavLayout from 'src/layouts/BlogNavLayout'
+
+const Routes = () => {
+  return (
+    <Router>
+      <Set wrap={[BlogContext, BlogLayout]}>
+        <Route path="/" page={HomePage} name="home" />
+        <Route path="/about" page={AboutPage} name="about" />
+        <Route path="/contact" page={ContactPage} name="contact" />
+        <Set wrap={BlogNavLayout}>
+          <Route path="/blog-post/{id:Int}" page={BlogPostPage} name="blogPost" />
+        </Set>
+      </Set>
+    </Router>
+  )
+}
+```
 
 ## Link and named route functions
 

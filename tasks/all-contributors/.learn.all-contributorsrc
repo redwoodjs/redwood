@@ -64,6 +64,15 @@
       "contributions": [
         "tutorial"
       ]
+    },
+    {
+      "login": "origami-z",
+      "name": "Zhihao Cui",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5257855?v=4",
+      "profile": "https://github.com/origami-z",
+      "contributions": [
+        "tutorial"
+      ]
     }
   ],
   "contributorsPerLine": 5

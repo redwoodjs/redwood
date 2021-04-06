@@ -27,7 +27,7 @@ describe('matchPath', () => {
     ).toEqual({ match: true, params: { day: '07', month: '12', year: '2019' } })
   })
 
-  it('transforms a param based on the specified transform', () => {
+  it('transforms a param for Int', () => {
     expect(matchPath('/post/{id}', '/post/1337')).toEqual({
       match: true,
       params: { id: '1337' },
@@ -36,6 +36,93 @@ describe('matchPath', () => {
     expect(matchPath('/post/{id:Int}', '/post/1337')).toEqual({
       match: true,
       params: { id: 1337 },
+    })
+  })
+
+  it('transforms a param for Boolean', () => {
+    expect(matchPath('/signedUp/{status:Boolean}', '/signedUp/true')).toEqual({
+      match: true,
+      params: {
+        status: true,
+      },
+    })
+
+    expect(matchPath('/signedUp/{status:Boolean}', '/signedUp/false')).toEqual({
+      match: true,
+      params: {
+        status: false,
+      },
+    })
+
+    expect(
+      matchPath('/signedUp/{status:Boolean}', '/signedUp/somethingElse')
+    ).toEqual({
+      match: false,
+    })
+  })
+
+  it('transforms a param for Floats', () => {
+    expect(
+      matchPath('/version/{floatyMcFloat:Float}', '/version/1.58')
+    ).toEqual({
+      match: true,
+      params: {
+        floatyMcFloat: 1.58,
+      },
+    })
+
+    expect(matchPath('/version/{floatyMcFloat:Float}', '/version/626')).toEqual(
+      {
+        match: true,
+        params: {
+          floatyMcFloat: 626,
+        },
+      }
+    )
+
+    expect(
+      matchPath('/version/{floatyMcFloat:Float}', '/version/+0.92')
+    ).toEqual({
+      match: true,
+      params: {
+        floatyMcFloat: 0.92,
+      },
+    })
+
+    expect(
+      matchPath('/version/{floatyMcFloat:Float}', '/version/-5.5')
+    ).toEqual({
+      match: true,
+      params: {
+        floatyMcFloat: -5.5,
+      },
+    })
+
+    expect(matchPath('/version/{floatyMcFloat:Float}', '/version/4e8')).toEqual(
+      {
+        match: true,
+        params: {
+          floatyMcFloat: 4e8,
+        },
+      }
+    )
+
+    expect(
+      matchPath('/version/{floatyMcFloat:Float}', '/version/noMatchMe')
+    ).toEqual({
+      match: false,
+    })
+  })
+
+  it('handles multiple typed params', () => {
+    expect(
+      matchPath(
+        '/dashboard/document/{id:Int}/{version:Float}/edit/{edit:Boolean}',
+        '/dashboard/document/44/1.8/edit/false'
+      )
+    ).toEqual({
+      match: true,
+      params: { id: 44, version: 1.8, edit: false },
     })
   })
 })

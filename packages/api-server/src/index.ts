@@ -1,60 +1,38 @@
 #!/usr/bin/env node
-import { rmSync } from 'fs'
-import path from 'path'
-
-import requireDir from 'require-dir'
 import yargs from 'yargs'
 
-import { server, setLambdaFunctions } from './http'
-import { requestHandler } from './requestHandlers/awsLambda'
+import { http } from './http'
 
-const { port, functions, socket } = yargs
-  .option('port', { default: 8911, type: 'number' })
+if (process.argv0 === 'api-server') {
+  console.log()
+  console.warn(
+    '"api-server" is deprecated, please use "rw-api-server" instead.'
+  )
+  console.log()
+}
+
+const { port, socket, rootPath } = yargs
+  .option('port', { default: 8911, type: 'number', alias: 'p' })
   .option('socket', { type: 'string' })
-  .option('functions', {
-    alias: 'f',
-    required: true,
+  .option('rootPath', {
+    alias: 'root-path',
+    default: '/',
     type: 'string',
-    desc: 'The path where your Serverless Functions are stored',
+    desc: 'Root path where your api functions are served',
+  })
+  .coerce('rootPath', (path) => {
+    // Make sure that we create a root path that starts and ends with a slash (/)
+    const prefix = path.charAt(0) !== '/' ? '/' : ''
+    const suffix = path.charAt(path.length - 1) !== '/' ? '/' : ''
+
+    return `${prefix}${path}${suffix}`
   }).argv
 
-if (process.env.NODE_ENV !== 'production') {
-  console.info(`NODE_ENV ${process.env.NODE_ENV}`)
-  // Transpile files during development,
-  // this command has to be run from the "api" directory.
-  const babelRequireHook = require('@babel/register')
-  babelRequireHook({
-    extends: path.join(process.cwd(), '.babelrc.js'),
-    extensions: ['.js', '.ts'],
-    only: [process.cwd()],
-    ignore: ['node_modules'],
-    cache: false,
-  })
-}
-
-const serverlessFunctions = requireDir(path.join(process.cwd(), functions), {
-  recurse: false,
-  extensions: ['.js', '.ts'],
+http({ port, socket, rootPath }).on('listening', () => {
+  if (socket) {
+    console.log(`Listening on ${socket}`)
+  } else {
+    console.log(`Listening on http://localhost:${port}${rootPath}`)
+  }
+  console.log()
 })
-
-try {
-  const app = server({ requestHandler }).listen(socket || port, () => {
-    if (socket) {
-      console.log(socket)
-    } else {
-      console.log(`http://localhost:${port}`)
-    }
-    setLambdaFunctions(serverlessFunctions)
-  })
-
-  process.on('exit', () => {
-    app.close(() => {
-      if (socket) {
-        rmSync(socket)
-      }
-    })
-  })
-} catch (e) {
-  console.error(e)
-  process.exit(1)
-}

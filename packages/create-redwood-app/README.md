@@ -24,7 +24,7 @@ Do you love the Jamstack philosophy but need a database-backed web app? Want gre
 
 <h2>Quick Start</h2>
 
-Redwood requires Node.js v12 and Yarn v1.15 (or newer).
+Redwood requires Node.js v14 and Yarn v1.15 (or newer).
 ```console
 yarn create redwood-app redwood-project
 cd redwood-project

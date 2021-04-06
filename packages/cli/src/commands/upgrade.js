@@ -124,6 +124,7 @@ const refreshPrismaClient = () => {
 }
 
 const checkInstalled = () => {
+  const basePath = getPaths().base
   return [
     {
       // yarn upgrade will install listed packages even if not already installed
@@ -134,7 +135,10 @@ const checkInstalled = () => {
       task: async (ctx, task) => {
         try {
           const { stdout } = await execa.command(
-            'yarn list --depth 0 --pattern @redwoodjs/auth'
+            'yarn list --depth 0 --pattern @redwoodjs/auth',
+            {
+              cwd: basePath,
+            }
           )
           if (stdout.includes('redwoodjs/auth')) {
             ctx.auth = true
@@ -154,6 +158,7 @@ const checkInstalled = () => {
 // yargs allows passing the 'dry-run' alias 'd' here,
 // which we need to use because babel fails on 'dry-run'
 const runUpgrade = ({ d: dryRun, tag, pr }) => {
+  const basePath = getPaths().base
   return [
     {
       title: '...',
@@ -169,6 +174,7 @@ const runUpgrade = ({ d: dryRun, tag, pr }) => {
           if (!tag) {
             execa.command(`yarn outdated ${rwPackages}`, {
               stdio: 'inherit',
+              cwd: basePath,
             })
           } else {
             throw new Error()
@@ -179,12 +185,14 @@ const runUpgrade = ({ d: dryRun, tag, pr }) => {
           execa.command(installTags(tag, ctx.auth), {
             stdio: 'inherit',
             shell: true,
+            cwd: basePath,
           })
         } else if (pr) {
           task.title = `Installs packages from PR ${pr}`
           execa.command(installPr(pr, ctx.auth), {
             stdio: 'inherit',
             shell: true,
+            cwd: basePath,
           })
         } else {
           task.title = 'Running @redwoodjs package interactive upgrade CLI'
@@ -194,6 +202,7 @@ const runUpgrade = ({ d: dryRun, tag, pr }) => {
             {
               stdio: 'inherit',
               shell: true,
+              cwd: basePath,
             }
           )
         }

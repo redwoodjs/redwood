@@ -102,10 +102,17 @@ module.exports = {
       },
     },
     {
-      files: ['.babelrc.js', 'babel.config.js', '.eslintrc.js', '*.config.js'],
+      files: [
+        '.babelrc.js',
+        'babel.config.js',
+        '.eslintrc.js',
+        '*.config.js',
+        'jest.setup.js',
+      ],
       env: {
         node: true,
         commonjs: true,
+        jest: true,
       },
     },
   ],

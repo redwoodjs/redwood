@@ -11,7 +11,7 @@ import c from 'src/lib/colors'
 import { generatePrismaClient } from 'src/lib/generatePrismaClient'
 
 export const command = 'dev [side..]'
-export const description = 'Start development servers for api, db, and web'
+export const description = 'Start development servers for api, and web'
 export const builder = (yargs) => {
   yargs
     .positional('side', {
@@ -26,6 +26,11 @@ export const builder = (yargs) => {
         'String of one or more Webpack DevServer config options, for example: `--fwd="--port=1234 --open=false"`',
       type: 'string',
     })
+    .option('esbuild', {
+      type: 'boolean',
+      required: false,
+      description: 'Use ESBuild for api side [experimental]',
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -34,7 +39,11 @@ export const builder = (yargs) => {
     )
 }
 
-export const handler = async ({ side = ['api', 'web'], forward = '' }) => {
+export const handler = async ({
+  side = ['api', 'web'],
+  forward = '',
+  esbuild = false,
+}) => {
   // We use BASE_DIR when we need to effectively set the working dir
   const BASE_DIR = getPaths().base
   // For validation, e.g. dirExists?, we use these
@@ -91,6 +100,15 @@ export const handler = async ({ side = ['api', 'web'], forward = '' }) => {
       prefixColor: 'blue',
       runWhen: () => fs.existsSync(WEB_DIR_SRC),
     },
+  }
+
+  if (esbuild) {
+    jobs.api.name = 'api esbuild'
+    jobs.api.command =
+      'yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn rw-api-server-watch'
+
+    jobs.web.name = 'web esbuild'
+    jobs.web.command = 'yarn cross-env ESBUILD=1 && ' + jobs.web.command
   }
 
   concurrently(
