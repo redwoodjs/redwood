@@ -100,6 +100,8 @@ export class PageLoader extends React.Component<Props> {
     // than `delay`.
     // Consumers of the context can show a loading indicator
     // to signal to the user that something is happening.
+    // adding ts-ignore to avoid getting error TS2322: Type 'Timeout' is not assignable to type 'number'
+    // @ts-ignore
     this.loadingTimeout = setTimeout(
       () => this.setState({ slowModuleImport: true }),
       delay
