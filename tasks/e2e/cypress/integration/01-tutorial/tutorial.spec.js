@@ -255,5 +255,6 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     cy.contains('Save').click()
     // console
     // {name: "test name", email: "foo@bar.com", message: "test message"}
+    cy.visit('http://localhost:8910/')
   })
 })
