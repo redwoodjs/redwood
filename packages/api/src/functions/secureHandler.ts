@@ -7,6 +7,12 @@ import {
   DEFAULT_WEBHOOK_SECRET,
 } from 'src/auth/verifiers'
 
+export {
+  VerifyOptions,
+  WebhookVerificationError,
+  DEFAULT_WEBHOOK_SECRET,
+} from 'src/auth/verifiers'
+
 /**
  * @const {string}
  */
@@ -45,25 +51,41 @@ export const signatureFromEvent = ({
  *
  * @example
  *
- *    verify({ event: event, options: {} })*
+ *    verifyWebhook({ event: event, options: {} })*
  */
-export const verify = ({
+export const verifyWebhook = ({
   event,
-  payload,
   secret = DEFAULT_WEBHOOK_SECRET,
   signatureHeader = DEFAULT_WEBHOOK_SIGNATURE_HEADER,
   options,
 }: {
   event: APIGatewayProxyEvent
-  payload?: string | null
   secret?: string
   signatureHeader?: string
   options: VerifyOptions
 }): boolean | WebhookVerificationError => {
-  // const body = event.body || ''
+  const body = event.body || ''
   const signature = signatureFromEvent({ event, signatureHeader })
-  const { verify } = createVerifier('timestampScheme', options) // maybe options?
-  const body = payload || event.body || ''
+
+  const { verify } = createVerifier({ options })
 
   return verify({ body, secret, signature })
+}
+
+/**
+ * Signs a payload with a secret and verifier type method
+ *
+ */
+export const sign = ({
+  payload,
+  secret = DEFAULT_WEBHOOK_SECRET,
+  options,
+}: {
+  payload: string
+  secret: string
+  options: VerifyOptions
+}) => {
+  const { sign } = createVerifier({ options })
+
+  return sign({ body: payload, secret })
 }
