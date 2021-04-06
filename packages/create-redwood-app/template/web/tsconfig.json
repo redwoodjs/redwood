@@ -14,5 +14,5 @@
     "types": ["jest"],
     "jsx": "preserve",
   },
-  "include": ["src", "../.redwood/**/*"]
+  "include": ["src", "../.redwood/**/*", "types", "../types"]
 }

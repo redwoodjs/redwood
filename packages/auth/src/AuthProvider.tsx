@@ -21,7 +21,7 @@ export interface AuthContextInterface {
    */
   authToken: string | null // @WARN! deprecated, will always be null
   /* The current user's data from the `getCurrentUser` function on the api side */
-  currentUser?: null | CurrentUser
+  currentUser: null | CurrentUser
   /* The user's metadata from the auth provider */
   userMetadata: null | SupportedUserMetadata
   logIn(options?: unknown): Promise<void>
