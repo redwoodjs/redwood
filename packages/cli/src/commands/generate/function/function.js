@@ -81,9 +81,9 @@ export const handler = async ({ name, force }) => {
     await tasks.run()
 
     console.info('')
-
     console.info(c.warning('⚠ Important:'))
     console.info('')
+
     console.info(
       c.bold(
         'When deployed, a custom serverless function is an open API endpoint and ' +
@@ -92,14 +92,11 @@ export const handler = async ({ name, force }) => {
     )
 
     console.info('')
-
     console.info(
-      c.info(
-        `Please consult the ${terminalLink(
-          'Serverless Function Considerations',
-          'https://redwoodjs.com/docs/serverless-functions#security-considerations'
-        )} in the RedwoodJS documentation for more information.`
-      )
+      `Please consult the ${terminalLink(
+        'Serverless Function Considerations',
+        'https://redwoodjs.com/docs/serverless-functions#security-considerations'
+      )} in the RedwoodJS documentation for more information.`
     )
     console.info('')
   } catch (e) {
