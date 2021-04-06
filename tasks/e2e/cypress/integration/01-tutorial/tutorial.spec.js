@@ -103,17 +103,30 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     cy.visit('http://localhost:8910/posts')
 
     cy.get('h1').should('contain', 'Posts')
+    cy.get('a.rw-button.rw-button-green').should(
+      'have.css',
+      'background-color',
+      'rgb(72, 187, 120)'
+    )
     cy.contains(' New Post').click()
     cy.get('h2').should('contain', 'New Post')
 
     // SAVE
     cy.get('input#title').type('First post')
     cy.get('input#body').type('Hello world!')
+    //check scaffold css
+    cy.get('button.rw-button.rw-button-blue').should(
+      'have.css',
+      'background-color',
+      'rgb(49, 130, 206)'
+    )
     cy.get('button').contains('Save').click()
 
     cy.contains('Post created')
 
     cy.contains('Loading...').should('not.exist')
+    //checks Toast messages
+    cy.get('div[role="status"]').contains('Post created')
 
     // EDIT
     cy.contains('Edit').click()
@@ -122,6 +135,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     cy.get('input#body').clear().type('No, Margle the World!')
     cy.get('button').contains('Save').click()
     cy.get('td').contains('No, Margle the World!')
+    cy.get('div[role="status"]').contains('Post updated')
 
     cy.contains('Post updated')
 
@@ -130,6 +144,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
 
     // No more posts, so it should be in the empty state.
     cy.contains('Post deleted')
+    cy.get('div[role="status"]').contains('Post deleted')
 
     cy.contains('Create one?').click()
     cy.get('input#title').type('Second post')
