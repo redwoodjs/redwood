@@ -101,7 +101,7 @@ export const apiPackages = ['@redwoodjs/api-server']
 // any files to create
 export const files = [
   {
-    path: path.join(getPaths().base, 'api/src/functions/renderHealthz.js'),
+    path: path.join(getPaths().base, 'api/src/functions/healthz.js'),
     content: RENDER_HEALTH_CHECK,
   },
 ]
