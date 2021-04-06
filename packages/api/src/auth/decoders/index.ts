@@ -33,12 +33,10 @@ const typesToDecoders: Record<
   ethereum: ethereum,
   nhost: noop,
   custom: noop,
-  supertokens: noop
+  supertokens: noop,
 }
 
-export const isAuthHeaderUsedByType: Record<
-  SupportedAuthTypes, boolean
-> = {
+export const isAuthHeaderUsedByType: Record<SupportedAuthTypes, boolean> = {
   auth0: true,
   azureActiveDirectory: true,
   netlify: true,
@@ -49,8 +47,8 @@ export const isAuthHeaderUsedByType: Record<
   ethereum: true,
   nhost: true,
   custom: true,
-  supertokens: false
-};
+  supertokens: false,
+}
 
 export const decodeToken = async (
   type: SupportedAuthTypes,

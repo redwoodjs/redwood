@@ -59,9 +59,12 @@ export const getAuthenticationContext = async ({
   if (!type) {
     return undefined
   }
-  let tokenUsedByType = isAuthHeaderUsedByType[type] === undefined ? true : isAuthHeaderUsedByType[type];
+  const tokenUsedByType =
+    isAuthHeaderUsedByType[type] === undefined
+      ? true
+      : isAuthHeaderUsedByType[type]
   if (!tokenUsedByType) {
-    return [{}, {type, token: "", schema: ""}, { event, context }];
+    return [{}, { type, token: '', schema: '' }, { event, context }]
   }
 
   let decoded = null

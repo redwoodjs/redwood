@@ -36,7 +36,12 @@ const expressResponseForLambdaResult = (
   lambdaResult: APIGatewayProxyResult
 ) => {
   // Old code: const { statusCode = 200, headers, body = '' } = lambdaResult
-  const { statusCode = 200, headers, body = '', multiValueHeaders } = lambdaResult
+  const {
+    statusCode = 200,
+    headers,
+    body = '',
+    multiValueHeaders,
+  } = lambdaResult
 
   if (headers) {
     Object.keys(headers).forEach((headerName) => {
