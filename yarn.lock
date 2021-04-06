@@ -3419,17 +3419,17 @@
     resolve-from "^5.0.0"
     store2 "^2.7.1"
 
-"@supabase/gotrue-js@^1.12.0":
-  version "1.12.1"
-  resolved "https://registry.yarnpkg.com/@supabase/gotrue-js/-/gotrue-js-1.12.1.tgz#0c5b9267f5608e6e57d1830c74874864193a5016"
-  integrity sha512-qg3vuABV7IrDBN2KxjvxQosu+RORcrX5l+TifaIUYests041eoxa5++NxE0dyIvsJHPZI3xUlbJ856iDxSkpbg==
+"@supabase/gotrue-js@^1.12.2":
+  version "1.12.2"
+  resolved "https://registry.yarnpkg.com/@supabase/gotrue-js/-/gotrue-js-1.12.2.tgz#48b2f479a1cbb421e5079959a64ec13a31cbd23b"
+  integrity sha512-5kRvMiTqt8wTYyqYmlWfBICSEqYrqnvukwRbXaNQ2GJuSm3Z5CNkLRa9gd1KrLOvo6varTi6M/b8ckcFBe4qxQ==
   dependencies:
     cross-fetch "^3.0.6"
 
-"@supabase/postgrest-js@^0.26.1":
-  version "0.26.1"
-  resolved "https://registry.yarnpkg.com/@supabase/postgrest-js/-/postgrest-js-0.26.1.tgz#8b68c5fc68da25fcfbf6b1f36da4ec6c951edba4"
-  integrity sha512-fD7K6S2bl8JkYqeeZ0hWBWaCz61ktqz2MA4jiugT9FiKITaMgnjekHUwA29KbPsiRRft0HW/bNDRPxrGy+3UNw==
+"@supabase/postgrest-js@^0.28.0":
+  version "0.28.0"
+  resolved "https://registry.yarnpkg.com/@supabase/postgrest-js/-/postgrest-js-0.28.0.tgz#6e383b451057bef4e1caf6fc75c88a935ca5524a"
+  integrity sha512-h7em0UwOy6HK+33kzTOWbOzfB9uXe7DtxNv2JLDcgj9vRN1fSIUSYKrbuwmM93zz3r6ZMpkALXND8S/4fgoXBA==
   dependencies:
     cross-fetch "^3.0.6"
 
@@ -3442,14 +3442,15 @@
     query-string "^6.12.1"
     websocket "^1.0.31"
 
-"@supabase/supabase-js@^1.3.3":
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/@supabase/supabase-js/-/supabase-js-1.6.0.tgz#097603e946d08ad4eab70cdfbb74aa1c319b4598"
-  integrity sha512-YQKo9AUCfVZtwX2izTb/fnHA7TigJ3gBaroQs1ntSDbu6/v9QVzCWQHh912qe8BbJAx7Bu36OZCeyYml8OlM8w==
+"@supabase/supabase-js@^1.7.7":
+  version "1.7.7"
+  resolved "https://registry.yarnpkg.com/@supabase/supabase-js/-/supabase-js-1.7.7.tgz#f4c7be3df531ac20c5b13224e4bd4de5d3bf578b"
+  integrity sha512-zbBU/a1hu9rXmm764z29GP3NLxccZrKd64TFkp3K6xkxKgxSs/y4kgfOdVD4+a0xmeE6jBgB/q+4G9PR8GQOPA==
   dependencies:
-    "@supabase/gotrue-js" "^1.12.0"
-    "@supabase/postgrest-js" "^0.26.1"
+    "@supabase/gotrue-js" "^1.12.2"
+    "@supabase/postgrest-js" "^0.28.0"
     "@supabase/realtime-js" "^1.0.6"
+    cross-fetch "^3.1.0"
 
 "@szmarczak/http-timer@^1.1.2":
   version "1.1.2"
@@ -7270,6 +7271,13 @@ cross-fetch@^3.0.6:
   dependencies:
     node-fetch "2.6.1"
 
+cross-fetch@^3.1.0:
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-3.1.3.tgz#b8e7d5f19161c4a0ca916f707978848786043afb"
+  integrity sha512-2i6v88DTqVBNODyjD9U6Ycn/uSZNvyHe25cIbo2fFnAACAsaLTJsd23miRWiR5NuiGXR9wpJ9d40/9WAhjDIrw==
+  dependencies:
+    node-fetch "2.6.1"
+
 cross-spawn@7.0.3, cross-spawn@^7.0.0, cross-spawn@^7.0.1, cross-spawn@^7.0.2, cross-spawn@^7.0.3:
   version "7.0.3"
   resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-7.0.3.tgz#f73a85b9d5d41d045551c177e2882d4ac85728a6"
@@ -10704,7 +10712,7 @@ ignore-by-default@^1.0.1:
   resolved "https://registry.yarnpkg.com/ignore-by-default/-/ignore-by-default-1.0.1.tgz#48ca6d72f6c6a3af00a9ad4ae6876be3889e2b09"
   integrity sha1-SMptcvbGo68Aqa1K5odr44ieKwk=
 
-ignore-walk@^3.0.1:
+ignore-walk@^3.0.1, ignore-walk@^3.0.3:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/ignore-walk/-/ignore-walk-3.0.3.tgz#017e2447184bfeade7c238e4aefdd1e8f95b1e37"
   integrity sha512-m7o6xuOaT1aqheYHKf8W6J5pYH85ZI9w077erOzLje3JsB1gkafkAhHHY19dqjulgIZHFm32Cp5uNZgcQqdJKw==
@@ -13791,7 +13799,7 @@ normalize-url@^4.1.0:
   resolved "https://registry.yarnpkg.com/normalize-url/-/normalize-url-4.5.0.tgz#453354087e6ca96957bd8f5baf753f5982142129"
   integrity sha512-2s47yzUxdexf1OhyRi4Em83iQk0aPvwTddtFz4hnSSw9dCEsLEGf6SwIO8ss/19S9iBb5sJaOuTvTGDeZI00BQ==
 
-npm-bundled@^1.0.1:
+npm-bundled@^1.0.1, npm-bundled@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/npm-bundled/-/npm-bundled-1.1.1.tgz#1edd570865a94cdb1bc8220775e29466c9fb234b"
   integrity sha512-gqkfgGePhTpAEgUsGEgcq1rqPXA+tv/aVBlgEzfXwA1yiUJF7xtEt3CtVwOjNYQOVknDk0F20w58Fnm3EtG0fA==
@@ -13834,6 +13842,16 @@ npm-packlist@^1.4.4:
   dependencies:
     ignore-walk "^3.0.1"
     npm-bundled "^1.0.1"
+    npm-normalize-package-bin "^1.0.1"
+
+npm-packlist@^2.1.5:
+  version "2.1.5"
+  resolved "https://registry.yarnpkg.com/npm-packlist/-/npm-packlist-2.1.5.tgz#43ef5bbb9f59b7c0ef91e0905f1dd707b4cfb33c"
+  integrity sha512-KCfK3Vi2F+PH1klYauoQzg81GQ8/GGjQRKYY6tRnpQUPKTs/1gBZSRWtTEd7jGdSn1LZL7gpAmJT+BcS55k2XQ==
+  dependencies:
+    glob "^7.1.6"
+    ignore-walk "^3.0.3"
+    npm-bundled "^1.1.1"
     npm-normalize-package-bin "^1.0.1"
 
 npm-pick-manifest@^3.0.0:
