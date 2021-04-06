@@ -22,18 +22,26 @@ export type CellLoadingEmptyStateComponent = Omit<
   OperationResult,
   'error' | 'loading' | 'data'
 >
-export type CellSuccessStateComponent =
-  | Omit<OperationResult, 'error' | 'loading' | 'data'>
+export type CellSuccessStateComponent<TData = any> =
+  | Omit<OperationResult<TData>, 'error' | 'loading' | 'data'>
   | DataObject
 
-export interface WithCellProps {
-  beforeQuery?: <TProps>(props: TProps) => { variables: TProps }
-  QUERY: DocumentNode | ((variables: Record<string, unknown>) => DocumentNode)
-  afterQuery?: (data: DataObject) => DataObject
-  Loading?: React.FC<CellLoadingEmptyStateComponent>
+export interface WithCellProps<
+  TData,
+  TVariables extends Record<string, unknown>,
+  TInitialData = TData,
+  TProps extends { variables: TVariables } & Record<string, unknown> = {
+    variables: TVariables
+  },
+  TProcessedProps = TProps
+> {
+  beforeQuery?: (props: TProps) => TProcessedProps
+  QUERY: DocumentNode | ((variables: TProcessedProps) => DocumentNode)
+  afterQuery?: (data: TInitialData) => TData
+  Loading?: React.FC<CellLoadingEmptyStateComponent & TProps>
   Failure?: React.FC<CellFailureStateComponent>
   Empty?: React.FC<CellLoadingEmptyStateComponent>
-  Success: React.FC<CellSuccessStateComponent>
+  Success: React.FC<CellSuccessStateComponent<TData>>
 }
 
 /**
@@ -89,36 +97,40 @@ const isEmpty = (data: DataObject) => {
   return isDataNull(data) || isDataEmptyArray(data)
 }
 
-export const withCell = ({
+export function withCell<
+  TData = any,
+  TVariables extends Record<string, unknown> = any
+>({
   beforeQuery = (props) => ({
     variables: props,
     fetchPolicy: 'cache-and-network',
     nextFetchPolicy: 'cache-first',
   }),
   QUERY,
-  afterQuery = (data) => ({ ...data }),
+  afterQuery = (data: TData) => data,
   Loading = () => <>Loading...</>,
   Failure,
   Empty,
   Success,
-}: WithCellProps) => {
+}: WithCellProps<TData, TVariables>) {
+  type TProps = Parameters<typeof beforeQuery>[0]
+
   // If its prerendering, render the Cell's Loading component
   if (global.__REDWOOD__PRERENDERING) {
-    return (props: Record<string, unknown>) => <Loading {...props} />
+    return (props: TProps) => <Loading {...props} />
   }
 
-  return (props: Record<string, unknown>) => {
-    const {
-      children, // eslint-disable-line @typescript-eslint/no-unused-vars
-      ...variables
-    } = props
+  return (props: TProps) => {
+    if ('children' in props) {
+      throw Error(
+        'Cells should not have any children, or any props named children.'
+      )
+    }
 
     return (
       <Query
-        query={
-          typeof QUERY === 'function' ? QUERY(beforeQuery(variables)) : QUERY
-        }
-        {...beforeQuery(variables)}
+        query={typeof QUERY === 'function' ? QUERY(beforeQuery(props)) : QUERY}
+        {...beforeQuery(props)}
       >
         {({ error, loading, data, ...queryRest }) => {
           if (error) {
