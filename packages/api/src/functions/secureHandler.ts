@@ -42,10 +42,9 @@ export const signatureFromEvent = ({
 
 /**
  * Verifies event is signed with a valid webhook signature.
- * See verifySignature() for implementation rules.
  *
  * @param {APIGatewayProxyEvent} event - The event that incudes the request details, like headers.
- * @param {string} secret - The secret that will verify the signature according to the verifer type
+ * @param {string} secret - The secret that will verify the signature according to the verifier type
  * @param {VerifyOptions} options - Options to specify the verifier type the header key that contains the signature, timestamp leeway.
  * @return {boolean | WebhookVerificationError} - Returns true if the signature is verified, or raises WebhookVerificationError.
  *
@@ -69,6 +68,35 @@ export const verifyWebhook = ({
       options.signatureHeader || DEFAULT_WEBHOOK_SIGNATURE_HEADER,
   })
 
+  const { verify } = createVerifier({ options })
+
+  return verify({ body, secret, signature })
+}
+
+/**
+ * Verifies a webhook signature given a body, secret and verifier type.
+ *
+ * @param {string} body -
+ * @param {string} secret - The secret that will verify the signature according to the verifier type
+ * @param {string} signature -
+ * @param {VerifyOptions} options - Options to specify the verifier type the header key that contains the signature, timestamp leeway.
+ * @return {boolean | WebhookVerificationError} - Returns true if the signature is verified, or raises WebhookVerificationError.
+ *
+ * @example
+ *
+ *    verify({ body, secret, signature, options: {} })*
+ */
+export const verify = ({
+  body,
+  secret = DEFAULT_WEBHOOK_SECRET,
+  signature,
+  options,
+}: {
+  body: string
+  secret: string
+  signature: string
+  options: VerifyOptions
+}): boolean | WebhookVerificationError => {
   const { verify } = createVerifier({ options })
 
   return verify({ body, secret, signature })
