@@ -12,9 +12,11 @@ export const secretKey = ({
   options: VerifyOptions
 }): SecretKey => {
   return {
-    sign: () => {
-      console.log(options)
-      return ''
+    sign: ({ secret }) => {
+      console.warn(
+        `With the ${options.type} verifier, your body isn't signed with a secret`
+      )
+      return secret
     },
     verify: ({ signature, secret = DEFAULT_WEBHOOK_SECRET }) => {
       const verified = signature === secret

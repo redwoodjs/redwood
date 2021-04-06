@@ -9,7 +9,7 @@ const { sign, verify } = createVerifier({
   options: { type: 'timestampScheme' },
 })
 
-describe('timestampScheme', () => {
+describe('timestampScheme verifier', () => {
   describe('signs a payload with default timestamp', () => {
     test('it has a time and scheme', () => {
       const signature = sign({ body, secret })

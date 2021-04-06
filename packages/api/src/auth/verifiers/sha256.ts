@@ -22,7 +22,14 @@ const createSignature = ({
   body: string
   secret: string
 }): string => {
-  return body + secret
+  const algorithm = 'sha256'
+  const hmac = createHmac(algorithm, secret)
+  const digest = Buffer.from(
+    algorithm + '=' + hmac.update(body).digest('hex'),
+    'utf8'
+  )
+
+  return digest.toString()
 }
 
 /**
@@ -50,10 +57,14 @@ export const verifySignature = ({
     )
 
     const verified =
-      webhookSignature.length !== digest.length ||
-      !timingSafeEqual(digest, webhookSignature)
+      webhookSignature.length === digest.length &&
+      timingSafeEqual(digest, webhookSignature)
 
-    return verified
+    if (verified) {
+      return verified
+    }
+
+    throw new WebhookVerificationError()
   } catch (error) {
     throw new WebhookVerificationError(
       `${VERIFICATION_ERROR_MESSAGE}: ${error.message}`

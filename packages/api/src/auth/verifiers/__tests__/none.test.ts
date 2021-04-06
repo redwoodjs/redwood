@@ -7,7 +7,7 @@ const { sign, verify } = createVerifier({
   options: { type: 'none' },
 })
 
-describe('none', () => {
+describe('none verifier', () => {
   describe('faux signs a payload', () => {
     test('it has an empty signature', () => {
       const signature = sign({ body, secret })
