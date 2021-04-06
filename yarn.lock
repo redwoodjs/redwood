@@ -18202,9 +18202,10 @@ subscriptions-transport-ws@^0.9.11:
     symbol-observable "^1.0.4"
     ws "^5.2.0"
 
-"supertokens-auth-react@github:supertokens/supertokens-auth-react":
+supertokens-auth-react@^0.8.0:
   version "0.8.0"
-  resolved "https://codeload.github.com/supertokens/supertokens-auth-react/tar.gz/b6f0f7a418e76dd27c7148d359a04f8e7158d23c"
+  resolved "https://registry.yarnpkg.com/supertokens-auth-react/-/supertokens-auth-react-0.8.0.tgz#fac698f87df1bfc0b41e70705982a19d525ef461"
+  integrity sha512-ylKllvEAsmA6+g695nfA2zG5GmfdxXn2POXTkFTQc9IMVwx8EZhz/YxpS98dsfoMyRBCdFg6CpkP4/4Bc+ecEA==
   dependencies:
     "@emotion/babel-plugin" "11.1.2"
     "@emotion/cache" "11.1.3"

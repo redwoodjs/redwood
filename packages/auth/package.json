@@ -18,9 +18,8 @@
     "magic-sdk": "^2.5.0",
     "msal": "^1.4.1",
     "netlify-identity-widget": "1.9.1",
-    "react": "^17.0.1",
     "nhost-js-sdk": "^3.0.0-14",
-    "supertokens-auth-react": "github:supertokens/supertokens-auth-react"
+    "supertokens-auth-react": "^0.8.0"
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",
