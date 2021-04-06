@@ -15,12 +15,11 @@ export const supertokens = <T, S, R, N>(client: {
   return {
     type: 'supertokens',
     client: undefined,
-    // TODO: use lib's login with redirect function (need to create one)
+
     login: async () => client.authRecipe.redirectToAuth('signin'),
 
     logout: () => client.authRecipe.signOut(),
 
-    // TODO: specifically go to sign up
     signup: async () => client.authRecipe.redirectToAuth('signup'),
 
     getToken: async () => null,
