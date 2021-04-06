@@ -70,7 +70,7 @@ export const prismaDataSourceCheck = (database) => {
   const detectedDatabase = content.match(
     /(?<=datasource DS.*\n\W*provider\W*)\w+/
   )
-  if (detectedDatabase === database) {
+  if (detectedDatabase == database) {
     switch (database) {
       case 'postgres':
         return {
@@ -88,6 +88,7 @@ export const prismaDataSourceCheck = (database) => {
     }
   } else {
     throw new Error(`
+    detected ${detectedDatabase}
     Prisma datasource provider is not ${database}.
     Update your schema.prisma provider to be ${database}, then run
     yarn rw prisma migrate dev`)
