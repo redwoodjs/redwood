@@ -48,12 +48,6 @@ export const builder = (yargs) => {
       description: 'Name of the Function',
       type: 'string',
     })
-    .option('force', {
-      alias: 'f',
-      default: false,
-      description: 'Overwrite existing files',
-      type: 'boolean',
-    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -67,6 +61,8 @@ export const builder = (yargs) => {
   })
 }
 
+// This could be built using createYargsForComponentGeneration;
+// however, we need to add a message after generating the function files
 export const handler = async ({ name, force }) => {
   const tasks = new Listr(
     [
@@ -90,7 +86,8 @@ export const handler = async ({ name, force }) => {
     console.info('')
     console.info(
       c.bold(
-        'When deployed, a custom serverless function is an open API endpoint and is your responsibility to secure appropriately.'
+        'When deployed, a custom serverless function is an open API endpoint and ' +
+          'is your responsibility to secure appropriately.'
       )
     )
 
