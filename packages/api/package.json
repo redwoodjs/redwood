@@ -14,7 +14,7 @@
     "@redwoodjs/internal": "^0.28.4",
     "@types/pino": "^6.3.6",
     "apollo-server-lambda": "2.22.2",
-    "core-js": "3.6.5",
+    "core-js": "3.10.0",
     "graphql": "15.5.0",
     "graphql-scalars": "1.9.0",
     "jsonwebtoken": "^8.5.1",

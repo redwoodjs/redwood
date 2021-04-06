@@ -13,7 +13,7 @@
   "dependencies": {
     "@apollo/client": "^3.3.11",
     "@redwoodjs/auth": "^0.28.4",
-    "core-js": "3.6.5",
+    "core-js": "3.10.0",
     "graphql": "^15.3.0",
     "proptypes": "^1.1.0",
     "react-hot-toast": "^1.0.2"
