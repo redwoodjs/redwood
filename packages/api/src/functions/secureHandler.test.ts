@@ -48,7 +48,7 @@ describe('secureHandler', () => {
       })
 
       describe('with a webhook event', () => {
-        test('it can verify a signature it generates', () => {
+        test('it can verify an event body payload with a signature it generates', () => {
           const options = { type: 'timestampScheme' }
           const signature = sign({ payload, secret, options })
 
@@ -59,6 +59,21 @@ describe('secureHandler', () => {
           })
 
           expect(verifyWebhook({ event, secret, options })).toBeTruthy()
+        })
+
+        test('it can verify overriding the event body payload with a signature it generates', () => {
+          const options = { type: 'timestampScheme' }
+          const signature = sign({ payload, secret, options })
+
+          const event = buildEvent({
+            payload: { body: payload },
+            signature,
+            signatureHeader: DEFAULT_WEBHOOK_SIGNATURE_HEADER,
+          })
+
+          expect(
+            verifyWebhook({ event, payload, secret, options })
+          ).toBeTruthy()
         })
 
         test('it denies verification when signed with a different secret', () => {

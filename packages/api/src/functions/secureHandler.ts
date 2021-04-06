@@ -41,9 +41,10 @@ export const signatureFromEvent = ({
 }
 
 /**
- * Verifies event is signed with a valid webhook signature.
+ * Verifies event payload is signed with a valid webhook signature.
  *
- * @param {APIGatewayProxyEvent} event - The event that incudes the request details, like headers.
+ * @param {APIGatewayProxyEvent} event - The event that includes the body for the verification payload and request details, like headers.
+ * @param {string} payload - If provided, the payload will be used to verify the signature instead of the event body.
  * @param {string} secret - The secret that will verify the signature according to the verifier type
  * @param {VerifyOptions} options - Options to specify the verifier type the header key that contains the signature, timestamp leeway.
  * @return {boolean | WebhookVerificationError} - Returns true if the signature is verified, or raises WebhookVerificationError.
@@ -54,14 +55,23 @@ export const signatureFromEvent = ({
  */
 export const verifyWebhook = ({
   event,
+  payload,
   secret = DEFAULT_WEBHOOK_SECRET,
   options,
 }: {
   event: APIGatewayProxyEvent
+  payload?: string
   secret?: string
   options: VerifyOptions
 }): boolean | WebhookVerificationError => {
-  const body = event.body || ''
+  let body = ''
+
+  if (payload) {
+    body = payload
+  } else {
+    body = event.body || ''
+  }
+
   const signature = signatureFromEvent({
     event,
     signatureHeader:
