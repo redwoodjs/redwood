@@ -3,7 +3,9 @@ import { createVerifier } from '../index'
 const body = 'No more secrets, Marty.'
 const secret = 'MY_VOICE_IS_MY_PASSPORT_VERIFY_ME'
 
-const { sign, verify } = createVerifier('none', {})
+const { sign, verify } = createVerifier({
+  options: { type: 'none' },
+})
 
 describe('none', () => {
   describe('faux signs a payload', () => {

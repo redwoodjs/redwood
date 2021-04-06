@@ -65,11 +65,13 @@ export class WebhookVerificationError extends WebhookError {
  * Used when verifying a signature's time component for permitted leeway.
  *
  * @typedef {Object} VerifyOptions
- * /TODODODODODO Add the type here as required?
+ * @param {SupportedVerifierTypes} type - What verification type methods used
+ * to sign and verify signatures
  * @param {number} tolerance - Optional tolerance in msec
  * @param {number} timestamp - Optional timestamp in msec
  */
 export interface VerifyOptions {
+  type: SupportedVerifierTypes
   tolerance?: number
   timestamp?: number
 }
@@ -78,25 +80,15 @@ export interface VerifyOptions {
  *
  */
 export interface WebhookVerifier {
-  sign({
-    body,
-    secret,
-    options,
-  }: {
-    body: string
-    secret: string
-    options?: VerifyOptions
-  }): string
+  sign({ body, secret }: { body: string; secret: string }): string
   verify({
     body,
     secret,
     signature,
-    options,
   }: {
     body: string
     secret: string
     signature: string
-    options?: VerifyOptions
   }): boolean | WebhookVerificationError
   type: SupportedVerifierTypes
 }
@@ -104,9 +96,10 @@ export interface WebhookVerifier {
 /**
  *
  */
-export const createVerifier = (
-  type: SupportedVerifierTypes,
+export const createVerifier = ({
+  options,
+}: {
   options: VerifyOptions
-): WebhookVerifier => {
-  return typesToVerifiers[type](options)
+}): WebhookVerifier => {
+  return typesToVerifiers[options.type]({ options })
 }

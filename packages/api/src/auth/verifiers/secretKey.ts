@@ -7,7 +7,11 @@ import {
 } from './index'
 export type SecretKey = WebhookVerifier
 
-export const secretKey = (options?: VerifyOptions): SecretKey => {
+export const secretKey = ({
+  options,
+}: {
+  options: VerifyOptions
+}): SecretKey => {
   return {
     sign: () => {
       console.log(options)

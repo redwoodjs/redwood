@@ -5,7 +5,9 @@ import { createVerifier, WebhookVerificationError } from '../index'
 const body = 'No more secrets, Marty.'
 const secret = 'MY_VOICE_IS_MY_PASSPORT_VERIFY_ME'
 
-const { sign, verify } = createVerifier('timestampScheme', {})
+const { sign, verify } = createVerifier({
+  options: { type: 'timestampScheme' },
+})
 
 describe('timestampScheme', () => {
   describe('signs a payload with default timestamp', () => {

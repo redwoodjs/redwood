@@ -1,6 +1,7 @@
 import { createHmac, timingSafeEqual } from 'crypto'
 
 import {
+  VerifyOptions,
   WebhookVerificationError,
   VERIFICATION_ERROR_MESSAGE,
   DEFAULT_WEBHOOK_SECRET,
@@ -20,7 +21,6 @@ const createSignature = ({
 }: {
   body: string
   secret: string
-  timestamp?: number
 }): string => {
   return body + secret
 }
@@ -67,9 +67,14 @@ export const verifySignature = ({
  * @see https://docs.github.com/en/developers/webhooks-and-events/securing-your-webhooks
  *
  */
-export const sha256 = (): WebhookVerifier => {
+export const sha256 = ({
+  options,
+}: {
+  options: VerifyOptions
+}): WebhookVerifier => {
   return {
     sign: ({ body, secret }) => {
+      console.log(options)
       return createSignature({ body, secret })
     },
     verify: ({ body, secret, signature }) => {

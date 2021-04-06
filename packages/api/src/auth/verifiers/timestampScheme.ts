@@ -104,7 +104,7 @@ const verifySignature = ({
   body,
   secret = DEFAULT_WEBHOOK_SECRET,
   signature,
-  options = {},
+  options,
 }: {
   body: string
   secret: string
@@ -144,10 +144,14 @@ const verifySignature = ({
  * @see https://stripe.com/docs/webhooks/signatures
  *
  */
-export const timestampScheme = (options: VerifyOptions): TimestampScheme => {
+export const timestampScheme = ({
+  options,
+}: {
+  options: VerifyOptions
+}): TimestampScheme => {
   return {
     sign: ({ body, secret }) => {
-      return createSignature({ body, secret })
+      return createSignature({ body, secret, timestamp: options.timestamp })
     },
     verify: ({ body, secret, signature }) => {
       return verifySignature({ body, secret, signature, options })
