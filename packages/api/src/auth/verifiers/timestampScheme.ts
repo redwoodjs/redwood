@@ -3,7 +3,6 @@ import { createHmac } from 'crypto'
 import {
   VerifyOptions,
   WebhookVerificationError,
-  VERIFICATION_ERROR_MESSAGE,
   DEFAULT_WEBHOOK_SECRET,
 } from './index'
 import type { WebhookVerifier } from './index'
@@ -32,7 +31,7 @@ const DEFAULT_TOLERANCE = FIVE_MINUTES
  */
 const getHmac = ({ secret }: { secret: string }) => {
   if (typeof secret === 'undefined' || secret === '') {
-    throw new WebhookVerificationError(VERIFICATION_ERROR_MESSAGE)
+    throw new WebhookVerificationError()
   }
 
   return createHmac('sha256', secret)
@@ -113,7 +112,7 @@ const verifySignature = ({
 }): boolean | WebhookVerificationError => {
   const match = /t=(\d+),v1=([\da-f]+)/.exec(signature)
   if (!match) {
-    throw new WebhookVerificationError(VERIFICATION_ERROR_MESSAGE)
+    throw new WebhookVerificationError()
   }
 
   const signedStamp = Number(match[1])
@@ -125,7 +124,7 @@ const verifySignature = ({
   const difference = Math.abs(timestamp - signedStamp)
 
   if (difference > tolerance) {
-    throw new WebhookVerificationError(VERIFICATION_ERROR_MESSAGE)
+    throw new WebhookVerificationError()
   }
 
   const hmac = getHmac({ secret })
@@ -135,7 +134,7 @@ const verifySignature = ({
     return true
   }
 
-  throw new WebhookVerificationError(VERIFICATION_ERROR_MESSAGE)
+  throw new WebhookVerificationError()
 }
 
 /**

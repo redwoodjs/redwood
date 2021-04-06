@@ -2,7 +2,6 @@ import type { WebhookVerifier } from './index'
 import {
   VerifyOptions,
   WebhookVerificationError,
-  VERIFICATION_ERROR_MESSAGE,
   DEFAULT_WEBHOOK_SECRET,
 } from './index'
 export type SecretKey = WebhookVerifier
@@ -21,7 +20,7 @@ export const secretKey = ({
       const verified = signature === secret
 
       if (!verified) {
-        throw new WebhookVerificationError(VERIFICATION_ERROR_MESSAGE)
+        throw new WebhookVerificationError()
       }
 
       return verified

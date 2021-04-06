@@ -54,8 +54,8 @@ export class WebhookVerificationError extends WebhookError {
    * Create a WebhookVerificationError.
    * @param {string} message - The error message
    * */
-  constructor(message: string) {
-    super(message)
+  constructor(message?: string) {
+    super(message || VERIFICATION_ERROR_MESSAGE)
   }
 }
 
@@ -67,11 +67,14 @@ export class WebhookVerificationError extends WebhookError {
  * @typedef {Object} VerifyOptions
  * @param {SupportedVerifierTypes} type - What verification type methods used
  * to sign and verify signatures
+ * @param {string} signatureHeader - Optional Header that contains the signature to verify
+ * will default to DEFAULT_WEBHOOK_SIGNATURE_HEADER
  * @param {number} tolerance - Optional tolerance in msec
  * @param {number} timestamp - Optional timestamp in msec
  */
 export interface VerifyOptions {
   type: SupportedVerifierTypes
+  signatureHeader?: string
   tolerance?: number
   timestamp?: number
 }
