@@ -60,7 +60,7 @@ export const handler = async () => {
 `
 // prisma data source check
 export const prismaDataSourceCheck = (database) => {
-  if (database == 'none') {
+  if (database === 'none') {
     return {
       path: path.join(getPaths().base, 'render.yaml'),
       content: RENDER_YAML(''),
@@ -70,7 +70,7 @@ export const prismaDataSourceCheck = (database) => {
   const detectedDatabase = content.match(
     /(?<=datasource DS.*\n\W*provider\W*)\w+/
   )
-  if (detectedDatabase == database) {
+  if (detectedDatabase === database) {
     switch (database) {
       case 'postgres':
         return {
