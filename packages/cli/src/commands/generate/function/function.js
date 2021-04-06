@@ -63,14 +63,14 @@ export const builder = (yargs) => {
 
 // This could be built using createYargsForComponentGeneration;
 // however, we need to add a message after generating the function files
-export const handler = async ({ name, force }) => {
+export const handler = async ({ name, ...rest }) => {
   const tasks = new Listr(
     [
       {
         title: `Generating function files...`,
         task: async () => {
-          const f = await files({ name })
-          return writeFilesTask(f, { overwriteExisting: force })
+          const f = await files({ name, ...rest })
+          return writeFilesTask(f, { overwriteExisting: rest.force })
         },
       },
     ],
