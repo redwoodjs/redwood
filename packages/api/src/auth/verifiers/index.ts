@@ -69,27 +69,33 @@ export class WebhookVerificationError extends WebhookError {
  * to sign and verify signatures
  * @param {string} signatureHeader - Optional Header that contains the signature to verify
  * will default to DEFAULT_WEBHOOK_SIGNATURE_HEADER
- * @param {number} tolerance - Optional tolerance in msec
  * @param {number} timestamp - Optional timestamp in msec
+ * @param {number} tolerance - Optional tolerance in msec
  */
 export interface VerifyOptions {
   type: SupportedVerifierTypes
   signatureHeader?: string
-  tolerance?: number
   timestamp?: number
+  tolerance?: number
 }
 
 /**
  *
  */
 export interface WebhookVerifier {
-  sign({ body, secret }: { body: string; secret: string }): string
+  sign({
+    payload,
+    secret,
+  }: {
+    payload: string | Record<string, unknown>
+    secret: string
+  }): string
   verify({
-    body,
+    payload,
     secret,
     signature,
   }: {
-    body: string
+    payload: string | Record<string, unknown>
     secret: string
     signature: string
   }): boolean | WebhookVerificationError

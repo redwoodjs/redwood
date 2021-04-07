@@ -2,7 +2,7 @@ import type { APIGatewayProxyEvent } from 'aws-lambda'
 
 import {
   sign,
-  verifyWebhook,
+  receiveAndVerify,
   WebhookVerificationError,
   DEFAULT_WEBHOOK_SIGNATURE_HEADER,
 } from './secureHandler'
@@ -36,18 +36,18 @@ const buildEvent = ({
 }
 
 describe('secureHandler', () => {
-  describe('webhooks via event', () => {
-    describe('using the timestampScheme verifier', () => {
-      describe('signs a payload with default timestamp', () => {
-        test('it has a time and scheme', () => {
-          const options = { type: 'timestampScheme' }
-          const signature = sign({ payload, secret, options })
+  describe('using the timestampScheme verifier', () => {
+    describe('signs a payload with default timestamp', () => {
+      test('it has a time and scheme', () => {
+        const options = { type: 'timestampScheme' }
+        const signature = sign({ payload, secret, options })
 
-          expect(signature).toMatch(/t=(\d+),v1=([\da-f]+)/)
-        })
+        expect(signature).toMatch(/t=(\d+),v1=([\da-f]+)/)
       })
+    })
 
-      describe('with a webhook event', () => {
+    describe('webhooks via event', () => {
+      describe('when it receives and event  extracts the signature and payload from the event', () => {
         test('it can verify an event body payload with a signature it generates', () => {
           const options = { type: 'timestampScheme' }
           const signature = sign({ payload, secret, options })
@@ -58,7 +58,7 @@ describe('secureHandler', () => {
             signatureHeader: DEFAULT_WEBHOOK_SIGNATURE_HEADER,
           })
 
-          expect(verifyWebhook({ event, secret, options })).toBeTruthy()
+          expect(receiveAndVerify({ event, secret, options })).toBeTruthy()
         })
 
         test('it can verify overriding the event body payload with a signature it generates', () => {
@@ -72,7 +72,7 @@ describe('secureHandler', () => {
           })
 
           expect(
-            verifyWebhook({ event, payload, secret, options })
+            receiveAndVerify({ event, payload, secret, options })
           ).toBeTruthy()
         })
 
@@ -87,7 +87,7 @@ describe('secureHandler', () => {
           })
 
           expect(() => {
-            verifyWebhook({ event, secret, options })
+            receiveAndVerify({ event, secret, options })
           }).toThrow(WebhookVerificationError)
         })
 
@@ -107,7 +107,7 @@ describe('secureHandler', () => {
           })
 
           expect(() => {
-            verifyWebhook({
+            receiveAndVerify({
               event,
               secret,
               options: { ...options, tolerance: 100_000 },
@@ -131,7 +131,7 @@ describe('secureHandler', () => {
           })
 
           expect(() => {
-            verifyWebhook({
+            receiveAndVerify({
               event,
               secret,
               options: { ...options, tolerance: 5_000 },

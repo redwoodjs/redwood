@@ -12,7 +12,7 @@ export type TimestampScheme = WebhookVerifier
 /**
  * @const {number}
  */
-const FIVE_MINUTES = 5 * 60 * 1000
+const FIVE_MINUTES = 5 * 60_000
 
 /**
  * @const {number}
@@ -58,16 +58,16 @@ const getHmac = ({ secret }: { secret: string }) => {
  *    sign({ body: 'This is some content to sign.' })
  */
 const createSignature = ({
-  body,
+  payload,
   secret = DEFAULT_WEBHOOK_SECRET,
   timestamp = Date.now(),
 }: {
-  body: string
+  payload: string | Record<string, unknown>
   secret: string
   timestamp?: number
 }): string => {
   const hmac = getHmac({ secret })
-  hmac.update(timestamp + '.' + body)
+  hmac.update(timestamp + '.' + payload)
 
   return `t=${timestamp},v1=${hmac.digest('hex')}`
 }
@@ -100,12 +100,12 @@ const createSignature = ({
  *                      options: {} })
  */
 const verifySignature = ({
-  body,
+  payload,
   secret = DEFAULT_WEBHOOK_SECRET,
   signature,
   options,
 }: {
-  body: string
+  payload: string | Record<string, unknown>
   secret: string
   signature: string
   options?: VerifyOptions
@@ -116,7 +116,7 @@ const verifySignature = ({
   }
 
   const signedStamp = Number(match[1])
-  const payload = match[2]
+  const signedPayload = match[2]
 
   const timestamp = options?.timestamp ?? Date.now()
   const tolerance = options?.tolerance ?? DEFAULT_TOLERANCE
@@ -128,9 +128,9 @@ const verifySignature = ({
   }
 
   const hmac = getHmac({ secret })
-  hmac.update(signedStamp + '.' + body)
+  hmac.update(signedStamp + '.' + payload)
 
-  if (hmac.digest('hex') === payload) {
+  if (hmac.digest('hex') === signedPayload) {
     return true
   }
 
@@ -149,11 +149,11 @@ export const timestampScheme = ({
   options: VerifyOptions
 }): TimestampScheme => {
   return {
-    sign: ({ body, secret }) => {
-      return createSignature({ body, secret, timestamp: options.timestamp })
+    sign: ({ payload, secret }) => {
+      return createSignature({ payload, secret, timestamp: options.timestamp })
     },
-    verify: ({ body, secret, signature }) => {
-      return verifySignature({ body, secret, signature, options })
+    verify: ({ payload, secret, signature }) => {
+      return verifySignature({ payload, secret, signature, options })
     },
     type: 'timestampScheme',
   }

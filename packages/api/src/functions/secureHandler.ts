@@ -51,9 +51,9 @@ export const signatureFromEvent = ({
  *
  * @example
  *
- *    verifyWebhook({ event: event, options: {} })*
+ *    receiveAndVerify({ event: event, options: {} })*
  */
-export const verifyWebhook = ({
+export const receiveAndVerify = ({
   event,
   payload,
   secret = DEFAULT_WEBHOOK_SECRET,
@@ -78,15 +78,19 @@ export const verifyWebhook = ({
       options.signatureHeader || DEFAULT_WEBHOOK_SIGNATURE_HEADER,
   })
 
+  console.log('in receiveAndVerify')
+  console.log(signature)
+  console.log(body)
+
   const { verify } = createVerifier({ options })
 
-  return verify({ body, secret, signature })
+  return verify({ payload: body, secret, signature })
 }
 
 /**
- * Verifies a webhook signature given a body, secret and verifier type.
+ * Standalone verification of webhook signature given a payload, secret, verifier type and options.
  *
- * @param {string} body -
+ * @param {string} payload -
  * @param {string} secret - The secret that will verify the signature according to the verifier type
  * @param {string} signature -
  * @param {VerifyOptions} options - Options to specify the verifier type the header key that contains the signature, timestamp leeway.
@@ -94,22 +98,22 @@ export const verifyWebhook = ({
  *
  * @example
  *
- *    verify({ body, secret, signature, options: {} })*
+ *    verify({ payload, secret, signature, options: {} })*
  */
 export const verify = ({
-  body,
+  payload,
   secret = DEFAULT_WEBHOOK_SECRET,
   signature,
   options,
 }: {
-  body: string
+  payload: string | Record<string, unknown>
   secret: string
   signature: string
   options: VerifyOptions
 }): boolean | WebhookVerificationError => {
   const { verify } = createVerifier({ options })
 
-  return verify({ body, secret, signature })
+  return verify({ payload, secret, signature })
 }
 
 /**
@@ -127,5 +131,5 @@ export const sign = ({
 }) => {
   const { sign } = createVerifier({ options })
 
-  return sign({ body: payload, secret })
+  return sign({ payload, secret })
 }
