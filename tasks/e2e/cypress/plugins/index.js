@@ -11,7 +11,7 @@
 
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
-const execa = require('execa');
+const execa = require('execa')
 
 /**
  * @type {Cypress.PluginConfig}
@@ -21,12 +21,15 @@ module.exports = (on, config) => {
   // `config` is the resolved Cypress config
   on('task', {
     execa: async (args) => {
-      await execa(args.cmd, [], {
-        shell: true,
-        cleanup: true,
-        cwd: args.cwd,
-      })
+      try {
+        await execa(args.cmd, [], {
+          shell: true,
+          cleanup: true,
+          cwd: args.cwd,
+        })
+      } catch {}
+
       return 0
-    }
+    },
   })
 }

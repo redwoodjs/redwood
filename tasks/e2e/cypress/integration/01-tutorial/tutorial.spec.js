@@ -192,11 +192,15 @@ describe('The Redwood Tutorial - Golden path edition', () => {
   })
 
   it('5. Cells', () => {
-    cy.exec(`cd ${BASE_DIR}; yarn rw g cell BlogPosts --force`)
+    cy.task('execa', {
+      cmd: 'yarn rw g cell BlogPosts --force',
+      cwd: BASE_DIR,
+    })
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/components/BlogPostsCell/BlogPostsCell.js'),
       Step5_1_ComponentsCellBlogPost
     )
+    cy.wait(15000)
     cy.writeFile(
       path.join(
         BASE_DIR,
@@ -220,19 +224,34 @@ describe('The Redwood Tutorial - Golden path edition', () => {
 
   it('6. Routing Params', () => {
     // https://redwoodjs.com/tutorial/routing-params
-    cy.exec(`cd ${BASE_DIR}; yarn rw g page BlogPost --force`)
-    cy.exec(`cd ${BASE_DIR}; yarn rw g cell BlogPost --force`)
-    cy.exec(`cd ${BASE_DIR}; yarn rw g component BlogPost --force`)
+    cy.task('execa', {
+      cmd: 'yarn rw g page BlogPost --force',
+      cwd: BASE_DIR,
+    })
+    cy.wait(15000)
+    cy.task('execa', {
+      cmd: 'yarn rw g cell BlogPost --force',
+      cwd: BASE_DIR,
+    })
+    cy.wait(15000)
+    cy.task('execa', {
+      cmd: 'yarn rw g component BlogPost --force',
+      cwd: BASE_DIR,
+    })
+    cy.wait(15000)
 
     cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step6_1_Routes)
+    cy.wait(15000)
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/pages/BlogPostPage/BlogPostPage.js'),
       Step6_2_BlogPostPage
     )
+    cy.wait(15000)
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/components/BlogPostCell/BlogPostCell.js'),
       Step6_3_BlogPostCell
     )
+    cy.wait(15000)
     cy.writeFile(
       path.join(
         BASE_DIR,
@@ -240,18 +259,22 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       ),
       Step6_3_BlogPostCellTest
     )
+    cy.wait(15000)
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/components/BlogPost/BlogPost.js'),
       Step6_4_BlogPost
     )
+    cy.wait(15000)
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/components/BlogPost/BlogPost.test.js'),
       Step6_4_BlogPostTest
     )
+    cy.wait(15000)
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/components/BlogPostsCell/BlogPostsCell.js'),
       Step6_5_BlogPostsCell
     )
+    cy.wait(15000)
     cy.writeFile(
       path.join(
         BASE_DIR,
@@ -259,6 +282,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       ),
       Step6_5_BlogPostsCellMock
     )
+    cy.wait(15000)
 
     // New entry
     cy.visit('http://localhost:8910/posts')
@@ -281,17 +305,25 @@ describe('The Redwood Tutorial - Golden path edition', () => {
 
   it("7. Everyone's Favorite Thing to Build: Forms", () => {
     // https://redwoodjs.com/tutorial/everyone-s-favorite-thing-to-build-forms
-    cy.exec(`cd ${BASE_DIR}; yarn rw g page contact --force`)
+    cy.task('execa', {
+      cmd: 'yarn rw g page contact --force',
+      cwd: BASE_DIR,
+    })
+    cy.wait(15000)
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/layouts/BlogLayout/BlogLayout.js'),
       Step7_1_BlogLayout
     )
+    cy.wait(15000)
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/pages/ContactPage/ContactPage.js'),
       Step7_2_ContactPage
     )
+    cy.wait(15000)
     cy.writeFile(path.join(BASE_DIR, 'web/src/index.css'), Step7_3_Css)
+    cy.wait(15000)
     cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step7_4_Routes)
+    cy.wait(15000)
 
     cy.contains('Contact').click()
     cy.contains('Save').click()
