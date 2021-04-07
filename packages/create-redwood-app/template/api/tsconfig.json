@@ -13,5 +13,5 @@
     "typeRoots": ["../node_modules/@types", "./node_modules/@types"],
     "types": ["jest"]
   },
-  "include": ["src", "../.redwood/**/*", "types", "../types",]
+  "include": ["src", "../.redwood/**/*"]
 }
