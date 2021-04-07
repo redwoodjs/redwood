@@ -39,6 +39,11 @@ jobs:
         shell: bash
         run: ./tasks/run-e2e ${{ steps.createpath.outputs.project_path }} --no-start
 
+      - name: Start server in background
+        shell: bash
+        run: yarn rw dev &
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
       - name: Cypress run
         uses: cypress-io/github-action@v2
         env:
