@@ -60,14 +60,12 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       path.join(BASE_DIR, 'web/src/pages/HomePage/HomePage.js'),
       Step2_1_PagesHome
     )
-    cy.wait(15000)
     cy.contains('About').click()
     cy.get('h1').should('contain', 'AboutPage')
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/pages/AboutPage/AboutPage.js'),
       Step2_2_PagesAbout
     )
-    cy.wait(5000)
     cy.get('h1').should('contain', 'Redwood Blog')
     cy.contains('Return home').click()
   })
@@ -87,18 +85,14 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       path.join(BASE_DIR, 'web/src/pages/HomePage/HomePage.js'),
       Step3_3_PagesHome
     )
-    cy.wait(5000)
     cy.contains('Redwood Blog').click()
-    cy.wait(5000)
     cy.get('main').should('contain', 'Home')
 
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/pages/AboutPage/AboutPage.js'),
       Step3_4_PagesAbout
     )
-    cy.wait(5000)
     cy.contains('About').click()
-    cy.wait(5000)
     cy.get('p').should(
       'contain',
       'This site was created to demonstrate my mastery of Redwood: Look on my works, ye mighty, and despair!'
@@ -108,18 +102,15 @@ describe('The Redwood Tutorial - Golden path edition', () => {
   it('4. Getting Dynamic', () => {
     // https://redwoodjs.com/tutorial/getting-dynamic
     cy.writeFile(path.join(BASE_DIR, 'api/db/schema.prisma'), Step4_1_DbSchema)
-    cy.wait(15000)
     cy.task('execa', {
       cmd: `rm ${BASE_DIR}/api/db/dev.db`,
       cwd: BASE_DIR,
     })
-    cy.wait(15000)
     // need to also handle case where Prisma Client be out of sync
     cy.task('execa', {
       cmd: 'yarn rimraf ./api/db/migrations',
       cwd: BASE_DIR,
     })
-    cy.wait(15000)
     cy.task('execa', {
       cmd: 'yarn rw prisma migrate reset --skip-seed --force',
       cwd: BASE_DIR,
@@ -138,7 +129,6 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     cy.wait(5000)
 
     cy.visit('http://localhost:8910/posts')
-    cy.wait(5000)
 
     cy.get('h1').should('contain', 'Posts')
     cy.get('a.rw-button.rw-button-green').should(
@@ -147,7 +137,6 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       'rgb(72, 187, 120)'
     )
     cy.contains(' New Post').click()
-    cy.wait(5000)
     cy.get('h2').should('contain', 'New Post')
 
     // SAVE
@@ -196,11 +185,11 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       cmd: 'yarn rw g cell BlogPosts --force',
       cwd: BASE_DIR,
     })
+    cy.wait(15000)
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/components/BlogPostsCell/BlogPostsCell.js'),
       Step5_1_ComponentsCellBlogPost
     )
-    cy.wait(15000)
     cy.writeFile(
       path.join(
         BASE_DIR,
@@ -228,12 +217,10 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       cmd: 'yarn rw g page BlogPost --force',
       cwd: BASE_DIR,
     })
-    cy.wait(15000)
     cy.task('execa', {
       cmd: 'yarn rw g cell BlogPost --force',
       cwd: BASE_DIR,
     })
-    cy.wait(15000)
     cy.task('execa', {
       cmd: 'yarn rw g component BlogPost --force',
       cwd: BASE_DIR,
@@ -241,17 +228,14 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     cy.wait(15000)
 
     cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step6_1_Routes)
-    cy.wait(15000)
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/pages/BlogPostPage/BlogPostPage.js'),
       Step6_2_BlogPostPage
     )
-    cy.wait(15000)
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/components/BlogPostCell/BlogPostCell.js'),
       Step6_3_BlogPostCell
     )
-    cy.wait(15000)
     cy.writeFile(
       path.join(
         BASE_DIR,
@@ -259,22 +243,18 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       ),
       Step6_3_BlogPostCellTest
     )
-    cy.wait(15000)
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/components/BlogPost/BlogPost.js'),
       Step6_4_BlogPost
     )
-    cy.wait(15000)
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/components/BlogPost/BlogPost.test.js'),
       Step6_4_BlogPostTest
     )
-    cy.wait(15000)
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/components/BlogPostsCell/BlogPostsCell.js'),
       Step6_5_BlogPostsCell
     )
-    cy.wait(15000)
     cy.writeFile(
       path.join(
         BASE_DIR,
@@ -282,7 +262,6 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       ),
       Step6_5_BlogPostsCellMock
     )
-    cy.wait(15000)
 
     // New entry
     cy.visit('http://localhost:8910/posts')
@@ -314,16 +293,12 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       path.join(BASE_DIR, 'web/src/layouts/BlogLayout/BlogLayout.js'),
       Step7_1_BlogLayout
     )
-    cy.wait(15000)
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/pages/ContactPage/ContactPage.js'),
       Step7_2_ContactPage
     )
-    cy.wait(15000)
     cy.writeFile(path.join(BASE_DIR, 'web/src/index.css'), Step7_3_Css)
-    cy.wait(15000)
     cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step7_4_Routes)
-    cy.wait(15000)
 
     cy.contains('Contact').click()
     cy.contains('Save').click()
