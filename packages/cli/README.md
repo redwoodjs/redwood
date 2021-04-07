@@ -370,7 +370,7 @@ const ${singularPascalName}Page = () => {
 
 The variables referenced in the template must be named the same as what's passed to the `generateTemplate` function, which is usually wrapped in a few functions, but accessible via the respective generator's `files` function.
 
-The `files` function is what actually generates the files. Every genrator has one. They use a helper, `templateForComponentFiles`, which takes care of the logic around creating an output path and contents.
+The `files` function is what actually generates the files. Every generator has one. They use a helper, `templateForComponentFiles`, which takes care of the logic around creating an output path and contents.
 
 The `...rest` parameter from `files` gets passed to this function's `templateVars` parameter which gets passed to `generateTemplate` for interpolation:
 
