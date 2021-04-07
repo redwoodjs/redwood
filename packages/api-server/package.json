@@ -10,6 +10,7 @@
   "files": [
     "dist"
   ],
+  "main": "dist/handler",
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.19.0",
