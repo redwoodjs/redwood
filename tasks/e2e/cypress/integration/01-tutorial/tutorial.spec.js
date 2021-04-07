@@ -41,30 +41,43 @@ describe('The Redwood Tutorial - Golden path edition', () => {
 
   it('1. Our First Page', () => {
     //redwoodjs.com/tutorial/our-first-page
+    cy.task('execa', {
+      cmd: 'yarn redwood generate page home / --force',
+      cwd: BASE_DIR,
+    });
     cy.visit('http://localhost:8910')
-    cy.exec(`cd ${BASE_DIR}; yarn redwood generate page home / --force`)
     cy.get('h1').should('contain', 'HomePage')
   })
 
   it('2. A Second Page and a Link', () => {
     // https://redwoodjs.com/tutorial/a-second-page-and-a-link
-    cy.exec(`cd ${BASE_DIR}; yarn redwood generate page about --force`)
+    cy.task('execa', {
+      cmd: 'yarn redwood generate page about --force',
+      cwd: BASE_DIR,
+    });
+    cy.wait(15000)
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/pages/HomePage/HomePage.js'),
       Step2_1_PagesHome
     )
+    cy.wait(15000)
     cy.contains('About').click()
     cy.get('h1').should('contain', 'AboutPage')
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/pages/AboutPage/AboutPage.js'),
       Step2_2_PagesAbout
     )
+    cy.wait(5000)
     cy.get('h1').should('contain', 'Redwood Blog')
     cy.contains('Return home').click()
   })
 
   it('3. Layouts', () => {
-    cy.exec(`cd ${BASE_DIR}; yarn redwood generate layout blog --force`)
+    cy.task('execa', {
+      cmd: 'yarn redwood generate layout blog --force',
+      cwd: BASE_DIR,
+    })
+    cy.wait(5000)
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/layouts/BlogLayout/BlogLayout.js'),
       Step3_1_LayoutsBlog
@@ -74,14 +87,18 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       path.join(BASE_DIR, 'web/src/pages/HomePage/HomePage.js'),
       Step3_3_PagesHome
     )
+    cy.wait(5000)
     cy.contains('Redwood Blog').click()
+    cy.wait(5000)
     cy.get('main').should('contain', 'Home')
 
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/pages/AboutPage/AboutPage.js'),
       Step3_4_PagesAbout
     )
+    cy.wait(5000)
     cy.contains('About').click()
+    cy.wait(5000)
     cy.get('p').should(
       'contain',
       'This site was created to demonstrate my mastery of Redwood: Look on my works, ye mighty, and despair!'
@@ -91,16 +108,37 @@ describe('The Redwood Tutorial - Golden path edition', () => {
   it('4. Getting Dynamic', () => {
     // https://redwoodjs.com/tutorial/getting-dynamic
     cy.writeFile(path.join(BASE_DIR, 'api/db/schema.prisma'), Step4_1_DbSchema)
-    cy.exec(`rm ${BASE_DIR}/api/db/dev.db`, { failOnNonZeroExit: false })
+    cy.wait(15000)
+    cy.task('execa', {
+      cmd: `rm ${BASE_DIR}/api/db/dev.db`,
+      cwd: BASE_DIR,
+    })
+    cy.wait(15000)
     // need to also handle case where Prisma Client be out of sync
-    cy.exec(
-      `cd ${BASE_DIR}; yarn rimraf ./api/db/migrations && yarn rw prisma migrate reset --skip-seed --force`
-    )
-    cy.exec(`cd ${BASE_DIR}; yarn rw prisma migrate dev`)
+    cy.task('execa', {
+      cmd: 'yarn rimraf ./api/db/migrations',
+      cwd: BASE_DIR,
+    })
+    cy.wait(15000)
+    cy.task('execa', {
+      cmd: 'yarn rw prisma migrate reset --skip-seed --force',
+      cwd: BASE_DIR,
+    })
+    cy.wait(5000)
+    cy.task('execa', {
+      cmd: 'yarn rw prisma migrate dev',
+      cwd: BASE_DIR,
+    })
+    cy.wait(5000)
 
-    cy.exec(`cd ${BASE_DIR}; yarn rw g scaffold post --force`)
+    cy.task('execa', {
+      cmd: 'yarn rw g scaffold post --force',
+      cwd: BASE_DIR,
+    })
+    cy.wait(5000)
 
     cy.visit('http://localhost:8910/posts')
+    cy.wait(5000)
 
     cy.get('h1').should('contain', 'Posts')
     cy.get('a.rw-button.rw-button-green').should(
@@ -109,6 +147,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       'rgb(72, 187, 120)'
     )
     cy.contains(' New Post').click()
+    cy.wait(5000)
     cy.get('h2').should('contain', 'New Post')
 
     // SAVE
