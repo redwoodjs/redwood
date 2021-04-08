@@ -1,20 +1,37 @@
 import terminalLink from 'terminal-link'
 
-import { cliOptions, handler as apiServerHandler } from '@redwoodjs/api-server'
+import {
+  apiCliOptions,
+  webCliOptions,
+  bothCliOptions,
+  apiServerHandler,
+  webServerHandler,
+  bothServerHandler,
+} from '@redwoodjs/api-server'
 
 export const command = 'serve [side]'
-export const description = 'Run server for api in production'
+export const description = 'Run server for api or web in production'
 
-// @NOTE if/when we add more sides
-// We might want to structure this like packages/cli/src/redwood-tools.js
-// With each side as a command, rather than a side positional
 export const builder = (yargs) => {
   yargs
-    .options(cliOptions)
-    .positional('side', {
-      default: 'api',
-      description: 'Which server to start',
-      type: 'string',
+    .usage('usage: $0 <side>')
+    .command({
+      command: '$0',
+      descriptions: 'Run both api and web servers',
+      handler: bothServerHandler,
+      builder: (yargs) => yargs.options(bothCliOptions),
+    })
+    .command({
+      command: 'api',
+      description: 'start server for serving only the api',
+      handler: apiServerHandler,
+      builder: (yargs) => yargs.options(apiCliOptions),
+    })
+    .command({
+      command: 'web',
+      description: 'start server for serving only the web side',
+      handler: webServerHandler,
+      builder: (yargs) => yargs.options(webCliOptions),
     })
     .epilogue(
       `Also see the ${terminalLink(
@@ -22,12 +39,4 @@ export const builder = (yargs) => {
         'https://redwoodjs.com/reference/command-line-interface#serve'
       )}`
     )
-}
-
-export const handler = async ({ side = 'api', ...otherOptions }) => {
-  // Currently we only support api anyway
-  // Not sure if we will support web in the future
-  if (side === 'api') {
-    apiServerHandler(otherOptions)
-  }
 }

@@ -6,6 +6,7 @@ import bodyParser from 'body-parser'
 import type { Response, Request } from 'express'
 import express from 'express'
 import glob from 'glob'
+import { createProxyMiddleware } from 'http-proxy-middleware'
 import escape from 'lodash.escape'
 import morgan from 'morgan'
 
@@ -47,40 +48,79 @@ const lambdaRequestHandler = async (req: Request, res: Response) => {
 export interface HttpServerParams {
   port: number
   socket?: string
-  rootPath?: string
+  apiRootPath?: string
+  apiHost?: string
+  serveWeb?: boolean
 }
 
-export const http = ({ port = 8911, socket, rootPath }: HttpServerParams) => {
+export const http = ({
+  port = 8911,
+  socket,
+  apiRootPath,
+  apiHost,
+  serveWeb,
+}: HttpServerParams) => {
   const app = express()
-
-  app.use(
-    bodyParser.text({
-      type: ['text/*', 'application/json', 'multipart/form-data'],
-    })
-  )
-
-  app.use(
-    bodyParser.raw({
-      type: '*/*',
-      limit: process.env.BODY_PARSER_LIMIT,
-    })
-  )
 
   app.use(morgan<Request, Response>('dev'))
 
-  app.all(`${rootPath}:routeName`, lambdaRequestHandler)
-  app.all(`${rootPath}:routeName/*`, lambdaRequestHandler)
+  // If apiHost is supplied, it means the functions are running elsewhere
+  // So we should just proxy requests
+  if (apiHost) {
+    const apiProxyPath = apiRootPath as string
+    app.use(
+      createProxyMiddleware(apiProxyPath, {
+        changeOrigin: true,
+        pathRewrite: {
+          [`^${apiProxyPath}`]: '/', // remove base path
+        },
+        target: apiHost,
+      })
+    )
+  } else {
+    app.use(
+      bodyParser.text({
+        type: ['text/*', 'application/json', 'multipart/form-data'],
+      })
+    )
+
+    app.use(
+      bodyParser.raw({
+        type: '*/*',
+        limit: process.env.BODY_PARSER_LIMIT,
+      })
+    )
+
+    app.all(`${apiRootPath}:routeName`, lambdaRequestHandler)
+    app.all(`${apiRootPath}:routeName/*`, lambdaRequestHandler)
+  }
+
+  // Put this at the bottom so other routes match first
+  if (serveWeb) {
+    app.use(
+      express.static(getPaths().web.dist, {
+        redirect: false,
+      })
+    )
+
+    // For SPA routing
+    app.get('*', function (_, response) {
+      response.sendFile(path.join(getPaths().web.dist, '/index.html'))
+    })
+  }
 
   const server = app
     .listen(socket || port, () => {
       const ts = Date.now()
-      console.log('Importing API... ')
-      const apiFunctions = glob.sync('dist/functions/*.{ts,js}', {
-        cwd: rwjsPaths.api.base,
-        absolute: true,
-      })
-      setLambdaFunctions(apiFunctions)
-      console.log('Imported in', Date.now() - ts, 'ms')
+      if (!apiHost) {
+        console.log('Importing API... ')
+        const apiFunctions = glob.sync('dist/functions/*.{ts,js}', {
+          cwd: rwjsPaths.api.base,
+          absolute: true,
+        })
+        setLambdaFunctions(apiFunctions)
+        console.log('Imported in', Date.now() - ts, 'ms')
+      }
     })
     .on('close', () => {
       if (socket) {
