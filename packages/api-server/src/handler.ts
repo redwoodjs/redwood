@@ -1,4 +1,5 @@
 import { http } from './http'
+import type { HttpServerParams } from './http'
 
 export const cliOptions = {
   port: { default: 8911, type: 'number', alias: 'p' },
@@ -18,13 +19,7 @@ export const cliOptions = {
   },
 } as const
 
-interface HandlerOptions {
-  port: number
-  socket?: string
-  rootPath: string
-}
-
-export const handler = ({ port, socket, rootPath }: HandlerOptions) => {
+export const handler = ({ port, socket, rootPath }: HttpServerParams) => {
   http({ port, socket, rootPath }).on('listening', () => {
     if (socket) {
       console.log(`Listening on ${socket}`)
