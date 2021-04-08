@@ -2,7 +2,7 @@ import terminalLink from 'terminal-link'
 
 import { cliOptions, handler as apiServerHandler } from '@redwoodjs/api-server'
 
-export const command = 'serve side'
+export const command = 'serve [side]'
 export const description = 'Run server for api in production'
 
 // @NOTE if/when we add more sides
