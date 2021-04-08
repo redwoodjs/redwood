@@ -59,7 +59,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       path.join(BASE_DIR, 'web/src/pages/AboutPage/AboutPage.js'),
       Step2_2_PagesAbout
     )
-    cy.get('h1').should('contain', 'AboutPage')
+    cy.get('h1').should('contain', 'Redwood Blog')
     cy.contains('Return home').click()
   })
 
