@@ -138,10 +138,11 @@ const runAsync = async () => {
   })
 }
 
-const onChange = _.debounce((packageFolderName) => {
-  console.log('Building 📦', packageFolderName)
-  build({ packageFolderName, types: true })
-  copyDistFiles({ packageFolderName })
+const onChange = _.debounce(async (packageFolderName) => {
+  console.log('Building 📦...', packageFolderName)
+  await build({ packageFolderName, types: true })
+  await copyDistFiles({ packageFolderName })
+  console.log(`${packageFolderName} ready to use ✔`)
 }, 200)
 
 // @Note:
