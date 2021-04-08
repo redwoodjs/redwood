@@ -54,8 +54,14 @@ export const builder = (yargs) => {
       alias: 'd',
       choices: ['none', 'postgres', 'sqlite'],
       default: 'postgres',
-      description: 'Set Prisma database provider',
+      description: 'Database deployment for Render only',
       type: 'string',
+    })
+    .check((argv) => {
+      if (argv.provider !== 'render' && argv.database !== 'postgres') {
+        throw new Error('Database option only availble for Render deployment')
+      }
+      return true
     })
     .epilogue(
       `Also see the ${terminalLink(
