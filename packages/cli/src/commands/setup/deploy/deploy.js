@@ -67,6 +67,19 @@ export const builder = (yargs) => {
 
 export const handler = async ({ provider, force, database }) => {
   const providerData = await import(`./providers/${provider}`)
+  const apiDependencies = JSON.parse(
+    fs.readFileSync('api/package.json').toString()
+  ).dependencies
+
+  const missingPackages = providerData?.apiPackages?.reduce(
+    (missingPackages, apiPackage) => {
+      if (!(apiPackage in apiDependencies)) {
+        missingPackages.push(apiPackage)
+      }
+      return missingPackages
+    },
+    []
+  )
 
   const tasks = new Listr(
     [
@@ -99,7 +112,7 @@ export const handler = async ({ provider, force, database }) => {
           return writeFilesTask(files, { overwriteExisting: force })
         },
       },
-      providerData?.apiPackages?.length && {
+      missingPackages?.length && {
         title: 'Adding required api packages...',
         task: async () => {
           await execa('yarn', [
@@ -107,7 +120,7 @@ export const handler = async ({ provider, force, database }) => {
             'api',
             'add',
             '-D',
-            ...providerData.apiPackages,
+            ...missingPackages,
           ])
         },
       },
