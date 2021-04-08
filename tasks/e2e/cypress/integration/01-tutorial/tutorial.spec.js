@@ -41,21 +41,14 @@ describe('The Redwood Tutorial - Golden path edition', () => {
 
   it('1. Our First Page', () => {
     //redwoodjs.com/tutorial/our-first-page
-    cy.task('execa', {
-      cmd: 'yarn redwood generate page home / --force',
-      cwd: BASE_DIR,
-    })
     cy.visit('http://localhost:8910')
+    cy.exec(`cd ${BASE_DIR}; yarn redwood generate page home / --force`)
     cy.get('h1').should('contain', 'HomePage')
   })
 
   it('2. A Second Page and a Link', () => {
     // https://redwoodjs.com/tutorial/a-second-page-and-a-link
-    cy.task('execa', {
-      cmd: 'yarn redwood generate page about --force',
-      cwd: BASE_DIR,
-    })
-    cy.wait(15000)
+    cy.exec(`cd ${BASE_DIR}; yarn redwood generate page about --force`)
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/pages/HomePage/HomePage.js'),
       Step2_1_PagesHome
@@ -71,11 +64,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
   })
 
   it('3. Layouts', () => {
-    cy.task('execa', {
-      cmd: 'yarn redwood generate layout blog --force',
-      cwd: BASE_DIR,
-    })
-    cy.wait(5000)
+    cy.exec(`cd ${BASE_DIR}; yarn redwood generate layout blog --force`)
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/layouts/BlogLayout/BlogLayout.js'),
       Step3_1_LayoutsBlog
@@ -102,31 +91,14 @@ describe('The Redwood Tutorial - Golden path edition', () => {
   it('4. Getting Dynamic', () => {
     // https://redwoodjs.com/tutorial/getting-dynamic
     cy.writeFile(path.join(BASE_DIR, 'api/db/schema.prisma'), Step4_1_DbSchema)
-    cy.task('execa', {
-      cmd: `yarn rimraf ${BASE_DIR}/api/db/dev.db`,
-      cwd: BASE_DIR,
-    })
+    cy.exec(`rm ${BASE_DIR}/api/db/dev.db`, { failOnNonZeroExit: false })
     // need to also handle case where Prisma Client be out of sync
-    cy.task('execa', {
-      cmd: 'yarn rimraf ./api/db/migrations',
-      cwd: BASE_DIR,
-    })
-    cy.task('execa', {
-      cmd: 'yarn rw prisma migrate reset --skip-seed --force',
-      cwd: BASE_DIR,
-    })
-    cy.wait(5000)
-    cy.task('execa', {
-      cmd: 'yarn rw prisma migrate dev',
-      cwd: BASE_DIR,
-    })
-    cy.wait(5000)
+    cy.exec(
+      `cd ${BASE_DIR}; yarn rimraf ./api/db/migrations && yarn rw prisma migrate reset --skip-seed --force`
+    )
+    cy.exec(`cd ${BASE_DIR}; yarn rw prisma migrate dev`)
 
-    cy.task('execa', {
-      cmd: 'yarn rw g scaffold post --force',
-      cwd: BASE_DIR,
-    })
-    cy.wait(5000)
+    cy.exec(`cd ${BASE_DIR}; yarn rw g scaffold post --force`)
 
     cy.visit('http://localhost:8910/posts')
 
@@ -184,11 +156,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     // https://redwoodjs.com/tutorial/cells
     cy.visit('http://localhost:8910/')
 
-    cy.task('execa', {
-      cmd: 'yarn rw g cell BlogPosts --force',
-      cwd: BASE_DIR,
-    })
-    cy.wait(15000)
+    cy.exec(`cd ${BASE_DIR}; yarn rw g cell BlogPosts --force`)
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/components/BlogPostsCell/BlogPostsCell.js'),
       Step5_1_ComponentsCellBlogPost
@@ -213,19 +181,9 @@ describe('The Redwood Tutorial - Golden path edition', () => {
 
   it('6. Routing Params', () => {
     // https://redwoodjs.com/tutorial/routing-params
-    cy.task('execa', {
-      cmd: 'yarn rw g page BlogPost --force',
-      cwd: BASE_DIR,
-    })
-    cy.task('execa', {
-      cmd: 'yarn rw g cell BlogPost --force',
-      cwd: BASE_DIR,
-    })
-    cy.task('execa', {
-      cmd: 'yarn rw g component BlogPost --force',
-      cwd: BASE_DIR,
-    })
-    cy.wait(15000)
+    cy.exec(`cd ${BASE_DIR}; yarn rw g page BlogPost --force`)
+    cy.exec(`cd ${BASE_DIR}; yarn rw g cell BlogPost --force`)
+    cy.exec(`cd ${BASE_DIR}; yarn rw g component BlogPost --force`)
 
     cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step6_1_Routes)
     cy.writeFile(
@@ -284,11 +242,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
 
   it("7. Everyone's Favorite Thing to Build: Forms", () => {
     // https://redwoodjs.com/tutorial/everyone-s-favorite-thing-to-build-forms
-    cy.task('execa', {
-      cmd: 'yarn rw g page contact --force',
-      cwd: BASE_DIR,
-    })
-    cy.wait(15000)
+    cy.exec(`cd ${BASE_DIR}; yarn rw g page contact --force`)
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/layouts/BlogLayout/BlogLayout.js'),
       Step7_1_BlogLayout
