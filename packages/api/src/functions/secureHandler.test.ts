@@ -39,7 +39,7 @@ describe('secureHandler', () => {
   describe('using the timestampScheme verifier', () => {
     describe('signs a payload with default timestamp', () => {
       test('it has a time and scheme', () => {
-        const options = { type: 'timestampScheme' }
+        const options = { type: 'timestampSchemeVerifier' }
         const signature = sign({ payload, secret, options })
 
         expect(signature).toMatch(/t=(\d+),v1=([\da-f]+)/)
@@ -49,7 +49,7 @@ describe('secureHandler', () => {
     describe('webhooks via event', () => {
       describe('when it receives and event  extracts the signature and payload from the event', () => {
         test('it can verify an event body payload with a signature it generates', () => {
-          const options = { type: 'timestampScheme' }
+          const options = { type: 'timestampSchemeVerifier' }
           const signature = sign({ payload, secret, options })
 
           const event = buildEvent({
@@ -62,7 +62,7 @@ describe('secureHandler', () => {
         })
 
         test('it can verify overriding the event body payload with a signature it generates', () => {
-          const options = { type: 'timestampScheme' }
+          const options = { type: 'timestampSchemeVerifier' }
           const signature = sign({ payload, secret, options })
 
           const event = buildEvent({
@@ -77,7 +77,7 @@ describe('secureHandler', () => {
         })
 
         test('it denies verification when signed with a different secret', () => {
-          const options = { type: 'timestampScheme' }
+          const options = { type: 'timestampSchemeVerifier' }
           const signature = sign({ payload, secret: 'WERNER_BRANDES', options })
 
           const event = buildEvent({
@@ -92,7 +92,7 @@ describe('secureHandler', () => {
         })
 
         test('it verifies when within the timestamp tolerance', () => {
-          const options = { type: 'timestampScheme' }
+          const options = { type: 'timestampSchemeVerifier' }
 
           const signature = sign({
             payload,
@@ -116,7 +116,7 @@ describe('secureHandler', () => {
         })
 
         test('it denies verification when verifying with a short tolerance', () => {
-          const options = { type: 'timestampScheme' }
+          const options = { type: 'timestampSchemeVerifier' }
 
           const signature = sign({
             payload,

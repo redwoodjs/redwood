@@ -1,8 +1,12 @@
 import type { VerifyOptions, WebhookVerifier } from './index'
 
-export type None = WebhookVerifier
+export type SkipVerifier = WebhookVerifier
 
-export const none = ({ options }: { options: VerifyOptions }): None => {
+export const skipVerifier = ({
+  options,
+}: {
+  options: VerifyOptions
+}): SkipVerifier => {
   return {
     sign: () => {
       console.warn(`No signature is created for the ${options.type} verifier`)
@@ -14,6 +18,6 @@ export const none = ({ options }: { options: VerifyOptions }): None => {
       )
       return true
     },
-    type: 'none',
+    type: 'skipVerifier',
   }
 }

@@ -4,7 +4,7 @@ const payload = 'No more secrets, Marty.'
 const secret = 'MY_VOICE_IS_MY_PASSPORT_VERIFY_ME'
 
 const { sign, verify } = createVerifier({
-  options: { type: 'secretKey' },
+  options: { type: 'secretKeyVerifier' },
 })
 
 describe('secretKey verifier', () => {

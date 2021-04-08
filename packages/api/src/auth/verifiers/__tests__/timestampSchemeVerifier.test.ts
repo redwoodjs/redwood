@@ -9,7 +9,7 @@ describe('timestampScheme verifier', () => {
   describe('signs a payload with default timestamp', () => {
     test('it has a time and scheme', () => {
       const { sign } = createVerifier({
-        options: { type: 'timestampScheme' },
+        options: { type: 'timestampSchemeVerifier' },
       })
 
       const signature = sign({ payload, secret })
@@ -18,7 +18,7 @@ describe('timestampScheme verifier', () => {
 
     test('it can verify a signature it generates', () => {
       const { sign, verify } = createVerifier({
-        options: { type: 'timestampScheme' },
+        options: { type: 'timestampSchemeVerifier' },
       })
 
       const signature = sign({ payload, secret })
@@ -27,7 +27,7 @@ describe('timestampScheme verifier', () => {
 
     test('it denies a signature when signed with a different secret', () => {
       const { sign, verify } = createVerifier({
-        options: { type: 'timestampScheme' },
+        options: { type: 'timestampSchemeVerifier' },
       })
 
       const signature = sign({ payload, secret: 'WERNER_BRANDES' })
@@ -41,14 +41,14 @@ describe('timestampScheme verifier', () => {
     test('it denies a signature when verifying with a short tolerance', () => {
       const { sign } = createVerifier({
         options: {
-          type: 'timestampScheme',
+          type: 'timestampSchemeVerifier',
           timestamp: Date.now() - 600_000, // 10 minutes in msec
         },
       })
 
       const { verify } = createVerifier({
         options: {
-          type: 'timestampScheme',
+          type: 'timestampSchemeVerifier',
           tolerance: 120_000, // 2 minutes in msec
         },
       })
@@ -70,7 +70,7 @@ describe('timestampScheme verifier', () => {
     test('it denies a signature when verifying when outside the default tolerance', () => {
       const { sign } = createVerifier({
         options: {
-          type: 'timestampScheme',
+          type: 'timestampSchemeVerifier',
           timestamp: Date.now() - 600_000, // 10 minutes in msec
         },
       })
@@ -78,7 +78,7 @@ describe('timestampScheme verifier', () => {
       // uses default 5 minute tolerance
       const { verify } = createVerifier({
         options: {
-          type: 'timestampScheme',
+          type: 'timestampSchemeVerifier',
         },
       })
 

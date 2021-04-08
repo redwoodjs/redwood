@@ -4,13 +4,13 @@ import {
   WebhookVerificationError,
   DEFAULT_WEBHOOK_SECRET,
 } from './index'
-export type SecretKey = WebhookVerifier
+export type SecretKeyVerifier = WebhookVerifier
 
-export const secretKey = ({
+export const secretKeyVerifier = ({
   options,
 }: {
   options: VerifyOptions
-}): SecretKey => {
+}): SecretKeyVerifier => {
   return {
     sign: ({ secret }) => {
       console.warn(
@@ -27,6 +27,6 @@ export const secretKey = ({
 
       return verified
     },
-    type: 'secretKey',
+    type: 'secretKeyVerifier',
   }
 }

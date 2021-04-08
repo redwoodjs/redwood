@@ -7,7 +7,7 @@ import {
 } from './index'
 import type { WebhookVerifier } from './index'
 
-export type TimestampScheme = WebhookVerifier
+export type TimestampSchemeVerifier = WebhookVerifier
 
 /**
  * @const {number}
@@ -143,11 +143,11 @@ const verifySignature = ({
  * @see https://stripe.com/docs/webhooks/signatures
  *
  */
-export const timestampScheme = ({
+export const timestampSchemeVerifier = ({
   options,
 }: {
   options: VerifyOptions
-}): TimestampScheme => {
+}): TimestampSchemeVerifier => {
   return {
     sign: ({ payload, secret }) => {
       return createSignature({ payload, secret, timestamp: options.timestamp })
@@ -155,6 +155,6 @@ export const timestampScheme = ({
     verify: ({ payload, secret, signature }) => {
       return verifySignature({ payload, secret, signature, options })
     },
-    type: 'timestampScheme',
+    type: 'timestampSchemeVerifier',
   }
 }

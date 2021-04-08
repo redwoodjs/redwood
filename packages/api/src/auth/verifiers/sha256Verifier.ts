@@ -8,7 +8,7 @@ import {
 } from './index'
 import type { WebhookVerifier } from './index'
 
-export type Sha256 = WebhookVerifier
+export type Sha256Verifier = WebhookVerifier
 
 function toNormalizedJsonString(payload: Record<string, unknown>) {
   return JSON.stringify(payload).replace(/[^\\]\\u[\da-f]{4}/g, (s) => {
@@ -109,7 +109,7 @@ export const verifySignature = ({
  * @see https://docs.github.com/en/developers/webhooks-and-events/securing-your-webhooks
  *
  */
-export const sha256 = ({
+export const sha256Verifier = ({
   options,
 }: {
   options: VerifyOptions
@@ -122,6 +122,6 @@ export const sha256 = ({
     verify: ({ payload, secret, signature }) => {
       return verifySignature({ payload, secret, signature })
     },
-    type: 'sha256',
+    type: 'sha256Verifier',
   }
 }
