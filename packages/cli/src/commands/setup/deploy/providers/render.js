@@ -18,6 +18,7 @@ const RENDER_YAML = (database) => {
   routes:
   - type: rewrite
     source: /.redwood/functions/*
+# replace destination api url after first deploy to Render
     destination: replace_me_with_api_url/*
   - type: rewrite
     source: /*
@@ -115,5 +116,6 @@ export const apiProxyPath = '/.redwood/functions'
 // any notes to print out when the job is done
 export const notes = [
   'You are ready to deploy to Render!',
-  'Check out the docs at https://render.com/docs/deploy-redwood to get started',
+  'Check out the docs at https://render.com/docs/deploy-redwood to get started\n',
+  'Note: After first deployment to Render update rewrite rule destiation in render.yaml',
 ]
