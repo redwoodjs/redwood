@@ -21,13 +21,11 @@ module.exports = (on, config) => {
   // `config` is the resolved Cypress config
   on('task', {
     execa: async (args) => {
-      try {
-        await execa(args.cmd, [], {
-          shell: true,
-          cleanup: true,
-          cwd: args.cwd,
-        })
-      } catch {}
+      await execa(args.cmd, [], {
+        shell: true,
+        cleanup: true,
+        cwd: args.cwd,
+      })
 
       return 0
     },

@@ -26,7 +26,9 @@ import Step7_2_ContactPage from './codemods/Step7_2_ContactPage'
 import Step7_3_Css from './codemods/Step7_3_Css'
 import Step7_4_Routes from './codemods/Step7_4_Routes'
 
-const BASE_DIR = Cypress.env('RW_PATH')
+console.log('RW_PATH', Cypress.env('RW_PATH'))
+const BASE_DIR = Cypress.env('RW_PATH').replace(/.*redwood/, 'C:\\Users\\RUNNER~1\\AppData\\Local\\Temp\\redwood')
+console.error('BASE_DIR', BASE_DIR)
 
 describe('The Redwood Tutorial - Golden path edition', () => {
   // TODO: https://redwoodjs.com/tutorial/saving-data
@@ -35,6 +37,10 @@ describe('The Redwood Tutorial - Golden path edition', () => {
   it('0. Starting Development', () => {
     // https://redwoodjs.com/tutorial/installation-starting-development
     cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step1_1_Routes)
+    cy.task('execa', {
+      cmd: 'cat web/src/Routes.js',
+      cwd: BASE_DIR,
+    });
     cy.visit('http://localhost:8910')
     cy.get('h1 > span').contains('Welcome to RedwoodJS!')
   })

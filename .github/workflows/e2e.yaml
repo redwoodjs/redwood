@@ -42,6 +42,7 @@ jobs:
         run: |
           echo "${{ steps.createpath.outputs.project_path }}"
           cd "${{ steps.createpath.outputs.project_path }}"
+          ls -la
           yarn rw dev &
 
       - name: Cypress run
