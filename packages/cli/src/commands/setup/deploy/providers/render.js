@@ -89,8 +89,13 @@ export const prismaDataSourceCheck = (database) => {
   } else {
     throw new Error(`
     Prisma datasource provider is detected to be ${detectedDatabase}.
-    Update your schema.prisma provider to be ${database}, then run
-    yarn rw prisma migrate dev`)
+
+    Option 1: Update your schema.prisma provider to be ${database}, then run
+    yarn rw prisma migrate dev
+    yarn rw setup deploy render --database ${database}
+
+    Option 2: Rerun setup deloy command with current schema.prisma provider:
+    yarn rw setup deploy render --database ${detectedDatabase}`)
   }
 }
 
