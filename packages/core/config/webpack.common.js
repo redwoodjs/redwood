@@ -7,6 +7,7 @@ const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const Dotenv = require('dotenv-webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 const webpack = require('webpack')
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin')
 const { merge } = require('webpack-merge')
@@ -314,7 +315,7 @@ module.exports = (webpackEnv) => {
       runtimeChunk: {
         name: (entrypoint) => `runtime-${entrypoint.name}`,
       },
-      minimizer: [isEnvProduction && new CssMinimizerPlugin()].filter(Boolean),
+      minimizer: [new CssMinimizerPlugin(), new TerserPlugin()],
     },
     output: {
       pathinfo: true,
