@@ -24,7 +24,11 @@ import {
 import c from 'src/lib/colors'
 
 import { yargsDefaults } from '../../generate'
-import { relationsForModel, intForeignKeysForModel } from '../helpers'
+import {
+  relationsForModel,
+  intForeignKeysForModel,
+  splitPathAndName,
+} from '../helpers'
 import { files as sdlFiles, builder as sdlBuilder } from '../sdl/sdl'
 import {
   files as serviceFiles,
@@ -448,22 +452,12 @@ export const handler = async ({
   typescript,
   javascript,
 }) => {
-  const { model, path } = splitPathAndModel(modelArg)
-  const t = tasks({ model, path, force, typescript, javascript })
+  const { name, path } = splitPathAndName(modelArg)
+  const t = tasks({ model: name, path, force, typescript, javascript })
 
   try {
     await t.run()
   } catch (e) {
     console.log(c.error(e.message))
   }
-}
-
-export const splitPathAndModel = (pathSlashModel) => {
-  const path = pathSlashModel.split('/').slice(0, -1).join('/')
-  // This code will work whether or not there's a path in model
-  // E.g. if model is just 'post',
-  // path.split('/') will return ['post'].
-  const model = pathSlashModel.split('/').pop()
-
-  return { model, path }
 }

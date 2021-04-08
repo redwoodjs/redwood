@@ -19,7 +19,7 @@ import { yargsDefaults } from '../generate'
 // TODO: Make this read all the files in a template directory instead of
 // manually passing in each file.
 export const templateForComponentFile = ({
-  name,
+  name: pathSlashName,
   suffix = '',
   extension = '.js',
   webPathSection,
@@ -30,6 +30,13 @@ export const templateForComponentFile = ({
   componentName,
   outputPath,
 }) => {
+  const { name, path: componentPath = '' } = splitPathAndName(pathSlashName)
+
+  const pascalComponentPath =
+    componentPath === ''
+      ? componentPath
+      : componentPath.split('/').map(pascalcase).join('/') + '/'
+
   const basePath = webPathSection
     ? getPaths().web[webPathSection]
     : getPaths().api[apiPathSection]
@@ -37,7 +44,12 @@ export const templateForComponentFile = ({
     componentName || pascalcase(paramCase(name)) + suffix
   const componentOutputPath =
     outputPath ||
-    path.join(basePath, outputComponentName, outputComponentName + extension)
+    path.join(
+      basePath,
+      pascalComponentPath,
+      outputComponentName,
+      outputComponentName + extension
+    )
   const fullTemplatePath = path.join(generator, 'templates', templatePath)
   const content = generateTemplate(fullTemplatePath, {
     name,
@@ -145,4 +157,15 @@ export const intForeignKeysForModel = (model) => {
   return model.fields
     .filter((f) => f.name.match(/Id$/) && f.type === 'Int')
     .map((f) => f.name)
+}
+
+// Splits Path and Name or Model from the command argument <path/name>
+export const splitPathAndName = (pathSlashName) => {
+  const path = pathSlashName.split('/').slice(0, -1).join('/') ?? ''
+  // This code will work whether or not there's a path in model
+  // E.g. if model is just 'post',
+  // path.split('/') will return ['post'].
+  const name = pathSlashName.split('/').pop()
+
+  return { name, path }
 }
