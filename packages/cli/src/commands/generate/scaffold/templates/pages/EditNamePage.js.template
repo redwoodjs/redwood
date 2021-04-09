@@ -1,5 +1,5 @@
-import ${pluralPascalName}Layout from 'src/layouts/${pascalScaffoldPath}${pluralPascalName}Layout'
-import Edit${singularPascalName}Cell from 'src/components/${pascalScaffoldPath}Edit${singularPascalName}Cell'
+import ${pluralPascalName}Layout from 'src/layouts/${camelScaffoldPath}${pluralPascalName}Layout'
+import Edit${singularPascalName}Cell from 'src/components/${camelScaffoldPath}Edit${singularPascalName}Cell'
 
 const Edit${singularPascalName}Page = ({ id }) => {
   return (

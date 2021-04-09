@@ -1,5 +1,5 @@
-import ${pluralPascalName}Layout from 'src/layouts/${pascalScaffoldPath}${pluralPascalName}Layout'
-import New${singularPascalName} from 'src/components/${pascalScaffoldPath}New${singularPascalName}'
+import ${pluralPascalName}Layout from 'src/layouts/${camelScaffoldPath}${pluralPascalName}Layout'
+import New${singularPascalName} from 'src/components/${camelScaffoldPath}New${singularPascalName}'
 
 const New${singularPascalName}Page = () => {
   return (

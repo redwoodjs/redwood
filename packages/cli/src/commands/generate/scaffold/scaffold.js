@@ -28,6 +28,7 @@ import {
   relationsForModel,
   intForeignKeysForModel,
   splitPathAndName,
+  formatCamelPath,
 } from '../helpers'
 import { files as sdlFiles, builder as sdlBuilder } from '../sdl/sdl'
 import {
@@ -117,21 +118,20 @@ const layoutFiles = (name, scaffoldPath = '') => {
   const singularName = pascalcase(pluralize.singular(name))
   let fileList = {}
 
-  const pascalScaffoldPath =
-    scaffoldPath === ''
-      ? scaffoldPath
-      : scaffoldPath.split('/').map(pascalcase).join('/') + '/'
+  const camelScaffoldPath = formatCamelPath(scaffoldPath)
 
   const pluralCamelName = camelcase(pluralName)
-  const camelScaffoldPath = camelcase(pascalcase(scaffoldPath))
+  const camelScaffoldPathName = camelcase(pascalcase(scaffoldPath))
 
   const pluralRouteName =
-    scaffoldPath === '' ? pluralCamelName : `${camelScaffoldPath}${pluralName}`
+    scaffoldPath === ''
+      ? pluralCamelName
+      : `${camelScaffoldPathName}${pluralName}`
 
   const newRouteName =
     scaffoldPath === ''
       ? `new${singularName}`
-      : `${camelScaffoldPath}New${singularName}`
+      : `${camelScaffoldPathName}New${singularName}`
 
   LAYOUTS.forEach((layout) => {
     const outputLayoutName = layout
@@ -140,7 +140,7 @@ const layoutFiles = (name, scaffoldPath = '') => {
       .replace(/\.template/, '')
     const outputPath = path.join(
       getPaths().web.layouts,
-      pascalScaffoldPath,
+      camelScaffoldPath,
       outputLayoutName.replace(/\.js/, ''),
       outputLayoutName
     )
@@ -148,7 +148,7 @@ const layoutFiles = (name, scaffoldPath = '') => {
       path.join('scaffold', 'templates', 'layouts', layout),
       {
         name,
-        pascalScaffoldPath,
+        camelScaffoldPathName,
         pluralRouteName,
         newRouteName,
       }
@@ -164,10 +164,7 @@ const pageFiles = (name, scaffoldPath = '') => {
   const singularName = pascalcase(pluralize.singular(name))
   let fileList = {}
 
-  const pascalScaffoldPath =
-    scaffoldPath === ''
-      ? scaffoldPath
-      : scaffoldPath.split('/').map(pascalcase).join('/') + '/'
+  const camelScaffoldPath = formatCamelPath(scaffoldPath)
 
   PAGES.forEach((page) => {
     const outputPageName = page
@@ -176,7 +173,7 @@ const pageFiles = (name, scaffoldPath = '') => {
       .replace(/\.template/, '')
     const outputPath = path.join(
       getPaths().web.pages,
-      pascalScaffoldPath,
+      camelScaffoldPath,
       outputPageName.replace(/\.js/, ''),
       outputPageName
     )
@@ -184,7 +181,7 @@ const pageFiles = (name, scaffoldPath = '') => {
       path.join('scaffold', 'templates', 'pages', page),
       {
         name,
-        pascalScaffoldPath,
+        camelScaffoldPath,
       }
     )
     fileList[outputPath] = template
@@ -274,31 +271,35 @@ const componentFiles = async (name, scaffoldPath = '') => {
     }, {})
   )
 
-  const pascalScaffoldPath =
-    scaffoldPath === ''
-      ? scaffoldPath
-      : scaffoldPath.split('/').map(pascalcase).join('/') + '/'
+  const camelScaffoldPath = formatCamelPath(scaffoldPath)
+  const camelScaffoldPathName = camelcase(pascalcase(scaffoldPath))
+
+  console.log(`
+    camelScaffoldPath: ${camelScaffoldPath}
+    camelScaffoldPathName: ${camelScaffoldPathName}
+  `)
 
   const pluralCamelName = camelcase(pluralName)
-  const camelScaffoldPath = camelcase(pascalcase(scaffoldPath))
 
   const pluralRouteName =
-    scaffoldPath === '' ? pluralCamelName : `${camelScaffoldPath}${pluralName}`
+    scaffoldPath === ''
+      ? pluralCamelName
+      : `${camelScaffoldPathName}${pluralName}`
 
   const editRouteName =
     scaffoldPath === ''
       ? `edit${singularName}`
-      : `${camelScaffoldPath}Edit${singularName}`
+      : `${camelScaffoldPathName}Edit${singularName}`
 
   const singularRouteName =
     scaffoldPath === ''
       ? camelcase(singularName)
-      : `${camelScaffoldPath}${singularName}`
+      : `${camelScaffoldPathName}${singularName}`
 
   const newRouteName =
     scaffoldPath === ''
       ? `new${singularName}`
-      : `${camelScaffoldPath}New${singularName}`
+      : `${camelScaffoldPathName}New${singularName}`
 
   await asyncForEach(COMPONENTS, (component) => {
     const outputComponentName = component
@@ -307,7 +308,7 @@ const componentFiles = async (name, scaffoldPath = '') => {
       .replace(/\.template/, '')
     const outputPath = path.join(
       getPaths().web.components,
-      pascalScaffoldPath,
+      camelScaffoldPath,
       outputComponentName.replace(/\.js/, ''),
       outputComponentName
     )
@@ -321,7 +322,7 @@ const componentFiles = async (name, scaffoldPath = '') => {
         editableColumns,
         idType,
         intForeignKeys,
-        pascalScaffoldPath,
+        camelScaffoldPath,
         pluralRouteName,
         editRouteName,
         singularRouteName,
@@ -344,44 +345,40 @@ export const routes = async ({ model: name, path: scaffoldPath = '' }) => {
   const model = await getSchema(singularPascalName)
   const idRouteParam = getIdType(model) === 'Int' ? ':Int' : ''
 
-  const paramScaffoldPath =
-    scaffoldPath === ''
-      ? scaffoldPath
-      : scaffoldPath.split('/').map(paramCase).join('/') + '/'
-  const pascalScaffoldPath = pascalcase(scaffoldPath)
-  const camelScaffoldPath = camelcase(pascalScaffoldPath)
+  const camelScaffoldPath = formatCamelPath(scaffoldPath)
+  const camelScaffoldPathName = camelcase(scaffoldPath)
 
   const newRouteName =
     scaffoldPath === ''
       ? `new${singularPascalName}`
-      : `${camelScaffoldPath}New${singularPascalName}`
+      : `${camelScaffoldPathName}New${singularPascalName}`
 
   const editRouteName =
     scaffoldPath === ''
       ? `edit${singularPascalName}`
-      : `${camelScaffoldPath}Edit${singularPascalName}`
+      : `${camelScaffoldPathName}Edit${singularPascalName}`
 
   const singularRouteName =
     scaffoldPath === ''
       ? singularCamelName
-      : `${camelScaffoldPath}${singularPascalName}`
+      : `${camelScaffoldPathName}${singularPascalName}`
 
   const pluralRouteName =
     scaffoldPath === ''
       ? pluralCamelName
-      : `${camelScaffoldPath}${pluralPascalName}`
+      : `${camelScaffoldPathName}${pluralPascalName}`
 
   // TODO: These names look like they need changing
 
   return [
     // new
-    `<Route path="/${paramScaffoldPath}${pluralParamName}/new" page={${pascalScaffoldPath}New${singularPascalName}Page} name="${newRouteName}" />`,
+    `<Route path="/${camelScaffoldPath}${pluralParamName}/new" page={${camelScaffoldPathName}New${singularPascalName}Page} name="${newRouteName}" />`,
     // edit
-    `<Route path="/${paramScaffoldPath}${pluralParamName}/{id${idRouteParam}}/edit" page={${pascalScaffoldPath}Edit${singularPascalName}Page} name="${editRouteName}" />`,
+    `<Route path="/${camelScaffoldPath}${pluralParamName}/{id${idRouteParam}}/edit" page={${camelScaffoldPathName}Edit${singularPascalName}Page} name="${editRouteName}" />`,
     // singular
-    `<Route path="/${paramScaffoldPath}${pluralParamName}/{id${idRouteParam}}" page={${pascalScaffoldPath}${singularPascalName}Page} name="${singularRouteName}" />`,
+    `<Route path="/${camelScaffoldPath}${pluralParamName}/{id${idRouteParam}}" page={${camelScaffoldPathName}${singularPascalName}Page} name="${singularRouteName}" />`,
     // plural
-    `<Route path="/${paramScaffoldPath}${pluralParamName}" page={${pascalScaffoldPath}${pluralPascalName}Page} name="${pluralRouteName}" />`,
+    `<Route path="/${camelScaffoldPath}${pluralParamName}" page={${camelScaffoldPathName}${pluralPascalName}Page} name="${pluralRouteName}" />`,
   ]
 }
 
