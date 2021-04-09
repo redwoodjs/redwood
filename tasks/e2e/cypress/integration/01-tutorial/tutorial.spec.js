@@ -6,8 +6,9 @@ import Step1_1_Routes from './codemods/Step1_1_Routes'
 import Step2_1_PagesHome from './codemods/Step2_1_PagesHome'
 import Step2_2_PagesAbout from './codemods/Step2_2_PagesAbout'
 import Step3_1_LayoutsBlog from './codemods/Step3_1_LayoutsBlog'
-import Step3_2_PagesHome from './codemods/Step3_2_PagesHome'
-import Step3_3_PagesAbout from './codemods/Step3_3_PagesAbout'
+import Step3_2_Routes from './codemods/Step3_2_Routes'
+import Step3_3_PagesHome from './codemods/Step3_3_PagesHome'
+import Step3_4_PagesAbout from './codemods/Step3_4_PagesAbout'
 import Step4_1_DbSchema from './codemods/Step4_1_DbSchema'
 import Step5_1_ComponentsCellBlogPost from './codemods/Step5_1_ComponentsCellBlogPost'
 import Step5_2_ComponentsCellBlogPostTest from './codemods/Step5_2_ComponentsCellBlogPostTest'
@@ -23,6 +24,7 @@ import Step6_5_BlogPostsCellMock from './codemods/Step6_5_BlogPostsCellMock'
 import Step7_1_BlogLayout from './codemods/Step7_1_BlogLayout'
 import Step7_2_ContactPage from './codemods/Step7_2_ContactPage'
 import Step7_3_Css from './codemods/Step7_3_Css'
+import Step7_4_Routes from './codemods/Step7_4_Routes'
 
 const BASE_DIR = Cypress.env('RW_PATH')
 
@@ -57,7 +59,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       path.join(BASE_DIR, 'web/src/pages/AboutPage/AboutPage.js'),
       Step2_2_PagesAbout
     )
-    cy.get('h1').should('contain', 'AboutPage')
+    cy.get('h1').should('contain', 'Redwood Blog')
     cy.contains('Return home').click()
   })
 
@@ -67,16 +69,17 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       path.join(BASE_DIR, 'web/src/layouts/BlogLayout/BlogLayout.js'),
       Step3_1_LayoutsBlog
     )
+    cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step3_2_Routes)
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/pages/HomePage/HomePage.js'),
-      Step3_2_PagesHome
+      Step3_3_PagesHome
     )
     cy.contains('Redwood Blog').click()
     cy.get('main').should('contain', 'Home')
 
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/pages/AboutPage/AboutPage.js'),
-      Step3_3_PagesAbout
+      Step3_4_PagesAbout
     )
     cy.contains('About').click()
     cy.get('p').should(
@@ -100,17 +103,30 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     cy.visit('http://localhost:8910/posts')
 
     cy.get('h1').should('contain', 'Posts')
+    cy.get('a.rw-button.rw-button-green').should(
+      'have.css',
+      'background-color',
+      'rgb(72, 187, 120)'
+    )
     cy.contains(' New Post').click()
     cy.get('h2').should('contain', 'New Post')
 
     // SAVE
     cy.get('input#title').type('First post')
     cy.get('input#body').type('Hello world!')
+    //check scaffold css
+    cy.get('button.rw-button.rw-button-blue').should(
+      'have.css',
+      'background-color',
+      'rgb(49, 130, 206)'
+    )
     cy.get('button').contains('Save').click()
 
     cy.contains('Post created')
 
     cy.contains('Loading...').should('not.exist')
+    //checks Toast messages
+    cy.get('div[role="status"]').contains('Post created')
 
     // EDIT
     cy.contains('Edit').click()
@@ -119,6 +135,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     cy.get('input#body').clear().type('No, Margle the World!')
     cy.get('button').contains('Save').click()
     cy.get('td').contains('No, Margle the World!')
+    cy.get('div[role="status"]').contains('Post updated')
 
     cy.contains('Post updated')
 
@@ -127,6 +144,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
 
     // No more posts, so it should be in the empty state.
     cy.contains('Post deleted')
+    cy.get('div[role="status"]').contains('Post deleted')
 
     cy.contains('Create one?').click()
     cy.get('input#title').type('Second post')
@@ -234,6 +252,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       Step7_2_ContactPage
     )
     cy.writeFile(path.join(BASE_DIR, 'web/src/index.css'), Step7_3_Css)
+    cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step7_4_Routes)
 
     cy.contains('Contact').click()
     cy.contains('Save').click()
@@ -251,5 +270,6 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     cy.contains('Save').click()
     // console
     // {name: "test name", email: "foo@bar.com", message: "test message"}
+    cy.visit('http://localhost:8910/')
   })
 })
