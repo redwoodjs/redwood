@@ -4180,10 +4180,10 @@
   resolved "https://registry.yarnpkg.com/@types/unist/-/unist-2.0.3.tgz#9c088679876f374eb5983f150d4787aa6fb32d7e"
   integrity sha512-FvUupuM3rlRsRtCN+fDudtmytGO6iHJuuRKS1Ss0pG5z8oX0diNEw94UEL7hgDbpN94rgaK5R7sWm6RrSkZuAQ==
 
-"@types/vscode@^1.46.0":
-  version "1.54.0"
-  resolved "https://registry.yarnpkg.com/@types/vscode/-/vscode-1.54.0.tgz#d28e3b3614054b2d6543c29412f60a986cabd9bb"
-  integrity sha512-sHHw9HG4bTrnKhLGgmEiOS88OLO/2RQytUN4COX9Djv81zc0FSZsSiYaVyjNidDzUSpXsySKBkZ31lk2/FbdCg==
+"@types/vscode@^1.55.0":
+  version "1.55.0"
+  resolved "https://registry.yarnpkg.com/@types/vscode/-/vscode-1.55.0.tgz#58cfbebbd32b3e374e07e7858b1fd0e92b1a1d2b"
+  integrity sha512-49hysH7jneTQoSC8TWbAi7nKK9Lc5osQNjmDHVosrcU8o3jecD9GrK0Qyul8q4aGPSXRfNGqIp9CBdb13akETg==
 
 "@types/warning@^3.0.0":
   version "3.0.0"
