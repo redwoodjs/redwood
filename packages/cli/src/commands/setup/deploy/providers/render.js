@@ -37,9 +37,9 @@ ${database}
 }
 
 const POSTGRES_YAML = `  - key: DATABASE_URL
-  fromDatabase:
-    name: redwood-db
-    property: connectionString
+    fromDatabase:
+      name: ${PROJECT_NAME}-db
+      property: connectionString
 
 databases:
   - name: ${PROJECT_NAME}-db
