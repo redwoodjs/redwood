@@ -1,5 +1,6 @@
 import path from 'path'
 
+import camelcase from 'camelcase'
 import Listr from 'listr'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
@@ -32,10 +33,10 @@ export const templateForComponentFile = ({
 }) => {
   const { name, path: componentPath = '' } = splitPathAndName(pathSlashName)
 
-  const pascalComponentPath =
+  const camelComponentPath =
     componentPath === ''
       ? componentPath
-      : componentPath.split('/').map(pascalcase).join('/') + '/'
+      : componentPath.split('/').map(camelcase).join('/') + '/'
 
   const basePath = webPathSection
     ? getPaths().web[webPathSection]
@@ -46,7 +47,7 @@ export const templateForComponentFile = ({
     outputPath ||
     path.join(
       basePath,
-      pascalComponentPath,
+      camelComponentPath,
       outputComponentName,
       outputComponentName + extension
     )
