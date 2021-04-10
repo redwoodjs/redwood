@@ -31,13 +31,15 @@ export * from './route-announcement'
  *
  * @example
  * interface AvailableRoutes {
- *   home: (params?: ParseRouteParameters<"/">) => "/"
- *   post: (params?: ParseRouteParameters<"/posts/{id:Int}">) => "/posts/{id:Int}"
+ *   home: (params?: RouteParams<"/">) => "/"
+ *   post: (params?: RouteParams<"/posts/{id:Int}">) => "/posts/{id:Int}"
  * }
  */
 // Keep this in index.ts so it can be extended with declaration merging
 export interface AvailableRoutes {
-  [key: string]: (args?: Record<string, string>) => string
+  [key: string]: (
+    args?: Record<string | number, string | number | boolean>
+  ) => string
 }
 
 export { SkipNavLink, SkipNavContent } from '@reach/skip-nav'

@@ -13,5 +13,6 @@
     { "path": "../internal" },
     { "path": "../structure" },
     { "path": "../prerender" },
+    { "path": "../api-server" },
   ]
 }

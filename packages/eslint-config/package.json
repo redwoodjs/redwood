@@ -1,10 +1,10 @@
 {
   "name": "@redwoodjs/eslint-config",
-  "version": "0.28.3",
+  "version": "0.29.0",
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@redwoodjs/eslint-plugin-redwood": "^0.28.3",
+    "@redwoodjs/eslint-plugin-redwood": "^0.29.0",
     "@typescript-eslint/eslint-plugin": "^4.0.1",
     "@typescript-eslint/parser": "^4.0.1",
     "babel-eslint": "^10.1.0",
@@ -13,7 +13,7 @@
     "eslint-import-resolver-babel-module": "^5.2.0",
     "eslint-plugin-babel": "^5.3.1",
     "eslint-plugin-import": "^2.22.0",
-    "eslint-plugin-jest-dom": "^3.6.3",
+    "eslint-plugin-jest-dom": "^3.7.0",
     "eslint-plugin-jsx-a11y": "^6.3.1",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.20.6",
@@ -21,7 +21,6 @@
     "prettier": "^2.1.1"
   },
   "scripts": {
-    "build:link": "../../tasks/build-link",
     "build": "echo 'Nothing to build..'"
   },
   "gitHead": "c235e7d7186e5e258764699c0e0e1d5cc0fdd0b5"
