@@ -41,6 +41,7 @@ export const netlify = (client: NetlifyIdentity): AuthClient => {
       })
     },
     getToken: async () => {
+      client.refresh()
       const user = await client.currentUser()
       return user?.token?.access_token || null
     },

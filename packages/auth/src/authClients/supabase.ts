@@ -88,6 +88,13 @@ export const supabase = (client: Supabase): AuthClientSupabase => {
     },
     getToken: async () => {
       const currentSession = client.auth.session()
+      const expiresAt = currentSession?.expires_at
+
+      if (expiresAt && expiresAt > Math.round(Date.now() / 1000)) {
+        const { data } = await client.auth.refreshSession()
+        return data?.access_token || null
+      }
+
       return currentSession?.access_token || null
     },
     getUserMetadata: async () => {
