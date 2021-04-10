@@ -31,6 +31,9 @@ function createDummyAuthContextValues(partial: Partial<AuthContextInterface>) {
   return { ...authContextValues, ...partial }
 }
 
+const mockUseAuth = (isAuthenticated = false, loading = false) => () =>
+  createDummyAuthContextValues({ loading, isAuthenticated })
+
 // SETUP
 const HomePage = () => <h1>Home Page</h1>
 const LoginPage = () => <h1>Login Page</h1>
@@ -38,13 +41,6 @@ const AboutPage = () => <h1>About Page</h1>
 const PrivatePage = () => <h1>Private Page</h1>
 const RedirectPage = () => <Redirect to="/about" />
 const NotFoundPage = () => <h1>404</h1>
-const mockAuth = (isAuthenticated = false) => {
-  window.__REDWOOD__USE_AUTH = () =>
-    createDummyAuthContextValues({
-      loading: false,
-      isAuthenticated,
-    })
-}
 
 beforeEach(() => {
   window.history.pushState({}, null, '/')
@@ -52,8 +48,6 @@ beforeEach(() => {
 })
 
 test('inits routes and navigates as expected', async () => {
-  mockAuth(false)
-
   const ParamPage = ({ value, q }: { value: string; q: string }) => {
     const params = useParams()
 
@@ -66,7 +60,7 @@ test('inits routes and navigates as expected', async () => {
   }
 
   const TestRouter = () => (
-    <Router useAuth={window.__REDWOOD__USE_AUTH}>
+    <Router useAuth={mockUseAuth()}>
       <Route path="/" page={HomePage} name="home" />
       <Route path="/about" page={AboutPage} name="about" />
       <Route path="/redirect" page={RedirectPage} name="redirect" />
@@ -123,9 +117,8 @@ test('inits routes and navigates as expected', async () => {
 })
 
 test('unauthenticated user is redirected away from private page', async () => {
-  mockAuth(false)
   const TestRouter = () => (
-    <Router useAuth={window.__REDWOOD__USE_AUTH}>
+    <Router useAuth={mockUseAuth()}>
       <Route path="/" page={HomePage} name="home" />
       <Route path="/login" page={LoginPage} name="login" />
       <Route path="/about" page={AboutPage} name="about" />
@@ -152,9 +145,8 @@ test('unauthenticated user is redirected away from private page', async () => {
 })
 
 test('unauthenticated user is redirected including search params', async () => {
-  mockAuth(false)
   const TestRouter = () => (
-    <Router useAuth={window.__REDWOOD__USE_AUTH}>
+    <Router useAuth={mockUseAuth()}>
       <Route path="/" page={HomePage} name="home" />
       <Route path="/login" page={LoginPage} name="login" />
       <Private unauthenticated="login">
@@ -182,9 +174,8 @@ test('unauthenticated user is redirected including search params', async () => {
 })
 
 test('authenticated user can access private page', async () => {
-  mockAuth(true)
   const TestRouter = () => (
-    <Router useAuth={window.__REDWOOD__USE_AUTH}>
+    <Router useAuth={mockUseAuth(true)}>
       <Route path="/" page={HomePage} name="home" />
       <Private unauthenticated="home">
         <Route path="/private" page={PrivatePage} name="private" />
@@ -207,7 +198,7 @@ test('authenticated user can access private page', async () => {
 
 test('can display a loading screen whilst waiting for auth', async () => {
   const TestRouter = () => (
-    <Router useAuth={() => createDummyAuthContextValues({ loading: true })}>
+    <Router useAuth={mockUseAuth(true, true)}>
       <Route path="/" page={HomePage} name="home" />
       <Private unauthenticated="home">
         <Route
@@ -234,9 +225,8 @@ test('can display a loading screen whilst waiting for auth', async () => {
 })
 
 test('inits routes two private routes with a space in between and loads as expected', async () => {
-  mockAuth(false)
   const TestRouter = () => (
-    <Router useAuth={window.__REDWOOD__USE_AUTH}>
+    <Router useAuth={mockUseAuth()}>
       <Route path="/" page={HomePage} name="home" />
       <Route path="/about" page={AboutPage} name="about" />
       <Route path="/redirect" page={RedirectPage} name="redirect" />
@@ -259,7 +249,6 @@ test('inits routes two private routes with a space in between and loads as expec
 })
 
 test('supports <Set>', async () => {
-  mockAuth(false)
   const GlobalLayout = ({ children }) => (
     <div>
       <h1>Global Layout</h1>
@@ -268,7 +257,7 @@ test('supports <Set>', async () => {
   )
 
   const TestRouter = () => (
-    <Router useAuth={window.__REDWOOD__USE_AUTH}>
+    <Router useAuth={mockUseAuth()}>
       <Set wrap={GlobalLayout}>
         <Route path="/" page={HomePage} name="home" />
         <Route path="/about" page={AboutPage} name="about" />
@@ -332,7 +321,7 @@ test("Doesn't destroy <Set> when navigating inside, but does when navigating bet
 
   const TestRouter = () => {
     return (
-      <Router useAuth={window.__REDWOOD__USE_AUTH}>
+      <Router>
         <Set wrap={SetContextProvider}>
           <Route path="/" page={HomePage} name="home" />
           <Route path="/ctx-1-page" page={Ctx1Page} name="ctx1" />
@@ -373,7 +362,7 @@ test('can use named routes for navigating', async () => {
   }
 
   const TestRouter = () => (
-    <Router useAuth={window.__REDWOOD__USE_AUTH}>
+    <Router>
       <Set wrap={MainLayout}>
         <Route path="/" page={HomePage} name="home" />
         <Route path="/about" page={AboutPage} name="about" />
@@ -413,7 +402,7 @@ test('renders only active path', async () => {
   }
 
   const TestRouter = () => (
-    <Router useAuth={window.__REDWOOD__USE_AUTH}>
+    <Router>
       <Route path="/" page={HomePage} name="home" />
       <Set wrap={AboutLayout}>
         <Route path="/about" page={AboutPage} name="about" />
@@ -448,7 +437,7 @@ test('renders first matching route only', async () => {
   const ParamPage = ({ param }: { param: string }) => <div>param {param}</div>
 
   const TestRouter = () => (
-    <Router useAuth={window.__REDWOOD__USE_AUTH}>
+    <Router>
       <Route path="/" page={HomePage} name="home" />
       <Route path="/about" page={AboutPage} name="about" />
       <Route path="/{param}" page={ParamPage} name="param" />
@@ -474,8 +463,7 @@ test('params should never be an empty object', async (done) => {
   }
 
   const TestRouter = () => (
-    // @ts-expect-error - Meh.
-    <Router useAuth={window.__REDWOOD__USE_AUTH}>
+    <Router>
       <Route path="/test/{documentId}" page={ParamPage} name="param" />
     </Router>
   )
@@ -497,8 +485,7 @@ test('params should never be an empty object in Set', async (done) => {
   }
 
   const TestRouter = () => (
-    // @ts-expect-error - Meh.
-    <Router useAuth={window.__REDWOOD__USE_AUTH}>
+    <Router>
       <Set wrap={SetWithUseParams}>
         <Route path="/test/{documentId}" page={ParamPage} name="param" />
       </Set>
@@ -524,8 +511,7 @@ test('params should never be an empty object in Set', async () => {
   }
 
   const TestRouter = () => (
-    // @ts-expect-error - Meh.
-    <Router useAuth={window.__REDWOOD__USE_AUTH}>
+    <Router>
       <Set wrap={SetWithUseParams}>
         <Route path="/test/{documentId}" page={ParamPage} name="param" />
       </Set>
@@ -540,9 +526,6 @@ test('params should never be an empty object in Set', async () => {
 })
 
 test('Set is not rendered for unauthenticated user.', async () => {
-  // not authenticated.
-  mockAuth(false)
-
   const ParamPage = () => {
     // This should never be called. We should be redirect to login instead.
     expect(false).toBe(true)
@@ -556,8 +539,7 @@ test('Set is not rendered for unauthenticated user.', async () => {
   }
 
   const TestRouter = () => (
-    // @ts-expect-error - Meh.
-    <Router useAuth={window.__REDWOOD__USE_AUTH}>
+    <Router useAuth={mockUseAuth()}>
       <Private unauthenticated="login">
         <Set wrap={SetWithUseParams}>
           <Route path="/test/{documentId}" page={ParamPage} name="param" />

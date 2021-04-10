@@ -4,7 +4,7 @@
     "build:types": "ttsc --build --verbose",
     "build:clean": "rimraf ./packages/**/dist",
     "build:watch": "lerna run build:watch --parallel; ttsc --build",
-    "build:link": "lerna run 'build:link' --parallel",
+    "build:link": "./tasks/build-link",
     "test": "lerna run test --stream -- --colors --maxWorkers=4",
     "lint": "cross-env __REDWOOD__CONFIG_PATH=packages/create-redwood-app/template eslint -c .eslintrc.js packages",
     "lint:fix": "cross-env __REDWOOD__CONFIG_PATH=packages/create-redwood-app/template eslint -c .eslintrc.js --fix packages"
@@ -29,7 +29,7 @@
     "@babel/runtime-corejs3": "^7.11.2",
     "@testing-library/jest-dom": "5.11.6",
     "@testing-library/react": "11.2.2",
-    "@testing-library/user-event": "12.5.0",
+    "@testing-library/user-event": "13.1.2",
     "@types/jest": "^26.0.14",
     "babel-jest": "^26.5.2",
     "babel-plugin-auto-import": "^1.1.0",

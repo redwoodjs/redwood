@@ -21,12 +21,51 @@ export const CoercionContextProvider: React.FC = ({ children }) => {
   )
 }
 
+const coercionWarn = (type: string, value: string) => {
+  if (
+    process.env.NODE_ENV === 'development' ||
+    process.env.NODE_ENV === 'test'
+  ) {
+    console.warn(
+      `Invalid ${type}. Form field validation not set.  Returning 'undefined' instead of '${value}'`
+    )
+  }
+}
+
 const COERCION_FUNCTIONS = {
   Boolean: (value: string) => !!value,
-  Float: (value: string) => parseFloat(value),
-  Int: (value: string) => parseInt(value, 10),
-  Json: (value: string) => JSON.parse(value),
-  DateTime: (value: string) => new Date(value).toISOString(),
+  Float: (value: string) => {
+    const val = parseFloat(value)
+    if (isNaN(val)) {
+      coercionWarn('Float', value)
+      return undefined
+    }
+    return val
+  },
+  Int: (value: string) => {
+    const val = parseInt(value, 10)
+    if (isNaN(val)) {
+      coercionWarn('Int', value)
+      return undefined
+    }
+    return val
+  },
+  Json: (value: string) => {
+    try {
+      return JSON.parse(value)
+    } catch (e) {
+      coercionWarn('Json', value)
+      return undefined
+    }
+  },
+  DateTime: (value: string) => {
+    try {
+      return new Date(value).toISOString()
+    } catch (e) {
+      coercionWarn('DateTime', value)
+      return undefined
+    }
+  },
 }
 
 export type TDefinedCoercionFunctions = keyof typeof COERCION_FUNCTIONS
@@ -66,6 +105,15 @@ export const useCoercion = () => {
       } else {
         if (transformValue) {
           coercionFunction = COERCION_FUNCTIONS[transformValue]
+          if (
+            !coercionFunction &&
+            (process.env.NODE_ENV === 'development' ||
+              process.env.NODE_ENV === 'test')
+          ) {
+            console.warn(
+              'Form input ' + name + ' does not have a valid transformValue'
+            )
+          }
         } else if (type && inputTypeToDataTypeMapping[type]) {
           coercionFunction =
             COERCION_FUNCTIONS[inputTypeToDataTypeMapping[type]]

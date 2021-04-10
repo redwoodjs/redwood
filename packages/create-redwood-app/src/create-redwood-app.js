@@ -51,7 +51,7 @@ const { _: args, 'yarn-install': yarnInstall, javascript } = yargs
     default: true,
     describe: 'Skip yarn install with --no-yarn-install',
   })
-  .option('--javascript', {
+  .option('javascript', {
     default: true,
     describe: 'Generate a JavaScript project',
   })
