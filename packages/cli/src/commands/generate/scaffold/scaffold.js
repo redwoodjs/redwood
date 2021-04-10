@@ -28,6 +28,7 @@ import {
   relationsForModel,
   intForeignKeysForModel,
   splitPathAndName,
+  formatCamelPath,
 } from '../helpers'
 import { files as sdlFiles, builder as sdlBuilder } from '../sdl/sdl'
 import {
@@ -117,10 +118,7 @@ const layoutFiles = (name, scaffoldPath = '') => {
   const singularName = pascalcase(pluralize.singular(name))
   let fileList = {}
 
-  const pascalScaffoldPath =
-    scaffoldPath === ''
-      ? scaffoldPath
-      : scaffoldPath.split('/').map(pascalcase).join('/') + '/'
+  const scaffoldPathCamel = formatCamelPath(scaffoldPath)
 
   const pluralCamelName = camelcase(pluralName)
   const camelScaffoldPath = camelcase(pascalcase(scaffoldPath))
@@ -140,7 +138,7 @@ const layoutFiles = (name, scaffoldPath = '') => {
       .replace(/\.template/, '')
     const outputPath = path.join(
       getPaths().web.layouts,
-      pascalScaffoldPath,
+      scaffoldPathCamel,
       outputLayoutName.replace(/\.js/, ''),
       outputLayoutName
     )
@@ -148,7 +146,7 @@ const layoutFiles = (name, scaffoldPath = '') => {
       path.join('scaffold', 'templates', 'layouts', layout),
       {
         name,
-        pascalScaffoldPath,
+        scaffoldPathCamel,
         pluralRouteName,
         newRouteName,
       }
@@ -273,11 +271,7 @@ const componentFiles = async (name, scaffoldPath = '') => {
       return accumulator
     }, {})
   )
-
-  const pascalScaffoldPath =
-    scaffoldPath === ''
-      ? scaffoldPath
-      : scaffoldPath.split('/').map(pascalcase).join('/') + '/'
+  const scaffoldPathCamel = formatCamelPath(scaffoldPath)
 
   const pluralCamelName = camelcase(pluralName)
   const camelScaffoldPath = camelcase(pascalcase(scaffoldPath))
@@ -307,7 +301,7 @@ const componentFiles = async (name, scaffoldPath = '') => {
       .replace(/\.template/, '')
     const outputPath = path.join(
       getPaths().web.components,
-      pascalScaffoldPath,
+      scaffoldPathCamel,
       outputComponentName.replace(/\.js/, ''),
       outputComponentName
     )
@@ -321,7 +315,7 @@ const componentFiles = async (name, scaffoldPath = '') => {
         editableColumns,
         idType,
         intForeignKeys,
-        pascalScaffoldPath,
+        scaffoldPathCamel,
         pluralRouteName,
         editRouteName,
         singularRouteName,
