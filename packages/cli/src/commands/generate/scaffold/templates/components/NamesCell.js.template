@@ -1,6 +1,6 @@
 import { Link, routes } from '@redwoodjs/router'
 
-import ${pluralPascalName} from 'src/components/${camelScaffoldPath}${pluralPascalName}'
+import ${pluralPascalName} from 'src/components/${pascalScaffoldPath}${pluralPascalName}'
 
 export const QUERY = gql`
   query ${pluralConstantName} {
