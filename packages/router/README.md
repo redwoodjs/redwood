@@ -84,7 +84,7 @@ const Routes = () => {
 export default Routes
 ```
 
-The `wrap` prop accepts a single component or an array of components. Components are rendered in the same order they're passed, so in the exmaple above, Set expands to:
+The `wrap` prop accepts a single component or an array of components. Components are rendered in the same order they're passed, so in the example above, Set expands to:
 
 ```js
 <BlogContext>
@@ -121,6 +121,26 @@ const Routes = () => {
     </Router>
   )
 }
+```
+
+### Forwarding props
+
+All props you give to `<Set>` (except for `wrap`) will be passed to the wrapper components.
+
+So this...
+
+```
+<Set wrap={MainLayout} theme="dark">
+  <Route path="/" page={HomePage} name="home" />
+</Set>
+```
+
+becomes...
+
+```
+<MainLayout theme="dark">
+  <Route path="/" page={HomePage} name="home" />
+</MainLayout>
 ```
 
 ## Link and named route functions
