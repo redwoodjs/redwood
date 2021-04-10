@@ -50,15 +50,17 @@ export const verifySignature = ({
   options: VerifyOptions
 }): boolean => {
   try {
-    if (payload) {
-      const decoded = jwt.verify(signature, secret) as Record<string, unknown>
-
-      if (decoded['iss'] && decoded['iss'] !== options.issuer) {
-        throw new WebhookVerificationError()
-      }
-
-      return true
+    if (payload === undefined || payload?.length === 0) {
+      console.warn('Missing payload')
     }
+
+    const decoded = jwt.verify(signature, secret) as Record<string, unknown>
+
+    if (decoded['iss'] && decoded['iss'] !== options.issuer) {
+      throw new WebhookVerificationError()
+    }
+
+    return true
 
     throw new WebhookVerificationError()
   } catch (error) {
@@ -68,8 +70,7 @@ export const verifySignature = ({
 
 /**
  *
- * Based on Stripe's secure webhook implementation
- * @see https://stripe.com/docs/webhooks/signatures
+ * JWT
  *
  */
 export const jwtVerifier = ({
