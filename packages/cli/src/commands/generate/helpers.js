@@ -33,10 +33,7 @@ export const templateForComponentFile = ({
 }) => {
   const { name, path: componentPath = '' } = splitPathAndName(pathSlashName)
 
-  const camelComponentPath =
-    componentPath === ''
-      ? componentPath
-      : componentPath.split('/').map(camelcase).join('/') + '/'
+  const camelComponentPath = formatCamelPath(componentPath)
 
   const basePath = webPathSection
     ? getPaths().web[webPathSection]
@@ -170,3 +167,7 @@ export const splitPathAndName = (pathSlashName) => {
 
   return { name, path }
 }
+
+// Format path to camelCasen
+export const formatCamelPath = (path) =>
+  path === '' ? path : path.split('/').map(camelcase).join('/') + '/'
