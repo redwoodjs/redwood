@@ -4,8 +4,8 @@ import { createLogger } from '@redwoodjs/api/logger'
  * Creates a logger with RedwoodLoggerOptions
  *
  * These extend and override default LoggerOptions,
- * can define a destination like a file or other supported pin log transport stream,
- * and sets where or not to show the logger configuration settings (defaults to false)
+ * can define a destination like a file or other supported pino log transport stream,
+ * and sets whether or not to show the logger configuration settings (defaults to false)
  *
  * @param RedwoodLoggerOptions
  *
