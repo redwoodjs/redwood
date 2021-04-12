@@ -315,6 +315,8 @@ module.exports = (webpackEnv) => {
       runtimeChunk: {
         name: (entrypoint) => `runtime-${entrypoint.name}`,
       },
+      // This doesn't get used when mode !== 'production'
+      // Because minimize gets set to false, see https://webpack.js.org/configuration/mode/#usage
       minimizer: [new CssMinimizerPlugin(), new TerserPlugin()],
     },
     output: {
