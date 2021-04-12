@@ -99,8 +99,6 @@ When you're done, go back to your `rwt link` tab and ctrl-c to quit. `rwt link` 
 
 Next time you want to contribute, just run `yarn rwt link` again!
 
-> Having issues with `rwt link`? There's an [rwt link FAQ](https://github.com/redwoodjs/redwood/issues/2215), if not please try one of the legacy contributing flows below.
-
 
 *Flags for rwt link command*
 | Flag | Description                              |
@@ -109,6 +107,10 @@ Next time you want to contribute, just run `yarn rwt link` again!
 | `--clean, -c`       | Clean the framework repo before linking? Set this to false to speed things up if you're sure your build folders are clean [default: true]                 |
 | `--watch, -w`           | Set this to false, if you just want to link once, and not watch for file changes [default: true]      |
 <br>
+
+
+> Having issues with `rwt link`? There's an [rwt link FAQ](https://github.com/redwoodjs/redwood/issues/2215), if not please try one of the legacy contributing flows below.
+
 #### Copy and Watch
 
 `yarn rwt link` not working for you? That's ok &mdash; we have a few legacy contributing workflows that you can fall back on.
