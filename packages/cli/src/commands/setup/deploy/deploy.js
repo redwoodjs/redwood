@@ -77,7 +77,7 @@ export const handler = async ({ provider, force, database }) => {
     fs.readFileSync('api/package.json').toString()
   ).dependencies
 
-  const missingPackages = providerData?.apiPackages?.reduce(
+  const missingApiPackages = providerData?.apiPackages?.reduce(
     (missingPackages, apiPackage) => {
       if (!(apiPackage in apiDependencies)) {
         missingPackages.push(apiPackage)
@@ -118,15 +118,26 @@ export const handler = async ({ provider, force, database }) => {
           return writeFilesTask(files, { overwriteExisting: force })
         },
       },
-      missingPackages?.length && {
+      missingApiPackages?.length && {
         title: 'Adding required api packages...',
         task: async () => {
           await execa('yarn', [
             'workspace',
             'api',
             'add',
+            ...missingApiPackages,
+          ])
+        },
+      },
+      providerData?.apiDevPackages?.length && {
+        title: 'Adding required api dev packages...',
+        task: async () => {
+          await execa('yarn', [
+            'workspace',
+            'api',
+            'add',
             '-D',
-            ...missingPackages,
+            ...providerData.apiDevPackages,
           ])
         },
       },
