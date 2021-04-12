@@ -59,7 +59,7 @@ export const builder = (yargs) => {
     })
     .check((argv) => {
       if (argv.provider !== 'render' && argv.database !== 'postgres') {
-        throw new Error('Database option only availble for Render deployment')
+        throw new Error('Database option only available for Render deployment')
       }
       return true
     })
