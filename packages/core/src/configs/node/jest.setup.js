@@ -29,7 +29,7 @@ const seedScenario = async (scenario) => {
 
 const teardown = async () => {
   const prismaModelNames = (await getSchemaDefinitions()).datamodel.models.map(
-    (m) => (m.dbName || m.name)
+    (m) => m.dbName || m.name
   )
 
   for (const model of prismaModelNames) {
