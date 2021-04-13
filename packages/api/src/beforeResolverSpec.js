@@ -1,4 +1,30 @@
-const BeforeSpec = class {
+// Thrown if resolver function has no explicit `apply()` or `skip()`
+// which includes it
+export const InsecureServiceError = class extends Error {
+  constructor(resolverName, ...args) {
+    super(
+      `Service call not authorized. If you really want to allow access, add \`before.skip({ only: ['${resolverName}'] })\` to your beforeResolver()`,
+      ...args
+    )
+    this.name = 'InsecureServiceError'
+  }
+}
+
+// Thrown if service has no `beforeResolver()` defined
+export const MissingBeforeResolver = class extends Error {
+  constructor(servicePath, ...args) {
+    super(
+      `Must define a \`beforeResolver()\` in ${servicePath.replaceAll(
+        '_',
+        '/'
+      )}`,
+      ...args
+    )
+    this.name = 'MissingBeforeResolver'
+  }
+}
+
+export const BeforeResolverSpec = class {
   constructor(serviceNames) {
     this.befores = {}
 
@@ -69,9 +95,7 @@ const BeforeSpec = class {
     if (this._canSkipService(name)) {
       return true
     } else if (this._noBeforesDefined(name)) {
-      throw new Error(
-        `Service call not authorized. If you really want to allow access, try before.skip({ only: ['${name}'] })`
-      )
+      throw new InsecureServiceError(name)
     } else {
       return this._invokeBefores(name)
     }
@@ -102,5 +126,3 @@ const BeforeSpec = class {
     return true
   }
 }
-
-module.exports = BeforeSpec
