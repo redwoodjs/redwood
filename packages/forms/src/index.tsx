@@ -72,8 +72,11 @@ interface ValidatableFieldProps extends InputTagProps {
 const inputTagProps = <T extends InputTagProps>(
   props: T
 ): Omit<T, 'dataType' | 'transformValue' | 'errorClassName' | 'errorStyle'> => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { errors, setError } = useFormContext()
+  const {
+    setError,
+    formState: { errors },
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+  } = useFormContext()
 
   // Check for errors from server and set on field if present
 
@@ -212,7 +215,9 @@ interface FieldErrorProps extends React.HTMLProps<HTMLSpanElement> {
 }
 
 const FieldError = (props: FieldErrorProps) => {
-  const { errors } = useFormContext()
+  const {
+    formState: { errors },
+  } = useFormContext()
   const validationError = errors[props.name]
   const errorMessage =
     validationError &&
@@ -268,7 +273,7 @@ const TextAreaField = forwardRef<
     <textarea
       {...tagProps}
       id={props.id || props.name}
-      ref={(element) => {
+      {...(element: HTMLTextAreaElement | null) => {
         register(element, validation)
 
         if (typeof ref === 'function') {
@@ -303,7 +308,7 @@ const SelectField = forwardRef<
     <select
       {...tagProps}
       id={props.id || props.name}
-      ref={(element) => {
+      {...(element: HTMLSelectElement | null) => {
         register(element, props.validation || { required: false })
 
         if (typeof ref === 'function') {
@@ -355,7 +360,7 @@ export const CheckboxField = forwardRef<
       type="checkbox"
       {...tagProps}
       id={props.id || props.name}
-      ref={(element) => {
+      {...(element: HTMLInputElement | null) => {
         register(element, props.validation || { required: false })
 
         if (typeof ref === 'function') {
@@ -416,7 +421,7 @@ const InputField = forwardRef<
     <input
       {...tagProps}
       id={props.id || props.name}
-      ref={(element) => {
+      {...(element: HTMLInputElement | null) => {
         register(element, props.validation || { required: false })
 
         if (typeof ref === 'function') {
