@@ -95,27 +95,27 @@ Your Redwood App isn't using the packages in `node_modules/@redwoodjs` anymore. 
 
 you can open a new tab in your terminal, cd to `redwood-app` and launch your Redwood App from there. As you make changes in `redwood`, you will see those changes immediately in the behavior of your Redwood App.
 
-When you're done, go back to your `rwt link` tab and ctrl-c to quit. `rwt link` will ask you to run `yarn rwt unlink` comand. This will restore your Redwood App to its original state, reverting it to the version of Redwood that it originally had installed.
+When you're done, go back to your `rwt link` tab and ctrl-c to quit. `rwt link` will ask you to run the `yarn rwt unlink` command. This will restore your Redwood App to its original state, reverting it to the version of Redwood that it originally had installed.
 
 Next time you want to contribute, just run `yarn rwt link` again!
 
 
-*Flags for rwt link command*
+*Flags for rwt link command:*
 | Flag | Description                              |
 | :------------------ | :--------------------------------------- |
 | `RW_PATH`              | Path to the framework repo. Required if RW_PATH environment var not set                         |
 | `--clean, -c`       | Clean the framework repo before linking? Set this to false to speed things up if you're sure your build folders are clean [default: true]                 |
-| `--watch, -w`           | Set this to false, if you just want to link once, and not watch for file changes [default: true]      |
+| `--watch, -w`           | Set this to false if you just want to link once and not watch for file changes [default: true]      |
 <br>
 
 
-> Having issues with `rwt link`? There's an [rwt link FAQ](https://github.com/redwoodjs/redwood/issues/2215), if not please try one of the legacy contributing flows below.
+> Having trouble with `rwt link`? Check the [rwt link FAQ](https://github.com/redwoodjs/redwood/issues/2215). If that doesn't help, please try one of the legacy contributing flows below.
 
 #### Copy and Watch
 
 `yarn rwt link` not working for you? That's ok &mdash; we have a few legacy contributing workflows that you can fall back on.
 
-After you've gotten everything [up-to-date and installed](#first-steps), make sure your Redwood app is on the latest canary release.
+After you've gotten everything [up-to-date and installed](#first-steps), make sure your Redwood App is on the latest canary release:
 
 ```terminal
 cd redwood-app
