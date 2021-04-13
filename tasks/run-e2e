@@ -131,7 +131,7 @@ const convertProjectToJavaScript = () => {
 
 const runDevServerInBackground = async (subprocesses) => {
   console.log('Starting RedwoodJS dev server...')
-  subprocesses.push(execa('yarn rw dev --fwd="--open=false" &', {
+  subprocesses.push(execa('yarn rw dev --fwd="--open=false"', {
     cwd: REDWOOD_PROJECT_DIRECTORY,
     shell: true,
     stdio: 'inherit',
