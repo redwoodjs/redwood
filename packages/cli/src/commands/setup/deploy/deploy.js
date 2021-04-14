@@ -52,7 +52,7 @@ export const builder = (yargs) => {
     })
     .option('database', {
       alias: 'd',
-      choices: ['none', 'postgres', 'sqlite'],
+      choices: ['none', 'postgresql', 'sqlite'],
       description: 'Database deployment for Render only',
       type: 'string',
     })
@@ -61,7 +61,7 @@ export const builder = (yargs) => {
         throw new Error('Database option only available for Render deployment')
       }
       if (argv.provider === 'render' && argv.database === undefined) {
-        argv.database = 'postgres'
+        argv.database = 'postgresql'
       }
       return true
     })

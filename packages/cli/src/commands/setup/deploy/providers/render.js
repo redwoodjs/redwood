@@ -73,7 +73,7 @@ export const prismaDataSourceCheck = (database) => {
   )
   if (detectedDatabase == database) {
     switch (database) {
-      case 'postgres':
+      case 'postgresql':
         return {
           path: path.join(getPaths().base, 'render.yaml'),
           content: RENDER_YAML(POSTGRES_YAML),
