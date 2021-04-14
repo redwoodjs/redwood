@@ -115,9 +115,6 @@ interface PrivateProps {
   role?: string | string[]
 }
 
-/**
- * @deprecated Use `<Set private>` instead
- */
 export const Private: React.FC<PrivateProps> = ({
   children,
   unauthenticated,
