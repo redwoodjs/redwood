@@ -55,14 +55,6 @@ yarn install
 
 You can also `git clone` one of the Redwood example apps, or use one you already have. As mentioned above, we'll assume your Redwood App is in a directory called `redwood-app`.
 
-Then, you should upgrade your Redwood App to the latest canary release &mdash; Redwood's bleeding edge &mdash; to make sure your Redwood App is compatible with the most recent version of the Redwood Framework:
-
-```terminal
-cd redwood-app
-yarn rw upgrade -t canary
-yarn install
-```
-
 ### Watching Changes
 
 As you make changes to your local copy of the Redwood Framework, you'll want to see the effects "live" in your Redwood App.
@@ -88,17 +80,50 @@ yarn rwt link ../path/to/redwood
 
 Your Redwood App isn't using the packages in `node_modules/@redwoodjs` anymore. It's now using the packages in the new workspace with your local changes. You can even install packages or upgrade dependencies &mdash; it's really that simple.
 
-`rwt link` won't return you to the command line. Once it stops outputting to the terminal, you can open a new tab in your terminal, cd to `redwood-app` and launch your Redwood App from there. As you make changes in `redwood`, you will see those changes immediately in the behavior of your Redwood App.
+`rwt link` won't return you to the command line. Once it sets everything up you should see:
+```terminal
+   ┌─────────────────────────────────────────────────────────────┐
+   │                                                             │
+   │   🚀 Go Forth and Contribute!                               │
+   │                                                             │
+   │   🔗  Your project is linked!                               │
+   │                                                             │
+   │   Contributing doc: https://redwoodjs.com/docs/contributing │
+   │                                                             │
+   └─────────────────────────────────────────────────────────────┘
+```
 
-When you're done, go back to your `rwt link` tab and ctrl-c to quit. `rwt link` will issue a `yarn rwt unlink` comand. This will restore your Redwood App to its original state, reverting it to the version of Redwood that it originally had installed.
+you can open a new tab in your terminal, cd to `redwood-app` and launch your Redwood App from there. As you make changes in `redwood`, you will see those changes immediately in the behavior of your Redwood App.
+
+When you're done, go back to your `rwt link` tab and ctrl-c to quit. `rwt link` will ask you to run the `yarn rwt unlink` command. This will restore your Redwood App to its original state, reverting it to the version of Redwood that it originally had installed.
 
 Next time you want to contribute, just run `yarn rwt link` again!
+
+
+*Flags for rwt link command:*
+| Flag | Description                              |
+| :------------------ | :--------------------------------------- |
+| `RW_PATH`              | Path to the framework repo. Required if RW_PATH environment var not set                         |
+| `--clean, -c`       | Clean the framework repo before linking? Set this to false to speed things up if you're sure your build folders are clean [default: true]                 |
+| `--watch, -w`           | Set this to false if you just want to link once and not watch for file changes [default: true]      |
+<br>
+
+
+> Having trouble with `rwt link`? Check the [rwt link FAQ](https://github.com/redwoodjs/redwood/issues/2215). If that doesn't help, please try one of the legacy contributing flows below.
 
 #### Copy and Watch
 
 `yarn rwt link` not working for you? That's ok &mdash; we have a few legacy contributing workflows that you can fall back on.
 
-After you've gotten everything [up-to-date and installed](#first-steps), you'll want to build-and-watch the files in the Redwood Framework for changes:
+After you've gotten everything [up-to-date and installed](#first-steps), make sure your Redwood App is on the latest canary release:
+
+```terminal
+cd redwood-app
+yarn rw upgrade -t canary
+yarn install
+```
+
+Now you'll want to build-and-watch the files in the Redwood Framework for changes:
 
 ```terminal
 cd redwood
