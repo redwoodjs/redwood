@@ -1,4 +1,5 @@
-import type Firebase from 'firebase/app'
+import type FirebaseNamespace from 'firebase/app'
+export type Firebase = typeof FirebaseNamespace
 
 import { AuthClient } from './'
 
@@ -21,7 +22,7 @@ const isPasswordCreds = (
   return creds.email !== undefined && creds.password !== undefined
 }
 
-export const firebase = (client: typeof Firebase): AuthClient => {
+export const firebase = (client: Firebase): AuthClient => {
   // Use a function to allow us to extend for non-oauth providers in the future
   const getProvider = (providerId: oAuthProvider) => {
     return new client.auth.OAuthProvider(providerId)
