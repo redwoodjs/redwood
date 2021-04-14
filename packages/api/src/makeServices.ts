@@ -1,5 +1,6 @@
+import { getConfig } from '@redwoodjs/internal'
+
 import c from '../../cli/src/lib/colors'
-import { getConfig } from '../../internal/src/config'
 
 import { BeforeResolverSpec, MissingBeforeResolver } from './beforeResolverSpec'
 import { MakeServices } from './types'
