@@ -33,7 +33,7 @@ export const BeforeResolverSpec = class {
     }
   }
 
-  run(functions, options = {}) {
+  apply(functions, options = {}) {
     for (let [name, _list] of Object.entries(this.befores)) {
       if (
         (!options.only && !options.except) ||
@@ -101,12 +101,12 @@ export const BeforeResolverSpec = class {
     }
   }
 
-  // initializes a service as having before functions to run, but none defined yet
+  // initializes a service as having before functions to apply, but none defined yet
   _initBefore(name) {
     this.befores[name] = []
   }
 
-  // marks a service as having no needed before functions to run
+  // marks a service as having no needed before functions to apply
   _clearBefore(name) {
     this.befores[name] = false
   }
