@@ -57,13 +57,6 @@ export const verifySignature = ({
   signature: string
 }): boolean => {
   try {
-    // check if sha256? or make this a general sha verifier?
-    console.log('in verifySignature')
-    console.log(payload)
-
-    console.log('in secret')
-    console.log(secret)
-
     const algorithm = signature.split('=')[0]
     const webhookSignature = Buffer.from(signature || '', 'utf8')
     const hmac = createHmac(algorithm, secret)
@@ -75,14 +68,6 @@ export const verifySignature = ({
       algorithm + '=' + hmac.update(payload).digest('hex'),
       'utf8'
     )
-
-    console.log('signature')
-    console.log(signature)
-
-    console.log('webhookSignature')
-    console.log(webhookSignature.toString())
-    console.log('digest')
-    console.log(digest.toString())
 
     // constant time comparison to prevent timing attacks
     // https://stackoverflow.com/a/31096242/206879

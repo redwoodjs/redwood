@@ -78,10 +78,6 @@ export const receiveAndVerify = ({
       options.signatureHeader || DEFAULT_WEBHOOK_SIGNATURE_HEADER,
   })
 
-  console.log('in receiveAndVerify')
-  console.log(signature)
-  console.log(body)
-
   const { verify } = createVerifier({ options })
 
   return verify({ payload: body, secret, signature })
@@ -90,9 +86,9 @@ export const receiveAndVerify = ({
 /**
  * Standalone verification of webhook signature given a payload, secret, verifier type and options.
  *
- * @param {string} payload -
+ * @param {string} payload - Body content of the event
  * @param {string} secret - The secret that will verify the signature according to the verifier type
- * @param {string} signature -
+ * @param {string} signature - Signature that verifies that the event
  * @param {VerifyOptions} options - Options to specify the verifier type the header key that contains the signature, timestamp leeway.
  * @return {boolean | WebhookVerificationError} - Returns true if the signature is verified, or raises WebhookVerificationError.
  *
@@ -119,6 +115,15 @@ export const verify = ({
 /**
  * Signs a payload with a secret and verifier type method
  *
+ * @param {string} payload - Body content of the event to sign
+ * @param {string} secret - The secret that will verify the signature according to the verifier type
+ * @param {VerifyOptions} options - Options to specify the verifier type the header key that contains the signature, timestamp leeway.
+ * @return {string} - Returns signature
+ *
+ * @example
+ *
+ *    sign({ payload, secret, options: {} })*
+
  */
 export const sign = ({
   payload,
@@ -128,7 +133,7 @@ export const sign = ({
   payload: string
   secret: string
   options: VerifyOptions
-}) => {
+}): string => {
   const { sign } = createVerifier({ options })
 
   return sign({ payload, secret })
