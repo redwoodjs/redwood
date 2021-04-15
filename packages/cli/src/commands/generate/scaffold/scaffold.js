@@ -60,6 +60,8 @@ export const files = async ({
 }) => {
   const model = await getSchema(pascalcase(pluralize.singular(name)))
 
+  const generateTypescript = !javascript && typescript
+
   return {
     ...(await sdlFiles({
       ...getDefaultArgs(sdlBuilder),
@@ -77,9 +79,9 @@ export const files = async ({
       javascript,
     })),
     ...assetFiles(name),
-    ...layoutFiles(name, scaffoldPath),
-    ...pageFiles(name, scaffoldPath),
-    ...(await componentFiles(name, scaffoldPath)),
+    ...layoutFiles(name, scaffoldPath, generateTypescript),
+    ...pageFiles(name, scaffoldPath, generateTypescript),
+    ...(await componentFiles(name, scaffoldPath, generateTypescript)),
   }
 }
 
@@ -108,7 +110,7 @@ const assetFiles = (name) => {
   return fileList
 }
 
-const layoutFiles = (name, scaffoldPath = '') => {
+const layoutFiles = (name, scaffoldPath = '', generateTypescript) => {
   const pluralName = pascalcase(pluralize(name))
   const singularName = pascalcase(pluralize.singular(name))
   let fileList = {}
@@ -133,11 +135,12 @@ const layoutFiles = (name, scaffoldPath = '') => {
     const outputLayoutName = layout
       .replace(/Names/, pluralName)
       .replace(/Name/, singularName)
-      .replace(/\.template/, '')
+      .replace(/\.js\.template/, generateTypescript ? '.tsx' : '.js')
+
     const outputPath = path.join(
       getPaths().web.layouts,
       pascalScaffoldPath,
-      outputLayoutName.replace(/\.js/, ''),
+      outputLayoutName.replace(/\.(js|tsx?)/, ''),
       outputLayoutName
     )
     const template = generateTemplate(
@@ -155,7 +158,7 @@ const layoutFiles = (name, scaffoldPath = '') => {
   return fileList
 }
 
-const pageFiles = (name, scaffoldPath = '') => {
+const pageFiles = (name, scaffoldPath = '', generateTypescript) => {
   const pluralName = pascalcase(pluralize(name))
   const singularName = pascalcase(pluralize.singular(name))
   let fileList = {}
@@ -166,14 +169,16 @@ const pageFiles = (name, scaffoldPath = '') => {
       : scaffoldPath.split('/').map(pascalcase).join('/') + '/'
 
   PAGES.forEach((page) => {
+    // Sanitize page names
     const outputPageName = page
       .replace(/Names/, pluralName)
       .replace(/Name/, singularName)
-      .replace(/\.template/, '')
+      .replace(/\.js\.template/, generateTypescript ? '.tsx' : '.js')
+
     const outputPath = path.join(
       getPaths().web.pages,
       pascalScaffoldPath,
-      outputPageName.replace(/\.js/, ''),
+      outputPageName.replace(/\.(js|tsx?)/, ''),
       outputPageName
     )
     const template = generateTemplate(
@@ -189,7 +194,7 @@ const pageFiles = (name, scaffoldPath = '') => {
   return fileList
 }
 
-const componentFiles = async (name, scaffoldPath = '') => {
+const componentFiles = async (name, scaffoldPath = '', generateTypescript) => {
   const pluralName = pascalcase(pluralize(name))
   const singularName = pascalcase(pluralize.singular(name))
   const model = await getSchema(singularName)
@@ -300,11 +305,12 @@ const componentFiles = async (name, scaffoldPath = '') => {
     const outputComponentName = component
       .replace(/Names/, pluralName)
       .replace(/Name/, singularName)
-      .replace(/\.template/, '')
+      .replace(/\.js\.template/, generateTypescript ? '.tsx' : '.js')
+
     const outputPath = path.join(
       getPaths().web.components,
       pascalScaffoldPath,
-      outputComponentName.replace(/\.js/, ''),
+      outputComponentName.replace(/\.(js|tsx?)/, ''),
       outputComponentName
     )
 
