@@ -1,6 +1,8 @@
 global.__dirname = __dirname
 import path from 'path'
 
+import * as cell from '../cell'
+
 jest.mock('@redwoodjs/structure', () => {
   return {
     getProject: () => ({
@@ -8,10 +10,6 @@ jest.mock('@redwoodjs/structure', () => {
     }),
   }
 })
-
-import { loadGeneratorFixture } from 'src/lib/test'
-
-import * as cell from '../cell'
 
 let singleWordFiles,
   multiWordFiles,
