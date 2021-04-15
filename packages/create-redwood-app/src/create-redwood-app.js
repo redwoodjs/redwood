@@ -174,11 +174,6 @@ new Listr(
       '',
       style.success('Thanks for trying out Redwood!'),
       '',
-      `We've created your app in '${style.green(newAppDir)}'`,
-      `Enter the directory and run '${style.green(
-        'yarn rw dev'
-      )}' to start the development server.`,
-      '',
       ` ⚡️ ${style.redwood(
         'Get up and running fast with this Quick Start guide'
       )}: https://redwoodjs.com/docs/quick-start`,
@@ -214,6 +209,11 @@ new Listr(
       `${style.redwood(
         ' ❖ Find a Good First Issue'
       )}: https://redwoodjs.com/good-first-issue`,
+      '',
+      `${style.header(`Fire it up!`)} 🚀`,
+      '',
+      `${style.redwood(` > ${style.green(`cd ${targetDir}`)}`)}`,
+      `${style.redwood(` > ${style.green(`yarn rw dev`)}`)}`,
       '',
     ].map((item) => console.log(item))
   })
