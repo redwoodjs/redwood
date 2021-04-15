@@ -23,17 +23,12 @@ export const builder = (yargs) =>
       )}`
     )
 
+/** @type {Record<string, import('yargs').Options>} */
 export const yargsDefaults = {
   force: {
     alias: 'f',
     default: false,
     description: 'Overwrite existing files',
-    type: 'boolean',
-  },
-  javascript: {
-    alias: 'js',
-    default: !project.isTypeScriptProject,
-    description: 'Generate JavaScript files',
     type: 'boolean',
   },
   typescript: {

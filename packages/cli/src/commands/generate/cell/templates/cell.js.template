@@ -13,5 +13,5 @@ export const Empty = () => <div>Empty</div>
 export const Failure = ({ error }) => <div style={{color: 'red'}}>Error: {error.message}</div>
 
 export const Success = ({ ${camelName} }) => {
-  return <div style={{color: 'green'}}>{JSON.stringify(${camelName})}</div>
+  return <div>{JSON.stringify(${camelName})}</div>
 }

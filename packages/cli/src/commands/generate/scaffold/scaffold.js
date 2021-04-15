@@ -56,11 +56,8 @@ export const files = async ({
   model: name,
   path: scaffoldPath = '',
   typescript,
-  javascript,
 }) => {
   const model = await getSchema(pascalcase(pluralize.singular(name)))
-
-  const generateTypescript = !javascript && typescript
 
   return {
     ...(await sdlFiles({
@@ -68,7 +65,6 @@ export const files = async ({
       name,
       crud: true,
       typescript,
-      javascript,
     })),
     ...(await serviceFiles({
       ...getDefaultArgs(serviceBuilder),
@@ -76,12 +72,11 @@ export const files = async ({
       crud: true,
       relations: relationsForModel(model),
       typescript,
-      javascript,
     })),
     ...assetFiles(name),
-    ...layoutFiles(name, scaffoldPath, generateTypescript),
-    ...pageFiles(name, scaffoldPath, generateTypescript),
-    ...(await componentFiles(name, scaffoldPath, generateTypescript)),
+    ...layoutFiles(name, scaffoldPath, typescript),
+    ...pageFiles(name, scaffoldPath, typescript),
+    ...(await componentFiles(name, scaffoldPath, typescript)),
   }
 }
 
