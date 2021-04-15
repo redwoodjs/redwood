@@ -10,7 +10,11 @@ import c from 'src/lib/colors'
 import { yargsDefaults } from '../../generate'
 import { templateForComponentFile } from '../helpers'
 
-export const files = ({ name, typescript: generateTypescript, ...rest }) => {
+export const files = ({
+  name,
+  typescript: generateTypescript = false,
+  ...rest
+}) => {
   // Taken from ../component; should be updated to take from the project's configuration
   const extension = generateTypescript ? '.ts' : '.js'
 
