@@ -31,13 +31,21 @@ const uniqueOperationName = async (name, index = 1) => {
   return uniqueOperationName(name, index + 1)
 }
 
-export const files = async ({ name, tests = true, stories = true }) => {
+export const files = async ({
+  name,
+  tests = true,
+  stories = true,
+  javascript,
+  typescript,
+}) => {
   // Create a unique operation name.
   const operationName = await uniqueOperationName(name)
+  const generateJs = javascript && !typescript
 
   const cellFile = templateForComponentFile({
     name,
     suffix: COMPONENT_SUFFIX,
+    extension: generateJs ? '.js' : '.tsx',
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'cell',
     templatePath: 'cell.js.template',
@@ -48,7 +56,7 @@ export const files = async ({ name, tests = true, stories = true }) => {
   const testFile = templateForComponentFile({
     name,
     suffix: COMPONENT_SUFFIX,
-    extension: '.test.js',
+    extension: generateJs ? '.test.js' : '.test.tsx',
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'cell',
     templatePath: 'test.js.template',
@@ -56,7 +64,7 @@ export const files = async ({ name, tests = true, stories = true }) => {
   const storiesFile = templateForComponentFile({
     name,
     suffix: COMPONENT_SUFFIX,
-    extension: '.stories.js',
+    extension: generateJs ? '.stories.js' : '.stories.tsx',
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'cell',
     templatePath: 'stories.js.template',
@@ -64,7 +72,7 @@ export const files = async ({ name, tests = true, stories = true }) => {
   const mockFile = templateForComponentFile({
     name,
     suffix: COMPONENT_SUFFIX,
-    extension: '.mock.js',
+    extension: generateJs ? '.mock.js' : '.mock.ts',
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'cell',
     templatePath: 'mock.js.template',

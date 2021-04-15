@@ -38,10 +38,19 @@ export const paramVariants = (path) => {
   }
 }
 
-export const files = ({ name, tests, stories, ...rest }) => {
+export const files = ({
+  name,
+  tests,
+  stories,
+  javascript,
+  typescript,
+  ...rest
+}) => {
+  const generateJs = javascript && !typescript
   const pageFile = templateForComponentFile({
     name,
     suffix: COMPONENT_SUFFIX,
+    extension: generateJs ? '.js' : '.tsx',
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'page',
     templatePath: 'page.js.template',
@@ -50,7 +59,7 @@ export const files = ({ name, tests, stories, ...rest }) => {
   const testFile = templateForComponentFile({
     name,
     suffix: COMPONENT_SUFFIX,
-    extension: '.test.js',
+    extension: generateJs ? '.test.js' : '.test.tsx',
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'page',
     templatePath: 'test.js.template',
@@ -59,7 +68,7 @@ export const files = ({ name, tests, stories, ...rest }) => {
   const storiesFile = templateForComponentFile({
     name,
     suffix: COMPONENT_SUFFIX,
-    extension: '.stories.js',
+    extension: generateJs ? '.stories.js' : '.stories.tsx',
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'page',
     templatePath: 'stories.js.template',

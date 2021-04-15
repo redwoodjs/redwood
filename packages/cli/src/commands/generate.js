@@ -1,7 +1,12 @@
 import terminalLink from 'terminal-link'
+
+import { getProject } from '@redwoodjs/structure'
+
 export const command = 'generate <type>'
 export const aliases = ['g']
 export const description = 'Save time by generating boilerplate code'
+
+const project = getProject()
 
 export const builder = (yargs) =>
   yargs
@@ -27,14 +32,15 @@ export const yargsDefaults = {
   },
   javascript: {
     alias: 'js',
-    default: true,
+    default: !project.isTypeScriptProject,
     description: 'Generate JavaScript files',
     type: 'boolean',
   },
   typescript: {
     alias: 'ts',
-    default: false,
-    description: 'Generate TypeScript files',
+    default: project.isTypeScriptProject,
+    description:
+      'Generate TypeScript files. Enabled by default if we detect your project is typescript',
     type: 'boolean',
   },
 }
