@@ -26,16 +26,8 @@ const auth0 = new Auth0Client({
   // @MARK: useRefreshTokens is required for automatically extending sessions
   // beyond that set in the initial JWT expiration.
   //
-  // If you want to allow users to get refresh tokens while offline,
-  // you must also enable the Allow Offline Access switch in your
-  // Auth0 API Settings as part of setup configuration.
-  // https://auth0.com/docs/tokens/refresh-tokens
-  //
-  // Note: You can increase security by using refresh token rotation which issues a new refresh token
-  // and invalidates the predecessor token with each request made to Auth0 for a new access token.
-  // Rotating the refresh token reduces the risk of a compromised refresh token.
-  // https://auth0.com/docs/tokens/refresh-tokens/refresh-token-rotation
-  useRefreshTokens: true,
+  // @MARK: https://auth0.com/docs/tokens/refresh-tokens
+  // useRefreshTokens: true,
 })
 
 const App = () => (
