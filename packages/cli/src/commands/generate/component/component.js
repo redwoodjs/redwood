@@ -7,7 +7,12 @@ import {
 
 const REDWOOD_WEB_PATH_NAME = 'components'
 
-export const files = ({ name, tests = true, stories = true, typescript }) => {
+export const files = ({
+  name,
+  tests = true,
+  stories = true,
+  typescript = false,
+}) => {
   const extension = typescript ? '.tsx' : '.js'
   const componentFile = templateForComponentFile({
     name,
@@ -18,14 +23,14 @@ export const files = ({ name, tests = true, stories = true, typescript }) => {
   })
   const testFile = templateForComponentFile({
     name,
-    extension,
+    extension: `.test${extension}`,
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'component',
     templatePath: 'test.tsx.template',
   })
   const storiesFile = templateForComponentFile({
     name,
-    extension,
+    extension: `.stories${extension}`,
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'component',
     templatePath: 'stories.tsx.template',
