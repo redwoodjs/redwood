@@ -62,7 +62,7 @@ export const handler = async () => {
 }
 `
 // prisma data source check
-export const prismaDataSourceCheck = (database) => {
+export const prismaDataSourceCheck = async (database) => {
   if (database === 'none') {
     return {
       path: path.join(getPaths().base, 'render.yaml'),
@@ -73,33 +73,28 @@ export const prismaDataSourceCheck = (database) => {
     throw new Error("Could not find prisma schema at 'api/db/schema.prisma'")
   }
 
-  const getPrismaConfig = async () => {
-    const schema = await getSchema('api/db/schema.prisma')
-    const config = await getConfig({ datamodel: schema })
-    return config
-  }
+  const schema = await getSchema('api/db/schema.prisma')
+  const config = await getConfig({ datamodel: schema })
+  const detectedDatabase = config.datasources[0].activeProvider
 
-  getPrismaConfig().then((prismaConfig) => {
-    const detectedDatabase = prismaConfig.datasources[0].activeProvider
-
-    if (detectedDatabase == database) {
-      switch (database) {
-        case 'postgresql':
-          return {
-            path: path.join(getPaths().base, 'render.yaml'),
-            content: RENDER_YAML(POSTGRES_YAML),
-          }
-        case 'sqlite':
-          return {
-            path: path.join(getPaths().base, 'render.yaml'),
-            content: RENDER_YAML(SQLITE_YAML),
-          }
-        default:
-          throw new Error(`
+  if (detectedDatabase == database) {
+    switch (database) {
+      case 'postgresql':
+        return {
+          path: path.join(getPaths().base, 'render.yaml'),
+          content: RENDER_YAML(POSTGRES_YAML),
+        }
+      case 'sqlite':
+        return {
+          path: path.join(getPaths().base, 'render.yaml'),
+          content: RENDER_YAML(SQLITE_YAML),
+        }
+      default:
+        throw new Error(`
        Unexpected datasource provider found: ${database}`)
-      }
-    } else {
-      throw new Error(`
+    }
+  } else {
+    throw new Error(`
     Prisma datasource provider is detected to be ${detectedDatabase}.
 
     Option 1: Update your schema.prisma provider to be ${database}, then run
@@ -108,8 +103,7 @@ export const prismaDataSourceCheck = (database) => {
 
     Option 2: Rerun setup deloy command with current schema.prisma provider:
     yarn rw setup deploy render --database ${detectedDatabase}`)
-    }
-  })
+  }
 }
 
 //any packages to install

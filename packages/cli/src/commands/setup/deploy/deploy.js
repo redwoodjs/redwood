@@ -113,8 +113,11 @@ export const handler = async ({ provider, force, database }) => {
       },
       providerData?.prismaDataSourceCheck && {
         title: 'Checking Prisma data source provider...',
-        task: () => {
-          providerData.prismaDataSourceCheck(database)
+        task: async () => {
+          const fileData = await providerData.prismaDataSourceCheck(database)
+          let files = {}
+          files[fileData.path] = fileData.content
+          return writeFilesTask(files, { overwriteExisting: force })
         },
       },
       missingApiPackages?.length && {
