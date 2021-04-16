@@ -12,7 +12,11 @@ export {
   useMutation,
 } from './components/GraphQLHooksProvider'
 
-export { createCell } from './components/createCell'
+import { createCell } from './components/createCell'
+export { createCell }
+
+/** @deprecated `withCell` will be removed in v0.31.0, please use `createCell` instead. */
+export const withCell = createCell
 
 // TODO: Remove these in v.10, people can import from `@redwoodjs/web/toast`
 // deprecated
