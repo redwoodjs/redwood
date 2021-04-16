@@ -186,7 +186,7 @@
     browserslist "^4.14.5"
     semver "^6.3.0"
 
-"@babel/helper-create-class-features-plugin@^7.13.0":
+"@babel/helper-create-class-features-plugin@^7.13.0", "@babel/helper-create-class-features-plugin@^7.13.11":
   version "7.13.11"
   resolved "https://registry.yarnpkg.com/@babel/helper-create-class-features-plugin/-/helper-create-class-features-plugin-7.13.11.tgz#30d30a005bca2c953f5653fc25091a492177f4f6"
   integrity sha512-ays0I7XYq9xbjCSvT+EvysLgfc3tOkwCULHjrnscGT3A9qD4sk3wXnJ3of0MAWsWGjdinFvajHU2smYuqXKMrw==
@@ -404,12 +404,12 @@
     "@babel/helper-create-class-features-plugin" "^7.13.0"
     "@babel/helper-plugin-utils" "^7.13.0"
 
-"@babel/plugin-proposal-decorators@^7.10.5", "@babel/plugin-proposal-decorators@^7.12.1":
-  version "7.13.5"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-decorators/-/plugin-proposal-decorators-7.13.5.tgz#d28071457a5ba8ee1394b23e38d5dcf32ea20ef7"
-  integrity sha512-i0GDfVNuoapwiheevUOuSW67mInqJ8qw7uWfpjNVeHMn143kXblEy/bmL9AdZ/0yf/4BMQeWXezK0tQIvNPqag==
+"@babel/plugin-proposal-decorators@^7.12.1", "@babel/plugin-proposal-decorators@^7.13.15":
+  version "7.13.15"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-decorators/-/plugin-proposal-decorators-7.13.15.tgz#e91ccfef2dc24dd5bd5dcc9fc9e2557c684ecfb8"
+  integrity sha512-ibAMAqUm97yzi+LPgdr5Nqb9CMkeieGHvwPg1ywSGjZrZHQEGqE01HmOio8kxRpA/+VtOHouIVy2FMpBbtltjA==
   dependencies:
-    "@babel/helper-create-class-features-plugin" "^7.13.0"
+    "@babel/helper-create-class-features-plugin" "^7.13.11"
     "@babel/helper-plugin-utils" "^7.13.0"
     "@babel/plugin-syntax-decorators" "^7.12.13"
 
