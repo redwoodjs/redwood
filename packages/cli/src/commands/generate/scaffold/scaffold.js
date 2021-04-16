@@ -168,6 +168,8 @@ const pageFiles = (name, scaffoldPath = '') => {
       ? scaffoldPath
       : scaffoldPath.split('/').map(pascalcase).join('/') + '/'
 
+  const camelScaffoldPath = formatCamelPath(scaffoldPath)
+
   PAGES.forEach((page) => {
     const outputPageName = page
       .replace(/Names/, pluralName)
@@ -184,6 +186,7 @@ const pageFiles = (name, scaffoldPath = '') => {
       {
         name,
         pascalScaffoldPath,
+        camelScaffoldPath,
       }
     )
     fileList[outputPath] = template
