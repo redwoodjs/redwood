@@ -52,7 +52,7 @@ export const handler = async ({ side, build, prisma, dm: dataMigrate }) => {
   } else if (side == 'web') {
     if (build) {
       commandSet.push('yarn')
-      commandSet.push('yarn rw build api')
+      commandSet.push('yarn rw build web')
     }
   }
 

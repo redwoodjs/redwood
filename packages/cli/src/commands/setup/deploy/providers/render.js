@@ -9,8 +9,8 @@ const PROJECT_NAME = getPaths().base.match(/[^/|\\]+$/)[0]
 
 const RENDER_YAML = (database) => {
   return `services:
-- type: web
-  name: ${PROJECT_NAME}-web
+- name: ${PROJECT_NAME}-web
+  type: web
   env: static
   buildCommand: yarn rw deploy render web
   staticPublishPath: ./web/dist
@@ -26,10 +26,10 @@ const RENDER_YAML = (database) => {
     source: /*
     destination: /index.html
 
-- type: web
-  name: ${PROJECT_NAME}-api
+- name: ${PROJECT_NAME}-api
+  type: web
   env: node
-  buildCommand: yarn rw deploy render api
+  buildCommand: yarn && yarn rw deploy render api
   startCommand: yarn rw serve api
   envVars:
   - key: NODE_VERSION
