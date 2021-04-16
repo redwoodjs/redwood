@@ -10,7 +10,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@babel/register": "^7.9.0",
+    "@babel/register": "7.13.14",
     "@redwoodjs/internal": "^0.30.0",
     "body-parser": "^1.19.0",
     "chokidar": "^3.4.3",
