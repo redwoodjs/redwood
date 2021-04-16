@@ -29,6 +29,7 @@ import {
   intForeignKeysForModel,
   splitPathAndName,
   formatCamelPath,
+  formatParamPath,
 } from '../helpers'
 import { files as sdlFiles, builder as sdlBuilder } from '../sdl/sdl'
 import {
@@ -338,10 +339,7 @@ export const routes = async ({ model: name, path: scaffoldPath = '' }) => {
   const model = await getSchema(singularPascalName)
   const idRouteParam = getIdType(model) === 'Int' ? ':Int' : ''
 
-  const paramScaffoldPath =
-    scaffoldPath === ''
-      ? scaffoldPath
-      : scaffoldPath.split('/').map(paramCase).join('/') + '/'
+  const paramScaffoldPath = formatParamPath(scaffoldPath)
   const pascalScaffoldPath = pascalcase(scaffoldPath)
   const camelScaffoldPath = camelcase(pascalScaffoldPath)
 
