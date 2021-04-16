@@ -26,20 +26,20 @@ export type CellSuccessStateComponent =
   | Omit<OperationResult, 'error' | 'loading' | 'data'>
   | DataObject
 
-export interface WithCellProps {
+export interface CreateCellProps<CellProps> {
   beforeQuery?: <TProps>(props: TProps) => { variables: TProps }
   QUERY: DocumentNode | ((variables: Record<string, unknown>) => DocumentNode)
   afterQuery?: (data: DataObject) => DataObject
-  Loading?: React.FC<CellLoadingEmptyStateComponent>
-  Failure?: React.FC<CellFailureStateComponent>
-  Empty?: React.FC<CellLoadingEmptyStateComponent>
-  Success: React.FC<CellSuccessStateComponent>
+  Loading?: React.FC<CellLoadingEmptyStateComponent & Partial<CellProps>>
+  Failure?: React.FC<CellFailureStateComponent & Partial<CellProps>>
+  Empty?: React.FC<CellLoadingEmptyStateComponent & Partial<CellProps>>
+  Success: React.FC<CellSuccessStateComponent & Partial<CellProps>>
 }
 
 /**
  * Is a higher-order-component that executes a GraphQL query and automatically
  * manages the lifecycle of that query. If you export named parameters that match
- * the required params of `withCell` it will be automatically wrapped in this
+ * the required params of `createCell` it will be automatically wrapped in this
  * HOC via a babel-plugin.
  *
  * @param {string} QUERY - The graphQL syntax tree to execute
@@ -56,10 +56,10 @@ export interface WithCellProps {
  * // `src/ExampleComponent/index.js`. This file is automatically dealt with
  * in webpack.
  *
- * import { withCell } from '@redwoodjs/web'
+ * import { createCell } from '@redwoodjs/web'
  * import * as cell from './ExampleComponent'
  *
- * export default withCell(cell)
+ * export default createCell(cell)
  * ```
  *
  * // USAGE:
@@ -89,7 +89,7 @@ const isEmpty = (data: DataObject) => {
   return isDataNull(data) || isDataEmptyArray(data)
 }
 
-export const withCell = ({
+export function createCell<CellProps = any>({
   beforeQuery = (props) => ({
     variables: props,
     fetchPolicy: 'cache-and-network',
@@ -101,13 +101,13 @@ export const withCell = ({
   Failure,
   Empty,
   Success,
-}: WithCellProps) => {
+}: CreateCellProps<CellProps>): React.FC<CellProps> {
   // If its prerendering, render the Cell's Loading component
   if (global.__REDWOOD__PRERENDERING) {
-    return (props: Record<string, unknown>) => <Loading {...props} />
+    return (props) => <Loading {...props} />
   }
 
-  return (props: Record<string, unknown>) => {
+  return (props) => {
     const {
       children, // eslint-disable-line @typescript-eslint/no-unused-vars
       ...variables
