@@ -115,7 +115,6 @@ export const handler = async ({ provider, force, database }) => {
         title: 'Checking Prisma data source provider...',
         task: () => {
           providerData.prismaDataSourceCheck(database)
-          console.log('TESTING MESSAGE')
         },
       },
       missingApiPackages?.length && {
