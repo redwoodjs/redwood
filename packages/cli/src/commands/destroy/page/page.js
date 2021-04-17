@@ -24,7 +24,7 @@ export const builder = (yargs) => {
   })
 }
 
-export const tasks = ({ name, path }) => {
+export const tasks = ({ name, path, tests = true, stories = true }) => {
   let routeName = null
   if (name && name.includes(`/`)) {
     const { name: splittedName, path: splittedPath } = splitPathAndName(name)
@@ -42,6 +42,8 @@ export const tasks = ({ name, path }) => {
           const p = pathName(path, name)
           const f = pageFiles({
             name,
+            tests,
+            stories,
             path: p,
             ...templateVars(p),
           })
