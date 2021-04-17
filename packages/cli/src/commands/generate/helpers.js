@@ -33,6 +33,16 @@ export const templateForComponentFile = ({
 }) => {
   const { name, path: componentPath = '' } = splitPathAndName(pathSlashName)
 
+  let routeName = ''
+  if (name && name.includes(`/`)) {
+    const { name: splittedName, path: splittedPath } = splitPathAndName(name)
+    if (splittedPath !== '') {
+      routeName = camelcase(splittedPath) + pascalcase(splittedName)
+    }
+  } else {
+    routeName = camelcase(name)
+  }
+
   const camelComponentPath = formatCamelPath(componentPath)
 
   const basePath = webPathSection
@@ -55,6 +65,8 @@ export const templateForComponentFile = ({
       `./${path.relative(getPaths().base, componentOutputPath)}`
     ),
     ...templateVars,
+    // ...(templatePath === 'page.js.template' ? routeName : null),
+    routeName: templatePath === 'page.js.template' ? routeName : '',
   })
   return [componentOutputPath, content]
 }

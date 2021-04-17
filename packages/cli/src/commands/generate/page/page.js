@@ -45,13 +45,23 @@ export const paramVariants = (path) => {
 }
 
 export const files = ({ name, tests, stories, ...rest }) => {
+  let routeName = null
+  if (name && name.includes(`/`)) {
+    const { name: splittedName, path: splittedPath } = splitPathAndName(name)
+    if (splittedPath !== '') {
+      routeName = camelcase(splittedPath) + pascalcase(splittedName)
+    }
+  } else {
+    routeName = camelcase(name)
+  }
+
   const pageFile = templateForComponentFile({
     name,
     suffix: COMPONENT_SUFFIX,
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'page',
     templatePath: 'page.js.template',
-    templateVars: rest,
+    templateVars: { ...rest, routeName },
   })
   const testFile = templateForComponentFile({
     name,
