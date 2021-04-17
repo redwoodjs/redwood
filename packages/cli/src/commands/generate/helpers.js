@@ -67,12 +67,17 @@ export const templateForComponentFile = ({
 export const pathName = (path, name) => {
   let routePath = path
 
-  if (path && path.startsWith('{') && path.endsWith('}')) {
-    routePath = `/${paramCase(name)}/${path}`
-  }
+  if (name && name.includes('/')) {
+    const { _name, path: splittedPath } = splitPathAndName(name)
+    routePath = `/${formatParamPath(splittedPath)}${paramCase(name)}`
+  } else {
+    if (path && path.startsWith('{') && path.endsWith('}')) {
+      routePath = `/${paramCase(name)}/${path}`
+    }
 
-  if (!routePath) {
-    routePath = `/${paramCase(name)}`
+    if (!routePath) {
+      routePath = `/${paramCase(name)}`
+    }
   }
 
   return routePath
@@ -175,3 +180,7 @@ export const formatCamelPath = (path) =>
 // Format path to paramCase
 export const formatParamPath = (path) =>
   path === '' ? path : path.split('/').map(paramCase).join('/') + '/'
+
+// Format path to pascalCase
+export const formatPascalPath = (path) =>
+  path === '' ? path : path.split('/').map(pascalcase).join('/') + '/'
