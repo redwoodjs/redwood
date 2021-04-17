@@ -30,6 +30,7 @@ import {
   splitPathAndName,
   formatCamelPath,
   formatParamPath,
+  formatPascalPath,
 } from '../helpers'
 import { files as sdlFiles, builder as sdlBuilder } from '../sdl/sdl'
 import {
@@ -163,10 +164,7 @@ const pageFiles = (name, scaffoldPath = '') => {
   const singularName = pascalcase(pluralize.singular(name))
   let fileList = {}
 
-  const pascalScaffoldPath =
-    scaffoldPath === ''
-      ? scaffoldPath
-      : scaffoldPath.split('/').map(pascalcase).join('/') + '/'
+  const pascalScaffoldPath = formatPascalPath(scaffoldPath)
 
   const camelScaffoldPath = formatCamelPath(scaffoldPath)
 
