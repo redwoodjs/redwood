@@ -8,7 +8,7 @@ import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 
 export const command = 'a11y'
-export const description = 'Build accessible websites with this a11y setup'
+export const description = 'Setup tooling for building accessible websites'
 export const builder = (yargs) => {
   yargs.option('force', {
     alias: 'f',
