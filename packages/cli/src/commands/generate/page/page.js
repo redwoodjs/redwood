@@ -14,6 +14,7 @@ import {
   pathName,
   splitPathAndName,
   formatParamPath,
+  formatCamelPath,
 } from '../helpers'
 
 const COMPONENT_SUFFIX = 'Page'
@@ -45,15 +46,16 @@ export const paramVariants = (path) => {
 }
 
 export const files = ({ name, tests, stories, ...rest }) => {
-  let routeName = null
-  if (name && name.includes(`/`)) {
-    const { name: splittedName, path: splittedPath } = splitPathAndName(name)
-    if (splittedPath !== '') {
-      routeName = camelcase(splittedPath) + pascalcase(splittedName)
-    }
-  } else {
-    routeName = camelcase(name)
-  }
+  // let routeName = ''
+  // if (name && name.includes(`/`)) {
+  //   const { name: splittedName, path: splittedPath } = splitPathAndName(name)
+  //   if (splittedPath !== '') {
+  //     routeName = camelcase(pascalcase(splittedPath)) + pascalcase(splittedName)
+  //   }
+  // } else {
+  //   routeName = camelcase(name)
+  // }
+  // console.log(routeName)
 
   const pageFile = templateForComponentFile({
     name,
@@ -61,7 +63,7 @@ export const files = ({ name, tests, stories, ...rest }) => {
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'page',
     templatePath: 'page.js.template',
-    templateVars: { ...rest, routeName },
+    templateVars: { ...rest },
   })
   const testFile = templateForComponentFile({
     name,
@@ -111,9 +113,11 @@ export const routes = ({ name, path }) => {
     return [
       `<Route path="/${formatParamPath(splittedPath)}${paramCase(
         splittedName
-      )}" page={${camelcase(splittedPath)}${pascalcase(
+      )}" page={${camelcase(pascalcase(splittedPath))}${pascalcase(
         splittedName
-      )}Page} name="${camelcase(splittedPath)}${pascalcase(splittedName)}" />`,
+      )}Page} name="${camelcase(pascalcase(splittedPath))}${pascalcase(
+        splittedName
+      )}" />`,
     ]
   }
   return [

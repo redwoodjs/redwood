@@ -34,13 +34,16 @@ export const templateForComponentFile = ({
   const { name, path: componentPath = '' } = splitPathAndName(pathSlashName)
 
   let routeName = ''
-  if (name && name.includes(`/`)) {
-    const { name: splittedName, path: splittedPath } = splitPathAndName(name)
+
+  if (pathSlashName && pathSlashName.includes(`/`)) {
+    const { name: splittedName, path: splittedPath } = splitPathAndName(
+      pathSlashName
+    )
     if (splittedPath !== '') {
-      routeName = camelcase(splittedPath) + pascalcase(splittedName)
+      routeName = camelcase(pascalcase(splittedPath)) + pascalcase(splittedName)
     }
   } else {
-    routeName = camelcase(name)
+    routeName = camelcase(pathSlashName)
   }
 
   const camelComponentPath = formatCamelPath(componentPath)
