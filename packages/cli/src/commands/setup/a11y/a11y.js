@@ -43,6 +43,7 @@ const installPackages = {
       'workspace',
       'web',
       'add',
+      '-D',
       '@axe-core/react',
       // maybe...
       // 'jest-axe',
