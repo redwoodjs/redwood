@@ -15,6 +15,7 @@ module.exports = {
       rules: {
         'no-undef': 'off',
         '@redwoodjs/redwood/no-unavailable-pages': 'error',
+        'jsx-a11y/aria-role': 'off',
       },
     },
     // `api` side
