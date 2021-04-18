@@ -5,12 +5,19 @@ export const config = {
   domain: process.env.AUTH0_DOMAIN,
   client_id: process.env.AUTH0_CLIENT_ID,
   redirect_uri: process.env.AUTH0_REDIRECT_URI,
+
   // ** NOTE ** Storing tokens in browser local storage provides persistence across page refreshes and browser tabs.
   // However, if an attacker can achieve running JavaScript in the SPA using a cross-site scripting (XSS) attack,
   // they can retrieve the tokens stored in local storage.
   // https://auth0.com/docs/libraries/auth0-spa-js#change-storage-options
   cacheLocation: 'localstorage',
   audience: process.env.AUTH0_AUDIENCE,
+
+  // @MARK: useRefreshTokens is required for automatically extending sessions
+  // beyond that set in the initial JWT expiration.
+  //
+  // @MARK: https://auth0.com/docs/tokens/refresh-tokens
+  // useRefreshTokens: true,
 })`,
   authProvider: {
     client: 'auth0',
@@ -31,4 +38,14 @@ export const notes = [
   "You must also create an API and set the audience parameter, or you'll",
   'receive an opaque token instead of the required JWT token.',
   'See: https://auth0.com/docs/quickstart/spa/react/02-calling-an-api#create-an-api',
+  '\n',
+  'If you want to allow users to get refresh tokens while offline,',
+  'you must also enable the Allow Offline Access switch in your',
+  'Auth0 API Settings as part of setup configuration.',
+  'See: https://auth0.com/docs/tokens/refresh-tokens',
+  '\n',
+  'You can increase security by using refresh token rotation which issues a new refresh token',
+  'and invalidates the predecessor token with each request made to Auth0 for a new access token.',
+  'Rotating the refresh token reduces the risk of a compromised refresh token.',
+  'See: https://auth0.com/docs/tokens/refresh-tokens/refresh-token-rotation',
 ]
