@@ -75,8 +75,7 @@ const axeCoreReactConfig = [
   '// for more information, see: https://github.com/dequelabs/axe-core-npm/tree/develop/packages/react',
   '//',
   "if (process.env.NODE_ENV === 'development') {",
-  "  const axe = require('@axe-core/react')",
-  '  axe(React, ReactDOM, 1000)',
+  "  import('@axe-core/react').then((axe) => axe.default(React, ReactDOM, 1000))",
   '}',
   '// END --- yarn rw setup a11y\n',
 ]
