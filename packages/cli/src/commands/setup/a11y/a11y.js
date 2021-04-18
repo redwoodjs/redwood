@@ -1,5 +1,4 @@
 import fs from 'fs'
-import path from 'path'
 
 import execa from 'execa'
 import Listr from 'listr'
@@ -67,22 +66,31 @@ const installPackages = {
 //
 // this is what a vanilla `web/src/index.js` looks like: https://github.com/redwoodjs/redwood/blob/main/packages/create-redwood-app/template/web/src/index.js
 
-const WEB_INDEX_PATH = path.join(getPaths().web.src, 'index.js')
-
 const axeCoreReactConfig = [
   // add comments, before and after (like the tailwind setup command)?
   //
-  '\n',
+  '\n// START --- yarn rw setup a11y',
+  '//',
+  '// `yarn rw setup a11y` placed this code here',
+  '// for more information, see: https://github.com/dequelabs/axe-core-npm/tree/develop/packages/react',
+  '//',
   "if (process.env.NODE_ENV === 'development') {",
   "  const axe = require('@axe-core/react')",
   '  axe(React, ReactDOM, 1000)',
   '}',
-  '\n',
+  '// END --- yarn rw setup a11y\n',
 ]
 
 const configureAxeCoreReact = {
   title: 'Configuring @axe-core/react...',
-  task: () => {
+  task: async () => {
+    let WEB_INDEX_PATH = getPaths().web.index
+
+    if (!fs.existsSync(WEB_INDEX_PATH)) {
+      await execa('yarn', ['rw', 'setup', 'custom-web-index'])
+      WEB_INDEX_PATH = getPaths().web.index
+    }
+
     const webIndex = fs.readFileSync(WEB_INDEX_PATH)
     const webIndexWithAxeCoreReact = webIndex + axeCoreReactConfig.join('\n')
     fs.writeFileSync(WEB_INDEX_PATH, webIndexWithAxeCoreReact)
