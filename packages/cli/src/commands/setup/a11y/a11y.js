@@ -1,4 +1,5 @@
 import fs from 'fs'
+import path from 'path'
 
 import execa from 'execa'
 import Listr from 'listr'
@@ -21,8 +22,7 @@ export const handler = async () => {
   const tasks = new Listr([
     installPackages,
     configureAxeCoreReact,
-    // maybe...
-    // configureJestAxe
+    configureJestAxe,
   ])
 
   try {
@@ -45,8 +45,7 @@ const installPackages = {
       'add',
       '-D',
       '@axe-core/react',
-      // maybe...
-      // 'jest-axe',
+      'jest-axe',
     ])
   },
 }
@@ -101,24 +100,34 @@ const configureAxeCoreReact = {
 // jest-axe
 //------------------------
 
-// not sure what we need to do for this one yet.
-//
-// const configureJestAxe = {
-//   title 'Configuring Jest Axe',
-//   tasks: () => {}
-// }
-//
-// it'd probably be setting up this test:
-//
-//   const React = require('react')
-//   const { render } =  require('react-dom')
-//   const App = require('./app')
-//
-//   const { axe, toHaveNoViolations } = require('jest-axe')
-//   expect.extend(toHaveNoViolations)
-//
-//   it('should demonstrate this matcher`s usage with react', async () => {
-//     render(<App/>, document.body)
-//     const results = await axe(document.body)
-//     expect(results).toHaveNoViolations()
-//   })
+// store as template file...
+const jestAxeConfig = [
+  "import { render } from '@redwoodjs/testing'",
+  '',
+  "import App from './App'",
+  '',
+  "import { axe, toHaveNoViolations } from 'jest-axe'",
+  '',
+  'expect.extend(toHaveNoViolations)',
+  "describe('App', () => {",
+  "  it('should not have any a11y violations', async () => {",
+  '    const { container } = render(<App />)',
+  '    const results = await axe(container)',
+  '    expect(results).toHaveNoViolations()',
+  '  })',
+  '})',
+  '\n',
+]
+
+const WEB_PATH = getPaths().web.src
+
+const configureJestAxe = {
+  title: 'Configuring jest-axe',
+  task: () => {
+    // make file App.test.ts
+    fs.writeFileSync(
+      path.join(WEB_PATH, 'App.test.js'),
+      jestAxeConfig.join('\n')
+    )
+  },
+}
