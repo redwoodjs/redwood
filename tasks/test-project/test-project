@@ -1,0 +1,291 @@
+#!/usr/bin/env node
+/* eslint-env node, es6*/
+//@ts-check
+const fs = require('fs')
+const path = require('path')
+
+const execa = require('execa')
+const Listr = require('listr')
+const yargs = require('yargs')
+
+const args = yargs
+  .option('name', { default: 'redwoodblog', type: 'string', alias: 'n' })
+  .help()
+  .strict().argv
+
+const { name } = args
+
+const RW_BASEPATH = path.join(__dirname, '../../')
+const RW_BLOGPATH = path.resolve(RW_BASEPATH, name)
+
+const getExecaOptions = (cwd = RW_BLOGPATH) => ({
+  shell: true,
+  stdio: ['ignore', 'ignore', 'inherit'],
+  cleanup: true,
+  cwd,
+})
+
+async function applyCodemod(codemod, target) {
+  const args = []
+
+  args.push(
+    '-t',
+    `${path.resolve(__dirname, 'codemods', codemod)} ${RW_BLOGPATH}/${target}`
+  )
+  // args.push('-d')
+  // args.push('-p')
+
+  await execa('yarn transform', args, getExecaOptions(path.resolve(__dirname)))
+}
+
+const createProject = async () => {
+  if (fs.existsSync(RW_BLOGPATH)) {
+    fs.rmSync(RW_BLOGPATH, { recursive: true })
+  }
+
+  return execa(
+    `yarn babel-node packages/create-redwood-app/src/create-redwood-app.js ${RW_BLOGPATH}`,
+    [],
+    getExecaOptions(RW_BASEPATH)
+  )
+}
+
+async function webTasks() {
+  const createBuilder = (cmd) => {
+    return async function createItem(name) {
+      await execa(`${cmd} ${name}`, [], getExecaOptions())
+    }
+  }
+
+  const createPages = async () => {
+    const createPage = createBuilder('yarn redwood g page')
+
+    return new Listr([
+      {
+        title: 'Creating home page',
+        task: async () => {
+          await createPage('home /')
+
+          return applyCodemod(
+            'homePage.js',
+            `web/src/pages/HomePage/HomePage.js`
+          )
+        },
+      },
+      {
+        title: 'Creating about page',
+        task: async () => {
+          await createPage('about')
+
+          return applyCodemod(
+            'aboutPage.js',
+            `web/src/pages/AboutPage/AboutPage.js`
+          )
+        },
+      },
+      {
+        title: 'Creating contact page',
+        task: async () => {
+          await createPage('contact')
+
+          return applyCodemod(
+            'contactPage.js',
+            `web/src/pages/ContactPage/ContactPage.js`
+          )
+        },
+      },
+      {
+        title: 'Creating blog post page',
+        task: async () => {
+          await createPage('blogPost /blog-post/{id:Int}')
+
+          return applyCodemod(
+            'blogPostPage.js',
+            `web/src/pages/BlogPostPage/BlogPostPage.js`
+          )
+        },
+      },
+    ])
+  }
+
+  const createLayout = async () => {
+    const createLayout = createBuilder('yarn redwood g layout')
+
+    await createLayout('blog')
+
+    return applyCodemod(
+      'blogLayout.js',
+      'web/src/layouts/BlogLayout/BlogLayout.js'
+    )
+  }
+
+  const createComponents = async () => {
+    const createLayout = createBuilder('yarn redwood g component')
+
+    await createLayout('blogPost')
+
+    return applyCodemod(
+      'blogPost.js',
+      'web/src/components/BlogPost/BlogPost.js'
+    )
+  }
+
+  const createCells = async () => {
+    const createCell = createBuilder('yarn redwood g cell')
+
+    await createCell('blogPosts')
+
+    applyCodemod(
+      'blogPostsCell.js',
+      'web/src/components/BlogPostsCell/BlogPostsCell.js'
+    )
+
+    await createCell('blogPost')
+
+    return applyCodemod(
+      'blogPostCell.js',
+      'web/src/components/BlogPostCell/BlogPostCell.js'
+    )
+  }
+
+  return new Listr(
+    [
+      {
+        title: 'Creating pages',
+        task: async () => createPages(),
+      },
+      {
+        title: 'Creating layout',
+        task: async () => createLayout(),
+      },
+      {
+        title: 'Creating components',
+        task: async () => createComponents(),
+      },
+      {
+        title: 'Creating cells',
+        task: async () => createCells(),
+      },
+      {
+        title: 'Changing routes',
+        task: async () => applyCodemod('routes.js', 'web/src/Routes.js'),
+      },
+      {
+        title: 'Adding Tailwind',
+        task: async () => {
+          return execa('yarn rw setup tailwind', [], getExecaOptions())
+        },
+      },
+    ],
+    {
+      exitOnError: true,
+    }
+  )
+}
+
+async function apiTasks() {
+  async function addModel(schema) {
+    const path = `${RW_BLOGPATH}/api/db/schema.prisma`
+
+    const current = fs.readFileSync(path)
+
+    fs.writeFileSync(path, `${current}${schema}`)
+  }
+
+  return new Listr([
+    {
+      title: 'Adding post model to prisma',
+      task: async () => {
+        addModel(`model Post {
+          id        Int      @id @default(autoincrement())
+          title     String
+          body      String
+          createdAt DateTime @default(now())
+        }`)
+
+        return execa(
+          `yarn rw prisma migrate dev --name create_product`,
+          [],
+          getExecaOptions()
+        )
+      },
+    },
+    {
+      title: 'Scaffoding post',
+      task: async () => {
+        return execa('yarn rw g scaffold post', [], getExecaOptions())
+      },
+    },
+    {
+      title: 'Seeding database',
+      task: async () => {
+        await applyCodemod('seed.js', 'api/db/seed.js')
+
+        return execa('yarn rw prisma db seed', [], getExecaOptions())
+      },
+    },
+    {
+      title: 'Adding contact model to prisma',
+      task: async () => {
+        addModel(`model Contact {
+          id        Int @id @default(autoincrement())
+          name      String
+          email     String
+          message   String
+          createdAt DateTime @default(now())
+        }`)
+
+        await execa(
+          `yarn rw prisma migrate dev --name create_contact`,
+          [],
+          getExecaOptions()
+        )
+
+        await execa(`yarn rw g sdl contact`, [], getExecaOptions())
+      },
+    },
+  ])
+}
+
+const globalTasks = () =>
+  new Listr(
+    [
+      {
+        title: `Installing packages`,
+        task: async () => {
+          return execa(
+            'yarn install',
+            [],
+            getExecaOptions(path.resolve(__dirname))
+          )
+        },
+      },
+      {
+        title: `Creating project`,
+        task: () => createProject(),
+      },
+      {
+        title: `Setting up web project`,
+        task: () => webTasks(),
+      },
+      {
+        title: `Setting up api project`,
+        task: () => apiTasks(),
+      },
+      {
+        title: `Running lint`,
+        task: async () => {
+          return execa('yarn rw lint --fix', [], getExecaOptions())
+        },
+      },
+    ],
+    {
+      exitOnError: true,
+    }
+  )
+
+globalTasks()
+  .run()
+  .catch((err) => {
+    console.error(err)
+  })
