@@ -99,8 +99,9 @@ const configureAxeCoreReact = {
 //------------------------
 // jest-axe
 //------------------------
+//
+// TODO(dom): use writeFileTask instead; take overwrite, js/ts options
 
-// store as template file...
 const jestAxeConfig = [
   "import { render } from '@redwoodjs/testing'",
   '',
@@ -119,14 +120,13 @@ const jestAxeConfig = [
   '\n',
 ]
 
-const WEB_PATH = getPaths().web.src
+const WEB_SRC_PATH = getPaths().web.src
 
 const configureJestAxe = {
   title: 'Configuring jest-axe',
   task: () => {
-    // make file App.test.ts
     fs.writeFileSync(
-      path.join(WEB_PATH, 'App.test.js'),
+      path.join(WEB_SRC_PATH, 'App.test.js'),
       jestAxeConfig.join('\n')
     )
   },
