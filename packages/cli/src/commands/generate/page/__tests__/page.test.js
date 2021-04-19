@@ -51,7 +51,8 @@ let singleWordFiles,
   pluralWordFiles,
   paramFiles,
   noTestsFiles,
-  noStoriesFiles
+  noStoriesFiles,
+  typescriptFiles
 
 beforeAll(() => {
   singleWordFiles = page.files({
@@ -90,6 +91,14 @@ beforeAll(() => {
     stories: false,
     ...page.paramVariants(pathName(undefined, 'no-stories')),
   })
+
+  typescriptFiles = page.files({
+    name: 'TSFiles',
+    typescript: true,
+    tests: true,
+    stories: true,
+    ...page.paramVariants(pathName(undefined, 'typescript')),
+  })
 })
 
 test('returns exactly 3 files', () => {
@@ -101,7 +110,7 @@ test('creates a page component', () => {
     singleWordFiles[
       path.normalize('/path/to/project/web/src/pages/HomePage/HomePage.js')
     ]
-  ).toEqual(loadGeneratorFixture('page', 'singleWordPage.js'))
+  ).toMatchSnapshot()
 })
 
 test('creates a page test', () => {
@@ -109,7 +118,7 @@ test('creates a page test', () => {
     singleWordFiles[
       path.normalize('/path/to/project/web/src/pages/HomePage/HomePage.test.js')
     ]
-  ).toEqual(loadGeneratorFixture('page', 'singleWordPage.test.js'))
+  ).toMatchSnapshot()
 })
 
 test('creates a page story', () => {
@@ -119,7 +128,7 @@ test('creates a page story', () => {
         '/path/to/project/web/src/pages/HomePage/HomePage.stories.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('page', 'singleWordPage.stories.js'))
+  ).toMatchSnapshot()
 })
 
 test('creates a page component', () => {
@@ -129,7 +138,7 @@ test('creates a page component', () => {
         '/path/to/project/web/src/pages/ContactUsPage/ContactUsPage.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('page', 'multiWordPage.js'))
+  ).toMatchSnapshot()
 })
 
 test('creates a test for a component with multiple words for a name', () => {
@@ -139,7 +148,7 @@ test('creates a test for a component with multiple words for a name', () => {
         '/path/to/project/web/src/pages/ContactUsPage/ContactUsPage.test.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('page', 'multiWordPage.test.js'))
+  ).toMatchSnapshot()
 })
 
 test('creates a page story', () => {
@@ -149,7 +158,7 @@ test('creates a page story', () => {
         '/path/to/project/web/src/pages/ContactUsPage/ContactUsPage.stories.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('page', 'multiWordPage.stories.js'))
+  ).toMatchSnapshot()
 })
 
 test('creates a page component with a plural word for name', () => {
@@ -157,7 +166,7 @@ test('creates a page component with a plural word for name', () => {
     pluralWordFiles[
       path.normalize('/path/to/project/web/src/pages/CatsPage/CatsPage.js')
     ]
-  ).toEqual(loadGeneratorFixture('page', 'pluralWordPage.js'))
+  ).toMatchSnapshot()
 })
 
 test('creates a page component with params', () => {
@@ -165,7 +174,7 @@ test('creates a page component with params', () => {
     paramFiles[
       path.normalize('/path/to/project/web/src/pages/PostPage/PostPage.js')
     ]
-  ).toEqual(loadGeneratorFixture('page', 'paramPage.js'))
+  ).toMatchSnapshot()
 })
 
 test('creates a test for page component with params', () => {
@@ -173,7 +182,7 @@ test('creates a test for page component with params', () => {
     paramFiles[
       path.normalize('/path/to/project/web/src/pages/PostPage/PostPage.test.js')
     ]
-  ).toEqual(loadGeneratorFixture('page', 'paramPage.test.js'))
+  ).toMatchSnapshot()
 })
 
 test('doesnt create a test for page component when tests=false', () => {
@@ -282,45 +291,20 @@ test('file generation', async () => {
   }
 
   const spy = jest.spyOn(fs, 'writeFileSync')
+
   global.mockFs = true
 
   await page.handler({ name: 'home', path: '', force: false })
 
-  expect(spy).toHaveBeenCalledWith(
-    path.normalize('/path/to/project/web/src/pages/HomePage/HomePage.js'),
-    loadGeneratorFixture('page', 'singleWordPage.js')
-  )
+  expect(spy).toHaveBeenCalled()
 
-  expect(spy).toHaveBeenCalledWith(
-    path.normalize('/path/to/project/web/src/pages/HomePage/HomePage.test.js'),
-    loadGeneratorFixture('page', 'singleWordPage.test.js')
-  )
-
-  expect(spy).toHaveBeenCalledWith(
-    path.normalize(
-      '/path/to/project/web/src/pages/HomePage/HomePage.stories.js'
-    ),
-    loadGeneratorFixture('page', 'singleWordPage.stories.js')
-  )
-
-  expect(spy).toHaveBeenCalledWith(
-    path.normalize('/path/to/project/web/src/Routes.js'),
-    [
-      "import { Router, Route } from '@redwoodjs/router'",
-      '',
-      'const Routes = () => {',
-      '  return (',
-      '    <Router>',
-      '      <Route path="/home" page={HomePage} name="home" />',
-      '      <Route path="/about" page={AboutPage} name="about" />',
-      '      <Route notfound page={NotFoundPage} />',
-      '    </Router>',
-      '  )',
-      '}',
-      '',
-      'export default Routes',
-    ].join('\n')
-  )
+  spy.mock.calls.forEach((calls) => {
+    const testOutput = {
+      filePath: calls[0],
+      fileContent: calls[1],
+    }
+    expect(testOutput).toMatchSnapshot()
+  })
 
   global.mockFs = false
   spy.mockRestore()
@@ -349,42 +333,42 @@ test('file generation with route params', async () => {
 
   await page.handler({ name: 'post', path: '{id}', force: false })
 
-  expect(spy).toHaveBeenCalledWith(
-    path.normalize('/path/to/project/web/src/pages/PostPage/PostPage.js'),
-    loadGeneratorFixture('page', 'paramPage.js')
-  )
+  expect(spy).toHaveBeenCalled()
 
-  expect(spy).toHaveBeenCalledWith(
-    path.normalize('/path/to/project/web/src/pages/PostPage/PostPage.test.js'),
-    loadGeneratorFixture('page', 'paramPage.test.js')
-  )
-
-  expect(spy).toHaveBeenCalledWith(
-    path.normalize(
-      '/path/to/project/web/src/pages/PostPage/PostPage.stories.js'
-    ),
-    loadGeneratorFixture('page', 'paramPage.stories.js')
-  )
-
-  expect(spy).toHaveBeenCalledWith(
-    path.normalize('/path/to/project/web/src/Routes.js'),
-    [
-      "import { Router, Route } from '@redwoodjs/router'",
-      '',
-      'const Routes = () => {',
-      '  return (',
-      '    <Router>',
-      '      <Route path="/post/{id}" page={PostPage} name="post" />',
-      '      <Route path="/about" page={AboutPage} name="about" />',
-      '      <Route notfound page={NotFoundPage} />',
-      '    </Router>',
-      '  )',
-      '}',
-      '',
-      'export default Routes',
-    ].join('\n')
-  )
+  spy.mock.calls.forEach((calls) => {
+    const testOutput = {
+      filePath: calls[0],
+      fileContent: calls[1],
+    }
+    expect(testOutput).toMatchSnapshot()
+  })
 
   global.mockFs = false
   spy.mockRestore()
+})
+
+test('generates typescript pages', () => {
+  expect(
+    typescriptFiles[
+      path.normalize(
+        '/path/to/project/web/src/pages/TsFilesPage/TsFilesPage.tsx'
+      )
+    ]
+  ).toMatchSnapshot()
+
+  expect(
+    typescriptFiles[
+      path.normalize(
+        '/path/to/project/web/src/pages/TsFilesPage/TsFilesPage.stories.tsx'
+      )
+    ]
+  ).toMatchSnapshot()
+
+  expect(
+    typescriptFiles[
+      path.normalize(
+        '/path/to/project/web/src/pages/TsFilesPage/TsFilesPage.test.tsx'
+      )
+    ]
+  ).toMatchSnapshot()
 })
