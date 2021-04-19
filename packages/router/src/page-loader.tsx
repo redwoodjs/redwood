@@ -99,7 +99,6 @@ export class PageLoader extends React.Component<Props> {
       if (this.announcementRef.current) {
         this.announcementRef.current.innerText = getAnnouncement()
       }
-
       const routeFocus = getFocus()
       if (!routeFocus) {
         resetFocus()
