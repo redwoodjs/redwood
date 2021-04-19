@@ -301,7 +301,8 @@ test('file generation', async () => {
 
   spy.mock.calls.forEach((calls) => {
     const testOutput = {
-      filePath: calls[0],
+      // Because windows paths are different, we need to normalise before snapshotting
+      filePath: path.normalize(calls[0]),
       fileContent: calls[1],
     }
     expect(testOutput).toMatchSnapshot()
@@ -338,7 +339,7 @@ test('file generation with route params', async () => {
 
   spy.mock.calls.forEach((calls) => {
     const testOutput = {
-      filePath: calls[0],
+      filePath: path.normalize(calls[0]),
       fileContent: calls[1],
     }
     expect(testOutput).toMatchSnapshot()
