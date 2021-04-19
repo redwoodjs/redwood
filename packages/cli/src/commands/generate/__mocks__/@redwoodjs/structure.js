@@ -2,11 +2,11 @@
 
 const mockedStructure = {
   ...jest.requireActual('@redwoodjs/structure'),
-  getProject: jest.fn(() => {
+  getProject: () => {
     return {
-      isTypescriptProject: false,
+      isTypeScriptProject: false,
     }
-  }),
+  },
 }
 
 module.exports = mockedStructure

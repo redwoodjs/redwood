@@ -55,7 +55,7 @@ const getIdType = (model) => {
 export const files = async ({
   model: name,
   path: scaffoldPath = '',
-  typescript,
+  typescript = false,
 }) => {
   const model = await getSchema(pascalcase(pluralize.singular(name)))
 
