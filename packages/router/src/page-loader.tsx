@@ -2,7 +2,13 @@ import React, { useContext } from 'react'
 
 import isEqual from 'lodash.isequal'
 
-import { createNamedContext, Spec, getAnnouncement } from './internal'
+import {
+  createNamedContext,
+  Spec,
+  getAnnouncement,
+  getFocus,
+  resetFocus,
+} from './internal'
 
 export interface PageLoadingContextInterface {
   loading: boolean
@@ -92,6 +98,13 @@ export class PageLoader extends React.Component<Props> {
       global?.scrollTo(0, 0)
       if (this.announcementRef.current) {
         this.announcementRef.current.innerText = getAnnouncement()
+      }
+
+      const routeFocus = getFocus()
+      if (!routeFocus) {
+        resetFocus()
+      } else {
+        routeFocus.focus()
       }
     }
   }
