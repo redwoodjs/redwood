@@ -33,44 +33,33 @@ export const verifyAuth0Token = (
       )
     }
 
-    if (
-      process.env.NODE_ENV === 'development' ||
-      process.env.NODE_ENV === 'test'
-    ) {
-      const decoded = jwt.decode(bearerToken)
-      resolve(
-        typeof decoded === 'undefined'
-          ? null
-          : (decoded as Record<string, unknown>)
-      )
-    } else {
-      const client = jwksClient({
-        jwksUri: `https://${AUTH0_DOMAIN}/.well-known/jwks.json`,
-      })
-      jwt.verify(
-        bearerToken,
-        (header, callback) => {
-          client.getSigningKey(header.kid as string, (error, key) => {
-            callback(error, key.getPublicKey())
-          })
-        },
-        {
-          audience: AUTH0_AUDIENCE,
-          issuer: `https://${AUTH0_DOMAIN}/`,
-          algorithms: ['RS256'],
-        },
-        (verifyError, decoded) => {
-          if (verifyError) {
-            return reject(verifyError)
-          }
-          resolve(
-            typeof decoded === 'undefined'
-              ? null
-              : (decoded as Record<string, unknown>)
-          )
+    const client = jwksClient({
+      jwksUri: `https://${AUTH0_DOMAIN}/.well-known/jwks.json`,
+    })
+
+    jwt.verify(
+      bearerToken,
+      (header, callback) => {
+        client.getSigningKey(header.kid as string, (error, key) => {
+          callback(error, key.getPublicKey())
+        })
+      },
+      {
+        audience: AUTH0_AUDIENCE,
+        issuer: `https://${AUTH0_DOMAIN}/`,
+        algorithms: ['RS256'],
+      },
+      (verifyError, decoded) => {
+        if (verifyError) {
+          return reject(verifyError)
         }
-      )
-    }
+        resolve(
+          typeof decoded === 'undefined'
+            ? null
+            : (decoded as Record<string, unknown>)
+        )
+      }
+    )
   })
 }
 
