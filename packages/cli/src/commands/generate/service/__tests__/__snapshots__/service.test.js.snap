@@ -1,0 +1,261 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`in javascript mode creates a multi word service file 1`] = `
+"import { db } from 'src/lib/db'
+
+export const userProfiles = () => {
+  return db.userProfile.findMany()
+}
+"
+`;
+
+exports[`in javascript mode creates a multi word service test file 1`] = `
+"import { userProfiles } from './userProfiles'
+
+describe('userProfiles', () => {
+  scenario('returns all userProfiles', async (scenario) => {
+    const result = await userProfiles()
+
+    expect(result.length).toEqual(Object.keys(scenario.userProfile).length)
+  })
+})
+"
+`;
+
+exports[`in javascript mode creates a single word service file 1`] = `
+"import { db } from 'src/lib/db'
+
+export const users = () => {
+  return db.user.findMany()
+}
+"
+`;
+
+exports[`in javascript mode creates a single word service file with CRUD actions 1`] = `
+"import { db } from 'src/lib/db'
+
+export const posts = () => {
+  return db.post.findMany()
+}
+
+export const post = ({ id }) => {
+  return db.post.findUnique({
+    where: { id },
+  })
+}
+
+export const createPost = ({ input }) => {
+  return db.post.create({
+    data: input,
+  })
+}
+
+export const updatePost = ({ id, input }) => {
+  return db.post.update({
+    data: input,
+    where: { id },
+  })
+}
+
+export const deletePost = ({ id }) => {
+  return db.post.delete({
+    where: { id },
+  })
+}
+"
+`;
+
+exports[`in javascript mode creates a single word service file with a belongsTo relation 1`] = `
+"import { db } from 'src/lib/db'
+
+export const users = () => {
+  return db.user.findMany()
+}
+
+export const User = {
+  identity: (_obj, { root }) =>
+    db.user.findUnique({ where: { id: root.id } }).identity(),
+}
+"
+`;
+
+exports[`in javascript mode creates a single word service file with a hasMany relation 1`] = `
+"import { db } from 'src/lib/db'
+
+export const users = () => {
+  return db.user.findMany()
+}
+
+export const User = {
+  userProfiles: (_obj, { root }) =>
+    db.user.findUnique({ where: { id: root.id } }).userProfiles(),
+}
+"
+`;
+
+exports[`in javascript mode creates a single word service file with multiple relations 1`] = `
+"import { db } from 'src/lib/db'
+
+export const users = () => {
+  return db.user.findMany()
+}
+
+export const User = {
+  userProfiles: (_obj, { root }) =>
+    db.user.findUnique({ where: { id: root.id } }).userProfiles(),
+  identity: (_obj, { root }) =>
+    db.user.findUnique({ where: { id: root.id } }).identity(),
+}
+"
+`;
+
+exports[`in javascript mode creates a single word service test file 1`] = `
+"import { users } from './users'
+
+describe('users', () => {
+  scenario('returns all users', async (scenario) => {
+    const result = await users()
+
+    expect(result.length).toEqual(Object.keys(scenario.user).length)
+  })
+})
+"
+`;
+
+exports[`in typescript mode creates a multi word service file 1`] = `
+"import { db } from 'src/lib/db'
+
+export const userProfiles = () => {
+  return db.userProfile.findMany()
+}
+"
+`;
+
+exports[`in typescript mode creates a multi word service test file 1`] = `
+"import { userProfiles } from './userProfiles'
+
+describe('userProfiles', () => {
+  scenario('returns all userProfiles', async (scenario) => {
+    const result = await userProfiles()
+
+    expect(result.length).toEqual(Object.keys(scenario.userProfile).length)
+  })
+})
+"
+`;
+
+exports[`in typescript mode creates a single word service file 1`] = `
+"import { db } from 'src/lib/db'
+
+export const users = () => {
+  return db.user.findMany()
+}
+"
+`;
+
+exports[`in typescript mode creates a single word service file with CRUD actions 1`] = `
+"import { Prisma } from '@prisma/client'
+import { db } from 'src/lib/db'
+
+export const posts = () => {
+  return db.post.findMany()
+}
+
+export const post = ({ id }: Prisma.PostWhereUniqueInput) => {
+  return db.post.findUnique({
+    where: { id },
+  })
+}
+
+interface CreatePostArgs {
+  input: Prisma.PostCreateInput
+}
+
+export const createPost = ({ input }: CreatePostArgs) => {
+  return db.post.create({
+    data: input,
+  })
+}
+
+interface UpdatePostArgs {
+  where: Prisma.PostWhereUniqueInput
+  input: Prisma.PostUpdateInput
+}
+
+export const updatePost = ({ id, input }: UpdatePostArgs) => {
+  return db.post.update({
+    data: input,
+    where: { id },
+  })
+}
+
+export const deletePost = ({ id }: Prisma.PostWhereUniqueInput) => {
+  return db.post.delete({
+    where: { id },
+  })
+}
+"
+`;
+
+exports[`in typescript mode creates a single word service file with a belongsTo relation 1`] = `
+"import { Prisma } from '@prisma/client'
+import { ResolverArgs } from '@redwoodjs/api/dist/types'
+import { db } from 'src/lib/db'
+
+export const users = () => {
+  return db.user.findMany()
+}
+
+export const User = {
+  identity: (_obj, { root }: ResolverArgs<Prisma.UserWhereUniqueInput>) =>
+    db.user.findUnique({ where: { id: root.id } }).identity(),
+}
+"
+`;
+
+exports[`in typescript mode creates a single word service file with a hasMany relation 1`] = `
+"import { Prisma } from '@prisma/client'
+import { ResolverArgs } from '@redwoodjs/api/dist/types'
+import { db } from 'src/lib/db'
+
+export const users = () => {
+  return db.user.findMany()
+}
+
+export const User = {
+  userProfiles: (_obj, { root }: ResolverArgs<Prisma.UserWhereUniqueInput>) =>
+    db.user.findUnique({ where: { id: root.id } }).userProfiles(),
+}
+"
+`;
+
+exports[`in typescript mode creates a single word service file with multiple relations 1`] = `
+"import { Prisma } from '@prisma/client'
+import { ResolverArgs } from '@redwoodjs/api/dist/types'
+import { db } from 'src/lib/db'
+
+export const users = () => {
+  return db.user.findMany()
+}
+
+export const User = {
+  userProfiles: (_obj, { root }: ResolverArgs<Prisma.UserWhereUniqueInput>) =>
+    db.user.findUnique({ where: { id: root.id } }).userProfiles(),
+  identity: (_obj, { root }: ResolverArgs<Prisma.UserWhereUniqueInput>) =>
+    db.user.findUnique({ where: { id: root.id } }).identity(),
+}
+"
+`;
+
+exports[`in typescript mode creates a single word service test file 1`] = `
+"import { users } from './users'
+
+describe('users', () => {
+  scenario('returns all users', async (scenario) => {
+    const result = await users()
+
+    expect(result.length).toEqual(Object.keys(scenario.user).length)
+  })
+})
+"
+`;
