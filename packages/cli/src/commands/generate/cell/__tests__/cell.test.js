@@ -1,6 +1,8 @@
 global.__dirname = __dirname
 import path from 'path'
 
+// Load mocks
+import 'src/lib/test'
 import * as cell from '../cell'
 
 jest.mock('@redwoodjs/structure', () => {
