@@ -77,7 +77,7 @@ export const prismaDataSourceCheck = async (database) => {
   const config = await getConfig({ datamodel: schema })
   const detectedDatabase = config.datasources[0].activeProvider
 
-  if (detectedDatabase == database) {
+  if (detectedDatabase === database) {
     switch (database) {
       case 'postgresql':
         return {
