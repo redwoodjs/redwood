@@ -25,9 +25,9 @@ export const supertokens = <T, S, R, N>(client: {
     getToken: async () => null,
 
     getUserMetadata: async (): Promise<SuperTokensUser | null> => {
-      if (client.sessions.doesSessionExist()) {
+      if (await client.sessions.doesSessionExist()) {
         return {
-          userId: client.sessions.getUserId(),
+          userId: await client.sessions.getUserId(),
           jwtPayload: await client.sessions.getJWTPayloadSecurely(),
         }
       } else {

@@ -17659,10 +17659,10 @@ subscriptions-transport-ws@^0.9.11:
     symbol-observable "^1.0.4"
     ws "^5.2.0"
 
-supertokens-auth-react@^0.8.0:
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/supertokens-auth-react/-/supertokens-auth-react-0.8.0.tgz#fac698f87df1bfc0b41e70705982a19d525ef461"
-  integrity sha512-ylKllvEAsmA6+g695nfA2zG5GmfdxXn2POXTkFTQc9IMVwx8EZhz/YxpS98dsfoMyRBCdFg6CpkP4/4Bc+ecEA==
+supertokens-auth-react@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/supertokens-auth-react/-/supertokens-auth-react-0.9.0.tgz#25d9a4acd812f21f418f68b3a66b262965fdec2c"
+  integrity sha512-WvhbGBDDWu3+atcx1IsUXeB6o3CpX0u8caZpzVHhy0kpyqx7IbPDPWiNRK27YkX1QOa+HBqgKb90hEth2AQPIw==
   dependencies:
     "@emotion/babel-plugin" "11.1.2"
     "@emotion/cache" "11.1.3"
@@ -17671,12 +17671,12 @@ supertokens-auth-react@^0.8.0:
     chroma-js "2.1.0"
     emotion "11.0.0"
     react-shadow "19.0.1"
-    supertokens-website "^5.1.0"
+    supertokens-website "^6.0.0"
 
-supertokens-website@^5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/supertokens-website/-/supertokens-website-5.1.0.tgz#441d0881fe7867f6a9c629825df691eaf6da1bec"
-  integrity sha512-m9pYsjIQES8ZcBIwR8OHpVT77BquIN/WwlnIZpfGeQPyV9KffRSYVyoTpLyY4t/TKNG0Ju62tyM4bjj9wadWaQ==
+supertokens-website@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/supertokens-website/-/supertokens-website-6.0.0.tgz#f9ef244fa4e0907a139fe6f7ecca7725c164d0d8"
+  integrity sha512-33f3/St4hW0rr8v3ipFe5q28hvTu92U9p4nB7od3RCmhzLjaOL/osFK789+tMuHY0zHb5orUBBWXXu0sTJiurw==
   dependencies:
     browser-tabs-lock "^1.2.8"
 
