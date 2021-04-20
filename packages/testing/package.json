@@ -15,7 +15,7 @@
     "@redwoodjs/web": "^0.30.1",
     "@testing-library/react": "11.2.2",
     "@types/react": "17.0.3",
-    "msw": "^0.21.2"
+    "msw": "^0.28.1"
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",
