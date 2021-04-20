@@ -1,16 +1,12 @@
 import { getConfig } from '@redwoodjs/internal'
 
-import c from '../../cli/src/lib/colors'
-
 import { BeforeResolverSpec, MissingBeforeResolver } from './beforeResolverSpec'
 import { MakeServices } from './types'
 
 export const makeServices: MakeServices = ({ services }) => {
   if (!getConfig().api.experimentalSecureServices) {
     console.warn(
-      c.warning(
-        'NOTICE: Redwood v1.0 will make services secure by default. To optin to this behavior now, add `experimentalSecureServices = true` to the [api] section of your redwood.toml file. For more information: https://redwoodjs.com/docs/secure-services'
-      )
+      'NOTICE: Redwood v1.0 will make services secure by default. To optin to this behavior now, add `experimentalSecureServices = true` to the [api] section of your redwood.toml file. For more information: https://redwoodjs.com/docs/secure-services'
     )
     return services
   }
