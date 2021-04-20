@@ -42,6 +42,8 @@ import path from 'path'
 // Load mocks
 import 'src/lib/test'
 
+import { ensurePosixPath } from '@redwoodjs/internal'
+
 import { getPaths } from 'src/lib'
 
 import { pathName } from '../../helpers'
@@ -302,7 +304,7 @@ test('file generation', async () => {
   spy.mock.calls.forEach((calls) => {
     const testOutput = {
       // Because windows paths are different, we need to normalise before snapshotting
-      filePath: path.normalize(calls[0]),
+      filePath: ensurePosixPath(calls[0]),
       fileContent: calls[1],
     }
     expect(testOutput).toMatchSnapshot()
@@ -339,7 +341,7 @@ test('file generation with route params', async () => {
 
   spy.mock.calls.forEach((calls) => {
     const testOutput = {
-      filePath: path.normalize(calls[0]),
+      filePath: ensurePosixPath(calls[0]),
       fileContent: calls[1],
     }
     expect(testOutput).toMatchSnapshot()
