@@ -247,8 +247,11 @@ export const handler = async ({ provider, force }) => {
           getPaths().base,
           ''
         )}/auth.js? y/n`,
+        validate: (value) => value.toLowerCase().match(/^(yes|no|y|n)$/),
       })
-      force = response.answer === 'y'
+      force =
+        response.answer.toLowerCase() === 'y' ||
+        response.answer.toLowerCase() === 'yes'
     }
   }
 
