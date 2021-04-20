@@ -18,6 +18,7 @@ const { getConfig, getPaths } = require('@redwoodjs/internal')
 const redwoodConfig = getConfig()
 const redwoodPaths = getPaths()
 
+/** @returns {{[key: string]: string}} Env vars */
 const getEnvVars = () => {
   const redwoodEnvPrefix = 'REDWOOD_ENV_'
   const includeEnvKeys = redwoodConfig.web.includeEnvironmentVariables
@@ -34,6 +35,7 @@ const getEnvVars = () => {
   return redwoodEnvKeys
 }
 
+/** @returns {import('webpack').RuleSetLoader[]} */
 const getStyleLoaders = (isEnvProduction) => {
   const styleOrExtractLoader = isEnvProduction
     ? MiniCssExtractPlugin.loader
@@ -120,7 +122,7 @@ const getStyleLoaders = (isEnvProduction) => {
   ]
 }
 
-// Shared with storybook, as well as the RW app
+/** @returns {import('webpack').Plugin[]} Plugins shared with storybook, as well as the RW app */
 const getSharedPlugins = (isEnvProduction) => {
   const shouldIncludeFastRefresh =
     redwoodConfig.web.fastRefresh !== false && !isEnvProduction
@@ -339,6 +341,7 @@ module.exports = (webpackEnv) => {
   }
 }
 
+/** @returns {import('webpack').Configuration} */
 module.exports.mergeUserWebpackConfig = (mode, baseConfig) => {
   const redwoodPaths = getPaths()
   const hasCustomConfig = fs.existsSync(redwoodPaths.web.webpack)
