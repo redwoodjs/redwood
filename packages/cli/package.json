@@ -39,7 +39,7 @@
     "prettier": "^2.1.1",
     "prompts": "^2.4.1",
     "rimraf": "^3.0.2",
-    "terminal-link": "^2.1.1",
+    "terminal-link": "^3.0.0",
     "yargs": "^16.0.3"
   },
   "devDependencies": {
