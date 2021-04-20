@@ -12,7 +12,7 @@
     "@graphql-tools/merge": "6.2.10",
     "@prisma/client": "2.21.2",
     "@redwoodjs/internal": "^0.30.1",
-    "@types/pino": "^6.3.6",
+    "@types/pino": "^6.3.7",
     "apollo-server-lambda": "2.22.2",
     "core-js": "3.10.1",
     "graphql": "15.5.0",
