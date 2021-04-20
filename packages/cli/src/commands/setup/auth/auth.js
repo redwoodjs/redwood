@@ -241,17 +241,15 @@ export const handler = async ({ provider, force }) => {
   if (force === false) {
     if (fs.existsSync(Object.keys(files(provider))[0])) {
       const response = await prompts({
-        type: 'text',
+        type: 'confirm',
         name: 'answer',
         message: `Overwrite existing ${getPaths().api.lib.replace(
           getPaths().base,
           ''
-        )}/auth.js? y/n`,
-        validate: (value) => value.toLowerCase().match(/^(yes|no|y|n)$/),
+        )}/auth.js?`,
+        initial: false,
       })
-      force =
-        response.answer.toLowerCase() === 'y' ||
-        response.answer.toLowerCase() === 'yes'
+      force = response.answer
     }
   }
 
