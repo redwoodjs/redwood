@@ -57,13 +57,14 @@ const rwPackages = [
   '@redwoodjs/router',
   '@redwoodjs/auth',
   '@redwoodjs/forms',
+  '@redwoodjs/api-server',
 ].join(' ')
 
 // yarn upgrade-interactive does not allow --tags, so we resort to this mess
 // @redwoodjs/auth may not be installed so we add check
 const installTags = (tag, isAuth) => {
   const mainString = `yarn upgrade @redwoodjs/core@${tag} \
-  && yarn workspace api upgrade @redwoodjs/api@${tag} \
+  && yarn workspace api upgrade @redwoodjs/api@${tag} @redwoodjs/api-server@${tag} \
   && yarn workspace web upgrade @redwoodjs/web@${tag} @redwoodjs/router@${tag} @redwoodjs/forms@${tag}`
 
   const authString = ` @redwoodjs/auth@${tag}`
@@ -87,6 +88,7 @@ const installPr = (pr, isAuth) => {
   const mainString =
     `yarn add -DW ${packageUrl('core')} ${packageUrl('cli')} ` +
     `&& yarn workspace api add ${packageUrl('api')} ` +
+    `${packageUrl('api-server')} ` +
     `&& yarn workspace web add ${packageUrl('web')} ` +
     `${packageUrl('router')} ${packageUrl('forms')}`
 

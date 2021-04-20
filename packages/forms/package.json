@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/forms",
-  "version": "0.28.4",
+  "version": "0.30.1",
   "files": [
     "dist",
     "src/index.d.ts"
@@ -10,7 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "@types/pascalcase": "^1.0.0",
-    "core-js": "3.6.5",
+    "core-js": "3.10.1",
     "pascalcase": "1.0.0",
     "react-hook-form": "^6.9.5"
   },

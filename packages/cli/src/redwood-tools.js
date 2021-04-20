@@ -177,7 +177,7 @@ const rwtLink = async (yargs) => {
     })
   }
 
-  // Unlink framework repo, when process cancelled
+  // Inform user to unlink framework repo, when process cancelled
   process.on('SIGINT', () => {
     const message = `
     🙏  Thanks for contributing..\n
@@ -192,9 +192,6 @@ const rwtLink = async (yargs) => {
     )
   })
 
-  // Delete existing redwood folders in node_modules
-  rimraf.sync(path.join(getPaths().base, 'node_modules/@redwoodjs/'))
-
   const onlyParams = only ? ['--only', only] : []
 
   await execa(
@@ -207,6 +204,10 @@ const rwtLink = async (yargs) => {
       cwd: frameworkPath,
     }
   )
+
+  // Delete existing redwood folders in node_modules
+  // Do this right before install, incase build:link fails
+  rimraf.sync(path.join(getPaths().base, 'node_modules/@redwoodjs/'))
 
   // Let workspaces do the link
   await execa('yarn install', ['--pure-lockfile', '--check-files'], {

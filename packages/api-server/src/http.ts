@@ -44,15 +44,13 @@ const lambdaRequestHandler = async (req: Request, res: Response) => {
   return requestHandler(req, res, LAMBDA_FUNCTIONS[routeName])
 }
 
-export const http = ({
-  port = 8911,
-  socket,
-  rootPath,
-}: {
+export interface HttpServerParams {
   port: number
   socket?: string
   rootPath?: string
-}) => {
+}
+
+export const http = ({ port = 8911, socket, rootPath }: HttpServerParams) => {
   const app = express()
 
   app.use(
