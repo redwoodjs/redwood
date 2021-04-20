@@ -3,6 +3,7 @@ import path from 'path'
 
 import execa from 'execa'
 import Listr from 'listr'
+import prompts from 'prompts'
 import terminalLink from 'terminal-link'
 
 import { resolveFile } from '@redwoodjs/internal'
@@ -131,7 +132,7 @@ const removeOldAuthProvider = async (content) => {
 }
 
 // check to make sure AuthProvider doesn't exist
-const checkAuthProviderExists = () => {
+const checkAuthProviderExists = async () => {
   const content = fs.readFileSync(getWebAppPath()).toString()
 
   if (content.includes(AUTH_PROVIDER_IMPORT)) {
@@ -236,6 +237,21 @@ export const builder = (yargs) => {
 export const handler = async ({ provider, force }) => {
   const providerData = await import(`./providers/${provider}`)
 
+  // check if api/src/lib/auth.js already exists and if so, ask the user to overwrite
+  if (force === false) {
+    if (fs.existsSync(Object.keys(files(provider))[0])) {
+      const response = await prompts({
+        type: 'text',
+        name: 'answer',
+        message: `Overwrite existing ${getPaths().api.lib.replace(
+          getPaths().base,
+          ''
+        )}/auth.js? y/n`,
+      })
+      force = response.answer === 'y'
+    }
+  }
+
   const tasks = new Listr(
     [
       {
@@ -243,7 +259,7 @@ export const handler = async ({ provider, force }) => {
         task: (_ctx, task) => {
           if (apiSrcDoesExist()) {
             return writeFilesTask(files(provider), {
-              overwriteExisting: true,
+              overwriteExisting: force,
             })
           } else {
             task.skip('api/src not found, skipping')
@@ -320,7 +336,7 @@ export const handler = async ({ provider, force }) => {
   try {
     // Don't throw existing provider error when --force exists
     if (!force) {
-      checkAuthProviderExists()
+      await checkAuthProviderExists()
     }
 
     await tasks.run()
