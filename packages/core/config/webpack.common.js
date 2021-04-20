@@ -17,7 +17,7 @@ const { getConfig, getPaths } = require('@redwoodjs/internal')
 const redwoodConfig = getConfig()
 const redwoodPaths = getPaths()
 
-/** @returns {{[key: string]: string}} Envinronment variables */
+/** @returns {{[key: string]: string}} Env vars */
 const getEnvVars = () => {
   const redwoodEnvPrefix = 'REDWOOD_ENV_'
   const includeEnvKeys = redwoodConfig.web.includeEnvironmentVariables
