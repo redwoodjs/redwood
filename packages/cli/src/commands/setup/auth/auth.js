@@ -243,7 +243,7 @@ export const handler = async ({ provider, force }) => {
         task: (_ctx, task) => {
           if (apiSrcDoesExist()) {
             return writeFilesTask(files(provider), {
-              overwriteExisting: force,
+              overwriteExisting: true,
             })
           } else {
             task.skip('api/src not found, skipping')
