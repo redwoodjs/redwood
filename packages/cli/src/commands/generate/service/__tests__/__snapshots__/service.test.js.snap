@@ -177,8 +177,7 @@ export const createPost = ({ input }: CreatePostArgs) => {
   })
 }
 
-interface UpdatePostArgs {
-  where: Prisma.PostWhereUniqueInput
+interface UpdatePostArgs extends Prisma.PostWhereUniqueInput {
   input: Prisma.PostUpdateInput
 }
 
