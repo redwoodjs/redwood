@@ -54,10 +54,13 @@ export const verifySignature = ({
       console.warn('Missing payload')
     }
 
-    const decoded = jwt.verify(signature, secret) as Record<string, unknown>
-
-    if (decoded['iss'] && decoded['iss'] !== options.issuer) {
-      throw new WebhookVerificationError()
+    if (options.issuer) {
+      jwt.verify(signature, secret, { issuer: options.issuer }) as Record<
+        string,
+        unknown
+      >
+    } else {
+      jwt.verify(signature, secret) as Record<string, unknown>
     }
 
     return true
