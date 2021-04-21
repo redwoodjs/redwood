@@ -42,4 +42,5 @@ const baseConfig = merge(webpackConfig('development'), {
   plugins: [new ErrorOverlayPlugin()].filter(Boolean),
 })
 
+/** @type {import('webpack').Configuration} */
 module.exports = mergeUserWebpackConfig('development', baseConfig)
