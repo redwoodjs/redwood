@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth",
-  "version": "0.29.0",
+  "version": "0.30.1",
   "files": [
     "dist"
   ],
@@ -8,15 +8,15 @@
   "types": "./dist/index.d.ts",
   "license": "MIT",
   "devDependencies": {
-    "@auth0/auth0-spa-js": "^1.7.0",
-    "@supabase/supabase-js": "^1.7.7",
-    "@types/netlify-identity-widget": "^1.4.1",
+    "@auth0/auth0-spa-js": "^1.14.0",
+    "@supabase/supabase-js": "^1.11.2",
+    "@types/netlify-identity-widget": "^1.9.1",
     "@types/react": "17.0.3",
-    "firebase": "^7.14.5",
+    "firebase": "^8.4.1",
     "firebase-admin": "^9.6.0",
     "gotrue-js": "^0.9.29",
     "magic-sdk": "^2.5.0",
-    "msal": "^1.4.1",
+    "msal": "^1.4.9",
     "netlify-identity-widget": "1.9.1",
     "nhost-js-sdk": "^3.0.0-14",
     "react": "^17.0.1"
