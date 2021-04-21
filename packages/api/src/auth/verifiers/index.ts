@@ -2,6 +2,8 @@ import type { JwtVerifier } from './jwtVerifier'
 import { jwtVerifier } from './jwtVerifier'
 import type { SecretKeyVerifier } from './secretKeyVerifier'
 import { secretKeyVerifier } from './secretKeyVerifier'
+import type { Sha1Verifier } from './sha1Verifier'
+import { sha1Verifier } from './sha1Verifier'
 import type { Sha256Verifier } from './sha256Verifier'
 import { sha256Verifier } from './sha256Verifier'
 import { skipVerifier } from './skipVerifier'
@@ -12,6 +14,7 @@ import { timestampSchemeVerifier } from './timestampSchemeVerifier'
 const typesToVerifiers = {
   skipVerifier,
   secretKeyVerifier,
+  sha1Verifier,
   sha256Verifier,
   timestampSchemeVerifier,
   jwtVerifier,
@@ -20,7 +23,9 @@ const typesToVerifiers = {
 export type SupportedVerifiers =
   | SkipVerifier
   | SecretKeyVerifier
+  | Sha1Verifier
   | Sha256Verifier
+  | Sha1Verifier
   | TimestampSchemeVerifier
   | JwtVerifier
 
