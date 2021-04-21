@@ -1,27 +1,17 @@
-jest.mock('@redwoodjs/internal', () => {
-  return {
-    getPaths: jest.fn(() => {
-      return {
-        base: '/mock/path',
-        web: `/mock/path/web`,
-      }
-    }),
-    processPagesDir: jest.fn(() => []),
-  }
-})
+import 'src/lib/test'
 
 jest.mock('@redwoodjs/api-server', () => {
   return {
-    handler: jest.fn(),
-    options: {
-      test: 'blah',
-    },
+    ...jest.requireActual('@redwoodjs/api-server'),
+    apiServerHandler: jest.fn(),
   }
 })
 
-import { handler as apiServerHandler } from '@redwoodjs/api-server'
+import yargs from 'yargs'
 
-import { handler } from '../serve'
+import { apiServerHandler } from '@redwoodjs/api-server'
+
+import { builder } from '../serve'
 
 describe('yarn rw serve', () => {
   jest.mock('fs', () => {
@@ -36,11 +26,9 @@ describe('yarn rw serve', () => {
   })
 
   it('Should proxy the command with params to api-server handler', async () => {
-    await handler({
-      side: 'api',
-      port: 5551,
-      rootPath: '/rooty/mcRoot',
-    })
+    const parser = yargs.command('serve', false, builder)
+
+    parser.parse('serve api --bazinga')
 
     expect(apiServerHandler).toHaveBeenCalledWith({
       port: 5551,
