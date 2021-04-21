@@ -75,6 +75,17 @@ describe('BeforeResolverSpec', () => {
       }
     })
 
+    it('skips everything after an apply', () => {
+      const spec = new BeforeResolverSpec(services)
+      const validate = () => {}
+      spec.apply(validate)
+      spec.skip()
+
+      for (const [name, _funcs] of Object.entries(spec.befores)) {
+        expect(spec.befores[name]).toEqual(false)
+      }
+    })
+
     it('skips a single named function from all services', () => {
       const spec = new BeforeResolverSpec(services)
       const validate = () => {}
@@ -98,7 +109,7 @@ describe('BeforeResolverSpec', () => {
       }
     })
 
-    it('skips single named functions in array syntax from all services', () => {
+    it('skips only some functions from all services', () => {
       const spec = new BeforeResolverSpec(services)
       const validateA = () => {}
       const validateB = () => {}
@@ -120,7 +131,7 @@ describe('BeforeResolverSpec', () => {
       expect(spec.befores['post']).toEqual([validate])
     })
 
-    it('with `only` option removes all function in named services', () => {
+    it('with only the `only` option removes all function in named services', () => {
       const spec = new BeforeResolverSpec(services)
       const validate = () => {}
       spec.apply(validate)
@@ -140,6 +151,17 @@ describe('BeforeResolverSpec', () => {
       expect(spec.befores['post']).toEqual(false)
     })
 
+    it('with only the `except` option removes all functions from all but one service', () => {
+      const spec = new BeforeResolverSpec(services)
+      const validateA = () => {}
+      const validateB = () => {}
+      spec.apply([validateA, validateB])
+      spec.skip({ except: ['posts'] })
+
+      expect(spec.befores['posts']).toEqual([validateA, validateB])
+      expect(spec.befores['post']).toEqual(false)
+    })
+
     // shouldn't be a problem to skip something that doesn't exist
     it('does not mind skipping a function that does not exist', () => {
       const spec = new BeforeResolverSpec(services)
@@ -149,17 +171,6 @@ describe('BeforeResolverSpec', () => {
       spec.skip(validateB)
 
       expect(spec.befores['posts']).toEqual([validateA])
-    })
-
-    it('skips everything with no arguments', () => {
-      const spec = new BeforeResolverSpec(services)
-      const validate = () => {}
-      spec.apply(validate)
-      spec.skip()
-
-      for (const [name, _funcs] of Object.entries(spec.befores)) {
-        expect(spec.befores[name]).toEqual(false)
-      }
     })
   })
 
