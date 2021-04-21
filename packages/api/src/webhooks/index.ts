@@ -5,6 +5,7 @@ import {
   VerifyOptions,
   WebhookVerificationError,
   DEFAULT_WEBHOOK_SECRET,
+  SupportedVerifierTypes,
 } from 'src/auth/verifiers'
 
 export {
@@ -53,17 +54,20 @@ export const signatureFromEvent = ({
  *
  *    verifyEvent({ event: event, options: {} })*
  */
-export const verifyEvent = ({
-  event,
-  payload,
-  secret = DEFAULT_WEBHOOK_SECRET,
-  options,
-}: {
-  event: APIGatewayProxyEvent
-  payload?: string
-  secret?: string
-  options: VerifyOptions
-}): boolean | WebhookVerificationError => {
+export const verifyEvent = (
+  type: SupportedVerifierTypes,
+  {
+    event,
+    payload,
+    secret = DEFAULT_WEBHOOK_SECRET,
+    options,
+  }: {
+    event: APIGatewayProxyEvent
+    payload?: string
+    secret?: string
+    options: VerifyOptions
+  }
+): boolean | WebhookVerificationError => {
   let body = ''
 
   if (payload) {
@@ -78,7 +82,7 @@ export const verifyEvent = ({
       options.signatureHeader || DEFAULT_WEBHOOK_SIGNATURE_HEADER,
   })
 
-  const { verify } = createVerifier({ options })
+  const { verify } = createVerifier(type, options)
 
   return verify({ payload: body, secret, signature })
 }
@@ -96,18 +100,21 @@ export const verifyEvent = ({
  *
  *    verifySignature({ payload, secret, signature, options: {} })*
  */
-export const verifySignature = ({
-  payload,
-  secret = DEFAULT_WEBHOOK_SECRET,
-  signature,
-  options,
-}: {
-  payload: string | Record<string, unknown>
-  secret: string
-  signature: string
-  options: VerifyOptions
-}): boolean | WebhookVerificationError => {
-  const { verify } = createVerifier({ options })
+export const verifySignature = (
+  type: SupportedVerifierTypes,
+  {
+    payload,
+    secret = DEFAULT_WEBHOOK_SECRET,
+    signature,
+    options,
+  }: {
+    payload: string | Record<string, unknown>
+    secret: string
+    signature: string
+    options: VerifyOptions
+  }
+): boolean | WebhookVerificationError => {
+  const { verify } = createVerifier(type, options)
 
   return verify({ payload, secret, signature })
 }
@@ -125,16 +132,19 @@ export const verifySignature = ({
  *    signPayload({ payload, secret, options: {} })*
 
  */
-export const signPayload = ({
-  payload,
-  secret = DEFAULT_WEBHOOK_SECRET,
-  options,
-}: {
-  payload: string
-  secret: string
-  options: VerifyOptions
-}): string => {
-  const { sign } = createVerifier({ options })
+export const signPayload = (
+  type: SupportedVerifierTypes,
+  {
+    payload,
+    secret = DEFAULT_WEBHOOK_SECRET,
+    options,
+  }: {
+    payload: string
+    secret: string
+    options: VerifyOptions
+  }
+): string => {
+  const { sign } = createVerifier(type, options)
 
   return sign({ payload, secret })
 }

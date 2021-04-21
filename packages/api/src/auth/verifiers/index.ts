@@ -92,11 +92,8 @@ export class WebhookSignError extends WebhookError {
 /**
  * VerifyOptions
  *
- * Used when verifying a signature's time component for permitted leeway.
+ * Used when verifying a signature based on the verifier's requirements
  *
- * @typedef {Object} VerifyOptions
- * @param {SupportedVerifierTypes} type - What verification type methods used
- * to sign and verify signatures
  * @param {string} signatureHeader - Optional Header that contains the signature to verify
  * will default to DEFAULT_WEBHOOK_SIGNATURE_HEADER
  * @param {number} timestamp - Optional timestamp in msec
@@ -104,7 +101,6 @@ export class WebhookSignError extends WebhookError {
  * @param {string} issuer - Options JWT issuer for JWTVerifier
  */
 export interface VerifyOptions {
-  type: SupportedVerifierTypes
   signatureHeader?: string
   timestamp?: number
   tolerance?: number
@@ -112,7 +108,7 @@ export interface VerifyOptions {
 }
 
 /**
- *
+ * WebhookVerifier is the interface for all verifiers
  */
 export interface WebhookVerifier {
   sign({
@@ -135,12 +131,13 @@ export interface WebhookVerifier {
 }
 
 /**
- *
+ * @param {SupportedVerifierTypes} type - What verification type methods used
+ * to sign and verify signatures
+ * @param {VerifyOptions} options - Options used to verify the signature based on verifiers requirements
  */
-export const createVerifier = ({
-  options,
-}: {
+export const createVerifier = (
+  type: SupportedVerifierTypes,
   options: VerifyOptions
-}): WebhookVerifier => {
-  return typesToVerifiers[options.type]({ options })
+): WebhookVerifier => {
+  return typesToVerifiers[type](options)
 }

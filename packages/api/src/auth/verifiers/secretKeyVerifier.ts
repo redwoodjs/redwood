@@ -6,15 +6,18 @@ import {
 } from './index'
 export type SecretKeyVerifier = WebhookVerifier
 
-export const secretKeyVerifier = ({
-  options,
-}: {
-  options: VerifyOptions
-}): SecretKeyVerifier => {
+export const secretKeyVerifier = (
+  options?: VerifyOptions
+): SecretKeyVerifier => {
+  if (options) {
+    console.warn(
+      `With the SecretKeyVerifier verifier, VerifyOptions are ignored`
+    )
+  }
   return {
     sign: ({ secret }) => {
       console.warn(
-        `With the ${options.type} verifier, your body isn't signed with a secret`
+        `With the SecretKeyVerifier verifier, your body isn't signed with a secret`
       )
       return secret
     },

@@ -143,11 +143,9 @@ const verifySignature = ({
  * @see https://stripe.com/docs/webhooks/signatures
  *
  */
-export const timestampSchemeVerifier = ({
-  options,
-}: {
+export const timestampSchemeVerifier = (
   options: VerifyOptions
-}): TimestampSchemeVerifier => {
+): TimestampSchemeVerifier => {
   return {
     sign: ({ payload, secret }) => {
       return createSignature({ payload, secret, timestamp: options.timestamp })

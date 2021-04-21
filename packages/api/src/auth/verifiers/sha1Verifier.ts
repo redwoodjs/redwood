@@ -30,7 +30,11 @@ const createSignature = ({
   secret: string
   options?: VerifyOptions
 }): string => {
-  const algorithm = options?.type.replace('Verifier', '') || 'sha1'
+  if (options) {
+    console.warn('VerifyOptions are invalid for the Sha1Verifier')
+  }
+
+  const algorithm = 'sha1'
   const hmac = createHmac(algorithm, secret)
 
   payload =
@@ -61,8 +65,8 @@ export const verifySignature = ({
   options?: VerifyOptions
 }): boolean => {
   try {
-    if (options && options?.type !== 'sha1Verifier') {
-      console.error('VerifyOptions are invalid for the Sha1Verifier')
+    if (options) {
+      console.warn('VerifyOptions are invalid for the Sha1Verifier')
     }
 
     const algorithm = signature.split('=')[0]
@@ -102,11 +106,7 @@ export const verifySignature = ({
  * @see https://docs.github.com/en/developers/webhooks-and-events/securing-your-webhooks
  *
  */
-export const sha1Verifier = ({
-  options,
-}: {
-  options: VerifyOptions
-}): WebhookVerifier => {
+export const sha1Verifier = (options?: VerifyOptions): WebhookVerifier => {
   return {
     sign: ({ payload, secret }) => {
       return createSignature({ payload, secret, options })

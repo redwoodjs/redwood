@@ -73,11 +73,7 @@ export const verifySignature = ({
  * JWT
  *
  */
-export const jwtVerifier = ({
-  options,
-}: {
-  options: VerifyOptions
-}): JwtVerifier => {
+export const jwtVerifier = (options: VerifyOptions): JwtVerifier => {
   return {
     sign: ({ payload, secret }) => {
       return createSignature({ payload, secret, options })
