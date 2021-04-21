@@ -8,7 +8,7 @@ import {
 } from './index'
 import type { WebhookVerifier } from './index'
 
-export type Sha1Verifier = WebhookVerifier
+export interface Sha1Verifier extends WebhookVerifier {}
 
 function toNormalizedJsonString(payload: Record<string, unknown>) {
   return JSON.stringify(payload).replace(/[^\\]\\u[\da-f]{4}/g, (s) => {

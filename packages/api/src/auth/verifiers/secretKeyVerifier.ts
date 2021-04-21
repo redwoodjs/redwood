@@ -4,7 +4,8 @@ import {
   WebhookVerificationError,
   DEFAULT_WEBHOOK_SECRET,
 } from './index'
-export type SecretKeyVerifier = WebhookVerifier
+
+export interface SecretKeyVerifier extends WebhookVerifier {}
 
 export const secretKeyVerifier = (
   options?: VerifyOptions

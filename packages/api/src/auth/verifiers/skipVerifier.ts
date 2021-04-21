@@ -1,6 +1,6 @@
 import type { VerifyOptions, WebhookVerifier } from './index'
 
-export type SkipVerifier = WebhookVerifier
+export interface SkipVerifier extends WebhookVerifier {}
 
 export const skipVerifier = (options?: VerifyOptions): SkipVerifier => {
   if (options) {

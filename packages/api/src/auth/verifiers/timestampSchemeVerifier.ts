@@ -7,7 +7,7 @@ import {
 } from './index'
 import type { WebhookVerifier } from './index'
 
-export type TimestampSchemeVerifier = WebhookVerifier
+export interface TimestampSchemeVerifier extends WebhookVerifier {}
 
 /**
  * @const {number}

@@ -8,7 +8,7 @@ import {
 } from './index'
 import type { WebhookVerifier } from './index'
 
-export type JwtVerifier = WebhookVerifier
+export interface JwtVerifier extends WebhookVerifier {}
 
 /**
  *
