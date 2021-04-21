@@ -51,6 +51,7 @@ describe('BeforeResolverSpec', () => {
       const validate = () => {}
       spec.apply(validate, { only: ['posts'] })
 
+      console.info(spec.befores)
       expect(spec.befores['posts']).toContain(validate)
       expect(spec.befores['post']).not.toContain(validate)
     })
@@ -95,6 +96,18 @@ describe('BeforeResolverSpec', () => {
 
       for (const [_name, funcs] of Object.entries(spec.befores)) {
         expect(funcs).toEqual(false)
+      }
+    })
+
+    it('skips single named functions in array syntax from all services', () => {
+      const spec = new BeforeResolverSpec(services)
+      const validateA = () => {}
+      const validateB = () => {}
+      spec.apply([validateA, validateB])
+      spec.skip([validateA])
+
+      for (const [_name, funcs] of Object.entries(spec.befores)) {
+        expect(funcs).toEqual([validateB])
       }
     })
 
