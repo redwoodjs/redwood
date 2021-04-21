@@ -46,15 +46,11 @@ export const BeforeResolverSpec = class implements BeforeResolverInterface {
   constructor(serviceNames: string[]) {
     this.befores = {}
 
-    for (const name of serviceNames) {
-      this._initBefore(name)
-    }
+    serviceNames.forEach((name) => this._initBefore(name))
   }
 
   apply(functions: RuleFunction | Array<RuleFunction>, options?: RuleOptions) {
-    // @TODO Let's use this.befores.map?
-
-    for (const [name, _list] of Object.entries(this.befores)) {
+    Object.keys(this.befores).forEach((name) => {
       if (
         !options ||
         (options?.only && options.only.includes(name)) ||
@@ -70,7 +66,7 @@ export const BeforeResolverSpec = class implements BeforeResolverInterface {
           ...[functions].flat(),
         ]
       }
-    }
+    })
   }
 
   skip(
