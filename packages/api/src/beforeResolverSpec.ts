@@ -30,11 +30,15 @@ interface BeforeResolverInterface {
 type RuleFunction = () => unknown
 type BeforeFunctionCollection = Array<RuleFunction>
 
-type BeforeFunctionOptions = {
-  // @TODO make only and except mutually exclusive
-  only?: string[]
-  except?: string[]
-}
+type RuleOptions =
+  | {
+      only: string[]
+      except: undefined
+    }
+  | {
+      except: string[]
+      only: undefined
+    }
 
 export const BeforeResolverSpec = class implements BeforeResolverInterface {
   befores: Record<string, BeforeFunctionCollection | false>
@@ -47,10 +51,9 @@ export const BeforeResolverSpec = class implements BeforeResolverInterface {
     }
   }
 
-  apply(
-    functions: RuleFunction | Array<RuleFunction>,
-    options?: BeforeFunctionOptions
-  ) {
+  apply(functions: RuleFunction | Array<RuleFunction>, options?: RuleOptions) {
+    // @TODO Let's use this.befores.map?
+
     for (const [name, _list] of Object.entries(this.befores)) {
       if (
         !options ||
@@ -71,52 +74,62 @@ export const BeforeResolverSpec = class implements BeforeResolverInterface {
   }
 
   skip(
-    functionsOrOptions?: RuleFunction | Array<RuleFunction>,
-    opts?: BeforeFunctionOptions
+    functionsOrOptions?: RuleFunction | Array<RuleFunction> | RuleOptions,
+    opts?: RuleOptions
   ) {
-    let functions: RuleFunction | Array<RuleFunction> | 'all'
-    let options: BeforeFunctionOptions | undefined
+    let functionsToSkip: RuleFunction | Array<RuleFunction> | undefined
+    let options: RuleOptions | undefined
+
+    let applyToAll = false
+
     // covers the case where no functions are passed, which means skip ALL
-    if (
-      typeof functionsOrOptions === 'undefined' ||
-      (typeof functionsOrOptions === 'object' &&
-        Object.keys(options).length === 0)
-    ) {
-      functions = 'all'
-      options = <BeforeFunctionOptions>functionsOrOptions
+    if (this._isOptions(functionsOrOptions)) {
+      // Options supplied in first param
+
+      // @TODO this doesnt seem right
+      applyToAll = true
+      options = functionsOrOptions
     } else {
-      functions = functionsOrOptions
+      // Rule functions supplied (and maybe options)
+      functionsToSkip = functionsOrOptions
       options = opts
     }
 
     for (const [name, _list] of Object.entries(this.befores)) {
+      const rulesForFunction = this.befores[name]
       if (
-        (!options.only && !options.except) ||
-        (options.only && options.only.includes(name)) ||
-        (options.except && !options.except.includes(name))
+        (options && !options.only && !options.except) ||
+        (options && options.only && options.only.includes(name)) ||
+        (options && options.except && !options.except.includes(name))
       ) {
-        if (Array.isArray(functions)) {
-          for (const func of this.befores[name]) {
-            this.befores[name] = this.befores[name].filter((s) => s !== func)
+        if (Array.isArray(functionsToSkip) && Array.isArray(rulesForFunction)) {
+          // @TODO WHAT IS THIS DOING!?
+          // We might be better off using rulesForFunction.map
+          for (const func of rulesForFunction) {
+            this.befores[name] = rulesForFunction.filter((s) => s !== func)
           }
+
+          // this.befores[name] = rulesForFunction.filter((rule) => rule !== func)
         } else {
-          if (functions === 'all') {
+          if (applyToAll) {
             this.befores[name] = []
           } else {
-            this.befores[name] = this.befores[name].filter(
-              (s) => s !== functions
-            )
+            if (rulesForFunction !== false) {
+              this.befores[name] = rulesForFunction.filter(
+                (s) => s !== functionsToSkip
+              )
+            }
           }
         }
 
-        if (this.befores[name].length === 0) {
+        if (rulesForFunction !== false && rulesForFunction.length === 0) {
           this._clearBefore(name)
         }
       }
     }
   }
 
-  verify(name) {
+  verify(name: string) {
     if (this._canSkipService(name)) {
       return true
     } else if (this._noBeforesDefined(name)) {
@@ -131,22 +144,37 @@ export const BeforeResolverSpec = class implements BeforeResolverInterface {
     this.befores[name] = []
   }
 
+  _isOptions(
+    functionsOrOptions?: RuleFunction | Array<RuleFunction> | RuleOptions
+  ): functionsOrOptions is RuleOptions {
+    return (
+      typeof functionsOrOptions === 'undefined' ||
+      typeof functionsOrOptions === 'object'
+    )
+  }
+
   // marks a service as having no needed before functions to apply
-  _clearBefore(name) {
+  _clearBefore(name: string) {
     this.befores[name] = false
   }
 
-  _canSkipService(name) {
+  _canSkipService(name: string) {
     return this.befores[name] === false
   }
 
-  _noBeforesDefined(name) {
-    return this.befores[name].length === 0
+  _noBeforesDefined(name: string) {
+    const rulesForName = this.befores[name]
+
+    return Array.isArray(rulesForName) && rulesForName.length === 0
   }
 
-  _invokeBefores(name) {
-    for (const func of this.befores[name]) {
-      func.call(this, name)
+  _invokeBefores(name: string) {
+    const rulesForName = this.befores[name]
+
+    if (Array.isArray(rulesForName)) {
+      rulesForName.every((rule) => {
+        rule.call(this)
+      })
     }
     return true
   }
