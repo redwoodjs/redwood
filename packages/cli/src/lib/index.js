@@ -459,8 +459,12 @@ export const runCommandTask = async (commands, { verbose }) => {
  * Extract default CLI args from an exported builder
  */
 export const getDefaultArgs = (builder) => {
-  return Object.entries(builder).reduce((agg, [k, v]) => {
-    agg[k] = v.default
-    return agg
-  }, {})
+  return Object.entries(builder).reduce(
+    (options, [optionName, optionConfig]) => {
+      // If a default is defined use it
+      options[optionName] = optionConfig.default
+      return options
+    },
+    {}
+  )
 }
