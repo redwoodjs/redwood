@@ -1,7 +1,8 @@
 global.__dirname = __dirname
 import path from 'path'
 
-import { loadGeneratorFixture } from 'src/lib/test'
+// Load mocks
+import 'src/lib/test'
 
 import { getDefaultArgs } from 'src/lib'
 
@@ -49,9 +50,7 @@ describe('in javascript (default) mode', () => {
   test('creates a stylesheet', () => {
     expect(
       files[path.normalize('/path/to/project/web/src/scaffold.css')]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('assets', 'scaffold.css'))
-    )
+    ).toMatchSnapshot()
   })
 
   // Layout
@@ -63,9 +62,7 @@ describe('in javascript (default) mode', () => {
           '/path/to/project/web/src/layouts/PostsLayout/PostsLayout.js'
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('layouts', 'layout.js'))
-    )
+    ).toMatchSnapshot()
   })
 
   // Pages
@@ -77,9 +74,7 @@ describe('in javascript (default) mode', () => {
           '/path/to/project/web/src/pages/EditPostPage/EditPostPage.js'
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('pages', 'editPage.js'))
-    )
+    ).toMatchSnapshot()
   })
 
   test('creates a index page', async () => {
@@ -87,9 +82,7 @@ describe('in javascript (default) mode', () => {
       files[
         path.normalize('/path/to/project/web/src/pages/PostsPage/PostsPage.js')
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('pages', 'indexPage.js'))
-    )
+    ).toMatchSnapshot()
   })
 
   test('creates a new page', async () => {
@@ -99,9 +92,7 @@ describe('in javascript (default) mode', () => {
           '/path/to/project/web/src/pages/NewPostPage/NewPostPage.js'
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('pages', 'newPage.js'))
-    )
+    ).toMatchSnapshot()
   })
 
   test('creates a show page', async () => {
@@ -109,9 +100,7 @@ describe('in javascript (default) mode', () => {
       files[
         path.normalize('/path/to/project/web/src/pages/PostPage/PostPage.js')
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('pages', 'showPage.js'))
-    )
+    ).toMatchSnapshot()
   })
 
   // Cells
@@ -123,9 +112,7 @@ describe('in javascript (default) mode', () => {
           '/path/to/project/web/src/components/EditPostCell/EditPostCell.js'
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('components', 'editCell.js'))
-    )
+    ).toMatchSnapshot()
   })
 
   test('creates an index cell', async () => {
@@ -135,9 +122,7 @@ describe('in javascript (default) mode', () => {
           '/path/to/project/web/src/components/PostsCell/PostsCell.js'
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('components', 'indexCell.js'))
-    )
+    ).toMatchSnapshot()
   })
 
   test('creates a show cell', async () => {
@@ -147,9 +132,7 @@ describe('in javascript (default) mode', () => {
           '/path/to/project/web/src/components/PostCell/PostCell.js'
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('components', 'showCell.js'))
-    )
+    ).toMatchSnapshot()
   })
 
   // Components
@@ -161,9 +144,7 @@ describe('in javascript (default) mode', () => {
           '/path/to/project/web/src/components/PostForm/PostForm.js'
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('components', 'form.js'))
-    )
+    ).toMatchSnapshot()
   })
 
   test('creates an index component', async () => {
@@ -171,9 +152,7 @@ describe('in javascript (default) mode', () => {
       files[
         path.normalize('/path/to/project/web/src/components/Posts/Posts.js')
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('components', 'index.js'))
-    )
+    ).toMatchSnapshot()
   })
 
   test('creates a new component', async () => {
@@ -181,17 +160,13 @@ describe('in javascript (default) mode', () => {
       files[
         path.normalize('/path/to/project/web/src/components/NewPost/NewPost.js')
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('components', 'new.js'))
-    )
+    ).toMatchSnapshot()
   })
 
   test('creates a show component', async () => {
     expect(
       files[path.normalize('/path/to/project/web/src/components/Post/Post.js')]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('components', 'show.js'))
-    )
+    ).toMatchSnapshot()
   })
 
   // Routes
@@ -266,12 +241,7 @@ describe('in javascript (default) mode', () => {
           '/path/to/project/web/src/components/NewUserProfile/NewUserProfile.js'
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture(
-        'scaffold',
-        path.join('components', 'foreignKeys', 'new.js')
-      )
-    )
+    ).toMatchSnapshot()
   })
 
   test('creates an edit component with int foreign keys converted in onSave', async () => {
@@ -283,20 +253,15 @@ describe('in javascript (default) mode', () => {
           '/path/to/project/web/src/components/EditUserProfileCell/EditUserProfileCell.js'
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture(
-        'scaffold',
-        path.join('components', 'foreignKeys', 'edit.js')
-      )
-    )
+    ).toMatchSnapshot()
   })
 })
 
 describe('in typescript mode', () => {
-  let files
+  let tsFiles
 
   beforeAll(async () => {
-    files = await scaffold.files({
+    tsFiles = await scaffold.files({
       ...getDefaultArgs(defaults),
       model: 'Post',
       typescript: true,
@@ -304,13 +269,13 @@ describe('in typescript mode', () => {
   })
 
   test('returns exactly 17 files', () => {
-    expect(Object.keys(files).length).toEqual(17)
+    expect(Object.keys(tsFiles).length).toEqual(17)
   })
 
   // SDL
 
   test('creates an sdl', () => {
-    expect(files).toHaveProperty([
+    expect(tsFiles).toHaveProperty([
       path.normalize('/path/to/project/api/src/graphql/posts.sdl.ts'),
     ])
   })
@@ -318,13 +283,13 @@ describe('in typescript mode', () => {
   // Service
 
   test('creates a service', () => {
-    expect(files).toHaveProperty([
+    expect(tsFiles).toHaveProperty([
       path.normalize('/path/to/project/api/src/services/posts/posts.ts'),
     ])
   })
 
   test('creates a service test', () => {
-    expect(files).toHaveProperty([
+    expect(tsFiles).toHaveProperty([
       path.normalize('/path/to/project/api/src/services/posts/posts.test.ts'),
     ])
   })
@@ -333,150 +298,128 @@ describe('in typescript mode', () => {
 
   test('creates a stylesheet', () => {
     expect(
-      files[path.normalize('/path/to/project/web/src/scaffold.css')]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('assets', 'scaffold.css'))
-    )
+      tsFiles[path.normalize('/path/to/project/web/src/scaffold.css')]
+    ).toMatchSnapshot()
   })
 
   // Layout
 
   test('creates a layout', async () => {
     expect(
-      files[
+      tsFiles[
         path.normalize(
-          '/path/to/project/web/src/layouts/PostsLayout/PostsLayout.js'
+          '/path/to/project/web/src/layouts/PostsLayout/PostsLayout.tsx'
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('layouts', 'layout.js'))
-    )
+    ).toMatchSnapshot()
   })
 
   // Pages
 
   test('creates a edit page', async () => {
     expect(
-      files[
+      tsFiles[
         path.normalize(
-          '/path/to/project/web/src/pages/EditPostPage/EditPostPage.js'
+          '/path/to/project/web/src/pages/EditPostPage/EditPostPage.tsx'
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('pages', 'editPage.js'))
-    )
+    ).toMatchSnapshot()
   })
 
   test('creates a index page', async () => {
     expect(
-      files[
-        path.normalize('/path/to/project/web/src/pages/PostsPage/PostsPage.js')
+      tsFiles[
+        path.normalize('/path/to/project/web/src/pages/PostsPage/PostsPage.tsx')
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('pages', 'indexPage.js'))
-    )
+    ).toMatchSnapshot()
   })
 
   test('creates a new page', async () => {
     expect(
-      files[
+      tsFiles[
         path.normalize(
-          '/path/to/project/web/src/pages/NewPostPage/NewPostPage.js'
+          '/path/to/project/web/src/pages/NewPostPage/NewPostPage.tsx'
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('pages', 'newPage.js'))
-    )
+    ).toMatchSnapshot()
   })
 
   test('creates a show page', async () => {
     expect(
-      files[
-        path.normalize('/path/to/project/web/src/pages/PostPage/PostPage.js')
+      tsFiles[
+        path.normalize('/path/to/project/web/src/pages/PostPage/PostPage.tsx')
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('pages', 'showPage.js'))
-    )
+    ).toMatchSnapshot()
   })
 
   // Cells
 
   test('creates an edit cell', async () => {
     expect(
-      files[
+      tsFiles[
         path.normalize(
-          '/path/to/project/web/src/components/EditPostCell/EditPostCell.js'
+          '/path/to/project/web/src/components/EditPostCell/EditPostCell.tsx'
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('components', 'editCell.js'))
-    )
+    ).toMatchSnapshot()
   })
 
   test('creates an index cell', async () => {
     expect(
-      files[
+      tsFiles[
         path.normalize(
-          '/path/to/project/web/src/components/PostsCell/PostsCell.js'
+          '/path/to/project/web/src/components/PostsCell/PostsCell.tsx'
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('components', 'indexCell.js'))
-    )
+    ).toMatchSnapshot()
   })
 
   test('creates a show cell', async () => {
     expect(
-      files[
+      tsFiles[
         path.normalize(
-          '/path/to/project/web/src/components/PostCell/PostCell.js'
+          '/path/to/project/web/src/components/PostCell/PostCell.tsx'
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('components', 'showCell.js'))
-    )
+    ).toMatchSnapshot()
   })
 
   // Components
 
   test('creates a form component', async () => {
     expect(
-      files[
+      tsFiles[
         path.normalize(
-          '/path/to/project/web/src/components/PostForm/PostForm.js'
+          '/path/to/project/web/src/components/PostForm/PostForm.tsx'
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('components', 'form.js'))
-    )
+    ).toMatchSnapshot()
   })
 
   test('creates an index component', async () => {
     expect(
-      files[
-        path.normalize('/path/to/project/web/src/components/Posts/Posts.js')
+      tsFiles[
+        path.normalize('/path/to/project/web/src/components/Posts/Posts.tsx')
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('components', 'index.js'))
-    )
+    ).toMatchSnapshot()
   })
 
   test('creates a new component', async () => {
     expect(
-      files[
-        path.normalize('/path/to/project/web/src/components/NewPost/NewPost.js')
+      tsFiles[
+        path.normalize(
+          '/path/to/project/web/src/components/NewPost/NewPost.tsx'
+        )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('components', 'new.js'))
-    )
+    ).toMatchSnapshot()
   })
 
   test('creates a show component', async () => {
     expect(
-      files[path.normalize('/path/to/project/web/src/components/Post/Post.js')]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('components', 'show.js'))
-    )
+      tsFiles[
+        path.normalize('/path/to/project/web/src/components/Post/Post.tsx')
+      ]
+    ).toMatchSnapshot()
   })
 
   // Routes
@@ -551,12 +494,7 @@ describe('in typescript mode', () => {
           '/path/to/project/web/src/components/NewUserProfile/NewUserProfile.js'
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture(
-        'scaffold',
-        path.join('components', 'foreignKeys', 'new.js')
-      )
-    )
+    ).toMatchSnapshot()
   })
 
   test('creates an edit component with int foreign keys converted in onSave', async () => {
@@ -568,11 +506,6 @@ describe('in typescript mode', () => {
           '/path/to/project/web/src/components/EditUserProfileCell/EditUserProfileCell.js'
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture(
-        'scaffold',
-        path.join('components', 'foreignKeys', 'edit.js')
-      )
-    )
+    ).toMatchSnapshot()
   })
 })
