@@ -51,9 +51,9 @@ export const signatureFromEvent = ({
  *
  * @example
  *
- *    receiveAndVerify({ event: event, options: {} })*
+ *    verifyEvent({ event: event, options: {} })*
  */
-export const receiveAndVerify = ({
+export const verifyEvent = ({
   event,
   payload,
   secret = DEFAULT_WEBHOOK_SECRET,
@@ -94,9 +94,9 @@ export const receiveAndVerify = ({
  *
  * @example
  *
- *    verify({ payload, secret, signature, options: {} })*
+ *    verifySignature({ payload, secret, signature, options: {} })*
  */
-export const verify = ({
+export const verifySignature = ({
   payload,
   secret = DEFAULT_WEBHOOK_SECRET,
   signature,
@@ -122,10 +122,10 @@ export const verify = ({
  *
  * @example
  *
- *    sign({ payload, secret, options: {} })*
+ *    signPayload({ payload, secret, options: {} })*
 
  */
-export const sign = ({
+export const signPayload = ({
   payload,
   secret = DEFAULT_WEBHOOK_SECRET,
   options,

@@ -24,11 +24,13 @@ function toNormalizedJsonString(payload: Record<string, unknown>) {
 const createSignature = ({
   payload,
   secret = DEFAULT_WEBHOOK_SECRET,
+  options,
 }: {
   payload: string | Record<string, unknown>
   secret: string
+  options?: VerifyOptions
 }): string => {
-  const algorithm = 'sha1'
+  const algorithm = options?.type.replace('Verifier', '') || 'sha1'
   const hmac = createHmac(algorithm, secret)
 
   payload =
@@ -51,12 +53,18 @@ export const verifySignature = ({
   payload,
   secret = DEFAULT_WEBHOOK_SECRET,
   signature,
+  options,
 }: {
   payload: string | Record<string, unknown>
   secret: string
   signature: string
+  options?: VerifyOptions
 }): boolean => {
   try {
+    if (options && options?.type !== 'sha1Verifier') {
+      console.error('VerifyOptions are invalid for the Sha1Verifier')
+    }
+
     const algorithm = signature.split('=')[0]
     const webhookSignature = Buffer.from(signature || '', 'utf8')
     const hmac = createHmac(algorithm, secret)
@@ -101,10 +109,10 @@ export const sha1Verifier = ({
 }): WebhookVerifier => {
   return {
     sign: ({ payload, secret }) => {
-      return createSignature({ payload, secret })
+      return createSignature({ payload, secret, options })
     },
     verify: ({ payload, secret, signature }) => {
-      return verifySignature({ payload, secret, signature })
+      return verifySignature({ payload, secret, signature, options })
     },
     type: 'sha1Verifier',
   }
