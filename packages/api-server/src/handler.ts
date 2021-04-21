@@ -62,7 +62,7 @@ export const apiServerHandler = ({
     if (socket) {
       console.log(`Listening on ${socket}`)
     }
-    console.log(`APIs Listening on http://localhost:${port}${apiRootPath}`)
+    console.log(`Listening on http://localhost:${port}${apiRootPath}`)
   })
 }
 
