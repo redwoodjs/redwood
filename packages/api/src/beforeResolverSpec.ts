@@ -77,7 +77,7 @@ export const BeforeResolverSpec = class implements BeforeResolverInterface {
     functionsOrOptions?: RuleFunction | Array<RuleFunction> | RuleOptions,
     opts?: RuleOptions
   ) {
-    let functionsToSkip: RuleFunction | Array<RuleFunction> | undefined
+    let functionsToSkip: Array<RuleFunction> | undefined
     let options: RuleOptions | undefined
 
     let applyToAll = false
@@ -85,53 +85,40 @@ export const BeforeResolverSpec = class implements BeforeResolverInterface {
     // covers the case where no functions are passed, which means skip ALL
     if (this._isOptions(functionsOrOptions)) {
       // Options supplied in first param
-
-      // @TODO this doesnt seem right
       applyToAll = true
       options = functionsOrOptions
     } else {
-      // Rule functions supplied (and maybe options)
-      functionsToSkip = functionsOrOptions
+      // Rule functions supplied in first param (and maybe options in second)
+      functionsToSkip = [functionsOrOptions].flat()
       options = opts
     }
 
-    for (const [name, _list] of Object.entries(this.befores)) {
+    Object.keys(this.befores).forEach((name) => {
       const rulesForFunction = this.befores[name]
+
       if (
-        (options && !options.only && !options.except) ||
-        (options && options.only && options.only.includes(name)) ||
-        (options && options.except && !options.except.includes(name))
+        !options ||
+        (options.only && options.only.includes(name)) ||
+        (options.except && !options.except.includes(name))
       ) {
         if (Array.isArray(functionsToSkip) && Array.isArray(rulesForFunction)) {
-          // @TODO WHAT IS THIS DOING!?
-          // We might be better off using rulesForFunction.map
-          for (const func of rulesForFunction) {
-            this.befores[name] = rulesForFunction.filter((s) => s !== func)
-          }
-
-          // this.befores[name] = rulesForFunction.filter((rule) => rule !== func)
-        } else {
-          if (applyToAll) {
-            this.befores[name] = []
-          } else {
-            if (rulesForFunction !== false) {
-              this.befores[name] = rulesForFunction.filter(
-                (s) => s !== functionsToSkip
-              )
-            }
-          }
+          this.befores[name] = rulesForFunction.filter(
+            (func) => !functionsToSkip.includes(func)
+          )
+        } else if (applyToAll) {
+          this.befores[name] = []
         }
 
-        if (rulesForFunction !== false && rulesForFunction.length === 0) {
+        if (this.befores[name].length === 0) {
           this._clearBefore(name)
         }
       }
-    }
+    })
   }
 
   verify(name: string) {
     if (this._canSkipService(name)) {
-      return true
+      return []
     } else if (this._noBeforesDefined(name)) {
       throw new InsecureServiceError(name)
     } else {
@@ -149,7 +136,8 @@ export const BeforeResolverSpec = class implements BeforeResolverInterface {
   ): functionsOrOptions is RuleOptions {
     return (
       typeof functionsOrOptions === 'undefined' ||
-      typeof functionsOrOptions === 'object'
+      (typeof functionsOrOptions === 'object' &&
+        !Array.isArray(functionsOrOptions))
     )
   }
 
@@ -168,14 +156,12 @@ export const BeforeResolverSpec = class implements BeforeResolverInterface {
     return Array.isArray(rulesForName) && rulesForName.length === 0
   }
 
+  // returns an array of the result of every before function being run
   _invokeBefores(name: string) {
     const rulesForName = this.befores[name]
 
-    if (Array.isArray(rulesForName)) {
-      rulesForName.every((rule) => {
-        rule.call(this)
-      })
-    }
-    return true
+    return rulesForName.map((rule: RuleFunction) => {
+      return rule.call(this, name)
+    })
   }
 }

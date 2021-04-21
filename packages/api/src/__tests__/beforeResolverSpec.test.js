@@ -51,7 +51,6 @@ describe('BeforeResolverSpec', () => {
       const validate = () => {}
       spec.apply(validate, { only: ['posts'] })
 
-      console.info(spec.befores)
       expect(spec.befores['posts']).toContain(validate)
       expect(spec.befores['post']).not.toContain(validate)
     })
@@ -177,14 +176,23 @@ describe('BeforeResolverSpec', () => {
       const spec = new BeforeResolverSpec(services)
       spec.skip()
 
-      expect(spec.verify('posts')).toEqual(true)
+      expect(spec.verify('posts')).toEqual([])
     })
 
     it('verifies with a validation function that does not throw', () => {
       const spec = new BeforeResolverSpec(services)
       spec.apply(() => {})
 
-      expect(spec.verify('posts')).toEqual(true)
+      expect(spec.verify('posts')).toEqual([undefined])
+    })
+
+    it('returns an array with the result of every validation function', () => {
+      const spec = new BeforeResolverSpec(services)
+      spec.apply(() => true)
+      spec.apply(() => false)
+      spec.apply(() => 'foo')
+
+      expect(spec.verify('posts')).toEqual([true, false, 'foo'])
     })
 
     it('passes name of service function to validation function', () => {
