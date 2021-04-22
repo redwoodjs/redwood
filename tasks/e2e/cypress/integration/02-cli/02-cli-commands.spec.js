@@ -21,8 +21,7 @@ describe('Check Redwood cli commands against tutorial', () => {
       .should('eq', 0)
   })
 
-  // @TODO figure out why babel issues happen when linked
-  it.skip('Should run web tests successfully', () => {
+  it('Should run web tests successfully', () => {
     cy.exec(`cd ${BASE_DIR}; yarn rw test web --no-watch`, {
       timeout: 60000,
     })

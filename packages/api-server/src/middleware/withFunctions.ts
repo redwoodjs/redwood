@@ -1,22 +1,18 @@
-import fs from 'fs'
 import path from 'path'
 
 import type { Handler } from 'aws-lambda'
 import bodyParser from 'body-parser'
-import type { Response, Request } from 'express'
-import express from 'express'
+import type { Application, Request, Response } from 'express'
 import glob from 'glob'
 import escape from 'lodash.escape'
-import morgan from 'morgan'
 
 import { getPaths } from '@redwoodjs/internal'
 
-import { requestHandler } from './requestHandlers/awsLambda'
-
-const rwjsPaths = getPaths()
+import { requestHandler } from '../requestHandlers/awsLambda'
 
 export type Lambdas = Record<string, Handler>
 const LAMBDA_FUNCTIONS: Lambdas = {}
+
 export const setLambdaFunctions = (foundFunctions: string[]) => {
   for (const fnPath of foundFunctions) {
     const routeName = path.basename(fnPath).replace('.js', '')
@@ -44,15 +40,7 @@ const lambdaRequestHandler = async (req: Request, res: Response) => {
   return requestHandler(req, res, LAMBDA_FUNCTIONS[routeName])
 }
 
-export interface HttpServerParams {
-  port: number
-  socket?: string
-  rootPath?: string
-}
-
-export const http = ({ port = 8911, socket, rootPath }: HttpServerParams) => {
-  const app = express()
-
+const withFunctions = (app: Application, apiRootPath: string) => {
   app.use(
     bodyParser.text({
       type: ['text/*', 'application/json', 'multipart/form-data'],
@@ -66,27 +54,21 @@ export const http = ({ port = 8911, socket, rootPath }: HttpServerParams) => {
     })
   )
 
-  app.use(morgan<Request, Response>('dev'))
+  const rwjsPaths = getPaths()
 
-  app.all(`${rootPath}:routeName`, lambdaRequestHandler)
-  app.all(`${rootPath}:routeName/*`, lambdaRequestHandler)
+  console.log('Importing API... ')
+  const ts = Date.now()
+  const apiFunctions = glob.sync('dist/functions/*.{ts,js}', {
+    cwd: rwjsPaths.api.base,
+    absolute: true,
+  })
+  setLambdaFunctions(apiFunctions)
+  console.log('Imported in', Date.now() - ts, 'ms')
 
-  const server = app
-    .listen(socket || port, () => {
-      const ts = Date.now()
-      console.log('Importing API... ')
-      const apiFunctions = glob.sync('dist/functions/*.{ts,js}', {
-        cwd: rwjsPaths.api.base,
-        absolute: true,
-      })
-      setLambdaFunctions(apiFunctions)
-      console.log('Imported in', Date.now() - ts, 'ms')
-    })
-    .on('close', () => {
-      if (socket) {
-        fs.rmSync(socket)
-      }
-    })
+  app.all(`${apiRootPath}:routeName`, lambdaRequestHandler)
+  app.all(`${apiRootPath}:routeName/*`, lambdaRequestHandler)
 
-  return server
+  return app
 }
+
+export default withFunctions
