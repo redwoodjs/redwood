@@ -20,4 +20,6 @@ const baseConfig = {
 
 const userConfig = require('~__REDWOOD__USER_STORYBOOK_PREVIEW_CONFIG')
 
+
+/** @returns {import('webpack').Configuration} Webpack Configuration with storybook provider */
 module.exports = merge(baseConfig, userConfig)

@@ -80,4 +80,5 @@ const mergeUserStorybookConfig = (baseConfig) => {
   return merge(baseConfig, userStorybookConfig)
 }
 
+/** @returns {import('webpack').Configuration} Webpack Configuration with storybook config */
 module.exports = mergeUserStorybookConfig(baseConfig)
