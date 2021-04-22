@@ -29,8 +29,8 @@ const RENDER_YAML = (database) => {
 - name: ${PROJECT_NAME}-api
   type: web
   env: node
-  buildCommand: yarn && yarn rw deploy render api
-  startCommand: yarn rw serve api
+  buildCommand: yarn && yarn rw build api
+  startCommand: yarn rw deploy render api
   envVars:
   - key: NODE_VERSION
     value: 14
