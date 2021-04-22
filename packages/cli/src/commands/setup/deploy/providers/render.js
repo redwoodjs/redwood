@@ -8,10 +8,17 @@ import { getPaths } from 'src/lib'
 const PROJECT_NAME = getPaths().base.match(/[^/|\\]+$/)[0]
 
 const RENDER_YAML = (database) => {
-  return `services:
+  return `#####
+# Documentation
+# Redwood: https://render.com/docs/deploy-redwood
+# YAML (all config values): https://render.com/docs/yaml-spec
+#####
+
+services:
 - name: ${PROJECT_NAME}-web
   type: web
   env: static
+  region: oregon
   buildCommand: yarn rw deploy render web
   staticPublishPath: ./web/dist
   envVars:
@@ -20,8 +27,12 @@ const RENDER_YAML = (database) => {
   routes:
   - type: rewrite
     source: /.redwood/functions/*
-# replace destination api url after first deploy to Render
-    destination: replace_me_with_api_url/*
+#####
+# NOTE: replace destination api url after first deploy to Render
+# example:
+#   destination: https://myredwoodproject-api.onrender.com/*
+#####
+    destination: replace_with_api_url/*
   - type: rewrite
     source: /*
     destination: /index.html
@@ -29,6 +40,7 @@ const RENDER_YAML = (database) => {
 - name: ${PROJECT_NAME}-api
   type: web
   env: node
+  region: oregon
   buildCommand: yarn && yarn rw build api
   startCommand: yarn rw deploy render api
   envVars:
@@ -45,6 +57,7 @@ const POSTGRES_YAML = `  - key: DATABASE_URL
 
 databases:
   - name: ${PROJECT_NAME}-db
+    region: oregon
 `
 
 const SQLITE_YAML = `  - key: DATABASE_URL
