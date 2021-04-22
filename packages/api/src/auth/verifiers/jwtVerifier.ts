@@ -1,14 +1,15 @@
 import jwt from 'jsonwebtoken'
 
 import {
-  VerifyOptions,
   WebhookSignError,
   WebhookVerificationError,
   DEFAULT_WEBHOOK_SECRET,
-} from './index'
-import type { WebhookVerifier } from './index'
+} from './common'
+import type { WebhookVerifier, VerifyOptions } from './common'
 
-export interface JwtVerifier extends WebhookVerifier {}
+export interface JwtVerifier extends WebhookVerifier {
+  type: 'jwtVerifier'
+}
 
 /**
  *
@@ -91,3 +92,5 @@ export const jwtVerifier = (
     type: 'jwtVerifier',
   }
 }
+
+export default jwtVerifier

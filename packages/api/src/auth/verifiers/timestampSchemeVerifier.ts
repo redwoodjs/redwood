@@ -1,13 +1,11 @@
 import { createHmac } from 'crypto'
 
-import {
-  VerifyOptions,
-  WebhookVerificationError,
-  DEFAULT_WEBHOOK_SECRET,
-} from './index'
-import type { WebhookVerifier } from './index'
+import { WebhookVerificationError, DEFAULT_WEBHOOK_SECRET } from './common'
+import type { WebhookVerifier, VerifyOptions } from './common'
 
-export interface TimestampSchemeVerifier extends WebhookVerifier {}
+export interface TimestampSchemeVerifier extends WebhookVerifier {
+  type: 'timestampSchemeVerifier'
+}
 
 /**
  * @const {number}
@@ -143,7 +141,7 @@ const verifySignature = ({
  * @see https://stripe.com/docs/webhooks/signatures
  *
  */
-export const timestampSchemeVerifier = (
+const timestampSchemeVerifier = (
   options?: VerifyOptions | undefined
 ): TimestampSchemeVerifier => {
   return {
@@ -156,3 +154,5 @@ export const timestampSchemeVerifier = (
     type: 'timestampSchemeVerifier',
   }
 }
+
+export default timestampSchemeVerifier

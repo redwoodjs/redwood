@@ -1,14 +1,15 @@
 import { createHmac, timingSafeEqual } from 'crypto'
 
 import {
-  VerifyOptions,
   WebhookVerificationError,
   VERIFICATION_ERROR_MESSAGE,
   DEFAULT_WEBHOOK_SECRET,
-} from './index'
-import type { WebhookVerifier } from './index'
+} from './common'
+import type { WebhookVerifier, VerifyOptions } from './common'
 
-export interface Sha1Verifier extends WebhookVerifier {}
+export interface Sha1Verifier extends WebhookVerifier {
+  type: 'sha1Verifier'
+}
 
 function toNormalizedJsonString(payload: Record<string, unknown>) {
   return JSON.stringify(payload).replace(/[^\\]\\u[\da-f]{4}/g, (s) => {
@@ -106,9 +107,7 @@ export const verifySignature = ({
  * @see https://docs.github.com/en/developers/webhooks-and-events/securing-your-webhooks
  *
  */
-export const sha1Verifier = (
-  options?: VerifyOptions | undefined
-): WebhookVerifier => {
+const sha1Verifier = (options?: VerifyOptions | undefined): Sha1Verifier => {
   return {
     sign: ({ payload, secret }) => {
       return createSignature({ payload, secret, options })
@@ -119,3 +118,5 @@ export const sha1Verifier = (
     type: 'sha1Verifier',
   }
 }
+
+export default sha1Verifier

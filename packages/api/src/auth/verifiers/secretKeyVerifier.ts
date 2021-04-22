@@ -1,11 +1,9 @@
-import type { WebhookVerifier } from './index'
-import {
-  VerifyOptions,
-  WebhookVerificationError,
-  DEFAULT_WEBHOOK_SECRET,
-} from './index'
+import { WebhookVerificationError, DEFAULT_WEBHOOK_SECRET } from './common'
+import type { WebhookVerifier, VerifyOptions } from './common'
 
-export interface SecretKeyVerifier extends WebhookVerifier {}
+export interface SecretKeyVerifier extends WebhookVerifier {
+  type: 'secretKeyVerifier'
+}
 
 export const secretKeyVerifier = (
   options?: VerifyOptions | undefined
@@ -34,3 +32,5 @@ export const secretKeyVerifier = (
     type: 'secretKeyVerifier',
   }
 }
+
+export default secretKeyVerifier
