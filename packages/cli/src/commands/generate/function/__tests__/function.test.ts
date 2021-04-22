@@ -1,13 +1,10 @@
 global.__dirname = __dirname
 import path from 'path'
 
-// Referenced from ../components/__tests__
+// Load shared mocks
+import 'src/lib/test'
 
-// Pending full TS support
-import { loadGeneratorFixture } from 'src/lib/test'
-
-// TODO: Revert to import from '../function' when it gets types.
-import * as functionGenerator from 'src/commands/generate/function/function'
+import * as functionGenerator from '../function'
 
 // Should be refactored as it's repeated
 type WordFilesType = { [key: string]: string }
@@ -20,15 +17,12 @@ let typescriptFiles: WordFilesType
 beforeAll(() => {
   singleWordDefaultFiles = functionGenerator.files({
     name: 'foo',
-    javascript: true, // Does not respect default value; explicitly define it.
   })
   multiWordDefaultFiles = functionGenerator.files({
     name: 'send-mail',
-    javascript: true, // Does not respect default value; explicitly define it.
   })
   javascriptFiles = functionGenerator.files({
     name: 'javascript-function',
-    javascript: true,
   })
   typescriptFiles = functionGenerator.files({
     name: 'typescript-function',
@@ -45,7 +39,7 @@ test('creates a single word function file', () => {
     singleWordDefaultFiles[
       path.normalize('/path/to/project/api/src/functions/foo.js')
     ]
-  ).toEqual(loadGeneratorFixture('function', 'singleWord.js'))
+  ).toMatchSnapshot()
 })
 
 test('creates a multi word function file', () => {
@@ -53,7 +47,7 @@ test('creates a multi word function file', () => {
     multiWordDefaultFiles[
       path.normalize('/path/to/project/api/src/functions/sendMail.js')
     ]
-  ).toEqual(loadGeneratorFixture('function', 'multiWord.js'))
+  ).toMatchSnapshot()
 })
 
 test('creates a .js file if --javascript=true', () => {
@@ -61,7 +55,7 @@ test('creates a .js file if --javascript=true', () => {
     javascriptFiles[
       path.normalize('/path/to/project/api/src/functions/javascriptFunction.js')
     ]
-  ).toEqual(loadGeneratorFixture('function', 'jsFunc.js'))
+  ).toMatchSnapshot()
   // ^ JS-function-args should be stripped of their types and consequently the unused 'aws-lamda' import removed.
   // https://babeljs.io/docs/en/babel-plugin-transform-typescript
 })
@@ -71,6 +65,6 @@ test('creates a .ts file if --typescript=true', () => {
     typescriptFiles[
       path.normalize('/path/to/project/api/src/functions/typescriptFunction.ts')
     ]
-  ).toEqual(loadGeneratorFixture('function', 'tsFunc.ts'))
+  ).toMatchSnapshot()
   // ^ TS-functions, on the other hand, retain the 'aws-lamda' import and type-declartions.
 })

@@ -1,8 +1,8 @@
 global.__dirname = __dirname
 import path from 'path'
 
-// TODO: Revert to import from '../component' when it gets types.
-import { loadGeneratorFixture } from 'src/lib/test'
+// Shared mocks for paths, etc.
+import 'src/lib/test'
 
 import * as component from '../component'
 
@@ -18,7 +18,7 @@ beforeAll(() => {
   multiWordDefaultFiles = component.files({ name: 'UserProfile' })
   javascriptFiles = component.files({
     name: 'JavascriptUser',
-    javascript: true,
+    typescript: false,
   })
   typescriptFiles = component.files({
     name: 'TypescriptUser',
@@ -26,12 +26,10 @@ beforeAll(() => {
   })
   withoutTestFiles = component.files({
     name: 'withoutTests',
-    javascript: true,
     tests: false,
   })
   withoutStoryFiles = component.files({
     name: 'withoutStories',
-    javascript: true,
     stories: false,
   })
 })
@@ -43,62 +41,58 @@ test('returns exactly 3 files', () => {
 test('creates a single word component', () => {
   expect(
     singleWordDefaultFiles[
-      path.normalize('/path/to/project/web/src/components/User/User.tsx')
+      path.normalize('/path/to/project/web/src/components/User/User.js')
     ]
-  ).toEqual(loadGeneratorFixture('component', 'singleWordComponent.tsx'))
+  ).toMatchSnapshot()
 })
 
 test('creates a single word component test', () => {
   expect(
     singleWordDefaultFiles[
-      path.normalize('/path/to/project/web/src/components/User/User.test.tsx')
+      path.normalize('/path/to/project/web/src/components/User/User.test.js')
     ]
-  ).toEqual(loadGeneratorFixture('component', 'singleWordComponent.test.tsx'))
+  ).toMatchSnapshot()
 })
 
 test('creates a single word component story', () => {
   expect(
     singleWordDefaultFiles[
-      path.normalize(
-        '/path/to/project/web/src/components/User/User.stories.tsx'
-      )
+      path.normalize('/path/to/project/web/src/components/User/User.stories.js')
     ]
-  ).toEqual(
-    loadGeneratorFixture('component', 'singleWordComponent.stories.tsx')
-  )
+  ).toMatchSnapshot()
 })
 
 test('creates a multi word component', () => {
   expect(
     multiWordDefaultFiles[
       path.normalize(
-        '/path/to/project/web/src/components/UserProfile/UserProfile.tsx'
+        '/path/to/project/web/src/components/UserProfile/UserProfile.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('component', 'multiWordComponent.tsx'))
+  ).toMatchSnapshot()
 })
 
 test('creates a multi word component test', () => {
   expect(
     multiWordDefaultFiles[
       path.normalize(
-        '/path/to/project/web/src/components/UserProfile/UserProfile.test.tsx'
+        '/path/to/project/web/src/components/UserProfile/UserProfile.test.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('component', 'multiWordComponent.test.tsx'))
+  ).toMatchSnapshot()
 })
 
 test('creates a multi word component story', () => {
   expect(
     multiWordDefaultFiles[
       path.normalize(
-        '/path/to/project/web/src/components/UserProfile/UserProfile.stories.tsx'
+        '/path/to/project/web/src/components/UserProfile/UserProfile.stories.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('component', 'multiWordComponent.stories.tsx'))
+  ).toMatchSnapshot()
 })
 
-test('creates JS component files if javacript = true', () => {
+test('creates JS component files if typescript = false', () => {
   expect(
     javascriptFiles[
       path.normalize(

@@ -10,16 +10,19 @@ import c from 'src/lib/colors'
 import { yargsDefaults } from '../../generate'
 import { templateForComponentFile } from '../helpers'
 
-export const files = ({ name, ...rest }) => {
+export const files = ({
+  name,
+  typescript: generateTypescript = false,
+  ...rest
+}) => {
   // Taken from ../component; should be updated to take from the project's configuration
-  const isJavascript = rest.javascript && !rest.typescript
-  const extension = isJavascript ? '.js' : '.ts'
+  const extension = generateTypescript ? '.ts' : '.js'
 
   const functionName = camelcase(name)
   const file = templateForComponentFile({
     name: functionName,
     componentName: functionName,
-    extension: extension,
+    extension,
     apiPathSection: 'functions',
     generator: 'function',
     templatePath: 'function.ts.template',
@@ -30,7 +33,9 @@ export const files = ({ name, ...rest }) => {
     ),
   })
 
-  const template = isJavascript ? transformTSToJS(file[0], file[1]) : file[1]
+  const template = generateTypescript
+    ? file[1]
+    : transformTSToJS(file[0], file[1])
 
   return { [file[0]]: template }
 }

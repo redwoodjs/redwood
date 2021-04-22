@@ -1,5 +1,6 @@
 global.__dirname = __dirname
-import { loadGeneratorFixture as _loadGeneratorFixture } from 'src/lib/test'
+// Load mocks
+import 'src/lib/test'
 
 import * as service from '../service'
 
