@@ -15,11 +15,11 @@ describe('BeforeResolverSpec', () => {
     const spec = new BeforeResolverSpec(services)
 
     expect(spec.befores).toEqual({
-      posts: [],
-      post: [],
-      createPost: [],
-      updatePost: [],
-      deletePost: [],
+      posts: { validators: [], skippable: false },
+      post: { validators: [], skippable: false },
+      createPost: { validators: [], skippable: false },
+      updatePost: { validators: [], skippable: false },
+      deletePost: { validators: [], skippable: false },
     })
   })
 
@@ -29,8 +29,8 @@ describe('BeforeResolverSpec', () => {
       const validate = () => {}
       spec.apply(validate)
 
-      for (const [_name, funcs] of Object.entries(spec.befores)) {
-        expect(funcs).toContain(validate)
+      for (const [_name, rules] of Object.entries(spec.befores)) {
+        expect(rules.validators).toContain(validate)
       }
     })
 
@@ -40,9 +40,9 @@ describe('BeforeResolverSpec', () => {
       const validateB = () => {}
       spec.apply([validateA, validateB])
 
-      for (const [_name, funcs] of Object.entries(spec.befores)) {
-        expect(funcs).toContain(validateA)
-        expect(funcs).toContain(validateB)
+      for (const [_name, rules] of Object.entries(spec.befores)) {
+        expect(rules.validators).toContain(validateA)
+        expect(rules.validators).toContain(validateB)
       }
     })
 
@@ -51,8 +51,8 @@ describe('BeforeResolverSpec', () => {
       const validate = () => {}
       spec.apply(validate, { only: ['posts'] })
 
-      expect(spec.befores['posts']).toContain(validate)
-      expect(spec.befores['post']).not.toContain(validate)
+      expect(spec.befores['posts'].validators).toContain(validate)
+      expect(spec.befores['post'].validators).not.toContain(validate)
     })
 
     it('with `except` option adds a function to all but one service', () => {
@@ -60,8 +60,8 @@ describe('BeforeResolverSpec', () => {
       const validate = () => {}
       spec.apply(validate, { except: ['posts'] })
 
-      expect(spec.befores['posts']).not.toContain(validate)
-      expect(spec.befores['post']).toContain(validate)
+      expect(spec.befores['posts'].validators).not.toContain(validate)
+      expect(spec.befores['post'].validators).toContain(validate)
     })
   })
 
@@ -70,8 +70,9 @@ describe('BeforeResolverSpec', () => {
       const spec = new BeforeResolverSpec(services)
       spec.skip()
 
-      for (const [_name, funcs] of Object.entries(spec.befores)) {
-        expect(funcs).toEqual(false)
+      for (const [_name, rules] of Object.entries(spec.befores)) {
+        expect(rules.validators).toEqual([])
+        expect(rules.skippable).toEqual(true)
       }
     })
 
@@ -81,8 +82,8 @@ describe('BeforeResolverSpec', () => {
       spec.apply(validate)
       spec.skip()
 
-      for (const [name, _funcs] of Object.entries(spec.befores)) {
-        expect(spec.befores[name]).toEqual(false)
+      for (const [name, _rules] of Object.entries(spec.befores)) {
+        expect(spec.befores[name].skippable).toEqual(true)
       }
     })
 
@@ -92,8 +93,9 @@ describe('BeforeResolverSpec', () => {
       spec.apply(validate)
       spec.skip(validate)
 
-      for (const [_name, funcs] of Object.entries(spec.befores)) {
-        expect(funcs).toEqual(false)
+      for (const [_name, rules] of Object.entries(spec.befores)) {
+        expect(rules.validators).toEqual([])
+        expect(rules.skippable).toEqual(true)
       }
     })
 
@@ -104,8 +106,9 @@ describe('BeforeResolverSpec', () => {
       spec.apply([validateA, validateB])
       spec.skip([validateA, validateB])
 
-      for (const [_name, funcs] of Object.entries(spec.befores)) {
-        expect(funcs).toEqual(false)
+      for (const [_name, rules] of Object.entries(spec.befores)) {
+        expect(rules.validators).toEqual([])
+        expect(rules.skippable).toEqual(true)
       }
     })
 
@@ -116,8 +119,9 @@ describe('BeforeResolverSpec', () => {
       spec.apply([validateA, validateB])
       spec.skip([validateA])
 
-      for (const [_name, funcs] of Object.entries(spec.befores)) {
-        expect(funcs).toEqual([validateB])
+      for (const [_name, rules] of Object.entries(spec.befores)) {
+        expect(rules.validators).toEqual([validateB])
+        expect(rules.skippable).toEqual(false)
       }
     })
 
@@ -127,8 +131,8 @@ describe('BeforeResolverSpec', () => {
       spec.apply(validate)
       spec.skip(validate, { only: ['posts'] })
 
-      expect(spec.befores['posts']).toEqual(false)
-      expect(spec.befores['post']).toEqual([validate])
+      expect(spec.befores['posts'].skippable).toEqual(true)
+      expect(spec.befores['post'].validators).toEqual([validate])
     })
 
     it('with only the `only` option removes all function in named services', () => {
@@ -137,8 +141,10 @@ describe('BeforeResolverSpec', () => {
       spec.apply(validate)
       spec.skip({ only: ['posts'] })
 
-      expect(spec.befores['posts']).toEqual(false)
-      expect(spec.befores['post']).toEqual([validate])
+      expect(spec.befores['posts'].validators).toEqual([])
+      expect(spec.befores['posts'].skippable).toEqual(true)
+      expect(spec.befores['post'].validators).toEqual([validate])
+      expect(spec.befores['post'].skippable).toEqual(false)
     })
 
     it('with `except` option removes from all but one service', () => {
@@ -147,8 +153,10 @@ describe('BeforeResolverSpec', () => {
       spec.apply(validate)
       spec.skip(validate, { except: ['posts'] })
 
-      expect(spec.befores['posts']).toEqual([validate])
-      expect(spec.befores['post']).toEqual(false)
+      expect(spec.befores['posts'].validators).toEqual([validate])
+      expect(spec.befores['posts'].skippable).toEqual(false)
+      expect(spec.befores['post'].validators).toEqual([])
+      expect(spec.befores['post'].skippable).toEqual(true)
     })
 
     it('with only the `except` option removes all functions from all but one service', () => {
@@ -158,8 +166,10 @@ describe('BeforeResolverSpec', () => {
       spec.apply([validateA, validateB])
       spec.skip({ except: ['posts'] })
 
-      expect(spec.befores['posts']).toEqual([validateA, validateB])
-      expect(spec.befores['post']).toEqual(false)
+      expect(spec.befores['posts'].validators).toEqual([validateA, validateB])
+      expect(spec.befores['posts'].skippable).toEqual(false)
+      expect(spec.befores['post'].validators).toEqual([])
+      expect(spec.befores['post'].skippable).toEqual(true)
     })
 
     // shouldn't be a problem to skip something that doesn't exist
@@ -170,7 +180,7 @@ describe('BeforeResolverSpec', () => {
       spec.apply(validateA)
       spec.skip(validateB)
 
-      expect(spec.befores['posts']).toEqual([validateA])
+      expect(spec.befores['posts'].validators).toEqual([validateA])
     })
   })
 
@@ -236,7 +246,7 @@ describe('BeforeResolverSpec', () => {
     })
   })
 
-  describe('common scenarios', () => {
+  describe('integration with common scenarios', () => {
     it('requires auth everywhere, skip on read-only endpoints', () => {
       const requireAuth = () => {
         return true
@@ -246,16 +256,16 @@ describe('BeforeResolverSpec', () => {
       spec.apply(requireAuth)
       spec.skip({ only: ['posts', 'post'] })
 
-      expect(spec.befores['posts']).toEqual(false)
-      expect(spec.befores['post']).toEqual(false)
-      expect(spec.befores['createPost']).toEqual([requireAuth])
-      expect(spec.befores['updatePost']).toEqual([requireAuth])
-      expect(spec.befores['deletePost']).toEqual([requireAuth])
       expect(spec.verify('posts'))
+      expect(spec.befores['posts'].validators.length).toEqual(0)
       expect(spec.verify('post'))
+      expect(spec.befores['posts'].validators.length).toEqual(0)
       expect(spec.verify('createPost'))
+      expect(spec.befores['createPost'].validators.length).toEqual(1)
       expect(spec.verify('updatePost'))
+      expect(spec.befores['updatePost'].validators.length).toEqual(1)
       expect(spec.verify('deletePost'))
+      expect(spec.befores['deletePost'].validators.length).toEqual(1)
     })
 
     it('skip all first, then requires auth on secure endpoints', () => {
@@ -269,16 +279,16 @@ describe('BeforeResolverSpec', () => {
         only: ['createPost', 'updatePost', 'deletePost'],
       })
 
-      expect(spec.befores['posts']).toEqual(false)
-      expect(spec.befores['post']).toEqual(false)
-      expect(spec.befores['createPost']).toEqual([requireAuth])
-      expect(spec.befores['updatePost']).toEqual([requireAuth])
-      expect(spec.befores['deletePost']).toEqual([requireAuth])
       expect(spec.verify('posts'))
+      expect(spec.befores['posts'].validators.length).toEqual(0)
       expect(spec.verify('post'))
+      expect(spec.befores['post'].validators.length).toEqual(0)
       expect(spec.verify('createPost'))
+      expect(spec.befores['createPost'].validators.length).toEqual(1)
       expect(spec.verify('updatePost'))
+      expect(spec.befores['updatePost'].validators.length).toEqual(1)
       expect(spec.verify('deletePost'))
+      expect(spec.befores['deletePost'].validators.length).toEqual(1)
     })
 
     it('requires auth everywhere, additional requirements on secure endpoints', () => {
@@ -295,16 +305,16 @@ describe('BeforeResolverSpec', () => {
         only: ['createPost', 'updatePost', 'deletePost'],
       })
 
-      expect(spec.befores['posts']).toEqual([requireAuth])
-      expect(spec.befores['post']).toEqual([requireAuth])
-      expect(spec.befores['createPost']).toEqual([requireAuth, requireAuthor])
-      expect(spec.befores['updatePost']).toEqual([requireAuth, requireAuthor])
-      expect(spec.befores['deletePost']).toEqual([requireAuth, requireAuthor])
       expect(spec.verify('posts'))
+      expect(spec.befores['posts'].validators.length).toEqual(1)
       expect(spec.verify('post'))
+      expect(spec.befores['post'].validators.length).toEqual(1)
       expect(spec.verify('createPost'))
+      expect(spec.befores['createPost'].validators.length).toEqual(2)
       expect(spec.verify('updatePost'))
+      expect(spec.befores['updatePost'].validators.length).toEqual(2)
       expect(spec.verify('deletePost'))
+      expect(spec.befores['deletePost'].validators.length).toEqual(2)
     })
   })
 })

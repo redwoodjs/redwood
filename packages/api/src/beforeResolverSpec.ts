@@ -24,11 +24,14 @@ export const MissingBeforeResolver = class extends Error {
 }
 
 interface BeforeResolverInterface {
-  befores?: Record<string, BeforeFunctionCollection | boolean> // {}
+  befores?: Record<string, BeforeFunctionCollection> // {}
 }
 
 type RuleFunction = () => unknown
-type BeforeFunctionCollection = Array<RuleFunction>
+type BeforeFunctionCollection = {
+  validators: Array<RuleFunction>
+  skippable: boolean
+}
 
 type RuleOptions =
   | {
@@ -41,72 +44,47 @@ type RuleOptions =
     }
 
 export const BeforeResolverSpec = class implements BeforeResolverInterface {
-  befores: Record<string, BeforeFunctionCollection | false>
+  befores: Record<string, BeforeFunctionCollection>
 
   constructor(serviceNames: string[]) {
     this.befores = {}
-
-    serviceNames.forEach((name) => this._initBefore(name))
+    serviceNames.forEach((name) => this._initValidators(name))
   }
 
   apply(functions: RuleFunction | Array<RuleFunction>, options?: RuleOptions) {
-    Object.keys(this.befores).forEach((name) => {
-      if (
-        !options ||
-        (options?.only && options.only.includes(name)) ||
-        (options?.except && !options.except.includes(name))
-      ) {
-        // if currently false, set to an empty array so we can start adding functions
-        if (this.befores[name] === false) {
-          this._initBefore(name)
+    this._forEachService((serviceName) => {
+      if (this._shouldApplyValidator(serviceName, options)) {
+        // If currently skippable, reset back to state that lets us add validators
+        if (this.befores[serviceName].skippable) {
+          this._initValidators(serviceName)
         }
 
-        this.befores[name] = [
-          ...(<BeforeFunctionCollection>this.befores[name]), // typecast because it could be bool
+        this.befores[serviceName].validators = [
+          ...(<Array<RuleFunction>>this.befores[serviceName].validators), // typecast because it could be bool
           ...[functions].flat(),
         ]
       }
     })
   }
 
-  skip(
-    functionsOrOptions?: RuleFunction | Array<RuleFunction> | RuleOptions,
-    opts?: RuleOptions
-  ) {
-    let functionsToSkip: Array<RuleFunction> | undefined
-    let options: RuleOptions | undefined
+  skip(...args: Array<RuleFunction | Array<RuleFunction> | RuleOptions>) {
+    const { skipValidators, options, applyToAll } = this._skipArgs(args)
 
-    let applyToAll = false
+    this._forEachService((serviceName) => {
+      const validators = this.befores[serviceName].validators
 
-    // covers the case where no functions are passed, which means skip ALL
-    if (this._isOptions(functionsOrOptions)) {
-      // Options supplied in first param
-      applyToAll = true
-      options = functionsOrOptions
-    } else {
-      // Rule functions supplied in first param (and maybe options in second)
-      functionsToSkip = [functionsOrOptions].flat()
-      options = opts
-    }
-
-    Object.keys(this.befores).forEach((name) => {
-      const rulesForFunction = this.befores[name]
-
-      if (
-        !options ||
-        (options.only && options.only.includes(name)) ||
-        (options.except && !options.except.includes(name))
-      ) {
-        if (Array.isArray(functionsToSkip) && Array.isArray(rulesForFunction)) {
-          this.befores[name] = rulesForFunction.filter(
-            (func) => !functionsToSkip.includes(func)
+      if (this._shouldSkipValidator(serviceName, options)) {
+        if (skipValidators.length > 0) {
+          this.befores[serviceName].validators = validators.filter(
+            (func) => !skipValidators.includes(func)
           )
         } else if (applyToAll) {
-          this.befores[name] = []
+          this._markServiceSkippable(serviceName)
         }
 
-        if (this.befores[name].length === 0) {
-          this._clearBefore(name)
+        // if we just removed every validator then we're technically skipping
+        if (this.befores[serviceName].validators.length === 0) {
+          this._markServiceSkippable(serviceName)
         }
       }
     })
@@ -115,16 +93,55 @@ export const BeforeResolverSpec = class implements BeforeResolverInterface {
   verify(name: string) {
     if (this._canSkipService(name)) {
       return []
-    } else if (this._noBeforesDefined(name)) {
+    } else if (this._isInsecureService(name)) {
       throw new InsecureServiceError(name)
     } else {
-      return this._invokeBefores(name)
+      return this._invokeValidators(name)
     }
   }
 
-  // initializes a service as having before functions to apply, but none defined yet
-  _initBefore(name: string) {
-    this.befores[name] = []
+  // Initializes a service as having validators to apply, but none
+  // defined yet, and definitely not skippable
+  _initValidators(name: string) {
+    this.befores[name] = { validators: [], skippable: false }
+  }
+
+  _shouldApplyValidator(name: string, options: RuleOptions) {
+    return (
+      !options ||
+      (options?.only && options.only.includes(name)) ||
+      (options?.except && !options.except.includes(name))
+    )
+  }
+
+  _shouldSkipValidator(name: string, options: RuleOptions) {
+    return (
+      !options ||
+      (options.only && options.only.includes(name)) ||
+      (options.except && !options.except.includes(name))
+    )
+  }
+
+  _skipArgs(args) {
+    const [functionsOrOptions, opts] = args
+
+    let skipValidators: Array<RuleFunction | undefined>
+    let options: RuleOptions | undefined
+    let applyToAll = false
+
+    // covers the case where no functions are passed, which means skip ALL
+    if (this._isOptions(functionsOrOptions)) {
+      // Options supplied in first param
+      applyToAll = true
+      skipValidators = []
+      options = functionsOrOptions
+    } else {
+      // Rule functions supplied in first param (and maybe options in second)
+      skipValidators = [functionsOrOptions].flat()
+      options = opts
+    }
+
+    return { skipValidators, options, applyToAll }
   }
 
   _isOptions(
@@ -138,26 +155,32 @@ export const BeforeResolverSpec = class implements BeforeResolverInterface {
   }
 
   // marks a service as having no needed before functions to apply
-  _clearBefore(name: string) {
-    this.befores[name] = false
+  _markServiceSkippable(name: string) {
+    this.befores[name].validators = []
+    this.befores[name].skippable = true
   }
 
   _canSkipService(name: string) {
-    return this.befores[name] === false
+    return this.befores[name].skippable === true
   }
 
-  _noBeforesDefined(name: string) {
-    const rulesForName = this.befores[name]
-
-    return Array.isArray(rulesForName) && rulesForName.length === 0
+  _isInsecureService(name: string) {
+    const rules = this.befores[name]
+    return rules.validators.length === 0 && !rules.skippable
   }
 
-  // returns an array of the result of every before function being run
-  _invokeBefores(name: string) {
-    const rulesForName = this.befores[name]
+  // Returns an array of the results of every validation function being run.
+  // We don't do anything with this list currently, but maybe we can pass it
+  // through to the service at some point so the user can do something with it?
+  _invokeValidators(name: string) {
+    const validators = this.befores[name].validators
 
-    return rulesForName.map((rule: RuleFunction) => {
+    return validators.map((rule: RuleFunction) => {
       return rule.call(this, name)
     })
+  }
+
+  _forEachService(iterator: () => unknown) {
+    return Object.keys(this.befores).forEach(iterator)
   }
 }
