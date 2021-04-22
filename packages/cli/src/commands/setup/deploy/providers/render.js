@@ -121,7 +121,8 @@ export const apiProxyPath = '/.redwood/functions'
 
 // any notes to print out when the job is done
 export const notes = [
-  'You are ready to deploy to Render!',
-  'Check out the docs at https://render.com/docs/deploy-redwood to get started\n',
-  'Note: After first deployment to Render update rewrite rule destiation in render.yaml',
+  'You are ready to deploy to Render!\n',
+  'Go to https://dashboard.render.com/iacs to create your account and deploy to Render',
+  'Check out the deployment docs at https://render.com/docs/deploy-redwood for detailed instructions',
+  'Note: After first deployment to Render update the rewrite rule destination in `./render.yaml`',
 ]
