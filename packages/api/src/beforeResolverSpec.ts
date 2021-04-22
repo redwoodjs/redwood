@@ -52,15 +52,15 @@ export const BeforeResolverSpec = class implements BeforeResolverInterface {
   }
 
   apply(functions: RuleFunction | Array<RuleFunction>, options?: RuleOptions) {
-    this._forEachService((serviceName) => {
-      if (this._shouldApplyValidator(serviceName, options)) {
+    this._forEachService((name) => {
+      if (this._shouldApplyValidator(name, options)) {
         // If currently skippable, reset back to state that lets us add validators
-        if (this.befores[serviceName].skippable) {
-          this._initValidators(serviceName)
+        if (this.befores[name].skippable) {
+          this._initValidators(name)
         }
 
-        this.befores[serviceName].validators = [
-          ...(<Array<RuleFunction>>this.befores[serviceName].validators), // typecast because it could be bool
+        this.befores[name].validators = [
+          ...(<Array<RuleFunction>>this.befores[name].validators), // typecast because it could be bool
           ...[functions].flat(),
         ]
       }
@@ -70,21 +70,21 @@ export const BeforeResolverSpec = class implements BeforeResolverInterface {
   skip(...args: Array<RuleFunction | Array<RuleFunction> | RuleOptions>) {
     const { skipValidators, options, applyToAll } = this._skipArgs(args)
 
-    this._forEachService((serviceName) => {
-      const validators = this.befores[serviceName].validators
+    this._forEachService((name) => {
+      const validators = this.befores[name].validators
 
-      if (this._shouldSkipValidator(serviceName, options)) {
+      if (this._shouldSkipValidator(name, options)) {
         if (skipValidators.length > 0) {
-          this.befores[serviceName].validators = validators.filter(
+          this.befores[name].validators = validators.filter(
             (func) => !skipValidators.includes(func)
           )
         } else if (applyToAll) {
-          this._markServiceSkippable(serviceName)
+          this._markServiceSkippable(name)
         }
 
         // if we just removed every validator then we're technically skipping
-        if (this.befores[serviceName].validators.length === 0) {
-          this._markServiceSkippable(serviceName)
+        if (this.befores[name].validators.length === 0) {
+          this._markServiceSkippable(name)
         }
       }
     })
