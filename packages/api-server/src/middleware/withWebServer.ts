@@ -6,12 +6,12 @@ import express from 'express'
 
 import { getPaths } from '@redwoodjs/internal'
 
-const indexContent = fs.readFileSync(
-  path.join(getPaths().web.dist, '/index.html'),
-  'utf-8'
-)
-
 const withWebServer = (app: Application) => {
+  const indexContent = fs.readFileSync(
+    path.join(getPaths().web.dist, '/index.html'),
+    'utf-8'
+  )
+
   app.use(
     express.static(getPaths().web.dist, {
       redirect: false,

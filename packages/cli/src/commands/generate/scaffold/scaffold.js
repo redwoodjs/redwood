@@ -443,14 +443,9 @@ const tasks = ({ model, path, force, typescript, javascript }) => {
   )
 }
 
-export const handler = async ({
-  model: modelArg,
-  force,
-  typescript,
-  javascript,
-}) => {
+export const handler = async ({ model: modelArg, force, typescript }) => {
   const { model, path } = splitPathAndModel(modelArg)
-  const t = tasks({ model, path, force, typescript, javascript })
+  const t = tasks({ model, path, force, typescript })
 
   try {
     await t.run()
