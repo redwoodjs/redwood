@@ -57,7 +57,7 @@
     "graphql-tag": "^2.10.3",
     "html-webpack-plugin": "^4.0.2",
     "jest": "^26.4.2",
-    "jest-watch-typeahead": "^0.6.1",
+    "jest-watch-typeahead": "^0.6.2",
     "lodash.escaperegexp": "^4.1.2",
     "mini-css-extract-plugin": "^1.4.1",
     "null-loader": "^4.0.1",
