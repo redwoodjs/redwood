@@ -8,7 +8,7 @@ import {
 export interface SecretKeyVerifier extends WebhookVerifier {}
 
 export const secretKeyVerifier = (
-  options?: VerifyOptions
+  options?: VerifyOptions | undefined
 ): SecretKeyVerifier => {
   if (options) {
     console.warn(

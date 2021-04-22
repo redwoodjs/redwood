@@ -10,7 +10,7 @@ const secret = 'MY_VOICE_IS_MY_PASSPORT_VERIFY_ME'
 describe('jwtVerifier verifier', () => {
   describe('signs a payload', () => {
     test('it has a signature', () => {
-      const { sign } = createVerifier('jwtVerifier', {})
+      const { sign } = createVerifier('jwtVerifier')
       const signature = sign({ payload, secret })
       expect(signature).toMatch(
         /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/
@@ -31,7 +31,7 @@ describe('jwtVerifier verifier', () => {
 
   describe('it verifies JWT', () => {
     test('that it has signed', () => {
-      const { sign, verify } = createVerifier('jwtVerifier', {})
+      const { sign, verify } = createVerifier('jwtVerifier')
       const signature = sign({ payload, secret })
       expect(verify({ payload, secret, signature })).toBeTruthy()
     })
@@ -48,7 +48,7 @@ describe('jwtVerifier verifier', () => {
 
   describe('it denies a JWT', () => {
     test('that it has signed with a different secret', () => {
-      const { sign, verify } = createVerifier('jwtVerifier', {})
+      const { sign, verify } = createVerifier('jwtVerifier')
 
       const signature = sign({ payload, secret })
 

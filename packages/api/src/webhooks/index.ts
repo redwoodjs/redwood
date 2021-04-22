@@ -65,7 +65,7 @@ export const verifyEvent = (
     event: APIGatewayProxyEvent
     payload?: string
     secret?: string
-    options: VerifyOptions
+    options?: VerifyOptions | undefined
   }
 ): boolean | WebhookVerificationError => {
   let body = ''
@@ -79,7 +79,7 @@ export const verifyEvent = (
   const signature = signatureFromEvent({
     event,
     signatureHeader:
-      options.signatureHeader || DEFAULT_WEBHOOK_SIGNATURE_HEADER,
+      options?.signatureHeader || DEFAULT_WEBHOOK_SIGNATURE_HEADER,
   })
 
   const { verify } = createVerifier(type, options)
@@ -111,7 +111,7 @@ export const verifySignature = (
     payload: string | Record<string, unknown>
     secret: string
     signature: string
-    options: VerifyOptions
+    options?: VerifyOptions | undefined
   }
 ): boolean | WebhookVerificationError => {
   const { verify } = createVerifier(type, options)
@@ -141,7 +141,7 @@ export const signPayload = (
   }: {
     payload: string
     secret: string
-    options: VerifyOptions
+    options?: VerifyOptions | undefined
   }
 ): string => {
   const { sign } = createVerifier(type, options)

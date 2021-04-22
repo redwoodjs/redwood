@@ -8,21 +8,21 @@ const secret = 'MY_VOICE_IS_MY_PASSPORT_VERIFY_ME'
 describe('timestampScheme verifier', () => {
   describe('signs a payload with default timestamp', () => {
     test('it has a time and scheme', () => {
-      const { sign } = createVerifier('timestampSchemeVerifier', {})
+      const { sign } = createVerifier('timestampSchemeVerifier')
 
       const signature = sign({ payload, secret })
       expect(signature).toMatch(/t=(\d+),v1=([\da-f]+)/)
     })
 
     test('it can verify a signature it generates', () => {
-      const { sign, verify } = createVerifier('timestampSchemeVerifier', {})
+      const { sign, verify } = createVerifier('timestampSchemeVerifier')
 
       const signature = sign({ payload, secret })
       expect(verify({ payload, secret, signature })).toBeTruthy()
     })
 
     test('it denies a signature when signed with a different secret', () => {
-      const { sign, verify } = createVerifier('timestampSchemeVerifier', {})
+      const { sign, verify } = createVerifier('timestampSchemeVerifier')
 
       const signature = sign({ payload, secret: 'WERNER_BRANDES' })
       expect(() => {
@@ -61,7 +61,7 @@ describe('timestampScheme verifier', () => {
       })
 
       // uses default 5 minute tolerance
-      const { verify } = createVerifier('timestampSchemeVerifier', {})
+      const { verify } = createVerifier('timestampSchemeVerifier')
 
       const signature = sign({
         payload,

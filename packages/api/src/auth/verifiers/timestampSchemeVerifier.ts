@@ -144,11 +144,11 @@ const verifySignature = ({
  *
  */
 export const timestampSchemeVerifier = (
-  options: VerifyOptions
+  options?: VerifyOptions | undefined
 ): TimestampSchemeVerifier => {
   return {
     sign: ({ payload, secret }) => {
-      return createSignature({ payload, secret, timestamp: options.timestamp })
+      return createSignature({ payload, secret, timestamp: options?.timestamp })
     },
     verify: ({ payload, secret, signature }) => {
       return verifySignature({ payload, secret, signature, options })

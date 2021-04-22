@@ -22,10 +22,12 @@ const createSignature = ({
 }: {
   payload: string | Record<string, unknown>
   secret: string
-  options: VerifyOptions
+  options: VerifyOptions | undefined
 }): string => {
   try {
-    const signOptions = options.issuer ? { issuer: options.issuer } : undefined
+    const signOptions = options?.issuer
+      ? { issuer: options?.issuer }
+      : undefined
 
     return jwt.sign(payload, secret, { ...signOptions })
   } catch (error) {
@@ -47,15 +49,15 @@ export const verifySignature = ({
   payload: string | Record<string, unknown>
   secret: string
   signature: string
-  options: VerifyOptions
+  options: VerifyOptions | undefined
 }): boolean => {
   try {
     if (payload === undefined || payload?.length === 0) {
       console.warn('Missing payload')
     }
 
-    if (options.issuer) {
-      jwt.verify(signature, secret, { issuer: options.issuer }) as Record<
+    if (options?.issuer) {
+      jwt.verify(signature, secret, { issuer: options?.issuer }) as Record<
         string,
         unknown
       >
@@ -76,7 +78,9 @@ export const verifySignature = ({
  * JWT
  *
  */
-export const jwtVerifier = (options: VerifyOptions): JwtVerifier => {
+export const jwtVerifier = (
+  options?: VerifyOptions | undefined
+): JwtVerifier => {
   return {
     sign: ({ payload, secret }) => {
       return createSignature({ payload, secret, options })

@@ -139,7 +139,11 @@ export interface WebhookVerifier {
  */
 export const createVerifier = (
   type: SupportedVerifierTypes,
-  options: VerifyOptions
+  options?: VerifyOptions | undefined
 ): WebhookVerifier => {
-  return typesToVerifiers[type](options)
+  if (options) {
+    return typesToVerifiers[type](options)
+  } else {
+    return typesToVerifiers[type]()
+  }
 }

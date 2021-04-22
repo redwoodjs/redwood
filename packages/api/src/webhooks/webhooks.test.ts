@@ -40,22 +40,18 @@ describe('webhooks', () => {
   describe('using the timestampScheme verifier', () => {
     describe('signs a payload with default timestamp', () => {
       test('it has a time and scheme signature', () => {
-        const options = {}
         const signature = signPayload('timestampSchemeVerifier', {
           payload,
           secret,
-          options,
         })
 
         expect(signature).toMatch(/t=(\d+),v1=([\da-f]+)/)
       })
 
       test('it signs and verifies', () => {
-        const options = {}
         const signature = signPayload('timestampSchemeVerifier', {
           payload,
           secret,
-          options,
         })
 
         expect(
@@ -63,7 +59,6 @@ describe('webhooks', () => {
             payload,
             secret,
             signature,
-            options,
           })
         ).toBeTruthy()
       })
@@ -73,22 +68,18 @@ describe('webhooks', () => {
   describe('using the sha1 verifier', () => {
     describe('signs a payload', () => {
       test('it has a sha1 signature', () => {
-        const options = {}
         const signature = signPayload('sha1Verifier', {
           payload,
           secret,
-          options,
         })
 
         expect(signature).toMatch(/sha1=([\da-f]+)/)
       })
 
       test('it signs and verifies', () => {
-        const options = {}
         const signature = signPayload('sha1Verifier', {
           payload,
           secret,
-          options,
         })
 
         expect(
@@ -96,7 +87,6 @@ describe('webhooks', () => {
             payload,
             secret,
             signature,
-            options,
           })
         ).toBeTruthy()
       })
@@ -106,22 +96,18 @@ describe('webhooks', () => {
   describe('using the sha256 verifier', () => {
     describe('signs a payload', () => {
       test('it has a sha256 signature', () => {
-        const options = {}
         const signature = signPayload('sha256Verifier', {
           payload,
           secret,
-          options,
         })
 
         expect(signature).toMatch(/sha256=([\da-f]+)/)
       })
 
       test('it signs and verifies', () => {
-        const options = {}
         const signature = signPayload('sha256Verifier', {
           payload,
           secret,
-          options,
         })
 
         expect(
@@ -129,7 +115,6 @@ describe('webhooks', () => {
             payload,
             secret,
             signature,
-            options,
           })
         ).toBeTruthy()
       })
@@ -139,22 +124,18 @@ describe('webhooks', () => {
   describe('using the secret key verifier', () => {
     describe('signs a payload', () => {
       test('it has the key as a signature', () => {
-        const options = {}
         const signature = signPayload('secretKeyVerifier', {
           payload,
           secret,
-          options,
         })
 
         expect(signature).toEqual(secret)
       })
 
       test('it signs and verifies', () => {
-        const options = {}
         const signature = signPayload('secretKeyVerifier', {
           payload,
           secret,
-          options,
         })
 
         expect(
@@ -162,7 +143,6 @@ describe('webhooks', () => {
             payload,
             secret,
             signature,
-            options,
           })
         ).toBeTruthy()
       })
@@ -172,11 +152,9 @@ describe('webhooks', () => {
   describe('using the JWT verifier', () => {
     describe('signs a payload', () => {
       test('it has the JWT as a signature', () => {
-        const options = {}
         const signature = signPayload('jwtVerifier', {
           payload,
           secret,
-          options,
         })
 
         expect(signature).toEqual(
@@ -185,11 +163,9 @@ describe('webhooks', () => {
       })
 
       test('it signs and verifies', () => {
-        const options = {}
         const signature = signPayload('jwtVerifier', {
           payload,
           secret,
-          options,
         })
 
         expect(
@@ -197,7 +173,6 @@ describe('webhooks', () => {
             payload,
             secret,
             signature,
-            options,
           })
         ).toBeTruthy()
       })
@@ -207,11 +182,9 @@ describe('webhooks', () => {
   describe('webhooks via event', () => {
     describe('when it receives and event  extracts the signature and payload from the event', () => {
       test('it can verify an event body payload with a signature it generates', () => {
-        const options = {}
         const signature = signPayload('timestampSchemeVerifier', {
           payload,
           secret,
-          options,
         })
 
         const event = buildEvent({
@@ -221,16 +194,14 @@ describe('webhooks', () => {
         })
 
         expect(
-          verifyEvent('timestampSchemeVerifier', { event, secret, options })
+          verifyEvent('timestampSchemeVerifier', { event, secret })
         ).toBeTruthy()
       })
 
       test('it can verify overriding the event body payload with a signature it generates', () => {
-        const options = {}
         const signature = signPayload('timestampSchemeVerifier', {
           payload,
           secret,
-          options,
         })
 
         const event = buildEvent({
@@ -244,17 +215,14 @@ describe('webhooks', () => {
             event,
             payload,
             secret,
-            options,
           })
         ).toBeTruthy()
       })
 
       test('it denies verification when signed with a different secret', () => {
-        const options = {}
         const signature = signPayload('timestampSchemeVerifier', {
           payload,
           secret: 'WERNER_BRANDES',
-          options,
         })
 
         const event = buildEvent({
@@ -264,17 +232,15 @@ describe('webhooks', () => {
         })
 
         expect(() => {
-          verifyEvent('timestampSchemeVerifier', { event, secret, options })
+          verifyEvent('timestampSchemeVerifier', { event, secret })
         }).toThrow(WebhookVerificationError)
       })
 
       test('it verifies when within the timestamp tolerance', () => {
-        const options = {}
-
         const signature = signPayload('timestampSchemeVerifier', {
           payload,
           secret,
-          options: { ...options, timestamp: Date.now() - 10 * 60_000 },
+          options: { timestamp: Date.now() - 10 * 60_000 },
         })
 
         const event = buildEvent({
@@ -287,18 +253,16 @@ describe('webhooks', () => {
           verifyEvent('timestampSchemeVerifier', {
             event,
             secret,
-            options: { ...options, tolerance: 100_000 },
+            options: { tolerance: 100_000 },
           })
         }).toBeTruthy()
       })
 
       test('it denies verification when verifying with a short tolerance', () => {
-        const options = {}
-
         const signature = signPayload('timestampSchemeVerifier', {
           payload,
           secret,
-          options: { ...options, timestamp: Date.now() - 10 * 60_000 },
+          options: { timestamp: Date.now() - 10 * 60_000 },
         })
 
         const event = buildEvent({
@@ -311,7 +275,7 @@ describe('webhooks', () => {
           verifyEvent('timestampSchemeVerifier', {
             event,
             secret,
-            options: { ...options, tolerance: 5_000 },
+            options: { tolerance: 5_000 },
           })
         }).toThrow(WebhookVerificationError)
       })

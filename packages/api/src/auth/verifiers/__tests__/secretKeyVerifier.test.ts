@@ -3,7 +3,7 @@ import { createVerifier, WebhookVerificationError } from '../index'
 const payload = 'No more secrets, Marty.'
 const secret = 'MY_VOICE_IS_MY_PASSPORT_VERIFY_ME'
 
-const { sign, verify } = createVerifier('secretKeyVerifier', {})
+const { sign, verify } = createVerifier('secretKeyVerifier')
 
 describe('secretKey verifier', () => {
   describe('faux signs a payload', () => {

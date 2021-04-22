@@ -4,7 +4,7 @@ const stringPayload = 'No more secrets, Marty.'
 const payload = { data: { move: 'Sneakers', quote: stringPayload } }
 const secret = 'MY_VOICE_IS_MY_PASSPORT_VERIFY_ME'
 
-const { sign, verify } = createVerifier('sha256Verifier', {})
+const { sign, verify } = createVerifier('sha256Verifier')
 
 describe('sha256 verifier', () => {
   describe('signs a payload with the sha256 algorithm', () => {
