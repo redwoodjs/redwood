@@ -3,7 +3,8 @@
   "version": "0.30.1",
   "files": [
     "dist",
-    "logger"
+    "logger",
+    "webhooks"
   ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
