@@ -155,11 +155,6 @@ new Listr(
     {
       title: 'Convert TypeScript files to JavaScript',
       enabled: () => typescript === false,
-      // skip: () => {
-      //   if (typescript === true) {
-      //     return 'Skipped on request'
-      //   }
-      // },
       task: () => {
         return execa('yarn rw ts-to-js', {
           shell: true,
