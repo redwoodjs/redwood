@@ -1,50 +1,92 @@
+global.__dirname = __dirname
+
+// We mock these to skip the check for web/dist and api/dist
 jest.mock('@redwoodjs/internal', () => {
   return {
-    getPaths: jest.fn(() => {
+    getPaths: () => {
       return {
-        base: '/mock/path',
-        web: `/mock/path/web`,
+        api: {
+          dist: '/mocked/project/api/dist',
+        },
+        web: {
+          dist: '/mocked/project/web/dist',
+        },
       }
-    }),
-    processPagesDir: jest.fn(() => []),
+    },
+  }
+})
+
+jest.mock('fs', () => {
+  return {
+    ...jest.requireActual('fs'),
+    readFileSync: () => 'File content',
+    existsSync: () => true,
   }
 })
 
 jest.mock('@redwoodjs/api-server', () => {
   return {
-    handler: jest.fn(),
-    options: {
-      test: 'blah',
-    },
+    ...jest.requireActual('@redwoodjs/api-server'),
+    apiServerHandler: jest.fn(),
+    webServerHandler: jest.fn(),
+    bothServerHandler: jest.fn(),
   }
 })
 
-import { handler as apiServerHandler } from '@redwoodjs/api-server'
+import yargs from 'yargs'
 
-import { handler } from '../serve'
+import {
+  apiServerHandler,
+  bothServerHandler,
+  webServerHandler,
+} from '@redwoodjs/api-server'
+
+import { builder } from '../serve'
 
 describe('yarn rw serve', () => {
-  jest.mock('fs', () => {
-    return {
-      ...jest.requireActual('fs'),
-      existsSync: () => true,
-    }
-  })
-
   afterEach(() => {
     jest.clearAllMocks()
   })
 
-  it('Should proxy the command with params to api-server handler', async () => {
-    await handler({
-      side: 'api',
-      port: 5551,
-      rootPath: '/rooty/mcRoot',
-    })
+  it('Should proxy serve api with params to api-server handler', async () => {
+    const parser = yargs.command('serve [side]', false, builder)
 
-    expect(apiServerHandler).toHaveBeenCalledWith({
-      port: 5551,
-      rootPath: '/rooty/mcRoot',
-    })
+    parser.parse('serve api --port 5555 --rootPath funkyFunctions')
+
+    expect(apiServerHandler).toHaveBeenCalledWith(
+      expect.objectContaining({
+        port: 5555,
+        apiRootPath: '/funkyFunctions/',
+      })
+    )
+  })
+
+  it('Should proxy serve web with params to web server handler', async () => {
+    const parser = yargs.command('serve [side]', false, builder)
+
+    parser.parse(
+      'serve web --port 9898 --socket abc --apiHost https://myapi.redwood/api'
+    )
+
+    expect(webServerHandler).toHaveBeenCalledWith(
+      expect.objectContaining({
+        port: 9898,
+        socket: 'abc',
+        apiHost: 'https://myapi.redwood/api',
+      })
+    )
+  })
+
+  it('Should proxy rw serve with params to approripate handler', async () => {
+    const parser = yargs.command('serve [side]', false, builder)
+
+    parser.parse('serve --port 9898 --socket abc')
+
+    expect(bothServerHandler).toHaveBeenCalledWith(
+      expect.objectContaining({
+        port: 9898,
+        socket: 'abc',
+      })
+    )
   })
 })
