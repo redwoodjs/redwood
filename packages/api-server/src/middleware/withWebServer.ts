@@ -1,9 +1,15 @@
+import fs from 'fs'
 import path from 'path'
 
 import type { Application } from 'express'
 import express from 'express'
 
 import { getPaths } from '@redwoodjs/internal'
+
+const indexContent = fs.readFileSync(
+  path.join(getPaths().web.dist, '/index.html'),
+  'utf-8'
+)
 
 const withWebServer = (app: Application) => {
   app.use(
@@ -12,9 +18,9 @@ const withWebServer = (app: Application) => {
     })
   )
 
-  // For SPA routing
+  // For SPA routing on unmatched routes
   app.get('*', function (_, response) {
-    response.sendFile(path.join(getPaths().web.dist, '/index.html'))
+    response.send(indexContent)
   })
 
   return app
