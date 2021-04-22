@@ -103,8 +103,10 @@ export const verifySignature = ({
 
 /**
  *
- * Based on GitHub's webhook payload validation
- * @see https://docs.github.com/en/developers/webhooks-and-events/securing-your-webhooks
+ * SHA1 HMAC Payload Verfifier
+ *
+ * Based on Vercel's webhook payload verification
+ * @see https://vercel.com/docs/api#integrations/webhooks/securing-webhooks
  *
  */
 const sha1Verifier = (options?: VerifyOptions | undefined): Sha1Verifier => {

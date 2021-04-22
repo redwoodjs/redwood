@@ -6,8 +6,7 @@ import type {
 } from './common'
 
 /**
- * @param {SupportedVerifierTypes} type - What verification type methods used
- * to sign and verify signatures
+ * @param {SupportedVerifierTypes} type - What verification type methods used to sign and verify signatures
  * @param {VerifyOptions} options - Options used to verify the signature based on verifiers requirements
  */
 export const createVerifier = (

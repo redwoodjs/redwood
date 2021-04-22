@@ -46,14 +46,14 @@ const getHmac = ({ secret }: { secret: string }) => {
  * The character .
  * The actual JSON payload (i.e., the request body)
  *
- * @param {string} body - The body payload to sign.
+ * @param {string} payload - The body payload to sign.
  * @param {string} secret - The secret key used to sign. Defaults to DEFAULT_WEBHOOK_SECRET.
  * @param {number} timestamp - Timestamp in msec used to sign. Defaults to now.
  * @return {string} - The signature
  *
  * @example
  *
- *    sign({ body: 'This is some content to sign.' })
+ *    sign({ payload: 'This is some content to sign.' })
  */
 const createSignature = ({
   payload,
@@ -85,7 +85,7 @@ const createSignature = ({
  *
  * This tolerance protects against timing attacks by comparing the expected signature to each of the received signatures.
  *
- * @param {string} body - The body payload.
+ * @param {string} payload - The body payload.
  * @param {string} secret - The secret key used to sign. Defaults to DEFAULT_WEBHOOK_SECRET.
  * @param {string} signature - The signature.
  * @param {VerifyOptions} options - Options for verifying the timestamp leeway.
@@ -93,7 +93,7 @@ const createSignature = ({
  *
  * @example
  *
- *    verifySignature({ body: event,
+ *    verifySignature({ payload: event,
  *                      signature: 't=1535555109,v1=5257a869e7ecebeda32affa62cdca3fa51cad7e77a0e56ff536d0ce8e108d8bd`',
  *                      options: {} })
  */
@@ -137,7 +137,10 @@ const verifySignature = ({
 
 /**
  *
+ * Timestamp & Scheme Verifier
+ *
  * Based on Stripe's secure webhook implementation
+ *
  * @see https://stripe.com/docs/webhooks/signatures
  *
  */
