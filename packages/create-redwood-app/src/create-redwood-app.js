@@ -43,17 +43,20 @@ const style = {
   green: chalk.green,
 }
 
-const { _: args, 'yarn-install': yarnInstall, javascript } = yargs
+const { _: args, 'yarn-install': yarnInstall, typescript } = yargs
   .scriptName(name)
   .usage('Usage: $0 <project directory> [option]')
   .example('$0 newapp')
   .option('yarn-install', {
     default: true,
+    type: 'boolean',
     describe: 'Skip yarn install with --no-yarn-install',
   })
-  .option('javascript', {
-    default: true,
-    describe: 'Generate a JavaScript project',
+  .option('typescript', {
+    alias: 'ts',
+    default: false,
+    type: 'boolean',
+    describe: 'Generate a TypeScript project. JavaScript by default.',
   })
   .version(version)
   .strict().argv
@@ -151,11 +154,12 @@ new Listr(
     },
     {
       title: 'Convert TypeScript files to JavaScript',
-      skip: () => {
-        if (javascript === false) {
-          return 'skipped on request'
-        }
-      },
+      enabled: () => typescript === false,
+      // skip: () => {
+      //   if (typescript === true) {
+      //     return 'Skipped on request'
+      //   }
+      // },
       task: () => {
         return execa('yarn rw ts-to-js', {
           shell: true,
