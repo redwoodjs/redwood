@@ -7,13 +7,16 @@ import prompts from 'prompts'
 import terminalLink from 'terminal-link'
 
 import { resolveFile } from '@redwoodjs/internal'
+import { getProject } from '@redwoodjs/structure'
 
 import { getPaths, writeFilesTask } from 'src/lib'
 import c from 'src/lib/colors'
-
 const AUTH_PROVIDER_IMPORT = `import { AuthProvider } from '@redwoodjs/auth'`
 
-const OUTPUT_PATH = path.join(getPaths().api.lib, 'auth.js')
+const OUTPUT_PATH = path.join(
+  getPaths().api.lib,
+  getProject().isTypeScriptProject ? 'auth.ts' : 'auth.js'
+)
 
 const getGraphqlPath = () =>
   resolveFile(path.join(getPaths().api.functions, 'graphql'))
@@ -235,10 +238,16 @@ export const builder = (yargs) => {
 }
 
 export const handler = async ({ provider, force }) => {
+  console.log(`✋ ~ file: auth.js ~ line 238 ~ handler ~ provider`, provider)
+  console.log(`✋ ~ file: auth.js ~ line 238 ~ handler ~ force`, force)
   const providerData = await import(`./providers/${provider}`)
 
   // check if api/src/lib/auth.js already exists and if so, ask the user to overwrite
   if (force === false) {
+    console.log(
+      `✋ ~ file: auth.js ~ line 247 ~ handler ~ Object.keys(files(provider))[0])`,
+      Object.keys(files(provider))[0]
+    )
     if (fs.existsSync(Object.keys(files(provider))[0])) {
       const response = await prompts({
         type: 'confirm',
@@ -246,7 +255,7 @@ export const handler = async ({ provider, force }) => {
         message: `Overwrite existing ${getPaths().api.lib.replace(
           getPaths().base,
           ''
-        )}/auth.js?`,
+        )}/auth.[jt]s?`,
         initial: false,
       })
       force = response.answer

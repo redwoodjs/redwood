@@ -2,8 +2,9 @@
 <% } %><% if (relations.length) { %>import { ResolverArgs } from '@redwoodjs/api/dist/types'
 <% } %>import { db } from 'src/lib/db'
 import { requireAuth } from 'src/lib/auth'
+import { BeforeResolverSpecType } from '@redwoodjs/api'
 
-export const beforeResolver = (rules) => {
+export const beforeResolver = (rules: BeforeResolverSpecType) => {
   rules.add(requireAuth)
 }
 
