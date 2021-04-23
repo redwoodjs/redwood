@@ -23,7 +23,7 @@ const buildEvent = ({
   const body = isBase64Encoded
     ? Buffer.from(payload || '').toString('base64')
     : payload
-  console.debug(body)
+
   return {
     body,
     headers,

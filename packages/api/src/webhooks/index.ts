@@ -21,7 +21,6 @@ export const DEFAULT_WEBHOOK_SIGNATURE_HEADER = 'RW-WEBHOOK-SIGNATURE'
  *
  */
 const eventBody = (event: APIGatewayProxyEvent) => {
-  console.debug(event.isBase64Encoded)
   if (event.isBase64Encoded) {
     return Buffer.from(event.body || '', 'base64').toString('utf-8')
   } else {
@@ -85,8 +84,6 @@ export const verifyEvent = (
   } else {
     body = eventBody(event)
   }
-
-  console.debug(body)
 
   const signature = signatureFromEvent({
     event,
