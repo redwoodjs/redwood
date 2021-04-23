@@ -18,7 +18,6 @@ services:
 - name: ${PROJECT_NAME}-web
   type: web
   env: static
-  region: oregon
   buildCommand: yarn rw deploy render web
   staticPublishPath: ./web/dist
   envVars:
