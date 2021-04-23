@@ -16,15 +16,19 @@ const buildEvent = ({
   payload,
   signature,
   signatureHeader,
+  isBase64Encoded = false,
 }): APIGatewayProxyEvent => {
   const headers = {}
   headers[signatureHeader.toLocaleLowerCase()] = signature
-
+  const body = isBase64Encoded
+    ? Buffer.from(payload || '').toString('base64')
+    : payload
+  console.debug(body)
   return {
-    body: payload,
+    body,
     headers,
     multiValueHeaders: {},
-    isBase64Encoded: false,
+    isBase64Encoded,
     path: '',
     pathParameters: null,
     stageVariables: null,
@@ -191,6 +195,24 @@ describe('webhooks', () => {
           payload,
           signature,
           signatureHeader: DEFAULT_WEBHOOK_SIGNATURE_HEADER,
+        })
+
+        expect(
+          verifyEvent('timestampSchemeVerifier', { event, secret })
+        ).toBeTruthy()
+      })
+
+      test('it can verify an event base64encoded body payload with a signature it generates', () => {
+        const signature = signPayload('timestampSchemeVerifier', {
+          payload,
+          secret,
+        })
+
+        const event = buildEvent({
+          payload,
+          signature,
+          signatureHeader: DEFAULT_WEBHOOK_SIGNATURE_HEADER,
+          isBase64Encoded: true,
         })
 
         expect(

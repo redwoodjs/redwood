@@ -17,6 +17,19 @@ export {
 export const DEFAULT_WEBHOOK_SIGNATURE_HEADER = 'RW-WEBHOOK-SIGNATURE'
 
 /**
+ * Extracts body payload from event with base64 encoding check
+ *
+ */
+const eventBody = (event: APIGatewayProxyEvent) => {
+  console.debug(event.isBase64Encoded)
+  if (event.isBase64Encoded) {
+    return Buffer.from(event.body || '', 'base64').toString('utf-8')
+  } else {
+    return event.body || ''
+  }
+}
+
+/**
  * Extracts signature from Lambda Event.
  *
  * @param {APIGatewayProxyEvent} event - The event that incudes the request details, like headers
@@ -70,8 +83,10 @@ export const verifyEvent = (
   if (payload) {
     body = payload
   } else {
-    body = event.body || ''
+    body = eventBody(event)
   }
+
+  console.debug(body)
 
   const signature = signatureFromEvent({
     event,
