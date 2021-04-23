@@ -69,7 +69,7 @@ export const builder = (yargs) => {
 
       if (
         // serve both
-        (positionalArgs.includes('api', 'web') &&
+        (positionalArgs.length === 1 &&
           !fs.existsSync(path.join(getPaths().api.dist))) ||
         !fs.existsSync(path.join(getPaths().web.dist), 'index.html')
       ) {
