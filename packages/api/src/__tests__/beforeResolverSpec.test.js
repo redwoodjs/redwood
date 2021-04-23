@@ -23,11 +23,11 @@ describe('BeforeResolverSpec', () => {
     })
   })
 
-  describe('#apply', () => {
+  describe('#add', () => {
     it('adds a single function to all services', () => {
       const spec = new BeforeResolverSpec(services)
       const validate = () => {}
-      spec.apply(validate)
+      spec.add(validate)
 
       for (const [_name, rules] of Object.entries(spec.befores)) {
         expect(rules.validators).toContain(validate)
@@ -38,7 +38,7 @@ describe('BeforeResolverSpec', () => {
       const spec = new BeforeResolverSpec(services)
       const validateA = () => {}
       const validateB = () => {}
-      spec.apply([validateA, validateB])
+      spec.add([validateA, validateB])
 
       for (const [_name, rules] of Object.entries(spec.befores)) {
         expect(rules.validators).toContain(validateA)
@@ -49,7 +49,7 @@ describe('BeforeResolverSpec', () => {
     it('with `only` option adds a function to a single service', () => {
       const spec = new BeforeResolverSpec(services)
       const validate = () => {}
-      spec.apply(validate, { only: ['posts'] })
+      spec.add(validate, { only: ['posts'] })
 
       expect(spec.befores['posts'].validators).toContain(validate)
       expect(spec.befores['post'].validators).not.toContain(validate)
@@ -58,7 +58,7 @@ describe('BeforeResolverSpec', () => {
     it('with `except` option adds a function to all but one service', () => {
       const spec = new BeforeResolverSpec(services)
       const validate = () => {}
-      spec.apply(validate, { except: ['posts'] })
+      spec.add(validate, { except: ['posts'] })
 
       expect(spec.befores['posts'].validators).not.toContain(validate)
       expect(spec.befores['post'].validators).toContain(validate)
@@ -79,7 +79,7 @@ describe('BeforeResolverSpec', () => {
     it('skips everything after an apply', () => {
       const spec = new BeforeResolverSpec(services)
       const validate = () => {}
-      spec.apply(validate)
+      spec.add(validate)
       spec.skip()
 
       for (const [name, _rules] of Object.entries(spec.befores)) {
@@ -90,7 +90,7 @@ describe('BeforeResolverSpec', () => {
     it('skips a single named function from all services', () => {
       const spec = new BeforeResolverSpec(services)
       const validate = () => {}
-      spec.apply(validate)
+      spec.add(validate)
       spec.skip(validate)
 
       for (const [_name, rules] of Object.entries(spec.befores)) {
@@ -103,7 +103,7 @@ describe('BeforeResolverSpec', () => {
       const spec = new BeforeResolverSpec(services)
       const validateA = () => {}
       const validateB = () => {}
-      spec.apply([validateA, validateB])
+      spec.add([validateA, validateB])
       spec.skip([validateA, validateB])
 
       for (const [_name, rules] of Object.entries(spec.befores)) {
@@ -116,7 +116,7 @@ describe('BeforeResolverSpec', () => {
       const spec = new BeforeResolverSpec(services)
       const validateA = () => {}
       const validateB = () => {}
-      spec.apply([validateA, validateB])
+      spec.add([validateA, validateB])
       spec.skip([validateA])
 
       for (const [_name, rules] of Object.entries(spec.befores)) {
@@ -128,7 +128,7 @@ describe('BeforeResolverSpec', () => {
     it('with `only` option removes a named function a single service', () => {
       const spec = new BeforeResolverSpec(services)
       const validate = () => {}
-      spec.apply(validate)
+      spec.add(validate)
       spec.skip(validate, { only: ['posts'] })
 
       expect(spec.befores['posts'].skippable).toEqual(true)
@@ -138,7 +138,7 @@ describe('BeforeResolverSpec', () => {
     it('with only the `only` option removes all function in named services', () => {
       const spec = new BeforeResolverSpec(services)
       const validate = () => {}
-      spec.apply(validate)
+      spec.add(validate)
       spec.skip({ only: ['posts'] })
 
       expect(spec.befores['posts'].validators).toEqual([])
@@ -150,7 +150,7 @@ describe('BeforeResolverSpec', () => {
     it('with `except` option removes from all but one service', () => {
       const spec = new BeforeResolverSpec(services)
       const validate = () => {}
-      spec.apply(validate)
+      spec.add(validate)
       spec.skip(validate, { except: ['posts'] })
 
       expect(spec.befores['posts'].validators).toEqual([validate])
@@ -163,7 +163,7 @@ describe('BeforeResolverSpec', () => {
       const spec = new BeforeResolverSpec(services)
       const validateA = () => {}
       const validateB = () => {}
-      spec.apply([validateA, validateB])
+      spec.add([validateA, validateB])
       spec.skip({ except: ['posts'] })
 
       expect(spec.befores['posts'].validators).toEqual([validateA, validateB])
@@ -177,7 +177,7 @@ describe('BeforeResolverSpec', () => {
       const spec = new BeforeResolverSpec(services)
       const validateA = () => {}
       const validateB = () => {}
-      spec.apply(validateA)
+      spec.add(validateA)
       spec.skip(validateB)
 
       expect(spec.befores['posts'].validators).toEqual([validateA])
@@ -202,23 +202,23 @@ describe('BeforeResolverSpec', () => {
 
     it('verifies with a validation function that does not throw', () => {
       const spec = new BeforeResolverSpec(services)
-      spec.apply(() => {})
+      spec.add(() => {})
 
       expect(spec.verify('posts')).toEqual([undefined])
     })
 
     it('returns an array with the result of every validation function', () => {
       const spec = new BeforeResolverSpec(services)
-      spec.apply(() => true)
-      spec.apply(() => false)
-      spec.apply(() => 'foo')
+      spec.add(() => true)
+      spec.add(() => false)
+      spec.add(() => 'foo')
 
       expect(spec.verify('posts')).toEqual([true, false, 'foo'])
     })
 
     it('passes name of service function to validation function', () => {
       const spec = new BeforeResolverSpec(services)
-      spec.apply((name) => {
+      spec.add((name) => {
         expect(name).toEqual('posts')
       })
       spec.verify('posts')
@@ -226,7 +226,7 @@ describe('BeforeResolverSpec', () => {
 
     it('bubbles up validation errors', () => {
       const spec = new BeforeResolverSpec(services)
-      spec.apply(() => {
+      spec.add(() => {
         throw new Error()
       })
 
@@ -235,10 +235,10 @@ describe('BeforeResolverSpec', () => {
 
     it('bubbles up validation errors if not first validation function', () => {
       const spec = new BeforeResolverSpec(services)
-      spec.apply(() => {
+      spec.add(() => {
         return true
       })
-      spec.apply(() => {
+      spec.add(() => {
         throw new Error()
       })
 
@@ -253,7 +253,7 @@ describe('BeforeResolverSpec', () => {
       }
 
       const spec = new BeforeResolverSpec(services)
-      spec.apply(requireAuth)
+      spec.add(requireAuth)
       spec.skip({ only: ['posts', 'post'] })
 
       expect(spec.verify('posts'))
@@ -275,7 +275,7 @@ describe('BeforeResolverSpec', () => {
 
       const spec = new BeforeResolverSpec(services)
       spec.skip()
-      spec.apply(requireAuth, {
+      spec.add(requireAuth, {
         only: ['createPost', 'updatePost', 'deletePost'],
       })
 
@@ -300,8 +300,8 @@ describe('BeforeResolverSpec', () => {
       }
 
       const spec = new BeforeResolverSpec(services)
-      spec.apply(requireAuth)
-      spec.apply(requireAuthor, {
+      spec.add(requireAuth)
+      spec.add(requireAuthor, {
         only: ['createPost', 'updatePost', 'deletePost'],
       })
 

@@ -1,7 +1,9 @@
 import type {
-  BeforeResolverInterface,
   RuleValidator,
   ValidatorCollection,
+  BeforeResolverSpecType,
+  RuleOptions,
+  SkipArgs,
 } from './types'
 
 // Thrown if resolver function has no explicit `apply()` or `skip()`
@@ -29,18 +31,7 @@ export const MissingBeforeResolver = class extends Error {
   }
 }
 
-type SkipArgs = [RuleValidator | Array<RuleValidator>, RuleOptions?]
-type RuleOptions =
-  | {
-      only: string[]
-      except: undefined
-    }
-  | {
-      except: string[]
-      only: undefined
-    }
-
-export const BeforeResolverSpec = class implements BeforeResolverInterface {
+export const BeforeResolverSpec = class implements BeforeResolverSpecType {
   befores: Record<string, ValidatorCollection>
 
   constructor(serviceNames: string[]) {
@@ -48,7 +39,7 @@ export const BeforeResolverSpec = class implements BeforeResolverInterface {
     serviceNames.forEach((name) => this._initValidators(name))
   }
 
-  apply(
+  public add(
     functions: RuleValidator | Array<RuleValidator>,
     options?: RuleOptions
   ) {
@@ -67,7 +58,7 @@ export const BeforeResolverSpec = class implements BeforeResolverInterface {
     })
   }
 
-  skip(...args: SkipArgs) {
+  public skip(...args: SkipArgs) {
     const { skipValidators, options, applyToAll } = this._parseSkipArgs(args)
 
     this._forEachService((name) => {
@@ -90,7 +81,7 @@ export const BeforeResolverSpec = class implements BeforeResolverInterface {
     })
   }
 
-  verify(name: string) {
+  public verify(name: string) {
     if (this._canSkipService(name)) {
       return []
     } else if (this._isInsecureService(name)) {

@@ -4,7 +4,7 @@
 import { requireAuth } from 'src/lib/auth'
 
 export const beforeResolver = (rules) => {
-  rules.apply(requireAuth)
+  rules.add(requireAuth)
 }
 
 export const ${pluralCamelName} = () => {

@@ -27,6 +27,25 @@ export type ValidatorCollection = {
   skippable: boolean
 }
 
-export interface BeforeResolverInterface {
-  befores?: Record<string, ValidatorCollection> // {serviceName: {validators:[...], skippable: false}}
+export type SkipArgs = [
+  (RuleValidator | Array<RuleValidator> | RuleOptions)?,
+  RuleOptions?
+]
+
+export type RuleOptions =
+  | {
+      only: string[]
+      except?: undefined
+    }
+  | {
+      except: string[]
+      only?: undefined
+    }
+
+export interface BeforeResolverSpecType {
+  add: (
+    functions: RuleValidator | Array<RuleValidator>,
+    options?: RuleOptions
+  ) => void
+  skip: (...args: SkipArgs) => void
 }
