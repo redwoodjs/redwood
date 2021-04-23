@@ -24,14 +24,14 @@ export const MissingBeforeResolver = class extends Error {
 }
 
 interface BeforeResolverInterface {
-  befores?: Record<string, BeforeFunctionCollection> // {}
+  befores?: Record<string, ValidatorCollection> // {serviceName: {validators:[...], skippable: false}}
 }
 
 // @TODO Discuss with RC what params a rule function takes
 // I think its context right?
-type RuleFunction = (...args: any[]) => unknown
-type BeforeFunctionCollection = {
-  validators: Array<RuleFunction>
+type RuleValidator = (...args: any[]) => unknown
+type ValidatorCollection = {
+  validators: Array<RuleValidator>
   skippable: boolean
 }
 
@@ -45,17 +45,20 @@ type RuleOptions =
       only: undefined
     }
 
-type SkipArgs = [RuleFunction | Array<RuleFunction>, RuleOptions?]
+type SkipArgs = [RuleValidator | Array<RuleValidator>, RuleOptions?]
 
 export const BeforeResolverSpec = class implements BeforeResolverInterface {
-  befores: Record<string, BeforeFunctionCollection>
+  befores: Record<string, ValidatorCollection>
 
   constructor(serviceNames: string[]) {
     this.befores = {}
     serviceNames.forEach((name) => this._initValidators(name))
   }
 
-  apply(functions: RuleFunction | Array<RuleFunction>, options?: RuleOptions) {
+  apply(
+    functions: RuleValidator | Array<RuleValidator>,
+    options?: RuleOptions
+  ) {
     this._forEachService((name) => {
       if (this._shouldApplyValidator(name, options)) {
         // If currently skippable, reset back to state that lets us add validators
@@ -64,7 +67,7 @@ export const BeforeResolverSpec = class implements BeforeResolverInterface {
         }
 
         this.befores[name].validators = [
-          ...(<Array<RuleFunction>>this.befores[name].validators), // typecast because it could be bool
+          ...(<Array<RuleValidator>>this.befores[name].validators), // typecast because it could be bool
           ...[functions].flat(),
         ]
       }
@@ -127,7 +130,7 @@ export const BeforeResolverSpec = class implements BeforeResolverInterface {
   }
 
   _parseSkipArgs([functionsOrOptions, opts]: SkipArgs) {
-    let skipValidators: Array<RuleFunction | undefined>
+    let skipValidators: Array<RuleValidator | undefined>
     let options: RuleOptions | undefined
     let applyToAll = false
 
@@ -147,7 +150,7 @@ export const BeforeResolverSpec = class implements BeforeResolverInterface {
   }
 
   _isOptions(
-    functionsOrOptions?: RuleFunction | Array<RuleFunction> | RuleOptions
+    functionsOrOptions?: RuleValidator | Array<RuleValidator> | RuleOptions
   ): functionsOrOptions is RuleOptions {
     return (
       typeof functionsOrOptions === 'undefined' ||
@@ -177,7 +180,7 @@ export const BeforeResolverSpec = class implements BeforeResolverInterface {
   _invokeValidators(name: string) {
     const validators = this.befores[name].validators
 
-    return validators.map((rule: RuleFunction) => {
+    return validators.map((rule: RuleValidator) => {
       return rule.call(this, name)
     })
   }
