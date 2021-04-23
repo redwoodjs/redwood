@@ -23,7 +23,7 @@ interface LinkProps {
 const Link = forwardRef<
   HTMLAnchorElement,
   LinkProps & React.AnchorHTMLAttributes<HTMLAnchorElement>
->(({ to, ...rest }, ref) => (
+>(({ to, onClick, ...rest }, ref) => (
   <a
     href={to}
     ref={ref}
@@ -37,6 +37,10 @@ const Link = forwardRef<
         event.shiftKey
       ) {
         return
+      }
+
+      if (onClick) {
+        onClick(event)
       }
 
       event.preventDefault()
@@ -53,7 +57,7 @@ interface NavLinkProps {
 const NavLink = forwardRef<
   HTMLAnchorElement,
   NavLinkProps & React.AnchorHTMLAttributes<HTMLAnchorElement>
->(({ to, activeClassName, className, ...rest }, ref) => {
+>(({ to, activeClassName, className, onClick, ...rest }, ref) => {
   const matchInfo = useMatch(to)
   const theClassName = [className, matchInfo.match && activeClassName]
     .filter(Boolean)
@@ -74,6 +78,10 @@ const NavLink = forwardRef<
           event.shiftKey
         ) {
           return
+        }
+
+        if (onClick) {
+          onClick(event)
         }
 
         event.preventDefault()
