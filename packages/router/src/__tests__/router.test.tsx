@@ -556,3 +556,28 @@ test('Set is not rendered for unauthenticated user.', async () => {
 
   await waitFor(() => screen.getByText(/auth thyself/))
 })
+
+test('Private can be used as a Set', async () => {
+  const PrivateLayout = ({ children }) => (
+    <div>
+      <h1>Private Layout</h1>
+      {children}
+    </div>
+  )
+
+  const TestRouter = () => (
+    <Router useAuth={mockUseAuth(true)}>
+      <Route path="/" page={HomePage} name="home" />
+      <Private wrap={PrivateLayout} unauthenticated="home">
+        <Route path="/private" page={PrivatePage} name="private" />
+      </Private>
+    </Router>
+  )
+  const screen = render(<TestRouter />)
+
+  await waitFor(() => screen.getByText(/Home Page/i))
+
+  act(() => navigate('/private'))
+  await waitFor(() => screen.getByText(/Private Layout/))
+  await waitFor(() => screen.getByText(/Private Page/))
+})

@@ -18,6 +18,8 @@ import {
   RouterContextProviderProps,
   useRouterState,
 } from './router-context'
+import { Set } from './Set'
+import type { SetProps, WrapperType } from './Set'
 import { SplashPage } from './splash-page'
 import { flattenAll, isReactElement } from './util'
 
@@ -144,10 +146,11 @@ const InternalRoute: React.VFC<InternalRouteProps> = ({
   )
 }
 
-interface PrivateProps {
+type PrivateProps<P> = Omit<SetProps<P>, 'wrap'> & {
   /** The page name where a user will be redirected when not authenticated */
   unauthenticated: string
   role?: string | string[]
+  wrap?: WrapperType<P> | WrapperType<P>[]
 }
 
 /**
@@ -155,18 +158,23 @@ interface PrivateProps {
  * When a user is not authenticated and attempts to visit this route they will be
  * redirected to `unauthenticated` route.
  */
-const Private: React.FC<PrivateProps> = ({
-  children,
-  unauthenticated,
-  role,
-}) => {
+function Private<WrapperProps>(props: PrivateProps<WrapperProps>) {
+  const { role, unauthenticated, children, wrap, ...rest } = props
+
   return (
     <PrivateContextProvider
       isPrivate={true}
       role={role}
       unauthenticated={unauthenticated}
     >
-      {children}
+      {wrap ? (
+        // @ts-expect-error - Set
+        <Set wrap={wrap} {...rest}>
+          {children}
+        </Set>
+      ) : (
+        children
+      )}
     </PrivateContextProvider>
   )
 }

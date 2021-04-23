@@ -7,13 +7,13 @@ import { isRoute } from './router'
 import { useRouterState } from './router-context'
 import { flattenAll, matchPath } from './util'
 
-type WrapperType<WTProps> = (
+export type WrapperType<WTProps> = (
   props: WTProps & { children: ReactNode }
 ) => ReactElement | null
 
 type ReduceType = ReactElement | undefined
 
-type SetProps<P> = P & {
+export type SetProps<P> = P & {
   wrap: WrapperType<P> | WrapperType<P>[]
   children: ReactNode
 }
