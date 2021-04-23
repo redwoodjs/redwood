@@ -1,3 +1,9 @@
+import type {
+  BeforeResolverInterface,
+  RuleValidator,
+  ValidatorCollection,
+} from './types'
+
 // Thrown if resolver function has no explicit `apply()` or `skip()`
 // which includes it
 
@@ -23,18 +29,7 @@ export const MissingBeforeResolver = class extends Error {
   }
 }
 
-interface BeforeResolverInterface {
-  befores?: Record<string, ValidatorCollection> // {serviceName: {validators:[...], skippable: false}}
-}
-
-// @TODO Discuss with RC what params a rule function takes
-// I think its context right?
-type RuleValidator = (...args: any[]) => unknown
-type ValidatorCollection = {
-  validators: Array<RuleValidator>
-  skippable: boolean
-}
-
+type SkipArgs = [RuleValidator | Array<RuleValidator>, RuleOptions?]
 type RuleOptions =
   | {
       only: string[]
@@ -44,8 +39,6 @@ type RuleOptions =
       except: string[]
       only: undefined
     }
-
-type SkipArgs = [RuleValidator | Array<RuleValidator>, RuleOptions?]
 
 export const BeforeResolverSpec = class implements BeforeResolverInterface {
   befores: Record<string, ValidatorCollection>

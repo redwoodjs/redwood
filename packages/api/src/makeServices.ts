@@ -1,7 +1,7 @@
 import { getConfig } from '@redwoodjs/internal'
 
 import { BeforeResolverSpec, MissingBeforeResolver } from './beforeResolverSpec'
-import { MakeServices } from './types'
+import { ServicesCollection, MakeServices, Services } from './types'
 
 export const makeServices: MakeServices = ({ services }) => {
   if (!getConfig().api.experimentalSecureServices) {
@@ -11,7 +11,7 @@ export const makeServices: MakeServices = ({ services }) => {
     return services
   }
 
-  const exportServices = {}
+  const servicesCollection: ServicesCollection = {}
 
   for (const [name, resolvers] of Object.entries(services)) {
     if (!resolvers?.beforeResolver) {
@@ -21,7 +21,7 @@ export const makeServices: MakeServices = ({ services }) => {
     const spec = new BeforeResolverSpec(Object.keys(resolvers))
     resolvers.beforeResolver(spec)
 
-    const exportResolvers = {}
+    const exportResolvers: Services = {}
 
     for (const [resolverName, resolverFunc] of Object.entries(resolvers)) {
       if (resolverName === 'beforeResolver') {
@@ -39,8 +39,8 @@ export const makeServices: MakeServices = ({ services }) => {
         exportResolvers[resolverName] = resolverFunc
       }
     }
-    exportServices[name] = exportResolvers
+    servicesCollection[name] = exportResolvers
   }
 
-  return exportServices
+  return servicesCollection
 }
