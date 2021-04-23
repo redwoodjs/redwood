@@ -27,7 +27,9 @@ interface BeforeResolverInterface {
   befores?: Record<string, BeforeFunctionCollection> // {}
 }
 
-type RuleFunction = () => unknown
+// @TODO Discuss with RC what params a rule function takes
+// I think its context right?
+type RuleFunction = (...args: any[]) => unknown
 type BeforeFunctionCollection = {
   validators: Array<RuleFunction>
   skippable: boolean
@@ -42,6 +44,8 @@ type RuleOptions =
       except: string[]
       only: undefined
     }
+
+type SkipArgs = [RuleFunction | Array<RuleFunction>, RuleOptions?]
 
 export const BeforeResolverSpec = class implements BeforeResolverInterface {
   befores: Record<string, BeforeFunctionCollection>
@@ -67,8 +71,8 @@ export const BeforeResolverSpec = class implements BeforeResolverInterface {
     })
   }
 
-  skip(...args: Array<RuleFunction | Array<RuleFunction> | RuleOptions>) {
-    const { skipValidators, options, applyToAll } = this._skipArgs(args)
+  skip(...args: SkipArgs) {
+    const { skipValidators, options, applyToAll } = this._parseSkipArgs(args)
 
     this._forEachService((name) => {
       const validators = this.befores[name].validators
@@ -106,7 +110,7 @@ export const BeforeResolverSpec = class implements BeforeResolverInterface {
     this.befores[name] = { validators: [], skippable: false }
   }
 
-  _shouldApplyValidator(name: string, options: RuleOptions) {
+  _shouldApplyValidator(name: string, options?: RuleOptions) {
     return (
       !options ||
       (options?.only && options.only.includes(name)) ||
@@ -114,7 +118,7 @@ export const BeforeResolverSpec = class implements BeforeResolverInterface {
     )
   }
 
-  _shouldSkipValidator(name: string, options: RuleOptions) {
+  _shouldSkipValidator(name: string, options?: RuleOptions) {
     return (
       !options ||
       (options.only && options.only.includes(name)) ||
@@ -122,9 +126,7 @@ export const BeforeResolverSpec = class implements BeforeResolverInterface {
     )
   }
 
-  _skipArgs(args) {
-    const [functionsOrOptions, opts] = args
-
+  _parseSkipArgs([functionsOrOptions, opts]: SkipArgs) {
     let skipValidators: Array<RuleFunction | undefined>
     let options: RuleOptions | undefined
     let applyToAll = false
@@ -180,7 +182,7 @@ export const BeforeResolverSpec = class implements BeforeResolverInterface {
     })
   }
 
-  _forEachService(iterator: () => unknown) {
+  _forEachService(iterator: (serviceName: string) => void) {
     return Object.keys(this.befores).forEach(iterator)
   }
 }
