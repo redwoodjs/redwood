@@ -8,7 +8,13 @@ import { getPaths } from 'src/lib'
 const PROJECT_NAME = getPaths().base.match(/[^/|\\]+$/)[0]
 
 const RENDER_YAML = (database) => {
-  return `services:
+  return `#####
+# Documentation
+# Redwood: https://render.com/docs/deploy-redwood
+# YAML (all config values): https://render.com/docs/yaml-spec
+#####
+
+services:
 - name: ${PROJECT_NAME}-web
   type: web
   env: static
@@ -20,8 +26,12 @@ const RENDER_YAML = (database) => {
   routes:
   - type: rewrite
     source: /.redwood/functions/*
-# replace destination api url after first deploy to Render
-    destination: replace_me_with_api_url/*
+#####
+# NOTE: replace destination api url after first deploy to Render
+# example:
+#   destination: https://myredwoodproject-api.onrender.com/*
+#####
+    destination: replace_with_api_url/*
   - type: rewrite
     source: /*
     destination: /index.html
@@ -29,8 +39,9 @@ const RENDER_YAML = (database) => {
 - name: ${PROJECT_NAME}-api
   type: web
   env: node
-  buildCommand: yarn && yarn rw deploy render api
-  startCommand: yarn rw serve api
+  region: oregon
+  buildCommand: yarn && yarn rw build api
+  startCommand: yarn rw deploy render api
   envVars:
   - key: NODE_VERSION
     value: 14
@@ -45,6 +56,7 @@ const POSTGRES_YAML = `  - key: DATABASE_URL
 
 databases:
   - name: ${PROJECT_NAME}-db
+    region: oregon
 `
 
 const SQLITE_YAML = `  - key: DATABASE_URL
@@ -121,7 +133,8 @@ export const apiProxyPath = '/.redwood/functions'
 
 // any notes to print out when the job is done
 export const notes = [
-  'You are ready to deploy to Render!',
-  'Check out the docs at https://render.com/docs/deploy-redwood to get started\n',
-  'Note: After first deployment to Render update rewrite rule destiation in render.yaml',
+  'You are ready to deploy to Render!\n',
+  'Go to https://dashboard.render.com/iacs to create your account and deploy to Render',
+  'Check out the deployment docs at https://render.com/docs/deploy-redwood for detailed instructions',
+  'Note: After first deployment to Render update the rewrite rule destination in `./render.yaml`',
 ]
