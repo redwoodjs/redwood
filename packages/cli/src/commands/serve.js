@@ -69,9 +69,9 @@ export const builder = (yargs) => {
 
       if (
         // serve both
-        (positionalArgs.length === 1 &&
-          !fs.existsSync(path.join(getPaths().api.dist))) ||
-        !fs.existsSync(path.join(getPaths().web.dist), 'index.html')
+        positionalArgs.length === 1 &&
+        (!fs.existsSync(path.join(getPaths().api.dist)) ||
+          !fs.existsSync(path.join(getPaths().web.dist), 'index.html'))
       ) {
         console.error(
           c.error(

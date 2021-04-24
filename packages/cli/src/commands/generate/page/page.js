@@ -123,6 +123,12 @@ export const builder = (yargs) => {
       type: 'boolean',
       default: true,
     })
+    .option('typescript', {
+      alias: ['ts'],
+      description: 'Generate in TypeScript',
+      type: 'boolean',
+      default: false,
+    })
     .option('stories', {
       description: 'Generate storybook files',
       type: 'boolean',
@@ -142,6 +148,7 @@ export const handler = async ({
   force,
   tests = true,
   stories = true,
+  typescript = false,
 }) => {
   if (process.platform === 'win32') {
     // running `yarn rw g page home /` on Windows using GitBash
@@ -181,6 +188,7 @@ export const handler = async ({
             path,
             tests,
             stories,
+            typescript,
             ...paramVariants(path),
           })
           return writeFilesTask(f, { overwriteExisting: force })
