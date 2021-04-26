@@ -238,16 +238,10 @@ export const builder = (yargs) => {
 }
 
 export const handler = async ({ provider, force }) => {
-  console.log(`✋ ~ file: auth.js ~ line 238 ~ handler ~ provider`, provider)
-  console.log(`✋ ~ file: auth.js ~ line 238 ~ handler ~ force`, force)
   const providerData = await import(`./providers/${provider}`)
 
   // check if api/src/lib/auth.js already exists and if so, ask the user to overwrite
   if (force === false) {
-    console.log(
-      `✋ ~ file: auth.js ~ line 247 ~ handler ~ Object.keys(files(provider))[0])`,
-      Object.keys(files(provider))[0]
-    )
     if (fs.existsSync(Object.keys(files(provider))[0])) {
       const response = await prompts({
         type: 'confirm',
