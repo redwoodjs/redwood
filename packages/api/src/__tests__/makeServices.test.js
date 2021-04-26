@@ -9,7 +9,7 @@ jest.mock('@redwoodjs/internal', () => {
   }
 })
 
-import { MissingBeforeResolver } from '../beforeResolverSpec'
+import { MissingBeforeResolverError } from '../beforeResolverSpec'
 import { makeServices } from '../makeServices'
 
 describe('makeServices', () => {

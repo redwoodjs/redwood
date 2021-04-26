@@ -1,6 +1,9 @@
 import { getConfig } from '@redwoodjs/internal'
 
-import { BeforeResolverSpec, MissingBeforeResolver } from './beforeResolverSpec'
+import {
+  BeforeResolverSpec,
+  MissingBeforeResolverError,
+} from './beforeResolverSpec'
 import { ServicesCollection, MakeServices, Services } from './types'
 
 export const makeServices: MakeServices = ({ services }) => {
@@ -15,7 +18,7 @@ export const makeServices: MakeServices = ({ services }) => {
 
   for (const [name, resolvers] of Object.entries(services)) {
     if (!resolvers?.beforeResolver) {
-      throw new MissingBeforeResolver(name)
+      throw new MissingBeforeResolverError(name)
     }
 
     const spec = new BeforeResolverSpec(Object.keys(resolvers))

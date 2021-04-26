@@ -19,7 +19,7 @@ export const InsecureServiceError = class extends Error {
 }
 
 // Thrown if service has no `beforeResolver()` defined
-export const MissingBeforeResolver = class extends Error {
+export const MissingBeforeResolverError = class extends Error {
   constructor(servicePath: string) {
     super(
       `Must define a \`beforeResolver()\` in ${servicePath.replaceAll(
