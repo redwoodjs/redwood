@@ -39,12 +39,16 @@ const Link = forwardRef<
         return
       }
 
-      if (onClick) {
-        onClick(event)
-      }
-
       event.preventDefault()
-      navigate(to)
+
+      if (onClick) {
+        const result = onClick(event)
+        if (typeof result !== 'boolean' || result) {
+          navigate(to)
+        }
+      } else {
+        navigate(to)
+      }
     }}
   />
 ))
@@ -80,12 +84,16 @@ const NavLink = forwardRef<
           return
         }
 
-        if (onClick) {
-          onClick(event)
-        }
-
         event.preventDefault()
-        navigate(to)
+
+        if (onClick) {
+          const result = onClick(event)
+          if (typeof result !== 'boolean' || result) {
+            navigate(to)
+          }
+        } else {
+          navigate(to)
+        }
       }}
     />
   )
