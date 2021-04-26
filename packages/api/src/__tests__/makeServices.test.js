@@ -28,7 +28,7 @@ describe('makeServices', () => {
   beforeEach(() => {
     services = {
       posts_posts: {
-        beforeResolver: (rules) => {},
+        beforeResolver: () => {},
         posts: () => {},
         post: () => {},
         createPost: () => {},
@@ -54,7 +54,7 @@ describe('makeServices', () => {
 
     expect(() => {
       makeServices({ services })
-    }).toThrow(MissingBeforeResolver)
+    }).toThrow(MissingBeforeResolverError)
   })
 
   it('exports the same named object and structure as the input', () => {
