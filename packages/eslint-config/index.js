@@ -52,6 +52,8 @@ module.exports = {
       globals: {
         React: 'readonly',
         gql: 'readonly',
+        process: 'readonly',
+        require: 'readonly',
       },
     },
     // Test, stories, scenarios, and mock files
