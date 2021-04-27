@@ -10,6 +10,7 @@ describe('getConfig', () => {
     expect(config).toMatchInlineSnapshot(`
       Object {
         "api": Object {
+          "experimentalSecureServices": false,
           "host": "localhost",
           "path": "./api",
           "port": 8911,
