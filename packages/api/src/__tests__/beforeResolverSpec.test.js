@@ -224,6 +224,24 @@ describe('BeforeResolverSpec', () => {
       spec.verify('posts')
     })
 
+    it('passes an undefined second argument by default', () => {
+      const spec = new BeforeResolverSpec(services)
+      spec.add((_name, other) => {
+        expect(other).toEqual(undefined)
+      })
+      spec.verify('posts')
+    })
+
+    it('passes any additional arguments sent to the resolver', () => {
+      const spec = new BeforeResolverSpec(services)
+      spec.add((_name, { foo, baz }, quux) => {
+        expect(foo).toEqual('bar')
+        expect(baz).toEqual('qux')
+        expect(quux).toEqual('garply')
+      })
+      spec.verify('posts', [{ foo: 'bar', baz: 'qux' }, 'garply'])
+    })
+
     it('bubbles up validation errors', () => {
       const spec = new BeforeResolverSpec(services)
       spec.add(() => {
