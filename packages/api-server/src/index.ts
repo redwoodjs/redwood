@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import yargs from 'yargs'
 
-import { cliOptions, handler } from './handler'
+import { apiCliOptions, apiServerHandler } from './handler'
 
 if (process.argv0 === 'api-server') {
   console.log()
@@ -11,4 +11,4 @@ if (process.argv0 === 'api-server') {
   console.log()
 }
 
-handler(yargs.options(cliOptions).argv)
+apiServerHandler(yargs.options(apiCliOptions).argv)

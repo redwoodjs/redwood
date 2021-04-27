@@ -1,7 +1,12 @@
 import terminalLink from 'terminal-link'
+
+import { getProject } from '@redwoodjs/structure'
+
 export const command = 'generate <type>'
 export const aliases = ['g']
 export const description = 'Save time by generating boilerplate code'
+
+const project = getProject()
 
 export const builder = (yargs) =>
   yargs
@@ -18,6 +23,7 @@ export const builder = (yargs) =>
       )}`
     )
 
+/** @type {Record<string, import('yargs').Options>} */
 export const yargsDefaults = {
   force: {
     alias: 'f',
@@ -25,16 +31,11 @@ export const yargsDefaults = {
     description: 'Overwrite existing files',
     type: 'boolean',
   },
-  javascript: {
-    alias: 'js',
-    default: true,
-    description: 'Generate JavaScript files',
-    type: 'boolean',
-  },
   typescript: {
     alias: 'ts',
-    default: false,
-    description: 'Generate TypeScript files',
+    default: project.isTypeScriptProject,
+    description:
+      'Generate TypeScript files. Enabled by default if we detect your project is typescript',
     type: 'boolean',
   },
 }

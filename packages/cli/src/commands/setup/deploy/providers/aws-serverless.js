@@ -82,7 +82,7 @@ export const preRequisites = [
   },
 ]
 
-export const apiPackages = [
+export const apiDevPackages = [
   '@netlify/zip-it-and-ship-it',
   'serverless-dotenv-plugin',
 ]

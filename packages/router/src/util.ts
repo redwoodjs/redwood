@@ -290,3 +290,26 @@ export const getAnnouncement = () => {
 
   return `new page at ${global?.location.pathname}`
 }
+
+export const getFocus = () => {
+  const routeFocus = global?.document.querySelectorAll(
+    '[data-redwood-route-focus]'
+  )?.[0]
+
+  if (
+    !routeFocus ||
+    !routeFocus.children.length ||
+    (routeFocus.children[0] as HTMLElement).tabIndex < 0
+  ) {
+    return null
+  }
+
+  return routeFocus.children[0] as HTMLElement
+}
+
+// note: tried document.activeElement.blur(), but that didn't reset the focus flow
+export const resetFocus = () => {
+  global?.document.body.setAttribute('tabindex', '-1')
+  global?.document.body.focus()
+  global?.document.body.removeAttribute('tabindex')
+}

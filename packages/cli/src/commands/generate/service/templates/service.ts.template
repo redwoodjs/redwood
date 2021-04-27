@@ -22,8 +22,7 @@ export const create${singularPascalName} = ({ input }: Create${singularPascalNam
   })
 }
 
-interface Update${singularPascalName}Args {
-  where: Prisma.${singularPascalName}WhereUniqueInput
+interface Update${singularPascalName}Args extends Prisma.${singularPascalName}WhereUniqueInput {
   input: Prisma.${singularPascalName}UpdateInput
 }
 
