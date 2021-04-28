@@ -234,6 +234,7 @@ describe('BeforeResolverSpec', () => {
 
     it('passes any additional arguments sent to the resolver', () => {
       const spec = new BeforeResolverSpec(services)
+      // @MARK RC where would quux come from?
       spec.add((_name, { foo, baz }, quux) => {
         expect(foo).toEqual('bar')
         expect(baz).toEqual('qux')
