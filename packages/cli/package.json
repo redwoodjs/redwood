@@ -18,7 +18,7 @@
     "@redwoodjs/internal": "^0.31.0",
     "@redwoodjs/prerender": "^0.31.0",
     "@redwoodjs/structure": "^0.31.0",
-    "boxen": "^4.2.0",
+    "boxen": "^5.0.1",
     "camelcase": "^6.0.0",
     "chalk": "^4.1.0",
     "concurrently": "^6.0.2",
