@@ -9,14 +9,14 @@
   "license": "MIT",
   "devDependencies": {
     "@auth0/auth0-spa-js": "^1.14.0",
-    "@supabase/supabase-js": "^1.11.2",
+    "@supabase/supabase-js": "^1.11.8",
     "@types/netlify-identity-widget": "^1.9.1",
     "@types/react": "17.0.3",
     "firebase": "^8.4.2",
     "firebase-admin": "^9.6.0",
     "gotrue-js": "^0.9.29",
     "magic-sdk": "^2.5.0",
-    "msal": "^1.4.9",
+    "msal": "^1.4.10",
     "netlify-identity-widget": "1.9.1",
     "nhost-js-sdk": "^3.0.0-14",
     "react": "^17.0.1"
