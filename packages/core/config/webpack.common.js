@@ -44,8 +44,8 @@ const getStyleLoaders = (isEnvProduction) => {
   const cssLoader = (withModules, importLoaders) => {
     // Obscured classnames in production, more expressive classnames in development.
     const localIdentName = isEnvProduction
-      ? '[hash:base64]'
-      : '[path][name]__[local]--[hash:base64:5]'
+      ? '[contenthash:base64]'
+      : '[path][name]__[local]--[contenthash:base64:5]'
 
     const loaderConfig = {
       loader: 'css-loader',
@@ -85,7 +85,7 @@ const getStyleLoaders = (isEnvProduction) => {
   return [
     {
       test: /\.module\.css$/,
-      loader: [
+      use: [
         styleOrExtractLoader,
         cssLoader(true, numImportLoadersForCSS),
         postCssLoader,
@@ -93,7 +93,7 @@ const getStyleLoaders = (isEnvProduction) => {
     },
     {
       test: /\.css$/,
-      loader: [
+      use: [
         styleOrExtractLoader,
         cssLoader(false, numImportLoadersForCSS),
         postCssLoader,
@@ -102,7 +102,7 @@ const getStyleLoaders = (isEnvProduction) => {
     },
     {
       test: /\.module\.scss$/,
-      loader: [
+      use: [
         styleOrExtractLoader,
         cssLoader(true, numImportLoadersForSCSS),
         postCssLoader,
@@ -111,7 +111,7 @@ const getStyleLoaders = (isEnvProduction) => {
     },
     {
       test: /\.scss$/,
-      loader: [
+      use: [
         styleOrExtractLoader,
         cssLoader(false, numImportLoadersForSCSS),
         postCssLoader,
@@ -240,11 +240,12 @@ module.exports = (webpackEnv) => {
                   loader: 'url-loader',
                   options: {
                     limit: '10000',
-                    name: 'static/media/[name].[hash:8].[ext]',
+                    name: 'static/media/[name].[contenthash:8].[ext]',
                   },
                 },
               ],
             },
+            // (1)
             {
               test: /\.(js|mjs|jsx)$/,
               exclude: /(node_modules)/,
@@ -266,6 +267,7 @@ module.exports = (webpackEnv) => {
                 },
               ].filter(Boolean),
             },
+            // (2)
             {
               test: /\.(ts|tsx)$/,
               exclude: /(node_modules)/,
@@ -287,7 +289,7 @@ module.exports = (webpackEnv) => {
                 },
               ].filter(Boolean),
             },
-            // .module.css (2), .css (3), .module.scss (4), .scss (5)
+            // .module.css (3), .css (4), .module.scss (5), .scss (6)
             ...getStyleLoaders(isEnvProduction),
             isEnvProduction && {
               test: path.join(
@@ -296,12 +298,12 @@ module.exports = (webpackEnv) => {
               ),
               use: 'null-loader',
             },
-            // (6)
+            // (7)
             {
               test: /\.(svg|ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|pdf)(\?.*)?$/,
               loader: 'file-loader',
               options: {
-                name: 'static/media/[name].[hash:8].[ext]',
+                name: 'static/media/[name].[contenthash:8].[ext]',
               },
             },
           ].filter(Boolean),

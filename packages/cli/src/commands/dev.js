@@ -100,7 +100,7 @@ export const handler = async ({
       command: `cd "${path.join(
         BASE_DIR,
         'web'
-      )}" && yarn webpack-dev-server --config ../node_modules/@redwoodjs/core/config/webpack.development.js ${forward}`,
+      )}" && yarn webpack serve --config ../node_modules/@redwoodjs/core/config/webpack.development.js ${forward}`,
       prefixColor: 'blue',
       runWhen: () => fs.existsSync(WEB_DIR_SRC),
     },
