@@ -69,17 +69,22 @@ export const pathName = (path, name) => {
 }
 
 /**
- * Reduces boilerplate for creating a yargs handler that writes a component to a
+ * Reduces boilerplate for creating a yargs handler that writes a component/page/layout to a
  * location.
  */
-// TODO: Make this work for all files, not just components.
 export const createYargsForComponentGeneration = ({
   componentName,
   filesFn,
-  builderObj = yargsDefaults,
+  optionsObj = yargsDefaults,
+  positionalsObj = {},
 }) => {
   return {
-    command: `${componentName} <name>`,
+    command:
+      `${componentName} <name> ` +
+      // Takes positionals, and adds them like this [pos1] [pas2]
+      Object.keys(positionalsObj)
+        .map((positionalName) => `[${positionalName}]`)
+        .join(' '),
     description: `Generate a ${componentName} component`,
     builder: (yargs) => {
       yargs
@@ -104,7 +109,12 @@ export const createYargsForComponentGeneration = ({
           default: true,
         })
 
-      Object.entries(builderObj).forEach(([option, config]) => {
+      // Add in passed in positionals
+      Object.entries(positionalsObj).forEach(([option, config]) => {
+        yargs.positional(option, config)
+      })
+      // Add in passed in options
+      Object.entries(optionsObj).forEach(([option, config]) => {
         yargs.option(option, config)
       })
     },
