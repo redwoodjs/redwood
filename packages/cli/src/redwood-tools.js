@@ -436,5 +436,10 @@ yargs
       fixProjectBinaries(getPaths().base)
     }
   )
+  .command(
+    ['danny'],
+    'description',
+  )
   .demandCommand()
   .strict().argv
+˝
