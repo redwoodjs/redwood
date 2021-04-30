@@ -2,8 +2,9 @@ name: Publish release candidate
 
 on:
   push:
-    branches: 
-      - 'release/*'
+    branches: ['release/**']
+    tags-ignore:
+      - v** # We don't want this to run on release
 
 jobs:
   build:
