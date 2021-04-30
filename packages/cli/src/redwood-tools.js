@@ -437,7 +437,7 @@ yargs
     }
   )
   .command(
-    ['dp'],
+    ['dsp'],
     'description',
   )
   .demandCommand()
