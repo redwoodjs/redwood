@@ -5237,10 +5237,10 @@ apollo-server-caching@^0.6.0:
   dependencies:
     lru-cache "^6.0.0"
 
-apollo-server-core@^2.22.2:
-  version "2.22.2"
-  resolved "https://registry.yarnpkg.com/apollo-server-core/-/apollo-server-core-2.22.2.tgz#daee67a17aa4f1bf0df3e448e237a37324906b5d"
-  integrity sha512-YPrhfN+I5vUerc4c0I6pd89fdqP5UNYCt/+MGv4bDA/a0kOCLvzylkQ3NlEepK1fewtqf4QO+S1LscC8vMmYdg==
+apollo-server-core@^2.23.0:
+  version "2.23.0"
+  resolved "https://registry.yarnpkg.com/apollo-server-core/-/apollo-server-core-2.23.0.tgz#65ac55a293205efa63eadbf09d30704d6a5974d3"
+  integrity sha512-3/a4LPgRADc8CdT/nRh7W0CAqQv3Q4DJvakWQgKqGSqDEb/0u4IBynYjlQKuPBi4wwKdeK2Hb1wiQLl+zu4StQ==
   dependencies:
     "@apollographql/apollo-tools" "^0.4.3"
     "@apollographql/graphql-playground-html" "1.6.27"
@@ -5253,7 +5253,7 @@ apollo-server-core@^2.22.2:
     apollo-reporting-protobuf "^0.6.2"
     apollo-server-caching "^0.6.0"
     apollo-server-env "^3.0.0"
-    apollo-server-errors "^2.4.2"
+    apollo-server-errors "^2.5.0"
     apollo-server-plugin-base "^0.11.0"
     apollo-server-types "^0.7.0"
     apollo-tracing "^0.13.0"
@@ -5277,19 +5277,19 @@ apollo-server-env@^3.0.0:
     node-fetch "^2.1.2"
     util.promisify "^1.0.0"
 
-apollo-server-errors@^2.4.2:
-  version "2.4.2"
-  resolved "https://registry.yarnpkg.com/apollo-server-errors/-/apollo-server-errors-2.4.2.tgz#1128738a1d14da989f58420896d70524784eabe5"
-  integrity sha512-FeGxW3Batn6sUtX3OVVUm7o56EgjxDlmgpTLNyWcLb0j6P8mw9oLNyAm3B+deHA4KNdNHO5BmHS2g1SJYjqPCQ==
+apollo-server-errors@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/apollo-server-errors/-/apollo-server-errors-2.5.0.tgz#5d1024117c7496a2979e3e34908b5685fe112b68"
+  integrity sha512-lO5oTjgiC3vlVg2RKr3RiXIIQ5pGXBFxYGGUkKDhTud3jMIhs+gel8L8zsEjKaKxkjHhCQAA/bcEfYiKkGQIvA==
 
-apollo-server-lambda@2.22.2:
-  version "2.22.2"
-  resolved "https://registry.yarnpkg.com/apollo-server-lambda/-/apollo-server-lambda-2.22.2.tgz#8beb0f2cfbb9048ae8dfa609afbfcb8fa42de622"
-  integrity sha512-QOVHg6u1+jqnY6c+fb4njUtfQEQr118guerDveZgG3vQP1t8/AtYDT33m03JhsKWRkzZjOgj5cs0RA1iSYw7cg==
+apollo-server-lambda@2.23.0:
+  version "2.23.0"
+  resolved "https://registry.yarnpkg.com/apollo-server-lambda/-/apollo-server-lambda-2.23.0.tgz#7331a1fa5fea6191cc7dae7ff951591a59b757f7"
+  integrity sha512-6Ov/q7jO0t6XUjpvHi5rwGFwiOZsviEdfsC+KC9hFIch8Na0dq2nUpFhMD4FBiTZVtlKEKrKCJx4hJ9qv7DYYA==
   dependencies:
     "@apollographql/graphql-playground-html" "1.6.27"
     "@types/aws-lambda" "^8.10.31"
-    apollo-server-core "^2.22.2"
+    apollo-server-core "^2.23.0"
     apollo-server-env "^3.0.0"
     apollo-server-types "^0.7.0"
     graphql-tools "^4.0.8"
