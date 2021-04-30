@@ -437,7 +437,7 @@ yargs
     }
   )
   .command(
-    ['danny'],
+    ['dc'],
     'description',
   )
   .demandCommand()
