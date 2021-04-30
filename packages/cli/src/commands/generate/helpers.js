@@ -103,6 +103,7 @@ export const createYargsForComponentGeneration = ({
           type: 'boolean',
           default: true,
         })
+
       Object.entries(builderObj).forEach(([option, config]) => {
         yargs.option(option, config)
       })
