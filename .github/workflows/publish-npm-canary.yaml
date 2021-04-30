@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     tags-ignore:
-      - v**
+      - v** # We don't want this to run on release
 
 jobs:
   build:
