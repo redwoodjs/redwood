@@ -54,7 +54,7 @@
     "findup-sync": "^4.0.0",
     "glob": "7.1.6",
     "graphql": "^15.3.0",
-    "graphql-tag": "^2.10.3",
+    "graphql-tag": "^2.12.4",
     "html-webpack-plugin": "^4.0.2",
     "jest": "^26.4.2",
     "jest-watch-typeahead": "^0.6.3",
