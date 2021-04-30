@@ -4545,7 +4545,7 @@
   resolved "https://registry.yarnpkg.com/@types/source-list-map/-/source-list-map-0.1.2.tgz#0078836063ffaf17412349bba364087e0ac02ec9"
   integrity sha512-K5K+yml8LTo9bWJI/rECfIPrGgxdpeNbj+d53lwN4QjW1MCwlkhUms+gtdzigTeUyBr09+u8BwOIY3MXvHdcsA==
 
-"@types/stack-trace@^0.0.29":
+"@types/stack-trace@0.0.29", "@types/stack-trace@^0.0.29":
   version "0.0.29"
   resolved "https://registry.yarnpkg.com/@types/stack-trace/-/stack-trace-0.0.29.tgz#eb7a7c60098edb35630ed900742a5ecb20cfcb4d"
   integrity sha512-TgfOX+mGY/NyNxJLIbDWrO9DjGoVSW9+aB8H2yy1fy32jsvxijhmyJI9fDFgvz3YP4lvJaq9DzdR/M1bOgVc9g==
@@ -13927,10 +13927,10 @@ multimatch@^4.0.0:
     arrify "^2.0.1"
     minimatch "^3.0.4"
 
-mustache@^4.0.1:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/mustache/-/mustache-4.1.0.tgz#8c1b042238a982d2eb2d30efc6c14296ae3f699d"
-  integrity sha512-0FsgP/WVq4mKyjolIyX+Z9Bd+3WS8GOwoUTyKXT5cTYMGeauNTi2HPCwERqseC1IHAy0Z7MDZnJBfjabd4O8GQ==
+mustache@^4.1.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/mustache/-/mustache-4.2.0.tgz#e5892324d60a12ec9c2a73359edca52972bf6f64"
+  integrity sha512-71ippSywq5Yb7/tVYyGbkBggbU8H3u5Rz56fH60jGFgr8uHwxs+aSKeqmluIVzM0m0kB7xQjKS6qPfd0b2ZoqQ==
 
 mute-stream@0.0.7:
   version "0.0.7"
@@ -19789,13 +19789,14 @@ youch-terminal@^1.0.1:
   dependencies:
     kleur "^4.1.3"
 
-youch@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/youch/-/youch-2.1.1.tgz#c25a35fc9a7acec31e6edc3a73283e7a7f34b7e6"
-  integrity sha512-qYN29wSKxAnECdcsTegBziyRXS3MWcTTefzViBN++/UulXCcIGT/VaQhDVeeKvVFpEaQ9EPv3OVJafPrDNU1+Q==
+youch@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/youch/-/youch-2.2.1.tgz#204e7a55b48708a77fc09cd3d3cba0038f560a4e"
+  integrity sha512-omRM/t3JOsGN1wXP2r5HNmcUgkO3xxw+veese5L3FAgFwuqYZkK3Nuk03ZkTZ6VZ64lG6pbfl1pej49mt44wxA==
   dependencies:
+    "@types/stack-trace" "0.0.29"
     cookie "^0.4.1"
-    mustache "^4.0.1"
+    mustache "^4.1.0"
     stack-trace "0.0.10"
 
 zen-observable-ts@^0.8.21:
