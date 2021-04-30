@@ -437,9 +437,8 @@ yargs
     }
   )
   .command(
-    ['dc'],
+    ['dp'],
     'description',
   )
   .demandCommand()
   .strict().argv
-˝
