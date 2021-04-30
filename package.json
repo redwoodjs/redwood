@@ -17,7 +17,7 @@
     "packages/*"
   ],
   "devDependencies": {
-    "@babel/cli": "7.13.14",
+    "@babel/cli": "7.13.16",
     "@babel/core": "7.13.16",
     "@babel/node": "7.13.13",
     "@babel/plugin-proposal-class-properties": "7.13.0",
