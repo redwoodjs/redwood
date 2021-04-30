@@ -291,6 +291,7 @@ module.exports = (webpackEnv) => {
             },
             // .module.css (3), .css (4), .module.scss (5), .scss (6)
             ...getStyleLoaders(isEnvProduction),
+            // (7)
             isEnvProduction && {
               test: path.join(
                 redwoodPaths.base,
@@ -298,7 +299,7 @@ module.exports = (webpackEnv) => {
               ),
               use: 'null-loader',
             },
-            // (7)
+            // (8)
             {
               test: /\.(svg|ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|pdf)(\?.*)?$/,
               loader: 'file-loader',
