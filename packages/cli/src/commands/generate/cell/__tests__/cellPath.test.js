@@ -1,6 +1,10 @@
 global.__dirname = __dirname
 import path from 'path'
 
+// Load mocks
+import 'src/lib/test'
+import * as cell from '../cell'
+
 jest.mock('@redwoodjs/structure', () => {
   return {
     getProject: () => ({
@@ -8,10 +12,6 @@ jest.mock('@redwoodjs/structure', () => {
     }),
   }
 })
-
-import { loadGeneratorFixture } from 'src/lib/test'
-
-import * as cell from '../cell'
 
 let singleWordFiles,
   multiWordFiles,
@@ -43,7 +43,7 @@ test('creates a cell component with a single word name', () => {
         '/path/to/project/web/src/components/admin/UserCell/UserCell.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('cell', 'singleWordCell.js'))
+  ).toMatchSnapshot()
 })
 
 test('creates a cell test with a single word name', () => {
@@ -53,7 +53,7 @@ test('creates a cell test with a single word name', () => {
         '/path/to/project/web/src/components/admin/UserCell/UserCell.test.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('cell', 'singleWordCell.test.js'))
+  ).toMatchSnapshot()
 })
 
 test('creates a cell stories with a single word name', () => {
@@ -63,7 +63,7 @@ test('creates a cell stories with a single word name', () => {
         '/path/to/project/web/src/components/admin/UserCell/UserCell.stories.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('cell', 'singleWordCell.stories.js'))
+  ).toMatchSnapshot()
 })
 
 test('creates a cell mock with a single word name', () => {
@@ -73,7 +73,7 @@ test('creates a cell mock with a single word name', () => {
         '/path/to/project/web/src/components/admin/UserCell/UserCell.mock.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('cell', 'singleWordCell.mock.js'))
+  ).toMatchSnapshot()
 })
 
 // Multi Word Scenario: UserProfile
@@ -84,7 +84,7 @@ test('creates a cell component with a multi word name', () => {
         '/path/to/project/web/src/components/admin/UserProfileCell/UserProfileCell.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('cell', 'multiWordCell.js'))
+  ).toMatchSnapshot()
 })
 
 test('creates a cell test with a multi word name', () => {
@@ -94,7 +94,7 @@ test('creates a cell test with a multi word name', () => {
         '/path/to/project/web/src/components/admin/UserProfileCell/UserProfileCell.test.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('cell', 'multiWordCell.test.js'))
+  ).toMatchSnapshot()
 })
 
 test('creates a cell stories with a multi word name', () => {
@@ -104,7 +104,7 @@ test('creates a cell stories with a multi word name', () => {
         '/path/to/project/web/src/components/admin/UserProfileCell/UserProfileCell.stories.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('cell', 'multiWordCell.stories.js'))
+  ).toMatchSnapshot()
 })
 
 test('creates a cell mock with a multi word name', () => {
@@ -114,7 +114,7 @@ test('creates a cell mock with a multi word name', () => {
         '/path/to/project/web/src/components/admin/UserProfileCell/UserProfileCell.mock.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('cell', 'multiWordCell.mock.js'))
+  ).toMatchSnapshot()
 })
 
 test("doesn't include test file when --tests is set to false", () => {
