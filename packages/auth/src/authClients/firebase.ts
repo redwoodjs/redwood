@@ -1,6 +1,5 @@
-import type * as Firebase from 'firebase/app'
-
-export type Firebase = typeof Firebase
+import type FirebaseNamespace from 'firebase/app'
+export type Firebase = typeof FirebaseNamespace
 
 import { AuthClient } from './'
 

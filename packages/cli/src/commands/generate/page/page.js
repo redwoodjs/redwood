@@ -38,28 +38,31 @@ export const paramVariants = (path) => {
   }
 }
 
-export const files = ({ name, tests, stories, ...rest }) => {
+export const files = ({ name, tests, stories, typescript, ...rest }) => {
   const pageFile = templateForComponentFile({
     name,
     suffix: COMPONENT_SUFFIX,
+    extension: typescript ? '.tsx' : '.js',
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'page',
     templatePath: 'page.js.template',
     templateVars: rest,
   })
+
   const testFile = templateForComponentFile({
     name,
     suffix: COMPONENT_SUFFIX,
-    extension: '.test.js',
+    extension: typescript ? '.test.tsx' : '.test.js',
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'page',
     templatePath: 'test.js.template',
     templateVars: rest,
   })
+
   const storiesFile = templateForComponentFile({
     name,
     suffix: COMPONENT_SUFFIX,
-    extension: '.stories.js',
+    extension: typescript ? '.stories.tsx' : '.stories.js',
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'page',
     templatePath: 'stories.js.template',
@@ -120,6 +123,12 @@ export const builder = (yargs) => {
       type: 'boolean',
       default: true,
     })
+    .option('typescript', {
+      alias: ['ts'],
+      description: 'Generate in TypeScript',
+      type: 'boolean',
+      default: false,
+    })
     .option('stories', {
       description: 'Generate storybook files',
       type: 'boolean',
@@ -139,6 +148,7 @@ export const handler = async ({
   force,
   tests = true,
   stories = true,
+  typescript = false,
 }) => {
   if (process.platform === 'win32') {
     // running `yarn rw g page home /` on Windows using GitBash
@@ -178,6 +188,7 @@ export const handler = async ({
             path,
             tests,
             stories,
+            typescript,
             ...paramVariants(path),
           })
           return writeFilesTask(f, { overwriteExisting: force })

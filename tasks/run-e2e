@@ -40,7 +40,7 @@ const createRedwoodJSApp = () => {
   try {
     execa.sync(
       'yarn babel-node src/create-redwood-app.js',
-      [REDWOOD_PROJECT_DIRECTORY, '--no-yarn-install', '--no-javascript'],
+      [REDWOOD_PROJECT_DIRECTORY, '--no-yarn-install', '--typescript'],
       {
         cwd: path.join(REDWOODJS_FRAMEWORK_PATH, 'packages/create-redwood-app'),
         shell: true,
@@ -54,19 +54,38 @@ const createRedwoodJSApp = () => {
   }
 }
 
+const addRedwoodToWorkspaces = () => {
+  console.log(
+    'Adding "node_modules/.RedwoodJSFrameworkPackages/*" to package.json workspaces...'
+  )
+  const pkgJsonPath = path.join(REDWOOD_PROJECT_DIRECTORY, 'package.json')
+  const pkgJson = require(pkgJsonPath)
+  pkgJson.workspaces.packages = [
+    ...pkgJson.workspaces.packages,
+    'node_modules/.RedwoodJSFrameworkPackages/packages/*',
+  ]
+  fs.writeFileSync(pkgJsonPath, JSON.stringify(pkgJson, undefined, 2))
+}
+
 const copyFrameworkPackages = () => {
   try {
+    const pkgDirectory = path.join(
+      REDWOOD_PROJECT_DIRECTORY,
+      'node_modules/.RedwoodJSFrameworkPackages'
+    )
+    fs.mkdirSync(pkgDirectory, { recursive: true })
+
     console.log(
       'cp -r',
       `"${path.join(REDWOODJS_FRAMEWORK_PATH, 'packages')}"`,
-      `"${path.join(REDWOOD_PROJECT_DIRECTORY, 'packages')}"`
+      `"${pkgDirectory}"`
     )
     execa.sync(
       'cp',
       [
         '-r',
         `"${path.join(REDWOODJS_FRAMEWORK_PATH, 'packages')}"`,
-        `"${path.join(REDWOOD_PROJECT_DIRECTORY, 'packages')}"`,
+        `"${pkgDirectory}"`,
       ],
       {
         shell: true,
@@ -174,6 +193,7 @@ let { copyFramework, createProject, jsProject, autoStart } = args
 const tasks = [
   copyFramework && buildRedwoodJSFramework,
   createProject && createRedwoodJSApp,
+  copyFramework && addRedwoodToWorkspaces,
   copyFramework && copyFrameworkPackages,
   copyFramework && runYarnInstall,
   jsProject && convertProjectToJavaScript,
