@@ -24,7 +24,14 @@ import {
 import c from 'src/lib/colors'
 
 import { yargsDefaults } from '../../generate'
-import { relationsForModel, intForeignKeysForModel } from '../helpers'
+import {
+  relationsForModel,
+  intForeignKeysForModel,
+  splitPathAndName,
+  formatCamelPath,
+  formatParamPath,
+  formatPascalPath,
+} from '../helpers'
 import { files as sdlFiles, builder as sdlBuilder } from '../sdl/sdl'
 import {
   files as serviceFiles,
@@ -110,10 +117,7 @@ const layoutFiles = (name, scaffoldPath = '', generateTypescript) => {
   const singularName = pascalcase(pluralize.singular(name))
   let fileList = {}
 
-  const pascalScaffoldPath =
-    scaffoldPath === ''
-      ? scaffoldPath
-      : scaffoldPath.split('/').map(pascalcase).join('/') + '/'
+  const scaffoldPathCamel = formatCamelPath(scaffoldPath)
 
   const pluralCamelName = camelcase(pluralName)
   const camelScaffoldPath = camelcase(pascalcase(scaffoldPath))
@@ -134,7 +138,7 @@ const layoutFiles = (name, scaffoldPath = '', generateTypescript) => {
 
     const outputPath = path.join(
       getPaths().web.layouts,
-      pascalScaffoldPath,
+      scaffoldPathCamel,
       outputLayoutName.replace(/\.(js|tsx?)/, ''),
       outputLayoutName
     )
@@ -142,7 +146,7 @@ const layoutFiles = (name, scaffoldPath = '', generateTypescript) => {
       path.join('scaffold', 'templates', 'layouts', layout),
       {
         name,
-        pascalScaffoldPath,
+        scaffoldPathCamel,
         pluralRouteName,
         newRouteName,
       }
@@ -158,10 +162,9 @@ const pageFiles = (name, scaffoldPath = '', generateTypescript) => {
   const singularName = pascalcase(pluralize.singular(name))
   let fileList = {}
 
-  const pascalScaffoldPath =
-    scaffoldPath === ''
-      ? scaffoldPath
-      : scaffoldPath.split('/').map(pascalcase).join('/') + '/'
+  const pascalScaffoldPath = formatPascalPath(scaffoldPath)
+
+  const camelScaffoldPath = formatCamelPath(scaffoldPath)
 
   PAGES.forEach((page) => {
     // Sanitize page names
@@ -181,6 +184,7 @@ const pageFiles = (name, scaffoldPath = '', generateTypescript) => {
       {
         name,
         pascalScaffoldPath,
+        camelScaffoldPath,
       }
     )
     fileList[outputPath] = template
@@ -270,10 +274,7 @@ const componentFiles = async (name, scaffoldPath = '', generateTypescript) => {
     }, {})
   )
 
-  const pascalScaffoldPath =
-    scaffoldPath === ''
-      ? scaffoldPath
-      : scaffoldPath.split('/').map(pascalcase).join('/') + '/'
+  const scaffoldPathCamel = formatCamelPath(scaffoldPath)
 
   const pluralCamelName = camelcase(pluralName)
   const camelScaffoldPath = camelcase(pascalcase(scaffoldPath))
@@ -304,7 +305,7 @@ const componentFiles = async (name, scaffoldPath = '', generateTypescript) => {
 
     const outputPath = path.join(
       getPaths().web.components,
-      pascalScaffoldPath,
+      scaffoldPathCamel,
       outputComponentName.replace(/\.(js|tsx?)/, ''),
       outputComponentName
     )
@@ -318,7 +319,7 @@ const componentFiles = async (name, scaffoldPath = '', generateTypescript) => {
         editableColumns,
         idType,
         intForeignKeys,
-        pascalScaffoldPath,
+        scaffoldPathCamel,
         pluralRouteName,
         editRouteName,
         singularRouteName,
@@ -341,10 +342,7 @@ export const routes = async ({ model: name, path: scaffoldPath = '' }) => {
   const model = await getSchema(singularPascalName)
   const idRouteParam = getIdType(model) === 'Int' ? ':Int' : ''
 
-  const paramScaffoldPath =
-    scaffoldPath === ''
-      ? scaffoldPath
-      : scaffoldPath.split('/').map(paramCase).join('/') + '/'
+  const paramScaffoldPath = formatParamPath(scaffoldPath)
   const pascalScaffoldPath = pascalcase(scaffoldPath)
   const camelScaffoldPath = camelcase(pascalScaffoldPath)
 
@@ -444,22 +442,12 @@ const tasks = ({ model, path, force, typescript, javascript }) => {
 }
 
 export const handler = async ({ model: modelArg, force, typescript }) => {
-  const { model, path } = splitPathAndModel(modelArg)
-  const t = tasks({ model, path, force, typescript })
+  const { name, path } = splitPathAndName(modelArg)
+  const t = tasks({ model: name, path, force, typescript })
 
   try {
     await t.run()
   } catch (e) {
     console.log(c.error(e.message))
   }
-}
-
-export const splitPathAndModel = (pathSlashModel) => {
-  const path = pathSlashModel.split('/').slice(0, -1).join('/')
-  // This code will work whether or not there's a path in model
-  // E.g. if model is just 'post',
-  // path.split('/') will return ['post'].
-  const model = pathSlashModel.split('/').pop()
-
-  return { model, path }
 }
