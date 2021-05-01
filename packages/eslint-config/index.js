@@ -36,10 +36,13 @@ module.exports = {
       },
     },
     {
-      files: 'api/db/seed.js',
+      files: 'api/db/seed.ts',
       env: {
         node: true,
         commonjs: true,
+      },
+      globals: {
+        Promise: 'readonly',
       },
     },
     // `web` side
