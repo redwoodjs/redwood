@@ -13,7 +13,7 @@ const ${pascalName}Page = (<%- paramName === '' ? '' : `${propParam}: ${pascalNa
       </p>
       <p>
         My default route is named <code>${camelName}</code>, link to me with `
-        <Link to={routes.${camelName}(${ argumentParam })}>${pascalName}<%= argumentParam !== '' ? ' 42' : '' %></Link>`
+        <Link to={routes.${routeName}(${ argumentParam })}>${pascalName}<%= argumentParam !== '' ? ' 42' : '' %></Link>`
       </p><% if (paramName !== '') { %>
       <p>The parameter passed to me is {${ paramName }}</p><% } %>
     </>
