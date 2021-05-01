@@ -11,7 +11,6 @@ import {
   LocationProvider,
 } from './internal'
 import { ParamsProvider } from './params'
-import { PrivateContextProvider, usePrivate } from './private-context'
 import { RouteNameProvider, useRouteName } from './RouteNameContext'
 import {
   RouterContextProvider,
@@ -66,13 +65,12 @@ const InternalRoute: React.VFC<InternalRouteProps> = ({
   name,
   redirect,
   notfound,
-  whileLoading = () => null,
+  // @ts-expect-error - This prop is picked up by <Set>
+  whileLoading, // eslint-disable-line
 }) => {
   const location = useLocation()
   const routerState = useRouterState()
   const { routeName } = useRouteName()
-  const { isPrivate, unauthorized, unauthenticated } = usePrivate()
-  const { loading } = routerState.useAuth()
 
   if (notfound) {
     // The "notfound" route is handled by <NotFoundChecker>
@@ -94,23 +92,6 @@ const InternalRoute: React.VFC<InternalRouteProps> = ({
 
   if (!match) {
     return null
-  }
-
-  if (isPrivate) {
-    if (loading) {
-      return whileLoading()
-    }
-
-    if (unauthorized()) {
-      const currentLocation =
-        global.location.pathname + encodeURIComponent(global.location.search)
-
-      return (
-        <Redirect
-          to={`${namedRoutes[unauthenticated]()}?redirectTo=${currentLocation}`}
-        />
-      )
-    }
   }
 
   const searchParams = parseSearch(location.search)
@@ -141,33 +122,6 @@ const InternalRoute: React.VFC<InternalRouteProps> = ({
       delay={routerState.pageLoadingDelay}
       params={allParams}
     />
-  )
-}
-
-interface PrivateProps {
-  /** The page name where a user will be redirected when not authenticated */
-  unauthenticated: string
-  role?: string | string[]
-}
-
-/**
- * `Routes` nested in `Private` require authentication.
- * When a user is not authenticated and attempts to visit this route they will be
- * redirected to `unauthenticated` route.
- */
-const Private: React.FC<PrivateProps> = ({
-  children,
-  unauthenticated,
-  role,
-}) => {
-  return (
-    <PrivateContextProvider
-      isPrivate={true}
-      role={role}
-      unauthenticated={unauthenticated}
-    >
-      {children}
-    </PrivateContextProvider>
   )
 }
 
@@ -314,4 +268,4 @@ const normalizePage = (specOrPage: Spec | React.ComponentType): Spec => {
   }
 }
 
-export { Router, Route, Private, namedRoutes as routes, isRoute, PageType }
+export { Router, Route, namedRoutes as routes, isRoute, PageType }
