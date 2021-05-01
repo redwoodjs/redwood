@@ -2,13 +2,19 @@ import { execSync } from 'child_process'
 
 import camelcase from 'camelcase'
 import Listr from 'listr'
+import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import terminalLink from 'terminal-link'
 
 import { writeFilesTask, addRoutesToRouterTask } from 'src/lib'
 import c from 'src/lib/colors'
 
-import { templateForComponentFile, pathName } from '../helpers'
+import {
+  templateForComponentFile,
+  pathName,
+  splitPathAndName,
+  formatParamPath,
+} from '../helpers'
 
 const COMPONENT_SUFFIX = 'Page'
 const REDWOOD_WEB_PATH_NAME = 'pages'
@@ -93,6 +99,19 @@ export const files = ({ name, tests, stories, typescript, ...rest }) => {
 }
 
 export const routes = ({ name, path }) => {
+  // handle path in the name args includes path
+  if (name && name.includes('/')) {
+    const { name: splittedName, path: splittedPath } = splitPathAndName(name)
+    return [
+      `<Route path="/${formatParamPath(splittedPath)}${paramCase(
+        splittedName
+      )}" page={${camelcase(pascalcase(splittedPath))}${pascalcase(
+        splittedName
+      )}Page} name="${camelcase(pascalcase(splittedPath))}${pascalcase(
+        splittedName
+      )}" />`,
+    ]
+  }
   return [
     `<Route path="${path}" page={${pascalcase(name)}Page} name="${camelcase(
       name
