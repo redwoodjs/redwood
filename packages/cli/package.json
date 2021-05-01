@@ -44,7 +44,7 @@
   },
   "devDependencies": {
     "@types/listr": "^0.14.2",
-    "@types/node-fetch": "^2.5.5"
+    "@types/node-fetch": "^2.5.10"
   },
   "scripts": {
     "build": "yarn build:js",
