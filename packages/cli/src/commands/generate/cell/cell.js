@@ -3,6 +3,7 @@ import pascalcase from 'pascalcase'
 import {
   templateForComponentFile,
   createYargsForComponentGeneration,
+  splitPathAndName,
 } from '../helpers'
 
 const COMPONENT_SUFFIX = 'Cell'
@@ -19,16 +20,17 @@ const getCellOperationNames = async () => {
 }
 
 const uniqueOperationName = async (name, index = 1) => {
+  const { name: splittedName } = splitPathAndName(name)
   let operationName =
     index <= 1
-      ? `${pascalcase(name)}Query`
-      : `${pascalcase(name)}Query_${index}`
+      ? `${pascalcase(splittedName)}Query`
+      : `${pascalcase(splittedName)}Query_${index}`
 
   const cellOperationNames = await getCellOperationNames()
   if (!cellOperationNames.includes(operationName)) {
     return operationName
   }
-  return uniqueOperationName(name, index + 1)
+  return uniqueOperationName(splittedName, index + 1)
 }
 
 export const files = async ({
