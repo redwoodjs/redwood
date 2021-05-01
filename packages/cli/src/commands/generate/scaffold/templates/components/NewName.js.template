@@ -1,9 +1,9 @@
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
-import ${singularPascalName}Form from 'src/components/${pascalScaffoldPath}${singularPascalName}Form'
+import ${singularPascalName}Form from 'src/components/${scaffoldPathCamel}${singularPascalName}Form'
 
-import { QUERY } from 'src/components/${pascalScaffoldPath}${pluralPascalName}Cell'
+import { QUERY } from 'src/components/${scaffoldPathCamel}${pluralPascalName}Cell'
 
 const CREATE_${singularConstantName}_MUTATION = gql`
   mutation Create${singularPascalName}Mutation($input: Create${singularPascalName}Input!) {
