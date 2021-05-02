@@ -1,0 +1,5 @@
+import { db } from 'src/lib/db'
+
+export default async () => {
+  // Your script here...
+}
