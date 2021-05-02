@@ -12,7 +12,17 @@ import c from 'src/lib/colors'
 babelRequireHook({
   extends: path.join(getPaths().api.base, '.babelrc.js'),
   extensions: ['.js', '.ts', '.tsx', '.jsx'],
-  only: [getPaths().base],
+  only: [getPaths().api.base],
+  plugins: [
+    [
+      'babel-plugin-module-resolver',
+      {
+        alias: {
+          src: getPaths().api.src,
+        },
+      },
+    ],
+  ],
   ignore: ['node_modules'],
   cache: false,
 })
@@ -22,6 +32,7 @@ const { db } = require(path.join(getPaths().api.lib, 'db'))
 const runScript = async (scriptPath) => {
   const script = await import(scriptPath)
   const startedAt = new Date()
+  await script.default({ db })
   const finishedAt = new Date()
 
   return { startedAt, finishedAt }
