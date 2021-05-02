@@ -26,7 +26,7 @@
     "@babel/preset-env": "7.13.15",
     "@babel/preset-react": "7.13.13",
     "@babel/preset-typescript": "7.13.0",
-    "@babel/runtime-corejs3": "7.13.10",
+    "@babel/runtime-corejs3": "7.14.0",
     "@testing-library/jest-dom": "5.11.10",
     "@testing-library/react": "11.2.6",
     "@testing-library/user-event": "13.1.6",
