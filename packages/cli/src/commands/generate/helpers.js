@@ -180,7 +180,7 @@ export const intForeignKeysForModel = (model) => {
 export const splitPathAndName = (pathSlashName) => {
   const path = pathSlashName.split('/').slice(0, -1).join('/') ?? ''
   // This code will work whether or not there's a path in the name
-  // E.g. if model is just 'post',
+  // E.g. if the name is just 'post',
   // path.split('/') will return ['post'].
   const name = pathSlashName.split('/').pop()
 
