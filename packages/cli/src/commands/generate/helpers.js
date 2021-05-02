@@ -233,7 +233,7 @@ export const splitPathAndName = (pathSlashName) => {
   return { name, path }
 }
 
-// Format path to camelCasen
+// Format path to camelCase
 export const formatCamelPath = (path) =>
   path === '' ? path : path.split('/').map(camelcase).join('/') + '/'
 
