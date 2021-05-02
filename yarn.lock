@@ -3756,10 +3756,10 @@
     resolve-from "^5.0.0"
     store2 "^2.7.1"
 
-"@supabase/gotrue-js@^1.13.1":
-  version "1.13.1"
-  resolved "https://registry.yarnpkg.com/@supabase/gotrue-js/-/gotrue-js-1.13.1.tgz#01339389ff633e4ce7ba8f14b495002a3aa320f7"
-  integrity sha512-LBn1RK4UaHwy+CqO3ZJb29Z30iGI8yxyTTVZGZN9JOzS3Zr6bxgYFdBVHLkIY7jQsEur+fH6SFze+truUQIYpw==
+"@supabase/gotrue-js@^1.13.2":
+  version "1.13.2"
+  resolved "https://registry.yarnpkg.com/@supabase/gotrue-js/-/gotrue-js-1.13.2.tgz#9c15a08530ef1eb76cf52699789a3ceecfdfa9c7"
+  integrity sha512-aW0me0fVAkPEMfvOC4As0c1boVgo1Qi7St/s/aqStP9KAwEccGMGuzvKuJ6zC++7JFrT+arGRg34f+SzvnjPrw==
   dependencies:
     cross-fetch "^3.0.6"
 
@@ -3778,23 +3778,22 @@
     "@types/websocket" "^1.0.1"
     websocket "^1.0.34"
 
-"@supabase/storage-js@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@supabase/storage-js/-/storage-js-1.0.1.tgz#bd1ef34cd835cd69d20d5a597e8653c249cbd066"
-  integrity sha512-t+Z/5iI9UjlgcIjGKbxQYnBNlJQOOjEvJEZDntt6kkcxntdhT3MiaLnVYkM/HfeAm4AHPzzWEiHg3QYuDKWZ0g==
+"@supabase/storage-js@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@supabase/storage-js/-/storage-js-1.0.2.tgz#8fa3bd2b683a8ff95321586c6024edb9f4e44e7a"
+  integrity sha512-cnmdzLcUc06JqqxxqK6grALnUhWbR4d5AyzsG5zlXgMW78JmdghofNz5ToDwMq949RZgxXmknBWZWhS+yhns3Q==
   dependencies:
     cross-fetch "^3.1.0"
 
-"@supabase/supabase-js@^1.11.8":
-  version "1.11.8"
-  resolved "https://registry.yarnpkg.com/@supabase/supabase-js/-/supabase-js-1.11.8.tgz#d54a2f8130ee40ba7e72484879487578f8b8756a"
-  integrity sha512-ac/fga/BnnsywzUWsWvT6dsvyJusegjtFxoz6+vf3sRCAgg5x3/qH8v4lp3GB6eXtSDGmBFTesyoiKBYcEeI5Q==
+"@supabase/supabase-js@^1.11.9":
+  version "1.11.9"
+  resolved "https://registry.yarnpkg.com/@supabase/supabase-js/-/supabase-js-1.11.9.tgz#55ac470be911ba64395a3311bce1902436f328f6"
+  integrity sha512-ovv/KkaRZLSDo/DbeeNHwG7iL5mJXm3UGG6x3AEU4r2FJ75wa6/dhmNWWLdUmc+eWIpfUgR/XpW7xzB93EgM1w==
   dependencies:
-    "@supabase/gotrue-js" "^1.13.1"
+    "@supabase/gotrue-js" "^1.13.2"
     "@supabase/postgrest-js" "^0.28.1"
     "@supabase/realtime-js" "^1.0.9"
-    "@supabase/storage-js" "^1.0.1"
-    cross-fetch "^3.1.0"
+    "@supabase/storage-js" "^1.0.2"
 
 "@szmarczak/http-timer@^1.1.2":
   version "1.1.2"
