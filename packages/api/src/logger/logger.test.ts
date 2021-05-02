@@ -1,22 +1,30 @@
+import { existsSync, readFileSync, statSync } from 'fs'
+import os from 'os'
+import { join } from 'path'
+
 import { BaseLogger, LoggerOptions } from 'pino'
 import split from 'split2'
 
-import { createLogger } from '../logger'
+const pid = process.pid
+const hostname = os.hostname()
+
+import { createLogger, emitLogLevels } from '../logger'
 
 const once = (emitter, name) => {
   return new Promise((resolve, reject) => {
     if (name !== 'error') {
       emitter.once('error', reject)
     }
-    emitter.once(name, (...args) => {
+
+    emitter.once(name, ({ ...args }) => {
       emitter.removeListener('error', reject)
-      resolve(...args)
+      resolve({ ...args })
     })
   })
 }
 
 const sink = () => {
-  const result = split((data) => {
+  const logStatement = split((data) => {
     try {
       return JSON.parse(data)
     } catch (err) {
@@ -25,25 +33,58 @@ const sink = () => {
     }
   })
 
-  return result
+  return logStatement
+}
+
+const watchFileCreated = (filename) => {
+  return new Promise((resolve, reject) => {
+    const TIMEOUT = 800
+    const INTERVAL = 100
+    const threshold = TIMEOUT / INTERVAL
+    let counter = 0
+    const interval = setInterval(() => {
+      // On some CI runs file is created but not filled
+      if (existsSync(filename) && statSync(filename).size !== 0) {
+        clearInterval(interval)
+        resolve(null)
+      } else if (counter <= threshold) {
+        counter++
+      } else {
+        clearInterval(interval)
+        reject(new Error(`${filename} was not created.`))
+      }
+    }, INTERVAL)
+  })
 }
 
 const setupLogger = (
-  loggerOptions?: LoggerOptions
+  loggerOptions?: LoggerOptions,
+  destination?: string,
+  showConfig?: boolean
 ): {
   logger: BaseLogger
-  logSinkData: Promise<unknown>
+  logSinkData?: Promise<unknown>
 } => {
-  const stream = sink()
-  const logSinkData = once(stream, 'data')
+  if (destination) {
+    const logger = createLogger({
+      options: { prettyPrint: false, ...loggerOptions },
+      destination: destination,
+      showConfig,
+    })
 
-  const logger = createLogger({
-    options: { ...loggerOptions, prettyPrint: false },
-    destination: stream,
-    showConfig: false,
-  })
+    return { logger }
+  } else {
+    const stream = sink()
+    const logSinkData = once(stream, 'data')
 
-  return { logger, logSinkData }
+    const logger = createLogger({
+      options: { ...loggerOptions, prettyPrint: false },
+      destination: stream,
+      showConfig,
+    })
+
+    return { logger, logSinkData }
+  }
 }
 
 describe('logger', () => {
@@ -211,6 +252,100 @@ describe('logger', () => {
 
       expect(logStatement).toHaveProperty('email')
       expect(logStatement['email']).toEqual('[Redacted]')
+    })
+  })
+
+  describe('when configuring pretty printing', () => {
+    test('it pretty prints', async () => {
+      const tmp = join(
+        os.tmpdir(),
+        '_' + Math.random().toString(36).substr(2, 9)
+      )
+
+      const { logger } = setupLogger({ prettyPrint: true }, tmp)
+
+      const message = 'logged with pretty printing on'
+
+      logger.info(message)
+
+      await watchFileCreated(tmp)
+
+      const logStatement = readFileSync(tmp).toString().trim()
+
+      expect(logStatement).toMatch(/INFO/)
+      expect(logStatement).toContain(message)
+    })
+
+    test('it allows setting translateTime ', async () => {
+      const tmp = join(
+        os.tmpdir(),
+        '_' + Math.random().toString(36).substr(2, 9)
+      )
+
+      const { logger } = setupLogger(
+        { prettyPrint: { translateTime: 'dddd, mmmm dS, yyyy, h:MM:ss TT' } },
+        tmp
+      )
+
+      const message = 'logged with pretty printing on'
+
+      logger.info(message)
+
+      await watchFileCreated(tmp)
+
+      const logStatement = readFileSync(tmp).toString().trim()
+      console.log(logStatement)
+      expect(logStatement).toMatch(/INFO/)
+      expect(logStatement).toContain(message)
+    })
+  })
+
+  describe('file logging', () => {
+    test('it creates a log file with a statement', async () => {
+      const tmp = join(
+        os.tmpdir(),
+        '_' + Math.random().toString(36).substr(2, 9)
+      )
+
+      const { logger } = setupLogger({}, tmp)
+
+      logger.warn('logged a warning to a temp file')
+
+      await watchFileCreated(tmp)
+
+      const logStatement = JSON.parse(readFileSync(tmp).toString())
+
+      delete logStatement.time
+
+      expect(logStatement).toEqual({
+        pid,
+        hostname,
+        level: 40,
+        msg: 'logged a warning to a temp file',
+      })
+    })
+  })
+
+  describe('handles Prisma Logging', () => {
+    test('it defines log levels to emit', () => {
+      const log = emitLogLevels(['info', 'warn', 'error'])
+
+      expect(log).toEqual([
+        { emit: 'event', level: 'info' },
+        { emit: 'event', level: 'warn' },
+        { emit: 'event', level: 'error' },
+      ])
+    })
+
+    test('it defines log levels with query events to emit', () => {
+      const log = emitLogLevels(['info', 'warn', 'error', 'query'])
+
+      expect(log).toEqual([
+        { emit: 'event', level: 'info' },
+        { emit: 'event', level: 'warn' },
+        { emit: 'event', level: 'error' },
+        { emit: 'event', level: 'query' },
+      ])
     })
   })
 })

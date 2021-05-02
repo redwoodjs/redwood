@@ -3,16 +3,20 @@ import path from 'path'
 
 import execa from 'execa'
 import Listr from 'listr'
+import prompts from 'prompts'
 import terminalLink from 'terminal-link'
 
 import { resolveFile } from '@redwoodjs/internal'
+import { getProject } from '@redwoodjs/structure'
 
 import { getPaths, writeFilesTask } from 'src/lib'
 import c from 'src/lib/colors'
-
 const AUTH_PROVIDER_IMPORT = `import { AuthProvider } from '@redwoodjs/auth'`
 
-const OUTPUT_PATH = path.join(getPaths().api.lib, 'auth.js')
+const OUTPUT_PATH = path.join(
+  getPaths().api.lib,
+  getProject().isTypeScriptProject ? 'auth.ts' : 'auth.js'
+)
 
 const getGraphqlPath = () =>
   resolveFile(path.join(getPaths().api.functions, 'graphql'))
@@ -131,7 +135,7 @@ const removeOldAuthProvider = async (content) => {
 }
 
 // check to make sure AuthProvider doesn't exist
-const checkAuthProviderExists = () => {
+const checkAuthProviderExists = async () => {
   const content = fs.readFileSync(getWebAppPath()).toString()
 
   if (content.includes(AUTH_PROVIDER_IMPORT)) {
@@ -236,6 +240,22 @@ export const builder = (yargs) => {
 export const handler = async ({ provider, force }) => {
   const providerData = await import(`./providers/${provider}`)
 
+  // check if api/src/lib/auth.js already exists and if so, ask the user to overwrite
+  if (force === false) {
+    if (fs.existsSync(Object.keys(files(provider))[0])) {
+      const response = await prompts({
+        type: 'confirm',
+        name: 'answer',
+        message: `Overwrite existing ${getPaths().api.lib.replace(
+          getPaths().base,
+          ''
+        )}/auth.[jt]s?`,
+        initial: false,
+      })
+      force = response.answer
+    }
+  }
+
   const tasks = new Listr(
     [
       {
@@ -320,7 +340,7 @@ export const handler = async ({ provider, force }) => {
   try {
     // Don't throw existing provider error when --force exists
     if (!force) {
-      checkAuthProviderExists()
+      await checkAuthProviderExists()
     }
 
     await tasks.run()

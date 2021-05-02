@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
+import boxen from 'boxen'
 import execa from 'execa'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
@@ -50,6 +51,21 @@ export const builder = (yargs) => {
       description: 'Overwrite existing configuration',
       type: 'boolean',
     })
+    .option('database', {
+      alias: 'd',
+      choices: ['none', 'postgresql', 'sqlite'],
+      description: 'Database deployment for Render only',
+      type: 'string',
+    })
+    .check((argv) => {
+      if (argv.provider !== 'render' && argv.database !== undefined) {
+        throw new Error('Database option only available for Render deployment')
+      }
+      if (argv.provider === 'render' && argv.database === undefined) {
+        argv.database = 'postgresql'
+      }
+      return true
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -58,8 +74,21 @@ export const builder = (yargs) => {
     )
 }
 
-export const handler = async ({ provider, force }) => {
+export const handler = async ({ provider, force, database }) => {
   const providerData = await import(`./providers/${provider}`)
+  const apiDependencies = JSON.parse(
+    fs.readFileSync('api/package.json').toString()
+  ).dependencies
+
+  const missingApiPackages = providerData?.apiPackages?.reduce(
+    (missingPackages, apiPackage) => {
+      if (!(apiPackage in apiDependencies)) {
+        missingPackages.push(apiPackage)
+      }
+      return missingPackages
+    },
+    []
+  )
 
   const tasks = new Listr(
     [
@@ -83,15 +112,35 @@ export const handler = async ({ provider, force }) => {
             })
           ),
       },
-      providerData?.apiPackages?.length && {
+      providerData?.prismaDataSourceCheck && {
+        title: 'Checking Prisma data source provider...',
+        task: async () => {
+          const fileData = await providerData.prismaDataSourceCheck(database)
+          let files = {}
+          files[fileData.path] = fileData.content
+          return writeFilesTask(files, { overwriteExisting: force })
+        },
+      },
+      missingApiPackages?.length && {
         title: 'Adding required api packages...',
         task: async () => {
           await execa('yarn', [
             'workspace',
             'api',
             'add',
+            ...missingApiPackages,
+          ])
+        },
+      },
+      providerData?.apiDevPackages?.length && {
+        title: 'Adding required api dev packages...',
+        task: async () => {
+          await execa('yarn', [
+            'workspace',
+            'api',
+            'add',
             '-D',
-            ...providerData.apiPackages,
+            ...providerData.apiDevPackages,
           ])
         },
       },
@@ -147,9 +196,14 @@ export const handler = async ({ provider, force }) => {
       {
         title: 'One more thing...',
         task: (_ctx, task) => {
-          task.title = `One more thing...\n\n   ${providerData.notes.join(
-            '\n   '
-          )}\n`
+          task.title = `One more thing...\n\n ${boxen(
+            providerData.notes.join('\n   '),
+            {
+              padding: { top: 0, bottom: 0, right: 0, left: 0 },
+              margin: 1,
+              borderColour: 'gray',
+            }
+          )}  \n`
         },
       },
     ].filter(Boolean),

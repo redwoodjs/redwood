@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 const fs = require('fs')
 const path = require('path')
 
@@ -8,6 +7,7 @@ const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const Dotenv = require('dotenv-webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 const webpack = require('webpack')
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin')
 const { merge } = require('webpack-merge')
@@ -18,6 +18,7 @@ const { getConfig, getPaths } = require('@redwoodjs/internal')
 const redwoodConfig = getConfig()
 const redwoodPaths = getPaths()
 
+/** @returns {{[key: string]: string}} Env vars */
 const getEnvVars = () => {
   const redwoodEnvPrefix = 'REDWOOD_ENV_'
   const includeEnvKeys = redwoodConfig.web.includeEnvironmentVariables
@@ -34,6 +35,7 @@ const getEnvVars = () => {
   return redwoodEnvKeys
 }
 
+/** @returns {import('webpack').RuleSetLoader[]} */
 const getStyleLoaders = (isEnvProduction) => {
   const styleOrExtractLoader = isEnvProduction
     ? MiniCssExtractPlugin.loader
@@ -120,10 +122,10 @@ const getStyleLoaders = (isEnvProduction) => {
   ]
 }
 
-// Shared with storybook, as well as the RW app
+/** @returns {import('webpack').Plugin[]} Plugins shared with storybook, as well as the RW app */
 const getSharedPlugins = (isEnvProduction) => {
   const shouldIncludeFastRefresh =
-    redwoodConfig.web.experimentalFastRefresh && !isEnvProduction
+    redwoodConfig.web.fastRefresh !== false && !isEnvProduction
 
   return [
     isEnvProduction &&
@@ -161,6 +163,8 @@ module.exports = (webpackEnv) => {
   const shouldIncludeFastRefresh =
     redwoodConfig.web.experimentalFastRefresh && !isEnvProduction
 
+  const shouldUseEsbuild = process.env.ESBUILD === '1'
+
   return {
     mode: isEnvProduction ? 'production' : 'development',
     devtool: isEnvProduction ? 'source-map' : 'cheap-module-source-map',
@@ -197,7 +201,9 @@ module.exports = (webpackEnv) => {
         title: path.basename(redwoodPaths.base),
         template: path.resolve(redwoodPaths.base, 'web/src/index.html'),
         templateParameters: {
-          prerenderPlaceholder: '<server-markup></server-markup>',
+          prerenderPlaceholder: isEnvProduction
+            ? '<server-markup></server-markup>'
+            : '<!-- Prerender placeholder -->',
         },
         scriptLoading: 'defer',
         inject: true,
@@ -239,19 +245,47 @@ module.exports = (webpackEnv) => {
                 },
               ],
             },
-            // (1)
             {
-              test: /\.(js|mjs|jsx|ts|tsx)$/,
+              test: /\.(js|mjs|jsx)$/,
               exclude: /(node_modules)/,
-              use: {
-                loader: 'babel-loader',
-                options: {
-                  plugins: [
-                    shouldIncludeFastRefresh &&
-                      require.resolve('react-refresh/babel'),
-                  ].filter(Boolean),
+              use: [
+                {
+                  loader: 'babel-loader',
+                  options: {
+                    plugins: [
+                      shouldIncludeFastRefresh &&
+                        require.resolve('react-refresh/babel'),
+                    ].filter(Boolean),
+                  },
                 },
-              },
+                shouldUseEsbuild && {
+                  loader: 'esbuild-loader',
+                  options: {
+                    loader: 'jsx',
+                  },
+                },
+              ].filter(Boolean),
+            },
+            {
+              test: /\.(ts|tsx)$/,
+              exclude: /(node_modules)/,
+              use: [
+                {
+                  loader: 'babel-loader',
+                  options: {
+                    plugins: [
+                      shouldIncludeFastRefresh &&
+                        require.resolve('react-refresh/babel'),
+                    ].filter(Boolean),
+                  },
+                },
+                shouldUseEsbuild && {
+                  loader: 'esbuild-loader',
+                  options: {
+                    loader: 'tsx',
+                  },
+                },
+              ].filter(Boolean),
             },
             // .module.css (2), .css (3), .module.scss (4), .scss (5)
             ...getStyleLoaders(isEnvProduction),
@@ -275,14 +309,17 @@ module.exports = (webpackEnv) => {
       ],
     },
     optimization: {
+      mergeDuplicateChunks: true,
       splitChunks: {
         chunks: 'all',
-        name: 'vendors',
+        minChunks: 2,
       },
       runtimeChunk: {
         name: (entrypoint) => `runtime-${entrypoint.name}`,
       },
-      minimizer: [isEnvProduction && new CssMinimizerPlugin()].filter(Boolean),
+      // This doesn't get used when mode !== 'production'
+      // Because minimize gets set to false, see https://webpack.js.org/configuration/mode/#usage
+      minimizer: [new CssMinimizerPlugin(), new TerserPlugin()],
     },
     output: {
       pathinfo: true,
@@ -304,6 +341,7 @@ module.exports = (webpackEnv) => {
   }
 }
 
+/** @returns {import('webpack').Configuration} */
 module.exports.mergeUserWebpackConfig = (mode, baseConfig) => {
   const redwoodPaths = getPaths()
   const hasCustomConfig = fs.existsSync(redwoodPaths.web.webpack)

@@ -11,5 +11,6 @@
 [api]
   port = 8911
   schemaPath = "./api/db/schema.prisma"
+  experimentalSecureServices = true
 [browser]
   open = true

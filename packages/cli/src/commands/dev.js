@@ -9,6 +9,7 @@ import { getConfig, shutdownPort } from '@redwoodjs/internal'
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 import { generatePrismaClient } from 'src/lib/generatePrismaClient'
+import runPreBuildTasks from 'src/lib/runPreBuildTasks'
 
 export const command = 'dev [side..]'
 export const description = 'Start development servers for api, and web'
@@ -50,6 +51,9 @@ export const handler = async ({
   // note: getPaths().web|api.base returns undefined on Windows
   const API_DIR_SRC = getPaths().api.src
   const WEB_DIR_SRC = getPaths().web.src
+
+  // Run tasks like type generate, etc.
+  runPreBuildTasks()
 
   if (side.includes('api')) {
     try {
@@ -105,7 +109,10 @@ export const handler = async ({
   if (esbuild) {
     jobs.api.name = 'api esbuild'
     jobs.api.command =
-      'yarn cross-env NODE_ENV=development yarn rw-api-server-watch'
+      'yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn rw-api-server-watch'
+
+    jobs.web.name = 'web esbuild'
+    jobs.web.command = 'yarn cross-env ESBUILD=1 && ' + jobs.web.command
   }
 
   concurrently(

@@ -39,7 +39,7 @@ This Code of Conduct applies within all community spaces, and also applies when 
 
 ## Enforcement
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting Tom Preston-Werner [tom@mojombo.com](mailto:tom@mojombo.com), Peter Pistorius [peter.pistorius@gmail.com](peter.pistorius@gmail.com), and/or Rob Cameron [cannikin@fastmail.com](cannikin@fastmail.com). All complaints will be reviewed and investigated promptly and fairly.
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting Tom Preston-Werner [tom@mojombo.com](mailto:tom@mojombo.com), Peter Pistorius [peter.pistorius@gmail.com](peter.pistorius@gmail.com), Rob Cameron [cannikin@fastmail.com](cannikin@fastmail.com), and/or [David Price](thedavid@thedavidprice.com). All complaints will be reviewed and investigated promptly and fairly.
 
 All community leaders are obligated to respect the privacy and security of the reporter of any incident.
 
