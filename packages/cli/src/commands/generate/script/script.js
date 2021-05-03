@@ -15,11 +15,7 @@ const POST_RUN_INSTRUCTIONS = `Next steps...\n\n   ${c.warning(
      yarn rw run <name>
 `
 
-const TEMPLATE_PATH = path.resolve(
-  __dirname,
-  'templates',
-  'script.js.template'
-)
+const TEMPLATE_PATH = path.resolve(__dirname, 'templates', 'script.js.template')
 
 export const files = ({ name }) => {
   const outputFilename = `${paramCase(name)}.js`

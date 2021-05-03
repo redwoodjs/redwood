@@ -1,4 +1,3 @@
-import fs from 'fs'
 import path from 'path'
 
 import babelRequireHook from '@babel/register'
@@ -38,19 +37,21 @@ export const command = 'run <name>'
 export const description = 'Run your script'
 export const builder = (yargs) => {
   yargs
-  .positional('name', {
-    description: 'The name of the script to run',
-    type: 'string',
-  }).strict(false).epilogue(
-    `Also see the ${terminalLink(
-      'Redwood CLI Reference',
-      'https://redwoodjs.com/docs/cli-commands#up'
-    )}`
-  )
+    .positional('name', {
+      description: 'The name of the script to run',
+      type: 'string',
+    })
+    .strict(false)
+    .epilogue(
+      `Also see the ${terminalLink(
+        'Redwood CLI Reference',
+        'https://redwoodjs.com/docs/cli-commands#up'
+      )}`
+    )
 }
 
 export const handler = async (args) => {
-  const {name, ...scriptArgs} = args
+  const { name, ...scriptArgs } = args
   const scriptPath = path.join(getPaths().api.scripts, `${name}`)
   try {
     require.resolve(scriptPath)
@@ -69,7 +70,7 @@ export const handler = async (args) => {
           console.error(c.error(`Error in script: ${e.message}`))
         }
       },
-    }
+    },
   ]
 
   const tasks = new Listr(scriptTasks, {
@@ -82,9 +83,7 @@ export const handler = async (args) => {
     await db.$disconnect()
   } catch (e) {
     await db.$disconnect()
-    console.error(
-      c.error(`The script exited with errors.`)
-    )
+    console.error(c.error(`The script exited with errors.`))
     process.exit(e?.exitCode || 1)
   }
 }
