@@ -3,7 +3,6 @@ import { execSync } from 'child_process'
 import camelcase from 'camelcase'
 import Listr from 'listr'
 import pascalcase from 'pascalcase'
-import yargs from 'yargs'
 
 import { addRoutesToRouterTask, writeFilesTask } from 'src/lib'
 import c from 'src/lib/colors'

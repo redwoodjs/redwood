@@ -68,6 +68,19 @@ export const pathName = (path, name) => {
   return routePath
 }
 
+const appendPositionalsToCmd = (commandString, positionalsObj) => {
+  // Add positionals like `page <name>` + ` [path]` if specified
+  if (Object.keys(positionalsObj).length > 0) {
+    const positionalNames = Object.keys(positionalsObj)
+      .map((positionalName) => `[${positionalName}]`)
+      .join(' ')
+    // Note space after command is important
+    return `${commandString} ${positionalNames}`
+  } else {
+    return commandString
+  }
+}
+
 /**
  * Reduces boilerplate for creating a yargs handler that writes a component/page/layout to a
  * location.
@@ -79,12 +92,7 @@ export const createYargsForComponentGeneration = ({
   positionalsObj = {},
 }) => {
   return {
-    command:
-      `${componentName} <name> ` +
-      // Takes positionals, and adds them like this [pos1] [pas2]
-      Object.keys(positionalsObj)
-        .map((positionalName) => `[${positionalName}]`)
-        .join(' '),
+    command: appendPositionalsToCmd(`${componentName} <name>`, positionalsObj),
     description: `Generate a ${componentName} component`,
     builder: (yargs) => {
       yargs
