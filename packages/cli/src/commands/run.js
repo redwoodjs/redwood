@@ -29,23 +29,19 @@ babelRequireHook({
 
 const { db } = require(path.join(getPaths().api.lib, 'db'))
 
-const runScript = async (scriptPath) => {
+const runScript = async (scriptPath, scriptArgs) => {
   const script = await import(scriptPath)
-  const startedAt = new Date()
-  await script.default({ db })
-  const finishedAt = new Date()
-
-  return { startedAt, finishedAt }
+  await script.default({ db, args: scriptArgs })
 }
 
-export const command = 'run'
+export const command = 'run <name>'
 export const description = 'Run your script'
 export const builder = (yargs) => {
   yargs
   .positional('name', {
     description: 'The name of the script to run',
     type: 'string',
-  }).epilogue(
+  }).strict(false).epilogue(
     `Also see the ${terminalLink(
       'Redwood CLI Reference',
       'https://redwoodjs.com/docs/cli-commands#up'
@@ -54,8 +50,8 @@ export const builder = (yargs) => {
 }
 
 export const handler = async (args) => {
-  const scriptPath = path.join(getPaths().api.scripts, `${args.name}.js`)
-
+  const {name, ...scriptArgs} = args
+  const scriptPath = path.join(getPaths().api.scripts, `${name}.js`)
   if (!fs.existsSync(scriptPath)) {
     console.info(c.error(`\nNo script file (${scriptPath}) exists.\n`))
     process.exit(0)
@@ -66,7 +62,7 @@ export const handler = async (args) => {
       title: 'Running script',
       task: async () => {
         try {
-          const { startedAt, finishedAt } = await runScript(scriptPath)
+          await runScript(scriptPath, scriptArgs)
         } catch (e) {
           console.error(c.error(`Error in script: ${e.message}`))
         }
@@ -82,7 +78,6 @@ export const handler = async (args) => {
   try {
     await tasks.run()
     await db.$disconnect()
-    console.info(c.info('\nScript has completed successfully.\n'))
   } catch (e) {
     await db.$disconnect()
     console.error(
