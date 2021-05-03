@@ -412,6 +412,8 @@ export const builder = (yargs) => {
         'https://redwoodjs.com/reference/command-line-interface#generate-scaffold'
       )}`
     )
+
+  // Merge generator defaults in
   Object.entries(yargsDefaults).forEach(([option, config]) => {
     yargs.option(option, config)
   })

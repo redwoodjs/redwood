@@ -68,7 +68,7 @@ export const files = ({
   }, {})
 }
 
-const builderObj = {
+const optionsObj = {
   skipLink: {
     default: false,
     description: 'Generate with skip link',
@@ -85,5 +85,5 @@ export const {
 } = createYargsForComponentGeneration({
   componentName: 'layout',
   filesFn: files,
-  builderObj,
+  optionsObj,
 })
