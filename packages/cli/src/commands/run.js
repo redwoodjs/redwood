@@ -51,10 +51,12 @@ export const builder = (yargs) => {
 
 export const handler = async (args) => {
   const {name, ...scriptArgs} = args
-  const scriptPath = path.join(getPaths().api.scripts, `${name}.js`)
-  if (!fs.existsSync(scriptPath)) {
-    console.info(c.error(`\nNo script file (${scriptPath}) exists.\n`))
-    process.exit(0)
+  const scriptPath = path.join(getPaths().api.scripts, `${name}`)
+  try {
+    require.resolve(scriptPath)
+  } catch {
+    console.info(c.error(`\nNo script module exists with that name.\n`))
+    process.exit(1)
   }
 
   const scriptTasks = [
