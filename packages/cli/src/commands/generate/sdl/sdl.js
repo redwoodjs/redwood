@@ -205,6 +205,8 @@ export const builder = (yargs) => {
         'https://redwoodjs.com/reference/command-line-interface#generate-sdl'
       )}`
     )
+
+  // Merge default options in
   Object.entries(defaults).forEach(([option, config]) => {
     yargs.option(option, config)
   })
