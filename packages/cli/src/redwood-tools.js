@@ -436,9 +436,5 @@ yargs
       fixProjectBinaries(getPaths().base)
     }
   )
-  .command(
-    ['dsp'],
-    'description',
-  )
   .demandCommand()
   .strict().argv
