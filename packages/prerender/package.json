@@ -34,5 +34,6 @@
   "externals": {
     "react": "react",
     "react-dom": "react-dom"
-  }
+  },
+  "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"
 }
