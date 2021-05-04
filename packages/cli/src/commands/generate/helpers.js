@@ -68,18 +68,31 @@ export const pathName = (path, name) => {
   return routePath
 }
 
+const appendPositionalsToCmd = (commandString, positionalsObj) => {
+  // Add positionals like `page <name>` + ` [path]` if specified
+  if (Object.keys(positionalsObj).length > 0) {
+    const positionalNames = Object.keys(positionalsObj)
+      .map((positionalName) => `[${positionalName}]`)
+      .join(' ')
+    // Note space after command is important
+    return `${commandString} ${positionalNames}`
+  } else {
+    return commandString
+  }
+}
+
 /**
- * Reduces boilerplate for creating a yargs handler that writes a component to a
+ * Reduces boilerplate for creating a yargs handler that writes a component/page/layout to a
  * location.
  */
-// TODO: Make this work for all files, not just components.
 export const createYargsForComponentGeneration = ({
   componentName,
   filesFn,
-  builderObj = yargsDefaults,
+  optionsObj = yargsDefaults,
+  positionalsObj = {},
 }) => {
   return {
-    command: `${componentName} <name>`,
+    command: appendPositionalsToCmd(`${componentName} <name>`, positionalsObj),
     description: `Generate a ${componentName} component`,
     builder: (yargs) => {
       yargs
@@ -103,7 +116,13 @@ export const createYargsForComponentGeneration = ({
           type: 'boolean',
           default: true,
         })
-      Object.entries(builderObj).forEach(([option, config]) => {
+
+      // Add in passed in positionals
+      Object.entries(positionalsObj).forEach(([option, config]) => {
+        yargs.positional(option, config)
+      })
+      // Add in passed in options
+      Object.entries(optionsObj).forEach(([option, config]) => {
         yargs.option(option, config)
       })
     },

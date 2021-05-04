@@ -406,11 +406,12 @@ There's another helper you'll see being used fairly often: [createYargsForCompon
 
 This function takes care of some of the boilerplate around yargs commands by creating the four constants&mdash;`command`, `description`, `builder`, and `handler`&mdash;for you.
 
-It has three parameters:
+It has four parameters:
 
 - `componentName`: a string, like `'page'`
 - `filesFn`: a function, usually the one called `files`
-- `builderObj`: an object, used to construct `builder`. Defaults to [yargsDefaults](#yargsdefaults)
+- `optionsObj`: an object, used to construct `options` for yargs. Defaults to [yargsDefaults](#yargsdefaults)
+- `positionalsObj`: an object, used to construct `positionals` for yargs.
 
 The idea here's to export as many constants as you can straight from `createYargsForComponentGeneration`'s returns:
 
