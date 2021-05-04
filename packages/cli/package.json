@@ -20,13 +20,13 @@
     "@redwoodjs/structure": "^0.31.1",
     "boxen": "^4.2.0",
     "camelcase": "^6.0.0",
-    "chalk": "^4.1.0",
-    "concurrently": "^5.1.0",
+    "chalk": "^4.1.1",
+    "concurrently": "^6.0.2",
     "core-js": "3.10.1",
     "cross-env": "^7.0.2",
     "decamelize": "^4.0.0",
     "dotenv-defaults": "^2.0.1",
-    "envinfo": "^7.7.3",
+    "envinfo": "^7.8.1",
     "execa": "^5.0.0",
     "fs-extra": "^9.0.1",
     "humanize-string": "^2.1.0",
@@ -44,7 +44,7 @@
   },
   "devDependencies": {
     "@types/listr": "^0.14.2",
-    "@types/node-fetch": "^2.5.5"
+    "@types/node-fetch": "^2.5.10"
   },
   "scripts": {
     "build": "yarn build:js",
