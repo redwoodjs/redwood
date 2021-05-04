@@ -26,9 +26,9 @@ babelRequireHook({
   cache: false,
 })
 
-const { db } = require(path.join(getPaths().api.lib, 'db'))
 
 const runScript = async (scriptPath, scriptArgs) => {
+  const { db } = require(path.join(getPaths().api.lib, 'db'))
   const script = await import(scriptPath)
   await script.default({ db, args: scriptArgs })
 }
