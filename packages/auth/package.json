@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth",
-  "version": "0.31.1",
+  "version": "0.31.2",
   "files": [
     "dist"
   ],
@@ -30,5 +30,5 @@
     "test": "jest",
     "test:watch": "yarn test --watch"
   },
-  "gitHead": "c235e7d7186e5e258764699c0e0e1d5cc0fdd0b5"
+  "gitHead": "93f60dd2c9e8592c9b35e1f7c2191eb8b5037727"
 }
