@@ -15,7 +15,7 @@
     "root": true
   },
   "engines": {
-    "node": ">=14",
+    "node": ">=14 <16",
     "yarn": ">=1.15"
   },
   "resolutions": {

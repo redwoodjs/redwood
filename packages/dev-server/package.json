@@ -19,11 +19,11 @@
     "qs": "^6.9.3",
     "require-dir": "^1.2.0",
     "yargs": "^16.0.3",
-    "youch": "^2.1.1",
+    "youch": "^2.2.1",
     "youch-terminal": "^1.0.1"
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.46",
+    "@types/aws-lambda": "^8.10.76",
     "@types/express": "^4.17.3",
     "@types/morgan": "^1.9.0",
     "@types/qs": "^6.9.1",
