@@ -78,8 +78,8 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
 
 export const RedwoodApolloProvider: React.FunctionComponent<{
   graphQLClientConfig?: GraphQLClientConfigProp
-  useAuth: UseAuthProp
-}> = ({ graphQLClientConfig, useAuth, children }) => {
+  useAuth?: UseAuthProp
+}> = ({ graphQLClientConfig, useAuth = useRWAuth, children }) => {
   return (
     <FetchConfigProvider useAuth={useAuth}>
       <ApolloProviderWithFetchConfig
