@@ -10,7 +10,8 @@ import {
 } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 
-import { AuthContextInterface, useAuth } from '@redwoodjs/auth'
+import { useAuth } from '@redwoodjs/auth'
+import type { AuthContextInterface } from '@redwoodjs/auth'
 
 import {
   FetchConfigProvider,
