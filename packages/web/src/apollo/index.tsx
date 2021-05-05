@@ -28,9 +28,10 @@ export type UseAuthProp = () => AuthContextInterface
 
 const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   config?: GraphQLClientConfigProp
-}> = ({ config = {}, children }) => {
+  useAuth: UseAuthProp
+}> = ({ config = {}, children, useAuth }) => {
   const { uri, headers } = useFetchConfig()
-  const { getToken, type: authProviderType, isAuthenticated } = useRWAuth()
+  const { getToken, type: authProviderType, isAuthenticated } = useAuth()
 
   const withToken = setContext(async () => {
     if (isAuthenticated && getToken) {
@@ -81,7 +82,10 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
 }> = ({ graphQLClientConfig, useAuth, children }) => {
   return (
     <FetchConfigProvider useAuth={useAuth}>
-      <ApolloProviderWithFetchConfig config={graphQLClientConfig}>
+      <ApolloProviderWithFetchConfig
+        config={graphQLClientConfig}
+        useAuth={useAuth}
+      >
         <GraphQLHooksProvider useQuery={useQuery} useMutation={useMutation}>
           {children}
         </GraphQLHooksProvider>
