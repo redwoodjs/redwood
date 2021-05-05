@@ -10,7 +10,7 @@ import {
 } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 
-import { useAuth } from '@redwoodjs/auth'
+import { useAuth as useRWAuth } from '@redwoodjs/auth'
 import type { AuthContextInterface } from '@redwoodjs/auth'
 
 import {
@@ -23,7 +23,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   config?: Omit<ApolloClientOptions<InMemoryCache>, 'cache'>
 }> = ({ config = {}, children }) => {
   const { uri, headers } = useFetchConfig()
-  const { getToken, type: authProviderType, isAuthenticated } = useAuth()
+  const { getToken, type: authProviderType, isAuthenticated } = useRWAuth()
 
   const withToken = setContext(async () => {
     if (isAuthenticated && getToken) {
