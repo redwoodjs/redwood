@@ -19,8 +19,15 @@ import {
 } from 'src/components/FetchConfigProvider'
 import { GraphQLHooksProvider } from 'src/components/GraphQLHooksProvider'
 
+export type GraphQLClientConfigProp = Omit<
+  ApolloClientOptions<InMemoryCache>,
+  'cache'
+>
+
+export type UseAuthProp = () => AuthContextInterface
+
 const ApolloProviderWithFetchConfig: React.FunctionComponent<{
-  config?: Omit<ApolloClientOptions<InMemoryCache>, 'cache'>
+  config?: GraphQLClientConfigProp
 }> = ({ config = {}, children }) => {
   const { uri, headers } = useFetchConfig()
   const { getToken, type: authProviderType, isAuthenticated } = useRWAuth()
@@ -69,8 +76,8 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
 }
 
 export const RedwoodApolloProvider: React.FunctionComponent<{
-  graphQLClientConfig?: Omit<ApolloClientOptions<InMemoryCache>, 'cache'>
-  useAuth: () => AuthContextInterface
+  graphQLClientConfig?: GraphQLClientConfigProp
+  useAuth: UseAuthProp
 }> = ({ graphQLClientConfig, useAuth, children }) => {
   return (
     <FetchConfigProvider useAuth={useAuth}>
