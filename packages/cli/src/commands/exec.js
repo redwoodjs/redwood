@@ -33,7 +33,7 @@ const runScript = async (scriptPath, scriptArgs) => {
   await script.default({ db, args: scriptArgs })
 }
 
-export const command = 'run <name>'
+export const command = 'exec <name>'
 export const description = 'Run your script'
 export const builder = (yargs) => {
   yargs
