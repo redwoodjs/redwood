@@ -62,7 +62,7 @@ const addRedwoodToWorkspaces = () => {
   const pkgJson = require(pkgJsonPath)
   pkgJson.workspaces.packages = [
     ...pkgJson.workspaces.packages,
-    'node_modules/.RedwoodJSFrameworkPackages/*',
+    'node_modules/.RedwoodJSFrameworkPackages/packages/*',
   ]
   fs.writeFileSync(pkgJsonPath, JSON.stringify(pkgJson, undefined, 2))
 }
@@ -71,7 +71,7 @@ const copyFrameworkPackages = () => {
   try {
     const pkgDirectory = path.join(
       REDWOOD_PROJECT_DIRECTORY,
-      'node_modules/.RedwoodJSFrameworkPackages/*'
+      'node_modules/.RedwoodJSFrameworkPackages'
     )
     fs.mkdirSync(pkgDirectory, { recursive: true })
 
