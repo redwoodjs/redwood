@@ -10,7 +10,7 @@ import c from 'src/lib/colors'
 
 babelRequireHook({
   extends: path.join(getPaths().api.base, '.babelrc.js'),
-  extensions: ['.js', '.ts', '.tsx', '.jsx'],
+  extensions: ['.js', '.ts'],
   only: [getPaths().api.base],
   plugins: [
     [
