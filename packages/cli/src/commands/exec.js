@@ -13,6 +13,7 @@ babelRequireHook({
   extensions: ['.js', '.ts'],
   only: [getPaths().api.base],
   plugins: [
+    ['ignore-html-and-css-imports'],
     [
       'babel-plugin-module-resolver',
       {
@@ -26,9 +27,9 @@ babelRequireHook({
   cache: false,
 })
 
+const { db } = require(path.join(getPaths().api.lib, 'db'))
 
 const runScript = async (scriptPath, scriptArgs) => {
-  const { db } = require(path.join(getPaths().api.lib, 'db'))
   const script = await import(scriptPath)
   await script.default({ db, args: scriptArgs })
 }
