@@ -24,7 +24,7 @@ async function main() {
   //   { name: 'bob', email: "bob@example.com" },
   // ]
 
-  // // Note: if using Postgres, using `createMany` to insert multiple records is much faster
+  // // Note: if using PostgreSQL, using `createMany` to insert multiple records is much faster
   // // @see: https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#createmany
   // return Promise.all(
   //   data.map(async (user) => {
