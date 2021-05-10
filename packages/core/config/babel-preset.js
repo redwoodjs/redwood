@@ -58,8 +58,7 @@ module.exports = () => {
                 proposals: true,
               },
               exclude: [
-                // Although preset-env includes class-properties
-                // but webpack 4 doesn't support the syntax when target supports and babel transpilation is skipped
+                // Remove class-properties from preset-env, and include separately with loose
                 // https://github.com/webpack/webpack/issues/9708
                 '@babel/plugin-proposal-class-properties',
                 '@babel/plugin-proposal-private-methods',
@@ -112,8 +111,7 @@ module.exports = () => {
                 proposals: true,
               },
               exclude: [
-                // Although preset-env includes class-properties
-                // but webpack 4 doesn't support the syntax when target supports and babel transpilation is skipped
+                // Remove class-properties from preset-env, and include separately
                 // https://github.com/webpack/webpack/issues/9708
                 '@babel/plugin-proposal-class-properties',
                 '@babel/plugin-proposal-private-methods',
