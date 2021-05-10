@@ -22,6 +22,9 @@ module.exports = () => {
     presets: ['@babel/preset-react', '@babel/preset-typescript'],
     plugins: [
       ['@babel/plugin-proposal-class-properties', { loose: true }],
+      // Note: The private method loose mode configuration setting must be the
+      // same as @babel/plugin-proposal class-properties.
+      // (https://babeljs.io/docs/en/babel-plugin-proposal-private-methods#loose)
       ['@babel/plugin-proposal-private-methods', { loose: true }],
       [
         '@babel/plugin-transform-runtime',
