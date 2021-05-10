@@ -6,13 +6,13 @@ dotenv.config()
 const db = new PrismaClient()
 
 /*
-* Seed data is database data that needs to exist for your app to run.
-*
-* @see https://www.prisma.io/docs/reference/api-reference/command-reference#migrate-reset
-* @see https://www.prisma.io/docs/guides/prisma-guides/seed-database
-* @see https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#upsert
-* @see https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#createmany
-*/
+ * Seed data is database data that needs to exist for your app to run.
+ *
+ * @see https://www.prisma.io/docs/reference/api-reference/command-reference#migrate-reset
+ * @see https://www.prisma.io/docs/guides/prisma-guides/seed-database
+ * @see https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#upsert
+ * @see https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#createmany
+ */
 async function main() {
   console.warn('Please define your seed data.')
 
@@ -28,7 +28,9 @@ async function main() {
   // // @see: https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#createmany
   // return Promise.all(
   //   data.map(async (user) => {
-  //     const record = await db.user.create({ data: { name: user.name, email: user.email }})
+  //     const record = await db.user.create({
+  //       data: { name: user.name, email: user.email },
+  //     })
   //     console.log(record)
   //   })
   // )
