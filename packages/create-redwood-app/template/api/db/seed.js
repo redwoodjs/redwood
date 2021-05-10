@@ -18,10 +18,10 @@ async function main() {
 
   // // Change to match your data model and seeding needs
   // const data = [
-  //   { name: 'alice', email: "alice@example.com" },
-  //   { name: 'mark', email: "mark@example.com" },
-  //   { name: 'jackie', email: "jackie@example.com" },
-  //   { name: 'bob', email: "bob@example.com" },
+  //   { name: 'alice', email: 'alice@example.com' },
+  //   { name: 'mark', email: 'mark@example.com' },
+  //   { name: 'jackie', email: 'jackie@example.com' },
+  //   { name: 'bob', email: 'bob@example.com' },
   // ]
 
   // // Note: if using PostgreSQL, using `createMany` to insert multiple records is much faster
