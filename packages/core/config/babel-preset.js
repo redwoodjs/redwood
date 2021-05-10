@@ -1,6 +1,7 @@
 /**
  * This is the babel preset used in `create-redwood-app`
  */
+const { extendDefaultPlugins } = require('svgo')
 
 const { getProject } = require('@redwoodjs/structure')
 
@@ -21,6 +22,7 @@ module.exports = () => {
     presets: ['@babel/preset-react', '@babel/preset-typescript'],
     plugins: [
       ['@babel/plugin-proposal-class-properties', { loose: true }],
+      ['@babel/plugin-proposal-private-methods', { loose: true }],
       [
         '@babel/plugin-transform-runtime',
         {
@@ -55,6 +57,13 @@ module.exports = () => {
                 // List of supported proposals: https://github.com/zloirock/core-js/blob/master/docs/2019-03-19-core-js-3-babel-and-a-look-into-the-future.md#ecmascript-proposals
                 proposals: true,
               },
+              exclude: [
+                // Although preset-env includes class-properties
+                // but webpack 4 doesn't support the syntax when target supports and babel transpilation is skipped
+                // https://github.com/webpack/webpack/issues/9708
+                '@babel/plugin-proposal-class-properties',
+                '@babel/plugin-proposal-private-methods',
+              ],
             },
           ],
         ],
@@ -102,6 +111,13 @@ module.exports = () => {
                 version: CORE_JS_VERSION,
                 proposals: true,
               },
+              exclude: [
+                // Although preset-env includes class-properties
+                // but webpack 4 doesn't support the syntax when target supports and babel transpilation is skipped
+                // https://github.com/webpack/webpack/issues/9708
+                '@babel/plugin-proposal-class-properties',
+                '@babel/plugin-proposal-private-methods',
+              ],
             },
           ],
         ],
@@ -148,7 +164,29 @@ module.exports = () => {
               ],
             },
           ],
-          ['inline-react-svg'],
+          [
+            'inline-react-svg',
+            {
+              svgo: {
+                plugins: extendDefaultPlugins([
+                  {
+                    name: 'removeAttrs',
+                    params: { attrs: '(data-name)' },
+                  },
+                  {
+                    // @TODO confirm this is the right thing
+                    // On my projects, this was needed for backwards compatibility
+                    name: 'removeViewBox',
+                    active: false,
+                  },
+                  {
+                    // Otherwise having style="xxx" breaks
+                    name: 'convertStyleToAttrs',
+                  },
+                ]),
+              },
+            },
+          ],
         ],
       },
       // ** Files ending in `Cell.[js,ts]` **
