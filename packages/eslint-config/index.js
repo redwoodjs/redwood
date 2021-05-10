@@ -36,7 +36,7 @@ module.exports = {
       },
     },
     {
-      files: 'api/db/seed.ts',
+      files: 'api/db/seed.js',
       env: {
         node: true,
         commonjs: true,
