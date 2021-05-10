@@ -9,7 +9,7 @@
   "license": "MIT",
   "devDependencies": {
     "@auth0/auth0-spa-js": "^1.14.0",
-    "@supabase/supabase-js": "^1.11.8",
+    "@supabase/supabase-js": "^1.11.10",
     "@types/netlify-identity-widget": "^1.9.1",
     "@types/react": "17.0.3",
     "firebase": "^8.4.3",
