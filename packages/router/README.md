@@ -134,7 +134,7 @@ All `Routes` nested in `<Private>` require authentication.
 
 Sets can take a `private` prop which makes all routes inside that set require authentication.  When a user is not authenticated and attempts to visit this route, they will be redirected to the route passed as the `unauthenticated` prop and the originally requested route's path will be added to the query string in a `redirectTo` param. This lets you send the user to the originally requested page once logged in. Additionally you can also specify `role` to be more fine-grained in your access control.
 
-This is an example of how you'd use a private set:
+Here's an example of how you'd use a private set:
 
 ```jsx
 // Routes.js
