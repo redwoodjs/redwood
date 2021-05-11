@@ -6,8 +6,8 @@ import {
   FormProvider,
   useFormContext,
   RegisterOptions,
-  UseFormMethods,
-  UseFormOptions,
+  UseFormReturn,
+  UseFormProps,
 } from 'react-hook-form'
 
 import {
@@ -137,8 +137,8 @@ const coerceValues = (
 interface FormWithCoercionContext
   extends Omit<React.HTMLProps<HTMLFormElement>, 'onSubmit'> {
   error?: any
-  formMethods?: UseFormMethods
-  validation?: UseFormOptions
+  formMethods?: UseFormReturn
+  validation?: UseFormProps
   onSubmit?: (
     values: Record<string, any>,
     event?: React.BaseSyntheticEvent
@@ -154,8 +154,8 @@ const FormWithCoercionContext: React.FC<FormWithCoercionContext> = (props) => {
     onSubmit,
     ...formProps
   } = props
-  const useFormMethods = useForm(props.validation)
-  const formMethods = propFormMethods || useFormMethods
+  const UseFormReturn = useForm(props.validation)
+  const formMethods = propFormMethods || UseFormReturn
   const { coerce } = useCoercion()
 
   return (
@@ -273,7 +273,7 @@ const TextAreaField = forwardRef<
     <textarea
       {...tagProps}
       id={props.id || props.name}
-      {...(element: HTMLTextAreaElement | null) => {
+      {...(element: HTMLTextAreaElement | any) => {
         register(element, validation)
 
         if (typeof ref === 'function') {
@@ -308,7 +308,7 @@ const SelectField = forwardRef<
     <select
       {...tagProps}
       id={props.id || props.name}
-      {...(element: HTMLSelectElement | null) => {
+      {...(element: HTMLSelectElement | any) => {
         register(element, props.validation || { required: false })
 
         if (typeof ref === 'function') {
@@ -360,7 +360,7 @@ export const CheckboxField = forwardRef<
       type="checkbox"
       {...tagProps}
       id={props.id || props.name}
-      {...(element: HTMLInputElement | null) => {
+      {...(element: HTMLInputElement | any) => {
         register(element, props.validation || { required: false })
 
         if (typeof ref === 'function') {
@@ -421,7 +421,7 @@ const InputField = forwardRef<
     <input
       {...tagProps}
       id={props.id || props.name}
-      {...(element: HTMLInputElement | null) => {
+      {...(element: HTMLInputElement | any) => {
         register(element, props.validation || { required: false })
 
         if (typeof ref === 'function') {
