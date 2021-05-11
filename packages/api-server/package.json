@@ -23,7 +23,7 @@
     "morgan": "^1.10.0",
     "qs": "^6.9.3",
     "yargs": "^16.0.3",
-    "youch": "^2.2.1",
+    "youch": "^2.2.2",
     "youch-terminal": "^1.1.1"
   },
   "devDependencies": {
