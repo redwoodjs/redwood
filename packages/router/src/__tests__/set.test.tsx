@@ -33,7 +33,7 @@ const BLayout = ({ children }) => (
 
 test('wraps components in other components', async () => {
   const TestSet = () => (
-    <Router useAuth={window.__REDWOOD__USE_AUTH}>
+    <Router>
       <Set wrap={[CustomWrapper, GlobalLayout]}>
         <ChildA />
         <Set wrap={BLayout}>
@@ -106,7 +106,7 @@ test('passes props to wrappers', async () => {
     </div>
   )
   const TestSet = () => (
-    <Router useAuth={window.__REDWOOD__USE_AUTH}>
+    <Router>
       <Set wrap={[PropWrapper, GlobalLayout]} propOne="une" propTwo="deux">
         <Route path="/" page={ChildA} name="childa" />
       </Set>

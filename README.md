@@ -55,6 +55,7 @@ use:
 - [Storybook](https://storybook.js.org/)
 - [Babel](https://babeljs.io/)
 - [Webpack](https://webpack.js.org/)
+- [Pino](https://getpino.io)
 
 ## Features
 
@@ -68,7 +69,10 @@ use:
 - Forms with easy client- and/or server-side validation and error handling.
 - [Hot module replacement](https://webpack.js.org/concepts/hot-module-replacement/) (HMR) for faster development.
 - Database migrations (via Prisma 2).
-- First class JAMstack-style deployment to [Netlify](https://www.netlify.com/).
+- Logging using [Pino](https://getpino.io) including to [transports](https://getpino.io/#/docs/transports)
+- Signature verification and payload signing for handling incoming and outgoing Webhooks
+- Page prerendering
+- First class JAMstack-style deployment to [Netlify](https://www.netlify.com/), [Vercel](https://vercel.com/), [Render](https://render.com/), and [Serverless](https://www.serverless.com/).
 
 ## Roadmap
 
