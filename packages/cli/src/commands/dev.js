@@ -110,7 +110,7 @@ export const handler = async ({
     },
     typeGenerator: {
       name: 'typeGenerator',
-      command: 'yarn rw generate types',
+      command: 'yarn rw generate types --watch',
       prefixColor: 'green',
       runWhen: () => project.isTypeScriptProject,
     },

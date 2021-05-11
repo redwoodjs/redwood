@@ -10,10 +10,14 @@ import generateCurrentUserTypes from 'src/lib/runPreBuildTasks'
 import { generateGqlTypes } from './generate-gql-types'
 
 export const command = 'types [side]'
-export const description = 'Generate a data migration'
+export const description = 'Generate graphql types'
 
 /** @type {(yargs: import('yargs')) => import('yargs')} */
 export const builder = (yargs) => {
+  yargs.option('watch', {
+    type: 'boolean',
+    default: false,
+  })
   yargs.epilogue(
     `Also see the ${terminalLink(
       'Redwood CLI Reference',
@@ -22,7 +26,7 @@ export const builder = (yargs) => {
   )
 }
 
-export const handler = async (args) => {
+export const handler = async ({ watch }) => {
   const tasks = new Listr(
     [
       {
@@ -34,7 +38,7 @@ export const handler = async (args) => {
       {
         title: 'Generating graphql types...',
         task: () => {
-          return generateGqlTypes()
+          return generateGqlTypes({ watch })
         },
       },
     ].filter(Boolean),
