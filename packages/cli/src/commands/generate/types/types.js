@@ -1,6 +1,3 @@
-import fs from 'fs'
-import path from 'path'
-
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
 
