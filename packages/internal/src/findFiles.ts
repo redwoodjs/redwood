@@ -27,5 +27,25 @@ export const findCells = (webSrcDir: string = getPaths().web.src) => {
       }
       return false
     })
-    .filter(Boolean)
+    .filter(Boolean) as string[]
+}
+
+/**
+ * Find all the directory named modules.
+ *
+ * @todo measure how performant this code is.
+ */
+export const findDirectoryNamedModules = (
+  projectBaseDir: string = getPaths().base
+) => {
+  const modules = glob.sync('**/*.{ts,js,jsx,tsx}', { cwd: projectBaseDir })
+  return modules
+    .map((m) => {
+      const { dir, name } = path.parse(m)
+      if (!dir.endsWith(name)) {
+        return false
+      }
+      return path.join(projectBaseDir, m)
+    })
+    .filter(Boolean) as string[]
 }
