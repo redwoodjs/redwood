@@ -25,6 +25,7 @@ export const findCells = (webSrcDir: string = getPaths().web.src) => {
       if (exportedQUERY && exportedSuccess) {
         return p
       }
+      return false
     })
-    .filter((p) => typeof p === 'string')
+    .filter(Boolean)
 }

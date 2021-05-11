@@ -17,7 +17,8 @@ interface NamedExports {
  */
 export const getNamedExports = (code: string): NamedExports[] => {
   const namedExports: NamedExports[] = []
-  traverse(parse(code), {
+  const ast = parse(code) as types.Node
+  traverse(ast, {
     ExportNamedDeclaration(path) {
       // Re-exports from other modules
       // Eg: export { a, b } from './module'
@@ -63,7 +64,8 @@ export const getNamedExports = (code: string): NamedExports[] => {
 
 export const hasDefaultExport = (code: string): boolean => {
   let exported = false
-  traverse(parse(code), {
+  const ast = parse(code) as types.Node
+  traverse(ast, {
     ExportDefaultDeclaration() {
       exported = true
       return
