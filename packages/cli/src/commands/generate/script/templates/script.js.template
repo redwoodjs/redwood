@@ -1,0 +1,5 @@
+// Import files from your api workspace here
+
+export default async ({ db, args }) => {
+  // Your script here...
+}
