@@ -5,6 +5,9 @@ import concurrently from 'concurrently'
 import terminalLink from 'terminal-link'
 
 import { getConfig, shutdownPort } from '@redwoodjs/internal'
+import { getProject } from '@redwoodjs/structure'
+
+const project = getProject()
 
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
@@ -85,6 +88,7 @@ export const handler = async ({
     }
   }
 
+  /** @type {Record<string, import('concurrently').CommandObj>} */
   const jobs = {
     api: {
       name: 'api',
@@ -100,9 +104,15 @@ export const handler = async ({
       command: `cd "${path.join(
         BASE_DIR,
         'web'
-      )}" && yarn webpack-dev-server --config ../node_modules/@redwoodjs/core/config/webpack.development.js ${forward}`,
+      )}" && yarn cross-env NODE_ENV=development webpack-dev-server --config ../node_modules/@redwoodjs/core/config/webpack.development.js ${forward}`,
       prefixColor: 'blue',
       runWhen: () => fs.existsSync(WEB_DIR_SRC),
+    },
+    typeGenerator: {
+      name: 'typeGenerator',
+      command: 'yarn rw generate types',
+      prefixColor: 'green',
+      runWhen: () => project.isTypeScriptProject,
     },
   }
 
@@ -117,7 +127,7 @@ export const handler = async ({
 
   concurrently(
     Object.keys(jobs)
-      .map((n) => side.includes(n) && jobs[n])
+      .map((n) => (side.includes(n) || n === 'typeGenerator') && jobs[n])
       .filter((job) => job && job.runWhen()),
     {
       prefix: '{name} |',

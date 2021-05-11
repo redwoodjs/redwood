@@ -9,7 +9,7 @@ function generateTypeDef(filename, contents) {
   host.writeFileSync(path.join(host.paths.types, filename), contents)
 }
 
-function generateCurrentUserTypes() {
+export function generateCurrentUserTypes() {
   generateTypeDef(
     'currentUser.d.ts',
     project.host.readFileSync(
