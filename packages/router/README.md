@@ -40,7 +40,7 @@ The `path` prop specifies the URL path to match, starting with the beginning sla
 
 Some pages should only be visible to authenticated users.
 
-We support this using private `<Set>`s or the `<Private>` component. Read more [further down](#private-set)
+We support this using private `<Set>`s or the `<Private>` component. Read more [further down](#private-set).
 
 ## Sets of Routes
 
