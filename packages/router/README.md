@@ -145,7 +145,7 @@ Here's an example of how you'd use a private set:
 </Router>
 ```
 
-Private routes are important, and should be easy to spot in your routes file. The larger your routes file gets, the more difficult it will probably become to find `<Set private /*...*/>` among your other sets. So we also provide a `<Private>` component that's just an alias for `<Set private /*...*/>`. Most of our documentation will use `<Private>`.
+Private routes are important and should be easy to spot in your Routes file. The larger your Routes file gets, the more difficult it will probably become to find `<Set private /*...*/>` among your other Sets. So we also provide a `<Private>` component that's just an alias for `<Set private /*...*/>`. Most of our documentation uses `<Private>`.
 
 Here's the same example again, but now using `<Private>`
 
