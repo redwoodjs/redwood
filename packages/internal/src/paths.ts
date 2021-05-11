@@ -213,17 +213,6 @@ export const processPagesDir = (
   })
 }
 
-export const findCells = (webSrcDir: string = getPaths().web.src) => {
-  const cellPaths = glob.sync('*Cell.{js,jsx,ts,tsx}', {
-    cwd: webSrcDir,
-  })
-
-  // Determine if they contain the correct exports.
-  for (const p of cellPaths) {
-    console.log(p)
-  }
-}
-
 /**
  * Converts Windows-style paths to Posix-style
  * C:\Users\Bob\dev\Redwood -> /c/Users/Bob/dev/Redwood
