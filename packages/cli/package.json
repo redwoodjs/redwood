@@ -28,7 +28,7 @@
     "dotenv-defaults": "^2.0.1",
     "envinfo": "^7.8.1",
     "execa": "^5.0.0",
-    "fs-extra": "^9.0.1",
+    "fs-extra": "^10.0.0",
     "humanize-string": "^2.1.0",
     "listr": "^0.14.3",
     "listr-verbose-renderer": "^0.6.0",
