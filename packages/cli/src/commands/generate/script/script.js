@@ -12,7 +12,7 @@ const POST_RUN_INSTRUCTIONS = `Next steps...\n\n   ${c.warning(
   'After writing your script, you can run it with:'
 )}
 
-     yarn rw run <name>
+     yarn rw exec <name>
 `
 
 const TEMPLATE_PATH = path.resolve(__dirname, 'templates', 'script.js.template')

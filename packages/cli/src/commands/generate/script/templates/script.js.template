@@ -1,5 +1,6 @@
 // Import files from your api workspace here
+import { db } from 'src/lib/db'
 
-export default async ({ db, args }) => {
+export default async ({ args }) => {
   // Your script here...
 }
