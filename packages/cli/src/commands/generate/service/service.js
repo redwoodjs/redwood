@@ -210,7 +210,6 @@ export const files = async ({
   name,
   tests = true,
   relations,
-  javascript,
   typescript,
   ...rest
 }) => {
@@ -265,7 +264,7 @@ export const files = async ({
   //    "path/to/fileB": "<<<template>>>",
   // }
   return files.reduce((acc, [outputPath, content]) => {
-    if (javascript && !typescript) {
+    if (!typescript) {
       content = transformTSToJS(outputPath, content)
       outputPath = outputPath.replace('.ts', '.js')
     }

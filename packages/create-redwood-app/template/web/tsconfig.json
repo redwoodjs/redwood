@@ -10,9 +10,9 @@
     "paths": {
       "src/*": ["./src/*"]
     },
-    "typeRoots": ["../node_modules/@types", "../.redwood"],
+    "typeRoots": ["../node_modules/@types", "./node_modules/@types"],
     "types": ["jest"],
     "jsx": "preserve",
   },
-  "include": ["src", "../.redwood/globals"]
+  "include": ["src", "../.redwood/**/*"]
 }
