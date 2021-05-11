@@ -1,8 +1,6 @@
 name: Cypress E2E tests
 
 on:
-  push:
-    branches: [main]
   pull_request:
     types: [opened, synchronize, reopened]
 
