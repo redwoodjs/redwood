@@ -1,7 +1,4 @@
 import { generate } from '@graphql-codegen/cli'
-import chokidar from 'chokidar'
-
-import { getPaths } from 'src/lib'
 
 // We'll need this when we try to use makeMergedSchema
 // import path from 'path'
@@ -34,6 +31,7 @@ const GENERATOR_CONFIG = {
       JSONObject: 'Record<string, unknown>',
       Time: 'string',
     },
+    omitOperationSuffix: true, // prevent type names being PetQueryQuery, RW generators already append Query/Mutation/etc.
   },
   generates: {
     './api/types/gql-types.ts': {
@@ -46,41 +44,6 @@ const GENERATOR_CONFIG = {
   },
 }
 
-let watchHandle
-
-process.on('SIGINT', () => {
-  watchHandle?.close()
-})
-
-/**  @type ({watch: boolean}) => void **/
-export async function generateGqlTypes({ watch }) {
+export async function generateGqlTypes() {
   await generate(GENERATOR_CONFIG, true)
-
-  if (watch) {
-    watchHandle = chokidar
-      .watch(
-        [
-          `${getPaths().api.src}/**/*.{ts,tsx}`,
-          `${getPaths().web.src}/**/*.{ts,tsx}`,
-        ],
-        {
-          persistent: true,
-
-          ignored: [
-            '**/*.test.ts',
-            '**/*.test.js',
-            '**/__fixtures__/**',
-            '**/__tests__/**',
-            '**/dist/**',
-          ],
-        }
-      )
-      .on('change', (fileName) => {
-        console.log(
-          `✋ ~ file: generate-gql-types.js ~ line 55 ~ .on ~ fileName`,
-          fileName
-        )
-        generate(GENERATOR_CONFIG, true)
-      })
-  }
 }

@@ -1,9 +1,11 @@
+import chokidar from 'chokidar'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
 
+import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
-import generateCurrentUserTypes from 'src/lib/runPreBuildTasks'
 
+import { generateCurrentUserTypes } from './generate-current-user'
 import { generateGqlTypes } from './generate-gql-types'
 
 export const command = 'types [side]'
@@ -23,6 +25,8 @@ export const builder = (yargs) => {
   )
 }
 
+let watchHandle
+
 export const handler = async ({ watch }) => {
   const tasks = new Listr(
     [
@@ -35,7 +39,7 @@ export const handler = async ({ watch }) => {
       {
         title: 'Generating graphql types...',
         task: () => {
-          return generateGqlTypes({ watch })
+          return generateGqlTypes()
         },
       },
     ].filter(Boolean),
@@ -44,6 +48,40 @@ export const handler = async ({ watch }) => {
 
   try {
     await tasks.run()
+
+    if (watch) {
+      watchHandle = chokidar
+        .watch(
+          [
+            `${getPaths().api.src}/**/*.{ts,tsx}`,
+            `${getPaths().web.src}/**/*.{ts,tsx}`,
+          ],
+          {
+            persistent: true,
+
+            ignored: [
+              '**/*.test.ts',
+              '**/*.test.js',
+              '**/__fixtures__/**',
+              '**/__tests__/**',
+              '**/dist/**',
+            ],
+          }
+        )
+        .on('change', (fileName) => {
+          console.log(
+            `✋ ~ file: generate-gql-types.js ~ line 55 ~ .on ~ fileName`,
+            fileName
+          )
+          // For now we only need to dynamically generate gql types
+          // Cell "mirrored types" should also be generated here
+          generateGqlTypes()
+        })
+
+      process.on('SIGINT', () => {
+        watchHandle?.close()
+      })
+    }
   } catch (e) {
     console.log(c.error(e.message))
     process.exit(1)

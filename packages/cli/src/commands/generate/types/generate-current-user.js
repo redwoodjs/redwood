@@ -17,16 +17,3 @@ export function generateCurrentUserTypes() {
     )
   )
 }
-
-/**
- * @description This function houses all the tasks that
- * need to run before rw build/rw dev
- */
-
-function runPreBuildTasks() {
-  if (project.isTypeScriptProject) {
-    generateCurrentUserTypes()
-  }
-}
-
-export default runPreBuildTasks
