@@ -9,6 +9,7 @@ import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 
 const runScript = async (scriptPath, scriptArgs) => {
+  // Import babel config for running script
   babelRequireHook({
     extends: path.join(getPaths().api.base, '.babelrc.js'),
     extensions: ['.js', '.ts'],
