@@ -161,7 +161,7 @@ Here's the same example again, but now using `<Private>`
 ```
 
 Redwood uses the `useAuth` hook under the hood to determine if the user is authenticated.
-Read more about authentication in redwood [here](https://redwoodjs.com/tutorial/authentication).
+Read more about authentication in Redwood [here](https://redwoodjs.com/tutorial/authentication).
 
 ## Link and named route functions
 
