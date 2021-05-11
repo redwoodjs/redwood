@@ -12,7 +12,7 @@
     "@supabase/supabase-js": "^1.11.8",
     "@types/netlify-identity-widget": "^1.9.1",
     "@types/react": "17.0.3",
-    "firebase": "^8.4.3",
+    "firebase": "^8.5.0",
     "firebase-admin": "^9.7.0",
     "gotrue-js": "^0.9.29",
     "magic-sdk": "^2.5.0",
