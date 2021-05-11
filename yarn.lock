@@ -13950,7 +13950,7 @@ multimatch@^3.0.0:
     arrify "^1.0.1"
     minimatch "^3.0.4"
 
-mustache@^4.1.0:
+mustache@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/mustache/-/mustache-4.2.0.tgz#e5892324d60a12ec9c2a73359edca52972bf6f64"
   integrity sha512-71ippSywq5Yb7/tVYyGbkBggbU8H3u5Rz56fH60jGFgr8uHwxs+aSKeqmluIVzM0m0kB7xQjKS6qPfd0b2ZoqQ==
@@ -19824,14 +19824,14 @@ youch-terminal@^1.1.1:
   dependencies:
     kleur "^4.1.4"
 
-youch@^2.2.1:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/youch/-/youch-2.2.1.tgz#204e7a55b48708a77fc09cd3d3cba0038f560a4e"
-  integrity sha512-omRM/t3JOsGN1wXP2r5HNmcUgkO3xxw+veese5L3FAgFwuqYZkK3Nuk03ZkTZ6VZ64lG6pbfl1pej49mt44wxA==
+youch@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/youch/-/youch-2.2.2.tgz#cb87a359a5c524ebd35eb07ca3a1521dbc7e1a3e"
+  integrity sha512-/FaCeG3GkuJwaMR34GHVg0l8jCbafZLHiFowSjqLlqhC6OMyf2tPJBu8UirF7/NI9X/R5ai4QfEKUCOxMAGxZQ==
   dependencies:
     "@types/stack-trace" "0.0.29"
     cookie "^0.4.1"
-    mustache "^4.1.0"
+    mustache "^4.2.0"
     stack-trace "0.0.10"
 
 zen-observable-ts@^0.8.21:
