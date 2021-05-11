@@ -131,7 +131,9 @@ becomes...
 ### `private` Set
 
 
-Sets can take a `private` prop which makes all routes inside that set require authentication.  When a user is not authenticated and attempts to visit this route, they will be redirected to the route passed as the `unauthenticated` prop and the originally requested route's path will be added to the query string in a `redirectTo` param. This lets you send the user to the originally requested page once logged in. Additionally you can also specify `role` to be more fine-grained in your access control.
+Sets can take a `private` prop which makes all Routes inside that Set require authentication. When a user isn't authenticated and attempts to visit one of the Routes in the private Set, they'll be redirected to the Route passed as the Set's `unauthenticated` prop. The originally-requested Route's path is added to the query string as a `redirectTo` param. This lets you send the user to the page they originally requested once they're logged-in. 
+
+Additionally you can also specify `role` to be more fine-grained in your access control.
 
 Here's an example of how you'd use a private set:
 
