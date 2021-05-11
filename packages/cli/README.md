@@ -370,7 +370,7 @@ const ${singularPascalName}Page = () => {
 
 The variables referenced in the template must be named the same as what's passed to the `generateTemplate` function, which is usually wrapped in a few functions, but accessible via the respective generator's `files` function.
 
-The `files` function is what actually generates the files. Every genrator has one. They use a helper, `templateForComponentFiles`, which takes care of the logic around creating an output path and contents.
+The `files` function is what actually generates the files. Every generator has one. They use a helper, `templateForComponentFiles`, which takes care of the logic around creating an output path and contents.
 
 The `...rest` parameter from `files` gets passed to this function's `templateVars` parameter which gets passed to `generateTemplate` for interpolation:
 
@@ -406,11 +406,12 @@ There's another helper you'll see being used fairly often: [createYargsForCompon
 
 This function takes care of some of the boilerplate around yargs commands by creating the four constants&mdash;`command`, `description`, `builder`, and `handler`&mdash;for you.
 
-It has three parameters:
+It has four parameters:
 
 - `componentName`: a string, like `'page'`
 - `filesFn`: a function, usually the one called `files`
-- `builderObj`: an object, used to construct `builder`. Defaults to [yargsDefaults](#yargsdefaults)
+- `optionsObj`: an object, used to construct `options` for yargs. Defaults to [yargsDefaults](#yargsdefaults)
+- `positionalsObj`: an object, used to construct `positionals` for yargs.
 
 The idea here's to export as many constants as you can straight from `createYargsForComponentGeneration`'s returns:
 

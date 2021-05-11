@@ -8,9 +8,9 @@ const config = getConfig()
 
 const baseConfig = {
   stories: ['../../../../web/src/**/*.stories.{tsx,jsx,js}'],
-  // addons: [
-  //    config.web.a11y && '@storybook/addon-a11y'
-  // ].filter(Boolean),
+  addons: [
+     config.web.a11y && '@storybook/addon-a11y'
+  ].filter(Boolean),
   webpackFinal: (sbConfig, { configType }) => {
     // configType is 'PRODUCTION' or 'DEVELOPMENT', why shout?
     const isEnvProduction = configType && configType.toLowerCase() === 'production'
@@ -80,4 +80,5 @@ const mergeUserStorybookConfig = (baseConfig) => {
   return merge(baseConfig, userStorybookConfig)
 }
 
+/** @returns {import('webpack').Configuration} Webpack Configuration with storybook config */
 module.exports = mergeUserStorybookConfig(baseConfig)

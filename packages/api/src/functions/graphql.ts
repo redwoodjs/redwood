@@ -40,7 +40,7 @@ export const createContextHandler = (
     context: GlobalContext & LambdaContext
   }) => {
     // Prevent the Serverless function from waiting for all resources (db connections)
-    // to be released before returning a reponse.
+    // to be released before returning a response.
     context.callbackWaitsForEmptyEventLoop = false
 
     // If the request contains authorization headers, we'll decode the providers that we support,
