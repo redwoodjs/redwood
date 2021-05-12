@@ -1,7 +1,8 @@
 global.__dirname = __dirname
 import path from 'path'
 
-import { loadGeneratorFixture } from 'src/lib/test'
+// Load shared mocks
+import 'src/lib/test'
 
 import * as layout from '../layout'
 
@@ -11,14 +12,14 @@ let singleWordDefaultFiles,
   typescriptFiles,
   withoutTestFiles,
   withoutStoryFiles,
-  withSkipLinkFiles
+  withSkipLinkFilesTS,
+  withSkipLinkFilesJS
 
 beforeAll(() => {
   singleWordDefaultFiles = layout.files({ name: 'App' })
   multiWordDefaultFiles = layout.files({ name: 'SinglePage' })
   javascriptFiles = layout.files({
     name: 'JavascriptPage',
-    javascript: true,
   })
   typescriptFiles = layout.files({
     name: 'TypescriptPage',
@@ -26,15 +27,21 @@ beforeAll(() => {
   })
   withoutTestFiles = layout.files({
     name: 'withoutTests',
-    javascript: true,
     tests: false,
   })
   withoutStoryFiles = layout.files({
     name: 'withoutStories',
-    javascript: true,
+
     stories: false,
   })
-  withSkipLinkFiles = layout.files({
+
+  withSkipLinkFilesTS = layout.files({
+    name: 'A11y',
+    skipLink: true,
+    typescript: true,
+  })
+
+  withSkipLinkFilesJS = layout.files({
     name: 'A11y',
     skipLink: true,
   })
@@ -47,59 +54,59 @@ test('returns exactly 3 files', () => {
 test('creates a single word layout component', () => {
   expect(
     singleWordDefaultFiles[
-      path.normalize('/path/to/project/web/src/layouts/AppLayout/AppLayout.tsx')
+      path.normalize('/path/to/project/web/src/layouts/AppLayout/AppLayout.js')
     ]
-  ).toEqual(loadGeneratorFixture('layout', 'singleWordLayout.tsx'))
+  ).toMatchSnapshot()
 })
 
 test('creates a single word layout test', () => {
   expect(
     singleWordDefaultFiles[
       path.normalize(
-        '/path/to/project/web/src/layouts/AppLayout/AppLayout.test.tsx'
+        '/path/to/project/web/src/layouts/AppLayout/AppLayout.test.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('layout', 'singleWordLayout.test.tsx'))
+  ).toMatchSnapshot()
 })
 
 test('creates a single word layout stories', () => {
   expect(
     singleWordDefaultFiles[
       path.normalize(
-        '/path/to/project/web/src/layouts/AppLayout/AppLayout.stories.tsx'
+        '/path/to/project/web/src/layouts/AppLayout/AppLayout.stories.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('layout', 'singleWordLayout.stories.tsx'))
+  ).toMatchSnapshot()
 })
 
 test('creates a multi word layout component', () => {
   expect(
     multiWordDefaultFiles[
       path.normalize(
-        '/path/to/project/web/src/layouts/SinglePageLayout/SinglePageLayout.tsx'
+        '/path/to/project/web/src/layouts/SinglePageLayout/SinglePageLayout.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('layout', 'multiWordLayout.tsx'))
+  ).toMatchSnapshot()
 })
 
 test('creates a multi word layout test', () => {
   expect(
     multiWordDefaultFiles[
       path.normalize(
-        '/path/to/project/web/src/layouts/SinglePageLayout/SinglePageLayout.test.tsx'
+        '/path/to/project/web/src/layouts/SinglePageLayout/SinglePageLayout.test.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('layout', 'multiWordLayout.test.tsx'))
+  ).toMatchSnapshot()
 })
 
 test('creates a multi word layout test', () => {
   expect(
     multiWordDefaultFiles[
       path.normalize(
-        '/path/to/project/web/src/layouts/SinglePageLayout/SinglePageLayout.stories.tsx'
+        '/path/to/project/web/src/layouts/SinglePageLayout/SinglePageLayout.stories.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('layout', 'multiWordLayout.stories.tsx'))
+  ).toMatchSnapshot()
 })
 
 test('creates JS layout components if javacript = true', () => {
@@ -158,12 +165,22 @@ test("doesn't include test file when --tests is set to false", () => {
   ])
 })
 
-test.only('includes skip link when --skipLink is set to true', () => {
+test('JavaScript: includes skip link when --skipLink is set to true', () => {
   expect(
-    withSkipLinkFiles[
+    withSkipLinkFilesTS[
       path.normalize(
         '/path/to/project/web/src/layouts/A11yLayout/A11yLayout.tsx'
       )
     ]
-  ).toEqual(loadGeneratorFixture('layout', 'withSkipLinkLayout.tsx'))
+  ).toMatchSnapshot()
+})
+
+test('TypeScript: includes skip link when --skipLink is set to true', () => {
+  expect(
+    withSkipLinkFilesJS[
+      path.normalize(
+        '/path/to/project/web/src/layouts/A11yLayout/A11yLayout.js'
+      )
+    ]
+  ).toMatchSnapshot()
 })

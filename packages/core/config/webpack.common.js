@@ -7,6 +7,7 @@ const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const Dotenv = require('dotenv-webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 const webpack = require('webpack')
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin')
 const { merge } = require('webpack-merge')
@@ -17,6 +18,7 @@ const { getConfig, getPaths } = require('@redwoodjs/internal')
 const redwoodConfig = getConfig()
 const redwoodPaths = getPaths()
 
+/** @returns {{[key: string]: string}} Env vars */
 const getEnvVars = () => {
   const redwoodEnvPrefix = 'REDWOOD_ENV_'
   const includeEnvKeys = redwoodConfig.web.includeEnvironmentVariables
@@ -33,6 +35,7 @@ const getEnvVars = () => {
   return redwoodEnvKeys
 }
 
+/** @returns {import('webpack').RuleSetLoader[]} */
 const getStyleLoaders = (isEnvProduction) => {
   const styleOrExtractLoader = isEnvProduction
     ? MiniCssExtractPlugin.loader
@@ -119,10 +122,10 @@ const getStyleLoaders = (isEnvProduction) => {
   ]
 }
 
-// Shared with storybook, as well as the RW app
+/** @returns {import('webpack').Plugin[]} Plugins shared with storybook, as well as the RW app */
 const getSharedPlugins = (isEnvProduction) => {
   const shouldIncludeFastRefresh =
-    redwoodConfig.web.experimentalFastRefresh && !isEnvProduction
+    redwoodConfig.web.fastRefresh !== false && !isEnvProduction
 
   return [
     isEnvProduction &&
@@ -306,14 +309,17 @@ module.exports = (webpackEnv) => {
       ],
     },
     optimization: {
+      mergeDuplicateChunks: true,
       splitChunks: {
         chunks: 'all',
-        name: 'vendors',
+        minChunks: 2,
       },
       runtimeChunk: {
         name: (entrypoint) => `runtime-${entrypoint.name}`,
       },
-      minimizer: [isEnvProduction && new CssMinimizerPlugin()].filter(Boolean),
+      // This doesn't get used when mode !== 'production'
+      // Because minimize gets set to false, see https://webpack.js.org/configuration/mode/#usage
+      minimizer: [new CssMinimizerPlugin(), new TerserPlugin()],
     },
     output: {
       pathinfo: true,
@@ -335,6 +341,7 @@ module.exports = (webpackEnv) => {
   }
 }
 
+/** @returns {import('webpack').Configuration} */
 module.exports.mergeUserWebpackConfig = (mode, baseConfig) => {
   const redwoodPaths = getPaths()
   const hasCustomConfig = fs.existsSync(redwoodPaths.web.webpack)

@@ -4,9 +4,10 @@ import isEqual from 'lodash.isequal'
 
 import {
   createNamedContext,
-  ParamsContext,
   Spec,
   getAnnouncement,
+  getFocus,
+  resetFocus,
 } from './internal'
 
 export interface PageLoadingContextInterface {
@@ -49,8 +50,6 @@ export class PageLoader extends React.Component<Props> {
     pageName: undefined,
     slowModuleImport: false,
   }
-
-  static contextType = ParamsContext
 
   loadingTimeout?: number = undefined
 
@@ -100,7 +99,17 @@ export class PageLoader extends React.Component<Props> {
       if (this.announcementRef.current) {
         this.announcementRef.current.innerText = getAnnouncement()
       }
+      const routeFocus = getFocus()
+      if (!routeFocus) {
+        resetFocus()
+      } else {
+        routeFocus.focus()
+      }
     }
+  }
+
+  componentWillUnmount() {
+    this.setState = () => {} // Prevent updating state after component has been unmounted.
   }
 
   clearLoadingTimeout = () => {
@@ -134,8 +143,6 @@ export class PageLoader extends React.Component<Props> {
       slowModuleImport: false,
       params: props.params,
     })
-
-    this.context.setParams(props.params)
   }
 
   render() {

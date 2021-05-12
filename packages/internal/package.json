@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/internal",
-  "version": "0.27.1",
+  "version": "0.31.2",
   "files": [
     "dist"
   ],
@@ -8,7 +8,7 @@
   "types": "dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@babel/plugin-transform-typescript": "^7.11.6",
+    "@babel/plugin-transform-typescript": "7.13.0",
     "deepmerge": "^4.2.2",
     "findup-sync": "^4.0.0",
     "glob": "7.1.6",
@@ -32,5 +32,5 @@
     "test": "jest",
     "test:watch": "yarn test --watch"
   },
-  "gitHead": "c235e7d7186e5e258764699c0e0e1d5cc0fdd0b5"
+  "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"
 }

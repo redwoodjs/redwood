@@ -8,15 +8,15 @@
     ]
   },
   "devDependencies": {
-    "@redwoodjs/core": "^0.27.1"
+    "@redwoodjs/core": "^0.31.2"
   },
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config",
     "root": true
   },
   "engines": {
-    "node": ">=14",
-    "yarn": ">=1.15"
+    "node": "14.x",
+    "yarn": "1.x"
   },
   "resolutions": {
     "react": "17.0.1",

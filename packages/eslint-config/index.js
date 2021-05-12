@@ -15,6 +15,12 @@ module.exports = {
       rules: {
         'no-undef': 'off',
         '@redwoodjs/redwood/no-unavailable-pages': 'error',
+        'jsx-a11y/aria-role': [
+          2,
+          {
+            ignoreNonDOM: true,
+          },
+        ],
       },
     },
     // `api` side
@@ -46,6 +52,8 @@ module.exports = {
       globals: {
         React: 'readonly',
         gql: 'readonly',
+        process: 'readonly',
+        require: 'readonly',
       },
     },
     // Test, stories, scenarios, and mock files

@@ -24,8 +24,9 @@ const globImports = {
   name: 'glob-imports',
   setup: (build) => {
     // Find all files that match "src/<word characters>/**",
-    // and mark them as "glob-imports".
-    build.onResolve({ filter: /^src\/\w+\/\*\*/ }, (args) => {
+    // and mark them as "glob-imports",
+    // which means that the default "file-imports" will not touch them.
+    build.onResolve({ filter: /^src\/\S+\/\*\*/ }, (args) => {
       return {
         path: args.path,
         namespace: 'glob-imports',
@@ -34,7 +35,7 @@ const globImports = {
 
     // Resolve "glob-imports" by replacing them with standard imports.
     build.onLoad(
-      { filter: /^src\/\w+\/\*\*/, namespace: 'glob-imports' },
+      { filter: /^src\/\S+\/\*\*/, namespace: 'glob-imports' },
       (args) => {
         const files = glob.sync(args.path, {
           cwd: rwjsPaths.api.base,

@@ -19,6 +19,7 @@ export interface NodeTargetConfig {
   path: string
   target: TargetEnum.NODE
   schemaPath: string
+  experimentalSecureServices: boolean
 }
 
 interface BrowserTargetConfig {
@@ -30,8 +31,7 @@ interface BrowserTargetConfig {
   // TODO: apiProxyHost: string
   apiProxyPort: number
   apiProxyPath: string
-  experimentalFastRefresh?: boolean
-  experiemntalPrerender?: boolean
+  fastRefresh: boolean
   a11y: boolean
 }
 
@@ -53,7 +53,7 @@ const DEFAULT_CONFIG: Config = {
     target: TargetEnum.BROWSER,
     apiProxyPath: '/.netlify/functions',
     apiProxyPort: 8911,
-    experimentalFastRefresh: false,
+    fastRefresh: true,
     a11y: true,
   },
   api: {
@@ -62,6 +62,7 @@ const DEFAULT_CONFIG: Config = {
     path: './api',
     target: TargetEnum.NODE,
     schemaPath: './api/prisma/schema.prisma',
+    experimentalSecureServices: false,
   },
   browser: {
     open: false,

@@ -6,6 +6,7 @@ const { getPaths } = require('@redwoodjs/internal')
 
 const redwoodPaths = getPaths()
 
+/** @type {import('@jest/types').Config.InitialOptions} */
 module.exports = {
   collectCoverageFrom: [
     '**/*.{js,jsx,ts,tsx}',

@@ -14,9 +14,7 @@
 
 import { AsyncLocalStorage } from 'async_hooks'
 
-export interface GlobalContext {
-  [key: string]: unknown
-}
+export interface GlobalContext extends Record<string, unknown> {}
 
 let GLOBAL_CONTEXT: GlobalContext = {}
 let PER_REQUEST_CONTEXT:

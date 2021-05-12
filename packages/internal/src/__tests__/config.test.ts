@@ -10,6 +10,7 @@ describe('getConfig', () => {
     expect(config).toMatchInlineSnapshot(`
       Object {
         "api": Object {
+          "experimentalSecureServices": false,
           "host": "localhost",
           "path": "./api",
           "port": 8911,
@@ -23,7 +24,7 @@ describe('getConfig', () => {
           "a11y": true,
           "apiProxyPath": "/.netlify/functions",
           "apiProxyPort": 8911,
-          "experimentalFastRefresh": false,
+          "fastRefresh": true,
           "host": "localhost",
           "path": "./web",
           "port": 8910,
