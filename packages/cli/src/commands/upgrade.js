@@ -96,7 +96,7 @@ export const handler = async ({ dryRun, tag, verbose }) => {
       },
       {
         title: 'Refreshing the Prisma client',
-        task: () => refreshPrismaClient(verbose),
+        task: (_ctx, task) => refreshPrismaClient(task, { verbose }),
         skip: () => dryRun,
       },
       {
@@ -222,30 +222,19 @@ function updateRedwoodDepsForAllSides(ctx, options) {
   )
 }
 
-function refreshPrismaClient(verbose) {
+async function refreshPrismaClient(task, { verbose }) {
   /** Relates to prisma/client issue, @see: https://github.com/redwoodjs/redwood/issues/1083 */
-  console.log('definitely here!!')
-  return new Listr(
-    [
-      {
-        title: '...',
-        task: async (_ctx, task) => {
-          try {
-            await generatePrismaClient({
-              verbose,
-              force: false,
-              schema: getPaths().api.dbSchema,
-            })
-          } catch (e) {
-            task.skip('Refreshing the Prisma client caused an Error.')
-            console.log(
-              'You may need to update your prisma client manually: $ yarn rw prisma generate'
-            )
-            console.log(c.error(e.message))
-          }
-        },
-      },
-    ],
-    { collapse: false, renderer: verbose && VerboseRenderer }
-  )
+  try {
+    await generatePrismaClient({
+      verbose,
+      force: false,
+      schema: getPaths().api.dbSchema,
+    })
+  } catch (e) {
+    task.skip('Refreshing the Prisma client caused an Error.')
+    console.log(
+      'You may need to update your prisma client manually: $ yarn rw prisma generate'
+    )
+    console.log(c.error(e.message))
+  }
 }
