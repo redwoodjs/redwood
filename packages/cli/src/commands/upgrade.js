@@ -34,7 +34,7 @@ export const builder = (yargs) => {
       coerce: validateTag,
     })
     .option('verbose', {
-      alias: 'vvv',
+      alias: 'v',
       description: 'Print verbose logs',
       type: 'boolean',
       default: false,
