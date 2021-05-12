@@ -19,10 +19,10 @@
     "react-hot-toast": "^1.0.2"
   },
   "peerDependencies": {
-    "react": "^17.0.1"
+    "react": "^17.0.2"
   },
   "devDependencies": {
-    "@types/react": "17.0.3"
+    "@types/react": "17.0.5"
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",

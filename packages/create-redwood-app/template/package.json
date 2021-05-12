@@ -17,9 +17,5 @@
   "engines": {
     "node": "14.x",
     "yarn": "1.x"
-  },
-  "resolutions": {
-    "react": "17.0.1",
-    "react-dom": "17.0.1"
   }
 }
