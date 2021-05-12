@@ -6,7 +6,7 @@
   "dependencies": {
     "@redwoodjs/eslint-plugin-redwood": "^0.31.2",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
-    "@typescript-eslint/parser": "^4.22.0",
+    "@typescript-eslint/parser": "^4.23.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.25.0",
     "eslint-config-prettier": "^8.3.0",
