@@ -12,7 +12,7 @@ import type {
 export const InsecureServiceError = class extends Error {
   constructor(resolverName: string) {
     super(
-      `Service call not authorized. If you really want to allow access, add \`before.skip({ only: ['${resolverName}'] })\` to your beforeResolver()`
+      `Service call not authorized. If you really want to allow access, add \`rules.skip({ only: ['${resolverName}'] })\` to your beforeResolver()`
     )
     this.name = 'InsecureServiceError'
   }
