@@ -49,7 +49,7 @@
     "css-minimizer-webpack-plugin": "^1.2.0",
     "dotenv-webpack": "^2.0.0",
     "error-overlay-webpack-plugin": "^0.4.1",
-    "esbuild": "0.11.16",
+    "esbuild": "0.11.20",
     "esbuild-loader": "^2.10.0",
     "file-loader": "^6.0.0",
     "findup-sync": "^4.0.0",
