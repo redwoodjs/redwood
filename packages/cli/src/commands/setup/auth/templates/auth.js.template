@@ -6,10 +6,6 @@ import { AuthenticationError, ForbiddenError, parseJWT } from '@redwoodjs/api'
  * an optional collection of roles used by requireAuth() to check
  * if the user is authenticated or has role-based access
  *
- * Use requireAuth in your services to check that a user is logged in,
- * whether or not they are assigned a role, and optionally raise an
- * error if they're not.
- *
  * @param decoded - The decoded access token containing user info and JWT claims like `sub`
  * @param { token, SupportedAuthTypes type } - The access token itself as well as the auth provider type
  * @param { APIGatewayEvent event, Context context } - An object which contains information from the invoker
