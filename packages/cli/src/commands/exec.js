@@ -8,30 +8,29 @@ import terminalLink from 'terminal-link'
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 
-babelRequireHook({
-  extends: path.join(getPaths().api.base, '.babelrc.js'),
-  extensions: ['.js', '.ts'],
-  only: [getPaths().api.base],
-  plugins: [
-    ['ignore-html-and-css-imports'],
-    [
-      'babel-plugin-module-resolver',
-      {
-        alias: {
-          src: getPaths().api.src,
-        },
-      },
-    ],
-  ],
-  ignore: ['node_modules'],
-  cache: false,
-})
-
-const { db } = require(path.join(getPaths().api.lib, 'db'))
-
 const runScript = async (scriptPath, scriptArgs) => {
+  // Import babel config for running script
+  babelRequireHook({
+    extends: path.join(getPaths().api.base, '.babelrc.js'),
+    extensions: ['.js', '.ts'],
+    only: [getPaths().api.base],
+    plugins: [
+      [
+        'babel-plugin-module-resolver',
+        {
+          alias: {
+            src: getPaths().api.src,
+          },
+        },
+      ],
+    ],
+    ignore: ['node_modules'],
+    cache: false,
+  })
+
   const script = await import(scriptPath)
-  await script.default({ db, args: scriptArgs })
+  await script.default({ args: scriptArgs })
+  return
 }
 
 export const command = 'exec <name>'
@@ -81,9 +80,10 @@ export const handler = async (args) => {
 
   try {
     await tasks.run()
-    await db.$disconnect()
+
+    // We have to do this to terminate
+    process.exit(0)
   } catch (e) {
-    await db.$disconnect()
     console.error(c.error(`The script exited with errors.`))
     process.exit(e?.exitCode || 1)
   }

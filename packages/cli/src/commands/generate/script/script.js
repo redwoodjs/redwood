@@ -2,23 +2,17 @@ import fs from 'fs'
 import path from 'path'
 
 import Listr from 'listr'
-import { paramCase } from 'param-case'
 import terminalLink from 'terminal-link'
+
+import { getProject } from '@redwoodjs/structure'
 
 import { getPaths, writeFilesTask } from 'src/lib'
 import c from 'src/lib/colors'
 
-const POST_RUN_INSTRUCTIONS = `Next steps...\n\n   ${c.warning(
-  'After writing your script, you can run it with:'
-)}
-
-     yarn rw run <name>
-`
-
 const TEMPLATE_PATH = path.resolve(__dirname, 'templates', 'script.js.template')
 
-export const files = ({ name }) => {
-  const outputFilename = `${paramCase(name)}.js`
+export const files = ({ name, typescript }) => {
+  const outputFilename = `${name}.${typescript ? 'ts' : 'js'}`
   const outputPath = path.join(getPaths().api.scripts, outputFilename)
 
   return {
@@ -34,6 +28,13 @@ export const builder = (yargs) => {
       description: 'A descriptor of what this script does',
       type: 'string',
     })
+    .option('typescript', {
+      alias: 'ts',
+      description:
+        'Generate TypeScript file. Enabled by default if we detect your project is TypeScript',
+      type: 'boolean',
+      default: getProject().isTypeScriptProject,
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -43,6 +44,15 @@ export const builder = (yargs) => {
 }
 
 export const handler = async (args) => {
+  const POST_RUN_INSTRUCTIONS = `Next steps...\n\n   ${c.warning(
+    'After modifying your script, you can invoke it like:'
+  )}
+
+     yarn rw exec ${args.name}
+
+     yarn rw exec ${args.name} --param1 true
+`
+
   const tasks = new Listr(
     [
       {
