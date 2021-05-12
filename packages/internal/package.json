@@ -2,7 +2,8 @@
   "name": "@redwoodjs/internal",
   "version": "0.32.0",
   "files": [
-    "dist"
+    "dist",
+    "devtools"
   ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
