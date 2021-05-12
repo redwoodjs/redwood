@@ -1,8 +1,6 @@
 name: Lint, build and run tests
 
 on:
-  push:
-    branches: [main]
   pull_request:
     types: [opened, synchronize, reopened]
 
