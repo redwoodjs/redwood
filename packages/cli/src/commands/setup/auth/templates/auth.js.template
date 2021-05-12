@@ -15,54 +15,7 @@ import { AuthenticationError, ForbiddenError, parseJWT } from '@redwoodjs/api'
  * @param { APIGatewayEvent event, Context context } - An object which contains information from the invoker
  * such as headers and cookies, and the context information about the invocation such as IP Address
  *
- * @example - User details fetched via database query
- *
- * export const getCurrentUser = async (decoded) => {
- *   return await db.user.findUnique({ where: { decoded.email } })
- * }
- *
- * @example - User info is decoded from the access token
- *
- * export const getCurrentUser = async (decoded) => {
- *   return { ...decoded }
- * }
-*
- * @example - User info is contained in the decoded token and roles extracted
- *
- * export const getCurrentUser = async (decoded) => {
- *   return { ...decoded, roles: parseJWT({ decoded }).roles }
- * }
- *
- * @example - User record query by email with namespaced app_metadata roles as
- // Auth0 requires custom JWT claims to be namespaced
- *
- * export const getCurrentUser = async (decoded) => {
- *   const currentUser = await db.user.findUnique({ where: { email: decoded.email } })
- *
- *   return {
- *     ...currentUser,
- *     roles: parseJWT({ decoded: decoded, namespace: NAMESPACE }).roles,
- *   }
- * }
- *
- * @example - User record query by an identity with app_metadata roles
- *
- * const getCurrentUser = async (decoded) => {
- *   const currentUser = await db.user.findUnique({ where: { userIdentity: decoded.sub } })
- *   return {
- *     ...currentUser,
- *     roles: parseJWT({ decoded: decoded }).roles,
- *   }
- * }
- *
- * @example - Cookies and other request information are available in the req parameter, just in case
- *
- * const getCurrentUser = async (_decoded, _raw, { event, _context }) => {
- *   const cookies = cookie(event.headers.cookies)
- *   const session = cookies['my.cookie.name']
- *   const currentUser = await db.sessions.findUnique({ where: { id: session } })
- *   return currentUser
- * }
+ * @see https://github.com/redwoodjs/redwood/tree/main/packages/api/src/auth for examples
  */
 export const getCurrentUser = async (decoded, { _token, _type }, { _event, _context }) => {
   return { ...decoded, roles: parseJWT({ decoded }).roles }
@@ -75,18 +28,12 @@ export const getCurrentUser = async (decoded, { _token, _type }, { _event, _cont
  *
  * @param {string=} roles - An optional role or list of roles
  * @param {string[]=} roles - An optional list of roles
-
- * @example
+ * @returns {boolean} - If the currentUser is authenticated (and assigned one of the given roles)
  *
- * // checks if currentUser is authenticated
- * requireAuth()
+ * @throws {AuthenticationError} - If the currentUser is not authenticated
+ * @throws {ForbiddenError} If the currentUser is not allowed due to role permissions
  *
- * @example
- *
- * // checks if currentUser is authenticated and assigned one of the given roles
- * requireAuth({ role: 'admin' })
- * requireAuth({ role: ['editor', 'author'] })
- * requireAuth({ role: ['publisher'] })
+ * @see https://github.com/redwoodjs/redwood/tree/main/packages/api/src/auth for examples
  */
 export const requireAuth = ({ role } = {}) => {
   if (!context.currentUser) {
