@@ -1,8 +1,8 @@
-name: Publish canaray packages to npm
+name: Publish release candidate
 
 on:
   push:
-    branches: [main]
+    branches: ['release/**']
     tags-ignore:
       - v** # We don't want this to run on release
 
@@ -14,14 +14,12 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0 # Required because lerna uses tags to determine the version.
+
       - name: Setup node
         uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - name: Print node and yarn versions
-        run: |
-          node --version
-          yarn --version
+
       - name: Install dependencies
         run: yarn install --frozen-lockfile --check-files
 
@@ -38,10 +36,10 @@ jobs:
         env:
           CI: true
 
-      - name: Publish to npm
+      - name: Publish
         run: |
           git fetch --depth=1 origin +refs/tags/*:refs/tags/*
           echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc
-          ./tasks/publish-canary
+          ./tasks/publish-rc
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
