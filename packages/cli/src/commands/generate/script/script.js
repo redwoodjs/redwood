@@ -11,7 +11,7 @@ import c from 'src/lib/colors'
 
 const TEMPLATE_PATH = path.resolve(__dirname, 'templates', 'script.js.template')
 
-export const files = ({ name, typescript }) => {
+export const files = ({ name, typescript = false }) => {
   const outputFilename = `${name}.${typescript ? 'ts' : 'js'}`
   const outputPath = path.join(getPaths().api.scripts, outputFilename)
 
