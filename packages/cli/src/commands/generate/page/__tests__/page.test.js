@@ -55,7 +55,8 @@ let singleWordFiles,
   paramFiles,
   noTestsFiles,
   noStoriesFiles,
-  typescriptFiles
+  typescriptFiles,
+  typescriptParamFiles
 
 beforeAll(() => {
   singleWordFiles = page.files({
@@ -94,13 +95,19 @@ beforeAll(() => {
     stories: false,
     ...page.paramVariants(pathName(undefined, 'no-stories')),
   })
-
   typescriptFiles = page.files({
     name: 'TSFiles',
     typescript: true,
     tests: true,
     stories: true,
     ...page.paramVariants(pathName(undefined, 'typescript')),
+  })
+  typescriptParamFiles = page.files({
+    name: 'TSParamFiles',
+    typescript: true,
+    tests: true,
+    stories: true,
+    ...page.paramVariants(pathName('{id}', 'typescript-param')),
   })
 })
 
@@ -372,6 +379,14 @@ test('generates typescript pages', () => {
     typescriptFiles[
       path.normalize(
         '/path/to/project/web/src/pages/TsFilesPage/TsFilesPage.test.tsx'
+      )
+    ]
+  ).toMatchSnapshot()
+
+  expect(
+    typescriptParamFiles[
+      path.normalize(
+        '/path/to/project/web/src/pages/TsParamFilesPage/TsParamFilesPage.tsx'
       )
     ]
   ).toMatchSnapshot()

@@ -4,6 +4,7 @@ import camelcase from 'camelcase'
 import Listr from 'listr'
 import pascalcase from 'pascalcase'
 
+import { transformTSToJS } from 'src/lib'
 import { addRoutesToRouterTask, writeFilesTask } from 'src/lib'
 import c from 'src/lib/colors'
 
@@ -48,7 +49,7 @@ export const files = ({ name, tests, stories, typescript, ...rest }) => {
     extension: typescript ? '.tsx' : '.js',
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'page',
-    templatePath: 'page.js.template',
+    templatePath: 'page.tsx.template',
     templateVars: rest,
   })
 
@@ -58,7 +59,7 @@ export const files = ({ name, tests, stories, typescript, ...rest }) => {
     extension: typescript ? '.test.tsx' : '.test.js',
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'page',
-    templatePath: 'test.js.template',
+    templatePath: 'test.tsx.template',
     templateVars: rest,
   })
 
@@ -68,7 +69,7 @@ export const files = ({ name, tests, stories, typescript, ...rest }) => {
     extension: typescript ? '.stories.tsx' : '.stories.js',
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'page',
-    templatePath: 'stories.js.template',
+    templatePath: 'stories.tsx.template',
     templateVars: rest,
   })
 
@@ -88,8 +89,10 @@ export const files = ({ name, tests, stories, typescript, ...rest }) => {
   //    "path/to/fileB": "<<<template>>>",
   // }
   return files.reduce((acc, [outputPath, content]) => {
+    const template = typescript ? content : transformTSToJS(outputPath, content)
+
     return {
-      [outputPath]: content,
+      [outputPath]: template,
       ...acc,
     }
   }, {})
