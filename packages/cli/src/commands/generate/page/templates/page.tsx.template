@@ -1,7 +1,7 @@
 import { Link, routes } from '@redwoodjs/router'
 <% if (paramName !== '') { %>
 type ${pascalName}PageProps = {
-  ${paramName}: string
+  ${paramName}: ${paramType}
 }
 <% } %>
 const ${pascalName}Page = (<%- paramName === '' ? '' : `${propParam}: ${pascalName}PageProps` %>) => {

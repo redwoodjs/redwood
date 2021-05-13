@@ -28,8 +28,14 @@ export const paramVariants = (path) => {
       argumentParam: '',
       paramName: '',
       paramValue: '',
+      paramType: '',
     }
   }
+
+  // set paramType param includes type (e.g. {id:Int}), else use string
+  const paramType = param?.match(/:/)
+    ? param?.replace(/[^:]+/, '').slice(1, -1)
+    : 'string'
 
   // "42" is just a value used for demonstrating parameter usage in the
   // generated page-, test-, and story-files.
@@ -38,7 +44,8 @@ export const paramVariants = (path) => {
     propValueParam: `${paramName}="42" `,
     argumentParam: `{ ${paramName}: '42' }`,
     paramName,
-    paramValue: ' 42',
+    paramValue: '42',
+    paramType,
   }
 }
 
