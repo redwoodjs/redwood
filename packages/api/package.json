@@ -12,7 +12,6 @@
   "dependencies": {
     "@graphql-tools/merge": "6.2.13",
     "@prisma/client": "2.22.1",
-    "@redwoodjs/internal": "^0.32.0",
     "@types/pino": "^6.3.8",
     "apollo-server-lambda": "2.22.2",
     "core-js": "3.10.1",
