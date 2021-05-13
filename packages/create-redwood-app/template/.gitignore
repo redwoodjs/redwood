@@ -3,7 +3,7 @@
 .env
 .netlify
 .redwood
-dev.db
+dev.db*
 dist
 dist-babel
 node_modules
