@@ -7,10 +7,10 @@
     "outDir": "dist",
     "paths": {
       "src/*": ["./src/*"],
-    }
+    },
   },
   "include": [
-    "src"
+    "src",
   ],
   "references": [
     { "path": "../router" },
