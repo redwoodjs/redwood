@@ -41,6 +41,9 @@ module.exports = {
         node: true,
         commonjs: true,
       },
+      globals: {
+        Promise: 'readonly',
+      },
     },
     // `web` side
     {
