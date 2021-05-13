@@ -1,12 +1,12 @@
 {
   "name": "@redwoodjs/eslint-config",
-  "version": "0.31.2",
+  "version": "0.32.0",
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@redwoodjs/eslint-plugin-redwood": "^0.31.2",
-    "@typescript-eslint/eslint-plugin": "^4.22.0",
-    "@typescript-eslint/parser": "^4.22.0",
+    "@redwoodjs/eslint-plugin-redwood": "^0.32.0",
+    "@typescript-eslint/eslint-plugin": "^4.23.0",
+    "@typescript-eslint/parser": "^4.23.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.25.0",
     "eslint-config-prettier": "^8.3.0",
