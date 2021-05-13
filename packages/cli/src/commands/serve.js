@@ -11,6 +11,7 @@ import {
   webServerHandler,
   bothServerHandler,
 } from '@redwoodjs/api-server'
+import { getConfig } from '@redwoodjs/internal'
 import { getPaths } from '@redwoodjs/internal'
 
 import c from 'src/lib/colors'
@@ -19,6 +20,10 @@ export const command = 'serve [side]'
 export const description = 'Run server for api or web in production'
 
 export const builder = (yargs) => {
+  if (getConfig().api.experimentalSecureServices) {
+    process.env.REDWOOD_SECURE_SERVICES = '1'
+  }
+
   yargs
     .usage('usage: $0 <side>')
     .command({
