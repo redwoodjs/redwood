@@ -76,7 +76,7 @@ export const verifySignature = ({
 
 /**
  *
- * JWT Payload Verfifier
+ * JWT Payload Verifier
  *
  * Based on Netlify's webhook payload verification
  * @see: https://docs.netlify.com/site-deploys/notifications/#payload-signature

@@ -13,6 +13,11 @@ jest.mock('@redwoodjs/internal', () => {
         },
       }
     },
+    getConfig: () => {
+      return {
+        api: {},
+      }
+    },
   }
 })
 

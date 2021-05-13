@@ -103,7 +103,7 @@ export const verifySignature = ({
 
 /**
  *
- * SHA256 HMAC Payload Verfifier
+ * SHA256 HMAC Payload Verifier
  *
  * Based on GitHub's webhook payload verification
  * @see https://docs.github.com/en/developers/webhooks-and-events/securing-your-webhooks
