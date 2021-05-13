@@ -11,6 +11,7 @@ export const config = {
 }
 
 const firebaseClient = ((config) => {
+  // comment to force CI test to re-run ... will delete
   if (!firebase.apps.length) {
     firebase.initializeApp(config)
   }
