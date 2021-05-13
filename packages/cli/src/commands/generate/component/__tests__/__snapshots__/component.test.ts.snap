@@ -1,5 +1,63 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`creates TS component files if typescript = true 1`] = `
+"const TypescriptUser = () => {
+  return (
+    <div>
+      <h2>{'TypescriptUser'}</h2>
+      <p>{'Find me in ./web/src/components/TypescriptUser/TypescriptUser.tsx'}</p>
+    </div>
+  )
+}
+
+export default TypescriptUser
+"
+`;
+
+exports[`creates TS component files if typescript = true 2`] = `
+"import { render } from '@redwoodjs/testing'
+
+import TypescriptUser from './TypescriptUser'
+
+describe('TypescriptUser', () => {
+  it('renders successfully', () => {
+    expect(() => {
+      render(<TypescriptUser />)
+    }).not.toThrow()
+  })
+})
+"
+`;
+
+exports[`creates a TS component and test 1`] = `
+"const TypescriptUser = () => {
+  return (
+    <div>
+      <h2>{'TypescriptUser'}</h2>
+      <p>{'Find me in ./web/src/components/TypescriptUser/TypescriptUser.tsx'}</p>
+    </div>
+  )
+}
+
+export default TypescriptUser
+"
+`;
+
+exports[`creates a TS component and test 2`] = `
+"import { render } from '@redwoodjs/testing'
+
+import TypescriptUser from './TypescriptUser'
+
+describe('TypescriptUser', () => {
+  it('renders successfully', () => {
+    expect(() => {
+      render(<TypescriptUser />)
+    }).not.toThrow()
+  })
+})
+"
+`;
+
 exports[`creates a multi word component 1`] = `
 "const UserProfile = () => {
   return (
