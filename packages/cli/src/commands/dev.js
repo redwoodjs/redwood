@@ -92,9 +92,7 @@ export const handler = async ({
       command: `cd "${path.join(
         BASE_DIR,
         'api'
-      )}" && yarn cross-env NODE_ENV=development REDWOOD_SECURE_SERVICES=${
-        getConfig().api.experimentalSecureServices ? '1' : '0'
-      } yarn dev-server`,
+      )}" && yarn cross-env NODE_ENV=development yarn dev-server`,
       prefixColor: 'cyan',
       runWhen: () => fs.existsSync(API_DIR_SRC),
     },
