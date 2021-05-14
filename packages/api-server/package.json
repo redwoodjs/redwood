@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/api-server",
   "description": "Redwood's HTTP server for Serverless Functions",
-  "version": "0.31.2",
+  "version": "0.32.1",
   "bin": {
     "api-server": "./dist/index.js",
     "rw-api-server": "./dist/index.js",
@@ -23,8 +23,8 @@
     "morgan": "^1.10.0",
     "qs": "^6.9.3",
     "yargs": "^16.0.3",
-    "youch": "^2.2.1",
-    "youch-terminal": "^1.0.1"
+    "youch": "^2.2.2",
+    "youch-terminal": "^1.1.1"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.76",

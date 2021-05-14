@@ -1,8 +1,9 @@
 {
   "name": "@redwoodjs/internal",
-  "version": "0.31.2",
+  "version": "0.32.1",
   "files": [
-    "dist"
+    "dist",
+    "devtools"
   ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -13,6 +14,7 @@
     "findup-sync": "^4.0.0",
     "glob": "7.1.6",
     "kill-port": "^1.6.1",
+    "prettier": "^2.2.1",
     "toml": "^3.0.0"
   },
   "devDependencies": {
