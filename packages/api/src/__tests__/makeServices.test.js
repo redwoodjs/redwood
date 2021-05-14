@@ -1,14 +1,3 @@
-let mockedExperimentalSetting = {}
-jest.mock('@redwoodjs/internal', () => {
-  return {
-    getConfig: jest.fn(() => {
-      return {
-        api: mockedExperimentalSetting,
-      }
-    }),
-  }
-})
-
 import { MissingBeforeResolverError } from '../beforeResolverSpec'
 import { makeServices } from '../makeServices'
 
@@ -39,17 +28,17 @@ describe('makeServices', () => {
   })
 
   afterEach(() => {
+    delete process.env['REDWOOD_SECURE_SERVICES']
     services = []
   })
 
   it('returns same services if experimentalSecureService config option is absent', () => {
     const madeServices = makeServices({ services })
-
     expect(madeServices).toEqual(services)
   })
 
   it('throws an error if service does not export a beforeResolver()', () => {
-    mockedExperimentalSetting = { experimentalSecureServices: true }
+    process.env.REDWOOD_SECURE_SERVICES = '1'
     services.posts_posts.beforeResolver = null
 
     expect(() => {
@@ -57,14 +46,8 @@ describe('makeServices', () => {
     }).toThrow(MissingBeforeResolverError)
   })
 
-  it('exports the same named object and structure as the input', () => {
-    mockedExperimentalSetting = { experimentalSecureServices: true }
-
-    expect(true).toEqual(true)
-  })
-
   it('does not include beforeResolver() in returned services', () => {
-    mockedExperimentalSetting = { experimentalSecureServices: true }
+    process.env.REDWOOD_SECURE_SERVICES = '1'
 
     const madeServices = makeServices({ services })
 
