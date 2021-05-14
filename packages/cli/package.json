@@ -21,7 +21,7 @@
     "boxen": "^5.0.1",
     "camelcase": "^6.0.0",
     "chalk": "^4.1.1",
-    "concurrently": "^6.0.2",
+    "concurrently": "^6.1.0",
     "core-js": "3.10.1",
     "cross-env": "^7.0.3",
     "decamelize": "^4.0.0",
