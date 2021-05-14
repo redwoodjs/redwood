@@ -22,9 +22,9 @@ describe('matchPath', () => {
       params: { id: 7 },
     })
 
-    expect(
-      matchPath('/blog/{year}/{month}/{day}', '/blog/2019/12/07')
-    ).toEqual({ match: true, params: { day: '07', month: '12', year: '2019' } })
+    expect(matchPath('/blog/{year}/{month}/{day}', '/blog/2019/12/07')).toEqual(
+      { match: true, params: { day: '07', month: '12', year: '2019' } }
+    )
   })
 
   it('transforms a param for Int', () => {

@@ -103,12 +103,8 @@ export const files = async ({
   }, {})
 }
 
-export const {
-  command,
-  description,
-  builder,
-  handler,
-} = createYargsForComponentGeneration({
-  componentName: 'cell',
-  filesFn: files,
-})
+export const { command, description, builder, handler } =
+  createYargsForComponentGeneration({
+    componentName: 'cell',
+    filesFn: files,
+  })

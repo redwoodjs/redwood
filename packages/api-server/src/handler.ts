@@ -5,6 +5,7 @@ import withApiProxy from './middleware/withApiProxy'
 import withFunctions from './middleware/withFunctions'
 import withWebServer from './middleware/withWebServer'
 import { startServer } from './server'
+
 import type { HttpServerParams } from './server'
 
 /*
@@ -35,8 +36,7 @@ export const webCliOptions = {
   apiHost: {
     alias: 'api-host',
     type: 'string',
-    desc:
-      'Forward requests from the apiProxyPath, defined in redwood.toml to this host',
+    desc: 'Forward requests from the apiProxyPath, defined in redwood.toml to this host',
   },
 } as const
 

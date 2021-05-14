@@ -42,13 +42,8 @@ export class CommandsManager {
 
   // --- start command implementations
   private async command__cli(cmdString?: string, cwd?: string) {
-    const {
-      vscodeWindowMethods,
-      host,
-      projectRoot,
-      connection,
-      documents,
-    } = this.server
+    const { vscodeWindowMethods, host, projectRoot, connection, documents } =
+      this.server
     cwd = cwd ?? projectRoot
     if (!cwd) {
       return

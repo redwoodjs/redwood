@@ -5,6 +5,7 @@ import {
   WebhookVerificationError,
   DEFAULT_WEBHOOK_SECRET,
 } from './common'
+
 import type { WebhookVerifier, VerifyOptions } from './common'
 
 export interface JwtVerifier extends WebhookVerifier {

@@ -5,6 +5,7 @@ import {
   VERIFICATION_ERROR_MESSAGE,
   DEFAULT_WEBHOOK_SECRET,
 } from './common'
+
 import type { WebhookVerifier, VerifyOptions } from './common'
 
 export interface Sha1Verifier extends WebhookVerifier {
