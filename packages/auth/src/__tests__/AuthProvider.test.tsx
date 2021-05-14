@@ -307,7 +307,7 @@ test('When the current user cannot be fetched the user is not authenticated', as
   expect(screen.getByText('Loading...')).toBeInTheDocument()
 
   await waitFor(() =>
-    screen.getByText('Could not fetch current user: OK (404)')
+    screen.getByText('Could not fetch current user: Not Found (404)')
   )
 
   done()

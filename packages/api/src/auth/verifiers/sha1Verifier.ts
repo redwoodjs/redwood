@@ -103,7 +103,7 @@ export const verifySignature = ({
 
 /**
  *
- * SHA1 HMAC Payload Verfifier
+ * SHA1 HMAC Payload Verifier
  *
  * Based on Vercel's webhook payload verification
  * @see https://vercel.com/docs/api#integrations/webhooks/securing-webhooks

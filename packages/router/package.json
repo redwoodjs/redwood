@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/router",
-  "version": "0.31.2",
+  "version": "0.32.2",
   "files": [
     "dist"
   ],
@@ -9,15 +9,15 @@
   "license": "MIT",
   "dependencies": {
     "@reach/skip-nav": "^0.15.0",
-    "@redwoodjs/auth": "^0.31.2",
+    "@redwoodjs/auth": "^0.32.2",
     "core-js": "3.10.1",
     "lodash.isequal": "^4.5.0"
   },
   "devDependencies": {
     "@types/lodash.isequal": "^4.5.5",
     "prop-types": "^15.7.2",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",
