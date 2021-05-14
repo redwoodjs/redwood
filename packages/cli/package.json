@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/cli",
   "description": "The Redwood Command Line",
-  "version": "0.32.1",
+  "version": "0.32.2",
   "license": "MIT",
   "bin": {
     "redwood": "./dist/index.js",
@@ -14,10 +14,10 @@
   ],
   "dependencies": {
     "@prisma/sdk": "2.22.1",
-    "@redwoodjs/api-server": "^0.32.1",
-    "@redwoodjs/internal": "^0.32.1",
-    "@redwoodjs/prerender": "^0.32.1",
-    "@redwoodjs/structure": "^0.32.1",
+    "@redwoodjs/api-server": "^0.32.2",
+    "@redwoodjs/internal": "^0.32.2",
+    "@redwoodjs/prerender": "^0.32.2",
+    "@redwoodjs/structure": "^0.32.2",
     "boxen": "^5.0.1",
     "camelcase": "^6.0.0",
     "chalk": "^4.1.1",
