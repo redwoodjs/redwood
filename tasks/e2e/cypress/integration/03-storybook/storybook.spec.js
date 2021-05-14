@@ -33,7 +33,7 @@ describe(
       )
 
       cy.exec(`cd ${BASE_DIR}; yarn rw storybook --build`, {
-        timeout: 50000,
+        timeout: 90000,
       })
         .its('code')
         .should('eq', 0)
