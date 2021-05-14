@@ -72,6 +72,23 @@ test('creates a multi word component', () => {
   ).toMatchSnapshot()
 })
 
+test('creates a TS component and test', () => {
+  expect(
+    typescriptFiles[
+      path.normalize(
+        '/path/to/project/web/src/components/TypescriptUser/TypescriptUser.tsx'
+      )
+    ]
+  ).toMatchSnapshot()
+  expect(
+    typescriptFiles[
+      path.normalize(
+        '/path/to/project/web/src/components/TypescriptUser/TypescriptUser.test.tsx'
+      )
+    ]
+  ).toMatchSnapshot()
+})
+
 test('creates a multi word component test', () => {
   expect(
     multiWordDefaultFiles[

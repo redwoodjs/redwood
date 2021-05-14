@@ -167,9 +167,9 @@ test("doesn't include test file when --tests is set to false", () => {
 
 test('JavaScript: includes skip link when --skipLink is set to true', () => {
   expect(
-    withSkipLinkFilesTS[
+    withSkipLinkFilesJS[
       path.normalize(
-        '/path/to/project/web/src/layouts/A11yLayout/A11yLayout.tsx'
+        '/path/to/project/web/src/layouts/A11yLayout/A11yLayout.js'
       )
     ]
   ).toMatchSnapshot()
@@ -177,9 +177,9 @@ test('JavaScript: includes skip link when --skipLink is set to true', () => {
 
 test('TypeScript: includes skip link when --skipLink is set to true', () => {
   expect(
-    withSkipLinkFilesJS[
+    withSkipLinkFilesTS[
       path.normalize(
-        '/path/to/project/web/src/layouts/A11yLayout/A11yLayout.js'
+        '/path/to/project/web/src/layouts/A11yLayout/A11yLayout.tsx'
       )
     ]
   ).toMatchSnapshot()

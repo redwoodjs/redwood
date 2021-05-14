@@ -3,10 +3,15 @@ import {
   setupWorker,
   graphql,
   RequestHandler,
-  GraphQLMockedContext,
-  GraphQLMockedRequest,
+  GraphQLContext,
+  GraphQLRequest,
+  ResponseTransformer,
+  MockedResponse,
+  SetupWorkerApi,
+  ResponseComposition,
 } from 'msw'
-import { SetupWorkerApi } from 'msw/lib/types/setupWorker/setupWorker'
+import type { StartOptions as StartMSWWorkerOptions } from 'msw/lib/types/setupWorker/glossary'
+import type { SharedOptions as SharedMSWOptions } from 'msw/lib/types/sharedOptions'
 
 // Allow users to call "mockGraphQLQuery" and "mockGraphQLMutation"
 // before the server has started. We store the request handlers in
@@ -20,18 +25,25 @@ let SERVER_INSTANCE: SetupWorkerApi | any
  * Request handlers can be registered lazily (via `mockGraphQL<Query|Mutation>`),
  * the queue will be drained and used.
  */
-export const startMSW = async (target: 'node' | 'browsers') => {
+
+type StartOptions<Target> = Target extends 'browsers'
+  ? StartMSWWorkerOptions
+  : SharedMSWOptions
+export const startMSW = async <Target extends 'node' | 'browsers'>(
+  target: Target,
+  options?: StartOptions<Target>
+) => {
   if (SERVER_INSTANCE) {
     return SERVER_INSTANCE
   }
 
   if (target === 'browsers') {
     SERVER_INSTANCE = setupWorker()
-    await SERVER_INSTANCE.start()
+    await SERVER_INSTANCE.start(options)
   } else {
     const { setupServer } = require('msw/node')
     SERVER_INSTANCE = setupServer()
-    await SERVER_INSTANCE.listen()
+    await SERVER_INSTANCE.listen(options)
   }
 
   return SERVER_INSTANCE
@@ -61,20 +73,32 @@ export type DataFunction = (
     req,
     ctx,
   }: {
-    req: GraphQLMockedRequest
-    ctx: GraphQLMockedContext<Record<string, any>>
+    req: GraphQLRequest<any>
+    ctx: GraphQLContext<Record<string, any>>
   }
 ) => Record<string, unknown>
+
+// These should get exported from MSW
+type ResponseFunction<BodyType = any> = (
+  ...transformers: ResponseTransformer<BodyType>[]
+) => MockedResponse<BodyType>
+
+type ResponseEnhancers = {
+  once: ResponseFunction<any>
+  networkError: (message: string) => void
+}
+type ResponseEnhancer = keyof ResponseEnhancers
 
 const mockGraphQL = (
   type: 'query' | 'mutation',
   operation: string,
-  data: DataFunction | Record<string, any>
+  data: DataFunction | Record<string, any>,
+  responseEnhancer?: ResponseEnhancer
 ) => {
   const resolver = (
-    req: GraphQLMockedRequest,
-    res: (...args: unknown[]) => unknown,
-    ctx: GraphQLMockedContext<Record<string, any>>
+    req: GraphQLRequest<any>,
+    res: ResponseComposition<any>,
+    ctx: GraphQLContext<Record<string, any>>
   ) => {
     let d = data
     let responseTransforms: any[] = []
@@ -92,7 +116,7 @@ const mockGraphQL = (
           return resTransform
         }
       }
-      const newCtx: GraphQLMockedContext<Record<string, any>> = {
+      const newCtx: GraphQLContext<Record<string, any>> = {
         status: captureTransform(ctx.status),
         delay: captureTransform(ctx.delay),
         errors: captureTransform(ctx.errors),
@@ -107,27 +131,31 @@ const mockGraphQL = (
       })
     }
 
-    return res(ctx.data(d), ...responseTransforms)
+    return (responseEnhancer ? res[responseEnhancer] : res)(
+      ctx.data(d) as any,
+      ...responseTransforms
+    )
   }
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  //@ts-expect-error
   registerHandler(graphql[type](operation, resolver))
   return data
 }
 
 export const mockGraphQLQuery = (
   operation: string,
-  data: DataFunction | Record<string, unknown>
+  data: DataFunction | Record<string, unknown>,
+  responseEnhancer?: ResponseEnhancer
 ) => {
-  return mockGraphQL('query', operation, data)
+  return mockGraphQL('query', operation, data, responseEnhancer)
 }
 
 export const mockGraphQLMutation = (
   operation: string,
-  data: DataFunction | Record<string, unknown>
+  data: DataFunction | Record<string, unknown>,
+  responseEnhancer?: ResponseEnhancer
 ) => {
-  return mockGraphQL('mutation', operation, data)
+  return mockGraphQL('mutation', operation, data, responseEnhancer)
 }
 
 export const mockedUserMeta: { currentUser: Record<string, unknown> | null } = {
