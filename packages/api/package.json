@@ -10,7 +10,7 @@
   "types": "./dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@graphql-tools/merge": "6.2.13",
+    "@graphql-tools/merge": "6.2.14",
     "@prisma/client": "2.22.1",
     "@types/pino": "^6.3.8",
     "apollo-server-lambda": "2.22.2",
@@ -22,7 +22,7 @@
     "lodash.merge": "^4.6.2",
     "lodash.omitby": "^4.6.0",
     "pino": "^6.11.3",
-    "pino-pretty": "^4.7.1"
+    "pino-pretty": "^4.8.0"
   },
   "devDependencies": {
     "@redwoodjs/auth": "^0.32.2",
