@@ -5,6 +5,7 @@ import Listr from 'listr'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 
+import { transformTSToJS } from 'src/lib'
 import { addRoutesToRouterTask, writeFilesTask } from 'src/lib'
 import c from 'src/lib/colors'
 
@@ -30,8 +31,14 @@ export const paramVariants = (path) => {
       argumentParam: '',
       paramName: '',
       paramValue: '',
+      paramType: '',
     }
   }
+
+  // set paramType param includes type (e.g. {id:Int}), else use string
+  const paramType = param?.match(/:/)
+    ? param?.replace(/[^:]+/, '').slice(1, -1)
+    : 'string'
 
   // "42" is just a value used for demonstrating parameter usage in the
   // generated page-, test-, and story-files.
@@ -40,7 +47,8 @@ export const paramVariants = (path) => {
     propValueParam: `${paramName}="42" `,
     argumentParam: `{ ${paramName}: '42' }`,
     paramName,
-    paramValue: ' 42',
+    paramValue: '42',
+    paramType,
   }
 }
 
@@ -51,7 +59,7 @@ export const files = ({ name, tests, stories, typescript, ...rest }) => {
     extension: typescript ? '.tsx' : '.js',
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'page',
-    templatePath: 'page.js.template',
+    templatePath: 'page.tsx.template',
     templateVars: rest,
   })
 
@@ -61,7 +69,7 @@ export const files = ({ name, tests, stories, typescript, ...rest }) => {
     extension: typescript ? '.test.tsx' : '.test.js',
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'page',
-    templatePath: 'test.js.template',
+    templatePath: 'test.tsx.template',
     templateVars: rest,
   })
 
@@ -71,7 +79,7 @@ export const files = ({ name, tests, stories, typescript, ...rest }) => {
     extension: typescript ? '.stories.tsx' : '.stories.js',
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'page',
-    templatePath: 'stories.js.template',
+    templatePath: 'stories.tsx.template',
     templateVars: rest,
   })
 
@@ -91,8 +99,10 @@ export const files = ({ name, tests, stories, typescript, ...rest }) => {
   //    "path/to/fileB": "<<<template>>>",
   // }
   return files.reduce((acc, [outputPath, content]) => {
+    const template = typescript ? content : transformTSToJS(outputPath, content)
+
     return {
-      [outputPath]: content,
+      [outputPath]: template,
       ...acc,
     }
   }, {})

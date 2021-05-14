@@ -1,17 +1,21 @@
 import { Link, routes } from '@redwoodjs/router'
-
-const ${pascalName}Page = (${propParam}) => {
+<% if (paramName !== '') { %>
+type ${pascalName}PageProps = {
+  ${paramName}: ${paramType}
+}
+<% } %>
+const ${pascalName}Page = (<%- paramName === '' ? '' : `${propParam}: ${pascalName}PageProps` %>) => {
   return (
     <>
       <h1>${pascalName}Page</h1>
-      <p>Find me in <code>${outputPath}</code></p>
+      <p>
+        Find me in <code>${outputPath}</code>
+      </p>
       <p>
         My default route is named <code>${camelName}</code>, link to me with `
         <Link to={routes.${routeName}(${ argumentParam })}>${pascalName}<%= argumentParam !== '' ? ' 42' : '' %></Link>`
       </p><% if (paramName !== '') { %>
-      <p>
-        The parameter passed to me is {${ paramName }}
-      </p><% } %>
+      <p>The parameter passed to me is {${ paramName }}</p><% } %>
     </>
   )
 }

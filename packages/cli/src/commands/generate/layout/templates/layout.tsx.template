@@ -1,4 +1,8 @@
-const ${singularPascalName}Layout: React.FunctionComponent = ({ children }) => {
+type ${singularPascalName}LayoutProps = {
+  children: React.ReactNode
+}
+
+const ${singularPascalName}Layout = ({ children }: ${singularPascalName}LayoutProps) => {
   return <>{children}</>
 }
 
