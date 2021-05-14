@@ -40,22 +40,7 @@ The `path` prop specifies the URL path to match, starting with the beginning sla
 
 Some pages should only be visible to authenticated users.
 
-All `Routes` nested in `<Private>` require authentication.
-When a user is not authenticated and attempts to visit this route,
-they will be redirected to the route passed as the `unauthenticated` prop and the originally requested route's path will be added to the querystring in a `redirectTo` param. This lets you send the user to the originally requested once logged in.
-
-```js
-// Routes.js
-<Router>
-  <Route path="/" page={HomePage} name="home" />
-  <Private unauthenticated="home">
-    <Route path="/admin" page={AdminPage} name="admin" />
-  </Private>
-</Router>
-```
-
-Redwood uses the `useAuth` hook under the hood to determine if the user is authenticated.
-Read more about authentication in redwood [here](https://redwoodjs.com/tutorial/authentication).
+We support this using private `<Set>`s or the `<Private>` component. Read more [further down](#private-set).
 
 ## Sets of Routes
 
@@ -142,6 +127,42 @@ becomes...
   <Route path="/" page={HomePage} name="home" />
 </MainLayout>
 ```
+
+### `private` Set
+
+
+Sets can take a `private` prop which makes all Routes inside that Set require authentication. When a user isn't authenticated and attempts to visit one of the Routes in the private Set, they'll be redirected to the Route passed as the Set's `unauthenticated` prop. The originally-requested Route's path is added to the query string as a `redirectTo` param. This lets you send the user to the page they originally requested once they're logged-in. 
+
+For more fine-grained control, you can specify `role` (which takes an array of roles), and RR will check to see that the user is authorized before giving them access to the Route. If they're not, it'll redirect them in the same way as above.
+
+Here's an example of how you'd use a private set:
+
+```jsx
+// Routes.js
+<Router>
+  <Route path="/" page={HomePage} name="home" />
+  <Set private unauthenticated="home">
+    <Route path="/admin" page={AdminPage} name="admin" />
+  </Set>
+</Router>
+```
+
+Private routes are important and should be easy to spot in your Routes file. The larger your Routes file gets, the more difficult it will probably become to find `<Set private /*...*/>` among your other Sets. So we also provide a `<Private>` component that's just an alias for `<Set private /*...*/>`. Most of our documentation uses `<Private>`.
+
+Here's the same example again, but now using `<Private>`
+
+```js
+// Routes.js
+<Router>
+  <Route path="/" page={HomePage} name="home" />
+  <Private unauthenticated="home">
+    <Route path="/admin" page={AdminPage} name="admin" />
+  </Private>
+</Router>
+```
+
+Redwood uses the `useAuth` hook under the hood to determine if the user is authenticated.
+Read more about authentication in Redwood [here](https://redwoodjs.com/tutorial/authentication).
 
 ## Link and named route functions
 
