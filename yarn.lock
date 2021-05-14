@@ -10850,11 +10850,6 @@ he@^1.2.0:
   resolved "https://registry.yarnpkg.com/he/-/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
   integrity sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==
 
-headers-utils@^1.2.0:
-  version "1.2.5"
-  resolved "https://registry.yarnpkg.com/headers-utils/-/headers-utils-1.2.5.tgz#899d6a76b21bcbe18d6108f56136fdbd4f30c404"
-  integrity sha512-DAzV5P/pk3wTU/8TLZN+zFTDv4Xa1QDTU8pRvovPetcOMbmqq8CwsAvZBLPZHH6usxyy31zMp7I4aCYb6XIf6w==
-
 headers-utils@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/headers-utils/-/headers-utils-3.0.2.tgz#dfc65feae4b0e34357308aefbcafa99c895e59ef"
@@ -13885,24 +13880,6 @@ msal@^1.4.10:
   dependencies:
     tslib "^1.9.3"
 
-msw@0.21.2:
-  version "0.21.2"
-  resolved "https://registry.yarnpkg.com/msw/-/msw-0.21.2.tgz#74ed10b8eb224325652a3c3812b5460dac297bd8"
-  integrity sha512-XOJehxtJThNFdMJdVjxDAbZ8KuC3UltOlO5nQDks0Q1yzSUqqKcVUjbKrH7T+K2hckBr0KEY2fwJHv21R4BV2A==
-  dependencies:
-    "@open-draft/until" "^1.0.3"
-    "@types/cookie" "^0.4.0"
-    chalk "^4.1.0"
-    chokidar "^3.4.2"
-    cookie "^0.4.1"
-    graphql "^15.3.0"
-    headers-utils "^1.2.0"
-    node-fetch "^2.6.1"
-    node-match-path "^0.4.4"
-    node-request-interceptor "^0.5.1"
-    statuses "^2.0.0"
-    yargs "^16.0.3"
-
 msw@^0.28.2:
   version "0.28.2"
   resolved "https://registry.yarnpkg.com/msw/-/msw-0.28.2.tgz#5179df2c2f8c65e31b2043b8ec9cbe245ad0bd48"
@@ -14151,11 +14128,6 @@ node-libs-browser@^2.2.1:
     util "^0.11.0"
     vm-browserify "^1.0.1"
 
-node-match-path@^0.4.4:
-  version "0.4.4"
-  resolved "https://registry.yarnpkg.com/node-match-path/-/node-match-path-0.4.4.tgz#516a10926093c0cc6f237d020685b593b19baebb"
-  integrity sha512-pBq9gp7TG0r0VXuy/oeZmQsjBSnYQo7G886Ly/B3azRwZuEtHCY155dzmfoKWcDPGgyfIGD8WKVC7h3+6y7yTg==
-
 node-match-path@^0.6.1:
   version "0.6.3"
   resolved "https://registry.yarnpkg.com/node-match-path/-/node-match-path-0.6.3.tgz#55dd8443d547f066937a0752dce462ea7dc27551"
@@ -14182,15 +14154,6 @@ node-releases@^1.1.61, node-releases@^1.1.70:
   version "1.1.71"
   resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-1.1.71.tgz#cb1334b179896b1c89ecfdd4b725fb7bbdfc7dbb"
   integrity sha512-zR6HoT6LrLCRBwukmrVbHv0EpEQjksO6GmFcZQQuCAy139BEsoVKPYnf3jongYW83fAa1torLGYwxxky/p28sg==
-
-node-request-interceptor@^0.5.1:
-  version "0.5.9"
-  resolved "https://registry.yarnpkg.com/node-request-interceptor/-/node-request-interceptor-0.5.9.tgz#f0498ae2889162523f58c1e1b4adc39f26e47163"
-  integrity sha512-M1a3aulCW/kqajDn/w+qBX86G4So7utJGlrODAjQ1piz/kR8ZaDfd/wrJnsuPtUM12F0YxsnXG8qRKFkIEIxsw==
-  dependencies:
-    "@open-draft/until" "^1.0.3"
-    debug "^4.3.0"
-    headers-utils "^1.2.0"
 
 nodemon@^2.0.6:
   version "2.0.7"
