@@ -120,12 +120,18 @@ export const redactionsList: string[] | redactOptions = [
  *
  * You can pass `'silent'` to disable logging.
  *
+ * @default 'warn' in Production
+ * @default 'trace' in Development
+ * @default 'silent' in Test
+ *
  */
 export const logLevel: LevelWithSilent | string = (() => {
   if (typeof process.env.LOG_LEVEL !== 'undefined') {
     return process.env.LOG_LEVEL
   } else if (isProduction) {
     return 'warn'
+  } else if (isTest) {
+    return 'silent'
   } else {
     return 'trace'
   }
@@ -155,15 +161,16 @@ export const defaultPrettyPrintOptions: PrettyOptions = {
  * Defines an opinionated base logger configuration that defines
  * how to log and what to ignore.
  *
- * Defaults are:
+ * @default logger options are:
  *
  * - Colorize output when pretty printing
  * - Ignore certain event attributes like hostname and pid for cleaner log statements
  * - Prefix the log output with log level
  * - Use a shorted log message that omits server name
  * - Humanize time in GMT
- * - Set the default log level in dev or test to trace and warn in prod
- *   (or set via LOG_LEVEL environment variable)
+ * - Set the default log level in test to silent, development to trace
+ *   and warn in prod
+ *   Or set via LOG_LEVEL environment variable
  * - Redact the host and other keys via a set redactionList
  *
  * Pretty Printing Defaults defined in defaultPrettyPrintOptions

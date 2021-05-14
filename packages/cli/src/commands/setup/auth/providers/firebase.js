@@ -11,7 +11,9 @@ export const config = {
 }
 
 const firebaseClient = ((config) => {
-  firebase.initializeApp(config)
+  if (!firebase.apps.length) {
+    firebase.initializeApp(config)
+  }
   return firebase
 })(firebaseClientConfig)`,
   authProvider: { client: 'firebaseClient', type: 'firebase' },

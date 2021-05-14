@@ -1,5 +1,3 @@
-import { getConfig } from '@redwoodjs/internal'
-
 import {
   BeforeResolverSpec,
   MissingBeforeResolverError,
@@ -7,9 +5,11 @@ import {
 import { ServicesCollection, MakeServices, Services } from './types'
 
 export const makeServices: MakeServices = ({ services }) => {
-  if (!getConfig().api.experimentalSecureServices) {
+  if (process.env.REDWOOD_SECURE_SERVICES !== '1') {
+    console.warn('NOTICE: Redwood v1.0 will make resolvers secure by default.')
+
     console.warn(
-      'NOTICE: Redwood v1.0 will make services secure by default. To optin to this behavior now, add `experimentalSecureServices = true` to the [api] section of your redwood.toml file. For more information: https://redwoodjs.com/docs/secure-services'
+      'To opt in to this behavior now, add `REDWOOD_SECURE_SERVICES=1` to your `.env.defaults` file. For more information: https://redwoodjs.com/docs/services'
     )
     return services
   }
