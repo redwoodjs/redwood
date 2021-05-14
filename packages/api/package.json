@@ -10,7 +10,7 @@
   "types": "./dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@graphql-tools/merge": "6.2.13",
+    "@graphql-tools/merge": "6.2.14",
     "@prisma/client": "2.22.1",
     "@types/pino": "^6.3.8",
     "apollo-server-lambda": "2.22.2",
