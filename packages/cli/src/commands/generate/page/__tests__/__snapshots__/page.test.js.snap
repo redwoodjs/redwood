@@ -356,3 +356,57 @@ describe('TSFilesPage', () => {
 })
 "
 `;
+
+exports[`generates typescript pages 4`] = `
+"import { Link, routes } from '@redwoodjs/router'
+
+type TSParamFilesPageProps = {
+  id: string
+}
+
+const TSParamFilesPage = ({ id }: TSParamFilesPageProps) => {
+  return (
+    <>
+      <h1>TSParamFilesPage</h1>
+      <p>
+        Find me in <code>./web/src/pages/TsParamFilesPage/TsParamFilesPage.tsx</code>
+      </p>
+      <p>
+        My default route is named <code>tsParamFiles</code>, link to me with \`
+        <Link to={routes.tsParamFiles({ id: '42' })}>TSParamFiles 42</Link>\`
+      </p>
+      <p>The parameter passed to me is {id}</p>
+    </>
+  )
+}
+
+export default TSParamFilesPage
+"
+`;
+
+exports[`generates typescript pages 5`] = `
+"import { Link, routes } from '@redwoodjs/router'
+
+type TSParamTypeFilesPageProps = {
+  id: Int
+}
+
+const TSParamTypeFilesPage = ({ id }: TSParamTypeFilesPageProps) => {
+  return (
+    <>
+      <h1>TSParamTypeFilesPage</h1>
+      <p>
+        Find me in <code>./web/src/pages/TsParamTypeFilesPage/TsParamTypeFilesPage.tsx</code>
+      </p>
+      <p>
+        My default route is named <code>tsParamTypeFiles</code>, link to me with \`
+        <Link to={routes.tsParamTypeFiles({ id: '42' })}>TSParamTypeFiles 42</Link>\`
+      </p>
+      <p>The parameter passed to me is {id}</p>
+    </>
+  )
+}
+
+export default TSParamTypeFilesPage
+"
+`;
