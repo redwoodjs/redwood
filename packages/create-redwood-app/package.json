@@ -13,7 +13,7 @@
     "axios": "^0.20.0",
     "chalk": "^4.1.1",
     "check-node-version": "^4.0.2",
-    "decompress": "^4.2.0",
+    "decompress": "^4.2.1",
     "execa": "^5.0.0",
     "fs-extra": "^10.0.0",
     "listr": "^0.14.3",

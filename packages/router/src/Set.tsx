@@ -32,7 +32,7 @@ type SetProps<P> = P & {
   children: ReactNode
 }
 
-const IdentityWrapper: WrapperType<{}> = ({ children }) => {
+const IdentityWrapper: WrapperType<Record<string, any>> = ({ children }) => {
   return <>{children}</>
 }
 
