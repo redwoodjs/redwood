@@ -13,7 +13,7 @@
     "react-dom": "*"
   },
   "dependencies": {
-    "@babel/register": "7.13.14",
+    "@babel/register": "7.13.16",
     "@redwoodjs/auth": "^0.32.2",
     "@redwoodjs/internal": "^0.32.2",
     "@redwoodjs/router": "^0.32.2",

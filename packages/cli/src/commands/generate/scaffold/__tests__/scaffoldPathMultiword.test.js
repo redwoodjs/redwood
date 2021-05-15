@@ -14,18 +14,22 @@ beforeAll(async () => {
   filesMultiwordLower = await scaffold.files({
     model: 'post',
     path: 'adminPages',
+    tests: true,
   })
   filesMultiwordUpper = await scaffold.files({
     model: 'Post',
     path: 'AdminPages',
+    tests: true,
   })
   filesMultiwordDash = await scaffold.files({
     model: 'post',
     path: 'admin-pages',
+    tests: true,
   })
   filesMultiwordUnderscore = await scaffold.files({
     model: 'post',
     path: 'admin_pages',
+    tests: true,
   })
 })
 
@@ -1165,6 +1169,7 @@ describe('admin_pages/post', () => {
       const userProfileFiles = await scaffold.files({
         model: 'userProfile',
         path: 'admin-pages',
+        tests: true,
       })
 
       const cell =
@@ -1183,6 +1188,7 @@ describe('admin_pages/post', () => {
       const userProfileFiles = await scaffold.files({
         model: 'userProfile',
         path: 'admin_pages',
+        tests: true,
       })
 
       const cell =
@@ -1201,6 +1207,7 @@ describe('admin_pages/post', () => {
       const userProfileFiles = await scaffold.files({
         model: 'userProfile',
         path: 'admin_pages',
+        tests: true,
       })
 
       const cell =
@@ -1221,6 +1228,7 @@ describe('admin_pages/post', () => {
       const foreignKeyFiles = await scaffold.files({
         model: 'userProfile',
         path: 'admin_pages',
+        tests: true,
       })
 
       expect(foreignKeyFiles).toHaveProperty([
@@ -1234,6 +1242,7 @@ describe('admin_pages/post', () => {
       const foreignKeyFiles = await scaffold.files({
         model: 'userProfile',
         path: 'admin_pages',
+        tests: true,
       })
 
       expect(foreignKeyFiles).toHaveProperty([

@@ -19,6 +19,10 @@ describe('getConfig', () => {
         "browser": Object {
           "open": false,
         },
+        "generate": Object {
+          "stories": true,
+          "tests": true,
+        },
         "web": Object {
           "a11y": true,
           "apiProxyPath": "/.netlify/functions",

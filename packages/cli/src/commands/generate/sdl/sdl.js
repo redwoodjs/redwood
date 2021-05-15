@@ -8,6 +8,8 @@ import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 import terminalLink from 'terminal-link'
 
+import { getConfig } from '@redwoodjs/internal'
+
 import {
   generateTemplate,
   transformTSToJS,
@@ -142,9 +144,15 @@ const sdlFromSchemaModel = async (name, crud) => {
   }
 }
 
-export const files = async ({ name, crud, typescript }) => {
-  const { query, createInput, updateInput, idType, relations, enums } =
-    await sdlFromSchemaModel(pascalcase(pluralize.singular(name)), crud)
+export const files = async ({ name, crud, tests, typescript }) => {
+  const {
+    query,
+    createInput,
+    updateInput,
+    idType,
+    relations,
+    enums,
+  } = await sdlFromSchemaModel(pascalcase(pluralize.singular(name)), crud)
 
   let template = generateTemplate(
     path.join('sdl', 'templates', `sdl.ts.template`),
@@ -171,7 +179,7 @@ export const files = async ({ name, crud, typescript }) => {
 
   return {
     [outputPath]: template,
-    ...(await serviceFiles({ name, crud, relations, typescript })),
+    ...(await serviceFiles({ name, crud, tests, relations, typescript })),
   }
 }
 
@@ -193,6 +201,10 @@ export const builder = (yargs) => {
       description: 'Model to generate the sdl for',
       type: 'string',
     })
+    .option('tests', {
+      description: 'Generate test files',
+      type: 'boolean',
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -206,13 +218,16 @@ export const builder = (yargs) => {
   })
 }
 // TODO: Add --dry-run command
-export const handler = async ({ model, crud, force, typescript }) => {
+export const handler = async ({ model, crud, force, tests, typescript }) => {
+  if (tests === undefined) {
+    tests = getConfig().generate.tests
+  }
   const tasks = new Listr(
     [
       {
         title: 'Generating SDL files...',
         task: async () => {
-          const f = await files({ name: model, crud, typescript })
+          const f = await files({ name: model, tests, crud, typescript })
           return writeFilesTask(f, { overwriteExisting: force })
         },
       },

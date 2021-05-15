@@ -11,10 +11,12 @@ beforeAll(async () => {
   filesNestedLower = await scaffold.files({
     model: 'post',
     path: 'admin/pages',
+    tests: true,
   })
   filesNestedUpper = await scaffold.files({
     model: 'Post',
     path: 'Admin/Pages',
+    tests: true,
   })
 })
 
