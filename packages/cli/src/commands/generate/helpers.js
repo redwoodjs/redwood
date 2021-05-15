@@ -69,7 +69,7 @@ export const templateForComponentFile = ({
       `./${path.relative(getPaths().base, componentOutputPath)}`
     ),
     ...templateVars,
-    routeName: templatePath === 'page.js.template' ? routeName : '',
+    routeName: templatePath === 'page.tsx.template' ? routeName : '',
   })
   return [componentOutputPath, content]
 }
