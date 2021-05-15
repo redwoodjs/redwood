@@ -124,12 +124,15 @@ const positionalsObj = {
 
 // @NOTE: Not exporting handler from function
 // As pages need a special handler
-export const { command, description, builder } =
-  createYargsForComponentGeneration({
-    componentName: 'page',
-    filesFn: files,
-    positionalsObj,
-  })
+export const {
+  command,
+  description,
+  builder,
+} = createYargsForComponentGeneration({
+  componentName: 'page',
+  filesFn: files,
+  positionalsObj,
+})
 
 export const handler = async ({
   name,
