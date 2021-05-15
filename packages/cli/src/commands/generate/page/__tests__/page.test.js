@@ -308,7 +308,13 @@ test('file generation', async () => {
 
   global.mockFs = true
 
-  await page.handler({ name: 'home', path: '', force: false })
+  await page.handler({
+    name: 'home',
+    path: '',
+    force: false,
+    tests: true,
+    stories: true,
+  })
 
   expect(spy).toHaveBeenCalled()
 
@@ -346,7 +352,13 @@ test('file generation with route params', async () => {
   const spy = jest.spyOn(fs, 'writeFileSync')
   global.mockFs = true
 
-  await page.handler({ name: 'post', path: '{id}', force: false })
+  await page.handler({
+    name: 'post',
+    path: '{id}',
+    force: false,
+    tests: true,
+    stories: true,
+  })
 
   expect(spy).toHaveBeenCalled()
 
