@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/api",
-  "version": "0.32.0",
+  "version": "0.32.2",
   "files": [
     "dist",
     "logger",
@@ -10,12 +10,11 @@
   "types": "./dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@graphql-tools/merge": "6.2.13",
+    "@graphql-tools/merge": "6.2.14",
     "@prisma/client": "2.22.1",
-    "@redwoodjs/internal": "^0.32.0",
     "@types/pino": "^6.3.8",
     "apollo-server-lambda": "2.22.2",
-    "core-js": "3.10.1",
+    "core-js": "3.12.1",
     "graphql": "15.5.0",
     "graphql-scalars": "1.9.3",
     "jsonwebtoken": "^8.5.1",
@@ -23,11 +22,11 @@
     "lodash.merge": "^4.6.2",
     "lodash.omitby": "^4.6.0",
     "pino": "^6.11.3",
-    "pino-pretty": "^4.7.1"
+    "pino-pretty": "^4.8.0"
   },
   "devDependencies": {
-    "@redwoodjs/auth": "^0.32.0",
-    "@redwoodjs/dev-server": "^0.32.0",
+    "@redwoodjs/auth": "^0.32.2",
+    "@redwoodjs/dev-server": "^0.32.2",
     "@types/jsonwebtoken": "^8.3.9",
     "@types/lodash.merge": "^4.6.6",
     "@types/lodash.omitby": "^4.6.6",

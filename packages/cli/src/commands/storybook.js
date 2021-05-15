@@ -39,7 +39,7 @@ export const handler = ({ open, port, build, buildDirectory }) => {
   const staticAssetsFolder = path.join(getPaths().web.base, 'public')
   // Create the `MockServiceWorker.js` file
   // https://mswjs.io/docs/cli/init
-  execa(`yarn msw init "${staticAssetsFolder}"`, undefined, {
+  execa(`yarn msw init "${staticAssetsFolder}" --no-save`, undefined, {
     stdio: 'inherit',
     shell: true,
     cwd,

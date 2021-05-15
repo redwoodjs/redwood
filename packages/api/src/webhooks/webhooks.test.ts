@@ -40,6 +40,14 @@ const buildEvent = ({
   }
 }
 
+beforeEach(() => {
+  jest.spyOn(console, 'warn').mockImplementation(jest.fn())
+})
+
+afterEach(() => {
+  jest.spyOn(console, 'warn').mockRestore()
+})
+
 describe('webhooks', () => {
   describe('using the timestampScheme verifier', () => {
     describe('signs a payload with default timestamp', () => {
@@ -184,7 +192,7 @@ describe('webhooks', () => {
   })
 
   describe('webhooks via event', () => {
-    describe('when it receives and event  extracts the signature and payload from the event', () => {
+    describe('when it receives and event extracts the signature and payload from the event', () => {
       test('it can verify an event body payload with a signature it generates', () => {
         const signature = signPayload('timestampSchemeVerifier', {
           payload,
