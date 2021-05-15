@@ -43,13 +43,20 @@ const style = {
   green: chalk.green,
 }
 
-const { _: args, 'yarn-install': yarnInstall } = yargs
+const { _: args, 'yarn-install': yarnInstall, typescript } = yargs
   .scriptName(name)
   .usage('Usage: $0 <project directory> [option]')
   .example('$0 newapp')
   .option('yarn-install', {
     default: true,
+    type: 'boolean',
     describe: 'Skip yarn install with --no-yarn-install',
+  })
+  .option('typescript', {
+    alias: 'ts',
+    default: false,
+    type: 'boolean',
+    describe: 'Generate a TypeScript project. JavaScript by default.',
   })
   .version(version)
   .strict().argv
@@ -145,6 +152,16 @@ new Listr(
       title: 'Installing packages',
       task: () => new Listr(installNodeModulesTasks({ newAppDir })),
     },
+    {
+      title: 'Convert TypeScript files to JavaScript',
+      enabled: () => typescript === false,
+      task: () => {
+        return execa('yarn rw ts-to-js', {
+          shell: true,
+          cwd: newAppDir,
+        })
+      },
+    },
   ],
   { collapse: false, exitOnError: true }
 )
@@ -155,11 +172,6 @@ new Listr(
     ;[
       '',
       style.success('Thanks for trying out Redwood!'),
-      '',
-      `We've created your app in '${style.green(newAppDir)}'`,
-      `Enter the directory and run '${style.green(
-        'yarn rw dev'
-      )}' to start the development server.`,
       '',
       ` ⚡️ ${style.redwood(
         'Get up and running fast with this Quick Start guide'
@@ -196,6 +208,11 @@ new Listr(
       `${style.redwood(
         ' ❖ Find a Good First Issue'
       )}: https://redwoodjs.com/good-first-issue`,
+      '',
+      `${style.header(`Fire it up!`)} 🚀`,
+      '',
+      `${style.redwood(` > ${style.green(`cd ${targetDir}`)}`)}`,
+      `${style.redwood(` > ${style.green(`yarn rw dev`)}`)}`,
       '',
     ].map((item) => console.log(item))
   })

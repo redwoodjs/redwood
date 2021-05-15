@@ -1,0 +1,57 @@
+name: Cypress E2E tests
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  cypress-run:
+    if: github.repository == 'redwoodjs/redwood'
+    strategy:
+      matrix:
+        os: ['ubuntu-latest']
+        node-version: ['14']
+      fail-fast: true
+    runs-on: ${{ matrix.os }}
+    name: ${{ matrix.os }} | Node ${{ matrix.node-version }} latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install framework modules
+        run: yarn install --frozen-lockfile
+
+      - name: Create a temporary directory
+        id: createpath
+        run: |
+          project_path=$(mktemp -d -t redwood.XXXXXX)
+          echo "::set-output name=project_path::$project_path"
+
+      - name: Create a RedwoodJS app
+        run: ./tasks/run-e2e ${{ steps.createpath.outputs.project_path }} --no-start
+
+      - name: Start server in background
+        run: yarn rw dev &
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CYPRESS_RW_PATH:  "${{ steps.createpath.outputs.project_path }}"
+          CYPRESS_pageLoadTimeout: 300000
+          CYPRESS_defaultCommandTimeout: 300000
+          CYPRESS_requestTimeout: 300000
+        with:
+          browser: chrome
+          env: true
+          wait-on: 'http://localhost:8910'
+          record: true
+          working-directory: ./tasks/e2e

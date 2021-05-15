@@ -1,8 +1,13 @@
 // This is the ESLint configuation used by Redwood projects.
+const { getConfig } = require('@redwoodjs/internal')
+
+const config = getConfig()
 
 module.exports = {
-  extends: './shared.js',
-
+  extends: [
+    './shared.js',
+    config.web.a11y && 'plugin:jsx-a11y/recommended',
+  ].filter(Boolean),
   plugins: ['@redwoodjs/eslint-plugin-redwood'],
   overrides: [
     {
@@ -10,6 +15,12 @@ module.exports = {
       rules: {
         'no-undef': 'off',
         '@redwoodjs/redwood/no-unavailable-pages': 'error',
+        'jsx-a11y/aria-role': [
+          2,
+          {
+            ignoreNonDOM: true,
+          },
+        ],
       },
     },
     // `api` side
@@ -30,6 +41,9 @@ module.exports = {
         node: true,
         commonjs: true,
       },
+      globals: {
+        Promise: 'readonly',
+      },
     },
     // `web` side
     {
@@ -41,6 +55,8 @@ module.exports = {
       globals: {
         React: 'readonly',
         gql: 'readonly',
+        process: 'readonly',
+        require: 'readonly',
       },
     },
     // Test, stories, scenarios, and mock files
@@ -48,7 +64,7 @@ module.exports = {
       files: [
         '*.test.*',
         '**/__mocks__/**',
-        '*.scenario.*',
+        '*.scenarios.*',
         '*.stories.*',
         '*.mock.*',
       ],

@@ -6,9 +6,6 @@
 .rw-scaffold ::after,
 .rw-scaffold ::before {
   box-sizing: inherit;
-  border-width: 0;
-  border-style: solid;
-  border-color: #e2e8f0;
 }
 .rw-scaffold main {
   color: #4a5568;
@@ -101,35 +98,6 @@
 .rw-heading .rw-link:hover {
   color: #1a202c;
   text-decoration: underline;
-}
-.rw-flash-message {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin: 0 1rem;
-  padding: 1rem;
-  background: #e2e8f0;
-  border-radius: 0.25rem;
-}
-.rw-flash-message .rw-flash-message-dismiss {
-  font-size: 1.25rem;
-  font-weight: 600;
-  line-height: 1;
-  margin-right: 0.25rem;
-  transform-origin: center;
-  transform: rotate(45deg);
-  cursor: pointer;
-}
-.rw-flash-message .rw-flash-message-dismiss:hover {
-  opacity: 0.7;
-}
-.rw-flash-message.rw-flash-success {
-  background: #48bb78;
-  color: #fff;
-}
-.rw-flash-message.rw-flash-error {
-  background: #e53e3e;
-  color: #fff;
 }
 .rw-form-wrapper {
   box-sizing: border-box;
@@ -238,8 +206,9 @@
   border-radius: 0.25rem;
   outline: none;
 }
-.rw-input[type='checkbox'] {
-  width: initial;
+.rw-input[type='checkbox'],
+.rw-input[type='radio'] {
+  width: 1rem;
   margin-left: 0;
 }
 .rw-input:focus {

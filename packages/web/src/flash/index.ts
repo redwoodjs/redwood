@@ -1,4 +1,2 @@
-import Flash from './Flash'
-import { FlashProvider, useFlash } from './FlashContext'
-
-export { FlashProvider, useFlash, Flash }
+export { default as Flash } from './Flash'
+export { useFlash } from './FlashContext'

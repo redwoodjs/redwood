@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, forwardRef } from 'react'
+import React, { useContext, forwardRef } from 'react'
 
 import pascalcase from 'pascalcase'
 import {
   useForm,
   FormProvider,
   useFormContext,
-  ValidationRules,
+  RegisterOptions,
   UseFormMethods,
   UseFormOptions,
 } from 'react-hook-form'
@@ -65,7 +65,7 @@ interface InputTagProps {
 }
 
 interface ValidatableFieldProps extends InputTagProps {
-  validation?: ValidationRules
+  validation?: RegisterOptions
   defaultValue?: string
 }
 
@@ -82,7 +82,7 @@ const inputTagProps = <T extends InputTagProps>(
   const contextError = fieldErrorsContext[props.name]
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  useEffect(() => {
+  React.useEffect(() => {
     if (contextError) {
       setError(props.name, { type: 'server', message: contextError })
     }
@@ -224,6 +224,14 @@ const FieldError = (props: FieldErrorProps) => {
   return validationError ? <span {...props}>{errorMessage}</span> : null
 }
 
+const jsonValidation = (value: string) => {
+  try {
+    JSON.parse(value)
+  } catch (e) {
+    return e.message
+  }
+}
+
 // Renders a <textarea> field
 
 const TextAreaField = forwardRef<
@@ -233,8 +241,12 @@ const TextAreaField = forwardRef<
   const { register } = useFormContext()
   const { setCoercion } = useCoercion()
 
-  useEffect(() => {
-    if (process.env.NODE_ENV !== 'production' && props.dataType !== undefined) {
+  React.useEffect(() => {
+    if (
+      props.dataType !== undefined &&
+      (process.env.NODE_ENV === 'development' ||
+        process.env.NODE_ENV === 'test')
+    ) {
       console.warn(
         'Using the "dataType" prop on form input fields is deprecated. Use "transformValue" instead.'
       )
@@ -246,13 +258,18 @@ const TextAreaField = forwardRef<
   }, [setCoercion, props.name, props.transformValue, props.dataType])
 
   const tagProps = inputTagProps(props)
+  // implements JSON validation if a transformValue of 'Json' is set
+  const validation = props.validation ? props.validation : { required: false }
+  if (!validation.validate && props.transformValue === 'Json') {
+    validation.validate = jsonValidation
+  }
 
   return (
     <textarea
       {...tagProps}
       id={props.id || props.name}
       ref={(element) => {
-        register(element, props.validation || { required: false })
+        register(element, validation)
 
         if (typeof ref === 'function') {
           ref(element)
@@ -271,6 +288,15 @@ const SelectField = forwardRef<
   ValidatableFieldProps & React.SelectHTMLAttributes<HTMLSelectElement>
 >((props, ref) => {
   const { register } = useFormContext()
+  const { setCoercion } = useCoercion()
+
+  React.useEffect(() => {
+    setCoercion({
+      name: props.name,
+      transformValue: props.transformValue,
+    })
+  }, [setCoercion, props.name, props.transformValue])
+
   const tagProps = inputTagProps(props)
 
   return (
@@ -306,7 +332,11 @@ export const CheckboxField = forwardRef<
   const type = 'checkbox'
 
   React.useEffect(() => {
-    if (process.env.NODE_ENV !== 'production' && props.dataType !== undefined) {
+    if (
+      props.dataType !== undefined &&
+      (process.env.NODE_ENV === 'development' ||
+        process.env.NODE_ENV === 'test')
+    ) {
       console.warn(
         'Using the "dataType" prop on form input fields is deprecated. Use "transformValue" instead.'
       )
@@ -358,7 +388,11 @@ const InputField = forwardRef<
   const { register } = useFormContext()
   const { setCoercion } = useCoercion()
   React.useEffect(() => {
-    if (process.env.NODE_ENV !== 'production' && props.dataType !== undefined) {
+    if (
+      props.dataType !== undefined &&
+      (process.env.NODE_ENV === 'development' ||
+        process.env.NODE_ENV === 'test')
+    ) {
       console.warn(
         'Using the "dataType" prop on form input fields is deprecated. Use "transformValue" instead.'
       )

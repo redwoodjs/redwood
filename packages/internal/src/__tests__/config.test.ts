@@ -24,9 +24,10 @@ describe('getConfig', () => {
           "tests": true,
         },
         "web": Object {
+          "a11y": true,
           "apiProxyPath": "/.netlify/functions",
           "apiProxyPort": 8911,
-          "experimentalFastRefresh": false,
+          "fastRefresh": true,
           "host": "localhost",
           "path": "./web",
           "port": 8910,

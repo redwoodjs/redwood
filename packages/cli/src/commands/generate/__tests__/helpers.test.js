@@ -35,7 +35,7 @@ test('templateForComponentFile creates a proper output path for files', () => {
       suffix: 'Page',
       webPathSection: 'pages',
       generator: 'page',
-      templatePath: 'page.js.template',
+      templatePath: 'page.tsx.template',
       templateVars: page.paramVariants(helpers.pathName(undefined, name)),
     })
 
@@ -51,7 +51,7 @@ test('templateForComponentFile can create a path in /web', () => {
     suffix: 'Page',
     webPathSection: 'pages',
     generator: 'page',
-    templatePath: 'page.js.template',
+    templatePath: 'page.tsx.template',
     templateVars: page.paramVariants(helpers.pathName(undefined, 'Home')),
   })
 
@@ -66,7 +66,7 @@ test('templateForComponentFile can create a path in /api', () => {
     suffix: 'Page',
     apiPathSection: 'services',
     generator: 'page',
-    templatePath: 'page.js.template',
+    templatePath: 'page.tsx.template',
     templateVars: page.paramVariants(helpers.pathName(undefined, 'Home')),
   })
 
@@ -81,7 +81,7 @@ test('templateForComponentFile can override generated component name', () => {
     componentName: 'Hobbiton',
     webPathSection: 'pages',
     generator: 'page',
-    templatePath: 'page.js.template',
+    templatePath: 'page.tsx.template',
     templateVars: page.paramVariants(helpers.pathName(undefined, 'Home')),
   })
 
@@ -97,7 +97,7 @@ test('templateForComponentFile can override file extension', () => {
     extension: '.txt',
     webPathSection: 'pages',
     generator: 'page',
-    templatePath: 'page.js.template',
+    templatePath: 'page.tsx.template',
     templateVars: page.paramVariants(helpers.pathName(undefined, 'Home')),
   })
 
@@ -111,13 +111,13 @@ test('templateForComponentFile can override output path', () => {
     name: 'func',
     apiPathSection: 'functions',
     generator: 'function',
-    templatePath: 'function.js.template',
+    templatePath: 'function.ts.template',
     templateVars: { name: 'func' },
-    outputPath: path.normalize('/path/to/project/api/src/functions/func.js'),
+    outputPath: path.normalize('/path/to/project/api/src/functions/func.ts'),
   })
 
   expect(output[0]).toEqual(
-    path.normalize('/path/to/project/api/src/functions/func.js')
+    path.normalize('/path/to/project/api/src/functions/func.ts')
   )
 })
 
@@ -127,7 +127,7 @@ test('templateForComponentFile creates a template', () => {
     suffix: 'Page',
     webPathSection: 'pages',
     generator: 'page',
-    templatePath: 'page.js.template',
+    templatePath: 'page.tsx.template',
     templateVars: page.paramVariants(helpers.pathName(undefined, 'fooBar')),
   })
 

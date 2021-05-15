@@ -65,6 +65,8 @@ _note: this file is also used for all aggregated contributors_
 > - aldonline
 > - clairefro
 > - ajcwebdev
+> - forresthayes
+> - kimadeline
 
 #### Framework
 ```js

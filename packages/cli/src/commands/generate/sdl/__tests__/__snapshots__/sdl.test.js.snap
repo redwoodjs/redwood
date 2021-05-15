@@ -1,0 +1,399 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`in javascript mode creates a multi word sdl file 1`] = `
+"export const schema = gql\`
+  type UserProfile {
+    id: Int!
+    username: String!
+    userId: Int!
+    user: User!
+  }
+
+  type Query {
+    userProfiles: [UserProfile!]!
+  }
+
+  input CreateUserProfileInput {
+    username: String!
+    userId: Int!
+  }
+
+  input UpdateUserProfileInput {
+    username: String
+    userId: Int
+  }
+\`
+"
+`;
+
+exports[`in javascript mode creates a multi word sdl file with CRUD actions 1`] = `
+"export const schema = gql\`
+  type UserProfile {
+    id: Int!
+    username: String!
+    userId: Int!
+    user: User!
+  }
+
+  type Query {
+    userProfiles: [UserProfile!]!
+    userProfile(id: Int!): UserProfile
+  }
+
+  input CreateUserProfileInput {
+    username: String!
+    userId: Int!
+  }
+
+  input UpdateUserProfileInput {
+    username: String
+    userId: Int
+  }
+
+  type Mutation {
+    createUserProfile(input: CreateUserProfileInput!): UserProfile!
+    updateUserProfile(id: Int!, input: UpdateUserProfileInput!): UserProfile!
+    deleteUserProfile(id: Int!): UserProfile!
+  }
+\`
+"
+`;
+
+exports[`in javascript mode creates a sdl file with enum definitions 1`] = `
+"export const schema = gql\`
+  type Shoe {
+    id: Int!
+    color: Color!
+  }
+
+  enum Color {
+    RED
+    GREEN
+    BLUE
+  }
+
+  type Query {
+    shoes: [Shoe!]!
+    shoe(id: Int!): Shoe
+  }
+
+  input CreateShoeInput {
+    color: Color!
+  }
+
+  input UpdateShoeInput {
+    color: Color
+  }
+
+  type Mutation {
+    createShoe(input: CreateShoeInput!): Shoe!
+    updateShoe(id: Int!, input: UpdateShoeInput!): Shoe!
+    deleteShoe(id: Int!): Shoe!
+  }
+\`
+"
+`;
+
+exports[`in javascript mode creates a sdl file with json definitions 1`] = `
+"export const schema = gql\`
+  type Photo {
+    id: Int!
+    name: String!
+    metadata: JSON!
+  }
+
+  type Query {
+    photos: [Photo!]!
+    photo(id: Int!): Photo
+  }
+
+  input CreatePhotoInput {
+    name: String!
+    metadata: JSON!
+  }
+
+  input UpdatePhotoInput {
+    name: String
+    metadata: JSON
+  }
+
+  type Mutation {
+    createPhoto(input: CreatePhotoInput!): Photo!
+    updatePhoto(id: Int!, input: UpdatePhotoInput!): Photo!
+    deletePhoto(id: Int!): Photo!
+  }
+\`
+"
+`;
+
+exports[`in javascript mode creates a single word sdl file 1`] = `
+"export const schema = gql\`
+  type User {
+    id: Int!
+    name: String
+    email: String!
+    isAdmin: Boolean!
+    profiles: [UserProfile]!
+  }
+
+  type Query {
+    users: [User!]!
+  }
+
+  input CreateUserInput {
+    name: String
+    email: String!
+    isAdmin: Boolean!
+  }
+
+  input UpdateUserInput {
+    name: String
+    email: String
+    isAdmin: Boolean
+  }
+\`
+"
+`;
+
+exports[`in javascript mode creates a single word sdl file with CRUD actions 1`] = `
+"export const schema = gql\`
+  type Post {
+    id: Int!
+    title: String!
+    slug: String!
+    author: String!
+    body: String!
+    image: String
+    postedAt: DateTime
+  }
+
+  type Query {
+    posts: [Post!]!
+    post(id: Int!): Post
+  }
+
+  input CreatePostInput {
+    title: String!
+    slug: String!
+    author: String!
+    body: String!
+    image: String
+    postedAt: DateTime
+  }
+
+  input UpdatePostInput {
+    title: String
+    slug: String
+    author: String
+    body: String
+    image: String
+    postedAt: DateTime
+  }
+
+  type Mutation {
+    createPost(input: CreatePostInput!): Post!
+    updatePost(id: Int!, input: UpdatePostInput!): Post!
+    deletePost(id: Int!): Post!
+  }
+\`
+"
+`;
+
+exports[`in typescript mode creates a multi word sdl file 1`] = `
+"export const schema = gql\`
+  type UserProfile {
+    id: Int!
+    username: String!
+    userId: Int!
+    user: User!
+  }
+
+  type Query {
+    userProfiles: [UserProfile!]!
+  }
+
+  input CreateUserProfileInput {
+    username: String!
+    userId: Int!
+  }
+
+  input UpdateUserProfileInput {
+    username: String
+    userId: Int
+  }
+\`
+"
+`;
+
+exports[`in typescript mode creates a multi word sdl file with CRUD actions 1`] = `
+"export const schema = gql\`
+  type UserProfile {
+    id: Int!
+    username: String!
+    userId: Int!
+    user: User!
+  }
+
+  type Query {
+    userProfiles: [UserProfile!]!
+    userProfile(id: Int!): UserProfile
+  }
+
+  input CreateUserProfileInput {
+    username: String!
+    userId: Int!
+  }
+
+  input UpdateUserProfileInput {
+    username: String
+    userId: Int
+  }
+
+  type Mutation {
+    createUserProfile(input: CreateUserProfileInput!): UserProfile!
+    updateUserProfile(id: Int!, input: UpdateUserProfileInput!): UserProfile!
+    deleteUserProfile(id: Int!): UserProfile!
+  }
+\`
+"
+`;
+
+exports[`in typescript mode creates a sdl file with enum definitions 1`] = `
+"export const schema = gql\`
+  type Shoe {
+    id: Int!
+    color: Color!
+  }
+
+  enum Color {
+    RED
+    GREEN
+    BLUE
+  }
+
+  type Query {
+    shoes: [Shoe!]!
+    shoe(id: Int!): Shoe
+  }
+
+  input CreateShoeInput {
+    color: Color!
+  }
+
+  input UpdateShoeInput {
+    color: Color
+  }
+
+  type Mutation {
+    createShoe(input: CreateShoeInput!): Shoe!
+    updateShoe(id: Int!, input: UpdateShoeInput!): Shoe!
+    deleteShoe(id: Int!): Shoe!
+  }
+\`
+"
+`;
+
+exports[`in typescript mode creates a sdl file with json definitions 1`] = `
+"export const schema = gql\`
+  type Photo {
+    id: Int!
+    name: String!
+    metadata: JSON!
+  }
+
+  type Query {
+    photos: [Photo!]!
+    photo(id: Int!): Photo
+  }
+
+  input CreatePhotoInput {
+    name: String!
+    metadata: JSON!
+  }
+
+  input UpdatePhotoInput {
+    name: String
+    metadata: JSON
+  }
+
+  type Mutation {
+    createPhoto(input: CreatePhotoInput!): Photo!
+    updatePhoto(id: Int!, input: UpdatePhotoInput!): Photo!
+    deletePhoto(id: Int!): Photo!
+  }
+\`
+"
+`;
+
+exports[`in typescript mode creates a single word sdl file 1`] = `
+"export const schema = gql\`
+  type User {
+    id: Int!
+    name: String
+    email: String!
+    isAdmin: Boolean!
+    profiles: [UserProfile]!
+  }
+
+  type Query {
+    users: [User!]!
+  }
+
+  input CreateUserInput {
+    name: String
+    email: String!
+    isAdmin: Boolean!
+  }
+
+  input UpdateUserInput {
+    name: String
+    email: String
+    isAdmin: Boolean
+  }
+\`
+"
+`;
+
+exports[`in typescript mode creates a single word sdl file with CRUD actions 1`] = `
+"export const schema = gql\`
+  type Post {
+    id: Int!
+    title: String!
+    slug: String!
+    author: String!
+    body: String!
+    image: String
+    postedAt: DateTime
+  }
+
+  type Query {
+    posts: [Post!]!
+    post(id: Int!): Post
+  }
+
+  input CreatePostInput {
+    title: String!
+    slug: String!
+    author: String!
+    body: String!
+    image: String
+    postedAt: DateTime
+  }
+
+  input UpdatePostInput {
+    title: String
+    slug: String
+    author: String
+    body: String
+    image: String
+    postedAt: DateTime
+  }
+
+  type Mutation {
+    createPost(input: CreatePostInput!): Post!
+    updatePost(id: Int!, input: UpdatePostInput!): Post!
+    deletePost(id: Int!): Post!
+  }
+\`
+"
+`;

@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     tags-ignore:
-      - v**
+      - v** # We don't want this to run on release
 
 jobs:
   build:
@@ -15,9 +15,9 @@ jobs:
         with:
           fetch-depth: 0 # Required because lerna uses tags to determine the version.
       - name: Setup node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
-          node-version: '12'
+          node-version: '14'
       - name: Print node and yarn versions
         run: |
           node --version

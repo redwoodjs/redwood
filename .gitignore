@@ -1,6 +1,5 @@
 .idea
 .DS_Store
-.nvmrc
 node_modules
 dist
 lerna-debug.log

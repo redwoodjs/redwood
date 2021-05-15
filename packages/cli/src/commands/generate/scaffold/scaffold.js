@@ -58,8 +58,7 @@ export const files = async ({
   model: name,
   path: scaffoldPath = '',
   tests,
-  typescript,
-  javascript,
+  typescript = false,
 }) => {
   const model = await getSchema(pascalcase(pluralize.singular(name)))
 
@@ -69,7 +68,6 @@ export const files = async ({
       name,
       crud: true,
       typescript,
-      javascript,
     })),
     ...(await serviceFiles({
       ...getDefaultArgs(serviceBuilder),
@@ -78,12 +76,11 @@ export const files = async ({
       relations: relationsForModel(model),
       tests,
       typescript,
-      javascript,
     })),
     ...assetFiles(name),
-    ...layoutFiles(name, scaffoldPath),
-    ...pageFiles(name, scaffoldPath),
-    ...(await componentFiles(name, scaffoldPath)),
+    ...layoutFiles(name, scaffoldPath, typescript),
+    ...pageFiles(name, scaffoldPath, typescript),
+    ...(await componentFiles(name, scaffoldPath, typescript)),
   }
 }
 
@@ -112,7 +109,7 @@ const assetFiles = (name) => {
   return fileList
 }
 
-const layoutFiles = (name, scaffoldPath = '') => {
+const layoutFiles = (name, scaffoldPath = '', generateTypescript) => {
   const pluralName = pascalcase(pluralize(name))
   const singularName = pascalcase(pluralize.singular(name))
   let fileList = {}
@@ -137,11 +134,12 @@ const layoutFiles = (name, scaffoldPath = '') => {
     const outputLayoutName = layout
       .replace(/Names/, pluralName)
       .replace(/Name/, singularName)
-      .replace(/\.template/, '')
+      .replace(/\.js\.template/, generateTypescript ? '.tsx' : '.js')
+
     const outputPath = path.join(
       getPaths().web.layouts,
       pascalScaffoldPath,
-      outputLayoutName.replace(/\.js/, ''),
+      outputLayoutName.replace(/\.(js|tsx?)/, ''),
       outputLayoutName
     )
     const template = generateTemplate(
@@ -159,7 +157,7 @@ const layoutFiles = (name, scaffoldPath = '') => {
   return fileList
 }
 
-const pageFiles = (name, scaffoldPath = '') => {
+const pageFiles = (name, scaffoldPath = '', generateTypescript) => {
   const pluralName = pascalcase(pluralize(name))
   const singularName = pascalcase(pluralize.singular(name))
   let fileList = {}
@@ -170,14 +168,16 @@ const pageFiles = (name, scaffoldPath = '') => {
       : scaffoldPath.split('/').map(pascalcase).join('/') + '/'
 
   PAGES.forEach((page) => {
+    // Sanitize page names
     const outputPageName = page
       .replace(/Names/, pluralName)
       .replace(/Name/, singularName)
-      .replace(/\.template/, '')
+      .replace(/\.js\.template/, generateTypescript ? '.tsx' : '.js')
+
     const outputPath = path.join(
       getPaths().web.pages,
       pascalScaffoldPath,
-      outputPageName.replace(/\.js/, ''),
+      outputPageName.replace(/\.(js|tsx?)/, ''),
       outputPageName
     )
     const template = generateTemplate(
@@ -193,7 +193,7 @@ const pageFiles = (name, scaffoldPath = '') => {
   return fileList
 }
 
-const componentFiles = async (name, scaffoldPath = '') => {
+const componentFiles = async (name, scaffoldPath = '', generateTypescript) => {
   const pluralName = pascalcase(pluralize(name))
   const singularName = pascalcase(pluralize.singular(name))
   const model = await getSchema(singularName)
@@ -209,6 +209,8 @@ const componentFiles = async (name, scaffoldPath = '') => {
       displayFunction: 'checkboxInputTag',
     },
     DateTime: {
+      componentName: 'DatetimeLocalField',
+      deserilizeFunction: 'formatDatetime',
       listDisplayFunction: 'timeTag',
       displayFunction: 'timeTag',
     },
@@ -302,11 +304,12 @@ const componentFiles = async (name, scaffoldPath = '') => {
     const outputComponentName = component
       .replace(/Names/, pluralName)
       .replace(/Name/, singularName)
-      .replace(/\.template/, '')
+      .replace(/\.js\.template/, generateTypescript ? '.tsx' : '.js')
+
     const outputPath = path.join(
       getPaths().web.components,
       pascalScaffoldPath,
-      outputComponentName.replace(/\.js/, ''),
+      outputComponentName.replace(/\.(js|tsx?)/, ''),
       outputComponentName
     )
 
@@ -384,20 +387,20 @@ export const routes = async ({ model: name, path: scaffoldPath = '' }) => {
 }
 
 const addScaffoldImport = () => {
-  const indexJsPath = path.join(getPaths().web.src, 'index.js')
-  let indexJsContents = readFile(indexJsPath).toString()
+  const appJsPath = getPaths().web.app
+  let appJsContents = readFile(appJsPath).toString()
 
-  if (indexJsContents.match(SCAFFOLD_STYLE_PATH)) {
+  if (appJsContents.match(SCAFFOLD_STYLE_PATH)) {
     return 'Skipping scaffold style include'
   }
 
-  indexJsContents = indexJsContents.replace(
+  appJsContents = appJsContents.replace(
     "import Routes from 'src/Routes'\n",
     `import Routes from 'src/Routes'\n\nimport '${SCAFFOLD_STYLE_PATH}'`
   )
-  writeFile(indexJsPath, indexJsContents, { overwriteExisting: true })
+  writeFile(appJsPath, appJsContents, { overwriteExisting: true })
 
-  return 'Added scaffold import to index.js'
+  return 'Added scaffold import to App.{js,tsx}'
 }
 
 export const command = 'scaffold <model>'
@@ -419,6 +422,8 @@ export const builder = (yargs) => {
         'https://redwoodjs.com/reference/command-line-interface#generate-scaffold'
       )}`
     )
+
+  // Merge generator defaults in
   Object.entries(yargsDefaults).forEach(([option, config]) => {
     yargs.option(option, config)
   })
@@ -453,13 +458,12 @@ export const handler = async ({
   force,
   tests,
   typescript,
-  javascript,
 }) => {
   if (tests === undefined) {
     tests = getConfig().generate.tests
   }
   const { model, path } = splitPathAndModel(modelArg)
-  const t = tasks({ model, path, force, tests, typescript, javascript })
+  const t = tasks({ model, path, force, tests, typescript })
 
   try {
     await t.run()
