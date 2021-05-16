@@ -9,6 +9,8 @@ import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 import terminalLink from 'terminal-link'
 
+import { getConfig } from '@redwoodjs/internal'
+
 import {
   generateTemplate,
   templateRoot,
@@ -55,8 +57,8 @@ const getIdType = (model) => {
 export const files = async ({
   model: name,
   path: scaffoldPath = '',
-  typescript,
-  javascript,
+  tests,
+  typescript = false,
 }) => {
   const model = await getSchema(pascalcase(pluralize.singular(name)))
 
@@ -66,20 +68,19 @@ export const files = async ({
       name,
       crud: true,
       typescript,
-      javascript,
     })),
     ...(await serviceFiles({
       ...getDefaultArgs(serviceBuilder),
       name,
       crud: true,
       relations: relationsForModel(model),
+      tests,
       typescript,
-      javascript,
     })),
     ...assetFiles(name),
-    ...layoutFiles(name, scaffoldPath),
-    ...pageFiles(name, scaffoldPath),
-    ...(await componentFiles(name, scaffoldPath)),
+    ...layoutFiles(name, scaffoldPath, typescript),
+    ...pageFiles(name, scaffoldPath, typescript),
+    ...(await componentFiles(name, scaffoldPath, typescript)),
   }
 }
 
@@ -108,7 +109,7 @@ const assetFiles = (name) => {
   return fileList
 }
 
-const layoutFiles = (name, scaffoldPath = '') => {
+const layoutFiles = (name, scaffoldPath = '', generateTypescript) => {
   const pluralName = pascalcase(pluralize(name))
   const singularName = pascalcase(pluralize.singular(name))
   let fileList = {}
@@ -133,11 +134,12 @@ const layoutFiles = (name, scaffoldPath = '') => {
     const outputLayoutName = layout
       .replace(/Names/, pluralName)
       .replace(/Name/, singularName)
-      .replace(/\.template/, '')
+      .replace(/\.js\.template/, generateTypescript ? '.tsx' : '.js')
+
     const outputPath = path.join(
       getPaths().web.layouts,
       pascalScaffoldPath,
-      outputLayoutName.replace(/\.js/, ''),
+      outputLayoutName.replace(/\.(js|tsx?)/, ''),
       outputLayoutName
     )
     const template = generateTemplate(
@@ -155,7 +157,7 @@ const layoutFiles = (name, scaffoldPath = '') => {
   return fileList
 }
 
-const pageFiles = (name, scaffoldPath = '') => {
+const pageFiles = (name, scaffoldPath = '', generateTypescript) => {
   const pluralName = pascalcase(pluralize(name))
   const singularName = pascalcase(pluralize.singular(name))
   let fileList = {}
@@ -166,14 +168,16 @@ const pageFiles = (name, scaffoldPath = '') => {
       : scaffoldPath.split('/').map(pascalcase).join('/') + '/'
 
   PAGES.forEach((page) => {
+    // Sanitize page names
     const outputPageName = page
       .replace(/Names/, pluralName)
       .replace(/Name/, singularName)
-      .replace(/\.template/, '')
+      .replace(/\.js\.template/, generateTypescript ? '.tsx' : '.js')
+
     const outputPath = path.join(
       getPaths().web.pages,
       pascalScaffoldPath,
-      outputPageName.replace(/\.js/, ''),
+      outputPageName.replace(/\.(js|tsx?)/, ''),
       outputPageName
     )
     const template = generateTemplate(
@@ -189,7 +193,7 @@ const pageFiles = (name, scaffoldPath = '') => {
   return fileList
 }
 
-const componentFiles = async (name, scaffoldPath = '') => {
+const componentFiles = async (name, scaffoldPath = '', generateTypescript) => {
   const pluralName = pascalcase(pluralize(name))
   const singularName = pascalcase(pluralize.singular(name))
   const model = await getSchema(singularName)
@@ -300,11 +304,12 @@ const componentFiles = async (name, scaffoldPath = '') => {
     const outputComponentName = component
       .replace(/Names/, pluralName)
       .replace(/Name/, singularName)
-      .replace(/\.template/, '')
+      .replace(/\.js\.template/, generateTypescript ? '.tsx' : '.js')
+
     const outputPath = path.join(
       getPaths().web.components,
       pascalScaffoldPath,
-      outputComponentName.replace(/\.js/, ''),
+      outputComponentName.replace(/\.(js|tsx?)/, ''),
       outputComponentName
     )
 
@@ -382,7 +387,7 @@ export const routes = async ({ model: name, path: scaffoldPath = '' }) => {
 }
 
 const addScaffoldImport = () => {
-  const appJsPath = path.join(getPaths().web.src, 'App.js')
+  const appJsPath = getPaths().web.app
   let appJsContents = readFile(appJsPath).toString()
 
   if (appJsContents.match(SCAFFOLD_STYLE_PATH)) {
@@ -395,7 +400,7 @@ const addScaffoldImport = () => {
   )
   writeFile(appJsPath, appJsContents, { overwriteExisting: true })
 
-  return 'Added scaffold import to App.js'
+  return 'Added scaffold import to App.{js,tsx}'
 }
 
 export const command = 'scaffold <model>'
@@ -407,23 +412,29 @@ export const builder = (yargs) => {
       description:
         "Model to scaffold. You can also use <path/model> to nest files by type at the given path directory (or directories). For example, 'rw g scaffold admin/post'",
     })
+    .option('tests', {
+      description: 'Generate test files',
+      type: 'boolean',
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
         'https://redwoodjs.com/reference/command-line-interface#generate-scaffold'
       )}`
     )
+
+  // Merge generator defaults in
   Object.entries(yargsDefaults).forEach(([option, config]) => {
     yargs.option(option, config)
   })
 }
-const tasks = ({ model, path, force, typescript, javascript }) => {
+const tasks = ({ model, path, force, tests, typescript, javascript }) => {
   return new Listr(
     [
       {
         title: 'Generating scaffold files...',
         task: async () => {
-          const f = await files({ model, path, typescript, javascript })
+          const f = await files({ model, path, tests, typescript, javascript })
           return writeFilesTask(f, { overwriteExisting: force })
         },
       },
@@ -445,11 +456,14 @@ const tasks = ({ model, path, force, typescript, javascript }) => {
 export const handler = async ({
   model: modelArg,
   force,
+  tests,
   typescript,
-  javascript,
 }) => {
+  if (tests === undefined) {
+    tests = getConfig().generate.tests
+  }
   const { model, path } = splitPathAndModel(modelArg)
-  const t = tasks({ model, path, force, typescript, javascript })
+  const t = tasks({ model, path, force, tests, typescript })
 
   try {
     await t.run()

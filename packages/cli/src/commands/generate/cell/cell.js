@@ -31,13 +31,18 @@ const uniqueOperationName = async (name, index = 1) => {
   return uniqueOperationName(name, index + 1)
 }
 
-export const files = async ({ name, tests = true, stories = true }) => {
+export const files = async ({
+  name,
+  typescript: generateTypescript,
+  ...options
+}) => {
   // Create a unique operation name.
   const operationName = await uniqueOperationName(name)
 
   const cellFile = templateForComponentFile({
     name,
     suffix: COMPONENT_SUFFIX,
+    extension: generateTypescript ? '.tsx' : '.js',
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'cell',
     templatePath: 'cell.js.template',
@@ -48,7 +53,7 @@ export const files = async ({ name, tests = true, stories = true }) => {
   const testFile = templateForComponentFile({
     name,
     suffix: COMPONENT_SUFFIX,
-    extension: '.test.js',
+    extension: generateTypescript ? '.test.tsx' : '.test.js',
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'cell',
     templatePath: 'test.js.template',
@@ -56,7 +61,7 @@ export const files = async ({ name, tests = true, stories = true }) => {
   const storiesFile = templateForComponentFile({
     name,
     suffix: COMPONENT_SUFFIX,
-    extension: '.stories.js',
+    extension: generateTypescript ? '.stories.tsx' : '.stories.js',
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'cell',
     templatePath: 'stories.js.template',
@@ -64,7 +69,7 @@ export const files = async ({ name, tests = true, stories = true }) => {
   const mockFile = templateForComponentFile({
     name,
     suffix: COMPONENT_SUFFIX,
-    extension: '.mock.js',
+    extension: generateTypescript ? '.mock.ts' : '.mock.js',
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'cell',
     templatePath: 'mock.js.template',
@@ -72,15 +77,15 @@ export const files = async ({ name, tests = true, stories = true }) => {
 
   const files = [cellFile]
 
-  if (stories) {
+  if (options.stories) {
     files.push(storiesFile)
   }
 
-  if (tests) {
+  if (options.tests) {
     files.push(testFile)
   }
 
-  if (stories || tests) {
+  if (options.stories || options.tests) {
     files.push(mockFile)
   }
 

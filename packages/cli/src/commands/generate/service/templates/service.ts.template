@@ -1,6 +1,13 @@
 <% if (crud || relations.length > 0) { %>import { Prisma } from '@prisma/client'
 <% } %><% if (relations.length) { %>import { ResolverArgs } from '@redwoodjs/api/dist/types'
 <% } %>import { db } from 'src/lib/db'
+import { requireAuth } from 'src/lib/auth'
+import { BeforeResolverSpecType } from '@redwoodjs/api'
+
+// Used when the environment variable REDWOOD_SECURE_SERVICES=1
+export const beforeResolver = (rules: BeforeResolverSpecType) => {
+  rules.add(requireAuth)
+}
 
 export const ${pluralCamelName} = () => {
   return db.${singularCamelName}.findMany()
@@ -22,8 +29,7 @@ export const create${singularPascalName} = ({ input }: Create${singularPascalNam
   })
 }
 
-interface Update${singularPascalName}Args {
-  where: Prisma.${singularPascalName}WhereUniqueInput
+interface Update${singularPascalName}Args extends Prisma.${singularPascalName}WhereUniqueInput {
   input: Prisma.${singularPascalName}UpdateInput
 }
 

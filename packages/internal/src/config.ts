@@ -30,8 +30,8 @@ interface BrowserTargetConfig {
   // TODO: apiProxyHost: string
   apiProxyPort: number
   apiProxyPath: string
-  experimentalFastRefresh?: boolean
-  experiemntalPrerender?: boolean
+  fastRefresh: boolean
+  a11y: boolean
 }
 
 export interface Config {
@@ -39,6 +39,10 @@ export interface Config {
   api: NodeTargetConfig
   browser: {
     open: boolean | string
+  }
+  generate: {
+    tests: boolean
+    stories: boolean
   }
 }
 
@@ -52,7 +56,8 @@ const DEFAULT_CONFIG: Config = {
     target: TargetEnum.BROWSER,
     apiProxyPath: '/.netlify/functions',
     apiProxyPort: 8911,
-    experimentalFastRefresh: false,
+    fastRefresh: true,
+    a11y: true,
   },
   api: {
     host: 'localhost',
@@ -63,6 +68,10 @@ const DEFAULT_CONFIG: Config = {
   },
   browser: {
     open: false,
+  },
+  generate: {
+    tests: true,
+    stories: true,
   },
 }
 

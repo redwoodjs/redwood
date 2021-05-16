@@ -8,13 +8,14 @@ import { getAuthenticationContext } from 'src/auth'
 import {
   GlobalContext,
   setContext,
-  initPerRequestContext,
+  getPerRequestContext,
   usePerRequestContext,
 } from 'src/globalContext'
 
 export type GetCurrentUser = (
   decoded: AuthContextPayload[0],
-  raw: AuthContextPayload[1]
+  raw: AuthContextPayload[1],
+  req?: AuthContextPayload[2]
 ) => Promise<null | Record<string, unknown> | string>
 
 /**
@@ -39,7 +40,7 @@ export const createContextHandler = (
     context: GlobalContext & LambdaContext
   }) => {
     // Prevent the Serverless function from waiting for all resources (db connections)
-    // to be released before returning a reponse.
+    // to be released before returning a response.
     context.callbackWaitsForEmptyEventLoop = false
 
     // If the request contains authorization headers, we'll decode the providers that we support,
@@ -47,7 +48,7 @@ export const createContextHandler = (
     const authContext = await getAuthenticationContext({ event, context })
     if (authContext) {
       context.currentUser = getCurrentUser
-        ? await getCurrentUser(authContext[0], authContext[1])
+        ? await getCurrentUser(authContext[0], authContext[1], authContext[2])
         : authContext
     }
 
@@ -132,7 +133,7 @@ export const createGraphQLHandler = ({
   ): void => {
     if (usePerRequestContext()) {
       // This must be used when you're self-hosting RedwoodJS.
-      const localAsyncStorage = initPerRequestContext()
+      const localAsyncStorage = getPerRequestContext()
       localAsyncStorage.run(new Map(), () => {
         try {
           handler(event, context, callback)

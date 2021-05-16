@@ -14,6 +14,8 @@ export const aliases = ['render']
 export const description = 'Prerender pages of a redwood app (experimental)'
 
 export const builder = (yargs) => {
+  yargs.showHelpOnFail(false)
+
   yargs.option('path', {
     alias: 'path',
     default: false,
@@ -95,10 +97,76 @@ export const getTasks = (dryrun) => {
   return listrTasks
 }
 
-export const handler = async ({ path, output, dryRun, verbose }) => {
-  if (path) {
+const diagnosticCheck = () => {
+  const checks = [
+    {
+      message: 'Duplicate React version found in web/node_modules',
+      failure: fs.existsSync(
+        path.join(getPaths().web.base, 'node_modules/react')
+      ),
+    },
+    {
+      message: 'Duplicate react-dom version found in web/node_modules',
+      failure: fs.existsSync(
+        path.join(getPaths().web.base, 'node_modules/react-dom')
+      ),
+    },
+    {
+      message: 'Duplicate core-js version found in web/node_modules',
+      failure: fs.existsSync(
+        path.join(getPaths().web.base, 'node_modules/core-js')
+      ),
+    },
+    {
+      message: 'Duplicate @redwoodjs/web version found in web/node_modules',
+      failure: fs.existsSync(
+        path.join(getPaths().web.base, 'node_modules/@redwoodjs/web')
+      ),
+    },
+  ]
+  console.log('Running diagnostic checks')
+
+  if (checks.some((checks) => checks.failure)) {
+    console.error(c.error('node_modules are being duplicated in `./web` \n'))
+    console.log('⚠️  Issues found: ')
+    console.log('-'.repeat(50))
+
+    checks
+      .filter((check) => check.failure)
+      .forEach((check, i) => {
+        console.log(`${i + 1}. ${check.message}`)
+      })
+
+    console.log('-'.repeat(50))
+
+    console.log(
+      'Diagnostic check found issues. See the Redwood Forum link below for help:'
+    )
+
+    console.log(
+      c.underline(
+        'https://community.redwoodjs.com/search?q=duplicate%20package%20found'
+      )
+    )
+
+    console.log()
+
+    // Exit, no need to show other messages
+    process.exit(1)
+  } else {
+    console.log('✔ Diagnostics checks passed \n')
+  }
+}
+
+export const handler = async ({
+  path: routerPath,
+  output,
+  dryRun,
+  verbose,
+}) => {
+  if (routerPath) {
     await runPrerender({
-      routerPath: path,
+      routerPath,
       outputHtmlPath: output,
       dryRun,
     })
@@ -117,20 +185,26 @@ export const handler = async ({ path, output, dryRun, verbose }) => {
     await tasks.run()
   } catch (e) {
     console.log()
-    console.error(c.warning('Not all routes were succesfully prerendered'))
-    console.error(
-      c.info(
-        `we could not prerender your page, but your Redwood app should still work fine.`
+    await diagnosticCheck()
+
+    console.log(
+      c.warning(
+        'Not all routes were succesfully prerendered. Run `yarn rw prerender --dry-run` for detailed logs'
       )
     )
-    console.error(
+    console.log(
+      c.info(
+        `We could not prerender all your pages, but your Redwood app should still work fine.`
+      )
+    )
+    console.log(
       c.info(
         `This could mean that a library you're using does not support SSR.`
       )
     )
+
     console.log()
-    console.error(e)
-    console.log()
+
     process.exit(1)
   }
 }

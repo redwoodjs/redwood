@@ -17,6 +17,7 @@ export interface NodeTargetPaths {
   lib: string
   services: string
   config: string
+  dist: string
 }
 
 export interface BrowserTargetPaths {
@@ -32,6 +33,7 @@ export interface BrowserTargetPaths {
   webpack: string
   postcss: string
   storybookConfig: string
+  storybookPreviewConfig: string
   dist: string
 }
 
@@ -76,6 +78,7 @@ const PATH_WEB_DIR_CONFIG = 'web/config'
 const PATH_WEB_DIR_CONFIG_WEBPACK = 'web/config/webpack.config.js'
 const PATH_WEB_DIR_CONFIG_POSTCSS = 'web/config/postcss.config.js'
 const PATH_WEB_DIR_CONFIG_STORYBOOK_CONFIG = 'web/config/storybook.config.js'
+const PATH_WEB_DIR_CONFIG_STORYBOOK_PREVIEW = 'web/config/storybook.preview.js'
 
 const PATH_WEB_DIR_DIST = 'web/dist'
 
@@ -154,6 +157,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       config: path.join(BASE_DIR, PATH_API_DIR_CONFIG),
       services: path.join(BASE_DIR, PATH_API_DIR_SERVICES),
       src: path.join(BASE_DIR, PATH_API_DIR_SRC),
+      dist: path.join(BASE_DIR, 'api/dist'),
     },
     web: {
       routes,
@@ -171,6 +175,10 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
         BASE_DIR,
         PATH_WEB_DIR_CONFIG_STORYBOOK_CONFIG
       ),
+      storybookPreviewConfig: path.join(
+        BASE_DIR,
+        PATH_WEB_DIR_CONFIG_STORYBOOK_PREVIEW
+      ),
       dist: path.join(BASE_DIR, PATH_WEB_DIR_DIST),
     },
   }
@@ -178,6 +186,8 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
 
 /**
  * Process the pages directory and return information useful for automated imports.
+ *
+ * Note: glob.sync returns posix style paths on Windows machines
  */
 export const processPagesDir = (
   webPagesDir: string = getPaths().web.pages
@@ -188,7 +198,7 @@ export const processPagesDir = (
   return pagePaths.map((pagePath) => {
     const p = path.parse(pagePath)
 
-    const importName = p.dir.replace(path.sep, '')
+    const importName = p.dir.replace('/', '')
     const importPath = importStatementPath(
       path.join(webPagesDir, p.dir, p.name)
     )

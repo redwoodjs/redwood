@@ -11,6 +11,12 @@ interface PluginOptions {
   useStaticImports?: boolean
 }
 
+// Use ' because I don't want to escape `
+const RouteParameterTypeParser =
+  'type ParamType<constraint> = constraint extends "Int" ? number : constraint extends "Boolean" ? boolean : constraint extends "Float" ? number : string;' +
+  '\n' +
+  'type RouteParams<Route> = Route extends `${string}/{${infer Param}:${infer Constraint}}/${infer Rest}` ? { [Entry in Param]: ParamType<Constraint> } & RouteParams<`/${Rest}`> : Route extends `${string}/{${infer Param}:${infer Constraint}}` ? { [Entry in Param]: ParamType<Constraint> } : Route extends `${string}/{${infer Param}}/${infer Rest}` ? { [Entry in Param]: string } & RouteParams<`/${Rest}`> : {}'
+
 export default function (
   { types: t }: { types: typeof types },
   { project, useStaticImports = false }: PluginOptions
@@ -61,7 +67,10 @@ export default function (
           const availableRoutes = project
             .getRouter()
             .routes.filter((r) => !r.isNotFound)
-            .map((r) => `${r.name}: () => "${r.path}"`)
+            .map(
+              (r) =>
+                `${r.name}: (params?: RouteParams<"${r.path}"> & QueryParams) => "${r.path}"`
+            )
 
           const pageImports = pages.map(
             (page) => `import type ${page.const}Type from '${page.importPath}'`
@@ -71,6 +80,11 @@ export default function (
           )
 
           const typeDefContent = `
+            import '@redwoodjs/router'
+
+            ${RouteParameterTypeParser}
+            type QueryParams = Record<string | number, string | number | boolean>
+
             declare module '@redwoodjs/router' {
               interface AvailableRoutes {
                 ${availableRoutes.join('\n    ')}

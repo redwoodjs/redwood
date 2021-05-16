@@ -1,4 +1,5 @@
-import { useMutation, useFlash } from '@redwoodjs/web'
+import { useMutation } from '@redwoodjs/web'
+import { toast } from '@redwoodjs/web/toast'
 import { Link, routes } from '@redwoodjs/router'
 
 import { QUERY } from 'src/components/${pascalScaffoldPath}${pluralPascalName}Cell'
@@ -38,10 +39,9 @@ const checkboxInputTag = (checked) => {
 }
 
 const ${pluralPascalName}List = ({ ${pluralCamelName} }) => {
-  const { addMessage } = useFlash()
   const [delete${singularPascalName}] = useMutation(DELETE_${singularConstantName}_MUTATION, {
     onCompleted: () => {
-      addMessage('${singularPascalName} deleted.', { classes: 'rw-flash-success' })
+      toast.success('${singularPascalName} deleted')
     },
     // This refetches the query on the list page. Read more about other ways to
     // update the cache over here:

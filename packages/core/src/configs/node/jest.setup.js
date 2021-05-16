@@ -6,7 +6,11 @@ const { getSchemaDefinitions } = require('@redwoodjs/cli/dist/lib')
 const { getPaths } = require('@redwoodjs/internal')
 const { defineScenario } = require('@redwoodjs/testing/dist/scenario')
 const { db } = require(path.join(getPaths().api.src, 'lib', 'db'))
+
 const DEFAULT_SCENARIO = 'standard'
+
+// Disable per-request-context in testing.
+process.env.SAFE_GLOBAL_CONTEXT = '1'
 
 const seedScenario = async (scenario) => {
   if (scenario) {
@@ -25,7 +29,7 @@ const seedScenario = async (scenario) => {
 
 const teardown = async () => {
   const prismaModelNames = (await getSchemaDefinitions()).datamodel.models.map(
-    (m) => m.name
+    (m) => m.dbName || m.name
   )
 
   for (const model of prismaModelNames) {

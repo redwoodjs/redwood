@@ -132,73 +132,84 @@ export const fieldsToInput = async (model) => {
     }
   })
 
-  return inputObj
+  if (Object.keys(inputObj).length > 0) {
+    return inputObj
+  } else {
+    return false
+  }
 }
 
 // outputs fields necessary to update an object in the test file
 export const fieldsToUpdate = async (model) => {
   const { scalarFields, relations, foreignKeys } = await parseSchema(model)
   const modelName = camelcase(pluralize.singular(model))
-  let field = scalarFields[0]
+  let field, newValue, fieldName
+
+  // find an editable scalar field, ideally one that isn't a foreign key
+  field = scalarFields.find((scalar) => !foreignKeys.includes(scalar.name))
+
+  // no non-foreign keys, so just take the first one
+  if (!field) {
+    field = scalarFields[0]
+  }
 
   // if the model has no editable scalar fields, skip update test completely
-  if (field) {
-    let newValue
+  if (!field) {
+    return false
+  }
 
-    if (foreignKeys.includes(field.name)) {
-      // no scalar fields, change a relation field instead
-      // { post: [ 'postId' ], tag: [ 'tagId' ] }
-      field.name = Object.values(relations)[0]
-      newValue = `scenario.${modelName}.two.${field.name}`
-    } else {
-      // change scalar fields
-      const value = scenarioFieldValue(field)
-      newValue = value
+  if (foreignKeys.includes(field.name)) {
+    // no scalar fields, change a relation field instead
+    // { post: [ 'postId' ], tag: [ 'tagId' ] }
+    fieldName = Object.values(relations)[0]
+    newValue = `scenario.${modelName}.two.${field.name}`
+  } else {
+    fieldName = field.name
 
-      // depending on the field type, append/update the value to something different
-      switch (field.type) {
-        case 'String': {
-          newValue = newValue + '2'
-          break
+    // change scalar fields
+    const value = scenarioFieldValue(field)
+    newValue = value
+
+    // depending on the field type, append/update the value to something different
+    switch (field.type) {
+      case 'String': {
+        newValue = newValue + '2'
+        break
+      }
+      case 'Int': {
+        newValue = newValue + 1
+        break
+      }
+      case 'DateTime': {
+        let date = new Date()
+        date.setDate(date.getDate() + 1)
+        newValue = date.toISOString().replace(/\.\d{3}/, '')
+        break
+      }
+      case 'Json': {
+        newValue = { foo: 'baz' }
+        break
+      }
+      default: {
+        if (
+          field.kind === 'enum' &&
+          field.enumValues[field.enumValues.length - 1]
+        ) {
+          const enumVal = field.enumValues[field.enumValues.length - 1]
+          newValue = enumVal.dbName || enumVal.name
         }
-        case 'Int': {
-          newValue = newValue + 1
-          break
-        }
-        case 'DateTime': {
-          let date = new Date()
-          date.setDate(date.getDate() + 1)
-          newValue = date.toISOString().replace(/\.\d{3}/, '')
-          break
-        }
-        case 'Json': {
-          newValue = { foo: 'baz' }
-          break
-        }
-        default: {
-          if (
-            field.kind === 'enum' &&
-            field.enumValues[field.enumValues.length - 1]
-          ) {
-            const enumVal = field.enumValues[field.enumValues.length - 1]
-            newValue = enumVal.dbName || enumVal.name
-          }
-          break
-        }
+        break
       }
     }
-
-    return { [field.name]: newValue }
-  } else {
-    return null
   }
+
+  return { [fieldName]: newValue }
 }
 
 export const files = async ({
   name,
-  tests = true,
+  tests,
   relations,
-  javascript,
   typescript,
   ...rest
 }) => {
@@ -223,7 +234,7 @@ export const files = async ({
     templatePath: `test.${extension}.template`,
     templateVars: {
       relations: relations || [],
-      input: await fieldsToInput(model),
+      create: await fieldsToInput(model),
       update: await fieldsToUpdate(model),
       ...rest,
     },
@@ -253,7 +264,7 @@ export const files = async ({
   //    "path/to/fileB": "<<<template>>>",
   // }
   return files.reduce((acc, [outputPath, content]) => {
-    if (javascript && !typescript) {
+    if (!typescript) {
       content = transformTSToJS(outputPath, content)
       outputPath = outputPath.replace('.ts', '.js')
     }
@@ -268,7 +279,6 @@ export const files = async ({
 export const defaults = {
   ...yargsDefaults,
   tests: {
-    default: true,
     description: 'Generate test files',
     type: 'boolean',
   },

@@ -12,6 +12,12 @@ export {
   useMutation,
 } from './components/GraphQLHooksProvider'
 
-export { withCell } from './components/withCellHOC'
+import { createCell } from './components/createCell'
+export { createCell }
 
-export { FlashProvider, useFlash, Flash } from './flash'
+/** @deprecated `withCell` will be removed in v0.32.0, please use `createCell` instead. */
+export const withCell = createCell
+
+// TODO: Remove these in v.10, people can import from `@redwoodjs/web/toast`
+// deprecated
+export { useFlash, Flash } from './flash'
