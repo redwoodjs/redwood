@@ -4,6 +4,8 @@ import camelcase from 'camelcase'
 import Listr from 'listr'
 import pascalcase from 'pascalcase'
 
+import { getConfig } from '@redwoodjs/internal'
+
 import { transformTSToJS } from 'src/lib'
 import { addRoutesToRouterTask, writeFilesTask } from 'src/lib'
 import c from 'src/lib/colors'
@@ -136,10 +138,16 @@ export const handler = async ({
   name,
   path,
   force,
-  tests = true,
-  stories = true,
+  tests,
+  stories,
   typescript = false,
 }) => {
+  if (tests === undefined) {
+    tests = getConfig().generate.tests
+  }
+  if (stories === undefined) {
+    stories = getConfig().generate.stories
+  }
   if (process.platform === 'win32') {
     // running `yarn rw g page home /` on Windows using GitBash
     // POSIX-to-Windows path conversion will kick in.

@@ -40,6 +40,10 @@ export interface Config {
   browser: {
     open: boolean | string
   }
+  generate: {
+    tests: boolean
+    stories: boolean
+  }
 }
 
 // Note that web's includeEnvironmentVariables is handled in `webpack.common.js`
@@ -64,6 +68,10 @@ const DEFAULT_CONFIG: Config = {
   },
   browser: {
     open: false,
+  },
+  generate: {
+    tests: true,
+    stories: true,
   },
 }
 
