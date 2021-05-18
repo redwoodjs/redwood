@@ -245,7 +245,7 @@ yarn rwt copy:watch
 
 _On Windows_
 
-Open a command prompt and type the command below, where /path/to/redwood/framework is replaced by the path to your local copy of the Redwood Framework.
+Open a Command Prompt and type the command below, where /path/to/redwood/framework is replaced by the path to your local copy of the Redwood Framework.
 
 ```terminal
 setx RW_PATH "C:\Users\mojombo\path\to\redwood\framework"
