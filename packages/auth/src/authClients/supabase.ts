@@ -1,7 +1,8 @@
 import { Session, User, Provider } from '@supabase/gotrue-js'
-import type { SupabaseClient } from '@supabase/supabase-js'
 
 import type { AuthClient } from './index'
+import type { SupabaseClient } from '@supabase/supabase-js'
+
 export type Supabase = SupabaseClient
 export type SupabaseUser = User
 

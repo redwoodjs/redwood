@@ -1,14 +1,15 @@
 import path from 'path'
 
-import type { Handler } from 'aws-lambda'
 import bodyParser from 'body-parser'
-import type { Application, Request, Response } from 'express'
 import glob from 'glob'
 import escape from 'lodash.escape'
 
 import { getPaths } from '@redwoodjs/internal'
 
 import { requestHandler } from '../requestHandlers/awsLambda'
+
+import type { Handler } from 'aws-lambda'
+import type { Application, Request, Response } from 'express'
 
 export type Lambdas = Record<string, Handler>
 const LAMBDA_FUNCTIONS: Lambdas = {}

@@ -306,11 +306,8 @@ export const builder = (yargs) => {
   })
 }
 
-export const {
-  command,
-  description,
-  handler,
-} = createYargsForComponentGeneration({
-  componentName: 'service',
-  filesFn: files,
-})
+export const { command, description, handler } =
+  createYargsForComponentGeneration({
+    componentName: 'service',
+    filesFn: files,
+  })

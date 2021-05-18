@@ -1,5 +1,3 @@
-import type { APIGatewayProxyEvent } from 'aws-lambda'
-
 import {
   signPayload,
   verifyEvent,
@@ -7,6 +5,8 @@ import {
   WebhookVerificationError,
   DEFAULT_WEBHOOK_SIGNATURE_HEADER,
 } from './index'
+
+import type { APIGatewayProxyEvent } from 'aws-lambda'
 
 const payload = 'No more secrets, Marty.'
 const secret = 'MY_VOICE_IS_MY_PASSPORT_VERIFY_ME'

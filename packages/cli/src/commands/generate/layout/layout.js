@@ -71,13 +71,9 @@ const optionsObj = {
   ...yargsDefaults,
 }
 
-export const {
-  command,
-  description,
-  builder,
-  handler,
-} = createYargsForComponentGeneration({
-  componentName: 'layout',
-  filesFn: files,
-  optionsObj,
-})
+export const { command, description, builder, handler } =
+  createYargsForComponentGeneration({
+    componentName: 'layout',
+    filesFn: files,
+    optionsObj,
+  })

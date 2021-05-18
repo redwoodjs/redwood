@@ -145,14 +145,8 @@ const sdlFromSchemaModel = async (name, crud) => {
 }
 
 export const files = async ({ name, crud, tests, typescript }) => {
-  const {
-    query,
-    createInput,
-    updateInput,
-    idType,
-    relations,
-    enums,
-  } = await sdlFromSchemaModel(pascalcase(pluralize.singular(name)), crud)
+  const { query, createInput, updateInput, idType, relations, enums } =
+    await sdlFromSchemaModel(pascalcase(pluralize.singular(name)), crud)
 
   let template = generateTemplate(
     path.join('sdl', 'templates', `sdl.ts.template`),
