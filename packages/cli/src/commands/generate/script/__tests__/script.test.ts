@@ -1,55 +1,37 @@
 global.__dirname = __dirname
-import path from 'path'
-
 // Load shared mocks
 import 'src/lib/test'
 
-import * as functionGenerator from '../script'
+import path from 'path'
 
-// Should be refactored as it's repeated
-type WordFilesType = { [key: string]: string }
+import { files } from '../script'
 
-let singleWordDefaultFiles: WordFilesType
-let multiWordDefaultFiles: WordFilesType
-let typescriptFiles: WordFilesType
+beforeAll(() => {})
 
-beforeAll(() => {
-  singleWordDefaultFiles = functionGenerator.files({
-    name: 'foo',
+test('creates a JavaScript function to execute', () => {
+  const output = files({
+    name: 'scriptyMcScript',
+    typescript: false,
   })
-  multiWordDefaultFiles = functionGenerator.files({
-    name: 'send-mail',
-  })
-  typescriptFiles = functionGenerator.files({
-    name: 'typescript-function',
+
+  const expectedOutputPath = path.normalize(
+    '/path/to/project/api/src/scripts/scriptyMcScript.js'
+  )
+
+  expect(Object.keys(output)).toContainEqual(expectedOutputPath)
+  expect(output[expectedOutputPath]).toMatchSnapshot()
+})
+
+test('creates a TypeScript function to execute', () => {
+  const output = files({
+    name: 'typescriptyTypescript',
     typescript: true,
   })
-})
 
-test('returns exactly 1 file', () => {
-  expect(Object.keys(singleWordDefaultFiles).length).toEqual(1)
-})
+  const expectedOutputPath = path.normalize(
+    '/path/to/project/api/src/scripts/typescriptyTypescript.ts'
+  )
 
-test('creates a single word function file', () => {
-  expect(
-    singleWordDefaultFiles[
-      path.normalize('/path/to/project/api/scripts/foo.js')
-    ]
-  ).toMatchSnapshot()
-})
-
-test('creates a multi word function file', () => {
-  expect(
-    multiWordDefaultFiles[
-      path.normalize('/path/to/project/api/scripts/send-mail.js')
-    ]
-  ).toMatchSnapshot()
-})
-
-test('creates a .ts file if --typescript=true', () => {
-  expect(
-    typescriptFiles[
-      path.normalize('/path/to/project/api/scripts/typescript-function.ts')
-    ]
-  ).toMatchSnapshot()
+  expect(Object.keys(output)).toContainEqual(expectedOutputPath)
+  expect(output[expectedOutputPath]).toMatchSnapshot()
 })
