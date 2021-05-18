@@ -98,7 +98,7 @@ describe('logger', () => {
 
   describe('supports various logging levels', () => {
     test('it logs a trace message', async () => {
-      const { logger, logSinkData } = setupLogger()
+      const { logger, logSinkData } = setupLogger({ level: 'trace' })
 
       logger.trace('test of a trace level message')
       const logStatement = await logSinkData
@@ -112,7 +112,7 @@ describe('logger', () => {
     })
 
     test('it logs an info message', async () => {
-      const { logger, logSinkData } = setupLogger()
+      const { logger, logSinkData } = setupLogger({ level: 'trace' })
 
       logger.info('test of an info level message')
       const logStatement = await logSinkData
@@ -126,7 +126,7 @@ describe('logger', () => {
     })
 
     test('it logs a debug message', async () => {
-      const { logger, logSinkData } = setupLogger()
+      const { logger, logSinkData } = setupLogger({ level: 'trace' })
 
       logger.debug('test of a debug level message')
       const logStatement = await logSinkData
@@ -140,7 +140,7 @@ describe('logger', () => {
     })
 
     test('it logs a warning message', async () => {
-      const { logger, logSinkData } = setupLogger()
+      const { logger, logSinkData } = setupLogger({ level: 'trace' })
 
       logger.warn('test of a warning level message')
       const logStatement = await logSinkData
@@ -154,7 +154,7 @@ describe('logger', () => {
     })
 
     test('it logs an error message', async () => {
-      const { logger, logSinkData } = setupLogger()
+      const { logger, logSinkData } = setupLogger({ level: 'trace' })
 
       const error = Object.assign(new Error('TestError'), {
         message: 'something unexpected happened',
@@ -176,6 +176,7 @@ describe('logger', () => {
   describe('supports key redaction', () => {
     test('it redacts defaults header authorization', async () => {
       const { logger, logSinkData } = setupLogger({
+        level: 'trace',
         redact: ['event.headers.authorization'],
       })
       const event = {
@@ -194,6 +195,7 @@ describe('logger', () => {
 
     test('it redacts the value of a given key', async () => {
       const { logger, logSinkData } = setupLogger({
+        level: 'trace',
         redact: ['redactedKey'],
       })
 
@@ -206,12 +208,11 @@ describe('logger', () => {
     })
 
     test('it redacts a JWT token key by default', async () => {
-      const { logger, logSinkData } = setupLogger()
+      const { logger, logSinkData } = setupLogger({ level: 'trace' })
 
       logger.info(
         {
-          jwt:
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
+          jwt: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
         },
         'test of a redacted JWT'
       )
@@ -223,7 +224,7 @@ describe('logger', () => {
     })
 
     test('it redacts a password key by default', async () => {
-      const { logger, logSinkData } = setupLogger()
+      const { logger, logSinkData } = setupLogger({ level: 'trace' })
 
       logger.info(
         {
@@ -239,7 +240,7 @@ describe('logger', () => {
     })
 
     test('it redacts the email key by default', async () => {
-      const { logger, logSinkData } = setupLogger()
+      const { logger, logSinkData } = setupLogger({ level: 'trace' })
 
       logger.info(
         {
@@ -262,7 +263,7 @@ describe('logger', () => {
         '_' + Math.random().toString(36).substr(2, 9)
       )
 
-      const { logger } = setupLogger({ prettyPrint: true }, tmp)
+      const { logger } = setupLogger({ level: 'trace', prettyPrint: true }, tmp)
 
       const message = 'logged with pretty printing on'
 
@@ -283,7 +284,10 @@ describe('logger', () => {
       )
 
       const { logger } = setupLogger(
-        { prettyPrint: { translateTime: 'dddd, mmmm dS, yyyy, h:MM:ss TT' } },
+        {
+          level: 'trace',
+          prettyPrint: { translateTime: 'dddd, mmmm dS, yyyy, h:MM:ss TT' },
+        },
         tmp
       )
 
@@ -307,7 +311,7 @@ describe('logger', () => {
         '_' + Math.random().toString(36).substr(2, 9)
       )
 
-      const { logger } = setupLogger({}, tmp)
+      const { logger } = setupLogger({ level: 'trace' }, tmp)
 
       logger.warn('logged a warning to a temp file')
 

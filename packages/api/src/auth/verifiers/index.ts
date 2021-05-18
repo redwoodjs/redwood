@@ -1,4 +1,5 @@
 import { verifierLookup } from './common'
+
 import type {
   SupportedVerifierTypes,
   VerifyOptions,

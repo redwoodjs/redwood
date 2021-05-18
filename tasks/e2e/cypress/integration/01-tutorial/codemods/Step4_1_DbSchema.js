@@ -1,7 +1,7 @@
 export default `
 // api/db/schema.prisma
 
-datasource DS {
+datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }

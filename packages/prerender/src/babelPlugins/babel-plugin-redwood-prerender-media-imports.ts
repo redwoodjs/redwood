@@ -1,8 +1,8 @@
 import { extname, basename, join } from 'path'
 
-import type { PluginObj, types, NodePath } from '@babel/core'
-
 import { getPaths } from '@redwoodjs/internal'
+
+import type { PluginObj, types, NodePath } from '@babel/core'
 
 const defaultOptions = {
   // This list of extensions matches config for file-loader in

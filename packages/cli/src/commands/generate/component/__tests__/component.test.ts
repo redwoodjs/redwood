@@ -14,22 +14,38 @@ let singleWordDefaultFiles,
   withoutStoryFiles
 
 beforeAll(() => {
-  singleWordDefaultFiles = component.files({ name: 'User' })
-  multiWordDefaultFiles = component.files({ name: 'UserProfile' })
+  singleWordDefaultFiles = component.files({
+    name: 'User',
+    tests: true,
+    stories: true,
+  })
+  multiWordDefaultFiles = component.files({
+    name: 'UserProfile',
+    tests: true,
+    stories: true,
+  })
   javascriptFiles = component.files({
     name: 'JavascriptUser',
     typescript: false,
+    stories: true,
+    tests: true,
   })
   typescriptFiles = component.files({
     name: 'TypescriptUser',
     typescript: true,
+    stories: true,
+    tests: true,
   })
   withoutTestFiles = component.files({
     name: 'withoutTests',
+    javascript: true,
+    stories: true,
     tests: false,
   })
   withoutStoryFiles = component.files({
     name: 'withoutStories',
+    javascript: true,
+    tests: true,
     stories: false,
   })
 })
@@ -67,6 +83,23 @@ test('creates a multi word component', () => {
     multiWordDefaultFiles[
       path.normalize(
         '/path/to/project/web/src/components/UserProfile/UserProfile.js'
+      )
+    ]
+  ).toMatchSnapshot()
+})
+
+test('creates a TS component and test', () => {
+  expect(
+    typescriptFiles[
+      path.normalize(
+        '/path/to/project/web/src/components/TypescriptUser/TypescriptUser.tsx'
+      )
+    ]
+  ).toMatchSnapshot()
+  expect(
+    typescriptFiles[
+      path.normalize(
+        '/path/to/project/web/src/components/TypescriptUser/TypescriptUser.test.tsx'
       )
     ]
   ).toMatchSnapshot()

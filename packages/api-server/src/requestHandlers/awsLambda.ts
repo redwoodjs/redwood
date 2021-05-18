@@ -1,12 +1,13 @@
+import qs from 'qs'
+
+import { handleError } from '../error'
+
 import type {
   APIGatewayProxyResult,
   APIGatewayProxyEvent,
   Handler,
 } from 'aws-lambda'
 import type { Response, Request } from 'express'
-import qs from 'qs'
-
-import { handleError } from '../error'
 
 export const parseBody = (rawBody: string | Buffer) => {
   if (typeof rawBody === 'string') {
@@ -91,17 +92,16 @@ export const requestHandler = async (
   // We take the express request object and convert it into a lambda function event.
   const event = lambdaEventForExpressRequest(req)
 
-  const handlerCallback = (expressResFn: Response) => (
-    error: Error,
-    lambdaResult: APIGatewayProxyResult
-  ) => {
-    if (error) {
-      expressResponseForLambdaError(expressResFn, error)
-      return
-    }
+  const handlerCallback =
+    (expressResFn: Response) =>
+    (error: Error, lambdaResult: APIGatewayProxyResult) => {
+      if (error) {
+        expressResponseForLambdaError(expressResFn, error)
+        return
+      }
 
-    expressResponseForLambdaResult(expressResFn, lambdaResult)
-  }
+      expressResponseForLambdaResult(expressResFn, lambdaResult)
+    }
 
   // Execute the lambda function.
   // https://docs.aws.amazon.com/lambda/latest/dg/nodejs-prog-model-handler.html
