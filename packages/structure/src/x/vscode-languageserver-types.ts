@@ -1,7 +1,6 @@
 import lc from 'line-column'
 import { groupBy, mapValues, uniqBy } from 'lodash'
 import * as tsm from 'ts-morph'
-import { TextDocuments } from 'vscode-languageserver'
 import { TextDocument } from 'vscode-languageserver-textdocument'
 import {
   CodeAction,
@@ -15,6 +14,7 @@ import {
   WorkspaceChange,
   WorkspaceEdit,
 } from 'vscode-languageserver-types'
+import { TextDocuments } from 'vscode-languageserver'
 
 import { URL_file } from './URL'
 
@@ -201,9 +201,9 @@ export function ExtendedDiagnostic_is(x: any): x is ExtendedDiagnostic {
   return true
 }
 
-export function ExtendedDiagnostic_groupByUri(
-  ds: ExtendedDiagnostic[]
-): { [uri: string]: Diagnostic[] } {
+export function ExtendedDiagnostic_groupByUri(ds: ExtendedDiagnostic[]): {
+  [uri: string]: Diagnostic[]
+} {
   const grouped = groupBy(ds, (d) => d.uri)
   const dss = mapValues(grouped, (xds) => {
     const dd = xds.map((xd) => xd.diagnostic)

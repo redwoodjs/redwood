@@ -7,12 +7,7 @@ import {
 
 const REDWOOD_WEB_PATH_NAME = 'components'
 
-export const files = ({
-  name,
-  tests = true,
-  stories = true,
-  typescript = false,
-}) => {
+export const files = ({ name, typescript = false, ...options }) => {
   const extension = typescript ? '.tsx' : '.js'
   const componentFile = templateForComponentFile({
     name,
@@ -37,11 +32,11 @@ export const files = ({
   })
 
   const files = [componentFile]
-  if (stories) {
+  if (options.stories) {
     files.push(storiesFile)
   }
 
-  if (tests) {
+  if (options.tests) {
     files.push(testFile)
   }
 

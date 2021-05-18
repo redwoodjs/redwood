@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/testing",
   "description": "Tools, wrappers and configuration for testing a Redwood project.",
-  "version": "0.32.1",
+  "version": "0.32.2",
   "files": [
     "dist"
   ],
@@ -9,11 +9,11 @@
   "types": "dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@redwoodjs/auth": "^0.32.1",
-    "@redwoodjs/internal": "^0.32.1",
-    "@redwoodjs/router": "^0.32.1",
-    "@redwoodjs/web": "^0.32.1",
-    "@testing-library/react": "11.2.6",
+    "@redwoodjs/auth": "^0.32.2",
+    "@redwoodjs/internal": "^0.32.2",
+    "@redwoodjs/router": "^0.32.2",
+    "@redwoodjs/web": "^0.32.2",
+    "@testing-library/react": "11.2.7",
     "@types/react": "17.0.5",
     "msw": "^0.28.2"
   },

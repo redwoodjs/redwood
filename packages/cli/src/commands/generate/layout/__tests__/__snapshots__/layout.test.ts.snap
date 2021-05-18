@@ -10,7 +10,7 @@ import '@reach/skip-nav/styles.css'
  * API docs: https://reach.tech/skip-nav/#reach-skip-nav
  */
 
-const A11yLayout: React.FunctionComponent = ({ children }) => {
+const A11yLayout = ({ children }) => {
   return (
     <>
       {/* renders a link that remains hidden till focused; put it at the top of your layout */}
@@ -37,7 +37,11 @@ import '@reach/skip-nav/styles.css'
  * API docs: https://reach.tech/skip-nav/#reach-skip-nav
  */
 
-const A11yLayout = ({ children }) => {
+type A11yLayoutProps = {
+  children: React.ReactNode
+}
+
+const A11yLayout = ({ children }: A11yLayoutProps) => {
   return (
     <>
       {/* renders a link that remains hidden till focused; put it at the top of your layout */}

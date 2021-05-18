@@ -17,6 +17,8 @@ describe('Redwood Project Model', () => {
         'NotFoundPage',
         'TypeScriptPage',
         'EditUserPage',
+        'FooPage',
+        'BarPage',
       ])
     )
     for (const page of project.pages) {
@@ -112,12 +114,11 @@ describe('Redwood Route detection', () => {
 
     const prerenderRoutes = routes
       .filter((r) => r.prerender)
-      // Make it a little easier to read
-      .map(({ name, path }) => {
-        return { name, path }
-      })
+      // Make it a little easier to read by only keeping the attributes we're
+      // interested in
+      .map(({ name, path }) => ({ name, path }))
 
-    expect(prerenderRoutes.length).toBe(3)
+    expect(prerenderRoutes.length).toBe(5)
     expect(prerenderRoutes).toContainEqual({ name: 'home', path: '/' })
     expect(prerenderRoutes).toContainEqual({
       name: 'typescriptPage',
@@ -127,6 +128,8 @@ describe('Redwood Route detection', () => {
       name: 'someOtherPage',
       path: '/somewhereElse',
     })
+    expect(prerenderRoutes).toContainEqual({ name: 'fooPage', path: '/foo' })
+    expect(prerenderRoutes).toContainEqual({ name: 'barPage', path: '/bar' })
   })
 })
 
