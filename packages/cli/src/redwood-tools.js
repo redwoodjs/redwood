@@ -418,8 +418,7 @@ yargs
   })
   .command({
     command: 'unlink',
-    desc:
-      'Unlink your local version of redwood, and use the one specified in package.json',
+    desc: 'Unlink your local version of redwood, and use the one specified in package.json',
     handler: rwtUnlink,
   })
   .command(

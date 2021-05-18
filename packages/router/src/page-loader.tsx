@@ -14,9 +14,8 @@ export interface PageLoadingContextInterface {
   loading: boolean
 }
 
-export const PageLoadingContext = createNamedContext<PageLoadingContextInterface>(
-  'PageLoading'
-)
+export const PageLoadingContext =
+  createNamedContext<PageLoadingContextInterface>('PageLoading')
 
 export const usePageLoadingContext = () => {
   const pageLoadingContext = useContext(PageLoadingContext)
@@ -126,10 +125,10 @@ export class PageLoader extends React.Component<Props> {
     // than `delay`.
     // Consumers of the context can show a loading indicator
     // to signal to the user that something is happening.
-    this.loadingTimeout = (setTimeout(
+    this.loadingTimeout = setTimeout(
       () => this.setState({ slowModuleImport: true }),
       delay
-    ) as unknown) as number
+    ) as unknown as number
 
     // Wait to download and parse the page.
     const module = await loader()
@@ -151,8 +150,8 @@ export class PageLoader extends React.Component<Props> {
     if (global.__REDWOOD__PRERENDERING) {
       // babel autoloader plugin uses withStaticImport in prerender mode
       // override the types for this condition
-      const syncPageLoader = (this.props.spec
-        .loader as unknown) as synchonousLoaderSpec
+      const syncPageLoader = this.props.spec
+        .loader as unknown as synchonousLoaderSpec
       const PageFromLoader = syncPageLoader().default
 
       return (

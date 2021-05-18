@@ -5,13 +5,14 @@ import {
   IResolvers,
   IExecutableSchemaDefinition,
 } from 'apollo-server-lambda'
-import type { GraphQLSchema, GraphQLFieldMap } from 'graphql'
 import merge from 'lodash.merge'
 import omitBy from 'lodash.omitby'
 
 import { Services, GraphQLTypeWithFields } from 'src/types'
 
 import * as rootSchema from './rootSchema'
+
+import type { GraphQLSchema, GraphQLFieldMap } from 'graphql'
 
 const mapFieldsToService = ({
   fields = {},

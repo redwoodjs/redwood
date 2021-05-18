@@ -6,9 +6,8 @@ export interface RouteNameContextInterface {
   routeName?: string
 }
 
-const RouteNameContext = createNamedContext<RouteNameContextInterface>(
-  'RouteName'
-)
+const RouteNameContext =
+  createNamedContext<RouteNameContextInterface>('RouteName')
 
 export const RouteNameProvider = RouteNameContext.Provider
 

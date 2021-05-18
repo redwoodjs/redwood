@@ -4,8 +4,8 @@
  */
 import React from 'react'
 
-import { AuthProvider } from '@redwoodjs/auth'
 import type { AuthContextInterface } from '@redwoodjs/auth'
+import { AuthProvider } from '@redwoodjs/auth'
 import { LocationProvider } from '@redwoodjs/router'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 

@@ -1,5 +1,3 @@
-import type { APIGatewayProxyEvent } from 'aws-lambda'
-
 import {
   createVerifier,
   VerifyOptions,
@@ -7,6 +5,8 @@ import {
   DEFAULT_WEBHOOK_SECRET,
   SupportedVerifierTypes,
 } from 'src/auth/verifiers'
+
+import type { APIGatewayProxyEvent } from 'aws-lambda'
 
 export {
   VerifyOptions,
