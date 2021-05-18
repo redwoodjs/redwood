@@ -245,11 +245,29 @@ yarn rwt copy:watch
 
 _On Windows_
 
-Open a Command Prompt and type the command below, where /path/to/redwood/framework is replaced by the path to your local copy of the Redwood Framework.
+You may use any one of the following methods:
+
+For Cmd:
 
 ```terminal
 setx RW_PATH "C:\Users\mojombo\path\to\redwood\framework"
 ```
+
+For PowerShell:
+
+```terminal
+[System.Environment]::SetEnvironmentVariable("RW_PATH", "C:\Users\mojombo\path\to\redwood\framework",[System.EnvironmentVariableTarget]::User)
+```
+
+For gitbash:
+
+```terminal
+export RW_PATH=/c/Users/mojombo/path/to/redwood/framework
+```
+
+GUI:
+
+![image](https://user-images.githubusercontent.com/61768800/118632594-2891f980-b803-11eb-9023-d0b9561d61c0.png)
 
 ### Local Package Registry Emulation
 
