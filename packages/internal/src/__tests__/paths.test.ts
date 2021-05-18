@@ -19,7 +19,9 @@ describe('paths', () => {
 
       expect(pages.length).toEqual(7)
 
-      const adminEditUserPage = pages.find(page => page.importName === 'adminEditUserPage')
+      const adminEditUserPage = pages.find(
+        (page) => page.importName === 'adminEditUserPage'
+      )
       expect(adminEditUserPage).not.toBeUndefined()
       expect(adminEditUserPage.importPath).toEqual(
         importStatementPath(
@@ -27,40 +29,50 @@ describe('paths', () => {
         )
       )
 
-      const barPage = pages.find(page => page.importName === 'BarPage')
+      const barPage = pages.find((page) => page.importName === 'BarPage')
       expect(barPage).not.toBeUndefined()
       expect(barPage.importPath).toEqual(
         importStatementPath(path.join(pagesDir, 'BarPage/BarPage'))
       )
 
-      const fatalErrorPage = pages.find(page => page.importName === 'FatalErrorPage')
+      const fatalErrorPage = pages.find(
+        (page) => page.importName === 'FatalErrorPage'
+      )
       expect(fatalErrorPage).not.toBeUndefined()
       expect(fatalErrorPage.importPath).toEqual(
-        importStatementPath(path.join(pagesDir, 'FatalErrorPage/FatalErrorPage'))
+        importStatementPath(
+          path.join(pagesDir, 'FatalErrorPage/FatalErrorPage')
+        )
       )
 
-      const fooPage = pages.find(page => page.importName === 'FooPage')
+      const fooPage = pages.find((page) => page.importName === 'FooPage')
       expect(fooPage).not.toBeUndefined()
       expect(fooPage.importPath).toEqual(
         importStatementPath(path.join(pagesDir, 'FooPage/FooPage'))
       )
 
-      const homePage = pages.find(page => page.importName === 'HomePage')
+      const homePage = pages.find((page) => page.importName === 'HomePage')
       expect(homePage).not.toBeUndefined()
       expect(homePage.importPath).toEqual(
         importStatementPath(path.join(pagesDir, 'HomePage/HomePage'))
       )
 
-      const notFoundPage = pages.find(page => page.importName === 'NotFoundPage')
+      const notFoundPage = pages.find(
+        (page) => page.importName === 'NotFoundPage'
+      )
       expect(notFoundPage).not.toBeUndefined()
       expect(notFoundPage.importPath).toEqual(
         importStatementPath(path.join(pagesDir, 'NotFoundPage/NotFoundPage'))
       )
 
-      const typeScriptPage = pages.find(page => page.importName === 'TypeScriptPage')
+      const typeScriptPage = pages.find(
+        (page) => page.importName === 'TypeScriptPage'
+      )
       expect(typeScriptPage).not.toBeUndefined()
       expect(typeScriptPage.importPath).toEqual(
-        importStatementPath(path.join(pagesDir, 'TypeScriptPage/TypeScriptPage'))
+        importStatementPath(
+          path.join(pagesDir, 'TypeScriptPage/TypeScriptPage')
+        )
       )
     })
   })
