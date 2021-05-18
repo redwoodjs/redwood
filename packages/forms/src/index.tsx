@@ -269,13 +269,15 @@ const TextAreaField = forwardRef<
     validation.validate = jsonValidation
   }
 
+  const { onChange, onBlur } = register(props.name, validation)
+
   return (
     <textarea
       {...tagProps}
       id={props.id || props.name}
-      {...(element: HTMLTextAreaElement | any) => {
-        register(element, validation)
-
+      onChange={onChange}
+      onBlur={onBlur}
+      ref={(element: HTMLTextAreaElement) => {
         if (typeof ref === 'function') {
           ref(element)
         } else if (ref) {
@@ -304,13 +306,18 @@ const SelectField = forwardRef<
 
   const tagProps = inputTagProps(props)
 
+  const { onChange, onBlur } = register(
+    props.name,
+    props.validation || { required: false }
+  )
+
   return (
     <select
       {...tagProps}
       id={props.id || props.name}
-      {...(element: HTMLSelectElement | any) => {
-        register(element, props.validation || { required: false })
-
+      onChange={onChange}
+      onBlur={onBlur}
+      ref={(element: HTMLSelectElement) => {
         if (typeof ref === 'function') {
           ref(element)
         } else if (ref) {
@@ -355,14 +362,19 @@ export const CheckboxField = forwardRef<
 
   const tagProps = inputTagProps(props)
 
+  const { onChange, onBlur } = register(
+    props.name,
+    props.validation || { required: false }
+  )
+
   return (
     <input
       type="checkbox"
       {...tagProps}
       id={props.id || props.name}
-      {...(element: HTMLInputElement | any) => {
-        register(element, props.validation || { required: false })
-
+      onChange={onChange}
+      onBlur={onBlur}
+      ref={(element: HTMLInputElement) => {
         if (typeof ref === 'function') {
           ref(element)
         } else if (ref) {
@@ -417,13 +429,18 @@ const InputField = forwardRef<
 
   const tagProps = inputTagProps(props)
 
+  const { onChange, onBlur } = register(
+    props.name,
+    props.validation || { required: false }
+  )
+
   return (
     <input
       {...tagProps}
       id={props.id || props.name}
-      {...(element: HTMLInputElement | any) => {
-        register(element, props.validation || { required: false })
-
+      onChange={onChange}
+      onBlur={onBlur}
+      ref={(element: HTMLInputElement) => {
         if (typeof ref === 'function') {
           ref(element)
         } else if (ref) {
