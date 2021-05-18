@@ -73,6 +73,69 @@
       "contributions": [
         "tutorial"
       ]
+    },
+    {
+      "login": "corbt",
+      "name": "Kyle Corbitt",
+      "avatar_url": "https://avatars.githubusercontent.com/u/176426?v=4",
+      "profile": "https://corbt.com/",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "adriatic",
+      "name": "Nikolaj Ivancic",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2712405?v=4",
+      "profile": "https://github.com/adriatic",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "rene-demonsters",
+      "name": "rene-demonsters",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20322259?v=4",
+      "profile": "https://github.com/rene-demonsters",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "Kreozot",
+      "name": "Sergey Sharov",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1423028?v=4",
+      "profile": "https://sharov.dev/",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "blackpr",
+      "name": "Tim Pap",
+      "avatar_url": "https://avatars.githubusercontent.com/u/30457?v=4",
+      "profile": "https://twitter.com/blackpr",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "in-in",
+      "name": "in-in",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8797432?v=4",
+      "profile": "https://github.com/in-in",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "mlabate",
+      "name": "mlabate",
+      "avatar_url": "https://avatars.githubusercontent.com/u/17139676?v=4",
+      "profile": "https://github.com/mlabate",
+      "contributions": [
+        "tutorial"
+      ]
     }
   ],
   "contributorsPerLine": 5

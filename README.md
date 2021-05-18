@@ -3,7 +3,7 @@
   <h1 align="center">Redwood</h1>
 </p>
 
-_by Tom Preston-Werner, Peter Pistorius, Rob Cameron, David Price, and more than a hundred amazing contributors (see end of file for a full list)._
+_by Tom Preston-Werner, Peter Pistorius, Rob Cameron, David Price, and more than two hundred amazing contributors (see end of file for a full list)._
 
 **Redwood is an opinionated, full-stack, serverless web application framework
 that will allow you to build and deploy JAMstack applications with ease.**
@@ -502,11 +502,30 @@ And there you have it.
     <td align="center"><a href="http://loonyb.in/"><img src="https://avatars.githubusercontent.com/u/78673?v=4" width="100px;" alt=""/><br /><sub><b>Subhash Chandra</b></sub></a></td>
     <td align="center"><a href="https://github.com/seonghyeonkimm"><img src="https://avatars.githubusercontent.com/u/13966404?v=4" width="100px;" alt=""/><br /><sub><b>KimSeonghyeon</b></sub></a></td>
     <td align="center"><a href="https://github.com/origami-z"><img src="https://avatars.githubusercontent.com/u/5257855?v=4" width="100px;" alt=""/><br /><sub><b>Zhihao Cui</b></sub></a></td>
+    <td align="center"><a href="https://corbt.com/"><img src="https://avatars.githubusercontent.com/u/176426?v=4" width="100px;" alt=""/><br /><sub><b>Kyle Corbitt</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/SEANDOUGHTY"><img src="https://avatars.githubusercontent.com/u/12256202?v=4" width="100px;" alt=""/><br /><sub><b>Sean Doughty</b></sub></a></td>
+    <td align="center"><a href="https://github.com/zakmandhro"><img src="https://avatars.githubusercontent.com/u/15746?v=4" width="100px;" alt=""/><br /><sub><b>Zak Mandhro</b></sub></a></td>
+    <td align="center"><a href="https://bozdoz.com/"><img src="https://avatars.githubusercontent.com/u/1410985?v=4" width="100px;" alt=""/><br /><sub><b>bozdoz</b></sub></a></td>
+    <td align="center"><a href="https://mountaintopcoding.dev/"><img src="https://avatars.githubusercontent.com/u/14932877?v=4" width="100px;" alt=""/><br /><sub><b>Isaac Tait</b></sub></a></td>
+    <td align="center"><a href="https://jace.pro/"><img src="https://avatars.githubusercontent.com/u/638764?v=4" width="100px;" alt=""/><br /><sub><b>Jace</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/bernsno"><img src="https://avatars.githubusercontent.com/u/13946?v=4" width="100px;" alt=""/><br /><sub><b>Noah Bernsohn</b></sub></a></td>
+    <td align="center"><a href="https://github.com/rene-demonsters"><img src="https://avatars.githubusercontent.com/u/20322259?v=4" width="100px;" alt=""/><br /><sub><b>rene-demonsters</b></sub></a></td>
+    <td align="center"><a href="https://sharov.dev/"><img src="https://avatars.githubusercontent.com/u/1423028?v=4" width="100px;" alt=""/><br /><sub><b>Sergey Sharov</b></sub></a></td>
+    <td align="center"><a href="https://twitter.com/blackpr"><img src="https://avatars.githubusercontent.com/u/30457?v=4" width="100px;" alt=""/><br /><sub><b>Tim Pap</b></sub></a></td>
+    <td align="center"><a href="https://github.com/in-in"><img src="https://avatars.githubusercontent.com/u/8797432?v=4" width="100px;" alt=""/><br /><sub><b>in-in</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/mlabate"><img src="https://avatars.githubusercontent.com/u/17139676?v=4" width="100px;" alt=""/><br /><sub><b>mlabate</b></sub></a></td>
   </tr>
 </table>
 
 <!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 Redwood projects *(mostly)* follow the [all-contributions](https://allcontributors.org/) specification. Contributions of any kind are welcome.

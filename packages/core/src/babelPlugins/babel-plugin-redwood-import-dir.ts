@@ -1,9 +1,10 @@
 import path from 'path'
 
-import type { PluginObj, types } from '@babel/core'
 import glob from 'glob'
 
 import { generateTypeDef, generateTypeDefIndex } from './generateTypes'
+
+import type { PluginObj, types } from '@babel/core'
 
 /**
  * This babel plugin will search for import statements that include star `**`

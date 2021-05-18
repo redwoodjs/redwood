@@ -1,7 +1,6 @@
 import { basename } from 'path'
 
 import * as tsm from 'ts-morph'
-import { TextDocuments } from 'vscode-languageserver'
 import { TextDocument } from 'vscode-languageserver-textdocument'
 import {
   CodeLens,
@@ -10,6 +9,7 @@ import {
   Location,
   Range,
 } from 'vscode-languageserver-types'
+import { TextDocuments } from 'vscode-languageserver'
 
 import { Host, DefaultHost } from './hosts'
 import { ArrayLike, ArrayLike_normalize } from './x/Array'
