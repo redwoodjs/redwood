@@ -946,6 +946,69 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "Isaac-Tait",
+      "name": "Isaac Tait",
+      "avatar_url": "https://avatars.githubusercontent.com/u/14932877?v=4",
+      "profile": "https://mountaintopcoding.dev/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "SEANDOUGHTY",
+      "name": "Sean Doughty",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12256202?v=4",
+      "profile": "https://github.com/SEANDOUGHTY",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "andrew-hwahin",
+      "name": "Andrew Lam",
+      "avatar_url": "https://avatars.githubusercontent.com/u/61768800?v=4",
+      "profile": "https://github.com/andrew-hwahin",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "jacebenson",
+      "name": "Jace",
+      "avatar_url": "https://avatars.githubusercontent.com/u/638764?v=4",
+      "profile": "https://jace.pro/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "adriatic",
+      "name": "Nikolaj Ivancic",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2712405?v=4",
+      "profile": "https://github.com/adriatic",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "bernsno",
+      "name": "Noah Bernsohn",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13946?v=4",
+      "profile": "https://github.com/bernsno",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "renansoares",
+      "name": "Renan Andrade",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1657840?v=4",
+      "profile": "https://github.com/renansoares",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 5
