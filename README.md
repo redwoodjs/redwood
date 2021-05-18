@@ -520,6 +520,13 @@ And there you have it.
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/mlabate"><img src="https://avatars.githubusercontent.com/u/17139676?v=4" width="100px;" alt=""/><br /><sub><b>mlabate</b></sub></a></td>
+    <td align="center"><a href="https://github.com/pdjota"><img src="https://avatars.githubusercontent.com/u/93544?v=4" width="100px;" alt=""/><br /><sub><b>pdjota</b></sub></a></td>
+    <td align="center"><a href="https://github.com/renansoares"><img src="https://avatars.githubusercontent.com/u/1657840?v=4" width="100px;" alt=""/><br /><sub><b>renansoares</b></sub></a></td>
+    <td align="center"><a href="https://github.com/bugsfunny"><img src="https://avatars.githubusercontent.com/u/12965842?v=4" width="100px;" alt=""/><br /><sub><b>bugsfunny</b></sub></a></td>
+    <td align="center"><a href="https://github.com/luispinto23"><img src="https://avatars.githubusercontent.com/u/4148663?v=4" width="100px;" alt=""/><br /><sub><b>luispinto23</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/simoncrypta"><img src="https://avatars.githubusercontent.com/u/18013532?v=4" width="100px;" alt=""/><br /><sub><b>simoncrypta</b></sub></a></td>
   </tr>
 </table>
 
