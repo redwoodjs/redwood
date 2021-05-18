@@ -22,22 +22,30 @@ describe('paths', () => {
           path.join(pagesDir, 'admin/EditUserPage/EditUserPage')
         )
       )
-      expect(pages[1].importName).toEqual('FatalErrorPage')
+      expect(pages[1].importName).toEqual('BarPage')
       expect(pages[1].importPath).toEqual(
+        importStatementPath(path.join(pagesDir, 'BarPage/BarPage'))
+      )
+      expect(pages[2].importName).toEqual('FatalErrorPage')
+      expect(pages[2].importPath).toEqual(
         importStatementPath(
           path.join(pagesDir, 'FatalErrorPage/FatalErrorPage')
         )
       )
-      expect(pages[2].importName).toEqual('HomePage')
-      expect(pages[2].importPath).toEqual(
+      expect(pages[3].importName).toEqual('FooPage')
+      expect(pages[3].importPath).toEqual(
+        importStatementPath(path.join(pagesDir, 'FooPage/FooPage'))
+      )
+      expect(pages[4].importName).toEqual('HomePage')
+      expect(pages[4].importPath).toEqual(
         importStatementPath(path.join(pagesDir, 'HomePage/HomePage'))
       )
-      expect(pages[3].importName).toEqual('NotFoundPage')
-      expect(pages[3].importPath).toEqual(
+      expect(pages[5].importName).toEqual('NotFoundPage')
+      expect(pages[5].importPath).toEqual(
         importStatementPath(path.join(pagesDir, 'NotFoundPage/NotFoundPage'))
       )
-      expect(pages[4].importName).toEqual('TypeScriptPage')
-      expect(pages[4].importPath).toEqual(
+      expect(pages[6].importName).toEqual('TypeScriptPage')
+      expect(pages[6].importPath).toEqual(
         importStatementPath(
           path.join(pagesDir, 'TypeScriptPage/TypeScriptPage')
         )
