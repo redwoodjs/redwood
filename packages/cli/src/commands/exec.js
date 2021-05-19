@@ -19,7 +19,7 @@ const runScript = async (scriptPath, scriptArgs) => {
         'babel-plugin-module-resolver',
         {
           alias: {
-            api: getPaths().api.base,
+            '$api': getPaths().api.base,
           },
         },
       ],
@@ -38,7 +38,7 @@ export const description = 'Run scripts generated with yarn generate script'
 export const builder = (yargs) => {
   yargs
     .positional('name', {
-      description: 'The name of the script to run',
+      description: 'The file name (extension is optional) of the script to run',
       type: 'string',
     })
     .strict(false)
@@ -52,17 +52,17 @@ export const builder = (yargs) => {
 
 export const handler = async (args) => {
   const { name, ...scriptArgs } = args
-  const scriptPath = path.join(getPaths().scripts, `${name}`)
+  const scriptPath = path.join(getPaths().scripts,  name)
   try {
     require.resolve(scriptPath)
   } catch {
-    console.info(c.error(`\nNo script module exists with that name.\n`))
+    console.error(c.error(`\nNo script module exists with that name.\n`))
     process.exit(1)
   }
 
   const scriptTasks = [
     {
-      title: 'Generating prisma client if required',
+      title: 'Generating Prisma client',
       task: () => generatePrismaClient({ force: false }),
     },
     {
