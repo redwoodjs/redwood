@@ -1,10 +1,11 @@
 import fs from 'fs'
 import path from 'path'
 
-import type { Application } from 'express'
 import express from 'express'
 
 import { getPaths } from '@redwoodjs/internal'
+
+import type { Application } from 'express'
 
 const withWebServer = (app: Application) => {
   const indexContent = fs.readFileSync(

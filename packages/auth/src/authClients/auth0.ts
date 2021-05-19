@@ -1,6 +1,5 @@
-import type { Auth0Client as Auth0 } from '@auth0/auth0-spa-js'
-
 import type { AuthClient } from './'
+import type { Auth0Client as Auth0 } from '@auth0/auth0-spa-js'
 
 export type AuthClientAuth0 = AuthClient
 

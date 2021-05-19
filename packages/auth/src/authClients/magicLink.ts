@@ -1,10 +1,8 @@
+import type { AuthClient } from './'
 import type { Magic, MagicUserMetadata } from 'magic-sdk'
 
 export type MagicLink = Magic
 export type MagicUser = MagicUserMetadata
-
-import type { AuthClient } from './'
-
 export interface AuthClientMagicLink extends AuthClient {
   login(options: { email: string; showUI?: boolean }): Promise<any>
 }

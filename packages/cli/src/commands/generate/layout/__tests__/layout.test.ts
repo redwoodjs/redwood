@@ -16,22 +16,37 @@ let singleWordDefaultFiles,
   withSkipLinkFilesJS
 
 beforeAll(() => {
-  singleWordDefaultFiles = layout.files({ name: 'App' })
-  multiWordDefaultFiles = layout.files({ name: 'SinglePage' })
+  singleWordDefaultFiles = layout.files({
+    name: 'App',
+    tests: true,
+    stories: true,
+  })
+  multiWordDefaultFiles = layout.files({
+    name: 'SinglePage',
+    tests: true,
+    stories: true,
+  })
   javascriptFiles = layout.files({
     name: 'JavascriptPage',
+    javascript: true,
+    tests: true,
+    stories: true,
   })
   typescriptFiles = layout.files({
     name: 'TypescriptPage',
     typescript: true,
+    tests: true,
+    stories: true,
   })
   withoutTestFiles = layout.files({
     name: 'withoutTests',
     tests: false,
+    stories: true,
   })
   withoutStoryFiles = layout.files({
     name: 'withoutStories',
-
+    javascript: true,
+    tests: true,
     stories: false,
   })
 
@@ -167,9 +182,9 @@ test("doesn't include test file when --tests is set to false", () => {
 
 test('JavaScript: includes skip link when --skipLink is set to true', () => {
   expect(
-    withSkipLinkFilesTS[
+    withSkipLinkFilesJS[
       path.normalize(
-        '/path/to/project/web/src/layouts/A11yLayout/A11yLayout.tsx'
+        '/path/to/project/web/src/layouts/A11yLayout/A11yLayout.js'
       )
     ]
   ).toMatchSnapshot()
@@ -177,9 +192,9 @@ test('JavaScript: includes skip link when --skipLink is set to true', () => {
 
 test('TypeScript: includes skip link when --skipLink is set to true', () => {
   expect(
-    withSkipLinkFilesJS[
+    withSkipLinkFilesTS[
       path.normalize(
-        '/path/to/project/web/src/layouts/A11yLayout/A11yLayout.js'
+        '/path/to/project/web/src/layouts/A11yLayout/A11yLayout.tsx'
       )
     ]
   ).toMatchSnapshot()

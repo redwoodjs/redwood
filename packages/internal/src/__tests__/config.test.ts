@@ -10,7 +10,6 @@ describe('getConfig', () => {
     expect(config).toMatchInlineSnapshot(`
       Object {
         "api": Object {
-          "experimentalSecureServices": false,
           "host": "localhost",
           "path": "./api",
           "port": 8911,
@@ -19,6 +18,10 @@ describe('getConfig', () => {
         },
         "browser": Object {
           "open": false,
+        },
+        "generate": Object {
+          "stories": true,
+          "tests": true,
         },
         "web": Object {
           "a11y": true,

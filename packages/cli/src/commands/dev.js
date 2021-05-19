@@ -4,7 +4,8 @@ import path from 'path'
 import concurrently from 'concurrently'
 import terminalLink from 'terminal-link'
 
-import { getConfig, shutdownPort } from '@redwoodjs/internal'
+import { getConfig } from '@redwoodjs/internal'
+import { shutdownPort } from '@redwoodjs/internal/devtools'
 
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'

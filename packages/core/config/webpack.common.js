@@ -11,6 +11,7 @@ const webpack = require('webpack')
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin')
 const { merge } = require('webpack-merge')
 const { RetryChunkLoadPlugin } = require('webpack-retry-chunk-load-plugin')
+const webpack = require('webpack')
 
 const { getConfig, getPaths } = require('@redwoodjs/internal')
 
