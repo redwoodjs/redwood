@@ -245,25 +245,7 @@ yarn rwt copy:watch
 
 _On Windows_
 
-You may use any one of the following methods:
-
-For Cmd:
-
-```terminal
-setx RW_PATH "C:\Users\mojombo\path\to\redwood\framework"
-```
-
-For PowerShell:
-
-```terminal
-[System.Environment]::SetEnvironmentVariable("RW_PATH", "C:\Users\mojombo\path\to\redwood\framework",[System.EnvironmentVariableTarget]::User)
-```
-
-For gitbash:
-
-```terminal
-export RW_PATH=/c/Users/mojombo/path/to/redwood/framework
-```
+[Todo: please contribute a PR if you can help.]
 
 GUI:
 
