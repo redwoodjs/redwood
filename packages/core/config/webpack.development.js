@@ -12,9 +12,11 @@ const redwoodConfig = getConfig()
 const baseConfig = merge(webpackConfig('development'), {
   devServer: {
     // https://webpack.js.org/configuration/dev-server/
-    writeToDisk: false,
+    // note: docs not yet updated for webpack-dev-server v4
+    devMiddleware: {
+      writeToDisk: false,
+    },
     compress: true,
-    quiet: true,
     historyApiFallback: true,
     host: redwoodConfig.web.host || 'localhost',
     port: redwoodConfig.web.port,
@@ -37,6 +39,11 @@ const baseConfig = merge(webpackConfig('development'), {
     splitChunks: false,
   },
   // plugins: [new ErrorOverlayPlugin()].filter(Boolean),
+  // plugin does not yet work with Webpack 5: https://github.com/smooth-code/error-overlay-webpack-plugin/issues/67
+  // webpack-dev-server v4 enables an overlay by default, it's just not as pretty
+  infrastructureLogging: {
+    level: 'error', // new in v4; previously we used quiet
+  },
 })
 
 /** @type {import('webpack').Configuration} */

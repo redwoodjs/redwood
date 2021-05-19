@@ -132,7 +132,8 @@ const getSharedPlugins = (isEnvProduction) => {
         filename: 'static/css/[name].[contenthash:8].css',
         chunkFilename: 'static/css/[name].[contenthash:8].css',
       }),
-    shouldIncludeFastRefresh && new ReactRefreshWebpackPlugin(),
+    shouldIncludeFastRefresh &&
+      new ReactRefreshWebpackPlugin({ overlay: false }), // bug with Webpack v5
     new webpack.ProvidePlugin({
       React: 'react',
       PropTypes: 'prop-types',
