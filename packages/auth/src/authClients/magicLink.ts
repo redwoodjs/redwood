@@ -8,6 +8,8 @@ export interface AuthClientMagicLink extends AuthClient {
 }
 
 export const magicLink = (client: MagicLink): AuthClientMagicLink => {
+  let token: string | null
+  let expireTime: number
   return {
     type: 'magicLink',
     client,
@@ -18,7 +20,15 @@ export const magicLink = (client: MagicLink): AuthClientMagicLink => {
     },
     signup: async ({ email, showUI }) =>
       await client.auth.loginWithMagicLink({ email, showUI }),
-    getToken: async () => await client.user.getIdToken(),
+    getToken: async () => {
+      if (!token || !expireTime || Date.now() <= expireTime) {
+        expireTime = Date.now() + 600 // now + 10 min
+        token = await client.user.getIdToken()
+        return token
+      } else {
+        return token
+      }
+    },
     getUserMetadata: async () =>
       (await client.user.isLoggedIn()) ? await client.user.getMetadata() : null,
   }
