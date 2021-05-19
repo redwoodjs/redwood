@@ -247,7 +247,6 @@ _On Windows_
 
 [Todo: please contribute a PR if you can help.]
 
-
 ### Local Package Registry Emulation
 
 Sometimes you'll want to test the full package-development workflow: building, publishing, and installing all the packages in your local copy of the Redwood Framework in your Redwood App. We accomodate this using a local NPM registry called [Verdaccio](https://github.com/verdaccio/verdaccio).
