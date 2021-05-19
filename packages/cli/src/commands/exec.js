@@ -33,7 +33,7 @@ const runScript = async (scriptPath, scriptArgs) => {
 }
 
 export const command = 'exec <name>'
-export const description = 'Run your script'
+export const description = 'Run scripts generated with yarn generate script'
 export const builder = (yargs) => {
   yargs
     .positional('name', {
