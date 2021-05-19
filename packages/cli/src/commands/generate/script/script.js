@@ -13,7 +13,7 @@ const TEMPLATE_PATH = path.resolve(__dirname, 'templates', 'script.js.template')
 
 export const files = ({ name, typescript = false }) => {
   const outputFilename = `${name}.${typescript ? 'ts' : 'js'}`
-  const outputPath = path.join(getPaths().api.scripts, outputFilename)
+  const outputPath = path.join(getPaths().scripts, outputFilename)
 
   return {
     [outputPath]: fs.readFileSync(TEMPLATE_PATH).toString(),

@@ -15,7 +15,7 @@ test('creates a JavaScript function to execute', () => {
   })
 
   const expectedOutputPath = path.normalize(
-    '/path/to/project/api/src/scripts/scriptyMcScript.js'
+    '/path/to/project/scripts/scriptyMcScript.js'
   )
 
   expect(Object.keys(output)).toContainEqual(expectedOutputPath)
@@ -29,7 +29,7 @@ test('creates a TypeScript function to execute', () => {
   })
 
   const expectedOutputPath = path.normalize(
-    '/path/to/project/api/src/scripts/typescriptyTypescript.ts'
+    '/path/to/project/scripts/typescriptyTypescript.ts'
   )
 
   expect(Object.keys(output)).toContainEqual(expectedOutputPath)

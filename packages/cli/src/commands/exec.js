@@ -13,13 +13,12 @@ const runScript = async (scriptPath, scriptArgs) => {
   babelRequireHook({
     extends: path.join(getPaths().api.base, '.babelrc.js'),
     extensions: ['.js', '.ts'],
-    only: [getPaths().api.base],
     plugins: [
       [
         'babel-plugin-module-resolver',
         {
           alias: {
-            src: getPaths().api.src,
+            api: getPaths().api.base,
           },
         },
       ],
@@ -52,7 +51,7 @@ export const builder = (yargs) => {
 
 export const handler = async (args) => {
   const { name, ...scriptArgs } = args
-  const scriptPath = path.join(getPaths().api.scripts, `${name}`)
+  const scriptPath = path.join(getPaths().scripts, `${name}`)
   try {
     require.resolve(scriptPath)
   } catch {
