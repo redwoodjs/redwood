@@ -23,8 +23,7 @@ export const magicLink = (client: MagicLink): AuthClientMagicLink => {
     getToken: async () => {
       if (!token || Date.now() <= expireTime) {
         expireTime = Date.now() + 600 // now + 10 min
-        token = await client.user.getIdToken()
-        return token
+        return (token = await client.user.getIdToken())
       } else {
         return token
       }
