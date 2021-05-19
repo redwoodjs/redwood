@@ -9,7 +9,7 @@ export interface AuthClientMagicLink extends AuthClient {
 
 export const magicLink = (client: MagicLink): AuthClientMagicLink => {
   let token: string | null
-  let expireTime: number
+  let expireTime = 0: number
   return {
     type: 'magicLink',
     client,
