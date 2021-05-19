@@ -247,9 +247,6 @@ _On Windows_
 
 [Todo: please contribute a PR if you can help.]
 
-GUI:
-
-![image](https://user-images.githubusercontent.com/61768800/118632594-2891f980-b803-11eb-9023-d0b9561d61c0.png)
 
 ### Local Package Registry Emulation
 
