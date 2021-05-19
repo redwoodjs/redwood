@@ -31,7 +31,6 @@ const baseConfig = merge(webpackConfig('development'), {
       },
     },
     inline: true,
-    overlay: true,
     open: redwoodConfig.browser.open,
   },
   optimization: {
