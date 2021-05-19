@@ -7,6 +7,7 @@ import terminalLink from 'terminal-link'
 
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
+import { generatePrismaClient } from 'src/lib/generatePrismaClient'
 
 const runScript = async (scriptPath, scriptArgs) => {
   // Import babel config for running script
@@ -60,6 +61,10 @@ export const handler = async (args) => {
   }
 
   const scriptTasks = [
+    {
+      title: 'Generating prisma client if required',
+      task: () => generatePrismaClient({ force: false }),
+    },
     {
       title: 'Running script',
       task: async () => {
