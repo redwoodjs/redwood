@@ -1,4 +1,4 @@
-const ErrorOverlayPlugin = require('error-overlay-webpack-plugin')
+// const ErrorOverlayPlugin = require('error-overlay-webpack-plugin')
 const escapeRegExp = require('lodash.escaperegexp')
 const { merge } = require('webpack-merge')
 
@@ -30,7 +30,6 @@ const baseConfig = merge(webpackConfig('development'), {
         },
       },
     },
-    inline: true,
     open: redwoodConfig.browser.open,
   },
   optimization: {
@@ -38,7 +37,7 @@ const baseConfig = merge(webpackConfig('development'), {
     removeEmptyChunks: false,
     splitChunks: false,
   },
-  plugins: [new ErrorOverlayPlugin()].filter(Boolean),
+  // plugins: [new ErrorOverlayPlugin()].filter(Boolean),
 })
 
 /** @type {import('webpack').Configuration} */
