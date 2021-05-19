@@ -1,5 +1,5 @@
-import Youch from 'youch'
 import forTerminal from 'youch-terminal'
+import Youch from 'youch'
 
 /**
  * This function will print a pretty version of an error in the terminal.

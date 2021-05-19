@@ -47,9 +47,8 @@ export class RWRouter extends FileNode {
   }
 
   /**
-   * the <Router> tag
+   * the `<Router>` tag
    */
-
   @lazy() private get jsxNode() {
     return this.sf
       .getDescendantsOfKind(tsm.SyntaxKind.JsxOpeningElement)
@@ -57,17 +56,39 @@ export class RWRouter extends FileNode {
   }
 
   /**
-   * One per <Route>
+   * One per `<Route>`
    */
-
   @lazy() get routes() {
     const self = this
+
     return iter(function* () {
       if (!self.jsxNode) {
         return
       }
       // TODO: make sure that they are nested within the <Router> tag
       // we are not checking it right now
+
+      const sets = self.sf
+        .getDescendantsOfKind(tsm.SyntaxKind.JsxElement)
+        .filter(
+          (x) => x.getOpeningElement().getTagNameNode().getText() === 'Set'
+        )
+
+      const prerenderSets = sets.filter((set) =>
+        set.getOpeningElement().getAttribute('prerender')
+      )
+
+      for (const set of prerenderSets) {
+        for (const x of set.getDescendantsOfKind(
+          tsm.SyntaxKind.JsxSelfClosingElement
+        )) {
+          const tagName = x.getTagNameNode().getText()
+          if (tagName === 'Route') {
+            x.insertAttribute(0, { name: 'prerender' })
+          }
+        }
+      }
+
       for (const x of self.sf.getDescendantsOfKind(
         tsm.SyntaxKind.JsxSelfClosingElement
       )) {
@@ -78,9 +99,11 @@ export class RWRouter extends FileNode {
       }
     })
   }
+
   @lazy() private get numNotFoundPages(): number {
     return this.routes.filter((r) => r.isNotFound).length
   }
+
   *ideInfo() {
     if (this.jsxNode) {
       let location = Location_fromNode(this.jsxNode)

@@ -43,7 +43,11 @@ const style = {
   green: chalk.green,
 }
 
-const { _: args, 'yarn-install': yarnInstall, typescript } = yargs
+const {
+  _: args,
+  'yarn-install': yarnInstall,
+  typescript,
+} = yargs
   .scriptName(name)
   .usage('Usage: $0 <project directory> [option]')
   .example('$0 newapp')

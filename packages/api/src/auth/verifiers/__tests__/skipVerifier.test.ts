@@ -5,6 +5,14 @@ const secret = 'MY_VOICE_IS_MY_PASSPORT_VERIFY_ME'
 
 const { sign, verify } = createVerifier('skipVerifier')
 
+beforeEach(() => {
+  jest.spyOn(console, 'warn').mockImplementation(jest.fn())
+})
+
+afterEach(() => {
+  jest.spyOn(console, 'warn').mockRestore()
+})
+
 describe('skips verification verifier', () => {
   describe('faux signs a payload', () => {
     test('it has an empty signature', () => {

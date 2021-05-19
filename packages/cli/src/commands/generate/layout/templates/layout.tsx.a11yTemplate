@@ -7,7 +7,11 @@ import '@reach/skip-nav/styles.css'
  * API docs: https://reach.tech/skip-nav/#reach-skip-nav
  */
 
-const ${singularPascalName}Layout: React.FunctionComponent = ({ children }) => {
+type ${singularPascalName}LayoutProps = {
+  children: React.ReactNode
+}
+
+const ${singularPascalName}Layout = ({ children }: ${singularPascalName}LayoutProps) => {
   return (
     <>
       {/* renders a link that remains hidden till focused; put it at the top of your layout */}

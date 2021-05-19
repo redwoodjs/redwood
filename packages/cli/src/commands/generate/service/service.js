@@ -208,7 +208,7 @@ export const fieldsToUpdate = async (model) => {
 
 export const files = async ({
   name,
-  tests = true,
+  tests,
   relations,
   typescript,
   ...rest
@@ -279,7 +279,6 @@ export const files = async ({
 export const defaults = {
   ...yargsDefaults,
   tests: {
-    default: true,
     description: 'Generate test files',
     type: 'boolean',
   },
@@ -307,11 +306,8 @@ export const builder = (yargs) => {
   })
 }
 
-export const {
-  command,
-  description,
-  handler,
-} = createYargsForComponentGeneration({
-  componentName: 'service',
-  filesFn: files,
-})
+export const { command, description, handler } =
+  createYargsForComponentGeneration({
+    componentName: 'service',
+    filesFn: files,
+  })

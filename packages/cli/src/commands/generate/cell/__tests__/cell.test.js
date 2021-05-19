@@ -23,13 +23,41 @@ let singleWordFiles,
   withoutTestAndStoryFiles
 
 beforeAll(async () => {
-  singleWordFiles = await cell.files({ name: 'User' })
-  multiWordFiles = await cell.files({ name: 'UserProfile' })
-  snakeCaseWordFiles = await cell.files({ name: 'user_profile' })
-  kebabCaseWordFiles = await cell.files({ name: 'user-profile' })
-  camelCaseWordFiles = await cell.files({ name: 'userProfile' })
-  withoutTestFiles = await cell.files({ name: 'User', tests: false })
-  withoutStoryFiles = await cell.files({ name: 'User', stories: false })
+  singleWordFiles = await cell.files({
+    name: 'User',
+    tests: true,
+    stories: true,
+  })
+  multiWordFiles = await cell.files({
+    name: 'UserProfile',
+    tests: true,
+    stories: true,
+  })
+  snakeCaseWordFiles = await cell.files({
+    name: 'user_profile',
+    tests: true,
+    stories: true,
+  })
+  kebabCaseWordFiles = await cell.files({
+    name: 'user-profile',
+    tests: true,
+    stories: true,
+  })
+  camelCaseWordFiles = await cell.files({
+    name: 'userProfile',
+    tests: true,
+    stories: true,
+  })
+  withoutTestFiles = await cell.files({
+    name: 'User',
+    tests: false,
+    stories: true,
+  })
+  withoutStoryFiles = await cell.files({
+    name: 'User',
+    tests: true,
+    stories: false,
+  })
   withoutTestAndStoryFiles = await cell.files({
     name: 'User',
     tests: false,

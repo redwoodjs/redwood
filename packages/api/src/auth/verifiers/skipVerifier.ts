@@ -9,10 +9,7 @@ export interface SkipVerifier extends WebhookVerifier {
  * entirely public.
  *
  */
-const skipVerifier = (options?: VerifyOptions | undefined): SkipVerifier => {
-  if (options) {
-    console.warn(`VerifyOptions are ignored for the skipVerifier verifier`)
-  }
+const skipVerifier = (_options?: VerifyOptions | undefined): SkipVerifier => {
   return {
     sign: () => {
       console.warn(`No signature is created for the skipVerifier verifier`)

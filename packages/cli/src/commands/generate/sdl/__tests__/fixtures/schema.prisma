@@ -1,4 +1,4 @@
-datasource DS {
+datasource db {
   provider = "mysql"
   url      = env("DB_HOST")
 }
