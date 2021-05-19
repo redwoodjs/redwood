@@ -12,7 +12,6 @@ const redwoodConfig = getConfig()
 const baseConfig = merge(webpackConfig('development'), {
   devServer: {
     // https://webpack.js.org/configuration/dev-server/
-    hot: true,
     writeToDisk: false,
     compress: true,
     quiet: true,
