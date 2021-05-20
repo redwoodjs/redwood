@@ -11,4 +11,15 @@ declare global {
   interface Window {
     __REDWOOD__API_PROXY_PATH: string
   }
+
+  // Overridable graphQL hook return types
+  interface QueryOperationResult<TData = any> {
+    data: TData | null
+    loading: boolean
+    error?: Error | any
+    [key: string]: any
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  interface MutationOperationResult<TData = any, TVariables = any> {}
 }

@@ -1,10 +1,10 @@
-import { useQuery, OperationResult } from './GraphQLHooksProvider'
-
 import type { DocumentNode } from 'graphql'
+
+import { useQuery } from './GraphQLHooksProvider'
 
 interface QueryProps {
   query: DocumentNode
-  children: (result: OperationResult) => React.ReactElement
+  children: (result: QueryOperationResult) => React.ReactElement
 }
 
 const Query: React.FC<QueryProps> = ({ children, query, ...rest }) => {
@@ -15,15 +15,15 @@ const Query: React.FC<QueryProps> = ({ children, query, ...rest }) => {
 export type DataObject = { [key: string]: unknown }
 
 export type CellFailureStateComponent = Omit<
-  OperationResult,
+  QueryOperationResult,
   'data' | 'loading'
 >
 export type CellLoadingEmptyStateComponent = Omit<
-  OperationResult,
+  QueryOperationResult,
   'error' | 'loading' | 'data'
 >
 export type CellSuccessStateComponent =
-  | Omit<OperationResult, 'error' | 'loading' | 'data'>
+  | Omit<QueryOperationResult, 'error' | 'loading' | 'data'>
   | DataObject
 
 export interface CreateCellProps<CellProps> {
