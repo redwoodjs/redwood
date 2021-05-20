@@ -14,10 +14,9 @@ declare global {
 
   // Overridable graphQL hook return types
   interface QueryOperationResult<TData = any> {
-    data: TData | null
+    data: TData | undefined
     loading: boolean
     error?: Error | any
-    [key: string]: any
   }
 
   // not defining it here, because it gets overriden by Apollo provider anyway

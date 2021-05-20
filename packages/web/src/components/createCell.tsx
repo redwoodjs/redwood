@@ -1,39 +1,38 @@
-import type { DocumentNode } from 'graphql'
-
 import { useQuery } from './GraphQLHooksProvider'
+
+import type { DocumentNode } from 'graphql'
 
 interface QueryProps {
   query: DocumentNode
   children: (result: QueryOperationResult) => React.ReactElement
 }
 
-const Query: React.FC<QueryProps> = ({ children, query, ...rest }) => {
+const Query = ({ children, query, ...rest }: QueryProps) => {
   const result = useQuery(query, rest)
   return result ? children(result) : null
 }
 
 export type DataObject = { [key: string]: unknown }
 
-export type CellFailureStateComponent = Omit<
-  QueryOperationResult,
-  'data' | 'loading'
->
-export type CellLoadingEmptyStateComponent = Omit<
+export type CellFailureProps = Omit<QueryOperationResult, 'data' | 'loading'>
+export type CellLoadingProps = Omit<
   QueryOperationResult,
   'error' | 'loading' | 'data'
 >
-export type CellSuccessStateComponent =
-  | Omit<QueryOperationResult, 'error' | 'loading' | 'data'>
-  | DataObject
+export type CellSuccessProps<TData = any> = Omit<
+  QueryOperationResult<TData>,
+  'error' | 'loading' | 'data'
+> &
+  TData
 
 export interface CreateCellProps<CellProps> {
   beforeQuery?: <TProps>(props: TProps) => { variables: TProps }
   QUERY: DocumentNode | ((variables: Record<string, unknown>) => DocumentNode)
   afterQuery?: (data: DataObject) => DataObject
-  Loading?: React.FC<CellLoadingEmptyStateComponent & Partial<CellProps>>
-  Failure?: React.FC<CellFailureStateComponent & Partial<CellProps>>
-  Empty?: React.FC<CellLoadingEmptyStateComponent & Partial<CellProps>>
-  Success: React.FC<CellSuccessStateComponent & Partial<CellProps>>
+  Loading?: React.FC<CellLoadingProps & Partial<CellProps>>
+  Failure?: React.FC<CellFailureProps & Partial<CellProps>>
+  Empty?: React.FC<CellLoadingProps & Partial<CellProps>>
+  Success: React.FC<CellSuccessProps & Partial<CellProps>>
 }
 
 /**
@@ -102,9 +101,10 @@ export function createCell<CellProps = any>({
   Empty,
   Success,
 }: CreateCellProps<CellProps>): React.FC<CellProps> {
-  // If its prerendering, render the Cell's Loading component
   if (global.__REDWOOD__PRERENDERING) {
-    return (props) => <Loading {...props} />
+    // If its prerendering, render the Cell's Loading component
+    // and exit early. The apolloclient loading props aren't available here, so 'any'
+    return (props) => <Loading {...(props as any)} />
   }
 
   return (props) => {
