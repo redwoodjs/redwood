@@ -1,5 +1,6 @@
 import path from 'path'
 
+import execa from 'execa'
 import Listr from 'listr'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
@@ -90,6 +91,7 @@ export const createYargsForComponentGeneration = ({
   filesFn,
   optionsObj = yargsDefaults,
   positionalsObj = {},
+  generateTypes = false,
 }) => {
   return {
     command: appendPositionalsToCmd(`${componentName} <name>`, positionalsObj),
@@ -140,6 +142,24 @@ export const createYargsForComponentGeneration = ({
               const f = await filesFn(options)
               return writeFilesTask(f, { overwriteExisting: options.force })
             },
+          },
+          {
+            title: `Generating types...`,
+            task: async () => {
+              try {
+                await execa('yarn rw generate types', {
+                  shell: true,
+                  stdio: 'inherit',
+
+                  cwd: getPaths().base,
+                })
+              } catch (e) {
+                throw new Error(
+                  'Could not generate types, please run `yarn rw g types` or `yarn rw dev` to generate types'
+                )
+              }
+            },
+            enabled: () => options.typescript && generateTypes,
           },
         ],
         { collapse: false, exitOnError: true }

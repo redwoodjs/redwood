@@ -106,4 +106,5 @@ export const { command, description, builder, handler } =
   createYargsForComponentGeneration({
     componentName: 'cell',
     filesFn: files,
+    generateTypes: true,
   })
