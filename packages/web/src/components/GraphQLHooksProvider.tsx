@@ -6,15 +6,22 @@ export interface GraphQLHookOptions {
   onCompleted?: (data: any) => void
   [key: string]: any
 }
-export interface GraphQLHooks {
-  useQuery: (
-    query: DocumentNode,
-    options?: GraphQLHookOptions
-  ) => QueryOperationResult
-  useMutation: (
-    mutation: DocumentNode,
-    options?: GraphQLHookOptions
-  ) => MutationOperationResult
+
+type DefaultUseQueryType = (
+  query: DocumentNode,
+  options?: GraphQLHookOptions
+) => QueryOperationResult
+
+type DefaultUseMutationType = (
+  mutation: DocumentNode,
+  options?: GraphQLHookOptions
+) => MutationOperationResult
+export interface GraphQLHooks<
+  TuseQuery = DefaultUseQueryType,
+  TuseMutation = DefaultUseMutationType
+> {
+  useQuery: TuseQuery
+  useMutation: TuseMutation
 }
 
 export const GraphQLHooksContext = React.createContext<GraphQLHooks>({
@@ -30,6 +37,13 @@ export const GraphQLHooksContext = React.createContext<GraphQLHooks>({
   },
 })
 
+interface GraphQlHooksProviderProps<
+  TuseQuery = DefaultUseQueryType,
+  TuseMutation = DefaultUseMutationType
+> extends GraphQLHooks<TuseQuery, TuseMutation> {
+  children: React.ReactNode
+}
+
 /**
  * GraphQLHooksProvider stores standard `useQuery` and `useMutation` hooks for Redwood
  * that can be mapped to your GraphQL library of choice's own `useQuery`
@@ -37,11 +51,14 @@ export const GraphQLHooksContext = React.createContext<GraphQLHooks>({
  *
  * @todo Let the user pass in the additional type for options.
  */
-export const GraphQLHooksProvider: React.FunctionComponent<GraphQLHooks> = ({
+export const GraphQLHooksProvider = <
+  TuseQuery extends DefaultUseQueryType,
+  TuseMutation extends DefaultUseMutationType
+>({
   useQuery,
   useMutation,
   children,
-}) => {
+}: GraphQlHooksProviderProps<TuseQuery, TuseMutation>) => {
   return (
     <GraphQLHooksContext.Provider
       value={{
@@ -54,13 +71,16 @@ export const GraphQLHooksProvider: React.FunctionComponent<GraphQLHooks> = ({
   )
 }
 
-export function useQuery(query: DocumentNode, options?: GraphQLHookOptions) {
+export function useQuery<TData = any>(
+  query: DocumentNode,
+  options?: GraphQLHookOptions
+): QueryOperationResult<TData> {
   return React.useContext(GraphQLHooksContext).useQuery(query, options)
 }
 
-export function useMutation(
+export function useMutation<TData = any>(
   mutation: DocumentNode,
   options?: GraphQLHookOptions
-) {
+): MutationOperationResult<TData> {
   return React.useContext(GraphQLHooksContext).useMutation(mutation, options)
 }

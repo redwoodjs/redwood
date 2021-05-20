@@ -20,6 +20,7 @@ declare global {
     [key: string]: any
   }
 
+  // not defining it here, because it gets overriden by Apollo provider anyway
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface MutationOperationResult<TData = any, TVariables = any> {}
 }
