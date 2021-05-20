@@ -1,5 +1,7 @@
 import pascalcase from 'pascalcase'
 
+import { transformTSToJS } from 'src/lib'
+
 import {
   templateForComponentFile,
   createYargsForComponentGeneration,
@@ -95,8 +97,12 @@ export const files = async ({
   //    "path/to/fileB": "<<<template>>>",
   // }
   return files.reduce((acc, [outputPath, content]) => {
+    const template = generateTypescript
+      ? content
+      : transformTSToJS(outputPath, content)
+
     return {
-      [outputPath]: content,
+      [outputPath]: template,
       ...acc,
     }
   }, {})
