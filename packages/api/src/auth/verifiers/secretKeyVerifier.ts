@@ -18,9 +18,6 @@ export const secretKeyVerifier = (
 ): SecretKeyVerifier => {
   return {
     sign: ({ secret }) => {
-      console.warn(
-        `With the SecretKeyVerifier verifier, your body isn't signed with a secret`
-      )
       return secret
     },
     verify: ({ signature, secret = DEFAULT_WEBHOOK_SECRET }) => {

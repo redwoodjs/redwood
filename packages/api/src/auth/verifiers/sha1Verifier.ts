@@ -26,16 +26,10 @@ function toNormalizedJsonString(payload: Record<string, unknown>) {
 const createSignature = ({
   payload,
   secret = DEFAULT_WEBHOOK_SECRET,
-  options,
 }: {
   payload: string | Record<string, unknown>
   secret: string
-  options?: VerifyOptions
 }): string => {
-  if (options) {
-    console.warn('VerifyOptions are invalid for the Sha1Verifier')
-  }
-
   const algorithm = 'sha1'
   const hmac = createHmac(algorithm, secret)
 
@@ -59,18 +53,12 @@ export const verifySignature = ({
   payload,
   secret = DEFAULT_WEBHOOK_SECRET,
   signature,
-  options,
 }: {
   payload: string | Record<string, unknown>
   secret: string
   signature: string
-  options?: VerifyOptions
 }): boolean => {
   try {
-    if (options) {
-      console.warn('VerifyOptions are invalid for the Sha1Verifier')
-    }
-
     const algorithm = signature.split('=')[0]
     const webhookSignature = Buffer.from(signature || '', 'utf8')
     const hmac = createHmac(algorithm, secret)
@@ -110,13 +98,13 @@ export const verifySignature = ({
  * @see https://vercel.com/docs/api#integrations/webhooks/securing-webhooks
  *
  */
-const sha1Verifier = (options?: VerifyOptions | undefined): Sha1Verifier => {
+const sha1Verifier = (_options?: VerifyOptions | undefined): Sha1Verifier => {
   return {
     sign: ({ payload, secret }) => {
-      return createSignature({ payload, secret, options })
+      return createSignature({ payload, secret })
     },
     verify: ({ payload, secret, signature }) => {
-      return verifySignature({ payload, secret, signature, options })
+      return verifySignature({ payload, secret, signature })
     },
     type: 'sha1Verifier',
   }
