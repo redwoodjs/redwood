@@ -68,13 +68,8 @@ export const handler = async ({ watch }) => {
             ],
           }
         )
-        .on('change', (fileName) => {
-          console.log(
-            `✋ ~ file: generate-gql-types.js ~ line 55 ~ .on ~ fileName`,
-            fileName
-          )
+        .on('change', () => {
           // For now we only need to dynamically generate gql types
-          // Cell "mirrored types" should also be generated here
           generateGqlTypes()
         })
 
