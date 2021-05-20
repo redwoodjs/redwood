@@ -31,6 +31,7 @@ export const builder = (yargs) => {
     .option('esbuild', {
       type: 'boolean',
       required: false,
+      default: getConfig().experimental.esbuild,
       description: 'Use ESBuild for api side [experimental]',
     })
     .epilogue(
