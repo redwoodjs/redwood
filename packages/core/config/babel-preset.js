@@ -46,7 +46,7 @@ module.exports = () => {
     overrides: [
       // ** API **
       {
-        test: './api/',
+        test: ['./api/', './scripts/'],
         presets: [
           [
             '@babel/preset-env',
