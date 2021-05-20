@@ -19,7 +19,7 @@ const runScript = async (scriptPath, scriptArgs) => {
         'babel-plugin-module-resolver',
         {
           alias: {
-            '$api': getPaths().api.base,
+            $api: getPaths().api.base,
           },
         },
       ],
@@ -52,7 +52,7 @@ export const builder = (yargs) => {
 
 export const handler = async (args) => {
   const { name, ...scriptArgs } = args
-  const scriptPath = path.join(getPaths().scripts,  name)
+  const scriptPath = path.join(getPaths().scripts, name)
   try {
     require.resolve(scriptPath)
   } catch {
