@@ -38,12 +38,20 @@ test('destroys component files', async () => {
 test('destroys component files including stories and tests', async () => {
   fs.__setMockFiles(files({ name: 'About', stories: true, tests: true }))
   const unlinkSpy = jest.spyOn(fs, 'unlinkSync')
-  const t = tasks({ componentName: 'component', filesFn: files, name: 'About', stories: true, tests: true})
+  const t = tasks({
+    componentName: 'component',
+    filesFn: files,
+    name: 'About',
+    stories: true,
+    tests: true,
+  })
   t.setRenderer('silent')
 
   return t.run().then(() => {
-    const generatedFiles = Object.keys(files({ name: 'About', stories: true, tests: true }))
-    console.log('generatedFiles', generatedFiles);
+    const generatedFiles = Object.keys(
+      files({ name: 'About', stories: true, tests: true })
+    )
+    console.log('generatedFiles', generatedFiles)
     expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
     generatedFiles.forEach((f) => expect(unlinkSpy).toHaveBeenCalledWith(f))
   })
