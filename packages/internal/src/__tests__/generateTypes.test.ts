@@ -4,7 +4,7 @@ import path from 'path'
 import {
   generateCellTypesDefs,
   generateDirectoryNamedModuleTypeDefs,
-} from '../mirrorTypes'
+} from '../generateTypes'
 import { ensurePosixPath } from '../paths'
 
 const FIXTURE_PATH = path.resolve(

@@ -3,4 +3,4 @@ export * from './config'
 export * from './ts2js'
 export * from './dev'
 
-export { generateTypes } from './mirrorTypes'
+export { generateTypes } from './generateTypes'
