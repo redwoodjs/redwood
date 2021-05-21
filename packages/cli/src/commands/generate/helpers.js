@@ -177,7 +177,7 @@ export const isWordNonPluralizable = (word) => {
 }
 
 /**
- * @description Adds an s, if it it can't pluralize the word
+ * Adds an s if it can't pluralize the word
  */
 export const forcePluralizeWord = (word) => {
   // If word is already plural, check if plural === singular, then add s
