@@ -7,8 +7,9 @@ import { getNamedExports } from './ast'
 import { getPaths } from './paths'
 
 /**
- * Find all the Cell components in a project's web-side.
+ * Find all the Cell components in a project's web side.
  */
+// TODO: Cells must be directory named modules.
 export const findCells = (webSrcDir: string = getPaths().web.src) => {
   const cellPaths = glob.sync('**/*Cell.{js,jsx,ts,tsx}', {
     cwd: webSrcDir,
@@ -19,9 +20,9 @@ export const findCells = (webSrcDir: string = getPaths().web.src) => {
     .map((p) => {
       const code = fs.readFileSync(p, 'utf-8')
       const exports = getNamedExports(code)
-      const exportedQUERY = exports.findIndex((v) => v.name === 'QUERY') !== -1 //?
+      const exportedQUERY = exports.findIndex((v) => v.name === 'QUERY') !== -1
       const exportedSuccess =
-        exports.findIndex((v) => v.name === 'Success') !== -1 //?
+        exports.findIndex((v) => v.name === 'Success') !== -1
       if (exportedQUERY && exportedSuccess) {
         return p
       }
@@ -33,7 +34,7 @@ export const findCells = (webSrcDir: string = getPaths().web.src) => {
 /**
  * Find all the directory named modules.
  *
- * @todo measure how performant this code is.
+ * @todo measure this code's performance.
  */
 export const findDirectoryNamedModules = (
   projectBaseDir: string = getPaths().base
