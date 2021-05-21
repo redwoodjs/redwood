@@ -4,6 +4,13 @@ import path from 'path'
 import { findCells, findDirectoryNamedModules } from './findFiles'
 import { getPaths } from './paths'
 
+// TODO: We generate some types as part of the transpilation process.
+// Those should be removed and placed over here.
+export const generateTypes = () => {
+  generateDirectoryNamedModuleTypeDefs()
+  generateCellTypesDefs()
+}
+
 export const generateDirectoryNamedModuleTypeDefs = () => {
   const rwjsPaths = getPaths()
   const paths = findDirectoryNamedModules()
