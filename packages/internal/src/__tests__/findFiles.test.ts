@@ -13,21 +13,30 @@ afterAll(() => {
 })
 
 import { findCells, findDirectoryNamedModules } from '../findFiles'
+import { ensurePosixPath } from '../paths'
 
 test('finds all the cells', () => {
   const paths = findCells()
+  const p = paths.map((p) => p.replace(FIXTURE_PATH, '')).map(ensurePosixPath)
 
-  const p = paths.map((p) => p.replace(FIXTURE_PATH, ''))
-
-  expect(p[0]).toContain('NumTodosCell.js')
-  expect(p[1]).toContain('TodoListCell.tsx')
+  expect(p).toMatchInlineSnapshot(`
+    Array [
+      "/web/src/components/NumTodosCell/NumTodosCell.js",
+      "/web/src/components/TodoListCell/TodoListCell.tsx",
+    ]
+  `)
 })
 
 test('finds directory named modules', () => {
   const paths = findDirectoryNamedModules()
-  const p = paths.map((p) => p.replace(FIXTURE_PATH, ''))
+  const p = paths.map((p) => p.replace(FIXTURE_PATH, '')).map(ensurePosixPath)
 
-  expect(p[0]).toContain('todos.js')
-  expect(p[1]).toContain('AddTodo.js')
-  expect(p[2]).toContain('AddTodoControl.js')
+  expect(p).toMatchInlineSnapshot(`
+    Array [
+      "/api/src/services/todos/todos.js",
+      "/web/src/components/AddTodo/AddTodo.js",
+      "/web/src/components/Check/Check.js",
+      "/web/src/components/TodoItem/TodoItem.js",
+    ]
+  `)
 })
