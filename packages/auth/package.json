@@ -11,7 +11,7 @@
     "@auth0/auth0-spa-js": "^1.14.0",
     "@supabase/supabase-js": "^1.11.13",
     "@types/netlify-identity-widget": "^1.9.1",
-    "@types/react": "17.0.5",
+    "@types/react": "17.0.6",
     "firebase": "^8.6.1",
     "firebase-admin": "^9.8.0",
     "gotrue-js": "^0.9.29",
