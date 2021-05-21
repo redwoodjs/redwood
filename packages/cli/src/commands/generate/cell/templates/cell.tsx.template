@@ -2,8 +2,8 @@ import type { ${operationName} } from 'types/gql-types'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 export const QUERY = gql`
-  query ${operationName} {
-    ${camelName} {
+  query ${operationName}($id: ${idType}!) {
+    ${camelName}: ${camelName}(id: $id) {
       id
     }
   }
