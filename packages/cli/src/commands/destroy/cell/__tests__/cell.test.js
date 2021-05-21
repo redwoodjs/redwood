@@ -1,4 +1,5 @@
 global.__dirname = __dirname
+
 jest.mock('fs')
 jest.mock('src/lib', () => {
   return {
@@ -37,7 +38,6 @@ test('destroys cell files', async () => {
     componentName: 'cell',
     filesFn: files,
     name: 'User',
-    list: null,
   })
   t.setRenderer('silent')
 

@@ -44,14 +44,22 @@ export const files = async ({
   typescript: generateTypescript,
   ...options
 }) => {
-  const model = await getSchema(pascalcase(pluralize.singular(name)))
-
   let cellName = name
+  let idType,
+    model = null
   let templateNameSuffix = ''
 
   if (options.list) {
     cellName = options.list
     templateNameSuffix = 'List'
+  } else {
+    // needed for the singular cell GQL query find by id case
+    try {
+      model = await getSchema(pascalcase(pluralize.singular(name)))
+      idType = getIdType(model)
+    } catch {
+      // eat error so that the destroy cell generator doesn't raise when try to find prisma query engine in test runs
+    }
   }
 
   // Create a unique operation name.
@@ -66,7 +74,7 @@ export const files = async ({
     templatePath: `cell${templateNameSuffix}.js.template`,
     templateVars: {
       operationName,
-      idType: getIdType(model),
+      idType,
     },
   })
 
