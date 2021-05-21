@@ -48,6 +48,7 @@
     "@types/node-fetch": "^2.5.10"
   },
   "scripts": {
+    "dev": "yarn build:js && __REDWOOD__CONFIG_PATH=../../__fixtures__/example-todo-main node dist/index.js",
     "build": "yarn build:js",
     "prepublishOnly": "yarn build",
     "build:clean-dist": "yarn rimraf 'dist/**/*/__tests__'",
