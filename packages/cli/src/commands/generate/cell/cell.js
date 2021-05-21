@@ -50,9 +50,6 @@ export const files = async ({
   let templateNameSuffix = ''
 
   if (options.list) {
-    console.log(`Making list cell ${options.list}`)
-    console.log(options)
-    console.log(options.list)
     cellName = options.list
     templateNameSuffix = 'List'
   }
