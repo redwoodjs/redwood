@@ -51,7 +51,6 @@ test('destroys component files including stories and tests', async () => {
     const generatedFiles = Object.keys(
       files({ name: 'About', stories: true, tests: true })
     )
-    console.log('generatedFiles', generatedFiles)
     expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
     generatedFiles.forEach((f) => expect(unlinkSpy).toHaveBeenCalledWith(f))
   })
