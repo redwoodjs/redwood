@@ -7,8 +7,10 @@ import { getPaths } from './paths'
 // TODO: We generate some types as part of the transpilation process.
 // Those should be removed and placed over here.
 export const generateTypes = () => {
-  generateDirectoryNamedModuleTypeDefs()
-  generateCellTypesDefs()
+  const p1 = generateDirectoryNamedModuleTypeDefs()
+  const p2 = generateCellTypesDefs()
+
+  return [...p1, ...p2]
 }
 
 export const generateDirectoryNamedModuleTypeDefs = () => {

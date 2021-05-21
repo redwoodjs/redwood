@@ -1,6 +1,9 @@
 import terminalLink from 'terminal-link'
 
+import { getPaths, generateTypes } from '@redwoodjs/internal'
 import { getProject } from '@redwoodjs/structure'
+
+import c from 'src/lib/colors'
 
 export const command = 'generate <type>'
 export const aliases = ['g']
@@ -8,9 +11,25 @@ export const description = 'Generate boilerplate code and type definitions'
 
 export const builder = (yargs) =>
   yargs
+
+    .command('types', 'Generate TypeScript definitions', {}, function () {
+      console.log(
+        'Redwood will generate a virtual mirror directory to enable type definitions for Cells and directory-named-modules...'
+      )
+
+      const rwjsPaths = getPaths()
+      console.log(c.bold('Virtual mirror directory:'), rwjsPaths.mirror)
+      console.log(c.bold('Wrote:'))
+      const files = generateTypes()
+      for (const f of files) {
+        console.log('  -', f.replace(rwjsPaths.base, '').substring(1))
+      }
+      console.log('... and done.')
+    })
     /**
      * Like generate, util is an entry point command,
-     * so we can't have generate going through its subdirectories
+     * so we can't have generate going through its subdirectories.
+     * NOTE: `util` is deprecated.
      */
     .commandDir('./generate', { recurse: true, exclude: /\/util\// })
     .demandCommand()
