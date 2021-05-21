@@ -1,5 +1,5 @@
 export const QUERY = gql`
-  query FIND_${operationName.toUpperCase()}_BY_ID($id: ${idType}!) {
+  query ${operationName}($id: ${idType}!) {
     ${camelName}: ${camelName}(id: $id) {
       id
     }

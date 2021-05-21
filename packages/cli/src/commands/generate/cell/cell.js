@@ -7,6 +7,8 @@ import { yargsDefaults } from '../../generate'
 import {
   templateForComponentFile,
   createYargsForComponentGeneration,
+  forcePluralizeWord,
+  isWordNonPluralizable,
 } from '../helpers'
 
 const COMPONENT_SUFFIX = 'Cell'
@@ -22,17 +24,23 @@ const getCellOperationNames = async () => {
     .filter(Boolean)
 }
 
-const uniqueOperationName = async (name, index = 1) => {
-  let operationName =
-    index <= 1
-      ? `${pascalcase(name)}Query`
-      : `${pascalcase(name)}Query_${index}`
+const uniqueOperationName = async (name, { index = 1, list = false }) => {
+  let operationName = pascalcase(
+    index <= 1 ? `find_${name}_query` : `find_${name}_query_${index}`
+  )
+
+  if (list) {
+    operationName =
+      index <= 1
+        ? `${pascalcase(name)}Query`
+        : `${pascalcase(name)}Query_${index}`
+  }
 
   const cellOperationNames = await getCellOperationNames()
   if (!cellOperationNames.includes(operationName)) {
     return operationName
   }
-  return uniqueOperationName(name, index + 1)
+  return uniqueOperationName(name, { index: index + 1 })
 }
 
 const getIdType = (model) => {
@@ -49,9 +57,16 @@ export const files = async ({
     model = null
   let templateNameSuffix = ''
 
-  if (options.list) {
-    cellName = options.list
+  // Create a unique operation name.
+
+  const shouldGenerateList =
+    (isWordNonPluralizable(name) ? options.list : pluralize.isPlural(name)) ||
+    options.list
+
+  if (shouldGenerateList) {
+    cellName = forcePluralizeWord(name)
     templateNameSuffix = 'List'
+    // override operationName so that its find_operationName
   } else {
     // needed for the singular cell GQL query find by id case
     try {
@@ -62,8 +77,9 @@ export const files = async ({
     }
   }
 
-  // Create a unique operation name.
-  const operationName = await uniqueOperationName(cellName)
+  const operationName = await uniqueOperationName(cellName, {
+    list: shouldGenerateList,
+  })
 
   const cellFile = templateForComponentFile({
     name: cellName,
@@ -140,10 +156,10 @@ export const { command, description, builder, handler } =
       ...yargsDefaults,
       list: {
         alias: 'l',
-        default: null,
+        default: false,
         description:
           'Use when you want to generate a cell for a list of the model name.',
-        type: 'string',
+        type: 'boolean',
       },
     },
   })

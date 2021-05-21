@@ -26,10 +26,6 @@ export const createYargsForComponentDestroy = ({ componentName, filesFn }) => {
         description: `Name of the ${componentName}`,
         type: 'string',
       })
-
-      // Object.entries(optionsObj).forEach(([option, config]) => {
-      //   yargs.option(option, config)
-      // })
     },
     handler: async ({ name }) => {
       const t = tasks({ componentName, filesFn, name })

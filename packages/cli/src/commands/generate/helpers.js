@@ -3,6 +3,7 @@ import path from 'path'
 import Listr from 'listr'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
+import pluralize from 'pluralize'
 import terminalLink from 'terminal-link'
 
 import { ensurePosixPath, getConfig } from '@redwoodjs/internal'
@@ -169,4 +170,23 @@ export const intForeignKeysForModel = (model) => {
   return model.fields
     .filter((f) => f.name.match(/Id$/) && f.type === 'Int')
     .map((f) => f.name)
+}
+
+export const isWordNonPluralizable = (word) => {
+  return pluralize.isPlural(word) === pluralize.isSingular(word)
+}
+
+/**
+ * @description Adds an s, if it it can't pluralize the word
+ */
+export const forcePluralizeWord = (word) => {
+  // If word is already plural, check if plural === singular, then add s
+  // else use plural
+  const shouldAddS = isWordNonPluralizable(word) // equipment === equipment
+
+  if (shouldAddS) {
+    return `${word}s`
+  }
+
+  return pluralize.plural(word)
 }
