@@ -4,9 +4,7 @@ import { getProject } from '@redwoodjs/structure'
 
 export const command = 'generate <type>'
 export const aliases = ['g']
-export const description = 'Save time by generating boilerplate code'
-
-const project = getProject()
+export const description = 'Generate boilerplate code and type definitions'
 
 export const builder = (yargs) =>
   yargs
@@ -33,9 +31,11 @@ export const yargsDefaults = {
   },
   typescript: {
     alias: 'ts',
-    default: project.isTypeScriptProject,
+    default() {
+      return getProject().isTypeScriptProject()
+    },
     description:
-      'Generate TypeScript files. Enabled by default if we detect your project is typescript',
+      'Generate TypeScript files. Enabled by default if we detect your project is TypeScript.',
     type: 'boolean',
   },
 }
