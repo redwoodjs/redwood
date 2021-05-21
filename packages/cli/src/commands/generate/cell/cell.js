@@ -47,7 +47,7 @@ export const files = async ({
     extension: generateTypescript ? '.tsx' : '.js',
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'cell',
-    templatePath: 'cell.js.template',
+    templatePath: 'cell.tsx.template',
     templateVars: {
       operationName,
     },
