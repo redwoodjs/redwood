@@ -53,9 +53,10 @@ type InternalRouteProps = Partial<
   RouteProps & RedirectRouteProps & NotFoundRouteProps
 >
 
-const Route: React.VFC<RouteProps | RedirectRouteProps | NotFoundRouteProps> = (
-  props
-) => {
+function Route(props: RouteProps): JSX.Element
+function Route(props: RedirectRouteProps): JSX.Element
+function Route(props: NotFoundRouteProps): JSX.Element
+function Route(props: RouteProps | RedirectRouteProps | NotFoundRouteProps) {
   return <InternalRoute {...props} />
 }
 
