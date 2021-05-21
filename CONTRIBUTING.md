@@ -323,14 +323,14 @@ yarn rw dev web
 We're using Cypress to test the steps that we recommend in the tutorial. Run the command by doing the following:
 
 ```terminal
-./tasks/test-tutorial
+./tasks/run-e2e
 ```
 
 This creates a new project in a tmp directory using `yarn create redwood-app ...` Once installed, it then upgrades the project to the most recent `canary` release, which means it will use the current code in the `main` branch. Once the upgrade is complete (and successful), it will start Cypress for the E2E tests.
 
 
 ```terminal
-./tasks/test-tutorial /path/to/app
+./tasks/run-e2e /path/to/app
 ```
 
 Use this `path/to/app` option to run the same Cypress E2E tests against a local project. In this case, the command will _not_ upgrade the project to the `canary` release — it will use the project's installed packages. Chose this option if you have modified code (and packages) you want to test locally.
