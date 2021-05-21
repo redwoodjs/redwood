@@ -27,41 +27,49 @@ beforeAll(async () => {
     name: 'User',
     tests: true,
     stories: true,
+    list: null,
   })
   multiWordFiles = await cell.files({
     name: 'UserProfile',
     tests: true,
     stories: true,
+    list: null,
   })
   snakeCaseWordFiles = await cell.files({
     name: 'user_profile',
     tests: true,
     stories: true,
+    list: null,
   })
   kebabCaseWordFiles = await cell.files({
     name: 'user-profile',
     tests: true,
     stories: true,
+    list: null,
   })
   camelCaseWordFiles = await cell.files({
     name: 'userProfile',
     tests: true,
     stories: true,
+    list: null,
   })
   withoutTestFiles = await cell.files({
     name: 'User',
     tests: false,
     stories: true,
+    list: null,
   })
   withoutStoryFiles = await cell.files({
     name: 'User',
     tests: true,
     stories: false,
+    list: null,
   })
   withoutTestAndStoryFiles = await cell.files({
     name: 'User',
     tests: false,
     stories: false,
+    list: null,
   })
 })
 

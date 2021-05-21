@@ -33,7 +33,12 @@ afterEach(() => {
 
 test('destroys cell files', async () => {
   const unlinkSpy = jest.spyOn(fs, 'unlinkSync')
-  const t = tasks({ componentName: 'cell', filesFn: files, name: 'User' })
+  const t = tasks({
+    componentName: 'cell',
+    filesFn: files,
+    name: 'User',
+    list: null,
+  })
   t.setRenderer('silent')
 
   return t.run().then(() => {

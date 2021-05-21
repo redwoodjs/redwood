@@ -2,8 +2,8 @@
 
 exports[`creates a cell component with a camelCase word name 1`] = `
 "export const QUERY = gql\`
-  query UserProfileQuery {
-    userProfile {
+  query FIND_USERPROFILEQUERY_BY_ID($id: Int!) {
+    userProfile: userProfile(id: $id) {
       id
     }
   }
@@ -25,8 +25,8 @@ export const Success = ({ userProfile }) => {
 
 exports[`creates a cell component with a kebabCase word name 1`] = `
 "export const QUERY = gql\`
-  query UserProfileQuery {
-    userProfile {
+  query FIND_USERPROFILEQUERY_BY_ID($id: Int!) {
+    userProfile: userProfile(id: $id) {
       id
     }
   }
@@ -48,8 +48,8 @@ export const Success = ({ userProfile }) => {
 
 exports[`creates a cell component with a multi word name 1`] = `
 "export const QUERY = gql\`
-  query UserProfileQuery {
-    userProfile {
+  query FIND_USERPROFILEQUERY_BY_ID($id: Int!) {
+    userProfile: userProfile(id: $id) {
       id
     }
   }
@@ -71,8 +71,8 @@ export const Success = ({ userProfile }) => {
 
 exports[`creates a cell component with a single word name 1`] = `
 "export const QUERY = gql\`
-  query UserQuery {
-    user {
+  query FIND_USERQUERY_BY_ID($id: Int!) {
+    user: user(id: $id) {
       id
     }
   }
@@ -94,8 +94,8 @@ export const Success = ({ user }) => {
 
 exports[`creates a cell component with a snakeCase word name 1`] = `
 "export const QUERY = gql\`
-  query UserProfileQuery {
-    userProfile {
+  query FIND_USERPROFILEQUERY_BY_ID($id: Int!) {
+    userProfile: userProfile(id: $id) {
       id
     }
   }

@@ -17,7 +17,11 @@ const tasks = ({ componentName, filesFn, name }) =>
     { collapse: false, exitOnError: true }
   )
 
-export const createYargsForComponentDestroy = ({ componentName, filesFn }) => {
+export const createYargsForComponentDestroy = ({
+  componentName,
+  filesFn,
+  optionsObj = {},
+}) => {
   return {
     command: `${componentName} <name>`,
     description: `Destroy a ${componentName} component`,
@@ -25,6 +29,10 @@ export const createYargsForComponentDestroy = ({ componentName, filesFn }) => {
       yargs.positional('name', {
         description: `Name of the ${componentName}`,
         type: 'string',
+      })
+
+      Object.entries(optionsObj).forEach(([option, config]) => {
+        yargs.option(option, config)
       })
     },
     handler: async ({ name }) => {
