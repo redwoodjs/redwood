@@ -20,48 +20,87 @@ let singleWordFiles,
   camelCaseWordFiles,
   withoutTestFiles,
   withoutStoryFiles,
-  withoutTestAndStoryFiles
+  withoutTestAndStoryFiles,
+  listFlagPassedIn,
+  listInferredFromName,
+  modelPluralMatchesSingularWithList,
+  modelPluralMatchesSingularWithoutList
 
 beforeAll(async () => {
   singleWordFiles = await cell.files({
     name: 'User',
     tests: true,
     stories: true,
+    list: false,
   })
   multiWordFiles = await cell.files({
     name: 'UserProfile',
     tests: true,
     stories: true,
+    list: false,
   })
   snakeCaseWordFiles = await cell.files({
     name: 'user_profile',
     tests: true,
     stories: true,
+    list: false,
   })
   kebabCaseWordFiles = await cell.files({
     name: 'user-profile',
     tests: true,
     stories: true,
+    list: false,
   })
   camelCaseWordFiles = await cell.files({
     name: 'userProfile',
     tests: true,
     stories: true,
+    list: false,
   })
   withoutTestFiles = await cell.files({
     name: 'User',
     tests: false,
     stories: true,
+    list: false,
   })
   withoutStoryFiles = await cell.files({
     name: 'User',
     tests: true,
     stories: false,
+    list: false,
   })
   withoutTestAndStoryFiles = await cell.files({
     name: 'User',
     tests: false,
     stories: false,
+    list: false,
+  })
+
+  listFlagPassedIn = await cell.files({
+    name: 'Member',
+    tests: true,
+    stories: true,
+    list: true,
+  })
+
+  listInferredFromName = await cell.files({
+    name: 'Members',
+    tests: true,
+    stories: true,
+  })
+
+  modelPluralMatchesSingularWithList = await cell.files({
+    name: 'equipment',
+    tests: true,
+    stories: true,
+    list: true,
+  })
+
+  modelPluralMatchesSingularWithoutList = await cell.files({
+    name: 'equipment',
+    tests: true,
+    stories: true,
+    list: false,
   })
 })
 
@@ -300,4 +339,120 @@ test("doesn't include storybook and test files when --stories and --tests is set
   expect(Object.keys(withoutTestAndStoryFiles)).toEqual([
     path.normalize('/path/to/project/web/src/components/UserCell/UserCell.js'),
   ])
+})
+
+test('generates list cells if list flag passed in', () => {
+  const CELL_PATH = path.normalize(
+    '/path/to/project/web/src/components/MembersCell/MembersCell.js'
+  )
+
+  const TEST_PATH = path.normalize(
+    '/path/to/project/web/src/components/MembersCell/MembersCell.test.js'
+  )
+
+  const STORY_PATH = path.normalize(
+    '/path/to/project/web/src/components/MembersCell/MembersCell.stories.js'
+  )
+
+  const MOCK_PATH = path.normalize(
+    '/path/to/project/web/src/components/MembersCell/MembersCell.mock.js'
+  )
+
+  // Check the file names
+  expect(Object.keys(listFlagPassedIn)).toEqual([
+    MOCK_PATH,
+    TEST_PATH,
+    STORY_PATH,
+    CELL_PATH,
+  ])
+
+  // Check the contents
+  expect(listFlagPassedIn[CELL_PATH]).toMatchSnapshot()
+})
+
+test('generates list cells if name is plural', () => {
+  const CELL_PATH = path.normalize(
+    '/path/to/project/web/src/components/MembersCell/MembersCell.js'
+  )
+
+  const TEST_PATH = path.normalize(
+    '/path/to/project/web/src/components/MembersCell/MembersCell.test.js'
+  )
+
+  const STORY_PATH = path.normalize(
+    '/path/to/project/web/src/components/MembersCell/MembersCell.stories.js'
+  )
+
+  const MOCK_PATH = path.normalize(
+    '/path/to/project/web/src/components/MembersCell/MembersCell.mock.js'
+  )
+
+  // Check the file names
+  expect(Object.keys(listInferredFromName)).toEqual([
+    MOCK_PATH,
+    TEST_PATH,
+    STORY_PATH,
+    CELL_PATH,
+  ])
+
+  // Check the contents
+  expect(listInferredFromName[CELL_PATH]).toMatchSnapshot()
+})
+
+test('"equipment" with list flag', () => {
+  const CELL_PATH = path.normalize(
+    '/path/to/project/web/src/components/ManyEquipmentCell/ManyEquipmentCell.js'
+  )
+
+  const TEST_PATH = path.normalize(
+    '/path/to/project/web/src/components/ManyEquipmentCell/ManyEquipmentCell.test.js'
+  )
+
+  const STORY_PATH = path.normalize(
+    '/path/to/project/web/src/components/ManyEquipmentCell/ManyEquipmentCell.stories.js'
+  )
+
+  const MOCK_PATH = path.normalize(
+    '/path/to/project/web/src/components/ManyEquipmentCell/ManyEquipmentCell.mock.js'
+  )
+
+  // Check the file names
+  expect(Object.keys(modelPluralMatchesSingularWithList)).toEqual([
+    MOCK_PATH,
+    TEST_PATH,
+    STORY_PATH,
+    CELL_PATH,
+  ])
+
+  // Check the contents
+  expect(modelPluralMatchesSingularWithList[CELL_PATH]).toMatchSnapshot()
+})
+
+test('"equipment" withOUT list flag should find equipment by id', () => {
+  const CELL_PATH = path.normalize(
+    '/path/to/project/web/src/components/EquipmentCell/EquipmentCell.js'
+  )
+
+  const TEST_PATH = path.normalize(
+    '/path/to/project/web/src/components/EquipmentCell/EquipmentCell.test.js'
+  )
+
+  const STORY_PATH = path.normalize(
+    '/path/to/project/web/src/components/EquipmentCell/EquipmentCell.stories.js'
+  )
+
+  const MOCK_PATH = path.normalize(
+    '/path/to/project/web/src/components/EquipmentCell/EquipmentCell.mock.js'
+  )
+
+  // Check the file names
+  expect(Object.keys(modelPluralMatchesSingularWithoutList)).toEqual([
+    MOCK_PATH,
+    TEST_PATH,
+    STORY_PATH,
+    CELL_PATH,
+  ])
+
+  // Check the contents
+  expect(modelPluralMatchesSingularWithoutList[CELL_PATH]).toMatchSnapshot()
 })
