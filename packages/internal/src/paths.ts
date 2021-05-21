@@ -1,8 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 
+import fg from 'fast-glob'
 import findUp from 'findup-sync'
-import { glob } from 'glob'
 
 import { getConfig } from './config'
 
@@ -202,8 +202,9 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
 export const processPagesDir = (
   webPagesDir: string = getPaths().web.pages
 ): Array<PagesDependency> => {
-  const pagePaths = glob.sync('**/**/*Page.{js,jsx,ts,tsx}', {
+  const pagePaths = fg.sync('**/*Page.{js,jsx,ts,tsx}', {
     cwd: webPagesDir,
+    ignore: ['node_modules'],
   })
   return pagePaths.map((pagePath) => {
     const p = path.parse(pagePath)

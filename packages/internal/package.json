@@ -13,7 +13,7 @@
     "@babel/plugin-transform-typescript": "7.13.0",
     "deepmerge": "^4.2.2",
     "findup-sync": "^4.0.0",
-    "glob": "7.1.6",
+    "fast-glob": "3.2.5",
     "kill-port": "^1.6.1",
     "prettier": "^2.3.0",
     "toml": "^3.0.0"
