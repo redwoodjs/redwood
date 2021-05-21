@@ -5,7 +5,7 @@ import { transform } from '@babel/core'
 import glob from 'glob'
 import { format } from 'prettier'
 
-import { getPaths } from '../paths'
+import { getPaths } from './paths'
 
 /**
  * Converts all the TypeScript files in the `api` and `web` sides to JavaScript.

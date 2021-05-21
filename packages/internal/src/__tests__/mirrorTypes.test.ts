@@ -49,6 +49,7 @@ test('generate the correct mirror types for directory named modules', () => {
       "/.redwood/mirror/web/src/components/AddTodo/index.d.ts",
       "/.redwood/mirror/web/src/components/Check/index.d.ts",
       "/.redwood/mirror/web/src/components/TodoItem/index.d.ts",
+      "/.redwood/mirror/web/src/layouts/SetLayout/index.d.ts",
     ]
   `)
 

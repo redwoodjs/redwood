@@ -37,6 +37,7 @@ test('finds directory named modules', () => {
       "/web/src/components/AddTodo/AddTodo.js",
       "/web/src/components/Check/Check.js",
       "/web/src/components/TodoItem/TodoItem.js",
+      "/web/src/layouts/SetLayout/SetLayout.js",
     ]
   `)
 })
