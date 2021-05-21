@@ -9,7 +9,7 @@
   "types": "dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@babel/plugin-transform-typescript": "7.13.0",
+    "@babel/plugin-transform-typescript": "7.14.3",
     "deepmerge": "^4.2.2",
     "findup-sync": "^4.0.0",
     "glob": "7.1.6",
