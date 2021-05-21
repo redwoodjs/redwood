@@ -9498,10 +9498,10 @@ eslint-plugin-babel@^5.3.1:
   dependencies:
     eslint-rule-composer "^0.3.0"
 
-eslint-plugin-import@^2.23.0:
-  version "2.23.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-import/-/eslint-plugin-import-2.23.0.tgz#557160f501e4beaefb768fb4165d36eb2a4e543a"
-  integrity sha512-W5v1f7Cbam6BwbSSKtN6+yoUAms07ozbqAEhLOtf5erEqRv7w67PeZuAuBThaUkzdq2GfBx/5GBvxF+NWJshrQ==
+eslint-plugin-import@^2.23.2:
+  version "2.23.2"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-import/-/eslint-plugin-import-2.23.2.tgz#ee15dd68fc7a1a1ba4c653c734e0d01c100d3484"
+  integrity sha512-LmNoRptHBxOP+nb0PIKz1y6OSzCJlB+0g0IGS3XV4KaKk2q4szqQ6s6F1utVf5ZRkxk/QOTjdxe7v4VjS99Bsg==
   dependencies:
     array-includes "^3.1.3"
     array.prototype.flat "^1.2.4"
@@ -11965,14 +11965,7 @@ is-color-stop@^1.0.0:
     rgb-regex "^1.0.1"
     rgba-regex "^1.0.0"
 
-is-core-module@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/is-core-module/-/is-core-module-2.2.0.tgz#97037ef3d52224d85163f5597b2b63d9afed981a"
-  integrity sha512-XRAfAdyyY5F5cOXn7hYQDqh2Xmii+DEfIcQGxK/uNwMHhIkPWO0g8msXcbzLe+MpGoR951MlqM/2iIlU4vKDdQ==
-  dependencies:
-    has "^1.0.3"
-
-is-core-module@^2.4.0:
+is-core-module@^2.2.0, is-core-module@^2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/is-core-module/-/is-core-module-2.4.0.tgz#8e9fc8e15027b011418026e98f0e6f4d86305cc1"
   integrity sha512-6A2fkfq1rfeQZjxrZJGerpLCTHRNEBiSgnu0+obeJpEPZRUooHgsizvzv0ZjJwOz3iWIHdJtVWJ/tmPr3D21/A==
