@@ -1,6 +1,7 @@
-import type { types } from '@babel/core'
 import { parse as babelParse } from '@babel/parser'
 import traverse from '@babel/traverse'
+
+import type { types } from '@babel/core'
 
 // We're using babel to parse the AST, but there's no reason why this wouldn't change
 // in the future, so we're creating abstractions that are easier to use and switchable.
