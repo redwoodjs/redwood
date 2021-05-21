@@ -1,4 +1,5 @@
 global.__dirname = __dirname
+
 jest.mock('fs')
 jest.mock('src/lib', () => {
   return {
@@ -33,7 +34,11 @@ afterEach(() => {
 
 test('destroys cell files', async () => {
   const unlinkSpy = jest.spyOn(fs, 'unlinkSync')
-  const t = tasks({ componentName: 'cell', filesFn: files, name: 'User' })
+  const t = tasks({
+    componentName: 'cell',
+    filesFn: files,
+    name: 'User',
+  })
   t.setRenderer('silent')
 
   return t.run().then(() => {
