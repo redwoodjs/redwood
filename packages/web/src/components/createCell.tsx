@@ -1,3 +1,5 @@
+import { A } from 'ts-toolbelt'
+
 import { useQuery } from './GraphQLHooksProvider'
 
 import type { DocumentNode } from 'graphql'
@@ -14,16 +16,19 @@ const Query = ({ children, query, ...rest }: QueryProps) => {
 
 export type DataObject = { [key: string]: unknown }
 
-export type CellFailureProps = Omit<QueryOperationResult, 'data' | 'loading'>
+export type CellFailureProps =
+  | Omit<QueryOperationResult, 'data' | 'loading'>
+  | { error: Error } // for tests and storybook
+
 export type CellLoadingProps = Omit<
   QueryOperationResult,
   'error' | 'loading' | 'data'
 >
-export type CellSuccessProps<TData = any> = Omit<
-  QueryOperationResult<TData>,
-  'error' | 'loading' | 'data'
+// @MARK not sure about this partial, but we need to do this for tests and storybook
+export type CellSuccessProps<TData = any> = Partial<
+  Omit<QueryOperationResult<TData>, 'error' | 'loading' | 'data'>
 > &
-  TData
+  A.Compute<TData> // pre-computing makes the types more readable on hover
 
 export interface CreateCellProps<CellProps> {
   beforeQuery?: <TProps>(props: TProps) => { variables: TProps }
