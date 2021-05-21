@@ -5,6 +5,7 @@ import {
   generateCellTypesDefs,
   generateDirectoryNamedModuleTypeDefs,
   generateRouterPageImports,
+  generateCurrentUser,
 } from '../generateTypes'
 import { ensurePosixPath } from '../paths'
 
@@ -66,7 +67,7 @@ test('generate the correct mirror types for directory named modules', () => {
 test('generates global page imports', () => {
   const paths = generateRouterPageImports()
   const p = paths.map((p) => p.replace(FIXTURE_PATH, '')).map(ensurePosixPath)
-  expect(p[0]).toEqual('/.redwood/types/global-pages.d.ts')
+  expect(p[0]).toEqual('/.redwood/types/web-global-pages.d.ts')
 
   expect(fs.readFileSync(paths[0], 'utf-8')).toContain(`
 declare global {
@@ -78,4 +79,10 @@ declare global {
   const TypeScriptPage: typeof TypeScriptPageType
   const adminEditUserPage: typeof adminEditUserPageType
 }`)
+})
+
+test('generate current user ', () => {
+  const paths = generateCurrentUser()
+  const p = paths.map((p) => p.replace(FIXTURE_PATH, '')).map(ensurePosixPath)
+  expect(p[0]).toEqual('/.redwood/types/currentUser.d.ts')
 })

@@ -4,12 +4,11 @@ import path from 'path'
 import concurrently from 'concurrently'
 import terminalLink from 'terminal-link'
 
-import { getConfig, shutdownPort } from '@redwoodjs/internal'
+import { getConfig, shutdownPort, generateTypes } from '@redwoodjs/internal'
 
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 import { generatePrismaClient } from 'src/lib/generatePrismaClient'
-import runPreBuildTasks from 'src/lib/runPreBuildTasks'
 
 export const command = 'dev [side..]'
 export const description = 'Start development servers for api, and web'
@@ -53,7 +52,7 @@ export const handler = async ({
   const WEB_DIR_SRC = getPaths().web.src
 
   // Run tasks like type generate, etc.
-  runPreBuildTasks()
+  generateTypes()
 
   if (side.includes('api')) {
     try {

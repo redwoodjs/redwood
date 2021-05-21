@@ -13,10 +13,7 @@ export const builder = (yargs) =>
   yargs
 
     .command('types', 'Generate TypeScript definitions', {}, function () {
-      console.log(
-        'Redwood will generate a virtual mirror directory to enable type definitions for Cells and directory-named-modules...'
-      )
-
+      console.log()
       const rwjsPaths = getPaths()
       console.log(c.bold('Virtual mirror directory:'), rwjsPaths.mirror)
       console.log(c.bold('Wrote:'))
