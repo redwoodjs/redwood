@@ -57,6 +57,6 @@ test('generate the correct mirror types for directory named modules', () => {
     import { default as DEFAULT } from './todos'
     export default DEFAULT
     export * from './todos'
-        "
+    "
   `)
 })

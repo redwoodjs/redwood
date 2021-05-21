@@ -22,7 +22,7 @@ export const generateDirectoryNamedModuleTypeDefs = () => {
 import { default as DEFAULT } from './${name}'
 export default DEFAULT
 export * from './${name}'
-    `
+`
     fs.writeFileSync(typeDefPath, typeDefContents)
 
     return typeDefPath
