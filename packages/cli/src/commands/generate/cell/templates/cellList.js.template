@@ -14,12 +14,14 @@ export const Failure = ({ error }) => <div style={{color: 'red'}}>Error: {error.
 
 export const Success = ({ ${camelName} }) => {
   return (
-    ${camelName}.map((item) => {
-      return (
-        <li key={item.id}>
-          <div>{JSON.stringify(item)}</div>
-        </li>
-      )
-    })
+    <ul>
+      ${camelName}.map((item) => {
+        return (
+          <li key={item.id}>
+            <div>{JSON.stringify(item)}</div>
+          </li>
+        )
+      })
+    </ul>
   )
 }
