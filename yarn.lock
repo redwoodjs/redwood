@@ -19014,10 +19014,10 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript-transform-paths@^2.2.3:
-  version "2.2.3"
-  resolved "https://registry.yarnpkg.com/typescript-transform-paths/-/typescript-transform-paths-2.2.3.tgz#a22e4227978ab85cd54b5344d43ecc796460d3aa"
-  integrity sha512-jF63/iDnjKfLANZK1F8HhNgRv+v6R3vqpoPrx6KJWYtq9Ch7hPvefmb0HtbUfYaAMqUW3ol+w29wEYa7HNKBcA==
+typescript-transform-paths@^2.2.4:
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/typescript-transform-paths/-/typescript-transform-paths-2.2.4.tgz#9d4b74a063918ce528b696766634f854b8ce9134"
+  integrity sha512-i+/sgp3rw1ZronMCm2TKGBy1dlvN88Kd8CCb+HWnOE8+Hv0uIVnbC8xM5AD2t1JBCWabEhuH9p3n8DOVi0+R6g==
   dependencies:
     minimatch "^3.0.4"
 
