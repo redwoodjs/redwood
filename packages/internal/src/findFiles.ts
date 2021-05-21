@@ -7,8 +7,7 @@ import { getNamedExports, hasDefaultExport } from './ast'
 import { getPaths } from './paths'
 
 /**
- * Find all the Cell components in a project's web side.
- *
+ * Find all the Cell components in the web side.
  */
 export const findCells = (webSrcDir: string = getPaths().web.src) => {
   const modules = glob.sync('**/*Cell.{js,jsx,ts,tsx}', {
@@ -31,7 +30,7 @@ export const findCells = (webSrcDir: string = getPaths().web.src) => {
         return false
       }
 
-      // A Cell must export QUERY and Success
+      // A Cell must export QUERY and Success.
       const exports = getNamedExports(code)
       const exportedQUERY = exports.findIndex((v) => v.name === 'QUERY') !== -1
       const exportedSuccess =
