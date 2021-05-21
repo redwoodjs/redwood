@@ -1,10 +1,15 @@
 import pascalcase from 'pascalcase'
+import pluralize from 'pluralize'
 
 import { transformTSToJS } from 'src/lib'
+import { getSchema } from 'src/lib'
 
+import { yargsDefaults } from '../../generate'
 import {
   templateForComponentFile,
   createYargsForComponentGeneration,
+  forcePluralizeWord,
+  isWordNonPluralizable,
 } from '../helpers'
 
 const COMPONENT_SUFFIX = 'Cell'
@@ -20,17 +25,27 @@ const getCellOperationNames = async () => {
     .filter(Boolean)
 }
 
-const uniqueOperationName = async (name, index = 1) => {
-  let operationName =
-    index <= 1
-      ? `${pascalcase(name)}Query`
-      : `${pascalcase(name)}Query_${index}`
+const uniqueOperationName = async (name, { index = 1, list = false }) => {
+  let operationName = pascalcase(
+    index <= 1 ? `find_${name}_query` : `find_${name}_query_${index}`
+  )
+
+  if (list) {
+    operationName =
+      index <= 1
+        ? `${pascalcase(name)}Query`
+        : `${pascalcase(name)}Query_${index}`
+  }
 
   const cellOperationNames = await getCellOperationNames()
   if (!cellOperationNames.includes(operationName)) {
     return operationName
   }
-  return uniqueOperationName(name, index + 1)
+  return uniqueOperationName(name, { index: index + 1 })
+}
+
+const getIdType = (model) => {
+  return model.fields.find((field) => field.isId)?.type
 }
 
 export const files = async ({
@@ -38,43 +53,73 @@ export const files = async ({
   typescript: generateTypescript,
   ...options
 }) => {
+  let cellName = name
+  let idType,
+    model = null
+  let templateNameSuffix = ''
+
   // Create a unique operation name.
-  const operationName = await uniqueOperationName(name)
+
+  const shouldGenerateList =
+    (isWordNonPluralizable(name) ? options.list : pluralize.isPlural(name)) ||
+    options.list
+
+  if (shouldGenerateList) {
+    cellName = forcePluralizeWord(name)
+    templateNameSuffix = 'List'
+    // override operationName so that its find_operationName
+  } else {
+    // needed for the singular cell GQL query find by id case
+    try {
+      model = await getSchema(pascalcase(pluralize.singular(name)))
+      idType = getIdType(model)
+    } catch {
+      // eat error so that the destroy cell generator doesn't raise when try to find prisma query engine in test runs
+    }
+  }
+
+  const operationName = await uniqueOperationName(cellName, {
+    list: shouldGenerateList,
+  })
 
   const cellFile = templateForComponentFile({
-    name,
+    name: cellName,
     suffix: COMPONENT_SUFFIX,
     extension: generateTypescript ? '.tsx' : '.js',
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'cell',
-    templatePath: 'cell.tsx.template',
+    templatePath: `cell${templateNameSuffix}.tsx.template`,
     templateVars: {
       operationName,
+      idType,
     },
   })
+
   const testFile = templateForComponentFile({
-    name,
+    name: cellName,
     suffix: COMPONENT_SUFFIX,
     extension: generateTypescript ? '.test.tsx' : '.test.js',
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'cell',
     templatePath: 'test.js.template',
   })
+
   const storiesFile = templateForComponentFile({
-    name,
+    name: cellName,
     suffix: COMPONENT_SUFFIX,
     extension: generateTypescript ? '.stories.tsx' : '.stories.js',
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'cell',
     templatePath: 'stories.js.template',
   })
+
   const mockFile = templateForComponentFile({
-    name,
+    name: cellName,
     suffix: COMPONENT_SUFFIX,
     extension: generateTypescript ? '.mock.ts' : '.mock.js',
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'cell',
-    templatePath: 'mock.js.template',
+    templatePath: `mock${templateNameSuffix}.js.template`,
   })
 
   const files = [cellFile]
@@ -113,4 +158,14 @@ export const { command, description, builder, handler } =
     componentName: 'cell',
     filesFn: files,
     generateTypes: true,
+    optionsObj: {
+      ...yargsDefaults,
+      list: {
+        alias: 'l',
+        default: false,
+        description:
+          'Use when you want to generate a cell for a list of the model name.',
+        type: 'boolean',
+      },
+    },
   })

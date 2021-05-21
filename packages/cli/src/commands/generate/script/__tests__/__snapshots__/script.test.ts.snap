@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`creates a JavaScript function to execute 1`] = `
+"// To access your database
+import { db } from '../api/src/lib/db'
+
+export default async ({ args }) => {
+  // Your script here...
+  console.log(':: Executing script with args ::')
+  console.log(args)
+}
+"
+`;
+
+exports[`creates a TypeScript function to execute 1`] = `
+"// To access your database
+import { db } from '../api/src/lib/db'
+
+export default async ({ args }) => {
+  // Your script here...
+  console.log(':: Executing script with args ::')
+  console.log(args)
+}
+"
+`;

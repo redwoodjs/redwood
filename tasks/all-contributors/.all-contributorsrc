@@ -1550,7 +1550,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/18013532?v=4",
       "profile": "https://simoncrypta.dev/",
       "contributions": [
-        "code"
+        "code",
+        "tutorial"
       ]
     },
     {
@@ -1627,7 +1628,8 @@
       "profile": "https://github.com/renansoares",
       "contributions": [
         "code",
-        "doc"
+        "doc",
+        "tutorial"
       ]
     },
     {
@@ -1826,6 +1828,33 @@
       "name": "mlabate",
       "avatar_url": "https://avatars.githubusercontent.com/u/17139676?v=4",
       "profile": "https://github.com/mlabate",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "pdjota",
+      "name": "Pablo Dejuan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/93544?v=4",
+      "profile": "https://github.com/pdjota",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "bugsfunny",
+      "name": "bugsfunny",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12965842?v=4",
+      "profile": "https://github.com/bugsfunny",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "luispinto23",
+      "name": "Luís Pinto",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4148663?v=4",
+      "profile": "https://github.com/luispinto23",
       "contributions": [
         "tutorial"
       ]
