@@ -24,6 +24,10 @@ export const handler = async (event, context) => {
 
   return {
     statusCode: 200,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+
     body: JSON.stringify({
       data: 'javascriptFunction function',
     }),
@@ -57,6 +61,9 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
 
   return {
     statusCode: 200,
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify({
       data: 'typescriptFunction function',
     }),
@@ -89,6 +96,10 @@ export const handler = async (event, context) => {
 
   return {
     statusCode: 200,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+
     body: JSON.stringify({
       data: 'sendMail function',
     }),
@@ -121,6 +132,10 @@ export const handler = async (event, context) => {
 
   return {
     statusCode: 200,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+
     body: JSON.stringify({
       data: 'foo function',
     }),

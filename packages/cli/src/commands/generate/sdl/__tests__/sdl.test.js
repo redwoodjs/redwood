@@ -142,7 +142,7 @@ const itCreatesASDLFileWithJsonDefinitions = (baseArgs = {}) => {
 }
 
 describe('in javascript mode', () => {
-  const baseArgs = getDefaultArgs(sdl.defaults)
+  const baseArgs = { ...getDefaultArgs(sdl.defaults), tests: true }
 
   itReturnsExactlyThreeFiles(baseArgs)
   itCreatesAService(baseArgs)
@@ -155,7 +155,11 @@ describe('in javascript mode', () => {
 })
 
 describe('in typescript mode', () => {
-  const baseArgs = { ...getDefaultArgs(sdl.defaults), typescript: true }
+  const baseArgs = {
+    ...getDefaultArgs(sdl.defaults),
+    typescript: true,
+    tests: true,
+  }
 
   itReturnsExactlyThreeFiles(baseArgs)
   itCreatesAService(baseArgs)

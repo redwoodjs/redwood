@@ -1,5 +1,3 @@
-import type { APIGatewayProxyEvent } from 'aws-lambda'
-
 import {
   signPayload,
   verifyEvent,
@@ -7,6 +5,8 @@ import {
   WebhookVerificationError,
   DEFAULT_WEBHOOK_SIGNATURE_HEADER,
 } from './index'
+
+import type { APIGatewayProxyEvent } from 'aws-lambda'
 
 const payload = 'No more secrets, Marty.'
 const secret = 'MY_VOICE_IS_MY_PASSPORT_VERIFY_ME'
@@ -39,6 +39,14 @@ const buildEvent = ({
     multiValueQueryStringParameters: null,
   }
 }
+
+beforeEach(() => {
+  jest.spyOn(console, 'warn').mockImplementation(jest.fn())
+})
+
+afterEach(() => {
+  jest.spyOn(console, 'warn').mockRestore()
+})
 
 describe('webhooks', () => {
   describe('using the timestampScheme verifier', () => {
@@ -184,7 +192,7 @@ describe('webhooks', () => {
   })
 
   describe('webhooks via event', () => {
-    describe('when it receives and event  extracts the signature and payload from the event', () => {
+    describe('when it receives and event extracts the signature and payload from the event', () => {
       test('it can verify an event body payload with a signature it generates', () => {
         const signature = signPayload('timestampSchemeVerifier', {
           payload,

@@ -33,7 +33,7 @@ describe('useLocation', () => {
       getByText(
         '{"pathname":"/dunder-mifflin","search":"?facts=bears","hash":"#woof"}'
       )
-    ).toBeTruthy()
+    ).toBeInTheDocument()
     expect(getByTestId('pathname')).toHaveValue('/dunder-mifflin')
     expect(getByTestId('search')).toHaveValue('?facts=bears')
     expect(getByTestId('hash')).toHaveValue('#woof')

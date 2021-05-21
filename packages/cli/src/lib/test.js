@@ -34,6 +34,7 @@ jest.mock('@redwoodjs/internal', () => {
           layouts: path.join(BASE_PATH, '/web/src/layouts'),
           pages: path.join(BASE_PATH, '/web/src/pages'),
         },
+        scripts: path.join(BASE_PATH, 'scripts'),
       }
     },
   }

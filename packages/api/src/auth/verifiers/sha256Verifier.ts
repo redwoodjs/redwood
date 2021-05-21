@@ -5,6 +5,7 @@ import {
   VERIFICATION_ERROR_MESSAGE,
   DEFAULT_WEBHOOK_SECRET,
 } from './common'
+
 import type { WebhookVerifier, VerifyOptions } from './common'
 
 export interface Sha256Verifier extends WebhookVerifier {
@@ -103,7 +104,7 @@ export const verifySignature = ({
 
 /**
  *
- * SHA256 HMAC Payload Verfifier
+ * SHA256 HMAC Payload Verifier
  *
  * Based on GitHub's webhook payload verification
  * @see https://docs.github.com/en/developers/webhooks-and-events/securing-your-webhooks
