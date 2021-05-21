@@ -2,8 +2,8 @@
 
 exports[`"equipment" with list flag 1`] = `
 "export const QUERY = gql\`
-  query EquipmentsQuery {
-    equipments {
+  query ManyEquipmentQuery {
+    manyEquipment {
       id
     }
   }
@@ -17,15 +17,11 @@ export const Failure = ({ error }) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-export const Success = ({ equipments }) => {
+export const Success = ({ manyEquipment }) => {
   return (
     <ul>
-      {equipments.map((item) => {
-        return (
-          <li key={item.id}>
-            <div>{JSON.stringify(item)}</div>
-          </li>
-        )
+      {manyEquipment.map((item) => {
+        return <li key={item.id}>{JSON.stringify(item)}</li>
       })}
     </ul>
   )
@@ -552,11 +548,7 @@ export const Success = ({ members }) => {
   return (
     <ul>
       {members.map((item) => {
-        return (
-          <li key={item.id}>
-            <div>{JSON.stringify(item)}</div>
-          </li>
-        )
+        return <li key={item.id}>{JSON.stringify(item)}</li>
       })}
     </ul>
   )
@@ -585,11 +577,7 @@ export const Success = ({ members }) => {
   return (
     <ul>
       {members.map((item) => {
-        return (
-          <li key={item.id}>
-            <div>{JSON.stringify(item)}</div>
-          </li>
-        )
+        return <li key={item.id}>{JSON.stringify(item)}</li>
       })}
     </ul>
   )

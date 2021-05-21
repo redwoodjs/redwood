@@ -185,7 +185,7 @@ export const forcePluralizeWord = (word) => {
   const shouldAddS = isWordNonPluralizable(word) // equipment === equipment
 
   if (shouldAddS) {
-    return `${word}s`
+    return pascalcase(`many_${word}`)
   }
 
   return pluralize.plural(word)

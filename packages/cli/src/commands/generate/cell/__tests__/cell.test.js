@@ -401,19 +401,19 @@ test('generates list cells if name is plural', () => {
 
 test('"equipment" with list flag', () => {
   const CELL_PATH = path.normalize(
-    '/path/to/project/web/src/components/EquipmentsCell/EquipmentsCell.js'
+    '/path/to/project/web/src/components/ManyEquipmentCell/ManyEquipmentCell.js'
   )
 
   const TEST_PATH = path.normalize(
-    '/path/to/project/web/src/components/EquipmentsCell/EquipmentsCell.test.js'
+    '/path/to/project/web/src/components/ManyEquipmentCell/ManyEquipmentCell.test.js'
   )
 
   const STORY_PATH = path.normalize(
-    '/path/to/project/web/src/components/EquipmentsCell/EquipmentsCell.stories.js'
+    '/path/to/project/web/src/components/ManyEquipmentCell/ManyEquipmentCell.stories.js'
   )
 
   const MOCK_PATH = path.normalize(
-    '/path/to/project/web/src/components/EquipmentsCell/EquipmentsCell.mock.js'
+    '/path/to/project/web/src/components/ManyEquipmentCell/ManyEquipmentCell.mock.js'
   )
 
   // Check the file names
