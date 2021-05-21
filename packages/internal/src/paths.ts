@@ -39,6 +39,7 @@ export interface BrowserTargetPaths {
 
 export interface Paths {
   cache: string
+  mirror: string
   types: string
   globals: string
   base: string
@@ -135,17 +136,23 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
 
   // We store our test database over here:
   const cache = path.join(BASE_DIR, '.redwood')
-  const types = path.join(BASE_DIR, '.redwood', 'types')
-  const globals = path.join(BASE_DIR, '.redwood', 'globals')
+  const types = path.join(BASE_DIR, '.redwood/types')
+  const globals = path.join(BASE_DIR, '.redwood/globals')
+  const mirror = path.join(BASE_DIR, '.redwood/mirror')
+
   fs.mkdirSync(cache, { recursive: true })
   fs.mkdirSync(types, { recursive: true })
   fs.mkdirSync(globals, { recursive: true })
+  fs.mkdirSync(mirror, { recursive: true })
 
   return {
     base: BASE_DIR,
     cache,
+    // TODO: Nest "types" into a sub-object.
     types,
     globals,
+    mirror,
+
     api: {
       base: path.join(BASE_DIR, 'api'),
       dataMigrations: path.join(BASE_DIR, schemaDir, 'dataMigrations'),
