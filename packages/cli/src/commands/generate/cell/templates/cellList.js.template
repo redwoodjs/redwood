@@ -1,6 +1,6 @@
 export const QUERY = gql`
-  query ${operationName}($id: ${idType}!) {
-    ${camelName}: ${camelName}(id: $id) {
+  query ${operationName} {
+    ${camelName} {
       id
     }
   }
@@ -13,5 +13,15 @@ export const Empty = () => <div>Empty</div>
 export const Failure = ({ error }) => <div style={{color: 'red'}}>Error: {error.message}</div>
 
 export const Success = ({ ${camelName} }) => {
-  return <div>{JSON.stringify(${camelName})}</div>
+  return (
+    <ul>
+      {${camelName}.map((item) => {
+        return (
+          <li key={item.id}>
+            <div>{JSON.stringify(item)}</div>
+          </li>
+        )
+      })}
+    </ul>
+  )
 }
