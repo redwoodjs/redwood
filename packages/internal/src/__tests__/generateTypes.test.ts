@@ -5,7 +5,7 @@ import {
   generateCellTypesDefs,
   generateDirectoryNamedModuleTypeDefs,
   generateRouterPageImports,
-  generateCurrentUser,
+  generateCurrentUserTypeDef,
 } from '../generateTypes'
 import { ensurePosixPath } from '../paths'
 
@@ -82,7 +82,7 @@ declare global {
 })
 
 test('generate current user ', () => {
-  const paths = generateCurrentUser()
+  const paths = generateCurrentUserTypeDef()
   const p = paths.map((p) => p.replace(FIXTURE_PATH, '')).map(ensurePosixPath)
   expect(p[0]).toEqual('/.redwood/types/currentUser.d.ts')
 })
