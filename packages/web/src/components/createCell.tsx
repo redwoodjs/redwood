@@ -1,6 +1,6 @@
-import { useQuery, OperationResult } from './GraphQLHooksProvider'
-
 import type { DocumentNode } from 'graphql'
+
+import { useQuery, OperationResult } from './GraphQLHooksProvider'
 
 interface QueryProps {
   query: DocumentNode

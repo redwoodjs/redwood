@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { createAuthClient } from './authClients'
-
 import type {
   AuthClient,
   SupportedAuthTypes,
