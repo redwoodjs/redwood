@@ -18,7 +18,7 @@
     "toml": "^3.0.0"
   },
   "devDependencies": {
-    "@types/findup-sync": "^2.0.2"
+    "@types/findup-sync": "^4.0.0"
   },
   "jest": {
     "testPathIgnorePatterns": [
