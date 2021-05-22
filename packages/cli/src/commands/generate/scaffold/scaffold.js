@@ -386,6 +386,29 @@ export const routes = async ({ model: name, path: scaffoldPath = '' }) => {
   ]
 }
 
+const addRoutesInsideSetToRouter = async (model, path) => {
+  const pluralPascalName = pascalcase(pluralize(model))
+  const layoutName = `${pluralPascalName}Layout`
+  addRoutesToRouterTask(await routes({ model, path }), layoutName)
+}
+
+const addLayoutImport = ({ model: name, path: scaffoldPath = '' }) => {
+  const pluralPascalName = pascalcase(pluralize(name))
+  const pascalScaffoldPath = pascalcase(scaffoldPath)
+  const layoutName = `${pluralPascalName}Layout`
+  const importLayout = `import ${pluralPascalName}Layout from 'src/layouts/${pascalScaffoldPath}${layoutName}'`
+  const routesPath = getPaths().web.routes
+  const routesContent = readFile(routesPath).toString()
+
+  const newRoutesContent = routesContent.replace(
+    /'@redwoodjs\/router'(\s*)/,
+    `'@redwoodjs/router'$1${importLayout}$1`
+  )
+  writeFile(routesPath, newRoutesContent, { overwriteExisting: true })
+
+  return 'Added layout import to Routes.{js,tsx}'
+}
+
 const addScaffoldImport = () => {
   const appJsPath = getPaths().web.app
   let appJsContents = readFile(appJsPath).toString()
@@ -439,10 +462,12 @@ const tasks = ({ model, path, force, tests, typescript, javascript }) => {
         },
       },
       {
+        title: 'Adding layout import...',
+        task: async () => addLayoutImport({ model, path }),
+      },
+      {
         title: 'Adding scaffold routes...',
-        task: async () => {
-          return addRoutesToRouterTask(await routes({ model, path }))
-        },
+        task: async () => addRoutesInsideSetToRouter(model, path),
       },
       {
         title: 'Adding scaffold asset imports...',
