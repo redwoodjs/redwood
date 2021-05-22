@@ -1,15 +1,14 @@
 import jwtVerifier from './jwtVerifier'
-import secretKeyVerifier from './secretKeyVerifier'
-import sha1Verifier from './sha1Verifier'
-import sha256Verifier from './sha256Verifier'
-import skipVerifier from './skipVerifier'
-import timestampSchemeVerifier from './timestampSchemeVerifier'
-
 import type { JwtVerifier } from './jwtVerifier'
+import secretKeyVerifier from './secretKeyVerifier'
 import type { SecretKeyVerifier } from './secretKeyVerifier'
+import sha1Verifier from './sha1Verifier'
 import type { Sha1Verifier } from './sha1Verifier'
+import sha256Verifier from './sha256Verifier'
 import type { Sha256Verifier } from './sha256Verifier'
+import skipVerifier from './skipVerifier'
 import type { SkipVerifier } from './skipVerifier'
+import timestampSchemeVerifier from './timestampSchemeVerifier'
 import type { TimestampSchemeVerifier } from './timestampSchemeVerifier'
 
 export const verifierLookup = {

@@ -1,5 +1,6 @@
-import type { AuthClient } from './'
 import type { Magic, MagicUserMetadata } from 'magic-sdk'
+
+import type { AuthClient } from './'
 
 export type MagicLink = Magic
 export type MagicUser = MagicUserMetadata
