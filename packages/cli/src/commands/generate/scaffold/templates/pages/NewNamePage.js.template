@@ -1,12 +1,7 @@
-import ${pluralPascalName}Layout from 'src/layouts/${pascalScaffoldPath}${pluralPascalName}Layout'
 import New${singularPascalName} from 'src/components/${pascalScaffoldPath}New${singularPascalName}'
 
 const New${singularPascalName}Page = () => {
-  return (
-    <${pluralPascalName}Layout>
-      <New${singularPascalName} />
-    </${pluralPascalName}Layout>
-  )
+  return <New${singularPascalName} />
 }
 
 export default New${singularPascalName}Page
