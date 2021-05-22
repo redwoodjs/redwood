@@ -520,6 +520,9 @@ And there you have it.
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/mlabate"><img src="https://avatars.githubusercontent.com/u/17139676?v=4" width="100px;" alt=""/><br /><sub><b>mlabate</b></sub></a></td>
+    <td align="center"><a href="https://github.com/pdjota"><img src="https://avatars.githubusercontent.com/u/93544?v=4" width="100px;" alt=""/><br /><sub><b>Pablo Dejuan</b></sub></a></td>
+    <td align="center"><a href="https://github.com/bugsfunny"><img src="https://avatars.githubusercontent.com/u/12965842?v=4" width="100px;" alt=""/><br /><sub><b>bugsfunny</b></sub></a></td>
+    <td align="center"><a href="https://github.com/luispinto23"><img src="https://avatars.githubusercontent.com/u/4148663?v=4" width="100px;" alt=""/><br /><sub><b>Luís Pinto</b></sub></a></td>
   </tr>
 </table>
 
