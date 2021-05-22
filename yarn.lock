@@ -9319,7 +9319,12 @@ esbuild-loader@^2.13.1:
     type-fest "^1.0.1"
     webpack-sources "^2.2.0"
 
-esbuild@0.11.21, esbuild@^0.11.19:
+esbuild@0.12.1:
+  version "0.12.1"
+  resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.12.1.tgz#f652d5b3b9432dbb42fc2c034ddd62360296e03d"
+  integrity sha512-WfQ00MKm/Y4ysz1u9PCUAsV66k5lbrcEvS6aG9jhBIavpB94FBdaWeBkaZXxCZB4w+oqh+j4ozJFWnnFprOXbg==
+
+esbuild@^0.11.19:
   version "0.11.21"
   resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.11.21.tgz#9220b0185ae40947811dcaff6bfcfb572bebac08"
   integrity sha512-FqpYdJqiTeLDbj3vqxc/fG8UmHIEvQrDaUxSw1oJf4giLd/tnMDUUlXellCjOab7qGKQ5hUFD5eQgmO+tkZeow==
