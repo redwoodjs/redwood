@@ -40,7 +40,7 @@
     "babel-jest": "^26.6.3",
     "babel-loader": "^8.2.2",
     "babel-plugin-auto-import": "1.1.0",
-    "babel-plugin-graphql-tag": "3.2.0",
+    "babel-plugin-graphql-tag": "3.3.0",
     "babel-plugin-inline-react-svg": "2.0.1",
     "babel-plugin-module-resolver": "4.1.0",
     "copy-webpack-plugin": "^6.1.0",
