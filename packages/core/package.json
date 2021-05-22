@@ -13,7 +13,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "dependencies": {
-    "@babel/cli": "7.13.16",
+    "@babel/cli": "7.14.3",
     "@babel/core": "7.14.3",
     "@babel/node": "7.14.2",
     "@babel/plugin-proposal-class-properties": "7.13.0",
