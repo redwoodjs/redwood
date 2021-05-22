@@ -1,9 +1,8 @@
+import type { APIGatewayProxyResult, APIGatewayProxyEvent } from 'aws-lambda'
+import type { Response, Request } from 'express'
 import qs from 'qs'
 
 import { handleError } from '../error'
-
-import type { APIGatewayProxyResult, APIGatewayProxyEvent } from 'aws-lambda'
-import type { Response, Request } from 'express'
 
 export const parseBody = (rawBody: string | Buffer) => {
   if (typeof rawBody === 'string') {

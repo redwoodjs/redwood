@@ -1,6 +1,6 @@
-import { AuthClient } from './'
-
 import type { Session, NhostClient, User } from 'nhost-js-sdk'
+
+import { AuthClient } from './'
 
 export type Nhost = NhostClient
 export type NhostUser = User
