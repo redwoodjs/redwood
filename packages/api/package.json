@@ -13,7 +13,7 @@
     "@graphql-tools/merge": "6.2.14",
     "@prisma/client": "2.23.0",
     "@types/pino": "^6.3.8",
-    "apollo-server-lambda": "2.22.2",
+    "apollo-server-lambda": "2.24.1",
     "core-js": "3.12.1",
     "graphql": "15.5.0",
     "graphql-scalars": "1.9.3",
