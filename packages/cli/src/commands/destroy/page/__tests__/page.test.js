@@ -46,6 +46,20 @@ test('destroys page files', async () => {
   })
 })
 
+test('destroys page files with stories and tests', async () => {
+  const unlinkSpy = jest.spyOn(fs, 'unlinkSync')
+  const t = tasks({ name: 'About', stories: true, tests: true })
+  t.setRenderer('silent')
+
+  return t._tasks[0].run().then(() => {
+    const generatedFiles = Object.keys(
+      files({ name: 'About', stories: true, tests: true })
+    )
+    expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
+    generatedFiles.forEach((f) => expect(unlinkSpy).toHaveBeenCalledWith(f))
+  })
+})
+
 test('cleans up route from Routes.js', async () => {
   const t = tasks({ name: 'About' })
   t.setRenderer('silent')
