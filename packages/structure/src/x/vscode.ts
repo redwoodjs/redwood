@@ -4,9 +4,9 @@
 // we only use it in type declarations
 // (we can't use "import type" since we need to do use it in some typeof expressions)
 import { memoize } from 'lodash'
-import { Command, Location } from 'vscode-languageserver-types'
-import { Connection as LSPConnection } from 'vscode-languageserver'
 import * as vscode from 'vscode'
+import { Connection as LSPConnection } from 'vscode-languageserver'
+import { Command, Location } from 'vscode-languageserver-types'
 
 import { lazy, memo } from '../x/decorators'
 

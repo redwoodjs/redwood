@@ -10,7 +10,6 @@ import {
   SetupWorkerApi,
   ResponseComposition,
 } from 'msw'
-
 import type { StartOptions as StartMSWWorkerOptions } from 'msw/lib/types/setupWorker/glossary'
 import type { SharedOptions as SharedMSWOptions } from 'msw/lib/types/sharedOptions'
 
