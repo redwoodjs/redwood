@@ -21,8 +21,10 @@ export const generateTypeDefs = () => {
   const p3 = generateRouterPageImports()
   const p4 = generateCurrentUserTypeDef()
   const p5 = generateRouterRoutesTypeDef()
+  const p6 = generateGlobImports()
+  const p7 = generateAPIGlobalContext()
 
-  return [...p1, ...p2, p3[0], p4[0], p5[0]]
+  return [...p1, ...p2, p3[0], p4[0], p5[0], p6[0], p7[0]]
 }
 
 export const generateDirectoryNamedModuleTypeDefs = () => {

@@ -11,12 +11,10 @@ export const description = 'Generate boilerplate code and type definitions'
 
 export const builder = (yargs) =>
   yargs
-
     .command('types', 'Generate TypeScript definitions', {}, function () {
-      console.log()
       const rwjsPaths = getPaths()
-      console.log(c.bold('Virtual mirror directory:'), rwjsPaths.mirror)
-      console.log(c.bold('Wrote:'))
+      console.log()
+      console.log(c.bold('Generating...'))
       const files = generateTypeDefs()
       for (const f of files) {
         console.log('  -', f.replace(rwjsPaths.base, '').substring(1))

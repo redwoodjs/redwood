@@ -4,7 +4,7 @@ import path from 'path'
 import concurrently from 'concurrently'
 import terminalLink from 'terminal-link'
 
-import { getConfig, shutdownPort, generateTypes } from '@redwoodjs/internal'
+import { getConfig, shutdownPort, generateTypeDefs } from '@redwoodjs/internal'
 
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
@@ -52,7 +52,7 @@ export const handler = async ({
   const WEB_DIR_SRC = getPaths().web.src
 
   // Run tasks like type generate, etc.
-  generateTypes()
+  generateTypeDefs()
 
   if (side.includes('api')) {
     try {
