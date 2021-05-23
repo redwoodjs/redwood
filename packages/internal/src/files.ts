@@ -6,15 +6,33 @@ import fg from 'fast-glob'
 import { getNamedExports, hasDefaultExport } from './ast'
 import { getPaths } from './paths'
 
-/**
- * Find all the Cell files in the web side.
- */
 export const findCells = (cwd: string = getPaths().web.src) => {
   const modules = fg.sync('**/*Cell.{js,jsx,ts,tsx}', {
     cwd,
+    absolute: true,
     ignore: ['node_modules'],
   })
-  return modules.map((p) => path.join(cwd, p)).filter(isCellFile)
+  return modules.filter(isCellFile)
+}
+
+export const findPages = (cwd: string = getPaths().web.pages) => {
+  const modules = fg.sync('**/*Page.{tsx,js,jsx}', {
+    cwd,
+    absolute: true,
+    ignore: ['node_modules'],
+  })
+
+  return modules.filter(isPageFile)
+}
+
+export const findDirectoryNamedModules = (cwd: string = getPaths().base) => {
+  const modules = fg.sync('**/src/**/*[!Cell].{ts,js,jsx,tsx}', {
+    cwd,
+    absolute: true,
+    ignore: ['node_modules'],
+  })
+
+  return modules.filter(isDirectoryNamedModuleFile)
 }
 
 export const isCellFile = (p: string) => {
@@ -50,14 +68,13 @@ export const isPageFile = (p: string) => {
     return false
   }
 
-  // A page should be in the pages directory.
+  // A page should be in the `web/src/pages` directory.
   const pagesDir = getPaths().web.pages
-
   if (!dir.startsWith(pagesDir)) {
     return false
   }
 
-  // A Page should not have a default export.
+  // A Page should have a default export.
   const code = fs.readFileSync(p, 'utf-8')
   if (!hasDefaultExport(code)) {
     return false
@@ -66,31 +83,7 @@ export const isPageFile = (p: string) => {
   return true
 }
 
-export const findPages = (cwd: string = getPaths().web.pages) => {
-  const modules = fg.sync('**/*Page.{tsx,js,jsx}', {
-    cwd,
-    ignore: ['node_modules'],
-  })
-
-  return modules.map((p) => path.join(cwd, p)).filter(isPageFile)
-}
-
-/**
- * Find all the directory named module files.
- */
-export const findDirectoryNamedModules = (cwd: string = getPaths().base) => {
-  const modules = fg.sync('**/src/**/*[!Cell].{ts,js,jsx,tsx}', {
-    cwd,
-    ignore: ['node_modules'],
-  })
-
-  return modules
-    .map((p) => {
-      const { dir, name } = path.parse(p)
-      if (!dir.endsWith(name)) {
-        return false
-      }
-      return path.join(cwd, p)
-    })
-    .filter(Boolean) as string[]
+export const isDirectoryNamedModuleFile = (p: string) => {
+  const { dir, name } = path.parse(p)
+  return dir.endsWith(name)
 }
