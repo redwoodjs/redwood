@@ -63,6 +63,7 @@ const getImportComponentNames = (
       importNameNew: `${path}${singularName}New/${singularName}New`,
       importNames: `${path}${pluralName}/${pluralName}`,
       importNamesCell: `${path}${pluralName}Cell/${pluralName}Cell`,
+      importNamesLayout: `src/layouts/${sP}${pluralName}Layout/${pluralName}Layout`,
     }
   } else {
     const path = `src/components/${sP}${singularName}/`
@@ -75,6 +76,7 @@ const getImportComponentNames = (
       importNameNew: `${path}${singularName}New`,
       importNames: `${path}${pluralName}`,
       importNamesCell: `${path}${pluralName}Cell`,
+      importNamesLayout: `src/layouts/${sP}${pluralName}Layout/${pluralName}Layout`,
     }
   }
 }

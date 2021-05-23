@@ -1,4 +1,4 @@
-import ${pluralPascalName}Layout from 'src/layouts/${pascalScaffoldPath}${pluralPascalName}Layout'
+import ${pluralPascalName}Layout from '${importNamesLayout}'
 import ${pluralPascalName}Cell from '${importNamesCell}'
 
 const ${pluralPascalName}Page = () => {

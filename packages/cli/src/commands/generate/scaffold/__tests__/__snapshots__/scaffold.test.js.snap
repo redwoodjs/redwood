@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`in javascript (default) mode creates a edit page 1`] = `
-"import PostsLayout from 'src/layouts/PostsLayout'
+"import PostsLayout from 'src/layouts/PostsLayout/PostsLayout'
 import PostEditCell from 'src/components/Post/PostEditCell'
 
 const PostEditPage = ({ id }) => {
@@ -227,7 +227,7 @@ export default PostForm
 `;
 
 exports[`in javascript (default) mode creates a index page 1`] = `
-"import PostsLayout from 'src/layouts/PostsLayout'
+"import PostsLayout from 'src/layouts/PostsLayout/PostsLayout'
 import PostsCell from 'src/components/Post/PostsCell'
 
 const PostsPage = () => {
@@ -314,7 +314,7 @@ export default PostNew
 exports[`in javascript (default) mode creates a new component with int foreign keys converted in onSave 1`] = `undefined`;
 
 exports[`in javascript (default) mode creates a new page 1`] = `
-"import PostsLayout from 'src/layouts/PostsLayout'
+"import PostsLayout from 'src/layouts/PostsLayout/PostsLayout'
 import PostNew from 'src/components/Post/PostNew'
 
 const PostNewPage = () => {
@@ -490,7 +490,7 @@ export default Post
 `;
 
 exports[`in javascript (default) mode creates a show page 1`] = `
-"import PostsLayout from 'src/layouts/PostsLayout'
+"import PostsLayout from 'src/layouts/PostsLayout/PostsLayout'
 import PostCell from 'src/components/Post/PostCell'
 
 const PostPage = ({ id }) => {
@@ -1133,7 +1133,7 @@ export default PostsList
 `;
 
 exports[`in typescript mode creates a edit page 1`] = `
-"import PostsLayout from 'src/layouts/PostsLayout'
+"import PostsLayout from 'src/layouts/PostsLayout/PostsLayout'
 import PostEditCell from 'src/components/Post/PostEditCell'
 
 const PostEditPage = ({ id }) => {
@@ -1359,7 +1359,7 @@ export default PostForm
 `;
 
 exports[`in typescript mode creates a index page 1`] = `
-"import PostsLayout from 'src/layouts/PostsLayout'
+"import PostsLayout from 'src/layouts/PostsLayout/PostsLayout'
 import PostsCell from 'src/components/Post/PostsCell'
 
 const PostsPage = () => {
@@ -1490,7 +1490,7 @@ export default UserProfileNew
 `;
 
 exports[`in typescript mode creates a new page 1`] = `
-"import PostsLayout from 'src/layouts/PostsLayout'
+"import PostsLayout from 'src/layouts/PostsLayout/PostsLayout'
 import PostNew from 'src/components/Post/PostNew'
 
 const PostNewPage = () => {
@@ -1666,7 +1666,7 @@ export default Post
 `;
 
 exports[`in typescript mode creates a show page 1`] = `
-"import PostsLayout from 'src/layouts/PostsLayout'
+"import PostsLayout from 'src/layouts/PostsLayout/PostsLayout'
 import PostCell from 'src/components/Post/PostCell'
 
 const PostPage = ({ id }) => {
