@@ -390,7 +390,7 @@ export const routes = async ({ model: name, path: scaffoldPath = '' }) => {
 const addRoutesInsideSetToRouter = async (model, path) => {
   const pluralPascalName = pascalcase(pluralize(model))
   const layoutName = `${pluralPascalName}Layout`
-  addRoutesToRouterTask(await routes({ model, path }), layoutName)
+  return addRoutesToRouterTask(await routes({ model, path }), layoutName)
 }
 
 const addLayoutImport = ({ model: name, path: scaffoldPath = '' }) => {
