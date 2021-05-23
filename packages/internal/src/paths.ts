@@ -38,11 +38,14 @@ export interface BrowserTargetPaths {
 }
 
 export interface Paths {
-  cache: string
-  mirror: string
-  types: string
-  globals: string
   base: string
+  generated: {
+    base: string
+    types: {
+      includes: string
+      mirror: string
+    }
+  }
   web: BrowserTargetPaths
   api: NodeTargetPaths
   scripts: string
@@ -63,6 +66,7 @@ export interface PagesDependency {
 
 const CONFIG_FILE_NAME = 'redwood.toml'
 
+// TODO: Remove these.
 const PATH_API_DIR_FUNCTIONS = 'api/src/functions'
 const PATH_RW_SCRIPTS = 'scripts'
 const PATH_API_DIR_GRAPHQL = 'api/src/graphql'
@@ -136,26 +140,19 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
   const { schemaPath } = getConfig(getConfigPath(BASE_DIR)).api
   const schemaDir = path.dirname(schemaPath)
 
-  // We store our test database over here:
-  const cache = path.join(BASE_DIR, '.redwood')
-  const types = path.join(BASE_DIR, '.redwood/types')
-  const globals = path.join(BASE_DIR, '.redwood/globals')
-  const mirror = path.join(BASE_DIR, '.redwood/mirror')
-
-  fs.mkdirSync(cache, { recursive: true })
-  fs.mkdirSync(types, { recursive: true })
-  fs.mkdirSync(globals, { recursive: true })
-  fs.mkdirSync(mirror, { recursive: true })
-
-  return {
+  const paths = {
     base: BASE_DIR,
-    cache,
-    // TODO: Nest "types" into a sub-object.
-    types,
-    globals,
-    mirror,
+
+    generated: {
+      base: path.join(BASE_DIR, '.redwood'),
+      types: {
+        includes: path.join(BASE_DIR, '.redwood/types/includes'),
+        mirror: path.join(BASE_DIR, '.redwood/types/mirror'),
+      },
+    },
 
     scripts: path.join(BASE_DIR, PATH_RW_SCRIPTS),
+
     api: {
       base: path.join(BASE_DIR, 'api'),
       dataMigrations: path.join(BASE_DIR, schemaDir, 'dataMigrations'),
@@ -169,6 +166,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       src: path.join(BASE_DIR, PATH_API_DIR_SRC),
       dist: path.join(BASE_DIR, 'api/dist'),
     },
+
     web: {
       routes,
       base: path.join(BASE_DIR, 'web'),
@@ -192,6 +190,11 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       dist: path.join(BASE_DIR, PATH_WEB_DIR_DIST),
     },
   }
+
+  fs.mkdirSync(paths.generated.types.includes, { recursive: true })
+  fs.mkdirSync(paths.generated.types.mirror, { recursive: true })
+
+  return paths
 }
 
 /**

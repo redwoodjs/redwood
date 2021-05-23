@@ -28,8 +28,8 @@ test('generate the correct mirror types for cells', () => {
 
   expect(p).toMatchInlineSnapshot(`
     Array [
-      "/.redwood/mirror/web/src/components/NumTodosCell/index.d.ts",
-      "/.redwood/mirror/web/src/components/TodoListCell/index.d.ts",
+      "/.redwood/types/mirror/web/src/components/NumTodosCell/index.d.ts",
+      "/.redwood/types/mirror/web/src/components/TodoListCell/index.d.ts",
     ]
   `)
 
@@ -47,11 +47,11 @@ test('generate the correct mirror types for directory named modules', () => {
 
   expect(p).toMatchInlineSnapshot(`
     Array [
-      "/.redwood/mirror/api/src/services/todos/index.d.ts",
-      "/.redwood/mirror/web/src/components/AddTodo/index.d.ts",
-      "/.redwood/mirror/web/src/components/Check/index.d.ts",
-      "/.redwood/mirror/web/src/components/TodoItem/index.d.ts",
-      "/.redwood/mirror/web/src/layouts/SetLayout/index.d.ts",
+      "/.redwood/types/mirror/api/src/services/todos/index.d.ts",
+      "/.redwood/types/mirror/web/src/components/AddTodo/index.d.ts",
+      "/.redwood/types/mirror/web/src/components/Check/index.d.ts",
+      "/.redwood/types/mirror/web/src/components/TodoItem/index.d.ts",
+      "/.redwood/types/mirror/web/src/layouts/SetLayout/index.d.ts",
     ]
   `)
 
@@ -67,7 +67,7 @@ test('generate the correct mirror types for directory named modules', () => {
 test('generates global page imports', () => {
   const paths = generateRouterPageImports()
   const p = paths.map((p) => p.replace(FIXTURE_PATH, '')).map(ensurePosixPath)
-  expect(p[0]).toEqual('/.redwood/types/web-global-pages.d.ts')
+  expect(p[0]).toEqual('/.redwood/types/includes/web-global-pages.d.ts')
 
   const c = fs.readFileSync(paths[0], 'utf-8')
 
@@ -86,14 +86,14 @@ declare global {
 test('generate current user ', () => {
   const paths = generateCurrentUserTypeDef()
   const p = paths.map((p) => p.replace(FIXTURE_PATH, '')).map(ensurePosixPath)
-  expect(p[0]).toEqual('/.redwood/types/currentUser.d.ts')
+  expect(p[0]).toEqual('/.redwood/types/includes/currentUser.d.ts')
   // The type definition output is static, so there's nothing to test.
 })
 
 test('generates the router routes', () => {
   const paths = generateRouterRoutesTypeDef()
   const p = paths.map((p) => p.replace(FIXTURE_PATH, '')).map(ensurePosixPath)
-  expect(p[0]).toEqual('/.redwood/types/routerRoutes.d.ts')
+  expect(p[0]).toEqual('/.redwood/types/includes/routerRoutes.d.ts')
 
   const c = fs.readFileSync(paths[0], 'utf-8')
   expect(c).toContain(`

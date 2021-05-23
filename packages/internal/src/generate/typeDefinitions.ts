@@ -1,14 +1,12 @@
 import fs from 'fs'
 import path from 'path'
 
-import { findCells, findDirectoryNamedModules } from 'src/findFiles'
+import { findCells, findDirectoryNamedModules } from 'src/files'
 import { getJsxElements } from 'src/jsx'
 import { getPaths, processPagesDir } from 'src/paths'
 
 import { writeTemplate } from './templates'
 
-// TODO: We generate some types as part of the transpilation process.
-// Those should be removed and placed over here.
 export const generateTypeDefs = () => {
   const p1 = generateDirectoryNamedModuleTypeDefs()
   const p2 = generateCellTypesDefs()
@@ -22,7 +20,10 @@ export const generateTypeDefs = () => {
 export const generateRouterPageImports = () => {
   const pages = processPagesDir()
   const rwjsPaths = getPaths()
-  const typeDefPath = path.join(rwjsPaths.types, 'web-global-pages.d.ts')
+  const typeDefPath = path.join(
+    rwjsPaths.generated.types.includes,
+    'web-global-pages.d.ts'
+  )
   writeTemplate('templates/web-global-pages.d.ts.template', typeDefPath, {
     pages,
   })
@@ -31,7 +32,10 @@ export const generateRouterPageImports = () => {
 
 export const generateCurrentUserTypeDef = () => {
   const rwjsPaths = getPaths()
-  const typeDefPath = path.join(rwjsPaths.types, 'currentUser.d.ts')
+  const typeDefPath = path.join(
+    rwjsPaths.generated.types.includes,
+    'currentUser.d.ts'
+  )
   writeTemplate('templates/currentUser.d.ts.template', typeDefPath)
   return [typeDefPath]
 }
@@ -41,14 +45,17 @@ export const generateRouterRoutesTypeDef = () => {
 
   const code = fs.readFileSync(rwjsPaths.web.routes, 'utf-8')
   const routes = getJsxElements(code, 'Route').filter((x) => {
-    // All generated "routes" should have a name and path value
+    // All generated "routes" should have a "name" and "path" prop-value
     return (
       typeof x.props?.path !== 'undefined' &&
       typeof x.props?.name !== 'undefined'
     )
   })
 
-  const typeDefPath = path.join(rwjsPaths.types, 'routerRoutes.d.ts')
+  const typeDefPath = path.join(
+    rwjsPaths.generated.types.includes,
+    'routerRoutes.d.ts'
+  )
   writeTemplate('templates/routerRoutes.d.ts.template', typeDefPath, { routes })
   return [typeDefPath]
 }
@@ -61,7 +68,7 @@ export const generateDirectoryNamedModuleTypeDefs = () => {
     const { dir, name } = path.parse(p)
 
     const mirrorDir = path.join(
-      rwjsPaths.mirror,
+      rwjsPaths.generated.types.mirror,
       dir.replace(rwjsPaths.base, '')
     )
     fs.mkdirSync(mirrorDir, { recursive: true })
@@ -82,7 +89,7 @@ export const generateCellTypesDefs = () => {
     const { dir, name } = path.parse(p)
 
     const mirrorDir = path.join(
-      rwjsPaths.mirror,
+      rwjsPaths.generated.types.mirror,
       dir.replace(rwjsPaths.base, '')
     )
     fs.mkdirSync(mirrorDir, { recursive: true })
@@ -92,4 +99,18 @@ export const generateCellTypesDefs = () => {
 
     return typeDefPath
   })
+}
+
+export const generateGlobImports = () => {
+  //   // GenerateTypes
+  //   const typeDefContent = `
+  //   // @ts-expect-error
+  //   declare module '${importGlob.replace('../', 'src/')}';
+  //   `
+  //   .split('\n')
+  //   .slice(1)
+  //   .map((line) => line.replace('          ', ''))
+  //   .join('\n')
+  // generateTypeDef(`import-dir-${importName}.d.ts`, typeDefContent)
+  // generateTypeDefIndex()
 }
