@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-// @ts-nocheck This file was adapted from: https://github.com/gglnx/simplified-jsx-to-json/blob/master/index.js#L13
-
+// @ts-nocheck This function was adapted from: https://github.com/gglnx/simplified-jsx-to-json/blob/master/index.js#L13
 export const getJsxAttributeValue = (expression: any): any => {
   // If the expression is null, this is an implicitly "true" prop, such as readOnly
   if (expression === null) {

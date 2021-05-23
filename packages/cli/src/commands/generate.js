@@ -1,6 +1,6 @@
 import terminalLink from 'terminal-link'
 
-import { getPaths, generateTypes } from '@redwoodjs/internal'
+import { getPaths, generateTypeDefs } from '@redwoodjs/internal'
 import { getProject } from '@redwoodjs/structure'
 
 import c from 'src/lib/colors'
@@ -17,7 +17,7 @@ export const builder = (yargs) =>
       const rwjsPaths = getPaths()
       console.log(c.bold('Virtual mirror directory:'), rwjsPaths.mirror)
       console.log(c.bold('Wrote:'))
-      const files = generateTypes()
+      const files = generateTypeDefs()
       for (const f of files) {
         console.log('  -', f.replace(rwjsPaths.base, '').substring(1))
       }
@@ -48,8 +48,7 @@ export const yargsDefaults = {
   typescript: {
     alias: 'ts',
     default: getProject().isTypeScriptProject,
-    description:
-      'Generate TypeScript files. Enabled by default if we detect your project is TypeScript.',
+    description: 'Generate TypeScript files',
     type: 'boolean',
   },
 }
