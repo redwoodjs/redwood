@@ -421,7 +421,7 @@ const removeEmtpySet = (routesContent, layout) => {
   const setWithLayoutReg = new RegExp(
     `\\s*<Set[^>]*wrap={${layout}}[^<]*>([^<]*)<\/Set>`
   )
-  const [matchedSet, childContent] = routesContent.match(setWithLayoutReg)
+  const [matchedSet, childContent] = routesContent.match(setWithLayoutReg) || []
   if (!matchedSet) {
     return routesContent
   }
