@@ -7,7 +7,7 @@ import { getNamedExports, hasDefaultExport } from './ast'
 import { getPaths } from './paths'
 
 /**
- * Find all the Cell components in the web side.
+ * Find all the Cell files in the web side.
  */
 export const findCells = (webSrcDir: string = getPaths().web.src) => {
   const modules = fg.sync('**/*Cell.{js,jsx,ts,tsx}', {
@@ -46,9 +46,7 @@ export const findCells = (webSrcDir: string = getPaths().web.src) => {
 }
 
 /**
- * Find all the directory named modules.
- *
- * performance: ~30ms to find the directory named modules.
+ * Find all the directory named module files.
  */
 export const findDirectoryNamedModules = (
   projectBaseDir: string = getPaths().base

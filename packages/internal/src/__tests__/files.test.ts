@@ -12,7 +12,7 @@ afterAll(() => {
   delete process.env.__REDWOOD__CONFIG_PATH
 })
 
-import { findCells, findDirectoryNamedModules } from '../findFiles'
+import { findCells, findDirectoryNamedModules } from '../files'
 import { ensurePosixPath } from '../paths'
 
 test('finds all the cells', () => {

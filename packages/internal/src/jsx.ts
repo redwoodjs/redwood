@@ -11,7 +11,7 @@ interface JsxElement {
   children?: JsxElement[]
 }
 /**
- * Statically extract JSX elements from code.
+ * Extract JSX elements, children and props from static code.
  */
 export const getJsxElements = (code: string, name: string) => {
   let elements: JsxElement[] = []
