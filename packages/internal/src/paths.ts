@@ -201,6 +201,8 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
  * Process the pages directory and return information useful for automated imports.
  *
  * Note: glob.sync returns posix style paths on Windows machines
+ * @deprecated I will write a seperate method that use `getFiles` instead. This
+ * is used by structure, babel auto-importer and the eslint plugin.
  */
 export const processPagesDir = (
   webPagesDir: string = getPaths().web.pages
