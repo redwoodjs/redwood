@@ -32,11 +32,16 @@ describe('rw destroy scaffold', () => {
   describe('destroy scaffold post', () => {
     beforeEach(async () => {
       fs.__setMockFiles({
-        ...(await files({ ...getDefaultArgs(defaults), model: 'Post' })),
+        ...(await files({
+          ...getDefaultArgs(defaults),
+          model: 'Post',
+          tests: false,
+          individualComponentFolders: true,
+        })),
         [getPaths().web.routes]: [
           '<Routes>',
-          '  <Route path="/posts/new" page={NewPostPage} name="newPost" />',
-          '  <Route path="/posts/{id:Int}/edit" page={EditPostPage} name="editPost" />',
+          '  <Route path="/posts/new" page={PostNewPage} name="postNew" />',
+          '  <Route path="/posts/{id:Int}/edit" page={PostEditPage} name="postEdit" />',
           '  <Route path="/posts/{id:Int}" page={PostPage} name="post" />',
           '  <Route path="/posts" page={PostsPage} name="posts" />',
           '  <Route path="/" page={HomePage} name="home" />',
@@ -53,12 +58,21 @@ describe('rw destroy scaffold', () => {
 
     test('destroys files', async () => {
       const unlinkSpy = jest.spyOn(fs, 'unlinkSync')
-      const t = tasks({ model: 'Post' })
+      const t = tasks({
+        model: 'Post',
+        tests: false,
+        individualComponentFolders: true,
+      })
       t.setRenderer('silent')
 
       return t._tasks[0].run().then(async () => {
         const generatedFiles = Object.keys(
-          await files({ ...getDefaultArgs(defaults), model: 'Post' })
+          await files({
+            ...getDefaultArgs(defaults),
+            model: 'Post',
+            tests: false,
+            individualComponentFolders: true,
+          })
         )
         expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
         generatedFiles.forEach((f) => expect(unlinkSpy).toHaveBeenCalledWith(f))
@@ -73,11 +87,13 @@ describe('rw destroy scaffold', () => {
             ...getDefaultArgs(defaults),
             typescript: true,
             model: 'Post',
+            tests: false,
+            individualComponentFolders: true,
           })),
           [getPaths().web.routes]: [
             '<Routes>',
-            '  <Route path="/posts/new" page={NewPostPage} name="newPost" />',
-            '  <Route path="/posts/{id:Int}/edit" page={EditPostPage} name="editPost" />',
+            '  <Route path="/posts/new" page={PostNewPage} name="postNew" />',
+            '  <Route path="/posts/{id:Int}/edit" page={PostEditPage} name="postEdit" />',
             '  <Route path="/posts/{id:Int}" page={PostPage} name="post" />',
             '  <Route path="/posts" page={PostsPage} name="posts" />',
             '  <Route path="/" page={HomePage} name="home" />',
@@ -89,7 +105,11 @@ describe('rw destroy scaffold', () => {
 
       test('destroys files', async () => {
         const unlinkSpy = jest.spyOn(fs, 'unlinkSync')
-        const t = tasks({ model: 'Post' })
+        const t = tasks({
+          model: 'Post',
+          tests: false,
+          individualComponentFolders: true,
+        })
         t.setRenderer('silent')
 
         return t._tasks[0].run().then(async () => {
@@ -98,6 +118,8 @@ describe('rw destroy scaffold', () => {
               ...getDefaultArgs(defaults),
               typescript: true,
               model: 'Post',
+              tests: false,
+              individualComponentFolders: true,
             })
           )
           expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
@@ -109,7 +131,11 @@ describe('rw destroy scaffold', () => {
     })
 
     test('cleans up routes from Routes.js', async () => {
-      const t = tasks({ model: 'Post' })
+      const t = tasks({
+        model: 'Post',
+        tests: false,
+        individualComponentFolders: true,
+      })
       t.setRenderer('silent')
 
       return t._tasks[1].run().then(() => {
@@ -133,11 +159,13 @@ describe('rw destroy scaffold', () => {
           ...getDefaultArgs(defaults),
           model: 'Post',
           path: 'admin',
+          tests: false,
+          individualComponentFolders: true,
         })),
         [getPaths().web.routes]: [
           '<Routes>',
-          '  <Route path="/admin/posts/new" page={AdminNewPostPage} name="adminNewPost" />',
-          '  <Route path="/admin/posts/{id:Int}/edit" page={AdminEditPostPage} name="adminEditPost" />',
+          '  <Route path="/admin/posts/new" page={AdminPostNewPage} name="adminPostNew" />',
+          '  <Route path="/admin/posts/{id:Int}/edit" page={AdminPostEditPage} name="adminPostEdit" />',
           '  <Route path="/admin/posts/{id:Int}" page={AdminPostPage} name="adminPost" />',
           '  <Route path="/" page={HomePage} name="home" />',
           '  <Route notfound page={NotFoundPage} />',
@@ -153,7 +181,12 @@ describe('rw destroy scaffold', () => {
 
     test('destroys files', async () => {
       const unlinkSpy = jest.spyOn(fs, 'unlinkSync')
-      const t = tasks({ model: 'Post', path: 'admin' })
+      const t = tasks({
+        model: 'Post',
+        path: 'admin',
+        tests: false,
+        individualComponentFolders: true,
+      })
       t.setRenderer('silent')
 
       return t._tasks[0].run().then(async () => {
@@ -162,6 +195,8 @@ describe('rw destroy scaffold', () => {
             ...getDefaultArgs(defaults),
             model: 'Post',
             path: 'admin',
+            tests: false,
+            individualComponentFolders: true,
           })
         )
         expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
@@ -177,11 +212,13 @@ describe('rw destroy scaffold', () => {
             ...getDefaultArgs(defaults),
             model: 'Post',
             path: 'admin',
+            tests: false,
+            individualComponentFolders: true,
           })),
           [getPaths().web.routes]: [
             '<Routes>',
-            '  <Route path="/admin/posts/new" page={AdminNewPostPage} name="adminNewPost" />',
-            '  <Route path="/admin/posts/{id:Int}/edit" page={AdminEditPostPage} name="adminEditPost" />',
+            '  <Route path="/admin/posts/new" page={AdminPostNewPage} name="adminPostNew" />',
+            '  <Route path="/admin/posts/{id:Int}/edit" page={AdminPostEditPage} name="adminPostEdit" />',
             '  <Route path="/admin/posts/{id:Int}" page={AdminPostPage} name="adminPost" />',
             '  <Route path="/" page={HomePage} name="home" />',
             '  <Route notfound page={NotFoundPage} />',
@@ -191,7 +228,12 @@ describe('rw destroy scaffold', () => {
       })
       test('destroys files', async () => {
         const unlinkSpy = jest.spyOn(fs, 'unlinkSync')
-        const t = tasks({ model: 'Post', path: 'admin' })
+        const t = tasks({
+          model: 'Post',
+          path: 'admin',
+          tests: false,
+          individualComponentFolders: true,
+        })
         t.setRenderer('silent')
 
         return t._tasks[0].run().then(async () => {
@@ -200,6 +242,8 @@ describe('rw destroy scaffold', () => {
               ...getDefaultArgs(defaults),
               model: 'Post',
               path: 'admin',
+              tests: false,
+              individualComponentFolders: true,
             })
           )
           expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
@@ -211,7 +255,12 @@ describe('rw destroy scaffold', () => {
     })
 
     test('cleans up routes from Routes.js', async () => {
-      const t = tasks({ model: 'Post', path: 'admin' })
+      const t = tasks({
+        model: 'Post',
+        path: 'admin',
+        tests: false,
+        individualComponentFolders: true,
+      })
       t.setRenderer('silent')
 
       return t._tasks[1].run().then(() => {

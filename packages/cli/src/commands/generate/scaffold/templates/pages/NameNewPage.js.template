@@ -1,12 +1,12 @@
 import ${pluralPascalName}Layout from 'src/layouts/${pascalScaffoldPath}${pluralPascalName}Layout'
-import ${pluralPascalName}Cell from '${importNamesCell}'
+import ${singularPascalName}New from '${importNameNew}'
 
-const ${pluralPascalName}Page = () => {
+const ${singularPascalName}NewPage = () => {
   return (
     <${pluralPascalName}Layout>
-      <${pluralPascalName}Cell />
+      <${singularPascalName}New />
     </${pluralPascalName}Layout>
   )
 }
 
-export default ${pluralPascalName}Page
+export default ${singularPascalName}NewPage

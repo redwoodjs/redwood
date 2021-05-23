@@ -12,11 +12,13 @@ beforeAll(async () => {
     model: 'post',
     path: 'admin/pages',
     tests: true,
+    individualComponentFolders: true,
   })
   filesNestedUpper = await scaffold.files({
     model: 'Post',
     path: 'Admin/Pages',
     tests: true,
+    individualComponentFolders: true,
   })
 })
 
@@ -41,7 +43,7 @@ describe('admin/pages/post', () => {
     test('creates a edit page', async () => {
       expect(filesNestedLower).toHaveProperty([
         path.normalize(
-          '/path/to/project/web/src/pages/Admin/Pages/EditPostPage/EditPostPage.js'
+          '/path/to/project/web/src/pages/Admin/Pages/PostEditPage/PostEditPage.js'
         ),
       ])
     })
@@ -50,11 +52,11 @@ describe('admin/pages/post', () => {
       expect(
         filesNestedLower[
           path.normalize(
-            '/path/to/project/web/src/pages/Admin/Pages/EditPostPage/EditPostPage.js'
+            '/path/to/project/web/src/pages/Admin/Pages/PostEditPage/PostEditPage.js'
           )
         ]
       ).toMatch(
-        `import EditPostCell from 'src/components/Admin/Pages/EditPostCell'`
+        `import PostEditCell from 'src/components/Admin/Pages/PostEditCell/PostEditCell'`
       )
     })
 
@@ -73,13 +75,13 @@ describe('admin/pages/post', () => {
             '/path/to/project/web/src/pages/Admin/Pages/PostsPage/PostsPage.js'
           )
         ]
-      ).toMatch(`import PostsCell from 'src/components/Admin/Pages/PostsCell'`)
+      ).toMatch(`import PostsCell from 'src/components/Admin/Pages/PostsCell/PostsCell'`)
     })
 
     test('creates a new page', async () => {
       expect(filesNestedLower).toHaveProperty([
         path.normalize(
-          '/path/to/project/web/src/pages/Admin/Pages/NewPostPage/NewPostPage.js'
+          '/path/to/project/web/src/pages/Admin/Pages/PostNewPage/PostNewPage.js'
         ),
       ])
     })
@@ -88,10 +90,10 @@ describe('admin/pages/post', () => {
       expect(
         filesNestedLower[
           path.normalize(
-            '/path/to/project/web/src/pages/Admin/Pages/NewPostPage/NewPostPage.js'
+            '/path/to/project/web/src/pages/Admin/Pages/PostNewPage/PostNewPage.js'
           )
         ]
-      ).toMatch(`import NewPost from 'src/components/Admin/Pages/NewPost'`)
+      ).toMatch(`import PostNew from 'src/components/Admin/Pages/PostNew/PostNew'`)
     })
 
     test('creates a show page', async () => {
@@ -109,7 +111,7 @@ describe('admin/pages/post', () => {
             '/path/to/project/web/src/pages/Admin/Pages/PostPage/PostPage.js'
           )
         ]
-      ).toMatch(`import PostCell from 'src/components/Admin/Pages/PostCell'`)
+      ).toMatch(`import PostCell from 'src/components/Admin/Pages/PostCell/PostCell'`)
     })
 
     // Cells
@@ -117,7 +119,7 @@ describe('admin/pages/post', () => {
     test('creates an edit cell', async () => {
       expect(filesNestedLower).toHaveProperty([
         path.normalize(
-          '/path/to/project/web/src/components/Admin/Pages/EditPostCell/EditPostCell.js'
+          '/path/to/project/web/src/components/Admin/Pages/PostEditCell/PostEditCell.js'
         ),
       ])
     })
@@ -126,10 +128,10 @@ describe('admin/pages/post', () => {
       expect(
         filesNestedLower[
           path.normalize(
-            '/path/to/project/web/src/components/Admin/Pages/EditPostCell/EditPostCell.js'
+            '/path/to/project/web/src/components/Admin/Pages/PostEditCell/PostEditCell.js'
           )
         ]
-      ).toMatch(`import PostForm from 'src/components/Admin/Pages/PostForm'`)
+      ).toMatch(`import PostForm from 'src/components/Admin/Pages/PostForm/PostForm'`)
     })
 
     test('creates an index cell', async () => {
@@ -147,7 +149,7 @@ describe('admin/pages/post', () => {
             '/path/to/project/web/src/components/Admin/Pages/PostsCell/PostsCell.js'
           )
         ]
-      ).toMatch(`import Posts from 'src/components/Admin/Pages/Posts'`)
+      ).toMatch(`import Posts from 'src/components/Admin/Pages/Posts/Posts'`)
     })
 
     test('creates a show cell', async () => {
@@ -165,7 +167,7 @@ describe('admin/pages/post', () => {
             '/path/to/project/web/src/components/Admin/Pages/PostCell/PostCell.js'
           )
         ]
-      ).toMatch(`import Post from 'src/components/Admin/Pages/Post'`)
+      ).toMatch(`import Post from 'src/components/Admin/Pages/Post/Post'`)
     })
 
     // Components
@@ -189,7 +191,7 @@ describe('admin/pages/post', () => {
     test('creates a new component', async () => {
       expect(filesNestedLower).toHaveProperty([
         path.normalize(
-          '/path/to/project/web/src/components/Admin/Pages/NewPost/NewPost.js'
+          '/path/to/project/web/src/components/Admin/Pages/PostNew/PostNew.js'
         ),
       ])
     })
@@ -198,10 +200,10 @@ describe('admin/pages/post', () => {
       expect(
         filesNestedLower[
           path.normalize(
-            '/path/to/project/web/src/components/Admin/Pages/NewPost/NewPost.js'
+            '/path/to/project/web/src/components/Admin/Pages/PostNew/PostNew.js'
           )
         ]
-      ).toMatch(`import PostForm from 'src/components/Admin/Pages/PostForm'`)
+      ).toMatch(`import PostForm from 'src/components/Admin/Pages/PostForm/PostForm'`)
     })
 
     test('creates a show component', async () => {
@@ -220,8 +222,8 @@ describe('admin/pages/post', () => {
       expect(
         await scaffold.routes({ model: 'post', path: 'admin/pages' })
       ).toEqual([
-        '<Route path="/admin/pages/posts/new" page={AdminPagesNewPostPage} name="adminPagesNewPost" />',
-        '<Route path="/admin/pages/posts/{id:Int}/edit" page={AdminPagesEditPostPage} name="adminPagesEditPost" />',
+        '<Route path="/admin/pages/posts/new" page={AdminPagesPostNewPage} name="adminPagesPostNew" />',
+        '<Route path="/admin/pages/posts/{id:Int}/edit" page={AdminPagesPostEditPage} name="adminPagesPostEdit" />',
         '<Route path="/admin/pages/posts/{id:Int}" page={AdminPagesPostPage} name="adminPagesPost" />',
         '<Route path="/admin/pages/posts" page={AdminPagesPostsPage} name="adminPagesPosts" />',
       ])
@@ -231,8 +233,8 @@ describe('admin/pages/post', () => {
       expect(
         await scaffold.routes({ model: 'userProfile', path: 'admin/pages' })
       ).toEqual([
-        '<Route path="/admin/pages/user-profiles/new" page={AdminPagesNewUserProfilePage} name="adminPagesNewUserProfile" />',
-        '<Route path="/admin/pages/user-profiles/{id:Int}/edit" page={AdminPagesEditUserProfilePage} name="adminPagesEditUserProfile" />',
+        '<Route path="/admin/pages/user-profiles/new" page={AdminPagesUserProfileNewPage} name="adminPagesUserProfileNew" />',
+        '<Route path="/admin/pages/user-profiles/{id:Int}/edit" page={AdminPagesUserProfileEditPage} name="adminPagesUserProfileEdit" />',
         '<Route path="/admin/pages/user-profiles/{id:Int}" page={AdminPagesUserProfilePage} name="adminPagesUserProfile" />',
         '<Route path="/admin/pages/user-profiles" page={AdminPagesUserProfilesPage} name="adminPagesUserProfiles" />',
       ])
@@ -244,6 +246,8 @@ describe('admin/pages/post', () => {
       const userProfileFiles = await scaffold.files({
         model: 'userProfile',
         path: 'admin/pages',
+        tests: false,
+        individualComponentFolders: true,
       })
 
       const cell =
@@ -262,6 +266,8 @@ describe('admin/pages/post', () => {
       const userProfileFiles = await scaffold.files({
         model: 'userProfile',
         path: 'admin/pages',
+        tests: false,
+        individualComponentFolders: true,
       })
 
       const cell =
@@ -280,12 +286,14 @@ describe('admin/pages/post', () => {
       const userProfileFiles = await scaffold.files({
         model: 'userProfile',
         path: 'admin/pages',
+        tests: false,
+        individualComponentFolders: true,
       })
 
       const cell =
         userProfileFiles[
           path.normalize(
-            '/path/to/project/web/src/components/Admin/Pages/EditUserProfileCell/EditUserProfileCell.js'
+            '/path/to/project/web/src/components/Admin/Pages/UserProfileEditCell/UserProfileEditCell.js'
           )
         ]
 
@@ -300,11 +308,13 @@ describe('admin/pages/post', () => {
       const foreignKeyFiles = await scaffold.files({
         model: 'userProfile',
         path: 'admin/pages',
+        tests: false,
+        individualComponentFolders: true,
       })
 
       expect(foreignKeyFiles).toHaveProperty([
         path.normalize(
-          '/path/to/project/web/src/components/Admin/Pages/NewUserProfile/NewUserProfile.js'
+          '/path/to/project/web/src/components/Admin/Pages/UserProfileNew/UserProfileNew.js'
         ),
       ])
     })
@@ -313,11 +323,13 @@ describe('admin/pages/post', () => {
       const foreignKeyFiles = await scaffold.files({
         model: 'userProfile',
         path: 'admin/pages',
+        tests: false,
+        individualComponentFolders: true,
       })
 
       expect(foreignKeyFiles).toHaveProperty([
         path.normalize(
-          '/path/to/project/web/src/components/Admin/Pages/EditUserProfileCell/EditUserProfileCell.js'
+          '/path/to/project/web/src/components/Admin/Pages/UserProfileEditCell/UserProfileEditCell.js'
         ),
       ])
     })
@@ -345,7 +357,7 @@ describe('Admin/Pages/Post', () => {
     test('creates a edit page', async () => {
       expect(filesNestedUpper).toHaveProperty([
         path.normalize(
-          '/path/to/project/web/src/pages/Admin/Pages/EditPostPage/EditPostPage.js'
+          '/path/to/project/web/src/pages/Admin/Pages/PostEditPage/PostEditPage.js'
         ),
       ])
     })
@@ -354,11 +366,11 @@ describe('Admin/Pages/Post', () => {
       expect(
         filesNestedUpper[
           path.normalize(
-            '/path/to/project/web/src/pages/Admin/Pages/EditPostPage/EditPostPage.js'
+            '/path/to/project/web/src/pages/Admin/Pages/PostEditPage/PostEditPage.js'
           )
         ]
       ).toMatch(
-        `import EditPostCell from 'src/components/Admin/Pages/EditPostCell'`
+        `import PostEditCell from 'src/components/Admin/Pages/PostEditCell/PostEditCell'`
       )
     })
 
@@ -377,13 +389,13 @@ describe('Admin/Pages/Post', () => {
             '/path/to/project/web/src/pages/Admin/Pages/PostsPage/PostsPage.js'
           )
         ]
-      ).toMatch(`import PostsCell from 'src/components/Admin/Pages/PostsCell'`)
+      ).toMatch(`import PostsCell from 'src/components/Admin/Pages/PostsCell/PostsCell'`)
     })
 
     test('creates a new page', async () => {
       expect(filesNestedUpper).toHaveProperty([
         path.normalize(
-          '/path/to/project/web/src/pages/Admin/Pages/NewPostPage/NewPostPage.js'
+          '/path/to/project/web/src/pages/Admin/Pages/PostNewPage/PostNewPage.js'
         ),
       ])
     })
@@ -392,10 +404,10 @@ describe('Admin/Pages/Post', () => {
       expect(
         filesNestedUpper[
           path.normalize(
-            '/path/to/project/web/src/pages/Admin/Pages/NewPostPage/NewPostPage.js'
+            '/path/to/project/web/src/pages/Admin/Pages/PostNewPage/PostNewPage.js'
           )
         ]
-      ).toMatch(`import NewPost from 'src/components/Admin/Pages/NewPost'`)
+      ).toMatch(`import PostNew from 'src/components/Admin/Pages/PostNew/PostNew'`)
     })
 
     test('creates a show page', async () => {
@@ -413,7 +425,7 @@ describe('Admin/Pages/Post', () => {
             '/path/to/project/web/src/pages/Admin/Pages/PostPage/PostPage.js'
           )
         ]
-      ).toMatch(`import PostCell from 'src/components/Admin/Pages/PostCell'`)
+      ).toMatch(`import PostCell from 'src/components/Admin/Pages/PostCell/PostCell'`)
     })
 
     // Cells
@@ -421,7 +433,7 @@ describe('Admin/Pages/Post', () => {
     test('creates an edit cell', async () => {
       expect(filesNestedUpper).toHaveProperty([
         path.normalize(
-          '/path/to/project/web/src/components/Admin/Pages/EditPostCell/EditPostCell.js'
+          '/path/to/project/web/src/components/Admin/Pages/PostEditCell/PostEditCell.js'
         ),
       ])
     })
@@ -430,10 +442,10 @@ describe('Admin/Pages/Post', () => {
       expect(
         filesNestedUpper[
           path.normalize(
-            '/path/to/project/web/src/components/Admin/Pages/EditPostCell/EditPostCell.js'
+            '/path/to/project/web/src/components/Admin/Pages/PostEditCell/PostEditCell.js'
           )
         ]
-      ).toMatch(`import PostForm from 'src/components/Admin/Pages/PostForm'`)
+      ).toMatch(`import PostForm from 'src/components/Admin/Pages/PostForm/PostForm'`)
     })
 
     test('creates an index cell', async () => {
@@ -451,7 +463,7 @@ describe('Admin/Pages/Post', () => {
             '/path/to/project/web/src/components/Admin/Pages/PostsCell/PostsCell.js'
           )
         ]
-      ).toMatch(`import Posts from 'src/components/Admin/Pages/Posts'`)
+      ).toMatch(`import Posts from 'src/components/Admin/Pages/Posts/Posts'`)
     })
 
     test('creates a show cell', async () => {
@@ -469,7 +481,7 @@ describe('Admin/Pages/Post', () => {
             '/path/to/project/web/src/components/Admin/Pages/PostCell/PostCell.js'
           )
         ]
-      ).toMatch(`import Post from 'src/components/Admin/Pages/Post'`)
+      ).toMatch(`import Post from 'src/components/Admin/Pages/Post/Post'`)
     })
 
     // Components
@@ -493,7 +505,7 @@ describe('Admin/Pages/Post', () => {
     test('creates a new component', async () => {
       expect(filesNestedUpper).toHaveProperty([
         path.normalize(
-          '/path/to/project/web/src/components/Admin/Pages/NewPost/NewPost.js'
+          '/path/to/project/web/src/components/Admin/Pages/PostNew/PostNew.js'
         ),
       ])
     })
@@ -502,10 +514,10 @@ describe('Admin/Pages/Post', () => {
       expect(
         filesNestedUpper[
           path.normalize(
-            '/path/to/project/web/src/components/Admin/Pages/NewPost/NewPost.js'
+            '/path/to/project/web/src/components/Admin/Pages/PostNew/PostNew.js'
           )
         ]
-      ).toMatch(`import PostForm from 'src/components/Admin/Pages/PostForm'`)
+      ).toMatch(`import PostForm from 'src/components/Admin/Pages/PostForm/PostForm'`)
     })
 
     test('creates a show component', async () => {
@@ -524,8 +536,8 @@ describe('Admin/Pages/Post', () => {
       expect(
         await scaffold.routes({ model: 'Post', path: 'Admin/Pages' })
       ).toEqual([
-        '<Route path="/admin/pages/posts/new" page={AdminPagesNewPostPage} name="adminPagesNewPost" />',
-        '<Route path="/admin/pages/posts/{id:Int}/edit" page={AdminPagesEditPostPage} name="adminPagesEditPost" />',
+        '<Route path="/admin/pages/posts/new" page={AdminPagesPostNewPage} name="adminPagesPostNew" />',
+        '<Route path="/admin/pages/posts/{id:Int}/edit" page={AdminPagesPostEditPage} name="adminPagesPostEdit" />',
         '<Route path="/admin/pages/posts/{id:Int}" page={AdminPagesPostPage} name="adminPagesPost" />',
         '<Route path="/admin/pages/posts" page={AdminPagesPostsPage} name="adminPagesPosts" />',
       ])
@@ -535,8 +547,8 @@ describe('Admin/Pages/Post', () => {
       expect(
         await scaffold.routes({ model: 'UserProfile', path: 'Admin/Pages' })
       ).toEqual([
-        '<Route path="/admin/pages/user-profiles/new" page={AdminPagesNewUserProfilePage} name="adminPagesNewUserProfile" />',
-        '<Route path="/admin/pages/user-profiles/{id:Int}/edit" page={AdminPagesEditUserProfilePage} name="adminPagesEditUserProfile" />',
+        '<Route path="/admin/pages/user-profiles/new" page={AdminPagesUserProfileNewPage} name="adminPagesUserProfileNew" />',
+        '<Route path="/admin/pages/user-profiles/{id:Int}/edit" page={AdminPagesUserProfileEditPage} name="adminPagesUserProfileEdit" />',
         '<Route path="/admin/pages/user-profiles/{id:Int}" page={AdminPagesUserProfilePage} name="adminPagesUserProfile" />',
         '<Route path="/admin/pages/user-profiles" page={AdminPagesUserProfilesPage} name="adminPagesUserProfiles" />',
       ])
@@ -548,6 +560,8 @@ describe('Admin/Pages/Post', () => {
       const userProfileFiles = await scaffold.files({
         model: 'UserProfile',
         path: 'Admin/Pages',
+        tests: false,
+        individualComponentFolders: true,
       })
 
       const cell =
@@ -566,6 +580,8 @@ describe('Admin/Pages/Post', () => {
       const userProfileFiles = await scaffold.files({
         model: 'UserProfile',
         path: 'Admin/Pages',
+        tests: false,
+        individualComponentFolders: true,
       })
 
       const cell =
@@ -584,12 +600,14 @@ describe('Admin/Pages/Post', () => {
       const userProfileFiles = await scaffold.files({
         model: 'UserProfile',
         path: 'Admin/Pages',
+        tests: false,
+        individualComponentFolders: true,
       })
 
       const cell =
         userProfileFiles[
           path.normalize(
-            '/path/to/project/web/src/components/Admin/Pages/EditUserProfileCell/EditUserProfileCell.js'
+            '/path/to/project/web/src/components/Admin/Pages/UserProfileEditCell/UserProfileEditCell.js'
           )
         ]
 
@@ -604,11 +622,13 @@ describe('Admin/Pages/Post', () => {
       const foreignKeyFiles = await scaffold.files({
         model: 'UserProfile',
         path: 'Admin/Pages',
+        tests: false,
+        individualComponentFolders: true,
       })
 
       expect(foreignKeyFiles).toHaveProperty([
         path.normalize(
-          '/path/to/project/web/src/components/Admin/Pages/NewUserProfile/NewUserProfile.js'
+          '/path/to/project/web/src/components/Admin/Pages/UserProfileNew/UserProfileNew.js'
         ),
       ])
     })
@@ -617,11 +637,13 @@ describe('Admin/Pages/Post', () => {
       const foreignKeyFiles = await scaffold.files({
         model: 'UserProfile',
         path: 'Admin/Pages',
+        tests: false,
+        individualComponentFolders: true,
       })
 
       expect(foreignKeyFiles).toHaveProperty([
         path.normalize(
-          '/path/to/project/web/src/components/Admin/Pages/EditUserProfileCell/EditUserProfileCell.js'
+          '/path/to/project/web/src/components/Admin/Pages/UserProfileEditCell/UserProfileEditCell.js'
         ),
       ])
     })

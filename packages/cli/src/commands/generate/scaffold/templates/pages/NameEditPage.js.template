@@ -1,0 +1,12 @@
+import ${pluralPascalName}Layout from 'src/layouts/${pascalScaffoldPath}${pluralPascalName}Layout'
+import ${singularPascalName}EditCell from '${importNameEditCell}'
+
+const ${singularPascalName}EditPage = ({ id }) => {
+  return (
+    <${pluralPascalName}Layout>
+      <${singularPascalName}EditCell id={id} />
+    </${pluralPascalName}Layout>
+  )
+}
+
+export default ${singularPascalName}EditPage

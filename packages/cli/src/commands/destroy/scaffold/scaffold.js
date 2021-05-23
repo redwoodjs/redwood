@@ -20,13 +20,18 @@ export const builder = (yargs) => {
   })
 }
 
-export const tasks = ({ model, path }) =>
+export const tasks = ({ model, path, tests, individualComponentFolders }) =>
   new Listr(
     [
       {
         title: 'Destroying scaffold files...',
         task: async () => {
-          const f = await files({ model, path })
+          const f = await files({
+            model,
+            path,
+            tests,
+            individualComponentFolders,
+          })
           return deleteFilesTask(f)
         },
       },

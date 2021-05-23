@@ -17,7 +17,7 @@ describe('in javascript (default) mode', () => {
       ...getDefaultArgs(defaults),
       model: 'Post',
       tests: true,
-      individualComponentFolders: false,
+      individualComponentFolders: true,
     })
   })
 
@@ -110,7 +110,7 @@ describe('in javascript (default) mode', () => {
     expect(
       files[
         path.normalize(
-          '/path/to/project/web/src/components/Post/PostEditCell.js'
+          '/path/to/project/web/src/components/PostEditCell/PostEditCell.js'
         )
       ]
     ).toMatchSnapshot()
@@ -120,7 +120,7 @@ describe('in javascript (default) mode', () => {
     expect(
       files[
         path.normalize(
-          '/path/to/project/web/src/components/Post/PostsCell.js'
+          '/path/to/project/web/src/components/PostsCell/PostsCell.js'
         )
       ]
     ).toMatchSnapshot()
@@ -130,7 +130,7 @@ describe('in javascript (default) mode', () => {
     expect(
       files[
         path.normalize(
-          '/path/to/project/web/src/components/Post/PostCell.js'
+          '/path/to/project/web/src/components/PostCell/PostCell.js'
         )
       ]
     ).toMatchSnapshot()
@@ -142,7 +142,7 @@ describe('in javascript (default) mode', () => {
     expect(
       files[
         path.normalize(
-          '/path/to/project/web/src/components/Post/PostForm.js'
+          '/path/to/project/web/src/components/PostForm/PostForm.js'
         )
       ]
     ).toMatchSnapshot()
@@ -151,7 +151,7 @@ describe('in javascript (default) mode', () => {
   test('creates an index component', async () => {
     expect(
       files[
-        path.normalize('/path/to/project/web/src/components/Post/Posts.js')
+        path.normalize('/path/to/project/web/src/components/Posts/Posts.js')
       ]
     ).toMatchSnapshot()
   })
@@ -159,7 +159,7 @@ describe('in javascript (default) mode', () => {
   test('creates a new component', async () => {
     expect(
       files[
-        path.normalize('/path/to/project/web/src/components/Post/PostNew.js')
+        path.normalize('/path/to/project/web/src/components/PostNew/PostNew.js')
       ]
     ).toMatchSnapshot()
   })
@@ -196,12 +196,12 @@ describe('in javascript (default) mode', () => {
     const userProfileFiles = await scaffold.files({
       model: 'UserProfile',
       tests: false,
-      individualComponentFolders: false,
+      individualComponentFolders: true,
     })
     const cell =
       userProfileFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfile/UserProfilesCell.js'
+          '/path/to/project/web/src/components/UserProfilesCell/UserProfilesCell.js'
         )
       ]
     const query = cell.match(/(userProfiles.*?\})/s)[1]
@@ -213,12 +213,12 @@ describe('in javascript (default) mode', () => {
     const userProfileFiles = await scaffold.files({
       model: 'UserProfile',
       tests: false,
-      individualComponentFolders: false,
+      individualComponentFolders: true,
     })
     const cell =
       userProfileFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfile/UserProfileCell.js'
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.js'
         )
       ]
     const query = cell.match(/(userProfile.*?\})/s)[1]
@@ -230,12 +230,12 @@ describe('in javascript (default) mode', () => {
     const userProfileFiles = await scaffold.files({
       model: 'UserProfile',
       tests: false,
-      individualComponentFolders: false,
+      individualComponentFolders: true,
     })
     const cell =
       userProfileFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfile/UserProfileEditCell.js'
+          '/path/to/project/web/src/components/UserProfileEditCell/UserProfileEditCell.js'
         )
       ]
     const query = cell.match(/(userProfile.*?\})/s)[1]
@@ -249,7 +249,7 @@ describe('in javascript (default) mode', () => {
     const foreignKeyFiles = await scaffold.files({
       model: 'UserProfile',
       tests: false,
-      individualComponentFolders: false,
+      individualComponentFolders: true,
     })
 
     expect(
@@ -265,13 +265,13 @@ describe('in javascript (default) mode', () => {
     const foreignKeyFiles = await scaffold.files({
       model: 'UserProfile',
       tests: false,
-      individualComponentFolders: false,
+      individualComponentFolders: true,
     })
 
     expect(
       foreignKeyFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfile/UserProfileEditCell.js'
+          '/path/to/project/web/src/components/UserProfileEditCell/UserProfileEditCell.js'
         )
       ]
     ).toMatchSnapshot()
@@ -287,7 +287,7 @@ describe('in typescript mode', () => {
       model: 'Post',
       typescript: true,
       tests: true,
-      individualComponentFolders: false,
+      individualComponentFolders: true,
     })
   })
 
@@ -381,7 +381,7 @@ describe('in typescript mode', () => {
     expect(
       tsFiles[
         path.normalize(
-          '/path/to/project/web/src/components/Post/PostEditCell.tsx'
+          '/path/to/project/web/src/components/PostEditCell/PostEditCell.tsx'
         )
       ]
     ).toMatchSnapshot()
@@ -391,7 +391,7 @@ describe('in typescript mode', () => {
     expect(
       tsFiles[
         path.normalize(
-          '/path/to/project/web/src/components/Post/PostsCell.tsx'
+          '/path/to/project/web/src/components/PostsCell/PostsCell.tsx'
         )
       ]
     ).toMatchSnapshot()
@@ -401,7 +401,7 @@ describe('in typescript mode', () => {
     expect(
       tsFiles[
         path.normalize(
-          '/path/to/project/web/src/components/Post/PostCell.tsx'
+          '/path/to/project/web/src/components/PostCell/PostCell.tsx'
         )
       ]
     ).toMatchSnapshot()
@@ -413,7 +413,7 @@ describe('in typescript mode', () => {
     expect(
       tsFiles[
         path.normalize(
-          '/path/to/project/web/src/components/Post/PostForm.tsx'
+          '/path/to/project/web/src/components/PostForm/PostForm.tsx'
         )
       ]
     ).toMatchSnapshot()
@@ -422,7 +422,7 @@ describe('in typescript mode', () => {
   test('creates an index component', async () => {
     expect(
       tsFiles[
-        path.normalize('/path/to/project/web/src/components/Post/Posts.tsx')
+        path.normalize('/path/to/project/web/src/components/Posts/Posts.tsx')
       ]
     ).toMatchSnapshot()
   })
@@ -431,7 +431,7 @@ describe('in typescript mode', () => {
     expect(
       tsFiles[
         path.normalize(
-          '/path/to/project/web/src/components/Post/PostNew.tsx'
+          '/path/to/project/web/src/components/PostNew/PostNew.tsx'
         )
       ]
     ).toMatchSnapshot()
@@ -471,12 +471,12 @@ describe('in typescript mode', () => {
     const userProfileFiles = await scaffold.files({
       model: 'UserProfile',
       tests: false,
-      individualComponentFolders: false,
+      individualComponentFolders: true,
     })
     const cell =
       userProfileFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfile/UserProfilesCell.js'
+          '/path/to/project/web/src/components/UserProfilesCell/UserProfilesCell.js'
         )
       ]
     const query = cell.match(/(userProfiles.*?\})/s)[1]
@@ -488,12 +488,12 @@ describe('in typescript mode', () => {
     const userProfileFiles = await scaffold.files({
       model: 'UserProfile',
       tests: false,
-      individualComponentFolders: false,
+      individualComponentFolders: true,
     })
     const cell =
       userProfileFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfile/UserProfileCell.js'
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.js'
         )
       ]
     const query = cell.match(/(userProfile.*?\})/s)[1]
@@ -505,12 +505,12 @@ describe('in typescript mode', () => {
     const userProfileFiles = await scaffold.files({
       model: 'UserProfile',
       tests: false,
-      individualComponentFolders: false,
+      individualComponentFolders: true,
     })
     const cell =
       userProfileFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfile/UserProfileEditCell.js'
+          '/path/to/project/web/src/components/UserProfileEditCell/UserProfileEditCell.js'
         )
       ]
     const query = cell.match(/(userProfile.*?\})/s)[1]
@@ -524,13 +524,13 @@ describe('in typescript mode', () => {
     const foreignKeyFiles = await scaffold.files({
       model: 'UserProfile',
       tests: false,
-      individualComponentFolders: false,
+      individualComponentFolders: true,
     })
 
     expect(
       foreignKeyFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfile/UserProfileNew.js'
+          '/path/to/project/web/src/components/UserProfileNew/UserProfileNew.js'
         )
       ]
     ).toMatchSnapshot()
@@ -540,13 +540,13 @@ describe('in typescript mode', () => {
     const foreignKeyFiles = await scaffold.files({
       model: 'UserProfile',
       tests: false,
-      individualComponentFolders: false,
+      individualComponentFolders: true,
     })
 
     expect(
       foreignKeyFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfile/UserProfileEditCell.js'
+          '/path/to/project/web/src/components/UserProfileEditCell/UserProfileEditCell.js'
         )
       ]
     ).toMatchSnapshot()
