@@ -8,6 +8,7 @@ import {
   generateCurrentUserTypeDef,
   generateRouterRoutesTypeDef,
   generateGlobImports,
+  generateAPIGlobalContext,
 } from '../generate/typeDefinitions'
 import { ensurePosixPath } from '../paths'
 
@@ -110,4 +111,10 @@ test('generate glob imports', () => {
   const paths = generateGlobImports()
   const p = paths.map((p) => p.replace(FIXTURE_PATH, '')).map(ensurePosixPath)
   expect(p[0]).toEqual('/.redwood/types/includes/api-globImports.d.ts')
+})
+
+test('generate api global context', () => {
+  const paths = generateAPIGlobalContext()
+  const p = paths.map((p) => p.replace(FIXTURE_PATH, '')).map(ensurePosixPath)
+  expect(p[0]).toEqual('/.redwood/types/includes/api-globalContext.d.ts')
 })

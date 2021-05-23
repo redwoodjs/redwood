@@ -25,51 +25,6 @@ export const generateTypeDefs = () => {
   return [...p1, ...p2, p3[0], p4[0], p5[0]]
 }
 
-export const generateRouterPageImports = () => {
-  const pages = processPagesDir()
-  const rwjsPaths = getPaths()
-  const typeDefPath = path.join(
-    rwjsPaths.generated.types.includes,
-    'web-routesPages.d.ts'
-  )
-  writeTemplate('templates/web-routesPages.d.ts.template', typeDefPath, {
-    pages,
-  })
-  return [typeDefPath]
-}
-
-export const generateCurrentUserTypeDef = () => {
-  const rwjsPaths = getPaths()
-  const typeDefPath = path.join(
-    rwjsPaths.generated.types.includes,
-    'all-currentUser.d.ts'
-  )
-  writeTemplate('templates/all-currentUser.d.ts.template', typeDefPath)
-  return [typeDefPath]
-}
-
-export const generateRouterRoutesTypeDef = () => {
-  const rwjsPaths = getPaths()
-
-  const code = fs.readFileSync(rwjsPaths.web.routes, 'utf-8')
-  const routes = getJsxElements(code, 'Route').filter((x) => {
-    // All generated "routes" should have a "name" and "path" prop-value
-    return (
-      typeof x.props?.path !== 'undefined' &&
-      typeof x.props?.name !== 'undefined'
-    )
-  })
-
-  const typeDefPath = path.join(
-    rwjsPaths.generated.types.includes,
-    'web-routerRoutes.d.ts'
-  )
-  writeTemplate('templates/web-routerRoutes.d.ts.template', typeDefPath, {
-    routes,
-  })
-  return [typeDefPath]
-}
-
 export const generateDirectoryNamedModuleTypeDefs = () => {
   const rwjsPaths = getPaths()
   const paths = findDirectoryNamedModules()
@@ -115,12 +70,47 @@ export const generateCellTypesDefs = () => {
   })
 }
 
-export const generateGlobImports = () => {
+const writeTypeDefIncludeFile = (
+  template: string,
+  values: Record<string, unknown> = {}
+) => {
   const rwjsPaths = getPaths()
   const typeDefPath = path.join(
     rwjsPaths.generated.types.includes,
-    'api-globImports.d.ts'
+    template.replace('.template', '')
   )
-  writeTemplate('templates/api-globImports.d.ts.template', typeDefPath)
+
+  const templateFilename = path.join('templates', template)
+  writeTemplate(templateFilename, typeDefPath, values)
   return [typeDefPath]
+}
+
+export const generateRouterRoutesTypeDef = () => {
+  const code = fs.readFileSync(getPaths().web.routes, 'utf-8')
+  const routes = getJsxElements(code, 'Route').filter((x) => {
+    // All generated "routes" should have a "name" and "path" prop-value
+    return (
+      typeof x.props?.path !== 'undefined' &&
+      typeof x.props?.name !== 'undefined'
+    )
+  })
+
+  return writeTypeDefIncludeFile('web-routerRoutes.d.ts.template', { routes })
+}
+
+export const generateRouterPageImports = () => {
+  const pages = processPagesDir()
+  return writeTypeDefIncludeFile('web-routesPages.d.ts.template', { pages })
+}
+
+export const generateCurrentUserTypeDef = () => {
+  return writeTypeDefIncludeFile('all-currentUser.d.ts.template')
+}
+
+export const generateGlobImports = () => {
+  return writeTypeDefIncludeFile('api-globImports.d.ts.template')
+}
+
+export const generateAPIGlobalContext = () => {
+  return writeTypeDefIncludeFile('api-globalContext.d.ts.template')
 }
