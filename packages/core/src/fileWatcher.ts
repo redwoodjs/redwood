@@ -10,14 +10,6 @@ import {
   generateTypeDefRouterRoutes,
   generateTypeDefRouterPages,
 } from '@redwoodjs/internal'
-//
-
-// This code allows you to "watch a glob of files"
-
-// when a file is deleted, modified or added we trigger a function in response
-// to that.
-
-// Initialize watcher.
 
 const rwjsPaths = getPaths()
 
@@ -29,37 +21,33 @@ const watcher = chokidar.watch('**/src/**/*.{ts,js,jsx,tsx}', {
   awaitWriteFinish: true,
 })
 
+// TODO: Make this emit our own events so that it can be used programatically in the CLI.
+// TODO: Move this into internal.
 watcher
   .on('ready', () => {
     console.log('Watching files...')
-
     console.log(watcher.getWatched())
-
-    // We should generate all the files here?
+    // TODO: Generate all the things.
   })
   .on('all', (eventName, p) => {
-    // TODO: Routes
     p = path.join(rwjsPaths.base, p)
 
-    if (eventName === 'add' || eventName === 'change') {
+    if (
+      eventName === 'add' ||
+      eventName === 'change' ||
+      eventName == 'unlink'
+    ) {
       if (p.indexOf('Cell') !== -1 && isCellFile(p)) {
-        const x = generateMirrorCell(p)
-        console.log(p, x)
+        // TODO: Delete mirror cell if unlink.
+        generateMirrorCell(p)
       } else if (p === rwjsPaths.web.routes) {
-        // generate router
         generateTypeDefRouterRoutes()
       } else if (p.indexOf('Page') !== -1 && isPageFile(p)) {
         generateTypeDefRouterPages()
       }
+      // TODO: directory-named-modules.
+      // TODO: GraphQL Schema.
     }
-
-    //if (eventName === 'add' && eventName === '')
-
-    //console.log('x', x)
-
-    // If this is a pages file, generate page imports
-
-    // If this is the route file (generate routes)
   })
 
 //watcher.close().then(() => console.log('closed'))
