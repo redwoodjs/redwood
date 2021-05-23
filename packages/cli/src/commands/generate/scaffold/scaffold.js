@@ -414,7 +414,8 @@ const addSetImport = () => {
   const routesPath = getPaths().web.routes
   const routesContent = readFile(routesPath).toString()
   const [redwoodRouterImport, importStart, spacing, importContent, importEnd] =
-    routesContent.match(/(import {)(\s*)([^]*)(} from '@redwoodjs\/router')/)
+    routesContent.match(/(import {)(\s*)([^]*)(} from '@redwoodjs\/router')/) |
+    []
   const routerImports = importContent.replace(/\s/g, '').split(',')
   if (routerImports.includes(PACKAGE_SET)) {
     return 'Skipping Set import'
