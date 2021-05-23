@@ -10,12 +10,12 @@
     "paths": {
       "src/*": [
         "./src/*",
-        "../.redwood/mirror/web/src/*"
+        "../.redwood/types/mirror/web/src/*"
       ]
     },
     "rootDirs": [
       "./src",
-      "../.redwood/mirror/web/src"
+      "../.redwood/types/mirror/web/src"
     ],
     "typeRoots": [
       "../node_modules/@types",
@@ -28,7 +28,7 @@
   },
   "include": [
     "src",
-    "../.redwood/types/*",
-    "../.redwood/globals/*",
+    "../.redwood/types/includes/global-*",
+    "../.redwood/types/includes/web-*",
   ]
 }

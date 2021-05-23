@@ -10,15 +10,18 @@
     "paths": {
       "src/*": [
         "./src/*",
-        "../.redwood/mirror/api/src/*"
+        "../.redwood/types/mirror/api/src/*"
       ]
     },
     "rootDirs": [
       "./src",
-      "../.redwood/mirror/api/src"
+      "../.redwood/types/mirror/api/src"
     ],
     "typeRoots": ["../node_modules/@types", "./node_modules/@types"],
     "types": ["jest"]
   },
-  "include": ["src", "../.redwood/**/*"]
+  "include": ["src",
+    "../.redwood/types/includes/global-*",
+    "../.redwood/types/includes/api-*",
+  ]
 }

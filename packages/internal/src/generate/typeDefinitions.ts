@@ -22,9 +22,9 @@ export const generateRouterPageImports = () => {
   const rwjsPaths = getPaths()
   const typeDefPath = path.join(
     rwjsPaths.generated.types.includes,
-    'web-global-pages.d.ts'
+    'web-routesPages.d.ts'
   )
-  writeTemplate('templates/web-global-pages.d.ts.template', typeDefPath, {
+  writeTemplate('templates/web-routesPages.d.ts.template', typeDefPath, {
     pages,
   })
   return [typeDefPath]
@@ -34,9 +34,9 @@ export const generateCurrentUserTypeDef = () => {
   const rwjsPaths = getPaths()
   const typeDefPath = path.join(
     rwjsPaths.generated.types.includes,
-    'currentUser.d.ts'
+    'global-currentUser.d.ts'
   )
-  writeTemplate('templates/currentUser.d.ts.template', typeDefPath)
+  writeTemplate('templates/global-currentUser.d.ts.template', typeDefPath)
   return [typeDefPath]
 }
 
@@ -54,9 +54,11 @@ export const generateRouterRoutesTypeDef = () => {
 
   const typeDefPath = path.join(
     rwjsPaths.generated.types.includes,
-    'routerRoutes.d.ts'
+    'web-routerRoutes.d.ts'
   )
-  writeTemplate('templates/routerRoutes.d.ts.template', typeDefPath, { routes })
+  writeTemplate('templates/web-routerRoutes.d.ts.template', typeDefPath, {
+    routes,
+  })
   return [typeDefPath]
 }
 
@@ -74,9 +76,13 @@ export const generateDirectoryNamedModuleTypeDefs = () => {
     fs.mkdirSync(mirrorDir, { recursive: true })
 
     const typeDefPath = path.join(mirrorDir, 'index.d.ts')
-    writeTemplate('templates/directoryNamedModule.d.ts.template', typeDefPath, {
-      name,
-    })
+    writeTemplate(
+      'templates/mirror-directoryNamedModule.d.ts.template',
+      typeDefPath,
+      {
+        name,
+      }
+    )
     return typeDefPath
   })
 }
@@ -95,7 +101,7 @@ export const generateCellTypesDefs = () => {
     fs.mkdirSync(mirrorDir, { recursive: true })
 
     const typeDefPath = path.join(mirrorDir, 'index.d.ts')
-    writeTemplate('templates/cell.d.ts.template', typeDefPath, { name })
+    writeTemplate('templates/mirror-cell.d.ts.template', typeDefPath, { name })
 
     return typeDefPath
   })

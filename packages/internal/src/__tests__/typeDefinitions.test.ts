@@ -67,7 +67,7 @@ test('generate the correct mirror types for directory named modules', () => {
 test('generates global page imports', () => {
   const paths = generateRouterPageImports()
   const p = paths.map((p) => p.replace(FIXTURE_PATH, '')).map(ensurePosixPath)
-  expect(p[0]).toEqual('/.redwood/types/includes/web-global-pages.d.ts')
+  expect(p[0]).toEqual('/.redwood/types/includes/web-routesPages.d.ts')
 
   const c = fs.readFileSync(paths[0], 'utf-8')
 
@@ -86,14 +86,14 @@ declare global {
 test('generate current user ', () => {
   const paths = generateCurrentUserTypeDef()
   const p = paths.map((p) => p.replace(FIXTURE_PATH, '')).map(ensurePosixPath)
-  expect(p[0]).toEqual('/.redwood/types/includes/currentUser.d.ts')
+  expect(p[0]).toEqual('/.redwood/types/includes/global-currentUser.d.ts')
   // The type definition output is static, so there's nothing to test.
 })
 
 test('generates the router routes', () => {
   const paths = generateRouterRoutesTypeDef()
   const p = paths.map((p) => p.replace(FIXTURE_PATH, '')).map(ensurePosixPath)
-  expect(p[0]).toEqual('/.redwood/types/includes/routerRoutes.d.ts')
+  expect(p[0]).toEqual('/.redwood/types/includes/web-routerRoutes.d.ts')
 
   const c = fs.readFileSync(paths[0], 'utf-8')
   expect(c).toContain(`
