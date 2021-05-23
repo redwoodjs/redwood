@@ -32,7 +32,7 @@ const removeRoutesWithSet = async (model, path) => {
 const removeSetImport = () => {
   const routesPath = getPaths().web.routes
   const routesContent = readFile(routesPath).toString()
-  if (routesContent.match('<Set ')) {
+  if (routesContent.match('<Set')) {
     return 'Skipping removal of Set import in Routes.{js,tsx}'
   }
 
