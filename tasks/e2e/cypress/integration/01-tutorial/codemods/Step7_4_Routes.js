@@ -11,8 +11,8 @@ const Routes = () => {
         <Route path="/about" page={AboutPage} name="about" prerender/>
         <Route path="/" page={HomePage} name="home" prerender/>
       </Set>
-      <Route path="/posts/new" page={NewPostPage} name="newPost" />
-      <Route path="/posts/{id:Int}/edit" page={EditPostPage} name="editPost" />
+      <Route path="/posts/new" page={PostNewPage} name="postNew" />
+      <Route path="/posts/{id:Int}/edit" page={PostEditPage} name="postEdit" />
       <Route path="/posts/{id:Int}" page={PostPage} name="post" />
       <Route path="/posts" page={PostsPage} name="posts" />
       <Route notfound page={NotFoundPage} prerender/>
