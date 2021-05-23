@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+import type { types } from '@babel/core'
 import traverse from '@babel/traverse'
 
 import { parse } from './ast'
 import { getJsxAttributeValue } from './jsxAttributeValue'
-
-import type { types } from '@babel/core'
 
 interface JsxElement {
   name: string

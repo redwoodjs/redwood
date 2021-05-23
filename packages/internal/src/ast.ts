@@ -1,7 +1,6 @@
+import type { types } from '@babel/core'
 import { parse as babelParse } from '@babel/parser'
 import traverse from '@babel/traverse'
-
-import type { types } from '@babel/core'
 
 export const parse = (code: string) =>
   babelParse(code, { sourceType: 'module', plugins: ['jsx', 'typescript'] })
