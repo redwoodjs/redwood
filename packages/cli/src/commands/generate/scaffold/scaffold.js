@@ -524,7 +524,7 @@ export const handler = async ({
   try {
     await t.run()
   } catch (e) {
-    console.log(e)
+    console.log(c.error(e.message))
   }
 }
 
