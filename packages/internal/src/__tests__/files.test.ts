@@ -12,7 +12,7 @@ afterAll(() => {
   delete process.env.__REDWOOD__CONFIG_PATH
 })
 
-import { findCells, findDirectoryNamedModules } from '../files'
+import { findCells, findDirectoryNamedModules, findPages } from '../files'
 import { ensurePosixPath } from '../paths'
 
 test('finds all the cells', () => {
@@ -38,6 +38,23 @@ test('finds directory named modules', () => {
       "/web/src/components/Check/Check.js",
       "/web/src/components/TodoItem/TodoItem.js",
       "/web/src/layouts/SetLayout/SetLayout.js",
+    ]
+  `)
+})
+
+test('finds all the page files', () => {
+  const paths = findPages()
+  const p = paths.map((p) => p.replace(FIXTURE_PATH, '')).map(ensurePosixPath)
+
+  expect(p).toMatchInlineSnapshot(`
+    Array [
+      "/web/src/pages/BarPage/BarPage.tsx",
+      "/web/src/pages/FatalErrorPage/FatalErrorPage.js",
+      "/web/src/pages/FooPage/FooPage.tsx",
+      "/web/src/pages/HomePage/HomePage.tsx",
+      "/web/src/pages/NotFoundPage/NotFoundPage.js",
+      "/web/src/pages/TypeScriptPage/TypeScriptPage.tsx",
+      "/web/src/pages/admin/EditUserPage/EditUserPage.jsx",
     ]
   `)
 })
