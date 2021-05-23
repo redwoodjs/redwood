@@ -1,10 +1,10 @@
 import path from 'path'
 
 // TODO: Figure out why Wallaby doesn't work with a normal import.
+import type { PluginObj, types } from '@babel/core'
+
 import { getBaseDirFromFile } from '@redwoodjs/internal/dist/paths'
 import { getProject, URL_file } from '@redwoodjs/structure'
-
-import type { PluginObj, types } from '@babel/core'
 
 export default function ({ types: t }: { types: typeof types }): PluginObj {
   let nodesToRemove: any[] = []

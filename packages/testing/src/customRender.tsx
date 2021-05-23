@@ -1,10 +1,9 @@
 import React from 'react'
 
 import { render } from '@testing-library/react'
+import type { RenderResult } from '@testing-library/react'
 
 import { MockProviders } from './MockProviders'
-
-import type { RenderResult } from '@testing-library/react'
 
 export const customRender = (
   ui: React.ReactElement,
