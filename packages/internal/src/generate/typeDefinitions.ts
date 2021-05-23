@@ -16,18 +16,18 @@ import { writeTemplate } from './templates'
 // to target inclusion for that side, or use "all-" for both.
 
 export const generateTypeDefs = () => {
-  const p1 = generateDirectoryNamedModuleTypeDefs()
-  const p2 = generateCellTypesDefs()
-  const p3 = generateRouterPageImports()
-  const p4 = generateCurrentUserTypeDef()
-  const p5 = generateRouterRoutesTypeDef()
-  const p6 = generateGlobImports()
-  const p7 = generateAPIGlobalContext()
+  const p1 = generateMirrorDirectoryNamedModules()
+  const p2 = generateMirrorCells()
+  const p3 = generateTypeDefRouterPages()
+  const p4 = generateTypeDefCurrentUser()
+  const p5 = generateTypeDefRouterRoutes()
+  const p6 = generateTypeDefGlobImports()
+  const p7 = generateTypeDefGlobalContext()
 
   return [...p1, ...p2, p3[0], p4[0], p5[0], p6[0], p7[0]]
 }
 
-export const generateDirectoryNamedModuleTypeDefs = () => {
+export const generateMirrorDirectoryNamedModules = () => {
   const rwjsPaths = getPaths()
   const paths = findDirectoryNamedModules()
 
@@ -52,24 +52,22 @@ export const generateDirectoryNamedModuleTypeDefs = () => {
   })
 }
 
-export const generateCellTypesDefs = () => {
+export const generateMirrorCells = () => {
+  return findCells().map(generateMirrorCell)
+}
+
+export const generateMirrorCell = (p: string) => {
   const rwjsPaths = getPaths()
-  const paths = findCells()
+  const { dir, name } = path.parse(p)
 
-  return paths.map((p) => {
-    const { dir, name } = path.parse(p)
-
-    const mirrorDir = path.join(
-      rwjsPaths.generated.types.mirror,
-      dir.replace(rwjsPaths.base, '')
-    )
-    fs.mkdirSync(mirrorDir, { recursive: true })
-
-    const typeDefPath = path.join(mirrorDir, 'index.d.ts')
-    writeTemplate('templates/mirror-cell.d.ts.template', typeDefPath, { name })
-
-    return typeDefPath
-  })
+  const mirrorDir = path.join(
+    rwjsPaths.generated.types.mirror,
+    dir.replace(rwjsPaths.base, '')
+  )
+  fs.mkdirSync(mirrorDir, { recursive: true })
+  const typeDefPath = path.join(mirrorDir, 'index.d.ts')
+  writeTemplate('templates/mirror-cell.d.ts.template', typeDefPath, { name })
+  return typeDefPath
 }
 
 const writeTypeDefIncludeFile = (
@@ -87,7 +85,7 @@ const writeTypeDefIncludeFile = (
   return [typeDefPath]
 }
 
-export const generateRouterRoutesTypeDef = () => {
+export const generateTypeDefRouterRoutes = () => {
   const code = fs.readFileSync(getPaths().web.routes, 'utf-8')
   const routes = getJsxElements(code, 'Route').filter((x) => {
     // All generated "routes" should have a "name" and "path" prop-value
@@ -100,19 +98,19 @@ export const generateRouterRoutesTypeDef = () => {
   return writeTypeDefIncludeFile('web-routerRoutes.d.ts.template', { routes })
 }
 
-export const generateRouterPageImports = () => {
+export const generateTypeDefRouterPages = () => {
   const pages = processPagesDir()
   return writeTypeDefIncludeFile('web-routesPages.d.ts.template', { pages })
 }
 
-export const generateCurrentUserTypeDef = () => {
+export const generateTypeDefCurrentUser = () => {
   return writeTypeDefIncludeFile('all-currentUser.d.ts.template')
 }
 
-export const generateGlobImports = () => {
+export const generateTypeDefGlobImports = () => {
   return writeTypeDefIncludeFile('api-globImports.d.ts.template')
 }
 
-export const generateAPIGlobalContext = () => {
+export const generateTypeDefGlobalContext = () => {
   return writeTypeDefIncludeFile('api-globalContext.d.ts.template')
 }

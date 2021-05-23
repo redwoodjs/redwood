@@ -2,13 +2,13 @@ import fs from 'fs'
 import path from 'path'
 
 import {
-  generateCellTypesDefs,
-  generateDirectoryNamedModuleTypeDefs,
-  generateRouterPageImports,
-  generateCurrentUserTypeDef,
-  generateRouterRoutesTypeDef,
-  generateGlobImports,
-  generateAPIGlobalContext,
+  generateMirrorCells,
+  generateMirrorDirectoryNamedModules,
+  generateTypeDefRouterPages,
+  generateTypeDefCurrentUser,
+  generateTypeDefRouterRoutes,
+  generateTypeDefGlobImports,
+  generateTypeDefGlobalContext,
 } from '../generate/typeDefinitions'
 import { ensurePosixPath } from '../paths'
 
@@ -25,7 +25,7 @@ afterAll(() => {
 })
 
 test('generate the correct mirror types for cells', () => {
-  const paths = generateCellTypesDefs()
+  const paths = generateMirrorCells()
   const p = paths.map((p) => p.replace(FIXTURE_PATH, '')).map(ensurePosixPath)
 
   expect(p).toMatchInlineSnapshot(`
@@ -44,7 +44,7 @@ test('generate the correct mirror types for cells', () => {
 })
 
 test('generate the correct mirror types for directory named modules', () => {
-  const paths = generateDirectoryNamedModuleTypeDefs()
+  const paths = generateMirrorDirectoryNamedModules()
   const p = paths.map((p) => p.replace(FIXTURE_PATH, '')).map(ensurePosixPath)
 
   expect(p).toMatchInlineSnapshot(`
@@ -67,7 +67,7 @@ test('generate the correct mirror types for directory named modules', () => {
 })
 
 test('generates global page imports', () => {
-  const paths = generateRouterPageImports()
+  const paths = generateTypeDefRouterPages()
   const p = paths.map((p) => p.replace(FIXTURE_PATH, '')).map(ensurePosixPath)
   expect(p[0]).toEqual('/.redwood/types/includes/web-routesPages.d.ts')
 
@@ -86,14 +86,14 @@ declare global {
 })
 
 test('generate current user ', () => {
-  const paths = generateCurrentUserTypeDef()
+  const paths = generateTypeDefCurrentUser()
   const p = paths.map((p) => p.replace(FIXTURE_PATH, '')).map(ensurePosixPath)
   expect(p[0]).toEqual('/.redwood/types/includes/all-currentUser.d.ts')
   // The type definition output is static, so there's nothing to test.
 })
 
 test('generates the router routes', () => {
-  const paths = generateRouterRoutesTypeDef()
+  const paths = generateTypeDefRouterRoutes()
   const p = paths.map((p) => p.replace(FIXTURE_PATH, '')).map(ensurePosixPath)
   expect(p[0]).toEqual('/.redwood/types/includes/web-routerRoutes.d.ts')
 
@@ -108,13 +108,13 @@ test('generates the router routes', () => {
 })
 
 test('generate glob imports', () => {
-  const paths = generateGlobImports()
+  const paths = generateTypeDefGlobImports()
   const p = paths.map((p) => p.replace(FIXTURE_PATH, '')).map(ensurePosixPath)
   expect(p[0]).toEqual('/.redwood/types/includes/api-globImports.d.ts')
 })
 
 test('generate api global context', () => {
-  const paths = generateAPIGlobalContext()
+  const paths = generateTypeDefGlobalContext()
   const p = paths.map((p) => p.replace(FIXTURE_PATH, '')).map(ensurePosixPath)
   expect(p[0]).toEqual('/.redwood/types/includes/api-globalContext.d.ts')
 })
