@@ -417,12 +417,28 @@ export const addRoutesToRouterTask = (routes, layout) => {
   })
 }
 
+const removeEmtpySet = (routesContent, layout) => {
+  const setWithLayoutReg = new RegExp(
+    `\\s*<Set[^>]*wrap={${layout}}[^<]*>([^<]*)<\/Set>`
+  )
+  const [matchedSet, childContent] = routesContent.match(setWithLayoutReg)
+  if (!matchedSet) {
+    return routesContent
+  }
+
+  const child = childContent.replace(/\s/g, '')
+  if (child.length > 0) {
+    return routesContent
+  }
+  return routesContent.replace(setWithLayoutReg, '')
+}
+
 /**
  * Remove named routes from the project's routes file.
  *
  * @param {string[]} routes - Route names
  */
-export const removeRoutesFromRouterTask = (routes) => {
+export const removeRoutesFromRouterTask = (routes, layout) => {
   const redwoodPaths = getPaths()
   const routesContent = readFile(redwoodPaths.web.routes).toString()
   const newRoutesContent = routes.reduce((content, route) => {
@@ -430,7 +446,11 @@ export const removeRoutesFromRouterTask = (routes) => {
     return content.replace(matchRouteByName, '')
   }, routesContent)
 
-  writeFile(redwoodPaths.web.routes, newRoutesContent, {
+  const routesWithoutEmptySet = layout
+    ? removeEmtpySet(newRoutesContent, layout)
+    : newRoutesContent
+
+  writeFile(redwoodPaths.web.routes, routesWithoutEmptySet, {
     overwriteExisting: true,
   })
 }
