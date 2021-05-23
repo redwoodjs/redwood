@@ -47,9 +47,7 @@ export const yargsDefaults = {
   },
   typescript: {
     alias: 'ts',
-    default() {
-      return getProject().isTypeScriptProject()
-    },
+    default: getProject().isTypeScriptProject,
     description:
       'Generate TypeScript files. Enabled by default if we detect your project is TypeScript.',
     type: 'boolean',
