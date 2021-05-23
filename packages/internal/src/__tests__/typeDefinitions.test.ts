@@ -7,6 +7,7 @@ import {
   generateRouterPageImports,
   generateCurrentUserTypeDef,
   generateRouterRoutesTypeDef,
+  generateGlobImports,
 } from '../generate/typeDefinitions'
 import { ensurePosixPath } from '../paths'
 
@@ -86,7 +87,7 @@ declare global {
 test('generate current user ', () => {
   const paths = generateCurrentUserTypeDef()
   const p = paths.map((p) => p.replace(FIXTURE_PATH, '')).map(ensurePosixPath)
-  expect(p[0]).toEqual('/.redwood/types/includes/global-currentUser.d.ts')
+  expect(p[0]).toEqual('/.redwood/types/includes/all-currentUser.d.ts')
   // The type definition output is static, so there's nothing to test.
 })
 
@@ -103,4 +104,10 @@ test('generates the router routes', () => {
     fooPage: (params?: RouteParams<"/foo"> & QueryParams) => "/foo"
     barPage: (params?: RouteParams<"/bar"> & QueryParams) => "/bar"
 `)
+})
+
+test('generate glob imports', () => {
+  const paths = generateGlobImports()
+  const p = paths.map((p) => p.replace(FIXTURE_PATH, '')).map(ensurePosixPath)
+  expect(p[0]).toEqual('/.redwood/types/includes/api-globImports.d.ts')
 })

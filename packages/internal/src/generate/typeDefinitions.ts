@@ -7,6 +7,14 @@ import { getPaths, processPagesDir } from 'src/paths'
 
 import { writeTemplate } from './templates'
 
+// Note for contributors:
+//
+// The functions in this file generate type definitions.
+//
+// When generating a new type definition that targets a particular side,
+// you must prefix the generated filename with "web-" or "api-"
+// to target inclusion for that side, or use "all-" for both.
+
 export const generateTypeDefs = () => {
   const p1 = generateDirectoryNamedModuleTypeDefs()
   const p2 = generateCellTypesDefs()
@@ -34,9 +42,9 @@ export const generateCurrentUserTypeDef = () => {
   const rwjsPaths = getPaths()
   const typeDefPath = path.join(
     rwjsPaths.generated.types.includes,
-    'global-currentUser.d.ts'
+    'all-currentUser.d.ts'
   )
-  writeTemplate('templates/global-currentUser.d.ts.template', typeDefPath)
+  writeTemplate('templates/all-currentUser.d.ts.template', typeDefPath)
   return [typeDefPath]
 }
 
@@ -108,15 +116,11 @@ export const generateCellTypesDefs = () => {
 }
 
 export const generateGlobImports = () => {
-  //   // GenerateTypes
-  //   const typeDefContent = `
-  //   // @ts-expect-error
-  //   declare module '${importGlob.replace('../', 'src/')}';
-  //   `
-  //   .split('\n')
-  //   .slice(1)
-  //   .map((line) => line.replace('          ', ''))
-  //   .join('\n')
-  // generateTypeDef(`import-dir-${importName}.d.ts`, typeDefContent)
-  // generateTypeDefIndex()
+  const rwjsPaths = getPaths()
+  const typeDefPath = path.join(
+    rwjsPaths.generated.types.includes,
+    'api-globImports.d.ts'
+  )
+  writeTemplate('templates/api-globImports.d.ts.template', typeDefPath)
+  return [typeDefPath]
 }

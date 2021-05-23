@@ -21,7 +21,7 @@
     "types": ["jest"]
   },
   "include": ["src",
-    "../.redwood/types/includes/global-*",
+    "../.redwood/types/includes/all-*",
     "../.redwood/types/includes/api-*",
   ]
 }
