@@ -2,8 +2,8 @@ import React, { ReactElement, ReactNode, useCallback } from 'react'
 
 import { Redirect } from './links'
 import { useLocation } from './location'
-import { useRouterState } from './router-context'
 import { isRoute } from './router'
+import { useRouterState } from './router-context'
 import { flattenAll, matchPath } from './util'
 
 type WrapperType<WTProps> = (

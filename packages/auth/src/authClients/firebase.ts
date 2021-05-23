@@ -1,6 +1,6 @@
-import { AuthClient } from './'
-
 import type FirebaseNamespace from 'firebase/app'
+
+import { AuthClient } from './'
 
 export type Firebase = typeof FirebaseNamespace
 
