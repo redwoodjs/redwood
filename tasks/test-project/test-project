@@ -15,8 +15,14 @@ const args = yargs
 
 const { name } = args
 
+const choosenPath = args._
+
+const RW_BLOGPATH = path.resolve(
+  choosenPath.length >= 1
+    ? String(choosenPath).replace(/,/g, '-')
+    : path.join(__dirname, '../../', name)
+)
 const RW_BASEPATH = path.join(__dirname, '../../')
-const RW_BLOGPATH = path.resolve(RW_BASEPATH, name)
 
 const getExecaOptions = (cwd = RW_BLOGPATH) => ({
   shell: true,
@@ -40,7 +46,8 @@ async function applyCodemod(codemod, target) {
 
 const createProject = async () => {
   if (fs.existsSync(RW_BLOGPATH)) {
-    fs.rmSync(RW_BLOGPATH, { recursive: true })
+    console.error(`'${RW_BLOGPATH}' already exists and is not empty.`)
+    process.exit(1)
   }
 
   return execa(
