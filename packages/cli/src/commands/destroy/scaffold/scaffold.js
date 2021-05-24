@@ -51,7 +51,10 @@ const removeSetImport = () => {
 
 const removeLayoutImport = ({ model: name, path: scaffoldPath = '' }) => {
   const pluralPascalName = pascalcase(pluralize(name))
-  const pascalScaffoldPath = pascalcase(scaffoldPath)
+  const pascalScaffoldPath =
+    scaffoldPath === ''
+      ? scaffoldPath
+      : scaffoldPath.split('/').map(pascalcase).join('/') + '/'
   const layoutName = `${pluralPascalName}Layout`
   const importLayout = `import ${pluralPascalName}Layout from 'src/layouts/${pascalScaffoldPath}${layoutName}'`
   const routesPath = getPaths().web.routes
