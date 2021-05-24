@@ -9,6 +9,12 @@ const body = `
 </article>
 `
 
+const propsInterface = `
+interface Props {
+  post: { id: string, title: string, body: string }
+}
+`
+
 export default (file, api) => {
   const j = api.jscodeshift
   const root = j(file.source)
@@ -22,6 +28,21 @@ export default (file, api) => {
   )
 
   root.find(j.VariableDeclaration).insertBefore(routerImport)
+
+  if (file.path.endsWith('.tsx')) {
+    root.find(j.VariableDeclaration).insertBefore(propsInterface)
+
+    root
+      .find(j.Identifier, {
+        name: 'BlogPost',
+      })
+      .at(0)
+      .replaceWith((nodePath) => {
+        const { node } = nodePath
+        node.typeAnnotation.typeAnnotation.typeParameters = '<Props>'
+        return node
+      })
+  }
 
   return root
     .find(j.VariableDeclarator, {
