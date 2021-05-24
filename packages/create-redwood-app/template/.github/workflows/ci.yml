@@ -1,0 +1,14 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  redwood-project-ci:
+    name: 🌲 Redwood Project CI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Redwood Project CI
+        uses: redwoodjs/project-ci-action@v0.1.1
