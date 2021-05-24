@@ -12,7 +12,7 @@ const createHistory = () => {
     },
     navigate: (to: string) => {
       const { pathname, search, hash } = new URL(global?.location?.origin + to)
-      console.log(search)
+
       if (
         global?.location?.pathname !== pathname ||
         global?.location?.search !== search ||
