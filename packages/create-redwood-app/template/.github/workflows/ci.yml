@@ -34,6 +34,6 @@ jobs:
       - name: Lint
         run: yarn rw lint
       - name: Run tests
-        run: yarn rw test
+        run: yarn rw test --no-watch
       - name: Build
         run: yarn rw build
