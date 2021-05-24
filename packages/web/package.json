@@ -22,6 +22,7 @@
     "react": "^17.0.2"
   },
   "devDependencies": {
+    "ts-toolbelt": "^9.6.0",
     "@types/react": "17.0.6"
   },
   "scripts": {
