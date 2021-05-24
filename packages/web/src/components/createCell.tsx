@@ -1,9 +1,6 @@
-
-
-import type { DocumentNode } from 'graphql'
-
 import { useQuery } from './GraphQLHooksProvider'
 
+import type { DocumentNode } from 'graphql'
 import type { A } from 'ts-toolbelt'
 interface QueryProps {
   query: DocumentNode

@@ -16,10 +16,8 @@ declare global {
   interface QueryOperationResult<TData = any> {
     data: TData | undefined
     loading: boolean
-
-    // @TODO Adding error here causes a problem with Apollo, because TS thinks this is the override, not the apollo one
-    // Not really a problem, but the types in createCell aren't a 100% acurate
-    // error?: Error | any
+    // @MARK not adding error here, as it gets overriden by type overrides
+    // see packages/web/src/apollo/typeOverride.ts
   }
 
   // not defining it here, because it gets overriden by Apollo provider anyway
