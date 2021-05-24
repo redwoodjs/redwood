@@ -392,7 +392,7 @@ export const cleanupEmptyDirsTask = (files) => {
 
 const wrapWithSet = (routesContent, layout, routes, newLineAndIndent) => {
   const [_, indentOne, indentTwo] = routesContent.match(
-    /([ \t]*)<Router>[^ \t<]*([ \t]*)</
+    /([ \t]*)<Router>[^<]*[\r\n]+([ \t]+)/
   ) || ['', 0, 2]
   const oneLevelIndent = indentTwo.slice(0, indentTwo.length - indentOne.length)
   const newRoutesWithExtraIndent = routes.map((route) => oneLevelIndent + route)
