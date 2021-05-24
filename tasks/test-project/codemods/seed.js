@@ -32,7 +32,7 @@ export default (file, api) => {
   const j = api.jscodeshift
   const root = j(file.source)
 
-  root.find(j.FunctionDeclaration).insertBefore(posts).toSource()
+  root.find(j.FunctionDeclaration).insertBefore(posts)
 
   return root
     .find(j.FunctionDeclaration, {

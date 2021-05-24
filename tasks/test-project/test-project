@@ -9,7 +9,7 @@ const Listr = require('listr')
 const yargs = require('yargs')
 
 const args = yargs
-  .option('name', { default: 'redwoodblog', type: 'string', alias: 'n' })
+  .option('name', { default: 'blog-test-project', type: 'string', alias: 'n' })
   .help()
   .strict().argv
 
