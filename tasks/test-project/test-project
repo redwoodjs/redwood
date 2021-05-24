@@ -20,7 +20,7 @@ const RW_BLOGPATH = path.resolve(RW_BASEPATH, name)
 
 const getExecaOptions = (cwd = RW_BLOGPATH) => ({
   shell: true,
-  stdio: ['ignore', 'ignore', 'inherit'],
+  stdio: ['ignore', 'pipe', 'inherit'],
   cleanup: true,
   cwd,
 })
@@ -196,12 +196,9 @@ async function apiTasks() {
     {
       title: 'Adding post model to prisma',
       task: async () => {
-        addModel(`model Post {
-          id        Int      @id @default(autoincrement())
-          title     String
-          body      String
-          createdAt DateTime @default(now())
-        }`)
+        const { post } = await import('./codemods/models.js')
+
+        addModel(post)
 
         return execa(
           `yarn rw prisma migrate dev --name create_product`,
@@ -227,13 +224,9 @@ async function apiTasks() {
     {
       title: 'Adding contact model to prisma',
       task: async () => {
-        addModel(`model Contact {
-          id        Int @id @default(autoincrement())
-          name      String
-          email     String
-          message   String
-          createdAt DateTime @default(now())
-        }`)
+        const { contact } = await import('./codemods/models.js')
+
+        addModel(contact)
 
         await execa(
           `yarn rw prisma migrate dev --name create_contact`,
