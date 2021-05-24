@@ -11,7 +11,10 @@ const createHistory = () => {
       return listenerId
     },
     navigate: (to: string) => {
-      global.history.pushState({}, '', to)
+      if (global?.location?.pathname !== to) {
+        global.history.pushState({}, '', to)
+      }
+
       for (const listener of Object.values(listeners)) {
         listener()
       }
