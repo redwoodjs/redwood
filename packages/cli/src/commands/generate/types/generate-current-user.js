@@ -9,7 +9,7 @@ function generateTypeDef(filename, contents) {
   host.writeFileSync(path.join(host.paths.types, filename), contents)
 }
 
-function generateCurrentUserTypes() {
+export function generateCurrentUserTypes() {
   generateTypeDef(
     'currentUser.d.ts',
     project.host.readFileSync(
@@ -17,16 +17,3 @@ function generateCurrentUserTypes() {
     )
   )
 }
-
-/**
- * @description This function houses all the tasks that
- * need to run before rw build/rw dev
- */
-
-function runPreBuildTasks() {
-  if (project.isTypeScriptProject) {
-    generateCurrentUserTypes()
-  }
-}
-
-export default runPreBuildTasks

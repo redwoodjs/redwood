@@ -12,6 +12,7 @@ import { setContext } from '@apollo/client/link/context'
 
 import type { AuthContextInterface } from '@redwoodjs/auth'
 import { useAuth as useRWAuth } from '@redwoodjs/auth'
+import './typeOverride'
 
 import {
   FetchConfigProvider,
