@@ -11,7 +11,13 @@ const createHistory = () => {
       return listenerId
     },
     navigate: (to: string) => {
-      if (global?.location?.pathname !== to) {
+      const { pathname, search, hash } = new URL(global?.location?.origin + to)
+      console.log(search)
+      if (
+        global?.location?.pathname !== pathname ||
+        global?.location?.search !== search ||
+        global?.location?.hash !== hash
+      ) {
         global.history.pushState({}, '', to)
       }
 
