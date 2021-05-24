@@ -1,5 +1,4 @@
 import { WebhookVerificationError, DEFAULT_WEBHOOK_SECRET } from './common'
-
 import type { WebhookVerifier, VerifyOptions } from './common'
 
 export interface SecretKeyVerifier extends WebhookVerifier {
@@ -18,9 +17,6 @@ export const secretKeyVerifier = (
 ): SecretKeyVerifier => {
   return {
     sign: ({ secret }) => {
-      console.warn(
-        `With the SecretKeyVerifier verifier, your body isn't signed with a secret`
-      )
       return secret
     },
     verify: ({ signature, secret = DEFAULT_WEBHOOK_SECRET }) => {

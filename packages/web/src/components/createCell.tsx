@@ -1,9 +1,10 @@
-import { A } from 'ts-toolbelt'
 
-import { useQuery } from './GraphQLHooksProvider'
 
 import type { DocumentNode } from 'graphql'
 
+import { useQuery } from './GraphQLHooksProvider'
+
+import type { A } from 'ts-toolbelt'
 interface QueryProps {
   query: DocumentNode
   children: (result: QueryOperationResult) => React.ReactElement
