@@ -1,6 +1,7 @@
 import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 
+import { transformTSToJS } from 'src/lib'
 import { getSchema } from 'src/lib'
 
 import { yargsDefaults } from '../../generate'
@@ -87,7 +88,7 @@ export const files = async ({
     extension: generateTypescript ? '.tsx' : '.js',
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'cell',
-    templatePath: `cell${templateNameSuffix}.js.template`,
+    templatePath: `cell${templateNameSuffix}.tsx.template`,
     templateVars: {
       operationName,
       idType,
@@ -141,8 +142,12 @@ export const files = async ({
   //    "path/to/fileB": "<<<template>>>",
   // }
   return files.reduce((acc, [outputPath, content]) => {
+    const template = generateTypescript
+      ? content
+      : transformTSToJS(outputPath, content)
+
     return {
-      [outputPath]: content,
+      [outputPath]: template,
       ...acc,
     }
   }, {})
@@ -152,6 +157,7 @@ export const { command, description, builder, handler } =
   createYargsForComponentGeneration({
     componentName: 'cell',
     filesFn: files,
+    generateTypes: true,
     optionsObj: {
       ...yargsDefaults,
       list: {

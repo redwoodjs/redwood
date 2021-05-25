@@ -9,7 +9,7 @@ const tasks = ({ componentName, filesFn, name }) =>
       {
         title: `Destroying ${componentName} files...`,
         task: async () => {
-          const f = await filesFn({ name })
+          const f = await filesFn({ name, stories: true, tests: true })
           return deleteFilesTask(f)
         },
       },
