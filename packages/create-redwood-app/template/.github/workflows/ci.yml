@@ -8,7 +8,7 @@ on:
 
 jobs:
   lint:
-    name: Lint, run tests, and build
+    name: Run CI
     runs-on: ubuntu-latest
     steps:
       # check out this repo (so that this workflow can use it)
@@ -30,10 +30,6 @@ jobs:
       # install dependencies
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-      # lint, run tests, and build
-      - name: Lint
-        run: yarn rw lint
-      - name: Run tests
-        run: yarn rw test --no-watch
-      - name: Build
-        run: yarn rw build
+      # lint, check, run tests, and build
+      - name: Run CI
+        uses: redwoodjs/redwoodjs-ci@v1
