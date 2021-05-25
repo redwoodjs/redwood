@@ -29,10 +29,9 @@ export const command = 'test [side..]'
 export const description = 'Run Jest tests. Defaults to watch mode'
 export const builder = (yargs) => {
   yargs
-    .positional('side', {
-      choices: getProject().sides,
+    .positional('filter', {
       default: getProject().sides,
-      description: 'Which side(s) to test',
+      description: 'Which side(s) to test, and/or test filename to filter by',
       type: 'array',
     })
     .option('watch', {
@@ -40,6 +39,12 @@ export const builder = (yargs) => {
         'Run tests related to changed files based on hg/git. Specify the name or path to a file to focus on a specific set of tests',
       type: 'boolean',
       default: true,
+    })
+    .option('updateSnapshots', {
+      alias: 'u',
+      describe: 'Update snapshots',
+      type: 'boolean',
+      default: false,
     })
     .option('collectCoverage', {
       describe:
@@ -62,22 +67,37 @@ export const builder = (yargs) => {
 }
 
 export const handler = async ({
-  side,
+  filter: filterParams = [],
   watch = true,
   collectCoverage = false,
+  updateSnapshots,
 }) => {
   const { cache: CACHE_DIR } = getPaths()
-  const sides = [].concat(side).filter(Boolean)
-  const args = [
+
+  // Only the side params
+  const sides = filterParams.filter((filterString) =>
+    getProject().sides.includes(filterString)
+  )
+
+  // All the other params, apart from sides
+  const jestFilterArgs = [
+    ...filterParams.filter(
+      (filterString) => !getProject().sides.includes(filterString)
+    ),
+  ]
+
+  const jestArgs = [
     '--passWithNoTests',
     collectCoverage && '--collectCoverage',
+    updateSnapshots && '-u',
+    ...jestFilterArgs,
   ].filter(Boolean)
 
   // If the user wants to watch, set the proper watch flag based on what kind of repo this is
   // because of https://github.com/facebook/create-react-app/issues/5210
   if (watch && !process.env.CI && !collectCoverage) {
     const hasSourceControl = isInGitRepository() || isInMercurialRepository()
-    args.push(hasSourceControl ? '--watch' : '--watchAll')
+    jestArgs.push(hasSourceControl ? '--watch' : '--watchAll')
   }
 
   // if no sides declared with yargs, default to all sides
@@ -86,16 +106,16 @@ export const handler = async ({
   }
 
   if (sides.includes('api')) {
-    args.push('--runInBand')
+    jestArgs.push('--runInBand')
   }
 
-  args.push(
+  jestArgs.push(
     '--config',
     `"${require.resolve('@redwoodjs/core/config/jest.config.js')}"`
   )
 
   if (sides.length > 0) {
-    args.push('--projects', ...sides)
+    jestArgs.push('--projects', ...sides)
   }
 
   try {
@@ -118,7 +138,8 @@ export const handler = async ({
     // **NOTE** There is no official way to run Jest programatically,
     // so we're running it via execa, since `jest.run()` is a bit unstable.
     // https://github.com/facebook/jest/issues/5048
-    await execa('yarn jest', args, {
+
+    await execa('yarn jest', jestArgs, {
       cwd: getPaths().base,
       shell: true,
       stdio: 'inherit',
