@@ -33,6 +33,8 @@ export const tasks = ({ name, path }) =>
           const f = pageFiles({
             name,
             path: p,
+            stories: true,
+            tests: true,
             ...templateVars(p),
           })
           return deleteFilesTask(f)
