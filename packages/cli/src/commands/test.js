@@ -25,13 +25,15 @@ function isInMercurialRepository() {
   }
 }
 
-export const command = 'test [side..]'
+export const command = 'test [filter..]'
 export const description = 'Run Jest tests. Defaults to watch mode'
 export const builder = (yargs) => {
   yargs
+    .strict(false)
     .positional('filter', {
       default: getProject().sides,
-      description: 'Which side(s) to test, and/or test filename to filter by',
+      description:
+        'Which side(s) to test, and/or a regular expression to match against your test files to filter by',
       type: 'array',
     })
     .option('watch', {
@@ -40,21 +42,9 @@ export const builder = (yargs) => {
       type: 'boolean',
       default: true,
     })
-    .option('updateSnapshots', {
-      alias: 'u',
-      describe: 'Update snapshots',
-      type: 'boolean',
-      default: false,
-    })
-    .option('collectCoverage', {
+    .option('collect-coverage', {
       describe:
         'Show test coverage summary and output info to coverage directory',
-      type: 'boolean',
-      default: false,
-    })
-    .option('clearCache', {
-      describe:
-        'Delete the Jest cache directory and exit without running tests',
       type: 'boolean',
       default: false,
     })
@@ -70,8 +60,26 @@ export const handler = async ({
   filter: filterParams = [],
   watch = true,
   collectCoverage = false,
-  updateSnapshots,
+  ...others
 }) => {
+  const forwardJestFlags = Object.keys(others).flatMap((flagName) => {
+    if (['watch', 'collect-coverage', '$0', '_'].includes(flagName)) {
+      // filter out flags meant for the rw test command only
+      return []
+    } else {
+      // and forward on the other flags
+      return [
+        flagName.length > 1 ? `--${flagName}` : `-${flagName}`,
+        others[flagName],
+      ]
+    }
+  })
+
+  console.log(
+    `✋ ~ file: test.js ~ line 68 ~ forwardedJestArgs`,
+    forwardJestFlags
+  )
+
   const { cache: CACHE_DIR } = getPaths()
 
   // Only the side params
@@ -87,9 +95,10 @@ export const handler = async ({
   ]
 
   const jestArgs = [
-    '--passWithNoTests',
+    ...jestFilterArgs,
+    ...forwardJestFlags,
     collectCoverage && '--collectCoverage',
-    updateSnapshots && '-u',
+    '--passWithNoTests',
     ...jestFilterArgs,
   ].filter(Boolean)
 

@@ -67,6 +67,20 @@ test('Runs tests for all available sides if no side filter passed', async () => 
   expect(execa.mock.results[1].value.params).toContain('api')
 })
 
+test('Runs tests specified side if even with additional filters', async () => {
+  await handler({
+    filter: ['web', 'bazinga'],
+  })
+
+  // Api side would have run prisma reset
+  expect(execa.mock.results[0].value.cmd).not.toBe('yarn rw')
+  expect(execa.mock.results[0].value.params).not.toContain('api')
+
+  expect(execa.mock.results[0].value.cmd).toBe('yarn jest')
+  expect(execa.mock.results[0].value.params).toContain('bazinga')
+  expect(execa.mock.results[0].value.params).toContain('web')
+})
+
 test('Does not create db when calling test with just web', async () => {
   await handler({
     filter: ['web'],
@@ -84,14 +98,18 @@ test('Passes filter param to jest command if passed', async () => {
   expect(execa.mock.results[0].value.params).toContain('bazinga')
 })
 
-test('Passes relevant flags to jest', async () => {
+test('Passes other flags to jest', async () => {
   await handler({
-    updateSnapshots: true,
+    u: true,
+    debug: true,
+    json: true,
     collectCoverage: true,
   })
 
   // Second command because api side runs
   expect(execa.mock.results[1].value.cmd).toBe('yarn jest')
   expect(execa.mock.results[1].value.params).toContain('-u')
+  expect(execa.mock.results[1].value.params).toContain('--debug')
+  expect(execa.mock.results[1].value.params).toContain('--json')
   expect(execa.mock.results[1].value.params).toContain('--collectCoverage')
 })
