@@ -12,8 +12,9 @@ import { writeTemplate } from './templates'
 // The functions in this file generate type definitions.
 //
 // When generating a new type definition that targets a particular side,
-// you must prefix the generated filename with "web-" or "api-"
-// to target inclusion for that side, or use "all-" for both.
+// you must prefix the generated filename
+// with "web-" or "api-" to target inclusion for that side,
+// or use "all-" for both.
 
 export const generateTypeDefs = () => {
   const p1 = generateMirrorDirectoryNamedModules()

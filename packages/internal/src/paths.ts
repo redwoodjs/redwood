@@ -116,8 +116,8 @@ export const getBaseDirFromFile = (file: string) => {
 }
 
 /**
- * Use this to resolve files when the path to the file is known, but the extension
- * is not.
+ * Use this to resolve files when the path to the file is known,
+ * but the extension is not.
  */
 export const resolveFile = (
   filePath: string,
@@ -135,6 +135,7 @@ export const resolveFile = (
 /**
  * Path constants that are relevant to a Redwood project.
  */
+// TODO: Make this a proxy and make it lazy.
 export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
   const routes = resolveFile(path.join(BASE_DIR, PATH_WEB_ROUTES)) as string
   const { schemaPath } = getConfig(getConfigPath(BASE_DIR)).api

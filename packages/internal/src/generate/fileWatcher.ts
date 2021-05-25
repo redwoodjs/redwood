@@ -12,6 +12,8 @@ import {
   generateTypeDefRouterPages,
 } from './typeDefinitions'
 
+// TODO: Make this emit our own events so that it can be used programatically in the CLI.
+
 const rwjsPaths = getPaths()
 
 const watcher = chokidar.watch('**/src/**/*.{ts,js,jsx,tsx}', {
@@ -22,7 +24,6 @@ const watcher = chokidar.watch('**/src/**/*.{ts,js,jsx,tsx}', {
   awaitWriteFinish: true,
 })
 
-// TODO: Make this emit our own events so that it can be used programatically in the CLI.
 watcher
   .on('ready', () => {
     console.log('Watching files...')
