@@ -17,10 +17,15 @@ const args = yargs
     type: 'boolean',
     describe: 'Generate a TypeScript project. JavaScript by default.',
   })
+  .option('canary', {
+    default: false,
+    type: 'boolean',
+    describe: 'Upgrade project to latest canary version',
+  })
   .help()
   .strict().argv
 
-const { name, typescript } = args
+const { name, typescript, canary } = args
 
 const choosenPath = args._
 
@@ -297,6 +302,13 @@ const globalTasks = () =>
         task: async () => {
           return execa('yarn rw lint --fix', [], getExecaOptions())
         },
+      },
+      {
+        title: `Upgrading to latest canary version`,
+        task: async () => {
+          return execa('yarn rw upgrade -t canary', [], getExecaOptions())
+        },
+        enabled: () => canary,
       },
     ],
     {
