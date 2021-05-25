@@ -49,6 +49,7 @@ const COMPONENTS = fs.readdirSync(
 const SCAFFOLD_STYLE_PATH = './scaffold.css'
 // Any assets that should not trigger an overwrite error and require a --force
 const SKIPPABLE_ASSETS = ['scaffold.css']
+const PACKAGE_SET = 'Set'
 
 const getIdType = (model) => {
   return model.fields.find((field) => field.isId)?.type
@@ -386,6 +387,58 @@ export const routes = async ({ model: name, path: scaffoldPath = '' }) => {
   ]
 }
 
+const addRoutesInsideSetToRouter = async (model, path) => {
+  const pluralPascalName = pascalcase(pluralize(model))
+  const layoutName = `${pluralPascalName}Layout`
+  return addRoutesToRouterTask(await routes({ model, path }), layoutName)
+}
+
+const addLayoutImport = ({ model: name, path: scaffoldPath = '' }) => {
+  const pluralPascalName = pascalcase(pluralize(name))
+  const pascalScaffoldPath =
+    scaffoldPath === ''
+      ? scaffoldPath
+      : scaffoldPath.split('/').map(pascalcase).join('/') + '/'
+  const layoutName = `${pluralPascalName}Layout`
+  const importLayout = `import ${pluralPascalName}Layout from 'src/layouts/${pascalScaffoldPath}${layoutName}'`
+  const routesPath = getPaths().web.routes
+  const routesContent = readFile(routesPath).toString()
+
+  const newRoutesContent = routesContent.replace(
+    /'@redwoodjs\/router'(\s*)/,
+    `'@redwoodjs/router'$1${importLayout}$1`
+  )
+  writeFile(routesPath, newRoutesContent, { overwriteExisting: true })
+
+  return 'Added layout import to Routes.{js,tsx}'
+}
+
+const addSetImport = () => {
+  const routesPath = getPaths().web.routes
+  const routesContent = readFile(routesPath).toString()
+  const [redwoodRouterImport, importStart, spacing, importContent, importEnd] =
+    routesContent.match(/(import {)(\s*)([^]*)(} from '@redwoodjs\/router')/) ||
+    []
+  const routerImports = importContent.replace(/\s/g, '').split(',')
+  if (routerImports.includes(PACKAGE_SET)) {
+    return 'Skipping Set import'
+  }
+  const newRoutesContent = routesContent.replace(
+    redwoodRouterImport,
+    importStart +
+      spacing +
+      PACKAGE_SET +
+      `,` +
+      spacing +
+      importContent +
+      importEnd
+  )
+
+  writeFile(routesPath, newRoutesContent, { overwriteExisting: true })
+
+  return 'Added Set import to Routes.{js,tsx}'
+}
+
 const addScaffoldImport = () => {
   const appJsPath = getPaths().web.app
   let appJsContents = readFile(appJsPath).toString()
@@ -439,10 +492,16 @@ const tasks = ({ model, path, force, tests, typescript, javascript }) => {
         },
       },
       {
+        title: 'Adding layout import...',
+        task: async () => addLayoutImport({ model, path }),
+      },
+      {
+        title: 'Adding set import...',
+        task: async () => addSetImport({ model, path }),
+      },
+      {
         title: 'Adding scaffold routes...',
-        task: async () => {
-          return addRoutesToRouterTask(await routes({ model, path }))
-        },
+        task: async () => addRoutesInsideSetToRouter(model, path),
       },
       {
         title: 'Adding scaffold asset imports...',
