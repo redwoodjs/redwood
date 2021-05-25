@@ -32,6 +32,8 @@ type PageType =
   | React.ComponentType<unknown>
   | ((props: any) => JSX.Element)
 
+type TrailingSlashesType = 'never' | 'always' | 'preserve'
+
 interface RouteProps {
   path: string
   page: PageType
@@ -89,7 +91,8 @@ const InternalRoute: React.VFC<InternalRouteProps> = ({
   const { match, params: pathParams } = matchPath(
     path,
     location.pathname,
-    routerState.paramTypes
+    routerState.paramTypes,
+    routerState.trailingSlashes
   )
 
   if (!match) {
@@ -131,6 +134,7 @@ const Router: React.FC<RouterProps> = ({
   useAuth,
   paramTypes,
   pageLoadingDelay,
+  trailingSlashes,
   children,
 }) => {
   const flatChildArray = flattenAll(children)
@@ -161,6 +165,7 @@ const Router: React.FC<RouterProps> = ({
   return (
     <RouterContextProvider
       useAuth={useAuth}
+      trailingSlashes={trailingSlashes}
       paramTypes={paramTypes}
       pageLoadingDelay={pageLoadingDelay}
     >
@@ -236,7 +241,8 @@ const RouteScanner: React.FC = ({ children }) => {
       const { match } = matchPath(
         path,
         location.pathname,
-        routerState.paramTypes
+        routerState.paramTypes,
+        routerState.trailingSlashes
       )
 
       if (match) {
@@ -306,4 +312,11 @@ const normalizePage = (specOrPage: Spec | React.ComponentType): Spec => {
   }
 }
 
-export { Router, Route, namedRoutes as routes, isRoute, PageType }
+export {
+  Router,
+  Route,
+  namedRoutes as routes,
+  isRoute,
+  PageType,
+  TrailingSlashesType,
+}

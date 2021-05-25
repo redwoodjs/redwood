@@ -1,5 +1,7 @@
 import React, { Children, ReactElement, ReactNode } from 'react'
 
+import { TrailingSlashesType } from './router'
+
 /** Create a React Context with the given name. */
 const createNamedContext = <T extends unknown>(
   name: string,
@@ -67,11 +69,23 @@ type SupportedRouterParamTypes = keyof typeof coreParamTypes
  *  matchPath('/post/{id:Int}', '/post/7')
  *  => { match: true, params: { id: 7 }}
  */
+
+const formatPath = (path: string, trailingSlashes: TrailingSlashesType) => {
+  return {
+    never: path.replace(/\/$/, ''),
+    always: path.endsWith('/') ? path : path + '/',
+    preserve: path,
+  }[trailingSlashes]
+}
 const matchPath = (
-  route: string,
-  pathname: string,
-  paramTypes?: Record<string, ParamType>
+  path: string,
+  locationPathname: string,
+  paramTypes?: Record<string, ParamType>,
+  trailingSlashes: TrailingSlashesType = 'never'
 ) => {
+  const route = formatPath(path, trailingSlashes)
+  const pathname = formatPath(locationPathname, trailingSlashes)
+
   // Get the names and the transform types for the given route.
   const routeParams = paramsForRoute(route)
   const allParamTypes = { ...coreParamTypes, ...paramTypes }
