@@ -1,13 +1,12 @@
-import qs from 'qs'
-
-import { handleError } from '../error'
-
 import type {
   APIGatewayProxyResult,
   APIGatewayProxyEvent,
   Handler,
 } from 'aws-lambda'
 import type { Response, Request } from 'express'
+import qs from 'qs'
+
+import { handleError } from '../error'
 
 export const parseBody = (rawBody: string | Buffer) => {
   if (typeof rawBody === 'string') {

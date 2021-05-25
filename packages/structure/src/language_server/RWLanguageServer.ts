@@ -1,5 +1,3 @@
-import { TextDocument } from 'vscode-languageserver-textdocument'
-import { CodeAction } from 'vscode-languageserver-types'
 import {
   createConnection,
   InitializeParams,
@@ -7,17 +5,19 @@ import {
   TextDocuments,
   TextDocumentSyncKind,
 } from 'vscode-languageserver'
+import { TextDocument } from 'vscode-languageserver-textdocument'
+import { CodeAction } from 'vscode-languageserver-types'
 
 import { HostWithDocumentsStore, IDEInfo } from '../ide'
 import { RWProject } from '../model'
 import { lazy, memo } from '../x/decorators'
 import { URL_toFile } from '../x/URL'
+import { VSCodeWindowMethods_fromConnection } from '../x/vscode'
+import { Connection_suppressErrors } from '../x/vscode-languageserver'
 import {
   ExtendedDiagnostic_findRelevantQuickFixes,
   Range_contains,
 } from '../x/vscode-languageserver-types'
-import { Connection_suppressErrors } from '../x/vscode-languageserver'
-import { VSCodeWindowMethods_fromConnection } from '../x/vscode'
 
 import { CommandsManager } from './commands'
 import { DiagnosticsManager } from './diagnostics'
