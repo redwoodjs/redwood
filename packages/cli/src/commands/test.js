@@ -29,7 +29,7 @@ export const command = 'test [filter..]'
 export const description = 'Run Jest tests. Defaults to watch mode'
 export const builder = (yargs) => {
   yargs
-    .strict(false)
+    .strict(false) // so that we can forward arguments to jest
     .positional('filter', {
       default: getProject().sides,
       description:
@@ -74,11 +74,6 @@ export const handler = async ({
       ]
     }
   })
-
-  console.log(
-    `✋ ~ file: test.js ~ line 68 ~ forwardedJestArgs`,
-    forwardJestFlags
-  )
 
   const { cache: CACHE_DIR } = getPaths()
 
