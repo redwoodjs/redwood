@@ -1,4 +1,4 @@
-import { matchPath, parseSearch, validatePath } from '../util'
+import { formatPath, matchPath, parseSearch, validatePath } from '../util'
 
 describe('matchPath', () => {
   it.each([
@@ -238,5 +238,28 @@ describe('parseSearch', () => {
     expect(
       parseSearch('?search=all+dogs+go+to+heaven&category=movies')
     ).toEqual({ category: 'movies', search: 'all dogs go to heaven' })
+  })
+})
+
+describe('formatPath', () => {
+  describe('never', () => {
+    it('strips trailing slashes', () => {
+      expect(formatPath('/post', 'never')).toEqual('/post')
+      expect(formatPath('/post/', 'never')).toEqual('/post')
+    })
+  })
+
+  describe('always', () => {
+    it('adds trailing slashes', () => {
+      expect(formatPath('/post', 'always')).toEqual('/post/')
+      expect(formatPath('/post/', 'always')).toEqual('/post/')
+    })
+  })
+
+  describe('preserve', () => {
+    it('keeps trailing slashes as-is', () => {
+      expect(formatPath('/post', 'preserve')).toEqual('/post')
+      expect(formatPath('/post/', 'preserve')).toEqual('/post/')
+    })
   })
 })

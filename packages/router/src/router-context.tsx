@@ -3,8 +3,8 @@ import React, { useReducer, createContext, useContext } from 'react'
 import { useAuth } from '@redwoodjs/auth'
 
 import type { ParamType } from 'src/internal'
-import { isRoute, PageType, TrailingSlashesType } from 'src/router'
-import { flattenAll } from 'src/util'
+import { isRoute, PageType } from 'src/router'
+import { flattenAll, TrailingSlashesTypes } from 'src/util'
 
 const DEFAULT_PAGE_LOADING_DELAY = 1000 // milliseconds
 const DEFAULT_TRAILING_SLASHES = 'never'
@@ -13,7 +13,7 @@ export interface RouterState {
   paramTypes?: Record<string, ParamType>
   pageLoadingDelay?: number
   useAuth: typeof useAuth
-  trailingSlashes: TrailingSlashesType
+  trailingSlashes: TrailingSlashesTypes
   routes: Array<{ name?: string; path?: string; page?: PageType }>
 }
 

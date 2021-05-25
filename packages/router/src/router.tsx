@@ -32,8 +32,6 @@ type PageType =
   | React.ComponentType<unknown>
   | ((props: any) => JSX.Element)
 
-type TrailingSlashesType = 'never' | 'always' | 'preserve'
-
 interface RouteProps {
   path: string
   page: PageType
@@ -312,11 +310,4 @@ const normalizePage = (specOrPage: Spec | React.ComponentType): Spec => {
   }
 }
 
-export {
-  Router,
-  Route,
-  namedRoutes as routes,
-  isRoute,
-  PageType,
-  TrailingSlashesType,
-}
+export { Router, Route, namedRoutes as routes, isRoute, PageType }
