@@ -1,39 +1,42 @@
 import type { DocumentNode } from 'graphql'
+import type { A } from 'ts-toolbelt'
 
-import { useQuery, OperationResult } from './GraphQLHooksProvider'
+import { useQuery } from './GraphQLHooksProvider'
 
 interface QueryProps {
   query: DocumentNode
-  children: (result: OperationResult) => React.ReactElement
+  children: (result: QueryOperationResult) => React.ReactElement
 }
 
-const Query: React.FC<QueryProps> = ({ children, query, ...rest }) => {
+const Query = ({ children, query, ...rest }: QueryProps) => {
   const result = useQuery(query, rest)
   return result ? children(result) : null
 }
 
 export type DataObject = { [key: string]: unknown }
 
-export type CellFailureStateComponent = Omit<
-  OperationResult,
-  'data' | 'loading'
->
-export type CellLoadingEmptyStateComponent = Omit<
-  OperationResult,
+export type CellFailureProps =
+  | Omit<QueryOperationResult, 'data' | 'loading'>
+  | { error: Error } // for tests and storybook
+
+export type CellLoadingProps = Omit<
+  QueryOperationResult,
   'error' | 'loading' | 'data'
 >
-export type CellSuccessStateComponent =
-  | Omit<OperationResult, 'error' | 'loading' | 'data'>
-  | DataObject
+// @MARK not sure about this partial, but we need to do this for tests and storybook
+export type CellSuccessProps<TData = any> = Partial<
+  Omit<QueryOperationResult<TData>, 'error' | 'loading' | 'data'>
+> &
+  A.Compute<TData> // pre-computing makes the types more readable on hover
 
 export interface CreateCellProps<CellProps> {
   beforeQuery?: <TProps>(props: TProps) => { variables: TProps }
   QUERY: DocumentNode | ((variables: Record<string, unknown>) => DocumentNode)
   afterQuery?: (data: DataObject) => DataObject
-  Loading?: React.FC<CellLoadingEmptyStateComponent & Partial<CellProps>>
-  Failure?: React.FC<CellFailureStateComponent & Partial<CellProps>>
-  Empty?: React.FC<CellLoadingEmptyStateComponent & Partial<CellProps>>
-  Success: React.FC<CellSuccessStateComponent & Partial<CellProps>>
+  Loading?: React.FC<CellLoadingProps & Partial<CellProps>>
+  Failure?: React.FC<CellFailureProps & Partial<CellProps>>
+  Empty?: React.FC<CellLoadingProps & Partial<CellProps>>
+  Success: React.FC<CellSuccessProps & Partial<CellProps>>
 }
 
 /**
@@ -102,9 +105,10 @@ export function createCell<CellProps = any>({
   Empty,
   Success,
 }: CreateCellProps<CellProps>): React.FC<CellProps> {
-  // If its prerendering, render the Cell's Loading component
   if (global.__REDWOOD__PRERENDERING) {
-    return (props) => <Loading {...props} />
+    // If its prerendering, render the Cell's Loading component
+    // and exit early. The apolloclient loading props aren't available here, so 'any'
+    return (props) => <Loading {...(props as any)} />
   }
 
   return (props) => {
