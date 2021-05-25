@@ -5,7 +5,7 @@
   "license": "MIT",
   "dependencies": {
     "@redwoodjs/eslint-plugin-redwood": "^0.32.2",
-    "@typescript-eslint/eslint-plugin": "^4.24.0",
+    "@typescript-eslint/eslint-plugin": "^4.25.0",
     "@typescript-eslint/parser": "^4.25.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.27.0",
