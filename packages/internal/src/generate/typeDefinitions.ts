@@ -29,35 +29,40 @@ export const generateTypeDefs = () => {
 
 export const generateMirrorDirectoryNamedModules = () => {
   const rwjsPaths = getPaths()
-  const paths = findDirectoryNamedModules()
+  return findDirectoryNamedModules().map((p) =>
+    generateMirrorDirectoryNamedModule(p, rwjsPaths)
+  )
+}
 
-  return paths.map((p) => {
-    const { dir, name } = path.parse(p)
+export const generateMirrorDirectoryNamedModule = (
+  p: string,
+  rwjsPaths = getPaths()
+) => {
+  const { dir, name } = path.parse(p)
 
-    const mirrorDir = path.join(
-      rwjsPaths.generated.types.mirror,
-      dir.replace(rwjsPaths.base, '')
-    )
-    fs.mkdirSync(mirrorDir, { recursive: true })
+  const mirrorDir = path.join(
+    rwjsPaths.generated.types.mirror,
+    dir.replace(rwjsPaths.base, '')
+  )
+  fs.mkdirSync(mirrorDir, { recursive: true })
 
-    const typeDefPath = path.join(mirrorDir, 'index.d.ts')
-    writeTemplate(
-      'templates/mirror-directoryNamedModule.d.ts.template',
-      typeDefPath,
-      {
-        name,
-      }
-    )
-    return typeDefPath
-  })
+  const typeDefPath = path.join(mirrorDir, 'index.d.ts')
+  writeTemplate(
+    'templates/mirror-directoryNamedModule.d.ts.template',
+    typeDefPath,
+    {
+      name,
+    }
+  )
+  return typeDefPath
 }
 
 export const generateMirrorCells = () => {
-  return findCells().map(generateMirrorCell)
+  const rwjsPaths = getPaths()
+  return findCells().map((p) => generateMirrorCell(p, rwjsPaths))
 }
 
-export const generateMirrorCell = (p: string) => {
-  const rwjsPaths = getPaths()
+export const generateMirrorCell = (p: string, rwjsPaths = getPaths()) => {
   const { dir, name } = path.parse(p)
 
   const mirrorDir = path.join(

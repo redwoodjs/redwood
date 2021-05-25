@@ -2,14 +2,15 @@ import path from 'path'
 
 import chokidar from 'chokidar'
 
+import { isCellFile, isPageFile, isDirectoryNamedModuleFile } from '../files'
+import { getPaths } from '../paths'
+
 import {
-  getPaths,
-  isCellFile,
-  isPageFile,
   generateMirrorCell,
+  generateMirrorDirectoryNamedModule,
   generateTypeDefRouterRoutes,
   generateTypeDefRouterPages,
-} from '@redwoodjs/internal'
+} from './typeDefinitions'
 
 const rwjsPaths = getPaths()
 
@@ -22,7 +23,6 @@ const watcher = chokidar.watch('**/src/**/*.{ts,js,jsx,tsx}', {
 })
 
 // TODO: Make this emit our own events so that it can be used programatically in the CLI.
-// TODO: Move this into internal.
 watcher
   .on('ready', () => {
     console.log('Watching files...')
@@ -39,15 +39,15 @@ watcher
     ) {
       if (p.indexOf('Cell') !== -1 && isCellFile(p)) {
         // TODO: Delete mirror cell if unlink.
-        generateMirrorCell(p)
+        generateMirrorCell(p, rwjsPaths)
       } else if (p === rwjsPaths.web.routes) {
         generateTypeDefRouterRoutes()
       } else if (p.indexOf('Page') !== -1 && isPageFile(p)) {
         generateTypeDefRouterPages()
+      } else if (isDirectoryNamedModuleFile(p)) {
+        generateMirrorDirectoryNamedModule(p, rwjsPaths)
       }
-      // TODO: directory-named-modules.
+
       // TODO: GraphQL Schema.
     }
   })
-
-//watcher.close().then(() => console.log('closed'))
