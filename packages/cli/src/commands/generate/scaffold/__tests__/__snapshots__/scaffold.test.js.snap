@@ -1,15 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`in javascript (default) mode creates a edit page 1`] = `
-"import PostsLayout from 'src/layouts/PostsLayout'
-import EditPostCell from 'src/components/EditPostCell'
+"import EditPostCell from 'src/components/EditPostCell'
 
 const EditPostPage = ({ id }) => {
-  return (
-    <PostsLayout>
-      <EditPostCell id={id} />
-    </PostsLayout>
-  )
+  return <EditPostCell id={id} />
 }
 
 export default EditPostPage
@@ -227,15 +222,10 @@ export default PostForm
 `;
 
 exports[`in javascript (default) mode creates a index page 1`] = `
-"import PostsLayout from 'src/layouts/PostsLayout'
-import PostsCell from 'src/components/PostsCell'
+"import PostsCell from 'src/components/PostsCell'
 
 const PostsPage = () => {
-  return (
-    <PostsLayout>
-      <PostsCell />
-    </PostsLayout>
-  )
+  return <PostsCell />
 }
 
 export default PostsPage
@@ -362,15 +352,10 @@ export default NewUserProfile
 `;
 
 exports[`in javascript (default) mode creates a new page 1`] = `
-"import PostsLayout from 'src/layouts/PostsLayout'
-import NewPost from 'src/components/NewPost'
+"import NewPost from 'src/components/NewPost'
 
 const NewPostPage = () => {
-  return (
-    <PostsLayout>
-      <NewPost />
-    </PostsLayout>
-  )
+  return <NewPost />
 }
 
 export default NewPostPage
@@ -538,15 +523,10 @@ export default Post
 `;
 
 exports[`in javascript (default) mode creates a show page 1`] = `
-"import PostsLayout from 'src/layouts/PostsLayout'
-import PostCell from 'src/components/PostCell'
+"import PostCell from 'src/components/PostCell'
 
 const PostPage = ({ id }) => {
-  return (
-    <PostsLayout>
-      <PostCell id={id} />
-    </PostsLayout>
-  )
+  return <PostCell id={id} />
 }
 
 export default PostPage
@@ -1181,15 +1161,10 @@ export default PostsList
 `;
 
 exports[`in typescript mode creates a edit page 1`] = `
-"import PostsLayout from 'src/layouts/PostsLayout'
-import EditPostCell from 'src/components/EditPostCell'
+"import EditPostCell from 'src/components/EditPostCell'
 
 const EditPostPage = ({ id }) => {
-  return (
-    <PostsLayout>
-      <EditPostCell id={id} />
-    </PostsLayout>
-  )
+  return <EditPostCell id={id} />
 }
 
 export default EditPostPage
@@ -1407,15 +1382,10 @@ export default PostForm
 `;
 
 exports[`in typescript mode creates a index page 1`] = `
-"import PostsLayout from 'src/layouts/PostsLayout'
-import PostsCell from 'src/components/PostsCell'
+"import PostsCell from 'src/components/PostsCell'
 
 const PostsPage = () => {
-  return (
-    <PostsLayout>
-      <PostsCell />
-    </PostsLayout>
-  )
+  return <PostsCell />
 }
 
 export default PostsPage
@@ -1542,15 +1512,10 @@ export default NewUserProfile
 `;
 
 exports[`in typescript mode creates a new page 1`] = `
-"import PostsLayout from 'src/layouts/PostsLayout'
-import NewPost from 'src/components/NewPost'
+"import NewPost from 'src/components/NewPost'
 
 const NewPostPage = () => {
-  return (
-    <PostsLayout>
-      <NewPost />
-    </PostsLayout>
-  )
+  return <NewPost />
 }
 
 export default NewPostPage
@@ -1718,15 +1683,10 @@ export default Post
 `;
 
 exports[`in typescript mode creates a show page 1`] = `
-"import PostsLayout from 'src/layouts/PostsLayout'
-import PostCell from 'src/components/PostCell'
+"import PostCell from 'src/components/PostCell'
 
 const PostPage = ({ id }) => {
-  return (
-    <PostsLayout>
-      <PostCell id={id} />
-    </PostsLayout>
-  )
+  return <PostCell id={id} />
 }
 
 export default PostPage

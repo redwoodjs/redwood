@@ -1,3 +1,5 @@
+import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
+
 import type { SupportedAuthTypes } from '@redwoodjs/auth'
 
 import type { GlobalContext } from 'src/globalContext'
@@ -9,7 +11,6 @@ import { netlify } from './netlify'
 import { nhost } from './nhost'
 import { supabase } from './supabase'
 
-import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 const noop = (token: string) => token
 
 interface Req {

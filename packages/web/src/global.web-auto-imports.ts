@@ -11,4 +11,16 @@ declare global {
   interface Window {
     __REDWOOD__API_PROXY_PATH: string
   }
+
+  // Overridable graphQL hook return types
+  interface QueryOperationResult<TData = any> {
+    data: TData | undefined
+    loading: boolean
+    // @MARK not adding error here, as it gets overriden by type overrides
+    // see packages/web/src/apollo/typeOverride.ts
+  }
+
+  // not defining it here, because it gets overriden by Apollo provider anyway
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  interface MutationOperationResult<TData = any, TVariables = any> {}
 }
