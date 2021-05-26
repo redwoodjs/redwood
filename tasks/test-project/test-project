@@ -58,7 +58,11 @@ async function applyCodemod(codemod, target) {
 
 function addExtension(name) {
   if (typescript) {
-    name += '.tsx'
+    if (name.startsWith('api')) {
+      name += '.ts'
+    } else if (name.startsWith('web')) {
+      name += '.tsx'
+    }
   } else {
     name += '.js'
   }
@@ -266,6 +270,11 @@ async function apiTasks() {
         )
 
         await execa(`yarn rw g sdl contact`, [], getExecaOptions())
+
+        await applyCodemod(
+          'contactsSdl.js',
+          addExtension('api/src/graphql/contacts.sdl')
+        )
       },
     },
   ])
