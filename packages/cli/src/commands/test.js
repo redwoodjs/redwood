@@ -53,6 +53,11 @@ export const builder = (yargs) => {
       type: 'boolean',
       default: false,
     })
+    .option('disableDbGeneration', {
+      describe: 'Disable database generation for api side',
+      type: 'boolean',
+      default: false,
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -65,6 +70,7 @@ export const handler = async ({
   side,
   watch = true,
   collectCoverage = false,
+  disableDbGeneration = false,
 }) => {
   const { cache: CACHE_DIR } = getPaths()
   const sides = [].concat(side).filter(Boolean)
@@ -102,8 +108,10 @@ export const handler = async ({
     const cacheDirDb = `file:${ensurePosixPath(CACHE_DIR)}/test.db`
     const DATABASE_URL = process.env.TEST_DATABASE_URL || cacheDirDb
 
-    // Create a test database
-    if (sides.includes('api')) {
+    if (sides.includes('api') && !disableDbGeneration) {
+      // Create a test database
+      console.log('Generating Test Database...')
+
       await execa(
         `yarn rw`,
         ['prisma db push', '--force-reset', '--accept-data-loss'],
@@ -114,8 +122,13 @@ export const handler = async ({
           env: { DATABASE_URL },
         }
       )
+
+      console.log('Test DB successfully generated')
+    } else {
+      console.log('Skipping Test DB generation')
     }
-    // **NOTE** There is no official way to run Jest programatically,
+
+    // **NOTE** There is no official way to run Jest programmatically,
     // so we're running it via execa, since `jest.run()` is a bit unstable.
     // https://github.com/facebook/jest/issues/5048
     await execa('yarn jest', args, {
