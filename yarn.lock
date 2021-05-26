@@ -11413,11 +11413,6 @@ graphql-ws@^4.4.1:
   resolved "https://registry.yarnpkg.com/graphql-ws/-/graphql-ws-4.5.1.tgz#d9dc6e047c6d4ddb928ccbfb3ca3022580a89925"
   integrity sha512-GE7vCMKe2D7fc0ugkM1V8QMneHcbV9c3BpPBzdlW/Uzkqv0F/zZq9DDHxLzg55ZhE5OSLL+n/gyqAMPgH59hcw==
 
-graphql@15.3.0:
-  version "15.3.0"
-  resolved "https://registry.yarnpkg.com/graphql/-/graphql-15.3.0.tgz#3ad2b0caab0d110e3be4a5a9b2aa281e362b5278"
-  integrity sha512-GTCJtzJmkFLWRfFJuoo9RWWa/FfamUHgiFosxi/X1Ani4AVWbeyBenZTNX6dM+7WSbbFfTo/25eh0LLkwHMw2w==
-
 graphql@15.5.0, graphql@^15.4.0:
   version "15.5.0"
   resolved "https://registry.yarnpkg.com/graphql/-/graphql-15.5.0.tgz#39d19494dbe69d1ea719915b578bf920344a69d5"
@@ -15009,15 +15004,14 @@ next-tick@~1.0.0:
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.0.0.tgz#ca86d1fe8828169b0120208e3dc8424b9db8342c"
   integrity sha1-yobR/ogoFpsBICCOPchCS524NCw=
 
-nhost-js-sdk@3.0.0-14:
-  version "3.0.0-14"
-  resolved "https://registry.yarnpkg.com/nhost-js-sdk/-/nhost-js-sdk-3.0.0-14.tgz#6c0dab7b83874dd74952008e531138af7c134888"
-  integrity sha512-D+Jq/Ug7vnT2aZ5exV4/90m0209sanwANTOA2HPP+xjA+q/ay8BKqYsrTiBxyHJ+YLC+Mr2DbIETyTKU1x9wTA==
+nhost-js-sdk@3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/nhost-js-sdk/-/nhost-js-sdk-3.1.0.tgz#3c9cefe6a6184b91bacf7c97d68444b520ed0d71"
+  integrity sha512-DNEAUYJTQghuuYltGq8dUb/8wZaxsMgWR1IGl3lxQQ5BdUbg3Yre7U/O5dzm1JAG3kJbDKy3YnbIN9G8T/uIUw==
   dependencies:
     "@types/jwt-decode" "^2.2.1"
     axios "^0.21.1"
     jwt-decode "^2.2.0"
-    node-blob "git://github.com/elitan/node-blob.git"
     query-string "^6.13.1"
 
 nice-try@^1.0.4:
@@ -15032,10 +15026,6 @@ no-case@^3.0.4:
   dependencies:
     lower-case "^2.0.2"
     tslib "^2.0.3"
-
-"node-blob@git://github.com/elitan/node-blob.git":
-  version "0.0.2"
-  resolved "git://github.com/elitan/node-blob.git#0382ee22c765fa4c85ae64219fbe4abba1b2a474"
 
 node-dir@^0.1.10:
   version "0.1.17"
