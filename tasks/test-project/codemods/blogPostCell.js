@@ -14,12 +14,12 @@ export default (file, api) => {
   const j = api.jscodeshift
   const root = j(file.source)
 
-  const importComponent = j.importDeclaration(
+  const componentImport = j.importDeclaration(
     [j.importDefaultSpecifier(j.identifier('BlogPost'))],
     j.stringLiteral('src/components/BlogPost')
   )
 
-  root.find(j.ExportNamedDeclaration).at(0).insertBefore(importComponent)
+  root.find(j.ExportNamedDeclaration).at(0).insertBefore(componentImport)
 
   root
     .find(j.VariableDeclarator, {

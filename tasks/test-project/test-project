@@ -49,8 +49,7 @@ async function applyCodemod(codemod, target) {
     '-t',
     `${path.resolve(__dirname, 'codemods', codemod)} ${RW_BLOGPATH}/${target}`
   )
-  // args.push('-d')
-  // args.push('-p')
+
   if (typescript) {
     args.push('--parser', 'tsx')
   }
