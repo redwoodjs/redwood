@@ -1,6 +1,6 @@
 const body = `
 <header className="relative flex justify-between items-center py-4 px-8 bg-blue-700 text-white">
-  <h1 className="text-5xl font-semibold tracking-tight">
+  <h1 className="text-3xl font-semibold tracking-tight">
     <Link
       className="text-blue-400 hover:text-blue-100 transition duration-100"
       to={routes.home()}
@@ -37,7 +37,7 @@ const body = `
     </ul>
   </nav>
 </header>
-<main className="max-w-4xl mx-auto p-12 bg-white shadow rounded-b mt-3">
+<main className="max-w-4xl mx-auto p-12 bg-white shadow-lg rounded-b mt-3">
   {children}
 </main>
 `

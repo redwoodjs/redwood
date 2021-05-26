@@ -8,7 +8,9 @@ const query = `
         }
     }
 `
-const successBody = `posts.map((post) => <BlogPost post={post} />)`
+const successBody = `<div className="divide-y divide-grey-700">
+{posts.map((post) => <BlogPost post={post} />)}
+</div>`
 
 export default (file, api) => {
   const j = api.jscodeshift
