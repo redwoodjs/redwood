@@ -10,15 +10,15 @@
   "license": "MIT",
   "dependencies": {
     "@babel/plugin-transform-typescript": "7.14.3",
-    "deepmerge": "^4.2.2",
-    "findup-sync": "^4.0.0",
+    "deepmerge": "4.2.2",
+    "findup-sync": "4.0.0",
     "glob": "7.1.6",
-    "kill-port": "^1.6.1",
-    "prettier": "^2.3.0",
-    "toml": "^3.0.0"
+    "kill-port": "1.6.1",
+    "prettier": "2.3.0",
+    "toml": "3.0.0"
   },
   "devDependencies": {
-    "@types/findup-sync": "^4.0.0"
+    "@types/findup-sync": "4.0.0"
   },
   "jest": {
     "testPathIgnorePatterns": [
