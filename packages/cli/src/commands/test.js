@@ -92,10 +92,10 @@ export const handler = async ({
   const jestArgs = [
     ...jestFilterArgs,
     ...forwardJestFlags,
-    collectCoverage && '--collectCoverage',
+    collectCoverage ? '--collectCoverage' : null,
     '--passWithNoTests',
     ...jestFilterArgs,
-  ].filter(Boolean)
+  ].filter((flagOrValue) => flagOrValue !== null) // Filter out nulls, not booleans because user may have passed a --something false flag
 
   // If the user wants to watch, set the proper watch flag based on what kind of repo this is
   // because of https://github.com/facebook/create-react-app/issues/5210

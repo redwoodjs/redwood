@@ -113,3 +113,23 @@ test('Passes other flags to jest', async () => {
   expect(execa.mock.results[1].value.params).toContain('--json')
   expect(execa.mock.results[1].value.params).toContain('--collectCoverage')
 })
+
+test('Passes values of other flags to jest', async () => {
+  await handler({
+    bazinga: false,
+    hello: 'world',
+  })
+
+  // Second command because api side runs
+  expect(execa.mock.results[1].value.cmd).toBe('yarn jest')
+
+  // Note that these below tests aren't the best, since they don't check for order
+  // But I'm making sure only 2 extra params get passed
+  expect(execa.mock.results[1].value.params).toEqual(
+    expect.arrayContaining(['--bazinga', false])
+  )
+
+  expect(execa.mock.results[1].value.params).toEqual(
+    expect.arrayContaining(['--hello', 'world'])
+  )
+})
