@@ -7,7 +7,7 @@ on:
     types: [opened, synchronize]
 
 jobs:
-  lint:
+  runCI:
     name: Run CI
     runs-on: ubuntu-latest
     steps:
@@ -30,6 +30,6 @@ jobs:
       # install dependencies
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-      # lint, check, run tests, and build
+      # lint, check, run tests, and build using RedwoodJS's GitHub Action
       - name: Run CI
-        uses: redwoodjs/redwoodjs-ci@v1
+        uses: redwoodjs/project-action-ci@v1
