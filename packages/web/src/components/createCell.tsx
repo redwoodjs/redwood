@@ -25,7 +25,7 @@ export type CellLoadingProps = Omit<
 >
 // @MARK not sure about this partial, but we need to do this for tests and storybook
 export type CellSuccessProps<TData = any> = Partial<
-  Omit<QueryOperationResult<TData>, 'error' | 'loading' | 'data'>
+  Omit<QueryOperationResult<TData>, 'error' | 'data'>
 > &
   A.Compute<TData> // pre-computing makes the types more readable on hover
 
@@ -96,7 +96,7 @@ export function createCell<CellProps = any>({
   beforeQuery = (props) => ({
     variables: props,
     fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'cache-first',
+    notifyOnNetworkStatusChange: true,
   }),
   QUERY,
   afterQuery = (data) => ({ ...data }),
@@ -131,14 +131,20 @@ export function createCell<CellProps = any>({
             } else {
               throw error
             }
-          } else if (loading) {
-            return <Loading {...queryRest} {...props} />
           } else if (data) {
             if (typeof Empty !== 'undefined' && isEmpty(data)) {
-              return <Empty {...queryRest} {...props} />
+              return <Empty {...{ loading, ...queryRest }} {...props} />
             } else {
-              return <Success {...afterQuery(data)} {...queryRest} {...props} />
+              return (
+                <Success
+                  {...afterQuery(data)}
+                  {...{ loading, ...queryRest }}
+                  {...props}
+                />
+              )
             }
+          } else if (loading) {
+            return <Loading {...queryRest} {...props} />
           } else {
             throw new Error(
               'Cannot render cell: GraphQL success but `data` is null'
