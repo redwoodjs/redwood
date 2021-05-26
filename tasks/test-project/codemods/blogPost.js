@@ -36,6 +36,7 @@ export default (file, api) => {
       .find(j.Identifier, {
         name: 'BlogPost',
       })
+      .at(0)
       .replaceWith((nodePath) => {
         const { node } = nodePath
         node.typeAnnotation.typeAnnotation.typeParameters = '<Props>'
