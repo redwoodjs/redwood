@@ -123,6 +123,9 @@ const itCreatesASingleWordServiceFileWithCRUDActions = (baseArgs) => {
         )
       ]
     ).toMatchSnapshot()
+
+    // TODO
+    // Mock Date, so we can take snapshots of tests and scenarios
   })
 }
 
@@ -230,7 +233,7 @@ const itCreatesASingleWordServiceFileWithMultipleRelations = (baseArgs) => {
   })
 }
 
-describe('in javascript mode', () => {
+describe.only('in javascript mode', () => {
   const baseArgs = { ...getDefaultArgs(service.defaults), tests: true }
 
   itReturnsExactly3Files(baseArgs)

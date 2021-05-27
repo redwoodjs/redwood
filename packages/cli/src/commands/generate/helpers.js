@@ -1,6 +1,5 @@
 import path from 'path'
 
-import execa from 'execa'
 import Listr from 'listr'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
