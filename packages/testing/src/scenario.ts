@@ -32,15 +32,16 @@ export const defineScenario: DefineScenario = (data) => {
 // Note that the generic is **inside** the interface
 // This is so we can assign it to a const when we generate scenarios.d.ts
 export interface DefineScenario {
-  <PrismaCreateType extends { data: any }>(
+  <
+    PrismaCreateType extends { data: any },
+    ModelName extends string | number | symbol = string | number | symbol,
+    KeyName extends string | number | symbol = string | number | symbol
+  >(
     scenario: Record<
-      string | number, // model name
-      Record<string | number, A.Compute<PrismaCreateType['data']>>
+      ModelName,
+      Record<KeyName, A.Compute<PrismaCreateType['data']>>
     >
-  ): Record<
-    string | number, // model name
-    Record<string | number, A.Compute<PrismaCreateType['data']>>
-  >
+  ): Record<ModelName, Record<KeyName, A.Compute<PrismaCreateType['data']>>>
 }
 
 interface TestFunctionWithScenario<TData> {
