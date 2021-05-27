@@ -11,6 +11,7 @@ import {
   templateForComponentFile,
   createYargsForComponentGeneration,
 } from '../helpers'
+import { generateScenarioTypes } from '../types/generate-project-typedefs'
 
 const DEFAULT_SCENARIO_NAMES = ['one', 'two']
 
@@ -248,6 +249,7 @@ export const files = async ({
     templatePath: `scenarios.${extension}.template`,
     templateVars: {
       scenario: await buildScenario(model),
+      prismaTypeName: `${model}CreateArgs`,
       ...rest,
     },
   })
@@ -310,4 +312,20 @@ export const { command, description, handler } =
   createYargsForComponentGeneration({
     componentName: 'service',
     filesFn: files,
+    includeAdditionalTasks: (options) => {
+      return [
+        {
+          title: `Generating types...`,
+          task: async () => {
+            try {
+              generateScenarioTypes()
+            } catch (e) {
+              console.log(e)
+              throw new Error('Could not generate scenario types')
+            }
+          },
+          enabled: () => options.typescript,
+        },
+      ]
+    },
   })

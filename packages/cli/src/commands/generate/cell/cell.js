@@ -11,6 +11,7 @@ import {
   forcePluralizeWord,
   isWordNonPluralizable,
 } from '../helpers'
+import { generateGqlTypes } from '../types/generate-gql-types'
 
 const COMPONENT_SUFFIX = 'Cell'
 const REDWOOD_WEB_PATH_NAME = 'components'
@@ -45,7 +46,7 @@ const uniqueOperationName = async (name, { index = 1, list = false }) => {
 }
 
 const getIdType = (model) => {
-  return model.fields.find((field) => field.isId)?.type
+  return model.fields.find((field) => field.isId)?.type || 'Int'
 }
 
 export const files = async ({
@@ -157,7 +158,6 @@ export const { command, description, builder, handler } =
   createYargsForComponentGeneration({
     componentName: 'cell',
     filesFn: files,
-    generateTypes: true,
     optionsObj: {
       ...yargsDefaults,
       list: {
@@ -167,5 +167,22 @@ export const { command, description, builder, handler } =
           'Use when you want to generate a cell for a list of the model name.',
         type: 'boolean',
       },
+    },
+    includeAdditionalTasks: (options) => {
+      return [
+        {
+          title: `Generating types...`,
+          task: async () => {
+            try {
+              await generateGqlTypes()
+            } catch (e) {
+              throw new Error(
+                'Could not generate types, please run `yarn rw g types` or restart your dev serve with `yarn rw dev` to generate types'
+              )
+            }
+          },
+          enabled: () => options.typescript,
+        },
+      ]
     },
   })

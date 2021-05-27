@@ -5,8 +5,8 @@ import terminalLink from 'terminal-link'
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 
-import { generateCurrentUserTypes } from './generate-current-user'
 import { generateGqlTypes } from './generate-gql-types'
+import { generateCurrentUserTypes } from './generate-project-typedefs'
 
 export const command = 'types [side]'
 export const description = 'Generate graphql types'
