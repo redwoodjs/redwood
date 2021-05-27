@@ -44,7 +44,7 @@ export interface DefineScenario {
 }
 
 interface TestFunctionWithScenario<TData> {
-  (scenario: TData): Promise<void>
+  (scenario?: TData): Promise<void>
 }
 
 export interface Scenario {
