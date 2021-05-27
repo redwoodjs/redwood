@@ -1,5 +1,4 @@
 import { PrismaClient } from '@prisma/client'
-import * as prettyPrint from 'pino-pretty'
 import pino, {
   BaseLogger,
   DestinationStream,
@@ -8,6 +7,7 @@ import pino, {
   PrettyOptions,
   redactOptions,
 } from 'pino'
+import * as prettyPrint from 'pino-pretty'
 
 export type LogLevel = 'info' | 'query' | 'warn' | 'error'
 

@@ -390,21 +390,51 @@ export const cleanupEmptyDirsTask = (files) => {
   )
 }
 
+const wrapWithSet = (routesContent, layout, routes, newLineAndIndent) => {
+  const [_, indentOne, indentTwo] = routesContent.match(
+    /([ \t]*)<Router>[^<]*[\r\n]+([ \t]+)/
+  ) || ['', 0, 2]
+  const oneLevelIndent = indentTwo.slice(0, indentTwo.length - indentOne.length)
+  const newRoutesWithExtraIndent = routes.map((route) => oneLevelIndent + route)
+  return [`<Set wrap={${layout}}>`, ...newRoutesWithExtraIndent, `</Set>`].join(
+    newLineAndIndent
+  )
+}
+
 /**
  * Update the project's routes file.
  */
-export const addRoutesToRouterTask = (routes) => {
+export const addRoutesToRouterTask = (routes, layout) => {
   const redwoodPaths = getPaths()
   const routesContent = readFile(redwoodPaths.web.routes).toString()
-  const newRoutesContent = routes.reverse().reduce((content, route) => {
-    if (content.includes(route)) {
-      return content
-    }
-    return content.replace(/<Router>(\s*)/, `<Router>$1${route}$1`)
-  }, routesContent)
+  const newRoutes = routes.filter((route) => !routesContent.includes(route))
+  const [routerStart, newLineAndIndent] = routesContent.match(/<Router>(\s*)/)
+  const routesBatch = layout
+    ? wrapWithSet(routesContent, layout, newRoutes, newLineAndIndent)
+    : newRoutes.join(newLineAndIndent)
+  const newRoutesContent = routesContent.replace(
+    routerStart,
+    `${routerStart + routesBatch + newLineAndIndent}`
+  )
   writeFile(redwoodPaths.web.routes, newRoutesContent, {
     overwriteExisting: true,
   })
+}
+
+const removeEmtpySet = (routesContent, layout) => {
+  const setWithLayoutReg = new RegExp(
+    `\\s*<Set[^>]*wrap={${layout}}[^<]*>([^<]*)<\/Set>`
+  )
+  const [matchedSet, childContent] = routesContent.match(setWithLayoutReg) || []
+  if (!matchedSet) {
+    return routesContent
+  }
+
+  const child = childContent.replace(/\s/g, '')
+  if (child.length > 0) {
+    return routesContent
+  }
+  return routesContent.replace(setWithLayoutReg, '')
 }
 
 /**
@@ -412,7 +442,7 @@ export const addRoutesToRouterTask = (routes) => {
  *
  * @param {string[]} routes - Route names
  */
-export const removeRoutesFromRouterTask = (routes) => {
+export const removeRoutesFromRouterTask = (routes, layout) => {
   const redwoodPaths = getPaths()
   const routesContent = readFile(redwoodPaths.web.routes).toString()
   const newRoutesContent = routes.reduce((content, route) => {
@@ -420,7 +450,11 @@ export const removeRoutesFromRouterTask = (routes) => {
     return content.replace(matchRouteByName, '')
   }, routesContent)
 
-  writeFile(redwoodPaths.web.routes, newRoutesContent, {
+  const routesWithoutEmptySet = layout
+    ? removeEmtpySet(newRoutesContent, layout)
+    : newRoutesContent
+
+  writeFile(redwoodPaths.web.routes, routesWithoutEmptySet, {
     overwriteExisting: true,
   })
 }

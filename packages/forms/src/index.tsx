@@ -22,8 +22,8 @@ const DEFAULT_MESSAGES = {
   pattern: 'is not formatted correctly',
   minLength: 'is too short',
   maxLength: 'is too long',
-  min: 'is too high',
-  max: 'is too low',
+  min: 'is too low',
+  max: 'is too high',
   validate: 'is not valid',
 }
 

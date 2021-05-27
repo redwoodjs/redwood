@@ -44,6 +44,7 @@ export interface Paths {
   base: string
   web: BrowserTargetPaths
   api: NodeTargetPaths
+  scripts: string
 }
 
 export interface PagesDependency {
@@ -62,6 +63,7 @@ export interface PagesDependency {
 const CONFIG_FILE_NAME = 'redwood.toml'
 
 const PATH_API_DIR_FUNCTIONS = 'api/src/functions'
+const PATH_RW_SCRIPTS = 'scripts'
 const PATH_API_DIR_GRAPHQL = 'api/src/graphql'
 const PATH_API_DIR_CONFIG = 'api/src/config'
 const PATH_API_DIR_LIB = 'api/src/lib'
@@ -146,6 +148,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
     cache,
     types,
     globals,
+    scripts: path.join(BASE_DIR, PATH_RW_SCRIPTS),
     api: {
       base: path.join(BASE_DIR, 'api'),
       dataMigrations: path.join(BASE_DIR, schemaDir, 'dataMigrations'),

@@ -5,7 +5,6 @@ import withApiProxy from './middleware/withApiProxy'
 import withFunctions from './middleware/withFunctions'
 import withWebServer from './middleware/withWebServer'
 import { startServer } from './server'
-
 import type { HttpServerParams } from './server'
 
 /*
