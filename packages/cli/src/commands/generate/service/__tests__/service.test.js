@@ -233,7 +233,7 @@ const itCreatesASingleWordServiceFileWithMultipleRelations = (baseArgs) => {
   })
 }
 
-describe.only('in javascript mode', () => {
+describe('in javascript mode', () => {
   const baseArgs = { ...getDefaultArgs(service.defaults), tests: true }
 
   itReturnsExactly3Files(baseArgs)
