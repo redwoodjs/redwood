@@ -471,7 +471,7 @@ const inputComponents: Record<
       React.RefAttributes<HTMLInputElement>
   >
 > = {}
-Object.values(inputTypes).forEach((type) => {
+inputTypes.forEach((type) => {
   inputComponents[`${pascalcase(type)}Field`] = forwardRef<
     HTMLInputElement,
     InputFieldProps & React.InputHTMLAttributes<HTMLInputElement>
