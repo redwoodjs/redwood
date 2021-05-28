@@ -8,6 +8,9 @@ export const FetchConfigContext = React.createContext<FetchConfig>({
   uri: `${global.__REDWOOD__API_PROXY_PATH}/graphql`,
 })
 
+const defaultAuthState = { loading: false, isAuthenticated: false }
+type UseAuthType = () => AuthContextInterface
+
 /**
  * The `FetchConfigProvider` understands Redwood's Auth and determines the
  * correct request-headers based on a user's authentication state.
@@ -15,10 +18,9 @@ export const FetchConfigContext = React.createContext<FetchConfig>({
  * as the token is retrieved async
  */
 export const FetchConfigProvider: React.FunctionComponent<{
-  useAuth?: () => AuthContextInterface
+  useAuth?: UseAuthType
 }> = ({
-  useAuth = global.__REDWOOD__USE_AUTH ??
-    (() => ({ loading: false, isAuthenticated: false })),
+  useAuth = global.__REDWOOD__USE_AUTH ?? (() => defaultAuthState),
   ...rest
 }) => {
   const { isAuthenticated, type } = useAuth()
