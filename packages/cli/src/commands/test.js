@@ -53,10 +53,11 @@ export const builder = (yargs) => {
       type: 'boolean',
       default: false,
     })
-    .option('disableDbGeneration', {
-      describe: 'Disable database generation for api side',
+    .option('db-push', {
+      describe:
+        "Syncs the test database with your Prisma schema. It creates a test database if it doesn't already exist.",
       type: 'boolean',
-      default: false,
+      default: true,
     })
     .epilogue(
       `Also see the ${terminalLink(
@@ -70,7 +71,7 @@ export const handler = async ({
   side,
   watch = true,
   collectCoverage = false,
-  disableDbGeneration = false,
+  dbPush = true,
 }) => {
   const { cache: CACHE_DIR } = getPaths()
   const sides = [].concat(side).filter(Boolean)
@@ -108,10 +109,8 @@ export const handler = async ({
     const cacheDirDb = `file:${ensurePosixPath(CACHE_DIR)}/test.db`
     const DATABASE_URL = process.env.TEST_DATABASE_URL || cacheDirDb
 
-    if (sides.includes('api') && !disableDbGeneration) {
-      // Create a test database
-      console.log('Generating Test Database...')
-
+    if (sides.includes('api') && dbPush) {
+      // Sync||create test database
       await execa(
         `yarn rw`,
         ['prisma db push', '--force-reset', '--accept-data-loss'],
@@ -122,10 +121,6 @@ export const handler = async ({
           env: { DATABASE_URL },
         }
       )
-
-      console.log('Test DB successfully generated')
-    } else {
-      console.log('Skipping Test DB generation')
     }
 
     // **NOTE** There is no official way to run Jest programmatically,
