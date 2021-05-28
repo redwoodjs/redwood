@@ -8,7 +8,7 @@ window.__REDWOOD__API_PROXY_PATH = 'https://api.example.com'
 import { FetchConfigProvider, useFetchConfig } from './FetchConfigProvider'
 
 const FetchConfigToString: React.FunctionComponent = () => {
-  const c = useFetchConfig()
+  const c = useFetchConfig() //?
   return <>{JSON.stringify(c)}</>
 }
 
@@ -39,7 +39,6 @@ describe('FetchConfigProvider', () => {
           ({
             loading: false,
             isAuthenticated: true,
-            authToken: 'margle the world',
             type: 'custom',
           } as AuthContextInterface)
         }
@@ -49,7 +48,7 @@ describe('FetchConfigProvider', () => {
     )
     await waitFor(() =>
       screen.getByText(
-        '{"uri":"https://api.example.com/graphql","headers":{"auth-provider":"custom","authorization":"Bearer margle the world"}}'
+        '{"uri":"https://api.example.com/graphql","headers":{"auth-provider":"custom"}}'
       )
     )
   })
