@@ -61,7 +61,7 @@ describe('yarn rw serve', () => {
     expect(apiServerHandler).toHaveBeenCalledWith(
       expect.objectContaining({
         port: 5555,
-        apiRootPath: 'funkyFunctions',
+        apiRootPath: expect.stringMatching(/^\/?funkyFunctions\/?$/),
       })
     )
   })
@@ -74,7 +74,7 @@ describe('yarn rw serve', () => {
     expect(apiServerHandler).toHaveBeenCalledWith(
       expect.objectContaining({
         port: 5555,
-        rootPath: 'funkyFunctions/nested/',
+        rootPath: expect.stringMatching(/^\/?funkyFunctions\/nested\/$/),
       })
     )
   })
