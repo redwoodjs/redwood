@@ -55,7 +55,7 @@ export const builder = (yargs) => {
     })
     .option('db-push', {
       describe:
-        "Syncs the test database with your Prisma schema. It creates a test database if it doesn't already exist.",
+        "Syncs the test database with your Prisma schema without requiring a migration. It creates a test database if it doesn't already exist.",
       type: 'boolean',
       default: true,
     })
