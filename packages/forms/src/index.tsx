@@ -27,29 +27,31 @@ const DEFAULT_MESSAGES = {
   validate: 'is not valid',
 }
 
-enum INPUT_TYPES {
-  BUTTON = 'button',
-  COLOR = 'color',
-  DATE = 'date',
-  DATETIME_LOCAL = 'datetime-local',
-  EMAIL = 'email',
-  FILE = 'file',
-  HIDDEN = 'hidden',
-  IMAGE = 'image',
-  MONTH = 'month',
-  NUMBER = 'number',
-  PASSWORD = 'password',
-  RADIO = 'radio',
-  RANGE = 'range',
-  RESET = 'reset',
-  SEARCH = 'search',
-  SUBMIT = 'submit',
-  TEL = 'tel',
-  TEXT = 'text',
-  TIME = 'time',
-  URL = 'url',
-  WEEK = 'week',
-}
+const inputTypes = [
+  'button',
+  'color',
+  'date',
+  'datetime-local',
+  'email',
+  'file',
+  'hidden',
+  'image',
+  'month',
+  'number',
+  'password',
+  'radio',
+  'range',
+  'reset',
+  'search',
+  'submit',
+  'tel',
+  'text',
+  'time',
+  'url',
+  'week',
+]
+
+type INPUT_TYPES = typeof inputTypes[number]
 
 // Massages a hash of props depending on whether the given named field has
 // any errors on it
@@ -469,7 +471,7 @@ const inputComponents: Record<
       React.RefAttributes<HTMLInputElement>
   >
 > = {}
-Object.values(INPUT_TYPES).forEach((type) => {
+Object.values(inputTypes).forEach((type) => {
   inputComponents[`${pascalcase(type)}Field`] = forwardRef<
     HTMLInputElement,
     InputFieldProps & React.InputHTMLAttributes<HTMLInputElement>
