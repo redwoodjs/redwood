@@ -56,12 +56,25 @@ describe('yarn rw serve', () => {
   it('Should proxy serve api with params to api-server handler', async () => {
     const parser = yargs.command('serve [side]', false, builder)
 
-    parser.parse('serve api --port 5555 --rootPath funkyFunctions')
+    parser.parse('serve api --port 5555 --apiRootPath funkyFunctions')
 
     expect(apiServerHandler).toHaveBeenCalledWith(
       expect.objectContaining({
         port: 5555,
-        apiRootPath: '/funkyFunctions/',
+        apiRootPath: expect.stringMatching(/^\/?funkyFunctions\/?$/),
+      })
+    )
+  })
+
+  it('Should proxy serve api with params to api-server handler (alias and slashes in path)', async () => {
+    const parser = yargs.command('serve [side]', false, builder)
+
+    parser.parse('serve api --port 5555 --rootPath funkyFunctions/nested/')
+
+    expect(apiServerHandler).toHaveBeenCalledWith(
+      expect.objectContaining({
+        port: 5555,
+        rootPath: expect.stringMatching(/^\/?funkyFunctions\/nested\/$/),
       })
     )
   })
@@ -82,7 +95,7 @@ describe('yarn rw serve', () => {
     )
   })
 
-  it('Should proxy rw serve with params to approripate handler', async () => {
+  it('Should proxy rw serve with params to appropriate handler', async () => {
     const parser = yargs.command('serve [side]', false, builder)
 
     parser.parse('serve --port 9898 --socket abc')
