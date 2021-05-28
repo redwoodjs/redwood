@@ -3,12 +3,13 @@ import { render, screen, waitFor } from '@testing-library/react'
 import type { AuthContextInterface } from '@redwoodjs/auth'
 import '@testing-library/jest-dom/extend-expect'
 
-window.__REDWOOD__API_PROXY_PATH = 'https://api.example.com'
+// @ts-expect-error Mocking api proxy path for test
+global.__REDWOOD__API_PROXY_PATH = 'https://api.example.com'
 
 import { FetchConfigProvider, useFetchConfig } from './FetchConfigProvider'
 
 const FetchConfigToString: React.FunctionComponent = () => {
-  const c = useFetchConfig() //?
+  const c = useFetchConfig()
   return <>{JSON.stringify(c)}</>
 }
 
