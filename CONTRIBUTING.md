@@ -311,6 +311,24 @@ yarn rwt install @redwoodjs/dev-server
 > yarn upgrade @redwoodjs/dev-server@dev --no-lockfile --registry http://localhost:4873/
 > ```
 
+## Creating a Functional Test Project
+
+We understand that sometimes you need to test some functionalities, and you don't have a local project to test your changes. We don't want it to be something that prevents you from contributing to Redwood.
+
+Using the functional test project might be the easiest and fastest way to test your changes in Redwood. You can create a Redwood project that contains a big range of functionalities in a few minutes.
+
+The following command creates a new project app using your local Create Redwood App and applies code mods of the [Redwood tutorial](https://learn.redwoodjs.com/docs/tutorial/welcome-to-redwood/). At the end, you will have a full working Redwood blog.
+
+Run the following in the `redwood` folder:
+
+```terminal
+yarn run build:test-project
+```
+
+By default, the project is generated in JavaScript. You might want to have the TypeScript version. For this, add `--typescript` to the command.
+
+If you prefer, you can upgrade to the latest canary version using `--canary`.
+
 ## Running Your Redwood App's Local Server(s)
 
 When developing Redwood Apps, you’re probably used to running both the API and Web servers with `yarn rw dev` and seeing your changes included immediately.
