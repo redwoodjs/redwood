@@ -12,7 +12,12 @@ afterAll(() => {
   delete process.env.__REDWOOD__CONFIG_PATH
 })
 
-import { findCells, findDirectoryNamedModules, findPages } from '../files'
+import {
+  findCells,
+  findDirectoryNamedModules,
+  findGraphQLSchemas,
+  findPages,
+} from '../files'
 import { ensurePosixPath } from '../paths'
 
 test('finds all the cells', () => {
@@ -57,4 +62,12 @@ test('finds all the page files', () => {
       "/web/src/pages/admin/EditUserPage/EditUserPage.jsx",
     ]
   `)
+})
+
+test('find the graphql schema files', () => {
+  const paths = findGraphQLSchemas()
+  const p = paths.map((p) => p.replace(FIXTURE_PATH, '')).map(ensurePosixPath)
+
+  expect(p[0]).toMatchInlineSnapshot(`"/api/src/graphql/currentUser.sdl.ts"`)
+  expect(p[1]).toMatchInlineSnapshot(`"/api/src/graphql/todos.sdl.js"`)
 })

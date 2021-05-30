@@ -35,6 +35,12 @@ export const findDirectoryNamedModules = (cwd: string = getPaths().base) => {
   return modules.filter(isDirectoryNamedModuleFile)
 }
 
+export const findGraphQLSchemas = (cwd: string = getPaths().api.graphql) => {
+  return fg
+    .sync('**/*.sdl.{ts,js}', { cwd, absolute: true })
+    .filter(isGraphQLSchemaFile)
+}
+
 export const isCellFile = (p: string) => {
   const { dir, name } = path.parse(p)
   // A Cell must be a directory named module.
@@ -86,4 +92,15 @@ export const isPageFile = (p: string) => {
 export const isDirectoryNamedModuleFile = (p: string) => {
   const { dir, name } = path.parse(p)
   return dir.endsWith(name)
+}
+
+export const isGraphQLSchemaFile = (p: string) => {
+  p.match(/\.sdl\.(ts|js)$/) // ?
+  if (!p.match(/\.sdl\.(ts|js)$/)?.[0]) {
+    return false
+  }
+
+  const code = fs.readFileSync(p, 'utf-8')
+  const exports = getNamedExports(code)
+  return exports.findIndex((v) => v.name === 'schema') !== -1
 }
