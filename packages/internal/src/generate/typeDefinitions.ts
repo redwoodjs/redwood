@@ -9,12 +9,17 @@ import { writeTemplate } from './templates'
 
 // Note for contributors:
 //
-// The functions in this file generate type definitions.
+// The functions in this file generate type definitions of which there are two types:
+//
+// 1. Mirror types: Create a virtual directory that allows us to type
+// cells and directory named modules.
+// 2. Types based on contents of other files
 //
 // When generating a new type definition that targets a particular side,
 // you must prefix the generated filename
 // with "web-" or "api-" to target inclusion for that side,
-// or use "all-" for both.
+// or use "all-" for both. This is controlled by the user's "tsconfig.json"
+// file.
 
 export const generateTypeDefs = () => {
   const p1 = generateMirrorDirectoryNamedModules()
@@ -35,25 +40,32 @@ export const generateMirrorDirectoryNamedModules = () => {
   )
 }
 
+export const mirrorPathForDirectoryNamedModules = (
+  p: string,
+  rwjsPaths = getPaths()
+) => {
+  return [
+    path.join(
+      rwjsPaths.generated.types.mirror,
+      path.dirname(p).replace(rwjsPaths.base, '')
+    ),
+    'index.d.ts',
+  ]
+}
+
 export const generateMirrorDirectoryNamedModule = (
   p: string,
   rwjsPaths = getPaths()
 ) => {
-  const { dir, name } = path.parse(p)
-
-  const mirrorDir = path.join(
-    rwjsPaths.generated.types.mirror,
-    dir.replace(rwjsPaths.base, '')
-  )
+  const [mirrorDir, typeDef] = mirrorPathForDirectoryNamedModules(p, rwjsPaths)
   fs.mkdirSync(mirrorDir, { recursive: true })
 
-  const typeDefPath = path.join(mirrorDir, 'index.d.ts')
+  const typeDefPath = path.join(mirrorDir, typeDef)
+  const { name } = path.parse(p)
   writeTemplate(
     'templates/mirror-directoryNamedModule.d.ts.template',
     typeDefPath,
-    {
-      name,
-    }
+    { name }
   )
   return typeDefPath
 }
@@ -63,15 +75,21 @@ export const generateMirrorCells = () => {
   return findCells().map((p) => generateMirrorCell(p, rwjsPaths))
 }
 
-export const generateMirrorCell = (p: string, rwjsPaths = getPaths()) => {
-  const { dir, name } = path.parse(p)
-
+export const mirrorPathForCell = (p: string, rwjsPaths = getPaths()) => {
   const mirrorDir = path.join(
     rwjsPaths.generated.types.mirror,
-    dir.replace(rwjsPaths.base, '')
+    path.dirname(p).replace(rwjsPaths.base, '')
   )
   fs.mkdirSync(mirrorDir, { recursive: true })
-  const typeDefPath = path.join(mirrorDir, 'index.d.ts')
+  return [mirrorDir, 'index.d.ts']
+}
+
+export const generateMirrorCell = (p: string, rwjsPaths = getPaths()) => {
+  const [mirrorDir, typeDef] = mirrorPathForCell(p, rwjsPaths)
+  fs.mkdirSync(mirrorDir, { recursive: true })
+
+  const typeDefPath = path.join(mirrorDir, typeDef)
+  const { name } = path.parse(p)
   writeTemplate('templates/mirror-cell.d.ts.template', typeDefPath, { name })
   return typeDefPath
 }

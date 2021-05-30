@@ -1,3 +1,4 @@
+import fs from 'fs'
 import path from 'path'
 
 import chokidar from 'chokidar'
@@ -10,6 +11,8 @@ import {
   generateMirrorDirectoryNamedModule,
   generateTypeDefRouterRoutes,
   generateTypeDefRouterPages,
+  mirrorPathForDirectoryNamedModules,
+  mirrorPathForCell,
 } from './typeDefinitions'
 
 // TODO: Make this emit our own events so that it can be used programatically in the CLI.
@@ -39,14 +42,21 @@ watcher
       eventName == 'unlink'
     ) {
       if (p.indexOf('Cell') !== -1 && isCellFile(p)) {
-        // TODO: Delete mirror cell if unlink.
-        generateMirrorCell(p, rwjsPaths)
+        if (eventName === 'unlink') {
+          fs.unlinkSync(mirrorPathForCell(p, rwjsPaths)[0])
+        } else {
+          generateMirrorCell(p, rwjsPaths)
+        }
       } else if (p === rwjsPaths.web.routes) {
         generateTypeDefRouterRoutes()
       } else if (p.indexOf('Page') !== -1 && isPageFile(p)) {
         generateTypeDefRouterPages()
       } else if (isDirectoryNamedModuleFile(p)) {
-        generateMirrorDirectoryNamedModule(p, rwjsPaths)
+        if (eventName === 'unlink') {
+          fs.unlinkSync(mirrorPathForDirectoryNamedModules(p, rwjsPaths)[0])
+        } else {
+          generateMirrorDirectoryNamedModule(p, rwjsPaths)
+        }
       }
 
       // TODO: GraphQL Schema.

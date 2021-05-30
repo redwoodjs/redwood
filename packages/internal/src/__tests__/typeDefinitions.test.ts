@@ -9,6 +9,8 @@ import {
   generateTypeDefRouterRoutes,
   generateTypeDefGlobImports,
   generateTypeDefGlobalContext,
+  mirrorPathForDirectoryNamedModules,
+  mirrorPathForCell,
 } from '../generate/typeDefinitions'
 import { ensurePosixPath } from '../paths'
 
@@ -117,4 +119,20 @@ test('generate api global context', () => {
   const paths = generateTypeDefGlobalContext()
   const p = paths.map((p) => p.replace(FIXTURE_PATH, '')).map(ensurePosixPath)
   expect(p[0]).toEqual('/.redwood/types/includes/api-globalContext.d.ts')
+})
+
+test('mirror path for directory named modules', () => {
+  const p = mirrorPathForDirectoryNamedModules(
+    'src/components/CoolComponent/CoolComponent.ts'
+  )
+  expect(p[0].replace(FIXTURE_PATH, '')).toMatchInlineSnapshot(
+    `"/.redwood/types/mirror/src/components/CoolComponent"`
+  )
+})
+
+test('mirror path for dir cells', () => {
+  const p = mirrorPathForCell('src/components/MyCell/MyCell.tsx')
+  expect(p[0].replace(FIXTURE_PATH, '')).toMatchInlineSnapshot(
+    `"/.redwood/types/mirror/src/components/MyCell"`
+  )
 })
