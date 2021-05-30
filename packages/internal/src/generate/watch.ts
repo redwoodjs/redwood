@@ -35,56 +35,57 @@ const watcher = chokidar.watch('**/src/**/*.{ts,js,jsx,tsx}', {
   awaitWriteFinish: true,
 })
 
+const action = {
+  add: 'Created',
+  unlink: 'Deleted',
+  change: 'Modified',
+}
+
 watcher
   .on('ready', async () => {
-    console.log()
-    console.log('Generating...')
-    console.log()
-
+    console.log('Generating TypeScript definitions and GraphQL schemas...')
     const files = await generate()
-    for (const f of files) {
-      console.log('  -', f.replace(rwjsPaths.base, '')?.substring(1))
-    }
+    console.log(files.length, 'files generated')
   })
   .on('all', async (eventName, p) => {
     if (!['add', 'change', 'unlink'].includes(eventName)) {
       return
     }
+    eventName = eventName as 'add' | 'change' | 'unlink'
 
-    p = path.join(rwjsPaths.base, p)
+    const absPath = path.join(rwjsPaths.base, p)
 
-    if (p.indexOf('Cell') !== -1 && isCellFile(p)) {
-      console.log('Cell:', p)
-
-      const f1 = await generateTypeDefGraphQL('web')
-      f1.map((f) => console.log(' -', f))
+    if (absPath.indexOf('Cell') !== -1 && isCellFile(absPath)) {
+      await generateTypeDefGraphQL('web')
       if (eventName === 'unlink') {
-        fs.unlinkSync(mirrorPathForCell(p, rwjsPaths)[0])
+        fs.unlinkSync(mirrorPathForCell(absPath, rwjsPaths)[0])
       } else {
-        const f = generateMirrorCell(p, rwjsPaths)
-        console.log(' -', f)
+        generateMirrorCell(absPath, rwjsPaths)
       }
-    } else if (p === rwjsPaths.web.routes) {
-      console.log('Routes:', p)
-      generateTypeDefRouterRoutes().map((f) => console.log(' -', f))
-    } else if (p.indexOf('Page') !== -1 && isPageFile(p)) {
-      console.log('Page:', p)
-      generateTypeDefRouterPages().map((f) => console.log(' -', f))
-    } else if (isDirectoryNamedModuleFile(p)) {
-      console.log('Directory named module:', p)
+
+      console.log(action[eventName], 'Cell:', '\x1b[2m', p, '\x1b[0m')
+    } else if (absPath === rwjsPaths.web.routes) {
+      generateTypeDefRouterRoutes()
+      console.log(action[eventName], 'Routes:', '\x1b[2m', p, '\x1b[0m')
+    } else if (absPath.indexOf('Page') !== -1 && isPageFile(absPath)) {
+      generateTypeDefRouterPages()
+      console.log(action[eventName], 'Page:', '\x1b[2m', p, '\x1b[0m')
+    } else if (isDirectoryNamedModuleFile(absPath)) {
       if (eventName === 'unlink') {
-        fs.unlinkSync(mirrorPathForDirectoryNamedModules(p, rwjsPaths)[0])
+        fs.unlinkSync(mirrorPathForDirectoryNamedModules(absPath, rwjsPaths)[0])
       } else {
-        const f = generateMirrorDirectoryNamedModule(p, rwjsPaths)
-        console.log(' -', f)
+        generateMirrorDirectoryNamedModule(absPath, rwjsPaths)
       }
-    } else if (isGraphQLSchemaFile(p)) {
-      console.log('GraphQL schema:', p)
-      const f1 = await generateGraphQLSchema()
-      if (f1) {
-        console.log(' -', f1)
-      }
-      const f2 = await generateTypeDefGraphQL('api')
-      f2.map((f) => console.log(' -', f))
+      console.log(
+        action[eventName],
+        'Directory named module:',
+        '\x1b[2m',
+        p,
+        '\x1b[0m'
+      )
+    } else if (isGraphQLSchemaFile(absPath)) {
+      await generateGraphQLSchema()
+      await generateTypeDefGraphQL('api')
+      console.log(action[eventName], 'GraphQL Schema:', '\x1b[2m', p, '\x1b[0m')
     }
   })

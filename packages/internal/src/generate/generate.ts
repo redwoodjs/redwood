@@ -21,7 +21,7 @@ const run = async () => {
   const rwjsPaths = getPaths()
   const files = await generate()
   for (const f of files) {
-    console.log('  -', f.replace(rwjsPaths.base, '')?.substring(1))
+    console.log('-', f.replace(rwjsPaths.base + '/', ''))
   }
 
   console.log()

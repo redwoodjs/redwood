@@ -127,7 +127,8 @@ export const handler = async ({
     }
   ).catch((e) => {
     if (typeof e?.message !== 'undefined') {
-      console.log(c.error(e.message))
+      console.error(c.error(e.message))
+      process.exit(1)
     }
   })
 }

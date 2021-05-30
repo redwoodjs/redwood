@@ -43,6 +43,8 @@ export const generateGraphQLSchema = async () => {
             plugins: ['schema-ast'],
           },
         },
+        silent: false,
+        errorsOnly: true,
       },
       true
     )
