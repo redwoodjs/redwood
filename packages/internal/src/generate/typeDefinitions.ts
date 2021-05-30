@@ -148,21 +148,18 @@ export const generateTypeDefGlobalContext = () => {
 
 // TODO: We're going to have to give the user an entry point into this
 // configuration file because they may have to define other scalars
-// and they may want to generate for other side.s
+// and they may want to generate a custom side. :shrug
 // TODO: Figure out how to get a list of scalars from the api-side so that
 // they don't get out of sync.
 export const generateTypeDefGraphQL = async () => {
   const rwjsPaths = getPaths()
-
   type GenerateResponse = { filename: string; contents: string }[]
-
   try {
     // https://www.graphql-code-generator.com/docs/getting-started/programmatic-usage#using-the-cli-instead-of-core
-    // TODO: Move to core once we write the schema to disk.
     const f: GenerateResponse = await generate(
       {
         cwd: rwjsPaths.base,
-        schema: 'http://127.0.0.1:8911/graphql',
+        schema: rwjsPaths.generated.schema,
         config: {
           scalars: {
             DateTime: 'string',
