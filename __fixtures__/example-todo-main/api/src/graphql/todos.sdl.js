@@ -7,7 +7,7 @@ export const schema = gql`
 
   type Query {
     todos: [Todo]
-    # todosCount: Int!
+    todosCount: Int!
   }
 
   type Mutation {
