@@ -64,7 +64,7 @@ const DEFAULT_CONFIG: Config = {
     port: 8911,
     path: './api',
     target: TargetEnum.NODE,
-    schemaPath: './api/prisma/schema.prisma',
+    schemaPath: './api/db/schema.prisma',
   },
   browser: {
     open: false,
