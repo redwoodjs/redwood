@@ -45,7 +45,7 @@ const getIdType = (model) => {
 const getImportComponentNames = (
   name,
   scaffoldPath,
-  individualComponentFolders = false
+  oneComponentFolder = true
 ) => {
   const pluralName = pascalcase(pluralize(name))
   const singularName = pascalcase(pluralize.singular(name))
@@ -53,19 +53,7 @@ const getImportComponentNames = (
     scaffoldPath !== ''
       ? scaffoldPath.split('/').map(pascalcase).join('/') + '/'
       : ''
-  if (individualComponentFolders) {
-    const path = `src/components/${sP}`
-    return {
-      importName: `${path}${singularName}/${singularName}`,
-      importNameCell: `${path}${singularName}Cell/${singularName}Cell`,
-      importNameEditCell: `${path}${singularName}EditCell/${singularName}EditCell`,
-      importNameForm: `${path}${singularName}Form/${singularName}Form`,
-      importNameNew: `${path}${singularName}New/${singularName}New`,
-      importNames: `${path}${pluralName}/${pluralName}`,
-      importNamesCell: `${path}${pluralName}Cell/${pluralName}Cell`,
-      importNamesLayout: `src/layouts/${sP}${pluralName}Layout/${pluralName}Layout`,
-    }
-  } else {
+  if (oneComponentFolder) {
     const path = `src/components/${sP}${singularName}/`
     return {
       // default case
@@ -78,15 +66,23 @@ const getImportComponentNames = (
       importNamesCell: `${path}${pluralName}Cell`,
       importNamesLayout: `src/layouts/${sP}${pluralName}Layout/${pluralName}Layout`,
     }
+  } else {
+    const path = `src/components/${sP}`
+    return {
+      importName: `${path}${singularName}/${singularName}`,
+      importNameCell: `${path}${singularName}Cell/${singularName}Cell`,
+      importNameEditCell: `${path}${singularName}EditCell/${singularName}EditCell`,
+      importNameForm: `${path}${singularName}Form/${singularName}Form`,
+      importNameNew: `${path}${singularName}New/${singularName}New`,
+      importNames: `${path}${pluralName}/${pluralName}`,
+      importNamesCell: `${path}${pluralName}Cell/${pluralName}Cell`,
+      importNamesLayout: `src/layouts/${sP}${pluralName}Layout/${pluralName}Layout`,
+    }
   }
 }
 
 // Includes imports from getImportComponentNames()
-const getTemplateStrings = (
-  name,
-  scaffoldPath,
-  individualComponentFolders = false
-) => {
+const getTemplateStrings = (name, scaffoldPath, oneComponentFolder = true) => {
   const pluralPascalName = pascalcase(pluralize(name))
   const singularPascalName = pascalcase(pluralize.singular(name))
   //const singularPascalName = pascalcase(pluralize.singular(name))
@@ -118,7 +114,7 @@ const getTemplateStrings = (
       scaffoldPath === ''
         ? `${singularCamelName}New`
         : `${camelScaffoldPath}${singularPascalName}New`,
-    ...getImportComponentNames(name, scaffoldPath, individualComponentFolders),
+    ...getImportComponentNames(name, scaffoldPath, oneComponentFolder),
   }
 }
 
@@ -127,17 +123,16 @@ export const files = async ({
   path: scaffoldPath = '',
   tests = true,
   typescript = false,
-  individualComponentFolders,
+  oneComponentFolder,
 }) => {
   const model = await getSchema(pascalcase(pluralize.singular(name)))
-  if (typeof individualComponentFolders === 'undefined') {
-    individualComponentFolders = getConfig().generate
-      .scaffoldIndividualComponentFolders
+  if (typeof oneComponentFolder === 'undefined') {
+    oneComponentFolder = getConfig().generate.oneComponentFolderPerScaffold
   }
   const templateStrings = getTemplateStrings(
     name,
     scaffoldPath,
-    individualComponentFolders
+    oneComponentFolder
   )
 
   return {
@@ -162,7 +157,7 @@ export const files = async ({
       name,
       scaffoldPath,
       typescript,
-      individualComponentFolders,
+      oneComponentFolder,
       templateStrings
     )),
   }
@@ -292,7 +287,7 @@ const componentFiles = async (
   name,
   scaffoldPath = '',
   generateTypescript,
-  individualComponentFolders,
+  oneComponentFolder,
   templateStrings
 ) => {
   const pluralName = pascalcase(pluralize(name))
@@ -390,9 +385,9 @@ const componentFiles = async (
       .replace(/Name/, singularName)
       .replace(/\.js\.template/, generateTypescript ? '.tsx' : '.js')
 
-    const finalFolder = individualComponentFolders
-      ? outputComponentName.replace(/\.(js|tsx?)/, '')
-      : singularName
+    const finalFolder = oneComponentFolder
+      ? singularName
+      : outputComponentName.replace(/\.(js|tsx?)/, '')
 
     const outputPath = path.join(
       getPaths().web.components,

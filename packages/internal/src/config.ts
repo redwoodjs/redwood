@@ -43,7 +43,7 @@ export interface Config {
   generate: {
     tests: boolean
     stories: boolean
-    scaffoldIndividualComponentFolders: boolean
+    oneComponentFolderPerScaffold: boolean
   }
 }
 
@@ -73,7 +73,7 @@ const DEFAULT_CONFIG: Config = {
   generate: {
     tests: true,
     stories: true,
-    scaffoldIndividualComponentFolders: false,
+    oneComponentFolderPerScaffold: false,
   },
 }
 

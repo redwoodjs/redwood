@@ -17,7 +17,7 @@ describe('in javascript (default) mode', () => {
       ...getDefaultArgs(defaults),
       model: 'Post',
       tests: true,
-      individualComponentFolders: false,
+      oneComponentFolder: true,
     })
   })
 
@@ -119,9 +119,7 @@ describe('in javascript (default) mode', () => {
   test('creates an index cell', async () => {
     expect(
       files[
-        path.normalize(
-          '/path/to/project/web/src/components/Post/PostsCell.js'
-        )
+        path.normalize('/path/to/project/web/src/components/Post/PostsCell.js')
       ]
     ).toMatchSnapshot()
   })
@@ -129,9 +127,7 @@ describe('in javascript (default) mode', () => {
   test('creates a show cell', async () => {
     expect(
       files[
-        path.normalize(
-          '/path/to/project/web/src/components/Post/PostCell.js'
-        )
+        path.normalize('/path/to/project/web/src/components/Post/PostCell.js')
       ]
     ).toMatchSnapshot()
   })
@@ -141,18 +137,14 @@ describe('in javascript (default) mode', () => {
   test('creates a form component', async () => {
     expect(
       files[
-        path.normalize(
-          '/path/to/project/web/src/components/Post/PostForm.js'
-        )
+        path.normalize('/path/to/project/web/src/components/Post/PostForm.js')
       ]
     ).toMatchSnapshot()
   })
 
   test('creates an index component', async () => {
     expect(
-      files[
-        path.normalize('/path/to/project/web/src/components/Post/Posts.js')
-      ]
+      files[path.normalize('/path/to/project/web/src/components/Post/Posts.js')]
     ).toMatchSnapshot()
   })
 
@@ -196,7 +188,7 @@ describe('in javascript (default) mode', () => {
     const userProfileFiles = await scaffold.files({
       model: 'UserProfile',
       tests: false,
-      individualComponentFolders: false,
+      oneComponentFolder: true,
     })
     const cell =
       userProfileFiles[
@@ -213,7 +205,7 @@ describe('in javascript (default) mode', () => {
     const userProfileFiles = await scaffold.files({
       model: 'UserProfile',
       tests: false,
-      individualComponentFolders: false,
+      oneComponentFolder: true,
     })
     const cell =
       userProfileFiles[
@@ -230,7 +222,7 @@ describe('in javascript (default) mode', () => {
     const userProfileFiles = await scaffold.files({
       model: 'UserProfile',
       tests: false,
-      individualComponentFolders: false,
+      oneComponentFolder: true,
     })
     const cell =
       userProfileFiles[
@@ -249,7 +241,7 @@ describe('in javascript (default) mode', () => {
     const foreignKeyFiles = await scaffold.files({
       model: 'UserProfile',
       tests: false,
-      individualComponentFolders: false,
+      oneComponentFolder: true,
     })
 
     expect(
@@ -265,7 +257,7 @@ describe('in javascript (default) mode', () => {
     const foreignKeyFiles = await scaffold.files({
       model: 'UserProfile',
       tests: false,
-      individualComponentFolders: false,
+      oneComponentFolder: true,
     })
 
     expect(
@@ -287,7 +279,7 @@ describe('in typescript mode', () => {
       model: 'Post',
       typescript: true,
       tests: true,
-      individualComponentFolders: false,
+      oneComponentFolder: true,
     })
   })
 
@@ -390,9 +382,7 @@ describe('in typescript mode', () => {
   test('creates an index cell', async () => {
     expect(
       tsFiles[
-        path.normalize(
-          '/path/to/project/web/src/components/Post/PostsCell.tsx'
-        )
+        path.normalize('/path/to/project/web/src/components/Post/PostsCell.tsx')
       ]
     ).toMatchSnapshot()
   })
@@ -400,9 +390,7 @@ describe('in typescript mode', () => {
   test('creates a show cell', async () => {
     expect(
       tsFiles[
-        path.normalize(
-          '/path/to/project/web/src/components/Post/PostCell.tsx'
-        )
+        path.normalize('/path/to/project/web/src/components/Post/PostCell.tsx')
       ]
     ).toMatchSnapshot()
   })
@@ -412,9 +400,7 @@ describe('in typescript mode', () => {
   test('creates a form component', async () => {
     expect(
       tsFiles[
-        path.normalize(
-          '/path/to/project/web/src/components/Post/PostForm.tsx'
-        )
+        path.normalize('/path/to/project/web/src/components/Post/PostForm.tsx')
       ]
     ).toMatchSnapshot()
   })
@@ -430,9 +416,7 @@ describe('in typescript mode', () => {
   test('creates a new component', async () => {
     expect(
       tsFiles[
-        path.normalize(
-          '/path/to/project/web/src/components/Post/PostNew.tsx'
-        )
+        path.normalize('/path/to/project/web/src/components/Post/PostNew.tsx')
       ]
     ).toMatchSnapshot()
   })
@@ -471,7 +455,7 @@ describe('in typescript mode', () => {
     const userProfileFiles = await scaffold.files({
       model: 'UserProfile',
       tests: false,
-      individualComponentFolders: false,
+      oneComponentFolder: true,
     })
     const cell =
       userProfileFiles[
@@ -488,7 +472,7 @@ describe('in typescript mode', () => {
     const userProfileFiles = await scaffold.files({
       model: 'UserProfile',
       tests: false,
-      individualComponentFolders: false,
+      oneComponentFolder: true,
     })
     const cell =
       userProfileFiles[
@@ -505,7 +489,7 @@ describe('in typescript mode', () => {
     const userProfileFiles = await scaffold.files({
       model: 'UserProfile',
       tests: false,
-      individualComponentFolders: false,
+      oneComponentFolder: true,
     })
     const cell =
       userProfileFiles[
@@ -524,7 +508,7 @@ describe('in typescript mode', () => {
     const foreignKeyFiles = await scaffold.files({
       model: 'UserProfile',
       tests: false,
-      individualComponentFolders: false,
+      oneComponentFolder: true,
     })
 
     expect(
@@ -540,7 +524,7 @@ describe('in typescript mode', () => {
     const foreignKeyFiles = await scaffold.files({
       model: 'UserProfile',
       tests: false,
-      individualComponentFolders: false,
+      oneComponentFolder: true,
     })
 
     expect(

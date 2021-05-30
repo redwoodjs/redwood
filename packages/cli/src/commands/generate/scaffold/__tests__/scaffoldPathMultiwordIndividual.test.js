@@ -15,25 +15,25 @@ beforeAll(async () => {
     model: 'post',
     path: 'adminPages',
     tests: true,
-    individualComponentFolders: true,
+    oneComponentFolder: false,
   })
   filesMultiwordUpper = await scaffold.files({
     model: 'Post',
     path: 'AdminPages',
     tests: true,
-    individualComponentFolders: true,
+    oneComponentFolder: false,
   })
   filesMultiwordDash = await scaffold.files({
     model: 'post',
     path: 'admin-pages',
     tests: true,
-    individualComponentFolders: true,
+    oneComponentFolder: false,
   })
   filesMultiwordUnderscore = await scaffold.files({
     model: 'post',
     path: 'admin_pages',
     tests: true,
-    individualComponentFolders: true,
+    oneComponentFolder: false,
   })
 })
 
@@ -272,7 +272,7 @@ describe('adminPages/post', () => {
         model: 'userProfile',
         path: 'adminPages',
         tests: false,
-        individualComponentFolders: true,
+        oneComponentFolder: false,
       })
 
       const cell =
@@ -292,7 +292,7 @@ describe('adminPages/post', () => {
         model: 'userProfile',
         path: 'adminPages',
         tests: false,
-        individualComponentFolders: true,
+        oneComponentFolder: false,
       })
 
       const cell =
@@ -312,7 +312,7 @@ describe('adminPages/post', () => {
         model: 'userProfile',
         path: 'adminPages',
         tests: false,
-        individualComponentFolders: true,
+        oneComponentFolder: false,
       })
 
       const cell =
@@ -334,7 +334,7 @@ describe('adminPages/post', () => {
         model: 'userProfile',
         path: 'adminPages',
         tests: false,
-        individualComponentFolders: true,
+        oneComponentFolder: false,
       })
 
       expect(foreignKeyFiles).toHaveProperty([
@@ -349,7 +349,7 @@ describe('adminPages/post', () => {
         model: 'userProfile',
         path: 'adminPages',
         tests: false,
-        individualComponentFolders: true,
+        oneComponentFolder: false,
       })
 
       expect(foreignKeyFiles).toHaveProperty([
@@ -596,7 +596,7 @@ describe('AdminPages/Post', () => {
         model: 'UserProfile',
         path: 'AdminPages',
         tests: false,
-        individualComponentFolders: true,
+        oneComponentFolder: false,
       })
 
       const cell =
@@ -616,7 +616,7 @@ describe('AdminPages/Post', () => {
         model: 'UserProfile',
         path: 'AdminPages',
         tests: false,
-        individualComponentFolders: true,
+        oneComponentFolder: false,
       })
 
       const cell =
@@ -636,7 +636,7 @@ describe('AdminPages/Post', () => {
         model: 'UserProfile',
         path: 'AdminPages',
         tests: false,
-        individualComponentFolders: true,
+        oneComponentFolder: false,
       })
 
       const cell =
@@ -658,7 +658,7 @@ describe('AdminPages/Post', () => {
         model: 'UserProfile',
         path: 'AdminPages',
         tests: false,
-        individualComponentFolders: true,
+        oneComponentFolder: false,
       })
 
       expect(foreignKeyFiles).toHaveProperty([
@@ -673,7 +673,7 @@ describe('AdminPages/Post', () => {
         model: 'UserProfile',
         path: 'AdminPages',
         tests: false,
-        individualComponentFolders: true,
+        oneComponentFolder: false,
       })
 
       expect(foreignKeyFiles).toHaveProperty([
@@ -920,7 +920,7 @@ describe('admin-pages/post', () => {
         model: 'userProfile',
         path: 'admin-pages',
         tests: false,
-        individualComponentFolders: true,
+        oneComponentFolder: false,
       })
 
       const cell =
@@ -940,7 +940,7 @@ describe('admin-pages/post', () => {
         model: 'userProfile',
         path: 'admin-pages',
         tests: false,
-        individualComponentFolders: true,
+        oneComponentFolder: false,
       })
 
       const cell =
@@ -960,7 +960,7 @@ describe('admin-pages/post', () => {
         model: 'userProfile',
         path: 'admin-pages',
         tests: false,
-        individualComponentFolders: true,
+        oneComponentFolder: false,
       })
 
       const cell =
@@ -982,7 +982,7 @@ describe('admin-pages/post', () => {
         model: 'userProfile',
         path: 'admin-pages',
         tests: false,
-        individualComponentFolders: true,
+        oneComponentFolder: false,
       })
 
       expect(foreignKeyFiles).toHaveProperty([
@@ -997,7 +997,7 @@ describe('admin-pages/post', () => {
         model: 'userProfile',
         path: 'admin-pages',
         tests: false,
-        individualComponentFolders: true,
+        oneComponentFolder: false,
       })
 
       expect(foreignKeyFiles).toHaveProperty([
@@ -1244,7 +1244,7 @@ describe('admin_pages/post', () => {
         model: 'userProfile',
         path: 'admin-pages',
         tests: true,
-        individualComponentFolders: true,
+        oneComponentFolder: false,
       })
 
       const cell =
@@ -1264,7 +1264,7 @@ describe('admin_pages/post', () => {
         model: 'userProfile',
         path: 'admin_pages',
         tests: true,
-        individualComponentFolders: true,
+        oneComponentFolder: false,
       })
 
       const cell =
@@ -1284,7 +1284,7 @@ describe('admin_pages/post', () => {
         model: 'userProfile',
         path: 'admin_pages',
         tests: true,
-        individualComponentFolders: true,
+        oneComponentFolder: false,
       })
 
       const cell =
@@ -1306,7 +1306,7 @@ describe('admin_pages/post', () => {
         model: 'userProfile',
         path: 'admin_pages',
         tests: true,
-        individualComponentFolders: true,
+        oneComponentFolder: false,
       })
 
       expect(foreignKeyFiles).toHaveProperty([
@@ -1321,7 +1321,7 @@ describe('admin_pages/post', () => {
         model: 'userProfile',
         path: 'admin_pages',
         tests: true,
-        individualComponentFolders: true,
+        oneComponentFolder: false,
       })
 
       expect(foreignKeyFiles).toHaveProperty([

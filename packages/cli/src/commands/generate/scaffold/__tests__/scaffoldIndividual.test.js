@@ -17,7 +17,7 @@ describe('in javascript (default) mode', () => {
       ...getDefaultArgs(defaults),
       model: 'Post',
       tests: true,
-      individualComponentFolders: true,
+      oneComponentFolder: false,
     })
   })
 
@@ -196,7 +196,7 @@ describe('in javascript (default) mode', () => {
     const userProfileFiles = await scaffold.files({
       model: 'UserProfile',
       tests: false,
-      individualComponentFolders: true,
+      oneComponentFolder: false,
     })
     const cell =
       userProfileFiles[
@@ -213,7 +213,7 @@ describe('in javascript (default) mode', () => {
     const userProfileFiles = await scaffold.files({
       model: 'UserProfile',
       tests: false,
-      individualComponentFolders: true,
+      oneComponentFolder: false,
     })
     const cell =
       userProfileFiles[
@@ -230,7 +230,7 @@ describe('in javascript (default) mode', () => {
     const userProfileFiles = await scaffold.files({
       model: 'UserProfile',
       tests: false,
-      individualComponentFolders: true,
+      oneComponentFolder: false,
     })
     const cell =
       userProfileFiles[
@@ -249,7 +249,7 @@ describe('in javascript (default) mode', () => {
     const foreignKeyFiles = await scaffold.files({
       model: 'UserProfile',
       tests: false,
-      individualComponentFolders: true,
+      oneComponentFolder: false,
     })
 
     expect(
@@ -265,7 +265,7 @@ describe('in javascript (default) mode', () => {
     const foreignKeyFiles = await scaffold.files({
       model: 'UserProfile',
       tests: false,
-      individualComponentFolders: true,
+      oneComponentFolder: false,
     })
 
     expect(
@@ -287,7 +287,7 @@ describe('in typescript mode', () => {
       model: 'Post',
       typescript: true,
       tests: true,
-      individualComponentFolders: true,
+      oneComponentFolder: false,
     })
   })
 
@@ -471,7 +471,7 @@ describe('in typescript mode', () => {
     const userProfileFiles = await scaffold.files({
       model: 'UserProfile',
       tests: false,
-      individualComponentFolders: true,
+      oneComponentFolder: false,
     })
     const cell =
       userProfileFiles[
@@ -488,7 +488,7 @@ describe('in typescript mode', () => {
     const userProfileFiles = await scaffold.files({
       model: 'UserProfile',
       tests: false,
-      individualComponentFolders: true,
+      oneComponentFolder: false,
     })
     const cell =
       userProfileFiles[
@@ -505,7 +505,7 @@ describe('in typescript mode', () => {
     const userProfileFiles = await scaffold.files({
       model: 'UserProfile',
       tests: false,
-      individualComponentFolders: true,
+      oneComponentFolder: false,
     })
     const cell =
       userProfileFiles[
@@ -524,7 +524,7 @@ describe('in typescript mode', () => {
     const foreignKeyFiles = await scaffold.files({
       model: 'UserProfile',
       tests: false,
-      individualComponentFolders: true,
+      oneComponentFolder: false,
     })
 
     expect(
@@ -540,7 +540,7 @@ describe('in typescript mode', () => {
     const foreignKeyFiles = await scaffold.files({
       model: 'UserProfile',
       tests: false,
-      individualComponentFolders: true,
+      oneComponentFolder: false,
     })
 
     expect(

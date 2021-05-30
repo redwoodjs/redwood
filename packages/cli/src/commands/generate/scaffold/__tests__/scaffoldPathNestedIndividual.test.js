@@ -12,13 +12,13 @@ beforeAll(async () => {
     model: 'post',
     path: 'admin/pages',
     tests: true,
-    individualComponentFolders: true,
+    oneComponentFolder: false,
   })
   filesNestedUpper = await scaffold.files({
     model: 'Post',
     path: 'Admin/Pages',
     tests: true,
-    individualComponentFolders: true,
+    oneComponentFolder: false,
   })
 })
 
@@ -75,7 +75,9 @@ describe('admin/pages/post', () => {
             '/path/to/project/web/src/pages/Admin/Pages/PostsPage/PostsPage.js'
           )
         ]
-      ).toMatch(`import PostsCell from 'src/components/Admin/Pages/PostsCell/PostsCell'`)
+      ).toMatch(
+        `import PostsCell from 'src/components/Admin/Pages/PostsCell/PostsCell'`
+      )
     })
 
     test('creates a new page', async () => {
@@ -93,7 +95,9 @@ describe('admin/pages/post', () => {
             '/path/to/project/web/src/pages/Admin/Pages/PostNewPage/PostNewPage.js'
           )
         ]
-      ).toMatch(`import PostNew from 'src/components/Admin/Pages/PostNew/PostNew'`)
+      ).toMatch(
+        `import PostNew from 'src/components/Admin/Pages/PostNew/PostNew'`
+      )
     })
 
     test('creates a show page', async () => {
@@ -111,7 +115,9 @@ describe('admin/pages/post', () => {
             '/path/to/project/web/src/pages/Admin/Pages/PostPage/PostPage.js'
           )
         ]
-      ).toMatch(`import PostCell from 'src/components/Admin/Pages/PostCell/PostCell'`)
+      ).toMatch(
+        `import PostCell from 'src/components/Admin/Pages/PostCell/PostCell'`
+      )
     })
 
     // Cells
@@ -131,7 +137,9 @@ describe('admin/pages/post', () => {
             '/path/to/project/web/src/components/Admin/Pages/PostEditCell/PostEditCell.js'
           )
         ]
-      ).toMatch(`import PostForm from 'src/components/Admin/Pages/PostForm/PostForm'`)
+      ).toMatch(
+        `import PostForm from 'src/components/Admin/Pages/PostForm/PostForm'`
+      )
     })
 
     test('creates an index cell', async () => {
@@ -203,7 +211,9 @@ describe('admin/pages/post', () => {
             '/path/to/project/web/src/components/Admin/Pages/PostNew/PostNew.js'
           )
         ]
-      ).toMatch(`import PostForm from 'src/components/Admin/Pages/PostForm/PostForm'`)
+      ).toMatch(
+        `import PostForm from 'src/components/Admin/Pages/PostForm/PostForm'`
+      )
     })
 
     test('creates a show component', async () => {
@@ -247,7 +257,7 @@ describe('admin/pages/post', () => {
         model: 'userProfile',
         path: 'admin/pages',
         tests: false,
-        individualComponentFolders: true,
+        oneComponentFolder: false,
       })
 
       const cell =
@@ -267,7 +277,7 @@ describe('admin/pages/post', () => {
         model: 'userProfile',
         path: 'admin/pages',
         tests: false,
-        individualComponentFolders: true,
+        oneComponentFolder: false,
       })
 
       const cell =
@@ -287,7 +297,7 @@ describe('admin/pages/post', () => {
         model: 'userProfile',
         path: 'admin/pages',
         tests: false,
-        individualComponentFolders: true,
+        oneComponentFolder: false,
       })
 
       const cell =
@@ -309,7 +319,7 @@ describe('admin/pages/post', () => {
         model: 'userProfile',
         path: 'admin/pages',
         tests: false,
-        individualComponentFolders: true,
+        oneComponentFolder: false,
       })
 
       expect(foreignKeyFiles).toHaveProperty([
@@ -324,7 +334,7 @@ describe('admin/pages/post', () => {
         model: 'userProfile',
         path: 'admin/pages',
         tests: false,
-        individualComponentFolders: true,
+        oneComponentFolder: false,
       })
 
       expect(foreignKeyFiles).toHaveProperty([
@@ -389,7 +399,9 @@ describe('Admin/Pages/Post', () => {
             '/path/to/project/web/src/pages/Admin/Pages/PostsPage/PostsPage.js'
           )
         ]
-      ).toMatch(`import PostsCell from 'src/components/Admin/Pages/PostsCell/PostsCell'`)
+      ).toMatch(
+        `import PostsCell from 'src/components/Admin/Pages/PostsCell/PostsCell'`
+      )
     })
 
     test('creates a new page', async () => {
@@ -407,7 +419,9 @@ describe('Admin/Pages/Post', () => {
             '/path/to/project/web/src/pages/Admin/Pages/PostNewPage/PostNewPage.js'
           )
         ]
-      ).toMatch(`import PostNew from 'src/components/Admin/Pages/PostNew/PostNew'`)
+      ).toMatch(
+        `import PostNew from 'src/components/Admin/Pages/PostNew/PostNew'`
+      )
     })
 
     test('creates a show page', async () => {
@@ -425,7 +439,9 @@ describe('Admin/Pages/Post', () => {
             '/path/to/project/web/src/pages/Admin/Pages/PostPage/PostPage.js'
           )
         ]
-      ).toMatch(`import PostCell from 'src/components/Admin/Pages/PostCell/PostCell'`)
+      ).toMatch(
+        `import PostCell from 'src/components/Admin/Pages/PostCell/PostCell'`
+      )
     })
 
     // Cells
@@ -445,7 +461,9 @@ describe('Admin/Pages/Post', () => {
             '/path/to/project/web/src/components/Admin/Pages/PostEditCell/PostEditCell.js'
           )
         ]
-      ).toMatch(`import PostForm from 'src/components/Admin/Pages/PostForm/PostForm'`)
+      ).toMatch(
+        `import PostForm from 'src/components/Admin/Pages/PostForm/PostForm'`
+      )
     })
 
     test('creates an index cell', async () => {
@@ -517,7 +535,9 @@ describe('Admin/Pages/Post', () => {
             '/path/to/project/web/src/components/Admin/Pages/PostNew/PostNew.js'
           )
         ]
-      ).toMatch(`import PostForm from 'src/components/Admin/Pages/PostForm/PostForm'`)
+      ).toMatch(
+        `import PostForm from 'src/components/Admin/Pages/PostForm/PostForm'`
+      )
     })
 
     test('creates a show component', async () => {
@@ -561,7 +581,7 @@ describe('Admin/Pages/Post', () => {
         model: 'UserProfile',
         path: 'Admin/Pages',
         tests: false,
-        individualComponentFolders: true,
+        oneComponentFolder: false,
       })
 
       const cell =
@@ -581,7 +601,7 @@ describe('Admin/Pages/Post', () => {
         model: 'UserProfile',
         path: 'Admin/Pages',
         tests: false,
-        individualComponentFolders: true,
+        oneComponentFolder: false,
       })
 
       const cell =
@@ -601,7 +621,7 @@ describe('Admin/Pages/Post', () => {
         model: 'UserProfile',
         path: 'Admin/Pages',
         tests: false,
-        individualComponentFolders: true,
+        oneComponentFolder: false,
       })
 
       const cell =
@@ -623,7 +643,7 @@ describe('Admin/Pages/Post', () => {
         model: 'UserProfile',
         path: 'Admin/Pages',
         tests: false,
-        individualComponentFolders: true,
+        oneComponentFolder: false,
       })
 
       expect(foreignKeyFiles).toHaveProperty([
@@ -638,7 +658,7 @@ describe('Admin/Pages/Post', () => {
         model: 'UserProfile',
         path: 'Admin/Pages',
         tests: false,
-        individualComponentFolders: true,
+        oneComponentFolder: false,
       })
 
       expect(foreignKeyFiles).toHaveProperty([

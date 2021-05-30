@@ -20,7 +20,7 @@ export const builder = (yargs) => {
   })
 }
 
-export const tasks = ({ model, path, tests, individualComponentFolders }) =>
+export const tasks = ({ model, path, tests, oneComponentFolder }) =>
   new Listr(
     [
       {
@@ -30,7 +30,7 @@ export const tasks = ({ model, path, tests, individualComponentFolders }) =>
             model,
             path,
             tests,
-            individualComponentFolders,
+            oneComponentFolder,
           })
           return deleteFilesTask(f)
         },

@@ -12,13 +12,13 @@ beforeAll(async () => {
     model: 'post',
     path: 'admin',
     tests: true,
-    individualComponentFolders: false,
+    oneComponentFolder: true,
   })
   filesUpper = await scaffold.files({
     model: 'Post',
     path: 'Admin',
     tests: true,
-    individualComponentFolders: false,
+    oneComponentFolder: true,
   })
 })
 
@@ -74,9 +74,7 @@ describe('admin/post', () => {
             '/path/to/project/web/src/pages/Admin/PostsPage/PostsPage.js'
           )
         ]
-      ).toMatch(
-        `import PostsCell from 'src/components/Admin/Post/PostsCell'`
-      )
+      ).toMatch(`import PostsCell from 'src/components/Admin/Post/PostsCell'`)
     })
 
     test('creates a new page', async () => {
@@ -245,7 +243,7 @@ describe('admin/post', () => {
         model: 'userProfile',
         path: 'admin',
         tests: false,
-        individualComponentFolders: false,
+        oneComponentFolder: true,
       })
 
       const cell =
@@ -265,7 +263,7 @@ describe('admin/post', () => {
         model: 'userProfile',
         path: 'admin',
         tests: false,
-        individualComponentFolders: false,
+        oneComponentFolder: true,
       })
 
       const cell =
@@ -285,7 +283,7 @@ describe('admin/post', () => {
         model: 'userProfile',
         path: 'admin',
         tests: false,
-        individualComponentFolders: false,
+        oneComponentFolder: true,
       })
 
       const cell =
@@ -307,7 +305,7 @@ describe('admin/post', () => {
         model: 'userProfile',
         path: 'admin',
         tests: false,
-        individualComponentFolders: false,
+        oneComponentFolder: true,
       })
 
       expect(foreignKeyFiles).toHaveProperty([
@@ -322,7 +320,7 @@ describe('admin/post', () => {
         model: 'userProfile',
         path: 'admin',
         tests: false,
-        individualComponentFolders: false,
+        oneComponentFolder: true,
       })
 
       expect(foreignKeyFiles).toHaveProperty([
@@ -387,9 +385,7 @@ describe('Admin/Post', () => {
             '/path/to/project/web/src/pages/Admin/PostsPage/PostsPage.js'
           )
         ]
-      ).toMatch(
-        `import PostsCell from 'src/components/Admin/Post/PostsCell'`
-      )
+      ).toMatch(`import PostsCell from 'src/components/Admin/Post/PostsCell'`)
     })
 
     test('creates a new page', async () => {
@@ -559,7 +555,7 @@ describe('Admin/Post', () => {
         model: 'UserProfile',
         path: 'Admin',
         tests: false,
-        individualComponentFolders: false,
+        oneComponentFolder: true,
       })
 
       const cell =
@@ -579,7 +575,7 @@ describe('Admin/Post', () => {
         model: 'UserProfile',
         path: 'Admin',
         tests: false,
-        individualComponentFolders: false,
+        oneComponentFolder: true,
       })
 
       const cell =
@@ -599,7 +595,7 @@ describe('Admin/Post', () => {
         model: 'UserProfile',
         path: 'Admin',
         tests: false,
-        individualComponentFolders: false,
+        oneComponentFolder: true,
       })
 
       const cell =
@@ -621,7 +617,7 @@ describe('Admin/Post', () => {
         model: 'UserProfile',
         path: 'Admin',
         tests: false,
-        individualComponentFolders: false,
+        oneComponentFolder: true,
       })
 
       expect(foreignKeyFiles).toHaveProperty([
@@ -636,7 +632,7 @@ describe('Admin/Post', () => {
         model: 'UserProfile',
         path: 'Admin',
         tests: false,
-        individualComponentFolders: false,
+        oneComponentFolder: true,
       })
 
       expect(foreignKeyFiles).toHaveProperty([

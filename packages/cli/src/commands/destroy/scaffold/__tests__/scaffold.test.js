@@ -36,7 +36,7 @@ describe('rw destroy scaffold', () => {
           ...getDefaultArgs(defaults),
           model: 'Post',
           tests: false,
-          individualComponentFolders: true,
+          oneComponentFolder: false,
         })),
         [getPaths().web.routes]: [
           '<Routes>',
@@ -61,7 +61,7 @@ describe('rw destroy scaffold', () => {
       const t = tasks({
         model: 'Post',
         tests: false,
-        individualComponentFolders: true,
+        oneComponentFolder: false,
       })
       t.setRenderer('silent')
 
@@ -71,7 +71,7 @@ describe('rw destroy scaffold', () => {
             ...getDefaultArgs(defaults),
             model: 'Post',
             tests: false,
-            individualComponentFolders: true,
+            oneComponentFolder: false,
           })
         )
         expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
@@ -88,7 +88,7 @@ describe('rw destroy scaffold', () => {
             typescript: true,
             model: 'Post',
             tests: false,
-            individualComponentFolders: true,
+            oneComponentFolder: false,
           })),
           [getPaths().web.routes]: [
             '<Routes>',
@@ -108,7 +108,7 @@ describe('rw destroy scaffold', () => {
         const t = tasks({
           model: 'Post',
           tests: false,
-          individualComponentFolders: true,
+          oneComponentFolder: false,
         })
         t.setRenderer('silent')
 
@@ -119,7 +119,7 @@ describe('rw destroy scaffold', () => {
               typescript: true,
               model: 'Post',
               tests: false,
-              individualComponentFolders: true,
+              oneComponentFolder: false,
             })
           )
           expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
@@ -134,7 +134,7 @@ describe('rw destroy scaffold', () => {
       const t = tasks({
         model: 'Post',
         tests: false,
-        individualComponentFolders: true,
+        oneComponentFolder: false,
       })
       t.setRenderer('silent')
 
@@ -160,7 +160,7 @@ describe('rw destroy scaffold', () => {
           model: 'Post',
           path: 'admin',
           tests: false,
-          individualComponentFolders: true,
+          oneComponentFolder: false,
         })),
         [getPaths().web.routes]: [
           '<Routes>',
@@ -185,7 +185,7 @@ describe('rw destroy scaffold', () => {
         model: 'Post',
         path: 'admin',
         tests: false,
-        individualComponentFolders: true,
+        oneComponentFolder: false,
       })
       t.setRenderer('silent')
 
@@ -196,7 +196,7 @@ describe('rw destroy scaffold', () => {
             model: 'Post',
             path: 'admin',
             tests: false,
-            individualComponentFolders: true,
+            oneComponentFolder: false,
           })
         )
         expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
@@ -213,7 +213,7 @@ describe('rw destroy scaffold', () => {
             model: 'Post',
             path: 'admin',
             tests: false,
-            individualComponentFolders: true,
+            oneComponentFolder: false,
           })),
           [getPaths().web.routes]: [
             '<Routes>',
@@ -232,7 +232,7 @@ describe('rw destroy scaffold', () => {
           model: 'Post',
           path: 'admin',
           tests: false,
-          individualComponentFolders: true,
+          oneComponentFolder: false,
         })
         t.setRenderer('silent')
 
@@ -243,7 +243,7 @@ describe('rw destroy scaffold', () => {
               model: 'Post',
               path: 'admin',
               tests: false,
-              individualComponentFolders: true,
+              oneComponentFolder: false,
             })
           )
           expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
@@ -259,7 +259,7 @@ describe('rw destroy scaffold', () => {
         model: 'Post',
         path: 'admin',
         tests: false,
-        individualComponentFolders: true,
+        oneComponentFolder: false,
       })
       t.setRenderer('silent')
 
