@@ -41,6 +41,7 @@ export interface Paths {
   base: string
   generated: {
     base: string
+    schema: string
     types: {
       includes: string
       mirror: string
@@ -146,6 +147,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
 
     generated: {
       base: path.join(BASE_DIR, '.redwood'),
+      schema: path.join(BASE_DIR, '.redwood/schema.graphql'),
       types: {
         includes: path.join(BASE_DIR, '.redwood/types/includes'),
         mirror: path.join(BASE_DIR, '.redwood/types/mirror'),
