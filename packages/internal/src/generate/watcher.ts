@@ -32,6 +32,8 @@ watcher
     console.log('Watching files...')
     console.log(watcher.getWatched())
     // TODO: Generate all the things.
+
+    // TODO: Generate schema when SDL changes.
   })
   .on('all', (eventName, p) => {
     p = path.join(rwjsPaths.base, p)

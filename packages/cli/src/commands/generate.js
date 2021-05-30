@@ -1,6 +1,6 @@
 import terminalLink from 'terminal-link'
 
-import { getPaths, generateTypeDefs } from '@redwoodjs/internal'
+import { getPaths, generate } from '@redwoodjs/internal'
 import { getProject } from '@redwoodjs/structure'
 
 import c from 'src/lib/colors'
@@ -16,7 +16,8 @@ export const builder = (yargs) =>
       console.log()
       console.log(c.bold('Generating...'))
       console.log()
-      const files = await generateTypeDefs()
+
+      const files = await generate()
       for (const f of files) {
         console.log('  -', f.replace(rwjsPaths.base, '').substring(1))
       }
