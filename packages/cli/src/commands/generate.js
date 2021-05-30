@@ -11,11 +11,11 @@ export const description = 'Generate boilerplate code and type definitions'
 
 export const builder = (yargs) =>
   yargs
-    .command('types', 'Generate TypeScript definitions', {}, function () {
+    .command('types', 'Generate TypeScript definitions', {}, async () => {
       const rwjsPaths = getPaths()
       console.log()
       console.log(c.bold('Generating...'))
-      const files = generateTypeDefs()
+      const files = await generateTypeDefs()
       for (const f of files) {
         console.log('  -', f.replace(rwjsPaths.base, '').substring(1))
       }

@@ -5,9 +5,9 @@ import concurrently from 'concurrently'
 import terminalLink from 'terminal-link'
 
 import { getConfig, shutdownPort } from '@redwoodjs/internal'
-import { getProject } from '@redwoodjs/structure'
+// import { getProject } from '@redwoodjs/structure'
 
-const project = getProject()
+// const project = getProject()
 
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
@@ -104,12 +104,12 @@ export const handler = async ({
       prefixColor: 'blue',
       runWhen: () => fs.existsSync(WEB_DIR_SRC),
     },
-    typeGenerator: {
-      name: 'typeGenerator',
-      command: 'yarn rw generate types --watch',
-      prefixColor: 'green',
-      runWhen: () => project.isTypeScriptProject,
-    },
+    // typeGenerator: {
+    //   name: 'typeGenerator',
+    //   command: 'yarn rw generate types --watch',
+    //   prefixColor: 'green',
+    //   runWhen: () => project.isTypeScriptProject,
+    // },
   }
 
   if (esbuild) {

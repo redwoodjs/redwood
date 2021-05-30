@@ -1,6 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 
+import { generate } from '@graphql-codegen/cli'
+
 import { findCells, findDirectoryNamedModules } from 'src/files'
 import { getJsxElements } from 'src/jsx'
 import { getPaths, processPagesDir } from 'src/paths'
@@ -21,7 +23,7 @@ import { writeTemplate } from './templates'
 // or use "all-" for both. This is controlled by the user's "tsconfig.json"
 // file.
 
-export const generateTypeDefs = () => {
+export const generateTypeDefs = async () => {
   const p1 = generateMirrorDirectoryNamedModules()
   const p2 = generateMirrorCells()
   const p3 = generateTypeDefRouterPages()
@@ -29,8 +31,9 @@ export const generateTypeDefs = () => {
   const p5 = generateTypeDefRouterRoutes()
   const p6 = generateTypeDefGlobImports()
   const p7 = generateTypeDefGlobalContext()
+  const p8 = await generateTypeDefGraphQL()
 
-  return [...p1, ...p2, p3[0], p4[0], p5[0], p6[0], p7[0]]
+  return [...p1, ...p2, p3[0], p4[0], p5[0], p6[0], p7[0], ...p8]
 }
 
 export const generateMirrorDirectoryNamedModules = () => {
@@ -137,4 +140,38 @@ export const generateTypeDefGlobImports = () => {
 
 export const generateTypeDefGlobalContext = () => {
   return writeTypeDefIncludeFile('api-globalContext.d.ts.template')
+}
+
+// TODO: We're going to have to give the user an entry point into this
+// configuration file because they may have to define other scalars
+// and they may want to generate for other side.s
+// TODO: Figure out how to get a list of scalars from the api-side so that
+// they don't get out of sync.
+export const generateTypeDefGraphQL = () => {
+  // https://www.graphql-code-generator.com/docs/getting-started/programmatic-usage#using-the-cli-instead-of-core
+  return generate(
+    {
+      schema: 'http://127.0.0.1:8911/graphql',
+      config: {
+        scalars: {
+          DateTime: 'string',
+          Date: 'string',
+          JSON: 'Record<string, unknown>',
+          JSONObject: 'Record<string, unknown>',
+          Time: 'string',
+        },
+        omitOperationSuffix: true, // prevent type names being PetQueryQuery, RW generators already append Query/Mutation/etc.
+      },
+      generates: {
+        './api/types/graphql.d.ts': {
+          plugins: ['typescript', 'typescript-resolvers'],
+        },
+        './web/types/graphql.d.ts': {
+          documents: './web/src/**/!(*.d).{ts,tsx,js,jsx}',
+          plugins: ['typescript', 'typescript-operations'],
+        },
+      },
+    },
+    true
+  )
 }
