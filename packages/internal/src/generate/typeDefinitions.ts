@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
+import { types } from '@babel/core'
 import { generate } from '@graphql-codegen/cli'
 
 import { findCells, findDirectoryNamedModules } from 'src/files'
@@ -23,6 +24,10 @@ import { writeTemplate } from './templates'
 // or use "all-" for both. This is controlled by the user's "tsconfig.json"
 // file.
 
+/**
+ * Generate all the types for a RedwoodJS project
+ * and return the generated files.
+ */
 export const generateTypeDefs = async () => {
   const p1 = generateMirrorDirectoryNamedModules()
   const p2 = generateMirrorCells()
@@ -147,31 +152,50 @@ export const generateTypeDefGlobalContext = () => {
 // and they may want to generate for other side.s
 // TODO: Figure out how to get a list of scalars from the api-side so that
 // they don't get out of sync.
-export const generateTypeDefGraphQL = () => {
-  // https://www.graphql-code-generator.com/docs/getting-started/programmatic-usage#using-the-cli-instead-of-core
-  return generate(
-    {
-      schema: 'http://127.0.0.1:8911/graphql',
-      config: {
-        scalars: {
-          DateTime: 'string',
-          Date: 'string',
-          JSON: 'Record<string, unknown>',
-          JSONObject: 'Record<string, unknown>',
-          Time: 'string',
+export const generateTypeDefGraphQL = async () => {
+  const rwjsPaths = getPaths()
+
+  type GenResponse = { filename: string; contents: string }[]
+
+  try {
+    // https://www.graphql-code-generator.com/docs/getting-started/programmatic-usage#using-the-cli-instead-of-core
+    // TODO: Move to core once we write the schema to disk.
+    const f: GenResponse = await generate(
+      {
+        cwd: rwjsPaths.base,
+        schema: 'http://127.0.0.1:8911/graphql',
+        config: {
+          scalars: {
+            DateTime: 'string',
+            Date: 'string',
+            JSON: 'Record<string, unknown>',
+            JSONObject: 'Record<string, unknown>',
+            Time: 'string',
+          },
+          omitOperationSuffix: true, // prevent type names being PetQueryQuery, RW generators already append Query/Mutation/etc.
         },
-        omitOperationSuffix: true, // prevent type names being PetQueryQuery, RW generators already append Query/Mutation/etc.
+        generates: {
+          [path.join(rwjsPaths.api.base, 'types/graphql.d.ts')]: {
+            plugins: ['typescript', 'typescript-resolvers'],
+          },
+          [path.join(rwjsPaths.web.base, 'types/graphql.d.ts')]: {
+            documents: './web/src/**/!(*.d).{ts,tsx,js,jsx}',
+            plugins: ['typescript', 'typescript-operations'],
+          },
+        },
+        silent: false,
+        errorsOnly: true,
       },
-      generates: {
-        './api/types/graphql.d.ts': {
-          plugins: ['typescript', 'typescript-resolvers'],
-        },
-        './web/types/graphql.d.ts': {
-          documents: './web/src/**/!(*.d).{ts,tsx,js,jsx}',
-          plugins: ['typescript', 'typescript-operations'],
-        },
-      },
-    },
-    true
-  )
+      true
+    )
+    return f.map(({ filename }) => filename)
+  } catch (e) {
+    // `generate` outputs errors which are helpful.
+    // This tries to clean up the output of those errors.
+    console.error()
+    console.error('Error: Could not generate GraphQL type definitions')
+    console.error()
+
+    return []
+  }
 }

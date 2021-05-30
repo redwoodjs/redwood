@@ -6,7 +6,9 @@ yarn-error.log
 .env
 .DS_Store
 .wip
-.redwood
-
 api/prisma/dev.sqlite
 
+# Generated files
+.redwood
+api/types/
+web/types/

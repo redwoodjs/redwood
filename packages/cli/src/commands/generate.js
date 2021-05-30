@@ -15,11 +15,13 @@ export const builder = (yargs) =>
       const rwjsPaths = getPaths()
       console.log()
       console.log(c.bold('Generating...'))
+      console.log()
       const files = await generateTypeDefs()
       for (const f of files) {
         console.log('  -', f.replace(rwjsPaths.base, '').substring(1))
       }
-      console.log('... and done.')
+      console.log()
+      console.log(c.bold('... and done.'))
     })
     /**
      * Like generate, util is an entry point command,
