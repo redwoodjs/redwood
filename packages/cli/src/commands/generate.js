@@ -1,9 +1,7 @@
+import execa from 'execa'
 import terminalLink from 'terminal-link'
 
-import { getPaths, generate } from '@redwoodjs/internal'
 import { getProject } from '@redwoodjs/structure'
-
-import c from 'src/lib/colors'
 
 export const command = 'generate <type>'
 export const aliases = ['g']
@@ -11,18 +9,8 @@ export const description = 'Generate boilerplate code and type definitions'
 
 export const builder = (yargs) =>
   yargs
-    .command('types', 'Generate TypeScript definitions', {}, async () => {
-      const rwjsPaths = getPaths()
-      console.log()
-      console.log(c.bold('Generating...'))
-      console.log()
-
-      const files = await generate()
-      for (const f of files) {
-        console.log('  -', f.replace(rwjsPaths.base, '').substring(1))
-      }
-      console.log()
-      console.log(c.bold('... and done.'))
+    .command('types', 'Generate supplementary code', {}, () => {
+      execa.sync('yarn rw-gen', { shell: true, stdio: 'inherit' })
     })
     /**
      * Like generate, util is an entry point command,

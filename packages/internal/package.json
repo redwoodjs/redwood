@@ -4,6 +4,10 @@
   "files": [
     "dist"
   ],
+  "bin": {
+    "rw-gen": "./dist/generate/generate.js",
+    "rw-gen-watch": "./dist/generate/watch.js"
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "license": "MIT",
@@ -11,6 +15,7 @@
     "@babel/parser": "7.14.3",
     "@babel/traverse": "7.14.2",
     "@babel/plugin-transform-typescript": "7.14.3",
+    "@babel/runtime-corejs3": "7.14.0",
     "fast-glob": "3.2.5",
     "deepmerge": "4.2.2",
     "findup-sync": "4.0.0",

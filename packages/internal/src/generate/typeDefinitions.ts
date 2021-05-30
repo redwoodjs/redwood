@@ -2,13 +2,16 @@ import fs from 'fs'
 import path from 'path'
 
 import { generate } from '@graphql-codegen/cli'
-import type { Config } from '@graphql-codegen/cli'
 
 import { findCells, findDirectoryNamedModules } from 'src/files'
 import { getJsxElements } from 'src/jsx'
 import { getPaths, processPagesDir } from 'src/paths'
 
 import { writeTemplate } from './templates'
+
+// TODO:
+// Common return format for CLI output:
+// ['type', 'relative path to base']
 
 // Note for contributors:
 //
@@ -158,7 +161,8 @@ export const generateTypeDefGraphQL = async (
   const rwjsPaths = getPaths()
   type GenerateResponse = { filename: string; contents: string }[]
   try {
-    const generates: Config.generates = {}
+    // TODO: Figure out how to get this type.
+    const generates: Record<string, unknown> = {}
 
     if (['api', 'all'].includes(side)) {
       generates[path.join(rwjsPaths.api.base, 'types/graphql.d.ts')] = {
@@ -187,6 +191,7 @@ export const generateTypeDefGraphQL = async (
           },
           omitOperationSuffix: true, // prevent type names being PetQueryQuery, RW generators already append Query/Mutation/etc.
         },
+        // @ts-expect-error - Meh.
         generates,
         silent: false,
         errorsOnly: true,
