@@ -1,7 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 
-import { types } from '@babel/core'
 import { generate } from '@graphql-codegen/cli'
 
 import { findCells, findDirectoryNamedModules } from 'src/files'
@@ -155,12 +154,12 @@ export const generateTypeDefGlobalContext = () => {
 export const generateTypeDefGraphQL = async () => {
   const rwjsPaths = getPaths()
 
-  type GenResponse = { filename: string; contents: string }[]
+  type GenerateResponse = { filename: string; contents: string }[]
 
   try {
     // https://www.graphql-code-generator.com/docs/getting-started/programmatic-usage#using-the-cli-instead-of-core
     // TODO: Move to core once we write the schema to disk.
-    const f: GenResponse = await generate(
+    const f: GenerateResponse = await generate(
       {
         cwd: rwjsPaths.base,
         schema: 'http://127.0.0.1:8911/graphql',
