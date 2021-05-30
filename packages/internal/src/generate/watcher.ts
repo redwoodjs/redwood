@@ -3,9 +3,16 @@ import path from 'path'
 
 import chokidar from 'chokidar'
 
-import { isCellFile, isPageFile, isDirectoryNamedModuleFile } from '../files'
+import {
+  isCellFile,
+  isPageFile,
+  isDirectoryNamedModuleFile,
+  isGraphQLSchemaFile,
+} from '../files'
 import { getPaths } from '../paths'
 
+import { generate } from './generate'
+import { generateGraphQLSchema } from './graphqlSchema'
 import {
   generateMirrorCell,
   generateMirrorDirectoryNamedModule,
@@ -13,6 +20,7 @@ import {
   generateTypeDefRouterPages,
   mirrorPathForDirectoryNamedModules,
   mirrorPathForCell,
+  generateTypeDefGraphQL,
 } from './typeDefinitions'
 
 // TODO: Make this emit our own events so that it can be used programatically in the CLI.
@@ -28,14 +36,12 @@ const watcher = chokidar.watch('**/src/**/*.{ts,js,jsx,tsx}', {
 })
 
 watcher
-  .on('ready', () => {
+  .on('ready', async () => {
     console.log('Watching files...')
     console.log(watcher.getWatched())
-    // TODO: Generate all the things.
-
-    // TODO: Generate schema when SDL changes.
+    const files = await generate()
   })
-  .on('all', (eventName, p) => {
+  .on('all', async (eventName, p) => {
     p = path.join(rwjsPaths.base, p)
 
     if (
@@ -49,6 +55,7 @@ watcher
         } else {
           generateMirrorCell(p, rwjsPaths)
         }
+        generateTypeDefGraphQL('web')
       } else if (p === rwjsPaths.web.routes) {
         generateTypeDefRouterRoutes()
       } else if (p.indexOf('Page') !== -1 && isPageFile(p)) {
@@ -59,8 +66,9 @@ watcher
         } else {
           generateMirrorDirectoryNamedModule(p, rwjsPaths)
         }
+      } else if (isGraphQLSchemaFile(p)) {
+        await generateGraphQLSchema()
+        await generateTypeDefGraphQL('api')
       }
-
-      // TODO: GraphQL Schema.
     }
   })

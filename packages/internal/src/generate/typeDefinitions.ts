@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import { generate } from '@graphql-codegen/cli'
+import type { Config } from '@graphql-codegen/cli'
 
 import { findCells, findDirectoryNamedModules } from 'src/files'
 import { getJsxElements } from 'src/jsx'
@@ -151,10 +152,26 @@ export const generateTypeDefGlobalContext = () => {
 // and they may want to generate a custom side. :shrug
 // TODO: Figure out how to get a list of scalars from the api-side so that
 // they don't get out of sync.
-export const generateTypeDefGraphQL = async () => {
+export const generateTypeDefGraphQL = async (
+  side: 'web' | 'api' | 'all' = 'all'
+) => {
   const rwjsPaths = getPaths()
   type GenerateResponse = { filename: string; contents: string }[]
   try {
+    const generates: Config.generates = {}
+
+    if (['api', 'all'].includes(side)) {
+      generates[path.join(rwjsPaths.api.base, 'types/graphql.d.ts')] = {
+        plugins: ['typescript', 'typescript-resolvers'],
+      }
+    }
+    if (['web', 'all'].includes(side)) {
+      generates[path.join(rwjsPaths.web.base, 'types/graphql.d.ts')] = {
+        documents: './web/src/**/!(*.d).{ts,tsx,js,jsx}',
+        plugins: ['typescript', 'typescript-operations'],
+      }
+    }
+
     // https://www.graphql-code-generator.com/docs/getting-started/programmatic-usage#using-the-cli-instead-of-core
     const f: GenerateResponse = await generate(
       {
@@ -170,15 +187,7 @@ export const generateTypeDefGraphQL = async () => {
           },
           omitOperationSuffix: true, // prevent type names being PetQueryQuery, RW generators already append Query/Mutation/etc.
         },
-        generates: {
-          [path.join(rwjsPaths.api.base, 'types/graphql.d.ts')]: {
-            plugins: ['typescript', 'typescript-resolvers'],
-          },
-          [path.join(rwjsPaths.web.base, 'types/graphql.d.ts')]: {
-            documents: './web/src/**/!(*.d).{ts,tsx,js,jsx}',
-            plugins: ['typescript', 'typescript-operations'],
-          },
-        },
+        generates,
         silent: false,
         errorsOnly: true,
       },
