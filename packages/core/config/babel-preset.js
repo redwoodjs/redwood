@@ -187,6 +187,11 @@ module.exports = () => {
               },
             },
           ],
+          // @MARK needed to enable ?? operator
+          // normally provided through preset-env detecting TARGET_BROWSER
+          // but webpack 4 has an issue with this
+          // see https://github.com/PaulLeCam/react-leaflet/issues/883
+          ['@babel/plugin-proposal-nullish-coalescing-operator'],
         ],
       },
       // ** Files ending in `Cell.[js,ts]` **
