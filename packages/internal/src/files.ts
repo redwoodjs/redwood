@@ -95,7 +95,6 @@ export const isDirectoryNamedModuleFile = (p: string) => {
 }
 
 export const isGraphQLSchemaFile = (p: string) => {
-  p.match(/\.sdl\.(ts|js)$/) // ?
   if (!p.match(/\.sdl\.(ts|js)$/)?.[0]) {
     return false
   }
