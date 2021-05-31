@@ -1,4 +1,4 @@
-import ${singularPascalName} from '${importName}'
+import ${singularPascalName} from '${importComponentName}'
 
 export const QUERY = gql`
   query FIND_${singularConstantName}_BY_ID($id: ${idType}!) {

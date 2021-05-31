@@ -33,7 +33,7 @@ describe('admin/pages/post', () => {
     test('creates a layout', async () => {
       expect(filesNestedLower).toHaveProperty([
         path.normalize(
-          '/path/to/project/web/src/layouts/Admin/Pages/PostsLayout/PostsLayout.js'
+          '/path/to/project/web/src/layouts/Admin/Pages/Post/PostsLayout/PostsLayout.js'
         ),
       ])
     })
@@ -43,7 +43,7 @@ describe('admin/pages/post', () => {
     test('creates a edit page', async () => {
       expect(filesNestedLower).toHaveProperty([
         path.normalize(
-          '/path/to/project/web/src/pages/Admin/Pages/PostEditPage/PostEditPage.js'
+          '/path/to/project/web/src/pages/Admin/Pages/Post/PostEditPage/PostEditPage.js'
         ),
       ])
     })
@@ -52,18 +52,18 @@ describe('admin/pages/post', () => {
       expect(
         filesNestedLower[
           path.normalize(
-            '/path/to/project/web/src/pages/Admin/Pages/PostEditPage/PostEditPage.js'
+            '/path/to/project/web/src/pages/Admin/Pages/Post/PostEditPage/PostEditPage.js'
           )
         ]
       ).toMatch(
-        `import PostEditCell from 'src/components/Admin/Pages/PostEditCell/PostEditCell'`
+        `import PostEditCell from 'src/components/Admin/Pages/Post/PostEditCell/PostEditCell'`
       )
     })
 
     test('creates a index page', async () => {
       expect(filesNestedLower).toHaveProperty([
         path.normalize(
-          '/path/to/project/web/src/pages/Admin/Pages/PostsPage/PostsPage.js'
+          '/path/to/project/web/src/pages/Admin/Pages/Post/PostsPage/PostsPage.js'
         ),
       ])
     })
@@ -72,18 +72,18 @@ describe('admin/pages/post', () => {
       expect(
         filesNestedLower[
           path.normalize(
-            '/path/to/project/web/src/pages/Admin/Pages/PostsPage/PostsPage.js'
+            '/path/to/project/web/src/pages/Admin/Pages/Post/PostsPage/PostsPage.js'
           )
         ]
       ).toMatch(
-        `import PostsCell from 'src/components/Admin/Pages/PostsCell/PostsCell'`
+        `import PostsCell from 'src/components/Admin/Pages/Post/PostsCell/PostsCell'`
       )
     })
 
     test('creates a new page', async () => {
       expect(filesNestedLower).toHaveProperty([
         path.normalize(
-          '/path/to/project/web/src/pages/Admin/Pages/PostNewPage/PostNewPage.js'
+          '/path/to/project/web/src/pages/Admin/Pages/Post/PostNewPage/PostNewPage.js'
         ),
       ])
     })

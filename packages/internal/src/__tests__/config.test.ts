@@ -20,7 +20,7 @@ describe('getConfig', () => {
           "open": false,
         },
         "generate": Object {
-          "scaffoldIndividualComponentFolders": false,
+          "nestScaffoldByModel": true,
           "stories": true,
           "tests": true,
         },

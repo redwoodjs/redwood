@@ -1,12 +1,7 @@
-import ${pluralPascalName}Layout from '${importNamesLayout}'
-import ${pluralPascalName}Cell from '${importNamesCell}'
+import ${pluralPascalName}Cell from '${importComponentNamesCell}'
 
 const ${pluralPascalName}Page = () => {
-  return (
-    <${pluralPascalName}Layout>
-      <${pluralPascalName}Cell />
-    </${pluralPascalName}Layout>
-  )
+  return <${pluralPascalName}Cell />
 }
 
 export default ${pluralPascalName}Page
