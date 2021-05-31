@@ -1,6 +1,8 @@
 import styled from 'styled-components'
-import TodoItem from 'src/components/TodoItem'
+
 import { useMutation } from '@redwoodjs/web'
+
+import TodoItem from 'src/components/TodoItem'
 
 export const QUERY = gql`
   query TodoListCell_GetTodos {
