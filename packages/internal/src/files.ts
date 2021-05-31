@@ -75,8 +75,8 @@ export const isPageFile = (p: string) => {
   }
 
   // A page should be in the `web/src/pages` directory.
-  const pagesDir = getPaths().web.pages
-  if (!dir.startsWith(pagesDir)) {
+  const r = path.relative(getPaths().web.pages, dir)
+  if (!r && r.startsWith('..') && path.isAbsolute(r)) {
     return false
   }
 

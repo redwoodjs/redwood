@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
+import { findCells, findDirectoryNamedModules } from '../files'
 import {
   generateMirrorCells,
   generateMirrorDirectoryNamedModules,
@@ -26,14 +27,18 @@ afterAll(() => {
   delete process.env.__REDWOOD__CONFIG_PATH
 })
 
+const cleanPaths = (p) => {
+  return ensurePosixPath(path.relative(FIXTURE_PATH, p))
+}
+
 test('generate the correct mirror types for cells', () => {
   const paths = generateMirrorCells()
-  const p = paths.map((p) => p.replace(FIXTURE_PATH, '')).map(ensurePosixPath)
+  const p = paths.map(cleanPaths)
 
   expect(p).toMatchInlineSnapshot(`
     Array [
-      "/.redwood/types/mirror/web/src/components/NumTodosCell/index.d.ts",
-      "/.redwood/types/mirror/web/src/components/TodoListCell/index.d.ts",
+      ".redwood/types/mirror/web/src/components/NumTodosCell/index.d.ts",
+      ".redwood/types/mirror/web/src/components/TodoListCell/index.d.ts",
     ]
   `)
 
@@ -47,15 +52,15 @@ test('generate the correct mirror types for cells', () => {
 
 test('generate the correct mirror types for directory named modules', () => {
   const paths = generateMirrorDirectoryNamedModules()
-  const p = paths.map((p) => p.replace(FIXTURE_PATH, '')).map(ensurePosixPath)
+  const p = paths.map(cleanPaths)
 
   expect(p).toMatchInlineSnapshot(`
     Array [
-      "/.redwood/types/mirror/api/src/services/todos/index.d.ts",
-      "/.redwood/types/mirror/web/src/components/AddTodo/index.d.ts",
-      "/.redwood/types/mirror/web/src/components/Check/index.d.ts",
-      "/.redwood/types/mirror/web/src/components/TodoItem/index.d.ts",
-      "/.redwood/types/mirror/web/src/layouts/SetLayout/index.d.ts",
+      ".redwood/types/mirror/api/src/services/todos/index.d.ts",
+      ".redwood/types/mirror/web/src/components/AddTodo/index.d.ts",
+      ".redwood/types/mirror/web/src/components/Check/index.d.ts",
+      ".redwood/types/mirror/web/src/components/TodoItem/index.d.ts",
+      ".redwood/types/mirror/web/src/layouts/SetLayout/index.d.ts",
     ]
   `)
 
@@ -70,8 +75,8 @@ test('generate the correct mirror types for directory named modules', () => {
 
 test('generates global page imports', () => {
   const paths = generateTypeDefRouterPages()
-  const p = paths.map((p) => p.replace(FIXTURE_PATH, '')).map(ensurePosixPath)
-  expect(p[0]).toEqual('/.redwood/types/includes/web-routesPages.d.ts')
+  const p = paths.map(cleanPaths)
+  expect(p[0]).toEqual('.redwood/types/includes/web-routesPages.d.ts')
 
   const c = fs.readFileSync(paths[0], 'utf-8')
 
@@ -89,15 +94,15 @@ declare global {
 
 test('generate current user ', () => {
   const paths = generateTypeDefCurrentUser()
-  const p = paths.map((p) => p.replace(FIXTURE_PATH, '')).map(ensurePosixPath)
-  expect(p[0]).toEqual('/.redwood/types/includes/all-currentUser.d.ts')
+  const p = paths.map(cleanPaths)
+  expect(p[0]).toEqual('.redwood/types/includes/all-currentUser.d.ts')
   // The type definition output is static, so there's nothing to test.
 })
 
 test('generates the router routes', () => {
   const paths = generateTypeDefRouterRoutes()
-  const p = paths.map((p) => p.replace(FIXTURE_PATH, '')).map(ensurePosixPath)
-  expect(p[0]).toEqual('/.redwood/types/includes/web-routerRoutes.d.ts')
+  const p = paths.map(cleanPaths)
+  expect(p[0]).toEqual('.redwood/types/includes/web-routerRoutes.d.ts')
 
   const c = fs.readFileSync(paths[0], 'utf-8')
   expect(c).toContain(`
@@ -111,28 +116,30 @@ test('generates the router routes', () => {
 
 test('generate glob imports', () => {
   const paths = generateTypeDefGlobImports()
-  const p = paths.map((p) => p.replace(FIXTURE_PATH, '')).map(ensurePosixPath)
-  expect(p[0]).toEqual('/.redwood/types/includes/api-globImports.d.ts')
+  const p = paths.map(cleanPaths)
+  expect(p[0]).toEqual('.redwood/types/includes/api-globImports.d.ts')
 })
 
 test('generate api global context', () => {
   const paths = generateTypeDefGlobalContext()
-  const p = paths.map((p) => p.replace(FIXTURE_PATH, '')).map(ensurePosixPath)
-  expect(p[0]).toEqual('/.redwood/types/includes/api-globalContext.d.ts')
+  const p = paths.map(cleanPaths)
+  expect(p[0]).toEqual('.redwood/types/includes/api-globalContext.d.ts')
 })
 
 test('mirror path for directory named modules', () => {
-  const p = mirrorPathForDirectoryNamedModules(
-    'src/components/CoolComponent/CoolComponent.ts'
-  )
-  expect(p[0].replace(FIXTURE_PATH, '')).toMatchInlineSnapshot(
-    `"/.redwood/types/mirror/src/components/CoolComponent"`
+  const d = findDirectoryNamedModules()
+  const p = mirrorPathForDirectoryNamedModules(d[0])
+
+  expect(cleanPaths(p[0])).toMatchInlineSnapshot(
+    `".redwood/types/mirror/api/src/services/todos"`
   )
 })
 
 test('mirror path for dir cells', () => {
-  const p = mirrorPathForCell('src/components/MyCell/MyCell.tsx')
-  expect(p[0].replace(FIXTURE_PATH, '')).toMatchInlineSnapshot(
-    `"/.redwood/types/mirror/src/components/MyCell"`
+  const c = findCells()
+  const p = mirrorPathForCell(c[0])
+
+  expect(cleanPaths(p[0])).toMatchInlineSnapshot(
+    `".redwood/types/mirror/web/src/components/NumTodosCell"`
   )
 })

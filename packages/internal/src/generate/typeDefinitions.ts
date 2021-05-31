@@ -58,7 +58,7 @@ export const mirrorPathForDirectoryNamedModules = (
   return [
     path.join(
       rwjsPaths.generated.types.mirror,
-      path.dirname(p).replace(rwjsPaths.base, '')
+      path.relative(rwjsPaths.base, path.dirname(p))
     ),
     'index.d.ts',
   ]
@@ -89,8 +89,9 @@ export const generateMirrorCells = () => {
 export const mirrorPathForCell = (p: string, rwjsPaths = getPaths()) => {
   const mirrorDir = path.join(
     rwjsPaths.generated.types.mirror,
-    path.dirname(p).replace(rwjsPaths.base, '')
+    path.relative(rwjsPaths.base, path.dirname(p))
   )
+
   fs.mkdirSync(mirrorDir, { recursive: true })
   return [mirrorDir, 'index.d.ts']
 }
