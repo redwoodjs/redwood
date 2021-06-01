@@ -15,6 +15,9 @@ Before interacting with the Redwood community, please read and understand our [C
       - [Copy and Watch](#copy-and-watch)
       - [cp](#cp)
       - [Specifying a RW_PATH](#specifying-a-rw_path)
+        - [On **Linux**](#on-linux)
+        - [On **MacOS**](#on-macos)
+        - [On **Windows**](#on-windows)
     - [Local Package Registry Emulation](#local-package-registry-emulation)
       - [Running a Local NPM Registry](#running-a-local-npm-registry)
       - [Publishing a Package](#publishing-a-package)
@@ -29,6 +32,7 @@ Before interacting with the Redwood community, please read and understand our [C
     - [copy:watch (cpw)](#copywatch-cpw)
     - [fix-bins (fix)](#fix-bins-fix)
     - [install (i)](#install-i)
+    - [link](#link)
 
 ## Local Development
 
@@ -36,7 +40,7 @@ Before interacting with the Redwood community, please read and understand our [C
 
 As a Redwood user, you're already familiar with the codebase created by `yarn create redwood-app`. In this document, we'll refer to that codebase as a 'Redwood App'. As a contributor, you'll have to gain familiarity with another codebase: the Redwood Framework.
 
-The Redwood Framework lives in the monorepo redwoodjs/redwood (which is where you're probably reading this). It contains all the packages that make Redwood Apps work the way they do. In a typical Redwood App, you can find the Redwood Framework in `./node_modules/@redwoodjs`.
+The Redwood Framework lives in the monorepo `redwoodjs/redwood` (which is where you're probably reading this). It contains all the packages that make Redwood Apps work the way they do. In a typical Redwood App, you can find the Redwood Framework in `./node_modules/@redwoodjs`.
 
 Throughout this document, we'll assume your local copy of the Redwood Framework is in a directory called `redwood` and your Redwood App is in a directory called `redwood-app`.
 
@@ -175,7 +179,7 @@ Then, you can restore your Redwood App to its original state by deleting `./node
 
 If you are on Windows and not using WSL, you will have to use `rwt cp` (this is tracked in [issue #701](https://github.com/redwoodjs/redwood/issues/701)). This method, unfortunately, will not let you see your changes live.
 
-Also, you most likely first have to [install rsync](https://tlundberg.com/blog/2020-06-15/installing-rsync-on-windows/).
+Also, you most likely first have to [install `rsync`](https://tlundberg.com/blog/2020-06-15/installing-rsync-on-windows/).
 
 Each time you make a change to your local Redwood Framework, you'll have to build it:
 
@@ -199,7 +203,7 @@ When you're done, you can restore your Redwood App to its original state by dele
 
 You can avoid having to provide the path to `redwood` by defining an `RW_PATH` environment variable on your system.
 
-_On Linux_
+##### On **Linux**
 
 Add the following line to your `~/.bashrc`:
 
@@ -207,7 +211,7 @@ Add the following line to your `~/.bashrc`:
 export RW_PATH=”$HOME/path/to/redwood/framework”
 ```
 
-Where /path/to/redwood/framework is replaced by the path to your local copy of the Redwood Framework.
+Where `/path/to/redwood/framework` is replaced by the path to your local copy of the Redwood Framework.
 
 Then, in your Redwood App or example app, you can just run:
 
@@ -221,7 +225,7 @@ or
 yarn rwt copy:watch
 ```
 
-_On Mac_
+##### On **MacOS**
 
 Add the following line to your `~/.bash_profile`:
 
@@ -229,7 +233,7 @@ Add the following line to your `~/.bash_profile`:
 export RW_PATH=”$HOME/path/to/redwood/framework”
 ```
 
-Where /path/to/redwood/framework is replaced by the path to your local copy of the Redwood Framework.
+Where `/path/to/redwood/framework` is replaced by the path to your local copy of the Redwood Framework.
 
 Then, in your Redwood App or example app, you can just run:
 
@@ -243,19 +247,21 @@ or
 yarn rwt copy:watch
 ```
 
-_On Windows_
+##### On **Windows**
 
-[Todo: please contribute a PR if you can help.]
+> **TODO**
+>
+> please contribute a PR if you can help.
 
 ### Local Package Registry Emulation
 
-Sometimes you'll want to test the full package-development workflow: building, publishing, and installing all the packages in your local copy of the Redwood Framework in your Redwood App. We accomodate this using a local NPM registry called [Verdaccio](https://github.com/verdaccio/verdaccio).
+Sometimes you'll want to test the full package-development workflow: building, publishing, and installing all the packages in your local copy of the Redwood Framework in your Redwood App. We accommodate this using a local NPM registry called [**Verdaccio**](https://github.com/verdaccio/verdaccio).
 
 You might also have to use this workflow if you've installed or upgraded one of Redwood's dependencies.
 
 #### Running a Local NPM Registry
 
-First, install Verdaccio:
+First, install `Verdaccio`:
 
 ```terminal
 yarn global add verdaccio
@@ -267,7 +273,7 @@ Then, in your local copy of the Redwood Framework, run:
 ./tasks/run-local-npm
 ```
 
-This starts Verdaccio (http://localhost:4873) with our configuration file.
+This starts `Verdaccio` (on http://localhost:4873) with our configuration file.
 
 #### Publishing a Package
 
@@ -323,14 +329,14 @@ yarn rw dev web
 We're using Cypress to test the steps that we recommend in the tutorial. Run the command by doing the following:
 
 ```terminal
-./tasks/test-tutorial
+./tasks/run-e2e
 ```
 
-This creates a new project in a tmp directory using `yarn create redwood-app ...` Once installed, it then upgrades the project to the most recent `canary` release, which means it will use the current code in the `main` branch. Once the upgrade is complete (and successful), it will start Cypress for the E2E tests.
+This creates a new project in a temporary directory using `yarn create redwood-app ...` Once installed, it then upgrades the project to the most recent `canary` release, which means it will use the current code in the `main` branch. Once the upgrade is complete (and successful), it will start Cypress for the E2E tests.
 
 
 ```terminal
-./tasks/test-tutorial /path/to/app
+./tasks/run-e2e /path/to/app
 ```
 
 Use this `path/to/app` option to run the same Cypress E2E tests against a local project. In this case, the command will _not_ upgrade the project to the `canary` release — it will use the project's installed packages. Chose this option if you have modified code (and packages) you want to test locally.
@@ -355,7 +361,11 @@ yarn build
 yarn lerna publish from-package
 ```
 
-This 1) changes the version of **all the packages** (even those that haven't changed), 2) changes the version of the packages within the CRWA Template, 3) Commits, Tags, and Pushes to GH, and 4) publishes all packages to NPM.
+This...
+  1) changes the version of **all the packages** (even those that haven't changed),
+  2) changes the version of the packages within the CRWA Template
+  3) Commits, Tags, and Pushes to GH
+  4) and finally publishes all packages to NPM.
 
 ### Troubleshooting
 
@@ -363,7 +373,10 @@ If something went wrong you can use `yarn lerna publish from-package` to publish
 
 ## CLI Reference: `redwood-tools`
 
-This CLI Reference section covers the `redwood-tools` command options. For `redwood` options, see the [CLI Reference on redwoodjs.com](https://redwoodjs.com/reference/command-line-interface).
+
+> This section covers the `redwood-tools` command options.
+>
+> For `redwood` options, see the [CLI Reference on redwoodjs.com](https://redwoodjs.com/reference/command-line-interface).
 
 ### redwood-tools (rwt)
 
@@ -437,4 +450,6 @@ Link the Redwood Framework path to this project and watch it for changes.
 yarn rwt link [RW_PATH]
 ```
 
-You can avoid having to provide `RW_PATH` by defining an environment variable on your system. See [Specifying a `RW_PATH`](#specifying-a-rw_path).
+You can avoid having to provide `RW_PATH` by defining an environment variable on your system. See
+[Specifying a `RW_PATH`](#specifying-a-rw_path).
+

@@ -1,0 +1,12 @@
+{
+  "name": "redwoodjs-tutorial-codemods",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "transform": "jscodeshift"
+  },
+  "dependencies": {
+    "jscodeshift": "^0.11.0"
+  }
+}
