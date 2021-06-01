@@ -23,6 +23,8 @@ const RW_BINS = {
   'api-server': 'api-server/dist/index.js',
   'rw-api-server': 'api-server/dist/index.js',
   'rw-api-build': 'core/esbuild/index.js',
+  'rw-gen': 'internal/dist/generate/generate.js',
+  'rw-gen-watch': 'internal/dist/generate/watch.js',
 }
 
 export const resolveFrameworkPath = (RW_PATH) => {

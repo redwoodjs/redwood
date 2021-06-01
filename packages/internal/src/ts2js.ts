@@ -2,10 +2,10 @@ import fs from 'fs'
 import path from 'path'
 
 import { transform } from '@babel/core'
-import glob from 'glob'
+import fg from 'fast-glob'
 import { format } from 'prettier'
 
-import { getPaths } from '../paths'
+import { getPaths } from './paths'
 
 /**
  * Converts all the TypeScript files in the `api` and `web` sides to JavaScript.
@@ -47,8 +47,9 @@ export const convertTsProjectToJs = (cwd = getPaths().base) => {
 export const typeScriptSourceFiles = (cwd: string) => {
   // TODO: When sides are expanded read the `api` and `web` string instead
   // of hard-coding them.
-  return glob.sync('{api,web}/src/**/*.{ts,tsx}', {
+  return fg.sync('{api,web}/src/**/*.{ts,tsx}', {
     cwd,
+    ignore: ['node_modules'],
   })
 }
 
