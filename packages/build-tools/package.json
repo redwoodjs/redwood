@@ -3,8 +3,6 @@
   "version": "0.32.2",
   "license": "MIT",
   "files": [
-    "config",
-    "dist",
     "esbuild"
   ],
   "bin": {
@@ -93,15 +91,5 @@
     "@types/react-dom": "17.0.5"
 
   },
-
-  "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762",
-  "scripts": {
-    "build": "yarn build:js && yarn build:types",
-    "prepublishOnly": "yarn build",
-    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
-    "build:types": "ttsc --build --verbose",
-    "build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build\"",
-    "test": "jest",
-    "test:watch": "yarn test --watch"
-  }
+  "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"
 }
