@@ -10,7 +10,7 @@
   },
   "dependencies": {
 
-    "x----x----x": "^0.0.2  ~~~~~~~ BABEL ~~~~~~~",
+    "x----x----x": "^0 BABEL",
 
     "@babel/cli": "7.14.3",
     "@babel/core": "7.14.3",
@@ -19,29 +19,31 @@
     "@babel/plugin-proposal-class-properties": "7.13.0",
     "@babel/plugin-proposal-private-methods": "7.13.0",
     "@babel/plugin-transform-runtime": "7.14.3",
-    "@babel/preset-env": "7.14.2",
+
     "@babel/preset-react": "7.13.13",
     "@babel/preset-typescript": "7.13.0",
+
+    "@babel/preset-env": "7.14.2",
     "@babel/runtime-corejs3": "7.14.0",
+    "core-js": "3.12.1",
 
     "babel-plugin-auto-import": "1.1.0",
     "babel-plugin-graphql-tag": "3.3.0",
     "graphql": "15.5.0",
     "graphql-tag": "2.12.4",
+
     "babel-plugin-inline-react-svg": "2.0.1",
     "babel-plugin-module-resolver": "4.1.0",
 
-    "core-js": "3.12.1",
+
     "esbuild": "0.12.1",
     "esbuild-loader": "2.13.1",
     "typescript": "4.2.4",
 
-    "cp-cli": "2.0.0",
     "cross-env": "7.0.3",
     "rimraf": "3.0.2",
 
-    "x----x----x": "^0.0.2  ~~~~~~~ WEBPACK ~~~~~~~",
-
+    "x----x----x": "^0 WEBPACK",
     "babel-loader": "8.2.2",
     "webpack": "4.46.0",
     "webpack-bundle-analyzer": "3.6.1",
@@ -67,10 +69,6 @@
     "null-loader": "4.0.1",
     "lodash.escaperegexp": "4.1.2",
 
-
-
-
-
     "x----x----x": "^0.0.2 ~~~~~~~ SHARED DESIGN TOOLS ~~~~~~~",
 
     "@storybook/addon-a11y": "6.2.9",
@@ -84,11 +82,10 @@
     "whatwg-fetch": "3.5.0",
     "msw": "0.29.0",
     "@types/jest": "26.0.23",
-    "prisma": "2.23.0",
-
     "@types/node": "15.6.1",
     "@types/react": "17.0.6",
-    "@types/react-dom": "17.0.5"
+    "@types/react-dom": "17.0.5",
+
 
   },
   "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"

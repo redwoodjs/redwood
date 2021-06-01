@@ -20806,7 +20806,7 @@ ws@^7.4.5:
   resolved "https://registry.yarnpkg.com/ws/-/ws-7.4.6.tgz#5654ca8ecdeee47c33a9a4bf6d28e2be2980377c"
   integrity sha512-YmhHDO4MzaDLB+M9ym/mDA5z0naX8j7SIlT8f8z+I0VtzsRbekxEutHSme7NPS2qE8StCYQNUnfWdXta/Yu85A==
 
-"x----x----x@^2 ~~~~~~~ SHARED DESIGN TOOLS ~~~~~~~":
+"x----x----x@^0.0.2 ~~~~~~~ SHARED DESIGN TOOLS ~~~~~~~":
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/x----x----x/-/x----x----x-0.0.2.tgz#44e014e79f53205066ecf7d170dd1f30ef677856"
   integrity sha1-ROAU559TIFBm7PfRcN0fMO9neFY=
