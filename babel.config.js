@@ -1,4 +1,4 @@
-const packageJSON = require('./package.json')
+const packageJSON = require('./packages/build-tools/package.json')
 
 // RedwoodJS targets Node.js 12.x because this is the default version
 // for Netlify's functions.
@@ -12,7 +12,7 @@ const TARGETS_BROWSERS = ['defaults', 'not IE 11', 'not IE_Mob 11']
 // instead of corejs: '3', since with '3' it will not be injected modules
 // which were added in minor core-js releases.
 // https://github.com/zloirock/core-js/blob/master/README.md#babelpreset-env
-const CORE_JS_VERSION = packageJSON.devDependencies['core-js']
+const CORE_JS_VERSION = packageJSON.dependencies['core-js']
   .split('.')
   .slice(0, 2)
   .join('.') // Produces: 3.12, instead of 3.12.1
@@ -65,7 +65,7 @@ module.exports = {
         // https://babeljs.io/docs/en/babel-plugin-transform-runtime/#version
         // Transform-runtime assumes that @babel/runtime@7.0.0 is installed.
         // Specifying the version can result in a smaller bundle size.
-        version: packageJSON.devDependencies['@babel/runtime-corejs3'],
+        version: packageJSON.dependencies['@babel/runtime-corejs3'],
       },
     ],
   ],
