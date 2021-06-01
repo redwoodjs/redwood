@@ -1,7 +1,13 @@
 const packageJSON = require('./package.json')
 
+// RedwoodJS targets Node.js 12.x because this is the default version
+// for Netlify's functions.
 const TARGETS_NODE = '12.16'
+
+// Run `npx browserslist "defaults, not IE 11, not IE_Mob 11"` to see a list
+// of target browsers.
 const TARGETS_BROWSERS = ['defaults', 'not IE 11', 'not IE_Mob 11']
+
 // Warning! Recommended to specify used minor core-js version, like corejs: '3.6',
 // instead of corejs: '3', since with '3' it will not be injected modules
 // which were added in minor core-js releases.
