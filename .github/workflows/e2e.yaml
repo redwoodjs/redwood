@@ -24,7 +24,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Install framework modules
-        run: yarn install --frozen-lockfile
+        run: yarn install --frozen-lockfile --offline
 
       - name: Create a temporary directory
         id: createpath
