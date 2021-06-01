@@ -73,10 +73,10 @@ module.exports = {
     // ** WEB PACKAGES **
     {
       test: [
-        './packages/router',
-        './packages/web/',
         './packages/auth/',
+        './packages/router',
         './packages/forms/',
+        './packages/web/',
       ],
       presets: [
         [
