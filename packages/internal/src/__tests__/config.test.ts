@@ -19,6 +19,9 @@ describe('getConfig', () => {
         "browser": Object {
           "open": false,
         },
+        "experimental": Object {
+          "esbuild": false,
+        },
         "generate": Object {
           "stories": true,
           "tests": true,
