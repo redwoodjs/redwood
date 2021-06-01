@@ -30,7 +30,6 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile --offline
-        shell: cmd # applies to Windows only
 
       - name: Build
         run: yarn build
