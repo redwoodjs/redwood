@@ -6,7 +6,7 @@ import path from 'path'
 import chokidar from 'chokidar'
 import dotenv from 'dotenv'
 
-import { build } from '@redwoodjs/core/esbuild/apiBuild'
+import { build } from '@redwoodjs/build-tools/esbuild/apiBuild'
 import { getPaths } from '@redwoodjs/internal'
 
 const rwjsPaths = getPaths()
