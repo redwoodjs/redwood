@@ -44,6 +44,9 @@ export interface Config {
     tests: boolean
     stories: boolean
   }
+  experimental: {
+    esbuild: boolean
+  }
 }
 
 // Note that web's includeEnvironmentVariables is handled in `webpack.common.js`
@@ -73,6 +76,9 @@ const DEFAULT_CONFIG: Config = {
     tests: true,
     stories: true,
   },
+  experimental: {
+    esbuild: false,
+  }
 }
 
 /**
