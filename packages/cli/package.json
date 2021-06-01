@@ -41,18 +41,14 @@
     "prompts": "2.4.1",
     "rimraf": "3.0.2",
     "terminal-link": "2.1.1",
-    "yargs": "16.0.3",
-    "@graphql-codegen/cli": "1.21.4",
-    "@graphql-codegen/typescript": "1.22.0",
-    "@graphql-codegen/typescript-operations": "1.17.16",
-    "@graphql-codegen/typescript-react-apollo": "2.2.4",
-    "@graphql-codegen/typescript-resolvers": "1.19.1"
+    "yargs": "16.0.3"
   },
   "devDependencies": {
     "@types/listr": "0.14.3",
     "@types/node-fetch": "2.5.10"
   },
   "scripts": {
+    "dev": "yarn build:js && __REDWOOD__CONFIG_PATH=../../__fixtures__/example-todo-main node dist/index.js",
     "build": "yarn build:js",
     "prepublishOnly": "yarn build",
     "build:clean-dist": "yarn rimraf 'dist/**/*/__tests__'",
