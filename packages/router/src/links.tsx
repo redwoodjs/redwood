@@ -1,6 +1,8 @@
 import { forwardRef, useEffect } from 'react'
 
-import { navigate, matchPath, useLocation } from './internal'
+import isEqual from 'lodash.isequal'
+
+import { navigate, matchPath, useLocation, parseSearch } from './internal'
 
 /**
  * Returns true if the URL for the given "route" value matches the current URL.
@@ -13,7 +15,14 @@ const useMatch = (route: string) => {
     return { match: false }
   }
 
-  return matchPath(route, location.pathname)
+  // Separate pathname and search parameters
+  const [pathname, search] = route.split('?')
+
+  if (!isEqual(parseSearch(search), parseSearch(location.search))) {
+    return { match: false }
+  }
+
+  return matchPath(pathname, location.pathname)
 }
 
 interface LinkProps {
