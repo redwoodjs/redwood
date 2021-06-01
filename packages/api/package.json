@@ -22,7 +22,7 @@
     "lodash.merge": "4.6.2",
     "lodash.omitby": "4.6.0",
     "pino": "6.11.3",
-    "pino-pretty": "4.8.0"
+    "pino-pretty": "5.0.1"
   },
   "devDependencies": {
     "@redwoodjs/auth": "0.32.2",
