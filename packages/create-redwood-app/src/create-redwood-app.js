@@ -130,6 +130,38 @@ const installNodeModulesTasks = ({ newAppDir }) => {
       },
     },
     {
+      title:
+        'Adding Typescript support for Prisma seed ... (This could take a while)',
+      skip: () => typescript === false,
+      task: () => {
+        return execa(
+          `yarn add npm-add-script @types/node ts-node --dev --ignore-workspace-root-check
+           npx npm-add-script -k ts-node -v "ts-node --compiler-options \'{"module":"CommonJS"}\'"`,
+          {
+            shell: true,
+            cwd: newAppDir,
+          }
+        )
+      },
+    },
+    {
+      title: 'Adding imports for Prisma seed',
+      task: () => {
+        let cmd =
+          "echo \"import { PrismaClient } from '@prisma/client'\nimport dotenv from 'dotenv'\n$(cat api/db/seed.ts)\n\n\" > api/db/seed.ts"
+
+        if (!typescript) {
+          cmd =
+            "echo  \"const { PrismaClient } = require('@prisma/client')\nconst dotenv = require('dotenv')\n$(cat api/db/seed.ts)\n\n\" > api/db/seed.js && rm api/db/seed.ts"
+        }
+
+        return execa(cmd, {
+          shell: true,
+          cwd: newAppDir,
+        })
+      },
+    },
+    {
       title: "Running 'yarn install'... (This could take a while)",
       skip: () => {
         if (yarnInstall === false) {
