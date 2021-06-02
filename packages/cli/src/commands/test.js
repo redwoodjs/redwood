@@ -94,6 +94,7 @@ export const handler = async ({
     collectCoverage ? '--collectCoverage' : null,
     '--passWithNoTests',
     ...jestFilterArgs,
+    sides.includes('api') && '--runInBand',
   ].filter((flagOrValue) => flagOrValue !== null) // Filter out nulls, not booleans because user may have passed a --something false flag
 
   // If the user wants to watch, set the proper watch flag based on what kind of repo this is
@@ -106,10 +107,6 @@ export const handler = async ({
   // if no sides declared with yargs, default to all sides
   if (!sides.length) {
     getProject().sides.forEach((side) => sides.push(side))
-  }
-
-  if (sides.includes('api')) {
-    jestArgs.push('--runInBand')
   }
 
   jestArgs.push(

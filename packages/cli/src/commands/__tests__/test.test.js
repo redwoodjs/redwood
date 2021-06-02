@@ -34,6 +34,9 @@ test('Creates/resets a test db when side has api, before calling jest', async ()
   })
 
   expect(execa.mock.results[1].value.cmd).toBe('yarn jest')
+
+  // Api tests need to run sequencially for scenarios
+  expect(execa.mock.results[1].value.params).toContain('--runInBand')
 })
 
 test('Runs tests for all available sides if no filter passed', async () => {
