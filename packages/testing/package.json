@@ -14,7 +14,7 @@
     "@redwoodjs/router": "0.32.2",
     "@redwoodjs/web": "0.32.2",
     "@testing-library/react": "11.2.7",
-    "@types/react": "17.0.6",
+    "@types/react": "17.0.8",
     "msw": "0.29.0"
   },
   "scripts": {
