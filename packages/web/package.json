@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "ts-toolbelt": "9.6.0",
-    "@types/react": "17.0.6"
+    "@types/react": "17.0.9"
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",
