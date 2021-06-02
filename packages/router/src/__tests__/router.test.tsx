@@ -467,11 +467,10 @@ test('renders first matching route only', async () => {
   expect(screen.queryByText(/param/)).not.toBeInTheDocument()
 })
 
-test('params should never be an empty object', async (done) => {
+test('params should never be an empty object', async () => {
   const ParamPage = () => {
     const params = useParams()
     expect(params).not.toEqual({})
-    done()
     return null
   }
 
@@ -485,7 +484,7 @@ test('params should never be an empty object', async (done) => {
   render(<TestRouter />)
 })
 
-test('params should never be an empty object in Set', async (done) => {
+test('params should never be an empty object in Set', async () => {
   const ParamPage = () => {
     return null
   }
@@ -493,7 +492,6 @@ test('params should never be an empty object in Set', async (done) => {
   const SetWithUseParams = ({ children }) => {
     const params = useParams()
     expect(params).not.toEqual({})
-    done()
     return children
   }
 
