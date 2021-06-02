@@ -32,6 +32,7 @@ import { writeTemplate } from './templates'
  * and return the generated files.
  */
 export const generateTypeDefs = async () => {
+  // MARK What does p mean?!
   const p1 = generateMirrorDirectoryNamedModules()
   const p2 = generateMirrorCells()
   const p3 = generateTypeDefRouterPages()
@@ -39,9 +40,12 @@ export const generateTypeDefs = async () => {
   const p5 = generateTypeDefRouterRoutes()
   const p6 = generateTypeDefGlobImports()
   const p7 = generateTypeDefGlobalContext()
-  const p8 = await generateTypeDefGraphQL()
+  const p8 = generateTypeDefScenarios()
+  const p9 = await generateTypeDefGraphQL()
 
-  return [...p1, ...p2, p3[0], p4[0], p5[0], p6[0], p7[0], ...p8]
+  // MARK What is this?
+  // Why create another array
+  return [...p1, ...p2, p3[0], p4[0], p5[0], p6[0], p7[0], ...p8, ...p9]
 }
 
 export const generateMirrorDirectoryNamedModules = () => {
@@ -141,6 +145,10 @@ export const generateTypeDefRouterPages = () => {
 
 export const generateTypeDefCurrentUser = () => {
   return writeTypeDefIncludeFile('all-currentUser.d.ts.template')
+}
+
+export const generateTypeDefScenarios = () => {
+  return writeTypeDefIncludeFile('api-scenarios.d.ts.template')
 }
 
 export const generateTypeDefGlobImports = () => {
