@@ -294,6 +294,7 @@ export const createGraphQLHandler = ({
       'getGraphQLParameters'
     )
 
+    let lambdaResponse: APIGatewayProxyResult
     try {
       logger.debug('About to processRequest')
 
@@ -311,7 +312,7 @@ export const createGraphQLHandler = ({
       })
 
       if (result.type === 'RESPONSE') {
-        return {
+        lambdaResponse = {
           body: JSON.stringify(result.payload),
           statusCode: 200,
           headers: {
@@ -323,55 +324,65 @@ export const createGraphQLHandler = ({
           },
         }
       } else if (result.type === 'MULTIPART_RESPONSE') {
-        return {
+        lambdaResponse = {
           body: JSON.stringify({ error: 'Streaming is not supported yet!' }),
           statusCode: 500,
         }
       } else if (result.type === 'PUSH') {
-        return {
+        lambdaResponse = {
           body: JSON.stringify({
             error: 'Subscriptions is not supported yet!',
           }),
           statusCode: 500,
         }
-      }
-
-      return {
-        body: JSON.stringify({ error: 'Unexpected flow' }),
-        statusCode: 500,
+      } else {
+        lambdaResponse = {
+          body: JSON.stringify({ error: 'Unexpected flow' }),
+          statusCode: 500,
+        }
       }
     } catch (e) {
       logger.error(e)
       onException && onException()
 
-      return {
+      lambdaResponse = {
         body: JSON.stringify({ error: 'GraphQL execution failed' }),
         statusCode: 500,
       }
     }
+
+    if (!lambdaResponse.headers) {
+      lambdaResponse.headers = {}
+    }
+
+    lambdaResponse.headers['Content-Type'] = 'application/json'
+
+    return lambdaResponse
   }
 
-  return (event: APIGatewayProxyEvent, context: LambdaContext): void => {
+  return (
+    event: APIGatewayProxyEvent,
+    context: LambdaContext
+  ): Promise<any> => {
+    const execFn = async () => {
+      try {
+        return await handlerFn(event, context)
+      } catch (e) {
+        onException && onException()
+
+        throw e
+      }
+    }
+
     if (usePerRequestContext()) {
+      logger.debug('>>>> This must be used when self-hosting RedwoodJS.')
       // This must be used when you're self-hosting RedwoodJS.
-      const localAsyncStorage = getPerRequestContext()
-      localAsyncStorage.run(new Map(), () => {
-        try {
-          handlerFn(event, context)
-        } catch (e) {
-          onException && onException()
-          throw e
-        }
-      })
+      return getPerRequestContext().run(new Map(), execFn)
     } else {
       // This is OK for AWS (Netlify/Vercel) because each Lambda request
       // is handled individually.
-      try {
-        handlerFn(event, context)
-      } catch (e) {
-        onException && onException()
-        throw e
-      }
+      logger.debug('>>>> is handled individually.')
+      return execFn()
     }
   }
 }

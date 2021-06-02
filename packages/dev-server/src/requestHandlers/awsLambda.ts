@@ -43,6 +43,7 @@ const expressResponseForLambdaResult = (
       expressResFn.setHeader(headerName, headerValue)
     })
   }
+
   expressResFn.status(statusCode)
 
   // We're using this to log GraphQL errors, this isn't the right place.
@@ -97,32 +98,15 @@ export const requestHandler = async (
   // We take the express request object and convert it into a lambda function event.
   const event = lambdaEventForExpressRequest(req)
 
-  const handlerCallback =
-    (expressResFn: Response) =>
-    (error: Error, lambdaResult: APIGatewayProxyResult) => {
-      if (error) {
-        expressResponseForLambdaError(expressResFn, error)
-        return
-      }
-
-      expressResponseForLambdaResult(expressResFn, lambdaResult)
-    }
-
   // Execute the lambda function.
   // https://docs.aws.amazon.com/lambda/latest/dg/nodejs-prog-model-handler.html
-  const handlerPromise = handler(
-    event,
-    {}, // TODO: Add support for context: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/0bb210867d16170c4a08d9ce5d132817651a0f80/types/aws-lambda/index.d.ts#L443-L467
-    handlerCallback(res)
-  )
-
-  // In this case the handlerCallback should not be called.
-  if (handlerPromise && typeof handlerPromise.then === 'function') {
-    try {
-      const lambaResponse = await handlerPromise
-      return expressResponseForLambdaResult(res, lambaResponse)
-    } catch (error) {
-      return expressResponseForLambdaError(res, error)
-    }
+  try {
+    const handlerResult = await handler(
+      event,
+      {} as any // TODO: Add support for context: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/0bb210867d16170c4a08d9ce5d132817651a0f80/types/aws-lambda/index.d.ts#L443-L467
+    )
+    expressResponseForLambdaResult(res, handlerResult)
+  } catch (e) {
+    expressResponseForLambdaError(res, e)
   }
 }
