@@ -73,7 +73,8 @@ export const handler = async ({
   collectCoverage = false,
   dbPush = true,
 }) => {
-  const { cache: CACHE_DIR } = getPaths()
+  const rwjsPaths = getPaths()
+
   const sides = [].concat(side).filter(Boolean)
   const args = [
     '--passWithNoTests',
@@ -106,7 +107,9 @@ export const handler = async ({
   }
 
   try {
-    const cacheDirDb = `file:${ensurePosixPath(CACHE_DIR)}/test.db`
+    const cacheDirDb = `file:${ensurePosixPath(
+      rwjsPaths.generated.base
+    )}/test.db`
     const DATABASE_URL = process.env.TEST_DATABASE_URL || cacheDirDb
 
     if (sides.includes('api') && dbPush) {
@@ -115,7 +118,7 @@ export const handler = async ({
         `yarn rw`,
         ['prisma db push', '--force-reset', '--accept-data-loss'],
         {
-          cwd: getPaths().api.base,
+          cwd: rwjsPaths.api.base,
           stdio: 'inherit',
           shell: true,
           env: { DATABASE_URL },
@@ -127,7 +130,7 @@ export const handler = async ({
     // so we're running it via execa, since `jest.run()` is a bit unstable.
     // https://github.com/facebook/jest/issues/5048
     await execa('yarn jest', args, {
-      cwd: getPaths().base,
+      cwd: rwjsPaths.base,
       shell: true,
       stdio: 'inherit',
       env: { DATABASE_URL },
