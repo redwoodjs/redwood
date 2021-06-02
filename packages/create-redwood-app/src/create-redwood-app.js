@@ -130,30 +130,19 @@ const installNodeModulesTasks = ({ newAppDir }) => {
       },
     },
     {
-      title:
-        'Adding Typescript support for Prisma seed ... (This could take a while)',
-      skip: () => typescript === false,
-      task: () => {
-        return execa(
-          `yarn add npm-add-script @types/node ts-node --dev --ignore-workspace-root-check
-           npx npm-add-script -k ts-node -v "ts-node --compiler-options \'{"module":"CommonJS"}\'"`,
-          {
-            shell: true,
-            cwd: newAppDir,
-          }
-        )
-      },
-    },
-    {
-      title: 'Adding imports for Prisma seed',
-      task: () => {
-        let cmd =
-          "echo \"import { PrismaClient } from '@prisma/client'\nimport dotenv from 'dotenv'\n$(cat api/db/seed.ts)\n\n\" > api/db/seed.ts"
-
-        if (!typescript) {
-          cmd =
-            "echo  \"const { PrismaClient } = require('@prisma/client')\nconst dotenv = require('dotenv')\n$(cat api/db/seed.ts)\n\n\" > api/db/seed.js && rm api/db/seed.ts"
+      title: 'Updating Prisma seed file imports',
+      skip: () => {
+        if (typescript) {
+          return 'skipped because project is already Typescript'
         }
+      },
+      task: () => {
+        const seedFile = 'api/db/seed.ts'
+        const prependImports =
+          "const { PrismaClient } = require('@prisma/client')\nconst dotenv = require('dotenv')\n"
+        const removeSeedFile = `rm ${seedFile}`
+
+        let cmd = `echo "${prependImports}$(tail -n +3 ${seedFile})" > api/db/seed.js && ${removeSeedFile}`
 
         return execa(cmd, {
           shell: true,
