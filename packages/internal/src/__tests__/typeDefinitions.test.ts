@@ -12,6 +12,7 @@ import {
   generateTypeDefGlobalContext,
   mirrorPathForDirectoryNamedModules,
   mirrorPathForCell,
+  generateTypeDefScenarios,
 } from '../generate/typeDefinitions'
 import { ensurePosixPath } from '../paths'
 
@@ -124,6 +125,12 @@ test('generate api global context', () => {
   const paths = generateTypeDefGlobalContext()
   const p = paths.map(cleanPaths)
   expect(p[0]).toEqual('.redwood/types/includes/api-globalContext.d.ts')
+})
+
+test('generate scenario type defs', () => {
+  const paths = generateTypeDefScenarios()
+  const p = paths.map(cleanPaths)
+  expect(p[0]).toEqual('.redwood/types/includes/api-scenarios.d.ts')
 })
 
 test('mirror path for directory named modules', () => {
