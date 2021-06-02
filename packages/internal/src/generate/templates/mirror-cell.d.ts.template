@@ -1,0 +1,3 @@
+import { Success } from './${name}'
+type SuccessType = typeof Success
+export default function (): ReturnType<SuccessType>

@@ -14,13 +14,13 @@
   },
   "dependencies": {
     "@babel/register": "7.13.16",
-    "@redwoodjs/auth": "^0.32.2",
-    "@redwoodjs/internal": "^0.32.2",
-    "@redwoodjs/router": "^0.32.2",
-    "@redwoodjs/structure": "^0.32.2",
-    "@redwoodjs/web": "^0.32.2",
-    "babel-plugin-ignore-html-and-css-imports": "^0.1.0",
-    "node-fetch": "^2.6.1"
+    "@redwoodjs/auth": "0.32.2",
+    "@redwoodjs/internal": "0.32.2",
+    "@redwoodjs/router": "0.32.2",
+    "@redwoodjs/structure": "0.32.2",
+    "@redwoodjs/web": "0.32.2",
+    "babel-plugin-ignore-html-and-css-imports": "0.1.0",
+    "node-fetch": "2.6.1"
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",
