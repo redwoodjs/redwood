@@ -286,6 +286,7 @@ describe('dbAuth', () => {
       dbAuth.verifyUser(' ', 'password').catch((e) => {
         expect(e).toBeInstanceOf(dbAuth.UsernameAndPasswordRequiredError)
       })
+      expect.assertions(3)
     })
 
     it('throws an error if password is missing', () => {
@@ -301,24 +302,24 @@ describe('dbAuth', () => {
       dbAuth.verifyUser('username', ' ').catch((e) => {
         expect(e).toBeInstanceOf(dbAuth.UsernameAndPasswordRequiredError)
       })
+      expect.assertions(4)
     })
 
     it('throws an error if user is not found', async () => {
-      try {
-        await dbAuth.verifyUser('username', 'password')
-      } catch (e) {
+      dbAuth.verifyUser('username', 'password').catch((e) => {
         expect(e).toBeInstanceOf(dbAuth.UserNotFoundError)
-      }
+      })
+      expect.assertions(1)
     })
 
     it('throws an error if password is incorrect', async () => {
       const dbUser = await createDbUser()
 
-      try {
-        await dbAuth.verifyUser(dbUser.email, 'incorrect')
-      } catch (e) {
+      dbAuth.verifyUser(dbUser.email, 'incorrect').catch((e) => {
         expect(e).toBeInstanceOf(dbAuth.IncorrectPasswordError)
-      }
+      })
+
+      expect.assertions(1)
     })
 
     it('returns the user with matching username and password', async () => {
@@ -332,21 +333,19 @@ describe('dbAuth', () => {
 
   describe('getCurrentUser', () => {
     it('throw an error if user is not logged in', async () => {
-      try {
-        await dbAuth.getCurrentUser()
-      } catch (e) {
+      dbAuth.getCurrentUser().catch((e) => {
         expect(e).toBeInstanceOf(dbAuth.NotLoggedInError)
-      }
+      })
+      expect.assertions(1)
     })
 
     it('throw an error if user is not found', async () => {
       global.session = { id: 500 }
 
-      try {
-        await dbAuth.getCurrentUser()
-      } catch (e) {
+      dbAuth.getCurrentUser().catch((e) => {
         expect(e).toBeInstanceOf(dbAuth.UserNotFoundError)
-      }
+      })
+      expect.assertions(1)
     })
 
     it('returns the user whos id is in session', async () => {
@@ -376,11 +375,10 @@ describe('dbAuth', () => {
         password: 'password',
       })
 
-      try {
-        await dbAuth.createUser()
-      } catch (e) {
+      dbAuth.createUser().catch((e) => {
         expect(e).toBeInstanceOf(dbAuth.DuplicateUsernameError)
-      }
+      })
+      expect.assertions(1)
     })
 
     it('throws an error if username is missing', async () => {
@@ -388,11 +386,10 @@ describe('dbAuth', () => {
         password: 'password',
       })
 
-      try {
-        await dbAuth.createUser()
-      } catch (e) {
+      dbAuth.createUser().catch((e) => {
         expect(e).toBeInstanceOf(dbAuth.FieldRequiredError)
-      }
+      })
+      expect.assertions(1)
     })
 
     it('throws an error if password is missing', async () => {
@@ -400,11 +397,10 @@ describe('dbAuth', () => {
         username: 'user@redwdoodjs.com',
       })
 
-      try {
-        await dbAuth.createUser()
-      } catch (e) {
+      dbAuth.createUser().catch((e) => {
         expect(e).toBeInstanceOf(dbAuth.FieldRequiredError)
-      }
+      })
+      expect.assertions(1)
     })
 
     it('creates a new user', async () => {
@@ -496,63 +492,8 @@ describe('dbAuth', () => {
       }).toThrow(dbAuth.FieldRequiredError)
     })
 
-    it('passes if no other validation', () => {
+    it('passes validation if everything is present', () => {
       expect(dbAuth.validateField('username', 'cannikin')).toEqual(true)
-    })
-
-    it('validates for format', () => {
-      global.options.validation = {
-        username: {
-          format: {
-            value: /^[a-z]+$/,
-            message: 'Can only be lowercase letters',
-          },
-        },
-      }
-      try {
-        dbAuth.validateField('username', 'Dude01')
-      } catch (e) {
-        expect(e).toBeInstanceOf(dbAuth.FieldFormatError)
-        expect(e.message).toEqual('Can only be lowercase letters')
-      }
-    })
-
-    it('validates for minimum length', () => {
-      global.options.validation = {
-        username: {
-          length: {
-            min: {
-              value: 4,
-              message: 'too short',
-            },
-          },
-        },
-      }
-      try {
-        dbAuth.validateField('username', 'abc')
-      } catch (e) {
-        expect(e).toBeInstanceOf(dbAuth.FieldFormatError)
-        expect(e.message).toEqual('too short')
-      }
-    })
-
-    it('validates for maximum length', () => {
-      global.options.validation = {
-        username: {
-          length: {
-            min: {
-              value: 4,
-              message: 'too long',
-            },
-          },
-        },
-      }
-      try {
-        dbAuth.validateField('username', 'qwerty')
-      } catch (e) {
-        expect(e).toBeInstanceOf(dbAuth.FieldFormatError)
-        expect(e.message).toEqual('too long')
-      }
     })
   })
 
@@ -677,11 +618,10 @@ describe('dbAuth', () => {
         password: 'password',
       })
 
-      try {
-        await dbAuth.methods.login()
-      } catch (e) {
+      dbAuth.methods.login().catch((e) => {
         expect(e).toBeInstanceOf(dbAuth.UserNotFoundError)
-      }
+      })
+      expect.assertions(1)
     })
 
     it('throws an error if password is wrong', async () => {
@@ -691,11 +631,10 @@ describe('dbAuth', () => {
         password: 'incorrect',
       })
 
-      try {
-        await dbAuth.methods.login()
-      } catch (e) {
+      dbAuth.methods.login().catch((e) => {
         expect(e).toBeInstanceOf(dbAuth.IncorrectPasswordError)
-      }
+      })
+      expect.assertions(1)
     })
 
     it('returns a JSON body of the user that is logged in', async () => {
