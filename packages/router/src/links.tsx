@@ -37,7 +37,7 @@ const useMatch = (route: string, options?: MatchHookOptions) => {
   // Separate pathname and search parameters, USVString expected
   const [pathname, search] = route.split('?')
 
-  if (!options?.ignoreQueryString && search) {
+  if (!options?.ignoreQueryString) {
     const filterParams = (searchParams: ReturnType<typeof parseSearch>) => {
       if (options?.matchSearchParamKeys?.length) {
         const matchSearchParamKeys = options.matchSearchParamKeys
@@ -110,48 +110,54 @@ const Link = forwardRef<
 interface NavLinkProps {
   to: string
   activeClassName: string
+  activeMatchOptions?: MatchHookOptions
 }
 
 const NavLink = forwardRef<
   HTMLAnchorElement,
   NavLinkProps & React.AnchorHTMLAttributes<HTMLAnchorElement>
->(({ to, activeClassName, className, onClick, ...rest }, ref) => {
-  const matchInfo = useMatch(to)
-  const theClassName = [className, matchInfo.match && activeClassName]
-    .filter(Boolean)
-    .join(' ')
+>(
+  (
+    { to, activeClassName, activeMatchOptions, className, onClick, ...rest },
+    ref
+  ) => {
+    const matchInfo = useMatch(to, activeMatchOptions)
+    const theClassName = [className, matchInfo.match && activeClassName]
+      .filter(Boolean)
+      .join(' ')
 
-  return (
-    <a
-      href={to}
-      ref={ref}
-      className={theClassName}
-      {...rest}
-      onClick={(event) => {
-        if (
-          event.button !== 0 ||
-          event.altKey ||
-          event.ctrlKey ||
-          event.metaKey ||
-          event.shiftKey
-        ) {
-          return
-        }
+    return (
+      <a
+        href={to}
+        ref={ref}
+        className={theClassName}
+        {...rest}
+        onClick={(event) => {
+          if (
+            event.button !== 0 ||
+            event.altKey ||
+            event.ctrlKey ||
+            event.metaKey ||
+            event.shiftKey
+          ) {
+            return
+          }
 
-        event.preventDefault()
+          event.preventDefault()
 
-        if (onClick) {
-          const result = onClick(event)
-          if (typeof result !== 'boolean' || result) {
+          if (onClick) {
+            const result = onClick(event)
+            if (typeof result !== 'boolean' || result) {
+              navigate(to)
+            }
+          } else {
             navigate(to)
           }
-        } else {
-          navigate(to)
-        }
-      }}
-    />
-  )
-})
+        }}
+      />
+    )
+  }
+)
 
 interface RedirectProps {
   /** The name of the route to redirect to */

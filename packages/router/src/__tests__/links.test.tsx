@@ -39,6 +39,45 @@ describe('<NavLink />', () => {
     expect(getByText(/Dunder Mifflin/)).toHaveClass('activeTest')
   })
 
+  it('receives active class on the same pathname', () => {
+    const mockLocation = createDummyLocation('/pathname', '?tab=main&page=1')
+
+    const { getByText } = render(
+      <LocationProvider location={mockLocation}>
+        <NavLink
+          activeClassName="activeTest"
+          to={`/pathname?tab=second&page=2`}
+          activeMatchOptions={{ ignoreQueryString: true }}
+        >
+          Dunder Mifflin
+        </NavLink>
+      </LocationProvider>
+    )
+
+    expect(getByText(/Dunder Mifflin/)).toHaveClass('activeTest')
+  })
+
+  it('receives active class on the same path and specific search parameters', () => {
+    const mockLocation = createDummyLocation(
+      '/pathname-params',
+      '?tab=main&page=1'
+    )
+
+    const { getByText } = render(
+      <LocationProvider location={mockLocation}>
+        <NavLink
+          activeClassName="activeTest"
+          to={`/pathname-params?tab=main&page=2`}
+          activeMatchOptions={{ matchSearchParamKeys: ['tab'] }}
+        >
+          Dunder Mifflin
+        </NavLink>
+      </LocationProvider>
+    )
+
+    expect(getByText(/Dunder Mifflin/)).toHaveClass('activeTest')
+  })
+
   it('receives active class on the same path with search parameters', () => {
     const mockLocation = createDummyLocation(
       '/search-params',
@@ -84,6 +123,27 @@ describe('<NavLink />', () => {
         <NavLink
           activeClassName="activeTest"
           to={`/search-params?page=2&tab=main`}
+        >
+          Dunder Mifflin
+        </NavLink>
+      </LocationProvider>
+    )
+
+    expect(getByText(/Dunder Mifflin/)).not.toHaveClass('activeTest')
+  })
+
+  it('does NOT receive active class on the same path but different specific search parameters', () => {
+    const mockLocation = createDummyLocation(
+      '/pathname-params',
+      '?tab=second&page=1'
+    )
+
+    const { getByText } = render(
+      <LocationProvider location={mockLocation}>
+        <NavLink
+          activeClassName="activeTest"
+          to={`/pathname-params?tab=main&page=2`}
+          activeMatchOptions={{ matchSearchParamKeys: ['tab'] }}
         >
           Dunder Mifflin
         </NavLink>
