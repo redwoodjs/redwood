@@ -9,8 +9,6 @@
   },
   "devDependencies": {
     "@redwoodjs/core": "^0.32.2",
-    "@types/node": "^15.6.1",
-    "ts-node": "^10.0.0"
   },
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config",
@@ -19,8 +17,5 @@
   "engines": {
     "node": "14.x",
     "yarn": "1.x"
-  },
-  "scripts": {
-    "ts-node": "ts-node --compiler-options '{\"module\":\"CommonJS\"}'"
   }
 }
