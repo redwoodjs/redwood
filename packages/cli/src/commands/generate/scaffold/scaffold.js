@@ -52,7 +52,9 @@ const getImportComponentNames = (
   const singularName = pascalcase(pluralize.singular(name))
   // TODO - confirm case for scaffold path
   const sP =
-    scaffoldPath !== '' ? scaffoldPath.split('/').map(pascalcase).join('/') : ''
+    scaffoldPath !== ''
+      ? scaffoldPath.split('/').map(pascalcase).join('/') + '/'
+      : ''
   const cPath = nestScaffoldByModel
     ? `src/components/${sP}${singularName}`
     : `src/components/${sP}`

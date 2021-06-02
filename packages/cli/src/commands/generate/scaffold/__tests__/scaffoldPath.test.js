@@ -55,7 +55,7 @@ describe('admin/post', () => {
           )
         ]
       ).toMatch(
-        `import PostEditCell from 'src/components/Admin/Post/PostEditCell/PostEditCell'`
+        `import EditPostCell from 'src/components/Admin/Post/EditPostCell/EditPostCell'`
       )
     })
 
@@ -91,11 +91,11 @@ describe('admin/post', () => {
       expect(
         filesLower[
           path.normalize(
-            '/path/to/project/web/src/pages/Admin/Post/PostNewPage/PostNewPage.js'
+            '/path/to/project/web/src/pages/Admin/Post/NewPostPage/NewPostPage.js'
           )
         ]
       ).toMatch(
-        `import PostNew from 'src/components/Post/Admin/Post/PostNew/PostNew'`
+        `import PostNew from 'src/components/Post/Admin/Post/NewPost/NewPost'`
       )
     })
 
@@ -124,7 +124,7 @@ describe('admin/post', () => {
     test('creates an edit cell', async () => {
       expect(filesLower).toHaveProperty([
         path.normalize(
-          '/path/to/project/web/src/components/Admin/Post/PostEditCell/PostEditCell.js'
+          '/path/to/project/web/src/components/Admin/Post/EditPostCell/EditPostCell.js'
         ),
       ])
     })
@@ -133,7 +133,7 @@ describe('admin/post', () => {
       expect(
         filesLower[
           path.normalize(
-            '/path/to/project/web/src/components/Admin/Post/PostEditCell/PostEditCell.js'
+            '/path/to/project/web/src/components/Admin/Post/EditPostCell/EditPostCell.js'
           )
         ]
       ).toMatch(
@@ -376,7 +376,7 @@ describe('Admin/Post', () => {
           )
         ]
       ).toMatch(
-        `import PostEditCell from 'src/components/Admin/Post/PostEditCell/PostEditCell'`
+        `import EditPostCell from 'src/components/Admin/Post/EditPostCell/EditPostCell'`
       )
     })
 
