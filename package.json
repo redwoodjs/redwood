@@ -32,7 +32,7 @@
     "@testing-library/react": "11.2.7",
     "@testing-library/user-event": "13.1.9",
     "@types/jest": "26.0.23",
-    "babel-jest": "26.6.3",
+    "babel-jest": "27.0.2",
     "babel-plugin-auto-import": "1.1.0",
     "babel-plugin-module-resolver": "4.1.0",
     "babel-plugin-remove-code": "0.0.6",
