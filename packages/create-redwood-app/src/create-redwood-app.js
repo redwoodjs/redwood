@@ -139,15 +139,17 @@ const installNodeModulesTasks = ({ newAppDir }) => {
       task: () => {
         const seedFile = 'api/db/seed.ts'
         const prependImports =
-          "const { PrismaClient } = require('@prisma/client')\nconst dotenv = require('dotenv')\n"
+          "const { PrismaClient } = require('@prisma/client')\n" +
+          "const dotenv = require('dotenv')\n"
         const removeSeedFile = `rm ${seedFile}`
 
-        let cmd = `echo "${prependImports}$(tail -n +3 ${seedFile})" > api/db/seed.js && ${removeSeedFile}`
-
-        return execa(cmd, {
-          shell: true,
-          cwd: newAppDir,
-        })
+        return execa(
+          `echo "${prependImports}$(tail -n +3 ${seedFile})" > api/db/seed.js && ${removeSeedFile}`,
+          {
+            shell: true,
+            cwd: newAppDir,
+          }
+        )
       },
     },
     {
