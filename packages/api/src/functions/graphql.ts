@@ -133,7 +133,7 @@ const useRedwoodAuthContext = (
   }
 }
 
-const useUserContext = (
+export const useUserContext = (
   userContextBuilder: NonNullable<GraphQLHandlerOptions['context']>
 ): Plugin<RedwoodGraphQLContext> => {
   return {
@@ -154,13 +154,14 @@ const useUserContext = (
  * // import { context } from '@redwoodjs/api'
  * @returns
  */
-const useRedwoodGlobalContextSetter = (): Plugin<RedwoodGraphQLContext> => ({
-  onContextBuilding() {
-    return ({ context }) => {
-      setContext(context)
-    }
-  },
-})
+export const useRedwoodGlobalContextSetter =
+  (): Plugin<RedwoodGraphQLContext> => ({
+    onContextBuilding() {
+      return ({ context }) => {
+        setContext(context)
+      }
+    },
+  })
 
 const useRedwoodLogger = (
   baseLogger: BaseLogger
