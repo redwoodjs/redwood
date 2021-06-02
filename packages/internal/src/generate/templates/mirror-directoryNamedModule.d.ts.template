@@ -1,0 +1,3 @@
+import { default as DEFAULT } from './${name}'
+export default DEFAULT
+export * from './${name}'

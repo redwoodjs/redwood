@@ -1,25 +1,14 @@
 import type { PluginObj, types } from '@babel/core'
 
 import { importStatementPath, processPagesDir } from '@redwoodjs/internal'
-import { RWProject } from '@redwoodjs/structure'
-
-import { generateGlobalsDef } from './generateGlobals'
-import { generateTypeDef, generateTypeDefIndex } from './generateTypes'
 
 interface PluginOptions {
-  project: RWProject
   useStaticImports?: boolean
 }
 
-// Use ' because I don't want to escape `
-const RouteParameterTypeParser =
-  'type ParamType<constraint> = constraint extends "Int" ? number : constraint extends "Boolean" ? boolean : constraint extends "Float" ? number : string;' +
-  '\n' +
-  'type RouteParams<Route> = Route extends `${string}/{${infer Param}:${infer Constraint}}/${infer Rest}` ? { [Entry in Param]: ParamType<Constraint> } & RouteParams<`/${Rest}`> : Route extends `${string}/{${infer Param}:${infer Constraint}}` ? { [Entry in Param]: ParamType<Constraint> } : Route extends `${string}/{${infer Param}}/${infer Rest}` ? { [Entry in Param]: string } & RouteParams<`/${Rest}`> : {}'
-
 export default function (
   { types: t }: { types: typeof types },
-  { project, useStaticImports = false }: PluginOptions
+  { useStaticImports = false }: PluginOptions
 ): PluginObj {
   let pages = processPagesDir()
   const rwPageImportPaths = pages.map((page) => page.importPath)
@@ -40,7 +29,7 @@ export default function (
         // and not asynchronous ones.
         if (useStaticImports) {
           // Match import paths, const name could be different
-          // NOTE: the userImportPath we receive at this point is the aboluste path
+          // NOTE: the userImportPath we receive at this point is the absolute path
           // because of babel-plugin-module-resolver that runs before
           const userImportPath = importStatementPath(p.node.source?.value)
 
@@ -60,57 +49,6 @@ export default function (
       Program: {
         enter() {
           pages = processPagesDir()
-
-          // Produces:
-          // routes.home: () => "/home"
-          // routes.aboutUs: () => "/about-us"
-          const availableRoutes = project
-            .getRouter()
-            .routes.filter((r) => !r.isNotFound)
-            .map(
-              (r) =>
-                `${r.name}: (params?: RouteParams<"${r.path}"> & QueryParams) => "${r.path}"`
-            )
-
-          const pageImports = pages.map(
-            (page) => `import type ${page.const}Type from '${page.importPath}'`
-          )
-          const pageGlobals = pages.map(
-            (page) => `const ${page.const}: typeof ${page.const}Type`
-          )
-
-          const typeDefContent = `
-            import '@redwoodjs/router'
-
-            ${RouteParameterTypeParser}
-            type QueryParams = Record<string | number, string | number | boolean>
-
-            declare module '@redwoodjs/router' {
-              interface AvailableRoutes {
-                ${availableRoutes.join('\n    ')}
-              }
-            }
-            `
-            .split('\n')
-            .slice(1)
-            .map((line) => line.replace('            ', ''))
-            .join('\n')
-
-          const globalsDefContent = `
-            ${pageImports.join('\n')}
-
-            declare global {
-              ${pageGlobals.join('\n  ')}
-            }
-            `
-            .split('\n')
-            .slice(1)
-            .map((line) => line.replace('            ', ''))
-            .join('\n')
-
-          generateTypeDef('routes.d.ts', typeDefContent)
-          generateGlobalsDef('routes-globals.d.ts', globalsDefContent)
-          generateTypeDefIndex()
         },
         exit(p) {
           if (pages.length === 0) {

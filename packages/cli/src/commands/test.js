@@ -62,6 +62,7 @@ export const handler = async ({
   collectCoverage = false,
   ...others
 }) => {
+  const rwjsPaths = getPaths()
   const forwardJestFlags = Object.keys(others).flatMap((flagName) => {
     if (['watch', 'collect-coverage', '$0', '_'].includes(flagName)) {
       // filter out flags meant for the rw test command only
@@ -74,8 +75,6 @@ export const handler = async ({
       ]
     }
   })
-
-  const { cache: CACHE_DIR } = getPaths()
 
   // Only the side params
   const sides = filterParams.filter((filterString) =>
@@ -123,7 +122,9 @@ export const handler = async ({
   }
 
   try {
-    const cacheDirDb = `file:${ensurePosixPath(CACHE_DIR)}/test.db`
+    const cacheDirDb = `file:${ensurePosixPath(
+      rwjsPaths.generated.base
+    )}/test.db`
     const DATABASE_URL = process.env.TEST_DATABASE_URL || cacheDirDb
 
     // Create a test database
@@ -132,7 +133,7 @@ export const handler = async ({
         `yarn rw`,
         ['prisma db push', '--force-reset', '--accept-data-loss'],
         {
-          cwd: getPaths().api.base,
+          cwd: rwjsPaths.api.base,
           stdio: 'inherit',
           shell: true,
           env: { DATABASE_URL },
@@ -142,9 +143,8 @@ export const handler = async ({
     // **NOTE** There is no official way to run Jest programatically,
     // so we're running it via execa, since `jest.run()` is a bit unstable.
     // https://github.com/facebook/jest/issues/5048
-
     await execa('yarn jest', jestArgs, {
-      cwd: getPaths().base,
+      cwd: rwjsPaths.base,
       shell: true,
       stdio: 'inherit',
       env: { DATABASE_URL },
