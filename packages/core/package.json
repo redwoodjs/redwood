@@ -48,7 +48,7 @@
     "copy-webpack-plugin": "9.0.0",
     "core-js": "3.12.1",
     "css-loader": "5.2.6",
-    "css-minimizer-webpack-plugin": "3.0.0",
+    "css-minimizer-webpack-plugin": "3.0.1",
     "dotenv-webpack": "7.0.2",
     "error-overlay-webpack-plugin": "0.4.2",
     "esbuild": "0.12.5",
