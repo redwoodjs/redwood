@@ -78,7 +78,7 @@ const DEFAULT_CONFIG: Config = {
   },
   experimental: {
     esbuild: false,
-  }
+  },
 }
 
 /**
