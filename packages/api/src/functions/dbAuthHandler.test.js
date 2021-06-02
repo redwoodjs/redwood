@@ -1,6 +1,51 @@
 import jwt from 'jsonwebtoken'
 
-import * as dbAuth from '../dbAuthHandler'
+import * as dbAuth from './dbAuthHandler'
+
+// mock prisma db client
+const DbMock = class {
+  constructor(accessors) {
+    accessors.forEach((accessor) => {
+      this[accessor] = new TableMock(accessor)
+    })
+  }
+}
+
+// creates a mock table accessor
+const TableMock = class {
+  constructor(accessor) {
+    this.accessor = accessor
+    this.records = []
+  }
+
+  count() {
+    return this.records.length
+  }
+
+  create({ data }) {
+    if (data.id === undefined) {
+      data.id = Math.round(Math.random() * 10000000)
+    }
+    this.records.push(data)
+    return data
+  }
+
+  findUnique({ where }) {
+    return this.records.find((record) => {
+      const key = Object.keys(where)[0]
+      return record[key] === where[key]
+    })
+  }
+
+  deleteMany() {
+    const count = this.records.length
+    this.records = []
+    return count
+  }
+}
+
+// create a mock `db` provider that simulates prisma creating/finding/deleting records
+global.db = new DbMock(['user'])
 
 const UUID_REGEX = /\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/
 const SET_SESSION_REGEX = /^session=[a-zA-Z0-9+=/]+;/
@@ -16,7 +61,7 @@ const setFutureDate = () => {
 }
 
 const createDbUser = async () => {
-  return await db.user.create({
+  return await global.db.user.create({
     data: {
       email: 'rob@redwoodjs.com',
       hashedPassword:
@@ -28,6 +73,9 @@ const createDbUser = async () => {
 
 describe('dbAuth', () => {
   beforeEach(() => {
+    global.event = {}
+    global.context = {}
+
     global.sessionCsrfToken = undefined
     global.headerCsrfToken = undefined
     global.session = undefined
@@ -39,6 +87,17 @@ describe('dbAuth', () => {
         hashedPassword: 'hashedPassword',
         salt: 'salt',
       },
+      excludeUserFields: [],
+      signupHandler: ({ username, hashedPassword, salt, userAttributes }) => {
+        return global.db.user.create({
+          data: {
+            email: username,
+            hashedPassword: hashedPassword,
+            salt: salt,
+            name: userAttributes.name,
+          },
+        })
+      },
     }
 
     // encryption key so results are consistent regardless of settings in .env
@@ -47,10 +106,9 @@ describe('dbAuth', () => {
   })
 
   afterEach(async () => {
-    await db.user.deleteMany({
+    await global.db.user.deleteMany({
       where: { email: 'rob@redwoodjs.com' },
     })
-    await db.$disconnect()
   })
 
   describe('futureExpiresDate', () => {
@@ -72,7 +130,7 @@ describe('dbAuth', () => {
 
   describe('dbAccessor', () => {
     it('returns the prisma db accessor for a model', () => {
-      expect(dbAuth.dbAccessor()).toEqual(db.user)
+      expect(dbAuth.dbAccessor()).toEqual(global.db.user)
     })
   })
 
@@ -303,7 +361,6 @@ describe('dbAuth', () => {
     it('strips some fields from returned user', async () => {
       const dbUser = await createDbUser()
       global.session = { id: dbUser.id }
-      global.options.excludeUserFields = ['hashedPassword']
 
       const user = await dbAuth.getCurrentUser()
 
@@ -565,20 +622,20 @@ describe('dbAuth', () => {
     it('sets handler args into global', () => {
       dbAuth.setGlobalContext(
         { headers: {} },
-        { context: 'c' },
-        { options: 'o' }
+        { foo: 'bar' },
+        { db: global.db }
       )
 
       expect(global.event).toEqual({ headers: {} })
-      expect(global.context).toEqual({ context: 'c' })
-      expect(global.options).toEqual({ options: 'o' })
+      expect(global.context).toEqual({ foo: 'bar' })
+      expect(Object.keys(global.options)).toContain('db')
     })
 
     it('sets header-based CSRF token', () => {
       dbAuth.setGlobalContext(
         { headers: { 'x-csrf-token': 'qwerty' } },
-        { context: 'c' },
-        { options: 'o' }
+        {},
+        { db: global.db }
       )
 
       expect(global.headerCsrfToken).toEqual('qwerty')
@@ -587,8 +644,8 @@ describe('dbAuth', () => {
     it('sets session variables to nothing if session cannot be decrypted', () => {
       dbAuth.setGlobalContext(
         { headers: { 'x-csrf-token': 'qwerty' } },
-        { context: 'c' },
-        { options: 'o' }
+        {},
+        { db: global.db }
       )
 
       expect(global.session).toBeUndefined()
@@ -604,7 +661,7 @@ describe('dbAuth', () => {
           },
         },
         { context: 'c' },
-        { options: 'o' }
+        { db: global.db }
       )
 
       expect(global.session).toEqual({ foo: 'bar' })
