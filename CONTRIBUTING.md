@@ -355,7 +355,7 @@ git clean -dfx
 yarn install
 ./tasks/update-package-versions <version>
 git commit -am "<version>"
-git tag <version>
+git tag -am <version> "<version>"
 git push && git push --tags
 yarn build
 yarn lerna publish from-package
