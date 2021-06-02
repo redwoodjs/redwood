@@ -11,7 +11,7 @@ const CREATE_${singularConstantName}_MUTATION = gql`
   }
 `
 
-const ${singularPascalName}New = () => {
+const New${singularPascalName} = () => {
   const [create${singularPascalName}, { loading, error }] = useMutation(CREATE_${singularConstantName}_MUTATION, {
     onCompleted: () => {
       toast.success('${singularPascalName} created')
@@ -36,4 +36,4 @@ const ${singularPascalName}New = () => {
   )
 }
 
-export default ${singularPascalName}New
+export default New${singularPascalName}

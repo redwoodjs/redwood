@@ -299,7 +299,7 @@ describe('admin/post', () => {
       const cell =
         userProfileFiles[
           path.normalize(
-            '/path/to/project/web/src/components/Admin/UserProfile/UserProfileEditCell/UserProfileEditCell.js'
+            '/path/to/project/web/src/components/Admin/UserProfile/EditUserProfileCell/EditUserProfileCell.js'
           )
         ]
 
