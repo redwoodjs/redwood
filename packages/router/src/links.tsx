@@ -20,7 +20,7 @@ type MatchHookOptions =
  *
  * Examples:
  *
- * match pathname only (ignore search parameters/query string), e.g match /about only in this case
+ * Match pathname only (ignore search parameters/query string), e.g. match /about only in this case
  * const match = useMatch('/about?tab=main&name=test', {ignoreQueryString: true})
  *
  *
