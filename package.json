@@ -36,7 +36,7 @@
     "babel-plugin-auto-import": "1.1.0",
     "babel-plugin-module-resolver": "4.1.0",
     "babel-plugin-remove-code": "0.0.6",
-    "core-js": "3.12.1",
+    "core-js": "3.13.1",
     "cp-cli": "2.0.0",
     "cross-env": "7.0.3",
     "jest": "26.5.3",
@@ -51,7 +51,7 @@
     "whatwg-fetch": "3.4.1"
   },
   "resolutions": {
-    "@types/react": "17.0.6",
+    "@types/react": "17.0.9",
     "prop-types": "15.7.2",
     "react-dom": "17.0.2",
     "react": "17.0.2",
