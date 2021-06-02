@@ -34,6 +34,7 @@ const typesToDecoders: Record<
   firebase: noop,
   supabase: supabase,
   ethereum: ethereum,
+  dbAuth: noop,
   custom: noop,
 }
 
