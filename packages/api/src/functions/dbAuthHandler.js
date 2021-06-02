@@ -291,7 +291,8 @@ export const createUser = async () => {
     throw new DuplicateUsernameError(username)
   }
 
-  // if we get here everything is good, create the user in the database
+  // if we get here everything is good, call the app's signup handler and let
+  // them worry about scrubbing data and saving to the DB
   const [hashedPassword, salt] = hashPassword(password)
   const newUser = await global.options.signupHandler({
     username,
@@ -337,46 +338,14 @@ export const getAuthMethod = () => {
 }
 
 // checks that a single field meets validation requirements and
-// currently checks for presense, format (regex), length min/max
+// currently checks for presense only
 export const validateField = (name, value) => {
   // check for presense
   if (!value || value === '' || value.trim() === '') {
     throw new FieldRequiredError(name)
+  } else {
+    return true
   }
-
-  if (global.options?.validation) {
-    // check for format against a regex
-    if (
-      global.options.validation[name]?.format &&
-      !value.match(global.options.validation[name]?.format?.value)
-    ) {
-      throw new FieldFormatError(
-        global.options.validation[name]?.format?.message
-      )
-    }
-
-    // check for minimum length
-    if (
-      global.options.validation[name]?.length?.min?.value &&
-      value.length < global.options.validation[name].length.min.value
-    ) {
-      throw new FieldFormatError(
-        global.options.validation[name].length.min.message
-      )
-    }
-
-    // check for maximum length
-    if (
-      global.options.validation.username?.length?.max?.value &&
-      value.length < global.options.validation[name].length.max.value
-    ) {
-      throw new FieldFormatError(
-        global.options.validation[name].length.max.message
-      )
-    }
-  }
-
-  return true
 }
 
 export const logoutResponse = (message) => {
