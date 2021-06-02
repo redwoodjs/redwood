@@ -161,3 +161,79 @@ describe('useMatch', () => {
     expect(getByText(/Dunder Mifflin/)).toHaveStyle('color: red')
   })
 })
+
+describe('useMatch - ignoreQueryString option', () => {
+  const MyLink = ({ to, ...rest }) => {
+    const matchInfo = useMatch(to, { ignoreQueryString: true })
+
+    return (
+      <Link
+        to={to}
+        style={{ color: matchInfo.match ? 'green' : 'red' }}
+        {...rest}
+      />
+    )
+  }
+
+  it('returns a match on the same pathname', () => {
+    const mockLocation = createDummyLocation('/ignore', '?page=1&tab=main')
+
+    const { getByText } = render(
+      <LocationProvider location={mockLocation}>
+        <MyLink to={`/ignore?tab=second&page=2`}>Dunder Mifflin</MyLink>
+      </LocationProvider>
+    )
+
+    expect(getByText(/Dunder Mifflin/)).toHaveStyle('color: green')
+  })
+
+  it('does NOT receive active class on different pathname', () => {
+    const mockLocation = createDummyLocation('/ignore', '?page=1&tab=main')
+
+    const { getByText } = render(
+      <LocationProvider location={mockLocation}>
+        <MyLink to={`/ignore2?tab=second&page=2`}>Dunder Mifflin</MyLink>
+      </LocationProvider>
+    )
+
+    expect(getByText(/Dunder Mifflin/)).toHaveStyle('color: red')
+  })
+})
+
+describe('useMatch - matchSearchParamKeys option', () => {
+  const MyLink = ({ to, ...rest }) => {
+    const matchInfo = useMatch(to, { matchSearchParamKeys: ['page'] })
+
+    return (
+      <Link
+        to={to}
+        style={{ color: matchInfo.match ? 'green' : 'red' }}
+        {...rest}
+      />
+    )
+  }
+
+  it('returns a match on the same path with specific search parameters', () => {
+    const mockLocation = createDummyLocation('/match-keys', '?page=1&tab=main')
+
+    const { getByText } = render(
+      <LocationProvider location={mockLocation}>
+        <MyLink to={`/match-keys?tab=second&page=1`}>Dunder Mifflin</MyLink>
+      </LocationProvider>
+    )
+
+    expect(getByText(/Dunder Mifflin/)).toHaveStyle('color: green')
+  })
+
+  it('does NOT receive active class on different search parameters', () => {
+    const mockLocation = createDummyLocation('/match-keys', '?page=1&tab=main')
+
+    const { getByText } = render(
+      <LocationProvider location={mockLocation}>
+        <MyLink to={`/match-keys?tab=second&page=2`}>Dunder Mifflin</MyLink>
+      </LocationProvider>
+    )
+
+    expect(getByText(/Dunder Mifflin/)).toHaveStyle('color: red')
+  })
+})

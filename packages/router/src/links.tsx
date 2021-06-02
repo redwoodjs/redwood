@@ -4,22 +4,67 @@ import isEqual from 'lodash.isequal'
 
 import { navigate, matchPath, useLocation, parseSearch } from './internal'
 
+type MatchHookOptions =
+  | { matchSearchParamKeys?: string[]; ignoreQueryString?: never | false }
+  | {
+      ignoreQueryString: true
+      matchSearchParamKeys?: never
+    }
+
 /**
  * Returns true if the URL for the given "route" value matches the current URL.
+ * i.e pathname and search parameters (query string) are both match
+ *
  * This is useful for components that need to know "active" state, e.g.
  * <NavLink>.
+ *
+ * Examples:
+ *
+ * match pathname only (ignore search parameters/query string), e.g match /about only in this case
+ * const match = useMatch('/about?tab=main&name=test', {ignoreQueryString: true})
+ *
+ *
+ * Match specific search parameters only, e.g match tab=main only
+ * const match = useMatch('/about?tab=main&name=test', {matchSearchParamKeys: ['tab']})
+ *
  */
-const useMatch = (route: string) => {
+const useMatch = (route: string, options?: MatchHookOptions) => {
   const location = useLocation()
   if (!location) {
     return { match: false }
   }
 
-  // Separate pathname and search parameters
+  // Separate pathname and search parameters, USVString expected
   const [pathname, search] = route.split('?')
 
-  if (!isEqual(parseSearch(search), parseSearch(location.search))) {
-    return { match: false }
+  if (!options?.ignoreQueryString && search) {
+    const filterParams = (searchParams: ReturnType<typeof parseSearch>) => {
+      if (options?.matchSearchParamKeys?.length) {
+        const matchSearchParamKeys = options.matchSearchParamKeys
+
+        return [...Object.keys(searchParams)].reduce((params, key) => {
+          if (matchSearchParamKeys.includes(key)) {
+            return {
+              ...params,
+              [key]: (searchParams as Record<string, unknown>)[key],
+            }
+          }
+
+          return params
+        }, {})
+      }
+
+      return searchParams
+    }
+
+    if (
+      !isEqual(
+        filterParams(parseSearch(search)),
+        filterParams(parseSearch(location.search))
+      )
+    ) {
+      return { match: false }
+    }
   }
 
   return matchPath(pathname, location.pathname)
