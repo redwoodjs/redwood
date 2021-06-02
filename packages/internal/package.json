@@ -24,7 +24,7 @@
     "prettier": "2.3.0",
     "toml": "3.0.0",
     "graphql": "15.5.0",
-    "@graphql-codegen/cli": "1.21.4",
+    "@graphql-codegen/cli": "1.21.5",
     "@graphql-codegen/core": "1.17.10",
     "@graphql-codegen/typescript": "1.22.0",
     "@graphql-codegen/typescript-operations": "1.17.16",
