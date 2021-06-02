@@ -10478,10 +10478,10 @@ findup-sync@4.0.0:
     micromatch "^4.0.2"
     resolve-dir "^1.0.1"
 
-firebase-admin@9.8.0:
-  version "9.8.0"
-  resolved "https://registry.yarnpkg.com/firebase-admin/-/firebase-admin-9.8.0.tgz#d54d1acdd2e1117e59b7d74cb467ef3d18f3aa7a"
-  integrity sha512-v8B1qU8McZZT2hlLZ018TKz2FoKlfFkZq9mOIyzN7wJUOlAywqQX0JyqNpVGyPeU+B+77ojlvmkGTNXt2OFkgw==
+firebase-admin@9.9.0:
+  version "9.9.0"
+  resolved "https://registry.yarnpkg.com/firebase-admin/-/firebase-admin-9.9.0.tgz#40442704b5ac0fddfdcdf4255601f8acb1e6fab3"
+  integrity sha512-04HT7JAAqcJYty95qf15IBD9CXf+vr7S8zNU6Zt1ayC1J05DLaCsUd19/sCNAjZ614KHexAYUtyLgZoJwu2wOQ==
   dependencies:
     "@firebase/database" "^0.10.0"
     "@firebase/database-types" "^0.7.2"
