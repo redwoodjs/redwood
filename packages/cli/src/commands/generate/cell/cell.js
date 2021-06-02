@@ -45,7 +45,7 @@ const uniqueOperationName = async (name, { index = 1, list = false }) => {
 }
 
 const getIdType = (model) => {
-  return model.fields.find((field) => field.isId)?.type || 'Int'
+  return model.fields.find((field) => field.isId)?.type
 }
 
 export const files = async ({
@@ -75,6 +75,8 @@ export const files = async ({
       idType = getIdType(model)
     } catch {
       // eat error so that the destroy cell generator doesn't raise when try to find prisma query engine in test runs
+      // assume id will be Int, otherwise generated will keep throwing
+      idType = 'Int'
     }
   }
 

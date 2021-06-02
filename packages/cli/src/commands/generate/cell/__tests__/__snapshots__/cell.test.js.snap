@@ -31,7 +31,7 @@ export const Success = ({ equipmentList }) => {
 
 exports[`"equipment" withOUT list flag should find equipment by id 1`] = `
 "export const QUERY = gql\`
-  query FindEquipmentQuery($id: !) {
+  query FindEquipmentQuery($id: Int!) {
     equipment: equipment(id: $id) {
       id
     }
