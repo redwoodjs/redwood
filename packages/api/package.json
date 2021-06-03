@@ -11,7 +11,7 @@
   "license": "MIT",
   "dependencies": {
     "@graphql-tools/merge": "6.2.14",
-    "@prisma/client": "2.23.0",
+    "@prisma/client": "2.24.1",
     "@types/pino": "6.3.8",
     "apollo-server-lambda": "2.24.1",
     "core-js": "3.13.1",
