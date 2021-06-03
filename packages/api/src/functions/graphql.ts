@@ -140,7 +140,7 @@ export const useUserContext = (
     async onContextBuilding({ context, extendContext }) {
       const userContext =
         typeof userContextBuilder === 'function'
-          ? await userContextBuilder(context)
+          ? await userContextBuilder({ context })
           : userContextBuilder
 
       extendContext(userContext)

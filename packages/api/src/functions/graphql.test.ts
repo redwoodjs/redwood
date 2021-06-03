@@ -70,7 +70,7 @@ describe('global context handlers', () => {
   })
 
   it('also accepts a promise that resolve dynamic value on each run', async () => {
-    const handler = createContextHandler(async (context) => {
+    const handler = createContextHandler(async ({ context }) => {
       return Promise.resolve({ c: context.d * 5 })
     })
     // @ts-ignore
