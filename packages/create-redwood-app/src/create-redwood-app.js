@@ -130,25 +130,19 @@ const installNodeModulesTasks = ({ newAppDir }) => {
       },
     },
     {
-      title: 'Updating Prisma seed file imports',
-      skip: () => {
-        if (typescript) {
-          return 'skipped because project is already Typescript'
-        }
-      },
-      task: () => {
-        const seedFile = 'api/db/seed.ts'
-        const prependImports =
-          "const { PrismaClient } = require('@prisma/client')\n" +
-          "const dotenv = require('dotenv')\n"
-        const removeSeedFile = `rm ${seedFile}`
+      title: 'Creating Prisma seed file',
 
-        return execa(
-          `echo "${prependImports}$(tail -n +3 ${seedFile})" > api/db/seed.js && ${removeSeedFile}`,
-          {
-            shell: true,
-            cwd: newAppDir,
-          }
+      task: () => {
+        const extension = typescript ? 'ts' : 'js'
+
+        const seedFile = path.join(newAppDir, `api/db/seed.${extension}`)
+
+        return fs.writeFileSync(
+          seedFile,
+          fs.readFileSync(
+            path.resolve(__dirname, 'templates', `seed.${extension}.template`),
+            { encoding: 'utf-8' }
+          )
         )
       },
     },
