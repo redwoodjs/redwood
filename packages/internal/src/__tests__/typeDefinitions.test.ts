@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import { findCells, findDirectoryNamedModules } from '../files'
+import { generateGraphQLSchema } from '../generate/graphqlSchema'
 import {
   generateMirrorCells,
   generateMirrorDirectoryNamedModules,
@@ -135,6 +136,8 @@ test('generate scenario type defs', () => {
 })
 
 test('Generate gql typedefs to correct paths', async () => {
+  // Generate scehma first
+  await generateGraphQLSchema()
   const paths = await generateTypeDefGraphQL()
   const p = paths.map(cleanPaths)
 
