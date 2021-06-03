@@ -1,7 +1,5 @@
-const { getConfig } = require('@redwoodjs/internal')
-
-const config = getConfig()
+const { getPaths } = require('@redwoodjs/internal')
 
 module.exports = {
-  schema: `http://${config.api.host}:${config.api.port}/graphql`,
+  schema: getPaths().generated.schema,
 }

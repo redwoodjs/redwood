@@ -176,9 +176,10 @@ export const userProfiles = () => {
 
 exports[`in typescript mode creates a multi word service test file 1`] = `
 "import { userProfiles } from './userProfiles'
+import type { StandardScenario } from './userProfiles.scenarios'
 
 describe('userProfiles', () => {
-  scenario('returns all userProfiles', async (scenario) => {
+  scenario('returns all userProfiles', async (scenario: StandardScenario) => {
     const result = await userProfiles()
 
     expect(result.length).toEqual(Object.keys(scenario.userProfile).length)
@@ -326,9 +327,10 @@ export const User = {
 
 exports[`in typescript mode creates a single word service test file 1`] = `
 "import { users } from './users'
+import type { StandardScenario } from './users.scenarios'
 
 describe('users', () => {
-  scenario('returns all users', async (scenario) => {
+  scenario('returns all users', async (scenario: StandardScenario) => {
     const result = await users()
 
     expect(result.length).toEqual(Object.keys(scenario.user).length)

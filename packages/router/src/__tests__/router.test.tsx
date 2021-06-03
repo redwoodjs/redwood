@@ -13,7 +13,6 @@ function createDummyAuthContextValues(partial: Partial<AuthContextInterface>) {
   const authContextValues: AuthContextInterface = {
     loading: true,
     isAuthenticated: false,
-    authToken: null,
     userMetadata: null,
     currentUser: null,
     logIn: () => null,
