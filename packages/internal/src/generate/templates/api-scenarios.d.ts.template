@@ -1,0 +1,9 @@
+import type { Scenario, DefineScenario } from '@redwoodjs/testing'
+
+declare global {
+  /**
+   * Note that the scenario name must match the exports in your {model}.scenarios.ts file
+   */
+  const scenario: Scenario
+  const defineScenario: DefineScenario
+}

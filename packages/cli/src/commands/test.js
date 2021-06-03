@@ -25,14 +25,15 @@ function isInMercurialRepository() {
   }
 }
 
-export const command = 'test [side..]'
+export const command = 'test [filter..]'
 export const description = 'Run Jest tests. Defaults to watch mode'
 export const builder = (yargs) => {
   yargs
-    .positional('side', {
-      choices: getProject().sides,
+    .strict(false) // so that we can forward arguments to jest
+    .positional('filter', {
       default: getProject().sides,
-      description: 'Which side(s) to test',
+      description:
+        'Which side(s) to test, and/or a regular expression to match against your test files to filter by',
       type: 'array',
     })
     .option('watch', {
@@ -41,7 +42,7 @@ export const builder = (yargs) => {
       type: 'boolean',
       default: true,
     })
-    .option('collectCoverage', {
+    .option('collect-coverage', {
       describe:
         'Show test coverage summary and output info to coverage directory',
       type: 'boolean',
@@ -68,24 +69,52 @@ export const builder = (yargs) => {
 }
 
 export const handler = async ({
-  side,
+  filter: filterParams = [],
   watch = true,
   collectCoverage = false,
   dbPush = true,
+  ...others
 }) => {
   const rwjsPaths = getPaths()
+  const forwardJestFlags = Object.keys(others).flatMap((flagName) => {
+    if (['watch', 'collect-coverage', '$0', '_'].includes(flagName)) {
+      // filter out flags meant for the rw test command only
+      return []
+    } else {
+      // and forward on the other flags
+      return [
+        flagName.length > 1 ? `--${flagName}` : `-${flagName}`,
+        others[flagName],
+      ]
+    }
+  })
 
-  const sides = [].concat(side).filter(Boolean)
-  const args = [
+  // Only the side params
+  const sides = filterParams.filter((filterString) =>
+    getProject().sides.includes(filterString)
+  )
+
+  // All the other params, apart from sides
+  const jestFilterArgs = [
+    ...filterParams.filter(
+      (filterString) => !getProject().sides.includes(filterString)
+    ),
+  ]
+
+  const jestArgs = [
+    ...jestFilterArgs,
+    ...forwardJestFlags,
+    collectCoverage ? '--collectCoverage' : null,
     '--passWithNoTests',
-    collectCoverage && '--collectCoverage',
-  ].filter(Boolean)
+    ...jestFilterArgs,
+    sides.includes('api') && '--runInBand',
+  ].filter((flagOrValue) => flagOrValue !== null) // Filter out nulls, not booleans because user may have passed a --something false flag
 
   // If the user wants to watch, set the proper watch flag based on what kind of repo this is
   // because of https://github.com/facebook/create-react-app/issues/5210
   if (watch && !process.env.CI && !collectCoverage) {
     const hasSourceControl = isInGitRepository() || isInMercurialRepository()
-    args.push(hasSourceControl ? '--watch' : '--watchAll')
+    jestArgs.push(hasSourceControl ? '--watch' : '--watchAll')
   }
 
   // if no sides declared with yargs, default to all sides
@@ -93,17 +122,13 @@ export const handler = async ({
     getProject().sides.forEach((side) => sides.push(side))
   }
 
-  if (sides.includes('api')) {
-    args.push('--runInBand')
-  }
-
-  args.push(
+  jestArgs.push(
     '--config',
     `"${require.resolve('@redwoodjs/core/config/jest.config.js')}"`
   )
 
   if (sides.length > 0) {
-    args.push('--projects', ...sides)
+    jestArgs.push('--projects', ...sides)
   }
 
   try {
@@ -129,7 +154,7 @@ export const handler = async ({
     // **NOTE** There is no official way to run Jest programmatically,
     // so we're running it via execa, since `jest.run()` is a bit unstable.
     // https://github.com/facebook/jest/issues/5048
-    await execa('yarn jest', args, {
+    await execa('yarn jest', jestArgs, {
       cwd: rwjsPaths.base,
       shell: true,
       stdio: 'inherit',
