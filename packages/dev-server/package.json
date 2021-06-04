@@ -23,7 +23,7 @@
     "youch-terminal": "1.1.1"
   },
   "devDependencies": {
-    "@types/aws-lambda": "8.10.76",
+    "@types/aws-lambda": "8.10.77",
     "@types/express": "4.17.12",
     "@types/morgan": "1.9.2",
     "@types/qs": "6.9.6",
