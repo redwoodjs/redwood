@@ -178,10 +178,8 @@ export const files = (provider) => {
     }
   }
 
-  console.log('🚀 ~ file: auth.js ~ line 175 ~ files ~ files', files)
-
   // if there are no provider-specific templates, just use the base auth one
-  if (files === {}) {
+  if (Object.keys(files).length === 0) {
     files = {
       [OUTPUT_PATHS.auth]: fs.readFileSync(templates.base[0]).toString(),
     }
