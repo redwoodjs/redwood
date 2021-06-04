@@ -102,7 +102,7 @@ export class AuthProvider extends React.Component<
 
   constructor(props: AuthProviderProps) {
     super(props)
-    this.rwClient = createAuthClient(props.client, props.type)
+    this.rwClient = createAuthClient(props.client || (() => null), props.type)
   }
 
   async componentDidMount() {
