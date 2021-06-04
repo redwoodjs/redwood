@@ -2,7 +2,6 @@
 export const config = {
   imports: [],
   authProvider: {
-    client: '() => null',
     type: 'dbAuth',
   },
 }
