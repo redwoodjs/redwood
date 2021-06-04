@@ -27,7 +27,7 @@
     "decamelize": "4.0.0",
     "dotenv-defaults": "2.0.1",
     "envinfo": "7.8.1",
-    "execa": "5.0.0",
+    "execa": "5.1.0",
     "fs-extra": "10.0.0",
     "humanize-string": "2.1.0",
     "latest-version": "5.1.0",
