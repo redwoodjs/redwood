@@ -324,7 +324,7 @@ export const handler = async ({ provider, force }) => {
           }
         },
       },
-      providerData.webPackages.length > 0 && {
+      {
         title: 'Adding required web packages...',
         task: async () => {
           if (!isProviderSupported(provider)) {
@@ -353,8 +353,7 @@ export const handler = async ({ provider, force }) => {
           ])
         },
       },
-      (providerData.apiPackages.length > 0 ||
-        providerData.webPackages.length > 0) && {
+      {
         title: 'Installing packages...',
         task: async () => {
           await execa('yarn', ['install'])
