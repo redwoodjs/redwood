@@ -75,6 +75,22 @@ const addWebInit = (content, init) => {
   }
 }
 
+const objectToComponentProps = (obj, { exclude = [] }) => {
+  let props = []
+
+  for (const [key, value] of Object.entries(obj)) {
+    if (!exclude.includes(key)) {
+      if (key === 'client') {
+        props.push(`${key}={${value}}`)
+      } else {
+        props.push(`${key}="${value}"`)
+      }
+    }
+  }
+
+  return props
+}
+
 // returns the content of App.{js,tsx} with <AuthProvider> added
 const addWebRender = (content, authProvider) => {
   const [_, indent, redwoodApolloProvider] = content.match(
@@ -97,10 +113,12 @@ const addWebRender = (content, authProvider) => {
     ''
   )
 
+  const props = objectToComponentProps(authProvider, { exclude: ['render'] })
+
   const renderContent =
     customRenderOpen +
     indent +
-    `<AuthProvider client={${authProvider.client}} type="${authProvider.type}">` +
+    `<AuthProvider ${props.join(' ')}>` +
     indent +
     redwoodApolloProviderLines.join('\n') +
     indent +
@@ -115,7 +133,9 @@ const addWebRender = (content, authProvider) => {
 
 // returns the content of App.{js,tsx} with <AuthProvider> updated
 const updateWebRender = (content, authProvider) => {
-  const renderContent = `<AuthProvider client={${authProvider.client}} type="${authProvider.type}">`
+  const props = objectToComponentProps(authProvider)
+  const renderContent = `<AuthProvider ${props.join(' ')}>`
+
   return content.replace(/<AuthProvider client={.*} type=".*">/s, renderContent)
 }
 
@@ -132,8 +152,10 @@ const removeOldWebInit = (content, init) => {
 // returns content with old auth provider removes
 const removeOldAuthProvider = async (content) => {
   // get the current auth provider
+  console.info(content)
+
   const [_, currentAuthProvider] = content.match(
-    /<AuthProvider client={.*} type="(.*)">/s
+    /<AuthProvider.*type=['"](.*)['"]/s
   )
 
   let oldAuthProvider
