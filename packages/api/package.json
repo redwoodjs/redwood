@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/api",
-  "version": "0.32.2",
+  "version": "0.33.0",
   "files": [
     "dist",
     "logger",
@@ -25,8 +25,8 @@
     "pino-pretty": "4.8.0"
   },
   "devDependencies": {
-    "@redwoodjs/auth": "0.32.2",
-    "@redwoodjs/dev-server": "0.32.2",
+    "@redwoodjs/auth": "^0.33.0",
+    "@redwoodjs/dev-server": "^0.33.0",
     "@types/jsonwebtoken": "8.3.9",
     "@types/lodash.merge": "4.6.6",
     "@types/lodash.omitby": "4.6.6",
