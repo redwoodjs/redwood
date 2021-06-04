@@ -6,6 +6,7 @@ import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
 
+import { getConfig } from '@redwoodjs/internal'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender'
 
 import { getPaths } from 'src/lib'
@@ -64,6 +65,7 @@ export const builder = (yargs) => {
     .option('esbuild', {
       type: 'boolean',
       required: false,
+      default: getConfig().experimental.esbuild,
       description: 'Use ESBuild for api side [experimental]',
     })
     .epilogue(

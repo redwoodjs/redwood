@@ -1,19 +1,21 @@
 import { ${pluralCamelName}<% if (crud) { %>,${singularCamelName}, create${singularPascalName}, update${singularPascalName}, delete${singularPascalName}<% } %> } from './${pluralCamelName}'
+import type { StandardScenario } from './${pluralCamelName}.scenarios'
+
 
 describe('${pluralCamelName}', () => {
-  scenario('returns all ${pluralCamelName}', async (scenario) => {
+  scenario('returns all ${pluralCamelName}', async (scenario: StandardScenario) => {
     const result = await ${pluralCamelName}()
 
     expect(result.length).toEqual(Object.keys(scenario.${singularCamelName}).length)
   })<% if (crud) { %>
 
-  scenario('returns a single ${singularCamelName}', async (scenario) => {
+  scenario('returns a single ${singularCamelName}', async (scenario: StandardScenario) => {
     const result = await ${singularCamelName}({ id: scenario.${singularCamelName}.one.id })
 
     expect(result).toEqual(scenario.${singularCamelName}.one)
   })
 
-  <% if (create) { %>scenario('creates a ${singularCamelName}', async (scenario) => {
+  <% if (create) { %>scenario('creates a ${singularCamelName}', async () => {
     const result = await create${singularPascalName}({
       input: ${JSON.stringify(create)},
     })
@@ -22,7 +24,7 @@ describe('${pluralCamelName}', () => {
     expect(result.${name}).toEqual(${JSON.stringify(value)})<% } %>
   })<% } %>
 
-  <% if (update) { %>scenario('updates a ${singularCamelName}', async (scenario) => {<% rand = parseInt(Math.random() * 10000000) %>
+  <% if (update) { %>scenario('updates a ${singularCamelName}', async (scenario: StandardScenario) => {<% rand = parseInt(Math.random() * 10000000) %>
     const original = await ${singularCamelName}({ id: scenario.${singularCamelName}.one.id })
     const result = await update${singularPascalName}({
       id: original.id,
@@ -33,7 +35,7 @@ describe('${pluralCamelName}', () => {
     expect(result.${name}).toEqual(${JSON.stringify(value)})<% } %>
   })<% } %>
 
-  scenario('deletes a ${singularCamelName}', async (scenario) => {
+  scenario('deletes a ${singularCamelName}', async (scenario: StandardScenario) => {
     const original = await delete${singularPascalName}({ id: scenario.${singularCamelName}.one.id })
     const result = await ${singularCamelName}({ id: original.id })
 
