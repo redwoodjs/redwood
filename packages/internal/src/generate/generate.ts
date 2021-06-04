@@ -7,8 +7,8 @@ import { generateTypeDefs } from './typeDefinitions'
 
 export const generate = async () => {
   const schemaPath = await generateGraphQLSchema()
-  const typeDefs = await generateTypeDefs()
-  return [schemaPath, ...typeDefs].filter(
+  const typeDefsPaths = await generateTypeDefs()
+  return [schemaPath, ...typeDefsPaths].filter(
     (x) => typeof x === 'string'
   ) as string[]
 }

@@ -39,6 +39,8 @@ export const generateGraphQLSchema = async () => {
           },
         },
         generates: {
+          // Note the plugin passed, we're not generating types here.
+          // its subtley different to generateTypeDefGraphQL
           [rwjsPaths.generated.schema]: {
             plugins: ['schema-ast'],
           },
@@ -53,7 +55,7 @@ export const generateGraphQLSchema = async () => {
     // `generate` outputs errors which are helpful.
     // This tries to clean up the output of those errors.
     console.error()
-    console.error('Error: Could not generate GraphQL type definitions')
+    console.error('Error: Could not generate GraphQL schema')
     console.error()
 
     return undefined
