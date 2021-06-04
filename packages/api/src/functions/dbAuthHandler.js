@@ -403,9 +403,8 @@ export const methods = {
   getToken: async () => {
     try {
       const user = await getCurrentUser()
-      const token = jwt.sign(JSON.stringify(user), process.env.SESSION_SECRET)
 
-      return [token]
+      return [user]
     } catch (e) {
       if (e instanceof NotLoggedInError) {
         return logoutResponse()
