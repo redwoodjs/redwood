@@ -3373,7 +3373,7 @@
   dependencies:
     "@prisma/debug" "2.24.1"
 
-"@prisma/sdk@2.24.1":
+"@prisma/sdk@2.24.01", "@prisma/sdk@2.24.1":
   version "2.24.1"
   resolved "https://registry.yarnpkg.com/@prisma/sdk/-/sdk-2.24.1.tgz#be9d94c3d0dddf5670e8b86e7e2575e76bcf7754"
   integrity sha512-pdJFw/XMzOI1ttz2V6+QG9tyYY+kC8vEtNbabxkgGAfFZgZ0U1j8XB7/ZEOFWD01BJgTQN//DP+uIfmLOkvX1A==
@@ -4695,15 +4695,10 @@
     "@types/node" "*"
     form-data "^3.0.0"
 
-"@types/node@*", "@types/node@>=12.12.47", "@types/node@>=13.7.0":
-  version "15.6.2"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-15.6.2.tgz#c61d49f38af70da32424b5322eee21f97e627175"
-  integrity sha512-dxcOx8801kMo3KlU+C+/ctWrzREAH7YvoF3aoVpRdqgs+Kf7flp+PJDN/EX5bME3suDUZHsxes9hpvBmzYlWbA==
-
-"@types/node@15.6.1":
-  version "15.6.1"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-15.6.1.tgz#32d43390d5c62c5b6ec486a9bc9c59544de39a08"
-  integrity sha512-7EIraBEyRHEe7CH+Fm1XvgqU6uwZN8Q7jppJGcqjROMT29qhAuuOxYB1uEY5UMYQKEmA5D+5tBnhdaPXSsLONA==
+"@types/node@*", "@types/node@15.12.0", "@types/node@>=12.12.47", "@types/node@>=13.7.0":
+  version "15.12.0"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-15.12.0.tgz#6a459d261450a300e6865faeddb5af01c3389bb3"
+  integrity sha512-+aHJvoCsVhO2ZCuT4o5JtcPrCPyDE3+1nvbDprYes+pPkEsbjH7AGUCNtjMOXS0fqH14t+B7yLzaqSz92FPWyw==
 
 "@types/node@^10.1.0":
   version "10.17.60"
