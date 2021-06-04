@@ -12,7 +12,7 @@
     "@types/pascalcase": "1.0.0",
     "core-js": "3.13.1",
     "pascalcase": "1.0.0",
-    "react-hook-form": "6.9.5"
+    "react-hook-form": "7.7.1"
   },
   "scripts": {
     "build": "yarn build:js",
