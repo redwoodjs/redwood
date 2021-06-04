@@ -1,0 +1,45 @@
+import { db } from 'src/lib/db'
+import { dbAuthHandler } from '@redwoodjs/api'
+
+export const handler = async (event, context) => {
+  return await dbAuthHandler(event, context, {
+    // Provide prisma db client
+    db: db,
+
+    // The name of the key you'd call on `db` to access your user table.
+    // ie. if your table is named `User` then this value would be `user`, as in `db.user`
+    authModelAccessor: 'user',
+
+    // A map of what dbAuth calls a field to what your database calls it.
+    // `id` is whatever column you use to uniquely identify a user (something like `id` or even `email`)
+    authFields: {
+      id: 'id',
+      username: 'email',
+      hashedPassword: 'hashedPassword',
+      salt: 'salt',
+    },
+
+    // Any db fields in your user table that you want to exclude from the
+    // `currentUser` data response. `hashedPassword` and `salt` are always excluded.
+    excludeUserFields: [],
+
+    // Whatever you want to happen to your data on new user signup.
+    // Redwood will check for duplicate usernames before calling this handler.
+    signupHandler: ({ username, hashedPassword, salt, userAttributes }) => {
+      // If you allow additional data to be included besides username and password,
+      // be careful to check that only allowed data in `userAttributes` is given to Prisma:
+      // a hacker could try to stuff additional data into the signup POST and sneak it into your DB
+
+      return db.user.create({
+        data: {
+          email: username,
+          hashedPassword: hashedPassword,
+          salt: salt,
+        },
+      })
+    },
+
+    // How long a user will remain logged in, in seconds
+    loginExpires: 60 * 60 * 24 * 365 * 10,
+  })
+}

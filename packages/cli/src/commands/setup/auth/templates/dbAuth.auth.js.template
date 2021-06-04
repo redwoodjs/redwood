@@ -1,0 +1,30 @@
+import { AuthenticationError, ForbiddenError } from '@redwoodjs/api'
+
+// dbAuth returns the user object automatically so there's nothing more you need
+// to do here, unless you wanted to add additional data to be available on the
+// `currentUser` object
+export const getCurrentUser = (user) => {
+  return user
+}
+
+export const requireAuth = ({ role } = {}) => {
+  if (!context.currentUser) {
+    throw new AuthenticationError("You don't have permission to do that.")
+  }
+
+  if (
+    typeof role !== 'undefined' &&
+    typeof role === 'string' &&
+    !context.currentUser.roles?.includes(role)
+  ) {
+    throw new ForbiddenError("You don't have access to do that.")
+  }
+
+  if (
+    typeof role !== 'undefined' &&
+    Array.isArray(role) &&
+    !context.currentUser.roles?.some((r) => role.includes(r))
+  ) {
+    throw new ForbiddenError("You don't have access to do that.")
+  }
+}
