@@ -1,10 +1,11 @@
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/api'
+import jwt from 'jsonwebtoken'
 
-// dbAuth returns the user object automatically so there's nothing more you need
-// to do here, unless you wanted to add additional data to be available on the
-// `currentUser` object
-export const getCurrentUser = (user) => {
-  return user
+// The JWT token returned from the auth function already contains all
+// of your user data. If you want to add any additional fields to `currentUser`
+// then you can merge them in here.
+export const getCurrentUser = (token) => {
+  return jwt.decode(token)
 }
 
 export const requireAuth = ({ role } = {}) => {
