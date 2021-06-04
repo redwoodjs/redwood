@@ -27,7 +27,7 @@
   "devDependencies": {
     "@redwoodjs/auth": "^0.33.0",
     "@redwoodjs/dev-server": "^0.33.0",
-    "@types/jsonwebtoken": "8.3.9",
+    "@types/jsonwebtoken": "8.5.1",
     "@types/lodash.merge": "4.6.6",
     "@types/lodash.omitby": "4.6.6",
     "split2": "3.1.1"
