@@ -71,7 +71,9 @@ export const handler = async ({
 }) => {
   const rwjsPaths = getPaths()
   const forwardJestFlags = Object.keys(others).flatMap((flagName) => {
-    if (['watch', 'collect-coverage', '$0', '_'].includes(flagName)) {
+    if (
+      ['watch', 'collect-coverage', 'db-push', '$0', '_'].includes(flagName)
+    ) {
       // filter out flags meant for the rw test command only
       return []
     } else {
