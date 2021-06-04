@@ -47,8 +47,7 @@ const TableMock = class {
 // create a mock `db` provider that simulates prisma creating/finding/deleting records
 global.db = new DbMock(['user'])
 
-const UUID_REGEX =
-  /\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/
+const UUID_REGEX = /\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/
 const SET_SESSION_REGEX = /^session=[a-zA-Z0-9+=/]+;/
 const JWT_REGEX = /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/
 
@@ -716,7 +715,8 @@ describe('dbAuth', () => {
 
       const response = await dbAuth.methods.getToken()
 
-      expect(response[0].id).toEqual(user.id)
+      expect(response[0]).toMatch(JWT_REGEX)
+      expect(jwt.decode(response[0]).id).toEqual(user.id)
     })
 
     it('returns nothing if user is not logged in', async () => {
