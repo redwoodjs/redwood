@@ -1,5 +1,7 @@
 {
   "name": "@redwoodjs/build-tools",
+  "description": "These dependencies here are used by a RedwoodJS project during build and design time. None of the dependencies here are required at runtime.",
+  "//": "We 'share' the babel dependencies with the RedwoodJS framework.",
   "version": "0.32.2",
   "license": "MIT",
   "files": [
@@ -9,9 +11,7 @@
     "rw-api-build": "esbuild/index.js"
   },
   "dependencies": {
-
-    "x----x----x": "^0 BABEL",
-
+    "x----x----x": "^0 Babel",
     "@babel/cli": "7.14.3",
     "@babel/core": "7.14.3",
     "@babel/node": "7.14.2",
@@ -19,32 +19,23 @@
     "@babel/plugin-proposal-class-properties": "7.13.0",
     "@babel/plugin-proposal-private-methods": "7.13.0",
     "@babel/plugin-transform-runtime": "7.14.3",
-
     "@babel/preset-react": "7.13.13",
     "@babel/preset-typescript": "7.13.0",
-
     "@babel/preset-env": "7.14.2",
-    "@babel/runtime-corejs3": "7.14.0",
-    "core-js": "3.12.1",
-
     "babel-plugin-auto-import": "1.1.0",
     "babel-plugin-graphql-tag": "3.3.0",
-    "graphql": "15.5.0",
-    "graphql-tag": "2.12.4",
-
     "babel-plugin-inline-react-svg": "2.0.1",
     "babel-plugin-module-resolver": "4.1.0",
-
-
+    "core-js": "3.12.1",
+    "graphql": "15.5.0",
+    "graphql-tag": "2.12.4",
+    "x----x----x": "^0 Bins",
     "esbuild": "0.12.1",
     "esbuild-loader": "2.13.1",
     "typescript": "4.2.4",
-
     "cross-env": "7.0.3",
     "rimraf": "3.0.2",
-
-    "x----x----x": "^0 WEBPACK",
-    "babel-loader": "8.2.2",
+    "x----x----x": "^0 Webpack",
     "webpack": "4.46.0",
     "webpack-bundle-analyzer": "3.6.1",
     "webpack-cli": "3.3.11",
@@ -52,6 +43,7 @@
     "webpack-manifest-plugin": "3.0.0",
     "webpack-merge": "5.1.2",
     "webpack-retry-chunk-load-plugin": "1.4.0",
+    "babel-loader": "8.2.2",
     "copy-webpack-plugin": "6.1.0",
     "css-loader": "4.2.2",
     "css-minimizer-webpack-plugin": "1.2.0",
@@ -68,11 +60,9 @@
     "mini-css-extract-plugin": "1.4.1",
     "null-loader": "4.0.1",
     "lodash.escaperegexp": "4.1.2",
-
-    "x----x----x": "^0.0.2 ~~~~~~~ SHARED DESIGN TOOLS ~~~~~~~",
-
-    "@storybook/addon-a11y": "6.2.9",
+    "x----x----x": "^0 Design tools",
     "@storybook/react": "6.1.21",
+    "@storybook/addon-a11y": "6.2.9",
     "@testing-library/jest-dom": "5.11.10",
     "@testing-library/react": "11.2.7",
     "@testing-library/user-event": "13.1.9",
@@ -81,12 +71,16 @@
     "jest-watch-typeahead": "0.6.3",
     "whatwg-fetch": "3.5.0",
     "msw": "0.29.0",
+    "x----x----x": "^0 Types",
     "@types/jest": "26.0.23",
     "@types/node": "15.6.1",
-    "@types/react": "17.0.6",
-    "@types/react-dom": "17.0.5"
+    "@types/react": "17.0.9",
+    "@types/react-dom": "17.0.6",
+    "@types/webpack": "4.41.11",
+    "@types/babel-core": "6.25.6",
 
-
+    "x----x----x": "^0 Runtime",
+    "@babel/runtime-corejs3": "7.14.0"
   },
   "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"
 }

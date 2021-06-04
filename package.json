@@ -14,9 +14,7 @@
     "typescript-transform-paths": "2.2.4",
     "npm-packlist": "2.2.2",
     "lerna": "3.20.2",
-    "@types/babel-core": "6.25.6",
     "@types/babel-plugin-tester": "9.0.2",
-    "@types/webpack": "4.41.11",
     "babel-plugin-tester": "10.0.0"
   },
   "resolutions": {
