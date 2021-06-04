@@ -47,7 +47,7 @@
     "core-js": "3.13.1",
     "css-loader": "4.2.2",
     "css-minimizer-webpack-plugin": "1.2.0",
-    "dotenv-webpack": "2.0.0",
+    "dotenv-webpack": "7.0.3",
     "error-overlay-webpack-plugin": "0.4.1",
     "esbuild": "0.12.5",
     "esbuild-loader": "2.13.1",
