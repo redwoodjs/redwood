@@ -48,12 +48,6 @@ export const builder = (yargs) => {
       type: 'boolean',
       default: false,
     })
-    .option('clearCache', {
-      describe:
-        'Delete the Jest cache directory and exit without running tests',
-      type: 'boolean',
-      default: false,
-    })
     .option('db-push', {
       describe:
         "Syncs the test database with your Prisma schema without requiring a migration. It creates a test database if it doesn't already exist.",
