@@ -248,6 +248,7 @@ export const files = async ({
     templatePath: `scenarios.${extension}.template`,
     templateVars: {
       scenario: await buildScenario(model),
+      prismaTypeName: `${model}CreateArgs`,
       ...rest,
     },
   })

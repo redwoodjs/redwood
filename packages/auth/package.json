@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth",
-  "version": "0.32.2",
+  "version": "0.33.0",
   "files": [
     "dist"
   ],
@@ -9,7 +9,7 @@
   "license": "MIT",
   "devDependencies": {
     "@auth0/auth0-spa-js": "1.15.0",
-    "@supabase/supabase-js": "1.12.0",
+    "@supabase/supabase-js": "1.13.1",
     "@types/netlify-identity-widget": "1.9.1",
     "@types/react": "17.0.9",
     "firebase": "8.6.3",

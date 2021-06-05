@@ -2,8 +2,8 @@
 
 exports[`"equipment" with list flag 1`] = `
 "export const QUERY = gql\`
-  query ManyEquipmentQuery {
-    manyEquipment {
+  query EquipmentListQuery {
+    equipmentList {
       id
     }
   }
@@ -17,10 +17,10 @@ export const Failure = ({ error }) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-export const Success = ({ manyEquipment }) => {
+export const Success = ({ equipmentList }) => {
   return (
     <ul>
-      {manyEquipment.map((item) => {
+      {equipmentList.map((item) => {
         return <li key={item.id}>{JSON.stringify(item)}</li>
       })}
     </ul>
@@ -31,7 +31,7 @@ export const Success = ({ manyEquipment }) => {
 
 exports[`"equipment" withOUT list flag should find equipment by id 1`] = `
 "export const QUERY = gql\`
-  query FindEquipmentQuery($id: !) {
+  query FindEquipmentQuery($id: Int!) {
     equipment: equipment(id: $id) {
       id
     }
