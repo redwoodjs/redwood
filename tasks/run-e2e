@@ -163,11 +163,11 @@ const installTaskDeps = () => {
 const args = yargs
   .option('create-project', { default: true, type: 'boolean', alias: 'create' })
   .option('copy-framework', { default: true, type: 'boolean', alias: 'copy' })
-  .option('js-project', { default: true, type: 'boolean', alias: 'js' })
+  .option('typescript', { default: false, type: 'boolean', alias: 'ts' })
   .option('auto-start', { default: true, type: 'boolean', alias: 'start' })
-  .scriptName('run-cypress')
-  .example('run-cypress')
-  .example('run-cypress /tmp/redwood-app --no-js-project')
+  .scriptName('run-e2e')
+  .example('run-e2e')
+  .example('run-e2e /tmp/redwood-app --ts')
   .help()
   .strict().argv
 
@@ -188,7 +188,7 @@ makeDirectory(REDWOOD_PROJECT_DIRECTORY)
 console.log()
 console.log('-'.repeat(80))
 
-let { copyFramework, createProject, jsProject, autoStart } = args
+let { copyFramework, createProject, typescript, autoStart } = args
 
 const tasks = [
   copyFramework && buildRedwoodJSFramework,
@@ -196,7 +196,7 @@ const tasks = [
   copyFramework && addRedwoodToWorkspaces,
   copyFramework && copyFrameworkPackages,
   copyFramework && runYarnInstall,
-  jsProject && convertProjectToJavaScript,
+  !typescript && convertProjectToJavaScript,
   autoStart && runDevServerInBackground,
   autoStart && installTaskDeps,
   autoStart && runCypress,

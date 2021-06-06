@@ -123,6 +123,9 @@ const itCreatesASingleWordServiceFileWithCRUDActions = (baseArgs) => {
         )
       ]
     ).toMatchSnapshot()
+
+    // TODO
+    // Mock Date, so we can take snapshots of tests and scenarios
   })
 }
 

@@ -1,16 +1,26 @@
 const packageJSON = require('./package.json')
 
+// RedwoodJS targets Node.js 12.x because this is the default version
+// for Netlify's functions.
 const TARGETS_NODE = '12.16'
+
+// Run `npx browserslist "defaults, not IE 11, not IE_Mob 11"` to see a list
+// of target browsers.
 const TARGETS_BROWSERS = ['defaults', 'not IE 11', 'not IE_Mob 11']
+
 // Warning! Recommended to specify used minor core-js version, like corejs: '3.6',
 // instead of corejs: '3', since with '3' it will not be injected modules
 // which were added in minor core-js releases.
 // https://github.com/zloirock/core-js/blob/master/README.md#babelpreset-env
-const CORE_JS_VERSION = '3.10'
+const CORE_JS_VERSION = packageJSON.devDependencies['core-js']
+  .split('.')
+  .slice(0, 2)
+  .join('.') // Produces: 3.12, instead of 3.12.1
 
 // We use the recommended babel configuration for monorepos, which is a base directory
 // `babel.config.js` file, but then use a per-project `.babelrc.js` file.
 // Learn more: https://babeljs.io/docs/en/config-files#monorepos
+
 /** @type {import('@babel/core').TransformOptions} */
 module.exports = {
   presets: [
@@ -63,10 +73,10 @@ module.exports = {
     // ** WEB PACKAGES **
     {
       test: [
-        './packages/router',
-        './packages/web/',
         './packages/auth/',
+        './packages/router',
         './packages/forms/',
+        './packages/web/',
       ],
       presets: [
         [

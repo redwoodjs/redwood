@@ -1,4 +1,4 @@
-# Command Line Interface
+# RedwoodJS CLI
 
   <!-- toc -->
   - [Purpose and Vision](#purpose-and-vision)
@@ -50,13 +50,11 @@ Since the CLI is the entry point to Redwood, as Redwood continues to grow&mdash;
 
 ### Coming Soon
 
-- [Typescript support](https://github.com/redwoodjs/redwood/issues/523)
 - [Generators refactor (plopjs)](https://github.com/redwoodjs/redwood/issues/653)
 
 ### Coming Later
 
 - [Multiple database support](https://github.com/redwoodjs/redwood/issues/507)
-- [Storybook generators](https://github.com/redwoodjs/redwood/issues/231)
 - [Support for dynamic sides and targets](https://github.com/redwoodjs/redwood/pull/355)
 
 ## Contributing
@@ -104,6 +102,17 @@ To get a good sense of the difference, compare [redwood-tools.js](https://github
 ### Overview
 
 Contributing to `@redwoodjs/cli` usually means adding a command or modifying an existing one. We've organized this doc around adding a command since if you know how to do this you'll know how to modify one too.
+
+
+#### Quickstart
+
+RedwoodJS CLI is usually run in a project, this is problematic for contributors, because the transpiled files are not in a project, but in the RedwoodJS framework repo. Luckily the path can be modified at run-time via an env-var: `__REDWOOD__CONFIG_PATH=../path/to/project`.
+
+We've added a handy yarn alias to test your modified changes to the Redwood CLI against the "example-todo-main" fixture (`__fixtures__/example-todo-main`) you can do the following:
+```terminal
+cd packages/cli
+yarn dev <command>
+```
 
 ### Best Practices
 
@@ -615,10 +624,6 @@ Adding a command here just entails adding another `command` method before the ca
 ```
 
 Contrived example aside, any command you add here should help people contribute to Redwood.
-
-### Converting to TypeScript
-
-We're in the midst of converting Redwood to TypeScript. If you're interested, we'd love your help! You can track our progress and see where you can contribute [here](https://github.com/redwoodjs/redwood/issues/523).
 
 #### Generators
 

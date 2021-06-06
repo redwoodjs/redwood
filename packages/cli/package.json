@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/cli",
   "description": "The Redwood Command Line",
-  "version": "0.32.2",
+  "version": "0.33.0",
   "license": "MIT",
   "bin": {
     "redwood": "./dist/index.js",
@@ -13,16 +13,16 @@
     "dist"
   ],
   "dependencies": {
-    "@prisma/sdk": "2.23.0",
-    "@redwoodjs/api-server": "0.32.2",
-    "@redwoodjs/internal": "0.32.2",
-    "@redwoodjs/prerender": "0.32.2",
-    "@redwoodjs/structure": "0.32.2",
+    "@prisma/sdk": "2.24.01",
+    "@redwoodjs/api-server": "^0.33.0",
+    "@redwoodjs/internal": "^0.33.0",
+    "@redwoodjs/prerender": "^0.33.0",
+    "@redwoodjs/structure": "^0.33.0",
     "boxen": "5.0.1",
     "camelcase": "6.0.0",
     "chalk": "4.1.1",
     "concurrently": "6.2.0",
-    "core-js": "3.12.1",
+    "core-js": "3.13.1",
     "cross-env": "7.0.3",
     "decamelize": "4.0.0",
     "dotenv-defaults": "2.0.1",
@@ -41,18 +41,14 @@
     "prompts": "2.4.1",
     "rimraf": "3.0.2",
     "terminal-link": "2.1.1",
-    "yargs": "16.0.3",
-    "@graphql-codegen/cli": "1.21.4",
-    "@graphql-codegen/typescript": "1.22.0",
-    "@graphql-codegen/typescript-operations": "1.17.16",
-    "@graphql-codegen/typescript-react-apollo": "2.2.4",
-    "@graphql-codegen/typescript-resolvers": "1.19.1"
+    "yargs": "16.0.3"
   },
   "devDependencies": {
     "@types/listr": "0.14.3",
     "@types/node-fetch": "2.5.10"
   },
   "scripts": {
+    "dev": "yarn build:js && __REDWOOD__CONFIG_PATH=../../__fixtures__/example-todo-main node dist/index.js",
     "build": "yarn build:js",
     "prepublishOnly": "yarn build",
     "build:clean-dist": "yarn rimraf 'dist/**/*/__tests__'",

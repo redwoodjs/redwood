@@ -2,18 +2,21 @@
 
 Love Redwood and want to get involved? You’re in the right place!
 
-Before interacting with the Redwood community, please read and understand our [Code of Conduct](https://github.com/redwoodjs/redwood/blob/main/CODE_OF_CONDUCT.md).
+Before interacting with the Redwood community, please read and understand our [Code of Conduct](https://github.com/redwoodjs/redwood/blob/main/CODE_OF_CONDUCT.md).  
 
 **Table of Contents**
 
 - [Contributing](#contributing)
   - [Local Development](#local-development)
     - [Code Organization](#code-organization)
-    - [First Steps](#first-steps)
-    - [Watching Changes](#watching-changes)
-      - [yarn rwt link](#yarn-rwt-link)
-      - [Copy and Watch](#copy-and-watch)
-      - [cp](#cp)
+    - [Local Setup](#local-setup)
+      - [Redwood Framework](#redwood-framework)
+      - [Redwood App: Create a Functional Test Project](#redwood-app-create-a-functional-test-project)
+        - [Running the Test Project Script](#running-the-test-project-script)
+    - [Testing Framework code in your App](#testing-framework-code-in-your-app)
+      - [Option 1: Linking](#option-1-linking)
+      - [Option 2: Copy and Watch](#option-2-copy-and-watch)
+      - [Option 3: Copy (for Windows)](#option-3-copy-for-windows)
       - [Specifying a RW_PATH](#specifying-a-rw_path)
         - [On **Linux**](#on-linux)
         - [On **MacOS**](#on-macos)
@@ -44,7 +47,9 @@ The Redwood Framework lives in the monorepo `redwoodjs/redwood` (which is where 
 
 Throughout this document, we'll assume your local copy of the Redwood Framework is in a directory called `redwood` and your Redwood App is in a directory called `redwood-app`.
 
-### First Steps
+### Local Setup
+
+#### Redwood Framework
 
 Use `git clone` to make a local copy of the Redwood Framework. As mentioned above, we'll assume your local copy is in a directory called `redwood`. This is where you'll be making most of your changes.
 
@@ -57,21 +62,57 @@ cd redwood
 yarn install
 ```
 
-You can also `git clone` one of the Redwood example apps, or use one you already have. As mentioned above, we'll assume your Redwood App is in a directory called `redwood-app`.
+#### Redwood App: Create a Functional Test Project
 
-### Watching Changes
+Most often, you'll need to test the functionality of your code in a local Redwood App. We'll assume your Redwood App is going to be a directory called `redwood-app`.
+
+There are several options:
+- run `yarn create redwood-app ./redwood-app` to install a fresh codebase (with no functionality)
+- `git clone` the [RedwoodJS Tutorial Blog](https://github.com/redwoodjs/redwood-tutorial)
+- use an App you already created
+- Or run `yarn run build:test-project` to create a functional test project 👀
+
+**Using the functional test project might be the easiest and fastest way to test your changes in Redwood.** You can create a Redwood project that contains a big range of functionality in a few minutes:
+1. it installs using the App template codebase in the current branch of your Framework
+2. with the current stable version of Redwood Packages (with the option to use the canary version)
+3. with a JavaScript language target (with the option for TypeScript)
+4. then applies code mods from the [Redwood tutorial](https://learn.redwoodjs.com/docs/tutorial/welcome-to-redwood/) to add functionality and styling
+5. and initializes a Prisma DB migration for SQLite
+
+At the end, you will have a fully working Redwood blog.
+
+##### Running the Test Project Script
+Run the following in the `redwood` folder root:
+
+```terminal
+yarn run build:test-project <path/to/redwood-app>
+```
+
+| Arguments & Options  | Description                                                          |
+|----------------------|----------------------------------------------------------------------|
+| `<project directory>` | Directory to build test project [default: "./blog-test-project"]    |
+| `--typescript, --ts` | Generate a TypeScript project [default: JavaScript]                  |
+| `--canary`           | Upgrade project to latest canary version                             |
+| `--help `            | Show help                                                            |
+
+**Example Use:**
+```terminal
+cd redwood/
+yarn run build:test-project ~/my-repos/redwood-app --typescript --canary
+```
+### Testing Framework code in your App
 
 As you make changes to your local copy of the Redwood Framework, you'll want to see the effects "live" in your Redwood App.
 
-Since we're always looking for ways to make contributing to Redwood easier, there's a few workflows we've come up with, but the one you'll want to use is `yarn rwt link`. You can fall back on any of the others if that one doesn't work, but once you've tried `yarn rwt link`, you won't want to.
+Since we're always looking for ways to make contributing to Redwood easier, there are a few workflows we've come up with, but the one you'll want to use is `yarn rwt link`. You can fall back on any of the others if that one doesn't work, but once you've tried `yarn rwt link`, you won't want to.
 
 > **I've used `yarn rw` before, but what's `yarn rwt`?**
 >
 > All workflows use `redwood-tools` (`rwt`), Redwood's companion CLI development tool.
 
-#### yarn rwt link
+#### Option 1: Linking
 
-Now that everything's [up-to-date and installed](#first-steps), go to your `redwood-app` and run `yarn rwt link`:
+Now that everything's [up-to-date and installed](#local-setup), go to your `redwood-app` and run `yarn rwt link`:
 
 ```bash
 cd redwood-app
@@ -115,11 +156,11 @@ Next time you want to contribute, just run `yarn rwt link` again!
 
 > Having trouble with `rwt link`? Check the [rwt link FAQ](https://github.com/redwoodjs/redwood/issues/2215). If that doesn't help, please try one of the legacy contributing flows below.
 
-#### Copy and Watch
+#### Option 2: Copy and Watch
 
 `yarn rwt link` not working for you? That's ok &mdash; we have a few legacy contributing workflows that you can fall back on.
 
-After you've gotten everything [up-to-date and installed](#first-steps), make sure your Redwood App is on the latest canary release:
+After you've gotten everything [up-to-date and installed](#local-setup), make sure your Redwood App is on the latest canary release:
 
 ```terminal
 cd redwood-app
@@ -175,7 +216,7 @@ When you're done, go back to your `build:watch` and `rwt copy:watch` tabs and ct
 
 Then, you can restore your Redwood App to its original state by deleting `./node_modules`, `web/node_modules`, and `api/node_modules`, then running `yarn install`.
 
-#### cp
+#### Option 3: Copy (for Windows)
 
 If you are on Windows and not using WSL, you will have to use `rwt cp` (this is tracked in [issue #701](https://github.com/redwoodjs/redwood/issues/701)). This method, unfortunately, will not let you see your changes live.
 
@@ -355,7 +396,7 @@ git clean -dfx
 yarn install
 ./tasks/update-package-versions <version>
 git commit -am "<version>"
-git tag <version>
+git tag -am <version> "<version>"
 git push && git push --tags
 yarn build
 yarn lerna publish from-package
