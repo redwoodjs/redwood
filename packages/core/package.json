@@ -38,7 +38,6 @@
     "esbuild": "0.12.5",
     "typescript": "4.2.4",
     "cross-env": "7.0.3",
-    "rimraf": "3.0.2",
     "x----x----x": "^0 Webpack",
     "webpack": "4.46.0",
     "webpack-bundle-analyzer": "3.6.1",
