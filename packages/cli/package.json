@@ -13,6 +13,7 @@
     "dist"
   ],
   "dependencies": {
+    "prisma": "2.24.1",
     "@prisma/sdk": "2.24.01",
     "@redwoodjs/api-server": "^0.33.0",
     "@redwoodjs/internal": "^0.33.0",
