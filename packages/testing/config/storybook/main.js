@@ -3,9 +3,8 @@ const path = require('path')
 
 const { merge } = require('webpack-merge')
 
+const { getSharedPlugins } = require('@redwoodjs/core/config/webpack.common.js')
 const { getConfig, getPaths } = require('@redwoodjs/internal')
-
-const { getSharedPlugins } = require('../webpack.common')
 
 const config = getConfig()
 
@@ -18,8 +17,8 @@ const baseConfig = {
       configType && configType.toLowerCase() === 'production'
 
     const rwConfig = isEnvProduction
-      ? require('../webpack.production')
-      : require('../webpack.development')
+      ? require('@redwoodjs/core/config/webpack.production')
+      : require('@redwoodjs/core/config/webpack.development')
 
     // We replace imports to "@redwoodjs/router" with our own implementation in "@redwoodjs/testing"
     sbConfig.resolve.alias['@redwoodjs/router$'] = path.join(
