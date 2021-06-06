@@ -95,6 +95,7 @@ module.exports = {
         'packages/prerender/src/**',
         'packages/structure/src/**',
         'packages/testing/src/**',
+        'packages/testing/config/**',
         'packages/eslint-config/*.js',
         'packages/eslint-plugin-redwood/src/**',
       ],

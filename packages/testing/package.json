@@ -3,6 +3,7 @@
   "description": "Tools, wrappers and configuration for testing a Redwood project.",
   "version": "0.33.0",
   "files": [
+    "config",
     "dist"
   ],
   "main": "dist/index.js",
