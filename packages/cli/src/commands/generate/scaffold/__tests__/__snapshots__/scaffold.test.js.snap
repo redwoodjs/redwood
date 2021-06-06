@@ -275,7 +275,7 @@ const CREATE_USER_PROFILE_MUTATION = gql\`
   }
 \`
 
-const UserProfileNew = () => {
+const NewUserProfile = () => {
   const [createUserProfile, { loading, error }] = useMutation(
     CREATE_USER_PROFILE_MUTATION,
     {
@@ -303,7 +303,7 @@ const UserProfileNew = () => {
   )
 }
 
-export default UserProfileNew
+export default NewUserProfile
 "
 `;
 
@@ -1322,7 +1322,7 @@ const CREATE_USER_PROFILE_MUTATION = gql\`
   }
 \`
 
-const UserProfileNew = () => {
+const NewUserProfile = () => {
   const [createUserProfile, { loading, error }] = useMutation(
     CREATE_USER_PROFILE_MUTATION,
     {
@@ -1350,7 +1350,7 @@ const UserProfileNew = () => {
   )
 }
 
-export default UserProfileNew
+export default NewUserProfile
 "
 `;
 

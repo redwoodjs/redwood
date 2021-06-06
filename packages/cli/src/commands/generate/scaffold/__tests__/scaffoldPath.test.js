@@ -42,7 +42,7 @@ describe('admin/post', () => {
     test('creates a edit page', async () => {
       expect(filesLower).toHaveProperty([
         path.normalize(
-          '/path/to/project/web/src/pages/Admin/Post/PostEditPage/PostEditPage.js'
+          '/path/to/project/web/src/pages/Admin/Post/EditPostPage/EditPostPage.js'
         ),
       ])
     })
@@ -51,7 +51,7 @@ describe('admin/post', () => {
       expect(
         filesLower[
           path.normalize(
-            '/path/to/project/web/src/pages/Admin/Post/PostEditPage/PostEditPage.js'
+            '/path/to/project/web/src/pages/Admin/Post/EditPostPage/EditPostPage.js'
           )
         ]
       ).toMatch(
@@ -82,7 +82,7 @@ describe('admin/post', () => {
     test('creates a new page', async () => {
       expect(filesLower).toHaveProperty([
         path.normalize(
-          '/path/to/project/web/src/pages/Admin/Post/PostNewPage/PostNewPage.js'
+          '/path/to/project/web/src/pages/Admin/Post/NewPostPage/NewPostPage.js'
         ),
       ])
     })
@@ -95,7 +95,7 @@ describe('admin/post', () => {
           )
         ]
       ).toMatch(
-        `import PostNew from 'src/components/Post/Admin/Post/NewPost/NewPost'`
+        `import NewPost from 'src/components/Admin/Post/NewPost/NewPost'`
       )
     })
 
@@ -198,7 +198,7 @@ describe('admin/post', () => {
     test('creates a new component', async () => {
       expect(filesLower).toHaveProperty([
         path.normalize(
-          '/path/to/project/web/src/components/Admin/Post/PostNew/PostNew.js'
+          '/path/to/project/web/src/components/Admin/Post/NewPost/NewPost.js'
         ),
       ])
     })
@@ -207,7 +207,7 @@ describe('admin/post', () => {
       expect(
         filesLower[
           path.normalize(
-            '/path/to/project/web/src/components/Admin/Post/PostNew/PostNew.js'
+            '/path/to/project/web/src/components/Admin/Post/NewPost/NewPost.js'
           )
         ]
       ).toMatch(
@@ -239,10 +239,10 @@ describe('admin/post', () => {
       expect(
         await scaffold.routes({ model: 'userProfile', path: 'admin' })
       ).toEqual([
-        '<Route path="/admin/user-profiles/new" page={AdminNewUserProfilePage} name="adminNewUserProfile" />',
-        '<Route path="/admin/user-profiles/{id:Int}/edit" page={AdminEditUserProfilePage} name="adminEditUserProfile" />',
-        '<Route path="/admin/user-profiles/{id:Int}" page={AdminUserProfilePage} name="adminUserProfile" />',
-        '<Route path="/admin/user-profiles" page={AdminUserProfilesPage} name="adminUserProfiles" />',
+        '<Route path="/admin/user-profiles/new" page={AdminUserProfileNewUserProfilePage} name="adminNewUserProfile" />',
+        '<Route path="/admin/user-profiles/{id:Int}/edit" page={AdminUserProfileEditUserProfilePage} name="adminEditUserProfile" />',
+        '<Route path="/admin/user-profiles/{id:Int}" page={AdminUserProfileUserProfilePage} name="adminUserProfile" />',
+        '<Route path="/admin/user-profiles" page={AdminUserProfileUserProfilesPage} name="adminUserProfiles" />',
       ])
     })
   })
@@ -412,11 +412,11 @@ describe('Admin/Post', () => {
       expect(
         filesUpper[
           path.normalize(
-            '/path/to/project/web/src/pages/Admin/PostNewPostPage/NewPostPage.js'
+            '/path/to/project/web/src/pages/Admin/Post/NewPostPage/NewPostPage.js'
           )
         ]
       ).toMatch(
-        `import PostNew from 'src/components/Admin/Post/NewPost/NewPost'`
+        `import NewPost from 'src/components/Admin/Post/NewPost/NewPost'`
       )
     })
 
