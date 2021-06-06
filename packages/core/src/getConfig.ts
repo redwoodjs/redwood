@@ -13,9 +13,12 @@ interface GetJestConfigParams {
 
 type GetConfigParams = GetJestConfigParams
 
-export function getConfig(opts: GetConfigParams) {
-  const createConfig =
-    require(`@redwoodjs/core/dist/configs/${opts.target}/${opts.type}.createConfig.js`).default
+// TODO: We need to move this to "testing" instead, in the meantime we'll just make it work.
+/**
+ * @deprecated This will be removed in v1.0.0, please use ""
+ */
+export function getConfig({ target }: GetConfigParams) {
+  const side = target === 'node' ? 'api' : 'web'
 
-  return createConfig(opts)
+  return require(`@redwoodjs/testing/configs/${side}/index.js`).default
 }
