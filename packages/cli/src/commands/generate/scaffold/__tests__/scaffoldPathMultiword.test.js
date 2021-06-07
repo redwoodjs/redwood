@@ -247,7 +247,11 @@ describe('adminPages/post', () => {
 
     test('creates a single-word name routes', async () => {
       expect(
-        await scaffold.routes({ model: 'post', path: 'adminPages' })
+        await scaffold.routes({
+          model: 'post',
+          path: 'adminPages',
+          nestScaffoldByModel: true,
+        })
       ).toEqual([
         '<Route path="/admin-pages/posts/new" page={AdminPagesPostNewPostPage} name="adminPagesNewPost" />',
         '<Route path="/admin-pages/posts/{id:Int}/edit" page={AdminPagesPostEditPostPage} name="adminPagesEditPost" />',
@@ -258,7 +262,11 @@ describe('adminPages/post', () => {
 
     test('creates a multi-word name routes', async () => {
       expect(
-        await scaffold.routes({ model: 'userProfile', path: 'adminPages' })
+        await scaffold.routes({
+          model: 'userProfile',
+          path: 'adminPages',
+          nestScaffoldByModel: true,
+        })
       ).toEqual([
         '<Route path="/admin-pages/user-profiles/new" page={AdminPagesUserProfileNewUserProfilePage} name="adminPagesNewUserProfile" />',
         '<Route path="/admin-pages/user-profiles/{id:Int}/edit" page={AdminPagesUserProfileEditUserProfilePage} name="adminPagesEditUserProfile" />',
@@ -573,7 +581,11 @@ describe('AdminPages/Post', () => {
 
     test('creates a single-word name routes', async () => {
       expect(
-        await scaffold.routes({ model: 'Post', path: 'AdminPages' })
+        await scaffold.routes({
+          model: 'Post',
+          path: 'AdminPages',
+          nestScaffoldByModel: true,
+        })
       ).toEqual([
         '<Route path="/admin-pages/posts/new" page={AdminPagesPostNewPostPage} name="adminPagesNewPost" />',
         '<Route path="/admin-pages/posts/{id:Int}/edit" page={AdminPagesPostEditPostPage} name="adminPagesEditPost" />',
@@ -584,7 +596,11 @@ describe('AdminPages/Post', () => {
 
     test('creates a multi-word name routes', async () => {
       expect(
-        await scaffold.routes({ model: 'UserProfile', path: 'AdminPages' })
+        await scaffold.routes({
+          model: 'UserProfile',
+          path: 'AdminPages',
+          nestScaffoldByModel: true,
+        })
       ).toEqual([
         '<Route path="/admin-pages/user-profiles/new" page={AdminPagesUserProfileNewUserProfilePage} name="adminPagesNewUserProfile" />',
         '<Route path="/admin-pages/user-profiles/{id:Int}/edit" page={AdminPagesUserProfileEditUserProfilePage} name="adminPagesEditUserProfile" />',
@@ -899,7 +915,11 @@ describe('admin-pages/post', () => {
 
     test('creates a single-word name routes', async () => {
       expect(
-        await scaffold.routes({ model: 'post', path: 'admin-pages' })
+        await scaffold.routes({
+          model: 'post',
+          path: 'admin-pages',
+          nestScaffoldByModel: true,
+        })
       ).toEqual([
         '<Route path="/admin-pages/posts/new" page={AdminPagesPostNewPostPage} name="adminPagesNewPost" />',
         '<Route path="/admin-pages/posts/{id:Int}/edit" page={AdminPagesPostEditPostPage} name="adminPagesEditPost" />',
@@ -910,7 +930,11 @@ describe('admin-pages/post', () => {
 
     test('creates a multi-word name routes', async () => {
       expect(
-        await scaffold.routes({ model: 'userProfile', path: 'admin-pages' })
+        await scaffold.routes({
+          model: 'userProfile',
+          path: 'admin-pages',
+          nestScaffoldByModel: true,
+        })
       ).toEqual([
         '<Route path="/admin-pages/user-profiles/new" page={AdminPagesUserProfileNewUserProfilePage} name="adminPagesNewUserProfile" />',
         '<Route path="/admin-pages/user-profiles/{id:Int}/edit" page={AdminPagesUserProfileEditUserProfilePage} name="adminPagesEditUserProfile" />',
@@ -1225,7 +1249,11 @@ describe('admin_pages/post', () => {
 
     test('creates a single-word name routes', async () => {
       expect(
-        await scaffold.routes({ model: 'post', path: 'admin_pages' })
+        await scaffold.routes({
+          model: 'post',
+          path: 'admin_pages',
+          nestScaffoldByModel: true,
+        })
       ).toEqual([
         '<Route path="/admin-pages/posts/new" page={AdminPagesPostNewPostPage} name="adminPagesNewPost" />',
         '<Route path="/admin-pages/posts/{id:Int}/edit" page={AdminPagesPostEditPostPage} name="adminPagesEditPost" />',
@@ -1236,7 +1264,11 @@ describe('admin_pages/post', () => {
 
     test('creates a multi-word name routes', async () => {
       expect(
-        await scaffold.routes({ model: 'userProfile', path: 'admin_pages' })
+        await scaffold.routes({
+          model: 'userProfile',
+          path: 'admin_pages',
+          nestScaffoldByModel: true,
+        })
       ).toEqual([
         '<Route path="/admin-pages/user-profiles/new" page={AdminPagesUserProfileNewUserProfilePage} name="adminPagesNewUserProfile" />',
         '<Route path="/admin-pages/user-profiles/{id:Int}/edit" page={AdminPagesUserProfileEditUserProfilePage} name="adminPagesEditUserProfile" />',

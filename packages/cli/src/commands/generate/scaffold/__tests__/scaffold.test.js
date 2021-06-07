@@ -183,7 +183,9 @@ describe('in javascript (default) mode', () => {
   // Routes
 
   test('creates a single-word name routes', async () => {
-    expect(await scaffold.routes({ model: 'Post' })).toEqual([
+    expect(
+      await scaffold.routes({ model: 'Post', nestScaffoldByModel: true })
+    ).toEqual([
       '<Route path="/posts/new" page={PostNewPostPage} name="newPost" />',
       '<Route path="/posts/{id:Int}/edit" page={PostEditPostPage} name="editPost" />',
       '<Route path="/posts/{id:Int}" page={PostPostPage} name="post" />',
@@ -192,7 +194,9 @@ describe('in javascript (default) mode', () => {
   })
 
   test('creates a multi-word name routes', async () => {
-    expect(await scaffold.routes({ model: 'UserProfile' })).toEqual([
+    expect(
+      await scaffold.routes({ model: 'UserProfile', nestScaffoldByModel: true })
+    ).toEqual([
       '<Route path="/user-profiles/new" page={UserProfileNewUserProfilePage} name="newUserProfile" />',
       '<Route path="/user-profiles/{id:Int}/edit" page={UserProfileEditUserProfilePage} name="editUserProfile" />',
       '<Route path="/user-profiles/{id:Int}" page={UserProfileUserProfilePage} name="userProfile" />',
@@ -464,7 +468,9 @@ describe('in typescript mode', () => {
   // Routes
 
   test('creates a single-word name routes', async () => {
-    expect(await scaffold.routes({ model: 'Post' })).toEqual([
+    expect(
+      await scaffold.routes({ model: 'Post', nestScaffoldByModel: true })
+    ).toEqual([
       '<Route path="/posts/new" page={PostNewPostPage} name="newPost" />',
       '<Route path="/posts/{id:Int}/edit" page={PostEditPostPage} name="editPost" />',
       '<Route path="/posts/{id:Int}" page={PostPostPage} name="post" />',
@@ -473,7 +479,9 @@ describe('in typescript mode', () => {
   })
 
   test('creates a multi-word name routes', async () => {
-    expect(await scaffold.routes({ model: 'UserProfile' })).toEqual([
+    expect(
+      await scaffold.routes({ model: 'UserProfile', nestScaffoldByModel: true })
+    ).toEqual([
       '<Route path="/user-profiles/new" page={UserProfileNewUserProfilePage} name="newUserProfile" />',
       '<Route path="/user-profiles/{id:Int}/edit" page={UserProfileEditUserProfilePage} name="editUserProfile" />',
       '<Route path="/user-profiles/{id:Int}" page={UserProfileUserProfilePage} name="userProfile" />',

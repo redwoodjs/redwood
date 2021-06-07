@@ -21,8 +21,8 @@ export const command = 'scaffold <model>'
 export const description =
   'Destroy pages, SDL, and Services files based on a given DB schema Model'
 
-const removeRoutesWithSet = async (model, path) => {
-  const routes = await scaffoldRoutes({ model, path })
+const removeRoutesWithSet = async ({ model, path, nestScaffoldByModel }) => {
+  const routes = await scaffoldRoutes({ model, path, nestScaffoldByModel })
   const routeNames = routes.map(extractRouteName)
   const pluralPascalName = pascalcase(pluralize(model))
   const layoutName = `${pluralPascalName}Layout`
@@ -96,7 +96,8 @@ export const tasks = ({ model, path, tests, nestScaffoldByModel }) =>
       },
       {
         title: 'Cleaning up scaffold routes...',
-        task: async () => removeRoutesWithSet(model, path),
+        task: async () =>
+          removeRoutesWithSet({ model, path, nestScaffoldByModel }),
       },
       {
         title: 'Removing set import...',

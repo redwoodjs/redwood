@@ -52,11 +52,9 @@ const getImportComponentNames = (
   const singularName = pascalcase(pluralize.singular(name))
   // TODO - confirm case for scaffold path
   const sP =
-    scaffoldPath !== ''
-      ? scaffoldPath.split('/').map(pascalcase).join('/') + '/'
-      : ''
+    scaffoldPath !== '' ? scaffoldPath.split('/').map(pascalcase).join('/') : ''
   const cPath = nestScaffoldByModel
-    ? `src/components/${sP}${singularName}`
+    ? `src/components/${sP}/${singularName}`
     : `src/components/${sP}`
 
   return {
@@ -410,8 +408,13 @@ const componentFiles = async (
 export const routes = async ({
   model: name,
   path: scaffoldPath = '',
-  nestScaffoldByModel = true,
+  nestScaffoldByModel,
 }) => {
+  if (typeof nestScaffoldByModel === 'undefined') {
+    nestScaffoldByModel = getConfig().generate.nestScaffoldByModel
+    console.log('nestScaffoldByModel from config: ', nestScaffoldByModel)
+  }
+
   const templateNames = getTemplateStrings(name, scaffoldPath)
   const singularPascalName = pascalcase(pluralize.singular(name))
   const pluralPascalName = pascalcase(pluralize(name))
