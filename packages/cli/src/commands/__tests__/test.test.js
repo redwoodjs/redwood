@@ -56,7 +56,7 @@ test('Runs tests for all available sides if no filter passed', async () => {
 test('Syncs or creates test database when the flag --db-push is set to true', async () => {
   await handler({
     filter: ['api'],
-    dbPush: true
+    dbPush: true,
   })
 
   expect(execa.mock.results[0].value).toEqual({
@@ -73,7 +73,7 @@ test('Syncs or creates test database when the flag --db-push is set to true', as
 test.only('Skips test database sync/creation when the flag --db-push is set to false', async () => {
   await handler({
     filter: ['api'],
-    dbPush: false
+    dbPush: false,
   })
 
   expect(execa.mock.results[0].value.cmd).toBe('yarn jest')
