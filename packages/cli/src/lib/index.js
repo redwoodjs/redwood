@@ -407,18 +407,21 @@ const wrapWithSet = (routesContent, layout, routes, newLineAndIndent) => {
 export const addRoutesToRouterTask = (routes, layout) => {
   const redwoodPaths = getPaths()
   const routesContent = readFile(redwoodPaths.web.routes).toString()
-  const newRoutes = routes.filter((route) => !routesContent.includes(route))
-  const [routerStart, newLineAndIndent] = routesContent.match(/<Router>(\s*)/)
-  const routesBatch = layout
-    ? wrapWithSet(routesContent, layout, newRoutes, newLineAndIndent)
-    : newRoutes.join(newLineAndIndent)
-  const newRoutesContent = routesContent.replace(
-    routerStart,
-    `${routerStart + routesBatch + newLineAndIndent}`
-  )
-  writeFile(redwoodPaths.web.routes, newRoutesContent, {
-    overwriteExisting: true,
-  })
+  const newRoutes = routes.filter((route) => !routesContent.match(route))
+
+  if (newRoutes.length) {
+    const [routerStart, newLineAndIndent] = routesContent.match(/<Router>(\s*)/)
+    const routesBatch = layout
+      ? wrapWithSet(routesContent, layout, newRoutes, newLineAndIndent)
+      : newRoutes.join(newLineAndIndent)
+    const newRoutesContent = routesContent.replace(
+      routerStart,
+      `${routerStart + routesBatch + newLineAndIndent}`
+    )
+    writeFile(redwoodPaths.web.routes, newRoutesContent, {
+      overwriteExisting: true,
+    })
+  }
 }
 
 const removeEmtpySet = (routesContent, layout) => {
