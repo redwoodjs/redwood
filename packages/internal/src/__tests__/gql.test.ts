@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
 
-import { getOperationType, getOperationName } from '../gql'
+import { parseDocumentAST } from '../gql'
 
-test('extracts type and name', () => {
+test('parses a document AST', () => {
   const QUERY = gql`
     query POSTS {
       posts {
@@ -11,9 +11,27 @@ test('extracts type and name', () => {
         body
         createdAt
       }
+      numberOfPosts
     }
   `
 
-  expect(getOperationType(QUERY)).toEqual('query')
-  expect(getOperationName(QUERY)).toEqual('POSTS')
+  expect(parseDocumentAST(QUERY)).toMatchInlineSnapshot(`
+    Array [
+      Object {
+        "fields": Array [
+          Object {
+            "posts": Array [
+              "id",
+              "title",
+              "body",
+              "createdAt",
+            ],
+          },
+          "numberOfPosts",
+        ],
+        "name": "POSTS",
+        "operation": "query",
+      },
+    ]
+  `)
 })

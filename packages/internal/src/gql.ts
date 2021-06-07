@@ -1,11 +1,55 @@
-import { DocumentNode, getOperationAST } from 'graphql'
+import {
+  visit,
+  DocumentNode,
+  OperationTypeNode,
+  OperationDefinitionNode,
+  FieldNode,
+} from 'graphql'
 
-export const getOperationType = (operation: DocumentNode) => {
-  const document = getOperationAST(operation)
-  return document?.operation
+interface Operation {
+  operation: OperationTypeNode
+  name: string | undefined
+  fields: Array<string | Field>
 }
 
-export const getOperationName = (operation: DocumentNode) => {
-  const document = getOperationAST(operation)
-  return document?.name?.value
+interface Field {
+  string: Array<string | Field>
+}
+
+export const parseDocumentAST = (document: DocumentNode) => {
+  const operations: Array<Operation> = []
+
+  visit(document, {
+    OperationDefinition(node: OperationDefinitionNode) {
+      const fields: any[] = []
+
+      node.selectionSet.selections.forEach((field) => {
+        fields.push(getFields(field as FieldNode))
+      })
+
+      operations.push({
+        operation: node.operation,
+        name: node.name?.value,
+        fields,
+      })
+    },
+  })
+
+  return operations
+}
+
+const getFields = (field: FieldNode): any => {
+  // base
+  if (!field.selectionSet) {
+    return field.name.value
+  } else {
+    const obj = {
+      [field.name.value]: [],
+    }
+
+    field.selectionSet.selections.forEach((subField) => {
+      obj[field.name.value].push(getFields(subField as FieldNode))
+    })
+    return obj
+  }
 }
