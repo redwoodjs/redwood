@@ -28,15 +28,15 @@ jobs:
       - name: Build
         run: yarn build
 
-      - name: Run ESLint
-        run: yarn lint
-        env:
-          CI: true
+      # - name: Run ESLint
+      #   run: yarn lint
+      #   env:
+      #     CI: true
 
-      - name: Run tests
-        run: yarn test
-        env:
-          CI: true
+      # - name: Run tests
+      #   run: yarn test
+      #   env:
+      #     CI: true
 
       - name: Publish to npm
         run: |
