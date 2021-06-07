@@ -11,15 +11,14 @@ import c from 'src/lib/colors'
 
 export const command = 'prerender'
 export const aliases = ['render']
-export const description = 'Prerender pages of a redwood app (experimental)'
+export const description = 'Prerender pages of your Redwood app at build time'
 
 export const builder = (yargs) => {
   yargs.showHelpOnFail(false)
 
   yargs.option('path', {
-    alias: 'path',
-    default: false,
-    description: 'Router path to prerender',
+    alias: ['p', 'route'],
+    description: 'Router path to prerender. Especially useful for debugging',
     type: 'string',
   })
 
@@ -96,18 +95,22 @@ export const getTasks = async (dryrun) => {
               dryRun: dryrun,
             })
           } catch (e) {
+            console.log()
             console.log(
-              `${c.info('-'.repeat(20))} Error rendering path "${
+              c.warning('You can use `yarn rw prerender --dry-run` to debug')
+            )
+            console.log()
+
+            console.log(
+              `${c.info('-'.repeat(10))} Error rendering path "${
                 routeToPrerender.path
-              }" ${c.info('-'.repeat(20))}`
+              }" ${c.info('-'.repeat(10))}`
             )
 
             console.error(c.error(e.stack))
-            console.log('-'.repeat(50))
+            console.log()
 
-            throw new Error(
-              `Failed to render file "${routeToPrerender.filePath}"`
-            )
+            throw new Error(`Failed to render "${routeToPrerender.filePath}"`)
           }
         },
       }
@@ -199,12 +202,11 @@ export const handler = async ({
 
   const tasks = new Listr(listrTasks, {
     renderer: verbose ? VerboseRenderer : 'default',
-    concurrent: true,
   })
 
   try {
     if (dryRun) {
-      console.log('::: Dry run, not writing changes :::')
+      console.log(c.info('::: Dry run, not writing changes :::'))
     }
 
     await tasks.run()
@@ -212,14 +214,15 @@ export const handler = async ({
     console.log()
     await diagnosticCheck()
 
+    console.log(c.warning('Tips:'))
     console.log(
-      c.warning(
-        'Not all routes were succesfully prerendered. Run `yarn rw prerender --dry-run --verbose` for detailed logs'
+      c.info(
+        `- This could mean that a library you're using does not support SSR.`
       )
     )
     console.log(
       c.info(
-        `This could mean that a library you're using does not support SSR.`
+        '- Avoid using `window` in your render functions without checks. \n  See https://redwoodjs.com/docs/prerender#prerender-utils'
       )
     )
 

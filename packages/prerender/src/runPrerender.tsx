@@ -35,7 +35,11 @@ babelRequireHook({
             alias: {
               src: rwWebPaths.src,
             },
-            loglevel: 'silent',
+            root: [getPaths().web.base],
+            // needed for respecting user's custom aliases in web/.babelrc
+            // See https://github.com/tleunen/babel-plugin-module-resolver/blob/master/DOCS.md#cwd
+            cwd: 'babelrc',
+            loglevel: 'silent', // to silence the unnecessary warnings
           },
           'prerender-module-resolver', // add this name, so it it doesn't over-write custom module resolvers in user's web/.babelrc
         ],
