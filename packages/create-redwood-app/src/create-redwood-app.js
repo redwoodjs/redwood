@@ -104,7 +104,7 @@ const createProjectTasks = ({ newAppDir }) => {
         fs.copySync(templateDir, newAppDir)
         // .gitignore is renamed here to force file inclusion during publishing
         fs.rename(
-          path.join(newAppDir, 'gitignore'),
+          path.join(newAppDir, 'gitignore.template'),
           path.join(newAppDir, '.gitignore')
         )
       },
