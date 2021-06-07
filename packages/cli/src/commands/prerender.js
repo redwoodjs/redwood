@@ -22,13 +22,6 @@ export const builder = (yargs) => {
     type: 'string',
   })
 
-  yargs.option('output', {
-    alias: 'output',
-    default: false,
-    description: 'Output path',
-    type: 'string',
-  })
-
   yargs.option('dry-run', {
     alias: ['d', 'dryrun'],
     default: false,
@@ -53,7 +46,7 @@ const mapRouterPathToHtml = (routerPath) => {
 }
 
 // This can be used directly in build.js for nested ListrTasks
-export const getTasks = async (dryrun) => {
+export const getTasks = async (dryrun, routerPathFilter = null) => {
   const prerenderRoutes = detectPrerenderRoutes()
 
   if (prerenderRoutes.length === 0) {
@@ -82,38 +75,45 @@ export const getTasks = async (dryrun) => {
 
   const listrTasks = prerenderRoutes
     .filter((route) => route.path)
-    .map((routeToPrerender) => {
+    .flatMap((routeToPrerender) => {
+      // Filter out routes that don't match the supplied routePathFilter
+      if (routerPathFilter && routeToPrerender.path !== routerPathFilter) {
+        return []
+      }
+
       const outputHtmlPath = mapRouterPathToHtml(routeToPrerender.path)
 
-      return {
-        title: `Prerendering ${routeToPrerender.path} -> ${outputHtmlPath}`,
-        task: async () => {
-          try {
-            await runPrerender({
-              routerPath: routeToPrerender.path,
-              outputHtmlPath,
-              dryRun: dryrun,
-            })
-          } catch (e) {
-            console.log()
-            console.log(
-              c.warning('You can use `yarn rw prerender --dry-run` to debug')
-            )
-            console.log()
+      return [
+        {
+          title: `Prerendering ${routeToPrerender.path} -> ${outputHtmlPath}`,
+          task: async () => {
+            try {
+              await runPrerender({
+                routerPath: routeToPrerender.path,
+                outputHtmlPath,
+                dryRun: dryrun,
+              })
+            } catch (e) {
+              console.log()
+              console.log(
+                c.warning('You can use `yarn rw prerender --dry-run` to debug')
+              )
+              console.log()
 
-            console.log(
-              `${c.info('-'.repeat(10))} Error rendering path "${
-                routeToPrerender.path
-              }" ${c.info('-'.repeat(10))}`
-            )
+              console.log(
+                `${c.info('-'.repeat(10))} Error rendering path "${
+                  routeToPrerender.path
+                }" ${c.info('-'.repeat(10))}`
+              )
 
-            console.error(c.error(e.stack))
-            console.log()
+              console.error(c.error(e.stack))
+              console.log()
 
-            throw new Error(`Failed to render "${routeToPrerender.filePath}"`)
-          }
+              throw new Error(`Failed to render "${routeToPrerender.filePath}"`)
+            }
+          },
         },
-      }
+      ]
     })
 
   return listrTasks
@@ -180,25 +180,8 @@ const diagnosticCheck = () => {
   }
 }
 
-export const handler = async ({
-  path: routerPath,
-  output,
-  dryRun,
-  verbose,
-}) => {
-  if (routerPath) {
-    const { runPrerender } = await import('@redwoodjs/prerender')
-
-    await runPrerender({
-      routerPath,
-      outputHtmlPath: output,
-      dryRun,
-    })
-
-    return
-  }
-
-  const listrTasks = await getTasks(dryRun)
+export const handler = async ({ path: routerPath, dryRun, verbose }) => {
+  const listrTasks = await getTasks(dryRun, routerPath)
 
   const tasks = new Listr(listrTasks, {
     renderer: verbose ? VerboseRenderer : 'default',
