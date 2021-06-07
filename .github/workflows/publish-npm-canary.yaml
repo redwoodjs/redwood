@@ -40,8 +40,11 @@ jobs:
 
       - name: Publish to npm
         run: |
+          git describe
           git fetch --tags --force
+          git describe
+          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+          git describe
           echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc
-          ./tasks/publish-canary
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
