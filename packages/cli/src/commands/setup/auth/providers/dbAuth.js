@@ -1,3 +1,5 @@
+import c from 'src/lib/colors'
+
 // the lines that need to be added to App.{js,tsx}
 export const config = {
   imports: [],
@@ -12,6 +14,7 @@ export const apiPackages = []
 
 // any notes to print out when the job is done
 export const notes = [
+  `${c.warning('Done! But you have a little more work to do:')}\n`,
   'You will need to add a couple of fields to your User table in order',
   'to store their hashed password and salt values. You can name them',
   'something custom if you wish, just be sure to update the `authFields`',
