@@ -153,9 +153,6 @@ describe('The Redwood Tutorial - Golden path edition', () => {
   })
 
   it('5. Cells', () => {
-    // https://redwoodjs.com/tutorial/cells
-    cy.visit('http://localhost:8910/')
-
     cy.exec(`cd ${BASE_DIR}; yarn rw g cell BlogPosts --force`)
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/components/BlogPostsCell/BlogPostsCell.js'),
@@ -172,6 +169,9 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       path.join(BASE_DIR, 'web/src/pages/HomePage/HomePage.js'),
       Step5_3_PagesHome
     )
+    cy.visit('http://localhost:8910/posts/2') // adding step for pause
+    cy.visit('http://localhost:8910/')
+
     cy.get('main').should(
       'contain',
       // [{"title":"Second post","body":"Hello world!","__typename":"Post"}]
@@ -267,9 +267,8 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     cy.get('input#name').type('test name')
     cy.get('input#email').type('foo@bar.com')
     cy.get('textarea#message').type('test message')
-    cy.contains('Save').click()
+    cy.get('#tutorial-form').submit()
     // console
     // {name: "test name", email: "foo@bar.com", message: "test message"}
-    cy.visit('http://localhost:8910/')
   })
 })

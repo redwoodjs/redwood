@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import { findCells, findDirectoryNamedModules } from '../files'
+import { generateGraphQLSchema } from '../generate/graphqlSchema'
 import {
   generateMirrorCells,
   generateMirrorDirectoryNamedModules,
@@ -12,6 +13,8 @@ import {
   generateTypeDefGlobalContext,
   mirrorPathForDirectoryNamedModules,
   mirrorPathForCell,
+  generateTypeDefScenarios,
+  generateTypeDefGraphQL,
 } from '../generate/typeDefinitions'
 import { ensurePosixPath } from '../paths'
 
@@ -124,6 +127,26 @@ test('generate api global context', () => {
   const paths = generateTypeDefGlobalContext()
   const p = paths.map(cleanPaths)
   expect(p[0]).toEqual('.redwood/types/includes/api-globalContext.d.ts')
+})
+
+test('generate scenario type defs', () => {
+  const paths = generateTypeDefScenarios()
+  const p = paths.map(cleanPaths)
+  expect(p[0]).toEqual('.redwood/types/includes/api-scenarios.d.ts')
+})
+
+test('Generate gql typedefs to correct paths', async () => {
+  // Generate scehma first
+  await generateGraphQLSchema()
+  const paths = await generateTypeDefGraphQL()
+  const p = paths.map(cleanPaths)
+
+  expect(p).toEqual(
+    expect.arrayContaining([
+      expect.stringMatching('web/types/graphql.d.ts'),
+      expect.stringMatching('api/types/graphql.d.ts'),
+    ])
+  )
 })
 
 test('mirror path for directory named modules', () => {
