@@ -26,6 +26,7 @@ import {
 import c from 'src/lib/colors'
 
 import { yargsDefaults } from '../../generate'
+import { handler as dbAuthHandler } from '../dbAuth/dbAuth'
 import { relationsForModel, intForeignKeysForModel } from '../helpers'
 import { files as sdlFiles, builder as sdlBuilder } from '../sdl/sdl'
 import {
@@ -518,6 +519,11 @@ export const handler = async ({
   tests,
   typescript,
 }) => {
+  if (modelArg.toLowerCase() === 'dbauth') {
+    // proxy to dbAuth generator
+    return await dbAuthHandler({ force, tests, typescript })
+  }
+
   if (tests === undefined) {
     tests = getConfig().generate.tests
   }
