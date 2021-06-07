@@ -4,7 +4,6 @@ import path from 'path'
 import React from 'react'
 
 import babelRequireHook from '@babel/register'
-import prettier from 'prettier'
 import ReactDOMServer from 'react-dom/server'
 
 import { getPaths } from '@redwoodjs/internal'
@@ -26,19 +25,25 @@ const rwWebPaths = getPaths().web
 babelRequireHook({
   extends: path.join(rwWebPaths.base, '.babelrc.js'),
   extensions: ['.js', '.ts', '.tsx', '.jsx'],
-  plugins: [
-    ['ignore-html-and-css-imports'], // webpack/postcss handles CSS imports
-    [
-      'babel-plugin-module-resolver',
-      {
-        alias: {
-          src: rwWebPaths.src,
-        },
-      },
-    ],
-    [mediaImportsPlugin],
+  overrides: [
+    {
+      plugins: [
+        ['ignore-html-and-css-imports'], // webpack/postcss handles CSS imports
+        [
+          'babel-plugin-module-resolver',
+          {
+            alias: {
+              src: rwWebPaths.src,
+            },
+            loglevel: 'silent',
+          },
+          'prerender-module-resolver', // add this name, so it it doesn't over-write custom module resolvers in user's web/.babelrc
+        ],
+        [mediaImportsPlugin],
+      ],
+    },
   ],
-  only: [rwWebPaths.base],
+  only: [getPaths().base],
   ignore: ['node_modules'],
   cache: false,
 })
@@ -70,17 +75,7 @@ export const runPrerender = async ({
     componentAsHtml
   )
 
-  if (dryRun) {
-    console.log('::: Dry run, not writing changes :::')
-    console.log(`::: 🚀 Prerender output for ${routerPath} ::: `)
-    const prettyOutput = prettier.format(renderOutput, { parser: 'html' })
-    console.log(prettyOutput)
-    console.log('::: --- ::: ')
-
-    return prettyOutput
-  }
-
-  if (outputHtmlPath) {
+  if (!dryRun && outputHtmlPath) {
     // Copy default index.html to 200.html first
     // This is to prevent recursively rendering the home page
     if (outputHtmlPath === 'web/dist/index.html') {

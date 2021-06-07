@@ -5,7 +5,7 @@ import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 
 import { getPaths } from '@redwoodjs/internal'
-import { runPrerender, detectPrerenderRoutes } from '@redwoodjs/prerender'
+import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
 
 import c from 'src/lib/colors'
 
@@ -31,7 +31,7 @@ export const builder = (yargs) => {
   })
 
   yargs.option('dry-run', {
-    alias: 'd',
+    alias: ['d', 'dryrun'],
     default: false,
     description: 'Run prerender and output to console',
     type: 'boolean',
@@ -54,7 +54,7 @@ const mapRouterPathToHtml = (routerPath) => {
 }
 
 // This can be used directly in build.js for nested ListrTasks
-export const getTasks = (dryrun) => {
+export const getTasks = async (dryrun) => {
   const prerenderRoutes = detectPrerenderRoutes()
 
   if (prerenderRoutes.length === 0) {
@@ -77,6 +77,10 @@ export const getTasks = (dryrun) => {
     // TODO: Run this automatically at this point.
   }
 
+  // Import runPrerender async, so babel config et all are only loaded
+  // when this task runs
+  const { runPrerender } = await import('@redwoodjs/prerender')
+
   const listrTasks = prerenderRoutes
     .filter((route) => route.path)
     .map((routeToPrerender) => {
@@ -84,12 +88,27 @@ export const getTasks = (dryrun) => {
 
       return {
         title: `Prerendering ${routeToPrerender.path} -> ${outputHtmlPath}`,
-        task: () => {
-          return runPrerender({
-            routerPath: routeToPrerender.path,
-            outputHtmlPath,
-            dryRun: dryrun,
-          })
+        task: async () => {
+          try {
+            await runPrerender({
+              routerPath: routeToPrerender.path,
+              outputHtmlPath,
+              dryRun: dryrun,
+            })
+          } catch (e) {
+            console.log(
+              `${c.info('-'.repeat(20))} Error rendering path "${
+                routeToPrerender.path
+              }" ${c.info('-'.repeat(20))}`
+            )
+
+            console.error(c.error(e.stack))
+            console.log('-'.repeat(50))
+
+            throw new Error(
+              `Failed to render file "${routeToPrerender.filePath}"`
+            )
+          }
         },
       }
     })
@@ -165,6 +184,8 @@ export const handler = async ({
   verbose,
 }) => {
   if (routerPath) {
+    const { runPrerender } = await import('@redwoodjs/prerender')
+
     await runPrerender({
       routerPath,
       outputHtmlPath: output,
@@ -174,7 +195,7 @@ export const handler = async ({
     return
   }
 
-  const listrTasks = getTasks(dryRun)
+  const listrTasks = await getTasks(dryRun)
 
   const tasks = new Listr(listrTasks, {
     renderer: verbose ? VerboseRenderer : 'default',
@@ -182,6 +203,10 @@ export const handler = async ({
   })
 
   try {
+    if (dryRun) {
+      console.log('::: Dry run, not writing changes :::')
+    }
+
     await tasks.run()
   } catch (e) {
     console.log()
@@ -189,12 +214,7 @@ export const handler = async ({
 
     console.log(
       c.warning(
-        'Not all routes were succesfully prerendered. Run `yarn rw prerender --dry-run` for detailed logs'
-      )
-    )
-    console.log(
-      c.info(
-        `We could not prerender all your pages, but your Redwood app should still work fine.`
+        'Not all routes were succesfully prerendered. Run `yarn rw prerender --dry-run --verbose` for detailed logs'
       )
     )
     console.log(

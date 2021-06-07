@@ -5,7 +5,8 @@
   "license": "MIT",
   "files": [
     "dist",
-    "browserUtils"
+    "browserUtils",
+    "detection"
   ],
   "main": "dist/index.js",
   "peerDependencies": {
