@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Update milestone to 'next-release'
     permissions:
-      pull-requests: read|write
+      pull-requests: write
     steps:
       # to use a private action, you have to check out the repo
       - name: Checkout
@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Remove milestone
     permissions:
-      pull-requests: read|write
+      pull-requests: write
     steps:
       - name: Checkout
         uses: actions/checkout@v2
