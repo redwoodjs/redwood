@@ -133,12 +133,14 @@ export function createCell<CellProps = any>({
             }
           } else if (data) {
             if (typeof Empty !== 'undefined' && isEmpty(data)) {
-              return <Empty {...{ loading, ...queryRest }} {...props} />
+              return (
+                <Empty {...{ updating: loading, ...queryRest }} {...props} />
+              )
             } else {
               return (
                 <Success
                   {...afterQuery(data)}
-                  {...{ loading, ...queryRest }}
+                  {...{ updating: loading, ...queryRest }}
                   {...props}
                 />
               )
