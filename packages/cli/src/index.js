@@ -12,6 +12,10 @@ config({
   defaults: path.join(getPaths().base, '.env.defaults'),
 })
 
+// TODO:
+// Add structure and rwjsPaths to global context.
+// Add 'cwd' command.
+
 // eslint-disable-next-line no-unused-expressions
 yargs
   .commandDir('./commands')
