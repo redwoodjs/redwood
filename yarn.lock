@@ -9649,10 +9649,10 @@ esbuild-loader@2.13.1:
     type-fest "^1.0.1"
     webpack-sources "^2.2.0"
 
-esbuild@0.12.5:
-  version "0.12.5"
-  resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.12.5.tgz#36076a6bc1966ba2741981d30512e95e8aaff495"
-  integrity sha512-vcuP53pA5XiwUU4FnlXM+2PnVjTfHGthM7uP1gtp+9yfheGvFFbq/KyuESThmtoHPUrfZH5JpxGVJIFDVD1Egw==
+esbuild@0.12.6:
+  version "0.12.6"
+  resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.12.6.tgz#85bc755c7cf3005d4f34b4f10f98049ce0ee67ce"
+  integrity sha512-RDvVLvAjsq/kIZJoneMiUOH7EE7t2QaW7T3Q7EdQij14+bZbDq5sndb0tTanmHIFSqZVMBMMyqzVHkS3dJobeA==
 
 esbuild@^0.11.19:
   version "0.11.23"
