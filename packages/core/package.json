@@ -31,7 +31,7 @@
     "@redwoodjs/testing": "^0.33.2",
     "@storybook/addon-a11y": "6.2.9",
     "@storybook/react": "6.1.21",
-    "@testing-library/jest-dom": "5.11.6",
+    "@testing-library/jest-dom": "5.13.0",
     "@types/jest": "26.0.23",
     "@types/node": "15.12.1",
     "@types/react": "17.0.9",
