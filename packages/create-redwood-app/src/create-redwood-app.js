@@ -171,6 +171,15 @@ new Listr(
         })
       },
     },
+    {
+      title: 'Generating types',
+      task: () => {
+        return execa('yarn rw-gen', {
+          shell: true,
+          cwd: newAppDir,
+        })
+      },
+    },
   ],
   { collapse: false, exitOnError: true }
 )
