@@ -25,7 +25,7 @@
     "core-js": "3.13.1",
     "cross-env": "7.0.3",
     "decamelize": "4.0.0",
-    "dotenv-defaults": "2.0.1",
+    "dotenv-defaults": "2.0.2",
     "envinfo": "7.8.1",
     "execa": "5.0.0",
     "fs-extra": "10.0.0",
