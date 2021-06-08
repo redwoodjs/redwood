@@ -4329,10 +4329,10 @@
     "@types/qs" "*"
     "@types/serve-static" "*"
 
-"@types/findup-sync@4.0.0":
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/@types/findup-sync/-/findup-sync-4.0.0.tgz#404bc757a0aa7e1c516c9093bab8bddbf43ff04f"
-  integrity sha512-xWXsj4DSFjAR8a7arkDNQz7trAQpbMxsnxNMGjrYvqH600TQFVjJaUP4dk5Y7HcE5IZ5uzt4IzalstzIry1HgA==
+"@types/findup-sync@4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@types/findup-sync/-/findup-sync-4.0.1.tgz#b818ce8bc0cad0a0814f3941bcd203f77f80f381"
+  integrity sha512-W2SVdWYC1kS9njS5MIucsB9U4Doy9t774BhStw3zR8XRqsXtvj3j9KnWzVEKEZMxUuF4htjR/5VfIa5gh0OoDQ==
   dependencies:
     "@types/micromatch" "*"
 
