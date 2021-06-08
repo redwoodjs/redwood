@@ -9,10 +9,12 @@ const webpackConfig = require('./webpack.common')
 const { mergeUserWebpackConfig } = webpackConfig
 const redwoodConfig = getConfig()
 
+/** @type {import('webpack').Configuration} */
 const baseConfig = merge(webpackConfig('development'), {
   devServer: {
     // https://webpack.js.org/configuration/dev-server/
-    hot: true,
+    hot: redwoodConfig.web.liveReload,
+    watch: redwoodConfig.web.liveReload,
     writeToDisk: false,
     compress: true,
     quiet: true,
@@ -42,5 +44,4 @@ const baseConfig = merge(webpackConfig('development'), {
   plugins: [new ErrorOverlayPlugin()].filter(Boolean),
 })
 
-/** @type {import('webpack').Configuration} */
 module.exports = mergeUserWebpackConfig('development', baseConfig)

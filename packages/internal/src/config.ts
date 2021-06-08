@@ -30,6 +30,7 @@ interface BrowserTargetConfig {
   // TODO: apiProxyHost: string
   apiProxyPort: number
   apiProxyPath: string
+  liveReload: boolean
   fastRefresh: boolean
   a11y: boolean
 }
@@ -51,6 +52,21 @@ export interface Config {
 
 // Note that web's includeEnvironmentVariables is handled in `webpack.common.js`
 // https://github.com/redwoodjs/redwood/blob/d51ade08118c17459cebcdb496197ea52485364a/packages/core/config/webpack.common.js#L19
+// TODO: All parts of RedwoodJS's config should also be controlled by `RWJS_` env-vars. Document these!
+// RWJS_WEB_PORT='8911'
+// RWJS_ESBUILD='0'
+// RWJS_WEB_OPEN='0'
+
+const liveReload =
+  typeof process.env.RWJS_WEB_LIVE_RELOAD !== 'undefined'
+    ? process.env.RWJS_WEB_LIVE_RELOAD === '1'
+    : true
+
+const fastRefresh =
+  typeof process.env.RWJS_WEB_FAST_REFRESH !== 'undefined'
+    ? process.env.RWJS_WEB_FAST_REFRESH === '1'
+    : true
+
 const DEFAULT_CONFIG: Config = {
   web: {
     host: 'localhost',
@@ -59,7 +75,8 @@ const DEFAULT_CONFIG: Config = {
     target: TargetEnum.BROWSER,
     apiProxyPath: '/.netlify/functions',
     apiProxyPort: 8911,
-    fastRefresh: true,
+    liveReload,
+    fastRefresh: liveReload && fastRefresh,
     a11y: true,
   },
   api: {
