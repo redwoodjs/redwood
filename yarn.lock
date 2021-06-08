@@ -11134,7 +11134,7 @@ globby@^9.2.0:
     pify "^4.0.1"
     slash "^2.0.0"
 
-goober@^2.0.15:
+goober@^2.0.35:
   version "2.0.37"
   resolved "https://registry.yarnpkg.com/goober/-/goober-2.0.37.tgz#5598c41f4c19bc1fca2c926e876a58a685faffb8"
   integrity sha512-wgj5C7IJX2+MyHZ4TgOA+hLL1mCDW+jGorQ5KCMLF1ofE9gQkfbo1s8txIrzIsAX65XRTm0qaipolId2KMYUkw==
@@ -17119,12 +17119,12 @@ react-hook-form@6.9.5:
   resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-6.9.5.tgz#a700ff55987c4409d938f3609f06bd516e8a86d7"
   integrity sha512-kkUm6b4u1Iy3wCdHA0fal23sjGQMg8BBRAT3KBG9PEdls5e+7OX2Df20oBPgpXxo/GaIwk2Lh5DeVv5OeVjKsg==
 
-react-hot-toast@1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/react-hot-toast/-/react-hot-toast-1.0.2.tgz#162f020ba7c0b20f2f25bb7738458c435e84107c"
-  integrity sha512-wp89H0WA6EtiexAg5l3ys+WaZ3u0xM/FJWxl6YxR3hlquWhKvO9snBgTe4ATPEcgbS6pbc43RbuBINOkYOzA5A==
+react-hot-toast@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-hot-toast/-/react-hot-toast-2.0.0.tgz#6e83b2937a20b040acb2d5fd08bcf32561b7832a"
+  integrity sha512-J0J2rcSvKetlziVquwESgk85pV9JB0Dz3RJIZcAEv7CWU2y2z8BQqxmZHZUxjPKIBGPqXAocZch4Kj4oUdX4+w==
   dependencies:
-    goober "^2.0.15"
+    goober "^2.0.35"
 
 react-hotkeys@2.0.0:
   version "2.0.0"
