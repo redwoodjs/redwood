@@ -45,7 +45,7 @@ const mapRouterPathToHtml = (routerPath) => {
   }
 }
 
-// This can be used directly in build.js for nested ListrTasks
+// This is used directly in build.js for nested ListrTasks
 export const getTasks = async (dryrun, routerPathFilter = null) => {
   const prerenderRoutes = detectPrerenderRoutes()
 
@@ -71,7 +71,9 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
 
   // Import runPrerender async, so babel config et all are only loaded
   // when this task runs
-  const { runPrerender } = await import('@redwoodjs/prerender')
+  const { runPrerender, writePrerenderedHtmlFile } = await import(
+    '@redwoodjs/prerender'
+  )
 
   const listrTasks = prerenderRoutes
     .filter((route) => route.path)
@@ -88,11 +90,13 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
           title: `Prerendering ${routeToPrerender.path} -> ${outputHtmlPath}`,
           task: async () => {
             try {
-              await runPrerender({
+              const prerenderedHtml = await runPrerender({
                 routerPath: routeToPrerender.path,
-                outputHtmlPath,
-                dryRun: dryrun,
               })
+
+              if (!dryrun) {
+                writePrerenderedHtmlFile(outputHtmlPath, prerenderedHtml)
+              }
             } catch (e) {
               console.log()
               console.log(

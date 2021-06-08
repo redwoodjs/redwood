@@ -14,8 +14,6 @@ import { getRootHtmlPath, registerShims, writeToDist } from './internal'
 
 interface PrerenderParams {
   routerPath: string // e.g. /about, /dashboard/me
-  outputHtmlPath: string // web/dist/{path}.html
-  dryRun: boolean
 }
 
 const rwWebPaths = getPaths().web
@@ -54,13 +52,10 @@ babelRequireHook({
 
 export const runPrerender = async ({
   routerPath,
-  outputHtmlPath,
-  dryRun,
 }: PrerenderParams): Promise<string | void> => {
   registerShims()
 
   const indexContent = fs.readFileSync(getRootHtmlPath()).toString()
-
   const { default: App } = await import(getPaths().web.app)
 
   const componentAsHtml = ReactDOMServer.renderToString(
@@ -79,13 +74,19 @@ export const runPrerender = async ({
     componentAsHtml
   )
 
-  if (!dryRun && outputHtmlPath) {
-    // Copy default index.html to 200.html first
-    // This is to prevent recursively rendering the home page
-    if (outputHtmlPath === 'web/dist/index.html') {
-      fs.copyFileSync(outputHtmlPath, 'web/dist/200.html')
-    }
+  return renderOutput
+}
 
-    writeToDist(outputHtmlPath, renderOutput)
+// Used by cli at build time
+export const writePrerenderedHtmlFile = (
+  outputHtmlPath: string,
+  content: string
+) => {
+  // Copy default index.html to 200.html first
+  // This is to prevent recursively rendering the home page
+  if (outputHtmlPath === 'web/dist/index.html') {
+    fs.copyFileSync(outputHtmlPath, 'web/dist/200.html')
   }
+
+  writeToDist(outputHtmlPath, content)
 }
