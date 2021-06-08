@@ -39,7 +39,8 @@
     "rimraf": "3.0.2"
   },
   "scripts": {
-    "build": "lerna run build:js && yarn build:types",
+    "build": "yarn build:js && yarn build:types",
+    "build:js": "lerna run build:js",
     "build:types": "ttsc --build ../../tsconfig.json --verbose",
     "build:clean": "rimraf ../../packages/**/dist",
     "build:watch": "lerna run build:watch --parallel; ttsc --build",

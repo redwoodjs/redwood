@@ -23,6 +23,7 @@
   "scripts": {
     "framework": "yarn --cwd ./tasks/framework-tools",
     "build": "yarn framework build",
+    "build:js": "yarn framework build:js",
     "build:types": "yarn framework build:types",
     "build:clean": "yarn framework build:clean",
     "build:watch": "yarn framework build:watch",
