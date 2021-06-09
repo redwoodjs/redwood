@@ -26,8 +26,7 @@ export type CellLoadingProps = Omit<
 // @MARK not sure about this partial, but we need to do this for tests and storybook
 export type CellSuccessProps<TData = any> = Partial<
   Omit<QueryOperationResult<TData>, 'error' | 'data'>
-> &
-  A.Compute<TData> // pre-computing makes the types more readable on hover
+> & { updating: boolean } & A.Compute<TData> // pre-computing makes the types more readable on hover
 
 export interface CreateCellProps<CellProps> {
   beforeQuery?: <TProps>(props: TProps) => { variables: TProps }
