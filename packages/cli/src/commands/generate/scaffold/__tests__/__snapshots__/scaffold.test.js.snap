@@ -855,7 +855,7 @@ import { navigate, routes } from '@redwoodjs/router'
 import PostForm from 'src/components/PostForm'
 
 export const QUERY = gql\`
-  query FindPostById(($id: Int!) {
+  query FindPostById($id: Int!) {
     post: post(id: $id) {
       id
       title
@@ -924,7 +924,7 @@ import { navigate, routes } from '@redwoodjs/router'
 import UserProfileForm from 'src/components/UserProfileForm'
 
 export const QUERY = gql\`
-  query FindUserProfileById(($id: Int!) {
+  query FindUserProfileById($id: Int!) {
     userProfile: userProfile(id: $id) {
       id
       username
@@ -2011,7 +2011,7 @@ import { navigate, routes } from '@redwoodjs/router'
 import PostForm from 'src/components/PostForm'
 
 export const QUERY = gql\`
-  query FindPostById(($id: Int!) {
+  query FindPostById($id: Int!) {
     post: post(id: $id) {
       id
       title
@@ -2080,7 +2080,7 @@ import { navigate, routes } from '@redwoodjs/router'
 import UserProfileForm from 'src/components/UserProfileForm'
 
 export const QUERY = gql\`
-  query FindUserProfileById(($id: Int!) {
+  query FindUserProfileById($id: Int!) {
     userProfile: userProfile(id: $id) {
       id
       username
