@@ -1,7 +1,7 @@
 import ${singularPascalName} from 'src/components/${pascalScaffoldPath}${singularPascalName}'
 
 export const QUERY = gql`
-  query FIND_${singularConstantName}_BY_ID($id: ${idType}!) {
+  query Find${singularPascalName}ById($id: ${idType}!) {
     ${singularCamelName}: ${singularCamelName}(id: $id) {<% columns.forEach(column => { %>
       <%= column.name %><% }) %>
     }
