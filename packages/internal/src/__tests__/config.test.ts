@@ -32,6 +32,7 @@ describe('getConfig', () => {
           "apiProxyPort": 8911,
           "fastRefresh": true,
           "host": "localhost",
+          "liveReload": true,
           "path": "./web",
           "port": 8910,
           "target": "browser",
