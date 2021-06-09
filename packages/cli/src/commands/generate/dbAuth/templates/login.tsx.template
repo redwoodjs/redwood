@@ -15,12 +15,11 @@ import { useEffect } from 'react'
 const LoginPage = () => {
   const { isAuthenticated, logIn } = useAuth()
 
-  // redirect somewhere else if already logged in
-  // useEffect(() => {
-  //   if (isAuthenticated) {
-  //     navigate(routes.home())
-  //   }
-  // }, [isAuthenticated])
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate(routes.home())
+    }
+  }, [isAuthenticated])
 
   const usernameRef = useRef()
   useEffect(() => {
@@ -68,6 +67,7 @@ const LoginPage = () => {
                       },
                     }}
                   />
+
                   <FieldError name="username" className="rw-field-error" />
                 </div>
 
@@ -91,6 +91,7 @@ const LoginPage = () => {
                       },
                     }}
                   />
+
                   <FieldError name="password" className="rw-field-error" />
                 </div>
 
