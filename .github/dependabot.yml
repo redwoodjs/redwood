@@ -4,6 +4,6 @@ updates:
     versioning-strategy: "increase"
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: "friday"
+      interval: "monthly"
+      day: "wednesday"
     open-pull-requests-limit: 20

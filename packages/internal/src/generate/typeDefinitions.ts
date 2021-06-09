@@ -26,26 +26,23 @@ import { writeTemplate } from './templates'
 // with "web-" or "api-" to target inclusion for that side,
 // or use "all-" for both. This is controlled by the user's "tsconfig.json"
 // file.
-
 /**
  * Generate all the types for a RedwoodJS project
- * and return the generated files.
+ * and return the generated path to files, so they're logged
  */
 export const generateTypeDefs = async () => {
-  // MARK What does p mean?!
-  const p1 = generateMirrorDirectoryNamedModules()
-  const p2 = generateMirrorCells()
-  const p3 = generateTypeDefRouterPages()
-  const p4 = generateTypeDefCurrentUser()
-  const p5 = generateTypeDefRouterRoutes()
-  const p6 = generateTypeDefGlobImports()
-  const p7 = generateTypeDefGlobalContext()
-  const p8 = generateTypeDefScenarios()
-  const p9 = await generateTypeDefGraphQL()
-
-  // MARK What is this?
-  // Why create another array
-  return [...p1, ...p2, p3[0], p4[0], p5[0], p6[0], p7[0], ...p8, ...p9]
+  // Return all the paths so they can be printed
+  return [
+    ...generateMirrorDirectoryNamedModules(),
+    ...generateMirrorCells(),
+    ...generateTypeDefRouterPages(),
+    ...generateTypeDefCurrentUser(),
+    ...generateTypeDefRouterRoutes(),
+    ...generateTypeDefGlobImports(),
+    ...generateTypeDefGlobalContext(),
+    ...generateTypeDefScenarios(),
+    ...(await generateTypeDefGraphQL()),
+  ]
 }
 
 export const generateMirrorDirectoryNamedModules = () => {
@@ -178,7 +175,7 @@ export const generateTypeDefGraphQL = async (
         plugins: ['typescript', 'typescript-resolvers'],
       }
     }
-    if (['web', 'all'].includes(side)) {
+    if (['web', 'all'].includes(side) && findCells().length) {
       generates[path.join(rwjsPaths.web.base, 'types/graphql.d.ts')] = {
         documents: './web/src/**/!(*.d).{ts,tsx,js,jsx}',
         plugins: ['typescript', 'typescript-operations'],
