@@ -265,8 +265,6 @@ import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import PostForm from 'src/components/PostForm'
 
-import { QUERY } from 'src/components/PostsCell'
-
 const CREATE_POST_MUTATION = gql\`
   mutation CreatePostMutation($input: CreatePostInput!) {
     createPost(input: $input) {
@@ -308,8 +306,6 @@ exports[`in javascript (default) mode creates a new component with int foreign k
 import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import UserProfileForm from 'src/components/UserProfileForm'
-
-import { QUERY } from 'src/components/UserProfilesCell'
 
 const CREATE_USER_PROFILE_MUTATION = gql\`
   mutation CreateUserProfileMutation($input: CreateUserProfileInput!) {
@@ -1425,8 +1421,6 @@ import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import PostForm from 'src/components/PostForm'
 
-import { QUERY } from 'src/components/PostsCell'
-
 const CREATE_POST_MUTATION = gql\`
   mutation CreatePostMutation($input: CreatePostInput!) {
     createPost(input: $input) {
@@ -1468,8 +1462,6 @@ exports[`in typescript mode creates a new component with int foreign keys conver
 import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import UserProfileForm from 'src/components/UserProfileForm'
-
-import { QUERY } from 'src/components/UserProfilesCell'
 
 const CREATE_USER_PROFILE_MUTATION = gql\`
   mutation CreateUserProfileMutation($input: CreateUserProfileInput!) {
