@@ -129,11 +129,14 @@ const convertProjectToJavaScript = () => {
 
 const runDevServerInBackground = () => {
   console.log('Starting RedwoodJS dev server...')
-  execa.sync('yarn rw dev --fwd="--open=false" &', {
-    cwd: REDWOOD_PROJECT_DIRECTORY,
-    shell: true,
-    stdio: 'inherit',
-  })
+  execa.sync(
+    'RWJS_WEB_LIVE_RELOAD=0 yarn rw dev --no-generate --fwd="--open=false" &',
+    {
+      cwd: REDWOOD_PROJECT_DIRECTORY,
+      shell: true,
+      stdio: 'inherit',
+    }
+  )
 }
 
 const runCypress = () => {

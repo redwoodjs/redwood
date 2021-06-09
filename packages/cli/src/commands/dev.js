@@ -73,6 +73,8 @@ export const handler = async ({
   }
 
   if (side.includes('web')) {
+    forward += getConfig().web.liveReload ? ' ' : ' --liveReload=false'
+
     try {
       await shutdownPort(getConfig().web.port)
     } catch (e) {

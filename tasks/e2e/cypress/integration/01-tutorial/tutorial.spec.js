@@ -41,8 +41,9 @@ describe('The Redwood Tutorial - Golden path edition', () => {
 
   it('1. Our First Page', () => {
     //redwoodjs.com/tutorial/our-first-page
-    cy.visit('http://localhost:8910')
     cy.exec(`cd ${BASE_DIR}; yarn redwood generate page home / --force`)
+    cy.visit('http://localhost:8910')
+    cy.reload(true)
     cy.get('h1').should('contain', 'HomePage')
   })
 
@@ -53,12 +54,15 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       path.join(BASE_DIR, 'web/src/pages/HomePage/HomePage.js'),
       Step2_1_PagesHome
     )
+    cy.visit('http://localhost:8910')
+    cy.reload(true)
     cy.contains('About').click()
     cy.get('h1').should('contain', 'AboutPage')
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/pages/AboutPage/AboutPage.js'),
       Step2_2_PagesAbout
     )
+    cy.reload(true)
     cy.get('h1').should('contain', 'Redwood Blog')
     cy.contains('Return home').click()
   })
@@ -74,6 +78,8 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       path.join(BASE_DIR, 'web/src/pages/HomePage/HomePage.js'),
       Step3_3_PagesHome
     )
+    cy.visit('http://localhost:8910')
+    cy.reload(true)
     cy.contains('Redwood Blog').click()
     cy.get('main').should('contain', 'Home')
 
@@ -81,6 +87,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       path.join(BASE_DIR, 'web/src/pages/AboutPage/AboutPage.js'),
       Step3_4_PagesAbout
     )
+    cy.reload(true)
     cy.contains('About').click()
     cy.get('p').should(
       'contain',
@@ -169,8 +176,9 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       path.join(BASE_DIR, 'web/src/pages/HomePage/HomePage.js'),
       Step5_3_PagesHome
     )
-    cy.visit('http://localhost:8910/posts/2') // adding step for pause
+    //cy.visit('http://localhost:8910/posts/2') // adding step for pause
     cy.visit('http://localhost:8910/')
+    cy.reload(true)
 
     cy.get('main').should(
       'contain',
@@ -253,6 +261,8 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     )
     cy.writeFile(path.join(BASE_DIR, 'web/src/index.css'), Step7_3_Css)
     cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step7_4_Routes)
+
+    cy.visit('http://localhost:8910/')
 
     cy.contains('Contact').click()
     cy.contains('Save').click()

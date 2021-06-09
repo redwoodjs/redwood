@@ -14,7 +14,6 @@ const baseConfig = merge(webpackConfig('development'), {
   devServer: {
     // https://webpack.js.org/configuration/dev-server/
     hot: redwoodConfig.web.liveReload,
-    watch: redwoodConfig.web.liveReload,
     writeToDisk: false,
     compress: true,
     quiet: true,
