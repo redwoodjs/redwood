@@ -19,7 +19,6 @@ export interface NodeTargetConfig {
   path: string
   target: TargetEnum.NODE
   schemaPath: string
-  experimentalSecureServices: boolean
 }
 
 interface BrowserTargetConfig {
@@ -41,6 +40,13 @@ export interface Config {
   browser: {
     open: boolean | string
   }
+  generate: {
+    tests: boolean
+    stories: boolean
+  }
+  experimental: {
+    esbuild: boolean
+  }
 }
 
 // Note that web's includeEnvironmentVariables is handled in `webpack.common.js`
@@ -61,11 +67,17 @@ const DEFAULT_CONFIG: Config = {
     port: 8911,
     path: './api',
     target: TargetEnum.NODE,
-    schemaPath: './api/prisma/schema.prisma',
-    experimentalSecureServices: false,
+    schemaPath: './api/db/schema.prisma',
   },
   browser: {
     open: false,
+  },
+  generate: {
+    tests: true,
+    stories: true,
+  },
+  experimental: {
+    esbuild: false,
   },
 }
 

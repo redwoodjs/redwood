@@ -1,7 +1,8 @@
 import type { UserAgentApplication as AzureActiveDirectory } from 'msal'
 
-export type { AzureActiveDirectory }
 import type { AuthClient } from './'
+
+export type { AzureActiveDirectory }
 
 export type AzureActiveDirectoryClient = AzureActiveDirectory
 export interface AzureActiveDirectoryUser {}

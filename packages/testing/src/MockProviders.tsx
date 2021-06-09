@@ -4,8 +4,8 @@
  */
 import React from 'react'
 
-import { AuthProvider } from '@redwoodjs/auth'
 import type { AuthContextInterface } from '@redwoodjs/auth'
+import { AuthProvider } from '@redwoodjs/auth'
 import { LocationProvider } from '@redwoodjs/router'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
@@ -22,7 +22,6 @@ const fakeUseAuth = (): AuthContextInterface => ({
   loading: false,
   isAuthenticated: false,
   currentUser: null,
-  authToken: null,
   userMetadata: null,
   logIn: async () => undefined,
   logOut: async () => undefined,

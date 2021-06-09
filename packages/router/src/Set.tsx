@@ -24,15 +24,15 @@ type SetProps<P> = P & {
    * the wrapped route they will be redirected to `unauthenticated` route.
    */
   private?: boolean
-  /**
-   * The page name where a user will be redirected when not authenticated
-   */
+  /** The page name where a user will be redirected when not authenticated */
   unauthenticated?: string
   role?: string | string[]
+  /** Prerender all pages in the set */
+  prerender?: boolean
   children: ReactNode
 }
 
-const IdentityWrapper: WrapperType<{}> = ({ children }) => {
+const IdentityWrapper: WrapperType<Record<string, any>> = ({ children }) => {
   return <>{children}</>
 }
 

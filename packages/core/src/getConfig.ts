@@ -14,8 +14,8 @@ interface GetJestConfigParams {
 type GetConfigParams = GetJestConfigParams
 
 export function getConfig(opts: GetConfigParams) {
-  const createConfig = require(`@redwoodjs/core/dist/configs/${opts.target}/${opts.type}.createConfig.js`)
-    .default
+  const createConfig =
+    require(`@redwoodjs/core/dist/configs/${opts.target}/${opts.type}.createConfig.js`).default
 
   return createConfig(opts)
 }

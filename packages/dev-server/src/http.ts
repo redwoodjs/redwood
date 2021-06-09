@@ -1,6 +1,6 @@
 import bodyParser from 'body-parser'
-import type { Response, Request } from 'express'
 import express from 'express'
+import type { Response, Request } from 'express'
 import morgan from 'morgan'
 
 export interface Lambdas {

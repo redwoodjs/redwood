@@ -1,5 +1,4 @@
 import fs from 'fs'
-import path from 'path'
 
 import concurrently from 'concurrently'
 import terminalLink from 'terminal-link'
@@ -9,7 +8,6 @@ import { getConfig, shutdownPort } from '@redwoodjs/internal'
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 import { generatePrismaClient } from 'src/lib/generatePrismaClient'
-import runPreBuildTasks from 'src/lib/runPreBuildTasks'
 
 export const command = 'dev [side..]'
 export const description = 'Start development servers for api, and web'
@@ -30,7 +28,13 @@ export const builder = (yargs) => {
     .option('esbuild', {
       type: 'boolean',
       required: false,
-      description: 'Use ESBuild for api side [experimental]',
+      default: getConfig().experimental.esbuild,
+      description: 'Use ESBuild [experimental]',
+    })
+    .option('generate', {
+      type: 'boolean',
+      default: true,
+      description: 'Generate artifacts',
     })
     .epilogue(
       `Also see the ${terminalLink(
@@ -44,16 +48,9 @@ export const handler = async ({
   side = ['api', 'web'],
   forward = '',
   esbuild = false,
+  generate = true,
 }) => {
-  // We use BASE_DIR when we need to effectively set the working dir
-  const BASE_DIR = getPaths().base
-  // For validation, e.g. dirExists?, we use these
-  // note: getPaths().web|api.base returns undefined on Windows
-  const API_DIR_SRC = getPaths().api.src
-  const WEB_DIR_SRC = getPaths().web.src
-
-  // Run tasks like type generate, etc.
-  runPreBuildTasks()
+  const rwjsPaths = getPaths()
 
   if (side.includes('api')) {
     try {
@@ -85,24 +82,25 @@ export const handler = async ({
     }
   }
 
+  /** @type {Record<string, import('concurrently').CommandObj>} */
   const jobs = {
     api: {
       name: 'api',
-      command: `cd "${path.join(
-        BASE_DIR,
-        'api'
-      )}" && yarn cross-env NODE_ENV=development yarn dev-server`,
+      command: `cd "${rwjsPaths.api.base}" && yarn cross-env NODE_ENV=development yarn dev-server`,
       prefixColor: 'cyan',
-      runWhen: () => fs.existsSync(API_DIR_SRC),
+      runWhen: () => fs.existsSync(rwjsPaths.api.src),
     },
     web: {
       name: 'web',
-      command: `cd "${path.join(
-        BASE_DIR,
-        'web'
-      )}" && yarn webpack-dev-server --config ../node_modules/@redwoodjs/core/config/webpack.development.js ${forward}`,
+      command: `cd "${rwjsPaths.web.base}" && yarn cross-env NODE_ENV=development webpack-dev-server --config ../node_modules/@redwoodjs/core/config/webpack.development.js ${forward}`,
       prefixColor: 'blue',
-      runWhen: () => fs.existsSync(WEB_DIR_SRC),
+      runWhen: () => fs.existsSync(rwjsPaths.web.src),
+    },
+    gen: {
+      name: 'gen',
+      command: 'yarn rw-gen-watch',
+      prefixColor: 'green',
+      runWhen: () => generate,
     },
   }
 
@@ -115,9 +113,14 @@ export const handler = async ({
     jobs.web.command = 'yarn cross-env ESBUILD=1 && ' + jobs.web.command
   }
 
+  // TODO: Convert jobs to an array and supply cwd command.
   concurrently(
     Object.keys(jobs)
-      .map((n) => side.includes(n) && jobs[n])
+      .map((job) => {
+        if (side.includes(job) || job === 'gen') {
+          return jobs[job]
+        }
+      })
       .filter((job) => job && job.runWhen()),
     {
       prefix: '{name} |',
@@ -125,7 +128,8 @@ export const handler = async ({
     }
   ).catch((e) => {
     if (typeof e?.message !== 'undefined') {
-      console.log(c.error(e.message))
+      console.error(c.error(e.message))
+      process.exit(1)
     }
   })
 }

@@ -1,6 +1,6 @@
 import type { Context, ContextFunction } from 'apollo-server-core'
-import type { Config, CreateHandlerOptions } from 'apollo-server-lambda'
 import { ApolloServer } from 'apollo-server-lambda'
+import type { Config, CreateHandlerOptions } from 'apollo-server-lambda'
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 
 import type { AuthContextPayload } from 'src/auth'

@@ -35,8 +35,7 @@ export const webCliOptions = {
   apiHost: {
     alias: 'api-host',
     type: 'string',
-    desc:
-      'Forward requests from the apiProxyPath, defined in redwood.toml to this host',
+    desc: 'Forward requests from the apiProxyPath, defined in redwood.toml to this host',
   },
 } as const
 

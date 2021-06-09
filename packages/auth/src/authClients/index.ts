@@ -1,26 +1,26 @@
-import type { Auth0, Auth0User } from './auth0'
 import { auth0 } from './auth0'
+import type { Auth0, Auth0User } from './auth0'
+import { azureActiveDirectory } from './azureActiveDirectory'
 import type {
   AzureActiveDirectory,
   AzureActiveDirectoryUser,
 } from './azureActiveDirectory'
-import { azureActiveDirectory } from './azureActiveDirectory'
-import type { Custom } from './custom'
 import { custom } from './custom'
-import type { Ethereum, EthereumUser } from './ethereum'
+import type { Custom } from './custom'
 import { ethereum } from './ethereum'
-import type { Firebase } from './firebase'
+import type { Ethereum, EthereumUser } from './ethereum'
 import { firebase } from './firebase'
-import type { GoTrue, GoTrueUser } from './goTrue'
+import type { Firebase } from './firebase'
 import { goTrue } from './goTrue'
-import type { MagicLink, MagicUser } from './magicLink'
+import type { GoTrue, GoTrueUser } from './goTrue'
 import { magicLink } from './magicLink'
-import type { NetlifyIdentity } from './netlify'
+import type { MagicLink, MagicUser } from './magicLink'
 import { netlify } from './netlify'
-import type { Nhost, NhostUser } from './nhost'
+import type { NetlifyIdentity } from './netlify'
 import { nhost } from './nhost'
-import type { Supabase, SupabaseUser } from './supabase'
+import type { Nhost, NhostUser } from './nhost'
 import { supabase } from './supabase'
+import type { Supabase, SupabaseUser } from './supabase'
 
 const typesToClients = {
   netlify,

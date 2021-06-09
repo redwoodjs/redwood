@@ -1,0 +1,2 @@
+declare module 'src/services/**/*.{js,ts}'
+declare module 'src/graphql/**/*.{js,ts}'

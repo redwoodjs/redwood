@@ -10,15 +10,21 @@ describe('getConfig', () => {
     expect(config).toMatchInlineSnapshot(`
       Object {
         "api": Object {
-          "experimentalSecureServices": false,
           "host": "localhost",
           "path": "./api",
           "port": 8911,
-          "schemaPath": "./api/prisma/schema.prisma",
+          "schemaPath": "./api/db/schema.prisma",
           "target": "node",
         },
         "browser": Object {
           "open": false,
+        },
+        "experimental": Object {
+          "esbuild": false,
+        },
+        "generate": Object {
+          "stories": true,
+          "tests": true,
         },
         "web": Object {
           "a11y": true,

@@ -3,9 +3,10 @@ import path from 'path'
 import Listr from 'listr'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
+import pluralize from 'pluralize'
 import terminalLink from 'terminal-link'
 
-import { ensurePosixPath } from '@redwoodjs/internal'
+import { ensurePosixPath, getConfig } from '@redwoodjs/internal'
 
 import { generateTemplate, getPaths, writeFilesTask } from 'src/lib'
 import c from 'src/lib/colors'
@@ -90,6 +91,7 @@ export const createYargsForComponentGeneration = ({
   filesFn,
   optionsObj = yargsDefaults,
   positionalsObj = {},
+  includeAdditionalTasks = () => [], // function that takes the options object and returns an array of listr tasks
 }) => {
   return {
     command: appendPositionalsToCmd(`${componentName} <name>`, positionalsObj),
@@ -109,12 +111,10 @@ export const createYargsForComponentGeneration = ({
         .option('tests', {
           description: 'Generate test files',
           type: 'boolean',
-          default: true,
         })
         .option('stories', {
           description: 'Generate storybook files',
           type: 'boolean',
-          default: true,
         })
 
       // Add in passed in positionals
@@ -127,6 +127,13 @@ export const createYargsForComponentGeneration = ({
       })
     },
     handler: async (options) => {
+      if (options.tests === undefined) {
+        options.tests = getConfig().generate.tests
+      }
+      if (options.stories === undefined) {
+        options.stories = getConfig().generate.stories
+      }
+
       const tasks = new Listr(
         [
           {
@@ -136,6 +143,7 @@ export const createYargsForComponentGeneration = ({
               return writeFilesTask(f, { overwriteExisting: options.force })
             },
           },
+          ...includeAdditionalTasks(options),
         ],
         { collapse: false, exitOnError: true }
       )
@@ -164,4 +172,23 @@ export const intForeignKeysForModel = (model) => {
   return model.fields
     .filter((f) => f.name.match(/Id$/) && f.type === 'Int')
     .map((f) => f.name)
+}
+
+export const isWordNonPluralizable = (word) => {
+  return pluralize.isPlural(word) === pluralize.isSingular(word)
+}
+
+/**
+ * Adds an s if it can't pluralize the word
+ */
+export const forcePluralizeWord = (word) => {
+  // If word is already plural, check if plural === singular, then add s
+  // else use plural
+  const shouldAppendList = isWordNonPluralizable(word) // equipment === equipment
+
+  if (shouldAppendList) {
+    return pascalcase(`${word}_list`)
+  }
+
+  return pluralize.plural(word)
 }

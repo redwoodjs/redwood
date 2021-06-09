@@ -73,6 +73,114 @@
       "contributions": [
         "tutorial"
       ]
+    },
+    {
+      "login": "corbt",
+      "name": "Kyle Corbitt",
+      "avatar_url": "https://avatars.githubusercontent.com/u/176426?v=4",
+      "profile": "https://corbt.com/",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "adriatic",
+      "name": "Nikolaj Ivancic",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2712405?v=4",
+      "profile": "https://github.com/adriatic",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "rene-demonsters",
+      "name": "rene-demonsters",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20322259?v=4",
+      "profile": "https://github.com/rene-demonsters",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "Kreozot",
+      "name": "Sergey Sharov",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1423028?v=4",
+      "profile": "https://sharov.dev/",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "blackpr",
+      "name": "Tim Pap",
+      "avatar_url": "https://avatars.githubusercontent.com/u/30457?v=4",
+      "profile": "https://twitter.com/blackpr",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "in-in",
+      "name": "in-in",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8797432?v=4",
+      "profile": "https://github.com/in-in",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "mlabate",
+      "name": "mlabate",
+      "avatar_url": "https://avatars.githubusercontent.com/u/17139676?v=4",
+      "profile": "https://github.com/mlabate",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "pdjota",
+      "name": "Pablo Dejuan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/93544?v=4",
+      "profile": "https://github.com/pdjota",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "renansoares",
+      "name": "Renan Andrade",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1657840?v=4",
+      "profile": "https://github.com/renansoares",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "bugsfunny",
+      "name": "bugsfunny",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12965842?v=4",
+      "profile": "https://github.com/bugsfunny",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "luispinto23",
+      "name": "Luís Pinto",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4148663?v=4",
+      "profile": "https://github.com/luispinto23",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "simoncrypta",
+      "name": "Simon Gagnon",
+      "avatar_url": "https://avatars.githubusercontent.com/u/18013532?v=4",
+      "profile": "https://simoncrypta.dev/",
+      "contributions": [
+        "tutorial"
+      ]
     }
   ],
   "contributorsPerLine": 5

@@ -9,6 +9,8 @@ import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 import terminalLink from 'terminal-link'
 
+import { getConfig } from '@redwoodjs/internal'
+
 import {
   generateTemplate,
   templateRoot,
@@ -47,6 +49,7 @@ const COMPONENTS = fs.readdirSync(
 const SCAFFOLD_STYLE_PATH = './scaffold.css'
 // Any assets that should not trigger an overwrite error and require a --force
 const SKIPPABLE_ASSETS = ['scaffold.css']
+const PACKAGE_SET = 'Set'
 
 const getIdType = (model) => {
   return model.fields.find((field) => field.isId)?.type
@@ -55,6 +58,7 @@ const getIdType = (model) => {
 export const files = async ({
   model: name,
   path: scaffoldPath = '',
+  tests,
   typescript = false,
 }) => {
   const model = await getSchema(pascalcase(pluralize.singular(name)))
@@ -71,6 +75,7 @@ export const files = async ({
       name,
       crud: true,
       relations: relationsForModel(model),
+      tests,
       typescript,
     })),
     ...assetFiles(name),
@@ -382,6 +387,58 @@ export const routes = async ({ model: name, path: scaffoldPath = '' }) => {
   ]
 }
 
+const addRoutesInsideSetToRouter = async (model, path) => {
+  const pluralPascalName = pascalcase(pluralize(model))
+  const layoutName = `${pluralPascalName}Layout`
+  return addRoutesToRouterTask(await routes({ model, path }), layoutName)
+}
+
+const addLayoutImport = ({ model: name, path: scaffoldPath = '' }) => {
+  const pluralPascalName = pascalcase(pluralize(name))
+  const pascalScaffoldPath =
+    scaffoldPath === ''
+      ? scaffoldPath
+      : scaffoldPath.split('/').map(pascalcase).join('/') + '/'
+  const layoutName = `${pluralPascalName}Layout`
+  const importLayout = `import ${pluralPascalName}Layout from 'src/layouts/${pascalScaffoldPath}${layoutName}'`
+  const routesPath = getPaths().web.routes
+  const routesContent = readFile(routesPath).toString()
+
+  const newRoutesContent = routesContent.replace(
+    /'@redwoodjs\/router'(\s*)/,
+    `'@redwoodjs/router'$1${importLayout}$1`
+  )
+  writeFile(routesPath, newRoutesContent, { overwriteExisting: true })
+
+  return 'Added layout import to Routes.{js,tsx}'
+}
+
+const addSetImport = () => {
+  const routesPath = getPaths().web.routes
+  const routesContent = readFile(routesPath).toString()
+  const [redwoodRouterImport, importStart, spacing, importContent, importEnd] =
+    routesContent.match(/(import {)(\s*)([^]*)(} from '@redwoodjs\/router')/) ||
+    []
+  const routerImports = importContent.replace(/\s/g, '').split(',')
+  if (routerImports.includes(PACKAGE_SET)) {
+    return 'Skipping Set import'
+  }
+  const newRoutesContent = routesContent.replace(
+    redwoodRouterImport,
+    importStart +
+      spacing +
+      PACKAGE_SET +
+      `,` +
+      spacing +
+      importContent +
+      importEnd
+  )
+
+  writeFile(routesPath, newRoutesContent, { overwriteExisting: true })
+
+  return 'Added Set import to Routes.{js,tsx}'
+}
+
 const addScaffoldImport = () => {
   const appJsPath = getPaths().web.app
   let appJsContents = readFile(appJsPath).toString()
@@ -408,6 +465,10 @@ export const builder = (yargs) => {
       description:
         "Model to scaffold. You can also use <path/model> to nest files by type at the given path directory (or directories). For example, 'rw g scaffold admin/post'",
     })
+    .option('tests', {
+      description: 'Generate test files',
+      type: 'boolean',
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -420,21 +481,27 @@ export const builder = (yargs) => {
     yargs.option(option, config)
   })
 }
-const tasks = ({ model, path, force, typescript, javascript }) => {
+const tasks = ({ model, path, force, tests, typescript, javascript }) => {
   return new Listr(
     [
       {
         title: 'Generating scaffold files...',
         task: async () => {
-          const f = await files({ model, path, typescript, javascript })
+          const f = await files({ model, path, tests, typescript, javascript })
           return writeFilesTask(f, { overwriteExisting: force })
         },
       },
       {
+        title: 'Adding layout import...',
+        task: async () => addLayoutImport({ model, path }),
+      },
+      {
+        title: 'Adding set import...',
+        task: async () => addSetImport({ model, path }),
+      },
+      {
         title: 'Adding scaffold routes...',
-        task: async () => {
-          return addRoutesToRouterTask(await routes({ model, path }))
-        },
+        task: async () => addRoutesInsideSetToRouter(model, path),
       },
       {
         title: 'Adding scaffold asset imports...',
@@ -445,9 +512,17 @@ const tasks = ({ model, path, force, typescript, javascript }) => {
   )
 }
 
-export const handler = async ({ model: modelArg, force, typescript }) => {
+export const handler = async ({
+  model: modelArg,
+  force,
+  tests,
+  typescript,
+}) => {
+  if (tests === undefined) {
+    tests = getConfig().generate.tests
+  }
   const { model, path } = splitPathAndModel(modelArg)
-  const t = tasks({ model, path, force, typescript })
+  const t = tasks({ model, path, force, tests, typescript })
 
   try {
     await t.run()

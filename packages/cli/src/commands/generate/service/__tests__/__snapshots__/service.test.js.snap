@@ -4,6 +4,7 @@ exports[`in javascript mode creates a multi word service file 1`] = `
 "import { db } from 'src/lib/db'
 import { requireAuth } from 'src/lib/auth'
 
+// Used when the environment variable REDWOOD_SECURE_SERVICES=1
 export const beforeResolver = (rules) => {
   rules.add(requireAuth)
 }
@@ -31,6 +32,7 @@ exports[`in javascript mode creates a single word service file 1`] = `
 "import { db } from 'src/lib/db'
 import { requireAuth } from 'src/lib/auth'
 
+// Used when the environment variable REDWOOD_SECURE_SERVICES=1
 export const beforeResolver = (rules) => {
   rules.add(requireAuth)
 }
@@ -45,6 +47,7 @@ exports[`in javascript mode creates a single word service file with CRUD actions
 "import { db } from 'src/lib/db'
 import { requireAuth } from 'src/lib/auth'
 
+// Used when the environment variable REDWOOD_SECURE_SERVICES=1
 export const beforeResolver = (rules) => {
   rules.add(requireAuth)
 }
@@ -84,6 +87,7 @@ exports[`in javascript mode creates a single word service file with a belongsTo 
 "import { db } from 'src/lib/db'
 import { requireAuth } from 'src/lib/auth'
 
+// Used when the environment variable REDWOOD_SECURE_SERVICES=1
 export const beforeResolver = (rules) => {
   rules.add(requireAuth)
 }
@@ -103,6 +107,7 @@ exports[`in javascript mode creates a single word service file with a hasMany re
 "import { db } from 'src/lib/db'
 import { requireAuth } from 'src/lib/auth'
 
+// Used when the environment variable REDWOOD_SECURE_SERVICES=1
 export const beforeResolver = (rules) => {
   rules.add(requireAuth)
 }
@@ -122,6 +127,7 @@ exports[`in javascript mode creates a single word service file with multiple rel
 "import { db } from 'src/lib/db'
 import { requireAuth } from 'src/lib/auth'
 
+// Used when the environment variable REDWOOD_SECURE_SERVICES=1
 export const beforeResolver = (rules) => {
   rules.add(requireAuth)
 }
@@ -157,6 +163,7 @@ exports[`in typescript mode creates a multi word service file 1`] = `
 import { requireAuth } from 'src/lib/auth'
 import { BeforeResolverSpecType } from '@redwoodjs/api'
 
+// Used when the environment variable REDWOOD_SECURE_SERVICES=1
 export const beforeResolver = (rules: BeforeResolverSpecType) => {
   rules.add(requireAuth)
 }
@@ -169,9 +176,10 @@ export const userProfiles = () => {
 
 exports[`in typescript mode creates a multi word service test file 1`] = `
 "import { userProfiles } from './userProfiles'
+import type { StandardScenario } from './userProfiles.scenarios'
 
 describe('userProfiles', () => {
-  scenario('returns all userProfiles', async (scenario) => {
+  scenario('returns all userProfiles', async (scenario: StandardScenario) => {
     const result = await userProfiles()
 
     expect(result.length).toEqual(Object.keys(scenario.userProfile).length)
@@ -185,6 +193,7 @@ exports[`in typescript mode creates a single word service file 1`] = `
 import { requireAuth } from 'src/lib/auth'
 import { BeforeResolverSpecType } from '@redwoodjs/api'
 
+// Used when the environment variable REDWOOD_SECURE_SERVICES=1
 export const beforeResolver = (rules: BeforeResolverSpecType) => {
   rules.add(requireAuth)
 }
@@ -201,6 +210,7 @@ import { db } from 'src/lib/db'
 import { requireAuth } from 'src/lib/auth'
 import { BeforeResolverSpecType } from '@redwoodjs/api'
 
+// Used when the environment variable REDWOOD_SECURE_SERVICES=1
 export const beforeResolver = (rules: BeforeResolverSpecType) => {
   rules.add(requireAuth)
 }
@@ -251,6 +261,7 @@ import { db } from 'src/lib/db'
 import { requireAuth } from 'src/lib/auth'
 import { BeforeResolverSpecType } from '@redwoodjs/api'
 
+// Used when the environment variable REDWOOD_SECURE_SERVICES=1
 export const beforeResolver = (rules: BeforeResolverSpecType) => {
   rules.add(requireAuth)
 }
@@ -273,6 +284,7 @@ import { db } from 'src/lib/db'
 import { requireAuth } from 'src/lib/auth'
 import { BeforeResolverSpecType } from '@redwoodjs/api'
 
+// Used when the environment variable REDWOOD_SECURE_SERVICES=1
 export const beforeResolver = (rules: BeforeResolverSpecType) => {
   rules.add(requireAuth)
 }
@@ -295,6 +307,7 @@ import { db } from 'src/lib/db'
 import { requireAuth } from 'src/lib/auth'
 import { BeforeResolverSpecType } from '@redwoodjs/api'
 
+// Used when the environment variable REDWOOD_SECURE_SERVICES=1
 export const beforeResolver = (rules: BeforeResolverSpecType) => {
   rules.add(requireAuth)
 }
@@ -314,9 +327,10 @@ export const User = {
 
 exports[`in typescript mode creates a single word service test file 1`] = `
 "import { users } from './users'
+import type { StandardScenario } from './users.scenarios'
 
 describe('users', () => {
-  scenario('returns all users', async (scenario) => {
+  scenario('returns all users', async (scenario: StandardScenario) => {
     const result = await users()
 
     expect(result.length).toEqual(Object.keys(scenario.user).length)

@@ -1,8 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 
+import fg from 'fast-glob'
 import findUp from 'findup-sync'
-import { glob } from 'glob'
 
 import { getConfig } from './config'
 
@@ -38,12 +38,18 @@ export interface BrowserTargetPaths {
 }
 
 export interface Paths {
-  cache: string
-  types: string
-  globals: string
   base: string
+  generated: {
+    base: string
+    schema: string
+    types: {
+      includes: string
+      mirror: string
+    }
+  }
   web: BrowserTargetPaths
   api: NodeTargetPaths
+  scripts: string
 }
 
 export interface PagesDependency {
@@ -61,7 +67,9 @@ export interface PagesDependency {
 
 const CONFIG_FILE_NAME = 'redwood.toml'
 
+// TODO: Remove these.
 const PATH_API_DIR_FUNCTIONS = 'api/src/functions'
+const PATH_RW_SCRIPTS = 'scripts'
 const PATH_API_DIR_GRAPHQL = 'api/src/graphql'
 const PATH_API_DIR_CONFIG = 'api/src/config'
 const PATH_API_DIR_LIB = 'api/src/lib'
@@ -109,8 +117,8 @@ export const getBaseDirFromFile = (file: string) => {
 }
 
 /**
- * Use this to resolve files when the path to the file is known, but the extension
- * is not.
+ * Use this to resolve files when the path to the file is known,
+ * but the extension is not.
  */
 export const resolveFile = (
   filePath: string,
@@ -128,24 +136,26 @@ export const resolveFile = (
 /**
  * Path constants that are relevant to a Redwood project.
  */
+// TODO: Make this a proxy and make it lazy.
 export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
   const routes = resolveFile(path.join(BASE_DIR, PATH_WEB_ROUTES)) as string
   const { schemaPath } = getConfig(getConfigPath(BASE_DIR)).api
   const schemaDir = path.dirname(schemaPath)
 
-  // We store our test database over here:
-  const cache = path.join(BASE_DIR, '.redwood')
-  const types = path.join(BASE_DIR, '.redwood', 'types')
-  const globals = path.join(BASE_DIR, '.redwood', 'globals')
-  fs.mkdirSync(cache, { recursive: true })
-  fs.mkdirSync(types, { recursive: true })
-  fs.mkdirSync(globals, { recursive: true })
-
-  return {
+  const paths = {
     base: BASE_DIR,
-    cache,
-    types,
-    globals,
+
+    generated: {
+      base: path.join(BASE_DIR, '.redwood'),
+      schema: path.join(BASE_DIR, '.redwood/schema.graphql'),
+      types: {
+        includes: path.join(BASE_DIR, '.redwood/types/includes'),
+        mirror: path.join(BASE_DIR, '.redwood/types/mirror'),
+      },
+    },
+
+    scripts: path.join(BASE_DIR, PATH_RW_SCRIPTS),
+
     api: {
       base: path.join(BASE_DIR, 'api'),
       dataMigrations: path.join(BASE_DIR, schemaDir, 'dataMigrations'),
@@ -159,6 +169,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       src: path.join(BASE_DIR, PATH_API_DIR_SRC),
       dist: path.join(BASE_DIR, 'api/dist'),
     },
+
     web: {
       routes,
       base: path.join(BASE_DIR, 'web'),
@@ -182,18 +193,26 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       dist: path.join(BASE_DIR, PATH_WEB_DIR_DIST),
     },
   }
+
+  fs.mkdirSync(paths.generated.types.includes, { recursive: true })
+  fs.mkdirSync(paths.generated.types.mirror, { recursive: true })
+
+  return paths
 }
 
 /**
  * Process the pages directory and return information useful for automated imports.
  *
  * Note: glob.sync returns posix style paths on Windows machines
+ * @deprecated I will write a seperate method that use `getFiles` instead. This
+ * is used by structure, babel auto-importer and the eslint plugin.
  */
 export const processPagesDir = (
   webPagesDir: string = getPaths().web.pages
 ): Array<PagesDependency> => {
-  const pagePaths = glob.sync('**/**/*Page.{js,jsx,ts,tsx}', {
+  const pagePaths = fg.sync('**/*Page.{js,jsx,ts,tsx}', {
     cwd: webPagesDir,
+    ignore: ['node_modules'],
   })
   return pagePaths.map((pagePath) => {
     const p = path.parse(pagePath)

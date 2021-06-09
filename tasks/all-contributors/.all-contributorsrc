@@ -1550,7 +1550,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/18013532?v=4",
       "profile": "https://simoncrypta.dev/",
       "contributions": [
-        "code"
+        "code",
+        "tutorial"
       ]
     },
     {
@@ -1568,7 +1569,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/61768800?v=4",
       "profile": "https://github.com/andrew-hwahin",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -1604,7 +1606,9 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/2712405?v=4",
       "profile": "https://github.com/adriatic",
       "contributions": [
-        "code"
+        "code",
+        "doc",
+        "tutorial"
       ]
     },
     {
@@ -1623,7 +1627,9 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/1657840?v=4",
       "profile": "https://github.com/renansoares",
       "contributions": [
-        "code"
+        "code",
+        "doc",
+        "tutorial"
       ]
     },
     {
@@ -1712,6 +1718,143 @@
       "name": "Zhihao Cui",
       "avatar_url": "https://avatars.githubusercontent.com/u/5257855?v=4",
       "profile": "https://github.com/origami-z",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "corbt",
+      "name": "Kyle Corbitt",
+      "avatar_url": "https://avatars.githubusercontent.com/u/176426?v=4",
+      "profile": "https://corbt.com/",
+      "contributions": [
+        "code",
+        "tutorial"
+      ]
+    },
+    {
+      "login": "SEANDOUGHTY",
+      "name": "Sean Doughty",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12256202?v=4",
+      "profile": "https://github.com/SEANDOUGHTY",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "zakmandhro",
+      "name": "Zak Mandhro",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15746?v=4",
+      "profile": "https://github.com/zakmandhro",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "bozdoz",
+      "name": "bozdoz",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1410985?v=4",
+      "profile": "https://bozdoz.com/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Isaac-Tait",
+      "name": "Isaac Tait",
+      "avatar_url": "https://avatars.githubusercontent.com/u/14932877?v=4",
+      "profile": "https://mountaintopcoding.dev/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "jacebenson",
+      "name": "Jace",
+      "avatar_url": "https://avatars.githubusercontent.com/u/638764?v=4",
+      "profile": "https://jace.pro/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "bernsno",
+      "name": "Noah Bernsohn",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13946?v=4",
+      "profile": "https://github.com/bernsno",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "rene-demonsters",
+      "name": "rene-demonsters",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20322259?v=4",
+      "profile": "https://github.com/rene-demonsters",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "Kreozot",
+      "name": "Sergey Sharov",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1423028?v=4",
+      "profile": "https://sharov.dev/",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "blackpr",
+      "name": "Tim Pap",
+      "avatar_url": "https://avatars.githubusercontent.com/u/30457?v=4",
+      "profile": "https://twitter.com/blackpr",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "in-in",
+      "name": "in-in",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8797432?v=4",
+      "profile": "https://github.com/in-in",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "mlabate",
+      "name": "mlabate",
+      "avatar_url": "https://avatars.githubusercontent.com/u/17139676?v=4",
+      "profile": "https://github.com/mlabate",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "pdjota",
+      "name": "Pablo Dejuan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/93544?v=4",
+      "profile": "https://github.com/pdjota",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "bugsfunny",
+      "name": "bugsfunny",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12965842?v=4",
+      "profile": "https://github.com/bugsfunny",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "luispinto23",
+      "name": "Luís Pinto",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4148663?v=4",
+      "profile": "https://github.com/luispinto23",
       "contributions": [
         "tutorial"
       ]

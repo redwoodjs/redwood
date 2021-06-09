@@ -13,7 +13,6 @@ function createDummyAuthContextValues(partial: Partial<AuthContextInterface>) {
   const authContextValues: AuthContextInterface = {
     loading: true,
     isAuthenticated: false,
-    authToken: null,
     userMetadata: null,
     currentUser: null,
     logIn: () => null,
@@ -31,15 +30,18 @@ function createDummyAuthContextValues(partial: Partial<AuthContextInterface>) {
   return { ...authContextValues, ...partial }
 }
 
-const mockUseAuth = (
-  {
-    isAuthenticated = false,
-    loading = false,
-  }: { isAuthenticated?: boolean; loading?: boolean } = {
-    isAuthenticated: false,
-    loading: false,
-  }
-) => () => createDummyAuthContextValues({ loading, isAuthenticated })
+const mockUseAuth =
+  (
+    {
+      isAuthenticated = false,
+      loading = false,
+    }: { isAuthenticated?: boolean; loading?: boolean } = {
+      isAuthenticated: false,
+      loading: false,
+    }
+  ) =>
+  () =>
+    createDummyAuthContextValues({ loading, isAuthenticated })
 
 // SETUP
 const HomePage = () => <h1>Home Page</h1>
@@ -92,8 +94,8 @@ test('inits routes and navigates as expected', async () => {
   // passes search params to the page
   act(() => navigate(routes.params({ value: 'val', q: 'q' })))
   await waitFor(() => {
-    expect(screen.queryByText('param valq')).toBeTruthy()
-    expect(screen.queryByText('hookparams val?q')).toBeTruthy()
+    expect(screen.queryByText('param valq')).toBeInTheDocument()
+    expect(screen.queryByText('hookparams val?q')).toBeInTheDocument()
   })
 
   // navigate to redirect page
@@ -101,7 +103,7 @@ test('inits routes and navigates as expected', async () => {
   act(() => navigate(routes.redirect()))
   await waitFor(() => {
     expect(screen.queryByText(/Redirect Page/)).not.toBeInTheDocument()
-    expect(screen.queryByText(/About Page/)).toBeTruthy()
+    expect(screen.queryByText(/About Page/)).toBeInTheDocument()
   })
 
   act(() => navigate('/redirect2/redirected?q=cue'))
@@ -198,7 +200,7 @@ test('authenticated user can access private page', async () => {
   // should not redirect
   act(() => navigate(routes.private()))
   await waitFor(() => {
-    expect(screen.getByText(/Private Page/)).toBeTruthy()
+    expect(screen.getByText(/Private Page/)).toBeInTheDocument()
     expect(screen.queryByText(/Home Page/)).not.toBeInTheDocument()
   })
 })
@@ -226,7 +228,7 @@ test('can display a loading screen whilst waiting for auth', async () => {
   // should not redirect
   act(() => navigate(routes.private()))
   await waitFor(() => {
-    expect(screen.getByText(/Loading.../)).toBeTruthy()
+    expect(screen.getByText(/Loading.../)).toBeInTheDocument()
     expect(screen.queryByText(/Home Page/)).not.toBeInTheDocument()
   })
 })

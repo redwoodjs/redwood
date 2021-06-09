@@ -8,8 +8,16 @@ import * as scaffold from '../scaffold'
 let filesLower, filesUpper
 
 beforeAll(async () => {
-  filesLower = await scaffold.files({ model: 'post', path: 'admin' })
-  filesUpper = await scaffold.files({ model: 'Post', path: 'Admin' })
+  filesLower = await scaffold.files({
+    model: 'post',
+    path: 'admin',
+    tests: true,
+  })
+  filesUpper = await scaffold.files({
+    model: 'Post',
+    path: 'Admin',
+    tests: true,
+  })
 })
 
 describe('admin/post', () => {

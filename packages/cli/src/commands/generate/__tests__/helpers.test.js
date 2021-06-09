@@ -1,7 +1,8 @@
 import path from 'path'
 
+// Setup test mocks
 global.__dirname = __dirname
-import {} from 'src/lib/test'
+import 'src/lib/test'
 
 import * as helpers from '../helpers'
 import * as page from '../page/page'
@@ -35,7 +36,7 @@ test('templateForComponentFile creates a proper output path for files', () => {
       suffix: 'Page',
       webPathSection: 'pages',
       generator: 'page',
-      templatePath: 'page.js.template',
+      templatePath: 'page.tsx.template',
       templateVars: page.paramVariants(helpers.pathName(undefined, name)),
     })
 
@@ -51,7 +52,7 @@ test('templateForComponentFile can create a path in /web', () => {
     suffix: 'Page',
     webPathSection: 'pages',
     generator: 'page',
-    templatePath: 'page.js.template',
+    templatePath: 'page.tsx.template',
     templateVars: page.paramVariants(helpers.pathName(undefined, 'Home')),
   })
 
@@ -66,7 +67,7 @@ test('templateForComponentFile can create a path in /api', () => {
     suffix: 'Page',
     apiPathSection: 'services',
     generator: 'page',
-    templatePath: 'page.js.template',
+    templatePath: 'page.tsx.template',
     templateVars: page.paramVariants(helpers.pathName(undefined, 'Home')),
   })
 
@@ -81,7 +82,7 @@ test('templateForComponentFile can override generated component name', () => {
     componentName: 'Hobbiton',
     webPathSection: 'pages',
     generator: 'page',
-    templatePath: 'page.js.template',
+    templatePath: 'page.tsx.template',
     templateVars: page.paramVariants(helpers.pathName(undefined, 'Home')),
   })
 
@@ -97,7 +98,7 @@ test('templateForComponentFile can override file extension', () => {
     extension: '.txt',
     webPathSection: 'pages',
     generator: 'page',
-    templatePath: 'page.js.template',
+    templatePath: 'page.tsx.template',
     templateVars: page.paramVariants(helpers.pathName(undefined, 'Home')),
   })
 
@@ -127,7 +128,7 @@ test('templateForComponentFile creates a template', () => {
     suffix: 'Page',
     webPathSection: 'pages',
     generator: 'page',
-    templatePath: 'page.js.template',
+    templatePath: 'page.tsx.template',
     templateVars: page.paramVariants(helpers.pathName(undefined, 'fooBar')),
   })
 

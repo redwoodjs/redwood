@@ -52,7 +52,7 @@ export const builder = async (yargs) => {
 
   // Only pass auto flags, when not running help
   if (!hasHelpFlag) {
-    if (['push', 'seed'].includes(argv[1])) {
+    if (['seed'].includes(argv[1])) {
       // this is safe as is if a user also adds --preview-feature
       autoFlags.push('--preview-feature')
     }
