@@ -163,7 +163,7 @@ new Listr(
     },
     {
       title: 'Convert TypeScript files to JavaScript',
-      enabled: () => typescript === false,
+      enabled: () => typescript === false && yarnInstall === true,
       task: () => {
         return execa('yarn rw ts-to-js', {
           shell: true,
