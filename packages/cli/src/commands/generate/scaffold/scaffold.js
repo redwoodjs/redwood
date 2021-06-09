@@ -22,6 +22,7 @@ import {
   getPaths,
   writeFilesTask,
   addRoutesToRouterTask,
+  addScaffoldImport,
 } from 'src/lib'
 import c from 'src/lib/colors'
 
@@ -47,7 +48,6 @@ const PAGES = fs.readdirSync(
 const COMPONENTS = fs.readdirSync(
   path.join(templateRoot, 'scaffold', 'templates', 'components')
 )
-const SCAFFOLD_STYLE_PATH = './scaffold.css'
 // Any assets that should not trigger an overwrite error and require a --force
 const SKIPPABLE_ASSETS = ['scaffold.css']
 const PACKAGE_SET = 'Set'
@@ -438,23 +438,6 @@ const addSetImport = () => {
   writeFile(routesPath, newRoutesContent, { overwriteExisting: true })
 
   return 'Added Set import to Routes.{js,tsx}'
-}
-
-const addScaffoldImport = () => {
-  const appJsPath = getPaths().web.app
-  let appJsContents = readFile(appJsPath).toString()
-
-  if (appJsContents.match(SCAFFOLD_STYLE_PATH)) {
-    return 'Skipping scaffold style include'
-  }
-
-  appJsContents = appJsContents.replace(
-    "import Routes from 'src/Routes'\n",
-    `import Routes from 'src/Routes'\n\nimport '${SCAFFOLD_STYLE_PATH}'`
-  )
-  writeFile(appJsPath, appJsContents, { overwriteExisting: true })
-
-  return 'Added scaffold import to App.{js,tsx}'
 }
 
 export const command = 'scaffold <model>'

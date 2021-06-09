@@ -424,6 +424,23 @@ export const addRoutesToRouterTask = (routes, layout) => {
   }
 }
 
+export const addScaffoldImport = () => {
+  const appJsPath = getPaths().web.app
+  let appJsContents = readFile(appJsPath).toString()
+
+  if (appJsContents.match('./scaffold.css')) {
+    return 'Skipping scaffold style include'
+  }
+
+  appJsContents = appJsContents.replace(
+    "import Routes from 'src/Routes'\n",
+    "import Routes from 'src/Routes'\n\nimport './scaffold.css'"
+  )
+  writeFile(appJsPath, appJsContents, { overwriteExisting: true })
+
+  return 'Added scaffold import to App.{js,tsx}'
+}
+
 const removeEmtpySet = (routesContent, layout) => {
   const setWithLayoutReg = new RegExp(
     `\\s*<Set[^>]*wrap={${layout}}[^<]*>([^<]*)<\/Set>`

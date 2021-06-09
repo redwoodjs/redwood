@@ -6,6 +6,7 @@ import Listr from 'listr'
 import c from 'src/lib/colors'
 import {
   addRoutesToRouterTask,
+  addScaffoldImport,
   generateTemplate,
   getPaths,
   transformTSToJS,
@@ -86,6 +87,10 @@ const tasks = ({ force, tests, typescript }) => {
         task: async () => {
           addRoutesToRouterTask(ROUTES)
         },
+      },
+      {
+        title: 'Adding scaffold import...',
+        task: () => addScaffoldImport(),
       },
       {
         title: 'One more thing...',
