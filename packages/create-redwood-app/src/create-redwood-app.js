@@ -173,6 +173,7 @@ new Listr(
     },
     {
       title: 'Generating types',
+      enabled: () => yarnInstall === true,
       task: () => {
         return execa('yarn rw-gen', {
           shell: true,
