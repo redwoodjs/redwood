@@ -24,6 +24,8 @@ export type CellLoadingProps = Omit<
   'error' | 'loading' | 'data'
 >
 // @MARK not sure about this partial, but we need to do this for tests and storybook
+// `updating` is just `loading` renamed; since Cells default to stale-while-refetch,
+// this prop lets users render something like a spinner to show that a request is in-flight
 export type CellSuccessProps<TData = any> = Partial<
   Omit<QueryOperationResult<TData>, 'error' | 'data'>
 > & { updating: boolean } & A.Compute<TData> // pre-computing makes the types more readable on hover
