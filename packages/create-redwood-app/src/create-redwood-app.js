@@ -90,6 +90,26 @@ const templateDir = path.resolve(__dirname, '../template')
 const createProjectTasks = ({ newAppDir }) => {
   return [
     {
+      title: 'Checking node and yarn compatibility',
+      task: () => {
+        return new Promise((resolve, reject) => {
+          const { engines } = require(path.join(templateDir, 'package.json'))
+
+          checkNodeVersion(engines, (_error, result) => {
+            if (result.isSatisfied) {
+              return resolve()
+            }
+
+            const errors = Object.keys(result.versions).map((name) => {
+              const { version, wanted } = result.versions[name]
+              return `${name} ${wanted} required, but you have ${version}.`
+            })
+            return reject(new Error(errors.join('\n')))
+          })
+        })
+      },
+    },
+    {
       title: `${appDirExists ? 'Using' : 'Creating'} directory '${newAppDir}'`,
       task: () => {
         if (appDirExists) {
@@ -114,26 +134,6 @@ const createProjectTasks = ({ newAppDir }) => {
 
 const installNodeModulesTasks = ({ newAppDir }) => {
   return [
-    {
-      title: 'Checking node and yarn compatibility',
-      task: () => {
-        return new Promise((resolve, reject) => {
-          const { engines } = require(path.join(newAppDir, 'package.json'))
-
-          checkNodeVersion(engines, (_error, result) => {
-            if (result.isSatisfied) {
-              return resolve()
-            }
-
-            const errors = Object.keys(result.versions).map((name) => {
-              const { version, wanted } = result.versions[name]
-              return `${name} ${wanted} required, but you have ${version}.`
-            })
-            return reject(new Error(errors.join('\n')))
-          })
-        })
-      },
-    },
     {
       title: "Running 'yarn install'... (This could take a while)",
       skip: () => {
