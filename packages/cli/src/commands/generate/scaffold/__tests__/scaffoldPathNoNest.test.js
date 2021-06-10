@@ -54,9 +54,7 @@ describe('admin/post', () => {
             '/path/to/project/web/src/pages/Admin/EditPostPage/EditPostPage.js'
           )
         ]
-      ).toMatch(
-        `import EditPostCell from 'src/components/Admin/EditPostCell/EditPostCell'`
-      )
+      ).toMatch(`import EditPostCell from 'src/components/Admin/EditPostCell'`)
     })
 
     test('creates a index page', async () => {
@@ -74,9 +72,7 @@ describe('admin/post', () => {
             '/path/to/project/web/src/pages/Admin/PostsPage/PostsPage.js'
           )
         ]
-      ).toMatch(
-        `import PostsCell from 'src/components/Admin/PostsCell/PostsCell'`
-      )
+      ).toMatch(`import PostsCell from 'src/components/Admin/PostsCell'`)
     })
 
     test('creates a new page', async () => {
@@ -94,7 +90,7 @@ describe('admin/post', () => {
             '/path/to/project/web/src/pages/Admin/NewPostPage/NewPostPage.js'
           )
         ]
-      ).toMatch(`import NewPost from 'src/components/Admin/NewPost/NewPost'`)
+      ).toMatch(`import NewPost from 'src/components/Admin/NewPost'`)
     })
 
     test('creates a show page', async () => {
@@ -112,7 +108,7 @@ describe('admin/post', () => {
             '/path/to/project/web/src/pages/Admin/PostPage/PostPage.js'
           )
         ]
-      ).toMatch(`import PostCell from 'src/components/Admin/PostCell/PostCell'`)
+      ).toMatch(`import PostCell from 'src/components/Admin/PostCell'`)
     })
 
     // Cells
@@ -132,7 +128,7 @@ describe('admin/post', () => {
             '/path/to/project/web/src/components/Admin/EditPostCell/EditPostCell.js'
           )
         ]
-      ).toMatch(`import PostForm from 'src/components/Admin/PostForm/PostForm'`)
+      ).toMatch(`import PostForm from 'src/components/Admin/PostForm'`)
     })
 
     test('creates an index cell', async () => {
@@ -150,7 +146,7 @@ describe('admin/post', () => {
             '/path/to/project/web/src/components/Admin/PostsCell/PostsCell.js'
           )
         ]
-      ).toMatch(`import Posts from 'src/components/Admin/Posts/Posts'`)
+      ).toMatch(`import Posts from 'src/components/Admin/Posts'`)
     })
 
     test('creates a show cell', async () => {
@@ -168,7 +164,7 @@ describe('admin/post', () => {
             '/path/to/project/web/src/components/Admin/PostCell/PostCell.js'
           )
         ]
-      ).toMatch(`import Post from 'src/components/Admin/Post/Post'`)
+      ).toMatch(`import Post from 'src/components/Admin/Post'`)
     })
 
     // Components
@@ -204,7 +200,7 @@ describe('admin/post', () => {
             '/path/to/project/web/src/components/Admin/NewPost/NewPost.js'
           )
         ]
-      ).toMatch(`import PostForm from 'src/components/Admin/PostForm/PostForm'`)
+      ).toMatch(`import PostForm from 'src/components/Admin/PostForm'`)
     })
 
     test('creates a show component', async () => {
@@ -377,9 +373,7 @@ describe('Admin/Post', () => {
             '/path/to/project/web/src/pages/Admin/EditPostPage/EditPostPage.js'
           )
         ]
-      ).toMatch(
-        `import EditPostCell from 'src/components/Admin/EditPostCell/EditPostCell'`
-      )
+      ).toMatch(`import EditPostCell from 'src/components/Admin/EditPostCell'`)
     })
 
     test('creates a index page', async () => {
@@ -397,9 +391,7 @@ describe('Admin/Post', () => {
             '/path/to/project/web/src/pages/Admin/PostsPage/PostsPage.js'
           )
         ]
-      ).toMatch(
-        `import PostsCell from 'src/components/Admin/PostsCell/PostsCell'`
-      )
+      ).toMatch(`import PostsCell from 'src/components/Admin/PostsCell'`)
     })
 
     test('creates a new page', async () => {
@@ -417,7 +409,7 @@ describe('Admin/Post', () => {
             '/path/to/project/web/src/pages/Admin/NewPostPage/NewPostPage.js'
           )
         ]
-      ).toMatch(`import NewPost from 'src/components/Admin/NewPost/NewPost'`)
+      ).toMatch(`import NewPost from 'src/components/Admin/NewPost'`)
     })
 
     test('creates a show page', async () => {
@@ -435,7 +427,7 @@ describe('Admin/Post', () => {
             '/path/to/project/web/src/pages/Admin/PostPage/PostPage.js'
           )
         ]
-      ).toMatch(`import PostCell from 'src/components/Admin/PostCell/PostCell'`)
+      ).toMatch(`import PostCell from 'src/components/Admin/PostCell'`)
     })
 
     // Cells
@@ -455,7 +447,7 @@ describe('Admin/Post', () => {
             '/path/to/project/web/src/components/Admin/EditPostCell/EditPostCell.js'
           )
         ]
-      ).toMatch(`import PostForm from 'src/components/Admin/PostForm/PostForm'`)
+      ).toMatch(`import PostForm from 'src/components/Admin/PostForm'`)
     })
 
     test('creates an index cell', async () => {
@@ -473,7 +465,7 @@ describe('Admin/Post', () => {
             '/path/to/project/web/src/components/Admin/PostsCell/PostsCell.js'
           )
         ]
-      ).toMatch(`import Posts from 'src/components/Admin/Posts/Posts'`)
+      ).toMatch(`import Posts from 'src/components/Admin/Posts'`)
     })
 
     test('creates a show cell', async () => {
@@ -491,7 +483,7 @@ describe('Admin/Post', () => {
             '/path/to/project/web/src/components/Admin/PostCell/PostCell.js'
           )
         ]
-      ).toMatch(`import Post from 'src/components/Admin/Post/Post'`)
+      ).toMatch(`import Post from 'src/components/Admin/Post'`)
     })
 
     // Components
@@ -527,7 +519,7 @@ describe('Admin/Post', () => {
             '/path/to/project/web/src/components/Admin/NewPost/NewPost.js'
           )
         ]
-      ).toMatch(`import PostForm from 'src/components/Admin/PostForm/PostForm'`)
+      ).toMatch(`import PostForm from 'src/components/Admin/PostForm'`)
     })
 
     test('creates a show component', async () => {

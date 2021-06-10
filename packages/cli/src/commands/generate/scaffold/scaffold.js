@@ -59,14 +59,14 @@ const getImportComponentNames = (
 
   return {
     // default case
-    importComponentName: `${cPath}/${singularName}/${singularName}`,
-    importComponentNameCell: `${cPath}/${singularName}Cell/${singularName}Cell`,
-    importComponentEditNameCell: `${cPath}/Edit${singularName}Cell/Edit${singularName}Cell`,
-    importComponentNameForm: `${cPath}/${singularName}Form/${singularName}Form`,
-    importComponentNewName: `${cPath}/New${singularName}/New${singularName}`,
-    importComponentNames: `${cPath}/${pluralName}/${pluralName}`,
-    importComponentNamesCell: `${cPath}/${pluralName}Cell/${pluralName}Cell`,
-    importLayoutNames: `src/layouts/${sP}/${pluralName}Layout/${pluralName}Layout`,
+    importComponentName: `${cPath}/${singularName}`,
+    importComponentNameCell: `${cPath}/${singularName}Cell`,
+    importComponentEditNameCell: `${cPath}/Edit${singularName}Cell`,
+    importComponentNameForm: `${cPath}/${singularName}Form`,
+    importComponentNewName: `${cPath}/New${singularName}`,
+    importComponentNames: `${cPath}/${pluralName}`,
+    importComponentNamesCell: `${cPath}/${pluralName}Cell`,
+    importLayoutNames: `src/layouts/${sP}/${pluralName}Layout`,
   }
 }
 

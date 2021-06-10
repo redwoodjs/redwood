@@ -71,7 +71,7 @@ describe('adminPages/post', () => {
           )
         ]
       ).toMatch(
-        `import EditPostCell from 'src/components/AdminPages/Post/EditPostCell/EditPostCell'`
+        `import EditPostCell from 'src/components/AdminPages/Post/EditPostCell'`
       )
     })
 
@@ -91,7 +91,7 @@ describe('adminPages/post', () => {
           )
         ]
       ).toMatch(
-        `import PostsCell from 'src/components/AdminPages/Post/PostsCell/PostsCell'`
+        `import PostsCell from 'src/components/AdminPages/Post/PostsCell'`
       )
     })
 
@@ -110,9 +110,7 @@ describe('adminPages/post', () => {
             '/path/to/project/web/src/pages/AdminPages/Post/NewPostPage/NewPostPage.js'
           )
         ]
-      ).toMatch(
-        `import NewPost from 'src/components/AdminPages/Post/NewPost/NewPost'`
-      )
+      ).toMatch(`import NewPost from 'src/components/AdminPages/Post/NewPost'`)
     })
 
     test('creates a show page', async () => {
@@ -131,7 +129,7 @@ describe('adminPages/post', () => {
           )
         ]
       ).toMatch(
-        `import PostCell from 'src/components/AdminPages/Post/PostCell/PostCell'`
+        `import PostCell from 'src/components/AdminPages/Post/PostCell'`
       )
     })
 
@@ -153,7 +151,7 @@ describe('adminPages/post', () => {
           )
         ]
       ).toMatch(
-        `import PostForm from 'src/components/AdminPages/Post/PostForm/PostForm'`
+        `import PostForm from 'src/components/AdminPages/Post/PostForm'`
       )
     })
 
@@ -172,9 +170,7 @@ describe('adminPages/post', () => {
             '/path/to/project/web/src/components/AdminPages/Post/PostsCell/PostsCell.js'
           )
         ]
-      ).toMatch(
-        `import Posts from 'src/components/AdminPages/Post/Posts/Posts'`
-      )
+      ).toMatch(`import Posts from 'src/components/AdminPages/Post/Posts'`)
     })
 
     test('creates a show cell', async () => {
@@ -192,7 +188,7 @@ describe('adminPages/post', () => {
             '/path/to/project/web/src/components/AdminPages/Post/PostCell/PostCell.js'
           )
         ]
-      ).toMatch(`import Post from 'src/components/AdminPages/Post/Post/Post'`)
+      ).toMatch(`import Post from 'src/components/AdminPages/Post/Post'`)
     })
 
     // Components
@@ -229,7 +225,7 @@ describe('adminPages/post', () => {
           )
         ]
       ).toMatch(
-        `import PostForm from 'src/components/AdminPages/Post/PostForm/PostForm'`
+        `import PostForm from 'src/components/AdminPages/Post/PostForm'`
       )
     })
 
@@ -405,7 +401,7 @@ describe('AdminPages/Post', () => {
           )
         ]
       ).toMatch(
-        `import EditPostCell from 'src/components/AdminPages/Post/EditPostCell/EditPostCell'`
+        `import EditPostCell from 'src/components/AdminPages/Post/EditPostCell'`
       )
     })
 
@@ -425,7 +421,7 @@ describe('AdminPages/Post', () => {
           )
         ]
       ).toMatch(
-        `import PostsCell from 'src/components/AdminPages/Post/PostsCell/PostsCell'`
+        `import PostsCell from 'src/components/AdminPages/Post/PostsCell'`
       )
     })
 
@@ -444,9 +440,7 @@ describe('AdminPages/Post', () => {
             '/path/to/project/web/src/pages/AdminPages/Post/NewPostPage/NewPostPage.js'
           )
         ]
-      ).toMatch(
-        `import NewPost from 'src/components/AdminPages/Post/NewPost/NewPost'`
-      )
+      ).toMatch(`import NewPost from 'src/components/AdminPages/Post/NewPost'`)
     })
 
     test('creates a show page', async () => {
@@ -465,7 +459,7 @@ describe('AdminPages/Post', () => {
           )
         ]
       ).toMatch(
-        `import PostCell from 'src/components/AdminPages/Post/PostCell/PostCell'`
+        `import PostCell from 'src/components/AdminPages/Post/PostCell'`
       )
     })
 
@@ -487,7 +481,7 @@ describe('AdminPages/Post', () => {
           )
         ]
       ).toMatch(
-        `import PostForm from 'src/components/AdminPages/Post/PostForm/PostForm'`
+        `import PostForm from 'src/components/AdminPages/Post/PostForm'`
       )
     })
 
@@ -506,9 +500,7 @@ describe('AdminPages/Post', () => {
             '/path/to/project/web/src/components/AdminPages/Post/PostsCell/PostsCell.js'
           )
         ]
-      ).toMatch(
-        `import Posts from 'src/components/AdminPages/Post/Posts/Posts'`
-      )
+      ).toMatch(`import Posts from 'src/components/AdminPages/Post/Posts'`)
     })
 
     test('creates a show cell', async () => {
@@ -526,7 +518,7 @@ describe('AdminPages/Post', () => {
             '/path/to/project/web/src/components/AdminPages/Post/PostCell/PostCell.js'
           )
         ]
-      ).toMatch(`import Post from 'src/components/AdminPages/Post/Post/Post'`)
+      ).toMatch(`import Post from 'src/components/AdminPages/Post/Post'`)
     })
 
     // Components
@@ -563,7 +555,7 @@ describe('AdminPages/Post', () => {
           )
         ]
       ).toMatch(
-        `import PostForm from 'src/components/AdminPages/Post/PostForm/PostForm'`
+        `import PostForm from 'src/components/AdminPages/Post/PostForm'`
       )
     })
 
@@ -739,7 +731,7 @@ describe('admin-pages/post', () => {
           )
         ]
       ).toMatch(
-        `import EditPostCell from 'src/components/AdminPages/Post/EditPostCell/EditPostCell'`
+        `import EditPostCell from 'src/components/AdminPages/Post/EditPostCell'`
       )
     })
 
@@ -759,7 +751,7 @@ describe('admin-pages/post', () => {
           )
         ]
       ).toMatch(
-        `import PostsCell from 'src/components/AdminPages/Post/PostsCell/PostsCell'`
+        `import PostsCell from 'src/components/AdminPages/Post/PostsCell'`
       )
     })
 
@@ -778,9 +770,7 @@ describe('admin-pages/post', () => {
             '/path/to/project/web/src/pages/AdminPages/Post/NewPostPage/NewPostPage.js'
           )
         ]
-      ).toMatch(
-        `import NewPost from 'src/components/AdminPages/Post/NewPost/NewPost'`
-      )
+      ).toMatch(`import NewPost from 'src/components/AdminPages/Post/NewPost'`)
     })
 
     test('creates a show page', async () => {
@@ -799,7 +789,7 @@ describe('admin-pages/post', () => {
           )
         ]
       ).toMatch(
-        `import PostCell from 'src/components/AdminPages/Post/PostCell/PostCell'`
+        `import PostCell from 'src/components/AdminPages/Post/PostCell'`
       )
     })
 
@@ -821,7 +811,7 @@ describe('admin-pages/post', () => {
           )
         ]
       ).toMatch(
-        `import PostForm from 'src/components/AdminPages/Post/PostForm/PostForm'`
+        `import PostForm from 'src/components/AdminPages/Post/PostForm'`
       )
     })
 
@@ -840,9 +830,7 @@ describe('admin-pages/post', () => {
             '/path/to/project/web/src/components/AdminPages/Post/PostsCell/PostsCell.js'
           )
         ]
-      ).toMatch(
-        `import Posts from 'src/components/AdminPages/Post/Posts/Posts'`
-      )
+      ).toMatch(`import Posts from 'src/components/AdminPages/Post/Posts'`)
     })
 
     test('creates a show cell', async () => {
@@ -860,7 +848,7 @@ describe('admin-pages/post', () => {
             '/path/to/project/web/src/components/AdminPages/Post/PostCell/PostCell.js'
           )
         ]
-      ).toMatch(`import Post from 'src/components/AdminPages/Post/Post/Post'`)
+      ).toMatch(`import Post from 'src/components/AdminPages/Post/Post'`)
     })
 
     // Components
@@ -897,7 +885,7 @@ describe('admin-pages/post', () => {
           )
         ]
       ).toMatch(
-        `import PostForm from 'src/components/AdminPages/Post/PostForm/PostForm'`
+        `import PostForm from 'src/components/AdminPages/Post/PostForm'`
       )
     })
 
@@ -1073,7 +1061,7 @@ describe('admin_pages/post', () => {
           )
         ]
       ).toMatch(
-        `import EditPostCell from 'src/components/AdminPages/Post/EditPostCell/EditPostCell'`
+        `import EditPostCell from 'src/components/AdminPages/Post/EditPostCell'`
       )
     })
 
@@ -1093,7 +1081,7 @@ describe('admin_pages/post', () => {
           )
         ]
       ).toMatch(
-        `import PostsCell from 'src/components/AdminPages/Post/PostsCell/PostsCell'`
+        `import PostsCell from 'src/components/AdminPages/Post/PostsCell'`
       )
     })
 
@@ -1112,9 +1100,7 @@ describe('admin_pages/post', () => {
             '/path/to/project/web/src/pages/AdminPages/Post/NewPostPage/NewPostPage.js'
           )
         ]
-      ).toMatch(
-        `import NewPost from 'src/components/AdminPages/Post/NewPost/NewPost'`
-      )
+      ).toMatch(`import NewPost from 'src/components/AdminPages/Post/NewPost'`)
     })
 
     test('creates a show page', async () => {
@@ -1133,7 +1119,7 @@ describe('admin_pages/post', () => {
           )
         ]
       ).toMatch(
-        `import PostCell from 'src/components/AdminPages/Post/PostCell/PostCell'`
+        `import PostCell from 'src/components/AdminPages/Post/PostCell'`
       )
     })
 
@@ -1155,7 +1141,7 @@ describe('admin_pages/post', () => {
           )
         ]
       ).toMatch(
-        `import PostForm from 'src/components/AdminPages/Post/PostForm/PostForm'`
+        `import PostForm from 'src/components/AdminPages/Post/PostForm'`
       )
     })
 
@@ -1174,9 +1160,7 @@ describe('admin_pages/post', () => {
             '/path/to/project/web/src/components/AdminPages/Post/PostsCell/PostsCell.js'
           )
         ]
-      ).toMatch(
-        `import Posts from 'src/components/AdminPages/Post/Posts/Posts'`
-      )
+      ).toMatch(`import Posts from 'src/components/AdminPages/Post/Posts'`)
     })
 
     test('creates a show cell', async () => {
@@ -1194,7 +1178,7 @@ describe('admin_pages/post', () => {
             '/path/to/project/web/src/components/AdminPages/Post/PostCell/PostCell.js'
           )
         ]
-      ).toMatch(`import Post from 'src/components/AdminPages/Post/Post/Post'`)
+      ).toMatch(`import Post from 'src/components/AdminPages/Post/Post'`)
     })
 
     // Components
@@ -1231,7 +1215,7 @@ describe('admin_pages/post', () => {
           )
         ]
       ).toMatch(
-        `import PostForm from 'src/components/AdminPages/Post/PostForm/PostForm'`
+        `import PostForm from 'src/components/AdminPages/Post/PostForm'`
       )
     })
 
