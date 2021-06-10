@@ -256,7 +256,7 @@ const rwtLink = async (yargs) => {
 const rwtUnlink = () => {
   const linkedPackagesPath = path.join(
     getPaths().base,
-    'node_modules/redwood-linked-packages'
+    'node_modules/_redwood-linked-packages'
   )
   if (fs.existsSync(linkedPackagesPath)) {
     // remove resolutions we added in link
