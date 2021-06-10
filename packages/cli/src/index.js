@@ -12,7 +12,6 @@ config({
   defaults: path.join(getPaths().base, '.env.defaults'),
 })
 
-
 // eslint-disable-next-line no-unused-expressions
 yargs
   .commandDir('./commands')
