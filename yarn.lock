@@ -2467,7 +2467,7 @@
   dependencies:
     "@prisma/debug" "2.24.1"
 
-"@prisma/sdk@2.24.01", "@prisma/sdk@2.24.1":
+"@prisma/sdk@2.24.1":
   version "2.24.1"
   resolved "https://registry.yarnpkg.com/@prisma/sdk/-/sdk-2.24.1.tgz#be9d94c3d0dddf5670e8b86e7e2575e76bcf7754"
   integrity sha512-pdJFw/XMzOI1ttz2V6+QG9tyYY+kC8vEtNbabxkgGAfFZgZ0U1j8XB7/ZEOFWD01BJgTQN//DP+uIfmLOkvX1A==
