@@ -65,8 +65,8 @@
     "lodash.escaperegexp": "4.1.2",
     "esbuild-loader": "2.13.1",
     "x----x----x": "^0 RedwoodJS",
-    "@redwoodjs/internal": "^0.33.0",
-    "@redwoodjs/testing": "^0.33.0"
+    "@redwoodjs/internal": "^0.33.2",
+    "@redwoodjs/testing": "^0.33.2"
   },
   "devDependencies": {
     "@types/babel-core": "6.25.6",
