@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/core",
-  "version": "0.33.0",
+  "version": "0.33.2",
   "license": "MIT",
   "files": [
     "config",
@@ -24,14 +24,14 @@
     "@babel/preset-typescript": "7.13.0",
     "@babel/runtime-corejs3": "7.14.0",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.3",
-    "@redwoodjs/cli": "^0.33.0",
-    "@redwoodjs/dev-server": "^0.33.0",
-    "@redwoodjs/eslint-config": "^0.33.0",
-    "@redwoodjs/internal": "^0.33.0",
-    "@redwoodjs/testing": "^0.33.0",
+    "@redwoodjs/cli": "^0.33.2",
+    "@redwoodjs/dev-server": "^0.33.2",
+    "@redwoodjs/eslint-config": "^0.33.2",
+    "@redwoodjs/internal": "^0.33.2",
+    "@redwoodjs/testing": "^0.33.2",
     "@storybook/addon-a11y": "6.2.9",
     "@storybook/react": "6.1.21",
-    "@testing-library/jest-dom": "5.11.6",
+    "@testing-library/jest-dom": "5.13.0",
     "@types/jest": "26.0.23",
     "@types/node": "15.12.1",
     "@types/react": "17.0.9",
@@ -49,7 +49,7 @@
     "css-minimizer-webpack-plugin": "1.2.0",
     "dotenv-webpack": "2.0.0",
     "error-overlay-webpack-plugin": "0.4.1",
-    "esbuild": "0.12.5",
+    "esbuild": "0.12.6",
     "esbuild-loader": "2.13.1",
     "file-loader": "6.0.0",
     "findup-sync": "4.0.0",
@@ -81,7 +81,7 @@
   "devDependencies": {
     "@types/babel-core": "6.25.6",
     "@types/babel-plugin-tester": "9.0.2",
-    "babel-plugin-tester": "10.0.0"
+    "babel-plugin-tester": "10.1.0"
   },
   "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762",
   "scripts": {
