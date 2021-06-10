@@ -8,7 +8,7 @@ const path = require('path')
  * This file builds the framework packages and copies them to a specific directory.
  * It's used by `yarn rwt link`.
  *
- * TODO: Consider making `rwt just an alias which is `yarn --cwd path-to-framework` and move
+ * TODO: Consider making `rwt` an alias which is `yarn --cwd path-to-framework-tools` and move
  * all the rwt commands into the framework-tools folder.
  *
  * TODO: Consider adding `rwt build`, deprecating this file, and using a combination of:

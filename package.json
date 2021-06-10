@@ -7,6 +7,7 @@
     "packages/*"
   ],
   "devDependencies": {
+    "npm-packlist": "2.2.2",
     "typescript-transform-paths": "2.2.4"
   },
   "resolutions": {

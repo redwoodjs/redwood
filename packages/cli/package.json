@@ -45,8 +45,7 @@
     "prompts": "2.4.1",
     "rimraf": "3.0.2",
     "terminal-link": "2.1.1",
-    "yargs": "16.0.3",
-    "npm-packlist": "2.2.2"
+    "yargs": "16.0.3"
   },
   "devDependencies": {
     "@types/listr": "0.14.3",
