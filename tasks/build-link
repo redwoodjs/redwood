@@ -25,6 +25,7 @@ const args = yargs
 
 const { dest, watch, only } = args
 
+/** The framework base path */
 const RW_BASEPATH = path.join(__dirname, '../')
 
 const packagePaths = glob
@@ -51,7 +52,7 @@ const build = async ({ packageFolderName, types }) => {
   }
 
   await execa(
-    'yarn lerna run',
+    'yarn framework lerna run',
     [
       types ? 'build' : 'build:js',
       '--parallel',
@@ -61,7 +62,7 @@ const build = async ({ packageFolderName, types }) => {
   )
 
   return execa(
-    'yarn lerna run',
+    'yarn framework lerna run',
     [
       'fix:permissions',
       '--parallel',
