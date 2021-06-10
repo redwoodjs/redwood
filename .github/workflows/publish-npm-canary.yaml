@@ -40,7 +40,7 @@ jobs:
 
       - name: Publish to npm
         run: |
-          git fetch --tags --force
+          git describe
           echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc
           ./tasks/publish-canary
         env:

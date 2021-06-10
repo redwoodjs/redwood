@@ -16,7 +16,7 @@
     "core-js": "3.13.1",
     "graphql": "15.5.0",
     "proptypes": "1.1.0",
-    "react-hot-toast": "1.0.2"
+    "react-hot-toast": "2.0.0"
   },
   "peerDependencies": {
     "react": "17.0.2"

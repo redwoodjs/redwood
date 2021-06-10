@@ -22,7 +22,7 @@
     "lodash.merge": "4.6.2",
     "lodash.omitby": "4.6.0",
     "pino": "6.11.3",
-    "pino-pretty": "4.8.0"
+    "pino-pretty": "5.0.2"
   },
   "devDependencies": {
     "@redwoodjs/auth": "^0.33.2",
@@ -30,7 +30,7 @@
     "@types/jsonwebtoken": "8.5.1",
     "@types/lodash.merge": "4.6.6",
     "@types/lodash.omitby": "4.6.6",
-    "split2": "3.1.1"
+    "split2": "3.2.2"
   },
   "jest": {
     "testPathIgnorePatterns": [
