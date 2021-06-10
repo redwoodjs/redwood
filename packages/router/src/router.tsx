@@ -174,8 +174,8 @@ const Router: React.FC<RouterProps> = ({
 }
 
 /**
- * Find the active (i.e. first matching) route and discard any other routes
- * also keep any wrapping <Set>s.
+ * Find the active (i.e. first matching) route and discard any other routes.
+ * Also, keep any <Set>s wrapping the active route.
  */
 function activeRouteTree(
   children: React.ReactNode,
@@ -208,7 +208,7 @@ function activeRouteTree(
 
       if (nestedChildren.length > 0) {
         // We found something we wanted to keep. So let's push it to our
-        // "active" tree
+        // "active route tree"
         acc.push(React.cloneElement(child, child.props, nestedChildren))
       }
     }
