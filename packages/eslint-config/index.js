@@ -8,13 +8,11 @@ module.exports = {
     './shared.js',
     config.web.a11y && 'plugin:jsx-a11y/recommended',
   ].filter(Boolean),
-  plugins: ['@redwoodjs/eslint-plugin-redwood'],
   overrides: [
     {
       files: ['web/src/Routes.js', 'web/src/Routes.tsx'],
       rules: {
         'no-undef': 'off',
-        '@redwoodjs/redwood/no-unavailable-pages': 'error',
         'jsx-a11y/aria-role': [
           2,
           {
