@@ -62,7 +62,7 @@ test('The build command runs the correct commands.', async () => {
   )
 
   expect(execa.mock.results[1].value).toEqual(
-    `yarn cross-env NODE_ENV=production babel src --out-dir dist --delete-dir-on-start --extensions .ts,.js --ignore '**/*.test.ts,**/*.test.js,**/__tests__'`
+    `yarn cross-env NODE_ENV=production babel src --out-dir dist --delete-dir-on-start --extensions .ts,.js --ignore '**/*.test.ts,**/*.test.js,**/__tests__' --source-maps`
   )
 
   expect(execa.mock.results[2].value).toEqual(

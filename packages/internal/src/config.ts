@@ -43,6 +43,7 @@ export interface Config {
   generate: {
     tests: boolean
     stories: boolean
+    nestScaffoldByModel: boolean
   }
   experimental: {
     esbuild: boolean
@@ -75,6 +76,7 @@ const DEFAULT_CONFIG: Config = {
   generate: {
     tests: true,
     stories: true,
+    nestScaffoldByModel: true,
   },
   experimental: {
     esbuild: false,

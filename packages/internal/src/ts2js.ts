@@ -14,6 +14,9 @@ import { getPaths } from './paths'
  */
 export const convertTsProjectToJs = (cwd = getPaths().base) => {
   const files = typeScriptSourceFiles(cwd)
+  if (files.length === 0) {
+    console.log('No TypeScript files found to convert to JS in this project.')
+  }
   for (const f of files) {
     const code = transformTSToJS(f)
     if (code) {
@@ -26,18 +29,17 @@ export const convertTsProjectToJs = (cwd = getPaths().base) => {
     }
   }
 
-  try {
+  if (fs.existsSync(path.join(cwd, 'api/tsconfig.json'))) {
     fs.renameSync(
       path.join(cwd, 'api/tsconfig.json'),
       path.join(cwd, 'api/jsconfig.json')
     )
+  }
+  if (fs.existsSync(path.join(cwd, 'web/tsconfig.json'))) {
     fs.renameSync(
       path.join(cwd, 'web/tsconfig.json'),
       path.join(cwd, 'web/jsconfig.json')
     )
-  } catch (e) {
-    // I want the user to be able to run this command multiple times.
-    console.error(e)
   }
 }
 
