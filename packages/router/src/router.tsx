@@ -1,5 +1,7 @@
 // The guts of the router implementation.
 
+import React from 'react'
+
 import {
   parseSearch,
   replaceParams,
@@ -173,8 +175,9 @@ const Router: React.FC<RouterProps> = ({
 
 /**
  * Find the active (i.e. first matching) route and discard any other routes
+ * also keep any wrapping <Set>s.
  */
-function discardAfterActive(
+function activeRouteTree(
   children: React.ReactNode,
   isActive: (child: React.ReactElement<InternalRouteProps>) => boolean,
   foundActive = false
@@ -187,19 +190,27 @@ function discardAfterActive(
     }
 
     if (isRoute(child)) {
+      // We have a <Route ...> element, let's check if it's the one we should
+      // render (i.e. the active route)
       active = isActive(child)
 
+      // Keep this child. It's the last one we'll keep since `active` is `true`
+      // now
       acc.push(child)
-      return acc
     } else if (isReactElement(child) && child.props.children) {
-      acc.push(
-        React.cloneElement(
-          child,
-          child.props,
-          discardAfterActive(child.props.children, isActive, foundActive)
-        )
+      // We have a child element that's not a <Route ...>, and that has
+      // children. It's probably a <Set>. Recurse down one level
+      const nestedChildren = activeRouteTree(
+        child.props.children,
+        isActive,
+        foundActive
       )
-      return acc
+
+      if (nestedChildren.length > 0) {
+        // We found something we wanted to keep. So let's push it to our
+        // "active" tree
+        acc.push(React.cloneElement(child, child.props, nestedChildren))
+      }
     }
 
     return acc
@@ -213,7 +224,7 @@ const RouteScanner: React.FC = ({ children }) => {
   let foundMatchingRoute = false
   let NotFoundPage: PageType | undefined = undefined
 
-  const filteredChildren = discardAfterActive(children, (child) => {
+  const filteredChildren = activeRouteTree(children, (child) => {
     const { path } = child.props
 
     if (path) {
