@@ -209,7 +209,7 @@ export const handler = async ({ path: routerPath, dryRun, verbose }) => {
     )
     console.log(
       c.info(
-        '- Avoid using `window` in your render functions without checks. \n  See https://redwoodjs.com/docs/prerender#prerender-utils'
+        '- Avoid using `window` in the initial render path through your React components without checks. \n  See https://redwoodjs.com/docs/prerender#prerender-utils'
       )
     )
 
