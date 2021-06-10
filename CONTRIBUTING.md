@@ -222,7 +222,7 @@ If you are on Windows and not using WSL, you will have to use `rwt cp` (this is 
 
 Also, you most likely first have to [install `rsync`](https://tlundberg.com/blog/2020-06-15/installing-rsync-on-windows/).
 
-Finally, ensure that appropriate Windows permissions are available to create symbolic links.  This can be accomplished via turning on Windows Developer Mode on Windows 10.  Go to Settings and find the `For developers` page.  Turn on the `Developer Mode` toggle.  Alternately, running your shell or VSCode as an Administrator will also work, but is the less preferred option.
+Finally, ensure that appropriate Windows permissions are available to create symbolic links. This can be accomplished via turning on Windows Developer Mode on Windows 10. Go to Settings and find the `For developers` page. Turn on the `Developer Mode` toggle. Alternately, running your shell or VSCode as an Administrator will also work, but is the less preferred option.
 
 Each time you make a change to your local Redwood Framework, you'll have to build it:
 
@@ -495,4 +495,3 @@ yarn rwt link [RW_PATH]
 
 You can avoid having to provide `RW_PATH` by defining an environment variable on your system. See
 [Specifying a `RW_PATH`](#specifying-a-rw_path).
-
