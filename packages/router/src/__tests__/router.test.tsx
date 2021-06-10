@@ -463,6 +463,30 @@ test('renders first matching route only', async () => {
   expect(screen.queryByText(/param/)).not.toBeInTheDocument()
 })
 
+test('renders first matching route only, even if multiple routes have the same name', async () => {
+  const ParamPage = ({ param }: { param: string }) => <div>param {param}</div>
+  const AboutTwoPage = () => <h1>About Two Page</h1>
+
+  const TestRouter = () => (
+    <Router>
+      <Route path="/" page={HomePage} name="home" />
+      <Route path="/about" page={AboutPage} name="about" />
+      <Route path="/{param}" page={ParamPage} name="about" />
+      <Route path="/about" page={AboutTwoPage} name="about" />
+    </Router>
+  )
+
+  const screen = render(<TestRouter />)
+
+  await waitFor(() => screen.getByText(/Home Page/))
+
+  // go to about page, and make sure that's the only page rendered
+  act(() => navigate(routes.about()))
+  await waitFor(() => screen.getByText('About Page'))
+  expect(screen.queryByText("param")).not.toBeInTheDocument()
+  expect(screen.queryByText("About Two Page")).not.toBeInTheDocument()
+})
+
 test('params should never be an empty object', async (done) => {
   const ParamPage = () => {
     const params = useParams()
