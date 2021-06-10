@@ -48,5 +48,4 @@ export const notes = [
   'as well:',
   '',
   '  yarn rw g scaffold dbAuth',
-  // TODO Note about picking field for username and updating auth.js function config to use it
 ]
