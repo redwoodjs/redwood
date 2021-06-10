@@ -2,7 +2,7 @@
 
 Love Redwood and want to get involved? You’re in the right place!
 
-Before interacting with the Redwood community, please read and understand our [Code of Conduct](https://github.com/redwoodjs/redwood/blob/main/CODE_OF_CONDUCT.md).  
+Before interacting with the Redwood community, please read and understand our [Code of Conduct](https://github.com/redwoodjs/redwood/blob/main/CODE_OF_CONDUCT.md).
 
 **Table of Contents**
 
@@ -181,7 +181,6 @@ this will echo:
 @redwoodjs/api: $ nodemon --watch src -e ts,js --ignore dist --exec 'yarn build'
 @redwoodjs/core: $ nodemon --ignore dist --exec 'yarn build'
 create-redwood-app: $ nodemon --ignore dist --exec 'yarn build'
-@redwoodjs/eslint-plugin-redwood: $ nodemon --ignore dist --exec 'yarn build'
 ```
 
 `build:watch` won't return you to the command line. Once it stops outputting to the terminal, you can open a new tab in your terminal, cd to `redwood-app` and run `rwt copy:watch` to get the changes in your local copy of the Redwood Framework:
