@@ -322,7 +322,7 @@ exports[`in javascript (default) mode creates a show cell 1`] = `
 "import Post from 'src/components//Post/Post/Post'
 
 export const QUERY = gql\`
-  query FIND_POST_BY_ID($id: Int!) {
+  query FindPostById($id: Int!) {
     post: post(id: $id) {
       id
       title
@@ -815,7 +815,7 @@ import { navigate, routes } from '@redwoodjs/router'
 import UserProfileForm from 'src/components//UserProfile/UserProfileForm/UserProfileForm'
 
 export const QUERY = gql\`
-  query FIND_USER_PROFILE_BY_ID($id: Int!) {
+  query FindUserProfileById($id: Int!) {
     userProfile: userProfile(id: $id) {
       id
       username
@@ -1369,7 +1369,7 @@ exports[`in typescript mode creates a show cell 1`] = `
 "import Post from 'src/components//Post/Post/Post'
 
 export const QUERY = gql\`
-  query FIND_POST_BY_ID($id: Int!) {
+  query FindPostById($id: Int!) {
     post: post(id: $id) {
       id
       title
@@ -1860,7 +1860,7 @@ import { navigate, routes } from '@redwoodjs/router'
 import PostForm from 'src/components//Post/PostForm/PostForm'
 
 export const QUERY = gql\`
-  query FIND_POST_BY_ID($id: Int!) {
+  query FindPostById($id: Int!) {
     post: post(id: $id) {
       id
       title
@@ -1929,7 +1929,7 @@ import { navigate, routes } from '@redwoodjs/router'
 import UserProfileForm from 'src/components//UserProfile/UserProfileForm/UserProfileForm'
 
 export const QUERY = gql\`
-  query FIND_USER_PROFILE_BY_ID($id: Int!) {
+  query FindUserProfileById($id: Int!) {
     userProfile: userProfile(id: $id) {
       id
       username

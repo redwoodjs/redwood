@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/internal",
-  "version": "0.33.0",
+  "version": "0.33.2",
   "files": [
     "dist"
   ],
