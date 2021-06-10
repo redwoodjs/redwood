@@ -1,10 +1,10 @@
 import CryptoJS from 'crypto-js'
-import jwt from 'jsonwebt_en'
+import jwt from 'jsonwebtoken'
 import { v4 as uuidv4 } from 'uuid'
 
 import * as DbAuthError from './dbAuthErrors'
 
-export const DbAuthHandler = class {
+const DbAuthHandler = class {
   // class constant: maps the auth functions to their required HTTP verb for access
   static get VERBS() {
     return {
@@ -38,14 +38,14 @@ export const DbAuthHandler = class {
   }
 
   // convert to the UTC datetime string that's required for cookies
-  get _futureExpiresDate() {
+  get futureExpiresDate() {
     let futureDate = new Date()
     futureDate.setSeconds(futureDate.getSeconds() + this.options.loginExpires)
     return futureDate.toUTCString()
   }
 
   // returns the Set-Cookie header to mark the cookie as expired ("deletes" the session)
-  get _deleteSessionHeader() {
+  get deleteSessionHeader() {
     return {
       'Set-Cookie': [
         'session=',
@@ -113,32 +113,36 @@ export const DbAuthHandler = class {
     }
   }
 
+  // returns all the cookie attributes in an array with the proper expiration date
+  //
+  // pass the argument `expires` set to "now" to get the attributes needed to expire
+  // the session, any other string will (or even null) will return the attributes to
+  // expire the session at the `FUTURE_EXPIRES_DATE`
+  _cookieAttributes(options = {}) {
+    const meta = JSON.parse(JSON.stringify(DbAuthHandler.COOKIE_META))
+    const expiresAt =
+      options.expires === 'now'
+        ? DbAuthHandler.PAST_EXPIRES_DATE
+        : this.futureExpiresDate
+    meta.push(`Expires=${expiresAt}`)
+
+    return meta
+  }
+
+  _encrypt(data) {
+    return CryptoJS.AES.encrypt(data, process.env.SESSION_SECRET)
+  }
+
   // returns the Set-Cookie header to be returned in the request (effectively creates the session)
   _createSessionHeader(data, csrfToken) {
     const session = JSON.stringify(data) + ';' + csrfToken
-    const encrypted = CryptoJS.AES.encrypt(session, process.env.SESSION_SECRET)
+    const encrypted = this._encrypt(session)
     const cookie = [
       `session=${encrypted.toString()}`,
       ...this._cookieAttributes({ expires: 'future' }),
     ].join(';')
 
     return { 'Set-Cookie': cookie }
-  }
-
-  // returns all the cookie attributes in an array with the proper expiration date
-  //
-  // pass the argument `expires` set to "now" to get the attributes needed to expire
-  // the session, any other string will (or even null) will return the attributes to
-  // expire the session at the `FUTURE_EXPIRES_DATE`
-  _cookieAttributes(options = { expires: 'future' }) {
-    const meta = JSON.parse(JSON.stringify(DbAuthHandler.COOKIE_META))
-    const date =
-      options.expires === 'now'
-        ? DbAuthHandler.PAST_EXPIRES_DATE
-        : this._futureExpiresDate
-    meta.push(`Expires=${date}`)
-
-    return meta
   }
 
   // checks the CSRF token in the header against the CSRF token in the session and
@@ -416,3 +420,5 @@ export const DbAuthHandler = class {
     }
   }
 }
+
+export default DbAuthHandler
