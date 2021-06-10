@@ -483,8 +483,8 @@ test('renders first matching route only, even if multiple routes have the same n
   // go to about page, and make sure that's the only page rendered
   act(() => navigate(routes.about()))
   await waitFor(() => screen.getByText('About Page'))
-  expect(screen.queryByText("param")).not.toBeInTheDocument()
-  expect(screen.queryByText("About Two Page")).not.toBeInTheDocument()
+  expect(screen.queryByText('param')).not.toBeInTheDocument()
+  expect(screen.queryByText('About Two Page')).not.toBeInTheDocument()
 })
 
 test('params should never be an empty object', async (done) => {
