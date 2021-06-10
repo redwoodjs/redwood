@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, Prisma } from '@prisma/client'
 import pino, {
   BaseLogger,
   DestinationStream,
@@ -351,8 +351,7 @@ interface PrismaLoggingConfig {
  */
 export const handlePrismaLogging = (config: PrismaLoggingConfig): void => {
   const logger = config.logger.child({
-    // @ts-ignore
-    prisma: { clientVersion: config.db['_clientVersion'] },
+    prisma: { clientVersion: Prisma.prismaVersion },
   })
 
   config.logLevels?.forEach((level) => {
