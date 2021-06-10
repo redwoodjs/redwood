@@ -1,4 +1,4 @@
-import ${singularPascalName}Cell from 'src/components/${pascalScaffoldPath}${singularPascalName}Cell'
+import ${singularPascalName}Cell from '${importComponentNameCell}'
 
 const ${singularPascalName}Page = ({ id }) => {
   return <${singularPascalName}Cell id={id} />
