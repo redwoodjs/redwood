@@ -1,6 +1,5 @@
 // The guts of the router implementation.
 
-import { ActiveRouteProvider, useActiveRoute } from './ActiveRouteContext'
 import {
   parseSearch,
   replaceParams,
@@ -72,7 +71,6 @@ const InternalRoute: React.VFC<InternalRouteProps> = ({
 }) => {
   const location = useLocation()
   const routerState = useRouterState()
-  const activeRoute = useActiveRoute()
 
   if (notfound) {
     // The "notfound" route is handled by <NotFoundChecker>
@@ -108,18 +106,6 @@ const InternalRoute: React.VFC<InternalRouteProps> = ({
     throw new Error(
       "A route that's not a redirect or notfound route needs to specify both a `page` and a `name`"
     )
-  }
-
-  if (
-    path !== activeRoute?.props.path ||
-    name !== activeRoute?.props.name ||
-    page !== activeRoute?.props.page
-  ) {
-    // This guards against rendering two pages when the current URL matches two paths
-    //   <Route path="/about" page={AboutPage} name="about" />
-    //   <Route path="/{param}" page={ParamPage} name="param" />
-    // If we go to /about, only the "about" page should be rendered
-    return null
   }
 
   return (
@@ -185,54 +171,84 @@ const Router: React.FC<RouterProps> = ({
   )
 }
 
+/**
+ * Find the active (i.e. first matching) route and discard any other routes
+ */
+function discardAfterActive(
+  children: React.ReactNode,
+  isActive: (child: React.ReactElement<InternalRouteProps>) => boolean,
+  foundActive = false
+) {
+  let active = false
+
+  return React.Children.toArray(children).reduce<any>((acc, child) => {
+    if (active || foundActive) {
+      return acc
+    }
+
+    if (isRoute(child)) {
+      active = isActive(child)
+
+      acc.push(child)
+      return acc
+    } else if (isReactElement(child) && child.props.children) {
+      acc.push(
+        React.cloneElement(
+          child,
+          child.props,
+          discardAfterActive(child.props.children, isActive, foundActive)
+        )
+      )
+      return acc
+    }
+
+    return acc
+  }, [])
+}
+
 const RouteScanner: React.FC = ({ children }) => {
   const location = useLocation()
   const routerState = useRouterState()
 
   let foundMatchingRoute = false
-  let activeRoute: JSX.Element | undefined = undefined
   let NotFoundPage: PageType | undefined = undefined
-  const flatChildArray = flattenAll(children)
 
-  for (const child of flatChildArray) {
-    if (isRoute(child)) {
-      const { path } = child.props
+  const filteredChildren = discardAfterActive(children, (child) => {
+    const { path } = child.props
 
-      if (path) {
-        const { match } = matchPath(
-          path,
-          location.pathname,
-          routerState.paramTypes
-        )
+    if (path) {
+      const { match } = matchPath(
+        path,
+        location.pathname,
+        routerState.paramTypes
+      )
 
-        if (match) {
-          activeRoute = child
+      if (match) {
+        foundMatchingRoute = true
 
-          foundMatchingRoute = true
-          // No need to loop further. As soon as we have a matching route and a
-          // route name we have all the info we need
-          break
-        }
-      }
-
-      if (child.props.notfound && child.props.page) {
-        NotFoundPage = child.props.page
+        // No need to loop further. As soon as we have a matching route we have
+        // all the info we need
+        return true
       }
     }
+
+    if (child.props.notfound && child.props.page) {
+      NotFoundPage = child.props.page
+    }
+
+    return false
+  })
+
+  if (!foundMatchingRoute && NotFoundPage) {
+    return (
+      <PageLoader
+        spec={normalizePage(NotFoundPage)}
+        delay={routerState.pageLoadingDelay}
+      />
+    )
   }
 
-  return (
-    <ActiveRouteProvider value={{ activeRoute }}>
-      {!foundMatchingRoute && NotFoundPage ? (
-        <PageLoader
-          spec={normalizePage(NotFoundPage)}
-          delay={routerState.pageLoadingDelay}
-        />
-      ) : (
-        children
-      )}
-    </ActiveRouteProvider>
-  )
+  return filteredChildren
 }
 
 function isSpec(specOrPage: Spec | React.ComponentType): specOrPage is Spec {
