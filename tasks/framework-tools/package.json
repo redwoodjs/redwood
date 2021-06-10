@@ -25,13 +25,11 @@
     "babel-plugin-remove-code": "0.0.6",
     "core-js": "3.13.1",
     "cp-cli": "2.0.0",
-
     "cross-env": "7.0.3",
     "jest": "26.5.3",
     "lerna": "4.0.0",
     "msw": "0.29.0",
     "nodemon": "2.0.7",
-    "npm-packlist": "2.2.2",
     "ttypescript": "1.5.12",
     "typescript": "4.2.4",
     "typescript-transform-paths": "2.2.4",
