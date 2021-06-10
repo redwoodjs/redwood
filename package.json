@@ -33,7 +33,6 @@
 
     "postinstall": "yarn framework install",
 
-    "build:link": "./tasks/build-link",
     "build:test-project": "./tasks/test-project/test-project"
   }
 }

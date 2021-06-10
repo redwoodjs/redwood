@@ -200,7 +200,7 @@ const rwtLink = async (yargs) => {
   const onlyParams = only ? ['--only', only] : []
 
   await execa(
-    'yarn build:link',
+    'node ./tasks/build-and-copy',
     ['--dest', `"${projectPackagesPath}"`, ...onlyParams],
     {
       shell: true,
@@ -343,15 +343,17 @@ const updateProjectWithResolutions = (redwoodPackagesPath, remove) => {
     resolutions = omit(resolutions, Object.keys(frameworkRepoResolutions))
     packages = packages.filter(
       (workspaceFolder) =>
-        workspaceFolder !== 'node_modules/.redwood-linked-packages/*'
+        workspaceFolder !== 'node_modules/.redwood-linked-packages/packages/*'
     )
   } else {
     resolutions = {
       ...resolutions,
       ...frameworkRepoResolutions,
     }
-    if (!packages.includes('node_modules/.redwood-linked-packages/*')) {
-      packages.push('node_modules/.redwood-linked-packages/*')
+    if (
+      !packages.includes('node_modules/.redwood-linked-packages/packages/*')
+    ) {
+      packages.push('node_modules/.redwood-linked-packages/packages/*')
     }
   }
 
