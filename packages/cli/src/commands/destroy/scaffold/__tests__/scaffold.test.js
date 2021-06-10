@@ -92,7 +92,7 @@ describe('rw destroy scaffold', () => {
           })),
           [getPaths().web.routes]: [
             '<Routes>',
-            '  <Route path="/posts/new" page={PostNewPostPage} name="newPos" />',
+            '  <Route path="/posts/new" page={PostNewPostPage} name="newPost" />',
             '  <Route path="/posts/{id:Int}/edit" page={PostEditPostPage} name="editPost" />',
             '  <Route path="/posts/{id:Int}" page={PostPostPage} name="post" />',
             '  <Route path="/posts" page={PostPostsPage} name="posts" />',
