@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { PrismaClient } from '@prisma/client'
 import pino, {
   BaseLogger,
@@ -350,11 +351,13 @@ interface PrismaLoggingConfig {
  */
 export const handlePrismaLogging = (config: PrismaLoggingConfig): void => {
   const logger = config.logger.child({
+    // @ts-ignore
     prisma: { clientVersion: config.db['_clientVersion'] },
   })
 
   config.logLevels?.forEach((level) => {
     if (level === 'query') {
+      // @ts-ignore
       config.db.$on(level, (queryEvent: QueryEvent) => {
         if (queryEvent.duration >= SLOW_QUERY_THRESHOLD) {
           logger.warn(
@@ -369,6 +372,7 @@ export const handlePrismaLogging = (config: PrismaLoggingConfig): void => {
         }
       })
     } else {
+      // @ts-ignore
       config.db.$on(level, (logEvent: LogEvent) => {
         switch (level) {
           case 'info':

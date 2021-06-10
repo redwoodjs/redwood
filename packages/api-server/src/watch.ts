@@ -30,8 +30,12 @@ build({ incremental: true }).then((buildResult) => {
     process.exit(0)
   })
 
+  const watchPaths = []
+  watchPaths.push(rwjsPaths.api.base)
+  watchPaths.push(rwjsPaths.redwoodConfig)
+
   chokidar
-    .watch(rwjsPaths.api.base, {
+    .watch(watchPaths, {
       persistent: true,
       ignoreInitial: true,
       ignored: (file: string) =>

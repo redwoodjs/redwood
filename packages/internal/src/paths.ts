@@ -39,6 +39,7 @@ export interface BrowserTargetPaths {
 
 export interface Paths {
   base: string
+  redwoodConfig: string
   generated: {
     base: string
     schema: string
@@ -144,6 +145,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
 
   const paths = {
     base: BASE_DIR,
+    redwoodConfig: path.join(BASE_DIR, 'redwood.toml'),
 
     generated: {
       base: path.join(BASE_DIR, '.redwood'),
