@@ -1,4 +1,4 @@
-import Edit${singularPascalName}Cell from 'src/components/${pascalScaffoldPath}Edit${singularPascalName}Cell'
+import Edit${singularPascalName}Cell from '${importComponentEditNameCell}'
 
 const Edit${singularPascalName}Page = ({ id }) => {
   return <Edit${singularPascalName}Cell id={id} />

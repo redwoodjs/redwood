@@ -366,11 +366,27 @@ export const deleteFilesTask = (files) => {
 
 /**
  * @param files - {[filepath]: contents}
+ * Deletes any empty directrories that are more than three levels deep below the base directory
+ * i.e. any directory below /web/src/components
  */
 export const cleanupEmptyDirsTask = (files) => {
   const { base } = getPaths()
-  const allDirs = Object.keys(files).map((file) => path.dirname(file))
-  const uniqueDirs = [...new Set(allDirs)]
+  const endDirs = Object.keys(files).map((file) => path.dirname(file))
+  const uniqueEndDirs = [...new Set(endDirs)]
+  // get the additional path directories not at the end of the path
+  const pathDirs = []
+  uniqueEndDirs.forEach((dir) => {
+    const relDir = path.relative(base, dir)
+    const splitDir = relDir.split(path.sep)
+    splitDir.pop()
+    while (splitDir.length > 3) {
+      const subDir = path.join(base, splitDir.join('/'))
+      pathDirs.push(subDir)
+      splitDir.pop()
+    }
+  })
+  const uniqueDirs = uniqueEndDirs.concat([...new Set(pathDirs)])
+
   return new Listr(
     uniqueDirs.map((dir) => {
       return {

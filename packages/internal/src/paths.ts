@@ -217,10 +217,11 @@ export const processPagesDir = (
   return pagePaths.map((pagePath) => {
     const p = path.parse(pagePath)
 
-    const importName = p.dir.replace('/', '')
+    const importName = p.dir.replace(/\//g, '')
     const importPath = importStatementPath(
       path.join(webPagesDir, p.dir, p.name)
     )
+
     const importStatement = `const ${importName} = { name: '${importName}', loader: import('${importPath}') }`
     return {
       importName,

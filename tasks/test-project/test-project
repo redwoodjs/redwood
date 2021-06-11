@@ -211,6 +211,12 @@ async function webTasks() {
           return execa('yarn rw setup tailwind', [], getExecaOptions())
         },
       },
+      {
+        title: `Running lint`,
+        task: async () => {
+          return execa('yarn rw lint --fix', [], getExecaOptions())
+        },
+      },
     ],
     {
       exitOnError: true,
@@ -277,6 +283,12 @@ async function apiTasks() {
         )
       },
     },
+    {
+      title: `Running lint`,
+      task: async () => {
+        return execa('yarn rw lint --fix', [], getExecaOptions())
+      },
+    },
   ])
 }
 
@@ -304,12 +316,6 @@ const globalTasks = () =>
       {
         title: `Setting up api project`,
         task: () => apiTasks(),
-      },
-      {
-        title: `Running lint`,
-        task: async () => {
-          return execa('yarn rw lint --fix', [], getExecaOptions())
-        },
       },
       {
         title: `Upgrading to latest canary version`,

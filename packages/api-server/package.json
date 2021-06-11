@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/api-server",
   "description": "Redwood's HTTP server for Serverless Functions",
-  "version": "0.33.2",
+  "version": "0.33.3",
   "bin": {
     "api-server": "./dist/index.js",
     "rw-api-server": "./dist/index.js",
@@ -15,7 +15,7 @@
   "dependencies": {
     "body-parser": "1.19.0",
     "chokidar": "3.5.1",
-    "dotenv-defaults": "2.0.1",
+    "dotenv-defaults": "2.0.2",
     "express": "4.17.1",
     "glob": "7.1.7",
     "http-proxy-middleware": "2.0.0",
