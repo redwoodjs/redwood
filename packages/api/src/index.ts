@@ -8,4 +8,4 @@ export * from './globalContext'
 export * from './parseJWT'
 export * from './types'
 // @ts-expect-error typescript :(
-export { dbAuthHandler } from './functions/dbAuthHandler'
+export { DbAuthHandler } from './functions/DbAuthHandler'
