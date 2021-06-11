@@ -38,14 +38,14 @@ const DbAuthHandler = class {
   }
 
   // convert to the UTC datetime string that's required for cookies
-  get futureExpiresDate() {
+  get _futureExpiresDate() {
     let futureDate = new Date()
     futureDate.setSeconds(futureDate.getSeconds() + this.options.loginExpires)
     return futureDate.toUTCString()
   }
 
   // returns the Set-Cookie header to mark the cookie as expired ("deletes" the session)
-  get deleteSessionHeader() {
+  get _deleteSessionHeader() {
     return {
       'Set-Cookie': [
         'session=',
@@ -123,7 +123,7 @@ const DbAuthHandler = class {
     const expiresAt =
       options.expires === 'now'
         ? DbAuthHandler.PAST_EXPIRES_DATE
-        : this.futureExpiresDate
+        : this._futureExpiresDate
     meta.push(`Expires=${expiresAt}`)
 
     return meta
@@ -304,12 +304,12 @@ const DbAuthHandler = class {
     // first, try getting the method name out of the URL in the form of /.redwood/functions/auth/[methodName]
     let methodName = this.event.path.split('/').pop()
 
-    if (!this[methodName]) {
+    if (methodName === 'auth' || !this[methodName]) {
       // next, try getting it from the query string instead, /.redwood/functions/auth?method=[methodName]
       methodName = this.event.queryStringParameters.method
     }
 
-    if (!this[methodName]) {
+    if (methodName === 'auth' || !this[methodName]) {
       // finally, try getting it from the body in JSON: { method: [methodName] }
       try {
         methodName = JSON.parse(this.event.body).method
@@ -398,9 +398,9 @@ const DbAuthHandler = class {
     }
   }
 
-  _ok(body, headers = {}, { statusCode = 200 }) {
+  _ok(body, headers = {}, options = { statusCode: 200 }) {
     return {
-      statusCode,
+      statusCode: options.statusCode,
       body,
       headers: { 'Content-Type': 'application/json', ...headers },
     }

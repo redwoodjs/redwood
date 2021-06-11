@@ -147,24 +147,65 @@ describe('dbAuth', () => {
     })
   })
 
-  describe('futureExpiresDate', () => {
+  describe('_futureExpiresDate', () => {
     it('returns a date in the future as a UTCString', () => {
       const dbAuth = new DbAuthHandler(event, context, options)
 
-      expect(dbAuth.futureExpiresDate).toMatch(UTC_DATE_REGEX)
+      expect(dbAuth._futureExpiresDate).toMatch(UTC_DATE_REGEX)
     })
   })
 
-  describe('deleteSessionHeader', () => {
+  describe('_deleteSessionHeader', () => {
     it('returns a Set-Cookie header to delete the session cookie', () => {
       const dbAuth = new DbAuthHandler(event, context, options)
-      const headers = dbAuth.deleteSessionHeader
+      const headers = dbAuth._deleteSessionHeader
 
       expect(Object.keys(headers).length).toEqual(1)
       expect(Object.keys(headers)).toContain('Set-Cookie')
       expect(headers['Set-Cookie']).toEqual(
         `session=;Path=/;Domain=site.test;HttpOnly;SameSite=Strict;Secure;Expires=Thu, 01 Jan 1970 08:00:00 GMT`
       )
+    })
+  })
+
+  describe('constructor', () => {
+    it('initializes some variables with passed values', () => {
+      event = { headers: {} }
+      context = { foo: 'bar' }
+      options = { db: db }
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      expect(dbAuth.event).toEqual(event)
+      expect(dbAuth.context).toEqual(context)
+      expect(dbAuth.options).toEqual(options)
+    })
+
+    it('sets header-based CSRF token', () => {
+      event = { headers: { 'x-csrf-token': 'qwerty' } }
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      expect(dbAuth.headerCsrfToken).toEqual('qwerty')
+    })
+
+    it('sets session variables to nothing if session cannot be decrypted', () => {
+      event = { headers: { 'x-csrf-token': 'qwerty' } }
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      expect(dbAuth.session).toBeUndefined()
+      expect(dbAuth.sessionCsrfToken).toBeUndefined()
+    })
+
+    it('sets session variables to valid session data', () => {
+      event = {
+        headers: {
+          cookie:
+            'session=U2FsdGVkX1/zRHVlEQhffsOufy7VLRAR6R4gb818vxblQQJFZI6W/T8uzxNUbQMx',
+        },
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      expect(dbAuth.session).toEqual({ foo: 'bar' })
+      expect(dbAuth.sessionCsrfToken).toEqual('abcd')
     })
   })
 
@@ -191,7 +232,7 @@ describe('dbAuth', () => {
 
       expect(Object.keys(headers).length).toEqual(1)
       expect(headers['Set-Cookie']).toMatch(
-        `;Path=/;Domain=site.test;HttpOnly;SameSite=Strict;Secure;Expires=${dbAuth.futureExpiresDate}`
+        `;Path=/;Domain=site.test;HttpOnly;SameSite=Strict;Secure;Expires=${dbAuth._futureExpiresDate}`
       )
       // can't really match on the session value since it will change on every render,
       // due to CSRF token generation but we can check that it contains a only the
@@ -438,248 +479,215 @@ describe('dbAuth', () => {
     })
   })
 
-  //   describe('createUser', () => {
-  //     it('throws an error if username is already taken', async () => {
-  //       const dbUser = await createDbUser()
-  //       global.event.body = JSON.stringify({
-  //         username: dbUser.email,
-  //         password: 'password',
-  //       })
+  describe('createUser', () => {
+    it('throws an error if username is already taken', async () => {
+      const dbUser = await createDbUser()
+      event.body = JSON.stringify({
+        username: dbUser.email,
+        password: 'password',
+      })
+      const dbAuth = new DbAuthHandler(event, context, options)
 
-  //       dbAuth.createUser().catch((e) => {
-  //         expect(e).toBeInstanceOf(dbAuth.DuplicateUsernameError)
-  //       })
-  //       expect.assertions(1)
-  //     })
+      dbAuth._createUser().catch((e) => {
+        expect(e).toBeInstanceOf(dbAuthError.DuplicateUsernameError)
+      })
+      expect.assertions(1)
+    })
 
-  //     it('throws an error if username is missing', async () => {
-  //       global.event.body = JSON.stringify({
-  //         password: 'password',
-  //       })
+    it('throws an error if username is missing', async () => {
+      event.body = JSON.stringify({
+        password: 'password',
+      })
+      const dbAuth = new DbAuthHandler(event, context, options)
 
-  //       dbAuth.createUser().catch((e) => {
-  //         expect(e).toBeInstanceOf(dbAuth.FieldRequiredError)
-  //       })
-  //       expect.assertions(1)
-  //     })
+      dbAuth._createUser().catch((e) => {
+        expect(e).toBeInstanceOf(dbAuthError.FieldRequiredError)
+      })
+      expect.assertions(1)
+    })
 
-  //     it('throws an error if password is missing', async () => {
-  //       global.event.body = JSON.stringify({
-  //         username: 'user@redwdoodjs.com',
-  //       })
+    it('throws an error if password is missing', async () => {
+      event.body = JSON.stringify({
+        username: 'user@redwdoodjs.com',
+      })
+      const dbAuth = new DbAuthHandler(event, context, options)
 
-  //       dbAuth.createUser().catch((e) => {
-  //         expect(e).toBeInstanceOf(dbAuth.FieldRequiredError)
-  //       })
-  //       expect.assertions(1)
-  //     })
+      dbAuth._createUser().catch((e) => {
+        expect(e).toBeInstanceOf(dbAuthError.FieldRequiredError)
+      })
+      expect.assertions(1)
+    })
 
-  //     it('creates a new user', async () => {
-  //       global.event.body = JSON.stringify({
-  //         username: 'rob@redwoodjs.com',
-  //         password: 'password',
-  //         name: 'Rob',
-  //       })
+    it('creates a new user', async () => {
+      event.headers = { 'Content-Type': 'application/json' }
+      event.body = JSON.stringify({
+        username: 'rob@redwoodjs.com',
+        password: 'password',
+        name: 'Rob',
+      })
+      const dbAuth = new DbAuthHandler(event, context, options)
 
-  //       const user = await dbAuth.createUser()
-  //       expect(user.email).toEqual('rob@redwoodjs.com')
-  //       expect(user.hashedPassword).not.toBeNull()
-  //       expect(user.salt).not.toBeNull()
-  //       expect(user.name).toEqual('Rob')
-  //     })
-  //   })
+      try {
+        const user = await dbAuth._createUser()
+        expect(user.email).toEqual('rob@redwoodjs.com')
+        expect(user.hashedPassword).not.toBeNull()
+        expect(user.salt).not.toBeNull()
+        expect(user.name).toEqual('Rob')
+      } catch (e) {
+        console.info(e)
+      }
+    })
+  })
 
-  //   describe('hashPassword', () => {
-  //     it('hashes a password with a given salt and returns both', () => {
-  //       const [hash, salt] = dbAuth.hashPassword(
-  //         'password',
-  //         '2ef27f4073c603ba8b7807c6de6d6a89'
-  //       )
+  describe('hashPassword', () => {
+    it('hashes a password with a given salt and returns both', () => {
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const [hash, salt] = dbAuth._hashPassword(
+        'password',
+        '2ef27f4073c603ba8b7807c6de6d6a89'
+      )
 
-  //       expect(hash).toEqual(
-  //         '0c2b24e20ee76a887eac1415cc2c175ff961e7a0f057cead74789c43399dd5ba'
-  //       )
-  //       expect(salt).toEqual('2ef27f4073c603ba8b7807c6de6d6a89')
-  //     })
+      expect(hash).toEqual(
+        '0c2b24e20ee76a887eac1415cc2c175ff961e7a0f057cead74789c43399dd5ba'
+      )
+      expect(salt).toEqual('2ef27f4073c603ba8b7807c6de6d6a89')
+    })
 
-  //     it('hashes a password with a generated salt if none provided', () => {
-  //       const [hash, salt] = dbAuth.hashPassword('password')
+    it('hashes a password with a generated salt if none provided', () => {
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const [hash, salt] = dbAuth._hashPassword('password')
 
-  //       expect(hash).toMatch(/^[a-f0-9]+$/)
-  //       expect(hash.length).toEqual(64)
-  //       expect(salt).toMatch(/^[a-f0-9]+$/)
-  //       expect(salt.length).toEqual(32)
-  //     })
-  //   })
+      expect(hash).toMatch(/^[a-f0-9]+$/)
+      expect(hash.length).toEqual(64)
+      expect(salt).toMatch(/^[a-f0-9]+$/)
+      expect(salt.length).toEqual(32)
+    })
+  })
 
-  //   describe('getAuthMethod', () => {
-  //     it('gets methodName out of the path', () => {
-  //       global.event = {
-  //         path: '/.redwood/functions/auth/login',
-  //         queryStringParameters: {},
-  //         body: '',
-  //       }
-  //       expect(dbAuth.getAuthMethod()).toEqual('login')
-  //     })
+  describe('getAuthMethod', () => {
+    it('gets methodName out of the path', () => {
+      event = {
+        path: '/.redwood/functions/auth/login',
+        queryStringParameters: {},
+        body: '',
+        headers: {},
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
 
-  //     it('gets methodName out of the query string', () => {
-  //       global.event = {
-  //         path: '/.redwood/functions/auth',
-  //         queryStringParameters: { method: 'login' },
-  //         body: '',
-  //       }
-  //       expect(dbAuth.getAuthMethod()).toEqual('login')
-  //     })
+      expect(dbAuth._getAuthMethod()).toEqual('login')
+    })
 
-  //     it('gets methodName out of a JSON body', () => {
-  //       global.event = {
-  //         path: '/.redwood/functions/auth',
-  //         queryStringParameters: {},
-  //         body: '{"method":"login"}',
-  //       }
-  //       expect(dbAuth.getAuthMethod()).toEqual('login')
-  //     })
+    it('gets methodName out of the query string', () => {
+      event = {
+        path: '/.redwood/functions/auth',
+        queryStringParameters: { method: 'logout' },
+        body: '',
+        headers: {},
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
 
-  //     it('otherwise returns undefined', () => {
-  //       global.event = {
-  //         path: '/.redwood/functions/auth',
-  //         queryStringParameters: {},
-  //         body: '',
-  //       }
-  //       expect(dbAuth.getAuthMethod()).toBeUndefined()
-  //     })
-  //   })
+      expect(dbAuth._getAuthMethod()).toEqual('logout')
+    })
 
-  //   describe('validateField', () => {
-  //     it('checks for the presence of a field', () => {
-  //       expect(() => {
-  //         dbAuth.validateField('username', null)
-  //       }).toThrow(dbAuth.FieldRequiredError)
-  //       expect(() => {
-  //         dbAuth.validateField('username', '')
-  //       }).toThrow(dbAuth.FieldRequiredError)
-  //       expect(() => {
-  //         dbAuth.validateField('username', ' ')
-  //       }).toThrow(dbAuth.FieldRequiredError)
-  //     })
+    it('gets methodName out of a JSON body', () => {
+      event = {
+        path: '/.redwood/functions/auth',
+        queryStringParameters: {},
+        body: '{"method":"signup"}',
+        headers: {},
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
 
-  //     it('passes validation if everything is present', () => {
-  //       expect(dbAuth.validateField('username', 'cannikin')).toEqual(true)
-  //     })
-  //   })
+      expect(dbAuth._getAuthMethod()).toEqual('signup')
+    })
 
-  //   describe('logoutResponse', () => {
-  //     it('returns the response array necessary to log user out', () => {
-  //       const [body, headers] = dbAuth.logoutResponse()
+    it('otherwise returns undefined', () => {
+      event = {
+        path: '/.redwood/functions/auth',
+        queryStringParameters: {},
+        body: '',
+        headers: {},
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
 
-  //       expect(body).toEqual('')
-  //       expect(headers['Set-Cookie']).toMatch(/^session=;/)
-  //     })
+      expect(dbAuth._getAuthMethod()).toBeUndefined()
+    })
+  })
 
-  //     it('can accept a message to return in the body', () => {
-  //       const [body, _headers] = dbAuth.logoutResponse('error message')
+  describe('validateField', () => {
+    it('checks for the presence of a field', () => {
+      const dbAuth = new DbAuthHandler(event, context, options)
 
-  //       expect(body).toEqual('{"message":"error message"}')
-  //     })
-  //   })
+      expect(() => {
+        dbAuth._validateField('username', null)
+      }).toThrow(dbAuth.FieldRequiredError)
+      expect(() => {
+        dbAuth._validateField('username', '')
+      }).toThrow(dbAuth.FieldRequiredError)
+      expect(() => {
+        dbAuth._validateField('username', ' ')
+      }).toThrow(dbAuth.FieldRequiredError)
+    })
 
-  //   describe('goodStatus', () => {
-  //     it('returns a 2xx response', () => {
-  //       const response = dbAuth.goodStatus(299, 'foobar', {
-  //         'x-header': 'value',
-  //       })
+    it('passes validation if everything is present', () => {
+      const dbAuth = new DbAuthHandler(event, context, options)
 
-  //       expect(response.statusCode).toEqual(299)
-  //       expect(response.body).toEqual('foobar')
-  //       expect(response.headers['Content-Type']).toEqual('application/json')
-  //       expect(response.headers['x-header']).toEqual('value')
-  //     })
-  //   })
+      expect(dbAuth._validateField('username', 'cannikin')).toEqual(true)
+    })
+  })
 
-  //   describe('ok', () => {
-  //     it('returns a 200 response', () => {
-  //       const response = dbAuth.ok('', {})
+  describe('logoutResponse', () => {
+    it('returns the response array necessary to log user out', () => {
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const [body, headers] = dbAuth._logoutResponse()
 
-  //       expect(response.statusCode).toEqual(200)
-  //     })
-  //   })
+      expect(body).toEqual('')
+      expect(headers['Set-Cookie']).toMatch(/^session=;/)
+    })
 
-  //   describe('created', () => {
-  //     it('returns a 201 response', () => {
-  //       const response = dbAuth.created('', {})
+    it('can accept a message to return in the body', () => {
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const [body, _headers] = dbAuth._logoutResponse('error message')
 
-  //       expect(response.statusCode).toEqual(201)
-  //     })
-  //   })
+      expect(body).toEqual('{"message":"error message"}')
+    })
+  })
 
-  //   describe('notFound', () => {
-  //     it('returns a 404 response', () => {
-  //       const response = dbAuth.notFound()
+  describe('ok', () => {
+    it('returns a 200 response by default', () => {
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const response = dbAuth._ok('', {})
 
-  //       expect(response.statusCode).toEqual(404)
-  //       expect(response.body).toEqual(undefined)
-  //     })
-  //   })
+      expect(response.statusCode).toEqual(200)
+    })
 
-  //   describe('badRequest', () => {
-  //     it('returns a 400 response', () => {
-  //       const response = dbAuth.badRequest('bad')
+    it('can return other status codes', () => {
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const response = dbAuth._ok('', {}, { statusCode: 201 })
 
-  //       expect(response.statusCode).toEqual(400)
-  //       expect(response.body).toEqual({ message: 'bad' })
-  //     })
-  //   })
+      expect(response.statusCode).toEqual(201)
+    })
+  })
 
-  //   describe('setGlobalContext', () => {
-  //     it('sets handler args into global', () => {
-  //       dbAuth.setGlobalContext(
-  //         { headers: {} },
-  //         { foo: 'bar' },
-  //         { db: global.db }
-  //       )
+  describe('_notFound', () => {
+    it('returns a 404 response', () => {
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const response = dbAuth._notFound()
 
-  //       expect(global.event).toEqual({ headers: {} })
-  //       expect(global.context).toEqual({ foo: 'bar' })
-  //       expect(Object.keys(global.options)).toContain('db')
-  //     })
+      expect(response.statusCode).toEqual(404)
+      expect(response.body).toEqual(undefined)
+    })
+  })
 
-  //     it('sets header-based CSRF token', () => {
-  //       dbAuth.setGlobalContext(
-  //         { headers: { 'x-csrf-token': 'qwerty' } },
-  //         {},
-  //         { db: global.db }
-  //       )
+  describe('_badRequest', () => {
+    it('returns a 400 response', () => {
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const response = dbAuth._badRequest('bad')
 
-  //       expect(global.headerCsrfToken).toEqual('qwerty')
-  //     })
-
-  //     it('sets session variables to nothing if session cannot be decrypted', () => {
-  //       dbAuth.setGlobalContext(
-  //         { headers: { 'x-csrf-token': 'qwerty' } },
-  //         {},
-  //         { db: global.db }
-  //       )
-
-  //       expect(global.session).toBeUndefined()
-  //       expect(global.sessionCsrfToken).toBeUndefined()
-  //     })
-
-  //     it('sets session variables to valid session data', () => {
-  //       dbAuth.setGlobalContext(
-  //         {
-  //           headers: {
-  //             cookie:
-  //               'session=U2FsdGVkX1/zRHVlEQhffsOufy7VLRAR6R4gb818vxblQQJFZI6W/T8uzxNUbQMx',
-  //           },
-  //         },
-  //         { context: 'c' },
-  //         { db: global.db }
-  //       )
-
-  //       expect(global.session).toEqual({ foo: 'bar' })
-  //       expect(global.sessionCsrfToken).toEqual('abcd')
-  //     })
-  //   })
+      expect(response.statusCode).toEqual(400)
+      expect(response.body).toEqual({ message: 'bad' })
+    })
+  })
 
   //   describe('login', () => {
   //     it('throws an error if username is not found', async () => {
