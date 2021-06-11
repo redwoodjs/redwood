@@ -46,6 +46,7 @@ build({ incremental: true }).then((buildResult) => {
           '.test.ts',
           '.scenarios.ts',
           '.scenarios.js',
+          '.api/types/*',
         ].some((ext) => file.endsWith(ext)),
     })
     .on('ready', async () => {

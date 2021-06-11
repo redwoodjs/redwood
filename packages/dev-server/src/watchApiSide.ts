@@ -66,6 +66,7 @@ export const watchFunctions = ({
 
   const watcher = chokidar.watch(paths.base, {
     ignored: (file: string) =>
+      file.includes('api/types/*')&&
       file.includes('node_modules') ||
       WATCHER_IGNORE_EXTENSIONS.some((ext) => file.endsWith(ext)),
   })
