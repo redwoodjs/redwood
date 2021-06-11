@@ -2,7 +2,7 @@ import CryptoJS from 'crypto-js'
 import jwt from 'jsonwebtoken'
 
 import * as dbAuthError from './dbAuthErrors'
-import DbAuthHandler from './DbAuthHandler'
+import { DbAuthHandler } from './DbAuthHandler'
 
 // encryption key so results are consistent regardless of settings in .env
 process.env.SESSION_SECRET = 'nREjs1HPS7cFia6tQHK70EWGtfhOgbqJQKsHQz3S'
