@@ -107,7 +107,6 @@ module.exports = {
         'packages/testing/src/**',
         'packages/testing/config/**',
         'packages/eslint-config/*.js',
-        'packages/eslint-plugin-redwood/src/**',
       ],
       env: {
         es6: true,

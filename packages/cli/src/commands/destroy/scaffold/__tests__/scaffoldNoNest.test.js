@@ -36,7 +36,7 @@ describe('rw destroy scaffold', () => {
           ...getDefaultArgs(defaults),
           model: 'Post',
           tests: false,
-          nestScaffoldByModel: true,
+          nestScaffoldByModel: false,
         })),
         [getPaths().web.routes]: [
           '<Routes>',
@@ -61,7 +61,7 @@ describe('rw destroy scaffold', () => {
       const t = tasks({
         model: 'Post',
         tests: false,
-        nestScaffoldByModel: true,
+        nestScaffoldByModel: false,
       })
       t.setRenderer('silent')
 
@@ -71,7 +71,7 @@ describe('rw destroy scaffold', () => {
             ...getDefaultArgs(defaults),
             model: 'Post',
             tests: false,
-            nestScaffoldByModel: true,
+            nestScaffoldByModel: false,
           })
         )
         expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
@@ -88,14 +88,14 @@ describe('rw destroy scaffold', () => {
             typescript: true,
             model: 'Post',
             tests: false,
-            nestScaffoldByModel: true,
+            nestScaffoldByModel: false,
           })),
           [getPaths().web.routes]: [
             '<Routes>',
-            '  <Route path="/posts/new" page={PostNewPostPage} name="newPost" />',
-            '  <Route path="/posts/{id:Int}/edit" page={PostEditPostPage} name="editPost" />',
-            '  <Route path="/posts/{id:Int}" page={PostPostPage} name="post" />',
-            '  <Route path="/posts" page={PostPostsPage} name="posts" />',
+            '  <Route path="/posts/new" page={NewPostPage} name="newPost" />',
+            '  <Route path="/posts/{id:Int}/edit" page={EditPostPage} name="editPost" />',
+            '  <Route path="/posts/{id:Int}" page={PostPage} name="post" />',
+            '  <Route path="/posts" page={PostsPage} name="posts" />',
             '  <Route path="/" page={HomePage} name="home" />',
             '  <Route notfound page={NotFoundPage} />',
             '</Routes>',
@@ -108,7 +108,7 @@ describe('rw destroy scaffold', () => {
         const t = tasks({
           model: 'Post',
           tests: false,
-          nestScaffoldByModel: true,
+          nestScaffoldByModel: false,
         })
         t.setRenderer('silent')
 
@@ -119,7 +119,7 @@ describe('rw destroy scaffold', () => {
               typescript: true,
               model: 'Post',
               tests: false,
-              nestScaffoldByModel: true,
+              nestScaffoldByModel: false,
             })
           )
           expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
@@ -134,7 +134,7 @@ describe('rw destroy scaffold', () => {
       const t = tasks({
         model: 'Post',
         tests: false,
-        nestScaffoldByModel: true,
+        nestScaffoldByModel: false,
       })
       t.setRenderer('silent')
 
@@ -160,13 +160,13 @@ describe('rw destroy scaffold', () => {
           model: 'Post',
           path: 'admin',
           tests: false,
-          nestScaffoldByModel: true,
+          nestScaffoldByModel: false,
         })),
         [getPaths().web.routes]: [
           '<Routes>',
-          '  <Route path="/admin/posts/new" page={AdminPostNewPostPage} name="adminNewPost" />',
-          '  <Route path="/admin/posts/{id:Int}/edit" page={AdminPostEditPostPage} name="adminEditPost" />',
-          '  <Route path="/admin/posts/{id:Int}" page={AdminPostPostPage} name="adminPost" />',
+          '  <Route path="/admin/posts/new" page={AdminNewPostPage} name="adminNewPost" />',
+          '  <Route path="/admin/posts/{id:Int}/edit" page={AdminEditPostPage} name="adminEditPost" />',
+          '  <Route path="/admin/posts/{id:Int}" page={AdminPostPage} name="adminPost" />',
           '  <Route path="/" page={HomePage} name="home" />',
           '  <Route notfound page={NotFoundPage} />',
           '</Routes>',
@@ -185,7 +185,7 @@ describe('rw destroy scaffold', () => {
         model: 'Post',
         path: 'admin',
         tests: false,
-        nestScaffoldByModel: true,
+        nestScaffoldByModel: false,
       })
       t.setRenderer('silent')
 
@@ -196,7 +196,7 @@ describe('rw destroy scaffold', () => {
             model: 'Post',
             path: 'admin',
             tests: false,
-            nestScaffoldByModel: true,
+            nestScaffoldByModel: false,
           })
         )
         expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
@@ -213,13 +213,13 @@ describe('rw destroy scaffold', () => {
             model: 'Post',
             path: 'admin',
             tests: false,
-            nestScaffoldByModel: true,
+            nestScaffoldByModel: false,
           })),
           [getPaths().web.routes]: [
             '<Routes>',
-            '  <Route path="/admin/posts/new" page={AdminPostNewPostPage} name="adminNewPost" />',
-            '  <Route path="/admin/posts/{id:Int}/edit" page={AdminPostEditPostPage} name="adminEditPost" />',
-            '  <Route path="/admin/posts/{id:Int}" page={AdminPostPostPage} name="adminPost" />',
+            '  <Route path="/admin/posts/new" page={AdminNewPostPage} name="adminNewPost" />',
+            '  <Route path="/admin/posts/{id:Int}/edit" page={AdminEditPostPage} name="adminEditPost" />',
+            '  <Route path="/admin/posts/{id:Int}" page={AdminPostPage} name="adminPost" />',
             '  <Route path="/" page={HomePage} name="home" />',
             '  <Route notfound page={NotFoundPage} />',
             '</Routes>',
@@ -232,7 +232,7 @@ describe('rw destroy scaffold', () => {
           model: 'Post',
           path: 'admin',
           tests: false,
-          nestScaffoldByModel: true,
+          nestScaffoldByModel: false,
         })
         t.setRenderer('silent')
 
@@ -243,7 +243,7 @@ describe('rw destroy scaffold', () => {
               model: 'Post',
               path: 'admin',
               tests: false,
-              nestScaffoldByModel: true,
+              nestScaffoldByModel: false,
             })
           )
           expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
@@ -259,7 +259,7 @@ describe('rw destroy scaffold', () => {
         model: 'Post',
         path: 'admin',
         tests: false,
-        nestScaffoldByModel: true,
+        nestScaffoldByModel: false,
       })
       t.setRenderer('silent')
 

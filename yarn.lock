@@ -2588,6 +2588,11 @@
     tiny-warning "^1.0.3"
     tslib "^2.1.0"
 
+"@redwoodjs/eslint-plugin-redwood@^0.33.3":
+  version "0.33.3"
+  resolved "https://registry.yarnpkg.com/@redwoodjs/eslint-plugin-redwood/-/eslint-plugin-redwood-0.33.3.tgz#1129f679a4e268f9055b54d9e1141acf23bd8bd3"
+  integrity sha512-hKwP5CMRbURCEL/GERZzaUsmQM2pJhGTLfHA+oNH2UaOKkBVaaYKEdGCB9+FxpGFxJTI1A1t+wEvF2F3tWUvXA==
+
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/@samverschueren/stream-to-observable/-/stream-to-observable-0.3.1.tgz#a21117b19ee9be70c379ec1877537ef2e1c63301"

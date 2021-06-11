@@ -21,8 +21,8 @@ export const command = 'scaffold <model>'
 export const description =
   'Destroy pages, SDL, and Services files based on a given DB schema Model'
 
-const removeRoutesWithSet = async (model, path) => {
-  const routes = await scaffoldRoutes({ model, path })
+const removeRoutesWithSet = async ({ model, path, nestScaffoldByModel }) => {
+  const routes = await scaffoldRoutes({ model, path, nestScaffoldByModel })
   const routeNames = routes.map(extractRouteName)
   const pluralPascalName = pascalcase(pluralize(model))
   const layoutName = `${pluralPascalName}Layout`
@@ -64,6 +64,9 @@ const removeLayoutImport = ({ model: name, path: scaffoldPath = '' }) => {
     new RegExp(`\\s*${importLayout}`),
     ''
   )
+  console.log('regex:', new RegExp(`\\s*${importLayout}`))
+  console.log(newRoutesContent)
+
   writeFile(routesPath, newRoutesContent, { overwriteExisting: true })
 
   return 'Removed layout import from Routes.{js,tsx}'
@@ -76,19 +79,25 @@ export const builder = (yargs) => {
   })
 }
 
-export const tasks = ({ model, path }) =>
+export const tasks = ({ model, path, tests, nestScaffoldByModel }) =>
   new Listr(
     [
       {
         title: 'Destroying scaffold files...',
         task: async () => {
-          const f = await files({ model, path })
+          const f = await files({
+            model,
+            path,
+            tests,
+            nestScaffoldByModel,
+          })
           return deleteFilesTask(f)
         },
       },
       {
         title: 'Cleaning up scaffold routes...',
-        task: async () => removeRoutesWithSet(model, path),
+        task: async () =>
+          removeRoutesWithSet({ model, path, nestScaffoldByModel }),
       },
       {
         title: 'Removing set import...',
