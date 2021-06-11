@@ -74,7 +74,7 @@ There are several options:
 
 **Using the functional test project might be the easiest and fastest way to test your changes in Redwood.** You can create a Redwood project that contains a big range of functionality in a few minutes:
 1. it installs using the App template codebase in the current branch of your Framework
-2. with the current stable version of Redwood Packages (with the option to use the canary version)
+2. with the current `canary` version of Redwood Packages (with the option to use the `latest` stable version)
 3. with a JavaScript language target (with the option for TypeScript)
 4. then applies code mods from the [Redwood tutorial](https://learn.redwoodjs.com/docs/tutorial/welcome-to-redwood/) to add functionality and styling
 5. and initializes a Prisma DB migration for SQLite
@@ -92,7 +92,7 @@ yarn run build:test-project <path/to/redwood-app>
 |----------------------|----------------------------------------------------------------------|
 | `<project directory>` | Directory to build test project [default: "./blog-test-project"]    |
 | `--typescript, --ts` | Generate a TypeScript project [default: JavaScript]                  |
-| `--canary`           | Upgrade project to latest canary version                             |
+| `--canary`           | Upgrade project to latest canary version [default: true]             |
 | `--help `            | Show help                                                            |
 
 **Example Use:**
