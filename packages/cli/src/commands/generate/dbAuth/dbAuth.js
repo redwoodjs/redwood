@@ -21,7 +21,7 @@ const ROUTES = [
 ]
 const SCAFFOLD_OUTPUT_PATH = path.join(getPaths().web.src, 'scaffold.css')
 
-export const files = ({ tests, typescript }) => {
+export const files = ({ _tests, typescript }) => {
   const files = []
 
   files.push(
