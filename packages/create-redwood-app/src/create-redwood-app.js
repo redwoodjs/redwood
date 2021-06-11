@@ -104,6 +104,11 @@ const createProjectTasks = ({ newAppDir }) => {
               const { version, wanted } = result.versions[name]
               return `${name} ${wanted} required, but you have ${version}.`
             })
+            errors.push(
+              style.info(
+                `Visit https://learn-redwood.netlify.app/docs/tutorial/prerequisites#nodejs-and-yarn-versions`
+              )
+            )
             return reject(new Error(errors.join('\n')))
           })
         })
