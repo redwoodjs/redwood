@@ -19,7 +19,6 @@ const ROUTES = [
   `<Route path="/login" page={LoginPage} name="login" />`,
   `<Route path="/signup" page={SignupPage} name="signup" />`,
 ]
-const SCAFFOLD_OUTPUT_PATH = path.join(getPaths().web.src, 'scaffold.css')
 
 export const files = ({ _tests, typescript }) => {
   const files = []
@@ -47,14 +46,14 @@ export const files = ({ _tests, typescript }) => {
   )
 
   // add scaffold CSS file if it doesn't exist already
-
-  if (!fs.existsSync(SCAFFOLD_OUTPUT_PATH)) {
+  const scaffoldOutputPath = path.join(getPaths().web.src, 'scaffold.css')
+  if (!fs.existsSync(scaffoldOutputPath)) {
     const scaffoldTemplate = generateTemplate(
       path.join('scaffold', 'templates', 'assets', 'scaffold.css.template'),
       { name: 'scaffold' }
     )
 
-    files.push([SCAFFOLD_OUTPUT_PATH, scaffoldTemplate])
+    files.push([scaffoldOutputPath, scaffoldTemplate])
   }
 
   return files.reduce((acc, [outputPath, content]) => {
