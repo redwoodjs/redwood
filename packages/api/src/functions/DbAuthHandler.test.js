@@ -80,7 +80,11 @@ let event, context, options
 
 describe('dbAuth', () => {
   beforeEach(() => {
-    event = { headers: {} }
+    event = {
+      queryStringParameters: {},
+      path: '/.redwood/functions/auth',
+      headers: {},
+    }
     context = {}
 
     options = {
@@ -197,6 +201,234 @@ describe('dbAuth', () => {
 
       expect(dbAuth.session).toEqual({ foo: 'bar' })
       expect(dbAuth.sessionCsrfToken).toEqual('abcd')
+    })
+  })
+
+  describe('invoke', () => {
+    it('returns a logout response if session is not valid', async () => {
+      event.body = JSON.stringify({ method: 'logout' })
+      event.httpMethod = 'GET'
+      event.headers.cookie = 'session=invalid'
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const response = await dbAuth.invoke()
+
+      expect(response.headers['Set-Cookie']).toEqual(LOGOUT_COOKIE)
+    })
+
+    it('returns a 404 if using the wrong HTTP verb', async () => {
+      event.body = JSON.stringify({ method: 'logout' })
+      event.httpMethod = 'GET'
+      event.headers.cookie =
+        'session=U2FsdGVkX1/zRHVlEQhffsOufy7VLRAR6R4gb818vxblQQJFZI6W/T8uzxNUbQMx'
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const response = await dbAuth.invoke()
+
+      expect(response.statusCode).toEqual(404)
+    })
+
+    it('returns a 404 for unsupported method name', async () => {
+      event.body = JSON.stringify({ method: 'foobar' })
+      event.httpMethod = 'POST'
+      event.headers.cookie =
+        'session=U2FsdGVkX1/zRHVlEQhffsOufy7VLRAR6R4gb818vxblQQJFZI6W/T8uzxNUbQMx'
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const response = await dbAuth.invoke()
+
+      expect(response.statusCode).toEqual(404)
+    })
+
+    it('returns a 400 for any other errors', async () => {
+      event.body = JSON.stringify({ method: 'logout' })
+      event.httpMethod = 'POST'
+      event.headers.cookie =
+        'session=U2FsdGVkX1/zRHVlEQhffsOufy7VLRAR6R4gb818vxblQQJFZI6W/T8uzxNUbQMx'
+      const dbAuth = new DbAuthHandler(event, context, options)
+      dbAuth.logout = jest.fn(() => {
+        throw Error('Logout error')
+      })
+      const response = await dbAuth.invoke()
+
+      expect(response.statusCode).toEqual(400)
+      expect(response.body).toEqual('{"message":"Logout error"}')
+    })
+
+    it('calls the appropriate auth function', async () => {
+      event.body = JSON.stringify({ method: 'logout' })
+      event.httpMethod = 'POST'
+      event.headers.cookie =
+        'session=U2FsdGVkX1/zRHVlEQhffsOufy7VLRAR6R4gb818vxblQQJFZI6W/T8uzxNUbQMx'
+      const dbAuth = new DbAuthHandler(event, context, options)
+      dbAuth.logout = jest.fn(() => ['body', { foo: 'bar' }])
+      const response = await dbAuth.invoke()
+
+      expect(dbAuth.logout).toHaveBeenCalled()
+      expect(response.statusCode).toEqual(200)
+      expect(response.body).toEqual('body')
+      expect(response.headers).toEqual({
+        'Content-Type': 'application/json',
+        foo: 'bar',
+      })
+    })
+  })
+
+  describe('login', () => {
+    it('throws an error if username is not found', async () => {
+      await createDbUser()
+      event.body = JSON.stringify({
+        username: 'missing@redwoodjs.com',
+        password: 'password',
+      })
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      dbAuth.login().catch((e) => {
+        expect(e).toBeInstanceOf(dbAuthError.UserNotFoundError)
+      })
+      expect.assertions(1)
+    })
+
+    it('throws an error if password is wrong', async () => {
+      await createDbUser()
+      event.body = JSON.stringify({
+        username: 'rob@redwoodjs.com',
+        password: 'incorrect',
+      })
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      dbAuth.login().catch((e) => {
+        expect(e).toBeInstanceOf(dbAuthError.IncorrectPasswordError)
+      })
+      expect.assertions(1)
+    })
+
+    it('returns a JSON body of the user that is logged in', async () => {
+      const user = await createDbUser()
+      event.body = JSON.stringify({
+        username: 'rob@redwoodjs.com',
+        password: 'password',
+      })
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      const response = await dbAuth.login()
+
+      expect(response[0]).toEqual({ id: user.id })
+    })
+
+    it('returns a CSRF token in the header', async () => {
+      await createDbUser()
+      event.body = JSON.stringify({
+        username: 'rob@redwoodjs.com',
+        password: 'password',
+      })
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      const response = await dbAuth.login()
+      expect(response[1]['X-CSRF-Token']).toMatch(UUID_REGEX)
+    })
+
+    it('returns a set-cookie header to create session', async () => {
+      await createDbUser()
+      event.body = JSON.stringify({
+        username: 'rob@redwoodjs.com',
+        password: 'password',
+      })
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      const response = await dbAuth.login()
+
+      expect(response[1]['X-CSRF-Token']).toMatch(UUID_REGEX)
+    })
+
+    it('returns a CSRF token in the header', async () => {
+      await createDbUser()
+      event.body = JSON.stringify({
+        username: 'rob@redwoodjs.com',
+        password: 'password',
+      })
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      const response = await dbAuth.login()
+
+      expect(response[1]['Set-Cookie']).toMatch(SET_SESSION_REGEX)
+    })
+  })
+
+  describe('logout', () => {
+    it('returns set-cookie header for removing session', async () => {
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const response = dbAuth.logout()
+
+      expect(response[1]['Set-Cookie']).toEqual(LOGOUT_COOKIE)
+    })
+  })
+
+  describe('signup', () => {
+    it('returns the logout response if an error is raised, including error message', async () => {
+      event.body = JSON.stringify({
+        username: 'rob@redwoodjs.com',
+        password: 'password',
+        name: 'Rob',
+      })
+      options.signupHandler = () => {
+        throw Error('Cannot signup')
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      const response = await dbAuth.signup()
+      expect(response[0]).toEqual('{"message":"Cannot signup"}')
+      expect(response[1]['Set-Cookie']).toMatch(LOGOUT_COOKIE)
+    })
+
+    it('creates a new user', async () => {
+      event.body = JSON.stringify({
+        username: 'rob@redwoodjs.com',
+        password: 'password',
+        name: 'Rob',
+      })
+      const oldUserCount = await db.user.count()
+      const dbAuth = new DbAuthHandler(event, context, options)
+      await dbAuth.signup()
+      const newUserCount = await db.user.count()
+
+      expect(newUserCount).toEqual(oldUserCount + 1)
+    })
+  })
+
+  describe('getToken', () => {
+    it('returns a JWT for logged in user', async () => {
+      const user = await createDbUser()
+      event = {
+        headers: {
+          cookie: encryptToCookie(
+            JSON.stringify({ id: user.id }) + ';' + 'token'
+          ),
+        },
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const response = await dbAuth.getToken()
+
+      expect(response[0]).toMatch(JWT_REGEX)
+      expect(jwt.decode(response[0]).id).toEqual(user.id)
+    })
+
+    it('returns nothing if user is not logged in', async () => {
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const response = await dbAuth.getToken()
+
+      expect(response[0]).toEqual('')
+    })
+
+    it('returns any other error', async () => {
+      event = {
+        headers: {
+          cookie: encryptToCookie(
+            JSON.stringify({ id: 9999999999 }) + ';' + 'token'
+          ),
+        },
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const response = await dbAuth.getToken()
+
+      expect(response[0]).toEqual('{"message":"User not found"}')
     })
   })
 
@@ -676,168 +908,7 @@ describe('dbAuth', () => {
       const response = dbAuth._badRequest('bad')
 
       expect(response.statusCode).toEqual(400)
-      expect(response.body).toEqual({ message: 'bad' })
-    })
-  })
-
-  describe('login', () => {
-    it('throws an error if username is not found', async () => {
-      await createDbUser()
-      event.body = JSON.stringify({
-        username: 'missing@redwoodjs.com',
-        password: 'password',
-      })
-      const dbAuth = new DbAuthHandler(event, context, options)
-
-      dbAuth.login().catch((e) => {
-        expect(e).toBeInstanceOf(dbAuthError.UserNotFoundError)
-      })
-      expect.assertions(1)
-    })
-
-    it('throws an error if password is wrong', async () => {
-      await createDbUser()
-      event.body = JSON.stringify({
-        username: 'rob@redwoodjs.com',
-        password: 'incorrect',
-      })
-      const dbAuth = new DbAuthHandler(event, context, options)
-
-      dbAuth.login().catch((e) => {
-        expect(e).toBeInstanceOf(dbAuthError.IncorrectPasswordError)
-      })
-      expect.assertions(1)
-    })
-
-    it('returns a JSON body of the user that is logged in', async () => {
-      const user = await createDbUser()
-      event.body = JSON.stringify({
-        username: 'rob@redwoodjs.com',
-        password: 'password',
-      })
-      const dbAuth = new DbAuthHandler(event, context, options)
-
-      const response = await dbAuth.login()
-
-      expect(response[0]).toEqual({ id: user.id })
-    })
-
-    it('returns a CSRF token in the header', async () => {
-      await createDbUser()
-      event.body = JSON.stringify({
-        username: 'rob@redwoodjs.com',
-        password: 'password',
-      })
-      const dbAuth = new DbAuthHandler(event, context, options)
-
-      const response = await dbAuth.login()
-      expect(response[1]['X-CSRF-Token']).toMatch(UUID_REGEX)
-    })
-
-    it('returns a set-cookie header to create session', async () => {
-      await createDbUser()
-      event.body = JSON.stringify({
-        username: 'rob@redwoodjs.com',
-        password: 'password',
-      })
-      const dbAuth = new DbAuthHandler(event, context, options)
-
-      const response = await dbAuth.login()
-
-      expect(response[1]['X-CSRF-Token']).toMatch(UUID_REGEX)
-    })
-
-    it('returns a CSRF token in the header', async () => {
-      await createDbUser()
-      event.body = JSON.stringify({
-        username: 'rob@redwoodjs.com',
-        password: 'password',
-      })
-      const dbAuth = new DbAuthHandler(event, context, options)
-
-      const response = await dbAuth.login()
-
-      expect(response[1]['Set-Cookie']).toMatch(SET_SESSION_REGEX)
-    })
-  })
-
-  describe('logout', () => {
-    it('returns set-cookie header for removing session', async () => {
-      const dbAuth = new DbAuthHandler(event, context, options)
-      const response = dbAuth.logout()
-
-      expect(response[1]['Set-Cookie']).toEqual(LOGOUT_COOKIE)
-    })
-  })
-
-  describe('signup', () => {
-    it('returns the logout response if an error is raised, including error message', async () => {
-      event.body = JSON.stringify({
-        username: 'rob@redwoodjs.com',
-        password: 'password',
-        name: 'Rob',
-      })
-      options.signupHandler = () => {
-        throw Error('Cannot signup')
-      }
-      const dbAuth = new DbAuthHandler(event, context, options)
-
-      const response = await dbAuth.signup()
-      expect(response[0]).toEqual('{"message":"Cannot signup"}')
-      expect(response[1]['Set-Cookie']).toMatch(LOGOUT_COOKIE)
-    })
-
-    it('creates a new user', async () => {
-      event.body = JSON.stringify({
-        username: 'rob@redwoodjs.com',
-        password: 'password',
-        name: 'Rob',
-      })
-      const oldUserCount = await db.user.count()
-      const dbAuth = new DbAuthHandler(event, context, options)
-      await dbAuth.signup()
-      const newUserCount = await db.user.count()
-
-      expect(newUserCount).toEqual(oldUserCount + 1)
-    })
-  })
-
-  describe('getToken', () => {
-    it('returns a JWT for logged in user', async () => {
-      const user = await createDbUser()
-      event = {
-        headers: {
-          cookie: encryptToCookie(
-            JSON.stringify({ id: user.id }) + ';' + 'token'
-          ),
-        },
-      }
-      const dbAuth = new DbAuthHandler(event, context, options)
-      const response = await dbAuth.getToken()
-
-      expect(response[0]).toMatch(JWT_REGEX)
-      expect(jwt.decode(response[0]).id).toEqual(user.id)
-    })
-
-    it('returns nothing if user is not logged in', async () => {
-      const dbAuth = new DbAuthHandler(event, context, options)
-      const response = await dbAuth.getToken()
-
-      expect(response[0]).toEqual('')
-    })
-
-    it('returns any other error', async () => {
-      event = {
-        headers: {
-          cookie: encryptToCookie(
-            JSON.stringify({ id: 9999999999 }) + ';' + 'token'
-          ),
-        },
-      }
-      const dbAuth = new DbAuthHandler(event, context, options)
-      const response = await dbAuth.getToken()
-
-      expect(response[0]).toEqual('{"message":"User not found"}')
+      expect(response.body).toEqual('{"message":"bad"}')
     })
   })
 })

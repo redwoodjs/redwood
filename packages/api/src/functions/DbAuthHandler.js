@@ -79,8 +79,9 @@ const DbAuthHandler = class {
   }
 
   // Actual function that triggers everything else to happen:
-  // login, logout, signup, or getToken is called from here
-  async auth() {
+  // `login`, `logout`, `signup`, or `getToken` is called from here, after some
+  // checks to make sure the request is good
+  async invoke() {
     // if there was a problem decryption the session, just return the logout
     // response immediately
     if (this.hasInvalidSession) {
@@ -89,7 +90,7 @@ const DbAuthHandler = class {
 
     try {
       // figure out which auth function is trying to be called
-      const method = this._getAuthMethod(this.event)
+      const method = this._getAuthMethod()
 
       // return a 404 if the auth method doesn't exist or the request didn't
       // use the required HTTP verb
@@ -101,14 +102,73 @@ const DbAuthHandler = class {
       }
 
       // call whatever auth method was requested and return the body and headers
-      const [body, headers, { statusCode = 200 }] = await this[method]()
+      const [body, headers, options = { statusCode: 200 }] = await this[
+        method
+      ]()
 
-      return this._ok(body, headers, { statusCode })
+      return this._ok(body, headers, options)
     } catch (e) {
       if (e instanceof DbAuthError.WrongVerbError) {
         return this._notFound()
       } else {
         return this._badRequest(e.message)
+      }
+    }
+  }
+
+  async login() {
+    const { username, password } = JSON.parse(this.event.body)
+    const user = await this._verifyUser(username, password)
+    const sessionData = { id: user[this.options.authFields.id] }
+
+    // this needs to go into graphql somewhere so that each request makes a new CSRF token
+    // and sets it in both the encrypted session and the x-csrf-token header
+    const csrfToken = DbAuthHandler.CSRF_TOKEN
+
+    return [
+      sessionData,
+      {
+        'X-CSRF-Token': csrfToken,
+        ...this._createSessionHeader(sessionData, csrfToken),
+      },
+    ]
+  }
+
+  logout() {
+    return this._logoutResponse()
+  }
+
+  async signup() {
+    try {
+      const user = await this._createUser()
+      const sessionData = { id: user[this.options.authFields.id] }
+      const csrfToken = DbAuthHandler.CSRF_TOKEN
+
+      return [
+        sessionData,
+        {
+          'X-CSRF-Token': csrfToken,
+          ...this._createSessionHeader(sessionData, csrfToken),
+        },
+        { statusCode: 201 },
+      ]
+    } catch (e) {
+      return this._logoutResponse(e.message)
+    }
+  }
+
+  // converts the currentUser data to a JWT. returns `null` if session is not present
+  async getToken() {
+    try {
+      const user = await this._getCurrentUser()
+      const token = jwt.sign(JSON.stringify(user), process.env.SESSION_SECRET)
+
+      return [token]
+    } catch (e) {
+      if (e instanceof DbAuthError.NotLoggedInError) {
+        return this._logoutResponse()
+      } else {
+        return this._logoutResponse(e.message)
       }
     }
   }
@@ -341,63 +401,6 @@ const DbAuthHandler = class {
     ]
   }
 
-  async login() {
-    const { username, password } = JSON.parse(this.event.body)
-    const user = await this._verifyUser(username, password)
-    const sessionData = { id: user[this.options.authFields.id] }
-
-    // this needs to go into graphql somewhere so that each request makes a new CSRF token
-    // and sets it in both the encrypted session and the x-csrf-token header
-    const csrfToken = DbAuthHandler.CSRF_TOKEN
-
-    return [
-      sessionData,
-      {
-        'X-CSRF-Token': csrfToken,
-        ...this._createSessionHeader(sessionData, csrfToken),
-      },
-    ]
-  }
-
-  logout() {
-    return this._logoutResponse()
-  }
-
-  async signup() {
-    try {
-      const user = await this._createUser()
-      const sessionData = { id: user[this.options.authFields.id] }
-      const csrfToken = DbAuthHandler.CSRF_TOKEN
-
-      return [
-        sessionData,
-        {
-          'X-CSRF-Token': csrfToken,
-          ...this._createSessionHeader(sessionData, csrfToken),
-        },
-        { statusCode: 201 },
-      ]
-    } catch (e) {
-      return this._logoutResponse(e.message)
-    }
-  }
-
-  // converts the currentUser data to a JWT. returns `null` if session is not present
-  async getToken() {
-    try {
-      const user = await this._getCurrentUser()
-      const token = jwt.sign(JSON.stringify(user), process.env.SESSION_SECRET)
-
-      return [token]
-    } catch (e) {
-      if (e instanceof DbAuthError.NotLoggedInError) {
-        return this._logoutResponse()
-      } else {
-        return this._logoutResponse(e.message)
-      }
-    }
-  }
-
   _ok(body, headers = {}, options = { statusCode: 200 }) {
     return {
       statusCode: options.statusCode,
@@ -415,7 +418,7 @@ const DbAuthHandler = class {
   _badRequest(message) {
     return {
       statusCode: 400,
-      body: { message },
+      body: JSON.stringify({ message }),
       headers: { 'Content-Type': 'application/json' },
     }
   }
