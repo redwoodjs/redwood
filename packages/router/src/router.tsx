@@ -47,6 +47,7 @@ interface RedirectRouteProps {
 interface NotFoundRouteProps {
   notfound: boolean
   page: PageType
+  prerender?: boolean
 }
 
 type InternalRouteProps = Partial<
