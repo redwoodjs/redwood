@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 import * as DbAuthError from './dbAuthErrors'
 
-export const DbAuthHandler = class {
+export class DbAuthHandler {
   // class constant: maps the auth functions to their required HTTP verb for access
   static get VERBS() {
     return {
