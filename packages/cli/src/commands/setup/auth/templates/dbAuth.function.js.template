@@ -1,8 +1,8 @@
 import { db } from 'src/lib/db'
-import { dbAuthHandler } from '@redwoodjs/api'
+import { DbAuthHandler } from '@redwoodjs/api'
 
 export const handler = async (event, context) => {
-  return await dbAuthHandler(event, context, {
+  const authHandler = new DbAuthHandler(event, context, {
     // Provide prisma db client
     db: db,
 
@@ -44,4 +44,6 @@ export const handler = async (event, context) => {
     // How long a user will remain logged in, in seconds
     loginExpires: 60 * 60 * 24 * 365 * 10,
   })
+
+  return authHandler.invoke()
 }
