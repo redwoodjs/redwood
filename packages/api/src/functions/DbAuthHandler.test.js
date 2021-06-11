@@ -58,15 +58,8 @@ const UUID_REGEX =
 const SET_SESSION_REGEX = /^session=[a-zA-Z0-9+=/]+;/
 const JWT_REGEX = /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/
 const UTC_DATE_REGEX = /\w{3}, \d{2} \w{3} \d{4} [\d:]{8} GMT/
-
-// helper to set global for cookie expiration and return that date
-// const setFutureDate = () => {
-//   options.loginExpires = 60 * 60
-//   let futureDate = new Date()
-//   futureDate.setSeconds(futureDate.getSeconds() + options.loginExpires)
-
-//   return futureDate
-// }
+const LOGOUT_COOKIE =
+  'session=;Path=/;Domain=site.test;HttpOnly;SameSite=Strict;Secure;Expires=Thu, 01 Jan 1970 08:00:00 GMT'
 
 const createDbUser = async () => {
   return await db.user.create({
@@ -162,9 +155,7 @@ describe('dbAuth', () => {
 
       expect(Object.keys(headers).length).toEqual(1)
       expect(Object.keys(headers)).toContain('Set-Cookie')
-      expect(headers['Set-Cookie']).toEqual(
-        `session=;Path=/;Domain=site.test;HttpOnly;SameSite=Strict;Secure;Expires=Thu, 01 Jan 1970 08:00:00 GMT`
-      )
+      expect(headers['Set-Cookie']).toEqual(LOGOUT_COOKIE)
     })
   })
 
@@ -479,7 +470,7 @@ describe('dbAuth', () => {
     })
   })
 
-  describe('createUser', () => {
+  describe('_createUser()', () => {
     it('throws an error if username is already taken', async () => {
       const dbUser = await createDbUser()
       event.body = JSON.stringify({
@@ -775,11 +766,27 @@ describe('dbAuth', () => {
       const dbAuth = new DbAuthHandler(event, context, options)
       const response = dbAuth.logout()
 
-      expect(response[1]['Set-Cookie']).toMatch(/^session=;/)
+      expect(response[1]['Set-Cookie']).toEqual(LOGOUT_COOKIE)
     })
   })
 
   describe('signup', () => {
+    it('returns the logout response if an error is raised, including error message', async () => {
+      event.body = JSON.stringify({
+        username: 'rob@redwoodjs.com',
+        password: 'password',
+        name: 'Rob',
+      })
+      options.signupHandler = () => {
+        throw Error('Cannot signup')
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      const response = await dbAuth.signup()
+      expect(response[0]).toEqual('{"message":"Cannot signup"}')
+      expect(response[1]['Set-Cookie']).toMatch(LOGOUT_COOKIE)
+    })
+
     it('creates a new user', async () => {
       event.body = JSON.stringify({
         username: 'rob@redwoodjs.com',
