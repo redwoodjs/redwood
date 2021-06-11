@@ -30,7 +30,7 @@ export const dbAuth = () => {
     const response = await fetch(`${global.__REDWOOD__API_PROXY_PATH}/auth`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ method: 'signup', ...attributes }),
+      body: JSON.stringify({ ...attributes, method: 'signup' }),
     })
     return await response.json()
   }
