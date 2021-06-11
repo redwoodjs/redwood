@@ -36,7 +36,6 @@ import {
 } from '../service/service'
 
 const NON_EDITABLE_COLUMNS = ['id', 'createdAt', 'updatedAt']
-const SCAFFOLD_STYLE_PATH = './scaffold.css'
 // Any assets that should not trigger an overwrite error and require a --force
 const SKIPPABLE_ASSETS = ['scaffold.css']
 const PACKAGE_SET = 'Set'
