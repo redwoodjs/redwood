@@ -58,8 +58,8 @@ const UUID_REGEX =
 const SET_SESSION_REGEX = /^session=[a-zA-Z0-9+=/]+;/
 const JWT_REGEX = /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/
 const UTC_DATE_REGEX = /\w{3}, \d{2} \w{3} \d{4} [\d:]{8} GMT/
-const LOGOUT_COOKIE_REGEX =
-  /session=;Path=\/;Domain=site.test;HttpOnly;SameSite=Strict;Secure;Expires=Thu, 01 Jan 1970 [\d:]{8} GMT/
+const LOGOUT_COOKIE =
+  'session=;Path=/;Domain=site.test;HttpOnly;SameSite=Strict;Secure;Expires=Thu, 01 Jan 1970 00:00:00 GMT'
 
 const createDbUser = async () => {
   return await db.user.create({
@@ -132,7 +132,7 @@ describe('dbAuth', () => {
   describe('PAST_EXPIRES_DATE', () => {
     it('returns the start of epoch as a UTCString', () => {
       expect(DbAuthHandler.PAST_EXPIRES_DATE).toEqual(
-        new Date(1970, 0, 1).toUTCString()
+        new Date('1970-01-01T00:00:00.000+00:00').toUTCString()
       )
     })
   })
@@ -159,7 +159,7 @@ describe('dbAuth', () => {
 
       expect(Object.keys(headers).length).toEqual(1)
       expect(Object.keys(headers)).toContain('Set-Cookie')
-      expect(headers['Set-Cookie']).toMatch(LOGOUT_COOKIE_REGEX)
+      expect(headers['Set-Cookie']).toEqual(LOGOUT_COOKIE)
     })
   })
 
@@ -212,7 +212,7 @@ describe('dbAuth', () => {
       const dbAuth = new DbAuthHandler(event, context, options)
       const response = await dbAuth.invoke()
 
-      expect(response.headers['Set-Cookie']).toMatch(LOGOUT_COOKIE_REGEX)
+      expect(response.headers['Set-Cookie']).toEqual(LOGOUT_COOKIE)
     })
 
     it('returns a 404 if using the wrong HTTP verb', async () => {
@@ -357,7 +357,7 @@ describe('dbAuth', () => {
       const dbAuth = new DbAuthHandler(event, context, options)
       const response = dbAuth.logout()
 
-      expect(response[1]['Set-Cookie']).toMatch(LOGOUT_COOKIE_REGEX)
+      expect(response[1]['Set-Cookie']).toEqual(LOGOUT_COOKIE)
     })
   })
 
@@ -375,7 +375,7 @@ describe('dbAuth', () => {
 
       const response = await dbAuth.signup()
       expect(response[0]).toEqual('{"message":"Cannot signup"}')
-      expect(response[1]['Set-Cookie']).toMatch(LOGOUT_COOKIE_REGEX)
+      expect(response[1]['Set-Cookie']).toMatch(LOGOUT_COOKIE)
     })
 
     it('creates a new user', async () => {

@@ -28,7 +28,7 @@ export class DbAuthHandler {
 
   // default to epoch when we want to expire
   static get PAST_EXPIRES_DATE() {
-    return new Date(1970, 0, 1).toUTCString()
+    return new Date('1970-01-01T00:00:00.000+00:00').toUTCString()
   }
 
   // generate a new token (standard UUID)
