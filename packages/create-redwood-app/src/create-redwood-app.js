@@ -243,5 +243,12 @@ new Listr(
   .catch((e) => {
     console.log()
     console.log(e)
+    if (fs.existsSync(newAppDir)) {
+      console.log(
+        style.warning(
+          `Directory '${newAppDir}' is created, however, the process could not be completed due to an error.`
+        )
+      )
+    }
     process.exit(1)
   })
