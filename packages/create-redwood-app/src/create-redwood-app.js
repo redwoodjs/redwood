@@ -100,16 +100,18 @@ const createProjectTasks = ({ newAppDir }) => {
               return resolve()
             }
 
-            const errors = Object.keys(result.versions).map((name) => {
-              const { version, wanted } = result.versions[name]
-              return `${name} ${wanted} required, but you have ${version}.`
-            })
-            errors.push(
+            const logStatements = Object.keys(result.versions)
+              .filter((name) => !result.versions[name].isSatisfied)
+              .map((name) => {
+                const { version, wanted } = result.versions[name]
+                return `${name} ${wanted} required, but you have ${version}.`
+              })
+            logStatements.push(
               style.info(
                 `Visit https://learn.redwoodjs.com/docs/tutorial/prerequisites/#nodejs-and-yarn-versions`
               )
             )
-            return reject(new Error(errors.join('\n')))
+            return reject(new Error(logStatements.join('\n')))
           })
         })
       },
