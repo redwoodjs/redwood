@@ -400,7 +400,7 @@ git commit -am "<version>"
 git tag -am <version> "<version>"
 git push && git push --tags
 yarn build
-yarn lerna publish from-package
+yarn framework lerna publish from-package
 ```
 
 This...
