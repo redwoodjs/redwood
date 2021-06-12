@@ -147,7 +147,7 @@ test('Generate gql typedefs to correct paths', async () => {
       expect.stringMatching('api/types/graphql.d.ts'),
     ])
   )
-})
+}, 10_000) // Set timeout to 10s. Windows test runners are slow.
 
 test('mirror path for directory named modules', () => {
   const d = findDirectoryNamedModules()
