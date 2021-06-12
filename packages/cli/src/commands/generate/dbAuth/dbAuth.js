@@ -3,7 +3,6 @@ import path from 'path'
 
 import Listr from 'listr'
 
-import c from 'src/lib/colors'
 import {
   addRoutesToRouterTask,
   addScaffoldImport,
@@ -11,8 +10,8 @@ import {
   getPaths,
   transformTSToJS,
   writeFilesTask,
-} from 'src/lib/index'
-
+} from '../../../lib'
+import c from '../../../lib/colors'
 import { templateForComponentFile } from '../helpers'
 
 const ROUTES = [
