@@ -32,9 +32,7 @@ describe(
         Step2_2_BlogPostsCellMock
       )
 
-      cy.exec(`cd ${BASE_DIR}; yarn rw storybook --build`, {
-        timeout: 90000,
-      })
+      cy.exec(`cd ${BASE_DIR}; yarn rw storybook --build`)
         .its('code')
         .should('eq', 0)
     })

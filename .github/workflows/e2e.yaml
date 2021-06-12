@@ -46,9 +46,6 @@ jobs:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_RW_PATH:  "${{ steps.createpath.outputs.project_path }}"
-          CYPRESS_pageLoadTimeout: 300000
-          CYPRESS_defaultCommandTimeout: 300000
-          CYPRESS_requestTimeout: 300000
         with:
           browser: chrome
           env: true
