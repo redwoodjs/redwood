@@ -6,10 +6,10 @@ const FIXTURE_PATH = path.resolve(
 )
 
 beforeAll(() => {
-  process.env.__REDWOOD__CONFIG_PATH = FIXTURE_PATH
+  process.env.RWJS_CWD = FIXTURE_PATH
 })
 afterAll(() => {
-  delete process.env.__REDWOOD__CONFIG_PATH
+  delete process.env.RWJS_CWD
 })
 
 import {

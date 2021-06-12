@@ -18,7 +18,7 @@ export const description = 'Run Prisma CLI with experimental features'
  * 0. cd __fixtures__/example-todo-main && yarn install
  * 1. cd..; yarn build:watch
  * 2. cd packages/cli
- * 3. __REDWOOD__CONFIG_PATH=../../__fixtures__/example-todo-main yarn node dist/index.js prisma <test commands>
+ * 3. RWJS_CWD=../../__fixtures__/example-todo-main yarn node dist/index.js prisma <test commands>
  */
 export const builder = async (yargs) => {
   // accept either help or --help, which is the same behavior as all the other RW Yargs commands.
