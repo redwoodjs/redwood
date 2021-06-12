@@ -1,5 +1,4 @@
-import { transformTSToJS } from 'src/lib'
-
+import { transformTSToJS } from '../../../lib'
 import { yargsDefaults } from '../../generate'
 import {
   templateForComponentFile,

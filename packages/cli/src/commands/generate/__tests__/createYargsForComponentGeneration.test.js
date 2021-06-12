@@ -1,6 +1,6 @@
 // Setup test mocks
 global.__dirname = __dirname
-import 'src/lib/test'
+import '../../../lib/test'
 
 jest.mock('listr')
 import Listr from 'listr'

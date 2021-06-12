@@ -2,7 +2,7 @@ global.__dirname = __dirname
 import path from 'path'
 
 // Shared mocks for paths, etc.
-import 'src/lib/test'
+import '../../../../lib/test'
 
 import * as component from '../component'
 

@@ -1,9 +1,7 @@
 import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 
-import { transformTSToJS } from 'src/lib'
-import { getSchema } from 'src/lib'
-
+import { getSchema, transformTSToJS } from '../../../lib'
 import { yargsDefaults } from '../../generate'
 import {
   templateForComponentFile,

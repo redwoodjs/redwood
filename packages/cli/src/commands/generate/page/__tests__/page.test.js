@@ -40,12 +40,11 @@ import fs from 'fs'
 import path from 'path'
 
 // Load mocks
-import 'src/lib/test'
+import '../../../../lib/test'
 
 import { ensurePosixPath } from '@redwoodjs/internal'
 
-import { getPaths } from 'src/lib'
-
+import { getPaths } from '../../../../lib'
 import { pathName } from '../../helpers'
 import * as page from '../page'
 

@@ -6,10 +6,9 @@ import pascalcase from 'pascalcase'
 
 import { getConfig } from '@redwoodjs/internal'
 
-import { transformTSToJS } from 'src/lib'
-import { addRoutesToRouterTask, writeFilesTask } from 'src/lib'
-import c from 'src/lib/colors'
-
+import { transformTSToJS } from '../../../lib'
+import { addRoutesToRouterTask, writeFilesTask } from '../../../lib'
+import c from '../../../lib/colors'
 import {
   createYargsForComponentGeneration,
   pathName,

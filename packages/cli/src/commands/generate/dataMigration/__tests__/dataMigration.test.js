@@ -1,8 +1,7 @@
 global.__dirname = __dirname
 import path from 'path'
 
-import { loadGeneratorFixture } from 'src/lib/test'
-
+import { loadGeneratorFixture } from '../../../../lib/test'
 import * as generator from '../dataMigration'
 
 const asyncForEach = async (array, callback) => {
@@ -58,6 +57,6 @@ test('creates a file with expected contents', async () => {
   const files = await generator.files({ name: 'MoveUser' })
   const filename = Object.keys(files)[0]
   expect(files[filename]).toEqual(
-    loadGeneratorFixture('dataMigration', 'dataMigration.js')
+    loadGeneratorFixture('dataMigration', 'dataMigration.js.txt')
   )
 })

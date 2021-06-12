@@ -1,6 +1,6 @@
 global.__dirname = __dirname
 // Load shared mocks
-import 'src/lib/test'
+import '../../../../lib/test'
 
 import path from 'path'
 

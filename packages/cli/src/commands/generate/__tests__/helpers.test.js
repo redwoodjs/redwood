@@ -2,7 +2,7 @@ import path from 'path'
 
 // Setup test mocks
 global.__dirname = __dirname
-import 'src/lib/test'
+import '../../../lib/test'
 
 import * as helpers from '../helpers'
 import * as page from '../page/page'

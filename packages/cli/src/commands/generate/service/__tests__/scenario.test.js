@@ -1,6 +1,6 @@
 global.__dirname = __dirname
 // Load mocks
-import 'src/lib/test'
+import '../../../../lib/test'
 
 import * as service from '../service'
 
