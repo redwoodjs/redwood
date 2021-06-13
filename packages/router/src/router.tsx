@@ -194,9 +194,11 @@ function activeRouteTree(
       // render (i.e. the active route)
       active = isActive(child)
 
-      // Keep this child. It's the last one we'll keep since `active` is `true`
-      // now
-      acc.push(child)
+      if (active) {
+        // Keep this child. It's the last one we'll keep since `active` is `true`
+        // now
+        acc.push(child)
+      }
     } else if (isReactElement(child) && child.props.children) {
       // We have a child element that's not a <Route ...>, and that has
       // children. It's probably a <Set>. Recurse down one level

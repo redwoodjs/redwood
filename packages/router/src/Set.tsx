@@ -2,7 +2,7 @@ import React, { ReactElement, ReactNode, useCallback } from 'react'
 
 import { Redirect } from './links'
 import { useLocation } from './location'
-import { isRoute } from './router'
+import { isRoute, routes as namedRoutes } from './router'
 import { useRouterState } from './router-context'
 import { flattenAll, matchPath } from './util'
 
@@ -81,9 +81,8 @@ export function Set<WrapperProps>(props: SetProps<WrapperProps>) {
         const currentLocation =
           global.location.pathname + encodeURIComponent(global.location.search)
 
-        const unauthenticatedPath = routerState.routes.filter(
-          ({ name }) => unauthenticated === name
-        )[0]?.path
+        // We already have a check for !unauthenticated further up
+        const unauthenticatedPath = namedRoutes[unauthenticated || '']()
 
         if (!unauthenticatedPath) {
           throw new Error(`We could not find a route named ${unauthenticated}`)
