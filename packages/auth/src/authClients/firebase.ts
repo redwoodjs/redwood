@@ -41,6 +41,15 @@ export const firebase = (client: Firebase): AuthClient => {
   const getProvider = (providerId: oAuthProvider) => {
     return new client.auth.OAuthProvider(providerId)
   }
+  const applyProviderOptions = (provider: any, options: Options) => {
+    if (options.customParameters) {
+      provider.setCustomParameters(options.customParameters)
+    }
+    if (options.scopes) {
+      options.scopes.forEach((scope) => provider.addScope(scope))
+    }
+    return provider
+  }
   // Firebase auth functions return a goog.Promise which as of 2021-05-12 does
   // not appear to work with try {await} catch blocks as exceptions are not caught.
   // This client returns a new standard Promise so that the exceptions can be
@@ -59,7 +68,14 @@ export const firebase = (client: Firebase): AuthClient => {
     type: 'firebase',
     client,
     restoreAuthState: () => repackagePromise(client.auth().getRedirectResult()),
-    login: (options: Options = { providerId: 'google.com' }) => {
+    login: (
+      options: oAuthProvider | Options = { providerId: 'google.com' }
+    ) => {
+      // If argument provided is a string, it should be the oAuth Provider
+      // Cast the provider string into the options object
+      if (typeof options === 'string') {
+        options = { providerId: options }
+      }
       if (hasPasswordCreds(options)) {
         return repackagePromise(
           client
@@ -72,16 +88,18 @@ export const firebase = (client: Firebase): AuthClient => {
       }
 
       const provider = getProvider(options.providerId || 'google.com')
-      if (options.customParameters) {
-        provider.setCustomParameters(options.customParameters)
-      }
-      if (options.scopes) {
-        options.scopes.forEach((scope) => provider.addScope(scope))
-      }
-      return repackagePromise(client.auth().signInWithPopup(provider))
+      const providerWithOptions = applyProviderOptions(provider, options)
+      return repackagePromise(
+        client.auth().signInWithPopup(providerWithOptions)
+      )
     },
     logout: () => repackagePromise(client.auth().signOut()),
-    signup: (options: Options = { providerId: 'google.com' }) => {
+    signup: (
+      options: oAuthProvider | Options = { providerId: 'google.com' }
+    ) => {
+      if (typeof options === 'string') {
+        options = { providerId: options }
+      }
       if (hasPasswordCreds(options)) {
         return repackagePromise(
           client
@@ -94,13 +112,10 @@ export const firebase = (client: Firebase): AuthClient => {
       }
 
       const provider = getProvider(options.providerId || 'google.com')
-      if (options.customParameters) {
-        provider.setCustomParameters(options.customParameters)
-      }
-      if (options.scopes) {
-        options.scopes.forEach((scope) => provider.addScope(scope))
-      }
-      return repackagePromise(client.auth().signInWithPopup(provider))
+      const providerWithOptions = applyProviderOptions(provider, options)
+      return repackagePromise(
+        client.auth().signInWithPopup(providerWithOptions)
+      )
     },
     getToken: () => {
       const currentUser = client.auth().currentUser
