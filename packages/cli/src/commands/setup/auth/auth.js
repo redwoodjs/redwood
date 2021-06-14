@@ -152,8 +152,6 @@ const removeOldWebInit = (content, init) => {
 // returns content with old auth provider removes
 const removeOldAuthProvider = async (content) => {
   // get the current auth provider
-  console.info(content)
-
   const [_, currentAuthProvider] = content.match(
     /<AuthProvider.*type=['"](.*)['"]/s
   )
@@ -381,6 +379,7 @@ export const handler = async ({ provider, force }) => {
           await execa('yarn', ['install'])
         },
       },
+      providerData.task,
       {
         title: 'One more thing...',
         task: (_ctx, task) => {
