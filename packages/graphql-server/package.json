@@ -11,7 +11,7 @@
   "license": "MIT",
   "dependencies": {
     "@graphql-tools/merge": "6.2.14",
-    "@prisma/client": "2.23.0",
+    "@prisma/client": "3.33.0",
     "@types/pino": "6.3.8",
     "core-js": "3.13.1",
     "graphql-playground-html": "1.6.29",
@@ -22,7 +22,6 @@
     "graphql-helix": "1.6.1",
     "@graphql-tools/schema": "7.1.5",
     "@graphql-tools/utils": "7.10.0",
-    "@redwoodjs/internal": "^0.31.0",
     "graphql": "15.5.0",
     "graphql-scalars": "1.9.3",
     "jsonwebtoken": "8.5.1",
@@ -33,8 +32,8 @@
     "pino-pretty": "4.8.0"
   },
   "devDependencies": {
-    "@redwoodjs/auth": "0.32.2",
-    "@redwoodjs/dev-server": "0.32.2",
+    "@redwoodjs/auth": "0.33.3",
+    "@redwoodjs/dev-server": "0.33.3",
     "@types/jsonwebtoken": "8.3.9",
     "@types/lodash.merge": "4.6.6",
     "@types/lodash.omitby": "4.6.6",
