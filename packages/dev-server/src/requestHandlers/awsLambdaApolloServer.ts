@@ -92,7 +92,7 @@ export const requestHandlerApolloServer = async (
   if (typeof handler !== 'function') {
     const errorMessage = `"${routeName}" does not export a function named "handler"`
     console.error(errorMessage)
-    res.status(500).send(errorMessage)
+    res.status(500).send(escape(errorMessage))
   }
 
   // We take the express request object and convert it into a lambda function event.
