@@ -1,3 +1,15 @@
-import { Success } from './${name}'
+import type { ComponentProps } from 'react'
+
+import { Success, CellProps } from './${name}'
+import type { ${queryResultType}, ${queryVariablesType} } from 'types/graphql'
+
 type SuccessType = typeof Success
-export default function (): ReturnType<SuccessType>
+
+export * from './${name}'
+
+type CellInputs = Omit<
+  ComponentProps<SuccessType>,
+  keyof QueryOperationResult | keyof ${queryResultType} | 'updating'
+> & ${queryVariablesType}
+
+export default function (props: CellInputs): ReturnType<SuccessType>

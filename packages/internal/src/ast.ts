@@ -59,6 +59,24 @@ export const getNamedExports = (code: string): NamedExports[] => {
   return namedExports
 }
 
+/**
+ * get all the gql queries from the supplied code
+ */
+export const getGqlQueries = (code: string) => {
+  const gqlQueries: string[] = []
+  const ast = parse(code) as types.Node
+  traverse(ast, {
+    TaggedTemplateExpression(path) {
+      const gqlTag = path.node.tag
+      if (gqlTag.type === 'Identifier' && gqlTag.name === 'gql') {
+        gqlQueries.push(path.node.quasi.quasis[0].value.raw)
+      }
+    },
+  })
+
+  return gqlQueries
+}
+
 export const hasDefaultExport = (code: string): boolean => {
   let exported = false
   const ast = parse(code) as types.Node

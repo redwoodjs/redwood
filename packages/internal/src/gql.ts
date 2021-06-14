@@ -4,6 +4,7 @@ import {
   OperationTypeNode,
   OperationDefinitionNode,
   FieldNode,
+  parse,
 } from 'graphql'
 
 interface Operation {
@@ -14,6 +15,11 @@ interface Operation {
 
 interface Field {
   string: Array<string | Field>
+}
+
+export const parseGqlQueryToAst = (gqlQuery: string) => {
+  const ast = parse(gqlQuery)
+  return parseDocumentAST(ast)
 }
 
 export const parseDocumentAST = (document: DocumentNode) => {
@@ -43,7 +49,7 @@ const getFields = (field: FieldNode): any => {
   if (!field.selectionSet) {
     return field.name.value
   } else {
-    const obj: Record<string, FieldNode[]>
+    const obj: Record<string, FieldNode[]> = {
       [field.name.value]: [],
     }
 

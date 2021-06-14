@@ -3,7 +3,9 @@ import path from 'path'
 
 import { generate } from '@graphql-codegen/cli'
 
+import { getGqlQueries } from 'src/ast'
 import { findCells, findDirectoryNamedModules } from 'src/files'
+import { parseGqlQueryToAst } from 'src/gql'
 import { getJsxElements } from 'src/jsx'
 import { getPaths, processPagesDir } from 'src/paths'
 
@@ -74,6 +76,7 @@ export const generateMirrorDirectoryNamedModule = (
 
   const typeDefPath = path.join(mirrorDir, typeDef)
   const { name } = path.parse(p)
+
   writeTemplate(
     'templates/mirror-directoryNamedModule.d.ts.template',
     typeDefPath,
@@ -103,7 +106,18 @@ export const generateMirrorCell = (p: string, rwjsPaths = getPaths()) => {
 
   const typeDefPath = path.join(mirrorDir, typeDef)
   const { name } = path.parse(p)
-  writeTemplate('templates/mirror-cell.d.ts.template', typeDefPath, { name })
+
+  const fileContents = fs.readFileSync(p, 'utf-8')
+  const gqlQueries = getGqlQueries(fileContents)
+
+  // For mirror cells we only care about the first gqlQuery
+  const gqlDoc = parseGqlQueryToAst(gqlQueries[0])[0]
+
+  writeTemplate('templates/mirror-cell.d.ts.template', typeDefPath, {
+    name,
+    queryResultType: `${gqlDoc.name}`,
+    queryVariablesType: `${gqlDoc.name}Variables`,
+  })
   return typeDefPath
 }
 
