@@ -17,13 +17,14 @@ export class DbAuthHandler {
 
   // class constant: all the attributes of the cookie other than the value itself
   static get COOKIE_META() {
-    return [
-      `Path=/`,
-      `Domain=${process.env.SELF_HOST.split('//')[1].split(':')[0]}`,
-      'HttpOnly',
-      'SameSite=Strict',
-      'Secure',
-    ]
+    const meta = [`Path=/`, 'HttpOnly', 'SameSite=Strict', 'Secure']
+
+    // set DBAUTH_COOKIE_DOMAIN if you need any subdomains to access this cookie
+    if (process.env.DBAUTH_COOKIE_DOMAIN) {
+      meta.push(`Domain=${process.env.DBAUTH_COOKIE_DOMAIN}`)
+    }
+
+    return meta
   }
 
   // default to epoch when we want to expire
@@ -54,6 +55,11 @@ export class DbAuthHandler {
   }
 
   constructor(event, context, options = {}) {
+    // must have a SESSION_SECRET so we can encrypt/decrypt the cookie
+    if (!process.env.SESSION_SECRET) {
+      throw new DbAuthError.NoSessionSecret()
+    }
+
     try {
       this.event = event
       this.context = context

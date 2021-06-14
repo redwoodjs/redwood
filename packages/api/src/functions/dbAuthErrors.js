@@ -1,3 +1,12 @@
+export class NoSessionSecret extends Error {
+  constructor() {
+    super(
+      'dbAuth requires a SESSION_SECRET environment variable that is used to encrypt session cookies. Use `yarn rw g secret` to create one, then add to your `.env` file. DO NOT check this variable in your version control system!!'
+    )
+    this.name = 'NoSessionSecret'
+  }
+}
+
 export class WrongVerbError extends Error {
   constructor(properVerb) {
     super(`Only accessible via ${properVerb}`)

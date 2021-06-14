@@ -4,10 +4,6 @@ import jwt from 'jsonwebtoken'
 import * as dbAuthError from './dbAuthErrors'
 import { DbAuthHandler } from './DbAuthHandler'
 
-// encryption key so results are consistent regardless of settings in .env
-process.env.SESSION_SECRET = 'nREjs1HPS7cFia6tQHK70EWGtfhOgbqJQKsHQz3S'
-process.env.SELF_HOST = 'http://site.test'
-
 // mock prisma db client
 const DbMock = class {
   constructor(accessors) {
@@ -59,7 +55,7 @@ const SET_SESSION_REGEX = /^session=[a-zA-Z0-9+=/]+;/
 const JWT_REGEX = /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/
 const UTC_DATE_REGEX = /\w{3}, \d{2} \w{3} \d{4} [\d:]{8} GMT/
 const LOGOUT_COOKIE =
-  'session=;Path=/;Domain=site.test;HttpOnly;SameSite=Strict;Secure;Expires=Thu, 01 Jan 1970 00:00:00 GMT'
+  'session=;Path=/;HttpOnly;SameSite=Strict;Secure;Expires=Thu, 01 Jan 1970 00:00:00 GMT'
 
 const createDbUser = async () => {
   return await db.user.create({
@@ -80,6 +76,11 @@ let event, context, options
 
 describe('dbAuth', () => {
   beforeEach(() => {
+    // encryption key so results are consistent regardless of settings in .env
+    process.env.SESSION_SECRET = 'nREjs1HPS7cFia6tQHK70EWGtfhOgbqJQKsHQz3S'
+    process.env.SELF_HOST = 'http://site.test'
+    delete process.env.DBAUTH_COOKIE_DOMAIN
+
     event = {
       queryStringParameters: {},
       path: '/.redwood/functions/auth',
@@ -201,6 +202,14 @@ describe('dbAuth', () => {
 
       expect(dbAuth.session).toEqual({ foo: 'bar' })
       expect(dbAuth.sessionCsrfToken).toEqual('abcd')
+    })
+
+    it('throws an error if SESSION_SECRET is not defined', () => {
+      delete process.env.SESSION_SECRET
+
+      expect(() => new DbAuthHandler(event, context, options)).toThrow(
+        dbAuthError.NoSessionSecret
+      )
     })
   })
 
@@ -437,14 +446,23 @@ describe('dbAuth', () => {
       const dbAuth = new DbAuthHandler(event, context, options)
       const attributes = dbAuth._cookieAttributes({})
 
-      expect(attributes.length).toEqual(6)
+      expect(attributes.length).toEqual(5)
       expect(attributes[0]).toEqual('Path=/')
-      expect(attributes[1]).toEqual('Domain=site.test')
-      expect(attributes[2]).toEqual('HttpOnly')
-      expect(attributes[3]).toEqual('SameSite=Strict')
-      expect(attributes[4]).toEqual('Secure')
-      expect(attributes[5]).toMatch(`Expires=`)
-      expect(attributes[5]).toMatch(UTC_DATE_REGEX)
+      // expect(attributes[1]).toEqual('Domain=site.test')
+      expect(attributes[1]).toEqual('HttpOnly')
+      expect(attributes[2]).toEqual('SameSite=Strict')
+      expect(attributes[3]).toEqual('Secure')
+      expect(attributes[4]).toMatch(`Expires=`)
+      expect(attributes[4]).toMatch(UTC_DATE_REGEX)
+    })
+
+    it('includes a Domain in the cookie if DBAUTH_COOKIE_DOMAIN is set', () => {
+      process.env.DBAUTH_COOKIE_DOMAIN = 'site.test'
+
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const attributes = dbAuth._cookieAttributes({})
+
+      expect(attributes[4]).toEqual('Domain=site.test')
     })
   })
 
@@ -455,7 +473,7 @@ describe('dbAuth', () => {
 
       expect(Object.keys(headers).length).toEqual(1)
       expect(headers['Set-Cookie']).toMatch(
-        `;Path=/;Domain=site.test;HttpOnly;SameSite=Strict;Secure;Expires=${dbAuth._futureExpiresDate}`
+        `;Path=/;HttpOnly;SameSite=Strict;Secure;Expires=${dbAuth._futureExpiresDate}`
       )
       // can't really match on the session value since it will change on every render,
       // due to CSRF token generation but we can check that it contains a only the
