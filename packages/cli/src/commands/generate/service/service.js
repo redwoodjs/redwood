@@ -3,7 +3,8 @@ import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 import terminalLink from 'terminal-link'
 
-import { getSchema, transformTSToJS } from '../../../lib'
+import { getSchema, transformTSToJS } from 'src/lib'
+
 import { yargsDefaults } from '../../generate'
 import {
   templateForComponentFile,

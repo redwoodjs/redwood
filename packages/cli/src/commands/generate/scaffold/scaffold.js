@@ -23,8 +23,9 @@ import {
   writeFilesTask,
   addRoutesToRouterTask,
   addScaffoldImport,
-} from '../../../lib'
-import c from '../../../lib/colors'
+} from 'src/lib'
+import c from 'src/lib/colors'
+
 import { yargsDefaults } from '../../generate'
 import { handler as dbAuthHandler } from '../dbAuth/dbAuth'
 import { relationsForModel, intForeignKeysForModel } from '../helpers'

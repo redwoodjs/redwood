@@ -1,7 +1,7 @@
 global.__dirname = __dirname
 import path from 'path'
 
-import '../../../../lib/test'
+import 'src/lib/test'
 
 import * as scaffold from '../scaffold'
 

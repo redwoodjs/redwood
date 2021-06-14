@@ -2,9 +2,10 @@ global.__dirname = __dirname
 import path from 'path'
 
 // Load mocks
-import '../../../../lib/test'
+import 'src/lib/test'
 
-import { getDefaultArgs } from '../../../../lib'
+import { getDefaultArgs } from 'src/lib'
+
 import { yargsDefaults as defaults } from '../../../generate'
 import * as scaffold from '../scaffold'
 
