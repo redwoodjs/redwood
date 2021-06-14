@@ -120,7 +120,7 @@ export const handler = async ({
 
   jestArgs.push(
     '--config',
-    `"${require.resolve('@redwoodjs/core/config/jest.config.js')}"`
+    `"${require.resolve('@redwoodjs/testing/config/jest/jest.config.js')}"`
   )
 
   if (sides.length > 0) {

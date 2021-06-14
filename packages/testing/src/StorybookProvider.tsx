@@ -1,11 +1,8 @@
 import type { ReactNode, ReactPortal } from 'react'
 import * as React from 'react'
 
-import {
-  MockProviders,
-  startMSW,
-  setupRequestHandlers,
-} from '@redwoodjs/testing'
+import { MockProviders } from './MockProviders'
+import { setupRequestHandlers, startMSW } from './mockRequests'
 
 export const StorybookProvider: React.FunctionComponent<{
   storyFn: () => ReactNode | ReactPortal

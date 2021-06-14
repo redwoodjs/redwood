@@ -1,5 +1,6 @@
 // The guts of the router implementation.
 
+import { ActiveRouteProvider, useActiveRoute } from './ActiveRouteContext'
 import {
   parseSearch,
   replaceParams,
@@ -11,7 +12,6 @@ import {
   LocationProvider,
 } from './internal'
 import { ParamsProvider } from './params'
-import { RouteNameProvider, useRouteName } from './RouteNameContext'
 import {
   RouterContextProvider,
   RouterContextProviderProps,
@@ -47,6 +47,7 @@ interface RedirectRouteProps {
 interface NotFoundRouteProps {
   notfound: boolean
   page: PageType
+  prerender?: boolean
 }
 
 type InternalRouteProps = Partial<
@@ -71,7 +72,7 @@ const InternalRoute: React.VFC<InternalRouteProps> = ({
 }) => {
   const location = useLocation()
   const routerState = useRouterState()
-  const { routeName } = useRouteName()
+  const activeRoute = useActiveRoute()
 
   if (notfound) {
     // The "notfound" route is handled by <NotFoundChecker>
@@ -109,11 +110,15 @@ const InternalRoute: React.VFC<InternalRouteProps> = ({
     )
   }
 
-  if (name !== routeName) {
+  if (
+    path !== activeRoute?.props.path ||
+    name !== activeRoute?.props.name ||
+    page !== activeRoute?.props.page
+  ) {
     // This guards against rendering two pages when the current URL matches two paths
     //   <Route path="/about" page={AboutPage} name="about" />
     //   <Route path="/{param}" page={ParamPage} name="param" />
-    // If we go to /about, only the page with name "about" should be rendered
+    // If we go to /about, only the "about" page should be rendered
     return null
   }
 
@@ -185,13 +190,13 @@ const RouteScanner: React.FC = ({ children }) => {
   const routerState = useRouterState()
 
   let foundMatchingRoute = false
-  let routeName: string | undefined = undefined
+  let activeRoute: JSX.Element | undefined = undefined
   let NotFoundPage: PageType | undefined = undefined
   const flatChildArray = flattenAll(children)
 
   for (const child of flatChildArray) {
     if (isRoute(child)) {
-      const { path, name } = child.props
+      const { path } = child.props
 
       if (path) {
         const { match } = matchPath(
@@ -201,7 +206,7 @@ const RouteScanner: React.FC = ({ children }) => {
         )
 
         if (match) {
-          routeName = name // name is undefined for redirect routes
+          activeRoute = child
 
           foundMatchingRoute = true
           // No need to loop further. As soon as we have a matching route and a
@@ -217,7 +222,7 @@ const RouteScanner: React.FC = ({ children }) => {
   }
 
   return (
-    <RouteNameProvider value={{ routeName }}>
+    <ActiveRouteProvider value={{ activeRoute }}>
       {!foundMatchingRoute && NotFoundPage ? (
         <PageLoader
           spec={normalizePage(NotFoundPage)}
@@ -226,7 +231,7 @@ const RouteScanner: React.FC = ({ children }) => {
       ) : (
         children
       )}
-    </RouteNameProvider>
+    </ActiveRouteProvider>
   )
 }
 

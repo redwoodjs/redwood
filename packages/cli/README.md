@@ -106,7 +106,7 @@ Contributing to `@redwoodjs/cli` usually means adding a command or modifying an 
 
 #### Quickstart
 
-RedwoodJS CLI is usually run in a project, this is problematic for contributors, because the transpiled files are not in a project, but in the RedwoodJS framework repo. Luckily the path can be modified at run-time via an env-var: `__REDWOOD__CONFIG_PATH=../path/to/project`.
+RedwoodJS CLI is usually run in a project, this is problematic for contributors, because the transpiled files are not in a project, but in the RedwoodJS framework repo. Luckily the path can be modified at run-time via an env-var: `RWJS_CWD=../path/to/project`.
 
 We've added a handy yarn alias to test your modified changes to the Redwood CLI against the "example-todo-main" fixture (`__fixtures__/example-todo-main`) you can do the following:
 ```terminal

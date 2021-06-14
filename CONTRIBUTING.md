@@ -2,7 +2,7 @@
 
 Love Redwood and want to get involved? You’re in the right place!
 
-Before interacting with the Redwood community, please read and understand our [Code of Conduct](https://github.com/redwoodjs/redwood/blob/main/CODE_OF_CONDUCT.md).  
+Before interacting with the Redwood community, please read and understand our [Code of Conduct](https://github.com/redwoodjs/redwood/blob/main/CODE_OF_CONDUCT.md).
 
 **Table of Contents**
 
@@ -74,7 +74,7 @@ There are several options:
 
 **Using the functional test project might be the easiest and fastest way to test your changes in Redwood.** You can create a Redwood project that contains a big range of functionality in a few minutes:
 1. it installs using the App template codebase in the current branch of your Framework
-2. with the current stable version of Redwood Packages (with the option to use the canary version)
+2. with the current `canary` version of Redwood Packages (with the option to use the `latest` stable version)
 3. with a JavaScript language target (with the option for TypeScript)
 4. then applies code mods from the [Redwood tutorial](https://learn.redwoodjs.com/docs/tutorial/welcome-to-redwood/) to add functionality and styling
 5. and initializes a Prisma DB migration for SQLite
@@ -92,7 +92,7 @@ yarn run build:test-project <path/to/redwood-app>
 |----------------------|----------------------------------------------------------------------|
 | `<project directory>` | Directory to build test project [default: "./blog-test-project"]    |
 | `--typescript, --ts` | Generate a TypeScript project [default: JavaScript]                  |
-| `--canary`           | Upgrade project to latest canary version                             |
+| `--canary`           | Upgrade project to latest canary version [default: true]             |
 | `--help `            | Show help                                                            |
 
 **Example Use:**
@@ -181,7 +181,6 @@ this will echo:
 @redwoodjs/api: $ nodemon --watch src -e ts,js --ignore dist --exec 'yarn build'
 @redwoodjs/core: $ nodemon --ignore dist --exec 'yarn build'
 create-redwood-app: $ nodemon --ignore dist --exec 'yarn build'
-@redwoodjs/eslint-plugin-redwood: $ nodemon --ignore dist --exec 'yarn build'
 ```
 
 `build:watch` won't return you to the command line. Once it stops outputting to the terminal, you can open a new tab in your terminal, cd to `redwood-app` and run `rwt copy:watch` to get the changes in your local copy of the Redwood Framework:
@@ -221,6 +220,8 @@ Then, you can restore your Redwood App to its original state by deleting `./node
 If you are on Windows and not using WSL, you will have to use `rwt cp` (this is tracked in [issue #701](https://github.com/redwoodjs/redwood/issues/701)). This method, unfortunately, will not let you see your changes live.
 
 Also, you most likely first have to [install `rsync`](https://tlundberg.com/blog/2020-06-15/installing-rsync-on-windows/).
+
+Finally, ensure that appropriate Windows permissions are available to create symbolic links. This can be accomplished via turning on Windows Developer Mode on Windows 10. Go to Settings and find the `For developers` page. Turn on the `Developer Mode` toggle. Alternately, running your shell or VSCode as an Administrator will also work, but is the less preferred option.
 
 Each time you make a change to your local Redwood Framework, you'll have to build it:
 
@@ -399,7 +400,7 @@ git commit -am "<version>"
 git tag -am <version> "<version>"
 git push && git push --tags
 yarn build
-yarn lerna publish from-package
+yarn framework lerna publish from-package
 ```
 
 This...
@@ -493,4 +494,3 @@ yarn rwt link [RW_PATH]
 
 You can avoid having to provide `RW_PATH` by defining an environment variable on your system. See
 [Specifying a `RW_PATH`](#specifying-a-rw_path).
-
