@@ -43,7 +43,7 @@ const getFields = (field: FieldNode): any => {
   if (!field.selectionSet) {
     return field.name.value
   } else {
-    const obj = {
+    const obj: Record<string, FieldNode[]>
       [field.name.value]: [],
     }
 
