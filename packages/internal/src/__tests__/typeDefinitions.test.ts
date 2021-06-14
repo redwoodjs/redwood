@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import { findCells, findDirectoryNamedModules } from '../files'
+import { generateGraphQLSchema } from '../generate/graphqlSchema'
 import {
   generateMirrorCells,
   generateMirrorDirectoryNamedModules,
@@ -13,6 +14,7 @@ import {
   mirrorPathForDirectoryNamedModules,
   mirrorPathForCell,
   generateTypeDefScenarios,
+  generateTypeDefGraphQL,
 } from '../generate/typeDefinitions'
 import { ensurePosixPath } from '../paths'
 
@@ -22,10 +24,10 @@ const FIXTURE_PATH = path.resolve(
 )
 
 beforeAll(() => {
-  process.env.__REDWOOD__CONFIG_PATH = FIXTURE_PATH
+  process.env.RWJS_CWD = FIXTURE_PATH
 })
 afterAll(() => {
-  delete process.env.__REDWOOD__CONFIG_PATH
+  delete process.env.RWJS_CWD
 })
 
 const cleanPaths = (p) => {
@@ -132,6 +134,20 @@ test('generate scenario type defs', () => {
   const p = paths.map(cleanPaths)
   expect(p[0]).toEqual('.redwood/types/includes/api-scenarios.d.ts')
 })
+
+test('Generate gql typedefs to correct paths', async () => {
+  // Generate scehma first
+  await generateGraphQLSchema()
+  const paths = await generateTypeDefGraphQL()
+  const p = paths.map(cleanPaths)
+
+  expect(p).toEqual(
+    expect.arrayContaining([
+      expect.stringMatching('web/types/graphql.d.ts'),
+      expect.stringMatching('api/types/graphql.d.ts'),
+    ])
+  )
+}, 10_000) // Set timeout to 10s. Windows test runners are slow.
 
 test('mirror path for directory named modules', () => {
   const d = findDirectoryNamedModules()

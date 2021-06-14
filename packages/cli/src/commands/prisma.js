@@ -12,122 +12,103 @@ export const command = 'prisma [commands..]'
 export const description = 'Run Prisma CLI with experimental features'
 
 /**
- * This is a lightweight wrapper around Prisma's CLI.
- *
- * In order to test this command you can do the following:
- * 0. cd __fixtures__/example-todo-main && yarn install
- * 1. cd..; yarn build:watch
- * 2. cd packages/cli
- * 3. __REDWOOD__CONFIG_PATH=../../__fixtures__/example-todo-main yarn node dist/index.js prisma <test commands>
+ * This is a lightweight wrapper around Prisma's CLI with some Redwood CLI modifications.
  */
-export const builder = async (yargs) => {
-  // accept either help or --help, which is the same behavior as all the other RW Yargs commands.
-  const argv = mapHelpCommandToFlag(process.argv.slice(3))
-
-  // We dynamically create the `--options` that are passed to this command.
-  // TODO: Figure out if there's a way to turn off yargs parsing.
-  const options = argv
-    .filter((x) => x.startsWith('--'))
-    .map((x) => x.substr(2))
-    .reduce((pv, cv) => {
-      return {
-        ...pv,
-        [cv]: {},
-      }
-    }, {})
-
+export const builder = (yargs) => {
+  // Disable yargs parsing of commands and options because it's forwarded
+  // to Prisma CLI.
   yargs
+    .strictOptions(false)
+    .strictCommands(false)
+    .strict(false)
+    .parserConfiguration({
+      'camel-case-expansion': false,
+    })
     .help(false)
     .version(false)
-    .option(options)
-    .option('version', { alias: 'v' })
+}
 
-  const paths = getPaths()
+// eslint-disable-next-line no-unused-vars
+export const handler = async ({ _, $0, commands = [], ...options }) => {
+  const rwjsPaths = getPaths()
 
-  const autoFlags = []
+  // Prisma only supports '--help', but Redwood CLI supports `prisma <command> help`
+  const helpIndex = commands.indexOf('help')
+  if (helpIndex !== -1) {
+    options.help = true
+    commands.splice(helpIndex, 1)
+  }
 
-  const hasHelpFlag = argv.some(
-    (arg) => arg.includes('--help') || arg.includes('-h')
-  )
-
-  // Only pass auto flags, when not running help
-  if (!hasHelpFlag) {
-    if (['push', 'seed'].includes(argv[1])) {
-      // this is safe as is if a user also adds --preview-feature
-      autoFlags.push('--preview-feature')
-    }
-
+  // Automatically inject options for some commands.
+  const hasHelpOption = options.help || options.h
+  if (!hasHelpOption) {
     if (
-      // `introspect` to be replaced by `db pull`; still valid as of prisma@2.19
       ['generate', 'introspect', 'db', 'migrate', 'studio', 'format'].includes(
-        argv[0]
+        commands[0]
       )
     ) {
-      if (!fs.existsSync(paths.api.dbSchema)) {
-        console.error(
-          c.error('\n Cannot run command. No Prisma Schema found.\n')
-        )
+      if (!fs.existsSync(rwjsPaths.api.dbSchema)) {
+        console.error()
+        console.error(c.error('No Prisma Schema found.'))
+        console.error(`Redwood searched here '${rwjsPaths.api.dbSchema}'`)
+        console.error()
         process.exit(1)
       }
-      autoFlags.push('--schema', `"${paths.api.dbSchema}"`)
+      options.schema = `"${rwjsPaths.api.dbSchema}"`
+
+      if (commands[1] === 'seed') {
+        options['preview-feature'] = true
+      }
     }
   }
 
-  // Set prevents duplicate flags
-  const args = Array.from(new Set([...argv, ...autoFlags]))
+  // Convert command and options into a string that's run via execa
+  let args = commands
+  for (const [name, value] of Object.entries(options)) {
+    args.push(`--${name}`)
+    if (typeof value !== 'boolean') {
+      args.push(value)
+    }
+  }
 
-  console.log(
-    c.green(`\nRunning Prisma CLI:\n`) + `yarn prisma ${args.join(' ')} \n`
-  )
+  console.log()
+  console.log(c.green('Running Prisma CLI...'))
+  console.log(c.underline('$ yarn prisma ' + args.join(' ')))
+  console.log()
 
   try {
-    const prismaCommand = execa(
-      `"${path.join(paths.base, 'node_modules/.bin/prisma')}"`,
+    execa.sync(
+      `"${path.join(rwjsPaths.base, 'node_modules/.bin/prisma')}"`,
       args,
       {
         shell: true,
-        cwd: paths.api.base,
-        extendEnv: true,
-        cleanup: true,
+        cwd: rwjsPaths.base,
         stdio: 'inherit',
+        cleanup: true,
       }
     )
-    prismaCommand.stdout?.pipe(process.stdout)
-    prismaCommand.stderr?.pipe(process.stderr)
 
-    // So we can check for yarn prisma in the output
-    // e.g. yarn prisma db pull
-    const { stdout } = await prismaCommand
-
-    if (hasHelpFlag || stdout?.match('yarn prisma')) {
-      printRwWrapperInfo()
+    if (hasHelpOption || commands.length === 0) {
+      printWrapInfo()
     }
   } catch (e) {
     process.exit(e?.exitCode || 1)
   }
 }
 
-const mapHelpCommandToFlag = (argv) => {
-  return argv.some((x) => x.includes('help'))
-    ? [
-        ...argv.filter((x) => !['--help'].includes(x) && !['help'].includes(x)),
-        '--help',
-      ]
-    : argv
-}
+const printWrapInfo = () => {
+  const message = [
+    c.bold('Redwood CLI wraps Prisma CLI'),
+    '',
+    'Use `yarn rw prisma` to automatically pass `--schema` and `--preview-feature` options.',
+    'Use `yarn prisma` to skip Redwood CLI automatic options.',
+    '',
+    'Find more information in our docs:',
+    c.underline('https://redwoodjs.com/docs/cli-commands#prisma'),
+  ]
 
-const printRwWrapperInfo = () => {
-  const message = `
-  ${c.bold('🦺 Redwood CLI Tip')}\n
-     Use 'redwood prisma' to automatically pass the options
-     '--schema=[path]' and '--preview-feature'. For example:\n
-     ${c.green('yarn redwood prisma [command]')}\n
-  🔍 Redwood Doc: ${c.underline(
-    'https://redwoodjs.com/docs/cli-commands#prisma'
-  )}
-  `
   console.log(
-    boxen(message, {
+    boxen(message.join('\n'), {
       padding: { top: 0, bottom: 0, right: 1, left: 1 },
       margin: 1,
       borderColor: 'gray',

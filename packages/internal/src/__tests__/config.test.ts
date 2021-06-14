@@ -24,6 +24,7 @@ describe('getConfig', () => {
           "useEnvelop": false,
         },
         "generate": Object {
+          "nestScaffoldByModel": true,
           "stories": true,
           "tests": true,
         },

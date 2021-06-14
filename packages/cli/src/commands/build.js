@@ -7,11 +7,13 @@ import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
 
 import { getConfig } from '@redwoodjs/internal'
-import { detectPrerenderRoutes } from '@redwoodjs/prerender'
+import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
 
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 import { generatePrismaClient } from 'src/lib/generatePrismaClient'
+
+import { getTasks as getPrerenderTasks } from './prerender'
 
 export const command = 'build [side..]'
 export const description = 'Build for production'
@@ -88,7 +90,7 @@ export const handler = async ({
     api: {
       // must use path.join() here, and for 'web' below, to support Windows
       cwd: path.join(getPaths().base, 'api'),
-      cmd: "yarn cross-env NODE_ENV=production babel src --out-dir dist --delete-dir-on-start --extensions .ts,.js --ignore '**/*.test.ts,**/*.test.js,**/__tests__'",
+      cmd: "yarn cross-env NODE_ENV=production babel src --out-dir dist --delete-dir-on-start --extensions .ts,.js --ignore '**/*.test.ts,**/*.test.js,**/__tests__' --source-maps",
     },
     web: {
       cwd: path.join(getPaths().base, 'web'),
@@ -159,11 +161,12 @@ export const handler = async ({
 
       listrTasks.push({
         title: 'Prerendering "web"...',
-        task: () => {
-          return execa('yarn rw prerender', undefined, {
-            stdio: verbose ? 'inherit' : 'pipe',
-            shell: true,
-            cwd: getPaths().base,
+        task: async () => {
+          const prerenderTasks = await getPrerenderTasks()
+          // Reuse prerender tasks, but run them in parallel to speed things up
+          return new Listr(prerenderTasks, {
+            renderer: verbose && VerboseRenderer,
+            concurrent: true,
           })
         },
         skip: () => {

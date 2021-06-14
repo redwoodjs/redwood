@@ -102,6 +102,11 @@ const createProjectTasks = ({ newAppDir }) => {
           fs.ensureDirSync(path.dirname(newAppDir))
         }
         fs.copySync(templateDir, newAppDir)
+        // .gitignore is renamed here to force file inclusion during publishing
+        fs.rename(
+          path.join(newAppDir, 'gitignore.template'),
+          path.join(newAppDir, '.gitignore')
+        )
       },
     },
   ]
@@ -158,9 +163,19 @@ new Listr(
     },
     {
       title: 'Convert TypeScript files to JavaScript',
-      enabled: () => typescript === false,
+      enabled: () => typescript === false && yarnInstall === true,
       task: () => {
         return execa('yarn rw ts-to-js', {
+          shell: true,
+          cwd: newAppDir,
+        })
+      },
+    },
+    {
+      title: 'Generating types',
+      skip: () => yarnInstall === false,
+      task: () => {
+        return execa('yarn rw-gen', {
           shell: true,
           cwd: newAppDir,
         })

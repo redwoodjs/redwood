@@ -48,6 +48,12 @@ export const builder = (yargs) => {
       type: 'boolean',
       default: false,
     })
+    .option('db-push', {
+      describe:
+        "Syncs the test database with your Prisma schema without requiring a migration. It creates a test database if it doesn't already exist.",
+      type: 'boolean',
+      default: true,
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -60,11 +66,14 @@ export const handler = async ({
   filter: filterParams = [],
   watch = true,
   collectCoverage = false,
+  dbPush = true,
   ...others
 }) => {
   const rwjsPaths = getPaths()
   const forwardJestFlags = Object.keys(others).flatMap((flagName) => {
-    if (['watch', 'collect-coverage', '$0', '_'].includes(flagName)) {
+    if (
+      ['watch', 'collect-coverage', 'db-push', '$0', '_'].includes(flagName)
+    ) {
       // filter out flags meant for the rw test command only
       return []
     } else {
@@ -111,7 +120,7 @@ export const handler = async ({
 
   jestArgs.push(
     '--config',
-    `"${require.resolve('@redwoodjs/core/config/jest.config.js')}"`
+    `"${require.resolve('@redwoodjs/testing/config/jest/jest.config.js')}"`
   )
 
   if (sides.length > 0) {
@@ -124,8 +133,8 @@ export const handler = async ({
     )}/test.db`
     const DATABASE_URL = process.env.TEST_DATABASE_URL || cacheDirDb
 
-    // Create a test database
-    if (sides.includes('api')) {
+    if (sides.includes('api') && dbPush) {
+      // Sync||create test database
       await execa(
         `yarn rw`,
         ['prisma db push', '--force-reset', '--accept-data-loss'],
@@ -137,7 +146,8 @@ export const handler = async ({
         }
       )
     }
-    // **NOTE** There is no official way to run Jest programatically,
+
+    // **NOTE** There is no official way to run Jest programmatically,
     // so we're running it via execa, since `jest.run()` is a bit unstable.
     // https://github.com/facebook/jest/issues/5048
     await execa('yarn jest', jestArgs, {

@@ -3,6 +3,7 @@
 //@ts-check
 const fs = require('fs')
 const path = require('path')
+const { title } = require('process')
 
 const execa = require('execa')
 const Listr = require('listr')
@@ -18,7 +19,7 @@ const args = yargs
     describe: 'Generate a TypeScript project. JavaScript by default.',
   })
   .option('canary', {
-    default: false,
+    default: true,
     type: 'boolean',
     describe: 'Upgrade project to latest canary version',
   })
@@ -211,6 +212,12 @@ async function webTasks() {
           return execa('yarn rw setup tailwind', [], getExecaOptions())
         },
       },
+      {
+        title: `Running lint`,
+        task: async () => {
+          return execa('yarn rw lint --fix', [], getExecaOptions())
+        },
+      },
     ],
     {
       exitOnError: true,
@@ -277,6 +284,12 @@ async function apiTasks() {
         )
       },
     },
+    {
+      title: `Running lint`,
+      task: async () => {
+        return execa('yarn rw lint --fix', [], getExecaOptions())
+      },
+    },
   ])
 }
 
@@ -284,7 +297,7 @@ const globalTasks = () =>
   new Listr(
     [
       {
-        title: `Installing packages`,
+        title: `Installing script packages`,
         task: async () => {
           return execa(
             'yarn install',
@@ -295,7 +308,21 @@ const globalTasks = () =>
       },
       {
         title: `Creating project`,
-        task: () => createProject(),
+        task: () => {
+          return new Listr([
+            {
+              title: `Installing project template and packages`,
+              task: () => createProject(),
+            },
+            {
+              title: `Upgrading to latest canary version`,
+              task: async () => {
+                return execa('yarn rw upgrade -t canary', [], getExecaOptions())
+              },
+              enabled: () => canary,
+            },
+          ])
+        },
       },
       {
         title: `Setting up web project`,
@@ -304,19 +331,6 @@ const globalTasks = () =>
       {
         title: `Setting up api project`,
         task: () => apiTasks(),
-      },
-      {
-        title: `Running lint`,
-        task: async () => {
-          return execa('yarn rw lint --fix', [], getExecaOptions())
-        },
-      },
-      {
-        title: `Upgrading to latest canary version`,
-        task: async () => {
-          return execa('yarn rw upgrade -t canary', [], getExecaOptions())
-        },
-        enabled: () => canary,
       },
     ],
     {

@@ -9,7 +9,7 @@ const query = `
     }
 `
 const successBody = `<div className="divide-y divide-grey-700">
-{posts.map((post) => <BlogPost post={post} />)}
+{posts.map((post) => <BlogPost key={post.id} post={post} />)}
 </div>`
 
 export default (file, api) => {
