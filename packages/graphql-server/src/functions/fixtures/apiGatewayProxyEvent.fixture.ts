@@ -22,7 +22,6 @@ export const mockedAPIGatewayProxyEvent: APIGatewayProxyEvent = {
       apiKey: null,
       apiKeyId: null,
       caller: null,
-      clientCert: null,
       cognitoAuthenticationProvider: null,
       cognitoAuthenticationType: null,
       cognitoIdentityId: null,

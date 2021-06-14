@@ -1,7 +1,22 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+import { envelop, Plugin } from '@envelop/core'
+
 import { context, getPerRequestContext } from '../globalContext'
 
-import { createContextHandler } from './graphql'
+import { useUserContext, useRedwoodGlobalContextSetter } from './graphql'
+
+const createContextHandler = (userContext?: any) => {
+  const plugins: Plugin<any>[] = [useRedwoodGlobalContextSetter()]
+
+  if (userContext) {
+    plugins.push(useUserContext(userContext))
+  }
+
+  const getEnveloped = envelop({ plugins })
+
+  return ({ context }: any) => getEnveloped().contextFactory(context)
+}
 
 describe('global context handlers', () => {
   beforeAll(() => {
@@ -20,13 +35,11 @@ describe('global context handlers', () => {
     expect(inlineContext).toEqual({
       a: 1,
       b: 2,
-      callbackWaitsForEmptyEventLoop: false,
     })
 
     expect(context).toEqual({
       a: 1,
       b: 2,
-      callbackWaitsForEmptyEventLoop: false,
     })
   })
 
@@ -35,7 +48,6 @@ describe('global context handlers', () => {
     // @ts-ignore
     expect(await handler1({ context: { b: 2 } })).toEqual({
       b: 2,
-      callbackWaitsForEmptyEventLoop: false,
     })
   })
 
@@ -45,7 +57,6 @@ describe('global context handlers', () => {
     expect(await handler({ context: { d: 4 } })).toEqual({
       c: 3,
       d: 4,
-      callbackWaitsForEmptyEventLoop: false,
     })
   })
 
@@ -55,9 +66,9 @@ describe('global context handlers', () => {
     expect(await handler({ context: { d: 4 } })).toEqual({
       c: 3,
       d: 4,
-      callbackWaitsForEmptyEventLoop: false,
     })
   })
+
   it('also accepts a promise that resolve dynamic value on each run', async () => {
     const handler = createContextHandler(async ({ context }) => {
       return Promise.resolve({ c: context.d * 5 })
@@ -66,7 +77,6 @@ describe('global context handlers', () => {
     expect(await handler({ context: { d: 4 } })).toEqual({
       c: 20,
       d: 4,
-      callbackWaitsForEmptyEventLoop: false,
     })
     // now run same handler again to simulate second request
     // with different event and context
@@ -74,7 +84,6 @@ describe('global context handlers', () => {
     expect(await handler({ context: { d: 5 } })).toEqual({
       c: 25,
       d: 5,
-      callbackWaitsForEmptyEventLoop: false,
     })
   })
 })
@@ -90,13 +99,11 @@ describe('per request context handlers', () => {
       expect(inlineContext).toEqual({
         a: 1,
         b: 2,
-        callbackWaitsForEmptyEventLoop: false,
       })
 
       expect(context).toEqual({
         a: 1,
         b: 2,
-        callbackWaitsForEmptyEventLoop: false,
       })
     })
   })

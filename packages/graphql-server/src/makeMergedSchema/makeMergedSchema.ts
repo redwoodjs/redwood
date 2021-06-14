@@ -1,11 +1,11 @@
 import { mergeTypeDefs } from '@graphql-tools/merge'
 import {
-  addResolveFunctionsToSchema,
+  addResolversToSchema,
   makeExecutableSchema,
-  IResolvers,
   IExecutableSchemaDefinition,
-} from 'apollo-server-lambda'
-import type { GraphQLSchema, GraphQLFieldMap } from 'graphql'
+} from '@graphql-tools/schema'
+import { IResolvers } from '@graphql-tools/utils'
+import type { GraphQLSchema, GraphQLFieldMap, DocumentNode } from 'graphql'
 import merge from 'lodash.merge'
 import omitBy from 'lodash.omitby'
 
@@ -120,7 +120,7 @@ const mergeResolversWithServices = ({
 
 const mergeResolvers = (schemas: {
   [key: string]: {
-    schema: Record<string, unknown>
+    schema: DocumentNode
     resolvers: Record<string, unknown>
   }
 }) =>
@@ -186,7 +186,7 @@ export const makeMergedSchema = ({
 }: {
   schemas: {
     [key: string]: {
-      schema: Record<string, unknown>
+      schema: DocumentNode
       resolvers: Record<string, unknown>
     }
   }
@@ -217,12 +217,11 @@ export const makeMergedSchema = ({
 
   const { resolverValidationOptions, inheritResolversFromInterfaces } =
     schemaOptions || {}
-  addResolveFunctionsToSchema({
+
+  return addResolversToSchema({
     schema,
     resolvers,
     resolverValidationOptions,
     inheritResolversFromInterfaces,
   })
-
-  return schema
 }

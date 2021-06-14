@@ -1,5 +1,5 @@
 {
-  "name": "@redwoodjs/api",
+  "name": "@redwoodjs/graphql-server",
   "version": "0.33.3",
   "files": [
     "dist",
@@ -11,10 +11,18 @@
   "license": "MIT",
   "dependencies": {
     "@graphql-tools/merge": "6.2.14",
-    "@prisma/client": "2.24.1",
+    "@prisma/client": "2.23.0",
     "@types/pino": "6.3.8",
-    "apollo-server-lambda": "2.25.0",
     "core-js": "3.13.1",
+    "graphql-playground-html": "1.6.29",
+    "@envelop/core": "0.2.1",
+    "@envelop/apollo-tracing": "0.1.0",
+    "@envelop/parser-cache": "0.1.0",
+    "@envelop/validation-cache": "0.1.0",
+    "graphql-helix": "1.6.1",
+    "@graphql-tools/schema": "7.1.5",
+    "@graphql-tools/utils": "7.10.0",
+    "@redwoodjs/internal": "^0.31.0",
     "graphql": "15.5.0",
     "graphql-scalars": "1.9.3",
     "jsonwebtoken": "8.5.1",
@@ -22,15 +30,15 @@
     "lodash.merge": "4.6.2",
     "lodash.omitby": "4.6.0",
     "pino": "6.11.3",
-    "pino-pretty": "5.0.2"
+    "pino-pretty": "4.8.0"
   },
   "devDependencies": {
-    "@redwoodjs/auth": "^0.33.3",
-    "@redwoodjs/dev-server": "^0.33.3",
-    "@types/jsonwebtoken": "8.5.1",
+    "@redwoodjs/auth": "0.32.2",
+    "@redwoodjs/dev-server": "0.32.2",
+    "@types/jsonwebtoken": "8.3.9",
     "@types/lodash.merge": "4.6.6",
     "@types/lodash.omitby": "4.6.6",
-    "split2": "3.2.2"
+    "split2": "3.1.1"
   },
   "jest": {
     "testPathIgnorePatterns": [
