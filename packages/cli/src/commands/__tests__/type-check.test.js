@@ -57,16 +57,16 @@ test('Should run tsc commands correctly, in order', async () => {
   expect(execa.mock.results[1].value.cmd).toEqual('yarn tsc')
   expect(execa.mock.results[1].value.params).toContain('--noEmit')
   expect(execa.mock.results[1].value.params).toContain('--skipLibCheck')
-  expect(path.normalize(execa.mock.results[1].value.options.cwd)).toBe(
-    'myBasePath/web'
+  expect(execa.mock.results[1].value.options.cwd).toBe(
+    path.normalize('myBasePath/web')
   )
 
   // Ensure tsc command run correctly for web side
   expect(execa.mock.results[2].value.cmd).toEqual('yarn tsc')
   expect(execa.mock.results[2].value.params).toContain('--noEmit')
   expect(execa.mock.results[2].value.params).toContain('--skipLibCheck')
-  expect(path.normalize(execa.mock.results[2].value.options.cwd)).toBe(
-    'myBasePath/api'
+  expect(execa.mock.results[2].value.options.cwd).toBe(
+    path.normalize('myBasePath/api')
   )
 })
 
@@ -83,7 +83,7 @@ test('Should generate prisma client', async () => {
   expect(runCommandTask.mock.results[0].value[0]).toEqual(
     'yarn prisma generate --schema="../../__fixtures__/example-todo-main/api/prisma"'
   )
-  expect(path.normalize(execa.mock.results[1].value.options.cwd)).toBe(
-    'myBasePath/api'
+  expect(execa.mock.results[1].value.options.cwd).toBe(
+    path.normalize('myBasePath/api')
   )
 })
