@@ -75,11 +75,11 @@ const addWebInit = (content, init) => {
   }
 }
 
-const objectToComponentProps = (obj, { exclude = [] }) => {
+const objectToComponentProps = (obj, options = { exclude: [] }) => {
   let props = []
 
   for (const [key, value] of Object.entries(obj)) {
-    if (!exclude.includes(key)) {
+    if (!options.exclude.includes(key)) {
       if (key === 'client') {
         props.push(`${key}={${value}}`)
       } else {
