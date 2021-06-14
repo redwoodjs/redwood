@@ -94,7 +94,7 @@ const PATH_WEB_DIR_DIST = 'web/dist'
  * Search the parent directories for the Redwood configuration file.
  */
 export const getConfigPath = (
-  cwd: string = process.env.__REDWOOD__CONFIG_PATH ?? process.cwd()
+  cwd: string = process.env.RWJS_CWD ?? process.cwd()
 ): string => {
   const configPath = findUp(CONFIG_FILE_NAME, { cwd })
   if (!configPath) {
@@ -217,10 +217,11 @@ export const processPagesDir = (
   return pagePaths.map((pagePath) => {
     const p = path.parse(pagePath)
 
-    const importName = p.dir.replace('/', '')
+    const importName = p.dir.replace(/\//g, '')
     const importPath = importStatementPath(
       path.join(webPagesDir, p.dir, p.name)
     )
+
     const importStatement = `const ${importName} = { name: '${importName}', loader: import('${importPath}') }`
     return {
       importName,

@@ -1,5 +1,15 @@
+const path = require('path')
+
 module.exports = {
-  extends: './packages/eslint-config/shared.js',
+  extends: path.join(__dirname, 'packages/eslint-config/shared.js'),
+  ignorePatterns: [
+    'dist',
+    'fixtures',
+    'packages/structure/**',
+    'packages/core/**/__fixtures__/**/*',
+    'packages/core/config/storybook/**/*',
+    'packages/create-redwood-app/template/web/src/Routes.tsx',
+  ],
   rules: {
     '@typescript-eslint/no-explicit-any': 'off',
     'import/order': [
@@ -95,8 +105,8 @@ module.exports = {
         'packages/prerender/src/**',
         'packages/structure/src/**',
         'packages/testing/src/**',
+        'packages/testing/config/**',
         'packages/eslint-config/*.js',
-        'packages/eslint-plugin-redwood/src/**',
       ],
       env: {
         es6: true,

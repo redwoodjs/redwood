@@ -159,9 +159,10 @@ describe('users', () => {
 `;
 
 exports[`in typescript mode creates a multi word service file 1`] = `
-"import { db } from 'src/lib/db'
+"import type { BeforeResolverSpecType } from '@redwoodjs/api'
+
+import { db } from 'src/lib/db'
 import { requireAuth } from 'src/lib/auth'
-import { BeforeResolverSpecType } from '@redwoodjs/api'
 
 // Used when the environment variable REDWOOD_SECURE_SERVICES=1
 export const beforeResolver = (rules: BeforeResolverSpecType) => {
@@ -189,9 +190,10 @@ describe('userProfiles', () => {
 `;
 
 exports[`in typescript mode creates a single word service file 1`] = `
-"import { db } from 'src/lib/db'
+"import type { BeforeResolverSpecType } from '@redwoodjs/api'
+
+import { db } from 'src/lib/db'
 import { requireAuth } from 'src/lib/auth'
-import { BeforeResolverSpecType } from '@redwoodjs/api'
 
 // Used when the environment variable REDWOOD_SECURE_SERVICES=1
 export const beforeResolver = (rules: BeforeResolverSpecType) => {
@@ -205,10 +207,11 @@ export const users = () => {
 `;
 
 exports[`in typescript mode creates a single word service file with CRUD actions 1`] = `
-"import { Prisma } from '@prisma/client'
+"import type { Prisma } from '@prisma/client'
+import type { BeforeResolverSpecType } from '@redwoodjs/api'
+
 import { db } from 'src/lib/db'
 import { requireAuth } from 'src/lib/auth'
-import { BeforeResolverSpecType } from '@redwoodjs/api'
 
 // Used when the environment variable REDWOOD_SECURE_SERVICES=1
 export const beforeResolver = (rules: BeforeResolverSpecType) => {
@@ -255,11 +258,11 @@ export const deletePost = ({ id }: Prisma.PostWhereUniqueInput) => {
 `;
 
 exports[`in typescript mode creates a single word service file with a belongsTo relation 1`] = `
-"import { Prisma } from '@prisma/client'
-import { ResolverArgs } from '@redwoodjs/api/dist/types'
+"import type { Prisma } from '@prisma/client'
+import type { ResolverArgs, BeforeResolverSpecType } from '@redwoodjs/api'
+
 import { db } from 'src/lib/db'
 import { requireAuth } from 'src/lib/auth'
-import { BeforeResolverSpecType } from '@redwoodjs/api'
 
 // Used when the environment variable REDWOOD_SECURE_SERVICES=1
 export const beforeResolver = (rules: BeforeResolverSpecType) => {
@@ -271,18 +274,18 @@ export const users = () => {
 }
 
 export const User = {
-  identity: (_obj, { root }: ResolverArgs<Prisma.UserWhereUniqueInput>) =>
+  identity: (_obj, { root }: ResolverArgs<ReturnType<typeof user>>) =>
     db.user.findUnique({ where: { id: root.id } }).identity(),
 }
 "
 `;
 
 exports[`in typescript mode creates a single word service file with a hasMany relation 1`] = `
-"import { Prisma } from '@prisma/client'
-import { ResolverArgs } from '@redwoodjs/api/dist/types'
+"import type { Prisma } from '@prisma/client'
+import type { ResolverArgs, BeforeResolverSpecType } from '@redwoodjs/api'
+
 import { db } from 'src/lib/db'
 import { requireAuth } from 'src/lib/auth'
-import { BeforeResolverSpecType } from '@redwoodjs/api'
 
 // Used when the environment variable REDWOOD_SECURE_SERVICES=1
 export const beforeResolver = (rules: BeforeResolverSpecType) => {
@@ -294,18 +297,18 @@ export const users = () => {
 }
 
 export const User = {
-  userProfiles: (_obj, { root }: ResolverArgs<Prisma.UserWhereUniqueInput>) =>
+  userProfiles: (_obj, { root }: ResolverArgs<ReturnType<typeof user>>) =>
     db.user.findUnique({ where: { id: root.id } }).userProfiles(),
 }
 "
 `;
 
 exports[`in typescript mode creates a single word service file with multiple relations 1`] = `
-"import { Prisma } from '@prisma/client'
-import { ResolverArgs } from '@redwoodjs/api/dist/types'
+"import type { Prisma } from '@prisma/client'
+import type { ResolverArgs, BeforeResolverSpecType } from '@redwoodjs/api'
+
 import { db } from 'src/lib/db'
 import { requireAuth } from 'src/lib/auth'
-import { BeforeResolverSpecType } from '@redwoodjs/api'
 
 // Used when the environment variable REDWOOD_SECURE_SERVICES=1
 export const beforeResolver = (rules: BeforeResolverSpecType) => {
@@ -317,9 +320,9 @@ export const users = () => {
 }
 
 export const User = {
-  userProfiles: (_obj, { root }: ResolverArgs<Prisma.UserWhereUniqueInput>) =>
+  userProfiles: (_obj, { root }: ResolverArgs<ReturnType<typeof user>>) =>
     db.user.findUnique({ where: { id: root.id } }).userProfiles(),
-  identity: (_obj, { root }: ResolverArgs<Prisma.UserWhereUniqueInput>) =>
+  identity: (_obj, { root }: ResolverArgs<ReturnType<typeof user>>) =>
     db.user.findUnique({ where: { id: root.id } }).identity(),
 }
 "
