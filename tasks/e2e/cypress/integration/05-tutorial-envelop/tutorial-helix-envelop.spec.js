@@ -30,17 +30,15 @@ import Step7_4_Routes from './codemods/Step7_4_Routes'
 
 const BASE_DIR = Cypress.env('RW_PATH')
 
-describe('The Redwood Tutorial - Golden path edition', () => {
+describe('The Redwood Tutorial - Golden path Helix/Envelop edition', () => {
   // TODO: https://redwoodjs.com/tutorial/saving-data
   // TODO: https://redwoodjs.com/tutorial/administration
 
   it('0. Starting Development', () => {
-    // reset graphql function to use classic api
-
-    // reset redwood toml to use standard apollo server aka not envelop
+    // reset redwood toml to use envelop
     cy.writeFile(path.join(BASE_DIR, 'redwood.toml'), Step0_1_RedwoodToml)
 
-    // needed because can run integration tests out of order and the helix tests will overwrite the graphql function
+    // reset graphql function to use envelop
     cy.writeFile(
       path.join(BASE_DIR, 'api/src/functions/graphql.js'),
       Step0_2_GraphQL
