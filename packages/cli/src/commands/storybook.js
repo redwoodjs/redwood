@@ -48,7 +48,7 @@ export const handler = ({ open, port, build, buildDirectory }) => {
   execa(
     `yarn ${build ? 'build' : 'start'}-storybook`,
     [
-      '--config-dir ../node_modules/@redwoodjs/core/config/storybook',
+      '--config-dir ../node_modules/@redwoodjs/testing/config/storybook',
       !build && `--port ${port}`,
       !build && '--no-version-updates',
       !build && `--static-dir "${staticAssetsFolder}"`,

@@ -4,6 +4,18 @@
 const fs = require('fs')
 const path = require('path')
 
+/**
+ * This file builds the framework packages and copies them to a specific directory.
+ * It's used by `yarn rwt link`.
+ *
+ * TODO: Consider making `rwt` an alias which is `yarn --cwd path-to-framework-tools` and move
+ * all the rwt commands into the framework-tools folder.
+ *
+ * TODO: Consider adding `rwt build`, deprecating this file, and using a combination of:
+ * `yarn rwt link, rwt build, rwt cp` in order to reduce the number different files that
+ * do almost same thing.
+ */
+
 // @NOTE: not all of these modules are defined as dependencies in core
 // This is because some of them are transitive dependencies through redwood/cli for example
 const chalk = require('chalk')
@@ -25,6 +37,7 @@ const args = yargs
 
 const { dest, watch, only } = args
 
+/** The framework base path */
 const RW_BASEPATH = path.join(__dirname, '../')
 
 const packagePaths = glob
@@ -51,7 +64,7 @@ const build = async ({ packageFolderName, types }) => {
   }
 
   await execa(
-    'yarn lerna run',
+    'yarn framework lerna run',
     [
       types ? 'build' : 'build:js',
       '--parallel',
@@ -61,7 +74,7 @@ const build = async ({ packageFolderName, types }) => {
   )
 
   return execa(
-    'yarn lerna run',
+    'yarn framework lerna run',
     [
       'fix:permissions',
       '--parallel',
