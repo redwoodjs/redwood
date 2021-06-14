@@ -1,6 +1,4 @@
-import Listr from 'listr'
 import password from 'secure-random-password'
-import terminalLink from 'terminal-link'
 
 export const command = 'secret'
 export const description =
