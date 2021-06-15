@@ -78,7 +78,6 @@ describe('dbAuth', () => {
   beforeEach(() => {
     // encryption key so results are consistent regardless of settings in .env
     process.env.SESSION_SECRET = 'nREjs1HPS7cFia6tQHK70EWGtfhOgbqJQKsHQz3S'
-    process.env.SELF_HOST = 'http://site.test'
     delete process.env.DBAUTH_COOKIE_DOMAIN
 
     event = {
@@ -403,7 +402,7 @@ describe('dbAuth', () => {
   })
 
   describe('getToken', () => {
-    it('returns a JWT for logged in user', async () => {
+    it('returns the ID of the logged in user', async () => {
       const user = await createDbUser()
       event = {
         headers: {
@@ -415,8 +414,7 @@ describe('dbAuth', () => {
       const dbAuth = new DbAuthHandler(event, context, options)
       const response = await dbAuth.getToken()
 
-      expect(response[0]).toMatch(JWT_REGEX)
-      expect(jwt.decode(response[0]).id).toEqual(user.id)
+      expect(response[0]).toEqual(user.id)
     })
 
     it('returns nothing if user is not logged in', async () => {
@@ -513,89 +511,6 @@ describe('dbAuth', () => {
       expect(() => {
         dbAuth._validateCsrf()
       }).toThrow(dbAuthError.CsrfTokenMismatchError)
-    })
-  })
-
-  describe('_getSession()', () => {
-    it('returns null if no cookies', () => {
-      const dbAuth = new DbAuthHandler(event, context, options)
-      expect(dbAuth._getSession()).toEqual(null)
-    })
-
-    it('returns null if no session cookie', () => {
-      event = { headers: { cookie: 'foo=bar' } }
-      const dbAuth = new DbAuthHandler(event, context, options)
-
-      expect(dbAuth._getSession()).toEqual(null)
-    })
-
-    it('returns the value of the session cookie', () => {
-      event = { headers: { cookie: 'session=qwerty' } }
-      const dbAuth = new DbAuthHandler(event, context, options)
-
-      expect(dbAuth._getSession()).toEqual('qwerty')
-    })
-
-    it('returns the value of the session cookie when there are multiple cookies', () => {
-      event = { headers: { cookie: 'foo=bar;session=qwerty' } }
-      let dbAuth = new DbAuthHandler(event, context, options)
-
-      expect(dbAuth._getSession()).toEqual('qwerty')
-
-      event = { headers: { cookie: 'session=qwerty;foo=bar' } }
-      dbAuth = new DbAuthHandler(event, context, options)
-
-      expect(dbAuth._getSession()).toEqual('qwerty')
-    })
-
-    it('returns the value of the session cookie when there are multiple cookies separated by spaces (iOS Safari)', () => {
-      event = { headers: { cookie: 'foo=bar; session=qwerty' } }
-      let dbAuth = new DbAuthHandler(event, context, options)
-
-      expect(dbAuth._getSession()).toEqual('qwerty')
-
-      event = { headers: { cookie: 'session=qwerty; foo=bar' } }
-      dbAuth = new DbAuthHandler(event, context, options)
-
-      expect(dbAuth._getSession()).toEqual('qwerty')
-    })
-  })
-
-  describe('_decryptSession()', () => {
-    it('returns an empty array if no session', () => {
-      event = { headers: {} }
-      const dbAuth = new DbAuthHandler(event, context, options)
-
-      expect(dbAuth._decryptSession()).toEqual([])
-    })
-
-    it('returns an empty array if session is empty', () => {
-      event = { headers: { cookie: 'session=' } }
-      const dbAuth = new DbAuthHandler(event, context, options)
-
-      expect(dbAuth._decryptSession()).toEqual([])
-    })
-
-    it('throws an error if decryption errors out', () => {
-      event = { headers: { cookie: 'session=qwerty' } }
-      const dbAuth = new DbAuthHandler(event, context, options)
-
-      expect(() => dbAuth._decryptSession()).toThrow(
-        dbAuth.SessionDecryptionError
-      )
-    })
-
-    it('returns an array with contents of encrypted cookie parts', () => {
-      const first = { foo: 'bar' }
-      const second = 'abcd'
-      event = {
-        headers: {
-          cookie: encryptToCookie(JSON.stringify(first) + ';' + second),
-        },
-      }
-      const dbAuth = new DbAuthHandler(event, context, options)
-
-      expect(dbAuth._decryptSession()).toEqual([first, second])
     })
   })
 

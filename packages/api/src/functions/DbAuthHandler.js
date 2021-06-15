@@ -1,8 +1,8 @@
 import CryptoJS from 'crypto-js'
-import jwt from 'jsonwebtoken'
 import { v4 as uuidv4 } from 'uuid'
 
 import * as DbAuthError from './dbAuthErrors'
+import { decryptSession, getSession } from './dbAuthHelpers'
 
 export class DbAuthHandler {
   // class constant: maps the auth functions to their required HTTP verb for access
@@ -69,7 +69,9 @@ export class DbAuthHandler {
       this.headerCsrfToken = this.event.headers['x-csrf-token']
       this.hasInvalidSession = false
 
-      const [session, csrfToken] = this._decryptSession()
+      const [session, csrfToken] = decryptSession(
+        getSession(this.event.headers['cookie'])
+      )
       this.session = session
       this.sessionCsrfToken = csrfToken
     } catch (e) {
@@ -166,9 +168,11 @@ export class DbAuthHandler {
   async getToken() {
     try {
       const user = await this._getCurrentUser()
-      const token = jwt.sign(JSON.stringify(user), process.env.SESSION_SECRET)
 
-      return [token]
+      // need to return *something* for our existing Authorization header stuff
+      // to work, so return the user's ID in case we can use it for something
+      // in the future
+      return [user.id]
     } catch (e) {
       if (e instanceof DbAuthError.NotLoggedInError) {
         return this._logoutResponse()
@@ -217,45 +221,6 @@ export class DbAuthHandler {
       throw new DbAuthError.CsrfTokenMismatchError()
     }
     return true
-  }
-
-  // returns the actual value of the session cookie
-  _getSession() {
-    if (typeof this.event.headers.cookie === 'undefined') {
-      return null
-    }
-
-    const cookies = this.event.headers.cookie.split(';')
-    const sessionCookie = cookies.find((cook) => {
-      return cook.split('=')[0].trim() === 'session'
-    })
-
-    if (!sessionCookie || sessionCookie === 'session=') {
-      return null
-    }
-
-    return sessionCookie.split('=')[1].trim()
-  }
-
-  // decrypts the session cookie and returns an array: [data, csrf]
-  _decryptSession() {
-    const session = this._getSession()
-    if (!session) {
-      return []
-    }
-
-    try {
-      const decoded = CryptoJS.AES.decrypt(
-        session,
-        process.env.SESSION_SECRET
-      ).toString(CryptoJS.enc.Utf8)
-      const [data, csrf] = decoded.split(';')
-      const json = JSON.parse(data)
-
-      return [json, csrf]
-    } catch (e) {
-      throw new DbAuthError.SessionDecryptionError()
-    }
   }
 
   // verifies that a username and password are correct, and returns the user if so
