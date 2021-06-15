@@ -24,7 +24,7 @@ describe('${pluralCamelName}', () => {
     expect(result).toEqual(scenario.${singularCamelName}.one)
   })
 
-  <% if (create) { %>scenario('creates a ${singularCamelName}', async () => {
+  <% if (create) { %>scenario('creates a ${singularCamelName}', async (${stringifyButNotScenario(create).includes('scenario.') ? 'scenario: StandardScenario' : ''}) => {
     const result = await create${singularPascalName}({
       input: ${stringifyButNotScenario(create)},
     })
