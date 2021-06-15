@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useApolloTracing } from '@envelop/apollo-tracing'
 import { envelop, useErrorHandler, useSchema, Plugin } from '@envelop/core'
+import { useDepthLimit, DepthLimitConfig } from '@envelop/depth-limit'
 import { useParserCache } from '@envelop/parser-cache'
 import { useValidationCache } from '@envelop/validation-cache'
 import type {
@@ -77,6 +78,12 @@ interface GraphQLHandlerOptions {
   cors?: CorsConfig
 
   onHealthCheck?: OnHealthcheckFn
+
+  /*
+   * Limit the complexity of the queries solely by their depth.
+   * @see: https://www.npmjs.com/package/graphql-depth-limit#documentation
+   */
+  depthLimit: DepthLimitConfig | undefined
 }
 
 function normalizeRequest(event: APIGatewayProxyEvent): Request {
@@ -217,8 +224,13 @@ export const createGraphQLHandler = ({
   extraPlugins,
   cors,
   onHealthCheck,
+  depthLimit,
 }: GraphQLHandlerOptions) => {
   const plugins: Plugin<any>[] = [
+    useDepthLimit({
+      maxDepth: (depthLimit && depthLimit.maxDepth) || 5,
+      ignore: (depthLimit && depthLimit.ignore) || [],
+    }),
     useParserCache(),
     useValidationCache(),
     useSchema(schema),

@@ -1,5 +1,6 @@
 import './global.api-auto-imports'
 
+export * from './errors'
 export * from './makeServices'
 export * from './makeMergedSchema/makeMergedSchema'
 export * from './functions/graphql'
