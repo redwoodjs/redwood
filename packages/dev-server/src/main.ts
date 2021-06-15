@@ -38,9 +38,6 @@ const { side } = yargs.option('side', { default: 'api' }).argv
 try {
   const { host, port, paths, useEnvelop } = getArgsForSide(side as 'api')
 
-  console.log('>>> useEnvelop', useEnvelop)
-  console.log('>>> paths', paths)
-
   const requestHandler = useEnvelop
     ? requestHandlerEnvelop
     : requestHandlerApolloServer

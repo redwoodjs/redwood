@@ -63,7 +63,7 @@ const expressResponseForLambdaResult = (
   }
 
   // The AWS lambda docs specify that the response object must be
-  // compatible with `JSON.stringify`, but the type definition specifices that
+  // compatible with `JSON.stringify`, but the type definition specifies that
   // it must be a string.
   if (typeof body === 'string') {
     expressResFn.send(body)

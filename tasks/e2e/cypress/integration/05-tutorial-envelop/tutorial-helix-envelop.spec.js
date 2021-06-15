@@ -279,7 +279,5 @@ describe('The Redwood Tutorial - Golden path Helix/Envelop edition', () => {
     cy.get('input#email').type('foo@bar.com')
     cy.get('textarea#message').type('test message')
     cy.get('#tutorial-form').submit()
-    // console
-    // {name: "test name", email: "foo@bar.com", message: "test message"}
   })
 })

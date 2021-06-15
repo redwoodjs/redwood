@@ -218,7 +218,6 @@ export const createGraphQLHandler = ({
   cors,
   onHealthCheck,
 }: GraphQLHandlerOptions) => {
-  logger.debug('>> GraphQLHandlerOptions')
   const plugins: Plugin<any>[] = [
     useParserCache(),
     useValidationCache(),
@@ -290,15 +289,9 @@ export const createGraphQLHandler = ({
 
     const { operationName, query, variables } = getGraphQLParameters(request)
 
-    logger.debug(
-      { requestBody: request.body, operationName, query, variables },
-      'getGraphQLParameters'
-    )
-
     let lambdaResponse: APIGatewayProxyResult
-    try {
-      logger.debug('About to processRequest')
 
+    try {
       const result = await processRequest({
         operationName,
         query,
@@ -376,13 +369,11 @@ export const createGraphQLHandler = ({
     }
 
     if (usePerRequestContext()) {
-      logger.debug('>>>> This must be used when self-hosting RedwoodJS.')
       // This must be used when you're self-hosting RedwoodJS.
       return getPerRequestContext().run(new Map(), execFn)
     } else {
       // This is OK for AWS (Netlify/Vercel) because each Lambda request
       // is handled individually.
-      logger.debug('>>>> is handled individually.')
       return execFn()
     }
   }
