@@ -65,6 +65,7 @@
     "lodash.escaperegexp": "4.1.2",
     "esbuild-loader": "2.13.1",
     "x----x----x": "^0 RedwoodJS",
+    "@redwoodjs/eslint-config": "^0.33.3",
     "@redwoodjs/internal": "^0.33.3",
     "@redwoodjs/testing": "^0.33.3",
     "@redwoodjs/cli": "^0.33.3"
