@@ -13,6 +13,7 @@
     "dist"
   ],
   "dependencies": {
+    "@redwoodjs/dev-server": "^0.33.3",
     "@redwoodjs/api-server": "^0.33.3",
     "@redwoodjs/internal": "^0.33.3",
     "@redwoodjs/prerender": "^0.33.3",
