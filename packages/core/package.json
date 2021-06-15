@@ -66,7 +66,8 @@
     "esbuild-loader": "2.13.1",
     "x----x----x": "^0 RedwoodJS",
     "@redwoodjs/internal": "^0.33.3",
-    "@redwoodjs/testing": "^0.33.3"
+    "@redwoodjs/testing": "^0.33.3",
+    "@redwoodjs/cli": "^0.33.3"
   },
   "devDependencies": {
     "@types/babel-core": "6.25.6",
