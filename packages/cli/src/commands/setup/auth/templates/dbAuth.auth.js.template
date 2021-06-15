@@ -1,11 +1,16 @@
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/api'
-import jwt from 'jsonwebtoken'
+import { db } from './db'
 
-// The JWT token returned from the auth function already contains all
-// of your user data. If you want to add any additional fields to `currentUser`
-// then you can merge them in here.
-export const getCurrentUser = (token) => {
-  return jwt.decode(token)
+// The session sent in as the first arugment will be an object with a single
+// { id } prop, containing the ID of the logged in user. You'll need to update
+// this call if you use a different model name or unique field ID:
+//
+//   return await db.profile.findUnique({ where: { email: session.id } })
+//                   ───┬───                       ──┬──
+//      model accessor ─┘      unique id field name ─┘
+
+export const getCurrentUser = async (session) => {
+  return await db.user.findUnique({ where: { id: session.id } })
 }
 
 export const requireAuth = ({ role } = {}) => {
