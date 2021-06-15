@@ -20,10 +20,6 @@ export const handler = async (event, context) => {
       salt: 'salt',
     },
 
-    // Any DB fields in your user table that you want to exclude from the
-    // `currentUser` data response. `hashedPassword` and `salt` are always excluded.
-    excludeUserFields: [],
-
     // Whatever you want to happen to your data on new user signup. Redwood will
     // check for duplicate usernames before calling this handler. At a minimum
     // you need to save the `username`, `hashedPassword` and `salt` to your

@@ -615,24 +615,6 @@ describe('dbAuth', () => {
 
       expect(user.id).toEqual(dbUser.id)
     })
-
-    it('strips some fields from returned user', async () => {
-      const dbUser = await createDbUser()
-      event = {
-        headers: {
-          cookie: encryptToCookie(
-            JSON.stringify({ id: dbUser.id }) + ';' + 'token'
-          ),
-        },
-      }
-      const dbAuth = new DbAuthHandler(event, context, options)
-      const user = await dbAuth._getCurrentUser()
-
-      expect(dbUser.hashedPassword).not.toEqual(undefined)
-      expect(user.hashedPassword).toEqual(undefined)
-      expect(dbUser.salt).not.toEqual(undefined)
-      expect(user.salt).toEqual(undefined)
-    })
   })
 
   describe('_createUser()', () => {

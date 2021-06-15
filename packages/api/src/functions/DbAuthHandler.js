@@ -256,23 +256,7 @@ export class DbAuthHandler {
     }
   }
 
-  // removes sensative properties from a given user object
-  _sanitizeUser(user) {
-    const exclude = [
-      this.options.authFields.hashedPassword,
-      this.options.authFields.salt,
-      ...this.options.excludeUserFields,
-    ]
-
-    const userArray = Object.entries(user)
-    const filteredUser = userArray.filter(
-      ([key, _value]) => !exclude.includes(key)
-    )
-    return Object.fromEntries(filteredUser)
-  }
-
-  // gets the user from the database and returns it as an object with
-  // `excludeUserFields` fields stripped out
+  // gets the user from the database and returns only its ID
   async _getCurrentUser() {
     if (!this.session?.id) {
       throw new DbAuthError.NotLoggedInError()
@@ -280,13 +264,14 @@ export class DbAuthHandler {
 
     const user = await this.dbAccessor.findUnique({
       where: { [this.options.authFields.id]: this.session?.id },
+      select: { [this.options.authFields.id]: true },
     })
 
     if (!user) {
       throw new DbAuthError.UserNotFoundError()
     }
 
-    return this._sanitizeUser(user)
+    return user
   }
 
   // creates and returns a user, first checking that the username/password
