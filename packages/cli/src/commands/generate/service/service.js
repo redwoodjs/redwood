@@ -160,7 +160,7 @@ export const fieldsToUpdate = async (model) => {
 
   if (foreignKeys.includes(field.name)) {
     // no scalar fields, change a relation field instead
-    // { post: { foreignKey: [ 'postId' ], type: "Post" }, tag: { foreignKey: [ 'tagId' ],type: "Post" } }
+    // { post: { foreignKey: [ 'postId' ], type: "Post" }, tag: { foreignKey: [ 'tagId' ], type: "Post" } }
     fieldName = Object.values(relations)[0].foreignKey
     newValue = `scenario.${modelName}.two.${field.name}`
   } else {
