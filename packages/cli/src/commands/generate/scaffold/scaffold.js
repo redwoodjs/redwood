@@ -130,6 +130,13 @@ export const files = async ({
       : scaffoldPath.split('/').map(pascalcase).join('/') + '/'
 
   return {
+    ...(await componentFiles(
+      name,
+      pascalScaffoldPath,
+      typescript,
+      nestScaffoldByModel,
+      templateStrings
+    )),
     ...(await sdlFiles({
       ...getDefaultArgs(sdlBuilder),
       name,
@@ -153,13 +160,6 @@ export const files = async ({
       nestScaffoldByModel,
       templateStrings
     ),
-    ...(await componentFiles(
-      name,
-      pascalScaffoldPath,
-      typescript,
-      nestScaffoldByModel,
-      templateStrings
-    )),
   }
 }
 
