@@ -554,7 +554,6 @@ const tasks = ({ model, path, force, tests, typescript, javascript }) => {
             tests,
             typescript,
             javascript,
-            force,
           })
           return writeFilesTask(f, { overwriteExisting: force })
         },
