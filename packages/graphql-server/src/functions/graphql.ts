@@ -2,6 +2,9 @@
 import { useApolloTracing } from '@envelop/apollo-tracing'
 import { envelop, useErrorHandler, useSchema, Plugin } from '@envelop/core'
 import { useDepthLimit, DepthLimitConfig } from '@envelop/depth-limit'
+import { useDisableIntrospection } from '@envelop/disable-introspection'
+import { useFilterAllowedOperations } from '@envelop/filter-operation-type'
+import type { AllowedOperations } from '@envelop/filter-operation-type'
 import { useParserCache } from '@envelop/parser-cache'
 import { useValidationCache } from '@envelop/validation-cache'
 import type {
@@ -52,38 +55,66 @@ interface GraphQLHandlerOptions {
    * Customize GraphQL Logger
    */
   logger: BaseLogger
+
   /**
    * Modify the resolver and global context.
    */
   context?: Context | ContextFunction
+
   /**
    * An async function that maps the auth token retrieved from the request headers to an object.
    * Is it executed when the `auth-provider` contains one of the supported providers.
    */
   getCurrentUser?: GetCurrentUser
+
   /**
    * A callback when an unhandled exception occurs. Use this to disconnect your prisma instance.
    */
   onException?: () => void
+
   /**
    * The GraphQL Schema
    */
   schema: GraphQLSchema
 
   /**
+   * CORS configuration
+   */
+  cors?: CorsConfig
+
+  /**
+   * Healthcheck
+   */
+  onHealthCheck?: OnHealthcheckFn
+
+  /**
+   * Limit the complexity of the queries solely by their depth.
+   * @see https://www.npmjs.com/package/graphql-depth-limit#documentation
+   */
+  depthLimit?: DepthLimitConfig
+
+  /**
+   * Only allows the specified operation types (e.g. subscription, query or mutation).
+   *
+   * By default, only allow query and mutation (ie, do not allow subscriptions).
+   *
+   * @see https://github.com/dotansimha/envelop/tree/main/packages/plugins/filter-operation-type
+   */
+
+  allowedOperations?: AllowedOperations
+
+  /**
    * Custom Envelop plugins
    */
   extraPlugins?: Plugin<any>[]
 
-  cors?: CorsConfig
-
-  onHealthCheck?: OnHealthcheckFn
-
-  /*
-   * Limit the complexity of the queries solely by their depth.
-   * @see: https://www.npmjs.com/package/graphql-depth-limit#documentation
+  /**
+   * Customize the GraphiQL Endpoint
+   *
+   * Defaults to '/graphql'
+   *
    */
-  depthLimit: DepthLimitConfig | undefined
+  graphiQLEndpoint?: string
 }
 
 function normalizeRequest(event: APIGatewayProxyEvent): Request {
@@ -209,8 +240,10 @@ const useRedwoodLogger = (
 }
 
 /**
- * Creates an Apollo GraphQL Server.
+ * Creates an Enveloped GraphQL Server.
  *
+ * @see https://www.envelop.dev/ for information about envelop
+ * @see https://www.envelop.dev/plugins for available ennelop plugins
  * ```js
  * export const handler = createGraphQLHandler({ schema, context, getCurrentUser })
  * ```
@@ -225,46 +258,68 @@ export const createGraphQLHandler = ({
   cors,
   onHealthCheck,
   depthLimit,
+  allowedOperations,
+  graphiQLEndpoint,
 }: GraphQLHandlerOptions) => {
   const plugins: Plugin<any>[] = [
+    // Limits the depth of your GraphQL selection sets.
     useDepthLimit({
       maxDepth: (depthLimit && depthLimit.maxDepth) || 5,
       ignore: (depthLimit && depthLimit.ignore) || [],
     }),
+    // Only allow execution of specific operation types
+    useFilterAllowedOperations(allowedOperations || ['mutation', 'query']),
+    // Simple LRU for caching parse results.
     useParserCache(),
+    // Simple LRU for caching validate results.
     useValidationCache(),
+    // Simplest plugin to provide your GraphQL schema.
     useSchema(schema),
+    // Custom Redwood plugins
     useRedwoodAuthContext(getCurrentUser),
     useRedwoodGlobalContextSetter(),
     useRedwoodLogger(logger),
   ]
 
-  if (extraPlugins && extraPlugins.length > 0) {
-    plugins.push(...extraPlugins)
+  const isDevEnv = process.env.NODE_ENV === 'development'
+
+  if (!isDevEnv) {
+    plugins.push(useDisableIntrospection())
+  }
+
+  if (isDevEnv) {
+    plugins.push(useApolloTracing())
+    plugins.push(useErrorHandler(redwoodErrorHandler))
   }
 
   if (context) {
     plugins.push(useUserContext(context))
   }
 
-  const isDevEnv = process.env.NODE_ENV === 'development'
-  if (isDevEnv) {
-    plugins.push(useApolloTracing())
-    plugins.push(useErrorHandler(redwoodErrorHandler))
+  if (extraPlugins && extraPlugins.length > 0) {
+    plugins.push(...extraPlugins)
   }
 
   const corsContext = createCorsContext(cors)
+
   const healthcheckContext = createHealthcheckContext(
     onHealthCheck,
     corsContext
   )
-  const createSharedEnvelop = envelop({ plugins })
-  const enveloped = createSharedEnvelop()
+
+  const createSharedEnvelop = envelop({
+    plugins,
+    enableInternalTracing: isDevEnv,
+  })
+
+  // ({ event, context: lambdaContext }),
 
   const handlerFn = async (
     event: APIGatewayProxyEvent,
     lambdaContext: LambdaContext
   ): Promise<APIGatewayProxyResult> => {
+    const enveloped = createSharedEnvelop({ event, context: lambdaContext })
+
     // In the future, this could be part of a specific handler for AWS lambdas
     lambdaContext.callbackWaitsForEmptyEventLoop = false
 
@@ -289,7 +344,7 @@ export const createGraphQLHandler = ({
     if (shouldRenderGraphiQL(request)) {
       return {
         body: renderPlaygroundPage({
-          endpoint: '/graphql',
+          endpoint: graphiQLEndpoint || '/graphql',
         }),
         statusCode: 200,
         headers: {
@@ -313,8 +368,7 @@ export const createGraphQLHandler = ({
           ? undefined
           : [NoSchemaIntrospectionCustomRule],
         ...enveloped,
-        contextFactory: () =>
-          enveloped.contextFactory({ event, context: lambdaContext }),
+        contextFactory: enveloped.contextFactory,
       })
 
       if (result.type === 'RESPONSE') {

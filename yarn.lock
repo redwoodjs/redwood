@@ -1338,12 +1338,12 @@
   dependencies:
     apollo-tracing "^0.12.2"
 
-"@envelop/core@0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@envelop/core/-/core-0.2.1.tgz#194fba6202d3b4b071152d79fe89e526a2d36c08"
-  integrity sha512-91ECIjmp+DSI/PnqOi8xBiQlqfa4PyvTQHUhkAKXFowRnN78ScvW7dRp+1f5C9cjLby8O/tDkOb2YQCBXdmuXQ==
+"@envelop/core@0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@envelop/core/-/core-0.3.0.tgz#43bd27fd338c5d3242c936ecb934823d34a0cda6"
+  integrity sha512-O2ydpp7JiX558wf3kS3UPSn/fQ7QORy4WQ/8ALEE1zCFxt/Ilynm+Gu2rU1mMEKXUd0th23i3ZbjBhsrNDH3QA==
   dependencies:
-    "@envelop/types" "0.1.4"
+    "@envelop/types" "0.2.0"
 
 "@envelop/depth-limit@0.1.0":
   version "0.1.0"
@@ -1352,6 +1352,16 @@
   dependencies:
     graphql-depth-limit "^1.1.0"
 
+"@envelop/disable-introspection@0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@envelop/disable-introspection/-/disable-introspection-0.0.1.tgz#63d48184ff36c3cbe21327b953f2f77add8b2441"
+  integrity sha512-5ZaDkxstzAxvpHCQ7/MKzBt0/qj9uhZXnqLKmIP8QyTuLxxI/qAZJDLvZHeFn0Vhg11UZzIjKQA9eSUc8UDy7A==
+
+"@envelop/filter-operation-type@0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@envelop/filter-operation-type/-/filter-operation-type-0.0.1.tgz#12c1a99c072cfa1c00d84315b8e4a57cfeb42ead"
+  integrity sha512-/WxDj+Rjn3G4XLr+JCvEjhkx87cNLVe5vEumDwUcztsxOyMES3fRDnk5lVq+/PDdGJ9UtcXKSreZgZEVP6PQIg==
+
 "@envelop/parser-cache@0.1.0":
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/@envelop/parser-cache/-/parser-cache-0.1.0.tgz#4168dc8f6714fa84ef6c9cdfa621c8e9330292d3"
@@ -1359,10 +1369,10 @@
   dependencies:
     tiny-lru "7.0.6"
 
-"@envelop/types@0.1.4":
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/@envelop/types/-/types-0.1.4.tgz#dd0672ee12d11cd09f3369fca7acde28976baea0"
-  integrity sha512-sXVv1u3qpm+LDT/Rr/z5Abome4ayoisUSkyRRgvQrhqysg5W1WWDaUzGtqvrw//nkfFUsolAVSHPDAUWcDbppQ==
+"@envelop/types@0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@envelop/types/-/types-0.2.0.tgz#d66f850a04032270ef55bcc128e6de113dcb0b33"
+  integrity sha512-rwK2zSui7d7hTZc0XZFOwV2AiU/n2NYT3z6TrkYbACNI3SV5bhPb6H1/WZOFK65VBCGIobFtnoWf/NmlFf7m9Q==
 
 "@envelop/validation-cache@0.1.0":
   version "0.1.0"
