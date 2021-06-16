@@ -3,7 +3,9 @@ import path from 'path'
 
 import { generate } from '@graphql-codegen/cli'
 
+import { getCellGqlQuery } from 'src/ast'
 import { findCells, findDirectoryNamedModules } from 'src/files'
+import { parseGqlQueryToAst } from 'src/gql'
 import { getJsxElements } from 'src/jsx'
 import { getPaths, processPagesDir } from 'src/paths'
 
@@ -78,6 +80,7 @@ export const generateMirrorDirectoryNamedModule = (
 
   const typeDefPath = path.join(mirrorDir, typeDef)
   const { name } = path.parse(p)
+
   writeTemplate(
     'templates/mirror-directoryNamedModule.d.ts.template',
     typeDefPath,
@@ -107,7 +110,27 @@ export const generateMirrorCell = (p: string, rwjsPaths = getPaths()) => {
 
   const typeDefPath = path.join(mirrorDir, typeDef)
   const { name } = path.parse(p)
-  writeTemplate('templates/mirror-cell.d.ts.template', typeDefPath, { name })
+
+  const fileContents = fs.readFileSync(p, 'utf-8')
+  const cellQuery = getCellGqlQuery(fileContents)
+
+  if (cellQuery) {
+    const gqlDoc = parseGqlQueryToAst(cellQuery)[0]
+
+    writeTemplate('templates/mirror-cell.d.ts.template', typeDefPath, {
+      name,
+      queryResultType: `${gqlDoc?.name}`,
+      queryVariablesType: `${gqlDoc?.name}Variables`,
+    })
+  } else {
+    // If for some reason we can't parse the query, generated the mirror cell anyway
+    writeTemplate('templates/mirror-cell.d.ts.template', typeDefPath, {
+      name,
+      queryResultType: 'any',
+      queryVariablesType: 'any',
+    })
+  }
+
   return typeDefPath
 }
 
