@@ -11,7 +11,7 @@ jobs:
       matrix:
         os: ['macos-latest']
         node-version: ['14']
-      fail-fast: true
+      fail-fast: false
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.os }} | Node ${{ matrix.node-version }} latest
     steps:
