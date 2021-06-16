@@ -1357,10 +1357,10 @@
   resolved "https://registry.yarnpkg.com/@envelop/disable-introspection/-/disable-introspection-0.0.1.tgz#63d48184ff36c3cbe21327b953f2f77add8b2441"
   integrity sha512-5ZaDkxstzAxvpHCQ7/MKzBt0/qj9uhZXnqLKmIP8QyTuLxxI/qAZJDLvZHeFn0Vhg11UZzIjKQA9eSUc8UDy7A==
 
-"@envelop/filter-operation-type@0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@envelop/filter-operation-type/-/filter-operation-type-0.0.1.tgz#12c1a99c072cfa1c00d84315b8e4a57cfeb42ead"
-  integrity sha512-/WxDj+Rjn3G4XLr+JCvEjhkx87cNLVe5vEumDwUcztsxOyMES3fRDnk5lVq+/PDdGJ9UtcXKSreZgZEVP6PQIg==
+"@envelop/filter-operation-type@0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@envelop/filter-operation-type/-/filter-operation-type-0.1.0.tgz#0536907332a2e762b0d02c75ec925f494e07b739"
+  integrity sha512-g2PuWn3mlfYQ5JVNCnKsmGhDY5FzCVzpECf2Ap7qIIvUUoUv8me+xt6RSuSJ6hNX7qYOwFIjY/0lQ7qBeVTEGQ==
 
 "@envelop/parser-cache@0.1.0":
   version "0.1.0"

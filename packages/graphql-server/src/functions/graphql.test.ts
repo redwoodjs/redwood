@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { envelop, Plugin } from '@envelop/core'
 
-import { context, getPerRequestContext } from '../globalContext'
+import { context, getPerRequestContext } from '@redwoodjs/api'
 
 import { useUserContext, useRedwoodGlobalContextSetter } from './graphql'
 
@@ -15,7 +15,7 @@ const createContextHandler = (userContext?: any) => {
 
   const getEnveloped = envelop({ plugins })
 
-  return ({ context }: any) => getEnveloped().contextFactory(context)
+  return ({ context }: any) => getEnveloped(context).contextFactory()
 }
 
 describe('global context handlers', () => {

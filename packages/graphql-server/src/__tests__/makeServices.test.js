@@ -1,4 +1,5 @@
-import { MissingBeforeResolverError } from '../beforeResolverSpec'
+import { MissingBeforeResolverError } from '@redwoodjs/api'
+
 import { makeServices } from '../makeServices'
 
 describe('makeServices', () => {

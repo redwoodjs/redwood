@@ -11,7 +11,7 @@ import gql from 'graphql-tag'
 // @ts-ignore - not inside the <rootDir>
 import apiPackageJson from 'src/../package.json'
 
-import type { GlobalContext } from 'src/globalContext'
+import type { GlobalContext } from '@redwoodjs/api'
 
 const { prismaVersion } = require('@prisma/client')
 

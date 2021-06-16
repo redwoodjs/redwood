@@ -26,14 +26,15 @@ import {
 import { renderPlaygroundPage } from 'graphql-playground-html'
 import { BaseLogger } from 'pino'
 
-import type { AuthContextPayload } from 'src/auth'
-import { getAuthenticationContext } from 'src/auth'
-import { CorsConfig, createCorsContext } from 'src/cors'
+import type { AuthContextPayload } from '@redwoodjs/api'
+import { getAuthenticationContext } from '@redwoodjs/api'
 import {
   getPerRequestContext,
   setContext,
   usePerRequestContext,
-} from 'src/globalContext'
+} from '@redwoodjs/api'
+
+import { CorsConfig, createCorsContext } from 'src/cors'
 import { createHealthcheckContext, OnHealthcheckFn } from 'src/healthcheck'
 
 export type GetCurrentUser = (
@@ -311,8 +312,6 @@ export const createGraphQLHandler = ({
     plugins,
     enableInternalTracing: isDevEnv,
   })
-
-  // ({ event, context: lambdaContext }),
 
   const handlerFn = async (
     event: APIGatewayProxyEvent,
