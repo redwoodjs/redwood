@@ -27,7 +27,7 @@ describe('global context handlers', () => {
     process.env.SAFE_GLOBAL_CONTEXT = '0'
   })
 
-  it('merges the apollo resolver and global context correctly', async () => {
+  it('merges the graphql-server resolver and global context correctly', async () => {
     const handler = createContextHandler({ a: 1 })
     // @ts-ignore
 
@@ -89,7 +89,7 @@ describe('global context handlers', () => {
 })
 
 describe('per request context handlers', () => {
-  it('merges the apollo resolver and global context correctly', async () => {
+  it('merges the graphql-server resolver and global context correctly', async () => {
     const localAsyncStorage = getPerRequestContext()
 
     localAsyncStorage.run(new Map(), async () => {

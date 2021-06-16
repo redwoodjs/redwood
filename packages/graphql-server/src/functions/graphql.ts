@@ -1,6 +1,12 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useApolloTracing } from '@envelop/apollo-tracing'
-import { envelop, useErrorHandler, useSchema, Plugin } from '@envelop/core'
+import {
+  envelop,
+  useErrorHandler,
+  useMaskedErrors,
+  useSchema,
+  Plugin,
+} from '@envelop/core'
 import { useDepthLimit, DepthLimitConfig } from '@envelop/depth-limit'
 import { useDisableIntrospection } from '@envelop/disable-introspection'
 import { useFilterAllowedOperations } from '@envelop/filter-operation-type'
@@ -201,7 +207,7 @@ export const useRedwoodGlobalContextSetter =
 const useRedwoodLogger = (
   baseLogger: BaseLogger
 ): Plugin<RedwoodGraphQLContext> => {
-  const childLogger = baseLogger.child({ name: 'GraphQL ' })
+  const childLogger = baseLogger.child({ name: 'graphql-server' })
 
   return {
     onExecute({ args }) {
@@ -269,6 +275,8 @@ export const createGraphQLHandler = ({
     }),
     // Only allow execution of specific operation types
     useFilterAllowedOperations(allowedOperations || ['mutation', 'query']),
+    // Prevent unexpected error messages from leaking to the GraphQL clients.
+    useMaskedErrors(),
     // Simple LRU for caching parse results.
     useParserCache(),
     // Simple LRU for caching validate results.
