@@ -11,7 +11,8 @@ jobs:
       matrix:
         os: ['ubuntu-latest']
         node-version: ['14']
-      fail-fast: true
+        containers: [1, 2, 3, 4]
+      fail-fast: false
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.os }} | Node ${{ matrix.node-version }} latest
     steps:
@@ -53,6 +54,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_RW_PATH:  "${{ steps.createpath.outputs.project_path }}"
         with:
+          parallel: true
           browser: chrome
           env: true
           wait-on: 'http://localhost:8910'
