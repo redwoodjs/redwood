@@ -31,6 +31,9 @@ const BASE_DIR = Cypress.env('RW_PATH')
 describe('The Redwood Tutorial - Golden path edition', () => {
   // TODO: https://redwoodjs.com/tutorial/saving-data
   // TODO: https://redwoodjs.com/tutorial/administration
+  afterEach(() => {
+    cy.reload()
+  })
 
   it('0. Starting Development', () => {
     // https://redwoodjs.com/tutorial/installation-starting-development

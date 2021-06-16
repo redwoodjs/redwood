@@ -11,8 +11,7 @@ jobs:
       matrix:
         os: ['ubuntu-latest']
         node-version: ['14']
-        containers: [1, 2, 3, 4]
-      fail-fast: false
+      fail-fast: true
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.os }} | Node ${{ matrix.node-version }} latest
     steps:
@@ -43,7 +42,7 @@ jobs:
         run: ./tasks/run-e2e ${{ steps.createpath.outputs.project_path }} --no-start
 
       - name: Start server in background
-        run: yarn rw dev &
+        run: yarn rw dev --no-generate --fwd="--open=false" &
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
 
@@ -54,9 +53,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_RW_PATH:  "${{ steps.createpath.outputs.project_path }}"
         with:
-          parallel: true
           browser: chrome
           env: true
           wait-on: 'http://localhost:8910'
-          record: true
+          # record: true
           working-directory: ./tasks/e2e
