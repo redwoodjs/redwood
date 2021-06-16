@@ -169,7 +169,7 @@ export const generateTypeDefGraphQLApi = async () => {
   try {
     const rwjsPaths = getPaths()
     const f = await generateTypeDefGraphQL({
-      [path.join(rwjsPaths.api.base, 'types/graphql.d.ts')]: {
+      [path.join(rwjsPaths.api.types, 'graphql.d.ts')]: {
         plugins: [
           {
             typescript: { enumsAsTypes: true },
@@ -192,7 +192,7 @@ export const generateTypeDefGraphQLWeb = async () => {
     const rwjsPaths = getPaths()
     try {
       const f = await generateTypeDefGraphQL({
-        [path.join(rwjsPaths.web.base, 'types/graphql.d.ts')]: {
+        [path.join(rwjsPaths.web.types, 'graphql.d.ts')]: {
           documents: './web/src/**/!(*.d).{ts,tsx,js,jsx}',
           plugins: [
             {
