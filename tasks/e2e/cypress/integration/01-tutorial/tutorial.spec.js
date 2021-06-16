@@ -247,6 +247,8 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       Step6_5_BlogPostsCellMock
     )
 
+    cy.reload()
+
     // New entry
     cy.visit('http://localhost:8910/posts')
     cy.contains(' New Post').click()
