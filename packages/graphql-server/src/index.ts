@@ -1,10 +1,9 @@
-export * from '@redwoodjs/api/logger'
-export * from '@redwoodjs/api/webhooks'
-
 export * from './errors'
+export * from './logger'
 export * from './makeServices'
 export * from './makeMergedSchema/makeMergedSchema'
 export * from './functions/graphql'
+export * from './webhooks'
 
 export {
   BeforeResolverSpec,

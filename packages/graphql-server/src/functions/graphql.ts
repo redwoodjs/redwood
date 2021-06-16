@@ -12,11 +12,7 @@ import type {
   Context as LambdaContext,
   APIGatewayProxyResult,
 } from 'aws-lambda'
-import {
-  GraphQLError,
-  GraphQLSchema,
-  NoSchemaIntrospectionCustomRule,
-} from 'graphql'
+import { GraphQLError, GraphQLSchema } from 'graphql'
 import {
   Request,
   getGraphQLParameters,
@@ -212,6 +208,7 @@ const useRedwoodLogger = (
       childLogger.info(
         {
           operationName: args.operationName,
+          userAgent: args.contextValue.event.headers['user-agent'],
         },
         `GraphQL execution started`
       )
@@ -230,6 +227,8 @@ const useRedwoodLogger = (
             childLogger.info(
               {
                 operationName: args.operationName,
+                userAgent: args.contextValue.event.headers['user-agent'],
+                envelopTracing: args.contextValue._envelopTracing,
               },
               `GraphQL execution completed`
             )
@@ -244,7 +243,7 @@ const useRedwoodLogger = (
  * Creates an Enveloped GraphQL Server.
  *
  * @see https://www.envelop.dev/ for information about envelop
- * @see https://www.envelop.dev/plugins for available ennelop plugins
+ * @see https://www.envelop.dev/plugins for available envelop plugins
  * ```js
  * export const handler = createGraphQLHandler({ schema, context, getCurrentUser })
  * ```
@@ -322,7 +321,7 @@ export const createGraphQLHandler = ({
     // In the future, this could be part of a specific handler for AWS lambdas
     lambdaContext.callbackWaitsForEmptyEventLoop = false
 
-    // In the future, the normalizeRequest can take more flexible params, maybe evne cloud provider name
+    // In the future, the normalizeRequest can take more flexible params, maybe even cloud provider name
     // and return a normalized request structure.
     const request = normalizeRequest(event)
 
@@ -363,9 +362,7 @@ export const createGraphQLHandler = ({
         query,
         variables,
         request,
-        validationRules: isDevEnv
-          ? undefined
-          : [NoSchemaIntrospectionCustomRule],
+        validationRules: undefined,
         ...enveloped,
         contextFactory: enveloped.contextFactory,
       })
@@ -385,13 +382,6 @@ export const createGraphQLHandler = ({
       } else if (result.type === 'MULTIPART_RESPONSE') {
         lambdaResponse = {
           body: JSON.stringify({ error: 'Streaming is not supported yet!' }),
-          statusCode: 500,
-        }
-      } else if (result.type === 'PUSH') {
-        lambdaResponse = {
-          body: JSON.stringify({
-            error: 'Subscriptions is not supported yet!',
-          }),
           statusCode: 500,
         }
       } else {

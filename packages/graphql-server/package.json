@@ -2,7 +2,9 @@
   "name": "@redwoodjs/graphql-server",
   "version": "0.33.3",
   "files": [
-    "dist"
+    "dist",
+    "logger",
+    "webhooks"
   ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
