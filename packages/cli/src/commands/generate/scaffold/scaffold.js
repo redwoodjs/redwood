@@ -412,7 +412,6 @@ export const routes = async ({
 }) => {
   if (typeof nestScaffoldByModel === 'undefined') {
     nestScaffoldByModel = getConfig().generate.nestScaffoldByModel
-    console.log('nestScaffoldByModel from config: ', nestScaffoldByModel)
   }
 
   const templateNames = getTemplateStrings(name, scaffoldPath)
