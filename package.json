@@ -22,7 +22,7 @@
     "vscode-languageserver-textdocument": "1.0.1"
   },
   "scripts": {
-    "framework": "yarn --cwd ./tasks/framework-tools",
+    "framework": "yarn ./tasks/framework-tools",
     "build": "yarn framework build",
     "build:js": "yarn framework build:js",
     "build:types": "yarn framework build:types",
