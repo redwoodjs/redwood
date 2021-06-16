@@ -10,9 +10,18 @@ import babelRequireHook from '@babel/register'
 import chokidar from 'chokidar'
 import requireDir from 'require-dir'
 
-import type { NodeTargetPaths } from '@redwoodjs/internal'
+import { getPaths, NodeTargetPaths } from '@redwoodjs/internal'
 
-const WATCHER_IGNORE_EXTENSIONS = ['.db', '.sqlite', '-journal']
+const WATCHER_IGNORE_EXTENSIONS = [
+  '.db',
+  '.sqlite',
+  '-journal',
+  '.test.js',
+  '.test.ts',
+  '.scenarios.ts',
+  '.scenarios.js',
+  '.d.ts',
+]
 
 export interface Functions {
   [path: string]: any
@@ -57,6 +66,8 @@ export const watchFunctions = ({
     cache: false,
   })
 
+  const rwjsPaths = getPaths()
+
   try {
     const functions = importFreshFunctions(paths.functions)
     onImport(functions)
@@ -67,6 +78,9 @@ export const watchFunctions = ({
   const watcher = chokidar.watch(paths.base, {
     ignored: (file: string) =>
       file.includes('node_modules') ||
+      file.includes(rwjsPaths.api.dist) ||
+      file.includes(rwjsPaths.api.types) ||
+      file.includes(rwjsPaths.api.db) ||
       WATCHER_IGNORE_EXTENSIONS.some((ext) => file.endsWith(ext)),
   })
   watcher.on('ready', () => {
