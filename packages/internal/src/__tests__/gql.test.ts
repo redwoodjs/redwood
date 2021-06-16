@@ -1,6 +1,3 @@
-import fs from 'fs'
-import path from 'path'
-
 import gql from 'graphql-tag'
 
 import { parseDocumentAST } from '../gql'
