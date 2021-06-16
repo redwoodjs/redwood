@@ -29,7 +29,7 @@ jobs:
           key: node_modules_${{ runner.os }}_${{ hashFiles('**/yarn.lock') }}
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
 
       - name: Build
         run: yarn build

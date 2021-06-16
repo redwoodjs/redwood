@@ -22,7 +22,7 @@ jobs:
         with:
           node-version: '12'
       - name: Install dependencies
-        run: cd tasks/actions && yarn install --frozen-lockfile
+        run: cd tasks/actions && yarn install --immutable
       - name: Change milestone to "next-release"
         uses: ./tasks/actions/change-milestone
         with:
@@ -44,7 +44,7 @@ jobs:
         with:
           node-version: '12'
       - name: Install dependencies
-        run: cd tasks/actions && yarn install --frozen-lockfile
+        run: cd tasks/actions && yarn install --immutable
       - name: Remove milestone
         uses: ./tasks/actions/change-milestone
         with:

@@ -9,7 +9,7 @@ jobs:
     if: github.repository == 'redwoodjs/redwood'
     strategy:
       matrix:
-        os: ['macos-latest']
+        os: ['ubuntu-latest']
         node-version: ['14']
       fail-fast: true
     runs-on: ${{ matrix.os }}
@@ -24,7 +24,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Install framework modules
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
 
       - name: Create a temporary directory
         id: createpath
