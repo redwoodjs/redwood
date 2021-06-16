@@ -50,7 +50,7 @@ export const handler = async ({ _, $0, commands = [], ...options }) => {
       if (!fs.existsSync(rwjsPaths.api.dbSchema)) {
         console.error()
         console.error(c.error('No Prisma Schema found.'))
-        console.error(`Snaplet searched here '${rwjsPaths.api.dbSchema}'`)
+        console.error(`Redwood searched here '${rwjsPaths.api.dbSchema}'`)
         console.error()
         process.exit(1)
       }

@@ -14,7 +14,8 @@ import {
   mirrorPathForDirectoryNamedModules,
   mirrorPathForCell,
   generateTypeDefScenarios,
-  generateTypeDefGraphQL,
+  generateTypeDefGraphQLApi,
+  generateTypeDefGraphQLWeb,
 } from '../generate/typeDefinitions'
 import { ensurePosixPath } from '../paths'
 
@@ -151,7 +152,9 @@ test('generate scenario type defs', () => {
 test('Generate gql typedefs to correct paths', async () => {
   // Generate scehma first
   await generateGraphQLSchema()
-  const paths = await generateTypeDefGraphQL()
+  const p1 = await generateTypeDefGraphQLWeb()
+  const p2 = await generateTypeDefGraphQLApi()
+  const paths = [...p1, ...p2]
   const p = paths.map(cleanPaths)
 
   expect(p).toEqual(
