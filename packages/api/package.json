@@ -12,6 +12,7 @@
   "dependencies": {
     "@graphql-tools/merge": "6.2.14",
     "@prisma/client": "2.24.1",
+    "@types/crypto-js": "^4.0.1",
     "@types/pino": "6.3.8",
     "apollo-server-lambda": "2.25.0",
     "core-js": "3.13.1",
