@@ -41,12 +41,7 @@ jobs:
       - name: Create a RedwoodJS app
         run: ./tasks/run-e2e ${{ steps.createpath.outputs.project_path }} --no-start
 
-      - name: Start server in background
-        run: yarn rw dev --no-generate --fwd="--open=false" &
-        working-directory: ${{ steps.createpath.outputs.project_path }}
-
-
-      - name: Cypress run
+      - name: Cypress | tutorial, storybook, logger
         uses: cypress-io/github-action@v2
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
@@ -54,7 +49,15 @@ jobs:
           CYPRESS_RW_PATH:  "${{ steps.createpath.outputs.project_path }}"
         with:
           browser: chrome
+          headless: true
+          install: false
+          start: |
+            yarn --cwd ${{ steps.createpath.outputs.project_path }} rw dev --no-generate --fwd="--open=false"
           env: true
           wait-on: 'http://localhost:8910'
           record: false
           working-directory: ./tasks/e2e
+          spec: |
+            cypress/integration/01-tutorial/*.spec.js
+            cypress/integration/03-storybook/*.spec.js
+            cypress/integration/04-logger/*.spec.js
