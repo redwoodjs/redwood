@@ -6,6 +6,7 @@ on:
 
 jobs:
   install:
+    if: github.repository == 'redwoodjs/redwood'
     runs-on: ubuntu-latest
     container: cypress/browsers:node14.16.0-chrome90-ff88
     steps:
@@ -28,7 +29,6 @@ jobs:
 
   cypress-run:
     if: github.repository == 'redwoodjs/redwood'
-    strategy:
     runs-on: ubuntu-latest
     container: cypress/browsers:node14.16.0-chrome90-ff88
     name: Ubuntu-latest | node14.16.0-chrome90 latest
@@ -47,6 +47,12 @@ jobs:
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Download the build folders
+        uses: actions/download-artifact@v2
+        with:
+          name: build
+          path: build
 
       - name: Install framework modules
         if: steps.yarn-cache.outputs.cache-hit != 'true'
