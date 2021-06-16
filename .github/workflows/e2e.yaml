@@ -64,3 +64,20 @@ jobs:
             cypress/integration/01-tutorial/*.spec.js
             cypress/integration/03-storybook/*.spec.js
             cypress/integration/04-logger/*.spec.js
+
+      - name: Cypress | CLI
+        uses: cypress-io/github-action@v2
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CYPRESS_RW_PATH:  "${{ steps.createpath.outputs.project_path }}"
+        with:
+          browser: chrome
+          headless: true
+          install: false
+          env: true
+          record: false
+          working-directory: ./tasks/e2e
+          spec: |
+            cypress/integration/02-cli/*.spec.js
+
