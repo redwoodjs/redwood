@@ -5,41 +5,23 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
-  install:
-    if: github.repository == 'redwoodjs/redwood'
-    runs-on: ubuntu-latest
-    container: cypress/browsers:node14.16.0-chrome90-ff88
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      # - name: Save build folder
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: build
-      #     if-no-files-found: error
-      #     path: build
-
-      - name: Cypress install
-        uses: cypress-io/github-action@v2
-        with:
-          # Disable running of tests within install job
-          runTests: false
-          working-directory: ./tasks/e2e
-
   cypress-run:
     if: github.repository == 'redwoodjs/redwood'
-    runs-on: ubuntu-latest
-    container: cypress/browsers:node14.16.0-chrome90-ff88
-    name: Ubuntu-latest | node14.16.0-chrome90 latest
+    strategy:
+      matrix:
+        os: ['ubuntu-latest']
+        node-version: ['14']
+      fail-fast: true
+    runs-on: ${{ matrix.os }}
+    name: ${{ matrix.os }} | Node ${{ matrix.node-version }} latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      # - name: Setup node
-      #   uses: actions/setup-node@v2
-      #   with:
-      #     node-version: ${{ matrix.node-version }}
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
 
       - name: Cache node_modules
         uses: actions/cache@v2
@@ -47,12 +29,6 @@ jobs:
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-
-      # - name: Download the build folders
-      #   uses: actions/download-artifact@v2
-      #   with:
-      #     name: build
-      #     path: build
 
       - name: Install framework modules
         if: steps.yarn-cache.outputs.cache-hit != 'true'
