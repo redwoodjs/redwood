@@ -132,8 +132,7 @@ export function createCell<CellProps = any>({
               return (
                 <Failure
                   error={error}
-                  {...{ updating: loading, ...queryRest }}
-                  {...props}
+                  {...{ updating: loading, ...queryRest, ...props }}
                 />
               )
             } else {
@@ -142,14 +141,13 @@ export function createCell<CellProps = any>({
           } else if (data) {
             if (typeof Empty !== 'undefined' && isEmpty(data)) {
               return (
-                <Empty {...{ updating: loading, ...queryRest }} {...props} />
+                <Empty {...{ updating: loading, ...queryRest, ...props }} />
               )
             } else {
               return (
                 <Success
                   {...afterQuery(data)}
-                  {...{ updating: loading, ...queryRest }}
-                  {...props}
+                  {...{ updating: loading, ...queryRest, ...props }}
                 />
               )
             }
