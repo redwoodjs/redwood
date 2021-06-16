@@ -44,9 +44,9 @@ jobs:
       - name: Create a RedwoodJS app
         run: ./tasks/run-e2e ${{ steps.createpath.outputs.project_path }} --no-start
 
-      # - name: Start server in background
-      #   run: yarn rw dev &
-      #   working-directory: ${{ steps.createpath.outputs.project_path }}
+      - name: Start server in background
+        run: yarn rw dev &
+        working-directory: ${{ steps.createpath.outputs.project_path }}
 
       - name: Install dependencies
         uses: cypress-io/github-action@v2
@@ -66,7 +66,7 @@ jobs:
           install: false
           env: true
           wait-on: 'http://localhost:8910'
-          start: yarn --cwd ${{ steps.createpath.outputs.project_path }} rw dev
+          # start: yarn --cwd ${{ steps.createpath.outputs.project_path }} rw dev --fwd="--open=false"
           record: true
           working-directory: ./tasks/e2e
           spec: cypress/integration/01-tutorial/tutorial.spec.js
