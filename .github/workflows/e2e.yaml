@@ -9,7 +9,7 @@ jobs:
     if: github.repository == 'redwoodjs/redwood'
     strategy:
       matrix:
-        containers: [1, 2, 3]
+        # containers: [1, 2, 3]
         os: ['ubuntu-latest']
         node-version: ['14']
       fail-fast: true
@@ -71,7 +71,7 @@ jobs:
           working-directory: ./tasks/e2e
           spec: cypress/integration/01-tutorial/tutorial.spec.js
 
-      - name: Cypress run
+      - name: CLI tests
         uses: cypress-io/github-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -85,6 +85,6 @@ jobs:
           working-directory: ./tasks/e2e
           parallel: true
           spec: |
-            cypress/integration/02-cli
-            cypress/integration/03-storybook
-            cypress/integration/04-logger
+            cypress/integration/02-cli/*.spec.js
+            cypress/integration/03-storybook/*.spec.js
+            cypress/integration/04-logger/*.spec.js
