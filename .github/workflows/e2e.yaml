@@ -66,7 +66,7 @@ jobs:
           install: false
           env: true
           wait-on: 'http://localhost:8910'
-          start: yarn rw dev --cwd ${{ steps.createpath.outputs.project_path }}
+          start: yarn --cwd ${{ steps.createpath.outputs.project_path }} rw dev
           record: true
           working-directory: ./tasks/e2e
           spec: cypress/integration/01-tutorial/tutorial.spec.js
