@@ -13,6 +13,7 @@ jobs:
         node-version: ['14']
       fail-fast: true
     runs-on: ${{ matrix.os }}
+    container: cypress/browsers:node12.18.3-chrome87-ff82
     name: ${{ matrix.os }} | Node ${{ matrix.node-version }} latest
     steps:
       - name: Checkout
