@@ -18,10 +18,9 @@ export const config = {
 // required packages to install
 export const webPackages = []
 export const apiPackages = []
-export const functionsPath = getPaths().api.functions.replace(
-  getPaths().base,
-  ''
-)
+
+const functionsPath = getPaths().api.functions.replace(getPaths().base, '')
+const libPath = getPaths().api.lib.replace(getPaths().base, '')
 
 export const task = {
   title: 'Adding SESSION_SECRET...',
@@ -77,6 +76,11 @@ export const notes = [
   "    hashedPassword: 'hashedPassword',",
   "    salt: 'salt',",
   '  },',
+  '',
+  "To get the actual user that's logged in, take a look at `getCurrentUser()`",
+  `in \`${libPath}/auth.js\`. We default it to something simple, but you may`,
+  'use different names for your model or unique ID fields, in which case you',
+  'need to update those calls (instructions are in the comment above the code).',
   '',
   'Finally, we created a SESSION_SECRET environment variable for you in',
   `${path.join(getPaths().base, '.env')}. This value should NOT be checked`,
