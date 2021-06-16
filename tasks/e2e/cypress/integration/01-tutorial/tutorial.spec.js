@@ -29,6 +29,9 @@ import Step7_4_Routes from './codemods/Step7_4_Routes'
 const BASE_DIR = Cypress.env('RW_PATH')
 
 describe('The Redwood Tutorial - Golden path edition', () => {
+  afterEach(() => {
+    cy.reload()
+  })
   // TODO: https://redwoodjs.com/tutorial/saving-data
   // TODO: https://redwoodjs.com/tutorial/administration
 
@@ -37,6 +40,29 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step1_1_Routes)
     cy.visit('http://localhost:8910')
     cy.get('h1 > span').contains('Welcome to RedwoodJS!')
+
+    // Check that the project is linked correctly
+    const versionQuery = `query Redwood {
+      redwood {
+        version
+      }
+    }`
+    const cliPackageJson = require('../../../../../packages/cli/package.json')
+
+    cy.request({
+      method: 'POST',
+      url: '.redwood/functions/graphql',
+      body: {
+        query: versionQuery,
+      },
+      timeout: 1000,
+    }).then((response) => {
+      expect(response.status).to.eq(200)
+      expect(response.body.data.redwood).to.have.property(
+        'version',
+        cliPackageJson.version
+      )
+    })
   })
 
   it('1. Our First Page', () => {
