@@ -9,6 +9,7 @@ jobs:
     if: github.repository == 'redwoodjs/redwood'
     strategy:
       matrix:
+        containers: [1, 2, 3]
         os: ['ubuntu-latest']
         node-version: ['14']
       fail-fast: true
@@ -43,10 +44,16 @@ jobs:
       - name: Create a RedwoodJS app
         run: ./tasks/run-e2e ${{ steps.createpath.outputs.project_path }} --no-start
 
-      - name: Start server in background
-        run: yarn rw dev &
-        working-directory: ${{ steps.createpath.outputs.project_path }}
+      # - name: Start server in background
+      #   run: yarn rw dev &
+      #   working-directory: ${{ steps.createpath.outputs.project_path }}
 
+      - name: Install dependencies
+        uses: cypress-io/github-action@v2
+        with:
+          # just perform install
+          runTests: false
+          working-directory: ./tasks/e2e
 
       - name: Cypress run
         uses: cypress-io/github-action@v2
@@ -56,7 +63,28 @@ jobs:
           CYPRESS_RW_PATH:  "${{ steps.createpath.outputs.project_path }}"
         with:
           browser: chrome
+          install: false
           env: true
           wait-on: 'http://localhost:8910'
+          start: yarn rw dev --cwd ${{ steps.createpath.outputs.project_path }}
           record: true
           working-directory: ./tasks/e2e
+          spec: cypress/integration/01-tutorial/tutorial.spec.js
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CYPRESS_RW_PATH:  "${{ steps.createpath.outputs.project_path }}"
+        with:
+          browser: chrome
+          headless: true
+          install: false
+          env: true
+          record: false
+          working-directory: ./tasks/e2e
+          parallel: true
+          spec: |
+            cypress/integration/02-cli
+            cypress/integration/03-storybook
+            cypress/integration/04-logger
