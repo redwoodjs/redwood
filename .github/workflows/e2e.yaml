@@ -56,5 +56,5 @@ jobs:
           browser: chrome
           env: true
           wait-on: 'http://localhost:8910'
-          # record: true
+          record: false
           working-directory: ./tasks/e2e

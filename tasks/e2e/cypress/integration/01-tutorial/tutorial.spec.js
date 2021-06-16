@@ -31,9 +31,6 @@ const BASE_DIR = Cypress.env('RW_PATH')
 describe('The Redwood Tutorial - Golden path edition', () => {
   // TODO: https://redwoodjs.com/tutorial/saving-data
   // TODO: https://redwoodjs.com/tutorial/administration
-  afterEach(() => {
-    cy.reload()
-  })
 
   it('0. Starting Development', () => {
     // https://redwoodjs.com/tutorial/installation-starting-development
@@ -185,8 +182,11 @@ describe('The Redwood Tutorial - Golden path edition', () => {
   it('6. Routing Params', () => {
     // https://redwoodjs.com/tutorial/routing-params
     cy.exec(`cd ${BASE_DIR}; yarn rw g page BlogPost --force`)
+    cy.visit('http://localhost:8910/') // attempting workaround
     cy.exec(`cd ${BASE_DIR}; yarn rw g cell BlogPost --force`)
+    cy.visit('http://localhost:8910/')
     cy.exec(`cd ${BASE_DIR}; yarn rw g component BlogPost --force`)
+    cy.visit('http://localhost:8910/')
 
     cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step6_1_Routes)
     cy.writeFile(
