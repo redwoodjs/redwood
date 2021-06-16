@@ -115,16 +115,23 @@ export const generateMirrorCell = (p: string, rwjsPaths = getPaths()) => {
   const cellQuery = getCellGqlQuery(fileContents)
 
   if (cellQuery) {
-    // For mirror cells we only care about the first gqlQuery
     const gqlDoc = parseGqlQueryToAst(cellQuery)[0]
 
     writeTemplate('templates/mirror-cell.d.ts.template', typeDefPath, {
       name,
-      queryResultType: `${gqlDoc.name}`,
-      queryVariablesType: `${gqlDoc.name}Variables`,
+      queryResultType: `${gqlDoc?.name}`,
+      queryVariablesType: `${gqlDoc?.name}Variables`,
     })
-    return typeDefPath
+  } else {
+    // If for some reason we can't parse the query, generated the mirror cell anyway
+    writeTemplate('templates/mirror-cell.d.ts.template', typeDefPath, {
+      name,
+      queryResultType: 'any',
+      queryVariablesType: 'any',
+    })
   }
+
+  return typeDefPath
 }
 
 const writeTypeDefIncludeFile = (
