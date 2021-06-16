@@ -21,8 +21,11 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Set Yarn registry # workaround for Windows network timeout
-        run: yarn config set registry "http://registry.npmjs.org"
+      - name: Set Yarn config # workaround for Windows network timeout
+        run: |
+          yarn config delete proxy
+          npm config rm proxy
+          npm config rm https-proxy
 
       - name: Cache "node_modules"
         uses: actions/cache@v2
