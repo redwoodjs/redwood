@@ -1,4 +1,4 @@
-import type { types } from '@babel/core'
+import { types } from '@babel/core'
 import { parse as babelParse } from '@babel/parser'
 import traverse from '@babel/traverse'
 
@@ -67,6 +67,7 @@ export const getGqlQueries = (code: string) => {
   const ast = parse(code) as types.Node
   traverse(ast, {
     TaggedTemplateExpression(path) {
+      console.log(path)
       const gqlTag = path.node.tag
       if (gqlTag.type === 'Identifier' && gqlTag.name === 'gql') {
         gqlQueries.push(path.node.quasi.quasis[0].value.raw)
@@ -75,6 +76,37 @@ export const getGqlQueries = (code: string) => {
   })
 
   return gqlQueries
+}
+
+export const getCellGqlQuery = (code: string) => {
+  const ast = parse(code) as types.Node
+  let cellQuery: string | undefined = undefined
+  traverse(ast, {
+    ExportNamedDeclaration({ node }) {
+      if (
+        node.exportKind === 'value' &&
+        types.isVariableDeclaration(node.declaration)
+      ) {
+        const exportedQueryNode = node.declaration.declarations.find((d) => {
+          return (
+            types.isIdentifier(d.id) &&
+            d.id.name === 'QUERY' &&
+            types.isTaggedTemplateExpression(d.init)
+          )
+        })
+
+        if (exportedQueryNode) {
+          const templateExpression =
+            exportedQueryNode.init as types.TaggedTemplateExpression
+
+          cellQuery = templateExpression.quasi.quasis[0].value.raw
+        }
+      }
+      return
+    },
+  })
+
+  return cellQuery
 }
 
 export const hasDefaultExport = (code: string): boolean => {

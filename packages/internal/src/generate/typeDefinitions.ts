@@ -3,7 +3,7 @@ import path from 'path'
 
 import { generate } from '@graphql-codegen/cli'
 
-import { getGqlQueries } from 'src/ast'
+import { getCellGqlQuery } from 'src/ast'
 import { findCells, findDirectoryNamedModules } from 'src/files'
 import { parseGqlQueryToAst } from 'src/gql'
 import { getJsxElements } from 'src/jsx'
@@ -112,17 +112,19 @@ export const generateMirrorCell = (p: string, rwjsPaths = getPaths()) => {
   const { name } = path.parse(p)
 
   const fileContents = fs.readFileSync(p, 'utf-8')
-  const gqlQueries = getGqlQueries(fileContents)
+  const cellQuery = getCellGqlQuery(fileContents)
 
-  // For mirror cells we only care about the first gqlQuery
-  const gqlDoc = parseGqlQueryToAst(gqlQueries[0])[0]
+  if (cellQuery) {
+    // For mirror cells we only care about the first gqlQuery
+    const gqlDoc = parseGqlQueryToAst(cellQuery)[0]
 
-  writeTemplate('templates/mirror-cell.d.ts.template', typeDefPath, {
-    name,
-    queryResultType: `${gqlDoc.name}`,
-    queryVariablesType: `${gqlDoc.name}Variables`,
-  })
-  return typeDefPath
+    writeTemplate('templates/mirror-cell.d.ts.template', typeDefPath, {
+      name,
+      queryResultType: `${gqlDoc.name}`,
+      queryVariablesType: `${gqlDoc.name}Variables`,
+    })
+    return typeDefPath
+  }
 }
 
 const writeTypeDefIncludeFile = (

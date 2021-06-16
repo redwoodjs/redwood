@@ -1,6 +1,6 @@
 import type { ComponentProps } from 'react'
 
-import { Success, CellProps } from './${name}'
+import { Success } from './${name}'
 import type { ${queryResultType}, ${queryVariablesType} } from 'types/graphql'
 
 type SuccessType = typeof Success
