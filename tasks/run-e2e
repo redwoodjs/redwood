@@ -136,11 +136,25 @@ const runDevServerInBackground = () => {
   })
 }
 
-const runCypress = () => {
+const launchCypress = () => {
   console.log('Starting Cypress...')
   execa.sync(
     'yarn cypress',
     ['open', `--env RW_PATH=${REDWOOD_PROJECT_DIRECTORY}`],
+    {
+      cwd: path.join(REDWOODJS_FRAMEWORK_PATH, 'tasks/e2e'),
+      shell: true,
+      stdio: 'inherit',
+      env: process.env,
+    }
+  )
+}
+
+const runTests = () => {
+  console.log('Starting Cypress...')
+  execa.sync(
+    'yarn cypress',
+    ['run', `--env RW_PATH=${REDWOOD_PROJECT_DIRECTORY}`, '-b chrome'],
     {
       cwd: path.join(REDWOODJS_FRAMEWORK_PATH, 'tasks/e2e'),
       shell: true,
@@ -165,6 +179,7 @@ const args = yargs
   .option('copy-framework', { default: true, type: 'boolean', alias: 'copy' })
   .option('typescript', { default: false, type: 'boolean', alias: 'ts' })
   .option('auto-start', { default: true, type: 'boolean', alias: 'start' })
+  .option('run', { default: false, type: 'boolean' })
   .scriptName('run-e2e')
   .example('run-e2e')
   .example('run-e2e /tmp/redwood-app --ts')
@@ -188,7 +203,7 @@ makeDirectory(REDWOOD_PROJECT_DIRECTORY)
 console.log()
 console.log('-'.repeat(80))
 
-let { copyFramework, createProject, typescript, autoStart } = args
+let { copyFramework, createProject, typescript, autoStart, run } = args
 
 const tasks = [
   copyFramework && buildRedwoodJSFramework,
@@ -199,7 +214,7 @@ const tasks = [
   !typescript && convertProjectToJavaScript,
   autoStart && runDevServerInBackground,
   autoStart && installTaskDeps,
-  autoStart && runCypress,
+  autoStart && (run ? runTests : launchCypress),
 ].filter(Boolean)
 
 for (const task of tasks) {
