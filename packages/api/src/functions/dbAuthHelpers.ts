@@ -3,7 +3,7 @@ import CryptoJS from 'crypto-js'
 import * as DbAuthError from './dbAuthErrors'
 
 // decrypts the session cookie and returns an array: [data, csrf]
-export const decryptSession = (text) => {
+export const decryptSession = (text: string) => {
   if (!text || text.trim() === '') {
     return []
   }
@@ -11,7 +11,7 @@ export const decryptSession = (text) => {
   try {
     const decoded = CryptoJS.AES.decrypt(
       text,
-      process.env.SESSION_SECRET
+      process.env.SESSION_SECRET as string
     ).toString(CryptoJS.enc.Utf8)
     const [data, csrf] = decoded.split(';')
     const json = JSON.parse(data)
@@ -23,7 +23,7 @@ export const decryptSession = (text) => {
 }
 
 // returns the actual value of the session cookie
-export const getSession = (text) => {
+export const getSession = (text: string) => {
   if (typeof text === 'undefined') {
     return null
   }

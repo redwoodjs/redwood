@@ -1,4 +1,3 @@
-// @ts-ignore What the hell is a declaration file?
 import { decryptSession, getSession } from '../../functions/dbAuthHelpers'
 
 export const dbAuth = (authHeaderValue: string, req: { event: any }) => {

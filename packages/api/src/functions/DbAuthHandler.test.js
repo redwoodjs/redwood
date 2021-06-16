@@ -1,5 +1,4 @@
 import CryptoJS from 'crypto-js'
-import jwt from 'jsonwebtoken'
 
 import * as dbAuthError from './dbAuthErrors'
 import { DbAuthHandler } from './DbAuthHandler'
@@ -52,7 +51,6 @@ const db = new DbMock(['user'])
 const UUID_REGEX =
   /\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/
 const SET_SESSION_REGEX = /^session=[a-zA-Z0-9+=/]+;/
-const JWT_REGEX = /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/
 const UTC_DATE_REGEX = /\w{3}, \d{2} \w{3} \d{4} [\d:]{8} GMT/
 const LOGOUT_COOKIE =
   'session=;Path=/;HttpOnly;SameSite=Strict;Secure;Expires=Thu, 01 Jan 1970 00:00:00 GMT'

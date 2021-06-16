@@ -8,7 +8,7 @@ export class NoSessionSecret extends Error {
 }
 
 export class WrongVerbError extends Error {
-  constructor(properVerb) {
+  constructor(properVerb: string) {
     super(`Only accessible via ${properVerb}`)
     this.name = 'WrongVerbError'
   }
@@ -22,7 +22,7 @@ export class NotLoggedInError extends Error {
 }
 
 export class UserNotFoundError extends Error {
-  constructor(username) {
+  constructor(username: string) {
     if (username) {
       super(`User \`${username}\` not found`)
     } else {
@@ -41,21 +41,21 @@ export class UsernameAndPasswordRequiredError extends Error {
 }
 
 export class FieldRequiredError extends Error {
-  constructor(name) {
+  constructor(name: string) {
     super(`${name} is required`)
     this.name = 'FieldRequiredError'
   }
 }
 
 export class FieldFormatError extends Error {
-  constructor(message) {
+  constructor(message: string) {
     super(message)
     this.name = 'FieldFormatError'
   }
 }
 
 export class DuplicateUsernameError extends Error {
-  constructor(username) {
+  constructor(username: string) {
     super(`Username \`${username}\` already in use`)
     this.name = 'DuplicateUsernameError'
   }
