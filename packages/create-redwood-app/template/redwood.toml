@@ -8,7 +8,6 @@
 [web]
   port = 8910
   apiProxyPath = "/.redwood/functions"
-  fastRefresh = false
 [api]
   port = 8911
 [browser]
