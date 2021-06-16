@@ -9,7 +9,7 @@ jobs:
     if: github.repository == 'redwoodjs/redwood'
     strategy:
       matrix:
-        os: ['macos-latest']
+        os: ['ubuntu-latest']
         node-version: ['14']
       fail-fast: false
     runs-on: ${{ matrix.os }}
