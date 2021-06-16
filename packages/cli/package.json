@@ -21,7 +21,7 @@
     "prisma": "2.24.1",
     "@prisma/sdk": "2.24.1",
     "boxen": "5.0.1",
-    "camelcase": "6.0.0",
+    "camelcase": "6.2.0",
     "chalk": "4.1.1",
     "concurrently": "6.2.0",
     "core-js": "3.13.1",
