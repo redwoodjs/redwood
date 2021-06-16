@@ -1,10 +1,12 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@1.6.0/schema.json",
-  "changelog": "@changesets/cli/changelog",
+  "changelog": [
+    "@changesets/changelog-github",
+    { "repo": "redwoodjs/redwood" }
+  ],
   "commit": false,
   "linked": [],
-  "access": "restricted",
-  "baseBranch": "master",
-  "updateInternalDependencies": "patch",
+  "access": "public",
+  "baseBranch": "main",
   "ignore": []
 }
