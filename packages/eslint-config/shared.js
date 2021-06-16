@@ -20,7 +20,7 @@ module.exports = {
     'plugin:prettier/recommended',
     'plugin:jest-dom/recommended',
   ],
-  parser: 'babel-eslint',
+  parser: '@babel/eslint-parser',
   plugins: [
     'prettier',
     'babel',
