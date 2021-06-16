@@ -16,7 +16,7 @@ const Query = ({ children, query, ...rest }: QueryProps) => {
 export type DataObject = { [key: string]: unknown }
 
 export type CellFailureProps =
-  | Omit<QueryOperationResult, 'data' | 'loading'>
+  | (Omit<QueryOperationResult, 'data' | 'loading'> & { updating: boolean })
   | { error: Error } // for tests and storybook
 
 export type CellLoadingProps = Omit<
@@ -129,7 +129,13 @@ export function createCell<CellProps = any>({
         {({ error, loading, data, ...queryRest }) => {
           if (error) {
             if (Failure) {
-              return <Failure error={error} {...queryRest} {...props} />
+              return (
+                <Failure
+                  error={error}
+                  {...{ updating: loading, ...queryRest }}
+                  {...props}
+                />
+              )
             } else {
               throw error
             }
