@@ -67,7 +67,6 @@ export const getGqlQueries = (code: string) => {
   const ast = parse(code) as types.Node
   traverse(ast, {
     TaggedTemplateExpression(path) {
-      console.log(path)
       const gqlTag = path.node.tag
       if (gqlTag.type === 'Identifier' && gqlTag.name === 'gql') {
         gqlQueries.push(path.node.quasi.quasis[0].value.raw)
