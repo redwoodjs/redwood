@@ -60,6 +60,11 @@ const prsQuery = `
 const formatPR = (pr) =>
   `- ${pr.title} [#${pr.number}](${pr.url}) by [@${pr.author.login}](${pr.author.url})`
 
+const getNoOfUniqueContributors = (prs) => {
+  const logins = prs.map((pr) => pr.author.login)
+  return new Set(logins).size
+}
+
 // ------------------------
 
 const main = async () => {
@@ -87,16 +92,29 @@ const main = async () => {
     node: { pullRequests },
   } = await octokit.graphql(prsQuery, { id })
 
-  // format and write
+  // - count unique contributors
+  // - format PRs
+  // ------------------------
+
+  const noOfUniqueContributors = getNoOfUniqueContributors(pullRequests.nodes)
+  const formattedPRs = pullRequests.nodes.map(formatPR)
+
+  // write
   // ------------------------
 
   const fileName = `${title}-release-notes.md`
 
+  fs.writeFileSync(
+    fileName,
+    [
+      `No. of PRs: ${pullRequests.nodes.length}`,
+      `No. of unique contributors: ${noOfUniqueContributors}`,
+      '',
+      ...formattedPRs,
+    ].join('\n')
+  )
+
   console.log(`Written to "${fileName}"`)
-
-  const formattedPRs = pullRequests.nodes.map(formatPR)
-  fs.writeFileSync(fileName, formattedPRs.join('\n'))
-
   console.log('Done')
   console.log()
 }
