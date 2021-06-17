@@ -64,8 +64,6 @@ const removeLayoutImport = ({ model: name, path: scaffoldPath = '' }) => {
     new RegExp(`\\s*${importLayout}`),
     ''
   )
-  console.log('regex:', new RegExp(`\\s*${importLayout}`))
-  console.log(newRoutesContent)
 
   writeFile(routesPath, newRoutesContent, { overwriteExisting: true })
 

@@ -50,23 +50,30 @@ const getImportComponentNames = (
 ) => {
   const pluralName = pascalcase(pluralize(name))
   const singularName = pascalcase(pluralize.singular(name))
-  // TODO - confirm case for scaffold path
-  const sP =
-    scaffoldPath !== '' ? scaffoldPath.split('/').map(pascalcase).join('/') : ''
-  const cPath = nestScaffoldByModel
-    ? `src/components/${sP}/${singularName}`
-    : `src/components/${sP}`
+  let componentPath
+  let layoutPath
+  if (scaffoldPath === '') {
+    componentPath = nestScaffoldByModel
+      ? `src/components/${singularName}`
+      : `src/components`
+    layoutPath = `src/layouts`
+  } else {
+    const sP = scaffoldPath.split('/').map(pascalcase).join('/')
+    componentPath = nestScaffoldByModel
+      ? `src/components/${sP}/${singularName}`
+      : `src/components/${sP}`
+    layoutPath = `src/layouts/${sP}`
+  }
 
   return {
-    // default case
-    importComponentName: `${cPath}/${singularName}`,
-    importComponentNameCell: `${cPath}/${singularName}Cell`,
-    importComponentEditNameCell: `${cPath}/Edit${singularName}Cell`,
-    importComponentNameForm: `${cPath}/${singularName}Form`,
-    importComponentNewName: `${cPath}/New${singularName}`,
-    importComponentNames: `${cPath}/${pluralName}`,
-    importComponentNamesCell: `${cPath}/${pluralName}Cell`,
-    importLayoutNames: `src/layouts/${sP}/${pluralName}Layout`,
+    importComponentName: `${componentPath}/${singularName}`,
+    importComponentNameCell: `${componentPath}/${singularName}Cell`,
+    importComponentEditNameCell: `${componentPath}/Edit${singularName}Cell`,
+    importComponentNameForm: `${componentPath}/${singularName}Form`,
+    importComponentNewName: `${componentPath}/New${singularName}`,
+    importComponentNames: `${componentPath}/${pluralName}`,
+    importComponentNamesCell: `${componentPath}/${pluralName}Cell`,
+    importLayoutNames: `${layoutPath}/${pluralName}Layout`,
   }
 }
 
@@ -74,16 +81,11 @@ const getImportComponentNames = (
 const getTemplateStrings = (name, scaffoldPath, nestScaffoldByModel = true) => {
   const pluralPascalName = pascalcase(pluralize(name))
   const singularPascalName = pascalcase(pluralize.singular(name))
-  //const singularPascalName = pascalcase(pluralize.singular(name))
-  //const pluralPascalName = pascalcase(pluralize(name))
-  //const singularCamelName = camelcase(singularPascalName)
-  //const pluralParamName = paramCase(pluralPascalName)
 
   const pluralCamelName = camelcase(pluralPascalName)
   const singularCamelName = camelcase(singularPascalName)
   const camelScaffoldPath = camelcase(pascalcase(scaffoldPath))
 
-  // ToDo - confirm if the route name should include the model again
   return {
     pluralRouteName:
       scaffoldPath === ''
@@ -412,7 +414,6 @@ export const routes = async ({
 }) => {
   if (typeof nestScaffoldByModel === 'undefined') {
     nestScaffoldByModel = getConfig().generate.nestScaffoldByModel
-    console.log('nestScaffoldByModel from config: ', nestScaffoldByModel)
   }
 
   const templateNames = getTemplateStrings(name, scaffoldPath)
@@ -449,7 +450,6 @@ const addRoutesInsideSetToRouter = async (model, path) => {
   return addRoutesToRouterTask(await routes({ model, path }), layoutName)
 }
 
-// TODO
 const addLayoutImport = ({ model: name, path: scaffoldPath = '' }) => {
   const pluralPascalName = pascalcase(pluralize(name))
   const pascalScaffoldPath =
