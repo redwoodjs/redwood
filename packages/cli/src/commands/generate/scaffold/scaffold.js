@@ -50,21 +50,30 @@ const getImportComponentNames = (
 ) => {
   const pluralName = pascalcase(pluralize(name))
   const singularName = pascalcase(pluralize.singular(name))
-  const sP =
-    scaffoldPath !== '' ? scaffoldPath.split('/').map(pascalcase).join('/') : ''
-  const cPath = nestScaffoldByModel
-    ? `src/components/${sP}/${singularName}`
-    : `src/components/${sP}`
+  let componentPath
+  let layoutPath
+  if (scaffoldPath === '') {
+    componentPath = nestScaffoldByModel
+      ? `src/components/${singularName}`
+      : `src/components`
+    layoutPath = `src/layouts`
+  } else {
+    const sP = scaffoldPath.split('/').map(pascalcase).join('/')
+    componentPath = nestScaffoldByModel
+      ? `src/components/${sP}/${singularName}`
+      : `src/components/${sP}`
+    layoutPath = `src/layouts/${sP}`
+  }
 
   return {
-    importComponentName: `${cPath}/${singularName}`,
-    importComponentNameCell: `${cPath}/${singularName}Cell`,
-    importComponentEditNameCell: `${cPath}/Edit${singularName}Cell`,
-    importComponentNameForm: `${cPath}/${singularName}Form`,
-    importComponentNewName: `${cPath}/New${singularName}`,
-    importComponentNames: `${cPath}/${pluralName}`,
-    importComponentNamesCell: `${cPath}/${pluralName}Cell`,
-    importLayoutNames: `src/layouts/${sP}/${pluralName}Layout`,
+    importComponentName: `${componentPath}/${singularName}`,
+    importComponentNameCell: `${componentPath}/${singularName}Cell`,
+    importComponentEditNameCell: `${componentPath}/Edit${singularName}Cell`,
+    importComponentNameForm: `${componentPath}/${singularName}Form`,
+    importComponentNewName: `${componentPath}/New${singularName}`,
+    importComponentNames: `${componentPath}/${pluralName}`,
+    importComponentNamesCell: `${componentPath}/${pluralName}Cell`,
+    importLayoutNames: `${layoutPath}/${pluralName}Layout`,
   }
 }
 
