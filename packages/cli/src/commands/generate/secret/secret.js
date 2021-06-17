@@ -11,7 +11,7 @@ export const generateSecret = (length = DEFAULT_LENGTH) => {
 
 export const command = 'secret'
 export const description =
-  'Generates a secret string using a cryptographically-secure source of entropy'
+  'Generates a secret key using a cryptographically-secure source of entropy'
 
 export const builder = (yargs) =>
   yargs.option('length', {
