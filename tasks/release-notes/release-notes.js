@@ -73,9 +73,7 @@ const main = async () => {
   console.log()
   console.log(`Getting PRs for milestone "${title}"`)
 
-  const octokit = new Octokit({
-    ...(process.env.GITHUB_TOKEN && { auth: process.env.GITHUB_TOKEN }),
-  })
+  const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
 
   // get the milestone's id
   // ------------------------
