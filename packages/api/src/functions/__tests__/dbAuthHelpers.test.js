@@ -1,7 +1,7 @@
 import CryptoJS from 'crypto-js'
 
-import * as dbAuth from './dbAuthErrors'
-import { getSession, decryptSession } from './dbAuthHelpers'
+import * as dbAuth from '../dbAuthErrors'
+import { getSession, decryptSession } from '../dbAuthHelpers'
 
 process.env.SESSION_SECRET = 'nREjs1HPS7cFia6tQHK70EWGtfhOgbqJQKsHQz3S'
 

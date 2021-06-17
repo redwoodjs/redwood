@@ -1,7 +1,7 @@
 import CryptoJS from 'crypto-js'
 
-import * as dbAuthError from './dbAuthErrors'
-import { DbAuthHandler } from './DbAuthHandler'
+import * as dbAuthError from '../dbAuthErrors'
+import { DbAuthHandler } from '../DbAuthHandler'
 
 // mock prisma db client
 const DbMock = class {
