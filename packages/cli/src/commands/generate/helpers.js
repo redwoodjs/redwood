@@ -4,6 +4,7 @@ import Listr from 'listr'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
+import prompts from 'prompts'
 import terminalLink from 'terminal-link'
 
 import { ensurePosixPath, getConfig } from '@redwoodjs/internal'
@@ -191,4 +192,37 @@ export const forcePluralizeWord = (word) => {
   }
 
   return pluralize.plural(word)
+}
+
+const validatePlural = (name, model) => {
+  if (name.trim() === model) {
+    return `Singular can not be same as of plural.`
+  }
+  if (name.trim().match(/[\n\r\s]+/)) {
+    return 'Only one word please!'
+  }
+  return true
+}
+
+export const ensureUniquePlural = async (model) => {
+  if (!isWordNonPluralizable) {
+    return
+  }
+
+  const initialPlural = model.slice(-1) === 's' ? `${model}es` : `${model}s` // News => Newses; Post => Posts
+  const promptResult = await prompts({
+    type: 'text',
+    name: 'plural',
+    message: `Hmm, English is weird so I can't figure out how to turn "${model}" into a unique plural version. Can you help?\nThe plural of "${model}" should be:`,
+    initial: initialPlural,
+    validate: (pluralInput) => validatePlural(pluralInput, model),
+  })
+
+  const pluralToUse = promptResult.plural?.trim()
+  if (!pluralToUse) {
+    throw Error('Plural name must not be empty')
+  }
+
+  // Set the rule
+  pluralize.addIrregularRule(model, pluralToUse)
 }
