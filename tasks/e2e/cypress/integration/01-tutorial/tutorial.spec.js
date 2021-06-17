@@ -179,100 +179,100 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     )
   })
 
-  // it('6. Routing Params', () => {
-  //   // https://redwoodjs.com/tutorial/routing-params
-  //   cy.visit('http://localhost:8910/') // attempting workaround
-  //   cy.exec(`cd ${BASE_DIR}; yarn rw g page BlogPost --force`)
-  //   cy.visit('http://localhost:8910/')
-  //   cy.exec(`cd ${BASE_DIR}; yarn rw g cell BlogPost --force`)
-  //   cy.visit('http://localhost:8910/')
-  //   cy.exec(`cd ${BASE_DIR}; yarn rw g component BlogPost --force`)
-  //   cy.visit('http://localhost:8910/')
+  it('6. Routing Params', () => {
+    // https://redwoodjs.com/tutorial/routing-params
+    cy.visit('http://localhost:8910/') // attempting workaround
+    cy.exec(`cd ${BASE_DIR}; yarn rw g page BlogPost --force`)
+    cy.visit('http://localhost:8910/')
+    cy.exec(`cd ${BASE_DIR}; yarn rw g cell BlogPost --force`)
+    cy.visit('http://localhost:8910/')
+    cy.exec(`cd ${BASE_DIR}; yarn rw g component BlogPost --force`)
+    cy.visit('http://localhost:8910/')
 
-  //   cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step6_1_Routes)
-  //   cy.writeFile(
-  //     path.join(BASE_DIR, 'web/src/pages/BlogPostPage/BlogPostPage.js'),
-  //     Step6_2_BlogPostPage
-  //   )
-  //   cy.writeFile(
-  //     path.join(BASE_DIR, 'web/src/components/BlogPostCell/BlogPostCell.js'),
-  //     Step6_3_BlogPostCell
-  //   )
-  //   cy.writeFile(
-  //     path.join(
-  //       BASE_DIR,
-  //       'web/src/components/BlogPostCell/BlogPostCell.test.js'
-  //     ),
-  //     Step6_3_BlogPostCellTest
-  //   )
-  //   cy.writeFile(
-  //     path.join(BASE_DIR, 'web/src/components/BlogPost/BlogPost.js'),
-  //     Step6_4_BlogPost
-  //   )
-  //   cy.writeFile(
-  //     path.join(BASE_DIR, 'web/src/components/BlogPost/BlogPost.test.js'),
-  //     Step6_4_BlogPostTest
-  //   )
-  //   cy.writeFile(
-  //     path.join(BASE_DIR, 'web/src/components/BlogPostsCell/BlogPostsCell.js'),
-  //     Step6_5_BlogPostsCell
-  //   )
-  //   cy.writeFile(
-  //     path.join(
-  //       BASE_DIR,
-  //       'web/src/components/BlogPostsCell/BlogPostsCell.mock.js'
-  //     ),
-  //     Step6_5_BlogPostsCellMock
-  //   )
+    cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step6_1_Routes)
+    cy.writeFile(
+      path.join(BASE_DIR, 'web/src/pages/BlogPostPage/BlogPostPage.js'),
+      Step6_2_BlogPostPage
+    )
+    cy.writeFile(
+      path.join(BASE_DIR, 'web/src/components/BlogPostCell/BlogPostCell.js'),
+      Step6_3_BlogPostCell
+    )
+    cy.writeFile(
+      path.join(
+        BASE_DIR,
+        'web/src/components/BlogPostCell/BlogPostCell.test.js'
+      ),
+      Step6_3_BlogPostCellTest
+    )
+    cy.writeFile(
+      path.join(BASE_DIR, 'web/src/components/BlogPost/BlogPost.js'),
+      Step6_4_BlogPost
+    )
+    cy.writeFile(
+      path.join(BASE_DIR, 'web/src/components/BlogPost/BlogPost.test.js'),
+      Step6_4_BlogPostTest
+    )
+    cy.writeFile(
+      path.join(BASE_DIR, 'web/src/components/BlogPostsCell/BlogPostsCell.js'),
+      Step6_5_BlogPostsCell
+    )
+    cy.writeFile(
+      path.join(
+        BASE_DIR,
+        'web/src/components/BlogPostsCell/BlogPostsCell.mock.js'
+      ),
+      Step6_5_BlogPostsCellMock
+    )
 
-  //   // New entry
-  //   cy.visit('http://localhost:8910/posts')
-  //   cy.contains(' New Post').click()
-  //   cy.get('input#title').type('Third post')
-  //   cy.get('input#body').type('foo bar')
-  //   cy.get('button').contains('Save').click()
+    // New entry
+    cy.visit('http://localhost:8910/posts')
+    cy.contains(' New Post').click()
+    cy.get('input#title').type('Third post')
+    cy.get('input#body').type('foo bar')
+    cy.get('button').contains('Save').click()
 
-  //   cy.visit('http://localhost:8910/')
+    cy.visit('http://localhost:8910/')
 
-  //   // Detail Page
-  //   cy.contains('Second post').click()
-  //   cy.get('main').should('contain', 'Hello world!')
+    // Detail Page
+    cy.contains('Second post').click()
+    cy.get('main').should('contain', 'Hello world!')
 
-  //   cy.visit('http://localhost:8910/')
+    cy.visit('http://localhost:8910/')
 
-  //   cy.contains('Third post').click()
-  //   cy.get('main').should('contain', 'foo bar')
-  // })
+    cy.contains('Third post').click()
+    cy.get('main').should('contain', 'foo bar')
+  })
 
-  // it("7. Everyone's Favorite Thing to Build: Forms", () => {
-  //   // https://redwoodjs.com/tutorial/everyone-s-favorite-thing-to-build-forms
-  //   cy.exec(`cd ${BASE_DIR}; yarn rw g page contact --force`)
-  //   cy.writeFile(
-  //     path.join(BASE_DIR, 'web/src/layouts/BlogLayout/BlogLayout.js'),
-  //     Step7_1_BlogLayout
-  //   )
-  //   cy.writeFile(
-  //     path.join(BASE_DIR, 'web/src/pages/ContactPage/ContactPage.js'),
-  //     Step7_2_ContactPage
-  //   )
-  //   cy.writeFile(path.join(BASE_DIR, 'web/src/index.css'), Step7_3_Css)
-  //   cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step7_4_Routes)
+  it("7. Everyone's Favorite Thing to Build: Forms", () => {
+    // https://redwoodjs.com/tutorial/everyone-s-favorite-thing-to-build-forms
+    cy.exec(`cd ${BASE_DIR}; yarn rw g page contact --force`)
+    cy.writeFile(
+      path.join(BASE_DIR, 'web/src/layouts/BlogLayout/BlogLayout.js'),
+      Step7_1_BlogLayout
+    )
+    cy.writeFile(
+      path.join(BASE_DIR, 'web/src/pages/ContactPage/ContactPage.js'),
+      Step7_2_ContactPage
+    )
+    cy.writeFile(path.join(BASE_DIR, 'web/src/index.css'), Step7_3_Css)
+    cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step7_4_Routes)
 
-  //   cy.contains('Contact').click()
-  //   cy.contains('Save').click()
-  //   cy.get('main').should('contain', 'name is required')
-  //   cy.get('main').should('contain', 'email is required')
-  //   cy.get('main').should('contain', 'message is required')
+    cy.contains('Contact').click()
+    cy.contains('Save').click()
+    cy.get('main').should('contain', 'name is required')
+    cy.get('main').should('contain', 'email is required')
+    cy.get('main').should('contain', 'message is required')
 
-  //   cy.get('input#email').type('foo bar')
-  //   cy.contains('Save').click()
-  //   cy.get('main').should('contain', 'Please enter a valid email address')
+    cy.get('input#email').type('foo bar')
+    cy.contains('Save').click()
+    cy.get('main').should('contain', 'Please enter a valid email address')
 
-  //   cy.get('input#name').type('test name')
-  //   cy.get('input#email').type('foo@bar.com')
-  //   cy.get('textarea#message').type('test message')
-  //   cy.get('#tutorial-form').submit()
-  //   // console
-  //   // {name: "test name", email: "foo@bar.com", message: "test message"}
-  // })
+    cy.get('input#name').type('test name')
+    cy.get('input#email').type('foo@bar.com')
+    cy.get('textarea#message').type('test message')
+    cy.get('#tutorial-form').submit()
+    // console
+    // {name: "test name", email: "foo@bar.com", message: "test message"}
+  })
 })
