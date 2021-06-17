@@ -98,8 +98,6 @@ export const requestHandlerEnvelop = async (
   // We take the express request object and convert it into a lambda function event.
   const event = lambdaEventForExpressRequest(req)
 
-  console.log(JSON.stringify(event, null, 2))
-
   // Execute the lambda function.
   // https://docs.aws.amazon.com/lambda/latest/dg/nodejs-prog-model-handler.html
   try {

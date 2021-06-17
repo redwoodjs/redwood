@@ -112,9 +112,9 @@ interface GraphQLHandlerOptions {
   extraPlugins?: Plugin<any>[]
 
   /**
-   * Customize the GraphiQL Endpoint
+   * Customize the GraphiQL Endpoint that appears in the location bar of the GraphQL Playground
    *
-   * Defaults to '/graphql'
+   * Defaults to '/graphql' as this value must match the name of the `graphql` function on the api-side.
    *
    */
   graphiQLEndpoint?: string
@@ -375,6 +375,8 @@ export const createGraphQLHandler = ({
         contextFactory: enveloped.contextFactory,
       })
 
+      // logger.debug({ result }, '>>> processRequest result')
+
       if (result.type === 'RESPONSE') {
         lambdaResponse = {
           body: JSON.stringify(result.payload),
@@ -404,7 +406,7 @@ export const createGraphQLHandler = ({
 
       lambdaResponse = {
         body: JSON.stringify({ error: 'GraphQL execution failed' }),
-        statusCode: 500,
+        statusCode: 200, // should be 500
       }
     }
 

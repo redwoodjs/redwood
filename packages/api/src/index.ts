@@ -1,4 +1,5 @@
 import './global.api-auto-imports'
+export * from './global.api-auto-imports'
 
 export * from 'apollo-server-lambda'
 export * from './auth'
