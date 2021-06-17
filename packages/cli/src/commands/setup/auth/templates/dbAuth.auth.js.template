@@ -1,9 +1,11 @@
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/api'
 import { db } from './db'
 
-// The session sent in as the first arugment will be an object with a single
-// { id } prop, containing the ID of the logged in user. You'll need to update
-// this call if you use a different model name or unique field ID:
+// The session object sent in as the first arugment to getCurrentUser() will
+// have a single key `id` containing the unique ID of the logged in user
+// (whatever field you set as `authFields.id` in your auth function config).
+// You'll need to update the call to `db` below if you use a different model
+// name or unique field name:
 //
 //   return await db.profile.findUnique({ where: { email: session.id } })
 //                   ───┬───                       ──┬──
