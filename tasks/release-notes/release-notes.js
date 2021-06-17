@@ -106,6 +106,7 @@ const main = async () => {
     fileName,
     [
       `No. of PRs: ${pullRequests.nodes.length}`,
+      '',
       `No. of unique contributors: ${noOfUniqueContributors}`,
       '',
       ...formattedPRs,
