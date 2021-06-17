@@ -1,6 +1,6 @@
 import CryptoJS from 'crypto-js'
 
-import * as DbAuthError from './dbAuthErrors'
+import * as DbAuthError from './errors'
 
 // decrypts the session cookie and returns an array: [data, csrf]
 export const decryptSession = (text: string) => {

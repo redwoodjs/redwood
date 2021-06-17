@@ -1,4 +1,4 @@
-import { decryptSession, getSession } from '../../functions/dbAuthHelpers'
+import { decryptSession, getSession } from '../../functions/dbAuth/shared'
 
 export const dbAuth = (authHeaderValue: string, req: { event: any }) => {
   const encrypted = getSession(req.event.headers['cookie'])

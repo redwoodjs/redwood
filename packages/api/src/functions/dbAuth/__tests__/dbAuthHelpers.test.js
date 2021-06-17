@@ -1,7 +1,7 @@
 import CryptoJS from 'crypto-js'
 
-import * as dbAuth from '../dbAuthErrors'
-import { getSession, decryptSession } from '../dbAuthHelpers'
+import * as error from '../errors'
+import { getSession, decryptSession } from '../shared'
 
 process.env.SESSION_SECRET = 'nREjs1HPS7cFia6tQHK70EWGtfhOgbqJQKsHQz3S'
 
@@ -45,7 +45,7 @@ describe('decryptSession()', () => {
 
   it('throws an error if decryption errors out', () => {
     expect(() => decryptSession('session=qwerty')).toThrow(
-      dbAuth.SessionDecryptionError
+      error.SessionDecryptionError
     )
   })
 
