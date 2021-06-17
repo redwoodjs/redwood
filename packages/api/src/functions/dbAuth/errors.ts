@@ -47,13 +47,6 @@ export class FieldRequiredError extends Error {
   }
 }
 
-export class FieldFormatError extends Error {
-  constructor(message: string) {
-    super(message)
-    this.name = 'FieldFormatError'
-  }
-}
-
 export class DuplicateUsernameError extends Error {
   constructor(username: string) {
     super(`Username \`${username}\` already in use`)
@@ -72,20 +65,6 @@ export class CsrfTokenMismatchError extends Error {
   constructor() {
     super(`CSRF token mismatch`)
     this.name = 'CsrfTokenMismatchError'
-  }
-}
-
-export class NoCookiesError extends Error {
-  constructor() {
-    super(`No cookies present`)
-    this.name = 'NoCookiesError'
-  }
-}
-
-export class NoSessionError extends Error {
-  constructor() {
-    super(`No session present`)
-    this.name = 'NoSessionError'
   }
 }
 
