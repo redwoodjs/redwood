@@ -5,6 +5,7 @@
 const fs = require('fs')
 
 const { Octokit } = require('octokit')
+const yargs = require('yargs')
 
 // ------------------------
 
@@ -67,24 +68,48 @@ const getNoOfUniqueContributors = (prs) => {
 
 // ------------------------
 
-const main = async () => {
-  const [title] = process.argv.slice(2)
+const builder = (yargs) =>
+  yargs.positional('milestone', {
+    describe: 'the milestone to generate release notes for',
+    type: 'string',
+  })
 
-  console.log()
-  console.log(`Getting PRs for milestone "${title}"`)
+const handler = async (argv) => {
+  if (!process.env.GITHUB_TOKEN) {
+    console.log()
+    console.error(
+      `  You have to provide a github token. Make sure there's a var named GITHUB_TOKEN in your env.`
+    )
+    console.error(
+      `  You can provision an personal access token here: https://github.com/settings/tokens`
+    )
+    console.log()
+
+    return
+  }
 
   const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
 
   // get the milestone's id
   // ------------------------
 
+  const title = argv.milestone
+
   const {
     repository: { milestones },
   } = await octokit.graphql(milestonesQuery, { title })
-  const { id } = milestones.nodes.find((milestone) => milestone.title === title)
+
+  const milestone = milestones.nodes.find(
+    (milestone) => milestone.title === title
+  )
+
+  id = milestone.id
 
   // get the PRs
   // ------------------------
+
+  console.log()
+  console.log(`Getting PRs for milestone "${title}"`)
 
   const {
     node: { pullRequests },
@@ -105,7 +130,7 @@ const main = async () => {
   fs.writeFileSync(
     fileName,
     [
-      `No. of PRs: ${pullRequests.nodes.length}`,
+      `# ${title}`,
       '',
       `No. of unique contributors: ${noOfUniqueContributors}`,
       '',
@@ -118,4 +143,14 @@ const main = async () => {
   console.log()
 }
 
-main()
+// eslint-disable-next-line no-unused-expressions
+yargs
+  .scriptName('build:release-notes')
+  .usage(
+    '$0 <milestone>',
+    'build release notes for a milestone',
+    builder,
+    handler
+  )
+  .help()
+  .strict().argv
