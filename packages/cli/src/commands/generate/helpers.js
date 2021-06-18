@@ -204,8 +204,9 @@ const validatePlural = (name, model) => {
   return true
 }
 
+// Ask user for plural version, if singular & plural are same for a word. For example: Pokemon
 export const ensureUniquePlural = async (model) => {
-  if (!isWordNonPluralizable) {
+  if (!isWordNonPluralizable(model)) {
     return
   }
 
