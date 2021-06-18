@@ -23,6 +23,12 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - name: Cache "node_modules"
+        uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: node_modules_${{ runner.os }}_${{ hashFiles('**/yarn.lock') }}
+
       - name: Install framework modules
         run: yarn install --frozen-lockfile
 
@@ -36,7 +42,7 @@ jobs:
         run: ./tasks/run-e2e ${{ steps.createpath.outputs.project_path }} --no-start
 
       - name: Start server in background
-        run: yarn rw dev &
+        run: yarn rw dev --no-generate --fwd="--open=false" &
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
 
@@ -50,5 +56,5 @@ jobs:
           browser: chrome
           env: true
           wait-on: 'http://localhost:8910'
-          record: true
+          record: false
           working-directory: ./tasks/e2e

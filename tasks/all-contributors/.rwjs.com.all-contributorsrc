@@ -1009,6 +1009,69 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "cjreimer",
+      "name": "Curtis Reimer",
+      "avatar_url": "https://avatars.githubusercontent.com/u/51102303?v=4",
+      "profile": "https://github.com/cjreimer",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "LBrian",
+      "name": "Brian Liu",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3888780?v=4",
+      "profile": "https://brianypliu.com/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "ajoslin103",
+      "name": "allen joslin",
+      "avatar_url": "https://avatars.githubusercontent.com/u/443893?v=4",
+      "profile": "https://github.com/ajoslin103",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "pdjota",
+      "name": "Pablo Dejuan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/93544?v=4",
+      "profile": "https://github.com/pdjota",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "callingmedic911",
+      "name": "Aditya Pandey",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2629902?v=4",
+      "profile": "https://adityaworks.com/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "morganmspencer",
+      "name": "Morgan Spencer",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10109983?v=4",
+      "profile": "https://morganmspencer.com/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "wongyouth",
+      "name": "Ryan Wang",
+      "avatar_url": "https://avatars.githubusercontent.com/u/944583?v=4",
+      "profile": "https://github.com/wongyouth",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 5
