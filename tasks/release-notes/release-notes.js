@@ -33,9 +33,7 @@ const prsQuery = `
             title
             author {
               login
-              url
             }
-            url
           }
           totalCount
           pageInfo {
@@ -54,12 +52,9 @@ const prsQuery = `
 //   "title": "Scaffold Generator File Organization",
 //   "author": {
 //     "login": "cjreimer",
-//     "url": "https://github.com/cjreimer"
 //   },
-//   "url": "https://github.com/redwoodjs/redwood/pull/2613"
 // }
-const formatPR = (pr) =>
-  `- ${pr.title} [#${pr.number}](${pr.url}) by [@${pr.author.login}](${pr.author.url})`
+const formatPR = (pr) => `- ${pr.title} #${pr.number} by @${pr.author.login}`
 
 const getNoOfUniqueContributors = (prs) => {
   const logins = prs.map((pr) => pr.author.login)
