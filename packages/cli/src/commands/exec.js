@@ -10,24 +10,6 @@ import c from 'src/lib/colors'
 import { generatePrismaClient } from 'src/lib/generatePrismaClient'
 
 const runScript = async (scriptPath, scriptArgs) => {
-  // Import babel config for running script
-  babelRequireHook({
-    extends: path.join(getPaths().api.base, '.babelrc.js'),
-    extensions: ['.js', '.ts'],
-    plugins: [
-      [
-        'babel-plugin-module-resolver',
-        {
-          alias: {
-            $api: getPaths().api.base,
-          },
-        },
-      ],
-    ],
-    ignore: ['node_modules'],
-    cache: false,
-  })
-
   const script = await import(scriptPath)
   await script.default({ args: scriptArgs })
   return
@@ -53,6 +35,25 @@ export const builder = (yargs) => {
 export const handler = async (args) => {
   const { name, ...scriptArgs } = args
   const scriptPath = path.join(getPaths().scripts, name)
+
+  // Import babel config for running script
+  babelRequireHook({
+    extends: path.join(getPaths().api.base, '.babelrc.js'),
+    extensions: ['.js', '.ts'],
+    plugins: [
+      [
+        'babel-plugin-module-resolver',
+        {
+          alias: {
+            $api: getPaths().api.base,
+          },
+        },
+      ],
+    ],
+    ignore: ['node_modules'],
+    cache: false,
+  })
+
   try {
     require.resolve(scriptPath)
   } catch {
