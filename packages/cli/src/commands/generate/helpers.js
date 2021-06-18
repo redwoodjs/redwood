@@ -93,6 +93,7 @@ export const createYargsForComponentGeneration = ({
   optionsObj = yargsDefaults,
   positionalsObj = {},
   includeAdditionalTasks = () => [], // function that takes the options object and returns an array of listr tasks
+  shouldEnsureUniquePlural = false,
 }) => {
   return {
     command: appendPositionalsToCmd(`${componentName} <name>`, positionalsObj),
@@ -135,6 +136,9 @@ export const createYargsForComponentGeneration = ({
         options.stories = getConfig().generate.stories
       }
 
+      if (shouldEnsureUniquePlural) {
+        ensureUniquePlural(options.name)
+      }
       const tasks = new Listr(
         [
           {

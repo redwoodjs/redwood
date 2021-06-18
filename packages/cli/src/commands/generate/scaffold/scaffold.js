@@ -584,8 +584,8 @@ export const handler = async ({
   }
   const { model, path } = splitPathAndModel(modelArg)
   await ensureUniquePlural(model)
-  const t = tasks({ model, path, force, tests, typescript })
 
+  const t = tasks({ model, path, force, tests, typescript })
   try {
     await t.run()
   } catch (e) {
