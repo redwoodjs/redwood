@@ -134,6 +134,8 @@ const handler = async (argv) => {
       '',
       `No. of unique contributors: ${noOfUniqueContributors}`,
       '',
+      `No. of PRs: ${pullRequests.nodes.length}`,
+      '',
       ...formattedPRs,
     ].join('\n')
   )
