@@ -75,9 +75,18 @@ test('generate the correct mirror types for directory named modules', () => {
     Array [
       ".redwood/types/mirror/api/src/services/todos/index.d.ts",
       ".redwood/types/mirror/web/src/components/AddTodo/index.d.ts",
+      ".redwood/types/mirror/web/src/components/AddTodoControl/index.d.ts",
       ".redwood/types/mirror/web/src/components/Check/index.d.ts",
+      ".redwood/types/mirror/web/src/components/TableCell/index.d.ts",
       ".redwood/types/mirror/web/src/components/TodoItem/index.d.ts",
       ".redwood/types/mirror/web/src/layouts/SetLayout/index.d.ts",
+      ".redwood/types/mirror/web/src/pages/BarPage/index.d.ts",
+      ".redwood/types/mirror/web/src/pages/FatalErrorPage/index.d.ts",
+      ".redwood/types/mirror/web/src/pages/FooPage/index.d.ts",
+      ".redwood/types/mirror/web/src/pages/HomePage/index.d.ts",
+      ".redwood/types/mirror/web/src/pages/NotFoundPage/index.d.ts",
+      ".redwood/types/mirror/web/src/pages/TypeScriptPage/index.d.ts",
+      ".redwood/types/mirror/web/src/pages/admin/EditUserPage/index.d.ts",
     ]
   `)
 
