@@ -190,7 +190,7 @@ export const fieldsToUpdate = async (model) => {
         break
       }
       case 'Boolean': {
-        newValue = false
+        newValue = !value
         break
       }
       case 'DateTime': {
