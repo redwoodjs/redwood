@@ -137,7 +137,7 @@ export const createYargsForComponentGeneration = ({
       }
 
       if (shouldEnsureUniquePlural) {
-        ensureUniquePlural(options.name)
+        await ensureUniquePlural(options.name)
       }
       const tasks = new Listr(
         [
