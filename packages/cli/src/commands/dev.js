@@ -31,6 +31,13 @@ export const builder = (yargs) => {
       default: getConfig().experimental.esbuild,
       description: 'Use ESBuild [experimental]',
     })
+    .option('useEnvelop', {
+      type: 'boolean',
+      required: false,
+      default: getConfig().experimental.useEnvelop,
+      description:
+        'Use Envelop as GraphQL Server instead of Apollo Server [experimental]',
+    })
     .option('generate', {
       type: 'boolean',
       default: true,
@@ -48,6 +55,7 @@ export const handler = async ({
   side = ['api', 'web'],
   forward = '',
   esbuild = false,
+  useEnvelop = false,
   generate = true,
 }) => {
   const rwjsPaths = getPaths()
@@ -111,6 +119,10 @@ export const handler = async ({
 
     jobs.web.name = 'web esbuild'
     jobs.web.command = 'yarn cross-env ESBUILD=1 && ' + jobs.web.command
+  }
+
+  if (useEnvelop) {
+    jobs.api.name = jobs.api.name + ' with envelop'
   }
 
   // TODO: Convert jobs to an array and supply cwd command.

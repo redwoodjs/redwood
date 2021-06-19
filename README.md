@@ -29,7 +29,7 @@ Redwood is the latest open source project initiated by Tom Preston-Werner, cofou
 
 > **QUICK START:** You can install and run a full-stack Redwood application on your
 > machine with only a couple commands. Check out the [Quick Start](https://redwoodjs.com/docs/quick-start)
-> guide to get started.
+> guide to get started.  
 
 **EXAMPLES:** If you'd like to see some examples of what a Redwood application looks
 like, take a look at the following projects:
