@@ -198,11 +198,11 @@ export const forcePluralizeWord = (word) => {
   return pluralize.plural(word)
 }
 
-const validatePlural = (name, model) => {
-  if (name.trim() === model) {
-    return `Singular can not be same as of plural.`
+export const validatePlural = (plural, singular) => {
+  if (plural.trim() === singular) {
+    return `Plural can not be same as singular.`
   }
-  if (name.trim().match(/[\n\r\s]+/)) {
+  if (plural.trim().match(/[\n\r\s]+/)) {
     return 'Only one word please!'
   }
   return true
@@ -218,7 +218,7 @@ export const ensureUniquePlural = async (model) => {
   const promptResult = await prompts({
     type: 'text',
     name: 'plural',
-    message: `Hmm, English is weird so I can't figure out how to turn "${model}" into a unique plural version. Can you help?\nThe plural of "${model}" should be:`,
+    message: `We don't know the plural form of "${model}" which is different from its singular.\n=> Enter plural (or accept suggestion):`,
     initial: initialPlural,
     validate: (pluralInput) => validatePlural(pluralInput, model),
   })
