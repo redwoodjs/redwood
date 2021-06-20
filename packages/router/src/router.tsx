@@ -184,39 +184,42 @@ function activeRouteTree(
 ) {
   let active = false
 
-  return React.Children.toArray(children).reduce<any>((acc, child) => {
-    if (active || foundActive) {
+  return React.Children.toArray(children).reduce<React.ReactNode[]>(
+    (acc, child) => {
+      if (active || foundActive) {
+        return acc
+      }
+
+      if (isRoute(child)) {
+        // We have a <Route ...> element, let's check if it's the one we should
+        // render (i.e. the active route)
+        active = isActive(child)
+
+        if (active) {
+          // Keep this child. It's the last one we'll keep since `active` is `true`
+          // now
+          acc.push(child)
+        }
+      } else if (isReactElement(child) && child.props.children) {
+        // We have a child element that's not a <Route ...>, and that has
+        // children. It's probably a <Set>. Recurse down one level
+        const nestedChildren = activeRouteTree(
+          child.props.children,
+          isActive,
+          foundActive
+        )
+
+        if (nestedChildren.length > 0) {
+          // We found something we wanted to keep. So let's push it to our
+          // "active route tree"
+          acc.push(React.cloneElement(child, child.props, nestedChildren))
+        }
+      }
+
       return acc
-    }
-
-    if (isRoute(child)) {
-      // We have a <Route ...> element, let's check if it's the one we should
-      // render (i.e. the active route)
-      active = isActive(child)
-
-      if (active) {
-        // Keep this child. It's the last one we'll keep since `active` is `true`
-        // now
-        acc.push(child)
-      }
-    } else if (isReactElement(child) && child.props.children) {
-      // We have a child element that's not a <Route ...>, and that has
-      // children. It's probably a <Set>. Recurse down one level
-      const nestedChildren = activeRouteTree(
-        child.props.children,
-        isActive,
-        foundActive
-      )
-
-      if (nestedChildren.length > 0) {
-        // We found something we wanted to keep. So let's push it to our
-        // "active route tree"
-        acc.push(React.cloneElement(child, child.props, nestedChildren))
-      }
-    }
-
-    return acc
-  }, [])
+    },
+    []
+  )
 }
 
 const RouteScanner: React.FC = ({ children }) => {
@@ -261,7 +264,7 @@ const RouteScanner: React.FC = ({ children }) => {
     )
   }
 
-  return filteredChildren
+  return <>{filteredChildren}</>
 }
 
 function isSpec(specOrPage: Spec | React.ComponentType): specOrPage is Spec {
