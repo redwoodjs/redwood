@@ -473,6 +473,7 @@ test('renders first matching route only, even if multiple routes have the same n
       <Route path="/about" page={AboutPage} name="about" />
       <Route path="/{param}" page={ParamPage} name="about" />
       <Route path="/about" page={AboutTwoPage} name="about" />
+      <Route path="/about" page={AboutPage} name="about" />
     </Router>
   )
 
@@ -482,6 +483,8 @@ test('renders first matching route only, even if multiple routes have the same n
 
   // go to about page, and make sure that's the only page rendered
   act(() => navigate(routes.about()))
+  // `getByText` will throw an error if more than one node is found
+  // which is perfect, because that's exactly what we want to test
   await waitFor(() => screen.getByText('About Page'))
   expect(screen.queryByText('param')).not.toBeInTheDocument()
   expect(screen.queryByText('About Two Page')).not.toBeInTheDocument()
