@@ -224,7 +224,7 @@ export const ensureUniquePlural = async (model) => {
   const promptResult = await prompts({
     type: 'text',
     name: 'plural',
-    message: `We don't know the plural form of "${model}" which is different from its singular.\n=> Enter plural (or accept suggestion):`,
+    message: `Cannot determine the plural of "${model}" "pokemon". To continue, the generator requires a unique plural form:`,
     initial: initialPlural,
     validate: (pluralInput) => validatePlural(pluralInput, model),
   })
