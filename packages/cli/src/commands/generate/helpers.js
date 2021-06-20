@@ -199,11 +199,17 @@ export const forcePluralizeWord = (word) => {
 }
 
 export const validatePlural = (plural, singular) => {
-  if (plural.trim() === singular) {
-    return `Plural can not be same as singular.`
+  const trimmedPlural = plural.trim()
+  if (trimmedPlural === singular) {
+    return 'Plural can not be same as singular.'
   }
-  if (plural.trim().match(/[\n\r\s]+/)) {
+  if (trimmedPlural.match(/[\n\r\s]+/)) {
     return 'Only one word please!'
+  }
+  // Control Char u0017 is retured if default input is cleared in the prompt using option+backspace
+  // eslint-disable-next-line no-control-regex
+  if (trimmedPlural.match(/^[\n\r\s\u0017]*$/)) {
+    return 'Plural can not be empty.'
   }
   return true
 }
@@ -223,7 +229,9 @@ export const ensureUniquePlural = async (model) => {
     validate: (pluralInput) => validatePlural(pluralInput, model),
   })
 
-  const pluralToUse = promptResult.plural?.trim()
+  // Quickfix is to remove that control char u0017, which is preprended if default input is cleared using option+backspace
+  // eslint-disable-next-line no-control-regex
+  const pluralToUse = promptResult.plural?.trim().replace(/\u0017/g, '')
   if (!pluralToUse) {
     throw Error('Plural name must not be empty')
   }
