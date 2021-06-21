@@ -30,8 +30,7 @@
     "jest-watch-typeahead": "0.6.3",
     "msw": "0.29.0",
     "ts-toolbelt": "9.6.0",
-    "whatwg-fetch": "3.6.2",
-    "x----x----x": "^0 Types"
+    "whatwg-fetch": "3.6.2"
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",
