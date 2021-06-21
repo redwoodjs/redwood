@@ -54,6 +54,7 @@ const modelFieldToSDL = (field, required = true, types = {}) => {
 
   const dictionary = {
     Json: 'JSON',
+    Decimal: 'Float',
   }
 
   return `${field.name}: ${field.isList ? '[' : ''}${
