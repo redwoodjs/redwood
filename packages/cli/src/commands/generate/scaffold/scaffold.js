@@ -26,7 +26,11 @@ import {
 import c from 'src/lib/colors'
 
 import { yargsDefaults } from '../../generate'
-import { relationsForModel, intForeignKeysForModel } from '../helpers'
+import {
+  relationsForModel,
+  intForeignKeysForModel,
+  ensureUniquePlural,
+} from '../helpers'
 import { files as sdlFiles, builder as sdlBuilder } from '../sdl/sdl'
 import {
   files as serviceFiles,
@@ -579,8 +583,9 @@ export const handler = async ({
     tests = getConfig().generate.tests
   }
   const { model, path } = splitPathAndModel(modelArg)
-  const t = tasks({ model, path, force, tests, typescript })
+  await ensureUniquePlural({ model })
 
+  const t = tasks({ model, path, force, tests, typescript })
   try {
     await t.run()
   } catch (e) {
