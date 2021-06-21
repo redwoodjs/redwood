@@ -35,7 +35,7 @@ export const createYargsForComponentDestroy = ({
     },
     handler: async ({ name }) => {
       if (shouldEnsureUniquePlural) {
-        await ensureUniquePlural(name)
+        await ensureUniquePlural({ model: name, inDestroyer: true })
       }
       const t = tasks({ componentName, filesFn, name })
 

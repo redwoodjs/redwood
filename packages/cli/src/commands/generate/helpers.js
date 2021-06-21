@@ -137,7 +137,7 @@ export const createYargsForComponentGeneration = ({
       }
 
       if (shouldEnsureUniquePlural) {
-        await ensureUniquePlural(options.name)
+        await ensureUniquePlural({ model: options.name })
       }
       const tasks = new Listr(
         [
@@ -215,16 +215,19 @@ export const validatePlural = (plural, singular) => {
 }
 
 // Ask user for plural version, if singular & plural are same for a word. For example: Pokemon
-export const ensureUniquePlural = async (model) => {
+export const ensureUniquePlural = async ({ model, inDestroyer = false }) => {
   if (!isWordNonPluralizable(model)) {
     return
   }
 
-  const initialPlural = model.slice(-1) === 's' ? `${model}es` : `${model}s` // News => Newses; Post => Posts
+  const promptMessage = inDestroyer
+    ? `Cannot determine the plural of "${model}" originally used to generate scaffolding. \nTo continue, the destroy command requires the plural form:`
+    : `Cannot determine the plural of "${model}". \nTo continue, the generator requires a unique plural form:`
+  const initialPlural = model.slice(-1) === 's' ? `${model}es` : `${model}s` // News => Newses; Equipment => Equipments
   const promptResult = await prompts({
     type: 'text',
     name: 'plural',
-    message: `Cannot determine the plural of "${model}". \nTo continue, the generator requires a unique plural form:`,
+    message: promptMessage,
     initial: initialPlural,
     validate: (pluralInput) => validatePlural(pluralInput, model),
   })

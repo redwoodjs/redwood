@@ -112,7 +112,7 @@ export const tasks = ({ model, path, tests, nestScaffoldByModel }) =>
 
 export const handler = async ({ model: modelArg }) => {
   const { model, path } = splitPathAndModel(modelArg)
-  await ensureUniquePlural(model)
+  await ensureUniquePlural({ model, inDestroyer: true })
 
   const t = tasks({ model, path })
   try {

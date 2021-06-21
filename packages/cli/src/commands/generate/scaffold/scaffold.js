@@ -583,7 +583,7 @@ export const handler = async ({
     tests = getConfig().generate.tests
   }
   const { model, path } = splitPathAndModel(modelArg)
-  await ensureUniquePlural(model)
+  await ensureUniquePlural({ model })
 
   const t = tasks({ model, path, force, tests, typescript })
   try {

@@ -32,7 +32,7 @@ export const tasks = ({ model }) =>
   )
 
 export const handler = async ({ model }) => {
-  await ensureUniquePlural(model)
+  await ensureUniquePlural({ model, inDestroyer: true })
   const t = tasks({ model })
 
   try {

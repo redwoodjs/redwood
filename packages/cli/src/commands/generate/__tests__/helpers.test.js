@@ -410,7 +410,7 @@ test('ensureUniquePlural sets irregular rule from user input if singular is same
   const userPluralInput = 'pikapika'
   prompts.inject(userPluralInput)
 
-  await helpers.ensureUniquePlural(uncountableModel)
+  await helpers.ensureUniquePlural({ model: uncountableModel })
 
   expect(pluralize.singular(uncountableModel)).toBe(uncountableModel)
   expect(pluralize.plural(uncountableModel)).toBe(userPluralInput)
@@ -421,7 +421,7 @@ test('ensureUniquePlural skips any rule if singular and plural are already diffe
   const plural = 'posts'
   prompts.inject('pikapika')
 
-  await helpers.ensureUniquePlural(singular)
+  await helpers.ensureUniquePlural({ model: singular })
 
   expect(pluralize.singular(singular)).toBe(singular)
   expect(pluralize.plural(singular)).toBe(plural)
