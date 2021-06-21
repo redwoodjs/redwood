@@ -70,6 +70,12 @@ export const builder = (yargs) => {
       default: getConfig().experimental.esbuild,
       description: 'Use ESBuild for api side [experimental]',
     })
+    .option('performance', {
+      alias: 'perf',
+      type: 'boolean',
+      default: false,
+      description: 'Measure build performance',
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -85,7 +91,10 @@ export const handler = async ({
   prisma = true,
   esbuild = false,
   prerender,
+  performance = false,
 }) => {
+  // TODO: Resolve webpack configuration path.
+
   const execCommandsForSides = {
     api: {
       // must use path.join() here, and for 'web' below, to support Windows
@@ -98,6 +107,15 @@ export const handler = async ({
         stats ? 'stats' : 'production'
       }.js`,
     },
+  }
+
+  if (performance) {
+    const configPath = require.resolve('@redwoodjs/core/config/webpack.perf.js')
+    execa.sync(
+      `yarn cross-env NODE_ENV=production webpack --config ${configPath}`,
+      { stdio: 'inherit', shell: true }
+    )
+    return
   }
 
   if (stats) {
