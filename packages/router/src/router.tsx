@@ -205,6 +205,10 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
       paramTypes={paramTypes}
       pageLoadingDelay={pageLoadingDelay}
     >
+      {/* TS doesn't "see" the assignment to `activeRoute` inside the callback
+          above. So it's type is `never`. And you can't access attributes
+          (props in this case) on `never`. There is an open issue about not
+          seeing the assignment */}
       {/* @ts-expect-error - https://github.com/microsoft/TypeScript/issues/11498 */}
       <ParamsProvider path={activeRoute?.props?.path}>
         {!activeRoute && NotFoundPage ? (
