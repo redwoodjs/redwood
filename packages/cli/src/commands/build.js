@@ -94,7 +94,7 @@ export const handler = async ({
   performance = false,
 }) => {
   let webpackConfigPath = require.resolve(
-    `@redwoodjs/core/config/wepback.${stats ? 'stats' : 'production'}.js`
+    `@redwoodjs/core/config/webpack.${stats ? 'stats' : 'production'}.js`
   )
 
   const execCommandsForSides = {
