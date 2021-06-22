@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Children, ReactElement, ReactNode } from 'react'
 
 /** Create a React Context with the given name. */
 const createNamedContext = <T extends unknown>(
@@ -31,12 +31,22 @@ export interface ParamType {
 }
 
 /** Definitions of the core param types. */
-const coreParamTypes: Record<string, ParamType> = {
+const coreParamTypes = {
   Int: {
     constraint: /\d+/,
     transform: Number,
   },
+  Float: {
+    constraint: /[-+]?(?:\d*\.?\d+|\d+\.?\d*)(?:[eE][-+]?\d+)?/,
+    transform: Number,
+  },
+  Boolean: {
+    constraint: /true|false/,
+    transform: (boolAsString: string) => boolAsString === 'true',
+  },
 }
+
+type SupportedRouterParamTypes = keyof typeof coreParamTypes
 
 /**
  * Determine if the given route is a match for the given pathname. If so,
@@ -70,12 +80,14 @@ const matchPath = (
   // Map all params from the route to their type constraint regex to create a "type-constrained route" regexp
   for (const [name, type] of routeParams) {
     let typeRegex = '[^/]+'
-    const constraint = type && allParamTypes[type].constraint
+    // Undefined constraint if not supported
+    // So leaves it as string
+    const constraint =
+      type && allParamTypes[type as SupportedRouterParamTypes]?.constraint
 
     if (constraint) {
-      // Get the type
-      typeRegex = constraint.toString() || '/[^/]+/'
-      typeRegex = typeRegex.substring(1, typeRegex.length - 1)
+      // Get the regex as a string
+      typeRegex = constraint.source || '[^/]+'
     }
 
     typeConstrainedRoute = typeConstrainedRoute.replace(
@@ -98,7 +110,7 @@ const matchPath = (
   const params = providedParams.reduce<Record<string, unknown>>(
     (acc, value, index) => {
       const [name, transformName] = routeParams[index]
-      const typeInfo = allParamTypes[transformName]
+      const typeInfo = allParamTypes[transformName as SupportedRouterParamTypes]
 
       let transformedValue: string | unknown = value
       if (typeInfo && typeof typeInfo.transform === 'function') {
@@ -219,10 +231,85 @@ const replaceParams = (path: string, args: Record<string, unknown> = {}) => {
   return newPath
 }
 
+function isReactElement(node: ReactNode): node is ReactElement {
+  return (
+    node !== undefined &&
+    node !== null &&
+    (node as ReactElement).type !== undefined
+  )
+}
+
+function flattenAll(children: ReactNode): ReactNode[] {
+  const childrenArray = Children.toArray(children)
+
+  return childrenArray.flatMap((child) => {
+    if (isReactElement(child) && child.props.children) {
+      return [child, ...flattenAll(child.props.children)]
+    }
+
+    return [child]
+  })
+}
+
 export {
   createNamedContext,
   matchPath,
   parseSearch,
   validatePath,
   replaceParams,
+  isReactElement,
+  flattenAll,
+}
+
+/**
+ * gets the announcement for the new page.
+ * called in page-loader's `componentDidUpdate`.
+ *
+ * the order of priority is:
+ * 1. RouteAnnouncement (the most specific one)
+ * 2. h1
+ * 3. document.title
+ * 4. location.pathname
+ */
+export const getAnnouncement = () => {
+  const routeAnnouncement = global?.document.querySelectorAll(
+    '[data-redwood-route-announcement]'
+  )?.[0]
+  if (routeAnnouncement?.textContent) {
+    return routeAnnouncement.textContent
+  }
+
+  const pageHeading = global?.document.querySelector(`h1`)
+  if (pageHeading?.textContent) {
+    return pageHeading.textContent
+  }
+
+  if (global?.document.title) {
+    return document.title
+  }
+
+  return `new page at ${global?.location.pathname}`
+}
+
+export const getFocus = () => {
+  const routeFocus = global?.document.querySelectorAll(
+    '[data-redwood-route-focus]'
+  )?.[0]
+
+  if (
+    !routeFocus ||
+    !routeFocus.children.length ||
+    (routeFocus.children[0] as HTMLElement).tabIndex < 0
+  ) {
+    return null
+  }
+
+  return routeFocus.children[0] as HTMLElement
+}
+
+// note: tried document.activeElement.blur(), but that didn't reset the focus flow
+export const resetFocus = () => {
+  global?.document.body.setAttribute('tabindex', '-1')
+  global?.document.body.focus()
+  global?.document.body.removeAttribute('tabindex')
 }

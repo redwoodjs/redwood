@@ -1,7 +1,8 @@
 global.__dirname = __dirname
 import path from 'path'
 
-import { loadGeneratorFixture } from 'src/lib/test'
+// Load mocks
+import 'src/lib/test'
 
 import { getDefaultArgs } from 'src/lib'
 
@@ -34,7 +35,7 @@ const itCreatesASingleWordServiceFile = (baseArgs) => {
           `/path/to/project/api/src/services/users/users.${extension}`
         )
       ]
-    ).toEqual(loadGeneratorFixture('service', `singleWord.${extension}`))
+    ).toMatchSnapshot()
   })
 }
 const itCreatesASingleWordServiceTestFile = (baseArgs) => {
@@ -51,7 +52,7 @@ const itCreatesASingleWordServiceTestFile = (baseArgs) => {
           `/path/to/project/api/src/services/users/users.test.${extension}`
         )
       ]
-    ).toEqual(loadGeneratorFixture('service', `singleWord.test.${extension}`))
+    ).toMatchSnapshot()
   })
 }
 
@@ -84,7 +85,7 @@ const itCreatesAMultiWordServiceFile = (baseArgs) => {
           `/path/to/project/api/src/services/userProfiles/userProfiles.${extension}`
         )
       ]
-    ).toEqual(loadGeneratorFixture('service', `multiWord.${extension}`))
+    ).toMatchSnapshot()
   })
 }
 
@@ -102,7 +103,7 @@ const itCreatesAMultiWordServiceTestFile = (baseArgs) => {
           `/path/to/project/api/src/services/userProfiles/userProfiles.test.${extension}`
         )
       ]
-    ).toEqual(loadGeneratorFixture('service', `multiWord.test.${extension}`))
+    ).toMatchSnapshot()
   })
 }
 
@@ -121,7 +122,10 @@ const itCreatesASingleWordServiceFileWithCRUDActions = (baseArgs) => {
           `/path/to/project/api/src/services/posts/posts.${extension}`
         )
       ]
-    ).toEqual(loadGeneratorFixture('service', `singleWord_crud.${extension}`))
+    ).toMatchSnapshot()
+
+    // TODO
+    // Mock Date, so we can take snapshots of tests and scenarios
   })
 }
 
@@ -156,6 +160,7 @@ const itCreatesAMultiWordServiceFileWithCRUDActions = (baseArgs) => {
     expect(Object.keys(files)).toContain(filePath)
   })
 }
+
 const itCreatesAMultiWordServiceTestFileWithCRUDActions = (baseArgs) => {
   test('creates a multi word service test file with CRUD actions', async () => {
     const files = await service.files({
@@ -187,9 +192,7 @@ const itCreatesASingleWordServiceFileWithAHasManyRelation = (baseArgs) => {
           `/path/to/project/api/src/services/users/users.${extension}`
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture('service', `singleWord_hasMany.${extension}`)
-    )
+    ).toMatchSnapshot()
   })
 }
 
@@ -208,9 +211,7 @@ const itCreatesASingleWordServiceFileWithABelongsToRelation = (baseArgs) => {
           `/path/to/project/api/src/services/users/users.${extension}`
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture('service', `singleWord_belongsTo.${extension}`)
-    )
+    ).toMatchSnapshot()
   })
 }
 
@@ -229,14 +230,33 @@ const itCreatesASingleWordServiceFileWithMultipleRelations = (baseArgs) => {
           `/path/to/project/api/src/services/users/users.${extension}`
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture('service', `singleWord_multiple.${extension}`)
-    )
+    ).toMatchSnapshot()
+  })
+}
+
+const itCreatesAMultiWordServiceTestFileWithCRUDAndOnlyForeignKeyRequired = (
+  baseArgs
+) => {
+  test('creates a multi word service test file with crud actions and only foreign as mandatory field', async () => {
+    const files = await service.files({
+      ...baseArgs,
+      name: 'Transaction',
+      crud: true,
+    })
+    const extension = extensionForBaseArgs(baseArgs)
+
+    expect(
+      files[
+        path.normalize(
+          `/path/to/project/api/src/services/transactions/transactions.test.${extension}`
+        )
+      ]
+    ).toMatchSnapshot()
   })
 }
 
 describe('in javascript mode', () => {
-  const baseArgs = getDefaultArgs(service.defaults)
+  const baseArgs = { ...getDefaultArgs(service.defaults), tests: true }
 
   itReturnsExactly3Files(baseArgs)
   itCreatesASingleWordServiceFile(baseArgs)
@@ -251,10 +271,15 @@ describe('in javascript mode', () => {
   itCreatesASingleWordServiceFileWithAHasManyRelation(baseArgs)
   itCreatesASingleWordServiceFileWithABelongsToRelation(baseArgs)
   itCreatesASingleWordServiceFileWithMultipleRelations(baseArgs)
+  itCreatesAMultiWordServiceTestFileWithCRUDAndOnlyForeignKeyRequired(baseArgs)
 })
 
 describe('in typescript mode', () => {
-  const baseArgs = { ...getDefaultArgs(service.defaults), typescript: true }
+  const baseArgs = {
+    ...getDefaultArgs(service.defaults),
+    typescript: true,
+    tests: true,
+  }
 
   itReturnsExactly3Files(baseArgs)
   itCreatesASingleWordServiceFile(baseArgs)
@@ -269,6 +294,7 @@ describe('in typescript mode', () => {
   itCreatesASingleWordServiceFileWithAHasManyRelation(baseArgs)
   itCreatesASingleWordServiceFileWithABelongsToRelation(baseArgs)
   itCreatesASingleWordServiceFileWithMultipleRelations(baseArgs)
+  itCreatesAMultiWordServiceTestFileWithCRUDAndOnlyForeignKeyRequired(baseArgs)
 })
 
 describe('parseSchema', () => {
@@ -404,7 +430,10 @@ describe('fieldsToScenario', () => {
 })
 
 test("doesn't include test file when --tests is set to false", async () => {
-  const baseArgs = { ...getDefaultArgs(service.defaults), javascript: true }
+  const baseArgs = {
+    ...getDefaultArgs(service.defaults),
+    javascript: true,
+  }
 
   const files = await service.files({
     ...baseArgs,

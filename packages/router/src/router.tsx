@@ -1,98 +1,271 @@
 // The guts of the router implementation.
 
-import React, { ReactChild, ReactElement } from 'react'
-
-import { useAuth as useAuthHook } from '@redwoodjs/auth'
+import React from 'react'
 
 import {
-  Location,
   parseSearch,
   replaceParams,
   matchPath,
-  mapNamedRoutes,
   PageLoader,
   Redirect,
-  LocationContextType,
-  ParamType,
+  useLocation,
+  validatePath,
+  LocationProvider,
 } from './internal'
+import { ParamsProvider } from './params'
+import {
+  RouterContextProvider,
+  RouterContextProviderProps,
+  useRouterState,
+} from './router-context'
 import { SplashPage } from './splash-page'
+import { flattenAll, isReactElement } from './util'
+
+import type { AvailableRoutes } from './index'
+
+// namedRoutes is populated at run-time by iterating over the `<Route />`
+// components, and appending them to this object.
+const namedRoutes: AvailableRoutes = {}
+
+type PageType =
+  | Spec
+  | React.ComponentType<unknown>
+  | ((props: any) => JSX.Element)
 
 interface RouteProps {
-  page: Spec | React.ComponentType<unknown> | ((props: any) => JSX.Element)
-  path?: string
-  name?: string
-  notfound?: boolean
-  redirect?: string
+  path: string
+  page: PageType
+  name: string
   prerender?: boolean
-  whileLoading?: () => ReactChild | null
+  whileLoading?: () => React.ReactElement | null
 }
 
-const Route: React.VFC<RouteProps> = () => {
-  return null
+interface RedirectRouteProps {
+  path: string
+  redirect: string
 }
 
-interface PrivateProps {
-  /** The page name where a user will be redirected when not authenticated */
-  unauthenticated: string
-  role?: string | string[]
+interface NotFoundRouteProps {
+  notfound: boolean
+  page: PageType
+  prerender?: boolean
 }
 
-/**
- * `Routes` nested in `Private` require authentication.
- * When a user is not authenticated and attempts to visit this route they will be
- * redirected to `unauthenticated` route.
- */
-const Private: React.FC<PrivateProps> = () => {
-  return null
+type InternalRouteProps = Partial<
+  RouteProps & RedirectRouteProps & NotFoundRouteProps
+>
+
+function Route(props: RouteProps): JSX.Element
+function Route(props: RedirectRouteProps): JSX.Element
+function Route(props: NotFoundRouteProps): JSX.Element
+function Route(props: RouteProps | RedirectRouteProps | NotFoundRouteProps) {
+  return <InternalRoute {...props} />
 }
 
-interface PrivatePageLoaderProps {
-  useAuth: typeof useAuthHook
-  unauthenticatedRoute: (args?: Record<string, string>) => string
-  role: string | string[]
-  whileLoading?: () => ReactElement | null
-}
-
-const PrivatePageLoader: React.FC<PrivatePageLoaderProps> = ({
-  useAuth,
-  unauthenticatedRoute,
-  role,
-  whileLoading = () => null,
-  children,
+const InternalRoute: React.VFC<InternalRouteProps> = ({
+  path,
+  page,
+  name,
+  redirect,
+  notfound,
+  // @ts-expect-error - This prop is picked up by <Set>
+  whileLoading, // eslint-disable-line
 }) => {
-  const { loading, isAuthenticated, hasRole } = useAuth()
+  const location = useLocation()
+  const routerState = useRouterState()
 
-  if (loading) {
-    return whileLoading()
+  if (notfound) {
+    // The "notfound" route is handled by <NotFoundChecker>
+    return null
   }
 
-  if (
-    (isAuthenticated && !role) ||
-    (isAuthenticated && role && hasRole(role))
-  ) {
-    return <>{children || null}</>
+  if (!path) {
+    throw new Error(`Route "${name}" needs to specify a path`)
   }
 
-  const currentLocation =
-    window.location.pathname + encodeURIComponent(window.location.search)
+  // Check for issues with the path.
+  validatePath(path)
+
+  const { match, params: pathParams } = matchPath(
+    path,
+    location.pathname,
+    routerState.paramTypes
+  )
+
+  if (!match) {
+    return null
+  }
+
+  const searchParams = parseSearch(location.search)
+  const allParams = { ...pathParams, ...searchParams }
+
+  if (redirect) {
+    const newPath = replaceParams(redirect, allParams)
+    return <Redirect to={newPath} />
+  }
+
+  if (!page || !name) {
+    throw new Error(
+      "A route that's not a redirect or notfound route needs to specify both a `page` and a `name`"
+    )
+  }
+
   return (
-    <Redirect to={`${unauthenticatedRoute()}?redirectTo=${currentLocation}`} />
+    <PageLoader
+      spec={normalizePage(page)}
+      delay={routerState.pageLoadingDelay}
+      params={allParams}
+    />
   )
 }
 
-interface RouterProps {
-  useAuth?: typeof useAuthHook
-  paramTypes?: Record<string, ParamType>
-  pageLoadingDelay?: number
+function isRoute(
+  node: React.ReactNode
+): node is React.ReactElement<InternalRouteProps> {
+  return isReactElement(node) && node.type === Route
 }
 
-const Router: React.FC<RouterProps> = (props) => (
-  <Location>
-    {(locationContext: LocationContextType) => (
-      <RouterImpl {...locationContext} {...props} />
-    )}
-  </Location>
-)
+interface RouterProps extends RouterContextProviderProps {}
+
+const Router: React.FC<RouterProps> = ({
+  useAuth,
+  paramTypes,
+  pageLoadingDelay,
+  children,
+}) => {
+  const flatChildArray = flattenAll(children)
+  const shouldShowSplash =
+    flatChildArray.length === 1 &&
+    isRoute(flatChildArray[0]) &&
+    flatChildArray[0].props.notfound
+
+  if (shouldShowSplash) {
+    return <SplashPage />
+  }
+
+  flatChildArray.forEach((child) => {
+    if (isRoute(child)) {
+      const { name, path } = child.props
+
+      if (path) {
+        // Check for issues with the path.
+        validatePath(path)
+
+        if (name && path) {
+          namedRoutes[name] = (args = {}) => replaceParams(path, args)
+        }
+      }
+    }
+  })
+
+  return (
+    <RouterContextProvider
+      useAuth={useAuth}
+      paramTypes={paramTypes}
+      pageLoadingDelay={pageLoadingDelay}
+    >
+      <LocationProvider>
+        <ParamsProvider>
+          <RouteScanner>{children}</RouteScanner>
+        </ParamsProvider>
+      </LocationProvider>
+    </RouterContextProvider>
+  )
+}
+
+/**
+ * Find the active (i.e. first matching) route and discard any other routes.
+ * Also, keep any <Set>s wrapping the active route.
+ */
+function activeRouteTree(
+  children: React.ReactNode,
+  isActive: (child: React.ReactElement<InternalRouteProps>) => boolean,
+  foundActive = false
+) {
+  let active = false
+
+  return React.Children.toArray(children).reduce<React.ReactNode[]>(
+    (acc, child) => {
+      if (active || foundActive) {
+        return acc
+      }
+
+      if (isRoute(child)) {
+        // We have a <Route ...> element, let's check if it's the one we should
+        // render (i.e. the active route)
+        active = isActive(child)
+
+        if (active) {
+          // Keep this child. It's the last one we'll keep since `active` is `true`
+          // now
+          acc.push(child)
+        }
+      } else if (isReactElement(child) && child.props.children) {
+        // We have a child element that's not a <Route ...>, and that has
+        // children. It's probably a <Set>. Recurse down one level
+        const nestedChildren = activeRouteTree(
+          child.props.children,
+          isActive,
+          foundActive
+        )
+
+        if (nestedChildren.length > 0) {
+          // We found something we wanted to keep. So let's push it to our
+          // "active route tree"
+          acc.push(React.cloneElement(child, child.props, nestedChildren))
+        }
+      }
+
+      return acc
+    },
+    []
+  )
+}
+
+const RouteScanner: React.FC = ({ children }) => {
+  const location = useLocation()
+  const routerState = useRouterState()
+
+  let foundMatchingRoute = false
+  let NotFoundPage: PageType | undefined = undefined
+
+  const filteredChildren = activeRouteTree(children, (child) => {
+    const { path } = child.props
+
+    if (path) {
+      const { match } = matchPath(
+        path,
+        location.pathname,
+        routerState.paramTypes
+      )
+
+      if (match) {
+        foundMatchingRoute = true
+
+        // No need to loop further. As soon as we have a matching route we have
+        // all the info we need
+        return true
+      }
+    }
+
+    if (child.props.notfound && child.props.page) {
+      NotFoundPage = child.props.page
+    }
+
+    return false
+  })
+
+  if (!foundMatchingRoute && NotFoundPage) {
+    return (
+      <PageLoader
+        spec={normalizePage(NotFoundPage)}
+        delay={routerState.pageLoadingDelay}
+      />
+    )
+  }
+
+  return <>{filteredChildren}</>
+}
 
 function isSpec(specOrPage: Spec | React.ComponentType): specOrPage is Spec {
   return (specOrPage as Spec).loader !== undefined
@@ -117,7 +290,8 @@ export interface Spec {
  *   import WhateverPage from 'src/pages/WhateverPage'
  *
  * Before passing a "page" to the PageLoader, we will normalize the manually
- * imported version into a spec. */
+ * imported version into a spec.
+ */
 const normalizePage = (specOrPage: Spec | React.ComponentType): Spec => {
   if (isSpec(specOrPage)) {
     // Already a spec, just return it.
@@ -132,156 +306,4 @@ const normalizePage = (specOrPage: Spec | React.ComponentType): Spec => {
   }
 }
 
-const DEFAULT_PAGE_LOADING_DELAY = 1000 // milliseconds
-
-interface LoadersProps {
-  allParams: Record<string, string>
-  Page: Spec | React.ComponentType
-  pageLoadingDelay: number
-}
-
-const Loaders: React.VFC<LoadersProps> = ({
-  allParams,
-  Page,
-  pageLoadingDelay,
-}) => {
-  return (
-    <PageLoader
-      spec={normalizePage(Page)}
-      delay={pageLoadingDelay}
-      params={allParams}
-    />
-  )
-}
-
-function isReactElement(
-  element: Exclude<React.ReactNode, boolean | null | undefined>
-): element is ReactElement {
-  return (element as ReactElement).type !== undefined
-}
-
-interface RouterImplProps {
-  pathname: string
-  search?: string
-  hash?: string
-}
-
-const RouterImpl: React.FC<RouterImplProps & RouterProps> = ({
-  pathname,
-  search,
-  paramTypes,
-  pageLoadingDelay = DEFAULT_PAGE_LOADING_DELAY,
-  children,
-  useAuth = useAuthHook,
-}) => {
-  const routes = React.useMemo(() => {
-    // Find `Private` components, mark their children `Route` components as private,
-    // and merge them into a single array.
-    const privateRoutes =
-      React.Children.toArray(children)
-        .filter(isReactElement)
-        .filter((child) => child.type === Private)
-        .map((privateElement) => {
-          // Set `Route` props
-          const { unauthenticated, role, children } = privateElement.props
-          return (
-            React.Children.toArray(children)
-              // Make sure only valid routes are considered
-              .filter(isReactElement)
-              .filter((route) => route.type === Route)
-              .map((route) =>
-                React.cloneElement(route, {
-                  private: true,
-                  unauthenticatedRedirect: unauthenticated,
-                  role: role,
-                })
-              )
-          )
-        })
-        .reduce((a, b) => a.concat(b), []) || []
-
-    const routes = [
-      ...privateRoutes,
-      ...React.Children.toArray(children)
-        .filter(isReactElement)
-        .filter((child) => child.type === Route),
-    ]
-
-    return routes
-  }, [children])
-
-  const namedRoutes = React.useMemo(() => mapNamedRoutes(routes), [routes])
-
-  let NotFoundPage
-
-  for (const route of routes) {
-    const {
-      path,
-      page: Page,
-      redirect,
-      notfound,
-      private: privateRoute,
-      unauthenticatedRedirect,
-      whileLoading,
-    } = route.props
-
-    if (notfound) {
-      NotFoundPage = Page
-      continue
-    }
-
-    const { match, params: pathParams } = matchPath(path, pathname, paramTypes)
-
-    if (match) {
-      const searchParams = parseSearch(search)
-      const allParams = { ...pathParams, ...searchParams }
-
-      if (redirect) {
-        const newPath = replaceParams(redirect, pathParams)
-        return <Redirect to={newPath} />
-      } else {
-        if (privateRoute) {
-          if (typeof useAuth === 'undefined') {
-            throw new Error(
-              "You're using a private route, but `useAuth` is undefined. " +
-                'Have you created an AuthProvider, or passed in the ' +
-                'incorrect prop to `useAuth`?'
-            )
-          }
-
-          return (
-            <PrivatePageLoader
-              useAuth={useAuth}
-              unauthenticatedRoute={namedRoutes[unauthenticatedRedirect]}
-              whileLoading={whileLoading}
-              role={route.props.role}
-            >
-              <Loaders
-                allParams={allParams}
-                Page={Page}
-                pageLoadingDelay={pageLoadingDelay}
-              />
-            </PrivatePageLoader>
-          )
-        }
-
-        return (
-          <Loaders
-            allParams={allParams}
-            Page={Page}
-            pageLoadingDelay={pageLoadingDelay}
-          />
-        )
-      }
-    }
-  }
-
-  // If only the notfound page is specified, show the Redwood splash page.
-  if (routes.length === 1 && NotFoundPage) {
-    return <SplashPage />
-  }
-
-  return <PageLoader spec={normalizePage(NotFoundPage)} />
-}
-
-export { Router, Route, Private }
+export { Router, Route, namedRoutes as routes, isRoute, PageType }

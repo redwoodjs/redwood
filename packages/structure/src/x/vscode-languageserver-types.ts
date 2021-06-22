@@ -201,9 +201,9 @@ export function ExtendedDiagnostic_is(x: any): x is ExtendedDiagnostic {
   return true
 }
 
-export function ExtendedDiagnostic_groupByUri(
-  ds: ExtendedDiagnostic[]
-): { [uri: string]: Diagnostic[] } {
+export function ExtendedDiagnostic_groupByUri(ds: ExtendedDiagnostic[]): {
+  [uri: string]: Diagnostic[]
+} {
   const grouped = groupBy(ds, (d) => d.uri)
   const dss = mapValues(grouped, (xds) => {
     const dd = xds.map((xd) => xd.diagnostic)

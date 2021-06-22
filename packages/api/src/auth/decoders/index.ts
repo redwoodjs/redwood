@@ -8,7 +8,9 @@ import { auth0 } from './auth0'
 import { azureActiveDirectory } from './azureActiveDirectory'
 import { ethereum } from './ethereum'
 import { netlify } from './netlify'
+import { nhost } from './nhost'
 import { supabase } from './supabase'
+
 const noop = (token: string) => token
 
 interface Req {
@@ -26,12 +28,12 @@ const typesToDecoders: Record<
   auth0: auth0,
   azureActiveDirectory: azureActiveDirectory,
   netlify: netlify,
+  nhost: nhost,
   goTrue: netlify,
   magicLink: noop,
   firebase: noop,
   supabase: supabase,
   ethereum: ethereum,
-  nhost: noop,
   custom: noop,
 }
 

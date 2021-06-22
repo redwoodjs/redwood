@@ -6,11 +6,14 @@ import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
 
-import { detectPrerenderRoutes } from '@redwoodjs/prerender'
+import { getConfig } from '@redwoodjs/internal'
+import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
 
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 import { generatePrismaClient } from 'src/lib/generatePrismaClient'
+
+import { getTasks as getPrerenderTasks } from './prerender'
 
 export const command = 'build [side..]'
 export const description = 'Build for production'
@@ -56,6 +59,17 @@ export const builder = (yargs) => {
       description: 'Prerender after building web',
       type: 'boolean',
     })
+    .option('prisma', {
+      type: 'boolean',
+      default: true,
+      description: 'Generate the Prisma client',
+    })
+    .option('esbuild', {
+      type: 'boolean',
+      required: false,
+      default: getConfig().experimental.esbuild,
+      description: 'Use ESBuild for api side [experimental]',
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -68,14 +82,15 @@ export const handler = async ({
   side = ['api', 'web'],
   verbose = false,
   stats = false,
+  prisma = true,
+  esbuild = false,
   prerender,
 }) => {
   const execCommandsForSides = {
     api: {
       // must use path.join() here, and for 'web' below, to support Windows
       cwd: path.join(getPaths().base, 'api'),
-      cmd:
-        "yarn cross-env NODE_ENV=production babel src --out-dir dist --delete-dir-on-start --extensions .ts,.js --ignore '**/*.test.ts,**/*.test.js,**/__tests__'",
+      cmd: "yarn cross-env NODE_ENV=production babel src --out-dir dist --delete-dir-on-start --extensions .ts,.js --ignore '**/*.test.ts,**/*.test.js,**/__tests__' --source-maps",
     },
     web: {
       cwd: path.join(getPaths().base, 'web'),
@@ -90,6 +105,13 @@ export const handler = async ({
     console.log(
       ' ⏩ Skipping `api` build because stats only works for Webpack at the moment.'
     )
+  }
+
+  if (esbuild) {
+    console.log('Using experimental esbuild...')
+    execCommandsForSides.api.cmd = `yarn rimraf "${
+      getPaths().api.dist
+    }" && yarn cross-env NODE_ENV=production yarn rw-api-build`
   }
 
   const listrTasks = side.map((sideName) => {
@@ -107,7 +129,7 @@ export const handler = async ({
   })
 
   // Additional tasks, apart from build
-  if (side.includes('api')) {
+  if (side.includes('api') && prisma) {
     try {
       await generatePrismaClient({
         verbose,
@@ -139,11 +161,12 @@ export const handler = async ({
 
       listrTasks.push({
         title: 'Prerendering "web"...',
-        task: () => {
-          return execa('yarn rw prerender', undefined, {
-            stdio: verbose ? 'inherit' : 'pipe',
-            shell: true,
-            cwd: getPaths().base,
+        task: async () => {
+          const prerenderTasks = await getPrerenderTasks()
+          // Reuse prerender tasks, but run them in parallel to speed things up
+          return new Listr(prerenderTasks, {
+            renderer: verbose && VerboseRenderer,
+            concurrent: true,
           })
         },
         skip: () => {

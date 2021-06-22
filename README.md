@@ -3,7 +3,7 @@
   <h1 align="center">Redwood</h1>
 </p>
 
-_by Tom Preston-Werner, Peter Pistorius, Rob Cameron, David Price, and more than a hundred amazing contributors (see end of file for a full list)._
+_by Tom Preston-Werner, Peter Pistorius, Rob Cameron, David Price, and more than two hundred amazing contributors (see end of file for a full list)._
 
 **Redwood is an opinionated, full-stack, serverless web application framework
 that will allow you to build and deploy JAMstack applications with ease.**
@@ -22,14 +22,14 @@ Redwood is the latest open source project initiated by Tom Preston-Werner, cofou
 > right; make it fast" paradigm, Redwood is in the later stages of the "make it
 > work" phase. That said, your input can have a huge impact during this period,
 > and we welcome your feedback and ideas! Check out the [Redwood Community
-> Forum](https://community.redwoodjs.com/) to join in.
+> Forum](https://community.redwoodjs.com/) to join in.  
 
 > **TUTORIAL:** The best way to get to know Redwood is by going through the extensive
 > [Redwood Tutorial](https://redwoodjs.com/tutorial). Have fun!
 
 > **QUICK START:** You can install and run a full-stack Redwood application on your
 > machine with only a couple commands. Check out the [Quick Start](https://redwoodjs.com/docs/quick-start)
-> guide to get started.
+> guide to get started.  
 
 **EXAMPLES:** If you'd like to see some examples of what a Redwood application looks
 like, take a look at the following projects:
@@ -51,10 +51,11 @@ use:
 - [React](https://reactjs.org/)
 - [GraphQL](https://graphql.org/) ([Apollo](https://github.com/apollographql))
 - [Prisma](https://www.prisma.io/)
-- [Jest](https://jestjs.io/) (coming soon)
+- [Jest](https://jestjs.io/)
 - [Storybook](https://storybook.js.org/)
 - [Babel](https://babeljs.io/)
 - [Webpack](https://webpack.js.org/)
+- [Pino](https://getpino.io)
 
 ## Features
 
@@ -68,7 +69,10 @@ use:
 - Forms with easy client- and/or server-side validation and error handling.
 - [Hot module replacement](https://webpack.js.org/concepts/hot-module-replacement/) (HMR) for faster development.
 - Database migrations (via Prisma 2).
-- First class JAMstack-style deployment to [Netlify](https://www.netlify.com/).
+- Logging using [Pino](https://getpino.io) including to [transports](https://getpino.io/#/docs/transports)
+- Signature verification and payload signing for handling incoming and outgoing Webhooks
+- Page prerendering
+- First class JAMstack-style deployment to [Netlify](https://www.netlify.com/), [Vercel](https://vercel.com/), [Render](https://render.com/), and [Serverless](https://www.serverless.com/).
 
 ## Roadmap
 
@@ -229,7 +233,7 @@ And there you have it.
 <tr>
     <td align="center"><a href="https://github.com/ajcwebdev"><img src="https://avatars0.githubusercontent.com/u/12433465?v=4" width="100px;" alt=""/><br /><sub><b>Anthony Campolo</b></sub></a><br /><sub>advocate</sub></td>
     <td align="center"><a href="https://github.com/clairefro"><img src="https://avatars1.githubusercontent.com/u/9841162?v=4" width="100px;" alt=""/><br /><sub><b>Claire Froelich</b></sub></a><br /><sub>maintainer</sub></td>
-    <td align="center"><a href="https://twitter.com/kimadeline_m"><img src="https://avatars3.githubusercontent.com/u/51720070?v=4" width="100px;" alt=""/><br /><sub><b>Kim-Adeline Miguel</b></sub></a><br /><sub>community</sub></td>
+    <td align="center"><a href="https://github.com/kimadeline"><img src="https://avatars3.githubusercontent.com/u/51720070?v=4" width="100px;" alt=""/><br /><sub><b>Kim-Adeline Miguel</b></sub></a><br /><sub>community</sub></td>
     <td align="center"><a href="https://github.com/forresthayes"><img src="https://avatars0.githubusercontent.com/u/44448047?v=4" width="100px;" alt=""/><br /><sub><b>Forrest Hayes</b></sub></a><br /><sub>community</sub></td>
 </tr>
 </table>
@@ -469,11 +473,81 @@ And there you have it.
     <td align="center"><a href="https://github.com/agiannelli"><img src="https://avatars.githubusercontent.com/u/53096355?v=4" width="100px;" alt=""/><br /><sub><b>Amanda Giannelli</b></sub></a></td>
     <td align="center"><a href="https://www.linkedin.com/in/tawfikyasser"><img src="https://avatars.githubusercontent.com/u/54971231?v=4" width="100px;" alt=""/><br /><sub><b>Tawfik Yasser</b></sub></a></td>
     <td align="center"><a href="https://sebastienlorber.com/"><img src="https://avatars.githubusercontent.com/u/749374?v=4" width="100px;" alt=""/><br /><sub><b>Sébastien Lorber</b></sub></a></td>
+    <td align="center"><a href="https://github.com/o0charlie0o"><img src="https://avatars.githubusercontent.com/u/1259226?v=4" width="100px;" alt=""/><br /><sub><b>Charlie Ray</b></sub></a></td>
+    <td align="center"><a href="https://github.com/jangxyz"><img src="https://avatars.githubusercontent.com/u/52015?v=4" width="100px;" alt=""/><br /><sub><b>Kim, Jang-hwan</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://simoncrypta.dev/"><img src="https://avatars.githubusercontent.com/u/18013532?v=4" width="100px;" alt=""/><br /><sub><b>Simon Gagnon</b></sub></a></td>
+    <td align="center"><a href="https://wafuwafu13.hateblo.jp/"><img src="https://avatars.githubusercontent.com/u/50798936?v=4" width="100px;" alt=""/><br /><sub><b>TagawaHirotaka</b></sub></a></td>
+    <td align="center"><a href="https://github.com/andrew-hwahin"><img src="https://avatars.githubusercontent.com/u/61768800?v=4" width="100px;" alt=""/><br /><sub><b>Andrew Lam</b></sub></a></td>
+    <td align="center"><a href="https://github.com/bdurette"><img src="https://avatars.githubusercontent.com/u/403387?v=4" width="100px;" alt=""/><br /><sub><b>Brandon DuRette</b></sub></a></td>
+    <td align="center"><a href="https://github.com/cjreimer"><img src="https://avatars.githubusercontent.com/u/51102303?v=4" width="100px;" alt=""/><br /><sub><b>Curtis Reimer</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://twitter.com/webstacker"><img src="https://avatars.githubusercontent.com/u/6331356?v=4" width="100px;" alt=""/><br /><sub><b>Kevin Brown</b></sub></a></td>
+    <td align="center"><a href="https://github.com/adriatic"><img src="https://avatars.githubusercontent.com/u/2712405?v=4" width="100px;" alt=""/><br /><sub><b>Nikolaj Ivancic</b></sub></a></td>
+    <td align="center"><a href="https://github.com/nunopato"><img src="https://avatars.githubusercontent.com/u/1523504?v=4" width="100px;" alt=""/><br /><sub><b>Nuno Pato</b></sub></a></td>
+    <td align="center"><a href="https://github.com/renansoares"><img src="https://avatars.githubusercontent.com/u/1657840?v=4" width="100px;" alt=""/><br /><sub><b>Renan Andrade</b></sub></a></td>
+    <td align="center"><a href="https://github.com/saideepesh000"><img src="https://avatars.githubusercontent.com/u/43727167?v=4" width="100px;" alt=""/><br /><sub><b>Sai Deepesh</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/bl-ue"><img src="https://avatars.githubusercontent.com/u/54780737?v=4" width="100px;" alt=""/><br /><sub><b>bl-ue</b></sub></a></td>
+    <td align="center"><a href="https://github.com/magicjuju"><img src="https://avatars.githubusercontent.com/u/19280122?v=4" width="100px;" alt=""/><br /><sub><b>juju</b></sub></a></td>
+    <td align="center"><a href="https://www.figma.com/@realstandal"><img src="https://avatars.githubusercontent.com/u/25166787?v=4" width="100px;" alt=""/><br /><sub><b>Ryan Lockard</b></sub></a></td>
+    <td align="center"><a href="https://github.com/svenhanssen"><img src="https://avatars.githubusercontent.com/u/445182?v=4" width="100px;" alt=""/><br /><sub><b>Sven Hanssen</b></sub></a></td>
+    <td align="center"><a href="https://mudssrali.github.io/"><img src="https://avatars.githubusercontent.com/u/24487349?v=4" width="100px;" alt=""/><br /><sub><b>Mudassar Ali</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/sangheestyle"><img src="https://avatars.githubusercontent.com/u/319490?v=4" width="100px;" alt=""/><br /><sub><b>SangHee Kim</b></sub></a></td>
+    <td align="center"><a href="http://loonyb.in/"><img src="https://avatars.githubusercontent.com/u/78673?v=4" width="100px;" alt=""/><br /><sub><b>Subhash Chandra</b></sub></a></td>
+    <td align="center"><a href="https://github.com/seonghyeonkimm"><img src="https://avatars.githubusercontent.com/u/13966404?v=4" width="100px;" alt=""/><br /><sub><b>KimSeonghyeon</b></sub></a></td>
+    <td align="center"><a href="https://github.com/origami-z"><img src="https://avatars.githubusercontent.com/u/5257855?v=4" width="100px;" alt=""/><br /><sub><b>Zhihao Cui</b></sub></a></td>
+    <td align="center"><a href="https://corbt.com/"><img src="https://avatars.githubusercontent.com/u/176426?v=4" width="100px;" alt=""/><br /><sub><b>Kyle Corbitt</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/SEANDOUGHTY"><img src="https://avatars.githubusercontent.com/u/12256202?v=4" width="100px;" alt=""/><br /><sub><b>Sean Doughty</b></sub></a></td>
+    <td align="center"><a href="https://github.com/zakmandhro"><img src="https://avatars.githubusercontent.com/u/15746?v=4" width="100px;" alt=""/><br /><sub><b>Zak Mandhro</b></sub></a></td>
+    <td align="center"><a href="https://bozdoz.com/"><img src="https://avatars.githubusercontent.com/u/1410985?v=4" width="100px;" alt=""/><br /><sub><b>bozdoz</b></sub></a></td>
+    <td align="center"><a href="https://mountaintopcoding.dev/"><img src="https://avatars.githubusercontent.com/u/14932877?v=4" width="100px;" alt=""/><br /><sub><b>Isaac Tait</b></sub></a></td>
+    <td align="center"><a href="https://jace.pro/"><img src="https://avatars.githubusercontent.com/u/638764?v=4" width="100px;" alt=""/><br /><sub><b>Jace</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/bernsno"><img src="https://avatars.githubusercontent.com/u/13946?v=4" width="100px;" alt=""/><br /><sub><b>Noah Bernsohn</b></sub></a></td>
+    <td align="center"><a href="https://github.com/rene-demonsters"><img src="https://avatars.githubusercontent.com/u/20322259?v=4" width="100px;" alt=""/><br /><sub><b>rene-demonsters</b></sub></a></td>
+    <td align="center"><a href="https://sharov.dev/"><img src="https://avatars.githubusercontent.com/u/1423028?v=4" width="100px;" alt=""/><br /><sub><b>Sergey Sharov</b></sub></a></td>
+    <td align="center"><a href="https://twitter.com/blackpr"><img src="https://avatars.githubusercontent.com/u/30457?v=4" width="100px;" alt=""/><br /><sub><b>Tim Pap</b></sub></a></td>
+    <td align="center"><a href="https://github.com/in-in"><img src="https://avatars.githubusercontent.com/u/8797432?v=4" width="100px;" alt=""/><br /><sub><b>in-in</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/mlabate"><img src="https://avatars.githubusercontent.com/u/17139676?v=4" width="100px;" alt=""/><br /><sub><b>mlabate</b></sub></a></td>
+    <td align="center"><a href="https://github.com/pdjota"><img src="https://avatars.githubusercontent.com/u/93544?v=4" width="100px;" alt=""/><br /><sub><b>Pablo Dejuan</b></sub></a></td>
+    <td align="center"><a href="https://github.com/bugsfunny"><img src="https://avatars.githubusercontent.com/u/12965842?v=4" width="100px;" alt=""/><br /><sub><b>bugsfunny</b></sub></a></td>
+    <td align="center"><a href="https://github.com/luispinto23"><img src="https://avatars.githubusercontent.com/u/4148663?v=4" width="100px;" alt=""/><br /><sub><b>Luís Pinto</b></sub></a></td>
+    <td align="center"><a href="https://adityaworks.com/"><img src="https://avatars.githubusercontent.com/u/2629902?v=4" width="100px;" alt=""/><br /><sub><b>Aditya Pandey</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://www.leighhalliday.com/"><img src="https://avatars.githubusercontent.com/u/603921?v=4" width="100px;" alt=""/><br /><sub><b>Leigh Halliday</b></sub></a></td>
+    <td align="center"><a href="https://github.com/BlackHawkSigma"><img src="https://avatars.githubusercontent.com/u/14921811?v=4" width="100px;" alt=""/><br /><sub><b>BlackHawkSigma</b></sub></a></td>
+    <td align="center"><a href="https://www.linkedin.com/in/devhmac/"><img src="https://avatars.githubusercontent.com/u/52307383?v=4" width="100px;" alt=""/><br /><sub><b>Devin MacGillivray</b></sub></a></td>
+    <td align="center"><a href="https://github.com/pachoclo"><img src="https://avatars.githubusercontent.com/u/3608140?v=4" width="100px;" alt=""/><br /><sub><b>Francisco Jaramillo</b></sub></a></td>
+    <td align="center"><a href="https://orta.io/"><img src="https://avatars.githubusercontent.com/u/49038?v=4" width="100px;" alt=""/><br /><sub><b>Orta Therox</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/viperfx"><img src="https://avatars.githubusercontent.com/u/328257?v=4" width="100px;" alt=""/><br /><sub><b>Tharshan Muthulingam</b></sub></a></td>
+    <td align="center"><a href="https://brianypliu.com/"><img src="https://avatars.githubusercontent.com/u/3888780?v=4" width="100px;" alt=""/><br /><sub><b>Brian Liu</b></sub></a></td>
+    <td align="center"><a href="https://github.com/ajoslin103"><img src="https://avatars.githubusercontent.com/u/443893?v=4" width="100px;" alt=""/><br /><sub><b>allen joslin</b></sub></a></td>
+    <td align="center"><a href="https://github.com/wongyouth"><img src="https://avatars.githubusercontent.com/u/944583?v=4" width="100px;" alt=""/><br /><sub><b>Ryan Wang</b></sub></a></td>
+    <td align="center"><a href="https://github.com/Vashiru"><img src="https://avatars.githubusercontent.com/u/11370057?v=4" width="100px;" alt=""/><br /><sub><b>Vashiru</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="http://prolabprints.com/"><img src="https://avatars.githubusercontent.com/u/7111699?v=4" width="100px;" alt=""/><br /><sub><b>Ron Dyar</b></sub></a></td>
+    <td align="center"><a href="https://github.com/toddpress"><img src="https://avatars.githubusercontent.com/u/2934422?v=4" width="100px;" alt=""/><br /><sub><b>Todd Pressley</b></sub></a></td>
   </tr>
 </table>
 
 <!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 Redwood projects *(mostly)* follow the [all-contributions](https://allcontributors.org/) specification. Contributions of any kind are welcome.

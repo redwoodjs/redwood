@@ -1,8 +1,18 @@
 import type { Context as LambdaContext, ClientContext } from 'aws-lambda'
-import jwt from 'jsonwebtoken'
+import jwt, { TokenExpiredError } from 'jsonwebtoken'
+
+// import type { TokenExpiredError } from 'jsonwebtoken'
 
 type NetlifyContext = ClientContext & {
   user?: Record<string, unknown>
+}
+
+interface NetlifyTokenPayload extends Record<string, unknown> {
+  exp: number
+  sub: string
+  email: string
+  app_metadata: Record<string, unknown>
+  user_metadata: Record<string, unknown>
 }
 
 export const netlify = (token: string, req: { context: LambdaContext }) => {
@@ -15,7 +25,19 @@ export const netlify = (token: string, req: { context: LambdaContext }) => {
     process.env.NODE_ENV === 'development' ||
     process.env.NODE_ENV === 'test'
   ) {
-    return jwt.decode(token)
+    // In dev, we don't have access to the JWT private key to verify
+    // So we simulate a verification
+    const decodedToken = jwt.decode(token) as NetlifyTokenPayload
+    const nowTimestamp = Math.floor(Date.now() / 1000)
+
+    if (nowTimestamp >= decodedToken.exp) {
+      throw new TokenExpiredError(
+        'jwt expired',
+        new Date(decodedToken.exp * 1000)
+      )
+    }
+
+    return decodedToken
   } else {
     const clientContext = req.context.clientContext as NetlifyContext
     return clientContext?.user || null

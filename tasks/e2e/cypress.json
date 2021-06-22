@@ -1,8 +1,17 @@
 {
-  "ignoreTestFiles": ["**/codemods/*.js"],
+  "ignoreTestFiles": [
+    "**/codemods/*.js"
+  ],
   "projectId": "ao5sqb",
   "retries": {
     "runMode": 2,
     "openMode": 0
-  }
+  },
+  "videoUploadOnPasses": false,
+  "video": false,
+  "execTimeout": 300000,
+  "pageLoadTimeout": 300000,
+  "defaultCommandTimeout": 300000,
+  "taskTimeout": 300000,
+  "requestTimeout": 300000
 }

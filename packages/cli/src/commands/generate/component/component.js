@@ -7,36 +7,36 @@ import {
 
 const REDWOOD_WEB_PATH_NAME = 'components'
 
-export const files = ({ name, tests = true, stories = true, ...options }) => {
-  const isJavascript = options.javascript && !options.typescript
+export const files = ({ name, typescript = false, ...options }) => {
+  const extension = typescript ? '.tsx' : '.js'
   const componentFile = templateForComponentFile({
     name,
     webPathSection: REDWOOD_WEB_PATH_NAME,
-    extension: isJavascript ? '.js' : '.tsx',
+    extension,
     generator: 'component',
     templatePath: 'component.tsx.template',
   })
   const testFile = templateForComponentFile({
     name,
-    extension: `.test.${isJavascript ? 'js' : 'tsx'}`,
+    extension: `.test${extension}`,
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'component',
     templatePath: 'test.tsx.template',
   })
   const storiesFile = templateForComponentFile({
     name,
-    extension: `.stories.${isJavascript ? 'js' : 'tsx'}`,
+    extension: `.stories${extension}`,
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'component',
     templatePath: 'stories.tsx.template',
   })
 
   const files = [componentFile]
-  if (stories) {
+  if (options.stories) {
     files.push(storiesFile)
   }
 
-  if (tests) {
+  if (options.tests) {
     files.push(testFile)
   }
 
@@ -46,9 +46,7 @@ export const files = ({ name, tests = true, stories = true, ...options }) => {
   //    "path/to/fileB": "<<<template>>>",
   // }
   return files.reduce((acc, [outputPath, content]) => {
-    const template = isJavascript
-      ? transformTSToJS(outputPath, content)
-      : content
+    const template = typescript ? content : transformTSToJS(outputPath, content)
 
     return {
       [outputPath]: template,

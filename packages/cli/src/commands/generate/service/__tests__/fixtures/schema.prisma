@@ -1,4 +1,4 @@
-datasource DS {
+datasource db {
   provider = "postgresql"
   url      = env("DB_HOST")
 }
@@ -30,6 +30,7 @@ model User {
   email    String        @unique
   isAdmin  Boolean       @default(false)
   profiles UserProfile[]
+  transactions Transaction[]
 }
 
 model UserProfile {
@@ -37,6 +38,13 @@ model UserProfile {
   username String @unique
   userId   Int
   user     User   @relation(fields: [userId], references: [id])
+}
+
+model Transaction {
+  id       Int    @id @default(autoincrement())
+  item     String?
+  userId   Int
+  user     User @relation(fields: [userId], references: [id])
 }
 
 model Product {

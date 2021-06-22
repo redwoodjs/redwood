@@ -2,12 +2,15 @@
 /// <reference types="cypress" />
 import path from 'path'
 
+import Step0_1_RedwoodToml from './codemods/Step0_1_RedwoodToml'
+import Step0_2_GraphQL from './codemods/Step0_2_GraphQL'
 import Step1_1_Routes from './codemods/Step1_1_Routes'
 import Step2_1_PagesHome from './codemods/Step2_1_PagesHome'
 import Step2_2_PagesAbout from './codemods/Step2_2_PagesAbout'
 import Step3_1_LayoutsBlog from './codemods/Step3_1_LayoutsBlog'
-import Step3_2_PagesHome from './codemods/Step3_2_PagesHome'
-import Step3_3_PagesAbout from './codemods/Step3_3_PagesAbout'
+import Step3_2_Routes from './codemods/Step3_2_Routes'
+import Step3_3_PagesHome from './codemods/Step3_3_PagesHome'
+import Step3_4_PagesAbout from './codemods/Step3_4_PagesAbout'
 import Step4_1_DbSchema from './codemods/Step4_1_DbSchema'
 import Step5_1_ComponentsCellBlogPost from './codemods/Step5_1_ComponentsCellBlogPost'
 import Step5_2_ComponentsCellBlogPostTest from './codemods/Step5_2_ComponentsCellBlogPostTest'
@@ -23,6 +26,7 @@ import Step6_5_BlogPostsCellMock from './codemods/Step6_5_BlogPostsCellMock'
 import Step7_1_BlogLayout from './codemods/Step7_1_BlogLayout'
 import Step7_2_ContactPage from './codemods/Step7_2_ContactPage'
 import Step7_3_Css from './codemods/Step7_3_Css'
+import Step7_4_Routes from './codemods/Step7_4_Routes'
 
 const BASE_DIR = Cypress.env('RW_PATH')
 
@@ -31,6 +35,17 @@ describe('The Redwood Tutorial - Golden path edition', () => {
   // TODO: https://redwoodjs.com/tutorial/administration
 
   it('0. Starting Development', () => {
+    // reset graphql function to use classic api
+
+    // reset redwood toml to use standard apollo server aka not envelop
+    cy.writeFile(path.join(BASE_DIR, 'redwood.toml'), Step0_1_RedwoodToml)
+
+    // needed because can run integration tests out of order and the helix tests will overwrite the graphql function
+    cy.writeFile(
+      path.join(BASE_DIR, 'api/src/functions/graphql.js'),
+      Step0_2_GraphQL
+    )
+
     // https://redwoodjs.com/tutorial/installation-starting-development
     cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step1_1_Routes)
     cy.visit('http://localhost:8910')
@@ -57,7 +72,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       path.join(BASE_DIR, 'web/src/pages/AboutPage/AboutPage.js'),
       Step2_2_PagesAbout
     )
-    cy.get('h1').should('contain', 'AboutPage')
+    cy.get('h1').should('contain', 'Redwood Blog')
     cy.contains('Return home').click()
   })
 
@@ -67,16 +82,17 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       path.join(BASE_DIR, 'web/src/layouts/BlogLayout/BlogLayout.js'),
       Step3_1_LayoutsBlog
     )
+    cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step3_2_Routes)
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/pages/HomePage/HomePage.js'),
-      Step3_2_PagesHome
+      Step3_3_PagesHome
     )
     cy.contains('Redwood Blog').click()
     cy.get('main').should('contain', 'Home')
 
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/pages/AboutPage/AboutPage.js'),
-      Step3_3_PagesAbout
+      Step3_4_PagesAbout
     )
     cy.contains('About').click()
     cy.get('p').should(
@@ -100,27 +116,48 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     cy.visit('http://localhost:8910/posts')
 
     cy.get('h1').should('contain', 'Posts')
+    cy.get('a.rw-button.rw-button-green').should(
+      'have.css',
+      'background-color',
+      'rgb(72, 187, 120)'
+    )
     cy.contains(' New Post').click()
     cy.get('h2').should('contain', 'New Post')
 
     // SAVE
     cy.get('input#title').type('First post')
     cy.get('input#body').type('Hello world!')
+    //check scaffold css
+    cy.get('button.rw-button.rw-button-blue').should(
+      'have.css',
+      'background-color',
+      'rgb(49, 130, 206)'
+    )
     cy.get('button').contains('Save').click()
 
-    cy.get('td').contains('First post')
+    cy.contains('Post created')
+
+    cy.contains('Loading...').should('not.exist')
+    //checks Toast messages
+    cy.get('div[role="status"]').contains('Post created')
 
     // EDIT
     cy.contains('Edit').click()
+    cy.contains('Loading...').should('not.exist')
+    cy.get('h2').contains('Edit Post 1')
     cy.get('input#body').clear().type('No, Margle the World!')
     cy.get('button').contains('Save').click()
     cy.get('td').contains('No, Margle the World!')
+    cy.get('div[role="status"]').contains('Post updated')
+
+    cy.contains('Post updated')
 
     // DELETE
     cy.contains('Delete').click()
 
     // No more posts, so it should be in the empty state.
     cy.contains('Post deleted')
+    cy.get('div[role="status"]').contains('Post deleted')
 
     cy.contains('Create one?').click()
     cy.get('input#title').type('Second post')
@@ -129,9 +166,6 @@ describe('The Redwood Tutorial - Golden path edition', () => {
   })
 
   it('5. Cells', () => {
-    // https://redwoodjs.com/tutorial/cells
-    cy.visit('http://localhost:8910/')
-
     cy.exec(`cd ${BASE_DIR}; yarn rw g cell BlogPosts --force`)
     cy.writeFile(
       path.join(BASE_DIR, 'web/src/components/BlogPostsCell/BlogPostsCell.js'),
@@ -148,6 +182,9 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       path.join(BASE_DIR, 'web/src/pages/HomePage/HomePage.js'),
       Step5_3_PagesHome
     )
+    cy.visit('http://localhost:8910/posts/2') // adding step for pause
+    cy.visit('http://localhost:8910/')
+
     cy.get('main').should(
       'contain',
       // [{"title":"Second post","body":"Hello world!","__typename":"Post"}]
@@ -228,6 +265,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       Step7_2_ContactPage
     )
     cy.writeFile(path.join(BASE_DIR, 'web/src/index.css'), Step7_3_Css)
+    cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step7_4_Routes)
 
     cy.contains('Contact').click()
     cy.contains('Save').click()
@@ -242,7 +280,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     cy.get('input#name').type('test name')
     cy.get('input#email').type('foo@bar.com')
     cy.get('textarea#message').type('test message')
-    cy.contains('Save').click()
+    cy.get('#tutorial-form').submit()
     // console
     // {name: "test name", email: "foo@bar.com", message: "test message"}
   })

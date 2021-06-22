@@ -7,11 +7,20 @@ const createHistory = () => {
     listen: (listener: Listener) => {
       const listenerId = 'RW_HISTORY_LISTENER_ID_' + Date.now()
       listeners[listenerId] = listener
-      window?.addEventListener('popstate', listener)
+      global.addEventListener('popstate', listener)
       return listenerId
     },
     navigate: (to: string) => {
-      window?.history.pushState({}, '', to)
+      const { pathname, search, hash } = new URL(global?.location?.origin + to)
+
+      if (
+        global?.location?.pathname !== pathname ||
+        global?.location?.search !== search ||
+        global?.location?.hash !== hash
+      ) {
+        global.history.pushState({}, '', to)
+      }
+
       for (const listener of Object.values(listeners)) {
         listener()
       }
@@ -19,7 +28,7 @@ const createHistory = () => {
     remove: (listenerId: string) => {
       if (listeners[listenerId]) {
         const listener = listeners[listenerId]
-        window?.removeEventListener('popstate', listener)
+        global.removeEventListener('popstate', listener)
         delete listeners[listenerId]
       } else {
         console.warn(

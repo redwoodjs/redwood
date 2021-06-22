@@ -1,7 +1,8 @@
 global.__dirname = __dirname
 import path from 'path'
 
-import { loadGeneratorFixture } from 'src/lib/test'
+// Load mocks
+import 'src/lib/test'
 
 import { getDefaultArgs } from 'src/lib'
 
@@ -14,7 +15,7 @@ afterEach(() => {
 const extensionForBaseArgs = (baseArgs) =>
   baseArgs && baseArgs.typescript ? 'ts' : 'js'
 
-const itReturnsExactlyThreeFiles = (baseArgs = {}) => {
+const itReturnsExactlyFourFiles = (baseArgs = {}) => {
   test('returns exactly 4 files', async () => {
     const files = await sdl.files({ ...baseArgs, name: 'Post', crud: false })
 
@@ -54,7 +55,7 @@ const itCreatesASingleWordSDLFile = (baseArgs = {}) => {
           `/path/to/project/api/src/graphql/users.sdl.${extension}`
         )
       ]
-    ).toEqual(loadGeneratorFixture('sdl', `singleWordSdl.${extension}`))
+    ).toMatchSnapshot()
   })
 }
 
@@ -72,7 +73,7 @@ const itCreatesAMultiWordSDLFile = (baseArgs = {}) => {
           `/path/to/project/api/src/graphql/userProfiles.sdl.${extension}`
         )
       ]
-    ).toEqual(loadGeneratorFixture('sdl', `multiWordSdl.${extension}`))
+    ).toMatchSnapshot()
   })
 }
 
@@ -87,7 +88,7 @@ const itCreatesASingleWordSDLFileWithCRUD = (baseArgs = {}) => {
           `/path/to/project/api/src/graphql/posts.sdl.${extension}`
         )
       ]
-    ).toEqual(loadGeneratorFixture('sdl', `singleWordSdlCrud.${extension}`))
+    ).toMatchSnapshot()
   })
 }
 
@@ -106,11 +107,11 @@ const itCreateAMultiWordSDLFileWithCRUD = (baseArgs = {}) => {
           `/path/to/project/api/src/graphql/userProfiles.sdl.${extension}`
         )
       ]
-    ).toEqual(loadGeneratorFixture('sdl', `multiWordSdlCrud.${extension}`))
+    ).toMatchSnapshot()
   })
 }
 
-const itCreatesASDLFileWithEnumDefinitions = (baseArgs = {}) => {
+const itCreatesAnSDLFileWithEnumDefinitions = (baseArgs = {}) => {
   test('creates a sdl file with enum definitions', async () => {
     const files = await sdl.files({ ...baseArgs, name: 'Shoe', crud: true })
     const extension = extensionForBaseArgs(baseArgs)
@@ -121,11 +122,11 @@ const itCreatesASDLFileWithEnumDefinitions = (baseArgs = {}) => {
           `/path/to/project/api/src/graphql/shoes.sdl.${extension}`
         )
       ]
-    ).toEqual(loadGeneratorFixture('sdl', `enumGeneratedSdl.${extension}`))
+    ).toMatchSnapshot()
   })
 }
 
-const itCreatesASDLFileWithJsonDefinitions = (baseArgs = {}) => {
+const itCreatesAnSDLFileWithJsonDefinitions = (baseArgs = {}) => {
   test('creates a sdl file with json definitions', async () => {
     const files = await sdl.files({ ...baseArgs, name: 'Photo', crud: true })
     const extension = extensionForBaseArgs(baseArgs)
@@ -136,32 +137,36 @@ const itCreatesASDLFileWithJsonDefinitions = (baseArgs = {}) => {
           `/path/to/project/api/src/graphql/photos.sdl.${extension}`
         )
       ]
-    ).toEqual(loadGeneratorFixture('sdl', `jsonGeneratedSdl.${extension}`))
+    ).toMatchSnapshot()
   })
 }
 
 describe('in javascript mode', () => {
-  const baseArgs = getDefaultArgs(sdl.defaults)
+  const baseArgs = { ...getDefaultArgs(sdl.defaults), tests: true }
 
-  itReturnsExactlyThreeFiles(baseArgs)
+  itReturnsExactlyFourFiles(baseArgs)
   itCreatesAService(baseArgs)
   itCreatesASingleWordSDLFile(baseArgs)
   itCreatesAMultiWordSDLFile(baseArgs)
   itCreatesASingleWordSDLFileWithCRUD(baseArgs)
   itCreateAMultiWordSDLFileWithCRUD(baseArgs)
-  itCreatesASDLFileWithEnumDefinitions(baseArgs)
-  itCreatesASDLFileWithJsonDefinitions(baseArgs)
+  itCreatesAnSDLFileWithEnumDefinitions(baseArgs)
+  itCreatesAnSDLFileWithJsonDefinitions(baseArgs)
 })
 
 describe('in typescript mode', () => {
-  const baseArgs = { ...getDefaultArgs(sdl.defaults), typescript: true }
+  const baseArgs = {
+    ...getDefaultArgs(sdl.defaults),
+    typescript: true,
+    tests: true,
+  }
 
-  itReturnsExactlyThreeFiles(baseArgs)
+  itReturnsExactlyFourFiles(baseArgs)
   itCreatesAService(baseArgs)
   itCreatesASingleWordSDLFile(baseArgs)
   itCreatesAMultiWordSDLFile(baseArgs)
   itCreatesASingleWordSDLFileWithCRUD(baseArgs)
   itCreateAMultiWordSDLFileWithCRUD(baseArgs)
-  itCreatesASDLFileWithEnumDefinitions(baseArgs)
-  itCreatesASDLFileWithJsonDefinitions(baseArgs)
+  itCreatesAnSDLFileWithEnumDefinitions(baseArgs)
+  itCreatesAnSDLFileWithJsonDefinitions(baseArgs)
 })

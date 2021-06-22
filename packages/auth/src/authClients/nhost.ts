@@ -1,9 +1,9 @@
 import type { Session, NhostClient, User } from 'nhost-js-sdk'
 
+import { AuthClient } from './'
+
 export type Nhost = NhostClient
 export type NhostUser = User
-
-import { AuthClient } from './'
 
 type NhostProvider = 'google' | 'github' | 'facebook' | 'linkedin'
 export interface AuthClientNhost extends AuthClient {

@@ -10,7 +10,9 @@ import {
 } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 
-import { AuthContextInterface, useAuth } from '@redwoodjs/auth'
+import type { AuthContextInterface } from '@redwoodjs/auth'
+import { useAuth as useRWAuth } from '@redwoodjs/auth'
+import './typeOverride'
 
 import {
   FetchConfigProvider,
@@ -18,9 +20,17 @@ import {
 } from 'src/components/FetchConfigProvider'
 import { GraphQLHooksProvider } from 'src/components/GraphQLHooksProvider'
 
+export type GraphQLClientConfigProp = Omit<
+  ApolloClientOptions<InMemoryCache>,
+  'cache'
+>
+
+export type UseAuthProp = () => AuthContextInterface
+
 const ApolloProviderWithFetchConfig: React.FunctionComponent<{
-  config?: Omit<ApolloClientOptions<InMemoryCache>, 'cache'>
-}> = ({ config = {}, children }) => {
+  config?: GraphQLClientConfigProp
+  useAuth: UseAuthProp
+}> = ({ config = {}, children, useAuth }) => {
   const { uri, headers } = useFetchConfig()
   const { getToken, type: authProviderType, isAuthenticated } = useAuth()
 
@@ -68,12 +78,15 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
 }
 
 export const RedwoodApolloProvider: React.FunctionComponent<{
-  graphQLClientConfig?: Omit<ApolloClientOptions<InMemoryCache>, 'cache'>
-  useAuth: () => AuthContextInterface
-}> = ({ graphQLClientConfig, useAuth, children }) => {
+  graphQLClientConfig?: GraphQLClientConfigProp
+  useAuth?: UseAuthProp
+}> = ({ graphQLClientConfig, useAuth = useRWAuth, children }) => {
   return (
     <FetchConfigProvider useAuth={useAuth}>
-      <ApolloProviderWithFetchConfig config={graphQLClientConfig}>
+      <ApolloProviderWithFetchConfig
+        config={graphQLClientConfig}
+        useAuth={useAuth}
+      >
         <GraphQLHooksProvider useQuery={useQuery} useMutation={useMutation}>
           {children}
         </GraphQLHooksProvider>

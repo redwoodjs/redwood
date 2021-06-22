@@ -1,0 +1,110 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`creates a TS component and test 1`] = `
+"const TypescriptUser = () => {
+  return (
+    <div>
+      <h2>{'TypescriptUser'}</h2>
+      <p>{'Find me in ./web/src/components/TypescriptUser/TypescriptUser.tsx'}</p>
+    </div>
+  )
+}
+
+export default TypescriptUser
+"
+`;
+
+exports[`creates a TS component and test 2`] = `
+"import { render } from '@redwoodjs/testing'
+
+import TypescriptUser from './TypescriptUser'
+
+describe('TypescriptUser', () => {
+  it('renders successfully', () => {
+    expect(() => {
+      render(<TypescriptUser />)
+    }).not.toThrow()
+  })
+})
+"
+`;
+
+exports[`creates a multi word component 1`] = `
+"const UserProfile = () => {
+  return (
+    <div>
+      <h2>{'UserProfile'}</h2>
+      <p>{'Find me in ./web/src/components/UserProfile/UserProfile.js'}</p>
+    </div>
+  )
+}
+
+export default UserProfile
+"
+`;
+
+exports[`creates a multi word component story 1`] = `
+"import UserProfile from './UserProfile'
+
+export const generated = () => {
+  return <UserProfile />
+}
+
+export default { title: 'Components/UserProfile' }
+"
+`;
+
+exports[`creates a multi word component test 1`] = `
+"import { render } from '@redwoodjs/testing'
+
+import UserProfile from './UserProfile'
+
+describe('UserProfile', () => {
+  it('renders successfully', () => {
+    expect(() => {
+      render(<UserProfile />)
+    }).not.toThrow()
+  })
+})
+"
+`;
+
+exports[`creates a single word component 1`] = `
+"const User = () => {
+  return (
+    <div>
+      <h2>{'User'}</h2>
+      <p>{'Find me in ./web/src/components/User/User.js'}</p>
+    </div>
+  )
+}
+
+export default User
+"
+`;
+
+exports[`creates a single word component story 1`] = `
+"import User from './User'
+
+export const generated = () => {
+  return <User />
+}
+
+export default { title: 'Components/User' }
+"
+`;
+
+exports[`creates a single word component test 1`] = `
+"import { render } from '@redwoodjs/testing'
+
+import User from './User'
+
+describe('User', () => {
+  it('renders successfully', () => {
+    expect(() => {
+      render(<User />)
+    }).not.toThrow()
+  })
+})
+"
+`;

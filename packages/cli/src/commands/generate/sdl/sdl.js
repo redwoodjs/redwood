@@ -8,6 +8,8 @@ import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 import terminalLink from 'terminal-link'
 
+import { getConfig } from '@redwoodjs/internal'
+
 import {
   generateTemplate,
   transformTSToJS,
@@ -19,7 +21,7 @@ import {
 import c from 'src/lib/colors'
 
 import { yargsDefaults } from '../../generate'
-import { relationsForModel } from '../helpers'
+import { ensureUniquePlural, relationsForModel } from '../helpers'
 import { files as serviceFiles } from '../service/service'
 
 const IGNORE_FIELDS_FOR_INPUT = ['id', 'createdAt', 'updatedAt']
@@ -52,6 +54,7 @@ const modelFieldToSDL = (field, required = true, types = {}) => {
 
   const dictionary = {
     Json: 'JSON',
+    Decimal: 'Float',
   }
 
   return `${field.name}: ${field.isList ? '[' : ''}${
@@ -142,15 +145,9 @@ const sdlFromSchemaModel = async (name, crud) => {
   }
 }
 
-export const files = async ({ name, crud, typescript, javascript }) => {
-  const {
-    query,
-    createInput,
-    updateInput,
-    idType,
-    relations,
-    enums,
-  } = await sdlFromSchemaModel(pascalcase(pluralize.singular(name)), crud)
+export const files = async ({ name, crud, tests, typescript }) => {
+  const { query, createInput, updateInput, idType, relations, enums } =
+    await sdlFromSchemaModel(pascalcase(pluralize.singular(name)), crud)
 
   let template = generateTemplate(
     path.join('sdl', 'templates', `sdl.ts.template`),
@@ -165,19 +162,19 @@ export const files = async ({ name, crud, typescript, javascript }) => {
     }
   )
 
-  const extension = typescript === true ? 'ts' : 'js'
+  const extension = typescript ? 'ts' : 'js'
   let outputPath = path.join(
     getPaths().api.graphql,
     `${camelcase(pluralize(name))}.sdl.${extension}`
   )
 
-  if (javascript && !typescript) {
+  if (typescript) {
     template = transformTSToJS(outputPath, template)
   }
 
   return {
     [outputPath]: template,
-    ...(await serviceFiles({ name, crud, relations, typescript, javascript })),
+    ...(await serviceFiles({ name, crud, tests, relations, typescript })),
   }
 }
 
@@ -199,30 +196,33 @@ export const builder = (yargs) => {
       description: 'Model to generate the sdl for',
       type: 'string',
     })
+    .option('tests', {
+      description: 'Generate test files',
+      type: 'boolean',
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
         'https://redwoodjs.com/reference/command-line-interface#generate-sdl'
       )}`
     )
+
+  // Merge default options in
   Object.entries(defaults).forEach(([option, config]) => {
     yargs.option(option, config)
   })
 }
 // TODO: Add --dry-run command
-export const handler = async ({
-  model,
-  crud,
-  force,
-  typescript,
-  javascript,
-}) => {
+export const handler = async ({ model, crud, force, tests, typescript }) => {
+  if (tests === undefined) {
+    tests = getConfig().generate.tests
+  }
   const tasks = new Listr(
     [
       {
         title: 'Generating SDL files...',
         task: async () => {
-          const f = await files({ name: model, crud, typescript, javascript })
+          const f = await files({ name: model, tests, crud, typescript })
           return writeFilesTask(f, { overwriteExisting: force })
         },
       },
@@ -231,6 +231,7 @@ export const handler = async ({
   )
 
   try {
+    await ensureUniquePlural({ model })
     await tasks.run()
   } catch (e) {
     console.error(c.error(e.message))

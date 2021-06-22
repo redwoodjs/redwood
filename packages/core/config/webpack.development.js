@@ -34,6 +34,9 @@ const baseConfig = merge(webpackConfig('development'), {
     overlay: true,
     open: redwoodConfig.browser.open,
   },
+  watchOptions: {
+    ignored: ['**/*.d.ts'],
+  },
   optimization: {
     removeAvailableModules: false,
     removeEmptyChunks: false,
@@ -42,4 +45,5 @@ const baseConfig = merge(webpackConfig('development'), {
   plugins: [new ErrorOverlayPlugin()].filter(Boolean),
 })
 
+/** @type {import('webpack').Configuration} */
 module.exports = mergeUserWebpackConfig('development', baseConfig)

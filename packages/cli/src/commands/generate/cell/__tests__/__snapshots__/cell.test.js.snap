@@ -1,0 +1,591 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`"equipment" with list flag 1`] = `
+"export const QUERY = gql\`
+  query EquipmentListQuery {
+    equipmentList {
+      id
+    }
+  }
+\`
+
+export const Loading = () => <div>Loading...</div>
+
+export const Empty = () => <div>Empty</div>
+
+export const Failure = ({ error }) => (
+  <div style={{ color: 'red' }}>Error: {error.message}</div>
+)
+
+export const Success = ({ equipmentList }) => {
+  return (
+    <ul>
+      {equipmentList.map((item) => {
+        return <li key={item.id}>{JSON.stringify(item)}</li>
+      })}
+    </ul>
+  )
+}
+"
+`;
+
+exports[`"equipment" withOUT list flag should find equipment by id 1`] = `
+"export const QUERY = gql\`
+  query FindEquipmentQuery($id: Int!) {
+    equipment: equipment(id: $id) {
+      id
+    }
+  }
+\`
+
+export const Loading = () => <div>Loading...</div>
+
+export const Empty = () => <div>Empty</div>
+
+export const Failure = ({ error }) => (
+  <div style={{ color: 'red' }}>Error: {error.message}</div>
+)
+
+export const Success = ({ equipment }) => {
+  return <div>{JSON.stringify(equipment)}</div>
+}
+"
+`;
+
+exports[`creates a cell component with a camelCase word name 1`] = `
+"export const QUERY = gql\`
+  query FindUserProfileQuery($id: Int!) {
+    userProfile: userProfile(id: $id) {
+      id
+    }
+  }
+\`
+
+export const Loading = () => <div>Loading...</div>
+
+export const Empty = () => <div>Empty</div>
+
+export const Failure = ({ error }) => (
+  <div style={{ color: 'red' }}>Error: {error.message}</div>
+)
+
+export const Success = ({ userProfile }) => {
+  return <div>{JSON.stringify(userProfile)}</div>
+}
+"
+`;
+
+exports[`creates a cell component with a kebabCase word name 1`] = `
+"export const QUERY = gql\`
+  query FindUserProfileQuery($id: Int!) {
+    userProfile: userProfile(id: $id) {
+      id
+    }
+  }
+\`
+
+export const Loading = () => <div>Loading...</div>
+
+export const Empty = () => <div>Empty</div>
+
+export const Failure = ({ error }) => (
+  <div style={{ color: 'red' }}>Error: {error.message}</div>
+)
+
+export const Success = ({ userProfile }) => {
+  return <div>{JSON.stringify(userProfile)}</div>
+}
+"
+`;
+
+exports[`creates a cell component with a multi word name 1`] = `
+"export const QUERY = gql\`
+  query FindUserProfileQuery($id: Int!) {
+    userProfile: userProfile(id: $id) {
+      id
+    }
+  }
+\`
+
+export const Loading = () => <div>Loading...</div>
+
+export const Empty = () => <div>Empty</div>
+
+export const Failure = ({ error }) => (
+  <div style={{ color: 'red' }}>Error: {error.message}</div>
+)
+
+export const Success = ({ userProfile }) => {
+  return <div>{JSON.stringify(userProfile)}</div>
+}
+"
+`;
+
+exports[`creates a cell component with a single word name 1`] = `
+"export const QUERY = gql\`
+  query FindUserQuery($id: Int!) {
+    user: user(id: $id) {
+      id
+    }
+  }
+\`
+
+export const Loading = () => <div>Loading...</div>
+
+export const Empty = () => <div>Empty</div>
+
+export const Failure = ({ error }) => (
+  <div style={{ color: 'red' }}>Error: {error.message}</div>
+)
+
+export const Success = ({ user }) => {
+  return <div>{JSON.stringify(user)}</div>
+}
+"
+`;
+
+exports[`creates a cell component with a snakeCase word name 1`] = `
+"export const QUERY = gql\`
+  query FindUserProfileQuery($id: Int!) {
+    userProfile: userProfile(id: $id) {
+      id
+    }
+  }
+\`
+
+export const Loading = () => <div>Loading...</div>
+
+export const Empty = () => <div>Empty</div>
+
+export const Failure = ({ error }) => (
+  <div style={{ color: 'red' }}>Error: {error.message}</div>
+)
+
+export const Success = ({ userProfile }) => {
+  return <div>{JSON.stringify(userProfile)}</div>
+}
+"
+`;
+
+exports[`creates a cell mock with a camelCase word name 1`] = `
+"// Define your own mock data here:
+export const standard = () => /* vars, { ctx, req } */ ({
+  userProfile: {
+    id: 42,
+  },
+})
+"
+`;
+
+exports[`creates a cell mock with a kebabCase word name 1`] = `
+"// Define your own mock data here:
+export const standard = () => /* vars, { ctx, req } */ ({
+  userProfile: {
+    id: 42,
+  },
+})
+"
+`;
+
+exports[`creates a cell mock with a multi word name 1`] = `
+"// Define your own mock data here:
+export const standard = () => /* vars, { ctx, req } */ ({
+  userProfile: {
+    id: 42,
+  },
+})
+"
+`;
+
+exports[`creates a cell mock with a single word name 1`] = `
+"// Define your own mock data here:
+export const standard = () => /* vars, { ctx, req } */ ({
+  user: {
+    id: 42,
+  },
+})
+"
+`;
+
+exports[`creates a cell mock with a snakeCase word name 1`] = `
+"// Define your own mock data here:
+export const standard = () => /* vars, { ctx, req } */ ({
+  userProfile: {
+    id: 42,
+  },
+})
+"
+`;
+
+exports[`creates a cell stories with a camelCase word name 1`] = `
+"import { Loading, Empty, Failure, Success } from './UserProfileCell'
+import { standard } from './UserProfileCell.mock'
+
+export const loading = () => {
+  return Loading ? <Loading /> : null
+}
+
+export const empty = () => {
+  return Empty ? <Empty /> : null
+}
+
+export const failure = () => {
+  return Failure ? <Failure error={new Error('Oh no')} /> : null
+}
+
+export const success = () => {
+  return Success ? <Success {...standard()} /> : null
+}
+
+export default { title: 'Cells/UserProfileCell' }
+"
+`;
+
+exports[`creates a cell stories with a kebabCase word name 1`] = `
+"import { Loading, Empty, Failure, Success } from './UserProfileCell'
+import { standard } from './UserProfileCell.mock'
+
+export const loading = () => {
+  return Loading ? <Loading /> : null
+}
+
+export const empty = () => {
+  return Empty ? <Empty /> : null
+}
+
+export const failure = () => {
+  return Failure ? <Failure error={new Error('Oh no')} /> : null
+}
+
+export const success = () => {
+  return Success ? <Success {...standard()} /> : null
+}
+
+export default { title: 'Cells/UserProfileCell' }
+"
+`;
+
+exports[`creates a cell stories with a multi word name 1`] = `
+"import { Loading, Empty, Failure, Success } from './UserProfileCell'
+import { standard } from './UserProfileCell.mock'
+
+export const loading = () => {
+  return Loading ? <Loading /> : null
+}
+
+export const empty = () => {
+  return Empty ? <Empty /> : null
+}
+
+export const failure = () => {
+  return Failure ? <Failure error={new Error('Oh no')} /> : null
+}
+
+export const success = () => {
+  return Success ? <Success {...standard()} /> : null
+}
+
+export default { title: 'Cells/UserProfileCell' }
+"
+`;
+
+exports[`creates a cell stories with a single word name 1`] = `
+"import { Loading, Empty, Failure, Success } from './UserCell'
+import { standard } from './UserCell.mock'
+
+export const loading = () => {
+  return Loading ? <Loading /> : null
+}
+
+export const empty = () => {
+  return Empty ? <Empty /> : null
+}
+
+export const failure = () => {
+  return Failure ? <Failure error={new Error('Oh no')} /> : null
+}
+
+export const success = () => {
+  return Success ? <Success {...standard()} /> : null
+}
+
+export default { title: 'Cells/UserCell' }
+"
+`;
+
+exports[`creates a cell stories with a snakeCase word name 1`] = `
+"import { Loading, Empty, Failure, Success } from './UserProfileCell'
+import { standard } from './UserProfileCell.mock'
+
+export const loading = () => {
+  return Loading ? <Loading /> : null
+}
+
+export const empty = () => {
+  return Empty ? <Empty /> : null
+}
+
+export const failure = () => {
+  return Failure ? <Failure error={new Error('Oh no')} /> : null
+}
+
+export const success = () => {
+  return Success ? <Success {...standard()} /> : null
+}
+
+export default { title: 'Cells/UserProfileCell' }
+"
+`;
+
+exports[`creates a cell test with a camelCase word name 1`] = `
+"import { render } from '@redwoodjs/testing'
+import { Loading, Empty, Failure, Success } from './UserProfileCell'
+import { standard } from './UserProfileCell.mock'
+
+describe('UserProfileCell', () => {
+  it('renders Loading successfully', () => {
+    expect(() => {
+      render(<Loading />)
+    }).not.toThrow()
+  })
+
+  it('renders Empty successfully', async () => {
+    expect(() => {
+      render(<Empty />)
+    }).not.toThrow()
+  })
+
+  it('renders Failure successfully', async () => {
+    expect(() => {
+      render(<Failure error={new Error('Oh no')} />)
+    }).not.toThrow()
+  })
+
+  // When you're ready to test the actual output of your component render
+  // you could test that, for example, certain text is present:
+  //
+  // 1. import { screen } from '@redwoodjs/testing'
+  // 2. Add test: expect(screen.getByText('Hello, world')).toBeInTheDocument()
+
+  it('renders Success successfully', async () => {
+    expect(() => {
+      render(<Success userProfile={standard().userProfile} />)
+    }).not.toThrow()
+  })
+})
+"
+`;
+
+exports[`creates a cell test with a kebabCase word name 1`] = `
+"import { render } from '@redwoodjs/testing'
+import { Loading, Empty, Failure, Success } from './UserProfileCell'
+import { standard } from './UserProfileCell.mock'
+
+describe('UserProfileCell', () => {
+  it('renders Loading successfully', () => {
+    expect(() => {
+      render(<Loading />)
+    }).not.toThrow()
+  })
+
+  it('renders Empty successfully', async () => {
+    expect(() => {
+      render(<Empty />)
+    }).not.toThrow()
+  })
+
+  it('renders Failure successfully', async () => {
+    expect(() => {
+      render(<Failure error={new Error('Oh no')} />)
+    }).not.toThrow()
+  })
+
+  // When you're ready to test the actual output of your component render
+  // you could test that, for example, certain text is present:
+  //
+  // 1. import { screen } from '@redwoodjs/testing'
+  // 2. Add test: expect(screen.getByText('Hello, world')).toBeInTheDocument()
+
+  it('renders Success successfully', async () => {
+    expect(() => {
+      render(<Success userProfile={standard().userProfile} />)
+    }).not.toThrow()
+  })
+})
+"
+`;
+
+exports[`creates a cell test with a multi word name 1`] = `
+"import { render } from '@redwoodjs/testing'
+import { Loading, Empty, Failure, Success } from './UserProfileCell'
+import { standard } from './UserProfileCell.mock'
+
+describe('UserProfileCell', () => {
+  it('renders Loading successfully', () => {
+    expect(() => {
+      render(<Loading />)
+    }).not.toThrow()
+  })
+
+  it('renders Empty successfully', async () => {
+    expect(() => {
+      render(<Empty />)
+    }).not.toThrow()
+  })
+
+  it('renders Failure successfully', async () => {
+    expect(() => {
+      render(<Failure error={new Error('Oh no')} />)
+    }).not.toThrow()
+  })
+
+  // When you're ready to test the actual output of your component render
+  // you could test that, for example, certain text is present:
+  //
+  // 1. import { screen } from '@redwoodjs/testing'
+  // 2. Add test: expect(screen.getByText('Hello, world')).toBeInTheDocument()
+
+  it('renders Success successfully', async () => {
+    expect(() => {
+      render(<Success userProfile={standard().userProfile} />)
+    }).not.toThrow()
+  })
+})
+"
+`;
+
+exports[`creates a cell test with a single word name 1`] = `
+"import { render } from '@redwoodjs/testing'
+import { Loading, Empty, Failure, Success } from './UserCell'
+import { standard } from './UserCell.mock'
+
+describe('UserCell', () => {
+  it('renders Loading successfully', () => {
+    expect(() => {
+      render(<Loading />)
+    }).not.toThrow()
+  })
+
+  it('renders Empty successfully', async () => {
+    expect(() => {
+      render(<Empty />)
+    }).not.toThrow()
+  })
+
+  it('renders Failure successfully', async () => {
+    expect(() => {
+      render(<Failure error={new Error('Oh no')} />)
+    }).not.toThrow()
+  })
+
+  // When you're ready to test the actual output of your component render
+  // you could test that, for example, certain text is present:
+  //
+  // 1. import { screen } from '@redwoodjs/testing'
+  // 2. Add test: expect(screen.getByText('Hello, world')).toBeInTheDocument()
+
+  it('renders Success successfully', async () => {
+    expect(() => {
+      render(<Success user={standard().user} />)
+    }).not.toThrow()
+  })
+})
+"
+`;
+
+exports[`creates a cell test with a snakeCase word name 1`] = `
+"import { render } from '@redwoodjs/testing'
+import { Loading, Empty, Failure, Success } from './UserProfileCell'
+import { standard } from './UserProfileCell.mock'
+
+describe('UserProfileCell', () => {
+  it('renders Loading successfully', () => {
+    expect(() => {
+      render(<Loading />)
+    }).not.toThrow()
+  })
+
+  it('renders Empty successfully', async () => {
+    expect(() => {
+      render(<Empty />)
+    }).not.toThrow()
+  })
+
+  it('renders Failure successfully', async () => {
+    expect(() => {
+      render(<Failure error={new Error('Oh no')} />)
+    }).not.toThrow()
+  })
+
+  // When you're ready to test the actual output of your component render
+  // you could test that, for example, certain text is present:
+  //
+  // 1. import { screen } from '@redwoodjs/testing'
+  // 2. Add test: expect(screen.getByText('Hello, world')).toBeInTheDocument()
+
+  it('renders Success successfully', async () => {
+    expect(() => {
+      render(<Success userProfile={standard().userProfile} />)
+    }).not.toThrow()
+  })
+})
+"
+`;
+
+exports[`generates list cells if list flag passed in 1`] = `
+"export const QUERY = gql\`
+  query MembersQuery {
+    members {
+      id
+    }
+  }
+\`
+
+export const Loading = () => <div>Loading...</div>
+
+export const Empty = () => <div>Empty</div>
+
+export const Failure = ({ error }) => (
+  <div style={{ color: 'red' }}>Error: {error.message}</div>
+)
+
+export const Success = ({ members }) => {
+  return (
+    <ul>
+      {members.map((item) => {
+        return <li key={item.id}>{JSON.stringify(item)}</li>
+      })}
+    </ul>
+  )
+}
+"
+`;
+
+exports[`generates list cells if name is plural 1`] = `
+"export const QUERY = gql\`
+  query MembersQuery {
+    members {
+      id
+    }
+  }
+\`
+
+export const Loading = () => <div>Loading...</div>
+
+export const Empty = () => <div>Empty</div>
+
+export const Failure = ({ error }) => (
+  <div style={{ color: 'red' }}>Error: {error.message}</div>
+)
+
+export const Success = ({ members }) => {
+  return (
+    <ul>
+      {members.map((item) => {
+        return <li key={item.id}>{JSON.stringify(item)}</li>
+      })}
+    </ul>
+  )
+}
+"
+`;

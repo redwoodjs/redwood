@@ -1,0 +1,345 @@
+#!/usr/bin/env node
+/* eslint-env node, es6*/
+//@ts-check
+const fs = require('fs')
+const path = require('path')
+const { title } = require('process')
+
+const execa = require('execa')
+const Listr = require('listr')
+const yargs = require('yargs')
+
+const args = yargs
+  .usage('Usage: $0 <project directory> [option]')
+  .option('name', { default: 'blog-test-project', type: 'string', alias: 'n' })
+  .option('typescript', {
+    alias: 'ts',
+    default: false,
+    type: 'boolean',
+    describe: 'Generate a TypeScript project. JavaScript by default.',
+  })
+  .option('canary', {
+    default: true,
+    type: 'boolean',
+    describe: 'Upgrade project to latest canary version',
+  })
+  .help()
+  .strict().argv
+
+const { name, typescript, canary } = args
+
+const choosenPath = args._
+
+const RW_BLOGPATH = path.resolve(
+  choosenPath.length >= 1
+    ? String(choosenPath).replace(/,/g, '-')
+    : path.join(__dirname, '../../', name)
+)
+const RW_BASEPATH = path.join(__dirname, '../../')
+
+const getExecaOptions = (cwd = RW_BLOGPATH) => ({
+  shell: true,
+  stdio: ['ignore', 'pipe', 'inherit'],
+  cleanup: true,
+  cwd,
+})
+
+async function applyCodemod(codemod, target) {
+  const args = []
+  args.push(
+    '-t',
+    `${path.resolve(__dirname, 'codemods', codemod)} ${RW_BLOGPATH}/${target}`
+  )
+
+  if (typescript) {
+    args.push('--parser', 'tsx')
+  }
+  await execa('yarn transform', args, getExecaOptions(path.resolve(__dirname)))
+}
+
+function addExtension(name) {
+  if (typescript) {
+    if (name.startsWith('api')) {
+      name += '.ts'
+    } else if (name.startsWith('web')) {
+      name += '.tsx'
+    }
+  } else {
+    name += '.js'
+  }
+  return name
+}
+
+const createProject = async () => {
+  if (fs.existsSync(RW_BLOGPATH)) {
+    console.error(`'${RW_BLOGPATH}' already exists and is not empty.`)
+    process.exit(1)
+  }
+
+  let cmd = `yarn babel-node packages/create-redwood-app/src/create-redwood-app.js ${RW_BLOGPATH}`
+
+  if (typescript) {
+    cmd = `${cmd} --typescript`
+  }
+
+  return execa(cmd, [], getExecaOptions(RW_BASEPATH))
+}
+
+async function webTasks() {
+  const createBuilder = (cmd) => {
+    return async function createItem(name) {
+      await execa(`${cmd} ${name}`, [], getExecaOptions())
+    }
+  }
+
+  const createPages = async () => {
+    const createPage = createBuilder('yarn redwood g page')
+
+    return new Listr([
+      {
+        title: 'Creating home page',
+        task: async () => {
+          await createPage('home /')
+
+          return applyCodemod(
+            'homePage.js',
+            addExtension(`web/src/pages/HomePage/HomePage`)
+          )
+        },
+      },
+      {
+        title: 'Creating about page',
+        task: async () => {
+          await createPage('about')
+
+          return applyCodemod(
+            'aboutPage.js',
+            addExtension('web/src/pages/AboutPage/AboutPage')
+          )
+        },
+      },
+      {
+        title: 'Creating contact page',
+        task: async () => {
+          await createPage('contact')
+
+          return applyCodemod(
+            'contactPage.js',
+            addExtension('web/src/pages/ContactPage/ContactPage')
+          )
+        },
+      },
+      {
+        title: 'Creating blog post page',
+        task: async () => {
+          await createPage('blogPost /blog-post/{id:Int}')
+
+          return applyCodemod(
+            'blogPostPage.js',
+            addExtension('web/src/pages/BlogPostPage/BlogPostPage')
+          )
+        },
+      },
+    ])
+  }
+
+  const createLayout = async () => {
+    const createLayout = createBuilder('yarn redwood g layout')
+
+    await createLayout('blog')
+
+    return applyCodemod(
+      'blogLayout.js',
+      addExtension('web/src/layouts/BlogLayout/BlogLayout')
+    )
+  }
+
+  const createComponents = async () => {
+    const createLayout = createBuilder('yarn redwood g component')
+
+    await createLayout('blogPost')
+
+    return applyCodemod(
+      'blogPost.js',
+      addExtension('web/src/components/BlogPost/BlogPost')
+    )
+  }
+
+  const createCells = async () => {
+    const createCell = createBuilder('yarn redwood g cell')
+
+    await createCell('blogPosts')
+
+    applyCodemod(
+      'blogPostsCell.js',
+      addExtension('web/src/components/BlogPostsCell/BlogPostsCell')
+    )
+
+    await createCell('blogPost')
+
+    return applyCodemod(
+      'blogPostCell.js',
+      addExtension('web/src/components/BlogPostCell/BlogPostCell')
+    )
+  }
+
+  return new Listr(
+    [
+      {
+        title: 'Creating pages',
+        task: async () => createPages(),
+      },
+      {
+        title: 'Creating layout',
+        task: async () => createLayout(),
+      },
+      {
+        title: 'Creating components',
+        task: async () => createComponents(),
+      },
+      {
+        title: 'Creating cells',
+        task: async () => createCells(),
+      },
+      {
+        title: 'Changing routes',
+        task: async () =>
+          applyCodemod('routes.js', addExtension('web/src/Routes')),
+      },
+      {
+        title: 'Adding Tailwind',
+        task: async () => {
+          return execa('yarn rw setup tailwind', [], getExecaOptions())
+        },
+      },
+      {
+        title: `Running lint`,
+        task: async () => {
+          return execa('yarn rw lint --fix', [], getExecaOptions())
+        },
+      },
+    ],
+    {
+      exitOnError: true,
+    }
+  )
+}
+
+async function apiTasks() {
+  async function addModel(schema) {
+    const path = `${RW_BLOGPATH}/api/db/schema.prisma`
+
+    const current = fs.readFileSync(path)
+
+    fs.writeFileSync(path, `${current}${schema}`)
+  }
+
+  return new Listr([
+    {
+      title: 'Adding post model to prisma',
+      task: async () => {
+        const { post } = await import('./codemods/models.js')
+
+        addModel(post)
+
+        return execa(
+          `yarn rw prisma migrate dev --name create_product`,
+          [],
+          getExecaOptions()
+        )
+      },
+    },
+    {
+      title: 'Scaffoding post',
+      task: async () => {
+        return execa('yarn rw g scaffold post', [], getExecaOptions())
+      },
+    },
+    {
+      title: 'Seeding database',
+      task: async () => {
+        await applyCodemod('seed.js', 'api/db/seed.js')
+
+        return execa('yarn rw prisma db seed', [], getExecaOptions())
+      },
+    },
+    {
+      title: 'Adding contact model to prisma',
+      task: async () => {
+        const { contact } = await import('./codemods/models.js')
+
+        addModel(contact)
+
+        await execa(
+          `yarn rw prisma migrate dev --name create_contact`,
+          [],
+          getExecaOptions()
+        )
+
+        await execa(`yarn rw g sdl contact`, [], getExecaOptions())
+
+        await applyCodemod(
+          'contactsSdl.js',
+          addExtension('api/src/graphql/contacts.sdl')
+        )
+      },
+    },
+    {
+      title: `Running lint`,
+      task: async () => {
+        return execa('yarn rw lint --fix', [], getExecaOptions())
+      },
+    },
+  ])
+}
+
+const globalTasks = () =>
+  new Listr(
+    [
+      {
+        title: `Installing script packages`,
+        task: async () => {
+          return execa(
+            'yarn install',
+            [],
+            getExecaOptions(path.resolve(__dirname))
+          )
+        },
+      },
+      {
+        title: `Creating project`,
+        task: () => {
+          return new Listr([
+            {
+              title: `Installing project template and packages`,
+              task: () => createProject(),
+            },
+            {
+              title: `Upgrading to latest canary version`,
+              task: async () => {
+                return execa('yarn rw upgrade -t canary', [], getExecaOptions())
+              },
+              enabled: () => canary,
+            },
+          ])
+        },
+      },
+      {
+        title: `Setting up web project`,
+        task: () => webTasks(),
+      },
+      {
+        title: `Setting up api project`,
+        task: () => apiTasks(),
+      },
+    ],
+    {
+      exitOnError: true,
+    }
+  )
+
+globalTasks()
+  .run()
+  .catch((err) => {
+    console.error(err)
+  })

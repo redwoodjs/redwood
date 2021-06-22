@@ -4,11 +4,11 @@ This is the built-in router for Redwood apps. It takes inspiration from Ruby on 
 
 > **WARNING:** RedwoodJS software has not reached a stable version 1.0 and should not be considered suitable for production use. In the "make it work; make it right; make it fast" paradigm, Redwood is in the later stages of the "make it work" phase.
 
-Redwood Router (RR from now on) is designed to list all routes in a single file, without any nesting. We prefer this design, as it makes it very easy to track which routes map to which pages.
+Redwood Router (RR from now on) is designed to list all routes in a single file, with limited nesting. We prefer this design, as it makes it very easy to track which routes map to which pages.
 
 ## Router and Route
 
-The first thing you need is a `Router`. It will contain all of your routes. RR will attempt to match the current URL to each route in turn, stopping when it finds a match, and rendering that route only. The only exception to this is the `notfound` route, which can be placed anywhere in the list and only matches when no other routes do.
+The first thing you need is a `Router`. It will contain all of your routes. RR will attempt to match the current URL to each route in turn, and only render those with a matching `path`. The only exception to this is the `notfound` route, which can be placed anywhere in the list and only matches when no other routes do.
 
 Each route is specified with a `Route`. Our first route will tell RR what to render when no other route matches:
 
@@ -40,9 +40,116 @@ The `path` prop specifies the URL path to match, starting with the beginning sla
 
 Some pages should only be visible to authenticated users.
 
-All `Routes` nested in `<Private>` require authentication.
-When a user is not authenticated and attempts to visit this route,
-they will be redirected to the route passed as the `unauthenticated` prop and the originally requested route's path will be added to the querystring in a `redirectTo` param. This lets you send the user to the originally requested once logged in.
+We support this using private `<Set>`s or the `<Private>` component. Read more [further down](#private-set).
+
+## Sets of Routes
+
+You can group Routes into sets using the `Set` component. `Set` allows you to wrap a set of Routes in another component or array of components—usually a Context, a Layout, or both:
+
+```js
+// Routes.js
+
+import { Router, Route, Set } from '@redwoodjs/router'
+import BlogContext from 'src/contexts/BlogContext'
+import BlogLayout from 'src/layouts/BlogLayout'
+
+const Routes = () => {
+  return (
+    <Router>
+      <Set wrap={[BlogContext, BlogLayout]}>
+        <Route path="/" page={HomePage} name="home" />
+        <Route path="/about" page={AboutPage} name="about" />
+        <Route path="/contact" page={ContactPage} name="contact" />
+        <Route path="/blog-post/{id:Int}" page={BlogPostPage} name="blogPost" />
+      </Set>
+    </Router>
+  )
+}
+
+export default Routes
+```
+
+The `wrap` prop accepts a single component or an array of components. Components are rendered in the same order they're passed, so in the example above, Set expands to:
+
+```js
+<BlogContext>
+  <BlogLayout>
+    <Route path="/" page={HomePage} name="home" />
+    // ...
+  </BlogLayout>
+</BlogContext>
+```
+
+Conceptually, this fits with how we think about Context and Layouts as things that wrap Pages and contain content that’s outside the scope of the Pages themselves. Crucially, since they're higher in the tree, `BlogContext` and `BlogLayout` won't rerender across Pages in the same Set.
+
+There's a lot of flexibility here. You can even nest `Sets` to great effect:
+
+```js
+// Routes.js
+
+import { Router, Route, Set, Private } from '@redwoodjs/router'
+import BlogContext from 'src/contexts/BlogContext'
+import BlogLayout from 'src/layouts/BlogLayout'
+import BlogNavLayout from 'src/layouts/BlogNavLayout'
+
+const Routes = () => {
+  return (
+    <Router>
+      <Set wrap={[BlogContext, BlogLayout]}>
+        <Route path="/" page={HomePage} name="home" />
+        <Route path="/about" page={AboutPage} name="about" />
+        <Route path="/contact" page={ContactPage} name="contact" />
+        <Set wrap={BlogNavLayout}>
+          <Route path="/blog-post/{id:Int}" page={BlogPostPage} name="blogPost" />
+        </Set>
+      </Set>
+    </Router>
+  )
+}
+```
+
+### Forwarding props
+
+All props you give to `<Set>` (except for `wrap`) will be passed to the wrapper components.
+
+So this...
+
+```
+<Set wrap={MainLayout} theme="dark">
+  <Route path="/" page={HomePage} name="home" />
+</Set>
+```
+
+becomes...
+
+```
+<MainLayout theme="dark">
+  <Route path="/" page={HomePage} name="home" />
+</MainLayout>
+```
+
+### `private` Set
+
+
+Sets can take a `private` prop which makes all Routes inside that Set require authentication. When a user isn't authenticated and attempts to visit one of the Routes in the private Set, they'll be redirected to the Route passed as the Set's `unauthenticated` prop. The originally-requested Route's path is added to the query string as a `redirectTo` param. This lets you send the user to the page they originally requested once they're logged-in. 
+
+For more fine-grained control, you can specify `role` (which takes an array of roles), and RR will check to see that the user is authorized before giving them access to the Route. If they're not, it'll redirect them in the same way as above.
+
+Here's an example of how you'd use a private set:
+
+```jsx
+// Routes.js
+<Router>
+  <Route path="/" page={HomePage} name="home" />
+  <Set private unauthenticated="home">
+    <Route path="/admin" page={AdminPage} name="admin" />
+  </Set>
+</Router>
+```
+
+Private routes are important and should be easy to spot in your Routes file. The larger your Routes file gets, the more difficult it will probably become to find `<Set private /*...*/>` among your other Sets. So we also provide a `<Private>` component that's just an alias for `<Set private /*...*/>`. Most of our documentation uses `<Private>`.
+
+Here's the same example again, but now using `<Private>`
 
 ```js
 // Routes.js
@@ -55,7 +162,7 @@ they will be redirected to the route passed as the `unauthenticated` prop and th
 ```
 
 Redwood uses the `useAuth` hook under the hood to determine if the user is authenticated.
-Read more about authentication in redwood [here](https://redwoodjs.com/tutorial/authentication).
+Read more about authentication in Redwood [here](https://redwoodjs.com/tutorial/authentication).
 
 ## Link and named route functions
 
@@ -167,6 +274,11 @@ Now, if a request for `/user/mojombo` comes in, it will fail to match the first 
 We call built-in parameter types _core parameter types_. All core parameter types begin with a capital letter. Here are the types:
 
 - `Int` - Matches and converts an integer.
+- `Float` - Matches and converts a Float.
+- `Boolean` - Matches and converts Boolean (true or false only)
+
+> Note on TypeScript support
+Redwood will automatically generate types for your named routes, but you do have to run `yarn redwood dev` or `yarn redwood build` atleast once for your `Routes.{js,ts}` to be parsed
 
 ## User route parameter types
 
