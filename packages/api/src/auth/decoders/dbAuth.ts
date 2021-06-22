@@ -1,19 +1,19 @@
-import { decryptSession, getSession } from '../../functions/dbAuth/shared'
+import { dbAuthSession } from '../../functions/dbAuth/shared'
 
 export const dbAuth = (authHeaderValue: string, req: { event: any }) => {
-  const encrypted = getSession(req.event.headers['cookie'])
-
-  if (!encrypted) {
-    return null
-  }
-
+  const session = dbAuthSession(req.event)
   const authHeaderUserId = authHeaderValue
-  const [session, _csrfToken] = decryptSession(encrypted)
+
+  // const encrypted = getSession(req.event.headers['cookie'])
+
+  // if (!encrypted) {
+  //   return null
+  // }
+
+  // const [session, _csrfToken] = decryptSession(encrypted)
 
   if (session.id.toString() !== authHeaderUserId) {
-    throw new Error(
-      'Error comparing Authorization header value to decrypted user'
-    )
+    throw new Error('Authorization header does not match decrypted user ID')
   }
 
   return session
