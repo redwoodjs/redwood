@@ -58,9 +58,6 @@ test('wraps components in other components', async () => {
           <h1>
             Global Layout
           </h1>
-          <h1>
-            ChildA
-          </h1>
           <div>
             <h1>
               Layout for B
@@ -84,9 +81,6 @@ test('wraps components in other components', async () => {
           Custom Wrapper End
         </p>
       </div>
-      <h1>
-        ChildC
-      </h1>
     </div>
   `)
 })
