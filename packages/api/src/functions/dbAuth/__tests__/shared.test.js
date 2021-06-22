@@ -1,7 +1,7 @@
 import CryptoJS from 'crypto-js'
 
 import * as error from '../errors'
-import { getSession, decryptSession } from '../shared'
+import { getSession, decryptSession, dbAuthSession } from '../shared'
 
 process.env.SESSION_SECRET = 'nREjs1HPS7cFia6tQHK70EWGtfhOgbqJQKsHQz3S'
 
@@ -9,7 +9,7 @@ const encrypt = (data) => {
   return CryptoJS.AES.encrypt(data, process.env.SESSION_SECRET).toString()
 }
 
-describe('_getSession()', () => {
+describe('getSession()', () => {
   it('returns null if no text', () => {
     expect(getSession()).toEqual(null)
   })
@@ -55,5 +55,26 @@ describe('decryptSession()', () => {
     const text = encrypt(JSON.stringify(first) + ';' + second)
 
     expect(decryptSession(text)).toEqual([first, second])
+  })
+})
+
+describe('dbAuthSession()', () => {
+  it('returns null if no cookies', () => {
+    const event = { headers: {} }
+
+    expect(dbAuthSession(event)).toEqual(null)
+  })
+
+  it('return session given event', () => {
+    const first = { foo: 'bar' }
+    const second = 'abcd'
+    const text = encrypt(JSON.stringify(first) + ';' + second)
+    const event = {
+      headers: {
+        cookie: `session=${text}`,
+      },
+    }
+
+    expect(dbAuthSession(event)).toEqual(first)
   })
 })

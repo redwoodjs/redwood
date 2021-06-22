@@ -1,9 +1,10 @@
+import type { APIGatewayProxyEvent } from 'aws-lambda'
 import CryptoJS from 'crypto-js'
 
 import * as DbAuthError from './errors'
 
 // decrypts the session cookie and returns an array: [data, csrf]
-export const decryptSession = (text: string) => {
+export const decryptSession = (text: string | null) => {
   if (!text || text.trim() === '') {
     return []
   }
@@ -38,4 +39,17 @@ export const getSession = (text: string) => {
   }
 
   return sessionCookie.split('=')[1].trim()
+}
+
+// Conveience function to get session, decrypt, and return session data all
+// at once. Accepts the `event` argument from a Lambda function call.
+export const dbAuthSession = (event: APIGatewayProxyEvent) => {
+  if (event.headers.cookie) {
+    const [session, _csrfToken] = decryptSession(
+      getSession(event.headers.cookie)
+    )
+    return session
+  } else {
+    return null
+  }
 }
