@@ -11,7 +11,7 @@ The Redwood repo is scanned frequently for code and dependency vulnerabilities. 
 
 If you discover a potential security issue, do let us know as soon as possible. We'll work toward a resolution as quickly as possible, so please provide us with a reasonable amount of time before disclosure to the public or a third-party.
 
-Contact us at **EMAIL HERE**
+Contact us at [security@redwoodjs.com](mailto:security@redwoodjs.com)
 
 Thank you for helping improve Redwood security!
 
