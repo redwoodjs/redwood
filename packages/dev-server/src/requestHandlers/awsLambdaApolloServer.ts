@@ -43,6 +43,7 @@ const expressResponseForLambdaResult = (
       expressResFn.setHeader(headerName, headerValue)
     })
   }
+
   expressResFn.status(statusCode)
 
   // We're using this to log GraphQL errors, this isn't the right place.
@@ -62,7 +63,7 @@ const expressResponseForLambdaResult = (
   }
 
   // The AWS lambda docs specify that the response object must be
-  // compatible with `JSON.stringify`, but the type definition specifices that
+  // compatible with `JSON.stringify`, but the type definition specifies that
   // it must be a string.
   if (typeof body === 'string') {
     expressResFn.send(body)
@@ -79,7 +80,7 @@ const expressResponseForLambdaError = (
   expressResFn.status(500).send()
 }
 
-export const requestHandler = async (
+export const requestHandlerApolloServer = async (
   req: Request,
   res: Response,
   lambdaFunction: any
@@ -91,7 +92,7 @@ export const requestHandler = async (
   if (typeof handler !== 'function') {
     const errorMessage = `"${routeName}" does not export a function named "handler"`
     console.error(errorMessage)
-    res.status(500).send(errorMessage)
+    res.status(500).send(escape(errorMessage))
   }
 
   // We take the express request object and convert it into a lambda function event.

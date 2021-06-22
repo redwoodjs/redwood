@@ -43,13 +43,18 @@ export const parseSchema = async (model) => {
 }
 
 export const scenarioFieldValue = (field) => {
-  const rand = parseInt(Math.random() * 10000000)
+  const randFloat = Math.random() * 10000000
+  const randInt = parseInt(Math.random() * 10000000)
 
   switch (field.type) {
     case 'String':
-      return field.isUnique ? `String${rand}` : 'String'
+      return field.isUnique ? `String${randInt}` : 'String'
+    case 'Boolean':
+      return true
+    case 'Decimal':
+      return randFloat
     case 'Int':
-      return rand
+      return randInt
     case 'DateTime':
       return new Date().toISOString().replace(/\.\d{3}/, '')
     case 'Json':
@@ -159,8 +164,8 @@ export const fieldsToUpdate = async (model) => {
 
   if (foreignKeys.includes(field.name)) {
     // no scalar fields, change a relation field instead
-    // { post: [ 'postId' ], tag: [ 'tagId' ] }
-    fieldName = Object.values(relations)[0]
+    // { post: { foreignKey: [ 'postId' ], type: "Post" }, tag: { foreignKey: [ 'tagId' ], type: "Post" } }
+    fieldName = Object.values(relations)[0].foreignKey
     newValue = `scenario.${modelName}.two.${field.name}`
   } else {
     fieldName = field.name
@@ -177,6 +182,14 @@ export const fieldsToUpdate = async (model) => {
       }
       case 'Int': {
         newValue = newValue + 1
+        break
+      }
+      case 'Decimal': {
+        newValue = newValue + 1.1
+        break
+      }
+      case 'Boolean': {
+        newValue = !value
         break
       }
       case 'DateTime': {
@@ -310,4 +323,5 @@ export const { command, description, handler } =
   createYargsForComponentGeneration({
     componentName: 'service',
     filesFn: files,
+    shouldEnsureUniquePlural: true,
   })

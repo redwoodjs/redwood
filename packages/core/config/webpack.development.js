@@ -34,6 +34,9 @@ const baseConfig = merge(webpackConfig('development'), {
     overlay: true,
     open: redwoodConfig.browser.open,
   },
+  watchOptions: {
+    ignored: ['**/*.d.ts'],
+  },
   optimization: {
     removeAvailableModules: false,
     removeEmptyChunks: false,

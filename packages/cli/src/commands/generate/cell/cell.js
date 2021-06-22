@@ -1,6 +1,8 @@
 import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 
+import { generate } from '@redwoodjs/internal'
+
 import { transformTSToJS } from 'src/lib'
 import { getSchema } from 'src/lib'
 
@@ -168,5 +170,15 @@ export const { command, description, builder, handler } =
           'Use when you want to generate a cell for a list of the model name.',
         type: 'boolean',
       },
+    },
+    includeAdditionalTasks: () => {
+      return [
+        {
+          title: `Generating types ...`,
+          task: async () => {
+            return generate()
+          },
+        },
+      ]
     },
   })
