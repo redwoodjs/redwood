@@ -93,7 +93,9 @@ export const handler = async ({
   prerender,
   performance = false,
 }) => {
-  // TODO: Resolve webpack configuration path.
+  let webpackConfigPath = require.resolve(
+    `@redwoodjs/core/config/wepback.${stats ? 'stats' : 'production'}.js`
+  )
 
   const execCommandsForSides = {
     api: {
@@ -103,18 +105,19 @@ export const handler = async ({
     },
     web: {
       cwd: path.join(getPaths().base, 'web'),
-      cmd: `yarn cross-env NODE_ENV=production webpack --config ../node_modules/@redwoodjs/core/config/webpack.${
-        stats ? 'stats' : 'production'
-      }.js`,
+      cmd: `yarn cross-env NODE_ENV=production webpack --config ${webpackConfigPath}`,
     },
   }
 
   if (performance) {
-    const configPath = require.resolve('@redwoodjs/core/config/webpack.perf.js')
+    webpackConfigPath = require.resolve(
+      '@redwoodjs/core/config/webpack.perf.js'
+    )
     execa.sync(
-      `yarn cross-env NODE_ENV=production webpack --config ${configPath}`,
+      `yarn cross-env NODE_ENV=production webpack --config ${webpackConfigPath}`,
       { stdio: 'inherit', shell: true }
     )
+    // We do not want to continue building...
     return
   }
 
