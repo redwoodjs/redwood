@@ -701,18 +701,6 @@ describe('dbAuth', () => {
   })
 
   describe('getAuthMethod', () => {
-    it('gets methodName out of the path', () => {
-      event = {
-        path: '/.redwood/functions/auth/login',
-        queryStringParameters: {},
-        body: '',
-        headers: {},
-      }
-      const dbAuth = new DbAuthHandler(event, context, options)
-
-      expect(dbAuth._getAuthMethod()).toEqual('login')
-    })
-
     it('gets methodName out of the query string', () => {
       event = {
         path: '/.redwood/functions/auth',

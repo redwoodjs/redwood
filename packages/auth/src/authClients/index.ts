@@ -7,8 +7,8 @@ import type {
 } from './azureActiveDirectory'
 import { custom } from './custom'
 import type { Custom } from './custom'
-// @ts-expect-error No types yet!
 import { dbAuth } from './dbAuth'
+import type { DbAuth } from './dbAuth'
 import { ethereum } from './ethereum'
 import type { Ethereum, EthereumUser } from './ethereum'
 import { firebase } from './firebase'
@@ -38,8 +38,6 @@ const typesToClients = {
   /** Don't we support your auth client? No problem, define your own the `custom` type! */
   custom,
 }
-
-type DbAuth = unknown
 
 export type SupportedAuthClients =
   | Auth0

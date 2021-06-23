@@ -1,5 +1,15 @@
-/* eslint-disable no-undef */
-export const dbAuth = () => {
+import { AuthClient } from './index'
+
+export interface LoginAttributes {
+  username: string
+  password: string
+}
+
+export type SignupAttributes = Record<string, unknown> & LoginAttributes
+
+export type DbAuth = () => null
+
+export const dbAuth = (): AuthClient => {
   const getToken = async () => {
     const response = await fetch(
       `${global.__REDWOOD__API_PROXY_PATH}/auth?method=getToken`
@@ -8,7 +18,7 @@ export const dbAuth = () => {
     return token
   }
 
-  const login = async (attributes) => {
+  const login = async (attributes: LoginAttributes) => {
     const { username, password } = attributes
     const response = await fetch(`${global.__REDWOOD__API_PROXY_PATH}/auth`, {
       method: 'POST',
@@ -26,7 +36,7 @@ export const dbAuth = () => {
     return true
   }
 
-  const signup = async (attributes) => {
+  const signup = async (attributes: SignupAttributes) => {
     const response = await fetch(`${global.__REDWOOD__API_PROXY_PATH}/auth`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

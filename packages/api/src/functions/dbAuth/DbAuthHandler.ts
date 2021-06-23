@@ -1,10 +1,78 @@
+import type { PrismaClient } from '@prisma/client'
+import type { APIGatewayProxyEvent } from 'aws-lambda'
 import CryptoJS from 'crypto-js'
 import { v4 as uuidv4 } from 'uuid'
+
+import type { GlobalContext } from '../../globalContext'
 
 import * as DbAuthError from './errors'
 import { decryptSession, getSession } from './shared'
 
+interface DbAuthHandlerOptions {
+  /**
+   * Provide prisma db client
+   */
+  db: PrismaClient
+  /**
+   * The name of the property you'd call on `db` to access your user table.
+   * ie. if your Prisma model is named `User` this value would be `user`, as in `db.user`
+   */
+  authModelAccessor: string
+  /**
+   *  A map of what dbAuth calls a field to what your database calls it.
+   * `id` is whatever column you use to uniquely identify a user (probably
+   * something like `id` or `userId` or even `email`)
+   */
+  authFields: {
+    id: string
+    username: string
+    hashedPassword: string
+    salt: string
+  }
+  /**
+   * Whatever you want to happen to your data on new user signup. Redwood will
+   * check for duplicate usernames before calling this handler. At a minimum
+   * you need to save the `username`, `hashedPassword` and `salt` to your
+   * user table. `userAttributes` contains any additional object members that
+   * were included in the object given to the `signUp()` function you got
+   * from `useAuth()`
+   */
+  signupHandler: (signupHandlerOptions: SignupHandlerOptions) => Promise<any>
+  /**
+   * How long a user will remain logged in, in seconds
+   */
+  loginExpires: number
+}
+
+interface SignupHandlerOptions {
+  username: string
+  hashedPassword: string
+  salt: string
+  userAttributes?: any
+}
+
+interface SessionRecord {
+  id: string | number
+}
+
+type AuthMethodNames = 'login' | 'logout' | 'signup' | 'getToken'
+
 export class DbAuthHandler {
+  event: APIGatewayProxyEvent
+  context: GlobalContext
+  options: DbAuthHandlerOptions
+  db: PrismaClient
+  dbAccessor: any
+  headerCsrfToken: string | undefined
+  hasInvalidSession: boolean
+  session: SessionRecord | undefined
+  sessionCsrfToken: string | undefined
+
+  // class constant: list of auth methods that are supported
+  static get METHODS(): AuthMethodNames[] {
+    return ['login', 'logout', 'signup', 'getToken']
+  }
+
   // class constant: maps the auth functions to their required HTTP verb for access
   static get VERBS() {
     return {
@@ -39,7 +107,7 @@ export class DbAuthHandler {
 
   // convert to the UTC datetime string that's required for cookies
   get _futureExpiresDate() {
-    let futureDate = new Date()
+    const futureDate = new Date()
     futureDate.setSeconds(futureDate.getSeconds() + this.options.loginExpires)
     return futureDate.toUTCString()
   }
@@ -54,21 +122,25 @@ export class DbAuthHandler {
     }
   }
 
-  constructor(event, context, options = {}) {
+  constructor(
+    event: APIGatewayProxyEvent,
+    context: GlobalContext,
+    options: DbAuthHandlerOptions
+  ) {
     // must have a SESSION_SECRET so we can encrypt/decrypt the cookie
     if (!process.env.SESSION_SECRET) {
       throw new DbAuthError.NoSessionSecret()
     }
 
-    try {
-      this.event = event
-      this.context = context
-      this.options = options
-      this.db = this.options.db
-      this.dbAccessor = this.db[this.options.authModelAccessor]
-      this.headerCsrfToken = this.event.headers['x-csrf-token']
-      this.hasInvalidSession = false
+    this.event = event
+    this.context = context
+    this.options = options
+    this.db = this.options.db
+    this.dbAccessor = this.db[this.options.authModelAccessor]
+    this.headerCsrfToken = this.event.headers['x-csrf-token']
+    this.hasInvalidSession = false
 
+    try {
       const [session, csrfToken] = decryptSession(
         getSession(this.event.headers['cookie'])
       )
@@ -96,15 +168,15 @@ export class DbAuthHandler {
     }
 
     try {
-      // figure out which auth function is trying to be called
       const method = this._getAuthMethod()
 
-      // return a 404 if the auth method doesn't exist or the request didn't
-      // use the required HTTP verb
-      if (
-        !this[method] ||
-        this.event.httpMethod !== DbAuthHandler.VERBS[method]
-      ) {
+      // get the auth method the incoming request is trying to call
+      if (!DbAuthHandler.METHODS.includes(method)) {
+        return this._notFound()
+      }
+
+      // make sure it's using the correct verb, GET vs POST
+      if (this.event.httpMethod !== DbAuthHandler.VERBS[method]) {
         return this._notFound()
       }
 
@@ -124,7 +196,7 @@ export class DbAuthHandler {
   }
 
   async login() {
-    const { username, password } = JSON.parse(this.event.body)
+    const { username, password } = JSON.parse(this.event.body as string)
     const user = await this._verifyUser(username, password)
     const sessionData = { id: user[this.options.authFields.id] }
 
@@ -185,12 +257,11 @@ export class DbAuthHandler {
   // returns all the cookie attributes in an array with the proper expiration date
   //
   // pass the argument `expires` set to "now" to get the attributes needed to expire
-  // the session, any other string will (or even null) will return the attributes to
-  // expire the session at the `FUTURE_EXPIRES_DATE`
-  _cookieAttributes(options = {}) {
+  // the session, or future (or left out completely) to set to `_futureExpiresDate`
+  _cookieAttributes({ expires = 'future' }: { expires?: 'now' | 'future' }) {
     const meta = JSON.parse(JSON.stringify(DbAuthHandler.COOKIE_META))
     const expiresAt =
-      options.expires === 'now'
+      expires === 'now'
         ? DbAuthHandler.PAST_EXPIRES_DATE
         : this._futureExpiresDate
     meta.push(`Expires=${expiresAt}`)
@@ -198,12 +269,15 @@ export class DbAuthHandler {
     return meta
   }
 
-  _encrypt(data) {
-    return CryptoJS.AES.encrypt(data, process.env.SESSION_SECRET)
+  _encrypt(data: string) {
+    return CryptoJS.AES.encrypt(data, process.env.SESSION_SECRET as string)
   }
 
   // returns the Set-Cookie header to be returned in the request (effectively creates the session)
-  _createSessionHeader(data, csrfToken) {
+  _createSessionHeader(
+    data: SessionRecord,
+    csrfToken: string
+  ): Record<'Set-Cookie', string> {
     const session = JSON.stringify(data) + ';' + csrfToken
     const encrypted = this._encrypt(session)
     const cookie = [
@@ -224,7 +298,10 @@ export class DbAuthHandler {
   }
 
   // verifies that a username and password are correct, and returns the user if so
-  async _verifyUser(username, password) {
+  async _verifyUser(
+    username: string | undefined,
+    password: string | undefined
+  ) {
     // do we have all the query params we need to check the user?
     if (
       !username ||
@@ -278,12 +355,12 @@ export class DbAuthHandler {
   // values pass validation
   async _createUser() {
     const { username, password, ...userAttributes } = JSON.parse(
-      this.event.body
+      this.event.body as string
     )
     this._validateField('username', username)
     this._validateField('password', password)
 
-    let user = await this.dbAccessor.findUnique({
+    const user = await this.dbAccessor.findUnique({
       where: { [this.options.authFields.username]: username },
     })
     if (user) {
@@ -305,7 +382,7 @@ export class DbAuthHandler {
 
   // hashes a password using either the given `salt` argument, or creates a new
   // salt and hashes using that. Either way, returns an array with [hash, salt]
-  _hashPassword(text, salt) {
+  _hashPassword(text: string, salt?: string) {
     const useSalt = salt || CryptoJS.lib.WordArray.random(128 / 8).toString()
 
     return [
@@ -316,16 +393,12 @@ export class DbAuthHandler {
 
   // figure out which auth method we're trying to call
   _getAuthMethod() {
-    // first, try getting the method name out of the URL in the form of /.redwood/functions/auth/[methodName]
-    let methodName = this.event.path.split('/').pop()
+    // try getting it from the query string, /.redwood/functions/auth?method=[methodName]
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    let methodName = this.event.queryStringParameters!.method as AuthMethodNames
 
-    if (methodName === 'auth' || !this[methodName]) {
-      // next, try getting it from the query string instead, /.redwood/functions/auth?method=[methodName]
-      methodName = this.event.queryStringParameters.method
-    }
-
-    if (methodName === 'auth' || !this[methodName]) {
-      // finally, try getting it from the body in JSON: { method: [methodName] }
+    if (!DbAuthHandler.METHODS.includes(methodName) && this.event.body) {
+      // try getting it from the body in JSON: { method: [methodName] }
       try {
         methodName = JSON.parse(this.event.body).method
       } catch (e) {
@@ -338,7 +411,7 @@ export class DbAuthHandler {
 
   // checks that a single field meets validation requirements and
   // currently checks for presense only
-  _validateField(name, value) {
+  _validateField(name: string, value: string) {
     // check for presense
     if (!value || value.trim() === '') {
       throw new DbAuthError.FieldRequiredError(name)
@@ -347,7 +420,7 @@ export class DbAuthHandler {
     }
   }
 
-  _logoutResponse(message) {
+  _logoutResponse(message?: string): [string, Record<'Set-Cookie', string>] {
     return [
       message ? JSON.stringify({ message }) : '',
       {
@@ -356,7 +429,7 @@ export class DbAuthHandler {
     ]
   }
 
-  _ok(body, headers = {}, options = { statusCode: 200 }) {
+  _ok(body: string, headers = {}, options = { statusCode: 200 }) {
     return {
       statusCode: options.statusCode,
       body,
@@ -370,7 +443,7 @@ export class DbAuthHandler {
     }
   }
 
-  _badRequest(message) {
+  _badRequest(message: string) {
     return {
       statusCode: 400,
       body: JSON.stringify({ message }),

@@ -7,6 +7,13 @@ export class NoSessionSecret extends Error {
   }
 }
 
+export class UnknownAuthMethod extends Error {
+  constructor(name: string) {
+    super(`Unknown auth method '${name}'`)
+    this.name = 'UnknownAuthMethod'
+  }
+}
+
 export class WrongVerbError extends Error {
   constructor(properVerb: string) {
     super(`Only accessible via ${properVerb}`)
@@ -22,7 +29,7 @@ export class NotLoggedInError extends Error {
 }
 
 export class UserNotFoundError extends Error {
-  constructor(username: string) {
+  constructor(username: string | undefined = undefined) {
     if (username) {
       super(`User \`${username}\` not found`)
     } else {

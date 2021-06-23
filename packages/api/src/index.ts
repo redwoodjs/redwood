@@ -10,6 +10,5 @@ export * from './functions/graphql'
 export * from './globalContext'
 export * from './parseJWT'
 export * from './types'
-// @ts-expect-error typescript :(
 export * from './functions/dbAuth/DbAuthHandler'
 export { dbAuthSession } from './functions/dbAuth/shared'

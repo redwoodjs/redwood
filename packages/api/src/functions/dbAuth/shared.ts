@@ -24,7 +24,7 @@ export const decryptSession = (text: string | null) => {
 }
 
 // returns the actual value of the session cookie
-export const getSession = (text: string) => {
+export const getSession = (text?: string) => {
   if (typeof text === 'undefined') {
     return null
   }
