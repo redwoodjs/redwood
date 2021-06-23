@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/core",
   "description": "Foundational packages and config required to build RedwoodJS.",
-  "version": "0.34.0",
+  "version": "0.34.1",
   "license": "MIT",
   "files": [
     "config",
@@ -26,11 +26,12 @@
     "@babel/preset-typescript": "7.13.0",
     "@babel/runtime-corejs3": "7.14.0",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.3",
-    "@redwoodjs/cli": "^0.34.0",
-    "@redwoodjs/eslint-config": "^0.34.0",
-    "@redwoodjs/internal": "^0.34.0",
-    "@redwoodjs/testing": "^0.34.0",
+    "@redwoodjs/cli": "^0.34.1",
+    "@redwoodjs/eslint-config": "^0.34.1",
+    "@redwoodjs/internal": "^0.34.1",
+    "@redwoodjs/testing": "^0.34.1",
     "babel-loader": "8.2.2",
+    "babel-timing": "0.9.1",
     "babel-plugin-auto-import": "1.1.0",
     "babel-plugin-graphql-tag": "3.3.0",
     "babel-plugin-inline-react-svg": "2.0.1",
@@ -64,8 +65,7 @@
     "webpack-dev-server": "3.10.3",
     "webpack-manifest-plugin": "3.0.0",
     "webpack-merge": "5.1.2",
-    "webpack-retry-chunk-load-plugin": "1.4.0",
-    "x----x----x": "^0 RedwoodJS"
+    "webpack-retry-chunk-load-plugin": "1.4.0"
   },
   "devDependencies": {
     "@types/babel-core": "6.25.6",
