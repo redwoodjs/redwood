@@ -375,8 +375,6 @@ export const createGraphQLHandler = ({
         contextFactory: enveloped.contextFactory,
       })
 
-      // logger.debug({ result }, '>>> processRequest result')
-
       if (result.type === 'RESPONSE') {
         lambdaResponse = {
           body: JSON.stringify(result.payload),
