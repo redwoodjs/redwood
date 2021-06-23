@@ -41,7 +41,7 @@ export const getSession = (text?: string) => {
   return sessionCookie.split('=')[1].trim()
 }
 
-// Conveience function to get session, decrypt, and return session data all
+// Convenience function to get session, decrypt, and return session data all
 // at once. Accepts the `event` argument from a Lambda function call.
 export const dbAuthSession = (event: APIGatewayProxyEvent) => {
   if (event.headers.cookie) {
