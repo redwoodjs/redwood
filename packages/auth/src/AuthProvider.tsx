@@ -65,7 +65,7 @@ type AuthProviderProps =
       skipFetchCurrentUser?: boolean
     }
   | {
-      client?: undefined
+      client?: never
       type: 'dbAuth'
       skipFetchCurrentUser?: boolean
     }
