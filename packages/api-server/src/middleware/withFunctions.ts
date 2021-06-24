@@ -2,6 +2,7 @@ import path from 'path'
 
 import type { Handler } from 'aws-lambda'
 import bodyParser from 'body-parser'
+import chokidar from 'chokidar'
 import type { Application, Request, Response } from 'express'
 import glob from 'glob'
 import escape from 'lodash.escape'
@@ -54,21 +55,62 @@ const withFunctions = (app: Application, apiRootPath: string) => {
     })
   )
 
-  const rwjsPaths = getPaths()
-
   console.log('Importing API... ')
   const ts = Date.now()
-  const apiFunctions = glob.sync('dist/functions/*.{ts,js}', {
-    cwd: rwjsPaths.api.base,
-    absolute: true,
-  })
-  setLambdaFunctions(apiFunctions)
+
+  loadFunctionsFromDist()
+
   console.log('Imported in', Date.now() - ts, 'ms')
+
+  if (process.env.NODE_ENV === 'development') {
+    console.log(':: Enabling api server hotreload ::')
+    startFunctionHotReloader()
+  }
 
   app.all(`${apiRootPath}:routeName`, lambdaRequestHandler)
   app.all(`${apiRootPath}:routeName/*`, lambdaRequestHandler)
 
   return app
+}
+
+function loadFunctionsFromDist() {
+  const rwjsPaths = getPaths()
+
+  const apiFunctions = glob.sync('dist/functions/*.{ts,js}', {
+    cwd: rwjsPaths.api.base,
+    absolute: true,
+  })
+
+  setLambdaFunctions(apiFunctions)
+}
+
+function startFunctionHotReloader() {
+  let chokidarReady = false
+  const rwjsPaths = getPaths()
+
+  chokidar
+    .watch(rwjsPaths.api.dist, {
+      persistent: true,
+      ignoreInitial: true,
+      ignored: (file: string) => file.includes('node_modules'),
+    })
+    .on('ready', async () => {
+      chokidarReady = true
+    })
+    .on('all', async (_eventName, filePath) => {
+      if (!chokidarReady) {
+        return
+      }
+
+      const reloadTimestamp = Date.now()
+      console.log(`Detected change in ${filePath}`)
+      console.log('Hot reloading API...')
+
+      delete require.cache[filePath]
+
+      loadFunctionsFromDist()
+      console.log('Reloaded in', Date.now() - reloadTimestamp, 'ms')
+    })
 }
 
 export default withFunctions

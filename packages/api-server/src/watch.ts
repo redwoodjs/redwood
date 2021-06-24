@@ -36,10 +36,16 @@ const startBuildWatcher = async () => {
       console.log('Done.')
       process.exit(0)
     })
-    startApiWatcher(buildResult?.rebuild)
+    startApiSrcWatcher(buildResult?.rebuild)
   } else {
-    // babel build
-    await babelBuild()
+    // First  build
+    try {
+      await babelBuild({
+        watch: false,
+      })
+    } catch (e) {
+      process.exit(1)
+    }
 
     process.on('SIGINT', () => {
       console.log()
@@ -49,7 +55,11 @@ const startBuildWatcher = async () => {
       process.exit(0)
     })
 
-    startApiWatcher(babelBuild)
+    // For babel builds, use babel's watcher
+    // So we only regenerate changed files, rather than the whole dist dir
+    babelBuild({
+      watch: true,
+    })
   }
 
   httpServer = fork(path.join(__dirname, 'index.js'))
@@ -59,9 +69,7 @@ const startBuildWatcher = async () => {
  *
  * @param onChange the rebuild function, based on whether esbuild or babel is being used
  */
-function startApiWatcher(
-  onChange?: (eventName: string, filePath: string) => void
-) {
+function startApiSrcWatcher(onChange?: (filePath: string) => void) {
   chokidar
     .watch(rwjsPaths.api.base, {
       persistent: true,
@@ -100,13 +108,8 @@ function startApiWatcher(
       console.log('Building API...')
 
       try {
-        await onChange?.(eventName, filePath)
+        await onChange?.(filePath)
         console.log('Built in', Date.now() - tsRebuild, 'ms')
-
-        // Restart HTTP...
-        httpServer.emit('exit')
-        httpServer.kill()
-        httpServer = fork(path.join(__dirname, 'index.js'))
       } catch (e) {
         console.error(e)
       }
