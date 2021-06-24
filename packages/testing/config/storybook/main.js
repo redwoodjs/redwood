@@ -3,7 +3,7 @@ const path = require('path')
 
 const { merge } = require('webpack-merge')
 
-// const { getSharedPlugins } = require('@redwoodjs/core/config/webpack.common.js')
+const { getSharedPlugins } = require('@redwoodjs/core/config/webpack.common.js')
 const { getConfig, getPaths } = require('@redwoodjs/internal')
 
 const config = getConfig()
@@ -54,7 +54,7 @@ const baseConfig = {
     // ** PLUGINS **
     sbConfig.plugins = [
       ...sbConfig.plugins,
-      // ...getSharedPlugins(isEnvProduction),
+      ...getSharedPlugins(isEnvProduction),
     ]
 
     // ** LOADERS **
