@@ -132,7 +132,7 @@ export const handler = async ({
     console.log('Using experimental esbuild...')
     execCommandsForSides.api.cmd = `yarn rimraf "${
       getPaths().api.dist
-    }" && yarn cross-env NODE_ENV=production yarn rw-api-build`
+    }" && yarn cross-env NODE_ENV=production yarn rw-api-esbuild`
   }
 
   const listrTasks = side.map((sideName) => {

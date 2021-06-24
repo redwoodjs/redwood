@@ -135,7 +135,7 @@ function redwoodErrorHandler(errors: Readonly<GraphQLError[]>) {
     // TODO: Move the error handling into a separate package
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    import('@redwoodjs/dev-server/dist/error')
+    import('@redwoodjs/api-server/dist/error')
       .then(({ handleError }) => {
         return handleError(error.originalError as Error)
       })

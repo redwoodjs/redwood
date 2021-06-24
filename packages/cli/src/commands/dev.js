@@ -94,7 +94,8 @@ export const handler = async ({
   const jobs = {
     api: {
       name: 'api',
-      command: `cd "${rwjsPaths.api.base}" && yarn cross-env NODE_ENV=development yarn dev-server`,
+      command:
+        'yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn rw-api-server-watch',
       prefixColor: 'cyan',
       runWhen: () => fs.existsSync(rwjsPaths.api.src),
     },
@@ -115,7 +116,7 @@ export const handler = async ({
   if (esbuild) {
     jobs.api.name = 'api esbuild'
     jobs.api.command =
-      'yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn rw-api-server-watch'
+      'yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps ESBUILD=1 yarn rw-api-server-watch'
 
     jobs.web.name = 'web esbuild'
     jobs.web.command = 'yarn cross-env ESBUILD=1 && ' + jobs.web.command

@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 
 import { fork } from 'child_process'
+import type { ChildProcess } from 'child_process'
 import path from 'path'
 
 import chokidar from 'chokidar'
 import dotenv from 'dotenv'
 
-import { build } from '@redwoodjs/core/esbuild/apiBuild'
+import { build as babelBuild } from '@redwoodjs/core/babel/apiBuild'
+import { build as esBuild } from '@redwoodjs/core/esbuild/apiBuild'
 import { getPaths } from '@redwoodjs/internal'
 
 const rwjsPaths = getPaths()
@@ -15,21 +17,51 @@ dotenv.config({
   path: rwjsPaths.base,
 })
 
+let chokidarReady = false
+let httpServer: ChildProcess
 const tsInitialBuild = Date.now()
-console.log('Building API...')
-build({ incremental: true }).then((buildResult) => {
-  let chokidarReady = false
-  let httpServer = fork(path.join(__dirname, 'index.js'))
 
-  process.on('SIGINT', () => {
-    console.log()
-    console.log('Shutting down... ')
-    httpServer.kill()
-    buildResult.stop?.()
-    console.log('Done.')
-    process.exit(0)
-  })
+// So that we can use await
+const startBuildWatcher = async () => {
+  console.log('Building API...')
 
+  if (process.env.ESBUILD === '1') {
+    const buildResult = await esBuild({ incremental: true })
+
+    process.on('SIGINT', () => {
+      console.log()
+      console.log('Shutting down... ')
+      httpServer.kill()
+      buildResult.stop?.()
+      console.log('Done.')
+      process.exit(0)
+    })
+    startApiWatcher(buildResult?.rebuild)
+  } else {
+    // babel build
+    await babelBuild()
+
+    process.on('SIGINT', () => {
+      console.log()
+      console.log('Shutting down... ')
+      httpServer.kill()
+      console.log('Done.')
+      process.exit(0)
+    })
+
+    startApiWatcher(babelBuild)
+  }
+
+  httpServer = fork(path.join(__dirname, 'index.js'))
+}
+
+/**
+ *
+ * @param onChange the rebuild function, based on whether esbuild or babel is being used
+ */
+function startApiWatcher(
+  onChange?: (eventName: string, filePath: string) => void
+) {
   chokidar
     .watch(rwjsPaths.api.base, {
       persistent: true,
@@ -55,7 +87,6 @@ build({ incremental: true }).then((buildResult) => {
       console.log('Built in', Date.now() - tsInitialBuild, 'ms')
     })
     .on('all', async (eventName, filePath) => {
-      // Chokidar emits when it's initial booting up, let's ignore those.
       if (!chokidarReady) {
         return
       }
@@ -67,8 +98,9 @@ build({ incremental: true }).then((buildResult) => {
 
       const tsRebuild = Date.now()
       console.log('Building API...')
+
       try {
-        await buildResult?.rebuild?.()
+        await onChange?.(eventName, filePath)
         console.log('Built in', Date.now() - tsRebuild, 'ms')
 
         // Restart HTTP...
@@ -79,4 +111,6 @@ build({ incremental: true }).then((buildResult) => {
         console.error(e)
       }
     })
-})
+}
+
+startBuildWatcher()
