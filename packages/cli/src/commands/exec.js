@@ -85,9 +85,6 @@ export const handler = async (args) => {
 
   try {
     await tasks.run()
-
-    // We have to do this to terminate
-    process.exit(0)
   } catch (e) {
     console.error(c.error(`The script exited with errors.`))
     process.exit(e?.exitCode || 1)
