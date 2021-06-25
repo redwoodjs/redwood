@@ -1,5 +1,6 @@
 import Listr from 'listr'
 
+import { ensureUniquePlural } from 'src/commands/generate/helpers'
 import { deleteFilesTask } from 'src/lib'
 import c from 'src/lib/colors'
 
@@ -31,6 +32,7 @@ export const tasks = ({ model }) =>
   )
 
 export const handler = async ({ model }) => {
+  await ensureUniquePlural({ model, inDestroyer: true })
   const t = tasks({ model })
 
   try {

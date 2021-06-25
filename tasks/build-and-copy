@@ -158,6 +158,10 @@ const runAsync = async () => {
         'error'
       )} - Could not build your redwood framework.`
     )
+
+    console.log()
+
+    console.error(e)
     process.exit(1)
   }
 }
