@@ -324,4 +324,5 @@ export const { command, description, handler } =
   createYargsForComponentGeneration({
     componentName: 'service',
     filesFn: files,
+    shouldEnsureUniquePlural: true,
   })

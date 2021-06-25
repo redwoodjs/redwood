@@ -177,10 +177,7 @@ module.exports = (webpackEnv) => {
        */
       app:
         redwoodPaths.web.index ||
-        path.join(
-          redwoodPaths.base,
-          'node_modules/@redwoodjs/web/dist/entry/index.js'
-        ),
+        require.resolve('@redwoodjs/web/dist/entry/index.js'),
     },
     resolve: {
       extensions: ['.wasm', '.mjs', '.js', '.jsx', '.ts', '.tsx', '.json'],
@@ -211,7 +208,11 @@ module.exports = (webpackEnv) => {
       }),
       new CopyPlugin({
         patterns: [
-          { from: 'public/', to: '', globOptions: { ignore: ['README.md'] } },
+          {
+            from: path.join(redwoodPaths.web.base, 'public'),
+            to: '',
+            globOptions: { ignore: ['README.md'] },
+          },
         ],
       }),
       isEnvProduction &&
@@ -252,6 +253,7 @@ module.exports = (webpackEnv) => {
                 {
                   loader: 'babel-loader',
                   options: {
+                    cwd: redwoodPaths.base,
                     plugins: [
                       shouldIncludeFastRefresh &&
                         require.resolve('react-refresh/babel'),
@@ -273,6 +275,7 @@ module.exports = (webpackEnv) => {
                 {
                   loader: 'babel-loader',
                   options: {
+                    cwd: redwoodPaths.base,
                     plugins: [
                       shouldIncludeFastRefresh &&
                         require.resolve('react-refresh/babel'),
@@ -290,10 +293,7 @@ module.exports = (webpackEnv) => {
             // .module.css (2), .css (3), .module.scss (4), .scss (5)
             ...getStyleLoaders(isEnvProduction),
             isEnvProduction && {
-              test: path.join(
-                redwoodPaths.base,
-                'node_modules/@redwoodjs/router/dist/splash-page'
-              ),
+              test: require.resolve('@redwoodjs/router/dist/splash-page'),
               use: 'null-loader',
             },
             // (6)
