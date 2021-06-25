@@ -44,15 +44,12 @@ export const handler = ({ open, port, build, buildDirectory }) => {
     shell: true,
     cwd,
   })
-  
-  const storybookConfig = require.resolve(
-     '@redwoodjs/testing/config/storybook'
-   )  
+  const storybookConfig = require.resolve('@redwoodjs/testing/config/storybook')  
 
   execa(
     `yarn ${build ? 'build' : 'start'}-storybook`,
     [
-      '--config-dir "${storybookConfig}"',
+      `--config-dir "${storybookConfig}"`,
       !build && `--port ${port}`,
       !build && '--no-version-updates',
       !build && `--static-dir "${staticAssetsFolder}"`,
