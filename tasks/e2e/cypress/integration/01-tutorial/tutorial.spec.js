@@ -184,7 +184,10 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       path.join(BASE_DIR, 'web/src/pages/HomePage/HomePage.js'),
       Step5_3_PagesHome
     )
-    cy.visit('http://localhost:8910/posts/2') // adding step for pause
+
+    // Dev server can be slow during e2e
+    cy.reload()
+
     cy.visit('http://localhost:8910/')
 
     cy.get('main').should(
@@ -235,6 +238,9 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       ),
       Step6_5_BlogPostsCellMock
     )
+
+    // Dev server can be slow during e2e
+    cy.reload()
 
     // New entry
     cy.visit('http://localhost:8910/posts')
