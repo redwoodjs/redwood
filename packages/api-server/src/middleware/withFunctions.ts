@@ -64,7 +64,8 @@ const withFunctions = (app: Application, apiRootPath: string) => {
 
   if (process.env.NODE_ENV === 'development') {
     console.log(':: Enabling api server hotreload ::')
-    startFunctionHotReloader()
+    // Wait for first run, because babel may still be building
+    setTimeout(startFunctionHotReloader, 2000)
   }
 
   app.all(`${apiRootPath}:routeName`, lambdaRequestHandler)
@@ -92,7 +93,10 @@ function startFunctionHotReloader() {
     .watch(rwjsPaths.api.dist, {
       persistent: true,
       ignoreInitial: true,
-      ignored: (file: string) => file.includes('node_modules'),
+      awaitWriteFinish: true,
+      ignored: (file: string) =>
+        file.includes('node_modules') ||
+        ['.map', '.d.ts'].some((ext) => file.endsWith(ext)),
     })
     .on('ready', async () => {
       chokidarReady = true
@@ -106,7 +110,11 @@ function startFunctionHotReloader() {
       console.log(`Detected change in ${filePath}`)
       console.log('Hot reloading API...')
 
-      delete require.cache[filePath]
+      Object.keys(require.cache).forEach((cacheKey) => {
+        delete require.cache[cacheKey]
+      })
+
+      // delete require.cache[filePath]
 
       loadFunctionsFromDist()
       console.log('Reloaded in', Date.now() - reloadTimestamp, 'ms')

@@ -5,11 +5,13 @@ const util = require('util')
 const exec = util.promisify(require('child_process').exec)
 const { getPaths } = require('@redwoodjs/internal')
 
-module.exports.build = ({ watch }) => {
+module.exports.build = ({ watch } = { watch: false }) => {
   const ignoredFiles = [
     '**/*.test.js',
+    '**/*.scenarios.js',
     '**/*.scenario.js',
     '**/*.test.ts',
+    '**/*.scenarios.ts',
     '**/*.scenario.ts',
     '**/__tests__',
     '**/*.d.ts',

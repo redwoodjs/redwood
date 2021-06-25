@@ -114,6 +114,8 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     cy.exec(`cd ${BASE_DIR}; yarn rw g scaffold post --force`)
 
     cy.visit('http://localhost:8910/posts')
+    // Sometimes webpack dev server doesn't reload in time
+    cy.reload()
 
     cy.get('h1').should('contain', 'Posts')
     cy.get('a.rw-button.rw-button-green').should(
