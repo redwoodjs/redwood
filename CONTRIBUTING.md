@@ -270,7 +270,7 @@ yarn build
 cd packages/cli
 yarn dev --cwd /path/to/your/project
 ```
-The `yarn dev` script will build the CLI package and the `--cwd` option will make the command run in that directory. Remember to rebuild the packages if you have made a change to the code! (Tip: You can use `yarn build:watch` to automatically build the framework whilst you're making changes.)
+The `yarn dev` will run the built CLI, and the `--cwd` option will make the command run in that directory. Remember to rebuild the packages if you have made a change to the code! (Tip: You can use `yarn build:watch` to automatically build the framework whilst you're making changes.)
 
 (Tip: --cwd is optional, it will reference the `__fixtures__/example-todo-main` project in the framework.)
 
