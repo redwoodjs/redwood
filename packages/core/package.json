@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/core",
   "description": "Foundational packages and config required to build RedwoodJS.",
-  "version": "0.33.3",
+  "version": "0.34.1",
   "license": "MIT",
   "files": [
     "config",
@@ -14,6 +14,10 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "dependencies": {
+    "@redwoodjs/eslint-config": "0.34.1",
+    "@redwoodjs/internal": "0.34.1",
+    "@redwoodjs/testing": "0.34.1",
+    "@redwoodjs/cli": "0.34.1",
     "x----x----x": "^0 Babel",
     "@babel/cli": "7.14.3",
     "@babel/core": "7.14.3",
@@ -47,6 +51,7 @@
     "webpack-merge": "5.1.2",
     "webpack-retry-chunk-load-plugin": "1.4.0",
     "babel-loader": "8.2.2",
+    "babel-timing": "0.9.1",
     "copy-webpack-plugin": "6.1.0",
     "css-loader": "4.2.2",
     "css-minimizer-webpack-plugin": "1.2.0",
@@ -63,11 +68,7 @@
     "mini-css-extract-plugin": "1.4.1",
     "null-loader": "4.0.1",
     "lodash.escaperegexp": "4.1.2",
-    "esbuild-loader": "2.13.1",
-    "x----x----x": "^0 RedwoodJS",
-    "@redwoodjs/internal": "^0.33.3",
-    "@redwoodjs/testing": "^0.33.3",
-    "@redwoodjs/cli": "^0.33.3"
+    "esbuild-loader": "2.13.1"
   },
   "devDependencies": {
     "@types/babel-core": "6.25.6",

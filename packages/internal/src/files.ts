@@ -26,13 +26,17 @@ export const findPages = (cwd: string = getPaths().web.pages) => {
 }
 
 export const findDirectoryNamedModules = (cwd: string = getPaths().base) => {
-  const modules = fg.sync('**/src/**/*[!Cell].{ts,js,jsx,tsx}', {
+  const modules = fg.sync('**/src/**/*.{ts,js,jsx,tsx}', {
     cwd,
     absolute: true,
     ignore: ['node_modules'],
   })
 
-  return modules.filter(isDirectoryNamedModuleFile)
+  // Cell's also follow use the directory-named-module pattern,
+  // but they get their own special type mirror file, so ignore them.
+  return modules
+    .filter(isDirectoryNamedModuleFile)
+    .filter((p) => !isCellFile(p))
 }
 
 export const findGraphQLSchemas = (cwd: string = getPaths().api.graphql) => {
@@ -69,7 +73,7 @@ export const isCellFile = (p: string) => {
 export const isPageFile = (p: string) => {
   const { dir, name } = path.parse(p)
 
-  // A page must end with "Page.{jsx, jsx,tsx}".
+  // A page must end with "Page.{jsx,js,tsx}".
   if (!name.endsWith('Page')) {
     return false
   }

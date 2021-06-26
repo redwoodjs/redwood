@@ -21,7 +21,7 @@ import {
 import c from 'src/lib/colors'
 
 import { yargsDefaults } from '../../generate'
-import { relationsForModel } from '../helpers'
+import { ensureUniquePlural, relationsForModel } from '../helpers'
 import { files as serviceFiles } from '../service/service'
 
 const IGNORE_FIELDS_FOR_INPUT = ['id', 'createdAt', 'updatedAt']
@@ -54,6 +54,7 @@ const modelFieldToSDL = (field, required = true, types = {}) => {
 
   const dictionary = {
     Json: 'JSON',
+    Decimal: 'Float',
   }
 
   return `${field.name}: ${field.isList ? '[' : ''}${
@@ -230,6 +231,7 @@ export const handler = async ({ model, crud, force, tests, typescript }) => {
   )
 
   try {
+    await ensureUniquePlural({ model })
     await tasks.run()
   } catch (e) {
     console.error(c.error(e.message))
