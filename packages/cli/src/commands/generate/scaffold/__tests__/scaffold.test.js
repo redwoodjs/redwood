@@ -271,16 +271,15 @@ describe('in javascript (default) mode', () => {
   })
 
   test('error when no editable fields are in model', async () => {
-    expect(
-      async () =>
-        await scaffold.files({
-          ...getDefaultArgs(defaults),
-          model: 'NoEditableField',
-          tests: true,
-          nestScaffoldByModel: true,
-        })
+    await expect(
+      scaffold.files({
+        ...getDefaultArgs(defaults),
+        model: 'NoEditableField',
+        tests: true,
+        nestScaffoldByModel: true,
+      })
     ).rejects.toThrow(
-      `There are no editable fields in the NoEditableField model`
+      'There are no editable fields in the NoEditableField model'
     )
   })
 
