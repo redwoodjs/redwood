@@ -123,6 +123,7 @@ const getStyleLoaders = (isEnvProduction) => {
 
 /** @returns {import('webpack').Plugin[]} Plugins shared with storybook, as well as the RW app */
 const getSharedPlugins = (isEnvProduction) => {
+  // TODO disable in Storybook config
   const shouldIncludeFastRefresh =
     redwoodConfig.web.fastRefresh !== false && !isEnvProduction
 
