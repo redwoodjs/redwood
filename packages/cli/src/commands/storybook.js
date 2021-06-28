@@ -44,7 +44,10 @@ export const handler = ({ open, port, build, buildDirectory }) => {
     shell: true,
     cwd,
   })
-  const storybookConfig = require.resolve('@redwoodjs/testing/config/storybook')  
+
+  const storybookConfig = path.dirname(
+    require.resolve('@redwoodjs/testing/config/storybook/main.js')
+  )
 
   execa(
     `yarn ${build ? 'build' : 'start'}-storybook`,
