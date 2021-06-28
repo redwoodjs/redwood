@@ -11,7 +11,7 @@
   "license": "MIT",
   "dependencies": {
     "@envelop/apollo-tracing": "0.1.0",
-    "@envelop/core": "0.3.0",
+    "@envelop/core": "0.3.1",
     "@envelop/depth-limit": "0.1.0",
     "@envelop/disable-introspection": "0.0.1",
     "@envelop/filter-operation-type": "0.1.0",

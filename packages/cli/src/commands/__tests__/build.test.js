@@ -71,9 +71,9 @@ test('The build command runs the correct commands.', async () => {
     )
   ).toEqual(true)
 
-  expect(
-    execa.mock.results[2].value.endsWith('core/config/webpack.production.js')
-  ).toEqual(true)
+  expect(execa.mock.results[2].value.endsWith('webpack.production.js')).toEqual(
+    true
+  )
 })
 
 test('Should run prerender for web, after build', async () => {
@@ -86,9 +86,9 @@ test('Should run prerender for web, after build', async () => {
     )
   ).toEqual(true)
 
-  expect(
-    execa.mock.results[1].value.endsWith('core/config/webpack.production.js')
-  ).toEqual(true)
+  expect(execa.mock.results[1].value.endsWith('webpack.production.js')).toEqual(
+    true
+  )
 
   expect(getPrerenderTasks).toHaveBeenCalled()
 })
