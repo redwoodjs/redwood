@@ -136,6 +136,13 @@ export const files = async ({
       : scaffoldPath.split('/').map(pascalcase).join('/') + '/'
 
   return {
+    ...(await componentFiles(
+      name,
+      pascalScaffoldPath,
+      typescript,
+      nestScaffoldByModel,
+      templateStrings
+    )),
     ...(await sdlFiles({
       ...getDefaultArgs(sdlBuilder),
       name,
@@ -159,13 +166,6 @@ export const files = async ({
       nestScaffoldByModel,
       templateStrings
     ),
-    ...(await componentFiles(
-      name,
-      pascalScaffoldPath,
-      typescript,
-      nestScaffoldByModel,
-      templateStrings
-    )),
   }
 }
 
@@ -370,6 +370,10 @@ const componentFiles = async (
     }, {})
   )
 
+  if (!fieldsToImport.length) {
+    throw new Error(`There are no editable fields in the ${name} model`)
+  }
+
   const components = fs.readdirSync(
     path.join(templateRoot, 'scaffold', 'templates', 'components')
   )
@@ -548,7 +552,13 @@ const tasks = ({ model, path, force, tests, typescript, javascript }) => {
       {
         title: 'Generating scaffold files...',
         task: async () => {
-          const f = await files({ model, path, tests, typescript, javascript })
+          const f = await files({
+            model,
+            path,
+            tests,
+            typescript,
+            javascript,
+          })
           return writeFilesTask(f, { overwriteExisting: force })
         },
       },
@@ -590,6 +600,7 @@ export const handler = async ({
     await t.run()
   } catch (e) {
     console.log(c.error(e.message))
+    process.exit(e?.existCode || 1)
   }
 }
 
