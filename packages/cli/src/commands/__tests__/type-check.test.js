@@ -39,7 +39,7 @@ import execa from 'execa'
 
 import { runCommandTask } from 'src/lib'
 
-import { handler } from '../typecheck'
+import { handler } from '../typeCheck'
 
 afterEach(() => {
   jest.clearAllMocks()
