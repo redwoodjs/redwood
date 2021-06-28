@@ -35,7 +35,18 @@ const lambdaRequestHandler = async (req: Request, res: Response) => {
   if (!LAMBDA_FUNCTIONS[routeName]) {
     const errorMessage = `Function "${routeName}" was not found.`
     console.error(errorMessage)
-    res.status(404).send(escape(errorMessage))
+    res.status(404)
+
+    if (process.env.NODE_ENV === 'development') {
+      const devError = {
+        error: errorMessage,
+        availableFunctions: Object.keys(LAMBDA_FUNCTIONS),
+      }
+      res.json(devError)
+    } else {
+      res.send(escape(errorMessage))
+    }
+
     return
   }
   return requestHandler(req, res, LAMBDA_FUNCTIONS[routeName])
@@ -62,7 +73,7 @@ const withFunctions = (app: Application, apiRootPath: string) => {
 
   console.log('Imported in', Date.now() - ts, 'ms')
 
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.HOTRELOAD_FUNCTIONS === '1') {
     console.log(':: Enabling api server hotreload ::')
     // Wait for first run, because babel may still be building
     setTimeout(startFunctionHotReloader, 2000)

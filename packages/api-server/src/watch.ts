@@ -55,11 +55,7 @@ const startBuildWatcher = async () => {
       process.exit(0)
     })
 
-    // For babel builds, use babel's watcher
-    // So we only regenerate changed files, rather than the whole dist dir
-    babelBuild({
-      watch: true,
-    })
+    startApiSrcWatcher(() => babelBuild())
   }
 
   httpServer = fork(path.join(__dirname, 'index.js'))
@@ -110,6 +106,11 @@ function startApiSrcWatcher(onChange?: (filePath: string) => void) {
       try {
         await onChange?.(filePath)
         console.log('Built in', Date.now() - tsRebuild, 'ms')
+
+        // Restart HTTP...
+        httpServer.emit('exit')
+        httpServer.kill()
+        httpServer = fork(path.join(__dirname, 'index.js'))
       } catch (e) {
         console.error(e)
       }
