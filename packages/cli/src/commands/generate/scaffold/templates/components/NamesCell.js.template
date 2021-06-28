@@ -26,6 +26,10 @@ export const Empty = () => {
   )
 }
 
+export const Failure = ({ error }) => (
+  <div style={{ color: 'red' }}>Error: {error.message}</div>
+)
+
 export const Success = ({ ${pluralCamelName} }) => {
   return <${pluralPascalName} ${pluralCamelName}={${pluralCamelName}} />
 }
