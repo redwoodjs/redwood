@@ -5,7 +5,9 @@ const util = require('util')
 const exec = util.promisify(require('child_process').exec)
 const { getPaths } = require('@redwoodjs/internal')
 
-module.exports.build = ({ watch } = { watch: false }) => {
+module.exports.build = (
+  { watch, rebuild } = { watch: false, rebuild: false }
+) => {
   const ignoredFiles = [
     '**/*.test.js',
     '**/*.scenarios.js',
@@ -21,7 +23,7 @@ module.exports.build = ({ watch } = { watch: false }) => {
     [
       'yarn cross-env NODE_ENV=production babel src',
       '--out-dir dist',
-      !watch && '--delete-dir-on-start',
+      (!watch || !rebuild) && '--delete-dir-on-start',
       '--extensions .ts,.js',
       `--ignore ${ignoredFiles}`,
       '--source-maps true',

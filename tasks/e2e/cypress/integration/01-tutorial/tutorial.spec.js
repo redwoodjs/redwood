@@ -116,9 +116,11 @@ describe('The Redwood Tutorial - Golden path edition', () => {
 
     cy.exec(`cd ${BASE_DIR}; yarn rw g scaffold post --force`)
 
-    cy.visit('http://localhost:8910/posts')
-    // Sometimes webpack dev server doesn't reload in time
+    // Wait 10s for api server to reload
+    cy.wait(10000)
+    // Sometimes webpack dev server doesn't reload in time, or throws errors
     cy.reload()
+    cy.visit('http://localhost:8910/posts')
 
     cy.get('h1').should('contain', 'Posts')
     cy.get('a.rw-button.rw-button-green').should(

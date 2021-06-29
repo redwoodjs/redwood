@@ -6,6 +6,7 @@ import path from 'path'
 
 import chokidar from 'chokidar'
 import dotenv from 'dotenv'
+import { debounce } from 'lodash'
 
 import { build as babelBuild } from '@redwoodjs/core/babel/apiBuild'
 import { build as esBuild } from '@redwoodjs/core/esbuild/apiBuild'
@@ -36,13 +37,11 @@ const startBuildWatcher = async () => {
       console.log('Done.')
       process.exit(0)
     })
-    startApiSrcWatcher(buildResult?.rebuild)
+    startApiSrcWatcher(() => buildResult?.rebuild?.() as Promise<any>)
   } else {
     // First  build
     try {
-      await babelBuild({
-        watch: false,
-      })
+      await babelBuild()
     } catch (e) {
       process.exit(1)
     }
@@ -55,7 +54,12 @@ const startBuildWatcher = async () => {
       process.exit(0)
     })
 
-    startApiSrcWatcher(() => babelBuild())
+    startApiSrcWatcher(() =>
+      babelBuild({
+        watch: false,
+        rebuild: true,
+      })
+    )
   }
 
   httpServer = fork(path.join(__dirname, 'index.js'))
@@ -65,7 +69,7 @@ const startBuildWatcher = async () => {
  *
  * @param onChange the rebuild function, based on whether esbuild or babel is being used
  */
-function startApiSrcWatcher(onChange?: (filePath: string) => void) {
+function startApiSrcWatcher(onChange: (filePath?: string) => Promise<any>) {
   chokidar
     .watch(rwjsPaths.api.base, {
       persistent: true,
@@ -102,19 +106,27 @@ function startApiSrcWatcher(onChange?: (filePath: string) => void) {
 
       const tsRebuild = Date.now()
       console.log('Building API...')
+      await rebuildAndRestart(onChange)
 
       try {
-        await onChange?.(filePath)
         console.log('Built in', Date.now() - tsRebuild, 'ms')
-
-        // Restart HTTP...
-        httpServer.emit('exit')
-        httpServer.kill()
-        httpServer = fork(path.join(__dirname, 'index.js'))
       } catch (e) {
         console.error(e)
       }
     })
 }
+
+// debounce to prevent multipule rebuilds+restarts when using generators
+const rebuildAndRestart = debounce(
+  async (onChange: (filePath?: string) => Promise<any>) => {
+    await onChange?.()
+    // Restart HTTP...
+    httpServer.emit('exit')
+    httpServer.kill()
+    httpServer = fork(path.join(__dirname, 'index.js'))
+    return
+  },
+  100
+)
 
 startBuildWatcher()

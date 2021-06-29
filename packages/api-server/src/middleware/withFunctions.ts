@@ -73,7 +73,7 @@ const withFunctions = (app: Application, apiRootPath: string) => {
 
   console.log('Imported in', Date.now() - ts, 'ms')
 
-  if (process.env.HOTRELOAD_FUNCTIONS === '1') {
+  if (process.env.HOTRELOAD_API === '1') {
     console.log(':: Enabling api server hotreload ::')
     // Wait for first run, because babel may still be building
     setTimeout(startFunctionHotReloader, 2000)
@@ -117,19 +117,23 @@ function startFunctionHotReloader() {
         return
       }
 
-      const reloadTimestamp = Date.now()
       console.log(`Detected change in ${filePath}`)
-      console.log('Hot reloading API...')
-
-      Object.keys(require.cache).forEach((cacheKey) => {
-        delete require.cache[cacheKey]
-      })
-
-      // delete require.cache[filePath]
-
-      loadFunctionsFromDist()
-      console.log('Reloaded in', Date.now() - reloadTimestamp, 'ms')
+      clearCacheAndHotreload()
     })
+}
+
+const clearCacheAndHotreload = () => {
+  const reloadTimestamp = Date.now()
+  console.log('Hot reloading API...')
+
+  Object.keys(require.cache).forEach((cacheKey) => {
+    delete require.cache[cacheKey]
+  })
+
+  // delete require.cache[filePath]
+
+  loadFunctionsFromDist()
+  console.log('Reloaded in', Date.now() - reloadTimestamp, 'ms')
 }
 
 export default withFunctions
