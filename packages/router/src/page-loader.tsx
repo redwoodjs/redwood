@@ -41,7 +41,7 @@ interface Props {
   spec: Spec
   delay?: number
   params?: Record<string, string>
-  whileLoading?: () => React.ReactElement | null
+  whileLoadingPage?: () => React.ReactElement | null
 }
 
 export class PageLoader extends React.Component<Props> {
@@ -190,7 +190,7 @@ export class PageLoader extends React.Component<Props> {
       )
     } else {
       return this.state.slowModuleImport
-        ? this.props.whileLoading?.() || null
+        ? this.props.whileLoadingPage?.() || null
         : null
     }
   }

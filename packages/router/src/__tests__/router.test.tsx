@@ -211,7 +211,7 @@ test('can display a loading screen whilst waiting for auth', async () => {
       <Route path="/" page={HomePage} name="home" />
       <Private
         unauthenticated="home"
-        whileAuthenticating={() => <>Authenticating...</>}
+        whileLoadingAuth={() => <>Authenticating...</>}
       >
         <Route path="/private" page={PrivatePage} name="private" />
       </Private>

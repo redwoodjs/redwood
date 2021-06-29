@@ -29,7 +29,7 @@ type SetProps<P> = P & {
   prerender?: boolean
   children: ReactNode
   /** Loading state for auth to distinguish with whileLoading */
-  whileAuthenticating?: () => React.ReactElement | null
+  whileLoadingAuth?: () => React.ReactElement | null
 }
 
 const IdentityWrapper: WrapperType<Record<string, any>> = ({ children }) => {
@@ -43,7 +43,7 @@ export function Set<WrapperProps>(props: SetProps<WrapperProps>) {
     private: privateSet,
     unauthenticated,
     role,
-    whileAuthenticating,
+    whileLoadingAuth,
     ...rest
   } = props
   const routerState = useRouterState()
@@ -64,7 +64,7 @@ export function Set<WrapperProps>(props: SetProps<WrapperProps>) {
 
   if (privateSet && unauthorized()) {
     if (loading) {
-      return whileAuthenticating?.() || null
+      return whileLoadingAuth?.() || null
     } else {
       const currentLocation =
         global.location.pathname + encodeURIComponent(global.location.search)
