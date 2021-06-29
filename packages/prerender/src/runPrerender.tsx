@@ -6,7 +6,6 @@ import React from 'react'
 import babelRequireHook from '@babel/register'
 import cheerio from 'cheerio'
 import ReactDOMServer from 'react-dom/server'
-import type { HelmetData } from 'react-helmet-async'
 
 import { getPaths } from '@redwoodjs/internal'
 import { LocationProvider } from '@redwoodjs/router'
