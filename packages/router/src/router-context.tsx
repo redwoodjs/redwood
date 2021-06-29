@@ -27,8 +27,9 @@ const RouterSetContext =
   createContext<React.Dispatch<Partial<RouterState>> | undefined>(undefined)
 
 export interface RouterContextProviderProps
-  extends Omit<RouterState, 'useAuth' | 'routes'> {
+  extends Omit<RouterState, 'useAuth' | 'routes' | 'trailingSlashes'> {
   useAuth?: typeof useAuth
+  trailingSlashes?: TrailingSlashesTypes
 }
 
 function stateReducer(state: RouterState, newState: Partial<RouterState>) {
