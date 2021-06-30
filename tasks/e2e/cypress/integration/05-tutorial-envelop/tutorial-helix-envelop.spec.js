@@ -26,6 +26,9 @@ import Step7_2_ContactPage from '../01-tutorial/codemods/Step7_2_ContactPage'
 import Step7_3_Css from '../01-tutorial/codemods/Step7_3_Css'
 import Step7_4_Routes from '../01-tutorial/codemods/Step7_4_Routes'
 import Step8_1_ContactPageWithoutJsEmailValidation from '../01-tutorial/codemods/Step8_1_ContactPageWithoutJsEmailValidation'
+import Step9_1_RequireAuth from '../01-tutorial/codemods/Step9_1_RequireAuth'
+import Step9_2_PostsRequireAuth from '../01-tutorial/codemods/Step9_2_PostsRequireAuth'
+import Step9_3_DisableAuth from '../01-tutorial/codemods/Step9_3_DisableAuth'
 
 import Step0_1_RedwoodToml from './codemods/Step0_1_RedwoodToml'
 import Step0_2_GraphQL from './codemods/Step0_2_GraphQL'
@@ -318,5 +321,31 @@ describe('The Redwood Tutorial - Golden path Helix/Envelop edition', () => {
     cy.contains('Save').click()
 
     cy.get('main').should('contain', 'Thank you for your submission')
+  })
+
+  it('9. Auth - Render Cell Failure Message', () => {
+    // enable auth
+    cy.writeFile(
+      path.join(BASE_DIR, 'api/src/lib/auth.js'),
+      Step9_1_RequireAuth
+    )
+
+    cy.writeFile(
+      path.join(BASE_DIR, 'api/src/services/posts/posts.js'),
+      Step9_2_PostsRequireAuth
+    )
+
+    cy.visit('http://localhost:8910/posts')
+
+    cy.get('main').should('not.contain', 'Second post')
+
+    cy.get('main > div:nth-child(1)').should('contain', 'Error')
+    cy.get('main > div:nth-child(1)').should('contain', "can't do that")
+
+    // disable auth
+    cy.writeFile(
+      path.join(BASE_DIR, 'api/src/lib/auth.js'),
+      Step9_3_DisableAuth
+    )
   })
 })
