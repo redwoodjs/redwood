@@ -29,6 +29,9 @@ import Step7_3_Css from './codemods/Step7_3_Css'
 import Step7_4_Routes from './codemods/Step7_4_Routes'
 import Step8_1_ContactPageWithoutJsEmailValidation from './codemods/Step8_1_ContactPageWithoutJsEmailValidation'
 import Step8_2_CreateContactServiceValidation from './codemods/Step8_2_CreateContactServiceValidation'
+import Step8_1_RequireAuth from './codemods/Step8_1_RequireAuth'
+import Step8_2_PostsRequireAuth from './codemods/Step8_2_PostsRequireAuth'
+import Step8_3_DisableAuth from './codemods/Step8_3_DisableAuth'
 
 const BASE_DIR = Cypress.env('RW_PATH')
 
@@ -320,5 +323,31 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     cy.contains('Save').click()
 
     cy.get('main').should('contain', 'Thank you for your submission')
+  }
+     
+  it('9. Auth - Render Cell Failure Message', () => {
+    // enable auth
+    cy.writeFile(
+      path.join(BASE_DIR, 'api/src/lib/auth.js'),
+      Step8_1_RequireAuth
+    )
+
+    cy.writeFile(
+      path.join(BASE_DIR, 'api/src/services/posts/posts.js'),
+      Step8_2_PostsRequireAuth
+    )
+
+    cy.visit('http://localhost:8910/posts')
+
+    cy.get('main').should('not.contain', 'Second post')
+
+    cy.get('main > div:nth-child(1)').should('contain', 'Error')
+    cy.get('main > div:nth-child(1)').should('contain', "can't do that")
+
+    // disable auth
+    cy.writeFile(
+      path.join(BASE_DIR, 'api/src/lib/auth.js'),
+      Step8_3_DisableAuth
+    )
   })
 })

@@ -343,6 +343,10 @@ export const Loading = () => <div>Loading...</div>
 
 export const Empty = () => <div>Post not found</div>
 
+export const Failure = ({ error }) => (
+  <div style={{ color: 'red' }}>Error: {error.message}</div>
+)
+
 export const Success = ({ post }) => {
   return <Post post={post} />
 }
@@ -838,6 +842,10 @@ const UPDATE_USER_PROFILE_MUTATION = gql\`
 
 export const Loading = () => <div>Loading...</div>
 
+export const Failure = ({ error }) => (
+  <div style={{ color: 'red' }}>Error: {error.message}</div>
+)
+
 export const Success = ({ userProfile }) => {
   const [updateUserProfile, { loading, error }] = useMutation(
     UPDATE_USER_PROFILE_MUTATION,
@@ -910,6 +918,10 @@ export const Empty = () => {
     </div>
   )
 }
+
+export const Failure = ({ error }) => (
+  <div style={{ color: 'red' }}>Error: {error.message}</div>
+)
 
 export const Success = ({ posts }) => {
   return <Posts posts={posts} />
@@ -1389,6 +1401,10 @@ export const QUERY = gql\`
 export const Loading = () => <div>Loading...</div>
 
 export const Empty = () => <div>Post not found</div>
+
+export const Failure = ({ error }) => (
+  <div style={{ color: 'red' }}>Error: {error.message}</div>
+)
 
 export const Success = ({ post }) => {
   return <Post post={post} />
@@ -1896,6 +1912,10 @@ const UPDATE_POST_MUTATION = gql\`
 
 export const Loading = () => <div>Loading...</div>
 
+export const Failure = ({ error }) => (
+  <div style={{ color: 'red' }}>Error: {error.message}</div>
+)
+
 export const Success = ({ post }) => {
   const [updatePost, { loading, error }] = useMutation(UPDATE_POST_MUTATION, {
     onCompleted: () => {
@@ -1951,6 +1971,10 @@ const UPDATE_USER_PROFILE_MUTATION = gql\`
 \`
 
 export const Loading = () => <div>Loading...</div>
+
+export const Failure = ({ error }) => (
+  <div style={{ color: 'red' }}>Error: {error.message}</div>
+)
 
 export const Success = ({ userProfile }) => {
   const [updateUserProfile, { loading, error }] = useMutation(
@@ -2024,6 +2048,10 @@ export const Empty = () => {
     </div>
   )
 }
+
+export const Failure = ({ error }) => (
+  <div style={{ color: 'red' }}>Error: {error.message}</div>
+)
 
 export const Success = ({ posts }) => {
   return <Posts posts={posts} />

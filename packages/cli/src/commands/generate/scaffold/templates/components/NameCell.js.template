@@ -12,6 +12,10 @@ export const Loading = () => <div>Loading...</div>
 
 export const Empty = () => <div>${singularPascalName} not found</div>
 
+export const Failure = ({ error }) => (
+  <div style={{ color: 'red' }}>Error: {error.message}</div>
+)
+
 export const Success = ({ ${singularCamelName} }) => {
   return <${singularPascalName} ${singularCamelName}={${singularCamelName}} />
 }

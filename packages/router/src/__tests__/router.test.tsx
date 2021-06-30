@@ -615,3 +615,52 @@ test('Private is an alias for Set private', async () => {
   await waitFor(() => screen.getByText(/Private Layout \(dark\)/))
   await waitFor(() => screen.getByText(/Private Page/))
 })
+
+test('redirect to last page', async () => {
+  const TestRouter = () => (
+    <Router useAuth={mockUseAuth()}>
+      <Route path="/" page={HomePage} name="home" />
+      <Route path="/about" page={AboutPage} name="about" />
+      <Private unauthenticated="login">
+        <Route path="/private" page={PrivatePage} name="private" />
+      </Private>
+      <Route path="/login" page={LoginPage} name="login" />
+    </Router>
+  )
+  const screen = render(<TestRouter />)
+
+  // starts on home page
+  await waitFor(() => screen.getByText(/Home Page/i))
+
+  // navigate to private page
+  // should redirect to login
+  act(() => navigate(routes.private()))
+
+  await waitFor(() => {
+    expect(screen.queryByText(/Private Page/i)).not.toBeInTheDocument()
+    expect(window.location.pathname).toBe('/login')
+    expect(window.location.search).toBe('?redirectTo=/private')
+    screen.getByText(/Login Page/i)
+  })
+})
+
+test('no location match means nothing is rendered', async () => {
+  const TestRouter = () => (
+    <Router>
+      <Route path="/" page={HomePage} name="home" />
+    </Router>
+  )
+  const screen = render(<TestRouter />)
+
+  // starts on home page
+  await waitFor(() => screen.getByText(/Home Page/i))
+
+  // navigate page that doesn't exist
+  act(() => navigate('/not/found'))
+
+  // wait for rendering
+  // Otherwise adding a NotFound route still makes this test pass
+  await new Promise((r) => setTimeout(r, 200))
+
+  expect(screen.container).toMatchInlineSnapshot('<div />')
+})
