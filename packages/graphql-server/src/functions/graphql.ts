@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useApolloTracing } from '@envelop/apollo-tracing'
+import { useApolloServerErrors } from '@envelop/apollo-server-errors'
 import {
   envelop,
   useErrorHandler,
-  useMaskedErrors,
+  // useMaskedErrors,
   useSchema,
   Plugin,
 } from '@envelop/core'
@@ -27,6 +27,7 @@ import {
 } from 'graphql-helix'
 import { renderPlaygroundPage } from 'graphql-playground-html'
 import { BaseLogger } from 'pino'
+import { v4 as uuidv4 } from 'uuid'
 
 import type { AuthContextPayload } from '@redwoodjs/api'
 import { getAuthenticationContext } from '@redwoodjs/api'
@@ -118,14 +119,34 @@ interface GraphQLHandlerOptions {
    *
    */
   graphiQLEndpoint?: string
+
+  /**
+   * Collect resolver timings, and exposes trace data for
+   * an individual request under extensions as part of the GraphQL response.
+   */
+  tracing?: boolean
+}
+
+/**
+ * Extracts and parses body payload from event with base64 encoding check
+ *
+ */
+const parseEventBody = (event: APIGatewayProxyEvent) => {
+  if (event.isBase64Encoded) {
+    return JSON.parse(Buffer.from(event.body || '', 'base64').toString('utf-8'))
+  } else {
+    return event.body && JSON.parse(event.body)
+  }
 }
 
 function normalizeRequest(event: APIGatewayProxyEvent): Request {
+  const body = parseEventBody(event)
+
   return {
     headers: event.headers || {},
     method: event.httpMethod,
     query: event.queryStringParameters,
-    body: event.body && JSON.parse(event.body),
+    body,
   }
 }
 
@@ -207,34 +228,33 @@ export const useRedwoodGlobalContextSetter =
 const useRedwoodLogger = (
   baseLogger: BaseLogger
 ): Plugin<RedwoodGraphQLContext> => {
-  const childLogger = baseLogger.child({ name: 'graphql-server' })
+  const childLogger = baseLogger.child({
+    name: 'graphql-server',
+  })
 
   return {
     onExecute({ args }) {
-      childLogger.info(
-        {
-          operationName: args.operationName,
-          userAgent: args.contextValue.event.headers['user-agent'],
-        },
-        `GraphQL execution started`
-      )
+      const envelopLogger = childLogger.child({
+        operationName: args.operationName,
+        userAgent: args.contextValue.event.headers['user-agent'],
+        requestId: args.contextValue.awsRequestId || uuidv4(),
+      })
+
+      envelopLogger.info(`GraphQL execution started`)
 
       return {
         onExecuteDone({ result }) {
           if (result.errors && result.errors.length > 0) {
-            childLogger.error(
+            envelopLogger.error(
               {
-                operationName: args.operationName,
                 errors: result.errors,
               },
               `GraphQL execution completed with errors:`
             )
           } else {
-            childLogger.info(
+            envelopLogger.info(
               {
-                operationName: args.operationName,
-                userAgent: args.contextValue.event.headers['user-agent'],
-                envelopTracing: args.contextValue._envelopTracing,
+                tracing: args.contextValue._envelopTracing,
               },
               `GraphQL execution completed`
             )
@@ -266,8 +286,11 @@ export const createGraphQLHandler = ({
   depthLimit,
   allowedOperations,
   graphiQLEndpoint,
+  tracing,
 }: GraphQLHandlerOptions) => {
   const plugins: Plugin<any>[] = [
+    // Apollo Server compatible errors
+    useApolloServerErrors(),
     // Limits the depth of your GraphQL selection sets.
     useDepthLimit({
       maxDepth: (depthLimit && depthLimit.maxDepth) || 5,
@@ -276,7 +299,7 @@ export const createGraphQLHandler = ({
     // Only allow execution of specific operation types
     useFilterAllowedOperations(allowedOperations || ['mutation', 'query']),
     // Prevent unexpected error messages from leaking to the GraphQL clients.
-    useMaskedErrors(),
+    // useMaskedErrors(),
     // Simple LRU for caching parse results.
     useParserCache(),
     // Simple LRU for caching validate results.
@@ -296,7 +319,6 @@ export const createGraphQLHandler = ({
   }
 
   if (isDevEnv) {
-    plugins.push(useApolloTracing())
     plugins.push(useErrorHandler(redwoodErrorHandler))
   }
 
@@ -317,7 +339,7 @@ export const createGraphQLHandler = ({
 
   const createSharedEnvelop = envelop({
     plugins,
-    enableInternalTracing: isDevEnv,
+    enableInternalTracing: tracing,
   })
 
   const handlerFn = async (

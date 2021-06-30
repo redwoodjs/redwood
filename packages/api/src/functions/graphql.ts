@@ -71,18 +71,38 @@ interface GraphQLHandlerOptions extends Config {
    * Modify the resolver and global context.
    */
   context?: Context | ContextFunction
+
   /**
    * An async function that maps the auth token retrieved from the request headers to an object.
    * Is it executed when the `auth-provider` contains one of the supported providers.
    */
   getCurrentUser?: GetCurrentUser
+
   /**
    * A callback when an unhandled exception occurs. Use this to disconnect your prisma instance.
    */
   onException?: () => void
 
+  /**
+   * CORS configuration
+   */
   cors?: CreateHandlerOptions['cors']
+
+  /**
+   * Customize GraphQL Logger
+   */
+  logger?: BaseLogger
+
+  /**
+   * Healthcheck
+   */
   onHealthCheck?: CreateHandlerOptions['onHealthCheck']
+
+  /**
+   * Collect resolver timings, and exposes trace data for
+   * an individual request under extensions as part of the GraphQL response.
+   */
+  tracing?: boolean
 }
 /**
  * Creates an Apollo GraphQL Server.
@@ -96,7 +116,9 @@ export const createGraphQLHandler = ({
   getCurrentUser,
   onException,
   cors,
+  logger,
   onHealthCheck,
+  tracing,
   ...options
 }: GraphQLHandlerOptions = {}) => {
   const isDevEnv = process.env.NODE_ENV === 'development'
@@ -104,7 +126,9 @@ export const createGraphQLHandler = ({
     // Turn off playground, introspection and debug in production.
     debug: isDevEnv,
     introspection: isDevEnv,
+    logger,
     playground: isDevEnv,
+    tracing: tracing,
     // Log the errors in the console
     formatError: (error) => {
       if (isDevEnv) {

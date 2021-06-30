@@ -27,6 +27,8 @@ import Step7_1_BlogLayout from './codemods/Step7_1_BlogLayout'
 import Step7_2_ContactPage from './codemods/Step7_2_ContactPage'
 import Step7_3_Css from './codemods/Step7_3_Css'
 import Step7_4_Routes from './codemods/Step7_4_Routes'
+import Step8_1_ContactPageWithoutJsEmailValidation from './codemods/Step8_1_ContactPageWithoutJsEmailValidation'
+import Step8_2_CreateContactServiceValidation from './codemods/Step8_2_CreateContactServiceValidation'
 
 const BASE_DIR = Cypress.env('RW_PATH')
 
@@ -283,5 +285,40 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     cy.get('#tutorial-form').submit()
     // console
     // {name: "test name", email: "foo@bar.com", message: "test message"}
+  })
+
+  it('8. Saving Data', () => {
+    // navigate back out
+    cy.visit('http://localhost:8910/')
+
+    // Create a CRUD contacts service
+    cy.exec(`cd ${BASE_DIR}; yarn rw g sdl contact --force --crud`)
+
+    cy.writeFile(
+      path.join(BASE_DIR, 'web/src/pages/ContactPage/ContactPage.js'),
+      Step8_1_ContactPageWithoutJsEmailValidation
+    )
+
+    cy.writeFile(
+      path.join(BASE_DIR, 'api/src/services/contacts/contacts.js'),
+      Step8_2_CreateContactServiceValidation
+    )
+
+    // then get to new contact with api side validation
+    cy.contains('Contact').click()
+
+    cy.get('input#name').clear().type('test name')
+    cy.get('input#email').clear().type('foo bar com')
+    cy.get('textarea#message').clear().type('test message')
+    cy.contains('Save').click()
+
+    cy.get('main').should('contain', "Can't create new contact")
+    cy.get('main').should('contain', 'is not formatted like an email address')
+
+    // then test saving with a valid email
+    cy.get('input#email').clear().type('test@example.com')
+    cy.contains('Save').click()
+
+    cy.get('main').should('contain', 'Thank you for your submission')
   })
 })
