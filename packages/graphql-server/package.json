@@ -32,7 +32,7 @@
     "jwks-rsa": "1.8.1",
     "lodash.merge": "4.6.2",
     "lodash.omitby": "4.6.0",
-    "pino-pretty": "5.0.2",
+    "pino-pretty": "5.1.0",
     "pino": "6.11.3"
   },
   "devDependencies": {
