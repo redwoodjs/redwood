@@ -10,7 +10,7 @@
   "types": "./dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@envelop/apollo-tracing": "0.1.0",
+    "@envelop/apollo-tracing": "0.2.0",
     "@envelop/core": "0.3.1",
     "@envelop/depth-limit": "0.1.0",
     "@envelop/disable-introspection": "0.0.1",
