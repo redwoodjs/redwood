@@ -1561,10 +1561,10 @@
   resolved "https://registry.yarnpkg.com/@envelop/filter-operation-type/-/filter-operation-type-0.1.0.tgz#0536907332a2e762b0d02c75ec925f494e07b739"
   integrity sha512-g2PuWn3mlfYQ5JVNCnKsmGhDY5FzCVzpECf2Ap7qIIvUUoUv8me+xt6RSuSJ6hNX7qYOwFIjY/0lQ7qBeVTEGQ==
 
-"@envelop/parser-cache@0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@envelop/parser-cache/-/parser-cache-0.1.0.tgz#4168dc8f6714fa84ef6c9cdfa621c8e9330292d3"
-  integrity sha512-DF5lMNJHuFMrQq2QptkkBCX0C4QjtARu/CV/s+NueqQUkkp/vEwAEWa75QCeLQON+3jGXpMksc1rHCkfzqop9g==
+"@envelop/parser-cache@0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@envelop/parser-cache/-/parser-cache-0.2.0.tgz#98a5d7db372dacfc8b4f0009d1b1653cfdd06f64"
+  integrity sha512-y8yp4gtB/NGNNi7oCB6F5IGvGHjw054A+tX1B3FBRXqQbW+bYWZXG7pNATMMP7J52HoJVrE/gk4b1t5uqed0GA==
   dependencies:
     tiny-lru "7.0.6"
 
