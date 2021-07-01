@@ -37,7 +37,7 @@ interface RouteProps {
   page: PageType
   name: string
   prerender?: boolean
-  whileLoading?: () => React.ReactElement | null
+  whileLoadingPage?: () => React.ReactElement | null
 }
 
 interface RedirectRouteProps {
@@ -68,8 +68,7 @@ const InternalRoute: React.VFC<InternalRouteProps> = ({
   name,
   redirect,
   notfound,
-  // @ts-expect-error - This prop is picked up by <Set>
-  whileLoading, // eslint-disable-line
+  whileLoadingPage,
 }) => {
   const location = useLocation()
   const routerState = useRouterState()
@@ -115,6 +114,7 @@ const InternalRoute: React.VFC<InternalRouteProps> = ({
       spec={normalizePage(page)}
       delay={routerState.pageLoadingDelay}
       params={allParams}
+      whileLoadingPage={whileLoadingPage}
     />
   )
 }
