@@ -40,7 +40,9 @@ describe('The Redwood Tutorial - Golden path Helix/Envelop edition', () => {
   // TODO: https://redwoodjs.com/tutorial/saving-data
   // TODO: https://redwoodjs.com/tutorial/administration
   before(() => {
-    cy.exec(`cd ${BASE_DIR}; git restore . && git clean -df`)
+    cy.exec(`cd ${BASE_DIR}; git restore . && git clean -df`, {
+      failOnNonZeroExit: false,
+    })
   })
 
   it('0. Starting Development', () => {
