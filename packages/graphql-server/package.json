@@ -26,7 +26,7 @@
     "core-js": "3.13.1",
     "graphql-helix": "1.6.1",
     "graphql-playground-html": "1.6.29",
-    "graphql-scalars": "1.9.3",
+    "graphql-scalars": "1.10.0",
     "graphql": "15.5.0",
     "jsonwebtoken": "8.5.1",
     "jwks-rsa": "1.8.1",
