@@ -13,7 +13,7 @@
     "@envelop/apollo-tracing": "0.1.0",
     "@envelop/core": "0.3.1",
     "@envelop/depth-limit": "0.1.0",
-    "@envelop/disable-introspection": "0.0.1",
+    "@envelop/disable-introspection": "0.1.0",
     "@envelop/filter-operation-type": "0.1.0",
     "@envelop/parser-cache": "0.1.0",
     "@envelop/validation-cache": "0.1.0",
