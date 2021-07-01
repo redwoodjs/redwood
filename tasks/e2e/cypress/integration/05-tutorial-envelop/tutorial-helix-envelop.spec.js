@@ -39,6 +39,9 @@ const BASE_DIR = Cypress.env('RW_PATH')
 describe('The Redwood Tutorial - Golden path Helix/Envelop edition', () => {
   // TODO: https://redwoodjs.com/tutorial/saving-data
   // TODO: https://redwoodjs.com/tutorial/administration
+  before(() => {
+    cy.exec(`cd ${BASE_DIR}; git restore . && git clean -df`)
+  })
 
   it('0. Starting Development', () => {
     // reset redwood toml to use envelop

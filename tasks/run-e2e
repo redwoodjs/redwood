@@ -168,6 +168,20 @@ const installTaskDeps = () => {
   })
 }
 
+const initGit = () => {
+  console.log('Initializing Git')
+  execa.sync('git init --initial-branch main && git add .', {
+    cwd: REDWOOD_PROJECT_DIRECTORY,
+    shell: true,
+    stdio: 'inherit',
+  })
+  execa.sync('git commit -a --message=init', {
+    cwd: REDWOOD_PROJECT_DIRECTORY,
+    shell: true,
+    stdio: 'inherit',
+  })
+}
+
 const args = yargs
   .option('create-project', { default: true, type: 'boolean', alias: 'create' })
   .option('copy-framework', { default: true, type: 'boolean', alias: 'copy' })
@@ -214,6 +228,7 @@ const tasks = [
   secureServices && setRedwoodSecureServices,
   autoStart && runDevServerInBackground,
   autoStart && installTaskDeps,
+  autoStart && initGit,
   autoStart && runCypress,
 ].filter(Boolean)
 
