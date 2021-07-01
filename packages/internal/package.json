@@ -22,7 +22,7 @@
     "@graphql-codegen/typescript": "1.22.1",
     "@graphql-codegen/typescript-operations": "1.18.0",
     "@graphql-codegen/typescript-react-apollo": "2.2.5",
-    "@graphql-codegen/typescript-resolvers": "1.19.2",
+    "@graphql-codegen/typescript-resolvers": "1.19.5",
     "deepmerge": "4.2.2",
     "fast-glob": "3.2.5",
     "findup-sync": "4.0.0",
