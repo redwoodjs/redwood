@@ -2,9 +2,8 @@ import path from 'path'
 
 import type { Handler } from 'aws-lambda'
 import bodyParser from 'body-parser'
-import chokidar from 'chokidar'
 import type { Application, Request, Response } from 'express'
-import glob from 'glob'
+import fg from 'fast-glob'
 import escape from 'lodash.escape'
 
 import { getPaths } from '@redwoodjs/internal'
@@ -14,20 +13,42 @@ import { requestHandler } from '../requestHandlers/awsLambda'
 export type Lambdas = Record<string, Handler>
 const LAMBDA_FUNCTIONS: Lambdas = {}
 
-export const setLambdaFunctions = (foundFunctions: string[]) => {
-  for (const fnPath of foundFunctions) {
-    const routeName = path.basename(fnPath).replace('.js', '')
-    const { handler } = require(fnPath)
-    LAMBDA_FUNCTIONS[routeName] = handler
-    if (!handler) {
-      console.warn(
-        routeName,
-        'at',
-        fnPath,
-        'does not have a function called handler defined.'
-      )
-    }
-  }
+const loadFunctionsFromDist = async () => {
+  const rwjsPaths = getPaths()
+  const apiFunctions = fg.sync('dist/functions/*.{ts,js}', {
+    cwd: rwjsPaths.api.base,
+    absolute: true,
+  })
+
+  await setLambdaFunctions(apiFunctions)
+}
+
+// Import the API functions and add them to the LAMBDA_FUNCTIONS object
+export const setLambdaFunctions = async (foundFunctions: string[]) => {
+  const ts = Date.now()
+  console.log('Importing API... ')
+
+  const imports = foundFunctions.map((fnPath) => {
+    return new Promise((resolve) => {
+      const routeName = path.basename(fnPath).replace('.js', '')
+      console.log('  /' + routeName)
+      const { handler } = require(fnPath)
+      LAMBDA_FUNCTIONS[routeName] = handler
+      if (!handler) {
+        console.warn(
+          routeName,
+          'at',
+          fnPath,
+          'does not have a function called handler defined.'
+        )
+      }
+      return resolve(true)
+    })
+  })
+
+  Promise.all(imports).then((_results) => {
+    console.log('Imported in', Date.now() - ts, 'ms')
+  })
 }
 
 const lambdaRequestHandler = async (req: Request, res: Response) => {
@@ -52,10 +73,11 @@ const lambdaRequestHandler = async (req: Request, res: Response) => {
   return requestHandler(req, res, LAMBDA_FUNCTIONS[routeName])
 }
 
-const withFunctions = (app: Application, apiRootPath: string) => {
+const withFunctions = async (app: Application, apiRootPath: string) => {
   app.use(
     bodyParser.text({
       type: ['text/*', 'application/json', 'multipart/form-data'],
+      limit: process.env.BODY_PARSER_LIMIT,
     })
   )
 
@@ -66,74 +88,12 @@ const withFunctions = (app: Application, apiRootPath: string) => {
     })
   )
 
-  console.log('Importing API... ')
-  const ts = Date.now()
-
-  loadFunctionsFromDist()
-
-  console.log('Imported in', Date.now() - ts, 'ms')
-
-  if (process.env.HOTRELOAD_API === '1') {
-    console.log(':: Enabling api server hotreload ::')
-    // Wait for first run, because babel may still be building
-    setTimeout(startFunctionHotReloader, 2000)
-  }
+  await loadFunctionsFromDist()
 
   app.all(`${apiRootPath}:routeName`, lambdaRequestHandler)
   app.all(`${apiRootPath}:routeName/*`, lambdaRequestHandler)
 
   return app
-}
-
-function loadFunctionsFromDist() {
-  const rwjsPaths = getPaths()
-
-  const apiFunctions = glob.sync('dist/functions/*.{ts,js}', {
-    cwd: rwjsPaths.api.base,
-    absolute: true,
-  })
-
-  setLambdaFunctions(apiFunctions)
-}
-
-function startFunctionHotReloader() {
-  let chokidarReady = false
-  const rwjsPaths = getPaths()
-
-  chokidar
-    .watch(rwjsPaths.api.dist, {
-      persistent: true,
-      ignoreInitial: true,
-      awaitWriteFinish: true,
-      ignored: (file: string) =>
-        file.includes('node_modules') ||
-        ['.map', '.d.ts'].some((ext) => file.endsWith(ext)),
-    })
-    .on('ready', async () => {
-      chokidarReady = true
-    })
-    .on('all', async (_eventName, filePath) => {
-      if (!chokidarReady) {
-        return
-      }
-
-      console.log(`Detected change in ${filePath}`)
-      clearCacheAndHotreload()
-    })
-}
-
-const clearCacheAndHotreload = () => {
-  const reloadTimestamp = Date.now()
-  console.log('Hot reloading API...')
-
-  Object.keys(require.cache).forEach((cacheKey) => {
-    delete require.cache[cacheKey]
-  })
-
-  // delete require.cache[filePath]
-
-  loadFunctionsFromDist()
-  console.log('Reloaded in', Date.now() - reloadTimestamp, 'ms')
 }
 
 export default withFunctions
