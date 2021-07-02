@@ -27,6 +27,35 @@ export type GetCurrentUser = (
 ) => Promise<null | Record<string, unknown> | string>
 
 /**
+ * Settings for limiting the complexity of the queries solely by their depth.
+ * Use by graphql-depth-limit,
+ *
+ * @see https://github.com/stems/graphql-depth-limit
+ */
+type DepthLimitOptions = { maxDepth: number; ignore?: string[] }
+
+/**
+ * Options for request and response information to include in the log statements
+ * output by UseRedwoodLogger around the execution event
+ */
+type LoggerOptions = {
+  data?: boolean
+  operationName?: boolean
+  requestId?: boolean
+  query?: boolean
+  tracing?: boolean
+  userAgent?: boolean
+}
+
+/**
+ * Configure the logger.
+ *
+ * @param logger your logger
+ * @param options the LoggerOptions such as tracing, operationName, etc
+ */
+type LoggerConfig = { logger: BaseLogger; options?: LoggerOptions }
+
+/**
  * This plugin logs every time an operation is being executed and
  * when the execution of the operation is done.
  *
@@ -34,66 +63,104 @@ export type GetCurrentUser = (
  * such as the operation name, request id, errors, and header info
  * to help trace and diagnose issues.
  *
- * Tracing and timing information can be enabled via the
- * GraphQLHandlerOptions traction option.
+ * Tracing and timing information can be set in LoggerConfig options.
  *
  * @see https://www.apollographql.com/docs/apollo-server/integrations/plugins/
  * @returns
  */
-const UseRedwoodLogger = (tracing?: boolean): ApolloServerPlugin => {
+const UseRedwoodLogger = (loggerConfig?: LoggerConfig): ApolloServerPlugin => {
   return {
     requestDidStart(requestContext: GraphQLRequestContext) {
       const logger = requestContext.logger as BaseLogger
 
+      const includeData = loggerConfig?.options?.data || true
+      const includeOperationName = loggerConfig?.options?.operationName || true
+      const includeRequestId = loggerConfig?.options?.requestId
+      const includeTracing = loggerConfig?.options?.tracing
+      const includeUserAgent = loggerConfig?.options?.userAgent
+      const includeQuery = loggerConfig?.options?.query
+
+      if (!logger) {
+        return
+      }
+
+      const childLoggerOptions = {} as any
+
+      if (includeUserAgent) {
+        childLoggerOptions['userAgent'] =
+          requestContext.request.http?.headers.get('user-agent') as string
+      }
+
+      if (includeQuery) {
+        childLoggerOptions['query'] = requestContext.request.query
+      }
+
       const childLogger = logger.child({
         name: 'apollo-graphql-server',
-        userAgent: requestContext.request.http?.headers.get(
-          'user-agent'
-        ) as string,
-        query: requestContext.request.query,
+        ...childLoggerOptions,
       })
 
-      childLogger.info(
-        {
-          metrics: requestContext.metrics,
-        },
-        'GraphQL requestDidStart'
-      )
+      const options = {} as any
+
+      if (includeTracing) {
+        options['metrics'] = requestContext.metrics
+      }
+
+      childLogger.info({ ...options }, 'GraphQL requestDidStart')
 
       return {
         executionDidStart(requestContext: GraphQLRequestContext) {
-          const options = {
-            operationName: requestContext.operationName,
-            requestId:
+          const options = {} as any
+
+          if (includeOperationName) {
+            options['operationName'] = requestContext.operationName
+          }
+
+          if (includeRequestId) {
+            options['requestId'] =
               requestContext.request.http?.headers.get('x-amz-request-id') ||
-              uuidv4(),
-          } as any
+              uuidv4()
+          }
 
           childLogger.debug({ ...options }, 'GraphQL executionDidStart')
         },
         willSendResponse(requestContext: GraphQLRequestContext) {
-          const options = {
-            operationName: requestContext.operationName,
-            requestId:
-              requestContext.request.http?.headers.get('x-amz-request-id') ||
-              uuidv4(),
-          } as any
+          const options = {} as any
 
-          if (tracing) {
+          if (includeData) {
+            options['data'] = requestContext.response?.data
+          }
+
+          if (includeOperationName && requestContext.operationName) {
+            options['operationName'] = requestContext.operationName
+          }
+
+          if (includeRequestId) {
+            options['requestId'] =
+              requestContext.request.http?.headers.get('x-amz-request-id') ||
+              uuidv4()
+          }
+
+          if (includeTracing) {
             options['tracing'] = requestContext.response?.extensions?.tracing
           }
 
           childLogger.info({ ...options }, 'GraphQL willSendResponse')
         },
         didEncounterErrors(requestContext: GraphQLRequestContext) {
-          const options = {
-            operationName: requestContext.operationName,
-            requestId:
-              requestContext.request.http?.headers.get('x-amz-request-id') ||
-              uuidv4(),
-          } as any
+          const options = {} as any
 
-          if (tracing) {
+          if (includeOperationName) {
+            options['operationName'] = requestContext.operationName
+          }
+
+          if (includeRequestId) {
+            options['requestId'] =
+              requestContext.request.http?.headers.get('x-amz-request-id') ||
+              uuidv4()
+          }
+
+          if (includeTracing) {
             options['tracing'] = requestContext.response?.extensions?.tracing
           }
           childLogger.error(
@@ -157,8 +224,6 @@ export const createContextHandler = (
   }
 }
 
-type DepthLimitConfig = { maxDepth: number; ignore?: string[] }
-
 interface GraphQLHandlerOptions extends Config {
   /**
    * Modify the resolver and global context.
@@ -182,9 +247,9 @@ interface GraphQLHandlerOptions extends Config {
   cors?: CreateHandlerOptions['cors']
 
   /**
-   * Customize GraphQL Logger
+   * Customize GraphQL Logger with options
    */
-  logger?: BaseLogger
+  loggerConfig?: LoggerConfig
 
   /**
    * Healthcheck
@@ -195,18 +260,12 @@ interface GraphQLHandlerOptions extends Config {
    * Limit the complexity of the queries solely by their depth.
    * @see https://www.npmjs.com/package/graphql-depth-limit#documentation
    */
-  setDepthLimit?: DepthLimitConfig
+  depthLimitOptions?: DepthLimitOptions
 
   /**
    * Custom Apollo Server plugins
    */
   extraPlugins?: ApolloServerPlugin[]
-
-  /**
-   * Collect resolver timings, and exposes trace data for
-   * an individual request under extensions as part of the GraphQL response.
-   */
-  tracing?: boolean
 }
 /**
  * Creates an Apollo GraphQL Server.
@@ -220,36 +279,41 @@ export const createGraphQLHandler = ({
   getCurrentUser,
   onException,
   cors,
-  logger,
+  loggerConfig,
   onHealthCheck,
-  tracing,
   extraPlugins,
-  setDepthLimit,
+  depthLimitOptions,
   ...options
 }: GraphQLHandlerOptions = {}) => {
   const isDevEnv = process.env.NODE_ENV === 'development'
 
-  const plugins = [UseRedwoodLogger(tracing)]
+  const plugins = options.plugins || []
+
+  plugins.push(UseRedwoodLogger(loggerConfig))
 
   if (extraPlugins && extraPlugins.length > 0) {
     plugins.push(...extraPlugins)
   }
 
   // extract depth limit configuration and use a sensible default
-  const ignore = (setDepthLimit && setDepthLimit.ignore) || []
-  const maxDepth = (setDepthLimit && setDepthLimit.maxDepth) || 10
+  const ignore = (depthLimitOptions && depthLimitOptions.ignore) || []
+  const maxDepth = (depthLimitOptions && depthLimitOptions.maxDepth) || 10
+
+  const validationRules = options.validationRules || []
+
+  validationRules.push(depthLimit(maxDepth, { ignore }))
 
   const handler = new ApolloServer({
     // Turn off playground, introspection and debug in production.
     debug: isDevEnv,
     introspection: isDevEnv,
-    logger,
+    logger: loggerConfig && loggerConfig.logger,
     playground: isDevEnv,
     plugins,
-    // Log trace timings
-    tracing: tracing,
+    // Log trace timings if set in loggerConfig
+    tracing: loggerConfig?.options?.tracing,
     // Limits the depth of your GraphQL selection sets.
-    validationRules: [depthLimit(maxDepth, { ignore })],
+    validationRules,
     // Log the errors in the console
     formatError: (error) => {
       if (isDevEnv) {

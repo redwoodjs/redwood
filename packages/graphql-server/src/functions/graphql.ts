@@ -56,11 +56,34 @@ export type RedwoodGraphQLContext = {
   context: LambdaContext
 }
 
+/**
+ * Options for request and response information to include in the log statements
+ * output by UseRedwoodLogger around the execution event
+ */
+type LoggerOptions = {
+  data?: boolean
+  operationName?: boolean
+  requestId?: boolean
+  query?: boolean
+  tracing?: boolean
+  userAgent?: boolean
+}
+/**
+ * Configure the logger.
+ *
+ * @param logger your logger
+ * @param options the LoggerOptions such as tracing, operationName, etc
+ */
+type LoggerConfig = { logger: BaseLogger; options?: LoggerOptions }
+
 interface GraphQLHandlerOptions {
   /**
    * Customize GraphQL Logger
+   *
+   * Collect resolver timings, and exposes trace data for
+   * an individual request under extensions as part of the GraphQL response.
    */
-  logger: BaseLogger
+  loggerConfig: LoggerConfig
 
   /**
    * Modify the resolver and global context.
@@ -97,7 +120,7 @@ interface GraphQLHandlerOptions {
    * Limit the complexity of the queries solely by their depth.
    * @see https://www.npmjs.com/package/graphql-depth-limit#documentation
    */
-  setDepthLimit?: DepthLimitConfig
+  depthLimitOptions?: DepthLimitConfig
 
   /**
    * Only allows the specified operation types (e.g. subscription, query or mutation).
@@ -121,12 +144,6 @@ interface GraphQLHandlerOptions {
    *
    */
   graphiQLEndpoint?: string
-
-  /**
-   * Collect resolver timings, and exposes trace data for
-   * an individual request under extensions as part of the GraphQL response.
-   */
-  tracing?: boolean
 }
 
 /**
@@ -242,19 +259,40 @@ export const useRedwoodGlobalContextSetter =
  * @returns
  */
 const useRedwoodLogger = (
-  baseLogger: BaseLogger,
-  tracing?: boolean
+  loggerConfig: LoggerConfig
 ): Plugin<RedwoodGraphQLContext> => {
-  const childLogger = baseLogger.child({
+  const logger = loggerConfig.logger
+
+  const childLogger = logger.child({
     name: 'graphql-server',
   })
 
+  const includeData = loggerConfig?.options?.data || true
+  const includeOperationName = loggerConfig?.options?.operationName || true
+  const includeRequestId = loggerConfig?.options?.requestId
+  const includeTracing = loggerConfig?.options?.tracing
+  const includeUserAgent = loggerConfig?.options?.userAgent
+  // const includeQuery = loggerConfig?.options?.query
+
   return {
     onExecute({ args }) {
+      const options = {} as any
+
+      if (includeOperationName && args.operationName) {
+        options['operationName'] = args.operationName
+      }
+
+      if (includeRequestId) {
+        options['requestId'] =
+          args.contextValue.awsRequestId || uuidv4() || uuidv4()
+      }
+
+      if (includeUserAgent) {
+        options['userAgent'] = args.contextValue.event.headers['user-agent']
+      }
+
       const envelopLogger = childLogger.child({
-        operationName: args.operationName,
-        userAgent: args.contextValue.event.headers['user-agent'],
-        requestId: args.contextValue.awsRequestId || uuidv4(),
+        ...options,
       })
 
       envelopLogger.info(`GraphQL execution started`)
@@ -262,6 +300,10 @@ const useRedwoodLogger = (
       return {
         onExecuteDone({ result }) {
           const options = {} as any
+
+          if (includeData) {
+            options['data'] = result.data
+          }
 
           if (result.errors && result.errors.length > 0) {
             envelopLogger.error(
@@ -271,7 +313,7 @@ const useRedwoodLogger = (
               `GraphQL execution completed with errors:`
             )
           } else {
-            if (tracing) {
+            if (includeTracing) {
               options['tracing'] = args.contextValue._envelopTracing
             }
 
@@ -318,7 +360,7 @@ export const formatError: FormatErrorHandler = (err) => {
  * ```
  */
 export const createGraphQLHandler = ({
-  logger,
+  loggerConfig,
   schema,
   context,
   getCurrentUser,
@@ -326,10 +368,9 @@ export const createGraphQLHandler = ({
   extraPlugins,
   cors,
   onHealthCheck,
-  setDepthLimit,
+  depthLimitOptions,
   allowedOperations,
   graphiQLEndpoint,
-  tracing,
 }: GraphQLHandlerOptions) => {
   // Important: Plugins are executed in order of their usage, and inject functionality serially,
   // so the order here matters
@@ -343,11 +384,11 @@ export const createGraphQLHandler = ({
     // Custom Redwood plugins
     useRedwoodAuthContext(getCurrentUser),
     useRedwoodGlobalContextSetter(),
-    useRedwoodLogger(logger, tracing),
+    useRedwoodLogger(loggerConfig),
     // Limits the depth of your GraphQL selection sets.
     useDepthLimit({
-      maxDepth: (setDepthLimit && setDepthLimit.maxDepth) || 10,
-      ignore: (setDepthLimit && setDepthLimit.ignore) || [],
+      maxDepth: (depthLimitOptions && depthLimitOptions.maxDepth) || 10,
+      ignore: (depthLimitOptions && depthLimitOptions.ignore) || [],
     }),
     // Only allow execution of specific operation types
     useFilterAllowedOperations(allowedOperations || ['mutation', 'query']),
@@ -387,7 +428,7 @@ export const createGraphQLHandler = ({
 
   const createSharedEnvelop = envelop({
     plugins,
-    enableInternalTracing: tracing,
+    enableInternalTracing: loggerConfig.options?.tracing,
   })
 
   const handlerFn = async (

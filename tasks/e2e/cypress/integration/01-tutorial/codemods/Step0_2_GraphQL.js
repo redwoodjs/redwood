@@ -11,7 +11,7 @@ import { logger } from 'src/lib/logger'
 import services from 'src/services/**/*.{js,ts}'
 
 export const handler = createGraphQLHandler({
-  logger,
+  loggerConfig: { logger, options: { data: true} },
   schema: makeMergedSchema({
     schemas,
     services: makeServices({ services }),
