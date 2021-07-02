@@ -2,10 +2,12 @@
 import { useApolloServerErrors } from '@envelop/apollo-server-errors'
 import {
   envelop,
+  FormatErrorHandler,
   useErrorHandler,
-  // useMaskedErrors,
+  useMaskedErrors,
   useSchema,
   Plugin,
+  EnvelopError,
 } from '@envelop/core'
 import { useDepthLimit, DepthLimitConfig } from '@envelop/depth-limit'
 import { useDisableIntrospection } from '@envelop/disable-introspection'
@@ -13,6 +15,7 @@ import { useFilterAllowedOperations } from '@envelop/filter-operation-type'
 import type { AllowedOperations } from '@envelop/filter-operation-type'
 import { useParserCache } from '@envelop/parser-cache'
 import { useValidationCache } from '@envelop/validation-cache'
+import { fromGraphQLError } from 'apollo-server-errors'
 import type {
   APIGatewayProxyEvent,
   Context as LambdaContext,
@@ -29,7 +32,7 @@ import { renderPlaygroundPage } from 'graphql-playground-html'
 import { BaseLogger } from 'pino'
 import { v4 as uuidv4 } from 'uuid'
 
-import type { AuthContextPayload } from '@redwoodjs/api'
+import { ApolloError, AuthContextPayload } from '@redwoodjs/api'
 import { getAuthenticationContext } from '@redwoodjs/api'
 import {
   getPerRequestContext,
@@ -225,8 +228,23 @@ export const useRedwoodGlobalContextSetter =
     },
   })
 
+/**
+ * This plugin logs every time an operation is being executed and
+ * when the execution of the operation is done.
+ *
+ * It adds information using a child logger from the context
+ * such as the operation name, request id, errors, and header info
+ * to help trace and diagnose issues.
+ *
+ * Tracing and timing information can be enabled via the
+ * GraphQLHandlerOptions traction option.
+ *
+ * @see https://www.envelop.dev/docs/plugins/lifecycle
+ * @returns
+ */
 const useRedwoodLogger = (
-  baseLogger: BaseLogger
+  baseLogger: BaseLogger,
+  tracing?: boolean
 ): Plugin<RedwoodGraphQLContext> => {
   const childLogger = baseLogger.child({
     name: 'graphql-server',
@@ -244,6 +262,8 @@ const useRedwoodLogger = (
 
       return {
         onExecuteDone({ result }) {
+          const options = {} as any
+
           if (result.errors && result.errors.length > 0) {
             envelopLogger.error(
               {
@@ -252,9 +272,13 @@ const useRedwoodLogger = (
               `GraphQL execution completed with errors:`
             )
           } else {
+            if (tracing) {
+              options['tracing'] = args.contextValue._envelopTracing
+            }
+
             envelopLogger.info(
               {
-                tracing: args.contextValue._envelopTracing,
+                ...options,
               },
               `GraphQL execution completed`
             )
@@ -263,6 +287,26 @@ const useRedwoodLogger = (
       }
     },
   }
+}
+
+/*
+ * Prevent unexpected error messages from leaking to the GraphQL clients.
+ *
+ * Unexpected errors are those that are not Envelop or Apollo errors
+ *
+ * Note that error masking should come after useApolloServerErrors since the originalError
+ * will could become an ApolloError but if not, then should get masked
+ **/
+export const formatError: FormatErrorHandler = (err) => {
+  if (
+    err.originalError &&
+    err.originalError instanceof EnvelopError === false &&
+    err.originalError instanceof ApolloError === true
+  ) {
+    return new GraphQLError('Something went wrong.')
+  }
+
+  return err
 }
 
 /**
@@ -288,18 +332,9 @@ export const createGraphQLHandler = ({
   graphiQLEndpoint,
   tracing,
 }: GraphQLHandlerOptions) => {
+  // Important: Plugins are executed in order of their usage, and inject functionality serially,
+  // so the order here matters
   const plugins: Plugin<any>[] = [
-    // Apollo Server compatible errors
-    useApolloServerErrors(),
-    // Limits the depth of your GraphQL selection sets.
-    useDepthLimit({
-      maxDepth: (depthLimit && depthLimit.maxDepth) || 5,
-      ignore: (depthLimit && depthLimit.ignore) || [],
-    }),
-    // Only allow execution of specific operation types
-    useFilterAllowedOperations(allowedOperations || ['mutation', 'query']),
-    // Prevent unexpected error messages from leaking to the GraphQL clients.
-    // useMaskedErrors(),
     // Simple LRU for caching parse results.
     useParserCache(),
     // Simple LRU for caching validate results.
@@ -309,7 +344,21 @@ export const createGraphQLHandler = ({
     // Custom Redwood plugins
     useRedwoodAuthContext(getCurrentUser),
     useRedwoodGlobalContextSetter(),
-    useRedwoodLogger(logger),
+    useRedwoodLogger(logger, tracing),
+    // Limits the depth of your GraphQL selection sets.
+    useDepthLimit({
+      maxDepth: (depthLimit && depthLimit.maxDepth) || 5,
+      ignore: (depthLimit && depthLimit.ignore) || [],
+    }),
+    // Only allow execution of specific operation types
+    useFilterAllowedOperations(allowedOperations || ['mutation', 'query']),
+    // Apollo Server compatible errors.
+    // Important: *must* be listed before useMaskedErrors
+    useApolloServerErrors(),
+    // Prevent unexpected error messages from leaking to the GraphQL clients.
+    // Important: *must* be listed after useApolloServerErrors so it can detect if the error is an ApolloError
+    // and mask if not
+    useMaskedErrors({ formatError }),
   ]
 
   const isDevEnv = process.env.NODE_ENV === 'development'

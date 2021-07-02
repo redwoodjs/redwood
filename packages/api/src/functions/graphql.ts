@@ -1,8 +1,14 @@
-import type { Context, ContextFunction } from 'apollo-server-core'
+import type {
+  Context,
+  ContextFunction,
+  GraphQLRequestContext,
+} from 'apollo-server-core'
 import { ApolloServer } from 'apollo-server-lambda'
 import type { Config, CreateHandlerOptions } from 'apollo-server-lambda'
+import type { ApolloServerPlugin } from 'apollo-server-plugin-base'
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import { BaseLogger } from 'pino'
+import { v4 as uuidv4 } from 'uuid'
 
 import type { AuthContextPayload } from 'src/auth'
 import { getAuthenticationContext } from 'src/auth'
@@ -18,6 +24,89 @@ export type GetCurrentUser = (
   raw: AuthContextPayload[1],
   req?: AuthContextPayload[2]
 ) => Promise<null | Record<string, unknown> | string>
+
+/**
+ * This plugin logs every time an operation is being executed and
+ * when the execution of the operation is done.
+ *
+ * It adds information using a child logger from the context
+ * such as the operation name, request id, errors, and header info
+ * to help trace and diagnose issues.
+ *
+ * Tracing and timing information can be enabled via the
+ * GraphQLHandlerOptions traction option.
+ *
+ * @see https://www.apollographql.com/docs/apollo-server/integrations/plugins/
+ * @returns
+ */
+const UseRedwoodLogger = (tracing?: boolean): ApolloServerPlugin => {
+  return {
+    requestDidStart(requestContext: GraphQLRequestContext) {
+      const logger = requestContext.logger as BaseLogger
+
+      const childLogger = logger.child({
+        name: 'apollo-graphql-server',
+        userAgent: requestContext.request.http?.headers.get(
+          'user-agent'
+        ) as string,
+        query: requestContext.request.query,
+      })
+
+      childLogger.info(
+        {
+          metrics: requestContext.metrics,
+        },
+        'GraphQL requestDidStart'
+      )
+
+      return {
+        executionDidStart(requestContext: GraphQLRequestContext) {
+          const options = {
+            operationName: requestContext.operationName,
+            requestId:
+              requestContext.request.http?.headers.get('x-amz-request-id') ||
+              uuidv4(),
+          } as any
+
+          childLogger.debug({ ...options }, 'GraphQL executionDidStart')
+        },
+        willSendResponse(requestContext: GraphQLRequestContext) {
+          const options = {
+            operationName: requestContext.operationName,
+            requestId:
+              requestContext.request.http?.headers.get('x-amz-request-id') ||
+              uuidv4(),
+          } as any
+
+          if (tracing) {
+            options['tracing'] = requestContext.response?.extensions?.tracing
+          }
+
+          childLogger.info({ ...options }, 'GraphQL willSendResponse')
+        },
+        didEncounterErrors(requestContext: GraphQLRequestContext) {
+          const options = {
+            operationName: requestContext.operationName,
+            requestId:
+              requestContext.request.http?.headers.get('x-amz-request-id') ||
+              uuidv4(),
+          } as any
+
+          if (tracing) {
+            options['tracing'] = requestContext.response?.extensions?.tracing
+          }
+          childLogger.error(
+            {
+              errors: requestContext.errors,
+              ...options,
+            },
+            'GraphQL didEncounterErrors'
+          )
+        },
+      }
+    },
+  }
+}
 
 /**
  * We use Apollo Server's `context` option as an entry point to construct our
@@ -100,6 +189,11 @@ interface GraphQLHandlerOptions extends Config {
   onHealthCheck?: CreateHandlerOptions['onHealthCheck']
 
   /**
+   * Custom Apollo Server plugins
+   */
+  extraPlugins?: ApolloServerPlugin[]
+
+  /**
    * Collect resolver timings, and exposes trace data for
    * an individual request under extensions as part of the GraphQL response.
    */
@@ -120,15 +214,24 @@ export const createGraphQLHandler = ({
   logger,
   onHealthCheck,
   tracing,
+  extraPlugins,
   ...options
 }: GraphQLHandlerOptions = {}) => {
   const isDevEnv = process.env.NODE_ENV === 'development'
+
+  const plugins = [UseRedwoodLogger(tracing)]
+
+  if (extraPlugins && extraPlugins.length > 0) {
+    plugins.push(...extraPlugins)
+  }
+
   const handler = new ApolloServer({
     // Turn off playground, introspection and debug in production.
     debug: isDevEnv,
     introspection: isDevEnv,
     logger,
     playground: isDevEnv,
+    plugins,
     tracing: tracing,
     // Log the errors in the console
     formatError: (error) => {

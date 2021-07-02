@@ -42,6 +42,7 @@
     "@types/jsonwebtoken": "8.3.9",
     "@types/lodash.merge": "4.6.6",
     "@types/lodash.omitby": "4.6.6",
+    "@types/uuid": "^8.3.0",
     "split2": "3.2.2"
   },
   "jest": {
