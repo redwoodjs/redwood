@@ -15,7 +15,6 @@ import { useFilterAllowedOperations } from '@envelop/filter-operation-type'
 import type { AllowedOperations } from '@envelop/filter-operation-type'
 import { useParserCache } from '@envelop/parser-cache'
 import { useValidationCache } from '@envelop/validation-cache'
-import { fromGraphQLError } from 'apollo-server-errors'
 import type {
   APIGatewayProxyEvent,
   Context as LambdaContext,
