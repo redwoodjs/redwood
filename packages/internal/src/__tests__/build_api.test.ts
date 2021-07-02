@@ -1,6 +1,7 @@
 import path from 'path'
 
-import { prebuildApiFiles, buildApi } from '../build/api'
+import { prebuildApiFiles } from '../build/api'
+import { findApiFiles } from '../files'
 
 const FIXTURE_PATH = path.resolve(
   __dirname,
@@ -15,21 +16,7 @@ afterAll(() => {
 })
 
 test('api files are prebuilt', () => {
-  // const builtFiles = prebuildApiFiles()
-  // expect(builtFiles[0].endsWith('api/src/functions/graphql.js')).toBeTruthy()
-  // expect(builtFiles[2].endsWith('api/src/graphql/todos.sdl.js')).toBeTruthy()
-})
-
-test.only('api side is built', () => {
-  const x = buildApi()
-
-  x //?
-
-  // let files = prebuildApi()
-  // files = files.filter((x) => typeof x !== 'undefined') //?
-  // const f = transpileApi(files)
-  // f //?
-  // const builtFiles = prebuildApi()
-  // expect(builtFiles[0].endsWith('api/src/functions/graphql.js')).toBeTruthy()
-  // expect(builtFiles[2].endsWith('api/src/graphql/todos.sdl.js')).toBeTruthy()
+  const builtFiles = prebuildApiFiles(findApiFiles())
+  expect(builtFiles[0].endsWith('api/src/functions/graphql.js')).toBeTruthy()
+  expect(builtFiles[2].endsWith('api/src/graphql/todos.sdl.js')).toBeTruthy()
 })

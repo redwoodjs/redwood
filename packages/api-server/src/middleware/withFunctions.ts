@@ -32,12 +32,12 @@ const loadFunctionsFromDist = async () => {
 
 // Import the API functions and add them to the LAMBDA_FUNCTIONS object
 export const setLambdaFunctions = async (foundFunctions: string[]) => {
-  const tsImport = new Date()
+  const tsImport = Date.now()
   console.log(c.italic(c.dim('Importing Server Functions... ')))
 
   const imports = foundFunctions.map((fnPath) => {
     return new Promise((resolve) => {
-      const ts = new Date()
+      const ts = Date.now()
       const routeName = path.basename(fnPath).replace('.js', '')
 
       const { handler } = require(fnPath)
