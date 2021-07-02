@@ -25,12 +25,6 @@ export const builder = (yargs) => {
         'String of one or more Webpack DevServer config options, for example: `--fwd="--port=1234 --open=false"`',
       type: 'string',
     })
-    .option('esbuild', {
-      type: 'boolean',
-      required: false,
-      default: getConfig().experimental.esbuild,
-      description: 'Use ESBuild [experimental]',
-    })
     .option('useEnvelop', {
       type: 'boolean',
       required: false,
@@ -54,7 +48,6 @@ export const builder = (yargs) => {
 export const handler = async ({
   side = ['api', 'web'],
   forward = '',
-  esbuild = false,
   useEnvelop = false,
   generate = true,
 }) => {
@@ -115,15 +108,6 @@ export const handler = async ({
       prefixColor: 'green',
       runWhen: () => generate,
     },
-  }
-
-  if (esbuild) {
-    jobs.api.name = 'api esbuild'
-    jobs.api.command =
-      'yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps ESBUILD=1 yarn rw-api-server-watch'
-
-    jobs.web.name = 'web esbuild'
-    jobs.web.command = 'yarn cross-env ESBUILD=1 && ' + jobs.web.command
   }
 
   if (useEnvelop) {
