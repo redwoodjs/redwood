@@ -4315,10 +4315,10 @@
   dependencies:
     "@types/babel-types" "*"
 
-"@types/babel-plugin-tester@9.0.2", "@types/babel-plugin-tester@^9.0.0":
-  version "9.0.2"
-  resolved "https://registry.yarnpkg.com/@types/babel-plugin-tester/-/babel-plugin-tester-9.0.2.tgz#be5c85f2b4195d5647f50615dd8a0e9355c381e8"
-  integrity sha512-mvx4XPLgRQBa2SK7H8xIyukZr6A5ks61ubOnYI4/rLAQAwUBG2WpXNd8Fri+3BkNaLujkMf8VRUKIs6BAqLiig==
+"@types/babel-plugin-tester@9.0.3", "@types/babel-plugin-tester@^9.0.0":
+  version "9.0.3"
+  resolved "https://registry.yarnpkg.com/@types/babel-plugin-tester/-/babel-plugin-tester-9.0.3.tgz#cc6ad6f18a0199441313fce48d09b45a05a407f8"
+  integrity sha512-qw+Km6cLPF50NtFII2MR/MNi7UA3ojaO9hxvktJv9txvsp24nWXG2m8Ij1Ijf93j+sY/9oVpFY+7Z9BI4ZS8qA==
   dependencies:
     "@types/babel__core" "*"
     "@types/prettier" "*"
