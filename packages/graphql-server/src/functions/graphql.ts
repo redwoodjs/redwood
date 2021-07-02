@@ -300,7 +300,7 @@ export const formatError: FormatErrorHandler = (err) => {
   if (
     err.originalError &&
     err.originalError instanceof EnvelopError === false &&
-    err.originalError instanceof ApolloError === true
+    err.originalError instanceof ApolloError === false
   ) {
     return new GraphQLError('Something went wrong.')
   }
