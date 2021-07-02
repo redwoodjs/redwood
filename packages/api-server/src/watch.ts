@@ -38,6 +38,10 @@ const rebuildApiServer = () => {
   }
 }
 
+// We want to delay exection when multiple files are modified on the filesystem,
+// this usually happens when running RedwoodJS generator commands.
+const delayRestartServer = debounce(rebuildApiServer, 500)
+
 chokidar
   .watch(rwjsPaths.api.base, {
     persistent: true,
@@ -62,8 +66,9 @@ chokidar
     rebuildApiServer()
   })
   .on('all', (eventName, filePath) => {
-    console.log(`[${eventName}]`, `${filePath.replace(rwjsPaths.api.base, '')}`)
-
-    //rebuildApiServer.cancel()
-    rebuildApiServer()
+    console.log(
+      c.dim(`[${eventName}] ${filePath.replace(rwjsPaths.api.base, '')}`)
+    )
+    delayRestartServer.cancel()
+    delayRestartServer()
   })
