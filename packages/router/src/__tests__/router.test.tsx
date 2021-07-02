@@ -209,13 +209,11 @@ test('can display a loading screen whilst waiting for auth', async () => {
   const TestRouter = () => (
     <Router useAuth={mockUseAuth({ isAuthenticated: false, loading: true })}>
       <Route path="/" page={HomePage} name="home" />
-      <Private unauthenticated="home">
-        <Route
-          path="/private"
-          page={PrivatePage}
-          name="private"
-          whileLoading={() => <>Loading...</>}
-        />
+      <Private
+        unauthenticated="home"
+        whileLoadingAuth={() => <>Authenticating...</>}
+      >
+        <Route path="/private" page={PrivatePage} name="private" />
       </Private>
     </Router>
   )
@@ -228,7 +226,7 @@ test('can display a loading screen whilst waiting for auth', async () => {
   // should not redirect
   act(() => navigate(routes.private()))
   await waitFor(() => {
-    expect(screen.getByText(/Loading.../)).toBeInTheDocument()
+    expect(screen.getByText(/Authenticating.../)).toBeInTheDocument()
     expect(screen.queryByText(/Home Page/)).not.toBeInTheDocument()
   })
 })
