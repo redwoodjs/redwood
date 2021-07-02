@@ -15,7 +15,7 @@
     "@babel/parser": "7.14.4",
     "@babel/plugin-transform-typescript": "7.14.4",
     "@babel/runtime-corejs3": "7.14.0",
-    "@babel/traverse": "7.14.2",
+    "@babel/traverse": "7.14.7",
     "@graphql-codegen/cli": "1.21.6",
     "@graphql-codegen/core": "1.17.10",
     "@graphql-codegen/schema-ast": "1.18.3",
