@@ -1,9 +1,8 @@
 import React, { ReactElement, ReactNode, useCallback } from 'react'
 
 import { Redirect } from './links'
-import { InternalRouteProps, isRoute, routes as namedRoutes } from './router'
+import { routes as namedRoutes } from './router'
 import { useRouterState } from './router-context'
-import { flattenAll } from './util'
 
 type WrapperType<WTProps> = (
   props: WTProps & { children: ReactNode }
@@ -29,6 +28,8 @@ type SetProps<P> = P & {
   /** Prerender all pages in the set */
   prerender?: boolean
   children: ReactNode
+  /** Loading state for auth to distinguish with whileLoading */
+  whileLoadingAuth?: () => React.ReactElement | null
 }
 
 const IdentityWrapper: WrapperType<Record<string, any>> = ({ children }) => {
@@ -42,6 +43,7 @@ export function Set<WrapperProps>(props: SetProps<WrapperProps>) {
     private: privateSet,
     unauthenticated,
     role,
+    whileLoadingAuth,
     ...rest
   } = props
   const routerState = useRouterState()
@@ -59,14 +61,10 @@ export function Set<WrapperProps>(props: SetProps<WrapperProps>) {
 
   // Make sure `wrappers` is always an array with at least one wrapper component
   const wrappers = Array.isArray(wrap) ? wrap : [wrap ? wrap : IdentityWrapper]
-  const flatChildArray = flattenAll(children)
-  const route = flatChildArray.find(
-    (child): child is React.ReactElement<InternalRouteProps> => isRoute(child)
-  )
 
   if (privateSet && unauthorized()) {
     if (loading) {
-      return route?.props?.whileLoading?.() || null
+      return whileLoadingAuth?.() || null
     } else {
       const currentLocation =
         global.location.pathname + encodeURIComponent(global.location.search)
