@@ -21,8 +21,10 @@ describe('getConfig', () => {
         },
         "experimental": Object {
           "esbuild": false,
+          "useEnvelop": false,
         },
         "generate": Object {
+          "nestScaffoldByModel": true,
           "stories": true,
           "tests": true,
         },

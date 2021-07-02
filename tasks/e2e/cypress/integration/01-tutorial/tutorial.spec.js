@@ -2,6 +2,8 @@
 /// <reference types="cypress" />
 import path from 'path'
 
+import Step0_1_RedwoodToml from './codemods/Step0_1_RedwoodToml'
+import Step0_2_GraphQL from './codemods/Step0_2_GraphQL'
 import Step1_1_Routes from './codemods/Step1_1_Routes'
 import Step2_1_PagesHome from './codemods/Step2_1_PagesHome'
 import Step2_2_PagesAbout from './codemods/Step2_2_PagesAbout'
@@ -25,6 +27,9 @@ import Step7_1_BlogLayout from './codemods/Step7_1_BlogLayout'
 import Step7_2_ContactPage from './codemods/Step7_2_ContactPage'
 import Step7_3_Css from './codemods/Step7_3_Css'
 import Step7_4_Routes from './codemods/Step7_4_Routes'
+import Step8_1_RequireAuth from './codemods/Step8_1_RequireAuth'
+import Step8_2_PostsRequireAuth from './codemods/Step8_2_PostsRequireAuth'
+import Step8_3_DisableAuth from './codemods/Step8_3_DisableAuth'
 
 const BASE_DIR = Cypress.env('RW_PATH')
 
@@ -33,6 +38,17 @@ describe('The Redwood Tutorial - Golden path edition', () => {
   // TODO: https://redwoodjs.com/tutorial/administration
 
   it('0. Starting Development', () => {
+    // reset graphql function to use classic api
+
+    // reset redwood toml to use standard apollo server aka not envelop
+    cy.writeFile(path.join(BASE_DIR, 'redwood.toml'), Step0_1_RedwoodToml)
+
+    // needed because can run integration tests out of order and the helix tests will overwrite the graphql function
+    cy.writeFile(
+      path.join(BASE_DIR, 'api/src/functions/graphql.js'),
+      Step0_2_GraphQL
+    )
+
     // https://redwoodjs.com/tutorial/installation-starting-development
     cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step1_1_Routes)
     cy.visit('http://localhost:8910')
@@ -270,5 +286,31 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     cy.get('#tutorial-form').submit()
     // console
     // {name: "test name", email: "foo@bar.com", message: "test message"}
+  })
+
+  it('8. Auth - Render Cell Failure Message', () => {
+    // enable auth
+    cy.writeFile(
+      path.join(BASE_DIR, 'api/src/lib/auth.js'),
+      Step8_1_RequireAuth
+    )
+
+    cy.writeFile(
+      path.join(BASE_DIR, 'api/src/services/posts/posts.js'),
+      Step8_2_PostsRequireAuth
+    )
+
+    cy.visit('http://localhost:8910/posts')
+
+    cy.get('main').should('not.contain', 'Second post')
+
+    cy.get('main > div:nth-child(1)').should('contain', 'Error')
+    cy.get('main > div:nth-child(1)').should('contain', "can't do that")
+
+    // disable auth
+    cy.writeFile(
+      path.join(BASE_DIR, 'api/src/lib/auth.js'),
+      Step8_3_DisableAuth
+    )
   })
 })

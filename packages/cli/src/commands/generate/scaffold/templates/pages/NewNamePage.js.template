@@ -1,4 +1,4 @@
-import New${singularPascalName} from 'src/components/${pascalScaffoldPath}New${singularPascalName}'
+import New${singularPascalName} from '${importComponentNewName}'
 
 const New${singularPascalName}Page = () => {
   return <New${singularPascalName} />

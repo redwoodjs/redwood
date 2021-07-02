@@ -1,10 +1,10 @@
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
-import ${singularPascalName}Form from 'src/components/${pascalScaffoldPath}${singularPascalName}Form'
+import ${singularPascalName}Form from '${importComponentNameForm}'
 
 export const QUERY = gql`
-  query FIND_${singularConstantName}_BY_ID($id: ${idType}!) {
+  query Find${singularPascalName}ById($id: ${idType}!) {
     ${singularCamelName}: ${singularCamelName}(id: $id) {<% columns.forEach(column => { %>
       <%= column.name %><% }) %>
     }
@@ -19,6 +19,10 @@ const UPDATE_${singularConstantName}_MUTATION = gql`
 `
 
 export const Loading = () => <div>Loading...</div>
+
+export const Failure = ({ error }) => (
+  <div style={{ color: 'red' }}>Error: {error.message}</div>
+)
 
 export const Success = ({ ${singularCamelName} }) => {
   const [update${singularPascalName}, { loading, error }] = useMutation(UPDATE_${singularConstantName}_MUTATION, {

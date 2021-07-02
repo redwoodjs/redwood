@@ -181,6 +181,51 @@
       "contributions": [
         "tutorial"
       ]
+    },
+    {
+      "login": "Vashiru",
+      "name": "Vashiru",
+      "avatar_url": "https://avatars.githubusercontent.com/u/11370057?v=4",
+      "profile": "https://github.com/Vashiru",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "callingmedic911",
+      "name": "Aditya Pandey",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2629902?v=4",
+      "profile": "https://adityaworks.com/",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "rdyar",
+      "name": "Ron Dyar",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7111699?v=4",
+      "profile": "http://prolabprints.com/",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "AntonioMeireles",
+      "name": "António Meireles",
+      "avatar_url": "https://avatars.githubusercontent.com/u/743527?v=4",
+      "profile": "https://github.com/AntonioMeireles",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "toddpress",
+      "name": "Todd Pressley",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2934422?v=4",
+      "profile": "https://github.com/toddpress",
+      "contributions": [
+        "tutorial"
+      ]
     }
   ],
   "contributorsPerLine": 5

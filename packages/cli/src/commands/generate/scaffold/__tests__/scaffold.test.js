@@ -17,13 +17,13 @@ describe('in javascript (default) mode', () => {
       ...getDefaultArgs(defaults),
       model: 'Post',
       tests: true,
+      nestScaffoldByModel: true,
     })
   })
 
   test('returns exactly 17 files', () => {
     expect(Object.keys(files).length).toEqual(17)
   })
-
   // SDL
 
   test('creates an sdl', () => {
@@ -72,36 +72,80 @@ describe('in javascript (default) mode', () => {
     expect(
       files[
         path.normalize(
-          '/path/to/project/web/src/pages/EditPostPage/EditPostPage.js'
+          '/path/to/project/web/src/pages/Post/EditPostPage/EditPostPage.js'
         )
       ]
     ).toMatchSnapshot()
   })
 
+  test('the edit page correctly imports the edit cell', async () => {
+    expect(
+      files[
+        path.normalize(
+          '/path/to/project/web/src/pages/Post/EditPostPage/EditPostPage.js'
+        )
+      ]
+    ).toMatch(`import EditPostCell from 'src/components/Post/EditPostCell'`)
+  })
+
   test('creates a index page', async () => {
     expect(
       files[
-        path.normalize('/path/to/project/web/src/pages/PostsPage/PostsPage.js')
+        path.normalize(
+          '/path/to/project/web/src/pages/Post/PostsPage/PostsPage.js'
+        )
       ]
     ).toMatchSnapshot()
+  })
+
+  test('the index page correctly imports the index cell', async () => {
+    expect(
+      files[
+        path.normalize(
+          '/path/to/project/web/src/pages/Post/PostsPage/PostsPage.js'
+        )
+      ]
+    ).toMatch(`import PostsCell from 'src/components/Post/PostsCell'`)
   })
 
   test('creates a new page', async () => {
     expect(
       files[
         path.normalize(
-          '/path/to/project/web/src/pages/NewPostPage/NewPostPage.js'
+          '/path/to/project/web/src/pages/Post/NewPostPage/NewPostPage.js'
         )
       ]
     ).toMatchSnapshot()
   })
 
+  test('the new page correctly imports the new component', async () => {
+    expect(
+      files[
+        path.normalize(
+          '/path/to/project/web/src/pages/Post/NewPostPage/NewPostPage.js'
+        )
+      ]
+    ).toMatch(`import NewPost from 'src/components/Post/NewPost'`)
+  })
+
   test('creates a show page', async () => {
     expect(
       files[
-        path.normalize('/path/to/project/web/src/pages/PostPage/PostPage.js')
+        path.normalize(
+          '/path/to/project/web/src/pages/Post/PostPage/PostPage.js'
+        )
       ]
     ).toMatchSnapshot()
+  })
+
+  test('the show page correctly imports the show cell', async () => {
+    expect(
+      files[
+        path.normalize(
+          '/path/to/project/web/src/pages/Post/PostPage/PostPage.js'
+        )
+      ]
+    ).toMatch(`import PostCell from 'src/components/Post/PostCell'`)
   })
 
   // Cells
@@ -110,30 +154,60 @@ describe('in javascript (default) mode', () => {
     expect(
       files[
         path.normalize(
-          '/path/to/project/web/src/components/EditPostCell/EditPostCell.js'
+          '/path/to/project/web/src/components/Post/PostEditCell/PostEditCell.js'
         )
       ]
     ).toMatchSnapshot()
+  })
+
+  test('the edit cell correctly imports the form', async () => {
+    expect(
+      files[
+        path.normalize(
+          '/path/to/project/web/src/components/Post/EditPostCell/EditPostCell.js'
+        )
+      ]
+    ).toMatch(`import PostForm from 'src/components/Post/PostForm'`)
   })
 
   test('creates an index cell', async () => {
     expect(
       files[
         path.normalize(
-          '/path/to/project/web/src/components/PostsCell/PostsCell.js'
+          '/path/to/project/web/src/components/Post/PostsCell/PostsCell.js'
         )
       ]
     ).toMatchSnapshot()
+  })
+
+  test('the index cell correctly imports the index component', async () => {
+    expect(
+      files[
+        path.normalize(
+          '/path/to/project/web/src/components/Post/PostsCell/PostsCell.js'
+        )
+      ]
+    ).toMatch(`import Posts from 'src/components/Post/Posts'`)
   })
 
   test('creates a show cell', async () => {
     expect(
       files[
         path.normalize(
-          '/path/to/project/web/src/components/PostCell/PostCell.js'
+          '/path/to/project/web/src/components/Post/PostCell/PostCell.js'
         )
       ]
     ).toMatchSnapshot()
+  })
+
+  test('the show cell correctly imports the show component', async () => {
+    expect(
+      files[
+        path.normalize(
+          '/path/to/project/web/src/components/Post/PostCell/PostCell.js'
+        )
+      ]
+    ).toMatch(`import Post from 'src/components/Post/Post'`)
   })
 
   // Components
@@ -142,7 +216,7 @@ describe('in javascript (default) mode', () => {
     expect(
       files[
         path.normalize(
-          '/path/to/project/web/src/components/PostForm/PostForm.js'
+          '/path/to/project/web/src/components/Post/PostForm/PostForm.js'
         )
       ]
     ).toMatchSnapshot()
@@ -151,53 +225,100 @@ describe('in javascript (default) mode', () => {
   test('creates an index component', async () => {
     expect(
       files[
-        path.normalize('/path/to/project/web/src/components/Posts/Posts.js')
+        path.normalize(
+          '/path/to/project/web/src/components/Post/Posts/Posts.js'
+        )
       ]
     ).toMatchSnapshot()
+  })
+
+  test('the index component correctly imports the QUERY', async () => {
+    expect(
+      files[
+        path.normalize(
+          '/path/to/project/web/src/components/Post/Posts/Posts.js'
+        )
+      ]
+    ).toMatch(`import { QUERY } from 'src/components/Post/PostsCell'`)
   })
 
   test('creates a new component', async () => {
     expect(
       files[
-        path.normalize('/path/to/project/web/src/components/NewPost/NewPost.js')
+        path.normalize(
+          '/path/to/project/web/src/components/Post/NewPost/NewPost.js'
+        )
       ]
     ).toMatchSnapshot()
   })
 
+  test('the new component correctly imports the form', async () => {
+    expect(
+      files[
+        path.normalize(
+          '/path/to/project/web/src/components/Post/NewPost/NewPost.js'
+        )
+      ]
+    ).toMatch(`import PostForm from 'src/components/Post/PostForm'`)
+  })
+
   test('creates a show component', async () => {
     expect(
-      files[path.normalize('/path/to/project/web/src/components/Post/Post.js')]
+      files[
+        path.normalize('/path/to/project/web/src/components/Post/Post/Post.js')
+      ]
     ).toMatchSnapshot()
+  })
+
+  test('error when no editable fields are in model', async () => {
+    await expect(
+      scaffold.files({
+        ...getDefaultArgs(defaults),
+        model: 'NoEditableField',
+        tests: true,
+        nestScaffoldByModel: true,
+      })
+    ).rejects.toThrow(
+      'There are no editable fields in the NoEditableField model'
+    )
   })
 
   // Routes
 
   test('creates a single-word name routes', async () => {
-    expect(await scaffold.routes({ model: 'Post' })).toEqual([
-      '<Route path="/posts/new" page={NewPostPage} name="newPost" />',
-      '<Route path="/posts/{id:Int}/edit" page={EditPostPage} name="editPost" />',
-      '<Route path="/posts/{id:Int}" page={PostPage} name="post" />',
-      '<Route path="/posts" page={PostsPage} name="posts" />',
+    expect(
+      await scaffold.routes({ model: 'Post', nestScaffoldByModel: true })
+    ).toEqual([
+      '<Route path="/posts/new" page={PostNewPostPage} name="newPost" />',
+      '<Route path="/posts/{id:Int}/edit" page={PostEditPostPage} name="editPost" />',
+      '<Route path="/posts/{id:Int}" page={PostPostPage} name="post" />',
+      '<Route path="/posts" page={PostPostsPage} name="posts" />',
     ])
   })
 
   test('creates a multi-word name routes', async () => {
-    expect(await scaffold.routes({ model: 'UserProfile' })).toEqual([
-      '<Route path="/user-profiles/new" page={NewUserProfilePage} name="newUserProfile" />',
-      '<Route path="/user-profiles/{id:Int}/edit" page={EditUserProfilePage} name="editUserProfile" />',
-      '<Route path="/user-profiles/{id:Int}" page={UserProfilePage} name="userProfile" />',
-      '<Route path="/user-profiles" page={UserProfilesPage} name="userProfiles" />',
+    expect(
+      await scaffold.routes({ model: 'UserProfile', nestScaffoldByModel: true })
+    ).toEqual([
+      '<Route path="/user-profiles/new" page={UserProfileNewUserProfilePage} name="newUserProfile" />',
+      '<Route path="/user-profiles/{id:Int}/edit" page={UserProfileEditUserProfilePage} name="editUserProfile" />',
+      '<Route path="/user-profiles/{id:Int}" page={UserProfileUserProfilePage} name="userProfile" />',
+      '<Route path="/user-profiles" page={UserProfileUserProfilesPage} name="userProfiles" />',
     ])
   })
 
   // GraphQL queries
 
   test('the GraphQL in the index query does not contain object types', async () => {
-    const userProfileFiles = await scaffold.files({ model: 'UserProfile' })
+    const userProfileFiles = await scaffold.files({
+      model: 'UserProfile',
+      tests: false,
+      nestScaffoldByModel: true,
+    })
     const cell =
       userProfileFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfilesCell/UserProfilesCell.js'
+          '/path/to/project/web/src/components/UserProfile/UserProfilesCell/UserProfilesCell.js'
         )
       ]
     const query = cell.match(/(userProfiles.*?\})/s)[1]
@@ -206,11 +327,15 @@ describe('in javascript (default) mode', () => {
   })
 
   test('the GraphQL in the show query does not contain object types', async () => {
-    const userProfileFiles = await scaffold.files({ model: 'UserProfile' })
+    const userProfileFiles = await scaffold.files({
+      model: 'UserProfile',
+      tests: false,
+      nestScaffoldByModel: true,
+    })
     const cell =
       userProfileFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.js'
+          '/path/to/project/web/src/components/UserProfile/UserProfileCell/UserProfileCell.js'
         )
       ]
     const query = cell.match(/(userProfile.*?\})/s)[1]
@@ -219,11 +344,15 @@ describe('in javascript (default) mode', () => {
   })
 
   test('the GraphQL in the edit query does not contain object types', async () => {
-    const userProfileFiles = await scaffold.files({ model: 'UserProfile' })
+    const userProfileFiles = await scaffold.files({
+      model: 'UserProfile',
+      tests: false,
+      nestScaffoldByModel: true,
+    })
     const cell =
       userProfileFiles[
         path.normalize(
-          '/path/to/project/web/src/components/EditUserProfileCell/EditUserProfileCell.js'
+          '/path/to/project/web/src/components/UserProfile/EditUserProfileCell/EditUserProfileCell.js'
         )
       ]
     const query = cell.match(/(userProfile.*?\})/s)[1]
@@ -234,24 +363,32 @@ describe('in javascript (default) mode', () => {
   // Foreign key casting
 
   test('creates a new component with int foreign keys converted in onSave', async () => {
-    const foreignKeyFiles = await scaffold.files({ model: 'UserProfile' })
+    const foreignKeyFiles = await scaffold.files({
+      model: 'UserProfile',
+      tests: false,
+      nestScaffoldByModel: true,
+    })
 
     expect(
       foreignKeyFiles[
         path.normalize(
-          '/path/to/project/web/src/components/NewUserProfile/NewUserProfile.js'
+          '/path/to/project/web/src/components/UserProfile/NewUserProfile/NewUserProfile.js'
         )
       ]
     ).toMatchSnapshot()
   })
 
   test('creates an edit component with int foreign keys converted in onSave', async () => {
-    const foreignKeyFiles = await scaffold.files({ model: 'UserProfile' })
+    const foreignKeyFiles = await scaffold.files({
+      model: 'UserProfile',
+      tests: false,
+      nestScaffoldByModel: true,
+    })
 
     expect(
       foreignKeyFiles[
         path.normalize(
-          '/path/to/project/web/src/components/EditUserProfileCell/EditUserProfileCell.js'
+          '/path/to/project/web/src/components/UserProfile/EditUserProfileCell/EditUserProfileCell.js'
         )
       ]
     ).toMatchSnapshot()
@@ -267,6 +404,7 @@ describe('in typescript mode', () => {
       model: 'Post',
       typescript: true,
       tests: true,
+      nestScaffoldByModel: true,
     })
   })
 
@@ -322,7 +460,7 @@ describe('in typescript mode', () => {
     expect(
       tsFiles[
         path.normalize(
-          '/path/to/project/web/src/pages/EditPostPage/EditPostPage.tsx'
+          '/path/to/project/web/src/pages/Post/EditPostPage/EditPostPage.tsx'
         )
       ]
     ).toMatchSnapshot()
@@ -331,7 +469,9 @@ describe('in typescript mode', () => {
   test('creates a index page', async () => {
     expect(
       tsFiles[
-        path.normalize('/path/to/project/web/src/pages/PostsPage/PostsPage.tsx')
+        path.normalize(
+          '/path/to/project/web/src/pages/Post/PostsPage/PostsPage.tsx'
+        )
       ]
     ).toMatchSnapshot()
   })
@@ -340,7 +480,7 @@ describe('in typescript mode', () => {
     expect(
       tsFiles[
         path.normalize(
-          '/path/to/project/web/src/pages/NewPostPage/NewPostPage.tsx'
+          '/path/to/project/web/src/pages/Post/NewPostPage/NewPostPage.tsx'
         )
       ]
     ).toMatchSnapshot()
@@ -349,7 +489,9 @@ describe('in typescript mode', () => {
   test('creates a show page', async () => {
     expect(
       tsFiles[
-        path.normalize('/path/to/project/web/src/pages/PostPage/PostPage.tsx')
+        path.normalize(
+          '/path/to/project/web/src/pages/Post/PostPage/PostPage.tsx'
+        )
       ]
     ).toMatchSnapshot()
   })
@@ -360,7 +502,7 @@ describe('in typescript mode', () => {
     expect(
       tsFiles[
         path.normalize(
-          '/path/to/project/web/src/components/EditPostCell/EditPostCell.tsx'
+          '/path/to/project/web/src/components/Post/EditPostCell/EditPostCell.tsx'
         )
       ]
     ).toMatchSnapshot()
@@ -370,7 +512,7 @@ describe('in typescript mode', () => {
     expect(
       tsFiles[
         path.normalize(
-          '/path/to/project/web/src/components/PostsCell/PostsCell.tsx'
+          '/path/to/project/web/src/components/Post/PostsCell/PostsCell.tsx'
         )
       ]
     ).toMatchSnapshot()
@@ -380,7 +522,7 @@ describe('in typescript mode', () => {
     expect(
       tsFiles[
         path.normalize(
-          '/path/to/project/web/src/components/PostCell/PostCell.tsx'
+          '/path/to/project/web/src/components/Post/PostCell/PostCell.tsx'
         )
       ]
     ).toMatchSnapshot()
@@ -392,7 +534,7 @@ describe('in typescript mode', () => {
     expect(
       tsFiles[
         path.normalize(
-          '/path/to/project/web/src/components/PostForm/PostForm.tsx'
+          '/path/to/project/web/src/components/Post/PostForm/PostForm.tsx'
         )
       ]
     ).toMatchSnapshot()
@@ -401,7 +543,9 @@ describe('in typescript mode', () => {
   test('creates an index component', async () => {
     expect(
       tsFiles[
-        path.normalize('/path/to/project/web/src/components/Posts/Posts.tsx')
+        path.normalize(
+          '/path/to/project/web/src/components/Post/Posts/Posts.tsx'
+        )
       ]
     ).toMatchSnapshot()
   })
@@ -410,7 +554,7 @@ describe('in typescript mode', () => {
     expect(
       tsFiles[
         path.normalize(
-          '/path/to/project/web/src/components/NewPost/NewPost.tsx'
+          '/path/to/project/web/src/components/Post/NewPost/NewPost.tsx'
         )
       ]
     ).toMatchSnapshot()
@@ -419,7 +563,7 @@ describe('in typescript mode', () => {
   test('creates a show component', async () => {
     expect(
       tsFiles[
-        path.normalize('/path/to/project/web/src/components/Post/Post.tsx')
+        path.normalize('/path/to/project/web/src/components/Post/Post/Post.tsx')
       ]
     ).toMatchSnapshot()
   })
@@ -427,31 +571,39 @@ describe('in typescript mode', () => {
   // Routes
 
   test('creates a single-word name routes', async () => {
-    expect(await scaffold.routes({ model: 'Post' })).toEqual([
-      '<Route path="/posts/new" page={NewPostPage} name="newPost" />',
-      '<Route path="/posts/{id:Int}/edit" page={EditPostPage} name="editPost" />',
-      '<Route path="/posts/{id:Int}" page={PostPage} name="post" />',
-      '<Route path="/posts" page={PostsPage} name="posts" />',
+    expect(
+      await scaffold.routes({ model: 'Post', nestScaffoldByModel: true })
+    ).toEqual([
+      '<Route path="/posts/new" page={PostNewPostPage} name="newPost" />',
+      '<Route path="/posts/{id:Int}/edit" page={PostEditPostPage} name="editPost" />',
+      '<Route path="/posts/{id:Int}" page={PostPostPage} name="post" />',
+      '<Route path="/posts" page={PostPostsPage} name="posts" />',
     ])
   })
 
   test('creates a multi-word name routes', async () => {
-    expect(await scaffold.routes({ model: 'UserProfile' })).toEqual([
-      '<Route path="/user-profiles/new" page={NewUserProfilePage} name="newUserProfile" />',
-      '<Route path="/user-profiles/{id:Int}/edit" page={EditUserProfilePage} name="editUserProfile" />',
-      '<Route path="/user-profiles/{id:Int}" page={UserProfilePage} name="userProfile" />',
-      '<Route path="/user-profiles" page={UserProfilesPage} name="userProfiles" />',
+    expect(
+      await scaffold.routes({ model: 'UserProfile', nestScaffoldByModel: true })
+    ).toEqual([
+      '<Route path="/user-profiles/new" page={UserProfileNewUserProfilePage} name="newUserProfile" />',
+      '<Route path="/user-profiles/{id:Int}/edit" page={UserProfileEditUserProfilePage} name="editUserProfile" />',
+      '<Route path="/user-profiles/{id:Int}" page={UserProfileUserProfilePage} name="userProfile" />',
+      '<Route path="/user-profiles" page={UserProfileUserProfilesPage} name="userProfiles" />',
     ])
   })
 
   // GraphQL queries
 
   test('the GraphQL in the index query does not contain object types', async () => {
-    const userProfileFiles = await scaffold.files({ model: 'UserProfile' })
+    const userProfileFiles = await scaffold.files({
+      model: 'UserProfile',
+      tests: false,
+      nestScaffoldByModel: true,
+    })
     const cell =
       userProfileFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfilesCell/UserProfilesCell.js'
+          '/path/to/project/web/src/components/UserProfile/UserProfilesCell/UserProfilesCell.js'
         )
       ]
     const query = cell.match(/(userProfiles.*?\})/s)[1]
@@ -460,11 +612,15 @@ describe('in typescript mode', () => {
   })
 
   test('the GraphQL in the show query does not contain object types', async () => {
-    const userProfileFiles = await scaffold.files({ model: 'UserProfile' })
+    const userProfileFiles = await scaffold.files({
+      model: 'UserProfile',
+      tests: false,
+      nestScaffoldByModel: true,
+    })
     const cell =
       userProfileFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.js'
+          '/path/to/project/web/src/components/UserProfile/UserProfileCell/UserProfileCell.js'
         )
       ]
     const query = cell.match(/(userProfile.*?\})/s)[1]
@@ -473,11 +629,16 @@ describe('in typescript mode', () => {
   })
 
   test('the GraphQL in the edit query does not contain object types', async () => {
-    const userProfileFiles = await scaffold.files({ model: 'UserProfile' })
+    const userProfileFiles = await scaffold.files({
+      model: 'UserProfile',
+      typescript: true,
+      tests: false,
+      nestScaffoldByModel: true,
+    })
     const cell =
       userProfileFiles[
         path.normalize(
-          '/path/to/project/web/src/components/EditUserProfileCell/EditUserProfileCell.js'
+          '/path/to/project/web/src/components/UserProfile/EditUserProfileCell/EditUserProfileCell.tsx'
         )
       ]
     const query = cell.match(/(userProfile.*?\})/s)[1]
@@ -488,24 +649,34 @@ describe('in typescript mode', () => {
   // Foreign key casting
 
   test('creates a new component with int foreign keys converted in onSave', async () => {
-    const foreignKeyFiles = await scaffold.files({ model: 'UserProfile' })
+    const foreignKeyFiles = await scaffold.files({
+      model: 'UserProfile',
+      typescript: true,
+      tests: false,
+      nestScaffoldByModel: true,
+    })
 
     expect(
       foreignKeyFiles[
         path.normalize(
-          '/path/to/project/web/src/components/NewUserProfile/NewUserProfile.js'
+          '/path/to/project/web/src/components/UserProfile/NewUserProfile/NewUserProfile.tsx'
         )
       ]
     ).toMatchSnapshot()
   })
 
   test('creates an edit component with int foreign keys converted in onSave', async () => {
-    const foreignKeyFiles = await scaffold.files({ model: 'UserProfile' })
+    const foreignKeyFiles = await scaffold.files({
+      model: 'UserProfile',
+      typescript: true,
+      tests: false,
+      nestScaffoldByModel: true,
+    })
 
     expect(
       foreignKeyFiles[
         path.normalize(
-          '/path/to/project/web/src/components/EditUserProfileCell/EditUserProfileCell.js'
+          '/path/to/project/web/src/components/UserProfile/EditUserProfileCell/EditUserProfileCell.tsx'
         )
       ]
     ).toMatchSnapshot()

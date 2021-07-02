@@ -16,7 +16,7 @@ const Query = ({ children, query, ...rest }: QueryProps) => {
 export type DataObject = { [key: string]: unknown }
 
 export type CellFailureProps =
-  | Omit<QueryOperationResult, 'data' | 'loading'>
+  | (Omit<QueryOperationResult, 'data' | 'loading'> & { updating: boolean })
   | { error: Error } // for tests and storybook
 
 export type CellLoadingProps = Omit<
@@ -24,8 +24,10 @@ export type CellLoadingProps = Omit<
   'error' | 'loading' | 'data'
 >
 // @MARK not sure about this partial, but we need to do this for tests and storybook
+// `updating` is just `loading` renamed; since Cells default to stale-while-refetch,
+// this prop lets users render something like a spinner to show that a request is in-flight
 export type CellSuccessProps<TData = any> = Partial<
-  Omit<QueryOperationResult<TData>, 'error' | 'loading' | 'data'>
+  Omit<QueryOperationResult<TData>, 'error' | 'data'> & { updating: boolean }
 > &
   A.Compute<TData> // pre-computing makes the types more readable on hover
 
@@ -96,7 +98,7 @@ export function createCell<CellProps = any>({
   beforeQuery = (props) => ({
     variables: props,
     fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'cache-first',
+    notifyOnNetworkStatusChange: true,
   }),
   QUERY,
   afterQuery = (data) => ({ ...data }),
@@ -127,18 +129,30 @@ export function createCell<CellProps = any>({
         {({ error, loading, data, ...queryRest }) => {
           if (error) {
             if (Failure) {
-              return <Failure error={error} {...queryRest} {...props} />
+              return (
+                <Failure
+                  error={error}
+                  {...{ updating: loading, ...queryRest, ...props }}
+                />
+              )
             } else {
               throw error
             }
-          } else if (loading) {
-            return <Loading {...queryRest} {...props} />
           } else if (data) {
             if (typeof Empty !== 'undefined' && isEmpty(data)) {
-              return <Empty {...queryRest} {...props} />
+              return (
+                <Empty {...{ updating: loading, ...queryRest, ...props }} />
+              )
             } else {
-              return <Success {...afterQuery(data)} {...queryRest} {...props} />
+              return (
+                <Success
+                  {...afterQuery(data)}
+                  {...{ updating: loading, ...queryRest, ...props }}
+                />
+              )
             }
+          } else if (loading) {
+            return <Loading {...queryRest} {...props} />
           } else {
             throw new Error(
               'Cannot render cell: GraphQL success but `data` is null'

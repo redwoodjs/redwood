@@ -12,10 +12,10 @@ const Routes = () => {
         <Route path="/" page={HomePage} name="home" prerender/>
       </Set>
       <Set wrap={PostsLayout}>
-        <Route path="/posts/new" page={NewPostPage} name="newPost" />
-        <Route path="/posts/{id:Int}/edit" page={EditPostPage} name="editPost" />
-        <Route path="/posts/{id:Int}" page={PostPage} name="post" />
-        <Route path="/posts" page={PostsPage} name="posts" />
+        <Route path="/posts/new" page={PostNewPostPage} name="newPost" />
+        <Route path="/posts/{id:Int}/edit" page={PostEditPostPage} name="editPost" />
+        <Route path="/posts/{id:Int}" page={PostPostPage} name="post" />
+        <Route path="/posts" page={PostPostsPage} name="posts" />
       </Set>
       <Route notfound page={NotFoundPage} prerender/>
     </Router>

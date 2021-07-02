@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/cli",
   "description": "The Redwood Command Line",
-  "version": "0.33.2",
+  "version": "0.34.1",
   "license": "MIT",
   "bin": {
     "redwood": "./dist/index.js",
@@ -13,11 +13,12 @@
     "dist"
   ],
   "dependencies": {
-    "@prisma/sdk": "2.24.1",
-    "@redwoodjs/api-server": "^0.33.2",
-    "@redwoodjs/internal": "^0.33.2",
-    "@redwoodjs/prerender": "^0.33.2",
-    "@redwoodjs/structure": "^0.33.2",
+    "@prisma/sdk": "2.25.0",
+    "@redwoodjs/api-server": "0.34.1",
+    "@redwoodjs/dev-server": "0.34.1",
+    "@redwoodjs/internal": "0.34.1",
+    "@redwoodjs/prerender": "0.34.1",
+    "@redwoodjs/structure": "0.34.1",
     "boxen": "5.0.1",
     "camelcase": "6.0.0",
     "chalk": "4.1.1",
@@ -38,6 +39,7 @@
     "pascalcase": "1.0.0",
     "pluralize": "8.0.0",
     "prettier": "2.3.1",
+    "prisma": "2.25.0",
     "prompts": "2.4.1",
     "rimraf": "3.0.2",
     "terminal-link": "2.1.1",
@@ -48,10 +50,10 @@
     "@types/node-fetch": "2.5.10"
   },
   "scripts": {
-    "dev": "yarn build:js && __REDWOOD__CONFIG_PATH=../../__fixtures__/example-todo-main node dist/index.js",
+    "dev": "RWJS_CWD=../../__fixtures__/example-todo-main node dist/index.js",
     "build": "yarn build:js",
     "prepublishOnly": "yarn build",
-    "build:clean-dist": "yarn rimraf 'dist/**/*/__tests__'",
+    "build:clean-dist": "rimraf 'dist/**/*/__tests__'",
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\" --copy-files --no-copy-ignored && yarn build:clean-dist",
     "fix:permissions": "chmod +x dist/index.js dist/redwood-tools.js",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build && yarn fix:permissions\"",

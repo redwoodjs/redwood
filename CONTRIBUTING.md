@@ -2,7 +2,7 @@
 
 Love Redwood and want to get involved? You’re in the right place!
 
-Before interacting with the Redwood community, please read and understand our [Code of Conduct](https://github.com/redwoodjs/redwood/blob/main/CODE_OF_CONDUCT.md).  
+Before interacting with the Redwood community, please read and understand our [Code of Conduct](https://github.com/redwoodjs/redwood/blob/main/CODE_OF_CONDUCT.md).
 
 **Table of Contents**
 
@@ -17,6 +17,7 @@ Before interacting with the Redwood community, please read and understand our [C
       - [Option 1: Linking](#option-1-linking)
       - [Option 2: Copy and Watch](#option-2-copy-and-watch)
       - [Option 3: Copy (for Windows)](#option-3-copy-for-windows)
+      - [Option 4: Testing the CLI](#option-4-testing-the-cli)
       - [Specifying a RW_PATH](#specifying-a-rw_path)
         - [On **Linux**](#on-linux)
         - [On **MacOS**](#on-macos)
@@ -74,7 +75,7 @@ There are several options:
 
 **Using the functional test project might be the easiest and fastest way to test your changes in Redwood.** You can create a Redwood project that contains a big range of functionality in a few minutes:
 1. it installs using the App template codebase in the current branch of your Framework
-2. with the current stable version of Redwood Packages (with the option to use the canary version)
+2. with the current `canary` version of Redwood Packages (with the option to use the `latest` stable version)
 3. with a JavaScript language target (with the option for TypeScript)
 4. then applies code mods from the [Redwood tutorial](https://learn.redwoodjs.com/docs/tutorial/welcome-to-redwood/) to add functionality and styling
 5. and initializes a Prisma DB migration for SQLite
@@ -82,7 +83,7 @@ There are several options:
 At the end, you will have a fully working Redwood blog.
 
 ##### Running the Test Project Script
-Run the following in the `redwood` folder root:
+Run the following in the `redwood` folder root (_note: the script will automatically install dependencies_):
 
 ```terminal
 yarn run build:test-project <path/to/redwood-app>
@@ -92,7 +93,7 @@ yarn run build:test-project <path/to/redwood-app>
 |----------------------|----------------------------------------------------------------------|
 | `<project directory>` | Directory to build test project [default: "./blog-test-project"]    |
 | `--typescript, --ts` | Generate a TypeScript project [default: JavaScript]                  |
-| `--canary`           | Upgrade project to latest canary version                             |
+| `--canary`           | Upgrade project to latest canary version [default: true]             |
 | `--help `            | Show help                                                            |
 
 **Example Use:**
@@ -181,7 +182,6 @@ this will echo:
 @redwoodjs/api: $ nodemon --watch src -e ts,js --ignore dist --exec 'yarn build'
 @redwoodjs/core: $ nodemon --ignore dist --exec 'yarn build'
 create-redwood-app: $ nodemon --ignore dist --exec 'yarn build'
-@redwoodjs/eslint-plugin-redwood: $ nodemon --ignore dist --exec 'yarn build'
 ```
 
 `build:watch` won't return you to the command line. Once it stops outputting to the terminal, you can open a new tab in your terminal, cd to `redwood-app` and run `rwt copy:watch` to get the changes in your local copy of the Redwood Framework:
@@ -222,6 +222,8 @@ If you are on Windows and not using WSL, you will have to use `rwt cp` (this is 
 
 Also, you most likely first have to [install `rsync`](https://tlundberg.com/blog/2020-06-15/installing-rsync-on-windows/).
 
+Finally, ensure that appropriate Windows permissions are available to create symbolic links. This can be accomplished via turning on Windows Developer Mode on Windows 10. Go to Settings and find the `For developers` page. Turn on the `Developer Mode` toggle. Alternately, running your shell or VSCode as an Administrator will also work, but is the less preferred option.
+
 Each time you make a change to your local Redwood Framework, you'll have to build it:
 
 ```terminal
@@ -239,6 +241,39 @@ yarn rwt cp ../path/to/redwood
 Then you can test the effects of your changes. Unfortunately, each time you make a change to your local Redwood Framework, you'll have to manually run `build` and `rwt cp` again.
 
 When you're done, you can restore your Redwood App to its original state by deleting `./node_modules`, `web/node_modules`, and `api/node_modules`, then running `yarn install`.
+
+#### Option 4: Testing the CLI
+
+If you've made build or design time changes to RedwoodJS, that is if you have modified one of the following packages:
+
+```terminal
+./packages/
+├ api-server
+├ cli
+├ core
+├ dev-server
+├ eslint-config
+├ internal
+├ prerender
+├ structure
+├ testing
+```
+
+
+You can run a development version of the CLI directly from the framework's repo where you don't have to sync any files or node modules.
+
+(For all of the packages above the entry point is the CLI, these are what we consider "build time" and "design time" packages, rather than "run-time" packages which are web, auth, api, forms.)
+
+In order to do that you use the `--cwd` option to set the current working directory to your "test project":
+
+```terminal
+yarn build
+cd packages/cli
+yarn dev --cwd /path/to/your/project
+```
+The `yarn dev` will run the built CLI, and the `--cwd` option will make the command run in that directory. Remember to rebuild the packages if you have made a change to the code! (Tip: You can use `yarn build:watch` to automatically build the framework whilst you're making changes.)
+
+(Tip: --cwd is optional, it will reference the `__fixtures__/example-todo-main` project in the framework.)
 
 #### Specifying a RW_PATH
 
@@ -399,7 +434,7 @@ git commit -am "<version>"
 git tag -am <version> "<version>"
 git push && git push --tags
 yarn build
-yarn lerna publish from-package
+yarn framework lerna publish from-package
 ```
 
 This...
@@ -493,4 +528,3 @@ yarn rwt link [RW_PATH]
 
 You can avoid having to provide `RW_PATH` by defining an environment variable on your system. See
 [Specifying a `RW_PATH`](#specifying-a-rw_path).
-

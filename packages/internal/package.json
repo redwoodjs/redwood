@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/internal",
-  "version": "0.33.2",
+  "version": "0.34.1",
   "files": [
     "dist"
   ],
@@ -33,7 +33,8 @@
     "toml": "3.0.0"
   },
   "devDependencies": {
-    "@types/findup-sync": "4.0.0"
+    "@types/findup-sync": "4.0.0",
+    "graphql-tag": "^2.12.4"
   },
   "jest": {
     "testPathIgnorePatterns": [
@@ -43,7 +44,7 @@
   "scripts": {
     "build": "yarn build:js && yarn build:types",
     "prepublishOnly": "yarn cross-env NODE_ENV=production yarn build",
-    "build:clean-dist": "yarn rimraf 'dist/**/*/__tests__'",
+    "build:clean-dist": "rimraf 'dist/**/*/__tests__'",
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\" --copy-files --no-copy-ignored && yarn build:clean-dist",
     "build:types": "ttsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
