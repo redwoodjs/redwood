@@ -61,7 +61,7 @@ export const setLambdaFunctions = async (foundFunctions: string[]) => {
 
   Promise.all(imports).then((_results) => {
     console.log(
-      c.italic(c.dim('Imported in ' + (Date.now() - tsImport) + ' ms'))
+      c.italic(c.dim('... Imported in ' + (Date.now() - tsImport) + ' ms'))
     )
   })
 }
