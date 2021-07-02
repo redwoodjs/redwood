@@ -97,7 +97,7 @@ interface GraphQLHandlerOptions {
    * Limit the complexity of the queries solely by their depth.
    * @see https://www.npmjs.com/package/graphql-depth-limit#documentation
    */
-  depthLimit?: DepthLimitConfig
+  setDepthLimit?: DepthLimitConfig
 
   /**
    * Only allows the specified operation types (e.g. subscription, query or mutation).
@@ -326,7 +326,7 @@ export const createGraphQLHandler = ({
   extraPlugins,
   cors,
   onHealthCheck,
-  depthLimit,
+  setDepthLimit,
   allowedOperations,
   graphiQLEndpoint,
   tracing,
@@ -346,8 +346,8 @@ export const createGraphQLHandler = ({
     useRedwoodLogger(logger, tracing),
     // Limits the depth of your GraphQL selection sets.
     useDepthLimit({
-      maxDepth: (depthLimit && depthLimit.maxDepth) || 5,
-      ignore: (depthLimit && depthLimit.ignore) || [],
+      maxDepth: (setDepthLimit && setDepthLimit.maxDepth) || 10,
+      ignore: (setDepthLimit && setDepthLimit.ignore) || [],
     }),
     // Only allow execution of specific operation types
     useFilterAllowedOperations(allowedOperations || ['mutation', 'query']),

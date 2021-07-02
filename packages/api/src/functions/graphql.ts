@@ -7,6 +7,7 @@ import { ApolloServer } from 'apollo-server-lambda'
 import type { Config, CreateHandlerOptions } from 'apollo-server-lambda'
 import type { ApolloServerPlugin } from 'apollo-server-plugin-base'
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
+import depthLimit from 'graphql-depth-limit'
 import { BaseLogger } from 'pino'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -156,6 +157,8 @@ export const createContextHandler = (
   }
 }
 
+type DepthLimitConfig = { maxDepth: number; ignore?: string[] }
+
 interface GraphQLHandlerOptions extends Config {
   /**
    * Modify the resolver and global context.
@@ -189,6 +192,12 @@ interface GraphQLHandlerOptions extends Config {
   onHealthCheck?: CreateHandlerOptions['onHealthCheck']
 
   /**
+   * Limit the complexity of the queries solely by their depth.
+   * @see https://www.npmjs.com/package/graphql-depth-limit#documentation
+   */
+  setDepthLimit?: DepthLimitConfig
+
+  /**
    * Custom Apollo Server plugins
    */
   extraPlugins?: ApolloServerPlugin[]
@@ -215,6 +224,7 @@ export const createGraphQLHandler = ({
   onHealthCheck,
   tracing,
   extraPlugins,
+  setDepthLimit,
   ...options
 }: GraphQLHandlerOptions = {}) => {
   const isDevEnv = process.env.NODE_ENV === 'development'
@@ -225,6 +235,10 @@ export const createGraphQLHandler = ({
     plugins.push(...extraPlugins)
   }
 
+  // extract depth limit configuration and use a sensible default
+  const ignore = (setDepthLimit && setDepthLimit.ignore) || []
+  const maxDepth = (setDepthLimit && setDepthLimit.maxDepth) || 10
+
   const handler = new ApolloServer({
     // Turn off playground, introspection and debug in production.
     debug: isDevEnv,
@@ -232,7 +246,10 @@ export const createGraphQLHandler = ({
     logger,
     playground: isDevEnv,
     plugins,
+    // Log trace timings
     tracing: tracing,
+    // Limits the depth of your GraphQL selection sets.
+    validationRules: [depthLimit(maxDepth, { ignore })],
     // Log the errors in the console
     formatError: (error) => {
       if (isDevEnv) {
