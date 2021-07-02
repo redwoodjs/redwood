@@ -43,6 +43,7 @@ test('finds directory named modules', () => {
 
   expect(p).toMatchInlineSnapshot(`
     Array [
+      "api/src/functions/healthz/healthz.js",
       "api/src/services/todos/todos.js",
       "web/src/components/AddTodo/AddTodo.js",
       "web/src/components/AddTodoControl/AddTodoControl.js",
