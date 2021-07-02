@@ -14,7 +14,7 @@
     "@redwoodjs/internal": "0.34.1",
     "@redwoodjs/router": "0.34.1",
     "@redwoodjs/web": "0.34.1",
-    "@testing-library/react": "11.2.7",
+    "@testing-library/react": "12.0.0",
     "msw": "0.29.0",
     "@storybook/react": "6.1.21",
     "@storybook/addon-a11y": "6.2.9",
