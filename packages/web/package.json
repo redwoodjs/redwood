@@ -14,7 +14,7 @@
     "@apollo/client": "3.3.19",
     "@redwoodjs/auth": "0.34.1",
     "core-js": "3.13.1",
-    "graphql": "15.5.0",
+    "graphql": "15.5.1",
     "proptypes": "1.1.0",
     "react-hot-toast": "2.0.0"
   },
