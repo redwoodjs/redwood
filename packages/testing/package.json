@@ -17,7 +17,7 @@
     "@testing-library/react": "11.2.7",
     "msw": "0.29.0",
     "@storybook/react": "6.1.21",
-    "@storybook/addon-a11y": "6.2.9",
+    "@storybook/addon-a11y": "6.3.2",
     "@testing-library/jest-dom": "5.11.10",
     "@testing-library/user-event": "13.1.9",
     "babel-jest": "26.6.3",
