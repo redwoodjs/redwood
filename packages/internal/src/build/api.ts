@@ -114,7 +114,7 @@ export const transpileApi = (files: string[], options = {}) => {
     entryPoints: files,
     platform: 'node',
     target: process.env.NODE_ENV === 'development' ? 'esnext' : 'node12.21', // AWS Lambdas support NodeJS 12.x and 14.x, but what does Netlify Target?
-    format: 'esm',
+    format: 'cjs',
     bundle: false,
     outdir: rwjsPaths.api.dist,
     sourcemap: 'external', // figure out what's best during development.
