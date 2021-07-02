@@ -98,13 +98,13 @@ export const handler = async ({
   const jobs = {
     api: {
       name: 'api',
-      command: `cd "${rwjsPaths.api.base}" && yarn cross-env NODE_ENV=development yarn dev-server`,
+      command: `cd "${rwjsPaths.api.base}" && yarn cross-env NODE_ENV=development nodemon --watch "${rwjsPaths.redwoodConfig}" --exec "yarn dev-server"`,
       prefixColor: 'cyan',
       runWhen: () => fs.existsSync(rwjsPaths.api.src),
     },
     web: {
       name: 'web',
-      command: `cd "${rwjsPaths.web.base}" && yarn cross-env NODE_ENV=development webpack-dev-server --config "${webpackDevConfig}" ${forward}`,
+      command: `cd "${rwjsPaths.web.base}" && yarn cross-env NODE_ENV=development nodemon --watch "${rwjsPaths.redwoodConfig}" --exec "webpack-dev-server --config "${webpackDevConfig}" ${forward}"`,
       prefixColor: 'blue',
       runWhen: () => fs.existsSync(rwjsPaths.web.src),
     },
@@ -118,8 +118,7 @@ export const handler = async ({
 
   if (esbuild) {
     jobs.api.name = 'api esbuild'
-    jobs.api.command =
-      'yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn rw-api-server-watch'
+    jobs.api.command = `yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps nodemon --watch "${rwjsPaths.redwoodConfig}" --exec "yarn rw-api-server-watch"`
 
     jobs.web.name = 'web esbuild'
     jobs.web.command = 'yarn cross-env ESBUILD=1 && ' + jobs.web.command
