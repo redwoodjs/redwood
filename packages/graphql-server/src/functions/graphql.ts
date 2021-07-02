@@ -437,6 +437,8 @@ export const createGraphQLHandler = ({
   ): Promise<APIGatewayProxyResult> => {
     const enveloped = createSharedEnvelop({ event, context: lambdaContext })
 
+    const logger = loggerConfig.logger
+
     // In the future, this could be part of a specific handler for AWS lambdas
     lambdaContext.callbackWaitsForEmptyEventLoop = false
 
