@@ -40,7 +40,14 @@ const rebuildApiServer = () => {
 
 // We want to delay exection when multiple files are modified on the filesystem,
 // this usually happens when running RedwoodJS generator commands.
-const delayRestartServer = debounce(rebuildApiServer, 500)
+// Local writes are very fast, but writes in e2e environments are not,
+// so allow the default to be adjust with a env-var.
+const delayRestartServer = debounce(
+  rebuildApiServer,
+  process.env.RWJS_DELAY_RESTART
+    ? parseInt(process.env.RWJS_DELAY_RESTART, 10)
+    : 5
+)
 
 chokidar
   .watch(rwjsPaths.api.base, {

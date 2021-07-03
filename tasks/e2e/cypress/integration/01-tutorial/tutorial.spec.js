@@ -2,6 +2,8 @@
 /// <reference types="cypress" />
 import path from 'path'
 
+import 'cypress-wait-until'
+
 import Step0_1_RedwoodToml from './codemods/Step0_1_RedwoodToml'
 import Step0_2_GraphQL from './codemods/Step0_2_GraphQL'
 import Step1_1_Routes from './codemods/Step1_1_Routes'
@@ -38,7 +40,11 @@ describe('The Redwood Tutorial - Golden path edition', () => {
   // TODO: https://redwoodjs.com/tutorial/administration
 
   it('0. Starting Development', () => {
-    // reset graphql function to use classic api
+    // Make sure Auth is disabled. Helpful if "step 8" fails.
+    cy.writeFile(
+      path.join(BASE_DIR, 'api/src/lib/auth.js'),
+      Step8_3_DisableAuth
+    )
 
     // reset redwood toml to use standard apollo server aka not envelop
     cy.writeFile(path.join(BASE_DIR, 'redwood.toml'), Step0_1_RedwoodToml)
@@ -52,6 +58,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     // https://redwoodjs.com/tutorial/installation-starting-development
     cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step1_1_Routes)
     cy.visit('http://localhost:8910')
+
     cy.get('h1 > span').contains('Welcome to RedwoodJS!')
   })
 
@@ -113,14 +120,15 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       `cd ${BASE_DIR}; yarn rimraf ./api/db/migrations && yarn rw prisma migrate reset --skip-seed --force`
     )
     cy.exec(`cd ${BASE_DIR}; yarn rw prisma migrate dev`)
-
     cy.exec(`cd ${BASE_DIR}; yarn rw g scaffold post --force`)
 
-    // Wait 10s for api server to reload
-    cy.wait(10000)
-    // Sometimes webpack dev server doesn't reload in time, or throws errors
-    cy.reload()
-    cy.visit('http://localhost:8910/posts')
+    cy.waitUntil(
+      () =>
+        cy
+          .visit('http://localhost:8910/posts')
+          .then(() => Cypress.$('.rw-button').length),
+      { interval: 1000 }
+    )
 
     cy.get('h1').should('contain', 'Posts')
     cy.get('a.rw-button.rw-button-green').should(
@@ -190,9 +198,6 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       Step5_3_PagesHome
     )
 
-    // Dev server can be slow during e2e
-    cy.reload()
-
     cy.visit('http://localhost:8910/')
 
     cy.get('main').should(
@@ -244,11 +249,15 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       Step6_5_BlogPostsCellMock
     )
 
-    // Dev server can be slow during e2e
-    cy.reload()
+    cy.waitUntil(
+      () =>
+        cy
+          .visit('http://localhost:8910/posts')
+          .then(() => Cypress.$('.rw-button').length),
+      { interval: 1000 }
+    )
 
     // New entry
-    cy.visit('http://localhost:8910/posts')
     cy.contains(' New Post').click()
     cy.get('input#title').type('Third post')
     cy.get('input#body').type('foo bar')
@@ -298,24 +307,30 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     // {name: "test name", email: "foo@bar.com", message: "test message"}
   })
 
+  // Note: This test is a bit problematic because we're modifying the API
+  // side, then expecting to see a difference on the web side,
+  // but the API server is restarting whilst we're testing for it.
   it('8. Auth - Render Cell Failure Message', () => {
     // enable auth
     cy.writeFile(
       path.join(BASE_DIR, 'api/src/lib/auth.js'),
       Step8_1_RequireAuth
     )
-
     cy.writeFile(
       path.join(BASE_DIR, 'api/src/services/posts/posts.js'),
       Step8_2_PostsRequireAuth
     )
 
-    cy.visit('http://localhost:8910/posts')
-
-    cy.get('main').should('not.contain', 'Second post')
-
-    cy.get('main > div:nth-child(1)').should('contain', 'Error')
-    cy.get('main > div:nth-child(1)').should('contain', "can't do that")
+    cy.waitUntil(
+      () =>
+        cy
+          .visit('http://localhost:8910/posts')
+          .then(() => Cypress.$('.rw-button').length),
+      { interval: 1000 }
+    )
+    //
+    cy.visit('http://localhost:8910/')
+    cy.contains("I'm sorry, Dave. I'm afraid I can't do that.")
 
     // disable auth
     cy.writeFile(
