@@ -41,6 +41,12 @@ jobs:
       - name: Create a RedwoodJS app
         run: ./tasks/run-e2e ${{ steps.createpath.outputs.project_path }} --no-start
 
+      - name: Init Git for RedwoodJS app directory
+        run: |
+          git init --initial-branch main && git add .
+          git commit -a --message=init
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
       - name: Start server in background
         run: yarn rw dev --no-generate --fwd="--open=false" &
         working-directory: ${{ steps.createpath.outputs.project_path }}
