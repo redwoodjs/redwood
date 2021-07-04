@@ -169,11 +169,6 @@ const args = yargs
   .option('copy-framework', { default: true, type: 'boolean', alias: 'copy' })
   .option('typescript', { default: false, type: 'boolean', alias: 'ts' })
   .option('auto-start', { default: true, type: 'boolean', alias: 'start' })
-  .option('secure-services', {
-    default: true,
-    type: 'boolean',
-    alias: 'secure',
-  })
   .scriptName('run-e2e')
   .example('run-e2e')
   .example('run-e2e /tmp/redwood-app --ts')

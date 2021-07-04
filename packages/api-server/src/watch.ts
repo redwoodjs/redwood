@@ -53,21 +53,26 @@ chokidar
   .watch(rwjsPaths.api.base, {
     persistent: true,
     ignoreInitial: true,
-    ignored: (file: string) =>
-      file.includes('node_modules') ||
-      file.includes(rwjsPaths.api.dist) ||
-      file.includes(rwjsPaths.api.types) ||
-      file.includes(rwjsPaths.api.db) ||
-      [
-        '.db',
-        '.sqlite',
-        '-journal',
-        '.test.js',
-        '.test.ts',
-        '.scenarios.ts',
-        '.scenarios.js',
-        '.d.ts',
-      ].some((ext) => file.endsWith(ext)),
+    ignored: (file: string) => {
+      const x =
+        file.includes('node_modules') ||
+        file.includes(rwjsPaths.api.dist) ||
+        file.includes(rwjsPaths.api.types) ||
+        file.includes(rwjsPaths.api.db) ||
+        [
+          '.DS_Store',
+          '.db',
+          '.sqlite',
+          '-journal',
+          '.test.js',
+          '.test.ts',
+          '.scenarios.ts',
+          '.scenarios.js',
+          '.d.ts',
+          '.log',
+        ].some((ext) => file.endsWith(ext))
+      return x
+    },
   })
   .on('ready', async () => {
     rebuildApiServer()

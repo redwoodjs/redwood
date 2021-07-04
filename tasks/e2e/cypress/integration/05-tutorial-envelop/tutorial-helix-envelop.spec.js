@@ -112,7 +112,13 @@ describe('The Redwood Tutorial - Golden path Helix/Envelop edition', () => {
 
     cy.exec(`cd ${BASE_DIR}; yarn rw g scaffold post --force`)
 
-    cy.visit('http://localhost:8910/posts')
+    cy.waitUntil(
+      () =>
+        cy
+          .visit('http://localhost:8910/posts')
+          .then(() => Cypress.$('.rw-button').length),
+      { interval: 2000 }
+    )
 
     cy.get('h1').should('contain', 'Posts')
     cy.get('a.rw-button.rw-button-green').should(

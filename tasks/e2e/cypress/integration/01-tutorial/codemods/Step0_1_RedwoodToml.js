@@ -12,7 +12,7 @@ export default `
 [api]
   port = 8911
 [browser]
-  open = false
+  open = true
 [experimental]
   esbuild = false
   useEnvelop = false

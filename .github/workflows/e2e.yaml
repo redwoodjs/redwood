@@ -58,3 +58,17 @@ jobs:
           wait-on: 'http://localhost:8910'
           record: false
           working-directory: ./tasks/e2e
+
+      - name: Run `rw test`
+        run: yarn rw test
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
+      - name: Run `rw build`
+        run: yarn rw build --no-prerender --verbose
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
+      - name: Run `rw prerender`
+        run: yarn rw prerender
+        # TODO: We should have a script that verifies this.
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
