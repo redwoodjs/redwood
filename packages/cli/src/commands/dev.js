@@ -58,7 +58,7 @@ export const handler = async ({
       await generatePrismaClient({
         verbose: false,
         force: false,
-        schema: getPaths().api.dbSchema,
+        schema: rwjsPaths.api.dbSchema,
       })
     } catch (e) {
       console.error(c.error(e.message))

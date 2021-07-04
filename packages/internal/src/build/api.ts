@@ -9,7 +9,7 @@ import { findApiFiles } from 'src/files'
 import { getPaths } from 'src/paths'
 
 export const buildApi = () => {
-  // TODO: Be smarter about caching and invalidating cached files,
+  // TODO: Be smarter about caching and invalidating files,
   // but right now we just delete everything.
   cleanApiBuild()
 
@@ -52,7 +52,7 @@ export const prebuildApiFiles = (srcFiles: string[]) => {
 }
 
 // TODO: This can be shared between the api and web sides, but web
-// needs to determine plugins on a per-file basis.
+// needs to determine plugins on a per-file basis for web side.
 export const prebuildFile = (
   srcPath: string,
   plugins: TransformOptions['plugins']
@@ -113,7 +113,7 @@ export const transpileApi = (files: string[], options = {}) => {
     absWorkingDir: rwjsPaths.api.base,
     entryPoints: files,
     platform: 'node',
-    target: process.env.NODE_ENV === 'development' ? 'esnext' : 'node12.21', // AWS Lambdas support NodeJS 12.x and 14.x, but what does Netlify Target?
+    target: 'node12.21', // AWS Lambdas support NodeJS 12.x and 14.x, but what does Netlify Target?
     format: 'cjs',
     bundle: false,
     outdir: rwjsPaths.api.dist,
