@@ -29,7 +29,7 @@ if (!fs.existsSync(RWFW_PATH)) {
 }
 
 const absRwFwPath = path.resolve(process.cwd(), RWFW_PATH)
-config.set(RWFW_PATH, absRwFwPath)
+config.set('RWFW_PATH', absRwFwPath)
 
 // Execute the commands in the Redwood Framework Tools package.
 const projectPath = path.dirname(
