@@ -65,7 +65,7 @@
     "url-loader": "4.1.1",
     "terser-webpack-plugin": "4.2.3",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.3",
-    "mini-css-extract-plugin": "1.4.1",
+    "mini-css-extract-plugin": "2.1.0",
     "null-loader": "4.0.1",
     "lodash.escaperegexp": "4.1.2",
     "esbuild-loader": "2.13.1"
