@@ -21,5 +21,6 @@ export {
 
 export * from './components/RedwoodProvider'
 
+export * from './components/MetaTags'
 export { Helmet as Head, Helmet } from 'react-helmet-async'
 export { HelmetProvider } from 'react-helmet-async'
