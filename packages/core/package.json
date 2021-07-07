@@ -22,7 +22,7 @@
     "@babel/cli": "7.14.3",
     "@babel/core": "7.14.3",
     "@babel/node": "7.14.2",
-    "@babel/plugin-proposal-decorators": "7.14.2",
+    "@babel/plugin-proposal-decorators": "7.14.5",
     "@babel/plugin-proposal-class-properties": "7.13.0",
     "@babel/plugin-proposal-private-methods": "7.13.0",
     "@babel/plugin-transform-runtime": "7.14.3",
