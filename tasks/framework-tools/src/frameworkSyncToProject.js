@@ -28,12 +28,19 @@ const { dependencies, warnings } = gatherDeps()
 
 chokidar
   .watch(REDWOOD_PACKAGES_PATH, {
-    persistent: true,
-    ignoreInitial: true,
-    ignored: (file) =>
-      file.includes('node_modules') ||
-      file.includes('test') ||
-      ['.md'].some((ext) => file.endsWith(ext)),
+    ignored: [
+      '**/create-redwood-app/**',
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/.vscode',
+      '**/*.md',
+      '**/__fixtures__/**',
+      '**/fixtures/**',
+      '**/*.test.{js,ts}',
+      '**/{__tests__}/**',
+      '**/__mocks__/**',
+      '**/jest.{config,setup}.{js,ts}',
+    ],
   })
   .on('ready', () => {
     if (warnings.length) {
