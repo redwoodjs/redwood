@@ -11,7 +11,12 @@ const c = require('ansi-colors')
 const chokidar = require('chokidar')
 const execa = require('execa')
 
-const { gatherDeps, getPackageJson, REDWOOD_PACKAGES_PATH } = require('./utils')
+const {
+  gatherDeps,
+  getPackageJson,
+  REDWOOD_PACKAGES_PATH,
+  redwoodPackages,
+} = require('./utils')
 
 const projectPath = process.argv?.[2] ?? process.env.RWJS_CWD
 
@@ -81,11 +86,16 @@ chokidar
   })
   .on('change', (file) => {
     console.log(c.dim(`[${file}`))
-    // - Copying the files: then if a change is detected in a particular package,
-    // run yarn build in that packages folder, and copy over the files of that package.
-    // (packagesFileList allows you to specify an array of packages that it should operate against.)
 
-    // - Copying the deps: If the change is in a package.json file
-    // determine if the contributor has installed a new package by comparing the deps (that we keep in memory from step 2),
-    // and a newly generated list of complete deps., warn them that they need to run yarn install.
+    if (redwoodPackages().includes(file)) {
+      console.log('rebuild deps')
+      // - Copying the deps: If the change is in a package.json file
+      // determine if the contributor has installed a new package by comparing the deps (that we keep in memory from step 2),
+      // and a newly generated list of complete deps., warn them that they need to run yarn install.
+    } else {
+      console.log('rebuild files')
+      // - Copying the files: then if a change is detected in a particular package,
+      // run yarn build in that packages folder, and copy over the files of that package.
+      // (packagesFileList allows you to specify an array of packages that it should operate against.)
+    }
   })
