@@ -19,6 +19,7 @@ export {
   CellSuccessProps,
 } from './components/createCell'
 
-// TODO: Remove these in v.10, people can import from `@redwoodjs/web/toast`
-// deprecated
-export { useFlash, Flash } from './flash'
+export * from './components/RedwoodProvider'
+
+export * from './components/MetaTags'
+export { Helmet as Head, Helmet } from 'react-helmet-async'
