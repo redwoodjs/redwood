@@ -29,7 +29,7 @@ if (!projectPath) {
 const { packageJson, packageJsonLink, writePackageJson } =
   getPackageJson(projectPath)
 
-const { dependencies, warnings } = gatherDeps()
+let { dependencies, warnings } = gatherDeps()
 
 chokidar
   .watch(REDWOOD_PACKAGES_PATH, {
@@ -88,10 +88,24 @@ chokidar
     console.log(c.dim(`[${file}`))
 
     if (redwoodPackages().includes(file)) {
-      console.log('rebuild deps')
-      // - Copying the deps: If the change is in a package.json file
-      // determine if the contributor has installed a new package by comparing the deps (that we keep in memory from step 2),
-      // and a newly generated list of complete deps., warn them that they need to run yarn install.
+      const newDeps = gatherDeps()
+
+      if (
+        JSON.stringify(dependencies) !== JSON.stringify(newDeps.dependencies)
+      ) {
+        console.log('Your dependencies have changed; run `yarn install`')
+        console.log()
+
+        dependencies = newDeps.dependencies
+        warnings = newDeps.warnings
+
+        if (warnings.length) {
+          for (const [packageName, message] of warnings) {
+            console.warn('Warning:', packageName, message)
+          }
+          console.log()
+        }
+      }
     } else {
       console.log('rebuild files')
       // - Copying the files: then if a change is detected in a particular package,
