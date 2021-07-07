@@ -1,10 +1,12 @@
 /* eslint-env node, es6*/
 
 // gather all the dependencies.
+const fs = require('fs')
 const path = require('path')
 
 const fg = require('fast-glob')
 const packlist = require('npm-packlist')
+const terminalLink = require('terminal-link')
 
 const REDWOOD_PACKAGES_PATH = path.resolve(__dirname, '../../../packages')
 
@@ -94,8 +96,40 @@ function redwoodBins(packages = frameworkPackages()) {
   return bins
 }
 
+// gets the redwood project's package.json and builds a write function around it
+function getPackageJson(projectPath) {
+  const packageJsonPath = path.join(projectPath, 'package.json')
+
+  const packageJsonLink = terminalLink(
+    'Redwood Project Path',
+    'file://' + packageJsonPath
+  )
+
+  if (!fs.existsSync(packageJsonPath)) {
+    console.log(
+      `Error: The specified ${packageJsonLink} does not have a package.json file.`
+    )
+    console.log('Expected:', packageJsonPath)
+    process.exit(1)
+  }
+
+  const packageJson = require(packageJsonPath)
+
+  function writePackageJson(packageJson) {
+    fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, undefined, 2))
+  }
+
+  return {
+    packageJson,
+    packageJsonPath,
+    packageJsonLink,
+    writePackageJson,
+  }
+}
+
 module.exports.REDWOOD_PACKAGES_PATH = REDWOOD_PACKAGES_PATH
 module.exports.redwoodPackages = frameworkPackages
 module.exports.gatherDeps = gatherDeps
 module.exports.packagesFileList = packagesFileList
 module.exports.redwoodBins = redwoodBins
+module.exports.getPackageJson = getPackageJson

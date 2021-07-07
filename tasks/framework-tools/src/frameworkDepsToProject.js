@@ -1,12 +1,7 @@
 #!/usr/bin/env node
 /* eslint-env node, es6 */
 
-const fs = require('fs')
-const path = require('path')
-
-const terminalLink = require('terminal-link')
-
-const { gatherDeps } = require('./utils')
+const { gatherDeps, getPackageJson } = require('./utils')
 
 const projectPath = process.argv?.[2] ?? process.env.RWJS_CWD
 if (!projectPath) {
@@ -16,20 +11,8 @@ if (!projectPath) {
 }
 
 try {
-  const packageJsonPath = path.join(projectPath, 'package.json')
-
-  const packageJsonLink = terminalLink(
-    'Redwood Project Path',
-    'file://' + packageJsonPath
-  )
-
-  if (!fs.existsSync(packageJsonPath)) {
-    console.log(
-      `Error: The specified ${packageJsonLink} does not have a package.json file.`
-    )
-    console.log('Expected:', packageJsonPath)
-    process.exit(1)
-  }
+  const { packageJson, packageJsonLink, writePackageJson } =
+    getPackageJson(projectPath)
 
   const { dependencies, warnings } = gatherDeps()
 
@@ -45,7 +28,7 @@ try {
       Object.keys(dependencies).length
     } Framework dependencies to ${packageJsonLink}...`
   )
-  const packageJson = require(packageJsonPath)
+
   if (packageJson.dependencies) {
     packageJson.dependencies = {
       ...packageJson.dependencies,
@@ -54,7 +37,8 @@ try {
   } else {
     packageJson.dependencies = dependencies
   }
-  fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, undefined, 2))
+
+  writePackageJson(packageJson)
 
   console.log('... Done. Now run `yarn install`')
 } catch (e) {
