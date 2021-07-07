@@ -115,6 +115,7 @@ function getPackageJson(projectPath) {
 
   const packageJson = require(packageJsonPath)
 
+  // for use later, after updating packageJson's dependencies
   function writePackageJson(packageJson) {
     fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, undefined, 2))
   }
