@@ -21,7 +21,7 @@ export const getCurrentUser = async (decoded, { _token, _type }, { _event, _cont
  *
  * @returns {boolean} - If the currentUser is authenticated
  */
-export const isAuthenticated = () {
+export const isAuthenticated = () => {
   return (!context.currentUser)
 }
 
@@ -32,7 +32,7 @@ export const isAuthenticated = () {
  *
  * @returns {boolean} - Returns true if the currentUser is authenticated (and assigned one of the given roles)
  */
-export const hasRole = ({ role }) {
+export const hasRole = ({ role }) => {
   if (!isAuthenticated) {
     return false
   }

@@ -8,6 +8,14 @@
  * See https://redwoodjs.com/docs/authentication for more info.
  */
 
-export const requireAuth = () => {
+export const isAuthenticated = () => {
   return true
+}
+
+export const hasRole = ({ role }) => {
+  return role !== undefined
+}
+
+export const requireAuth = () => {
+  return isAuthenticated()
 }
