@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@types/fs-extra": "9.0.11",
-    "@types/lodash": "4.14.170",
+    "@types/lodash": "4.14.171",
     "@types/lru-cache": "5.1.0",
     "@types/node": "15.12.1",
     "@types/vscode": "1.56.0"
