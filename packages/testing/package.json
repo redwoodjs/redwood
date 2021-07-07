@@ -28,7 +28,7 @@
     "ts-toolbelt": "9.6.0",
     "@types/jest": "26.0.23",
     "@types/node": "15.12.1",
-    "@types/react": "17.0.9",
+    "@types/react": "17.0.13",
     "@types/react-dom": "17.0.6",
     "@types/webpack": "4.41.11",
     "@types/babel-core": "6.25.6"
