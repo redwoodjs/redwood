@@ -38,21 +38,28 @@ function gatherDeps(packages = frameworkPackages()) {
   const dependencies = {}
   for (const packageFile of packages) {
     // reduce.
-    const packageJson = require(packageFile)
-    for (const [name, version] of Object.entries(
-      packageJson?.dependencies ?? {}
-    )) {
-      // Skip `@redwoodjs/*` packages, since these are processed
-      // by the workspace.
-      if (!name.startsWith('@redwoodjs/')) {
-        if (dependencies[name] && dependencies[name] !== version) {
-          warnings.push([
-            name,
-            'dependency version mismatched, please make sure the versions are the same.',
-          ])
+    try {
+      const packageJson = JSON.parse(fs.readFileSync(packageFile))
+      for (const [name, version] of Object.entries(
+        packageJson?.dependencies ?? {}
+      )) {
+        // Skip `@redwoodjs/*` packages, since these are processed
+        // by the workspace.
+        if (!name.startsWith('@redwoodjs/')) {
+          if (dependencies[name] && dependencies[name] !== version) {
+            warnings.push([
+              name,
+              'dependency version mismatched, please make sure the versions are the same.',
+            ])
+          }
+          dependencies[name] = version
         }
-        dependencies[name] = version
       }
+    } catch (error) {
+      console.error()
+      console.error(`Error: in ${packageFile}: ${error.message}.`)
+      console.error("This package's dependencies will not be included.")
+      console.error()
     }
   }
   return { dependencies: sortObjectKeys(dependencies), warnings }
