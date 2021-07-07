@@ -52,7 +52,7 @@
     "webpack-retry-chunk-load-plugin": "1.4.0",
     "babel-loader": "8.2.2",
     "babel-timing": "0.9.1",
-    "copy-webpack-plugin": "6.1.0",
+    "copy-webpack-plugin": "6.4.1",
     "css-loader": "4.2.2",
     "css-minimizer-webpack-plugin": "1.2.0",
     "dotenv-webpack": "2.0.0",
