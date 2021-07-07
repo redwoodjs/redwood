@@ -2,6 +2,7 @@ import React, { useContext, forwardRef } from 'react'
 
 import pascalcase from 'pascalcase'
 import {
+  get,
   useForm,
   FormProvider,
   useFormContext,
@@ -213,7 +214,7 @@ interface FieldErrorProps extends React.HTMLProps<HTMLSpanElement> {
 
 const FieldError = (props: FieldErrorProps) => {
   const { errors } = useFormContext()
-  const validationError = errors[props.name]
+  const validationError = get(errors, props.name)
   const errorMessage =
     validationError &&
     (validationError.message ||
