@@ -5,12 +5,11 @@ const fs = require('fs')
 const path = require('path')
 
 const rimraf = require('rimraf')
-const terminalLink = require('terminal-link')
 
 const {
   packagesFileList,
   redwoodBins,
-  REDWOOD_PACKAGES_PATH,
+  makeCopyPackageFiles,
 } = require('./utils')
 
 const projectPath = process.argv?.[2] ?? process.env.RWJS_CWD
@@ -20,32 +19,15 @@ if (!projectPath) {
   process.exit(1)
 }
 
-// Delete existing files.
 const REDWOOD_PROJECT_NODE_MODULES = path.join(projectPath, 'node_modules')
+const copyPackageFiles = makeCopyPackageFiles(REDWOOD_PROJECT_NODE_MODULES)
+
+// Delete existing and copy
 rimraf.sync(path.join(REDWOOD_PROJECT_NODE_MODULES, '@redwoodjs'))
 
 console.log('Copying...')
 const packages = packagesFileList()
-for (const [packageName, files] of Object.entries(packages)) {
-  console.log(
-    terminalLink(
-      packageName,
-      'file://' + path.join(REDWOOD_PROJECT_NODE_MODULES, packageName)
-    ),
-    files.length,
-    'files'
-  )
-  for (const file of files) {
-    const src = path.join(
-      REDWOOD_PACKAGES_PATH,
-      packageName.replace('@redwoodjs', ''),
-      file
-    )
-    const dst = path.join(REDWOOD_PROJECT_NODE_MODULES, packageName, file)
-    fs.mkdirSync(path.dirname(dst), { recursive: true })
-    fs.copyFileSync(src, dst)
-  }
-}
+Object.entries(packages).forEach(copyPackageFiles)
 
 console.log()
 const bins = redwoodBins()

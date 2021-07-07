@@ -135,9 +135,33 @@ function getPackageJson(projectPath) {
   }
 }
 
+const makeCopyPackageFiles =
+  (REDWOOD_PROJECT_NODE_MODULES) =>
+  ([packageName, files]) => {
+    console.log(
+      terminalLink(
+        packageName,
+        'file://' + path.join(REDWOOD_PROJECT_NODE_MODULES, packageName)
+      ),
+      files.length,
+      'files'
+    )
+    for (const file of files) {
+      const src = path.join(
+        REDWOOD_PACKAGES_PATH,
+        packageName.replace('@redwoodjs', ''),
+        file
+      )
+      const dst = path.join(REDWOOD_PROJECT_NODE_MODULES, packageName, file)
+      fs.mkdirSync(path.dirname(dst), { recursive: true })
+      fs.copyFileSync(src, dst)
+    }
+  }
+
 module.exports.REDWOOD_PACKAGES_PATH = REDWOOD_PACKAGES_PATH
 module.exports.redwoodPackages = frameworkPackages
 module.exports.gatherDeps = gatherDeps
 module.exports.packagesFileList = packagesFileList
 module.exports.redwoodBins = redwoodBins
 module.exports.getPackageJson = getPackageJson
+module.exports.makeCopyPackageFiles = makeCopyPackageFiles
