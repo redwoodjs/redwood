@@ -49,6 +49,9 @@ export interface Config {
     esbuild: boolean
     useEnvelop: boolean
   }
+  telemetry: {
+    url: string
+  }
 }
 
 // Note that web's includeEnvironmentVariables is handled in `webpack.common.js`
@@ -82,6 +85,9 @@ const DEFAULT_CONFIG: Config = {
   experimental: {
     esbuild: false,
     useEnvelop: false,
+  },
+  telemetry: {
+    url: 'https://redwoodjs.ngrok.io/api/v1/telemetry',
   },
 }
 
