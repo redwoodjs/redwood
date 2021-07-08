@@ -21,6 +21,7 @@ import {
   DateField,
   SelectField,
   Submit,
+  FieldError,
 } from '../index'
 
 describe('Form', () => {
@@ -369,5 +370,44 @@ describe('Form', () => {
     )
 
     spy.mockRestore()
+  })
+
+  it('for a FieldError with name set to path', async () => {
+    const mockFn = jest.fn()
+
+    render(
+      <Form onSubmit={mockFn}>
+        <TextField
+          name="phone"
+          defaultValue="abcde"
+          data-testid="phoneField"
+          validation={{ pattern: /^[0-9]+$/i }}
+        />
+        <FieldError name="phone" data-testid="phoneFieldError" />
+        <TextField
+          name="address.street"
+          defaultValue="George123"
+          data-testid="streetField"
+          validation={{ pattern: /^[a-zA-z]+$/i }}
+        />
+        <FieldError name="address.street" data-testid="streetFieldError" />
+        <Submit>Save</Submit>
+      </Form>
+    )
+    fireEvent.click(screen.getByText('Save'))
+    // The validation should catch and prevent the onSubmit from being called
+    await waitFor(async () => {
+      await new Promise((res) =>
+        setTimeout(() => {
+          res(1)
+        }, 50)
+      )
+      expect(mockFn).not.toHaveBeenCalled()
+
+      const phoneError = screen.getByTestId('phoneFieldError').textContent
+      const streetError = screen.getByTestId('streetFieldError').textContent
+      expect(phoneError).toEqual('phone is not formatted correctly')
+      expect(streetError).toEqual('address.street is not formatted correctly')
+    })
   })
 })
