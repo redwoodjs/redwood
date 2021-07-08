@@ -43,7 +43,7 @@ export const telemetry = async (argv, data = {}) => {
 
   const payload = {
     type: data.type || 'command',
-    command: argv.slice(2, argv.length).join(' '),
+    command: argv.slice(2).join(' '),
     ci: ci.isCI,
     diagnostics: await getInfo(),
     duration: data.duration,
