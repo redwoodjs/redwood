@@ -43,7 +43,7 @@ type DepthLimitOptions = { maxDepth: number; ignore?: string[] }
  * @param requestId - Include the event's requestId, or if none, generate a uuid as an identifier.
  * @param query - Include the query. This is the query or mutation (with fields) made in the request.
  * @param tracing - Include the tracing and timing information.
- * @param userAgent -Include the browser (or client's) user agent.
+ * @param userAgent - Include the browser (or client's) user agent.
  */
 type GraphQLLoggerOptions = {
   /**
