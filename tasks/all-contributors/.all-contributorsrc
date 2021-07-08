@@ -1072,7 +1072,8 @@
       "profile": "https://github.com/AntonioMeireles",
       "contributions": [
         "code",
-        "doc"
+        "doc",
+        "tutorial"
       ]
     },
     {
@@ -1422,7 +1423,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/10109983?v=4",
       "profile": "https://morganmspencer.com/",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -1588,7 +1590,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/51102303?v=4",
       "profile": "https://github.com/cjreimer",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -1838,7 +1841,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/93544?v=4",
       "profile": "https://github.com/pdjota",
       "contributions": [
-        "tutorial"
+        "tutorial",
+        "doc"
       ]
     },
     {
@@ -1855,6 +1859,125 @@
       "name": "Luís Pinto",
       "avatar_url": "https://avatars.githubusercontent.com/u/4148663?v=4",
       "profile": "https://github.com/luispinto23",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "callingmedic911",
+      "name": "Aditya Pandey",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2629902?v=4",
+      "profile": "https://adityaworks.com/",
+      "contributions": [
+        "code",
+        "doc",
+        "tutorial"
+      ]
+    },
+    {
+      "login": "leighhalliday",
+      "name": "Leigh Halliday",
+      "avatar_url": "https://avatars.githubusercontent.com/u/603921?v=4",
+      "profile": "https://www.leighhalliday.com/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "BlackHawkSigma",
+      "name": "BlackHawkSigma",
+      "avatar_url": "https://avatars.githubusercontent.com/u/14921811?v=4",
+      "profile": "https://github.com/BlackHawkSigma",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "devhmac",
+      "name": "Devin MacGillivray",
+      "avatar_url": "https://avatars.githubusercontent.com/u/52307383?v=4",
+      "profile": "https://www.linkedin.com/in/devhmac/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "pachoclo",
+      "name": "Francisco Jaramillo",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3608140?v=4",
+      "profile": "https://github.com/pachoclo",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "orta",
+      "name": "Orta Therox",
+      "avatar_url": "https://avatars.githubusercontent.com/u/49038?v=4",
+      "profile": "https://orta.io/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "viperfx",
+      "name": "Tharshan Muthulingam",
+      "avatar_url": "https://avatars.githubusercontent.com/u/328257?v=4",
+      "profile": "https://github.com/viperfx",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "LBrian",
+      "name": "Brian Liu",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3888780?v=4",
+      "profile": "https://brianypliu.com/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "ajoslin103",
+      "name": "allen joslin",
+      "avatar_url": "https://avatars.githubusercontent.com/u/443893?v=4",
+      "profile": "https://github.com/ajoslin103",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "wongyouth",
+      "name": "Ryan Wang",
+      "avatar_url": "https://avatars.githubusercontent.com/u/944583?v=4",
+      "profile": "https://github.com/wongyouth",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "Vashiru",
+      "name": "Vashiru",
+      "avatar_url": "https://avatars.githubusercontent.com/u/11370057?v=4",
+      "profile": "https://github.com/Vashiru",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "rdyar",
+      "name": "Ron Dyar",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7111699?v=4",
+      "profile": "http://prolabprints.com/",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "toddpress",
+      "name": "Todd Pressley",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2934422?v=4",
+      "profile": "https://github.com/toddpress",
       "contributions": [
         "tutorial"
       ]

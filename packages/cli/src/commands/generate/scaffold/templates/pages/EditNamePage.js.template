@@ -1,7 +1,0 @@
-import Edit${singularPascalName}Cell from '${importComponentEditNameCell}'
-
-const Edit${singularPascalName}Page = ({ id }) => {
-  return <Edit${singularPascalName}Cell id={id} />
-}
-
-export default Edit${singularPascalName}Page

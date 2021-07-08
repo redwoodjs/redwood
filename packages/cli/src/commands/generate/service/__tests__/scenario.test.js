@@ -72,10 +72,24 @@ describe('the scenario generator', () => {
     expect(service.scenarioFieldValue(field)).toMatch(/\d{1,}$/)
   })
 
+  test('scenarioFieldValue returns a true for Boolean types', () => {
+    const field = { type: 'Boolean' }
+
+    expect(service.scenarioFieldValue(field)).toEqual(true)
+  })
+
+  test('scenarioFieldValue returns a float for Decimal types', () => {
+    const field = { type: 'Decimal' }
+    const value = service.scenarioFieldValue(field)
+
+    expect(value).toEqual(parseFloat(value))
+  })
+
   test('scenarioFieldValue returns a number for Int types', () => {
     const field = { type: 'Int' }
+    const value = service.scenarioFieldValue(field)
 
-    expect(service.scenarioFieldValue(field)).toEqual(expect.any(Number))
+    expect(value).toEqual(parseInt(value))
   })
 
   test('scenarioFieldValue returns an ISO8601 timestamp string for DateTime types', () => {
