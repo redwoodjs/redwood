@@ -14,7 +14,6 @@ const c = require('ansi-colors')
 const chokidar = require('chokidar')
 const execa = require('execa')
 const rimraf = require('rimraf')
-const terminalLink = require('terminal-link')
 
 const {
   gatherDeps,
@@ -23,6 +22,7 @@ const {
   redwoodPackages,
   packagesFileList,
   redwoodBins,
+  makeCopyPackageFiles,
 } = require('./utils')
 
 const projectPath = process.argv?.[2] ?? process.env.RWJS_CWD
@@ -34,6 +34,7 @@ if (!projectPath) {
 }
 
 const REDWOOD_PROJECT_NODE_MODULES = path.join(projectPath, 'node_modules')
+const copyPackageFiles = makeCopyPackageFiles(REDWOOD_PROJECT_NODE_MODULES)
 
 const { packageJson, packageJsonLink, writePackageJson } =
   getPackageJson(projectPath)
@@ -99,29 +100,8 @@ chokidar
 
     console.log('Copying...')
     console.log()
-
     const packages = packagesFileList()
-
-    for (const [packageName, files] of Object.entries(packages)) {
-      console.log(
-        terminalLink(
-          packageName,
-          'file://' + path.join(REDWOOD_PROJECT_NODE_MODULES, packageName)
-        ),
-        files.length,
-        'files'
-      )
-      for (const file of files) {
-        const src = path.join(
-          REDWOOD_PACKAGES_PATH,
-          packageName.replace('@redwoodjs', ''),
-          file
-        )
-        const dst = path.join(REDWOOD_PROJECT_NODE_MODULES, packageName, file)
-        fs.mkdirSync(path.dirname(dst), { recursive: true })
-        fs.copyFileSync(src, dst)
-      }
-    }
+    Object.entries(packages).forEach(copyPackageFiles)
     console.log()
 
     const bins = redwoodBins()
@@ -175,30 +155,14 @@ chokidar
         shell: true,
         stdio: 'inherit',
       })
-
       console.log()
 
-      // copy just this package's files
-      // console.log(
-      //   terminalLink(packageToRebuild, 'file://' + packageToRebuild),
-      //   files.length,
-      //   'files'
-      // )
-      //
-      // const files = packagesFileList()[packageToRebuild]
-      // for (const file of files) {
-      //   const src = path.join(
-      //     REDWOOD_PACKAGES_PATH,
-      //     packageToRebuild.replace('@redwoodjs', ''),
-      //     file
-      //   )
-      //   const dst = path.join(
-      //     REDWOOD_PROJECT_NODE_MODULES,
-      //     packageToRebuild,
-      //     file
-      //   )
-      //   fs.mkdirSync(path.dirname(dst), { recursive: true })
-      //   fs.copyFileSync(src, dst)
-      // }
+      const packages = packagesFileList()
+
+      const packageName = Object.keys(packages).find((packageName) =>
+        packageToRebuild.endsWith(packageName.replace('@redwoodjs', ''))
+      )
+
+      copyPackageFiles([packageName, packages[packageName]])
     }
   })
