@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@types/findup-sync": "4.0.0",
-    "graphql-tag": "^2.12.5"
+    "graphql-tag": "2.12.5"
   },
   "jest": {
     "testPathIgnorePatterns": [
