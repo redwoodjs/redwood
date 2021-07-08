@@ -347,9 +347,13 @@ export const createGraphQLHandler = ({
 }: GraphQLHandlerOptions = {}) => {
   const isDevEnv = process.env.NODE_ENV === 'development'
 
+  const logger = options.logger || (loggerConfig && loggerConfig.logger)
+
   const plugins = options.plugins || []
 
-  plugins.push(UseRedwoodLogger(loggerConfig))
+  if (logger) {
+    plugins.push(UseRedwoodLogger(loggerConfig))
+  }
 
   if (extraPlugins && extraPlugins.length > 0) {
     plugins.push(...extraPlugins)
@@ -367,7 +371,7 @@ export const createGraphQLHandler = ({
     // Turn off playground, introspection and debug in production.
     debug: isDevEnv,
     introspection: isDevEnv,
-    logger: loggerConfig && loggerConfig.logger,
+    logger,
     playground: isDevEnv,
     plugins,
     // Log trace timings if set in loggerConfig

@@ -321,7 +321,7 @@ const useRedwoodLogger = (
   const includeRequestId = loggerConfig?.options?.requestId
   const includeTracing = loggerConfig?.options?.tracing
   const includeUserAgent = loggerConfig?.options?.userAgent
-  // const includeQuery = loggerConfig?.options?.query
+  const includeQuery = loggerConfig?.options?.query
 
   return {
     onExecute({ args }) {
@@ -331,12 +331,16 @@ const useRedwoodLogger = (
         options['operationName'] = args.operationName
       }
 
+      if (includeQuery) {
+        options['query'] = args.variableValues && args.variableValues
+      }
+
       if (includeRequestId) {
         options['requestId'] = args.contextValue.awsRequestId || uuidv4()
       }
 
       if (includeUserAgent) {
-        options['userAgent'] = args.contextValue.event.headers['user-agent']
+        options['userAgent'] = args.contextValue.event?.headers['user-agent']
       }
 
       const envelopLogger = childLogger.child({
