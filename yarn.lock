@@ -2234,10 +2234,10 @@
   dependencies:
     graphql-depth-limit "^1.1.0"
 
-"@envelop/disable-introspection@0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@envelop/disable-introspection/-/disable-introspection-0.1.0.tgz#bbf2097d85f5cbae8803a2bc0d015e598442e54d"
-  integrity sha512-5SQNHl9uZvlDuFNA5P18PJfD8GnDlAfTjcZkno4m7zuYDw4QFWgHGkZNAYDUtQtUfIUNdKSmVzePOI7WS2tXVA==
+"@envelop/disable-introspection@0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@envelop/disable-introspection/-/disable-introspection-0.2.0.tgz#516974a132444b1ee02b21c46b78223fb3fd9823"
+  integrity sha512-1XgmCPXxVb2t6rWVsmFUcWRH2dwEF4oZIu8hiRTvRfmJMvX65/ZwoJCZzHoLx2ZYiNVgs7k9RwYRGv7HEb0hQQ==
 
 "@envelop/filter-operation-type@0.1.0":
   version "0.1.0"

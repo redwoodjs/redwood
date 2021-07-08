@@ -59,26 +59,74 @@ export type RedwoodGraphQLContext = {
 /**
  * Options for request and response information to include in the log statements
  * output by UseRedwoodLogger around the execution event
+ *
+ * @param data - Include response data sent to client.
+ * @param operationName - Include operation name.
+ * @param requestId - Include the event's requestId, or if none, generate a uuid as an identifier.
+ * @param query - Include the query. This is the query or mutation (with fields) made in the request.
+ * @param tracing - Include the tracing and timing information.
+ * @param userAgent - Include the browser (or client's) user agent.
  */
-type LoggerOptions = {
+type GraphQLLoggerOptions = {
+  /**
+   * @description Include response data sent to client.
+   */
   data?: boolean
+
+  /**
+   * @description Include operation name.
+   *
+   * The operation name is a meaningful and explicit name for your operation. It is only required in multi-operation documents,
+   * but its use is encouraged because it is very helpful for debugging and server-side logging.
+   * When something goes wrong (you see errors either in your network logs, or in the logs of your GraphQL server)
+   * it is easier to identify a query in your codebase by name instead of trying to decipher the contents.
+   * Think of this just like a function name in your favorite programming language.
+   *
+   * @see https://graphql.org/learn/queries/#operation-name
+   */
   operationName?: boolean
+
+  /**
+   * @description Include the event's requestId, or if none, generate a uuid as an identifier.
+   *
+   * The requestId can be helpful when contacting your deployment provider to resolve issues when encountering errors or unexpected behavior.
+   */
   requestId?: boolean
+
+  /**
+   * @description Include the query. This is the query or mutation (with fields) made in the request.
+   */
   query?: boolean
+
+  /**
+   * @description Include the tracing and timing information.
+   *
+   * This will log various performance timings withing the GraphQL event lifecycle (parsing, validating, executing, etc).
+   */
   tracing?: boolean
+
+  /**
+   * @description Include the browser (or client's) user agent.
+   *
+   * This can be helpful to know what type of client made the request to resolve issues when encountering errors or unexpected behavior.
+   */
   userAgent?: boolean
 }
+
 /**
- * Configure the logger.
+ * Configure the logger used by the GraphQL server.
  *
  * @param logger your logger
- * @param options the LoggerOptions such as tracing, operationName, etc
+ * @param options the GraphQLLoggerOptions such as tracing, operationName, etc
  */
-type LoggerConfig = { logger: BaseLogger; options?: LoggerOptions }
+type LoggerConfig = { logger: BaseLogger; options?: GraphQLLoggerOptions }
 
+/**
+ * GraphQLHandlerOptions
+ */
 interface GraphQLHandlerOptions {
   /**
-   * Customize GraphQL Logger
+   * @description Customize GraphQL Logger
    *
    * Collect resolver timings, and exposes trace data for
    * an individual request under extensions as part of the GraphQL response.
@@ -86,44 +134,45 @@ interface GraphQLHandlerOptions {
   loggerConfig: LoggerConfig
 
   /**
-   * Modify the resolver and global context.
+   * @description  Modify the resolver and global context.
    */
   context?: Context | ContextFunction
 
   /**
-   * An async function that maps the auth token retrieved from the request headers to an object.
+   * A @description n async function that maps the auth token retrieved from the request headers to an object.
    * Is it executed when the `auth-provider` contains one of the supported providers.
    */
   getCurrentUser?: GetCurrentUser
 
   /**
-   * A callback when an unhandled exception occurs. Use this to disconnect your prisma instance.
+   *  @description A callback when an unhandled exception occurs. Use this to disconnect your prisma instance.
    */
   onException?: () => void
 
   /**
-   * The GraphQL Schema
+   * T @description he GraphQL Schema
    */
   schema: GraphQLSchema
 
   /**
-   * CORS configuration
+   *  @description CORS configuration
    */
   cors?: CorsConfig
 
   /**
-   * Healthcheck
+   *  @description Healthcheck
    */
   onHealthCheck?: OnHealthcheckFn
 
   /**
-   * Limit the complexity of the queries solely by their depth.
+   *  @description Limit the complexity of the queries solely by their depth.
+   *
    * @see https://www.npmjs.com/package/graphql-depth-limit#documentation
    */
   depthLimitOptions?: DepthLimitConfig
 
   /**
-   * Only allows the specified operation types (e.g. subscription, query or mutation).
+   * @description  Only allows the specified operation types (e.g. subscription, query or mutation).
    *
    * By default, only allow query and mutation (ie, do not allow subscriptions).
    *
@@ -133,12 +182,12 @@ interface GraphQLHandlerOptions {
   allowedOperations?: AllowedOperations
 
   /**
-   * Custom Envelop plugins
+   * @description  Custom Envelop plugins
    */
   extraPlugins?: Plugin<any>[]
 
   /**
-   * Customize the GraphiQL Endpoint that appears in the location bar of the GraphQL Playground
+   * @description  Customize the GraphiQL Endpoint that appears in the location bar of the GraphQL Playground
    *
    * Defaults to '/graphql' as this value must match the name of the `graphql` function on the api-side.
    *
@@ -267,12 +316,12 @@ const useRedwoodLogger = (
     name: 'graphql-server',
   })
 
-  const includeData = loggerConfig?.options?.data || true
-  const includeOperationName = loggerConfig?.options?.operationName || true
+  const includeData = loggerConfig?.options?.data
+  const includeOperationName = loggerConfig?.options?.operationName
   const includeRequestId = loggerConfig?.options?.requestId
   const includeTracing = loggerConfig?.options?.tracing
   const includeUserAgent = loggerConfig?.options?.userAgent
-  // const includeQuery = loggerConfig?.options?.query
+  const includeQuery = loggerConfig?.options?.query
 
   return {
     onExecute({ args }) {
@@ -282,13 +331,16 @@ const useRedwoodLogger = (
         options['operationName'] = args.operationName
       }
 
+      if (includeQuery) {
+        options['query'] = args.variableValues && args.variableValues
+      }
+
       if (includeRequestId) {
-        options['requestId'] =
-          args.contextValue.awsRequestId || uuidv4() || uuidv4()
+        options['requestId'] = args.contextValue.awsRequestId || uuidv4()
       }
 
       if (includeUserAgent) {
-        options['userAgent'] = args.contextValue.event.headers['user-agent']
+        options['userAgent'] = args.contextValue.event?.headers['user-agent']
       }
 
       const envelopLogger = childLogger.child({
@@ -460,7 +512,7 @@ export const createGraphQLHandler = ({
       }
     }
 
-    if (shouldRenderGraphiQL(request)) {
+    if (isDevEnv && shouldRenderGraphiQL(request)) {
       return {
         body: renderPlaygroundPage({
           endpoint: graphiQLEndpoint || '/graphql',
