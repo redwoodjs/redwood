@@ -19,18 +19,34 @@ const getInfo = async () => {
   return JSON.parse(info)
 }
 
+// wrap a function in this call to get a telemetry hit including how long it took
+export const timedTelemetry = async (argv, func) => {
+  const start = new Date()
+  const result = await func.call()
+  const duration = new Date() - start
+
+  await telemetry(argv, { duration })
+
+  return result
+}
+
+// used as yargs middleware when any command is invoked
+export const telemetryMiddleware = async () => {
+  await telemetry(process.argv)
+}
+
 // command that actually sends prepared data to telemetry collection service
-export const telemetry = async (args = {}) => {
+export const telemetry = async (argv, data = {}) => {
   if (process.env.REDWOOD_DISABLE_TELEMETRY || process.env.DO_NOT_TRACK) {
     return
   }
 
   const payload = {
-    type: args.type || 'command',
-    command: args.command,
+    type: data.type || 'command',
+    command: argv.slice(2, argv.length).join(' '),
     ci: ci.isCI,
     diagnostics: await getInfo(),
-    duration: args.duration || null,
+    duration: data.duration,
     nodeEnv: process.env.NODE_ENV || null,
     routeCount: getProject().getRouter().routes.length,
   }
@@ -47,19 +63,4 @@ export const telemetry = async (args = {}) => {
     // do nothing if telemetry can't be saved—network or server is down!
     // console.error(e)
   }
-}
-
-export const timedCommand = async (command, func) => {
-  const start = new Date()
-  const result = await func.call()
-  const duration = new Date() - start
-
-  await telemetry({ type: 'timer', command, duration })
-
-  return result
-}
-
-// used as yargs middleware when any command is invoked
-export const telemetryMiddleware = async (argv) => {
-  await telemetry({ command: argv })
 }
