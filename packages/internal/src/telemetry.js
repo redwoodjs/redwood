@@ -6,17 +6,67 @@ import { getProject } from '@redwoodjs/structure'
 
 import { getConfig } from './config'
 
+// Tracks any commands that could contain sensative info and theor position in
+// the argv array, as well as the text to replace them with
+const SENSATIVE_ARG_POSITIONS = {
+  exec: {
+    positions: [1],
+    redactWith: '[script]',
+  },
+  g: {
+    positions: [2],
+    redactWith: '[name]',
+  },
+  generate: {
+    positions: [2],
+    redactWith: '[name]',
+  },
+}
+
+// gets diagnostic info and sanitizes by removing references to paths
 const getInfo = async () => {
-  const info = await envinfo.run(
-    {
-      System: ['OS', 'Shell'],
-      Binaries: ['Node', 'Yarn', 'npm'],
-      npmPackages: '@redwoodjs/*',
-      IDEs: ['VSCode'],
-    },
-    { json: true }
+  const info = JSON.parse(
+    await envinfo.run(
+      {
+        System: ['OS', 'Shell'],
+        Binaries: ['Node', 'Yarn', 'npm'],
+        npmPackages: '@redwoodjs/*',
+        IDEs: ['VSCode'],
+      },
+      { json: true }
+    )
   )
-  return JSON.parse(info)
+
+  // get shell name instead of path
+  if (info.System.Shell.path.match('/')) {
+    info.System.Shell.name = info.System.Shell.path.split('/').pop()
+  } else if (info.System.Shell.path.match('\\')) {
+    info.System.Shell.name = info.System.Shell.path.split('\\').pop()
+  }
+
+  // remove paths to binaries
+  delete info.Binaries?.Node?.path
+  delete info.Binaries?.Yarn?.path
+  delete info.Binaries?.npm?.path
+  delete info.System?.Shell?.path
+  delete info.IDEs?.VSCode?.path
+
+  return info
+}
+
+// removes potentially sensative information from an array of argv strings
+const sanitizeArgv = (argv) => {
+  const args = argv.slice(2)
+  const name = args[0]
+  const sensativeCommand = SENSATIVE_ARG_POSITIONS[name]
+
+  if (sensativeCommand) {
+    sensativeCommand.positions.forEach((pos) => {
+      args[pos] = sensativeCommand.redactWith
+    })
+  }
+
+  return args.join(' ')
 }
 
 // wrap a function in this call to get a telemetry hit including how long it took
@@ -43,10 +93,10 @@ export const telemetry = async (argv, data = {}) => {
 
   const payload = {
     type: data.type || 'command',
-    command: argv.slice(2).join(' '),
+    command: sanitizeArgv(argv),
     ci: ci.isCI,
-    diagnostics: await getInfo(),
     duration: data.duration,
+    info: await getInfo(),
     nodeEnv: process.env.NODE_ENV || null,
     routeCount: getProject().getRouter().routes.length,
   }
