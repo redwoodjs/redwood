@@ -11,6 +11,7 @@ import terminalLink from 'terminal-link'
 
 import { getConfig } from '@redwoodjs/internal'
 
+import { transformTSToJS } from 'src/lib'
 import {
   generateTemplate,
   templateRoot,
@@ -141,7 +142,8 @@ export const files = async ({
       pascalScaffoldPath,
       typescript,
       nestScaffoldByModel,
-      templateStrings
+      templateStrings,
+      typescript
     )),
     ...(await sdlFiles({
       ...getDefaultArgs(sdlBuilder),
@@ -158,14 +160,21 @@ export const files = async ({
       typescript,
     })),
     ...assetFiles(name),
-    ...layoutFiles(name, pascalScaffoldPath, typescript, templateStrings),
-    ...pageFiles(
+    ...layoutFiles(
+      name,
+      pascalScaffoldPath,
+      typescript,
+      templateStrings,
+      typescript
+    ),
+    ...(await pageFiles(
       name,
       pascalScaffoldPath,
       typescript,
       nestScaffoldByModel,
-      templateStrings
-    ),
+      templateStrings,
+      typescript
+    )),
   }
 }
 
@@ -215,7 +224,7 @@ const layoutFiles = (
     const outputLayoutName = layout
       .replace(/Names/, pluralName)
       .replace(/Name/, singularName)
-      .replace(/\.js\.template/, generateTypescript ? '.tsx' : '.js')
+      .replace(/\.tsx\.template/, generateTypescript ? '.tsx' : '.js')
 
     const outputPath = path.join(
       getPaths().web.layouts,
@@ -231,13 +240,16 @@ const layoutFiles = (
         ...templateStrings,
       }
     )
-    fileList[outputPath] = template
+
+    fileList[outputPath] = generateTypescript
+      ? template
+      : transformTSToJS(outputPath, template)
   })
 
   return fileList
 }
 
-const pageFiles = (
+const pageFiles = async (
   name,
   pascalScaffoldPath = '',
   generateTypescript,
@@ -246,6 +258,9 @@ const pageFiles = (
 ) => {
   const pluralName = pascalcase(pluralize(name))
   const singularName = pascalcase(pluralize.singular(name))
+  const model = await getSchema(singularName)
+  const idType = getIdType(model)
+
   let fileList = {}
 
   const pages = fs.readdirSync(
@@ -257,7 +272,7 @@ const pageFiles = (
     const outputPageName = page
       .replace(/Names/, pluralName)
       .replace(/Name/, singularName)
-      .replace(/\.js\.template/, generateTypescript ? '.tsx' : '.js')
+      .replace(/\.tsx\.template/, generateTypescript ? '.tsx' : '.js')
 
     const finalFolder =
       (nestScaffoldByModel ? singularName + '/' : '') +
@@ -272,12 +287,16 @@ const pageFiles = (
     const template = generateTemplate(
       path.join('scaffold', 'templates', 'pages', page),
       {
+        idType,
         name,
         pascalScaffoldPath,
         ...templateStrings,
       }
     )
-    fileList[outputPath] = template
+
+    fileList[outputPath] = generateTypescript
+      ? template
+      : transformTSToJS(outputPath, template)
   })
 
   return fileList
@@ -382,7 +401,7 @@ const componentFiles = async (
     const outputComponentName = component
       .replace(/Names/, pluralName)
       .replace(/Name/, singularName)
-      .replace(/\.js\.template/, generateTypescript ? '.tsx' : '.js')
+      .replace(/\.tsx\.template/, generateTypescript ? '.tsx' : '.js')
 
     const finalFolder =
       (nestScaffoldByModel ? singularName + '/' : '') +
@@ -408,7 +427,10 @@ const componentFiles = async (
         ...templateStrings,
       }
     )
-    fileList[outputPath] = template
+
+    fileList[outputPath] = generateTypescript
+      ? template
+      : transformTSToJS(outputPath, template)
   })
 
   return fileList
