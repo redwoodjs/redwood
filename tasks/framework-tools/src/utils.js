@@ -139,6 +139,7 @@ const makeCopyPackageFiles =
   (REDWOOD_PROJECT_NODE_MODULES) =>
   ([packageName, files]) => {
     console.log(
+      '',
       terminalLink(
         packageName,
         'file://' + path.join(REDWOOD_PROJECT_NODE_MODULES, packageName)

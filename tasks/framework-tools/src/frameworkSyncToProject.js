@@ -58,9 +58,11 @@ chokidar
     ],
   })
   .on('ready', () => {
+    console.log()
+
     if (warnings.length) {
       for (const [packageName, message] of warnings) {
-        console.warn('Warning:', packageName, message)
+        console.warn(c.yellow('Warning:'), packageName, message)
       }
       console.log()
     }
@@ -82,6 +84,10 @@ chokidar
 
     writePackageJson(packageJson)
 
+    console.log(c.green(' Done.'))
+    console.log()
+
+    console.log('Running yarn install...')
     try {
       execa.sync('yarn install', {
         cwd: projectPath,
@@ -93,17 +99,19 @@ chokidar
       console.error(e)
       process.exit(1)
     }
+    console.log()
 
     // copy over the files
 
     rimraf.sync(path.join(REDWOOD_PROJECT_NODE_MODULES, '@redwoodjs'))
 
-    console.log('Copying...')
-    console.log()
+    console.log('Copying over files...')
     const packages = packagesFileList()
     Object.entries(packages).forEach(copyPackageFiles)
+    console.log(c.green(' Done.'))
     console.log()
 
+    console.log('Make binaries executable...')
     const bins = redwoodBins()
     for (let [binName, binPath] of Object.entries(bins)) {
       // if the binPath doesn't exist, create it.
@@ -117,13 +125,15 @@ chokidar
         fs.symlinkSync(binPath, binSymlink)
       }
 
-      console.log('chmod +x', binName)
+      console.log(' chmod +x', binName)
       fs.chmodSync(binPath, '755')
     }
+    console.log(c.green(' Done.'))
     console.log()
   })
   .on('change', (file) => {
-    console.log(c.dim(`[${file}`))
+    console.log(c.dim(`--- file changed: ${file}`))
+    console.log()
 
     if (redwoodPackages().includes(file)) {
       const newDeps = gatherDeps()
@@ -147,15 +157,13 @@ chokidar
     } else {
       const packageDirs = redwoodPackages().map(path.dirname)
       const packageToRebuild = packageDirs.find((dir) => file.startsWith(dir))
-      console.log(`Rebuilding ${packageToRebuild}`)
-      console.log()
+      console.log(`Rebuilding...`)
 
       execa.sync('yarn build', {
         cwd: packageToRebuild,
         shell: true,
         stdio: 'inherit',
       })
-      console.log()
 
       const packages = packagesFileList()
 
@@ -163,6 +171,10 @@ chokidar
         packageToRebuild.endsWith(packageName.replace('@redwoodjs', ''))
       )
 
+      console.log('Copying over files...')
+      console.log()
       copyPackageFiles([packageName, packages[packageName]])
+      console.log(c.green(' Done.'))
+      console.log()
     }
   })
