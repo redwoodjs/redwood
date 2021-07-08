@@ -104,11 +104,16 @@ const createProjectTasks = ({ newAppDir }) => {
               .filter((name) => !result.versions[name].isSatisfied)
               .map((name) => {
                 const { version, wanted } = result.versions[name]
-                return `${name} ${wanted} required, but you have ${version}.`
+                return style.error(
+                  `${name} ${wanted} required, but you have ${version}`
+                )
               })
             logStatements.push(
-              style.info(
-                `Visit https://learn.redwoodjs.com/docs/tutorial/prerequisites/#nodejs-and-yarn-versions`
+              style.header(`\nVisit requirements documentation:`)
+            )
+            logStatements.push(
+              style.warning(
+                `https://learn.redwoodjs.com/docs/tutorial/prerequisites/#nodejs-and-yarn-versions\n`
               )
             )
             return reject(new Error(logStatements.join('\n')))
@@ -122,7 +127,9 @@ const createProjectTasks = ({ newAppDir }) => {
         if (appDirExists) {
           // make sure that the target directory is empty
           if (fs.readdirSync(newAppDir).length > 0) {
-            console.error(`'${newAppDir}' already exists and is not empty.`)
+            console.error(
+              style.error(`\n'${newAppDir}' already exists and is not empty\n`)
+            )
             process.exit(1)
           }
         } else {
@@ -247,9 +254,11 @@ new Listr(
     console.log(e)
     if (fs.existsSync(newAppDir)) {
       console.log(
-        style.warning(
-          `Directory '${newAppDir}' is created, however, the process could not be completed due to an error.`
-        )
+        style.warning(`\nWarning: Directory `) +
+          style.cmd(`'${newAppDir}' `) +
+          style.warning(
+            `was created. However, the installation could not complete due to an error.\n`
+          )
       )
     }
     process.exit(1)
