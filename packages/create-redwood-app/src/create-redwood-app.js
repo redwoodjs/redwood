@@ -54,7 +54,8 @@ const {
   .option('yarn-install', {
     default: true,
     type: 'boolean',
-    describe: 'Skip yarn install with --no-yarn-install',
+    describe:
+      'Skip yarn install with --no-yarn-install. Also skips version requirements check.',
   })
   .option('typescript', {
     alias: 'ts',
@@ -91,6 +92,11 @@ const createProjectTasks = ({ newAppDir }) => {
   return [
     {
       title: 'Checking node and yarn compatibility',
+      skip: () => {
+        if (yarnInstall === false) {
+          return 'Warning: skipping check on request'
+        }
+      },
       task: () => {
         return new Promise((resolve, reject) => {
           const { engines } = require(path.join(templateDir, 'package.json'))
