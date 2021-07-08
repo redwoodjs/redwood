@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { toHaveFocus } from '@testing-library/jest-dom/matchers'
+import { toHaveFocus, toHaveClass } from '@testing-library/jest-dom/matchers'
 import {
   screen,
   render,
@@ -9,7 +9,7 @@ import {
   waitFor,
 } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-expect.extend({ toHaveFocus })
+expect.extend({ toHaveFocus, toHaveClass })
 
 import {
   Form,
@@ -389,6 +389,7 @@ describe('Form', () => {
           defaultValue="George123"
           data-testid="streetField"
           validation={{ pattern: /^[a-zA-z]+$/i }}
+          errorClassName="border-red"
         />
         <FieldError name="address.street" data-testid="streetFieldError" />
         <Submit>Save</Submit>
@@ -406,8 +407,10 @@ describe('Form', () => {
 
       const phoneError = screen.getByTestId('phoneFieldError').textContent
       const streetError = screen.getByTestId('streetFieldError').textContent
+      const streetField = screen.getByTestId('streetField')
       expect(phoneError).toEqual('phone is not formatted correctly')
       expect(streetError).toEqual('address.street is not formatted correctly')
+      expect(streetField).toHaveClass('border-red', { exact: true })
     })
   })
 })
