@@ -12,7 +12,7 @@ import c from 'src/lib/colors'
 import { generatePrismaClient } from 'src/lib/generatePrismaClient'
 
 export const command = 'type-check [sides..]'
-export const aliases = ['tsc', 'tc', 'typeCheck', 'typecheck']
+export const aliases = ['tsc', 'tc', 'typecheck']
 export const description = 'Run a TypeScript compiler check on your project'
 export const builder = (yargs) => {
   yargs

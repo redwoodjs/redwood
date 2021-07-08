@@ -1,7 +1,7 @@
 import { getPaths, convertTsProjectToJs } from '@redwoodjs/internal'
 
 export const command = 'ts-to-js'
-export const aliases = ['tsToJs']
+export const aliases = ['ts2Js']
 export const description = 'Convert a TypeScript project to JavaScript'
 
 export const handler = () => {
