@@ -2,7 +2,8 @@
   "version": "0.34.1",
   "npmClient": "yarn",
   "packages": [
-    "../../packages/*"
+    "../../packages/api",
+    "../../packages/api-server"
   ],
   "command": {
     "publish": {
