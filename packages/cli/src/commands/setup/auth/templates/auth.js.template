@@ -42,17 +42,17 @@ export const hasRole = ({ roles }) => {
   }
 
   if (
-    typeof role !== 'undefined' &&
-    typeof role === 'string' &&
-    context.currentUser.roles?.includes(role)
+    typeof roles !== 'undefined' &&
+    typeof roles === 'string' &&
+    context.currentUser.roles?.includes(roles)
   ) {
     return true
   }
 
   if (
-    typeof role !== 'undefined' &&
-    Array.isArray(role) &&
-    context.currentUser.roles?.some((r) => role.includes(r))
+    typeof roles !== 'undefined' &&
+    Array.isArray(roles) &&
+    context.currentUser.roles?.some((r) => roles.includes(r))
   ) {
     return true
   }
