@@ -199,12 +199,8 @@ function linkBinaries(REDWOOD_PROJECT_NODE_MODULES) {
   }
 }
 
-class FSWatcher {
-  constructor(chokidar) {
-    this.chokidar = chokidar
-  }
-
-  register(registerObj) {
+function makeRegister(watcher) {
+  return function (registerObj) {
     for (const [event, eventObject] of Object.entries(registerObj.on)) {
       // figure out the syntax for the handler based on the event
       let handler
@@ -225,10 +221,8 @@ class FSWatcher {
           }
       }
 
-      this.chokidar.on(event, handler)
+      watcher.on(event, handler)
     }
-
-    return this
   }
 }
 
@@ -241,4 +235,4 @@ module.exports.getPackageJson = getPackageJson
 module.exports.makeCopyPackageFiles = makeCopyPackageFiles
 module.exports.logWarnings = logWarnings
 module.exports.linkBinaries = linkBinaries
-module.exports.FSWatcher = FSWatcher
+module.exports.makeRegister = makeRegister

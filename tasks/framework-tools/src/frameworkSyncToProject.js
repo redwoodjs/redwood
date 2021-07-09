@@ -25,7 +25,7 @@ const {
   makeCopyPackageFiles,
   logWarnings,
   linkBinaries,
-  FSWatcher,
+  makeRegister,
 } = require('./utils')
 
 const projectPath = process.argv?.[2] ?? process.env.RWJS_CWD
@@ -164,7 +164,7 @@ const files = {
 
 // start watching for changes
 
-chokidar
+const watcher = chokidar
   .watch(REDWOOD_PACKAGES_PATH, {
     ignored: [
       '**/create-redwood-app/**',
@@ -184,9 +184,10 @@ chokidar
     console.log(c.dim(`--- file changed: ${file}`))
   })
 
-const fsWatcher = new FSWatcher(chokidar)
+const register = makeRegister(watcher)
 
-fsWatcher.register(deps).register(files)
+register(deps)
+register(files)
 
 process.on('SIGINT', () => {
   console.log()
