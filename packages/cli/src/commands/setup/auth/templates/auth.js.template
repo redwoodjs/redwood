@@ -26,7 +26,7 @@ export const getCurrentUser = async (
  * @returns {boolean} - If the currentUser is authenticated
  */
 export const isAuthenticated = () => {
-  return !context.currentUser
+  return !!context.currentUser
 }
 
 /**
@@ -37,27 +37,27 @@ export const isAuthenticated = () => {
  * @returns {boolean} - Returns true if the currentUser is authenticated (and assigned one of the given roles)
  */
 export const hasRole = ({ role }) => {
-  if (!isAuthenticated) {
+  if (!isAuthenticated()) {
     return false
   }
 
   if (
     typeof role !== 'undefined' &&
     typeof role === 'string' &&
-    !context.currentUser.roles?.includes(role)
+    context.currentUser.roles?.includes(role)
   ) {
-    return false
+    return true
   }
 
   if (
     typeof role !== 'undefined' &&
     Array.isArray(role) &&
-    !context.currentUser.roles?.some((r) => role.includes(r))
+    context.currentUser.roles?.some((r) => role.includes(r))
   ) {
-    return false
+    return true
   }
 
-  return true
+  return false
 }
 
 /**
