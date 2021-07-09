@@ -203,9 +203,7 @@ class FSWatcher {
 
   register(registerObj) {
     for (const [event, eventObject] of Object.entries(registerObj.on)) {
-      // key -> change
-      // value -> obj w/ guard, handler
-
+      // figure out the syntax for the handler based on the event
       let handler
 
       switch (event) {
