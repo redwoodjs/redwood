@@ -32,11 +32,11 @@ export const isAuthenticated = () => {
 /**
  * Checks if the currentUser is authenticated (and assigned one of the given roles)
  *
- * @param {string= | string[]=} role - A single role or list of roles to check if the user belongs to
+ * @param {string= | string[]=} roles - A single role or list of roles to check if the user belongs to
  *
  * @returns {boolean} - Returns true if the currentUser is authenticated (and assigned one of the given roles)
  */
-export const hasRole = ({ role }) => {
+export const hasRole = ({ roles }) => {
   if (!isAuthenticated()) {
     return false
   }
@@ -65,7 +65,7 @@ export const hasRole = ({ role }) => {
  * whether or not they are assigned a role, and optionally raise an
  * error if they're not.
  *
- * @param {string= | string[]=} role - A single role or list of roles to check if the user belongs to
+ * @param {string= | string[]=} roles - A single role or list of roles to check if the user belongs to
  *
  * @returns - If the currentUser is authenticated (and assigned one of the given roles)
  *
@@ -74,12 +74,12 @@ export const hasRole = ({ role }) => {
  *
  * @see https://github.com/redwoodjs/redwood/tree/main/packages/auth for examples
  */
-export const requireAuth = ({ role } = {}) => {
+export const requireAuth = ({ roles } = {}) => {
   if (!isAuthenticated) {
     throw new AuthenticationError("You don't have permission to do that.")
   }
 
-  if (!hasRole({ role })) {
+  if (!hasRole({ roles })) {
     throw new ForbiddenError("You don't have access to do that.")
   }
 }
