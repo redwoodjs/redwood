@@ -40,7 +40,13 @@ function gatherDeps(packages = frameworkPackages()) {
   const dependencies = {}
 
   for (const packageFile of packages) {
-    const packageJson = JSON.parse(fs.readFileSync(packageFile))
+    let packageJson
+
+    try {
+      packageJson = JSON.parse(fs.readFileSync(packageFile))
+    } catch (e) {
+      throw new Error(packageFile + ' is not a valid package.json file.')
+    }
 
     for (const [name, version] of Object.entries(
       packageJson?.dependencies ?? {}
@@ -74,7 +80,13 @@ function logWarnings(warnings) {
 function packagesFileList(packages = frameworkPackages()) {
   const fileList = {}
   for (const packageFile of packages) {
-    const packageJson = JSON.parse(fs.readFileSync(packageFile))
+    let packageJson
+
+    try {
+      packageJson = JSON.parse(fs.readFileSync(packageFile))
+    } catch (e) {
+      throw new Error(packageFile + ' is not a valid package.json file.')
+    }
 
     if (!packageJson.name) {
       continue
@@ -90,7 +102,14 @@ function packagesFileList(packages = frameworkPackages()) {
 function redwoodBins(packages = frameworkPackages()) {
   let bins = {}
   for (const packageFile of packages) {
-    const packageJson = JSON.parse(fs.readFileSync(packageFile))
+    let packageJson
+
+    try {
+      packageJson = JSON.parse(fs.readFileSync(packageFile))
+    } catch (e) {
+      throw new Error(packageFile + ' is not a valid package.json file.')
+    }
+
     if (!packageJson.name) {
       continue
     }

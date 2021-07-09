@@ -41,6 +41,6 @@ try {
 
   console.log('... Done. Now run `yarn install`')
 } catch (e) {
-  console.log('Error:', e)
+  console.log(e)
   process.exit(1)
 }
