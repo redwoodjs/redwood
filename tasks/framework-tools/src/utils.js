@@ -196,6 +196,41 @@ function linkBinaries(REDWOOD_PROJECT_NODE_MODULES) {
   }
 }
 
+class FSWatcher {
+  constructor(chokidar) {
+    this.chokidar = chokidar
+  }
+
+  register(registerObj) {
+    for (const [event, eventObject] of Object.entries(registerObj.on)) {
+      // key -> change
+      // value -> obj w/ guard, handler
+
+      let handler
+
+      switch (event) {
+        case 'ready':
+          handler = eventObject.handler
+          break
+        case 'change':
+          if (eventObject.guard) {
+            handler = (file) => {
+              if (eventObject.guard(file)) {
+                eventObject.handler(file)
+              }
+            }
+          } else {
+            handler = eventObject.handler
+          }
+      }
+
+      this.chokidar.on(event, handler)
+    }
+
+    return this
+  }
+}
+
 module.exports.REDWOOD_PACKAGES_PATH = REDWOOD_PACKAGES_PATH
 module.exports.redwoodPackages = frameworkPackages
 module.exports.gatherDeps = gatherDeps
@@ -205,3 +240,4 @@ module.exports.getPackageJson = getPackageJson
 module.exports.makeCopyPackageFiles = makeCopyPackageFiles
 module.exports.logWarnings = logWarnings
 module.exports.linkBinaries = linkBinaries
+module.exports.FSWatcher = FSWatcher

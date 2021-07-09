@@ -25,6 +25,7 @@ const {
   makeCopyPackageFiles,
   logWarnings,
   linkBinaries,
+  FSWatcher,
 } = require('./utils')
 
 const projectPath = process.argv?.[2] ?? process.env.RWJS_CWD
@@ -47,48 +48,119 @@ const {
 
 let { dependencies, warnings } = gatherDeps()
 
-const handleDeps = _.debounce(() => {
-  console.log()
-  const newDeps = gatherDeps()
+const deps = {
+  on: {
+    ready: {
+      handler: () => {
+        console.log()
 
-  if (JSON.stringify(dependencies) !== JSON.stringify(newDeps.dependencies)) {
-    console.log('Your dependencies have changed; run `yarn install`')
-    console.log()
+        if (warnings.length) {
+          logWarnings(warnings)
+          console.log()
+        }
 
-    dependencies = newDeps.dependencies
-    warnings = newDeps.warnings
+        // ---
 
-    if (warnings.length) {
-      logWarnings(warnings)
-      console.log()
-    }
+        console.log(
+          `Adding ${
+            Object.keys(dependencies).length
+          } Framework dependencies to ${packageJsonLink}...`
+        )
 
-    writePackageJson(updatePackageJsonDeps(dependencies))
-  }
-}, 200)
+        writePackageJson(updatePackageJsonDeps(dependencies))
 
-const handleFiles = _.debounce((file) => {
-  console.log()
-  const packageDirs = redwoodPackages().map(path.dirname)
-  const packageToRebuild = packageDirs.find((dir) => file.startsWith(dir))
-  const packages = packagesFileList()
-  const packageName = Object.keys(packages).find((packageName) =>
-    packageToRebuild.endsWith(packageName.replace('@redwoodjs', ''))
-  )
-  console.log(`Rebuilding ${packageName}...`)
+        console.log(c.green(' Done.'))
+        console.log()
 
-  execa.sync('yarn build', {
-    cwd: packageToRebuild,
-    shell: true,
-    stdio: 'inherit',
-  })
+        // ---
 
-  console.log('Copying over files...')
-  console.log()
-  copyPackageFiles([packageName, packages[packageName]])
-  console.log(c.green(' Done.'))
-  console.log()
-}, 200)
+        console.log('Running yarn install...')
+        try {
+          execa.sync('yarn install', {
+            cwd: projectPath,
+            shell: true,
+            stdio: 'inherit',
+          })
+        } catch (e) {
+          console.error('Error: Could not run `yarn install`')
+          console.error(e)
+          process.exit(1)
+        }
+        console.log()
+      },
+    },
+    change: {
+      guard: (file) => redwoodPackages().includes(file),
+      handler: _.debounce(() => {
+        console.log()
+        const newDeps = gatherDeps()
+
+        if (
+          JSON.stringify(dependencies) !== JSON.stringify(newDeps.dependencies)
+        ) {
+          console.log('Your dependencies have changed; run `yarn install`')
+          console.log()
+
+          dependencies = newDeps.dependencies
+          warnings = newDeps.warnings
+
+          if (warnings.length) {
+            logWarnings(warnings)
+            console.log()
+          }
+
+          writePackageJson(updatePackageJsonDeps(dependencies))
+        }
+      }, 200),
+    },
+  },
+}
+
+const files = {
+  on: {
+    ready: {
+      handler: () => {
+        rimraf.sync(path.join(REDWOOD_PROJECT_NODE_MODULES, '@redwoodjs'))
+
+        console.log('Copying over files...')
+        const packages = packagesFileList()
+        Object.entries(packages).forEach(copyPackageFiles)
+        console.log(c.green(' Done.'))
+        console.log()
+
+        console.log('Make binaries executable...')
+        linkBinaries(REDWOOD_PROJECT_NODE_MODULES)
+        console.log(c.green(' Done.'))
+        console.log()
+      },
+    },
+    change: {
+      guard: (file) => !redwoodPackages().includes(file),
+      handler: _.debounce((file) => {
+        console.log()
+        const packageDirs = redwoodPackages().map(path.dirname)
+        const packageToRebuild = packageDirs.find((dir) => file.startsWith(dir))
+        const packages = packagesFileList()
+        const packageName = Object.keys(packages).find((packageName) =>
+          packageToRebuild.endsWith(packageName.replace('@redwoodjs', ''))
+        )
+        console.log(`Rebuilding ${packageName}...`)
+
+        execa.sync('yarn build', {
+          cwd: packageToRebuild,
+          shell: true,
+          stdio: 'inherit',
+        })
+
+        console.log('Copying over files...')
+        console.log()
+        copyPackageFiles([packageName, packages[packageName]])
+        console.log(c.green(' Done.'))
+        console.log()
+      }, 200),
+    },
+  },
+}
 
 // start watching for changes
 
@@ -108,67 +180,13 @@ chokidar
       '**/jest.{config,setup}.{js,ts}',
     ],
   })
-  .on('ready', () => {
-    console.log()
-
-    if (warnings.length) {
-      logWarnings(warnings)
-      console.log()
-    }
-
-    // ---
-
-    console.log(
-      `Adding ${
-        Object.keys(dependencies).length
-      } Framework dependencies to ${packageJsonLink}...`
-    )
-
-    writePackageJson(updatePackageJsonDeps(dependencies))
-
-    console.log(c.green(' Done.'))
-    console.log()
-
-    // ---
-
-    console.log('Running yarn install...')
-    try {
-      execa.sync('yarn install', {
-        cwd: projectPath,
-        shell: true,
-        stdio: 'inherit',
-      })
-    } catch (e) {
-      console.error('Error: Could not run `yarn install`')
-      console.error(e)
-      process.exit(1)
-    }
-    console.log()
-
-    // copy over the files
-
-    rimraf.sync(path.join(REDWOOD_PROJECT_NODE_MODULES, '@redwoodjs'))
-
-    console.log('Copying over files...')
-    const packages = packagesFileList()
-    Object.entries(packages).forEach(copyPackageFiles)
-    console.log(c.green(' Done.'))
-    console.log()
-
-    console.log('Make binaries executable...')
-    linkBinaries(REDWOOD_PROJECT_NODE_MODULES)
-    console.log(c.green(' Done.'))
-    console.log()
-  })
   .on('change', (file) => {
     console.log(c.dim(`--- file changed: ${file}`))
-
-    if (redwoodPackages().includes(file)) {
-      handleDeps(file)
-    } else {
-      handleFiles(file)
-    }
   })
+
+const fsWatcher = new FSWatcher(chokidar)
+
+fsWatcher.register(deps).register(files)
 
 process.on('SIGINT', () => {
   console.log()
