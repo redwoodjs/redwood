@@ -43,21 +43,20 @@ const { packageJson, packageJsonLink, writePackageJson } =
 let { dependencies, warnings } = gatherDeps()
 
 const handleFiles = _.debounce((file) => {
+  console.log()
   const packageDirs = redwoodPackages().map(path.dirname)
   const packageToRebuild = packageDirs.find((dir) => file.startsWith(dir))
-  console.log(`Rebuilding...`)
+  const packages = packagesFileList()
+  const packageName = Object.keys(packages).find((packageName) =>
+    packageToRebuild.endsWith(packageName.replace('@redwoodjs', ''))
+  )
+  console.log(`Rebuilding ${packageName}...`)
 
   execa.sync('yarn build', {
     cwd: packageToRebuild,
     shell: true,
     stdio: 'inherit',
   })
-
-  const packages = packagesFileList()
-
-  const packageName = Object.keys(packages).find((packageName) =>
-    packageToRebuild.endsWith(packageName.replace('@redwoodjs', ''))
-  )
 
   console.log('Copying over files...')
   console.log()
@@ -67,6 +66,7 @@ const handleFiles = _.debounce((file) => {
 }, 200)
 
 const handleDeps = _.debounce(() => {
+  console.log()
   const newDeps = gatherDeps()
 
   if (JSON.stringify(dependencies) !== JSON.stringify(newDeps.dependencies)) {
@@ -185,7 +185,6 @@ chokidar
   })
   .on('change', (file) => {
     console.log(c.dim(`--- file changed: ${file}`))
-    console.log()
 
     if (redwoodPackages().includes(file)) {
       handleDeps(file)
