@@ -3,8 +3,9 @@
 
 /**
  * - add the deps and install
- * - build and copy over files
- * - remove them when user cancels
+ * - build and copy over the files
+ * - watch for changes
+ * - revert when on exit
  */
 
 const fs = require('fs')
@@ -42,29 +43,6 @@ const { packageJson, packageJsonLink, writePackageJson } =
 
 let { dependencies, warnings } = gatherDeps()
 
-const handleFiles = _.debounce((file) => {
-  console.log()
-  const packageDirs = redwoodPackages().map(path.dirname)
-  const packageToRebuild = packageDirs.find((dir) => file.startsWith(dir))
-  const packages = packagesFileList()
-  const packageName = Object.keys(packages).find((packageName) =>
-    packageToRebuild.endsWith(packageName.replace('@redwoodjs', ''))
-  )
-  console.log(`Rebuilding ${packageName}...`)
-
-  execa.sync('yarn build', {
-    cwd: packageToRebuild,
-    shell: true,
-    stdio: 'inherit',
-  })
-
-  console.log('Copying over files...')
-  console.log()
-  copyPackageFiles([packageName, packages[packageName]])
-  console.log(c.green(' Done.'))
-  console.log()
-}, 200)
-
 const handleDeps = _.debounce(() => {
   console.log()
   const newDeps = gatherDeps()
@@ -92,6 +70,31 @@ const handleDeps = _.debounce(() => {
     writePackageJson(packageJson)
   }
 }, 200)
+
+const handleFiles = _.debounce((file) => {
+  console.log()
+  const packageDirs = redwoodPackages().map(path.dirname)
+  const packageToRebuild = packageDirs.find((dir) => file.startsWith(dir))
+  const packages = packagesFileList()
+  const packageName = Object.keys(packages).find((packageName) =>
+    packageToRebuild.endsWith(packageName.replace('@redwoodjs', ''))
+  )
+  console.log(`Rebuilding ${packageName}...`)
+
+  execa.sync('yarn build', {
+    cwd: packageToRebuild,
+    shell: true,
+    stdio: 'inherit',
+  })
+
+  console.log('Copying over files...')
+  console.log()
+  copyPackageFiles([packageName, packages[packageName]])
+  console.log(c.green(' Done.'))
+  console.log()
+}, 200)
+
+// start watching for changes
 
 chokidar
   .watch(REDWOOD_PACKAGES_PATH, {
