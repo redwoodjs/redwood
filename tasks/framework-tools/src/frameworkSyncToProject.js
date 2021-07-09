@@ -118,6 +118,8 @@ chokidar
       console.log()
     }
 
+    // ---
+
     console.log(
       `Adding ${
         Object.keys(dependencies).length
@@ -137,6 +139,8 @@ chokidar
 
     console.log(c.green(' Done.'))
     console.log()
+
+    // ---
 
     console.log('Running yarn install...')
     try {
