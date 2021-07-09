@@ -15,23 +15,23 @@ export const getCurrentUser = async (session) => {
   return await db.user.findUnique({ where: { id: session.id } })
 }
 
-export const requireAuth = ({ role } = {}) => {
+export const requireAuth = ({ roles } = {}) => {
   if (!context.currentUser) {
     throw new AuthenticationError("You don't have permission to do that.")
   }
 
   if (
-    typeof role !== 'undefined' &&
-    typeof role === 'string' &&
-    !context.currentUser.roles?.includes(role)
+    typeof roles !== 'undefined' &&
+    typeof roles === 'string' &&
+    !context.currentUser.roles?.includes(roles)
   ) {
     throw new ForbiddenError("You don't have access to do that.")
   }
 
   if (
-    typeof role !== 'undefined' &&
+    typeof roles !== 'undefined' &&
     Array.isArray(role) &&
-    !context.currentUser.roles?.some((r) => role.includes(r))
+    !context.currentUser.roles?.some((r) => roles.includes(r))
   ) {
     throw new ForbiddenError("You don't have access to do that.")
   }
