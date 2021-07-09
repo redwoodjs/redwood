@@ -6,7 +6,7 @@ import { getProject } from '@redwoodjs/structure'
 
 import { getConfig } from './config'
 
-// Tracks any commands that could contain sensative info and theor position in
+// Tracks any commands that could contain sensative info and their position in
 // the argv array, as well as the text to replace them with
 const SENSATIVE_ARG_POSITIONS = {
   exec: {
@@ -51,7 +51,16 @@ const getInfo = async () => {
   delete info.System?.Shell?.path
   delete info.IDEs?.VSCode?.path
 
-  return info
+  return {
+    os: info.System.OS.split(' ')[0],
+    osVersion: info.System.OS.split(' ')[1],
+    shell: info.System.Shell.name,
+    node: info.Binaries.Node.version,
+    yarn: info.Binaries.Node.version,
+    npm: info.Binaries.Node.version,
+    vscode: info.IDEs.VSCode.version,
+    redwoodjs: info.npmPackages['@redwoodjs/core'].installed,
+  }
 }
 
 // removes potentially sensative information from an array of argv strings
@@ -96,9 +105,9 @@ export const telemetry = async (argv, data = {}) => {
     command: sanitizeArgv(argv),
     ci: ci.isCI,
     duration: data.duration,
-    info: await getInfo(),
     nodeEnv: process.env.NODE_ENV || null,
     routeCount: getProject().getRouter().routes.length,
+    ...(await getInfo()),
   }
 
   console.info('payload', payload)
