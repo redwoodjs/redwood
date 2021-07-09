@@ -13,6 +13,7 @@ const path = require('path')
 const c = require('ansi-colors')
 const chokidar = require('chokidar')
 const execa = require('execa')
+const _ = require('lodash')
 const rimraf = require('rimraf')
 
 const {
@@ -40,6 +41,57 @@ const { packageJson, packageJsonLink, writePackageJson } =
   getPackageJson(projectPath)
 
 let { dependencies, warnings } = gatherDeps()
+
+const handleFiles = _.debounce((file) => {
+  const packageDirs = redwoodPackages().map(path.dirname)
+  const packageToRebuild = packageDirs.find((dir) => file.startsWith(dir))
+  console.log(`Rebuilding...`)
+
+  execa.sync('yarn build', {
+    cwd: packageToRebuild,
+    shell: true,
+    stdio: 'inherit',
+  })
+
+  const packages = packagesFileList()
+
+  const packageName = Object.keys(packages).find((packageName) =>
+    packageToRebuild.endsWith(packageName.replace('@redwoodjs', ''))
+  )
+
+  console.log('Copying over files...')
+  console.log()
+  copyPackageFiles([packageName, packages[packageName]])
+  console.log(c.green(' Done.'))
+  console.log()
+}, 200)
+
+const handleDeps = _.debounce(() => {
+  const newDeps = gatherDeps()
+
+  if (JSON.stringify(dependencies) !== JSON.stringify(newDeps.dependencies)) {
+    console.log('Your dependencies have changed; run `yarn install`')
+    console.log()
+
+    dependencies = newDeps.dependencies
+    warnings = newDeps.warnings
+
+    if (warnings.length) {
+      for (const [packageName, message] of warnings) {
+        console.warn('Warning:', packageName, message)
+      }
+      console.log()
+    }
+
+    // how to handle a dependency being removed?
+    packageJson.dependencies = {
+      ...packageJson.dependencies,
+      ...dependencies,
+    }
+
+    writePackageJson(packageJson)
+  }
+}, 200)
 
 chokidar
   .watch(REDWOOD_PACKAGES_PATH, {
@@ -136,45 +188,8 @@ chokidar
     console.log()
 
     if (redwoodPackages().includes(file)) {
-      const newDeps = gatherDeps()
-
-      if (
-        JSON.stringify(dependencies) !== JSON.stringify(newDeps.dependencies)
-      ) {
-        console.log('Your dependencies have changed; run `yarn install`')
-        console.log()
-
-        dependencies = newDeps.dependencies
-        warnings = newDeps.warnings
-
-        if (warnings.length) {
-          for (const [packageName, message] of warnings) {
-            console.warn('Warning:', packageName, message)
-          }
-          console.log()
-        }
-      }
+      handleDeps(file)
     } else {
-      const packageDirs = redwoodPackages().map(path.dirname)
-      const packageToRebuild = packageDirs.find((dir) => file.startsWith(dir))
-      console.log(`Rebuilding...`)
-
-      execa.sync('yarn build', {
-        cwd: packageToRebuild,
-        shell: true,
-        stdio: 'inherit',
-      })
-
-      const packages = packagesFileList()
-
-      const packageName = Object.keys(packages).find((packageName) =>
-        packageToRebuild.endsWith(packageName.replace('@redwoodjs', ''))
-      )
-
-      console.log('Copying over files...')
-      console.log()
-      copyPackageFiles([packageName, packages[packageName]])
-      console.log(c.green(' Done.'))
-      console.log()
+      handleFiles(file)
     }
   })
