@@ -38,8 +38,12 @@ if (!projectPath) {
 const REDWOOD_PROJECT_NODE_MODULES = path.join(projectPath, 'node_modules')
 const copyPackageFiles = makeCopyPackageFiles(REDWOOD_PROJECT_NODE_MODULES)
 
-const { packageJson, packageJsonLink, writePackageJson } =
-  getPackageJson(projectPath)
+const {
+  packageJson,
+  packageJsonLink,
+  writePackageJson,
+  updatePackageJsonDeps,
+} = getPackageJson(projectPath)
 
 let { dependencies, warnings } = gatherDeps()
 
@@ -59,13 +63,7 @@ const handleDeps = _.debounce(() => {
       console.log()
     }
 
-    // how to handle a dependency being removed?
-    packageJson.dependencies = {
-      ...packageJson.dependencies,
-      ...dependencies,
-    }
-
-    writePackageJson(packageJson)
+    writePackageJson(updatePackageJsonDeps(dependencies))
   }
 }, 200)
 
@@ -126,16 +124,7 @@ chokidar
       } Framework dependencies to ${packageJsonLink}...`
     )
 
-    if (packageJson.dependencies) {
-      packageJson.dependencies = {
-        ...packageJson.dependencies,
-        ...dependencies,
-      }
-    } else {
-      packageJson.dependencies = dependencies
-    }
-
-    writePackageJson(packageJson)
+    writePackageJson(updatePackageJsonDeps(dependencies))
 
     console.log(c.green(' Done.'))
     console.log()

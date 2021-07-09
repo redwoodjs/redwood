@@ -6,6 +6,7 @@ const path = require('path')
 
 const c = require('ansi-colors')
 const fg = require('fast-glob')
+const produce = require('immer')
 const packlist = require('npm-packlist')
 const terminalLink = require('terminal-link')
 
@@ -134,11 +135,25 @@ function getPackageJson(projectPath) {
     fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, undefined, 2))
   }
 
+  function updatePackageJsonDeps(dependencies) {
+    return produce(packageJson, (draftPackageJson) => {
+      if (draftPackageJson.dependencies) {
+        draftPackageJson.dependencies = {
+          ...draftPackageJson.dependencies,
+          ...dependencies,
+        }
+      } else {
+        draftPackageJson.dependencies = dependencies
+      }
+    })
+  }
+
   return {
     packageJson,
     packageJsonPath,
     packageJsonLink,
     writePackageJson,
+    updatePackageJsonDeps,
   }
 }
 
