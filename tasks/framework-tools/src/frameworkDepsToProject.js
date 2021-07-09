@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* eslint-env node, es6 */
 
-const { gatherDeps, getPackageJson } = require('./utils')
+const { gatherDeps, getPackageJson, logWarnings } = require('./utils')
 
 const projectPath = process.argv?.[2] ?? process.env.RWJS_CWD
 if (!projectPath) {
@@ -17,9 +17,7 @@ try {
   const { dependencies, warnings } = gatherDeps()
 
   if (warnings.length) {
-    for (const [packageName, message] of warnings) {
-      console.warn('Warning:', packageName, message)
-    }
+    logWarnings(warnings)
     console.log()
   }
 

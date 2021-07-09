@@ -4,6 +4,7 @@
 const fs = require('fs')
 const path = require('path')
 
+const c = require('ansi-colors')
 const fg = require('fast-glob')
 const packlist = require('npm-packlist')
 const terminalLink = require('terminal-link')
@@ -63,6 +64,12 @@ function gatherDeps(packages = frameworkPackages()) {
     }
   }
   return { dependencies: sortObjectKeys(dependencies), warnings }
+}
+
+function logWarnings(warnings) {
+  for (const [packageName, message] of warnings) {
+    console.warn(c.yellow('Warning:'), packageName, message)
+  }
 }
 
 /**
@@ -166,3 +173,4 @@ module.exports.packagesFileList = packagesFileList
 module.exports.redwoodBins = redwoodBins
 module.exports.getPackageJson = getPackageJson
 module.exports.makeCopyPackageFiles = makeCopyPackageFiles
+module.exports.logWarnings = logWarnings

@@ -25,6 +25,7 @@ const {
   packagesFileList,
   redwoodBins,
   makeCopyPackageFiles,
+  logWarnings,
 } = require('./utils')
 
 const projectPath = process.argv?.[2] ?? process.env.RWJS_CWD
@@ -55,9 +56,7 @@ const handleDeps = _.debounce(() => {
     warnings = newDeps.warnings
 
     if (warnings.length) {
-      for (const [packageName, message] of warnings) {
-        console.warn('Warning:', packageName, message)
-      }
+      logWarnings(warnings)
       console.log()
     }
 
@@ -116,9 +115,7 @@ chokidar
     console.log()
 
     if (warnings.length) {
-      for (const [packageName, message] of warnings) {
-        console.warn(c.yellow('Warning:'), packageName, message)
-      }
+      logWarnings(warnings)
       console.log()
     }
 
