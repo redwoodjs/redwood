@@ -5,7 +5,7 @@
  * - add the deps and install
  * - build and copy over the files
  * - watch for changes
- * - revert when on exit
+ * - revert on exit
  */
 
 const path = require('path')
@@ -169,3 +169,25 @@ chokidar
       handleFiles(file)
     }
   })
+
+process.on('SIGINT', () => {
+  console.log()
+  console.log()
+  console.log('Removing Framework dependencies ')
+  console.log()
+  writePackageJson(packageJson)
+  rimraf.sync(path.join(REDWOOD_PROJECT_NODE_MODULES, '@redwoodjs'))
+
+  console.log('Running yarn install...')
+  try {
+    execa.sync('yarn install', {
+      cwd: projectPath,
+      shell: true,
+      stdio: 'inherit',
+    })
+  } catch (e) {
+    console.error('Error: Could not run `yarn install`')
+    console.error(e)
+    process.exit(1)
+  }
+})
