@@ -1,15 +1,14 @@
 #!/usr/bin/env node
 /* eslint-env node, es6 */
 
-const fs = require('fs')
 const path = require('path')
 
 const rimraf = require('rimraf')
 
 const {
   packagesFileList,
-  redwoodBins,
   makeCopyPackageFiles,
+  linkBinaries,
 } = require('./utils')
 
 const projectPath = process.argv?.[2] ?? process.env.RWJS_CWD
@@ -30,15 +29,4 @@ const packages = packagesFileList()
 Object.entries(packages).forEach(copyPackageFiles)
 
 console.log()
-const bins = redwoodBins()
-for (let [binName, binPath] of Object.entries(bins)) {
-  // if the binPath doesn't exist, create it.
-  const binSymlink = path.join(REDWOOD_PROJECT_NODE_MODULES, '.bin', binName)
-  binPath = path.join(REDWOOD_PROJECT_NODE_MODULES, binPath)
-  if (!fs.existsSync(binSymlink)) {
-    fs.symlinkSync(binPath, binSymlink)
-  }
-
-  console.log('chmod +x', binName)
-  fs.chmodSync(binPath, '755')
-}
+linkBinaries(REDWOOD_PROJECT_NODE_MODULES)

@@ -166,6 +166,21 @@ const makeCopyPackageFiles =
     }
   }
 
+function linkBinaries(REDWOOD_PROJECT_NODE_MODULES) {
+  const bins = redwoodBins()
+  for (let [binName, binPath] of Object.entries(bins)) {
+    // if the binPath doesn't exist, create it.
+    const binSymlink = path.join(REDWOOD_PROJECT_NODE_MODULES, '.bin', binName)
+    binPath = path.join(REDWOOD_PROJECT_NODE_MODULES, binPath)
+    if (!fs.existsSync(binSymlink)) {
+      fs.symlinkSync(binPath, binSymlink)
+    }
+
+    console.log('chmod +x', binName)
+    fs.chmodSync(binPath, '755')
+  }
+}
+
 module.exports.REDWOOD_PACKAGES_PATH = REDWOOD_PACKAGES_PATH
 module.exports.redwoodPackages = frameworkPackages
 module.exports.gatherDeps = gatherDeps
@@ -174,3 +189,4 @@ module.exports.redwoodBins = redwoodBins
 module.exports.getPackageJson = getPackageJson
 module.exports.makeCopyPackageFiles = makeCopyPackageFiles
 module.exports.logWarnings = logWarnings
+module.exports.linkBinaries = linkBinaries

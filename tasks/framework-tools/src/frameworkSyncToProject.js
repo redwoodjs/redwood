@@ -8,7 +8,6 @@
  * - revert when on exit
  */
 
-const fs = require('fs')
 const path = require('path')
 
 const c = require('ansi-colors')
@@ -23,9 +22,9 @@ const {
   REDWOOD_PACKAGES_PATH,
   redwoodPackages,
   packagesFileList,
-  redwoodBins,
   makeCopyPackageFiles,
   logWarnings,
+  linkBinaries,
 } = require('./utils')
 
 const projectPath = process.argv?.[2] ?? process.env.RWJS_CWD
@@ -164,22 +163,7 @@ chokidar
     console.log()
 
     console.log('Make binaries executable...')
-    const bins = redwoodBins()
-    for (let [binName, binPath] of Object.entries(bins)) {
-      // if the binPath doesn't exist, create it.
-      const binSymlink = path.join(
-        REDWOOD_PROJECT_NODE_MODULES,
-        '.bin',
-        binName
-      )
-      binPath = path.join(REDWOOD_PROJECT_NODE_MODULES, binPath)
-      if (!fs.existsSync(binSymlink)) {
-        fs.symlinkSync(binPath, binSymlink)
-      }
-
-      console.log(' chmod +x', binName)
-      fs.chmodSync(binPath, '755')
-    }
+    linkBinaries(REDWOOD_PROJECT_NODE_MODULES)
     console.log(c.green(' Done.'))
     console.log()
   })
