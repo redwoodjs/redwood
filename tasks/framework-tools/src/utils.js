@@ -6,7 +6,7 @@ const path = require('path')
 
 const c = require('ansi-colors')
 const fg = require('fast-glob')
-const produce = require('immer')
+const { produce } = require('immer')
 const packlist = require('npm-packlist')
 const terminalLink = require('terminal-link')
 
