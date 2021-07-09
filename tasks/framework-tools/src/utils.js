@@ -38,8 +38,9 @@ function frameworkPackages() {
 function gatherDeps(packages = frameworkPackages()) {
   const warnings = []
   const dependencies = {}
+
   for (const packageFile of packages) {
-    // reduce.
+    // try catch to handle parsing errors in package json
     try {
       const packageJson = JSON.parse(fs.readFileSync(packageFile))
       for (const [name, version] of Object.entries(
@@ -59,8 +60,10 @@ function gatherDeps(packages = frameworkPackages()) {
       }
     } catch (error) {
       console.error()
-      console.error(`Error: in ${packageFile}: ${error.message}.`)
-      console.error("This package's dependencies will not be included.")
+      console.error(c.red(`Error in ${packageFile}:`))
+      console.error('', error.message)
+      console.error()
+      console.error(` This package's dependencies will not be included.`)
       console.error()
     }
   }

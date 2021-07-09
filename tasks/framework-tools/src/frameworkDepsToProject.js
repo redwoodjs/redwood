@@ -4,6 +4,7 @@
 const { gatherDeps, getPackageJson, logWarnings } = require('./utils')
 
 const projectPath = process.argv?.[2] ?? process.env.RWJS_CWD
+
 if (!projectPath) {
   console.log('Error: Please specify the path to your Redwood Project')
   console.log(`Usage: ${process.argv?.[1]} /path/to/rwjs/proect`)
