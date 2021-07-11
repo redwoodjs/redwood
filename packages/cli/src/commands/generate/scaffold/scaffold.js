@@ -11,6 +11,7 @@ import terminalLink from 'terminal-link'
 
 import { getConfig } from '@redwoodjs/internal'
 
+import { transformTSToJS } from 'src/lib'
 import {
   generateTemplate,
   templateRoot,
@@ -22,10 +23,12 @@ import {
   getPaths,
   writeFilesTask,
   addRoutesToRouterTask,
+  addScaffoldImport,
 } from 'src/lib'
 import c from 'src/lib/colors'
 
 import { yargsDefaults } from '../../generate'
+import { handler as dbAuthHandler } from '../dbAuth/dbAuth'
 import {
   relationsForModel,
   intForeignKeysForModel,
@@ -38,7 +41,6 @@ import {
 } from '../service/service'
 
 const NON_EDITABLE_COLUMNS = ['id', 'createdAt', 'updatedAt']
-const SCAFFOLD_STYLE_PATH = './scaffold.css'
 // Any assets that should not trigger an overwrite error and require a --force
 const SKIPPABLE_ASSETS = ['scaffold.css']
 const PACKAGE_SET = 'Set'
@@ -141,7 +143,8 @@ export const files = async ({
       pascalScaffoldPath,
       typescript,
       nestScaffoldByModel,
-      templateStrings
+      templateStrings,
+      typescript
     )),
     ...(await sdlFiles({
       ...getDefaultArgs(sdlBuilder),
@@ -158,14 +161,21 @@ export const files = async ({
       typescript,
     })),
     ...assetFiles(name),
-    ...layoutFiles(name, pascalScaffoldPath, typescript, templateStrings),
-    ...pageFiles(
+    ...layoutFiles(
+      name,
+      pascalScaffoldPath,
+      typescript,
+      templateStrings,
+      typescript
+    ),
+    ...(await pageFiles(
       name,
       pascalScaffoldPath,
       typescript,
       nestScaffoldByModel,
-      templateStrings
-    ),
+      templateStrings,
+      typescript
+    )),
   }
 }
 
@@ -215,7 +225,7 @@ const layoutFiles = (
     const outputLayoutName = layout
       .replace(/Names/, pluralName)
       .replace(/Name/, singularName)
-      .replace(/\.js\.template/, generateTypescript ? '.tsx' : '.js')
+      .replace(/\.tsx\.template/, generateTypescript ? '.tsx' : '.js')
 
     const outputPath = path.join(
       getPaths().web.layouts,
@@ -231,13 +241,16 @@ const layoutFiles = (
         ...templateStrings,
       }
     )
-    fileList[outputPath] = template
+
+    fileList[outputPath] = generateTypescript
+      ? template
+      : transformTSToJS(outputPath, template)
   })
 
   return fileList
 }
 
-const pageFiles = (
+const pageFiles = async (
   name,
   pascalScaffoldPath = '',
   generateTypescript,
@@ -246,6 +259,9 @@ const pageFiles = (
 ) => {
   const pluralName = pascalcase(pluralize(name))
   const singularName = pascalcase(pluralize.singular(name))
+  const model = await getSchema(singularName)
+  const idType = getIdType(model)
+
   let fileList = {}
 
   const pages = fs.readdirSync(
@@ -257,7 +273,7 @@ const pageFiles = (
     const outputPageName = page
       .replace(/Names/, pluralName)
       .replace(/Name/, singularName)
-      .replace(/\.js\.template/, generateTypescript ? '.tsx' : '.js')
+      .replace(/\.tsx\.template/, generateTypescript ? '.tsx' : '.js')
 
     const finalFolder =
       (nestScaffoldByModel ? singularName + '/' : '') +
@@ -272,12 +288,16 @@ const pageFiles = (
     const template = generateTemplate(
       path.join('scaffold', 'templates', 'pages', page),
       {
+        idType,
         name,
         pascalScaffoldPath,
         ...templateStrings,
       }
     )
-    fileList[outputPath] = template
+
+    fileList[outputPath] = generateTypescript
+      ? template
+      : transformTSToJS(outputPath, template)
   })
 
   return fileList
@@ -382,7 +402,7 @@ const componentFiles = async (
     const outputComponentName = component
       .replace(/Names/, pluralName)
       .replace(/Name/, singularName)
-      .replace(/\.js\.template/, generateTypescript ? '.tsx' : '.js')
+      .replace(/\.tsx\.template/, generateTypescript ? '.tsx' : '.js')
 
     const finalFolder =
       (nestScaffoldByModel ? singularName + '/' : '') +
@@ -408,7 +428,10 @@ const componentFiles = async (
         ...templateStrings,
       }
     )
-    fileList[outputPath] = template
+
+    fileList[outputPath] = generateTypescript
+      ? template
+      : transformTSToJS(outputPath, template)
   })
 
   return fileList
@@ -504,23 +527,6 @@ const addSetImport = () => {
   return 'Added Set import to Routes.{js,tsx}'
 }
 
-const addScaffoldImport = () => {
-  const appJsPath = getPaths().web.app
-  let appJsContents = readFile(appJsPath).toString()
-
-  if (appJsContents.match(SCAFFOLD_STYLE_PATH)) {
-    return 'Skipping scaffold style include'
-  }
-
-  appJsContents = appJsContents.replace(
-    "import Routes from 'src/Routes'\n",
-    `import Routes from 'src/Routes'\n\nimport '${SCAFFOLD_STYLE_PATH}'`
-  )
-  writeFile(appJsPath, appJsContents, { overwriteExisting: true })
-
-  return 'Added scaffold import to App.{js,tsx}'
-}
-
 export const command = 'scaffold <model>'
 export const description =
   'Generate Pages, SDL, and Services files based on a given DB schema Model. Also accepts <path/model>'
@@ -589,6 +595,11 @@ export const handler = async ({
   tests,
   typescript,
 }) => {
+  if (modelArg.toLowerCase() === 'dbauth') {
+    // proxy to dbAuth generator
+    return await dbAuthHandler({ force, tests, typescript })
+  }
+
   if (tests === undefined) {
     tests = getConfig().generate.tests
   }
