@@ -238,7 +238,9 @@ for (const task of tasks) {
   console.log('-'.repeat(80))
 }
 
-console.log()
-makeDirectory(REDWOOD_PROJECT_DIRECTORY)
-console.log()
-console.log('-'.repeat(80))
+process.on('SIGINT', () => {
+  console.log()
+  console.log(REDWOOD_PROJECT_DIRECTORY)
+  console.log('-'.repeat(80))
+  process.exit(0)
+})
