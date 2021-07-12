@@ -5,10 +5,26 @@ import envinfo from 'envinfo'
 import { getProject } from '@redwoodjs/structure'
 
 import { getConfig } from './config'
+import { getPaths } from './paths'
+
+interface SensitiveArgPositions {
+  exec: {
+    positions: Array<number>
+    redactWith: string
+  }
+  g: {
+    positions: Array<number>
+    redactWith: string
+  }
+  generate: {
+    positions: Array<number>
+    redactWith: string
+  }
+}
 
 // Tracks any commands that could contain sensative info and their position in
 // the argv array, as well as the text to replace them with
-const SENSATIVE_ARG_POSITIONS = {
+const SENSITIVE_ARG_POSITIONS: SensitiveArgPositions = {
   exec: {
     positions: [1],
     redactWith: '[script]',
@@ -57,13 +73,14 @@ const getInfo = async () => {
 }
 
 // removes potentially sensative information from an array of argv strings
-const sanitizeArgv = (argv) => {
+const sanitizeArgv = (argv: Array<string>) => {
   const args = argv.slice(2)
   const name = args[0]
-  const sensativeCommand = SENSATIVE_ARG_POSITIONS[name]
+  const sensativeCommand =
+    SENSITIVE_ARG_POSITIONS[name as keyof SensitiveArgPositions]
 
   if (sensativeCommand) {
-    sensativeCommand.positions.forEach((pos) => {
+    sensativeCommand.positions.forEach((pos: number) => {
       args[pos] = sensativeCommand.redactWith
     })
   }
@@ -72,10 +89,13 @@ const sanitizeArgv = (argv) => {
 }
 
 // wrap a function in this call to get a telemetry hit including how long it took
-export const timedTelemetry = async (argv, func) => {
+export const timedTelemetry = async (
+  argv: Array<string>,
+  func: (...args: any[]) => any
+) => {
   const start = new Date()
-  const result = await func.call()
-  const duration = new Date() - start
+  const result = await func.call(this)
+  const duration = new Date().getTime() - start.getTime()
 
   await telemetry(argv, { duration })
 
@@ -88,13 +108,16 @@ export const telemetryMiddleware = async () => {
 }
 
 // command that actually sends prepared data to telemetry collection service
-export const telemetry = async (argv, input = {}) => {
+export const telemetry = async (
+  argv: Array<string>,
+  input: Record<string, unknown> = {}
+) => {
   if (process.env.REDWOOD_DISABLE_TELEMETRY || process.env.DO_NOT_TRACK) {
     return
   }
 
   try {
-    const project = getProject()
+    const project = getProject(getPaths().base)
     const payload = {
       type: input.type || 'command',
       command: sanitizeArgv(argv),
