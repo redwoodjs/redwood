@@ -36,20 +36,17 @@ export const hasRole = ({ roles }) => {
     return false
   }
 
-  if (
-    typeof roles !== 'undefined' &&
-    typeof roles === 'string' &&
-    context.currentUser.roles?.includes(roles)
-  ) {
-    return true
-  }
+  if(!!roles) {
+    if (Array.isArray(roles) {
+      return context.currentUser.roles?.some((r) => roles.includes(r))
+    }
 
-  if (
-    typeof roles !== 'undefined' &&
-    Array.isArray(roles) &&
-    context.currentUser.roles?.some((r) => roles.includes(r))
-  ) {
-    return true
+    if (typeof roles === 'string') {
+      return context.currentUser.roles?.includes(roles)
+      }
+
+    // roles not found
+    return false
   }
 
   return false
