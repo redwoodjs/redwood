@@ -13,7 +13,7 @@
     "@envelop/apollo-server-errors": "0.0.1",
     "@envelop/core": "0.3.1",
     "@envelop/depth-limit": "0.2.0",
-    "@envelop/disable-introspection": "0.1.0",
+    "@envelop/disable-introspection": "0.2.0",
     "@envelop/filter-operation-type": "0.1.0",
     "@envelop/parser-cache": "0.2.0",
     "@envelop/validation-cache": "0.2.0",
@@ -34,7 +34,7 @@
     "lodash.omitby": "4.6.0",
     "pino": "6.11.3",
     "pino-pretty": "5.1.0",
-    "uuid": "^8.3.2"
+    "uuid": "8.3.2"
   },
   "devDependencies": {
     "@redwoodjs/auth": "0.34.1",
@@ -42,7 +42,7 @@
     "@types/jsonwebtoken": "8.5.3",
     "@types/lodash.merge": "4.6.6",
     "@types/lodash.omitby": "4.6.6",
-    "@types/uuid": "^8.3.0",
+    "@types/uuid": "8.3.0",
     "split2": "3.2.2"
   },
   "jest": {
