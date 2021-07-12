@@ -1,6 +1,6 @@
+import { PostgrestClient } from '@supabase/postgrest-js'
 import ci from 'ci-info'
 import envinfo from 'envinfo'
-import fetch from 'node-fetch'
 
 import { getProject } from '@redwoodjs/structure'
 
@@ -44,22 +44,15 @@ const getInfo = async () => {
     info.System.Shell.name = info.System.Shell.path.split('\\').pop()
   }
 
-  // remove paths to binaries
-  delete info.Binaries?.Node?.path
-  delete info.Binaries?.Yarn?.path
-  delete info.Binaries?.npm?.path
-  delete info.System?.Shell?.path
-  delete info.IDEs?.VSCode?.path
-
   return {
     os: info.System.OS.split(' ')[0],
     osVersion: info.System.OS.split(' ')[1],
     shell: info.System.Shell.name,
-    node: info.Binaries.Node.version,
-    yarn: info.Binaries.Node.version,
-    npm: info.Binaries.Node.version,
-    vscode: info.IDEs.VSCode.version,
-    redwoodjs: info.npmPackages['@redwoodjs/core'].installed,
+    nodeVersion: info.Binaries.Node.version,
+    yarnVersion: info.Binaries.Node.version,
+    npmVersion: info.Binaries.Node.version,
+    vsCodeVersion: info.IDEs.VSCode.version,
+    redwoodVersion: info.npmPackages['@redwoodjs/core'].installed,
   }
 }
 
@@ -95,31 +88,43 @@ export const telemetryMiddleware = async () => {
 }
 
 // command that actually sends prepared data to telemetry collection service
-export const telemetry = async (argv, data = {}) => {
+export const telemetry = async (argv, input = {}) => {
   if (process.env.REDWOOD_DISABLE_TELEMETRY || process.env.DO_NOT_TRACK) {
     return
   }
 
-  const payload = {
-    type: data.type || 'command',
-    command: sanitizeArgv(argv),
-    ci: ci.isCI,
-    duration: data.duration,
-    nodeEnv: process.env.NODE_ENV || null,
-    routeCount: getProject().getRouter().routes.length,
-    ...(await getInfo()),
-  }
-
-  console.info('payload', payload)
-
   try {
-    await fetch(getConfig().telemetry.url, {
-      method: 'post',
-      body: JSON.stringify(payload),
-      headers: { 'Content-Type': 'application/json' },
+    const project = getProject()
+    const payload = {
+      type: input.type || 'command',
+      command: sanitizeArgv(argv),
+      ci: ci.isCI,
+      duration: input.duration,
+      nodeEnv: process.env.NODE_ENV || null,
+      routeCount: project.getRouter().routes.length,
+      serviceCount: project.services.length,
+      sides: project.sides.join(','),
+      ...(await getInfo()),
+    }
+
+    const telemetryConfig = getConfig().telemetry
+
+    const postgrest = new PostgrestClient(telemetryConfig.url, {
+      headers: {
+        apikey: telemetryConfig.apikey,
+      },
+      schema: 'public',
     })
+
+    const { error } = await postgrest.from('events').insert(payload)
+
+    // TODO: remove this before merging for real
+    if (error) {
+      console.error('Error from telemetry insert:', error)
+    }
   } catch (e) {
-    // do nothing if telemetry can't be saved—network or server is down!
-    // console.error(e)
+    // service interruption: network down or telemetry API not responding
+    // don't let telemetry errors bubble up to user, just do nothing
+    console.error('Uncaught error in telemetry:', e)
   }
 }

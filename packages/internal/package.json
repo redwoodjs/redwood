@@ -23,6 +23,7 @@
     "@graphql-codegen/typescript-operations": "1.18.3",
     "@graphql-codegen/typescript-react-apollo": "2.3.0",
     "@graphql-codegen/typescript-resolvers": "1.19.5",
+    "@supabase/postgrest-js": "^0.33.0",
     "ci-info": "^3.2.0",
     "deepmerge": "4.2.2",
     "fast-glob": "3.2.5",
