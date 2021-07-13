@@ -2,13 +2,13 @@ import { PostgrestClient } from '@supabase/postgrest-js'
 import ci from 'ci-info'
 import envinfo from 'envinfo'
 
-import { getConfig } from './config'
-import { getPaths } from './paths'
+import { getConfig } from '../config'
+import { getPaths } from '../paths'
 
 // circular dependency when trying to import @redwoodjs/structure so lets do it
 // the old fashioned way
-const { DefaultHost } = require('../../structure/dist/hosts')
-const { RWProject } = require('../../structure/dist/model/RWProject')
+const { DefaultHost } = require('../../../structure/dist/hosts')
+const { RWProject } = require('../../../structure/dist/model/RWProject')
 
 interface SensitiveArgPositions {
   exec: {
@@ -91,33 +91,8 @@ const sanitizeArgv = (argv: Array<string>) => {
   return args.join(' ')
 }
 
-// wrap a function in this call to get a telemetry hit including how long it took
-export const timedTelemetry = async (
-  argv: Array<string>,
-  func: (...args: any[]) => any
-) => {
-  const start = new Date()
-  const result = await func.call(this)
-  const duration = new Date().getTime() - start.getTime()
-
-  await telemetry(argv, { duration })
-
-  return result
-}
-
-// used as yargs middleware when any command is invoked
-export const telemetryMiddleware = async () => {
-  await telemetry(process.argv)
-}
-
-// command that actually sends prepared data to telemetry collection service
-export const telemetry = async (
-  argv: Array<string>,
-  input: Record<string, unknown> = {}
-) => {
-  if (process.env.REDWOOD_DISABLE_TELEMETRY || process.env.DO_NOT_TRACK) {
-    return
-  }
+;(async function () {
+  const argv = require('yargs/yargs')(process.argv.slice(2)).argv
 
   try {
     const project = new RWProject({
@@ -126,10 +101,10 @@ export const telemetry = async (
     })
 
     const payload = {
-      type: input.type || 'command',
-      command: sanitizeArgv(argv),
+      type: argv.type || 'command',
+      command: sanitizeArgv(JSON.parse(argv.argv)),
       ci: ci.isCI,
-      duration: input.duration,
+      duration: argv.duration ? parseInt(argv.duration) : null,
       nodeEnv: process.env.NODE_ENV || null,
       routeCount: project.getRouter().routes.length,
       serviceCount: project.services.length,
@@ -160,4 +135,4 @@ export const telemetry = async (
     // don't let telemetry errors bubble up to user, just do nothing
     console.error('Uncaught error in telemetry:', e)
   }
-}
+})()
