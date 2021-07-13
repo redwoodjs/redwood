@@ -17,6 +17,7 @@ Before interacting with the Redwood community, please read and understand our [C
       - [Option 1: Linking](#option-1-linking)
       - [Option 2: Copy and Watch](#option-2-copy-and-watch)
       - [Option 3: Copy (for Windows)](#option-3-copy-for-windows)
+      - [Option 4: Testing the CLI](#option-4-testing-the-cli)
       - [Specifying a RW_PATH](#specifying-a-rw_path)
         - [On **Linux**](#on-linux)
         - [On **MacOS**](#on-macos)
@@ -82,7 +83,7 @@ There are several options:
 At the end, you will have a fully working Redwood blog.
 
 ##### Running the Test Project Script
-Run the following in the `redwood` folder root:
+Run the following in the `redwood` folder root (_note: the script will automatically install dependencies_):
 
 ```terminal
 yarn run build:test-project <path/to/redwood-app>
