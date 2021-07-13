@@ -1,4 +1,4 @@
-import { fork } from 'child_process'
+import { spawn } from 'child_process'
 import path from 'path'
 
 // wrap a function in this call to get a telemetry hit including how long it took
@@ -14,9 +14,15 @@ export const timedTelemetry = async (
   const result = await func.call(this)
   const duration = new Date().getTime() - start.getTime()
 
-  fork(
-    path.join(__dirname, 'sendTelemetry.js'),
-    ['--argv', JSON.stringify(argv), '--duration', duration.toString()],
+  spawn(
+    process.execPath,
+    [
+      path.join(__dirname, 'sendTelemetry.js'),
+      '--argv',
+      JSON.stringify(argv),
+      '--duration',
+      duration.toString(),
+    ],
     { detached: true, stdio: 'ignore' }
   ).unref()
 
@@ -29,9 +35,13 @@ export const telemetryMiddleware = async () => {
     return
   }
 
-  fork(
-    path.join(__dirname, 'sendTelemetry.js'),
-    ['--argv', JSON.stringify(process.argv)],
+  spawn(
+    process.execPath,
+    [
+      path.join(__dirname, 'sendTelemetry.js'),
+      '--argv',
+      JSON.stringify(process.argv),
+    ],
     { detached: true, stdio: 'ignore' }
   ).unref()
 }
