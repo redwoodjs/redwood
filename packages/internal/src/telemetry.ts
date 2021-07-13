@@ -142,11 +142,14 @@ export const telemetry = async (
     const postgrest = new PostgrestClient(telemetryConfig.url, {
       headers: {
         apikey: telemetryConfig.apikey,
+        Authorization: `Bearer ${telemetryConfig.apikey}`,
       },
       schema: 'public',
     })
 
-    const { error } = await postgrest.from('events').insert(payload)
+    const { error } = await postgrest
+      .from('events')
+      .insert(payload, { returning: 'minimal' })
 
     // TODO: remove this before merging for real
     if (error) {
