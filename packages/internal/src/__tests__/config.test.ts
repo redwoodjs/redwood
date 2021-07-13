@@ -28,6 +28,10 @@ describe('getConfig', () => {
           "stories": true,
           "tests": true,
         },
+        "telemetry": Object {
+          "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYyNTg3NjYxMywiZXhwIjoxOTQxNDUyNjEzfQ.xDvtPNKfE1GLMIKO5kKJnk_NaQpCDvPpsHij6iz2UX8",
+          "url": "https://cuvvzwmeexzpnctfycwn.supabase.co/rest/v1",
+        },
         "web": Object {
           "a11y": true,
           "apiProxyPath": "/.netlify/functions",
