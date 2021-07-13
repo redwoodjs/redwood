@@ -434,11 +434,13 @@ describe('Form', () => {
 
     fireEvent.click(screen.getByText('Save'))
 
-    const phoneError = await waitFor(() => screen.getByTestId('phoneFieldError').textContent)
+    const phoneError = await waitFor(
+      () => screen.getByTestId('phoneFieldError').textContent
+    )
     expect(phoneError).toEqual('phone is not formatted correctly')
   })
 
-  it("can handle falsy names (\"false\")", async () => {
+  it('can handle falsy names ("false")', async () => {
     render(
       <Form>
         <TextField
@@ -454,11 +456,13 @@ describe('Form', () => {
 
     fireEvent.click(screen.getByText('Save'))
 
-    const phoneError = await waitFor(() => screen.getByTestId('phoneFieldError').textContent)
+    const phoneError = await waitFor(
+      () => screen.getByTestId('phoneFieldError').textContent
+    )
     expect(phoneError).toEqual('false is not formatted correctly')
   })
 
-  it("can handle falsy names (\"0\")", async () => {
+  it('can handle falsy names ("0")', async () => {
     render(
       <Form>
         <TextField
@@ -474,7 +478,9 @@ describe('Form', () => {
 
     fireEvent.click(screen.getByText('Save'))
 
-    const phoneError = await waitFor(() => screen.getByTestId('phoneFieldError').textContent)
+    const phoneError = await waitFor(
+      () => screen.getByTestId('phoneFieldError').textContent
+    )
     expect(phoneError).toEqual('0 is not formatted correctly')
   })
 })
