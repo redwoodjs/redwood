@@ -4,10 +4,10 @@ import { render, waitFor, act, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 
 import { AuthContextInterface } from '@redwoodjs/auth'
-import { HistoryProvider, navigate } from '@redwoodjs/history'
+import { navigate } from '@redwoodjs/history'
 
 import {
-  Router as RedwoodRouter,
+  Router,
   Route,
   Private,
   Redirect,
@@ -55,12 +55,6 @@ interface RouterProps {
   useAuth?: () => AuthContextInterface
   children: React.ReactNode
 }
-
-const Router = ({ useAuth, children }: RouterProps) => (
-  <HistoryProvider>
-    <RedwoodRouter useAuth={useAuth}>{children}</RedwoodRouter>
-  </HistoryProvider>
-)
 
 // SETUP
 const HomePage = () => <h1>Home Page</h1>

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 
-import { useHistory, gHistory } from '@redwoodjs/history'
+import { gHistory } from '@redwoodjs/history'
 
 import { createNamedContext } from './internal'
 
@@ -38,14 +38,9 @@ const LocationProvider: React.FC<Props> = ({ children, location }) => {
   const HISTORY_LISTENER_ID = useRef<string | undefined>(undefined)
   const parentLocation = useContext(LocationContext)
   const [context, setContext] = useState(getContext(parentLocation, location))
-  const history = useHistory()
 
   useEffect(() => {
     HISTORY_LISTENER_ID.current = gHistory.listen(() => {
-      setContext(getContext(parentLocation, location))
-    })
-
-    history.addListener(() => {
       setContext(getContext(parentLocation, location))
     })
 

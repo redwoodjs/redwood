@@ -1,6 +1,6 @@
 import { HelmetProvider } from 'react-helmet-async'
 
-import { HistoryProvider } from '@redwoodjs/history'
+import '@redwoodjs/history'
 
 interface RedwoodProviderProps {
   children: React.ReactNode
@@ -8,11 +8,9 @@ interface RedwoodProviderProps {
 
 export const RedwoodProvider = ({ children }: RedwoodProviderProps) => {
   return (
-    <HistoryProvider>
-      <HelmetProvider context={global.__REDWOOD__HELMET_CONTEXT}>
-        {children}
-      </HelmetProvider>
-    </HistoryProvider>
+    <HelmetProvider context={global.__REDWOOD__HELMET_CONTEXT}>
+      {children}
+    </HelmetProvider>
   )
 }
 
