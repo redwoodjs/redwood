@@ -17,8 +17,8 @@ export const timedTelemetry = async (
   fork(
     path.join(__dirname, 'sendTelemetry.js'),
     ['--argv', JSON.stringify(argv), '--duration', duration.toString()],
-    { detached: true }
-  )
+    { detached: true, stdio: 'ignore' }
+  ).unref()
 
   return result
 }
@@ -32,6 +32,6 @@ export const telemetryMiddleware = async () => {
   fork(
     path.join(__dirname, 'sendTelemetry.js'),
     ['--argv', JSON.stringify(process.argv)],
-    { detached: true }
-  )
+    { detached: true, stdio: 'ignore' }
+  ).unref()
 }

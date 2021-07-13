@@ -91,6 +91,7 @@ const sanitizeArgv = (argv: Array<string>) => {
   return args.join(' ')
 }
 
+// actual telemetry send process
 ;(async function () {
   const argv = require('yargs/yargs')(process.argv.slice(2)).argv
 
@@ -133,6 +134,7 @@ const sanitizeArgv = (argv: Array<string>) => {
   } catch (e) {
     // service interruption: network down or telemetry API not responding
     // don't let telemetry errors bubble up to user, just do nothing
+    // TODO: remove before merging for real
     console.error('Uncaught error in telemetry:', e)
   }
 })()
