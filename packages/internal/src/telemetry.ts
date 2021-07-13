@@ -2,10 +2,13 @@ import { PostgrestClient } from '@supabase/postgrest-js'
 import ci from 'ci-info'
 import envinfo from 'envinfo'
 
-import { getProject } from '@redwoodjs/structure'
-
 import { getConfig } from './config'
 import { getPaths } from './paths'
+
+// circular dependency when trying to import @redwoodjs/structure so lets do it
+// the old fashioned way
+const { DefaultHost } = require('../../structure/dist/hosts')
+const { RWProject } = require('../../structure/dist/model/RWProject')
 
 interface SensitiveArgPositions {
   exec: {
@@ -117,7 +120,11 @@ export const telemetry = async (
   }
 
   try {
-    const project = getProject(getPaths().base)
+    const project = new RWProject({
+      projectRoot: getPaths().base,
+      host: new DefaultHost(),
+    })
+
     const payload = {
       type: input.type || 'command',
       command: sanitizeArgv(argv),
