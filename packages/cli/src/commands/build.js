@@ -1,5 +1,4 @@
 import fs from 'fs'
-import path from 'path'
 
 import execa from 'execa'
 import Listr from 'listr'
@@ -175,7 +174,7 @@ export const handler = async ({
           }
           return new Listr(await getPrerenderTasks(), {
             renderer: verbose && VerboseRenderer,
-            concurrent: true, // Reuse prerender tasks, but run them in parallel to speed things up
+            concurrent: true, // Re-use prerender tasks, but run them in parallel to speed things up
           })
         },
       },
