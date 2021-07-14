@@ -493,7 +493,7 @@ const addLayoutImport = ({ model: name, path: scaffoldPath = '' }) => {
   const routesContent = readFile(routesPath).toString()
 
   const newRoutesContent = routesContent.replace(
-    /'@redwoodjs\/router'(\s*)/,
+    /['"]@redwoodjs\/router['"](\s*)/,
     `'@redwoodjs/router'\n${importLayout}$1`
   )
   writeFile(routesPath, newRoutesContent, { overwriteExisting: true })
@@ -505,8 +505,13 @@ const addSetImport = () => {
   const routesPath = getPaths().web.routes
   const routesContent = readFile(routesPath).toString()
   const [redwoodRouterImport, importStart, spacing, importContent, importEnd] =
-    routesContent.match(/(import {)(\s*)([^]*)(} from '@redwoodjs\/router')/) ||
+    routesContent.match(/(import {)(\s*)([^]*)(} from ['"]@redwoodjs\/router['"])/) ||
     []
+
+  if (!redwoodRouterImport) {
+    return "Couldn't add Set import from @redwoodjs/router to Routes.{js,tsx}"
+  }
+
   const routerImports = importContent.replace(/\s/g, '').split(',')
   if (routerImports.includes(PACKAGE_SET)) {
     return 'Skipping Set import'
