@@ -59,6 +59,7 @@ const baseConfig = {
       timers: false,
       os: false,
       tty: false,
+      crypto: false,
     }
 
     // ** PLUGINS **
