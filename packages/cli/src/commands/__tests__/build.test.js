@@ -7,7 +7,6 @@ jest.mock('@redwoodjs/internal', () => {
         },
         web: {
           dist: '/mocked/project/web/dist',
-          routes: '/mocked/project/web/Routes.tsx',
         },
       }
     },
@@ -54,7 +53,5 @@ test('Should run prerender for web', async () => {
   // Run prerendering task, but expect failure,
   // because `detectPrerenderRoutes` is empty.
   const x = await Listr.mock.calls[0][0][2].task()
-  expect(x).toMatchInlineSnapshot(
-    `"You have not marked any \\"prerender\\" in your Routes (​file:///mocked/project/web/Routes.tsx​)."`
-  )
+  expect(x.startsWith('You have not marked any "prerender" in your Routes'))
 })
