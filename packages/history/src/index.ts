@@ -1,1 +1,1 @@
-export { navigate, gHistory } from './history'
+export { navigate, jump, back, gHistory } from './history'

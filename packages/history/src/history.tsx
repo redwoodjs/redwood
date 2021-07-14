@@ -40,6 +40,13 @@ const createHistory = () => {
         }
       }
     },
+    back: () => {
+      global.history.back()
+
+      for (const listener of Object.values(listeners)) {
+        listener()
+      }
+    },
     remove: (listenerId: string) => {
       if (listeners[listenerId]) {
         const listener = listeners[listenerId]
@@ -57,5 +64,7 @@ const createHistory = () => {
 const gHistory = createHistory()
 
 const navigate = gHistory.navigate
+const jump = gHistory.jump
+const back = gHistory.back
 
-export { gHistory, navigate }
+export { gHistory, navigate, jump, back }
