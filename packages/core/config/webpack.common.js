@@ -146,6 +146,7 @@ const getSharedPlugins = (isEnvProduction) => {
     // time.
     new webpack.DefinePlugin({
       __REDWOOD__API_PROXY_PATH: JSON.stringify(redwoodConfig.web.apiProxyPath),
+      __REDWOOD__APP_TITLE: redwoodConfig.web.title || path.basename(redwoodPaths.base),
       ...getEnvVars(),
     }),
     new Dotenv({
