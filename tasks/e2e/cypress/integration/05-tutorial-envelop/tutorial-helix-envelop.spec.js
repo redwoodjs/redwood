@@ -299,7 +299,7 @@ describe('The Redwood Tutorial - Golden path Helix/Envelop edition', () => {
     cy.get('#tutorial-form').submit()
   })
 
-  it('8. Saving Data', () => {
+  it.skip('8. Saving Data', () => {
     // navigate back out
     cy.visit('http://localhost:8910/')
 
@@ -334,7 +334,7 @@ describe('The Redwood Tutorial - Golden path Helix/Envelop edition', () => {
     cy.get('main').should('contain', 'Thank you for your submission')
   })
 
-  it('9. Auth - Render Cell Failure Message', () => {
+  it.skip('9. Auth - Render Cell Failure Message', () => {
     // enable auth
     cy.writeFile(
       path.join(BASE_DIR, 'api/src/lib/auth.js'),

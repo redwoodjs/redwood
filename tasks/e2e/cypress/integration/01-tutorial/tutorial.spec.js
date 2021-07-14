@@ -303,7 +303,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     // {name: "test name", email: "foo@bar.com", message: "test message"}
   })
 
-  it('8. Saving Data', () => {
+  it.skip('8. Saving Data', () => {
     // navigate back out
     cy.visit('http://localhost:8910/')
 
@@ -338,7 +338,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     cy.get('main').should('contain', 'Thank you for your submission')
   })
 
-  it('9. Auth - Render Cell Failure Message', () => {
+  it.skip('9. Auth - Render Cell Failure Message', () => {
     // enable auth
     cy.writeFile(
       path.join(BASE_DIR, 'api/src/lib/auth.js'),
