@@ -9,8 +9,8 @@ const ${pascalName}Page = (<%- paramName === '' ? '' : `${propParam}: ${pascalNa
   return (
     <>
       <MetaTags
-        title="${pascalName}Page"
-        description="My default route is named ${camelName}"
+        title="${pascalName}"
+        description="${pascalName} is a great page"
       />
       <h1>${pascalName}Page</h1>
       <p>
