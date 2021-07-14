@@ -1,4 +1,3 @@
-// const ErrorOverlayPlugin = require('error-overlay-webpack-plugin')
 const escapeRegExp = require('lodash.escaperegexp')
 const { merge } = require('webpack-merge')
 
@@ -44,8 +43,8 @@ const baseConfig = merge(webpackConfig('development'), {
   infrastructureLogging: {
     level: 'error', // new in v4; previously we used quiet
   },
+  // TODO plugin does not yet work with Webpack 5: https://github.com/smooth-code/error-overlay-webpack-plugin/issues/67
   // plugins: [new ErrorOverlayPlugin()].filter(Boolean),
-  // plugin does not yet work with Webpack 5: https://github.com/smooth-code/error-overlay-webpack-plugin/issues/67
   // webpack-dev-server v4 enables an overlay by default, it's just not as pretty
 })
 

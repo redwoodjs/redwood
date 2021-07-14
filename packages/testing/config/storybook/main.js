@@ -33,7 +33,7 @@ const baseConfig = {
       rwjsPaths.web.routes
     sbConfig.resolve.alias['~__REDWOOD__USER_WEB_SRC'] = rwjsPaths.web.src
 
-    // // Determine the default storybook style file to use.
+    // Determine the default storybook style file to use.
     const supportedStyleIndexFiles = ['index.scss', 'index.sass', 'index.css']
     for (let file of supportedStyleIndexFiles) {
       const filePath = path.join(rwjsPaths.web.src, file)
