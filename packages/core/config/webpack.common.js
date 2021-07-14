@@ -125,7 +125,7 @@ const getStyleLoaders = (isEnvProduction) => {
 /** @returns {import('webpack').Plugin[]} Plugins shared with storybook, as well as the RW app */
 const getSharedPlugins = (isEnvProduction) => {
   const shouldIncludeFastRefresh =
-  redwoodConfig.web.fastRefresh !== false && !isEnvProduction
+    redwoodConfig.web.fastRefresh !== false && !isEnvProduction
 
   return [
     isEnvProduction &&
@@ -146,7 +146,8 @@ const getSharedPlugins = (isEnvProduction) => {
     // time.
     new webpack.DefinePlugin({
       __REDWOOD__API_PROXY_PATH: JSON.stringify(redwoodConfig.web.apiProxyPath),
-      __REDWOOD__APP_TITLE: redwoodConfig.web.title || path.basename(redwoodPaths.base),
+      __REDWOOD__APP_TITLE:
+        redwoodConfig.web.title || path.basename(redwoodPaths.base),
       ...getEnvVars(),
     }),
     new Dotenv({

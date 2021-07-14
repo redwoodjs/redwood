@@ -1,6 +1,5 @@
 import { Head } from '../index'
 
-
 type RobotsParams =
   | 'noindex'
   | 'index'
@@ -85,7 +84,11 @@ export const MetaTags = (props: MetaTagsProps) => {
       {title && (
         <>
           <title>{`${appTitle} | ${title}`}</title>
-          <meta property="og:title" content={`${appTitle} | ${title}`} key="title" />
+          <meta
+            property="og:title"
+            content={`${appTitle} | ${title}`}
+            key="title"
+          />
           <meta property="twitter:title" content={`${appTitle} | ${title}`} />
         </>
       )}
