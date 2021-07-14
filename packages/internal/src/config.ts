@@ -22,6 +22,7 @@ export interface NodeTargetConfig {
 }
 
 interface BrowserTargetConfig {
+  title?: string
   name?: string
   host: string
   port: number
