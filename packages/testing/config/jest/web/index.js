@@ -1,6 +1,6 @@
 const path = require('path')
 
-const { getPaths,  } = require('@redwoodjs/internal')
+const { getPaths } = require('@redwoodjs/internal')
 
 const rwjsPaths = getPaths()
 const NODE_MODULES_PATH = path.join(rwjsPaths.base, 'node_modules')
@@ -12,7 +12,7 @@ module.exports = {
   },
   globals: {
     __REDWOOD__API_PROXY_PATH: '/',
-    __REDWOOD__APP_TITLE: '/',
+    __REDWOOD__APP_TITLE: 'Awesome Redwood App',
   },
   setupFilesAfterEnv: [path.resolve(__dirname, './jest.setup.js')],
   moduleNameMapper: {
