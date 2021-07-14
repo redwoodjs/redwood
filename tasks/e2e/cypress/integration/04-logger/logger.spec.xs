@@ -10,7 +10,7 @@ const LOG_FILENAME = 'e2e.log'
 
 import 'cypress-wait-until'
 
-describe.skip('The Redwood Logger - Basic Scaffold CRUD Logging', () => {
+describe('The Redwood Logger - Basic Scaffold CRUD Logging', () => {
   const LOG_PATH = path.join(BASE_DIR, LOG_FILENAME)
 
   it('1. Test Logging for CRUD', () => {

@@ -303,64 +303,64 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     // {name: "test name", email: "foo@bar.com", message: "test message"}
   })
 
-  it.skip('8. Saving Data', () => {
-    // navigate back out
-    cy.visit('http://localhost:8910/')
+  // it.skip('8. Saving Data', () => {
+  //   // navigate back out
+  //   cy.visit('http://localhost:8910/')
 
-    // Create a CRUD contacts service
-    cy.exec(`cd ${BASE_DIR}; yarn rw g sdl contact --force --crud`)
+  //   // Create a CRUD contacts service
+  //   cy.exec(`cd ${BASE_DIR}; yarn rw g sdl contact --force --crud`)
 
-    cy.writeFile(
-      path.join(BASE_DIR, 'web/src/pages/ContactPage/ContactPage.js'),
-      Step8_1_ContactPageWithoutJsEmailValidation
-    )
+  //   cy.writeFile(
+  //     path.join(BASE_DIR, 'web/src/pages/ContactPage/ContactPage.js'),
+  //     Step8_1_ContactPageWithoutJsEmailValidation
+  //   )
 
-    cy.writeFile(
-      path.join(BASE_DIR, 'api/src/services/contacts/contacts.js'),
-      Step8_2_CreateContactServiceValidation
-    )
+  //   cy.writeFile(
+  //     path.join(BASE_DIR, 'api/src/services/contacts/contacts.js'),
+  //     Step8_2_CreateContactServiceValidation
+  //   )
 
-    // then get to new contact with api side validation
-    cy.contains('Contact').click()
+  //   // then get to new contact with api side validation
+  //   cy.contains('Contact').click()
 
-    cy.get('input#name').clear().type('test name')
-    cy.get('input#email').clear().type('foo bar com')
-    cy.get('textarea#message').clear().type('test message')
-    cy.contains('Save').click()
+  //   cy.get('input#name').clear().type('test name')
+  //   cy.get('input#email').clear().type('foo bar com')
+  //   cy.get('textarea#message').clear().type('test message')
+  //   cy.contains('Save').click()
 
-    cy.get('main').should('contain', "Can't create new contact")
-    cy.get('main').should('contain', 'is not formatted like an email address')
+  //   cy.get('main').should('contain', "Can't create new contact")
+  //   cy.get('main').should('contain', 'is not formatted like an email address')
 
-    // then test saving with a valid email
-    cy.get('input#email').clear().type('test@example.com')
-    cy.contains('Save').click()
+  //   // then test saving with a valid email
+  //   cy.get('input#email').clear().type('test@example.com')
+  //   cy.contains('Save').click()
 
-    cy.get('main').should('contain', 'Thank you for your submission')
-  })
+  //   cy.get('main').should('contain', 'Thank you for your submission')
+  // })
 
-  it.skip('9. Auth - Render Cell Failure Message', () => {
-    // enable auth
-    cy.writeFile(
-      path.join(BASE_DIR, 'api/src/lib/auth.js'),
-      Step9_1_RequireAuth
-    )
+  // it('9. Auth - Render Cell Failure Message', () => {
+  //   // enable auth
+  //   cy.writeFile(
+  //     path.join(BASE_DIR, 'api/src/lib/auth.js'),
+  //     Step9_1_RequireAuth
+  //   )
 
-    cy.writeFile(
-      path.join(BASE_DIR, 'api/src/services/posts/posts.js'),
-      Step9_2_PostsRequireAuth
-    )
+  //   cy.writeFile(
+  //     path.join(BASE_DIR, 'api/src/services/posts/posts.js'),
+  //     Step9_2_PostsRequireAuth
+  //   )
 
-    cy.visit('http://localhost:8910/posts')
+  //   cy.visit('http://localhost:8910/posts')
 
-    cy.get('main').should('not.contain', 'Second post')
+  //   cy.get('main').should('not.contain', 'Second post')
 
-    cy.get('main > div:nth-child(1)').should('contain', 'Error')
-    cy.get('main > div:nth-child(1)').should('contain', "can't do that")
+  //   cy.get('main > div:nth-child(1)').should('contain', 'Error')
+  //   cy.get('main > div:nth-child(1)').should('contain', "can't do that")
 
-    // disable auth
-    cy.writeFile(
-      path.join(BASE_DIR, 'api/src/lib/auth.js'),
-      Step9_3_DisableAuth
-    )
-  })
+  //   // disable auth
+  //   cy.writeFile(
+  //     path.join(BASE_DIR, 'api/src/lib/auth.js'),
+  //     Step9_3_DisableAuth
+  //   )
+  // })
 })
