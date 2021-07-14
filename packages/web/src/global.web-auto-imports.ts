@@ -10,6 +10,7 @@ declare global {
 
   interface Window {
     __REDWOOD__API_PROXY_PATH: string
+    __REDWOOD__APP_TITLE: string
   }
 
   // Overridable graphQL hook return types
