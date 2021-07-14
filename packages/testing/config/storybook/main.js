@@ -52,6 +52,15 @@ const baseConfig = {
     sbConfig.resolve.extensions = rwConfig.resolve.extensions
     sbConfig.resolve.plugins = rwConfig.resolve.plugins // Directory Named Plugin
 
+    // Webpack v5 does not include polyfills. Will error without these:
+    sbConfig.resolve.fallback = {
+      http: false,
+      https: false,
+      timers: false,
+      os: false,
+      tty: false,
+    }
+
     // ** PLUGINS **
     sbConfig.plugins = [
       ...sbConfig.plugins,
