@@ -125,7 +125,7 @@ const getStyleLoaders = (isEnvProduction) => {
 /** @returns {import('webpack').Plugin[]} Plugins shared with storybook, as well as the RW app */
 const getSharedPlugins = (isEnvProduction) => {
   const shouldIncludeFastRefresh =
-    redwoodConfig.web.fastRefresh !== false && !isEnvProduction
+  redwoodConfig.web.fastRefresh !== false && !isEnvProduction
 
   return [
     isEnvProduction &&
@@ -195,7 +195,7 @@ module.exports = (webpackEnv) => {
     plugins: [
       !isEnvProduction && new webpack.HotModuleReplacementPlugin(),
       new HtmlWebpackPlugin({
-        title: path.basename(redwoodPaths.base),
+        title: redwoodConfig.web.title || path.basename(redwoodPaths.base),
         template: path.resolve(redwoodPaths.base, 'web/src/index.html'),
         templateParameters: {
           prerenderPlaceholder: isEnvProduction
