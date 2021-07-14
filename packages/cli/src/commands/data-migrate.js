@@ -1,5 +1,5 @@
-export const command = 'dataMigrate <command>'
-export const aliases = ['dm']
+export const command = 'data-migrate <command>'
+export const aliases = ['dm', 'dataMigrate']
 export const description = 'Migrate the data in your database'
 import terminalLink from 'terminal-link'
 

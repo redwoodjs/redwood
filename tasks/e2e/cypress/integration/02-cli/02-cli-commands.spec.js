@@ -13,8 +13,11 @@ describe.skip('Check Redwood cli commands against tutorial', () => {
   after(() => {
     Cypress.config('record', true)
   })
-  it.skip('Should run api tests successfully', () => {
-    cy.exec(`cd ${BASE_DIR}; yarn rw test api --no-watch --forceExit`)
+  it('Should run api tests successfully', () => {
+    // Reset contacts service to initial state to pass tests
+    cy.exec(`cd ${BASE_DIR}; yarn rw g sdl contact --force`)
+
+    cy.exec(`cd ${BASE_DIR}; yarn rw test api --no-watch`)
       .its('code')
       .should('eq', 0)
   })
