@@ -1,5 +1,5 @@
 import { Link, routes } from '@redwoodjs/router'
-import { Helmet } from '@redwoodjs/web'
+import { Head } from '@redwoodjs/web'
 <% if (paramName !== '') { %>
 type ${pascalName}PageProps = {
   ${paramName}: ${paramType}
@@ -8,10 +8,10 @@ type ${pascalName}PageProps = {
 const ${pascalName}Page = (<%- paramName === '' ? '' : `${propParam}: ${pascalName}PageProps` %>) => {
   return (
     <>
-      <Helmet>
+      <Head>
         <title>${pascalName}Page</title>
         <meta name="description" content=" My default route is named ${camelName}" />
-      </Helmet>
+      </Head>
       <h1>${pascalName}Page</h1>
       <p>
         Find me in <code>${outputPath}</code>
