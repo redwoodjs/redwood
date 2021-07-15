@@ -35,22 +35,28 @@ jobs:
       - name: Create a temporary directory
         id: createpath
         run: |
-          project_path=$(mktemp -d -t redwood.XXXXXX)
+          project_path=$(./tasks/test-project/scripts/createTempDir)
           echo "::set-output name=project_path::$project_path"
 
-      - name: Cache project "node_modules" and playwright deps
+      - name: Cache project "node_modules"
         uses: actions/cache@v2
         with:
           path: "${{ steps.createpath.outputs.project_path }}/**/node_modules"
-          key: node_modules_test_project_${{ runner.os }}_${{ hashFiles('**/yarn.lock') }}
+          key: node_modules_test_project_${{ runner.os }}_${{ hashFiles("${{ steps.createpath.outputs.project_path }}/node_modules") }}
+
+      - name: Cache playwright deps "node_modules"
+        uses: actions/cache@v2
+        with:
+           path: './playwright-cache'
+           key: playwright_cache_${{ hashFiles('./playwright-cache')}}
 
       - name: Create a test project
         run:  yarn build:test-project ${{ steps.createpath.outputs.project_path }} --verbose --link --force
 
       - name: Install Playwright deps
-        run:  npx playwright install-deps chromium
+        run:  npx --cache ./playwright-cache playwright install-deps chromium
 
       - name: Run tests
-        run:  cd tasks/test-project/playwright && npx playwright test
+        run:  cd tasks/test-project/playwright && npx --cache ./playwright-cache playwright test
         env:
           PROJECT_PATH: ${{ steps.createpath.outputs.project_path }}

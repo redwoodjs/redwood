@@ -1,0 +1,15 @@
+#!/usr/bin/env node
+/* eslint-env node, es6*/
+
+const fs = require('fs')
+const os = require('os')
+const path = require('path')
+
+const tempDirPath = path.join(
+  os.tmpdir(),
+  'redwood-e2e',
+  // ":" is problematic with paths
+  new Date().toISOString().split(':').join('-')
+)
+
+console.log(fs.mkdtempSync(tempDirPath))
