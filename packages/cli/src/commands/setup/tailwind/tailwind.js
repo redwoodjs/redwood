@@ -73,6 +73,7 @@ export const handler = async ({ force }) => {
                 'web',
                 'add',
                 '-D',
+                'postcss',
                 'postcss-loader',
                 'tailwindcss',
                 'autoprefixer',
