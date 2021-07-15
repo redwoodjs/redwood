@@ -7,9 +7,7 @@ const path = require('path')
 
 const tempDirPath = path.join(
   os.tmpdir(),
-  'redwood-e2e',
-  // ":" is problematic with paths
-  new Date().toISOString().split(':').join('-')
+  `redwood-e2e-${new Date().toISOString().split(':').join('-')}`
 )
 
 console.log(fs.mkdtempSync(tempDirPath))
