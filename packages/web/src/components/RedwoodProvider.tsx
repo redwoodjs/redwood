@@ -1,5 +1,7 @@
 import { HelmetProvider } from 'react-helmet-async'
 
+import '@redwoodjs/history'
+
 interface RedwoodProviderProps {
   children: React.ReactNode
 }

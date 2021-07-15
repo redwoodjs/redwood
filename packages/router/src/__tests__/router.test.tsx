@@ -5,7 +5,16 @@ import '@testing-library/jest-dom/extend-expect'
 
 import { AuthContextInterface } from '@redwoodjs/auth'
 
-import { Router, Route, Private, Redirect, navigate, routes, Link } from '../'
+import {
+  Router,
+  Route,
+  Private,
+  Redirect,
+  routes,
+  Link,
+  navigate,
+  back,
+} from '../'
 import { useParams } from '../params'
 import { Set } from '../Set'
 
@@ -661,4 +670,27 @@ test('no location match means nothing is rendered', async () => {
   await new Promise((r) => setTimeout(r, 200))
 
   expect(screen.container).toMatchInlineSnapshot('<div />')
+})
+
+test('jump to new route, then go back', async () => {
+  const HelpPage = () => <h1>Help Page</h1>
+  const TestRouter = () => (
+    <Router>
+      <Route path="/" page={HomePage} name="home" />
+      <Route path="/login" page={LoginPage} name="login" />
+      <Route path="/about" page={AboutPage} name="about" />
+      <Route path="/help" page={HelpPage} name="help" />
+    </Router>
+  )
+  const screen = render(<TestRouter />)
+
+  // starts on home page
+  await waitFor(() => screen.getByText('Home Page'))
+
+  act(() => navigate(routes.about()))
+  await waitFor(() => screen.getByText('About Page'))
+  act(() => navigate(routes.help(), { replace: true }))
+  await waitFor(() => screen.getByText('Help Page'))
+  act(() => back())
+  await waitFor(() => screen.getByText('Home Page'))
 })
