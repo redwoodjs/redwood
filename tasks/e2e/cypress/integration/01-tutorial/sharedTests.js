@@ -344,15 +344,9 @@ export const test_saving_data = () =>
 export const test_auth_cell_failure = () =>
   it('9. Auth - Render Cell Failure Message', () => {
     // Turn auth off.
-    cy.writeFile(
-      path.join(BASE_DIR, 'api/src/lib/auth.js'),
-      Step9_3_DisableAuth
-    )
+    cy.writeFile(path.join(BASE_DIR, 'api/src/lib/auth.js'), Step9_3_DisableAuth)
     // Turn auth on.
-    cy.writeFile(
-      path.join(BASE_DIR, 'api/src/lib/auth.js'),
-      Step9_1_RequireAuth
-    )
+    cy.writeFile(path.join(BASE_DIR, 'api/src/lib/auth.js'), Step9_1_RequireAuth)
     // Add beforeResolver.
     cy.writeFile(
       path.join(BASE_DIR, 'api/src/services/posts/posts.js'),
@@ -360,14 +354,12 @@ export const test_auth_cell_failure = () =>
     )
 
     // Wait for API server to be available.
+    cy.visit('http://localhost:8910/')
     waitForApiSide()
     cy.visit('http://localhost:8910/posts')
 
     cy.contains("I'm sorry, Dave")
 
     // disable auth
-    cy.writeFile(
-      path.join(BASE_DIR, 'api/src/lib/auth.js'),
-      Step9_3_DisableAuth
-    )
+    cy.writeFile(path.join(BASE_DIR, 'api/src/lib/auth.js'), Step9_3_DisableAuth)
   })
