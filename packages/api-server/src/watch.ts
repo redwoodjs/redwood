@@ -24,14 +24,16 @@ let httpServerProcess: ChildProcess
 
 const rebuildApiServer = () => {
   try {
+    // Shutdown API server
+    httpServerProcess?.emit('exit')
+    httpServerProcess?.kill()
+
     const buildTs = Date.now()
     process.stdout.write(c.dim(c.italic('Building... ')))
     buildApi()
     console.log(c.dim(c.italic('Took ' + (Date.now() - buildTs) + ' ms')))
 
-    // Restart the API server
-    httpServerProcess?.emit('exit')
-    httpServerProcess?.kill()
+    // Start API server
     httpServerProcess = fork(path.join(__dirname, 'index.js'))
   } catch (e) {
     console.error(e)
