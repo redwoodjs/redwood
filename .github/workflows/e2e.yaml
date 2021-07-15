@@ -68,15 +68,15 @@ jobs:
           working-directory: ./tasks/e2e
 
       - name: Run `rw test`
-        run: yarn rw test
+        run: yarn rw test --no-watch
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
-      - name: Run `rw build`
+      - name: Run `rw build` (no prerender)
         run: yarn rw build --no-prerender --verbose
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
       - name: Run `rw prerender`
-        run: yarn rw prerender
+        run: yarn rw prerender --verbose
         # TODO: We should have a script that verifies this.
         working-directory: ${{ steps.createpath.outputs.project_path }}
 

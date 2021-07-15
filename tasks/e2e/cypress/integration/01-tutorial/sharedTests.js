@@ -315,10 +315,9 @@ export const test_saving_data = () =>
       Step8_1_ContactPageWithoutJsEmailValidation
     )
 
-    cy.writeFile(
-      path.join(BASE_DIR, 'api/src/services/contacts/contacts.js'),
-      Step8_2_CreateContactServiceValidation
-    )
+    const serviceContactPath = path.join(BASE_DIR, 'api/src/services/contacts/contacts.js')
+    const originalFile = cy.readFile(serviceContactPath)
+    cy.writeFile(serviceContactPath, Step8_2_CreateContactServiceValidation)
 
     // Wait for API server to be available.
     waitForApiSide()
@@ -338,6 +337,8 @@ export const test_saving_data = () =>
     cy.get('input#email').clear().type('test@example.com')
     cy.contains('Save').click()
     cy.contains('Thank you for your submission')
+
+    cy.writeFile(serviceContactPath, originalFile)
   })
 
 export const test_auth_cell_failure = () =>
