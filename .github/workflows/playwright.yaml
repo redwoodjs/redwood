@@ -32,9 +32,9 @@ jobs:
       - name: Install framework modules
         run: yarn install --frozen-lockfile
 
-      - name: Create a temporary directory
+      - name: Create project directory
         id: createpath
-        run: echo "::set-output name=project_path::$(node tasks/test-project/scripts/createTempDir)"
+        run: echo "::set-output name=project_path::$($HOME/generated-blog-project)"
 
       - name: Cache project "node_modules"
         uses: actions/cache@v2
