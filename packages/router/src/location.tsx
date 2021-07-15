@@ -49,7 +49,7 @@ const LocationProvider: React.FC<Props> = ({ children, location }) => {
         gHistory.remove(HISTORY_LISTENER_ID.current)
       }
     }
-  }, [parentLocation, location, history])
+  }, [parentLocation, location])
 
   return (
     <LocationContext.Provider value={context}>

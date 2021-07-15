@@ -4,16 +4,12 @@ import '@testing-library/jest-dom/extend-expect'
 import { navigate } from '@redwoodjs/history'
 
 import {
-  Router as RedwoodRouter,
+  Router,
   Route,
   routes,
   getAnnouncement,
 } from '../internal'
 import RouteAnnouncement from '../route-announcement'
-
-const Router = ({ children }) => (
-  <RedwoodRouter>{children}</RedwoodRouter>
-)
 
 // SETUP
 const HomePage = () => <h1>Home Page</h1>

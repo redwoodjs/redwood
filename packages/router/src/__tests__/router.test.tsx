@@ -53,11 +53,6 @@ const mockUseAuth =
   () =>
     createDummyAuthContextValues({ loading, isAuthenticated })
 
-interface RouterProps {
-  useAuth?: () => AuthContextInterface
-  children: React.ReactNode
-}
-
 // SETUP
 const HomePage = () => <h1>Home Page</h1>
 const LoginPage = () => <h1>Login Page</h1>

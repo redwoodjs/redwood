@@ -1,12 +1,8 @@
 import { render, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 
-import { Router as RedwoodRouter, Route, routes, getFocus } from '../internal'
+import { Router, Route, routes, getFocus } from '../internal'
 import RouteFocus from '../route-focus'
-
-const Router = ({ children }) => (
-  <RedwoodRouter>{children}</RedwoodRouter>
-)
 
 // SETUP
 const RouteFocusPage = () => (
