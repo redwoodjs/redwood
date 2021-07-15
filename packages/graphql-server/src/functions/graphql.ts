@@ -20,7 +20,12 @@ import type {
   Context as LambdaContext,
   APIGatewayProxyResult,
 } from 'aws-lambda'
-import { GraphQLError, GraphQLSchema } from 'graphql'
+import {
+  GraphQLError,
+  GraphQLSchema,
+  Kind,
+  OperationDefinitionNode,
+} from 'graphql'
 import {
   Request,
   getGraphQLParameters,
@@ -332,9 +337,15 @@ const useRedwoodLogger = (
   return {
     onExecute({ args }) {
       const options = {} as any
+      const rootOperation = args.document.definitions.find(
+        (o) => o.kind === Kind.OPERATION_DEFINITION
+      ) as OperationDefinitionNode
 
       if (includeOperationName && args.operationName) {
-        options['operationName'] = args.operationName
+        options['operationName'] =
+          args.operationName ||
+          rootOperation.name?.value ||
+          'Anonymous Operation'
       }
 
       if (includeQuery) {
@@ -342,7 +353,8 @@ const useRedwoodLogger = (
       }
 
       if (includeRequestId) {
-        options['requestId'] = args.contextValue.awsRequestId || uuidv4()
+        options['requestId'] =
+          args.contextValue.event?.requestContext?.requestId || uuidv4()
       }
 
       if (includeUserAgent) {
