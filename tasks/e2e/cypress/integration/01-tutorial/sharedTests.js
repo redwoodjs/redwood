@@ -37,7 +37,7 @@ const BASE_DIR = Cypress.env('RW_PATH')
 function waitForApiSide() {
   // Pause because chokidar `ignoreInitial` and debounce add at least 1000ms delay
   // to restarting the api-server in the e2e environment.
-  cy.wait(2_000)
+  cy.wait(1_000)
   cy.waitUntil(
     () =>
       cy
@@ -358,8 +358,6 @@ export const test_auth_cell_failure = () =>
     )
 
     // Wait for API server to be available.
-    cy.wait(2_000)
-    cy.visit('http://localhost:8910/')
     waitForApiSide()
     cy.visit('http://localhost:8910/posts')
     cy.contains("I'm sorry, Dave")
