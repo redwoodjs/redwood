@@ -60,11 +60,7 @@ export const runPrerender = async ({
   const { default: App } = await import(getPaths().web.app)
 
   const componentAsHtml = ReactDOMServer.renderToString(
-    <LocationProvider
-      location={{
-        pathname: routerPath,
-      }}
-    >
+    <LocationProvider location={{ pathname: routerPath }}>
       <App />
     </LocationProvider>
   )
