@@ -35,7 +35,7 @@ jobs:
       - name: Create a temporary directory
         id: createpath
         run: |
-          project_path=$(./tasks/test-project/scripts/createTempDir)
+          project_path=$(node tasks/test-project/scripts/createTempDir)
           echo "::set-output name=project_path::$project_path"
 
       - name: Cache project "node_modules"
