@@ -38,8 +38,9 @@ import Step9_3_DisableAuth from './codemods/Step9_3_DisableAuth'
 const BASE_DIR = Cypress.env('RW_PATH')
 
 function waitForApiSide() {
-  // Pause because chokidar and debounce add 1000ms delay to restarting the api-server in the e2e environment.
-  cy.wait(1000)
+  // Pause because chokidar `ignoreInitial` and debounce add at least 1000ms delay
+  // to restarting the api-server in the e2e environment.
+  cy.wait(1_000)
   cy.waitUntil(
     () =>
       cy
@@ -55,39 +56,13 @@ function waitForApiSide() {
           failOnStatusCode: false,
         })
         .then((r) => {
-          return r.status === 200
+          return r.status === 200 // The first response should be 504
         }),
     { interval: 2000 }
   )
 }
 
-describe('The Redwood Tutorial - Golden path edition', () => {
-  // TODO: https://redwoodjs.com/tutorial/saving-data
-  // TODO: https://redwoodjs.com/tutorial/administration
-
-  it('0. Starting Development', () => {
-    // disable auth
-    cy.writeFile(
-      path.join(BASE_DIR, 'api/src/lib/auth.js'),
-      Step9_3_DisableAuth
-    )
-
-    // reset redwood toml to use standard apollo server aka not envelop
-    cy.writeFile(path.join(BASE_DIR, 'redwood.toml'), Step0_1_RedwoodToml)
-
-    // needed because can run integration tests out of order and the helix tests will overwrite the graphql function
-    cy.writeFile(
-      path.join(BASE_DIR, 'api/src/functions/graphql.js'),
-      Step0_2_GraphQL
-    )
-
-    // https://redwoodjs.com/tutorial/installation-starting-development
-    cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step1_1_Routes)
-    cy.visit('http://localhost:8910')
-
-    cy.get('h1 > span').contains('Welcome to RedwoodJS!')
-  })
-
+export const test_first_page = () =>
   it('1. Our First Page', () => {
     //redwoodjs.com/tutorial/our-first-page
     cy.visit('http://localhost:8910')
@@ -95,6 +70,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     cy.get('h1').should('contain', 'HomePage')
   })
 
+export const test_pages = () =>
   it('2. A Second Page and a Link', () => {
     // https://redwoodjs.com/tutorial/a-second-page-and-a-link
     cy.exec(`cd ${BASE_DIR}; yarn redwood generate page about --force`)
@@ -112,6 +88,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     cy.contains('Return home').click()
   })
 
+export const test_layouts = () =>
   it('3. Layouts', () => {
     cy.exec(`cd ${BASE_DIR}; yarn redwood generate layout blog --force`)
     cy.writeFile(
@@ -137,6 +114,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     )
   })
 
+export const test_dynamic = () =>
   it('4. Getting Dynamic', () => {
     // https://redwoodjs.com/tutorial/getting-dynamic
     cy.writeFile(path.join(BASE_DIR, 'api/db/schema.prisma'), Step4_1_DbSchema)
@@ -202,6 +180,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     cy.get('button').contains('Save').click()
   })
 
+export const test_cells = () =>
   it('5. Cells', () => {
     cy.exec(`cd ${BASE_DIR}; yarn rw g cell BlogPosts --force`)
     cy.writeFile(
@@ -229,6 +208,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     )
   })
 
+export const test_routing_params = () =>
   it('6. Routing Params', () => {
     // https://redwoodjs.com/tutorial/routing-params
     cy.exec(`cd ${BASE_DIR}; yarn rw g page BlogPost --force`)
@@ -293,6 +273,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     cy.get('main').should('contain', 'foo bar')
   })
 
+export const test_forms = () =>
   it("7. Everyone's Favorite Thing to Build: Forms", () => {
     // https://redwoodjs.com/tutorial/everyone-s-favorite-thing-to-build-forms
     cy.exec(`cd ${BASE_DIR}; yarn rw g page contact --force`)
@@ -325,6 +306,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     // {name: "test name", email: "foo@bar.com", message: "test message"}
   })
 
+export const test_saving_data = () =>
   it('8. Saving Data', () => {
     // navigate back out
 
@@ -364,6 +346,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     cy.get('main').should('contain', 'Thank you for your submission')
   })
 
+export const test_auth_cell_failure = () =>
   it('9. Auth - Render Cell Failure Message', () => {
     // Turn auth off.
     cy.writeFile(
@@ -393,4 +376,40 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       Step9_3_DisableAuth
     )
   })
+
+describe('The Redwood Tutorial - Golden path edition', () => {
+  // TODO: https://redwoodjs.com/tutorial/saving-data
+  // TODO: https://redwoodjs.com/tutorial/administration
+  it('0. Starting Development', () => {
+    // disable auth
+    cy.writeFile(
+      path.join(BASE_DIR, 'api/src/lib/auth.js'),
+      Step9_3_DisableAuth
+    )
+
+    // reset redwood toml to use standard apollo server aka not envelop
+    cy.writeFile(path.join(BASE_DIR, 'redwood.toml'), Step0_1_RedwoodToml)
+
+    // needed because can run integration tests out of order and the helix tests will overwrite the graphql function
+    cy.writeFile(
+      path.join(BASE_DIR, 'api/src/functions/graphql.js'),
+      Step0_2_GraphQL
+    )
+
+    // https://redwoodjs.com/tutorial/installation-starting-development
+    cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step1_1_Routes)
+    cy.visit('http://localhost:8910')
+
+    cy.get('h1 > span').contains('Welcome to RedwoodJS!')
+  })
+
+  test_first_page()
+  test_pages()
+  test_layouts()
+  test_dynamic()
+  test_cells()
+  test_routing_params()
+  test_forms()
+  test_saving_data()
+  test_auth_cell_failure()
 })
