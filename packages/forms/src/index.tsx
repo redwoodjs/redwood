@@ -214,7 +214,7 @@ interface FieldErrorProps extends React.HTMLProps<HTMLSpanElement> {
 
 const FieldError = (props: FieldErrorProps) => {
   const { errors } = useFormContext()
-  const validationError = props.name ? get(errors, props.name) : undefined
+  const validationError = get(errors, props.name)
   const errorMessage =
     validationError &&
     (validationError.message ||
