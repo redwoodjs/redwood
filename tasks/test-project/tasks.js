@@ -12,10 +12,12 @@ const { getExecaOptions, applyCodemod } = require('./util')
 let OUTPUT_PATH
 
 function fullPath(name) {
-  if (name.startsWith('api')) {
-    name += '.ts'
-  } else if (name.startsWith('web')) {
-    name += '.tsx'
+  if (!path.extname(name)) {
+    if (name.startsWith('api')) {
+      name += '.ts'
+    } else if (name.startsWith('web')) {
+      name += '.tsx'
+    }
   }
 
   return path.join(OUTPUT_PATH, name)
@@ -151,12 +153,12 @@ async function webTasks(outputPath) {
           return execa('yarn rw setup tailwind', [], execaOptions)
         },
       },
-      {
-        title: `Running lint`,
-        task: async () => {
-          return execa('yarn rw lint --fix', [], execaOptions)
-        },
-      },
+      // {
+      //   title: `Running lint`,
+      //   task: async () => {
+      //     return execa('yarn rw lint --fix', [], execaOptions)
+      //   },
+      // },
     ],
     {
       exitOnError: true,
@@ -175,7 +177,7 @@ async function addModel(schema) {
 async function apiTasks(outputPath) {
   OUTPUT_PATH = outputPath
 
-  const execaOptions = getExecaOptions(outputPath)
+  const execaOptionsForProject = getExecaOptions(outputPath)
 
   return new Listr([
     {
@@ -188,22 +190,22 @@ async function apiTasks(outputPath) {
         return execa(
           `yarn rw prisma migrate dev --name create_product`,
           [],
-          execaOptions
+          execaOptionsForProject
         )
       },
     },
     {
       title: 'Scaffoding post',
       task: async () => {
-        return execa('yarn rw g scaffold post', [], execaOptions)
+        return execa('yarn rw g scaffold post', [], execaOptionsForProject)
       },
     },
     {
       title: 'Seeding database',
       task: async () => {
-        await applyCodemod('seed.js', 'api/db/seed.js')
+        await applyCodemod('seed.js', fullPath('api/db/seed.js'))
 
-        return execa('yarn rw prisma db seed', [], execaOptions)
+        return execa('yarn rw prisma db seed', [], execaOptionsForProject)
       },
     },
     {
@@ -216,10 +218,10 @@ async function apiTasks(outputPath) {
         await execa(
           `yarn rw prisma migrate dev --name create_contact`,
           [],
-          execaOptions
+          execaOptionsForProject
         )
 
-        await execa(`yarn rw g sdl contact`, [], execaOptions)
+        await execa(`yarn rw g sdl contact`, [], execaOptionsForProject)
 
         await applyCodemod(
           'contactsSdl.js',
@@ -227,12 +229,12 @@ async function apiTasks(outputPath) {
         )
       },
     },
-    {
-      title: `Running lint`,
-      task: async () => {
-        return execa('yarn rw lint --fix', [], execaOptions)
-      },
-    },
+    // {
+    //   title: `Running lint`,
+    //   task: async () => {
+    //     return execa('yarn rw lint --fix', [], execaOptions)
+    //   },
+    // },
   ])
 }
 
