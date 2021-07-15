@@ -39,7 +39,7 @@
   "devDependencies": {
     "@redwoodjs/auth": "0.35.0",
     "@redwoodjs/dev-server": "0.35.0",
-    "@types/jsonwebtoken": "8.5.3",
+    "@types/jsonwebtoken": "8.5.4",
     "@types/lodash.merge": "4.6.6",
     "@types/lodash.omitby": "4.6.6",
     "@types/uuid": "8.3.0",
