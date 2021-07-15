@@ -4,8 +4,6 @@ import { render, waitFor, act, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 
 import { AuthContextInterface } from '@redwoodjs/auth'
-import '@redwoodjs/history'
-import { navigate, jump, back } from '@redwoodjs/router'
 
 import {
   Router,
@@ -14,6 +12,9 @@ import {
   Redirect,
   routes,
   Link,
+  navigate,
+  jump,
+  back,
 } from '../'
 import { useParams } from '../params'
 import { Set } from '../Set'
@@ -690,12 +691,12 @@ test('jump to new route, then go back', async () => {
   const screen = render(<TestRouter />)
 
   // starts on home page
-  await waitFor(() => screen.getByText("Home Page"))
+  await waitFor(() => screen.getByText('Home Page'))
 
   act(() => navigate(routes.about()))
-  await waitFor(() => screen.getByText("About Page"))
+  await waitFor(() => screen.getByText('About Page'))
   act(() => jump(routes.help()))
-  await waitFor(() => screen.getByText("Help Page"))
+  await waitFor(() => screen.getByText('Help Page'))
   act(() => back())
-  await waitFor(() => screen.getByText("Home Page"))
+  await waitFor(() => screen.getByText('Home Page'))
 })
