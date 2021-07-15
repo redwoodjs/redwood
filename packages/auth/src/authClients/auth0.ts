@@ -21,11 +21,11 @@ export const auth0 = (client: Auth0): AuthClientAuth0 => {
         global?.location?.search?.includes('state=')
       ) {
         const { appState } = await client.handleRedirectCallback()
-        gHistory.jump(
+        gHistory.navigate(
           appState && appState.targetUrl
             ? appState.targetUrl
             : window.location.pathname,
-          document.title
+          { replace: true }
         )
       }
     },
