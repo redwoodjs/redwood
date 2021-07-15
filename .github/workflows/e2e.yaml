@@ -43,6 +43,8 @@ jobs:
 
       - name: Init Git for RedwoodJS app directory
         run: |
+          git config --global user.email "you@example.com"
+          git config --global user.name "Your Name"
           git init --initial-branch main && git add .
           git commit -a --message=init
         working-directory: ${{ steps.createpath.outputs.project_path }}
