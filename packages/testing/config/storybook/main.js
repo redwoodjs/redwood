@@ -60,6 +60,7 @@ const baseConfig = {
       os: false,
       tty: false,
       crypto: false,
+      zlib: false,
     }
 
     // ** PLUGINS **
