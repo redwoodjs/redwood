@@ -493,7 +493,7 @@ const addLayoutImport = ({ model: name, path: scaffoldPath = '' }) => {
   const routesContent = readFile(routesPath).toString()
 
   const newRoutesContent = routesContent.replace(
-    /'@redwoodjs\/router'(\s*)/,
+    /['"]@redwoodjs\/router['"](\s*)/,
     `'@redwoodjs/router'\n${importLayout}$1`
   )
   writeFile(routesPath, newRoutesContent, { overwriteExisting: true })
@@ -501,12 +501,21 @@ const addLayoutImport = ({ model: name, path: scaffoldPath = '' }) => {
   return 'Added layout import to Routes.{js,tsx}'
 }
 
-const addSetImport = () => {
+const addSetImport = (task) => {
   const routesPath = getPaths().web.routes
   const routesContent = readFile(routesPath).toString()
   const [redwoodRouterImport, importStart, spacing, importContent, importEnd] =
-    routesContent.match(/(import {)(\s*)([^]*)(} from '@redwoodjs\/router')/) ||
-    []
+    routesContent.match(
+      /(import {)(\s*)([^]*)(} from ['"]@redwoodjs\/router['"])/
+    ) || []
+
+  if (!redwoodRouterImport) {
+    task.skip(
+      "Couldn't add Set import from @redwoodjs/router to Routes.{js,tsx}"
+    )
+    return undefined
+  }
+
   const routerImports = importContent.replace(/\s/g, '').split(',')
   if (routerImports.includes(PACKAGE_SET)) {
     return 'Skipping Set import'
@@ -574,7 +583,7 @@ const tasks = ({ model, path, force, tests, typescript, javascript }) => {
       },
       {
         title: 'Adding set import...',
-        task: async () => addSetImport({ model, path }),
+        task: async (_, task) => addSetImport(task),
       },
       {
         title: 'Adding scaffold routes...',
