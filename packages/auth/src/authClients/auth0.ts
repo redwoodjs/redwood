@@ -21,12 +21,11 @@ export const auth0 = (client: Auth0): AuthClientAuth0 => {
         global?.location?.search?.includes('state=')
       ) {
         const { appState } = await client.handleRedirectCallback()
-        gHistory.navigate(
+        const url =
           appState && appState.targetUrl
             ? appState.targetUrl
-            : window.location.pathname,
-          { replace: true }
-        )
+            : window.location.pathname
+        gHistory.navigate(url, { replace: true })
       }
     },
     login: async (options?) => client.loginWithRedirect(options),
