@@ -24,10 +24,21 @@ const test = base.extend<{}, DevServerFixtures>({
     async ({ port }, use) => {
       // Setup express app.
       console.log('Starting dev server.....')
+
+      const projectPath = process.env.PROJECT_PATH
+
+      if (!projectPath) {
+        throw new Error(
+          'PROJECT_PATH not defined. Need this to launch the dev server'
+        )
+      }
+
+      console.log(`Launching dev server at ${projectPath}`)
+
       execa.command(
         `yarn rw dev --no-generate --fwd="--open=false --port ${port}" `,
         {
-          cwd: process.env.PROJECT_PATH,
+          cwd: projectPath,
           shell: true,
           stdio: 'inherit',
         }
