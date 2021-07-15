@@ -299,40 +299,50 @@ describe('The Redwood Tutorial - Golden path Helix/Envelop edition', () => {
     cy.get('#tutorial-form').submit()
   })
 
-  // it('8. Saving Data', () => {
-  //   // navigate back out
-  //   cy.visit('http://localhost:8910/')
+  it('8. Saving Data', () => {
+    // navigate back out
 
-  //   // Create a CRUD contacts service
-  //   cy.exec(`cd ${BASE_DIR}; yarn rw g sdl contact --force --crud`)
+    // Create a CRUD contacts service
+    cy.exec(`cd ${BASE_DIR}; yarn rw g sdl contact --force --crud`)
 
-  //   cy.writeFile(
-  //     path.join(BASE_DIR, 'web/src/pages/ContactPage/ContactPage.js'),
-  //     Step8_1_ContactPageWithoutJsEmailValidation
-  //   )
+    cy.writeFile(
+      path.join(BASE_DIR, 'web/src/pages/ContactPage/ContactPage.js'),
+      Step8_1_ContactPageWithoutJsEmailValidation
+    )
 
-  //   cy.writeFile(
-  //     path.join(BASE_DIR, 'api/src/services/contacts/contacts.js'),
-  //     Step8_2_CreateContactServiceValidation
-  //   )
+    cy.writeFile(
+      path.join(BASE_DIR, 'api/src/services/contacts/contacts.js'),
+      Step8_2_CreateContactServiceValidation
+    )
 
-  //   // then get to new contact with api side validation
-  //   cy.contains('Contact').click()
+    // Wait for API server to be available.
+    cy.waitUntil(
+      () =>
+        cy
+          .visit('http://localhost:8911/graphql')
+          .then(() => Cypress.$('#playground-config').length),
+      { interval: 2000 }
+    )
 
-  //   cy.get('input#name').clear().type('test name')
-  //   cy.get('input#email').clear().type('foo bar com')
-  //   cy.get('textarea#message').clear().type('test message')
-  //   cy.contains('Save').click()
+    cy.visit('http://localhost:8910/')
 
-  //   cy.get('main').should('contain', "Can't create new contact")
-  //   cy.get('main').should('contain', 'is not formatted like an email address')
+    // then get to new contact with api side validation
+    cy.contains('Contact').click()
 
-  //   // then test saving with a valid email
-  //   cy.get('input#email').clear().type('test@example.com')
-  //   cy.contains('Save').click()
+    cy.get('input#name').clear().type('test name')
+    cy.get('input#email').clear().type('foo bar com')
+    cy.get('textarea#message').clear().type('test message')
+    cy.contains('Save').click()
 
-  //   cy.get('main').should('contain', 'Thank you for your submission')
-  // })
+    cy.get('main').should('contain', "Can't create new contact")
+    cy.get('main').should('contain', 'is not formatted like an email address')
+
+    // then test saving with a valid email
+    cy.get('input#email').clear().type('test@example.com')
+    cy.contains('Save').click()
+
+    cy.get('main').should('contain', 'Thank you for your submission')
+  })
 
   // it('9. Auth - Render Cell Failure Message', () => {
   //   // enable auth

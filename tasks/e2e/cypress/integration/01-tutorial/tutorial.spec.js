@@ -37,11 +37,41 @@ import Step9_3_DisableAuth from './codemods/Step9_3_DisableAuth'
 
 const BASE_DIR = Cypress.env('RW_PATH')
 
+function waitForApiSide() {
+  // Pause because chokidar and debounce add 1000ms delay to restarting the api-server in the e2e environment.
+  cy.wait(1000)
+  cy.waitUntil(
+    () =>
+      cy
+        .request({
+          method: 'POST',
+          url: 'http://localhost:8910/.redwood/functions/graphql',
+          headers: {
+            'content-type': 'application/json',
+          },
+          body: JSON.stringify({
+            query: 'query Q { redwood { version } }',
+          }),
+          failOnStatusCode: false,
+        })
+        .then((r) => {
+          return r.status === 200
+        }),
+    { interval: 2000 }
+  )
+}
+
 describe('The Redwood Tutorial - Golden path edition', () => {
   // TODO: https://redwoodjs.com/tutorial/saving-data
   // TODO: https://redwoodjs.com/tutorial/administration
 
   it('0. Starting Development', () => {
+    // disable auth
+    cy.writeFile(
+      path.join(BASE_DIR, 'api/src/lib/auth.js'),
+      Step9_3_DisableAuth
+    )
+
     // reset redwood toml to use standard apollo server aka not envelop
     cy.writeFile(path.join(BASE_DIR, 'redwood.toml'), Step0_1_RedwoodToml)
 
@@ -118,13 +148,9 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     cy.exec(`cd ${BASE_DIR}; yarn rw prisma migrate dev`)
     cy.exec(`cd ${BASE_DIR}; yarn rw g scaffold post --force`)
 
-    cy.waitUntil(
-      () =>
-        cy
-          .visit('http://localhost:8910/posts')
-          .then(() => Cypress.$('.rw-button').length),
-      { interval: 2000 }
-    )
+    // Wait for API server to be available.
+    waitForApiSide()
+    cy.visit('http://localhost:8910/posts')
 
     cy.get('h1').should('contain', 'Posts')
     cy.get('a.rw-button.rw-button-green').should(
@@ -245,13 +271,9 @@ describe('The Redwood Tutorial - Golden path edition', () => {
       Step6_5_BlogPostsCellMock
     )
 
-    cy.waitUntil(
-      () =>
-        cy
-          .visit('http://localhost:8910/posts')
-          .then(() => Cypress.$('.rw-button').length),
-      { interval: 1000 }
-    )
+    // Wait for API server to be available.
+    waitForApiSide()
+    cy.visit('http://localhost:8910/posts')
 
     // New entry
     cy.contains(' New Post').click()
@@ -303,64 +325,72 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     // {name: "test name", email: "foo@bar.com", message: "test message"}
   })
 
-  // it.skip('8. Saving Data', () => {
-  //   // navigate back out
-  //   cy.visit('http://localhost:8910/')
+  it('8. Saving Data', () => {
+    // navigate back out
 
-  //   // Create a CRUD contacts service
-  //   cy.exec(`cd ${BASE_DIR}; yarn rw g sdl contact --force --crud`)
+    // Create a CRUD contacts service
+    cy.exec(`cd ${BASE_DIR}; yarn rw g sdl contact --force --crud`)
 
-  //   cy.writeFile(
-  //     path.join(BASE_DIR, 'web/src/pages/ContactPage/ContactPage.js'),
-  //     Step8_1_ContactPageWithoutJsEmailValidation
-  //   )
+    cy.writeFile(
+      path.join(BASE_DIR, 'web/src/pages/ContactPage/ContactPage.js'),
+      Step8_1_ContactPageWithoutJsEmailValidation
+    )
 
-  //   cy.writeFile(
-  //     path.join(BASE_DIR, 'api/src/services/contacts/contacts.js'),
-  //     Step8_2_CreateContactServiceValidation
-  //   )
+    cy.writeFile(
+      path.join(BASE_DIR, 'api/src/services/contacts/contacts.js'),
+      Step8_2_CreateContactServiceValidation
+    )
 
-  //   // then get to new contact with api side validation
-  //   cy.contains('Contact').click()
+    // Wait for API server to be available.
+    waitForApiSide()
 
-  //   cy.get('input#name').clear().type('test name')
-  //   cy.get('input#email').clear().type('foo bar com')
-  //   cy.get('textarea#message').clear().type('test message')
-  //   cy.contains('Save').click()
+    cy.visit('http://localhost:8910/')
 
-  //   cy.get('main').should('contain', "Can't create new contact")
-  //   cy.get('main').should('contain', 'is not formatted like an email address')
+    // then get to new contact with api side validation
+    cy.contains('Contact').click()
 
-  //   // then test saving with a valid email
-  //   cy.get('input#email').clear().type('test@example.com')
-  //   cy.contains('Save').click()
+    cy.get('input#name').clear().type('test name')
+    cy.get('input#email').clear().type('foo bar com')
+    cy.get('textarea#message').clear().type('test message')
+    cy.contains('Save').click()
 
-  //   cy.get('main').should('contain', 'Thank you for your submission')
-  // })
+    cy.get('main').should('contain', "Can't create new contact")
+    cy.get('main').should('contain', 'is not formatted like an email address')
 
-  // it('9. Auth - Render Cell Failure Message', () => {
-  //   // enable auth
-  //   cy.writeFile(
-  //     path.join(BASE_DIR, 'api/src/lib/auth.js'),
-  //     Step9_1_RequireAuth
-  //   )
+    // then test saving with a valid email
+    cy.get('input#email').clear().type('test@example.com')
+    cy.contains('Save').click()
 
-  //   cy.writeFile(
-  //     path.join(BASE_DIR, 'api/src/services/posts/posts.js'),
-  //     Step9_2_PostsRequireAuth
-  //   )
+    cy.get('main').should('contain', 'Thank you for your submission')
+  })
 
-  //   cy.visit('http://localhost:8910/posts')
+  it('9. Auth - Render Cell Failure Message', () => {
+    // Turn auth off.
+    cy.writeFile(
+      path.join(BASE_DIR, 'api/src/lib/auth.js'),
+      Step9_3_DisableAuth
+    )
+    // Turn auth on.
+    cy.writeFile(
+      path.join(BASE_DIR, 'api/src/lib/auth.js'),
+      Step9_1_RequireAuth
+    )
+    // Add beforeResolver.
+    cy.writeFile(
+      path.join(BASE_DIR, 'api/src/services/posts/posts.js'),
+      Step9_2_PostsRequireAuth
+    )
 
-  //   cy.get('main').should('not.contain', 'Second post')
+    // Wait for API server to be available.
+    waitForApiSide()
+    cy.visit('http://localhost:8910/posts')
 
-  //   cy.get('main > div:nth-child(1)').should('contain', 'Error')
-  //   cy.get('main > div:nth-child(1)').should('contain', "can't do that")
+    cy.contains("I'm sorry, Dave")
 
-  //   // disable auth
-  //   cy.writeFile(
-  //     path.join(BASE_DIR, 'api/src/lib/auth.js'),
-  //     Step9_3_DisableAuth
-  //   )
-  // })
+    // disable auth
+    cy.writeFile(
+      path.join(BASE_DIR, 'api/src/lib/auth.js'),
+      Step9_3_DisableAuth
+    )
+  })
 })
