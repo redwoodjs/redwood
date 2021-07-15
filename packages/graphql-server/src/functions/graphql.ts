@@ -354,7 +354,9 @@ const useRedwoodLogger = (
 
       if (includeRequestId) {
         options['requestId'] =
-          args.contextValue.event?.requestContext?.requestId || uuidv4()
+          args.contextValue.context?.awsRequestId ||
+          args.contextValue.event?.requestContext?.requestId ||
+          uuidv4()
       }
 
       if (includeUserAgent) {
@@ -384,7 +386,7 @@ const useRedwoodLogger = (
             )
           } else {
             if (includeTracing) {
-              options['tracing'] = args.contextValue._envelopTracing
+              options['tracing'] = result.extensions?.envelopTracing
             }
 
             envelopLogger.info(
