@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/history",
   "description": "RedwoodJS history",
-  "version": "0.35.0",
+  "version": "0.35.1",
   "license": "MIT",
   "files": [ "dist" ],
   "main": "./dist/index.js",
