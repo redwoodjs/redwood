@@ -264,17 +264,22 @@ const useRedwoodAuthContext = (
   }
 }
 
-export const useUserContext = (
-  userContextBuilder: NonNullable<GraphQLHandlerOptions['context']>
+/**
+ * This Envelop plugin enriches the context on a per-request basis
+ * by populating it with the results of a custom function
+ * @returns
+ */
+export const usePopulateContext = (
+  populateContextBuilder: NonNullable<GraphQLHandlerOptions['context']>
 ): Plugin<RedwoodGraphQLContext> => {
   return {
     async onContextBuilding({ context, extendContext }) {
-      const userContext =
-        typeof userContextBuilder === 'function'
-          ? await userContextBuilder({ context })
-          : userContextBuilder
+      const populateContext =
+        typeof populateContextBuilder === 'function'
+          ? await populateContextBuilder({ context })
+          : populateContextBuilder
 
-      extendContext(userContext)
+      extendContext(populateContext)
     },
   }
 }
@@ -282,7 +287,7 @@ export const useUserContext = (
 /**
  * This Envelop plugin waits until the GraphQL context is done building and sets the
  * Redwood global context which can be imported with:
- * // import { context } from '@redwoodjs/api'
+ * // import { context } from '@redwoodjs/graphql-server'
  * @returns
  */
 export const useRedwoodGlobalContextSetter =
@@ -465,7 +470,7 @@ export const createGraphQLHandler = ({
   }
 
   if (context) {
-    plugins.push(useUserContext(context))
+    plugins.push(usePopulateContext(context))
   }
 
   if (extraPlugins && extraPlugins.length > 0) {
