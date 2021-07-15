@@ -1,8 +1,9 @@
 name: Lint, build and run tests
 
-on:
-  pull_request:
-    types: [opened, synchronize, reopened]
+# Disable temporarily
+# on:
+#   pull_request:
+#     types: [opened, synchronize, reopened]
 
 jobs:
   all:
