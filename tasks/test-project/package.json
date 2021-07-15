@@ -7,6 +7,9 @@
     "transform": "node node_modules/.bin/jscodeshift"
   },
   "dependencies": {
+    "@playwright/test": "^1.12.3",
+    "execa": "^5.1.1",
+    "is-port-reachable": "^3.0.0",
     "jscodeshift": "^0.13.0"
   }
 }

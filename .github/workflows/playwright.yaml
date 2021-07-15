@@ -38,7 +38,7 @@ jobs:
           project_path=$(mktemp -d -t redwood.XXXXXX)
           echo "::set-output name=project_path::$project_path"
 
-      - name: Cache project "node_modules"
+      - name: Cache project "node_modules" and playwright deps
         uses: actions/cache@v2
         with:
           path: "${{ steps.createpath.outputs.project_path }}/**/node_modules"
@@ -46,3 +46,11 @@ jobs:
 
       - name: Create a test project
         run:  yarn build:test-project ${{ steps.createpath.outputs.project_path }} --verbose --link --force
+
+      - name: Install Playwright deps
+        run:  npx playwright install-deps chromium
+
+      - name: Run tests
+        run:  cd tasks/test-project/playwright && npx playwright test
+        env:
+          PROJECT_PATH: ${{ steps.createpath.outputs.project_path }}
