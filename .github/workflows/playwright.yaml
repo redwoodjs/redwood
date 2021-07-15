@@ -55,6 +55,7 @@ jobs:
         run:  npx --cache ./playwright-cache playwright install-deps chromium
 
       - name: Run tests
-        run:  cd tasks/test-project/playwright && npx --cache ./playwright-cache playwright test
+        working-directory: ./tasks/test-project/playwright
+        run: npx --cache ./playwright-cache playwright test
         env:
           PROJECT_PATH: ${{ steps.createpath.outputs.project_path }}
