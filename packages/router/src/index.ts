@@ -44,4 +44,4 @@ export interface AvailableRoutes {
 
 export { SkipNavLink, SkipNavContent } from '@reach/skip-nav'
 
-export { navigate } from '@redwoodjs/history'
+export { navigate, jump, back } from '@redwoodjs/history'
