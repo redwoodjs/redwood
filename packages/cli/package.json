@@ -16,7 +16,6 @@
   "dependencies": {
     "@prisma/sdk": "2.26.0",
     "@redwoodjs/api-server": "0.35.0",
-    "@redwoodjs/dev-server": "0.35.0",
     "@redwoodjs/internal": "0.35.0",
     "@redwoodjs/prerender": "0.35.0",
     "@redwoodjs/structure": "0.35.0",

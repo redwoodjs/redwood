@@ -29,8 +29,7 @@
   },
   "devDependencies": {
     "@redwoodjs/auth": "0.35.0",
-    "@redwoodjs/dev-server": "0.35.0",
-    "@types/crypto-js": "^4.0.1",
+    "@types/crypto-js": "4.0.1",
     "@types/graphql-depth-limit": "1.1.2",
     "@types/jsonwebtoken": "8.5.3",
     "@types/lodash.merge": "4.6.6",
