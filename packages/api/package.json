@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/api",
-  "version": "0.35.0",
+  "version": "0.35.1",
   "files": [
     "dist",
     "logger",
@@ -28,8 +28,8 @@
     "uuid": "8.3.2"
   },
   "devDependencies": {
-    "@redwoodjs/auth": "0.35.0",
-    "@redwoodjs/dev-server": "0.35.0",
+    "@redwoodjs/auth": "0.35.1",
+    "@redwoodjs/dev-server": "0.35.1",
     "@types/crypto-js": "^4.0.1",
     "@types/graphql-depth-limit": "1.1.2",
     "@types/jsonwebtoken": "8.5.3",
