@@ -62,9 +62,9 @@ jobs:
           CYPRESS_RW_PATH:  "${{ steps.createpath.outputs.project_path }}"
         with:
           browser: chrome
+          record: true
           env: true
           wait-on: 'http://localhost:8910'
-          record: false
           working-directory: ./tasks/e2e
 
       - name: Run `rw test`
