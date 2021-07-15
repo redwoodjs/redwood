@@ -42,8 +42,9 @@ export const prebuildApiFiles = (srcFiles: string[]) => {
       return undefined
     }
 
-    let dstPath = srcPath.replace(rwjsPaths.base, '')
+    let dstPath = path.relative(rwjsPaths.base, srcPath)
     dstPath = path.join(rwjsPaths.generated.prebuild, dstPath)
+
     dstPath = dstPath.replace(/\.(ts)$/, '.js') // TODO: Figure out a better way to handle extensions
     fs.mkdirSync(path.dirname(dstPath), { recursive: true })
     fs.writeFileSync(dstPath, result.code)
