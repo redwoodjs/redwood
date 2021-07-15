@@ -1,1 +1,1 @@
-export { navigate, jump, back, gHistory } from './history'
+export { navigate, back, gHistory, NavigateOptions } from './history'

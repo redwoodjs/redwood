@@ -13,7 +13,6 @@ import {
   routes,
   Link,
   navigate,
-  jump,
   back,
 } from '../'
 import { useParams } from '../params'
@@ -690,7 +689,7 @@ test('jump to new route, then go back', async () => {
 
   act(() => navigate(routes.about()))
   await waitFor(() => screen.getByText('About Page'))
-  act(() => jump(routes.help()))
+  act(() => navigate(routes.help(), { replace: true }))
   await waitFor(() => screen.getByText('Help Page'))
   act(() => back())
   await waitFor(() => screen.getByText('Home Page'))
