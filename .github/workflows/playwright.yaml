@@ -42,7 +42,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ steps.createpath.outputs.project_path }}/**/node_modules
-          key: project_modules_${{ runner.os }}_${{ hashFiles("${{ steps.createpath.outputs.project_path }}/**/node_modules") }}
+          key: project_modules_${{ runner.os }}_${{ hashFiles('packages/create-redwood-app/template') }}
 
       - name: Cache playwright deps "node_modules"
         uses: actions/cache@v2
