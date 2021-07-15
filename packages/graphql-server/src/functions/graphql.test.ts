@@ -2,15 +2,15 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { envelop, Plugin } from '@envelop/core'
 
-import { context, getPerRequestContext } from '@redwoodjs/api'
+import { context, getPerRequestContext } from '@redwoodjs/graphql-server'
 
-import { useUserContext, useRedwoodGlobalContextSetter } from './graphql'
+import { usePopulateContext, useRedwoodGlobalContextSetter } from './graphql'
 
 const createContextHandler = (userContext?: any) => {
   const plugins: Plugin<any>[] = [useRedwoodGlobalContextSetter()]
 
   if (userContext) {
-    plugins.push(useUserContext(userContext))
+    plugins.push(usePopulateContext(userContext))
   }
 
   const getEnveloped = envelop({ plugins })
