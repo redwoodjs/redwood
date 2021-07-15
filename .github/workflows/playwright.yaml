@@ -34,7 +34,7 @@ jobs:
 
       - name: Create project directory
         id: createpath
-        run: echo "::set-output name=project_path::$($HOME/generated-blog-project)"
+        run: echo "::set-output name=project_path::$HOME/generated-blog-project"
 
       - name: Cache project "node_modules"
         uses: actions/cache@v2
