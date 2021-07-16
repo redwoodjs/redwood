@@ -94,6 +94,11 @@ const sanitizeArgv = (argv: Array<string>) => {
 // actual telemetry send process
 ;(async function () {
   const argv = require('yargs/yargs')(process.argv.slice(2)).argv
+  let type = 'command'
+
+  if (argv.error) {
+    type = 'error'
+  }
 
   try {
     const project = new RWProject({
@@ -102,10 +107,11 @@ const sanitizeArgv = (argv: Array<string>) => {
     })
 
     const payload = {
-      type: argv.type || 'command',
+      type,
       command: sanitizeArgv(JSON.parse(argv.argv)),
       ci: ci.isCI,
       duration: argv.duration ? parseInt(argv.duration) : null,
+      error: argv.error,
       nodeEnv: process.env.NODE_ENV || null,
       routeCount: project.getRouter().routes.length,
       serviceCount: project.services.length,

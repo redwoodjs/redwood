@@ -29,6 +29,20 @@ export const timedTelemetry = async (
   return result
 }
 
+export const telemetryError = async (argv: Array<string>, error: any) => {
+  spawn(
+    process.execPath,
+    [
+      path.join(__dirname, 'sendTelemetry.js'),
+      '--argv',
+      JSON.stringify(argv),
+      '--error',
+      JSON.stringify(error),
+    ],
+    { detached: true, stdio: 'ignore' }
+  ).unref()
+}
+
 // used as yargs middleware when any command is invoked
 export const telemetryMiddleware = async () => {
   if (process.env.REDWOOD_DISABLE_TELEMETRY || process.env.DO_NOT_TRACK) {
@@ -41,7 +55,7 @@ export const telemetryMiddleware = async () => {
       path.join(__dirname, 'sendTelemetry.js'),
       '--argv',
       JSON.stringify(process.argv),
-    ],
-    { detached: true, stdio: 'ignore' }
-  ).unref()
+    ]
+    //{ detached: true, stdio: 'ignore' }
+  )
 }
