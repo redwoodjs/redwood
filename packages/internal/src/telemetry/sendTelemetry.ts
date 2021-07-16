@@ -119,6 +119,10 @@ const sanitizeArgv = (argv: Array<string>) => {
       ...(await getInfo()),
     }
 
+    if (process.env.REDWOOD_VERBOSE_TELEMETRY) {
+      console.info('Redwood Telemetry Payload', payload)
+    }
+
     const telemetryConfig = getConfig().telemetry
 
     const postgrest = new PostgrestClient(telemetryConfig.url, {
