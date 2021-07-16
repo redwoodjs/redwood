@@ -204,14 +204,12 @@ export const handler = async ({
   })
 
   try {
-    await timedTelemetry(process.argv, {
-      callback: async () => {
-        await tasks.run()
-      },
+    await timedTelemetry(process.argv, { type: 'build' }, async () => {
+      await tasks.run()
     })
   } catch (e) {
     console.log(c.error(e.message))
-    errorTelemetry(process.argv, e)
+    errorTelemetry(process.argv, e.message)
     process.exit(1)
   }
 }

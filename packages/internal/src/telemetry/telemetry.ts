@@ -1,9 +1,17 @@
 import { spawn } from 'child_process'
 import path from 'path'
 
+const spawnProcess = (...args: Array<string>) => {
+  spawn(process.execPath, [path.join(__dirname, 'sendTelemetry.js'), ...args], {
+    detached: true,
+    stdio: 'ignore',
+  }).unref()
+}
+
 // wrap a function in this call to get a telemetry hit including how long it took
 export const timedTelemetry = async (
   argv: Array<string>,
+  options: Record<string, unknown>,
   func: (...args: any[]) => any
 ) => {
   if (process.env.REDWOOD_DISABLE_TELEMETRY || process.env.DO_NOT_TRACK) {
@@ -14,33 +22,24 @@ export const timedTelemetry = async (
   const result = await func.call(this)
   const duration = new Date().getTime() - start.getTime()
 
-  spawn(
-    process.execPath,
-    [
-      path.join(__dirname, 'sendTelemetry.js'),
-      '--argv',
-      JSON.stringify(argv),
-      '--duration',
-      duration.toString(),
-    ],
-    { detached: true, stdio: 'ignore' }
-  ).unref()
+  spawnProcess(
+    '--argv',
+    JSON.stringify(argv),
+    '--duration',
+    duration.toString(),
+    '--type',
+    JSON.stringify(options.type)
+  )
 
   return result
 }
 
-export const telemetryError = async (argv: Array<string>, error: any) => {
-  spawn(
-    process.execPath,
-    [
-      path.join(__dirname, 'sendTelemetry.js'),
-      '--argv',
-      JSON.stringify(argv),
-      '--error',
-      JSON.stringify(error),
-    ],
-    { detached: true, stdio: 'ignore' }
-  ).unref()
+export const errorTelemetry = async (argv: Array<string>, error: any) => {
+  if (process.env.REDWOOD_DISABLE_TELEMETRY || process.env.DO_NOT_TRACK) {
+    return
+  }
+
+  spawnProcess('--argv', JSON.stringify(argv), '--error', JSON.stringify(error))
 }
 
 // used as yargs middleware when any command is invoked
@@ -49,13 +48,5 @@ export const telemetryMiddleware = async () => {
     return
   }
 
-  spawn(
-    process.execPath,
-    [
-      path.join(__dirname, 'sendTelemetry.js'),
-      '--argv',
-      JSON.stringify(process.argv),
-    ]
-    //{ detached: true, stdio: 'ignore' }
-  )
+  spawnProcess('--argv', JSON.stringify(process.argv))
 }

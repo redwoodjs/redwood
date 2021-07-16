@@ -94,7 +94,7 @@ const sanitizeArgv = (argv: Array<string>) => {
 // actual telemetry send process
 ;(async function () {
   const argv = require('yargs/yargs')(process.argv.slice(2)).argv
-  let type = 'command'
+  let type = argv.type || 'command'
 
   if (argv.error) {
     type = 'error'
