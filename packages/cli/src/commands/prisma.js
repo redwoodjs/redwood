@@ -4,7 +4,7 @@ import path from 'path'
 import boxen from 'boxen'
 import execa from 'execa'
 
-import { getPaths } from '@redwoodjs/internal'
+import { getPaths, errorTelemetry } from '@redwoodjs/internal'
 
 import c from 'src/lib/colors'
 
@@ -92,6 +92,7 @@ export const handler = async ({ _, $0, commands = [], ...options }) => {
       printWrapInfo()
     }
   } catch (e) {
+    errorTelemetry(process.argv, `Error generating prisma client: ${e.message}`)
     process.exit(e?.exitCode || 1)
   }
 }

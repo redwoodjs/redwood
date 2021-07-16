@@ -5,6 +5,8 @@ import chalk from 'chalk'
 import execa from 'execa'
 import Listr from 'listr'
 
+import { errorTelemetry } from '@redwoodjs/internal'
+
 import { getPaths, writeFile } from 'src/lib'
 import c from 'src/lib/colors'
 
@@ -183,6 +185,7 @@ export const handler = async ({ force }) => {
   try {
     await tasks.run()
   } catch (e) {
+    errorTelemetry(process.argv, e.message)
     console.error(c.error(e.message))
     process.exit(e?.exitCode || 1)
   }

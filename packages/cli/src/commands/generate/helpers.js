@@ -7,7 +7,7 @@ import pluralize from 'pluralize'
 import prompts from 'prompts'
 import terminalLink from 'terminal-link'
 
-import { ensurePosixPath, getConfig } from '@redwoodjs/internal'
+import { ensurePosixPath, getConfig, errorTelemetry } from '@redwoodjs/internal'
 
 import { generateTemplate, getPaths, writeFilesTask } from '../../lib'
 import c from '../../lib/colors'
@@ -155,6 +155,7 @@ export const createYargsForComponentGeneration = ({
       try {
         await tasks.run()
       } catch (e) {
+        errorTelemetry(process.argv, e.message)
         console.error(c.error(e.message))
         process.exit(e?.exitCode || 1)
       }

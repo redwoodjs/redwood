@@ -1,7 +1,7 @@
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
-import { ensurePosixPath } from '@redwoodjs/internal'
+import { ensurePosixPath, errorTelemetry } from '@redwoodjs/internal'
 import { getProject } from '@redwoodjs/structure'
 
 import { getPaths } from 'src/lib'
@@ -158,6 +158,7 @@ export const handler = async ({
     })
   } catch (e) {
     // Errors already shown from execa inherited stderr
+    errorTelemetry(process.argv, e.message)
     process.exit(e?.exitCode || 1)
   }
 }

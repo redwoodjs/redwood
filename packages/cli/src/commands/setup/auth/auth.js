@@ -6,7 +6,7 @@ import Listr from 'listr'
 import prompts from 'prompts'
 import terminalLink from 'terminal-link'
 
-import { resolveFile } from '@redwoodjs/internal'
+import { resolveFile, errorTelemetry } from '@redwoodjs/internal'
 import { getProject } from '@redwoodjs/structure'
 
 import { getPaths, writeFilesTask } from 'src/lib'
@@ -400,6 +400,7 @@ export const handler = async ({ provider, force }) => {
 
     await tasks.run()
   } catch (e) {
+    errorTelemetry(process.argv, e.message)
     console.error(c.error(e.message))
     process.exit(e?.exitCode || 1)
   }
