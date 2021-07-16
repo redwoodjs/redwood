@@ -7,9 +7,6 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "license": "MIT",
-  "dependencies": {
-    "@redwoodjs/history": "0.35.2"
-  },
   "devDependencies": {
     "@auth0/auth0-spa-js": "1.16.1",
     "@supabase/supabase-js": "1.18.0",
