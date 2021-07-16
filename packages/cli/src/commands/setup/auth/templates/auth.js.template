@@ -32,7 +32,7 @@ export const isAuthenticated = () => {
 /**
  * Checks if the currentUser is authenticated (and assigned one of the given roles)
  *
- * @param {string= | string[]=} roles - A single role or list of roles to check if the user belongs to
+ * @param {string | string[]} roles - A single role or list of roles to check if the user belongs to
  *
  * @returns {boolean} - Returns true if the currentUser is authenticated (and assigned one of the given roles)
  */
