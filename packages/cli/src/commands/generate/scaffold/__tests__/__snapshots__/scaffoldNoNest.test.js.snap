@@ -629,6 +629,7 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   list-style-position: inside;
 }
 .rw-button {
+  border: none;
   color: #718096;
   cursor: pointer;
   display: flex;
@@ -706,6 +707,7 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   width: 100%;
   padding: 0.5rem;
   border-width: 1px;
+  border-style: solid;
   border-color: #e2e8f0;
   color: #4a5568;
   border-radius: 0.25rem;
@@ -1705,6 +1707,7 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   list-style-position: inside;
 }
 .rw-button {
+  border: none;
   color: #718096;
   cursor: pointer;
   display: flex;
@@ -1782,6 +1785,7 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   width: 100%;
   padding: 0.5rem;
   border-width: 1px;
+  border-style: solid;
   border-color: #e2e8f0;
   color: #4a5568;
   border-radius: 0.25rem;
