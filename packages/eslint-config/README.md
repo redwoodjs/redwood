@@ -31,14 +31,14 @@ Peter Pistorius (@peterp), David Price (@thedavidprice), Dominic Saadi (@jtoar),
 
 ## Contributing
 
-This package has no dependencies on other Redwood Framework packages. To contribute, you should be familiar with the ESLint package. Keep in mind that any rules added should not conflict with code formatting tools (e.g. [Prettier](https://prettier.io/docs/en/integrating-with-linters.html)).
+This package doesn't depend on other Redwood Framework packages. To contribute, you should be familiar with the ESLint package. Keep in mind that any rules added should not conflict with code formatting tools (e.g. [Prettier](https://prettier.io/docs/en/integrating-with-linters.html)).
 
 ## Overriding Default Configuration
 
 In a Redwood App, you can override default config in your root `package.json` file by adding the rules after the include for this package:
 
 ```javascript
-// redwood/package.json
+// redwood-app/package.json
 "eslintConfig": {
   "extends": "@redwoodjs/eslint-config",
   "root": true,
@@ -49,7 +49,7 @@ In a Redwood App, you can override default config in your root `package.json` fi
 If you need script in your configuration, you can remove the `eslintConfig` block from your root `package.json` file and add an `.eslintrc.js` file:
 
 ```javascript
-// redwood/.eslintrc.js
+// redwood-app/.eslintrc.js
 module.exports = {
   extends: ['@redwoodjs/eslint-config'],
   'root': true,
@@ -59,7 +59,7 @@ module.exports = {
 }
 ```
 
-By default, ESLint will recurse through all project directories looking for configuration files and directives, and overriding those specified in multiple places according to a prioritization formula. The `root` directive tells ESLint to stop searching for configuration lower in the tree at the file this directive is encountered.
+By default, ESLint will recurse through all project directories looking for configuration files and directives, and override those specified in multiple places according to a prioritization formula. The `root` directive tells ESLint to stop searching for configuration lower in the tree at the file this directive is encountered.
 
 In a different Redwood Framework package or in a Redwood App, you can provide configuration that applies only to that package or side by omitting the `root` directive. For example, to apply a directive only to the client code of an app:
 
