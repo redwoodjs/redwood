@@ -33,8 +33,8 @@ export const makeServices: MakeServices = ({ services }) => {
 
       if (typeof resolverFunc === 'function') {
         // wrap resolver function in spec verification
-        exportResolvers[resolverName] = (...args: Array<unknown>) => {
-          spec.verify(resolverName, args)
+        exportResolvers[resolverName] = async (...args: Array<unknown>) => {
+          await spec.verify(resolverName, args)
           return resolverFunc(...args)
         }
       } else {

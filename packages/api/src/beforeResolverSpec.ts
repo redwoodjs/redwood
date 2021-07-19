@@ -81,13 +81,13 @@ export const BeforeResolverSpec = class implements BeforeResolverSpecType {
     })
   }
 
-  public verify(name: string, args: Array<unknown>) {
+  public async verify(name: string, args: Array<unknown>) {
     if (this._canSkipService(name)) {
       return []
     } else if (this._isInsecureService(name)) {
       throw new InsecureServiceError(name)
     } else {
-      return this._invokeValidators(name, args)
+      return await this._invokeValidators(name, args)
     }
   }
 
@@ -161,12 +161,15 @@ export const BeforeResolverSpec = class implements BeforeResolverSpecType {
   // Returns an array of the results of every validation function being run.
   // We don't do anything with this list currently, but maybe we can pass it
   // through to the service at some point so the user can do something with it?
-  _invokeValidators(name: string, args: Array<unknown>) {
+  async _invokeValidators(name: string, args: Array<unknown>) {
     const validators = this.befores[name].validators
+    const results = []
 
-    return validators.map((rule: RuleValidator) => {
-      return rule.apply(this, [name, ...[args].flat()])
-    })
+    for (const rule of validators) {
+      results.push(await rule.apply(this, [name, ...[args].flat()]))
+    }
+
+    return results
   }
 
   _forEachService(iterator: (serviceName: string) => void) {

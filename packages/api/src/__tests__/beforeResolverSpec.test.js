@@ -188,58 +188,58 @@ describe('BeforeResolverSpec', () => {
     it('throws an error on an empty validation list', () => {
       const spec = new BeforeResolverSpec(services)
 
-      expect(() => {
-        spec.verify('posts')
-      }).toThrow(InsecureServiceError)
+      spec.verify('posts').catch((e) => {
+        expect(e).toBeInstanceOf(InsecureServiceError)
+      })
     })
 
-    it('verifies if everything is skipped', () => {
+    it('verifies if everything is skipped', async () => {
       const spec = new BeforeResolverSpec(services)
       spec.skip()
 
-      expect(spec.verify('posts')).toEqual([])
+      expect(await spec.verify('posts')).toEqual([])
     })
 
-    it('verifies with a validation function that does not throw', () => {
+    it('verifies with a validation function that does not throw', async () => {
       const spec = new BeforeResolverSpec(services)
       spec.add(() => {})
 
-      expect(spec.verify('posts')).toEqual([undefined])
+      expect(await spec.verify('posts')).toEqual([undefined])
     })
 
-    it('returns an array with the result of every validation function', () => {
+    it('returns an array with the result of every validation function', async () => {
       const spec = new BeforeResolverSpec(services)
       spec.add(() => true)
       spec.add(() => false)
       spec.add(() => 'foo')
 
-      expect(spec.verify('posts')).toEqual([true, false, 'foo'])
+      expect(await spec.verify('posts')).toEqual([true, false, 'foo'])
     })
 
-    it('passes name of service function to validation function', () => {
+    it('passes name of service function to validation function', async () => {
       const spec = new BeforeResolverSpec(services)
       spec.add((name) => {
         expect(name).toEqual('posts')
       })
-      spec.verify('posts')
+      await spec.verify('posts')
     })
 
-    it('passes an undefined second argument by default', () => {
+    it('passes an undefined second argument by default', async () => {
       const spec = new BeforeResolverSpec(services)
       spec.add((_name, other) => {
         expect(other).toEqual(undefined)
       })
-      spec.verify('posts')
+      await spec.verify('posts')
     })
 
-    it('passes any additional arguments sent to the resolver', () => {
+    it('passes any additional arguments sent to the resolver', async () => {
       const spec = new BeforeResolverSpec(services)
       spec.add((_name, { foo, baz }, quux) => {
         expect(foo).toEqual('bar')
         expect(baz).toEqual('qux')
         expect(quux).toEqual('garply')
       })
-      spec.verify('posts', [{ foo: 'bar', baz: 'qux' }, 'garply'])
+      await spec.verify('posts', [{ foo: 'bar', baz: 'qux' }, 'garply'])
     })
 
     it('bubbles up validation errors', () => {
@@ -248,7 +248,9 @@ describe('BeforeResolverSpec', () => {
         throw new Error()
       })
 
-      expect(() => spec.verify('posts')).toThrow(Error)
+      spec.verify('posts').catch((e) => {
+        expect(e).toBeInstanceOf(Error)
+      })
     })
 
     it('bubbles up validation errors if not first validation function', () => {
@@ -260,7 +262,9 @@ describe('BeforeResolverSpec', () => {
         throw new Error()
       })
 
-      expect(() => spec.verify('posts')).toThrow(Error)
+      spec.verify('posts').catch((e) => {
+        expect(e).toBeInstanceOf(Error)
+      })
     })
   })
 
