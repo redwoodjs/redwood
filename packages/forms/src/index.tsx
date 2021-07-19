@@ -7,8 +7,8 @@ import {
   FormProvider,
   useFormContext,
   RegisterOptions,
-  UseFormMethods,
-  UseFormOptions,
+  UseFormReturn,
+  UseFormProps,
 } from 'react-hook-form'
 
 import {
@@ -28,29 +28,31 @@ const DEFAULT_MESSAGES = {
   validate: 'is not valid',
 }
 
-enum INPUT_TYPES {
-  BUTTON = 'button',
-  COLOR = 'color',
-  DATE = 'date',
-  DATETIME_LOCAL = 'datetime-local',
-  EMAIL = 'email',
-  FILE = 'file',
-  HIDDEN = 'hidden',
-  IMAGE = 'image',
-  MONTH = 'month',
-  NUMBER = 'number',
-  PASSWORD = 'password',
-  RADIO = 'radio',
-  RANGE = 'range',
-  RESET = 'reset',
-  SEARCH = 'search',
-  SUBMIT = 'submit',
-  TEL = 'tel',
-  TEXT = 'text',
-  TIME = 'time',
-  URL = 'url',
-  WEEK = 'week',
-}
+const INPUT_TYPES = [
+  'button',
+  'color',
+  'date',
+  'datetime-local',
+  'email',
+  'file',
+  'hidden',
+  'image',
+  'month',
+  'number',
+  'password',
+  'radio',
+  'range',
+  'reset',
+  'search',
+  'submit',
+  'tel',
+  'text',
+  'time',
+  'url',
+  'week',
+] as const
+
+type InputType = typeof INPUT_TYPES[number]
 
 // Massages a hash of props depending on whether the given named field has
 // any errors on it
@@ -73,8 +75,11 @@ interface ValidatableFieldProps extends InputTagProps {
 const inputTagProps = <T extends InputTagProps>(
   props: T
 ): Omit<T, 'dataType' | 'transformValue' | 'errorClassName' | 'errorStyle'> => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { errors, setError } = useFormContext()
+  const {
+    formState: { errors },
+    setError,
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+  } = useFormContext()
 
   // Check for errors from server and set on field if present
 
@@ -113,6 +118,59 @@ const inputTagProps = <T extends InputTagProps>(
   return tagProps
 }
 
+// A hook-like function merge field props and return props (ref, onChange and onBlur primarily) of RHF v7 register()
+const useFieldRegister = <
+  T extends Omit<ValidatableFieldProps, 'defaultValue'>,
+  E
+>(
+  props: T,
+  ref?: React.ForwardedRef<E>
+) => {
+  const { register } = useFormContext()
+  const validation = props.validation || { required: false }
+
+  // Primarily for TextAreaField
+  if (!validation.validate && props.transformValue === 'Json') {
+    validation.validate = jsonValidation
+  }
+
+  const tagProps = inputTagProps(props) as T & {
+    onChange?: React.ChangeEventHandler<T>
+    onBlur?: React.FocusEventHandler<T>
+  }
+  const {
+    ref: _ref,
+    onBlur: handleBlur,
+    onChange: handleChange,
+    ...rest
+  } = register(props.name, validation)
+
+  const onBlur: React.FocusEventHandler<T> = (event) => {
+    handleBlur(event)
+    tagProps?.onBlur?.(event)
+  }
+  const onChange: React.ChangeEventHandler<T> = (event) => {
+    handleChange(event)
+    tagProps?.onChange?.(event)
+  }
+
+  return {
+    ...tagProps,
+    ...rest,
+    onBlur,
+    onChange,
+    ref: (element: E) => {
+      _ref(element)
+
+      if (typeof ref === 'function') {
+        ref(element)
+      } else if (ref) {
+        ref.current = element
+      }
+    },
+  }
+}
+
 // Context for keeping track of errors from the server
 interface FieldErrorContextProps {
   [key: string]: string
@@ -135,8 +193,8 @@ const coerceValues = (
 interface FormWithCoercionContext
   extends Omit<React.HTMLProps<HTMLFormElement>, 'onSubmit'> {
   error?: any
-  formMethods?: UseFormMethods
-  validation?: UseFormOptions
+  formMethods?: UseFormReturn
+  validation?: UseFormProps
   onSubmit?: (
     values: Record<string, any>,
     event?: React.BaseSyntheticEvent
@@ -152,8 +210,8 @@ const FormWithCoercionContext: React.FC<FormWithCoercionContext> = (props) => {
     onSubmit,
     ...formProps
   } = props
-  const useFormMethods = useForm(props.validation)
-  const formMethods = propFormMethods || useFormMethods
+  const useFormReturn = useForm(props.validation)
+  const formMethods = propFormMethods || useFormReturn
   const { coerce } = useCoercion()
 
   return (
@@ -213,7 +271,9 @@ interface FieldErrorProps extends React.HTMLProps<HTMLSpanElement> {
 }
 
 const FieldError = (props: FieldErrorProps) => {
-  const { errors } = useFormContext()
+  const {
+    formState: { errors },
+  } = useFormContext()
   const validationError = get(errors, props.name)
   const errorMessage =
     validationError &&
@@ -239,7 +299,7 @@ const TextAreaField = forwardRef<
   HTMLTextAreaElement,
   ValidatableFieldProps & React.TextareaHTMLAttributes<HTMLTextAreaElement>
 >((props, ref) => {
-  const { register } = useFormContext()
+  const fieldProps = useFieldRegister(props, ref)
   const { setCoercion } = useCoercion()
 
   React.useEffect(() => {
@@ -258,28 +318,7 @@ const TextAreaField = forwardRef<
     })
   }, [setCoercion, props.name, props.transformValue, props.dataType])
 
-  const tagProps = inputTagProps(props)
-  // implements JSON validation if a transformValue of 'Json' is set
-  const validation = props.validation ? props.validation : { required: false }
-  if (!validation.validate && props.transformValue === 'Json') {
-    validation.validate = jsonValidation
-  }
-
-  return (
-    <textarea
-      {...tagProps}
-      id={props.id || props.name}
-      ref={(element) => {
-        register(element, validation)
-
-        if (typeof ref === 'function') {
-          ref(element)
-        } else if (ref) {
-          ref.current = element
-        }
-      }}
-    />
-  )
+  return <textarea id={props.id || props.name} {...fieldProps} />
 })
 
 // Renders a <select> field
@@ -288,7 +327,7 @@ const SelectField = forwardRef<
   HTMLSelectElement,
   ValidatableFieldProps & React.SelectHTMLAttributes<HTMLSelectElement>
 >((props, ref) => {
-  const { register } = useFormContext()
+  const fieldProps = useFieldRegister(props, ref)
   const { setCoercion } = useCoercion()
 
   React.useEffect(() => {
@@ -298,23 +337,7 @@ const SelectField = forwardRef<
     })
   }, [setCoercion, props.name, props.transformValue])
 
-  const tagProps = inputTagProps(props)
-
-  return (
-    <select
-      {...tagProps}
-      id={props.id || props.name}
-      ref={(element) => {
-        register(element, props.validation || { required: false })
-
-        if (typeof ref === 'function') {
-          ref(element)
-        } else if (ref) {
-          ref.current = element
-        }
-      }}
-    />
-  )
+  return <select id={props.id || props.name} {...fieldProps} />
 })
 
 // Renders a <input type="checkbox"> field
@@ -328,7 +351,7 @@ export const CheckboxField = forwardRef<
   HTMLInputElement,
   CheckboxFieldProps & React.InputHTMLAttributes<HTMLInputElement>
 >((props, ref) => {
-  const { register } = useFormContext()
+  const fieldProps = useFieldRegister(props, ref)
   const { setCoercion } = useCoercion()
   const type = 'checkbox'
 
@@ -349,24 +372,7 @@ export const CheckboxField = forwardRef<
     })
   }, [setCoercion, props.name, type, props.transformValue, props.dataType])
 
-  const tagProps = inputTagProps(props)
-
-  return (
-    <input
-      type="checkbox"
-      {...tagProps}
-      id={props.id || props.name}
-      ref={(element) => {
-        register(element, props.validation || { required: false })
-
-        if (typeof ref === 'function') {
-          ref(element)
-        } else if (ref) {
-          ref.current = element
-        }
-      }}
-    />
-  )
+  return <input type="checkbox" id={props.id || props.name} {...fieldProps} />
 })
 
 // Renders a <button type="submit">
@@ -379,14 +385,14 @@ const Submit = forwardRef<
 // Renders a <input>
 
 interface InputFieldProps extends ValidatableFieldProps {
-  type?: INPUT_TYPES
+  type?: InputType
 }
 
 const InputField = forwardRef<
   HTMLInputElement,
   InputFieldProps & React.InputHTMLAttributes<HTMLInputElement>
 >((props, ref) => {
-  const { register } = useFormContext()
+  const fieldProps = useFieldRegister(props, ref)
   const { setCoercion } = useCoercion()
   React.useEffect(() => {
     if (
@@ -411,23 +417,7 @@ const InputField = forwardRef<
     props.dataType,
   ])
 
-  const tagProps = inputTagProps(props)
-
-  return (
-    <input
-      {...tagProps}
-      id={props.id || props.name}
-      ref={(element) => {
-        register(element, props.validation || { required: false })
-
-        if (typeof ref === 'function') {
-          ref(element)
-        } else if (ref) {
-          ref.current = element
-        }
-      }}
-    />
-  )
+  return <input id={props.id || props.name} {...fieldProps} />
 })
 
 // Create a component for each type of Input.
@@ -448,7 +438,7 @@ const inputComponents: Record<
       React.RefAttributes<HTMLInputElement>
   >
 > = {}
-Object.values(INPUT_TYPES).forEach((type) => {
+INPUT_TYPES.forEach((type) => {
   inputComponents[`${pascalcase(type)}Field`] = forwardRef<
     HTMLInputElement,
     InputFieldProps & React.InputHTMLAttributes<HTMLInputElement>
