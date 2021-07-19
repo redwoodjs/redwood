@@ -47,7 +47,7 @@ export type RuleOptions =
 
 export interface BeforeResolverSpecType {
   /**
-   * @param  {RuleValidator|Array<RuleValidator>} functions - Function or Array of Functions that validates whether service function is allowed to run. Should Throw if not.
+   * @param  {RuleValidator|Array<RuleValidator>} functions - Function or Array of Functions (can be async or not) that validates whether service function is allowed to run. Should Throw if not.
    * @param {RuleOptions} [options]  - Optionally pass to selectively apply rule to specific service functions
    */
   add: (
@@ -56,7 +56,7 @@ export interface BeforeResolverSpecType {
   ) => void
   /**
    *
-   * @param {RuleValidator|Array<RuleValidator>} functions - Function or Array of Functions that validates whether service function is allowed to run. Should Throw if not.
+   * @param {RuleValidator|Array<RuleValidator>} functions - Function handler or Array of Function handlers to skip.
    * @param {RuleOptions} [options]  - Optionally pass to selectively skip rule for specific service functions
    *
    * @example <caption>Skip all rules</caption>
