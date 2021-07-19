@@ -22,13 +22,13 @@ const SignupPage = () => {
   }, [isAuthenticated])
 
   // focus on email box on page load
-  const usernameRef = useRef()
+  const usernameRef = useRef<HTMLInputElement>(null)
   useEffect(() => {
     usernameRef.current.focus()
   }, [])
 
   const onSubmit = async (data) => {
-    const response = await signUp({ ...data })
+    const response: any = await signUp({ ...data })
 
     if (response.message) {
       toast.error(response.message)

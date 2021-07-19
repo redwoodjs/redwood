@@ -712,6 +712,7 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   color: #4a5568;
   border-radius: 0.25rem;
   outline: none;
+  box-sizing: border-box;
 }
 .rw-input[type='checkbox'],
 .rw-input[type='radio'] {
@@ -1790,6 +1791,7 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   color: #4a5568;
   border-radius: 0.25rem;
   outline: none;
+  box-sizing: border-box;
 }
 .rw-input[type='checkbox'],
 .rw-input[type='radio'] {
