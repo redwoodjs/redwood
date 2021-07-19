@@ -1,7 +1,3 @@
-/**
- * @jest-environment jsdom
- */
-
 require('whatwg-fetch')
 
 import { useEffect, useState } from 'react'

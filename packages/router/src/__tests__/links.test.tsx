@@ -1,7 +1,3 @@
-/**
- * @jest-environment jsdom
- */
-
 import { toHaveClass, toHaveStyle } from '@testing-library/jest-dom/matchers'
 import { render } from '@testing-library/react'
 

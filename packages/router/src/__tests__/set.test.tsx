@@ -1,7 +1,3 @@
-/**
- * @jest-environment jsdom
- */
-
 import React from 'react'
 
 import { render, waitFor } from '@testing-library/react'

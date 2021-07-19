@@ -1,7 +1,3 @@
-/**
- * @jest-environment jsdom
- */
-
 import React from 'react'
 
 import { toHaveFocus, toHaveClass } from '@testing-library/jest-dom/matchers'

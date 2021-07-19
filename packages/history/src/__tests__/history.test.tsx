@@ -1,7 +1,3 @@
-/**
- * @jest-environment jsdom
- */
-
 import { navigate } from '../history'
 
 describe('navigate', () => {
