@@ -38,7 +38,7 @@ import '@reach/skip-nav/styles.css'
  */
 
 type A11yLayoutProps = {
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 const A11yLayout = ({ children }: A11yLayoutProps) => {
