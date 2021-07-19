@@ -4,15 +4,23 @@ const path = require('path')
 const { merge } = require('webpack-merge')
 
 const { getSharedPlugins } = require('@redwoodjs/core/config/webpack.common.js')
-const { getConfig, getPaths } = require('@redwoodjs/internal')
+const {
+  importStatementPath,
+  getConfig,
+  getPaths,
+} = require('@redwoodjs/internal')
 
 const config = getConfig()
 
 const rwjsPaths = getPaths()
 
 const baseConfig = {
-  stories: [`${rwjsPaths.web.src}/**/*.stories.{tsx,jsx,js}`],
-
+  core: {
+    builder: 'webpack5',
+  },
+  stories: [
+    `${importStatementPath(rwjsPaths.web.src)}/**/*.stories.{tsx,jsx,js}`,
+  ],
   addons: [config.web.a11y && '@storybook/addon-a11y'].filter(Boolean),
   webpackFinal: (sbConfig, { configType }) => {
     // configType is 'PRODUCTION' or 'DEVELOPMENT', why shout?
@@ -49,6 +57,17 @@ const baseConfig = {
 
     sbConfig.resolve.extensions = rwConfig.resolve.extensions
     sbConfig.resolve.plugins = rwConfig.resolve.plugins // Directory Named Plugin
+
+    // Webpack v5 does not include polyfills. Will error without these:
+    sbConfig.resolve.fallback = {
+      http: false,
+      https: false,
+      timers: false,
+      os: false,
+      tty: false,
+      crypto: false,
+      zlib: false,
+    }
 
     // ** PLUGINS **
     sbConfig.plugins = [

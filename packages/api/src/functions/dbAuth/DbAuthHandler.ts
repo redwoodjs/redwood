@@ -17,7 +17,7 @@ interface DbAuthHandlerOptions {
    * The name of the property you'd call on `db` to access your user table.
    * ie. if your Prisma model is named `User` this value would be `user`, as in `db.user`
    */
-  authModelAccessor: string
+  authModelAccessor: keyof PrismaClient
   /**
    *  A map of what dbAuth calls a field to what your database calls it.
    * `id` is whatever column you use to uniquely identify a user (probably
