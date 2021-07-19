@@ -1,7 +1,5 @@
 import type { Auth0Client as Auth0 } from '@auth0/auth0-spa-js'
 
-import { gHistory } from '@redwoodjs/history'
-
 import type { AuthClient } from './'
 
 export type AuthClientAuth0 = AuthClient
@@ -25,7 +23,7 @@ export const auth0 = (client: Auth0): AuthClientAuth0 => {
           appState && appState.targetUrl
             ? appState.targetUrl
             : window.location.pathname
-        gHistory.navigate(url, { replace: true })
+        global?.location?.assign(url)
       }
     },
     login: async (options?) => client.loginWithRedirect(options),

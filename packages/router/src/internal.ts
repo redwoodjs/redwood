@@ -1,4 +1,5 @@
 export * from './util'
+export * from './history'
 export * from './location'
 export * from './router'
 export * from './params'
