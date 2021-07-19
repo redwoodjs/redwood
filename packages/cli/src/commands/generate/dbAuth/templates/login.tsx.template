@@ -21,13 +21,13 @@ const LoginPage = () => {
     }
   }, [isAuthenticated])
 
-  const usernameRef = useRef()
+  const usernameRef = useRef<HTMLInputElement>(null)
   useEffect(() => {
     usernameRef.current.focus()
   }, [])
 
   const onSubmit = async (data) => {
-    const response = await logIn({ ...data })
+    const response: any = await logIn({ ...data })
     if (response.message) {
       toast.error(response.message)
     } else {
