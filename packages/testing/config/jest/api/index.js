@@ -6,4 +6,5 @@ module.exports = {
     name: 'api',
   },
   setupFilesAfterEnv: [path.join(__dirname, './jest.setup.js')],
+  testRunner: 'jest-jasmine2',
 }
