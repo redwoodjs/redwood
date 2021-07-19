@@ -20,7 +20,12 @@ import type {
   Context as LambdaContext,
   APIGatewayProxyResult,
 } from 'aws-lambda'
-import { GraphQLError, GraphQLSchema } from 'graphql'
+import {
+  GraphQLError,
+  GraphQLSchema,
+  Kind,
+  OperationDefinitionNode,
+} from 'graphql'
 import {
   Request,
   getGraphQLParameters,
@@ -31,16 +36,16 @@ import { renderPlaygroundPage } from 'graphql-playground-html'
 import { BaseLogger } from 'pino'
 import { v4 as uuidv4 } from 'uuid'
 
-import { ApolloError, AuthContextPayload } from '@redwoodjs/api'
-import { getAuthenticationContext } from '@redwoodjs/api'
+import { CorsConfig, createCorsContext } from '../cors'
+import { createHealthcheckContext, OnHealthcheckFn } from '../healthcheck'
 import {
+  ApolloError,
+  AuthContextPayload,
+  getAuthenticationContext,
   getPerRequestContext,
   setContext,
   usePerRequestContext,
-} from '@redwoodjs/api'
-
-import { CorsConfig, createCorsContext } from 'src/cors'
-import { createHealthcheckContext, OnHealthcheckFn } from 'src/healthcheck'
+} from '../index'
 
 export type GetCurrentUser = (
   decoded: AuthContextPayload[0],
@@ -263,17 +268,22 @@ const useRedwoodAuthContext = (
   }
 }
 
-export const useUserContext = (
-  userContextBuilder: NonNullable<GraphQLHandlerOptions['context']>
+/**
+ * This Envelop plugin enriches the context on a per-request basis
+ * by populating it with the results of a custom function
+ * @returns
+ */
+export const usePopulateContext = (
+  populateContextBuilder: NonNullable<GraphQLHandlerOptions['context']>
 ): Plugin<RedwoodGraphQLContext> => {
   return {
     async onContextBuilding({ context, extendContext }) {
-      const userContext =
-        typeof userContextBuilder === 'function'
-          ? await userContextBuilder({ context })
-          : userContextBuilder
+      const populateContext =
+        typeof populateContextBuilder === 'function'
+          ? await populateContextBuilder({ context })
+          : populateContextBuilder
 
-      extendContext(userContext)
+      extendContext(populateContext)
     },
   }
 }
@@ -281,7 +291,7 @@ export const useUserContext = (
 /**
  * This Envelop plugin waits until the GraphQL context is done building and sets the
  * Redwood global context which can be imported with:
- * // import { context } from '@redwoodjs/api'
+ * // import { context } from '@redwoodjs/graphql-server'
  * @returns
  */
 export const useRedwoodGlobalContextSetter =
@@ -326,9 +336,15 @@ const useRedwoodLogger = (
   return {
     onExecute({ args }) {
       const options = {} as any
+      const rootOperation = args.document.definitions.find(
+        (o) => o.kind === Kind.OPERATION_DEFINITION
+      ) as OperationDefinitionNode
 
       if (includeOperationName && args.operationName) {
-        options['operationName'] = args.operationName
+        options['operationName'] =
+          args.operationName ||
+          rootOperation.name?.value ||
+          'Anonymous Operation'
       }
 
       if (includeQuery) {
@@ -336,7 +352,10 @@ const useRedwoodLogger = (
       }
 
       if (includeRequestId) {
-        options['requestId'] = args.contextValue.awsRequestId || uuidv4()
+        options['requestId'] =
+          args.contextValue.context?.awsRequestId ||
+          args.contextValue.event?.requestContext?.requestId ||
+          uuidv4()
       }
 
       if (includeUserAgent) {
@@ -366,7 +385,7 @@ const useRedwoodLogger = (
             )
           } else {
             if (includeTracing) {
-              options['tracing'] = args.contextValue._envelopTracing
+              options['tracing'] = result.extensions?.envelopTracing
             }
 
             envelopLogger.info(
@@ -464,7 +483,7 @@ export const createGraphQLHandler = ({
   }
 
   if (context) {
-    plugins.push(useUserContext(context))
+    plugins.push(usePopulateContext(context))
   }
 
   if (extraPlugins && extraPlugins.length > 0) {
