@@ -22,6 +22,7 @@ import {
   SelectField,
   Submit,
   FieldError,
+  Label,
 } from '../index'
 
 describe('Form', () => {
@@ -412,5 +413,74 @@ describe('Form', () => {
       expect(streetError).toEqual('address.street is not formatted correctly')
       expect(streetField).toHaveClass('border-red', { exact: true })
     })
+  })
+
+  it("doesn't crash on Labels without name", async () => {
+    render(
+      <Form>
+        {/* @ts-expect-error - pretend this is a .js file */}
+        <Label htmlFor="phone">Input your phone number</Label>
+        <TextField
+          id="phone"
+          name="phone"
+          defaultValue="abcde"
+          data-testid="phoneField"
+          validation={{ pattern: /^[0-9]+$/i }}
+        />
+        <FieldError name="phone" data-testid="phoneFieldError" />
+        <Submit>Save</Submit>
+      </Form>
+    )
+
+    fireEvent.click(screen.getByText('Save'))
+
+    const phoneError = await waitFor(
+      () => screen.getByTestId('phoneFieldError').textContent
+    )
+    expect(phoneError).toEqual('phone is not formatted correctly')
+  })
+
+  it('can handle falsy names ("false")', async () => {
+    render(
+      <Form>
+        <TextField
+          name="false"
+          defaultValue="abcde"
+          data-testid="phoneField"
+          validation={{ pattern: /^[0-9]+$/i }}
+        />
+        <FieldError name="false" data-testid="phoneFieldError" />
+        <Submit>Save</Submit>
+      </Form>
+    )
+
+    fireEvent.click(screen.getByText('Save'))
+
+    const phoneError = await waitFor(
+      () => screen.getByTestId('phoneFieldError').textContent
+    )
+    expect(phoneError).toEqual('false is not formatted correctly')
+  })
+
+  it('can handle falsy names ("0")', async () => {
+    render(
+      <Form>
+        <TextField
+          name="0"
+          defaultValue="abcde"
+          data-testid="phoneField"
+          validation={{ pattern: /^[0-9]+$/i }}
+        />
+        <FieldError name="0" data-testid="phoneFieldError" />
+        <Submit>Save</Submit>
+      </Form>
+    )
+
+    fireEvent.click(screen.getByText('Save'))
+
+    const phoneError = await waitFor(
+      () => screen.getByTestId('phoneFieldError').textContent
+    )
+    expect(phoneError).toEqual('0 is not formatted correctly')
   })
 })
