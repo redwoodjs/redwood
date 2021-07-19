@@ -20,5 +20,4 @@ module.exports = {
     'jest-watch-typeahead/filename',
     'jest-watch-typeahead/testname',
   ],
-  testEnvironment: 'jest-environment-jsdom',
 }
