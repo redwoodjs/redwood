@@ -1,7 +1,0 @@
-import ${singularPascalName}Cell from '${importComponentNameCell}'
-
-const ${singularPascalName}Page = ({ id }) => {
-  return <${singularPascalName}Cell id={id} />
-}
-
-export default ${singularPascalName}Page

@@ -1,0 +1,11 @@
+import ${singularPascalName}Cell from '${importComponentNameCell}'
+
+type ${pascalName}PageProps = {
+  id: ${idType}
+}
+
+const ${singularPascalName}Page = ({ id }: ${pascalName}PageProps) => {
+  return <${singularPascalName}Cell id={id} />
+}
+
+export default ${singularPascalName}Page
