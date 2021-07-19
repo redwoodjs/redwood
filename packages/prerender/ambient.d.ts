@@ -7,6 +7,7 @@ declare global {
     interface Global {
       __REDWOOD__PRERENDERING: boolean
       __REDWOOD__HELMET_CONTEXT: { helmet?: HelmetData }
+      __REDWOOD__APP_TITLE: string
     }
   }
 }

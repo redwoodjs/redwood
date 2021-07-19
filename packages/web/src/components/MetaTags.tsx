@@ -78,22 +78,26 @@ export const MetaTags = (props: MetaTagsProps) => {
     author,
     children,
   } = props
-
+  const appTitle = global.__REDWOOD__APP_TITLE
   return (
     <Head>
       {title && (
         <>
-          <title>{title}</title>
-          <meta property="og:title" content={title} key="title" />
-          <meta property="twitter:title" content={title} />
+          <title>{`${appTitle} | ${title}`}</title>
+          <meta
+            property="og:title"
+            content={`${appTitle} | ${title}`}
+            key="title"
+          />
+          <meta property="twitter:title" content={`${appTitle} | ${title}`} />
         </>
       )}
 
       {description && (
         <>
-          <meta property="description" content={description} />
+          <meta name="description" content={description} />
+          <meta name="twitter:description" content={description} />
           <meta property="og:description" content={description} />
-          <meta property="twitter:image:alt" content={description} />
         </>
       )}
 
@@ -108,10 +112,17 @@ export const MetaTags = (props: MetaTagsProps) => {
       {ogUrl && <meta property="og:url" content={ogUrl} />}
 
       {/* en_US by default */}
-      {locale && <meta property="og:locale" content={locale} />}
+      {locale && (
+        <>
+          <html lang={locale} />
+          <meta property="og:locale" content={locale} />
+        </>
+      )}
 
       <meta property="og:type" content={ogType} />
-      <meta property={tag} content={ogContentUrl} />
+
+      {ogContentUrl && <meta property={tag} content={ogContentUrl} />}
+
       {contentType && <meta property={`${tag}:type`} content={contentType} />}
 
       {tag === 'og:image' && (
