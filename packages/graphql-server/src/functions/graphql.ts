@@ -36,9 +36,8 @@ import { renderPlaygroundPage } from 'graphql-playground-html'
 import { BaseLogger } from 'pino'
 import { v4 as uuidv4 } from 'uuid'
 
-import { CorsConfig, createCorsContext } from 'src/cors'
-import { createHealthcheckContext, OnHealthcheckFn } from 'src/healthcheck'
-
+import { CorsConfig, createCorsContext } from '../cors'
+import { createHealthcheckContext, OnHealthcheckFn } from '../healthcheck'
 import {
   ApolloError,
   AuthContextPayload,

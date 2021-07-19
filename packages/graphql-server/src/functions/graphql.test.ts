@@ -6,7 +6,7 @@ import { context, getPerRequestContext } from '@redwoodjs/graphql-server'
 
 import { usePopulateContext, useRedwoodGlobalContextSetter } from './graphql'
 
-const createContextHandler = (userContext?: any) => {
+const createContextHandler = (userContext?: Record<string, any>) => {
   const plugins: Plugin<any>[] = [useRedwoodGlobalContextSetter()]
 
   if (userContext) {
@@ -15,7 +15,8 @@ const createContextHandler = (userContext?: any) => {
 
   const getEnveloped = envelop({ plugins })
 
-  return ({ context }: any) => getEnveloped(context).contextFactory()
+  return ({ context }: Record<string, any>) =>
+    getEnveloped(context).contextFactory()
 }
 
 describe('global context handlers', () => {
