@@ -139,8 +139,18 @@ export function packageJsonName(packageJsonPath) {
 /**
  * Build Redwood packages.
  */
-export function buildPackages(packages = frameworkPkgJsonFiles()) {
+export function buildPackages(
+  packages = frameworkPkgJsonFiles(),
+  { clean } = { clean: false }
+) {
   const packageNames = packages.map(packageJsonName)
+
+  clean &&
+    execa.sync('yarn build:clean', {
+      shell: true,
+      stdio: 'inherit',
+      cwd: path.resolve(__dirname, '../../'),
+    })
 
   execa.sync(
     'yarn lerna run build',
