@@ -1,4 +1,5 @@
 import * as auth0Decoder from '../../auth/decoders/auth0'
+import * as clerkDecoder from '../../auth/decoders/clerk'
 import { decodeToken } from '../../auth/decoders/index'
 import * as netlifyDecoder from '../../auth/decoders/netlify'
 import * as supabaseDecoder from '../../auth/decoders/supabase'
@@ -8,6 +9,14 @@ jest.mock('./../../auth/decoders/auth0', () => {
   return {
     auth0: jest.fn().mockImplementation(async () => {
       return { decodedWith: 'auth0', fakeDecodedToken: true }
+    }),
+  }
+})
+
+jest.mock('./../../auth/decoders/clerk', () => {
+  return {
+    clerk: jest.fn().mockImplementation(async () => {
+      return { decodedWith: 'clerk', fakeDecodedToken: true }
     }),
   }
 })
@@ -43,6 +52,22 @@ describe('Uses correct Auth decoder', () => {
     )
     expect(output).toEqual({
       decodedWith: 'auth0',
+      fakeDecodedToken: true,
+    })
+  })
+
+  it('handles clerk', async () => {
+    const output = await decodeToken('clerk', MOCKED_JWT, {
+      event: mockedAPIGatewayProxyEvent,
+      context: {},
+    })
+
+    expect(clerkDecoder.clerk).toHaveBeenCalledWith(
+      MOCKED_JWT,
+      expect.anything()
+    )
+    expect(output).toEqual({
+      decodedWith: 'clerk',
       fakeDecodedToken: true,
     })
   })

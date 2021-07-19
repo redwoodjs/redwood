@@ -6,6 +6,7 @@ import type { GlobalContext } from 'src/globalContext'
 
 import { auth0 } from './auth0'
 import { azureActiveDirectory } from './azureActiveDirectory'
+import { clerk } from './clerk'
 import { dbAuth } from './dbAuth'
 import { ethereum } from './ethereum'
 import { netlify } from './netlify'
@@ -28,6 +29,7 @@ const typesToDecoders: Record<
 > = {
   auth0: auth0,
   azureActiveDirectory: azureActiveDirectory,
+  clerk,
   netlify: netlify,
   nhost: nhost,
   goTrue: netlify,
