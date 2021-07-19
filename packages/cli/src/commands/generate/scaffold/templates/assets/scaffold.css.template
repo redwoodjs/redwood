@@ -138,6 +138,7 @@
   letter-spacing: 0.025em;
   border-radius: 0.25rem;
   line-height: 2;
+  border: 0;
 }
 .rw-button:hover {
   background-color: #718096;
