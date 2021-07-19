@@ -6,6 +6,8 @@ import execa from 'execa'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
 
+import { errorTelemetry } from '@redwoodjs/internal'
+
 import { getPaths, writeFilesTask } from 'src/lib'
 import c from 'src/lib/colors'
 
@@ -213,6 +215,7 @@ export const handler = async ({ provider, force, database }) => {
   try {
     await tasks.run()
   } catch (e) {
+    errorTelemetry(process.argv, e.message)
     console.error(c.error(e.message))
     process.exit(e?.exitCode || 1)
   }

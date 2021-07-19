@@ -3,7 +3,7 @@ import fs from 'fs'
 import concurrently from 'concurrently'
 import terminalLink from 'terminal-link'
 
-import { getConfig, shutdownPort } from '@redwoodjs/internal'
+import { getConfig, errorTelemetry, shutdownPort } from '@redwoodjs/internal'
 
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
@@ -68,12 +68,17 @@ export const handler = async ({
         schema: getPaths().api.dbSchema,
       })
     } catch (e) {
+      errorTelemetry(
+        process.argv,
+        `Error generating prisma client: ${e.message}`
+      )
       console.error(c.error(e.message))
     }
 
     try {
       await shutdownPort(getConfig().api.port)
     } catch (e) {
+      errorTelemetry(process.argv, `Error shutting down "api": ${e.message}`)
       console.error(
         `Error whilst shutting down "api" port: ${c.error(e.message)}`
       )
@@ -84,6 +89,7 @@ export const handler = async ({
     try {
       await shutdownPort(getConfig().web.port)
     } catch (e) {
+      errorTelemetry(process.argv, `Error shutting down "web": ${e.message}`)
       console.error(
         `Error whilst shutting down "web" port: ${c.error(e.message)}`
       )
@@ -144,6 +150,10 @@ export const handler = async ({
     }
   ).catch((e) => {
     if (typeof e?.message !== 'undefined') {
+      errorTelemetry(
+        process.argv,
+        `Error concurrently starting sides: ${e.message}`
+      )
       console.error(c.error(e.message))
       process.exit(1)
     }

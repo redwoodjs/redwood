@@ -6,7 +6,7 @@ import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
 
-import { getConfig } from '@redwoodjs/internal'
+import { getConfig, timedTelemetry, errorTelemetry } from '@redwoodjs/internal'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
 
 import { getPaths } from 'src/lib'
@@ -204,9 +204,12 @@ export const handler = async ({
   })
 
   try {
-    await tasks.run()
+    await timedTelemetry(process.argv, { type: 'build' }, async () => {
+      await tasks.run()
+    })
   } catch (e) {
     console.log(c.error(e.message))
+    errorTelemetry(process.argv, e.message)
     process.exit(1)
   }
 }

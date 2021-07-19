@@ -5,6 +5,7 @@ import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
 
+import { errorTelemetry } from '@redwoodjs/internal'
 import { getProject } from '@redwoodjs/structure'
 
 import { getPaths } from 'src/lib'
@@ -91,6 +92,7 @@ export const handler = async ({ sides, verbose, prisma }) => {
   try {
     await tasks.run()
   } catch (e) {
+    errorTelemetry(process.argv, e.message)
     console.log(c.error(e.message))
     process.exit(e?.exitCode || 1)
   }

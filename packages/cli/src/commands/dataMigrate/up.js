@@ -6,6 +6,8 @@ import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
 
+import { errorTelemetry } from '@redwoodjs/internal'
+
 import { getPaths } from 'src/lib'
 import c from 'src/lib/colors'
 
@@ -172,6 +174,7 @@ export const handler = async () => {
   } catch (e) {
     await db.$disconnect()
     report(counters)
+    errorTelemetry(process.argv, e.message)
     process.exit(e?.exitCode || 1)
   }
 }
