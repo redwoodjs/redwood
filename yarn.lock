@@ -1848,12 +1848,12 @@
   dependencies:
     apollo-server-errors "2.5.0"
 
-"@envelop/core@0.3.1":
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/@envelop/core/-/core-0.3.1.tgz#ecc5312714fbc3c42639d95f03403c8ae491eef3"
-  integrity sha512-+5i1fu+OAHkzTKEQwbBM79mQ69JwoQ7lS6rODMB0UXHgEQVX1AVdhHWc1oqQHkdWghmegIAiBHokbnAS4opq2Q==
+"@envelop/core@0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@envelop/core/-/core-0.5.1.tgz#ba7323882c6903c55a4bb3724c9a81d09c5a3b52"
+  integrity sha512-FsByt/7YHLxpRy7YCTKjWKohLt1ZwpspXoRvoJI27ym/4BSUGx4Ucy2EmjxBf1cE7okOukl/J8MaWt12mbfFdw==
   dependencies:
-    "@envelop/types" "0.2.1"
+    "@envelop/types" "0.4.1"
 
 "@envelop/depth-limit@0.2.0":
   version "0.2.0"
@@ -1879,10 +1879,10 @@
   dependencies:
     tiny-lru "7.0.6"
 
-"@envelop/types@0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@envelop/types/-/types-0.2.1.tgz#a278492acb09998d06a7685a1188dfbd9b47a057"
-  integrity sha512-7BmiQsprpe2WrmJJi31xPk52z8QKR/up5xnU4MT3ksYWHtoAJ6V56lYwY0hAZKB1SumVHVs5QnlDY24n49hcuA==
+"@envelop/types@0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@envelop/types/-/types-0.4.1.tgz#0ef52ad8e098e79bf808c6c97b088ce55d6f9678"
+  integrity sha512-JUS6OcACZ2SnPudvTqrNqCDTudwBFOFrfIyzU5/FG7xMaeL5jOjszJwpNuL/LqlghPILPS95LleweBfrw/SqOg==
 
 "@envelop/validation-cache@0.2.0":
   version "0.2.0"

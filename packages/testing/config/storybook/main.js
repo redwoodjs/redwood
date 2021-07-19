@@ -4,7 +4,11 @@ const path = require('path')
 const { merge } = require('webpack-merge')
 
 const { getSharedPlugins } = require('@redwoodjs/core/config/webpack.common.js')
-const { getConfig, getPaths } = require('@redwoodjs/internal')
+const {
+  importStatementPath,
+  getConfig,
+  getPaths,
+} = require('@redwoodjs/internal')
 
 const config = getConfig()
 
@@ -14,7 +18,9 @@ const baseConfig = {
   core: {
     builder: 'webpack5',
   },
-  stories: [`${rwjsPaths.web.src}/**/*.stories.{tsx,jsx,js}`],
+  stories: [
+    `${importStatementPath(rwjsPaths.web.src)}/**/*.stories.{tsx,jsx,js}`,
+  ],
   addons: [config.web.a11y && '@storybook/addon-a11y'].filter(Boolean),
   webpackFinal: (sbConfig, { configType }) => {
     // configType is 'PRODUCTION' or 'DEVELOPMENT', why shout?
