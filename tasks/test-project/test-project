@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 /* eslint-env node, es6*/
 //@ts-check
-const fs = require('fs')
 const path = require('path')
 
 const execa = require('execa')
@@ -37,7 +36,7 @@ const args = yargs
     type: 'boolean',
     describe: 'Verbose output',
   })
-  .option('force', {
+  .option('clean', {
     default: false,
     type: 'boolean',
     describe: 'Delete existing directory, and recreate project',
@@ -50,7 +49,7 @@ const args = yargs
   .help()
   .strict().argv
 
-const { name, typescript, canary, link, verbose, force } = args
+const { name, typescript, canary, link, verbose, clean } = args
 
 const choosenPath = args._
 
@@ -62,16 +61,12 @@ const OUTPUT_PROJECT_PATH = path.resolve(
 const RW_FRAMEWORKPATH = path.join(__dirname, '../../')
 
 const createProject = async () => {
-  if (force) {
+  if (clean) {
     rimraf.sync(OUTPUT_PROJECT_PATH)
-  } else {
-    if (fs.existsSync(OUTPUT_PROJECT_PATH)) {
-      console.error(`'${OUTPUT_PROJECT_PATH}' already exists and is not empty.`)
-      process.exit(1)
-    }
   }
 
-  let cmd = `yarn babel-node packages/create-redwood-app/src/create-redwood-app.js ${OUTPUT_PROJECT_PATH} --no-yarn-install --typescript`
+  // We create a ts project and convert using ts-to-js at the end if typescript flag is false
+  let cmd = `yarn babel-node packages/create-redwood-app/src/create-redwood-app.js ${OUTPUT_PROJECT_PATH} --no-yarn-install --typescript --overwrite`
 
   return execa(cmd, [], getExecaOptions(RW_FRAMEWORKPATH))
 }
