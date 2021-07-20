@@ -37,8 +37,7 @@ import path from 'path'
 
 import execa from 'execa'
 
-import { runCommandTask } from 'src/lib'
-
+import { runCommandTask } from '../../lib'
 import { handler } from '../type-check'
 
 afterEach(() => {

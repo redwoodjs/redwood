@@ -3,8 +3,7 @@ import fs from 'fs'
 
 import 'src/lib/test'
 
-import { getDefaultArgs } from 'src/lib'
-
+import { getDefaultArgs } from '../../../../lib'
 import { builder, files } from '../../../generate/service/service'
 import { tasks } from '../service'
 

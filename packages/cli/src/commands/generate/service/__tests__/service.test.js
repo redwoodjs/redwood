@@ -4,8 +4,7 @@ import path from 'path'
 // Load mocks
 import 'src/lib/test'
 
-import { getDefaultArgs } from 'src/lib'
-
+import { getDefaultArgs } from '../../../../lib'
 import * as service from '../service'
 
 const extensionForBaseArgs = (baseArgs) =>

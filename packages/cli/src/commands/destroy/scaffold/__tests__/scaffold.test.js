@@ -4,8 +4,7 @@ import fs from 'fs'
 
 import 'src/lib/test'
 
-import { getPaths, getDefaultArgs } from 'src/lib'
-
+import { getPaths, getDefaultArgs } from '../../../../lib'
 import { yargsDefaults as defaults } from '../../../generate'
 import { files } from '../../../generate/scaffold/scaffold'
 import { tasks } from '../scaffold'

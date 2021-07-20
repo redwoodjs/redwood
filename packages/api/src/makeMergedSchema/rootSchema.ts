@@ -9,9 +9,9 @@ import {
 import gql from 'graphql-tag'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore - not inside the <rootDir>
-import apiPackageJson from 'src/../package.json'
 
-import type { GlobalContext } from 'src/globalContext'
+import apiPackageJson from '../../package.json'
+import type { GlobalContext } from '../globalContext'
 
 const { prismaVersion } = require('@prisma/client')
 

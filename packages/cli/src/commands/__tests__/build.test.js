@@ -39,8 +39,7 @@ jest.mock('@redwoodjs/prerender/detection', () => {
 
 import execa from 'execa'
 
-import { runCommandTask } from 'src/lib'
-
+import { runCommandTask } from '../../lib'
 import { handler } from '../build'
 import { getTasks as getPrerenderTasks } from '../prerender'
 

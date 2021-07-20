@@ -11,8 +11,7 @@ import fs from 'fs'
 
 import 'src/lib/test'
 
-import { getPaths } from 'src/lib'
-
+import { getPaths } from '../../../../lib'
 import { files } from '../../../generate/page/page'
 import { tasks } from '../page'
 

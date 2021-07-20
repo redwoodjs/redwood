@@ -44,8 +44,7 @@ import 'src/lib/test'
 
 import { ensurePosixPath } from '@redwoodjs/internal'
 
-import { getPaths } from 'src/lib'
-
+import { getPaths } from '../../../../lib'
 import { pathName } from '../../helpers'
 import * as page from '../page'
 

@@ -2,10 +2,9 @@ global.__dirname = __dirname
 
 import fs from 'fs'
 
-import 'src/lib/test'
+import '../../../../lib/test'
 
-import { getDefaultArgs } from 'src/lib'
-
+import { getDefaultArgs } from '../../../../lib'
 import { builder, files } from '../../../generate/sdl/sdl'
 import { tasks } from '../sdl'
 
