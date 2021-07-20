@@ -36,7 +36,6 @@
     "terminal-link": "2.1.1",
     "msw": "0.30.1",
     "nodemon": "2.0.10",
-    "ttypescript": "1.5.12",
     "typescript": "4.3.5",
     "typescript-transform-paths": "3.0.2",
     "whatwg-fetch": "3.6.2",
