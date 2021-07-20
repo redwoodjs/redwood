@@ -20,9 +20,9 @@ export interface AuthContextInterface {
   currentUser: null | CurrentUser
   /* The user's metadata from the auth provider */
   userMetadata: null | SupportedUserMetadata
-  logIn(options?: unknown): Promise<void>
+  logIn(options?: unknown): Promise<any>
   logOut(options?: unknown): Promise<void>
-  signUp(options?: unknown): Promise<void>
+  signUp(options?: unknown): Promise<any>
   getToken(): Promise<null | string>
   /**
    * Fetches the "currentUser" from the api side,

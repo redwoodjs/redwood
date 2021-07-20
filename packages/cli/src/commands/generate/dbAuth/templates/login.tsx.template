@@ -27,7 +27,7 @@ const LoginPage = () => {
   }, [])
 
   const onSubmit = async (data) => {
-    const response: any = await logIn({ ...data })
+    const response = await logIn({ ...data })
     if (response.message) {
       toast.error(response.message)
     } else {
