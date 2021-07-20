@@ -26,9 +26,7 @@ jobs:
       - name: Cache framework "node_modules"
         uses: actions/cache@v2
         with:
-          path: |
-            'node_modules'
-            'packages/**/node_modules'
+          path: '**/node_modules'
           key: framework_modules_${{ runner.os }}_${{ hashFiles('**/yarn.lock') }}
 
       - name: Install framework modules
@@ -46,14 +44,14 @@ jobs:
           cache-name: project-modules
         with:
           # npm cache files are stored in `~/.npm` on Linux/macOS
+          # yarn does a full reinstall if no lockfile present
           path: |
            ~/.npm
            "${{ steps.createpath.outputs.project_path }}/**/node_modules"
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('~/generated-blog-project/**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
+           "${{ steps.createpath.outputs.project_path }}/yarn.lock"
+          # we only want to use the cache, if the framework lockfile or crwa hasn't changed,
+          # because we're caching the lockfile, we need to be extra cautious
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock', 'packages/create-redwood-app') }}
 
       - name: Create a test project
         run:  yarn build:test-project ${{ steps.createpath.outputs.project_path }} --verbose --link
