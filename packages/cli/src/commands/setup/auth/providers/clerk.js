@@ -4,7 +4,8 @@ export const config = {
     `import { ClerkProvider, ClerkLoaded, useClerk } from '@clerk/clerk-react'`,
   ],
   init: `
-// You need to add two env variables: NEXT_PUBLIC_CLERK_FRONTEND_API
+// You can set user roles in a "roles" array on the public metadata in Clerk.
+// Also, you need to add two env variables: NEXT_PUBLIC_CLERK_FRONTEND_API
 // for web and CLERK_API_KEY for api, with the frontend api host and
 // api key, respectively, both from your Clerk.dev dashboard.
 let clerk
