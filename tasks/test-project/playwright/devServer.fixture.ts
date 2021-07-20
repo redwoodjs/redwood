@@ -35,14 +35,17 @@ const test = base.extend<{}, DevServerFixtures>({
 
       console.log(`Launching dev server at ${projectPath}`)
 
-      execa.command(
+      // Don't wait for this to finish, because it doens't
+      const devServerHandler = execa.command(
         `yarn rw dev --no-generate --fwd="--open=false --port ${port}" `,
         {
           cwd: projectPath,
           shell: true,
-          stdio: 'inherit',
         }
       )
+
+      // So we can see the dev server logs too
+      devServerHandler.stdout.pipe(process.stdout)
 
       console.log('Waiting for dev server.....')
       const devServerReady = await waitForServer(port, 1000)
