@@ -19,7 +19,7 @@ async function applyCodemod(codemod, target) {
 /** @type {(string) => import('execa').Options} */
 const getExecaOptions = (cwd) => ({
   shell: true,
-  stdio: ['ignore', 'pipe', 'inherit'],
+  stdio: 'inherit',
   cleanup: true,
   cwd,
 })

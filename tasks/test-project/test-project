@@ -121,6 +121,11 @@ const globalTasks = () =>
       {
         title: 'Installing node_modules',
         task: async () => {
+          console.log('xxx --------- xxxx')
+          await execa('ls node_modules', getExecaOptions(OUTPUT_PROJECT_PATH))
+          await execa('pwd', getExecaOptions(OUTPUT_PROJECT_PATH))
+          console.log('xxx --------- xxxx')
+
           return execa(
             'yarn install',
             ['--non-interactive', !verbose && '--silent'].filter(Boolean),
