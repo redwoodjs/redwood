@@ -38,26 +38,27 @@ jobs:
           mkdir $HOME/generated-blog-project
           echo "::set-output name=project_path::$HOME/generated-blog-project"
 
-      - name: Cache project "node_modules"
+      - name: Cache project modules
         uses: actions/cache@v2
+        env:
+          cache-name: cache-project-modules
         with:
-          path: ${{ steps.createpath.outputs.project_path }}/**/node_modules
-          key: project_modules_${{ runner.os }}_${{ hashFiles('packages/create-redwood-app/template') }}
-
-      - name: Cache playwright deps "node_modules"
-        uses: actions/cache@v2
-        with:
-           path: './playwright-cache'
-           key: playwright_cache_${{ hashFiles('./playwright-cache')}}
+          # npm cache files are stored in `~/.npm` on Linux/macOS
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
 
       - name: Create a test project
-        run:  yarn build:test-project ${{ steps.createpath.outputs.project_path }} --verbose --link --force
+        run:  yarn build:test-project ${{ steps.createpath.outputs.project_path }} --verbose --link
 
       - name: Install Playwright deps
-        run:  npx --cache ./playwright-cache playwright install-deps chromium
+        run:  npx playwright install-deps chromium
 
       - name: Run tests
         working-directory: ./tasks/test-project/playwright
-        run: npx --cache ./playwright-cache playwright test
+        run: npx playwright test
         env:
           PROJECT_PATH: ${{ steps.createpath.outputs.project_path }}
