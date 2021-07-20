@@ -27,7 +27,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: '**/node_modules'
-          key: node_modules_${{ runner.os }}_${{ hashFiles('**/yarn.lock') }}
+          key: framework_modules_${{ runner.os }}_${{ hashFiles('**/yarn.lock') }}
 
       - name: Install framework modules
         run: yarn install --frozen-lockfile
@@ -44,7 +44,9 @@ jobs:
           cache-name: cache-project-modules
         with:
           # npm cache files are stored in `~/.npm` on Linux/macOS
-          path: ~/.npm
+          path: |
+           ~/.npm
+           ${{ steps.createpath.outputs.project_path }}/**/node_modules
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
