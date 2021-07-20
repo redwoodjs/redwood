@@ -12,7 +12,7 @@
   "dependencies": {
     "@clerk/clerk-sdk-node": "^0.5.0",
     "@graphql-tools/merge": "6.2.14",
-    "@prisma/client": "2.26.0",
+    "@prisma/client": "2.27.0",
     "@types/pino": "6.3.8",
     "apollo-server-lambda": "2.25.2",
     "core-js": "3.15.2",
