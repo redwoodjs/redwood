@@ -1,11 +1,10 @@
-import { PrismaClient } from '@prisma/client'
+import { Prisma, PrismaClient } from '@prisma/client'
 import pino, {
   BaseLogger,
   DestinationStream,
   LevelWithSilent,
   LoggerOptions,
   PrettyOptions,
-  redactOptions,
 } from 'pino'
 import * as prettyPrint from 'pino-pretty'
 
@@ -80,15 +79,8 @@ export const prettifier = prettyPrint
  *
  * As an array, the redact option specifies paths that should have their values redacted from any log output.
  *
- * Each path must be a string using a syntax which corresponds to JavaScript dot and bracket notation.
- *
- * If an object is supplied, three options can be specified:
- *
- *      paths (String[]): Required. An array of paths
- *      censor (String): Optional. A value to overwrite key which are to be redacted. Default: '[Redacted]'
- *      remove (Boolean): Optional. Instead of censoring the value, remove both the key and the value. Default: false
  */
-export const redactionsList: string[] | redactOptions = [
+export const redactionsList: string[] = [
   'access_token',
   'accessToken',
   'DATABASE_URL',
@@ -172,6 +164,14 @@ export const defaultPrettyPrintOptions: PrettyOptions = {
  *   and warn in prod
  *   Or set via LOG_LEVEL environment variable
  * - Redact the host and other keys via a set redactionList
+ *
+ * Each path must be a string using a syntax which corresponds to JavaScript dot and bracket notation.
+ *
+ * If an object is supplied, three options can be specified:
+ *
+ *      paths (String[]): Required. An array of paths
+ *      censor (String): Optional. A value to overwrite key which are to be redacted. Default: '[Redacted]'
+ *      remove (Boolean): Optional. Instead of censoring the value, remove both the key and the value. Default: false
  *
  * Pretty Printing Defaults defined in defaultPrettyPrintOptions
  *
@@ -350,12 +350,13 @@ interface PrismaLoggingConfig {
  */
 export const handlePrismaLogging = (config: PrismaLoggingConfig): void => {
   const logger = config.logger.child({
-    prisma: { clientVersion: config.db['_clientVersion'] },
+    prisma: { clientVersion: Prisma.prismaVersion.client },
   })
 
-  config.logLevels?.forEach((level) => {
+  config.logLevels?.forEach((level: any) => {
     if (level === 'query') {
-      config.db.$on(level, (queryEvent: QueryEvent) => {
+      config.db.$on(level, (event) => {
+        const queryEvent = event as QueryEvent
         if (queryEvent.duration >= SLOW_QUERY_THRESHOLD) {
           logger.warn(
             { ...queryEvent },
@@ -369,7 +370,8 @@ export const handlePrismaLogging = (config: PrismaLoggingConfig): void => {
         }
       })
     } else {
-      config.db.$on(level, (logEvent: LogEvent) => {
+      config.db.$on(level, (event) => {
+        const logEvent = event as LogEvent
         switch (level) {
           case 'info':
             logger.info({ ...logEvent }, logEvent.message)
