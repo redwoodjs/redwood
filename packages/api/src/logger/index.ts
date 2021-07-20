@@ -378,7 +378,7 @@ export const handlePrismaLogging = (config: PrismaLoggingConfig): void => {
     prisma: { clientVersion: config.db['_clientVersion'] },
   })
 
-  config.logLevels?.forEach((level: any) => {
+  config.logLevels?.forEach((level) => {
     if (level === 'query') {
       config.db.$on(level, (event: any) => {
         const queryEvent = event as QueryEvent
