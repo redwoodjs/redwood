@@ -344,8 +344,7 @@ describe('The Redwood Tutorial - Golden path Helix/Envelop edition', () => {
 
     cy.get('main').should('not.contain', 'Second post')
 
-    cy.get('main > div:nth-child(1)').should('contain', 'Error')
-    cy.get('main > div:nth-child(1)').should('contain', "can't do that")
+    cy.get('.rw-form-error-title').should('contain', "can't do that")
 
     // disable auth
     cy.writeFile(
