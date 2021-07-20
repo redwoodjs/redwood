@@ -1,4 +1,3 @@
-import Prisma from '@prisma/client'
 import pino, {
   BaseLogger,
   DestinationStream,
@@ -14,7 +13,6 @@ export type LogLevel = 'info' | 'query' | 'warn' | 'error'
 // @TODO use type from Prisma once the issue is solved
 // https://github.com/prisma/prisma/issues/8291
 type PrismaClient = any
-// type PrismaClient =  Prisma.PrismaClient
 
 type LogDefinition = {
   level: LogLevel
@@ -355,10 +353,9 @@ interface PrismaLoggingConfig {
  */
 export const handlePrismaLogging = (config: PrismaLoggingConfig): void => {
   const logger = config.logger.child({
-    // @ts-expect-error Not available in prisma typing yet.
-    // Remove this comment once the below issue is solved
+    // @TODO Change this once this issue is resolved
     // See https://github.com/prisma/prisma/issues/8290
-    prisma: { clientVersion: Prisma.prismaVersion.client },
+    prisma: { clientVersion: config.db['_clientVersion'] },
   })
 
   config.logLevels?.forEach((level) => {

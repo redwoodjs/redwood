@@ -11,7 +11,7 @@ const { getExecaOptions, applyCodemod } = require('./util')
 // and is set when webTasks or apiTasks are called
 let OUTPUT_PATH
 
-function fullPath(name, { addExtension } = { addExtension: false }) {
+function fullPath(name, { addExtension } = { addExtension: true }) {
   if (addExtension) {
     if (name.startsWith('api')) {
       name += '.ts'

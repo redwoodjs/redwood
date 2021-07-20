@@ -147,7 +147,7 @@ const createProjectTasks = ({ newAppDir, overwrite }) => {
         } else {
           fs.ensureDirSync(path.dirname(newAppDir))
         }
-        fs.copySync(templateDir, newAppDir)
+        fs.copySync(templateDir, newAppDir, { overwrite: overwrite })
         // .gitignore is renamed here to force file inclusion during publishing
         fs.rename(
           path.join(newAppDir, 'gitignore.template'),

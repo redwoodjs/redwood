@@ -65,10 +65,14 @@ const createProject = async () => {
     rimraf.sync(OUTPUT_PROJECT_PATH)
   }
 
-  // We create a ts project and convert using ts-to-js at the end if typescript flag is false
-  let cmd = `yarn babel-node packages/create-redwood-app/src/create-redwood-app.js ${OUTPUT_PROJECT_PATH} --no-yarn-install --typescript --overwrite`
+  let cmd = `yarn babel-node packages/create-redwood-app/src/create-redwood-app.js ${OUTPUT_PROJECT_PATH}`
 
-  return execa(cmd, [], getExecaOptions(RW_FRAMEWORKPATH))
+  // We create a ts project and convert using ts-to-js at the end if typescript flag is false
+  return execa(
+    cmd,
+    ['--no-yarn-install', '--typescript', '--overwrite'],
+    getExecaOptions(RW_FRAMEWORKPATH)
+  )
 }
 
 const globalTasks = () =>
