@@ -1,4 +1,3 @@
-import { Prisma, PrismaClient } from '@prisma/client'
 import pino, {
   BaseLogger,
   DestinationStream,
@@ -9,6 +8,10 @@ import pino, {
 import * as prettyPrint from 'pino-pretty'
 
 export type LogLevel = 'info' | 'query' | 'warn' | 'error'
+
+// @TODO use type from Prisma once the issue is solved
+// https://github.com/prisma/prisma/issues/8291
+type PrismaClient = any
 
 type LogDefinition = {
   level: LogLevel
@@ -370,12 +373,14 @@ interface PrismaLoggingConfig {
  */
 export const handlePrismaLogging = (config: PrismaLoggingConfig): void => {
   const logger = config.logger.child({
-    prisma: { clientVersion: Prisma.prismaVersion.client },
+    // @TODO Change this once this issue is resolved
+    // See https://github.com/prisma/prisma/issues/8290
+    prisma: { clientVersion: config.db['_clientVersion'] },
   })
 
   config.logLevels?.forEach((level: any) => {
     if (level === 'query') {
-      config.db.$on(level, (event) => {
+      config.db.$on(level, (event: any) => {
         const queryEvent = event as QueryEvent
         if (queryEvent.duration >= SLOW_QUERY_THRESHOLD) {
           logger.warn(
@@ -390,7 +395,7 @@ export const handlePrismaLogging = (config: PrismaLoggingConfig): void => {
         }
       })
     } else {
-      config.db.$on(level, (event) => {
+      config.db.$on(level, (event: any) => {
         const logEvent = event as LogEvent
         switch (level) {
           case 'info':
