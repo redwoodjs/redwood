@@ -11,8 +11,8 @@ const { getExecaOptions, applyCodemod } = require('./util')
 // and is set when webTasks or apiTasks are called
 let OUTPUT_PATH
 
-function fullPath(name) {
-  if (!path.extname(name)) {
+function fullPath(name, { addExtension } = { addExtension: false }) {
+  if (addExtension) {
     if (name.startsWith('api')) {
       name += '.ts'
     } else if (name.startsWith('web')) {
@@ -147,12 +147,12 @@ async function webTasks(outputPath) {
         title: 'Changing routes',
         task: async () => applyCodemod('routes.js', fullPath('web/src/Routes')),
       },
-      {
-        title: 'Adding Tailwind',
-        task: async () => {
-          return execa('yarn rw setup tailwind', [], execaOptions)
-        },
-      },
+      // {
+      //   title: 'Adding Tailwind',
+      //   task: async () => {
+      //     return execa('yarn rw setup tailwind', [], execaOptions)
+      //   },
+      // },
       // {
       //   title: `Running lint`,
       //   task: async () => {
@@ -203,7 +203,10 @@ async function apiTasks(outputPath) {
     {
       title: 'Seeding database',
       task: async () => {
-        await applyCodemod('seed.js', fullPath('api/db/seed.js'))
+        await applyCodemod(
+          'seed.js',
+          fullPath('api/db/seed.js', { addExtension: false }) // seed.js is seed.js in a TS project too
+        )
 
         return execa('yarn rw prisma db seed', [], execaOptionsForProject)
       },
