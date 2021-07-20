@@ -15,6 +15,9 @@ export const clerk = async (token: string, req: Req) => {
   }
 
   try {
+    // Clerk sessions are a combination of a clerk "current session id", which we store
+    // in the Redwood auth token, and the __session cookie, which contains a second session
+    // bearer token. The two tokens together define which device is browsing and as who.
     const clerkCookieName = '__session'
     const cookies = req.event.headers['cookie']?.split(';').map((c) => c.trim())
     const sessionCookie = cookies
