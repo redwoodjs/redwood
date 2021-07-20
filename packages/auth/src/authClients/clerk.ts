@@ -1,4 +1,5 @@
 import { Clerk } from '@clerk/clerk-js'
+import { UserResource as ClerkUserResource } from '@clerk/types'
 
 import type { AuthClient } from '.'
 
@@ -6,8 +7,7 @@ export type AuthClientClerk = AuthClient
 
 export type { Clerk }
 
-// TODO: Map out this user properly.
-export interface ClerkUser {}
+export type ClerkUser = ClerkUserResource & { roles: string[] | null }
 
 export const clerk = (client: Clerk): AuthClientClerk => {
   return {
@@ -20,7 +20,7 @@ export const clerk = (client: Clerk): AuthClientClerk => {
     getToken: async () => client.session.id,
     getUserMetadata: async () => {
       return client.user
-        ? { ...client.user, roles: client.user.publicMetadata['roles'] }
+        ? { ...client.user, roles: client.user.publicMetadata['roles'] ?? [] }
         : null
     },
   }
