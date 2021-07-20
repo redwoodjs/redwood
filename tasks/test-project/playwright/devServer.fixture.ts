@@ -37,7 +37,7 @@ const test = base.extend<{}, DevServerFixtures>({
 
       // Don't wait for this to finish, because it doens't
       const devServerHandler = execa.command(
-        `yarn rw dev --fwd="--port=${port}" --open false --no-generate`,
+        `yarn rw dev --fwd="--port=${port}" --no-generate`,
         {
           cwd: projectPath,
           shell: true,
