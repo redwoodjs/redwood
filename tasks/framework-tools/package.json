@@ -45,9 +45,9 @@
   "scripts": {
     "build": "yarn build:js && yarn build:types",
     "build:js": "lerna run build:js",
-    "build:types": "ttsc --build ../../tsconfig.json --verbose",
+    "build:types": "tsc --build ../../tsconfig.json --verbose",
     "build:clean": "rimraf ../../packages/**/dist",
-    "build:watch": "lerna run build:watch --parallel; ttsc --build",
+    "build:watch": "lerna run build:watch --parallel; tsc --build",
     "test": "lerna run test --stream -- --colors --maxWorkers=4",
     "lint": "cross-env RWJS_CWD=../../packages/create-redwood-app/template eslint --config ../../.eslintrc.js ../../packages",
     "lint:fix": "yarn lint --fix",
