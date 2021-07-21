@@ -1,6 +1,7 @@
 {
   "name": "@redwoodjs/web",
-  "version": "0.35.2",2  "files": [
+  "version": "0.35.2",
+  "files": [
     "dist",
     "apollo",
     "toast",
