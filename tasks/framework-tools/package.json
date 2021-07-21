@@ -55,8 +55,5 @@
     "project:deps": "node ./src/frameworkDepsToProject.mjs",
     "project:copy": "node ./src/frameworkFilesToProject.mjs",
     "project:sync": "node ./src/frameworkSyncToProject.mjs"
-  },
-  "dependencies": {
-    "immer": "^9.0.5"
   }
 }
