@@ -23,10 +23,12 @@ import {
   getPaths,
   writeFilesTask,
   addRoutesToRouterTask,
+  addScaffoldImport,
 } from 'src/lib'
 import c from 'src/lib/colors'
 
 import { yargsDefaults } from '../../generate'
+import { handler as dbAuthHandler } from '../dbAuth/dbAuth'
 import {
   relationsForModel,
   intForeignKeysForModel,
@@ -39,7 +41,6 @@ import {
 } from '../service/service'
 
 const NON_EDITABLE_COLUMNS = ['id', 'createdAt', 'updatedAt']
-const SCAFFOLD_STYLE_PATH = './scaffold.css'
 // Any assets that should not trigger an overwrite error and require a --force
 const SKIPPABLE_ASSETS = ['scaffold.css']
 const PACKAGE_SET = 'Set'
@@ -492,7 +493,7 @@ const addLayoutImport = ({ model: name, path: scaffoldPath = '' }) => {
   const routesContent = readFile(routesPath).toString()
 
   const newRoutesContent = routesContent.replace(
-    /'@redwoodjs\/router'(\s*)/,
+    /['"]@redwoodjs\/router['"](\s*)/,
     `'@redwoodjs/router'\n${importLayout}$1`
   )
   writeFile(routesPath, newRoutesContent, { overwriteExisting: true })
@@ -500,12 +501,21 @@ const addLayoutImport = ({ model: name, path: scaffoldPath = '' }) => {
   return 'Added layout import to Routes.{js,tsx}'
 }
 
-const addSetImport = () => {
+const addSetImport = (task) => {
   const routesPath = getPaths().web.routes
   const routesContent = readFile(routesPath).toString()
   const [redwoodRouterImport, importStart, spacing, importContent, importEnd] =
-    routesContent.match(/(import {)(\s*)([^]*)(} from '@redwoodjs\/router')/) ||
-    []
+    routesContent.match(
+      /(import {)(\s*)([^]*)(} from ['"]@redwoodjs\/router['"])/
+    ) || []
+
+  if (!redwoodRouterImport) {
+    task.skip(
+      "Couldn't add Set import from @redwoodjs/router to Routes.{js,tsx}"
+    )
+    return undefined
+  }
+
   const routerImports = importContent.replace(/\s/g, '').split(',')
   if (routerImports.includes(PACKAGE_SET)) {
     return 'Skipping Set import'
@@ -524,23 +534,6 @@ const addSetImport = () => {
   writeFile(routesPath, newRoutesContent, { overwriteExisting: true })
 
   return 'Added Set import to Routes.{js,tsx}'
-}
-
-const addScaffoldImport = () => {
-  const appJsPath = getPaths().web.app
-  let appJsContents = readFile(appJsPath).toString()
-
-  if (appJsContents.match(SCAFFOLD_STYLE_PATH)) {
-    return 'Skipping scaffold style include'
-  }
-
-  appJsContents = appJsContents.replace(
-    "import Routes from 'src/Routes'\n",
-    `import Routes from 'src/Routes'\n\nimport '${SCAFFOLD_STYLE_PATH}'`
-  )
-  writeFile(appJsPath, appJsContents, { overwriteExisting: true })
-
-  return 'Added scaffold import to App.{js,tsx}'
 }
 
 export const command = 'scaffold <model>'
@@ -590,7 +583,7 @@ const tasks = ({ model, path, force, tests, typescript, javascript }) => {
       },
       {
         title: 'Adding set import...',
-        task: async () => addSetImport({ model, path }),
+        task: async (_, task) => addSetImport(task),
       },
       {
         title: 'Adding scaffold routes...',
@@ -611,6 +604,11 @@ export const handler = async ({
   tests,
   typescript,
 }) => {
+  if (modelArg.toLowerCase() === 'dbauth') {
+    // proxy to dbAuth generator
+    return await dbAuthHandler({ force, tests, typescript })
+  }
+
   if (tests === undefined) {
     tests = getConfig().generate.tests
   }

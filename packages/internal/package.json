@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/internal",
-  "version": "0.34.1",
+  "version": "0.35.2",
   "files": [
     "dist"
   ],
@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@types/findup-sync": "4.0.0",
-    "graphql-tag": "^2.12.5"
+    "graphql-tag": "2.12.5"
   },
   "jest": {
     "testPathIgnorePatterns": [

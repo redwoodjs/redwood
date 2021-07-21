@@ -1,13 +1,14 @@
 {
   "extends": "../../tsconfig.compilerOption.json",
   "compilerOptions": {
+    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
     "baseUrl": ".",
     "rootDir": "src",
-    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
     "outDir": "dist",
     "paths": {
-      "src/*": ["./src/*"]
+      "src/*": ["./src/*"],
     }
   },
   "include": ["src"],
+  "references": [{ "path": "../history/tsconfig.json" }]
 }
