@@ -1,11 +1,17 @@
 import { toHaveClass, toHaveStyle } from '@testing-library/jest-dom/matchers'
 import { render } from '@testing-library/react'
+
 // TODO: Remove when jest configs are in place
 expect.extend({ toHaveClass, toHaveStyle })
 
 import { NavLink, useMatch, Link } from '../links'
-import { LocationProvider } from '../location'
+import { LocationProvider as RedwoodLocationProvider } from '../location'
 
+const LocationProvider = ({ location, children }) => (
+  <RedwoodLocationProvider location={location}>
+    {children}
+  </RedwoodLocationProvider>
+)
 function createDummyLocation(pathname: string) {
   return {
     pathname,

@@ -73,7 +73,7 @@ describe(
       cy.get('li a').eq(1).should('contain.text', 'Contact')
     })
 
-    it('3. Pages: AboutPage, ContactPage, and HomePage', () => {
+    it('4. Pages: AboutPage, ContactPage, and HomePage', () => {
       // About
       cy.visit(
         `/storybook/iframe.html?id=pages-aboutpage--generated&viewMode=story`
