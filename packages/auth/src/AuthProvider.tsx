@@ -21,7 +21,7 @@ export interface AuthContextInterface {
   /* The user's metadata from the auth provider */
   userMetadata: null | SupportedUserMetadata
   logIn(options?: unknown): Promise<any>
-  logOut(options?: unknown): Promise<void>
+  logOut(options?: unknown): Promise<any>
   signUp(options?: unknown): Promise<any>
   getToken(): Promise<null | string>
   /**
