@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/graphql-server",
-  "version": "0.35.0",
+  "version": "0.35.2",
   "files": [
     "dist",
     "logger",
@@ -11,7 +11,7 @@
   "license": "MIT",
   "dependencies": {
     "@envelop/apollo-server-errors": "0.0.1",
-    "@envelop/core": "0.3.1",
+    "@envelop/core": "0.5.1",
     "@envelop/depth-limit": "0.2.0",
     "@envelop/disable-introspection": "0.2.0",
     "@envelop/filter-operation-type": "0.1.0",
@@ -20,8 +20,8 @@
     "@graphql-tools/merge": "6.2.14",
     "@graphql-tools/schema": "7.1.5",
     "@graphql-tools/utils": "7.10.0",
-    "@prisma/client": "2.26.0",
-    "@redwoodjs/api": "0.35.0",
+    "@prisma/client": "2.27.0",
+    "@redwoodjs/api": "0.35.2",
     "@types/pino": "6.3.8",
     "core-js": "3.15.2",
     "graphql": "15.5.1",
@@ -37,8 +37,8 @@
     "uuid": "8.3.2"
   },
   "devDependencies": {
-    "@redwoodjs/auth": "0.35.0",
-    "@redwoodjs/dev-server": "0.35.0",
+    "@redwoodjs/auth": "0.35.2",
+    "@redwoodjs/dev-server": "0.35.2",
     "@types/jsonwebtoken": "8.5.3",
     "@types/lodash.merge": "4.6.6",
     "@types/lodash.omitby": "4.6.6",
