@@ -45,14 +45,6 @@ module.exports = {
     '@babel/typescript',
   ],
   plugins: [
-    [
-      'babel-plugin-module-resolver',
-      {
-        alias: {
-          src: './src',
-        },
-      },
-    ],
     /**
      * NOTE
      * Experimental decorators are used in `@redwoodjs/structure`.
