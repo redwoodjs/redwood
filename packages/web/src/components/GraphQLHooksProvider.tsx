@@ -1,20 +1,5 @@
 import type { DocumentNode } from 'graphql'
 
-export interface GraphQLQueryHookOptions {
-  variables?: Record<string, any>
-  [key: string]: any
-}
-
-export interface GraphQLMutationHookOptions {
-  variables?: Record<string, any>
-  refetchQueries?: {
-    query: DocumentNode
-    variables?: Record<string, any>
-  }[]
-  onCompleted?: (data: any) => void
-  [key: string]: any
-}
-
 type DefaultUseQueryType = (
   query: DocumentNode,
   options?: GraphQLQueryHookOptions
