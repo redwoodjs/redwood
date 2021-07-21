@@ -21,7 +21,7 @@ const LoginPage = () => {
     }
   }, [isAuthenticated])
 
-  const usernameRef = useRef()
+  const usernameRef = useRef<HTMLInputElement>()
   useEffect(() => {
     usernameRef.current.focus()
   }, [])
