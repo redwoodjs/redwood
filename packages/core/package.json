@@ -66,6 +66,7 @@
     "mini-css-extract-plugin": "2.1.0",
     "null-loader": "4.0.1",
     "lodash.escaperegexp": "4.1.2",
+    "nodemon": "2.0.9",
     "esbuild-loader": "2.13.1"
   },
   "devDependencies": {
