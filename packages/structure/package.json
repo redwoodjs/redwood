@@ -35,8 +35,8 @@
     "@types/fs-extra": "9.0.12",
     "@types/lodash": "4.14.171",
     "@types/lru-cache": "5.1.1",
-    "@types/node": "16.0.0",
-    "@types/vscode": "1.57.1"
+    "@types/node": "16.4.0",
+    "@types/vscode": "1.58.1"
   },
   "jest": {
     "testPathIgnorePatterns": [
