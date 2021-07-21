@@ -4,10 +4,7 @@
     "baseUrl": ".",
     "rootDir": "src",
     "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
-    "outDir": "dist",
-    "paths": {
-      "src/*": ["./src/*"]
-    },
+    "outDir": "dist"
   },
   "include": ["./src/**/*", "./global.d.ts"],
   "references": [
