@@ -9,6 +9,7 @@ import c from 'ansi-colors'
 import execa from 'execa'
 import fg from 'fast-glob'
 import packlist from 'npm-packlist'
+import rimraf from 'rimraf'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 export const REDWOOD_PACKAGES_PATH = path.resolve(
@@ -145,12 +146,12 @@ export function buildPackages(
 ) {
   const packageNames = packages.map(packageJsonName)
 
-  clean &&
-    execa.sync('yarn build:clean', {
-      shell: true,
-      stdio: 'inherit',
-      cwd: path.resolve(__dirname, '../../'),
-    })
+  // clean before building
+  if (clean) {
+    for (const packageJsonPath of packages) {
+      rimraf.sync(path.join(path.dirname(packageJsonPath), 'dist'))
+    }
+  }
 
   execa.sync(
     'yarn lerna run build',
