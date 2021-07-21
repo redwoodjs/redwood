@@ -92,11 +92,17 @@ chokidar
 
     console.log()
     logStatus(`Building ${packageName}...`)
-    buildPackages([packageJsonPath], { clean: true })
+    try {
+      buildPackages([packageJsonPath], { clean: true })
 
-    console.log()
-    logStatus(`Copying ${packageName}...`)
-    copyFrameworkFilesToProject(projectPath, [packageJsonPath])
+      console.log()
+      logStatus(`Copying ${packageName}...`)
+      copyFrameworkFilesToProject(projectPath, [packageJsonPath])
+    } catch (error) {
+      console.log()
+      logStatus(`Error building ${packageName}...`)
+      console.log(error)
+    }
 
     console.log()
     logStatus(`Done, and waiting for changes...`)
