@@ -40,7 +40,7 @@ import fs from 'fs'
 import path from 'path'
 
 // Load mocks
-import 'src/lib/test'
+import '../../../../lib/test'
 
 import { ensurePosixPath } from '@redwoodjs/internal'
 

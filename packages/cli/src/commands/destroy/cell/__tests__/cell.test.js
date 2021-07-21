@@ -1,9 +1,9 @@
 global.__dirname = __dirname
 
 jest.mock('fs')
-jest.mock('src/lib', () => {
+jest.mock('../../../../lib', () => {
   return {
-    ...jest.requireActual('src/lib'),
+    ...jest.requireActual('../../../../lib'),
     generateTemplate: () => '',
   }
 })
@@ -18,7 +18,7 @@ jest.mock('@redwoodjs/structure', () => {
 
 import fs from 'fs'
 
-import 'src/lib/test'
+import '../../../../lib/test'
 
 import { files } from '../../../generate/cell/cell'
 import { tasks } from '../cell'

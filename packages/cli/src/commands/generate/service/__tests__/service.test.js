@@ -2,7 +2,7 @@ global.__dirname = __dirname
 import path from 'path'
 
 // Load mocks
-import 'src/lib/test'
+import '../../../../lib/test'
 
 import { getDefaultArgs } from '../../../../lib'
 import * as service from '../service'

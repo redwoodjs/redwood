@@ -12,9 +12,9 @@ let mockedRedwoodConfig = {
   browser: {},
 }
 
-jest.mock('src/lib', () => {
+jest.mock('../../lib/', () => {
   return {
-    ...jest.requireActual('src/lib'),
+    ...jest.requireActual('../../lib/'),
     runCommandTask: jest.fn((commands) => {
       return commands.map(({ cmd, args }) => `${cmd} ${args?.join(' ')}`)
     }),
