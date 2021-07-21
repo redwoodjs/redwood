@@ -20,7 +20,7 @@ export const clerk = (client: Clerk): AuthClientClerk => {
     getToken: async () => client.session.id,
     getUserMetadata: async () => {
       return client.user
-        ? { ...client.user, roles: client.user.publicMetadata['roles'] ?? [] }
+        ? { ...client.user, roles: client.user.publicMetadata?.['roles'] ?? [] }
         : null
     },
   }

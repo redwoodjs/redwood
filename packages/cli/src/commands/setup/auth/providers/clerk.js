@@ -5,9 +5,9 @@ export const config = {
   ],
   init: `
 // You can set user roles in a "roles" array on the public metadata in Clerk.
-// Also, you need to add two env variables: NEXT_PUBLIC_CLERK_FRONTEND_API
-// for web and CLERK_API_KEY for api, with the frontend api host and
-// api key, respectively, both from your Clerk.dev dashboard.
+// Also, you need to add two env variables: CLERK_FRONTEND_API_URL for web and
+// CLERK_API_KEY for api, with the frontend api host and api key, respectively,
+// both from your Clerk.dev dashboard.
 let clerk
 const ClerkAuthConsumer = ({ children }) => {
   clerk = useClerk()
@@ -15,9 +15,9 @@ const ClerkAuthConsumer = ({ children }) => {
 }
 
 const ClerkAuthProvider = ({ children }) => {
-  const frontendApi = process.env.NEXT_PUBLIC_CLERK_FRONTEND_API
+  const frontendApi = process.env.CLERK_FRONTEND_API_URL
   if (!frontendApi) {
-    throw new Error('Need to define env variable NEXT_PUBLIC_CLERK_FRONTEND_API')
+    throw new Error('Need to define env variable CLERK_FRONTEND_API_URL')
   }
 
   return (
@@ -43,6 +43,5 @@ export const apiPackages = ['@clerk/clerk-sdk-node']
 export const notes = [
   'You will need to add two environment variables with your Clerk URL and API key.',
   'Check out web/src/App.{js,tsx} for the variables you need to add.',
-  'See also: https://docs.clerk.dev/get-started/quickstarts/nextjs',
-  'and https://docs.clerk.dev/get-started/quickstarts/nextjs-api',
+  'See also: https://redwoodjs.com/docs/authentication#clerk',
 ]
