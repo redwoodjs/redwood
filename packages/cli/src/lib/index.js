@@ -408,7 +408,7 @@ export const cleanupEmptyDirsTask = (files) => {
 
 const wrapWithSet = (routesContent, layout, routes, newLineAndIndent) => {
   const [_, indentOne, indentTwo] = routesContent.match(
-    /([ \t]*)<Router>[^<]*[\r\n]+([ \t]+)/
+    /([ \t]*)<Router.*?>[^<]*[\r\n]+([ \t]+)/
   ) || ['', 0, 2]
   const oneLevelIndent = indentTwo.slice(0, indentTwo.length - indentOne.length)
   const newRoutesWithExtraIndent = routes.map((route) => oneLevelIndent + route)
@@ -426,7 +426,8 @@ export const addRoutesToRouterTask = (routes, layout) => {
   const newRoutes = routes.filter((route) => !routesContent.match(route))
 
   if (newRoutes.length) {
-    const [routerStart, newLineAndIndent] = routesContent.match(/<Router>(\s*)/)
+    const [routerStart, newLineAndIndent] =
+      routesContent.match(/\s*<Router.*?>(\s*)/)
     const routesBatch = layout
       ? wrapWithSet(routesContent, layout, newRoutes, newLineAndIndent)
       : newRoutes.join(newLineAndIndent)

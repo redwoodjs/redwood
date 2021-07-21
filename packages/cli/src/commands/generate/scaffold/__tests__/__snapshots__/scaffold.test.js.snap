@@ -514,13 +514,13 @@ const Post = ({ post }) => {
         >
           Edit
         </Link>
-        <a
-          href=\\"#\\"
+        <button
+          type=\\"button\\"
           className=\\"rw-button rw-button-red\\"
           onClick={() => onDeleteClick(post.id)}
         >
           Delete
-        </a>
+        </button>
       </nav>
     </>
   )
@@ -669,6 +669,7 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   list-style-position: inside;
 }
 .rw-button {
+  border: none;
   color: #718096;
   cursor: pointer;
   display: flex;
@@ -681,6 +682,7 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   letter-spacing: 0.025em;
   border-radius: 0.25rem;
   line-height: 2;
+  border: 0;
 }
 .rw-button:hover {
   background-color: #718096;
@@ -746,6 +748,7 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   width: 100%;
   padding: 0.5rem;
   border-width: 1px;
+  border-style: solid;
   border-color: #e2e8f0;
   color: #4a5568;
   border-radius: 0.25rem;
@@ -1095,14 +1098,14 @@ const PostsList = ({ posts }) => {
                   >
                     Edit
                   </Link>
-                  <a
-                    href=\\"#\\"
+                  <button
+                    type=\\"button\\"
                     title={'Delete post ' + post.id}
                     className=\\"rw-button rw-button-small rw-button-red\\"
                     onClick={() => onDeleteClick(post.id)}
                   >
                     Delete
-                  </a>
+                  </button>
                 </nav>
               </td>
             </tr>
@@ -1626,13 +1629,13 @@ const Post = ({ post }) => {
         >
           Edit
         </Link>
-        <a
-          href=\\"#\\"
+        <button
+          type=\\"button\\"
           className=\\"rw-button rw-button-red\\"
           onClick={() => onDeleteClick(post.id)}
         >
           Delete
-        </a>
+        </button>
       </nav>
     </>
   )
@@ -1785,6 +1788,7 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   list-style-position: inside;
 }
 .rw-button {
+  border: none;
   color: #718096;
   cursor: pointer;
   display: flex;
@@ -1797,6 +1801,7 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   letter-spacing: 0.025em;
   border-radius: 0.25rem;
   line-height: 2;
+  border: 0;
 }
 .rw-button:hover {
   background-color: #718096;
@@ -1862,6 +1867,7 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   width: 100%;
   padding: 0.5rem;
   border-width: 1px;
+  border-style: solid;
   border-color: #e2e8f0;
   color: #4a5568;
   border-radius: 0.25rem;
@@ -2282,14 +2288,14 @@ const PostsList = ({ posts }) => {
                   >
                     Edit
                   </Link>
-                  <a
-                    href=\\"#\\"
+                  <button
+                    type=\\"button\\"
                     title={'Delete post ' + post.id}
                     className=\\"rw-button rw-button-small rw-button-red\\"
                     onClick={() => onDeleteClick(post.id)}
                   >
                     Delete
-                  </a>
+                  </button>
                 </nav>
               </td>
             </tr>

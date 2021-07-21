@@ -85,14 +85,14 @@ const ${pluralPascalName}List = ({ ${pluralCamelName} }) => {
                   >
                     Edit
                   </Link>
-                  <a
-                    href="#"
+                  <button
+                    type="button"
                     title={'Delete ${singularCamelName} ' + ${singularCamelName}.id}
                     className="rw-button rw-button-small rw-button-red"
                     onClick={() => onDeleteClick(${singularCamelName}.id)}
                   >
                     Delete
-                  </a>
+                  </button>
                 </nav>
               </td>
             </tr>

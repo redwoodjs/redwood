@@ -1,5 +1,5 @@
 type ${singularPascalName}LayoutProps = {
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 const ${singularPascalName}Layout = ({ children }: ${singularPascalName}LayoutProps) => {
