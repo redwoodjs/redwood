@@ -45,7 +45,7 @@ const globImports = {
             '**/*.test.js',
             '**/*.scenarios.ts',
             '**/*.scenarios.js',
-            '**/index.d.ts',
+            '**/*.d.ts',
           ],
         })
 
