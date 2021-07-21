@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/web",
-  "version": "0.34.1",
+  "version": "0.35.2",
   "files": [
     "dist",
     "apollo",
@@ -11,18 +11,20 @@
   "types": "dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@apollo/client": "3.3.19",
-    "@redwoodjs/auth": "0.34.1",
-    "core-js": "3.13.1",
-    "graphql": "15.5.0",
+    "@apollo/client": "3.3.21",
+    "@redwoodjs/auth": "0.35.2",
+    "@redwoodjs/history": "0.35.2",
+    "core-js": "3.15.2",
+    "graphql": "15.5.1",
     "proptypes": "1.1.0",
+    "react-helmet-async": "1.0.9",
     "react-hot-toast": "2.0.0"
   },
   "peerDependencies": {
     "react": "17.0.2"
   },
   "devDependencies": {
-    "@types/react": "17.0.9"
+    "@types/react": "17.0.13"
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",

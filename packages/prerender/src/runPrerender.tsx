@@ -4,6 +4,7 @@ import path from 'path'
 import React from 'react'
 
 import babelRequireHook from '@babel/register'
+import cheerio from 'cheerio'
 import ReactDOMServer from 'react-dom/server'
 
 import { getPaths } from '@redwoodjs/internal'
@@ -59,20 +60,36 @@ export const runPrerender = async ({
   const { default: App } = await import(getPaths().web.app)
 
   const componentAsHtml = ReactDOMServer.renderToString(
-    <LocationProvider
-      location={{
-        pathname: routerPath,
-      }}
-    >
+    <LocationProvider location={{ pathname: routerPath }}>
       <App />
     </LocationProvider>
   )
 
+  const { helmet } = global.__REDWOOD__HELMET_CONTEXT
+
+  const indexHtmlTree = cheerio.load(indexContent)
+
+  if (helmet) {
+    const helmetElements = `
+  ${helmet?.link.toString()}
+  ${helmet?.meta.toString()}
+  ${helmet?.script.toString()}
+  ${helmet?.noscript.toString()}
+  `
+
+    // Add all head elements
+    indexHtmlTree('head').prepend(helmetElements)
+
+    // Only change the title, if its not empty
+    if (cheerio.load(helmet?.title.toString())('title').text() !== '') {
+      indexHtmlTree('title').replaceWith(helmet?.title.toString())
+    }
+  }
+
   // This is set by webpack by the html plugin
-  const renderOutput = indexContent.replace(
-    '<server-markup></server-markup>',
-    componentAsHtml
-  )
+  indexHtmlTree('server-markup').replaceWith(componentAsHtml)
+
+  const renderOutput = indexHtmlTree.html()
 
   return renderOutput
 }

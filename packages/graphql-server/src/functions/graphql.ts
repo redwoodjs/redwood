@@ -1,11 +1,13 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useApolloTracing } from '@envelop/apollo-tracing'
+import { useApolloServerErrors } from '@envelop/apollo-server-errors'
 import {
   envelop,
+  FormatErrorHandler,
   useErrorHandler,
   useMaskedErrors,
   useSchema,
   Plugin,
+  EnvelopError,
 } from '@envelop/core'
 import { useDepthLimit, DepthLimitConfig } from '@envelop/depth-limit'
 import { useDisableIntrospection } from '@envelop/disable-introspection'
@@ -18,7 +20,12 @@ import type {
   Context as LambdaContext,
   APIGatewayProxyResult,
 } from 'aws-lambda'
-import { GraphQLError, GraphQLSchema } from 'graphql'
+import {
+  GraphQLError,
+  GraphQLSchema,
+  Kind,
+  OperationDefinitionNode,
+} from 'graphql'
 import {
   Request,
   getGraphQLParameters,
@@ -27,17 +34,18 @@ import {
 } from 'graphql-helix'
 import { renderPlaygroundPage } from 'graphql-playground-html'
 import { BaseLogger } from 'pino'
+import { v4 as uuidv4 } from 'uuid'
 
-import type { AuthContextPayload } from '@redwoodjs/api'
-import { getAuthenticationContext } from '@redwoodjs/api'
+import { CorsConfig, createCorsContext } from '../cors'
+import { createHealthcheckContext, OnHealthcheckFn } from '../healthcheck'
 import {
+  ApolloError,
+  AuthContextPayload,
+  getAuthenticationContext,
   getPerRequestContext,
   setContext,
   usePerRequestContext,
-} from '@redwoodjs/api'
-
-import { CorsConfig, createCorsContext } from 'src/cors'
-import { createHealthcheckContext, OnHealthcheckFn } from 'src/healthcheck'
+} from '../index'
 
 export type GetCurrentUser = (
   decoded: AuthContextPayload[0],
@@ -53,51 +61,123 @@ export type RedwoodGraphQLContext = {
   context: LambdaContext
 }
 
-interface GraphQLHandlerOptions {
+/**
+ * Options for request and response information to include in the log statements
+ * output by UseRedwoodLogger around the execution event
+ *
+ * @param data - Include response data sent to client.
+ * @param operationName - Include operation name.
+ * @param requestId - Include the event's requestId, or if none, generate a uuid as an identifier.
+ * @param query - Include the query. This is the query or mutation (with fields) made in the request.
+ * @param tracing - Include the tracing and timing information.
+ * @param userAgent - Include the browser (or client's) user agent.
+ */
+type GraphQLLoggerOptions = {
   /**
-   * Customize GraphQL Logger
+   * @description Include response data sent to client.
    */
-  logger: BaseLogger
+  data?: boolean
 
   /**
-   * Modify the resolver and global context.
+   * @description Include operation name.
+   *
+   * The operation name is a meaningful and explicit name for your operation. It is only required in multi-operation documents,
+   * but its use is encouraged because it is very helpful for debugging and server-side logging.
+   * When something goes wrong (you see errors either in your network logs, or in the logs of your GraphQL server)
+   * it is easier to identify a query in your codebase by name instead of trying to decipher the contents.
+   * Think of this just like a function name in your favorite programming language.
+   *
+   * @see https://graphql.org/learn/queries/#operation-name
+   */
+  operationName?: boolean
+
+  /**
+   * @description Include the event's requestId, or if none, generate a uuid as an identifier.
+   *
+   * The requestId can be helpful when contacting your deployment provider to resolve issues when encountering errors or unexpected behavior.
+   */
+  requestId?: boolean
+
+  /**
+   * @description Include the query. This is the query or mutation (with fields) made in the request.
+   */
+  query?: boolean
+
+  /**
+   * @description Include the tracing and timing information.
+   *
+   * This will log various performance timings withing the GraphQL event lifecycle (parsing, validating, executing, etc).
+   */
+  tracing?: boolean
+
+  /**
+   * @description Include the browser (or client's) user agent.
+   *
+   * This can be helpful to know what type of client made the request to resolve issues when encountering errors or unexpected behavior.
+   */
+  userAgent?: boolean
+}
+
+/**
+ * Configure the logger used by the GraphQL server.
+ *
+ * @param logger your logger
+ * @param options the GraphQLLoggerOptions such as tracing, operationName, etc
+ */
+type LoggerConfig = { logger: BaseLogger; options?: GraphQLLoggerOptions }
+
+/**
+ * GraphQLHandlerOptions
+ */
+interface GraphQLHandlerOptions {
+  /**
+   * @description Customize GraphQL Logger
+   *
+   * Collect resolver timings, and exposes trace data for
+   * an individual request under extensions as part of the GraphQL response.
+   */
+  loggerConfig: LoggerConfig
+
+  /**
+   * @description  Modify the resolver and global context.
    */
   context?: Context | ContextFunction
 
   /**
-   * An async function that maps the auth token retrieved from the request headers to an object.
+   * A @description n async function that maps the auth token retrieved from the request headers to an object.
    * Is it executed when the `auth-provider` contains one of the supported providers.
    */
   getCurrentUser?: GetCurrentUser
 
   /**
-   * A callback when an unhandled exception occurs. Use this to disconnect your prisma instance.
+   *  @description A callback when an unhandled exception occurs. Use this to disconnect your prisma instance.
    */
   onException?: () => void
 
   /**
-   * The GraphQL Schema
+   * T @description he GraphQL Schema
    */
   schema: GraphQLSchema
 
   /**
-   * CORS configuration
+   *  @description CORS configuration
    */
   cors?: CorsConfig
 
   /**
-   * Healthcheck
+   *  @description Healthcheck
    */
   onHealthCheck?: OnHealthcheckFn
 
   /**
-   * Limit the complexity of the queries solely by their depth.
+   *  @description Limit the complexity of the queries solely by their depth.
+   *
    * @see https://www.npmjs.com/package/graphql-depth-limit#documentation
    */
-  depthLimit?: DepthLimitConfig
+  depthLimitOptions?: DepthLimitConfig
 
   /**
-   * Only allows the specified operation types (e.g. subscription, query or mutation).
+   * @description  Only allows the specified operation types (e.g. subscription, query or mutation).
    *
    * By default, only allow query and mutation (ie, do not allow subscriptions).
    *
@@ -107,12 +187,12 @@ interface GraphQLHandlerOptions {
   allowedOperations?: AllowedOperations
 
   /**
-   * Custom Envelop plugins
+   * @description  Custom Envelop plugins
    */
   extraPlugins?: Plugin<any>[]
 
   /**
-   * Customize the GraphiQL Endpoint that appears in the location bar of the GraphQL Playground
+   * @description  Customize the GraphiQL Endpoint that appears in the location bar of the GraphQL Playground
    *
    * Defaults to '/graphql' as this value must match the name of the `graphql` function on the api-side.
    *
@@ -120,12 +200,26 @@ interface GraphQLHandlerOptions {
   graphiQLEndpoint?: string
 }
 
+/**
+ * Extracts and parses body payload from event with base64 encoding check
+ *
+ */
+const parseEventBody = (event: APIGatewayProxyEvent) => {
+  if (event.isBase64Encoded) {
+    return JSON.parse(Buffer.from(event.body || '', 'base64').toString('utf-8'))
+  } else {
+    return event.body && JSON.parse(event.body)
+  }
+}
+
 function normalizeRequest(event: APIGatewayProxyEvent): Request {
+  const body = parseEventBody(event)
+
   return {
     headers: event.headers || {},
     method: event.httpMethod,
     query: event.queryStringParameters,
-    body: event.body && JSON.parse(event.body),
+    body,
   }
 }
 
@@ -174,17 +268,22 @@ const useRedwoodAuthContext = (
   }
 }
 
-export const useUserContext = (
-  userContextBuilder: NonNullable<GraphQLHandlerOptions['context']>
+/**
+ * This Envelop plugin enriches the context on a per-request basis
+ * by populating it with the results of a custom function
+ * @returns
+ */
+export const usePopulateContext = (
+  populateContextBuilder: NonNullable<GraphQLHandlerOptions['context']>
 ): Plugin<RedwoodGraphQLContext> => {
   return {
     async onContextBuilding({ context, extendContext }) {
-      const userContext =
-        typeof userContextBuilder === 'function'
-          ? await userContextBuilder({ context })
-          : userContextBuilder
+      const populateContext =
+        typeof populateContextBuilder === 'function'
+          ? await populateContextBuilder({ context })
+          : populateContextBuilder
 
-      extendContext(userContext)
+      extendContext(populateContext)
     },
   }
 }
@@ -192,7 +291,7 @@ export const useUserContext = (
 /**
  * This Envelop plugin waits until the GraphQL context is done building and sets the
  * Redwood global context which can be imported with:
- * // import { context } from '@redwoodjs/api'
+ * // import { context } from '@redwoodjs/graphql-server'
  * @returns
  */
 export const useRedwoodGlobalContextSetter =
@@ -204,37 +303,94 @@ export const useRedwoodGlobalContextSetter =
     },
   })
 
+/**
+ * This plugin logs every time an operation is being executed and
+ * when the execution of the operation is done.
+ *
+ * It adds information using a child logger from the context
+ * such as the operation name, request id, errors, and header info
+ * to help trace and diagnose issues.
+ *
+ * Tracing and timing information can be enabled via the
+ * GraphQLHandlerOptions traction option.
+ *
+ * @see https://www.envelop.dev/docs/plugins/lifecycle
+ * @returns
+ */
 const useRedwoodLogger = (
-  baseLogger: BaseLogger
+  loggerConfig: LoggerConfig
 ): Plugin<RedwoodGraphQLContext> => {
-  const childLogger = baseLogger.child({ name: 'graphql-server' })
+  const logger = loggerConfig.logger
+
+  const childLogger = logger.child({
+    name: 'graphql-server',
+  })
+
+  const includeData = loggerConfig?.options?.data
+  const includeOperationName = loggerConfig?.options?.operationName
+  const includeRequestId = loggerConfig?.options?.requestId
+  const includeTracing = loggerConfig?.options?.tracing
+  const includeUserAgent = loggerConfig?.options?.userAgent
+  const includeQuery = loggerConfig?.options?.query
 
   return {
     onExecute({ args }) {
-      childLogger.info(
-        {
-          operationName: args.operationName,
-          userAgent: args.contextValue.event.headers['user-agent'],
-        },
-        `GraphQL execution started`
-      )
+      const options = {} as any
+      const rootOperation = args.document.definitions.find(
+        (o) => o.kind === Kind.OPERATION_DEFINITION
+      ) as OperationDefinitionNode
+
+      if (includeOperationName && args.operationName) {
+        options['operationName'] =
+          args.operationName ||
+          rootOperation.name?.value ||
+          'Anonymous Operation'
+      }
+
+      if (includeQuery) {
+        options['query'] = args.variableValues && args.variableValues
+      }
+
+      if (includeRequestId) {
+        options['requestId'] =
+          args.contextValue.context?.awsRequestId ||
+          args.contextValue.event?.requestContext?.requestId ||
+          uuidv4()
+      }
+
+      if (includeUserAgent) {
+        options['userAgent'] = args.contextValue.event?.headers['user-agent']
+      }
+
+      const envelopLogger = childLogger.child({
+        ...options,
+      })
+
+      envelopLogger.info(`GraphQL execution started`)
 
       return {
         onExecuteDone({ result }) {
+          const options = {} as any
+
+          if (includeData) {
+            options['data'] = result.data
+          }
+
           if (result.errors && result.errors.length > 0) {
-            childLogger.error(
+            envelopLogger.error(
               {
-                operationName: args.operationName,
                 errors: result.errors,
               },
               `GraphQL execution completed with errors:`
             )
           } else {
-            childLogger.info(
+            if (includeTracing) {
+              options['tracing'] = result.extensions?.envelopTracing
+            }
+
+            envelopLogger.info(
               {
-                operationName: args.operationName,
-                userAgent: args.contextValue.event.headers['user-agent'],
-                envelopTracing: args.contextValue._envelopTracing,
+                ...options,
               },
               `GraphQL execution completed`
             )
@@ -243,6 +399,26 @@ const useRedwoodLogger = (
       }
     },
   }
+}
+
+/*
+ * Prevent unexpected error messages from leaking to the GraphQL clients.
+ *
+ * Unexpected errors are those that are not Envelop or Apollo errors
+ *
+ * Note that error masking should come after useApolloServerErrors since the originalError
+ * will could become an ApolloError but if not, then should get masked
+ **/
+export const formatError: FormatErrorHandler = (err) => {
+  if (
+    err.originalError &&
+    err.originalError instanceof EnvelopError === false &&
+    err.originalError instanceof ApolloError === false
+  ) {
+    return new GraphQLError('Something went wrong.')
+  }
+
+  return err
 }
 
 /**
@@ -255,7 +431,7 @@ const useRedwoodLogger = (
  * ```
  */
 export const createGraphQLHandler = ({
-  logger,
+  loggerConfig,
   schema,
   context,
   getCurrentUser,
@@ -263,20 +439,13 @@ export const createGraphQLHandler = ({
   extraPlugins,
   cors,
   onHealthCheck,
-  depthLimit,
+  depthLimitOptions,
   allowedOperations,
   graphiQLEndpoint,
 }: GraphQLHandlerOptions) => {
+  // Important: Plugins are executed in order of their usage, and inject functionality serially,
+  // so the order here matters
   const plugins: Plugin<any>[] = [
-    // Limits the depth of your GraphQL selection sets.
-    useDepthLimit({
-      maxDepth: (depthLimit && depthLimit.maxDepth) || 5,
-      ignore: (depthLimit && depthLimit.ignore) || [],
-    }),
-    // Only allow execution of specific operation types
-    useFilterAllowedOperations(allowedOperations || ['mutation', 'query']),
-    // Prevent unexpected error messages from leaking to the GraphQL clients.
-    useMaskedErrors(),
     // Simple LRU for caching parse results.
     useParserCache(),
     // Simple LRU for caching validate results.
@@ -286,7 +455,21 @@ export const createGraphQLHandler = ({
     // Custom Redwood plugins
     useRedwoodAuthContext(getCurrentUser),
     useRedwoodGlobalContextSetter(),
-    useRedwoodLogger(logger),
+    useRedwoodLogger(loggerConfig),
+    // Limits the depth of your GraphQL selection sets.
+    useDepthLimit({
+      maxDepth: (depthLimitOptions && depthLimitOptions.maxDepth) || 10,
+      ignore: (depthLimitOptions && depthLimitOptions.ignore) || [],
+    }),
+    // Only allow execution of specific operation types
+    useFilterAllowedOperations(allowedOperations || ['mutation', 'query']),
+    // Apollo Server compatible errors.
+    // Important: *must* be listed before useMaskedErrors
+    useApolloServerErrors(),
+    // Prevent unexpected error messages from leaking to the GraphQL clients.
+    // Important: *must* be listed after useApolloServerErrors so it can detect if the error is an ApolloError
+    // and mask if not
+    useMaskedErrors({ formatError }),
   ]
 
   const isDevEnv = process.env.NODE_ENV === 'development'
@@ -296,12 +479,11 @@ export const createGraphQLHandler = ({
   }
 
   if (isDevEnv) {
-    plugins.push(useApolloTracing())
     plugins.push(useErrorHandler(redwoodErrorHandler))
   }
 
   if (context) {
-    plugins.push(useUserContext(context))
+    plugins.push(usePopulateContext(context))
   }
 
   if (extraPlugins && extraPlugins.length > 0) {
@@ -317,7 +499,7 @@ export const createGraphQLHandler = ({
 
   const createSharedEnvelop = envelop({
     plugins,
-    enableInternalTracing: isDevEnv,
+    enableInternalTracing: loggerConfig.options?.tracing,
   })
 
   const handlerFn = async (
@@ -325,6 +507,8 @@ export const createGraphQLHandler = ({
     lambdaContext: LambdaContext
   ): Promise<APIGatewayProxyResult> => {
     const enveloped = createSharedEnvelop({ event, context: lambdaContext })
+
+    const logger = loggerConfig.logger
 
     // In the future, this could be part of a specific handler for AWS lambdas
     lambdaContext.callbackWaitsForEmptyEventLoop = false
@@ -347,7 +531,7 @@ export const createGraphQLHandler = ({
       }
     }
 
-    if (shouldRenderGraphiQL(request)) {
+    if (isDevEnv && shouldRenderGraphiQL(request)) {
       return {
         body: renderPlaygroundPage({
           endpoint: graphiQLEndpoint || '/graphql',
