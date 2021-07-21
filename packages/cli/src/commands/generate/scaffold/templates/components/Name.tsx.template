@@ -70,13 +70,13 @@ const ${singularPascalName} = ({ ${singularCamelName} }) => {
         >
           Edit
         </Link>
-        <a
-          href="#"
+        <button
+          type="button"
           className="rw-button rw-button-red"
           onClick={() => onDeleteClick(${singularCamelName}.id)}
         >
           Delete
-        </a>
+        </button>
       </nav>
     </>
   )

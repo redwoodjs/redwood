@@ -125,6 +125,7 @@
   list-style-position: inside;
 }
 .rw-button {
+  border: none;
   color: #718096;
   cursor: pointer;
   display: flex;
@@ -137,6 +138,7 @@
   letter-spacing: 0.025em;
   border-radius: 0.25rem;
   line-height: 2;
+  border: 0;
 }
 .rw-button:hover {
   background-color: #718096;
@@ -202,6 +204,7 @@
   width: 100%;
   padding: 0.5rem;
   border-width: 1px;
+  border-style: solid;
   border-color: #e2e8f0;
   color: #4a5568;
   border-radius: 0.25rem;
