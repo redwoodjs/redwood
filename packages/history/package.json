@@ -1,13 +1,13 @@
 {
   "name": "@redwoodjs/history",
   "description": "RedwoodJS history",
-  "version": "0.35.1",
+  "version": "0.35.2",
   "license": "MIT",
   "files": [ "dist" ],
   "main": "./dist/index.js",
   "types": "dist/index.d.ts",
   "peerDependencies": {
-    "react": "^17.0.1",
+    "react": "^17.0.2",
     "react-dom": "*"
   },
   "scripts": {
