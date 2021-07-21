@@ -10,7 +10,7 @@ const ${pascalName}Page = (<%- paramName === '' ? '' : `${propParam}: ${pascalNa
     <>
       <MetaTags
         title="${pascalName}"
-        description="${pascalName} is a great page"
+        description="${pascalName} description"
       />
       <h1>${pascalName}Page</h1>
       <p>
