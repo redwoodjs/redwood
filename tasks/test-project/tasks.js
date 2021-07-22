@@ -153,12 +153,6 @@ async function webTasks(outputPath) {
       //     return execa('yarn rw setup tailwind', [], execaOptions)
       //   },
       // },
-      // {
-      //   title: `Running lint`,
-      //   task: async () => {
-      //     return execa('yarn rw lint --fix', [], execaOptions)
-      //   },
-      // },
     ],
     {
       exitOnError: true,
@@ -232,12 +226,6 @@ async function apiTasks(outputPath) {
         )
       },
     },
-    // {
-    //   title: `Running lint`,
-    //   task: async () => {
-    //     return execa('yarn rw lint --fix', [], execaOptions)
-    //   },
-    // },
   ])
 }
 
