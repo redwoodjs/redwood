@@ -5,8 +5,8 @@ import execa from 'execa'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
 
-import { getPaths } from 'src/lib'
-import c from 'src/lib/colors'
+import { getPaths } from '../../lib'
+import c from '../../lib/colors'
 
 export const command = 'aws [provider]'
 export const description = 'Deploy to AWS using the selected provider'
