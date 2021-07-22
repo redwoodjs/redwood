@@ -341,7 +341,6 @@ describe('The Redwood Tutorial - Golden path edition', () => {
 
     cy.get('main').should('not.contain', 'Second post')
 
-    cy.get('main > div:nth-child(1)').should('contain', 'Error')
     cy.get('main > div:nth-child(1)').should('contain', "can't do that")
 
     // disable auth

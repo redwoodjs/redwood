@@ -4,8 +4,8 @@ import path from 'path'
 import chalk from 'chalk'
 import Listr from 'listr'
 
-import { getPaths, writeFile } from 'src/lib'
-import c from 'src/lib/colors'
+import { getPaths, writeFile } from '../../../lib'
+import c from '../../../lib/colors'
 
 export const command = 'custom-web-index'
 

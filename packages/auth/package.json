@@ -1,22 +1,19 @@
 {
   "name": "@redwoodjs/auth",
-  "version": "0.35.1",
+  "version": "0.35.2",
   "files": [
     "dist"
   ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "license": "MIT",
-  "dependencies": {
-    "@redwoodjs/history": "0.35.1"
-  },
   "devDependencies": {
     "@auth0/auth0-spa-js": "1.16.1",
     "@clerk/clerk-js": "^1.26.0",
     "@clerk/types": "^1.6.0",
     "@supabase/supabase-js": "1.18.0",
     "@types/netlify-identity-widget": "1.9.1",
-    "@types/react": "17.0.13",
+    "@types/react": "17.0.14",
     "firebase": "8.7.0",
     "firebase-admin": "9.10.0",
     "gotrue-js": "0.9.29",
@@ -30,7 +27,7 @@
     "build": "yarn build:js && yarn build:types",
     "prepublishOnly": "yarn cross-env NODE_ENV=production yarn build",
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
-    "build:types": "ttsc --build --verbose",
+    "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "test": "jest",
     "test:watch": "yarn test --watch"

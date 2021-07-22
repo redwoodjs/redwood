@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/core",
   "description": "Foundational packages and config required to build RedwoodJS.",
-  "version": "0.35.1",
+  "version": "0.35.2",
   "license": "MIT",
   "files": [
     "config",
@@ -14,10 +14,10 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "dependencies": {
-    "@redwoodjs/eslint-config": "0.35.1",
-    "@redwoodjs/internal": "0.35.1",
-    "@redwoodjs/testing": "0.35.1",
-    "@redwoodjs/cli": "0.35.1",
+    "@redwoodjs/eslint-config": "0.35.2",
+    "@redwoodjs/internal": "0.35.2",
+    "@redwoodjs/testing": "0.35.2",
+    "@redwoodjs/cli": "0.35.2",
     "x----x----x": "^0 Babel",
     "@babel/cli": "7.14.5",
     "@babel/core": "7.14.6",
@@ -66,6 +66,7 @@
     "mini-css-extract-plugin": "2.1.0",
     "null-loader": "4.0.1",
     "lodash.escaperegexp": "4.1.2",
+    "nodemon": "2.0.9",
     "esbuild-loader": "2.13.1"
   },
   "devDependencies": {
@@ -78,7 +79,7 @@
     "build": "yarn build:js && yarn build:types",
     "prepublishOnly": "yarn build",
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
-    "build:types": "ttsc --build --verbose",
+    "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build\"",
     "test": "jest",
     "test:watch": "yarn test --watch"

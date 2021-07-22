@@ -2,7 +2,7 @@ import fs from 'fs'
 
 import { addConfigToApp } from '../auth'
 
-jest.mock('src/lib', () => {
+jest.mock('../../../../lib', () => {
   const path = require('path')
   const __dirname = path.resolve()
   return {
