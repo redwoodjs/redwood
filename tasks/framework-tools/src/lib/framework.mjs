@@ -142,7 +142,7 @@ export function packageJsonName(packageJsonPath) {
  */
 export function buildPackages(
   packages = frameworkPkgJsonFiles(),
-  { clean } = { clean: false }
+  { clean } = { clean: true }
 ) {
   const packageNames = packages.map(packageJsonName)
 
