@@ -137,7 +137,7 @@ export function packageJsonName(packageJsonPath) {
 }
 
 export function cleanFramework() {
-  execa.sync('yarn framework build:clean', {
+  execa.sync('yarn build:clean', {
     shell: true,
     stdio: 'inherit',
     cwd: path.resolve(__dirname, '../../'),
