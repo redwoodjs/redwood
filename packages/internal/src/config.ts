@@ -57,7 +57,7 @@ export interface Config {
 // https://github.com/redwoodjs/redwood/blob/d51ade08118c17459cebcdb496197ea52485364a/packages/core/config/webpack.common.js#L19
 const DEFAULT_CONFIG: Config = {
   web: {
-    title: 'Awesome Redwood App',
+    title: 'Redwood App',
     host: 'localhost',
     port: 8910,
     path: './web',
@@ -68,7 +68,7 @@ const DEFAULT_CONFIG: Config = {
     a11y: true,
   },
   api: {
-    title: 'Awesome Redwood App',
+    title: 'Redwood App',
     host: 'localhost',
     port: 8911,
     path: './api',
