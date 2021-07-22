@@ -1,0 +1,60 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine.
+# See: https://circleci.com/docs/2.0/configuration-reference
+version: 2.1
+
+orbs:
+  # The Node.js orb contains a set of prepackaged CircleCI configuration you can utilize
+  # Orbs reduce the amount of configuration required for common tasks.
+  # See the orb documentation here: https://circleci.com/developer/orbs/orb/circleci/node
+  node: circleci/node@4.5.1
+
+
+jobs:
+  # Below is the definition of your job to build and test your app, you can rename and customize it as you want.
+  setup-test-project:
+    # These next lines define a Docker executor: https://circleci.com/docs/2.0/executor-types/
+    # You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
+    # A list of available CircleCI Docker Convenience Images are available here: https://circleci.com/developer/images/image/cimg/node
+    docker:
+      - image: cimg/node:lts
+    # Then run your tests!
+    # CircleCI will report the results back to your VCS provider.
+    steps:
+      # Checkout the code as the first step.
+      - checkout
+      # Next, the node orb's install-packages step will install the dependencies from a package.json.
+      # The orb install-packages step will also automatically cache them for faster future runs.
+      # - node/install-packages
+      # If you are using yarn instead npm, remove the line above and uncomment the two lines below.
+
+      # install framework modules
+      - node/install-packages:
+          pkg-manager: yarn
+      # create a temporary directory
+      - run:
+          name: Create a temporary directory
+          command: |
+            project_path=$(mktemp -d -t redwood.XXXXXX)
+            echo 'export PROJECT_PATH=$project_path' >> $BASH_ENV
+      - run:
+          name: Create a RedwoodJS app
+          command: |
+            ./tasks/run-e2e ${PROJECT_PATH} --no-start
+      - run:
+          name: Init Git for RedwoodJS app
+          command: |
+            git init --initial-branch main && git add .
+            git commit -a --message=init
+          working-directory: ${PROJECT_PATH}
+
+
+workflows:
+  # Below is the definition of your workflow.
+  # Inside the workflow, you provide the jobs you want to run, e.g this workflow runs the build-and-test job above.
+  # CircleCI will run this workflow on every commit.
+  # For more details on extending your workflow, see the configuration docs: https://circleci.com/docs/2.0/configuration-reference/#workflows
+  sample:
+    jobs:
+      - setup-test-project
+      # For running simple node tests, you could optionally use the node/test job from the orb to replicate and replace the job above in fewer lines.
+      # - node/test
