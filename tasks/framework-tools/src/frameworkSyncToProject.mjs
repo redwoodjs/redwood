@@ -27,8 +27,20 @@ if (!projectPath) {
   process.exit(1)
 }
 
-const cleanFlags = ['--clean', '-c']
-const clean = process.argv.slice(3).some((flag) => cleanFlags.includes(flag))
+const cleanBeforeAllFlags = ['--cleanBeforeAll']
+const cleanBeforeBuildFlags = [
+  '--cleanBeforeBuild',
+  '--clean',
+  '-c',
+  ...cleanBeforeAllFlags,
+]
+const cleanBeforeBuild = process.argv
+  .slice(3)
+  .some((flag) => cleanBeforeBuildFlags.includes(flag))
+const cleanBeforeRebuildFlags = ['--cleanBeforeRebuild', ...cleanBeforeAllFlags]
+const cleanBeforeRebuild = process.argv
+  .slice(3)
+  .some((flag) => cleanBeforeRebuildFlags.includes(flag))
 
 // Cache the original package.json and restore it when this process exits.
 const projectPackageJsonPath = path.join(projectPath, 'package.json')
@@ -62,7 +74,7 @@ chokidar
   })
   .on('ready', async () => {
     logStatus('Building Framework...')
-    buildPackages(frameworkPkgJsonFiles(), { clean })
+    buildPackages(frameworkPkgJsonFiles(), { clean: cleanBeforeBuild })
 
     console.log()
     logStatus('Adding dependencies...')
@@ -97,7 +109,7 @@ chokidar
     console.log()
     logStatus(`Building ${packageName}...`)
     try {
-      buildPackages([packageJsonPath], { clean })
+      buildPackages([packageJsonPath], { clean: cleanBeforeRebuild })
 
       console.log()
       logStatus(`Copying ${packageName}...`)
