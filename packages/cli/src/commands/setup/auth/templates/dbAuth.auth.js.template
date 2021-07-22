@@ -36,8 +36,8 @@ export const hasRole = ({ roles }) => {
     return false
   }
 
-  if(!!roles) {
-    if (Array.isArray(roles) {
+  if (!!roles) {
+    if (Array.isArray(roles)) {
       return context.currentUser.roles?.some((r) => roles.includes(r))
     }
 
@@ -49,7 +49,7 @@ export const hasRole = ({ roles }) => {
     return false
   }
 
-  return false
+  return true
 }
 
 /**
@@ -67,7 +67,7 @@ export const hasRole = ({ roles }) => {
  * @see https://github.com/redwoodjs/redwood/tree/main/packages/auth for examples
  */
 export const requireAuth = ({ roles } = {}) => {
-  if (!isAuthenticated) {
+  if (!isAuthenticated()) {
     throw new AuthenticationError("You don't have permission to do that.")
   }
 
