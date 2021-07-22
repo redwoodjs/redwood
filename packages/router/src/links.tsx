@@ -1,8 +1,6 @@
 import { forwardRef, useEffect } from 'react'
 
-import { navigate } from '@redwoodjs/history'
-
-import { matchPath, useLocation } from './internal'
+import { navigate, matchPath, useLocation } from './internal'
 
 /**
  * Returns true if the URL for the given "route" value matches the current URL.

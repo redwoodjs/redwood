@@ -1,5 +1,5 @@
 export interface NavigateOptions {
-  replace: boolean
+  replace?: boolean
 }
 
 const createHistory = () => {
@@ -27,10 +27,10 @@ const createHistory = () => {
         } else {
           global.history.pushState({}, '', to)
         }
+      }
 
-        for (const listener of Object.values(listeners)) {
-          listener()
-        }
+      for (const listener of Object.values(listeners)) {
+        listener()
       }
     },
     back: () => {
@@ -56,7 +56,6 @@ const createHistory = () => {
 
 const gHistory = createHistory()
 
-const navigate = gHistory.navigate
-const back = gHistory.back
+const { navigate, back } = gHistory
 
 export { gHistory, navigate, back }
