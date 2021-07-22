@@ -4,9 +4,8 @@ import camelcase from 'camelcase'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
 
-import { getPaths, transformTSToJS, writeFilesTask } from 'src/lib'
-import c from 'src/lib/colors'
-
+import { getPaths, transformTSToJS, writeFilesTask } from '../../../lib'
+import c from '../../../lib/colors'
 import { yargsDefaults } from '../../generate'
 import { templateForComponentFile } from '../helpers'
 

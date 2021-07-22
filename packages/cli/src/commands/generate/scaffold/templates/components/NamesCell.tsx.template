@@ -30,7 +30,7 @@ export const Empty = () => {
 }
 
 export const Failure = ({ error }: CellFailureProps) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div className="rw-cell-error">{error.message}</div>
 )
 
 export const Success = ({ ${pluralCamelName} }: CellSuccessProps<Find${pluralPascalName}>) => {

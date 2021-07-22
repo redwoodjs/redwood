@@ -3,9 +3,8 @@ import pluralize from 'pluralize'
 
 import { generate } from '@redwoodjs/internal'
 
-import { transformTSToJS } from 'src/lib'
-import { getSchema } from 'src/lib'
-
+import { transformTSToJS } from '../../../lib'
+import { getSchema } from '../../../lib'
 import { yargsDefaults } from '../../generate'
 import {
   templateForComponentFile,

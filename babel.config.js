@@ -45,14 +45,6 @@ module.exports = {
     '@babel/typescript',
   ],
   plugins: [
-    [
-      'babel-plugin-module-resolver',
-      {
-        alias: {
-          src: './src',
-        },
-      },
-    ],
     /**
      * NOTE
      * Experimental decorators are used in `@redwoodjs/structure`.
@@ -79,10 +71,9 @@ module.exports = {
     {
       test: [
         './packages/auth/',
-        './packages/router/',
+        './packages/router',
         './packages/forms/',
         './packages/web/',
-        './packages/history/',
       ],
       presets: [
         [

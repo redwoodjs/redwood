@@ -239,6 +239,120 @@ describe('logger', () => {
       expect(logStatement['password']).toEqual('[Redacted]')
     })
 
+    test('it redacts a hashedPassword key by default', async () => {
+      const { logger, logSinkData } = setupLogger({ level: 'trace' })
+
+      logger.info(
+        {
+          hashedPassword: 'c0RnBEEF####',
+        },
+        'test of a redacted hashed password'
+      )
+      const logStatement = await logSinkData
+      expect(logStatement['msg']).toEqual('test of a redacted hashed password')
+
+      expect(logStatement).toHaveProperty('hashedPassword')
+      expect(logStatement['hashedPassword']).toEqual('[Redacted]')
+    })
+
+    test('it redacts a hashedPassword key in data by default', async () => {
+      const { logger, logSinkData } = setupLogger({ level: 'trace' })
+
+      logger.info(
+        {
+          data: {
+            hashedPassword: 'c0RnBEEF####',
+          },
+        },
+        'test of a redacted data hashed password'
+      )
+      const logStatement = await logSinkData
+      expect(logStatement['msg']).toEqual(
+        'test of a redacted data hashed password'
+      )
+
+      expect(logStatement).toHaveProperty('data.hashedPassword')
+      expect(logStatement['data']['hashedPassword']).toEqual('[Redacted]')
+    })
+
+    test('it redacts a hashedPassword key in user data by default', async () => {
+      const { logger, logSinkData } = setupLogger({ level: 'trace' })
+
+      logger.info(
+        {
+          data: {
+            user: {
+              hashedPassword: 'c0RnBEEF####',
+            },
+          },
+        },
+        'test of a redacted user data hashed password'
+      )
+      const logStatement = await logSinkData
+      expect(logStatement['msg']).toEqual(
+        'test of a redacted user data hashed password'
+      )
+
+      expect(logStatement).toHaveProperty('data.user.hashedPassword')
+      expect(logStatement['data']['user']['hashedPassword']).toEqual(
+        '[Redacted]'
+      )
+    })
+
+    test('it redacts a salt key by default', async () => {
+      const { logger, logSinkData } = setupLogger({ level: 'trace' })
+
+      logger.info(
+        {
+          salt: 'npeppa',
+        },
+        'test of a redacted salt'
+      )
+      const logStatement = await logSinkData
+      expect(logStatement['msg']).toEqual('test of a redacted salt')
+
+      expect(logStatement).toHaveProperty('salt')
+      expect(logStatement['salt']).toEqual('[Redacted]')
+    })
+
+    test('it redacts a salt key in data by default', async () => {
+      const { logger, logSinkData } = setupLogger({ level: 'trace' })
+
+      logger.info(
+        {
+          data: {
+            salt: 'npeppa',
+          },
+        },
+        'test of a redacted data salt'
+      )
+      const logStatement = await logSinkData
+      expect(logStatement['msg']).toEqual('test of a redacted data salt')
+
+      expect(logStatement).toHaveProperty('data.salt')
+      expect(logStatement['data']['salt']).toEqual('[Redacted]')
+    })
+
+    test('it redacts a salt key in user data by default', async () => {
+      const { logger, logSinkData } = setupLogger({ level: 'trace' })
+
+      logger.info(
+        {
+          data: {
+            user: {
+              salt: 'npeppa',
+            },
+          },
+        },
+        'test of a redacted user data salt'
+      )
+      const logStatement = await logSinkData
+      expect(logStatement['msg']).toEqual('test of a redacted user data salt')
+
+      expect(logStatement).toHaveProperty('data.user.salt')
+      expect(logStatement['data']['user']['salt']).toEqual('[Redacted]')
+    })
+
     test('it redacts the email key by default', async () => {
       const { logger, logSinkData } = setupLogger({ level: 'trace' })
 
