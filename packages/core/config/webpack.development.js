@@ -1,7 +1,7 @@
-const { merge } = require('webpack-merge')
 const escapeRegExp = require('lodash.escaperegexp')
+const { merge } = require('webpack-merge')
+
 const { getConfig } = require('@redwoodjs/internal')
-const ErrorOverlayPlugin = require('error-overlay-webpack-plugin')
 
 const webpackConfig = require('./webpack.common')
 
@@ -11,10 +11,11 @@ const redwoodConfig = getConfig()
 const baseConfig = merge(webpackConfig('development'), {
   devServer: {
     // https://webpack.js.org/configuration/dev-server/
-    hot: true,
-    writeToDisk: false,
+    // note: docs not yet updated for webpack-dev-server v4
+    devMiddleware: {
+      writeToDisk: false,
+    },
     compress: true,
-    quiet: true,
     historyApiFallback: true,
     host: redwoodConfig.web.host || 'localhost',
     port: redwoodConfig.web.port,
@@ -29,16 +30,23 @@ const baseConfig = merge(webpackConfig('development'), {
         },
       },
     },
-    inline: true,
-    overlay: true,
     open: redwoodConfig.browser.open,
+  },
+  watchOptions: {
+    ignored: ['**/*.d.ts'],
   },
   optimization: {
     removeAvailableModules: false,
     removeEmptyChunks: false,
     splitChunks: false,
   },
-  plugins: [new ErrorOverlayPlugin()],
+  infrastructureLogging: {
+    level: 'error', // new in v4; previously we used quiet
+  },
+  // TODO plugin does not yet work with Webpack 5: https://github.com/smooth-code/error-overlay-webpack-plugin/issues/67
+  // plugins: [new ErrorOverlayPlugin()].filter(Boolean),
+  // webpack-dev-server v4 enables an overlay by default, it's just not as pretty
 })
 
+/** @type {import('webpack').Configuration} */
 module.exports = mergeUserWebpackConfig('development', baseConfig)

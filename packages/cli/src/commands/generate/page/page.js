@@ -1,14 +1,19 @@
 import { execSync } from 'child_process'
 
-import Listr from 'listr'
 import camelcase from 'camelcase'
+import Listr from 'listr'
 import pascalcase from 'pascalcase'
-import terminalLink from 'terminal-link'
 
-import { writeFilesTask, addRoutesToRouterTask } from 'src/lib'
-import c from 'src/lib/colors'
+import { getConfig } from '@redwoodjs/internal'
 
-import { templateForComponentFile, pathName } from '../helpers'
+import { transformTSToJS } from '../../../lib'
+import { addRoutesToRouterTask, writeFilesTask } from '../../../lib'
+import c from '../../../lib/colors'
+import {
+  createYargsForComponentGeneration,
+  pathName,
+  templateForComponentFile,
+} from '../helpers'
 
 const COMPONENT_SUFFIX = 'Page'
 const REDWOOD_WEB_PATH_NAME = 'pages'
@@ -24,8 +29,14 @@ export const paramVariants = (path) => {
       argumentParam: '',
       paramName: '',
       paramValue: '',
+      paramType: '',
     }
   }
+
+  // set paramType param includes type (e.g. {id:Int}), else use string
+  const paramType = param?.match(/:/)
+    ? param?.replace(/[^:]+/, '').slice(1, -1)
+    : 'string'
 
   // "42" is just a value used for demonstrating parameter usage in the
   // generated page-, test-, and story-files.
@@ -34,52 +45,65 @@ export const paramVariants = (path) => {
     propValueParam: `${paramName}="42" `,
     argumentParam: `{ ${paramName}: '42' }`,
     paramName,
-    paramValue: ' 42',
+    paramValue: '42',
+    paramType,
   }
 }
 
-export const files = ({ name, ...rest }) => {
+export const files = ({ name, tests, stories, typescript, ...rest }) => {
   const pageFile = templateForComponentFile({
     name,
     suffix: COMPONENT_SUFFIX,
+    extension: typescript ? '.tsx' : '.js',
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'page',
-    templatePath: 'page.js.template',
+    templatePath: 'page.tsx.template',
     templateVars: rest,
   })
+
   const testFile = templateForComponentFile({
     name,
     suffix: COMPONENT_SUFFIX,
-    extension: '.test.js',
+    extension: typescript ? '.test.tsx' : '.test.js',
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'page',
-    templatePath: 'test.js.template',
+    templatePath: 'test.tsx.template',
     templateVars: rest,
   })
+
   const storiesFile = templateForComponentFile({
     name,
     suffix: COMPONENT_SUFFIX,
-    extension: '.stories.js',
+    extension: typescript ? '.stories.tsx' : '.stories.js',
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'page',
-    templatePath: 'stories.js.template',
+    templatePath: 'stories.tsx.template',
     templateVars: rest,
   })
+
+  const files = [pageFile]
+
+  if (tests) {
+    files.push(testFile)
+  }
+
+  if (stories) {
+    files.push(storiesFile)
+  }
 
   // Returns
   // {
   //    "path/to/fileA": "<<<template>>>",
   //    "path/to/fileB": "<<<template>>>",
   // }
-  return [pageFile, testFile, storiesFile].reduce(
-    (acc, [outputPath, content]) => {
-      return {
-        [outputPath]: content,
-        ...acc,
-      }
-    },
-    {}
-  )
+  return files.reduce((acc, [outputPath, content]) => {
+    const template = typescript ? content : transformTSToJS(outputPath, content)
+
+    return {
+      [outputPath]: template,
+      ...acc,
+    }
+  }, {})
 }
 
 export const routes = ({ name, path }) => {
@@ -90,33 +114,36 @@ export const routes = ({ name, path }) => {
   ]
 }
 
-export const command = 'page <name> [path]'
-export const description = 'Generate a page and route component'
-export const builder = (yargs) => {
-  yargs
-    .positional('name', {
-      description: 'Name of the page',
-      type: 'string',
-    })
-    .positional('path', {
-      description: 'URL path to the page, or just {param}. Defaults to name',
-      type: 'string',
-    })
-    .option('force', {
-      alias: 'f',
-      default: false,
-      description: 'Overwrite existing files',
-      type: 'boolean',
-    })
-    .epilogue(
-      `Also see the ${terminalLink(
-        'Redwood CLI Reference',
-        'https://redwoodjs.com/reference/command-line-interface#generate-page'
-      )}`
-    )
+const positionalsObj = {
+  path: {
+    description: 'URL path to the page, or just {param}. Defaults to name',
+    type: 'string',
+  },
 }
 
-export const handler = async ({ name, path, force }) => {
+// @NOTE: Not exporting handler from function
+// As pages need a special handler
+export const { command, description, builder } =
+  createYargsForComponentGeneration({
+    componentName: 'page',
+    filesFn: files,
+    positionalsObj,
+  })
+
+export const handler = async ({
+  name,
+  path,
+  force,
+  tests,
+  stories,
+  typescript = false,
+}) => {
+  if (tests === undefined) {
+    tests = getConfig().generate.tests
+  }
+  if (stories === undefined) {
+    stories = getConfig().generate.stories
+  }
   if (process.platform === 'win32') {
     // running `yarn rw g page home /` on Windows using GitBash
     // POSIX-to-Windows path conversion will kick in.
@@ -150,7 +177,14 @@ export const handler = async ({ name, path, force }) => {
         title: 'Generating page files...',
         task: async () => {
           path = pathName(path, name)
-          const f = await files({ name, path, ...paramVariants(path) })
+          const f = await files({
+            name,
+            path,
+            tests,
+            stories,
+            typescript,
+            ...paramVariants(path),
+          })
           return writeFilesTask(f, { overwriteExisting: force })
         },
       },
@@ -167,6 +201,7 @@ export const handler = async ({ name, path, force }) => {
   try {
     await tasks.run()
   } catch (e) {
-    console.log(c.error(e.message))
+    console.error(c.error(e.message))
+    process.exit(e?.exitCode || 1)
   }
 }

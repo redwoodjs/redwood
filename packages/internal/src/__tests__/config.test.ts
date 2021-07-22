@@ -13,14 +13,26 @@ describe('getConfig', () => {
           "host": "localhost",
           "path": "./api",
           "port": 8911,
+          "schemaPath": "./api/db/schema.prisma",
           "target": "node",
         },
         "browser": Object {
           "open": false,
         },
+        "experimental": Object {
+          "esbuild": false,
+          "useEnvelop": false,
+        },
+        "generate": Object {
+          "nestScaffoldByModel": true,
+          "stories": true,
+          "tests": true,
+        },
         "web": Object {
+          "a11y": true,
           "apiProxyPath": "/.netlify/functions",
           "apiProxyPort": 8911,
+          "fastRefresh": true,
           "host": "localhost",
           "path": "./web",
           "port": 8910,

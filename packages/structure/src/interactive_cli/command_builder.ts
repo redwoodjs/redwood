@@ -1,7 +1,9 @@
 import camelcase from 'camelcase'
+
 import { RWProject } from '../model/RWProject'
 import { validateRoutePath } from '../util'
 import { lazy, memo } from '../x/decorators'
+
 import { RedwoodCommandString } from './RedwoodCommandString'
 import { UI } from './ui'
 
@@ -18,7 +20,9 @@ export function command_builder(
 }
 
 class CommandBuilder {
-  constructor(private opts: Opts) {}
+  constructor(private opts: Opts) {
+    this.prompts = new PromptHelper(this.opts)
+  }
 
   @memo()
   async buildCommand(): Promise<RedwoodCommandString | undefined> {
@@ -48,7 +52,9 @@ class CommandBuilder {
           return
       }
     } catch (e) {
-      if (e.message === 'break') return
+      if (e.message === 'break') {
+        return
+      }
       throw e
     }
   }
@@ -79,7 +85,9 @@ class CommandBuilder {
       case 'sdl':
         const modelName = await this.arg_generate_sdl_modelName()
         const opts = await this.prompts.sdl_options()
-        if (!opts) return
+        if (!opts) {
+          return
+        }
         // TODO: serialize options
         // services: { type: 'boolean', default: true },
         // crud: { type: 'boolean', default: false },
@@ -88,7 +96,7 @@ class CommandBuilder {
     }
   }
 
-  prompts = new PromptHelper(this.opts)
+  prompts: PromptHelper
 
   @memo()
   async arg_command(): Promise<string> {
@@ -131,7 +139,9 @@ class PromptHelper {
    */
   async prompt(msg: string): Promise<string> {
     let v = await this.opts.ui.prompt(msg)
-    if (v === '') v = undefined
+    if (v === '') {
+      v = undefined
+    }
     return breakIfNull(v)
   }
   async command() {
@@ -175,7 +185,9 @@ class PromptHelper {
       ],
       'Options...'
     )
-    if (!opts) return
+    if (!opts) {
+      return
+    }
     return new Set(opts) as any
   }
 
@@ -219,6 +231,8 @@ const generatorTypes = [
 const dbOperations = ['down', 'generate', 'save', 'seed', 'up']
 
 function breakIfNull<T>(x: T): NonNullable<T> {
-  if (typeof x === 'undefined' || x === null) throw new Error('break')
+  if (typeof x === 'undefined' || x === null) {
+    throw new Error('break')
+  }
   return x as any
 }

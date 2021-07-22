@@ -1,0 +1,412 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`creates a page component 1`] = `
+"import { Link, routes } from '@redwoodjs/router'
+
+const HomePage = () => {
+  return (
+    <>
+      <h1>HomePage</h1>
+      <p>
+        Find me in <code>./web/src/pages/HomePage/HomePage.js</code>
+      </p>
+      <p>
+        My default route is named <code>home</code>, link to me with \`
+        <Link to={routes.home()}>Home</Link>\`
+      </p>
+    </>
+  )
+}
+
+export default HomePage
+"
+`;
+
+exports[`creates a page component 2`] = `
+"import { Link, routes } from '@redwoodjs/router'
+
+const ContactUsPage = () => {
+  return (
+    <>
+      <h1>ContactUsPage</h1>
+      <p>
+        Find me in <code>./web/src/pages/ContactUsPage/ContactUsPage.js</code>
+      </p>
+      <p>
+        My default route is named <code>contactUs</code>, link to me with \`
+        <Link to={routes.contactUs()}>ContactUs</Link>\`
+      </p>
+    </>
+  )
+}
+
+export default ContactUsPage
+"
+`;
+
+exports[`creates a page component with a plural word for name 1`] = `
+"import { Link, routes } from '@redwoodjs/router'
+
+const CatsPage = () => {
+  return (
+    <>
+      <h1>CatsPage</h1>
+      <p>
+        Find me in <code>./web/src/pages/CatsPage/CatsPage.js</code>
+      </p>
+      <p>
+        My default route is named <code>cats</code>, link to me with \`
+        <Link to={routes.cats()}>Cats</Link>\`
+      </p>
+    </>
+  )
+}
+
+export default CatsPage
+"
+`;
+
+exports[`creates a page component with params 1`] = `
+"import { Link, routes } from '@redwoodjs/router'
+
+const PostPage = ({ id }) => {
+  return (
+    <>
+      <h1>PostPage</h1>
+      <p>
+        Find me in <code>./web/src/pages/PostPage/PostPage.js</code>
+      </p>
+      <p>
+        My default route is named <code>post</code>, link to me with \`
+        <Link to={routes.post({ id: '42' })}>Post 42</Link>\`
+      </p>
+      <p>The parameter passed to me is {id}</p>
+    </>
+  )
+}
+
+export default PostPage
+"
+`;
+
+exports[`creates a page story 1`] = `
+"import HomePage from './HomePage'
+
+export const generated = () => {
+  return <HomePage />
+}
+
+export default { title: 'Pages/HomePage' }
+"
+`;
+
+exports[`creates a page story 2`] = `
+"import ContactUsPage from './ContactUsPage'
+
+export const generated = () => {
+  return <ContactUsPage />
+}
+
+export default { title: 'Pages/ContactUsPage' }
+"
+`;
+
+exports[`creates a page test 1`] = `
+"import { render } from '@redwoodjs/testing'
+
+import HomePage from './HomePage'
+
+describe('HomePage', () => {
+  it('renders successfully', () => {
+    expect(() => {
+      render(<HomePage />)
+    }).not.toThrow()
+  })
+})
+"
+`;
+
+exports[`creates a test for a component with multiple words for a name 1`] = `
+"import { render } from '@redwoodjs/testing'
+
+import ContactUsPage from './ContactUsPage'
+
+describe('ContactUsPage', () => {
+  it('renders successfully', () => {
+    expect(() => {
+      render(<ContactUsPage />)
+    }).not.toThrow()
+  })
+})
+"
+`;
+
+exports[`creates a test for page component with params 1`] = `
+"import { render } from '@redwoodjs/testing'
+
+import PostPage from './PostPage'
+
+describe('PostPage', () => {
+  it('renders successfully', () => {
+    expect(() => {
+      render(<PostPage id=\\"42\\" />)
+    }).not.toThrow()
+  })
+})
+"
+`;
+
+exports[`file generation 1`] = `
+Object {
+  "fileContent": "import HomePage from './HomePage'
+
+export const generated = () => {
+  return <HomePage />
+}
+
+export default { title: 'Pages/HomePage' }
+",
+  "filePath": "/path/to/project/web/src/pages/HomePage/HomePage.stories.js",
+}
+`;
+
+exports[`file generation 2`] = `
+Object {
+  "fileContent": "import { render } from '@redwoodjs/testing'
+
+import HomePage from './HomePage'
+
+describe('HomePage', () => {
+  it('renders successfully', () => {
+    expect(() => {
+      render(<HomePage />)
+    }).not.toThrow()
+  })
+})
+",
+  "filePath": "/path/to/project/web/src/pages/HomePage/HomePage.test.js",
+}
+`;
+
+exports[`file generation 3`] = `
+Object {
+  "fileContent": "import { Link, routes } from '@redwoodjs/router'
+
+const HomePage = () => {
+  return (
+    <>
+      <h1>HomePage</h1>
+      <p>
+        Find me in <code>./web/src/pages/HomePage/HomePage.js</code>
+      </p>
+      <p>
+        My default route is named <code>home</code>, link to me with \`
+        <Link to={routes.home()}>Home</Link>\`
+      </p>
+    </>
+  )
+}
+
+export default HomePage
+",
+  "filePath": "/path/to/project/web/src/pages/HomePage/HomePage.js",
+}
+`;
+
+exports[`file generation 4`] = `
+Object {
+  "fileContent": "import { Router, Route } from '@redwoodjs/router'
+
+const Routes = () => {
+  return (
+    <Router>
+      <Route path=\\"/home\\" page={HomePage} name=\\"home\\" />
+      <Route path=\\"/about\\" page={AboutPage} name=\\"about\\" />
+      <Route notfound page={NotFoundPage} />
+    </Router>
+  )
+}
+
+export default Routes",
+  "filePath": "/path/to/project/web/src/Routes.js",
+}
+`;
+
+exports[`file generation with route params 1`] = `
+Object {
+  "fileContent": "import PostPage from './PostPage'
+
+export const generated = () => {
+  return <PostPage id=\\"42\\" />
+}
+
+export default { title: 'Pages/PostPage' }
+",
+  "filePath": "/path/to/project/web/src/pages/PostPage/PostPage.stories.js",
+}
+`;
+
+exports[`file generation with route params 2`] = `
+Object {
+  "fileContent": "import { render } from '@redwoodjs/testing'
+
+import PostPage from './PostPage'
+
+describe('PostPage', () => {
+  it('renders successfully', () => {
+    expect(() => {
+      render(<PostPage id=\\"42\\" />)
+    }).not.toThrow()
+  })
+})
+",
+  "filePath": "/path/to/project/web/src/pages/PostPage/PostPage.test.js",
+}
+`;
+
+exports[`file generation with route params 3`] = `
+Object {
+  "fileContent": "import { Link, routes } from '@redwoodjs/router'
+
+const PostPage = ({ id }) => {
+  return (
+    <>
+      <h1>PostPage</h1>
+      <p>
+        Find me in <code>./web/src/pages/PostPage/PostPage.js</code>
+      </p>
+      <p>
+        My default route is named <code>post</code>, link to me with \`
+        <Link to={routes.post({ id: '42' })}>Post 42</Link>\`
+      </p>
+      <p>The parameter passed to me is {id}</p>
+    </>
+  )
+}
+
+export default PostPage
+",
+  "filePath": "/path/to/project/web/src/pages/PostPage/PostPage.js",
+}
+`;
+
+exports[`file generation with route params 4`] = `
+Object {
+  "fileContent": "import { Router, Route } from '@redwoodjs/router'
+
+const Routes = () => {
+  return (
+    <Router>
+      <Route path=\\"/post/{id}\\" page={PostPage} name=\\"post\\" />
+      <Route path=\\"/about\\" page={AboutPage} name=\\"about\\" />
+      <Route notfound page={NotFoundPage} />
+    </Router>
+  )
+}
+
+export default Routes",
+  "filePath": "/path/to/project/web/src/Routes.js",
+}
+`;
+
+exports[`generates typescript pages 1`] = `
+"import { Link, routes } from '@redwoodjs/router'
+
+const TSFilesPage = () => {
+  return (
+    <>
+      <h1>TSFilesPage</h1>
+      <p>
+        Find me in <code>./web/src/pages/TsFilesPage/TsFilesPage.tsx</code>
+      </p>
+      <p>
+        My default route is named <code>tsFiles</code>, link to me with \`
+        <Link to={routes.tsFiles()}>TSFiles</Link>\`
+      </p>
+    </>
+  )
+}
+
+export default TSFilesPage
+"
+`;
+
+exports[`generates typescript pages 2`] = `
+"import TSFilesPage from './TSFilesPage'
+
+export const generated = () => {
+  return <TSFilesPage />
+}
+
+export default { title: 'Pages/TSFilesPage' }
+"
+`;
+
+exports[`generates typescript pages 3`] = `
+"import { render } from '@redwoodjs/testing'
+
+import TSFilesPage from './TSFilesPage'
+
+describe('TSFilesPage', () => {
+  it('renders successfully', () => {
+    expect(() => {
+      render(<TSFilesPage />)
+    }).not.toThrow()
+  })
+})
+"
+`;
+
+exports[`generates typescript pages 4`] = `
+"import { Link, routes } from '@redwoodjs/router'
+
+type TSParamFilesPageProps = {
+  id: string
+}
+
+const TSParamFilesPage = ({ id }: TSParamFilesPageProps) => {
+  return (
+    <>
+      <h1>TSParamFilesPage</h1>
+      <p>
+        Find me in <code>./web/src/pages/TsParamFilesPage/TsParamFilesPage.tsx</code>
+      </p>
+      <p>
+        My default route is named <code>tsParamFiles</code>, link to me with \`
+        <Link to={routes.tsParamFiles({ id: '42' })}>TSParamFiles 42</Link>\`
+      </p>
+      <p>The parameter passed to me is {id}</p>
+    </>
+  )
+}
+
+export default TSParamFilesPage
+"
+`;
+
+exports[`generates typescript pages 5`] = `
+"import { Link, routes } from '@redwoodjs/router'
+
+type TSParamTypeFilesPageProps = {
+  id: Int
+}
+
+const TSParamTypeFilesPage = ({ id }: TSParamTypeFilesPageProps) => {
+  return (
+    <>
+      <h1>TSParamTypeFilesPage</h1>
+      <p>
+        Find me in <code>./web/src/pages/TsParamTypeFilesPage/TsParamTypeFilesPage.tsx</code>
+      </p>
+      <p>
+        My default route is named <code>tsParamTypeFiles</code>, link to me with \`
+        <Link to={routes.tsParamTypeFiles({ id: '42' })}>TSParamTypeFiles 42</Link>\`
+      </p>
+      <p>The parameter passed to me is {id}</p>
+    </>
+  )
+}
+
+export default TSParamTypeFilesPage
+"
+`;

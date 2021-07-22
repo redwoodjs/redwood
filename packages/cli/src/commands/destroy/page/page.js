@@ -1,9 +1,8 @@
 import camelcase from 'camelcase'
 import Listr from 'listr'
 
-import { deleteFilesTask, removeRoutesFromRouterTask } from 'src/lib'
-import c from 'src/lib/colors'
-
+import { deleteFilesTask, removeRoutesFromRouterTask } from '../../../lib'
+import c from '../../../lib/colors'
 import { pathName } from '../../generate/helpers'
 import {
   files as pageFiles,
@@ -33,6 +32,8 @@ export const tasks = ({ name, path }) =>
           const f = pageFiles({
             name,
             path: p,
+            stories: true,
+            tests: true,
             ...templateVars(p),
           })
           return deleteFilesTask(f)

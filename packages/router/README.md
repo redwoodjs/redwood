@@ -4,15 +4,11 @@ This is the built-in router for Redwood apps. It takes inspiration from Ruby on 
 
 > **WARNING:** RedwoodJS software has not reached a stable version 1.0 and should not be considered suitable for production use. In the "make it work; make it right; make it fast" paradigm, Redwood is in the later stages of the "make it work" phase.
 
-Redwood Router (RR from now on) is designed to list all routes in a single file, without any nesting. We prefer this design, as it makes it very easy to track which routes map to which pages.
-
-## Installation
-
-RR was designed for use in Redwood apps, and if you use `yarn create-redwood-app` it will be installed for you. The rest of the documentation here will use examples that are appropriate in that context. That said, you can use RR outside of Redwood apps too! To learn more, see [Installation and use outside of a Redwood app](#installation-and-use-outside-of-a-redwood-app) at the end of this document.
+Redwood Router (RR from now on) is designed to list all routes in a single file, with limited nesting. We prefer this design, as it makes it very easy to track which routes map to which pages.
 
 ## Router and Route
 
-The first thing you need is a `Router`. It will contain all of your routes. RR will attempt to match the current URL to each route in turn, stopping when it finds a match, and rendering that route only. The only exception to this is the `notfound` route, which can be placed anywhere in the list and only matches when no other routes do.
+The first thing you need is a `Router`. It will contain all of your routes. RR will attempt to match the current URL to each route in turn, and only render those with a matching `path`. The only exception to this is the `notfound` route, which can be placed anywhere in the list and only matches when no other routes do.
 
 Each route is specified with a `Route`. Our first route will tell RR what to render when no other route matches:
 
@@ -44,22 +40,129 @@ The `path` prop specifies the URL path to match, starting with the beginning sla
 
 Some pages should only be visible to authenticated users.
 
-All `Routes` nested in `<Private>` require authentication.
-When a user is not authenticated and attempts to visit this route,
-they will be redirected to the route passed as the `unauthenticated` prop and the originally requested route's path will be added to the querystring in a `redirectTo` param. This lets you send the user to the originally requested once logged in.
+We support this using private `<Set>`s or the `<Private>` component. Read more [further down](#private-set).
+
+## Sets of Routes
+
+You can group Routes into sets using the `Set` component. `Set` allows you to wrap a set of Routes in another component or array of components—usually a Context, a Layout, or both:
+
+```js
+// Routes.js
+
+import { Router, Route, Set } from '@redwoodjs/router'
+import BlogContext from 'src/contexts/BlogContext'
+import BlogLayout from 'src/layouts/BlogLayout'
+
+const Routes = () => {
+  return (
+    <Router>
+      <Set wrap={[BlogContext, BlogLayout]}>
+        <Route path="/" page={HomePage} name="home" />
+        <Route path="/about" page={AboutPage} name="about" />
+        <Route path="/contact" page={ContactPage} name="contact" />
+        <Route path="/blog-post/{id:Int}" page={BlogPostPage} name="blogPost" />
+      </Set>
+    </Router>
+  )
+}
+
+export default Routes
+```
+
+The `wrap` prop accepts a single component or an array of components. Components are rendered in the same order they're passed, so in the example above, Set expands to:
+
+```js
+<BlogContext>
+  <BlogLayout>
+    <Route path="/" page={HomePage} name="home" />
+    // ...
+  </BlogLayout>
+</BlogContext>
+```
+
+Conceptually, this fits with how we think about Context and Layouts as things that wrap Pages and contain content that’s outside the scope of the Pages themselves. Crucially, since they're higher in the tree, `BlogContext` and `BlogLayout` won't rerender across Pages in the same Set.
+
+There's a lot of flexibility here. You can even nest `Sets` to great effect:
+
+```js
+// Routes.js
+
+import { Router, Route, Set, Private } from '@redwoodjs/router'
+import BlogContext from 'src/contexts/BlogContext'
+import BlogLayout from 'src/layouts/BlogLayout'
+import BlogNavLayout from 'src/layouts/BlogNavLayout'
+
+const Routes = () => {
+  return (
+    <Router>
+      <Set wrap={[BlogContext, BlogLayout]}>
+        <Route path="/" page={HomePage} name="home" />
+        <Route path="/about" page={AboutPage} name="about" />
+        <Route path="/contact" page={ContactPage} name="contact" />
+        <Set wrap={BlogNavLayout}>
+          <Route path="/blog-post/{id:Int}" page={BlogPostPage} name="blogPost" />
+        </Set>
+      </Set>
+    </Router>
+  )
+}
+```
+
+### Forwarding props
+
+All props you give to `<Set>` (except for `wrap`) will be passed to the wrapper components.
+
+So this...
+
+```
+<Set wrap={MainLayout} theme="dark">
+  <Route path="/" page={HomePage} name="home" />
+</Set>
+```
+
+becomes...
+
+```
+<MainLayout theme="dark">
+  <Route path="/" page={HomePage} name="home" />
+</MainLayout>
+```
+
+### `private` Set
+
+
+Sets can take a `private` prop which makes all Routes inside that Set require authentication. When a user isn't authenticated and attempts to visit one of the Routes in the private Set, they'll be redirected to the Route passed as the Set's `unauthenticated` prop. The originally-requested Route's path is added to the query string as a `redirectTo` param. This lets you send the user to the page they originally requested once they're logged-in.
+
+For more fine-grained control, you can specify `role` (which takes an array of roles), and RR will check to see that the user is authorized before giving them access to the Route. If they're not, it'll redirect them in the same way as above.
+
+Here's an example of how you'd use a private set:
+
+```jsx
+// Routes.js
+<Router>
+  <Route path="/" page={HomePage} name="home" />
+  <Set private unauthenticated="home">
+    <Route path="/admin" page={AdminPage} name="admin" />
+  </Set>
+</Router>
+```
+
+Private routes are important and should be easy to spot in your Routes file. The larger your Routes file gets, the more difficult it will probably become to find `<Set private /*...*/>` among your other Sets. So we also provide a `<Private>` component that's just an alias for `<Set private /*...*/>`. Most of our documentation uses `<Private>`.
+
+Here's the same example again, but now using `<Private>`
 
 ```js
 // Routes.js
 <Router>
   <Route path="/" page={HomePage} name="home" />
   <Private unauthenticated="home">
-    <Routes path="/admin" page={AdminPage} name="admin" />
+    <Route path="/admin" page={AdminPage} name="admin" />
   </Private>
 </Router>
 ```
 
 Redwood uses the `useAuth` hook under the hood to determine if the user is authenticated.
-Read more about authentication in redwood [here](https://redwoodjs.com/tutorial/authentication).
+Read more about authentication in Redwood [here](https://redwoodjs.com/tutorial/authentication).
 
 ## Link and named route functions
 
@@ -171,6 +274,11 @@ Now, if a request for `/user/mojombo` comes in, it will fail to match the first 
 We call built-in parameter types _core parameter types_. All core parameter types begin with a capital letter. Here are the types:
 
 - `Int` - Matches and converts an integer.
+- `Float` - Matches and converts a Float.
+- `Boolean` - Matches and converts Boolean (true or false only)
+
+> Note on TypeScript support
+Redwood will automatically generate types for your named routes, but you do have to run `yarn redwood dev` or `yarn redwood build` atleast once for your `Routes.{js,ts}` to be parsed
 
 ## User route parameter types
 
@@ -192,7 +300,7 @@ const userRouteParamTypes = {
 
 Here we've created a custom `slug` route parameter type. It is defined by a `constraint` and a `transform`. Both are optional; the default constraint is `/[^/]+/` and the default transform is `(param) => param`.
 
-In the route we've specified a route parameter of `{name:slug}` which will invoke our custom route parameter type and if we have a requst for `/post/redwood-router`, the resulting `name` prop delivered to `PostPage` will be `['redwood', 'router']`.
+In the route we've specified a route parameter of `{name:slug}` which will invoke our custom route parameter type and if we have a request for `/post/redwood-router`, the resulting `name` prop delivered to `PostPage` will be `['redwood', 'router']`.
 
 ## useParams
 
@@ -274,7 +382,7 @@ const SomePage = () => {
 
 ## Code-splitting
 
-By default, RR (when used in a Redwood app) will code-split on every Page, creating a separate lazy-loaded webpack bundle for each. When navigating from page to page, RR will wait until the new Page module is loaded before re-rendering, thus preventing the "white-flash" effect.
+By default, RR will code-split on every Page, creating a separate lazy-loaded webpack bundle for each. When navigating from page to page, RR will wait until the new Page module is loaded before re-rendering, thus preventing the "white-flash" effect.
 
 ## Not code splitting
 
@@ -288,11 +396,38 @@ import HomePage from 'src/pages/HomePage'
 
 Redwood will detect your explicit import and refrain from splitting that page into a separate bundle. Be careful with this feature, as you can easily bloat the size of your main bundle to the point where your initial page load time becomes unacceptable.
 
-## PageLoadingContext
+## Page loaders & PageLoadingContext
+### Loader while page chunks load
+Because lazily-loaded pages can take a non-negligible amount of time to load (depending on bundle size and network connection), you may want to show a loading indicator to signal to the user that something is happening after they click a link.
+
+In order to show a loader as your page chunks are loading, you simply add the `whileLoadingPage` prop to your route, `Set` or `Private` component.
+
+```js
+// Routes.js
+import SkeletonLoader from 'src/components/SkeletonLoader'
+
+<Router>
+  <Set whileLoadingPage={SkeletonLoader}>
+    <Route path="/contact" page={ContactPage} name="contact" />
+    <Route path="/about" page={AboutPage} name="about" />
+  </Set>
+</Router>
+```
+
+After adding this to your app you will probably not see it when navigating between pages. This is because having a loading indicator is nice, but can get annoying when it shows up every single time you navigate to a new page. In fact, this behavior makes it feel like your pages take even longer to load than they actually do! RR takes this into account and, by default, will only show the loader when it takes more than 1000 milliseconds for the page to load. You can change this to whatever you like with the `pageLoadingDelay` prop on `Router`:
+
+```js
+// Routes.js
+
+<Router pageLoadingDelay={500}>...</Router>
+```
+
+Now the loader will show up after 500ms of load time. To see your loading indicator, you can set this value to 0 or, even better, [change the network speed](https://developers.google.com/web/tools/chrome-devtools/network#throttle) in developer tools to "Slow 3G" or another agonizingly slow connection speed.
+
+#### Using PageLoadingContext
+An alternative way to implement whileLoadingPage is to use `usePageLoadingContext`:
 
 > **VIDEO:** If you'd prefer to watch a video, there's one accompanying this section: https://www.youtube.com/watch?v=BVkyXjUQADs&feature=youtu.be
-
-Because lazily-loaded pages can take a non-negligible amount of time to load (depending on bundle size and network connection), you may want to show a loading indicator to signal to the user that something is happening after they click a link. RR makes this really easy with `usePageLoadingContext`:
 
 ```js
 // SomeLayout.js
@@ -312,49 +447,31 @@ const SomeLayout = (props) => {
 
 When the lazy-loaded page is loading, `PageLoadingContext.Consumer` will pass `{ loading: true }` to the render function, or false otherwise. You can use this context wherever you like in your application!
 
-After adding this to your app you will probably not see it when navigating between pages. This is because having a loading indicator is nice, but can get annoying when it shows up every single time you navigate to a new page. In fact, this behavior makes it feel like your pages take even longer to load than they actually do! RR takes this into account and, by default, will only show the loader when it takes more than 1000 milliseconds for the page to load. You can change this to whatever you like with the `pageLoadingDelay` prop on `Router`:
+### Loader while auth details are being retrieved
+Let's say you have a dashboard area on your Redwood app, which can only be accessed after logging in. When Redwood Router renders your private page, it will first fetch the user's details, and only render the page if it determines the user is indeed logged in.
+
+In order to display a loader while auth details are being retrieved you can add the `whileLoadingAuth` prop to your private `<Route>`, `<Set private>` or the `<Private>` component:
 
 ```js
-// Routes.js
+//Routes.js
 
-<Router pageLoadingDelay={500}>...</Router>
+ <Router>
+      <Private
+        wrap={DashboardLayout}
+        unauthenticated="login"
+        whileLoadingAuth={SkeletonLoader} //<-- auth loader
+        whileLoadingPage={SkeletonLoader} // <-- page chunk loader
+        prerender
+      >
+        <Route
+          path="/dashboard"
+          page={DashboardHomePage}
+          name="dashboard"
+        />
+
+       {/* other routes */}
+    </Private>
+ </Router>
+
 ```
 
-Now the loader will show up after 500ms of load time. To see your loading indicator, you can set this value to 0 or, even better, [change the network speed](https://developers.google.com/web/tools/chrome-devtools/network#throttle) in developer tools to "Slow 3G" or another agonizingly slow connection speed.
-
-## Installation and use outside of a Redwood app
-
-If you'd like to use RR in a non-Redwood app, you can! Start by installing it:
-
-```terminal
-$ yarn add @redwoodjs/router
-```
-
-Then you can import and use the various RR components like normal. The only exception being that Redwood automatically takes care of making all your Pages available in the `Routes.js` file. When using RR outside that context, you'll need to do this on your own. By default, RR provides code splitting for every Page. To mimic this, you'll need to define each Page as an object, like so:
-
-```js
-const HomePage = {
-  name: 'HomePage',
-  loader: () => import('path/to/HomePage.js'),
-}
-
-...
-
-<Router>
-  <Route path="/" page={HomePage} name="home" />
-</Router>
-```
-
-Then RR will take care of the lazy loading for you. If you'd prefer to have some or all of your Pages included in the main webpack bundle, you can import them normally:
-
-```js
-import HomePage from 'path/to/HomePage.js'
-
-...
-
-<Router>
-  <Route path="/" page={HomePage} name="home" />
-</Router>
-```
-
-That's it! Everything else should work the same as it does inside a Redwood app!

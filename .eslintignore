@@ -1,5 +1,0 @@
-dist
-fixtures
-packages/api/importAll.macro.js
-packages/core/**/__fixtures__/**/*
-packages/core/config/storybook/**/*

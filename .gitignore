@@ -1,6 +1,5 @@
 .idea
 .DS_Store
-.nvmrc
 node_modules
 dist
 lerna-debug.log
@@ -9,3 +8,5 @@ yarn-error.log
 tasks/.verdaccio
 tasks/e2e/cypress/fixtures/example.json
 tmp/
+.vscode/*
+blog-test-project/*

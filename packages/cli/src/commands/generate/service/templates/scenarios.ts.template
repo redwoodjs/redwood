@@ -1,0 +1,5 @@
+import type { Prisma } from '@prisma/client'
+
+export const standard = defineScenario<Prisma.${prismaTypeName}>(${JSON.stringify(scenario)})
+
+export type StandardScenario = typeof standard

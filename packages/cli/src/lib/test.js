@@ -1,3 +1,5 @@
+/* eslint-env jest */
+
 // Include at the top of your tests. Automatically mocks out the file system
 //
 // import { loadComponentFixture } from 'src/lib/test'
@@ -31,6 +33,15 @@ jest.mock('@redwoodjs/internal', () => {
           components: path.join(BASE_PATH, '/web/src/components'),
           layouts: path.join(BASE_PATH, '/web/src/layouts'),
           pages: path.join(BASE_PATH, '/web/src/pages'),
+        },
+        scripts: path.join(BASE_PATH, 'scripts'),
+        generated: {
+          base: path.join(BASE_PATH, '.redwood'),
+          schema: path.join(BASE_PATH, '.redwood/schema.graphql'),
+          types: {
+            includes: path.join(BASE_PATH, '.redwood/types/includes'),
+            mirror: path.join(BASE_PATH, '.redwood/types/mirror'),
+          },
         },
       }
     },

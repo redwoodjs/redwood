@@ -1,32 +1,42 @@
 {
   "name": "@redwoodjs/api",
-  "version": "0.19.4",
+  "version": "0.35.2",
   "files": [
-    "dist"
+    "dist",
+    "logger",
+    "webhooks"
   ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@prisma/client": "2.9.0",
-    "@redwoodjs/internal": "^0.19.4",
-    "apollo-server-lambda": "2.18.2",
-    "core-js": "3.6.5",
-    "graphql": "^15.3.0",
-    "graphql-scalars": "^1.2.7",
-    "graphql-tools": "6.2.4",
-    "jsonwebtoken": "^8.5.1",
-    "jwks-rsa": "^1.8.1",
-    "lodash.merge": "^4.6.2",
-    "lodash.omitby": "^4.6.0",
-    "merge-graphql-schemas": "^1.7.6"
+    "@graphql-tools/merge": "6.2.14",
+    "@prisma/client": "2.27.0",
+    "@types/pino": "6.3.9",
+    "apollo-server-lambda": "2.25.2",
+    "core-js": "3.15.2",
+    "crypto-js": "4.0.0",
+    "graphql": "15.5.1",
+    "graphql-depth-limit": "1.1.0",
+    "graphql-scalars": "1.10.0",
+    "jsonwebtoken": "8.5.1",
+    "jwks-rsa": "1.8.1",
+    "lodash.merge": "4.6.2",
+    "lodash.omitby": "4.6.0",
+    "pino": "6.11.3",
+    "pino-pretty": "5.1.0",
+    "uuid": "8.3.2"
   },
   "devDependencies": {
-    "@redwoodjs/auth": "^0.19.4",
-    "@redwoodjs/dev-server": "^0.19.4",
-    "@types/jsonwebtoken": "^8.3.9",
-    "@types/lodash.merge": "^4.6.6",
-    "@types/lodash.omitby": "^4.6.6"
+    "@redwoodjs/auth": "0.35.2",
+    "@redwoodjs/dev-server": "0.35.2",
+    "@types/crypto-js": "^4.0.2",
+    "@types/graphql-depth-limit": "1.1.2",
+    "@types/jsonwebtoken": "8.5.4",
+    "@types/lodash.merge": "4.6.6",
+    "@types/lodash.omitby": "4.6.6",
+    "@types/uuid": "8.3.1",
+    "split2": "3.2.2"
   },
   "jest": {
     "testPathIgnorePatterns": [
@@ -42,5 +52,5 @@
     "test": "jest",
     "test:watch": "yarn test --watch"
   },
-  "gitHead": "c235e7d7186e5e258764699c0e0e1d5cc0fdd0b5"
+  "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"
 }

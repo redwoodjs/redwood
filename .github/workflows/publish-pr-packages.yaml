@@ -1,0 +1,82 @@
+name: Publish PR packages
+
+on:
+  workflow_run:
+    workflows: ["Create PR Artifact"]
+    types:
+      - completed
+
+jobs:
+  publish_pr_packages:
+    name: Publish PR packages
+    if: github.repository == 'redwoodjs/redwood'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Download artifact
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: ${{ github.event.workflow_run.workflow_id }}
+          workflow_conclusion: success
+
+      - name: Get PR number
+        id: pr_number
+        run: |
+          ls -R
+          pr_number=$(ls pr-packages)
+          echo $pr_number
+          echo "::set-output name=pr_number::$pr_number"
+
+      - name: copy files to s3
+        env:
+          aws_key_id: ${{ secrets.AWS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET }}
+        run: |
+          sudo apt-get update && sudo apt-get -y install awscli
+          aws configure set aws_access_key_id $aws_key_id
+          aws configure set aws_secret_access_key $aws_secret_access_key
+          aws configure set default.region us-east-1
+          aws s3 cp --recursive ./pr-packages/ s3://rw-pr-redwoodjs-com/
+
+      - name: Create comment msg
+        id: comment_msg
+        run: |
+          pr_number=${{ steps.pr_number.outputs.pr_number }}
+          cd pr-packages/$pr_number
+          v_sha=$(ls | grep "\.tgz$" | sed 's/\.tgz$//' | head -n1 | awk -F"-" '{ print $(NF-1)"-"$NF }')
+          msg="### 📦 PR Packages%0A"
+          msg+="%0A"
+          msg+="<details><summary>Click to Show Package Download Links</summary>%0A"
+          msg+="%0A"
+          for p in *; do
+            msg+="https://rw-pr-redwoodjs-com.s3.amazonaws.com/$pr_number/$p%0A"
+          done
+          msg+="</details>%0A"
+          msg+="%0A"
+          msg+="Install this PR by running \`yarn rw upgrade --pr $pr_number:$v_sha\`"
+          echo "::set-output name=msg::$msg"
+
+      - name: Find Comment
+        uses: peter-evans/find-comment@v1
+        id: fc
+        with:
+          issue-number: ${{ steps.pr_number.outputs.pr_number }}
+          comment-author: 'github-actions[bot]'
+
+      - name: Create comment
+        if: ${{ steps.fc.outputs.comment-id == 0 }}
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          issue-number: ${{ steps.pr_number.outputs.pr_number }}
+          body: ${{ steps.comment_msg.outputs.msg }}
+
+      - name: Update comment
+        if: ${{ steps.fc.outputs.comment-id != 0 }}
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          body: ${{ steps.comment_msg.outputs.msg }}
+          edit-mode: replace

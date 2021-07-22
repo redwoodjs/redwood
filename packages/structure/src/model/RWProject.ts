@@ -1,7 +1,9 @@
-import { getDMMF } from '@prisma/sdk'
-// TODO: re-implement a higher quality version of these in ./project
-import { getPaths, processPagesDir } from '@redwoodjs/internal/dist/paths'
 import { join } from 'path'
+
+import { getDMMF } from '@prisma/sdk'
+
+import { getPaths, processPagesDir } from '@redwoodjs/internal'
+
 import { Host } from '../hosts'
 import { BaseNode } from '../ide'
 import { lazy, memo } from '../x/decorators'
@@ -11,6 +13,7 @@ import {
   isLayoutFileName,
 } from '../x/path'
 import { URL_file } from '../x/URL'
+
 import { RWCell } from './RWCell'
 import { RWComponent } from './RWComponent'
 import { RWEnvHelper } from './RWEnvHelper'
@@ -72,10 +75,12 @@ export class RWProject extends BaseNode {
   }
   /**
    * Checks for the presence of a tsconfig.json at the root.
-   * TODO: look for this file at the root? or within each side? (api/web)
    */
   @lazy() get isTypeScriptProject(): boolean {
-    return this.host.existsSync(join(this.projectRoot, 'tsconfig.json'))
+    return (
+      this.host.existsSync(join(this.pathHelper.web.base, 'tsconfig.json')) ||
+      this.host.existsSync(join(this.pathHelper.api.base, 'tsconfig.json'))
+    )
   }
   // TODO: do we move this to a separate node? (ex: RWDatabase)
   @memo() async prismaDMMF() {
@@ -90,7 +95,9 @@ export class RWProject extends BaseNode {
   }
   @memo() async prismaDMMFModelNames() {
     const dmmf = await this.prismaDMMF()
-    if (!dmmf) return []
+    if (!dmmf) {
+      return []
+    }
     return dmmf.datamodel.models.map((m) => m.name)
   }
   @lazy() get redwoodTOML(): RWTOML {
@@ -186,7 +193,7 @@ export class RWProject extends BaseNode {
    **/
   @lazy() get cells(): RWCell[] {
     return this.host
-      .globSync(this.pathHelper.web.components + '/**/*Cell.{js,jsx,tsx}')
+      .globSync(this.pathHelper.web.base + '/**/*Cell.{js,jsx,tsx}')
       .map((file) => new RWCell(file, this))
       .filter((file) => file.isCell)
   }

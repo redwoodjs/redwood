@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/forms",
-  "version": "0.19.4",
+  "version": "0.35.2",
   "files": [
     "dist",
     "src/index.d.ts"
@@ -9,18 +9,10 @@
   "types": "src/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "core-js": "3.6.5",
+    "@types/pascalcase": "1.0.0",
+    "core-js": "3.15.2",
     "pascalcase": "1.0.0",
-    "react-hook-form": "^6.5.3"
-  },
-  "devDependencies": {
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "11.0.4",
-    "@testing-library/user-event": "12.1.7",
-    "react": "16.13.1"
-  },
-  "peerDependencies": {
-    "react": "*"
+    "react-hook-form": "6.9.5"
   },
   "scripts": {
     "build": "yarn build:js",
@@ -30,5 +22,5 @@
     "test": "jest",
     "test:watch": "yarn test --watch"
   },
-  "gitHead": "c235e7d7186e5e258764699c0e0e1d5cc0fdd0b5"
+  "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"
 }

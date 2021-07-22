@@ -1,7 +1,9 @@
 global.__dirname = __dirname
 import path from 'path'
 
-import { loadGeneratorFixture } from 'src/lib/test'
+// Load mocks
+import '../../../../lib/test'
+import * as cell from '../cell'
 
 jest.mock('@redwoodjs/structure', () => {
   return {
@@ -11,20 +13,95 @@ jest.mock('@redwoodjs/structure', () => {
   }
 })
 
-import * as cell from '../cell'
-
 let singleWordFiles,
   multiWordFiles,
   snakeCaseWordFiles,
   kebabCaseWordFiles,
-  camelCaseWordFiles
+  camelCaseWordFiles,
+  withoutTestFiles,
+  withoutStoryFiles,
+  withoutTestAndStoryFiles,
+  listFlagPassedIn,
+  listInferredFromName,
+  modelPluralMatchesSingularWithList,
+  modelPluralMatchesSingularWithoutList
 
 beforeAll(async () => {
-  singleWordFiles = await cell.files({ name: 'User' })
-  multiWordFiles = await cell.files({ name: 'UserProfile' })
-  snakeCaseWordFiles = await cell.files({ name: 'user_profile' })
-  kebabCaseWordFiles = await cell.files({ name: 'user-profile' })
-  camelCaseWordFiles = await cell.files({ name: 'userProfile' })
+  singleWordFiles = await cell.files({
+    name: 'User',
+    tests: true,
+    stories: true,
+    list: false,
+  })
+  multiWordFiles = await cell.files({
+    name: 'UserProfile',
+    tests: true,
+    stories: true,
+    list: false,
+  })
+  snakeCaseWordFiles = await cell.files({
+    name: 'user_profile',
+    tests: true,
+    stories: true,
+    list: false,
+  })
+  kebabCaseWordFiles = await cell.files({
+    name: 'user-profile',
+    tests: true,
+    stories: true,
+    list: false,
+  })
+  camelCaseWordFiles = await cell.files({
+    name: 'userProfile',
+    tests: true,
+    stories: true,
+    list: false,
+  })
+  withoutTestFiles = await cell.files({
+    name: 'User',
+    tests: false,
+    stories: true,
+    list: false,
+  })
+  withoutStoryFiles = await cell.files({
+    name: 'User',
+    tests: true,
+    stories: false,
+    list: false,
+  })
+  withoutTestAndStoryFiles = await cell.files({
+    name: 'User',
+    tests: false,
+    stories: false,
+    list: false,
+  })
+
+  listFlagPassedIn = await cell.files({
+    name: 'Member',
+    tests: true,
+    stories: true,
+    list: true,
+  })
+
+  listInferredFromName = await cell.files({
+    name: 'Members',
+    tests: true,
+    stories: true,
+  })
+
+  modelPluralMatchesSingularWithList = await cell.files({
+    name: 'equipment',
+    tests: true,
+    stories: true,
+    list: true,
+  })
+
+  modelPluralMatchesSingularWithoutList = await cell.files({
+    name: 'equipment',
+    tests: true,
+    stories: true,
+    list: false,
+  })
 })
 
 // Single Word Scenario: User
@@ -37,7 +114,7 @@ test('creates a cell component with a single word name', () => {
     singleWordFiles[
       path.normalize('/path/to/project/web/src/components/UserCell/UserCell.js')
     ]
-  ).toEqual(loadGeneratorFixture('cell', 'singleWordCell.js'))
+  ).toMatchSnapshot()
 })
 
 test('creates a cell test with a single word name', () => {
@@ -47,7 +124,7 @@ test('creates a cell test with a single word name', () => {
         '/path/to/project/web/src/components/UserCell/UserCell.test.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('cell', 'singleWordCell.test.js'))
+  ).toMatchSnapshot()
 })
 
 test('creates a cell stories with a single word name', () => {
@@ -57,7 +134,7 @@ test('creates a cell stories with a single word name', () => {
         '/path/to/project/web/src/components/UserCell/UserCell.stories.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('cell', 'singleWordCell.stories.js'))
+  ).toMatchSnapshot()
 })
 
 test('creates a cell mock with a single word name', () => {
@@ -67,7 +144,7 @@ test('creates a cell mock with a single word name', () => {
         '/path/to/project/web/src/components/UserCell/UserCell.mock.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('cell', 'singleWordCell.mock.js'))
+  ).toMatchSnapshot()
 })
 
 // Multi Word Scenario: UserProfile
@@ -78,7 +155,7 @@ test('creates a cell component with a multi word name', () => {
         '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('cell', 'multiWordCell.js'))
+  ).toMatchSnapshot()
 })
 
 test('creates a cell test with a multi word name', () => {
@@ -88,7 +165,7 @@ test('creates a cell test with a multi word name', () => {
         '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.test.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('cell', 'multiWordCell.test.js'))
+  ).toMatchSnapshot()
 })
 
 test('creates a cell stories with a multi word name', () => {
@@ -98,7 +175,7 @@ test('creates a cell stories with a multi word name', () => {
         '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.stories.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('cell', 'multiWordCell.stories.js'))
+  ).toMatchSnapshot()
 })
 
 test('creates a cell mock with a multi word name', () => {
@@ -108,7 +185,7 @@ test('creates a cell mock with a multi word name', () => {
         '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.mock.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('cell', 'multiWordCell.mock.js'))
+  ).toMatchSnapshot()
 })
 
 // SnakeCase Word Scenario: user_profile
@@ -119,7 +196,7 @@ test('creates a cell component with a snakeCase word name', () => {
         '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('cell', 'snakeCaseWordCell.js'))
+  ).toMatchSnapshot()
 })
 
 test('creates a cell test with a snakeCase word name', () => {
@@ -129,7 +206,7 @@ test('creates a cell test with a snakeCase word name', () => {
         '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.test.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('cell', 'snakeCaseWordCell.test.js'))
+  ).toMatchSnapshot()
 })
 
 test('creates a cell stories with a snakeCase word name', () => {
@@ -139,7 +216,7 @@ test('creates a cell stories with a snakeCase word name', () => {
         '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.stories.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('cell', 'snakeCaseWordCell.stories.js'))
+  ).toMatchSnapshot()
 })
 
 test('creates a cell mock with a snakeCase word name', () => {
@@ -149,7 +226,7 @@ test('creates a cell mock with a snakeCase word name', () => {
         '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.mock.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('cell', 'snakeCaseWordCell.mock.js'))
+  ).toMatchSnapshot()
 })
 
 // KebabCase Word Scenario: user-profile
@@ -160,7 +237,7 @@ test('creates a cell component with a kebabCase word name', () => {
         '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('cell', 'kebabCaseWordCell.js'))
+  ).toMatchSnapshot()
 })
 
 test('creates a cell test with a kebabCase word name', () => {
@@ -170,7 +247,7 @@ test('creates a cell test with a kebabCase word name', () => {
         '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.test.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('cell', 'kebabCaseWordCell.test.js'))
+  ).toMatchSnapshot()
 })
 
 test('creates a cell stories with a kebabCase word name', () => {
@@ -180,7 +257,7 @@ test('creates a cell stories with a kebabCase word name', () => {
         '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.stories.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('cell', 'kebabCaseWordCell.stories.js'))
+  ).toMatchSnapshot()
 })
 
 test('creates a cell mock with a kebabCase word name', () => {
@@ -190,7 +267,7 @@ test('creates a cell mock with a kebabCase word name', () => {
         '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.mock.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('cell', 'kebabCaseWordCell.mock.js'))
+  ).toMatchSnapshot()
 })
 
 // camelCase Word Scenario: user-profile
@@ -201,7 +278,7 @@ test('creates a cell component with a camelCase word name', () => {
         '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('cell', 'camelCaseWordCell.js'))
+  ).toMatchSnapshot()
 })
 
 test('creates a cell test with a camelCase word name', () => {
@@ -211,7 +288,7 @@ test('creates a cell test with a camelCase word name', () => {
         '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.test.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('cell', 'camelCaseWordCell.test.js'))
+  ).toMatchSnapshot()
 })
 
 test('creates a cell stories with a camelCase word name', () => {
@@ -221,7 +298,7 @@ test('creates a cell stories with a camelCase word name', () => {
         '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.stories.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('cell', 'camelCaseWordCell.stories.js'))
+  ).toMatchSnapshot()
 })
 
 test('creates a cell mock with a camelCase word name', () => {
@@ -231,5 +308,151 @@ test('creates a cell mock with a camelCase word name', () => {
         '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.mock.js'
       )
     ]
-  ).toEqual(loadGeneratorFixture('cell', 'camelCaseWordCell.mock.js'))
+  ).toMatchSnapshot()
+})
+
+test("doesn't include test file when --tests is set to false", () => {
+  expect(Object.keys(withoutTestFiles)).toEqual([
+    path.normalize(
+      '/path/to/project/web/src/components/UserCell/UserCell.mock.js'
+    ),
+    path.normalize(
+      '/path/to/project/web/src/components/UserCell/UserCell.stories.js'
+    ),
+    path.normalize('/path/to/project/web/src/components/UserCell/UserCell.js'),
+  ])
+})
+
+test("doesn't include storybook file when --stories is set to false", () => {
+  expect(Object.keys(withoutStoryFiles)).toEqual([
+    path.normalize(
+      '/path/to/project/web/src/components/UserCell/UserCell.mock.js'
+    ),
+    path.normalize(
+      '/path/to/project/web/src/components/UserCell/UserCell.test.js'
+    ),
+    path.normalize('/path/to/project/web/src/components/UserCell/UserCell.js'),
+  ])
+})
+
+test("doesn't include storybook and test files when --stories and --tests is set to false", () => {
+  expect(Object.keys(withoutTestAndStoryFiles)).toEqual([
+    path.normalize('/path/to/project/web/src/components/UserCell/UserCell.js'),
+  ])
+})
+
+test('generates list cells if list flag passed in', () => {
+  const CELL_PATH = path.normalize(
+    '/path/to/project/web/src/components/MembersCell/MembersCell.js'
+  )
+
+  const TEST_PATH = path.normalize(
+    '/path/to/project/web/src/components/MembersCell/MembersCell.test.js'
+  )
+
+  const STORY_PATH = path.normalize(
+    '/path/to/project/web/src/components/MembersCell/MembersCell.stories.js'
+  )
+
+  const MOCK_PATH = path.normalize(
+    '/path/to/project/web/src/components/MembersCell/MembersCell.mock.js'
+  )
+
+  // Check the file names
+  expect(Object.keys(listFlagPassedIn)).toEqual([
+    MOCK_PATH,
+    TEST_PATH,
+    STORY_PATH,
+    CELL_PATH,
+  ])
+
+  // Check the contents
+  expect(listFlagPassedIn[CELL_PATH]).toMatchSnapshot()
+})
+
+test('generates list cells if name is plural', () => {
+  const CELL_PATH = path.normalize(
+    '/path/to/project/web/src/components/MembersCell/MembersCell.js'
+  )
+
+  const TEST_PATH = path.normalize(
+    '/path/to/project/web/src/components/MembersCell/MembersCell.test.js'
+  )
+
+  const STORY_PATH = path.normalize(
+    '/path/to/project/web/src/components/MembersCell/MembersCell.stories.js'
+  )
+
+  const MOCK_PATH = path.normalize(
+    '/path/to/project/web/src/components/MembersCell/MembersCell.mock.js'
+  )
+
+  // Check the file names
+  expect(Object.keys(listInferredFromName)).toEqual([
+    MOCK_PATH,
+    TEST_PATH,
+    STORY_PATH,
+    CELL_PATH,
+  ])
+
+  // Check the contents
+  expect(listInferredFromName[CELL_PATH]).toMatchSnapshot()
+})
+
+test('"equipment" with list flag', () => {
+  const CELL_PATH = path.normalize(
+    '/path/to/project/web/src/components/EquipmentListCell/EquipmentListCell.js'
+  )
+
+  const TEST_PATH = path.normalize(
+    '/path/to/project/web/src/components/EquipmentListCell/EquipmentListCell.test.js'
+  )
+
+  const STORY_PATH = path.normalize(
+    '/path/to/project/web/src/components/EquipmentListCell/EquipmentListCell.stories.js'
+  )
+
+  const MOCK_PATH = path.normalize(
+    '/path/to/project/web/src/components/EquipmentListCell/EquipmentListCell.mock.js'
+  )
+
+  // Check the file names
+  expect(Object.keys(modelPluralMatchesSingularWithList)).toEqual([
+    MOCK_PATH,
+    TEST_PATH,
+    STORY_PATH,
+    CELL_PATH,
+  ])
+
+  // Check the contents
+  expect(modelPluralMatchesSingularWithList[CELL_PATH]).toMatchSnapshot()
+})
+
+test('"equipment" withOUT list flag should find equipment by id', () => {
+  const CELL_PATH = path.normalize(
+    '/path/to/project/web/src/components/EquipmentCell/EquipmentCell.js'
+  )
+
+  const TEST_PATH = path.normalize(
+    '/path/to/project/web/src/components/EquipmentCell/EquipmentCell.test.js'
+  )
+
+  const STORY_PATH = path.normalize(
+    '/path/to/project/web/src/components/EquipmentCell/EquipmentCell.stories.js'
+  )
+
+  const MOCK_PATH = path.normalize(
+    '/path/to/project/web/src/components/EquipmentCell/EquipmentCell.mock.js'
+  )
+
+  // Check the file names
+  expect(Object.keys(modelPluralMatchesSingularWithoutList)).toEqual([
+    MOCK_PATH,
+    TEST_PATH,
+    STORY_PATH,
+    CELL_PATH,
+  ])
+
+  // Check the contents
+  expect(modelPluralMatchesSingularWithoutList[CELL_PATH]).toMatchSnapshot()
 })

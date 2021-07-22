@@ -1,8 +1,10 @@
 import * as tsm from 'ts-morph'
+
 import { FileNode } from '../ide'
 import { iter } from '../x/Array'
 import { lazy } from '../x/decorators'
 import { basenameNoExt } from '../x/path'
+
 import { RWProject } from './RWProject'
 import { RWSDL } from './RWSDL'
 import { RWServiceFunction } from './RWServiceFunction'
@@ -44,14 +46,18 @@ export class RWService extends FileNode {
       for (const vd of self.sf.getVariableDeclarations()) {
         if (vd.isExported()) {
           const init = vd.getInitializerIfKind(tsm.SyntaxKind.ArrowFunction)
-          if (init) yield new RWServiceFunction(vd.getName(), init, self)
+          if (init) {
+            yield new RWServiceFunction(vd.getName(), init, self)
+          }
         }
       }
       // export function foo(){}
       for (const fd of self.sf.getFunctions()) {
         if (fd.isExported() && !fd.isDefaultExport()) {
           const nn = fd.getNameNode()
-          if (nn) yield new RWServiceFunction(nn.getText(), fd, self)
+          if (nn) {
+            yield new RWServiceFunction(nn.getText(), fd, self)
+          }
         }
       }
     })

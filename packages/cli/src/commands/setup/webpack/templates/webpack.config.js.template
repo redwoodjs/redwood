@@ -1,5 +1,6 @@
-module.exports = (config, { env }) => {
-  if (env === 'development') {
+/** @returns {import('webpack').Configuration} Webpack Configuration */
+module.exports = (config, { mode }) => {
+  if (mode === 'development') {
     // Add dev plugin
   }
 

@@ -1,5 +1,5 @@
-import { transformTSToJS } from 'src/lib'
-
+import { transformTSToJS } from '../../../lib'
+import { yargsDefaults } from '../../generate'
 import {
   templateForComponentFile,
   createYargsForComponentGeneration,
@@ -8,21 +8,22 @@ import {
 const COMPONENT_SUFFIX = 'Layout'
 const REDWOOD_WEB_PATH_NAME = 'layouts'
 
-export const files = ({ name, ...options }) => {
-  // TODO: Replace with check from https://github.com/redwoodjs/redwood/pull/633
-  const isJavascript = options.javascript && !options.typescript
+export const files = ({ name, typescript = false, ...options }) => {
+  const extension = typescript ? '.tsx' : '.js'
   const layoutFile = templateForComponentFile({
     name,
     suffix: COMPONENT_SUFFIX,
     webPathSection: REDWOOD_WEB_PATH_NAME,
-    extension: isJavascript ? '.js' : '.tsx',
+    extension,
     generator: 'layout',
-    templatePath: 'layout.tsx.template',
+    templatePath: options.skipLink
+      ? 'layout.tsx.a11yTemplate'
+      : 'layout.tsx.template',
   })
   const testFile = templateForComponentFile({
     name,
     suffix: COMPONENT_SUFFIX,
-    extension: `.test.${isJavascript ? 'js' : 'tsx'}`,
+    extension: `.test${extension}`,
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'layout',
     templatePath: 'test.tsx.template',
@@ -30,38 +31,48 @@ export const files = ({ name, ...options }) => {
   const storyFile = templateForComponentFile({
     name,
     suffix: COMPONENT_SUFFIX,
-    extension: `.stories.${isJavascript ? 'js' : 'tsx'}`,
+    extension: `.stories${extension}`,
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'layout',
     templatePath: 'stories.tsx.template',
   })
+
+  const files = [layoutFile]
+  if (options.stories) {
+    files.push(storyFile)
+  }
+
+  if (options.tests) {
+    files.push(testFile)
+  }
 
   // Returns
   // {
   //    "path/to/fileA": "<<<template>>>",
   //    "path/to/fileB": "<<<template>>>",
   // }
-  return [layoutFile, testFile, storyFile].reduce(
-    (acc, [outputPath, content]) => {
-      const template = isJavascript
-        ? transformTSToJS(outputPath, content)
-        : content
+  return files.reduce((acc, [outputPath, content]) => {
+    const template = typescript ? content : transformTSToJS(outputPath, content)
 
-      return {
-        [outputPath]: template,
-        ...acc,
-      }
-    },
-    {}
-  )
+    return {
+      [outputPath]: template,
+      ...acc,
+    }
+  }, {})
 }
 
-export const {
-  command,
-  description,
-  builder,
-  handler,
-} = createYargsForComponentGeneration({
-  componentName: 'layout',
-  filesFn: files,
-})
+const optionsObj = {
+  skipLink: {
+    default: false,
+    description: 'Generate with skip link',
+    type: 'boolean',
+  },
+  ...yargsDefaults,
+}
+
+export const { command, description, builder, handler } =
+  createYargsForComponentGeneration({
+    componentName: 'layout',
+    filesFn: files,
+    optionsObj,
+  })

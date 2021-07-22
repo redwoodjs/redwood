@@ -1,0 +1,41 @@
+{
+  "name": "@redwoodjs/prerender",
+  "description": "RedwoodJS prerender",
+  "version": "0.35.2",
+  "license": "MIT",
+  "files": [
+    "dist",
+    "browserUtils",
+    "detection"
+  ],
+  "main": "dist/index.js",
+  "peerDependencies": {
+    "react": "*",
+    "react-dom": "*"
+  },
+  "dependencies": {
+    "@babel/register": "7.13.16",
+    "@redwoodjs/auth": "0.35.2",
+    "@redwoodjs/internal": "0.35.2",
+    "@redwoodjs/router": "0.35.2",
+    "@redwoodjs/structure": "0.35.2",
+    "@redwoodjs/web": "0.35.2",
+    "babel-plugin-ignore-html-and-css-imports": "0.1.0",
+    "cheerio": "1.0.0-rc.10",
+    "node-fetch": "2.6.1"
+  },
+  "scripts": {
+    "build": "yarn build:js && yarn build:types",
+    "prepublishOnly": "yarn build",
+    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx,.jsx\"",
+    "build:types": "tsc --build --verbose",
+    "build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build\"",
+    "test": "jest",
+    "test:watch": "yarn test --watch"
+  },
+  "externals": {
+    "react": "react",
+    "react-dom": "react-dom"
+  },
+  "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"
+}

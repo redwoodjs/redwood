@@ -1,8 +1,15 @@
+import fs from 'fs'
+import path from 'path'
+
 import execa from 'execa'
+import latestVersion from 'latest-version'
 import Listr from 'listr'
+import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
 
-import c from 'src/lib/colors'
+import { getPaths } from '../lib'
+import c from '../lib/colors'
+import { generatePrismaClient } from '../lib/generatePrismaClient'
 
 export const command = 'upgrade'
 export const description = 'Upgrade all @redwoodjs packages via interactive CLI'
@@ -22,9 +29,16 @@ export const builder = (yargs) => {
       alias: 't',
       description:
         '[choices: "canary", "rc", or specific-version (see example below)] WARNING: "canary" and "rc" tags are unstable releases!',
+      requiresArg: true,
       type: 'string',
+      coerce: validateTag,
     })
-    .coerce('tag', validateTag)
+    .option('verbose', {
+      alias: 'v',
+      description: 'Print verbose logs',
+      type: 'boolean',
+      default: false,
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -41,98 +55,9 @@ export const builder = (yargs) => {
     )
 }
 
-const rwPackages =
-  '@redwoodjs/core @redwoodjs/api @redwoodjs/web @redwoodjs/router @redwoodjs/auth @redwoodjs/forms'
-
-// yarn upgrade-interactive does not allow --tags, so we resort to this mess
-// @redwoodjs/auth may not be installed so we add check
-const installTags = (tag, isAuth) => {
-  const mainString = `yarn upgrade @redwoodjs/core@${tag} \
-  && yarn workspace api upgrade @redwoodjs/api@${tag} \
-  && yarn workspace web upgrade @redwoodjs/web@${tag} @redwoodjs/router@${tag} @redwoodjs/forms@${tag}`
-
-  const authString = ` @redwoodjs/auth@${tag}`
-
-  if (isAuth) {
-    return mainString + authString
-  } else {
-    return mainString
-  }
-}
-
-const checkInstalled = () => {
-  return [
-    {
-      // yarn upgrade will install listed packages even if not already installed
-      // this is a workaround to check for Auth install and then add to options if true
-      // TODO: this will not support cases where api/ or web/ do not exist;
-      // need to build a list of installed and use reference object to map commands
-      title: '...',
-      task: async (ctx, task) => {
-        try {
-          const { stdout } = await execa.command(
-            'yarn list --depth 0 --pattern @redwoodjs/auth'
-          )
-          if (stdout.includes('redwoodjs/auth')) {
-            ctx.auth = true
-            task.title = 'Found @redwoodjs/auth'
-          } else {
-            task.title = 'Done'
-          }
-        } catch (e) {
-          task.skip('"yarn list ..." caused an Error')
-          console.log(c.error(e.message))
-        }
-      },
-    },
-  ]
-}
-
-// yargs allows passing the 'dry-run' alias 'd' here,
-// which we need to use because babel fails on 'dry-run'
-const runUpgrade = ({ d: dryRun, tag }) => {
-  return [
-    {
-      title: '...',
-      task: (ctx, task) => {
-        if (dryRun) {
-          task.title = tag
-            ? 'The --dry-run option is not supported for --tags'
-            : 'Checking available upgrades for @redwoodjs packages'
-          // 'yarn outdated --scope @redwoodjs' will include netlify plugin
-          // so we have to use hardcoded list,
-          // which will NOT display info for uninstalled packages
-          if (!tag) {
-            execa.command(`yarn outdated ${rwPackages}`, {
-              stdio: 'inherit',
-            })
-          } else {
-            throw new Error()
-          }
-          // using @tag with workspaces limits us to use 'upgrade' with full list
-        } else if (tag) {
-          task.title = `Force upgrading @redwoodjs packages to latest ${tag} release`
-          execa.command(installTags(tag, ctx.auth), {
-            stdio: 'inherit',
-            shell: true,
-          })
-        } else {
-          task.title = 'Running @redwoodjs package interactive upgrade CLI'
-          execa(
-            'yarn upgrade-interactive',
-            ['--scope @redwoodjs', '--latest'],
-            {
-              stdio: 'inherit',
-              shell: true,
-            }
-          )
-        }
-      },
-    },
-  ]
-}
-
-const SEMVER_REGEX = /(?<=^v?|\sv?)(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*)(?:\.(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*))*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?(?=$|\s)/gi
+// Used in yargs builder to coerce tag
+const SEMVER_REGEX =
+  /(?<=^v?|\sv?)(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*)(?:\.(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*))*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?(?=$|\s)/gi
 const validateTag = (tag) => {
   const isTagValid =
     tag === 'rc' ||
@@ -152,25 +77,165 @@ const validateTag = (tag) => {
   return tag
 }
 
-export const handler = async ({ d, tag }) => {
+export const handler = async ({ dryRun, tag, verbose }) => {
   // structuring as nested tasks to avoid bug with task.title causing duplicates
   const tasks = new Listr(
     [
       {
-        title: 'Checking installed packages',
-        task: () => new Listr(checkInstalled()),
+        title: 'Checking latest version',
+        task: async (ctx) => setLatestVersionToContext(ctx, tag),
       },
       {
-        title: 'Running upgrade command',
-        task: () => new Listr(runUpgrade({ d, tag })),
+        title: 'Updating your project package.json(s)',
+        task: (ctx) => updateRedwoodDepsForAllSides(ctx, { dryRun, verbose }),
+        enabled: (ctx) => !!ctx.versionToUpgradeTo,
+      },
+      {
+        title: 'Running yarn install',
+        task: (ctx) => yarnInstall(ctx, { dryRun, verbose }),
+        skip: () => dryRun,
+      },
+      {
+        title: 'Refreshing the Prisma client',
+        task: (_ctx, task) => refreshPrismaClient(task, { verbose }),
+        skip: () => dryRun,
+      },
+      {
+        title: 'One more thing..',
+        task: (ctx, task) => {
+          const version = ctx.versionToUpgradeTo
+          task.title =
+            `One more thing...\n\n   ${c.warning(
+              `🎉 Your project has been upgraded to RedwoodJS ${version}!`
+            )} \n\n` +
+            `   Please review the release notes for any manual steps: \n   ❖ ${terminalLink(
+              `Redwood community discussion`,
+              `https://community.redwoodjs.com/search?q=${version}%23announcements`
+            )}\n   ❖ ${terminalLink(
+              `GitHub Release notes`,
+              `https://github.com/redwoodjs/redwood/releases` // intentionally not linking to specific version
+            )}
+          `
+        },
       },
     ],
-    { collapse: false }
+    { collapse: false, renderer: verbose && VerboseRenderer }
   )
 
   try {
     await tasks.run()
   } catch (e) {
+    console.error(c.error(e.message))
+    process.exit(e?.exitCode || 1)
+  }
+}
+async function yarnInstall({ verbose }) {
+  try {
+    await execa('yarn install', ['--force', '--non-interactive'], {
+      shell: true,
+      stdio: verbose ? 'inherit' : 'pipe',
+
+      cwd: getPaths().base,
+    })
+  } catch (e) {
+    throw new Error(
+      'Could not finish installation. Please run `yarn install --force`, before continuing'
+    )
+  }
+}
+
+async function setLatestVersionToContext(ctx, tag) {
+  try {
+    const foundVersion = await latestVersion(
+      '@redwoodjs/core',
+      tag ? { version: tag } : {}
+    )
+
+    ctx.versionToUpgradeTo = foundVersion
+    return foundVersion
+  } catch (e) {
+    throw new Error('Could not find the latest version')
+  }
+}
+
+/**
+ * Iterates over Redwood dependencies in package.json files and updates the version.
+ */
+function updatePackageJsonVersion(pkgPath, version, { dryRun, verbose }) {
+  const pkg = JSON.parse(
+    fs.readFileSync(path.join(pkgPath, 'package.json'), 'utf-8')
+  )
+
+  if (pkg.dependencies) {
+    for (const depName of Object.keys(pkg.dependencies).filter((x) =>
+      x.startsWith('@redwoodjs/')
+    )) {
+      if (verbose || dryRun) {
+        console.log(
+          ` - ${depName}: ${pkg.dependencies[depName]} => ^${version}`
+        )
+      }
+      pkg.dependencies[depName] = `^${version}`
+    }
+  }
+  if (pkg.devDependencies) {
+    for (const depName of Object.keys(pkg.devDependencies).filter((x) =>
+      x.startsWith('@redwoodjs/')
+    )) {
+      if (verbose || dryRun) {
+        console.log(
+          ` - ${depName}: ${pkg.devDependencies[depName]} => ^${version}`
+        )
+      }
+      pkg.devDependencies[depName] = `^${version}`
+    }
+  }
+
+  if (!dryRun) {
+    fs.writeFileSync(
+      path.join(pkgPath, 'package.json'),
+      JSON.stringify(pkg, undefined, 2)
+    )
+  }
+}
+
+function updateRedwoodDepsForAllSides(ctx, options) {
+  if (!ctx.versionToUpgradeTo) {
+    throw new Error('Failed to upgrade')
+  }
+
+  const updatePaths = [
+    getPaths().base,
+    getPaths().api.base,
+    getPaths().web.base,
+  ]
+
+  return new Listr(
+    updatePaths.map((basePath) => {
+      const pkgJsonPath = path.join(basePath, 'package.json')
+      return {
+        title: `Updating ${pkgJsonPath}`,
+        task: () =>
+          updatePackageJsonVersion(basePath, ctx.versionToUpgradeTo, options),
+        skip: () => !fs.existsSync(pkgJsonPath),
+      }
+    })
+  )
+}
+
+async function refreshPrismaClient(task, { verbose }) {
+  /** Relates to prisma/client issue, @see: https://github.com/redwoodjs/redwood/issues/1083 */
+  try {
+    await generatePrismaClient({
+      verbose,
+      force: false,
+      schema: getPaths().api.dbSchema,
+    })
+  } catch (e) {
+    task.skip('Refreshing the Prisma client caused an Error.')
+    console.log(
+      'You may need to update your prisma client manually: $ yarn rw prisma generate'
+    )
     console.log(c.error(e.message))
   }
 }

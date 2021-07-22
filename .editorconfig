@@ -1,0 +1,22 @@
+# EditorConfig works out of the box with many editors, plugins are available
+# for many others - see the website:
+# https://EditorConfig.org
+
+root = true
+
+[*]
+end_of_line = lf
+insert_final_newline = true
+charset = utf8
+
+[*.{js,jsx,ts,tsx,graphql,sql,md,html,mjml,json,jsonc,json5,yml,yaml,template,sh,Dockerfile}]
+indent_style = space
+indent_size = 2
+trim_trailing_whitespace = true
+
+[*.{md,html,mjml}]
+trim_trailing_whitespace = false
+
+[Dockerfile]
+indent_style = space
+indent_size = 2

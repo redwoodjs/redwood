@@ -1,0 +1,74 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_HOST")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Define your own models here and run yarn db:save to create
+// migrations for them.
+
+model Post {
+  id       Int       @id @default(autoincrement())
+  title    String
+  slug     String    @unique
+  author   String
+  body     String
+  image    String?
+  isPinned Boolean   @default(false)
+  readTime Int
+  rating   Float?
+  postedAt DateTime?
+  metadata Json
+}
+
+model User {
+  id       Int           @id @default(autoincrement())
+  name     String?
+  email    String        @unique
+  isAdmin  Boolean       @default(false)
+  profiles UserProfile[]
+  transactions Transaction[]
+}
+
+model UserProfile {
+  id       Int    @id @default(autoincrement())
+  username String @unique
+  userId   Int
+  user     User   @relation(fields: [userId], references: [id])
+}
+
+model Transaction {
+  id       Int    @id @default(autoincrement())
+  item     String?
+  userId   Int
+  user     User @relation(fields: [userId], references: [id])
+}
+
+model Product {
+  id      Int              @id @default(autoincrement())
+  tags    TagsOnProducts[]
+  Feature Feature[]
+}
+
+model TagsOnProducts {
+  id        Int     @id @default(autoincrement())
+  tagId     Int
+  tag       Tag     @relation(fields: [tagId], references: [id])
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+model Tag {
+  id       Int              @id @default(autoincrement())
+  name     String
+  products TagsOnProducts[]
+}
+
+model Feature {
+  id          Int     @id @default(autoincrement())
+  inventoryId Int
+  inventory   Product @relation(fields: [inventoryId], references: [id])
+}

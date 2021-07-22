@@ -1,33 +1,12 @@
 import path from 'path'
+
 import pluginTester from 'babel-plugin-tester'
+
 import plugin from '../babel-plugin-redwood-routes-auto-loader'
-import { getProject } from '@redwoodjs/structure'
-
-const mockReaddirSync = jest.fn(() => ['routes.d.ts'])
-const mockWriteFileSync = jest.fn()
-
-jest.mock('@redwoodjs/structure', () => {
-  return {
-    ...jest.requireActual('@redwoodjs/structure'),
-    DefaultHost: jest.fn().mockImplementation(() => ({
-      readdirSync: mockReaddirSync,
-      writeFileSync: mockWriteFileSync,
-      paths: {
-        types: '/fake/project/node_modules/@types/@redwoodjs/generated',
-      },
-    })),
-  }
-})
 
 jest.mock('@redwoodjs/internal', () => ({
-  getPaths: () => {
-    return {
-      web: {
-        base: '/path/to/example/web',
-        pages: '/path/to/example/web/src/pages',
-      },
-    }
-  },
+  ...jest.requireActual('@redwoodjs/internal'),
+  // Import path set to be absolute path, because babel-plugin-module-resolver runs before in the actual project
   processPagesDir: () => {
     return [
       {
@@ -60,28 +39,20 @@ jest.mock('@redwoodjs/internal', () => ({
 }))
 
 describe('routes auto loader', () => {
-  const exampleTodoPath = path.resolve(
-    __dirname,
-    '../../../../../__fixtures__/example-todo-main'
-  )
-  const project = getProject(exampleTodoPath)
+  pluginTester({
+    plugin,
+    pluginName: 'babel-plugin-redwood-routes-auto-loader',
+    fixtures: path.join(__dirname, '__fixtures__/routes-auto-loader/dynamic'),
+  })
+})
 
+describe('routes auto loader useStaticImports', () => {
   pluginTester({
     plugin,
     pluginName: 'babel-plugin-redwood-routes-auto-loader',
     pluginOptions: {
-      project,
+      useStaticImports: true,
     },
-    fixtures: path.join(__dirname, '__fixtures__/routes-auto-loader'),
-  })
-
-  afterAll(() => {
-    expect(mockWriteFileSync.mock.calls[0][0]).toContain(`routes.d.ts`)
-    expect(mockWriteFileSync.mock.calls[0][1]).toContain(`home: () => "/"`)
-    expect(mockWriteFileSync.mock.calls[1][0]).toContain(`index.d.ts`)
-    expect(mockWriteFileSync.mock.calls[1][1]).toContain(
-      `/// <reference path="./generated/routes.d.ts" />`
-    )
-    jest.clearAllMocks()
+    fixtures: path.join(__dirname, '__fixtures__/routes-auto-loader/static'),
   })
 })

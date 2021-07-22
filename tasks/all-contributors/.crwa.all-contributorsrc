@@ -127,7 +127,16 @@
       "contributions": [
         "tool"
       ]
-    }
+    },
+    {
+      "login": "dhausser",
+      "name": "Davy Hausser",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/24432220?v=4",
+      "profile": "https://github.com/dhausser",
+      "contributions": [
+        "tool"
+      ]
+    },
   ],
-  "contributorsPerLine": 7
+  "contributorsPerLine": 5
 }

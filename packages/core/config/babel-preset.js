@@ -1,8 +1,9 @@
 /**
  * This is the babel preset used in `create-redwood-app`
  */
+const { extendDefaultPlugins } = require('svgo')
 
-const { getProject } = require('@redwoodjs/structure')
+const { getPaths } = require('@redwoodjs/internal')
 
 const packageJSON = require('../package.json')
 
@@ -12,14 +13,18 @@ const TARGETS_NODE = '12.16'
 // https://github.com/zloirock/core-js/blob/master/README.md#babelpreset-env
 const CORE_JS_VERSION = '3.6'
 
+/** @type {import('@babel/core').TransformOptions} */
 module.exports = () => {
-  const project = getProject()
-  const paths = project.host.paths
+  const rwjsPaths = getPaths()
 
   return {
     presets: ['@babel/preset-react', '@babel/preset-typescript'],
     plugins: [
       ['@babel/plugin-proposal-class-properties', { loose: true }],
+      // Note: The private method loose mode configuration setting must be the
+      // same as @babel/plugin-proposal class-properties.
+      // (https://babeljs.io/docs/en/babel-plugin-proposal-private-methods#loose)
+      ['@babel/plugin-proposal-private-methods', { loose: true }],
       [
         '@babel/plugin-transform-runtime',
         {
@@ -32,7 +37,7 @@ module.exports = () => {
           version: packageJSON.devDependencies['@babel/runtime-corejs3'],
         },
       ],
-      ['babel-plugin-graphql-tag'],
+
       [
         require('../dist/babelPlugins/babel-plugin-redwood-directory-named-import'),
       ],
@@ -40,7 +45,7 @@ module.exports = () => {
     overrides: [
       // ** API **
       {
-        test: './api/',
+        test: ['./api/', './scripts/'],
         presets: [
           [
             '@babel/preset-env',
@@ -54,6 +59,12 @@ module.exports = () => {
                 // List of supported proposals: https://github.com/zloirock/core-js/blob/master/docs/2019-03-19-core-js-3-babel-and-a-look-into-the-future.md#ecmascript-proposals
                 proposals: true,
               },
+              exclude: [
+                // Remove class-properties from preset-env, and include separately with loose
+                // https://github.com/webpack/webpack/issues/9708
+                '@babel/plugin-proposal-class-properties',
+                '@babel/plugin-proposal-private-methods',
+              ],
             },
           ],
         ],
@@ -65,7 +76,7 @@ module.exports = () => {
                 src:
                   // Jest monorepo and multi project runner is not correctly determining
                   // the `cwd`: https://github.com/facebook/jest/issues/7359
-                  process.env.NODE_ENV !== 'test' ? './src' : paths.api.src,
+                  process.env.NODE_ENV !== 'test' ? './src' : rwjsPaths.api.src,
               },
             },
           ],
@@ -85,6 +96,7 @@ module.exports = () => {
               ],
             },
           ],
+          ['babel-plugin-graphql-tag'],
           [require('../dist/babelPlugins/babel-plugin-redwood-import-dir')],
         ],
       },
@@ -101,6 +113,12 @@ module.exports = () => {
                 version: CORE_JS_VERSION,
                 proposals: true,
               },
+              exclude: [
+                // Remove class-properties from preset-env, and include separately
+                // https://github.com/webpack/webpack/issues/9708
+                '@babel/plugin-proposal-class-properties',
+                '@babel/plugin-proposal-private-methods',
+              ],
             },
           ],
         ],
@@ -112,7 +130,7 @@ module.exports = () => {
                 src:
                   // Jest monorepo and multi project runner is not correctly determining
                   // the `cwd`: https://github.com/facebook/jest/issues/7359
-                  process.env.NODE_ENV !== 'test' ? './src' : paths.web.src,
+                  process.env.NODE_ENV !== 'test' ? './src' : rwjsPaths.web.src,
               },
             },
           ],
@@ -136,13 +154,46 @@ module.exports = () => {
                   path: 'graphql-tag',
                 },
                 {
-                  // import { mockGraphQLQuery, mockGraphQLMutation } from '@redwoodjs/testing'
-                  members: ['mockGraphQLQuery', 'mockGraphQLMutation'],
+                  // import { mockGraphQLQuery, mockGraphQLMutation, mockCurrentUser } from '@redwoodjs/testing'
+                  members: [
+                    'mockGraphQLQuery',
+                    'mockGraphQLMutation',
+                    'mockCurrentUser',
+                  ],
                   path: '@redwoodjs/testing',
                 },
               ],
             },
           ],
+          ['babel-plugin-graphql-tag'],
+          [
+            'inline-react-svg',
+            {
+              svgo: {
+                plugins: extendDefaultPlugins([
+                  {
+                    name: 'removeAttrs',
+                    params: { attrs: '(data-name)' },
+                  },
+                  {
+                    // @TODO confirm this is the right thing
+                    // On my projects, this was needed for backwards compatibility
+                    name: 'removeViewBox',
+                    active: false,
+                  },
+                  {
+                    // Otherwise having style="xxx" breaks
+                    name: 'convertStyleToAttrs',
+                  },
+                ]),
+              },
+            },
+          ],
+          // @MARK needed to enable ?? operator
+          // normally provided through preset-env detecting TARGET_BROWSER
+          // but webpack 4 has an issue with this
+          // see https://github.com/PaulLeCam/react-leaflet/issues/883
+          ['@babel/plugin-proposal-nullish-coalescing-operator'],
         ],
       },
       // ** Files ending in `Cell.[js,ts]` **
@@ -158,7 +209,7 @@ module.exports = () => {
           [
             require('../dist/babelPlugins/babel-plugin-redwood-routes-auto-loader'),
             {
-              project,
+              useStaticImports: process.env.__REDWOOD__PRERENDERING === '1',
             },
           ],
         ],

@@ -2,6 +2,7 @@ import type { default as GoTrue } from 'gotrue-js'
 import type { User } from 'gotrue-js'
 
 import type { AuthClient } from './index'
+
 export type GoTrueUser = User
 export type { GoTrue }
 

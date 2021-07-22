@@ -1,0 +1,45 @@
+name: Publish release candidate
+
+on:
+  push:
+    branches: ['release/**']
+    tags-ignore:
+      - v** # We don't want this to run on release
+
+jobs:
+  build:
+    if: github.repository == 'redwoodjs/redwood'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # Required because lerna uses tags to determine the version.
+
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --check-files
+
+      - name: Build
+        run: yarn build
+
+      - name: Run ESLint
+        run: yarn lint
+        env:
+          CI: true
+
+      - name: Run tests
+        run: yarn test
+        env:
+          CI: true
+
+      - name: Publish
+        run: |
+          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+          echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc
+          ./tasks/publish-rc
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}

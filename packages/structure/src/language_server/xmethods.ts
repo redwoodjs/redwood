@@ -1,4 +1,5 @@
 import { memo } from '../x/decorators'
+
 import { RWLanguageServer } from './RWLanguageServer'
 
 /**
@@ -12,7 +13,9 @@ export class XMethodsManager {
     const { connection } = server
     connection.onRequest('redwoodjs/x-getInfo', async (uri: string) => {
       const node = await server.getProject()?.findNode(uri)
-      if (!node) return undefined
+      if (!node) {
+        return undefined
+      }
       return await node.collectIDEInfo()
     })
     connection.onRequest(

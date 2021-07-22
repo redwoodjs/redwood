@@ -7,6 +7,7 @@ import {
   Position,
   WorkspaceChange,
 } from 'vscode-languageserver-types'
+
 import { RWError } from '../errors'
 import { CodeLensX, FileNode } from '../ide'
 import { iter } from '../x/Array'
@@ -18,9 +19,9 @@ import {
   LocationLike_toLocation,
   Location_fromNode,
 } from '../x/vscode-languageserver-types'
+
 import { RWProject } from './RWProject'
 import { RWRoute } from './RWRoute'
-import { rangeRight } from 'lodash'
 
 /**
  * one per Routes.js
@@ -39,14 +40,15 @@ export class RWRouter extends FileNode {
     // TODO: params
     const path = this.parent.pages.find((p) => p.filePath === filePath)?.route
       ?.path
-    if (path?.includes('{')) return
+    if (path?.includes('{')) {
+      return
+    }
     return path
   }
 
   /**
-   * the <Router> tag
+   * the `<Router>` tag
    */
-
   @lazy() private get jsxNode() {
     return this.sf
       .getDescendantsOfKind(tsm.SyntaxKind.JsxOpeningElement)
@@ -54,26 +56,54 @@ export class RWRouter extends FileNode {
   }
 
   /**
-   * One per <Route>
+   * One per `<Route>`
    */
-
   @lazy() get routes() {
     const self = this
+
     return iter(function* () {
-      if (!self.jsxNode) return
+      if (!self.jsxNode) {
+        return
+      }
       // TODO: make sure that they are nested within the <Router> tag
       // we are not checking it right now
+
+      const sets = self.sf
+        .getDescendantsOfKind(tsm.SyntaxKind.JsxElement)
+        .filter(
+          (x) => x.getOpeningElement().getTagNameNode().getText() === 'Set'
+        )
+
+      const prerenderSets = sets.filter((set) =>
+        set.getOpeningElement().getAttribute('prerender')
+      )
+
+      for (const set of prerenderSets) {
+        for (const x of set.getDescendantsOfKind(
+          tsm.SyntaxKind.JsxSelfClosingElement
+        )) {
+          const tagName = x.getTagNameNode().getText()
+          if (tagName === 'Route') {
+            x.insertAttribute(0, { name: 'prerender' })
+          }
+        }
+      }
+
       for (const x of self.sf.getDescendantsOfKind(
         tsm.SyntaxKind.JsxSelfClosingElement
       )) {
         const tagName = x.getTagNameNode().getText()
-        if (tagName === 'Route') yield new RWRoute(x, self)
+        if (tagName === 'Route') {
+          yield new RWRoute(x, self)
+        }
       }
     })
   }
+
   @lazy() private get numNotFoundPages(): number {
     return this.routes.filter((r) => r.isNotFound).length
   }
+
   *ideInfo() {
     if (this.jsxNode) {
       let location = Location_fromNode(this.jsxNode)
@@ -95,7 +125,9 @@ export class RWRouter extends FileNode {
   }
 
   @lazy() get quickFix_addNotFoundpage() {
-    if (!this.jsxNode) return undefined
+    if (!this.jsxNode) {
+      return undefined
+    }
     const change = new WorkspaceChange({ documentChanges: [] })
     let uri = URL_file(this.parent.defaultNotFoundPageFilePath)
     const p = this.parent.pages.find((p) => p.basenameNoExt === 'NotFoundPage')
@@ -140,7 +172,9 @@ export class RWRouter extends FileNode {
       return // stop checking for errors if the file doesn't exist
     }
 
-    if (!this.jsxNode) return
+    if (!this.jsxNode) {
+      return
+    }
 
     if (this.numNotFoundPages === 0) {
       const { uri, range } = LocationLike_toLocation(this.jsxNode)

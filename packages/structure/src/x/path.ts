@@ -10,7 +10,9 @@ export function directoryNameResolver(dirName: string): string | undefined {
   const pathNoExt = parts.join(sep)
   for (const ext of extensions) {
     const path = pathNoExt + ext
-    if (existsSync(path)) return path
+    if (existsSync(path)) {
+      return path
+    }
   }
 }
 
@@ -23,7 +25,9 @@ export function followsDirNameConvention(filePath: string): boolean {
 export function basenameNoExt(path: string): string {
   path = normalize(path)
   const parts = basename(path).split('.')
-  if (parts.length > 1) parts.pop()
+  if (parts.length > 1) {
+    parts.pop()
+  }
   return parts.join('.')
 }
 

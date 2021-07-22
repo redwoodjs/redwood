@@ -1,0 +1,21 @@
+{
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "api",
+      "web",
+      "packages/*"
+    ]
+  },
+  "devDependencies": {
+    "@redwoodjs/core": "0.35.2"
+  },
+  "eslintConfig": {
+    "extends": "@redwoodjs/eslint-config",
+    "root": true
+  },
+  "engines": {
+    "node": "14.x",
+    "yarn": "1.x"
+  }
+}

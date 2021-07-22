@@ -1,0 +1,246 @@
+#!/usr/bin/env node
+/* eslint-env node, es6*/
+
+const os = require('os')
+const path = require('path')
+
+const execa = require('execa')
+const fs = require('fs-extra')
+const yargs = require('yargs')
+
+// This script sets up a blank RedwoodJS app into a directory.
+// It uses the packages from the RedwoodJS framework (../packages).
+// So, if you're making changes to the framework,
+// you can use the e2e tests to verify your changes.
+//
+// The steps are composable, so that it can work for the GitHub Workflow, and
+// us contributors.
+//
+const makeDirectory = () => {
+  console.log('mkdir', REDWOOD_PROJECT_DIRECTORY)
+  fs.mkdirSync(REDWOOD_PROJECT_DIRECTORY, { recursive: true })
+  return REDWOOD_PROJECT_DIRECTORY
+}
+
+const buildRedwoodFramework = () => {
+  try {
+    execa.sync('yarn build:clean && yarn build:js', {
+      cwd: REDWOODJS_FRAMEWORK_PATH,
+      shell: true,
+      stdio: 'inherit',
+    })
+  } catch (e) {
+    console.error('Error: Could not build Redwood Framework')
+    console.error(e)
+    process.exit(1)
+  }
+}
+
+const createRedwoodJSApp = () => {
+  try {
+    execa.sync(
+      'yarn babel-node src/create-redwood-app.js',
+      [REDWOOD_PROJECT_DIRECTORY, '--no-yarn-install', '--typescript'],
+      {
+        cwd: path.join(REDWOODJS_FRAMEWORK_PATH, 'packages/create-redwood-app'),
+        shell: true,
+        stdio: 'inherit',
+      }
+    )
+  } catch (e) {
+    console.error('Error: Could not create Redwood Project')
+    console.error(e)
+    process.exit(1)
+  }
+}
+
+const addFrameworkDepsToProject = () => {
+  try {
+    execa.sync('yarn framework project:deps', {
+      cwd: REDWOODJS_FRAMEWORK_PATH,
+      shell: true,
+      stdio: 'inherit',
+      env: {
+        RWFW_PATH: REDWOODJS_FRAMEWORK_PATH,
+        RWJS_CWD: REDWOOD_PROJECT_DIRECTORY,
+      },
+    })
+  } catch (e) {
+    console.error(
+      'Error: Could not add Redwood Framework dependencies to project'
+    )
+    console.error(e)
+    process.exit(1)
+  }
+}
+
+const copyFrameworkPackages = () => {
+  try {
+    execa.sync('yarn framework project:copy', {
+      cwd: REDWOODJS_FRAMEWORK_PATH,
+      shell: true,
+      stdio: 'inherit',
+      env: {
+        RWFW_PATH: REDWOODJS_FRAMEWORK_PATH,
+        RWJS_CWD: REDWOOD_PROJECT_DIRECTORY,
+      },
+    })
+  } catch (e) {
+    console.error('Error: We could not copy Redwood Framework packages')
+    console.error(e)
+    process.exit(1)
+  }
+}
+
+const runYarnInstall = () => {
+  try {
+    execa.sync('yarn install', {
+      cwd: REDWOOD_PROJECT_DIRECTORY,
+      shell: true,
+      stdio: 'inherit',
+    })
+  } catch (e) {
+    console.error('Error: Could not run `yarn install`')
+    console.error(e)
+    process.exit(1)
+  }
+}
+
+const convertProjectToJavaScript = () => {
+  try {
+    execa.sync('yarn rw ts-to-js', {
+      cwd: REDWOOD_PROJECT_DIRECTORY,
+      shell: true,
+      stdio: 'inherit',
+    })
+  } catch (e) {
+    console.error('Could not convert the TypeScript app to JavaScript`')
+    console.error(e)
+    process.exit(1)
+  }
+}
+
+const setRedwoodSecureServices = () => {
+  console.log('Setting Secure RedwoodJS services...')
+  execa.sync(' echo "REDWOOD_SECURE_SERVICES=1" >> .env', {
+    cwd: REDWOOD_PROJECT_DIRECTORY,
+    shell: true,
+    stdio: 'inherit',
+  })
+}
+
+const runDevServerInBackground = () => {
+  console.log('Starting RedwoodJS dev server...')
+  execa.sync('yarn rw dev --no-generate --fwd="--open=false" &', {
+    cwd: REDWOOD_PROJECT_DIRECTORY,
+    shell: true,
+    stdio: 'inherit',
+  })
+}
+
+const runCypress = () => {
+  console.log('Starting Cypress...')
+  execa.sync(
+    'yarn cypress',
+    ['open', `--env RW_PATH=${REDWOOD_PROJECT_DIRECTORY}`],
+    {
+      cwd: path.join(REDWOODJS_FRAMEWORK_PATH, 'tasks/e2e'),
+      shell: true,
+      stdio: 'inherit',
+    }
+  )
+}
+
+const installTaskDeps = () => {
+  console.log('Installing dependencies for tasks/e2e')
+  execa.sync('yarn install', {
+    cwd: path.join(REDWOODJS_FRAMEWORK_PATH, 'tasks/e2e'),
+    shell: true,
+    stdio: 'inherit',
+  })
+}
+
+const initGit = () => {
+  console.log('Initializing Git')
+  execa.sync('git init --initial-branch main && git add .', {
+    cwd: REDWOOD_PROJECT_DIRECTORY,
+    shell: true,
+    stdio: 'inherit',
+  })
+  execa.sync('git commit -a --message=init', {
+    cwd: REDWOOD_PROJECT_DIRECTORY,
+    shell: true,
+    stdio: 'inherit',
+  })
+}
+
+const args = yargs
+  .option('create-project', { default: true, type: 'boolean', alias: 'create' })
+  .option('build-framework', { default: true, type: 'boolean', alias: 'build' })
+  .option('copy-framework', { default: true, type: 'boolean', alias: 'copy' })
+  .option('typescript', { default: false, type: 'boolean', alias: 'ts' })
+  .option('auto-start', { default: true, type: 'boolean', alias: 'start' })
+  .option('secure-services', {
+    default: true,
+    type: 'boolean',
+    alias: 'secure',
+  })
+  .scriptName('run-e2e')
+  .example('run-e2e')
+  .example('run-e2e /tmp/redwood-app --ts')
+  .help()
+  .strict().argv
+
+const REDWOODJS_FRAMEWORK_PATH = path.resolve(__dirname, '..')
+let REDWOOD_PROJECT_DIRECTORY =
+  args._?.[0] ||
+  path.join(
+    os.tmpdir(),
+    'redwood-e2e',
+    // ":" is problematic with paths
+    new Date().toISOString().split(':').join('-')
+  )
+
+console.log()
+console.log('-'.repeat(80))
+console.log()
+makeDirectory(REDWOOD_PROJECT_DIRECTORY)
+console.log()
+console.log('-'.repeat(80))
+
+let {
+  buildFramework,
+  copyFramework,
+  createProject,
+  typescript,
+  autoStart,
+  secureServices,
+} = args
+
+const tasks = [
+  buildFramework && buildRedwoodFramework,
+  createProject && createRedwoodJSApp,
+  copyFramework && addFrameworkDepsToProject,
+  copyFramework && runYarnInstall,
+  copyFramework && copyFrameworkPackages,
+  !typescript && convertProjectToJavaScript,
+  secureServices && setRedwoodSecureServices,
+  autoStart && runDevServerInBackground,
+  autoStart && installTaskDeps,
+  autoStart && initGit,
+  autoStart && runCypress,
+].filter(Boolean)
+
+for (const task of tasks) {
+  console.log()
+  task()
+  console.log()
+  console.log('-'.repeat(80))
+}
+
+process.on('SIGINT', () => {
+  console.log()
+  console.log(REDWOOD_PROJECT_DIRECTORY)
+  console.log('-'.repeat(80))
+  process.exit(0)
+})

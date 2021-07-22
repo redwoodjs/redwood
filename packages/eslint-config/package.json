@@ -1,24 +1,26 @@
 {
   "name": "@redwoodjs/eslint-config",
-  "version": "0.19.4",
+  "version": "0.35.2",
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@redwoodjs/eslint-plugin-redwood": "^0.19.4",
-    "@typescript-eslint/eslint-plugin": "^4.0.1",
-    "@typescript-eslint/parser": "^4.0.1",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^7.8.1",
-    "eslint-config-prettier": "^6.11.0",
-    "eslint-import-resolver-babel-module": "^5.1.2",
-    "eslint-plugin-babel": "^5.3.1",
-    "eslint-plugin-import": "^2.22.0",
-    "eslint-plugin-jest-dom": "^3.2.2",
-    "eslint-plugin-jsx-a11y": "^6.3.1",
-    "eslint-plugin-prettier": "^3.1.4",
-    "eslint-plugin-react": "^7.20.6",
-    "eslint-plugin-react-hooks": "^4.1.0",
-    "prettier": "^2.1.1"
+    "@typescript-eslint/eslint-plugin": "4.28.2",
+    "@typescript-eslint/parser": "4.28.2",
+    "babel-eslint": "10.1.0",
+    "eslint": "7.30.0",
+    "eslint-config-prettier": "8.3.0",
+    "eslint-import-resolver-babel-module": "5.3.1",
+    "eslint-plugin-babel": "5.3.1",
+    "eslint-plugin-import": "2.23.4",
+    "eslint-plugin-jest-dom": "3.9.0",
+    "eslint-plugin-jsx-a11y": "6.4.1",
+    "eslint-plugin-prettier": "3.4.0",
+    "eslint-plugin-react": "7.24.0",
+    "eslint-plugin-react-hooks": "4.2.0",
+    "prettier": "2.3.0"
   },
-  "gitHead": "c235e7d7186e5e258764699c0e0e1d5cc0fdd0b5"
+  "scripts": {
+    "build": "echo 'Nothing to build..'"
+  },
+  "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"
 }

@@ -1,21 +1,33 @@
 import fs from 'fs'
+import https from 'https'
 import path from 'path'
 
-import lodash from 'lodash/string'
-import camelcase from 'camelcase'
-import pascalcase from 'pascalcase'
-import pluralize from 'pluralize'
-import decamelize from 'decamelize'
-import { paramCase } from 'param-case'
+import * as babel from '@babel/core'
 import { getDMMF } from '@prisma/sdk'
-import { getPaths as getRedwoodPaths } from '@redwoodjs/internal'
+import camelcase from 'camelcase'
+import decamelize from 'decamelize'
 import execa from 'execa'
 import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
+import lodash from 'lodash/string'
+import { paramCase } from 'param-case'
+import pascalcase from 'pascalcase'
+import pluralize from 'pluralize'
 import { format } from 'prettier'
-import * as babel from '@babel/core'
+
+import {
+  getPaths as getRedwoodPaths,
+  getConfig as getRedwoodConfig,
+} from '@redwoodjs/internal'
 
 import c from './colors'
+
+/**
+ * Used to memoize results from `getSchema` so we don't have to go through
+ * the work of open the file and parsing it from scratch each time getSchema()
+ * is called with the same model name.
+ */
+const schemaMemo = {}
 
 export const asyncForEach = async (array, callback) => {
   for (let index = 0; index < array.length; index++) {
@@ -29,23 +41,37 @@ export const asyncForEach = async (array, callback) => {
  * entire schema is returned.
  */
 export const getSchema = async (name) => {
-  const schema = await getSchemaDefinitions()
-
   if (name) {
-    const model = schema.datamodel.models.find((model) => {
-      return model.name === name
-    })
+    if (!schemaMemo[name]) {
+      const schema = await getSchemaDefinitions()
+      const model = schema.datamodel.models.find((model) => {
+        return model.name === name
+      })
 
-    if (model) {
-      return model
-    } else {
-      throw new Error(
-        `No schema definition found for \`${name}\` in schema.prisma file`
-      )
+      if (model) {
+        // look for any fields that are enums and attach the possible enum values
+        // so we can put them in generated test files
+        model.fields.forEach((field) => {
+          const fieldEnum = schema.datamodel.enums.find((e) => {
+            return field.type === e.name
+          })
+          if (fieldEnum) {
+            field.enumValues = fieldEnum.values
+          }
+        })
+
+        // memoize based on the model name
+        schemaMemo[name] = model
+      } else {
+        throw new Error(
+          `No schema definition found for \`${name}\` in schema.prisma file`
+        )
+      }
     }
+    return schemaMemo[name]
+  } else {
+    return (await getSchemaDefinitions()).metadata.datamodel
   }
-
-  return schema.metadata.datamodel
 }
 
 /**
@@ -74,7 +100,7 @@ export const getEnum = async (name) => {
 }
 
 /*
- * Returns the DMMF defined by `prisma` resolving the relevant `shema.prisma` path.
+ * Returns the DMMF defined by `prisma` resolving the relevant `schema.prisma` path.
  */
 export const getSchemaDefinitions = async () => {
   const schemaPath = path.join(getPaths().api.db, 'schema.prisma')
@@ -201,6 +227,41 @@ export const writeFile = (
   task.title = `Successfully wrote file \`./${path.relative(base, target)}\``
 }
 
+export const saveRemoteFileToDisk = (
+  url,
+  localPath,
+  { overwriteExisting = false } = {}
+) => {
+  if (!overwriteExisting && fs.existsSync(localPath)) {
+    throw new Error(`${localPath} already exists.`)
+  }
+
+  const downloadPromise = new Promise((resolve, reject) =>
+    https.get(url, (response) => {
+      if (response.statusCode === 200) {
+        response.pipe(fs.createWriteStream(localPath))
+        resolve()
+      } else {
+        reject(
+          new Error(`${url} responded with status code ${response.statusCode}`)
+        )
+      }
+    })
+  )
+
+  return downloadPromise
+}
+
+export const getInstalledRedwoodVersion = () => {
+  try {
+    const packageJson = require('../../package.json')
+    return packageJson.version
+  } catch (e) {
+    console.error(c.error('Could not find installed redwood version'))
+    process.exit(1)
+  }
+}
+
 export const bytes = (contents) => Buffer.byteLength(contents, 'utf8')
 
 /**
@@ -212,7 +273,16 @@ export const getPaths = () => {
     return getRedwoodPaths()
   } catch (e) {
     console.error(c.error(e.message))
-    process.exit(0)
+    process.exit(1)
+  }
+}
+
+export const getConfig = () => {
+  try {
+    return getRedwoodConfig()
+  } catch (e) {
+    console.error(c.error(e.message))
+    process.exit(1)
   }
 }
 
@@ -296,11 +366,27 @@ export const deleteFilesTask = (files) => {
 
 /**
  * @param files - {[filepath]: contents}
+ * Deletes any empty directrories that are more than three levels deep below the base directory
+ * i.e. any directory below /web/src/components
  */
 export const cleanupEmptyDirsTask = (files) => {
   const { base } = getPaths()
-  const allDirs = Object.keys(files).map((file) => path.dirname(file))
-  const uniqueDirs = [...new Set(allDirs)]
+  const endDirs = Object.keys(files).map((file) => path.dirname(file))
+  const uniqueEndDirs = [...new Set(endDirs)]
+  // get the additional path directories not at the end of the path
+  const pathDirs = []
+  uniqueEndDirs.forEach((dir) => {
+    const relDir = path.relative(base, dir)
+    const splitDir = relDir.split(path.sep)
+    splitDir.pop()
+    while (splitDir.length > 3) {
+      const subDir = path.join(base, splitDir.join('/'))
+      pathDirs.push(subDir)
+      splitDir.pop()
+    }
+  })
+  const uniqueDirs = uniqueEndDirs.concat([...new Set(pathDirs)])
+
   return new Listr(
     uniqueDirs.map((dir) => {
       return {
@@ -320,21 +406,72 @@ export const cleanupEmptyDirsTask = (files) => {
   )
 }
 
+const wrapWithSet = (routesContent, layout, routes, newLineAndIndent) => {
+  const [_, indentOne, indentTwo] = routesContent.match(
+    /([ \t]*)<Router.*?>[^<]*[\r\n]+([ \t]+)/
+  ) || ['', 0, 2]
+  const oneLevelIndent = indentTwo.slice(0, indentTwo.length - indentOne.length)
+  const newRoutesWithExtraIndent = routes.map((route) => oneLevelIndent + route)
+  return [`<Set wrap={${layout}}>`, ...newRoutesWithExtraIndent, `</Set>`].join(
+    newLineAndIndent
+  )
+}
+
 /**
  * Update the project's routes file.
  */
-export const addRoutesToRouterTask = (routes) => {
+export const addRoutesToRouterTask = (routes, layout) => {
   const redwoodPaths = getPaths()
   const routesContent = readFile(redwoodPaths.web.routes).toString()
-  const newRoutesContent = routes.reverse().reduce((content, route) => {
-    if (content.includes(route)) {
-      return content
-    }
-    return content.replace(/<Router>(\s*)/, `<Router>$1${route}$1`)
-  }, routesContent)
-  writeFile(redwoodPaths.web.routes, newRoutesContent, {
-    overwriteExisting: true,
-  })
+  const newRoutes = routes.filter((route) => !routesContent.match(route))
+
+  if (newRoutes.length) {
+    const [routerStart, newLineAndIndent] =
+      routesContent.match(/\s*<Router.*?>(\s*)/)
+    const routesBatch = layout
+      ? wrapWithSet(routesContent, layout, newRoutes, newLineAndIndent)
+      : newRoutes.join(newLineAndIndent)
+    const newRoutesContent = routesContent.replace(
+      routerStart,
+      `${routerStart + routesBatch + newLineAndIndent}`
+    )
+    writeFile(redwoodPaths.web.routes, newRoutesContent, {
+      overwriteExisting: true,
+    })
+  }
+}
+
+export const addScaffoldImport = () => {
+  const appJsPath = getPaths().web.app
+  let appJsContents = readFile(appJsPath).toString()
+
+  if (appJsContents.match('./scaffold.css')) {
+    return 'Skipping scaffold style include'
+  }
+
+  appJsContents = appJsContents.replace(
+    "import Routes from 'src/Routes'\n",
+    "import Routes from 'src/Routes'\n\nimport './scaffold.css'"
+  )
+  writeFile(appJsPath, appJsContents, { overwriteExisting: true })
+
+  return 'Added scaffold import to App.{js,tsx}'
+}
+
+const removeEmtpySet = (routesContent, layout) => {
+  const setWithLayoutReg = new RegExp(
+    `\\s*<Set[^>]*wrap={${layout}}[^<]*>([^<]*)<\/Set>`
+  )
+  const [matchedSet, childContent] = routesContent.match(setWithLayoutReg) || []
+  if (!matchedSet) {
+    return routesContent
+  }
+
+  const child = childContent.replace(/\s/g, '')
+  if (child.length > 0) {
+    return routesContent
+  }
+  return routesContent.replace(setWithLayoutReg, '')
 }
 
 /**
@@ -342,7 +479,7 @@ export const addRoutesToRouterTask = (routes) => {
  *
  * @param {string[]} routes - Route names
  */
-export const removeRoutesFromRouterTask = (routes) => {
+export const removeRoutesFromRouterTask = (routes, layout) => {
   const redwoodPaths = getPaths()
   const routesContent = readFile(redwoodPaths.web.routes).toString()
   const newRoutesContent = routes.reduce((content, route) => {
@@ -350,7 +487,11 @@ export const removeRoutesFromRouterTask = (routes) => {
     return content.replace(matchRouteByName, '')
   }, routesContent)
 
-  writeFile(redwoodPaths.web.routes, newRoutesContent, {
+  const routesWithoutEmptySet = layout
+    ? removeEmtpySet(newRoutesContent, layout)
+    : newRoutesContent
+
+  writeFile(redwoodPaths.web.routes, routesWithoutEmptySet, {
     overwriteExisting: true,
   })
 }
@@ -389,8 +530,12 @@ export const runCommandTask = async (commands, { verbose }) => {
  * Extract default CLI args from an exported builder
  */
 export const getDefaultArgs = (builder) => {
-  return Object.entries(builder).reduce((agg, [k, v]) => {
-    agg[k] = v.default
-    return agg
-  }, {})
+  return Object.entries(builder).reduce(
+    (options, [optionName, optionConfig]) => {
+      // If a default is defined use it
+      options[optionName] = optionConfig.default
+      return options
+    },
+    {}
+  )
 }

@@ -1,13 +1,10 @@
-# TODO: Figure out how to make this workflow depend on the build, lint, test
-# workflow. Then we don't have to double down on these run tasks.
-
 name: Publish canaray packages to npm
 
 on:
   push:
     branches: [main]
     tags-ignore:
-      - v**
+      - v** # We don't want this to run on release
 
 jobs:
   build:
@@ -18,29 +15,33 @@ jobs:
         with:
           fetch-depth: 0 # Required because lerna uses tags to determine the version.
       - name: Setup node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
-          node-version: '12'
+          node-version: '14'
       - name: Print node and yarn versions
         run: |
           node --version
           yarn --version
       - name: Install dependencies
         run: yarn install --frozen-lockfile --check-files
+
+      - name: Build
+        run: yarn build
+
       - name: Run ESLint
         run: yarn lint
         env:
           CI: true
-      - name: Build
-        run: yarn build
+
       - name: Run tests
         run: yarn test
         env:
           CI: true
+
       - name: Publish to npm
         run: |
-          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-          echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc
-          ./tasks/publish-canary
+          git describe
+          echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > ./tasks/framework-tools/.npmrc
+          yarn framework publish:canary
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}

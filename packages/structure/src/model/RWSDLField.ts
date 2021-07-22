@@ -2,7 +2,6 @@ import {
   FieldDefinitionNode,
   ObjectTypeDefinitionNode,
 } from 'graphql/language/ast'
-import { URL_file } from '../x/URL'
 import {
   CodeAction,
   DiagnosticSeverity,
@@ -10,14 +9,17 @@ import {
   Position,
   WorkspaceChange,
 } from 'vscode-languageserver-types'
+
 import { RWError } from '../errors'
 import { BaseNode, Implementation } from '../ide'
 import { lazy } from '../x/decorators'
+import { URL_file } from '../x/URL'
 import {
   ExtendedDiagnostic,
   Location_fromNode,
   Position_fromTSMorphOffset,
 } from '../x/vscode-languageserver-types'
+
 import { RWSDL } from './RWSDL'
 import { RWServiceFunction } from './RWServiceFunction'
 

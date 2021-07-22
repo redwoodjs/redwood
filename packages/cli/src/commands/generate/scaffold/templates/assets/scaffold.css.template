@@ -6,9 +6,6 @@
 .rw-scaffold ::after,
 .rw-scaffold ::before {
   box-sizing: inherit;
-  border-width: 0;
-  border-style: solid;
-  border-color: #e2e8f0;
 }
 .rw-scaffold main {
   color: #4a5568;
@@ -68,6 +65,7 @@
   border-width: 1px;
   border-radius: 0.5rem;
   overflow: hidden;
+  width: 100%;
 }
 .rw-segment-header {
   background-color: #e2e8f0;
@@ -102,41 +100,16 @@
   color: #1a202c;
   text-decoration: underline;
 }
-.rw-flash-message {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin: 0 1rem;
-  padding: 1rem;
-  background: #e2e8f0;
-  border-radius: 0.25rem;
-}
-.rw-flash-message .rw-flash-message-dismiss {
-  font-size: 1.25rem;
+.rw-cell-error {
+  font-size: 90%;
   font-weight: 600;
-  line-height: 1;
-  margin-right: 0.25rem;
-  transform-origin: center;
-  transform: rotate(45deg);
-  cursor: pointer;
-}
-.rw-flash-message .rw-flash-message-dismiss:hover {
-  opacity: 0.7;
-}
-.rw-flash-message.rw-flash-success {
-  background: #48bb78;
-  color: #fff;
-}
-.rw-flash-message.rw-flash-error {
-  background: #e53e3e;
-  color: #fff;
 }
 .rw-form-wrapper {
   box-sizing: border-box;
   font-size: 0.875rem;
   margin-top: -1rem;
 }
-.rw-form-error-wrapper {
+.rw-cell-error, .rw-form-error-wrapper {
   padding: 1rem;
   background-color: #fff5f5;
   color: #c53030;
@@ -156,6 +129,7 @@
   list-style-position: inside;
 }
 .rw-button {
+  border: none;
   color: #718096;
   cursor: pointer;
   display: flex;
@@ -168,6 +142,7 @@
   letter-spacing: 0.025em;
   border-radius: 0.25rem;
   line-height: 2;
+  border: 0;
 }
 .rw-button:hover {
   background-color: #718096;
@@ -233,13 +208,15 @@
   width: 100%;
   padding: 0.5rem;
   border-width: 1px;
+  border-style: solid;
   border-color: #e2e8f0;
   color: #4a5568;
   border-radius: 0.25rem;
   outline: none;
 }
-.rw-input[type='checkbox'] {
-  width: initial;
+.rw-input[type='checkbox'],
+.rw-input[type='radio'] {
+  width: 1rem;
   margin-left: 0;
 }
 .rw-input:focus {
@@ -332,15 +309,21 @@
 .rw-text-center {
   text-align: center;
 }
-.rw-slide-up {
-  animation: slideUp 0.5s 1 ease;
-  animation-fill-mode: forwards;
-  overflow-y: hidden;
+.rw-login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24rem;
+  margin: 4rem auto;
+  flex-wrap: wrap;
 }
-@keyframes slideUp {
-  100% {
-    max-height: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-  }
+.rw-login-container .rw-form-wrapper {
+  width: 100%;
+}
+.rw-login-link {
+  margin-top: 1rem;
+  color: #4a5568;
+  font-size: 90%;
+  text-align: center;
+  flex-basis: 100%;
 }

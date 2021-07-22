@@ -1,10 +1,10 @@
-datasource DS {
+datasource db {
   provider = "mysql"
-  url = env("DB_HOST")
+  url      = env("DB_HOST")
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "rhel-openssl-1.0.x"]
 }
 
@@ -12,9 +12,9 @@ generator client {
 // migrations for them.
 
 model Post {
-  id       Int      @id @default(autoincrement())
+  id       Int       @id @default(autoincrement())
   title    String
-  slug     String @unique
+  slug     String    @unique
   author   String
   body     String
   image    String?
@@ -22,10 +22,10 @@ model Post {
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
+  id       Int           @id @default(autoincrement())
   name     String?
-  email    String  @unique
-  isAdmin  Boolean @default(false)
+  email    String        @unique
+  isAdmin  Boolean       @default(false)
   profiles UserProfile[]
 }
 
@@ -37,8 +37,8 @@ model UserProfile {
 }
 
 model Shoe {
-  id       Int    @id @default(autoincrement())
-  color    Color
+  id    Int   @id @default(autoincrement())
+  color Color
 }
 
 model Photo {

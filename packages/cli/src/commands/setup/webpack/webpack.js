@@ -1,10 +1,11 @@
 import fs from 'fs'
-import Listr from 'listr'
 import path from 'path'
-import chalk from 'chalk'
 
-import c from 'src/lib/colors'
-import { getPaths, writeFile } from 'src/lib'
+import chalk from 'chalk'
+import Listr from 'listr'
+
+import { getPaths, writeFile } from '../../../lib'
+import c from '../../../lib/colors'
 
 export const command = 'webpack'
 export const description =
@@ -54,6 +55,7 @@ export const handler = async ({ force }) => {
   try {
     await tasks.run()
   } catch (e) {
-    console.log(c.error(e.message))
+    console.error(c.error(e.message))
+    process.exit(e?.exitCode || 1)
   }
 }

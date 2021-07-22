@@ -1,14 +1,22 @@
-import path from 'path'
 import fs from 'fs'
+import path from 'path'
 
+import babelRequireHook from '@babel/register'
 import Listr from 'listr'
-import terminalLink from 'terminal-link'
 import VerboseRenderer from 'listr-verbose-renderer'
+import terminalLink from 'terminal-link'
 
-import { getPaths } from 'src/lib'
-import c from 'src/lib/colors'
+import { getPaths } from '../../lib'
+import c from '../../lib/colors'
 
-require('@babel/register')
+babelRequireHook({
+  extends: path.join(getPaths().api.base, '.babelrc.js'),
+  extensions: ['.js', '.ts', '.tsx', '.jsx'],
+  only: [getPaths().base],
+  ignore: ['node_modules'],
+  cache: false,
+})
+
 const { db } = require(path.join(getPaths().api.lib, 'db'))
 
 // sorts migrations by date, oldest first
@@ -17,8 +25,12 @@ const sortMigrations = (migrations) => {
     const aVersion = parseInt(Object.keys(a)[0])
     const bVersion = parseInt(Object.keys(b)[0])
 
-    if (aVersion > bVersion) return 1
-    if (aVersion < bVersion) return -1
+    if (aVersion > bVersion) {
+      return 1
+    }
+    if (aVersion < bVersion) {
+      return -1
+    }
     return 0
   })
 }
@@ -102,7 +114,7 @@ export const builder = (yargs) => {
   yargs.epilogue(
     `Also see the ${terminalLink(
       'Redwood CLI Reference',
-      'https://redwoodjs.com/reference/command-line-interface#datMigrate-up'
+      'https://redwoodjs.com/docs/cli-commands#up'
     )}`
   )
 }
@@ -155,9 +167,11 @@ export const handler = async () => {
 
   try {
     await tasks.run()
-  } finally {
-    await db.disconnect()
+    await db.$disconnect()
     report(counters)
-    process.exit(0)
+  } catch (e) {
+    await db.$disconnect()
+    report(counters)
+    process.exit(e?.exitCode || 1)
   }
 }

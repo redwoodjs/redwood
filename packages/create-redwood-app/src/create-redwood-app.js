@@ -6,16 +6,13 @@
 // Usage:
 // `$ yarn create redwood-app ./path/to/new-project`
 
-import fs from 'fs'
 import path from 'path'
 
-import decompress from 'decompress'
-import axios from 'axios'
-import Listr from 'listr'
-import execa from 'execa'
-import tmp from 'tmp'
-import checkNodeVersion from 'check-node-version'
 import chalk from 'chalk'
+import checkNodeVersion from 'check-node-version'
+import execa from 'execa'
+import fs from 'fs-extra'
+import Listr from 'listr'
 import yargs from 'yargs'
 
 import { name, version } from '../package'
@@ -46,34 +43,25 @@ const style = {
   green: chalk.green,
 }
 
-const RELEASE_URL =
-  'https://api.github.com/repos/redwoodjs/create-redwood-app/releases/latest'
-
-const latestReleaseZipFile = async () => {
-  const response = await axios.get(RELEASE_URL)
-  return response.data.zipball_url
-}
-
-const downloadFile = async (sourceUrl, targetFile) => {
-  const writer = fs.createWriteStream(targetFile)
-  const response = await axios.get(sourceUrl, {
-    responseType: 'stream',
-  })
-  response.data.pipe(writer)
-
-  return new Promise((resolve, reject) => {
-    writer.on('finish', resolve)
-    writer.on('error', reject)
-  })
-}
-
-const { _: args, 'yarn-install': yarnInstall } = yargs
+const {
+  _: args,
+  'yarn-install': yarnInstall,
+  typescript,
+} = yargs
   .scriptName(name)
   .usage('Usage: $0 <project directory> [option]')
   .example('$0 newapp')
   .option('yarn-install', {
     default: true,
-    describe: 'Skip yarn install with --no-yarn-install',
+    type: 'boolean',
+    describe:
+      'Skip yarn install with --no-yarn-install. Also skips version requirements check.',
+  })
+  .option('typescript', {
+    alias: 'ts',
+    default: false,
+    type: 'boolean',
+    describe: 'Generate a TypeScript project. JavaScript by default.',
   })
   .version(version)
   .strict().argv
@@ -98,54 +86,67 @@ if (!targetDir) {
 
 const newAppDir = path.resolve(process.cwd(), targetDir)
 const appDirExists = fs.existsSync(newAppDir)
-
-if (appDirExists && fs.readdirSync(newAppDir).length > 0) {
-  console.error(`'${newAppDir}' already exists and is not empty.`)
-  process.exit(1)
-}
+const templateDir = path.resolve(__dirname, '../template')
 
 const createProjectTasks = ({ newAppDir }) => {
-  const tmpDownloadPath = tmp.tmpNameSync({
-    prefix: 'redwood',
-    postfix: '.zip',
-  })
-
   return [
+    {
+      title: 'Checking node and yarn compatibility',
+      skip: () => {
+        if (yarnInstall === false) {
+          return 'Warning: skipping check on request'
+        }
+      },
+      task: () => {
+        return new Promise((resolve, reject) => {
+          const { engines } = require(path.join(templateDir, 'package.json'))
+
+          checkNodeVersion(engines, (_error, result) => {
+            if (result.isSatisfied) {
+              return resolve()
+            }
+
+            const logStatements = Object.keys(result.versions)
+              .filter((name) => !result.versions[name].isSatisfied)
+              .map((name) => {
+                const { version, wanted } = result.versions[name]
+                return style.error(
+                  `${name} ${wanted} required, but you have ${version}`
+                )
+              })
+            logStatements.push(
+              style.header(`\nVisit requirements documentation:`)
+            )
+            logStatements.push(
+              style.warning(
+                `https://learn.redwoodjs.com/docs/tutorial/prerequisites/#nodejs-and-yarn-versions\n`
+              )
+            )
+            return reject(new Error(logStatements.join('\n')))
+          })
+        })
+      },
+    },
     {
       title: `${appDirExists ? 'Using' : 'Creating'} directory '${newAppDir}'`,
       task: () => {
-        fs.mkdirSync(newAppDir, { recursive: true })
-      },
-    },
-    {
-      title: 'Downloading latest release',
-      task: async () => {
-        const url = await latestReleaseZipFile()
-        return downloadFile(url, tmpDownloadPath)
-      },
-    },
-    {
-      title: 'Extracting latest release',
-      task: () => decompress(tmpDownloadPath, newAppDir, { strip: 1 }),
-    },
-    {
-      title: 'Clean up',
-      task: () => {
-        try {
-          fs.unlinkSync(path.join(newAppDir, 'README.md'))
-          fs.renameSync(
-            path.join(newAppDir, 'README_APP.md'),
-            path.join(newAppDir, 'README.md')
-          )
-
-          fs.unlinkSync(path.join(newAppDir, '.gitignore'))
-          fs.renameSync(
-            path.join(newAppDir, '.gitignore.app'),
-            path.join(newAppDir, '.gitignore')
-          )
-        } catch (e) {
-          throw new Error('Could not move project files')
+        if (appDirExists) {
+          // make sure that the target directory is empty
+          if (fs.readdirSync(newAppDir).length > 0) {
+            console.error(
+              style.error(`\n'${newAppDir}' already exists and is not empty\n`)
+            )
+            process.exit(1)
+          }
+        } else {
+          fs.ensureDirSync(path.dirname(newAppDir))
         }
+        fs.copySync(templateDir, newAppDir)
+        // .gitignore is renamed here to force file inclusion during publishing
+        fs.rename(
+          path.join(newAppDir, 'gitignore.template'),
+          path.join(newAppDir, '.gitignore')
+        )
       },
     },
   ]
@@ -154,27 +155,7 @@ const createProjectTasks = ({ newAppDir }) => {
 const installNodeModulesTasks = ({ newAppDir }) => {
   return [
     {
-      title: 'Checking node and yarn compatibility',
-      task: () => {
-        return new Promise((resolve, reject) => {
-          const { engines } = require(path.join(newAppDir, 'package.json'))
-
-          checkNodeVersion(engines, (_error, result) => {
-            if (result.isSatisfied) {
-              return resolve()
-            }
-
-            const errors = Object.keys(result.versions).map((name) => {
-              const { version, wanted } = result.versions[name]
-              return `${name} ${wanted} required, but you have ${version}.`
-            })
-            return reject(new Error(errors.join('\n')))
-          })
-        })
-      },
-    },
-    {
-      title: 'Running `yarn install`... (This could take a while)',
+      title: "Running 'yarn install'... (This could take a while)",
       skip: () => {
         if (yarnInstall === false) {
           return 'skipped on request'
@@ -200,38 +181,91 @@ new Listr(
       title: 'Installing packages',
       task: () => new Listr(installNodeModulesTasks({ newAppDir })),
     },
+    {
+      title: 'Convert TypeScript files to JavaScript',
+      enabled: () => typescript === false && yarnInstall === true,
+      task: () => {
+        return execa('yarn rw ts-to-js', {
+          shell: true,
+          cwd: newAppDir,
+        })
+      },
+    },
+    {
+      title: 'Generating types',
+      skip: () => yarnInstall === false,
+      task: () => {
+        return execa('yarn rw-gen', {
+          shell: true,
+          cwd: newAppDir,
+        })
+      },
+    },
   ],
   { collapse: false, exitOnError: true }
 )
   .run()
   .then(() => {
-    [
+    // zOMG the semicolon below is a real Prettier thing. What??
+    // https://prettier.io/docs/en/rationale.html#semicolons
+    ;[
       '',
       style.success('Thanks for trying out Redwood!'),
       '',
-      `We've created your app in '${style.cmd(newAppDir)}'`,
-      `Enter the directory and run '${style.cmd("yarn rw dev")}' to start the development server.`,
+      ` ⚡️ ${style.redwood(
+        'Get up and running fast with this Quick Start guide'
+      )}: https://redwoodjs.com/docs/quick-start`,
       '',
-      style.header('Join the Community and Get Help'),
+      style.header('Join the Community'),
       '',
-      `${style.redwood(' ⮡  Join our Forums')}: https://community.redwoodjs.com`,
-      `${style.redwood(' ⮡  Join our Chat')}: https://discord.gg/redwoodjs`,
-      `${style.redwood(' ⮡  Read the Documentation')}: https://redwoodjs.com/docs`,
+      `${style.redwood(' ❖ Join our Forums')}: https://community.redwoodjs.com`,
+      `${style.redwood(' ❖ Join our Chat')}: https://discord.gg/redwoodjs`,
       '',
-      style.header('Keep updated'),
+      style.header('Get some help'),
       '',
-      `${style.redwood(' ⮡  Newsletter signup')}: https://www.redwoodjs.com`,
-      `${style.redwood(' ⮡  Follow on Twitter')}: https://twitter.com/redwoodjs`,
+      `${style.redwood(
+        ' ❖ Get started with the Tutorial'
+      )}: https://redwoodjs.com/tutorial`,
+      `${style.redwood(
+        ' ❖ Read the Documentation'
+      )}: https://redwoodjs.com/docs`,
+      '',
+      style.header('Stay updated'),
+      '',
+      `${style.redwood(
+        ' ❖ Sign up for our Newsletter'
+      )}: https://www.redwoodjs.com/newsletter`,
+      `${style.redwood(
+        ' ❖ Follow us on Twitter'
+      )}: https://twitter.com/redwoodjs`,
       '',
       `${style.header(`Become a Contributor`)} ${style.love('❤')}`,
       '',
-      `${style.redwood(' ⮡  Learn how to get started')}: https://redwoodjs.com/docs/contributing`,
-      `${style.redwood(' ⮡  Find a Good First Issue')}: https://redwoodjs.com/good-first-issue`,
-      ''
+      `${style.redwood(
+        ' ❖ Learn how to get started'
+      )}: https://redwoodjs.com/docs/contributing`,
+      `${style.redwood(
+        ' ❖ Find a Good First Issue'
+      )}: https://redwoodjs.com/good-first-issue`,
+      '',
+      `${style.header(`Fire it up!`)} 🚀`,
+      '',
+      `${style.redwood(` > ${style.green(`cd ${targetDir}`)}`)}`,
+      `${style.redwood(` > ${style.green(`yarn rw dev`)}`)}`,
+      '',
     ].map((item) => console.log(item))
   })
   .catch((e) => {
     console.log()
     console.log(e)
+    if (fs.existsSync(newAppDir)) {
+      console.log(
+        style.warning(`\nWarning: Directory `) +
+          style.cmd(`'${newAppDir}' `) +
+          style.warning(
+            `was created. However, the installation could not complete due to an error.\n`
+          )
+      )
+    }
     process.exit(1)
   })

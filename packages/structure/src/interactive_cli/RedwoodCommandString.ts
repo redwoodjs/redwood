@@ -1,4 +1,5 @@
 import yargs_parser from 'yargs-parser'
+
 import { lazy } from '../x/decorators'
 
 /**
@@ -18,8 +19,9 @@ export class RedwoodCommandString {
   constructor(public original: string) {
     let v = original
 
-    if (typeof v !== 'string')
+    if (typeof v !== 'string') {
       throw new Error('redwood command must be a string')
+    }
 
     if (v.trim().endsWith('...')) {
       this.isComplete = false
@@ -32,8 +34,12 @@ export class RedwoodCommandString {
       .trim()
       .split(' ')
       .map((s) => s.trim())
-    if (parts[0] === 'yarn') parts.shift()
-    if (parts[0] === 'redwood' || parts[0] === 'rw') parts.shift()
+    if (parts[0] === 'yarn') {
+      parts.shift()
+    }
+    if (parts[0] === 'redwood' || parts[0] === 'rw') {
+      parts.shift()
+    }
     this.processed = parts.join(' ')
   }
   @lazy() get parsed() {
@@ -42,10 +48,18 @@ export class RedwoodCommandString {
 
   @lazy() get isInterceptable() {
     let [a, b] = this.parsed._
-    if (a === 'g') a = 'generate'
-    if (a !== 'generate') return false
-    if (b === 'sdl') return false // <-- why?
-    if (b === 'scaffold') return false // <-- why?
+    if (a === 'g') {
+      a = 'generate'
+    }
+    if (a !== 'generate') {
+      return false
+    }
+    if (b === 'sdl') {
+      return false
+    } // <-- why?
+    if (b === 'scaffold') {
+      return false
+    } // <-- why?
     return true
   }
 }

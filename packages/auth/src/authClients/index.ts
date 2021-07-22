@@ -1,51 +1,80 @@
-import type { NetlifyIdentity } from './netlify'
-import type { Auth0, Auth0User } from './auth0'
-import type { GoTrue, GoTrueUser } from './goTrue'
-import type { MagicLink, MagicUser } from './magicLink'
-import type { Firebase } from './firebase'
-import type { Supabase, SupabaseUser } from './supabase'
-import type { Custom } from './custom'
-//
-import { netlify } from './netlify'
 import { auth0 } from './auth0'
-import { goTrue } from './goTrue'
-import { magicLink } from './magicLink'
-import { firebase } from './firebase'
-import { supabase } from './supabase'
+import type { Auth0, Auth0User } from './auth0'
+import { azureActiveDirectory } from './azureActiveDirectory'
+import type {
+  AzureActiveDirectory,
+  AzureActiveDirectoryUser,
+} from './azureActiveDirectory'
 import { custom } from './custom'
+import type { Custom } from './custom'
+import { dbAuth } from './dbAuth'
+import type { DbAuth } from './dbAuth'
+import { ethereum } from './ethereum'
+import type { Ethereum, EthereumUser } from './ethereum'
+import { firebase } from './firebase'
+import type { Firebase } from './firebase'
+import { goTrue } from './goTrue'
+import type { GoTrue, GoTrueUser } from './goTrue'
+import { magicLink } from './magicLink'
+import type { MagicLink, MagicUser } from './magicLink'
+import { netlify } from './netlify'
+import type { NetlifyIdentity } from './netlify'
+import { nhost } from './nhost'
+import type { Nhost, NhostUser } from './nhost'
+import { supabase } from './supabase'
+import type { Supabase, SupabaseUser } from './supabase'
 
 const typesToClients = {
   netlify,
   auth0,
+  azureActiveDirectory,
+  dbAuth,
   goTrue,
   magicLink,
   firebase,
   supabase,
+  ethereum,
+  nhost,
   /** Don't we support your auth client? No problem, define your own the `custom` type! */
   custom,
 }
 
 export type SupportedAuthClients =
   | Auth0
+  | AzureActiveDirectory
+  | DbAuth
   | GoTrue
   | NetlifyIdentity
   | MagicLink
   | Firebase
   | Supabase
+  | Ethereum
+  | Nhost
   | Custom
 
 export type SupportedAuthTypes = keyof typeof typesToClients
 
 export type { Auth0User }
+export type { AzureActiveDirectoryUser }
+export type { DbAuth }
 export type { GoTrueUser }
 export type { MagicUser }
 export type { SupabaseUser }
-export type SupportedUserMetadata = Auth0User | GoTrueUser | MagicUser | SupabaseUser
+export type { EthereumUser }
+export type { NhostUser }
+export type SupportedUserMetadata =
+  | Auth0User
+  | AzureActiveDirectoryUser
+  | GoTrueUser
+  | MagicUser
+  | SupabaseUser
+  | EthereumUser
+  | NhostUser
 
 export interface AuthClient {
   restoreAuthState?(): void | Promise<any>
   login(options?: any): Promise<any>
-  logout(options?: any): void | Promise<void>
+  logout(options?: any): void | Promise<any>
   signup(options?: any): void | Promise<any>
   getToken(): Promise<null | string>
   /** The user's data from the AuthProvider */

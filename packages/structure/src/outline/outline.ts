@@ -205,7 +205,9 @@ function _schema(project: RWProject): TreeItem2 {
     ...resourceUriAndCommandFor(project.pathHelper.api.dbSchema),
     async children() {
       const dmmf = await project.prismaDMMF()
-      if (!dmmf) return []
+      if (!dmmf) {
+        return []
+      }
       const models = dmmf.datamodel.models.map((model) => {
         return {
           label: model.name,

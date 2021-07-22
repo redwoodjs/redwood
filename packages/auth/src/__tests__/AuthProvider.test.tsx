@@ -1,15 +1,17 @@
 require('whatwg-fetch')
 
+import { useEffect, useState } from 'react'
+
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
-import { setupServer } from 'msw/node'
 import { graphql } from 'msw'
+import { setupServer } from 'msw/node'
 
-import { useAuth } from '../useAuth'
-import { AuthProvider } from '../AuthProvider'
 import type { AuthClient } from '../authClients'
+import { AuthProvider } from '../AuthProvider'
+import { useAuth } from '../useAuth'
 
-let CURRENT_USER_DATA = {
+let CURRENT_USER_DATA: { name: string; email: string; roles?: string[] } = {
   name: 'Peter Pistorius',
   email: 'nospam@example.net',
 }
@@ -43,6 +45,7 @@ const AuthConsumer = () => {
     isAuthenticated,
     logOut,
     logIn,
+    getToken,
     userMetadata,
     currentUser,
     reauthenticate,
@@ -50,6 +53,16 @@ const AuthConsumer = () => {
     hasRole,
     error,
   } = useAuth()
+
+  const [authToken, setAuthToken] = useState(null)
+
+  useEffect(() => {
+    const retrieveToken = async () => {
+      const token = await getToken()
+      setAuthToken(token)
+    }
+    retrieveToken()
+  }, [getToken])
 
   if (loading) {
     return <>Loading...</>
@@ -72,6 +85,7 @@ const AuthConsumer = () => {
       {isAuthenticated && (
         <>
           <p>userMetadata: {JSON.stringify(userMetadata)}</p>
+          <p>authToken: {authToken}</p>
           <p>
             currentUser:{' '}
             {(currentUser && JSON.stringify(currentUser)) ||
@@ -95,11 +109,12 @@ const AuthConsumer = () => {
 /**
  * A logged out user can login, view their personal account information and logout.
  */
-test('Authentication flow (logged out -> login -> logged in -> logout) works as expected', async (done) => {
+test('Authentication flow (logged out -> login -> logged in -> logout) works as expected', async () => {
   const mockAuthClient: AuthClient = {
     login: async () => {
       return true
     },
+    signup: async () => {},
     logout: async () => {},
     getToken: async () => 'hunter2',
     getUserMetadata: jest.fn(async () => {
@@ -144,19 +159,19 @@ test('Authentication flow (logged out -> login -> logged in -> logout) works as 
       'currentUser: {"name":"Peter Pistorius","email":"nospam@example.net"}'
     )
   ).toBeInTheDocument()
+  expect(screen.getByText('authToken: hunter2')).toBeInTheDocument()
 
   // Log out
   fireEvent.click(screen.getByText('Log Out'))
   await waitFor(() => screen.getByText('Log In'))
-
-  done()
 })
 
-test('Fetching the current user can be skipped', async (done) => {
+test('Fetching the current user can be skipped', async () => {
   const mockAuthClient: AuthClient = {
     login: async () => {
       return true
     },
+    signup: async () => {},
     logout: async () => {},
     getToken: async () => 'hunter2',
     getUserMetadata: jest.fn(async () => {
@@ -195,17 +210,17 @@ test('Fetching the current user can be skipped', async (done) => {
   // Log out
   fireEvent.click(screen.getByText('Log Out'))
   await waitFor(() => screen.getByText('Log In'))
-  done()
 })
 
 /**
  * This is especially helpful if you want to update the currentUser state.
  */
-test('A user can be reauthenticated to update the "auth state"', async (done) => {
+test('A user can be reauthenticated to update the "auth state"', async () => {
   const mockAuthClient: AuthClient = {
     login: async () => {
       return true
     },
+    signup: async () => {},
     logout: async () => {},
     getToken: async () => 'hunter2',
     getUserMetadata: jest.fn(async () => {
@@ -252,11 +267,9 @@ test('A user can be reauthenticated to update the "auth state"', async (done) =>
       'currentUser: {"name":"Rambo","email":"nospam@example.net"}'
     )
   )
-
-  done()
 })
 
-test('When the current user cannot be fetched the user is not authenticated', async (done) => {
+test('When the current user cannot be fetched the user is not authenticated', async () => {
   server.use(
     graphql.query('__REDWOOD__AUTH_GET_CURRENT_USER', (_req, res, ctx) => {
       return res(ctx.status(404))
@@ -267,6 +280,7 @@ test('When the current user cannot be fetched the user is not authenticated', as
     login: async () => {
       return true
     },
+    signup: async () => {},
     logout: async () => {},
     getToken: async () => 'hunter2',
     getUserMetadata: jest.fn(async () => {
@@ -288,20 +302,19 @@ test('When the current user cannot be fetched the user is not authenticated', as
   expect(screen.getByText('Loading...')).toBeInTheDocument()
 
   await waitFor(() =>
-    screen.getByText('Could not fetch current user: OK (404)')
+    screen.getByText('Could not fetch current user: Not Found (404)')
   )
-
-  done()
 })
 
 /**
  * Check assigned role access
  */
-test('Authenticated user has assigned role access as expected', async (done) => {
+test('Authenticated user has assigned role access as expected', async () => {
   const mockAuthClient: AuthClient = {
     login: async () => {
       return true
     },
+    signup: async () => {},
     logout: async () => {},
     getToken: async () => 'hunter2',
     getUserMetadata: jest.fn(async () => {
@@ -357,14 +370,12 @@ test('Authenticated user has assigned role access as expected', async (done) => 
   // Log out
   fireEvent.click(screen.getByText('Log Out'))
   await waitFor(() => screen.getByText('Log In'))
-
-  done()
 })
 
 /**
  * Check unassigned role access
  */
-test('Authenticated user has not been assigned role access as expected', async (done) => {
+test('Authenticated user has not been assigned role access as expected', async () => {
   const mockAuthClient: AuthClient = {
     login: async () => {
       return true
@@ -424,14 +435,12 @@ test('Authenticated user has not been assigned role access as expected', async (
   // Log out
   fireEvent.click(screen.getByText('Log Out'))
   await waitFor(() => screen.getByText('Log In'))
-
-  done()
 })
 
 /**
  * Check some unassigned role access
  */
-test('Authenticated user has not been assigned some role access but not others as expected', async (done) => {
+test('Authenticated user has not been assigned some role access but not others as expected', async () => {
   const mockAuthClient: AuthClient = {
     login: async () => {
       return true
@@ -491,14 +500,12 @@ test('Authenticated user has not been assigned some role access but not others a
   // Log out
   fireEvent.click(screen.getByText('Log Out'))
   await waitFor(() => screen.getByText('Log In'))
-
-  done()
 })
 
 /**
  * Check assigned role access when specified as single array element
  */
-test('Authenticated user has assigned role access as expected', async (done) => {
+test('Authenticated user has assigned role access as expected', async () => {
   const mockAuthClient: AuthClient = {
     login: async () => {
       return true
@@ -557,14 +564,12 @@ test('Authenticated user has assigned role access as expected', async (done) => 
   // Log out
   fireEvent.click(screen.getByText('Log Out'))
   await waitFor(() => screen.getByText('Log In'))
-
-  done()
 })
 
 /**
  * Check assigned role access when specified as array element
  */
-test('Authenticated user has assigned role access as expected', async (done) => {
+test('Authenticated user has assigned role access as expected', async () => {
   const mockAuthClient: AuthClient = {
     login: async () => {
       return true
@@ -623,14 +628,12 @@ test('Authenticated user has assigned role access as expected', async (done) => 
   // Log out
   fireEvent.click(screen.getByText('Log Out'))
   await waitFor(() => screen.getByText('Log In'))
-
-  done()
 })
 
 /**
  * Check if assigned one of the roles in an array
  */
-test('Authenticated user has assigned role access as expected', async (done) => {
+test('Authenticated user has assigned role access as expected', async () => {
   const mockAuthClient: AuthClient = {
     login: async () => {
       return true
@@ -689,14 +692,12 @@ test('Authenticated user has assigned role access as expected', async (done) => 
   // Log out
   fireEvent.click(screen.getByText('Log Out'))
   await waitFor(() => screen.getByText('Log In'))
-
-  done()
 })
 
 /**
  * Check if not assigned any of the roles in an array
  */
-test('Authenticated user has assigned role access as expected', async (done) => {
+test('Authenticated user has assigned role access as expected', async () => {
   const mockAuthClient: AuthClient = {
     login: async () => {
       return true
@@ -756,6 +757,4 @@ test('Authenticated user has assigned role access as expected', async (done) => 
   // Log out
   fireEvent.click(screen.getByText('Log Out'))
   await waitFor(() => screen.getByText('Log In'))
-
-  done()
 })

@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth",
-  "version": "0.19.4",
+  "version": "0.35.2",
   "files": [
     "dist"
   ],
@@ -8,29 +8,19 @@
   "types": "./dist/index.d.ts",
   "license": "MIT",
   "devDependencies": {
-    "@auth0/auth0-spa-js": "^1.7.0",
-    "@supabase/supabase-js": "^0.36.4",
-    "@types/netlify-identity-widget": "^1.4.1",
-    "@types/react": "16.9.38",
-    "firebase": "^7.14.5",
-    "firebase-admin": "^9.1.1",
-    "gotrue-js": "git://github.com/netlify/gotrue-js.git#28df09cfcac505feadcb1719714d2a9507cf68eb",
-    "magic-sdk": "^2.5.0",
+    "@auth0/auth0-spa-js": "1.16.1",
+    "@supabase/supabase-js": "1.18.0",
+    "@types/netlify-identity-widget": "1.9.2",
+    "@types/react": "17.0.14",
+    "firebase": "8.7.0",
+    "firebase-admin": "9.10.0",
+    "gotrue-js": "0.9.29",
+    "magic-sdk": "4.3.0",
+    "msal": "1.4.11",
     "netlify-identity-widget": "1.9.1",
-    "react": "^16.13.1"
+    "nhost-js-sdk": "3.1.0",
+    "react": "17.0.2"
   },
-  "bundlesize": [
-    {
-      "path": "./dist/AuthProvider.js",
-      "maxSize": "10 kB",
-      "compression": "none"
-    },
-    {
-      "path": "./dist/authClients/*.js",
-      "maxSize": "5 kB",
-      "compression": "none"
-    }
-  ],
   "scripts": {
     "build": "yarn build:js && yarn build:types",
     "prepublishOnly": "yarn cross-env NODE_ENV=production yarn build",
@@ -40,5 +30,5 @@
     "test": "jest",
     "test:watch": "yarn test --watch"
   },
-  "gitHead": "c235e7d7186e5e258764699c0e0e1d5cc0fdd0b5"
+  "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"
 }

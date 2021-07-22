@@ -1,17 +1,17 @@
 global.__dirname = __dirname
 jest.mock('fs')
-jest.mock('src/lib', () => {
+jest.mock('../../../../lib', () => {
   return {
-    ...jest.requireActual('src/lib'),
+    ...jest.requireActual('../../../../lib'),
     generateTemplate: () => '',
   }
 })
 
 import fs from 'fs'
 
-import 'src/lib/test'
-import { getPaths } from 'src/lib'
+import '../../../../lib/test'
 
+import { getPaths } from '../../../../lib'
 import { files } from '../../../generate/page/page'
 import { tasks } from '../page'
 
@@ -40,6 +40,30 @@ test('destroys page files', async () => {
 
   return t._tasks[0].run().then(() => {
     const generatedFiles = Object.keys(files({ name: 'About' }))
+    expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
+    generatedFiles.forEach((f) => expect(unlinkSpy).toHaveBeenCalledWith(f))
+  })
+})
+
+test('destroys page files with stories and tests', async () => {
+  const fileOptions = { name: 'About', stories: true, tests: true }
+  fs.__setMockFiles({
+    ...files(fileOptions),
+    [getPaths().web.routes]: [
+      '<Routes>',
+      '  <Route path="/about" page={AboutPage} name="about" />',
+      '  <Route path="/" page={HomePage} name="home" />',
+      '  <Route notfound page={NotFoundPage} />',
+      '</Routes>',
+    ].join('\n'),
+  })
+
+  const unlinkSpy = jest.spyOn(fs, 'unlinkSync')
+  const t = tasks(fileOptions)
+  t.setRenderer('silent')
+
+  return t._tasks[0].run().then(() => {
+    const generatedFiles = Object.keys(files(fileOptions))
     expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
     generatedFiles.forEach((f) => expect(unlinkSpy).toHaveBeenCalledWith(f))
   })

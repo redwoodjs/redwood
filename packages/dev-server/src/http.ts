@@ -1,7 +1,7 @@
-import type { Response, Request } from 'express'
-import express from 'express'
-import morgan from 'morgan'
 import bodyParser from 'body-parser'
+import express from 'express'
+import type { Response, Request } from 'express'
+import morgan from 'morgan'
 
 export interface Lambdas {
   [path: string]: any
@@ -22,8 +22,8 @@ export const server = ({
       type: ['text/*', 'application/json', 'multipart/form-data'],
     })
   )
-  app.use(bodyParser.raw({ type: '*/*' }))
-  app.use(morgan('dev'))
+  app.use(bodyParser.raw({ type: '*/*', limit: process.env.BODY_PARSER_LIMIT }))
+  app.use(morgan<Request, Response>('dev'))
 
   app.all('/', (_, res) => {
     return res.send(`
@@ -31,7 +31,7 @@ export const server = ({
       <ol>
         ${Object.keys(LAMBDA_FUNCTIONS)
           .sort()
-          .map((name) => `<li><a href="/${name}">/${name}</a></li>`)
+          .map((name) => `<li><a href="${name}">${name}</a></li>`)
           .join('')}
       </ol>
     `)

@@ -1,35 +1,33 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React from 'react'
+
 // Bypass the `main` field in `package.json` because we alias `@redwoodjs/router`
 // for jest and Storybook. Not doing so would cause an infinite loop.
-// See: ./packages/core/config/jest.config.web.js
-// @ts-expect-error - We do some magic here and this is expected.
-import { Private, Route } from '@redwoodjs/router/dist/index'
-// @ts-expect-error - We do some magic here and this is expected.
+// See: ./packages/core/config/src/configs/browser/jest.createConfig.ts
+// @ts-ignore
+import { isRoute } from '@redwoodjs/router/dist/router'
+import { flattenAll, replaceParams } from '@redwoodjs/router/dist/util'
+// @ts-ignore
 export * from '@redwoodjs/router/dist/index'
 
 export const routes: { [routeName: string]: () => string } = {}
-
-const getPrivateRoutes = (children: React.ReactNode) =>
-  (React.Children.toArray(children) as React.ReactElement[])
-    .filter((child) => child.type === Private)
-    .map((child) => child.props.children)
-    .flat(Infinity)
 
 /**
  * We overwrite the default `Router` export.
  * It populates the `routes.<pagename>()` utility object.
  */
 export const Router: React.FunctionComponent = ({ children }) => {
-  // get all children from <Private> blocks.
-  const privateRoutes = getPrivateRoutes(children)
+  const flatChildArray = flattenAll(children)
 
-  const normalRoutes = (React.Children.toArray(
-    children
-  ) as React.ReactElement[]).filter((child) => child.type === Route)
+  flatChildArray.forEach((child) => {
+    if (isRoute(child)) {
+      const { name, path } = child.props
 
-  for (const child of [...privateRoutes, ...normalRoutes]) {
-    const { name } = child.props
-    routes[name] = () => name
-  }
+      if (name && path) {
+        routes[name] = (args = {}) => replaceParams(path, args)
+      }
+    }
+  })
+
   return <></>
 }

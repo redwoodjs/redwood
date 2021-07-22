@@ -1,52 +1,40 @@
 {
   "private": true,
   "license": "MIT",
+  "npmClient": "yarn",
+  "useWorkspaces": true,
   "workspaces": [
     "packages/*"
   ],
   "devDependencies": {
-    "@babel/cli": "^7.11.6",
-    "@babel/core": "^7.11.6",
-    "@babel/node": "^7.10.5",
-    "@babel/plugin-proposal-class-properties": "^7.10.4",
-    "@babel/plugin-proposal-decorators": "^7.10.5",
-    "@babel/plugin-transform-runtime": "^7.11.5",
-    "@babel/preset-env": "^7.11.5",
-    "@babel/preset-react": "^7.10.4",
-    "@babel/preset-typescript": "^7.10.4",
-    "@babel/runtime-corejs3": "^7.11.2",
-    "core-js": "3.6.5",
-    "@testing-library/jest-dom": "5.11.4",
-    "@testing-library/react": "11.0.4",
-    "@testing-library/user-event": "^12.0.11",
-    "@types/jest": "^26.0.3",
-    "babel-jest": "^26.1.0",
-    "babel-plugin-auto-import": "^1.1.0",
-    "babel-plugin-module-resolver": "^4.0.0",
-    "babel-plugin-remove-code": "^0.0.6",
-    "bundlesize": "^0.18.0",
-    "cp-cli": "^2.0.0",
-    "cross-env": "^7.0.2",
-    "jest": "^26.1.0",
-    "lerna": "^3.20.2",
-    "msw": "0.21.2",
-    "nodemon": "^2.0.2",
-    "rimraf": "^3.0.2",
-    "typescript": "^4.0.2",
-    "whatwg-fetch": "3.4.1"
+    "npm-packlist": "2.2.2",
+    "typescript-transform-paths": "3.0.2"
   },
   "resolutions": {
-    "@types/react": "16.9.38"
-  },
-  "eslintConfig": {
-    "extends": "@redwoodjs/eslint-config"
+    "@types/react": "17.0.14",
+    "prop-types": "15.7.2",
+    "react-dom": "17.0.2",
+    "react": "17.0.2",
+    "typescript": "4.3.5",
+    "vscode-languageserver-protocol": "3.15.3",
+    "vscode-languageserver-types": "3.15.1",
+    "vscode-languageserver": "6.1.1",
+    "vscode-languageserver-textdocument": "1.0.1"
   },
   "scripts": {
-    "build": "tsc --build --verbose && lerna run build:js",
-    "build:clean": "rimraf ./packages/**/dist",
-    "build:watch": "tsc --build && lerna run build:watch --parallel",
-    "test": "lerna run test --stream -- --colors --maxWorkers=4",
-    "lint": "eslint packages",
-    "lint:fix": "eslint --fix packages"
+    "framework": "yarn --cwd ./tasks/framework-tools",
+    "build": "yarn framework build",
+    "build:js": "yarn framework build:js",
+    "build:types": "yarn framework build:types",
+    "build:clean": "yarn clean:prisma && yarn framework build:clean",
+    "build:watch": "yarn framework build:watch",
+    "test": "yarn framework test",
+    "clean:prisma": "rimraf node_modules/.prisma/client && node node_modules/@prisma/client/scripts/postinstall.js",
+    "lint": "yarn framework lint",
+    "lint:fix": "yarn framework lint:fix",
+
+    "postinstall": "yarn framework install",
+    "build:link": "node ./tasks/build-and-copy",
+    "build:test-project": "node ./tasks/test-project/test-project"
   }
 }

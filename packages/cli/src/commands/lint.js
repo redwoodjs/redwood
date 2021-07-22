@@ -1,7 +1,9 @@
+import fs from 'fs'
+
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
-import { getPaths } from 'src/lib'
+import { getPaths } from '../lib'
 
 export const command = 'lint'
 export const description = 'Lint your files'
@@ -21,9 +23,17 @@ export const builder = (yargs) => {
 }
 
 export const handler = ({ fix }) => {
-  execa('yarn eslint', [fix && '--fix', 'web/src', 'api/src'].filter(Boolean), {
-    cwd: getPaths().base,
-    shell: true,
-    stdio: 'inherit',
-  })
+  execa(
+    'yarn eslint',
+    [
+      fix && '--fix',
+      fs.existsSync(getPaths().web.src) && 'web/src',
+      fs.existsSync(getPaths().api.src) && 'api/src',
+    ].filter(Boolean),
+    {
+      cwd: getPaths().base,
+      shell: true,
+      stdio: 'inherit',
+    }
+  )
 }

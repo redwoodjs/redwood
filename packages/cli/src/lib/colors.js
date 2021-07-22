@@ -10,11 +10,12 @@ import chalk from 'chalk'
  *
  * - packages/cli/src/lib/colors.js (this file)
  * - packages/create-redwood-app/src/create-redwood-app.js
- *
  */
 export default {
   error: chalk.bold.red,
   warning: chalk.keyword('orange'),
   green: chalk.green,
   info: chalk.grey,
+  bold: chalk.bold,
+  underline: chalk.underline,
 }

@@ -1,4 +1,5 @@
 import { ExecuteCommandOptions } from 'vscode-languageserver'
+
 import { command_builder } from '../interactive_cli/command_builder'
 import { redwood_gen_dry_run as dry_run } from '../interactive_cli/dry_run'
 import { RedwoodCommandString } from '../interactive_cli/RedwoodCommandString'
@@ -10,6 +11,7 @@ import {
   FileSet_fromTextDocuments,
   WorkspaceEdit_fromFileSet,
 } from '../x/vscode-languageserver-types'
+
 import { RWLanguageServer } from './RWLanguageServer'
 
 export const redwoodjs_commands = {
@@ -40,15 +42,12 @@ export class CommandsManager {
 
   // --- start command implementations
   private async command__cli(cmdString?: string, cwd?: string) {
-    const {
-      vscodeWindowMethods,
-      host,
-      projectRoot,
-      connection,
-      documents,
-    } = this.server
+    const { vscodeWindowMethods, host, projectRoot, connection, documents } =
+      this.server
     cwd = cwd ?? projectRoot
-    if (!cwd) return // we need a cwd to run the CLI
+    if (!cwd) {
+      return
+    } // we need a cwd to run the CLI
     // parse the cmd. this will do some checks and throw
     let cmd = new RedwoodCommandString(cmdString ?? '...')
 
@@ -71,7 +70,9 @@ export class CommandsManager {
       // we have a convenience wrapper to access it
       const ui = new VSCodeWindowUI(vscodeWindowMethods)
       const cmd2 = await command_builder({ cmd, project, ui })
-      if (!cmd2) return // user cancelled the interactive process
+      if (!cmd2) {
+        return
+      } // user cancelled the interactive process
       cmd = cmd2
     }
     // run the command
@@ -86,7 +87,9 @@ export class CommandsManager {
         fileOverrides,
       })
       const edit = WorkspaceEdit_fromFileSet(files, (f) => {
-        if (!host.existsSync(URL_toFile(f))) return undefined
+        if (!host.existsSync(URL_toFile(f))) {
+          return undefined
+        }
         return host.readFileSync(URL_toFile(f))
       })
       vscodeWindowMethods.showInformationMessage(stdout)

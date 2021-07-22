@@ -20,7 +20,7 @@ export const handler = async () => {
       Binaries: ['Node', 'Yarn'],
       Browsers: ['Chrome', 'Edge', 'Firefox', 'Safari'],
       // yarn workspaces not supported :-/
-      npmPackages: ['@redwoodjs/core'],
+      npmPackages: '@redwoodjs/*',
       Databases: ['SQLite'],
     })
     console.log(output)

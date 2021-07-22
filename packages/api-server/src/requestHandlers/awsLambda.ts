@@ -1,4 +1,8 @@
-import type { APIGatewayProxyResult, APIGatewayProxyEvent } from 'aws-lambda'
+import type {
+  APIGatewayProxyResult,
+  APIGatewayProxyEvent,
+  Handler,
+} from 'aws-lambda'
 import type { Response, Request } from 'express'
 import qs from 'qs'
 
@@ -54,7 +58,7 @@ const expressResponseForLambdaResult = (
         const { message } = b.errors[0]
         const e = new Error(message)
         e.stack = ''
-        handleError(e).then(console.log)
+        handleError(e).then(console.error)
       }
     } catch (e) {
       // do nothing
@@ -82,38 +86,28 @@ const expressResponseForLambdaError = (
 export const requestHandler = async (
   req: Request,
   res: Response,
-  lambdaFunction: any
+  handler: Handler
 ) => {
-  const { routeName } = req.params
-  const { handler } = lambdaFunction
-
-  // TODO: Move this to http.
-  if (typeof handler !== 'function') {
-    const errorMessage = `"${routeName}" does not export a function named "handler"`
-    console.error(errorMessage)
-    res.status(500).send(errorMessage)
-  }
-
   // We take the express request object and convert it into a lambda function event.
   const event = lambdaEventForExpressRequest(req)
 
-  const handlerCallback = (expressResFn: Response) => (
-    error: Error,
-    lambdaResult: APIGatewayProxyResult
-  ) => {
-    if (error) {
-      expressResponseForLambdaError(expressResFn, error)
-      return
-    }
+  const handlerCallback =
+    (expressResFn: Response) =>
+    (error: Error, lambdaResult: APIGatewayProxyResult) => {
+      if (error) {
+        expressResponseForLambdaError(expressResFn, error)
+        return
+      }
 
-    expressResponseForLambdaResult(expressResFn, lambdaResult)
-  }
+      expressResponseForLambdaResult(expressResFn, lambdaResult)
+    }
 
   // Execute the lambda function.
   // https://docs.aws.amazon.com/lambda/latest/dg/nodejs-prog-model-handler.html
   const handlerPromise = handler(
     event,
-    {}, // TODO: Add support for context: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/0bb210867d16170c4a08d9ce5d132817651a0f80/types/aws-lambda/index.d.ts#L443-L467
+    // @ts-expect-error - Add support for context: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/0bb210867d16170c4a08d9ce5d132817651a0f80/types/aws-lambda/index.d.ts#L443-L467
+    {},
     handlerCallback(res)
   )
 

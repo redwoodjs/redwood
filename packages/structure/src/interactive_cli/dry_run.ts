@@ -1,7 +1,10 @@
-import { outputFileSync } from 'fs-extra'
 import { join } from 'path'
+
+import { outputFileSync } from 'fs-extra'
 import proxyquire from 'proxyquire'
+
 import { spawnCancellable } from '../x/child_process'
+
 import { RedwoodCommandString } from './RedwoodCommandString'
 
 export type FileSet = { [filePath: string]: string | null }
@@ -29,10 +32,11 @@ export async function redwood_gen_dry_run(
   opts: Opts
 ): Promise<{ stdout: string; files: FileSet }> {
   const { cwd, cmd, fileOverrides, tmpdir } = opts
-  if (!cmd.isComplete)
+  if (!cmd.isComplete) {
     throw new Error(
       'cannot pass an interactive command straight to the redwood-cli. You must run it through the command_builder first'
     )
+  }
   // eslint-disable-next-line
   const x = [proxyquire].length // we need to make sure this module is required. it will be used in a script we will generate dynamically
   const tempDir = tmpdir ?? join(cwd, '.tmp')

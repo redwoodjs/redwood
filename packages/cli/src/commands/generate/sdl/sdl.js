@@ -1,10 +1,14 @@
 import path from 'path'
 
-import Listr from 'listr'
+import boxen from 'boxen'
 import camelcase from 'camelcase'
+import chalk from 'chalk'
+import Listr from 'listr'
 import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 import terminalLink from 'terminal-link'
+
+import { getConfig } from '@redwoodjs/internal'
 
 import {
   generateTemplate,
@@ -13,14 +17,33 @@ import {
   getPaths,
   writeFilesTask,
   getEnum,
-} from 'src/lib'
-import c from 'src/lib/colors'
-
+} from '../../../lib'
+import c from '../../../lib/colors'
 import { yargsDefaults } from '../../generate'
+import { ensureUniquePlural, relationsForModel } from '../helpers'
 import { files as serviceFiles } from '../service/service'
-import { relationsForModel } from '../helpers'
 
 const IGNORE_FIELDS_FOR_INPUT = ['id', 'createdAt', 'updatedAt']
+
+const missingIdConsoleMessage = () => {
+  const line1 =
+    chalk.bold.yellow('WARNING') +
+    ': Cannot generate CRUD SDL without an `@id` database column.'
+  const line2 = 'If you are trying to generate for a many-to-many join table '
+  const line3 = "you'll need to update your schema definition to include"
+  const line4 = 'an `@id` column. Read more here: '
+  const line5 = chalk.underline.blue(
+    'https://redwoodjs.com/docs/schema-relations'
+  )
+
+  console.error(
+    boxen(line1 + '\n\n' + line2 + '\n' + line3 + '\n' + line4 + '\n' + line5, {
+      padding: 1,
+      margin: { top: 1, bottom: 3, right: 1, left: 2 },
+      borderStyle: 'single',
+    })
+  )
+}
 
 const modelFieldToSDL = (field, required = true, types = {}) => {
   if (Object.entries(types).length) {
@@ -30,6 +53,7 @@ const modelFieldToSDL = (field, required = true, types = {}) => {
 
   const dictionary = {
     Json: 'JSON',
+    Decimal: 'Float',
   }
 
   return `${field.name}: ${field.isList ? '[' : ''}${
@@ -71,7 +95,8 @@ const idType = (model, crud) => {
 
   const idField = model.fields.find((field) => field.isId)
   if (!idField) {
-    throw new Error('Cannot generate CRUD SDL without an `id` database column')
+    missingIdConsoleMessage()
+    throw new Error('Failed: Could not generate SDL')
   }
   return idField.type
 }
@@ -119,15 +144,9 @@ const sdlFromSchemaModel = async (name, crud) => {
   }
 }
 
-export const files = async ({ name, crud, typescript, javascript }) => {
-  const {
-    query,
-    createInput,
-    updateInput,
-    idType,
-    relations,
-    enums,
-  } = await sdlFromSchemaModel(pascalcase(pluralize.singular(name)), crud)
+export const files = async ({ name, crud, tests, typescript }) => {
+  const { query, createInput, updateInput, idType, relations, enums } =
+    await sdlFromSchemaModel(pascalcase(pluralize.singular(name)), crud)
 
   let template = generateTemplate(
     path.join('sdl', 'templates', `sdl.ts.template`),
@@ -142,19 +161,19 @@ export const files = async ({ name, crud, typescript, javascript }) => {
     }
   )
 
-  const extension = typescript === true ? 'ts' : 'js'
+  const extension = typescript ? 'ts' : 'js'
   let outputPath = path.join(
     getPaths().api.graphql,
     `${camelcase(pluralize(name))}.sdl.${extension}`
   )
 
-  if (javascript && !typescript) {
+  if (typescript) {
     template = transformTSToJS(outputPath, template)
   }
 
   return {
     [outputPath]: template,
-    ...(await serviceFiles({ name, crud, relations, typescript, javascript })),
+    ...(await serviceFiles({ name, crud, tests, relations, typescript })),
   }
 }
 
@@ -176,30 +195,33 @@ export const builder = (yargs) => {
       description: 'Model to generate the sdl for',
       type: 'string',
     })
+    .option('tests', {
+      description: 'Generate test files',
+      type: 'boolean',
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
         'https://redwoodjs.com/reference/command-line-interface#generate-sdl'
       )}`
     )
+
+  // Merge default options in
   Object.entries(defaults).forEach(([option, config]) => {
     yargs.option(option, config)
   })
 }
 // TODO: Add --dry-run command
-export const handler = async ({
-  model,
-  crud,
-  force,
-  typescript,
-  javascript,
-}) => {
+export const handler = async ({ model, crud, force, tests, typescript }) => {
+  if (tests === undefined) {
+    tests = getConfig().generate.tests
+  }
   const tasks = new Listr(
     [
       {
         title: 'Generating SDL files...',
         task: async () => {
-          const f = await files({ name: model, crud, typescript, javascript })
+          const f = await files({ name: model, tests, crud, typescript })
           return writeFilesTask(f, { overwriteExisting: force })
         },
       },
@@ -208,8 +230,10 @@ export const handler = async ({
   )
 
   try {
+    await ensureUniquePlural({ model })
     await tasks.run()
   } catch (e) {
-    console.log(c.error(e.message))
+    console.error(c.error(e.message))
+    process.exit(e?.exitCode || 1)
   }
 }

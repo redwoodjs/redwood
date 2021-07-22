@@ -1,0 +1,47 @@
+name: Create PR Artifact
+
+on: pull_request
+
+jobs:
+  create_pr_artifact:
+    name: Create PR Artifact
+    if: github.repository == 'redwoodjs/redwood'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v2
+
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build
+        run: yarn build
+
+      - name: Create packages
+        run: |
+          dirName="bin/${{ github.event.number }}"
+          mkdir -p $dirName
+          for d in packages/*/ ; do
+            (cd "$d" && tgz=$(npm pack) && cp $tgz "../../$dirName/")
+          done
+          cd $dirName
+          sha="${{ github.event.pull_request.head.sha }}"
+          for f in * ; do
+            mv -- "$f" "${f%.tgz}-${sha:0:7}.tgz"
+          done
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: pr-packages
+          path: bin/
+          retention-days: 1

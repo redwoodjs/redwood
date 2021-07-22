@@ -16,7 +16,7 @@ Redwood has a vibrant community that we want to highlight as much as possible. U
 
 ## Managing All-Contributors Data
 In general, this is a three-part process:
-1. Update the three `*.all-contributorsrc` files with new contributors
+1. Update the four `*.all-contributorsrc` files with new contributors
 2. Merge changes into the main `.all-contributorsrc` file
 3. Update README.md#Contributors with changes
 
@@ -33,16 +33,40 @@ _note: this file is also used for all aggregated contributors_
 **Website** `redwoodjs/redwoodjs.com` project:
 - `.rwjs.com.all-contributorsrc`
 
+**Learn** `redwoodjs/learn.redwoodjs.com` project:
+- `.learn.all-contributorsrc`
+
 >When adding contributors, use this "type" key for specific repos:
 >- 💻 (code) == Framework
 >- 📖 (doc) == Redwoodjs.com
 >- 🔧 (tool) == Create-Redwood-App
+>- ✅ (tutorial) == Learn.Redwoodjs.com
 >
 >The "type" is required.
 
 ### Step 1: Check for new contributors and add to `*rc` files
 
-'cd tasks/all-contributors'
+`cd tasks/all-contributors`
+`yarn install`
+
+> **NOTE:**
+> Do not add [bot] accounts to the files.
+>
+> Also, members of the Core Team are manually added to the #core-team section. To avoid duplication, do not add the following profiles to the files below:
+> - peterp
+> - thedavidprice
+> - mojombo
+> - cannikin
+> - jtoar
+> - Tobbe
+> - RobertBroersma
+> - dthyresson
+> - dac09
+> - aldonline
+> - clairefro
+> - ajcwebdev
+> - forresthayes
+> - kimadeline
 
 #### Framework
 ```js
@@ -69,6 +93,15 @@ yarn all-contributors check --config .crwa.all-contributorsrc
 // For each contributor listed in output, repeat the following:
 
 yarn all-contributors add --config .crwa.all-contributorsrc <contributor> tool
+```
+
+#### Learn.Redwoodjs.com
+```js
+yarn all-contributors check --config .learn.all-contributorsrc
+
+// For each contributor listed in output, repeat the following:
+
+yarn all-contributors add --config .learn.all-contributorsrc <contributor> tutorial
 ```
 
 ### Step 2: Merge contributors into main file

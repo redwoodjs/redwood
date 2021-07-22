@@ -1,8 +1,9 @@
-import { GraphQLResolveInfo } from 'graphql'
 import { gql } from 'apollo-server-lambda'
+import { GraphQLResolveInfo } from 'graphql'
 
 import { GraphQLTypeWithFields } from '../types'
-import { makeMergedSchema } from '../makeMergedSchema/makeMergedSchema'
+
+import { makeMergedSchema } from './makeMergedSchema'
 
 describe('makeMergedSchema', () => {
   // Simulate `importAll`

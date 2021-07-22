@@ -1,4 +1,5 @@
 import { basename } from 'path'
+
 import * as tsm from 'ts-morph'
 import { TextDocuments } from 'vscode-languageserver'
 import { TextDocument } from 'vscode-languageserver-textdocument'
@@ -9,13 +10,14 @@ import {
   Location,
   Range,
 } from 'vscode-languageserver-types'
+
+import { Host, DefaultHost } from './hosts'
 import { ArrayLike, ArrayLike_normalize } from './x/Array'
 import { lazy, memo } from './x/decorators'
 import { basenameNoExt } from './x/path'
 import { createTSMSourceFile_cached } from './x/ts-morph'
 import { URL_file } from './x/URL'
 import { ExtendedDiagnostic } from './x/vscode-languageserver-types'
-import { Host, DefaultHost } from './hosts'
 
 export type NodeID = string
 
@@ -89,7 +91,9 @@ export abstract class BaseNode {
 
   @lazy()
   get host(): Host {
-    if (this.parent) return this.parent.host
+    if (this.parent) {
+      return this.parent.host
+    }
     throw new Error(
       "Could not find host implementation on root node (you must override the 'host' gettter)"
     )
@@ -130,7 +134,9 @@ export abstract class BaseNode {
 
   @memo(JSON.stringify)
   async collectIDEInfo(uri?: string): Promise<IDEInfo[]> {
-    if (uri && this.bailOutOnCollection(uri)) return []
+    if (uri && this.bailOutOnCollection(uri)) {
+      return []
+    }
     try {
       const d1 = await this._ideInfo()
       const dd = await Promise.all(
@@ -138,7 +144,9 @@ export abstract class BaseNode {
       )
       const d2 = dd.flat()
       let all = [...d1, ...d2]
-      if (uri) all = all.filter((x) => x.location.uri === uri)
+      if (uri) {
+        all = all.filter((x) => x.location.uri === uri)
+      }
       return all
     } catch (e) {
       // TODO: this diagnostic is also interesting
@@ -155,7 +163,9 @@ export abstract class BaseNode {
   async collectDiagnostics(uri?: string): Promise<ExtendedDiagnostic[]> {
     // TODO: catch runtime errors and add them as diagnostics
     // TODO: we can parallelize this further
-    if (uri && this.bailOutOnCollection(uri)) return []
+    if (uri && this.bailOutOnCollection(uri)) {
+      return []
+    }
     try {
       const d1 = await this._diagnostics()
       const dd = await Promise.all(
@@ -163,11 +173,15 @@ export abstract class BaseNode {
       )
       const d2 = dd.flat()
       let all = [...d1, ...d2]
-      if (uri) all = all.filter((x) => x.uri === uri)
+      if (uri) {
+        all = all.filter((x) => x.uri === uri)
+      }
       return all
     } catch (e) {
       const uri = this.closestContainingUri
-      if (!uri) throw e
+      if (!uri) {
+        throw e
+      }
       const range = Range.create(0, 0, 0, 0)
       return [
         {
@@ -179,16 +193,24 @@ export abstract class BaseNode {
   }
 
   bailOutOnCollection(uri: string): boolean {
-    if (this.id === uri) return false
-    if (uri.startsWith(this.id)) return false
+    if (this.id === uri) {
+      return false
+    }
+    if (uri.startsWith(this.id)) {
+      return false
+    }
     return true
   }
 
   @lazy() get closestContainingUri(): string | undefined {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { uri } = this as any
-    if (uri) return uri
-    if (this.parent) return this.parent.closestContainingUri
+    if (uri) {
+      return uri
+    }
+    if (this.parent) {
+      return this.parent.closestContainingUri
+    }
     return undefined
   }
 
@@ -202,13 +224,18 @@ export abstract class BaseNode {
   @memo()
   async findNode(id: NodeID): Promise<BaseNode | undefined> {
     id = URL_file(id)
-    if (this.id === id) return this
-    if (id.startsWith(this.id))
+    if (this.id === id) {
+      return this
+    }
+    if (id.startsWith(this.id)) {
       for (const c of await this._children()) {
         // depth first search by default
         const cc = await c.findNode(id)
-        if (cc) return cc
+        if (cc) {
+          return cc
+        }
       }
+    }
     return undefined
   }
 }
@@ -234,8 +261,9 @@ export abstract class FileNode extends BaseNode {
    * parsed ts-morph source file
    */
   @lazy() get sf(): tsm.SourceFile {
-    if (typeof this.text === 'undefined')
+    if (typeof this.text === 'undefined') {
       throw new Error('undefined file ' + this.filePath)
+    }
     return createTSMSourceFile_cached(this.filePath, this.text!)
   }
   @lazy() get basenameNoExt() {
@@ -252,7 +280,9 @@ export class HostWithDocumentsStore implements Host {
   readFileSync(path: string) {
     const uri = URL_file(path)
     const doc = this.documents.get(uri)
-    if (doc) return doc.getText()
+    if (doc) {
+      return doc.getText()
+    }
     return this.defaultHost.readFileSync(path)
   }
   existsSync(path: string) {

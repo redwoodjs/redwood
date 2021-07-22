@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+/* eslint-disable no-undef */
+/* eslint-env node, es6*/
 
 // inspired by https://github.com/openclimatefix/merge-all-contributors
 
@@ -9,8 +11,8 @@ const targetFile = '.all-contributorsrc'
 const mainContribFile = JSON.parse(fs.readFileSync(targetFile))
 
 const contribFiles = [
-  '.crwa.all-contributorsrc',
   '.rwjs.com.all-contributorsrc',
+  '.learn.all-contributorsrc',
 ]
 
 async function main() {

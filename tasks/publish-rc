@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# This publishes a "canary" version of our packages to npm.
+# It is run when a branch is merged to main.
+# https://github.com/lerna/lerna/tree/master/commands/publish#--canary
+
+yarn framework lerna publish --force-publish --canary --preid rc --dist-tag rc --yes

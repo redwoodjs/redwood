@@ -1,9 +1,10 @@
 global.__dirname = __dirname
 import path from 'path'
 
-import { loadGeneratorFixture } from 'src/lib/test'
-import { getDefaultArgs } from 'src/lib'
+// Load mocks
+import '../../../../lib/test'
 
+import { getDefaultArgs } from '../../../../lib'
 import { yargsDefaults as defaults } from '../../../generate'
 import * as scaffold from '../scaffold'
 
@@ -14,13 +15,14 @@ describe('in javascript (default) mode', () => {
     files = await scaffold.files({
       ...getDefaultArgs(defaults),
       model: 'Post',
+      tests: true,
+      nestScaffoldByModel: true,
     })
   })
 
-  test('returns exactly 16 files', () => {
-    expect(Object.keys(files).length).toEqual(16)
+  test('returns exactly 17 files', () => {
+    expect(Object.keys(files).length).toEqual(17)
   })
-
   // SDL
 
   test('creates an sdl', () => {
@@ -48,9 +50,7 @@ describe('in javascript (default) mode', () => {
   test('creates a stylesheet', () => {
     expect(
       files[path.normalize('/path/to/project/web/src/scaffold.css')]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('assets', 'scaffold.css'))
-    )
+    ).toMatchSnapshot()
   })
 
   // Layout
@@ -62,9 +62,7 @@ describe('in javascript (default) mode', () => {
           '/path/to/project/web/src/layouts/PostsLayout/PostsLayout.js'
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('layouts', 'layout.js'))
-    )
+    ).toMatchSnapshot()
   })
 
   // Pages
@@ -73,44 +71,80 @@ describe('in javascript (default) mode', () => {
     expect(
       files[
         path.normalize(
-          '/path/to/project/web/src/pages/EditPostPage/EditPostPage.js'
+          '/path/to/project/web/src/pages/Post/EditPostPage/EditPostPage.js'
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('pages', 'editPage.js'))
-    )
+    ).toMatchSnapshot()
+  })
+
+  test('the edit page correctly imports the edit cell', async () => {
+    expect(
+      files[
+        path.normalize(
+          '/path/to/project/web/src/pages/Post/EditPostPage/EditPostPage.js'
+        )
+      ]
+    ).toMatch(`import EditPostCell from 'src/components/Post/EditPostCell'`)
   })
 
   test('creates a index page', async () => {
     expect(
       files[
-        path.normalize('/path/to/project/web/src/pages/PostsPage/PostsPage.js')
+        path.normalize(
+          '/path/to/project/web/src/pages/Post/PostsPage/PostsPage.js'
+        )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('pages', 'indexPage.js'))
-    )
+    ).toMatchSnapshot()
+  })
+
+  test('the index page correctly imports the index cell', async () => {
+    expect(
+      files[
+        path.normalize(
+          '/path/to/project/web/src/pages/Post/PostsPage/PostsPage.js'
+        )
+      ]
+    ).toMatch(`import PostsCell from 'src/components/Post/PostsCell'`)
   })
 
   test('creates a new page', async () => {
     expect(
       files[
         path.normalize(
-          '/path/to/project/web/src/pages/NewPostPage/NewPostPage.js'
+          '/path/to/project/web/src/pages/Post/NewPostPage/NewPostPage.js'
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('pages', 'newPage.js'))
-    )
+    ).toMatchSnapshot()
+  })
+
+  test('the new page correctly imports the new component', async () => {
+    expect(
+      files[
+        path.normalize(
+          '/path/to/project/web/src/pages/Post/NewPostPage/NewPostPage.js'
+        )
+      ]
+    ).toMatch(`import NewPost from 'src/components/Post/NewPost'`)
   })
 
   test('creates a show page', async () => {
     expect(
       files[
-        path.normalize('/path/to/project/web/src/pages/PostPage/PostPage.js')
+        path.normalize(
+          '/path/to/project/web/src/pages/Post/PostPage/PostPage.js'
+        )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('pages', 'showPage.js'))
-    )
+    ).toMatchSnapshot()
+  })
+
+  test('the show page correctly imports the show cell', async () => {
+    expect(
+      files[
+        path.normalize(
+          '/path/to/project/web/src/pages/Post/PostPage/PostPage.js'
+        )
+      ]
+    ).toMatch(`import PostCell from 'src/components/Post/PostCell'`)
   })
 
   // Cells
@@ -119,36 +153,60 @@ describe('in javascript (default) mode', () => {
     expect(
       files[
         path.normalize(
-          '/path/to/project/web/src/components/EditPostCell/EditPostCell.js'
+          '/path/to/project/web/src/components/Post/PostEditCell/PostEditCell.js'
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('components', 'editCell.js'))
-    )
+    ).toMatchSnapshot()
+  })
+
+  test('the edit cell correctly imports the form', async () => {
+    expect(
+      files[
+        path.normalize(
+          '/path/to/project/web/src/components/Post/EditPostCell/EditPostCell.js'
+        )
+      ]
+    ).toMatch(`import PostForm from 'src/components/Post/PostForm'`)
   })
 
   test('creates an index cell', async () => {
     expect(
       files[
         path.normalize(
-          '/path/to/project/web/src/components/PostsCell/PostsCell.js'
+          '/path/to/project/web/src/components/Post/PostsCell/PostsCell.js'
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('components', 'indexCell.js'))
-    )
+    ).toMatchSnapshot()
+  })
+
+  test('the index cell correctly imports the index component', async () => {
+    expect(
+      files[
+        path.normalize(
+          '/path/to/project/web/src/components/Post/PostsCell/PostsCell.js'
+        )
+      ]
+    ).toMatch(`import Posts from 'src/components/Post/Posts'`)
   })
 
   test('creates a show cell', async () => {
     expect(
       files[
         path.normalize(
-          '/path/to/project/web/src/components/PostCell/PostCell.js'
+          '/path/to/project/web/src/components/Post/PostCell/PostCell.js'
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('components', 'showCell.js'))
-    )
+    ).toMatchSnapshot()
+  })
+
+  test('the show cell correctly imports the show component', async () => {
+    expect(
+      files[
+        path.normalize(
+          '/path/to/project/web/src/components/Post/PostCell/PostCell.js'
+        )
+      ]
+    ).toMatch(`import Post from 'src/components/Post/Post'`)
   })
 
   // Components
@@ -157,70 +215,109 @@ describe('in javascript (default) mode', () => {
     expect(
       files[
         path.normalize(
-          '/path/to/project/web/src/components/PostForm/PostForm.js'
+          '/path/to/project/web/src/components/Post/PostForm/PostForm.js'
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('components', 'form.js'))
-    )
+    ).toMatchSnapshot()
   })
 
   test('creates an index component', async () => {
     expect(
       files[
-        path.normalize('/path/to/project/web/src/components/Posts/Posts.js')
+        path.normalize(
+          '/path/to/project/web/src/components/Post/Posts/Posts.js'
+        )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('components', 'index.js'))
-    )
+    ).toMatchSnapshot()
+  })
+
+  test('the index component correctly imports the QUERY', async () => {
+    expect(
+      files[
+        path.normalize(
+          '/path/to/project/web/src/components/Post/Posts/Posts.js'
+        )
+      ]
+    ).toMatch(`import { QUERY } from 'src/components/Post/PostsCell'`)
   })
 
   test('creates a new component', async () => {
     expect(
       files[
-        path.normalize('/path/to/project/web/src/components/NewPost/NewPost.js')
+        path.normalize(
+          '/path/to/project/web/src/components/Post/NewPost/NewPost.js'
+        )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('components', 'new.js'))
-    )
+    ).toMatchSnapshot()
+  })
+
+  test('the new component correctly imports the form', async () => {
+    expect(
+      files[
+        path.normalize(
+          '/path/to/project/web/src/components/Post/NewPost/NewPost.js'
+        )
+      ]
+    ).toMatch(`import PostForm from 'src/components/Post/PostForm'`)
   })
 
   test('creates a show component', async () => {
     expect(
-      files[path.normalize('/path/to/project/web/src/components/Post/Post.js')]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('components', 'show.js'))
+      files[
+        path.normalize('/path/to/project/web/src/components/Post/Post/Post.js')
+      ]
+    ).toMatchSnapshot()
+  })
+
+  test('error when no editable fields are in model', async () => {
+    await expect(
+      scaffold.files({
+        ...getDefaultArgs(defaults),
+        model: 'NoEditableField',
+        tests: true,
+        nestScaffoldByModel: true,
+      })
+    ).rejects.toThrow(
+      'There are no editable fields in the NoEditableField model'
     )
   })
 
   // Routes
 
   test('creates a single-word name routes', async () => {
-    expect(await scaffold.routes({ model: 'Post' })).toEqual([
-      '<Route path="/posts/new" page={NewPostPage} name="newPost" />',
-      '<Route path="/posts/{id:Int}/edit" page={EditPostPage} name="editPost" />',
-      '<Route path="/posts/{id:Int}" page={PostPage} name="post" />',
-      '<Route path="/posts" page={PostsPage} name="posts" />',
+    expect(
+      await scaffold.routes({ model: 'Post', nestScaffoldByModel: true })
+    ).toEqual([
+      '<Route path="/posts/new" page={PostNewPostPage} name="newPost" />',
+      '<Route path="/posts/{id:Int}/edit" page={PostEditPostPage} name="editPost" />',
+      '<Route path="/posts/{id:Int}" page={PostPostPage} name="post" />',
+      '<Route path="/posts" page={PostPostsPage} name="posts" />',
     ])
   })
 
   test('creates a multi-word name routes', async () => {
-    expect(await scaffold.routes({ model: 'UserProfile' })).toEqual([
-      '<Route path="/user-profiles/new" page={NewUserProfilePage} name="newUserProfile" />',
-      '<Route path="/user-profiles/{id:Int}/edit" page={EditUserProfilePage} name="editUserProfile" />',
-      '<Route path="/user-profiles/{id:Int}" page={UserProfilePage} name="userProfile" />',
-      '<Route path="/user-profiles" page={UserProfilesPage} name="userProfiles" />',
+    expect(
+      await scaffold.routes({ model: 'UserProfile', nestScaffoldByModel: true })
+    ).toEqual([
+      '<Route path="/user-profiles/new" page={UserProfileNewUserProfilePage} name="newUserProfile" />',
+      '<Route path="/user-profiles/{id:Int}/edit" page={UserProfileEditUserProfilePage} name="editUserProfile" />',
+      '<Route path="/user-profiles/{id:Int}" page={UserProfileUserProfilePage} name="userProfile" />',
+      '<Route path="/user-profiles" page={UserProfileUserProfilesPage} name="userProfiles" />',
     ])
   })
 
   // GraphQL queries
 
   test('the GraphQL in the index query does not contain object types', async () => {
-    const userProfileFiles = await scaffold.files({ model: 'UserProfile' })
+    const userProfileFiles = await scaffold.files({
+      model: 'UserProfile',
+      tests: false,
+      nestScaffoldByModel: true,
+    })
     const cell =
       userProfileFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfilesCell/UserProfilesCell.js'
+          '/path/to/project/web/src/components/UserProfile/UserProfilesCell/UserProfilesCell.js'
         )
       ]
     const query = cell.match(/(userProfiles.*?\})/s)[1]
@@ -229,11 +326,15 @@ describe('in javascript (default) mode', () => {
   })
 
   test('the GraphQL in the show query does not contain object types', async () => {
-    const userProfileFiles = await scaffold.files({ model: 'UserProfile' })
+    const userProfileFiles = await scaffold.files({
+      model: 'UserProfile',
+      tests: false,
+      nestScaffoldByModel: true,
+    })
     const cell =
       userProfileFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.js'
+          '/path/to/project/web/src/components/UserProfile/UserProfileCell/UserProfileCell.js'
         )
       ]
     const query = cell.match(/(userProfile.*?\})/s)[1]
@@ -242,11 +343,15 @@ describe('in javascript (default) mode', () => {
   })
 
   test('the GraphQL in the edit query does not contain object types', async () => {
-    const userProfileFiles = await scaffold.files({ model: 'UserProfile' })
+    const userProfileFiles = await scaffold.files({
+      model: 'UserProfile',
+      tests: false,
+      nestScaffoldByModel: true,
+    })
     const cell =
       userProfileFiles[
         path.normalize(
-          '/path/to/project/web/src/components/EditUserProfileCell/EditUserProfileCell.js'
+          '/path/to/project/web/src/components/UserProfile/EditUserProfileCell/EditUserProfileCell.js'
         )
       ]
     const query = cell.match(/(userProfile.*?\})/s)[1]
@@ -257,59 +362,59 @@ describe('in javascript (default) mode', () => {
   // Foreign key casting
 
   test('creates a new component with int foreign keys converted in onSave', async () => {
-    const foreignKeyFiles = await scaffold.files({ model: 'UserProfile' })
+    const foreignKeyFiles = await scaffold.files({
+      model: 'UserProfile',
+      tests: false,
+      nestScaffoldByModel: true,
+    })
 
     expect(
       foreignKeyFiles[
         path.normalize(
-          '/path/to/project/web/src/components/NewUserProfile/NewUserProfile.js'
+          '/path/to/project/web/src/components/UserProfile/NewUserProfile/NewUserProfile.js'
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture(
-        'scaffold',
-        path.join('components', 'foreignKeys', 'new.js')
-      )
-    )
+    ).toMatchSnapshot()
   })
 
   test('creates an edit component with int foreign keys converted in onSave', async () => {
-    const foreignKeyFiles = await scaffold.files({ model: 'UserProfile' })
+    const foreignKeyFiles = await scaffold.files({
+      model: 'UserProfile',
+      tests: false,
+      nestScaffoldByModel: true,
+    })
 
     expect(
       foreignKeyFiles[
         path.normalize(
-          '/path/to/project/web/src/components/EditUserProfileCell/EditUserProfileCell.js'
+          '/path/to/project/web/src/components/UserProfile/EditUserProfileCell/EditUserProfileCell.js'
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture(
-        'scaffold',
-        path.join('components', 'foreignKeys', 'edit.js')
-      )
-    )
+    ).toMatchSnapshot()
   })
 })
 
 describe('in typescript mode', () => {
-  let files
+  let tsFiles
 
   beforeAll(async () => {
-    files = await scaffold.files({
+    tsFiles = await scaffold.files({
       ...getDefaultArgs(defaults),
       model: 'Post',
       typescript: true,
+      tests: true,
+      nestScaffoldByModel: true,
     })
   })
 
-  test('returns exactly 16 files', () => {
-    expect(Object.keys(files).length).toEqual(16)
+  test('returns exactly 17 files', () => {
+    expect(Object.keys(tsFiles).length).toEqual(17)
   })
 
   // SDL
 
   test('creates an sdl', () => {
-    expect(files).toHaveProperty([
+    expect(tsFiles).toHaveProperty([
       path.normalize('/path/to/project/api/src/graphql/posts.sdl.ts'),
     ])
   })
@@ -317,13 +422,13 @@ describe('in typescript mode', () => {
   // Service
 
   test('creates a service', () => {
-    expect(files).toHaveProperty([
+    expect(tsFiles).toHaveProperty([
       path.normalize('/path/to/project/api/src/services/posts/posts.ts'),
     ])
   })
 
   test('creates a service test', () => {
-    expect(files).toHaveProperty([
+    expect(tsFiles).toHaveProperty([
       path.normalize('/path/to/project/api/src/services/posts/posts.test.ts'),
     ])
   })
@@ -332,180 +437,172 @@ describe('in typescript mode', () => {
 
   test('creates a stylesheet', () => {
     expect(
-      files[path.normalize('/path/to/project/web/src/scaffold.css')]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('assets', 'scaffold.css'))
-    )
+      tsFiles[path.normalize('/path/to/project/web/src/scaffold.css')]
+    ).toMatchSnapshot()
   })
 
   // Layout
 
   test('creates a layout', async () => {
     expect(
-      files[
+      tsFiles[
         path.normalize(
-          '/path/to/project/web/src/layouts/PostsLayout/PostsLayout.js'
+          '/path/to/project/web/src/layouts/PostsLayout/PostsLayout.tsx'
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('layouts', 'layout.js'))
-    )
+    ).toMatchSnapshot()
   })
 
   // Pages
 
   test('creates a edit page', async () => {
     expect(
-      files[
+      tsFiles[
         path.normalize(
-          '/path/to/project/web/src/pages/EditPostPage/EditPostPage.js'
+          '/path/to/project/web/src/pages/Post/EditPostPage/EditPostPage.tsx'
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('pages', 'editPage.js'))
-    )
+    ).toMatchSnapshot()
   })
 
   test('creates a index page', async () => {
     expect(
-      files[
-        path.normalize('/path/to/project/web/src/pages/PostsPage/PostsPage.js')
+      tsFiles[
+        path.normalize(
+          '/path/to/project/web/src/pages/Post/PostsPage/PostsPage.tsx'
+        )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('pages', 'indexPage.js'))
-    )
+    ).toMatchSnapshot()
   })
 
   test('creates a new page', async () => {
     expect(
-      files[
+      tsFiles[
         path.normalize(
-          '/path/to/project/web/src/pages/NewPostPage/NewPostPage.js'
+          '/path/to/project/web/src/pages/Post/NewPostPage/NewPostPage.tsx'
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('pages', 'newPage.js'))
-    )
+    ).toMatchSnapshot()
   })
 
   test('creates a show page', async () => {
     expect(
-      files[
-        path.normalize('/path/to/project/web/src/pages/PostPage/PostPage.js')
+      tsFiles[
+        path.normalize(
+          '/path/to/project/web/src/pages/Post/PostPage/PostPage.tsx'
+        )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('pages', 'showPage.js'))
-    )
+    ).toMatchSnapshot()
   })
 
   // Cells
 
   test('creates an edit cell', async () => {
     expect(
-      files[
+      tsFiles[
         path.normalize(
-          '/path/to/project/web/src/components/EditPostCell/EditPostCell.js'
+          '/path/to/project/web/src/components/Post/EditPostCell/EditPostCell.tsx'
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('components', 'editCell.js'))
-    )
+    ).toMatchSnapshot()
   })
 
   test('creates an index cell', async () => {
     expect(
-      files[
+      tsFiles[
         path.normalize(
-          '/path/to/project/web/src/components/PostsCell/PostsCell.js'
+          '/path/to/project/web/src/components/Post/PostsCell/PostsCell.tsx'
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('components', 'indexCell.js'))
-    )
+    ).toMatchSnapshot()
   })
 
   test('creates a show cell', async () => {
     expect(
-      files[
+      tsFiles[
         path.normalize(
-          '/path/to/project/web/src/components/PostCell/PostCell.js'
+          '/path/to/project/web/src/components/Post/PostCell/PostCell.tsx'
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('components', 'showCell.js'))
-    )
+    ).toMatchSnapshot()
   })
 
   // Components
 
   test('creates a form component', async () => {
     expect(
-      files[
+      tsFiles[
         path.normalize(
-          '/path/to/project/web/src/components/PostForm/PostForm.js'
+          '/path/to/project/web/src/components/Post/PostForm/PostForm.tsx'
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('components', 'form.js'))
-    )
+    ).toMatchSnapshot()
   })
 
   test('creates an index component', async () => {
     expect(
-      files[
-        path.normalize('/path/to/project/web/src/components/Posts/Posts.js')
+      tsFiles[
+        path.normalize(
+          '/path/to/project/web/src/components/Post/Posts/Posts.tsx'
+        )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('components', 'index.js'))
-    )
+    ).toMatchSnapshot()
   })
 
   test('creates a new component', async () => {
     expect(
-      files[
-        path.normalize('/path/to/project/web/src/components/NewPost/NewPost.js')
+      tsFiles[
+        path.normalize(
+          '/path/to/project/web/src/components/Post/NewPost/NewPost.tsx'
+        )
       ]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('components', 'new.js'))
-    )
+    ).toMatchSnapshot()
   })
 
   test('creates a show component', async () => {
     expect(
-      files[path.normalize('/path/to/project/web/src/components/Post/Post.js')]
-    ).toEqual(
-      loadGeneratorFixture('scaffold', path.join('components', 'show.js'))
-    )
+      tsFiles[
+        path.normalize('/path/to/project/web/src/components/Post/Post/Post.tsx')
+      ]
+    ).toMatchSnapshot()
   })
 
   // Routes
 
   test('creates a single-word name routes', async () => {
-    expect(await scaffold.routes({ model: 'Post' })).toEqual([
-      '<Route path="/posts/new" page={NewPostPage} name="newPost" />',
-      '<Route path="/posts/{id:Int}/edit" page={EditPostPage} name="editPost" />',
-      '<Route path="/posts/{id:Int}" page={PostPage} name="post" />',
-      '<Route path="/posts" page={PostsPage} name="posts" />',
+    expect(
+      await scaffold.routes({ model: 'Post', nestScaffoldByModel: true })
+    ).toEqual([
+      '<Route path="/posts/new" page={PostNewPostPage} name="newPost" />',
+      '<Route path="/posts/{id:Int}/edit" page={PostEditPostPage} name="editPost" />',
+      '<Route path="/posts/{id:Int}" page={PostPostPage} name="post" />',
+      '<Route path="/posts" page={PostPostsPage} name="posts" />',
     ])
   })
 
   test('creates a multi-word name routes', async () => {
-    expect(await scaffold.routes({ model: 'UserProfile' })).toEqual([
-      '<Route path="/user-profiles/new" page={NewUserProfilePage} name="newUserProfile" />',
-      '<Route path="/user-profiles/{id:Int}/edit" page={EditUserProfilePage} name="editUserProfile" />',
-      '<Route path="/user-profiles/{id:Int}" page={UserProfilePage} name="userProfile" />',
-      '<Route path="/user-profiles" page={UserProfilesPage} name="userProfiles" />',
+    expect(
+      await scaffold.routes({ model: 'UserProfile', nestScaffoldByModel: true })
+    ).toEqual([
+      '<Route path="/user-profiles/new" page={UserProfileNewUserProfilePage} name="newUserProfile" />',
+      '<Route path="/user-profiles/{id:Int}/edit" page={UserProfileEditUserProfilePage} name="editUserProfile" />',
+      '<Route path="/user-profiles/{id:Int}" page={UserProfileUserProfilePage} name="userProfile" />',
+      '<Route path="/user-profiles" page={UserProfileUserProfilesPage} name="userProfiles" />',
     ])
   })
 
   // GraphQL queries
 
   test('the GraphQL in the index query does not contain object types', async () => {
-    const userProfileFiles = await scaffold.files({ model: 'UserProfile' })
+    const userProfileFiles = await scaffold.files({
+      model: 'UserProfile',
+      tests: false,
+      nestScaffoldByModel: true,
+    })
     const cell =
       userProfileFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfilesCell/UserProfilesCell.js'
+          '/path/to/project/web/src/components/UserProfile/UserProfilesCell/UserProfilesCell.js'
         )
       ]
     const query = cell.match(/(userProfiles.*?\})/s)[1]
@@ -514,11 +611,15 @@ describe('in typescript mode', () => {
   })
 
   test('the GraphQL in the show query does not contain object types', async () => {
-    const userProfileFiles = await scaffold.files({ model: 'UserProfile' })
+    const userProfileFiles = await scaffold.files({
+      model: 'UserProfile',
+      tests: false,
+      nestScaffoldByModel: true,
+    })
     const cell =
       userProfileFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.js'
+          '/path/to/project/web/src/components/UserProfile/UserProfileCell/UserProfileCell.js'
         )
       ]
     const query = cell.match(/(userProfile.*?\})/s)[1]
@@ -527,11 +628,16 @@ describe('in typescript mode', () => {
   })
 
   test('the GraphQL in the edit query does not contain object types', async () => {
-    const userProfileFiles = await scaffold.files({ model: 'UserProfile' })
+    const userProfileFiles = await scaffold.files({
+      model: 'UserProfile',
+      typescript: true,
+      tests: false,
+      nestScaffoldByModel: true,
+    })
     const cell =
       userProfileFiles[
         path.normalize(
-          '/path/to/project/web/src/components/EditUserProfileCell/EditUserProfileCell.js'
+          '/path/to/project/web/src/components/UserProfile/EditUserProfileCell/EditUserProfileCell.tsx'
         )
       ]
     const query = cell.match(/(userProfile.*?\})/s)[1]
@@ -542,36 +648,36 @@ describe('in typescript mode', () => {
   // Foreign key casting
 
   test('creates a new component with int foreign keys converted in onSave', async () => {
-    const foreignKeyFiles = await scaffold.files({ model: 'UserProfile' })
+    const foreignKeyFiles = await scaffold.files({
+      model: 'UserProfile',
+      typescript: true,
+      tests: false,
+      nestScaffoldByModel: true,
+    })
 
     expect(
       foreignKeyFiles[
         path.normalize(
-          '/path/to/project/web/src/components/NewUserProfile/NewUserProfile.js'
+          '/path/to/project/web/src/components/UserProfile/NewUserProfile/NewUserProfile.tsx'
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture(
-        'scaffold',
-        path.join('components', 'foreignKeys', 'new.js')
-      )
-    )
+    ).toMatchSnapshot()
   })
 
   test('creates an edit component with int foreign keys converted in onSave', async () => {
-    const foreignKeyFiles = await scaffold.files({ model: 'UserProfile' })
+    const foreignKeyFiles = await scaffold.files({
+      model: 'UserProfile',
+      typescript: true,
+      tests: false,
+      nestScaffoldByModel: true,
+    })
 
     expect(
       foreignKeyFiles[
         path.normalize(
-          '/path/to/project/web/src/components/EditUserProfileCell/EditUserProfileCell.js'
+          '/path/to/project/web/src/components/UserProfile/EditUserProfileCell/EditUserProfileCell.tsx'
         )
       ]
-    ).toEqual(
-      loadGeneratorFixture(
-        'scaffold',
-        path.join('components', 'foreignKeys', 'edit.js')
-      )
-    )
+    ).toMatchSnapshot()
   })
 })

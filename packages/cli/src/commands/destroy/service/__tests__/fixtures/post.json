@@ -1,0 +1,50 @@
+{
+  "name": "Post",
+  "isEmbedded": false,
+  "dbName": null,
+  "fields": [
+    {
+      "name": "id",
+      "kind": "scalar",
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": true,
+      "isReadOnly": false,
+      "type": "Int",
+      "default": {
+        "name": "autoincrement",
+        "args": []
+      },
+      "isGenerated": false,
+      "isUpdatedAt": false
+    },
+    {
+      "name": "title",
+      "kind": "scalar",
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "type": "String",
+      "isGenerated": false,
+      "isUpdatedAt": false
+    },
+    {
+      "name": "content",
+      "kind": "scalar",
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "type": "String",
+      "isGenerated": false,
+      "isUpdatedAt": false
+    }
+  ],
+  "isGenerated": false,
+  "idFields": [],
+  "uniqueFields": []
+}

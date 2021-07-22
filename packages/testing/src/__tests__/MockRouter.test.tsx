@@ -1,7 +1,8 @@
 import React from 'react'
+
+import { render } from '@testing-library/react'
+
 import { Route, Private } from '@redwoodjs/router'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import '@testing-library/jest-dom/extend-expect'
 
 import { routes, Router } from '../MockRouter'
 

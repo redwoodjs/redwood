@@ -1,12 +1,12 @@
 import path from 'path'
 
-import fs from 'fs-extra'
 import execa from 'execa'
+import fs from 'fs-extra'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
 
-import { getPaths } from 'src/lib'
-import c from 'src/lib/colors'
+import { getPaths } from '../../lib'
+import c from '../../lib/colors'
 
 const MODEL = `model RW_DataMigration {
   version    String   @id
@@ -19,7 +19,7 @@ const POST_INSTALL_INSTRUCTIONS = `${c.warning(
   "Don't forget to apply your migration when ready:"
 )}
 
-     yarn rw db up
+    ${c.bold('yarn rw prisma migrate dev')}
 `
 
 // Creates dataMigrations directory
@@ -41,10 +41,14 @@ const appendModel = () => {
 
 // Create a new migration
 const save = async () => {
-  return await execa('yarn rw', ['db save', 'create data migrations'], {
-    cwd: getPaths().base,
-    shell: true,
-  })
+  return await execa(
+    'yarn rw',
+    ['prisma migrate dev', '--name create_data_migrations', '--create-only'],
+    {
+      cwd: getPaths().api.base,
+      shell: true,
+    }
+  )
 }
 
 export const command = 'install'
@@ -53,7 +57,7 @@ export const builder = (yargs) => {
   yargs.epilogue(
     `Also see the ${terminalLink(
       'Redwood CLI Reference',
-      'https://redwoodjs.com/reference/command-line-interface#datMigrate-install'
+      'https://redwoodjs.com/docs/cli-commands#install'
     )}`
   )
 }
@@ -86,6 +90,7 @@ export const handler = async () => {
   try {
     await tasks.run()
   } catch (e) {
-    console.log(c.error(e.message))
+    console.error(c.error(e.message))
+    process.exit(e?.exitCode || 1)
   }
 }

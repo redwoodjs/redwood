@@ -1,23 +1,27 @@
-<%if (crud || relations.length > 0) { %>import {
-  ${singularPascalName}WhereUniqueInput,<% if (crud) { %>
-  ${singularPascalName}CreateInput,
-  ${singularPascalName}UpdateInput,<% } %>
-} from '@prisma/client'
-<% } %><% if (relations.length) { %>import { ResolverArgs } from '@redwoodjs/api/dist/types'
-<% } %>import { db } from 'src/lib/db'
+<% if (crud || relations.length > 0) { %>import type { Prisma } from '@prisma/client'<% } %>
+import type { <% if (relations.length) { %>ResolverArgs, <% } %>BeforeResolverSpecType } from '@redwoodjs/api'
+
+import { db } from 'src/lib/db'
+import { requireAuth } from 'src/lib/auth'
+
+
+// Used when the environment variable REDWOOD_SECURE_SERVICES=1
+export const beforeResolver = (rules: BeforeResolverSpecType) => {
+  rules.add(requireAuth)
+}
 
 export const ${pluralCamelName} = () => {
   return db.${singularCamelName}.findMany()
 }<% if (crud) { %>
 
-export const ${singularCamelName} = ({ id }: ${singularPascalName}WhereUniqueInput) => {
-  return db.${singularCamelName}.findOne({
+export const ${singularCamelName} = ({ id }: Prisma.${singularPascalName}WhereUniqueInput) => {
+  return db.${singularCamelName}.findUnique({
     where: { id },
   })
 }
 
 interface Create${singularPascalName}Args {
-  input: ${singularPascalName}CreateInput
+  input: Prisma.${singularPascalName}CreateInput
 }
 
 export const create${singularPascalName} = ({ input }: Create${singularPascalName}Args) => {
@@ -26,9 +30,8 @@ export const create${singularPascalName} = ({ input }: Create${singularPascalNam
   })
 }
 
-interface Update${singularPascalName}Args {
-  where: ${singularPascalName}WhereUniqueInput
-  input: ${singularPascalName}UpdateInput
+interface Update${singularPascalName}Args extends Prisma.${singularPascalName}WhereUniqueInput {
+  input: Prisma.${singularPascalName}UpdateInput
 }
 
 export const update${singularPascalName} = ({ id, input }: Update${singularPascalName}Args) => {
@@ -38,12 +41,12 @@ export const update${singularPascalName} = ({ id, input }: Update${singularPasca
   })
 }
 
-export const delete${singularPascalName} = ({ id }: ${singularPascalName}WhereUniqueInput) => {
+export const delete${singularPascalName} = ({ id }: Prisma.${singularPascalName}WhereUniqueInput) => {
   return db.${singularCamelName}.delete({
     where: { id },
   })
 }<% } %><% if (relations.length) { %>
 
 export const ${singularPascalName} = {<% relations.forEach(relation => { %>
-  ${relation}: (_obj, { root }: ResolverArgs<${singularPascalName}WhereUniqueInput>) => db.${singularCamelName}.findOne({ where: { id: root.id } }).${relation}(),<% }) %>
+  ${relation}: (_obj, { root }: ResolverArgs<ReturnType<typeof ${singularCamelName}>>) => db.${singularCamelName}.findUnique({ where: { id: root.id } }).${relation}(),<% }) %>
 }<% } %>

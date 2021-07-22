@@ -1,4 +1,5 @@
 import { basename, resolve } from 'path'
+
 import { DefaultHost } from '../../hosts'
 import { URL_file } from '../../x/URL'
 import { RWProject } from '../RWProject'
@@ -10,13 +11,21 @@ describe('Redwood Project Model', () => {
 
     const pageNames = new Set(project.pages.map((p) => p.basenameNoExt))
     expect(pageNames).toEqual(
-      new Set(['FatalErrorPage', 'HomePage', 'NotFoundPage'])
+      new Set([
+        'FatalErrorPage',
+        'HomePage',
+        'NotFoundPage',
+        'TypeScriptPage',
+        'EditUserPage',
+        'FooPage',
+        'BarPage',
+      ])
     )
     for (const page of project.pages) {
       page.basenameNoExt //?
       page.route?.id //?
     }
-    expect(project.sdls.map((s) => s.name)).toEqual(['todos']) //?
+    expect(project.sdls.map((s) => s.name)).toEqual(['currentUser', 'todos']) //?
 
     for (const c of project.components) {
       c.basenameNoExt //?
@@ -67,11 +76,11 @@ describe('Cells', () => {
   it('Can get the operation name of the QUERY', () => {
     const projectRoot = getFixtureDir('example-todo-main')
     const project = new RWProject({ projectRoot, host: new DefaultHost() })
-    const cell = project.cells.find((x) => x.uri.endsWith('TodoListCell.js'))
+    const cell = project.cells.find((x) => x.uri.endsWith('TodoListCell.tsx'))
     expect(cell.queryOperationName).toMatch('TodoListCell_GetTodos')
   })
 
-  it('Warns you when you do not supply a name to QUERY', async (done) => {
+  it('Warns you when you do not supply a name to QUERY', async () => {
     const projectRoot = getFixtureDir('example-todo-main-with-errors')
     const project = new RWProject({ projectRoot, host: new DefaultHost() })
 
@@ -80,7 +89,6 @@ describe('Cells', () => {
     expect(x.map((e) => e.diagnostic.message)).toContain(
       'We recommend that you name your query operation'
     )
-    done()
   })
 })
 
@@ -94,6 +102,33 @@ describe.skip('env vars', () => {
     env.env_defaults //?
     project.redwoodTOML.web_includeEnvironmentVariables //?
     env.process_env_expressions //?
+  })
+})
+
+describe('Redwood Route detection', () => {
+  it('detects routes with the prerender prop', async () => {
+    const projectRoot = getFixtureDir('example-todo-main')
+    const project = new RWProject({ projectRoot, host: new DefaultHost() })
+    const routes = project.getRouter().routes
+
+    const prerenderRoutes = routes
+      .filter((r) => r.prerender)
+      // Make it a little easier to read by only keeping the attributes we're
+      // interested in
+      .map(({ name, path }) => ({ name, path }))
+
+    expect(prerenderRoutes.length).toBe(5)
+    expect(prerenderRoutes).toContainEqual({ name: 'home', path: '/' })
+    expect(prerenderRoutes).toContainEqual({
+      name: 'typescriptPage',
+      path: '/typescript',
+    })
+    expect(prerenderRoutes).toContainEqual({
+      name: 'someOtherPage',
+      path: '/somewhereElse',
+    })
+    expect(prerenderRoutes).toContainEqual({ name: 'fooPage', path: '/foo' })
+    expect(prerenderRoutes).toContainEqual({ name: 'barPage', path: '/bar' })
   })
 })
 

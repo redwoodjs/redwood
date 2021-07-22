@@ -1,6 +1,10 @@
-import type { GlobalContext } from 'src/globalContext'
+export * from './parseJWT'
+
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
+
 import type { SupportedAuthTypes } from '@redwoodjs/auth'
+
+import type { GlobalContext } from '../globalContext'
 
 import { decodeToken } from './decoders'
 
@@ -23,7 +27,11 @@ export interface AuthorizationHeader {
 export const parseAuthorizationHeader = (
   event: APIGatewayProxyEvent
 ): AuthorizationHeader => {
-  const [schema, token] = event.headers?.authorization?.split(' ')
+  const parts = event.headers?.authorization?.split(' ')
+  if (parts?.length !== 2) {
+    throw new Error('The `Authorization` header is not valid.')
+  }
+  const [schema, token] = parts
   if (!schema.length || !token.length) {
     throw new Error('The `Authorization` header is not valid.')
   }

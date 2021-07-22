@@ -1,8 +1,6 @@
 name: Lint, build and run tests
 
 on:
-  push:
-    branches: [main]
   pull_request:
     types: [opened, synchronize, reopened]
 
@@ -11,35 +9,34 @@ jobs:
     strategy:
       matrix:
         os: ['ubuntu-latest', 'windows-latest']
-        node-version: ['14', '12']
+        node-version: ['14']
       fail-fast: true
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.os }} | Node ${{ matrix.node-version }} latest
-    steps:        
+    steps:
       - uses: actions/checkout@v2
 
       - name: Setup node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
 
       - name: Cache "node_modules"
         uses: actions/cache@v2
-        if: matrix.os == 'ubuntu-latest'
         with:
           path: '**/node_modules'
-          key: node_modules_${{ runner.os }}_${{ hashFiles('**/yarn.lock') }}  
+          key: node_modules_${{ runner.os }}_${{ hashFiles('**/yarn.lock') }}
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
+
+      - name: Build
+        run: yarn build
 
       - name: Run ESLint
         run: yarn lint
         env:
           CI: true
-
-      - name: Build
-        run: yarn build
 
       - name: Run tests
         run: yarn test

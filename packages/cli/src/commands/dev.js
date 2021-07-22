@@ -1,16 +1,16 @@
 import fs from 'fs'
-import path from 'path'
 
 import concurrently from 'concurrently'
 import terminalLink from 'terminal-link'
-import { getConfig, shutdownPort } from '@redwoodjs/internal'
 
-import { getPaths } from 'src/lib'
-import c from 'src/lib/colors'
-import { handler as generatePrismaClient } from 'src/commands/dbCommands/generate'
+import { getConfig, getConfigPath, shutdownPort } from '@redwoodjs/internal'
+
+import { getPaths } from '../lib'
+import c from '../lib/colors'
+import { generatePrismaClient } from '../lib/generatePrismaClient'
 
 export const command = 'dev [side..]'
-export const description = 'Start development servers for api, db, and web'
+export const description = 'Start development servers for api, and web'
 export const builder = (yargs) => {
   yargs
     .positional('side', {
@@ -25,6 +25,24 @@ export const builder = (yargs) => {
         'String of one or more Webpack DevServer config options, for example: `--fwd="--port=1234 --open=false"`',
       type: 'string',
     })
+    .option('esbuild', {
+      type: 'boolean',
+      required: false,
+      default: getConfig().experimental.esbuild,
+      description: 'Use ESBuild [experimental]',
+    })
+    .option('useEnvelop', {
+      type: 'boolean',
+      required: false,
+      default: getConfig().experimental.useEnvelop,
+      description:
+        'Use Envelop as GraphQL Server instead of Apollo Server [experimental]',
+    })
+    .option('generate', {
+      type: 'boolean',
+      default: true,
+      description: 'Generate artifacts',
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -33,18 +51,22 @@ export const builder = (yargs) => {
     )
 }
 
-export const handler = async ({ side = ['api', 'web'], forward = '' }) => {
-  // We use BASE_DIR when we need to effectively set the working dir
-  const BASE_DIR = getPaths().base
-  // For validation, e.g. dirExists?, we use these
-  // note: getPaths().web|api.base returns undefined on Windows
-  const API_DIR_SRC = getPaths().api.src
-  const WEB_DIR_SRC = getPaths().web.src
+export const handler = async ({
+  side = ['api', 'web'],
+  forward = '',
+  esbuild = false,
+  useEnvelop = false,
+  generate = true,
+}) => {
+  const rwjsPaths = getPaths()
 
   if (side.includes('api')) {
     try {
-      // This command will check if the api side has a `prisma.schema` file.
-      await generatePrismaClient({ verbose: false, force: false })
+      await generatePrismaClient({
+        verbose: false,
+        force: false,
+        schema: getPaths().api.dbSchema,
+      })
     } catch (e) {
       console.error(c.error(e.message))
     }
@@ -68,27 +90,54 @@ export const handler = async ({ side = ['api', 'web'], forward = '' }) => {
     }
   }
 
+  const webpackDevConfig = require.resolve(
+    '@redwoodjs/core/config/webpack.development.js'
+  )
+
+  const redwoodConfigPath = getConfigPath()
+
+  /** @type {Record<string, import('concurrently').CommandObj>} */
   const jobs = {
     api: {
       name: 'api',
-      command: `cd "${path.join(BASE_DIR, 'api')}" && yarn dev-server`,
+      command: `cd "${rwjsPaths.api.base}" && yarn cross-env NODE_ENV=development nodemon --watch "${redwoodConfigPath}" --exec "yarn dev-server"`,
       prefixColor: 'cyan',
-      runWhen: () => fs.existsSync(API_DIR_SRC),
+      runWhen: () => fs.existsSync(rwjsPaths.api.src),
     },
     web: {
       name: 'web',
-      command: `cd "${path.join(
-        BASE_DIR,
-        'web'
-      )}" && yarn webpack-dev-server --config ../node_modules/@redwoodjs/core/config/webpack.development.js ${forward}`,
+      command: `cd "${rwjsPaths.web.base}" && yarn cross-env NODE_ENV=development webpack serve --config "${webpackDevConfig}" ${forward}`,
       prefixColor: 'blue',
-      runWhen: () => fs.existsSync(WEB_DIR_SRC),
+      runWhen: () => fs.existsSync(rwjsPaths.web.src),
+    },
+    gen: {
+      name: 'gen',
+      command: 'yarn rw-gen-watch',
+      prefixColor: 'green',
+      runWhen: () => generate,
     },
   }
 
+  if (esbuild) {
+    jobs.api.name = 'api esbuild'
+    jobs.api.command = `yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps nodemon --watch "${redwoodConfigPath}" --exec "yarn rw-api-server-watch"`
+
+    jobs.web.name = 'web esbuild'
+    jobs.web.command = 'yarn cross-env ESBUILD=1 && ' + jobs.web.command
+  }
+
+  if (useEnvelop) {
+    jobs.api.name = jobs.api.name + ' with envelop'
+  }
+
+  // TODO: Convert jobs to an array and supply cwd command.
   concurrently(
     Object.keys(jobs)
-      .map((n) => side.includes(n) && jobs[n])
+      .map((job) => {
+        if (side.includes(job) || job === 'gen') {
+          return jobs[job]
+        }
+      })
       .filter((job) => job && job.runWhen()),
     {
       prefix: '{name} |',
@@ -96,7 +145,8 @@ export const handler = async ({ side = ['api', 'web'], forward = '' }) => {
     }
   ).catch((e) => {
     if (typeof e?.message !== 'undefined') {
-      console.log(c.error(e.message))
+      console.error(c.error(e.message))
+      process.exit(1)
     }
   })
 }

@@ -1,0 +1,11 @@
+{
+  "Welcome to RedwoodJS": "Bienvenu sur RedwoodJS",
+  "info": "Ceci est votre fichier de traduction",
+  "see": "https://www.i18next.com/translation-function/essentials",
+  "HomePage": {
+    "title": "Page d'accueil",
+    "info": "Trouve moi dans",
+    "route": "Ma route par default se nomme",
+    "link": "le lien vers moi avec"
+  }
+}

@@ -1,12 +1,12 @@
 import fs from 'fs'
 import path from 'path'
 
-import { paramCase } from 'param-case'
 import Listr from 'listr'
+import { paramCase } from 'param-case'
 import terminalLink from 'terminal-link'
 
-import { getPaths, writeFilesTask } from 'src/lib'
-import c from 'src/lib/colors'
+import { getPaths, writeFilesTask } from '../../../lib'
+import c from '../../../lib/colors'
 
 const POST_RUN_INSTRUCTIONS = `Next steps...\n\n   ${c.warning(
   'After writing your migration, you can run it with:'

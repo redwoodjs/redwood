@@ -1,5 +1,5 @@
-import { getPaths } from 'src/lib'
-import c from 'src/lib/colors'
+import { getPaths } from '../lib'
+import c from '../lib/colors'
 
 export const command = 'check'
 export const aliases = ['diagnostics']
@@ -13,8 +13,12 @@ export const handler = async () => {
 
   printDiagnostics(getPaths().base, {
     getSeverityLabel: (severity) => {
-      if (severity === DiagnosticSeverity.Error) return c.error('error')
-      if (severity === DiagnosticSeverity.Warning) return c.warning('warning')
+      if (severity === DiagnosticSeverity.Error) {
+        return c.error('error')
+      }
+      if (severity === DiagnosticSeverity.Warning) {
+        return c.warning('warning')
+      }
       return c.info('info')
     },
   })

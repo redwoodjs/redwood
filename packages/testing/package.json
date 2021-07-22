@@ -1,18 +1,38 @@
 {
   "name": "@redwoodjs/testing",
   "description": "Tools, wrappers and configuration for testing a Redwood project.",
-  "version": "0.19.4",
+  "version": "0.35.2",
   "files": [
+    "config",
     "dist"
   ],
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@redwoodjs/internal": "^0.19.4",
-    "@redwoodjs/web": "^0.19.4",
-    "@testing-library/react": "^11.0.2",
-    "@types/react": "16.9.38",
-    "msw": "^0.21.2"
+    "@redwoodjs/auth": "0.35.2",
+    "@redwoodjs/internal": "0.35.2",
+    "@redwoodjs/router": "0.35.2",
+    "@redwoodjs/web": "0.35.2",
+    "@storybook/addon-a11y": "6.3.4",
+    "@storybook/builder-webpack5": "6.3.4",
+    "@storybook/manager-webpack5": "6.3.4",
+    "@storybook/react": "6.3.4",
+    "@testing-library/jest-dom": "5.14.1",
+    "@testing-library/react": "12.0.0",
+    "@testing-library/user-event": "13.2.0",
+    "@types/babel-core": "6.25.7",
+    "@types/jest": "26.0.24",
+    "@types/node": "16.4.0",
+    "@types/react": "17.0.14",
+    "@types/react-dom": "17.0.9",
+    "@types/webpack": "5.28.0",
+    "babel-jest": "27.0.6",
+    "jest": "27.0.6",
+    "jest-watch-typeahead": "0.6.4",
+    "msw": "0.32.2",
+    "ts-toolbelt": "9.6.0",
+    "whatwg-fetch": "3.6.2"
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",
@@ -23,5 +43,5 @@
     "test": "jest",
     "test:watch": "yarn test --watch"
   },
-  "gitHead": "c235e7d7186e5e258764699c0e0e1d5cc0fdd0b5"
+  "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"
 }
