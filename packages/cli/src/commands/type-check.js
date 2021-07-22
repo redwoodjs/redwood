@@ -7,9 +7,9 @@ import terminalLink from 'terminal-link'
 
 import { getProject } from '@redwoodjs/structure'
 
-import { getPaths } from 'src/lib'
-import c from 'src/lib/colors'
-import { generatePrismaClient } from 'src/lib/generatePrismaClient'
+import { getPaths } from '../lib'
+import c from '../lib/colors'
+import { generatePrismaClient } from '../lib/generatePrismaClient'
 
 export const command = 'type-check [sides..]'
 export const aliases = ['tsc', 'tc']

@@ -1,5 +1,4 @@
-import { getDefaultArgs } from 'src/lib'
-
+import { getDefaultArgs } from '../../../lib'
 import { builder, files } from '../../generate/service/service'
 import { createYargsForComponentDestroy } from '../helpers'
 

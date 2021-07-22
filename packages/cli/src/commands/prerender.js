@@ -7,7 +7,7 @@ import VerboseRenderer from 'listr-verbose-renderer'
 import { getPaths } from '@redwoodjs/internal'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
 
-import c from 'src/lib/colors'
+import c from '../lib/colors'
 
 export const command = 'prerender'
 export const aliases = ['render']
