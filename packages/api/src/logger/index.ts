@@ -1,15 +1,17 @@
-import { PrismaClient } from '@prisma/client'
 import pino, {
   BaseLogger,
   DestinationStream,
   LevelWithSilent,
   LoggerOptions,
   PrettyOptions,
-  redactOptions,
 } from 'pino'
 import * as prettyPrint from 'pino-pretty'
 
 export type LogLevel = 'info' | 'query' | 'warn' | 'error'
+
+// @TODO use type from Prisma once the issue is solved
+// https://github.com/prisma/prisma/issues/8291
+type PrismaClient = any
 
 type LogDefinition = {
   level: LogLevel
@@ -80,26 +82,39 @@ export const prettifier = prettyPrint
  *
  * As an array, the redact option specifies paths that should have their values redacted from any log output.
  *
- * Each path must be a string using a syntax which corresponds to JavaScript dot and bracket notation.
- *
- * If an object is supplied, three options can be specified:
- *
- *      paths (String[]): Required. An array of paths
- *      censor (String): Optional. A value to overwrite key which are to be redacted. Default: '[Redacted]'
- *      remove (Boolean): Optional. Instead of censoring the value, remove both the key and the value. Default: false
  */
-export const redactionsList: string[] | redactOptions = [
+export const redactionsList: string[] = [
   'access_token',
+  'data.access_token',
+  'data.*.access_token',
+  'data.*.accessToken',
   'accessToken',
+  'data.accessToken',
   'DATABASE_URL',
+  'data.*.email',
+  'data.email',
   'email',
   'event.headers.authorization',
+  'data.hashedPassword',
+  'data.*.hashedPassword',
+  'hashedPassword',
   'host',
   'jwt',
+  'data.jwt',
+  'data.*.jwt',
   'JWT',
+  'data.JWT',
+  'data.*.JWT',
   'password',
+  'data.password',
+  'data.*.password',
   'params',
+  'data.salt',
+  'data.*.salt',
+  'salt',
   'secret',
+  'data.secret',
+  'data.*.secret',
 ]
 
 /**
@@ -172,6 +187,14 @@ export const defaultPrettyPrintOptions: PrettyOptions = {
  *   and warn in prod
  *   Or set via LOG_LEVEL environment variable
  * - Redact the host and other keys via a set redactionList
+ *
+ * Each path must be a string using a syntax which corresponds to JavaScript dot and bracket notation.
+ *
+ * If an object is supplied, three options can be specified:
+ *
+ *      paths (String[]): Required. An array of paths
+ *      censor (String): Optional. A value to overwrite key which are to be redacted. Default: '[Redacted]'
+ *      remove (Boolean): Optional. Instead of censoring the value, remove both the key and the value. Default: false
  *
  * Pretty Printing Defaults defined in defaultPrettyPrintOptions
  *
@@ -350,12 +373,15 @@ interface PrismaLoggingConfig {
  */
 export const handlePrismaLogging = (config: PrismaLoggingConfig): void => {
   const logger = config.logger.child({
+    // @TODO Change this once this issue is resolved
+    // See https://github.com/prisma/prisma/issues/8290
     prisma: { clientVersion: config.db['_clientVersion'] },
   })
 
   config.logLevels?.forEach((level) => {
     if (level === 'query') {
-      config.db.$on(level, (queryEvent: QueryEvent) => {
+      config.db.$on(level, (event: any) => {
+        const queryEvent = event as QueryEvent
         if (queryEvent.duration >= SLOW_QUERY_THRESHOLD) {
           logger.warn(
             { ...queryEvent },
@@ -369,7 +395,8 @@ export const handlePrismaLogging = (config: PrismaLoggingConfig): void => {
         }
       })
     } else {
-      config.db.$on(level, (logEvent: LogEvent) => {
+      config.db.$on(level, (event: any) => {
+        const logEvent = event as LogEvent
         switch (level) {
           case 'info':
             logger.info({ ...logEvent }, logEvent.message)
