@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/dev-server",
   "description": "Redwood's HTTP server for serverless Functions",
-  "version": "0.33.3",
+  "version": "0.35.2",
   "bin": {
     "dev-server": "./dist/main.js"
   },
@@ -11,9 +11,9 @@
   "license": "MIT",
   "dependencies": {
     "@babel/register": "7.13.16",
-    "@redwoodjs/internal": "^0.33.3",
+    "@redwoodjs/internal": "0.35.2",
     "body-parser": "1.19.0",
-    "chokidar": "3.4.3",
+    "chokidar": "3.5.2",
     "express": "4.17.1",
     "morgan": "1.10.0",
     "qs": "6.9.3",

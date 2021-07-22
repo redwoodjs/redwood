@@ -22,7 +22,8 @@ import {
   generateTypeDefRouterPages,
   mirrorPathForDirectoryNamedModules,
   mirrorPathForCell,
-  generateTypeDefGraphQL,
+  generateTypeDefGraphQLWeb,
+  generateTypeDefGraphQLApi,
 } from './typeDefinitions'
 
 const rwjsPaths = getPaths()
@@ -56,7 +57,7 @@ watcher
     const absPath = path.join(rwjsPaths.base, p)
 
     if (absPath.indexOf('Cell') !== -1 && isCellFile(absPath)) {
-      await generateTypeDefGraphQL('web')
+      await generateTypeDefGraphQLWeb()
       if (eventName === 'unlink') {
         fs.unlinkSync(mirrorPathForCell(absPath, rwjsPaths)[0])
       } else {
@@ -85,7 +86,7 @@ watcher
       )
     } else if (isGraphQLSchemaFile(absPath)) {
       await generateGraphQLSchema()
-      await generateTypeDefGraphQL('api')
+      await generateTypeDefGraphQLApi()
       console.log(action[eventName], 'GraphQL Schema:', '\x1b[2m', p, '\x1b[0m')
     }
   })

@@ -3,11 +3,11 @@ import fs from 'fs'
 import concurrently from 'concurrently'
 import terminalLink from 'terminal-link'
 
-import { getConfig, shutdownPort } from '@redwoodjs/internal'
+import { getConfig, getConfigPath, shutdownPort } from '@redwoodjs/internal'
 
-import { getPaths } from 'src/lib'
-import c from 'src/lib/colors'
-import { generatePrismaClient } from 'src/lib/generatePrismaClient'
+import { getPaths } from '../lib'
+import c from '../lib/colors'
+import { generatePrismaClient } from '../lib/generatePrismaClient'
 
 export const command = 'dev [side..]'
 export const description = 'Start development servers for api, and web'
@@ -31,6 +31,13 @@ export const builder = (yargs) => {
       default: getConfig().experimental.esbuild,
       description: 'Use ESBuild [experimental]',
     })
+    .option('useEnvelop', {
+      type: 'boolean',
+      required: false,
+      default: getConfig().experimental.useEnvelop,
+      description:
+        'Use Envelop as GraphQL Server instead of Apollo Server [experimental]',
+    })
     .option('generate', {
       type: 'boolean',
       default: true,
@@ -48,6 +55,7 @@ export const handler = async ({
   side = ['api', 'web'],
   forward = '',
   esbuild = false,
+  useEnvelop = false,
   generate = true,
 }) => {
   const rwjsPaths = getPaths()
@@ -82,17 +90,23 @@ export const handler = async ({
     }
   }
 
+  const webpackDevConfig = require.resolve(
+    '@redwoodjs/core/config/webpack.development.js'
+  )
+
+  const redwoodConfigPath = getConfigPath()
+
   /** @type {Record<string, import('concurrently').CommandObj>} */
   const jobs = {
     api: {
       name: 'api',
-      command: `cd "${rwjsPaths.api.base}" && yarn cross-env NODE_ENV=development yarn dev-server`,
+      command: `cd "${rwjsPaths.api.base}" && yarn cross-env NODE_ENV=development nodemon --watch "${redwoodConfigPath}" --exec "yarn dev-server"`,
       prefixColor: 'cyan',
       runWhen: () => fs.existsSync(rwjsPaths.api.src),
     },
     web: {
       name: 'web',
-      command: `cd "${rwjsPaths.web.base}" && yarn cross-env NODE_ENV=development webpack-dev-server --config ../node_modules/@redwoodjs/core/config/webpack.development.js ${forward}`,
+      command: `cd "${rwjsPaths.web.base}" && yarn cross-env NODE_ENV=development webpack serve --config "${webpackDevConfig}" ${forward}`,
       prefixColor: 'blue',
       runWhen: () => fs.existsSync(rwjsPaths.web.src),
     },
@@ -106,11 +120,14 @@ export const handler = async ({
 
   if (esbuild) {
     jobs.api.name = 'api esbuild'
-    jobs.api.command =
-      'yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn rw-api-server-watch'
+    jobs.api.command = `yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps nodemon --watch "${redwoodConfigPath}" --exec "yarn rw-api-server-watch"`
 
     jobs.web.name = 'web esbuild'
     jobs.web.command = 'yarn cross-env ESBUILD=1 && ' + jobs.web.command
+  }
+
+  if (useEnvelop) {
+    jobs.api.name = jobs.api.name + ' with envelop'
   }
 
   // TODO: Convert jobs to an array and supply cwd command.

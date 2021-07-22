@@ -9,9 +9,9 @@ import terminalLink from 'terminal-link'
 import { getConfig } from '@redwoodjs/internal'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
 
-import { getPaths } from 'src/lib'
-import c from 'src/lib/colors'
-import { generatePrismaClient } from 'src/lib/generatePrismaClient'
+import { getPaths } from '../lib'
+import c from '../lib/colors'
+import { generatePrismaClient } from '../lib/generatePrismaClient'
 
 import { getTasks as getPrerenderTasks } from './prerender'
 
@@ -70,6 +70,12 @@ export const builder = (yargs) => {
       default: getConfig().experimental.esbuild,
       description: 'Use ESBuild for api side [experimental]',
     })
+    .option('performance', {
+      alias: 'perf',
+      type: 'boolean',
+      default: false,
+      description: 'Measure build performance',
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -85,7 +91,12 @@ export const handler = async ({
   prisma = true,
   esbuild = false,
   prerender,
+  performance = false,
 }) => {
+  let webpackConfigPath = require.resolve(
+    `@redwoodjs/core/config/webpack.${stats ? 'stats' : 'production'}.js`
+  )
+
   const execCommandsForSides = {
     api: {
       // must use path.join() here, and for 'web' below, to support Windows
@@ -94,10 +105,20 @@ export const handler = async ({
     },
     web: {
       cwd: path.join(getPaths().base, 'web'),
-      cmd: `yarn cross-env NODE_ENV=production webpack --config ../node_modules/@redwoodjs/core/config/webpack.${
-        stats ? 'stats' : 'production'
-      }.js`,
+      cmd: `yarn cross-env NODE_ENV=production webpack --config ${webpackConfigPath}`,
     },
+  }
+
+  if (performance) {
+    webpackConfigPath = require.resolve(
+      '@redwoodjs/core/config/webpack.perf.js'
+    )
+    execa.sync(
+      `yarn cross-env NODE_ENV=production webpack --config ${webpackConfigPath}`,
+      { stdio: 'inherit', shell: true }
+    )
+    // We do not want to continue building...
+    return
   }
 
   if (stats) {

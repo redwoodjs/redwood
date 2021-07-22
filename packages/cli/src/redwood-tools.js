@@ -159,8 +159,7 @@ const rwtLink = async (yargs) => {
   const frameworkPackagesPath = path.join(frameworkPath, 'packages/')
   const projectPackagesPath = path.join(
     getPaths().base,
-    'node_modules',
-    '_redwood-linked-packages'
+    'node_modules/_redwood-linked-packages'
   )
 
   console.log(
@@ -343,17 +342,15 @@ const updateProjectWithResolutions = (redwoodPackagesPath, remove) => {
     resolutions = omit(resolutions, Object.keys(frameworkRepoResolutions))
     packages = packages.filter(
       (workspaceFolder) =>
-        workspaceFolder !== 'node_modules/_redwood-linked-packages/packages/*'
+        workspaceFolder !== 'node_modules/_redwood-linked-packages/*'
     )
   } else {
     resolutions = {
       ...resolutions,
       ...frameworkRepoResolutions,
     }
-    if (
-      !packages.includes('node_modules/_redwood-linked-packages/packages/*')
-    ) {
-      packages.push('node_modules/_redwood-linked-packages/packages/*')
+    if (!packages.includes('node_modules/_redwood-linked-packages/*')) {
+      packages.push('node_modules/_redwood-linked-packages/*')
     }
   }
 

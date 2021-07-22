@@ -1,7 +1,7 @@
 global.__dirname = __dirname
 import path from 'path'
 
-import 'src/lib/test'
+import '../../../../lib/test'
 
 import * as scaffold from '../scaffold'
 
@@ -506,6 +506,26 @@ describe('Admin/Post', () => {
           '/path/to/project/web/src/components/Admin/Post/Posts/Posts.js'
         ),
       ])
+    })
+
+    test('the index component correctly imports the QUERY', async () => {
+      expect(
+        filesUpper[
+          path.normalize(
+            '/path/to/project/web/src/components/Admin/Post/Posts/Posts.js'
+          )
+        ]
+      ).toMatch(`import { QUERY } from 'src/components/Admin/Post/PostsCell'`)
+    })
+
+    test('the new component correctly imports the form', async () => {
+      expect(
+        filesUpper[
+          path.normalize(
+            '/path/to/project/web/src/components/Admin/Post/NewPost/NewPost.js'
+          )
+        ]
+      ).toMatch(`import PostForm from 'src/components/Admin/Post/PostForm'`)
     })
 
     test('creates a new component', async () => {

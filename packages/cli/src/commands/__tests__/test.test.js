@@ -1,5 +1,5 @@
 global.__dirname = __dirname
-import 'src/lib/test'
+import '../../lib/test'
 
 jest.mock('execa', () =>
   jest.fn((cmd, params) => ({
@@ -70,7 +70,7 @@ test('Syncs or creates test database when the flag --db-push is set to true', as
   expect(execa.mock.results[1].value.params).toContain('--runInBand')
 })
 
-test.only('Skips test database sync/creation when the flag --db-push is set to false', async () => {
+test('Skips test database sync/creation when the flag --db-push is set to false', async () => {
   await handler({
     filter: ['api'],
     dbPush: false,

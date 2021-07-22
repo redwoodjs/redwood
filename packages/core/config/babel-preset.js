@@ -37,7 +37,7 @@ module.exports = () => {
           version: packageJSON.devDependencies['@babel/runtime-corejs3'],
         },
       ],
-      ['babel-plugin-graphql-tag'],
+
       [
         require('../dist/babelPlugins/babel-plugin-redwood-directory-named-import'),
       ],
@@ -96,6 +96,7 @@ module.exports = () => {
               ],
             },
           ],
+          ['babel-plugin-graphql-tag'],
           [require('../dist/babelPlugins/babel-plugin-redwood-import-dir')],
         ],
       },
@@ -164,6 +165,7 @@ module.exports = () => {
               ],
             },
           ],
+          ['babel-plugin-graphql-tag'],
           [
             'inline-react-svg',
             {

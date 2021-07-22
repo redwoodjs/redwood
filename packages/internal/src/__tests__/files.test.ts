@@ -44,9 +44,18 @@ test('finds directory named modules', () => {
     Array [
       "api/src/services/todos/todos.js",
       "web/src/components/AddTodo/AddTodo.js",
+      "web/src/components/AddTodoControl/AddTodoControl.js",
       "web/src/components/Check/Check.js",
+      "web/src/components/TableCell/TableCell.js",
       "web/src/components/TodoItem/TodoItem.js",
       "web/src/layouts/SetLayout/SetLayout.js",
+      "web/src/pages/BarPage/BarPage.tsx",
+      "web/src/pages/FatalErrorPage/FatalErrorPage.js",
+      "web/src/pages/FooPage/FooPage.tsx",
+      "web/src/pages/HomePage/HomePage.tsx",
+      "web/src/pages/NotFoundPage/NotFoundPage.js",
+      "web/src/pages/TypeScriptPage/TypeScriptPage.tsx",
+      "web/src/pages/admin/EditUserPage/EditUserPage.jsx",
     ]
   `)
 })

@@ -5,7 +5,16 @@ import '@testing-library/jest-dom/extend-expect'
 
 import { AuthContextInterface } from '@redwoodjs/auth'
 
-import { Router, Route, Private, Redirect, navigate, routes, Link } from '../'
+import {
+  Router,
+  Route,
+  Private,
+  Redirect,
+  routes,
+  Link,
+  navigate,
+  back,
+} from '../'
 import { useParams } from '../params'
 import { Set } from '../Set'
 
@@ -209,13 +218,11 @@ test('can display a loading screen whilst waiting for auth', async () => {
   const TestRouter = () => (
     <Router useAuth={mockUseAuth({ isAuthenticated: false, loading: true })}>
       <Route path="/" page={HomePage} name="home" />
-      <Private unauthenticated="home">
-        <Route
-          path="/private"
-          page={PrivatePage}
-          name="private"
-          whileLoading={() => <>Loading...</>}
-        />
+      <Private
+        unauthenticated="home"
+        whileLoadingAuth={() => <>Authenticating...</>}
+      >
+        <Route path="/private" page={PrivatePage} name="private" />
       </Private>
     </Router>
   )
@@ -228,7 +235,7 @@ test('can display a loading screen whilst waiting for auth', async () => {
   // should not redirect
   act(() => navigate(routes.private()))
   await waitFor(() => {
-    expect(screen.getByText(/Loading.../)).toBeInTheDocument()
+    expect(screen.getByText(/Authenticating.../)).toBeInTheDocument()
     expect(screen.queryByText(/Home Page/)).not.toBeInTheDocument()
   })
 })
@@ -473,6 +480,34 @@ test('renders first matching route only, even if multiple routes have the same n
       <Route path="/about" page={AboutPage} name="about" />
       <Route path="/{param}" page={ParamPage} name="about" />
       <Route path="/about" page={AboutTwoPage} name="about" />
+      <Route path="/about" page={AboutPage} name="about" />
+    </Router>
+  )
+
+  const screen = render(<TestRouter />)
+
+  await waitFor(() => screen.getByText(/Home Page/))
+
+  // go to about page, and make sure that's the only page rendered
+  act(() => navigate(routes.about()))
+  // `getByText` will throw an error if more than one node is found
+  // which is perfect, because that's exactly what we want to test
+  await waitFor(() => screen.getByText('About Page'))
+  expect(screen.queryByText('param')).not.toBeInTheDocument()
+  expect(screen.queryByText('About Two Page')).not.toBeInTheDocument()
+})
+
+test('renders first matching route only, also with Private', async () => {
+  const ParamPage = ({ param }: { param: string }) => <div>param {param}</div>
+
+  const TestRouter = () => (
+    <Router useAuth={mockUseAuth()}>
+      <Route path="/" page={HomePage} name="home" />
+      <Route path="/login" page={LoginPage} name="login" />
+      <Route path="/about" page={AboutPage} name="about" />
+      <Private unauthenticated="login">
+        <Route path="/{param}" page={ParamPage} name="param" />
+      </Private>
     </Router>
   )
 
@@ -483,8 +518,7 @@ test('renders first matching route only, even if multiple routes have the same n
   // go to about page, and make sure that's the only page rendered
   act(() => navigate(routes.about()))
   await waitFor(() => screen.getByText('About Page'))
-  expect(screen.queryByText('param')).not.toBeInTheDocument()
-  expect(screen.queryByText('About Two Page')).not.toBeInTheDocument()
+  expect(screen.queryByText(/param/)).not.toBeInTheDocument()
 })
 
 test('params should never be an empty object', async (done) => {
@@ -611,4 +645,76 @@ test('Private is an alias for Set private', async () => {
   act(() => navigate('/private'))
   await waitFor(() => screen.getByText(/Private Layout \(dark\)/))
   await waitFor(() => screen.getByText(/Private Page/))
+})
+
+test('redirect to last page', async () => {
+  const TestRouter = () => (
+    <Router useAuth={mockUseAuth()}>
+      <Route path="/" page={HomePage} name="home" />
+      <Route path="/about" page={AboutPage} name="about" />
+      <Private unauthenticated="login">
+        <Route path="/private" page={PrivatePage} name="private" />
+      </Private>
+      <Route path="/login" page={LoginPage} name="login" />
+    </Router>
+  )
+  const screen = render(<TestRouter />)
+
+  // starts on home page
+  await waitFor(() => screen.getByText(/Home Page/i))
+
+  // navigate to private page
+  // should redirect to login
+  act(() => navigate(routes.private()))
+
+  await waitFor(() => {
+    expect(screen.queryByText(/Private Page/i)).not.toBeInTheDocument()
+    expect(window.location.pathname).toBe('/login')
+    expect(window.location.search).toBe('?redirectTo=/private')
+    screen.getByText(/Login Page/i)
+  })
+})
+
+test('no location match means nothing is rendered', async () => {
+  const TestRouter = () => (
+    <Router>
+      <Route path="/" page={HomePage} name="home" />
+    </Router>
+  )
+  const screen = render(<TestRouter />)
+
+  // starts on home page
+  await waitFor(() => screen.getByText(/Home Page/i))
+
+  // navigate page that doesn't exist
+  act(() => navigate('/not/found'))
+
+  // wait for rendering
+  // Otherwise adding a NotFound route still makes this test pass
+  await new Promise((r) => setTimeout(r, 200))
+
+  expect(screen.container).toMatchInlineSnapshot('<div />')
+})
+
+test('jump to new route, then go back', async () => {
+  const HelpPage = () => <h1>Help Page</h1>
+  const TestRouter = () => (
+    <Router>
+      <Route path="/" page={HomePage} name="home" />
+      <Route path="/login" page={LoginPage} name="login" />
+      <Route path="/about" page={AboutPage} name="about" />
+      <Route path="/help" page={HelpPage} name="help" />
+    </Router>
+  )
+  const screen = render(<TestRouter />)
+
+  // starts on home page
+  await waitFor(() => screen.getByText('Home Page'))
+
+  act(() => navigate(routes.about()))
+  await waitFor(() => screen.getByText('About Page'))
+  act(() => navigate(routes.help(), { replace: true }))
+  await waitFor(() => screen.getByText('Help Page'))
+  act(() => back())
+  await waitFor(() => screen.getByText('Home Page'))
 })

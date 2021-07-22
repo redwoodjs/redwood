@@ -2,10 +2,9 @@ global.__dirname = __dirname
 import path from 'path'
 
 // Load mocks
-import 'src/lib/test'
+import '../../../../lib/test'
 
-import { getDefaultArgs } from 'src/lib'
-
+import { getDefaultArgs } from '../../../../lib'
 import { yargsDefaults as defaults } from '../../../generate'
 import * as scaffold from '../scaffold'
 
@@ -78,6 +77,16 @@ describe('in javascript (default) mode', () => {
     ).toMatchSnapshot()
   })
 
+  test('the edit page correctly imports the edit cell', async () => {
+    expect(
+      files[
+        path.normalize(
+          '/path/to/project/web/src/pages/Post/EditPostPage/EditPostPage.js'
+        )
+      ]
+    ).toMatch(`import EditPostCell from 'src/components/Post/EditPostCell'`)
+  })
+
   test('creates a index page', async () => {
     expect(
       files[
@@ -86,6 +95,16 @@ describe('in javascript (default) mode', () => {
         )
       ]
     ).toMatchSnapshot()
+  })
+
+  test('the index page correctly imports the index cell', async () => {
+    expect(
+      files[
+        path.normalize(
+          '/path/to/project/web/src/pages/Post/PostsPage/PostsPage.js'
+        )
+      ]
+    ).toMatch(`import PostsCell from 'src/components/Post/PostsCell'`)
   })
 
   test('creates a new page', async () => {
@@ -98,6 +117,16 @@ describe('in javascript (default) mode', () => {
     ).toMatchSnapshot()
   })
 
+  test('the new page correctly imports the new component', async () => {
+    expect(
+      files[
+        path.normalize(
+          '/path/to/project/web/src/pages/Post/NewPostPage/NewPostPage.js'
+        )
+      ]
+    ).toMatch(`import NewPost from 'src/components/Post/NewPost'`)
+  })
+
   test('creates a show page', async () => {
     expect(
       files[
@@ -106,6 +135,16 @@ describe('in javascript (default) mode', () => {
         )
       ]
     ).toMatchSnapshot()
+  })
+
+  test('the show page correctly imports the show cell', async () => {
+    expect(
+      files[
+        path.normalize(
+          '/path/to/project/web/src/pages/Post/PostPage/PostPage.js'
+        )
+      ]
+    ).toMatch(`import PostCell from 'src/components/Post/PostCell'`)
   })
 
   // Cells
@@ -120,6 +159,16 @@ describe('in javascript (default) mode', () => {
     ).toMatchSnapshot()
   })
 
+  test('the edit cell correctly imports the form', async () => {
+    expect(
+      files[
+        path.normalize(
+          '/path/to/project/web/src/components/Post/EditPostCell/EditPostCell.js'
+        )
+      ]
+    ).toMatch(`import PostForm from 'src/components/Post/PostForm'`)
+  })
+
   test('creates an index cell', async () => {
     expect(
       files[
@@ -130,6 +179,16 @@ describe('in javascript (default) mode', () => {
     ).toMatchSnapshot()
   })
 
+  test('the index cell correctly imports the index component', async () => {
+    expect(
+      files[
+        path.normalize(
+          '/path/to/project/web/src/components/Post/PostsCell/PostsCell.js'
+        )
+      ]
+    ).toMatch(`import Posts from 'src/components/Post/Posts'`)
+  })
+
   test('creates a show cell', async () => {
     expect(
       files[
@@ -138,6 +197,16 @@ describe('in javascript (default) mode', () => {
         )
       ]
     ).toMatchSnapshot()
+  })
+
+  test('the show cell correctly imports the show component', async () => {
+    expect(
+      files[
+        path.normalize(
+          '/path/to/project/web/src/components/Post/PostCell/PostCell.js'
+        )
+      ]
+    ).toMatch(`import Post from 'src/components/Post/Post'`)
   })
 
   // Components
@@ -162,14 +231,34 @@ describe('in javascript (default) mode', () => {
     ).toMatchSnapshot()
   })
 
+  test('the index component correctly imports the QUERY', async () => {
+    expect(
+      files[
+        path.normalize(
+          '/path/to/project/web/src/components/Post/Posts/Posts.js'
+        )
+      ]
+    ).toMatch(`import { QUERY } from 'src/components/Post/PostsCell'`)
+  })
+
   test('creates a new component', async () => {
     expect(
       files[
         path.normalize(
-          '/path/to/project/web/src/components/Post/PostNew/PostNew.js'
+          '/path/to/project/web/src/components/Post/NewPost/NewPost.js'
         )
       ]
     ).toMatchSnapshot()
+  })
+
+  test('the new component correctly imports the form', async () => {
+    expect(
+      files[
+        path.normalize(
+          '/path/to/project/web/src/components/Post/NewPost/NewPost.js'
+        )
+      ]
+    ).toMatch(`import PostForm from 'src/components/Post/PostForm'`)
   })
 
   test('creates a show component', async () => {
@@ -178,6 +267,19 @@ describe('in javascript (default) mode', () => {
         path.normalize('/path/to/project/web/src/components/Post/Post/Post.js')
       ]
     ).toMatchSnapshot()
+  })
+
+  test('error when no editable fields are in model', async () => {
+    await expect(
+      scaffold.files({
+        ...getDefaultArgs(defaults),
+        model: 'NoEditableField',
+        tests: true,
+        nestScaffoldByModel: true,
+      })
+    ).rejects.toThrow(
+      'There are no editable fields in the NoEditableField model'
+    )
   })
 
   // Routes
@@ -451,7 +553,7 @@ describe('in typescript mode', () => {
     expect(
       tsFiles[
         path.normalize(
-          '/path/to/project/web/src/components/Post/PostNew/PostNew.tsx'
+          '/path/to/project/web/src/components/Post/NewPost/NewPost.tsx'
         )
       ]
     ).toMatchSnapshot()

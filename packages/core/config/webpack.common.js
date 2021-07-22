@@ -7,7 +7,6 @@ const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const Dotenv = require('dotenv-webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const TerserPlugin = require('terser-webpack-plugin')
 const webpack = require('webpack')
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin')
 const { merge } = require('webpack-merge')
@@ -44,8 +43,8 @@ const getStyleLoaders = (isEnvProduction) => {
   const cssLoader = (withModules, importLoaders) => {
     // Obscured classnames in production, more expressive classnames in development.
     const localIdentName = isEnvProduction
-      ? '[hash:base64]'
-      : '[path][name]__[local]--[hash:base64:5]'
+      ? '[contenthash:base64]'
+      : '[path][name]__[local]--[contenthash:base64:5]'
 
     const loaderConfig = {
       loader: 'css-loader',
@@ -85,7 +84,7 @@ const getStyleLoaders = (isEnvProduction) => {
   return [
     {
       test: /\.module\.css$/,
-      loader: [
+      use: [
         styleOrExtractLoader,
         cssLoader(true, numImportLoadersForCSS),
         postCssLoader,
@@ -93,7 +92,7 @@ const getStyleLoaders = (isEnvProduction) => {
     },
     {
       test: /\.css$/,
-      loader: [
+      use: [
         styleOrExtractLoader,
         cssLoader(false, numImportLoadersForCSS),
         postCssLoader,
@@ -102,7 +101,7 @@ const getStyleLoaders = (isEnvProduction) => {
     },
     {
       test: /\.module\.scss$/,
-      loader: [
+      use: [
         styleOrExtractLoader,
         cssLoader(true, numImportLoadersForSCSS),
         postCssLoader,
@@ -111,7 +110,7 @@ const getStyleLoaders = (isEnvProduction) => {
     },
     {
       test: /\.scss$/,
-      loader: [
+      use: [
         styleOrExtractLoader,
         cssLoader(false, numImportLoadersForSCSS),
         postCssLoader,
@@ -133,7 +132,10 @@ const getSharedPlugins = (isEnvProduction) => {
         filename: 'static/css/[name].[contenthash:8].css',
         chunkFilename: 'static/css/[name].[contenthash:8].css',
       }),
-    shouldIncludeFastRefresh && new ReactRefreshWebpackPlugin(),
+    shouldIncludeFastRefresh &&
+      // 06-2021 bug with Webpack v5 and sockjs-client dependency conflict
+      // https://github.com/pmmmwh/react-refresh-webpack-plugin/issues/396
+      new ReactRefreshWebpackPlugin({ overlay: false }),
     new webpack.ProvidePlugin({
       React: 'react',
       PropTypes: 'prop-types',
@@ -177,10 +179,7 @@ module.exports = (webpackEnv) => {
        */
       app:
         redwoodPaths.web.index ||
-        path.join(
-          redwoodPaths.base,
-          'node_modules/@redwoodjs/web/dist/entry/index.js'
-        ),
+        require.resolve('@redwoodjs/web/dist/entry/index.js'),
     },
     resolve: {
       extensions: ['.wasm', '.mjs', '.js', '.jsx', '.ts', '.tsx', '.json'],
@@ -211,7 +210,11 @@ module.exports = (webpackEnv) => {
       }),
       new CopyPlugin({
         patterns: [
-          { from: 'public/', to: '', globOptions: { ignore: ['README.md'] } },
+          {
+            from: path.join(redwoodPaths.web.base, 'public'),
+            to: '',
+            globOptions: { ignore: ['README.md'] },
+          },
         ],
       }),
       isEnvProduction &&
@@ -240,11 +243,12 @@ module.exports = (webpackEnv) => {
                   loader: 'url-loader',
                   options: {
                     limit: '10000',
-                    name: 'static/media/[name].[hash:8].[ext]',
+                    name: 'static/media/[name].[contenthash:8].[ext]',
                   },
                 },
               ],
             },
+            // (1)
             {
               test: /\.(js|mjs|jsx)$/,
               exclude: /(node_modules)/,
@@ -252,6 +256,7 @@ module.exports = (webpackEnv) => {
                 {
                   loader: 'babel-loader',
                   options: {
+                    cwd: redwoodPaths.base,
                     plugins: [
                       shouldIncludeFastRefresh &&
                         require.resolve('react-refresh/babel'),
@@ -266,6 +271,7 @@ module.exports = (webpackEnv) => {
                 },
               ].filter(Boolean),
             },
+            // (2)
             {
               test: /\.(ts|tsx)$/,
               exclude: /(node_modules)/,
@@ -273,6 +279,7 @@ module.exports = (webpackEnv) => {
                 {
                   loader: 'babel-loader',
                   options: {
+                    cwd: redwoodPaths.base,
                     plugins: [
                       shouldIncludeFastRefresh &&
                         require.resolve('react-refresh/babel'),
@@ -287,21 +294,19 @@ module.exports = (webpackEnv) => {
                 },
               ].filter(Boolean),
             },
-            // .module.css (2), .css (3), .module.scss (4), .scss (5)
+            // .module.css (3), .css (4), .module.scss (5), .scss (6)
             ...getStyleLoaders(isEnvProduction),
+            // (7)
             isEnvProduction && {
-              test: path.join(
-                redwoodPaths.base,
-                'node_modules/@redwoodjs/router/dist/splash-page'
-              ),
+              test: require.resolve('@redwoodjs/router/dist/splash-page'),
               use: 'null-loader',
             },
-            // (6)
+            // (8)
             {
               test: /\.(svg|ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|pdf)(\?.*)?$/,
               loader: 'file-loader',
               options: {
-                name: 'static/media/[name].[hash:8].[ext]',
+                name: 'static/media/[name].[contenthash:8].[ext]',
               },
             },
           ].filter(Boolean),
@@ -319,7 +324,7 @@ module.exports = (webpackEnv) => {
       },
       // This doesn't get used when mode !== 'production'
       // Because minimize gets set to false, see https://webpack.js.org/configuration/mode/#usage
-      minimizer: [new CssMinimizerPlugin(), new TerserPlugin()],
+      minimizer: ['...', new CssMinimizerPlugin()],
     },
     output: {
       pathinfo: true,

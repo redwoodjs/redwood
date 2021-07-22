@@ -37,6 +37,7 @@ build({ incremental: true }).then((buildResult) => {
       ignored: (file: string) =>
         file.includes('node_modules') ||
         file.includes(rwjsPaths.api.dist) ||
+        file.includes(rwjsPaths.api.types) ||
         file.includes(rwjsPaths.api.db) ||
         [
           '.db',
@@ -46,6 +47,7 @@ build({ incremental: true }).then((buildResult) => {
           '.test.ts',
           '.scenarios.ts',
           '.scenarios.js',
+          '.d.ts',
         ].some((ext) => file.endsWith(ext)),
     })
     .on('ready', async () => {

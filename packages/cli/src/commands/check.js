@@ -1,5 +1,5 @@
-import { getPaths } from 'src/lib'
-import c from 'src/lib/colors'
+import { getPaths } from '../lib'
+import c from '../lib/colors'
 
 export const command = 'check'
 export const aliases = ['diagnostics']

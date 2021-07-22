@@ -17,6 +17,7 @@ Before interacting with the Redwood community, please read and understand our [C
       - [Option 1: Linking](#option-1-linking)
       - [Option 2: Copy and Watch](#option-2-copy-and-watch)
       - [Option 3: Copy (for Windows)](#option-3-copy-for-windows)
+      - [Option 4: Testing the CLI](#option-4-testing-the-cli)
       - [Specifying a RW_PATH](#specifying-a-rw_path)
         - [On **Linux**](#on-linux)
         - [On **MacOS**](#on-macos)
@@ -82,7 +83,7 @@ There are several options:
 At the end, you will have a fully working Redwood blog.
 
 ##### Running the Test Project Script
-Run the following in the `redwood` folder root:
+Run the following in the `redwood` folder root (_note: the script will automatically install dependencies_):
 
 ```terminal
 yarn run build:test-project <path/to/redwood-app>
@@ -240,6 +241,39 @@ yarn rwt cp ../path/to/redwood
 Then you can test the effects of your changes. Unfortunately, each time you make a change to your local Redwood Framework, you'll have to manually run `build` and `rwt cp` again.
 
 When you're done, you can restore your Redwood App to its original state by deleting `./node_modules`, `web/node_modules`, and `api/node_modules`, then running `yarn install`.
+
+#### Option 4: Testing the CLI
+
+If you've made build or design time changes to RedwoodJS, that is if you have modified one of the following packages:
+
+```terminal
+./packages/
+├ api-server
+├ cli
+├ core
+├ dev-server
+├ eslint-config
+├ internal
+├ prerender
+├ structure
+├ testing
+```
+
+
+You can run a development version of the CLI directly from the framework's repo where you don't have to sync any files or node modules.
+
+(For all of the packages above the entry point is the CLI, these are what we consider "build time" and "design time" packages, rather than "run-time" packages which are web, auth, api, forms.)
+
+In order to do that you use the `--cwd` option to set the current working directory to your "test project":
+
+```terminal
+yarn build
+cd packages/cli
+yarn dev --cwd /path/to/your/project
+```
+The `yarn dev` will run the built CLI, and the `--cwd` option will make the command run in that directory. Remember to rebuild the packages if you have made a change to the code! (Tip: You can use `yarn build:watch` to automatically build the framework whilst you're making changes.)
+
+(Tip: --cwd is optional, it will reference the `__fixtures__/example-todo-main` project in the framework.)
 
 #### Specifying a RW_PATH
 
