@@ -1,13 +1,20 @@
 #!/usr/bin/env node
 /* eslint-env node, es6*/
 //@ts-check
-const fs = require('fs')
 const path = require('path')
-const { title } = require('process')
 
 const execa = require('execa')
 const Listr = require('listr')
+const VerboseRenderer = require('listr-verbose-renderer')
+const rimraf = require('rimraf')
 const yargs = require('yargs')
+
+const {
+  addFrameworkDepsToProject,
+  copyFrameworkPackages,
+} = require('./frameworkLinking')
+const { webTasks, apiTasks } = require('./tasks')
+const { getExecaOptions } = require('./util')
 
 const args = yargs
   .usage('Usage: $0 <project directory> [option]')
@@ -18,279 +25,54 @@ const args = yargs
     type: 'boolean',
     describe: 'Generate a TypeScript project. JavaScript by default.',
   })
+  .option('link', {
+    default: false,
+    type: 'boolean',
+    describe:
+      'Link the current checked out branch of the framework in the project',
+  })
+  .option('verbose', {
+    default: false,
+    type: 'boolean',
+    describe: 'Verbose output',
+  })
+  .option('clean', {
+    default: false,
+    type: 'boolean',
+    describe: 'Delete existing directory, and recreate project',
+  })
   .option('canary', {
-    default: true,
+    default: false,
     type: 'boolean',
     describe: 'Upgrade project to latest canary version',
   })
   .help()
   .strict().argv
 
-const { name, typescript, canary } = args
+const { name, typescript, canary, link, verbose, clean } = args
 
 const choosenPath = args._
 
-const RW_BLOGPATH = path.resolve(
+const OUTPUT_PROJECT_PATH = path.resolve(
   choosenPath.length >= 1
     ? String(choosenPath).replace(/,/g, '-')
     : path.join(__dirname, '../../', name)
 )
-const RW_BASEPATH = path.join(__dirname, '../../')
-
-const getExecaOptions = (cwd = RW_BLOGPATH) => ({
-  shell: true,
-  stdio: ['ignore', 'pipe', 'inherit'],
-  cleanup: true,
-  cwd,
-})
-
-async function applyCodemod(codemod, target) {
-  const args = []
-  args.push(
-    '-t',
-    `${path.resolve(__dirname, 'codemods', codemod)} ${RW_BLOGPATH}/${target}`
-  )
-
-  if (typescript) {
-    args.push('--parser', 'tsx')
-  }
-  await execa('yarn transform', args, getExecaOptions(path.resolve(__dirname)))
-}
-
-function addExtension(name) {
-  if (typescript) {
-    if (name.startsWith('api')) {
-      name += '.ts'
-    } else if (name.startsWith('web')) {
-      name += '.tsx'
-    }
-  } else {
-    name += '.js'
-  }
-  return name
-}
+const RW_FRAMEWORKPATH = path.join(__dirname, '../../')
 
 const createProject = async () => {
-  if (fs.existsSync(RW_BLOGPATH)) {
-    console.error(`'${RW_BLOGPATH}' already exists and is not empty.`)
-    process.exit(1)
+  if (clean) {
+    rimraf.sync(OUTPUT_PROJECT_PATH)
   }
 
-  let cmd = `yarn babel-node packages/create-redwood-app/src/create-redwood-app.js ${RW_BLOGPATH}`
+  let cmd = `yarn babel-node packages/create-redwood-app/src/create-redwood-app.js ${OUTPUT_PROJECT_PATH}`
 
-  if (typescript) {
-    cmd = `${cmd} --typescript`
-  }
-
-  return execa(cmd, [], getExecaOptions(RW_BASEPATH))
-}
-
-async function webTasks() {
-  const createBuilder = (cmd) => {
-    return async function createItem(name) {
-      await execa(`${cmd} ${name}`, [], getExecaOptions())
-    }
-  }
-
-  const createPages = async () => {
-    const createPage = createBuilder('yarn redwood g page')
-
-    return new Listr([
-      {
-        title: 'Creating home page',
-        task: async () => {
-          await createPage('home /')
-
-          return applyCodemod(
-            'homePage.js',
-            addExtension(`web/src/pages/HomePage/HomePage`)
-          )
-        },
-      },
-      {
-        title: 'Creating about page',
-        task: async () => {
-          await createPage('about')
-
-          return applyCodemod(
-            'aboutPage.js',
-            addExtension('web/src/pages/AboutPage/AboutPage')
-          )
-        },
-      },
-      {
-        title: 'Creating contact page',
-        task: async () => {
-          await createPage('contact')
-
-          return applyCodemod(
-            'contactPage.js',
-            addExtension('web/src/pages/ContactPage/ContactPage')
-          )
-        },
-      },
-      {
-        title: 'Creating blog post page',
-        task: async () => {
-          await createPage('blogPost /blog-post/{id:Int}')
-
-          return applyCodemod(
-            'blogPostPage.js',
-            addExtension('web/src/pages/BlogPostPage/BlogPostPage')
-          )
-        },
-      },
-    ])
-  }
-
-  const createLayout = async () => {
-    const createLayout = createBuilder('yarn redwood g layout')
-
-    await createLayout('blog')
-
-    return applyCodemod(
-      'blogLayout.js',
-      addExtension('web/src/layouts/BlogLayout/BlogLayout')
-    )
-  }
-
-  const createComponents = async () => {
-    const createLayout = createBuilder('yarn redwood g component')
-
-    await createLayout('blogPost')
-
-    return applyCodemod(
-      'blogPost.js',
-      addExtension('web/src/components/BlogPost/BlogPost')
-    )
-  }
-
-  const createCells = async () => {
-    const createCell = createBuilder('yarn redwood g cell')
-
-    await createCell('blogPosts')
-
-    applyCodemod(
-      'blogPostsCell.js',
-      addExtension('web/src/components/BlogPostsCell/BlogPostsCell')
-    )
-
-    await createCell('blogPost')
-
-    return applyCodemod(
-      'blogPostCell.js',
-      addExtension('web/src/components/BlogPostCell/BlogPostCell')
-    )
-  }
-
-  return new Listr(
-    [
-      {
-        title: 'Creating pages',
-        task: async () => createPages(),
-      },
-      {
-        title: 'Creating layout',
-        task: async () => createLayout(),
-      },
-      {
-        title: 'Creating components',
-        task: async () => createComponents(),
-      },
-      {
-        title: 'Creating cells',
-        task: async () => createCells(),
-      },
-      {
-        title: 'Changing routes',
-        task: async () =>
-          applyCodemod('routes.js', addExtension('web/src/Routes')),
-      },
-      {
-        title: 'Adding Tailwind',
-        task: async () => {
-          return execa('yarn rw setup tailwind', [], getExecaOptions())
-        },
-      },
-      {
-        title: `Running lint`,
-        task: async () => {
-          return execa('yarn rw lint --fix', [], getExecaOptions())
-        },
-      },
-    ],
-    {
-      exitOnError: true,
-    }
+  // We create a ts project and convert using ts-to-js at the end if typescript flag is false
+  return execa(
+    cmd,
+    ['--no-yarn-install', '--typescript', '--overwrite'],
+    getExecaOptions(RW_FRAMEWORKPATH)
   )
-}
-
-async function apiTasks() {
-  async function addModel(schema) {
-    const path = `${RW_BLOGPATH}/api/db/schema.prisma`
-
-    const current = fs.readFileSync(path)
-
-    fs.writeFileSync(path, `${current}${schema}`)
-  }
-
-  return new Listr([
-    {
-      title: 'Adding post model to prisma',
-      task: async () => {
-        const { post } = await import('./codemods/models.js')
-
-        addModel(post)
-
-        return execa(
-          `yarn rw prisma migrate dev --name create_product`,
-          [],
-          getExecaOptions()
-        )
-      },
-    },
-    {
-      title: 'Scaffoding post',
-      task: async () => {
-        return execa('yarn rw g scaffold post', [], getExecaOptions())
-      },
-    },
-    {
-      title: 'Seeding database',
-      task: async () => {
-        await applyCodemod('seed.js', 'api/db/seed.js')
-
-        return execa('yarn rw prisma db seed', [], getExecaOptions())
-      },
-    },
-    {
-      title: 'Adding contact model to prisma',
-      task: async () => {
-        const { contact } = await import('./codemods/models.js')
-
-        addModel(contact)
-
-        await execa(
-          `yarn rw prisma migrate dev --name create_contact`,
-          [],
-          getExecaOptions()
-        )
-
-        await execa(`yarn rw g sdl contact`, [], getExecaOptions())
-
-        await applyCodemod(
-          'contactsSdl.js',
-          addExtension('api/src/graphql/contacts.sdl')
-        )
-      },
-    },
-    {
-      title: `Running lint`,
-      task: async () => {
-        return execa('yarn rw lint --fix', [], getExecaOptions())
-      },
-    },
-  ])
 }
 
 const globalTasks = () =>
@@ -307,34 +89,85 @@ const globalTasks = () =>
         },
       },
       {
-        title: `Creating project`,
-        task: () => {
-          return new Listr([
-            {
-              title: `Installing project template and packages`,
-              task: () => createProject(),
-            },
-            {
-              title: `Upgrading to latest canary version`,
-              task: async () => {
-                return execa('yarn rw upgrade -t canary', [], getExecaOptions())
-              },
-              enabled: () => canary,
-            },
-          ])
+        title: 'Creating project',
+        task: () => createProject(),
+      },
+      {
+        title: '[link] Building Redwood framework',
+        task: async () => {
+          try {
+            await execa(
+              'yarn build:clean && yarn build',
+              [],
+              getExecaOptions(RW_FRAMEWORKPATH)
+            )
+          } catch (e) {
+            console.log('Failed to build framework...')
+            console.log()
+            console.log(
+              'Please check your branch is building with yarn build:clean && yarn build'
+            )
+            throw new Error('Failed to build framework')
+          }
+        },
+        enabled: () => link,
+      },
+      {
+        title: '[link] Adding framework dependencies to project',
+        task: () =>
+          addFrameworkDepsToProject(RW_FRAMEWORKPATH, OUTPUT_PROJECT_PATH),
+        enabled: () => link,
+      },
+      {
+        title: 'Installing node_modules',
+        task: async () => {
+          return execa(
+            'yarn install',
+            ['--non-interactive', !verbose && '--silent'].filter(Boolean),
+            getExecaOptions(OUTPUT_PROJECT_PATH)
+          )
         },
       },
       {
-        title: `Setting up web project`,
-        task: () => webTasks(),
+        title: '[link] Copying framework packages to project',
+        task: () =>
+          copyFrameworkPackages(RW_FRAMEWORKPATH, OUTPUT_PROJECT_PATH),
+        enabled: () => link,
       },
       {
-        title: `Setting up api project`,
-        task: () => apiTasks(),
+        title: 'Upgrading to latest canary version',
+        task: async () => {
+          return execa(
+            'yarn rw upgrade -t canary',
+            [],
+            getExecaOptions(OUTPUT_PROJECT_PATH)
+          )
+        },
+        enabled: () => canary && !link,
+      },
+      {
+        title: 'Apply web codemods',
+        task: () => webTasks(OUTPUT_PROJECT_PATH),
+      },
+      {
+        title: 'Apply api codemods',
+        task: () => apiTasks(OUTPUT_PROJECT_PATH),
+      },
+      {
+        title: 'Convert to JS',
+        task: async () => {
+          return execa(
+            'yarn rw ts-to-js',
+            [],
+            getExecaOptions(OUTPUT_PROJECT_PATH)
+          )
+        },
+        enabled: () => !typescript,
       },
     ],
     {
       exitOnError: true,
+      renderer: verbose && VerboseRenderer,
     }
   )
 
