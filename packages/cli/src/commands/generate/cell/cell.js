@@ -1,9 +1,10 @@
 import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 
-import { transformTSToJS } from 'src/lib'
-import { getSchema } from 'src/lib'
+import { generate } from '@redwoodjs/internal'
 
+import { transformTSToJS } from '../../../lib'
+import { getSchema } from '../../../lib'
 import { yargsDefaults } from '../../generate'
 import {
   templateForComponentFile,
@@ -75,6 +76,8 @@ export const files = async ({
       idType = getIdType(model)
     } catch {
       // eat error so that the destroy cell generator doesn't raise when try to find prisma query engine in test runs
+      // assume id will be Int, otherwise generated will keep throwing
+      idType = 'Int'
     }
   }
 
@@ -157,7 +160,6 @@ export const { command, description, builder, handler } =
   createYargsForComponentGeneration({
     componentName: 'cell',
     filesFn: files,
-    generateTypes: true,
     optionsObj: {
       ...yargsDefaults,
       list: {
@@ -167,5 +169,15 @@ export const { command, description, builder, handler } =
           'Use when you want to generate a cell for a list of the model name.',
         type: 'boolean',
       },
+    },
+    includeAdditionalTasks: () => {
+      return [
+        {
+          title: `Generating types ...`,
+          task: async () => {
+            return generate()
+          },
+        },
+      ]
     },
   })

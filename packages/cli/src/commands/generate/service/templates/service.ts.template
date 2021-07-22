@@ -1,8 +1,9 @@
-<% if (crud || relations.length > 0) { %>import { Prisma } from '@prisma/client'
-<% } %><% if (relations.length) { %>import { ResolverArgs } from '@redwoodjs/api/dist/types'
-<% } %>import { db } from 'src/lib/db'
+<% if (crud || relations.length > 0) { %>import type { Prisma } from '@prisma/client'<% } %>
+import type { <% if (relations.length) { %>ResolverArgs, <% } %>BeforeResolverSpecType } from '@redwoodjs/api'
+
+import { db } from 'src/lib/db'
 import { requireAuth } from 'src/lib/auth'
-import { BeforeResolverSpecType } from '@redwoodjs/api'
+
 
 // Used when the environment variable REDWOOD_SECURE_SERVICES=1
 export const beforeResolver = (rules: BeforeResolverSpecType) => {
@@ -47,5 +48,5 @@ export const delete${singularPascalName} = ({ id }: Prisma.${singularPascalName}
 }<% } %><% if (relations.length) { %>
 
 export const ${singularPascalName} = {<% relations.forEach(relation => { %>
-  ${relation}: (_obj, { root }: ResolverArgs<Prisma.${singularPascalName}WhereUniqueInput>) => db.${singularCamelName}.findUnique({ where: { id: root.id } }).${relation}(),<% }) %>
+  ${relation}: (_obj, { root }: ResolverArgs<ReturnType<typeof ${singularCamelName}>>) => db.${singularCamelName}.findUnique({ where: { id: root.id } }).${relation}(),<% }) %>
 }<% } %>

@@ -1,3 +1,7 @@
+export interface NavigateOptions {
+  replace?: boolean
+}
+
 const createHistory = () => {
   type Listener = (ev?: PopStateEvent) => any
 
@@ -10,8 +14,28 @@ const createHistory = () => {
       global.addEventListener('popstate', listener)
       return listenerId
     },
-    navigate: (to: string) => {
-      global.history.pushState({}, '', to)
+    navigate: (to: string, options?: NavigateOptions) => {
+      const { pathname, search, hash } = new URL(global?.location?.origin + to)
+
+      if (
+        global?.location?.pathname !== pathname ||
+        global?.location?.search !== search ||
+        global?.location?.hash !== hash
+      ) {
+        if (options?.replace) {
+          global.history.replaceState({}, '', to)
+        } else {
+          global.history.pushState({}, '', to)
+        }
+      }
+
+      for (const listener of Object.values(listeners)) {
+        listener()
+      }
+    },
+    back: () => {
+      global.history.back()
+
       for (const listener of Object.values(listeners)) {
         listener()
       }
@@ -32,6 +56,6 @@ const createHistory = () => {
 
 const gHistory = createHistory()
 
-const navigate = gHistory.navigate
+const { navigate, back } = gHistory
 
-export { gHistory, navigate }
+export { gHistory, navigate, back }

@@ -9,15 +9,18 @@ import {
 import gql from 'graphql-tag'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore - not inside the <rootDir>
-import apiPackageJson from 'src/../package.json'
 
-import type { GlobalContext } from 'src/globalContext'
+import apiPackageJson from '../../package.json'
+import type { GlobalContext } from '../globalContext'
 
 const { prismaVersion } = require('@prisma/client')
 
 /**
  * This adds scalar types for dealing with Date, Time, DateTime, and JSON.
  * This also adds a root Query type which is needed to start the GraphQL server on a fresh install.
+ *
+ * NOTE: When you add a new Scalar type you must add it to
+ * "generateTypeDefGraphQL" on @redwoodjs/internal.
  */
 export const schema = gql`
   scalar Date

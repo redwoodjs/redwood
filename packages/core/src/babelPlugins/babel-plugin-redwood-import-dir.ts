@@ -3,8 +3,6 @@ import path from 'path'
 import type { PluginObj, types } from '@babel/core'
 import glob from 'glob'
 
-import { generateTypeDef, generateTypeDefIndex } from './generateTypes'
-
 /**
  * This babel plugin will search for import statements that include star `**`
  * in the source part of the statement is a glob, the files that are matched are imported,
@@ -100,18 +98,6 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         }
         // - import importName from "dirPath"
         p.remove()
-
-        // GenerateTypes
-        const typeDefContent = `
-          // @ts-expect-error
-          declare module '${importGlob.replace('../', 'src/')}';
-          `
-          .split('\n')
-          .slice(1)
-          .map((line) => line.replace('          ', ''))
-          .join('\n')
-        generateTypeDef(`import-dir-${importName}.d.ts`, typeDefContent)
-        generateTypeDefIndex()
       },
     },
   }

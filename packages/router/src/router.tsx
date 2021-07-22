@@ -1,5 +1,7 @@
 // The guts of the router implementation.
 
+import React from 'react'
+
 import {
   parseSearch,
   replaceParams,
@@ -11,7 +13,6 @@ import {
   LocationProvider,
 } from './internal'
 import { ParamsProvider } from './params'
-import { RouteNameProvider, useRouteName } from './RouteNameContext'
 import {
   RouterContextProvider,
   RouterContextProviderProps,
@@ -36,7 +37,7 @@ interface RouteProps {
   page: PageType
   name: string
   prerender?: boolean
-  whileLoading?: () => React.ReactElement | null
+  whileLoadingPage?: () => React.ReactElement | null
 }
 
 interface RedirectRouteProps {
@@ -47,9 +48,10 @@ interface RedirectRouteProps {
 interface NotFoundRouteProps {
   notfound: boolean
   page: PageType
+  prerender?: boolean
 }
 
-type InternalRouteProps = Partial<
+export type InternalRouteProps = Partial<
   RouteProps & RedirectRouteProps & NotFoundRouteProps
 >
 
@@ -66,12 +68,10 @@ const InternalRoute: React.VFC<InternalRouteProps> = ({
   name,
   redirect,
   notfound,
-  // @ts-expect-error - This prop is picked up by <Set>
-  whileLoading, // eslint-disable-line
+  whileLoadingPage,
 }) => {
   const location = useLocation()
   const routerState = useRouterState()
-  const { routeName } = useRouteName()
 
   if (notfound) {
     // The "notfound" route is handled by <NotFoundChecker>
@@ -109,19 +109,12 @@ const InternalRoute: React.VFC<InternalRouteProps> = ({
     )
   }
 
-  if (name !== routeName) {
-    // This guards against rendering two pages when the current URL matches two paths
-    //   <Route path="/about" page={AboutPage} name="about" />
-    //   <Route path="/{param}" page={ParamPage} name="param" />
-    // If we go to /about, only the page with name "about" should be rendered
-    return null
-  }
-
   return (
     <PageLoader
       spec={normalizePage(page)}
       delay={routerState.pageLoadingDelay}
       params={allParams}
+      whileLoadingPage={whileLoadingPage}
     />
   )
 }
@@ -139,7 +132,25 @@ const Router: React.FC<RouterProps> = ({
   paramTypes,
   pageLoadingDelay,
   children,
+}) => (
+  <LocationProvider>
+    <LocationAwareRouter
+      useAuth={useAuth}
+      paramTypes={paramTypes}
+      pageLoadingDelay={pageLoadingDelay}
+    >
+      {children}
+    </LocationAwareRouter>
+  </LocationProvider>
+)
+
+const LocationAwareRouter: React.FC<RouterProps> = ({
+  useAuth,
+  paramTypes,
+  pageLoadingDelay,
+  children,
 }) => {
+  const { pathname } = useLocation()
   const flatChildArray = flattenAll(children)
   const shouldShowSplash =
     flatChildArray.length === 1 &&
@@ -165,68 +176,100 @@ const Router: React.FC<RouterProps> = ({
     }
   })
 
+  let activeRoute = undefined
+  let NotFoundPage: PageType | undefined = undefined
+
+  const activeChildren = activeRouteTree(children, (child) => {
+    if (child.props.path) {
+      const { match } = matchPath(child.props.path, pathname, paramTypes)
+
+      if (match) {
+        activeRoute = child
+
+        // No need to loop further. As soon as we have a matching route we have
+        // all the info we need
+        return true
+      }
+    }
+
+    if (child.props.notfound && child.props.page) {
+      NotFoundPage = child.props.page
+    }
+
+    return false
+  })
+
   return (
     <RouterContextProvider
       useAuth={useAuth}
       paramTypes={paramTypes}
       pageLoadingDelay={pageLoadingDelay}
     >
-      <LocationProvider>
-        <ParamsProvider>
-          <RouteScanner>{children}</RouteScanner>
-        </ParamsProvider>
-      </LocationProvider>
+      {/* TS doesn't "see" the assignment to `activeRoute` inside the callback
+          above. So it's type is `never`. And you can't access attributes
+          (props in this case) on `never`. There is an open issue about not
+          seeing the assignment */}
+      {/* @ts-expect-error - https://github.com/microsoft/TypeScript/issues/11498 */}
+      <ParamsProvider path={activeRoute?.props?.path}>
+        {!activeRoute && NotFoundPage ? (
+          <PageLoader
+            spec={normalizePage(NotFoundPage)}
+            delay={pageLoadingDelay}
+          />
+        ) : (
+          activeRoute && activeChildren
+        )}
+      </ParamsProvider>
     </RouterContextProvider>
   )
 }
 
-const RouteScanner: React.FC = ({ children }) => {
-  const location = useLocation()
-  const routerState = useRouterState()
+/*
+ * Find the active (i.e. first matching) route and discard any other routes.
+ * Also, keep any <Set>s wrapping the active route.
+ */
+function activeRouteTree(
+  children: React.ReactNode,
+  isActive: (child: React.ReactElement<InternalRouteProps>) => boolean,
+  foundActive = false
+) {
+  let active = false
 
-  let foundMatchingRoute = false
-  let routeName: string | undefined = undefined
-  let NotFoundPage: PageType | undefined = undefined
-  const flatChildArray = flattenAll(children)
+  return React.Children.toArray(children).reduce<React.ReactNode[]>(
+    (acc, child) => {
+      if (active || foundActive) {
+        return acc
+      }
 
-  for (const child of flatChildArray) {
-    if (isRoute(child)) {
-      const { path, name } = child.props
+      if (isRoute(child)) {
+        // We have a <Route ...> element, let's check if it's the one we should
+        // render (i.e. the active route)
+        active = isActive(child)
 
-      if (path) {
-        const { match } = matchPath(
-          path,
-          location.pathname,
-          routerState.paramTypes
+        if (active) {
+          // Keep this child. It's the last one we'll keep since `active` is `true`
+          // now
+          acc.push(child)
+        }
+      } else if (isReactElement(child) && child.props.children) {
+        // We have a child element that's not a <Route ...>, and that has
+        // children. It's probably a <Set>. Recurse down one level
+        const nestedChildren = activeRouteTree(
+          child.props.children,
+          isActive,
+          foundActive
         )
 
-        if (match) {
-          routeName = name // name is undefined for redirect routes
-
-          foundMatchingRoute = true
-          // No need to loop further. As soon as we have a matching route and a
-          // route name we have all the info we need
-          break
+        if (nestedChildren.length > 0) {
+          // We found something we wanted to keep. So let's push it to our
+          // "active route tree"
+          acc.push(React.cloneElement(child, child.props, nestedChildren))
         }
       }
 
-      if (child.props.notfound && child.props.page) {
-        NotFoundPage = child.props.page
-      }
-    }
-  }
-
-  return (
-    <RouteNameProvider value={{ routeName }}>
-      {!foundMatchingRoute && NotFoundPage ? (
-        <PageLoader
-          spec={normalizePage(NotFoundPage)}
-          delay={routerState.pageLoadingDelay}
-        />
-      ) : (
-        children
-      )}
-    </RouteNameProvider>
+      return acc
+    },
+    []
   )
 }
 

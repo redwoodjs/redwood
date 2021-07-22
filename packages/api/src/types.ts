@@ -5,6 +5,9 @@ export type Services = {
   [funcName: string]: Resolver
 }
 
+type ThenArg<T> = T extends PromiseLike<infer U> ? U : T
+export type ResolverArgs<TRoot> = { root: ThenArg<TRoot> }
+
 // e.g. imported service
 // [{ posts_posts: {
 // createPost: () => {..},

@@ -35,6 +35,14 @@ jest.mock('@redwoodjs/internal', () => {
           pages: path.join(BASE_PATH, '/web/src/pages'),
         },
         scripts: path.join(BASE_PATH, 'scripts'),
+        generated: {
+          base: path.join(BASE_PATH, '.redwood'),
+          schema: path.join(BASE_PATH, '.redwood/schema.graphql'),
+          types: {
+            includes: path.join(BASE_PATH, '.redwood/types/includes'),
+            mirror: path.join(BASE_PATH, '.redwood/types/mirror'),
+          },
+        },
       }
     },
   }

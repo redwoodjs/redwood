@@ -22,14 +22,14 @@ Redwood is the latest open source project initiated by Tom Preston-Werner, cofou
 > right; make it fast" paradigm, Redwood is in the later stages of the "make it
 > work" phase. That said, your input can have a huge impact during this period,
 > and we welcome your feedback and ideas! Check out the [Redwood Community
-> Forum](https://community.redwoodjs.com/) to join in.
+> Forum](https://community.redwoodjs.com/) to join in.  
 
 > **TUTORIAL:** The best way to get to know Redwood is by going through the extensive
 > [Redwood Tutorial](https://redwoodjs.com/tutorial). Have fun!
 
 > **QUICK START:** You can install and run a full-stack Redwood application on your
 > machine with only a couple commands. Check out the [Quick Start](https://redwoodjs.com/docs/quick-start)
-> guide to get started.
+> guide to get started.  
 
 **EXAMPLES:** If you'd like to see some examples of what a Redwood application looks
 like, take a look at the following projects:
@@ -523,6 +523,25 @@ And there you have it.
     <td align="center"><a href="https://github.com/pdjota"><img src="https://avatars.githubusercontent.com/u/93544?v=4" width="100px;" alt=""/><br /><sub><b>Pablo Dejuan</b></sub></a></td>
     <td align="center"><a href="https://github.com/bugsfunny"><img src="https://avatars.githubusercontent.com/u/12965842?v=4" width="100px;" alt=""/><br /><sub><b>bugsfunny</b></sub></a></td>
     <td align="center"><a href="https://github.com/luispinto23"><img src="https://avatars.githubusercontent.com/u/4148663?v=4" width="100px;" alt=""/><br /><sub><b>Luís Pinto</b></sub></a></td>
+    <td align="center"><a href="https://adityaworks.com/"><img src="https://avatars.githubusercontent.com/u/2629902?v=4" width="100px;" alt=""/><br /><sub><b>Aditya Pandey</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://www.leighhalliday.com/"><img src="https://avatars.githubusercontent.com/u/603921?v=4" width="100px;" alt=""/><br /><sub><b>Leigh Halliday</b></sub></a></td>
+    <td align="center"><a href="https://github.com/BlackHawkSigma"><img src="https://avatars.githubusercontent.com/u/14921811?v=4" width="100px;" alt=""/><br /><sub><b>BlackHawkSigma</b></sub></a></td>
+    <td align="center"><a href="https://www.linkedin.com/in/devhmac/"><img src="https://avatars.githubusercontent.com/u/52307383?v=4" width="100px;" alt=""/><br /><sub><b>Devin MacGillivray</b></sub></a></td>
+    <td align="center"><a href="https://github.com/pachoclo"><img src="https://avatars.githubusercontent.com/u/3608140?v=4" width="100px;" alt=""/><br /><sub><b>Francisco Jaramillo</b></sub></a></td>
+    <td align="center"><a href="https://orta.io/"><img src="https://avatars.githubusercontent.com/u/49038?v=4" width="100px;" alt=""/><br /><sub><b>Orta Therox</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/viperfx"><img src="https://avatars.githubusercontent.com/u/328257?v=4" width="100px;" alt=""/><br /><sub><b>Tharshan Muthulingam</b></sub></a></td>
+    <td align="center"><a href="https://brianypliu.com/"><img src="https://avatars.githubusercontent.com/u/3888780?v=4" width="100px;" alt=""/><br /><sub><b>Brian Liu</b></sub></a></td>
+    <td align="center"><a href="https://github.com/ajoslin103"><img src="https://avatars.githubusercontent.com/u/443893?v=4" width="100px;" alt=""/><br /><sub><b>allen joslin</b></sub></a></td>
+    <td align="center"><a href="https://github.com/wongyouth"><img src="https://avatars.githubusercontent.com/u/944583?v=4" width="100px;" alt=""/><br /><sub><b>Ryan Wang</b></sub></a></td>
+    <td align="center"><a href="https://github.com/Vashiru"><img src="https://avatars.githubusercontent.com/u/11370057?v=4" width="100px;" alt=""/><br /><sub><b>Vashiru</b></sub></a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="http://prolabprints.com/"><img src="https://avatars.githubusercontent.com/u/7111699?v=4" width="100px;" alt=""/><br /><sub><b>Ron Dyar</b></sub></a></td>
+    <td align="center"><a href="https://github.com/toddpress"><img src="https://avatars.githubusercontent.com/u/2934422?v=4" width="100px;" alt=""/><br /><sub><b>Todd Pressley</b></sub></a></td>
   </tr>
 </table>
 

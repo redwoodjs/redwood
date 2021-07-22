@@ -43,6 +43,11 @@ export interface Config {
   generate: {
     tests: boolean
     stories: boolean
+    nestScaffoldByModel: boolean
+  }
+  experimental: {
+    esbuild: boolean
+    useEnvelop: boolean
   }
 }
 
@@ -64,7 +69,7 @@ const DEFAULT_CONFIG: Config = {
     port: 8911,
     path: './api',
     target: TargetEnum.NODE,
-    schemaPath: './api/prisma/schema.prisma',
+    schemaPath: './api/db/schema.prisma',
   },
   browser: {
     open: false,
@@ -72,6 +77,11 @@ const DEFAULT_CONFIG: Config = {
   generate: {
     tests: true,
     stories: true,
+    nestScaffoldByModel: true,
+  },
+  experimental: {
+    esbuild: false,
+    useEnvelop: false,
   },
 }
 

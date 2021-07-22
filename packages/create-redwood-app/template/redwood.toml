@@ -10,6 +10,8 @@
   apiProxyPath = "/.redwood/functions"
 [api]
   port = 8911
-  schemaPath = "./api/db/schema.prisma"
 [browser]
   open = true
+[experimental]
+  esbuild = false
+  useEnvelop = false

@@ -13,7 +13,8 @@ export interface AuthClientSupabase extends AuthClient {
    * @param options The user login details.
    * @param options.email The user's email address.
    * @param options.password The user's password.
-   * @param { 'azure' | 'bitbucket' | 'facebook' | 'github' | 'gitlab' | 'google' } options.provider One of the providers supported by GoTrue.
+   * @param options.refreshToken A valid refresh token that was returned on login.
+   * @param { 'apple' | 'azure' | 'bitbucket' | 'discord' | 'facebook' | 'github' | 'gitlab' | 'google' | 'twitter' } options.provider One of the providers supported by GoTrue.
    * @param redirectTo A URL or mobile address to send the user to after they are confirmed.
    * @param scopes A space-separated list of scopes granted to the OAuth application.
    */
@@ -21,6 +22,7 @@ export interface AuthClientSupabase extends AuthClient {
     email?: string | undefined
     password?: string | undefined
     provider?: Provider
+    refreshToken?: string
     redirectTo?: string
     scopes?: string
   }): Promise<{
@@ -64,7 +66,19 @@ export const supabase = (client: Supabase): AuthClientSupabase => {
   return {
     type: 'supabase',
     client,
-    login: async ({ email, password, provider, redirectTo, scopes }) => {
+    login: async ({
+      email,
+      password,
+      provider,
+      refreshToken,
+      redirectTo,
+      scopes,
+    }) => {
+      // if refreshToken then currentSession and currentUser will be updated
+      // to latest on _callRefreshToken using the passed refreshToken
+      if (refreshToken) {
+        return await client.auth.signIn({ refreshToken }, { redirectTo })
+      }
       // magic link
       if (email && !password) {
         return await client.auth.signIn({ email }, { redirectTo })
@@ -73,12 +87,12 @@ export const supabase = (client: Supabase): AuthClientSupabase => {
       if (email && password) {
         return await client.auth.signIn({ email, password }, { redirectTo })
       }
-      // oauth, such as github, gitlab, bitbucket, google, azure etc.
+      // oauth, such as apple, twitter, github, gitlab, bitbucket, google, azure etc.
       if (provider) {
         return await client.auth.signIn({ provider }, { redirectTo, scopes })
       }
       throw new Error(
-        `You must provide either an email or a third-party provider.`
+        `You must provide either an email, third-party provider or a refreshToken.`
       )
     },
     logout: async () => {

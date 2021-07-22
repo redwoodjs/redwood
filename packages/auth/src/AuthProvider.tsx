@@ -16,17 +16,13 @@ export interface AuthContextInterface {
   /* Determining your current authentication state */
   loading: boolean
   isAuthenticated: boolean
-  /**
-   * @deprecated auth tokens are now refreshed when they expire, use getToken() instead. authToken will be removed from this context in future releases
-   */
-  authToken: string | null // @WARN! deprecated, will always be null
   /* The current user's data from the `getCurrentUser` function on the api side */
   currentUser: null | CurrentUser
   /* The user's metadata from the auth provider */
   userMetadata: null | SupportedUserMetadata
-  logIn(options?: unknown): Promise<void>
-  logOut(options?: unknown): Promise<void>
-  signUp(options?: unknown): Promise<void>
+  logIn(options?: unknown): Promise<any>
+  logOut(options?: unknown): Promise<any>
+  signUp(options?: unknown): Promise<any>
   getToken(): Promise<null | string>
   /**
    * Fetches the "currentUser" from the api side,
@@ -58,21 +54,25 @@ export interface AuthContextInterface {
 export const AuthContext = React.createContext<AuthContextInterface>({
   loading: true,
   isAuthenticated: false,
-  authToken: null, // @WARN! deprecated, will always be null
   userMetadata: null,
   currentUser: null,
 })
 
-type AuthProviderProps = {
-  client: SupportedAuthClients
-  type: SupportedAuthTypes
-  skipFetchCurrentUser?: boolean
-}
+type AuthProviderProps =
+  | {
+      client: SupportedAuthClients
+      type: Omit<SupportedAuthTypes, 'dbAuth'>
+      skipFetchCurrentUser?: boolean
+    }
+  | {
+      client?: never
+      type: 'dbAuth'
+      skipFetchCurrentUser?: boolean
+    }
 
 type AuthProviderState = {
   loading: boolean
   isAuthenticated: boolean
-  authToken: string | null // @WARN! deprecated, will always be null
   userMetadata: null | Record<string, any>
   currentUser: null | CurrentUser
   hasError: boolean
@@ -99,7 +99,6 @@ export class AuthProvider extends React.Component<
   state: AuthProviderState = {
     loading: true,
     isAuthenticated: false,
-    authToken: null, // @WARN! deprecated, will always be null
     userMetadata: null,
     currentUser: null,
     hasError: false,
@@ -109,7 +108,10 @@ export class AuthProvider extends React.Component<
 
   constructor(props: AuthProviderProps) {
     super(props)
-    this.rwClient = createAuthClient(props.client, props.type)
+    this.rwClient = createAuthClient(
+      props.client || (() => null),
+      props.type as SupportedAuthTypes
+    )
   }
 
   async componentDidMount() {
@@ -184,7 +186,6 @@ export class AuthProvider extends React.Component<
   reauthenticate = async () => {
     const notAuthenticatedState: AuthProviderState = {
       isAuthenticated: false,
-      authToken: null, // @WARN! deprecated, will always be null
       currentUser: null,
       userMetadata: null,
       loading: false,
@@ -258,7 +259,7 @@ export class AuthProvider extends React.Component<
           hasRole: this.hasRole,
           reauthenticate: this.reauthenticate,
           client,
-          type,
+          type: type as SupportedAuthTypes,
         }}
       >
         {children}

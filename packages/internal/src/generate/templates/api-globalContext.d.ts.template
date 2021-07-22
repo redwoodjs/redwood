@@ -1,0 +1,7 @@
+import { GlobalContext } from "@redwoodjs/api"
+
+export {}
+
+declare global {
+  const context: GlobalContext
+}

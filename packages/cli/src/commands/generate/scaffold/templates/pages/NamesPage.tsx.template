@@ -1,0 +1,7 @@
+import ${pluralPascalName}Cell from '${importComponentNamesCell}'
+
+const ${pluralPascalName}Page = () => {
+  return <${pluralPascalName}Cell />
+}
+
+export default ${pluralPascalName}Page

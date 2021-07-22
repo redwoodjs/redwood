@@ -1,14 +1,20 @@
 jest.mock('execa', () => jest.fn((cmd) => cmd))
 
+jest.mock('../prerender', () => {
+  return {
+    getTasks: jest.fn(),
+  }
+})
+
 let mockedRedwoodConfig = {
   api: {},
   web: {},
   browser: {},
 }
 
-jest.mock('src/lib', () => {
+jest.mock('../../lib/', () => {
   return {
-    ...jest.requireActual('src/lib'),
+    ...jest.requireActual('../../lib/'),
     runCommandTask: jest.fn((commands) => {
       return commands.map(({ cmd, args }) => `${cmd} ${args?.join(' ')}`)
     }),
@@ -25,18 +31,17 @@ jest.mock('src/lib', () => {
   }
 })
 
-// let mockDetectPrerenderRoutes = jest.fn(() => [])
 let mockedPrerenderRoutes = ['Pretend', 'Some', 'Routes', 'Are', 'There']
 // For the prerender tests
-jest.mock('@redwoodjs/prerender', () => {
+jest.mock('@redwoodjs/prerender/detection', () => {
   return { detectPrerenderRoutes: () => mockedPrerenderRoutes }
 })
 
 import execa from 'execa'
 
-import { runCommandTask } from 'src/lib'
-
+import { runCommandTask } from '../../lib'
 import { handler } from '../build'
+import { getTasks as getPrerenderTasks } from '../prerender'
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -56,11 +61,17 @@ test('The build command runs the correct commands.', async () => {
   )
 
   expect(execa.mock.results[1].value).toEqual(
-    `yarn cross-env NODE_ENV=production babel src --out-dir dist --delete-dir-on-start --extensions .ts,.js --ignore '**/*.test.ts,**/*.test.js,**/__tests__'`
+    `yarn cross-env NODE_ENV=production babel src --out-dir dist --delete-dir-on-start --extensions .ts,.js --ignore '**/*.test.ts,**/*.test.js,**/__tests__' --source-maps`
   )
 
-  expect(execa.mock.results[2].value).toEqual(
-    `yarn cross-env NODE_ENV=production webpack --config ../node_modules/@redwoodjs/core/config/webpack.production.js`
+  expect(
+    execa.mock.results[2].value.startsWith(
+      'yarn cross-env NODE_ENV=production webpack --config'
+    )
+  ).toEqual(true)
+
+  expect(execa.mock.results[2].value.endsWith('webpack.production.js')).toEqual(
+    true
   )
 })
 
@@ -68,11 +79,17 @@ test('Should run prerender for web, after build', async () => {
   // Prerender is true by default
   await handler({ side: ['web'], prerender: true })
 
-  expect(execa.mock.results[1].value).toEqual(
-    'yarn cross-env NODE_ENV=production webpack --config ../node_modules/@redwoodjs/core/config/webpack.production.js'
+  expect(
+    execa.mock.results[1].value.startsWith(
+      'yarn cross-env NODE_ENV=production webpack --config'
+    )
+  ).toEqual(true)
+
+  expect(execa.mock.results[1].value.endsWith('webpack.production.js')).toEqual(
+    true
   )
 
-  expect(execa.mock.results[2].value).toEqual('yarn rw prerender')
+  expect(getPrerenderTasks).toHaveBeenCalled()
 })
 
 test('Should skip prerender if no prerender routes detected', async () => {
@@ -82,4 +99,5 @@ test('Should skip prerender if no prerender routes detected', async () => {
   await handler({ side: ['web'], prerender: true })
 
   expect(execa.mock.results[2]).toBeFalsy()
+  expect(getPrerenderTasks).not.toHaveBeenCalled()
 })

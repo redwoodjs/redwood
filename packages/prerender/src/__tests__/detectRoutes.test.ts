@@ -1,4 +1,4 @@
-import { detectPrerenderRoutes } from '../router'
+import { detectPrerenderRoutes } from '../detection'
 
 jest.mock('@redwoodjs/internal', () => {
   return {

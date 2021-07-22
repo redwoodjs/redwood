@@ -3,6 +3,8 @@ import terminalLink from 'terminal-link'
 
 import { getPaths } from '@redwoodjs/internal'
 
+import c from '../../../lib/colors'
+
 export const deployBuilder = (yargs) => {
   yargs
     .option('build', {
@@ -34,16 +36,20 @@ export const deployHandler = async ({ build, prisma, dm: dataMigrate }) => {
 
   let commandSet = []
   if (build) {
-    commandSet.push('yarn rw build')
+    commandSet.push('yarn rw build --verbose')
   }
   if (prisma) {
     commandSet.push('yarn rw prisma migrate deploy')
   }
   if (dataMigrate) {
-    commandSet.push('yarn rw dataMigrate up')
+    commandSet.push('yarn rw data-migrate up')
   }
 
-  execa(commandSet.join(' && '), {
+  const joinedCommands = commandSet.join(' && ')
+
+  console.log(c.green(`\nRunning:\n`) + `${joinedCommands} \n`)
+
+  return execa(joinedCommands, {
     shell: true,
     stdio: 'inherit',
     cwd: paths.base,

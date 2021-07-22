@@ -4,4 +4,4 @@
 # It is run when a branch is merged to main.
 # https://github.com/lerna/lerna/tree/master/commands/publish#--canary
 
-yarn lerna publish --force-publish --canary --preid rc --dist-tag rc --yes
+yarn framework lerna publish --force-publish --canary --preid rc --dist-tag rc --yes

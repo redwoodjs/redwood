@@ -1,14 +1,4 @@
 {
-  "scripts": {
-    "build": "lerna run build:js && ttsc --build --verbose",
-    "build:types": "ttsc --build --verbose",
-    "build:clean": "rimraf ./packages/**/dist",
-    "build:watch": "lerna run build:watch --parallel; ttsc --build",
-    "build:link": "./tasks/build-link",
-    "test": "lerna run test --stream -- --colors --maxWorkers=4",
-    "lint": "cross-env __REDWOOD__CONFIG_PATH=packages/create-redwood-app/template eslint -c .eslintrc.js packages",
-    "lint:fix": "cross-env __REDWOOD__CONFIG_PATH=packages/create-redwood-app/template eslint -c .eslintrc.js --fix packages"
-  },
   "private": true,
   "license": "MIT",
   "npmClient": "yarn",
@@ -17,47 +7,33 @@
     "packages/*"
   ],
   "devDependencies": {
-    "@babel/cli": "7.14.3",
-    "@babel/core": "7.14.3",
-    "@babel/node": "7.14.2",
-    "@babel/plugin-proposal-class-properties": "7.13.0",
-    "@babel/plugin-proposal-decorators": "7.14.2",
-    "@babel/plugin-transform-runtime": "7.14.3",
-    "@babel/preset-env": "7.14.2",
-    "@babel/preset-react": "7.13.13",
-    "@babel/preset-typescript": "7.13.0",
-    "@babel/runtime-corejs3": "7.14.0",
-    "@testing-library/jest-dom": "5.11.10",
-    "@testing-library/react": "11.2.7",
-    "@testing-library/user-event": "13.1.9",
-    "@types/jest": "^26.0.23",
-    "babel-jest": "^26.6.3",
-    "babel-plugin-auto-import": "1.1.0",
-    "babel-plugin-module-resolver": "4.1.0",
-    "babel-plugin-remove-code": "0.0.6",
-    "core-js": "3.12.1",
-    "cp-cli": "^2.0.0",
-    "cross-env": "^7.0.3",
-    "jest": "^26.5.3",
-    "lerna": "^3.20.2",
-    "msw": "^0.29.0",
-    "nodemon": "^2.0.7",
-    "npm-packlist": "^2.2.2",
-    "rimraf": "^3.0.2",
-    "ttypescript": "^1.5.12",
-    "typescript": "^4.2.4",
-    "typescript-transform-paths": "^2.2.4",
-    "whatwg-fetch": "3.4.1"
+    "npm-packlist": "2.2.2",
+    "typescript-transform-paths": "3.0.2"
   },
   "resolutions": {
-    "@types/react": "17.0.5",
+    "@types/react": "17.0.14",
     "prop-types": "15.7.2",
     "react-dom": "17.0.2",
     "react": "17.0.2",
-    "typescript": "4.2.4",
+    "typescript": "4.3.5",
     "vscode-languageserver-protocol": "3.15.3",
     "vscode-languageserver-types": "3.15.1",
     "vscode-languageserver": "6.1.1",
     "vscode-languageserver-textdocument": "1.0.1"
+  },
+  "scripts": {
+    "framework": "yarn --cwd ./tasks/framework-tools",
+    "build": "yarn framework build",
+    "build:js": "yarn framework build:js",
+    "build:types": "yarn framework build:types",
+    "build:clean": "yarn framework build:clean",
+    "build:watch": "yarn framework build:watch",
+    "test": "yarn framework test",
+    "lint": "yarn framework lint",
+    "lint:fix": "yarn framework lint:fix",
+
+    "postinstall": "yarn framework install",
+    "build:link": "node ./tasks/build-and-copy",
+    "build:test-project": "node ./tasks/test-project/test-project"
   }
 }

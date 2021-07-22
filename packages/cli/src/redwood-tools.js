@@ -23,6 +23,8 @@ const RW_BINS = {
   'api-server': 'api-server/dist/index.js',
   'rw-api-server': 'api-server/dist/index.js',
   'rw-api-build': 'core/esbuild/index.js',
+  'rw-gen': 'internal/dist/generate/generate.js',
+  'rw-gen-watch': 'internal/dist/generate/watch.js',
 }
 
 export const resolveFrameworkPath = (RW_PATH) => {
@@ -145,6 +147,7 @@ const rwtLink = async (yargs) => {
 
   if (!RW_PATH) {
     console.error(c.error('You must specify a path to your local redwood repo'))
+    console.error(c.error("Or set RW_PATH in your shell's environment"))
     process.exit(1)
     return
   }
@@ -154,7 +157,10 @@ const rwtLink = async (yargs) => {
   console.log(`\n Redwood Framework Path: ${c.info(frameworkPath)}`)
 
   const frameworkPackagesPath = path.join(frameworkPath, 'packages/')
-  const projectPackagesPath = path.join(getPaths().base, 'redwood')
+  const projectPackagesPath = path.join(
+    getPaths().base,
+    'node_modules/_redwood-linked-packages'
+  )
 
   console.log(
     `Copying your local Redwood build from ${c.info(frameworkPackagesPath)} \n`
@@ -165,8 +171,6 @@ const rwtLink = async (yargs) => {
   }
 
   updateProjectWithResolutions(frameworkPackagesPath)
-
-  addRedwoodFolderToGitIgnore()
 
   if (clean) {
     await execa('yarn build:clean', {
@@ -195,7 +199,7 @@ const rwtLink = async (yargs) => {
   const onlyParams = only ? ['--only', only] : []
 
   await execa(
-    'yarn build:link',
+    'node ./tasks/build-and-copy',
     ['--dest', `"${projectPackagesPath}"`, ...onlyParams],
     {
       shell: true,
@@ -249,7 +253,10 @@ const rwtLink = async (yargs) => {
 
 // This should be synchronous
 const rwtUnlink = () => {
-  const linkedPackagesPath = path.join(getPaths().base, 'redwood')
+  const linkedPackagesPath = path.join(
+    getPaths().base,
+    'node_modules/_redwood-linked-packages'
+  )
   if (fs.existsSync(linkedPackagesPath)) {
     // remove resolutions we added in link
     updateProjectWithResolutions(linkedPackagesPath, true)
@@ -301,20 +308,6 @@ const rwtInstall = ({ packageName }) => {
   )
 }
 
-const addRedwoodFolderToGitIgnore = () => {
-  const gitIgnore = fs.readFileSync(
-    path.join(getPaths().base, '.gitignore'),
-    'utf-8'
-  )
-
-  if (gitIgnore.includes('redwood/*')) {
-    console.log('Redwood folder already in gitignore')
-  } else {
-    console.log('Adding `redwood/*` to .gitignore...')
-    fs.appendFileSync(path.join(getPaths().base, '.gitignore'), 'redwood/*')
-  }
-}
-
 const getRwPackagesToLink = (packagesPath) => {
   const packageFolders = fs.readdirSync(packagesPath)
 
@@ -348,15 +341,16 @@ const updateProjectWithResolutions = (redwoodPackagesPath, remove) => {
   if (remove) {
     resolutions = omit(resolutions, Object.keys(frameworkRepoResolutions))
     packages = packages.filter(
-      (workspaceFolder) => workspaceFolder !== 'redwood/*'
+      (workspaceFolder) =>
+        workspaceFolder !== 'node_modules/_redwood-linked-packages/*'
     )
   } else {
     resolutions = {
       ...resolutions,
       ...frameworkRepoResolutions,
     }
-    if (!packages.includes('redwood/*')) {
-      packages.push('redwood/*')
+    if (!packages.includes('node_modules/_redwood-linked-packages/*')) {
+      packages.push('node_modules/_redwood-linked-packages/*')
     }
   }
 

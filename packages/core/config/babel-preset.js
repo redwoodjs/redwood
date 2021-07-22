@@ -3,7 +3,7 @@
  */
 const { extendDefaultPlugins } = require('svgo')
 
-const { getProject } = require('@redwoodjs/structure')
+const { getPaths } = require('@redwoodjs/internal')
 
 const packageJSON = require('../package.json')
 
@@ -15,8 +15,7 @@ const CORE_JS_VERSION = '3.6'
 
 /** @type {import('@babel/core').TransformOptions} */
 module.exports = () => {
-  const project = getProject()
-  const paths = project.host.paths
+  const rwjsPaths = getPaths()
 
   return {
     presets: ['@babel/preset-react', '@babel/preset-typescript'],
@@ -38,7 +37,7 @@ module.exports = () => {
           version: packageJSON.devDependencies['@babel/runtime-corejs3'],
         },
       ],
-      ['babel-plugin-graphql-tag'],
+
       [
         require('../dist/babelPlugins/babel-plugin-redwood-directory-named-import'),
       ],
@@ -77,7 +76,7 @@ module.exports = () => {
                 src:
                   // Jest monorepo and multi project runner is not correctly determining
                   // the `cwd`: https://github.com/facebook/jest/issues/7359
-                  process.env.NODE_ENV !== 'test' ? './src' : paths.api.src,
+                  process.env.NODE_ENV !== 'test' ? './src' : rwjsPaths.api.src,
               },
             },
           ],
@@ -97,6 +96,7 @@ module.exports = () => {
               ],
             },
           ],
+          ['babel-plugin-graphql-tag'],
           [require('../dist/babelPlugins/babel-plugin-redwood-import-dir')],
         ],
       },
@@ -130,7 +130,7 @@ module.exports = () => {
                 src:
                   // Jest monorepo and multi project runner is not correctly determining
                   // the `cwd`: https://github.com/facebook/jest/issues/7359
-                  process.env.NODE_ENV !== 'test' ? './src' : paths.web.src,
+                  process.env.NODE_ENV !== 'test' ? './src' : rwjsPaths.web.src,
               },
             },
           ],
@@ -165,6 +165,7 @@ module.exports = () => {
               ],
             },
           ],
+          ['babel-plugin-graphql-tag'],
           [
             'inline-react-svg',
             {
@@ -188,6 +189,11 @@ module.exports = () => {
               },
             },
           ],
+          // @MARK needed to enable ?? operator
+          // normally provided through preset-env detecting TARGET_BROWSER
+          // but webpack 4 has an issue with this
+          // see https://github.com/PaulLeCam/react-leaflet/issues/883
+          ['@babel/plugin-proposal-nullish-coalescing-operator'],
         ],
       },
       // ** Files ending in `Cell.[js,ts]` **
@@ -203,7 +209,6 @@ module.exports = () => {
           [
             require('../dist/babelPlugins/babel-plugin-redwood-routes-auto-loader'),
             {
-              project,
               useStaticImports: process.env.__REDWOOD__PRERENDERING === '1',
             },
           ],

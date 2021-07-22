@@ -9,7 +9,7 @@ jobs:
     if: github.repository == 'redwoodjs/redwood'
     strategy:
       matrix:
-        os: ['ubuntu-latest']
+        os: ['macos-latest']
         node-version: ['14']
       fail-fast: true
     runs-on: ${{ matrix.os }}
@@ -23,6 +23,12 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      # - name: Cache "node_modules"
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: '**/node_modules'
+      #     key: node_modules_${{ runner.os }}_${{ hashFiles('**/yarn.lock') }}
+
       - name: Install framework modules
         run: yarn install --frozen-lockfile
 
@@ -35,8 +41,14 @@ jobs:
       - name: Create a RedwoodJS app
         run: ./tasks/run-e2e ${{ steps.createpath.outputs.project_path }} --no-start
 
+      - name: Init Git for RedwoodJS app directory
+        run: |
+          git init --initial-branch main && git add .
+          git commit -a --message=init
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
       - name: Start server in background
-        run: yarn rw dev &
+        run: yarn rw dev --no-generate --fwd="--open=false" &
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
 
@@ -46,12 +58,9 @@ jobs:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_RW_PATH:  "${{ steps.createpath.outputs.project_path }}"
-          CYPRESS_pageLoadTimeout: 300000
-          CYPRESS_defaultCommandTimeout: 300000
-          CYPRESS_requestTimeout: 300000
         with:
           browser: chrome
           env: true
           wait-on: 'http://localhost:8910'
-          record: true
+          record: false
           working-directory: ./tasks/e2e

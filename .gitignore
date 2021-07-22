@@ -9,3 +9,4 @@ tasks/.verdaccio
 tasks/e2e/cypress/fixtures/example.json
 tmp/
 .vscode/*
+blog-test-project/*

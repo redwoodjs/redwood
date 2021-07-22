@@ -54,7 +54,8 @@ const {
   .option('yarn-install', {
     default: true,
     type: 'boolean',
-    describe: 'Skip yarn install with --no-yarn-install',
+    describe:
+      'Skip yarn install with --no-yarn-install. Also skips version requirements check.',
   })
   .option('typescript', {
     alias: 'ts',
@@ -90,18 +91,62 @@ const templateDir = path.resolve(__dirname, '../template')
 const createProjectTasks = ({ newAppDir }) => {
   return [
     {
+      title: 'Checking node and yarn compatibility',
+      skip: () => {
+        if (yarnInstall === false) {
+          return 'Warning: skipping check on request'
+        }
+      },
+      task: () => {
+        return new Promise((resolve, reject) => {
+          const { engines } = require(path.join(templateDir, 'package.json'))
+
+          checkNodeVersion(engines, (_error, result) => {
+            if (result.isSatisfied) {
+              return resolve()
+            }
+
+            const logStatements = Object.keys(result.versions)
+              .filter((name) => !result.versions[name].isSatisfied)
+              .map((name) => {
+                const { version, wanted } = result.versions[name]
+                return style.error(
+                  `${name} ${wanted} required, but you have ${version}`
+                )
+              })
+            logStatements.push(
+              style.header(`\nVisit requirements documentation:`)
+            )
+            logStatements.push(
+              style.warning(
+                `https://learn.redwoodjs.com/docs/tutorial/prerequisites/#nodejs-and-yarn-versions\n`
+              )
+            )
+            return reject(new Error(logStatements.join('\n')))
+          })
+        })
+      },
+    },
+    {
       title: `${appDirExists ? 'Using' : 'Creating'} directory '${newAppDir}'`,
       task: () => {
         if (appDirExists) {
           // make sure that the target directory is empty
           if (fs.readdirSync(newAppDir).length > 0) {
-            console.error(`'${newAppDir}' already exists and is not empty.`)
+            console.error(
+              style.error(`\n'${newAppDir}' already exists and is not empty\n`)
+            )
             process.exit(1)
           }
         } else {
           fs.ensureDirSync(path.dirname(newAppDir))
         }
         fs.copySync(templateDir, newAppDir)
+        // .gitignore is renamed here to force file inclusion during publishing
+        fs.rename(
+          path.join(newAppDir, 'gitignore.template'),
+          path.join(newAppDir, '.gitignore')
+        )
       },
     },
   ]
@@ -109,26 +154,6 @@ const createProjectTasks = ({ newAppDir }) => {
 
 const installNodeModulesTasks = ({ newAppDir }) => {
   return [
-    {
-      title: 'Checking node and yarn compatibility',
-      task: () => {
-        return new Promise((resolve, reject) => {
-          const { engines } = require(path.join(newAppDir, 'package.json'))
-
-          checkNodeVersion(engines, (_error, result) => {
-            if (result.isSatisfied) {
-              return resolve()
-            }
-
-            const errors = Object.keys(result.versions).map((name) => {
-              const { version, wanted } = result.versions[name]
-              return `${name} ${wanted} required, but you have ${version}.`
-            })
-            return reject(new Error(errors.join('\n')))
-          })
-        })
-      },
-    },
     {
       title: "Running 'yarn install'... (This could take a while)",
       skip: () => {
@@ -158,9 +183,19 @@ new Listr(
     },
     {
       title: 'Convert TypeScript files to JavaScript',
-      enabled: () => typescript === false,
+      enabled: () => typescript === false && yarnInstall === true,
       task: () => {
         return execa('yarn rw ts-to-js', {
+          shell: true,
+          cwd: newAppDir,
+        })
+      },
+    },
+    {
+      title: 'Generating types',
+      skip: () => yarnInstall === false,
+      task: () => {
+        return execa('yarn rw-gen', {
           shell: true,
           cwd: newAppDir,
         })
@@ -223,5 +258,14 @@ new Listr(
   .catch((e) => {
     console.log()
     console.log(e)
+    if (fs.existsSync(newAppDir)) {
+      console.log(
+        style.warning(`\nWarning: Directory `) +
+          style.cmd(`'${newAppDir}' `) +
+          style.warning(
+            `was created. However, the installation could not complete due to an error.\n`
+          )
+      )
+    }
     process.exit(1)
   })

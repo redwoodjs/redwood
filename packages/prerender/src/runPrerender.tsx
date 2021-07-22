@@ -4,7 +4,7 @@ import path from 'path'
 import React from 'react'
 
 import babelRequireHook from '@babel/register'
-import prettier from 'prettier'
+import cheerio from 'cheerio'
 import ReactDOMServer from 'react-dom/server'
 
 import { getPaths } from '@redwoodjs/internal'
@@ -15,8 +15,6 @@ import { getRootHtmlPath, registerShims, writeToDist } from './internal'
 
 interface PrerenderParams {
   routerPath: string // e.g. /about, /dashboard/me
-  outputHtmlPath: string // web/dist/{path}.html
-  dryRun: boolean
 }
 
 const rwWebPaths = getPaths().web
@@ -26,32 +24,39 @@ const rwWebPaths = getPaths().web
 babelRequireHook({
   extends: path.join(rwWebPaths.base, '.babelrc.js'),
   extensions: ['.js', '.ts', '.tsx', '.jsx'],
-  plugins: [
-    ['ignore-html-and-css-imports'], // webpack/postcss handles CSS imports
-    [
-      'babel-plugin-module-resolver',
-      {
-        alias: {
-          src: rwWebPaths.src,
-        },
-      },
-    ],
-    [mediaImportsPlugin],
+  overrides: [
+    {
+      plugins: [
+        ['ignore-html-and-css-imports'], // webpack/postcss handles CSS imports
+        [
+          'babel-plugin-module-resolver',
+          {
+            alias: {
+              src: rwWebPaths.src,
+            },
+            root: [getPaths().web.base],
+            // needed for respecting users' custom aliases in web/.babelrc
+            // See https://github.com/tleunen/babel-plugin-module-resolver/blob/master/DOCS.md#cwd
+            cwd: 'babelrc',
+            loglevel: 'silent', // to silence the unnecessary warnings
+          },
+          'prerender-module-resolver', // add this name, so it doesn't overwrite custom module resolvers in users' web/.babelrc
+        ],
+        [mediaImportsPlugin],
+      ],
+    },
   ],
-  only: [rwWebPaths.base],
+  only: [getPaths().base],
   ignore: ['node_modules'],
   cache: false,
 })
 
 export const runPrerender = async ({
   routerPath,
-  outputHtmlPath,
-  dryRun,
 }: PrerenderParams): Promise<string | void> => {
   registerShims()
 
   const indexContent = fs.readFileSync(getRootHtmlPath()).toString()
-
   const { default: App } = await import(getPaths().web.app)
 
   const componentAsHtml = ReactDOMServer.renderToString(
@@ -64,29 +69,45 @@ export const runPrerender = async ({
     </LocationProvider>
   )
 
-  // This is set by webpack by the html plugin
-  const renderOutput = indexContent.replace(
-    '<server-markup></server-markup>',
-    componentAsHtml
-  )
+  const { helmet } = global.__REDWOOD__HELMET_CONTEXT
 
-  if (dryRun) {
-    console.log('::: Dry run, not writing changes :::')
-    console.log(`::: 🚀 Prerender output for ${routerPath} ::: `)
-    const prettyOutput = prettier.format(renderOutput, { parser: 'html' })
-    console.log(prettyOutput)
-    console.log('::: --- ::: ')
+  const indexHtmlTree = cheerio.load(indexContent)
 
-    return prettyOutput
-  }
+  if (helmet) {
+    const helmetElements = `
+  ${helmet?.link.toString()}
+  ${helmet?.meta.toString()}
+  ${helmet?.script.toString()}
+  ${helmet?.noscript.toString()}
+  `
 
-  if (outputHtmlPath) {
-    // Copy default index.html to 200.html first
-    // This is to prevent recursively rendering the home page
-    if (outputHtmlPath === 'web/dist/index.html') {
-      fs.copyFileSync(outputHtmlPath, 'web/dist/200.html')
+    // Add all head elements
+    indexHtmlTree('head').prepend(helmetElements)
+
+    // Only change the title, if its not empty
+    if (cheerio.load(helmet?.title.toString())('title').text() !== '') {
+      indexHtmlTree('title').replaceWith(helmet?.title.toString())
     }
-
-    writeToDist(outputHtmlPath, renderOutput)
   }
+
+  // This is set by webpack by the html plugin
+  indexHtmlTree('server-markup').replaceWith(componentAsHtml)
+
+  const renderOutput = indexHtmlTree.html()
+
+  return renderOutput
+}
+
+// Used by cli at build time
+export const writePrerenderedHtmlFile = (
+  outputHtmlPath: string,
+  content: string
+) => {
+  // Copy default index.html to 200.html first
+  // This is to prevent recursively rendering the home page
+  if (outputHtmlPath === 'web/dist/index.html') {
+    fs.copyFileSync(outputHtmlPath, 'web/dist/200.html')
+  }
+
+  writeToDist(outputHtmlPath, content)
 }

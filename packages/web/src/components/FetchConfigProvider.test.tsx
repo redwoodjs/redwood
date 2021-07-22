@@ -3,7 +3,8 @@ import { render, screen, waitFor } from '@testing-library/react'
 import type { AuthContextInterface } from '@redwoodjs/auth'
 import '@testing-library/jest-dom/extend-expect'
 
-window.__REDWOOD__API_PROXY_PATH = 'https://api.example.com'
+// @ts-expect-error Mocking api proxy path for test
+global.__REDWOOD__API_PROXY_PATH = 'https://api.example.com'
 
 import { FetchConfigProvider, useFetchConfig } from './FetchConfigProvider'
 
@@ -39,7 +40,6 @@ describe('FetchConfigProvider', () => {
           ({
             loading: false,
             isAuthenticated: true,
-            authToken: 'margle the world',
             type: 'custom',
           } as AuthContextInterface)
         }
@@ -49,7 +49,7 @@ describe('FetchConfigProvider', () => {
     )
     await waitFor(() =>
       screen.getByText(
-        '{"uri":"https://api.example.com/graphql","headers":{"auth-provider":"custom","authorization":"Bearer margle the world"}}'
+        '{"uri":"https://api.example.com/graphql","headers":{"auth-provider":"custom"}}'
       )
     )
   })

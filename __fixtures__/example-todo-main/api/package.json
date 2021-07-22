@@ -3,6 +3,6 @@
   "name": "api",
   "version": "0.0.0",
   "dependencies": {
-    "@redwoodjs/api": "0.7.0"
+    "@redwoodjs/api": "0.32.2"
   }
 }

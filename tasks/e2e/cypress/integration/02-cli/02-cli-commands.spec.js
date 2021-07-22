@@ -14,17 +14,16 @@ describe('Check Redwood cli commands against tutorial', () => {
     Cypress.config('record', true)
   })
   it('Should run api tests successfully', () => {
-    cy.exec(`cd ${BASE_DIR}; yarn rw test api --no-watch`, {
-      timeout: 60000,
-    })
+    // Reset contacts service to initial state to pass tests
+    cy.exec(`cd ${BASE_DIR}; yarn rw g sdl contact --force`)
+
+    cy.exec(`cd ${BASE_DIR}; yarn rw test api --no-watch`)
       .its('code')
       .should('eq', 0)
   })
 
   it('Should run web tests successfully', () => {
-    cy.exec(`cd ${BASE_DIR}; yarn rw test web --no-watch`, {
-      timeout: 60000,
-    })
+    cy.exec(`cd ${BASE_DIR}; yarn rw test web --no-watch`)
       .its('code')
       .should('eq', 0)
   })
@@ -32,20 +31,14 @@ describe('Check Redwood cli commands against tutorial', () => {
   it('Should run build successfully (no prerender)', () => {
     // Check if webpack build on web, and babel build on api
     // work correctly
-    cy.exec(`cd ${BASE_DIR}; yarn rw build --no-prerender`, {
-      timeout: 60000,
-    })
+    cy.exec(`cd ${BASE_DIR}; yarn rw build --no-prerender`)
       .its('code')
       .should('eq', 0)
   })
 
   it('Should prerender about and homepage', () => {
     // Check if prerender is working
-    cy.exec(`cd ${BASE_DIR}; yarn rw prerender`, {
-      timeout: 60000,
-    })
-      .its('code')
-      .should('eq', 0)
+    cy.exec(`cd ${BASE_DIR}; yarn rw prerender`).its('code').should('eq', 0)
 
     const WEB_DIST = `${BASE_DIR}/web/dist`
 

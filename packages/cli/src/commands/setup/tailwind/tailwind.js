@@ -5,8 +5,8 @@ import chalk from 'chalk'
 import execa from 'execa'
 import Listr from 'listr'
 
-import { getPaths, writeFile } from 'src/lib'
-import c from 'src/lib/colors'
+import { getPaths, writeFile } from '../../../lib'
+import c from '../../../lib/colors'
 
 export const command = 'tailwind'
 export const description = 'Setup tailwindcss and PostCSS'
@@ -73,9 +73,10 @@ export const handler = async ({ force }) => {
                 'web',
                 'add',
                 '-D',
-                'postcss-loader@4.0.2',
-                'tailwindcss@npm:@tailwindcss/postcss7-compat',
-                'autoprefixer@9.8.6',
+                'postcss',
+                'postcss-loader',
+                'tailwindcss',
+                'autoprefixer',
               ])
             },
           },

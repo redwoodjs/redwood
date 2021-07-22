@@ -2,7 +2,7 @@ global.__dirname = __dirname
 import path from 'path'
 
 // Load mocks
-import 'src/lib/test'
+import '../../../../lib/test'
 import * as cell from '../cell'
 
 jest.mock('@redwoodjs/structure', () => {
@@ -401,19 +401,19 @@ test('generates list cells if name is plural', () => {
 
 test('"equipment" with list flag', () => {
   const CELL_PATH = path.normalize(
-    '/path/to/project/web/src/components/ManyEquipmentCell/ManyEquipmentCell.js'
+    '/path/to/project/web/src/components/EquipmentListCell/EquipmentListCell.js'
   )
 
   const TEST_PATH = path.normalize(
-    '/path/to/project/web/src/components/ManyEquipmentCell/ManyEquipmentCell.test.js'
+    '/path/to/project/web/src/components/EquipmentListCell/EquipmentListCell.test.js'
   )
 
   const STORY_PATH = path.normalize(
-    '/path/to/project/web/src/components/ManyEquipmentCell/ManyEquipmentCell.stories.js'
+    '/path/to/project/web/src/components/EquipmentListCell/EquipmentListCell.stories.js'
   )
 
   const MOCK_PATH = path.normalize(
-    '/path/to/project/web/src/components/ManyEquipmentCell/ManyEquipmentCell.mock.js'
+    '/path/to/project/web/src/components/EquipmentListCell/EquipmentListCell.mock.js'
   )
 
   // Check the file names

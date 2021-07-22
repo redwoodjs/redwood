@@ -5,14 +5,10 @@
     "rootDir": "src",
     "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
     "outDir": "dist",
-    "paths": {
-      "src/*": ["./src/*"]
-    }
   },
   "include": ["src"],
   "references": [
     { "path": "../internal" },
-    { "path": "../testing" },
     { "path": "../structure" },
   ]
 }

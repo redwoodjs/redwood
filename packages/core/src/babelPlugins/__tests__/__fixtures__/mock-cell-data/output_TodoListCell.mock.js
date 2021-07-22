@@ -1,4 +1,4 @@
-import { afterQuery } from './TodoListCell.js'
+import { afterQuery } from './TodoListCell.tsx'
 export const standard = () =>
   afterQuery(
     mockGraphQLQuery('TodoListCell_GetTodos', () => ({

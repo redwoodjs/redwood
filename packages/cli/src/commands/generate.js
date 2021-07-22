@@ -1,20 +1,18 @@
+import execa from 'execa'
 import terminalLink from 'terminal-link'
 
 import { getProject } from '@redwoodjs/structure'
 
 export const command = 'generate <type>'
 export const aliases = ['g']
-export const description = 'Save time by generating boilerplate code'
-
-const project = getProject()
+export const description = 'Generate boilerplate code and type definitions'
 
 export const builder = (yargs) =>
   yargs
-    /**
-     * Like generate, util is an entry point command,
-     * so we can't have generate going through its subdirectories
-     */
-    .commandDir('./generate', { recurse: true, exclude: /\/util\// })
+    .command('types', 'Generate supplementary code', {}, () => {
+      execa.sync('yarn rw-gen', { shell: true, stdio: 'inherit' })
+    })
+    .commandDir('./generate', { recurse: true })
     .demandCommand()
     .epilogue(
       `Also see the ${terminalLink(
@@ -33,9 +31,8 @@ export const yargsDefaults = {
   },
   typescript: {
     alias: 'ts',
-    default: project.isTypeScriptProject,
-    description:
-      'Generate TypeScript files. Enabled by default if we detect your project is typescript',
+    default: getProject().isTypeScriptProject,
+    description: 'Generate TypeScript files',
     type: 'boolean',
   },
 }
