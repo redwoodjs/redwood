@@ -9,6 +9,5 @@
   "include": ["./src/**/*", "./global.d.ts"],
   "references": [
     { "path": "../auth" },
-    { "path": "../history" },
   ]
 }
