@@ -1,5 +1,5 @@
 global.__dirname = __dirname
-import 'src/lib/test'
+import '../../lib/test'
 
 jest.mock('execa', () =>
   jest.fn((cmd, params) => ({

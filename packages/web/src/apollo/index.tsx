@@ -19,8 +19,8 @@ import './typeOverride'
 import {
   FetchConfigProvider,
   useFetchConfig,
-} from 'src/components/FetchConfigProvider'
-import { GraphQLHooksProvider } from 'src/components/GraphQLHooksProvider'
+} from '../components/FetchConfigProvider'
+import { GraphQLHooksProvider } from '../components/GraphQLHooksProvider'
 
 export type GraphQLClientConfigProp = Omit<
   ApolloClientOptions<unknown>,

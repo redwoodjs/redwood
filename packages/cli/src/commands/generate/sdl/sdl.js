@@ -17,9 +17,8 @@ import {
   getPaths,
   writeFilesTask,
   getEnum,
-} from 'src/lib'
-import c from 'src/lib/colors'
-
+} from '../../../lib'
+import c from '../../../lib/colors'
 import { yargsDefaults } from '../../generate'
 import { ensureUniquePlural, relationsForModel } from '../helpers'
 import { files as serviceFiles } from '../service/service'

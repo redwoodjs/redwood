@@ -674,12 +674,12 @@ But it's distinct from the others in that it's the only one that has a shebang a
 
 We also use methods that we want to affect all commands here, like `demandCommand` and `strict`.
 
-#### src/lib/colors.js
+#### lib/colors.js
 
 [colors.js](https://github.com/redwoodjs/redwood/blob/main/packages/cli/src/lib/colors.js) provides a declarative way of coloring output to the console using [chalk](https://github.com/chalk/chalk#styles). You'll see it imported like:
 
 ```javascript
-import c from 'src/lib/colors'
+import c from '../lib/colors'
 ```
 
 And used mainly in catch statements, like:
