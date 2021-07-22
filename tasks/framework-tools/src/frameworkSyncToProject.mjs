@@ -12,6 +12,7 @@ import {
   packageJsonName,
   resolvePackageJsonPath,
   buildPackages,
+  frameworkPkgJsonFiles,
 } from './lib/framework.mjs'
 import {
   installProjectPackages,
@@ -25,6 +26,9 @@ if (!projectPath) {
   console.log(`Usage: ${process.argv?.[1]} /path/to/rwjs/proect`)
   process.exit(1)
 }
+
+const cleanFlags = ['--clean', '-c']
+const clean = process.argv.slice(3).some((flag) => cleanFlags.includes(flag))
 
 // Cache the original package.json and restore it when this process exits.
 const projectPackageJsonPath = path.join(projectPath, 'package.json')
@@ -58,7 +62,7 @@ chokidar
   })
   .on('ready', async () => {
     logStatus('Building Framework...')
-    buildPackages()
+    buildPackages(frameworkPkgJsonFiles(), { clean })
 
     console.log()
     logStatus('Adding dependencies...')
@@ -93,7 +97,7 @@ chokidar
     console.log()
     logStatus(`Building ${packageName}...`)
     try {
-      buildPackages([packageJsonPath], { clean: true })
+      buildPackages([packageJsonPath], { clean })
 
       console.log()
       logStatus(`Copying ${packageName}...`)
