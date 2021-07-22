@@ -9,7 +9,6 @@ import c from 'ansi-colors'
 import execa from 'execa'
 import fg from 'fast-glob'
 import packlist from 'npm-packlist'
-import rimraf from 'rimraf'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 export const REDWOOD_PACKAGES_PATH = path.resolve(
@@ -137,6 +136,14 @@ export function packageJsonName(packageJsonPath) {
   return JSON.parse(fs.readFileSync(packageJsonPath), 'utf-8').name
 }
 
+export function cleanFramework() {
+  execa.sync('yarn framework build:clean', {
+    shell: true,
+    stdio: 'inherit',
+    cwd: path.resolve(__dirname, '../../'),
+  })
+}
+
 /**
  * Build Redwood packages.
  */
@@ -148,9 +155,7 @@ export function buildPackages(
 
   // clean before building
   if (clean) {
-    for (const packageJsonPath of packages) {
-      rimraf.sync(path.join(path.dirname(packageJsonPath), 'dist'))
-    }
+    cleanFramework()
   }
 
   execa.sync(
