@@ -6,8 +6,8 @@ import terminalLink from 'terminal-link'
 
 import { getProject } from '@redwoodjs/structure'
 
-import { getPaths, writeFilesTask } from 'src/lib'
-import c from 'src/lib/colors'
+import { getPaths, writeFilesTask } from '../../../lib'
+import c from '../../../lib/colors'
 
 const TEMPLATE_PATH = path.resolve(__dirname, 'templates', 'script.js.template')
 

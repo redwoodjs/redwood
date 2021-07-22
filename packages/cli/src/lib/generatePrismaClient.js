@@ -3,7 +3,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { runCommandTask, getPaths } from 'src/lib'
+import { runCommandTask, getPaths } from '../lib'
 
 /**
  * Conditionally generate the prisma client, skip if it already exists.

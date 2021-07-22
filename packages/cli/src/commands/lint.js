@@ -3,7 +3,7 @@ import fs from 'fs'
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
-import { getPaths } from 'src/lib'
+import { getPaths } from '../lib'
 
 export const command = 'lint'
 export const description = 'Lint your files'

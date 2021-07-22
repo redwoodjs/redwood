@@ -22,7 +22,7 @@
     "@graphql-tools/utils": "7.10.0",
     "@prisma/client": "2.27.0",
     "@redwoodjs/api": "0.35.2",
-    "@types/pino": "6.3.8",
+    "@types/pino": "6.3.9",
     "core-js": "3.15.2",
     "graphql": "15.5.1",
     "graphql-helix": "1.6.1",
@@ -39,10 +39,10 @@
   "devDependencies": {
     "@redwoodjs/auth": "0.35.2",
     "@redwoodjs/dev-server": "0.35.2",
-    "@types/jsonwebtoken": "8.5.3",
+    "@types/jsonwebtoken": "8.5.4",
     "@types/lodash.merge": "4.6.6",
     "@types/lodash.omitby": "4.6.6",
-    "@types/uuid": "8.3.0",
+    "@types/uuid": "8.3.1",
     "split2": "3.2.2"
   },
   "jest": {
@@ -54,7 +54,7 @@
     "build": "yarn build:js && yarn build:types",
     "prepublishOnly": "yarn cross-env NODE_ENV=production yarn build",
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
-    "build:types": "ttsc --build --verbose",
+    "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "test": "jest",
     "test:watch": "yarn test --watch"
