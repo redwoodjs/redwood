@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path'
+import util from 'util'
 
 import chalk from 'chalk'
 import execa from 'execa'
@@ -19,40 +20,13 @@ export const builder = (yargs) => {
   })
 }
 
-const tailwindImportsAndNotes = [
-  '/**',
-  ' * START --- TAILWIND GENERATOR EDIT',
-  ' *',
-  ' * `yarn rw setup tailwind` placed these imports here',
-  " * to inject Tailwind's styles into your CSS.",
-  ' * For more information, see: https://tailwindcss.com/docs/installation#add-tailwind-to-your-css',
-  ' */',
-  '@import "tailwindcss/base";',
-  '@import "tailwindcss/components";',
-  '@import "tailwindcss/utilities";',
-  '/**',
-  ' * END --- TAILWIND GENERATOR EDIT',
-  ' */\n',
-]
+const tailwindImport = "import 'tailwindcss/tailwind.css'\n"
 
-const INDEX_CSS_PATH = path.join(getPaths().web.src, 'index.css')
+const tailwindImportExist = (app) => new RegExp(tailwindImport).test(app)
 
-const tailwindImportsExist = (indexCSS) => {
-  let content = indexCSS.toString()
-
-  const hasBaseImport = () => /@import "tailwindcss\/base"/.test(content)
-
-  const hasComponentsImport = () =>
-    /@import "tailwindcss\/components"/.test(content)
-
-  const hasUtilitiesImport = () =>
-    /@import "tailwindcss\/utilities"/.test(content)
-
-  return hasBaseImport() && hasComponentsImport() && hasUtilitiesImport()
-}
-
-const postCSSConfigExists = () => {
-  return fs.existsSync(getPaths().web.postcss)
+const addTailwindImport = (app) => {
+  const i = app.indexOf("import './index.css'")
+  return app.substring(0, i) + tailwindImport + app.substring(i)
 }
 
 export const handler = async ({ force }) => {
@@ -62,12 +36,9 @@ export const handler = async ({ force }) => {
       task: () => {
         return new Listr([
           {
-            title: 'Install postcss-loader, tailwindcss, and autoprefixer',
+            title:
+              'Install postcss, postcss-loader, tailwindcss, and autoprefixer',
             task: async () => {
-              /**
-               * Install postcss-loader, tailwindcss, and autoprefixer
-               * RedwoodJS currently uses PostCSS v7; postcss-loader and autoprefixers pinned for compatibility
-               */
               await execa('yarn', [
                 'workspace',
                 'web',
@@ -78,16 +49,6 @@ export const handler = async ({ force }) => {
                 'tailwindcss',
                 'autoprefixer',
               ])
-            },
-          },
-          {
-            title: 'Sync yarn.lock and node_modules',
-            task: async () => {
-              /**
-               * Sync yarn.lock file and node_modules folder.
-               * Refer https://github.com/redwoodjs/redwood/issues/1301 for more details.
-               */
-              await execa('yarn', ['install', '--check-files'])
             },
           },
         ])
@@ -105,13 +66,15 @@ export const handler = async ({ force }) => {
          * Check if PostCSS config already exists.
          * If it exists, throw an error.
          */
-        if (!force && postCSSConfigExists()) {
+        const postCSSConfigPath = getPaths().web.postcss
+
+        if (!force && fs.existsSync(postCSSConfigPath)) {
           throw new Error(
             'PostCSS config already exists.\nUse --force to override existing config.'
           )
         } else {
           return writeFile(
-            getPaths().web.postcss,
+            postCSSConfigPath,
             fs
               .readFileSync(
                 path.resolve(
@@ -129,13 +92,15 @@ export const handler = async ({ force }) => {
     {
       title: 'Initializing Tailwind CSS...',
       task: async () => {
-        const basePath = getPaths().web.base
-        const tailwindConfigPath = path.join(basePath, 'tailwind.config.js')
-        const configExists = fs.existsSync(tailwindConfigPath)
+        const webConfigPath = getPaths().web.config
+        const tailwindConfigPath = path.join(
+          webConfigPath,
+          'tailwind.config.js'
+        )
 
-        if (configExists) {
+        if (fs.existsSync(tailwindConfigPath)) {
           if (force) {
-            // yarn tailwindcss init will fail if the file already exists
+            // `yarn tailwindcss init` will fail these files already exists
             fs.unlinkSync(tailwindConfigPath)
           } else {
             throw new Error(
@@ -144,32 +109,36 @@ export const handler = async ({ force }) => {
           }
         }
 
-        await execa('yarn', ['tailwindcss', 'init'], { cwd: basePath })
+        await execa('yarn', [
+          'tailwindcss',
+          'init',
+          tailwindConfigPath,
+          '--jit',
+        ])
 
-        // opt-in to upcoming changes
-        const config = fs.readFileSync(tailwindConfigPath, 'utf-8')
+        // add purge and lint
+        const tailwindConfig = require(tailwindConfigPath)
+        tailwindConfig.purge = ['src/**/*.{js,jsx,ts,tsx}']
 
-        const uncommentFlags = (str) =>
-          str.replace(/\/{2} ([\w-]+: true)/g, '$1')
+        fs.writeFileSync(
+          tailwindConfigPath,
+          `module.exports = ${util.inspect(tailwindConfig, { compact: false })}`
+        )
 
-        const newConfig = config.replace(/future.*purge/s, uncommentFlags)
-
-        fs.writeFileSync(tailwindConfigPath, newConfig)
+        await execa('yarn', ['eslint', '--fix', tailwindConfigPath])
       },
     },
     {
-      title: 'Adding imports to index.css...',
+      title: 'Adding import to App.{js|tsx}...',
       task: (_ctx, task) => {
-        /**
-         * Add tailwind imports and notes to the top of index.css
-         */
-        let indexCSS = fs.readFileSync(INDEX_CSS_PATH)
+        const APP_PATH = getPaths().web.app
+        const app = fs.readFileSync(APP_PATH, 'utf-8')
 
-        if (tailwindImportsExist(indexCSS)) {
-          task.skip('Imports already exist in index.css')
+        if (tailwindImportExist(app)) {
+          task.skip('Imports already exist in App.{js|tsx}')
         } else {
-          indexCSS = tailwindImportsAndNotes.join('\n') + indexCSS
-          fs.writeFileSync(INDEX_CSS_PATH, indexCSS)
+          const newApp = addTailwindImport(app)
+          fs.writeFileSync(APP_PATH, newApp)
         }
       },
     },
@@ -177,11 +146,9 @@ export const handler = async ({ force }) => {
       title: 'One more thing...',
       task: (_ctx, task) => {
         task.title = `One more thing...\n
-          ${c.green(
-            'Tailwind configured with "upcoming change" opt-in enabled'
-          )}\n
+          ${c.green('Tailwind configured with "Just-in-Time" mode')}\n
           ${chalk.hex('#e8e8e8')(
-            'See this doc for info: https://tailwindcss.com/docs/upcoming-changes'
+            'See this doc for info: https://tailwindcss.com/docs/just-in-time-mode'
           )}
         `
       },
