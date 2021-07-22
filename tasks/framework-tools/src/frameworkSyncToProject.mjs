@@ -105,6 +105,6 @@ chokidar
     }
 
     console.log()
-    logStatus(`Done copying ${packageName} and waiting for changes...`)
+    logStatus(`Done copying ${packageName}, and waiting for changes...`)
     console.log('-'.repeat(80))
   })
