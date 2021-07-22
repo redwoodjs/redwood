@@ -5,7 +5,7 @@ import password from 'secure-random-password'
 
 import { getPaths } from '@redwoodjs/internal'
 
-import c from 'src/lib/colors'
+import c from '../../../../lib/colors'
 
 // the lines that need to be added to App.{js,tsx}
 export const config = {

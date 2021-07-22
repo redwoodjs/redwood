@@ -50,6 +50,7 @@ chokidar
     ignored: (file) =>
       file.includes('/node_modules/') ||
       file.includes('/dist/') ||
+      file.includes('/dist') ||
       file.includes('/__tests__/') ||
       file.includes('/__fixtures__/') ||
       file.includes('/.test./') ||
@@ -91,11 +92,17 @@ chokidar
 
     console.log()
     logStatus(`Building ${packageName}...`)
-    buildPackages([packageJsonPath])
+    try {
+      buildPackages([packageJsonPath], { clean: true })
 
-    console.log()
-    logStatus(`Copying ${packageName}...`)
-    copyFrameworkFilesToProject(projectPath, [packageJsonPath])
+      console.log()
+      logStatus(`Copying ${packageName}...`)
+      copyFrameworkFilesToProject(projectPath, [packageJsonPath])
+    } catch (error) {
+      console.log()
+      logStatus(`Error building ${packageName}...`)
+      console.log(error)
+    }
 
     console.log()
     logStatus(`Done, and waiting for changes...`)
