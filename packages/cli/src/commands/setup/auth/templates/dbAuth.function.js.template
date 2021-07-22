@@ -20,6 +20,19 @@ export const handler = async (event, context) => {
       salt: 'salt',
     },
 
+    // loginHander() is called after finding the user that matches the
+    // username/password provided at login, but before actually considering them
+    // logged in. So if you want to prevent someone logging in for another
+    // reason (they didn't validate their email yet), this is the place to do it
+    // by throwing an error. The `user` argument will be the user in the
+    // database that matched the username/password. If you do want to allow this
+    // user to log in, this function must return an object containing at least
+    // an `id` field (whatever named field was provided for `authFields.id`
+    // above). Ex: `return { id: user.id }`
+    loginHandler: (user) => {
+      return user
+    },
+
     // Whatever you want to happen to your data on new user signup. Redwood will
     // check for duplicate usernames before calling this handler. At a minimum
     // you need to save the `username`, `hashedPassword` and `salt` to your
