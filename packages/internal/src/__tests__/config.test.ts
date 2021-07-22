@@ -15,7 +15,7 @@ describe('getConfig', () => {
           "port": 8911,
           "schemaPath": "./api/db/schema.prisma",
           "target": "node",
-          "title": "Awesome Redwood App",
+          "title": "Redwood App",
         },
         "browser": Object {
           "open": false,
@@ -38,7 +38,7 @@ describe('getConfig', () => {
           "path": "./web",
           "port": 8910,
           "target": "browser",
-          "title": "Awesome Redwood App",
+          "title": "Redwood App",
         },
       }
     `)
