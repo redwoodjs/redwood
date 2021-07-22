@@ -23,11 +23,11 @@
     "youch-terminal": "1.1.1"
   },
   "devDependencies": {
-    "@types/aws-lambda": "8.10.77",
-    "@types/express": "4.17.12",
-    "@types/morgan": "1.9.2",
-    "@types/qs": "6.9.6",
-    "@types/require-dir": "1.0.1",
+    "@types/aws-lambda": "8.10.79",
+    "@types/express": "4.17.13",
+    "@types/morgan": "1.9.3",
+    "@types/qs": "6.9.7",
+    "@types/require-dir": "1.0.2",
     "@types/stack-trace": "0.0.29"
   },
   "scripts": {
