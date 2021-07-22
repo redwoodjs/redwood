@@ -79,7 +79,7 @@
     "build": "yarn build:js && yarn build:types",
     "prepublishOnly": "yarn build",
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
-    "build:types": "ttsc --build --verbose",
+    "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build\"",
     "test": "jest",
     "test:watch": "yarn test --watch"

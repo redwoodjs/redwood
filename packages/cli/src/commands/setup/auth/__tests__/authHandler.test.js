@@ -1,7 +1,7 @@
 global.__dirname = __dirname
 
 jest.mock('fs')
-jest.mock('src/lib', () => ({
+jest.mock('../../../../lib', () => ({
   getPaths: () => ({
     api: { functions: '', src: '', lib: '' },
     web: { src: '' },

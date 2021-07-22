@@ -5,9 +5,9 @@ import terminalLink from 'terminal-link'
 
 import { getConfig, getConfigPath, shutdownPort } from '@redwoodjs/internal'
 
-import { getPaths } from 'src/lib'
-import c from 'src/lib/colors'
-import { generatePrismaClient } from 'src/lib/generatePrismaClient'
+import { getPaths } from '../lib'
+import c from '../lib/colors'
+import { generatePrismaClient } from '../lib/generatePrismaClient'
 
 export const command = 'dev [side..]'
 export const description = 'Start development servers for api, and web'

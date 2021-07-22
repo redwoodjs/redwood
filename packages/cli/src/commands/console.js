@@ -3,7 +3,7 @@ import repl from 'repl'
 
 import babelRequireHook from '@babel/register'
 
-import { getPaths } from 'src/lib'
+import { getPaths } from '../lib'
 
 export const command = 'console'
 export const aliases = ['c']

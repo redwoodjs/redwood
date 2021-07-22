@@ -11,7 +11,6 @@ import terminalLink from 'terminal-link'
 
 import { getConfig } from '@redwoodjs/internal'
 
-import { transformTSToJS } from 'src/lib'
 import {
   generateTemplate,
   templateRoot,
@@ -24,9 +23,9 @@ import {
   writeFilesTask,
   addRoutesToRouterTask,
   addScaffoldImport,
-} from 'src/lib'
-import c from 'src/lib/colors'
-
+} from '../../../lib'
+import { transformTSToJS } from '../../../lib'
+import c from '../../../lib/colors'
 import { yargsDefaults } from '../../generate'
 import { handler as dbAuthHandler } from '../dbAuth/dbAuth'
 import {
