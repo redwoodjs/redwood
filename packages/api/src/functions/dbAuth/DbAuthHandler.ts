@@ -30,6 +30,14 @@ interface DbAuthHandlerOptions {
     salt: string
   }
   /**
+   * Anything you want to happen before logging the user in. This can include
+   * throwing an error to prevent login. If you do want to allow login, this
+   * function must return an object representing the user you want to be logged
+   * in, containing at least an `id` field (whatever named field was provided
+   * for `authFields.id`). For example: `return { id: user.id }`
+   */
+  loginHandler: (user: Record<string, unknown>) => Promise<any>
+  /**
    * Whatever you want to happen to your data on new user signup. Redwood will
    * check for duplicate usernames before calling this handler. At a minimum
    * you need to save the `username`, `hashedPassword` and `salt` to your
@@ -137,7 +145,7 @@ export class DbAuthHandler {
     this.options = options
     this.db = this.options.db
     this.dbAccessor = this.db[this.options.authModelAccessor]
-    this.headerCsrfToken = this.event.headers['x-csrf-token']
+    this.headerCsrfToken = this.event.headers['csrf-token']
     this.hasInvalidSession = false
 
     try {
@@ -197,17 +205,19 @@ export class DbAuthHandler {
 
   async login() {
     const { username, password } = JSON.parse(this.event.body as string)
-    const user = await this._verifyUser(username, password)
-    const sessionData = { id: user[this.options.authFields.id] }
+    const dbUser = await this._verifyUser(username, password)
+    const handlerUser = await this.options.loginHandler(dbUser)
+    const sessionData = { id: handlerUser[this.options.authFields.id] }
 
-    // this needs to go into graphql somewhere so that each request makes a new CSRF token
-    // and sets it in both the encrypted session and the x-csrf-token header
+    // TODO: this needs to go into graphql somewhere so that each request makes
+    // a new CSRF token and sets it in both the encrypted session and the
+    // csrf-token header
     const csrfToken = DbAuthHandler.CSRF_TOKEN
 
     return [
       sessionData,
       {
-        'X-CSRF-Token': csrfToken,
+        'csrf-token': csrfToken,
         ...this._createSessionHeader(sessionData, csrfToken),
       },
     ]
@@ -226,7 +236,7 @@ export class DbAuthHandler {
       return [
         sessionData,
         {
-          'X-CSRF-Token': csrfToken,
+          'csrf-token': csrfToken,
           ...this._createSessionHeader(sessionData, csrfToken),
         },
         { statusCode: 201 },
