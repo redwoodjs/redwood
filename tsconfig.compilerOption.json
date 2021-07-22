@@ -15,6 +15,7 @@
     "noFallthroughCasesInSwitch": true,
     "jsx": "preserve",
     "skipLibCheck": true,
+    "resolveJsonModule": true
   },
   "exclude": [
     "dist",
