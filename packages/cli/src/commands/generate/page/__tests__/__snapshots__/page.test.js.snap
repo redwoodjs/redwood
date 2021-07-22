@@ -7,7 +7,7 @@ import { MetaTags } from '@redwoodjs/web'
 const HomePage = () => {
   return (
     <>
-      <MetaTags title=\\"Home\\" description=\\"Home is a great page\\" />
+      <MetaTags title=\\"Home\\" description=\\"Home description\\" />
 
       <h1>HomePage</h1>
       <p>
@@ -32,7 +32,7 @@ import { MetaTags } from '@redwoodjs/web'
 const ContactUsPage = () => {
   return (
     <>
-      <MetaTags title=\\"ContactUs\\" description=\\"ContactUs is a great page\\" />
+      <MetaTags title=\\"ContactUs\\" description=\\"ContactUs description\\" />
 
       <h1>ContactUsPage</h1>
       <p>
@@ -57,7 +57,7 @@ import { MetaTags } from '@redwoodjs/web'
 const CatsPage = () => {
   return (
     <>
-      <MetaTags title=\\"Cats\\" description=\\"Cats is a great page\\" />
+      <MetaTags title=\\"Cats\\" description=\\"Cats description\\" />
 
       <h1>CatsPage</h1>
       <p>
@@ -82,7 +82,7 @@ import { MetaTags } from '@redwoodjs/web'
 const PostPage = ({ id }) => {
   return (
     <>
-      <MetaTags title=\\"Post\\" description=\\"Post is a great page\\" />
+      <MetaTags title=\\"Post\\" description=\\"Post description\\" />
 
       <h1>PostPage</h1>
       <p>
@@ -208,7 +208,7 @@ import { MetaTags } from '@redwoodjs/web'
 const HomePage = () => {
   return (
     <>
-      <MetaTags title=\\"Home\\" description=\\"Home is a great page\\" />
+      <MetaTags title=\\"Home\\" description=\\"Home description\\" />
 
       <h1>HomePage</h1>
       <p>
@@ -287,7 +287,7 @@ import { MetaTags } from '@redwoodjs/web'
 const PostPage = ({ id }) => {
   return (
     <>
-      <MetaTags title=\\"Post\\" description=\\"Post is a great page\\" />
+      <MetaTags title=\\"Post\\" description=\\"Post description\\" />
 
       <h1>PostPage</h1>
       <p>
@@ -336,7 +336,7 @@ const TSFilesPage = () => {
     <>
       <MetaTags
         title=\\"TSFiles\\"
-        description=\\"TSFiles is a great page\\"
+        description=\\"TSFiles description\\"
       />
       <h1>TSFilesPage</h1>
       <p>
@@ -393,7 +393,7 @@ const TSParamFilesPage = ({ id }: TSParamFilesPageProps) => {
     <>
       <MetaTags
         title=\\"TSParamFiles\\"
-        description=\\"TSParamFiles is a great page\\"
+        description=\\"TSParamFiles description\\"
       />
       <h1>TSParamFilesPage</h1>
       <p>
@@ -425,7 +425,7 @@ const TSParamTypeFilesPage = ({ id }: TSParamTypeFilesPageProps) => {
     <>
       <MetaTags
         title=\\"TSParamTypeFiles\\"
-        description=\\"TSParamTypeFiles is a great page\\"
+        description=\\"TSParamTypeFiles description\\"
       />
       <h1>TSParamTypeFilesPage</h1>
       <p>

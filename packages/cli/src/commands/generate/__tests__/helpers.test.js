@@ -18,7 +18,7 @@ const FooBarPage = () => {
     <>
       <MetaTags
         title="FooBar"
-        description="FooBar is a great page"
+        description="FooBar description"
       />
       <h1>FooBarPage</h1>
       <p>
