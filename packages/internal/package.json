@@ -33,7 +33,7 @@
     "toml": "3.0.0"
   },
   "devDependencies": {
-    "@types/findup-sync": "4.0.0",
+    "@types/findup-sync": "4.0.1",
     "graphql-tag": "2.12.5"
   },
   "jest": {
