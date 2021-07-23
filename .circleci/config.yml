@@ -43,11 +43,11 @@ jobs:
       - run:
           name: Init Git for RedwoodJS app
           command: |
+            cd ${PROJECT_PATH}
             git config user.email "you@example.com"
             git config user.name "Your Name"
             git init --initial-branch main && git add .
             git commit -a --message=init
-          working_directory: ${PROJECT_PATH}
 
 
 workflows:
