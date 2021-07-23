@@ -228,7 +228,7 @@ module.exports = (webpackEnv) => {
         }),
       isEnvProduction &&
         new WebpackManifestPlugin({
-          fileName: 'rw-build-manifest.json',
+          fileName: 'build-manifest.json',
         }),
       ...getSharedPlugins(isEnvProduction),
     ].filter(Boolean),
