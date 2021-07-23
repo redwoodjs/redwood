@@ -38,7 +38,7 @@ const BLANK_IMG_DATA_SRC =
   'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='
 
 export default function ({ types: t }: { types: typeof types }): PluginObj {
-  const manifestPath = join(getPaths().web.dist, 'manifest.json')
+  const manifestPath = join(getPaths().web.dist, 'build-manifest.json')
   const webpackManifest = require(manifestPath)
 
   return {
