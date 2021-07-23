@@ -22,13 +22,11 @@ export const handler = async (event, context) => {
 
     // loginHander() is called after finding the user that matches the
     // username/password provided at login, but before actually considering them
-    // logged in. So if you want to prevent someone logging in for another
+    // logged in. If you want to prevent someone logging in for another
     // reason (they didn't validate their email yet), this is the place to do it
     // by throwing an error. The `user` argument will be the user in the
     // database that matched the username/password. If you do want to allow this
-    // user to log in, this function must return an object containing at least
-    // an `id` field (whatever named field was provided for `authFields.id`
-    // above). Ex: `return { id: user.id }`
+    // user to log in, return the user.
     loginHandler: (user) => {
       return user
     },
