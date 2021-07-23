@@ -84,8 +84,7 @@ export const watchFunctions = ({
       WATCHER_IGNORE_EXTENSIONS.some((ext) => file.endsWith(ext)),
   })
   watcher.on('ready', () => {
-    watcher.on('all', (event: any, path: any) => {
-      console.log({path})
+    watcher.on('all', (event, path) => {
       onChange(event, path)
       try {
         const functions = importFreshFunctions(paths.functions)

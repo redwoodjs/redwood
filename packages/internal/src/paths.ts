@@ -141,7 +141,6 @@ export const resolveFile = (
 // TODO: Make this a proxy and make it lazy.
 export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
   const routes = resolveFile(path.join(BASE_DIR, PATH_WEB_ROUTES)) as string
-  console.log({routes})
   const { schemaPath } = getConfig(getConfigPath(BASE_DIR)).api
   const schemaDir = path.dirname(schemaPath)
 
@@ -202,7 +201,6 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
   fs.mkdirSync(paths.generated.types.includes, { recursive: true })
   fs.mkdirSync(paths.generated.types.mirror, { recursive: true })
 
-  // console.log({paths})
   return paths
 }
 
