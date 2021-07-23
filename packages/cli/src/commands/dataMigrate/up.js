@@ -6,8 +6,8 @@ import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
 
-import { getPaths } from 'src/lib'
-import c from 'src/lib/colors'
+import { getPaths } from '../../lib'
+import c from '../../lib/colors'
 
 babelRequireHook({
   extends: path.join(getPaths().api.base, '.babelrc.js'),
