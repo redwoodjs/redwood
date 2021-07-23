@@ -10,7 +10,7 @@
   "devDependencies": {
     "@auth0/auth0-spa-js": "1.16.1",
     "@supabase/supabase-js": "1.18.0",
-    "@types/netlify-identity-widget": "1.9.1",
+    "@types/netlify-identity-widget": "1.9.2",
     "@types/react": "17.0.14",
     "firebase": "8.7.0",
     "firebase-admin": "9.10.0",
