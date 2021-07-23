@@ -35,10 +35,12 @@ jobs:
           name: Create a temporary directory
           command: |
             project_path=$(mktemp -d -t redwood.XXXXXX)
+            echo $project_path
             echo 'export PROJECT_PATH=$project_path' >> $BASH_ENV
       - run:
           name: Create a RedwoodJS app
           command: |
+            echo ${PROJECT_PATH}
             ./tasks/run-e2e ${PROJECT_PATH} --no-start
       - run:
           name: Init Git for RedwoodJS app
