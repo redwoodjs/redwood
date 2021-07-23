@@ -35,7 +35,7 @@ jobs:
           name: Create a temporary directory
           command: |
             project_path=$(mktemp -d -t redwood.XXXXXX)
-            echo 'export PROJECT_PATH=$project_path' >> $BASH_ENV
+            echo "export PROJECT_PATH=$project_path" >> $BASH_ENV
       - run:
           name: Create a RedwoodJS app
           command: |
@@ -47,7 +47,7 @@ jobs:
             git config user.name "Your Name"
             git init --initial-branch main && git add .
             git commit -a --message=init
-          working-directory: ${PROJECT_PATH}
+          working_directory: ${PROJECT_PATH}
 
 
 workflows:
