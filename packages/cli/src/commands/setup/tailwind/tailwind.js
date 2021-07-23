@@ -1,6 +1,5 @@
 import fs from 'fs'
 import path from 'path'
-import util from 'util'
 
 import chalk from 'chalk'
 import execa from 'execa'
@@ -117,13 +116,13 @@ export const handler = async ({ force }) => {
         ])
 
         // add purge and lint
-        const tailwindConfig = require(tailwindConfigPath)
-        tailwindConfig.purge = ['src/**/*.{js,jsx,ts,tsx}']
-
-        fs.writeFileSync(
-          tailwindConfigPath,
-          `module.exports = ${util.inspect(tailwindConfig, { compact: false })}`
+        const tailwindConfig = fs.readFileSync(tailwindConfigPath, 'utf-8')
+        const newTailwindConfig = tailwindConfig.replace(
+          'purge: []',
+          "purge: ['src/**/*.{js,jsx,ts,tsx}']"
         )
+
+        fs.writeFileSync(tailwindConfigPath, newTailwindConfig)
 
         await execa('yarn', ['eslint', '--fix', tailwindConfigPath])
       },
