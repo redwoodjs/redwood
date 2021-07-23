@@ -12,7 +12,7 @@ const DbMock = class {
   }
 }
 
-// creates a mock table accessor
+// creates a mock database table accessor (db.user)
 const TableMock = class {
   constructor(accessor) {
     this.accessor = accessor
@@ -96,6 +96,7 @@ describe('dbAuth', () => {
       db: db,
       excludeUserFields: [],
       loginExpires: 60 * 60,
+      loginHandler: (user) => user,
       signupHandler: ({ username, hashedPassword, salt, userAttributes }) => {
         return db.user.create({
           data: {
@@ -174,14 +175,14 @@ describe('dbAuth', () => {
     })
 
     it('sets header-based CSRF token', () => {
-      event = { headers: { 'x-csrf-token': 'qwerty' } }
+      event = { headers: { 'csrf-token': 'qwerty' } }
       const dbAuth = new DbAuthHandler(event, context, options)
 
       expect(dbAuth.headerCsrfToken).toEqual('qwerty')
     })
 
     it('sets session variables to nothing if session cannot be decrypted', () => {
-      event = { headers: { 'x-csrf-token': 'qwerty' } }
+      event = { headers: { 'csrf-token': 'qwerty' } }
       const dbAuth = new DbAuthHandler(event, context, options)
 
       expect(dbAuth.session).toBeUndefined()
@@ -306,6 +307,69 @@ describe('dbAuth', () => {
       expect.assertions(1)
     })
 
+    it('throws an error if loginHandler throws', async () => {
+      const _user = await createDbUser()
+      event.body = JSON.stringify({
+        username: 'rob@redwoodjs.com',
+        password: 'password',
+      })
+      options.loginHandler = () => {
+        throw new Error('Cannot log in')
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      dbAuth.login().catch((e) => {
+        expect(e).toBeInstanceOf(Error)
+      })
+      expect.assertions(1)
+    })
+
+    it('passes the found user to loginHandler', async () => {
+      const user = await createDbUser()
+      event.body = JSON.stringify({
+        username: 'rob@redwoodjs.com',
+        password: 'password',
+      })
+      options.loginHandler = () => {
+        expect(user).toEqual(user)
+        return user
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+      await dbAuth.login()
+    })
+
+    it('throws an error if loginHandler returns null', async () => {
+      const _user = await createDbUser()
+      event.body = JSON.stringify({
+        username: 'rob@redwoodjs.com',
+        password: 'password',
+      })
+      options.loginHandler = () => {
+        return null
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+      dbAuth.login().catch((e) => {
+        expect(e).toBeInstanceOf(dbAuthError.NoUserIdError)
+      })
+      expect.assertions(1)
+    })
+
+    it('throws an error if loginHandler returns an object without an id', async () => {
+      const _user = await createDbUser()
+      event.body = JSON.stringify({
+        username: 'rob@redwoodjs.com',
+        password: 'password',
+      })
+      options.loginHandler = () => {
+        return { name: 'Rob' }
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+      dbAuth.login().catch((e) => {
+        expect(e).toBeInstanceOf(dbAuthError.NoUserIdError)
+      })
+      expect.assertions(1)
+    })
+
     it('returns a JSON body of the user that is logged in', async () => {
       const user = await createDbUser()
       event.body = JSON.stringify({
@@ -328,7 +392,7 @@ describe('dbAuth', () => {
       const dbAuth = new DbAuthHandler(event, context, options)
 
       const response = await dbAuth.login()
-      expect(response[1]['X-CSRF-Token']).toMatch(UUID_REGEX)
+      expect(response[1]['csrf-token']).toMatch(UUID_REGEX)
     })
 
     it('returns a set-cookie header to create session', async () => {
@@ -341,7 +405,7 @@ describe('dbAuth', () => {
 
       const response = await dbAuth.login()
 
-      expect(response[1]['X-CSRF-Token']).toMatch(UUID_REGEX)
+      expect(response[1]['csrf-token']).toMatch(UUID_REGEX)
     })
 
     it('returns a CSRF token in the header', async () => {
@@ -487,7 +551,7 @@ describe('dbAuth', () => {
       event = {
         headers: {
           cookie: encryptToCookie(JSON.stringify(data) + ';' + token),
-          'x-csrf-token': token,
+          'csrf-token': token,
         },
       }
       const dbAuth = new DbAuthHandler(event, context, options)
@@ -501,7 +565,7 @@ describe('dbAuth', () => {
       event = {
         headers: {
           cookie: encryptToCookie(JSON.stringify(data) + ';' + token),
-          'x-csrf-token': 'invalid',
+          'csrf-token': 'invalid',
         },
       }
       const dbAuth = new DbAuthHandler(event, context, options)

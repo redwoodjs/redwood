@@ -198,7 +198,7 @@ export class DbAuthHandler {
       if (e instanceof DbAuthError.WrongVerbError) {
         return this._notFound()
       } else {
-        return this._badRequest(e.message)
+        return this._badRequest(e.message || e)
       }
     }
   }
@@ -207,6 +207,14 @@ export class DbAuthHandler {
     const { username, password } = JSON.parse(this.event.body as string)
     const dbUser = await this._verifyUser(username, password)
     const handlerUser = await this.options.loginHandler(dbUser)
+
+    if (
+      handlerUser == null ||
+      handlerUser[this.options.authFields.id] == null
+    ) {
+      throw new DbAuthError.NoUserIdError()
+    }
+
     const sessionData = { id: handlerUser[this.options.authFields.id] }
 
     // TODO: this needs to go into graphql somewhere so that each request makes
