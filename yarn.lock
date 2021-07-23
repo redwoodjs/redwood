@@ -1875,53 +1875,53 @@
     ts-node "^9"
     tslib "^2"
 
-"@envelop/apollo-server-errors@0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@envelop/apollo-server-errors/-/apollo-server-errors-0.0.1.tgz#b5ce7c5a37f78324abb913042fa53ff8e52c4679"
-  integrity sha512-p41ztI4JiXkIQ193ohLXx0y8ZJc0E1jFoOi+Fm7+QRdcYdnhJHhqxkygss2OWUJpL4WlFOApbV+isIVnwq+GRg==
+"@envelop/apollo-server-errors@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@envelop/apollo-server-errors/-/apollo-server-errors-1.0.0.tgz#601f020308ecec7f05f451be18715d0e37c090c4"
+  integrity sha512-Yal9JCr+SLmSK9AXemCUPncY5SDjje5uaSmcDvNXuTsA3LtcwQw0OpZu3m6MGbDJxv5xcajNF2Bc3qVInaMdww==
   dependencies:
-    apollo-server-errors "2.5.0"
+    apollo-server-errors "3.0.1"
 
-"@envelop/core@0.5.1":
-  version "0.5.1"
-  resolved "https://registry.yarnpkg.com/@envelop/core/-/core-0.5.1.tgz#ba7323882c6903c55a4bb3724c9a81d09c5a3b52"
-  integrity sha512-FsByt/7YHLxpRy7YCTKjWKohLt1ZwpspXoRvoJI27ym/4BSUGx4Ucy2EmjxBf1cE7okOukl/J8MaWt12mbfFdw==
+"@envelop/core@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@envelop/core/-/core-1.0.0.tgz#2052bdce473e37df249bc718985141b47e87e6a5"
+  integrity sha512-RkByYgu77+mUJgDT56iXhd8lQno4/dneXNX0Q1WyidinOi6Xw6GcEzJAbtJfNIIShXYR39kdBn3zC9yJUcNkfg==
   dependencies:
-    "@envelop/types" "0.4.1"
+    "@envelop/types" "1.0.0"
 
-"@envelop/depth-limit@0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@envelop/depth-limit/-/depth-limit-0.2.0.tgz#9dd8261b053d2971656ebf5be838c16be123b225"
-  integrity sha512-NWZl7/HBp+8DZuQ1i4C0+01Al3Bo/gCNPpQHhHxsTp5Y2cOLw4zN6VgYMw3FYS1QsjJ8srusGBk23U7RpTpS5A==
+"@envelop/depth-limit@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@envelop/depth-limit/-/depth-limit-1.0.0.tgz#7269943879eeabd31fade1ccefbc5c1fdd2762b7"
+  integrity sha512-Ujy75wKcNJk8AwT1iOKVPUEODrtWxHCuA2SuCGXOG1IUfuKBpskiwkrIE5G46hoYzfQhZfZ8KS9Ak3AKA/e+vg==
   dependencies:
     graphql-depth-limit "^1.1.0"
 
-"@envelop/disable-introspection@0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@envelop/disable-introspection/-/disable-introspection-0.2.0.tgz#516974a132444b1ee02b21c46b78223fb3fd9823"
-  integrity sha512-1XgmCPXxVb2t6rWVsmFUcWRH2dwEF4oZIu8hiRTvRfmJMvX65/ZwoJCZzHoLx2ZYiNVgs7k9RwYRGv7HEb0hQQ==
+"@envelop/disable-introspection@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@envelop/disable-introspection/-/disable-introspection-1.0.0.tgz#d93f938fc9d6c7febfc8cbca1a6580474cb41a56"
+  integrity sha512-lb2ijbJNcsLfHeYJfbNDYdLEGfbQa7UKUU63RT7LZJDIvk/5TZeNzlZ5N0Bhox+e2g2TyYdtZu7dUjJp/thAMg==
 
-"@envelop/filter-operation-type@0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@envelop/filter-operation-type/-/filter-operation-type-0.1.0.tgz#0536907332a2e762b0d02c75ec925f494e07b739"
-  integrity sha512-g2PuWn3mlfYQ5JVNCnKsmGhDY5FzCVzpECf2Ap7qIIvUUoUv8me+xt6RSuSJ6hNX7qYOwFIjY/0lQ7qBeVTEGQ==
+"@envelop/filter-operation-type@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@envelop/filter-operation-type/-/filter-operation-type-1.0.0.tgz#85e251e4d0124308581880289ed0e4cde7b17d0d"
+  integrity sha512-Lr9sBHw3o6XB1y6G8/m093SLaQv+OTy6vXPOi9xDgC1FymFfZKI1DMXLxBa0ANvpDEBeXQvpJYkd5ceUK7kvvA==
 
-"@envelop/parser-cache@0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@envelop/parser-cache/-/parser-cache-0.2.0.tgz#98a5d7db372dacfc8b4f0009d1b1653cfdd06f64"
-  integrity sha512-y8yp4gtB/NGNNi7oCB6F5IGvGHjw054A+tX1B3FBRXqQbW+bYWZXG7pNATMMP7J52HoJVrE/gk4b1t5uqed0GA==
+"@envelop/parser-cache@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@envelop/parser-cache/-/parser-cache-1.0.0.tgz#1dfdf0ff916f8b90139389b588fbc021b57b956d"
+  integrity sha512-mdMf4wJiMWRRpqUOQkaaa5hP2FUWS80UMjDUJ/Ga2dIXUJZVlPapoWjIRd9JH14wg8n0/jpHs27YR7ETKV259g==
   dependencies:
     tiny-lru "7.0.6"
 
-"@envelop/types@0.4.1":
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/@envelop/types/-/types-0.4.1.tgz#0ef52ad8e098e79bf808c6c97b088ce55d6f9678"
-  integrity sha512-JUS6OcACZ2SnPudvTqrNqCDTudwBFOFrfIyzU5/FG7xMaeL5jOjszJwpNuL/LqlghPILPS95LleweBfrw/SqOg==
+"@envelop/types@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@envelop/types/-/types-1.0.0.tgz#704af5b74df951c0559d6443fd2dcf6cb7368172"
+  integrity sha512-L3hHwDcDd5SO5Dck/iJxvbanRa3dx7nUZKelT8x+YcNfEgmAFvtB+y1u48ky43rygVVf7MFaFT2d0nggR1HxRg==
 
-"@envelop/validation-cache@0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@envelop/validation-cache/-/validation-cache-0.2.0.tgz#512d711e08f2a0b43431e33c0c818d55544099fe"
-  integrity sha512-slFZsGoqVfQ746HfEznjI/x/4hb055Z2Y7wgS1CtwIrXNmTG0ejH4jhtOFzqX8z71P+Mw9vZEefGaXBlZLq14w==
+"@envelop/validation-cache@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@envelop/validation-cache/-/validation-cache-1.0.0.tgz#0e16553e9dd6047a024c9c75520f57217d10c777"
+  integrity sha512-HI4in/DlqSsZ6/hCAG9TTqvigTgd+5TGdz3JTGQr471vMW/Biw1a1C90VQO1XYMScxjranQfbBXu+ktA4kN6Kw==
   dependencies:
     tiny-lru "7.0.6"
 
@@ -5800,7 +5800,12 @@ apollo-server-env@^3.1.0:
     node-fetch "^2.6.1"
     util.promisify "^1.0.0"
 
-apollo-server-errors@2.5.0, apollo-server-errors@^2.5.0:
+apollo-server-errors@3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/apollo-server-errors/-/apollo-server-errors-3.0.1.tgz#0dfcc1fe8b10eab311fc7e4f6da93189ea6bcdae"
+  integrity sha512-PSp64IFeN1YK5EYZ3V/8iDRESMMyE00h1vE5aCr83wHL3T0mN7VRiMKoOIZ+2rUtnn7CpK73o6QLmouhxPtXsQ==
+
+apollo-server-errors@^2.5.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/apollo-server-errors/-/apollo-server-errors-2.5.0.tgz#5d1024117c7496a2979e3e34908b5685fe112b68"
   integrity sha512-lO5oTjgiC3vlVg2RKr3RiXIIQ5pGXBFxYGGUkKDhTud3jMIhs+gel8L8zsEjKaKxkjHhCQAA/bcEfYiKkGQIvA==
