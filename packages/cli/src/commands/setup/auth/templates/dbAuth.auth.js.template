@@ -44,7 +44,7 @@ export const hasRole = ({ roles }) => {
 
     if (typeof roles === 'string') {
       return context.currentUser.roles?.includes(roles)
-      }
+    }
 
     // roles not found
     return false
