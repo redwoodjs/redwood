@@ -12,6 +12,8 @@ const withWebServer = (app: Application) => {
     'utf-8'
   )
 
+  console.log({indexContent})
+  console.log(getPaths().web.dist)
   app.use(
     express.static(getPaths().web.dist, {
       redirect: false,
@@ -19,7 +21,8 @@ const withWebServer = (app: Application) => {
   )
 
   // For SPA routing on unmatched routes
-  app.get('*', function (_, response) {
+  app.get('*', function ({params}, response) {
+    console.log({params})
     response.send(indexContent)
   })
 

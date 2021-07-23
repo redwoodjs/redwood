@@ -49,6 +49,7 @@ try {
       console.log('Using experimental envelop GraphQL execution layer ')
     }
 
+    console.log({paths})
     console.log(`Watching files in '${paths.functions}'`)
     let startBuild = new Date().getTime()
     watchFunctions({
