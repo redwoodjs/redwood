@@ -226,7 +226,10 @@ module.exports = (webpackEnv) => {
           // @TODO: Add redirect to fatalErrorPage
           // lastResortScript: "window.location.href='/500.html';"
         }),
-      isEnvProduction && new WebpackManifestPlugin(),
+      isEnvProduction &&
+        new WebpackManifestPlugin({
+          fileName: 'build-manifest.json',
+        }),
       ...getSharedPlugins(isEnvProduction),
     ].filter(Boolean),
     module: {
