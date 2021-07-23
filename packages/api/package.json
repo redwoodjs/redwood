@@ -10,6 +10,7 @@
   "types": "./dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
+    "@clerk/clerk-sdk-node": "^0.5.0",
     "@graphql-tools/merge": "6.2.14",
     "@prisma/client": "2.27.0",
     "@types/pino": "6.3.9",
