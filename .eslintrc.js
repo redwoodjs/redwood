@@ -97,7 +97,6 @@ module.exports = {
         'packages/api/src/**',
         'packages/api-server/src/**',
         'packages/cli/src/**',
-        'packages/core/src/**',
         'packages/core/config/**',
         'packages/create-redwood-app/src/create-redwood-app.js',
         'packages/internal/src/**',
