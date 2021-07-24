@@ -146,7 +146,7 @@ export const isGraphQLSchemaFile = (p: string) => {
  * 3. a module in a folder named index: `/x/index.js`
  */
 export const isApiFunction = (p: string, functionsPath: string) => {
-  p = p.replace(functionsPath + '/', '')
+  p = path.relative(functionsPath, p)
   const { dir, name } = path.parse(p)
   if (dir === name) {
     // Directory named module
