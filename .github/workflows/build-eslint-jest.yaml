@@ -1,4 +1,4 @@
-name: Lint, build and run tests
+name: Lint, build & test
 
 on:
   pull_request:
@@ -35,10 +35,6 @@ jobs:
 
       - name: Run ESLint
         run: yarn lint
-        env:
-          CI: true
 
       - name: Run tests
         run: yarn test
-        env:
-          CI: true
