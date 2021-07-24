@@ -328,64 +328,6 @@ yarn rwt copy:watch
 >
 > please contribute a PR if you can help.
 
-### Local Package Registry Emulation
-
-Sometimes you'll want to test the full package-development workflow: building, publishing, and installing all the packages in your local copy of the Redwood Framework in your Redwood App. We accommodate this using a local NPM registry called [**Verdaccio**](https://github.com/verdaccio/verdaccio).
-
-You might also have to use this workflow if you've installed or upgraded one of Redwood's dependencies.
-
-#### Running a Local NPM Registry
-
-First, install `Verdaccio`:
-
-```terminal
-yarn global add verdaccio
-```
-
-Then, in your local copy of the Redwood Framework, run:
-
-```terminal
-./tasks/run-local-npm
-```
-
-This starts `Verdaccio` (on http://localhost:4873) with our configuration file.
-
-#### Publishing a Package
-
-To build, unpublish, and publish all the Redwood packages to your local NPM registry with a "dev" tag, run:
-
-```terminal
-./tasks/publish-local
-```
-
-> This script is equivalent to running:
->
-> ```terminal
-> npm unpublish --tag dev --registry http://localhost:4873/ --force
-> npm publish --tag dev --registry http://localhost:4873/ --force
-> ```
-
-Note that you can build a particular package by specifying the path to the package: `./tasks/publish-local ./packages/api`. For example, if you've made changes to the `@redwoodjs/api-server` package, you would run:
-
-```terminal
-./tasks/publish-local ./packages/api-server
-```
-
-#### Installing Published Packages in Your Redwood App
-
-The last step is to install the package into your Redwood App.
-
-```terminal
-yarn rwt install @redwoodjs/api-server
-```
-
-> This is equivalent to running:
->
-> ```terminal
-> rm -rf <APP_PATH>/node_modules/@redwoodjs/api-server
-> yarn upgrade @redwoodjs/api-server@dev --no-lockfile --registry http://localhost:4873/
-> ```
-
 ## Running Your Redwood App's Local Server(s)
 
 When developing Redwood Apps, you’re probably used to running both the API and Web servers with `yarn rw dev` and seeing your changes included immediately.
