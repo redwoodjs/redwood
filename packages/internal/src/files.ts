@@ -46,11 +46,10 @@ export const findGraphQLSchemas = (cwd: string = getPaths().api.graphql) => {
 }
 
 const ignoreApiFiles = [
-  '*.test.js',
-  '*.test.ts',
-  '*.scenarios.ts',
-  '*.scenarios.js',
-  '*.d.ts',
+  '**/*.test.{js,ts}',
+  '**/*.scenarios.{js,ts}',
+  '**/*.scenarios.{js,ts}',
+  '**/*.d.ts',
 ]
 
 export const findApiFiles = (cwd: string = getPaths().api.src) => {

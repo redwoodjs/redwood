@@ -1,4 +1,4 @@
-name: Lint, build & test
+name: Lint, Build & Test
 
 on:
   pull_request:
