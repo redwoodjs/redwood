@@ -11,7 +11,7 @@ import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
 
 import { getPaths } from '../lib'
 import c from '../lib/colors'
-import { generatePrismaClient } from '../lib/generatePrismaClient'
+import { generatePrismaCommand } from '../lib/generatePrismaClient'
 
 import { getTasks as getPrerenderTasks } from './prerender'
 
@@ -122,7 +122,7 @@ export const handler = async ({
           return execa(cmd, args, {
             stdio: verbose ? 'inherit' : 'pipe',
             shell: true,
-            cwd: rwjsPaths.web.base,
+            cwd: rwjsPaths.api.base,
           })
         },
       },
@@ -156,7 +156,6 @@ export const handler = async ({
           {
             stdio: verbose ? 'inherit' : 'pipe',
             shell: true,
-            cwd: rwjsPaths.web.base,
           }
         )
       },

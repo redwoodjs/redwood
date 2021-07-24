@@ -53,7 +53,6 @@ jobs:
         run: yarn rw dev --no-generate --fwd="--open=false" &
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
-
       - name: Cypress run
         uses: cypress-io/github-action@v2
         env:
@@ -61,9 +60,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_RW_PATH:  "${{ steps.createpath.outputs.project_path }}"
         with:
-          browser: chrome
-          record: true
           env: true
+          browser: chrome
+          record: false
           wait-on: 'http://localhost:8910'
           working-directory: ./tasks/e2e
 

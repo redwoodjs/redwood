@@ -198,8 +198,6 @@ import { context } from '@redwoodjs/api'
 
 <!-- Normally you’d be running the server now, `server.listen().then...` But Redwood does things a little differently. As you might’ve guessed from the name, createGraphQLHandler returns a handler. In Redwood, serverless functions have to return a handler. -->
 
-> **Read the Docs:** Now’s a good time to head over to [@redwoodjs/dev-server](https://github.com/redwoodjs/redwood/blob/bdb112f5d10f41697b9068bdeee93631811109bf/packages/dev-server/README.md).
-
 ## FAQ
 
 ### How do I schema merge/stitch?

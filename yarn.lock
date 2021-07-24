@@ -3268,23 +3268,6 @@
     tiny-warning "^1.0.3"
     tslib "^2.3.0"
 
-"@redwoodjs/dev-server@0.35.2":
-  version "0.35.2"
-  resolved "https://registry.yarnpkg.com/@redwoodjs/dev-server/-/dev-server-0.35.2.tgz#a795451a4bf5ffe866b91270cc7ea42808f96a14"
-  integrity sha512-exEBy7g18jPUOysxCe9u84xa7GE15GyXWF2cEgV3BUGOba4Yx5ogmQf+/YaNhrnrJdx1a/Q1ZgwIU8c0zfR8zA==
-  dependencies:
-    "@babel/register" "7.13.16"
-    "@redwoodjs/internal" "0.35.2"
-    body-parser "1.19.0"
-    chokidar "3.5.2"
-    express "4.17.1"
-    morgan "1.10.0"
-    qs "6.9.3"
-    require-dir "1.2.0"
-    yargs "16.0.3"
-    youch "2.2.2"
-    youch-terminal "1.1.1"
-
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/@samverschueren/stream-to-observable/-/stream-to-observable-0.3.1.tgz#a21117b19ee9be70c379ec1877537ef2e1c63301"
