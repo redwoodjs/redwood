@@ -5,8 +5,8 @@ import { transform, TransformOptions } from '@babel/core'
 import { buildSync } from 'esbuild'
 import rimraf from 'rimraf'
 
-import { findApiFiles } from 'src/files'
-import { getPaths } from 'src/paths'
+import { findApiFiles } from '../files'
+import { getPaths } from '../paths'
 
 export const buildApi = () => {
   // TODO: Be smarter about caching and invalidating files,
@@ -39,6 +39,7 @@ export const prebuildApiFiles = (srcFiles: string[]) => {
     if (!result?.code) {
       // TODO: Figure out a better way to return these programatically.
       console.warn('Error:', srcPath, 'could not prebuilt.')
+
       return undefined
     }
 
