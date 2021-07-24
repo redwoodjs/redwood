@@ -251,7 +251,6 @@ If you've made build or design time changes to RedwoodJS, that is if you have mo
 ├ api-server
 ├ cli
 ├ core
-├ dev-server
 ├ eslint-config
 ├ internal
 ├ prerender
@@ -366,10 +365,10 @@ To build, unpublish, and publish all the Redwood packages to your local NPM regi
 > npm publish --tag dev --registry http://localhost:4873/ --force
 > ```
 
-Note that you can build a particular package by specifying the path to the package: `./tasks/publish-local ./packages/api`. For example, if you've made changes to the `@redwoodjs/dev-server` package, you would run:
+Note that you can build a particular package by specifying the path to the package: `./tasks/publish-local ./packages/api`. For example, if you've made changes to the `@redwoodjs/api-server` package, you would run:
 
 ```terminal
-./tasks/publish-local ./packages/dev-server
+./tasks/publish-local ./packages/api-server
 ```
 
 #### Installing Published Packages in Your Redwood App
@@ -377,14 +376,14 @@ Note that you can build a particular package by specifying the path to the packa
 The last step is to install the package into your Redwood App.
 
 ```terminal
-yarn rwt install @redwoodjs/dev-server
+yarn rwt install @redwoodjs/api-server
 ```
 
 > This is equivalent to running:
 >
 > ```terminal
-> rm -rf <APP_PATH>/node_modules/@redwoodjs/dev-server
-> yarn upgrade @redwoodjs/dev-server@dev --no-lockfile --registry http://localhost:4873/
+> rm -rf <APP_PATH>/node_modules/@redwoodjs/api-server
+> yarn upgrade @redwoodjs/api-server@dev --no-lockfile --registry http://localhost:4873/
 > ```
 
 ## Running Your Redwood App's Local Server(s)
@@ -504,7 +503,6 @@ The Redwood CLI has the following binaries:
 - `rw`
 - `redwood-tools`
 - `rwt`
-- `dev-server`
 
 When you're contributing, the permissions of these binaries can sometimes get mixed up. This makes them executable again.
 
