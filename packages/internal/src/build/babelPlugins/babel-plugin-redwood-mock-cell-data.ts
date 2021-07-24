@@ -1,10 +1,15 @@
+import fs from 'fs'
 import path from 'path'
 
 // TODO: Figure out why Wallaby doesn't work with a normal import.
 import type { PluginObj, types } from '@babel/core'
 
-import { getBaseDirFromFile } from '@redwoodjs/internal/dist/paths'
-import { getProject, URL_file } from '@redwoodjs/structure'
+import { getCellGqlQuery, getNamedExports } from 'src/ast'
+import { isCellFile } from 'src/files'
+import { parseGqlQueryToAst } from 'src/gql'
+
+// TODO: Why did we use this?
+// import { getBaseDirFromFile } from '../../paths'
 
 export default function ({ types: t }: { types: typeof types }): PluginObj {
   let nodesToRemove: any[] = []
@@ -57,15 +62,21 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
 
         // Find the model of the Cell that is in the same directory.
         const filename = state.file.opts.filename
-        const dir = URL_file(path.dirname(state.file.opts.filename))
-        const project = getProject(getBaseDirFromFile(filename))
-        const cell = project.cells.find((x) => x.uri.startsWith(dir))
 
-        if (!cell || !cell?.filePath) {
+        if (!isCellFile(filename)) {
           return
         }
 
-        if (!cell.queryOperationName) {
+        const code = fs.readFileSync(filename, 'utf-8')
+
+        const QUERY = getCellGqlQuery(fs.readFileSync(filename, 'utf-8'))
+
+        if (typeof QUERY !== 'string') {
+          return
+        }
+
+        const [{ operation: queryOperationName }] = parseGqlQueryToAst(QUERY)
+        if (!queryOperationName) {
           return
         }
 
@@ -82,7 +93,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         // mockGraphQLQuery(<operationName>, <data>)
         const mockGraphQLCall = t.callExpression(
           t.identifier('mockGraphQLQuery'),
-          [t.stringLiteral(cell.queryOperationName), init]
+          [t.stringLiteral(queryOperationName), init]
         )
 
         // Delete original "export const standard"
@@ -90,7 +101,8 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
 
         // + import { afterQuery } from './${cellFileName}'
         // + export const standard = () => afterQuery(...)
-        if (cell.exportedSymbols.has('afterQuery')) {
+        const cellExports = getNamedExports(code)
+        if (cellExports.some((x) => x.name === 'afterQuery')) {
           const importAfterQuery = t.importDeclaration(
             [
               t.importSpecifier(
@@ -98,7 +110,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
                 t.identifier('afterQuery')
               ),
             ],
-            t.stringLiteral(`./${path.basename(cell.filePath)}`)
+            t.stringLiteral(`./${path.basename(filename)}`)
           )
 
           nodesToInsert = [

@@ -1,7 +1,7 @@
 import path from 'path'
 
 import type { PluginObj, types } from '@babel/core'
-import glob from 'glob'
+import glob from 'fast-glob'
 
 /**
  * This babel plugin will search for import statements that include star `**`

@@ -37,15 +37,14 @@ module.exports = () => {
           version: packageJSON.devDependencies['@babel/runtime-corejs3'],
         },
       ],
-
       [
-        require('../dist/babelPlugins/babel-plugin-redwood-directory-named-import'),
+        require('@redwoodjs/internal/dist/build/babelPlugins/babel-plugin-redwood-directory-named-import'),
       ],
     ],
     overrides: [
-      // ** API **
+      // ** SCRIPTS **
       {
-        test: ['./api/', './scripts/'],
+        test: ['./scripts/'],
         presets: [
           [
             '@babel/preset-env',
@@ -97,7 +96,9 @@ module.exports = () => {
             },
           ],
           ['babel-plugin-graphql-tag'],
-          [require('../dist/babelPlugins/babel-plugin-redwood-import-dir')],
+          [
+            require('@redwoodjs/internal/dist/build/babelPlugins/babel-plugin-redwood-import-dir'),
+          ],
         ],
       },
       // ** WEB **
@@ -199,7 +200,9 @@ module.exports = () => {
       // ** Files ending in `Cell.[js,ts]` **
       {
         test: /.+Cell.(js|tsx)$/,
-        plugins: [require('../dist/babelPlugins/babel-plugin-redwood-cell')],
+        plugins: [
+          require('@redwoodjs/internal/dist/build/babelPlugins/babel-plugin-redwood-cell'),
+        ],
       },
       // Automatically import files in `./web/src/pages/*` in to
       // the `./web/src/Routes.[ts|jsx]` file.
@@ -207,7 +210,7 @@ module.exports = () => {
         test: ['./web/src/Routes.js', './web/src/Routes.tsx'],
         plugins: [
           [
-            require('../dist/babelPlugins/babel-plugin-redwood-routes-auto-loader'),
+            require('@redwoodjs/internal/dist/build/babelPlugins/babel-plugin-redwood-routes-auto-loader'),
             {
               useStaticImports: process.env.__REDWOOD__PRERENDERING === '1',
             },
@@ -219,7 +222,7 @@ module.exports = () => {
       {
         test: /.+Cell.mock.(js|ts)$/,
         plugins: [
-          require('../dist/babelPlugins/babel-plugin-redwood-mock-cell-data'),
+          require('@redwoodjs/internal/dist/build/babelPlugins/babel-plugin-redwood-mock-cell-data'),
         ],
       },
     ],

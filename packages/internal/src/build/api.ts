@@ -74,13 +74,13 @@ export const getBabelPlugins = () => {
   const plugins = [
     ['@babel/plugin-transform-typescript'],
     [
-      require('@redwoodjs/core/dist/babelPlugins/babel-plugin-redwood-src-alias'),
+      require('./babelPlugins/babel-plugin-redwood-src-alias'),
       {
         srcAbsPath: rwjsPaths.api.src,
       },
     ],
     [
-      require('@redwoodjs/core/dist/babelPlugins/babel-plugin-redwood-directory-named-import'),
+      require('./babelPlugins/babel-plugin-redwood-directory-named-import'),
     ],
     [
       'babel-plugin-auto-import',
@@ -102,7 +102,7 @@ export const getBabelPlugins = () => {
     // FIXME: Babel plugin GraphQL tag doesn't seem to be working.
     ['babel-plugin-graphql-tag'],
     [
-      require('@redwoodjs/core/dist/babelPlugins/babel-plugin-redwood-import-dir'),
+      require('./babelPlugins/babel-plugin-redwood-import-dir'),
     ],
   ].filter(Boolean)
   return plugins as Array<any>

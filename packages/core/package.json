@@ -4,11 +4,8 @@
   "version": "0.35.2",
   "license": "MIT",
   "files": [
-    "config",
-    "dist"
+    "config"
   ],
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
   "dependencies": {
     "@redwoodjs/eslint-config": "0.35.2",
     "@redwoodjs/internal": "0.35.2",
@@ -65,19 +62,5 @@
     "nodemon": "2.0.9",
     "esbuild-loader": "2.13.1"
   },
-  "devDependencies": {
-    "@types/babel-core": "6.25.7",
-    "@types/babel-plugin-tester": "9.0.4",
-    "babel-plugin-tester": "10.1.0"
-  },
-  "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762",
-  "scripts": {
-    "build": "yarn build:js && yarn build:types",
-    "prepublishOnly": "yarn build",
-    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
-    "build:types": "tsc --build --verbose",
-    "build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build\"",
-    "test": "jest",
-    "test:watch": "yarn test --watch"
-  }
+  "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"
 }

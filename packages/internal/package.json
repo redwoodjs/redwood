@@ -37,7 +37,9 @@
   "devDependencies": {
     "@types/rimraf": "3.0.0",
     "@types/findup-sync": "4.0.1",
-    "graphql-tag": "2.12.5"
+    "graphql-tag": "2.12.5",
+    "@types/babel-plugin-tester": "9.0.4",
+    "babel-plugin-tester": "10.1.0"
   },
   "jest": {
     "testPathIgnorePatterns": [
