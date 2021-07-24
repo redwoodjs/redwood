@@ -89,7 +89,9 @@ test('find the graphql schema files', () => {
 
 test('find api functions', () => {
   const paths = findApiServerFunctions()
+  console.warn(paths)
   const p = paths.map(cleanPaths)
+
   expect(p).toMatchInlineSnapshot(`
     Array [
       "api/src/functions/graphql.js",
