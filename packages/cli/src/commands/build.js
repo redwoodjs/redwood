@@ -156,6 +156,7 @@ export const handler = async ({
           {
             stdio: verbose ? 'inherit' : 'pipe',
             shell: true,
+            cwd: rwjsPaths.web.base,
           }
         )
       },
