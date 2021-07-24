@@ -2,12 +2,12 @@ import path from 'path'
 
 import { prebuildApiFiles } from '../build/api'
 import { findApiFiles } from '../files'
+import { ensurePosixPath } from '../paths'
 
 const FIXTURE_PATH = path.resolve(
   __dirname,
   '../../../../__fixtures__/example-todo-main'
 )
-import { ensurePosixPath } from '../paths'
 
 const cleanPaths = (p) => {
   return ensurePosixPath(path.relative(FIXTURE_PATH, p))
@@ -22,7 +22,7 @@ afterAll(() => {
 
 test('api files are prebuilt', () => {
   const builtFiles = prebuildApiFiles(findApiFiles())
-  const p = builtFiles.map(cleanPaths)
+  const p = builtFiles.filter((x) => typeof x !== 'undefined').map(cleanPaths)
 
   expect(p[0].endsWith('api/src/functions/graphql.js')).toBeTruthy()
   expect(p[2].endsWith('api/src/graphql/todos.sdl.js')).toBeTruthy()

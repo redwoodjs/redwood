@@ -12,7 +12,7 @@ jobs:
         node-version: ['14']
       fail-fast: true
     runs-on: ${{ matrix.os }}
-    name: ${{ matrix.os }} NodeJS${{ matrix.node-version }}
+    name: ${{ matrix.os }} Node ${{ matrix.node-version }}
     steps:
       - uses: actions/checkout@v2
 
