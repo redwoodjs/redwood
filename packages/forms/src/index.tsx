@@ -90,7 +90,7 @@ const inputTagProps = <T extends InputTagProps>(
   }, [contextError, props.name, setError])
 
   // any errors on this field
-  const validationError = get(errors, props.name)
+  const validationError = props.name ? get(errors, props.name) : undefined
 
   // get errorStyle/errorClassName and replace style/className if present
   // Also remove dataType and transformValue from tagProps

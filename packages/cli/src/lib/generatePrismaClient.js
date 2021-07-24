@@ -3,7 +3,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { runCommandTask, getPaths } from 'src/lib'
+import { runCommandTask, getPaths } from '../lib'
 
 const skipTask = (schema = getPaths().api.dbSchema) => {
   if (!fs.existsSync(schema)) {

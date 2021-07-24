@@ -11,14 +11,14 @@ import depthLimit from 'graphql-depth-limit'
 import { BaseLogger } from 'pino'
 import { v4 as uuidv4 } from 'uuid'
 
-import type { AuthContextPayload } from 'src/auth'
-import { getAuthenticationContext } from 'src/auth'
+import type { AuthContextPayload } from '../auth'
+import { getAuthenticationContext } from '../auth'
 import {
   GlobalContext,
   setContext,
   getPerRequestContext,
   usePerRequestContext,
-} from 'src/globalContext'
+} from '../globalContext'
 
 export type GetCurrentUser = (
   decoded: AuthContextPayload[0],

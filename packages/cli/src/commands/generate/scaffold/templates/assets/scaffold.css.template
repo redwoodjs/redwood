@@ -100,12 +100,16 @@
   color: #1a202c;
   text-decoration: underline;
 }
+.rw-cell-error {
+  font-size: 90%;
+  font-weight: 600;
+}
 .rw-form-wrapper {
   box-sizing: border-box;
   font-size: 0.875rem;
   margin-top: -1rem;
 }
-.rw-form-error-wrapper {
+.rw-cell-error, .rw-form-error-wrapper {
   padding: 1rem;
   background-color: #fff5f5;
   color: #c53030;
@@ -125,6 +129,7 @@
   list-style-position: inside;
 }
 .rw-button {
+  border: none;
   color: #718096;
   cursor: pointer;
   display: flex;
@@ -137,6 +142,7 @@
   letter-spacing: 0.025em;
   border-radius: 0.25rem;
   line-height: 2;
+  border: 0;
 }
 .rw-button:hover {
   background-color: #718096;
@@ -202,6 +208,7 @@
   width: 100%;
   padding: 0.5rem;
   border-width: 1px;
+  border-style: solid;
   border-color: #e2e8f0;
   color: #4a5568;
   border-radius: 0.25rem;

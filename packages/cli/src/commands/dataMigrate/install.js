@@ -5,8 +5,8 @@ import fs from 'fs-extra'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
 
-import { getPaths } from 'src/lib'
-import c from 'src/lib/colors'
+import { getPaths } from '../../lib'
+import c from '../../lib/colors'
 
 const MODEL = `model RW_DataMigration {
   version    String   @id

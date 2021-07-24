@@ -250,7 +250,7 @@ async function apiTasks() {
       },
     },
     {
-      title: 'Scaffoding post',
+      title: 'Scaffolding post',
       task: async () => {
         return execa('yarn rw g scaffold post', [], getExecaOptions())
       },

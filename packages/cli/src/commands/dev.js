@@ -3,11 +3,11 @@ import fs from 'fs'
 import concurrently from 'concurrently'
 import terminalLink from 'terminal-link'
 
-import { getConfig, shutdownPort } from '@redwoodjs/internal'
+import { getConfig, getConfigPath, shutdownPort } from '@redwoodjs/internal'
 
-import { getPaths } from 'src/lib'
-import c from 'src/lib/colors'
-import { generatePrismaClient } from 'src/lib/generatePrismaClient'
+import { getPaths } from '../lib'
+import c from '../lib/colors'
+import { generatePrismaClient } from '../lib/generatePrismaClient'
 
 export const command = 'dev [side..]'
 export const description = 'Start development servers for api, and web'
@@ -87,12 +87,14 @@ export const handler = async ({
     '@redwoodjs/core/config/webpack.development.js'
   )
 
+  const redwoodConfigPath = getConfigPath()
+
   /** @type {Record<string, import('concurrently').CommandObj>} */
   const jobs = {
     api: {
       name: 'api',
       command:
-        'yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn rw-api-server-watch',
+        `yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn nodemon --watch "${redwoodConfigPath}" --exec "yarn rw-api-server-watch"`,
       prefixColor: 'cyan',
       runWhen: () => fs.existsSync(rwjsPaths.api.src),
     },

@@ -394,7 +394,7 @@ export const Loading = () => <div>Loading...</div>
 export const Empty = () => <div>Post not found</div>
 
 export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div className=\\"rw-cell-error\\">{error.message}</div>
 )
 
 export const Success = ({ post }) => {
@@ -514,13 +514,13 @@ const Post = ({ post }) => {
         >
           Edit
         </Link>
-        <a
-          href=\\"#\\"
+        <button
+          type=\\"button\\"
           className=\\"rw-button rw-button-red\\"
           onClick={() => onDeleteClick(post.id)}
         >
           Delete
-        </a>
+        </button>
       </nav>
     </>
   )
@@ -644,11 +644,16 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   color: #1a202c;
   text-decoration: underline;
 }
+.rw-cell-error {
+  font-size: 90%;
+  font-weight: 600;
+}
 .rw-form-wrapper {
   box-sizing: border-box;
   font-size: 0.875rem;
   margin-top: -1rem;
 }
+.rw-cell-error,
 .rw-form-error-wrapper {
   padding: 1rem;
   background-color: #fff5f5;
@@ -669,6 +674,7 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   list-style-position: inside;
 }
 .rw-button {
+  border: none;
   color: #718096;
   cursor: pointer;
   display: flex;
@@ -681,6 +687,7 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   letter-spacing: 0.025em;
   border-radius: 0.25rem;
   line-height: 2;
+  border: 0;
 }
 .rw-button:hover {
   background-color: #718096;
@@ -746,6 +753,7 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   width: 100%;
   padding: 0.5rem;
   border-width: 1px;
+  border-style: solid;
   border-color: #e2e8f0;
   color: #4a5568;
   border-radius: 0.25rem;
@@ -901,7 +909,7 @@ const UPDATE_USER_PROFILE_MUTATION = gql\`
 export const Loading = () => <div>Loading...</div>
 
 export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div className=\\"rw-cell-error\\">{error.message}</div>
 )
 
 export const Success = ({ userProfile }) => {
@@ -978,7 +986,7 @@ export const Empty = () => {
 }
 
 export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div className=\\"rw-cell-error\\">{error.message}</div>
 )
 
 export const Success = ({ posts }) => {
@@ -1095,14 +1103,14 @@ const PostsList = ({ posts }) => {
                   >
                     Edit
                   </Link>
-                  <a
-                    href=\\"#\\"
+                  <button
+                    type=\\"button\\"
                     title={'Delete post ' + post.id}
                     className=\\"rw-button rw-button-small rw-button-red\\"
                     onClick={() => onDeleteClick(post.id)}
                   >
                     Delete
-                  </a>
+                  </button>
                 </nav>
               </td>
             </tr>
@@ -1518,7 +1526,7 @@ export const Loading = () => <div>Loading...</div>
 export const Empty = () => <div>Post not found</div>
 
 export const Failure = ({ error }: CellFailureProps) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div className=\\"rw-cell-error\\">{error.message}</div>
 )
 
 export const Success = ({ post }: CellSuccessProps<FindPostById>) => {
@@ -1626,13 +1634,13 @@ const Post = ({ post }) => {
         >
           Edit
         </Link>
-        <a
-          href=\\"#\\"
+        <button
+          type=\\"button\\"
           className=\\"rw-button rw-button-red\\"
           onClick={() => onDeleteClick(post.id)}
         >
           Delete
-        </a>
+        </button>
       </nav>
     </>
   )
@@ -1760,11 +1768,16 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   color: #1a202c;
   text-decoration: underline;
 }
+.rw-cell-error {
+  font-size: 90%;
+  font-weight: 600;
+}
 .rw-form-wrapper {
   box-sizing: border-box;
   font-size: 0.875rem;
   margin-top: -1rem;
 }
+.rw-cell-error,
 .rw-form-error-wrapper {
   padding: 1rem;
   background-color: #fff5f5;
@@ -1785,6 +1798,7 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   list-style-position: inside;
 }
 .rw-button {
+  border: none;
   color: #718096;
   cursor: pointer;
   display: flex;
@@ -1797,6 +1811,7 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   letter-spacing: 0.025em;
   border-radius: 0.25rem;
   line-height: 2;
+  border: 0;
 }
 .rw-button:hover {
   background-color: #718096;
@@ -1862,6 +1877,7 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   width: 100%;
   padding: 0.5rem;
   border-width: 1px;
+  border-style: solid;
   border-color: #e2e8f0;
   color: #4a5568;
   border-radius: 0.25rem;
@@ -2031,7 +2047,7 @@ const UPDATE_POST_MUTATION = gql\`
 export const Loading = () => <div>Loading...</div>
 
 export const Failure = ({ error }: CellFailureProps) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div className=\\"rw-cell-error\\">{error.message}</div>
 )
 
 export const Success = ({ post }: CellSuccessProps<EditPostById>) => {
@@ -2092,7 +2108,7 @@ const UPDATE_USER_PROFILE_MUTATION = gql\`
 export const Loading = () => <div>Loading...</div>
 
 export const Failure = ({ error }: CellFailureProps) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div className=\\"rw-cell-error\\">{error.message}</div>
 )
 
 export const Success = ({ userProfile }: CellSuccessProps<EditUserProfileById>) => {
@@ -2165,7 +2181,7 @@ export const Empty = () => {
 }
 
 export const Failure = ({ error }: CellFailureProps) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div className=\\"rw-cell-error\\">{error.message}</div>
 )
 
 export const Success = ({ posts }: CellSuccessProps<FindPosts>) => {
@@ -2282,14 +2298,14 @@ const PostsList = ({ posts }) => {
                   >
                     Edit
                   </Link>
-                  <a
-                    href=\\"#\\"
+                  <button
+                    type=\\"button\\"
                     title={'Delete post ' + post.id}
                     className=\\"rw-button rw-button-small rw-button-red\\"
                     onClick={() => onDeleteClick(post.id)}
                   >
                     Delete
-                  </a>
+                  </button>
                 </nav>
               </td>
             </tr>
