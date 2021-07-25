@@ -46,7 +46,7 @@ module.exports = () => {
         {
           // https://babeljs.io/docs/en/babel-plugin-transform-runtime/#core-js-aliasing
           // Setting the version here also requires `@babel/runtime-corejs3`
-          corejs: { version: CORE_JS_VERSION, proposals: true },
+          corejs: { version: 3, proposals: true },
           // https://babeljs.io/docs/en/babel-plugin-transform-runtime/#version
           // Transform-runtime assumes that @babel/runtime@7.0.0 is installed.
           // Specifying the version can result in a smaller bundle size.
