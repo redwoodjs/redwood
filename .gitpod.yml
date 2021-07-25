@@ -5,9 +5,7 @@ tasks:
   - name: redwood
     init: |
       yarn install
-      gp sync-done install
-  - name: redwood-app
-    init: |
-      gp sync-await install
       yarn run build:test-project ../redwood-app --typescript
+  - name: redwood-app
+    command: |
       cd ../redwood-app
