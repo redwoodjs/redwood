@@ -20,7 +20,7 @@ const Routes = () => {
         <Route path="/foo" page={FooPage} name="fooPage" />
         <Route path="/bar" page={BarPage} name="barPage" />
       </Set>
-      <Private prerender>
+      <Private prerender unauthenticated="home">
         <Route path="/private-page" page={PrivatePage} name="privatePage" />
       </Private>
       <Route notfound page={NotFoundPage} />

@@ -56,6 +56,7 @@ test('finds directory named modules', () => {
       "web/src/pages/FooPage/FooPage.tsx",
       "web/src/pages/HomePage/HomePage.tsx",
       "web/src/pages/NotFoundPage/NotFoundPage.js",
+      "web/src/pages/PrivatePage/PrivatePage.tsx",
       "web/src/pages/TypeScriptPage/TypeScriptPage.tsx",
       "web/src/pages/admin/EditUserPage/EditUserPage.jsx",
     ]
@@ -73,6 +74,7 @@ test('finds all the page files', () => {
       "web/src/pages/FooPage/FooPage.tsx",
       "web/src/pages/HomePage/HomePage.tsx",
       "web/src/pages/NotFoundPage/NotFoundPage.js",
+      "web/src/pages/PrivatePage/PrivatePage.tsx",
       "web/src/pages/TypeScriptPage/TypeScriptPage.tsx",
       "web/src/pages/admin/EditUserPage/EditUserPage.jsx",
     ]
