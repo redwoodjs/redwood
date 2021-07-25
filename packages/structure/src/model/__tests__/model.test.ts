@@ -129,6 +129,7 @@ describe('Redwood Route detection', () => {
     })
     expect(prerenderRoutes).toContainEqual({ name: 'fooPage', path: '/foo' })
     expect(prerenderRoutes).toContainEqual({ name: 'barPage', path: '/bar' })
+    expect(prerenderRoutes).toContainEqual({ name: 'privatePage', path: '/private-page' })
   })
 })
 
