@@ -1,57 +1,40 @@
+import fs from 'fs'
 import path from 'path'
 
-import pluginTester from 'babel-plugin-tester'
+import * as babel from '@babel/core'
 
-import plugin from '../babel-plugin-redwood-routes-auto-loader'
+import { getPaths } from '../../../paths'
+import babelRoutesAutoLoader from '../babel-plugin-redwood-routes-auto-loader'
 
-jest.mock('@redwoodjs/internal', () => ({
-  // Import path set to be absolute path, because babel-plugin-module-resolver runs before in the actual project
-  processPagesDir: () => {
-    return [
-      {
-        importName: 'APage',
-        importPath: 'src/pages/APage',
-        const: 'APage',
-        path: '/Users/peterp/x/redwoodjs/example-blog/web/src/pages/APage',
-        importStatement:
-          "const AboutPage = { name: 'APage', loader: () => import('src/pages/APage') }",
-      },
-      {
-        importName: 'BPage',
-        importPath: 'src/pages/BPage',
-        const: 'BPage',
-        path: '/Users/peterp/x/redwoodjs/example-blog/web/src/pages/BPage',
-        importStatement:
-          "const AdminEditPostPage = { name: 'BPage', loader: () => import('src/pages/BPage') }",
-      },
+const FIXTURE_PATH = path.resolve(
+  __dirname,
+  '../../../../../../__fixtures__/example-todo-main/'
+)
 
-      {
-        importName: 'NestedCPage',
-        importPath: 'src/pages/Nested/NestedCPage',
-        const: 'BPage',
-        path: '/Users/peterp/x/redwoodjs/example-blog/web/src/pages/BPage',
-        importStatement:
-          "const AdminEditPostPage = { name: 'BPage', loader: () => import('src/pages/BPage') }",
-      },
-    ]
-  },
-}))
-
-describe('routes auto loader', () => {
-  pluginTester({
-    plugin,
-    pluginName: 'babel-plugin-redwood-routes-auto-loader',
-    fixtures: path.join(__dirname, '__fixtures__/routes-auto-loader/dynamic'),
-  })
+beforeAll(() => {
+  process.env.RWJS_CWD = FIXTURE_PATH
+})
+afterAll(() => {
+  delete process.env.RWJS_CWD
 })
 
-describe('routes auto loader useStaticImports', () => {
-  pluginTester({
-    plugin,
-    pluginName: 'babel-plugin-redwood-routes-auto-loader',
-    pluginOptions: {
-      useStaticImports: true,
-    },
-    fixtures: path.join(__dirname, '__fixtures__/routes-auto-loader/static'),
+const transform = (filename: string) => {
+  const code = fs.readFileSync(filename, 'utf-8')
+  return babel.transform(code, {
+    filename,
+    presets: ['@babel/preset-react'],
+    plugins: [babelRoutesAutoLoader],
   })
+}
+
+test('page auto loader correctly imports pages', () => {
+  const result = transform(getPaths().web.routes)
+
+  // Pages are automatically imported
+  expect(result.code).toContain(`const HomePage = {
+  name: "HomePage",
+  loader: () => import("`)
+
+  // Already imported pages are left alone.
+  expect(result.code).toContain(`import FooPage from 'src/pages/FooPage'`)
 })

@@ -10,6 +10,8 @@
 import { Router, Route } from '@redwoodjs/router'
 import SetLayout from 'src/layouts/SetLayout'
 
+import FooPage from 'src/pages/FooPage'
+
 const Routes = () => {
   return (
     <Router>
