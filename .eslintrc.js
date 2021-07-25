@@ -6,7 +6,7 @@ module.exports = {
     'dist',
     'fixtures',
     'packages/structure/**',
-    'packages/core/**/__fixtures__/**/*',
+    'packages/internal/src/build/babelPlugins/__tests__/__fixtures__/**/*',
     'packages/core/config/storybook/**/*',
     'packages/create-redwood-app/template/web/src/Routes.tsx',
   ],
