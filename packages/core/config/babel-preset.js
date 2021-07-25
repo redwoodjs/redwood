@@ -11,7 +11,23 @@ const TARGETS_NODE = '12.16'
 // Warning! Use the minor core-js version: "corejs: '3.6'", instead of "corejs: 3",
 // because we want to include the features added in the minor version.
 // https://github.com/zloirock/core-js/blob/master/README.md#babelpreset-env
-const CORE_JS_VERSION = '3.6'
+const CORE_JS_VERSION = packageJSON.dependencies['core-js']
+  .split('.')
+  .slice(0, 2)
+  .join('.') // Produces: 3.12, instead of 3.12.1
+if (!CORE_JS_VERSION) {
+  throw new Error(
+    'RedwoodJS Project Babel: Could not determine core-js version.'
+  )
+}
+
+const RUNTIME_CORE_JS_VERSION =
+  packageJSON.dependencies['@babel/runtime-corejs3']
+if (!RUNTIME_CORE_JS_VERSION) {
+  throw new Error(
+    'RedwoodJS Project Babel: Could not determine core-js runtime version'
+  )
+}
 
 /** @type {import('@babel/core').TransformOptions} */
 module.exports = () => {
@@ -30,11 +46,11 @@ module.exports = () => {
         {
           // https://babeljs.io/docs/en/babel-plugin-transform-runtime/#core-js-aliasing
           // Setting the version here also requires `@babel/runtime-corejs3`
-          corejs: { version: 3, proposals: true },
+          corejs: { version: CORE_JS_VERSION, proposals: true },
           // https://babeljs.io/docs/en/babel-plugin-transform-runtime/#version
           // Transform-runtime assumes that @babel/runtime@7.0.0 is installed.
           // Specifying the version can result in a smaller bundle size.
-          version: packageJSON.devDependencies['@babel/runtime-corejs3'],
+          version: RUNTIME_CORE_JS_VERSION,
         },
       ],
       [
