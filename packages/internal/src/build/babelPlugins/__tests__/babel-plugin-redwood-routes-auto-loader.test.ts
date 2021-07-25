@@ -5,7 +5,6 @@ import pluginTester from 'babel-plugin-tester'
 import plugin from '../babel-plugin-redwood-routes-auto-loader'
 
 jest.mock('@redwoodjs/internal', () => ({
-  ...jest.requireActual('@redwoodjs/internal'),
   // Import path set to be absolute path, because babel-plugin-module-resolver runs before in the actual project
   processPagesDir: () => {
     return [

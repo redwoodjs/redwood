@@ -4,9 +4,10 @@ import path from 'path'
 // TODO: Figure out why Wallaby doesn't work with a normal import.
 import type { PluginObj, types } from '@babel/core'
 
-import { getCellGqlQuery, getNamedExports } from 'src/ast'
-import { isCellFile } from 'src/files'
-import { parseGqlQueryToAst } from 'src/gql'
+import { getCellGqlQuery, getNamedExports } from '../../ast'
+import { isCellFile } from '../../files'
+import { parseGqlQueryToAst } from '../../gql'
+import { resolveFile } from '../../paths'
 
 // TODO: Why did we use this?
 // import { getBaseDirFromFile } from '../../paths'
@@ -60,8 +61,17 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
           return
         }
 
-        // Find the model of the Cell that is in the same directory.
-        const filename = state.file.opts.filename
+        // Find the model of the Cell that is in the same directory:
+        // CellFile/CellFile.{tsx,jsx,js}
+        const dirname = path.dirname(state.file.opts.filename)
+        const cellName = dirname.split(path.sep).pop()
+        if (!cellName) {
+          return
+        }
+        const filename = resolveFile(path.join(dirname, cellName))
+        if (!filename) {
+          return
+        }
 
         if (!isCellFile(filename)) {
           return
@@ -75,7 +85,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
           return
         }
 
-        const [{ operation: queryOperationName }] = parseGqlQueryToAst(QUERY)
+        const [{ name: queryOperationName }] = parseGqlQueryToAst(QUERY)
         if (!queryOperationName) {
           return
         }
@@ -102,6 +112,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         // + import { afterQuery } from './${cellFileName}'
         // + export const standard = () => afterQuery(...)
         const cellExports = getNamedExports(code)
+
         if (cellExports.some((x) => x.name === 'afterQuery')) {
           const importAfterQuery = t.importDeclaration(
             [

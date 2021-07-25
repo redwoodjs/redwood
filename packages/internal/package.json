@@ -43,7 +43,8 @@
   },
   "jest": {
     "testPathIgnorePatterns": [
-      "/fixtures/"
+      "/fixtures/",
+      "/__fixtures__/"
     ]
   },
   "scripts": {

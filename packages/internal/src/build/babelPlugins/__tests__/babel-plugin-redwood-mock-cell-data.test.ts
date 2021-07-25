@@ -1,35 +1,52 @@
+import fs from 'fs'
 import path from 'path'
 
-import pluginTester from 'babel-plugin-tester'
+import * as babel from '@babel/core'
 
-import plugin from '../babel-plugin-redwood-mock-cell-data'
+import babelMockCellData from '../babel-plugin-redwood-mock-cell-data'
+
+const transform = (filename: string) => {
+  const code = fs.readFileSync(filename, 'utf-8')
+  return babel.transform(code, {
+    filename,
+    plugins: [babelMockCellData],
+  })
+}
 
 describe('babel plugin redwood mock cell data', () => {
-  const __fixtures__ = path.resolve(__dirname, '../../../../../__fixtures__') //?
+  const __fixtures__ = path.resolve(
+    __dirname,
+    '../../../../../../__fixtures__/example-todo-main/'
+  )
 
-  pluginTester({
-    plugin,
-    tests: {
-      'cell with afterQuery': {
-        fixture: path.join(
-          __fixtures__,
-          'example-todo-main/web/src/components/TodoListCell/TodoListCell.mock.js'
-        ),
-        outputFixture: path.join(
-          __dirname,
-          '__fixtures__/mock-cell-data/output_TodoListCell.mock.js'
-        ),
-      },
-      'cell without afterQuery': {
-        fixture: path.join(
-          __fixtures__,
-          'example-todo-main/web/src/components/NumTodosCell/NumTodosCell.mock.js'
-        ),
-        outputFixture: path.join(
-          __dirname,
-          '__fixtures__/mock-cell-data/output_NumTodosCell.mock.js'
-        ),
-      },
-    },
+  test('cell with afterQuery', () => {
+    const todoListCellMockPath = path.join(
+      __fixtures__,
+      'web/src/components/TodoListCell/TodoListCell.mock.js'
+    )
+    const result = transform(todoListCellMockPath)
+    expect(result.code).toMatchInlineSnapshot(`
+"import { afterQuery } from \\"./TodoListCell.tsx\\";
+export const standard = () => afterQuery(mockGraphQLQuery(\\"TodoListCell_GetTodos\\", () => ({
+  todos: [{
+    id: 1,
+    body: 'Cheese',
+    status: ''
+  }]
+}))());"
+`)
+  })
+
+  test('cell without afterQuery', () => {
+    const NumTodosCellMockPath = path.join(
+      __fixtures__,
+      'web/src/components/NumTodosCell/NumTodosCell.mock.js'
+    )
+    const result = transform(NumTodosCellMockPath)
+    expect(result.code).toMatchInlineSnapshot(`
+"export const standard = mockGraphQLQuery(\\"NumTodosCell_GetCount\\", {
+  todosCount: 42
+});"
+`)
   })
 })
