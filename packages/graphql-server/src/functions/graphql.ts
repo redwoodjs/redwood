@@ -51,11 +51,10 @@ import {
 
 /**
  * Used in Envelop Plugins when handling a result in the onExecuteDone event
- * because if the result might be just a single ExecutionResult or if a stream, or subscription
- * an AsyncIterator of ExecutionResult
+ * because the result might be just a single ExecutionResult or
+ * if a stream, or subscription then an AsyncIterator of ExecutionResult
  * @see https://github.com/dotansimha/envelop/blob/8021229cc19be4f0c1bcf5534fa0c0cfad4425aa/packages/core/src/graphql-typings.d.ts#L1
  */
-
 export function isAsyncIterable(
   maybeAsyncIterable: any
 ): maybeAsyncIterable is AsyncIterable<unknown> {
@@ -424,6 +423,8 @@ const useRedwoodLogger = (
 
       return {
         onExecuteDone({ result }) {
+          // we check the type of result because if in the case of a stream or subscription
+          // then the result is iterable ...
           if (isAsyncIterable(result)) {
             return {
               onNext: ({ result }) => {
@@ -431,6 +432,7 @@ const useRedwoodLogger = (
               },
             }
           }
+          // otherwise, the result is just a single ExecutionResult
           const executionResult = result as ExecutionResult
           handleResult({ result: executionResult })
           return undefined
