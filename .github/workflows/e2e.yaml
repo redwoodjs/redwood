@@ -9,7 +9,7 @@ jobs:
     if: github.repository == 'redwoodjs/redwood'
     strategy:
       matrix:
-        os: ['macos-latest']
+        os: ['ubuntu-latest']
         node-version: ['14']
       fail-fast: true
     runs-on: ${{ matrix.os }}
@@ -43,6 +43,8 @@ jobs:
 
       - name: Init Git for RedwoodJS app directory
         run: |
+          git config --global user.email "you@example.com"
+          git config --global user.name "Your Name"
           git init --initial-branch main && git add .
           git commit -a --message=init
         working-directory: ${{ steps.createpath.outputs.project_path }}
@@ -51,7 +53,6 @@ jobs:
         run: yarn rw dev --no-generate --fwd="--open=false" &
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
-
       - name: Cypress run
         uses: cypress-io/github-action@v2
         env:
@@ -59,8 +60,22 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_RW_PATH:  "${{ steps.createpath.outputs.project_path }}"
         with:
-          browser: chrome
           env: true
-          wait-on: 'http://localhost:8910'
+          browser: chrome
           record: false
+          wait-on: 'http://localhost:8910'
           working-directory: ./tasks/e2e
+
+      - name: Run `rw test`
+        run: yarn rw test --no-watch
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
+      - name: Run `rw build` (no prerender)
+        run: yarn rw build --no-prerender --verbose
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
+      - name: Run `rw prerender`
+        run: yarn rw prerender --verbose
+        # TODO: We should have a script that verifies this.
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+

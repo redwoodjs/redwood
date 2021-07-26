@@ -16,5 +16,6 @@
     "**/node_modules": true,
     "**/__fixtures__": true,
     ".yarn-packages-cache": true
-  }
+  },
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
