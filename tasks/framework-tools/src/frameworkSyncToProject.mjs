@@ -13,6 +13,7 @@ import {
   resolvePackageJsonPath,
   buildPackages,
 } from './lib/framework.mjs'
+import { cleanPackages } from './lib/framework.mjs'
 import {
   installProjectPackages,
   addDependenciesToPackageJson,
@@ -58,6 +59,9 @@ chokidar
   })
   .on('ready', async () => {
     logStatus('Building Framework...')
+    cleanPackages()
+
+    logStatus('Building Framework...')
     buildPackages()
 
     console.log()
@@ -90,10 +94,14 @@ chokidar
     const packageName = packageJsonName(packageJsonPath)
     logStatus(c.magenta(packageName))
 
-    console.log()
-    logStatus(`Building ${packageName}...`)
     try {
-      buildPackages([packageJsonPath], { clean: true })
+      console.log()
+      logStatus(`Cleaning ${packageName}...`)
+      cleanPackages([packageJsonPath])
+
+      console.log()
+      logStatus(`Building ${packageName}...`)
+      buildPackages([packageJsonPath])
 
       console.log()
       logStatus(`Copying ${packageName}...`)
