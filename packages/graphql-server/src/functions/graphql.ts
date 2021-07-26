@@ -372,28 +372,35 @@ const useRedwoodLogger = (
         onExecuteDone({ result }) {
           const options = {} as any
 
-          if (includeData) {
-            options['data'] = result.data
-          }
-
-          if (result.errors && result.errors.length > 0) {
-            envelopLogger.error(
-              {
-                errors: result.errors,
-              },
-              `GraphQL execution completed with errors:`
-            )
-          } else {
-            if (includeTracing) {
-              options['tracing'] = result.extensions?.envelopTracing
+          // @ts-expect-error: Do not know where this is typed.
+          if (result.data) {
+            if (includeData) {
+              // @ts-expect-error: Do not know where this is typed.
+              options['data'] = result.data
             }
 
-            envelopLogger.info(
-              {
-                ...options,
-              },
-              `GraphQL execution completed`
-            )
+            // @ts-expect-error: Do not know where this is typed.
+            if (result.errors && result.errors.length > 0) {
+              envelopLogger.error(
+                {
+                  // @ts-expect-error: Do not know where this is typed.
+                  errors: result.errors,
+                },
+                `GraphQL execution completed with errors:`
+              )
+            } else {
+              if (includeTracing) {
+                // @ts-expect-error: Do not know where this is typed.
+                options['tracing'] = result.extensions?.envelopTracing
+              }
+
+              envelopLogger.info(
+                {
+                  ...options,
+                },
+                `GraphQL execution completed`
+              )
+            }
           }
         },
       }
