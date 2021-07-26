@@ -1875,19 +1875,19 @@
     ts-node "^9"
     tslib "^2"
 
-"@envelop/apollo-server-errors@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@envelop/apollo-server-errors/-/apollo-server-errors-1.0.0.tgz#601f020308ecec7f05f451be18715d0e37c090c4"
-  integrity sha512-Yal9JCr+SLmSK9AXemCUPncY5SDjje5uaSmcDvNXuTsA3LtcwQw0OpZu3m6MGbDJxv5xcajNF2Bc3qVInaMdww==
+"@envelop/apollo-server-errors@1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@envelop/apollo-server-errors/-/apollo-server-errors-1.0.1.tgz#b352dd9eafb807fb6faf1455c3041b67752dd38a"
+  integrity sha512-70yG+vwKT14Qf+4XxcQh0rm+KAClOZe1X7h+c9B0SLSWN2WYz4ZcH25uQ6gLufVaCmxq4aD2HCBep3OOrRf3Ww==
   dependencies:
     apollo-server-errors "3.0.1"
 
-"@envelop/core@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@envelop/core/-/core-1.0.0.tgz#2052bdce473e37df249bc718985141b47e87e6a5"
-  integrity sha512-RkByYgu77+mUJgDT56iXhd8lQno4/dneXNX0Q1WyidinOi6Xw6GcEzJAbtJfNIIShXYR39kdBn3zC9yJUcNkfg==
+"@envelop/core@1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@envelop/core/-/core-1.0.1.tgz#85a37d5cd576487a3f78a2c752be28c3467d7107"
+  integrity sha512-uRvIJDeiB0UIZZ0RB9ITlkOkG/Azul84vJSgJhJ6L6Oilsd9/fik3LddyaTlikuW+rSqMM7pDsrV/Uke5j4qzw==
   dependencies:
-    "@envelop/types" "1.0.0"
+    "@envelop/types" "1.0.1"
 
 "@envelop/depth-limit@1.0.0":
   version "1.0.0"
@@ -1913,10 +1913,10 @@
   dependencies:
     tiny-lru "7.0.6"
 
-"@envelop/types@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@envelop/types/-/types-1.0.0.tgz#704af5b74df951c0559d6443fd2dcf6cb7368172"
-  integrity sha512-L3hHwDcDd5SO5Dck/iJxvbanRa3dx7nUZKelT8x+YcNfEgmAFvtB+y1u48ky43rygVVf7MFaFT2d0nggR1HxRg==
+"@envelop/types@1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@envelop/types/-/types-1.0.1.tgz#f2b10ad63ecf002bf158ead763d98bf106e7ded9"
+  integrity sha512-2vOyCmZGfGvYMzuaxXy6kgG7oGi7QjR81O6g+zWMzTz1ANb21VBwMiX96SBDs6oUP+voOsC1p51zLeHW+sPZ+A==
 
 "@envelop/validation-cache@1.0.0":
   version "1.0.0"
