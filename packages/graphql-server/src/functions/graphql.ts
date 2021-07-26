@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
+
 import { useApolloServerErrors } from '@envelop/apollo-server-errors'
 import {
   envelop,
@@ -21,6 +22,7 @@ import type {
   APIGatewayProxyResult,
 } from 'aws-lambda'
 import {
+  ExecutionResult,
   GraphQLError,
   GraphQLSchema,
   Kind,
@@ -46,6 +48,19 @@ import {
   setContext,
   usePerRequestContext,
 } from '../index'
+
+/**
+ * Used in Envelop Plugins when handling a result in the onExecuteDone event
+ * because if the result might be just a single ExecutionResult or if a stream, or subscription
+ * an AsyncIterator of ExecutionResult
+ * @see https://github.com/dotansimha/envelop/blob/8021229cc19be4f0c1bcf5534fa0c0cfad4425aa/packages/core/src/graphql-typings.d.ts#L1
+ */
+
+export function isAsyncIterable(
+  maybeAsyncIterable: any
+): maybeAsyncIterable is AsyncIterable<unknown> {
+  return typeof maybeAsyncIterable?.[Symbol.asyncIterator] === 'function'
+}
 
 export type GetCurrentUser = (
   decoded: AuthContextPayload[0],
@@ -304,6 +319,46 @@ export const useRedwoodGlobalContextSetter =
   })
 
 /**
+ * This function is used by the useRedwoodLogger to
+ * logs every time an operation is being executed and
+ * when the execution of the operation is done.
+ */
+const logResult =
+  (loggerConfig: LoggerConfig, envelopLogger: BaseLogger) =>
+  ({ result }: { result: ExecutionResult }) => {
+    const includeTracing = loggerConfig?.options?.tracing
+    const includeData = loggerConfig?.options?.data
+
+    const options = {} as any
+
+    if (result.data) {
+      if (includeData) {
+        options['data'] = result.data
+      }
+
+      if (result.errors && result.errors.length > 0) {
+        envelopLogger.error(
+          {
+            errors: result.errors,
+          },
+          `GraphQL execution completed with errors:`
+        )
+      } else {
+        if (includeTracing) {
+          options['tracing'] = result.extensions?.envelopTracing
+        }
+
+        envelopLogger.info(
+          {
+            ...options,
+          },
+          `GraphQL execution completed`
+        )
+      }
+    }
+  }
+
+/**
  * This plugin logs every time an operation is being executed and
  * when the execution of the operation is done.
  *
@@ -326,10 +381,8 @@ const useRedwoodLogger = (
     name: 'graphql-server',
   })
 
-  const includeData = loggerConfig?.options?.data
   const includeOperationName = loggerConfig?.options?.operationName
   const includeRequestId = loggerConfig?.options?.requestId
-  const includeTracing = loggerConfig?.options?.tracing
   const includeUserAgent = loggerConfig?.options?.userAgent
   const includeQuery = loggerConfig?.options?.query
 
@@ -367,41 +420,20 @@ const useRedwoodLogger = (
       })
 
       envelopLogger.info(`GraphQL execution started`)
+      const handleResult = logResult(loggerConfig, envelopLogger)
 
       return {
         onExecuteDone({ result }) {
-          const options = {} as any
-
-          // @ts-expect-error: Do not know where this is typed.
-          if (result.data) {
-            if (includeData) {
-              // @ts-expect-error: Do not know where this is typed.
-              options['data'] = result.data
-            }
-
-            // @ts-expect-error: Do not know where this is typed.
-            if (result.errors && result.errors.length > 0) {
-              envelopLogger.error(
-                {
-                  // @ts-expect-error: Do not know where this is typed.
-                  errors: result.errors,
-                },
-                `GraphQL execution completed with errors:`
-              )
-            } else {
-              if (includeTracing) {
-                // @ts-expect-error: Do not know where this is typed.
-                options['tracing'] = result.extensions?.envelopTracing
-              }
-
-              envelopLogger.info(
-                {
-                  ...options,
-                },
-                `GraphQL execution completed`
-              )
+          if (isAsyncIterable(result)) {
+            return {
+              onNext: ({ result }) => {
+                handleResult({ result })
+              },
             }
           }
+          const executionResult = result as ExecutionResult
+          handleResult({ result: executionResult })
+          return undefined
         },
       }
     },
