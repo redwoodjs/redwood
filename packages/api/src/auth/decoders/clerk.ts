@@ -1,7 +1,7 @@
 import { sessions, users } from '@clerk/clerk-sdk-node'
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 
-import type { GlobalContext } from 'src/globalContext'
+import type { GlobalContext } from '../../globalContext'
 
 export type Req = {
   event: APIGatewayProxyEvent
