@@ -5,12 +5,8 @@
   "license": "MIT",
   "files": [
     "config",
-    "dist",
-    "esbuild"
+    "dist"
   ],
-  "bin": {
-    "rw-api-build": "esbuild/index.js"
-  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "dependencies": {

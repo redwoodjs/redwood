@@ -21,7 +21,7 @@ export const getJsxElements = (code: string, name: string) => {
         path.node.name === name &&
         path.parentPath.type === 'JSXOpeningElement'
       ) {
-        if (path.parentPath.parentPath.type === 'JSXElement') {
+        if (path?.parentPath?.parentPath?.type === 'JSXElement') {
           const element = reduceJsxElement([], path.parentPath.parentPath.node)
           elements = elements.concat(element)
         }

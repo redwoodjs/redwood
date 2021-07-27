@@ -13,6 +13,5 @@
   "references": [
     { "path": "../auth" },
     { "path": "../api" },
-    { "path": "../dev-server" }
   ]
 }
