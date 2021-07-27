@@ -130,6 +130,8 @@ const globalTasks = () =>
       },
       {
         title: '[link] Copying framework packages to project',
+        // @NOTE: we do this twice, because we want to use the latest generators here
+        // and re-sync after the tailwind setup command
         task: () =>
           copyFrameworkPackages(RW_FRAMEWORKPATH, OUTPUT_PROJECT_PATH),
         enabled: () => link,
@@ -154,6 +156,17 @@ const globalTasks = () =>
         task: () => apiTasks(OUTPUT_PROJECT_PATH),
       },
       {
+        title: '[link] Copy local framework files again',
+        // @NOTE: use rwfw, because calling the copy function doesn't seem to work here
+        task: () =>
+          execa(
+            'yarn rwfw project:copy',
+            [],
+            getExecaOptions(OUTPUT_PROJECT_PATH)
+          ),
+        enabled: () => link,
+      },
+      {
         title: 'Convert to JS',
         task: async () => {
           return execa(
@@ -163,6 +176,18 @@ const globalTasks = () =>
           )
         },
         enabled: () => !typescript,
+      },
+      {
+        title: 'All done!',
+        task: async () => {
+          console.log()
+          console.log('-'.repeat(30))
+          console.log()
+          console.log('✅ Success your project has been generated at:')
+          console.log(OUTPUT_PROJECT_PATH)
+          console.log()
+          console.log('-'.repeat(30))
+        },
       },
     ],
     {
@@ -175,4 +200,5 @@ globalTasks()
   .run()
   .catch((err) => {
     console.error(err)
+    process.exit(1)
   })

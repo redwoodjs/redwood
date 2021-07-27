@@ -129,30 +129,30 @@ async function webTasks(outputPath) {
     [
       {
         title: 'Creating pages',
-        task: async () => createPages(),
+        task: () => createPages(),
       },
       {
         title: 'Creating layout',
-        task: async () => createLayout(),
+        task: () => createLayout(),
       },
       {
         title: 'Creating components',
-        task: async () => createComponents(),
+        task: () => createComponents(),
       },
       {
         title: 'Creating cells',
-        task: async () => createCells(),
+        task: () => createCells(),
       },
       {
         title: 'Changing routes',
-        task: async () => applyCodemod('routes.js', fullPath('web/src/Routes')),
+        task: () => applyCodemod('routes.js', fullPath('web/src/Routes')),
       },
-      // {
-      //   title: 'Adding Tailwind',
-      //   task: async () => {
-      //     return execa('yarn rw setup tailwind', [], execaOptions)
-      //   },
-      // },
+      {
+        title: 'Adding Tailwind',
+        task: () => {
+          return execa('yarn rw setup tailwind', ['--force'], execaOptions)
+        },
+      },
     ],
     {
       exitOnError: true,
