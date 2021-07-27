@@ -30,7 +30,7 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     cy.exec(
       `cd ${BASE_DIR}; git add . && git commit -a --message=01-tutorial`,
       {
-        failOnNonZeroExit: false,
+        failOnNonZeroExit: true,
       }
     )
   })
