@@ -1,20 +1,13 @@
 import type { DocumentNode } from 'graphql'
 
-export interface GraphQLHookOptions {
-  variables?: Record<string, any>
-  refetchQueries?: { query: DocumentNode; variables?: Record<string, any> }[]
-  onCompleted?: (data: any) => void
-  [key: string]: any
-}
-
 type DefaultUseQueryType = (
   query: DocumentNode,
-  options?: GraphQLHookOptions
+  options?: GraphQLQueryHookOptions
 ) => QueryOperationResult
 
 type DefaultUseMutationType = (
   mutation: DocumentNode,
-  options?: GraphQLHookOptions
+  options?: GraphQLMutationHookOptions
 ) => MutationOperationResult
 export interface GraphQLHooks<
   TuseQuery = DefaultUseQueryType,
@@ -73,14 +66,14 @@ export const GraphQLHooksProvider = <
 
 export function useQuery<TData = any>(
   query: DocumentNode,
-  options?: GraphQLHookOptions
+  options?: GraphQLQueryHookOptions
 ): QueryOperationResult<TData> {
   return React.useContext(GraphQLHooksContext).useQuery(query, options)
 }
 
 export function useMutation<TData = any>(
   mutation: DocumentNode,
-  options?: GraphQLHookOptions
+  options?: GraphQLMutationHookOptions
 ): MutationOperationResult<TData> {
   return React.useContext(GraphQLHooksContext).useMutation(mutation, options)
 }
