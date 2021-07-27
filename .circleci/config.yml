@@ -21,7 +21,7 @@ executors:
       BAR: bar
 jobs:
   # Below is the definition of your job to build and test your app, you can rename and customize it as you want.
-  setup-test-project:
+  set-up-test-project:
     # These next lines define a Docker executor: https://circleci.com/docs/2.0/executor-types/
     # You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # A list of available CircleCI Docker Convenience Images are available here: https://circleci.com/developer/images/image/cimg/node
@@ -44,24 +44,26 @@ jobs:
       - run:
         name: Create a temporary directory
         command: |
-          project_path=$(mktemp -d -t redwood.XXXXXX)
-          echo "export PROJECT_PATH=$project_path" >> $BASH_ENV
+            project_path=$(mktemp -d -t redwood.XXXXXX)
+            echo "export PROJECT_PATH=$project_path" >> $BASH_ENV
       - run:
         name: Create a RedwoodJS app
         command: |
-          ./tasks/run-e2e ${PROJECT_PATH} --no-start
+            ./tasks/run-e2e ${PROJECT_PATH} --no-start
       - run:
         name: Init Git for RedwoodJS app
         command: |
-          git init --initial-branch main && git add .
-          git config user.email "you@example.com"
-          git config user.name "Your Name"
-          git commit -a --message=init
+            git init --initial-branch main && git add .
+            git config user.email "you@example.com"
+            git config user.name "Your Name"
+            git commit -a --message=init
         working_directory: ${PROJECT_PATH}
       - run:
         name: Start server in background
-        command: yarn rw dev --no-generate --fwd="--open=false"
-        working_directory: ${PROJECT_PATH}
+        command: |
+            cd ${PROJECT_PATH}
+            yarn rw dev --no-generate --fwd="--no-open"
+        # working_directory: ${PROJECT_PATH}
 
 workflows:
   # Below is the definition of your workflow.
@@ -73,12 +75,11 @@ workflows:
       - set-up-test-project
       # For running simple node tests, you could optionally use the node/test job from the orb to replicate and replace the job above in fewer lines.
       # - node/test
-    jobs:
-      - cypress/run
-        start: npm start
-        executor: with-chrome
-        browser: chrome
-        env: true
-        wait-on: 'http://localhost:8910'
-        record: false
-        working_directory: ./tasks/e2e
+    build:
+      jobs:
+        - cypress/run:
+            executor: with-chrome
+            browser: chrome
+            wait-on: 'http://localhost:8910'
+            record: false
+            working_directory: ./tasks/e2e
