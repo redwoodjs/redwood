@@ -69,7 +69,7 @@ jobs:
              cypress/integration/01-tutorial/*.spec.js
              cypress/integration/03-storybook/*.spec.js
              cypress/integration/04-logger/*.spec.js
-             cypress/integration/05-tutorial-envelop
+             cypress/integration/05-tutorial-envelop/*.spec.js
 
       - name: Prepare for CLI checks by restoring 01-tutorial end state
         run: |
