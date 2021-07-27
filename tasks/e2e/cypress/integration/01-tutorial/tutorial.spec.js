@@ -56,6 +56,6 @@ describe('The Redwood Tutorial - Golden path edition', () => {
   test_cells()
   test_routing_params()
   test_forms()
-  // test_saving_data()
-  // test_auth_cell_failure()
+  test_saving_data()
+  test_auth_cell_failure()
 })
