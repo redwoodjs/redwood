@@ -28,6 +28,7 @@ import Step7_3_Css from './codemods/Step7_3_Css'
 import Step7_4_Routes from './codemods/Step7_4_Routes'
 import Step8_1_ContactPageWithoutJsEmailValidation from './codemods/Step8_1_ContactPageWithoutJsEmailValidation'
 import Step8_2_CreateContactServiceValidation from './codemods/Step8_2_CreateContactServiceValidation'
+import Step8_3_UpdateContactTest from './codemods/Step8_3_UpdateContactTest'
 import Step9_1_RequireAuth from './codemods/Step9_1_RequireAuth'
 import Step9_2_PostsRequireAuth from './codemods/Step9_2_PostsRequireAuth'
 import Step9_3_DisableAuth from './codemods/Step9_3_DisableAuth'
@@ -320,6 +321,11 @@ export const test_saving_data = () =>
       'api/src/services/contacts/contacts.js'
     )
     cy.writeFile(serviceContactPath, Step8_2_CreateContactServiceValidation)
+
+    cy.writeFile(
+      path.join(BASE_DIR, 'api/src/services/contacts/contacts.test.js'),
+      Step8_3_UpdateContactTest
+    )
 
     // Wait for API server to be available.
     waitForApiSide()

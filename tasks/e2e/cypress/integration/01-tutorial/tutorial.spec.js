@@ -13,7 +13,7 @@ import {
   test_routing_params,
   test_forms,
   test_saving_data,
-  test_auth_cell_failure,
+  // test_auth_cell_failure,
 } from '../01-tutorial/sharedTests'
 
 import Step0_1_RedwoodToml from './codemods/Step0_1_RedwoodToml'
