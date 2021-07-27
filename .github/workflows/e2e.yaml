@@ -69,7 +69,12 @@ jobs:
              cypress/integration/01-tutorial/*.spec.js
              cypress/integration/03-storybook/*.spec.js
              cypress/integration/04-logger/*.spec.js
-             cypress/integration/05-tutorial-envelop/*.spec.js
+             cypress/integration/05-tutorial-envelop
+
+      - name: Prepare for CLI checks by restoring 01-tutorial end state
+        run: |
+          git restore . && git clean -df
+        working-directory: ${{ steps.createpath.outputs.project_path }}
 
       - name: Run `rw test`
         run: yarn rw test --no-watch
