@@ -1,3 +1,4 @@
+
 # Use the latest 2.1 version of CircleCI pipeline process engine.
 # See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
@@ -7,7 +8,7 @@ orbs:
   # Orbs reduce the amount of configuration required for common tasks.
   # See the orb documentation here: https://circleci.com/developer/orbs/orb/circleci/node
   node: circleci/node@4.5.1
-
+  cypress: cypress-io/cypress@1
 
 jobs:
   # Below is the definition of your job to build and test your app, you can rename and customize it as you want.
@@ -39,7 +40,6 @@ jobs:
       - run:
           name: Create a RedwoodJS app
           command: |
-            echo ${PROJECT_PATH}
             ./tasks/run-e2e ${PROJECT_PATH} --no-start
       - run:
           name: Init Git for RedwoodJS app
@@ -49,15 +49,14 @@ jobs:
             git config user.email "you@example.com"
             git config user.name "Your Name"
             git commit -a --message=init
-
-
 workflows:
   # Below is the definition of your workflow.
   # Inside the workflow, you provide the jobs you want to run, e.g this workflow runs the build-and-test job above.
   # CircleCI will run this workflow on every commit.
   # For more details on extending your workflow, see the configuration docs: https://circleci.com/docs/2.0/configuration-reference/#workflows
-  sample:
+  cypress-e2e:
     jobs:
-      - setup-test-project
+      - set-up-test-project
       # For running simple node tests, you could optionally use the node/test job from the orb to replicate and replace the job above in fewer lines.
       # - node/test
+
