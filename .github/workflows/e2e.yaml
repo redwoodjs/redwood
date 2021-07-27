@@ -23,11 +23,11 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      # - name: Cache "node_modules"
-      #   uses: actions/cache@v2
-      #   with:
-      #     path: '**/node_modules'
-      #     key: node_modules_${{ runner.os }}_${{ hashFiles('**/yarn.lock') }}
+      - name: Cache "node_modules"
+        uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: node_modules_${{ runner.os }}_${{ hashFiles('**/yarn.lock') }}
 
       - name: Install framework modules
         run: yarn install --frozen-lockfile
@@ -50,7 +50,7 @@ jobs:
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
       - name: Start server in background
-        run: yarn rw dev --no-generate --fwd="--open=false" &
+        run: yarn rw dev --no-generate --fwd="--no-open" &
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
       - name: Cypress run
@@ -65,6 +65,16 @@ jobs:
           record: false
           wait-on: 'http://localhost:8910'
           working-directory: ./tasks/e2e
+          spec: |
+             cypress/integration/01-tutorial/*.spec.js
+             cypress/integration/03-storybook/*.spec.js
+             cypress/integration/04-logger/*.spec.js
+             cypress/integration/05-tutorial-envelop/*.spec.js
+
+      - name: Prepare for CLI checks by restoring 01-tutorial end state
+        run: |
+          git restore . && git clean -df
+        working-directory: ${{ steps.createpath.outputs.project_path }}
 
       - name: Run `rw test`
         run: yarn rw test --no-watch

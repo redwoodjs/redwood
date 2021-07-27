@@ -13,7 +13,7 @@ import {
   test_routing_params,
   test_forms,
   test_saving_data,
-  test_auth_cell_failure,
+  // test_auth_cell_failure,
 } from '../01-tutorial/sharedTests'
 
 import Step0_1_RedwoodToml from './codemods/Step0_1_RedwoodToml'
@@ -26,6 +26,14 @@ const BASE_DIR = Cypress.env('RW_PATH')
 describe('The Redwood Tutorial - Golden path edition', () => {
   // TODO: https://redwoodjs.com/tutorial/saving-data
   // TODO: https://redwoodjs.com/tutorial/administration
+  after(() => {
+    cy.exec(
+      `cd ${BASE_DIR}; git add . && git commit -a --message=01-tutorial`,
+      {
+        failOnNonZeroExit: true,
+      }
+    )
+  })
   it('0. Starting Development', () => {
     // disable auth
     cy.writeFile(
@@ -56,6 +64,6 @@ describe('The Redwood Tutorial - Golden path edition', () => {
   test_cells()
   test_routing_params()
   test_forms()
-  // test_saving_data()
+  test_saving_data()
   // test_auth_cell_failure()
 })
