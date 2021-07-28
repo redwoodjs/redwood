@@ -30,7 +30,7 @@ const mapRouteParamTypeToTsType = (paramType) => {
   }
 }
 
-/** @type {(paramType: 'Int' | 'Boolean' | 'String') => string } **/
+/** @type {(paramType: 'Int' | 'Boolean' | 'String') } **/
 const mapRouteParamTypeToDefaultValue = (paramType) => {
   switch (paramType) {
     case 'Int':
