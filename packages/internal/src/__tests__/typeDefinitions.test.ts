@@ -86,6 +86,7 @@ test('generate the correct mirror types for directory named modules', () => {
       ".redwood/types/mirror/web/src/pages/FooPage/index.d.ts",
       ".redwood/types/mirror/web/src/pages/HomePage/index.d.ts",
       ".redwood/types/mirror/web/src/pages/NotFoundPage/index.d.ts",
+      ".redwood/types/mirror/web/src/pages/PrivatePage/index.d.ts",
       ".redwood/types/mirror/web/src/pages/TypeScriptPage/index.d.ts",
       ".redwood/types/mirror/web/src/pages/admin/EditUserPage/index.d.ts",
     ]
@@ -114,6 +115,7 @@ declare global {
   const FooPage: typeof FooPageType
   const HomePage: typeof HomePageType
   const NotFoundPage: typeof NotFoundPageType
+  const PrivatePage: typeof PrivatePageType
   const TypeScriptPage: typeof TypeScriptPageType
   const adminEditUserPage: typeof adminEditUserPageType
 }`)
@@ -138,6 +140,7 @@ test('generates the router routes', () => {
     someOtherPage: (params?: RouteParams<"/somewhereElse"> & QueryParams) => "/somewhereElse"
     fooPage: (params?: RouteParams<"/foo"> & QueryParams) => "/foo"
     barPage: (params?: RouteParams<"/bar"> & QueryParams) => "/bar"
+    privatePage: (params?: RouteParams<"/private-page"> & QueryParams) => "/private-page"
 `)
 })
 

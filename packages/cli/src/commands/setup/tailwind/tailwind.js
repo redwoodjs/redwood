@@ -17,6 +17,13 @@ export const builder = (yargs) => {
     description: 'Overwrite existing configuration',
     type: 'boolean',
   })
+
+  yargs.option('install', {
+    alias: 'i',
+    default: true,
+    description: 'Install packages',
+    type: 'boolean',
+  })
 }
 
 const tailwindImport = "import 'tailwindcss/tailwind.css'\n"
@@ -28,10 +35,11 @@ const addTailwindImport = (app) => {
   return app.substring(0, i) + tailwindImport + app.substring(i)
 }
 
-export const handler = async ({ force }) => {
+export const handler = async ({ force, install }) => {
   const tasks = new Listr([
     {
       title: 'Installing packages...',
+      skip: () => !install,
       task: () => {
         return new Listr([
           {
