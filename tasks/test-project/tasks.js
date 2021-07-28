@@ -98,9 +98,9 @@ async function webTasks(outputPath, { link, verbose }) {
   }
 
   const createComponents = async () => {
-    const createLayout = createBuilder('yarn redwood g component')
+    const createComponent = createBuilder('yarn redwood g component')
 
-    await createLayout('blogPost')
+    await createComponent('blogPost')
 
     return applyCodemod(
       'blogPost.js',
@@ -173,7 +173,7 @@ async function addModel(schema) {
 
   const current = fs.readFileSync(path)
 
-  fs.writeFileSync(path, `${current}\n${schema}`)
+  fs.writeFileSync(path, `${current}\n\n${schema}`)
 }
 
 async function apiTasks(outputPath, { verbose }) {
