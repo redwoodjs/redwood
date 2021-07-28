@@ -31,9 +31,15 @@ export const builder = (yargs) => {
       type: 'string',
       default: 'public/storybook',
     })
+    .option('ci', {
+      describe:
+        "CI mode plus Smoke-test (skip prompts, don't open browser, exit after successful start)",
+      type: 'boolean',
+      default: false,
+    })
 }
 
-export const handler = ({ open, port, build, buildDirectory }) => {
+export const handler = ({ open, port, build, buildDirectory, ci }) => {
   const cwd = getPaths().web.base
 
   const staticAssetsFolder = path.join(getPaths().web.base, 'public')
@@ -59,6 +65,7 @@ export const handler = ({ open, port, build, buildDirectory }) => {
       build &&
         `--output-dir "${path.join(getPaths().web.base, buildDirectory)}"`,
       !open && '--ci',
+      ci && '--ci --smoke-test',
     ].filter(Boolean),
     {
       stdio: 'inherit',
