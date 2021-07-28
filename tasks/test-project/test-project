@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /* eslint-env node, es6*/
 //@ts-check
+const fs = require('fs')
 const path = require('path')
 
 const execa = require('execa')
@@ -130,10 +131,29 @@ const globalTasks = () =>
       },
       {
         title: '[link] Copying framework packages to project',
-        // @NOTE: we do this twice, because we want to use the latest generators here
-        // and re-sync after the tailwind setup command
         task: () =>
           copyFrameworkPackages(RW_FRAMEWORKPATH, OUTPUT_PROJECT_PATH),
+        enabled: () => link,
+      },
+      {
+        title: '[link] Add rwfw project:copy postinstall',
+        task: () => {
+          const projectPackageJsonPath = path.join(
+            OUTPUT_PROJECT_PATH,
+            'package.json'
+          )
+          const projectPackageJson = JSON.parse(
+            fs.readFileSync(projectPackageJsonPath, 'utf-8')
+          )
+          projectPackageJson.scripts = {
+            ...projectPackageJson.scripts,
+            postinstall: 'yarn rwfw project:copy',
+          }
+          fs.writeFileSync(
+            projectPackageJsonPath,
+            JSON.stringify(projectPackageJson, undefined, 2)
+          )
+        },
         enabled: () => link,
       },
       {
