@@ -4,6 +4,7 @@ const path = require('path')
 
 const execa = require('execa')
 const Listr = require('listr')
+const VerboseRenderer = require('listr-verbose-renderer')
 
 const { getExecaOptions, applyCodemod } = require('./util')
 
@@ -23,7 +24,7 @@ function fullPath(name, { addExtension } = { addExtension: true }) {
   return path.join(OUTPUT_PATH, name)
 }
 
-async function webTasks(outputPath) {
+async function webTasks(outputPath, { link, verbose }) {
   OUTPUT_PATH = outputPath
 
   const execaOptions = getExecaOptions(outputPath)
@@ -152,10 +153,17 @@ async function webTasks(outputPath) {
         task: () => {
           return execa('yarn rw setup tailwind', ['--force'], execaOptions)
         },
+        skip: () => {
+          return (
+            link &&
+            'Skipping, due to link flag. Setup commands are not currently supported.'
+          )
+        },
       },
     ],
     {
       exitOnError: true,
+      renderer: verbose && VerboseRenderer,
     }
   )
 }
@@ -165,68 +173,74 @@ async function addModel(schema) {
 
   const current = fs.readFileSync(path)
 
-  fs.writeFileSync(path, `${current}${schema}`)
+  fs.writeFileSync(path, `${current}\n${schema}`)
 }
 
-async function apiTasks(outputPath) {
+async function apiTasks(outputPath, { verbose }) {
   OUTPUT_PATH = outputPath
 
   const execaOptionsForProject = getExecaOptions(outputPath)
 
-  return new Listr([
-    {
-      title: 'Adding post model to prisma',
-      task: async () => {
-        const { post } = await import('./codemods/models.js')
+  return new Listr(
+    [
+      {
+        title: 'Adding post model to prisma',
+        task: async () => {
+          const { post } = await import('./codemods/models.js')
 
-        addModel(post)
+          addModel(post)
 
-        return execa(
-          `yarn rw prisma migrate dev --name create_product`,
-          [],
-          execaOptionsForProject
-        )
+          return execa(
+            `yarn rw prisma migrate dev --name create_product`,
+            [],
+            execaOptionsForProject
+          )
+        },
       },
-    },
-    {
-      title: 'Scaffoding post',
-      task: async () => {
-        return execa('yarn rw g scaffold post', [], execaOptionsForProject)
+      {
+        title: 'Scaffoding post',
+        task: async () => {
+          return execa('yarn rw g scaffold post', [], execaOptionsForProject)
+        },
       },
-    },
-    {
-      title: 'Seeding database',
-      task: async () => {
-        await applyCodemod(
-          'seed.js',
-          fullPath('api/db/seed.js', { addExtension: false }) // seed.js is seed.js in a TS project too
-        )
+      {
+        title: 'Seeding database',
+        task: async () => {
+          await applyCodemod(
+            'seed.js',
+            fullPath('api/db/seed.js', { addExtension: false }) // seed.js is seed.js in a TS project too
+          )
 
-        return execa('yarn rw prisma db seed', [], execaOptionsForProject)
+          return execa('yarn rw prisma db seed', [], execaOptionsForProject)
+        },
       },
-    },
-    {
-      title: 'Adding contact model to prisma',
-      task: async () => {
-        const { contact } = await import('./codemods/models.js')
+      {
+        title: 'Adding contact model to prisma',
+        task: async () => {
+          const { contact } = await import('./codemods/models.js')
 
-        addModel(contact)
+          addModel(contact)
 
-        await execa(
-          `yarn rw prisma migrate dev --name create_contact`,
-          [],
-          execaOptionsForProject
-        )
+          await execa(
+            `yarn rw prisma migrate dev --name create_contact`,
+            [],
+            execaOptionsForProject
+          )
 
-        await execa(`yarn rw g sdl contact`, [], execaOptionsForProject)
+          await execa(`yarn rw g sdl contact`, [], execaOptionsForProject)
 
-        await applyCodemod(
-          'contactsSdl.js',
-          fullPath('api/src/graphql/contacts.sdl')
-        )
+          await applyCodemod(
+            'contactsSdl.js',
+            fullPath('api/src/graphql/contacts.sdl')
+          )
+        },
       },
-    },
-  ])
+    ],
+    {
+      exitOnError: true,
+      renderer: verbose && VerboseRenderer,
+    }
+  )
 }
 
 module.exports = {

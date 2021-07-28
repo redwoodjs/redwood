@@ -169,11 +169,11 @@ const globalTasks = () =>
       },
       {
         title: 'Apply web codemods',
-        task: () => webTasks(OUTPUT_PROJECT_PATH),
+        task: () => webTasks(OUTPUT_PROJECT_PATH, { verbose, link }),
       },
       {
         title: 'Apply api codemods',
-        task: () => apiTasks(OUTPUT_PROJECT_PATH),
+        task: () => apiTasks(OUTPUT_PROJECT_PATH, { verbose }),
       },
       {
         title: '[link] Copy local framework files again',
