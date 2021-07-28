@@ -8,8 +8,8 @@ tasks:
     init: |
       yarn install
       yarn run build:test-project ../redwood-app --typescript --link --verbose
-      gp sync-done install-and-link
     command: |
+      gp sync-done install-and-link
       cd ../redwood-app
       yarn rwt link $RW_PATH
   - name: API
