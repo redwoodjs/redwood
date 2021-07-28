@@ -22,7 +22,7 @@ export const builder = (yargs) => {
     .option('forward', {
       alias: 'fwd',
       description:
-        'String of one or more Webpack DevServer config options, for example: `--fwd="--port=1234 --open=false"`',
+        'String of one or more Webpack DevServer config options, for example: `--fwd="--port=1234 --no-open"`',
       type: 'string',
     })
     .option('useEnvelop', {
