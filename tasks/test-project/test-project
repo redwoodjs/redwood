@@ -176,17 +176,6 @@ const globalTasks = () =>
         task: () => apiTasks(OUTPUT_PROJECT_PATH, { verbose }),
       },
       {
-        title: '[link] Copy local framework files again',
-        // @NOTE: use rwfw, because calling the copy function doesn't seem to work here
-        task: () =>
-          execa(
-            'yarn rwfw project:copy',
-            [],
-            getExecaOptions(OUTPUT_PROJECT_PATH)
-          ),
-        enabled: () => link,
-      },
-      {
         title: 'Convert to JS',
         task: async () => {
           return execa(

@@ -148,15 +148,35 @@ async function webTasks(outputPath, { link, verbose }) {
         title: 'Changing routes',
         task: () => applyCodemod('routes.js', fullPath('web/src/Routes')),
       },
+
+      // ====== NOTE: rufus needs this workaround for tailwind =======
+      // Setup tailwind in a linked project, due to rwfw we install deps manually
+      {
+        title: 'Install tailwind dependencies',
+        // @NOTE: use rwfw, because calling the copy function doesn't seem to work here
+        task: () =>
+          execa(
+            'yarn workspace web add postcss postcss-loader tailwindcss autoprefixer',
+            [],
+            getExecaOptions(outputPath)
+          ),
+        enabled: () => link,
+      },
+      {
+        title: '[link] Copy local framework files again',
+        // @NOTE: use rwfw, because calling the copy function doesn't seem to work here
+        task: () =>
+          execa('yarn rwfw project:copy', [], getExecaOptions(outputPath)),
+        enabled: () => link,
+      },
+      // =========
       {
         title: 'Adding Tailwind',
         task: () => {
-          return execa('yarn rw setup tailwind', ['--force'], execaOptions)
-        },
-        skip: () => {
-          return (
-            link &&
-            'Skipping, due to link flag. Setup commands are not currently supported.'
+          return execa(
+            'yarn rw setup tailwind',
+            ['--force', link && '--no-install'].filter(Boolean),
+            execaOptions
           )
         },
       },
