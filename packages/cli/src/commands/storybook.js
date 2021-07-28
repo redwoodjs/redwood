@@ -37,6 +37,12 @@ export const builder = (yargs) => {
       type: 'boolean',
       default: true,
     })
+    .option('ci', {
+      describe:
+        "CI mode plus Smoke-test (skip prompts, don't open browser, exit after successful start)",
+      type: 'boolean',
+      default: false,
+    })
 }
 
 export const handler = ({
@@ -45,6 +51,7 @@ export const handler = ({
   build,
   buildDirectory,
   managerCache,
+  ci,
 }) => {
   const cwd = getPaths().web.base
 
@@ -70,6 +77,7 @@ export const handler = ({
       !managerCache && '--no-manager-cache',
       build && `--output-dir "${buildDirectory}"`,
       !open && '--ci',
+      ci && '--ci --smoke-test',
     ].filter(Boolean),
     {
       stdio: 'inherit',
