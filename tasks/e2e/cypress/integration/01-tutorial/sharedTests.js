@@ -28,13 +28,14 @@ import Step7_3_Css from './codemods/Step7_3_Css'
 import Step7_4_Routes from './codemods/Step7_4_Routes'
 import Step8_1_ContactPageWithoutJsEmailValidation from './codemods/Step8_1_ContactPageWithoutJsEmailValidation'
 import Step8_2_CreateContactServiceValidation from './codemods/Step8_2_CreateContactServiceValidation'
+import Step8_3_UpdateContactTest from './codemods/Step8_3_UpdateContactTest'
 import Step9_1_RequireAuth from './codemods/Step9_1_RequireAuth'
 import Step9_2_PostsRequireAuth from './codemods/Step9_2_PostsRequireAuth'
 import Step9_3_DisableAuth from './codemods/Step9_3_DisableAuth'
 
 const BASE_DIR = Cypress.env('RW_PATH')
 
-function waitForApiSide() {
+export function waitForApiSide() {
   // Pause because chokidar `ignoreInitial` and debounce add at least 1000ms delay
   // to restarting the api-server in the e2e environment.
   cy.wait(1_000)
@@ -319,8 +320,12 @@ export const test_saving_data = () =>
       BASE_DIR,
       'api/src/services/contacts/contacts.js'
     )
-    const originalFile = cy.readFile(serviceContactPath)
     cy.writeFile(serviceContactPath, Step8_2_CreateContactServiceValidation)
+
+    cy.writeFile(
+      path.join(BASE_DIR, 'api/src/services/contacts/contacts.test.js'),
+      Step8_3_UpdateContactTest
+    )
 
     // Wait for API server to be available.
     waitForApiSide()
@@ -340,8 +345,6 @@ export const test_saving_data = () =>
     cy.get('input#email').clear().type('test@example.com')
     cy.contains('Save').click()
     cy.contains('Thank you for your submission')
-
-    cy.writeFile(serviceContactPath, originalFile)
   })
 
 export const test_auth_cell_failure = () =>

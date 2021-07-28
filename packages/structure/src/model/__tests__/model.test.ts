@@ -15,6 +15,7 @@ describe('Redwood Project Model', () => {
         'FatalErrorPage',
         'HomePage',
         'NotFoundPage',
+        'PrivatePage',
         'TypeScriptPage',
         'EditUserPage',
         'FooPage',
@@ -117,7 +118,7 @@ describe('Redwood Route detection', () => {
       // interested in
       .map(({ name, path }) => ({ name, path }))
 
-    expect(prerenderRoutes.length).toBe(5)
+    expect(prerenderRoutes.length).toBe(6)
     expect(prerenderRoutes).toContainEqual({ name: 'home', path: '/' })
     expect(prerenderRoutes).toContainEqual({
       name: 'typescriptPage',
@@ -129,6 +130,7 @@ describe('Redwood Route detection', () => {
     })
     expect(prerenderRoutes).toContainEqual({ name: 'fooPage', path: '/foo' })
     expect(prerenderRoutes).toContainEqual({ name: 'barPage', path: '/bar' })
+    expect(prerenderRoutes).toContainEqual({ name: 'privatePage', path: '/private-page' })
   })
 })
 
