@@ -42,7 +42,7 @@ export default (file, api) => {
       .at(0)
       .replaceWith((nodePath) => {
         const { node } = nodePath
-        node.params = ['{ posts }: Props']
+        node.params = ['{ post }: Props']
         return node
       })
   }
@@ -56,12 +56,6 @@ export default (file, api) => {
     })
     .replaceWith((nodePath) => {
       const { node } = nodePath
-      node.init.params = [
-        ...node.init.params,
-        j.objectPattern([
-          j.objectProperty(j.identifier('post'), j.identifier('post')),
-        ]),
-      ]
       node.init.body.body[0].argument = body
       return node
     })
