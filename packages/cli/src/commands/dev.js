@@ -22,7 +22,7 @@ export const builder = (yargs) => {
     .positional('forward', {
       alias: 'fwd',
       description:
-        'String of one or more Webpack DevServer config options, for example: `--fwd="--port=1234 --open=false"`',
+        'String of one or more Webpack DevServer config options, for example: `--fwd="--port=1234 --no-open"`',
       type: 'string',
     })
     .option('useEnvelop', {
@@ -93,8 +93,7 @@ export const handler = async ({
   const jobs = {
     api: {
       name: 'api',
-      command:
-        `yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn nodemon --watch "${redwoodConfigPath}" --exec "yarn rw-api-server-watch"`,
+      command: `yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn nodemon --watch "${redwoodConfigPath}" --exec "yarn rw-api-server-watch"`,
       prefixColor: 'cyan',
       runWhen: () => fs.existsSync(rwjsPaths.api.src),
     },
