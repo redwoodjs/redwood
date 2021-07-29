@@ -10,18 +10,16 @@ tasks:
       yarn run build:test-project ../redwood-app --typescript --link --verbose
     command: |
       gp sync-done install-and-link
-      cd ../redwood-app
-      yarn rwt link $RW_PATH
   - name: API
     command: |
       gp sync-await install-and-link
       cd ../redwood-app
-      echo "Please wait for 'yarn rwt link' to complete, then run 'yarn rw dev api'"
+      yarn rw dev api
   - name: WEB
     command: |
       gp sync-await install-and-link
       cd ../redwood-app
-      echo "Please wait for 'yarn rwt link' to complete, then run 'yarn rw dev web'"
+      yarn rw dev web
     openMode: split-right
 
 ports:
