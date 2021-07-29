@@ -19,7 +19,7 @@ export const builder = (yargs) => {
       description: 'Which dev server(s) to start',
       type: 'array',
     })
-    .positional('forward', {
+    .option('forward', {
       alias: 'fwd',
       description:
         'String of one or more Webpack DevServer config options, for example: `--fwd="--port=1234 --no-open"`',

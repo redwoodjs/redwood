@@ -266,18 +266,29 @@ test('paramVariants returns empty strings for no params', () => {
 test('paramVariants finds the param and type in the middle of the path', () => {
   expect(page.paramVariants('/post/{id:Int}/edit')).toEqual({
     propParam: '{ id }',
-    propValueParam: 'id="42" ',
-    argumentParam: "{ id: '42' }",
+    propValueParam: 'id={42} ',
+    argumentParam: '{ id: 42 }',
     paramName: 'id',
-    paramValue: '42',
-    paramType: 'Int',
+    paramValue: 42,
+    paramType: 'number',
+  })
+})
+
+test('paramVariants handles boolean type', () => {
+  expect(page.paramVariants('/post/edit/{debug:Boolean}')).toEqual({
+    propParam: '{ debug }',
+    propValueParam: 'debug={true} ',
+    argumentParam: '{ debug: true }',
+    paramName: 'debug',
+    paramValue: true,
+    paramType: 'boolean',
   })
 })
 
 test('paramVariants paramType defaults to string', () => {
   expect(page.paramVariants('/posts/{id}')).toEqual({
     propParam: '{ id }',
-    propValueParam: 'id="42" ',
+    propValueParam: "id={'42'} ",
     argumentParam: "{ id: '42' }",
     paramName: 'id',
     paramValue: '42',

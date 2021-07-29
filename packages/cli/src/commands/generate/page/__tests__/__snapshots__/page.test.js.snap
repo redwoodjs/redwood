@@ -161,7 +161,7 @@ import PostPage from './PostPage'
 describe('PostPage', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<PostPage id=\\"42\\" />)
+      render(<PostPage id={'42'} />)
     }).not.toThrow()
   })
 })
@@ -252,7 +252,7 @@ Object {
   "fileContent": "import PostPage from './PostPage'
 
 export const generated = () => {
-  return <PostPage id=\\"42\\" />
+  return <PostPage id={'42'} />
 }
 
 export default { title: 'Pages/PostPage' }
@@ -270,7 +270,7 @@ import PostPage from './PostPage'
 describe('PostPage', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<PostPage id=\\"42\\" />)
+      render(<PostPage id={'42'} />)
     }).not.toThrow()
   })
 })
@@ -417,7 +417,7 @@ exports[`generates typescript pages 5`] = `
 import { MetaTags } from '@redwoodjs/web'
 
 type TSParamTypeFilesPageProps = {
-  id: Int
+  id: number
 }
 
 const TSParamTypeFilesPage = ({ id }: TSParamTypeFilesPageProps) => {
@@ -433,7 +433,7 @@ const TSParamTypeFilesPage = ({ id }: TSParamTypeFilesPageProps) => {
       </p>
       <p>
         My default route is named <code>tsParamTypeFiles</code>, link to me with \`
-        <Link to={routes.tsParamTypeFiles({ id: '42' })}>TSParamTypeFiles 42</Link>\`
+        <Link to={routes.tsParamTypeFiles({ id: 42 })}>TSParamTypeFiles 42</Link>\`
       </p>
       <p>The parameter passed to me is {id}</p>
     </>
