@@ -22,6 +22,9 @@ const getExecaOptions = (cwd) => ({
   stdio: 'inherit',
   cleanup: true,
   cwd,
+  env: {
+    RW_PATH: path.join(__dirname, '../../'),
+  },
 })
 
 module.exports = {
