@@ -16,12 +16,17 @@ async function applyCodemod(codemod, target) {
   await execa('yarn transform', args, getExecaOptions(path.resolve(__dirname)))
 }
 
+const RW_FRAMEWORKPATH = path.join(__dirname, '../../')
+
 /** @type {(string) => import('execa').Options} */
 const getExecaOptions = (cwd) => ({
   shell: true,
   stdio: 'inherit',
   cleanup: true,
   cwd,
+  env: {
+    RW_PATH: RW_FRAMEWORKPATH,
+  },
 })
 
 module.exports = {
