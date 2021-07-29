@@ -3,23 +3,15 @@ checkoutLocation: redwood
 workspaceLocation: .
 
 tasks:
-  - name: "Install & Link"
+  - name: "Dev Servers"
     before: export RW_PATH="/workspace/redwood"
     init: |
       yarn install
       yarn run build:test-project ../redwood-app --typescript --link --verbose
     command: |
-      gp sync-done install-and-link
-  - name: API
-    command: |
-      gp sync-await install-and-link
       cd ../redwood-app
-      yarn rw dev api
-  - name: WEB
-    command: |
-      gp sync-await install-and-link
-      cd ../redwood-app
-      yarn rw dev web
+      yarn rw dev
+  - name: Terminal
     openMode: split-right
 
 ports:
