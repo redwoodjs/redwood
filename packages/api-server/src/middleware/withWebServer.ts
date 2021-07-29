@@ -12,8 +12,8 @@ type HtmlContents = {
 const withWebServer = (app: Application) => {
   const files = fs
     .readdirSync(getPaths().web.dist)
-    .filter((fileName) => path.extname(fileName) === 'html')
-    .map((fileName) => path.basename(fileName))
+    .filter((fileName) => path.extname(fileName) === '.html')
+    .map((fileName) => path.basename(fileName, '.html'))
 
   const htmlContentsByPath: HtmlContents = files.reduce(
     (acc, cur) => ({
@@ -35,6 +35,7 @@ const withWebServer = (app: Application) => {
   // For SPA routing on unmatched routes
   Object.keys(htmlContentsByPath).forEach((pathName) => {
     app.get(`/${pathName}`, function (_, response) {
+      response.set('Content-Type', 'text/html')
       response.send(htmlContentsByPath[pathName])
     })
   })
