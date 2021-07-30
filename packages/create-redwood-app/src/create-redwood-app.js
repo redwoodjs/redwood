@@ -47,6 +47,7 @@ const {
   _: args,
   'yarn-install': yarnInstall,
   typescript,
+  overwrite,
 } = yargs
   .scriptName(name)
   .usage('Usage: $0 <project directory> [option]')
@@ -62,6 +63,11 @@ const {
     default: false,
     type: 'boolean',
     describe: 'Generate a TypeScript project. JavaScript by default.',
+  })
+  .option('overwrite', {
+    default: false,
+    type: 'boolean',
+    describe: 'Create even if target directory is empty',
   })
   .version(version)
   .strict().argv
@@ -88,7 +94,7 @@ const newAppDir = path.resolve(process.cwd(), targetDir)
 const appDirExists = fs.existsSync(newAppDir)
 const templateDir = path.resolve(__dirname, '../template')
 
-const createProjectTasks = ({ newAppDir }) => {
+const createProjectTasks = ({ newAppDir, overwrite }) => {
   return [
     {
       title: 'Checking node and yarn compatibility',
@@ -130,7 +136,7 @@ const createProjectTasks = ({ newAppDir }) => {
     {
       title: `${appDirExists ? 'Using' : 'Creating'} directory '${newAppDir}'`,
       task: () => {
-        if (appDirExists) {
+        if (appDirExists && !overwrite) {
           // make sure that the target directory is empty
           if (fs.readdirSync(newAppDir).length > 0) {
             console.error(
@@ -141,7 +147,7 @@ const createProjectTasks = ({ newAppDir }) => {
         } else {
           fs.ensureDirSync(path.dirname(newAppDir))
         }
-        fs.copySync(templateDir, newAppDir)
+        fs.copySync(templateDir, newAppDir, { overwrite: overwrite })
         // .gitignore is renamed here to force file inclusion during publishing
         fs.rename(
           path.join(newAppDir, 'gitignore.template'),
@@ -175,7 +181,7 @@ new Listr(
   [
     {
       title: 'Creating Redwood app',
-      task: () => new Listr(createProjectTasks({ newAppDir })),
+      task: () => new Listr(createProjectTasks({ newAppDir, overwrite })),
     },
     {
       title: 'Installing packages',

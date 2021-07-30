@@ -5,12 +5,8 @@
   "license": "MIT",
   "files": [
     "config",
-    "dist",
-    "esbuild"
+    "dist"
   ],
-  "bin": {
-    "rw-api-build": "esbuild/index.js"
-  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "dependencies": {
@@ -43,30 +39,30 @@
     "typescript": "4.3.5",
     "cross-env": "7.0.3",
     "x----x----x": "^0 Webpack",
-    "webpack": "5.44.0",
+    "webpack": "5.46.0",
     "webpack-bundle-analyzer": "4.4.2",
     "webpack-cli": "4.7.2",
-    "webpack-dev-server": "4.0.0-beta.3",
-    "webpack-manifest-plugin": "3.1.1",
+    "webpack-dev-server": "4.0.0-rc.0",
+    "webpack-manifest-plugin": "3.2.0",
     "webpack-merge": "5.8.0",
     "webpack-retry-chunk-load-plugin": "2.2.0",
     "babel-loader": "8.2.2",
     "babel-timing": "0.9.1",
     "copy-webpack-plugin": "9.0.1",
-    "css-loader": "6.0.0",
+    "css-loader": "6.2.0",
     "css-minimizer-webpack-plugin": "3.0.2",
     "dotenv-webpack": "7.0.3",
     "file-loader": "6.2.0",
     "html-webpack-plugin": "5.3.2",
     "react-refresh": "0.10.0",
-    "style-loader": "3.1.0",
+    "style-loader": "3.2.1",
     "svg-react-loader": "0.4.6",
     "url-loader": "4.1.1",
-    "@pmmmwh/react-refresh-webpack-plugin": "0.4.3",
+    "@pmmmwh/react-refresh-webpack-plugin": "0.5.0-rc.2",
     "mini-css-extract-plugin": "2.1.0",
     "null-loader": "4.0.1",
     "lodash.escaperegexp": "4.1.2",
-    "nodemon": "2.0.9",
+    "nodemon": "2.0.12",
     "esbuild-loader": "2.13.1"
   },
   "devDependencies": {

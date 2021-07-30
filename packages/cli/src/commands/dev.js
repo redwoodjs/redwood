@@ -19,17 +19,11 @@ export const builder = (yargs) => {
       description: 'Which dev server(s) to start',
       type: 'array',
     })
-    .positional('forward', {
+    .option('forward', {
       alias: 'fwd',
       description:
-        'String of one or more Webpack DevServer config options, for example: `--fwd="--port=1234 --open=false"`',
+        'String of one or more Webpack DevServer config options, for example: `--fwd="--port=1234 --no-open"`',
       type: 'string',
-    })
-    .option('esbuild', {
-      type: 'boolean',
-      required: false,
-      default: getConfig().experimental.esbuild,
-      description: 'Use ESBuild [experimental]',
     })
     .option('useEnvelop', {
       type: 'boolean',
@@ -54,7 +48,6 @@ export const builder = (yargs) => {
 export const handler = async ({
   side = ['api', 'web'],
   forward = '',
-  esbuild = false,
   useEnvelop = false,
   generate = true,
 }) => {
@@ -65,7 +58,7 @@ export const handler = async ({
       await generatePrismaClient({
         verbose: false,
         force: false,
-        schema: getPaths().api.dbSchema,
+        schema: rwjsPaths.api.dbSchema,
       })
     } catch (e) {
       console.error(c.error(e.message))
@@ -100,7 +93,7 @@ export const handler = async ({
   const jobs = {
     api: {
       name: 'api',
-      command: `cd "${rwjsPaths.api.base}" && yarn cross-env NODE_ENV=development nodemon --watch "${redwoodConfigPath}" --exec "yarn dev-server"`,
+      command: `yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn nodemon --watch "${redwoodConfigPath}" --exec "yarn rw-api-server-watch"`,
       prefixColor: 'cyan',
       runWhen: () => fs.existsSync(rwjsPaths.api.src),
     },
@@ -116,14 +109,6 @@ export const handler = async ({
       prefixColor: 'green',
       runWhen: () => generate,
     },
-  }
-
-  if (esbuild) {
-    jobs.api.name = 'api esbuild'
-    jobs.api.command = `yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps nodemon --watch "${redwoodConfigPath}" --exec "yarn rw-api-server-watch"`
-
-    jobs.web.name = 'web esbuild'
-    jobs.web.command = 'yarn cross-env ESBUILD=1 && ' + jobs.web.command
   }
 
   if (useEnvelop) {

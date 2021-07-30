@@ -10,8 +10,9 @@
   "types": "./dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
+    "@clerk/clerk-sdk-node": "^0.5.0",
     "@graphql-tools/merge": "6.2.14",
-    "@prisma/client": "2.27.0",
+    "@prisma/client": "2.28.0",
     "@types/pino": "6.3.9",
     "apollo-server-lambda": "2.25.2",
     "core-js": "3.15.2",
@@ -29,8 +30,7 @@
   },
   "devDependencies": {
     "@redwoodjs/auth": "0.35.2",
-    "@redwoodjs/dev-server": "0.35.2",
-    "@types/crypto-js": "^4.0.2",
+    "@types/crypto-js": "4.0.2",
     "@types/graphql-depth-limit": "1.1.2",
     "@types/jsonwebtoken": "8.5.4",
     "@types/lodash.merge": "4.6.6",
