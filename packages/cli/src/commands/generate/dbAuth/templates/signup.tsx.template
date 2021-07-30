@@ -31,8 +31,11 @@ const SignupPage = () => {
     const response = await signUp({ ...data })
 
     if (response.message) {
-      toast.error(response.message)
+      toast(response.message)
+    } else if (response.error) {
+      toast.error(response.error)
     } else {
+      // user is signed in automatically
       toast.success('Welcome!')
     }
   }

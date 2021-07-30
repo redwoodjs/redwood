@@ -237,19 +237,33 @@ export class DbAuthHandler {
 
   async signup() {
     try {
-      const user = await this._createUser()
-      const sessionData = { id: user[this.options.authFields.id] }
-      const csrfToken = DbAuthHandler.CSRF_TOKEN
+      const userOrMessage = await this._createUser()
 
-      return [
-        sessionData,
-        {
-          'csrf-token': csrfToken,
-          ...this._createSessionHeader(sessionData, csrfToken),
-        },
-        { statusCode: 201 },
-      ]
+      // at this point `user` is either an actual user, in which case log the
+      // user in automatically, or it's a string, which is a message to show
+      // the user (something like "please verify your email")
+
+      if (typeof userOrMessage === 'object') {
+        // signupHandler returned a user, log them in
+        const user = userOrMessage
+        const sessionData = { id: user[this.options.authFields.id] }
+        const csrfToken = DbAuthHandler.CSRF_TOKEN
+
+        return [
+          sessionData,
+          {
+            'csrf-token': csrfToken,
+            ...this._createSessionHeader(sessionData, csrfToken),
+          },
+          { statusCode: 201 },
+        ]
+      } else {
+        // signupHandler() returned a message
+        const message = userOrMessage
+        return [message, {}, { statusCode: 201 }]
+      }
     } catch (e) {
+      // signupHandler() threw an error
       return this._logoutResponse(e.message)
     }
   }
