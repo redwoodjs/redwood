@@ -9,6 +9,7 @@ Before interacting with the Redwood community, please read and understand our [C
 - [Contributing](#contributing)
   - [Local Development](#local-development)
     - [Code Organization](#code-organization)
+    - [Browser-based Setup](#browser-based-setup)
     - [Local Setup](#local-setup)
       - [Redwood Framework](#redwood-framework)
       - [Redwood App: Create a Functional Test Project](#redwood-app-create-a-functional-test-project)
@@ -47,6 +48,12 @@ As a Redwood user, you're already familiar with the codebase created by `yarn cr
 The Redwood Framework lives in the monorepo `redwoodjs/redwood` (which is where you're probably reading this). It contains all the packages that make Redwood Apps work the way they do. In a typical Redwood App, you can find the Redwood Framework in `./node_modules/@redwoodjs`.
 
 Throughout this document, we'll assume your local copy of the Redwood Framework is in a directory called `redwood` and your Redwood App is in a directory called `redwood-app`.
+
+### Browser-based Setup
+
+Use the following button to start a development environment in the cloud and access it through your browser.
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/redwoodjs/redwood)
 
 ### Local Setup
 
