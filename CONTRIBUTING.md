@@ -53,6 +53,10 @@ Throughout this document, we'll assume your local copy of the Redwood Framework 
 
 Use the following button to start a development environment in the cloud and access it through your browser.
 
+This will generate a test blog project, and link it with the framework code in `main` - and gives you an easy playground to try out your fixes and contributions.
+
+> Note: if you make changes to the framework, you will need to run `yarn rwfw project:sync` in the terminal, so that your changes are watched and reflected in the test project
+
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/redwoodjs/redwood)
 
 ### Local Setup
