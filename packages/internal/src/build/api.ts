@@ -61,8 +61,9 @@ export const getPrebuildOutputOptions = (
           folderName
         ) + '.js'
 
+      const { name: fileName } = path.parse(relativePathFromFunctions) //?
       const importString =
-        path.basename(relativePathFromFunctions) === 'index'
+        fileName === 'index'
           ? `../_build/${folderName}`
           : `../_build/${folderName}/${folderName}`
 
