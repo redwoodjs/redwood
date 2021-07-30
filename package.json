@@ -32,8 +32,8 @@
     "clean:prisma": "rimraf node_modules/.prisma/client && node node_modules/@prisma/client/scripts/postinstall.js",
     "lint": "yarn framework lint",
     "lint:fix": "yarn framework lint:fix",
-    "postinstall": "yarn ./tasks/framework-tools install",
+    "postinstall": "yarn framework install",
     "build:link": "node ./tasks/build-and-copy",
-    "build:test-project": "./tasks/test-project/test-project"
+    "build:test-project": "node ./tasks/test-project/test-project"
   }
 }

@@ -7,8 +7,8 @@
     "redwood": "./dist/index.js",
     "redwood-tools": "./dist/redwood-tools.js",
     "rw": "./dist/index.js",
-    "rwt": "./dist/redwood-tools.js",
-    "rwfw": "./dist/rwfw.js"
+    "rwfw": "./dist/rwfw.js",
+    "rwt": "./dist/redwood-tools.js"
   },
   "files": [
     "dist"
