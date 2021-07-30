@@ -42,7 +42,8 @@ console.log(
 )
 
 let command = process.argv.slice(2)
-if (!command.length) {
+const helpCommands = ['help', '--help']
+if (!command.length || command.some((cmd) => helpCommands.includes(cmd))) {
   command = ['run']
 }
 

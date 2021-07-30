@@ -23,7 +23,7 @@ describe('Check Redwood cli commands against tutorial', () => {
   })
 
   it('Should run web tests successfully', () => {
-    cy.exec(`cd ${BASE_DIR}; yarn rw test web --no-watch`)
+    cy.exec(`cd ${BASE_DIR}; yarn rw test web --no-watch --forceExit`)
       .its('code')
       .should('eq', 0)
   })
@@ -31,7 +31,7 @@ describe('Check Redwood cli commands against tutorial', () => {
   it('Should run build successfully (no prerender)', () => {
     // Check if webpack build on web, and babel build on api
     // work correctly
-    cy.exec(`cd ${BASE_DIR}; yarn rw build --no-prerender`)
+    cy.exec(`cd ${BASE_DIR}; yarn rw build --no-prerender --verbose`)
       .its('code')
       .should('eq', 0)
   })

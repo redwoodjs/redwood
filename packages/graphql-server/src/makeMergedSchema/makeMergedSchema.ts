@@ -9,7 +9,11 @@ import type { GraphQLSchema, GraphQLFieldMap, DocumentNode } from 'graphql'
 import merge from 'lodash.merge'
 import omitBy from 'lodash.omitby'
 
-import { Services, GraphQLTypeWithFields } from '@redwoodjs/api'
+import {
+  Services,
+  ServicesCollection,
+  GraphQLTypeWithFields,
+} from '@redwoodjs/api'
 
 import * as rootSchema from './rootSchema'
 
@@ -65,7 +69,7 @@ const mergeResolversWithServices = ({
 }: {
   schema: GraphQLSchema
   resolvers: { [key: string]: any }
-  services: Services
+  services: ServicesCollection
 }): IResolvers => {
   const mergedServices = merge(
     {},
@@ -190,7 +194,7 @@ export const makeMergedSchema = ({
       resolvers: Record<string, unknown>
     }
   }
-  services: Services
+  services: ServicesCollection
   /** @deprecated: Please use `schemaOptions` instead. */
   schemaDirectives?: IExecutableSchemaDefinition['schemaDirectives']
   /**

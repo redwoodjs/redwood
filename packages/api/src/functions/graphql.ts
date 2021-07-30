@@ -11,14 +11,14 @@ import depthLimit from 'graphql-depth-limit'
 import { BaseLogger } from 'pino'
 import { v4 as uuidv4 } from 'uuid'
 
-import type { AuthContextPayload } from 'src/auth'
-import { getAuthenticationContext } from 'src/auth'
+import type { AuthContextPayload } from '../auth'
+import { getAuthenticationContext } from '../auth'
 import {
   GlobalContext,
   setContext,
   getPerRequestContext,
   usePerRequestContext,
-} from 'src/globalContext'
+} from '../globalContext'
 
 export type GetCurrentUser = (
   decoded: AuthContextPayload[0],
@@ -381,11 +381,11 @@ export const createGraphQLHandler = ({
     // Log the errors in the console
     formatError: (error) => {
       if (isDevEnv) {
-        // I want the dev-server to pick this up!?
+        // I want the api-server to pick this up!?
         // TODO: Move the error handling into a separate package
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        import('@redwoodjs/dev-server/dist/error')
+        import('@redwoodjs/api-server/dist/error')
           .then(({ handleError }) => {
             return handleError(error.originalError as Error)
           })

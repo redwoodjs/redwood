@@ -13,6 +13,7 @@ import {
   resolvePackageJsonPath,
   buildPackages,
 } from './lib/framework.mjs'
+import { cleanPackages } from './lib/framework.mjs'
 import {
   installProjectPackages,
   addDependenciesToPackageJson,
@@ -50,12 +51,16 @@ chokidar
     ignored: (file) =>
       file.includes('/node_modules/') ||
       file.includes('/dist/') ||
+      file.includes('/dist') ||
       file.includes('/__tests__/') ||
       file.includes('/__fixtures__/') ||
       file.includes('/.test./') ||
       ['.DS_Store'].some((ext) => file.endsWith(ext)),
   })
   .on('ready', async () => {
+    logStatus('Building Framework...')
+    cleanPackages()
+
     logStatus('Building Framework...')
     buildPackages()
 
@@ -89,13 +94,23 @@ chokidar
     const packageName = packageJsonName(packageJsonPath)
     logStatus(c.magenta(packageName))
 
-    console.log()
-    logStatus(`Building ${packageName}...`)
-    buildPackages([packageJsonPath])
+    try {
+      console.log()
+      logStatus(`Cleaning ${packageName}...`)
+      cleanPackages([packageJsonPath])
 
-    console.log()
-    logStatus(`Copying ${packageName}...`)
-    copyFrameworkFilesToProject(projectPath, [packageJsonPath])
+      console.log()
+      logStatus(`Building ${packageName}...`)
+      buildPackages([packageJsonPath])
+
+      console.log()
+      logStatus(`Copying ${packageName}...`)
+      copyFrameworkFilesToProject(projectPath, [packageJsonPath])
+    } catch (error) {
+      console.log()
+      logStatus(`Error building ${packageName}...`)
+      console.log(error)
+    }
 
     console.log()
     logStatus(`Done, and waiting for changes...`)
