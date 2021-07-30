@@ -9,7 +9,7 @@ export const handler = async (event, context) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      data: 'x function',
+      data: 'nested function',
     }),
   }
 }

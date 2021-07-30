@@ -14,6 +14,7 @@ export const buildApi = () => {
   cleanApiBuild()
 
   const srcFiles = findApiFiles()
+
   const prebuiltFiles = prebuildApiFiles(srcFiles).filter(
     (x) => typeof x !== 'undefined'
   ) as string[]
@@ -27,15 +28,69 @@ export const cleanApiBuild = () => {
   rimraf.sync(path.join(rwjsPaths.generated.prebuild, 'api'))
 }
 
+export const getPrebuildOutputOptions = (
+  srcPath: string
+): [string, { reExportPath: null | string; reExportContent?: string }] => {
+  const rwjsPaths = getPaths()
+  const relativeSrcPath = path.relative(rwjsPaths.base, srcPath) //?
+
+  if (relativeSrcPath.includes('api/src/functions')) {
+    // special checks for api functions
+    const relativePathFromFunctions = path.relative(
+      rwjsPaths.api.functions,
+      srcPath
+    ) //?
+    const folderName = path.dirname(relativePathFromFunctions) //?
+
+    // If the function is nested in a folder
+    // put it into the special _build directory at the same level as functions
+    // then re-export it
+    if (folderName !== '.') {
+      const _buildOutputPath = path
+        .join(
+          rwjsPaths.generated.prebuild,
+          'api/src/_build',
+          relativePathFromFunctions
+        )
+        .replace(/\.(ts)$/, '.js')
+
+      const reExportPath =
+        path.join(
+          rwjsPaths.generated.prebuild,
+          'api/src/functions',
+          folderName
+        ) + '.js'
+
+      const importString =
+        path.basename(relativePathFromFunctions) === 'index'
+          ? `../_build/${folderName}`
+          : `../_build/${folderName}/${folderName}`
+
+      const reExportContent = `export * from '${importString}';`
+      return [_buildOutputPath, { reExportPath, reExportContent }]
+    }
+  }
+
+  // default case
+  return [
+    path
+      .join(rwjsPaths.generated.prebuild, relativeSrcPath)
+      .replace(/\.(ts)$/, '.js'),
+    { reExportPath: null },
+  ] // TODO: Figure out a better way to handle extensions
+}
+
 /**
  * Remove RedwoodJS "magic" from a user's code leaving JavaScript behind.
  */
 export const prebuildApiFiles = (srcFiles: string[]) => {
-  const rwjsPaths = getPaths()
   const plugins = getBabelPlugins()
 
-  return srcFiles.map((srcPath) => {
+  return srcFiles.flatMap((srcPath) => {
+    // @MARK Intentionally not passing cwd api.base here, because otherwise
+    // it picks up babel settings from src/api/.babelrc.js
     const result = prebuildFile(srcPath, plugins)
+
     if (!result?.code) {
       // TODO: Figure out a better way to return these programatically.
       console.warn('Error:', srcPath, 'could not prebuilt.')
@@ -43,13 +98,19 @@ export const prebuildApiFiles = (srcFiles: string[]) => {
       return undefined
     }
 
-    let dstPath = path.relative(rwjsPaths.base, srcPath)
-    dstPath = path.join(rwjsPaths.generated.prebuild, dstPath)
+    const [dstPath, options] = getPrebuildOutputOptions(srcPath) //?
 
-    dstPath = dstPath.replace(/\.(ts)$/, '.js') // TODO: Figure out a better way to handle extensions
+    if (options.reExportPath && options.reExportContent) {
+      // create rexport function
+      fs.writeFileSync(options.reExportPath, options.reExportContent)
+    }
+
     fs.mkdirSync(path.dirname(dstPath), { recursive: true })
     fs.writeFileSync(dstPath, result.code)
-    return dstPath
+
+    return [dstPath, options.reExportPath && options.reExportPath].filter(
+      Boolean
+    )
   })
 }
 
@@ -57,11 +118,12 @@ export const prebuildApiFiles = (srcFiles: string[]) => {
 // needs to determine plugins on a per-file basis for web side.
 export const prebuildFile = (
   srcPath: string,
-  plugins: TransformOptions['plugins']
+  plugins: TransformOptions['plugins'],
+  cwd: string = getPaths().base
 ) => {
   const code = fs.readFileSync(srcPath, 'utf-8')
   const result = transform(code, {
-    cwd: getPaths().base,
+    cwd,
     filename: srcPath,
     configFile: false,
     plugins,

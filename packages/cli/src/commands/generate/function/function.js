@@ -28,6 +28,7 @@ export const files = ({
     templateVars: { ...rest },
     outputPath: path.join(
       getPaths().api.functions,
+      functionName,
       `${functionName}${extension}`
     ),
   })

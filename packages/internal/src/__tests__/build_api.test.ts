@@ -22,8 +22,10 @@ afterAll(() => {
 
 test('api files are prebuilt', () => {
   const builtFiles = prebuildApiFiles(findApiFiles())
-  const p = builtFiles.filter((x) => typeof x !== 'undefined').map(cleanPaths)
+  const prebuildPaths = builtFiles
+    .filter((x) => typeof x !== 'undefined')
+    .map(cleanPaths) //?
 
-  expect(p[0].endsWith('api/src/functions/graphql.js')).toBeTruthy()
-  expect(p[2].endsWith('api/src/graphql/todos.sdl.js')).toBeTruthy()
+  expect(prebuildPaths[0].endsWith('api/src/functions/graphql.js')).toBeTruthy()
+  expect(prebuildPaths[2].endsWith('api/src/graphql/todos.sdl.js')).toBeTruthy()
 })

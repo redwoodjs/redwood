@@ -49,6 +49,7 @@ const ignoreApiFiles = [
   '**/*.test.{js,ts}',
   '**/*.scenarios.{js,ts}',
   '**/*.scenarios.{js,ts}',
+  '**/*.fixtures.{js,ts}',
   '**/*.d.ts',
 ]
 
