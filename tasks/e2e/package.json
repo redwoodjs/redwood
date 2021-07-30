@@ -3,7 +3,6 @@
   "description": "",
   "version": "0.0.0",
   "private": true,
-
   "devDependencies": {
     "cypress": "8.0.0",
     "cypress-wait-until": "1.7.1"
