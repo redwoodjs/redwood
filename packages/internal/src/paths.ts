@@ -18,6 +18,7 @@ export interface NodeTargetPaths {
   services: string
   config: string
   dist: string
+  types: string
 }
 
 export interface BrowserTargetPaths {
@@ -35,6 +36,7 @@ export interface BrowserTargetPaths {
   storybookConfig: string
   storybookPreviewConfig: string
   dist: string
+  types: string
 }
 
 export interface Paths {
@@ -46,6 +48,7 @@ export interface Paths {
       includes: string
       mirror: string
     }
+    prebuild: string
   }
   web: BrowserTargetPaths
   api: NodeTargetPaths
@@ -152,6 +155,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
         includes: path.join(BASE_DIR, '.redwood/types/includes'),
         mirror: path.join(BASE_DIR, '.redwood/types/mirror'),
       },
+      prebuild: path.join(BASE_DIR, '.redwood/prebuild'),
     },
 
     scripts: path.join(BASE_DIR, PATH_RW_SCRIPTS),
@@ -168,6 +172,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       services: path.join(BASE_DIR, PATH_API_DIR_SERVICES),
       src: path.join(BASE_DIR, PATH_API_DIR_SRC),
       dist: path.join(BASE_DIR, 'api/dist'),
+      types: path.join(BASE_DIR, 'api/types'),
     },
 
     web: {
@@ -191,6 +196,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
         PATH_WEB_DIR_CONFIG_STORYBOOK_PREVIEW
       ),
       dist: path.join(BASE_DIR, PATH_WEB_DIR_DIST),
+      types: path.join(BASE_DIR, 'web/types'),
     },
   }
 

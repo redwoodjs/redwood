@@ -23,4 +23,16 @@ declare global {
   // not defining it here, because it gets overriden by Apollo provider anyway
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface MutationOperationResult<TData = any, TVariables = any> {}
+
+  // Overridable useQuery and useMutation hooks
+  interface GraphQLQueryHookOptions {
+    variables?: Record<string, any>
+    [key: string]: any
+  }
+
+  export interface GraphQLMutationHookOptions {
+    variables?: Record<string, any>
+    onCompleted?: (data: any) => void
+    [key: string]: any
+  }
 }

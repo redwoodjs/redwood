@@ -1,4 +1,4 @@
-name: Lint, build and run tests
+name: Lint, Build & Test
 
 on:
   pull_request:
@@ -21,12 +21,11 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Cache "node_modules"
-        uses: actions/cache@v2
-        if: matrix.os == 'ubuntu-latest'
-        with:
-          path: '**/node_modules'
-          key: node_modules_${{ runner.os }}_${{ hashFiles('**/yarn.lock') }}
+      # - name: Cache "node_modules"
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: '**/node_modules'
+      #     key: node_modules_${{ runner.os }}_${{ hashFiles('**/yarn.lock') }}
 
       - name: Install dependencies
         run: yarn install --immutable
@@ -36,10 +35,6 @@ jobs:
 
       - name: Run ESLint
         run: yarn lint
-        env:
-          CI: true
 
       - name: Run tests
         run: yarn test
-        env:
-          CI: true

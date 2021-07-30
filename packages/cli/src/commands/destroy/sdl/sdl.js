@@ -1,8 +1,8 @@
 import Listr from 'listr'
 
-import { deleteFilesTask } from 'src/lib'
-import c from 'src/lib/colors'
-
+import { ensureUniquePlural } from '../../../commands/generate/helpers'
+import { deleteFilesTask } from '../../../lib'
+import c from '../../../lib/colors'
 import { files } from '../../generate/sdl/sdl'
 
 export const command = 'sdl <model>'
@@ -31,6 +31,7 @@ export const tasks = ({ model }) =>
   )
 
 export const handler = async ({ model }) => {
+  await ensureUniquePlural({ model, inDestroyer: true })
   const t = tasks({ model })
 
   try {

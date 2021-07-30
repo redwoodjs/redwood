@@ -5,6 +5,7 @@
   "private": true,
 
   "devDependencies": {
-    "cypress": "^7.4.0"
+    "cypress": "8.0.0",
+    "cypress-wait-until": "1.7.1"
   }
 }

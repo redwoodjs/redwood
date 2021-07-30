@@ -1,4 +1,12 @@
-import { getNamedExports, hasDefaultExport } from '../ast'
+import fs from 'fs'
+import path from 'path'
+
+import {
+  getGqlQueries,
+  getNamedExports,
+  hasDefaultExport,
+  getCellGqlQuery,
+} from '../ast'
 
 test('extracts named exports', () => {
   const fakeCode = `
@@ -53,4 +61,52 @@ test('tests default exports', () => {
 
   expect(hasDefaultExport(`export default a = 'b'`)).toEqual(true)
   expect(hasDefaultExport(`export const a = 'b'`)).toEqual(false)
+})
+
+test('Returns the exported query from a cell (ignoring others)', () => {
+  const cellFileContents = fs.readFileSync(
+    path.join(__dirname, 'fixtures/cell.ts'),
+    'utf-8'
+  )
+
+  const cellQuery = getCellGqlQuery(cellFileContents)
+  expect(cellQuery).toMatchInlineSnapshot(`
+    "
+      query BazingaQuery($id: String!) {
+        member: member(id: $id) {
+          id
+        }
+      }
+    "
+  `)
+})
+
+test('Returns the all quries from a file using getGqlQueries', () => {
+  const cellFileContents = fs.readFileSync(
+    path.join(__dirname, 'fixtures/cell.ts'),
+    'utf-8'
+  )
+
+  const cellQuery = getGqlQueries(cellFileContents)
+  expect(cellQuery).toMatchInlineSnapshot(`
+    Array [
+      "
+      query BazingaQuery($id: String!) {
+        member: member(id: $id) {
+          id
+        }
+      }
+    ",
+      "
+    query FindSoftKitten($id: String!) {
+        softKitten: softKitten(id: $id) {
+          id
+        }
+      }
+    ",
+      "query JustForFun {
+      itsFriday {}
+    }",
+    ]
+  `)
 })

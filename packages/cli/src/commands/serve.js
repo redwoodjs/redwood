@@ -13,7 +13,7 @@ import {
 } from '@redwoodjs/api-server'
 import { getPaths } from '@redwoodjs/internal'
 
-import c from 'src/lib/colors'
+import c from '../lib/colors'
 
 export const command = 'serve [side]'
 export const description = 'Run server for api or web in production'

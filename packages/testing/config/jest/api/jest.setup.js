@@ -9,9 +9,6 @@ const { db } = require(path.join(getPaths().api.src, 'lib', 'db'))
 
 const DEFAULT_SCENARIO = 'standard'
 
-// Disable per-request-context in testing.
-process.env.SAFE_GLOBAL_CONTEXT = '1'
-
 const seedScenario = async (scenario) => {
   if (scenario) {
     const scenarios = {}
@@ -51,7 +48,7 @@ global.scenario = (...args) => {
 
   return global.it(testName, async () => {
     const path = require('path')
-    const testFileDir = path.parse(global.jasmine.testPath)
+    const testFileDir = path.parse(global.testPath)
     const testFilePath = `${testFileDir.dir}/${
       testFileDir.name.split('.')[0]
     }.scenarios`

@@ -4,13 +4,13 @@ import Listr from 'listr'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
+import prompts from 'prompts'
 import terminalLink from 'terminal-link'
 
 import { ensurePosixPath, getConfig } from '@redwoodjs/internal'
 
-import { generateTemplate, getPaths, writeFilesTask } from 'src/lib'
-import c from 'src/lib/colors'
-
+import { generateTemplate, getPaths, writeFilesTask } from '../../lib'
+import c from '../../lib/colors'
 import { yargsDefaults } from '../generate'
 
 /**
@@ -92,6 +92,7 @@ export const createYargsForComponentGeneration = ({
   optionsObj = yargsDefaults,
   positionalsObj = {},
   includeAdditionalTasks = () => [], // function that takes the options object and returns an array of listr tasks
+  shouldEnsureUniquePlural = false,
 }) => {
   return {
     command: appendPositionalsToCmd(`${componentName} <name>`, positionalsObj),
@@ -134,6 +135,9 @@ export const createYargsForComponentGeneration = ({
         options.stories = getConfig().generate.stories
       }
 
+      if (shouldEnsureUniquePlural) {
+        await ensureUniquePlural({ model: options.name })
+      }
       const tasks = new Listr(
         [
           {
@@ -191,4 +195,49 @@ export const forcePluralizeWord = (word) => {
   }
 
   return pluralize.plural(word)
+}
+
+export const validatePlural = (plural, singular) => {
+  const trimmedPlural = plural.trim()
+  if (trimmedPlural === singular) {
+    return 'Plural can not be same as singular.'
+  }
+  if (trimmedPlural.match(/[\n\r\s]+/)) {
+    return 'Only one word please!'
+  }
+  // Control Char u0017 is retured if default input is cleared in the prompt using option+backspace
+  // eslint-disable-next-line no-control-regex
+  if (trimmedPlural.match(/^[\n\r\s\u0017]*$/)) {
+    return 'Plural can not be empty.'
+  }
+  return true
+}
+
+// Ask user for plural version, if singular & plural are same for a word. For example: Pokemon
+export const ensureUniquePlural = async ({ model, inDestroyer = false }) => {
+  if (!isWordNonPluralizable(model)) {
+    return
+  }
+
+  const promptMessage = inDestroyer
+    ? `Cannot determine the plural of "${model}" originally used to generate scaffolding. \nTo continue, the destroy command requires the plural form:`
+    : `Cannot determine the plural of "${model}". \nTo continue, the generator requires a unique plural form:`
+  const initialPlural = model.slice(-1) === 's' ? `${model}es` : `${model}s` // News => Newses; Equipment => Equipments
+  const promptResult = await prompts({
+    type: 'text',
+    name: 'plural',
+    message: promptMessage,
+    initial: initialPlural,
+    validate: (pluralInput) => validatePlural(pluralInput, model),
+  })
+
+  // Quickfix is to remove that control char u0017, which is preprended if default input is cleared using option+backspace
+  // eslint-disable-next-line no-control-regex
+  const pluralToUse = promptResult.plural?.trim().replace(/\u0017/g, '')
+  if (!pluralToUse) {
+    throw Error('Plural name must not be empty')
+  }
+
+  // Set the rule
+  pluralize.addIrregularRule(model, pluralToUse)
 }
