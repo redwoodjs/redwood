@@ -78,18 +78,13 @@ export const MetaTags = (props: MetaTagsProps) => {
     author,
     children,
   } = props
-  const appTitle = global.__REDWOOD__APP_TITLE
   return (
     <Head>
       {title && (
         <>
-          <title>{`${appTitle} | ${title}`}</title>
-          <meta
-            property="og:title"
-            content={`${appTitle} | ${title}`}
-            key="title"
-          />
-          <meta property="twitter:title" content={`${appTitle} | ${title}`} />
+          <title>{title}</title>
+          <meta property="og:title" content={title} key="title" />
+          <meta property="twitter:title" content={title} />
         </>
       )}
 
