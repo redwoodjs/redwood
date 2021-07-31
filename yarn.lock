@@ -11078,6 +11078,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "create-redwood-app@workspace:packages/create-redwood-app"
   dependencies:
+    "@babel/node": 7.14.7
     "@babel/runtime-corejs3": 7.14.0
     "@redwoodjs/internal": 0.35.2
     axios: 0.21.1
@@ -22609,7 +22610,9 @@ resolve@^2.0.0-next.3:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
+    eslint: 7.31.0
     npm-packlist: 2.2.2
+    rimraf: 3.0.2
     typescript-transform-paths: 3.0.2
   languageName: unknown
   linkType: soft

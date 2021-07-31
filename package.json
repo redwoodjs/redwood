@@ -7,7 +7,9 @@
     "packages/*"
   ],
   "devDependencies": {
+    "eslint": "7.31.0",
     "npm-packlist": "2.2.2",
+    "rimraf": "3.0.2",
     "typescript-transform-paths": "3.0.2"
   },
   "resolutions": {
