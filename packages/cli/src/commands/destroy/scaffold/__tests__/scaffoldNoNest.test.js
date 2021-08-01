@@ -2,10 +2,9 @@ global.__dirname = __dirname
 
 import fs from 'fs'
 
-import 'src/lib/test'
+import '../../../../lib/test'
 
-import { getPaths, getDefaultArgs } from 'src/lib'
-
+import { getPaths, getDefaultArgs } from '../../../../lib'
 import { yargsDefaults as defaults } from '../../../generate'
 import { files } from '../../../generate/scaffold/scaffold'
 import { tasks } from '../scaffold'
@@ -18,10 +17,10 @@ jest.mock('@babel/core', () => {
     }),
   }
 })
-jest.mock('src/lib', () => {
+jest.mock('../../../../lib', () => {
   const path = require('path')
   return {
-    ...jest.requireActual('src/lib'),
+    ...jest.requireActual('../../../../lib'),
     generateTemplate: () => '',
     getSchema: () =>
       require(path.join(global.__dirname, 'fixtures', 'post.json')),

@@ -9,7 +9,7 @@ jobs:
     if: github.repository == 'redwoodjs/redwood'
     strategy:
       matrix:
-        os: ['macos-latest']
+        os: ['ubuntu-latest']
         node-version: ['14']
       fail-fast: true
     runs-on: ${{ matrix.os }}
@@ -23,11 +23,11 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      # - name: Cache "node_modules"
-      #   uses: actions/cache@v2
-      #   with:
-      #     path: '**/node_modules'
-      #     key: node_modules_${{ runner.os }}_${{ hashFiles('**/yarn.lock') }}
+      - name: Cache "node_modules"
+        uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: node_modules_${{ runner.os }}_${{ hashFiles('**/yarn.lock') }}
 
       - name: Install framework modules
         run: yarn install --frozen-lockfile
@@ -43,14 +43,15 @@ jobs:
 
       - name: Init Git for RedwoodJS app directory
         run: |
+          git config --global user.email "you@example.com"
+          git config --global user.name "Your Name"
           git init --initial-branch main && git add .
           git commit -a --message=init
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
       - name: Start server in background
-        run: yarn rw dev --no-generate --fwd="--open=false" &
+        run: yarn rw dev --no-generate --fwd="--no-open" &
         working-directory: ${{ steps.createpath.outputs.project_path }}
-
 
       - name: Cypress run
         uses: cypress-io/github-action@v2
@@ -59,8 +60,32 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_RW_PATH:  "${{ steps.createpath.outputs.project_path }}"
         with:
-          browser: chrome
           env: true
-          wait-on: 'http://localhost:8910'
+          browser: chrome
           record: false
+          wait-on: 'http://localhost:8910'
           working-directory: ./tasks/e2e
+          spec: |
+             cypress/integration/01-tutorial/*.spec.js
+             cypress/integration/03-storybook/*.spec.js
+             cypress/integration/04-logger/*.spec.js
+             cypress/integration/05-tutorial-envelop/*.spec.js
+
+      - name: Prepare for CLI checks by restoring 01-tutorial end state
+        run: |
+          git restore . && git clean -df
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
+      - name: Run `rw test`
+        run: yarn rw test --no-watch
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
+      - name: Run `rw build` (no prerender)
+        run: yarn rw build --no-prerender --verbose
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
+      - name: Run `rw prerender`
+        run: yarn rw prerender --verbose
+        # TODO: We should have a script that verifies this.
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+

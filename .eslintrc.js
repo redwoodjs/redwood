@@ -70,7 +70,6 @@ module.exports = {
         'packages/prerender/src/browserUtils/**',
         'packages/router/src/**',
         'packages/web/src/**',
-        'packages/history/src/**',
       ],
       env: {
         es6: true,
@@ -101,7 +100,6 @@ module.exports = {
         'packages/core/src/**',
         'packages/core/config/**',
         'packages/create-redwood-app/src/create-redwood-app.js',
-        'packages/dev-server/src/**',
         'packages/internal/src/**',
         'packages/prerender/src/**',
         'packages/structure/src/**',

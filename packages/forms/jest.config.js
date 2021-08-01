@@ -8,4 +8,5 @@ module.exports = {
     'react-hook-form':
       '<rootDir>/../../node_modules/react-hook-form/dist/index.cjs',
   },
+  testEnvironment: 'jest-environment-jsdom',
 }

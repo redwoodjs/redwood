@@ -3,11 +3,11 @@ import path from 'path'
 
 import { generate } from '@graphql-codegen/cli'
 
-import { getCellGqlQuery } from 'src/ast'
-import { findCells, findDirectoryNamedModules } from 'src/files'
-import { parseGqlQueryToAst } from 'src/gql'
-import { getJsxElements } from 'src/jsx'
-import { getPaths, processPagesDir } from 'src/paths'
+import { getCellGqlQuery } from '../ast'
+import { findCells, findDirectoryNamedModules } from '../files'
+import { parseGqlQueryToAst } from '../gql'
+import { getJsxElements } from '../jsx'
+import { getPaths, processPagesDir } from '../paths'
 
 import { writeTemplate } from './templates'
 
