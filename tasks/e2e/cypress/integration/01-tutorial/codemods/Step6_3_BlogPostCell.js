@@ -3,6 +3,10 @@ export default `
 
 import BlogPost from 'src/components/BlogPost'
 
+import EmptyState from 'src/components/CellStates/EmptyState'
+import FailureState from 'src/components/CellStates/FailureState'
+import LoadingState from 'src/components/CellStates/LoadingState'
+
 export const QUERY = gql\`
   query BlogPostQuery($id: Int!) {
     post(id: $id) {
@@ -13,11 +17,11 @@ export const QUERY = gql\`
   }
 \`
 
-export const Loading = () => <div>Loading...</div>
+export const Loading = () => <LoadingState />
 
-export const Empty = () => <div>Empty</div>
+export const Empty = () => <EmptyState />
 
-export const Failure = ({ error }) => <div>Error: {error.message}</div>
+export const Failure = ({ error }) => <FailureState error={error} />
 
 export const Success = ({ post }) => {
   return <BlogPost post={post} />

@@ -1,6 +1,10 @@
 export default `
 // web/src/components/BlogPostsCell/BlogPostsCell.js
 
+import EmptyState from 'src/components/CellStates/EmptyState'
+import FailureState from 'src/components/CellStates/FailureState'
+import LoadingState from 'src/components/CellStates/LoadingState'
+
 export const QUERY = gql\`
 query {
   posts {
@@ -11,11 +15,11 @@ query {
 }
 \`
 
-export const Loading = () => <div>Loading...</div>
+export const Loading = () => <LoadingState />
 
-export const Empty = () => <div>Empty</div>
+export const Empty = () => <EmptyState />
 
-export const Failure = ({ error }) => <div>Error: {error.message}</div>
+export const Failure = ({ error }) => <FailureState error={error} />
 
 export const Success = ({ posts }) => {
   return JSON.stringify(posts)
