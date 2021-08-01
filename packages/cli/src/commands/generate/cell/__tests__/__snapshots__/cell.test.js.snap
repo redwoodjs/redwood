@@ -30,7 +30,11 @@ export const Success = ({ equipmentList }) => {
 `;
 
 exports[`"equipment" withOUT list flag should find equipment by id 1`] = `
-"export const QUERY = gql\`
+"import EmptyState from 'src/components/CellStates/EmptyState'
+import FailureState from 'src/components/CellStates/FailureState'
+import LoadingState from 'src/components/CellStates/LoadingState'
+
+export const QUERY = gql\`
   query FindEquipmentQuery($id: Int!) {
     equipment: equipment(id: $id) {
       id
@@ -38,13 +42,11 @@ exports[`"equipment" withOUT list flag should find equipment by id 1`] = `
   }
 \`
 
-export const Loading = () => <div>Loading...</div>
+export const Loading = () => <LoadingState />
 
-export const Empty = () => <div>Empty</div>
+export const Empty = () => <EmptyState />
 
-export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
-)
+export const Failure = ({ error }) => <FailureState error={error} />
 
 export const Success = ({ equipment }) => {
   return <div>{JSON.stringify(equipment)}</div>
@@ -53,7 +55,11 @@ export const Success = ({ equipment }) => {
 `;
 
 exports[`creates a cell component with a camelCase word name 1`] = `
-"export const QUERY = gql\`
+"import EmptyState from 'src/components/CellStates/EmptyState'
+import FailureState from 'src/components/CellStates/FailureState'
+import LoadingState from 'src/components/CellStates/LoadingState'
+
+export const QUERY = gql\`
   query FindUserProfileQuery($id: Int!) {
     userProfile: userProfile(id: $id) {
       id
@@ -61,13 +67,11 @@ exports[`creates a cell component with a camelCase word name 1`] = `
   }
 \`
 
-export const Loading = () => <div>Loading...</div>
+export const Loading = () => <LoadingState />
 
-export const Empty = () => <div>Empty</div>
+export const Empty = () => <EmptyState />
 
-export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
-)
+export const Failure = ({ error }) => <FailureState error={error} />
 
 export const Success = ({ userProfile }) => {
   return <div>{JSON.stringify(userProfile)}</div>
@@ -76,7 +80,11 @@ export const Success = ({ userProfile }) => {
 `;
 
 exports[`creates a cell component with a kebabCase word name 1`] = `
-"export const QUERY = gql\`
+"import EmptyState from 'src/components/CellStates/EmptyState'
+import FailureState from 'src/components/CellStates/FailureState'
+import LoadingState from 'src/components/CellStates/LoadingState'
+
+export const QUERY = gql\`
   query FindUserProfileQuery($id: Int!) {
     userProfile: userProfile(id: $id) {
       id
@@ -84,13 +92,11 @@ exports[`creates a cell component with a kebabCase word name 1`] = `
   }
 \`
 
-export const Loading = () => <div>Loading...</div>
+export const Loading = () => <LoadingState />
 
-export const Empty = () => <div>Empty</div>
+export const Empty = () => <EmptyState />
 
-export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
-)
+export const Failure = ({ error }) => <FailureState error={error} />
 
 export const Success = ({ userProfile }) => {
   return <div>{JSON.stringify(userProfile)}</div>
@@ -99,7 +105,11 @@ export const Success = ({ userProfile }) => {
 `;
 
 exports[`creates a cell component with a multi word name 1`] = `
-"export const QUERY = gql\`
+"import EmptyState from 'src/components/CellStates/EmptyState'
+import FailureState from 'src/components/CellStates/FailureState'
+import LoadingState from 'src/components/CellStates/LoadingState'
+
+export const QUERY = gql\`
   query FindUserProfileQuery($id: Int!) {
     userProfile: userProfile(id: $id) {
       id
@@ -107,13 +117,11 @@ exports[`creates a cell component with a multi word name 1`] = `
   }
 \`
 
-export const Loading = () => <div>Loading...</div>
+export const Loading = () => <LoadingState />
 
-export const Empty = () => <div>Empty</div>
+export const Empty = () => <EmptyState />
 
-export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
-)
+export const Failure = ({ error }) => <FailureState error={error} />
 
 export const Success = ({ userProfile }) => {
   return <div>{JSON.stringify(userProfile)}</div>
@@ -122,7 +130,11 @@ export const Success = ({ userProfile }) => {
 `;
 
 exports[`creates a cell component with a single word name 1`] = `
-"export const QUERY = gql\`
+"import EmptyState from 'src/components/CellStates/EmptyState'
+import FailureState from 'src/components/CellStates/FailureState'
+import LoadingState from 'src/components/CellStates/LoadingState'
+
+export const QUERY = gql\`
   query FindUserQuery($id: Int!) {
     user: user(id: $id) {
       id
@@ -130,13 +142,11 @@ exports[`creates a cell component with a single word name 1`] = `
   }
 \`
 
-export const Loading = () => <div>Loading...</div>
+export const Loading = () => <LoadingState />
 
-export const Empty = () => <div>Empty</div>
+export const Empty = () => <EmptyState />
 
-export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
-)
+export const Failure = ({ error }) => <FailureState error={error} />
 
 export const Success = ({ user }) => {
   return <div>{JSON.stringify(user)}</div>
@@ -145,7 +155,11 @@ export const Success = ({ user }) => {
 `;
 
 exports[`creates a cell component with a snakeCase word name 1`] = `
-"export const QUERY = gql\`
+"import EmptyState from 'src/components/CellStates/EmptyState'
+import FailureState from 'src/components/CellStates/FailureState'
+import LoadingState from 'src/components/CellStates/LoadingState'
+
+export const QUERY = gql\`
   query FindUserProfileQuery($id: Int!) {
     userProfile: userProfile(id: $id) {
       id
@@ -153,13 +167,11 @@ exports[`creates a cell component with a snakeCase word name 1`] = `
   }
 \`
 
-export const Loading = () => <div>Loading...</div>
+export const Loading = () => <LoadingState />
 
-export const Empty = () => <div>Empty</div>
+export const Empty = () => <EmptyState />
 
-export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
-)
+export const Failure = ({ error }) => <FailureState error={error} />
 
 export const Success = ({ userProfile }) => {
   return <div>{JSON.stringify(userProfile)}</div>
