@@ -34,18 +34,19 @@ export const getPrebuildOutputOptions = (
   const rwjsPaths = getPaths()
   const relativeSrcPath = path.relative(rwjsPaths.base, srcPath) //?
 
+  // special checks for api functions
   if (relativeSrcPath.includes('api/src/functions')) {
-    // special checks for api functions
     const relativePathFromFunctions = path.relative(
       rwjsPaths.api.functions,
       srcPath
-    ) //?
-    const folderName = path.dirname(relativePathFromFunctions) //?
+    )
+    const folderName = path.dirname(relativePathFromFunctions)
 
     // If the function is nested in a folder
     // put it into the special _build directory at the same level as functions
     // then re-export it
     if (folderName !== '.') {
+      // .redwood/prebuilds/api/src/_build/{folder}/{fileName}
       const _buildOutputPath = path
         .join(
           rwjsPaths.generated.prebuild,
@@ -54,6 +55,7 @@ export const getPrebuildOutputOptions = (
         )
         .replace(/\.(ts)$/, '.js')
 
+      // .redwood/prebuild/api/src/functions/{folderName}
       const reExportPath =
         path.join(
           rwjsPaths.generated.prebuild,
@@ -61,7 +63,8 @@ export const getPrebuildOutputOptions = (
           folderName
         ) + '.js'
 
-      const { name: fileName } = path.parse(relativePathFromFunctions) //?
+      const { name: fileName } = path.parse(relativePathFromFunctions)
+
       const importString =
         fileName === 'index'
           ? `../_build/${folderName}`
