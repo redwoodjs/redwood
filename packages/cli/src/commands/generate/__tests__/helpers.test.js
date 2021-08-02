@@ -18,7 +18,9 @@ const FooBarPage = () => {
     <>
       <MetaTags
         title="FooBar"
-        description="FooBar description"
+        // description="FooBar description"
+        /* you should un-comment description and add a unique description, 155 characters or less
+        You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
       />
       <h1>FooBarPage</h1>
       <p>
