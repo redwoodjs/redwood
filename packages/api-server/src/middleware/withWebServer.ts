@@ -4,22 +4,21 @@ import path from 'path'
 import express from 'express'
 import type { Application } from 'express'
 
-import { getPaths } from '@redwoodjs/internal'
+import { getPaths, findBuiltHtml } from '@redwoodjs/internal'
 
 type HtmlContents = {
   [path: string]: string
 }
+
 const withWebServer = (app: Application) => {
-  const files = fs
-    .readdirSync(getPaths().web.dist)
-    .filter((fileName) => path.extname(fileName) === '.html')
-    .map((fileName) => path.basename(fileName, '.html'))
+  const files = findBuiltHtml()
 
   const htmlContentsByPath: HtmlContents = files.reduce(
     (acc, cur) => ({
       ...acc,
-      [cur]: fs.readFileSync(
-        path.join(getPaths().web.dist, `/${cur}.html`),
+      // TODO find something better in fs
+      [cur.split('.')[0]]: fs.readFileSync(
+        path.join(getPaths().web.dist, `${cur}`),
         'utf-8'
       ),
     }),

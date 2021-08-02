@@ -74,6 +74,10 @@ export const findApiServerFunctions = (
   return files.filter((f) => isApiFunction(f, cwd))
 }
 
+export const findBuiltHtml = (
+  cwd = getPaths().web.dist
+) => fg.sync('**/*.html', { cwd })
+
 export const isCellFile = (p: string) => {
   const { dir, name } = path.parse(p)
   // A Cell must be a directory named module.
