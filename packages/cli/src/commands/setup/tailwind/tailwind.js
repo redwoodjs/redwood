@@ -26,14 +26,28 @@ export const builder = (yargs) => {
   })
 }
 
-const tailwindImport = "import 'tailwindcss/tailwind.css'\n"
+const tailwindImports = [
+  /@import "tailwindcss\/base";/,
+  /@import "tailwindcss\/components";/,
+  /@import "tailwindcss\/utilities";/,
+]
 
-const tailwindImportExist = (app) => new RegExp(tailwindImport).test(app)
+const tailwindImportsExist = (indexCSS) =>
+  tailwindImports.every((tailwindDirective) => tailwindDirective.test(indexCSS))
 
-const addTailwindImport = (app) => {
-  const i = app.indexOf("import './index.css'")
-  return app.substring(0, i) + tailwindImport + app.substring(i)
-}
+const tailwindImportsAndNotes = [
+  '/**',
+  ' * START --- TAILWIND GENERATOR EDIT',
+  ' *',
+  ' * `yarn rw setup tailwind` placed these imports here',
+  " * to inject Tailwind's styles into your CSS.",
+  ' * For more information, see: https://tailwindcss.com/docs/installation#add-tailwind-to-your-css',
+  ' */',
+  ...tailwindImports,
+  '/**',
+  ' * END --- TAILWIND GENERATOR EDIT',
+  ' */\n',
+]
 
 export const handler = async ({ force, install }) => {
   const tasks = new Listr([
@@ -136,16 +150,16 @@ export const handler = async ({ force, install }) => {
       },
     },
     {
-      title: 'Adding import to App.{js|tsx}...',
+      title: 'Adding import to index.css...',
       task: (_ctx, task) => {
-        const APP_PATH = getPaths().web.app
-        const app = fs.readFileSync(APP_PATH, 'utf-8')
+        const INDEX_CSS_PATH = path.join(getPaths().web.src, 'index.css')
+        const indexCSS = fs.readFileSync(INDEX_CSS_PATH, 'utf-8')
 
-        if (tailwindImportExist(app)) {
-          task.skip('Imports already exist in App.{js|tsx}')
+        if (tailwindImportsExist(indexCSS)) {
+          task.skip('Imports already exist in index.css')
         } else {
-          const newApp = addTailwindImport(app)
-          fs.writeFileSync(APP_PATH, newApp)
+          const newIndexCSS = tailwindImportsAndNotes + indexCSS
+          fs.writeFileSync(indexCSS, newIndexCSS)
         }
       },
     },
