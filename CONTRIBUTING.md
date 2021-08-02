@@ -17,6 +17,7 @@ Before interacting with the Redwood community, please read and understand our [C
       - [Option 1: Linking](#option-1-linking)
       - [Option 2: Copy and Watch](#option-2-copy-and-watch)
       - [Option 3: Copy (for Windows)](#option-3-copy-for-windows)
+      - [Option 4: Testing the CLI](#option-4-testing-the-cli)
       - [Specifying a RW_PATH](#specifying-a-rw_path)
         - [On **Linux**](#on-linux)
         - [On **MacOS**](#on-macos)
@@ -82,7 +83,7 @@ There are several options:
 At the end, you will have a fully working Redwood blog.
 
 ##### Running the Test Project Script
-Run the following in the `redwood` folder root:
+Run the following in the `redwood` folder root (_note: the script will automatically install dependencies_):
 
 ```terminal
 yarn run build:test-project <path/to/redwood-app>
@@ -250,7 +251,6 @@ If you've made build or design time changes to RedwoodJS, that is if you have mo
 ├ api-server
 ├ cli
 ├ core
-├ dev-server
 ├ eslint-config
 ├ internal
 ├ prerender
@@ -270,7 +270,7 @@ yarn build
 cd packages/cli
 yarn dev --cwd /path/to/your/project
 ```
-The `yarn dev` script will build the CLI package and the `--cwd` option will make the command run in that directory. Remember to rebuild the packages if you have made a change to the code! (Tip: You can use `yarn build:watch` to automatically build the framework whilst you're making changes.)
+The `yarn dev` will run the built CLI, and the `--cwd` option will make the command run in that directory. Remember to rebuild the packages if you have made a change to the code! (Tip: You can use `yarn build:watch` to automatically build the framework whilst you're making changes.)
 
 (Tip: --cwd is optional, it will reference the `__fixtures__/example-todo-main` project in the framework.)
 
@@ -327,64 +327,6 @@ yarn rwt copy:watch
 > **TODO**
 >
 > please contribute a PR if you can help.
-
-### Local Package Registry Emulation
-
-Sometimes you'll want to test the full package-development workflow: building, publishing, and installing all the packages in your local copy of the Redwood Framework in your Redwood App. We accommodate this using a local NPM registry called [**Verdaccio**](https://github.com/verdaccio/verdaccio).
-
-You might also have to use this workflow if you've installed or upgraded one of Redwood's dependencies.
-
-#### Running a Local NPM Registry
-
-First, install `Verdaccio`:
-
-```terminal
-yarn global add verdaccio
-```
-
-Then, in your local copy of the Redwood Framework, run:
-
-```terminal
-./tasks/run-local-npm
-```
-
-This starts `Verdaccio` (on http://localhost:4873) with our configuration file.
-
-#### Publishing a Package
-
-To build, unpublish, and publish all the Redwood packages to your local NPM registry with a "dev" tag, run:
-
-```terminal
-./tasks/publish-local
-```
-
-> This script is equivalent to running:
->
-> ```terminal
-> npm unpublish --tag dev --registry http://localhost:4873/ --force
-> npm publish --tag dev --registry http://localhost:4873/ --force
-> ```
-
-Note that you can build a particular package by specifying the path to the package: `./tasks/publish-local ./packages/api`. For example, if you've made changes to the `@redwoodjs/dev-server` package, you would run:
-
-```terminal
-./tasks/publish-local ./packages/dev-server
-```
-
-#### Installing Published Packages in Your Redwood App
-
-The last step is to install the package into your Redwood App.
-
-```terminal
-yarn rwt install @redwoodjs/dev-server
-```
-
-> This is equivalent to running:
->
-> ```terminal
-> rm -rf <APP_PATH>/node_modules/@redwoodjs/dev-server
-> yarn upgrade @redwoodjs/dev-server@dev --no-lockfile --registry http://localhost:4873/
-> ```
 
 ## Running Your Redwood App's Local Server(s)
 
@@ -503,7 +445,6 @@ The Redwood CLI has the following binaries:
 - `rw`
 - `redwood-tools`
 - `rwt`
-- `dev-server`
 
 When you're contributing, the permissions of these binaries can sometimes get mixed up. This makes them executable again.
 

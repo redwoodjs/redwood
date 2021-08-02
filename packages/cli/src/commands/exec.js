@@ -5,13 +5,21 @@ import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
 
-import { getPaths } from 'src/lib'
-import c from 'src/lib/colors'
-import { generatePrismaClient } from 'src/lib/generatePrismaClient'
+import { getPaths } from '../lib'
+import c from '../lib/colors'
+import { generatePrismaClient } from '../lib/generatePrismaClient'
 
 const runScript = async (scriptPath, scriptArgs) => {
   const script = await import(scriptPath)
   await script.default({ args: scriptArgs })
+
+  try {
+    const { db } = await import(path.join(getPaths().api.lib, 'db'))
+    db.$disconnect()
+  } catch (e) {
+    // silence
+  }
+
   return
 }
 
@@ -85,9 +93,6 @@ export const handler = async (args) => {
 
   try {
     await tasks.run()
-
-    // We have to do this to terminate
-    process.exit(0)
   } catch (e) {
     console.error(c.error(`The script exited with errors.`))
     process.exit(e?.exitCode || 1)

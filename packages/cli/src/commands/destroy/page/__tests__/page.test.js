@@ -1,18 +1,17 @@
 global.__dirname = __dirname
 jest.mock('fs')
-jest.mock('src/lib', () => {
+jest.mock('../../../../lib', () => {
   return {
-    ...jest.requireActual('src/lib'),
+    ...jest.requireActual('../../../../lib'),
     generateTemplate: () => '',
   }
 })
 
 import fs from 'fs'
 
-import 'src/lib/test'
+import '../../../../lib/test'
 
-import { getPaths } from 'src/lib'
-
+import { getPaths } from '../../../../lib'
 import { files } from '../../../generate/page/page'
 import { tasks } from '../page'
 

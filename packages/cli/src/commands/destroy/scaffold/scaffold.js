@@ -2,15 +2,15 @@ import Listr from 'listr'
 import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 
+import { ensureUniquePlural } from '../../../commands/generate/helpers'
 import {
   deleteFilesTask,
   getPaths,
   readFile,
   removeRoutesFromRouterTask,
   writeFile,
-} from 'src/lib'
-import c from 'src/lib/colors'
-
+} from '../../../lib'
+import c from '../../../lib/colors'
 import {
   files,
   routes as scaffoldRoutes,
@@ -111,6 +111,7 @@ export const tasks = ({ model, path, tests, nestScaffoldByModel }) =>
 
 export const handler = async ({ model: modelArg }) => {
   const { model, path } = splitPathAndModel(modelArg)
+  await ensureUniquePlural({ model, inDestroyer: true })
 
   const t = tasks({ model, path })
   try {

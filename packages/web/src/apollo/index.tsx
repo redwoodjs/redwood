@@ -1,14 +1,16 @@
-import {
+import type { ApolloClientOptions } from '@apollo/client'
+import * as apolloClient from '@apollo/client'
+import { setContext } from '@apollo/client/link/context'
+// Note: Importing directly from `apollo/client` does not work properly in Storybook.
+const {
   ApolloProvider,
-  ApolloClientOptions,
   ApolloClient,
   ApolloLink,
+  createHttpLink,
   InMemoryCache,
   useQuery,
   useMutation,
-  createHttpLink,
-} from '@apollo/client'
-import { setContext } from '@apollo/client/link/context'
+} = apolloClient
 
 import type { AuthContextInterface } from '@redwoodjs/auth'
 import { useAuth as useRWAuth } from '@redwoodjs/auth'
@@ -17,11 +19,11 @@ import './typeOverride'
 import {
   FetchConfigProvider,
   useFetchConfig,
-} from 'src/components/FetchConfigProvider'
-import { GraphQLHooksProvider } from 'src/components/GraphQLHooksProvider'
+} from '../components/FetchConfigProvider'
+import { GraphQLHooksProvider } from '../components/GraphQLHooksProvider'
 
 export type GraphQLClientConfigProp = Omit<
-  ApolloClientOptions<InMemoryCache>,
+  ApolloClientOptions<unknown>,
   'cache'
 >
 
