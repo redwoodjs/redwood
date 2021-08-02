@@ -85,4 +85,18 @@ describe("Should create a 'proxy' function for nested functions", () => {
       `"export * from '../_build/helloWorld';"`
     )
   })
+
+  it('It should not put files that dont match the folder name in dist/functions', () => {
+    const [buildPath, { reExportPath }] = getPrebuildOutputOptions(
+      path.join(FIXTURE_PATH, 'api/src/functions/helloWorld/anotherFile.ts')
+    )
+
+    // File is transpiled to the _build folder
+    expect(cleanPaths(buildPath)).toEqual(
+      '.redwood/prebuild/api/src/_build/helloWorld/anotherFile.js'
+    )
+
+    // But not exposed as a serverless function
+    expect(reExportPath).toBe(null)
+  })
 })

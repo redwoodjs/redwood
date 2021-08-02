@@ -46,6 +46,9 @@ export const getPrebuildOutputOptions = (
     // put it into the special _build directory at the same level as functions
     // then re-export it
     if (folderName !== '.') {
+      const { name: fileName } = path.parse(relativePathFromFunctions)
+      const isIndexFile = fileName === 'index'
+
       // .redwood/prebuilds/api/src/_build/{folder}/{fileName}
       const _buildOutputPath = path
         .join(
@@ -57,18 +60,17 @@ export const getPrebuildOutputOptions = (
 
       // .redwood/prebuild/api/src/functions/{folderName}
       const reExportPath =
-        path.join(
-          rwjsPaths.generated.prebuild,
-          'api/src/functions',
-          folderName
-        ) + '.js'
+        isIndexFile || fileName === folderName
+          ? path.join(
+              rwjsPaths.generated.prebuild,
+              'api/src/functions',
+              folderName
+            ) + '.js'
+          : null
 
-      const { name: fileName } = path.parse(relativePathFromFunctions)
-
-      const importString =
-        fileName === 'index'
-          ? `../_build/${folderName}`
-          : `../_build/${folderName}/${folderName}`
+      const importString = isIndexFile
+        ? `../_build/${folderName}`
+        : `../_build/${folderName}/${folderName}`
 
       const reExportContent = `export * from '${importString}';`
       return [_buildOutputPath, { reExportPath, reExportContent }]
