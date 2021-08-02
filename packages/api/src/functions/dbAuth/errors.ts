@@ -47,6 +47,15 @@ export class UsernameAndPasswordRequiredError extends Error {
   }
 }
 
+export class NoUserIdError extends Error {
+  constructor() {
+    super(
+      'loginHandler() must return an object with an `id` field as set in `authFields.id`'
+    )
+    this.name = 'NoUserIdError'
+  }
+}
+
 export class FieldRequiredError extends Error {
   constructor(name: string) {
     super(`${name} is required`)
