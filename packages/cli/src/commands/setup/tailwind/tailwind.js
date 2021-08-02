@@ -27,13 +27,15 @@ export const builder = (yargs) => {
 }
 
 const tailwindImports = [
-  /@import "tailwindcss\/base";/,
-  /@import "tailwindcss\/components";/,
-  /@import "tailwindcss\/utilities";/,
+  '@import "tailwindcss/base";',
+  '@import "tailwindcss/components";',
+  '@import "tailwindcss/utilities";',
 ]
 
 const tailwindImportsExist = (indexCSS) =>
-  tailwindImports.every((tailwindDirective) => tailwindDirective.test(indexCSS))
+  tailwindImports
+    .map((el) => new RegExp(el))
+    .every((tailwindDirective) => tailwindDirective.test(indexCSS))
 
 const tailwindImportsAndNotes = [
   '/**',
@@ -158,7 +160,7 @@ export const handler = async ({ force, install }) => {
         if (tailwindImportsExist(indexCSS)) {
           task.skip('Imports already exist in index.css')
         } else {
-          const newIndexCSS = tailwindImportsAndNotes + indexCSS
+          const newIndexCSS = tailwindImportsAndNotes.join('\n') + indexCSS
           fs.writeFileSync(INDEX_CSS_PATH, newIndexCSS)
         }
       },
