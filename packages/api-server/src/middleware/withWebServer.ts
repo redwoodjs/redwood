@@ -27,22 +27,21 @@ const withWebServer = (app: Application) => {
   const files = findPrerenderedHtml()
   const indexContent = getFallbackIndexContent()
 
+  console.log(
+    `✋ ~ file: withWebServer.ts ~ line 28 ~ withWebServer ~ files`,
+    files
+  )
+
   const htmlContentsByPath: HtmlContents = files.reduce(
-    (acc, cur) => ({
+    (acc, fileName) => ({
       ...acc,
       // TODO find something better in fs
-      [cur.split('.')[0]]: fs.readFileSync(
-        path.join(getPaths().web.dist, `${cur}`),
+      [fileName.split('.')[0]]: fs.readFileSync(
+        path.join(getPaths().web.dist, `${fileName}`),
         'utf-8'
       ),
     }),
     {}
-  )
-
-  app.use(
-    express.static(getPaths().web.dist, {
-      redirect: false,
-    })
   )
 
   // For SPA routing on unmatched routes
@@ -52,6 +51,12 @@ const withWebServer = (app: Application) => {
       response.send(htmlContentsByPath[pathName])
     })
   })
+
+  app.use(
+    express.static(getPaths().web.dist, {
+      redirect: false,
+    })
+  )
 
   // For SPA routing fallback on unmatched routes
   // And let JS routing take over
