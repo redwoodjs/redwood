@@ -27,11 +27,6 @@ const withWebServer = (app: Application) => {
   const files = findPrerenderedHtml()
   const indexContent = getFallbackIndexContent()
 
-  console.log(
-    `✋ ~ file: withWebServer.ts ~ line 28 ~ withWebServer ~ files`,
-    files
-  )
-
   const htmlContentsByPath: HtmlContents = files.reduce(
     (acc, fileName) => ({
       ...acc,
