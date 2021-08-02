@@ -159,7 +159,7 @@ export const handler = async ({ force, install }) => {
           task.skip('Imports already exist in index.css')
         } else {
           const newIndexCSS = tailwindImportsAndNotes + indexCSS
-          fs.writeFileSync(indexCSS, newIndexCSS)
+          fs.writeFileSync(INDEX_CSS_PATH, newIndexCSS)
         }
       },
     },
