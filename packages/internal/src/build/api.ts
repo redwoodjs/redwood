@@ -32,7 +32,7 @@ export const getPrebuildOutputOptions = (
   srcPath: string
 ): [string, { reExportPath: null | string; reExportContent?: string }] => {
   const rwjsPaths = getPaths()
-  const relativeSrcPath = path.relative(rwjsPaths.base, srcPath) //?
+  const relativeSrcPath = path.relative(rwjsPaths.base, srcPath)
 
   // special checks for api functions
   if (relativeSrcPath.includes('api/src/functions')) {
@@ -102,7 +102,7 @@ export const prebuildApiFiles = (srcFiles: string[]) => {
       return undefined
     }
 
-    const [dstPath, options] = getPrebuildOutputOptions(srcPath) //?
+    const [dstPath, options] = getPrebuildOutputOptions(srcPath)
 
     if (options.reExportPath && options.reExportContent) {
       // create rexport function
