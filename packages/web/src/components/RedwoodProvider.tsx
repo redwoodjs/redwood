@@ -21,8 +21,9 @@ export const RedwoodProvider = ({
   return (
     <HelmetProvider context={global.__REDWOOD__HELMET_CONTEXT}>
       <Helmet titleTemplate={template()} defaultTitle={appTitle}>
-        {children}
+        <title>{appTitle}</title>
       </Helmet>
+        {children}
     </HelmetProvider>
   )
 }
