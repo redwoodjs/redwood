@@ -11,12 +11,16 @@ import type { AuthClient } from '../authClients'
 import { AuthProvider } from '../AuthProvider'
 import { useAuth } from '../useAuth'
 
+type HasRoleAuthClient = AuthClient & {
+  hasRole: (role?: string | string[]) => Promise<boolean | null>
+}
+
 let CURRENT_USER_DATA: { name: string; email: string; roles?: string[] } = {
   name: 'Peter Pistorius',
   email: 'nospam@example.net',
 }
 
-window.__REDWOOD__API_PROXY_PATH = '/.netlify/functions'
+global.__REDWOOD__API_PROXY_PATH = '/.netlify/functions'
 const server = setupServer(
   graphql.query('__REDWOOD__AUTH_GET_CURRENT_USER', (_req, res, ctx) => {
     return res(
@@ -310,7 +314,7 @@ test('When the current user cannot be fetched the user is not authenticated', as
  * Check assigned role access
  */
 test('Authenticated user has assigned role access as expected', async () => {
-  const mockAuthClient: AuthClient = {
+  const mockAuthClient: HasRoleAuthClient = {
     login: async () => {
       return true
     },
@@ -320,9 +324,7 @@ test('Authenticated user has assigned role access as expected', async () => {
     getUserMetadata: jest.fn(async () => {
       return null
     }),
-    hasRole: jest.fn(async () => {
-      return null
-    }),
+    hasRole: jest.fn(async () => null),
     client: () => {},
     type: 'custom',
   }
@@ -376,18 +378,13 @@ test('Authenticated user has assigned role access as expected', async () => {
  * Check unassigned role access
  */
 test('Authenticated user has not been assigned role access as expected', async () => {
-  const mockAuthClient: AuthClient = {
-    login: async () => {
-      return true
-    },
+  const mockAuthClient: HasRoleAuthClient = {
+    login: async () => true,
+    signup: async () => {},
     logout: async () => {},
     getToken: async () => 'hunter2',
-    getUserMetadata: jest.fn(async () => {
-      return null
-    }),
-    hasRole: jest.fn(async () => {
-      return null
-    }),
+    getUserMetadata: jest.fn(async () => null),
+    hasRole: jest.fn(async () => null),
     client: () => {},
     type: 'custom',
   }
@@ -441,18 +438,13 @@ test('Authenticated user has not been assigned role access as expected', async (
  * Check some unassigned role access
  */
 test('Authenticated user has not been assigned some role access but not others as expected', async () => {
-  const mockAuthClient: AuthClient = {
-    login: async () => {
-      return true
-    },
+  const mockAuthClient: HasRoleAuthClient = {
+    login: async () => true,
+    signup: async () => {},
     logout: async () => {},
     getToken: async () => 'hunter2',
-    getUserMetadata: jest.fn(async () => {
-      return null
-    }),
-    hasRole: jest.fn(async () => {
-      return null
-    }),
+    getUserMetadata: jest.fn(async () => null),
+    hasRole: jest.fn(async () => null),
     client: () => {},
     type: 'custom',
   }
@@ -506,18 +498,13 @@ test('Authenticated user has not been assigned some role access but not others a
  * Check assigned role access when specified as single array element
  */
 test('Authenticated user has assigned role access as expected', async () => {
-  const mockAuthClient: AuthClient = {
-    login: async () => {
-      return true
-    },
+  const mockAuthClient: HasRoleAuthClient = {
+    login: async () => true,
+    signup: async () => {},
     logout: async () => {},
     getToken: async () => 'hunter2',
-    getUserMetadata: jest.fn(async () => {
-      return null
-    }),
-    hasRole: jest.fn(async () => {
-      return null
-    }),
+    getUserMetadata: jest.fn(async () => null),
+    hasRole: jest.fn(async () => null),
     client: () => {},
     type: 'custom',
   }
@@ -570,18 +557,13 @@ test('Authenticated user has assigned role access as expected', async () => {
  * Check assigned role access when specified as array element
  */
 test('Authenticated user has assigned role access as expected', async () => {
-  const mockAuthClient: AuthClient = {
-    login: async () => {
-      return true
-    },
+  const mockAuthClient: HasRoleAuthClient = {
+    login: async () => true,
+    signup: async () => true,
     logout: async () => {},
     getToken: async () => 'hunter2',
-    getUserMetadata: jest.fn(async () => {
-      return null
-    }),
-    hasRole: jest.fn(async () => {
-      return null
-    }),
+    getUserMetadata: jest.fn(async () => null),
+    hasRole: jest.fn(async () => null),
     client: () => {},
     type: 'custom',
   }
@@ -634,18 +616,13 @@ test('Authenticated user has assigned role access as expected', async () => {
  * Check if assigned one of the roles in an array
  */
 test('Authenticated user has assigned role access as expected', async () => {
-  const mockAuthClient: AuthClient = {
-    login: async () => {
-      return true
-    },
+  const mockAuthClient: HasRoleAuthClient = {
+    login: async () => true,
+    signup: async () => true,
     logout: async () => {},
     getToken: async () => 'hunter2',
-    getUserMetadata: jest.fn(async () => {
-      return null
-    }),
-    hasRole: jest.fn(async () => {
-      return null
-    }),
+    getUserMetadata: jest.fn(async () => null),
+    hasRole: jest.fn(async () => null),
     client: () => {},
     type: 'custom',
   }
@@ -698,18 +675,13 @@ test('Authenticated user has assigned role access as expected', async () => {
  * Check if not assigned any of the roles in an array
  */
 test('Authenticated user has assigned role access as expected', async () => {
-  const mockAuthClient: AuthClient = {
-    login: async () => {
-      return true
-    },
+  const mockAuthClient: HasRoleAuthClient = {
+    login: async () => true,
+    signup: async () => true,
     logout: async () => {},
     getToken: async () => 'hunter2',
-    getUserMetadata: jest.fn(async () => {
-      return null
-    }),
-    hasRole: jest.fn(async () => {
-      return null
-    }),
+    getUserMetadata: jest.fn(async () => null),
+    hasRole: jest.fn(async () => null),
     client: () => {},
     type: 'custom',
   }
