@@ -212,10 +212,7 @@ export class AuthProvider extends React.Component<
   }
 
   logIn = async (options?: any) => {
-    this.setState({
-      ...this.state,
-      loading: true,
-    })
+    this.setState({ loading: true })
     const loginOutput = await this.rwClient.login(options)
     await this.reauthenticate()
 
