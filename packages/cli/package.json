@@ -1,29 +1,30 @@
 {
   "name": "@redwoodjs/cli",
   "description": "The Redwood Command Line",
-  "version": "0.34.1",
+  "version": "0.35.2",
   "license": "MIT",
   "bin": {
     "redwood": "./dist/index.js",
     "rw": "./dist/index.js",
     "redwood-tools": "./dist/redwood-tools.js",
-    "rwt": "./dist/redwood-tools.js"
+    "rwt": "./dist/redwood-tools.js",
+    "rwfw": "./dist/rwfw.js"
   },
   "files": [
     "dist"
   ],
   "dependencies": {
-    "@prisma/sdk": "2.24.1",
-    "@redwoodjs/api-server": "^0.34.1",
-    "@redwoodjs/dev-server": "^0.34.1",
-    "@redwoodjs/internal": "^0.34.1",
-    "@redwoodjs/prerender": "^0.34.1",
-    "@redwoodjs/structure": "^0.34.1",
+    "@prisma/sdk": "2.28.0",
+    "@redwoodjs/api-server": "0.35.2",
+    "@redwoodjs/internal": "0.35.2",
+    "@redwoodjs/prerender": "0.35.2",
+    "@redwoodjs/structure": "0.35.2",
     "boxen": "5.0.1",
     "camelcase": "6.0.0",
     "chalk": "4.1.1",
     "concurrently": "6.2.0",
-    "core-js": "3.13.1",
+    "configstore": "3.1.5",
+    "core-js": "3.15.2",
     "cross-env": "7.0.3",
     "decamelize": "4.0.0",
     "dotenv-defaults": "2.0.2",
@@ -38,24 +39,25 @@
     "param-case": "3.0.4",
     "pascalcase": "1.0.0",
     "pluralize": "8.0.0",
-    "prettier": "2.3.1",
-    "prisma": "2.24.1",
+    "prettier": "2.3.2",
+    "prisma": "2.28.0",
     "prompts": "2.4.1",
     "rimraf": "3.0.2",
+    "secure-random-password": "0.2.3",
     "terminal-link": "2.1.1",
     "yargs": "16.0.3"
   },
   "devDependencies": {
-    "@types/listr": "0.14.3",
-    "@types/node-fetch": "2.5.10"
+    "@types/listr": "0.14.4",
+    "@types/node-fetch": "2.5.11"
   },
   "scripts": {
-    "dev": "yarn build:js && RWJS_CWD=../../__fixtures__/example-todo-main node dist/index.js",
+    "dev": "RWJS_CWD=../../__fixtures__/example-todo-main node dist/index.js",
     "build": "yarn build:js",
     "prepublishOnly": "yarn build",
     "build:clean-dist": "rimraf 'dist/**/*/__tests__'",
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\" --copy-files --no-copy-ignored && yarn build:clean-dist",
-    "fix:permissions": "chmod +x dist/index.js dist/redwood-tools.js",
+    "fix:permissions": "chmod +x dist/index.js dist/redwood-tools.js dist/rwfw.js",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build && yarn fix:permissions\"",
     "test": "jest",
     "test:watch": "yarn test --watch"

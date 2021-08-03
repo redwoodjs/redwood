@@ -2,10 +2,9 @@ global.__dirname = __dirname
 import path from 'path'
 
 // Load mocks
-import 'src/lib/test'
+import '../../../../lib/test'
 
-import { getDefaultArgs } from 'src/lib'
-
+import { getDefaultArgs } from '../../../../lib'
 import { yargsDefaults as defaults } from '../../../generate'
 import * as scaffold from '../scaffold'
 
@@ -268,6 +267,19 @@ describe('in javascript (default) mode', () => {
         path.normalize('/path/to/project/web/src/components/Post/Post/Post.js')
       ]
     ).toMatchSnapshot()
+  })
+
+  test('error when no editable fields are in model', async () => {
+    await expect(
+      scaffold.files({
+        ...getDefaultArgs(defaults),
+        model: 'NoEditableField',
+        tests: true,
+        nestScaffoldByModel: true,
+      })
+    ).rejects.toThrow(
+      'There are no editable fields in the NoEditableField model'
+    )
   })
 
   // Routes

@@ -1,8 +1,7 @@
 global.__dirname = __dirname
 import path from 'path'
 
-import { loadGeneratorFixture } from 'src/lib/test'
-
+import { loadGeneratorFixture } from '../../../../lib/test'
 import * as generator from '../dataMigration'
 
 const asyncForEach = async (array, callback) => {

@@ -20,9 +20,9 @@ export interface AuthContextInterface {
   currentUser: null | CurrentUser
   /* The user's metadata from the auth provider */
   userMetadata: null | SupportedUserMetadata
-  logIn(options?: unknown): Promise<void>
-  logOut(options?: unknown): Promise<void>
-  signUp(options?: unknown): Promise<void>
+  logIn(options?: unknown): Promise<any>
+  logOut(options?: unknown): Promise<any>
+  signUp(options?: unknown): Promise<any>
   getToken(): Promise<null | string>
   /**
    * Fetches the "currentUser" from the api side,
@@ -58,11 +58,17 @@ export const AuthContext = React.createContext<AuthContextInterface>({
   currentUser: null,
 })
 
-type AuthProviderProps = {
-  client: SupportedAuthClients
-  type: SupportedAuthTypes
-  skipFetchCurrentUser?: boolean
-}
+type AuthProviderProps =
+  | {
+      client: SupportedAuthClients
+      type: Omit<SupportedAuthTypes, 'dbAuth'>
+      skipFetchCurrentUser?: boolean
+    }
+  | {
+      client?: never
+      type: 'dbAuth'
+      skipFetchCurrentUser?: boolean
+    }
 
 type AuthProviderState = {
   loading: boolean
@@ -102,7 +108,10 @@ export class AuthProvider extends React.Component<
 
   constructor(props: AuthProviderProps) {
     super(props)
-    this.rwClient = createAuthClient(props.client, props.type)
+    this.rwClient = createAuthClient(
+      props.client || (() => null),
+      props.type as SupportedAuthTypes
+    )
   }
 
   async componentDidMount() {
@@ -251,7 +260,7 @@ export class AuthProvider extends React.Component<
           hasRole: this.hasRole,
           reauthenticate: this.reauthenticate,
           client,
-          type,
+          type: type as SupportedAuthTypes,
         }}
       >
         {children}

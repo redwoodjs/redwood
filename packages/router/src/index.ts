@@ -14,6 +14,7 @@ export {
   useLocation,
   LocationProvider,
   navigate,
+  back,
   PageLoadingContext,
 } from './internal'
 

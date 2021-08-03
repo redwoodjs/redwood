@@ -12,6 +12,7 @@ module.exports = {
   },
   globals: {
     __REDWOOD__API_PROXY_PATH: '/',
+    __REDWOOD__APP_TITLE: 'Redwood App',
   },
   setupFilesAfterEnv: [path.resolve(__dirname, './jest.setup.js')],
   moduleNameMapper: {
@@ -39,4 +40,5 @@ module.exports = {
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|css)$':
       '@redwoodjs/testing/dist/fileMock.js',
   },
+  testEnvironment: 'jest-environment-jsdom',
 }
