@@ -35,7 +35,7 @@
     "rimraf": "3.0.2"
   },
   "devDependencies": {
-    "@types/rimraf": "3.0.0",
+    "@types/rimraf": "3.0.1",
     "@types/findup-sync": "4.0.1",
     "graphql-tag": "2.12.5"
   },
