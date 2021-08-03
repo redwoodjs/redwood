@@ -18,8 +18,9 @@ export interface RouterSetContextProps {
   setState: (newState: Partial<RouterState>) => void
 }
 
-const RouterSetContext =
-  createContext<React.Dispatch<Partial<RouterState>> | undefined>(undefined)
+const RouterSetContext = createContext<
+  React.Dispatch<Partial<RouterState>> | undefined
+>(undefined)
 
 export interface RouterContextProviderProps
   extends Omit<RouterState, 'useAuth'> {
