@@ -17,7 +17,7 @@
     "firebase": "8.7.0",
     "firebase-admin": "9.10.0",
     "gotrue-js": "0.9.29",
-    "magic-sdk": "4.3.0",
+    "magic-sdk": "4.4.0",
     "msal": "1.4.11",
     "netlify-identity-widget": "1.9.1",
     "nhost-js-sdk": "3.1.0",
