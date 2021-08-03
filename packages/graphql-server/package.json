@@ -10,7 +10,7 @@
   "types": "./dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@envelop/apollo-server-errors": "1.0.1",
+    "@envelop/apollo-server-errors": "1.0.2",
     "@envelop/core": "1.0.1",
     "@envelop/depth-limit": "1.0.0",
     "@envelop/disable-introspection": "1.0.0",

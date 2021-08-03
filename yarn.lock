@@ -1875,10 +1875,10 @@
     ts-node "^9"
     tslib "^2"
 
-"@envelop/apollo-server-errors@1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@envelop/apollo-server-errors/-/apollo-server-errors-1.0.1.tgz#b352dd9eafb807fb6faf1455c3041b67752dd38a"
-  integrity sha512-70yG+vwKT14Qf+4XxcQh0rm+KAClOZe1X7h+c9B0SLSWN2WYz4ZcH25uQ6gLufVaCmxq4aD2HCBep3OOrRf3Ww==
+"@envelop/apollo-server-errors@1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@envelop/apollo-server-errors/-/apollo-server-errors-1.0.2.tgz#f957fd7066c611b6e820b6bc1db8a1ee09560428"
+  integrity sha512-sWKjYZnchEmMwpvnqSHpKt1nhp5ZM32sCAks+hP/8BLB3OilXssQm9dFdsWOiQhlOeE04nPgxVq0Z7hjJH4jBg==
   dependencies:
     apollo-server-errors "3.0.1"
 
