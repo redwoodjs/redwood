@@ -21,7 +21,7 @@
     "@graphql-codegen/schema-ast": "1.18.3",
     "@graphql-codegen/typescript": "1.22.4",
     "@graphql-codegen/typescript-operations": "1.18.3",
-    "@graphql-codegen/typescript-react-apollo": "2.3.0",
+    "@graphql-codegen/typescript-react-apollo": "3.0.0",
     "@graphql-codegen/typescript-resolvers": "1.19.5",
     "deepmerge": "4.2.2",
     "fast-glob": "3.2.5",
