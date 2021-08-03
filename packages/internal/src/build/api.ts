@@ -53,6 +53,15 @@ export const prebuildApiFiles = (srcFiles: string[]) => {
   })
 }
 
+export const getApiSideBabelConfigPath = () => {
+  const p = path.join(getPaths().api.base, 'babel.config.js')
+  if (fs.existsSync(p)) {
+    return p
+  } else {
+    return false
+  }
+}
+
 // TODO: This can be shared between the api and web sides, but web
 // needs to determine plugins on a per-file basis for web side.
 export const prebuildFile = (
@@ -61,9 +70,9 @@ export const prebuildFile = (
 ) => {
   const code = fs.readFileSync(srcPath, 'utf-8')
   const result = transform(code, {
-    cwd: getPaths().base,
+    cwd: getPaths().api.base,
     filename: srcPath,
-    configFile: false,
+    configFile: getApiSideBabelConfigPath(),
     plugins,
   })
   return result
