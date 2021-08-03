@@ -12,7 +12,7 @@
   "types": "dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@babel/parser": "7.14.4",
+    "@babel/parser": "7.14.9",
     "@babel/plugin-transform-typescript": "7.14.6",
     "@babel/runtime-corejs3": "7.14.0",
     "@babel/traverse": "7.14.2",
