@@ -10717,7 +10717,7 @@ google-p12-pem@^3.0.3:
   dependencies:
     node-forge "^0.10.0"
 
-got@^11.8.1:
+got@^11.8.1, got@^11.8.2:
   version "11.8.2"
   resolved "https://registry.yarnpkg.com/got/-/got-11.8.2.tgz#7abb3959ea28c31f3576f1576c1effce23f33599"
   integrity sha512-D0QywKgIe30ODs+fm8wMZiAcZjypcCodPNuMz5H9Mny7RJ+IjJ10BdmGW7OM7fHXP+O7r6ZwapQ/YQmMSvB0UQ==
@@ -13036,6 +13036,13 @@ latest-version@5.1.0, latest-version@^5.0.0:
   dependencies:
     package-json "^6.3.0"
 
+latest-version@6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/latest-version/-/latest-version-6.0.0.tgz#469fb95f1d588b38436c1ec8fec947b99ed268c7"
+  integrity sha512-zfTuGx4PwpoSJ1mABs58AkM6qMzu49LZ7LT5JHprKvpGpQ+cYtfSibi3tLLrH4z7UylYU42rfBdwN8YgqbTljA==
+  dependencies:
+    package-json "^7.0.0"
+
 lazy-get-decorator@2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/lazy-get-decorator/-/lazy-get-decorator-2.2.0.tgz#dd3b1d2a432800d435c2491038324f202f2a620d"
@@ -14760,6 +14767,16 @@ package-json@^6.3.0:
     registry-auth-token "^4.0.0"
     registry-url "^5.0.0"
     semver "^6.2.0"
+
+package-json@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/package-json/-/package-json-7.0.0.tgz#1355416e50a5c1b8f1a6f471197a3650d21186bf"
+  integrity sha512-CHJqc94AA8YfSLHGQT3DbvSIuE12NLFekpM4n7LRrAd3dOJtA911+4xe9q6nC3/jcKraq7nNS9VxgtT0KC+diA==
+  dependencies:
+    got "^11.8.2"
+    registry-auth-token "^4.0.0"
+    registry-url "^5.0.0"
+    semver "^7.3.5"
 
 pako@~1.0.5:
   version "1.0.11"
