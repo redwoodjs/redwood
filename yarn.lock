@@ -1882,12 +1882,12 @@
   dependencies:
     apollo-server-errors "3.0.1"
 
-"@envelop/core@1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@envelop/core/-/core-1.0.1.tgz#85a37d5cd576487a3f78a2c752be28c3467d7107"
-  integrity sha512-uRvIJDeiB0UIZZ0RB9ITlkOkG/Azul84vJSgJhJ6L6Oilsd9/fik3LddyaTlikuW+rSqMM7pDsrV/Uke5j4qzw==
+"@envelop/core@1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@envelop/core/-/core-1.0.2.tgz#ceb161078df1be33a6c911602f6b16d3dd0acc8f"
+  integrity sha512-gIYListx8T9hO7cbaGVmRElB6pz+w3j+oTt6EFlmoZA8n0hqzOas2xFup36V31ixBrnWSJ21ACt1R3EfGz8BbA==
   dependencies:
-    "@envelop/types" "1.0.1"
+    "@envelop/types" "1.0.2"
 
 "@envelop/depth-limit@1.0.0":
   version "1.0.0"
@@ -1917,6 +1917,11 @@
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@envelop/types/-/types-1.0.1.tgz#f2b10ad63ecf002bf158ead763d98bf106e7ded9"
   integrity sha512-2vOyCmZGfGvYMzuaxXy6kgG7oGi7QjR81O6g+zWMzTz1ANb21VBwMiX96SBDs6oUP+voOsC1p51zLeHW+sPZ+A==
+
+"@envelop/types@1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@envelop/types/-/types-1.0.2.tgz#c0eb58929209aa3c6563921a9fc58f63448c02fc"
+  integrity sha512-uL1Nn0aiDN72nEPvhJixH0DoCGxkPPW6/HZcl9lwnaVld1TDQhs72TVuX3vTsZQIvk2s62T5XsvrcdIbMkKfJw==
 
 "@envelop/validation-cache@1.0.0":
   version "1.0.0"
