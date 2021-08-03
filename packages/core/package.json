@@ -32,7 +32,7 @@
     "core-js": "3.15.2",
     "graphql": "15.5.1",
     "graphql-tag": "2.12.5",
-    "glob": "7.1.7",
+    "fast-glob": "3.2.5",
     "@babel/runtime-corejs3": "7.14.7",
     "x----x----x": "^0 Bins",
     "esbuild": "0.12.15",
