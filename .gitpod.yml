@@ -3,22 +3,31 @@ checkoutLocation: redwood
 workspaceLocation: .
 
 tasks:
+  - name: Terminal
+    openMode: split-left
+    init: |
+      mkdir ../rw-test-app
+    command: |
+      cd ../rw-test-app
+      echo -e "\n\n\033[94m ======================================================" && echo -e "\n\033[33mThe test project been linked. If you make further changes to the framework..." &&  echo -e "\033[33mRun \033[92m'yarn rwfw project:sync'\033[33m to watch & sync changes into the test project" &&  echo -e "\n\033[94m ======================================================\n\n"
+
+
   - name: "Dev Servers"
+    openMode: split-right
     before: export RW_PATH="/workspace/redwood"
     init: |
       yarn install
-      yarn run build:test-project ../redwood-app --typescript --link --verbose
+      yarn run build:test-project ../rw-test-app --typescript --link --verbose
     command: |
-      cd ../redwood-app
+      cd ../rw-test-app
       yarn rw dev
-  - name: Terminal
-    openMode: split-right
+
 
 ports:
   - port: 8911
     onOpen: ignore
   - port: 8910
-    onOpen: open-preview
+    onOpen: notify
 
 github:
   prebuilds:
