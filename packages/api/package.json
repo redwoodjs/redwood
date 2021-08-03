@@ -16,7 +16,7 @@
     "@types/pino": "6.3.9",
     "apollo-server-lambda": "2.25.2",
     "core-js": "3.15.2",
-    "crypto-js": "4.0.0",
+    "crypto-js": "4.1.1",
     "graphql": "15.5.1",
     "graphql-depth-limit": "1.1.0",
     "graphql-scalars": "1.10.0",
