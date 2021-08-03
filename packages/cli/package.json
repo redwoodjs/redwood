@@ -21,7 +21,7 @@
     "@redwoodjs/structure": "0.35.2",
     "boxen": "5.0.1",
     "camelcase": "6.0.0",
-    "chalk": "4.1.1",
+    "chalk": "4.1.2",
     "concurrently": "6.2.0",
     "configstore": "3.1.5",
     "core-js": "3.15.2",
