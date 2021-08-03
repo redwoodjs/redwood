@@ -22,7 +22,7 @@
     "@graphql-tools/utils": "7.10.0",
     "@prisma/client": "2.28.0",
     "@redwoodjs/api": "0.35.2",
-    "@types/pino": "6.3.9",
+    "@types/pino": "6.3.11",
     "core-js": "3.15.2",
     "graphql": "15.5.1",
     "graphql-helix": "1.6.1",
