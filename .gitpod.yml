@@ -9,10 +9,7 @@ tasks:
       mkdir ../rw-test-app
     command: |
       cd ../rw-test-app
-      echo "\e[94m ======================================================"
-      echo "\e[33mThe test project been linked. If you make further changes to the framework..."
-      echo "\e[33mRun \e[92m'yarn rwfw project:sync'  \e[33min the test-project to watch & sync changes into the test project"
-      echo "\e[94m ======================================================"
+      echo -e "\n\n\033[94m ======================================================" && echo -e "\n\033[33mThe test project been linked. If you make further changes to the framework..." &&  echo -e "\033[33mRun \033[92m'yarn rwfw project:sync' \033[33min the test-project to watch & sync changes into the test project" &&  echo -e "\n\033[94m ======================================================\n\n"
 
 
   - name: "Dev Servers"
