@@ -5,10 +5,15 @@ workspaceLocation: .
 tasks:
   - name: Terminal
     openMode: split-left
+    init: |
+      mkdir ../rw-test-app
     command: |
       cd ../rw-test-app
-      echo "The test project been linked. If you make further changes to the framework..."
-      echo "Run `yarn rwfw project:sync` to watch & sync changes into the test project"
+      echo "\e[94m ======================================================"
+      echo "\e[33mThe test project been linked. If you make further changes to the framework..."
+      echo "\e[33mRun \e[92m'yarn rwfw project:sync'  \e[33min the test-project to watch & sync changes into the test project"
+      echo "\e[94m ======================================================"
+
 
   - name: "Dev Servers"
     openMode: split-right
