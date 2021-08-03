@@ -1,6 +1,15 @@
 import type { ${operationName} } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
+<% if (emptyStateComponentExists) { %>
+import EmptyState from 'src/components/CellStates/EmptyState'
+<% } %>
+<% if (failureStateComponentExists) { %>
+import FailureState from 'src/components/CellStates/FailureState'
+<% } %>
+<% if (loadingStateComponentExists) { %>
+import LoadingState from 'src/components/CellStates/LoadingState'
+<% } %>
 
 export const QUERY = gql`
   query ${operationName} {
@@ -9,13 +18,15 @@ export const QUERY = gql`
     }
   }
 `
-
-export const Loading = () => <div>Loading...</div>
-
-export const Empty = () => <div>Empty</div>
+<% if (emptyStateComponentExists) { %>
+export const Loading = () => <LoadingState />
+<% } %>
+<% if (failureStateComponentExists) { %>
+export const Empty = () => <EmptyState />
+<% } %>
 
 export const Failure = ({ error }: CellFailureProps) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <FailureState error={error} />
 )
 
 export const Success = ({ ${camelName} }: CellSuccessProps<${operationName}>) => {

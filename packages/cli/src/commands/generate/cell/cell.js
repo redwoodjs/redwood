@@ -1,3 +1,5 @@
+import fs from 'fs'
+
 import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 
@@ -85,16 +87,31 @@ export const files = async ({
     list: shouldGenerateList,
   })
 
+  const cellFileExtension = generateTypescript ? '.tsx' : '.js'
+
+  // use imported cell state components or inline
+  const emptyStatePath = `src/components/CellStates/EmptyState/EmptyState${cellFileExtension}`
+  const emptyStateComponentExists = fs.existsSync(emptyStatePath)
+
+  const failureStatePath = `src/components/CellStates/FailureState/FailureState${cellFileExtension}`
+  const failureStateComponentExists = fs.existsSync(failureStatePath)
+
+  const loadingStatePath = `src/components/CellStates/LoadingState/LoadingState${cellFileExtension}`
+  const loadingStateComponentExists = fs.existsSync(loadingStatePath)
+
   const cellFile = templateForComponentFile({
     name: cellName,
     suffix: COMPONENT_SUFFIX,
-    extension: generateTypescript ? '.tsx' : '.js',
+    extension: cellFileExtension,
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'cell',
     templatePath: `cell${templateNameSuffix}.tsx.template`,
     templateVars: {
       operationName,
       idType,
+      emptyStateComponentExists,
+      failureStateComponentExists,
+      loadingStateComponentExists,
     },
   })
 
