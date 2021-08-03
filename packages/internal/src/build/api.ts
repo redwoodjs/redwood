@@ -80,7 +80,10 @@ export const prebuildFile = (
 
 export const getBabelPlugins = () => {
   const rwjsPaths = getPaths()
-  const plugins = [
+  // Plugin shape: [ ["Target", "Options", "name"] ],
+  // a custom "name" is supplied so that user's do not accidently overwrite
+  // Redwood's own plugins.
+  const plugins: TransformOptions['plugins'] = [
     ['@babel/plugin-transform-typescript', undefined, 'rwjs-babel-typescript'],
     [
       require('@redwoodjs/core/dist/babelPlugins/babel-plugin-redwood-src-alias'),
@@ -120,7 +123,7 @@ export const getBabelPlugins = () => {
       'rwjs-babel-glob-import-dir',
     ],
   ].filter(Boolean)
-  return plugins as Array<any>
+  return plugins
 }
 
 export const transpileApi = (files: string[], options = {}) => {
