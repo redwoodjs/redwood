@@ -4,37 +4,37 @@ const SplashPage: React.VFC = () => (
       <style
         dangerouslySetInnerHTML={{
           __html: `
-          :root {
-            --foreground: rgb(26, 32, 44);
-            --secondaryBg: rgb(253, 248, 246);
-            --background: hsl(0, 0%, 100%);
-            --highlight-1: rgb(191, 71, 34);
-            --highlight-2: rgb(220, 94, 56);
-            --space-1: 0.25rem;
-            --space-2: 0.5rem;
-            --space-3: 0.75rem;
-            --space-4: 1rem;
-            --space-5: 1.25rem;
-            --space-6: 1.5rem;
-            --space-7: 1.75rem;
-            --space-8: 2rem;
-            --space-9: 2.25rem;
-            --space-10: 2.5rem;
-            --space-11: 2.75rem;
-            --space-12: 3rem;
-            --space-14: 3.5rem;
-          }
-          @media (prefers-color-scheme: dark) {
             :root {
-              --foreground: hsl(0, 0%, 100%);
-              --background: hsl(250, 24%, 9%);
-              --secondaryBg: hsl(250, 21%, 11%);
+              --foreground: rgb(26, 32, 44);
+              --secondaryBg: rgb(253, 248, 246);
+              --background: hsl(0, 0%, 100%);
+              --highlight-1: rgb(191, 71, 34);
+              --highlight-2: rgb(220, 94, 56);
+              --space-1: 0.25rem;
+              --space-2: 0.5rem;
+              --space-3: 0.75rem;
+              --space-4: 1rem;
+              --space-5: 1.25rem;
+              --space-6: 1.5rem;
+              --space-7: 1.75rem;
+              --space-8: 2rem;
+              --space-9: 2.25rem;
+              --space-10: 2.5rem;
+              --space-11: 2.75rem;
+              --space-12: 3rem;
+              --space-14: 3.5rem;
             }
-          }
 
+            @media (prefers-color-scheme: dark) {
+              :root {
+                --foreground: hsl(0, 0%, 100%);
+                --background: hsl(250, 24%, 9%);
+                --secondaryBg: hsl(250, 21%, 11%);
+              }
+            }
 
-          .container {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+            .container {
+              font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
                 "Helvetica Neue", Arial, "Noto Sans", sans-serif;
               color: var(--foreground);
               background-color: var(--background);
@@ -43,141 +43,143 @@ const SplashPage: React.VFC = () => (
               min-height: 100vh;
             }
 
-          h1,
-          h2,
-          p {
-            margin: 0;
-          }
-
-          h1,
-          h2 {
-            font-size: inherit;
-            font-weight: inherit;
-          }
-
-          a {
-            color: var(--highlight-1);
-            text-decoration-thickness: 2px;
-          }
-
-          a:hover {
-            color: var(--highlight-2);
-          }
-
-          /* Social */
-          .social {
-            display: flex;
-            gap: var(--space-3);
-            padding: var(--space-4) var(--space-5);
-            justify-content: center;
-          }
-
-          .social-link {
-            width: var(--space-6);
-          }
-
-          /* Content */
-          .content {
-            position: relative;
-            padding: 0 var(--space-5);
-            flex-grow: 1;
-            display: flex;
-            justify-content: center;
-          }
-
-          /* Logo */
-          .logo {
-            position: fixed;
-            top: 50%;
-            left: 0%;
-            transform: translate(-50%, -50%);
-            max-height: 140vh;
-            color: var(--secondaryBg);
-          }
-
-          /* Intro */
-          .intro {
-            text-align: center;
-            margin-top: var(--space-12);
-            margin-bottom: var(--space-12);
-          }
-          .intro-heading {
-            font-size: var(--space-5);
-            line-height: 1;
-            font-weight: 700;
-          }
-          .intro-logo {
-            max-width: 23rem;
-            margin: var(--space-4);
-          }
-          .intro-instructions {
-            font-size: var(--space-5);
-            font-weight: 400;
-            line-height: var(--space-7);
-            margin-bottom: var(--space-1);
-          }
-
-          /* Resources */
-          .resources {
-            display: flex;
-            flex-wrap: wrap;
-            max-width: 56rem;
-            margin: auto;
-            gap: var(--space-4);
-            justify-content: center;
-          }
-
-          .resource {
-            flex-basis: 21rem;
-            padding: var(--space-6);
-            border-radius: var(--space-1);
-            border: 2px solid;
-            position: relative;
-            color: var(--background);
-            background-color: var(--highlight-1);
-            border-color: transparent;
-          }
-
-          .resource:hover {
-            background-color: var(--highlight-2);
-            border-color: var(--highlight-2);
-          }
-
-          @media (prefers-color-scheme: dark) {
-            .resource {
-              color: var(--foreground);
-              background-color: var(--secondaryBg);
-              border-color: var(--highlight-1);
+            h1,
+            h2,
+            p {
+              margin: 0;
             }
-          }
 
-          .resource-link {
-            position: absolute;
-            inset: 0;
-          }
+            h1,
+            h2 {
+              font-size: inherit;
+              font-weight: inherit;
+            }
 
-          .resource-title {
-            font-size: var(--space-5);
-            line-height: 1;
-            font-weight: 700;
-            margin-bottom: var(--space-2);
-          }
+            a {
+              color: var(--highlight-1);
+              text-decoration-thickness: 2px;
+            }
 
-          .resource-description {
-            font-weight: 500;
-            font-size: var(--space-4);
-            line-height: var(--space-6);
-          }
+            a:hover {
+              color: var(--highlight-2);
+            }
 
-          .footer {
-            position: relative;
-            text-align: center;
-            font-weight: 400;
-            padding: var(--space-5);
-            font-size: var(--space-4);
-            line-height: var(--space-6);
-          }
+            /* Social */
+            .social {
+              display: flex;
+              gap: var(--space-3);
+              padding: var(--space-4) var(--space-5);
+              justify-content: center;
+            }
 
+            .social-link {
+              width: var(--space-6);
+            }
+
+            /* Content */
+            .content {
+              position: relative;
+              padding: 0 var(--space-5);
+              flex-grow: 1;
+              display: flex;
+              justify-content: center;
+            }
+
+            /* Logo */
+            .logo {
+              position: fixed;
+              top: 50%;
+              left: 0%;
+              transform: translate(-50%, -50%);
+              max-height: 140vh;
+              color: var(--secondaryBg);
+            }
+
+            /* Intro */
+            .intro {
+              text-align: center;
+              margin-top: var(--space-12);
+              margin-bottom: var(--space-12);
+            }
+
+            .intro-heading {
+              font-size: var(--space-5);
+              line-height: 1;
+              font-weight: 700;
+            }
+
+            .intro-logo {
+              max-width: 23rem;
+              margin: var(--space-4);
+            }
+
+            .intro-instructions {
+              font-size: var(--space-5);
+              font-weight: 400;
+              line-height: var(--space-7);
+              margin-bottom: var(--space-1);
+            }
+
+            /* Resources */
+            .resources {
+              display: flex;
+              flex-wrap: wrap;
+              max-width: 56rem;
+              margin: auto;
+              gap: var(--space-4);
+              justify-content: center;
+            }
+
+            .resource {
+              flex-basis: 21rem;
+              padding: var(--space-6);
+              border-radius: var(--space-1);
+              border: 2px solid;
+              position: relative;
+              color: var(--background);
+              background-color: var(--highlight-1);
+              border-color: transparent;
+            }
+
+            .resource:hover {
+              background-color: var(--highlight-2);
+              border-color: var(--highlight-2);
+            }
+
+            @media (prefers-color-scheme: dark) {
+              .resource {
+                color: var(--foreground);
+                background-color: var(--secondaryBg);
+                border-color: var(--highlight-1);
+              }
+            }
+
+            .resource-link {
+              position: absolute;
+              inset: 0;
+            }
+
+            .resource-title {
+              font-size: var(--space-5);
+              line-height: 1;
+              font-weight: 700;
+              margin-bottom: var(--space-2);
+            }
+
+            .resource-description {
+              font-weight: 500;
+              font-size: var(--space-4);
+              line-height: var(--space-6);
+            }
+
+            .footer {
+              position: relative;
+              text-align: center;
+              font-weight: 400;
+              padding: var(--space-5);
+              font-size: var(--space-4);
+              line-height: var(--space-6);
+            }
           `,
         }}
       />
@@ -345,13 +347,12 @@ const SplashPage: React.VFC = () => (
               </svg>
             </a>
           </div>
-          RedwoodJS version
+          RedwoodJS version{' '}
           <a
             href="https://github.com/redwoodjs/redwood/releases"
             target="_blank"
             rel="noreferrer"
           >
-            {' '}
             v0.35.2
           </a>
         </section>
