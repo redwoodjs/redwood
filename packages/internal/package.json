@@ -16,7 +16,7 @@
     "@babel/plugin-transform-typescript": "7.14.6",
     "@babel/runtime-corejs3": "7.14.0",
     "@babel/traverse": "7.14.2",
-    "@graphql-codegen/cli": "1.21.6",
+    "@graphql-codegen/cli": "2.0.1",
     "@graphql-codegen/core": "1.17.10",
     "@graphql-codegen/schema-ast": "1.18.3",
     "@graphql-codegen/typescript": "1.22.4",
