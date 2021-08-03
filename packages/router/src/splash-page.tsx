@@ -217,7 +217,7 @@ const SplashPage: React.VFC = () => (
                   fill="var(--highlight-1)"
                 />
               </svg>
-              <p className="intro-instructions">
+              <p className="intro-instructions" data-cy="e2e-test-splashpage">
                 You&apos;re seeing this because you don&apos;t have any pages
                 yet.
               </p>
