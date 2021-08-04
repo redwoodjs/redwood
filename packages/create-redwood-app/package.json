@@ -8,10 +8,10 @@
     "template"
   ],
   "dependencies": {
-    "@babel/runtime-corejs3": "7.14.0",
+    "@babel/runtime-corejs3": "7.14.9",
     "@redwoodjs/internal": "0.35.2",
     "axios": "0.21.1",
-    "chalk": "4.1.1",
+    "chalk": "4.1.2",
     "check-node-version": "4.1.0",
     "decompress": "4.2.1",
     "execa": "5.1.1",
