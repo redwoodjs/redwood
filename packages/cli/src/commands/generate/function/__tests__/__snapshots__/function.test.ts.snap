@@ -143,3 +143,40 @@ export const handler = async (event, context) => {
 }
 "
 `;
+
+exports[`creates a single word function file: Scenario snapshot 1`] = `
+"export const standard = defineScenario({
+  // Define the \\"fixture\\" to write into your test database here
+  // See guide: https://redwoodjs.com/docs/testing#scenarios
+})
+"
+`;
+
+exports[`creates a single word function file: Test snapshot 1`] = `
+"import { mockHttpEvent } from '@redwoodjs/testing'
+
+import { handler } from './foo'
+
+describe('foo function', () => {
+  it('Should respond with 200', async () => {
+    const httpEvent = mockHttpEvent({
+      queryStringParameters: {
+        id: '42', // Add parameters here
+      },
+    })
+
+    const response = await handler(httpEvent, null)
+    const { data } = JSON.parse(response.body)
+
+    expect(response.statusCode).toBe(200)
+    expect(data).toBe('foo function')
+  })
+
+  // You can also use scenarios to test your api functions
+  // See guide here: https://redwoodjs.com/docs/testing#scenarios
+  //  scenario('Scenario test', async () => {
+  //
+  //  })
+})
+"
+`;
