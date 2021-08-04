@@ -10,12 +10,13 @@
   "types": "./dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@envelop/apollo-server-errors": "1.0.1",
-    "@envelop/core": "1.0.1",
+    "@envelop/apollo-server-errors": "1.0.2",
+    "@envelop/core": "1.0.3",
     "@envelop/depth-limit": "1.0.0",
     "@envelop/disable-introspection": "1.0.0",
     "@envelop/filter-operation-type": "1.0.0",
     "@envelop/parser-cache": "1.0.0",
+    "@envelop/resource-limitations": "0.1.1",
     "@envelop/validation-cache": "1.0.0",
     "@graphql-tools/merge": "6.2.14",
     "@graphql-tools/schema": "7.1.5",
@@ -37,7 +38,7 @@
     "uuid": "8.3.2"
   },
   "devDependencies": {
-    "@envelop/types": "1.0.1",
+    "@envelop/types": "1.0.2",
     "@redwoodjs/auth": "0.35.2",
     "@types/jsonwebtoken": "8.5.4",
     "@types/lodash.merge": "4.6.6",

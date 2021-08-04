@@ -1875,19 +1875,19 @@
     ts-node "^9"
     tslib "^2"
 
-"@envelop/apollo-server-errors@1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@envelop/apollo-server-errors/-/apollo-server-errors-1.0.1.tgz#b352dd9eafb807fb6faf1455c3041b67752dd38a"
-  integrity sha512-70yG+vwKT14Qf+4XxcQh0rm+KAClOZe1X7h+c9B0SLSWN2WYz4ZcH25uQ6gLufVaCmxq4aD2HCBep3OOrRf3Ww==
+"@envelop/apollo-server-errors@1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@envelop/apollo-server-errors/-/apollo-server-errors-1.0.2.tgz#f957fd7066c611b6e820b6bc1db8a1ee09560428"
+  integrity sha512-sWKjYZnchEmMwpvnqSHpKt1nhp5ZM32sCAks+hP/8BLB3OilXssQm9dFdsWOiQhlOeE04nPgxVq0Z7hjJH4jBg==
   dependencies:
     apollo-server-errors "3.0.1"
 
-"@envelop/core@1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@envelop/core/-/core-1.0.1.tgz#85a37d5cd576487a3f78a2c752be28c3467d7107"
-  integrity sha512-uRvIJDeiB0UIZZ0RB9ITlkOkG/Azul84vJSgJhJ6L6Oilsd9/fik3LddyaTlikuW+rSqMM7pDsrV/Uke5j4qzw==
+"@envelop/core@1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@envelop/core/-/core-1.0.3.tgz#80effebd5f41faff229b9b34dbe0d6b13beed4f2"
+  integrity sha512-lJ4/NEk8h2oe7cnTY8FXRHOiYdWnXyfUJwfN2trJNZksllwUxaabD1KK/Y/MH8brtQ2NbOR3YGUtiurRbrFzzQ==
   dependencies:
-    "@envelop/types" "1.0.1"
+    "@envelop/types" "1.0.2"
 
 "@envelop/depth-limit@1.0.0":
   version "1.0.0"
@@ -1913,10 +1913,15 @@
   dependencies:
     tiny-lru "7.0.6"
 
-"@envelop/types@1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@envelop/types/-/types-1.0.1.tgz#f2b10ad63ecf002bf158ead763d98bf106e7ded9"
-  integrity sha512-2vOyCmZGfGvYMzuaxXy6kgG7oGi7QjR81O6g+zWMzTz1ANb21VBwMiX96SBDs6oUP+voOsC1p51zLeHW+sPZ+A==
+"@envelop/resource-limitations@0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@envelop/resource-limitations/-/resource-limitations-0.1.1.tgz#9fbe1ca4537df58fc5ae57144e5da2d72ee2a31d"
+  integrity sha512-ow+EminO2ZcOqfp/xEhUHGRn5ilK98SYtQ2pQSi2r+gB+/AZnX3rhU5kl5vtSvVAifhDGLkGB0ucD1L0giOMhQ==
+
+"@envelop/types@1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@envelop/types/-/types-1.0.2.tgz#c0eb58929209aa3c6563921a9fc58f63448c02fc"
+  integrity sha512-uL1Nn0aiDN72nEPvhJixH0DoCGxkPPW6/HZcl9lwnaVld1TDQhs72TVuX3vTsZQIvk2s62T5XsvrcdIbMkKfJw==
 
 "@envelop/validation-cache@1.0.0":
   version "1.0.0"
