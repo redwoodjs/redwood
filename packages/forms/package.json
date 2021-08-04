@@ -10,7 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "@types/pascalcase": "1.0.0",
-    "core-js": "3.15.2",
+    "core-js": "3.16.0",
     "pascalcase": "1.0.0",
     "react-hook-form": "7.12.2"
   },
