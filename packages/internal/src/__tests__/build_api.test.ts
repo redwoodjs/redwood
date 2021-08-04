@@ -1,6 +1,11 @@
+import fs from 'fs'
 import path from 'path'
 
-import { prebuildApiFiles, getPrebuildOutputOptions } from '../build/api'
+import {
+  getApiSideBabelConfigPath,
+  prebuildApiFiles,
+  getPrebuildOutputOptions,
+} from '../build/api'
 import { findApiFiles } from '../files'
 import { ensurePosixPath } from '../paths'
 
@@ -99,4 +104,24 @@ describe("Should create a 'proxy' function for nested functions", () => {
     // But not exposed as a serverless function
     expect(reExportPath).toBe(null)
   })
+})
+
+test('api prebuild finds babel.config.js', () => {
+  let p = getApiSideBabelConfigPath()
+  p = cleanPaths(p)
+  expect(p).toEqual('api/babel.config.js')
+})
+
+test('api prebuild uses babel config', () => {
+  const builtFiles = prebuildApiFiles(findApiFiles())
+  const p = builtFiles
+    .filter((x) => typeof x !== 'undefined')
+    .filter((p) => p.endsWith('dog.js'))
+    .pop()
+
+  const code = fs.readFileSync(p, 'utf-8')
+  expect(code).toMatchInlineSnapshot(`
+    "import dog from \\"dog-bless\\";
+    console.log(dog);"
+  `)
 })

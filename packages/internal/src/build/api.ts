@@ -93,9 +93,7 @@ export const prebuildApiFiles = (srcFiles: string[]) => {
   const plugins = getBabelPlugins()
 
   return srcFiles.flatMap((srcPath) => {
-    // @MARK Intentionally not passing cwd api.base here, because otherwise
-    // it picks up babel settings from src/api/.babelrc.js
-    const result = prebuildFile(srcPath, plugins)
+    const result = prebuildFile(srcPath, plugins, getPaths().api.base)
 
     if (!result?.code) {
       // TODO: Figure out a better way to return these programatically.
@@ -120,6 +118,15 @@ export const prebuildApiFiles = (srcFiles: string[]) => {
   })
 }
 
+export const getApiSideBabelConfigPath = () => {
+  const p = path.join(getPaths().api.base, 'babel.config.js')
+  if (fs.existsSync(p)) {
+    return p
+  } else {
+    return false
+  }
+}
+
 // TODO: This can be shared between the api and web sides, but web
 // needs to determine plugins on a per-file basis for web side.
 export const prebuildFile = (
@@ -131,7 +138,7 @@ export const prebuildFile = (
   const result = transform(code, {
     cwd,
     filename: srcPath,
-    configFile: false,
+    configFile: getApiSideBabelConfigPath(),
     plugins,
   })
   return result
@@ -139,16 +146,22 @@ export const prebuildFile = (
 
 export const getBabelPlugins = () => {
   const rwjsPaths = getPaths()
-  const plugins = [
-    ['@babel/plugin-transform-typescript'],
+  // Plugin shape: [ ["Target", "Options", "name"] ],
+  // a custom "name" is supplied so that user's do not accidently overwrite
+  // Redwood's own plugins.
+  const plugins: TransformOptions['plugins'] = [
+    ['@babel/plugin-transform-typescript', undefined, 'rwjs-babel-typescript'],
     [
       require('@redwoodjs/core/dist/babelPlugins/babel-plugin-redwood-src-alias'),
       {
         srcAbsPath: rwjsPaths.api.src,
       },
+      'rwjs-babel-src-alias',
     ],
     [
       require('@redwoodjs/core/dist/babelPlugins/babel-plugin-redwood-directory-named-import'),
+      undefined,
+      'rwjs-babel-directory-named-modules',
     ],
     [
       'babel-plugin-auto-import',
@@ -166,14 +179,17 @@ export const getBabelPlugins = () => {
           },
         ],
       },
+      'rwjs-babel-auto-import',
     ],
     // FIXME: Babel plugin GraphQL tag doesn't seem to be working.
-    ['babel-plugin-graphql-tag'],
+    ['babel-plugin-graphql-tag', undefined, 'rwjs-babel-graphql-tag'],
     [
       require('@redwoodjs/core/dist/babelPlugins/babel-plugin-redwood-import-dir'),
+      undefined,
+      'rwjs-babel-glob-import-dir',
     ],
   ].filter(Boolean)
-  return plugins as Array<any>
+  return plugins
 }
 
 export const transpileApi = (files: string[], options = {}) => {

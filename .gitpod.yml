@@ -44,4 +44,4 @@ github:
     # add a "Review in Gitpod" button as a comment to pull requests (defaults to false)
     addComment: false
     # add a "Review in Gitpod" button to the pull request's description (defaults to false)
-    addBadge: true
+    addBadge: false
