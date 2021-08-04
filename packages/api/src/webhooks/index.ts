@@ -12,6 +12,7 @@ export {
   VerifyOptions,
   WebhookVerificationError,
   DEFAULT_WEBHOOK_SECRET,
+  SupportedVerifierTypes,
 } from '../auth/verifiers'
 
 export const DEFAULT_WEBHOOK_SIGNATURE_HEADER = 'RW-WEBHOOK-SIGNATURE'
