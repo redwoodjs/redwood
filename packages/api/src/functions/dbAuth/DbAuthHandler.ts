@@ -30,6 +30,14 @@ interface DbAuthHandlerOptions {
     salt: string
   }
   /**
+   * Anything you want to happen before logging the user in. This can include
+   * throwing an error to prevent login. If you do want to allow login, this
+   * function must return an object representing the user you want to be logged
+   * in, containing at least an `id` field (whatever named field was provided
+   * for `authFields.id`). For example: `return { id: user.id }`
+   */
+  loginHandler: (user: Record<string, unknown>) => Promise<any>
+  /**
    * Whatever you want to happen to your data on new user signup. Redwood will
    * check for duplicate usernames before calling this handler. At a minimum
    * you need to save the `username`, `hashedPassword` and `salt` to your
@@ -137,7 +145,7 @@ export class DbAuthHandler {
     this.options = options
     this.db = this.options.db
     this.dbAccessor = this.db[this.options.authModelAccessor]
-    this.headerCsrfToken = this.event.headers['x-csrf-token']
+    this.headerCsrfToken = this.event.headers['csrf-token']
     this.hasInvalidSession = false
 
     try {
@@ -190,24 +198,34 @@ export class DbAuthHandler {
       if (e instanceof DbAuthError.WrongVerbError) {
         return this._notFound()
       } else {
-        return this._badRequest(e.message)
+        return this._badRequest(e.message || e)
       }
     }
   }
 
   async login() {
     const { username, password } = JSON.parse(this.event.body as string)
-    const user = await this._verifyUser(username, password)
-    const sessionData = { id: user[this.options.authFields.id] }
+    const dbUser = await this._verifyUser(username, password)
+    const handlerUser = await this.options.loginHandler(dbUser)
 
-    // this needs to go into graphql somewhere so that each request makes a new CSRF token
-    // and sets it in both the encrypted session and the x-csrf-token header
+    if (
+      handlerUser == null ||
+      handlerUser[this.options.authFields.id] == null
+    ) {
+      throw new DbAuthError.NoUserIdError()
+    }
+
+    const sessionData = { id: handlerUser[this.options.authFields.id] }
+
+    // TODO: this needs to go into graphql somewhere so that each request makes
+    // a new CSRF token and sets it in both the encrypted session and the
+    // csrf-token header
     const csrfToken = DbAuthHandler.CSRF_TOKEN
 
     return [
       sessionData,
       {
-        'X-CSRF-Token': csrfToken,
+        'csrf-token': csrfToken,
         ...this._createSessionHeader(sessionData, csrfToken),
       },
     ]
@@ -218,22 +236,32 @@ export class DbAuthHandler {
   }
 
   async signup() {
-    try {
-      const user = await this._createUser()
+    const userOrMessage = await this._createUser()
+
+    // at this point `user` is either an actual user, in which case log the
+    // user in automatically, or it's a string, which is a message to show
+    // the user (something like "please verify your email")
+
+    if (typeof userOrMessage === 'object') {
+      // signupHandler returned a user, log them in
+      const user = userOrMessage
       const sessionData = { id: user[this.options.authFields.id] }
       const csrfToken = DbAuthHandler.CSRF_TOKEN
 
       return [
         sessionData,
         {
-          'X-CSRF-Token': csrfToken,
+          'csrf-token': csrfToken,
           ...this._createSessionHeader(sessionData, csrfToken),
         },
         { statusCode: 201 },
       ]
-    } catch (e) {
-      return this._logoutResponse(e.message)
+    } else {
+      // signupHandler() returned a message
+      const message = userOrMessage
+      return [JSON.stringify({ message }), {}, { statusCode: 201 }]
     }
+    // errors thrown in signupHandler() will be handled by `invoke()`
   }
 
   // converts the currentUser data to a JWT. returns `null` if session is not present
@@ -249,7 +277,7 @@ export class DbAuthHandler {
       if (e instanceof DbAuthError.NotLoggedInError) {
         return this._logoutResponse()
       } else {
-        return this._logoutResponse(e.message)
+        return this._logoutResponse({ error: e.message })
       }
     }
   }
@@ -420,9 +448,11 @@ export class DbAuthHandler {
     }
   }
 
-  _logoutResponse(message?: string): [string, Record<'Set-Cookie', string>] {
+  _logoutResponse(
+    response?: Record<string, string>
+  ): [string, Record<'Set-Cookie', string>] {
     return [
-      message ? JSON.stringify({ message }) : '',
+      response ? JSON.stringify(response) : '',
       {
         ...this._deleteSessionHeader,
       },
@@ -446,7 +476,7 @@ export class DbAuthHandler {
   _badRequest(message: string) {
     return {
       statusCode: 400,
-      body: JSON.stringify({ message }),
+      body: JSON.stringify({ error: message }),
       headers: { 'Content-Type': 'application/json' },
     }
   }
