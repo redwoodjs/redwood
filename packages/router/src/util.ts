@@ -254,7 +254,7 @@ function flattenAll(children: ReactNode): ReactNode[] {
 /**
  *
  * @param {string} queryString
- * @returns {Array<string | Record<string, any>>} A flatten array of search params
+ * @returns {Array<string | Record<string, any>>} A flat array of search params
  *
  * useMatch hook options searchParams requires a flat array
  *
