@@ -5,3 +5,5 @@ if (typeof __REDWOOD__API_PROXY_PATH !== 'undefined') {
   // @ts-expect-error-next-line
   global.__REDWOOD__API_PROXY_PATH = __REDWOOD__API_PROXY_PATH
 }
+// @ts-expect-error-next-line
+global.__REDWOOD__APP_TITLE = __REDWOOD__APP_TITLE

@@ -15,9 +15,7 @@
     "noFallthroughCasesInSwitch": true,
     "jsx": "preserve",
     "skipLibCheck": true,
-    "plugins": [
-      { "transform": "typescript-transform-paths", "afterDeclarations": true }
-    ]
+    "resolveJsonModule": true
   },
   "exclude": [
     "dist",

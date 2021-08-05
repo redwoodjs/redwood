@@ -2,9 +2,7 @@ import React, { useReducer, createContext, useContext } from 'react'
 
 import { useAuth } from '@redwoodjs/auth'
 
-import type { ParamType } from 'src/internal'
-import { isRoute, PageType } from 'src/router'
-import { flattenAll } from 'src/util'
+import type { ParamType } from './internal'
 
 const DEFAULT_PAGE_LOADING_DELAY = 1000 // milliseconds
 
@@ -12,7 +10,6 @@ export interface RouterState {
   paramTypes?: Record<string, ParamType>
   pageLoadingDelay?: number
   useAuth: typeof useAuth
-  routes: Array<{ name?: string; path?: string; page?: PageType }>
 }
 
 const RouterStateContext = createContext<RouterState | undefined>(undefined)
@@ -21,11 +18,12 @@ export interface RouterSetContextProps {
   setState: (newState: Partial<RouterState>) => void
 }
 
-const RouterSetContext =
-  createContext<React.Dispatch<Partial<RouterState>> | undefined>(undefined)
+const RouterSetContext = createContext<
+  React.Dispatch<Partial<RouterState>> | undefined
+>(undefined)
 
 export interface RouterContextProviderProps
-  extends Omit<RouterState, 'useAuth' | 'routes'> {
+  extends Omit<RouterState, 'useAuth'> {
   useAuth?: typeof useAuth
 }
 
@@ -39,19 +37,10 @@ export const RouterContextProvider: React.FC<RouterContextProviderProps> = ({
   pageLoadingDelay = DEFAULT_PAGE_LOADING_DELAY,
   children,
 }) => {
-  // Create an internal representation of all the routes and paths.
-  const routes = flattenAll(children)
-    .filter(isRoute)
-    .map((route) => {
-      const { name, path, page } = route.props
-      return { name, path, page }
-    })
-
   const [state, setState] = useReducer(stateReducer, {
     useAuth: customUseAuth || useAuth,
     paramTypes,
     pageLoadingDelay,
-    routes,
   })
 
   return (

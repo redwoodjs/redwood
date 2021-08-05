@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { getPaths } from 'src/paths'
+import { getPaths } from '../paths'
 
 import { generateGraphQLSchema } from './graphqlSchema'
 import { generateTypeDefs } from './typeDefinitions'

@@ -169,7 +169,7 @@ export const Success = ({ userProfile }) => {
 
 exports[`creates a cell mock with a camelCase word name 1`] = `
 "// Define your own mock data here:
-export const standard = () => /* vars, { ctx, req } */ ({
+export const standard = () => ({
   userProfile: {
     id: 42,
   },
@@ -179,7 +179,7 @@ export const standard = () => /* vars, { ctx, req } */ ({
 
 exports[`creates a cell mock with a kebabCase word name 1`] = `
 "// Define your own mock data here:
-export const standard = () => /* vars, { ctx, req } */ ({
+export const standard = () => ({
   userProfile: {
     id: 42,
   },
@@ -189,7 +189,7 @@ export const standard = () => /* vars, { ctx, req } */ ({
 
 exports[`creates a cell mock with a multi word name 1`] = `
 "// Define your own mock data here:
-export const standard = () => /* vars, { ctx, req } */ ({
+export const standard = () => ({
   userProfile: {
     id: 42,
   },
@@ -199,7 +199,7 @@ export const standard = () => /* vars, { ctx, req } */ ({
 
 exports[`creates a cell mock with a single word name 1`] = `
 "// Define your own mock data here:
-export const standard = () => /* vars, { ctx, req } */ ({
+export const standard = () => ({
   user: {
     id: 42,
   },
@@ -209,7 +209,7 @@ export const standard = () => /* vars, { ctx, req } */ ({
 
 exports[`creates a cell mock with a snakeCase word name 1`] = `
 "// Define your own mock data here:
-export const standard = () => /* vars, { ctx, req } */ ({
+export const standard = () => ({
   userProfile: {
     id: 42,
   },

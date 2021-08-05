@@ -35,14 +35,14 @@ export default (file, api) => {
   if (file.path.endsWith('.tsx')) {
     root.find(j.VariableDeclaration).insertBefore(propsInterface)
 
+    // Convert "const BlogPost = () "
+    // to "const BlogPost = ({ posts }: Props) "
     root
-      .find(j.Identifier, {
-        name: 'BlogPost',
-      })
+      .find(j.ArrowFunctionExpression)
       .at(0)
       .replaceWith((nodePath) => {
         const { node } = nodePath
-        node.typeAnnotation.typeAnnotation.typeParameters = '<Props>'
+        node.params = ['{ post }: Props']
         return node
       })
   }
@@ -56,12 +56,6 @@ export default (file, api) => {
     })
     .replaceWith((nodePath) => {
       const { node } = nodePath
-      node.init.params = [
-        ...node.init.params,
-        j.objectPattern([
-          j.objectProperty(j.identifier('post'), j.identifier('post')),
-        ]),
-      ]
       node.init.body.body[0].argument = body
       return node
     })

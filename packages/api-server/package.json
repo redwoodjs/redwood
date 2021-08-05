@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/api-server",
   "description": "Redwood's HTTP server for Serverless Functions",
-  "version": "0.34.1",
+  "version": "0.35.2",
   "bin": {
     "api-server": "./dist/index.js",
     "rw-api-server": "./dist/index.js",
@@ -13,12 +13,13 @@
   "main": "dist/handler",
   "license": "MIT",
   "dependencies": {
+    "ansi-colors": "4.1.1",
+    "fast-glob": "3.2.5",
     "body-parser": "1.19.0",
     "chokidar": "3.5.2",
     "dotenv-defaults": "2.0.2",
     "express": "4.17.1",
-    "glob": "7.1.7",
-    "http-proxy-middleware": "2.0.0",
+    "http-proxy-middleware": "2.0.1",
     "lodash.escape": "4.0.1",
     "morgan": "1.10.0",
     "qs": "6.9.3",
@@ -27,11 +28,11 @@
     "youch-terminal": "1.1.1"
   },
   "devDependencies": {
-    "@types/aws-lambda": "8.10.77",
-    "@types/express": "4.17.12",
+    "@types/aws-lambda": "8.10.81",
+    "@types/express": "4.17.13",
     "@types/lodash.escape": "4.0.6",
-    "@types/morgan": "1.9.2",
-    "@types/qs": "6.9.6",
+    "@types/morgan": "1.9.3",
+    "@types/qs": "6.9.7",
     "@types/stack-trace": "0.0.29"
   },
   "scripts": {
