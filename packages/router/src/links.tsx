@@ -1,68 +1,55 @@
 import { forwardRef, useEffect } from 'react'
 
-import isEqual from 'lodash.isequal'
+import {
+  navigate,
+  matchPath,
+  useLocation,
+  flattenSearchParams,
+} from './internal'
 
-import { navigate, matchPath, useLocation, parseSearch } from './internal'
-
-type MatchHookOptions =
-  | { matchSearchParamKeys?: string[]; ignoreQueryString?: never | false }
-  | {
-      ignoreQueryString: true
-      matchSearchParamKeys?: never
-    }
+type FlattenSearchParams = ReturnType<typeof flattenSearchParams>
+type UseMatchOptions = {
+  searchParams?: FlattenSearchParams
+}
 
 /**
- * Returns true if the URL for the given "route" value matches the current URL.
- * i.e pathname and search parameters (query string) are both match
+ * Returns true if the given pathname matches the current location.pathname,
+ * provide searchParams options to match the current location.search
  *
  * This is useful for components that need to know "active" state, e.g.
  * <NavLink>.
  *
  * Examples:
  *
- * Match pathname only (ignore search parameters/query string), e.g. match /about only in this case
- * const match = useMatch('/about?tab=main&name=test', {ignoreQueryString: true})
+ * Match search params key existence
+ * const match = useMatch('/about', ['category', 'page'])
  *
+ * Match search params key and value
+ * const match = useMatch('/items', [{page: 2}, {category: 'book'}])
  *
- * Match specific search parameters only, e.g match tab=main only
- * const match = useMatch('/about?tab=main&name=test', {matchSearchParamKeys: ['tab']})
+ * Mix match
+ * const match = useMatch('/list', [{page: 2}, 'gtm'])
  *
  */
-const useMatch = (route: string, options?: MatchHookOptions) => {
+const useMatch = (pathname: string, options?: UseMatchOptions) => {
   const location = useLocation()
   if (!location) {
     return { match: false }
   }
 
-  // Separate pathname and search parameters, USVString expected
-  const [pathname, search] = route.split('?')
-
-  if (!options?.ignoreQueryString) {
-    const filterParams = (searchParams: ReturnType<typeof parseSearch>) => {
-      if (options?.matchSearchParamKeys?.length) {
-        const matchSearchParamKeys = options.matchSearchParamKeys
-
-        return [...Object.keys(searchParams)].reduce((params, key) => {
-          if (matchSearchParamKeys.includes(key)) {
-            return {
-              ...params,
-              [key]: (searchParams as Record<string, unknown>)[key],
-            }
-          }
-
-          return params
-        }, {})
+  if (options?.searchParams) {
+    const locationParams = new URLSearchParams(location.search)
+    const hasUnmatched = options.searchParams.some((param) => {
+      if (typeof param === 'string') {
+        return !locationParams.has(param)
+      } else {
+        return Object.keys(param).some(
+          (key) => param[key] != locationParams.get(key)
+        )
       }
+    })
 
-      return searchParams
-    }
-
-    if (
-      !isEqual(
-        filterParams(parseSearch(search)),
-        filterParams(parseSearch(location.search))
-      )
-    ) {
+    if (hasUnmatched) {
       return { match: false }
     }
   }
@@ -110,7 +97,7 @@ const Link = forwardRef<
 interface NavLinkProps {
   to: string
   activeClassName: string
-  activeMatchOptions?: MatchHookOptions
+  activeMatchParams?: FlattenSearchParams
 }
 
 const NavLink = forwardRef<
@@ -118,10 +105,13 @@ const NavLink = forwardRef<
   NavLinkProps & React.AnchorHTMLAttributes<HTMLAnchorElement>
 >(
   (
-    { to, activeClassName, activeMatchOptions, className, onClick, ...rest },
+    { to, activeClassName, activeMatchParams, className, onClick, ...rest },
     ref
   ) => {
-    const matchInfo = useMatch(to, activeMatchOptions)
+    // Separate pathname and search parameters, USVString expected
+    const [pathname, queryString] = to.split('?')
+    const searchParams = activeMatchParams || flattenSearchParams(queryString)
+    const matchInfo = useMatch(pathname, { searchParams })
     const theClassName = [className, matchInfo.match && activeClassName]
       .filter(Boolean)
       .join(' ')
