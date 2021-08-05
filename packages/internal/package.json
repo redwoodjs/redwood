@@ -24,19 +24,21 @@
     "@graphql-codegen/typescript-react-apollo": "3.0.0",
     "@graphql-codegen/typescript-resolvers": "2.0.0",
     "deepmerge": "4.2.2",
+    "esbuild": "0.12.17",
     "fast-glob": "3.2.7",
     "findup-sync": "4.0.0",
+    "fs-extra": "10.0.0",
     "glob": "7.1.7",
     "graphql": "15.5.1",
     "kill-port": "1.6.1",
     "prettier": "2.3.2",
-    "toml": "3.0.0",
-    "esbuild": "0.12.17",
-    "rimraf": "3.0.2"
+    "rimraf": "3.0.2",
+    "toml": "3.0.0"
   },
   "devDependencies": {
-    "@types/rimraf": "3.0.1",
     "@types/findup-sync": "4.0.1",
+    "@types/fs-extra": "^9.0.12",
+    "@types/rimraf": "3.0.1",
     "graphql-tag": "2.12.5"
   },
   "jest": {
