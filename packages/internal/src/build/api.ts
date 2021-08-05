@@ -7,7 +7,7 @@ import { moveSync } from 'fs-extra'
 import rimraf from 'rimraf'
 
 import { findApiFiles } from '../files'
-import { getPaths } from '../paths'
+import { ensurePosixPath, getPaths } from '../paths'
 
 export const buildApi = () => {
   // TODO: Be smarter about caching and invalidating files,
@@ -50,7 +50,8 @@ export const generateProxyFilesForNestedFunction = (prebuiltFile: string) => {
   const folderName = path.dirname(relativePathFromFunctions)
 
   const isNestedFunction =
-    prebuiltFile.includes('api/src/functions') && folderName !== '.'
+    ensurePosixPath(prebuiltFile).includes('api/src/functions') &&
+    folderName !== '.'
 
   if (isNestedFunction) {
     const { name: fileName } = path.parse(relativePathFromFunctions)
