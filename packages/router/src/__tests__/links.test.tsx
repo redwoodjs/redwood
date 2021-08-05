@@ -141,6 +141,48 @@ describe('<NavLink />', () => {
     expect(getByText(/Dunder Mifflin/)).toHaveClass('activeTest')
   })
 
+  it('receives active class on the same pathname with a matched param key and multiple matched key-value param', () => {
+    const mockLocation = createDummyLocation(
+      '/search-params',
+      '?tab=about&page=3&category=magazine'
+    )
+
+    const { getByText } = render(
+      <LocationProvider location={mockLocation}>
+        <NavLink
+          activeClassName="activeTest"
+          to={`/search-params?page=3&tab=main&category=magazine`}
+          activeMatchParams={[{ page: 3, category: 'magazine' }, 'tab']}
+        >
+          Dunder Mifflin
+        </NavLink>
+      </LocationProvider>
+    )
+
+    expect(getByText(/Dunder Mifflin/)).toHaveClass('activeTest')
+  })
+
+  it('receives active class on the same pathname with a matched param key and multiple matched key-value param in separated', () => {
+    const mockLocation = createDummyLocation(
+      '/search-params',
+      '?tab=about&page=3&category=magazine'
+    )
+
+    const { getByText } = render(
+      <LocationProvider location={mockLocation}>
+        <NavLink
+          activeClassName="activeTest"
+          to={`/search-params?page=3&tab=main&category=magazine`}
+          activeMatchParams={[{ page: 3 }, { category: 'magazine' }, 'tab']}
+        >
+          Dunder Mifflin
+        </NavLink>
+      </LocationProvider>
+    )
+
+    expect(getByText(/Dunder Mifflin/)).toHaveClass('activeTest')
+  })
+
   it('does NOT receive active class on different path', () => {
     const mockLocation = createDummyLocation('/staples')
 
