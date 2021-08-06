@@ -201,7 +201,8 @@ describe('flattenSearchParams', () => {
       flattenSearchParams('?search=all+dogs+go+to+heaven&category=movies')
     ).toEqual([{ search: 'all dogs go to heaven' }, { category: 'movies' }])
   })
-  it('return empty array', () => {
+
+  it('returns an empty array', () => {
     expect(flattenSearchParams('')).toEqual([])
   })
 })
