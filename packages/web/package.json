@@ -13,7 +13,7 @@
   "dependencies": {
     "@apollo/client": "3.3.21",
     "@redwoodjs/auth": "0.35.2",
-    "core-js": "3.15.2",
+    "core-js": "3.16.0",
     "graphql": "15.5.1",
     "proptypes": "1.1.0",
     "react-helmet-async": "1.0.9",
@@ -23,7 +23,7 @@
     "react": "17.0.2"
   },
   "devDependencies": {
-    "@types/react": "17.0.14"
+    "@types/react": "17.0.15"
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",
