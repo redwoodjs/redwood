@@ -13,6 +13,7 @@ export interface AuthClientSupabase extends AuthClient {
    * @param options The user login details.
    * @param options.email The user's email address.
    * @param options.password The user's password.
+   * @param options.phone The user's phone number.
    * @param options.refreshToken A valid refresh token that was returned on login.
    * @param { 'apple' | 'azure' | 'bitbucket' | 'discord' | 'facebook' | 'github' | 'gitlab' | 'google' | 'twitch' | 'twitter' } options.provider One of the providers supported by GoTrue.
    * @param redirectTo A URL or mobile address to send the user to after they are confirmed.
@@ -21,6 +22,7 @@ export interface AuthClientSupabase extends AuthClient {
   login(options: {
     email?: string | undefined
     password?: string | undefined
+    phone?: string | undefined
     provider?: Provider
     refreshToken?: string
     redirectTo?: string
@@ -40,11 +42,13 @@ export interface AuthClientSupabase extends AuthClient {
    * @param options The user login details.
    * @param options.email The user's email address.
    * @param options.password The user's password.
+   * @param options.phone The user's phone number.
    * @param redirectTo A URL or mobile address to send the user to after they are confirmed.
    */
   signup(options: {
-    email: string
-    password: string
+    email?: string
+    password?: string
+    phone?: string
     redirectTo?: string
   }): Promise<{
     user: User | null
@@ -59,6 +63,22 @@ export interface AuthClientSupabase extends AuthClient {
    *
    */
   restoreAuthState(): void
+  /**
+   * Log in a user given a User supplied OTP received via mobile.
+   * @param phone The user's phone number.
+   * @param token The user's password.
+   * @param redirectTo A URL or mobile address to send the user to after they are confirmed.
+   */
+  verifyOTP(options: {
+    phone: string
+    token: string
+    redirectTo?: string
+  }): Promise<{
+    user: User | null
+    session: Session | null
+    error: Error | null
+    data: Session | User | null // Deprecated
+  }>
   client: Supabase
 }
 
@@ -69,37 +89,25 @@ export const supabase = (client: Supabase): AuthClientSupabase => {
     login: async ({
       email,
       password,
+      phone,
       provider,
       refreshToken,
       redirectTo,
       scopes,
     }) => {
-      // if refreshToken then currentSession and currentUser will be updated
-      // to latest on _callRefreshToken using the passed refreshToken
-      if (refreshToken) {
-        return await client.auth.signIn({ refreshToken }, { redirectTo })
-      }
-      // magic link
-      if (email && !password) {
-        return await client.auth.signIn({ email }, { redirectTo })
-      }
-      // email and password
-      if (email && password) {
-        return await client.auth.signIn({ email, password }, { redirectTo })
-      }
-      // oauth, such as apple, twitter, github, gitlab, bitbucket, google, azure etc.
-      if (provider) {
-        return await client.auth.signIn({ provider }, { redirectTo, scopes })
-      }
-      throw new Error(
-        `You must provide either an email, third-party provider or a refreshToken.`
+      return await client.auth.signIn(
+        { email, phone, password, refreshToken, provider },
+        { redirectTo, scopes }
       )
     },
     logout: async () => {
       return await client.auth.signOut()
     },
-    signup: async ({ email, password, redirectTo }) => {
-      return await client.auth.signUp({ email, password }, { redirectTo })
+    signup: async ({ email, password, phone, redirectTo }) => {
+      return await client.auth.signUp(
+        { email, password, phone },
+        { redirectTo }
+      )
     },
     getToken: async () => {
       const currentSession = client.auth.session()
@@ -114,6 +122,9 @@ export const supabase = (client: Supabase): AuthClientSupabase => {
       window.history.replaceState({}, document.title, window.location.pathname)
 
       return
+    },
+    verifyOTP: async ({ phone, token, redirectTo }) => {
+      return await client.auth.verifyOTP({ phone, token }, { redirectTo })
     },
   }
 }
