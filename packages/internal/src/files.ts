@@ -78,51 +78,82 @@ export const findPrerenderedHtml = (cwd = getPaths().web.dist) =>
   fg.sync('**/*.html', { cwd, ignore: ['200.html', '404.html'] })
 
 export const isCellFile = (p: string) => {
-  const { dir, name } = path.parse(p)
-  // A Cell must be a directory named module.
-  if (!dir.endsWith(name)) {
+  // If the path isn't on the web side it cannot be a cell
+  if (!isWebFile(p)) {
     return false
   }
 
-  const code = fs.readFileSync(p, 'utf-8')
+  // Cell checks parse the file into ast which can fail,
+  // this try-catch block indicates to the user
+  // which file could be the cause of the problem
+  try {
+    const { dir, name } = path.parse(p)
+    // A Cell must be a directory named module.
+    if (!dir.endsWith(name)) {
+      return false
+    }
 
-  // A Cell should not have a default export.
-  if (hasDefaultExport(code)) {
-    return false
+    const code = fs.readFileSync(p, 'utf-8')
+
+    // A Cell should not have a default export.
+    if (hasDefaultExport(code)) {
+      return false
+    }
+
+    // A Cell must export QUERY and Success.
+    const exports = getNamedExports(code)
+    const exportedQUERY = exports.findIndex((v) => v.name === 'QUERY') !== -1
+    const exportedSuccess =
+      exports.findIndex((v) => v.name === 'Success') !== -1
+    if (!exportedQUERY && !exportedSuccess) {
+      return false
+    }
+
+    return true
+  } catch (e) {
+    console.error(`\n Failed parse file at ${p} \n`)
+    throw e
   }
+}
 
-  // A Cell must export QUERY and Success.
-  const exports = getNamedExports(code)
-  const exportedQUERY = exports.findIndex((v) => v.name === 'QUERY') !== -1
-  const exportedSuccess = exports.findIndex((v) => v.name === 'Success') !== -1
-  if (!exportedQUERY && !exportedSuccess) {
-    return false
-  }
-
-  return true
+export const isWebFile = (p: string) => {
+  return p.includes(getPaths().web.base)
 }
 
 export const isPageFile = (p: string) => {
-  const { dir, name } = path.parse(p)
-
-  // A page must end with "Page.{jsx,js,tsx}".
-  if (!name.endsWith('Page')) {
+  // If the path isn't on the web side it cannot be a page
+  if (!isWebFile(p)) {
     return false
   }
 
-  // A page should be in the `web/src/pages` directory.
-  const r = path.relative(getPaths().web.pages, dir)
-  if (!r && r.startsWith('..') && path.isAbsolute(r)) {
-    return false
-  }
+  // Page checks parse the file into ast
+  // Which can fail, this try-catch block indicates to the user
+  // which file could be the cause of the problem
+  try {
+    const { dir, name } = path.parse(p)
 
-  // A Page should have a default export.
-  const code = fs.readFileSync(p, 'utf-8')
-  if (!hasDefaultExport(code)) {
-    return false
-  }
+    // A page must end with "Page.{jsx,js,tsx}".
+    if (!name.endsWith('Page')) {
+      return false
+    }
 
-  return true
+    // A page should be in the `web/src/pages` directory.
+    const r = path.relative(getPaths().web.pages, dir)
+    if (!r && r.startsWith('..') && path.isAbsolute(r)) {
+      return false
+    }
+
+    // A Page should have a default export.
+    const code = fs.readFileSync(p, 'utf-8')
+    if (!hasDefaultExport(code)) {
+      return false
+    }
+
+    return true
+  } catch (e) {
+    console.error(`\n Failed parse file at ${p} \n`)
+    throw e
+  }
 }
 
 export const isDirectoryNamedModuleFile = (p: string) => {
