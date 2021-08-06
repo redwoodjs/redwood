@@ -4,6 +4,8 @@
   "version": "0.35.2",
   "files": [
     "config",
+    "web",
+    "api",
     "dist"
   ],
   "main": "dist/index.js",

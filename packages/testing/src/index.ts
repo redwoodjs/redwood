@@ -1,12 +1,4 @@
-// https://testing-library.com/docs/react-testing-library/setup#custom-render
-import './global'
+// These are the common things that can be shared across
+// web and api tests
 
-export * from '@testing-library/react'
-export { customRender as render } from './customRender'
-
-export { MockProviders } from './MockProviders'
-
-export * from './mockRequests'
 export * from './scenario'
-
-export * from './apiTestingMocks'

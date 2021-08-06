@@ -29,10 +29,16 @@ module.exports = {
     // We replace imports to "@redwoodjs/router" with our own "mock" implementation.
     '^@redwoodjs/router$': path.join(
       NODE_MODULES_PATH,
-      '@redwoodjs/testing/dist/MockRouter.js'
+      '@redwoodjs/testing/dist/web/MockRouter.js'
     ),
     '^@redwoodjs/web$': path.join(NODE_MODULES_PATH, '@redwoodjs/web'),
-    '^@redwoodjs/testing$': path.join(NODE_MODULES_PATH, '@redwoodjs/testing'),
+
+    // @NOTE: Import @redwoodjs/testing in web tests, and it automatically remaps to the web side only
+    // This is to prevent web stuff leaking into api, and vice versa
+    '^@redwoodjs/testing$': path.join(
+      NODE_MODULES_PATH,
+      '@redwoodjs/testing/web'
+    ),
     '~__REDWOOD__USER_ROUTES_FOR_MOCK': rwjsPaths.web.routes,
     /**
      * Mock out files that aren't particularly useful in tests. See fileMock.js for more info.
