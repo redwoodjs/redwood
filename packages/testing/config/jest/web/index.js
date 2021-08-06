@@ -44,7 +44,7 @@ module.exports = {
      * Mock out files that aren't particularly useful in tests. See fileMock.js for more info.
      */
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|css)$':
-      '@redwoodjs/testing/dist/fileMock.js',
+      '@redwoodjs/testing/dist/web/fileMock.js',
   },
   testEnvironment: 'jest-environment-jsdom',
 }
