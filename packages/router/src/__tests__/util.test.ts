@@ -196,7 +196,7 @@ describe('parseSearch', () => {
 })
 
 describe('flattenSearchParams', () => {
-  it('return flatten array from query string', () => {
+  it('returns a flat array from query string', () => {
     expect(
       flattenSearchParams('?search=all+dogs+go+to+heaven&category=movies')
     ).toEqual([{ search: 'all dogs go to heaven' }, { category: 'movies' }])
