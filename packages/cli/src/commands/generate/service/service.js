@@ -52,6 +52,8 @@ export const scenarioFieldValue = (field) => {
       return true
     case 'Decimal':
       return randFloat
+    case 'Float':
+      return randFloat
     case 'Int':
       return randInt
     case 'DateTime':
@@ -184,6 +186,10 @@ export const fieldsToUpdate = async (model) => {
         break
       }
       case 'Decimal': {
+        newValue = newValue + 1.1
+        break
+      }
+      case 'Float': {
         newValue = newValue + 1.1
         break
       }

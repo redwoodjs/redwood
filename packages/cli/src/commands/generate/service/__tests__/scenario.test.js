@@ -85,6 +85,13 @@ describe('the scenario generator', () => {
     expect(value).toEqual(parseFloat(value))
   })
 
+  test('scenarioFieldValue returns a float for Float types', () => {
+    const field = { type: 'Float' }
+    const value = service.scenarioFieldValue(field)
+
+    expect(value).toEqual(parseFloat(value))
+  })
+
   test('scenarioFieldValue returns a number for Int types', () => {
     const field = { type: 'Int' }
     const value = service.scenarioFieldValue(field)
