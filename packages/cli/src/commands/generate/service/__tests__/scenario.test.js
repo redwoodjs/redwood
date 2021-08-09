@@ -78,8 +78,9 @@ describe('the scenario generator', () => {
 
   test('scenarioFieldValue returns a true for Boolean types', () => {
     const field = { type: 'Boolean' }
+    const value = service.scenarioFieldValue(field)
 
-    expect(service.scenarioFieldValue(field)).toEqual(true)
+    expect(value).toEqual(true)
     expect(typeof value).toBe('boolean')
   })
 
