@@ -118,11 +118,11 @@ export const isCellFile = (p: string) => {
 
 export const isFileInsideFolder = (filePath: string, folderPath: string) => {
   const { dir } = path.parse(filePath)
-  const relativePathFromWebSrc = path.relative(folderPath, dir)
+  const relativePathFromFolder = path.relative(folderPath, dir)
   if (
-    !relativePathFromWebSrc &&
-    relativePathFromWebSrc.startsWith('..') &&
-    path.isAbsolute(relativePathFromWebSrc)
+    !relativePathFromFolder &&
+    relativePathFromFolder.startsWith('..') &&
+    path.isAbsolute(relativePathFromFolder)
   ) {
     return false
   } else {
