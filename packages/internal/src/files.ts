@@ -79,7 +79,7 @@ export const findPrerenderedHtml = (cwd = getPaths().web.dist) =>
 
 export const isCellFile = (p: string) => {
   // If the path isn't on the web side it cannot be a cell
-  if (!isWebFile(p)) {
+  if (!isFileInsideFolder(p, getPaths().web.src)) {
     return false
   }
 
@@ -116,21 +116,26 @@ export const isCellFile = (p: string) => {
   }
 }
 
-export const isWebFile = (p: string) => {
-  return p.includes(getPaths().web.base)
+export const isFileInsideFolder = (filePath: string, folderPath: string) => {
+  const { dir } = path.parse(filePath)
+  const relativePathFromWebSrc = path.relative(folderPath, dir)
+  if (
+    !relativePathFromWebSrc &&
+    relativePathFromWebSrc.startsWith('..') &&
+    path.isAbsolute(relativePathFromWebSrc)
+  ) {
+    return false
+  } else {
+    return true
+  }
 }
 
 export const isPageFile = (p: string) => {
-  // If the path isn't on the web side it cannot be a page
-  if (!isWebFile(p)) {
-    return false
-  }
-
   // Page checks parse the file into ast
   // Which can fail, this try-catch block indicates to the user
   // which file could be the cause of the problem
   try {
-    const { dir, name } = path.parse(p)
+    const { name } = path.parse(p)
 
     // A page must end with "Page.{jsx,js,tsx}".
     if (!name.endsWith('Page')) {
@@ -138,8 +143,7 @@ export const isPageFile = (p: string) => {
     }
 
     // A page should be in the `web/src/pages` directory.
-    const r = path.relative(getPaths().web.pages, dir)
-    if (!r && r.startsWith('..') && path.isAbsolute(r)) {
+    if (!isFileInsideFolder(p, getPaths().web.pages)) {
       return false
     }
 
