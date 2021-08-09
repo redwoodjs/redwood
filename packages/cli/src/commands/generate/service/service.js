@@ -46,18 +46,19 @@ export const scenarioFieldValue = (field) => {
   const randInt = parseInt(Math.random() * 10000000)
 
   switch (field.type) {
-    case 'String':
-      return field.isUnique ? `String${randInt}` : 'String'
     case 'Boolean':
       return true
+    case 'DateTime':
+      return new Date().toISOString().replace(/\.\d{3}/, '')
     case 'Decimal':
+    case 'Float':
       return randFloat
     case 'Int':
       return randInt
-    case 'DateTime':
-      return new Date().toISOString().replace(/\.\d{3}/, '')
     case 'Json':
       return { foo: 'bar' }
+    case 'String':
+      return field.isUnique ? `String${randInt}` : 'String'
     default: {
       if (field.kind === 'enum' && field.enumValues[0]) {
         return field.enumValues[0].dbName || field.enumValues[0].name
@@ -175,18 +176,6 @@ export const fieldsToUpdate = async (model) => {
 
     // depending on the field type, append/update the value to something different
     switch (field.type) {
-      case 'String': {
-        newValue = newValue + '2'
-        break
-      }
-      case 'Int': {
-        newValue = newValue + 1
-        break
-      }
-      case 'Decimal': {
-        newValue = newValue + 1.1
-        break
-      }
       case 'Boolean': {
         newValue = !value
         break
@@ -197,8 +186,21 @@ export const fieldsToUpdate = async (model) => {
         newValue = date.toISOString().replace(/\.\d{3}/, '')
         break
       }
+      case 'Decimal':
+      case 'Float': {
+        newValue = newValue + 1.1
+        break
+      }
+      case 'Int': {
+        newValue = newValue + 1
+        break
+      }
       case 'Json': {
         newValue = { foo: 'baz' }
+        break
+      }
+      case 'String': {
+        newValue = newValue + '2'
         break
       }
       default: {
