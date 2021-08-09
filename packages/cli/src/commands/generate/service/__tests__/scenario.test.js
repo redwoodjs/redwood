@@ -60,22 +60,28 @@ describe('the scenario generator', () => {
 
   test('scenarioFieldValue returns a plain string for non-unique String types', () => {
     const field = { type: 'String', isUnique: false }
+    const value = service.scenarioFieldValue(field)
 
-    expect(service.scenarioFieldValue(field)).toEqual(expect.any(String))
+    expect(value).toEqual(expect.any(String))
+    expect(typeof value).toBe('string')
   })
 
   test('scenarioFieldValue returns a unique string for unique String types', () => {
     const field = { type: 'String', isUnique: true }
+    const value = service.scenarioFieldValue(field)
 
-    expect(service.scenarioFieldValue(field)).toEqual(expect.any(String))
+    expect(value).toEqual(expect.any(String))
     // contains some unique digits somewhere
-    expect(service.scenarioFieldValue(field)).toMatch(/\d{1,}$/)
+    expect(value).toMatch(/\d{1,}$/)
+    expect(typeof value).toBe('string')
   })
 
   test('scenarioFieldValue returns a true for Boolean types', () => {
     const field = { type: 'Boolean' }
+    const value = service.scenarioFieldValue(field)
 
-    expect(service.scenarioFieldValue(field)).toEqual(true)
+    expect(value).toEqual(true)
+    expect(typeof value).toBe('boolean')
   })
 
   test('scenarioFieldValue returns a float for Decimal types', () => {
@@ -83,6 +89,15 @@ describe('the scenario generator', () => {
     const value = service.scenarioFieldValue(field)
 
     expect(value).toEqual(parseFloat(value))
+    expect(typeof value).toBe('number')
+  })
+
+  test('scenarioFieldValue returns a float for Float types', () => {
+    const field = { type: 'Float' }
+    const value = service.scenarioFieldValue(field)
+
+    expect(value).toEqual(parseFloat(value))
+    expect(typeof value).toBe('number')
   })
 
   test('scenarioFieldValue returns a number for Int types', () => {
@@ -90,6 +105,7 @@ describe('the scenario generator', () => {
     const value = service.scenarioFieldValue(field)
 
     expect(value).toEqual(parseInt(value))
+    expect(typeof value).toBe('number')
   })
 
   test('scenarioFieldValue returns an ISO8601 timestamp string for DateTime types', () => {
