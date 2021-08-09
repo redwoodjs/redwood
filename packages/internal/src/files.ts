@@ -111,17 +111,17 @@ export const isCellFile = (p: string) => {
 
     return true
   } catch (e) {
-    console.error(`\n Failed parse file at ${p} \n`)
+    console.error(`\n Failed to parse file at ${p} \n`)
     throw e
   }
 }
 
 export const isFileInsideFolder = (filePath: string, folderPath: string) => {
   const { dir } = path.parse(filePath)
-  const relativePathFromFolder = path.relative(folderPath, dir)
+  const relativePathFromFolder = path.relative(folderPath, dir) //?
   if (
-    !relativePathFromFolder &&
-    relativePathFromFolder.startsWith('..') &&
+    !relativePathFromFolder ||
+    relativePathFromFolder.startsWith('..') ||
     path.isAbsolute(relativePathFromFolder)
   ) {
     return false
@@ -155,7 +155,7 @@ export const isPageFile = (p: string) => {
 
     return true
   } catch (e) {
-    console.error(`\n Failed parse file at ${p} \n`)
+    console.error(`\n Failed to parse file at ${p} \n`)
     throw e
   }
 }
