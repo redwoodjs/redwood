@@ -6,6 +6,7 @@ import {
   getNamedExports,
   hasDefaultExport,
   getCellGqlQuery,
+  parse,
 } from '../ast'
 
 test('extracts named exports', () => {
@@ -109,4 +110,13 @@ test('Returns the all quries from a file using getGqlQueries', () => {
     }",
     ]
   `)
+})
+
+test('TypeScript cast syntax works in non-JSX files', () => {
+  const code = `
+  const from = await user({ id: <number>submittal.fromId })
+  const to = await user({ id: <number>submittal.toId })
+`
+
+  expect(() => parse(code)).not.toThrow()
 })
