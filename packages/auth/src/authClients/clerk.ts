@@ -9,9 +9,9 @@ export type { Clerk }
 
 export type ClerkUser = ClerkUserResource & { roles: string[] | null }
 
-// In production, there is an issue where the AuthProvider sometimes captures Clerk
-// as null (and then sends it over as () => null). This captures that case and
-// falls back to `window.Clerk` to access the client.
+// In production, there is an issue where the AuthProvider sometimes captures
+// Clerk as null (and then sends it over as () => null). This intercepts that
+// issue and falls back to `window.Clerk` to access the client.
 function clerkClient(propsClient: Clerk | (() => null)): Clerk | null {
   if (!propsClient || (typeof propsClient === 'function' && !propsClient())) {
     return window.Clerk ?? null
