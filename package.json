@@ -8,10 +8,10 @@
   ],
   "devDependencies": {
     "npm-packlist": "2.2.2",
-    "typescript-transform-paths": "3.0.2"
+    "typescript-transform-paths": "3.2.0"
   },
   "resolutions": {
-    "@types/react": "17.0.14",
+    "@types/react": "17.0.15",
     "prop-types": "15.7.2",
     "react-dom": "17.0.2",
     "react": "17.0.2",
@@ -32,7 +32,6 @@
     "clean:prisma": "rimraf node_modules/.prisma/client && node node_modules/@prisma/client/scripts/postinstall.js",
     "lint": "yarn framework lint",
     "lint:fix": "yarn framework lint:fix",
-
     "postinstall": "yarn framework install",
     "build:link": "node ./tasks/build-and-copy",
     "build:test-project": "node ./tasks/test-project/test-project"

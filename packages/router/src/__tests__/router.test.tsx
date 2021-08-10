@@ -521,6 +521,29 @@ test('renders first matching route only, also with Private', async () => {
   expect(screen.queryByText(/param/)).not.toBeInTheDocument()
 })
 
+test('renders first matching route only, also with param path outside Private', async () => {
+  const ParamPage = ({ param }: { param: string }) => <div>param {param}</div>
+
+  const TestRouter = () => (
+    <Router useAuth={mockUseAuth({ isAuthenticated: true })}>
+      <Route path="/" page={HomePage} name="home" />
+      <Private unauthenticated="login">
+        <Route path="/private" page={PrivatePage} name="private" />
+      </Private>
+      <Route path="/{param}" page={ParamPage} name="param" />
+    </Router>
+  )
+
+  const screen = render(<TestRouter />)
+
+  await waitFor(() => screen.getByText(/Home Page/))
+
+  // go to about page, and make sure that's the only page rendered
+  act(() => navigate(routes.private()))
+  await waitFor(() => screen.getByText('Private Page'))
+  expect(screen.queryByText(/param/)).not.toBeInTheDocument()
+})
+
 test('params should never be an empty object', async () => {
   const ParamPage = () => {
     const params = useParams()

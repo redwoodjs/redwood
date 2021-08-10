@@ -1,4 +1,3 @@
-import { sessions, users } from '@clerk/clerk-sdk-node'
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 
 import type { GlobalContext } from '../../globalContext'
@@ -9,6 +8,9 @@ export type Req = {
 }
 
 export const clerk = async (token: string, req: Req) => {
+  // Use require here, to prevent needing clerk sdk in api deps
+  const { sessions, users } = require('@clerk/clerk-sdk-node')
+
   if (!process.env.CLERK_API_KEY) {
     console.error('CLERK_API_KEY env var is not set.')
     throw new Error('CLERK_API_KEY env var is not set.')

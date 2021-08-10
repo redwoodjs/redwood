@@ -15,6 +15,7 @@ import { useDisableIntrospection } from '@envelop/disable-introspection'
 import { useFilterAllowedOperations } from '@envelop/filter-operation-type'
 import type { AllowedOperations } from '@envelop/filter-operation-type'
 import { useParserCache } from '@envelop/parser-cache'
+import { handleStreamOrSingleExecutionResult } from '@envelop/types'
 import { useValidationCache } from '@envelop/validation-cache'
 import type {
   APIGatewayProxyEvent,
@@ -48,18 +49,6 @@ import {
   setContext,
   usePerRequestContext,
 } from '../index'
-
-/**
- * Used in Envelop Plugins when handling a result in the onExecuteDone event
- * because the result might be just a single ExecutionResult or
- * if a stream, or subscription then an AsyncIterator of ExecutionResult
- * @see https://github.com/dotansimha/envelop/blob/8021229cc19be4f0c1bcf5534fa0c0cfad4425aa/packages/core/src/graphql-typings.d.ts#L1
- */
-export function isAsyncIterable(
-  maybeAsyncIterable: any
-): maybeAsyncIterable is AsyncIterable<unknown> {
-  return typeof maybeAsyncIterable?.[Symbol.asyncIterator] === 'function'
-}
 
 export type GetCurrentUser = (
   decoded: AuthContextPayload[0],
@@ -422,20 +411,11 @@ const useRedwoodLogger = (
       const handleResult = logResult(loggerConfig, envelopLogger)
 
       return {
-        onExecuteDone({ result }) {
-          // we check the type of result because if in the case of a stream or subscription
-          // then the result is iterable ...
-          if (isAsyncIterable(result)) {
-            return {
-              onNext: ({ result }) => {
-                handleResult({ result })
-              },
-            }
-          }
-          // otherwise, the result is just a single ExecutionResult
-          const executionResult = result as ExecutionResult
-          handleResult({ result: executionResult })
-          return undefined
+        onExecuteDone: (payload) => {
+          handleStreamOrSingleExecutionResult(payload, ({ result }) => {
+            handleResult({ result })
+            return undefined
+          })
         },
       }
     },

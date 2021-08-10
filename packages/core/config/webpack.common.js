@@ -148,6 +148,9 @@ const getSharedPlugins = (isEnvProduction) => {
     // time.
     new webpack.DefinePlugin({
       __REDWOOD__API_PROXY_PATH: JSON.stringify(redwoodConfig.web.apiProxyPath),
+      __REDWOOD__APP_TITLE: JSON.stringify(
+        redwoodConfig.web.title || path.basename(redwoodPaths.base)
+      ),
       ...getEnvVars(),
     }),
     new Dotenv({
@@ -197,7 +200,6 @@ module.exports = (webpackEnv) => {
     plugins: [
       !isEnvProduction && new webpack.HotModuleReplacementPlugin(),
       new HtmlWebpackPlugin({
-        title: path.basename(redwoodPaths.base),
         template: path.resolve(redwoodPaths.base, 'web/src/index.html'),
         templateParameters: {
           prerenderPlaceholder: isEnvProduction
