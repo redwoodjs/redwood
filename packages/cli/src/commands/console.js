@@ -1,7 +1,7 @@
 import path from 'path'
 import repl from 'repl'
 
-import babelRequireHook from '@babel/register'
+import { registerApiSideBabelHook } from '@redwoodjs/internal'
 
 import { getPaths } from '../lib'
 
@@ -18,13 +18,7 @@ const mapDBToContext = (ctx) => {
 
 export const handler = () => {
   // Transpile on the fly
-  babelRequireHook({
-    extends: path.join(paths.base, '.babelrc.js'),
-    extensions: ['.js', '.ts'],
-    only: [paths.base],
-    ignore: ['node_modules'],
-    cache: false,
-  })
+  registerApiSideBabelHook()
 
   const r = repl.start()
 

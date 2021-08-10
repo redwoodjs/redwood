@@ -1,9 +1,10 @@
 import path from 'path'
 
-import babelRequireHook from '@babel/register'
 import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
+
+import { registerApiSideBabelHook } from '@redwoodjs/internal'
 
 import { getPaths } from '../lib'
 import c from '../lib/colors'
@@ -45,22 +46,17 @@ export const handler = async (args) => {
   const scriptPath = path.join(getPaths().scripts, name)
 
   // Import babel config for running script
-  babelRequireHook({
-    extends: path.join(getPaths().api.base, '.babelrc.js'),
-    extensions: ['.js', '.ts'],
-    plugins: [
-      [
-        'babel-plugin-module-resolver',
-        {
-          alias: {
-            $api: getPaths().api.base,
-          },
+  registerApiSideBabelHook([
+    [
+      'babel-plugin-module-resolver',
+      {
+        alias: {
+          $api: getPaths().api.base,
         },
-      ],
+      },
+      'exec-$api-module-resolver',
     ],
-    ignore: ['node_modules'],
-    cache: false,
-  })
+  ])
 
   try {
     require.resolve(scriptPath)
