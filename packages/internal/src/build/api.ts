@@ -35,7 +35,11 @@ export const prebuildApiFiles = (srcFiles: string[]) => {
   const plugins = getBabelPlugins()
 
   return srcFiles.map((srcPath) => {
-    const result = prebuildFile(srcPath, plugins)
+    let dstPath = path.relative(rwjsPaths.base, srcPath)
+    dstPath = path.join(rwjsPaths.generated.prebuild, dstPath)
+    dstPath = dstPath.replace(/\.(ts)$/, '.js') // TODO: Figure out a better way to handle extensions
+
+    const result = prebuildFile(srcPath, dstPath, plugins)
     if (!result?.code) {
       // TODO: Figure out a better way to return these programatically.
       console.warn('Error:', srcPath, 'could not prebuilt.')
@@ -43,10 +47,6 @@ export const prebuildApiFiles = (srcFiles: string[]) => {
       return undefined
     }
 
-    let dstPath = path.relative(rwjsPaths.base, srcPath)
-    dstPath = path.join(rwjsPaths.generated.prebuild, dstPath)
-
-    dstPath = dstPath.replace(/\.(ts)$/, '.js') // TODO: Figure out a better way to handle extensions
     fs.mkdirSync(path.dirname(dstPath), { recursive: true })
     fs.writeFileSync(dstPath, result.code)
     return dstPath
@@ -66,6 +66,9 @@ export const getApiSideBabelConfigPath = () => {
 // needs to determine plugins on a per-file basis for web side.
 export const prebuildFile = (
   srcPath: string,
+  // we need to know dstPath as well
+  // so we can generate an inline, relative sourcemap
+  dstPath: string,
   plugins: TransformOptions['plugins']
 ) => {
   const code = fs.readFileSync(srcPath, 'utf-8')
@@ -73,6 +76,14 @@ export const prebuildFile = (
     cwd: getPaths().api.base,
     filename: srcPath,
     configFile: getApiSideBabelConfigPath(),
+    // we set the sourceFile (for the sourcemap) as a correct, relative path
+    // this is why this function (prebuildFile) must know about the dstPath
+    sourceFileName: path.relative(path.dirname(dstPath), srcPath),
+    // we need inline sourcemaps at this level
+    // because this file will eventually be fed to esbuild
+    // when esbuild finds an inline sourcemap, it tries to "combine" it
+    // so the final sourcemap (the one that esbuild generates) combines both mappings
+    sourceMaps: 'inline',
     plugins,
   })
   return result
@@ -137,7 +148,10 @@ export const transpileApi = (files: string[], options = {}) => {
     format: 'cjs',
     bundle: false,
     outdir: rwjsPaths.api.dist,
-    sourcemap: 'external', // figure out what's best during development.
+    // setting this to 'true' will generate an external sourcemap x.js.map
+    // AND set the sourceMappingURL comment
+    // (setting it to 'external' will ONLY generate the file, but won't add the comment)
+    sourcemap: true,
     ...options,
   })
 }
