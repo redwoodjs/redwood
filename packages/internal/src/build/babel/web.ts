@@ -12,7 +12,7 @@ import { getPaths } from '../../paths'
 export const getWebSideBabelConfigPath = () => {
   // @Note: web side has .babel.rc still, not babel.config.js
   // This should be handled in the prebuild for web PR
-  const babelRcPath = path.join(getPaths().web.base, '.babel.rc.js')
+  const babelRcPath = path.join(getPaths().web.base, '.babelrc.js')
   if (fs.existsSync(babelRcPath)) {
     return babelRcPath
   } else {
