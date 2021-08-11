@@ -9,3 +9,4 @@ export { buildApi } from './build/api'
 
 // Babel helpers
 export * from './babel/api'
+export * from './babel/web'

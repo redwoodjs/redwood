@@ -1,17 +1,20 @@
 import fs from 'fs'
-import path from 'path'
 
 import React from 'react'
 
-import babelRequireHook from '@babel/register'
 import cheerio from 'cheerio'
 import ReactDOMServer from 'react-dom/server'
 
-import { getPaths } from '@redwoodjs/internal'
+import { getPaths, registerWebSideBabelHook } from '@redwoodjs/internal'
 import { LocationProvider } from '@redwoodjs/router'
 
 import mediaImportsPlugin from './babelPlugins/babel-plugin-redwood-prerender-media-imports'
 import { getRootHtmlPath, registerShims, writeToDist } from './internal'
+
+/** ~~~~~~ WARN ~~~~~~~~~
+ * This file should only be dynamically imported
+ * await import(), or require inline
+~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 interface PrerenderParams {
   routerPath: string // e.g. /about, /dashboard/me
@@ -19,41 +22,36 @@ interface PrerenderParams {
 
 const rwWebPaths = getPaths().web
 
-// Prerender specific configuration
-// extends projects web/babelConfig
-babelRequireHook({
-  extends: path.join(rwWebPaths.base, '.babelrc.js'),
-  extensions: ['.js', '.ts', '.tsx', '.jsx'],
-  overrides: [
-    {
-      plugins: [
-        ['ignore-html-and-css-imports'], // webpack/postcss handles CSS imports
-        [
-          'babel-plugin-module-resolver',
-          {
-            alias: {
-              src: rwWebPaths.src,
-            },
-            root: [getPaths().web.base],
-            // needed for respecting users' custom aliases in web/.babelrc
-            // See https://github.com/tleunen/babel-plugin-module-resolver/blob/master/DOCS.md#cwd
-            cwd: 'babelrc',
-            loglevel: 'silent', // to silence the unnecessary warnings
-          },
-          'prerender-module-resolver', // add this name, so it doesn't overwrite custom module resolvers in users' web/.babelrc
-        ],
-        [mediaImportsPlugin],
-      ],
-    },
-  ],
-  only: [getPaths().base],
-  ignore: ['node_modules'],
-  cache: false,
-})
-
 export const runPrerender = async ({
   routerPath,
 }: PrerenderParams): Promise<string | void> => {
+  // Prerender specific configuration
+  // extends projects web/babelConfig
+  registerWebSideBabelHook({
+    overrides: [
+      {
+        plugins: [
+          ['ignore-html-and-css-imports'], // webpack/postcss handles CSS imports
+          [
+            'babel-plugin-module-resolver',
+            {
+              alias: {
+                src: rwWebPaths.src,
+              },
+              root: [getPaths().web.base],
+              // needed for respecting users' custom aliases in web/.babelrc
+              // See https://github.com/tleunen/babel-plugin-module-resolver/blob/master/DOCS.md#cwd
+              cwd: 'babelrc',
+              loglevel: 'silent', // to silence the unnecessary warnings
+            },
+            'prerender-module-resolver', // add this name, so it doesn't overwrite custom module resolvers in users' web/.babelrc
+          ],
+          [mediaImportsPlugin],
+        ],
+      },
+    ],
+  })
+
   registerShims()
 
   const indexContent = fs.readFileSync(getRootHtmlPath()).toString()
