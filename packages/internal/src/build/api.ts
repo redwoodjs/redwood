@@ -148,9 +148,10 @@ export const transpileApi = (files: string[], options = {}) => {
     format: 'cjs',
     bundle: false,
     outdir: rwjsPaths.api.dist,
-    // inline sourcemaps are preferrable while developing
-    // fewer opportunities for inconsitent states
-    sourcemap: 'inline',
+    // setting this to 'true' will generate an external sourcemap x.js.map
+    // AND set the sourceMappingURL comment
+    // (setting it to 'external' will ONLY generate the file, but won't add the comment)
+    sourcemap: true,
     ...options,
   })
 }
