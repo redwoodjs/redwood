@@ -4,7 +4,7 @@ import path from 'path'
 import type { TransformOptions, PluginItem } from '@babel/core'
 import babelRequireHook from '@babel/register'
 
-import { getPaths } from '../paths'
+import { getPaths } from '../../paths'
 
 // TODO: move web side babel plugins here too when we pretranspile web side
 // and export getWebSideBabelPlugins
@@ -29,7 +29,7 @@ interface RegisterWebHookParams {
 export const registerWebSideBabelHook = ({
   additionalPlugins = [],
   overrides,
-}: RegisterWebHookParams) => {
+}: RegisterWebHookParams = {}) => {
   babelRequireHook({
     // incase user has a custom babel.config.js in api
     extends: getWebSideBabelConfigPath(),

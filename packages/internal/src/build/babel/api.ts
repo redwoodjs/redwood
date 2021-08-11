@@ -4,7 +4,7 @@ import path from 'path'
 import type { TransformOptions, PluginItem } from '@babel/core'
 import babelRequireHook from '@babel/register'
 
-import { getPaths } from '../paths'
+import { getPaths } from '../../paths'
 
 export const getApiSideBabelPlugins = () => {
   const rwjsPaths = getPaths()
@@ -67,11 +67,15 @@ export const getApiSideBabelConfigPath = () => {
   }
 }
 
+interface RegisterApiHookParams {
+  additionalPlugins?: PluginItem[]
+}
+
 // Used in cli commands that need to use es6, lib and services
 // Note that additionalPlugins are a nested array e.g. [[plug1, x, x], [plug2, y, y]]
-export const registerApiSideBabelHook = (
-  additionalPlugins: PluginItem[] = []
-) => {
+export const registerApiSideBabelHook = ({
+  additionalPlugins = [],
+}: RegisterApiHookParams = {}) => {
   babelRequireHook({
     // incase user has a custom babel.config.js in api
     extends: getApiSideBabelConfigPath(),

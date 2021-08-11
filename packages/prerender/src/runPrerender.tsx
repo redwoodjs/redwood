@@ -11,11 +11,6 @@ import { LocationProvider } from '@redwoodjs/router'
 import mediaImportsPlugin from './babelPlugins/babel-plugin-redwood-prerender-media-imports'
 import { getRootHtmlPath, registerShims, writeToDist } from './internal'
 
-/** ~~~~~~ WARN ~~~~~~~~~
- * This file should only be dynamically imported
- * await import(), or require inline
-~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
 interface PrerenderParams {
   routerPath: string // e.g. /about, /dashboard/me
 }

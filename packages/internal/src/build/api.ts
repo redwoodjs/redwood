@@ -5,9 +5,10 @@ import { transform, TransformOptions } from '@babel/core'
 import { buildSync } from 'esbuild'
 import rimraf from 'rimraf'
 
-import { getApiSideBabelConfigPath, getApiSideBabelPlugins } from '../babel/api'
 import { findApiFiles } from '../files'
 import { getPaths } from '../paths'
+
+import { getApiSideBabelConfigPath, getApiSideBabelPlugins } from './babel/api'
 
 export const buildApi = () => {
   // TODO: Be smarter about caching and invalidating files,

@@ -8,5 +8,5 @@ export { generate } from './generate/generate'
 export { buildApi } from './build/api'
 
 // Babel helpers
-export * from './babel/api'
-export * from './babel/web'
+export * from './build/babel/api'
+export * from './build/babel/web'

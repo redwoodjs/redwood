@@ -46,17 +46,19 @@ export const handler = async (args) => {
   const scriptPath = path.join(getPaths().scripts, name)
 
   // Import babel config for running script
-  registerApiSideBabelHook([
-    [
-      'babel-plugin-module-resolver',
-      {
-        alias: {
-          $api: getPaths().api.base,
+  registerApiSideBabelHook({
+    additionalPlugins: [
+      [
+        'babel-plugin-module-resolver',
+        {
+          alias: {
+            $api: getPaths().api.base,
+          },
         },
-      },
-      'exec-$api-module-resolver',
+        'exec-$api-module-resolver',
+      ],
     ],
-  ])
+  })
 
   try {
     require.resolve(scriptPath)
