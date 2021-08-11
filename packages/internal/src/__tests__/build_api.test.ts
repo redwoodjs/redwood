@@ -11,7 +11,7 @@ const FIXTURE_PATH = path.resolve(
   '../../../../__fixtures__/example-todo-main'
 )
 
-export const cleanPaths = (p) => {
+const cleanPaths = (p) => {
   return ensurePosixPath(path.relative(FIXTURE_PATH, p))
 }
 
@@ -30,6 +30,12 @@ test('api files are prebuilt', () => {
   expect(p[2].endsWith('api/src/graphql/todos.sdl.js')).toBeTruthy()
 })
 
+test('api prebuild finds babel.config.js', () => {
+  let p = getApiSideBabelConfigPath()
+  p = cleanPaths(p)
+  expect(p).toEqual('api/babel.config.js')
+})
+
 test('api prebuild uses babel config', () => {
   const builtFiles = prebuildApiFiles(findApiFiles())
   const p = builtFiles
@@ -42,10 +48,4 @@ test('api prebuild uses babel config', () => {
     "import dog from \\"dog-bless\\";
     console.log(dog);"
   `)
-})
-
-test('api prebuild finds babel.config.js', () => {
-  let p = getApiSideBabelConfigPath()
-  p = cleanPaths(p)
-  expect(p).toEqual('api/babel.config.js')
 })
