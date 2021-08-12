@@ -15,7 +15,7 @@ export const getWebSideBabelConfigPath = () => {
   if (fs.existsSync(babelRcPath)) {
     return babelRcPath
   } else {
-    return false
+    return undefined
   }
 }
 
