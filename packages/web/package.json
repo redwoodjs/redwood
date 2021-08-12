@@ -23,7 +23,7 @@
     "react": "17.0.2"
   },
   "devDependencies": {
-    "@types/react": "17.0.16"
+    "@types/react": "17.0.17"
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",

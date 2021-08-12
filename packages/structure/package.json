@@ -35,7 +35,7 @@
     "@types/fs-extra": "9.0.12",
     "@types/lodash": "4.14.172",
     "@types/lru-cache": "5.1.1",
-    "@types/node": "16.4.13",
+    "@types/node": "16.6.0",
     "@types/vscode": "1.59.0"
   },
   "jest": {
