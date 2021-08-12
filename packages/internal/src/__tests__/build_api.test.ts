@@ -63,7 +63,7 @@ describe("Should create a 'proxy' function for nested functions", () => {
       fullPath('.redwood/prebuild/api/src/functions/nested/nested.js')
     )
 
-    // Hidden path in the _build folder
+    // Hidden path in the _nestedFunctions folder
     expect(cleanPaths(buildPath)).toBe(
       '.redwood/prebuild/api/src/_nestedFunctions/nested/nested.js'
     )
