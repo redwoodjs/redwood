@@ -153,7 +153,7 @@ exports[`creates a single word function file: Scenario snapshot 1`] = `
 `;
 
 exports[`creates a single word function file: Test snapshot 1`] = `
-"import { mockHttpEvent } from '@redwoodjs/testing'
+"import { mockHttpEvent } from '@redwoodjs/testing/api'
 
 import { handler } from './foo'
 

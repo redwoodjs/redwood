@@ -1,4 +1,4 @@
-import { mockHttpEvent } from '@redwoodjs/testing'
+import { mockHttpEvent } from '@redwoodjs/testing/api'
 
 import { handler } from './${name}'
 
