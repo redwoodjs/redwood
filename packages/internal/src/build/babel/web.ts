@@ -17,7 +17,7 @@ export const getWebSideBabelConfigPath = () => {
   if (fs.existsSync(babelRcPath)) {
     return babelRcPath
   } else {
-    return undefined
+    return false
   }
 }
 
@@ -34,7 +34,8 @@ export const registerWebSideBabelHook = ({
   // @WARN! Do NOT use import statements for babel register, within TS files
   registerBabel({
     // incase user has a custom babel.config.js in api
-    extends: getWebSideBabelConfigPath(),
+    configFile: getWebSideBabelConfigPath(),
+    babelrc: false,
     extensions: ['.js', '.ts', '.tsx', '.jsx'],
     plugins: [...additionalPlugins],
     ignore: ['node_modules'],
