@@ -1,8 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 
-import type { TransformOptions, PluginItem } from '@babel/core'
-
 import { getPaths } from '../../paths'
 
 import { registerBabel, RegisterHookOptions } from './common'

@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import type { TransformOptions, PluginItem } from '@babel/core'
+import type { TransformOptions } from '@babel/core'
 
 import { getPaths } from '../../paths'
 
