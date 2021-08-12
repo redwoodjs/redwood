@@ -9,7 +9,7 @@
   ],
   "dependencies": {
     "@babel/node": "7.14.9",
-    "@babel/runtime-corejs3": "7.14.9",
+    "@babel/runtime-corejs3": "7.15.3",
     "@redwoodjs/internal": "0.35.2",
     "axios": "0.21.1",
     "chalk": "4.1.2",
@@ -19,7 +19,7 @@
     "fs-extra": "10.0.0",
     "listr": "0.14.3",
     "tmp": "0.2.1",
-    "yargs": "16.0.3"
+    "yargs": "16.2.0"
   },
   "scripts": {
     "build": "yarn build:js",
