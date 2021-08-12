@@ -23,6 +23,7 @@
     "@graphql-codegen/typescript-operations": "2.0.1",
     "@graphql-codegen/typescript-react-apollo": "3.0.0",
     "@graphql-codegen/typescript-resolvers": "2.0.0",
+    "babel-plugin-graphql-tag": "^3.3.0",
     "deepmerge": "4.2.2",
     "esbuild": "0.12.19",
     "fast-glob": "3.2.7",
