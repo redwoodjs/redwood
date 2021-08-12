@@ -30,7 +30,7 @@ jobs:
           key: node_modules_${{ runner.os }}_${{ hashFiles('**/yarn.lock') }}
 
       - name: Install framework modules
-        run: yarn install --immutable && yarn postinstall ## TO DO: is this really gonna be the way?
+        run: yarn install --immutable
 
       - name: Create a temporary directory
         id: createpath

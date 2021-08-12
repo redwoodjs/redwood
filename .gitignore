@@ -12,6 +12,7 @@ tmp/
 .vscode/*
 blog-test-project/*
 .yarn/*
+**/.yarn/install-state.gz
 !.yarn/patches
 !.yarn/releases
 !.yarn/plugins
