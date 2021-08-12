@@ -25,16 +25,18 @@ interface RegisterWebHookParams {
   additionalPlugins?: PluginItem[]
   overrides?: TransformOptions['overrides']
 }
+
 // Used in prerender only currently
-// Note that additionalPlugins are a nested array e.g. [[plug1, x, x], [plug2, y, y]]
+// Be Careful: additionalPlugins are a nested array e.g. [[plug1, x, x], [plug2, y, y]]
 export const registerWebSideBabelHook = ({
   additionalPlugins = [],
   overrides,
 }: RegisterWebHookParams = {}) => {
-  // @WARN! Do NOT use import statements for babel register, within TS files
+  // @NOTE
+  // Even though we specify the config file, babel will still search for .babelrc
+  // and merge them because we have specified the filename property, unless babelrc = false
   registerBabel({
-    // incase user has a custom babel.config.js in api
-    configFile: getWebSideBabelConfigPath(),
+    configFile: getWebSideBabelConfigPath(), // incase user has a custom babel.config.js in api
     babelrc: false,
     extensions: ['.js', '.ts', '.tsx', '.jsx'],
     plugins: [...additionalPlugins],

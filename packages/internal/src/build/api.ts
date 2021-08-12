@@ -65,6 +65,10 @@ export const prebuildFile = (
   plugins: TransformOptions['plugins']
 ) => {
   const code = fs.readFileSync(srcPath, 'utf-8')
+
+  // @NOTE
+  // Even though we specify the config file, babel will still search for .babelrc
+  // and merge them because we have specified the filename property, unless babelrc = false
   const result = transform(code, {
     cwd: getPaths().api.base,
     babelrc: false,

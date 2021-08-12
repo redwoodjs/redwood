@@ -74,12 +74,15 @@ interface RegisterApiHookParams {
 
 // Used in cli commands that need to use es6, lib and services
 // Note that additionalPlugins are a nested array e.g. [[plug1, x, x], [plug2, y, y]]
+
 export const registerApiSideBabelHook = ({
   additionalPlugins = [],
 }: RegisterApiHookParams = {}) => {
   registerBabel({
-    // incase user has a custom babel.config.js in api
-    configFile: getApiSideBabelConfigPath(),
+    // @NOTE
+    // Even though we specify the config file, babel will still search for it
+    // and merge them because we have specified the filename property, unless babelrc = false
+    configFile: getApiSideBabelConfigPath(), // incase user has a custom babel.config.js in api
     babelrc: false,
     extensions: ['.js', '.ts'],
     plugins: [...getApiSideBabelPlugins(), ...additionalPlugins],
