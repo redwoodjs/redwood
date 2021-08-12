@@ -43,9 +43,10 @@ const args = yargs
     describe: 'Delete existing directory, and recreate project',
   })
   .option('canary', {
-    default: false,
+    default: true,
     type: 'boolean',
-    describe: 'Upgrade project to latest canary version',
+    describe:
+      'Upgrade project to latest canary version. NOT compatible with --link.',
   })
   .help()
   .strict().argv
