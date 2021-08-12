@@ -9,7 +9,7 @@
   ],
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@prisma/sdk": "2.28.0",
+    "@prisma/sdk": "2.29.0",
     "@redwoodjs/internal": "0.35.2",
     "@types/line-column": "1.0.0",
     "camelcase": "6.2.0",
@@ -35,8 +35,8 @@
     "@types/fs-extra": "9.0.12",
     "@types/lodash": "4.14.172",
     "@types/lru-cache": "5.1.1",
-    "@types/node": "16.4.10",
-    "@types/vscode": "1.58.1"
+    "@types/node": "16.6.0",
+    "@types/vscode": "1.59.0"
   },
   "jest": {
     "testPathIgnorePatterns": [
