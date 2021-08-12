@@ -25,6 +25,7 @@ module.exports = () => {
       // same as @babel/plugin-proposal class-properties.
       // (https://babeljs.io/docs/en/babel-plugin-proposal-private-methods#loose)
       ['@babel/plugin-proposal-private-methods', { loose: true }],
+      ['@babel/plugin-proposal-private-property-in-object', { loose: true }],
       [
         '@babel/plugin-transform-runtime',
         {

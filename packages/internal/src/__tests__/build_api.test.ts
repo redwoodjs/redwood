@@ -130,8 +130,15 @@ test('api prebuild uses babel config', () => {
     .pop()
 
   const code = fs.readFileSync(p, 'utf-8')
-  expect(code).toMatchInlineSnapshot(`
+  expect(stripInlineSourceMap(code)).toMatchInlineSnapshot(`
     "import dog from \\"dog-bless\\";
     console.log(dog);"
   `)
 })
+
+function stripInlineSourceMap(src: string): string {
+  return src
+    .split('\n')
+    .filter((line) => !line.startsWith('//# sourceMappingURL='))
+    .join('\n')
+}

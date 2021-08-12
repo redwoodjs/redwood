@@ -23,7 +23,7 @@
     "lodash.escape": "4.0.1",
     "morgan": "1.10.0",
     "qs": "6.9.3",
-    "yargs": "16.0.3",
+    "yargs": "16.2.0",
     "youch": "2.2.2",
     "youch-terminal": "1.1.1"
   },
