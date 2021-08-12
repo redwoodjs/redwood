@@ -150,6 +150,109 @@ describe('inits routes and navigates as expected', () => {
   })
 })
 
+describe('test params escaping', () => {
+  const ParamPage = ({ value, q }: { value: string; q: string }) => {
+    const params = useParams()
+
+    return (
+      <div>
+        <p>param {`${value}${q}`}</p>
+        <p>hookparams {`${params.value}?${params.q}`}</p>
+      </div>
+    )
+  }
+
+  const TestRouter = () => (
+    <Router useAuth={mockUseAuth()}>
+      <Route path="/redirect2/{value}" redirect="/param-test/{value}" />
+      <Route path="/param-test/{value}" page={ParamPage} name="params" />
+      <Route notfound page={NotFoundPage} />
+    </Router>
+  )
+
+  const getScreen = () => render(<TestRouter />)
+
+  test('Params with unreserved characters work in path and query', async () => {
+    const screen = getScreen()
+    act(() =>
+      navigate(routes.params({ value: 'example.com', q: 'example.com' }))
+    )
+    await waitFor(() => {
+      expect(
+        screen.queryByText('param example.comexample.com')
+      ).toBeInTheDocument()
+      expect(
+        screen.queryByText('hookparams example.com?example.com')
+      ).toBeInTheDocument()
+    })
+  })
+
+  test('Params with reserved characters work in path and query', async () => {
+    const screen = getScreen()
+    act(() =>
+      navigate(routes.params({ value: 'example!com', q: 'example!com' }))
+    )
+
+    await waitFor(() => {
+      expect(
+        screen.queryByText('param example!comexample!com')
+      ).toBeInTheDocument()
+      expect(
+        screen.queryByText('hookparams example!com?example!com')
+      ).toBeInTheDocument()
+    })
+  })
+
+  test('Params with unsafe characters work in query, are escaped in path', async () => {
+    const screen = getScreen()
+    act(() =>
+      navigate(routes.params({ value: 'example com', q: 'example com' }))
+    )
+
+    await waitFor(() => {
+      expect(
+        screen.queryByText('param example%20comexample com')
+      ).toBeInTheDocument()
+      expect(
+        screen.queryByText('hookparams example%20com?example com')
+      ).toBeInTheDocument()
+    })
+  })
+
+  test('Character / is valid as part of a param in query', async () => {
+    const screen = getScreen()
+    act(() => navigate(routes.params({ value: 'example', q: 'example/com' })))
+
+    await waitFor(() => {
+      expect(screen.queryByText('param exampleexample/com')).toBeInTheDocument()
+      expect(
+        screen.queryByText('hookparams example?example/com')
+      ).toBeInTheDocument()
+    })
+  })
+
+  test('Character / is not captured as part of a param in path', async () => {
+    const screen = getScreen()
+    act(() =>
+      navigate(routes.params({ value: 'example/com', q: 'example/com' }))
+    )
+
+    await waitFor(() => screen.getByText('404'))
+  })
+
+  test('navigate to redirect2 should forward params with unreserved characters', async () => {
+    const screen = getScreen()
+    act(() => navigate('/redirect2/example.com?q=example.com'))
+    await waitFor(() => screen.getByText(/param example.comexample.com/i))
+  })
+
+  test('navigate to redirect2 should forward params with escaped characters', async () => {
+    const screen = getScreen()
+    act(() => navigate('/redirect2/example!com?q=example!com'))
+    await waitFor(() => screen.getByText(/param example!comexample!com/i))
+  })
+})
+
 test('unauthenticated user is redirected away from private page', async () => {
   const TestRouter = () => (
     <Router useAuth={mockUseAuth()}>
