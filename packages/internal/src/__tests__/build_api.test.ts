@@ -1,7 +1,12 @@
 import fs from 'fs'
 import path from 'path'
 
-import { getApiSideBabelConfigPath, prebuildApiFiles } from '../build/api'
+import {
+  getApiSideBabelConfigPath,
+  prebuildApiFiles,
+  cleanApiBuild,
+  generateProxyFilesForNestedFunction,
+} from '../build/api'
 import { findApiFiles } from '../files'
 import { ensurePosixPath } from '../paths'
 
@@ -14,19 +19,101 @@ const cleanPaths = (p) => {
   return ensurePosixPath(path.relative(FIXTURE_PATH, p))
 }
 
+const fullPath = (p) => {
+  return path.join(FIXTURE_PATH, p)
+}
+
+// Fixtures, filled in beforeAll
+let builtFiles
+let relativePaths
+
 beforeAll(() => {
   process.env.RWJS_CWD = FIXTURE_PATH
+  cleanApiBuild()
+  findApiFiles()
+  builtFiles = prebuildApiFiles(findApiFiles())
+  relativePaths = builtFiles
+    .filter((x) => typeof x !== 'undefined')
+    .map(cleanPaths)
 })
 afterAll(() => {
   delete process.env.RWJS_CWD
 })
 
 test('api files are prebuilt', () => {
-  const builtFiles = prebuildApiFiles(findApiFiles())
-  const p = builtFiles.filter((x) => typeof x !== 'undefined').map(cleanPaths)
+  // Builds non-nested functions
+  expect(relativePaths).toContain(
+    '.redwood/prebuild/api/src/functions/graphql.js'
+  )
 
-  expect(p[0].endsWith('api/src/functions/graphql.js')).toBeTruthy()
-  expect(p[2].endsWith('api/src/graphql/todos.sdl.js')).toBeTruthy()
+  // Builds graphql folder
+  expect(relativePaths).toContain(
+    '.redwood/prebuild/api/src/graphql/todos.sdl.js'
+  )
+
+  // Builds nested function
+  expect(relativePaths).toContain(
+    '.redwood/prebuild/api/src/functions/nested/nested.js'
+  )
+})
+
+describe("Should create a 'proxy' function for nested functions", () => {
+  it('Handles functions nested with the same name', () => {
+    const [buildPath, reExportPath] = generateProxyFilesForNestedFunction(
+      fullPath('.redwood/prebuild/api/src/functions/nested/nested.js')
+    )
+
+    // Hidden path in the _nestedFunctions folder
+    expect(cleanPaths(buildPath)).toBe(
+      '.redwood/prebuild/api/src/_nestedFunctions/nested/nested.js'
+    )
+
+    // Proxy/reExport function placed in the function directory
+    expect(cleanPaths(reExportPath)).toBe(
+      '.redwood/prebuild/api/src/functions/nested.js'
+    )
+
+    const reExportContent = fs.readFileSync(reExportPath, 'utf-8')
+    expect(reExportContent).toMatchInlineSnapshot(
+      `"export * from '../_nestedFunctions/nested/nested';"`
+    )
+  })
+
+  it('Handles folders with an index file', () => {
+    const [buildPath, reExportPath] = generateProxyFilesForNestedFunction(
+      fullPath('.redwood/prebuild/api/src/functions/x/index.js')
+    )
+
+    // Hidden path in the _build folder
+    expect(cleanPaths(buildPath)).toBe(
+      '.redwood/prebuild/api/src/_nestedFunctions/x/index.js'
+    )
+
+    // Proxy/reExport function placed in the function directory
+    expect(cleanPaths(reExportPath)).toBe(
+      '.redwood/prebuild/api/src/functions/x.js'
+    )
+
+    const reExportContent = fs.readFileSync(reExportPath, 'utf-8')
+
+    expect(reExportContent).toMatchInlineSnapshot(
+      `"export * from '../_nestedFunctions/x';"`
+    )
+  })
+
+  it('Should not put files that dont match the folder name in dist/functions', () => {
+    const [buildPath, reExportPath] = generateProxyFilesForNestedFunction(
+      fullPath('.redwood/prebuild/api/src/functions/invalid/x.js')
+    )
+
+    // File is transpiled to the _nestedFunctions folder
+    expect(cleanPaths(buildPath)).toEqual(
+      '.redwood/prebuild/api/src/_nestedFunctions/invalid/x.js'
+    )
+
+    // But not exposed as a serverless function
+    expect(reExportPath).toBe(undefined)
+  })
 })
 
 test('api prebuild finds babel.config.js', () => {
