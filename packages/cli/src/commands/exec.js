@@ -47,7 +47,7 @@ export const handler = async (args) => {
 
   // Import babel config for running script
   registerApiSideBabelHook({
-    additionalPlugins: [
+    plugins: [
       [
         'babel-plugin-module-resolver',
         {

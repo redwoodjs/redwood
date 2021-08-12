@@ -5,7 +5,7 @@ import type { TransformOptions, PluginItem } from '@babel/core'
 
 import { getPaths } from '../../paths'
 
-import { registerBabel } from './common'
+import { registerBabel, RegisterHookOptions } from './common'
 
 // TODO: move web side babel plugins here too when we pretranspile web side
 // and export getWebSideBabelPlugins
@@ -21,17 +21,11 @@ export const getWebSideBabelConfigPath = () => {
   }
 }
 
-interface RegisterWebHookParams {
-  additionalPlugins?: PluginItem[]
-  overrides?: TransformOptions['overrides']
-}
-
 // Used in prerender only currently
-// Be Careful: additionalPlugins are a nested array e.g. [[plug1, x, x], [plug2, y, y]]
 export const registerWebSideBabelHook = ({
-  additionalPlugins = [],
+  plugins = [],
   overrides,
-}: RegisterWebHookParams = {}) => {
+}: RegisterHookOptions = {}) => {
   // @NOTE
   // Even though we specify the config file, babel will still search for .babelrc
   // and merge them because we have specified the filename property, unless babelrc = false
@@ -39,7 +33,7 @@ export const registerWebSideBabelHook = ({
     configFile: getWebSideBabelConfigPath(), // incase user has a custom babel.config.js in api
     babelrc: false,
     extensions: ['.js', '.ts', '.tsx', '.jsx'],
-    plugins: [...additionalPlugins],
+    plugins: [...plugins],
     ignore: ['node_modules'],
     cache: false,
     overrides,

@@ -1,6 +1,15 @@
-import type { TransformOptions } from '@babel/core'
+import type { TransformOptions, PluginItem } from '@babel/core'
 
-export interface RequireHookOptions extends TransformOptions {
+export interface RegisterHookOptions {
+  /**
+   *  Be careful: plugins are a nested array e.g. [[plug1, x, x], [plug2, y, y]].
+   *  These are in addition to the default RW plugins
+   */
+  plugins?: PluginItem[]
+  overrides?: TransformOptions['overrides']
+}
+
+interface BabelRegisterOptions extends TransformOptions {
   extensions?: string[]
   cache?: boolean
 }
@@ -18,6 +27,6 @@ export interface RequireHookOptions extends TransformOptions {
  *
  *
 **/
-export const registerBabel = (options: RequireHookOptions) => {
+export const registerBabel = (options: BabelRegisterOptions) => {
   require('@babel/register')(options)
 }
