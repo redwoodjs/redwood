@@ -3,10 +3,11 @@ import path from 'path'
 
 import { transform, TransformOptions } from '@babel/core'
 import { buildSync } from 'esbuild'
+import { moveSync } from 'fs-extra'
 import rimraf from 'rimraf'
 
 import { findApiFiles } from '../files'
-import { getPaths } from '../paths'
+import { ensurePosixPath, getPaths } from '../paths'
 
 import { getApiSideBabelConfigPath, getApiSideBabelPlugins } from './babel/api'
 
@@ -16,9 +17,10 @@ export const buildApi = () => {
   cleanApiBuild()
 
   const srcFiles = findApiFiles()
-  const prebuiltFiles = prebuildApiFiles(srcFiles).filter(
-    (x) => typeof x !== 'undefined'
-  ) as string[]
+
+  const prebuiltFiles = prebuildApiFiles(srcFiles)
+    .filter((path): path is string => path !== undefined)
+    .flatMap(generateProxyFilesForNestedFunction)
 
   return transpileApi(prebuiltFiles)
 }
@@ -30,6 +32,77 @@ export const cleanApiBuild = () => {
 }
 
 /**
+ * Takes prebuilt api files, and will generate proxy functions where required
+ *  If the function is nested in a folder, put it into the special _build directory
+ *  at the same level as functions, then re-export it.
+ *
+ * This allows for support for nested functions across all our supported providers,
+ * (Netlify, Vercel, Render, Self-hosted) - and they behave consistently
+ *
+ * Note that this function takes prebuilt files in the .redwood/prebuild directory
+ *
+ */
+export const generateProxyFilesForNestedFunction = (prebuiltFile: string) => {
+  const rwjsPaths = getPaths()
+
+  const relativePathFromFunctions = path.relative(
+    path.join(rwjsPaths.generated.prebuild, 'api/src/functions'),
+    prebuiltFile
+  )
+  const folderName = path.dirname(relativePathFromFunctions)
+
+  const isNestedFunction =
+    ensurePosixPath(prebuiltFile).includes('api/src/functions') &&
+    folderName !== '.'
+
+  if (isNestedFunction) {
+    const { name: fileName } = path.parse(relativePathFromFunctions)
+    const isIndexFile = fileName === 'index'
+
+    // .redwood/prebuilds/api/src/_build/{folder}/{fileName}
+    const nestedFunctionOutputPath = path
+      .join(
+        rwjsPaths.generated.prebuild,
+        'api/src/_nestedFunctions',
+        relativePathFromFunctions
+      )
+      .replace(/\.(ts)$/, '.js')
+
+    // move existing file into the new nestedOutputPath
+    // @Note: use fs-extra.moveSync for compatibility under docker and linux
+    moveSync(prebuiltFile, nestedFunctionOutputPath)
+
+    // Only generate proxy files for the function
+    if (fileName === folderName || isIndexFile) {
+      // .redwood/prebuild/api/src/functions/{folderName}.js
+      const reExportPath =
+        path.join(
+          rwjsPaths.generated.prebuild,
+          'api/src/functions',
+          folderName
+        ) + '.js'
+
+      const importString = isIndexFile
+        ? `../_nestedFunctions/${folderName}`
+        : `../_nestedFunctions/${folderName}/${folderName}`
+
+      const reExportContent = `export * from '${importString}';`
+
+      fs.writeFileSync(reExportPath, reExportContent)
+
+      return [nestedFunctionOutputPath, reExportPath]
+    } else {
+      // other files in the folder e.g. functions/helloWorld/otherFile.js
+
+      return [nestedFunctionOutputPath]
+    }
+  }
+
+  // If no post-processing required
+  return [prebuiltFile]
+}
+
+/**
  * Remove RedwoodJS "magic" from a user's code leaving JavaScript behind.
  */
 export const prebuildApiFiles = (srcFiles: string[]) => {
@@ -37,9 +110,10 @@ export const prebuildApiFiles = (srcFiles: string[]) => {
   const plugins = getApiSideBabelPlugins()
 
   return srcFiles.map((srcPath) => {
-    let dstPath = path.relative(rwjsPaths.base, srcPath)
-    dstPath = path.join(rwjsPaths.generated.prebuild, dstPath)
-    dstPath = dstPath.replace(/\.(ts)$/, '.js') // TODO: Figure out a better way to handle extensions
+    const relativePathFromSrc = path.relative(rwjsPaths.base, srcPath)
+    const dstPath = path
+      .join(rwjsPaths.generated.prebuild, relativePathFromSrc)
+      .replace(/\.(ts)$/, '.js')
 
     const result = prebuildFile(srcPath, dstPath, plugins)
     if (!result?.code) {
@@ -51,6 +125,7 @@ export const prebuildApiFiles = (srcFiles: string[]) => {
 
     fs.mkdirSync(path.dirname(dstPath), { recursive: true })
     fs.writeFileSync(dstPath, result.code)
+
     return dstPath
   })
 }

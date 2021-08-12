@@ -161,7 +161,7 @@ module.exports = () => {
                     'mockGraphQLMutation',
                     'mockCurrentUser',
                   ],
-                  path: '@redwoodjs/testing',
+                  path: '@redwoodjs/testing/web',
                 },
               ],
             },
