@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@types/findup-sync": "4.0.1",
-    "@types/fs-extra": "^9.0.12",
+    "@types/fs-extra": "9.0.12",
     "@types/rimraf": "3.0.1",
     "graphql-tag": "2.12.5"
   },
