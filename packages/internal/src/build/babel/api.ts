@@ -2,7 +2,6 @@ import fs from 'fs'
 import path from 'path'
 
 import type { TransformOptions, PluginItem } from '@babel/core'
-import babelRequireHook from '@babel/register'
 
 import { getPaths } from '../../paths'
 
@@ -76,7 +75,8 @@ interface RegisterApiHookParams {
 export const registerApiSideBabelHook = ({
   additionalPlugins = [],
 }: RegisterApiHookParams = {}) => {
-  babelRequireHook({
+  // @WARN! Do NOT use import statements for babel register, within TS files
+  require('@babel/register')({
     // incase user has a custom babel.config.js in api
     extends: getApiSideBabelConfigPath(),
     extensions: ['.js', '.ts'],

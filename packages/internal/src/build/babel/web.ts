@@ -2,7 +2,6 @@ import fs from 'fs'
 import path from 'path'
 
 import type { TransformOptions, PluginItem } from '@babel/core'
-import babelRequireHook from '@babel/register'
 
 import { getPaths } from '../../paths'
 
@@ -30,7 +29,8 @@ export const registerWebSideBabelHook = ({
   additionalPlugins = [],
   overrides,
 }: RegisterWebHookParams = {}) => {
-  babelRequireHook({
+  // @WARN! Do NOT use import statements for babel register, within TS files
+  require('@babel/register')({
     // incase user has a custom babel.config.js in api
     extends: getWebSideBabelConfigPath(),
     extensions: ['.js', '.ts', '.tsx', '.jsx'],
