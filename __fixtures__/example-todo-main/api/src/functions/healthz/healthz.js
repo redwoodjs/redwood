@@ -1,7 +1,7 @@
 import { logger } from 'src/lib/logger'
 
 export const handler = async (event, context) => {
-  logger.info('Invoked hello function')
+  logger.info('Invoked healtz function')
 
   return {
     statusCode: 200,
@@ -9,7 +9,7 @@ export const handler = async (event, context) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      data: 'healtz function',
+      data: 'healthz function',
     }),
   }
 }

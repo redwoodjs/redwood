@@ -1,7 +1,7 @@
 import { logger } from 'src/lib/logger'
 
 export const handler = async (event, context) => {
-  logger.info('Invoked hello function')
+  logger.info('Invoked x function')
 
   return {
     statusCode: 200,
