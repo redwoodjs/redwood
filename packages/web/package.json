@@ -17,7 +17,7 @@
     "graphql": "15.5.1",
     "proptypes": "1.1.0",
     "react-helmet-async": "1.0.9",
-    "react-hot-toast": "2.0.0"
+    "react-hot-toast": "2.1.0"
   },
   "peerDependencies": {
     "react": "17.0.2"
