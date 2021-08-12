@@ -64,6 +64,7 @@ export const prebuildFile = (
   const code = fs.readFileSync(srcPath, 'utf-8')
   const result = transform(code, {
     cwd: getPaths().api.base,
+    babelrc: false,
     filename: srcPath,
     configFile: getApiSideBabelConfigPath(),
     plugins,

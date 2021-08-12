@@ -5,6 +5,8 @@ import type { TransformOptions, PluginItem } from '@babel/core'
 
 import { getPaths } from '../../paths'
 
+import { registerBabel } from './common'
+
 // TODO: move web side babel plugins here too when we pretranspile web side
 // and export getWebSideBabelPlugins
 
@@ -30,7 +32,7 @@ export const registerWebSideBabelHook = ({
   overrides,
 }: RegisterWebHookParams = {}) => {
   // @WARN! Do NOT use import statements for babel register, within TS files
-  require('@babel/register')({
+  registerBabel({
     // incase user has a custom babel.config.js in api
     extends: getWebSideBabelConfigPath(),
     extensions: ['.js', '.ts', '.tsx', '.jsx'],

@@ -5,6 +5,8 @@ import type { TransformOptions, PluginItem } from '@babel/core'
 
 import { getPaths } from '../../paths'
 
+import { registerBabel } from './common'
+
 export const getApiSideBabelPlugins = () => {
   const rwjsPaths = getPaths()
   // Plugin shape: [ ["Target", "Options", "name"] ],
@@ -75,10 +77,10 @@ interface RegisterApiHookParams {
 export const registerApiSideBabelHook = ({
   additionalPlugins = [],
 }: RegisterApiHookParams = {}) => {
-  // @WARN! Do NOT use import statements for babel register, within TS files
-  require('@babel/register')({
+  registerBabel({
     // incase user has a custom babel.config.js in api
-    extends: getApiSideBabelConfigPath(),
+    configFile: getApiSideBabelConfigPath(),
+    babelrc: false,
     extensions: ['.js', '.ts'],
     plugins: [...getApiSideBabelPlugins(), ...additionalPlugins],
     ignore: ['node_modules'],
