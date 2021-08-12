@@ -144,7 +144,7 @@ export default { title: 'Pages/ContactUsPage' }
 `;
 
 exports[`creates a page test 1`] = `
-"import { render } from '@redwoodjs/testing'
+"import { render } from '@redwoodjs/testing/web'
 
 import HomePage from './HomePage'
 
@@ -159,7 +159,7 @@ describe('HomePage', () => {
 `;
 
 exports[`creates a test for a component with multiple words for a name 1`] = `
-"import { render } from '@redwoodjs/testing'
+"import { render } from '@redwoodjs/testing/web'
 
 import ContactUsPage from './ContactUsPage'
 
@@ -174,7 +174,7 @@ describe('ContactUsPage', () => {
 `;
 
 exports[`creates a test for page component with params 1`] = `
-"import { render } from '@redwoodjs/testing'
+"import { render } from '@redwoodjs/testing/web'
 
 import PostPage from './PostPage'
 
@@ -204,7 +204,7 @@ export default { title: 'Pages/HomePage' }
 
 exports[`file generation 2`] = `
 Object {
-  "fileContent": "import { render } from '@redwoodjs/testing'
+  "fileContent": "import { render } from '@redwoodjs/testing/web'
 
 import HomePage from './HomePage'
 
@@ -288,7 +288,7 @@ export default { title: 'Pages/PostPage' }
 
 exports[`file generation with route params 2`] = `
 Object {
-  "fileContent": "import { render } from '@redwoodjs/testing'
+  "fileContent": "import { render } from '@redwoodjs/testing/web'
 
 import PostPage from './PostPage'
 
@@ -398,7 +398,7 @@ export default { title: 'Pages/TSFilesPage' }
 `;
 
 exports[`generates typescript pages 3`] = `
-"import { render } from '@redwoodjs/testing'
+"import { render } from '@redwoodjs/testing/web'
 
 import TSFilesPage from './TSFilesPage'
 

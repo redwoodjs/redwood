@@ -338,7 +338,7 @@ export default { title: 'Cells/UserProfileCell' }
 `;
 
 exports[`creates a cell test with a camelCase word name 1`] = `
-"import { render } from '@redwoodjs/testing'
+"import { render } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './UserProfileCell'
 import { standard } from './UserProfileCell.mock'
 
@@ -364,7 +364,7 @@ describe('UserProfileCell', () => {
   // When you're ready to test the actual output of your component render
   // you could test that, for example, certain text is present:
   //
-  // 1. import { screen } from '@redwoodjs/testing'
+  // 1. import { screen } from '@redwoodjs/testing/web'
   // 2. Add test: expect(screen.getByText('Hello, world')).toBeInTheDocument()
 
   it('renders Success successfully', async () => {
@@ -377,7 +377,7 @@ describe('UserProfileCell', () => {
 `;
 
 exports[`creates a cell test with a kebabCase word name 1`] = `
-"import { render } from '@redwoodjs/testing'
+"import { render } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './UserProfileCell'
 import { standard } from './UserProfileCell.mock'
 
@@ -403,7 +403,7 @@ describe('UserProfileCell', () => {
   // When you're ready to test the actual output of your component render
   // you could test that, for example, certain text is present:
   //
-  // 1. import { screen } from '@redwoodjs/testing'
+  // 1. import { screen } from '@redwoodjs/testing/web'
   // 2. Add test: expect(screen.getByText('Hello, world')).toBeInTheDocument()
 
   it('renders Success successfully', async () => {
@@ -416,7 +416,7 @@ describe('UserProfileCell', () => {
 `;
 
 exports[`creates a cell test with a multi word name 1`] = `
-"import { render } from '@redwoodjs/testing'
+"import { render } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './UserProfileCell'
 import { standard } from './UserProfileCell.mock'
 
@@ -442,7 +442,7 @@ describe('UserProfileCell', () => {
   // When you're ready to test the actual output of your component render
   // you could test that, for example, certain text is present:
   //
-  // 1. import { screen } from '@redwoodjs/testing'
+  // 1. import { screen } from '@redwoodjs/testing/web'
   // 2. Add test: expect(screen.getByText('Hello, world')).toBeInTheDocument()
 
   it('renders Success successfully', async () => {
@@ -455,7 +455,7 @@ describe('UserProfileCell', () => {
 `;
 
 exports[`creates a cell test with a single word name 1`] = `
-"import { render } from '@redwoodjs/testing'
+"import { render } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './UserCell'
 import { standard } from './UserCell.mock'
 
@@ -481,7 +481,7 @@ describe('UserCell', () => {
   // When you're ready to test the actual output of your component render
   // you could test that, for example, certain text is present:
   //
-  // 1. import { screen } from '@redwoodjs/testing'
+  // 1. import { screen } from '@redwoodjs/testing/web'
   // 2. Add test: expect(screen.getByText('Hello, world')).toBeInTheDocument()
 
   it('renders Success successfully', async () => {
@@ -494,7 +494,7 @@ describe('UserCell', () => {
 `;
 
 exports[`creates a cell test with a snakeCase word name 1`] = `
-"import { render } from '@redwoodjs/testing'
+"import { render } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './UserProfileCell'
 import { standard } from './UserProfileCell.mock'
 
@@ -520,7 +520,7 @@ describe('UserProfileCell', () => {
   // When you're ready to test the actual output of your component render
   // you could test that, for example, certain text is present:
   //
-  // 1. import { screen } from '@redwoodjs/testing'
+  // 1. import { screen } from '@redwoodjs/testing/web'
   // 2. Add test: expect(screen.getByText('Hello, world')).toBeInTheDocument()
 
   it('renders Success successfully', async () => {

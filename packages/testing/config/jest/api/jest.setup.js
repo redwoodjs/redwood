@@ -4,7 +4,7 @@ const path = require('path')
 const { setContext } = require('@redwoodjs/api')
 const { getSchemaDefinitions } = require('@redwoodjs/cli/dist/lib')
 const { getPaths } = require('@redwoodjs/internal')
-const { defineScenario } = require('@redwoodjs/testing/dist/scenario')
+const { defineScenario } = require('@redwoodjs/testing/dist/api')
 const { db } = require(path.join(getPaths().api.src, 'lib', 'db'))
 
 const DEFAULT_SCENARIO = 'standard'
