@@ -1,6 +1,16 @@
 import type { ${operationName} } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
+<% if (emptyStateComponentExists) { %>
+import EmptyState from 'src/components/CellStates/EmptyState'
+<% } %>
+<% if (failureStateComponentExists) { %>
+import FailureState from 'src/components/CellStates/FailureState'
+<% } %>
+<% if (loadingStateComponentExists) { %>
+import LoadingState from 'src/components/CellStates/LoadingState'
+<% } %>
+
 export const QUERY = gql`
   query ${operationName}($id: ${idType}!) {
     ${camelName}: ${camelName}(id: $id) {
@@ -9,13 +19,27 @@ export const QUERY = gql`
   }
 `
 
-export const Loading = () => <div>Loading...</div>
+<% if (loadingStateComponentExists) { %>
+ export const Loading = () => <LoadingState />
+<% } else { %>
+ export const Loading = () => <div>Loading...</div>
+<% } %>
 
-export const Empty = () => <div>Empty</div>
+<% if (emptyStateComponentExists) { %>
+ export const Empty = () => <EmptyState />
+<% } else { %>
+ export const Empty = () => <div>Empty</div>
+<% } %>
 
+<% if (failureStateComponentExists) { %>
+ export const Failure = ({ error }: CellFailureProps) => (
+   <FailureState error={error} />
+ )
+<% } else { %>
 export const Failure = ({ error }: CellFailureProps) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
+<% } %>
 
 export const Success = ({ ${camelName} }: CellSuccessProps<${operationName}>) => {
   return <div>{JSON.stringify(${camelName})}</div>
