@@ -95,4 +95,3 @@ jobs:
         run: yarn rw prerender --verbose
         # TODO: We should have a script that verifies this.
         working-directory: ${{ steps.createpath.outputs.project_path }}
-
