@@ -114,9 +114,9 @@ chokidar
       copyFrameworkFilesToProject(projectPath, [packageJsonPath])
     } catch (error) {
       hasHadError = true
+      console.log(error)
       console.log()
       logError(`Error building ${packageName}...`)
-      console.log(error)
     }
 
     if (!hasHadError) {
