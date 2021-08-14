@@ -1,0 +1,11 @@
+import { render } from '@redwoodjs/testing/web'
+
+import ${pascalName} from './${pascalName}'
+
+describe('${pascalName}', () => {
+  it('renders successfully', () => {
+    expect(() => {
+      render(<${pascalName} />)
+    }).not.toThrow()
+  })
+})
