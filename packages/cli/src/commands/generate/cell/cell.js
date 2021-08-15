@@ -90,13 +90,13 @@ export const files = async ({
   const cellFileExtension = generateTypescript ? '.tsx' : '.js'
 
   // use imported cell state components or inline
-  const emptyStatePath = `src/components/CellStates/EmptyState/EmptyState${cellFileExtension}`
+  const emptyStatePath = `web/src/components/CellStates/EmptyState/EmptyState${cellFileExtension}`
   const emptyStateComponentExists = fs.existsSync(emptyStatePath)
 
-  const failureStatePath = `src/components/CellStates/FailureState/FailureState${cellFileExtension}`
+  const failureStatePath = `web/src/components/CellStates/FailureState/FailureState${cellFileExtension}`
   const failureStateComponentExists = fs.existsSync(failureStatePath)
 
-  const loadingStatePath = `src/components/CellStates/LoadingState/LoadingState${cellFileExtension}`
+  const loadingStatePath = `web/src/components/CellStates/LoadingState/LoadingState${cellFileExtension}`
   const loadingStateComponentExists = fs.existsSync(loadingStatePath)
 
   const cellFile = templateForComponentFile({
