@@ -152,13 +152,35 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
 }) => {
   const { pathname } = useLocation()
   const flatChildArray = flattenAll(children)
-  const shouldShowSplash =
+  console.log('flatchild', flatChildArray)
+  console.log('pathname', pathname)
+  const hasHomeRoute = flatChildArray.some((child) => {
+    if (isRoute(child)) {
+      return child.props.path === '/'
+    }
+
+    return false
+  })
+
+  // The user has not generated routes
+  // if the only route that exists is
+  // is the not found page
+  const hasGeneratedRoutes = !(
     flatChildArray.length === 1 &&
     isRoute(flatChildArray[0]) &&
     flatChildArray[0].props.notfound
+  )
+
+  const shouldShowSplash =
+    (!hasHomeRoute && pathname === '/') || hasGeneratedRoutes
 
   if (shouldShowSplash) {
-    return <SplashPage />
+    return (
+      <SplashPage
+        hasGeneratedRoutes={hasGeneratedRoutes}
+        routes={flatChildArray}
+      />
+    )
   }
 
   flatChildArray.forEach((child) => {

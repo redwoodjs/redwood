@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from 'react'
 
-const SplashPage: React.VFC = () => {
-  const [version, setVersion] = useState(null)
+interface SplashPageProps {
+  hasGeneratedRoutes: boolean
+  routes: any[]
+}
 
+const SplashPage: React.VFC<SplashPageProps> = ({
+  hasGeneratedRoutes,
+  routes,
+}) => {
+  const [version, setVersion] = useState(null)
   useEffect(() => {
     async function fetchVersion() {
       try {
@@ -28,6 +35,9 @@ const SplashPage: React.VFC = () => {
 
     fetchVersion()
   }, [])
+
+  const introMessageNoRoutes = `You're seeing this because you don't have any pages yet.`
+  const introMessageRoutes = `You're seeing this because you don't have a home pages yet. Here is a list of your current pages:`
 
   return (
     <>
@@ -249,13 +259,20 @@ const SplashPage: React.VFC = () => {
                       fill="var(--highlight-1)"
                     />
                   </svg>
+
                   <p
                     className="intro-instructions"
                     data-cy="e2e-test-splashpage"
                   >
-                    You&apos;re seeing this because you don&apos;t have any
-                    pages yet.
+                    {hasGeneratedRoutes
+                      ? introMessageRoutes
+                      : introMessageNoRoutes}
                   </p>
+                  {hasGeneratedRoutes &&
+                    routes.map((route) => (
+                      <div key={route.key}>{route.props.path}</div>
+                    ))}
+
                   <p className="intro-instructions">
                     <a
                       href="https://redwoodjs.com/docs/cli-commands#generate-page"
