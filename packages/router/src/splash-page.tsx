@@ -37,7 +37,7 @@ const SplashPage: React.VFC<SplashPageProps> = ({
   }, [])
 
   const introMessageNoRoutes = `You're seeing this because you don't have any pages yet.`
-  const introMessageRoutes = `You're seeing this because you don't have a home pages yet. Here is a list of your current pages:`
+  const introMessageRoutes = `You're seeing this because you don't have a home page yet.`
 
   return (
     <>
@@ -52,6 +52,7 @@ const SplashPage: React.VFC<SplashPageProps> = ({
               --background: hsl(0, 0%, 100%);
               --highlight-1: rgb(191, 71, 34);
               --highlight-2: rgb(220, 94, 56);
+              --space-0: 0.125rem;
               --space-1: 0.25rem;
               --space-2: 0.5rem;
               --space-3: 0.75rem;
@@ -65,6 +66,9 @@ const SplashPage: React.VFC<SplashPageProps> = ({
               --space-11: 2.75rem;
               --space-12: 3rem;
               --space-14: 3.5rem;
+              --space-16: 4rem;
+              --space-18: 4.5rem;
+              --space-20: 5rem;
             }
 
             @media (prefers-color-scheme: dark) {
@@ -140,8 +144,8 @@ const SplashPage: React.VFC<SplashPageProps> = ({
             /* Intro */
             .intro {
               text-align: center;
-              margin-top: var(--space-12);
-              margin-bottom: var(--space-12);
+              margin-top: var(--space-20);
+              margin-bottom: var(--space-16);
             }
 
             .intro-heading {
@@ -155,11 +159,28 @@ const SplashPage: React.VFC<SplashPageProps> = ({
               margin: var(--space-4);
             }
 
+            .page-list {
+              margin-top: var(--space-6);
+              margin-bottom: var(--space-3);
+            }
+
+            code {
+              font-family: Fira Code,Fira Mono,Menlo,Monoco,monospace;
+              color: var(--highlight-1);
+              padding-top: var(--space-0);
+              padding-bottom: var(--space-0);
+              padding-left: var(--space-1);
+              padding-right: var(--space-1);
+              border-radius: var(--space-1);
+              background-color: #faeae5;
+              font-size: var(--space-4);
+            }
+
             .intro-instructions {
               font-size: var(--space-5);
               font-weight: 400;
               line-height: var(--space-7);
-              margin-bottom: var(--space-1);
+              margin-bottom: var(--space-2);
             }
 
             /* Resources */
@@ -188,6 +209,18 @@ const SplashPage: React.VFC<SplashPageProps> = ({
               border-color: var(--highlight-2);
             }
 
+            .icon {
+              fill: white;
+              width: var(--space-6);
+            }
+
+            .icon-container {
+              display: flex;
+              align-items: center;
+              gap: var(--space-2);
+              margin-bottom: var(--space-2);
+            }
+
             @media (prefers-color-scheme: dark) {
               .resource {
                 color: var(--foreground);
@@ -205,7 +238,6 @@ const SplashPage: React.VFC<SplashPageProps> = ({
               font-size: var(--space-5);
               line-height: 1;
               font-weight: 700;
-              margin-bottom: var(--space-2);
             }
 
             .resource-description {
@@ -268,23 +300,65 @@ const SplashPage: React.VFC<SplashPageProps> = ({
                       ? introMessageRoutes
                       : introMessageNoRoutes}
                   </p>
-                  {hasGeneratedRoutes &&
-                    routes.map((route) => (
-                      <div key={route.key}>{route.props.path}</div>
-                    ))}
+                  {hasGeneratedRoutes && (
+                    <>
+                      <div className="page-list">
+                        {' '}
+                        Here&apos;s a list of your current pages:
+                      </div>
+                      {routes.map((route) => {
+                        if (!route.props.notfound) {
+                          return (
+                            <div key={route.key}>
+                              <a
+                                href={route.props.path}
+                                target="_blank"
+                                rel="noreferrer"
+                              >
+                                {route.props.page.name}
+                              </a>
+                            </div>
+                          )
+                        }
+                        return <div key={route.key}></div>
+                      })}
+                    </>
+                  )}
 
-                  <p className="intro-instructions">
-                    <a
-                      href="https://redwoodjs.com/docs/cli-commands#generate-page"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Generate a new page
-                    </a>{' '}
-                    or check out the resources below.
-                  </p>
+                  {!hasGeneratedRoutes && (
+                    <p className="intro-instructions">
+                      Type <code>yarn redwood generate page my-page</code> in
+                      your CLI to get started!
+                    </p>
+                  )}
                 </div>
                 <div className="resources">
+                  <div className="resource">
+                    <a
+                      className="resource-link"
+                      href="https://learn.redwoodjs.com/docs/tutorial/welcome-to-redwood/"
+                      target="_blank"
+                      rel="noreferrer"
+                    ></a>
+                    <div className="icon-container">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        className="icon"
+                      >
+                        <path d="M0 0h24v24H0V0z" fill="none"></path>
+                        <path d="M4 5h16v11H4z" opacity=".3"></path>
+                        <path d="M20 18c1.1 0 1.99-.9 1.99-2L22 5c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2H0c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2h-4zM4 5h16v11H4V5zm8 14c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"></path>
+                      </svg>
+                      <h2 className="resource-title">Tutorial</h2>
+                    </div>
+
+                    <p className="resource-description">
+                      Start here to learn how to build full-stack apps with
+                      Redwood.
+                    </p>
+                  </div>
+
                   <div className="resource">
                     <a
                       className="resource-link"
@@ -292,7 +366,22 @@ const SplashPage: React.VFC<SplashPageProps> = ({
                       target="_blank"
                       rel="noreferrer"
                     ></a>
-                    <h2 className="resource-title">Docs</h2>
+                    <div className="icon-container">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        className="icon"
+                      >
+                        <path d="M0 0h24v24H0V0z" fill="none"></path>
+                        <path
+                          d="M13 13l-3-2.25L7 13V4H6v16h12V4h-5z"
+                          opacity=".3"
+                        ></path>
+                        <path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 4h2v5l-1-.75L9 9V4zm9 16H6V4h1v9l3-2.25L13 13V4h5v16z"></path>
+                      </svg>
+                      <h2 className="resource-title">Docs and Cookbook</h2>
+                    </div>
+
                     <p className="resource-description">
                       Find in-depth information about Redwood features and API.
                     </p>
@@ -301,27 +390,25 @@ const SplashPage: React.VFC<SplashPageProps> = ({
                   <div className="resource">
                     <a
                       className="resource-link"
-                      href="https://github.com/redwoodjs/example-blog"
+                      href="https://community.redwoodjs.com/"
                       target="_blank"
                       rel="noreferrer"
                     ></a>
-                    <h2 className="resource-title">Examples</h2>
-                    <p className="resource-description">
-                      Check out an example blog built with Redwood.
-                    </p>
-                  </div>
+                    <div className="icon-container">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        className="icon"
+                      >
+                        <path d="M0 0h24v24H0V0z" fill="none"></path>
+                        <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4V4c0-1.1-.9-2-2-2zm0 15.17L18.83 16H4V4h16v13.17z"></path>
+                        <path d="M4 4v12h14.83L20 17.17V4z" opacity=".3"></path>
+                      </svg>
+                      <h2 className="resource-title">Join the Community</h2>
+                    </div>
 
-                  <div className="resource">
-                    <a
-                      className="resource-link"
-                      href="https://learn.redwoodjs.com/docs/tutorial/welcome-to-redwood/"
-                      target="_blank"
-                      rel="noreferrer"
-                    ></a>
-                    <h2 className="resource-title">Tutorial</h2>
                     <p className="resource-description">
-                      Start here to learn how to build full-stack apps with
-                      Redwood.
+                      Get help, share tips, and collaborate together on Redwood.
                     </p>
                   </div>
 
@@ -332,7 +419,30 @@ const SplashPage: React.VFC<SplashPageProps> = ({
                       target="_blank"
                       rel="noreferrer"
                     ></a>
-                    <h2 className="resource-title">Contribute</h2>
+                    <div className="icon-container">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        className="icon"
+                      >
+                        <g>
+                          <rect fill="none" height="24" width="24"></rect>
+                        </g>
+                        <g>
+                          <path d="M21,5c-1.11-0.35-2.33-0.5-3.5-0.5c-1.95,0-4.05,0.4-5.5,1.5c-1.45-1.1-3.55-1.5-5.5-1.5S2.45,4.9,1,6v14.65 c0,0.25,0.25,0.5,0.5,0.5c0.1,0,0.15-0.05,0.25-0.05C3.1,20.45,5.05,20,6.5,20c1.95,0,4.05,0.4,5.5,1.5c1.35-0.85,3.8-1.5,5.5-1.5 c1.65,0,3.35,0.3,4.75,1.05c0.1,0.05,0.15,0.05,0.25,0.05c0.25,0,0.5-0.25,0.5-0.5V6C22.4,5.55,21.75,5.25,21,5z M3,18.5V7 c1.1-0.35,2.3-0.5,3.5-0.5c1.34,0,3.13,0.41,4.5,0.99v11.5C9.63,18.41,7.84,18,6.5,18C5.3,18,4.1,18.15,3,18.5z M21,18.5 c-1.1-0.35-2.3-0.5-3.5-0.5c-1.34,0-3.13,0.41-4.5,0.99V7.49c1.37-0.59,3.16-0.99,4.5-0.99c1.2,0,2.4,0.15,3.5,0.5V18.5z"></path>
+                          <path
+                            d="M11,7.49C9.63,6.91,7.84,6.5,6.5,6.5C5.3,6.5,4.1,6.65,3,7v11.5C4.1,18.15,5.3,18,6.5,18 c1.34,0,3.13,0.41,4.5,0.99V7.49z"
+                            opacity=".3"
+                          ></path>
+                        </g>
+                        <g>
+                          <path d="M17.5,10.5c0.88,0,1.73,0.09,2.5,0.26V9.24C19.21,9.09,18.36,9,17.5,9c-1.28,0-2.46,0.16-3.5,0.47v1.57 C14.99,10.69,16.18,10.5,17.5,10.5z"></path>
+                          <path d="M17.5,13.16c0.88,0,1.73,0.09,2.5,0.26V11.9c-0.79-0.15-1.64-0.24-2.5-0.24c-1.28,0-2.46,0.16-3.5,0.47v1.57 C14.99,13.36,16.18,13.16,17.5,13.16z"></path>
+                          <path d="M17.5,15.83c0.88,0,1.73,0.09,2.5,0.26v-1.52c-0.79-0.15-1.64-0.24-2.5-0.24c-1.28,0-2.46,0.16-3.5,0.47v1.57 C14.99,16.02,16.18,15.83,17.5,15.83z"></path>
+                        </g>
+                      </svg>
+                      <h2 className="resource-title">Become a Contributor</h2>
+                    </div>
                     <p className="resource-description">
                       Love Redwood and want to get involved? Contribute today!
                     </p>

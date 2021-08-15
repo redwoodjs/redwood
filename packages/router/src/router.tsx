@@ -172,7 +172,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
   )
 
   const shouldShowSplash =
-    (!hasHomeRoute && pathname === '/') || hasGeneratedRoutes
+    (!hasHomeRoute && pathname === '/') || !hasGeneratedRoutes
 
   if (shouldShowSplash) {
     return (
