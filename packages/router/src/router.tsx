@@ -152,8 +152,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
 }) => {
   const { pathname } = useLocation()
   const flatChildArray = flattenAll(children)
-  console.log('flatchild', flatChildArray)
-  console.log('pathname', pathname)
+
   const hasHomeRoute = flatChildArray.some((child) => {
     if (isRoute(child)) {
       return child.props.path === '/'
