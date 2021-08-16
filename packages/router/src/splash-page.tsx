@@ -144,8 +144,8 @@ const SplashPage: React.VFC<SplashPageProps> = ({
             /* Intro */
             .intro {
               text-align: center;
-              margin-top: var(--space-20);
-              margin-bottom: var(--space-16);
+              margin-top: var(--space-16);
+              margin-bottom: var(--space-18);
             }
 
             .intro-heading {
@@ -157,6 +157,10 @@ const SplashPage: React.VFC<SplashPageProps> = ({
             .intro-logo {
               max-width: 23rem;
               margin: var(--space-4);
+            }
+
+            .intro-instructions-container {
+              margin-top: var(--space-8);
             }
 
             .page-list {
@@ -291,46 +295,47 @@ const SplashPage: React.VFC<SplashPageProps> = ({
                       fill="var(--highlight-1)"
                     />
                   </svg>
-
-                  <p
-                    className="intro-instructions"
-                    data-cy="e2e-test-splashpage"
-                  >
-                    {hasGeneratedRoutes
-                      ? introMessageRoutes
-                      : introMessageNoRoutes}
-                  </p>
-                  {hasGeneratedRoutes && (
-                    <>
-                      <div className="page-list">
-                        {' '}
-                        Here&apos;s a list of your current pages:
-                      </div>
-                      {routes.map((route) => {
-                        if (!route.props.notfound) {
-                          return (
-                            <div key={route.key}>
-                              <a
-                                href={route.props.path}
-                                target="_blank"
-                                rel="noreferrer"
-                              >
-                                {route.props.page.name}
-                              </a>
-                            </div>
-                          )
-                        }
-                        return <div key={route.key}></div>
-                      })}
-                    </>
-                  )}
-
-                  {!hasGeneratedRoutes && (
-                    <p className="intro-instructions">
-                      Type <code>yarn redwood generate page my-page</code> in
-                      your CLI to get started!
+                  <div className="intro-instructions-container">
+                    <p
+                      className="intro-instructions"
+                      data-cy="e2e-test-splashpage"
+                    >
+                      {hasGeneratedRoutes
+                        ? introMessageRoutes
+                        : introMessageNoRoutes}
                     </p>
-                  )}
+                    {hasGeneratedRoutes && (
+                      <>
+                        <div className="page-list">
+                          {' '}
+                          Here&apos;s a list of your current pages:
+                        </div>
+                        {routes.map((route) => {
+                          if (!route.props.notfound) {
+                            return (
+                              <div key={route.key}>
+                                <a
+                                  href={route.props.path}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                >
+                                  {route.props.page.name}
+                                </a>
+                              </div>
+                            )
+                          }
+                          return <div key={route.key}></div>
+                        })}
+                      </>
+                    )}
+
+                    {!hasGeneratedRoutes && (
+                      <p className="intro-instructions">
+                        Type <code>yarn redwood generate page my-page</code> in
+                        your CLI to get started!
+                      </p>
+                    )}
+                  </div>
                 </div>
                 <div className="resources">
                   <div className="resource">
