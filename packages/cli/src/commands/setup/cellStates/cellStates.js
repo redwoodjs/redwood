@@ -140,7 +140,7 @@ export const createYargsForCellStateComponentGeneration = ({
         .epilogue(
           `Also see the ${terminalLink(
             'Redwood CLI Reference',
-            `https://redwoodjs.com/reference/command-line-interface#generate-cell-states`
+            `https://redwoodjs.com/reference/command-line-interface#setup-cell-states`
           )}`
         )
         .option('tests', {
@@ -203,7 +203,7 @@ export const { command, builder, handler } =
         type: 'boolean',
       },
       failure: {
-        alias: 'f',
+        alias: 'fail',
         default: true,
         description:
           'Use when you want to generate a Failure cell state component',
