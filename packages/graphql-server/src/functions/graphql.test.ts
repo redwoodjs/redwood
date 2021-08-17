@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { envelop, Plugin } from '@envelop/core'
 
-import { context, getPerRequestContext } from '@redwoodjs/graphql-server'
+import { context, getPerRequestContext } from '../index'
 
 import { usePopulateContext, useRedwoodGlobalContextSetter } from './graphql'
 
