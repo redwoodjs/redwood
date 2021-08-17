@@ -9,6 +9,7 @@ import c from 'ansi-colors'
 import execa from 'execa'
 import fg from 'fast-glob'
 import packlist from 'npm-packlist'
+import rimraf from 'rimraf'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 export const REDWOOD_PACKAGES_PATH = path.resolve(
@@ -137,13 +138,13 @@ export function packageJsonName(packageJsonPath) {
 }
 
 /**
- * Build Redwood packages.
+ * Clean Redwood packages.
  */
-export function buildPackages(packages = frameworkPkgJsonFiles()) {
+export function cleanPackages(packages = frameworkPkgJsonFiles()) {
   const packageNames = packages.map(packageJsonName)
 
   execa.sync(
-    'yarn lerna run build',
+    'yarn lerna run build:clean',
     ['--parallel', `--scope={${packageNames.join(',') + ','}}`],
     {
       shell: true,
@@ -151,6 +152,31 @@ export function buildPackages(packages = frameworkPkgJsonFiles()) {
       cwd: path.resolve(__dirname, '../../'),
     }
   )
+}
+
+/**
+ * Build Redwood packages.
+ */
+export function buildPackages(packages = frameworkPkgJsonFiles()) {
+  const packageNames = packages.map(packageJsonName)
+
+  // Build JavaScript.
+  execa.sync(
+    'yarn lerna run build:js',
+    ['--parallel', `--scope={${packageNames.join(',') + ','}}`],
+    {
+      shell: true,
+      stdio: 'inherit',
+      cwd: path.resolve(__dirname, '../../'),
+    }
+  )
+
+  // Build all TypeScript.
+  execa.sync('yarn build:types', undefined, {
+    shell: true,
+    stdio: 'inherit',
+    cwd: path.resolve(__dirname, '../../'),
+  })
 }
 
 function sortObjectKeys(obj) {

@@ -177,7 +177,7 @@ const PostForm = (props) => {
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
           validation={{ required: true }}
-          dataType=\\"Float\\"
+          transformValue=\\"Float\\"
         />
 
         <FieldError name=\\"rating\\" className=\\"rw-field-error\\" />
@@ -212,7 +212,7 @@ const PostForm = (props) => {
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
           validation={{ required: true }}
-          dataType=\\"Json\\"
+          transformValue=\\"Json\\"
         />
 
         <FieldError name=\\"metadata\\" className=\\"rw-field-error\\" />
@@ -354,7 +354,7 @@ export const Loading = () => <div>Loading...</div>
 export const Empty = () => <div>Post not found</div>
 
 export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div className=\\"rw-cell-error\\">{error.message}</div>
 )
 
 export const Success = ({ post }) => {
@@ -604,11 +604,16 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   color: #1a202c;
   text-decoration: underline;
 }
+.rw-cell-error {
+  font-size: 90%;
+  font-weight: 600;
+}
 .rw-form-wrapper {
   box-sizing: border-box;
   font-size: 0.875rem;
   margin-top: -1rem;
 }
+.rw-cell-error,
 .rw-form-error-wrapper {
   padding: 1rem;
   background-color: #fff5f5;
@@ -864,7 +869,7 @@ const UPDATE_USER_PROFILE_MUTATION = gql\`
 export const Loading = () => <div>Loading...</div>
 
 export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div className=\\"rw-cell-error\\">{error.message}</div>
 )
 
 export const Success = ({ userProfile }) => {
@@ -941,7 +946,7 @@ export const Empty = () => {
 }
 
 export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div className=\\"rw-cell-error\\">{error.message}</div>
 )
 
 export const Success = ({ posts }) => {
@@ -1254,7 +1259,7 @@ const PostForm = (props) => {
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
           validation={{ required: true }}
-          dataType=\\"Float\\"
+          transformValue=\\"Float\\"
         />
         <FieldError name=\\"rating\\" className=\\"rw-field-error\\" />
 
@@ -1287,7 +1292,7 @@ const PostForm = (props) => {
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
           validation={{ required: true }}
-          dataType=\\"Json\\"
+          transformValue=\\"Json\\"
         />
         <FieldError name=\\"metadata\\" className=\\"rw-field-error\\" />
 
@@ -1441,7 +1446,7 @@ export const Loading = () => <div>Loading...</div>
 export const Empty = () => <div>Post not found</div>
 
 export const Failure = ({ error }: CellFailureProps) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div className=\\"rw-cell-error\\">{error.message}</div>
 )
 
 export const Success = ({ post }: CellSuccessProps<FindPostById>) => {
@@ -1683,11 +1688,16 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   color: #1a202c;
   text-decoration: underline;
 }
+.rw-cell-error {
+  font-size: 90%;
+  font-weight: 600;
+}
 .rw-form-wrapper {
   box-sizing: border-box;
   font-size: 0.875rem;
   margin-top: -1rem;
 }
+.rw-cell-error,
 .rw-form-error-wrapper {
   padding: 1rem;
   background-color: #fff5f5;
@@ -1957,7 +1967,7 @@ const UPDATE_POST_MUTATION = gql\`
 export const Loading = () => <div>Loading...</div>
 
 export const Failure = ({ error }: CellFailureProps) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div className=\\"rw-cell-error\\">{error.message}</div>
 )
 
 export const Success = ({ post }: CellSuccessProps<EditPostById>) => {
@@ -2018,7 +2028,7 @@ const UPDATE_USER_PROFILE_MUTATION = gql\`
 export const Loading = () => <div>Loading...</div>
 
 export const Failure = ({ error }: CellFailureProps) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div className=\\"rw-cell-error\\">{error.message}</div>
 )
 
 export const Success = ({ userProfile }: CellSuccessProps<EditUserProfileById>) => {
@@ -2091,7 +2101,7 @@ export const Empty = () => {
 }
 
 export const Failure = ({ error }: CellFailureProps) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div className=\\"rw-cell-error\\">{error.message}</div>
 )
 
 export const Success = ({ posts }: CellSuccessProps<FindPosts>) => {

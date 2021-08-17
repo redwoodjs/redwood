@@ -230,14 +230,13 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
  */
 function activeRouteTree(
   children: React.ReactNode,
-  isActive: (child: React.ReactElement<InternalRouteProps>) => boolean,
-  foundActive = false
+  isActive: (child: React.ReactElement<InternalRouteProps>) => boolean
 ) {
   let active = false
 
   return React.Children.toArray(children).reduce<React.ReactNode[]>(
     (acc, child) => {
-      if (active || foundActive) {
+      if (active) {
         return acc
       }
 
@@ -254,16 +253,13 @@ function activeRouteTree(
       } else if (isReactElement(child) && child.props.children) {
         // We have a child element that's not a <Route ...>, and that has
         // children. It's probably a <Set>. Recurse down one level
-        const nestedChildren = activeRouteTree(
-          child.props.children,
-          isActive,
-          foundActive
-        )
+        const nestedChildren = activeRouteTree(child.props.children, isActive)
 
         if (nestedChildren.length > 0) {
           // We found something we wanted to keep. So let's push it to our
           // "active route tree"
           acc.push(React.cloneElement(child, child.props, nestedChildren))
+          active = true
         }
       }
 

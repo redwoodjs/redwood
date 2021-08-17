@@ -1,9 +1,8 @@
 import Listr from 'listr'
 
-import { ensureUniquePlural } from 'src/commands/generate/helpers'
-import { deleteFilesTask } from 'src/lib'
-import c from 'src/lib/colors'
-
+import { ensureUniquePlural } from '../../../commands/generate/helpers'
+import { deleteFilesTask } from '../../../lib'
+import c from '../../../lib/colors'
 import { files } from '../../generate/sdl/sdl'
 
 export const command = 'sdl <model>'

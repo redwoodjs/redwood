@@ -1,13 +1,14 @@
 import path from 'path'
 
-import babelRequireHook from '@babel/register'
 import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
 
-import { getPaths } from 'src/lib'
-import c from 'src/lib/colors'
-import { generatePrismaClient } from 'src/lib/generatePrismaClient'
+import { registerApiSideBabelHook } from '@redwoodjs/internal'
+
+import { getPaths } from '../lib'
+import c from '../lib/colors'
+import { generatePrismaClient } from '../lib/generatePrismaClient'
 
 const runScript = async (scriptPath, scriptArgs) => {
   const script = await import(scriptPath)
@@ -45,9 +46,7 @@ export const handler = async (args) => {
   const scriptPath = path.join(getPaths().scripts, name)
 
   // Import babel config for running script
-  babelRequireHook({
-    extends: path.join(getPaths().api.base, '.babelrc.js'),
-    extensions: ['.js', '.ts'],
+  registerApiSideBabelHook({
     plugins: [
       [
         'babel-plugin-module-resolver',
@@ -56,10 +55,9 @@ export const handler = async (args) => {
             $api: getPaths().api.base,
           },
         },
+        'exec-$api-module-resolver',
       ],
     ],
-    ignore: ['node_modules'],
-    cache: false,
   })
 
   try {

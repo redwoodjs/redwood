@@ -14,7 +14,6 @@
     "react-dom": "*"
   },
   "dependencies": {
-    "@babel/register": "7.13.16",
     "@redwoodjs/auth": "0.35.2",
     "@redwoodjs/internal": "0.35.2",
     "@redwoodjs/router": "0.35.2",
@@ -28,7 +27,7 @@
     "build": "yarn build:js && yarn build:types",
     "prepublishOnly": "yarn build",
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx,.jsx\"",
-    "build:types": "ttsc --build --verbose",
+    "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build\"",
     "test": "jest",
     "test:watch": "yarn test --watch"

@@ -15,6 +15,9 @@ const config = getConfig()
 const rwjsPaths = getPaths()
 
 const baseConfig = {
+  core: {
+    builder: 'webpack5',
+  },
   stories: [
     `${importStatementPath(rwjsPaths.web.src)}/**/*.stories.{tsx,jsx,js}`,
   ],
@@ -30,7 +33,7 @@ const baseConfig = {
 
     // We replace imports to "@redwoodjs/router" with our own implementation in "@redwoodjs/testing"
     sbConfig.resolve.alias['@redwoodjs/router$'] = require.resolve(
-      '@redwoodjs/testing/dist/MockRouter.js'
+      '@redwoodjs/testing/dist/web/MockRouter.js'
     )
     sbConfig.resolve.alias['~__REDWOOD__USER_ROUTES_FOR_MOCK'] =
       rwjsPaths.web.routes
@@ -54,6 +57,17 @@ const baseConfig = {
 
     sbConfig.resolve.extensions = rwConfig.resolve.extensions
     sbConfig.resolve.plugins = rwConfig.resolve.plugins // Directory Named Plugin
+
+    // Webpack v5 does not include polyfills. Will error without these:
+    sbConfig.resolve.fallback = {
+      http: false,
+      https: false,
+      timers: false,
+      os: false,
+      tty: false,
+      crypto: false,
+      zlib: false,
+    }
 
     // ** PLUGINS **
     sbConfig.plugins = [
