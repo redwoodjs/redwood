@@ -14,7 +14,6 @@
     "react-dom": "*"
   },
   "dependencies": {
-    "@babel/register": "7.14.5",
     "@redwoodjs/auth": "0.35.2",
     "@redwoodjs/internal": "0.35.2",
     "@redwoodjs/router": "0.35.2",
