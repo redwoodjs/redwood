@@ -1,5 +1,5 @@
 export default `
-// web/src/index.css
+/* web/src/index.css */
 
 button, input, label, textarea {
   display: block;

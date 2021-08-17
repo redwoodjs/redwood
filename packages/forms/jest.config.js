@@ -6,6 +6,7 @@ module.exports = {
      * that now requires this.
      */
     'react-hook-form':
-      '<rootDir>/../../node_modules/react-hook-form/dist/index.cjs.development',
+      '<rootDir>/../../node_modules/react-hook-form/dist/index.cjs',
   },
+  testEnvironment: 'jest-environment-jsdom',
 }

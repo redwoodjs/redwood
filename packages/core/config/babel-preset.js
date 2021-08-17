@@ -25,6 +25,7 @@ module.exports = () => {
       // same as @babel/plugin-proposal class-properties.
       // (https://babeljs.io/docs/en/babel-plugin-proposal-private-methods#loose)
       ['@babel/plugin-proposal-private-methods', { loose: true }],
+      ['@babel/plugin-proposal-private-property-in-object', { loose: true }],
       [
         '@babel/plugin-transform-runtime',
         {
@@ -37,7 +38,7 @@ module.exports = () => {
           version: packageJSON.devDependencies['@babel/runtime-corejs3'],
         },
       ],
-      ['babel-plugin-graphql-tag'],
+
       [
         require('../dist/babelPlugins/babel-plugin-redwood-directory-named-import'),
       ],
@@ -96,6 +97,7 @@ module.exports = () => {
               ],
             },
           ],
+          ['babel-plugin-graphql-tag'],
           [require('../dist/babelPlugins/babel-plugin-redwood-import-dir')],
         ],
       },
@@ -159,11 +161,12 @@ module.exports = () => {
                     'mockGraphQLMutation',
                     'mockCurrentUser',
                   ],
-                  path: '@redwoodjs/testing',
+                  path: '@redwoodjs/testing/web',
                 },
               ],
             },
           ],
+          ['babel-plugin-graphql-tag'],
           [
             'inline-react-svg',
             {

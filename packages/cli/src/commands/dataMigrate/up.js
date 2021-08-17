@@ -1,23 +1,14 @@
 import fs from 'fs'
 import path from 'path'
 
-import babelRequireHook from '@babel/register'
 import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
 
-import { getPaths } from 'src/lib'
-import c from 'src/lib/colors'
+import { registerApiSideBabelHook } from '@redwoodjs/internal'
 
-babelRequireHook({
-  extends: path.join(getPaths().api.base, '.babelrc.js'),
-  extensions: ['.js', '.ts', '.tsx', '.jsx'],
-  only: [getPaths().base],
-  ignore: ['node_modules'],
-  cache: false,
-})
-
-const { db } = require(path.join(getPaths().api.lib, 'db'))
+import { getPaths } from '../../lib'
+import c from '../../lib/colors'
 
 // sorts migrations by date, oldest first
 const sortMigrations = (migrations) => {
@@ -36,7 +27,7 @@ const sortMigrations = (migrations) => {
 }
 
 // Return the list of migrations that haven't run against the database yet
-const getMigrations = async () => {
+const getMigrations = async (db) => {
   const basePath = path.join(getPaths().api.dataMigrations)
 
   if (!fs.existsSync(basePath)) {
@@ -69,7 +60,7 @@ const getMigrations = async () => {
 }
 
 // adds data for completed migrations to the DB
-const record = async ({ version, name, startedAt, finishedAt }) => {
+const record = async (db, { version, name, startedAt, finishedAt }) => {
   await db.rW_DataMigration.create({
     data: { version, name, startedAt, finishedAt },
   })
@@ -98,7 +89,7 @@ const report = (counters) => {
   console.log('')
 }
 
-const runScript = async (scriptPath) => {
+const runScript = async (db, scriptPath) => {
   const script = await import(scriptPath)
   const startedAt = new Date()
   await script.default({ db })
@@ -120,7 +111,12 @@ export const builder = (yargs) => {
 }
 
 export const handler = async () => {
-  const migrations = await getMigrations()
+  // Import babel settings so we can write es6 scripts
+  registerApiSideBabelHook()
+
+  const { db } = require(path.join(getPaths().api.lib, 'db'))
+
+  const migrations = await getMigrations(db)
 
   // exit immediately if there aren't any migrations to run
   if (!migrations.length) {
@@ -144,9 +140,9 @@ export const handler = async () => {
       },
       task: async () => {
         try {
-          const { startedAt, finishedAt } = await runScript(migrationPath)
+          const { startedAt, finishedAt } = await runScript(db, migrationPath)
           counters.run++
-          await record({
+          await record(db, {
             version,
             name: migrationName,
             startedAt,

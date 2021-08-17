@@ -3,9 +3,7 @@ import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 import terminalLink from 'terminal-link'
 
-import { getSchema } from 'src/lib'
-
-import { transformTSToJS } from '../../../lib'
+import { getSchema, transformTSToJS } from '../../../lib'
 import { yargsDefaults } from '../../generate'
 import {
   templateForComponentFile,
@@ -44,17 +42,23 @@ export const parseSchema = async (model) => {
 }
 
 export const scenarioFieldValue = (field) => {
-  const rand = parseInt(Math.random() * 10000000)
+  const randFloat = Math.random() * 10000000
+  const randInt = parseInt(Math.random() * 10000000)
 
   switch (field.type) {
-    case 'String':
-      return field.isUnique ? `String${rand}` : 'String'
-    case 'Int':
-      return rand
+    case 'Boolean':
+      return true
     case 'DateTime':
       return new Date().toISOString().replace(/\.\d{3}/, '')
+    case 'Decimal':
+    case 'Float':
+      return randFloat
+    case 'Int':
+      return randInt
     case 'Json':
       return { foo: 'bar' }
+    case 'String':
+      return field.isUnique ? `String${randInt}` : 'String'
     default: {
       if (field.kind === 'enum' && field.enumValues[0]) {
         return field.enumValues[0].dbName || field.enumValues[0].name
@@ -172,12 +176,8 @@ export const fieldsToUpdate = async (model) => {
 
     // depending on the field type, append/update the value to something different
     switch (field.type) {
-      case 'String': {
-        newValue = newValue + '2'
-        break
-      }
-      case 'Int': {
-        newValue = newValue + 1
+      case 'Boolean': {
+        newValue = !value
         break
       }
       case 'DateTime': {
@@ -186,8 +186,21 @@ export const fieldsToUpdate = async (model) => {
         newValue = date.toISOString().replace(/\.\d{3}/, '')
         break
       }
+      case 'Decimal':
+      case 'Float': {
+        newValue = newValue + 1.1
+        break
+      }
+      case 'Int': {
+        newValue = newValue + 1
+        break
+      }
       case 'Json': {
         newValue = { foo: 'baz' }
+        break
+      }
+      case 'String': {
+        newValue = newValue + '2'
         break
       }
       default: {
@@ -311,4 +324,5 @@ export const { command, description, handler } =
   createYargsForComponentGeneration({
     componentName: 'service',
     filesFn: files,
+    shouldEnsureUniquePlural: true,
   })

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { toHaveFocus } from '@testing-library/jest-dom/matchers'
+import { toHaveFocus, toHaveClass } from '@testing-library/jest-dom/matchers'
 import {
   screen,
   render,
@@ -9,7 +9,7 @@ import {
   waitFor,
 } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-expect.extend({ toHaveFocus })
+expect.extend({ toHaveFocus, toHaveClass })
 
 import {
   Form,
@@ -21,6 +21,8 @@ import {
   DateField,
   SelectField,
   Submit,
+  FieldError,
+  Label,
 } from '../index'
 
 describe('Form', () => {
@@ -222,28 +224,6 @@ describe('Form', () => {
     )
   })
 
-  it('supports "dataType" prop on input fields with deprecation warning', async () => {
-    const spy = jest.spyOn(console, 'warn').mockImplementationOnce(() => {})
-    const mockFn = jest.fn()
-
-    render(
-      <Form onSubmit={mockFn}>
-        <TextField name="tf" defaultValue="3.14" dataType="Float" />
-        <Submit>Save</Submit>
-      </Form>
-    )
-
-    fireEvent.click(screen.getByText('Save'))
-
-    await waitFor(() => expect(console.warn).toHaveBeenCalledTimes(1))
-    expect(console.warn).toBeCalledWith(
-      'Using the "dataType" prop on form input fields is deprecated. Use "transformValue" instead.'
-    )
-    expect(mockFn).toHaveBeenCalledTimes(1)
-    expect(mockFn).toBeCalledWith({ tf: 3.14 }, expect.anything())
-    spy.mockRestore()
-  })
-
   it('handles int and float blank values gracefully with console warnings', async () => {
     const spy = jest.spyOn(console, 'warn').mockImplementation(() => {})
     const mockFn = jest.fn()
@@ -369,5 +349,116 @@ describe('Form', () => {
     )
 
     spy.mockRestore()
+  })
+
+  it('for a FieldError with name set to path', async () => {
+    const mockFn = jest.fn()
+
+    render(
+      <Form onSubmit={mockFn}>
+        <TextField
+          name="phone"
+          defaultValue="abcde"
+          data-testid="phoneField"
+          validation={{ pattern: /^[0-9]+$/i }}
+        />
+        <FieldError name="phone" data-testid="phoneFieldError" />
+        <TextField
+          name="address.street"
+          defaultValue="George123"
+          data-testid="streetField"
+          validation={{ pattern: /^[a-zA-z]+$/i }}
+          errorClassName="border-red"
+        />
+        <FieldError name="address.street" data-testid="streetFieldError" />
+        <Submit>Save</Submit>
+      </Form>
+    )
+    fireEvent.click(screen.getByText('Save'))
+    // The validation should catch and prevent the onSubmit from being called
+    await waitFor(async () => {
+      await new Promise((res) =>
+        setTimeout(() => {
+          res(1)
+        }, 50)
+      )
+      expect(mockFn).not.toHaveBeenCalled()
+
+      const phoneError = screen.getByTestId('phoneFieldError').textContent
+      const streetError = screen.getByTestId('streetFieldError').textContent
+      const streetField = screen.getByTestId('streetField')
+      expect(phoneError).toEqual('phone is not formatted correctly')
+      expect(streetError).toEqual('address.street is not formatted correctly')
+      expect(streetField).toHaveClass('border-red', { exact: true })
+    })
+  })
+
+  it("doesn't crash on Labels without name", async () => {
+    render(
+      <Form>
+        {/* @ts-expect-error - pretend this is a .js file */}
+        <Label htmlFor="phone">Input your phone number</Label>
+        <TextField
+          id="phone"
+          name="phone"
+          defaultValue="abcde"
+          data-testid="phoneField"
+          validation={{ pattern: /^[0-9]+$/i }}
+        />
+        <FieldError name="phone" data-testid="phoneFieldError" />
+        <Submit>Save</Submit>
+      </Form>
+    )
+
+    fireEvent.click(screen.getByText('Save'))
+
+    const phoneError = await waitFor(
+      () => screen.getByTestId('phoneFieldError').textContent
+    )
+    expect(phoneError).toEqual('phone is not formatted correctly')
+  })
+
+  it('can handle falsy names ("false")', async () => {
+    render(
+      <Form>
+        <TextField
+          name="false"
+          defaultValue="abcde"
+          data-testid="phoneField"
+          validation={{ pattern: /^[0-9]+$/i }}
+        />
+        <FieldError name="false" data-testid="phoneFieldError" />
+        <Submit>Save</Submit>
+      </Form>
+    )
+
+    fireEvent.click(screen.getByText('Save'))
+
+    const phoneError = await waitFor(
+      () => screen.getByTestId('phoneFieldError').textContent
+    )
+    expect(phoneError).toEqual('false is not formatted correctly')
+  })
+
+  it('can handle falsy names ("0")', async () => {
+    render(
+      <Form>
+        <TextField
+          name="0"
+          defaultValue="abcde"
+          data-testid="phoneField"
+          validation={{ pattern: /^[0-9]+$/i }}
+        />
+        <FieldError name="0" data-testid="phoneFieldError" />
+        <Submit>Save</Submit>
+      </Form>
+    )
+
+    fireEvent.click(screen.getByText('Save'))
+
+    const phoneError = await waitFor(
+      () => screen.getByTestId('phoneFieldError').textContent
+    )
+    expect(phoneError).toEqual('0 is not formatted correctly')
   })
 })
