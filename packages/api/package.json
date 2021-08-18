@@ -10,7 +10,6 @@
   "types": "./dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@babel/runtime": "7.15.3",
     "@graphql-tools/merge": "7.0.0",
     "@prisma/client": "2.29.1",
     "@types/pino": "6.3.11",
