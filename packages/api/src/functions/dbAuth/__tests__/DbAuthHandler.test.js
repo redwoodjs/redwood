@@ -663,11 +663,15 @@ describe('dbAuth', () => {
     })
 
     it('can throw a custom error message', () => {
-      const defaultMessage = new DbAuthHandler(event, context, options)
-      defaultMessage._verifyUser(null, 'password').catch((e) => {
-        expect(e.message).toEqual('Both username and password are required')
+      // default error message
+      const defaultMessage = options.login.errors.usernameOrPasswordMissing
+      delete options.login.errors.usernameOrPasswordMissing
+      const dbAuth1 = new DbAuthHandler(event, context, options)
+      dbAuth1._verifyUser(null, 'password').catch((e) => {
+        expect(e.message).toEqual(defaultMessage)
       })
 
+      // custom error message
       options.login.errors.usernameOrPasswordMissing = 'Missing!'
       const customMessage = new DbAuthHandler(event, context, options)
       customMessage._verifyUser(null, 'password').catch((e) => {
@@ -677,13 +681,28 @@ describe('dbAuth', () => {
       expect.assertions(2)
     })
 
-    it('throws an error if user is not found', async () => {
+    it('throws a default error message if user is not found', async () => {
+      delete options.login.errors.usernameNotFound
       const dbAuth = new DbAuthHandler(event, context, options)
 
       dbAuth._verifyUser('username', 'password').catch((e) => {
         expect(e).toBeInstanceOf(dbAuthError.UserNotFoundError)
+        expect(e.message).toEqual('Username username not found')
       })
-      expect.assertions(1)
+
+      expect.assertions(2)
+    })
+
+    it('throws a custom error message if user is not found', async () => {
+      options.login.errors.usernameNotFound = 'Cannot find ${username}'
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      dbAuth._verifyUser('Alice', 'password').catch((e) => {
+        expect(e).toBeInstanceOf(dbAuthError.UserNotFoundError)
+        expect(e.message).toEqual('Cannot find Alice')
+      })
+
+      expect.assertions(2)
     })
 
     it('throws an error if password is incorrect', async () => {

@@ -36,9 +36,12 @@ export class NotLoggedInError extends Error {
 }
 
 export class UserNotFoundError extends Error {
-  constructor(username: string | undefined = undefined) {
+  constructor(
+    username: string | undefined = undefined,
+    message: string | undefined = 'Username ${username} not found'
+  ) {
     if (username) {
-      super(`User \`${username}\` not found`)
+      super(message.replace(/\$\{username\}/g, username))
     } else {
       super(`User not found`)
     }

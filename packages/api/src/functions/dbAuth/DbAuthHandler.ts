@@ -378,7 +378,10 @@ export class DbAuthHandler {
     })
 
     if (!user) {
-      throw new DbAuthError.UserNotFoundError(username)
+      throw new DbAuthError.UserNotFoundError(
+        username,
+        this.options.login?.errors?.usernameNotFound
+      )
     }
 
     // is password correct?
