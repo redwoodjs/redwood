@@ -48,8 +48,10 @@ export class UserNotFoundError extends Error {
 }
 
 export class UsernameAndPasswordRequiredError extends Error {
-  constructor() {
-    super(`Both username and password are required`)
+  constructor(
+    message: string | undefined = 'Both username and password are required'
+  ) {
+    super(message)
     this.name = 'UsernameAndPasswordRequiredError'
   }
 }

@@ -662,6 +662,21 @@ describe('dbAuth', () => {
       expect.assertions(4)
     })
 
+    it('can throw a custom error message', () => {
+      const defaultMessage = new DbAuthHandler(event, context, options)
+      defaultMessage._verifyUser(null, 'password').catch((e) => {
+        expect(e.message).toEqual('Both username and password are required')
+      })
+
+      options.login.errors.usernameOrPasswordMissing = 'Missing!'
+      const customMessage = new DbAuthHandler(event, context, options)
+      customMessage._verifyUser(null, 'password').catch((e) => {
+        expect(e.message).toEqual('Missing!')
+      })
+
+      expect.assertions(2)
+    })
+
     it('throws an error if user is not found', async () => {
       const dbAuth = new DbAuthHandler(event, context, options)
 

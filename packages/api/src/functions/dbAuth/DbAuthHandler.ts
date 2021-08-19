@@ -367,7 +367,9 @@ export class DbAuthHandler {
       !password ||
       password.toString().trim() === ''
     ) {
-      throw new DbAuthError.UsernameAndPasswordRequiredError()
+      throw new DbAuthError.UsernameAndPasswordRequiredError(
+        this.options.login?.errors?.usernameOrPasswordMissing
+      )
     }
 
     // does user exist?
