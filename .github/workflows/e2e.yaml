@@ -37,6 +37,8 @@ jobs:
         run: |
           project_path=$(mktemp -d -t redwood.XXXXXX)
           echo "::set-output name=project_path::$project_path"
+          framework_path=$(pwd)
+          echo "::set-output name=framework_path::$framework_path"
 
       - name: Create a RedwoodJS app
         run: ./tasks/run-e2e ${{ steps.createpath.outputs.project_path }} --no-start
@@ -91,7 +93,7 @@ jobs:
 
       - name: Run `rwfw lint`
         # choosing a simple command to verify; --help requires prompt input
-        run: yarn rwfw lint
+        run: RWFW_PATH=${{ steps.createpath.outputs.framework_path }} yarn rwfw lint
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
       - name: Run `rw exec` generate and execute
