@@ -89,3 +89,14 @@ jobs:
         # TODO: We should have a script that verifies this.
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
+      - name: Run `rwfw lint`
+        run: yarn rwfw lint
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
+      - name: Run `rw exec` generate and execute
+        run: yarn rw g script testScript && yarn rw exec testScript
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
+      - name: Run `rw data-migrate up`
+        run: yarn rw dm up
+        working-directory: ${{ steps.createpath.outputs.project_path }}
