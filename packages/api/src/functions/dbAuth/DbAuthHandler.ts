@@ -392,7 +392,10 @@ export class DbAuthHandler {
     if (hashedPassword === user[this.options.authFields.hashedPassword]) {
       return user
     } else {
-      throw new DbAuthError.IncorrectPasswordError()
+      throw new DbAuthError.IncorrectPasswordError(
+        username,
+        this.options.login?.errors.incorrectPassword
+      )
     }
   }
 

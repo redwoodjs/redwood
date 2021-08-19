@@ -705,15 +705,30 @@ describe('dbAuth', () => {
       expect.assertions(2)
     })
 
-    it('throws an error if password is incorrect', async () => {
+    it('throws a default error if password is incorrect', async () => {
+      delete options.login.errors.incorrectPassword
       const dbUser = await createDbUser()
       const dbAuth = new DbAuthHandler(event, context, options)
 
       dbAuth._verifyUser(dbUser.email, 'incorrect').catch((e) => {
         expect(e).toBeInstanceOf(dbAuthError.IncorrectPasswordError)
+        expect(e.message).toEqual(`Incorrect password for ${dbUser.email}`)
       })
 
-      expect.assertions(1)
+      expect.assertions(2)
+    })
+
+    it('throws a custom error if password is incorrect', async () => {
+      options.login.errors.incorrectPassword = 'Wrong password for ${username}'
+      const dbUser = await createDbUser()
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      dbAuth._verifyUser(dbUser.email, 'incorrect').catch((e) => {
+        expect(e).toBeInstanceOf(dbAuthError.IncorrectPasswordError)
+        expect(e.message).toEqual(`Wrong password for ${dbUser.email}`)
+      })
+
+      expect.assertions(2)
     })
 
     it('returns the user with matching username and password', async () => {

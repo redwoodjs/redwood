@@ -83,8 +83,11 @@ export class DuplicateUsernameError extends Error {
 }
 
 export class IncorrectPasswordError extends Error {
-  constructor() {
-    super(`Incorrect password`)
+  constructor(
+    username: string,
+    message: string | undefined = 'Incorrect password for ${username}'
+  ) {
+    super(message.replace(/\$\{username\}/g, username))
     this.name = 'IncorrectPasswordError'
   }
 }
