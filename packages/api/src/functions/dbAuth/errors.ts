@@ -7,6 +7,13 @@ export class NoSessionSecret extends Error {
   }
 }
 
+export class NoSessionExpiration extends Error {
+  constructor() {
+    super('dbAuth requires login expiration time, in seconds')
+    this.name = 'NoSessionExpiration'
+  }
+}
+
 export class UnknownAuthMethod extends Error {
   constructor(name: string) {
     super(`Unknown auth method '${name}'`)

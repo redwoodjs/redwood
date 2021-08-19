@@ -141,7 +141,7 @@ export class DbAuthHandler {
   // convert to the UTC datetime string that's required for cookies
   get _futureExpiresDate() {
     const futureDate = new Date()
-    futureDate.setSeconds(futureDate.getSeconds() + this.options.loginExpires)
+    futureDate.setSeconds(futureDate.getSeconds() + this.options.login.expires)
     return futureDate.toUTCString()
   }
 
@@ -163,6 +163,11 @@ export class DbAuthHandler {
     // must have a SESSION_SECRET so we can encrypt/decrypt the cookie
     if (!process.env.SESSION_SECRET) {
       throw new DbAuthError.NoSessionSecret()
+    }
+
+    // must have an expiration time set for the session cookie
+    if (!options.login || !options.login.expires) {
+      throw new DbAuthError.NoSessionExpiration()
     }
 
     this.event = event

@@ -95,9 +95,14 @@ describe('dbAuth', () => {
       },
       db: db,
       excludeUserFields: [],
-      loginExpires: 60 * 60,
       login: {
         handler: (user) => user,
+        errors: {
+          usernameOrPasswordMissing: 'Both username and password are required',
+          usernameNotFound: 'Username ${username} not found',
+          incorrectPassword: 'Incorrect password for ${username}',
+        },
+        expires: 60 * 60,
       },
       signup: {
         handler: ({ username, hashedPassword, salt, userAttributes }) => {
@@ -109,6 +114,10 @@ describe('dbAuth', () => {
               name: userAttributes.name,
             },
           })
+        },
+        errors: {
+          fieldMissing: '${field} cannot be blank',
+          usernameTaken: 'Username ${username} already in use',
         },
       },
     }
@@ -170,7 +179,7 @@ describe('dbAuth', () => {
     it('initializes some variables with passed values', () => {
       event = { headers: {} }
       context = { foo: 'bar' }
-      options = { db: db }
+      options = { db: db, login: { expires: 1 } }
       const dbAuth = new DbAuthHandler(event, context, options)
 
       expect(dbAuth.event).toEqual(event)
@@ -211,6 +220,17 @@ describe('dbAuth', () => {
 
       expect(() => new DbAuthHandler(event, context, options)).toThrow(
         dbAuthError.NoSessionSecret
+      )
+    })
+
+    it('throws an error if login expiration time is not defined', () => {
+      // login object doesn't exist at all
+      expect(() => new DbAuthHandler(event, context, {})).toThrow(
+        dbAuthError.NoSessionExpiration
+      )
+      // login object exists, but not `expires` key
+      expect(() => new DbAuthHandler(event, context, { login: {} })).toThrow(
+        dbAuthError.NoSessionExpiration
       )
     })
   })
