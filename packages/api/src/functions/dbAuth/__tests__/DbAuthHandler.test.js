@@ -96,16 +96,20 @@ describe('dbAuth', () => {
       db: db,
       excludeUserFields: [],
       loginExpires: 60 * 60,
-      loginHandler: (user) => user,
-      signupHandler: ({ username, hashedPassword, salt, userAttributes }) => {
-        return db.user.create({
-          data: {
-            email: username,
-            hashedPassword: hashedPassword,
-            salt: salt,
-            name: userAttributes.name,
-          },
-        })
+      login: {
+        handler: (user) => user,
+      },
+      signup: {
+        handler: ({ username, hashedPassword, salt, userAttributes }) => {
+          return db.user.create({
+            data: {
+              email: username,
+              hashedPassword: hashedPassword,
+              salt: salt,
+              name: userAttributes.name,
+            },
+          })
+        },
       },
     }
   })
@@ -307,13 +311,13 @@ describe('dbAuth', () => {
       expect.assertions(1)
     })
 
-    it('throws an error if loginHandler throws', async () => {
+    it('throws an error if login.handler throws', async () => {
       const _user = await createDbUser()
       event.body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
       })
-      options.loginHandler = () => {
+      options.login.handler = () => {
         throw new Error('Cannot log in')
       }
       const dbAuth = new DbAuthHandler(event, context, options)
@@ -324,13 +328,13 @@ describe('dbAuth', () => {
       expect.assertions(1)
     })
 
-    it('passes the found user to loginHandler', async () => {
+    it('passes the found user to login.handler', async () => {
       const user = await createDbUser()
       event.body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
       })
-      options.loginHandler = () => {
+      options.login.handler = () => {
         expect(user).toEqual(user)
         return user
       }
@@ -338,13 +342,13 @@ describe('dbAuth', () => {
       await dbAuth.login()
     })
 
-    it('throws an error if loginHandler returns null', async () => {
+    it('throws an error if login.handler returns null', async () => {
       const _user = await createDbUser()
       event.body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
       })
-      options.loginHandler = () => {
+      options.login.handler = () => {
         return null
       }
       const dbAuth = new DbAuthHandler(event, context, options)
@@ -354,13 +358,13 @@ describe('dbAuth', () => {
       expect.assertions(1)
     })
 
-    it('throws an error if loginHandler returns an object without an id', async () => {
+    it('throws an error if login.handler returns an object without an id', async () => {
       const _user = await createDbUser()
       event.body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
       })
-      options.loginHandler = () => {
+      options.login.handler = () => {
         return { name: 'Rob' }
       }
       const dbAuth = new DbAuthHandler(event, context, options)
@@ -438,7 +442,7 @@ describe('dbAuth', () => {
         password: 'password',
         name: 'Rob',
       })
-      options.signupHandler = () => {
+      options.signup.handler = () => {
         throw Error('Cannot signup')
       }
       const dbAuth = new DbAuthHandler(event, context, options)
@@ -475,7 +479,7 @@ describe('dbAuth', () => {
         password: 'password',
         name: 'Rob',
       })
-      options.signupHandler = () => {
+      options.signup.handler = () => {
         return 'Hello, world'
       }
       const dbAuth = new DbAuthHandler(event, context, options)
