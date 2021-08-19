@@ -14,7 +14,7 @@
     "dist"
   ],
   "dependencies": {
-    "@prisma/sdk": "2.29.0",
+    "@prisma/sdk": "2.29.1",
     "@redwoodjs/api-server": "0.35.2",
     "@redwoodjs/internal": "0.35.2",
     "@redwoodjs/prerender": "0.35.2",
@@ -23,7 +23,7 @@
     "camelcase": "6.2.0",
     "chalk": "4.1.2",
     "concurrently": "6.2.1",
-    "configstore": "6.0.0",
+    "configstore": "3.1.5",
     "core-js": "3.16.1",
     "cross-env": "7.0.3",
     "decamelize": "5.0.0",
@@ -40,7 +40,7 @@
     "pascalcase": "1.0.0",
     "pluralize": "8.0.0",
     "prettier": "2.3.2",
-    "prisma": "2.29.0",
+    "prisma": "2.29.1",
     "prompts": "2.4.1",
     "rimraf": "3.0.2",
     "secure-random-password": "0.2.3",

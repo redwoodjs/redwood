@@ -2,11 +2,11 @@ import fs from 'fs'
 import path from 'path'
 
 import {
-  getApiSideBabelConfigPath,
   prebuildApiFiles,
   cleanApiBuild,
   generateProxyFilesForNestedFunction,
 } from '../build/api'
+import { getApiSideBabelConfigPath } from '../build/babel/api'
 import { findApiFiles } from '../files'
 import { ensurePosixPath } from '../paths'
 

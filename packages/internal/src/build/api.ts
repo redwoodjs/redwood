@@ -9,6 +9,8 @@ import rimraf from 'rimraf'
 import { findApiFiles } from '../files'
 import { ensurePosixPath, getPaths } from '../paths'
 
+import { getApiSideBabelConfigPath, getApiSideBabelPlugins } from './babel/api'
+
 export const buildApi = () => {
   // TODO: Be smarter about caching and invalidating files,
   // but right now we just delete everything.
@@ -104,8 +106,8 @@ export const generateProxyFilesForNestedFunction = (prebuiltFile: string) => {
  * Remove RedwoodJS "magic" from a user's code leaving JavaScript behind.
  */
 export const prebuildApiFiles = (srcFiles: string[]) => {
-  const plugins = getBabelPlugins()
   const rwjsPaths = getPaths()
+  const plugins = getApiSideBabelPlugins()
 
   return srcFiles.map((srcPath) => {
     const relativePathFromSrc = path.relative(rwjsPaths.base, srcPath)
@@ -128,15 +130,6 @@ export const prebuildApiFiles = (srcFiles: string[]) => {
   })
 }
 
-export const getApiSideBabelConfigPath = () => {
-  const p = path.join(getPaths().api.base, 'babel.config.js')
-  if (fs.existsSync(p)) {
-    return p
-  } else {
-    return false
-  }
-}
-
 // TODO: This can be shared between the api and web sides, but web
 // needs to determine plugins on a per-file basis for web side.
 export const prebuildFile = (
@@ -147,8 +140,13 @@ export const prebuildFile = (
   plugins: TransformOptions['plugins']
 ) => {
   const code = fs.readFileSync(srcPath, 'utf-8')
+
+  // @NOTE
+  // Even though we specify the config file, babel will still search for .babelrc
+  // and merge them because we have specified the filename property, unless babelrc = false
   const result = transform(code, {
     cwd: getPaths().api.base,
+    babelrc: false,
     filename: srcPath,
     configFile: getApiSideBabelConfigPath(),
     // we set the sourceFile (for the sourcemap) as a correct, relative path
@@ -162,54 +160,6 @@ export const prebuildFile = (
     plugins,
   })
   return result
-}
-
-export const getBabelPlugins = () => {
-  const rwjsPaths = getPaths()
-  // Plugin shape: [ ["Target", "Options", "name"] ],
-  // a custom "name" is supplied so that user's do not accidently overwrite
-  // Redwood's own plugins.
-  const plugins: TransformOptions['plugins'] = [
-    ['@babel/plugin-transform-typescript', undefined, 'rwjs-babel-typescript'],
-    [
-      require('@redwoodjs/core/dist/babelPlugins/babel-plugin-redwood-src-alias'),
-      {
-        srcAbsPath: rwjsPaths.api.src,
-      },
-      'rwjs-babel-src-alias',
-    ],
-    [
-      require('@redwoodjs/core/dist/babelPlugins/babel-plugin-redwood-directory-named-import'),
-      undefined,
-      'rwjs-babel-directory-named-modules',
-    ],
-    [
-      'babel-plugin-auto-import',
-      {
-        declarations: [
-          {
-            // import gql from 'graphql-tag'
-            default: 'gql',
-            path: 'graphql-tag',
-          },
-          {
-            // import { context } from '@redwoodjs/api'
-            members: ['context'],
-            path: '@redwoodjs/api',
-          },
-        ],
-      },
-      'rwjs-babel-auto-import',
-    ],
-    // FIXME: Babel plugin GraphQL tag doesn't seem to be working.
-    ['babel-plugin-graphql-tag', undefined, 'rwjs-babel-graphql-tag'],
-    [
-      require('@redwoodjs/core/dist/babelPlugins/babel-plugin-redwood-import-dir'),
-      undefined,
-      'rwjs-babel-glob-import-dir',
-    ],
-  ].filter(Boolean)
-  return plugins
 }
 
 export const transpileApi = (files: string[], options = {}) => {
