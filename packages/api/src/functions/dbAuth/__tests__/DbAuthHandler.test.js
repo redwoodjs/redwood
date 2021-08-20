@@ -117,7 +117,7 @@ describe('dbAuth', () => {
         },
         errors: {
           fieldMissing: '${field} is required',
-          usernameTaken: 'Username ${username} already in use',
+          usernameTaken: 'Username `${username}` already in use',
         },
       },
     }
@@ -781,7 +781,9 @@ describe('dbAuth', () => {
   })
 
   describe('_createUser()', () => {
-    it('throws an error if username is already taken', async () => {
+    it('throws a default error message if username is already taken', async () => {
+      const defaultMessage = options.signup.errors.usernameTaken
+      delete options.signup.errors.usernameTaken
       const dbUser = await createDbUser()
       event.body = JSON.stringify({
         username: dbUser.email,
@@ -791,8 +793,27 @@ describe('dbAuth', () => {
 
       dbAuth._createUser().catch((e) => {
         expect(e).toBeInstanceOf(dbAuthError.DuplicateUsernameError)
+        expect(e.message).toEqual(
+          defaultMessage.replace(/\$\{username\}/, dbUser.email)
+        )
       })
-      expect.assertions(1)
+      expect.assertions(2)
+    })
+
+    it('throws a custom error message if username is already taken', async () => {
+      options.signup.errors.usernameTaken = '${username} taken'
+      const dbUser = await createDbUser()
+      event.body = JSON.stringify({
+        username: dbUser.email,
+        password: 'password',
+      })
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      dbAuth._createUser().catch((e) => {
+        expect(e).toBeInstanceOf(dbAuthError.DuplicateUsernameError)
+        expect(e.message).toEqual(`${dbUser.email} taken`)
+      })
+      expect.assertions(2)
     })
 
     it('throws a default error message if username is missing', async () => {

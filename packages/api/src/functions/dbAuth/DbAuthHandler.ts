@@ -430,7 +430,10 @@ export class DbAuthHandler {
       where: { [this.options.authFields.username]: username },
     })
     if (user) {
-      throw new DbAuthError.DuplicateUsernameError(username)
+      throw new DbAuthError.DuplicateUsernameError(
+        username,
+        this.options.signup?.errors?.usernameTaken
+      )
     }
 
     // if we get here everything is good, call the app's signup handler and let

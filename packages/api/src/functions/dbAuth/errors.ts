@@ -79,8 +79,11 @@ export class FieldRequiredError extends Error {
 }
 
 export class DuplicateUsernameError extends Error {
-  constructor(username: string) {
-    super(`Username \`${username}\` already in use`)
+  constructor(
+    username: string,
+    message: string | undefined = 'Username `${username}` already in use'
+  ) {
+    super(message.replace(/\$\{username\}/g, username))
     this.name = 'DuplicateUsernameError'
   }
 }
