@@ -9,7 +9,7 @@ tasks:
       mkdir /workspace/rw-test-app
     command: |
       cd /workspace/rw-test-app
-      echo -e "\n\n\033[94m ======================================================" && echo -e "\n\033[33mThe test project been linked. If you make further changes to the framework..." &&  echo -e "\033[33mRun \033[92m'yarn rwfw project:sync'\033[33m to watch & sync changes into the test project" &&  echo -e "\n\033[94m ======================================================\n\n"
+      echo -e "\n\n\033[94m ======================================================" && echo -e "\n\033[33m ⌛ Please wait until the dev server is running on the right-side terminal. \n "rw-test-app" is being generated & linked with latest framework code. \n\nIf you make further changes to the framework..." &&  echo -e "\033[33mRun \033[92m'yarn rwfw project:sync'\033[33m to watch & sync changes into the test project" &&  echo -e "\n\033[94m ======================================================\n\n"
 
 
   - name: "Dev Servers"
