@@ -17,7 +17,7 @@ export type DataObject = { [key: string]: unknown }
 
 export type CellFailureProps = Partial<
   Omit<QueryOperationResult, 'data' | 'error' | 'loading'> & {
-    error: Pick<QueryOperationResult, 'error'> | Error // for tests and storybook
+    error: QueryOperationResult['error'] | Error // for tests and storybook
     updating: boolean
   }
 >
