@@ -22,9 +22,8 @@ export type CellFailureProps = Partial<
   }
 >
 
-export type CellLoadingProps = Omit<
-  QueryOperationResult,
-  'error' | 'loading' | 'data'
+export type CellLoadingProps = Partial<
+  Omit<QueryOperationResult, 'error' | 'loading' | 'data'>
 >
 // @MARK not sure about this partial, but we need to do this for tests and storybook
 // `updating` is just `loading` renamed; since Cells default to stale-while-refetch,
