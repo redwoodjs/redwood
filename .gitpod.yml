@@ -16,6 +16,7 @@ tasks:
     openMode: split-right
     before: export RW_PATH="/workspace/redwood"
     init: |
+      cd /workspace/redwood
       yarn install
       yarn run build:test-project ../rw-test-app --typescript --link --verbose
     command: |
