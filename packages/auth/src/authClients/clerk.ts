@@ -1,5 +1,9 @@
 import { Clerk } from '@clerk/clerk-js'
-import { UserResource as ClerkUserResource } from '@clerk/types'
+import {
+  UserResource as ClerkUserResource,
+  SignInProps,
+  SignUpProps,
+} from '@clerk/types'
 
 import type { AuthClient } from '.'
 
@@ -24,9 +28,11 @@ export const clerk = (client: Clerk): AuthClientClerk => {
   return {
     type: 'clerk',
     client,
-    login: async (options?) => clerkClient(client)?.openSignIn(options || {}),
+    login: async (options?: SignInProps) =>
+      clerkClient(client)?.openSignIn(options || {}),
     logout: async () => new Promise((res) => clerkClient(client)?.signOut(res)),
-    signup: async (options?) => clerkClient(client)?.openSignUp(options || {}),
+    signup: async (options?: SignUpProps) =>
+      clerkClient(client)?.openSignUp(options || {}),
     // Clerk uses the session ID PLUS the __session cookie.
     getToken: async () => clerkClient(client)?.session.id,
     getUserMetadata: async () => {
