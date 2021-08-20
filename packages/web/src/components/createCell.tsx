@@ -15,9 +15,12 @@ const Query = ({ children, query, ...rest }: QueryProps) => {
 
 export type DataObject = { [key: string]: unknown }
 
-export type CellFailureProps =
-  | (Omit<QueryOperationResult, 'data' | 'loading'> & { updating: boolean })
-  | { error: Error } // for tests and storybook
+export type CellFailureProps = Partial<
+  Omit<QueryOperationResult, 'data' | 'error' | 'loading'> & {
+    error: Pick<QueryOperationResult, 'error'> | Error // for tests and storybook
+    updating: boolean
+  }
+>
 
 export type CellLoadingProps = Omit<
   QueryOperationResult,
