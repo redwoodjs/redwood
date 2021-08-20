@@ -116,7 +116,7 @@ describe('dbAuth', () => {
           })
         },
         errors: {
-          fieldMissing: '${field} cannot be blank',
+          fieldMissing: '${field} is required',
           usernameTaken: 'Username ${username} already in use',
         },
       },
@@ -795,7 +795,9 @@ describe('dbAuth', () => {
       expect.assertions(1)
     })
 
-    it('throws an error if username is missing', async () => {
+    it('throws a default error message if username is missing', async () => {
+      const defaultMessage = options.signup.errors.fieldMissing
+      delete options.signup.errors.fieldMissing
       event.body = JSON.stringify({
         password: 'password',
       })
@@ -803,11 +805,30 @@ describe('dbAuth', () => {
 
       dbAuth._createUser().catch((e) => {
         expect(e).toBeInstanceOf(dbAuthError.FieldRequiredError)
+        expect(e.message).toEqual(
+          defaultMessage.replace(/\$\{field\}/, 'username')
+        )
       })
-      expect.assertions(1)
+      expect.assertions(2)
     })
 
-    it('throws an error if password is missing', async () => {
+    it('throws a custom error message if username is missing', async () => {
+      options.signup.errors.fieldMissing = '${field} blank'
+      event.body = JSON.stringify({
+        password: 'password',
+      })
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      dbAuth._createUser().catch((e) => {
+        expect(e).toBeInstanceOf(dbAuthError.FieldRequiredError)
+        expect(e.message).toEqual('username blank')
+      })
+      expect.assertions(2)
+    })
+
+    it('throws a default error message if password is missing', async () => {
+      const defaultMessage = options.signup.errors.fieldMissing
+      delete options.signup.errors.fieldMissing
       event.body = JSON.stringify({
         username: 'user@redwdoodjs.com',
       })
@@ -815,8 +836,25 @@ describe('dbAuth', () => {
 
       dbAuth._createUser().catch((e) => {
         expect(e).toBeInstanceOf(dbAuthError.FieldRequiredError)
+        expect(e.message).toEqual(
+          defaultMessage.replace(/\$\{field\}/, 'password')
+        )
       })
-      expect.assertions(1)
+      expect.assertions(2)
+    })
+
+    it('throws a custom error message if password is missing', async () => {
+      options.signup.errors.fieldMissing = '${field} blank'
+      event.body = JSON.stringify({
+        username: 'user@redwdoodjs.com',
+      })
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      dbAuth._createUser().catch((e) => {
+        expect(e).toBeInstanceOf(dbAuthError.FieldRequiredError)
+        expect(e.message).toEqual('password blank')
+      })
+      expect.assertions(2)
     })
 
     it('creates a new user', async () => {

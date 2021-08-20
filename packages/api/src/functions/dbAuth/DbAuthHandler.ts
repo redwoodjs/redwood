@@ -480,7 +480,10 @@ export class DbAuthHandler {
   _validateField(name: string, value: string) {
     // check for presense
     if (!value || value.trim() === '') {
-      throw new DbAuthError.FieldRequiredError(name)
+      throw new DbAuthError.FieldRequiredError(
+        name,
+        this.options.signup?.errors?.fieldMissing
+      )
     } else {
       return true
     }

@@ -69,8 +69,11 @@ export class NoUserIdError extends Error {
 }
 
 export class FieldRequiredError extends Error {
-  constructor(name: string) {
-    super(`${name} is required`)
+  constructor(
+    name: string,
+    message: string | undefined = '${field} is required'
+  ) {
+    super(message.replace(/\$\{field\}/g, name))
     this.name = 'FieldRequiredError'
   }
 }
