@@ -67,7 +67,6 @@ const itCreatesASingleWordServiceScenarioFile = (baseArgs) => {
     )
 
     expect(Object.keys(files)).toContain(filePath)
-    expect(files[filePath]).toMatchSnapshot()
   })
 }
 
