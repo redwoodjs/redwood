@@ -44,6 +44,7 @@
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",
+    "build:swc": "node ./src/buildFramework.mjs",
     "build:js": "lerna run build:js",
     "build:types": "tsc --build ../../tsconfig.json --verbose",
     "build:clean": "rimraf ../../packages/**/dist",
