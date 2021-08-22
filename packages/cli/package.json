@@ -59,7 +59,7 @@
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\" --copy-files --no-copy-ignored && yarn build:clean-dist",
     "fix:permissions": "chmod +x dist/index.js dist/redwood-tools.js dist/rwfw.js",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build && yarn fix:permissions\"",
-    "test": "jest",
+    "test": "jest src",
     "test:watch": "yarn test --watch"
   },
   "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"
