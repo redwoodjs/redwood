@@ -2,6 +2,10 @@
 /// <reference types="cypress" />
 import path from 'path'
 
+import 'cypress-wait-until'
+
+import { waitForApiSide } from '../01-tutorial/sharedTests'
+
 import { setupLogger } from './codemods/Step0_1_Setup_Logger'
 import Step2_Add_Logger from './codemods/Step2_1_Add_Logger_to_Posts'
 
@@ -26,13 +30,8 @@ describe('The Redwood Logger - Basic Scaffold CRUD Logging', () => {
       Step2_Add_Logger
     )
 
-    cy.waitUntil(
-      () =>
-        cy
-          .visit('http://localhost:8910')
-          .then(() => Cypress.$('a[href="/blog-post/3"]').length),
-      { interval: 5000, timeout: 5000 }
-    )
+    waitForApiSide()
+    cy.visit('http://localhost:8910/blog-post/3')
 
     cy.visit('http://localhost:8910/posts')
 

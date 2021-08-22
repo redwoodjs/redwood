@@ -275,7 +275,7 @@ export const importStatementPath = (path: string) => {
   let importPath = path
 
   if (process.platform === 'win32') {
-    importPath = importPath.replaceAll('\\', '/')
+    importPath = importPath.split('\\').join('/')
   }
 
   return importPath

@@ -2,16 +2,14 @@
 
 import fs from 'fs'
 import path from 'path'
-import { dirname } from 'path'
 import { fileURLToPath } from 'url'
 
 import c from 'ansi-colors'
 import execa from 'execa'
 import fg from 'fast-glob'
 import packlist from 'npm-packlist'
-import rimraf from 'rimraf'
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 export const REDWOOD_PACKAGES_PATH = path.resolve(
   __dirname,
   '../../../../packages'

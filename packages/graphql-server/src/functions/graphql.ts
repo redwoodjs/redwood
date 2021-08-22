@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
+
 import { useApolloServerErrors } from '@envelop/apollo-server-errors'
 import {
   envelop,
@@ -14,6 +15,7 @@ import { useDisableIntrospection } from '@envelop/disable-introspection'
 import { useFilterAllowedOperations } from '@envelop/filter-operation-type'
 import type { AllowedOperations } from '@envelop/filter-operation-type'
 import { useParserCache } from '@envelop/parser-cache'
+import { handleStreamOrSingleExecutionResult } from '@envelop/types'
 import { useValidationCache } from '@envelop/validation-cache'
 import type {
   APIGatewayProxyEvent,
@@ -21,6 +23,7 @@ import type {
   APIGatewayProxyResult,
 } from 'aws-lambda'
 import {
+  ExecutionResult,
   GraphQLError,
   GraphQLSchema,
   Kind,
@@ -33,7 +36,7 @@ import {
   shouldRenderGraphiQL,
 } from 'graphql-helix'
 import { renderPlaygroundPage } from 'graphql-playground-html'
-import { BaseLogger } from 'pino'
+import { BaseLogger, LevelWithSilent } from 'pino'
 import { v4 as uuidv4 } from 'uuid'
 
 import { CorsConfig, createCorsContext } from '../cors'
@@ -65,6 +68,7 @@ export type RedwoodGraphQLContext = {
  * Options for request and response information to include in the log statements
  * output by UseRedwoodLogger around the execution event
  *
+ * @param level - Sets log level specific to GraphQL log output. Defaults to current logger level.
  * @param data - Include response data sent to client.
  * @param operationName - Include operation name.
  * @param requestId - Include the event's requestId, or if none, generate a uuid as an identifier.
@@ -73,6 +77,31 @@ export type RedwoodGraphQLContext = {
  * @param userAgent - Include the browser (or client's) user agent.
  */
 type GraphQLLoggerOptions = {
+  /**
+   * Sets log level for GraphQL logging.
+   * This level setting can be different than the one used in api side logging.
+   * Defaults to the same level as the logger unless set here.
+   *
+   * Available log levels:
+   *
+   * - 'fatal'
+   * - 'error'
+   * - 'warn'
+   * - 'info'
+   * - 'debug'
+   * - 'trace'
+   * - 'silent'
+   *
+   * The logging level is a __minimum__ level. For instance if `logger.level` is `'info'` then all `'fatal'`, `'error'`, `'warn'`,
+   * and `'info'` logs will be enabled.
+   *
+   * You can pass `'silent'` to disable logging.
+   *
+   * @default level of the logger set in LoggerConfig
+   *
+   */
+  level?: LevelWithSilent | string
+
   /**
    * @description Include response data sent to client.
    */
@@ -304,6 +333,46 @@ export const useRedwoodGlobalContextSetter =
   })
 
 /**
+ * This function is used by the useRedwoodLogger to
+ * logs every time an operation is being executed and
+ * when the execution of the operation is done.
+ */
+const logResult =
+  (loggerConfig: LoggerConfig, envelopLogger: BaseLogger) =>
+  ({ result }: { result: ExecutionResult }) => {
+    const includeTracing = loggerConfig?.options?.tracing
+    const includeData = loggerConfig?.options?.data
+
+    const options = {} as any
+
+    if (result.data) {
+      if (includeData) {
+        options['data'] = result.data
+      }
+
+      if (result.errors && result.errors.length > 0) {
+        envelopLogger.error(
+          {
+            errors: result.errors,
+          },
+          `GraphQL execution completed with errors:`
+        )
+      } else {
+        if (includeTracing) {
+          options['tracing'] = result.extensions?.envelopTracing
+        }
+
+        envelopLogger.debug(
+          {
+            ...options,
+          },
+          `GraphQL execution completed`
+        )
+      }
+    }
+  }
+
+/**
  * This plugin logs every time an operation is being executed and
  * when the execution of the operation is done.
  *
@@ -321,15 +390,16 @@ const useRedwoodLogger = (
   loggerConfig: LoggerConfig
 ): Plugin<RedwoodGraphQLContext> => {
   const logger = loggerConfig.logger
+  const level = loggerConfig.options?.level || logger.level || 'warn'
 
   const childLogger = logger.child({
     name: 'graphql-server',
   })
 
-  const includeData = loggerConfig?.options?.data
+  childLogger.level = level
+
   const includeOperationName = loggerConfig?.options?.operationName
   const includeRequestId = loggerConfig?.options?.requestId
-  const includeTracing = loggerConfig?.options?.tracing
   const includeUserAgent = loggerConfig?.options?.userAgent
   const includeQuery = loggerConfig?.options?.query
 
@@ -366,35 +436,15 @@ const useRedwoodLogger = (
         ...options,
       })
 
-      envelopLogger.info(`GraphQL execution started`)
+      envelopLogger.debug(`GraphQL execution started`)
+      const handleResult = logResult(loggerConfig, envelopLogger)
 
       return {
-        onExecuteDone({ result }) {
-          const options = {} as any
-
-          if (includeData) {
-            options['data'] = result.data
-          }
-
-          if (result.errors && result.errors.length > 0) {
-            envelopLogger.error(
-              {
-                errors: result.errors,
-              },
-              `GraphQL execution completed with errors:`
-            )
-          } else {
-            if (includeTracing) {
-              options['tracing'] = result.extensions?.envelopTracing
-            }
-
-            envelopLogger.info(
-              {
-                ...options,
-              },
-              `GraphQL execution completed`
-            )
-          }
+        onExecuteDone: (payload) => {
+          handleStreamOrSingleExecutionResult(payload, ({ result }) => {
+            handleResult({ result })
+            return undefined
+          })
         },
       }
     },

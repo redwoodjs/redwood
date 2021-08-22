@@ -29,19 +29,17 @@ export const makeServices: MakeServices = ({ services }) => {
     const exportResolvers: Services = {}
 
     for (const [resolverName, resolverFunc] of Object.entries(resolvers)) {
-      if (resolverName === 'beforeResolver') {
-        continue
-      }
-
-      if (typeof resolverFunc === 'function') {
-        // wrap resolver function in spec verification
-        exportResolvers[resolverName] = (...args: Array<unknown>) => {
-          spec.verify(resolverName, args)
-          return resolverFunc(...args)
+      if (resolverName !== 'beforeResolver') {
+        if (typeof resolverFunc === 'function') {
+          // wrap resolver function in spec verification
+          exportResolvers[resolverName] = (...args: Array<unknown>) => {
+            spec.verify(resolverName, args)
+            return resolverFunc(...args)
+          }
+        } else {
+          // resolver is just a sub-type, like posts.comments
+          exportResolvers[resolverName] = resolverFunc
         }
-      } else {
-        // resolver is just a sub-type, like posts.comments
-        exportResolvers[resolverName] = resolverFunc
       }
     }
     servicesCollection[name] = exportResolvers

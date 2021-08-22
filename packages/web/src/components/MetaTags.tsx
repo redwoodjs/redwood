@@ -78,7 +78,6 @@ export const MetaTags = (props: MetaTagsProps) => {
     author,
     children,
   } = props
-
   return (
     <Head>
       {title && (
@@ -91,9 +90,9 @@ export const MetaTags = (props: MetaTagsProps) => {
 
       {description && (
         <>
-          <meta property="description" content={description} />
+          <meta name="description" content={description} />
+          <meta name="twitter:description" content={description} />
           <meta property="og:description" content={description} />
-          <meta property="twitter:image:alt" content={description} />
         </>
       )}
 
@@ -108,10 +107,17 @@ export const MetaTags = (props: MetaTagsProps) => {
       {ogUrl && <meta property="og:url" content={ogUrl} />}
 
       {/* en_US by default */}
-      {locale && <meta property="og:locale" content={locale} />}
+      {locale && (
+        <>
+          <html lang={locale} />
+          <meta property="og:locale" content={locale} />
+        </>
+      )}
 
       <meta property="og:type" content={ogType} />
-      <meta property={tag} content={ogContentUrl} />
+
+      {ogContentUrl && <meta property={tag} content={ogContentUrl} />}
+
       {contentType && <meta property={`${tag}:type`} content={contentType} />}
 
       {tag === 'og:image' && (
