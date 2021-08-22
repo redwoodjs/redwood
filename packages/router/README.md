@@ -411,7 +411,9 @@ const App = () => {
 
 ```
 
-## navigate
+## Navigation
+
+### navigate
 
 If you'd like to programmatically navigate to a different page, you can simply use the `navigate` function:
 
@@ -422,6 +424,24 @@ import { navigate, routes } from '@redwoodjs/router'
 const SomePage = () => {
   const onSomeAction = () => {
     navigate(routes.home())
+  }
+  ...
+}
+```
+
+The browser keeps track of the browsing history in a stack. By default when you navigate to a new page a new item is pushed to the history stack. But sometimes you want to replace the top item on the stack instead of appending to the stack. This is how you do that in Redwood: `navigate(routes.home(), { replace: true })`. As you can see you need to pass an options object as the second parameter to `navigate` with the option `replace` set to `true`.
+
+### back
+
+Going back is as easy as using the `back()` function that's exported from the router.
+
+```js
+// SomePage.js
+import { back } from '@redwoodjs/router'
+
+const SomePage = () => {
+  const onSomeAction = () => {
+    back()
   }
   ...
 }
