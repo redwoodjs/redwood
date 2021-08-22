@@ -13,6 +13,7 @@ module.exports = {
   globals: {
     REDWOOD_API_URL: '',
     REDWOOD_API_GRAPHQL_SERVER_PATH: '/',
+    __REDWOOD__APP_TITLE: 'Redwood App',
   },
   setupFilesAfterEnv: [path.resolve(__dirname, './jest.setup.js')],
   moduleNameMapper: {
@@ -29,15 +30,22 @@ module.exports = {
     // We replace imports to "@redwoodjs/router" with our own "mock" implementation.
     '^@redwoodjs/router$': path.join(
       NODE_MODULES_PATH,
-      '@redwoodjs/testing/dist/MockRouter.js'
+      '@redwoodjs/testing/dist/web/MockRouter.js'
     ),
     '^@redwoodjs/web$': path.join(NODE_MODULES_PATH, '@redwoodjs/web'),
-    '^@redwoodjs/testing$': path.join(NODE_MODULES_PATH, '@redwoodjs/testing'),
+
+    // @NOTE: Import @redwoodjs/testing in web tests, and it automatically remaps to the web side only
+    // This is to prevent web stuff leaking into api, and vice versa
+    '^@redwoodjs/testing$': path.join(
+      NODE_MODULES_PATH,
+      '@redwoodjs/testing/web'
+    ),
     '~__REDWOOD__USER_ROUTES_FOR_MOCK': rwjsPaths.web.routes,
     /**
      * Mock out files that aren't particularly useful in tests. See fileMock.js for more info.
      */
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|css)$':
-      '@redwoodjs/testing/dist/fileMock.js',
+      '@redwoodjs/testing/dist/web/fileMock.js',
   },
+  testEnvironment: 'jest-environment-jsdom',
 }

@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/prerender",
   "description": "RedwoodJS prerender",
-  "version": "0.33.3",
+  "version": "0.36.0",
   "license": "MIT",
   "files": [
     "dist",
@@ -14,20 +14,20 @@
     "react-dom": "*"
   },
   "dependencies": {
-    "@babel/register": "7.13.16",
-    "@redwoodjs/auth": "^0.33.3",
-    "@redwoodjs/internal": "^0.33.3",
-    "@redwoodjs/router": "^0.33.3",
-    "@redwoodjs/structure": "^0.33.3",
-    "@redwoodjs/web": "^0.33.3",
+    "@redwoodjs/auth": "0.36.0",
+    "@redwoodjs/internal": "0.36.0",
+    "@redwoodjs/router": "0.36.0",
+    "@redwoodjs/structure": "0.36.0",
+    "@redwoodjs/web": "0.36.0",
     "babel-plugin-ignore-html-and-css-imports": "0.1.0",
+    "cheerio": "1.0.0-rc.10",
     "node-fetch": "2.6.1"
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",
     "prepublishOnly": "yarn build",
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx,.jsx\"",
-    "build:types": "ttsc --build --verbose",
+    "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build\"",
     "test": "jest",
     "test:watch": "yarn test --watch"

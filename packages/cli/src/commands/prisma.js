@@ -6,7 +6,7 @@ import execa from 'execa'
 
 import { getPaths } from '@redwoodjs/internal'
 
-import c from 'src/lib/colors'
+import c from '../lib/colors'
 
 export const command = 'prisma [commands..]'
 export const description = 'Run Prisma CLI with experimental features'
@@ -50,7 +50,7 @@ export const handler = async ({ _, $0, commands = [], ...options }) => {
       if (!fs.existsSync(rwjsPaths.api.dbSchema)) {
         console.error()
         console.error(c.error('No Prisma Schema found.'))
-        console.error(`Snaplet searched here '${rwjsPaths.api.dbSchema}'`)
+        console.error(`Redwood searched here '${rwjsPaths.api.dbSchema}'`)
         console.error()
         process.exit(1)
       }

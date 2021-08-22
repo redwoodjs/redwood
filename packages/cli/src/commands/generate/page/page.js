@@ -6,10 +6,9 @@ import pascalcase from 'pascalcase'
 
 import { getConfig } from '@redwoodjs/internal'
 
-import { transformTSToJS } from 'src/lib'
-import { addRoutesToRouterTask, writeFilesTask } from 'src/lib'
-import c from 'src/lib/colors'
-
+import { transformTSToJS } from '../../../lib'
+import { addRoutesToRouterTask, writeFilesTask } from '../../../lib'
+import c from '../../../lib/colors'
 import {
   createYargsForComponentGeneration,
   pathName,
@@ -18,6 +17,33 @@ import {
 
 const COMPONENT_SUFFIX = 'Page'
 const REDWOOD_WEB_PATH_NAME = 'pages'
+
+/** @type {(paramType: 'Int' | 'Boolean' | 'String') => string } **/
+const mapRouteParamTypeToTsType = (paramType) => {
+  switch (paramType) {
+    case 'Int':
+      return 'number'
+
+    default:
+      // Boolean -> boolean, String -> string
+      return paramType.toLowerCase()
+  }
+}
+
+/** @type {(paramType: 'Int' | 'Boolean' | 'String') } **/
+const mapRouteParamTypeToDefaultValue = (paramType) => {
+  switch (paramType) {
+    case 'Int':
+      return 42
+
+    case 'Boolean':
+      return true
+
+    default:
+      // Boolean -> boolean, String -> string
+      return '42'
+  }
+}
 
 export const paramVariants = (path) => {
   const param = path?.match(/(\{[\w:]+\})/)?.[1]
@@ -35,19 +61,23 @@ export const paramVariants = (path) => {
   }
 
   // set paramType param includes type (e.g. {id:Int}), else use string
-  const paramType = param?.match(/:/)
+  const routeParamType = param?.match(/:/)
     ? param?.replace(/[^:]+/, '').slice(1, -1)
-    : 'string'
+    : 'String'
+
+  const defaultValue = mapRouteParamTypeToDefaultValue(routeParamType)
+  const defaultValueAsProp =
+    routeParamType === 'String' ? `'${defaultValue}'` : defaultValue
 
   // "42" is just a value used for demonstrating parameter usage in the
   // generated page-, test-, and story-files.
   return {
     propParam: `{ ${paramName} }`,
-    propValueParam: `${paramName}="42" `,
-    argumentParam: `{ ${paramName}: '42' }`,
+    propValueParam: `${paramName}={${defaultValueAsProp}} `, // used it story
+    argumentParam: `{ ${paramName}: ${defaultValueAsProp} }`,
     paramName,
-    paramValue: '42',
-    paramType,
+    paramValue: defaultValue,
+    paramType: mapRouteParamTypeToTsType(routeParamType),
   }
 }
 

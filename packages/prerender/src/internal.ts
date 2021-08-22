@@ -21,6 +21,7 @@ export const registerShims = () => {
   const rwjsConfig = getConfig()
   global.REDWOOD_API_URL = rwjsConfig.web.apiURL
   global.REDWOOD_API_GRAPHQL_SERVER_PATH = rwjsConfig.web.apiGraphQLServerPath
+  global.__REDWOOD__APP_TITLE = rwjsConfig.web.title
 
   global.__REDWOOD__USE_AUTH = () =>
     ({
@@ -29,6 +30,8 @@ export const registerShims = () => {
     } as AuthContextInterface) // we only need a parital AuthContextInterface for prerender
 
   global.__REDWOOD__PRERENDERING = true
+
+  global.__REDWOOD__HELMET_CONTEXT = {}
 
   // Let routes auto loader plugin know
   process.env.__REDWOOD__PRERENDERING = '1'

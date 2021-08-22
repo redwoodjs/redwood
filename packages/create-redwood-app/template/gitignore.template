@@ -9,3 +9,5 @@ dist-babel
 node_modules
 yarn-error.log
 web/public/mockServiceWorker.js
+web/types/graphql.d.ts
+api/types/graphql.d.ts

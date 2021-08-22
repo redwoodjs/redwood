@@ -28,6 +28,59 @@ describe('userProfiles', () => {
 "
 `;
 
+exports[`in javascript mode creates a multi word service test file with crud actions and only foreign as mandatory field 1`] = `
+"import {
+  transactions,
+  transaction,
+  createTransaction,
+  updateTransaction,
+  deleteTransaction,
+} from './transactions'
+
+describe('transactions', () => {
+  scenario('returns all transactions', async (scenario) => {
+    const result = await transactions()
+
+    expect(result.length).toEqual(Object.keys(scenario.transaction).length)
+  })
+
+  scenario('returns a single transaction', async (scenario) => {
+    const result = await transaction({ id: scenario.transaction.one.id })
+
+    expect(result).toEqual(scenario.transaction.one)
+  })
+
+  scenario('creates a transaction', async (scenario) => {
+    const result = await createTransaction({
+      input: { userId: scenario.transaction.two.userId },
+    })
+
+    expect(result.userId).toEqual(scenario.transaction.two.userId)
+  })
+
+  scenario('updates a transaction', async (scenario) => {
+    const original = await transaction({ id: scenario.transaction.one.id })
+    const result = await updateTransaction({
+      id: original.id,
+      input: { userId: scenario.transaction.two.userId },
+    })
+
+    expect(result.userId).toEqual(scenario.transaction.two.userId)
+  })
+
+  scenario('deletes a transaction', async (scenario) => {
+    const original = await deleteTransaction({
+      id: scenario.transaction.one.id,
+    })
+
+    const result = await transaction({ id: original.id })
+
+    expect(result).toEqual(null)
+  })
+})
+"
+`;
+
 exports[`in javascript mode creates a single word service file 1`] = `
 "import { db } from 'src/lib/db'
 import { requireAuth } from 'src/lib/auth'
@@ -184,6 +237,62 @@ describe('userProfiles', () => {
     const result = await userProfiles()
 
     expect(result.length).toEqual(Object.keys(scenario.userProfile).length)
+  })
+})
+"
+`;
+
+exports[`in typescript mode creates a multi word service test file with crud actions and only foreign as mandatory field 1`] = `
+"import {
+  transactions,
+  transaction,
+  createTransaction,
+  updateTransaction,
+  deleteTransaction,
+} from './transactions'
+import type { StandardScenario } from './transactions.scenarios'
+
+describe('transactions', () => {
+  scenario('returns all transactions', async (scenario: StandardScenario) => {
+    const result = await transactions()
+
+    expect(result.length).toEqual(Object.keys(scenario.transaction).length)
+  })
+
+  scenario(
+    'returns a single transaction',
+    async (scenario: StandardScenario) => {
+      const result = await transaction({ id: scenario.transaction.one.id })
+
+      expect(result).toEqual(scenario.transaction.one)
+    }
+  )
+
+  scenario('creates a transaction', async (scenario: StandardScenario) => {
+    const result = await createTransaction({
+      input: { userId: scenario.transaction.two.userId },
+    })
+
+    expect(result.userId).toEqual(scenario.transaction.two.userId)
+  })
+
+  scenario('updates a transaction', async (scenario: StandardScenario) => {
+    const original = await transaction({ id: scenario.transaction.one.id })
+    const result = await updateTransaction({
+      id: original.id,
+      input: { userId: scenario.transaction.two.userId },
+    })
+
+    expect(result.userId).toEqual(scenario.transaction.two.userId)
+  })
+
+  scenario('deletes a transaction', async (scenario: StandardScenario) => {
+    const original = await deleteTransaction({
+      id: scenario.transaction.one.id,
+    })
+    const result = await transaction({ id: original.id })
+
+    expect(result).toEqual(null)
   })
 })
 "

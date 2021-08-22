@@ -1,6 +1,6 @@
 import path from 'path'
 
-import { getPaths, getConfig } from 'src/lib'
+import { getPaths, getConfig } from '../../../../lib'
 
 const config = getConfig()
 

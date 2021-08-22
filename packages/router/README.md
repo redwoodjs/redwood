@@ -131,7 +131,7 @@ becomes...
 ### `private` Set
 
 
-Sets can take a `private` prop which makes all Routes inside that Set require authentication. When a user isn't authenticated and attempts to visit one of the Routes in the private Set, they'll be redirected to the Route passed as the Set's `unauthenticated` prop. The originally-requested Route's path is added to the query string as a `redirectTo` param. This lets you send the user to the page they originally requested once they're logged-in. 
+Sets can take a `private` prop which makes all Routes inside that Set require authentication. When a user isn't authenticated and attempts to visit one of the Routes in the private Set, they'll be redirected to the Route passed as the Set's `unauthenticated` prop. The originally-requested Route's path is added to the query string as a `redirectTo` param. This lets you send the user to the page they originally requested once they're logged-in.
 
 For more fine-grained control, you can specify `role` (which takes an array of roles), and RR will check to see that the user is authorized before giving them access to the Route. If they're not, it'll redirect them in the same way as above.
 
@@ -182,17 +182,67 @@ Named route functions simply return a string, so you can still pass in hardcoded
 
 ## Active links
 
-`NavLink` is a special version of `Link` that will add an `activeClassName` to the rendered element when it matches the current URL.
+`NavLink` is a special version of `Link` that will add an `activeClassName` to the rendered element when it matches **exactly** the current URL.
 
-```js
+
+```jsx
 // MainMenu.js
 import { NavLink, routes } from '@redwoodjs/router'
 
-// Will render <a href="/" className="link activeLink"> when on the home page
-const MainMenu = () => <NavLink className="link" activeClassName="activeLink" to={routes.home()} >Home</NavLink>
+// Will render <a className="link activeLink" {...rest}> respectively when on the page
+const MainMenu = () =>
+  <ul>
+    <li>
+      <!-- When match "/" -->
+      <NavLink
+        className="link"
+        activeClassName="activeLink"
+        to={routes.home()}>
+        Home
+      </NavLink>
+    </li>
+    <li>
+      <!-- When match "/?tab=tutorial" (params order insensitive) -->
+      <NavLink
+        className="link"
+        activeClassName="activeLink"
+        to={routes.home({ tab: 'tutorial' })}>
+          Home > Tutorial
+      </NavLink>
+    </li>
+  </ul>
 ```
 
-You can `useMatch` to create your own component with active styles. `NavLink` uses it internally!
+Alternatively, you can add the `activeMatchParams` prop to your `NavLink` to match the current URL **partially**
+
+```jsx
+import { NavLink, routes } from '@redwoodjs/router'
+
+// Will render <a href="/?tab=tutorial&page=2" className="link activeLink"> when on any of Home tutorial pages
+const MainMenu = () =>
+  <li>
+    <NavLink
+      className="link"
+      activeClassName="activeLink"
+      activeMatchParams={[{ tab: 'tutorial' }]}
+      to={routes.home({ tab: 'tutorial', page: '2' })}>
+        Home > Tutorial
+    </NavLink>
+  </li>
+```
+
+> Note `activeMatchParams` is an array of `string` *(key only)* or `Record<string, any>` *(key and value)*
+
+More granular match, `page` key only and `tab=tutorial`
+
+```jsx
+// Match /?tab=tutorial&page=*
+activeMatchParams={[{ tab: 'tutorial' }, 'page' ]}
+```
+
+You can `useMatch` to create your own component with active styles.
+
+> `NavLink` uses it internally!
 
 ```js
 import { Link, routes, useMatch } from '@redwoodjs/router'
@@ -205,6 +255,18 @@ const CustomLink = ({to, ...rest}) => {
 
 const MainMenu = () => {
   return <CustomLink to={routes.about()} />
+}
+```
+
+`useMatch` accepts `searchParams` in the `options` for matching granularity which is exactly the same as `activeMatchParams` of `NavLink`
+
+```jsx
+import { Link, routes, useMatch } from '@redwoodjs/router'
+
+const CustomLink = ({to, ...rest}) => {
+  const matchInfo = useMatch(to, { searchParams: [{ tab: 'tutorial' }, 'page'] })
+
+  return <SomeStyledComponent as={Link} to={to} isActive={matchInfo.match} />
 }
 ```
 
@@ -396,11 +458,38 @@ import HomePage from 'src/pages/HomePage'
 
 Redwood will detect your explicit import and refrain from splitting that page into a separate bundle. Be careful with this feature, as you can easily bloat the size of your main bundle to the point where your initial page load time becomes unacceptable.
 
-## PageLoadingContext
+## Page loaders & PageLoadingContext
+### Loader while page chunks load
+Because lazily-loaded pages can take a non-negligible amount of time to load (depending on bundle size and network connection), you may want to show a loading indicator to signal to the user that something is happening after they click a link.
+
+In order to show a loader as your page chunks are loading, you simply add the `whileLoadingPage` prop to your route, `Set` or `Private` component.
+
+```js
+// Routes.js
+import SkeletonLoader from 'src/components/SkeletonLoader'
+
+<Router>
+  <Set whileLoadingPage={SkeletonLoader}>
+    <Route path="/contact" page={ContactPage} name="contact" />
+    <Route path="/about" page={AboutPage} name="about" />
+  </Set>
+</Router>
+```
+
+After adding this to your app you will probably not see it when navigating between pages. This is because having a loading indicator is nice, but can get annoying when it shows up every single time you navigate to a new page. In fact, this behavior makes it feel like your pages take even longer to load than they actually do! RR takes this into account and, by default, will only show the loader when it takes more than 1000 milliseconds for the page to load. You can change this to whatever you like with the `pageLoadingDelay` prop on `Router`:
+
+```js
+// Routes.js
+
+<Router pageLoadingDelay={500}>...</Router>
+```
+
+Now the loader will show up after 500ms of load time. To see your loading indicator, you can set this value to 0 or, even better, [change the network speed](https://developers.google.com/web/tools/chrome-devtools/network#throttle) in developer tools to "Slow 3G" or another agonizingly slow connection speed.
+
+#### Using PageLoadingContext
+An alternative way to implement whileLoadingPage is to use `usePageLoadingContext`:
 
 > **VIDEO:** If you'd prefer to watch a video, there's one accompanying this section: https://www.youtube.com/watch?v=BVkyXjUQADs&feature=youtu.be
-
-Because lazily-loaded pages can take a non-negligible amount of time to load (depending on bundle size and network connection), you may want to show a loading indicator to signal to the user that something is happening after they click a link. RR makes this really easy with `usePageLoadingContext`:
 
 ```js
 // SomeLayout.js
@@ -420,12 +509,31 @@ const SomeLayout = (props) => {
 
 When the lazy-loaded page is loading, `PageLoadingContext.Consumer` will pass `{ loading: true }` to the render function, or false otherwise. You can use this context wherever you like in your application!
 
-After adding this to your app you will probably not see it when navigating between pages. This is because having a loading indicator is nice, but can get annoying when it shows up every single time you navigate to a new page. In fact, this behavior makes it feel like your pages take even longer to load than they actually do! RR takes this into account and, by default, will only show the loader when it takes more than 1000 milliseconds for the page to load. You can change this to whatever you like with the `pageLoadingDelay` prop on `Router`:
+### Loader while auth details are being retrieved
+Let's say you have a dashboard area on your Redwood app, which can only be accessed after logging in. When Redwood Router renders your private page, it will first fetch the user's details, and only render the page if it determines the user is indeed logged in.
+
+In order to display a loader while auth details are being retrieved you can add the `whileLoadingAuth` prop to your private `<Route>`, `<Set private>` or the `<Private>` component:
 
 ```js
-// Routes.js
+//Routes.js
 
-<Router pageLoadingDelay={500}>...</Router>
+ <Router>
+      <Private
+        wrap={DashboardLayout}
+        unauthenticated="login"
+        whileLoadingAuth={SkeletonLoader} //<-- auth loader
+        whileLoadingPage={SkeletonLoader} // <-- page chunk loader
+        prerender
+      >
+        <Route
+          path="/dashboard"
+          page={DashboardHomePage}
+          name="dashboard"
+        />
+
+       {/* other routes */}
+    </Private>
+ </Router>
+
 ```
 
-Now the loader will show up after 500ms of load time. To see your loading indicator, you can set this value to 0 or, even better, [change the network speed](https://developers.google.com/web/tools/chrome-devtools/network#throttle) in developer tools to "Slow 3G" or another agonizingly slow connection speed.

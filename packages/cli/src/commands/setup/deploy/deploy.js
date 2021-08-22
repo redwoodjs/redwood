@@ -6,8 +6,8 @@ import execa from 'execa'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
 
-import { getPaths, writeFilesTask } from 'src/lib'
-import c from 'src/lib/colors'
+import { getPaths, writeFilesTask } from '../../../lib'
+import c from '../../../lib/colors'
 
 const REDWOOD_TOML_PATH = path.join(getPaths().base, 'redwood.toml')
 const SUPPORTED_PROVIDERS = fs

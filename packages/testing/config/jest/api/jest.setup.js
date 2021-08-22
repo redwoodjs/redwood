@@ -4,13 +4,10 @@ const path = require('path')
 const { setContext } = require('@redwoodjs/api')
 const { getSchemaDefinitions } = require('@redwoodjs/cli/dist/lib')
 const { getPaths } = require('@redwoodjs/internal')
-const { defineScenario } = require('@redwoodjs/testing/dist/scenario')
+const { defineScenario } = require('@redwoodjs/testing/dist/api')
 const { db } = require(path.join(getPaths().api.src, 'lib', 'db'))
 
 const DEFAULT_SCENARIO = 'standard'
-
-// Disable per-request-context in testing.
-process.env.SAFE_GLOBAL_CONTEXT = '1'
 
 const seedScenario = async (scenario) => {
   if (scenario) {
@@ -51,7 +48,7 @@ global.scenario = (...args) => {
 
   return global.it(testName, async () => {
     const path = require('path')
-    const testFileDir = path.parse(global.jasmine.testPath)
+    const testFileDir = path.parse(global.testPath)
     const testFilePath = `${testFileDir.dir}/${
       testFileDir.name.split('.')[0]
     }.scenarios`

@@ -1,4 +1,9 @@
-import { matchPath, parseSearch, validatePath } from '../util'
+import {
+  matchPath,
+  parseSearch,
+  validatePath,
+  flattenSearchParams,
+} from '../util'
 
 describe('matchPath', () => {
   it.each([
@@ -187,5 +192,17 @@ describe('parseSearch', () => {
     expect(
       parseSearch('?search=all+dogs+go+to+heaven&category=movies')
     ).toEqual({ category: 'movies', search: 'all dogs go to heaven' })
+  })
+})
+
+describe('flattenSearchParams', () => {
+  it('returns a flat array from query string', () => {
+    expect(
+      flattenSearchParams('?search=all+dogs+go+to+heaven&category=movies')
+    ).toEqual([{ search: 'all dogs go to heaven' }, { category: 'movies' }])
+  })
+
+  it('returns an empty array', () => {
+    expect(flattenSearchParams('')).toEqual([])
   })
 })

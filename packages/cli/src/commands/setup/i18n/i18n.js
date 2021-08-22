@@ -5,8 +5,8 @@ import chalk from 'chalk'
 import execa from 'execa'
 import Listr from 'listr'
 
-import { getPaths, writeFile } from 'src/lib'
-import c from 'src/lib/colors'
+import { getPaths, writeFile } from '../../../lib'
+import c from '../../../lib/colors'
 
 export const command = 'i18n'
 export const description = 'Setup i18n'

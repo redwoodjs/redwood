@@ -15,20 +15,23 @@ const Query = ({ children, query, ...rest }: QueryProps) => {
 
 export type DataObject = { [key: string]: unknown }
 
-export type CellFailureProps =
-  | Omit<QueryOperationResult, 'data' | 'loading'>
-  | { error: Error } // for tests and storybook
+export type CellFailureProps = Partial<
+  Omit<QueryOperationResult, 'data' | 'error' | 'loading'> & {
+    error: QueryOperationResult['error'] | Error // for tests and storybook
+    updating: boolean
+  }
+>
 
-export type CellLoadingProps = Omit<
-  QueryOperationResult,
-  'error' | 'loading' | 'data'
+export type CellLoadingProps = Partial<
+  Omit<QueryOperationResult, 'error' | 'loading' | 'data'>
 >
 // @MARK not sure about this partial, but we need to do this for tests and storybook
 // `updating` is just `loading` renamed; since Cells default to stale-while-refetch,
 // this prop lets users render something like a spinner to show that a request is in-flight
 export type CellSuccessProps<TData = any> = Partial<
-  Omit<QueryOperationResult<TData>, 'error' | 'data'>
-> & { updating: boolean } & A.Compute<TData> // pre-computing makes the types more readable on hover
+  Omit<QueryOperationResult<TData>, 'error' | 'data'> & { updating: boolean }
+> &
+  A.Compute<TData> // pre-computing makes the types more readable on hover
 
 export interface CreateCellProps<CellProps> {
   beforeQuery?: <TProps>(props: TProps) => { variables: TProps }
@@ -128,21 +131,25 @@ export function createCell<CellProps = any>({
         {({ error, loading, data, ...queryRest }) => {
           if (error) {
             if (Failure) {
-              return <Failure error={error} {...queryRest} {...props} />
+              return (
+                <Failure
+                  error={error}
+                  {...{ updating: loading, ...queryRest, ...props }}
+                />
+              )
             } else {
               throw error
             }
           } else if (data) {
             if (typeof Empty !== 'undefined' && isEmpty(data)) {
               return (
-                <Empty {...{ updating: loading, ...queryRest }} {...props} />
+                <Empty {...{ updating: loading, ...queryRest, ...props }} />
               )
             } else {
               return (
                 <Success
                   {...afterQuery(data)}
-                  {...{ updating: loading, ...queryRest }}
-                  {...props}
+                  {...{ updating: loading, ...queryRest, ...props }}
                 />
               )
             }

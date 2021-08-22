@@ -33,8 +33,8 @@ describe(
       )
 
       cy.exec(`cd ${BASE_DIR}; yarn rw storybook --build`, {
-        timeout: 90000,
-      })
+        timeout: 300_0000,
+      }) // Slow!
         .its('code')
         .should('eq', 0)
     })
@@ -75,7 +75,7 @@ describe(
       cy.get('li a').eq(1).should('contain.text', 'Contact')
     })
 
-    it('3. Pages: AboutPage, ContactPage, and HomePage', () => {
+    it('4. Pages: AboutPage, ContactPage, and HomePage', () => {
       // About
       cy.visit(
         `/storybook/iframe.html?id=pages-aboutpage--generated&viewMode=story`

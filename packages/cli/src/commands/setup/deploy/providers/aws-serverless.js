@@ -3,7 +3,7 @@ import path from 'path'
 
 import { getConfig } from '@redwoodjs/internal'
 
-import { getPaths } from 'src/lib'
+import { getPaths } from '../../../../lib'
 
 const config = getConfig()
 

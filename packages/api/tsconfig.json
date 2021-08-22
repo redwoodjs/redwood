@@ -5,13 +5,9 @@
     "rootDir": "src",
     "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
     "outDir": "dist",
-    "paths": {
-      "src/*": ["./src/*"]
-    }
   },
   "include": ["src/**/*", "src/../package.json"],
   "references": [
     { "path": "../auth" },
-    { "path": "../dev-server" }
   ]
 }

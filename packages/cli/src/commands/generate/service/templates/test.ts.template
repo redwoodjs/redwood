@@ -1,3 +1,12 @@
+<% // To JSON stringify and remove quotes around `scenario` variables
+const stringifyButNotScenario = (obj) => {
+  return JSON.stringify(obj).replace(/['"].*?['"]/g, (string) => {
+    if (string.match(/scenario\./)) {
+      return string.replace(/['"]/g, '')
+    }
+    return string
+  })
+} %>
 import { ${pluralCamelName}<% if (crud) { %>,${singularCamelName}, create${singularPascalName}, update${singularPascalName}, delete${singularPascalName}<% } %> } from './${pluralCamelName}'
 import type { StandardScenario } from './${pluralCamelName}.scenarios'
 
@@ -15,24 +24,24 @@ describe('${pluralCamelName}', () => {
     expect(result).toEqual(scenario.${singularCamelName}.one)
   })
 
-  <% if (create) { %>scenario('creates a ${singularCamelName}', async () => {
+  <% if (create) { %>scenario('creates a ${singularCamelName}', async (${stringifyButNotScenario(create).includes('scenario.') ? 'scenario: StandardScenario' : ''}) => {
     const result = await create${singularPascalName}({
-      input: ${JSON.stringify(create)},
+      input: ${stringifyButNotScenario(create)},
     })
 
     <% for (const [name, value] of Object.entries(create)) { %>
-    expect(result.${name}).toEqual(${JSON.stringify(value)})<% } %>
+    expect(result.${name}).toEqual(${stringifyButNotScenario(value)})<% } %>
   })<% } %>
 
   <% if (update) { %>scenario('updates a ${singularCamelName}', async (scenario: StandardScenario) => {<% rand = parseInt(Math.random() * 10000000) %>
     const original = await ${singularCamelName}({ id: scenario.${singularCamelName}.one.id })
     const result = await update${singularPascalName}({
       id: original.id,
-      input: ${JSON.stringify(update)},
+      input: ${stringifyButNotScenario(update)},
     })
 
     <% for (const [name, value] of Object.entries(update)) { %>
-    expect(result.${name}).toEqual(${JSON.stringify(value)})<% } %>
+    expect(result.${name}).toEqual(${stringifyButNotScenario(value)})<% } %>
   })<% } %>
 
   scenario('deletes a ${singularCamelName}', async (scenario: StandardScenario) => {
