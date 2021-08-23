@@ -65,10 +65,18 @@ interface SessionRecord {
 
 type AuthMethodNames = 'login' | 'logout' | 'signup' | 'getToken'
 
+type Params = {
+  username: string | undefined
+  password: string | undefined
+  method: AuthMethodNames
+  [key: string]: unknown
+}
+
 export class DbAuthHandler {
   event: APIGatewayProxyEvent
   context: GlobalContext
   options: DbAuthHandlerOptions
+  params: Params
   db: PrismaClient
   dbAccessor: any
   headerCsrfToken: string | undefined
@@ -143,6 +151,8 @@ export class DbAuthHandler {
     this.event = event
     this.context = context
     this.options = options
+
+    this.params = this._parseBody()
     this.db = this.options.db
     this.dbAccessor = this.db[this.options.authModelAccessor]
     this.headerCsrfToken = this.event.headers['csrf-token']
@@ -204,7 +214,7 @@ export class DbAuthHandler {
   }
 
   async login() {
-    const { username, password } = JSON.parse(this.event.body as string)
+    const { username, password } = this.params
     const dbUser = await this._verifyUser(username, password)
     const handlerUser = await this.options.loginHandler(dbUser)
 
@@ -279,6 +289,17 @@ export class DbAuthHandler {
       } else {
         return this._logoutResponse({ error: e.message })
       }
+    }
+  }
+
+  // parses the event body into JSON, whether it's base64 encoded or not
+  _parseBody() {
+    if (this.event.isBase64Encoded) {
+      return JSON.parse(
+        Buffer.from(this.event.body || '', 'base64').toString('utf-8')
+      )
+    } else {
+      return this.event.body && JSON.parse(this.event.body)
     }
   }
 
@@ -382,9 +403,7 @@ export class DbAuthHandler {
   // creates and returns a user, first checking that the username/password
   // values pass validation
   async _createUser() {
-    const { username, password, ...userAttributes } = JSON.parse(
-      this.event.body as string
-    )
+    const { username, password, ...userAttributes } = this.params
     this._validateField('username', username)
     this._validateField('password', password)
 
@@ -425,10 +444,10 @@ export class DbAuthHandler {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     let methodName = this.event.queryStringParameters!.method as AuthMethodNames
 
-    if (!DbAuthHandler.METHODS.includes(methodName) && this.event.body) {
+    if (!DbAuthHandler.METHODS.includes(methodName) && this.params) {
       // try getting it from the body in JSON: { method: [methodName] }
       try {
-        methodName = JSON.parse(this.event.body).method
+        methodName = this.params.method
       } catch (e) {
         // there's no body, or it's not JSON, `handler` will return a 404
       }
@@ -439,7 +458,7 @@ export class DbAuthHandler {
 
   // checks that a single field meets validation requirements and
   // currently checks for presense only
-  _validateField(name: string, value: string) {
+  _validateField(name: string, value: string | undefined) {
     // check for presense
     if (!value || value.trim() === '') {
       throw new DbAuthError.FieldRequiredError(name)
