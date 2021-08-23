@@ -7,9 +7,9 @@ import {
   JSONObjectResolver,
 } from 'graphql-scalars'
 import gql from 'graphql-tag'
+
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore - not inside the <rootDir>
-
 import apiPackageJson from '../../package.json'
 import type { GlobalContext } from '../globalContext'
 

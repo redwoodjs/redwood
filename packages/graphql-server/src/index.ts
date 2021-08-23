@@ -1,11 +1,16 @@
-// In transition can keep Apollo Server error compatibility
-// export * from './errors'
+/**
+ * @deprecated
+ */
 export * from './logger'
-export * from './makeServices'
-export * from './makeMergedSchema/makeMergedSchema'
-export * from './functions/graphql'
+
+/**
+ * @deprecated
+ */
 export * from './webhooks'
 
+/**
+ * @deprecated
+ */
 export {
   // auth
   parseJWT,
@@ -14,9 +19,13 @@ export {
   // secure services
   BeforeResolverSpec,
   BeforeResolverSpecType,
+  MissingBeforeResolverError,
   SkipArgs,
   // graphql
+  createGraphQLHandler,
   GraphQLTypeWithFields,
+  makeMergedSchema,
+  makeServices,
   MakeServicesInterface,
   Resolver,
   RuleOptions,

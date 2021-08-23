@@ -31,13 +31,17 @@ Our vision is to provide frictionless and understandable integrations between th
 We also plan to make Functions platform-agnostic. At the moment, we're targeting AWS Lambda, but we aim to provide a single interface for other providers and build-time support when you've targeted them.
 
 ## Package Lead
+@todo revisit
 
 - [@peterp](https://github.com/peterp/)
 
 ## Roadmap
 
+@todo revisit
+
 ### GraphQL serverless Function
 
+@todo revisit
 - Connect to a "Redwood universal logging service" for exceptions and info.
 
 ### Services layer
@@ -51,6 +55,7 @@ We also plan to make Functions platform-agnostic. At the moment, we're targeting
 
 ### Authentication
 
+@todo revisit
 - What does RBAC look like?
 
 ### Logging
@@ -83,6 +88,7 @@ For detailed logger configuration, see the RedwoodJS logger package [README](./s
 
 `@redwoodjs/api` uses a few things you should be familiar with:
 
+@todo revisit. Mention Helix and envelop
 - [Apollo Server](https://www.apollographql.com/docs/apollo-server/) (Lambda)
 - [GraphQL](https://graphql.org/learn/)
 
@@ -96,6 +102,8 @@ Remember, files in this directory (`api/src/functions`) are serverless functions
 1. Everything (i.e. sdl and services) is imported
 2. The services are wrapped into resolvers
 3. The sdl and resolvers are merged/stitched into a schema
+
+@todo Remove use ofg ApolloServer and change to Helx/Envelop
 4. The ApolloServer is instantiated with said merged/stitched schema and context
 
 These four steps map quite nicely to these four "code" steps, some of which are doing a little more under-the-hood than others:

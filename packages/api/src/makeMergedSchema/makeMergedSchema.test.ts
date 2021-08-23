@@ -1,5 +1,4 @@
-import { gql } from 'apollo-server-lambda'
-import { GraphQLResolveInfo } from 'graphql'
+import { parse, GraphQLResolveInfo } from 'graphql'
 
 import { GraphQLTypeWithFields } from '../types'
 
@@ -10,7 +9,7 @@ describe('makeMergedSchema', () => {
   // ./graphql/tests.sdl.js
   const schemas = {
     tests: {
-      schema: gql`
+      schema: parse(`
         type MyOwnType {
           inTypeResolverAndServices: String
           inTypeResolver: String
@@ -23,7 +22,7 @@ describe('makeMergedSchema', () => {
           inResolver: String
           inServices: String
         }
-      `,
+      `),
       resolvers: {
         MyOwnType: {
           inTypeResolverAndServices: () =>

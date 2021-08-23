@@ -1,9 +1,10 @@
 import './global.api-auto-imports'
 export * from './global.api-auto-imports'
 
-export * from 'apollo-server-lambda'
+export { ApolloError, toApolloError } from 'apollo-server-lambda'
 export * from './auth'
 export * from './beforeResolverSpec'
+export * from './errors'
 export * from './makeServices'
 export * from './makeMergedSchema/makeMergedSchema'
 export * from './functions/graphql'
