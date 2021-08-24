@@ -105,9 +105,11 @@ Step two is the only explicit change you'll see to your project. You'll see that
 
 ![image](https://user-images.githubusercontent.com/32992335/130699570-6ceb91a6-58aa-4cbf-a080-9cee6f26aaf2.png)
 
-This is all the packages in the Redwood Framework. Note that this'll be cleaned up when you exit the `yarn rwfw project:sync` command.
+This is all the packages in the Redwood Framework. It's a lot! But don't worry, this'll be cleaned up when you exit the `yarn rwfw project:sync` command.
 
 Congratulations, you're all setup! Any changes you make in the Redwood Framework should be reflected in your Redwood Project.
+
+> You may have to restart the dev server...
 
 ### Testing the CLI in Your Project
 
