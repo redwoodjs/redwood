@@ -90,7 +90,7 @@ cd redwood-project
 yarn rwfw project:sync
 ```
 
-As `project:sync` spins up, it'll start logging to the console. In order, it:
+As `project:sync` starts up, it'll start logging to the console. In order, it:
 - cleans and builds the framework
 - copies the framework's dependencies to your project
 - runs `yarn install` in your project
