@@ -109,8 +109,6 @@ This is all the packages in the Redwood Framework. It's a lot! But don't worry, 
 
 Congratulations, you're all setup! Any changes you make in the Redwood Framework should be reflected in your Redwood Project.
 
-> You may have to restart the dev server...
-
 ### Testing the CLI in Your Project
 
 While you can test the CLI using `yarn rwfw`, there's an easier way.
