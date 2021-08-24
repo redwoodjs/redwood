@@ -3,10 +3,8 @@
 import { envelop, Plugin } from '@envelop/core'
 
 import { context, getPerRequestContext } from '../index'
-import {
-  useRedwoodPopulateContext,
-  useRedwoodGlobalContextSetter,
-} from '../plugins'
+import { useRedwoodGlobalContextSetter } from '../plugins/useRedwoodGlobalContextSetter'
+import { useRedwoodPopulateContext } from '../plugins/useRedwoodPopulateContext'
 
 const createContextHandler = (userContext?: Record<string, any>) => {
   const plugins: Plugin<any>[] = [useRedwoodGlobalContextSetter()]
