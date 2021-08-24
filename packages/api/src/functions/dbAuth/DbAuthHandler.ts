@@ -66,8 +66,8 @@ interface SessionRecord {
 type AuthMethodNames = 'login' | 'logout' | 'signup' | 'getToken'
 
 type Params = {
-  username: string | undefined
-  password: string | undefined
+  username?: string
+  password?: string
   method: AuthMethodNames
   [key: string]: unknown
 }
@@ -404,27 +404,29 @@ export class DbAuthHandler {
   // values pass validation
   async _createUser() {
     const { username, password, ...userAttributes } = this.params
-    this._validateField('username', username)
-    this._validateField('password', password)
+    if (
+      this._validateField('username', username) &&
+      this._validateField('password', password)
+    ) {
+      const user = await this.dbAccessor.findUnique({
+        where: { [this.options.authFields.username]: username },
+      })
+      if (user) {
+        throw new DbAuthError.DuplicateUsernameError(username as string)
+      }
 
-    const user = await this.dbAccessor.findUnique({
-      where: { [this.options.authFields.username]: username },
-    })
-    if (user) {
-      throw new DbAuthError.DuplicateUsernameError(username)
+      // if we get here everything is good, call the app's signup handler and let
+      // them worry about scrubbing data and saving to the DB
+      const [hashedPassword, salt] = this._hashPassword(password as string)
+      const newUser = await this.options.signupHandler({
+        username,
+        hashedPassword,
+        salt,
+        userAttributes,
+      })
+
+      return newUser
     }
-
-    // if we get here everything is good, call the app's signup handler and let
-    // them worry about scrubbing data and saving to the DB
-    const [hashedPassword, salt] = this._hashPassword(password)
-    const newUser = await this.options.signupHandler({
-      username,
-      hashedPassword,
-      salt,
-      userAttributes,
-    })
-
-    return newUser
   }
 
   // hashes a password using either the given `salt` argument, or creates a new
