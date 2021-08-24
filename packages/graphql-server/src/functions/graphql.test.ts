@@ -3,14 +3,16 @@
 import { envelop, Plugin } from '@envelop/core'
 
 import { context, getPerRequestContext } from '../index'
-
-import { usePopulateContext, useRedwoodGlobalContextSetter } from './graphql'
+import {
+  useRedwoodPopulateContext,
+  useRedwoodGlobalContextSetter,
+} from '../plugins'
 
 const createContextHandler = (userContext?: Record<string, any>) => {
   const plugins: Plugin<any>[] = [useRedwoodGlobalContextSetter()]
 
   if (userContext) {
-    plugins.push(usePopulateContext(userContext))
+    plugins.push(useRedwoodPopulateContext(userContext))
   }
 
   const getEnveloped = envelop({ plugins })
