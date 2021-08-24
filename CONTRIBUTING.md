@@ -83,14 +83,12 @@ As you make changes to the Redwood Framework, you'll want to see your changes re
 
 > `rwfw` is short for Redwood Framework.
 
-Navigate to your Redwood Project and run `yarn rwfw project:sync <framework directory>`:
+Navigate to your Redwood Project and run `yarn rwfw project:sync`:
 
 ```terminal
 cd redwood-project
-yarn rwfw project:sync <framework directory>
+yarn rwfw project:sync
 ```
-
-where `<framework directory>` is the path to your local copy of the Redwood Framework. Once provided to `yarn rwfw`, it'll remember it and you shouldn't have to provide it again unless you move it.
 
 As `project:sync` spins up, it'll start logging to the console. In order, it:
 - cleans and builds the framework
