@@ -93,11 +93,19 @@ RWFW_PATH=~/redwood yarn rwfw project:sync
 Where <framework directory> is the path to your local copy of the Redwood Framework. Once provided to `rwfw`, it'll remember it and you shouldn't have to provide it again unless you move it.
 
 As `project:sync` starts up, it'll start logging to the console. In order, it:
-- cleans and builds the framework
-- copies the framework's dependencies to your project
-- runs `yarn install` in your project
-- copies over the framework's packages to your project
-- waits for changes
+
+<!-- Markdown numbers for us automatically -->
+1. cleans and builds the framework
+1. copies the framework's dependencies to your project
+1. runs `yarn install` in your project
+1. copies over the framework's packages to your project
+1. waits for changes
+
+Step two is the only explicit change you'll see to your project. You'll see that a ton of packages have been added to your project's root `package.json`:
+
+![image](https://user-images.githubusercontent.com/32992335/130699570-6ceb91a6-58aa-4cbf-a080-9cee6f26aaf2.png)
+
+This is all the packages in the Redwood Framework. Note that this'll be cleaned up when you exit the `yarn rwfw project:sync` command.
 
 Congratulations, you're all setup! Any changes you make in the Redwood Framework should be reflected in your Redwood Project.
 
