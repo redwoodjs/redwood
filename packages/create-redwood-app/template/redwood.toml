@@ -9,7 +9,7 @@
   title = "Redwood App"
   port = 8910
   apiProxyPath = "/.redwood/functions"
-  includeEnvironmentVariables = [] # The array should look like ['ENV_VAR_AVAILBLE_TO_WEB_SIDE', 'ANOTHER_ONE']
+  includeEnvironmentVariables = [] # any ENV vars that should be available to the web side, see https://redwoodjs.com/docs/environment-variables#web
 [api]
   port = 8911
 [browser]
