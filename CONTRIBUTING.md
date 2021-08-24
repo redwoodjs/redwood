@@ -28,7 +28,7 @@ As a contributor, you'll have to familiarize yourself with one more codebase: th
 
 Here we'll assume your local copy of the Redwood Framework is in a directory called `redwood` and your Redwood Project is in a directory called `redwood-project`.
 
-Chances are that you'll have a few VS Codes open when you're contributing—one for the Redwood Framework and one for a Redwood Project. An easy way to tell which-is-which is by looking for a red bar at the bottom. The one with a red bar is the Redwood Framework:
+Chances are that you'll have more than a few VS Codes open when you're contributing—one with the Redwood Framework and one with a Redwood Project at least. An easy way to tell which-is-which is by looking for a red bar at the bottom. The one with a red bar is the Redwood Framework:
 
 <img src="https://user-images.githubusercontent.com/32992335/130157304-af0ca28c-96ae-411c-891c-c6c9e759920c.png" alt="The VS Code with the Redwood Framework has a red bar"/>
 
