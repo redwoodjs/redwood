@@ -9,6 +9,7 @@
   title = "Redwood App"
   port = 8910
   apiProxyPath = "/.redwood/functions"
+  includeEnvironmentVariables = [] # The array should look like ['SECRET_API_KEY', 'ANOTHER_ONE']
 [api]
   port = 8911
 [browser]
