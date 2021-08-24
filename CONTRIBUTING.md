@@ -12,7 +12,6 @@ Before interacting with the Redwood community, please read and understand our [C
     - [Local Setup](#local-setup)
       - [Redwood Framework](#redwood-framework)
       - [Redwood Project: Create a Functional Test Project](#redwood-project-create-a-functional-test-project)
-        - [Running the Test Project Script](#running-the-test-project-script)
     - [Testing Framework Code in Your Project](#testing-framework-code-in-your-project)
     - [Browser-based Setup](#browser-based-setup)
   - [Integration Tests](#integration-tests)
