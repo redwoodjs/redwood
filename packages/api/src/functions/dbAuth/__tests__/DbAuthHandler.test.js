@@ -174,6 +174,28 @@ describe('dbAuth', () => {
       expect(dbAuth.options).toEqual(options)
     })
 
+    it('parses a plain text body', () => {
+      event = { headers: {}, body: `{"foo":"bar", "baz":123}` }
+      context = { foo: 'bar' }
+      options = { db: db }
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      expect(dbAuth.params).toEqual({ foo: 'bar', baz: 123 })
+    })
+
+    it('parses a base64 encoded body', () => {
+      event = {
+        isBase64Encoded: true,
+        headers: {},
+        body: Buffer.from(`{"foo":"bar", "baz":123}`, 'utf8'),
+      }
+      context = { foo: 'bar' }
+      options = { db: db }
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      expect(dbAuth.params).toEqual({ foo: 'bar', baz: 123 })
+    })
+
     it('sets header-based CSRF token', () => {
       event = { headers: { 'csrf-token': 'qwerty' } }
       const dbAuth = new DbAuthHandler(event, context, options)
