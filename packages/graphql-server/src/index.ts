@@ -27,7 +27,7 @@ export {
   // context
   GlobalContext,
   context,
-  usePerRequestContext,
+  shouldUseLocalStorageContext as usePerRequestContext,
   getPerRequestContext,
   createContextProxy,
   setContext,

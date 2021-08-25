@@ -17,7 +17,7 @@ import {
   GlobalContext,
   setContext,
   getPerRequestContext,
-  usePerRequestContext,
+  shouldUseLocalStorageContext,
 } from '../globalContext'
 
 export type GetCurrentUser = (
@@ -432,7 +432,7 @@ export const createGraphQLHandler = ({
     context: LambdaContext,
     callback: any
   ): void => {
-    if (usePerRequestContext()) {
+    if (shouldUseLocalStorageContext()) {
       // This must be used when you're self-hosting RedwoodJS.
       const localAsyncStorage = getPerRequestContext()
       localAsyncStorage.run(new Map(), () => {

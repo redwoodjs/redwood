@@ -17,27 +17,34 @@ import { AsyncLocalStorage } from 'async_hooks'
 export interface GlobalContext extends Record<string, unknown> {}
 
 let GLOBAL_CONTEXT: GlobalContext = {}
-let PER_REQUEST_CONTEXT:
-  | undefined
-  | AsyncLocalStorage<Map<string, GlobalContext>> = undefined
+let PER_REQUEST_CONTEXT: AsyncLocalStorage<Map<string, GlobalContext>>
 
-export const usePerRequestContext = () =>
+// @NOTE By default we use local storage context
+// If the user is sure they don't need it e.g. running in lambda,
+// they can disable it by setting SAFE_GLOBAL_CONTEXT === '1'
+// which may have performance benefits
+export const shouldUseLocalStorageContext = () =>
   process.env.SAFE_GLOBAL_CONTEXT !== '1'
 
 export const getPerRequestContext = () => {
   if (!PER_REQUEST_CONTEXT) {
     PER_REQUEST_CONTEXT = new AsyncLocalStorage()
   }
-  return PER_REQUEST_CONTEXT
+  return PER_REQUEST_CONTEXT as AsyncLocalStorage<Map<string, GlobalContext>>
 }
 
 export const createContextProxy = () => {
-  return new Proxy<GlobalContext>(GLOBAL_CONTEXT, {
-    get: (_target, property: string) => {
-      const store = getPerRequestContext().getStore()
-      return store?.get('context')?.[property]
-    },
-  })
+  if (shouldUseLocalStorageContext()) {
+    return new Proxy<GlobalContext>(GLOBAL_CONTEXT, {
+      get: (_target, property: string) => {
+        const store = getPerRequestContext().getStore()
+        const ctx = store?.get('context') || {}
+        return ctx[property]
+      },
+    })
+  } else {
+    return GLOBAL_CONTEXT
+  }
 }
 
 export let context: GlobalContext = createContextProxy()
@@ -47,7 +54,7 @@ export let context: GlobalContext = createContextProxy()
  */
 export const setContext = (newContext: GlobalContext): GlobalContext => {
   GLOBAL_CONTEXT = newContext
-  if (usePerRequestContext()) {
+  if (shouldUseLocalStorageContext()) {
     // re-init the proxy against GLOBAL_CONTEXT,
     // so things like `console.log(context)` is the actual object,
     // not one initialized earlier.
