@@ -39,7 +39,6 @@ export const builder = (yargs) => {
     })
     .option('watchNodeModules', {
       type: 'boolean',
-      default: false,
       description: 'Reload on changes to node_modules',
     })
     .epilogue(
@@ -55,7 +54,7 @@ export const handler = async ({
   forward = '',
   useEnvelop = false,
   generate = true,
-  watchNodeModules = false,
+  watchNodeModules,
 }) => {
   const rwjsPaths = getPaths()
 
@@ -89,16 +88,13 @@ export const handler = async ({
     }
   }
 
-  const webCommand = [
-    `cd "${rwjsPaths.web.base}" && yarn cross-env NODE_ENV=development webpack serve --config`,
-    require.resolve('@redwoodjs/core/config/webpack.development.js'),
-    watchNodeModules &&
-      require.resolve('@redwoodjs/core/config/webpack.contributing.js'),
-    watchNodeModules && '--merge',
-    forward,
-  ]
-    .filter(Boolean)
-    .join(' ')
+  const webpackDevConfig = require.resolve(
+    '@redwoodjs/core/config/webpack.development.js'
+  )
+
+  if (watchNodeModules === undefined) {
+    watchNodeModules = process.env.WATCH_NODE_MODULES ?? false
+  }
 
   const redwoodConfigPath = getConfigPath()
 
@@ -112,7 +108,7 @@ export const handler = async ({
     },
     web: {
       name: 'web',
-      command: webCommand,
+      command: `cd "${rwjsPaths.web.base}" && yarn cross-env NODE_ENV=development WATCH_NODE_MODULES=${watchNodeModules} webpack serve --config "${webpackDevConfig}" ${forward}`,
       prefixColor: 'blue',
       runWhen: () => fs.existsSync(rwjsPaths.web.src),
     },
