@@ -38,6 +38,7 @@ interface RouteProps {
   name: string
   prerender?: boolean
   whileLoadingPage?: () => React.ReactElement | null
+  exact?: boolean
 }
 
 interface RedirectRouteProps {
@@ -69,6 +70,7 @@ const InternalRoute: React.VFC<InternalRouteProps> = ({
   redirect,
   notfound,
   whileLoadingPage,
+  exact,
 }) => {
   const location = useLocation()
   const routerState = useRouterState()
@@ -88,7 +90,8 @@ const InternalRoute: React.VFC<InternalRouteProps> = ({
   const { match, params: pathParams } = matchPath(
     path,
     location.pathname,
-    routerState.paramTypes
+    routerState.paramTypes,
+    exact
   )
 
   if (!match) {

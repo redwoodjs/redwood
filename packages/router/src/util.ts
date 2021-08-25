@@ -70,7 +70,8 @@ type SupportedRouterParamTypes = keyof typeof coreParamTypes
 const matchPath = (
   route: string,
   pathname: string,
-  paramTypes?: Record<string, ParamType>
+  paramTypes?: Record<string, ParamType>,
+  exact?: boolean
 ) => {
   // Get the names and the transform types for the given route.
   const routeParams = paramsForRoute(route)
@@ -98,7 +99,7 @@ const matchPath = (
 
   // Does the `pathname` match the route?
   const matches = [
-    ...pathname.matchAll(new RegExp(`^${typeConstrainedRoute}$`, 'g')),
+    ...pathname.matchAll(new RegExp(`^${typeConstrainedRoute}${exact ? '$' : ''}`, 'g')),
   ]
 
   if (matches.length === 0) {
