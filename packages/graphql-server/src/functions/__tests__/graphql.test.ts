@@ -1,6 +1,23 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { context, getPerRequestContext } from '../../globalContext'
-import { createContextHandler } from '../graphql'
+import { envelop, Plugin } from '@envelop/core'
+
+import { context, getPerRequestContext } from '@redwoodjs/api'
+
+import { usePopulateContext, useRedwoodGlobalContextSetter } from '../graphql'
+
+const createContextHandler = (userContext?: Record<string, any>) => {
+  const plugins: Plugin<any>[] = [useRedwoodGlobalContextSetter()]
+
+  if (userContext) {
+    plugins.push(usePopulateContext(userContext))
+  }
+
+  const getEnveloped = envelop({ plugins })
+
+  return ({ context }: Record<string, any>) =>
+    getEnveloped(context).contextFactory()
+}
 
 describe('global context handlers', () => {
   beforeAll(() => {
@@ -11,7 +28,7 @@ describe('global context handlers', () => {
     process.env.SAFE_GLOBAL_CONTEXT = '0'
   })
 
-  it('merges the apollo resolver and global context correctly', async () => {
+  it('merges the graphql-server resolver and global context correctly', async () => {
     const handler = createContextHandler({ a: 1 })
     // @ts-ignore
 
@@ -19,13 +36,11 @@ describe('global context handlers', () => {
     expect(inlineContext).toEqual({
       a: 1,
       b: 2,
-      callbackWaitsForEmptyEventLoop: false,
     })
 
     expect(context).toEqual({
       a: 1,
       b: 2,
-      callbackWaitsForEmptyEventLoop: false,
     })
   })
 
@@ -34,7 +49,6 @@ describe('global context handlers', () => {
     // @ts-ignore
     expect(await handler1({ context: { b: 2 } })).toEqual({
       b: 2,
-      callbackWaitsForEmptyEventLoop: false,
     })
   })
 
@@ -44,7 +58,6 @@ describe('global context handlers', () => {
     expect(await handler({ context: { d: 4 } })).toEqual({
       c: 3,
       d: 4,
-      callbackWaitsForEmptyEventLoop: false,
     })
   })
 
@@ -54,9 +67,9 @@ describe('global context handlers', () => {
     expect(await handler({ context: { d: 4 } })).toEqual({
       c: 3,
       d: 4,
-      callbackWaitsForEmptyEventLoop: false,
     })
   })
+
   it('also accepts a promise that resolve dynamic value on each run', async () => {
     const handler = createContextHandler(async ({ context }) => {
       return Promise.resolve({ c: context.d * 5 })
@@ -65,7 +78,6 @@ describe('global context handlers', () => {
     expect(await handler({ context: { d: 4 } })).toEqual({
       c: 20,
       d: 4,
-      callbackWaitsForEmptyEventLoop: false,
     })
     // now run same handler again to simulate second request
     // with different event and context
@@ -73,13 +85,12 @@ describe('global context handlers', () => {
     expect(await handler({ context: { d: 5 } })).toEqual({
       c: 25,
       d: 5,
-      callbackWaitsForEmptyEventLoop: false,
     })
   })
 })
 
 describe('per request context handlers', () => {
-  it('merges the apollo resolver and global context correctly', async () => {
+  it('merges the graphql-server resolver and global context correctly', async () => {
     const localAsyncStorage = getPerRequestContext()
 
     localAsyncStorage.run(new Map(), async () => {
@@ -89,13 +100,11 @@ describe('per request context handlers', () => {
       expect(inlineContext).toEqual({
         a: 1,
         b: 2,
-        callbackWaitsForEmptyEventLoop: false,
       })
 
       expect(context).toEqual({
         a: 1,
         b: 2,
-        callbackWaitsForEmptyEventLoop: false,
       })
     })
   })

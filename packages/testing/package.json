@@ -12,6 +12,7 @@
   "types": "dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
+    "@redwoodjs/api": "0.36.1",
     "@redwoodjs/auth": "0.36.1",
     "@redwoodjs/internal": "0.36.1",
     "@redwoodjs/router": "0.36.1",

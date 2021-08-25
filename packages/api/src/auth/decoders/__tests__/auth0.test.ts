@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 
-import { verifyAuth0Token } from './auth0'
+import { verifyAuth0Token } from '../auth0'
 
 jest.mock('jsonwebtoken', () => ({
   verify: jest.fn(),
@@ -13,7 +13,7 @@ test('verify, and not decode, should be called in production', () => {
   process.env.AUTH0_DOMAIN = 'redwoodjs.com'
   process.env.AUTH0_AUDIENCE = 'michael bolton'
 
-  // @ts-expect-error Ingore this error.
+  // @ts-expect-error Ignore this error.
   verifyAuth0Token({})
 
   expect(jwt.decode).not.toBeCalled()

@@ -39,16 +39,17 @@ import { renderPlaygroundPage } from 'graphql-playground-html'
 import { BaseLogger, LevelWithSilent } from 'pino'
 import { v4 as uuidv4 } from 'uuid'
 
-import { CorsConfig, createCorsContext } from '../cors'
-import { createHealthcheckContext, OnHealthcheckFn } from '../healthcheck'
 import {
-  ApolloError,
   AuthContextPayload,
   getAuthenticationContext,
   getPerRequestContext,
   setContext,
   usePerRequestContext,
-} from '../index'
+} from '@redwoodjs/api'
+
+import { CorsConfig, createCorsContext } from '../cors'
+import { createHealthcheckContext, OnHealthcheckFn } from '../healthcheck'
+import { ApolloError } from '../index'
 
 export type GetCurrentUser = (
   decoded: AuthContextPayload[0],

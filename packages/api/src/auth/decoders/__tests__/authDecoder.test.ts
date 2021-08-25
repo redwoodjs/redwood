@@ -1,11 +1,14 @@
-import * as auth0Decoder from '../../auth/decoders/auth0'
-import * as clerkDecoder from '../../auth/decoders/clerk'
-import { decodeToken } from '../../auth/decoders/index'
-import * as netlifyDecoder from '../../auth/decoders/netlify'
-import * as supabaseDecoder from '../../auth/decoders/supabase'
-import mockedAPIGatewayProxyEvent from '../fixtures/apiGatewayProxyEvent.fixture'
+import type { Context } from 'aws-lambda'
 
-jest.mock('./../../auth/decoders/auth0', () => {
+import mockedAPIGatewayProxyEvent from '../../../functions/fixtures/apiGatewayProxyEvent.fixture'
+import { GlobalContext } from '../../../globalContext'
+import * as auth0Decoder from '../auth0'
+import * as clerkDecoder from '../clerk'
+import { decodeToken } from '../index'
+import * as netlifyDecoder from '../netlify'
+import * as supabaseDecoder from '../supabase'
+
+jest.mock('../auth0', () => {
   return {
     auth0: jest.fn().mockImplementation(async () => {
       return { decodedWith: 'auth0', fakeDecodedToken: true }
@@ -13,7 +16,7 @@ jest.mock('./../../auth/decoders/auth0', () => {
   }
 })
 
-jest.mock('./../../auth/decoders/clerk', () => {
+jest.mock('../clerk', () => {
   return {
     clerk: jest.fn().mockImplementation(async () => {
       return { decodedWith: 'clerk', fakeDecodedToken: true }
@@ -21,7 +24,7 @@ jest.mock('./../../auth/decoders/clerk', () => {
   }
 })
 
-jest.mock('./../../auth/decoders/netlify', () => {
+jest.mock('../netlify', () => {
   return {
     netlify: jest.fn().mockImplementation(async () => {
       return { decodedWith: 'netlify', fakeDecodedToken: true }
@@ -29,7 +32,7 @@ jest.mock('./../../auth/decoders/netlify', () => {
   }
 })
 
-jest.mock('./../../auth/decoders/supabase', () => {
+jest.mock('../supabase', () => {
   return {
     supabase: jest.fn().mockImplementation(async () => {
       return { decodedWith: 'supabase', fakeDecodedToken: true }
@@ -43,7 +46,7 @@ describe('Uses correct Auth decoder', () => {
   it('handles auth0', async () => {
     const output = await decodeToken('auth0', MOCKED_JWT, {
       event: mockedAPIGatewayProxyEvent,
-      context: {},
+      context: {} as Context & GlobalContext,
     })
 
     expect(auth0Decoder.auth0).toHaveBeenCalledWith(
@@ -59,7 +62,7 @@ describe('Uses correct Auth decoder', () => {
   it('handles clerk', async () => {
     const output = await decodeToken('clerk', MOCKED_JWT, {
       event: mockedAPIGatewayProxyEvent,
-      context: {},
+      context: {} as Context & GlobalContext,
     })
 
     expect(clerkDecoder.clerk).toHaveBeenCalledWith(
@@ -75,7 +78,7 @@ describe('Uses correct Auth decoder', () => {
   it('decodes goTrue with netlify decoder', async () => {
     const output = await decodeToken('goTrue', MOCKED_JWT, {
       event: mockedAPIGatewayProxyEvent,
-      context: {},
+      context: {} as Context & GlobalContext,
     })
 
     expect(netlifyDecoder.netlify).toHaveBeenCalledWith(
@@ -91,7 +94,7 @@ describe('Uses correct Auth decoder', () => {
   it('decodes netlify with netlify decoder', async () => {
     const output = await decodeToken('netlify', MOCKED_JWT, {
       event: mockedAPIGatewayProxyEvent,
-      context: {},
+      context: {} as Context & GlobalContext,
     })
 
     expect(netlifyDecoder.netlify).toHaveBeenCalledWith(
@@ -107,7 +110,7 @@ describe('Uses correct Auth decoder', () => {
   it('returns undecoded token for custom', async () => {
     const output = await decodeToken('custom', MOCKED_JWT, {
       event: mockedAPIGatewayProxyEvent,
-      context: {},
+      context: {} as Context & GlobalContext,
     })
 
     expect(output).toEqual(MOCKED_JWT)
@@ -116,7 +119,7 @@ describe('Uses correct Auth decoder', () => {
   it('returns undecoded token for magicLink', async () => {
     const output = await decodeToken('magicLink', MOCKED_JWT, {
       event: mockedAPIGatewayProxyEvent,
-      context: {},
+      context: {} as Context & GlobalContext,
     })
 
     expect(output).toEqual(MOCKED_JWT)
@@ -125,7 +128,7 @@ describe('Uses correct Auth decoder', () => {
   it('returns undecoded token for firebase', async () => {
     const output = await decodeToken('firebase', MOCKED_JWT, {
       event: mockedAPIGatewayProxyEvent,
-      context: {},
+      context: {} as Context & GlobalContext,
     })
 
     expect(output).toEqual(MOCKED_JWT)
@@ -134,7 +137,7 @@ describe('Uses correct Auth decoder', () => {
   it('decodes supabase with supabase decoder', async () => {
     const output = await decodeToken('supabase', MOCKED_JWT, {
       event: mockedAPIGatewayProxyEvent,
-      context: {},
+      context: {} as Context & GlobalContext,
     })
 
     expect(supabaseDecoder.supabase).toHaveBeenCalledWith(
@@ -147,10 +150,10 @@ describe('Uses correct Auth decoder', () => {
     })
   })
 
-  it('returns undecoded token for unknown values', async () => {
-    const output = await decodeToken('SOMETHING_ELSE!', MOCKED_JWT, {
+  it('returns undecoded token for unknown custom decoder', async () => {
+    const output = await decodeToken('custom', MOCKED_JWT, {
       event: mockedAPIGatewayProxyEvent,
-      context: {},
+      context: {} as Context & GlobalContext,
     })
 
     expect(output).toEqual(MOCKED_JWT)
