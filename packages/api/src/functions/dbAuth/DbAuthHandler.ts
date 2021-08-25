@@ -412,12 +412,12 @@ export class DbAuthHandler {
         where: { [this.options.authFields.username]: username },
       })
       if (user) {
-        throw new DbAuthError.DuplicateUsernameError(username as string)
+        throw new DbAuthError.DuplicateUsernameError(username)
       }
 
       // if we get here everything is good, call the app's signup handler and let
       // them worry about scrubbing data and saving to the DB
-      const [hashedPassword, salt] = this._hashPassword(password as string)
+      const [hashedPassword, salt] = this._hashPassword(password)
       const newUser = await this.options.signupHandler({
         username,
         hashedPassword,
@@ -460,7 +460,7 @@ export class DbAuthHandler {
 
   // checks that a single field meets validation requirements and
   // currently checks for presense only
-  _validateField(name: string, value: string | undefined) {
+  _validateField(name: string, value: string | undefined): value is string {
     // check for presense
     if (!value || value.trim() === '') {
       throw new DbAuthError.FieldRequiredError(name)
