@@ -7,6 +7,7 @@ import React from 'react'
 import type { AuthContextInterface } from '@redwoodjs/auth'
 import { AuthProvider } from '@redwoodjs/auth'
 import { LocationProvider } from '@redwoodjs/router'
+import { RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
 import { mockedUserMeta } from './mockRequests'
@@ -53,10 +54,12 @@ export const mockAuthClient = {
 export const MockProviders: React.FunctionComponent = ({ children }) => {
   return (
     <AuthProvider client={mockAuthClient} type="custom">
-      <RedwoodApolloProvider useAuth={fakeUseAuth}>
-        <UserRouterWithRoutes />
-        <LocationProvider>{children}</LocationProvider>
-      </RedwoodApolloProvider>
+      <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
+        <RedwoodApolloProvider useAuth={fakeUseAuth}>
+          <UserRouterWithRoutes />
+          <LocationProvider>{children}</LocationProvider>
+        </RedwoodApolloProvider>
+      </RedwoodProvider>
     </AuthProvider>
   )
 }
