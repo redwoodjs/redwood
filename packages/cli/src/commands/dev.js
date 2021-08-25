@@ -37,6 +37,11 @@ export const builder = (yargs) => {
       default: true,
       description: 'Generate artifacts',
     })
+    .option('watchNodeModules', {
+      type: 'boolean',
+      default: false,
+      description: 'Reload on changes to node_modules',
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -50,6 +55,7 @@ export const handler = async ({
   forward = '',
   useEnvelop = false,
   generate = true,
+  watchNodeModules = false,
 }) => {
   const rwjsPaths = getPaths()
 
@@ -83,9 +89,16 @@ export const handler = async ({
     }
   }
 
-  const webpackDevConfig = require.resolve(
-    '@redwoodjs/core/config/webpack.development.js'
-  )
+  const webCommand = [
+    `cd "${rwjsPaths.web.base}" && yarn cross-env NODE_ENV=development webpack serve --config`,
+    require.resolve('@redwoodjs/core/config/webpack.development.js'),
+    watchNodeModules &&
+      require.resolve('@redwoodjs/core/config/webpack.contributing.js'),
+    watchNodeModules && '--merge',
+    forward,
+  ]
+    .filter(Boolean)
+    .join(' ')
 
   const redwoodConfigPath = getConfigPath()
 
@@ -99,7 +112,7 @@ export const handler = async ({
     },
     web: {
       name: 'web',
-      command: `cd "${rwjsPaths.web.base}" && yarn cross-env NODE_ENV=development webpack serve --config "${webpackDevConfig}" ${forward}`,
+      command: webCommand,
       prefixColor: 'blue',
       runWhen: () => fs.existsSync(rwjsPaths.web.src),
     },
