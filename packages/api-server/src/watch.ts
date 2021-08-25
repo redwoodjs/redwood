@@ -22,7 +22,7 @@ dotenv.config({
 
 let httpServerProcess: ChildProcess
 
-const rebuildApiServer = () => {
+const rebuildApiServer = async () => {
   try {
     // Shutdown API server
     httpServerProcess?.emit('exit')
@@ -30,7 +30,7 @@ const rebuildApiServer = () => {
 
     const buildTs = Date.now()
     process.stdout.write(c.dim(c.italic('Building... ')))
-    buildApi()
+    await buildApi()
     console.log(c.dim(c.italic('Took ' + (Date.now() - buildTs) + ' ms')))
 
     // Start API server
@@ -77,7 +77,7 @@ chokidar
     },
   })
   .on('ready', async () => {
-    rebuildApiServer()
+    await rebuildApiServer()
   })
   .on('all', (eventName, filePath) => {
     console.log(

@@ -128,8 +128,8 @@ export const handler = async ({
       },
     side.includes('api') && {
       title: 'Building API...',
-      task: () => {
-        const { errors, warnings } = buildApi()
+      task: async () => {
+        const { errors, warnings } = await buildApi()
 
         if (errors.length) {
           console.error(errors)
