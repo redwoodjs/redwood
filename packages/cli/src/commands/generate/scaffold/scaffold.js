@@ -9,7 +9,7 @@ import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 import terminalLink from 'terminal-link'
 
-import { getConfig } from '@redwoodjs/internal'
+import { getConfig, generate } from '@redwoodjs/internal'
 
 import {
   generateTemplate,
@@ -591,6 +591,12 @@ const tasks = ({ model, path, force, tests, typescript, javascript }) => {
       {
         title: 'Adding scaffold asset imports...',
         task: () => addScaffoldImport(),
+      },
+      {
+        title: `Generating types ...`,
+        task: async () => {
+          return generate()
+        },
       },
     ],
     { collapse: false, exitOnError: true }
