@@ -1,6 +1,4 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-
-// import { useApolloServerErrors } from '@envelop/apollo-server-errors'
 import {
   envelop,
   FormatErrorHandler,
@@ -455,10 +453,7 @@ const useRedwoodLogger = (
 /*
  * Prevent unexpected error messages from leaking to the GraphQL clients.
  *
- * Unexpected errors are those that are not Envelop or Apollo errors
- *
- * Note that error masking should come after useApolloServerErrors since the originalError
- * will could become an ApolloError but if not, then should get masked
+ * Unexpected errors are those that are not Envelop or GraphQL errors
  **/
 export const formatError: FormatErrorHandler = (err) => {
   if (
@@ -514,12 +509,7 @@ export const createGraphQLHandler = ({
     }),
     // Only allow execution of specific operation types
     useFilterAllowedOperations(allowedOperations || ['mutation', 'query']),
-    // Apollo Server compatible errors.
-    // Important: *must* be listed before useMaskedErrors
-    // useApolloServerErrors(),
     // Prevent unexpected error messages from leaking to the GraphQL clients.
-    // Important: *must* be listed after useApolloServerErrors so it can detect if the error is an ApolloError
-    // and mask if not
     useMaskedErrors({ formatError }),
   ]
 
