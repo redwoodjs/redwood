@@ -50,7 +50,19 @@ const loadConsoleHistory = async (r) => {
 
 export const handler = () => {
   // Transpile on the fly
-  registerApiSideBabelHook()
+  registerApiSideBabelHook({
+    plugins: [
+      [
+        'babel-plugin-module-resolver',
+        {
+          alias: {
+            src: paths.api.src,
+          },
+        },
+        'rwjs-console-module-resolver',
+      ],
+    ],
+  })
 
   const r = repl.start()
 
