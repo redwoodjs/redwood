@@ -1,6 +1,6 @@
 import { createTestkit } from '@envelop/testing'
 
-import { context, getPerRequestContext } from '../../index'
+import { context, getAsyncStoreInstance } from '../../index'
 import { testSchema, testQuery } from '../__fixtures__/common'
 import { useRedwoodGlobalContextSetter } from '../useRedwoodGlobalContextSetter'
 import { useRedwoodPopulateContext } from '../useRedwoodPopulateContext'
@@ -20,7 +20,7 @@ test('Safe Context OFF: Updates global context with extended context', async () 
     testSchema
   )
 
-  await getPerRequestContext().run(new Map(), async () => {
+  await getAsyncStoreInstance().run(new Map(), async () => {
     await teskit.execute(testQuery, {}, {})
 
     expect(context.hello).toBe('world')

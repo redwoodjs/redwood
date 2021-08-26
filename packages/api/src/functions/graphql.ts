@@ -16,7 +16,7 @@ import { getAuthenticationContext } from '../auth'
 import {
   GlobalContext,
   setContext,
-  getPerRequestLocalStorage,
+  getAsyncStoreInstance,
   shouldUseLocalStorageContext,
 } from '../globalContext'
 
@@ -434,7 +434,7 @@ export const createGraphQLHandler = ({
   ): void => {
     if (shouldUseLocalStorageContext()) {
       // This must be used when you're self-hosting RedwoodJS.
-      const localAsyncStorage = getPerRequestLocalStorage()
+      const localAsyncStorage = getAsyncStoreInstance()
       localAsyncStorage.run(new Map(), () => {
         try {
           handler(event, context, callback)

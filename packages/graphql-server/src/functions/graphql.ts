@@ -36,8 +36,7 @@ import { createHealthcheckContext, OnHealthcheckFn } from '../healthcheck'
 import {
   ApolloError,
   AuthContextPayload,
-  getPerRequestContext,
-  usePerRequestContext,
+  getAsyncStoreInstance,
 } from '../index'
 import { useRedwoodAuthContext } from '../plugins/useRedwoodAuthContext'
 import { useRedwoodGlobalContextSetter } from '../plugins/useRedwoodGlobalContextSetter'
@@ -478,9 +477,9 @@ export const createGraphQLHandler = ({
       }
     }
 
-    if (usePerRequestContext()) {
+    if (getAsyncStoreInstance()) {
       // This must be used when you're self-hosting RedwoodJS.
-      return getPerRequestContext().run(new Map(), execFn)
+      return getAsyncStoreInstance().run(new Map(), execFn)
     } else {
       // This is OK for AWS (Netlify/Vercel) because each Lambda request
       // is handled individually.
