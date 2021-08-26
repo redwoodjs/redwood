@@ -28,7 +28,7 @@ export {
   GlobalContext,
   context,
   shouldUseLocalStorageContext as usePerRequestContext,
-  getPerRequestContext,
+  getPerRequestLocalStorage as getPerRequestContext,
   createContextProxy,
   setContext,
   // Apollo Server error compatibility
