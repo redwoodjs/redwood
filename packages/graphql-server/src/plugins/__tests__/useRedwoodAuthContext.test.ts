@@ -58,3 +58,7 @@ test('Updates context with output of current user', async () => {
     { context: {}, event: {} }
   )
 })
+
+test('Exceptions raised in getCurrentUser are not swallowed up', () => {
+  expect('Implement this first!!').toBe(true)
+})
