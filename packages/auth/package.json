@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth",
-  "version": "0.35.2",
+  "version": "0.36.1",
   "files": [
     "dist"
   ],
@@ -10,8 +10,8 @@
   "devDependencies": {
     "@auth0/auth0-spa-js": "1.17.0",
     "@clerk/clerk-js": "1.28.2",
-    "@clerk/types": "1.8.1",
     "@clerk/clerk-sdk-node": "0.5.1",
+    "@clerk/types": "1.8.1",
     "@supabase/supabase-js": "1.21.1",
     "@types/netlify-identity-widget": "1.9.2",
     "@types/react": "17.0.17",
