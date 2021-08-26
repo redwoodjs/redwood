@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
-import { useApolloServerErrors } from '@envelop/apollo-server-errors'
+// import { useApolloServerErrors } from '@envelop/apollo-server-errors'
 import {
   envelop,
   FormatErrorHandler,
@@ -49,7 +49,7 @@ import {
 
 import { CorsConfig, createCorsContext } from '../cors'
 import { createHealthcheckContext, OnHealthcheckFn } from '../healthcheck'
-import { ApolloError } from '../index'
+// import { ApolloError } from '../index'
 
 export type GetCurrentUser = (
   decoded: AuthContextPayload[0],
@@ -463,8 +463,8 @@ const useRedwoodLogger = (
 export const formatError: FormatErrorHandler = (err) => {
   if (
     err.originalError &&
-    err.originalError instanceof EnvelopError === false &&
-    err.originalError instanceof ApolloError === false
+    err.originalError instanceof EnvelopError === false
+    //&& err.originalError instanceof ApolloError === false
   ) {
     return new GraphQLError('Something went wrong.')
   }
@@ -516,7 +516,7 @@ export const createGraphQLHandler = ({
     useFilterAllowedOperations(allowedOperations || ['mutation', 'query']),
     // Apollo Server compatible errors.
     // Important: *must* be listed before useMaskedErrors
-    useApolloServerErrors(),
+    // useApolloServerErrors(),
     // Prevent unexpected error messages from leaking to the GraphQL clients.
     // Important: *must* be listed after useApolloServerErrors so it can detect if the error is an ApolloError
     // and mask if not

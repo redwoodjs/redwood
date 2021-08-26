@@ -2187,13 +2187,6 @@
     ts-node "^9"
     tslib "^2"
 
-"@envelop/apollo-server-errors@1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@envelop/apollo-server-errors/-/apollo-server-errors-1.0.2.tgz#f957fd7066c611b6e820b6bc1db8a1ee09560428"
-  integrity sha512-sWKjYZnchEmMwpvnqSHpKt1nhp5ZM32sCAks+hP/8BLB3OilXssQm9dFdsWOiQhlOeE04nPgxVq0Z7hjJH4jBg==
-  dependencies:
-    apollo-server-errors "3.0.1"
-
 "@envelop/core@1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@envelop/core/-/core-1.0.3.tgz#80effebd5f41faff229b9b34dbe0d6b13beed4f2"
@@ -6191,11 +6184,6 @@ apollo-server-env@^3.1.0:
   dependencies:
     node-fetch "^2.6.1"
     util.promisify "^1.0.0"
-
-apollo-server-errors@3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/apollo-server-errors/-/apollo-server-errors-3.0.1.tgz#0dfcc1fe8b10eab311fc7e4f6da93189ea6bcdae"
-  integrity sha512-PSp64IFeN1YK5EYZ3V/8iDRESMMyE00h1vE5aCr83wHL3T0mN7VRiMKoOIZ+2rUtnn7CpK73o6QLmouhxPtXsQ==
 
 apollo-server-errors@^2.5.0:
   version "2.5.0"
