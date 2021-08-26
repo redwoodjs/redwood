@@ -15,7 +15,7 @@ export const useRedwoodAuthContext = (
 ): Plugin<RedwoodGraphQLContext> => {
   return {
     async onContextBuilding({ context, extendContext }) {
-      const lambdaContext = context.context as any
+      const { lambdaContext } = context as any
 
       const authContext = await getAuthenticationContext({
         event: context.event,

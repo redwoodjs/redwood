@@ -26,7 +26,7 @@ let PER_REQUEST_CONTEXT: AsyncLocalStorage<Map<string, GlobalContext>>
 export const shouldUseLocalStorageContext = () =>
   process.env.SAFE_GLOBAL_CONTEXT !== '1'
 
-export const getPerRequestContext = () => {
+export const getPerRequestLocalStorage = () => {
   if (!PER_REQUEST_CONTEXT) {
     PER_REQUEST_CONTEXT = new AsyncLocalStorage()
   }
@@ -37,7 +37,7 @@ export const createContextProxy = () => {
   if (shouldUseLocalStorageContext()) {
     return new Proxy<GlobalContext>(GLOBAL_CONTEXT, {
       get: (_target, property: string) => {
-        const store = getPerRequestContext().getStore()
+        const store = getPerRequestLocalStorage().getStore()
         const ctx = store?.get('context') || {}
         return ctx[property]
       },
@@ -59,7 +59,7 @@ export const setContext = (newContext: GlobalContext): GlobalContext => {
     // so things like `console.log(context)` is the actual object,
     // not one initialized earlier.
     context = createContextProxy()
-    const store = getPerRequestContext().getStore()
+    const store = getPerRequestLocalStorage().getStore()
     store?.set('context', GLOBAL_CONTEXT)
   } else {
     context = GLOBAL_CONTEXT

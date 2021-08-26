@@ -366,7 +366,10 @@ export const createGraphQLHandler = ({
     event: APIGatewayProxyEvent,
     lambdaContext: LambdaContext
   ): Promise<APIGatewayProxyResult> => {
-    const enveloped = createSharedEnvelop({ event, context: lambdaContext })
+    // @NOTE lambdaContext !== envelopContext
+    // Lambda context contains a lot of information, about the http request
+    // including the http headers, which we use for auth
+    const enveloped = createSharedEnvelop({ event, lambdaContext })
 
     const logger = loggerConfig.logger
 
