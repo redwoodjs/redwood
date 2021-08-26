@@ -451,7 +451,7 @@ export class DbAuthHandler {
       })
       if (user) {
         throw new DbAuthError.DuplicateUsernameError(
-          username, 
+          username,
           this.options.signup?.errors?.usernameTaken
         )
       }
@@ -459,7 +459,7 @@ export class DbAuthHandler {
       // if we get here everything is good, call the app's signup handler and let
       // them worry about scrubbing data and saving to the DB
       const [hashedPassword, salt] = this._hashPassword(password)
-      const newUser = await this.options.signupHandler({
+      const newUser = await this.options.signup.handler({
         username,
         hashedPassword,
         salt,
