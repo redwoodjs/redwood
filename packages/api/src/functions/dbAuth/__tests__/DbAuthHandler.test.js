@@ -189,8 +189,6 @@ describe('dbAuth', () => {
 
     it('parses a plain text body', () => {
       event = { headers: {}, body: `{"foo":"bar", "baz":123}` }
-      context = { foo: 'bar' }
-      options = { db: db }
       const dbAuth = new DbAuthHandler(event, context, options)
 
       expect(dbAuth.params).toEqual({ foo: 'bar', baz: 123 })
@@ -202,8 +200,6 @@ describe('dbAuth', () => {
         headers: {},
         body: Buffer.from(`{"foo":"bar", "baz":123}`, 'utf8'),
       }
-      context = { foo: 'bar' }
-      options = { db: db }
       const dbAuth = new DbAuthHandler(event, context, options)
 
       expect(dbAuth.params).toEqual({ foo: 'bar', baz: 123 })
