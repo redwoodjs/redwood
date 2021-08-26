@@ -47,7 +47,6 @@ import {
 
 import { CorsConfig, createCorsContext } from '../cors'
 import { createHealthcheckContext, OnHealthcheckFn } from '../healthcheck'
-// import { ApolloError } from '../index'
 
 export type GetCurrentUser = (
   decoded: AuthContextPayload[0],
@@ -459,7 +458,6 @@ export const formatError: FormatErrorHandler = (err) => {
   if (
     err.originalError &&
     err.originalError instanceof EnvelopError === false
-    //&& err.originalError instanceof ApolloError === false
   ) {
     return new GraphQLError('Something went wrong.')
   }
