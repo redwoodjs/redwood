@@ -18,12 +18,11 @@ const loadPrismaClient = (replContext) => {
 }
 
 const loadUserConfig = (replContext) => {
-  const userConfigPath = path.join(paths.api.config, 'console')
   try {
-    const userConfig = require(userConfigPath)
+    const userConfig = require(paths.api.console)
     Object.assign(replContext, userConfig)
   } catch (e) {
-    console.error(`Error loading user console config from ${userConfigPath}`)
+    console.error(`Error loading user console config from ${paths.api.console}`)
     throw e
   }
 }
