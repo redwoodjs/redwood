@@ -1,9 +1,7 @@
 import type { PrismaClient } from '@prisma/client'
-import type { APIGatewayProxyEvent } from 'aws-lambda'
+import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import CryptoJS from 'crypto-js'
 import { v4 as uuidv4 } from 'uuid'
-
-interface GlobalContext extends Record<string, unknown> {}
 
 import * as DbAuthError from './errors'
 import { decryptSession, getSession } from './shared'
@@ -74,7 +72,7 @@ type Params = {
 
 export class DbAuthHandler {
   event: APIGatewayProxyEvent
-  context: GlobalContext
+  context: LambdaContext
   options: DbAuthHandlerOptions
   params: Params
   db: PrismaClient
@@ -140,7 +138,7 @@ export class DbAuthHandler {
 
   constructor(
     event: APIGatewayProxyEvent,
-    context: GlobalContext,
+    context: LambdaContext,
     options: DbAuthHandlerOptions
   ) {
     // must have a SESSION_SECRET so we can encrypt/decrypt the cookie

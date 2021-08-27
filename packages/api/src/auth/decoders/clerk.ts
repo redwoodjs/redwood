@@ -1,10 +1,8 @@
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 
-interface GlobalContext extends Record<string, unknown> {}
-
 interface Req {
   event: APIGatewayProxyEvent
-  context: GlobalContext & LambdaContext
+  context: LambdaContext
 }
 
 export const clerk = async (token: string, req: Req) => {

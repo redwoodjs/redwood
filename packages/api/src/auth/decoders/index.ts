@@ -11,11 +11,9 @@ import { netlify } from './netlify'
 import { nhost } from './nhost'
 import { supabase } from './supabase'
 
-interface GlobalContext extends Record<string, unknown> {}
-
 interface Req {
   event: APIGatewayProxyEvent
-  context: GlobalContext & LambdaContext
+  context: LambdaContext
 }
 
 type Decoded = null | string | Record<string, unknown>
