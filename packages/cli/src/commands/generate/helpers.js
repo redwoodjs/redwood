@@ -6,6 +6,7 @@ import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 import prompts from 'prompts'
 import terminalLink from 'terminal-link'
+import {} from '@prisma/sdk'
 
 import { ensurePosixPath, getConfig } from '@redwoodjs/internal'
 
@@ -240,4 +241,28 @@ export const ensureUniquePlural = async ({ model, inDestroyer = false }) => {
 
   // Set the rule
   pluralize.addIrregularRule(model, pluralToUse)
+}
+
+/** @type {(paramType: 'Int' | 'Float' | 'Boolean' | 'String') => string } **/
+export const mapRouteParamTypeToTsType = (paramType) => {
+  const routeParamToTsType = {
+    Int: 'number',
+    Boolean: 'boolean',
+    String: 'string',
+  }
+  return routeParamToTsType[paramType] || 'unknown'
+}
+
+/** @type {(paramType: 'String' | 'Boolean' | 'Int' | 'BigInt' | 'Float' | 'Decimal' | 'DateTime' ) => string } **/
+export const mapPrismaScalarTypeToTsType = (scalarType) => {
+  const prismaScalarToTsType = {
+    String: 'string',
+    Boolean: 'boolean',
+    Int: 'number',
+    BigInt: 'number',
+    Float: 'number',
+    Decimal: 'number',
+    DateTime: 'Date',
+  }
+  return prismaScalarToTsType[scalarType] || 'unknown'
 }

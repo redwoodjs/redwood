@@ -1,9 +1,7 @@
-import type { Scalars } from 'types/graphql'
-
 import Edit${singularPascalName}Cell from '${importComponentEditNameCell}'
 
 type ${pascalName}PageProps = {
-  id: Scalars['${idType}']
+  id: ${idTsType}
 }
 
 const Edit${singularPascalName}Page = ({ id }: ${pascalName}PageProps) => {

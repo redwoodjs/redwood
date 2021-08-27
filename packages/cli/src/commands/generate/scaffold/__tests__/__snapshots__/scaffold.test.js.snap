@@ -1126,12 +1126,10 @@ export default PostsList
 `;
 
 exports[`in typescript mode creates a edit page 1`] = `
-"import type { Scalars } from 'types/graphql'
-
-import EditPostCell from 'src/components/Post/EditPostCell'
+"import EditPostCell from 'src/components/Post/EditPostCell'
 
 type PostPageProps = {
-  id: Scalars['Int']
+  id: number
 }
 
 const EditPostPage = ({ id }: PostPageProps) => {
@@ -1653,12 +1651,10 @@ export default Post
 `;
 
 exports[`in typescript mode creates a show page 1`] = `
-"import type { Scalars } from 'types/graphql'
-
-import PostCell from 'src/components/Post/PostCell'
+"import PostCell from 'src/components/Post/PostCell'
 
 type PostPageProps = {
-  id: Scalars['Int']
+  id: Int
 }
 
 const PostPage = ({ id }: PostPageProps) => {

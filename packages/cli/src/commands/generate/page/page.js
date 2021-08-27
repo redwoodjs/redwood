@@ -6,29 +6,21 @@ import pascalcase from 'pascalcase'
 
 import { getConfig } from '@redwoodjs/internal'
 
-import { transformTSToJS } from '../../../lib'
-import { addRoutesToRouterTask, writeFilesTask } from '../../../lib'
+import {
+  addRoutesToRouterTask,
+  transformTSToJS,
+  writeFilesTask,
+} from '../../../lib'
 import c from '../../../lib/colors'
 import {
   createYargsForComponentGeneration,
   pathName,
   templateForComponentFile,
+  mapRouteParamTypeToTsType,
 } from '../helpers'
 
 const COMPONENT_SUFFIX = 'Page'
 const REDWOOD_WEB_PATH_NAME = 'pages'
-
-/** @type {(paramType: 'Int' | 'Boolean' | 'String') => string } **/
-const mapRouteParamTypeToTsType = (paramType) => {
-  switch (paramType) {
-    case 'Int':
-      return 'number'
-
-    default:
-      // Boolean -> boolean, String -> string
-      return paramType.toLowerCase()
-  }
-}
 
 /** @type {(paramType: 'Int' | 'Boolean' | 'String') } **/
 const mapRouteParamTypeToDefaultValue = (paramType) => {
