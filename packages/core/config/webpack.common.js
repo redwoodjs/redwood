@@ -243,15 +243,12 @@ module.exports = (webpackEnv) => {
             // (0)
             {
               test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
-              use: [
-                {
-                  loader: 'url-loader',
-                  options: {
-                    limit: '10000',
-                    name: 'static/media/[name].[contenthash:8].[ext]',
-                  },
+              type: 'asset/inline',
+              parser: {
+                dataUrlCondition: {
+                  maxSize: 10_000,
                 },
-              ],
+              },
             },
             // (1)
             {
@@ -309,9 +306,9 @@ module.exports = (webpackEnv) => {
             // (8)
             {
               test: /\.(svg|ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|pdf)(\?.*)?$/,
-              loader: 'file-loader',
-              options: {
-                name: 'static/media/[name].[contenthash:8].[ext]',
+              type: 'asset/resource',
+              generator: {
+                filename: 'static/media/[name].[contenthash:8].[ext]',
               },
             },
           ].filter(Boolean),
