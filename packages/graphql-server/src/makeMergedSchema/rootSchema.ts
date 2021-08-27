@@ -8,11 +8,8 @@ import {
 } from 'graphql-scalars'
 import gql from 'graphql-tag'
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore - not inside the <rootDir>
-import type { GlobalContext } from '@redwoodjs/api'
-
 import apiPackageJson from '../../package.json'
+import type { GlobalContext } from '../index'
 
 const { prismaVersion } = require('@prisma/client')
 
