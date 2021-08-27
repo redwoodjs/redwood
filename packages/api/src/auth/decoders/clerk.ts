@@ -1,8 +1,8 @@
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 
-import type { GlobalContext } from '../../globalContext'
+interface GlobalContext extends Record<string, unknown> {}
 
-export type Req = {
+interface Req {
   event: APIGatewayProxyEvent
   context: GlobalContext & LambdaContext
 }

@@ -4,9 +4,9 @@ import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 
 import type { SupportedAuthTypes } from '@redwoodjs/auth'
 
-import type { GlobalContext } from '../globalContext'
-
 import { decodeToken } from './decoders'
+
+interface GlobalContext extends Record<string, unknown> {}
 
 // This is shared by `@redwoodjs/web`
 const AUTH_PROVIDER_HEADER = 'auth-provider'

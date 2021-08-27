@@ -2,8 +2,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { envelop, Plugin } from '@envelop/core'
 
-import { context, getPerRequestContext } from '@redwoodjs/api'
-
+import { context, getPerRequestContext } from '../../index'
 import { usePopulateContext, useRedwoodGlobalContextSetter } from '../graphql'
 
 const createContextHandler = (userContext?: Record<string, any>) => {

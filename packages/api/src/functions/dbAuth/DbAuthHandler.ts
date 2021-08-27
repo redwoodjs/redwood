@@ -3,7 +3,7 @@ import type { APIGatewayProxyEvent } from 'aws-lambda'
 import CryptoJS from 'crypto-js'
 import { v4 as uuidv4 } from 'uuid'
 
-import type { GlobalContext } from '../../globalContext'
+interface GlobalContext extends Record<string, unknown> {}
 
 import * as DbAuthError from './errors'
 import { decryptSession, getSession } from './shared'
