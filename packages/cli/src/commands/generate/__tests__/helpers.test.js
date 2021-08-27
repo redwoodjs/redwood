@@ -447,6 +447,10 @@ test('mapRouteParamTypeToTsType maps scalar type Int to TS type number', () => {
   expect(helpers.mapRouteParamTypeToTsType('Int')).toBe('number')
 })
 
+test('mapRouteParamTypeToTsType maps scalar type Float to TS type number', () => {
+  expect(helpers.mapRouteParamTypeToTsType('Float')).toBe('number')
+})
+
 test('mapRouteParamTypeToTsType maps unexpected type to TS unknown', () => {
   expect(helpers.mapRouteParamTypeToTsType('unknown')).toBe('unknown')
 })

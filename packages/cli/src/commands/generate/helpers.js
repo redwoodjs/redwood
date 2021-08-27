@@ -247,6 +247,7 @@ export const ensureUniquePlural = async ({ model, inDestroyer = false }) => {
 export const mapRouteParamTypeToTsType = (paramType) => {
   const routeParamToTsType = {
     Int: 'number',
+    Float: 'number',
     Boolean: 'boolean',
     String: 'string',
   }

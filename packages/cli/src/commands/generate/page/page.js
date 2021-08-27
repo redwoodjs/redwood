@@ -28,6 +28,9 @@ const mapRouteParamTypeToDefaultValue = (paramType) => {
     case 'Int':
       return 42
 
+    case 'Float':
+      return 42.1
+
     case 'Boolean':
       return true
 
