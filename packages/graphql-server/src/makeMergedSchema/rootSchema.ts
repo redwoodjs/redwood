@@ -8,10 +8,9 @@ import {
 } from 'graphql-scalars'
 import gql from 'graphql-tag'
 
-import apiPackageJson from '../../package.json'
-import type { GlobalContext } from '../index'
+import { prismaVersion, redwoodVersion } from '@redwoodjs/api'
 
-const { prismaVersion } = require('@prisma/client')
+import type { GlobalContext } from '../index'
 
 /**
  * This adds scalar types for dealing with Date, Time, DateTime, and JSON.
@@ -55,8 +54,8 @@ export const resolvers: Resolvers = {
   JSONObject: JSONObjectResolver,
   Query: {
     redwood: () => ({
-      version: apiPackageJson.version as string,
-      prismaVersion: () => prismaVersion.client,
+      version: redwoodVersion,
+      prismaVersion: prismaVersion,
       currentUser: (_args: any, context: GlobalContext) => {
         return context?.currentUser
       },
