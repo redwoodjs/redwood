@@ -243,11 +243,14 @@ module.exports = (webpackEnv) => {
             // (0)
             {
               test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
-              type: 'asset/inline',
+              type: 'asset',
               parser: {
                 dataUrlCondition: {
                   maxSize: 10_000,
                 },
+              },
+              generator: {
+                filename: 'static/media/[name].[contenthash:8].[ext]',
               },
             },
             // (1)
