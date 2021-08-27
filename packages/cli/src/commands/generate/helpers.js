@@ -6,7 +6,6 @@ import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 import prompts from 'prompts'
 import terminalLink from 'terminal-link'
-import {} from '@prisma/sdk'
 
 import { ensurePosixPath, getConfig } from '@redwoodjs/internal'
 
