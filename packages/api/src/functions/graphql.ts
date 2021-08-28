@@ -8,7 +8,7 @@ import type { Config, CreateHandlerOptions } from 'apollo-server-lambda'
 import type { ApolloServerPlugin } from 'apollo-server-plugin-base'
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import depthLimit from 'graphql-depth-limit'
-import { BaseLogger, LevelWithSilent } from 'pino'
+import pino from 'pino'
 import { v4 as uuidv4 } from 'uuid'
 
 import type { AuthContextPayload } from '../auth'
@@ -70,7 +70,7 @@ type GraphQLLoggerOptions = {
    * @default level of the logger set in LoggerConfig
    *
    */
-  level?: LevelWithSilent | string
+  level?: pino.LevelWithSilent | string
 
   /**
    * @description Include response data sent to client.
@@ -123,7 +123,7 @@ type GraphQLLoggerOptions = {
  * @param logger your logger
  * @param options the GraphQLLoggerOptions such as tracing, operationName, etc
  */
-type LoggerConfig = { logger: BaseLogger; options?: GraphQLLoggerOptions }
+type LoggerConfig = { logger: pino.BaseLogger; options?: GraphQLLoggerOptions }
 /**
  * This plugin logs every time an operation is being executed and
  * when the execution of the operation is done.
@@ -140,7 +140,7 @@ type LoggerConfig = { logger: BaseLogger; options?: GraphQLLoggerOptions }
 const UseRedwoodLogger = (loggerConfig?: LoggerConfig): ApolloServerPlugin => {
   return {
     requestDidStart(requestContext: GraphQLRequestContext) {
-      const logger = requestContext.logger as BaseLogger
+      const logger = requestContext.logger as pino.BaseLogger
       const level = loggerConfig?.options?.level || logger.level || 'warn'
 
       const includeData = loggerConfig?.options?.data

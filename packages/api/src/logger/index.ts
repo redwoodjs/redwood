@@ -1,10 +1,4 @@
-import pino, {
-  BaseLogger,
-  DestinationStream,
-  LevelWithSilent,
-  LoggerOptions,
-  PrettyOptions,
-} from 'pino'
+import pino from 'pino'
 import * as prettyPrint from 'pino-pretty'
 
 export type LogLevel = 'info' | 'query' | 'warn' | 'error'
@@ -140,7 +134,7 @@ export const redactionsList: string[] = [
  * @default 'silent' in Test
  *
  */
-export const logLevel: LevelWithSilent | string = (() => {
+export const logLevel: pino.LevelWithSilent | string = (() => {
   if (typeof process.env.LOG_LEVEL !== 'undefined') {
     return process.env.LOG_LEVEL
   } else if (isProduction) {
@@ -164,7 +158,7 @@ export const logLevel: LevelWithSilent | string = (() => {
  * - Use a shorted log message that omits server name
  * - Humanize time in GMT
  * */
-export const defaultPrettyPrintOptions: PrettyOptions = {
+export const defaultPrettyPrintOptions: pino.PrettyOptions = {
   colorize: true,
   ignore: 'hostname,pid',
   levelFirst: true,
@@ -201,7 +195,7 @@ export const defaultPrettyPrintOptions: PrettyOptions = {
  * @see {@link https://github.com/pinojs/pino/blob/master/docs/api.md}
  * @see {@link https://github.com/pinojs/pino-pretty}
  */
-export const defaultLoggerOptions: LoggerOptions = {
+export const defaultLoggerOptions: pino.LoggerOptions = {
   prettyPrint: isPretty && defaultPrettyPrintOptions,
   prettifier: isPretty && prettifier,
   level: logLevel,
@@ -219,8 +213,9 @@ export const defaultLoggerOptions: LoggerOptions = {
  * @property {boolean} showConfig - Display logger configuration on initialization
  */
 export interface RedwoodLoggerOptions {
-  options?: LoggerOptions
-  destination?: string | DestinationStream
+  options?: pino.LoggerOptions
+  transport?: pino.TransportSingleOptions | pino.TransportMultiOptions
+  destination?: string | pino.DestinationStream
   showConfig?: boolean
 }
 
@@ -243,20 +238,22 @@ export interface RedwoodLoggerOptions {
  */
 export const createLogger = ({
   options,
+  transport,
   destination,
   showConfig = false,
-}: RedwoodLoggerOptions): BaseLogger => {
+}: RedwoodLoggerOptions): pino.BaseLogger => {
   const hasDestination = typeof destination !== 'undefined'
+  const hasTransport = typeof transport !== 'undefined'
   const isFile = hasDestination && typeof destination === 'string'
-  const isStream = hasDestination && !isFile
+  const isStream = hasDestination && !isFile && !hasTransport
   const stream = destination
 
   // override, but retain default pretty print options
   if (isPretty && options && options.prettyPrint) {
     const prettyOptions = {
       prettyPrint: {
-        ...(defaultLoggerOptions.prettyPrint as PrettyOptions),
-        ...(options.prettyPrint as PrettyOptions),
+        ...(defaultLoggerOptions.prettyPrint as pino.PrettyOptions),
+        ...(options.prettyPrint as pino.PrettyOptions),
       },
     }
 
@@ -282,6 +279,7 @@ export const createLogger = ({
     console.log(`logLevel: ${logLevel}`)
     console.log(`options: ${JSON.stringify(options, null, 2)}`)
     console.log(`destination: ${destination}`)
+    console.log(`transport: ${transport}`)
   }
 
   if (isFile) {
@@ -291,8 +289,9 @@ export const createLogger = ({
       )
     }
 
-    return pino(options, stream as DestinationStream)
-  } else {
+    return pino(options, stream as pino.DestinationStream)
+  }
+  if (isStream) {
     if (isStream && isDevelopment && !isTest) {
       console.warn(
         'Logs will be sent to the transport stream in the current development environment.'
@@ -305,7 +304,17 @@ export const createLogger = ({
       )
     }
 
-    return pino(options, stream as DestinationStream)
+    console.warn(
+      'Logs sent to the transport stream are being prettified. This format may be incompatible.'
+    )
+
+    return pino(options, stream as pino.DestinationStream)
+  }
+  if (transport) {
+    const transports = pino.transport(transport)
+    return pino(options, transports as pino.DestinationStream)
+  } else {
+    return pino(options)
   }
 }
 
@@ -346,7 +355,7 @@ export const emitLogLevels = (setLogLevels: LogLevel[]): LogDefinition[] => {
  */
 interface PrismaLoggingConfig {
   db: PrismaClient
-  logger: BaseLogger
+  logger: pino.BaseLogger
   logLevels: LogLevel[]
 }
 
