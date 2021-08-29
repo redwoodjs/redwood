@@ -136,7 +136,7 @@ export const transpileApi = (files: string[], options = {}) => {
     absWorkingDir: rwjsPaths.api.base,
     entryPoints: files,
     platform: 'node',
-    target: 'node12', // AWS Lambdas support NodeJS 12.x and 14.x, but what does Netlify Target?
+    target: 'node12', // Netlify defaults NodeJS 12: https://answers.netlify.com/t/aws-lambda-now-supports-node-js-14/31789/3
     format: 'cjs',
     bundle: false,
     outdir: rwjsPaths.api.dist,

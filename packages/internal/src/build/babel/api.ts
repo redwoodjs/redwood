@@ -4,6 +4,9 @@ import path from 'path'
 import type { TransformOptions } from '@babel/core'
 import * as babel from '@babel/core'
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore Not inside tsconfig rootdir
+import pkgJson from '../../../package.json'
 import { getPaths } from '../../paths'
 
 import { registerBabel, RegisterHookOptions } from './common'
@@ -13,15 +16,21 @@ export const getApiSideBabelPlugins = () => {
   // Plugin shape: [ ["Target", "Options", "name"] ],
   // a custom "name" is supplied so that user's do not accidently overwrite
   // Redwood's own plugins when they specify their own.
+
+  const corejsMajorMinorVersion = pkgJson.dependencies['core-js']
+    .split('.')
+    .splice(0, 2)
+    .join('.') // Gives '3.16' instead of '3.16.12'
+
   const plugins: TransformOptions['plugins'] = [
     ['@babel/plugin-transform-typescript', undefined, 'rwjs-babel-typescript'],
     [
       'babel-plugin-polyfill-corejs3',
       {
         method: 'usage-global',
-        corejs: '3.16', // TODO: Grab value for package.
-        proposals: true, // https://github.com/zloirock/core-js/issues/978#issuecomment-904839852
-        targets: { node: 12 }, // https://answers.netlify.com/t/aws-lambda-now-supports-node-js-14/31789/3
+        corejs: corejsMajorMinorVersion,
+        proposals: true, // Bug: https://github.com/zloirock/core-js/issues/978#issuecomment-904839852
+        targets: { node: 12 }, // Netlify defaults NodeJS 12: https://answers.netlify.com/t/aws-lambda-now-supports-node-js-14/31789/3
       },
       'rwjs-babel-polyfill',
     ],
@@ -82,19 +91,16 @@ export const getApiSideBabelConfigPath = () => {
 // Used in cli commands that need to use es6, lib and services
 export const registerApiSideBabelHook = ({
   plugins = [],
-  overrides,
+  ...rest
 }: RegisterHookOptions = {}) => {
   registerBabel({
-    // Note:
-    // Even though we specify the config file, babel will still search for it
-    // and merge them because we have specified the filename property, unless babelrc = false
     configFile: getApiSideBabelConfigPath(), // incase user has a custom babel.config.js in api
-    babelrc: false,
+    babelrc: false, // Disables `.babelrc` config
     extensions: ['.js', '.ts'],
     plugins: [...getApiSideBabelPlugins(), ...plugins],
     ignore: ['node_modules'],
     cache: false,
-    overrides,
+    ...rest,
   })
 }
 
@@ -107,14 +113,11 @@ export const prebuildFile = (
 ) => {
   const code = fs.readFileSync(srcPath, 'utf-8')
 
-  // @NOTE
-  // Even though we specify the config file, babel will still search for .babelrc
-  // and merge them because we have specified the filename property, unless babelrc = false
   const result = babel.transform(code, {
     cwd: getPaths().api.base,
-    babelrc: false,
-    filename: srcPath,
+    babelrc: false, // Disables `.babelrc` config
     configFile: getApiSideBabelConfigPath(),
+    filename: srcPath,
     // we set the sourceFile (for the sourcemap) as a correct, relative path
     // this is why this function (prebuildFile) must know about the dstPath
     sourceFileName: path.relative(path.dirname(dstPath), srcPath),
