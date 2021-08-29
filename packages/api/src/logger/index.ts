@@ -214,8 +214,7 @@ export const defaultLoggerOptions: pino.LoggerOptions = {
  */
 export interface RedwoodLoggerOptions {
   options?: pino.LoggerOptions
-  transport?: pino.TransportSingleOptions | pino.TransportMultiOptions
-  destination?: string | pino.DestinationStream
+  destination?: string
   showConfig?: boolean
 }
 
@@ -225,7 +224,7 @@ export interface RedwoodLoggerOptions {
  * @param options {RedwoodLoggerOptions} - Override the default logger configuration
  * @param destination {DestinationStream} - An optional destination stream
  * @param showConfig {Boolean} - Show the logger configuration. This is off by default.
- *
+ *s
  * @example
  * // Create the logger to log just at the error level
  * createLogger({ options: { level: 'error' } })
@@ -238,15 +237,15 @@ export interface RedwoodLoggerOptions {
  */
 export const createLogger = ({
   options,
-  transport,
   destination,
   showConfig = false,
 }: RedwoodLoggerOptions): pino.BaseLogger => {
   const hasDestination = typeof destination !== 'undefined'
-  const hasTransport = typeof transport !== 'undefined'
   const isFile = hasDestination && typeof destination === 'string'
-  const isStream = hasDestination && !isFile && !hasTransport
-  const stream = destination
+  const isStream = hasDestination && !isFile
+  const stream = hasDestination
+    ? pino.transport({ target: destination, options: options })
+    : destination
 
   // override, but retain default pretty print options
   if (isPretty && options && options.prettyPrint) {
@@ -279,7 +278,6 @@ export const createLogger = ({
     console.log(`logLevel: ${logLevel}`)
     console.log(`options: ${JSON.stringify(options, null, 2)}`)
     console.log(`destination: ${destination}`)
-    console.log(`transport: ${transport}`)
   }
 
   if (isFile) {
@@ -290,8 +288,7 @@ export const createLogger = ({
     }
 
     return pino(options, stream as pino.DestinationStream)
-  }
-  if (isStream) {
+  } else {
     if (isStream && isDevelopment && !isTest) {
       console.warn(
         'Logs will be sent to the transport stream in the current development environment.'
@@ -304,17 +301,7 @@ export const createLogger = ({
       )
     }
 
-    console.warn(
-      'Logs sent to the transport stream are being prettified. This format may be incompatible.'
-    )
-
     return pino(options, stream as pino.DestinationStream)
-  }
-  if (transport) {
-    const transports = pino.transport(transport)
-    return pino(options, transports as pino.DestinationStream)
-  } else {
-    return pino(options)
   }
 }
 
