@@ -70,6 +70,8 @@ jest.mock('path', () => {
   }
 })
 
+jest.spyOn(Math, 'random').mockReturnValue(0.123456789)
+
 export const generatorsRootPath = path.join(
   __dirname,
   '..',
