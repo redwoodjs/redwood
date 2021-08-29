@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import type { TransformOptions } from '@babel/core'
+import * as babel from '@babel/core'
 
 import { getPaths } from '../../paths'
 
@@ -95,4 +96,34 @@ export const registerApiSideBabelHook = ({
     cache: false,
     overrides,
   })
+}
+
+export const prebuildFile = (
+  srcPath: string,
+  // we need to know dstPath as well
+  // so we can generate an inline, relative sourcemap
+  dstPath: string,
+  plugins: TransformOptions['plugins']
+) => {
+  const code = fs.readFileSync(srcPath, 'utf-8')
+
+  // @NOTE
+  // Even though we specify the config file, babel will still search for .babelrc
+  // and merge them because we have specified the filename property, unless babelrc = false
+  const result = babel.transform(code, {
+    cwd: getPaths().api.base,
+    babelrc: false,
+    filename: srcPath,
+    configFile: getApiSideBabelConfigPath(),
+    // we set the sourceFile (for the sourcemap) as a correct, relative path
+    // this is why this function (prebuildFile) must know about the dstPath
+    sourceFileName: path.relative(path.dirname(dstPath), srcPath),
+    // we need inline sourcemaps at this level
+    // because this file will eventually be fed to esbuild
+    // when esbuild finds an inline sourcemap, it tries to "combine" it
+    // so the final sourcemap (the one that esbuild generates) combines both mappings
+    sourceMaps: 'inline',
+    plugins,
+  })
+  return result
 }
