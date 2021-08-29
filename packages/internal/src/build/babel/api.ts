@@ -11,9 +11,19 @@ export const getApiSideBabelPlugins = () => {
   const rwjsPaths = getPaths()
   // Plugin shape: [ ["Target", "Options", "name"] ],
   // a custom "name" is supplied so that user's do not accidently overwrite
-  // Redwood's own plugins.
+  // Redwood's own plugins when they specify their own.
   const plugins: TransformOptions['plugins'] = [
     ['@babel/plugin-transform-typescript', undefined, 'rwjs-babel-typescript'],
+    [
+      'babel-plugin-polyfill-corejs3',
+      {
+        method: 'usage-global',
+        corejs: '3.16', // TODO: Grab value for package.
+        proposals: true, // https://github.com/zloirock/core-js/issues/978#issuecomment-904839852
+        targets: { node: 12 }, // https://answers.netlify.com/t/aws-lambda-now-supports-node-js-14/31789/3
+      },
+      'rwjs-babel-polyfill',
+    ],
     [
       require('@redwoodjs/core/dist/babelPlugins/babel-plugin-redwood-src-alias')
         .default,
@@ -46,7 +56,7 @@ export const getApiSideBabelPlugins = () => {
       },
       'rwjs-babel-auto-import',
     ],
-    // FIXME: Babel plugin GraphQL tag doesn't seem to be working.
+    // FIXME: `graphql-tag` is not working: https://github.com/redwoodjs/redwood/pull/3193
     ['babel-plugin-graphql-tag', undefined, 'rwjs-babel-graphql-tag'],
     [
       require('@redwoodjs/core/dist/babelPlugins/babel-plugin-redwood-import-dir')
@@ -74,7 +84,7 @@ export const registerApiSideBabelHook = ({
   overrides,
 }: RegisterHookOptions = {}) => {
   registerBabel({
-    // @NOTE
+    // Note:
     // Even though we specify the config file, babel will still search for it
     // and merge them because we have specified the filename property, unless babelrc = false
     configFile: getApiSideBabelConfigPath(), // incase user has a custom babel.config.js in api

@@ -24,15 +24,17 @@ const fullPath = (p) => {
 }
 
 // Fixtures, filled in beforeAll
-let builtFiles
+let prebuiltFiles
 let relativePaths
 
 beforeAll(() => {
   process.env.RWJS_CWD = FIXTURE_PATH
   cleanApiBuild()
-  findApiFiles()
-  builtFiles = prebuildApiFiles(findApiFiles())
-  relativePaths = builtFiles
+
+  const apiFiles = findApiFiles()
+  prebuiltFiles = prebuildApiFiles(apiFiles)
+
+  relativePaths = prebuiltFiles
     .filter((x) => typeof x !== 'undefined')
     .map(cleanPaths)
 })
@@ -123,17 +125,20 @@ test('api prebuild finds babel.config.js', () => {
 })
 
 test('api prebuild uses babel config', () => {
-  const builtFiles = prebuildApiFiles(findApiFiles())
-  const p = builtFiles
-    .filter((x) => typeof x !== 'undefined')
-    .filter((p) => p.endsWith('dog.js'))
-    .pop()
+  const p = prebuiltFiles.filter((p) => p.endsWith('dog.js')).pop()
 
   const code = fs.readFileSync(p, 'utf-8')
-  expect(stripInlineSourceMap(code)).toMatchInlineSnapshot(`
-    "import dog from \\"dog-bless\\";
-    console.log(dog);"
-  `)
+  const firstLine = stripInlineSourceMap(code).split('\n')[0]
+  expect(firstLine).toEqual('import dog from "dog-bless";')
+})
+
+test('Pretranspile polyfills unsupported functionality', () => {
+  const p = prebuiltFiles.filter((p) => p.endsWith('polyfill.js')).pop()
+  const code = fs.readFileSync(p, 'utf-8')
+  const firstLine = stripInlineSourceMap(code).split('\n')[0]
+  expect(firstLine).toEqual(
+    `import "core-js/modules/esnext.string.replace-all.js";`
+  )
 })
 
 function stripInlineSourceMap(src: string): string {

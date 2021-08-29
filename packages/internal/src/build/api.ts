@@ -1,8 +1,9 @@
 import fs from 'fs'
 import path from 'path'
 
-import { transform, TransformOptions } from '@babel/core'
-import { buildSync } from 'esbuild'
+import type { TransformOptions } from '@babel/core'
+import * as babel from '@babel/core'
+import * as esbuild from 'esbuild'
 import { moveSync } from 'fs-extra'
 import rimraf from 'rimraf'
 
@@ -144,7 +145,7 @@ export const prebuildFile = (
   // @NOTE
   // Even though we specify the config file, babel will still search for .babelrc
   // and merge them because we have specified the filename property, unless babelrc = false
-  const result = transform(code, {
+  const result = babel.transform(code, {
     cwd: getPaths().api.base,
     babelrc: false,
     filename: srcPath,
@@ -165,7 +166,7 @@ export const prebuildFile = (
 export const transpileApi = (files: string[], options = {}) => {
   const rwjsPaths = getPaths()
 
-  return buildSync({
+  return esbuild.buildSync({
     absWorkingDir: rwjsPaths.api.base,
     entryPoints: files,
     platform: 'node',
