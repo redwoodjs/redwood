@@ -9,7 +9,7 @@ import chokidar from 'chokidar'
 import dotenv from 'dotenv'
 import { debounce } from 'lodash'
 
-import { getPaths, buildApi } from '@redwoodjs/internal'
+import { getPaths, buildApi, getConfig } from '@redwoodjs/internal'
 
 const rwjsPaths = getPaths()
 
@@ -34,7 +34,10 @@ const rebuildApiServer = () => {
     console.log(c.dim(c.italic('Took ' + (Date.now() - buildTs) + ' ms')))
 
     // Start API server
-    httpServerProcess = fork(path.join(__dirname, 'index.js'))
+    httpServerProcess = fork(path.join(__dirname, 'index.js'), [
+      '--port',
+      getConfig().api.port.toString(),
+    ])
   } catch (e) {
     console.error(e)
   }
