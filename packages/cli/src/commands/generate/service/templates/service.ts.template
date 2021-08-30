@@ -1,5 +1,5 @@
 <% if (crud || relations.length > 0) { %>import type { Prisma } from '@prisma/client'<% } %>
-import type { <% if (relations.length) { %>ResolverArgs, <% } %>BeforeResolverSpecType } from '@redwoodjs/api'
+import type { <% if (relations.length) { %>ResolverArgs, <% } %>BeforeResolverSpecType } from '@redwoodjs/graphql-server'
 
 import { db } from 'src/lib/db'
 import { requireAuth } from 'src/lib/auth'

@@ -1,13 +1,8 @@
-import './global.api-auto-imports'
-export * from './global.api-auto-imports'
+import packageJson from '../package.json'
 
-export * from 'apollo-server-lambda'
 export * from './auth'
-export * from './beforeResolverSpec'
-export * from './makeServices'
-export * from './makeMergedSchema/makeMergedSchema'
-export * from './functions/graphql'
-export * from './globalContext'
-export * from './types'
 export * from './functions/dbAuth/DbAuthHandler'
 export { dbAuthSession } from './functions/dbAuth/shared'
+
+export const prismaVersion = packageJson?.dependencies['@prisma/client']
+export const redwoodVersion = packageJson?.version
