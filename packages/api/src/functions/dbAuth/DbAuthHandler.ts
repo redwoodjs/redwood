@@ -298,7 +298,7 @@ export class DbAuthHandler {
           Buffer.from(this.event.body || '', 'base64').toString('utf-8')
         )
       } else {
-        return this.event.body && JSON.parse(this.event.body)
+        return JSON.parse(this.event.body)
       }
     } else {
       return {}
