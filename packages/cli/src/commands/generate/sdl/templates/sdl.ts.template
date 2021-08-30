@@ -8,8 +8,8 @@ export const schema = gql`
   }
 <%}) %><% } %>
   type Query {
-    ${pluralCamelName}: [${singularPascalName}!]!<% if (crud) { %>
-    ${singularCamelName}(id: ${idType}!): ${singularPascalName}<% } %>
+    ${pluralCamelName}: [${singularPascalName}!]! @skipAuth<% if (crud) { %>
+    ${singularCamelName}(id: ${idType}!): ${singularPascalName}<% } %>  @skipAuth
   }
 
   input Create${singularPascalName}Input {
@@ -21,8 +21,8 @@ export const schema = gql`
   }<% if (crud) { %>
 
   type Mutation {
-    create${singularPascalName}(input: Create${singularPascalName}Input!): ${singularPascalName}!
-    update${singularPascalName}(id: ${idType}!, input: Update${singularPascalName}Input!): ${singularPascalName}!
-    delete${singularPascalName}(id: ${idType}!): ${singularPascalName}!
+    create${singularPascalName}(input: Create${singularPascalName}Input!): ${singularPascalName}! @skipAuth
+    update${singularPascalName}(id: ${idType}!, input: Update${singularPascalName}Input!): ${singularPascalName}! @skipAuth
+    delete${singularPascalName}(id: ${idType}!): ${singularPascalName}! @skipAuth
   }<% } %>
 `

@@ -11,6 +11,7 @@ import omitBy from 'lodash.omitby'
 
 import { Services, ServicesCollection, GraphQLTypeWithFields } from '../types'
 
+import { schema as authDirectivesSchema } from '../directives/authDirectives'
 import * as rootSchema from './rootSchema'
 
 const mapFieldsToService = ({
@@ -196,7 +197,9 @@ export const makeMergedSchema = ({
   schemaOptions?: Partial<IExecutableSchemaDefinition>
 }) => {
   const typeDefs = mergeTypes(
-    [rootSchema.schema, ...Object.values(schemas).map(({ schema }) => schema)],
+    [rootSchema.schema,
+      authDirectivesSchema,
+      ...Object.values(schemas).map(({ schema }) => schema)],
     { all: true }
   )
 

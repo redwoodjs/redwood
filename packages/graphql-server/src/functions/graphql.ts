@@ -7,24 +7,30 @@ import {
   Plugin,
   EnvelopError,
 } from '@envelop/core'
+
 import { useDepthLimit, DepthLimitConfig } from '@envelop/depth-limit'
 import { useDisableIntrospection } from '@envelop/disable-introspection'
 import { useFilterAllowedOperations } from '@envelop/filter-operation-type'
 import type { AllowedOperations } from '@envelop/filter-operation-type'
 import { useParserCache } from '@envelop/parser-cache'
 import { useValidationCache } from '@envelop/validation-cache'
+import { mergeSchemas } from '@graphql-tools/merge'
+import { makeExecutableSchema } from '@graphql-tools/schema'
+
 import type {
   APIGatewayProxyEvent,
   Context as LambdaContext,
   APIGatewayProxyResult,
 } from 'aws-lambda'
 import { GraphQLError, GraphQLSchema } from 'graphql'
+
 import {
   getGraphQLParameters,
   processRequest,
   Request,
   shouldRenderGraphiQL,
 } from 'graphql-helix'
+
 import { renderPlaygroundPage } from 'graphql-playground-html'
 import { BaseLogger, LevelWithSilent } from 'pino'
 
@@ -34,9 +40,16 @@ import { CorsConfig, createCorsContext } from '../cors'
 import { getAsyncStoreInstance } from '../globalContext'
 import { createHealthcheckContext, OnHealthcheckFn } from '../healthcheck'
 import { useRedwoodAuthContext } from '../plugins/useRedwoodAuthContext'
+import  {useRedwoodDirective } from '../plugins/useRedwoodDirective'
 import { useRedwoodGlobalContextSetter } from '../plugins/useRedwoodGlobalContextSetter'
 import { useRedwoodLogger } from '../plugins/useRedwoodLogger'
 import { useRedwoodPopulateContext } from '../plugins/useRedwoodPopulateContext'
+
+import {
+  schema as authDirectiveDocumentNodes,
+  requireAuth,
+  skipAuth,
+} from '../directives/authDirectives'
 
 export type GetCurrentUser = (
   decoded: AuthContextPayload[0],
@@ -280,17 +293,39 @@ export const createGraphQLHandler = ({
 }: GraphQLHandlerOptions) => {
   // Important: Plugins are executed in order of their usage, and inject functionality serially,
   // so the order here matters
+
+  const authDirectiveSchemas = makeExecutableSchema({
+    typeDefs: authDirectiveDocumentNodes,
+  })
+
+  const schemaWithBuiltInDirectives = mergeSchemas({
+    schemas: [schema, authDirectiveSchemas],
+  })
+
   const plugins: Plugin<any>[] = [
     // Simple LRU for caching parse results.
     useParserCache(),
     // Simple LRU for caching validate results.
     useValidationCache(),
     // Simplest plugin to provide your GraphQL schema.
-    useSchema(schema),
+    useSchema(schemaWithBuiltInDirectives),
     // Custom Redwood plugins
     useRedwoodAuthContext(getCurrentUser),
     useRedwoodGlobalContextSetter(),
     useRedwoodLogger(loggerConfig),
+
+    // -------------  Enforce Auth Directives
+    useRedwoodDirective({
+      name: 'requireAuth',
+      onExecute: requireAuth,
+    }),
+
+    useRedwoodDirective({
+      name: 'skipAuth',
+      onExecute: skipAuth,
+    }),
+    // --------------- Enforce Auth Directives
+
     // Limits the depth of your GraphQL selection sets.
     useDepthLimit({
       maxDepth: (depthLimitOptions && depthLimitOptions.maxDepth) || 10,
