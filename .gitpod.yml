@@ -14,7 +14,7 @@ tasks:
 
   - name: "Dev Servers"
     openMode: split-right
-    before: export RW_PATH="/workspace/redwood"
+    before: export RWFW_PATH="/workspace/redwood"
     init: |
       cd /workspace/redwood
       yarn install
