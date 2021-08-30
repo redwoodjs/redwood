@@ -7,7 +7,7 @@ import { BaseLogger, LoggerOptions } from 'pino'
 
 import { createLogger } from '@redwoodjs/api/logger'
 
-import { testSchema, testQuery } from '../__fixtures__/common'
+import { testSchema, testQuery, testErrorQuery } from '../__fixtures__/common'
 import { LoggerConfig, useRedwoodLogger } from '../useRedwoodLogger'
 
 const watchFileCreated = (filename) => {
@@ -66,10 +66,10 @@ describe('Populates context', () => {
     logFile
   )
 
-  it('Should log', async () => {
+  it('Should log debug statements around GraphQL the execution phase', async () => {
     const loggerConfig = {
       logger,
-      options: { data: true, operationName: true, query: true },
+      options: { data: true, query: true, operationName: true },
     } as LoggerConfig
 
     const testkit = createTestkit([useRedwoodLogger(loggerConfig)], testSchema)
@@ -80,8 +80,8 @@ describe('Populates context', () => {
 
     const logStatements = parseLogFile(logFile)
 
-    const executionStarted = logStatements[0]
-    const executionCompleted = logStatements[1]
+    const executionCompleted = logStatements.pop()
+    const executionStarted = logStatements.pop()
 
     expect(executionStarted).toHaveProperty('level')
     expect(executionStarted).toHaveProperty('time')
@@ -96,10 +96,38 @@ describe('Populates context', () => {
     expect(executionCompleted).toHaveProperty('time')
     expect(executionCompleted).toHaveProperty('msg')
     expect(executionCompleted).toHaveProperty('query')
+    expect(executionCompleted).toHaveProperty('operationName')
     expect(executionCompleted).toHaveProperty('data')
 
     expect(executionCompleted.msg).toEqual('GraphQL execution completed')
     expect(executionCompleted.data).toHaveProperty('me')
+    expect(executionCompleted.operationName).toEqual('meQuery')
     expect(executionCompleted.data.me.name).toEqual('Ba Zinga')
+  })
+
+  it('Should log an error when the resolver raises an exception', async () => {
+    const loggerConfig = {
+      logger,
+      options: {},
+    } as LoggerConfig
+
+    const testkit = createTestkit([useRedwoodLogger(loggerConfig)], testSchema)
+
+    await testkit.execute(testErrorQuery, {}, {})
+
+    await watchFileCreated(logFile)
+
+    const logStatements = parseLogFile(logFile)
+
+    const errorLogStatement = logStatements.pop()
+
+    expect(errorLogStatement).toHaveProperty('level')
+    expect(errorLogStatement).toHaveProperty('time')
+    expect(errorLogStatement).toHaveProperty('msg')
+    expect(errorLogStatement).toHaveProperty('error')
+
+    expect(errorLogStatement.name).toEqual('graphql-server')
+    expect(errorLogStatement.level).toEqual(50)
+    expect(errorLogStatement.msg).toEqual('You are forbidden')
   })
 })

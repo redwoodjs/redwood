@@ -180,7 +180,7 @@ export const useRedwoodLogger = (
         (o) => o.kind === Kind.OPERATION_DEFINITION
       ) as OperationDefinitionNode
 
-      if (includeOperationName && args.operationName) {
+      if (includeOperationName) {
         options['operationName'] =
           args.operationName ||
           rootOperation.name?.value ||

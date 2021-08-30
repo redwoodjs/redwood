@@ -5,6 +5,11 @@ export const testSchema = makeExecutableSchema({
     type Query {
       me: User!
     }
+
+    type Query {
+      forbiddenUser: User!
+    }
+
     type User {
       id: ID!
       name: String!
@@ -14,6 +19,9 @@ export const testSchema = makeExecutableSchema({
     Query: {
       me: () => {
         return { _id: 1, firstName: 'Ba', lastName: 'Zinga' }
+      },
+      forbiddenUser: () => {
+        throw Error('You are forbidden')
       },
     },
     User: {
@@ -26,6 +34,15 @@ export const testSchema = makeExecutableSchema({
 export const testQuery = /* GraphQL */ `
   query meQuery {
     me {
+      id
+      name
+    }
+  }
+`
+
+export const testErrorQuery = /* GraphQL */ `
+  query forbiddenUserQuery {
+    forbiddenUser {
       id
       name
     }
