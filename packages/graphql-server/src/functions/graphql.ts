@@ -34,7 +34,7 @@ import {
   shouldRenderGraphiQL,
 } from 'graphql-helix'
 import { renderPlaygroundPage } from 'graphql-playground-html'
-import { BaseLogger, LevelWithSilent } from 'pino'
+import type P from 'pino'
 import { v4 as uuidv4 } from 'uuid'
 
 import { AuthContextPayload, getAuthenticationContext } from '@redwoodjs/api'
@@ -97,7 +97,7 @@ type GraphQLLoggerOptions = {
    * @default level of the logger set in LoggerConfig
    *
    */
-  level?: LevelWithSilent | string
+  level?: P.LevelWithSilent | string
 
   /**
    * @description Include response data sent to client.
@@ -150,7 +150,7 @@ type GraphQLLoggerOptions = {
  * @param logger your logger
  * @param options the GraphQLLoggerOptions such as tracing, operationName, etc
  */
-type LoggerConfig = { logger: BaseLogger; options?: GraphQLLoggerOptions }
+type LoggerConfig = { logger: P.BaseLogger; options?: GraphQLLoggerOptions }
 
 /**
  * GraphQLHandlerOptions
@@ -335,7 +335,7 @@ export const useRedwoodGlobalContextSetter =
  * when the execution of the operation is done.
  */
 const logResult =
-  (loggerConfig: LoggerConfig, envelopLogger: BaseLogger) =>
+  (loggerConfig: LoggerConfig, envelopLogger: P.BaseLogger) =>
   ({ result }: { result: ExecutionResult }) => {
     const includeTracing = loggerConfig?.options?.tracing
     const includeData = loggerConfig?.options?.data
