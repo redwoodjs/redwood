@@ -111,12 +111,5 @@ module.exports = {
         jest: true,
       },
     },
-    {
-      files: ['*.tsx', '*.js', '*.jsx'],
-      ignorePatterns: ['api/src/**.*'],
-      rules: {
-        'react-hooks/rules-of-hooks': 'error',
-      },
-    },
   ],
 }
