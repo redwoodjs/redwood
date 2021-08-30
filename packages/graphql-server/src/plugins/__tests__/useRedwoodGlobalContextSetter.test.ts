@@ -11,7 +11,7 @@ afterAll(() => {
 
 test('Safe Context OFF: Updates global context with extended context', async () => {
   process.env.SAFE_GLOBAL_CONTEXT = '0' // default: use async local storage
-  const teskit = createTestkit(
+  const testkit = createTestkit(
     [
       useRedwoodPopulateContext(() => ({ hello: 'world' })),
       useRedwoodPopulateContext({ foo: 'bar' }),
@@ -21,7 +21,7 @@ test('Safe Context OFF: Updates global context with extended context', async () 
   )
 
   await getAsyncStoreInstance().run(new Map(), async () => {
-    await teskit.execute(testQuery, {}, {})
+    await testkit.execute(testQuery, {}, {})
 
     expect(context.hello).toBe('world')
     expect(context.foo).toBe('bar')
@@ -32,7 +32,7 @@ test('Safe Context OFF: Updates global context with extended context', async () 
 test('Safe Context ON: Updates global context with extended context', async () => {
   process.env.SAFE_GLOBAL_CONTEXT = '1' // user is saying its safe to not proxy the context
 
-  const teskit = createTestkit(
+  const testkit = createTestkit(
     [
       useRedwoodGlobalContextSetter(),
       useRedwoodPopulateContext(() => ({ hello: 'world' })),
@@ -41,7 +41,7 @@ test('Safe Context ON: Updates global context with extended context', async () =
     testSchema
   )
 
-  await teskit.execute(testQuery, {}, {})
+  await testkit.execute(testQuery, {}, {})
 
   expect(context.hello).toBe('world')
   expect(context.foo).toBe('bar')

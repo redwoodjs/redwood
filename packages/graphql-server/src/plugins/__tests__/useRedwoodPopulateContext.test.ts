@@ -25,7 +25,7 @@ describe('Populates context', () => {
       }
     })
 
-    const teskit = createTestkit(
+    const testkit = createTestkit(
       [
         useRedwoodPopulateContext(populateContextSpy),
         // @NOTE add spy here to check if context has been changed
@@ -34,7 +34,7 @@ describe('Populates context', () => {
       testSchema
     )
 
-    await teskit.execute(testQuery, {}, {})
+    await testkit.execute(testQuery, {}, {})
 
     expect(populateContextSpy).toHaveBeenCalled()
     expectContextContains({ bazinga: true })
@@ -47,7 +47,7 @@ describe('Populates context', () => {
       }
     })
 
-    const teskit = createTestkit(
+    const testkit = createTestkit(
       [
         useRedwoodPopulateContext({
           dtWasHere: 'hello!',
@@ -58,7 +58,7 @@ describe('Populates context', () => {
       testSchema
     )
 
-    await teskit.execute(testQuery, {}, {})
+    await testkit.execute(testQuery, {}, {})
 
     expect(populateContextSpy).not.toHaveBeenCalled()
     expectContextContains({ dtWasHere: 'hello!' })
