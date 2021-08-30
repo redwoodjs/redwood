@@ -24,7 +24,7 @@ export const testSchema = makeExecutableSchema({
 })
 
 export const testQuery = /* GraphQL */ `
-  query me {
+  query meQuery {
     me {
       id
       name
