@@ -254,7 +254,7 @@ export const mapRouteParamTypeToTsType = (paramType) => {
 }
 
 /** @type {(paramType: 'String' | 'Boolean' | 'Int' | 'BigInt' | 'Float' | 'Decimal' | 'DateTime' ) => string } **/
-export const mapPrismaScalarTypeToTsType = (scalarType) => {
+export const mapPrismaScalarToPagePropTsType = (scalarType) => {
   const prismaScalarToTsType = {
     String: 'string',
     Boolean: 'boolean',
@@ -262,7 +262,7 @@ export const mapPrismaScalarTypeToTsType = (scalarType) => {
     BigInt: 'number',
     Float: 'number',
     Decimal: 'number',
-    DateTime: 'Date',
+    DateTime: 'string',
   }
   return prismaScalarToTsType[scalarType] || 'unknown'
 }

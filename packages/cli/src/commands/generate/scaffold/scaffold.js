@@ -32,7 +32,7 @@ import {
   relationsForModel,
   intForeignKeysForModel,
   ensureUniquePlural,
-  mapPrismaScalarTypeToTsType,
+  mapPrismaScalarToPagePropTsType,
 } from '../helpers'
 import { files as sdlFiles, builder as sdlBuilder } from '../sdl/sdl'
 import {
@@ -261,7 +261,7 @@ const pageFiles = async (
   const singularName = pascalcase(pluralize.singular(name))
   const model = await getSchema(singularName)
   const idType = getIdType(model)
-  const idTsType = mapPrismaScalarTypeToTsType(idType)
+  const idTsType = mapPrismaScalarToPagePropTsType(idType)
 
   let fileList = {}
 
