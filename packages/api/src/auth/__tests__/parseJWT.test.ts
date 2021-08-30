@@ -1,6 +1,6 @@
-import { parseJWT } from './parseJWT'
+import { parseJWT } from '../parseJWT'
 
-const JWT_CLAIMS = {
+const JWT_CLAIMS: Record<string, unknown> = {
   iss: 'https://app.us.auth0.com/',
   sub: 'email|1234',
   aud: ['https://example.com', 'https://app.us.auth0.com/userinfo'],

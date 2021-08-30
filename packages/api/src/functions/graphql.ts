@@ -8,7 +8,7 @@ import type { Config, CreateHandlerOptions } from 'apollo-server-lambda'
 import type { ApolloServerPlugin } from 'apollo-server-plugin-base'
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import depthLimit from 'graphql-depth-limit'
-import pino from 'pino'
+import type pino from 'pino'
 import { v4 as uuidv4 } from 'uuid'
 
 import type { AuthContextPayload } from '../auth'

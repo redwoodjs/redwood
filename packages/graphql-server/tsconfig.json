@@ -2,16 +2,12 @@
   "extends": "../../tsconfig.compilerOption.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "rootDirs": [
-      "src",
-      "package.json"
-    ],
+    "rootDir": "src",
     "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
     "outDir": "dist",
   },
-  "include": ["src/**/*", "./package.json"],
+  "include": ["src/**/*"],
   "references": [
-    { "path": "../auth" },
     { "path": "../api" },
   ]
 }
