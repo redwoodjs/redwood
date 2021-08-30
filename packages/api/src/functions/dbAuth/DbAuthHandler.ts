@@ -485,7 +485,7 @@ export class DbAuthHandler {
   _ok(body: string, headers = {}, options = { statusCode: 200 }) {
     return {
       statusCode: options.statusCode,
-      body,
+      body: typeof body === 'string' ? body : JSON.stringify(body),
       headers: { 'Content-Type': 'application/json', ...headers },
     }
   }
