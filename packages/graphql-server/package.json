@@ -2,15 +2,12 @@
   "name": "@redwoodjs/graphql-server",
   "version": "0.36.2",
   "files": [
-    "dist",
-    "logger",
-    "webhooks"
+    "dist"
   ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@envelop/apollo-server-errors": "1.0.2",
     "@envelop/core": "1.0.3",
     "@envelop/depth-limit": "1.0.0",
     "@envelop/disable-introspection": "1.0.0",
@@ -23,13 +20,10 @@
     "@prisma/client": "2.30.0",
     "@redwoodjs/api": "0.36.2",
     "@types/pino": "6.3.11",
-    "core-js": "3.16.1",
     "graphql": "15.5.1",
     "graphql-helix": "1.7.0",
     "graphql-playground-html": "1.6.29",
     "graphql-scalars": "1.10.0",
-    "jsonwebtoken": "8.5.1",
-    "jwks-rsa": "2.0.4",
     "lodash.merge": "4.6.2",
     "lodash.omitby": "4.6.0",
     "pino": "6.13.0",

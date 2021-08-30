@@ -1,4 +1,4 @@
-import { GlobalContext } from "@redwoodjs/api"
+import { GlobalContext } from "@redwoodjs/graphql-server"
 
 export {}
 
