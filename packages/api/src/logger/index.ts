@@ -1,4 +1,6 @@
+import { isString } from 'lodash'
 import pino from 'pino'
+import type P from 'pino'
 import * as prettyPrint from 'pino-pretty'
 
 export type LogLevel = 'info' | 'query' | 'warn' | 'error'
@@ -134,7 +136,7 @@ export const redactionsList: string[] = [
  * @default 'silent' in Test
  *
  */
-export const logLevel: pino.LevelWithSilent | string = (() => {
+export const logLevel: P.LevelWithSilent | string = (() => {
   if (typeof process.env.LOG_LEVEL !== 'undefined') {
     return process.env.LOG_LEVEL
   } else if (isProduction) {
@@ -158,7 +160,7 @@ export const logLevel: pino.LevelWithSilent | string = (() => {
  * - Use a shorted log message that omits server name
  * - Humanize time in GMT
  * */
-export const defaultPrettyPrintOptions: pino.PrettyOptions = {
+export const defaultPrettyPrintOptions: P.PrettyOptions = {
   colorize: true,
   ignore: 'hostname,pid',
   levelFirst: true,
@@ -195,7 +197,7 @@ export const defaultPrettyPrintOptions: pino.PrettyOptions = {
  * @see {@link https://github.com/pinojs/pino/blob/master/docs/api.md}
  * @see {@link https://github.com/pinojs/pino-pretty}
  */
-export const defaultLoggerOptions: pino.LoggerOptions = {
+export const defaultLoggerOptions: P.LoggerOptions = {
   prettyPrint: isPretty && defaultPrettyPrintOptions,
   prettifier: isPretty && prettifier,
   level: logLevel,
@@ -213,7 +215,7 @@ export const defaultLoggerOptions: pino.LoggerOptions = {
  * @property {boolean} showConfig - Display logger configuration on initialization
  */
 export interface RedwoodLoggerOptions {
-  options?: pino.LoggerOptions
+  options?: P.LoggerOptions
   destination?: string
   showConfig?: boolean
 }
@@ -239,11 +241,11 @@ export const createLogger = ({
   options,
   destination,
   showConfig = false,
-}: RedwoodLoggerOptions): pino.BaseLogger => {
+}: RedwoodLoggerOptions): P.BaseLogger => {
   const hasDestination = typeof destination !== 'undefined'
   const isFile = hasDestination && typeof destination === 'string'
   const isStream = hasDestination && !isFile
-  const stream = hasDestination
+  const stream = isString(destination)
     ? pino.transport({ target: destination, options: options })
     : destination
 
@@ -251,8 +253,8 @@ export const createLogger = ({
   if (isPretty && options && options.prettyPrint) {
     const prettyOptions = {
       prettyPrint: {
-        ...(defaultLoggerOptions.prettyPrint as pino.PrettyOptions),
-        ...(options.prettyPrint as pino.PrettyOptions),
+        ...(defaultLoggerOptions.prettyPrint as P.PrettyOptions),
+        ...(options.prettyPrint as P.PrettyOptions),
       },
     }
 
@@ -287,7 +289,7 @@ export const createLogger = ({
       )
     }
 
-    return pino(options, stream as pino.DestinationStream)
+    return pino(options, stream as P.DestinationStream)
   } else {
     if (isStream && isDevelopment && !isTest) {
       console.warn(
@@ -301,7 +303,7 @@ export const createLogger = ({
       )
     }
 
-    return pino(options, stream as pino.DestinationStream)
+    return pino(options, stream as P.DestinationStream)
   }
 }
 
@@ -342,7 +344,7 @@ export const emitLogLevels = (setLogLevels: LogLevel[]): LogDefinition[] => {
  */
 interface PrismaLoggingConfig {
   db: PrismaClient
-  logger: pino.BaseLogger
+  logger: P.BaseLogger
   logLevels: LogLevel[]
 }
 
