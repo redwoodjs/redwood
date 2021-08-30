@@ -4,7 +4,7 @@ import camelcase from 'camelcase'
 import Listr from 'listr'
 import pascalcase from 'pascalcase'
 
-import { getConfig, generate } from '@redwoodjs/internal'
+import { getConfig, generate as generateTypes } from '@redwoodjs/internal'
 
 import {
   addRoutesToRouterTask,
@@ -223,7 +223,7 @@ export const handler = async ({
       {
         title: `Generating types ...`,
         task: async () => {
-          return generate()
+          return generateTypes()
         },
       },
     ].filter(Boolean),
