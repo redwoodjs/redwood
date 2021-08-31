@@ -1,5 +1,8 @@
 import { Plugin } from '@envelop/types'
+import type { Context as LambdaContext } from 'aws-lambda'
 import { DirectiveNode, GraphQLObjectType, GraphQLResolveInfo } from 'graphql'
+
+import { CurrentUser } from '../directives/authDirectives'
 
 export const DIRECTIVE_REQUIRED_ERROR_MESSAGE =
   'You must specify one of @requireAuth, @skipAuth or a custom directive'
@@ -93,6 +96,7 @@ export function getDirectiveArgument(
 type ExecuteFn = (
   resolverInfo?: {
     root: unknown
+    context: LambdaContext & CurrentUser
     args: Record<string, unknown>
     info: GraphQLResolveInfo
   },
@@ -114,7 +118,7 @@ export const useRedwoodDirective = (
   return {
     onExecute() {
       return {
-        async onResolverCalled({ args, root, info }) {
+        async onResolverCalled({ args, root, context, info }) {
           if (isQueryOrMutation(info) && !hasDirective(info)) {
             throw new Error(DIRECTIVE_REQUIRED_ERROR_MESSAGE)
           }
@@ -125,6 +129,7 @@ export const useRedwoodDirective = (
             await executeDirective(
               {
                 info,
+                context: context as unknown as LambdaContext & CurrentUser,
                 args,
                 root,
               },
