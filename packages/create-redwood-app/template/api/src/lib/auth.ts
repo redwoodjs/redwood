@@ -7,6 +7,9 @@
  *
  * See https://redwoodjs.com/docs/authentication for more info.
  */
+export const getCurrentUser = () => {
+  return { id: 1, sub: '1', name: 'Ba Zinga' }
+}
 
 export const isAuthenticated = () => {
   return true
