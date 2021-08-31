@@ -1,23 +1,19 @@
 import fs from 'fs'
-import { rm } from 'fs/promises'
 import path from 'path'
 
 import { transform, TransformOptions } from '@babel/core'
 import { buildSync } from 'esbuild'
-import { moveSync } from 'fs-extra'
+import { moveSync, removeSync } from 'fs-extra'
 
 import { findApiFiles } from '../files'
 import { ensurePosixPath, getPaths } from '../paths'
 
 import { getApiSideBabelConfigPath, getApiSideBabelPlugins } from './babel/api'
 
-const rmrf = (path: fs.PathLike, options?: fs.RmOptions | undefined) =>
-  rm(path, { force: true, recursive: true, maxRetries: 3, ...options })
-
 export const buildApi = async () => {
   // TODO: Be smarter about caching and invalidating files,
   // but right now we just delete everything.
-  await cleanApiBuild()
+  cleanApiBuild()
 
   const srcFiles = findApiFiles()
 
@@ -28,10 +24,10 @@ export const buildApi = async () => {
   return transpileApi(prebuiltFiles)
 }
 
-export const cleanApiBuild = async () => {
+export const cleanApiBuild = () => {
   const rwjsPaths = getPaths()
-  await rmrf(rwjsPaths.api.dist)
-  await rmrf(path.join(rwjsPaths.generated.prebuild, 'api'))
+  removeSync(rwjsPaths.api.dist)
+  removeSync(path.join(rwjsPaths.generated.prebuild, 'api'))
 }
 
 /**
