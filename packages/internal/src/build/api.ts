@@ -10,7 +10,7 @@ import { ensurePosixPath, getPaths } from '../paths'
 
 import { getApiSideBabelConfigPath, getApiSideBabelPlugins } from './babel/api'
 
-export const buildApi = async () => {
+export const buildApi = () => {
   // TODO: Be smarter about caching and invalidating files,
   // but right now we just delete everything.
   cleanApiBuild()
