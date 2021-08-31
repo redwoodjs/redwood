@@ -3,11 +3,16 @@ import fs from 'fs'
 import concurrently from 'concurrently'
 import terminalLink from 'terminal-link'
 
-import { getConfig, errorTelemetry, shutdownPort } from '@redwoodjs/internal'
+import {
+  errorTelemetry,
+  getConfig,
+  getConfigPath,
+  shutdownPort,
+} from '@redwoodjs/internal'
 
-import { getPaths } from 'src/lib'
-import c from 'src/lib/colors'
-import { generatePrismaClient } from 'src/lib/generatePrismaClient'
+import { getPaths } from '../lib'
+import c from '../lib/colors'
+import { generatePrismaClient } from '../lib/generatePrismaClient'
 
 export const command = 'dev [side..]'
 export const description = 'Start development servers for api, and web'
@@ -19,24 +24,11 @@ export const builder = (yargs) => {
       description: 'Which dev server(s) to start',
       type: 'array',
     })
-    .positional('forward', {
+    .option('forward', {
       alias: 'fwd',
       description:
-        'String of one or more Webpack DevServer config options, for example: `--fwd="--port=1234 --open=false"`',
+        'String of one or more Webpack DevServer config options, for example: `--fwd="--port=1234 --no-open"`',
       type: 'string',
-    })
-    .option('esbuild', {
-      type: 'boolean',
-      required: false,
-      default: getConfig().experimental.esbuild,
-      description: 'Use ESBuild [experimental]',
-    })
-    .option('useEnvelop', {
-      type: 'boolean',
-      required: false,
-      default: getConfig().experimental.useEnvelop,
-      description:
-        'Use Envelop as GraphQL Server instead of Apollo Server [experimental]',
     })
     .option('generate', {
       type: 'boolean',
@@ -54,8 +46,6 @@ export const builder = (yargs) => {
 export const handler = async ({
   side = ['api', 'web'],
   forward = '',
-  esbuild = false,
-  useEnvelop = false,
   generate = true,
 }) => {
   const rwjsPaths = getPaths()
@@ -65,7 +55,7 @@ export const handler = async ({
       await generatePrismaClient({
         verbose: false,
         force: false,
-        schema: getPaths().api.dbSchema,
+        schema: rwjsPaths.api.dbSchema,
       })
     } catch (e) {
       errorTelemetry(
@@ -100,11 +90,13 @@ export const handler = async ({
     '@redwoodjs/core/config/webpack.development.js'
   )
 
+  const redwoodConfigPath = getConfigPath()
+
   /** @type {Record<string, import('concurrently').CommandObj>} */
   const jobs = {
     api: {
       name: 'api',
-      command: `cd "${rwjsPaths.api.base}" && yarn cross-env NODE_ENV=development yarn dev-server`,
+      command: `yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn nodemon --watch "${redwoodConfigPath}" --exec "yarn rw-api-server-watch"`,
       prefixColor: 'cyan',
       runWhen: () => fs.existsSync(rwjsPaths.api.src),
     },
@@ -120,19 +112,6 @@ export const handler = async ({
       prefixColor: 'green',
       runWhen: () => generate,
     },
-  }
-
-  if (esbuild) {
-    jobs.api.name = 'api esbuild'
-    jobs.api.command =
-      'yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn rw-api-server-watch'
-
-    jobs.web.name = 'web esbuild'
-    jobs.web.command = 'yarn cross-env ESBUILD=1 && ' + jobs.web.command
-  }
-
-  if (useEnvelop) {
-    jobs.api.name = jobs.api.name + ' with envelop'
   }
 
   // TODO: Convert jobs to an array and supply cwd command.

@@ -1,14 +1,7 @@
 import { render, waitFor, act } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 
-import { navigate } from '@redwoodjs/history'
-
-import {
-  Router,
-  Route,
-  routes,
-  getAnnouncement,
-} from '../internal'
+import { Router, Route, navigate, routes, getAnnouncement } from '../internal'
 import RouteAnnouncement from '../route-announcement'
 
 // SETUP

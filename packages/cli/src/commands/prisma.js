@@ -6,7 +6,7 @@ import execa from 'execa'
 
 import { getPaths, errorTelemetry } from '@redwoodjs/internal'
 
-import c from 'src/lib/colors'
+import c from '../lib/colors'
 
 export const command = 'prisma [commands..]'
 export const description = 'Run Prisma CLI with experimental features'

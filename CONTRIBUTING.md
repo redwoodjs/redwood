@@ -6,423 +6,176 @@ Before interacting with the Redwood community, please read and understand our [C
 
 **Table of Contents**
 
-- [Contributing](#contributing)
-  - [Local Development](#local-development)
-    - [Code Organization](#code-organization)
-    - [Local Setup](#local-setup)
-      - [Redwood Framework](#redwood-framework)
-      - [Redwood App: Create a Functional Test Project](#redwood-app-create-a-functional-test-project)
-        - [Running the Test Project Script](#running-the-test-project-script)
-    - [Testing Framework code in your App](#testing-framework-code-in-your-app)
-      - [Option 1: Linking](#option-1-linking)
-      - [Option 2: Copy and Watch](#option-2-copy-and-watch)
-      - [Option 3: Copy (for Windows)](#option-3-copy-for-windows)
-      - [Option 4: Testing the CLI](#option-4-testing-the-cli)
-      - [Specifying a RW_PATH](#specifying-a-rw_path)
-        - [On **Linux**](#on-linux)
-        - [On **MacOS**](#on-macos)
-        - [On **Windows**](#on-windows)
-    - [Local Package Registry Emulation](#local-package-registry-emulation)
-      - [Running a Local NPM Registry](#running-a-local-npm-registry)
-      - [Publishing a Package](#publishing-a-package)
-      - [Installing Published Packages in Your Redwood App](#installing-published-packages-in-your-redwood-app)
-  - [Running Your Redwood App's Local Server(s)](#running-your-redwood-apps-local-servers)
-  - [Integration tests](#integration-tests)
+  - [Code Organization](#code-organization)
+  - [Local Setup](#local-setup)
+    - [Redwood Framework](#redwood-framework)
+    - [Redwood Project: Create a Functional Test Project](#redwood-project-create-a-functional-test-project)
+    - [Testing the Framework in Your Project](#testing-the-framework-in-your-project)
+    - [Testing the CLI in Your Project](#testing-the-cli-in-your-project)
+  - [Browser-based Setup](#browser-based-setup)
+  - [Integration Tests](#integration-tests)
   - [Releases](#releases)
     - [Troubleshooting](#troubleshooting)
-  - [CLI Reference: `redwood-tools`](#cli-reference-redwood-tools)
-    - [redwood-tools (rwt)](#redwood-tools-rwt)
-    - [copy (cp)](#copy-cp)
-    - [copy:watch (cpw)](#copywatch-cpw)
-    - [fix-bins (fix)](#fix-bins-fix)
-    - [install (i)](#install-i)
-    - [link](#link)
 
-## Local Development
+## Code Organization
 
-### Code Organization
+As a Redwood user, you're already familiar with the codebase created by `yarn create redwood-app`. In this document, we'll refer to that codebase as a Redwood Project.
 
-As a Redwood user, you're already familiar with the codebase created by `yarn create redwood-app`. In this document, we'll refer to that codebase as a 'Redwood App'. As a contributor, you'll have to gain familiarity with another codebase: the Redwood Framework.
+As a contributor, you'll have to familiarize yourself with one more codebase: the Redwood Framework. The Redwood Framework lives in the monorepo [redwoodjs/redwood](https://github.com/redwoodjs/redwood) (which is where you're probably reading this). It contains all the packages that make Redwood Projects work the way they do. In a Redwood Project, you can find the Redwood Framework in `node_modules/@redwoodjs`.
 
-The Redwood Framework lives in the monorepo `redwoodjs/redwood` (which is where you're probably reading this). It contains all the packages that make Redwood Apps work the way they do. In a typical Redwood App, you can find the Redwood Framework in `./node_modules/@redwoodjs`.
+Here we'll assume your local copy of the Redwood Framework is in a directory called `redwood` and your Redwood Project is in a directory called `redwood-project`.
 
-Throughout this document, we'll assume your local copy of the Redwood Framework is in a directory called `redwood` and your Redwood App is in a directory called `redwood-app`.
+Chances are that you'll have more than a few VS Codes open when you're contributing—one with the Redwood Framework and one with a Redwood Project at least. An easy way to tell which-is-which is by looking for a red bar at the bottom. The one with a red bar is the Redwood Framework:
 
-### Local Setup
+![image](https://user-images.githubusercontent.com/32992335/130697522-313317f8-21e5-4f71-8b8e-9690dbad412a.png)
 
-#### Redwood Framework
+## Local Setup
 
-Use `git clone` to make a local copy of the Redwood Framework. As mentioned above, we'll assume your local copy is in a directory called `redwood`. This is where you'll be making most of your changes.
+### Redwood Framework
 
-If you already have a local copy, make sure you've got the `main` branch's latest changes with `git pull`.
-
-Then run `yarn install` in the root directory to install all the dependencies:
+Use `git clone` to get a local copy of the Redwood Framework. If you've already got a local copy, make sure you've got the `main` branch's latest changes using `git pull`. Then run `yarn install` in the root directory to install the dependencies:
 
 ```terminal
+git clone https://github.com/redwoodjs/redwood.git
 cd redwood
 yarn install
 ```
 
-#### Redwood App: Create a Functional Test Project
+### Redwood Project: Create a Functional Test Project
 
-Most often, you'll need to test the functionality of your code in a local Redwood App. We'll assume your Redwood App is going to be a directory called `redwood-app`.
+You'll almost always want to test the functionality of your changes to the Redwood Framework in a Redwood Project. When it comes to getting a Redwood Project to test your changes out in, you have several options:
 
-There are several options:
-- run `yarn create redwood-app ./redwood-app` to install a fresh codebase (with no functionality)
+- run `yarn create redwood-app ./redwood-project`
 - `git clone` the [RedwoodJS Tutorial Blog](https://github.com/redwoodjs/redwood-tutorial)
-- use an App you already created
-- Or run `yarn run build:test-project` to create a functional test project 👀
+- use a project you've already created
+- run `yarn run build:test-project <project path>` from the root of your local copy of the Redwood Framework to create a functional test project 👀
 
-**Using the functional test project might be the easiest and fastest way to test your changes in Redwood.** You can create a Redwood project that contains a big range of functionality in a few minutes:
-1. it installs using the App template codebase in the current branch of your Framework
+**Using the functional test project might be the fastest and easiest way to test your changes.** You can create a Redwood Project that contains a lot of functionality in just a few minutes. For example, here's a brief overview of all the things `yarn run build:test-project <project directory>` does. It...
+
+1. installs using the `create-redwood-app` template in the current branch of your Redwood Framework
 2. with the current `canary` version of Redwood Packages (with the option to use the `latest` stable version)
 3. with a JavaScript language target (with the option for TypeScript)
 4. then applies code mods from the [Redwood tutorial](https://learn.redwoodjs.com/docs/tutorial/welcome-to-redwood/) to add functionality and styling
 5. and initializes a Prisma DB migration for SQLite
 
-At the end, you will have a fully working Redwood blog.
+Unless you've already got a project with a lot of functionality, it'd take quite some to add all of this yourself. Moreover, testing your changes in a project that has a lot of functionality will increase your confidence in the changes you're making.
 
-##### Running the Test Project Script
-Run the following in the `redwood` folder root (_note: the script will automatically install dependencies_):
+But how do you actually test your changes in the Redwood Framework in your Redwood Project? With another command, this time in the root of your Redwood Project: `yarn rwfw`.
 
-```terminal
-yarn run build:test-project <path/to/redwood-app>
-```
-
-| Arguments & Options  | Description                                                          |
-|----------------------|----------------------------------------------------------------------|
-| `<project directory>` | Directory to build test project [default: "./blog-test-project"]    |
-| `--typescript, --ts` | Generate a TypeScript project [default: JavaScript]                  |
-| `--canary`           | Upgrade project to latest canary version [default: true]             |
-| `--help `            | Show help                                                            |
-
-**Example Use:**
-```terminal
-cd redwood/
-yarn run build:test-project ~/my-repos/redwood-app --typescript --canary
-```
-### Testing Framework code in your App
-
-As you make changes to your local copy of the Redwood Framework, you'll want to see the effects "live" in your Redwood App.
-
-Since we're always looking for ways to make contributing to Redwood easier, there are a few workflows we've come up with, but the one you'll want to use is `yarn rwt link`. You can fall back on any of the others if that one doesn't work, but once you've tried `yarn rwt link`, you won't want to.
-
-> **I've used `yarn rw` before, but what's `yarn rwt`?**
+> Besides `<project directory>`, `build:test-project` takes a few other options as well:
 >
-> All workflows use `redwood-tools` (`rwt`), Redwood's companion CLI development tool.
+> | Arguments & Options   | Description                                                        |
+> |-----------------------|--------------------------------------------------------------------|
+> | `<project directory>` | Directory to build test project [default: "./blog-test-project"]   |
+> | `--typescript, --ts`  | Generate a TypeScript project [default: JavaScript]                |
+> | `--canary`            | Upgrade project to latest canary version [default: true]           |
+> | `--help `             | Show help                                                          |
+>
+> **Example:**
+> ```terminal
+> cd redwood/
+> yarn run build:test-project ~/my-repos/redwood-project --typescript --canary
+> ```
 
-#### Option 1: Linking
+### Testing the Framework in Your Project
 
-Now that everything's [up-to-date and installed](#local-setup), go to your `redwood-app` and run `yarn rwt link`:
+As you make changes to the Redwood Framework, you'll want to see your changes reflected "live" in a Redwood Project. Since we're always looking for ways to make contributing to Redwood easier, there are a few workflows we've come up with. The one you'll want to use is `yarn rwfw`.
 
-```bash
-cd redwood-app
-yarn rwt link ../path/to/redwood
-```
+> `rwfw` is short for Redwood Framework.
 
-> You can avoid having to provide the path to `redwood` by defining an `RW_PATH` environment variable on your system. See [Specifying a `RW_PATH`](#specifying-a-rw_path).
-
-`rwt link` will first add the redwood workspace to your Redwood App. Then you'll see a ton of output &mdash; `rwt link` is building the Redwood Framework, watching it for changes, and copying all that over into the new redwood workspace in your Redwood App.
-
-Your Redwood App isn't using the packages in `node_modules/@redwoodjs` anymore. It's now using the packages in the new workspace with your local changes. You can even install packages or upgrade dependencies &mdash; it's really that simple.
-
-`rwt link` won't return you to the command line. Once it sets everything up you should see:
-```terminal
-   ┌─────────────────────────────────────────────────────────────┐
-   │                                                             │
-   │   🚀 Go Forth and Contribute!                               │
-   │                                                             │
-   │   🔗  Your project is linked!                               │
-   │                                                             │
-   │   Contributing doc: https://redwoodjs.com/docs/contributing │
-   │                                                             │
-   └─────────────────────────────────────────────────────────────┘
-```
-
-you can open a new tab in your terminal, cd to `redwood-app` and launch your Redwood App from there. As you make changes in `redwood`, you will see those changes immediately in the behavior of your Redwood App.
-
-When you're done, go back to your `rwt link` tab and ctrl-c to quit. `rwt link` will ask you to run the `yarn rwt unlink` command. This will restore your Redwood App to its original state, reverting it to the version of Redwood that it originally had installed.
-
-Next time you want to contribute, just run `yarn rwt link` again!
-
-
-*Flags for rwt link command:*
-| Flag | Description                              |
-| :------------------ | :--------------------------------------- |
-| `RW_PATH`              | Path to the framework repo. Required if RW_PATH environment var not set                         |
-| `--clean, -c`       | Clean the framework repo before linking? Set this to false to speed things up if you're sure your build folders are clean [default: true]                 |
-| `--watch, -w`           | Set this to false if you just want to link once and not watch for file changes [default: true]      |
-<br>
-
-
-> Having trouble with `rwt link`? Check the [rwt link FAQ](https://github.com/redwoodjs/redwood/issues/2215). If that doesn't help, please try one of the legacy contributing flows below.
-
-#### Option 2: Copy and Watch
-
-`yarn rwt link` not working for you? That's ok &mdash; we have a few legacy contributing workflows that you can fall back on.
-
-After you've gotten everything [up-to-date and installed](#local-setup), make sure your Redwood App is on the latest canary release:
+Navigate to your Redwood Project and run `RWFW_PATH=<framework directory> yarn rwfw project:sync`:
 
 ```terminal
-cd redwood-app
-yarn rw upgrade -t canary
-yarn install
+cd redwood-project
+RWFW_PATH=~/redwood yarn rwfw project:sync
 ```
 
-Now you'll want to build-and-watch the files in the Redwood Framework for changes:
+Where <framework directory> is the path to your local copy of the Redwood Framework. Once provided to `rwfw`, it'll remember it and you shouldn't have to provide it again unless you move it.
 
-```terminal
-cd redwood
-yarn build:watch
-```
+As `project:sync` starts up, it'll start logging to the console. In order, it:
 
-this will echo:
+<!-- Markdown numbers for us automatically -->
+1. cleans and builds the framework
+1. copies the framework's dependencies to your project
+1. runs `yarn install` in your project
+1. copies over the framework's packages to your project
+1. waits for changes
 
-```terminal
-@redwoodjs/api: $ nodemon --watch src -e ts,js --ignore dist --exec 'yarn build'
-@redwoodjs/core: $ nodemon --ignore dist --exec 'yarn build'
-create-redwood-app: $ nodemon --ignore dist --exec 'yarn build'
-```
+Step two is the only explicit change you'll see to your project. You'll see that a ton of packages have been added to your project's root `package.json`:
 
-`build:watch` won't return you to the command line. Once it stops outputting to the terminal, you can open a new tab in your terminal, cd to `redwood-app` and run `rwt copy:watch` to get the changes in your local copy of the Redwood Framework:
+![image](https://user-images.githubusercontent.com/32992335/130699570-6ceb91a6-58aa-4cbf-a080-9cee6f26aaf2.png)
 
-```terminal
-cd redwood-app
-yarn rwt copy:watch ../path/to/redwood
-```
+This is all the packages in the Redwood Framework. It's a lot! But don't worry, this'll be cleaned up when you exit the `yarn rwfw project:sync` command.
 
-You can also use the alias `cpw`:
+Congratulations, you're all setup! Any changes you make in the Redwood Framework should be reflected in your Redwood Project.
 
-```terminal
-cd redwood-app
-yarn rwt cpw ../path/to/redwood
-```
+### Testing the CLI in Your Project
 
-> You can avoid having to provide the path to `redwood` by defining an `RW_PATH` environment variable on your system. See [Specifying a `RW_PATH`](#specifying-a-rw_path).
+While you can test the CLI using `yarn rwfw`, there's an easier way.
 
-this will echo:
+If you've made build or design time changes to RedwoodJS—that is, if you've modified one of the following packages:
 
-```terminal
-Redwood Framework Path:  /something/something/redwoodjs/redwood
-Trigger event:  add
-building file list ... done
-```
+- api-server
+- cli
+- core
+- eslint-config
+- internal
+- prerender
+- structure
+- testing
 
-`rwt copy:watch` won't return you to the command line. Once it stops outputting to the terminal, you can open a new tab in your terminal, cd to `redwood-app` and launch your Redwood App. As you make changes in `redwood`, you will see those changes immediately in the behavior of your Redwood App.
+—you can run a development version of the CLI directly from your local copy of the Redwood Framework. You don't even have to sync any dependencies or files!
 
-Now any changes made in the framework will be copied into your app!
+> For all the packages above, the entry point is the CLI. They're what we consider "build time" and "design time" packages, rather than "run-time" packages (which are web, auth, api, and forms).
 
-When you're done, go back to your `build:watch` and `rwt copy:watch` tabs and ctrl-c to quit.
-
-Then, you can restore your Redwood App to its original state by deleting `./node_modules`, `web/node_modules`, and `api/node_modules`, then running `yarn install`.
-
-#### Option 3: Copy (for Windows)
-
-If you are on Windows and not using WSL, you will have to use `rwt cp` (this is tracked in [issue #701](https://github.com/redwoodjs/redwood/issues/701)). This method, unfortunately, will not let you see your changes live.
-
-Also, you most likely first have to [install `rsync`](https://tlundberg.com/blog/2020-06-15/installing-rsync-on-windows/).
-
-Finally, ensure that appropriate Windows permissions are available to create symbolic links. This can be accomplished via turning on Windows Developer Mode on Windows 10. Go to Settings and find the `For developers` page. Turn on the `Developer Mode` toggle. Alternately, running your shell or VSCode as an Administrator will also work, but is the less preferred option.
-
-Each time you make a change to your local Redwood Framework, you'll have to build it:
+To do that, use the `--cwd` option to set the current working directory to your Redwood Project:
 
 ```terminal
 cd redwood
-yarn build
-```
-
-Then, you'll go to your Redwood App and copy the changes:
-
-```terminal
-cd redwood-app
-yarn rwt cp ../path/to/redwood
-```
-
-Then you can test the effects of your changes. Unfortunately, each time you make a change to your local Redwood Framework, you'll have to manually run `build` and `rwt cp` again.
-
-When you're done, you can restore your Redwood App to its original state by deleting `./node_modules`, `web/node_modules`, and `api/node_modules`, then running `yarn install`.
-
-#### Option 4: Testing the CLI
-
-If you've made build or design time changes to RedwoodJS, that is if you have modified one of the following packages:
-
-```terminal
-./packages/
-├ api-server
-├ cli
-├ core
-├ dev-server
-├ eslint-config
-├ internal
-├ prerender
-├ structure
-├ testing
-```
-
-
-You can run a development version of the CLI directly from the framework's repo where you don't have to sync any files or node modules.
-
-(For all of the packages above the entry point is the CLI, these are what we consider "build time" and "design time" packages, rather than "run-time" packages which are web, auth, api, forms.)
-
-In order to do that you use the `--cwd` option to set the current working directory to your "test project":
-
-```terminal
 yarn build
 cd packages/cli
-yarn dev --cwd /path/to/your/project
-```
-The `yarn dev` will run the built CLI, and the `--cwd` option will make the command run in that directory. Remember to rebuild the packages if you have made a change to the code! (Tip: You can use `yarn build:watch` to automatically build the framework whilst you're making changes.)
-
-(Tip: --cwd is optional, it will reference the `__fixtures__/example-todo-main` project in the framework.)
-
-#### Specifying a RW_PATH
-
-You can avoid having to provide the path to `redwood` by defining an `RW_PATH` environment variable on your system.
-
-##### On **Linux**
-
-Add the following line to your `~/.bashrc`:
-
-```terminal
-export RW_PATH=”$HOME/path/to/redwood/framework”
+yarn dev --cwd <project directory>
 ```
 
-Where `/path/to/redwood/framework` is replaced by the path to your local copy of the Redwood Framework.
+`yarn dev` runs the CLI and `--cwd` makes the command run in your Redwood Project. If you make a change to the code, remember to rebuild the packages!
 
-Then, in your Redwood App or example app, you can just run:
-
-```terminal
-yarn rwt link
-```
-
-or
-
-```terminal
-yarn rwt copy:watch
-```
-
-##### On **MacOS**
-
-Add the following line to your `~/.bash_profile`:
-
-```terminal
-export RW_PATH=”$HOME/path/to/redwood/framework”
-```
-
-Where `/path/to/redwood/framework` is replaced by the path to your local copy of the Redwood Framework.
-
-Then, in your Redwood App or example app, you can just run:
-
-```terminal
-yarn rwt link
-```
-
-or
-
-```terminal
-yarn rwt copy:watch
-```
-
-##### On **Windows**
-
-> **TODO**
+> Tip: You can use `yarn build:watch` to automatically build the framework whilst you're making changes.
 >
-> please contribute a PR if you can help.
+> Tip 2: --cwd is optional, it will reference the `__fixtures__/example-todo-main` project in the framework.
 
-### Local Package Registry Emulation
+## Browser-based Setup
 
-Sometimes you'll want to test the full package-development workflow: building, publishing, and installing all the packages in your local copy of the Redwood Framework in your Redwood App. We accommodate this using a local NPM registry called [**Verdaccio**](https://github.com/verdaccio/verdaccio).
+You can use the button below to start a development environment in the cloud and access it through your browser!
 
-You might also have to use this workflow if you've installed or upgraded one of Redwood's dependencies.
+This generates a functional test project and links it with the Redwood Framework code in `main`, giving you an easy playground to try out your fixes and contributions.
 
-#### Running a Local NPM Registry
+> Note: if you make changes to the framework, you will need to run `yarn rwfw project:sync` in the terminal, so that your changes are watched and reflected in the test project
 
-First, install `Verdaccio`:
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/redwoodjs/redwood)
 
-```terminal
-yarn global add verdaccio
-```
+## Integration Tests
 
-Then, in your local copy of the Redwood Framework, run:
-
-```terminal
-./tasks/run-local-npm
-```
-
-This starts `Verdaccio` (on http://localhost:4873) with our configuration file.
-
-#### Publishing a Package
-
-To build, unpublish, and publish all the Redwood packages to your local NPM registry with a "dev" tag, run:
-
-```terminal
-./tasks/publish-local
-```
-
-> This script is equivalent to running:
->
-> ```terminal
-> npm unpublish --tag dev --registry http://localhost:4873/ --force
-> npm publish --tag dev --registry http://localhost:4873/ --force
-> ```
-
-Note that you can build a particular package by specifying the path to the package: `./tasks/publish-local ./packages/api`. For example, if you've made changes to the `@redwoodjs/dev-server` package, you would run:
-
-```terminal
-./tasks/publish-local ./packages/dev-server
-```
-
-#### Installing Published Packages in Your Redwood App
-
-The last step is to install the package into your Redwood App.
-
-```terminal
-yarn rwt install @redwoodjs/dev-server
-```
-
-> This is equivalent to running:
->
-> ```terminal
-> rm -rf <APP_PATH>/node_modules/@redwoodjs/dev-server
-> yarn upgrade @redwoodjs/dev-server@dev --no-lockfile --registry http://localhost:4873/
-> ```
-
-## Running Your Redwood App's Local Server(s)
-
-When developing Redwood Apps, you’re probably used to running both the API and Web servers with `yarn rw dev` and seeing your changes included immediately.
-
-But for local package development, your changes won’t be included automatically&mdash;you'll need to manually stop/start the respective server to include them.
-
-In this case you might find it more convenient to run the servers for each of the yarn workspaces independently:
-
-```terminal
-yarn rw dev api
-yarn rw dev web
-```
-
-## Integration tests
-
-We're using Cypress to test the steps that we recommend in the tutorial. Run the command by doing the following:
+We use Cypress to test the steps in the [tutorial](https://learn.redwoodjs.com/docs/tutorial/welcome-to-redwood/). You can run this end-to-end (e2e) test locally by running the following in your local copy of the Redwood Framework:
 
 ```terminal
 ./tasks/run-e2e
 ```
 
-This creates a new project in a temporary directory using `yarn create redwood-app ...` Once installed, it then upgrades the project to the most recent `canary` release, which means it will use the current code in the `main` branch. Once the upgrade is complete (and successful), it will start Cypress for the E2E tests.
+This creates a new project using `yarn create redwood-app` in a temporary directory. Once created, it upgrades the project to the most-recent `canary` release, which means it'll use the code that's in the `main` branch. Once upgraded, it starts Cypress.
 
+If you want to run any of the integration tests against an existing project instead of creating a new one, just provide the path to the project:
 
 ```terminal
-./tasks/run-e2e /path/to/app
+./tasks/run-e2e <project directory>
 ```
 
-Use this `path/to/app` option to run the same Cypress E2E tests against a local project. In this case, the command will _not_ upgrade the project to the `canary` release — it will use the project's installed packages. Chose this option if you have modified code (and packages) you want to test locally.
+In this case, the command will _not_ upgrade the project to the most-recent `canary` release.
 
-
-> Windows Not Supported: The command for this is written in bash and will not work on Windows.
+> **Windows Not Supported:** The command for this is written in bash and will not work on Windows.
 
 ## Releases
 
-To publish a new version of Redwood to NPM run the following commands:
+To publish a new version of Redwood to NPM, run the following commands:
 
 > NOTE: `<version>` should be formatted `v0.24.0` (for example)
 
@@ -446,85 +199,3 @@ This...
 ### Troubleshooting
 
 If something went wrong you can use `yarn lerna publish from-package` to publish the packages that aren't already in the registry.
-
-## CLI Reference: `redwood-tools`
-
-
-> This section covers the `redwood-tools` command options.
->
-> For `redwood` options, see the [CLI Reference on redwoodjs.com](https://redwoodjs.com/reference/command-line-interface).
-
-### redwood-tools (rwt)
-
-Redwood's companion CLI development tool. You'll be using this if you're contributing to Redwood.
-
-```
-yarn rwt <command>
-```
-
-|Command | Description|
-|:-|:-|
-|`copy` | Copy the Redwood Framework path to this project.|
-|`copy:watch` | Watch the Redwood Framework path for changes and copy them over to this project.|
-|`fix-bins` | Fix Redwood symlinks and permissions.|
-|`install` | Install a package from your local NPM registry.|
-|`link` | Link the Redwood Framework path to this project and watch it for changes.|
-
-### copy (cp)
-
-Copy the Redwood Framework path to this project.
-
-```terminal
-yarn rwt cp [RW_PATH]
-```
-
-You can avoid having to provide `RW_PATH` by defining an environment variable on your system. See [Specifying a `RW_PATH`](#specifying-a-rw_path).
-
-### copy:watch (cpw)
-
-Watch the Redwood Framework path for changes and copy them over to this project.
-
-```terminal
-yarn rwt cpw [RW_PATH]
-```
-
-You can avoid having to provide `RW_PATH` by defining an environment variable on your system. See [Specifying a `RW_PATH`](#specifying-a-rw_path).
-
-### fix-bins (fix)
-
-Fix Redwood symlinks and permissions.
-
-```terminal
-yarn rwt fix
-```
-
-The Redwood CLI has the following binaries:
-
-- `redwood`
-- `rw`
-- `redwood-tools`
-- `rwt`
-- `dev-server`
-
-When you're contributing, the permissions of these binaries can sometimes get mixed up. This makes them executable again.
-
-### install (i)
-
-Install a package from your local NPM registry.
-
-```terminal
-yarn rwt i <packageName>
-```
-
-You'll use this command if you're testing the full package-development workflow. See [Local Package Registry Emulation](https://github.com/redwoodjs/redwood/blob/main/CONTRIBUTING.md#local-package-registry-emulation).
-
-### link
-
-Link the Redwood Framework path to this project and watch it for changes.
-
-```terminal
-yarn rwt link [RW_PATH]
-```
-
-You can avoid having to provide `RW_PATH` by defining an environment variable on your system. See
-[Specifying a `RW_PATH`](#specifying-a-rw_path).

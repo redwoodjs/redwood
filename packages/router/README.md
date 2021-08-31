@@ -182,17 +182,67 @@ Named route functions simply return a string, so you can still pass in hardcoded
 
 ## Active links
 
-`NavLink` is a special version of `Link` that will add an `activeClassName` to the rendered element when it matches the current URL.
+`NavLink` is a special version of `Link` that will add an `activeClassName` to the rendered element when it matches **exactly** the current URL.
 
-```js
+
+```jsx
 // MainMenu.js
 import { NavLink, routes } from '@redwoodjs/router'
 
-// Will render <a href="/" className="link activeLink"> when on the home page
-const MainMenu = () => <NavLink className="link" activeClassName="activeLink" to={routes.home()} >Home</NavLink>
+// Will render <a className="link activeLink" {...rest}> respectively when on the page
+const MainMenu = () =>
+  <ul>
+    <li>
+      <!-- When match "/" -->
+      <NavLink
+        className="link"
+        activeClassName="activeLink"
+        to={routes.home()}>
+        Home
+      </NavLink>
+    </li>
+    <li>
+      <!-- When match "/?tab=tutorial" (params order insensitive) -->
+      <NavLink
+        className="link"
+        activeClassName="activeLink"
+        to={routes.home({ tab: 'tutorial' })}>
+          Home > Tutorial
+      </NavLink>
+    </li>
+  </ul>
 ```
 
-You can `useMatch` to create your own component with active styles. `NavLink` uses it internally!
+Alternatively, you can add the `activeMatchParams` prop to your `NavLink` to match the current URL **partially**
+
+```jsx
+import { NavLink, routes } from '@redwoodjs/router'
+
+// Will render <a href="/?tab=tutorial&page=2" className="link activeLink"> when on any of Home tutorial pages
+const MainMenu = () =>
+  <li>
+    <NavLink
+      className="link"
+      activeClassName="activeLink"
+      activeMatchParams={[{ tab: 'tutorial' }]}
+      to={routes.home({ tab: 'tutorial', page: '2' })}>
+        Home > Tutorial
+    </NavLink>
+  </li>
+```
+
+> Note `activeMatchParams` is an array of `string` *(key only)* or `Record<string, any>` *(key and value)*
+
+More granular match, `page` key only and `tab=tutorial`
+
+```jsx
+// Match /?tab=tutorial&page=*
+activeMatchParams={[{ tab: 'tutorial' }, 'page' ]}
+```
+
+You can `useMatch` to create your own component with active styles.
+
+> `NavLink` uses it internally!
 
 ```js
 import { Link, routes, useMatch } from '@redwoodjs/router'
@@ -205,6 +255,18 @@ const CustomLink = ({to, ...rest}) => {
 
 const MainMenu = () => {
   return <CustomLink to={routes.about()} />
+}
+```
+
+`useMatch` accepts `searchParams` in the `options` for matching granularity which is exactly the same as `activeMatchParams` of `NavLink`
+
+```jsx
+import { Link, routes, useMatch } from '@redwoodjs/router'
+
+const CustomLink = ({to, ...rest}) => {
+  const matchInfo = useMatch(to, { searchParams: [{ tab: 'tutorial' }, 'page'] })
+
+  return <SomeStyledComponent as={Link} to={to} isActive={matchInfo.match} />
 }
 ```
 
@@ -349,7 +411,9 @@ const App = () => {
 
 ```
 
-## navigate
+## Navigation
+
+### navigate
 
 If you'd like to programmatically navigate to a different page, you can simply use the `navigate` function:
 
@@ -360,6 +424,24 @@ import { navigate, routes } from '@redwoodjs/router'
 const SomePage = () => {
   const onSomeAction = () => {
     navigate(routes.home())
+  }
+  ...
+}
+```
+
+The browser keeps track of the browsing history in a stack. By default when you navigate to a new page a new item is pushed to the history stack. But sometimes you want to replace the top item on the stack instead of appending to the stack. This is how you do that in Redwood: `navigate(routes.home(), { replace: true })`. As you can see you need to pass an options object as the second parameter to `navigate` with the option `replace` set to `true`.
+
+### back
+
+Going back is as easy as using the `back()` function that's exported from the router.
+
+```js
+// SomePage.js
+import { back } from '@redwoodjs/router'
+
+const SomePage = () => {
+  const onSomeAction = () => {
+    back()
   }
   ...
 }

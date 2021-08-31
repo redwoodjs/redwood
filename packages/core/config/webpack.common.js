@@ -140,14 +140,17 @@ const getSharedPlugins = (isEnvProduction) => {
       React: 'react',
       PropTypes: 'prop-types',
       gql: 'graphql-tag',
-      mockGraphQLQuery: ['@redwoodjs/testing', 'mockGraphQLQuery'],
-      mockGraphQLMutation: ['@redwoodjs/testing', 'mockGraphQLMutation'],
-      mockCurrentUser: ['@redwoodjs/testing', 'mockCurrentUser'],
+      mockGraphQLQuery: ['@redwoodjs/testing/web', 'mockGraphQLQuery'],
+      mockGraphQLMutation: ['@redwoodjs/testing/web', 'mockGraphQLMutation'],
+      mockCurrentUser: ['@redwoodjs/testing/web', 'mockCurrentUser'],
     }),
     // The define plugin will replace these keys with their values during build
     // time.
     new webpack.DefinePlugin({
       __REDWOOD__API_PROXY_PATH: JSON.stringify(redwoodConfig.web.apiProxyPath),
+      __REDWOOD__APP_TITLE: JSON.stringify(
+        redwoodConfig.web.title || path.basename(redwoodPaths.base)
+      ),
       ...getEnvVars(),
     }),
     new Dotenv({
@@ -192,12 +195,16 @@ module.exports = (webpackEnv) => {
         ),
         '~redwood-app-root': path.resolve(redwoodPaths.web.app),
         react: path.resolve(redwoodPaths.base, 'node_modules', 'react'),
+        'react-hook-form': path.resolve(
+          redwoodPaths.base,
+          'node_modules',
+          'react-hook-form'
+        ),
       },
     },
     plugins: [
       !isEnvProduction && new webpack.HotModuleReplacementPlugin(),
       new HtmlWebpackPlugin({
-        title: path.basename(redwoodPaths.base),
         template: path.resolve(redwoodPaths.base, 'web/src/index.html'),
         templateParameters: {
           prerenderPlaceholder: isEnvProduction
@@ -226,7 +233,10 @@ module.exports = (webpackEnv) => {
           // @TODO: Add redirect to fatalErrorPage
           // lastResortScript: "window.location.href='/500.html';"
         }),
-      isEnvProduction && new WebpackManifestPlugin(),
+      isEnvProduction &&
+        new WebpackManifestPlugin({
+          fileName: 'build-manifest.json',
+        }),
       ...getSharedPlugins(isEnvProduction),
     ].filter(Boolean),
     module: {

@@ -13,6 +13,7 @@ export enum TargetEnum {
 }
 
 export interface NodeTargetConfig {
+  title: string
   name?: string
   host: string
   port: number
@@ -22,6 +23,7 @@ export interface NodeTargetConfig {
 }
 
 interface BrowserTargetConfig {
+  title: string
   name?: string
   host: string
   port: number
@@ -47,7 +49,6 @@ export interface Config {
   }
   experimental: {
     esbuild: boolean
-    useEnvelop: boolean
   }
   telemetry: {
     url: string
@@ -59,6 +60,7 @@ export interface Config {
 // https://github.com/redwoodjs/redwood/blob/d51ade08118c17459cebcdb496197ea52485364a/packages/core/config/webpack.common.js#L19
 const DEFAULT_CONFIG: Config = {
   web: {
+    title: 'Redwood App',
     host: 'localhost',
     port: 8910,
     path: './web',
@@ -69,6 +71,7 @@ const DEFAULT_CONFIG: Config = {
     a11y: true,
   },
   api: {
+    title: 'Redwood App',
     host: 'localhost',
     port: 8911,
     path: './api',
@@ -85,7 +88,6 @@ const DEFAULT_CONFIG: Config = {
   },
   experimental: {
     esbuild: false,
-    useEnvelop: false,
   },
   telemetry: {
     url: 'https://cuvvzwmeexzpnctfycwn.supabase.co/rest/v1',

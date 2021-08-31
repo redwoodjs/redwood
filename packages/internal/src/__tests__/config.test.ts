@@ -15,13 +15,13 @@ describe('getConfig', () => {
           "port": 8911,
           "schemaPath": "./api/db/schema.prisma",
           "target": "node",
+          "title": "Redwood App",
         },
         "browser": Object {
           "open": false,
         },
         "experimental": Object {
           "esbuild": false,
-          "useEnvelop": false,
         },
         "generate": Object {
           "nestScaffoldByModel": true,
@@ -41,6 +41,7 @@ describe('getConfig', () => {
           "path": "./web",
           "port": 8910,
           "target": "browser",
+          "title": "Redwood App",
         },
       }
     `)

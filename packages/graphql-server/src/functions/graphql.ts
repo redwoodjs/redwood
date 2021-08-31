@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useApolloServerErrors } from '@envelop/apollo-server-errors'
 import {
   envelop,
   FormatErrorHandler,
@@ -14,13 +13,20 @@ import { useDisableIntrospection } from '@envelop/disable-introspection'
 import { useFilterAllowedOperations } from '@envelop/filter-operation-type'
 import type { AllowedOperations } from '@envelop/filter-operation-type'
 import { useParserCache } from '@envelop/parser-cache'
+import { handleStreamOrSingleExecutionResult } from '@envelop/types'
 import { useValidationCache } from '@envelop/validation-cache'
 import type {
   APIGatewayProxyEvent,
   Context as LambdaContext,
   APIGatewayProxyResult,
 } from 'aws-lambda'
-import { GraphQLError, GraphQLSchema } from 'graphql'
+import {
+  ExecutionResult,
+  GraphQLError,
+  GraphQLSchema,
+  Kind,
+  OperationDefinitionNode,
+} from 'graphql'
 import {
   Request,
   getGraphQLParameters,
@@ -28,19 +34,18 @@ import {
   shouldRenderGraphiQL,
 } from 'graphql-helix'
 import { renderPlaygroundPage } from 'graphql-playground-html'
-import { BaseLogger } from 'pino'
+import { BaseLogger, LevelWithSilent } from 'pino'
 import { v4 as uuidv4 } from 'uuid'
 
-import { ApolloError, AuthContextPayload } from '@redwoodjs/api'
-import { getAuthenticationContext } from '@redwoodjs/api'
+import { AuthContextPayload, getAuthenticationContext } from '@redwoodjs/api'
+
+import { CorsConfig, createCorsContext } from '../cors'
+import { createHealthcheckContext, OnHealthcheckFn } from '../healthcheck'
 import {
   getPerRequestContext,
   setContext,
   usePerRequestContext,
-} from '@redwoodjs/api'
-
-import { CorsConfig, createCorsContext } from 'src/cors'
-import { createHealthcheckContext, OnHealthcheckFn } from 'src/healthcheck'
+} from '../index'
 
 export type GetCurrentUser = (
   decoded: AuthContextPayload[0],
@@ -60,6 +65,7 @@ export type RedwoodGraphQLContext = {
  * Options for request and response information to include in the log statements
  * output by UseRedwoodLogger around the execution event
  *
+ * @param level - Sets log level specific to GraphQL log output. Defaults to current logger level.
  * @param data - Include response data sent to client.
  * @param operationName - Include operation name.
  * @param requestId - Include the event's requestId, or if none, generate a uuid as an identifier.
@@ -68,6 +74,31 @@ export type RedwoodGraphQLContext = {
  * @param userAgent - Include the browser (or client's) user agent.
  */
 type GraphQLLoggerOptions = {
+  /**
+   * Sets log level for GraphQL logging.
+   * This level setting can be different than the one used in api side logging.
+   * Defaults to the same level as the logger unless set here.
+   *
+   * Available log levels:
+   *
+   * - 'fatal'
+   * - 'error'
+   * - 'warn'
+   * - 'info'
+   * - 'debug'
+   * - 'trace'
+   * - 'silent'
+   *
+   * The logging level is a __minimum__ level. For instance if `logger.level` is `'info'` then all `'fatal'`, `'error'`, `'warn'`,
+   * and `'info'` logs will be enabled.
+   *
+   * You can pass `'silent'` to disable logging.
+   *
+   * @default level of the logger set in LoggerConfig
+   *
+   */
+  level?: LevelWithSilent | string
+
   /**
    * @description Include response data sent to client.
    */
@@ -220,11 +251,11 @@ function normalizeRequest(event: APIGatewayProxyEvent): Request {
 
 function redwoodErrorHandler(errors: Readonly<GraphQLError[]>) {
   for (const error of errors) {
-    // I want the dev-server to pick this up!?
+    // I want the api-server to pick this up!?
     // TODO: Move the error handling into a separate package
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    import('@redwoodjs/dev-server/dist/error')
+    import('@redwoodjs/api-server/dist/error')
       .then(({ handleError }) => {
         return handleError(error.originalError as Error)
       })
@@ -263,17 +294,22 @@ const useRedwoodAuthContext = (
   }
 }
 
-export const useUserContext = (
-  userContextBuilder: NonNullable<GraphQLHandlerOptions['context']>
+/**
+ * This Envelop plugin enriches the context on a per-request basis
+ * by populating it with the results of a custom function
+ * @returns
+ */
+export const usePopulateContext = (
+  populateContextBuilder: NonNullable<GraphQLHandlerOptions['context']>
 ): Plugin<RedwoodGraphQLContext> => {
   return {
     async onContextBuilding({ context, extendContext }) {
-      const userContext =
-        typeof userContextBuilder === 'function'
-          ? await userContextBuilder({ context })
-          : userContextBuilder
+      const populateContext =
+        typeof populateContextBuilder === 'function'
+          ? await populateContextBuilder({ context })
+          : populateContextBuilder
 
-      extendContext(userContext)
+      extendContext(populateContext)
     },
   }
 }
@@ -281,7 +317,7 @@ export const useUserContext = (
 /**
  * This Envelop plugin waits until the GraphQL context is done building and sets the
  * Redwood global context which can be imported with:
- * // import { context } from '@redwoodjs/api'
+ * // import { context } from '@redwoodjs/graphql-server'
  * @returns
  */
 export const useRedwoodGlobalContextSetter =
@@ -292,6 +328,46 @@ export const useRedwoodGlobalContextSetter =
       }
     },
   })
+
+/**
+ * This function is used by the useRedwoodLogger to
+ * logs every time an operation is being executed and
+ * when the execution of the operation is done.
+ */
+const logResult =
+  (loggerConfig: LoggerConfig, envelopLogger: BaseLogger) =>
+  ({ result }: { result: ExecutionResult }) => {
+    const includeTracing = loggerConfig?.options?.tracing
+    const includeData = loggerConfig?.options?.data
+
+    const options = {} as any
+
+    if (result.data) {
+      if (includeData) {
+        options['data'] = result.data
+      }
+
+      if (result.errors && result.errors.length > 0) {
+        envelopLogger.error(
+          {
+            errors: result.errors,
+          },
+          `GraphQL execution completed with errors:`
+        )
+      } else {
+        if (includeTracing) {
+          options['tracing'] = result.extensions?.envelopTracing
+        }
+
+        envelopLogger.debug(
+          {
+            ...options,
+          },
+          `GraphQL execution completed`
+        )
+      }
+    }
+  }
 
 /**
  * This plugin logs every time an operation is being executed and
@@ -311,24 +387,31 @@ const useRedwoodLogger = (
   loggerConfig: LoggerConfig
 ): Plugin<RedwoodGraphQLContext> => {
   const logger = loggerConfig.logger
+  const level = loggerConfig.options?.level || logger.level || 'warn'
 
   const childLogger = logger.child({
     name: 'graphql-server',
   })
 
-  const includeData = loggerConfig?.options?.data
+  childLogger.level = level
+
   const includeOperationName = loggerConfig?.options?.operationName
   const includeRequestId = loggerConfig?.options?.requestId
-  const includeTracing = loggerConfig?.options?.tracing
   const includeUserAgent = loggerConfig?.options?.userAgent
   const includeQuery = loggerConfig?.options?.query
 
   return {
     onExecute({ args }) {
       const options = {} as any
+      const rootOperation = args.document.definitions.find(
+        (o) => o.kind === Kind.OPERATION_DEFINITION
+      ) as OperationDefinitionNode
 
       if (includeOperationName && args.operationName) {
-        options['operationName'] = args.operationName
+        options['operationName'] =
+          args.operationName ||
+          rootOperation.name?.value ||
+          'Anonymous Operation'
       }
 
       if (includeQuery) {
@@ -336,7 +419,10 @@ const useRedwoodLogger = (
       }
 
       if (includeRequestId) {
-        options['requestId'] = args.contextValue.awsRequestId || uuidv4()
+        options['requestId'] =
+          args.contextValue.context?.awsRequestId ||
+          args.contextValue.event?.requestContext?.requestId ||
+          uuidv4()
       }
 
       if (includeUserAgent) {
@@ -347,35 +433,15 @@ const useRedwoodLogger = (
         ...options,
       })
 
-      envelopLogger.info(`GraphQL execution started`)
+      envelopLogger.debug(`GraphQL execution started`)
+      const handleResult = logResult(loggerConfig, envelopLogger)
 
       return {
-        onExecuteDone({ result }) {
-          const options = {} as any
-
-          if (includeData) {
-            options['data'] = result.data
-          }
-
-          if (result.errors && result.errors.length > 0) {
-            envelopLogger.error(
-              {
-                errors: result.errors,
-              },
-              `GraphQL execution completed with errors:`
-            )
-          } else {
-            if (includeTracing) {
-              options['tracing'] = args.contextValue._envelopTracing
-            }
-
-            envelopLogger.info(
-              {
-                ...options,
-              },
-              `GraphQL execution completed`
-            )
-          }
+        onExecuteDone: (payload) => {
+          handleStreamOrSingleExecutionResult(payload, ({ result }) => {
+            handleResult({ result })
+            return undefined
+          })
         },
       }
     },
@@ -385,16 +451,12 @@ const useRedwoodLogger = (
 /*
  * Prevent unexpected error messages from leaking to the GraphQL clients.
  *
- * Unexpected errors are those that are not Envelop or Apollo errors
- *
- * Note that error masking should come after useApolloServerErrors since the originalError
- * will could become an ApolloError but if not, then should get masked
+ * Unexpected errors are those that are not Envelop or GraphQL errors
  **/
 export const formatError: FormatErrorHandler = (err) => {
   if (
     err.originalError &&
-    err.originalError instanceof EnvelopError === false &&
-    err.originalError instanceof ApolloError === false
+    err.originalError instanceof EnvelopError === false
   ) {
     return new GraphQLError('Something went wrong.')
   }
@@ -444,12 +506,7 @@ export const createGraphQLHandler = ({
     }),
     // Only allow execution of specific operation types
     useFilterAllowedOperations(allowedOperations || ['mutation', 'query']),
-    // Apollo Server compatible errors.
-    // Important: *must* be listed before useMaskedErrors
-    useApolloServerErrors(),
     // Prevent unexpected error messages from leaking to the GraphQL clients.
-    // Important: *must* be listed after useApolloServerErrors so it can detect if the error is an ApolloError
-    // and mask if not
     useMaskedErrors({ formatError }),
   ]
 
@@ -464,7 +521,7 @@ export const createGraphQLHandler = ({
   }
 
   if (context) {
-    plugins.push(useUserContext(context))
+    plugins.push(usePopulateContext(context))
   }
 
   if (extraPlugins && extraPlugins.length > 0) {

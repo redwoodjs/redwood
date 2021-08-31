@@ -1,6 +1,6 @@
 import { generate } from '@graphql-codegen/cli'
 
-import { getPaths } from 'src/paths'
+import { getPaths } from '../paths'
 
 // TODO: This is a duplicate of the same root schema in `@redwoodjs/api`
 // We need to have a decent way to share this between generated and api.

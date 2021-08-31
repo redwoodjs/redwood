@@ -5,9 +5,6 @@
     "rootDir": "src",
     "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
     "outDir": "dist",
-    "paths": {
-      "src/*": ["./src/*"]
-    }
   },
-  "include": ["src", "./ambient.d.ts"],
+  "include": ["src/**/*", "./ambient.d.ts", "src/../package.json"],
 }

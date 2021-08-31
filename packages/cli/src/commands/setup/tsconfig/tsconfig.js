@@ -9,8 +9,8 @@ import {
   getInstalledRedwoodVersion,
   getPaths,
   saveRemoteFileToDisk,
-} from 'src/lib'
-import c from 'src/lib/colors'
+} from '../../../lib'
+import c from '../../../lib/colors'
 
 export const command = 'tsconfig'
 

@@ -1,8 +1,8 @@
+export * from './parseJWT'
+
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 
 import type { SupportedAuthTypes } from '@redwoodjs/auth'
-
-import type { GlobalContext } from 'src/globalContext'
 
 import { decodeToken } from './decoders'
 
@@ -39,7 +39,7 @@ export const parseAuthorizationHeader = (
 export type AuthContextPayload = [
   string | Record<string, unknown> | null,
   { type: SupportedAuthTypes } & AuthorizationHeader,
-  { event: APIGatewayProxyEvent; context: GlobalContext & LambdaContext }
+  { event: APIGatewayProxyEvent; context: LambdaContext }
 ]
 
 /**
@@ -51,7 +51,7 @@ export const getAuthenticationContext = async ({
   context,
 }: {
   event: APIGatewayProxyEvent
-  context: GlobalContext & LambdaContext
+  context: LambdaContext
 }): Promise<undefined | AuthContextPayload> => {
   const type = getAuthProviderHeader(event)
   // No `auth-provider` header means that the user is logged out,

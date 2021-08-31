@@ -7,8 +7,8 @@ import terminalLink from 'terminal-link'
 
 import { errorTelemetry } from '@redwoodjs/internal'
 
-import { getPaths } from 'src/lib'
-import c from 'src/lib/colors'
+import { getPaths } from '../../lib'
+import c from '../../lib/colors'
 
 const MODEL = `model RW_DataMigration {
   version    String   @id

@@ -4,7 +4,11 @@ const path = require('path')
 const { merge } = require('webpack-merge')
 
 const { getSharedPlugins } = require('@redwoodjs/core/config/webpack.common.js')
-const { getConfig, getPaths } = require('@redwoodjs/internal')
+const {
+  importStatementPath,
+  getConfig,
+  getPaths,
+} = require('@redwoodjs/internal')
 
 const config = getConfig()
 
@@ -14,7 +18,9 @@ const baseConfig = {
   core: {
     builder: 'webpack5',
   },
-  stories: [`${rwjsPaths.web.src}/**/*.stories.{tsx,jsx,js}`],
+  stories: [
+    `${importStatementPath(rwjsPaths.web.src)}/**/*.stories.{tsx,jsx,js}`,
+  ],
   addons: [config.web.a11y && '@storybook/addon-a11y'].filter(Boolean),
   webpackFinal: (sbConfig, { configType }) => {
     // configType is 'PRODUCTION' or 'DEVELOPMENT', why shout?
@@ -27,7 +33,7 @@ const baseConfig = {
 
     // We replace imports to "@redwoodjs/router" with our own implementation in "@redwoodjs/testing"
     sbConfig.resolve.alias['@redwoodjs/router$'] = require.resolve(
-      '@redwoodjs/testing/dist/MockRouter.js'
+      '@redwoodjs/testing/dist/web/MockRouter.js'
     )
     sbConfig.resolve.alias['~__REDWOOD__USER_ROUTES_FOR_MOCK'] =
       rwjsPaths.web.routes

@@ -9,8 +9,9 @@ import terminalLink from 'terminal-link'
 import { resolveFile, errorTelemetry } from '@redwoodjs/internal'
 import { getProject } from '@redwoodjs/structure'
 
-import { getPaths, writeFilesTask } from 'src/lib'
-import c from 'src/lib/colors'
+import { getPaths, writeFilesTask } from '../../../lib'
+import c from '../../../lib/colors'
+
 const AUTH_PROVIDER_IMPORT = `import { AuthProvider } from '@redwoodjs/auth'`
 
 const OUTPUT_PATHS = {
