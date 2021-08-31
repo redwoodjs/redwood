@@ -5,8 +5,7 @@ workspaceLocation: .
 tasks:
   - name: Terminal
     openMode: split-left
-    env:
-      RWFW_PATH: "/workspace/redwood"
+    before: gp env RWFW_PATH="/workspace/redwood"
     init: |
       mkdir /workspace/rw-test-app
     command: |
@@ -16,8 +15,7 @@ tasks:
 
   - name: "Dev Servers"
     openMode: split-right
-    env:
-      RWFW_PATH: "/workspace/redwood"
+    before: gp env RWFW_PATH="/workspace/redwood"
     init: |
       cd /workspace/redwood
       yarn install
