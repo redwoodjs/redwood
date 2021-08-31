@@ -8,8 +8,8 @@ export const schema = gql`
   }
 <%}) %><% } %>
   type Query {
-    ${pluralCamelName}: [${singularPascalName}!]!<% if (crud) { %>
-    ${singularCamelName}(id: ${idType}!): ${singularPascalName}<% } %>
+    ${pluralCamelName}: [${singularPascalName}!]! @skipAuth<% if (crud) { %>
+    ${singularCamelName}(id: ${idType}!): ${singularPascalName} @skipAuth<% } %>
   }
 
   input Create${singularPascalName}Input {
