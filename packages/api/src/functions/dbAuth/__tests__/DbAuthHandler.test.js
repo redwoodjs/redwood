@@ -174,7 +174,7 @@ describe('dbAuth', () => {
       expect(dbAuth.options).toEqual(options)
     })
 
-    it('parses a plain text body', () => {
+    it('parses params from a plain text body', () => {
       event = { headers: {}, body: `{"foo":"bar", "baz":123}` }
       context = { foo: 'bar' }
       options = { db: db }
@@ -183,7 +183,28 @@ describe('dbAuth', () => {
       expect(dbAuth.params).toEqual({ foo: 'bar', baz: 123 })
     })
 
-    it('parses a base64 encoded body', () => {
+    it('parses an empty plain text body and still sets params', () => {
+      event = { isBase64Encoded: false, headers: {}, body: '' }
+      context = { foo: 'bar' }
+      options = { db: db }
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      expect(dbAuth.params).toEqual({})
+    })
+
+    it('parses params from an undefined body when isBase64Encoded == false', () => {
+      event = {
+        isBase64Encoded: false,
+        headers: {},
+      }
+      context = { foo: 'bar' }
+      options = { db: db }
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      expect(dbAuth.params).toEqual({})
+    })
+
+    it('parses params from a base64 encoded body', () => {
       event = {
         isBase64Encoded: true,
         headers: {},
@@ -194,6 +215,31 @@ describe('dbAuth', () => {
       const dbAuth = new DbAuthHandler(event, context, options)
 
       expect(dbAuth.params).toEqual({ foo: 'bar', baz: 123 })
+    })
+
+    it('parses params from an undefined body when isBase64Encoded == true', () => {
+      event = {
+        isBase64Encoded: true,
+        headers: {},
+      }
+      context = { foo: 'bar' }
+      options = { db: db }
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      expect(dbAuth.params).toEqual({})
+    })
+
+    it('parses params from an empty body when isBase64Encoded == true', () => {
+      event = {
+        isBase64Encoded: true,
+        headers: {},
+        body: '',
+      }
+      context = { foo: 'bar' }
+      options = { db: db }
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      expect(dbAuth.params).toEqual({})
     })
 
     it('sets header-based CSRF token', () => {
@@ -906,6 +952,20 @@ describe('dbAuth', () => {
       const response = dbAuth._ok('', {}, { statusCode: 201 })
 
       expect(response.statusCode).toEqual(201)
+    })
+
+    it('stringifies a JSON body', () => {
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const response = dbAuth._ok({ foo: 'bar' }, {}, { statusCode: 201 })
+
+      expect(response.body).toEqual('{"foo":"bar"}')
+    })
+
+    it('does not stringify a body that is a string already', () => {
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const response = dbAuth._ok('{"foo":"bar"}', {}, { statusCode: 201 })
+
+      expect(response.body).toEqual('{"foo":"bar"}')
     })
   })
 
