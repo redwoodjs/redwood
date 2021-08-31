@@ -1,7 +1,7 @@
 import Edit${singularPascalName}Cell from '${importComponentEditNameCell}'
 
 type ${pascalName}PageProps = {
-  id: ${idType}
+  id: ${idTsType}
 }
 
 const Edit${singularPascalName}Page = ({ id }: ${pascalName}PageProps) => {

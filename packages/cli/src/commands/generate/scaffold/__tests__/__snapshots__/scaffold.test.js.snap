@@ -1129,7 +1129,7 @@ exports[`in typescript mode creates a edit page 1`] = `
 "import EditPostCell from 'src/components/Post/EditPostCell'
 
 type PostPageProps = {
-  id: Int
+  id: number
 }
 
 const EditPostPage = ({ id }: PostPageProps) => {

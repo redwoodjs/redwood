@@ -2,8 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import * as esbuild from 'esbuild'
-import { moveSync } from 'fs-extra'
-import rimraf from 'rimraf'
+import { moveSync, removeSync } from 'fs-extra'
 
 import { findApiFiles } from '../files'
 import { ensurePosixPath, getPaths } from '../paths'
@@ -26,8 +25,8 @@ export const buildApi = () => {
 
 export const cleanApiBuild = () => {
   const rwjsPaths = getPaths()
-  rimraf.sync(rwjsPaths.api.dist)
-  rimraf.sync(path.join(rwjsPaths.generated.prebuild, 'api'))
+  removeSync(rwjsPaths.api.dist)
+  removeSync(path.join(rwjsPaths.generated.prebuild, 'api'))
 }
 
 /**
