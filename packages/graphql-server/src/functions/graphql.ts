@@ -7,7 +7,6 @@ import {
   Plugin,
   EnvelopError,
 } from '@envelop/core'
-
 import { useDepthLimit, DepthLimitConfig } from '@envelop/depth-limit'
 import { useDisableIntrospection } from '@envelop/disable-introspection'
 import { useFilterAllowedOperations } from '@envelop/filter-operation-type'
@@ -16,40 +15,36 @@ import { useParserCache } from '@envelop/parser-cache'
 import { useValidationCache } from '@envelop/validation-cache'
 import { mergeSchemas } from '@graphql-tools/merge'
 import { makeExecutableSchema } from '@graphql-tools/schema'
-
 import type {
   APIGatewayProxyEvent,
   Context as LambdaContext,
   APIGatewayProxyResult,
 } from 'aws-lambda'
 import { GraphQLError, GraphQLSchema } from 'graphql'
-
 import {
   getGraphQLParameters,
   processRequest,
   Request,
   shouldRenderGraphiQL,
 } from 'graphql-helix'
-
 import { renderPlaygroundPage } from 'graphql-playground-html'
 import { BaseLogger, LevelWithSilent } from 'pino'
 
 import { AuthContextPayload } from '@redwoodjs/api'
 
 import { CorsConfig, createCorsContext } from '../cors'
-import { getAsyncStoreInstance } from '../globalContext'
-import { createHealthcheckContext, OnHealthcheckFn } from '../healthcheck'
-import { useRedwoodAuthContext } from '../plugins/useRedwoodAuthContext'
-import  {useRedwoodDirective } from '../plugins/useRedwoodDirective'
-import { useRedwoodGlobalContextSetter } from '../plugins/useRedwoodGlobalContextSetter'
-import { useRedwoodLogger } from '../plugins/useRedwoodLogger'
-import { useRedwoodPopulateContext } from '../plugins/useRedwoodPopulateContext'
-
 import {
   schema as authDirectiveDocumentNodes,
   requireAuth,
   skipAuth,
 } from '../directives/authDirectives'
+import { getAsyncStoreInstance } from '../globalContext'
+import { createHealthcheckContext, OnHealthcheckFn } from '../healthcheck'
+import { useRedwoodAuthContext } from '../plugins/useRedwoodAuthContext'
+import { useRedwoodDirective } from '../plugins/useRedwoodDirective'
+import { useRedwoodGlobalContextSetter } from '../plugins/useRedwoodGlobalContextSetter'
+import { useRedwoodLogger } from '../plugins/useRedwoodLogger'
+import { useRedwoodPopulateContext } from '../plugins/useRedwoodPopulateContext'
 
 export type GetCurrentUser = (
   decoded: AuthContextPayload[0],

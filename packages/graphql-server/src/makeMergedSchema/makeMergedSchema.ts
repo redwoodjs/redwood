@@ -9,9 +9,9 @@ import type { GraphQLSchema, GraphQLFieldMap, DocumentNode } from 'graphql'
 import merge from 'lodash.merge'
 import omitBy from 'lodash.omitby'
 
+import { schema as authDirectivesSchema } from '../directives/authDirectives'
 import { Services, ServicesCollection, GraphQLTypeWithFields } from '../types'
 
-import { schema as authDirectivesSchema } from '../directives/authDirectives'
 import * as rootSchema from './rootSchema'
 
 const mapFieldsToService = ({
@@ -197,9 +197,11 @@ export const makeMergedSchema = ({
   schemaOptions?: Partial<IExecutableSchemaDefinition>
 }) => {
   const typeDefs = mergeTypes(
-    [rootSchema.schema,
+    [
+      rootSchema.schema,
       authDirectivesSchema,
-      ...Object.values(schemas).map(({ schema }) => schema)],
+      ...Object.values(schemas).map(({ schema }) => schema),
+    ],
     { all: true }
   )
 
