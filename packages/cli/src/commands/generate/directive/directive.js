@@ -1,8 +1,9 @@
-import fs from 'fs'
 import path from 'path'
 
 import camelcase from 'camelcase'
 import Listr from 'listr'
+
+import { getConfig } from '@redwoodjs/internal'
 
 import { getPaths, writeFilesTask, transformTSToJS } from '../../../lib'
 import c from '../../../lib/colors'
@@ -11,13 +12,11 @@ import {
   templateForComponentFile,
 } from '../helpers'
 
-const TEMPLATE_PATH = path.resolve(
-  __dirname,
-  'templates',
-  'directive.ts.template'
-)
+export const files = ({ name, typescript = false, tests }) => {
+  if (tests === undefined) {
+    tests = getConfig().generate.tests
+  }
 
-export const files = ({ name, typescript = false }) => {
   const outputFilename = `${name}.${typescript ? 'ts' : 'js'}`
 
   const directiveFile = templateForComponentFile({
@@ -29,21 +28,22 @@ export const files = ({ name, typescript = false }) => {
     templateVars: { camelName: camelcase(name) },
   })
 
-  // const testFile = templateForComponentFile({
-  //   name,
-  //   suffix: COMPONENT_SUFFIX,
-  //   extension: typescript ? '.test.tsx' : '.test.js',
-  //   webPathSection: REDWOOD_WEB_PATH_NAME,
-  //   generator: 'page',
-  //   templatePath: 'test.tsx.template',
-  //   templateVars: rest,
-  // })
-
   const files = [directiveFile]
 
-  // if (tests) {
-  //   files.push(testFile)
-  // }
+  // @TODO: update test template!
+  if (tests) {
+    const testOutputFilename = `${name}.test.${typescript ? 'ts' : 'js'}`
+
+    const testFile = templateForComponentFile({
+      name,
+      extension: typescript ? '.test.ts' : '.test.js',
+      generator: 'directive',
+      templatePath: 'directive.test.ts.template',
+      outputPath: path.join(getPaths().api.directives, testOutputFilename),
+      templateVars: { camelName: camelcase(name) },
+    })
+    files.push(testFile)
+  }
 
   // Returns
   // {
