@@ -1,0 +1,9 @@
+import type { DirectiveImplementationFunction } from '@redwoodjs/graphql-server'
+
+export const schema = gql`
+  directive @${camelName} on FIELD_DEFINITION
+`
+
+export const ${camelName}: DirectiveImplementationFunction = ({ context }, directiveNode) => {
+  // Implement your directive here
+}
