@@ -2,7 +2,7 @@ import type { Context as LambdaContext } from 'aws-lambda'
 import { DirectiveNode, GraphQLResolveInfo } from 'graphql'
 import gql from 'graphql-tag'
 
-import { AuthenticationError, ForbiddenError } from '../errors'
+// import { AuthenticationError, ForbiddenError } from '../errors'
 
 export interface User {
   roles?: Array<string>
@@ -51,19 +51,23 @@ export const requireAuth = (
   },
   directiveNode?: DirectiveNode
 ) => {
-  if (resolverInfo) {
-    const roles = directiveNode
-      ? getDirectiveArgument(directiveNode, 'roles')
-      : []
+  console.log(resolverInfo)
+  console.log(directiveNode)
 
-    if (!isAuthenticated(resolverInfo.context)) {
-      throw new AuthenticationError("You don't have permission to do that.")
-    }
+  return
+  // if (resolverInfo) {
+  //   const roles = directiveNode
+  //     ? getDirectiveArgument(directiveNode, 'roles')
+  //     : []
 
-    if (!hasRole(resolverInfo.context, roles)) {
-      throw new ForbiddenError("You don't have access to do that.")
-    }
-  }
+  //   if (!isAuthenticated(resolverInfo.context)) {
+  //     throw new AuthenticationError("You don't have permission to do that.")
+  //   }
+
+  //   if (!hasRole(resolverInfo.context, roles)) {
+  //     throw new ForbiddenError("You don't have access to do that.")
+  //   }
+  // }
 }
 
 export const SKIP_AUTH_SDL = /* GraphQL */ `

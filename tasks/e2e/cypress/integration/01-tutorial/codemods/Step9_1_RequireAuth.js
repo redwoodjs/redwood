@@ -11,6 +11,10 @@ export default `
 
 import { ForbiddenError } from '@redwoodjs/graphql-server'
 
+export const getCurrentUser = () => {
+  return { id: 1, sub: '1', name: 'Ba Zinga' }
+}
+
 export const requireAuth = () => {
   throw new ForbiddenError("I'm sorry, Dave. I'm afraid I can't do that.")
 }

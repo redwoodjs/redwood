@@ -29,11 +29,6 @@ import {
 import { renderPlaygroundPage } from 'graphql-playground-html'
 
 import { createCorsContext } from '../cors'
-import {
-  requireAuth,
-  schema as authDirectiveDocumentNodes,
-  skipAuth,
-} from '../directives/authDirectives'
 import { parseDirectives } from '../directives/parseDirectives'
 import { getAsyncStoreInstance } from '../globalContext'
 import { createHealthcheckContext } from '../healthcheck'
@@ -113,20 +108,25 @@ export const createGraphQLHandler = ({
   // so the order here matters
 
   let finalMergeSchema = schema
+  let redwoodDirectivePlugins = [] as Plugin<any>[]
 
   if (directives) {
     const projectDirectives = parseDirectives(directives)
 
     const directiveSchemas = makeExecutableSchema({
-      typeDefs: [
-        authDirectiveDocumentNodes, // @TODO remove this, we won't have these built-in
-        projectDirectives.map((directive) => directive.schema),
-      ],
+      typeDefs: [projectDirectives.map((directive) => directive.schema)],
     })
 
     finalMergeSchema = mergeSchemas({
       schemas: [schema, directiveSchemas],
     })
+
+    redwoodDirectivePlugins = projectDirectives.map((directive) =>
+      useRedwoodDirective({
+        name: directive.name,
+        onExecute: directive.onExecute,
+      })
+    )
   }
 
   const plugins: Plugin<any>[] = [
@@ -141,17 +141,7 @@ export const createGraphQLHandler = ({
     useRedwoodGlobalContextSetter(),
     useRedwoodLogger(loggerConfig),
 
-    // -------------  Enforce Auth Directives
-    useRedwoodDirective({
-      name: 'requireAuth',
-      onExecute: requireAuth,
-    }),
-
-    useRedwoodDirective({
-      name: 'skipAuth',
-      onExecute: skipAuth,
-    }),
-    // --------------- Enforce Auth Directives
+    ...redwoodDirectivePlugins,
 
     // Limits the depth of your GraphQL selection sets.
     useDepthLimit({
