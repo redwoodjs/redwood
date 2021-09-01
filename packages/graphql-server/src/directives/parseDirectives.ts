@@ -8,7 +8,7 @@ interface RedwoodDirective {
   onExecute: () => Promise<any> // for now just support on execute
 }
 
-type DirectiveImplementationFunction = (
+export type DirectiveImplementationFunction = (
   resolverInfo?: {
     root: unknown
     context: GlobalContext
@@ -19,18 +19,12 @@ type DirectiveImplementationFunction = (
 ) => Promise<any> | any
 
 /* @TODO: this isn't the correct type
-We want an object with this shape:
+We want directivesGlobs type to be an object with this shape:
 {
   schema: DocumentNode // <-- required
   [string]: DirectiveImplementationFunction
 }
 */
-
-// interface DirectiveGlobImports {
-//   [fileName: string]: {
-//     schema: DocumentNode
-//   } & Record<string, DirectiveImplementationFunction>
-// }
 
 export const parseDirectives = (
   directiveGlobs: Record<string, any> // @TODO define this type
