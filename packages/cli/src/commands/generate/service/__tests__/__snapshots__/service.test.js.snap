@@ -222,7 +222,7 @@ describe('users', () => {
 `;
 
 exports[`in typescript mode creates a multi word service file 1`] = `
-"import type { BeforeResolverSpecType } from '@redwoodjs/api'
+"import type { BeforeResolverSpecType } from '@redwoodjs/graphql-server'
 
 import { db } from 'src/lib/db'
 import { requireAuth } from 'src/lib/auth'
@@ -309,7 +309,7 @@ describe('transactions', () => {
 `;
 
 exports[`in typescript mode creates a single word service file 1`] = `
-"import type { BeforeResolverSpecType } from '@redwoodjs/api'
+"import type { BeforeResolverSpecType } from '@redwoodjs/graphql-server'
 
 import { db } from 'src/lib/db'
 import { requireAuth } from 'src/lib/auth'
@@ -327,7 +327,7 @@ export const users = () => {
 
 exports[`in typescript mode creates a single word service file with CRUD actions 1`] = `
 "import type { Prisma } from '@prisma/client'
-import type { BeforeResolverSpecType } from '@redwoodjs/api'
+import type { BeforeResolverSpecType } from '@redwoodjs/graphql-server'
 
 import { db } from 'src/lib/db'
 import { requireAuth } from 'src/lib/auth'
@@ -378,7 +378,10 @@ export const deletePost = ({ id }: Prisma.PostWhereUniqueInput) => {
 
 exports[`in typescript mode creates a single word service file with a belongsTo relation 1`] = `
 "import type { Prisma } from '@prisma/client'
-import type { ResolverArgs, BeforeResolverSpecType } from '@redwoodjs/api'
+import type {
+  ResolverArgs,
+  BeforeResolverSpecType,
+} from '@redwoodjs/graphql-server'
 
 import { db } from 'src/lib/db'
 import { requireAuth } from 'src/lib/auth'
@@ -401,7 +404,10 @@ export const User = {
 
 exports[`in typescript mode creates a single word service file with a hasMany relation 1`] = `
 "import type { Prisma } from '@prisma/client'
-import type { ResolverArgs, BeforeResolverSpecType } from '@redwoodjs/api'
+import type {
+  ResolverArgs,
+  BeforeResolverSpecType,
+} from '@redwoodjs/graphql-server'
 
 import { db } from 'src/lib/db'
 import { requireAuth } from 'src/lib/auth'
@@ -424,7 +430,10 @@ export const User = {
 
 exports[`in typescript mode creates a single word service file with multiple relations 1`] = `
 "import type { Prisma } from '@prisma/client'
-import type { ResolverArgs, BeforeResolverSpecType } from '@redwoodjs/api'
+import type {
+  ResolverArgs,
+  BeforeResolverSpecType,
+} from '@redwoodjs/graphql-server'
 
 import { db } from 'src/lib/db'
 import { requireAuth } from 'src/lib/auth'

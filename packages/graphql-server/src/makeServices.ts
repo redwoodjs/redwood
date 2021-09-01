@@ -1,10 +1,8 @@
 import {
   BeforeResolverSpec,
   MissingBeforeResolverError,
-  ServicesCollection,
-  MakeServices,
-  Services,
-} from '@redwoodjs/api'
+} from './beforeResolverSpec'
+import { ServicesCollection, MakeServices, Services } from './types'
 
 export const makeServices: MakeServices = ({ services }) => {
   if (process.env.REDWOOD_SECURE_SERVICES !== '1') {

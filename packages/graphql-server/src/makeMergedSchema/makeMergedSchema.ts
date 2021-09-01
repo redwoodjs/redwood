@@ -9,11 +9,7 @@ import type { GraphQLSchema, GraphQLFieldMap, DocumentNode } from 'graphql'
 import merge from 'lodash.merge'
 import omitBy from 'lodash.omitby'
 
-import {
-  Services,
-  ServicesCollection,
-  GraphQLTypeWithFields,
-} from '@redwoodjs/api'
+import { Services, ServicesCollection, GraphQLTypeWithFields } from '../types'
 
 import * as rootSchema from './rootSchema'
 

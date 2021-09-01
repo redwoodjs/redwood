@@ -1,9 +1,7 @@
 import type { PrismaClient } from '@prisma/client'
-import type { APIGatewayProxyEvent } from 'aws-lambda'
+import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import CryptoJS from 'crypto-js'
 import { v4 as uuidv4 } from 'uuid'
-
-import type { GlobalContext } from '../../globalContext'
 
 import * as DbAuthError from './errors'
 import { decryptSession, getSession } from './shared'
@@ -65,10 +63,18 @@ interface SessionRecord {
 
 type AuthMethodNames = 'login' | 'logout' | 'signup' | 'getToken'
 
+type Params = {
+  username?: string
+  password?: string
+  method: AuthMethodNames
+  [key: string]: unknown
+}
+
 export class DbAuthHandler {
   event: APIGatewayProxyEvent
-  context: GlobalContext
+  context: LambdaContext
   options: DbAuthHandlerOptions
+  params: Params
   db: PrismaClient
   dbAccessor: any
   headerCsrfToken: string | undefined
@@ -132,7 +138,7 @@ export class DbAuthHandler {
 
   constructor(
     event: APIGatewayProxyEvent,
-    context: GlobalContext,
+    context: LambdaContext,
     options: DbAuthHandlerOptions
   ) {
     // must have a SESSION_SECRET so we can encrypt/decrypt the cookie
@@ -143,6 +149,8 @@ export class DbAuthHandler {
     this.event = event
     this.context = context
     this.options = options
+
+    this.params = this._parseBody()
     this.db = this.options.db
     this.dbAccessor = this.db[this.options.authModelAccessor]
     this.headerCsrfToken = this.event.headers['csrf-token']
@@ -204,7 +212,7 @@ export class DbAuthHandler {
   }
 
   async login() {
-    const { username, password } = JSON.parse(this.event.body as string)
+    const { username, password } = this.params
     const dbUser = await this._verifyUser(username, password)
     const handlerUser = await this.options.loginHandler(dbUser)
 
@@ -279,6 +287,21 @@ export class DbAuthHandler {
       } else {
         return this._logoutResponse({ error: e.message })
       }
+    }
+  }
+
+  // parses the event body into JSON, whether it's base64 encoded or not
+  _parseBody() {
+    if (this.event.body) {
+      if (this.event.isBase64Encoded) {
+        return JSON.parse(
+          Buffer.from(this.event.body || '', 'base64').toString('utf-8')
+        )
+      } else {
+        return JSON.parse(this.event.body)
+      }
+    } else {
+      return {}
     }
   }
 
@@ -382,30 +405,30 @@ export class DbAuthHandler {
   // creates and returns a user, first checking that the username/password
   // values pass validation
   async _createUser() {
-    const { username, password, ...userAttributes } = JSON.parse(
-      this.event.body as string
-    )
-    this._validateField('username', username)
-    this._validateField('password', password)
+    const { username, password, ...userAttributes } = this.params
+    if (
+      this._validateField('username', username) &&
+      this._validateField('password', password)
+    ) {
+      const user = await this.dbAccessor.findUnique({
+        where: { [this.options.authFields.username]: username },
+      })
+      if (user) {
+        throw new DbAuthError.DuplicateUsernameError(username)
+      }
 
-    const user = await this.dbAccessor.findUnique({
-      where: { [this.options.authFields.username]: username },
-    })
-    if (user) {
-      throw new DbAuthError.DuplicateUsernameError(username)
+      // if we get here everything is good, call the app's signup handler and let
+      // them worry about scrubbing data and saving to the DB
+      const [hashedPassword, salt] = this._hashPassword(password)
+      const newUser = await this.options.signupHandler({
+        username,
+        hashedPassword,
+        salt,
+        userAttributes,
+      })
+
+      return newUser
     }
-
-    // if we get here everything is good, call the app's signup handler and let
-    // them worry about scrubbing data and saving to the DB
-    const [hashedPassword, salt] = this._hashPassword(password)
-    const newUser = await this.options.signupHandler({
-      username,
-      hashedPassword,
-      salt,
-      userAttributes,
-    })
-
-    return newUser
   }
 
   // hashes a password using either the given `salt` argument, or creates a new
@@ -425,10 +448,10 @@ export class DbAuthHandler {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     let methodName = this.event.queryStringParameters!.method as AuthMethodNames
 
-    if (!DbAuthHandler.METHODS.includes(methodName) && this.event.body) {
+    if (!DbAuthHandler.METHODS.includes(methodName) && this.params) {
       // try getting it from the body in JSON: { method: [methodName] }
       try {
-        methodName = JSON.parse(this.event.body).method
+        methodName = this.params.method
       } catch (e) {
         // there's no body, or it's not JSON, `handler` will return a 404
       }
@@ -439,7 +462,7 @@ export class DbAuthHandler {
 
   // checks that a single field meets validation requirements and
   // currently checks for presense only
-  _validateField(name: string, value: string) {
+  _validateField(name: string, value: string | undefined): value is string {
     // check for presense
     if (!value || value.trim() === '') {
       throw new DbAuthError.FieldRequiredError(name)
@@ -462,7 +485,7 @@ export class DbAuthHandler {
   _ok(body: string, headers = {}, options = { statusCode: 200 }) {
     return {
       statusCode: options.statusCode,
-      body,
+      body: typeof body === 'string' ? body : JSON.stringify(body),
       headers: { 'Content-Type': 'application/json', ...headers },
     }
   }
