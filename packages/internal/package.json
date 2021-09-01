@@ -17,7 +17,7 @@
     "babel-plugin-polyfill-corejs3": "0.2.4",
     "@babel/register": "7.15.3",
     "@babel/runtime-corejs3": "7.15.3",
-    "core-js": "3.16.3",
+    "core-js": "3.16.4",
     "@babel/traverse": "7.15.0",
     "@graphql-codegen/cli": "2.0.1",
     "@graphql-codegen/core": "2.0.0",
