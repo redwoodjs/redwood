@@ -2,9 +2,11 @@ import { Plugin } from '@envelop/core'
 import { DepthLimitConfig } from '@envelop/depth-limit'
 import type { AllowedOperations } from '@envelop/filter-operation-type'
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
-import { DocumentNode, GraphQLSchema } from 'graphql'
+import { GraphQLSchema } from 'graphql'
 
 import { AuthContextPayload } from '@redwoodjs/api'
+
+import { DirectiveGlobImports } from 'src/directives/parseDirectives'
 
 import { CorsConfig } from '../cors'
 import { OnHealthcheckFn } from '../healthcheck'
@@ -58,14 +60,10 @@ export interface GraphQLHandlerOptions {
   schema: GraphQLSchema
 
   /**
-   * @description Custom directives
+   * @description Directives passed from the glob import:
+   * import directives from 'src/directives/**\/*.{js,ts}'
    */
-  directives?: {
-    [directiveName: string]: {
-      schema: DocumentNode
-      onExecute: () => void | Promise<void>
-    }
-  }
+  directives?: DirectiveGlobImports
 
   /**
    *  @description CORS configuration

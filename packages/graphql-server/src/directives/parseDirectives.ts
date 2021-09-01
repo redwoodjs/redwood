@@ -25,9 +25,10 @@ We want directivesGlobs type to be an object with this shape:
   [string]: DirectiveImplementationFunction
 }
 */
+export type DirectiveGlobImports = Record<string, any>
 
 export const parseDirectives = (
-  directiveGlobs: Record<string, any> // @TODO define this type
+  directiveGlobs: DirectiveGlobImports
 ): RedwoodDirective[] => {
   return Object.entries(directiveGlobs).flatMap(
     ([importedGlobName, details]) => {
