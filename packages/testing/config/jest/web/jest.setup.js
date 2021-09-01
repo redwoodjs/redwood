@@ -10,7 +10,7 @@ const {
   mockGraphQLMutation,
   mockGraphQLQuery,
   mockCurrentUser,
-} = require('@redwoodjs/testing')
+} = require('@redwoodjs/testing/web')
 
 global.mockGraphQLQuery = mockGraphQLQuery
 global.mockGraphQLMutation = mockGraphQLMutation

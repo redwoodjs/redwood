@@ -140,9 +140,9 @@ const getSharedPlugins = (isEnvProduction) => {
       React: 'react',
       PropTypes: 'prop-types',
       gql: 'graphql-tag',
-      mockGraphQLQuery: ['@redwoodjs/testing', 'mockGraphQLQuery'],
-      mockGraphQLMutation: ['@redwoodjs/testing', 'mockGraphQLMutation'],
-      mockCurrentUser: ['@redwoodjs/testing', 'mockCurrentUser'],
+      mockGraphQLQuery: ['@redwoodjs/testing/web', 'mockGraphQLQuery'],
+      mockGraphQLMutation: ['@redwoodjs/testing/web', 'mockGraphQLMutation'],
+      mockCurrentUser: ['@redwoodjs/testing/web', 'mockCurrentUser'],
     }),
     // The define plugin will replace these keys with their values during build
     // time.
@@ -195,6 +195,11 @@ module.exports = (webpackEnv) => {
         ),
         '~redwood-app-root': path.resolve(redwoodPaths.web.app),
         react: path.resolve(redwoodPaths.base, 'node_modules', 'react'),
+        'react-hook-form': path.resolve(
+          redwoodPaths.base,
+          'node_modules',
+          'react-hook-form'
+        ),
       },
     },
     plugins: [

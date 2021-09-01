@@ -42,25 +42,26 @@ test('finds directory named modules', () => {
   const p = paths.map(cleanPaths)
 
   expect(p).toMatchInlineSnapshot(`
-    Array [
-      "api/src/functions/healthz/healthz.js",
-      "api/src/services/todos/todos.js",
-      "web/src/components/AddTodo/AddTodo.js",
-      "web/src/components/AddTodoControl/AddTodoControl.js",
-      "web/src/components/Check/Check.js",
-      "web/src/components/TableCell/TableCell.js",
-      "web/src/components/TodoItem/TodoItem.js",
-      "web/src/layouts/SetLayout/SetLayout.js",
-      "web/src/pages/BarPage/BarPage.tsx",
-      "web/src/pages/FatalErrorPage/FatalErrorPage.js",
-      "web/src/pages/FooPage/FooPage.tsx",
-      "web/src/pages/HomePage/HomePage.tsx",
-      "web/src/pages/NotFoundPage/NotFoundPage.js",
-      "web/src/pages/PrivatePage/PrivatePage.tsx",
-      "web/src/pages/TypeScriptPage/TypeScriptPage.tsx",
-      "web/src/pages/admin/EditUserPage/EditUserPage.jsx",
-    ]
-  `)
+Array [
+  "api/src/functions/healthz/healthz.js",
+  "api/src/functions/nested/nested.ts",
+  "api/src/services/todos/todos.js",
+  "web/src/components/AddTodo/AddTodo.js",
+  "web/src/components/AddTodoControl/AddTodoControl.js",
+  "web/src/components/Check/Check.js",
+  "web/src/components/TableCell/TableCell.js",
+  "web/src/components/TodoItem/TodoItem.js",
+  "web/src/layouts/SetLayout/SetLayout.js",
+  "web/src/pages/BarPage/BarPage.tsx",
+  "web/src/pages/FatalErrorPage/FatalErrorPage.js",
+  "web/src/pages/FooPage/FooPage.tsx",
+  "web/src/pages/HomePage/HomePage.tsx",
+  "web/src/pages/NotFoundPage/NotFoundPage.js",
+  "web/src/pages/PrivatePage/PrivatePage.tsx",
+  "web/src/pages/TypeScriptPage/TypeScriptPage.tsx",
+  "web/src/pages/admin/EditUserPage/EditUserPage.jsx",
+]
+`)
 })
 
 test('finds all the page files', () => {
@@ -94,10 +95,11 @@ test('find api functions', () => {
   const p = paths.map(cleanPaths)
 
   expect(p).toMatchInlineSnapshot(`
-    Array [
-      "api/src/functions/graphql.js",
-      "api/src/functions/healthz/healthz.js",
-      "api/src/functions/x/index.js",
-    ]
-  `)
+Array [
+  "api/src/functions/graphql.js",
+  "api/src/functions/healthz/healthz.js",
+  "api/src/functions/nested/nested.ts",
+  "api/src/functions/x/index.js",
+]
+`)
 })
