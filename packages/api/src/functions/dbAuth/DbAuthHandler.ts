@@ -292,12 +292,16 @@ export class DbAuthHandler {
 
   // parses the event body into JSON, whether it's base64 encoded or not
   _parseBody() {
-    if (this.event.isBase64Encoded) {
-      return JSON.parse(
-        Buffer.from(this.event.body || '', 'base64').toString('utf-8')
-      )
+    if (this.event.body) {
+      if (this.event.isBase64Encoded) {
+        return JSON.parse(
+          Buffer.from(this.event.body || '', 'base64').toString('utf-8')
+        )
+      } else {
+        return JSON.parse(this.event.body)
+      }
     } else {
-      return this.event.body && JSON.parse(this.event.body)
+      return {}
     }
   }
 
@@ -481,7 +485,7 @@ export class DbAuthHandler {
   _ok(body: string, headers = {}, options = { statusCode: 200 }) {
     return {
       statusCode: options.statusCode,
-      body,
+      body: typeof body === 'string' ? body : JSON.stringify(body),
       headers: { 'Content-Type': 'application/json', ...headers },
     }
   }
