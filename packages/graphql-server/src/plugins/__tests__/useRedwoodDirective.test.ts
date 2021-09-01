@@ -1,13 +1,9 @@
 import { assertSingleExecutionValue, createTestkit } from '@envelop/testing'
 import { makeExecutableSchema } from '@graphql-tools/schema'
 
-import {
-  REQUIRE_AUTH_SDL,
-  SKIP_AUTH_SDL,
-} from '../../directives/authDirectives'
 import { GraphQLTypeWithFields } from '../../index'
 import {
-  getRoles,
+  getDirectiveArgument,
   useRedwoodDirective,
   DIRECTIVE_REQUIRED_ERROR_MESSAGE,
 } from '../useRedwoodDirective'
@@ -16,8 +12,8 @@ import {
 const AUTH_ERROR_MESSAGE = 'Sorry, you cannot do that'
 const schemaWithDirectiveQueries = makeExecutableSchema({
   typeDefs: `
-    ${REQUIRE_AUTH_SDL}
-    ${SKIP_AUTH_SDL}
+    directive @requireAuth(roles: [String]) on FIELD_DEFINITION
+    directive @skipAuth on FIELD_DEFINITION
 
     type Post {
       title: String! @skipAuth
@@ -252,7 +248,10 @@ describe('Directives on Mutations', () => {
     ) as GraphQLTypeWithFields
     const deletePost = mutationType.getFields()['deletePost']
 
-    const result = getRoles(deletePost.astNode.directives[0])
+    const result = getDirectiveArgument(
+      deletePost.astNode.directives[0],
+      'roles'
+    )
 
     expect(result).toContain('admin')
     expect(result).toContain('publisher')

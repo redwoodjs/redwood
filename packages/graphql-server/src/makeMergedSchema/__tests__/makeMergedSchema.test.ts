@@ -1,4 +1,5 @@
 import { parse, GraphQLResolveInfo } from 'graphql'
+import gql from 'graphql-tag'
 
 import { GraphQLTypeWithFields } from '../../types'
 import { makeMergedSchema } from '../makeMergedSchema'
@@ -20,6 +21,7 @@ describe('makeMergedSchema', () => {
           inResolverAndServices: String
           inResolver: String
           inServices: String
+          foo: String @foo
         }
       `),
       resolvers: {
@@ -31,6 +33,7 @@ describe('makeMergedSchema', () => {
         Query: {
           inResolverAndServices: () => "I'm defined in the resolver.",
           inResolver: () => "I'm defined in the resolver.",
+          foo: () => "I'm using @foo directive",
         },
       },
     },
@@ -47,7 +50,33 @@ describe('makeMergedSchema', () => {
     },
   }
 
-  const schema = makeMergedSchema({ schemas, services })
+  // mimics teh directives glob file structure
+  const directiveFiles = {
+    foo: {
+      foo: () => 'I am foo',
+      schema: gql`
+        directive @foo on FIELD_DEFINITION
+      `,
+    },
+    nested_bazinga: {
+      bazinga: async () => 'I am bazinga, async',
+      schema: gql`
+        directive @bazinga on FIELD_DEFINITION
+      `,
+    },
+    heavily_nested_bar: {
+      bar: async () => 'I am bar, async',
+      schema: gql`
+        directive @bar on FIELD_DEFINITION
+      `,
+    },
+  }
+
+  const schema = makeMergedSchema({
+    schemas,
+    services,
+    directives: directiveFiles,
+  })
 
   describe('Query Type', () => {
     const queryType = schema.getType('Query') as GraphQLTypeWithFields
@@ -128,6 +157,18 @@ describe('makeMergedSchema', () => {
             {} as GraphQLResolveInfo
           )
       ).toEqual("MyOwnType: I'm defined in the services.")
+    })
+  })
+
+  describe('Directives', () => {
+    it('Confirms that directives have been made from a set of files and added to schema.', () => {
+      expect(schema.getDirective('foo')).toBeTruthy()
+      expect(schema.getDirective('bazinga')).toBeTruthy()
+      expect(schema.getDirective('bar')).toBeTruthy()
+    })
+
+    it('Checks that an unknown directive does not get added to the schema.', () => {
+      expect(schema.getDirective('misdirective')).toBeFalsy()
     })
   })
 })

@@ -2,10 +2,29 @@ import { Plugin } from '@envelop/types'
 import type { Context as LambdaContext } from 'aws-lambda'
 import { DirectiveNode, GraphQLObjectType, GraphQLResolveInfo } from 'graphql'
 
-import { CurrentUser } from '../directives/authDirectives'
+function isQueryOrMutation(info: GraphQLResolveInfo): boolean {
+  const { parentType } = info
+
+  return parentType.name === 'Query' || parentType.name === 'Mutation'
+}
 
 export const DIRECTIVE_REQUIRED_ERROR_MESSAGE =
   'You must specify one of @requireAuth, @skipAuth or a custom directive'
+
+export type DirectiveImplementationFunction = (
+  resolverInfo?: {
+    root: unknown
+    context: LambdaContext
+    args: Record<string, unknown>
+    info: GraphQLResolveInfo
+  },
+  directiveNode?: DirectiveNode
+) => void | Promise<void>
+
+export type RedwoodDirectivePluginOptions = {
+  onExecute: DirectiveImplementationFunction
+  name: string
+}
 
 export function hasDirective(info: GraphQLResolveInfo): boolean {
   try {
@@ -20,12 +39,6 @@ export function hasDirective(info: GraphQLResolveInfo): boolean {
     console.error(error)
     return false
   }
-}
-
-function isQueryOrMutation(info: GraphQLResolveInfo): boolean {
-  const { parentType } = info
-
-  return parentType.name === 'Query' || parentType.name === 'Mutation'
 }
 
 export function getDirectiveByName(
@@ -48,27 +61,7 @@ export function getDirectiveByName(
   }
 }
 
-export function getRoles(authDirective: DirectiveNode): [string] | undefined {
-  if (authDirective.kind === 'Directive') {
-    const directiveArgs = authDirective.arguments?.filter(
-      (d) => d.name.value === 'roles'
-    )
-
-    const roles =
-      directiveArgs
-        ?.values()
-        .next()
-        .value?.value?.values?.map((v: any) => v.value) || undefined
-
-    return roles
-  }
-
-  return undefined
-}
-
 // use this to get specific argument values
-// e.g. getDirectiveArgument(directive, 'roles')
-// will return the roles listed in @requireAuth(roles: ['ADMIN', 'BAZINGA'])
 export function getDirectiveArgument(
   directive: DirectiveNode,
   argumentName: string
@@ -79,7 +72,6 @@ export function getDirectiveArgument(
     )
 
     if (directiveArgs) {
-      // needs improvement
       const outputArgs =
         directiveArgs
           .values()
@@ -93,25 +85,10 @@ export function getDirectiveArgument(
   return undefined
 }
 
-type ExecuteFn = (
-  resolverInfo?: {
-    root: unknown
-    context: LambdaContext & CurrentUser
-    args: Record<string, unknown>
-    info: GraphQLResolveInfo
-  },
-  directiveNode?: DirectiveNode
-) => void | Promise<void>
-
-export type RedwoodDirectivePluginOptions = {
-  onExecute: ExecuteFn
-  name: string
-}
-
 export const useRedwoodDirective = (
   options: RedwoodDirectivePluginOptions
 ): Plugin<{
-  onExecute: ExecuteFn
+  onExecute: DirectiveImplementationFunction
 }> => {
   const executeDirective = options.onExecute
 
@@ -129,7 +106,7 @@ export const useRedwoodDirective = (
             await executeDirective(
               {
                 info,
-                context: context as unknown as LambdaContext & CurrentUser,
+                context: context as unknown as LambdaContext,
                 args,
                 root,
               },

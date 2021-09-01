@@ -12,8 +12,6 @@ import { useDisableIntrospection } from '@envelop/disable-introspection'
 import { useFilterAllowedOperations } from '@envelop/filter-operation-type'
 import { useParserCache } from '@envelop/parser-cache'
 import { useValidationCache } from '@envelop/validation-cache'
-import { mergeSchemas } from '@graphql-tools/merge'
-import { makeExecutableSchema } from '@graphql-tools/schema'
 import type {
   APIGatewayProxyEvent,
   APIGatewayProxyResult,
@@ -29,7 +27,7 @@ import {
 import { renderPlaygroundPage } from 'graphql-playground-html'
 
 import { createCorsContext } from '../cors'
-import { parseDirectives } from '../directives/parseDirectives'
+import { makeDirectives, RedwoodDirective } from '../directives/makeDirectives'
 import { getAsyncStoreInstance } from '../globalContext'
 import { createHealthcheckContext } from '../healthcheck'
 import { useRedwoodAuthContext } from '../plugins/useRedwoodAuthContext'
@@ -107,19 +105,10 @@ export const createGraphQLHandler = ({
   // Important: Plugins are executed in order of their usage, and inject functionality serially,
   // so the order here matters
 
-  let finalMergeSchema = schema
   let redwoodDirectivePlugins = [] as Plugin<any>[]
 
   if (directives) {
-    const projectDirectives = parseDirectives(directives)
-
-    const directiveSchemas = makeExecutableSchema({
-      typeDefs: [projectDirectives.map((directive) => directive.schema)],
-    })
-
-    finalMergeSchema = mergeSchemas({
-      schemas: [schema, directiveSchemas],
-    })
+    const projectDirectives = makeDirectives(directives) as RedwoodDirective[]
 
     redwoodDirectivePlugins = projectDirectives.map((directive) =>
       useRedwoodDirective({
@@ -135,7 +124,7 @@ export const createGraphQLHandler = ({
     // Simple LRU for caching validate results.
     useValidationCache(),
     // Simplest plugin to provide your GraphQL schema.
-    useSchema(finalMergeSchema),
+    useSchema(schema),
     // Custom Redwood plugins
     useRedwoodAuthContext(getCurrentUser),
     useRedwoodGlobalContextSetter(),

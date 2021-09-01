@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-import { parseDirectives } from '../directives/parseDirectives'
+import { makeDirectives } from '../directives/makeDirectives'
 
 test('Should map globs to defined structure correctly', async () => {
   // Mocking what our import-dir plugin would do
@@ -26,7 +26,7 @@ test('Should map globs to defined structure correctly', async () => {
   }
 
   const [fooDirective, bazingaDirective, barDirective] =
-    parseDirectives(directiveFiles)
+    makeDirectives(directiveFiles)
 
   expect(fooDirective.name).toBe('foo')
   expect(fooDirective.onExecute()).toBe('I am foo')

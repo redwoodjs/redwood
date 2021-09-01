@@ -12,10 +12,10 @@ import services from 'src/services/**/*.{js,ts}'
 
 export const handler = createGraphQLHandler({
   loggerConfig: { logger, options: {} },
-  // getCurrentUser
   schema: makeMergedSchema({
     schemas,
     services: makeServices({ services }),
+    directives,
   }),
   directives,
   onException: () => {

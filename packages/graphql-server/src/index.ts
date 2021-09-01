@@ -8,3 +8,9 @@ export * from './functions/graphql'
 export * from './makeServices'
 export * from './makeMergedSchema/makeMergedSchema'
 export * from './types'
+export {
+  hasDirective,
+  getDirectiveByName,
+  getDirectiveArgument,
+  DirectiveImplementationFunction,
+} from './plugins/useRedwoodDirective'

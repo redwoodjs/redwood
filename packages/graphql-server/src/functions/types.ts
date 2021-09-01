@@ -6,7 +6,7 @@ import { GraphQLSchema } from 'graphql'
 
 import { AuthContextPayload } from '@redwoodjs/api'
 
-import { DirectiveGlobImports } from 'src/directives/parseDirectives'
+import { DirectiveGlobImports } from 'src/directives/makeDirectives'
 
 import { CorsConfig } from '../cors'
 import { OnHealthcheckFn } from '../healthcheck'
