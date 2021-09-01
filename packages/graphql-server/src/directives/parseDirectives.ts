@@ -18,14 +18,27 @@ export type DirectiveImplementationFunction = (
   directiveNode?: DirectiveNode
 ) => Promise<any> | any
 
-/* @TODO: this isn't the correct type
-We want directivesGlobs type to be an object with this shape:
+/* @Note: this isn't the best type
+We want directivesGlobs type to be an object with this shape, but TS has limitations
+declaring a record with one known key (schema), and other unknown keys
 {
-  schema: DocumentNode // <-- required
-  [string]: DirectiveImplementationFunction
+  fileName: {
+   schema: DocumentNode // <-- required
+   [string]: DirectiveImplementationFunction
+  }
 }
 */
-export type DirectiveGlobImports = Record<string, any>
+type PartiallyRequired<
+  Dict extends Record<string, any>,
+  RequiredKey extends keyof Dict
+> = Partial<Omit<Dict, RequiredKey>> & Required<Pick<Dict, RequiredKey>>
+
+export type DirectiveGlobImports = {
+  [fileIdentified: string]: PartiallyRequired<
+    Record<string, DocumentNode | DirectiveImplementationFunction>,
+    'schema'
+  >
+}
 
 export const parseDirectives = (
   directiveGlobs: DirectiveGlobImports
@@ -35,7 +48,7 @@ export const parseDirectives = (
       // Incase the directives get nested, their name comes as nested_directory_filename
       const directiveName = importedGlobName.split('_').pop()
 
-      // Just
+      // Just because we always want to return an array, even if empty
       if (!directiveName) {
         return []
       }
@@ -43,8 +56,8 @@ export const parseDirectives = (
       return [
         {
           name: directiveName,
-          schema: details.schema,
-          onExecute: details[directiveName],
+          schema: details.schema as DocumentNode,
+          onExecute: details[directiveName] as DirectiveImplementationFunction,
         },
       ]
     }
