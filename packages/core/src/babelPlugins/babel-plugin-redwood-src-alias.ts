@@ -2,6 +2,8 @@ import path from 'path'
 
 import type { PluginObj, types } from '@babel/core'
 
+import { importStatementPath } from '@redwoodjs/internal'
+
 export default function (
   { types: t }: { types: typeof types },
   options: {
@@ -32,7 +34,7 @@ export default function (
         if (newImport.indexOf('.') !== 0) {
           newImport = './' + newImport
         }
-        const newSource = t.stringLiteral(newImport)
+        const newSource = t.stringLiteral(importStatementPath(newImport))
 
         p.node.source = newSource
       },
@@ -57,8 +59,10 @@ export default function (
 
         // remove `src/` and create an absolute path
         const absPath = path.join(options.srcAbsPath, value.substr(4))
-        const newImport = path.relative(path.dirname(filename), absPath)
-        const newSource = t.stringLiteral(newImport)
+        const newExport = importStatementPath(
+          path.relative(path.dirname(filename), absPath)
+        )
+        const newSource = t.stringLiteral(newExport)
         // @ts-expect-error `source` does exist
         p.node.source = newSource
       },
