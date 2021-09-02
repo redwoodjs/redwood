@@ -14,7 +14,7 @@
     "@envelop/filter-operation-type": "1.0.0",
     "@envelop/parser-cache": "1.0.0",
     "@envelop/validation-cache": "1.0.0",
-    "@graphql-tools/merge": "7.0.0",
+    "@graphql-tools/merge": "8.1.0",
     "@graphql-tools/schema": "8.0.3",
     "@graphql-tools/utils": "8.0.2",
     "@prisma/client": "2.30.0",
