@@ -1,13 +1,19 @@
 import { parse, GraphQLResolveInfo } from 'graphql'
 import gql from 'graphql-tag'
 
-import { GraphQLTypeWithFields } from '../../types'
+import { makeDirectives } from '../../directives/makeDirectives'
+import { makeServices } from '../../makeServices'
+import {
+  GraphQLTypeWithFields,
+  ServicesGlobImports,
+  SdlGlobImports,
+} from '../../types'
 import { makeMergedSchema } from '../makeMergedSchema'
 
 describe('makeMergedSchema', () => {
   // Simulate `importAll`
   // ./graphql/tests.sdl.js
-  const schemas = {
+  const sdls = {
     tests: {
       schema: parse(`
         type MyOwnType {
@@ -37,7 +43,7 @@ describe('makeMergedSchema', () => {
         },
       },
     },
-  }
+  } as unknown as SdlGlobImports
 
   // ./services/tests.js
   const services = {
@@ -48,23 +54,23 @@ describe('makeMergedSchema', () => {
       inResolverAndServices: () => 'I should NOT be called.',
       inServices: () => "I'm defined in the service.",
     },
-  }
+  } as unknown as ServicesGlobImports
 
   // mimics teh directives glob file structure
   const directiveFiles = {
-    foo: {
+    foo_directive: {
       foo: () => 'I am foo',
       schema: gql`
         directive @foo on FIELD_DEFINITION
       `,
     },
-    nested_bazinga: {
+    nested_bazinga_directive: {
       bazinga: async () => 'I am bazinga, async',
       schema: gql`
         directive @bazinga on FIELD_DEFINITION
       `,
     },
-    heavily_nested_bar: {
+    heavily_nested_bar_directive: {
       bar: async () => 'I am bar, async',
       schema: gql`
         directive @bar on FIELD_DEFINITION
@@ -73,9 +79,9 @@ describe('makeMergedSchema', () => {
   }
 
   const schema = makeMergedSchema({
-    schemas,
-    services,
-    directives: directiveFiles,
+    sdls,
+    services: makeServices({ services }),
+    directives: makeDirectives(directiveFiles),
   })
 
   describe('Query Type', () => {
