@@ -33,8 +33,11 @@ export const makeDirectives = (
 ): RedwoodDirective[] => {
   return Object.entries(directiveGlobs).flatMap(
     ([importedGlobName, details]) => {
-      // Incase the directives get nested, their name comes as nested_directory_filename
-      const directiveName = importedGlobName.split('_').pop()
+      // Incase the directives get nested, their name comes as nested_directory_filename_directive
+
+      // directiveName is the filename without the directive extension
+      // slice gives us ['fileName', 'directive'], so we take the first one
+      const [directiveName] = importedGlobName.split('_').slice(-2)
 
       // Just
       if (!directiveName) {
