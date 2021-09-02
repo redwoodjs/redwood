@@ -3,6 +3,8 @@ import pino from 'pino'
 import type P from 'pino'
 import * as prettyPrint from 'pino-pretty'
 
+// import { getPaths } from '@redwoodjs/internal' TODO: getPaths().api.lib to get the /absolute/path/to/my-transport.mjs or find a another way
+
 export type LogLevel = 'info' | 'query' | 'warn' | 'error'
 
 // @TODO use type from Prisma once the issue is solved
@@ -216,7 +218,7 @@ export const defaultLoggerOptions: P.LoggerOptions = {
  */
 export interface RedwoodLoggerOptions {
   options?: P.LoggerOptions
-  destination?: string
+  destination?: string | P.MultiStreamOptions
   showConfig?: boolean
 }
 
@@ -240,13 +242,16 @@ export interface RedwoodLoggerOptions {
 export const createLogger = ({
   options,
   destination,
-  showConfig = false,
+  showConfig = true, // change to false
 }: RedwoodLoggerOptions): P.BaseLogger => {
   const hasDestination = typeof destination !== 'undefined'
   const isFile = hasDestination && typeof destination === 'string'
-  const isStream = hasDestination && !isFile
-  const stream = isString(destination)
-    ? pino.transport({ target: destination, options: options })
+  const isStream = hasDestination && isFile
+  // Check if destination have one destination or multiple destinations or undefined
+  const stream: P.DestinationStream = isString(destination)
+    ? pino.transport({ target: destination })
+    : Array.isArray(destination)
+    ? pino.transport({ targets: destination })
     : destination
 
   // override, but retain default pretty print options
@@ -289,7 +294,7 @@ export const createLogger = ({
       )
     }
 
-    return pino(options, stream as P.DestinationStream)
+    return pino(options, stream)
   } else {
     if (isStream && isDevelopment && !isTest) {
       console.warn(
@@ -303,7 +308,7 @@ export const createLogger = ({
       )
     }
 
-    return pino(options, stream as P.DestinationStream)
+    return pino(options, stream)
   }
 }
 
