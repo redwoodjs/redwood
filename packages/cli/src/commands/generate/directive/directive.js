@@ -19,7 +19,7 @@ export const files = ({ name, typescript = false, tests }) => {
 
   const camelName = camelcase(name)
 
-  const outputFilename = `${camelName}.${typescript ? 'ts' : 'js'}`
+  const outputFilename = `${camelName}.directive.${typescript ? 'ts' : 'js'}`
 
   const directiveFile = templateForComponentFile({
     name,

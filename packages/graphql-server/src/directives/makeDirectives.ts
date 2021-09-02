@@ -41,6 +41,12 @@ export const makeDirectives = (
         return []
       }
 
+      if (typeof details[directiveName] !== 'function') {
+        throw new Error(
+          `Directive execution function not implemented for @${directiveName}`
+        )
+      }
+
       return [
         {
           name: directiveName,

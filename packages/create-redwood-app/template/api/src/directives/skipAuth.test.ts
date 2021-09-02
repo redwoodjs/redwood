@@ -1,4 +1,4 @@
-import { schema, skipAuth } from './skipAuth'
+import { schema, skipAuth } from './skipAuth.directive'
 
 describe('skipAuth directive', () => {
   it('declares the directive sdl as schema', () => {

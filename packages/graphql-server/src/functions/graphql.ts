@@ -17,7 +17,7 @@ import type {
   APIGatewayProxyResult,
   Context as LambdaContext,
 } from 'aws-lambda'
-import { GraphQLError } from 'graphql'
+import { GraphQLError, GraphQLSchema } from 'graphql'
 import {
   getGraphQLParameters,
   processRequest,
@@ -106,29 +106,41 @@ export const createGraphQLHandler = ({
   graphiQLEndpoint,
   schemaOptions,
 }: GraphQLHandlerOptions) => {
-  // @NOTE: We wrap services for beforeResolvers
-  // Likely to be deprecated, and we can just pass in services to makeMergedSchema
-  const wrappedServices = makeServices({ services })
-
-  // @NOTE: Directives are optional
-  const projectDirectives = makeDirectives(directives)
+  let schema: GraphQLSchema
   let redwoodDirectivePlugins = [] as Plugin<any>[]
+  const logger = loggerConfig.logger
 
-  if (projectDirectives.length > 0) {
-    redwoodDirectivePlugins = projectDirectives.map((directive) =>
-      useRedwoodDirective({
-        name: directive.name,
-        onExecute: directive.onExecute,
-      })
-    )
+  try {
+    // @NOTE: We wrap services for beforeResolvers
+    // Likely to be deprecated, and we can just pass in services to makeMergedSchema
+    const wrappedServices = makeServices({ services })
+
+    // @NOTE: Directives are optional
+    const projectDirectives = makeDirectives(directives)
+
+    if (projectDirectives.length > 0) {
+      redwoodDirectivePlugins = projectDirectives.map((directive) =>
+        useRedwoodDirective({
+          name: directive.name,
+          onExecute: directive.onExecute,
+        })
+      )
+    }
+
+    schema = makeMergedSchema({
+      sdls,
+      services: wrappedServices,
+      directives: projectDirectives,
+      schemaOptions,
+    })
+  } catch (e) {
+    logger.error('⚠️ GraphQL server crashed')
+    logger.error(e)
+
+    // Forcefully crash the graphql server
+    // so users know that a misconfiguration has happened
+    process.exit(1)
   }
-
-  const schema = makeMergedSchema({
-    sdls,
-    services: wrappedServices,
-    directives: projectDirectives,
-    schemaOptions,
-  })
 
   // Important: Plugins are executed in order of their usage, and inject functionality serially,
   // so the order here matters
