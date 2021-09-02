@@ -1,8 +1,8 @@
 import { Plugin } from '@envelop/core'
 import { DepthLimitConfig } from '@envelop/depth-limit'
 import type { AllowedOperations } from '@envelop/filter-operation-type'
+import { IExecutableSchemaDefinition } from '@graphql-tools/schema'
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
-import { GraphQLSchema } from 'graphql'
 
 import { AuthContextPayload } from '@redwoodjs/api'
 
@@ -11,6 +11,7 @@ import { DirectiveGlobImports } from 'src/directives/makeDirectives'
 import { CorsConfig } from '../cors'
 import { OnHealthcheckFn } from '../healthcheck'
 import { LoggerConfig } from '../plugins/useRedwoodLogger'
+import { SdlGlobImports, ServicesGlobImports } from '../types'
 
 export type GetCurrentUser = (
   decoded: AuthContextPayload[0],
@@ -55,15 +56,28 @@ export interface GraphQLHandlerOptions {
   onException?: () => void
 
   /**
-   * @description The GraphQL Schema
+   * @description Services passed from the glob import:
+   * import services from 'src/services\/**\/*.{js,ts}'
    */
-  schema: GraphQLSchema
+  services: ServicesGlobImports
+
+  /**
+   * @description SDLs (schema definitions) passed from the glob import:
+   * import sdls from 'src/graphql\/**\/*.{js,ts}'
+   */
+  sdls: SdlGlobImports
 
   /**
    * @description Directives passed from the glob import:
    * import directives from 'src/directives/**\/*.{js,ts}'
    */
   directives?: DirectiveGlobImports
+
+  /**
+   * @description A list of options passed to [makeExecutableSchema]
+   * (https://www.graphql-tools.com/docs/generate-schema/#makeexecutableschemaoptions).
+   */
+  schemaOptions?: Partial<IExecutableSchemaDefinition>
 
   /**
    *  @description CORS configuration

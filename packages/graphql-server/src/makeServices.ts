@@ -2,7 +2,7 @@ import {
   BeforeResolverSpec,
   MissingBeforeResolverError,
 } from './beforeResolverSpec'
-import { ServicesCollection, MakeServices, Services } from './types'
+import { ServicesGlobImports, MakeServices, Services } from './types'
 
 export const makeServices: MakeServices = ({ services }) => {
   if (process.env.REDWOOD_SECURE_SERVICES !== '1') {
@@ -14,7 +14,7 @@ export const makeServices: MakeServices = ({ services }) => {
     return services
   }
 
-  const servicesCollection: ServicesCollection = {}
+  const servicesCollection: ServicesGlobImports = {}
 
   for (const [name, resolvers] of Object.entries(services)) {
     if (!resolvers?.beforeResolver) {

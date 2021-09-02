@@ -9,12 +9,13 @@ import type { GraphQLSchema, GraphQLFieldMap, DocumentNode } from 'graphql'
 import merge from 'lodash.merge'
 import omitBy from 'lodash.omitby'
 
+import { RedwoodDirective } from '../directives/makeDirectives'
 import {
-  makeDirectives,
-  DirectiveGlobImports,
-  RedwoodDirective,
-} from '../directives/makeDirectives'
-import { Services, ServicesCollection, GraphQLTypeWithFields } from '../types'
+  Services,
+  ServicesGlobImports,
+  GraphQLTypeWithFields,
+  SdlGlobImports,
+} from '../types'
 
 import * as rootSchema from './rootSchema'
 
@@ -70,7 +71,7 @@ const mergeResolversWithServices = ({
 }: {
   schema: GraphQLSchema
   resolvers: { [key: string]: any }
-  services: ServicesCollection
+  services: ServicesGlobImports
 }): IResolvers => {
   const mergedServices = merge(
     {},
@@ -184,32 +185,25 @@ const mergeTypes = (
 }
 
 export const makeMergedSchema = ({
-  schemas,
+  sdls,
   services,
   schemaOptions,
   directives,
 }: {
-  schemas: {
-    [key: string]: {
-      schema: DocumentNode
-      resolvers: Record<string, unknown>
-    }
-  }
-  services: ServicesCollection
-  directives: DirectiveGlobImports
+  sdls: SdlGlobImports
+  services: ServicesGlobImports
+  directives: RedwoodDirective[]
 
   /**
    * A list of options passed to [makeExecutableSchema](https://www.graphql-tools.com/docs/generate-schema/#makeexecutableschemaoptions).
    */
   schemaOptions?: Partial<IExecutableSchemaDefinition>
 }) => {
-  const projectDirectives = makeDirectives(directives) as RedwoodDirective[]
-
   const typeDefs = mergeTypes(
     [
       rootSchema.schema,
-      ...projectDirectives.map((directive) => directive.schema),
-      ...Object.values(schemas).map(({ schema }) => schema),
+      ...directives.map((directive) => directive.schema),
+      ...Object.values(sdls).map(({ schema }) => schema),
     ],
     { all: true }
   )
@@ -221,7 +215,7 @@ export const makeMergedSchema = ({
 
   const resolvers: IResolvers = mergeResolversWithServices({
     schema,
-    resolvers: mergeResolvers(schemas),
+    resolvers: mergeResolvers(sdls),
     services,
   })
 

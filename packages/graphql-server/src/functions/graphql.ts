@@ -27,9 +27,11 @@ import {
 import { renderPlaygroundPage } from 'graphql-playground-html'
 
 import { createCorsContext } from '../cors'
-import { makeDirectives, RedwoodDirective } from '../directives/makeDirectives'
+import { makeDirectives } from '../directives/makeDirectives'
 import { getAsyncStoreInstance } from '../globalContext'
 import { createHealthcheckContext } from '../healthcheck'
+import { makeMergedSchema } from '../makeMergedSchema/makeMergedSchema'
+import { makeServices } from '../makeServices'
 import { useRedwoodAuthContext } from '../plugins/useRedwoodAuthContext'
 import { useRedwoodDirective } from '../plugins/useRedwoodDirective'
 import { useRedwoodGlobalContextSetter } from '../plugins/useRedwoodGlobalContextSetter'
@@ -90,26 +92,29 @@ export const formatError: FormatErrorHandler = (err) => {
  */
 export const createGraphQLHandler = ({
   loggerConfig,
-  schema,
   context,
   getCurrentUser,
   onException,
   extraPlugins,
   cors,
-  directives,
+  services,
+  sdls,
+  directives = [],
   onHealthCheck,
   depthLimitOptions,
   allowedOperations,
   graphiQLEndpoint,
+  schemaOptions,
 }: GraphQLHandlerOptions) => {
-  // Important: Plugins are executed in order of their usage, and inject functionality serially,
-  // so the order here matters
+  // @NOTE: We wrap services for beforeResolvers
+  // Likely to be deprecated, and we can just pass in services to makeMergedSchema
+  const wrappedServices = makeServices({ services })
 
+  // @NOTE: Directives are optional
+  const projectDirectives = makeDirectives(directives)
   let redwoodDirectivePlugins = [] as Plugin<any>[]
 
-  if (directives) {
-    const projectDirectives = makeDirectives(directives) as RedwoodDirective[]
-
+  if (projectDirectives.length > 0) {
     redwoodDirectivePlugins = projectDirectives.map((directive) =>
       useRedwoodDirective({
         name: directive.name,
@@ -118,6 +123,15 @@ export const createGraphQLHandler = ({
     )
   }
 
+  const schema = makeMergedSchema({
+    sdls,
+    services: wrappedServices,
+    directives: projectDirectives,
+    schemaOptions,
+  })
+
+  // Important: Plugins are executed in order of their usage, and inject functionality serially,
+  // so the order here matters
   const plugins: Plugin<any>[] = [
     // Simple LRU for caching parse results.
     useParserCache(),
