@@ -24,6 +24,7 @@ const OUTPUT_PATHS = {
     getProject().isTypeScriptProject ? 'auth.ts' : 'auth.js'
   ),
   service: path.join(getPaths().api.services, '/ethereumAuth/ethereumAuth.js'),
+  graphql: path.join(getPaths().api.graphql, 'ethereumAuth.sdl.js'),
 }
 
 const getGraphqlPath = () =>
