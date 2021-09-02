@@ -27,8 +27,12 @@ export const generateGraphQLSchema = async () => {
   try {
     const f: GenerateResponse = await generate(
       {
-        cwd: rwjsPaths.api.graphql,
-        schema: [rootSchema, '**/*.sdl.{js,ts}'],
+        cwd: rwjsPaths.api.src,
+        schema: [
+          rootSchema,
+          'graphql/**/*.sdl.{js,ts}',
+          'directives/**/*.{js,ts}', // @TODO we want to have .directive extension
+        ],
         config: {
           scalars: {
             DateTime: 'string',

@@ -6,11 +6,9 @@ import type { DirectiveImplementationFunction } from '@redwoodjs/graphql-server'
 
 import { requireAuth as applicationRequireAuth } from 'src/lib/auth'
 
-export const REQUIRE_AUTH_SDL = /* GraphQL */ `
+export const schema = gql`
   directive @requireAuth(roles: [String]) on FIELD_DEFINITION
 `
-
-export const schema = gql(REQUIRE_AUTH_SDL)
 
 export const requireAuth: DirectiveImplementationFunction = (
   { context: _context },
