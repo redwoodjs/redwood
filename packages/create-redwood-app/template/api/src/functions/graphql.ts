@@ -1,8 +1,10 @@
-import { createGraphQLHandler } from '@redwoodjs/graphql-server'
+import {
+  createGraphQLHandler,
+} from '@redwoodjs/graphql-server'
 
-import sdls from 'src/graphql/**/*.sdl.{js,ts}'
 import services from 'src/services/**/*.{js,ts}'
 import directives from 'src/directives/**/*.directive.{js,ts}'
+import sdls from 'src/graphql/**/*.sdl.{js,ts}'
 
 import { db } from 'src/lib/db'
 import { logger } from 'src/lib/logger'
