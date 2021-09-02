@@ -59,6 +59,16 @@ module.exports = {
         'no-unused-expressions': 'off',
       },
     },
+    {
+      // Because it messes the grouped glob imports
+      // @WARN! Why doesn't this work?!
+      files: [
+        'packages/create-redwood-app/template/api/src/functions/graphql.ts',
+      ],
+      rules: {
+        'import/order': 'off',
+      },
+    },
     // Browser Context
     //
     // We prevent "window" from being used, and instead require "global".
