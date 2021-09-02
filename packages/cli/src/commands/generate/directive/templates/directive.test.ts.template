@@ -1,25 +1,11 @@
-//HELLO DT!
+import  { schema, ${camelName} } from './${camelName}'
 
-// THIS IS THE TEST FOR ${camelName} directive
+describe('${camelName} directive', () => {
+  it('declares the directive sdl as schema', () => {
+    expect(schema).toBeTruthy()
+  })
 
-// PLEASE ADD TEST TEMPLATE HERE
-
-// 👼
-// 🈚
-// 📲
-// 🐾
-// 🚕
-// 🌸
-// ™️
-// 📧
-// 🏪
-// ☁️
-// ♒
-// 👄
-// 👌
-// 🗼
-// 🐔
-// 👢
-// 🎁
-
-// PLEASE ADD TEST TEMPLATE HERE
+  it('has a skipAuth implementation that does not error', () => {
+    expect(${camelName}).not.toThrow()
+  })
+})

@@ -17,7 +17,9 @@ export const files = ({ name, typescript = false, tests }) => {
     tests = getConfig().generate.tests
   }
 
-  const outputFilename = `${name}.${typescript ? 'ts' : 'js'}`
+  const camelName = camelcase(name)
+
+  const outputFilename = `${camelName}.${typescript ? 'ts' : 'js'}`
 
   const directiveFile = templateForComponentFile({
     name,
@@ -25,14 +27,16 @@ export const files = ({ name, typescript = false, tests }) => {
     generator: 'directive',
     templatePath: 'directive.ts.template',
     outputPath: path.join(getPaths().api.directives, outputFilename),
-    templateVars: { camelName: camelcase(name) },
+    templateVars: { camelName },
   })
 
   const files = [directiveFile]
 
   // @TODO: update test template!
   if (tests) {
-    const testOutputFilename = `${name}.test.${typescript ? 'ts' : 'js'}`
+    const testOutputFilename = `${camelcase(name)}.test.${
+      typescript ? 'ts' : 'js'
+    }`
 
     const testFile = templateForComponentFile({
       name,
@@ -40,7 +44,7 @@ export const files = ({ name, typescript = false, tests }) => {
       generator: 'directive',
       templatePath: 'directive.test.ts.template',
       outputPath: path.join(getPaths().api.directives, testOutputFilename),
-      templateVars: { camelName: camelcase(name) },
+      templateVars: { camelName },
     })
     files.push(testFile)
   }
