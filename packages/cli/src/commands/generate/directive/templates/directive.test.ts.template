@@ -5,7 +5,7 @@ describe('${camelName} directive', () => {
     expect(schema).toBeTruthy()
   })
 
-  it('has a skipAuth implementation that does not error', () => {
+  it('has a ${camelName} implementation that does not error', () => {
     expect(${camelName}).not.toThrow()
   })
 })
