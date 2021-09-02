@@ -10,9 +10,7 @@ export const REQUIRE_AUTH_SDL = /* GraphQL */ `
   directive @requireAuth(roles: [String]) on FIELD_DEFINITION
 `
 
-export const schema = gql`
-  ${REQUIRE_AUTH_SDL}
-`
+export const schema = gql(REQUIRE_AUTH_SDL)
 
 export const requireAuth: DirectiveImplementationFunction = (
   { context: _context },
