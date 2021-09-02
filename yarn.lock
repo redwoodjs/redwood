@@ -3430,6 +3430,11 @@
   resolved "https://registry.yarnpkg.com/@prisma/engines/-/engines-2.30.0-28.60b19f4a1de4fe95741da371b4c44a92f4d1adcb.tgz#b4d91ff876662b1de83e0cc913149a1c088becc7"
   integrity sha512-LPKq88lIbYezvX0OOc1PU42hHdTsSMPJWmK8lusaHK7DaLHyXjDp/551LbsVapypbjW6N3Jx/If6GoMDASSMSw==
 
+"@prisma/engines@2.30.1-2.b8c35d44de987a9691890b3ddf3e2e7effb9bf20":
+  version "2.30.1-2.b8c35d44de987a9691890b3ddf3e2e7effb9bf20"
+  resolved "https://registry.yarnpkg.com/@prisma/engines/-/engines-2.30.1-2.b8c35d44de987a9691890b3ddf3e2e7effb9bf20.tgz#2df768aa7c9f84acaa1f35c970417822233a9fb1"
+  integrity sha512-WPnA/IUrxDihrRhdP6+8KAVSwsc0zsh8ioPYsLJjOhzVhwpRbuFH2tJDRIAbc+qFh+BbTIZbeyBYt8fpNXaYQQ==
+
 "@prisma/fetch-engine@2.30.0-28.60b19f4a1de4fe95741da371b4c44a92f4d1adcb":
   version "2.30.0-28.60b19f4a1de4fe95741da371b4c44a92f4d1adcb"
   resolved "https://registry.yarnpkg.com/@prisma/fetch-engine/-/fetch-engine-2.30.0-28.60b19f4a1de4fe95741da371b4c44a92f4d1adcb.tgz#434c8fb3b7c631bc1f55abb87e16c03c60895ce3"
@@ -15550,12 +15555,12 @@ prettysize@^2.0.0:
   resolved "https://registry.yarnpkg.com/prettysize/-/prettysize-2.0.0.tgz#902c02480d865d9cc0813011c9feb4fa02ce6996"
   integrity sha512-VVtxR7sOh0VsG8o06Ttq5TrI1aiZKmC+ClSn4eBPaNf4SHr5lzbYW+kYGX3HocBL/MfpVrRfFZ9V3vCbLaiplg==
 
-prisma@2.30.0:
-  version "2.30.0"
-  resolved "https://registry.yarnpkg.com/prisma/-/prisma-2.30.0.tgz#5b12091c480d538540b898d364b73651d44b4a01"
-  integrity sha512-2XYpSibcVpMd1JDxYypGDU/JKq0W2f/HI1itdddr4Pfg+q6qxt/ItWKcftv4/lqN6u/BVlQ2gDzXVEjpHeO5kQ==
+prisma@2.30.2:
+  version "2.30.2"
+  resolved "https://registry.yarnpkg.com/prisma/-/prisma-2.30.2.tgz#f65ea0a04ff642e1e393d5b42c804bdcb099a465"
+  integrity sha512-AoLz3CfD7XM+vfE7IWzxQq1O2+ZZ31+6yfabWeMr32wxdLLxSsGagW80LFgKIsZgWW6Ypwleu5ujyKNvO91WHA==
   dependencies:
-    "@prisma/engines" "2.30.0-28.60b19f4a1de4fe95741da371b4c44a92f4d1adcb"
+    "@prisma/engines" "2.30.1-2.b8c35d44de987a9691890b3ddf3e2e7effb9bf20"
 
 prismjs@^1.21.0, prismjs@~1.23.0:
   version "1.23.0"
@@ -19655,4 +19660,3 @@ zwitch@^1.0.0:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/zwitch/-/zwitch-1.0.5.tgz#d11d7381ffed16b742f6af7b3f223d5cd9fe9920"
   integrity sha512-V50KMwwzqJV0NpZIZFwfOD5/lyny3WlSzRiXgA0G7VUnRlqttta1L6UQIHzd6EuBY/cHGfwTIck7w1yH6Q5zUw==
-
