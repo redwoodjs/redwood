@@ -1,42 +1,45 @@
-// global.__dirname = __dirname
-// // Load shared mocks
-// import '../../../../lib/test'
+global.__dirname = __dirname
+// Load shared mocks
+import '../../../../lib/test'
 
-// import path from 'path'
+import path from 'path'
 
-// import { files } from '../script'
+import { files } from '../directive'
 
-// beforeAll(() => {})
+test('creates a JavaScript directive', () => {
+  const output = files({
+    name: 'require-admin', // checking camel casing too!
+    typescript: false,
+    tests: true,
+  }) //?
 
-// test('creates a JavaScript function to execute', () => {
-//   const output = files({
-//     name: 'scriptyMcScript',
-//     typescript: false,
-//   })
+  const expectedOutputPath = path.normalize(
+    '/path/to/project/api/src/directives/requireAdmin.directive.js'
+  )
+  const expectedTestOutputPath = path.normalize(
+    '/path/to/project/api/src/directives/requireAdmin.test.js'
+  )
 
-//   const expectedOutputPath = path.normalize(
-//     '/path/to/project/scripts/scriptyMcScript.js'
-//   )
+  expect(Object.keys(output)).toContainEqual(expectedOutputPath)
+  expect(Object.keys(output)).toContainEqual(expectedTestOutputPath)
+  expect(output[expectedOutputPath]).toMatchSnapshot()
+})
 
-//   expect(Object.keys(output)).toContainEqual(expectedOutputPath)
-//   expect(output[expectedOutputPath]).toMatchSnapshot()
-// })
+test('creates a TypeScript directive', () => {
+  const output = files({
+    name: 'bazinga-foo_bar', // checking camel casing too!
+    typescript: true,
+    tests: true,
+  }) //?
 
-// test('creates a TypeScript function to execute', () => {
-//   const output = files({
-//     name: 'typescriptyTypescript',
-//     typescript: true,
-//   })
+  const expectedOutputPath = path.normalize(
+    '/path/to/project/api/src/directives/bazingaFooBar.directive.ts'
+  )
+  const expectedTestOutputPath = path.normalize(
+    '/path/to/project/api/src/directives/bazingaFooBar.test.ts'
+  )
 
-//   const expectedOutputPath = path.normalize(
-//     '/path/to/project/scripts/typescriptyTypescript.ts'
-//   )
-
-//   expect(Object.keys(output)).toContainEqual(expectedOutputPath)
-//   expect(output[expectedOutputPath]).toMatchSnapshot()
-// })
-describe('Directive Generator', () => {
-  it('Gets to green since a test file needs one test.', () => {
-    expect(true).toBeTruthy()
-  })
+  expect(Object.keys(output)).toContainEqual(expectedOutputPath)
+  expect(Object.keys(output)).toContainEqual(expectedTestOutputPath)
+  expect(output[expectedOutputPath]).toMatchSnapshot()
 })

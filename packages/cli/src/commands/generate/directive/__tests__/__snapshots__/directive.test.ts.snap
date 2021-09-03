@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`creates a JavaScript directive 1`] = `
+"export const schema = gql\`
+  directive @requireAdmin on FIELD_DEFINITION
+\`
+
+export const requireAdmin = ({ context }, directiveNode) => {
+  // Implement your directive here. This will be executed \\"onExecute\\"
+  // More information on graphql lifecycle here: https://www.envelop.dev/docs/plugins/lifecycle
+
+  // If you have auth setup you can access currentUser
+  console.log(context.currentUser)
+
+  // You can also modify your directive to take arguments
+  // and use the getDirectiveArgument function from @redwoodjs/graphql-server
+  // See documentation here: https://redwoodjs.com/docs/directives
+}
+"
+`;
+
+exports[`creates a TypeScript directive 1`] = `
+"import type { DirectiveImplementationFunction } from '@redwoodjs/graphql-server'
+
+export const schema = gql\`
+  directive @bazingaFooBar on FIELD_DEFINITION
+\`
+
+export const bazingaFooBar: DirectiveImplementationFunction = (
+  { context },
+  directiveNode
+) => {
+  // Implement your directive here. This will be executed \\"onExecute\\"
+  // More information on graphql lifecycle here: https://www.envelop.dev/docs/plugins/lifecycle
+
+  // If you have auth setup you can access currentUser
+  console.log(context.currentUser)
+
+  // You can also modify your directive to take arguments
+  // and use the getDirectiveArgument function from @redwoodjs/graphql-server
+  // See documentation here: https://redwoodjs.com/docs/directives
+}
+"
+`;
