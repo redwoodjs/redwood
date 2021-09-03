@@ -52,7 +52,6 @@ export interface Config {
   }
   telemetry: {
     url: string
-    apikey: string
   }
 }
 
@@ -90,9 +89,7 @@ const DEFAULT_CONFIG: Config = {
     esbuild: false,
   },
   telemetry: {
-    url: 'https://cuvvzwmeexzpnctfycwn.supabase.co/rest/v1',
-    apikey:
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYyNTg3NjYxMywiZXhwIjoxOTQxNDUyNjEzfQ.xDvtPNKfE1GLMIKO5kKJnk_NaQpCDvPpsHij6iz2UX8',
+    url: 'http://localhost:8888/.netlify/functions/telemetry',
   },
 }
 

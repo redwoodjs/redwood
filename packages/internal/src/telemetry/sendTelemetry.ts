@@ -1,4 +1,3 @@
-import { PostgrestClient } from '@supabase/postgrest-js'
 import ci from 'ci-info'
 import envinfo from 'envinfo'
 
@@ -63,6 +62,7 @@ const getInfo = async () => {
     info.System.Shell.name = info.System.Shell.path.split('\\').pop()
   }
 
+  // convert nested env object into flat key/values
   return {
     os: info.System.OS.split(' ')[0],
     osVersion: info.System.OS.split(' ')[1],
@@ -105,7 +105,7 @@ const sanitizeArgv = (argv: Array<string>) => {
       projectRoot: getPaths().base,
       host: new DefaultHost(),
     })
-
+    const telemetryConfig = getConfig().telemetry
     const payload = {
       type,
       command: sanitizeArgv(JSON.parse(argv.argv)),
@@ -123,23 +123,15 @@ const sanitizeArgv = (argv: Array<string>) => {
       console.info('Redwood Telemetry Payload', payload)
     }
 
-    const telemetryConfig = getConfig().telemetry
-
-    const postgrest = new PostgrestClient(telemetryConfig.url, {
-      headers: {
-        apikey: telemetryConfig.apikey,
-        Authorization: `Bearer ${telemetryConfig.apikey}`,
-      },
-      schema: 'public',
+    const response = await fetch(telemetryConfig.url, {
+      method: 'post',
+      body: JSON.stringify(payload),
+      headers: { 'Content-Type': 'application/json' },
     })
 
-    const { error } = await postgrest
-      .from('events')
-      .insert(payload, { returning: 'minimal' })
-
-    // TODO: remove this before merging for real
-    if (error) {
-      console.error('Error from telemetry insert:', error)
+    // TODO: remove this before merging for real, swallow telemetry errors by default
+    if (response.status !== 201) {
+      console.error('Error from telemetry insert:', await response.text())
     }
   } catch (e) {
     // service interruption: network down or telemetry API not responding
