@@ -15,5 +15,4 @@ describe('requireAuth directive', () => {
     setContext({ currentUser: null })
     expect(requireAuth).not.toThrowError()
   })
-
 })
