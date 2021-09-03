@@ -84,9 +84,9 @@ module.exports = () => {
             {
               declarations: [
                 {
-                  // import { context } from '@redwoodjs/api'
+                  // import { context } from '@redwoodjs/graphql-server'
                   members: ['context'],
-                  path: '@redwoodjs/api',
+                  path: '@redwoodjs/graphql-server',
                 },
                 {
                   default: 'gql',
