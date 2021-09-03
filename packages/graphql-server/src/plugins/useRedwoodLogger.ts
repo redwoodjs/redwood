@@ -4,6 +4,7 @@ import { ExecutionResult, Kind, OperationDefinitionNode } from 'graphql'
 import { BaseLogger, LevelWithSilent } from 'pino'
 import { v4 as uuidv4 } from 'uuid'
 
+import { AuthenticationError, ForbiddenError } from '../errors'
 import { RedwoodGraphQLContext } from '../functions/types'
 
 /**
@@ -119,12 +120,27 @@ const logResult =
 
     if (result?.errors && result?.errors.length > 0) {
       result.errors.forEach((error) => {
-        envelopLogger.error(
-          {
-            error,
-          },
-          error.message || `Error in GraphQL execution: ${operationName}`
-        )
+        if (
+          error.originalError &&
+          (error.originalError instanceof AuthenticationError ||
+            error.originalError instanceof ForbiddenError)
+        ) {
+          envelopLogger.warn(
+            {
+              error,
+            },
+            `'${error?.extensions?.code || 'authentication'}' error '${
+              error.message
+            }' occurred in ${operationName}`
+          )
+        } else {
+          envelopLogger.error(
+            {
+              error,
+            },
+            error.message || `Error in GraphQL execution: ${operationName}`
+          )
+        }
       })
     }
 
@@ -192,7 +208,7 @@ export const useRedwoodLogger = (
       }
 
       if (includeQuery) {
-        options['query'] = args.variableValues && args.variableValues
+        options['query'] = args.variableValues
       }
 
       if (includeRequestId) {
