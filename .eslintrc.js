@@ -49,6 +49,16 @@ module.exports = {
   },
   overrides: [
     {
+      // We override import order of the CRWA graphql function because we want the grouped glob imports
+      // to be ordered separately.
+      // Note: for some reason, the pattern as eslints each file to match against the pattern
+      // the files pattern has to be the filename and not the relative path (as one might expect)
+      files: ['graphql.ts'],
+      rules: {
+        'import/order': 'off',
+      },
+    },
+    {
       files: ['packages/structure/**'],
       rules: {
         '@typescript-eslint/no-this-alias': 'off',
@@ -57,16 +67,6 @@ module.exports = {
         'prefer-const': 'off',
         'no-empty': 'warn',
         'no-unused-expressions': 'off',
-      },
-    },
-    {
-      // Because it messes the grouped glob imports
-      // @WARN! Why doesn't this work?!
-      files: [
-        'packages/create-redwood-app/template/api/src/functions/graphql.ts',
-      ],
-      rules: {
-        'import/order': 'off',
       },
     },
     // Browser Context
