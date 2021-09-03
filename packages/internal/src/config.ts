@@ -89,7 +89,7 @@ const DEFAULT_CONFIG: Config = {
     esbuild: false,
   },
   telemetry: {
-    url: 'http://localhost:8888/.netlify/functions/telemetry',
+    url: 'https://telemetry.redwoodjs.com/.netlify/functions/telemetry',
   },
 }
 
