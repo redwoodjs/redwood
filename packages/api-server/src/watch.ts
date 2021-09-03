@@ -59,20 +59,20 @@ const delayRestartServer = debounce(
     : 5
 )
 
+// NOTE: the file comes through as a unix path, even on windows
+// So we need to convert the rwjsPaths
+
+const IGNORED_API_PATHS = [
+  'api/dist', // use this, because using rwjsPaths.api.dist seems to not ignore on first build
+  rwjsPaths.api.types,
+  rwjsPaths.api.db,
+].map((path) => ensurePosixPath(path))
+
 chokidar
   .watch(rwjsPaths.api.base, {
     persistent: true,
     ignoreInitial: true,
     ignored: (file: string) => {
-      // NOTE: the file comes through as a unix path, even on windows
-      // So we need to convert the rwjsPaths
-
-      const IGNORED_API_PATHS = [
-        rwjsPaths.api.dist,
-        rwjsPaths.api.types,
-        rwjsPaths.api.db,
-      ].map((path) => ensurePosixPath(path))
-
       const x =
         file.includes('node_modules') ||
         IGNORED_API_PATHS.some((ignoredPath) => file.includes(ignoredPath)) ||
