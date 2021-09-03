@@ -4,7 +4,11 @@ import camelcase from 'camelcase'
 import Listr from 'listr'
 import pascalcase from 'pascalcase'
 
-import { getConfig, generate as generateTypes } from '@redwoodjs/internal'
+import {
+  errorTelemetry,
+  getConfig,
+  generate as generateTypes,
+} from '@redwoodjs/internal'
 
 import {
   addRoutesToRouterTask,
@@ -233,6 +237,7 @@ export const handler = async ({
   try {
     await tasks.run()
   } catch (e) {
+    errorTelemetry(process.argv, e.message)
     console.error(c.error(e.message))
     process.exit(e?.exitCode || 1)
   }

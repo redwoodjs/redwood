@@ -8,7 +8,7 @@ import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 import terminalLink from 'terminal-link'
 
-import { getConfig } from '@redwoodjs/internal'
+import { getConfig, errorTelemetry } from '@redwoodjs/internal'
 
 import {
   generateTemplate,
@@ -233,6 +233,7 @@ export const handler = async ({ model, crud, force, tests, typescript }) => {
     await ensureUniquePlural({ model })
     await tasks.run()
   } catch (e) {
+    errorTelemetry(process.argv, e.message)
     console.error(c.error(e.message))
     process.exit(e?.exitCode || 1)
   }

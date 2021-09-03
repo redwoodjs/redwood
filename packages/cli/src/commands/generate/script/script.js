@@ -4,6 +4,7 @@ import path from 'path'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
 
+import { errorTelemetry } from '@redwoodjs/internal'
 import { getProject } from '@redwoodjs/structure'
 
 import { getPaths, writeFilesTask } from '../../../lib'
@@ -74,6 +75,7 @@ export const handler = async (args) => {
   try {
     await tasks.run()
   } catch (e) {
+    errorTelemetry(process.argv, e.message)
     console.log(c.error(e.message))
     process.exit(1)
   }

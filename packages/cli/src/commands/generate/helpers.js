@@ -7,7 +7,7 @@ import pluralize from 'pluralize'
 import prompts from 'prompts'
 import terminalLink from 'terminal-link'
 
-import { ensurePosixPath, getConfig, errorTelemetry } from '@redwoodjs/internal'
+import { ensurePosixPath, errorTelemetry, getConfig } from '@redwoodjs/internal'
 
 import { generateTemplate, getPaths, writeFilesTask } from '../../lib'
 import c from '../../lib/colors'
