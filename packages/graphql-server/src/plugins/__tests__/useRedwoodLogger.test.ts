@@ -90,7 +90,7 @@ describe('Populates context', () => {
 
     expect(executionStarted.name).toEqual('graphql-server')
     expect(executionStarted.level).toEqual(20)
-    expect(executionStarted.msg).toEqual('GraphQL execution started')
+    expect(executionStarted.msg).toEqual('GraphQL execution started: meQuery')
 
     expect(executionCompleted).toHaveProperty('level')
     expect(executionCompleted).toHaveProperty('time')
@@ -99,7 +99,9 @@ describe('Populates context', () => {
     expect(executionCompleted).toHaveProperty('operationName')
     expect(executionCompleted).toHaveProperty('data')
 
-    expect(executionCompleted.msg).toEqual('GraphQL execution completed')
+    expect(executionCompleted.msg).toEqual(
+      'GraphQL execution completed: meQuery'
+    )
     expect(executionCompleted.data).toHaveProperty('me')
     expect(executionCompleted.operationName).toEqual('meQuery')
     expect(executionCompleted.data.me.name).toEqual('Ba Zinga')

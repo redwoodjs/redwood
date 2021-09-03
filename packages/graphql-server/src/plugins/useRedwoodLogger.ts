@@ -106,7 +106,11 @@ export type LoggerConfig = {
  * when the execution of the operation is done.
  */
 const logResult =
-  (loggerConfig: LoggerConfig, envelopLogger: BaseLogger) =>
+  (
+    loggerConfig: LoggerConfig,
+    envelopLogger: BaseLogger,
+    operationName: string
+  ) =>
   ({ result }: { result: ExecutionResult }) => {
     const includeTracing = loggerConfig?.options?.tracing
     const includeData = loggerConfig?.options?.data
@@ -119,7 +123,7 @@ const logResult =
           {
             error,
           },
-          error.message || 'Error in GraphQL execution'
+          error.message || `Error in GraphQL execution: ${operationName}`
         )
       })
     }
@@ -137,7 +141,7 @@ const logResult =
         {
           ...options,
         },
-        `GraphQL execution completed`
+        `GraphQL execution completed: ${operationName}`
       )
     }
   }
@@ -180,11 +184,11 @@ export const useRedwoodLogger = (
         (o) => o.kind === Kind.OPERATION_DEFINITION
       ) as OperationDefinitionNode
 
+      const operationName =
+        args.operationName || rootOperation.name?.value || 'Anonymous Operation'
+
       if (includeOperationName) {
-        options['operationName'] =
-          args.operationName ||
-          rootOperation.name?.value ||
-          'Anonymous Operation'
+        options['operationName'] = operationName
       }
 
       if (includeQuery) {
@@ -206,8 +210,8 @@ export const useRedwoodLogger = (
         ...options,
       })
 
-      envelopLogger.debug(`GraphQL execution started`)
-      const handleResult = logResult(loggerConfig, envelopLogger)
+      envelopLogger.debug(`GraphQL execution started: ${operationName}`)
+      const handleResult = logResult(loggerConfig, envelopLogger, operationName)
 
       return {
         onExecuteDone: (payload) => {
