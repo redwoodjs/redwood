@@ -1,5 +1,6 @@
 import ci from 'ci-info'
 import envinfo from 'envinfo'
+import fetch from 'node-fetch'
 
 import { getConfig } from '../config'
 import { getPaths } from '../paths'
@@ -112,9 +113,10 @@ const sanitizeArgv = (argv: Array<string>) => {
       ci: ci.isCI,
       duration: argv.duration ? parseInt(argv.duration) : null,
       error: argv.error,
-      nodeEnv: process.env.NODE_ENV || null,
-      routeCount: project.getRouter().routes.length,
-      serviceCount: project.services.length,
+      NODE_ENV: process.env.NODE_ENV || null,
+      complexity: `${project.getRouter().routes.length}.${
+        project.services.length
+      }.${project.cells.length}.${project.pages.length}`,
       sides: project.sides.join(','),
       ...(await getInfo()),
     }
