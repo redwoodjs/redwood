@@ -1,4 +1,5 @@
 import { setContext } from '@redwoodjs/graphql-server'
+
 import { schema, requireAuth } from './requireAuth.directive'
 
 describe('requireAuth directive', () => {
