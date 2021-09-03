@@ -9,7 +9,12 @@ import chokidar from 'chokidar'
 import dotenv from 'dotenv'
 import { debounce } from 'lodash'
 
-import { getPaths, buildApi, getConfig } from '@redwoodjs/internal'
+import {
+  getPaths,
+  buildApi,
+  getConfig,
+  ensurePosixPath,
+} from '@redwoodjs/internal'
 
 const rwjsPaths = getPaths()
 
@@ -54,6 +59,15 @@ const delayRestartServer = debounce(
     : 5
 )
 
+// NOTE: the file comes through as a unix path, even on windows
+// So we need to convert the rwjsPaths
+
+const IGNORED_API_PATHS = [
+  'api/dist', // use this, because using rwjsPaths.api.dist seems to not ignore on first build
+  rwjsPaths.api.types,
+  rwjsPaths.api.db,
+].map((path) => ensurePosixPath(path))
+
 chokidar
   .watch(rwjsPaths.api.base, {
     persistent: true,
@@ -61,9 +75,7 @@ chokidar
     ignored: (file: string) => {
       const x =
         file.includes('node_modules') ||
-        file.includes(rwjsPaths.api.dist) ||
-        file.includes(rwjsPaths.api.types) ||
-        file.includes(rwjsPaths.api.db) ||
+        IGNORED_API_PATHS.some((ignoredPath) => file.includes(ignoredPath)) ||
         [
           '.DS_Store',
           '.db',
