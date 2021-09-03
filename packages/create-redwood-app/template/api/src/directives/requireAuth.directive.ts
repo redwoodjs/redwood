@@ -13,8 +13,8 @@ export const requireAuth: DirectiveImplementationFunction = (_gqlResolverInfo, d
   // will return the roles listed in your sdl
 
   // e.g. @requireAuth(roles: ['ADMIN', 'BAZINGA'])
-  //                            ───┬────  ─────┬──
-  //   requiredRoles ──────────────┘──────────┘
+  //                           ───┬───   ────┬──
+  //   requiredRoles ─────────────┘──────────┘
   const requiredRoles = directiveNode
     ? getDirectiveArgument(directiveNode, 'roles')
     : []
