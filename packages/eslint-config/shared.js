@@ -67,7 +67,7 @@ module.exports = {
   overrides: [
     {
       files: ['*.tsx', '*.js', '*.jsx'],
-      excludedFiles: ['api/src/**.*'],
+      excludedFiles: ['api/src/**'],
       rules: {
         'react-hooks/rules-of-hooks': 'error',
       },
