@@ -83,13 +83,13 @@ export const handler = async (args) => {
     'After modifying your directive, you can add it to your SDLs e.g.:'
   )}
     ${c.info('// example todo.sdl.js')}
-    ${c.info('# Option A: Add it to a field')}
+    ${c.info('# Option A: Add it to a field (transform or validation)')}
     type Todo {
       id: Int!
       body: String! ${c.green(`@${args.name}`)}
     }
 
-    ${c.info('# Option B: Add it to query/mutation')}
+    ${c.info('# Option B: Add it to query/mutation (validation only)')}
     type Query {
       todos: [Todo] ${c.green(`@${args.name}`)}
     }

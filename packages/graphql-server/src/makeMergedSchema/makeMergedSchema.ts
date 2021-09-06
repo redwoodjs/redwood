@@ -9,7 +9,7 @@ import type { GraphQLSchema, GraphQLFieldMap, DocumentNode } from 'graphql'
 import merge from 'lodash.merge'
 import omitBy from 'lodash.omitby'
 
-import { RedwoodDirective } from '../directives/makeDirectives'
+import { ParsedDirectives } from '../directives/makeDirectives'
 import {
   Services,
   ServicesGlobImports,
@@ -192,7 +192,7 @@ export const makeMergedSchema = ({
 }: {
   sdls: SdlGlobImports
   services: ServicesGlobImports
-  directives: RedwoodDirective[]
+  directives: ParsedDirectives[]
 
   /**
    * A list of options passed to [makeExecutableSchema](https://www.graphql-tools.com/docs/generate-schema/#makeexecutableschemaoptions).

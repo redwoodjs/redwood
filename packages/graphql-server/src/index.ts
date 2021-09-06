@@ -12,5 +12,5 @@ export {
   hasDirective,
   getDirectiveByName,
   getDirectiveArgument,
-  DirectiveImplementationFunction,
+  RedwoodDirective,
 } from './plugins/useRedwoodDirective'

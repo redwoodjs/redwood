@@ -1,10 +1,10 @@
-import type { DirectiveImplementationFunction } from '@redwoodjs/graphql-server'
+import type { RedwoodDirective } from '@redwoodjs/graphql-server'
 
 export const schema = gql`
   directive @${camelName} on FIELD_DEFINITION
 `
 
-export const ${camelName}: DirectiveImplementationFunction = ({ context, getFieldValue }) => {
+export const ${camelName}: RedwoodDirective = ({ context, getFieldValue }) => {
   // Implement your directive here. This will be executed "onExecute"
   // More information on graphql lifecycle here: https://www.envelop.dev/docs/plugins/lifecycle
 

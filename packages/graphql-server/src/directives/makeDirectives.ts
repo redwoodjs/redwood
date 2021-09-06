@@ -1,36 +1,24 @@
-import { DirectiveNode, DocumentNode, GraphQLResolveInfo } from 'graphql'
+import { DocumentNode } from 'graphql'
 
-import { GlobalContext } from 'src/globalContext'
-
-export interface RedwoodDirective {
+export interface ParsedDirectives {
   name: string
   schema: DocumentNode
   onExecute: () => Promise<any> // for now just support on execute
 }
 
-// @todo: Perhaps rename to DirectiveExecuteFunction
-export type DirectiveImplementationFunction = (
-  resolverInfo?: {
-    root: unknown
-    context: GlobalContext
-    args: Record<string, unknown>
-    info: GraphQLResolveInfo
-  },
-  directiveNode?: DirectiveNode
-) => Promise<any> | any
-
-/* @TODO: this isn't the correct type
+/*
 We want directivesGlobs type to be an object with this shape:
+But not fully supported in TS
 {
   schema: DocumentNode // <-- required
-  [string]: DirectiveImplementationFunction
+  [string]: RedwoodDirective
 }
 */
 export type DirectiveGlobImports = Record<string, any>
 
 export const makeDirectives = (
   directiveGlobs: DirectiveGlobImports
-): RedwoodDirective[] => {
+): ParsedDirectives[] => {
   return Object.entries(directiveGlobs).flatMap(
     ([importedGlobName, details]) => {
       // Incase the directives get nested, their name comes as nested_directory_filename_directive

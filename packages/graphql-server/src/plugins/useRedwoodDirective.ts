@@ -33,12 +33,12 @@ export interface DirectiveArgs<FieldType = any> {
  * - Throw an error, if you want to stop executing e.g. not sufficient permissions
  *
  */
-export type DirectiveImplementationFunction<FieldType = any> = (
+export type RedwoodDirective<FieldType = any> = (
   args: DirectiveArgs<FieldType>
 ) => FieldType | Promise<void> | void
 
-export type RedwoodDirectivePluginOptions = {
-  onExecute: DirectiveImplementationFunction
+export type PluginOptions = {
+  onExecute: RedwoodDirective
   name: string
 }
 
@@ -102,9 +102,9 @@ export function getDirectiveArgument(
 }
 
 export const useRedwoodDirective = (
-  options: RedwoodDirectivePluginOptions
+  options: PluginOptions
 ): Plugin<{
-  onExecute: DirectiveImplementationFunction
+  onExecute: RedwoodDirective
 }> => {
   const executeDirective = options.onExecute
 

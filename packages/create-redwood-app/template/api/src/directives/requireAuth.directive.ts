@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 import {
-  DirectiveImplementationFunction,
+  RedwoodDirective,
   getDirectiveArgument,
 } from '@redwoodjs/graphql-server'
 
@@ -11,7 +11,7 @@ export const schema = gql`
   directive @requireAuth(roles: [String]) on FIELD_DEFINITION
 `
 
-export const requireAuth: DirectiveImplementationFunction = (
+export const requireAuth: RedwoodDirective = (
   { directiveNode }
 ) => {
   // get the roles listed in your sdl
