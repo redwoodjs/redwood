@@ -1,5 +1,6 @@
-import { setContext } from '@redwoodjs/graphql-server'
 import { ExecutableDefinitionNode } from 'graphql'
+
+import { setContext } from '@redwoodjs/graphql-server'
 
 import { schema, requireAuth } from './requireAuth.directive'
 

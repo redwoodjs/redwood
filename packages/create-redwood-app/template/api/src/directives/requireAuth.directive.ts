@@ -1,4 +1,5 @@
 import gql from 'graphql-tag'
+
 import { getDirectiveArgument } from '@redwoodjs/graphql-server'
 import type { RedwoodDirective } from '@redwoodjs/graphql-server'
 
