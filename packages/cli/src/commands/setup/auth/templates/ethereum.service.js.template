@@ -9,13 +9,27 @@ import { db } from 'src/lib/db'
 const NONCE_MESSAGE =
   'Please prove you control this wallet by signing this random text: '
 
-const getNonceMessage = (nonce) => NONCE_MESSAGE + nonce
+const getNonceMessage = (nonce, options) => {
+  let optionsText = ''
+  if (options)
+    optionsText =
+      '&' +
+      Object.keys(options)
+        .map(
+          (key) =>
+            encodeURIComponent(key) + '=' + encodeURIComponent(options[key])
+        )
+        .join('&')
+  return NONCE_MESSAGE + nonce + optionsText
+}
 
 export const beforeResolver = (rules) => {
   rules.skip({ only: ['authChallenge', 'authVerify'] })
 }
 
-export const authChallenge = async ({ input: { address: addressRaw } }) => {
+export const authChallenge = async ({
+  input: { address: addressRaw, options },
+}) => {
   const nonce = Math.floor(Math.random() * 1000000).toString()
   const address = addressRaw.toLowerCase()
   await db.user.upsert({
@@ -38,11 +52,11 @@ export const authChallenge = async ({ input: { address: addressRaw } }) => {
     },
   })
 
-  return { message: getNonceMessage(nonce) }
+  return { message: getNonceMessage(nonce, options) }
 }
 
 export const authVerify = async ({
-  input: { signature, address: addressRaw },
+  input: { signature, address: addressRaw, options },
 }) => {
   try {
     const address = addressRaw.toLowerCase()
@@ -62,7 +76,7 @@ export const authVerify = async ({
         'The challenge must have been generated within the last 5 minutes'
       )
     const signerAddress = recoverPersonalSignature({
-      data: bufferToHex(Buffer.from(getNonceMessage(nonce), 'utf8')),
+      data: bufferToHex(Buffer.from(getNonceMessage(nonce, options), 'utf8')),
       sig: signature,
     })
     if (address !== signerAddress.toLowerCase())
