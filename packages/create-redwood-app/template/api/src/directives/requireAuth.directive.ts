@@ -1,4 +1,3 @@
-import { DirectiveNode } from 'graphql'
 import gql from 'graphql-tag'
 
 import {
@@ -13,11 +12,9 @@ export const schema = gql`
 `
 
 export const requireAuth: DirectiveImplementationFunction = (
-  _gqlResolverInfo,
-  directiveNode: DirectiveNode
+  { directiveNode }
 ) => {
-  // will return the roles listed in your sdl
-
+  // get the roles listed in your sdl
   // e.g. @requireAuth(roles: ['ADMIN', 'BAZINGA'])
   //                           ───┬───   ────┬──
   //   requiredRoles ─────────────┘──────────┘

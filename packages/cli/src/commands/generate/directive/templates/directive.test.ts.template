@@ -1,4 +1,4 @@
-import  { schema, ${camelName} } from './${camelName}'
+import  { schema, ${camelName} } from './${camelName}.directive'
 
 describe('${camelName} directive', () => {
   it('declares the directive sdl as schema', () => {

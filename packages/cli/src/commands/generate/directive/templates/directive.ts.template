@@ -4,12 +4,18 @@ export const schema = gql`
   directive @${camelName} on FIELD_DEFINITION
 `
 
-export const ${camelName}: DirectiveImplementationFunction = ({ context }, directiveNode) => {
+export const ${camelName}: DirectiveImplementationFunction = ({ context, getFieldValue }) => {
   // Implement your directive here. This will be executed "onExecute"
   // More information on graphql lifecycle here: https://www.envelop.dev/docs/plugins/lifecycle
 
-  // If you have auth setup you can access currentUser
+  // If you want to implement a validation: throw an error if criteria not met to stop execution
+  // CurrentUser is only available when auth is setup.
   console.log(context.currentUser)
+
+  // If you want to implement a transform: you can modify the value and return it
+  const fieldValue = getFieldValue()
+  console.log(fieldValue)
+
 
   // You can also modify your directive to take arguments
   // and use the getDirectiveArgument function from @redwoodjs/graphql-server

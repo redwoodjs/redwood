@@ -1,6 +1,12 @@
 import { Plugin } from '@envelop/types'
-import type { Context as LambdaContext } from 'aws-lambda'
-import { DirectiveNode, GraphQLObjectType, GraphQLResolveInfo } from 'graphql'
+import {
+  defaultFieldResolver,
+  DirectiveNode,
+  GraphQLObjectType,
+  GraphQLResolveInfo,
+} from 'graphql'
+
+import { GlobalContext } from '../index'
 
 function isQueryOrMutation(info: GraphQLResolveInfo): boolean {
   const { parentType } = info
@@ -11,15 +17,25 @@ function isQueryOrMutation(info: GraphQLResolveInfo): boolean {
 export const DIRECTIVE_REQUIRED_ERROR_MESSAGE =
   'You must specify one of @requireAuth, @skipAuth or a custom directive'
 
-export type DirectiveImplementationFunction = (
-  resolverInfo?: {
-    root: unknown
-    context: LambdaContext
-    args: Record<string, unknown>
-    info: GraphQLResolveInfo
-  },
+export interface DirectiveArgs<FieldType = any> {
+  context: GlobalContext
   directiveNode?: DirectiveNode
-) => void | Promise<void>
+  getFieldValue: () => FieldType
+  root: unknown
+  args: Record<string, unknown>
+  info: GraphQLResolveInfo
+}
+
+/**
+ * Write your directive logic inside this function.
+ *
+ * - Return your transformed value if you want to replace it. e.g. masking a field
+ * - Throw an error, if you want to stop executing e.g. not sufficient permissions
+ *
+ */
+export type DirectiveImplementationFunction<FieldType = any> = (
+  args: DirectiveArgs<FieldType>
+) => FieldType | Promise<void> | void
 
 export type RedwoodDirectivePluginOptions = {
   onExecute: DirectiveImplementationFunction
@@ -103,20 +119,30 @@ export const useRedwoodDirective = (
           const directiveNode = getDirectiveByName(info, options.name)
 
           if (directiveNode) {
-            await executeDirective(
-              {
-                info,
-                context: context as unknown as LambdaContext,
-                args,
-                root,
-              },
-              directiveNode
-            )
+            const transformedOutputMaybe = await executeDirective({
+              context,
+              directiveNode,
+              getFieldValue: () =>
+                defaultFieldResolver(root, args, context, info),
+              args,
+              root,
+              info,
+            })
+
+            // In order to change the value of the field, we have to return a function in this form
+            // ({result, setResult}) => { setResult(newValue)}
+            // Not super clear but mentioned here: https://www.envelop.dev/docs/plugins/lifecycle#onexecuteapi
+
+            if (transformedOutputMaybe) {
+              return ({ setResult }) => {
+                setResult(transformedOutputMaybe)
+              }
+            }
           }
+
+          return
         },
       }
     },
   }
-
-  return {}
 }

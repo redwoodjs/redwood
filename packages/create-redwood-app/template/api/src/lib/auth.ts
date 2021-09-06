@@ -17,6 +17,6 @@ export const hasRole = ({ roles }) => {
 
 // This is used by the redwood directive
 // in ./api/src/directives/requireAuth
-export const requireAuth = ({ _roles }) => {
+export const requireAuth = ({ roles }) => {
   return isAuthenticated()
 }
