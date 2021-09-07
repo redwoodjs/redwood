@@ -1,6 +1,7 @@
 import ci from 'ci-info'
 import envinfo from 'envinfo'
 import fetch from 'node-fetch'
+import system from 'systeminformation'
 
 import { getConfig } from '../config'
 import { getPaths } from '../paths'
@@ -63,7 +64,9 @@ const getInfo = async () => {
     info.System.Shell.name = info.System.Shell.path.split('\\').pop()
   }
 
-  // convert nested env object into flat key/values
+  const cpu = await system.cpu()
+  const mem = await system.mem()
+
   return {
     os: info.System.OS.split(' ')[0],
     osVersion: info.System.OS.split(' ')[1],
@@ -73,6 +76,7 @@ const getInfo = async () => {
     npmVersion: info.Binaries.Node.version,
     vsCodeVersion: info.IDEs.VSCode.version,
     redwoodVersion: info.npmPackages['@redwoodjs/core'].installed,
+    system: `${cpu.physicalCores}.${Math.round(mem.total / 1073741824)}`,
   }
 }
 
