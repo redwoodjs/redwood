@@ -88,5 +88,5 @@ export const handler = async (event, context) => {
     signup: signupOptions,
   })
 
-  return authHandler.invoke()
+  return await authHandler.invoke()
 }

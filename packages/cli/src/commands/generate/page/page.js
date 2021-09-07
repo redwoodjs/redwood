@@ -4,37 +4,32 @@ import camelcase from 'camelcase'
 import Listr from 'listr'
 import pascalcase from 'pascalcase'
 
-import { getConfig } from '@redwoodjs/internal'
+import { getConfig, generate as generateTypes } from '@redwoodjs/internal'
 
-import { transformTSToJS } from '../../../lib'
-import { addRoutesToRouterTask, writeFilesTask } from '../../../lib'
+import {
+  addRoutesToRouterTask,
+  transformTSToJS,
+  writeFilesTask,
+} from '../../../lib'
 import c from '../../../lib/colors'
 import {
   createYargsForComponentGeneration,
   pathName,
   templateForComponentFile,
+  mapRouteParamTypeToTsType,
 } from '../helpers'
 
 const COMPONENT_SUFFIX = 'Page'
 const REDWOOD_WEB_PATH_NAME = 'pages'
-
-/** @type {(paramType: 'Int' | 'Boolean' | 'String') => string } **/
-const mapRouteParamTypeToTsType = (paramType) => {
-  switch (paramType) {
-    case 'Int':
-      return 'number'
-
-    default:
-      // Boolean -> boolean, String -> string
-      return paramType.toLowerCase()
-  }
-}
 
 /** @type {(paramType: 'Int' | 'Boolean' | 'String') } **/
 const mapRouteParamTypeToDefaultValue = (paramType) => {
   switch (paramType) {
     case 'Int':
       return 42
+
+    case 'Float':
+      return 42.1
 
     case 'Boolean':
       return true
@@ -223,6 +218,12 @@ export const handler = async ({
         title: 'Updating routes file...',
         task: async () => {
           addRoutesToRouterTask(routes({ name, path: pathName(path, name) }))
+        },
+      },
+      {
+        title: `Generating types ...`,
+        task: async () => {
+          return generateTypes()
         },
       },
     ].filter(Boolean),

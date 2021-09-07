@@ -3,6 +3,8 @@ import path from 'path'
 import type { PluginObj, types } from '@babel/core'
 import fg from 'fast-glob'
 
+import { importStatementPath } from '@redwoodjs/internal'
+
 /**
  * This babel plugin will search for import statements that include star `**`
  * in the source part of the statement is a glob, the files that are matched are imported,
@@ -42,7 +44,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
           ])
         )
 
-        const importGlob = p.node.source.value
+        const importGlob = importStatementPath(p.node.source.value)
         const cwd = path.dirname(state.file.opts.filename)
         const dirFiles = fg
           .sync(importGlob, { cwd })
@@ -54,7 +56,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         const filePathToVarName = (filePath: string) => {
           return filePath
             .replace(staticGlob, '')
-            .replace(/.(js|ts)/, '')
+            .replace(/\.(js|ts)$/, '')
             .replace(/[^a-zA-Z0-9]/g, '_')
         }
 
@@ -64,7 +66,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
           const fpVarName = filePathToVarName(filePath)
 
           // + import * as <importName>_<fpVarName> from <filePathWithoutExtension>
-          // import * as a from './services/a.j
+          // import * as a from './services/a
           nodes.push(
             t.importDeclaration(
               [
@@ -95,6 +97,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         for (const node of nodes) {
           p.insertBefore(node)
         }
+
         // - import importName from "dirPath"
         p.remove()
       },
