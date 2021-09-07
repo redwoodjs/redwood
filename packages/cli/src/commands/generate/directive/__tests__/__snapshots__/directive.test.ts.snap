@@ -1,7 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`creates a JavaScript directive 1`] = `
-"export const schema = gql\`
+"import { logger } from 'src/lib/logger'
+
+export const schema = gql\`
   directive @requireAdmin on FIELD_DEFINITION
 \`
 
@@ -11,11 +13,17 @@ export const requireAdmin = ({ context, getFieldValue }) => {
 
   // If you want to implement a validation: throw an error if criteria not met to stop execution
   // CurrentUser is only available when auth is setup.
-  console.log(context.currentUser)
+  logger.debug(
+    { currentUser: context.currentUser },
+    'currentUser in requireAdmin directive is only available when auth is setup'
+  )
 
   // If you want to implement a transform: you can modify the value and return it
   const fieldValue = getFieldValue()
-  console.log(fieldValue)
+  logger.debug(
+    { fieldValue: fieldValue },
+    'fieldValue in requireAdmin directive can be modified'
+  )
 
   // You can also modify your directive to take arguments
   // and use the getDirectiveArgument function from @redwoodjs/graphql-server
@@ -27,6 +35,8 @@ export const requireAdmin = ({ context, getFieldValue }) => {
 exports[`creates a TypeScript directive 1`] = `
 "import type { RedwoodDirective } from '@redwoodjs/graphql-server'
 
+import { logger } from 'src/lib/logger'
+
 export const schema = gql\`
   directive @bazingaFooBar on FIELD_DEFINITION
 \`
@@ -37,11 +47,17 @@ export const bazingaFooBar: RedwoodDirective = ({ context, getFieldValue }) => {
 
   // If you want to implement a validation: throw an error if criteria not met to stop execution
   // CurrentUser is only available when auth is setup.
-  console.log(context.currentUser)
+  logger.debug(
+    { currentUser: context.currentUser },
+    'currentUser in bazingaFooBar directive is only available when auth is setup'
+  )
 
   // If you want to implement a transform: you can modify the value and return it
   const fieldValue = getFieldValue()
-  console.log(fieldValue)
+  logger.debug(
+    { fieldValue: fieldValue },
+    'fieldValue in bazingaFooBar directive can be modified'
+  )
 
   // You can also modify your directive to take arguments
   // and use the getDirectiveArgument function from @redwoodjs/graphql-server
