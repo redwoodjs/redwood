@@ -81,5 +81,5 @@ export const handler = async (event, context) => {
     },
   })
 
-  return authHandler.invoke()
+  return await authHandler.invoke()
 }
