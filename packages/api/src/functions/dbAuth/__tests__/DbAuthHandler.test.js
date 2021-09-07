@@ -242,7 +242,6 @@ describe('dbAuth', () => {
     it('parses an empty plain text body and still sets params', () => {
       event = { isBase64Encoded: false, headers: {}, body: '' }
       context = { foo: 'bar' }
-      options = { db: db }
       const dbAuth = new DbAuthHandler(event, context, options)
 
       expect(dbAuth.params).toEqual({})
@@ -254,7 +253,6 @@ describe('dbAuth', () => {
         headers: {},
       }
       context = { foo: 'bar' }
-      options = { db: db }
       const dbAuth = new DbAuthHandler(event, context, options)
 
       expect(dbAuth.params).toEqual({})
@@ -277,7 +275,6 @@ describe('dbAuth', () => {
         headers: {},
       }
       context = { foo: 'bar' }
-      options = { db: db }
       const dbAuth = new DbAuthHandler(event, context, options)
 
       expect(dbAuth.params).toEqual({})
@@ -290,7 +287,6 @@ describe('dbAuth', () => {
         body: '',
       }
       context = { foo: 'bar' }
-      options = { db: db }
       const dbAuth = new DbAuthHandler(event, context, options)
 
       expect(dbAuth.params).toEqual({})
