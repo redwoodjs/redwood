@@ -168,19 +168,11 @@ export class DbAuthHandler {
     context: GlobalContext,
     options: DbAuthHandlerOptions
   ) {
-    // must have a SESSION_SECRET so we can encrypt/decrypt the cookie
-    if (!process.env.SESSION_SECRET) {
-      throw new DbAuthError.NoSessionSecret()
-    }
-
-    // must have an expiration time set for the session cookie
-    if (!options.login || !options.login.expires) {
-      throw new DbAuthError.NoSessionExpiration()
-    }
-
     this.event = event
     this.context = context
     this.options = options
+
+    this._validateOptions()
 
     this.params = this._parseBody()
     this.db = this.options.db
@@ -319,6 +311,29 @@ export class DbAuthHandler {
       } else {
         return this._logoutResponse({ error: e.message })
       }
+    }
+  }
+
+  // validates that we have all the ENV and options we need to login/signup
+  _validateOptions() {
+    // must have a SESSION_SECRET so we can encrypt/decrypt the cookie
+    if (!process.env.SESSION_SECRET) {
+      throw new DbAuthError.NoSessionSecret()
+    }
+
+    // must have an expiration time set for the session cookie
+    if (!this.options?.login?.expires) {
+      throw new DbAuthError.NoSessionExpiration()
+    }
+
+    // must have a login handler to actually log a user in
+    if (!this.options?.login?.handler) {
+      throw new DbAuthError.NoLoginHandler()
+    }
+
+    // must have a signup handler to define how to create a new user
+    if (!this.options?.signup?.handler) {
+      throw new DbAuthError.NoSignupHandler()
     }
   }
 

@@ -179,12 +179,57 @@ describe('dbAuth', () => {
     it('initializes some variables with passed values', () => {
       event = { headers: {} }
       context = { foo: 'bar' }
-      options = { db: db, login: { expires: 1 } }
+      options = {
+        db: db,
+        login: {
+          handler: () => {},
+          expires: 1,
+        },
+        signup: {
+          handler: () => {},
+        },
+      }
       const dbAuth = new DbAuthHandler(event, context, options)
 
       expect(dbAuth.event).toEqual(event)
       expect(dbAuth.context).toEqual(context)
       expect(dbAuth.options).toEqual(options)
+    })
+
+    it('throws an error if login expiration time is not defined', () => {
+      // login object doesn't exist at all
+      expect(() => new DbAuthHandler(event, context, {})).toThrow(
+        dbAuthError.NoSessionExpiration
+      )
+      // login object exists, but not `expires` key
+      expect(() => new DbAuthHandler(event, context, { login: {} })).toThrow(
+        dbAuthError.NoSessionExpiration
+      )
+    })
+
+    it('throws an error if no login.header option', () => {
+      expect(
+        () => new DbAuthHandler(event, context, { login: { expires: 1 } })
+      ).toThrow(dbAuthError.NoLoginHandler)
+    })
+
+    it('throws an error if no signup.header option', () => {
+      expect(
+        () =>
+          new DbAuthHandler(event, context, {
+            login: { handler: () => {}, expires: 1 },
+          })
+      ).toThrow(dbAuthError.NoSignupHandler)
+
+      expect(
+        () =>
+          new DbAuthHandler(event, context, {
+            login: { handler: () => {}, expires: 1 },
+            signup: {
+              errors: {},
+            },
+          })
+      ).toThrow(dbAuthError.NoSignupHandler)
     })
 
     it('parses a plain text body', () => {
@@ -238,17 +283,6 @@ describe('dbAuth', () => {
 
       expect(() => new DbAuthHandler(event, context, options)).toThrow(
         dbAuthError.NoSessionSecret
-      )
-    })
-
-    it('throws an error if login expiration time is not defined', () => {
-      // login object doesn't exist at all
-      expect(() => new DbAuthHandler(event, context, {})).toThrow(
-        dbAuthError.NoSessionExpiration
-      )
-      // login object exists, but not `expires` key
-      expect(() => new DbAuthHandler(event, context, { login: {} })).toThrow(
-        dbAuthError.NoSessionExpiration
       )
     })
   })

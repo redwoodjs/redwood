@@ -14,6 +14,20 @@ export class NoSessionExpiration extends Error {
   }
 }
 
+export class NoLoginHandler extends Error {
+  constructor() {
+    super('dbAuth requires a login handler in order to log in a user')
+    this.name = 'NoLoginHandler'
+  }
+}
+
+export class NoSignupHandler extends Error {
+  constructor() {
+    super('dbAuth requires a signup handler in order to create new users')
+    this.name = 'NoSignupHandler'
+  }
+}
+
 export class UnknownAuthMethod extends Error {
   constructor(name: string) {
     super(`Unknown auth method '${name}'`)
