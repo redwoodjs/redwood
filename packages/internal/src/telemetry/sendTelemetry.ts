@@ -96,34 +96,42 @@ const sanitizeArgv = (argv: Array<string>) => {
   return args.join(' ')
 }
 
-// actual telemetry send process
-;(async function () {
+export const buildPayload = async () => {
   const argv = require('yargs/yargs')(process.argv.slice(2)).argv
   let type = argv.type || 'command'
+  let error = argv.error
 
   if (argv.error) {
     type = 'error'
+    error = error.split('\n')[0].replace(/(\/[@\-\.\w]+)/g, '[path]')
   }
 
+  const project = new RWProject({
+    projectRoot: getPaths().base,
+    host: new DefaultHost(),
+  })
+
+  return {
+    type,
+    command: sanitizeArgv(JSON.parse(argv.argv)),
+    ci: ci.isCI,
+    duration: argv.duration ? parseInt(argv.duration) : null,
+    error: error,
+    NODE_ENV: process.env.NODE_ENV || null,
+    complexity: `${project.getRouter().routes.length}.${
+      project.services.length
+    }.${project.cells.length}.${project.pages.length}`,
+    sides: project.sides.join(','),
+    ...(await getInfo()),
+  }
+}
+
+// actual telemetry send process
+;(async function () {
+  const telemetryConfig = getConfig().telemetry
+
   try {
-    const project = new RWProject({
-      projectRoot: getPaths().base,
-      host: new DefaultHost(),
-    })
-    const telemetryConfig = getConfig().telemetry
-    const payload = {
-      type,
-      command: sanitizeArgv(JSON.parse(argv.argv)),
-      ci: ci.isCI,
-      duration: argv.duration ? parseInt(argv.duration) : null,
-      error: argv.error,
-      NODE_ENV: process.env.NODE_ENV || null,
-      complexity: `${project.getRouter().routes.length}.${
-        project.services.length
-      }.${project.cells.length}.${project.pages.length}`,
-      sides: project.sides.join(','),
-      ...(await getInfo()),
-    }
+    const payload = await buildPayload()
 
     if (process.env.REDWOOD_VERBOSE_TELEMETRY) {
       console.info('Redwood Telemetry Payload', payload)
