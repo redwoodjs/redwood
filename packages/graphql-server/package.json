@@ -17,7 +17,7 @@
     "@graphql-tools/merge": "7.0.0",
     "@graphql-tools/schema": "8.0.3",
     "@graphql-tools/utils": "8.0.2",
-    "@prisma/client": "2.30.0",
+    "@prisma/client": "3.0.1",
     "@redwoodjs/api": "0.36.2",
     "@types/pino": "6.3.11",
     "graphql": "15.5.1",
