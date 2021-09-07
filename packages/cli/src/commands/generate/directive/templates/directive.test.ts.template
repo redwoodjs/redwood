@@ -1,11 +1,50 @@
+import { ExecutableDefinitionNode } from 'graphql'
+
 import  { schema, ${camelName} } from './${camelName}.directive'
 
 describe('${camelName} directive', () => {
-  it('declares the directive sdl as schema', () => {
+  it('declares the directive sdl as schema, with the correct name', () => {
+    const directiveDefinition = schema.definitions.find(
+      (definition) => definition.kind === 'DirectiveDefinition'
+    ) as ExecutableDefinitionNode
+
     expect(schema).toBeTruthy()
+    expect(directiveDefinition.name.value).toBe('${camelName}')
   })
 
   it('has a ${camelName} implementation that does not error', () => {
-    expect(${camelName}).not.toThrow()
+    const value = 'foo'
+
+    const transformationFunction = () =>
+      ${camelName}({
+        getFieldValue: () => {
+          return value
+        },
+
+        context: {},
+        root: {},
+        args: {},
+        info: undefined,
+      })
+
+    expect(transformationFunction).not.toThrow()
+  })
+
+  it('implements the ${camelName} transformation', () => {
+    const value = 'foo'
+    const transformedValue = 'FOO'
+
+    const result = ${camelName}({
+      getFieldValue: () => {
+        return value
+      },
+
+      context: {},
+      root: {},
+      args: {},
+      info: undefined,
+    })
+
+    expect(result).toEqual(transformedValue)
   })
 })

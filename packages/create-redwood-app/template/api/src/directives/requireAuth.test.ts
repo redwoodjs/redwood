@@ -15,7 +15,35 @@ describe('requireAuth directive', () => {
   })
 
   it('requireAuth has stub implementation. Should not throw', () => {
-    setContext({ currentUser: null })
-    expect(() => requireAuth({})).not.toThrowError()
+    setContext({ currentUser: 'Lebron McGretzky' })
+    expect(() =>
+      requireAuth({
+        getFieldValue: () => {
+          return
+        },
+
+        context: {},
+        root: {},
+        args: {},
+        info: undefined,
+      })
+    ).not.toThrowError()
+  })
+
+  it('requireAuth has stub implementation. Should not throw when current user', () => {
+    setContext({ currentUser: { id: 1, name: 'Lebron McGretzky' } })
+
+    expect(() =>
+      requireAuth({
+        getFieldValue: () => {
+          return
+        },
+
+        context: { currentUser: { id: 1, name: 'Lebron McGretzky' } },
+        root: {},
+        args: {},
+        info: undefined,
+      })
+    ).not.toThrowError()
   })
 })
