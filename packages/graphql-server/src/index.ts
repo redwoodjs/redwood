@@ -13,4 +13,5 @@ export {
   getDirectiveByName,
   getDirectiveArgument,
   RedwoodDirective,
+  DirectiveArgs,
 } from './plugins/useRedwoodDirective'

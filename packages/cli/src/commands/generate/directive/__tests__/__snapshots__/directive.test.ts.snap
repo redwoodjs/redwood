@@ -19,6 +19,7 @@ export const requireAdmin = ({ context, getFieldValue }) => {
   )
 
   // If you want to implement a transform: you can modify the value and return it
+  // @NOTE: Make sure that you want this data to be accessible, before calling getFieldValue
   const fieldValue = getFieldValue()
   logger.debug(
     { fieldValue: fieldValue },
@@ -53,6 +54,7 @@ export const bazingaFooBar: RedwoodDirective = ({ context, getFieldValue }) => {
   )
 
   // If you want to implement a transform: you can modify the value and return it
+  // @NOTE: Make sure that you want this data to be accessible, before calling getFieldValue
   const fieldValue = getFieldValue()
   logger.debug(
     { fieldValue: fieldValue },

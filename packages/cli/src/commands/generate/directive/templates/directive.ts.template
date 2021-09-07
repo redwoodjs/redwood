@@ -15,6 +15,7 @@ export const ${camelName}: RedwoodDirective = ({ context, getFieldValue }) => {
   logger.debug({ currentUser: context.currentUser }, 'currentUser in ${camelName} directive is only available when auth is setup')
 
   // If you want to implement a transform: you can modify the value and return it
+  // @NOTE: Make sure that you want this data to be accessible, before calling getFieldValue
   const fieldValue = getFieldValue()
   logger.debug({ fieldValue: fieldValue }, 'fieldValue in ${camelName} directive can be modified')
 
