@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/core",
   "description": "Foundational packages and config required to build RedwoodJS.",
-  "version": "0.36.2",
+  "version": "0.36.4",
   "license": "MIT",
   "files": [
     "config",
@@ -10,10 +10,10 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "dependencies": {
-    "@redwoodjs/eslint-config": "0.36.2",
-    "@redwoodjs/internal": "0.36.2",
-    "@redwoodjs/testing": "0.36.2",
-    "@redwoodjs/cli": "0.36.2",
+    "@redwoodjs/eslint-config": "0.36.4",
+    "@redwoodjs/internal": "0.36.4",
+    "@redwoodjs/testing": "0.36.4",
+    "@redwoodjs/cli": "0.36.4",
     "x----x----x": "^0 Babel",
     "@babel/cli": "7.14.8",
     "@babel/core": "7.15.0",
