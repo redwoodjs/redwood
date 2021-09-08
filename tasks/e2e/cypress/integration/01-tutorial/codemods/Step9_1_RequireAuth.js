@@ -9,7 +9,7 @@ export default `
  * See https://redwoodjs.com/docs/authentication for more info.
  */
 
-import { ForbiddenError } from '@redwoodjs/api'
+import { ForbiddenError } from '@redwoodjs/graphql-server'
 
 export const requireAuth = () => {
   throw new ForbiddenError("I'm sorry, Dave. I'm afraid I can't do that.")

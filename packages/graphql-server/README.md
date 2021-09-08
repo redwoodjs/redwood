@@ -83,7 +83,6 @@ For detailed logger configuration, see the RedwoodJS logger package [README](./s
 
 `@redwoodjs/api` uses a few things you should be familiar with:
 
-- [Apollo Server](https://www.apollographql.com/docs/apollo-server/) (Lambda)
 - [GraphQL](https://graphql.org/learn/)
 
 Although this package depends, in the code-dependency sense, only on `@redwoodjs/internals`, it still hangs together with the others&mdash;notably, `@redwoodjs/web` and `@redwoodjs/api-server`. So if you’re asking yourself “but when does my server run?” head over to `@redwoodjs/api-server`.
@@ -96,7 +95,7 @@ Remember, files in this directory (`api/src/functions`) are serverless functions
 1. Everything (i.e. sdl and services) is imported
 2. The services are wrapped into resolvers
 3. The sdl and resolvers are merged/stitched into a schema
-4. The ApolloServer is instantiated with said merged/stitched schema and context
+4. The graphql-server is instantiated with said merged/stitched schema and context
 
 These four steps map quite nicely to these four "code" steps, some of which are doing a little more under-the-hood than others:
 
