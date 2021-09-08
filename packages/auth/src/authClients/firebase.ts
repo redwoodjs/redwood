@@ -1,5 +1,3 @@
-import { AuthClient } from './'
-
 import {
   isSignInWithEmailLink,
   sendSignInLinkToEmail,
@@ -10,15 +8,17 @@ import {
   signInWithPopup,
 } from '@firebase/auth'
 
+import type {
+  ActionCodeSettings,
+  User,
+  CustomParameters,
+  Auth as FirebaseAuth,
+} from '@firebase/auth'
 
-import type { ActionCodeSettings, User } from '@firebase/auth'
+import { AuthClient } from './'
+
 export type FirebaseUser = User
-
-import type { Auth as FirebaseAuth } from '@firebase/auth'
 export type Firebase = FirebaseAuth
-
-import type { CustomParameters } from '@firebase/auth'
-
 export type emailLinkProvider = 'emailLink'
 
 // @TODO: Firebase doesn't export a list of providerIds they use
@@ -31,7 +31,6 @@ export type oAuthProvider =
   | 'twitter.com'
   | 'microsoft.com'
   | 'apple.com'
-
 
 // valid parameters as of 2021-06-12 at https://firebase.google.com/docs/reference/js/firebase.auth.GoogleAuthProvider#setcustomparameters
 // NOTE: 2021-09-07 propose removing this and just using CustomParameters type exported by firebase-js-sdk ^v9.0.0
@@ -80,7 +79,11 @@ export const firebase = (
   const loginWithEmailLink = ({ email, emailLink }: Options) => {
     // dispatch to signIn step1 based on if no emailLink has been provided
     if (!emailLink) {
-      return sendSignInLinkToEmail(auth, email as string, actionCodeSettings as ActionCodeSettings)
+      return sendSignInLinkToEmail(
+        auth,
+        email as string,
+        actionCodeSettings as ActionCodeSettings
+      )
     }
     // otherwise validate emailLink
     if (!isSignInWithEmailLink(auth, emailLink)) {
@@ -105,7 +108,11 @@ export const firebase = (
       }
 
       if (hasPasswordCreds(options)) {
-        return signInWithEmailAndPassword(auth, options.email as string, options.password as string)
+        return signInWithEmailAndPassword(
+          auth,
+          options.email as string,
+          options.password as string
+        )
       }
 
       if (options.providerId === 'emailLink') {
