@@ -1,9 +1,11 @@
 import { Plugin } from '@envelop/types'
+import { getArgumentValues } from '@graphql-tools/utils'
 import {
   defaultFieldResolver,
   DirectiveNode,
   GraphQLObjectType,
   GraphQLResolveInfo,
+  GraphQLSchema,
 } from 'graphql'
 
 import { GlobalContext } from '../index'
@@ -21,6 +23,8 @@ export interface DirectiveArgs<FieldType = any> {
   context: GlobalContext
   directiveNode?: DirectiveNode
   getFieldValue: () => FieldType
+  argumentValues: Record<string, any>
+  roles: [string] | undefined
   root: unknown
   args: Record<string, unknown>
   info: GraphQLResolveInfo
@@ -77,28 +81,33 @@ export function getDirectiveByName(
   }
 }
 
-// use this to get specific argument values
-export function getDirectiveArgument(
-  directive: DirectiveNode,
-  argumentName: string
-) {
-  if (directive.kind === 'Directive') {
-    const directiveArgs = directive.arguments?.filter(
-      (d) => d.name.value === argumentName
-    )
+export function getDirectiveArgumentValues(
+  schema: GraphQLSchema,
+  directiveNode: DirectiveNode
+): Record<string, any> {
+  const directive = schema.getDirective(directiveNode.name.value)
 
-    if (directiveArgs) {
-      const outputArgs =
-        directiveArgs
-          .values()
-          .next()
-          .value?.value?.values?.map((v: any) => v.value) || undefined
-
-      return outputArgs
-    }
+  if (directive) {
+    return getArgumentValues(directive, directiveNode)
   }
+  return {}
+}
 
-  return undefined
+export function getDirectiveRoles(
+  schema: GraphQLSchema,
+  directiveNode: DirectiveNode
+): [string] | undefined {
+  return getDirectiveArgumentValue(schema, directiveNode, 'roles') as
+    | [string]
+    | undefined
+}
+
+export function getDirectiveArgumentValue(
+  schema: GraphQLSchema,
+  directiveNode: DirectiveNode,
+  argumentName: string
+): Record<string, any> {
+  return getDirectiveArgumentValues(schema, directiveNode)[argumentName]
 }
 
 export const useRedwoodDirective = (
@@ -119,11 +128,20 @@ export const useRedwoodDirective = (
           const directiveNode = getDirectiveByName(info, options.name)
 
           if (directiveNode) {
+            const argumentValues = getDirectiveArgumentValues(
+              info.schema,
+              directiveNode
+            )
+
+            const roles = getDirectiveRoles(info.schema, directiveNode)
+
             const transformedOutputMaybe = await executeDirective({
               context,
               directiveNode,
               getFieldValue: () =>
                 defaultFieldResolver(root, args, context, info),
+              argumentValues,
+              roles,
               args,
               root,
               info,

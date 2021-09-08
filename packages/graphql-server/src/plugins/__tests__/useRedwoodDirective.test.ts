@@ -3,7 +3,9 @@ import { makeExecutableSchema } from '@graphql-tools/schema'
 
 import { GraphQLTypeWithFields } from '../../index'
 import {
-  getDirectiveArgument,
+  getDirectiveArgumentValue,
+  getDirectiveArgumentValues,
+  getDirectiveRoles,
   useRedwoodDirective,
   DIRECTIVE_REQUIRED_ERROR_MESSAGE,
 } from '../useRedwoodDirective'
@@ -15,8 +17,11 @@ const schemaWithDirectiveQueries = makeExecutableSchema({
     directive @requireAuth(roles: [String]) on FIELD_DEFINITION
     directive @skipAuth on FIELD_DEFINITION
 
+    directive @truncate(maxLength: Int!, separator: String!) on FIELD_DEFINITION
+
     type Post {
       title: String! @skipAuth
+      description: String! @truncate(maxLength: 5, separator: ".")
     }
 
     type UserProfile {
@@ -58,9 +63,17 @@ const schemaWithDirectiveQueries = makeExecutableSchema({
       protected: (_root, _args, _context) => 'protected',
       public: (_root, _args, _context) => 'public',
       noDirectiveSpecified: () => 'i should not be returned',
-      posts: () => [{ title: 'Five ways to test Envelop plugins' }],
+      posts: () => [
+        {
+          title: 'Five ways to test Redwood directives',
+          description: 'Read this to learn about directive testing',
+        },
+      ],
       userProfiles: () => [
-        { name: 'Usario Jones', email: 'usario@example.com' },
+        {
+          name: 'John Doe',
+          email: 'doe@example.com',
+        },
       ],
       ambiguousAuthQuery: (_root, _args, _context) => 'am i allowed?',
       withoutDirective: (_root, _args, _context) => ({
@@ -146,7 +159,7 @@ describe('Directives on Queries', () => {
     expect(result.data.posts).toBeTruthy()
     expect(result.data.posts[0]).toHaveProperty('title')
     expect(result.data.posts[0].title).toEqual(
-      'Five ways to test Envelop plugins'
+      'Five ways to test Redwood directives'
     )
   })
 
@@ -176,7 +189,7 @@ describe('Directives on Queries', () => {
     expect(result.data.userProfiles).toBeTruthy()
     expect(result.data.userProfiles[0]).toHaveProperty('name')
     expect(result.data.userProfiles[0]).not.toHaveProperty('email')
-    expect(result.data.userProfiles[0].name).toEqual('Usario Jones')
+    expect(result.data.userProfiles[0].name).toEqual('John Doe')
   })
 
   it('Should disallow execution of a Query with requireAuth() even if another directive says to skip', async () => {
@@ -246,15 +259,49 @@ describe('Directives on Mutations', () => {
     const mutationType = schemaWithDirectiveQueries.getType(
       'Mutation'
     ) as GraphQLTypeWithFields
-    const deletePost = mutationType.getFields()['deletePost']
 
-    const result = getDirectiveArgument(
-      deletePost.astNode.directives[0],
-      'roles'
-    )
+    const deletePost = mutationType.getFields()['deletePost']
+    const directiveNode = deletePost.astNode.directives[0]
+
+    const result = getDirectiveRoles(schemaWithDirectiveQueries, directiveNode)
 
     expect(result).toContain('admin')
     expect(result).toContain('publisher')
     expect(result).not.toContain('author')
+  })
+
+  it('Should get the argument values for a directive', async () => {
+    const postType = schemaWithDirectiveQueries.getType(
+      'Post'
+    ) as GraphQLTypeWithFields
+
+    const deletePost = postType.getFields()['description']
+
+    const result = getDirectiveArgumentValues(
+      schemaWithDirectiveQueries,
+      deletePost.astNode.directives[0]
+    )
+
+    expect(result).toHaveProperty('maxLength')
+    expect(result.maxLength).toEqual(5)
+
+    expect(result).toHaveProperty('separator')
+    expect(result.separator).toEqual('.')
+  })
+
+  it('Should get the specified argument value for a directive', async () => {
+    const postType = schemaWithDirectiveQueries.getType(
+      'Post'
+    ) as GraphQLTypeWithFields
+
+    const deletePost = postType.getFields()['description']
+
+    const result = getDirectiveArgumentValue(
+      schemaWithDirectiveQueries,
+      deletePost.astNode.directives[0],
+      'maxLength'
+    )
+
+    expect(result).toEqual(5)
   })
 })

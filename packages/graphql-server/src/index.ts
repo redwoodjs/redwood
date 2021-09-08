@@ -10,8 +10,8 @@ export * from './makeMergedSchema/makeMergedSchema'
 export * from './types'
 export {
   hasDirective,
-  getDirectiveByName,
-  getDirectiveArgument,
+  getDirectiveArgumentValue,
+  getDirectiveArgumentValues,
   RedwoodDirective,
   DirectiveArgs,
 } from './plugins/useRedwoodDirective'
