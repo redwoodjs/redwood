@@ -29,7 +29,7 @@
     "babel-plugin-graphql-tag": "3.3.0",
     "babel-plugin-inline-react-svg": "2.0.1",
     "babel-plugin-module-resolver": "4.1.0",
-    "core-js": "3.16.1",
+    "core-js": "3.17.2",
     "graphql": "15.5.1",
     "graphql-tag": "2.12.5",
     "fast-glob": "3.2.7",
