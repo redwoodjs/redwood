@@ -33,7 +33,7 @@
   "devDependencies": {
     "@envelop/types": "1.0.2",
     "@redwoodjs/auth": "0.36.4",
-    "@types/jsonwebtoken": "8.5.4",
+    "@types/jsonwebtoken": "8.5.5",
     "@types/lodash.merge": "4.6.6",
     "@types/lodash.omitby": "4.6.6",
     "@types/uuid": "8.3.1",
