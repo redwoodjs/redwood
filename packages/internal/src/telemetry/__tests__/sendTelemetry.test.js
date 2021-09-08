@@ -1,4 +1,4 @@
-const { getInfo, sanitizeArgv } = require('../sendTelemetry')
+const { sanitizeArgv } = require('../sendTelemetry')
 
 describe('sanitizeArgv', () => {
   it('ignores commands with no replacements', () => {
