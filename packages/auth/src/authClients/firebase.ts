@@ -77,32 +77,22 @@ export const firebase = (
     return provider
   }
 
-  const sendEmailLink = (options: Options) => {
-    if (options.email) {
-      window.localStorage.setItem('emailForSignIn', options.email)
+  const loginWithEmailLink = ({ email, emailLink }: Options) => {
+    // dispatch to signIn step1 based on if no emailLink has been provided
+    if (!emailLink) {
+      return sendSignInLinkToEmail(auth, email, actionCodeSettings)
     }
-    return sendSignInLinkToEmail(auth, options.email, actionCodeSettings)
-  }
+    // otherwise validate emailLink
+    if (!isSignInWithEmailLink(auth, emailLink)) {
+      throw new Error('not a valid emailLink')
+    }
 
-  const emailLinkSignIn = (options: Options) => {
-    if (!options.emailLink) {
-      throw new Error(
-        `options.emailLink not set while providerId = ${options.providerId}`
-      )
-    }
-    // Perhaps makes more sense to do validation in email signin page handler?
-    if (!isSignInWithEmailLink(auth, options.emailLink)) {
-      throw new Error('invalid emailLink')
-    }
-    // TODO enforce that options.email is set
-    // BUT checking for email might be better to do in handler, so we can prompt user
-    return signInWithEmailLink(auth, options.email, options.emailLink)
+    return signInWithEmailLink(auth, email, emailLink)
   }
 
   // restoreAuthState?(): void | Promise<any>
-  // getUserMetadata(): Promise<null | SupportedUserMetadata>
   return {
-    type: 'firebase', // ??? actually isn't this type is different than component's prop type?
+    type: 'firebase',
     client: auth,
     //restoreAuthState -- perhaps use refreshtoken to reauth?
     login: async (
@@ -117,17 +107,12 @@ export const firebase = (
       }
 
       if (options.providerId === 'emailLink') {
-        if (!options.emailLink) {
-          return sendEmailLink(options)
-        } else {
-          return emailLinkSignIn(options)
-        }
+        return loginWithEmailLink(options)
       }
 
       const provider = getProvider(options.providerId || 'google.com')
       const providerWithOptions = applyProviderOptions(provider, options)
-      // TODO perhaps take userCred instead of doing popup here
-      // that is we could make pop the app's responsibility
+
       return signInWithPopup(auth, providerWithOptions)
     },
     logout: async () => auth.signOut(),
@@ -147,11 +132,7 @@ export const firebase = (
       }
 
       if (options.providerId === 'emailLink') {
-        if (!options.emailLink) {
-          return sendEmailLink(options)
-        } else {
-          return emailLinkSignIn(options)
-        }
+        return loginWithEmailLink(options)
       }
 
       const provider = getProvider(options.providerId || 'google.com')
