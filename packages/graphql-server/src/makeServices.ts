@@ -1,7 +1,4 @@
-import {
-  BeforeResolverSpec,
-  MissingBeforeResolverError,
-} from './beforeResolverSpec'
+import { BeforeResolverSpec } from './beforeResolverSpec'
 import { ServicesGlobImports, MakeServices, Services } from './types'
 
 export const makeServices: MakeServices = ({ services }) => {
