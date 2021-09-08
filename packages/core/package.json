@@ -58,7 +58,7 @@
     "style-loader": "3.2.1",
     "svg-react-loader": "0.4.6",
     "url-loader": "4.1.1",
-    "@pmmmwh/react-refresh-webpack-plugin": "0.5.0-rc.4",
+    "@pmmmwh/react-refresh-webpack-plugin": "0.5.0-rc.6",
     "mini-css-extract-plugin": "2.2.0",
     "null-loader": "4.0.1",
     "lodash.escaperegexp": "4.1.2",
