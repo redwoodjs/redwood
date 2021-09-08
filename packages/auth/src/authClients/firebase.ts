@@ -14,8 +14,8 @@ import {
 import type { ActionCodeSettings, User } from '@firebase/auth'
 export type FirebaseUser = User
 
-import { Auth as FirebaseAuth } from '@firebase/auth'
-export type Firebase = typeof FirebaseAuth
+import type { Auth as FirebaseAuth } from '@firebase/auth'
+export type Firebase = FirebaseAuth
 
 import type { CustomParameters } from '@firebase/auth'
 
@@ -80,14 +80,14 @@ export const firebase = (
   const loginWithEmailLink = ({ email, emailLink }: Options) => {
     // dispatch to signIn step1 based on if no emailLink has been provided
     if (!emailLink) {
-      return sendSignInLinkToEmail(auth, email, actionCodeSettings)
+      return sendSignInLinkToEmail(auth, email as string, actionCodeSettings as ActionCodeSettings)
     }
     // otherwise validate emailLink
     if (!isSignInWithEmailLink(auth, emailLink)) {
-      throw new Error('not a valid emailLink')
+      throw new Error('Login failed, invalid email link')
     }
 
-    return signInWithEmailLink(auth, email, emailLink)
+    return signInWithEmailLink(auth, email as string, emailLink as string)
   }
 
   // restoreAuthState?(): void | Promise<any>
@@ -105,7 +105,7 @@ export const firebase = (
       }
 
       if (hasPasswordCreds(options)) {
-        return signInWithEmailAndPassword(auth, options.email, options.password)
+        return signInWithEmailAndPassword(auth, options.email as string, options.password as string)
       }
 
       if (options.providerId === 'emailLink') {
@@ -128,8 +128,8 @@ export const firebase = (
       if (hasPasswordCreds(options)) {
         return createUserWithEmailAndPassword(
           auth,
-          options.email,
-          options.password
+          options.email as string,
+          options.password as string
         )
       }
 
