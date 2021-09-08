@@ -14,15 +14,15 @@ const { RWProject } = require('../../../structure/dist/model/RWProject')
 interface SensitiveArgPositions {
   exec: {
     positions: Array<number>
-    redactWith: string
+    redactWith: Array<string>
   }
   g: {
     positions: Array<number>
-    redactWith: string
+    redactWith: Array<string>
   }
   generate: {
     positions: Array<number>
-    redactWith: string
+    redactWith: Array<string>
   }
 }
 
@@ -31,20 +31,20 @@ interface SensitiveArgPositions {
 const SENSITIVE_ARG_POSITIONS: SensitiveArgPositions = {
   exec: {
     positions: [1],
-    redactWith: '[script]',
+    redactWith: ['[script]'],
   },
   g: {
-    positions: [2],
-    redactWith: '[name]',
+    positions: [2, 3],
+    redactWith: ['[name]', '[path]'],
   },
   generate: {
-    positions: [2],
-    redactWith: '[name]',
+    positions: [2, 3],
+    redactWith: ['[name]', '[path]'],
   },
 }
 
 // gets diagnostic info and sanitizes by removing references to paths
-const getInfo = async () => {
+export const getInfo = async () => {
   const info = JSON.parse(
     await envinfo.run(
       {
@@ -81,15 +81,18 @@ const getInfo = async () => {
 }
 
 // removes potentially sensative information from an array of argv strings
-const sanitizeArgv = (argv: Array<string>) => {
+export const sanitizeArgv = (argv: Array<string>) => {
   const args = argv.slice(2)
   const name = args[0]
   const sensativeCommand =
     SENSITIVE_ARG_POSITIONS[name as keyof SensitiveArgPositions]
 
   if (sensativeCommand) {
-    sensativeCommand.positions.forEach((pos: number) => {
-      args[pos] = sensativeCommand.redactWith
+    sensativeCommand.positions.forEach((pos: number, index: number) => {
+      // only redact if the text in the given position is not a --flag
+      if (args[pos] && !args[pos].match(/--/)) {
+        args[pos] = sensativeCommand.redactWith[index]
+      }
     })
   }
 
@@ -143,10 +146,12 @@ export const buildPayload = async () => {
       headers: { 'Content-Type': 'application/json' },
     })
 
-    // TODO: remove this before merging for real, swallow telemetry errors by default
-    if (response.status !== 201) {
-      console.error('Error from telemetry insert:', await response.text())
-    }
+    // Normally we would report on any non-error response here (like a 500)
+    // but since the process is spawned and stdout/stderr is ignored, it can
+    // never be seen by the user, so ignore
+    // if (response.status !== 201) {
+    //   console.error('Error from telemetry insert:', await response.text())
+    // }
   } catch (e) {
     // service interruption: network down or telemetry API not responding
     // don't let telemetry errors bubble up to user, just do nothing
