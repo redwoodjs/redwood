@@ -42,7 +42,7 @@
     "webpack": "5.51.1",
     "webpack-bundle-analyzer": "4.4.2",
     "webpack-cli": "4.8.0",
-    "webpack-dev-server": "4.0.0",
+    "webpack-dev-server": "4.1.1",
     "webpack-manifest-plugin": "4.0.2",
     "webpack-merge": "5.8.0",
     "webpack-retry-chunk-load-plugin": "2.2.0",
