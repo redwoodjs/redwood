@@ -10,7 +10,7 @@ describe('${camelName} directive', () => {
 
   it('has a ${camelName} implementation that does not error', () => {
     const mockExecution = mockRedwoodDirective(${camelName}, {
-      context: {},
+      context: {}, // pass in context if you need to check specific cases
       resolver: () => 'Example field value'
     })
 

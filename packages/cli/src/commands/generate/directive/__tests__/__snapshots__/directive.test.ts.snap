@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`creates a JavaScript directive 1`] = `
+exports[`creates a JavaScript directive: js directive 1`] = `
 "import { logger } from 'src/lib/logger'
 
 export const schema = gql\`
@@ -33,7 +33,33 @@ export const requireAdmin = ({ context, getFieldValue }) => {
 "
 `;
 
-exports[`creates a TypeScript directive 1`] = `
+exports[`creates a JavaScript directive: js directive test 1`] = `
+"import { mockRedwoodDirective, getDirectiveName } from '@redwoodjs/testing/api'
+
+import { schema, requireAdmin } from './requireAdmin.directive'
+
+describe('requireAdmin directive', () => {
+  it('declares the directive sdl as schema, with the correct name', () => {
+    expect(schema).toBeTruthy()
+    expect(getDirectiveName(schema)).toBe('requireAdmin')
+  })
+
+  it('has a requireAdmin implementation that does not error', () => {
+    const mockExecution = mockRedwoodDirective(requireAdmin, {
+      context: {}, // pass in context if you need to check specific cases
+      resolver: () => 'Example field value',
+    })
+
+    expect(mockExecution).not.toThrow()
+
+    // @NOTE You can also test transformations like this:
+    // expect(mockExecution()).toBe('myTransformedValue')
+  })
+})
+"
+`;
+
+exports[`creates a TypeScript directive: ts directive 1`] = `
 "import type { RedwoodDirective } from '@redwoodjs/graphql-server'
 
 import { logger } from 'src/lib/logger'
@@ -65,5 +91,31 @@ export const bazingaFooBar: RedwoodDirective = ({ context, getFieldValue }) => {
   // and use the getDirectiveArgument function from @redwoodjs/graphql-server
   // See documentation here: https://redwoodjs.com/docs/directives
 }
+"
+`;
+
+exports[`creates a TypeScript directive: ts directive test 1`] = `
+"import { mockRedwoodDirective, getDirectiveName } from '@redwoodjs/testing/api'
+
+import { schema, bazingaFooBar } from './bazingaFooBar.directive'
+
+describe('bazingaFooBar directive', () => {
+  it('declares the directive sdl as schema, with the correct name', () => {
+    expect(schema).toBeTruthy()
+    expect(getDirectiveName(schema)).toBe('bazingaFooBar')
+  })
+
+  it('has a bazingaFooBar implementation that does not error', () => {
+    const mockExecution = mockRedwoodDirective(bazingaFooBar, {
+      context: {}, // pass in context if you need to check specific cases
+      resolver: () => 'Example field value',
+    })
+
+    expect(mockExecution).not.toThrow()
+
+    // @NOTE You can also test transformations like this:
+    // expect(mockExecution()).toBe('myTransformedValue')
+  })
+})
 "
 `;
