@@ -7,7 +7,6 @@ import {
   signInWithEmailLink,
   signInWithPopup,
 } from '@firebase/auth'
-
 import type {
   ActionCodeSettings,
   User,
