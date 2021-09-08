@@ -23,7 +23,7 @@ export type emailLinkProvider = 'emailLink'
 
 // @TODO: Firebase doesn't export a list of providerIds they use
 // But I found them here: https://github.com/firebase/firebase-js-sdk/blob/a5768b0aa7d7ce732279931aa436e988c9f36487/packages/rules-unit-testing/src/api/index.ts
-// NOTE: 2021-09-07 why can't we use ProviderId exported from firebase-sdk-js v9.0.0 and above?
+// NOTE: 2021-09-07 could we replace this with ProviderId type now exported from firebase-sdk-js ^v9.0.0
 export type oAuthProvider =
   | 'google.com'
   | 'facebook.com'
@@ -32,16 +32,16 @@ export type oAuthProvider =
   | 'microsoft.com'
   | 'apple.com'
 
-export type Prompt = 'none' | 'consent' | 'select_account'
 
 // valid parameters as of 2021-06-12 at https://firebase.google.com/docs/reference/js/firebase.auth.GoogleAuthProvider#setcustomparameters
+// NOTE: 2021-09-07 propose removing this and just using CustomParameters type exported by firebase-js-sdk ^v9.0.0
+// export type Prompt = 'none' | 'consent' | 'select_account'
 // export type CustomParameters = {
 //   hd?: string
 //   include_granted_scopes?: boolean
 //   login_hint?: string
 //   prompt?: Prompt
 // }
-// NOTE: 2021-09-07 propose changing to use CustomParameters type exported by firebase-js-sdk v9.0.0 and above
 export type Options = {
   providerId?: oAuthProvider | emailLinkProvider
   email?: string
@@ -98,6 +98,8 @@ export const firebase = (
     login: async (
       options: oAuthProvider | Options = { providerId: 'google.com' }
     ) => {
+      // If argument provided is a string, it should be the oAuth Provider
+      // Cast the provider string into the options object
       if (typeof options === 'string') {
         options = { providerId: options }
       }
