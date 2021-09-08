@@ -140,7 +140,7 @@ export const buildPayload = async () => {
       console.info('Redwood Telemetry Payload', payload)
     }
 
-    const response = await fetch(telemetryConfig.url, {
+    await fetch(telemetryConfig.url, {
       method: 'post',
       body: JSON.stringify(payload),
       headers: { 'Content-Type': 'application/json' },
@@ -148,14 +148,16 @@ export const buildPayload = async () => {
 
     // Normally we would report on any non-error response here (like a 500)
     // but since the process is spawned and stdout/stderr is ignored, it can
-    // never be seen by the user, so ignore
+    // never be seen by the user, so ignore. Otherwise we would do:
+    //
     // if (response.status !== 201) {
     //   console.error('Error from telemetry insert:', await response.text())
     // }
   } catch (e) {
     // service interruption: network down or telemetry API not responding
     // don't let telemetry errors bubble up to user, just do nothing
-    // TODO: remove before merging for real
-    console.error('Uncaught error in telemetry:', e)
+    // Again, message will never be shown to user, but otherwise:
+    //
+    // console.error('Uncaught error in telemetry:', e)
   }
 })()
