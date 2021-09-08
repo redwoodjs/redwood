@@ -1,4 +1,3 @@
-import { setContext } from '@redwoodjs/graphql-server'
 import { mockRedwoodDirective, getDirectiveName } from '@redwoodjs/testing/api'
 
 import { schema, requireAuth } from './requireAuth.directive'
@@ -10,11 +9,11 @@ describe('requireAuth directive', () => {
   })
 
   it('requireAuth has stub implementation. Should not throw when current user', () => {
-    // If you want to set values in context, use setContext:
-    // import { setContext } from '@redwoodjs/graphql-server'
-    // setContext({ currentUser: { id: 1, name: 'Lebron McGretzky' } })
-    // or pass it to mockRedwoodDirective(requireAuth, { context: myMockedContext})
+    // If you want to set values in context, pass it through e.g.
+    // mockRedwoodDirective(requireAuth, { context: { currentUser: { id: 1, name: 'Lebron McGretzky' } }})
 
-    expect(mockRedwoodDirective(requireAuth, {})).not.toThrowError()
+    expect(
+      mockRedwoodDirective(requireAuth, { context: {} })
+    ).not.toThrowError()
   })
 })
