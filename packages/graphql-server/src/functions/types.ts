@@ -4,7 +4,7 @@ import type { AllowedOperations } from '@envelop/filter-operation-type'
 import { IExecutableSchemaDefinition } from '@graphql-tools/schema'
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 
-import { AuthContextPayload } from '@redwoodjs/api'
+import type { AuthContextPayload } from '@redwoodjs/api'
 
 import { DirectiveGlobImports } from 'src/directives/makeDirectives'
 
@@ -12,6 +12,8 @@ import { CorsConfig } from '../cors'
 import { OnHealthcheckFn } from '../healthcheck'
 import { LoggerConfig } from '../plugins/useRedwoodLogger'
 import { SdlGlobImports, ServicesGlobImports } from '../types'
+
+type ThenArg<T> = T extends PromiseLike<infer U> ? U : T
 
 export type GetCurrentUser = (
   decoded: AuthContextPayload[0],
@@ -23,8 +25,8 @@ export type Context = Record<string, unknown>
 export type ContextFunction = (...args: any[]) => Context | Promise<Context>
 export type RedwoodGraphQLContext = {
   event: APIGatewayProxyEvent
-  // TODO: Maybe this needs a better name?
-  context: LambdaContext
+  requestContext: LambdaContext
+  currentUser?: ThenArg<ReturnType<GetCurrentUser>> | AuthContextPayload | null
 }
 
 /**

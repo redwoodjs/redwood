@@ -12,8 +12,8 @@ import { setContext } from '../index'
 export const useRedwoodGlobalContextSetter =
   (): Plugin<RedwoodGraphQLContext> => ({
     onContextBuilding() {
-      return ({ context }) => {
-        setContext(context)
+      return ({ context: redwoodGraphqlContext }) => {
+        setContext(redwoodGraphqlContext)
       }
     },
   })

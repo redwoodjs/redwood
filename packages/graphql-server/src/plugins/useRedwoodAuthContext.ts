@@ -16,11 +16,11 @@ export const useRedwoodAuthContext = (
 ): Plugin<RedwoodGraphQLContext> => {
   return {
     async onContextBuilding({ context, extendContext }) {
-      const { lambdaContext } = context as any
+      const { requestContext } = context
 
       const authContext = await getAuthenticationContext({
         event: context.event,
-        context: lambdaContext,
+        context: requestContext,
       })
 
       if (authContext) {
@@ -28,11 +28,8 @@ export const useRedwoodAuthContext = (
           ? await getCurrentUser(authContext[0], authContext[1], authContext[2])
           : authContext
 
-        lambdaContext.currentUser = currentUser
+        extendContext({ currentUser })
       }
-
-      // TODO: Maybe we don't need to spread the entire object here? since it's already there
-      extendContext(lambdaContext)
     },
   }
 }

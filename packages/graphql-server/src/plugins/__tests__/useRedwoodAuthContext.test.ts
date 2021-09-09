@@ -47,7 +47,7 @@ describe('useRedwoodAuthContext: ', () => {
       testSchema
     )
 
-    await testkit.execute(testQuery, {}, { lambdaContext: {} })
+    await testkit.execute(testQuery, {}, { requestContext: {} })
 
     expectContextContains({
       currentUser: MOCK_USER,
@@ -75,7 +75,7 @@ describe('useRedwoodAuthContext: ', () => {
     )
 
     await expect(async () => {
-      await testkit.execute(testQuery, {}, { lambdaContext: {} })
+      await testkit.execute(testQuery, {}, { requestContext: {} })
     }).rejects.toEqual(new Error('Hey man, where is my DB?'))
     expect(mockedGetCurrentUser).toHaveBeenCalled()
   })

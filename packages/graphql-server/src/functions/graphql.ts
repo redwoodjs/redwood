@@ -199,7 +199,10 @@ export const createGraphQLHandler = ({
     event: APIGatewayProxyEvent,
     lambdaContext: LambdaContext
   ): Promise<APIGatewayProxyResult> => {
-    const enveloped = createSharedEnvelop({ event, context: lambdaContext })
+    const enveloped = createSharedEnvelop({
+      event,
+      requestContext: lambdaContext,
+    })
 
     const logger = loggerConfig.logger
 

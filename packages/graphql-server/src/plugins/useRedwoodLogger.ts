@@ -213,7 +213,7 @@ export const useRedwoodLogger = (
 
       if (includeRequestId) {
         options['requestId'] =
-          args.contextValue.context?.awsRequestId ||
+          args.contextValue.requestContext?.awsRequestId ||
           args.contextValue.event?.requestContext?.requestId ||
           uuidv4()
       }
