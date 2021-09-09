@@ -2,13 +2,13 @@ import React, { useContext } from 'react'
 
 import isEqual from 'lodash.isequal'
 
+import { Spec } from './router'
 import {
   createNamedContext,
-  Spec,
   getAnnouncement,
   getFocus,
   resetFocus,
-} from './internal'
+} from './util'
 
 export interface PageLoadingContextInterface {
   loading: boolean

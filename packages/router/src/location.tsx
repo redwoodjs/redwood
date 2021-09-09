@@ -1,6 +1,7 @@
 import React from 'react'
 
-import { createNamedContext, gHistory } from './internal'
+import { gHistory } from './history'
+import { createNamedContext } from './util'
 
 export interface LocationContextType {
   pathname: string
