@@ -620,7 +620,7 @@ export const createGraphQLHandler = ({
           statusCode: 500,
         }
       }
-    } catch (e) {
+    } catch (e: any) {
       logger.error(e)
       onException && onException()
 
