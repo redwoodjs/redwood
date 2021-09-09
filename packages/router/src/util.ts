@@ -26,6 +26,7 @@ const paramsForRoute = (route: string) => {
 }
 
 export type TrailingSlashesTypes = 'never' | 'always' | 'preserve'
+
 export interface ParamType {
   constraint: RegExp
   transform: (value: any) => unknown
