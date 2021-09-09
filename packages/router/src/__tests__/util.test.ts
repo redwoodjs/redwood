@@ -130,57 +130,6 @@ describe('matchPath', () => {
       params: { id: 44, version: 1.8, edit: false },
     })
   })
-
-  describe('trailingSlashes parameter', () => {
-    describe('never - Always strip trailing slashes from URLs before matching', () => {
-      it.each([
-        ['/post/', '/post/'],
-        ['/post', '/post/'],
-        ['/post/', '/post'],
-        ['/post', '/post'],
-      ])('matches route "%s" with pathname "%s"', (route, pathname) => {
-        expect(matchPath(route, pathname, undefined, 'never')).toEqual({
-          match: true,
-          params: {},
-        })
-      })
-    })
-
-    describe('always - Always add trailing slashes to URLs before matching.', () => {
-      it.each([
-        ['/post/', '/post/'],
-        ['/post', '/post/'],
-        ['/post/', '/post'],
-        ['/post', '/post'],
-      ])('matches route "%s" with pathname "%s"', (route, pathname) => {
-        expect(matchPath(route, pathname, undefined, 'always')).toEqual({
-          match: true,
-          params: {},
-        })
-      })
-    })
-
-    describe('preserve - Keep trailing slashes as-is before matching', () => {
-      it.each([
-        ['/post/', '/post'],
-        ['/post', '/post/'],
-      ])('does not match route "%s" with pathname "%s"', (route, pathname) => {
-        expect(matchPath(route, pathname, undefined, 'preserve')).toEqual({
-          match: false,
-        })
-      })
-
-      it.each([
-        ['/post/', '/post/'],
-        ['/post', '/post'],
-      ])('does match route "%s" with pathname "%s"', (route, pathname) => {
-        expect(matchPath(route, pathname, undefined, 'preserve')).toEqual({
-          match: true,
-          params: {},
-        })
-      })
-    })
-  })
 })
 
 describe('validatePath', () => {

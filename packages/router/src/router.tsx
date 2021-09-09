@@ -19,7 +19,7 @@ import {
   useRouterState,
 } from './router-context'
 import { SplashPage } from './splash-page'
-import { flattenAll, isReactElement } from './util'
+import { flattenAll, isReactElement, TrailingSlashesTypes } from './util'
 
 import type { AvailableRoutes } from './index'
 
@@ -88,8 +88,7 @@ const InternalRoute: React.VFC<InternalRouteProps> = ({
   const { match, params: pathParams } = matchPath(
     path,
     location.pathname,
-    routerState.paramTypes,
-    routerState.trailingSlashes
+    routerState.paramTypes
   )
 
   if (!match) {
@@ -126,16 +125,18 @@ function isRoute(
   return isReactElement(node) && node.type === Route
 }
 
-interface RouterProps extends RouterContextProviderProps {}
+interface RouterProps extends RouterContextProviderProps {
+  trailingSlashes?: TrailingSlashesTypes
+}
 
 const Router: React.FC<RouterProps> = ({
   useAuth,
   paramTypes,
   pageLoadingDelay,
-  trailingSlashes,
+  trailingSlashes = 'never',
   children,
 }) => (
-  <LocationProvider>
+  <LocationProvider trailingSlashes={trailingSlashes}>
     <LocationAwareRouter
       useAuth={useAuth}
       paramTypes={paramTypes}
@@ -204,7 +205,6 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
   return (
     <RouterContextProvider
       useAuth={useAuth}
-      trailingSlashes={trailingSlashes}
       paramTypes={paramTypes}
       pageLoadingDelay={pageLoadingDelay}
     >

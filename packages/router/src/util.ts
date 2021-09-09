@@ -53,10 +53,9 @@ type SupportedRouterParamTypes = keyof typeof coreParamTypes
  * Determine if the given route is a match for the given pathname. If so,
  * extract any named params and return them in an object.
  *
- * route           - The route path as specified in the <Route path={...} />
- * pathname        - The pathname from the window.location.
- * allParamTypes   - The object containing all param type definitions.
- * trailingSlashes - The option to handle the expected behavior of trailing slashes.
+ * route         - The route path as specified in the <Route path={...} />
+ * pathname      - The pathname from the window.location.
+ * allParamTypes - The object containing all param type definitions.
  *
  * Examples:
  *
@@ -69,27 +68,11 @@ type SupportedRouterParamTypes = keyof typeof coreParamTypes
  *  matchPath('/post/{id:Int}', '/post/7')
  *  => { match: true, params: { id: 7 }}
  */
-
-export const formatPath = (
-  path: string,
-  trailingSlashes: TrailingSlashesTypes
-) => {
-  return {
-    never: path.replace(/\/$/, ''),
-    always: path.endsWith('/') ? path : path + '/',
-    preserve: path,
-  }[trailingSlashes]
-}
-
 const matchPath = (
-  path: string,
-  locationPathname: string,
-  paramTypes?: Record<string, ParamType>,
-  trailingSlashes: TrailingSlashesTypes = 'never'
+  route: string,
+  pathname: string,
+  paramTypes?: Record<string, ParamType>
 ) => {
-  const route = formatPath(path, trailingSlashes)
-  const pathname = formatPath(locationPathname, trailingSlashes)
-
   // Get the names and the transform types for the given route.
   const routeParams = paramsForRoute(route)
   const allParamTypes = { ...coreParamTypes, ...paramTypes }

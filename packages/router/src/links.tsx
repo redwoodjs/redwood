@@ -1,6 +1,5 @@
 import { forwardRef, useEffect } from 'react'
 
-
 import {
   navigate,
   matchPath,
@@ -34,8 +33,6 @@ type UseMatchOptions = {
  */
 const useMatch = (pathname: string, options?: UseMatchOptions) => {
   const location = useLocation()
-  const routerState = useRouterState()
-
   if (!location) {
     return { match: false }
   }

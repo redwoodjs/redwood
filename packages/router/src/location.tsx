@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { createNamedContext, gHistory } from './internal'
+import { TrailingSlashesTypes } from './util'
 
 export interface LocationContextType {
   pathname: string
@@ -16,6 +17,7 @@ interface LocationProviderProps {
     search?: string
     hash?: string
   }
+  trailingSlashes?: TrailingSlashesTypes
 }
 
 class LocationProvider extends React.Component<LocationProviderProps> {
@@ -28,14 +30,33 @@ class LocationProvider extends React.Component<LocationProviderProps> {
   }
 
   getContext() {
-    const windowLocation =
-      typeof window !== 'undefined'
-        ? window.location
-        : {
-            pathname: this.context?.pathname || '',
-            search: this.context?.search || '',
-            hash: this.context?.hash || '',
-          }
+    let windowLocation
+
+    if (typeof window !== 'undefined') {
+      const { pathname } = window.location
+
+      if (this.props.trailingSlashes === 'never' && pathname.endsWith('/')) {
+        window.history.replaceState(
+          {},
+          '',
+          pathname.substr(0, pathname.length - 1)
+        )
+      } else if (
+        this.props.trailingSlashes === 'always' &&
+        !pathname.endsWith('/')
+      ) {
+        window.history.replaceState({}, '', pathname + '/')
+      }
+
+      windowLocation = window.location
+    } else {
+      windowLocation = {
+        pathname: this.context?.pathname || '',
+        search: this.context?.search || '',
+        hash: this.context?.hash || '',
+      }
+    }
+
     const { pathname, search, hash } = this.props.location || windowLocation
 
     return { pathname, search, hash }
