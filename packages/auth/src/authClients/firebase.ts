@@ -1,17 +1,17 @@
 import {
+  createUserWithEmailAndPassword,
   isSignInWithEmailLink,
+  OAuthProvider,
   sendSignInLinkToEmail,
   signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  OAuthProvider,
   signInWithEmailLink,
   signInWithPopup,
 } from '@firebase/auth'
 import type {
   ActionCodeSettings,
-  User,
-  CustomParameters,
   Auth as FirebaseAuth,
+  CustomParameters,
+  User,
 } from '@firebase/auth'
 
 import { AuthClient } from './'
@@ -92,11 +92,13 @@ export const firebase = (
     return signInWithEmailLink(auth, email as string, emailLink as string)
   }
 
-  // restoreAuthState?(): void | Promise<any>
   return {
     type: 'firebase',
     client: auth,
-    //restoreAuthState -- perhaps use refreshtoken to reauth?
+    restoreAuthState: async () => {
+      await auth.currentUser?.reload()
+      return auth.currentUser
+    },
     login: async (
       options: oAuthProvider | Options = { providerId: 'google.com' }
     ) => {
