@@ -98,13 +98,13 @@ export const handler = async (args) => {
   const tasks = new Listr(
     [
       {
-        title: 'Generating directive file...',
+        title: 'Generating directive file ...',
         task: () => {
           return writeFilesTask(files(args), { overwriteExisting: args.force })
         },
       },
       {
-        title: 'Generating redwood types...',
+        title: 'Generating TypeScript definitions and GraphQL schemas ...',
         task: () => {
           return execa('yarn rw-gen', [], {
             stdio: 'pipe',
