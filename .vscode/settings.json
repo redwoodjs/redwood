@@ -8,13 +8,14 @@
   "workbench.colorCustomizations": {
     "statusBar.background": "#b85833",
     "statusBarItem.hoverBackground": "#ce7350",
-    "statusBar.foreground": "#e7e7e7",
-    "statusBar.border": "#b85833"
+    "statusBar.foreground": "#e7e7e7"
   },
   "search.exclude": {
     "**/dist": true,
     "**/node_modules": true,
     "**/__fixtures__": true,
     ".yarn-packages-cache": true
-  }
+  },
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "peacock.color": "#b85833"
 }

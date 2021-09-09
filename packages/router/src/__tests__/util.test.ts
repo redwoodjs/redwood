@@ -1,4 +1,9 @@
-import { formatPath, matchPath, parseSearch, validatePath } from '../util'
+import {
+  matchPath,
+  parseSearch,
+  validatePath,
+  flattenSearchParams,
+} from '../util'
 
 describe('matchPath', () => {
   it.each([
@@ -241,25 +246,14 @@ describe('parseSearch', () => {
   })
 })
 
-describe('formatPath', () => {
-  describe('never', () => {
-    it('strips trailing slashes', () => {
-      expect(formatPath('/post', 'never')).toEqual('/post')
-      expect(formatPath('/post/', 'never')).toEqual('/post')
-    })
+describe('flattenSearchParams', () => {
+  it('returns a flat array from query string', () => {
+    expect(
+      flattenSearchParams('?search=all+dogs+go+to+heaven&category=movies')
+    ).toEqual([{ search: 'all dogs go to heaven' }, { category: 'movies' }])
   })
 
-  describe('always', () => {
-    it('adds trailing slashes', () => {
-      expect(formatPath('/post', 'always')).toEqual('/post/')
-      expect(formatPath('/post/', 'always')).toEqual('/post/')
-    })
-  })
-
-  describe('preserve', () => {
-    it('keeps trailing slashes as-is', () => {
-      expect(formatPath('/post', 'preserve')).toEqual('/post')
-      expect(formatPath('/post/', 'preserve')).toEqual('/post/')
-    })
+  it('returns an empty array', () => {
+    expect(flattenSearchParams('')).toEqual([])
   })
 })

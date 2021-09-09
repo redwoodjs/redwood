@@ -9,9 +9,8 @@ import terminalLink from 'terminal-link'
 
 import { ensurePosixPath, getConfig } from '@redwoodjs/internal'
 
-import { generateTemplate, getPaths, writeFilesTask } from 'src/lib'
-import c from 'src/lib/colors'
-
+import { generateTemplate, getPaths, writeFilesTask } from '../../lib'
+import c from '../../lib/colors'
 import { yargsDefaults } from '../generate'
 
 /**
@@ -241,4 +240,29 @@ export const ensureUniquePlural = async ({ model, inDestroyer = false }) => {
 
   // Set the rule
   pluralize.addIrregularRule(model, pluralToUse)
+}
+
+/** @type {(paramType: 'Int' | 'Float' | 'Boolean' | 'String') => string } **/
+export const mapRouteParamTypeToTsType = (paramType) => {
+  const routeParamToTsType = {
+    Int: 'number',
+    Float: 'number',
+    Boolean: 'boolean',
+    String: 'string',
+  }
+  return routeParamToTsType[paramType] || 'unknown'
+}
+
+/** @type {(paramType: 'String' | 'Boolean' | 'Int' | 'BigInt' | 'Float' | 'Decimal' | 'DateTime' ) => string } **/
+export const mapPrismaScalarToPagePropTsType = (scalarType) => {
+  const prismaScalarToTsType = {
+    String: 'string',
+    Boolean: 'boolean',
+    Int: 'number',
+    BigInt: 'number',
+    Float: 'number',
+    Decimal: 'number',
+    DateTime: 'string',
+  }
+  return prismaScalarToTsType[scalarType] || 'unknown'
 }

@@ -2,25 +2,18 @@ global.__dirname = __dirname
 
 import fs from 'fs'
 
-import 'src/lib/test'
+import '../../../../lib/test'
 
-import { getDefaultArgs } from 'src/lib'
-
+import { getDefaultArgs } from '../../../../lib'
 import { builder, files } from '../../../generate/sdl/sdl'
 import { tasks } from '../sdl'
 
 jest.mock('fs')
-jest.mock('@babel/core', () => {
-  return {
-    transform: () => ({
-      code: '',
-    }),
-  }
-})
-jest.mock('src/lib', () => {
+
+jest.mock('../../../../lib', () => {
   const path = require('path')
   return {
-    ...jest.requireActual('src/lib'),
+    ...jest.requireActual('../../../../lib'),
     generateTemplate: () => '',
     getSchema: () =>
       require(path.join(global.__dirname, 'fixtures', 'post.json')),

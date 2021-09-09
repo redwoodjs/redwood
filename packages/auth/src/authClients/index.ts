@@ -5,8 +5,12 @@ import type {
   AzureActiveDirectory,
   AzureActiveDirectoryUser,
 } from './azureActiveDirectory'
+import { clerk } from './clerk'
+import type { Clerk, ClerkUser } from './clerk'
 import { custom } from './custom'
 import type { Custom } from './custom'
+import { dbAuth } from './dbAuth'
+import type { DbAuth } from './dbAuth'
 import { ethereum } from './ethereum'
 import type { Ethereum, EthereumUser } from './ethereum'
 import { firebase } from './firebase'
@@ -26,12 +30,14 @@ const typesToClients = {
   netlify,
   auth0,
   azureActiveDirectory,
+  dbAuth,
   goTrue,
   magicLink,
   firebase,
   supabase,
   ethereum,
   nhost,
+  clerk,
   /** Don't we support your auth client? No problem, define your own the `custom` type! */
   custom,
 }
@@ -39,11 +45,13 @@ const typesToClients = {
 export type SupportedAuthClients =
   | Auth0
   | AzureActiveDirectory
+  | DbAuth
   | GoTrue
   | NetlifyIdentity
   | MagicLink
   | Firebase
   | Supabase
+  | Clerk
   | Ethereum
   | Nhost
   | Custom
@@ -52,6 +60,8 @@ export type SupportedAuthTypes = keyof typeof typesToClients
 
 export type { Auth0User }
 export type { AzureActiveDirectoryUser }
+export type { DbAuth }
+export type { ClerkUser }
 export type { GoTrueUser }
 export type { MagicUser }
 export type { SupabaseUser }
@@ -60,6 +70,7 @@ export type { NhostUser }
 export type SupportedUserMetadata =
   | Auth0User
   | AzureActiveDirectoryUser
+  | ClerkUser
   | GoTrueUser
   | MagicUser
   | SupabaseUser

@@ -38,7 +38,7 @@ import '@reach/skip-nav/styles.css'
  */
 
 type A11yLayoutProps = {
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 const A11yLayout = ({ children }: A11yLayoutProps) => {
@@ -68,7 +68,7 @@ export default SinglePageLayout
 `;
 
 exports[`creates a multi word layout test 1`] = `
-"import { render } from '@redwoodjs/testing'
+"import { render } from '@redwoodjs/testing/web'
 
 import SinglePageLayout from './SinglePageLayout'
 
@@ -114,7 +114,7 @@ export default { title: 'Layouts/AppLayout' }
 `;
 
 exports[`creates a single word layout test 1`] = `
-"import { render } from '@redwoodjs/testing'
+"import { render } from '@redwoodjs/testing/web'
 
 import AppLayout from './AppLayout'
 

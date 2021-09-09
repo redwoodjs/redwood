@@ -9,7 +9,7 @@ jobs:
     if: github.repository == 'redwoodjs/redwood'
     strategy:
       matrix:
-        os: ['macos-latest']
+        os: ['ubuntu-latest']
         node-version: ['14']
       fail-fast: true
     runs-on: ${{ matrix.os }}
@@ -37,14 +37,23 @@ jobs:
         run: |
           project_path=$(mktemp -d -t redwood.XXXXXX)
           echo "::set-output name=project_path::$project_path"
+          framework_path=$(pwd)
+          echo "::set-output name=framework_path::$framework_path"
 
       - name: Create a RedwoodJS app
         run: ./tasks/run-e2e ${{ steps.createpath.outputs.project_path }} --no-start
 
-      - name: Start server in background
-        run: yarn rw dev --no-generate --fwd="--open=false" &
+      - name: Init Git for RedwoodJS app directory
+        run: |
+          git config --global user.email "you@example.com"
+          git config --global user.name "Your Name"
+          git init --initial-branch main && git add .
+          git commit -a --message=init
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
+      - name: Start server in background
+        run: yarn rw dev --no-generate --fwd="--no-open" &
+        working-directory: ${{ steps.createpath.outputs.project_path }}
 
       - name: Cypress run
         uses: cypress-io/github-action@v2
@@ -53,8 +62,44 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_RW_PATH:  "${{ steps.createpath.outputs.project_path }}"
         with:
-          browser: chrome
           env: true
-          wait-on: 'http://localhost:8910'
+          browser: chrome
           record: false
+          wait-on: 'http://localhost:8910'
           working-directory: ./tasks/e2e
+          spec: |
+             cypress/integration/01-tutorial/*.spec.js
+             cypress/integration/03-storybook/*.spec.js
+             cypress/integration/04-logger/*.spec.js
+             cypress/integration/05-tutorial-envelop/*.spec.js
+
+      - name: Prepare for CLI checks by restoring 01-tutorial end state
+        run: |
+          git restore . && git clean -df
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
+      - name: Run `rw test`
+        run: yarn rw test --no-watch
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
+      - name: Run `rw build` (no prerender)
+        run: yarn rw build --no-prerender --verbose
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
+      - name: Run `rw prerender`
+        run: yarn rw prerender --verbose
+        # TODO: We should have a script that verifies this.
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
+      - name: Run `rwfw lint`
+        # choosing a simple command to verify; --help requires prompt input
+        run: RWFW_PATH=${{ steps.createpath.outputs.framework_path }} yarn rwfw lint
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
+      - name: Run `rw exec` generate and execute
+        run: yarn rw g script testScript && yarn rw exec testScript
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
+      - name: Run `rw data-migrate up`
+        run: yarn rw dm up
+        working-directory: ${{ steps.createpath.outputs.project_path }}

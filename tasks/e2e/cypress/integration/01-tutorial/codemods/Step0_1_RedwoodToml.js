@@ -15,6 +15,4 @@ export default `
   open = true
 [experimental]
   esbuild = false
-  useEnvelop = false
-
 `

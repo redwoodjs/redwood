@@ -3,7 +3,7 @@ import path from 'path'
 
 import { getSchema, getConfig } from '@prisma/sdk'
 
-import { getPaths } from 'src/lib'
+import { getPaths } from '../../../../lib'
 
 const PROJECT_NAME = getPaths().base.match(/[^/|\\]+$/)[0]
 

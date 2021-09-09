@@ -9,7 +9,7 @@ import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 import terminalLink from 'terminal-link'
 
-import { getConfig } from '@redwoodjs/internal'
+import { getConfig, generate as generateTypes } from '@redwoodjs/internal'
 
 import {
   generateTemplate,
@@ -22,14 +22,17 @@ import {
   getPaths,
   writeFilesTask,
   addRoutesToRouterTask,
-} from 'src/lib'
-import c from 'src/lib/colors'
-
+  addScaffoldImport,
+  transformTSToJS,
+} from '../../../lib'
+import c from '../../../lib/colors'
 import { yargsDefaults } from '../../generate'
+import { handler as dbAuthHandler } from '../dbAuth/dbAuth'
 import {
   relationsForModel,
   intForeignKeysForModel,
   ensureUniquePlural,
+  mapPrismaScalarToPagePropTsType,
 } from '../helpers'
 import { files as sdlFiles, builder as sdlBuilder } from '../sdl/sdl'
 import {
@@ -38,7 +41,6 @@ import {
 } from '../service/service'
 
 const NON_EDITABLE_COLUMNS = ['id', 'createdAt', 'updatedAt']
-const SCAFFOLD_STYLE_PATH = './scaffold.css'
 // Any assets that should not trigger an overwrite error and require a --force
 const SKIPPABLE_ASSETS = ['scaffold.css']
 const PACKAGE_SET = 'Set'
@@ -141,7 +143,8 @@ export const files = async ({
       pascalScaffoldPath,
       typescript,
       nestScaffoldByModel,
-      templateStrings
+      templateStrings,
+      typescript
     )),
     ...(await sdlFiles({
       ...getDefaultArgs(sdlBuilder),
@@ -158,14 +161,21 @@ export const files = async ({
       typescript,
     })),
     ...assetFiles(name),
-    ...layoutFiles(name, pascalScaffoldPath, typescript, templateStrings),
-    ...pageFiles(
+    ...layoutFiles(
+      name,
+      pascalScaffoldPath,
+      typescript,
+      templateStrings,
+      typescript
+    ),
+    ...(await pageFiles(
       name,
       pascalScaffoldPath,
       typescript,
       nestScaffoldByModel,
-      templateStrings
-    ),
+      templateStrings,
+      typescript
+    )),
   }
 }
 
@@ -215,7 +225,7 @@ const layoutFiles = (
     const outputLayoutName = layout
       .replace(/Names/, pluralName)
       .replace(/Name/, singularName)
-      .replace(/\.js\.template/, generateTypescript ? '.tsx' : '.js')
+      .replace(/\.tsx\.template/, generateTypescript ? '.tsx' : '.js')
 
     const outputPath = path.join(
       getPaths().web.layouts,
@@ -231,13 +241,16 @@ const layoutFiles = (
         ...templateStrings,
       }
     )
-    fileList[outputPath] = template
+
+    fileList[outputPath] = generateTypescript
+      ? template
+      : transformTSToJS(outputPath, template)
   })
 
   return fileList
 }
 
-const pageFiles = (
+const pageFiles = async (
   name,
   pascalScaffoldPath = '',
   generateTypescript,
@@ -246,6 +259,10 @@ const pageFiles = (
 ) => {
   const pluralName = pascalcase(pluralize(name))
   const singularName = pascalcase(pluralize.singular(name))
+  const model = await getSchema(singularName)
+  const idType = getIdType(model)
+  const idTsType = mapPrismaScalarToPagePropTsType(idType)
+
   let fileList = {}
 
   const pages = fs.readdirSync(
@@ -257,7 +274,7 @@ const pageFiles = (
     const outputPageName = page
       .replace(/Names/, pluralName)
       .replace(/Name/, singularName)
-      .replace(/\.js\.template/, generateTypescript ? '.tsx' : '.js')
+      .replace(/\.tsx\.template/, generateTypescript ? '.tsx' : '.js')
 
     const finalFolder =
       (nestScaffoldByModel ? singularName + '/' : '') +
@@ -272,12 +289,17 @@ const pageFiles = (
     const template = generateTemplate(
       path.join('scaffold', 'templates', 'pages', page),
       {
+        idType,
+        idTsType,
         name,
         pascalScaffoldPath,
         ...templateStrings,
       }
     )
-    fileList[outputPath] = template
+
+    fileList[outputPath] = generateTypescript
+      ? template
+      : transformTSToJS(outputPath, template)
   })
 
   return fileList
@@ -315,13 +337,13 @@ const componentFiles = async (
     },
     Json: {
       componentName: 'TextAreaField',
-      dataType: 'Json',
+      transformValue: 'Json',
       displayFunction: 'jsonDisplay',
       listDisplayFunction: 'jsonTruncate',
       deserilizeFunction: 'JSON.stringify',
     },
     Float: {
-      dataType: 'Float',
+      transformValue: 'Float',
     },
     default: {
       componentName: 'TextField',
@@ -330,7 +352,7 @@ const componentFiles = async (
       validation: '{{ required: true }}',
       displayFunction: undefined,
       listDisplayFunction: 'truncate',
-      dataType: undefined,
+      transformValue: undefined,
     },
   }
   const columns = model.fields
@@ -356,9 +378,9 @@ const componentFiles = async (
       displayFunction:
         componentMetadata[column.type]?.displayFunction ||
         componentMetadata.default.displayFunction,
-      dataType:
-        componentMetadata[column.type]?.dataType ||
-        componentMetadata.default.dataType,
+      transformValue:
+        componentMetadata[column.type]?.transformValue ||
+        componentMetadata.default.transformValue,
     }))
   const editableColumns = columns.filter((column) => {
     return NON_EDITABLE_COLUMNS.indexOf(column.name) === -1
@@ -382,7 +404,7 @@ const componentFiles = async (
     const outputComponentName = component
       .replace(/Names/, pluralName)
       .replace(/Name/, singularName)
-      .replace(/\.js\.template/, generateTypescript ? '.tsx' : '.js')
+      .replace(/\.tsx\.template/, generateTypescript ? '.tsx' : '.js')
 
     const finalFolder =
       (nestScaffoldByModel ? singularName + '/' : '') +
@@ -408,7 +430,10 @@ const componentFiles = async (
         ...templateStrings,
       }
     )
-    fileList[outputPath] = template
+
+    fileList[outputPath] = generateTypescript
+      ? template
+      : transformTSToJS(outputPath, template)
   })
 
   return fileList
@@ -470,7 +495,7 @@ const addLayoutImport = ({ model: name, path: scaffoldPath = '' }) => {
   const routesContent = readFile(routesPath).toString()
 
   const newRoutesContent = routesContent.replace(
-    /'@redwoodjs\/router'(\s*)/,
+    /['"]@redwoodjs\/router['"](\s*)/,
     `'@redwoodjs/router'\n${importLayout}$1`
   )
   writeFile(routesPath, newRoutesContent, { overwriteExisting: true })
@@ -478,12 +503,21 @@ const addLayoutImport = ({ model: name, path: scaffoldPath = '' }) => {
   return 'Added layout import to Routes.{js,tsx}'
 }
 
-const addSetImport = () => {
+const addSetImport = (task) => {
   const routesPath = getPaths().web.routes
   const routesContent = readFile(routesPath).toString()
   const [redwoodRouterImport, importStart, spacing, importContent, importEnd] =
-    routesContent.match(/(import {)(\s*)([^]*)(} from '@redwoodjs\/router')/) ||
-    []
+    routesContent.match(
+      /(import {)(\s*)([^]*)(} from ['"]@redwoodjs\/router['"])/
+    ) || []
+
+  if (!redwoodRouterImport) {
+    task.skip(
+      "Couldn't add Set import from @redwoodjs/router to Routes.{js,tsx}"
+    )
+    return undefined
+  }
+
   const routerImports = importContent.replace(/\s/g, '').split(',')
   if (routerImports.includes(PACKAGE_SET)) {
     return 'Skipping Set import'
@@ -502,23 +536,6 @@ const addSetImport = () => {
   writeFile(routesPath, newRoutesContent, { overwriteExisting: true })
 
   return 'Added Set import to Routes.{js,tsx}'
-}
-
-const addScaffoldImport = () => {
-  const appJsPath = getPaths().web.app
-  let appJsContents = readFile(appJsPath).toString()
-
-  if (appJsContents.match(SCAFFOLD_STYLE_PATH)) {
-    return 'Skipping scaffold style include'
-  }
-
-  appJsContents = appJsContents.replace(
-    "import Routes from 'src/Routes'\n",
-    `import Routes from 'src/Routes'\n\nimport '${SCAFFOLD_STYLE_PATH}'`
-  )
-  writeFile(appJsPath, appJsContents, { overwriteExisting: true })
-
-  return 'Added scaffold import to App.{js,tsx}'
 }
 
 export const command = 'scaffold <model>'
@@ -568,7 +585,7 @@ const tasks = ({ model, path, force, tests, typescript, javascript }) => {
       },
       {
         title: 'Adding set import...',
-        task: async () => addSetImport({ model, path }),
+        task: async (_, task) => addSetImport(task),
       },
       {
         title: 'Adding scaffold routes...',
@@ -577,6 +594,12 @@ const tasks = ({ model, path, force, tests, typescript, javascript }) => {
       {
         title: 'Adding scaffold asset imports...',
         task: () => addScaffoldImport(),
+      },
+      {
+        title: `Generating types ...`,
+        task: async () => {
+          return generateTypes()
+        },
       },
     ],
     { collapse: false, exitOnError: true }
@@ -589,6 +612,11 @@ export const handler = async ({
   tests,
   typescript,
 }) => {
+  if (modelArg.toLowerCase() === 'dbauth') {
+    // proxy to dbAuth generator
+    return await dbAuthHandler({ force, tests, typescript })
+  }
+
   if (tests === undefined) {
     tests = getConfig().generate.tests
   }

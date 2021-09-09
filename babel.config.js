@@ -45,14 +45,6 @@ module.exports = {
     '@babel/typescript',
   ],
   plugins: [
-    [
-      'babel-plugin-module-resolver',
-      {
-        alias: {
-          src: './src',
-        },
-      },
-    ],
     /**
      * NOTE
      * Experimental decorators are used in `@redwoodjs/structure`.
@@ -61,18 +53,6 @@ module.exports = {
     ['@babel/plugin-proposal-decorators', { legacy: true }],
     ['@babel/plugin-proposal-class-properties', { loose: true }],
     ['@babel/plugin-proposal-private-methods', { loose: true }],
-    [
-      '@babel/plugin-transform-runtime',
-      {
-        // https://babeljs.io/docs/en/babel-plugin-transform-runtime/#core-js-aliasing
-        // Setting the version here also requires `@babel/runtime-corejs3`
-        corejs: { version: 3, proposals: true },
-        // https://babeljs.io/docs/en/babel-plugin-transform-runtime/#version
-        // Transform-runtime assumes that @babel/runtime@7.0.0 is installed.
-        // Specifying the version can result in a smaller bundle size.
-        version: packageJSON.devDependencies['@babel/runtime-corejs3'],
-      },
-    ],
   ],
   overrides: [
     // ** WEB PACKAGES **
@@ -109,6 +89,18 @@ module.exports = {
                 path: 'prop-types',
               },
             ],
+          },
+        ],
+        [
+          '@babel/plugin-transform-runtime',
+          {
+            // https://babeljs.io/docs/en/babel-plugin-transform-runtime/#core-js-aliasing
+            // Setting the version here also requires `@babel/runtime-corejs3`
+            corejs: { version: 3, proposals: true },
+            // https://babeljs.io/docs/en/babel-plugin-transform-runtime/#version
+            // Transform-runtime assumes that @babel/runtime@7.0.0 is installed.
+            // Specifying the version can result in a smaller bundle size.
+            version: packageJSON.devDependencies['@babel/runtime-corejs3'],
           },
         ],
         // normally provided through preset-env detecting TARGET_BROWSER

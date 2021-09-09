@@ -5,7 +5,16 @@ import '@testing-library/jest-dom/extend-expect'
 
 import { AuthContextInterface } from '@redwoodjs/auth'
 
-import { Router, Route, Private, Redirect, navigate, routes, Link } from '../'
+import {
+  Router,
+  Route,
+  Private,
+  Redirect,
+  routes,
+  Link,
+  navigate,
+  back,
+} from '../'
 import { useParams } from '../params'
 import { Set } from '../Set'
 
@@ -56,7 +65,7 @@ beforeEach(() => {
   Object.keys(routes).forEach((key) => delete routes[key])
 })
 
-test('inits routes and navigates as expected', async () => {
+describe('inits routes and navigates as expected', () => {
   const ParamPage = ({ value, q }: { value: string; q: string }) => {
     const params = useParams()
 
@@ -82,47 +91,166 @@ test('inits routes and navigates as expected', async () => {
     </Router>
   )
 
-  const screen = render(<TestRouter />)
+  const getScreen = () => render(<TestRouter />)
 
-  // starts on home page
-  await waitFor(() => screen.getByText(/Home Page/i))
+  // Run the actual tests:
 
-  // navigate to about page
-  act(() => navigate(routes.about()))
-  await waitFor(() => screen.getByText(/About Page/i))
-
-  // passes search params to the page
-  act(() => navigate(routes.params({ value: 'val', q: 'q' })))
-  await waitFor(() => {
-    expect(screen.queryByText('param valq')).toBeInTheDocument()
-    expect(screen.queryByText('hookparams val?q')).toBeInTheDocument()
+  test('starts on home page', async () => {
+    const screen = getScreen()
+    await waitFor(() => screen.getByText(/Home Page/i))
   })
 
-  // navigate to redirect page
-  // should redirect to about
-  act(() => navigate(routes.redirect()))
-  await waitFor(() => {
-    expect(screen.queryByText(/Redirect Page/)).not.toBeInTheDocument()
-    expect(screen.queryByText(/About Page/)).toBeInTheDocument()
+  test('navigate to about page', async () => {
+    const screen = getScreen()
+    act(() => navigate(routes.about()))
+    await waitFor(() => screen.getByText(/About Page/i))
   })
 
-  act(() => navigate('/redirect2/redirected?q=cue'))
-  await waitFor(() => screen.getByText(/param redirectedcue/i))
+  test('passes search params to the page', async () => {
+    const screen = getScreen()
+    act(() => navigate(routes.params({ value: 'val', q: 'q' })))
+    await waitFor(() => {
+      expect(screen.queryByText('param valq')).toBeInTheDocument()
+      expect(screen.queryByText('hookparams val?q')).toBeInTheDocument()
+    })
+  })
 
-  // navigate to redirect2 page
-  // should redirect to /param-test
-  act(() => navigate('/redirect2/redirected'))
-  await waitFor(() => screen.getByText(/param redirected/))
+  test('navigate to redirect page should redirect to about', async () => {
+    const screen = getScreen()
 
-  act(() => navigate(routes.params({ value: 'one' })))
-  await waitFor(() => screen.getByText(/param one/i))
+    act(() => navigate(routes.redirect()))
+    await waitFor(() => {
+      expect(screen.queryByText(/Redirect Page/)).not.toBeInTheDocument()
+      expect(screen.queryByText(/About Page/)).toBeInTheDocument()
+    })
+  })
 
-  act(() => navigate(routes.params({ value: 'two' })))
-  await waitFor(() => screen.getByText(/param two/i))
+  test('navigate to redirect2 should forward params', async () => {
+    const screen = getScreen()
+    act(() => navigate('/redirect2/redirected?q=cue'))
+    await waitFor(() => screen.getByText(/param redirectedcue/i))
 
-  // Renders the notfound page
-  act(() => navigate('/no/route/defined'))
-  await waitFor(() => screen.getByText('404'))
+    act(() => navigate('/redirect2/redirected'))
+    await waitFor(() => screen.getByText(/param redirected/))
+  })
+
+  test('multiple navigates to params page should update params', async () => {
+    const screen = getScreen()
+    act(() => navigate(routes.params({ value: 'one' })))
+    await waitFor(() => screen.getByText(/param one/i))
+
+    act(() => navigate(routes.params({ value: 'two' })))
+    await waitFor(() => screen.getByText(/param two/i))
+  })
+
+  test('notfound page catches undefined paths', async () => {
+    const screen = getScreen()
+    act(() => navigate('/no/route/defined'))
+    await waitFor(() => screen.getByText('404'))
+  })
+})
+
+describe('test params escaping', () => {
+  const ParamPage = ({ value, q }: { value: string; q: string }) => {
+    const params = useParams()
+
+    return (
+      <div>
+        <p>param {`${value}${q}`}</p>
+        <p>hookparams {`${params.value}?${params.q}`}</p>
+      </div>
+    )
+  }
+
+  const TestRouter = () => (
+    <Router useAuth={mockUseAuth()}>
+      <Route path="/redirect2/{value}" redirect="/param-test/{value}" />
+      <Route path="/param-test/{value}" page={ParamPage} name="params" />
+      <Route notfound page={NotFoundPage} />
+    </Router>
+  )
+
+  const getScreen = () => render(<TestRouter />)
+
+  test('Params with unreserved characters work in path and query', async () => {
+    const screen = getScreen()
+    act(() =>
+      navigate(routes.params({ value: 'example.com', q: 'example.com' }))
+    )
+    await waitFor(() => {
+      expect(
+        screen.queryByText('param example.comexample.com')
+      ).toBeInTheDocument()
+      expect(
+        screen.queryByText('hookparams example.com?example.com')
+      ).toBeInTheDocument()
+    })
+  })
+
+  test('Params with reserved characters work in path and query', async () => {
+    const screen = getScreen()
+    act(() =>
+      navigate(routes.params({ value: 'example!com', q: 'example!com' }))
+    )
+
+    await waitFor(() => {
+      expect(
+        screen.queryByText('param example!comexample!com')
+      ).toBeInTheDocument()
+      expect(
+        screen.queryByText('hookparams example!com?example!com')
+      ).toBeInTheDocument()
+    })
+  })
+
+  test('Params with unsafe characters work in query, are escaped in path', async () => {
+    const screen = getScreen()
+    act(() =>
+      navigate(routes.params({ value: 'example com', q: 'example com' }))
+    )
+
+    await waitFor(() => {
+      expect(
+        screen.queryByText('param example%20comexample com')
+      ).toBeInTheDocument()
+      expect(
+        screen.queryByText('hookparams example%20com?example com')
+      ).toBeInTheDocument()
+    })
+  })
+
+  test('Character / is valid as part of a param in query', async () => {
+    const screen = getScreen()
+    act(() => navigate(routes.params({ value: 'example', q: 'example/com' })))
+
+    await waitFor(() => {
+      expect(screen.queryByText('param exampleexample/com')).toBeInTheDocument()
+      expect(
+        screen.queryByText('hookparams example?example/com')
+      ).toBeInTheDocument()
+    })
+  })
+
+  test('Character / is not captured as part of a param in path', async () => {
+    const screen = getScreen()
+    act(() =>
+      navigate(routes.params({ value: 'example/com', q: 'example/com' }))
+    )
+
+    await waitFor(() => screen.getByText('404'))
+  })
+
+  test('navigate to redirect2 should forward params with unreserved characters', async () => {
+    const screen = getScreen()
+    act(() => navigate('/redirect2/example.com?q=example.com'))
+    await waitFor(() => screen.getByText(/param example.comexample.com/i))
+  })
+
+  test('navigate to redirect2 should forward params with escaped characters', async () => {
+    const screen = getScreen()
+    act(() => navigate('/redirect2/example!com?q=example!com'))
+    await waitFor(() => screen.getByText(/param example!comexample!com/i))
+  })
 })
 
 test('unauthenticated user is redirected away from private page', async () => {
@@ -209,13 +337,11 @@ test('can display a loading screen whilst waiting for auth', async () => {
   const TestRouter = () => (
     <Router useAuth={mockUseAuth({ isAuthenticated: false, loading: true })}>
       <Route path="/" page={HomePage} name="home" />
-      <Private unauthenticated="home">
-        <Route
-          path="/private"
-          page={PrivatePage}
-          name="private"
-          whileLoading={() => <>Loading...</>}
-        />
+      <Private
+        unauthenticated="home"
+        whileLoadingAuth={() => <>Authenticating...</>}
+      >
+        <Route path="/private" page={PrivatePage} name="private" />
       </Private>
     </Router>
   )
@@ -228,7 +354,7 @@ test('can display a loading screen whilst waiting for auth', async () => {
   // should not redirect
   act(() => navigate(routes.private()))
   await waitFor(() => {
-    expect(screen.getByText(/Loading.../)).toBeInTheDocument()
+    expect(screen.getByText(/Authenticating.../)).toBeInTheDocument()
     expect(screen.queryByText(/Home Page/)).not.toBeInTheDocument()
   })
 })
@@ -490,11 +616,57 @@ test('renders first matching route only, even if multiple routes have the same n
   expect(screen.queryByText('About Two Page')).not.toBeInTheDocument()
 })
 
-test('params should never be an empty object', async (done) => {
+test('renders first matching route only, also with Private', async () => {
+  const ParamPage = ({ param }: { param: string }) => <div>param {param}</div>
+
+  const TestRouter = () => (
+    <Router useAuth={mockUseAuth()}>
+      <Route path="/" page={HomePage} name="home" />
+      <Route path="/login" page={LoginPage} name="login" />
+      <Route path="/about" page={AboutPage} name="about" />
+      <Private unauthenticated="login">
+        <Route path="/{param}" page={ParamPage} name="param" />
+      </Private>
+    </Router>
+  )
+
+  const screen = render(<TestRouter />)
+
+  await waitFor(() => screen.getByText(/Home Page/))
+
+  // go to about page, and make sure that's the only page rendered
+  act(() => navigate(routes.about()))
+  await waitFor(() => screen.getByText('About Page'))
+  expect(screen.queryByText(/param/)).not.toBeInTheDocument()
+})
+
+test('renders first matching route only, also with param path outside Private', async () => {
+  const ParamPage = ({ param }: { param: string }) => <div>param {param}</div>
+
+  const TestRouter = () => (
+    <Router useAuth={mockUseAuth({ isAuthenticated: true })}>
+      <Route path="/" page={HomePage} name="home" />
+      <Private unauthenticated="login">
+        <Route path="/private" page={PrivatePage} name="private" />
+      </Private>
+      <Route path="/{param}" page={ParamPage} name="param" />
+    </Router>
+  )
+
+  const screen = render(<TestRouter />)
+
+  await waitFor(() => screen.getByText(/Home Page/))
+
+  // go to about page, and make sure that's the only page rendered
+  act(() => navigate(routes.private()))
+  await waitFor(() => screen.getByText('Private Page'))
+  expect(screen.queryByText(/param/)).not.toBeInTheDocument()
+})
+
+test('params should never be an empty object', async () => {
   const ParamPage = () => {
     const params = useParams()
     expect(params).not.toEqual({})
-    done()
     return null
   }
 
@@ -508,7 +680,7 @@ test('params should never be an empty object', async (done) => {
   render(<TestRouter />)
 })
 
-test('params should never be an empty object in Set', async (done) => {
+test('params should never be an empty object in Set', async () => {
   const ParamPage = () => {
     return null
   }
@@ -516,7 +688,6 @@ test('params should never be an empty object in Set', async (done) => {
   const SetWithUseParams = ({ children }) => {
     const params = useParams()
     expect(params).not.toEqual({})
-    done()
     return children
   }
 
@@ -614,4 +785,76 @@ test('Private is an alias for Set private', async () => {
   act(() => navigate('/private'))
   await waitFor(() => screen.getByText(/Private Layout \(dark\)/))
   await waitFor(() => screen.getByText(/Private Page/))
+})
+
+test('redirect to last page', async () => {
+  const TestRouter = () => (
+    <Router useAuth={mockUseAuth()}>
+      <Route path="/" page={HomePage} name="home" />
+      <Route path="/about" page={AboutPage} name="about" />
+      <Private unauthenticated="login">
+        <Route path="/private" page={PrivatePage} name="private" />
+      </Private>
+      <Route path="/login" page={LoginPage} name="login" />
+    </Router>
+  )
+  const screen = render(<TestRouter />)
+
+  // starts on home page
+  await waitFor(() => screen.getByText(/Home Page/i))
+
+  // navigate to private page
+  // should redirect to login
+  act(() => navigate(routes.private()))
+
+  await waitFor(() => {
+    expect(screen.queryByText(/Private Page/i)).not.toBeInTheDocument()
+    expect(window.location.pathname).toBe('/login')
+    expect(window.location.search).toBe('?redirectTo=/private')
+    screen.getByText(/Login Page/i)
+  })
+})
+
+test('no location match means nothing is rendered', async () => {
+  const TestRouter = () => (
+    <Router>
+      <Route path="/" page={HomePage} name="home" />
+    </Router>
+  )
+  const screen = render(<TestRouter />)
+
+  // starts on home page
+  await waitFor(() => screen.getByText(/Home Page/i))
+
+  // navigate page that doesn't exist
+  act(() => navigate('/not/found'))
+
+  // wait for rendering
+  // Otherwise adding a NotFound route still makes this test pass
+  await new Promise((r) => setTimeout(r, 200))
+
+  expect(screen.container).toMatchInlineSnapshot('<div />')
+})
+
+test('jump to new route, then go back', async () => {
+  const HelpPage = () => <h1>Help Page</h1>
+  const TestRouter = () => (
+    <Router>
+      <Route path="/" page={HomePage} name="home" />
+      <Route path="/login" page={LoginPage} name="login" />
+      <Route path="/about" page={AboutPage} name="about" />
+      <Route path="/help" page={HelpPage} name="help" />
+    </Router>
+  )
+  const screen = render(<TestRouter />)
+
+  // starts on home page
+  await waitFor(() => screen.getByText('Home Page'))
+
+  act(() => navigate(routes.about()))
+  await waitFor(() => screen.getByText('About Page'))
+  act(() => navigate(routes.help(), { replace: true }))
+  await waitFor(() => screen.getByText('Help Page'))
+  act(() => back())
+  await waitFor(() => screen.getByText('Home Page'))
 })

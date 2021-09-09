@@ -83,10 +83,9 @@ For detailed logger configuration, see the RedwoodJS logger package [README](./s
 
 `@redwoodjs/api` uses a few things you should be familiar with:
 
-- [Apollo Server](https://www.apollographql.com/docs/apollo-server/) (Lambda)
 - [GraphQL](https://graphql.org/learn/)
 
-Although this package depends, in the code-dependency sense, only on `@redwoodjs/internals`, it still hangs together with the others&mdash;notably, `@redwoodjs/web` and `@redwoodjs/dev-server`. So if you’re asking yourself “but when does my server run?” head over to `@redwoodjs/dev-server`.
+Although this package depends, in the code-dependency sense, only on `@redwoodjs/internals`, it still hangs together with the others&mdash;notably, `@redwoodjs/web` and `@redwoodjs/api-server`. So if you’re asking yourself “but when does my server run?” head over to `@redwoodjs/api-server`.
 
 ### Overview
 
@@ -96,7 +95,7 @@ Remember, files in this directory (`api/src/functions`) are serverless functions
 1. Everything (i.e. sdl and services) is imported
 2. The services are wrapped into resolvers
 3. The sdl and resolvers are merged/stitched into a schema
-4. The ApolloServer is instantiated with said merged/stitched schema and context
+4. The graphql-server is instantiated with said merged/stitched schema and context
 
 These four steps map quite nicely to these four "code" steps, some of which are doing a little more under-the-hood than others:
 
@@ -197,8 +196,6 @@ import { context } from '@redwoodjs/api'
 ```
 
 <!-- Normally you’d be running the server now, `server.listen().then...` But Redwood does things a little differently. As you might’ve guessed from the name, createGraphQLHandler returns a handler. In Redwood, serverless functions have to return a handler. -->
-
-> **Read the Docs:** Now’s a good time to head over to [@redwoodjs/dev-server](https://github.com/redwoodjs/redwood/blob/bdb112f5d10f41697b9068bdeee93631811109bf/packages/dev-server/README.md).
 
 ## FAQ
 

@@ -6,7 +6,7 @@ import { getCurrentUser } from '../../api/src/lib/auth'
 type ThenArg<T> = T extends PromiseLike<infer U> ? U : T
 export type InferredCurrentUser = ThenArg<ReturnType<typeof getCurrentUser>>
 
-declare module '@redwoodjs/api' {
+declare module '@redwoodjs/graphql-server' {
   interface GlobalContext {
     currentUser?: InferredCurrentUser
   }
