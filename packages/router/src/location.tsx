@@ -35,17 +35,31 @@ class LocationProvider extends React.Component<LocationProviderProps> {
     if (typeof window !== 'undefined') {
       const { pathname } = window.location
 
-      if (this.props.trailingSlashes === 'never' && pathname.endsWith('/')) {
-        window.history.replaceState(
-          {},
-          '',
-          pathname.substr(0, pathname.length - 1)
-        )
-      } else if (
-        this.props.trailingSlashes === 'always' &&
-        !pathname.endsWith('/')
-      ) {
-        window.history.replaceState({}, '', pathname + '/')
+      // Since we have to update the URL, we might as well handle the trailing slash here, before matching.
+      //
+      // - never -> strip trailing slashes ("/about/" -> "/about")
+      // - always -> add trailing slashes ("/about" -> "/about/")
+      // - preserve -> do nothing ("/about" -> "/about", "/about/" -> "/about/")
+      //
+      switch (this.props.trailingSlashes) {
+        case 'never':
+          if (pathname.endsWith('/')) {
+            window.history.replaceState(
+              {},
+              '',
+              pathname.substr(0, pathname.length - 1)
+            )
+          }
+          break
+
+        case 'always':
+          if (!pathname.endsWith('/')) {
+            window.history.replaceState({}, '', pathname + '/')
+          }
+          break
+
+        case 'preserve':
+          break
       }
 
       windowLocation = window.location
