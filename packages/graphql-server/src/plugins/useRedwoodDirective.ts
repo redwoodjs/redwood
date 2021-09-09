@@ -1,7 +1,6 @@
 import { Plugin } from '@envelop/types'
 import { getArgumentValues } from '@graphql-tools/utils'
 import {
-  defaultFieldResolver,
   DirectiveNode,
   GraphQLObjectType,
   GraphQLResolveInfo,
@@ -20,14 +19,14 @@ export const DIRECTIVE_REQUIRED_ERROR_MESSAGE =
   'You must specify one of @requireAuth, @skipAuth or a custom directive'
 
 export interface DirectiveArgs<FieldType = any> {
-  context: GlobalContext
-  directiveNode?: DirectiveNode
-  getFieldValue: () => FieldType
-  argumentValues: Record<string, any>
-  roles: [string] | undefined
   root: unknown
   args: Record<string, unknown>
+  context: GlobalContext
   info: GraphQLResolveInfo
+  directiveNode?: DirectiveNode
+  directiveArgs: Record<string, any>
+  requiredRoles: [string] | undefined
+  getFieldValue: () => FieldType
 }
 
 /**
@@ -120,7 +119,7 @@ export const useRedwoodDirective = (
   return {
     onExecute() {
       return {
-        async onResolverCalled({ args, root, context, info }) {
+        async onResolverCalled({ args, root, context, info, resolverFn }) {
           if (isQueryOrMutation(info) && !hasDirective(info)) {
             throw new Error(DIRECTIVE_REQUIRED_ERROR_MESSAGE)
           }
@@ -128,23 +127,22 @@ export const useRedwoodDirective = (
           const directiveNode = getDirectiveByName(info, options.name)
 
           if (directiveNode) {
-            const argumentValues = getDirectiveArgumentValues(
+            const directiveArgs = getDirectiveArgumentValues(
               info.schema,
               directiveNode
             )
 
-            const roles = getDirectiveRoles(info.schema, directiveNode)
+            const requiredRoles = getDirectiveRoles(info.schema, directiveNode)
 
             const transformedOutputMaybe = await executeDirective({
-              context,
-              directiveNode,
-              getFieldValue: () =>
-                defaultFieldResolver(root, args, context, info),
-              argumentValues,
-              roles,
-              args,
               root,
+              args,
+              context,
               info,
+              directiveNode,
+              directiveArgs,
+              requiredRoles,
+              getFieldValue: () => resolverFn(root, args, context, info),
             })
 
             // In order to change the value of the field, we have to return a function in this form

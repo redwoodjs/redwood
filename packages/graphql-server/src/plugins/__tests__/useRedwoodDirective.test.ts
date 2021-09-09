@@ -263,11 +263,14 @@ describe('Directives on Mutations', () => {
     const deletePost = mutationType.getFields()['deletePost']
     const directiveNode = deletePost.astNode.directives[0]
 
-    const result = getDirectiveRoles(schemaWithDirectiveQueries, directiveNode)
+    const requiredRoles = getDirectiveRoles(
+      schemaWithDirectiveQueries,
+      directiveNode
+    )
 
-    expect(result).toContain('admin')
-    expect(result).toContain('publisher')
-    expect(result).not.toContain('author')
+    expect(requiredRoles).toContain('admin')
+    expect(requiredRoles).toContain('publisher')
+    expect(requiredRoles).not.toContain('author')
   })
 
   it('Should get the argument values for a directive', async () => {
@@ -277,16 +280,16 @@ describe('Directives on Mutations', () => {
 
     const deletePost = postType.getFields()['description']
 
-    const result = getDirectiveArgumentValues(
+    const directiveArgs = getDirectiveArgumentValues(
       schemaWithDirectiveQueries,
       deletePost.astNode.directives[0]
     )
 
-    expect(result).toHaveProperty('maxLength')
-    expect(result.maxLength).toEqual(5)
+    expect(directiveArgs).toHaveProperty('maxLength')
+    expect(directiveArgs.maxLength).toEqual(5)
 
-    expect(result).toHaveProperty('separator')
-    expect(result.separator).toEqual('.')
+    expect(directiveArgs).toHaveProperty('separator')
+    expect(directiveArgs.separator).toEqual('.')
   })
 
   it('Should get the specified argument value for a directive', async () => {
@@ -296,12 +299,12 @@ describe('Directives on Mutations', () => {
 
     const deletePost = postType.getFields()['description']
 
-    const result = getDirectiveArgumentValue(
+    const directiveArg = getDirectiveArgumentValue(
       schemaWithDirectiveQueries,
       deletePost.astNode.directives[0],
       'maxLength'
     )
 
-    expect(result).toEqual(5)
+    expect(directiveArg).toEqual(5)
   })
 })
