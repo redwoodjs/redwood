@@ -1,17 +1,12 @@
-import {
-  createUserWithEmailAndPassword,
-  isSignInWithEmailLink,
-  OAuthProvider,
-  sendSignInLinkToEmail,
-  signInWithEmailAndPassword,
-  signInWithEmailLink,
-  signInWithPopup,
-} from '@firebase/auth'
 import type {
   ActionCodeSettings,
   Auth as FirebaseAuth,
+  AuthProvider as FirebaseAuthProvider,
   CustomParameters,
+  OAuthProvider,
+  PopupRedirectResolver,
   User,
+  UserCredential,
 } from '@firebase/auth'
 
 import { AuthClient } from './'
@@ -53,14 +48,44 @@ const hasPasswordCreds = (options: Options): boolean => {
   return options.email !== undefined && options.password !== undefined
 }
 
-export const firebase = (
-  auth: FirebaseAuth,
+type FirebaseMethods = {
+  createUserWithEmailAndPassword(
+    auth: FirebaseAuth,
+    email: string,
+    password: string
+  ): Promise<UserCredential>
+  isSignInWithEmailLink(auth: FirebaseAuth, emailLink: string): boolean
+  sendSignInLinkToEmail(
+    auth: FirebaseAuth,
+    email: string,
+    actionCodeSettings: ActionCodeSettings
+  ): Promise<void>
+  signInWithEmailAndPassword(
+    auth: FirebaseAuth,
+    email: string,
+    password: string
+  ): Promise<UserCredential>
+  signInWithEmailLink(
+    auth: FirebaseAuth,
+    email: string,
+    emailLink?: string
+  ): Promise<UserCredential>
+  signInWithPopup(
+    auth: FirebaseAuth,
+    provider: FirebaseAuthProvider,
+    resolver?: PopupRedirectResolver
+  ): Promise<UserCredential>
+}
+
+type FirebaseClient = {
+  auth: FirebaseAuth
+  f: FirebaseMethods
+  getProvider(providerId: string): OAuthProvider
   actionCodeSettings?: ActionCodeSettings
-): AuthClient => {
-  // Use a function to allow us to extend for non-oauth providers in the future
-  const getProvider = (providerId: oAuthProvider) => {
-    return new OAuthProvider(providerId)
-  }
+}
+
+export const firebase = (client: FirebaseClient): AuthClient => {
+  const { auth, f, getProvider, actionCodeSettings } = client
 
   const applyProviderOptions = (
     provider: OAuthProvider,
@@ -78,18 +103,18 @@ export const firebase = (
   const loginWithEmailLink = ({ email, emailLink }: Options) => {
     // dispatch to signIn step1 based on if no emailLink has been provided
     if (!emailLink) {
-      return sendSignInLinkToEmail(
+      return f.sendSignInLinkToEmail(
         auth,
         email as string,
         actionCodeSettings as ActionCodeSettings
       )
     }
     // otherwise validate emailLink
-    if (!isSignInWithEmailLink(auth, emailLink)) {
+    if (!f.isSignInWithEmailLink(auth, emailLink)) {
       throw new Error('Login failed, invalid email link')
     }
 
-    return signInWithEmailLink(auth, email as string, emailLink as string)
+    return f.signInWithEmailLink(auth, email as string, emailLink as string)
   }
 
   return {
@@ -109,7 +134,7 @@ export const firebase = (
       }
 
       if (hasPasswordCreds(options)) {
-        return signInWithEmailAndPassword(
+        return f.signInWithEmailAndPassword(
           auth,
           options.email as string,
           options.password as string
@@ -123,7 +148,7 @@ export const firebase = (
       const provider = getProvider(options.providerId || 'google.com')
       const providerWithOptions = applyProviderOptions(provider, options)
 
-      return signInWithPopup(auth, providerWithOptions)
+      return f.signInWithPopup(auth, providerWithOptions)
     },
     logout: async () => auth.signOut(),
     signup: (
@@ -134,7 +159,7 @@ export const firebase = (
       }
 
       if (hasPasswordCreds(options)) {
-        return createUserWithEmailAndPassword(
+        return f.createUserWithEmailAndPassword(
           auth,
           options.email as string,
           options.password as string
@@ -147,7 +172,7 @@ export const firebase = (
 
       const provider = getProvider(options.providerId || 'google.com')
       const providerWithOptions = applyProviderOptions(provider, options)
-      return signInWithPopup(auth, providerWithOptions)
+      return f.signInWithPopup(auth, providerWithOptions)
     },
     getToken: async () => {
       return auth.currentUser ? auth.currentUser.getIdToken() : null
