@@ -30,13 +30,11 @@ describe('<NavLink />', () => {
     const mockLocation = createDummyLocation('/dunder-mifflin')
 
     const { getByText } = render(
-      <RouterContextProvider>
-        <LocationProvider location={mockLocation}>
-          <NavLink activeClassName="activeTest" to="/dunder-mifflin">
-            Dunder Mifflin
-          </NavLink>
-        </LocationProvider>
-      </RouterContextProvider>
+      <LocationProvider location={mockLocation}>
+        <NavLink activeClassName="activeTest" to="/dunder-mifflin">
+          Dunder Mifflin
+        </NavLink>
+      </LocationProvider>
     )
 
     expect(getByText(/Dunder Mifflin/)).toHaveClass('activeTest')
@@ -189,13 +187,11 @@ describe('<NavLink />', () => {
     const mockLocation = createDummyLocation('/staples')
 
     const { getByText } = render(
-      <RouterContextProvider>
-        <LocationProvider location={mockLocation}>
-          <NavLink activeClassName="activeTest" to="/dunder-mifflin">
-            Dunder Mifflin
-          </NavLink>
-        </LocationProvider>
-      </RouterContextProvider>
+      <LocationProvider location={mockLocation}>
+        <NavLink activeClassName="activeTest" to="/dunder-mifflin">
+          Dunder Mifflin
+        </NavLink>
+      </LocationProvider>
     )
 
     expect(getByText(/Dunder Mifflin/)).not.toHaveClass('activeTest')
@@ -263,11 +259,9 @@ describe('useMatch', () => {
     const mockLocation = createDummyLocation('/dunder-mifflin')
 
     const { getByText } = render(
-      <RouterContextProvider>
-        <LocationProvider location={mockLocation}>
-          <MyLink to="/dunder-mifflin">Dunder Mifflin</MyLink>
-        </LocationProvider>
-      </RouterContextProvider>
+      <LocationProvider location={mockLocation}>
+        <MyLink to="/dunder-mifflin">Dunder Mifflin</MyLink>
+      </LocationProvider>
     )
 
     expect(getByText(/Dunder Mifflin/)).toHaveStyle('color: green')
@@ -292,11 +286,9 @@ describe('useMatch', () => {
     const mockLocation = createDummyLocation('/staples')
 
     const { getByText } = render(
-      <RouterContextProvider>
-        <LocationProvider location={mockLocation}>
-          <MyLink to="/dunder-mifflin">Dunder Mifflin</MyLink>
-        </LocationProvider>
-      </RouterContextProvider>
+      <LocationProvider location={mockLocation}>
+        <MyLink to="/dunder-mifflin">Dunder Mifflin</MyLink>
+      </LocationProvider>
     )
 
     expect(getByText(/Dunder Mifflin/)).toHaveStyle('color: red')
