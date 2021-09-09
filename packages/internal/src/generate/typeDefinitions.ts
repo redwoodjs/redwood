@@ -46,6 +46,7 @@ export const generateTypeDefs = async () => {
     ...generateTypeDefGlobImports(),
     ...generateTypeDefGlobalContext(),
     ...generateTypeDefScenarios(),
+    ...generateTypeDefTestMocks(),
     ...gqlApi,
     ...gqlWeb,
   ]
@@ -173,6 +174,13 @@ export const generateTypeDefCurrentUser = () => {
 
 export const generateTypeDefScenarios = () => {
   return writeTypeDefIncludeFile('api-scenarios.d.ts.template')
+}
+
+export const generateTypeDefTestMocks = () => {
+  return [
+    writeTypeDefIncludeFile('api-test-globals.d.ts.template'),
+    writeTypeDefIncludeFile('web-test-globals.d.ts.template'),
+  ].flat()
 }
 
 export const generateTypeDefGlobImports = () => {
