@@ -1,6 +1,7 @@
 import path from 'path'
 
 import camelcase from 'camelcase'
+import execa from 'execa'
 import Listr from 'listr'
 
 import { getConfig } from '@redwoodjs/internal'
@@ -32,7 +33,6 @@ export const files = ({ name, typescript = false, tests }) => {
 
   const files = [directiveFile]
 
-  // @TODO: update test template!
   if (tests) {
     const testOutputFilename = `${camelcase(name)}.test.${
       typescript ? 'ts' : 'js'
@@ -101,6 +101,16 @@ export const handler = async (args) => {
         title: 'Generating directive file...',
         task: () => {
           return writeFilesTask(files(args), { overwriteExisting: args.force })
+        },
+      },
+      {
+        title: 'Generating redwood types...',
+        task: () => {
+          return execa('yarn rw-gen', [], {
+            stdio: 'pipe',
+            shell: true,
+            cwd: getPaths().web.base,
+          })
         },
       },
       {
