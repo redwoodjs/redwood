@@ -34,7 +34,8 @@ export const getCurrentUser = async (
 ) => {
   // RBAC for firebase Auth needs a custom implementation, can not use parseJWT
   // see: https://firebase.google.com/docs/auth/admin/custom-claims
-  return { decoded.email, decoded.uid }
+  const { email, uid } = decoded
+  return { email, uid }
 }
 
 /**
