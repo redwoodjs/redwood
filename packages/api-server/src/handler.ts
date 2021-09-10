@@ -70,7 +70,6 @@ export const apiServerHandler = async ({
   })
   process.on('exit', () => {
     http?.close()
-    process.exit(0)
   })
 }
 
