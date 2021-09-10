@@ -88,18 +88,15 @@ export const firebase = (client: FirebaseClient): AuthClient => {
     type: 'firebase',
     client: auth,
     restoreAuthState: () => {
-      return new Promise<User | null>((resolve, reject) => {
-        const reloadUser = (user: User | null) => {
-          // if (user) {
-          //   console.log('user is logged in')
-          // } else {
-          //   console.log('user is not logged in')
-          // }
+      // return a promise that we be await'd on for first page load until firebase
+      // auth has loaded, indicated by the first firing of onAuthStateChange)
+      return new Promise((resolve, reject) => {
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+          unsubscribe()
           resolve(user)
-        }
-        auth.onAuthStateChanged(reloadUser, reject)
-        // TODO shouldn't this unsubscribe to auth state after first "update"
+        }, reject)
       })
+      return
     },
     login: async (
       options: oAuthProvider | Options = { providerId: 'google.com' }
@@ -149,6 +146,7 @@ export const firebase = (client: FirebaseClient): AuthClient => {
 
       const provider = getProvider(options.providerId || 'google.com')
       const providerWithOptions = applyProviderOptions(provider, options)
+
       return firebaseAuth.signInWithPopup(auth, providerWithOptions)
     },
     getToken: async () => {
