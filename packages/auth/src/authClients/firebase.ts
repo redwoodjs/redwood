@@ -38,16 +38,16 @@ const hasPasswordCreds = (options: Options): boolean => {
 }
 
 type FirebaseClient = {
-  firebase: FirebaseAuth
+  firebaseAuth: FirebaseAuth
   actionCodeSettings?: ActionCodeSettings
 }
 
 export const firebase = (client: FirebaseClient): AuthClient => {
-  const { firebase, actionCodeSettings } = client
-  const auth = firebase.getAuth()
+  const { firebaseAuth, actionCodeSettings } = client
+  const auth = firebaseAuth.getAuth()
 
   function getProvider(providerId: string) {
-    return new firebase.OAuthProvider(providerId)
+    return new firebaseAuth.OAuthProvider(providerId)
   }
 
   const applyProviderOptions = (
@@ -66,18 +66,18 @@ export const firebase = (client: FirebaseClient): AuthClient => {
   const loginWithEmailLink = ({ email, emailLink }: Options) => {
     // dispatch to signIn step1 based on if no emailLink has been provided
     if (!emailLink) {
-      return firebase.sendSignInLinkToEmail(
+      return firebaseAuth.sendSignInLinkToEmail(
         auth,
         email as string,
         actionCodeSettings as ActionCodeSettings
       )
     }
     // otherwise validate emailLink
-    if (!firebase.isSignInWithEmailLink(auth, emailLink)) {
+    if (!firebaseAuth.isSignInWithEmailLink(auth, emailLink)) {
       throw new Error('Login failed, invalid email link')
     }
 
-    return firebase.signInWithEmailLink(
+    return firebaseAuth.signInWithEmailLink(
       auth,
       email as string,
       emailLink as string
@@ -101,7 +101,7 @@ export const firebase = (client: FirebaseClient): AuthClient => {
       }
 
       if (hasPasswordCreds(options)) {
-        return firebase.signInWithEmailAndPassword(
+        return firebaseAuth.signInWithEmailAndPassword(
           auth,
           options.email as string,
           options.password as string
@@ -115,7 +115,7 @@ export const firebase = (client: FirebaseClient): AuthClient => {
       const provider = getProvider(options.providerId || 'google.com')
       const providerWithOptions = applyProviderOptions(provider, options)
 
-      return firebase.signInWithPopup(auth, providerWithOptions)
+      return firebaseAuth.signInWithPopup(auth, providerWithOptions)
     },
     logout: async () => auth.signOut(),
     signup: (
@@ -126,7 +126,7 @@ export const firebase = (client: FirebaseClient): AuthClient => {
       }
 
       if (hasPasswordCreds(options)) {
-        return firebase.createUserWithEmailAndPassword(
+        return firebaseAuth.createUserWithEmailAndPassword(
           auth,
           options.email as string,
           options.password as string
@@ -139,7 +139,7 @@ export const firebase = (client: FirebaseClient): AuthClient => {
 
       const provider = getProvider(options.providerId || 'google.com')
       const providerWithOptions = applyProviderOptions(provider, options)
-      return firebase.signInWithPopup(auth, providerWithOptions)
+      return firebaseAuth.signInWithPopup(auth, providerWithOptions)
     },
     getToken: async () => {
       return auth.currentUser ? auth.currentUser.getIdToken() : null
