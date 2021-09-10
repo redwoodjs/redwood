@@ -39,5 +39,5 @@
     "build:link": "node ./tasks/build-and-copy",
     "build:test-project": "node ./tasks/test-project/test-project"
   },
-  "packageManager": "yarn@3.0.1"
+  "packageManager": "yarn@3.0.2"
 }
