@@ -1,8 +1,6 @@
 import { AuthenticationError } from '@redwoodjs/api'
 import admin from 'firebase-admin'
 
-import { db } from './db'
-
 const config = {
   apiKey: process.env.FIREBASE_API_KEY,
   authDomain: process.env.FIREBASE_AUTH_DOMAIN,
@@ -13,6 +11,7 @@ const config = {
   appId: process.env.FIREBASE_APP_ID,
 }
 
+// eslint-disable-next-line no-unused-vars
 const adminApp = admin.initializeApp(config)
 
 /**
