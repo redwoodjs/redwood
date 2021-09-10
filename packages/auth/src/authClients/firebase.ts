@@ -13,7 +13,7 @@ export type FirebaseUser = User
 
 // @TODO: Firebase doesn't export a list of providerIds they use
 // But I found them here: https://github.com/firebase/firebase-js-sdk/blob/a5768b0aa7d7ce732279931aa436e988c9f36487/packages/rules-unit-testing/src/api/index.ts
-// NOTE: 2021-09-07 could we replace this with ProviderId type now exported from firebase-sdk-js ^v9.0.0
+// NOTE: 2021-09-07 firebase has a const/enum ProviderId they export
 export type oAuthProvider =
   | 'google.com'
   | 'facebook.com'
