@@ -90,16 +90,15 @@ export const firebase = (client: FirebaseClient): AuthClient => {
     restoreAuthState: () => {
       return new Promise<User | null>((resolve, reject) => {
         const reloadUser = (user: User | null) => {
-          if (user) {
-            // console.log('user is logged in')
-            user.reload()
-            // } else {
-            // console.log('not logged in')
-          }
+          // if (user) {
+          //   console.log('user is logged in')
+          // } else {
+          //   console.log('user is not logged in')
+          // }
           resolve(user)
         }
         auth.onAuthStateChanged(reloadUser, reject)
-        // shouldn't this unsubscribe to auth state after first "update"
+        // TODO shouldn't this unsubscribe to auth state after first "update"
       })
     },
     login: async (
