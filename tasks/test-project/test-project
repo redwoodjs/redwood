@@ -123,15 +123,11 @@ const globalTasks = () =>
       {
         title: 'Installing node_modules',
         task: async () => {
-          return execa('yarn install', {
-            shell: true,
-            stdio: 'inherit',
-            cleanup: true,
-            cwd: OUTPUT_PROJECT_PATH,
-            env: {
-              RW_PATH: path.join(__dirname, '../../'),
-            },
-          })
+          return execa(
+            'yarn install',
+            ['--non-interactive', !verbose && '--silent'].filter(Boolean),
+            getExecaOptions(OUTPUT_PROJECT_PATH)
+          )
         },
       },
       {
