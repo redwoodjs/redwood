@@ -19,7 +19,12 @@ const { getExecaOptions } = require('./util')
 
 const args = yargs
   .usage('Usage: $0 <project directory> [option]')
-  .option('name', { default: 'blog-test-project', type: 'string', alias: 'n' })
+  .option('project-directory', {
+    type: 'string',
+    alias: 'pd',
+    description:
+      'Path to project directory. WARNING: path must be outside framework directory.',
+  })
   .option('typescript', {
     alias: 'ts',
     default: false,
@@ -51,15 +56,22 @@ const args = yargs
   .help()
   .strict().argv
 
-const { name, typescript, canary, link, verbose, clean } = args
+const { projectDirectory, typescript, canary, link, verbose, clean } = args
 
 const choosenPath = args._
 
+if (!projectDirectory && !(choosenPath.length >= 1)) {
+  console.error(
+    'Please specify the project directory. Example: `yarn build:test-project ../test-project`'
+  )
+  console.error('WARNING: path must be outside framework directory.')
+  process.exit(1)
+}
+
 const OUTPUT_PROJECT_PATH = path.resolve(
-  choosenPath.length >= 1
-    ? String(choosenPath).replace(/,/g, '-')
-    : path.join(__dirname, '../../', name)
+  choosenPath.length >= 1 ? String(choosenPath) : String(projectDirectory)
 )
+
 const RW_FRAMEWORKPATH = path.join(__dirname, '../../')
 
 const createProject = async () => {
@@ -119,6 +131,16 @@ const globalTasks = () =>
         task: () =>
           addFrameworkDepsToProject(RW_FRAMEWORKPATH, OUTPUT_PROJECT_PATH),
         enabled: () => link,
+      },
+      {
+        title: 'Set yarn v1 version in test-project directory',
+        task: async () => {
+          return execa(
+            'yarn set version classic',
+            [],
+            getExecaOptions(OUTPUT_PROJECT_PATH)
+          )
+        },
       },
       {
         title: 'Installing node_modules',
