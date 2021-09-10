@@ -14,10 +14,8 @@
   "dependencies": {
     "@babel/parser": "7.15.3",
     "@babel/plugin-transform-typescript": "7.15.0",
-    "babel-plugin-polyfill-corejs3": "0.2.4",
     "@babel/register": "7.15.3",
     "@babel/runtime-corejs3": "7.15.3",
-    "core-js": "3.16.3",
     "@babel/traverse": "7.15.0",
     "@graphql-codegen/cli": "2.0.1",
     "@graphql-codegen/core": "2.0.0",
@@ -27,6 +25,8 @@
     "@graphql-codegen/typescript-react-apollo": "3.0.0",
     "@graphql-codegen/typescript-resolvers": "2.0.0",
     "babel-plugin-graphql-tag": "3.3.0",
+    "babel-plugin-polyfill-corejs3": "0.2.4",
+    "core-js": "3.16.3",
     "deepmerge": "4.2.2",
     "esbuild": "0.12.21",
     "fast-glob": "3.2.7",
@@ -40,8 +40,8 @@
     "toml": "3.0.0"
   },
   "devDependencies": {
-    "@types/findup-sync": "4.0.1",
     "@types/babel__core": "7.1.15",
+    "@types/findup-sync": "4.0.1",
     "@types/fs-extra": "9.0.12",
     "@types/rimraf": "3.0.1",
     "graphql-tag": "2.12.5"
