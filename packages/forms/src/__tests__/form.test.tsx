@@ -34,12 +34,12 @@ describe('Form', () => {
         <TextField
           name="floatText"
           defaultValue="3.14"
-          transformValue="Float"
+          validation={{ valueAsNumber: true }}
         />
         <CheckboxField name="checkbox" defaultChecked={true} />
         <TextAreaField
           name="json"
-          transformValue="Json"
+          validation={{ valueAsJSON: true }}
           defaultValue={`
             {
               "key_one": "value1",
@@ -58,7 +58,11 @@ describe('Form', () => {
           <option>Option 2</option>
           <option>Option 3</option>
         </SelectField>
-        <SelectField name="select2" data-testid="select2" transformValue="Int">
+        <SelectField
+          name="select2"
+          data-testid="select2"
+          validation={{ valueAsNumber: true }}
+        >
           <option value={1}>Option 1</option>
           <option value={2}>Option 2</option>
           <option value={3}>Option 3</option>
@@ -91,7 +95,7 @@ describe('Form', () => {
           <TextField
             name="wrapped-ff"
             defaultValue="3.14"
-            transformValue="Float"
+            validation={{ valueAsNumber: true }}
           />
         </div>
         <NumberFieldsWrapper />
@@ -147,6 +151,7 @@ describe('Form', () => {
     fireEvent.click(screen.getByText('Save'))
 
     await waitFor(() => expect(mockFn).toHaveBeenCalledTimes(1))
+
     expect(mockFn).toBeCalledWith(
       {
         text: 'texttext',
@@ -201,12 +206,12 @@ describe('Form', () => {
         <TextField
           name="tf"
           defaultValue="123_456"
-          transformValue={coercionFunctionNumber}
+          validation={{ setValueAs: coercionFunctionNumber }}
         />
         <SelectField
           name="select"
           defaultValue="Option_2"
-          transformValue={coercionFunctionText}
+          validation={{ setValueAs: coercionFunctionText }}
         >
           <option>Option_1</option>
           <option>Option_2</option>
@@ -230,8 +235,16 @@ describe('Form', () => {
 
     render(
       <Form onSubmit={mockFn}>
-        <NumberField name="int" defaultValue="" transformValue="Int" />
-        <TextField name="float" defaultValue="" transformValue="Float" />
+        <NumberField
+          name="int"
+          defaultValue=""
+          validation={{ valueAsNumber: true }}
+        />
+        <TextField
+          name="float"
+          defaultValue=""
+          validation={{ valueAsNumber: true }}
+        />
         <Submit>Save</Submit>
       </Form>
     )
@@ -301,7 +314,7 @@ describe('Form', () => {
           name="jsonField"
           defaultValue="{bad-json}"
           data-testid="jsonField"
-          transformValue="Json"
+          validation={{ valueAsJSON: true }}
         />
         <Submit>Save</Submit>
       </Form>
@@ -328,8 +341,10 @@ describe('Form', () => {
           name="jsonField"
           defaultValue="{bad-json}"
           data-testid="jsonField"
-          transformValue="Json"
-          validation={{ validate: (value: string) => value && null }}
+          validation={{
+            validate: (value: string) => value && null,
+            valueAsJSON: true,
+          }}
         />
         <Submit>Save</Submit>
       </Form>
@@ -437,6 +452,7 @@ describe('Form', () => {
     const phoneError = await waitFor(
       () => screen.getByTestId('phoneFieldError').textContent
     )
+
     expect(phoneError).toEqual('false is not formatted correctly')
   })
 
@@ -459,6 +475,7 @@ describe('Form', () => {
     const phoneError = await waitFor(
       () => screen.getByTestId('phoneFieldError').textContent
     )
+
     expect(phoneError).toEqual('0 is not formatted correctly')
   })
 })
