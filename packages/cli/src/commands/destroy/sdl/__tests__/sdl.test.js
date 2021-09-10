@@ -9,13 +9,6 @@ import { builder, files } from '../../../generate/sdl/sdl'
 import { tasks } from '../sdl'
 
 jest.mock('fs')
-jest.mock('@babel/core', () => {
-  return {
-    transform: () => ({
-      code: '',
-    }),
-  }
-})
 
 jest.mock('../../../../lib', () => {
   const path = require('path')

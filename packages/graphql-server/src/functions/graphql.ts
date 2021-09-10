@@ -1,6 +1,4 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-
-import { useApolloServerErrors } from '@envelop/apollo-server-errors'
 import {
   envelop,
   FormatErrorHandler,
@@ -36,15 +34,14 @@ import {
   shouldRenderGraphiQL,
 } from 'graphql-helix'
 import { renderPlaygroundPage } from 'graphql-playground-html'
-import { BaseLogger } from 'pino'
+import { BaseLogger, LevelWithSilent } from 'pino'
 import { v4 as uuidv4 } from 'uuid'
+
+import { AuthContextPayload, getAuthenticationContext } from '@redwoodjs/api'
 
 import { CorsConfig, createCorsContext } from '../cors'
 import { createHealthcheckContext, OnHealthcheckFn } from '../healthcheck'
 import {
-  ApolloError,
-  AuthContextPayload,
-  getAuthenticationContext,
   getPerRequestContext,
   setContext,
   usePerRequestContext,
@@ -68,6 +65,7 @@ export type RedwoodGraphQLContext = {
  * Options for request and response information to include in the log statements
  * output by UseRedwoodLogger around the execution event
  *
+ * @param level - Sets log level specific to GraphQL log output. Defaults to current logger level.
  * @param data - Include response data sent to client.
  * @param operationName - Include operation name.
  * @param requestId - Include the event's requestId, or if none, generate a uuid as an identifier.
@@ -76,6 +74,31 @@ export type RedwoodGraphQLContext = {
  * @param userAgent - Include the browser (or client's) user agent.
  */
 type GraphQLLoggerOptions = {
+  /**
+   * Sets log level for GraphQL logging.
+   * This level setting can be different than the one used in api side logging.
+   * Defaults to the same level as the logger unless set here.
+   *
+   * Available log levels:
+   *
+   * - 'fatal'
+   * - 'error'
+   * - 'warn'
+   * - 'info'
+   * - 'debug'
+   * - 'trace'
+   * - 'silent'
+   *
+   * The logging level is a __minimum__ level. For instance if `logger.level` is `'info'` then all `'fatal'`, `'error'`, `'warn'`,
+   * and `'info'` logs will be enabled.
+   *
+   * You can pass `'silent'` to disable logging.
+   *
+   * @default level of the logger set in LoggerConfig
+   *
+   */
+  level?: LevelWithSilent | string
+
   /**
    * @description Include response data sent to client.
    */
@@ -336,7 +359,7 @@ const logResult =
           options['tracing'] = result.extensions?.envelopTracing
         }
 
-        envelopLogger.info(
+        envelopLogger.debug(
           {
             ...options,
           },
@@ -364,10 +387,13 @@ const useRedwoodLogger = (
   loggerConfig: LoggerConfig
 ): Plugin<RedwoodGraphQLContext> => {
   const logger = loggerConfig.logger
+  const level = loggerConfig.options?.level || logger.level || 'warn'
 
   const childLogger = logger.child({
     name: 'graphql-server',
   })
+
+  childLogger.level = level
 
   const includeOperationName = loggerConfig?.options?.operationName
   const includeRequestId = loggerConfig?.options?.requestId
@@ -407,7 +433,7 @@ const useRedwoodLogger = (
         ...options,
       })
 
-      envelopLogger.info(`GraphQL execution started`)
+      envelopLogger.debug(`GraphQL execution started`)
       const handleResult = logResult(loggerConfig, envelopLogger)
 
       return {
@@ -425,16 +451,12 @@ const useRedwoodLogger = (
 /*
  * Prevent unexpected error messages from leaking to the GraphQL clients.
  *
- * Unexpected errors are those that are not Envelop or Apollo errors
- *
- * Note that error masking should come after useApolloServerErrors since the originalError
- * will could become an ApolloError but if not, then should get masked
+ * Unexpected errors are those that are not Envelop or GraphQL errors
  **/
 export const formatError: FormatErrorHandler = (err) => {
   if (
     err.originalError &&
-    err.originalError instanceof EnvelopError === false &&
-    err.originalError instanceof ApolloError === false
+    err.originalError instanceof EnvelopError === false
   ) {
     return new GraphQLError('Something went wrong.')
   }
@@ -484,12 +506,7 @@ export const createGraphQLHandler = ({
     }),
     // Only allow execution of specific operation types
     useFilterAllowedOperations(allowedOperations || ['mutation', 'query']),
-    // Apollo Server compatible errors.
-    // Important: *must* be listed before useMaskedErrors
-    useApolloServerErrors(),
     // Prevent unexpected error messages from leaking to the GraphQL clients.
-    // Important: *must* be listed after useApolloServerErrors so it can detect if the error is an ApolloError
-    // and mask if not
     useMaskedErrors({ formatError }),
   ]
 

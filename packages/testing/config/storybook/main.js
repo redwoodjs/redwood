@@ -33,7 +33,7 @@ const baseConfig = {
 
     // We replace imports to "@redwoodjs/router" with our own implementation in "@redwoodjs/testing"
     sbConfig.resolve.alias['@redwoodjs/router$'] = require.resolve(
-      '@redwoodjs/testing/dist/MockRouter.js'
+      '@redwoodjs/testing/dist/web/MockRouter.js'
     )
     sbConfig.resolve.alias['~__REDWOOD__USER_ROUTES_FOR_MOCK'] =
       rwjsPaths.web.routes
