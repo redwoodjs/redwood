@@ -17,6 +17,9 @@ export const hasRole = ({ roles }) => {
 
 // This is used by the redwood directive
 // in ./api/src/directives/requireAuth
-export const requireAuth = () => {
+
+// Roles are passed in by the requireAuth directive if you have auth setup
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const requireAuth = ({ roles }) => {
   return isAuthenticated()
 }

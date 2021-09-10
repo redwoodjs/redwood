@@ -1,6 +1,9 @@
 import type { DocumentNode, ExecutableDefinitionNode } from 'graphql'
 
-import type { RedwoodDirective, DirectiveArgs } from '@redwoodjs/graphql-server'
+import type {
+  RedwoodDirective,
+  DirectiveParams,
+} from '@redwoodjs/graphql-server'
 
 export const getDirectiveName = (schema: DocumentNode) => {
   const definition = schema.definitions.find(
@@ -20,7 +23,7 @@ export const getDirectiveName = (schema: DocumentNode) => {
  *  expect(mockExecution).not.toThrow()
  *  expect(mockExecution()).toEqual('FFF')
  */
-type GqlExecutionMock = Omit<Partial<DirectiveArgs>, 'getFieldValue'> & {
+type GqlExecutionMock = Omit<Partial<DirectiveParams>, 'getFieldValue'> & {
   resolver?: () => any
 }
 
@@ -33,6 +36,6 @@ export const mockRedwoodDirective = (
     return directive({
       getFieldValue: resolver,
       ...others,
-    } as DirectiveArgs) // we dont need all the values for
+    } as DirectiveParams) // we dont need all the values for
   }
 }

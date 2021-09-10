@@ -18,14 +18,13 @@ function isQueryOrMutation(info: GraphQLResolveInfo): boolean {
 export const DIRECTIVE_REQUIRED_ERROR_MESSAGE =
   'You must specify one of @requireAuth, @skipAuth or a custom directive'
 
-export interface DirectiveArgs<FieldType = any> {
+export interface DirectiveParams<FieldType = any> {
   root: unknown
   args: Record<string, unknown>
   context: GlobalContext
   info: GraphQLResolveInfo
   directiveNode?: DirectiveNode
   directiveArgs: Record<string, any>
-  requiredRoles: [string] | undefined
   getFieldValue: () => FieldType
 }
 
@@ -37,7 +36,7 @@ export interface DirectiveArgs<FieldType = any> {
  *
  */
 export type RedwoodDirective<FieldType = any> = (
-  args: DirectiveArgs<FieldType>
+  args: DirectiveParams<FieldType>
 ) => FieldType | Promise<void> | void
 
 export type PluginOptions = {
@@ -80,7 +79,7 @@ export function getDirectiveByName(
   }
 }
 
-export function getDirectiveArgumentValues(
+export function getDirectiveArgs(
   schema: GraphQLSchema,
   directiveNode: DirectiveNode
 ): Record<string, any> {
@@ -90,23 +89,6 @@ export function getDirectiveArgumentValues(
     return getArgumentValues(directive, directiveNode)
   }
   return {}
-}
-
-export function getDirectiveRoles(
-  schema: GraphQLSchema,
-  directiveNode: DirectiveNode
-): [string] | undefined {
-  return getDirectiveArgumentValue(schema, directiveNode, 'roles') as
-    | [string]
-    | undefined
-}
-
-export function getDirectiveArgumentValue(
-  schema: GraphQLSchema,
-  directiveNode: DirectiveNode,
-  argumentName: string
-): Record<string, any> {
-  return getDirectiveArgumentValues(schema, directiveNode)[argumentName]
 }
 
 export const useRedwoodDirective = (
@@ -127,12 +109,7 @@ export const useRedwoodDirective = (
           const directiveNode = getDirectiveByName(info, options.name)
 
           if (directiveNode) {
-            const directiveArgs = getDirectiveArgumentValues(
-              info.schema,
-              directiveNode
-            )
-
-            const requiredRoles = getDirectiveRoles(info.schema, directiveNode)
+            const directiveArgs = getDirectiveArgs(info.schema, directiveNode)
 
             const transformedOutputMaybe = await executeDirective({
               root,
@@ -141,7 +118,6 @@ export const useRedwoodDirective = (
               info,
               directiveNode,
               directiveArgs,
-              requiredRoles,
               getFieldValue: () => resolverFn(root, args, context, info),
             })
 

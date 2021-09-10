@@ -8,6 +8,7 @@ export const schema = gql`
   directive @requireAuth(roles: [String]) on FIELD_DEFINITION
 `
 
-export const requireAuth: RedwoodDirective = () => {
-  applicationRequireAuth()
+export const requireAuth: RedwoodDirective = ({ directiveArgs }) => {
+  const { roles } = directiveArgs
+  applicationRequireAuth({ roles })
 }
