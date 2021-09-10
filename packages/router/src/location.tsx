@@ -58,7 +58,7 @@ class LocationProvider extends React.Component<LocationProviderProps> {
           }
           break
 
-        case 'preserve':
+        default:
           break
       }
 
