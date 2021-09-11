@@ -3,9 +3,7 @@ import { makeExecutableSchema } from '@graphql-tools/schema'
 
 import { GraphQLTypeWithFields } from '../../index'
 import {
-  getDirectiveArgumentValue,
-  getDirectiveArgumentValues,
-  getDirectiveRoles,
+  getDirectiveArgs,
   useRedwoodDirective,
   DIRECTIVE_REQUIRED_ERROR_MESSAGE,
 } from '../useRedwoodDirective'
@@ -263,14 +261,14 @@ describe('Directives on Mutations', () => {
     const deletePost = mutationType.getFields()['deletePost']
     const directiveNode = deletePost.astNode.directives[0]
 
-    const requiredRoles = getDirectiveRoles(
+    const { roles } = getDirectiveArgs(
       schemaWithDirectiveQueries,
       directiveNode
     )
 
-    expect(requiredRoles).toContain('admin')
-    expect(requiredRoles).toContain('publisher')
-    expect(requiredRoles).not.toContain('author')
+    expect(roles).toContain('admin')
+    expect(roles).toContain('publisher')
+    expect(roles).not.toContain('author')
   })
 
   it('Should get the argument values for a directive', async () => {
@@ -280,7 +278,7 @@ describe('Directives on Mutations', () => {
 
     const deletePost = postType.getFields()['description']
 
-    const directiveArgs = getDirectiveArgumentValues(
+    const directiveArgs = getDirectiveArgs(
       schemaWithDirectiveQueries,
       deletePost.astNode.directives[0]
     )
@@ -299,12 +297,11 @@ describe('Directives on Mutations', () => {
 
     const deletePost = postType.getFields()['description']
 
-    const directiveArg = getDirectiveArgumentValue(
+    const { maxLength } = getDirectiveArgs(
       schemaWithDirectiveQueries,
-      deletePost.astNode.directives[0],
-      'maxLength'
+      deletePost.astNode.directives[0]
     )
 
-    expect(directiveArg).toEqual(5)
+    expect(maxLength).toEqual(5)
   })
 })
