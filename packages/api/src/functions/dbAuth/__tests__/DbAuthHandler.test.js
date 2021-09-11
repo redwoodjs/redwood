@@ -95,17 +95,30 @@ describe('dbAuth', () => {
       },
       db: db,
       excludeUserFields: [],
-      loginExpires: 60 * 60,
-      loginHandler: (user) => user,
-      signupHandler: ({ username, hashedPassword, salt, userAttributes }) => {
-        return db.user.create({
-          data: {
-            email: username,
-            hashedPassword: hashedPassword,
-            salt: salt,
-            name: userAttributes.name,
-          },
-        })
+      login: {
+        handler: (user) => user,
+        errors: {
+          usernameOrPasswordMissing: 'Both username and password are required',
+          usernameNotFound: 'Username ${username} not found',
+          incorrectPassword: 'Incorrect password for ${username}',
+        },
+        expires: 60 * 60,
+      },
+      signup: {
+        handler: ({ username, hashedPassword, salt, userAttributes }) => {
+          return db.user.create({
+            data: {
+              email: username,
+              hashedPassword: hashedPassword,
+              salt: salt,
+              name: userAttributes.name,
+            },
+          })
+        },
+        errors: {
+          fieldMissing: '${field} is required',
+          usernameTaken: 'Username `${username}` already in use',
+        },
       },
     }
   })
@@ -166,7 +179,16 @@ describe('dbAuth', () => {
     it('initializes some variables with passed values', () => {
       event = { headers: {} }
       context = { foo: 'bar' }
-      options = { db: db }
+      options = {
+        db: db,
+        login: {
+          handler: () => {},
+          expires: 1,
+        },
+        signup: {
+          handler: () => {},
+        },
+      }
       const dbAuth = new DbAuthHandler(event, context, options)
 
       expect(dbAuth.event).toEqual(event)
@@ -174,26 +196,100 @@ describe('dbAuth', () => {
       expect(dbAuth.options).toEqual(options)
     })
 
-    it('parses a plain text body', () => {
+    it('throws an error if login expiration time is not defined', () => {
+      // login object doesn't exist at all
+      expect(() => new DbAuthHandler(event, context, {})).toThrow(
+        dbAuthError.NoSessionExpiration
+      )
+      // login object exists, but not `expires` key
+      expect(() => new DbAuthHandler(event, context, { login: {} })).toThrow(
+        dbAuthError.NoSessionExpiration
+      )
+    })
+
+    it('throws an error if no login.header option', () => {
+      expect(
+        () => new DbAuthHandler(event, context, { login: { expires: 1 } })
+      ).toThrow(dbAuthError.NoLoginHandler)
+    })
+
+    it('throws an error if no signup.header option', () => {
+      expect(
+        () =>
+          new DbAuthHandler(event, context, {
+            login: { handler: () => {}, expires: 1 },
+          })
+      ).toThrow(dbAuthError.NoSignupHandler)
+
+      expect(
+        () =>
+          new DbAuthHandler(event, context, {
+            login: { handler: () => {}, expires: 1 },
+            signup: {
+              errors: {},
+            },
+          })
+      ).toThrow(dbAuthError.NoSignupHandler)
+    })
+
+    it('parses params from a plain text body', () => {
       event = { headers: {}, body: `{"foo":"bar", "baz":123}` }
-      context = { foo: 'bar' }
-      options = { db: db }
       const dbAuth = new DbAuthHandler(event, context, options)
 
       expect(dbAuth.params).toEqual({ foo: 'bar', baz: 123 })
     })
 
-    it('parses a base64 encoded body', () => {
+    it('parses an empty plain text body and still sets params', () => {
+      event = { isBase64Encoded: false, headers: {}, body: '' }
+      context = { foo: 'bar' }
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      expect(dbAuth.params).toEqual({})
+    })
+
+    it('parses params from an undefined body when isBase64Encoded == false', () => {
+      event = {
+        isBase64Encoded: false,
+        headers: {},
+      }
+      context = { foo: 'bar' }
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      expect(dbAuth.params).toEqual({})
+    })
+
+    it('parses params from a base64 encoded body', () => {
       event = {
         isBase64Encoded: true,
         headers: {},
         body: Buffer.from(`{"foo":"bar", "baz":123}`, 'utf8'),
       }
-      context = { foo: 'bar' }
-      options = { db: db }
       const dbAuth = new DbAuthHandler(event, context, options)
 
       expect(dbAuth.params).toEqual({ foo: 'bar', baz: 123 })
+    })
+
+    it('parses params from an undefined body when isBase64Encoded == true', () => {
+      event = {
+        isBase64Encoded: true,
+        headers: {},
+      }
+      context = { foo: 'bar' }
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      expect(dbAuth.params).toEqual({})
+    })
+
+    it('parses params from an empty body when isBase64Encoded == true', () => {
+      event = {
+        isBase64Encoded: true,
+        headers: {},
+        body: '',
+      }
+      context = { foo: 'bar' }
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      expect(dbAuth.params).toEqual({})
     })
 
     it('sets header-based CSRF token', () => {
@@ -329,13 +425,13 @@ describe('dbAuth', () => {
       expect.assertions(1)
     })
 
-    it('throws an error if loginHandler throws', async () => {
+    it('throws an error if login.handler throws', async () => {
       const _user = await createDbUser()
       event.body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
       })
-      options.loginHandler = () => {
+      options.login.handler = () => {
         throw new Error('Cannot log in')
       }
       const dbAuth = new DbAuthHandler(event, context, options)
@@ -346,13 +442,13 @@ describe('dbAuth', () => {
       expect.assertions(1)
     })
 
-    it('passes the found user to loginHandler', async () => {
+    it('passes the found user to login.handler', async () => {
       const user = await createDbUser()
       event.body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
       })
-      options.loginHandler = () => {
+      options.login.handler = () => {
         expect(user).toEqual(user)
         return user
       }
@@ -360,13 +456,13 @@ describe('dbAuth', () => {
       await dbAuth.login()
     })
 
-    it('throws an error if loginHandler returns null', async () => {
+    it('throws an error if login.handler returns null', async () => {
       const _user = await createDbUser()
       event.body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
       })
-      options.loginHandler = () => {
+      options.login.handler = () => {
         return null
       }
       const dbAuth = new DbAuthHandler(event, context, options)
@@ -376,13 +472,13 @@ describe('dbAuth', () => {
       expect.assertions(1)
     })
 
-    it('throws an error if loginHandler returns an object without an id', async () => {
+    it('throws an error if login.handler returns an object without an id', async () => {
       const _user = await createDbUser()
       event.body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
       })
-      options.loginHandler = () => {
+      options.login.handler = () => {
         return { name: 'Rob' }
       }
       const dbAuth = new DbAuthHandler(event, context, options)
@@ -460,7 +556,7 @@ describe('dbAuth', () => {
         password: 'password',
         name: 'Rob',
       })
-      options.signupHandler = () => {
+      options.signup.handler = () => {
         throw Error('Cannot signup')
       }
       const dbAuth = new DbAuthHandler(event, context, options)
@@ -497,7 +593,7 @@ describe('dbAuth', () => {
         password: 'password',
         name: 'Rob',
       })
-      options.signupHandler = () => {
+      options.signup.handler = () => {
         return 'Hello, world'
       }
       const dbAuth = new DbAuthHandler(event, context, options)
@@ -660,24 +756,73 @@ describe('dbAuth', () => {
       expect.assertions(4)
     })
 
-    it('throws an error if user is not found', async () => {
+    it('can throw a custom error message', () => {
+      // default error message
+      const defaultMessage = options.login.errors.usernameOrPasswordMissing
+      delete options.login.errors.usernameOrPasswordMissing
+      const dbAuth1 = new DbAuthHandler(event, context, options)
+      dbAuth1._verifyUser(null, 'password').catch((e) => {
+        expect(e.message).toEqual(defaultMessage)
+      })
+
+      // custom error message
+      options.login.errors.usernameOrPasswordMissing = 'Missing!'
+      const customMessage = new DbAuthHandler(event, context, options)
+      customMessage._verifyUser(null, 'password').catch((e) => {
+        expect(e.message).toEqual('Missing!')
+      })
+
+      expect.assertions(2)
+    })
+
+    it('throws a default error message if user is not found', async () => {
+      delete options.login.errors.usernameNotFound
       const dbAuth = new DbAuthHandler(event, context, options)
 
       dbAuth._verifyUser('username', 'password').catch((e) => {
         expect(e).toBeInstanceOf(dbAuthError.UserNotFoundError)
+        expect(e.message).toEqual('Username username not found')
       })
-      expect.assertions(1)
+
+      expect.assertions(2)
     })
 
-    it('throws an error if password is incorrect', async () => {
+    it('throws a custom error message if user is not found', async () => {
+      options.login.errors.usernameNotFound = 'Cannot find ${username}'
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      dbAuth._verifyUser('Alice', 'password').catch((e) => {
+        expect(e).toBeInstanceOf(dbAuthError.UserNotFoundError)
+        expect(e.message).toEqual('Cannot find Alice')
+      })
+
+      expect.assertions(2)
+    })
+
+    it('throws a default error if password is incorrect', async () => {
+      delete options.login.errors.incorrectPassword
       const dbUser = await createDbUser()
       const dbAuth = new DbAuthHandler(event, context, options)
 
       dbAuth._verifyUser(dbUser.email, 'incorrect').catch((e) => {
         expect(e).toBeInstanceOf(dbAuthError.IncorrectPasswordError)
+        expect(e.message).toEqual(`Incorrect password for ${dbUser.email}`)
       })
 
-      expect.assertions(1)
+      expect.assertions(2)
+    })
+
+    it('throws a custom error if password is incorrect', async () => {
+      options.login.errors.incorrectPassword = 'Wrong password for ${username}'
+      const dbUser = await createDbUser()
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      dbAuth._verifyUser(dbUser.email, 'incorrect').catch((e) => {
+        expect(e).toBeInstanceOf(dbAuthError.IncorrectPasswordError)
+        expect(e.message).toEqual(`Wrong password for ${dbUser.email}`)
+      })
+
+      expect.assertions(2)
     })
 
     it('returns the user with matching username and password', async () => {
@@ -730,7 +875,9 @@ describe('dbAuth', () => {
   })
 
   describe('_createUser()', () => {
-    it('throws an error if username is already taken', async () => {
+    it('throws a default error message if username is already taken', async () => {
+      const defaultMessage = options.signup.errors.usernameTaken
+      delete options.signup.errors.usernameTaken
       const dbUser = await createDbUser()
       event.body = JSON.stringify({
         username: dbUser.email,
@@ -740,11 +887,32 @@ describe('dbAuth', () => {
 
       dbAuth._createUser().catch((e) => {
         expect(e).toBeInstanceOf(dbAuthError.DuplicateUsernameError)
+        expect(e.message).toEqual(
+          defaultMessage.replace(/\$\{username\}/, dbUser.email)
+        )
       })
-      expect.assertions(1)
+      expect.assertions(2)
     })
 
-    it('throws an error if username is missing', async () => {
+    it('throws a custom error message if username is already taken', async () => {
+      options.signup.errors.usernameTaken = '${username} taken'
+      const dbUser = await createDbUser()
+      event.body = JSON.stringify({
+        username: dbUser.email,
+        password: 'password',
+      })
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      dbAuth._createUser().catch((e) => {
+        expect(e).toBeInstanceOf(dbAuthError.DuplicateUsernameError)
+        expect(e.message).toEqual(`${dbUser.email} taken`)
+      })
+      expect.assertions(2)
+    })
+
+    it('throws a default error message if username is missing', async () => {
+      const defaultMessage = options.signup.errors.fieldMissing
+      delete options.signup.errors.fieldMissing
       event.body = JSON.stringify({
         password: 'password',
       })
@@ -752,11 +920,30 @@ describe('dbAuth', () => {
 
       dbAuth._createUser().catch((e) => {
         expect(e).toBeInstanceOf(dbAuthError.FieldRequiredError)
+        expect(e.message).toEqual(
+          defaultMessage.replace(/\$\{field\}/, 'username')
+        )
       })
-      expect.assertions(1)
+      expect.assertions(2)
     })
 
-    it('throws an error if password is missing', async () => {
+    it('throws a custom error message if username is missing', async () => {
+      options.signup.errors.fieldMissing = '${field} blank'
+      event.body = JSON.stringify({
+        password: 'password',
+      })
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      dbAuth._createUser().catch((e) => {
+        expect(e).toBeInstanceOf(dbAuthError.FieldRequiredError)
+        expect(e.message).toEqual('username blank')
+      })
+      expect.assertions(2)
+    })
+
+    it('throws a default error message if password is missing', async () => {
+      const defaultMessage = options.signup.errors.fieldMissing
+      delete options.signup.errors.fieldMissing
       event.body = JSON.stringify({
         username: 'user@redwdoodjs.com',
       })
@@ -764,8 +951,25 @@ describe('dbAuth', () => {
 
       dbAuth._createUser().catch((e) => {
         expect(e).toBeInstanceOf(dbAuthError.FieldRequiredError)
+        expect(e.message).toEqual(
+          defaultMessage.replace(/\$\{field\}/, 'password')
+        )
       })
-      expect.assertions(1)
+      expect.assertions(2)
+    })
+
+    it('throws a custom error message if password is missing', async () => {
+      options.signup.errors.fieldMissing = '${field} blank'
+      event.body = JSON.stringify({
+        username: 'user@redwdoodjs.com',
+      })
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      dbAuth._createUser().catch((e) => {
+        expect(e).toBeInstanceOf(dbAuthError.FieldRequiredError)
+        expect(e.message).toEqual('password blank')
+      })
+      expect.assertions(2)
     })
 
     it('creates a new user', async () => {
@@ -906,6 +1110,20 @@ describe('dbAuth', () => {
       const response = dbAuth._ok('', {}, { statusCode: 201 })
 
       expect(response.statusCode).toEqual(201)
+    })
+
+    it('stringifies a JSON body', () => {
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const response = dbAuth._ok({ foo: 'bar' }, {}, { statusCode: 201 })
+
+      expect(response.body).toEqual('{"foo":"bar"}')
+    })
+
+    it('does not stringify a body that is a string already', () => {
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const response = dbAuth._ok('{"foo":"bar"}', {}, { statusCode: 201 })
+
+      expect(response.body).toEqual('{"foo":"bar"}')
     })
   })
 
