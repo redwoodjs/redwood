@@ -144,44 +144,52 @@ export const createGraphQLHandler = ({
 
   // Important: Plugins are executed in order of their usage, and inject functionality serially,
   // so the order here matters
-  const plugins: Plugin<any>[] = [
-    // Simple LRU for caching parse results.
-    useParserCache(),
-    // Simple LRU for caching validate results.
-    useValidationCache(),
-    // Simplest plugin to provide your GraphQL schema.
-    useSchema(schema),
-    // Custom Redwood plugins
-    useRedwoodAuthContext(getCurrentUser),
-    useRedwoodGlobalContextSetter(),
-    useRedwoodLogger(loggerConfig),
-
-    ...redwoodDirectivePlugins,
-
-    // Limits the depth of your GraphQL selection sets.
-    useDepthLimit({
-      maxDepth: (depthLimitOptions && depthLimitOptions.maxDepth) || 10,
-      ignore: (depthLimitOptions && depthLimitOptions.ignore) || [],
-    }),
-    // Only allow execution of specific operation types
-    useFilterAllowedOperations(allowedOperations || ['mutation', 'query']),
-    // Prevent unexpected error messages from leaking to the GraphQL clients.
-    useMaskedErrors({ formatError }),
-  ]
-
   const isDevEnv = process.env.NODE_ENV === 'development'
+
+  const plugins: Plugin<any>[] = []
 
   if (!isDevEnv) {
     plugins.push(useDisableIntrospection())
   }
 
+  // Simple LRU for caching parse results.
+  plugins.push(useParserCache())
+  // Simple LRU for caching validate results.
+  plugins.push(useValidationCache())
+  // Simplest plugin to provide your GraphQL schema.
+  plugins.push(useSchema(schema))
+
+  // Custom Redwood plugins
+  plugins.push(useRedwoodAuthContext(getCurrentUser))
+  plugins.push(useRedwoodGlobalContextSetter())
+  plugins.push(useRedwoodLogger(loggerConfig))
+
   if (context) {
     plugins.push(useRedwoodPopulateContext(context))
   }
 
+  // Custom Redwood plugins
+  plugins.push(...redwoodDirectivePlugins)
+
+  // Limits the depth of your GraphQL selection sets.
+  plugins.push(
+    useDepthLimit({
+      maxDepth: (depthLimitOptions && depthLimitOptions.maxDepth) || 10,
+      ignore: (depthLimitOptions && depthLimitOptions.ignore) || [],
+    })
+  )
+  // Only allow execution of specific operation types
+  plugins.push(
+    useFilterAllowedOperations(allowedOperations || ['mutation', 'query'])
+  )
+
+  // App-defined plugins
   if (extraPlugins && extraPlugins.length > 0) {
     plugins.push(...extraPlugins)
   }
+
+  // Prevent unexpected error messages from leaking to the GraphQL clients.
+  plugins.push(useMaskedErrors({ formatError }))
 
   const corsContext = createCorsContext(cors)
 
