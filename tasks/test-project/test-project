@@ -60,19 +60,30 @@ const { projectDirectory, typescript, canary, link, verbose, clean } = args
 
 const choosenPath = args._
 
+const OUTPUT_PROJECT_PATH = path.resolve(
+  choosenPath.length >= 1 ? String(choosenPath) : String(projectDirectory)
+)
+
+const RW_FRAMEWORKPATH = path.join(__dirname, '../../')
+
+// Project Directory path checks
+
 if (!projectDirectory && !(choosenPath.length >= 1)) {
   console.error(
     'Please specify the project directory. Example: `yarn build:test-project ../test-project`'
   )
   console.error('WARNING: path must be outside framework directory.')
   process.exit(1)
+} else {
+  const relative = path.relative(RW_FRAMEWORKPATH, OUTPUT_PROJECT_PATH)
+  if (relative && !relative.startsWith('..') && !path.isAbsolute(relative)) {
+    console.log('YES subdir')
+    process.exit(1)
+  } else {
+    console.log('NOT subdir')
+    process.exit(1)
+  }
 }
-
-const OUTPUT_PROJECT_PATH = path.resolve(
-  choosenPath.length >= 1 ? String(choosenPath) : String(projectDirectory)
-)
-
-const RW_FRAMEWORKPATH = path.join(__dirname, '../../')
 
 const createProject = async () => {
   if (clean) {
