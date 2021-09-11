@@ -1,3 +1,4 @@
+import type { FirebaseApp } from '@firebase/app'
 import type {
   ActionCodeSettings,
   CustomParameters,
@@ -39,12 +40,13 @@ const hasPasswordCreds = (options: Options): boolean => {
 
 type FirebaseClient = {
   firebaseAuth: FirebaseAuth
+  firebaseApp?: FirebaseApp
   actionCodeSettings?: ActionCodeSettings
 }
 
 export const firebase = (client: FirebaseClient): AuthClient => {
-  const { firebaseAuth, actionCodeSettings } = client
-  const auth = firebaseAuth.getAuth()
+  const { firebaseAuth, firebaseApp, actionCodeSettings } = client
+  const auth = firebaseAuth.getAuth(firebaseApp)
 
   function getProvider(providerId: string) {
     return new firebaseAuth.OAuthProvider(providerId)
@@ -64,7 +66,7 @@ export const firebase = (client: FirebaseClient): AuthClient => {
   }
 
   const loginWithEmailLink = ({ email, emailLink }: Options) => {
-    // dispatch to signIn step1 based on if no emailLink has been provided
+    // send emailLink if logIn called with no emailLink
     if (!emailLink) {
       return firebaseAuth.sendSignInLinkToEmail(
         auth,
@@ -72,7 +74,7 @@ export const firebase = (client: FirebaseClient): AuthClient => {
         actionCodeSettings as ActionCodeSettings
       )
     }
-    // otherwise validate emailLink
+
     if (!firebaseAuth.isSignInWithEmailLink(auth, emailLink)) {
       throw new Error('Login failed, invalid email link')
     }
