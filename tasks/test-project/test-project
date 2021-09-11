@@ -4,6 +4,7 @@
 const fs = require('fs')
 const path = require('path')
 
+const chalk = require('chalk')
 const execa = require('execa')
 const Listr = require('listr')
 const VerboseRenderer = require('listr-verbose-renderer')
@@ -19,12 +20,6 @@ const { getExecaOptions } = require('./util')
 
 const args = yargs
   .usage('Usage: $0 <project directory> [option]')
-  .option('project-directory', {
-    type: 'string',
-    alias: 'pd',
-    description:
-      'Path to project directory. WARNING: path must be outside framework directory.',
-  })
   .option('typescript', {
     alias: 'ts',
     default: false,
@@ -53,16 +48,24 @@ const args = yargs
     describe:
       'Upgrade project to latest canary version. NOT compatible with --link.',
   })
+  .demandCommand(
+    1,
+    1,
+    chalk.red.bold(
+      '  Specify a project directory outside the framework directory\n    Example: `yarn build:test-project ../test-project`\n'
+    ),
+    chalk.red.bold(
+      '  Only specify one project directory outside the framework directory\n    Example: `yarn build:test-project ../test-project`\n'
+    )
+  )
   .help()
   .strict().argv
 
-const { projectDirectory, typescript, canary, link, verbose, clean } = args
+const { typescript, canary, link, verbose, clean } = args
 
 const choosenPath = args._
 
-const OUTPUT_PROJECT_PATH = path.resolve(
-  choosenPath.length >= 1 ? String(choosenPath) : String(projectDirectory)
-)
+const OUTPUT_PROJECT_PATH = path.resolve(String(args._))
 
 const RW_FRAMEWORKPATH = path.join(__dirname, '../../')
 
