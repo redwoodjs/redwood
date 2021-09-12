@@ -597,9 +597,7 @@ const tasks = ({ model, path, force, tests, typescript, javascript }) => {
       },
       {
         title: `Generating types ...`,
-        task: async () => {
-          return generateTypes()
-        },
+        task: () => generateTypes,
       },
     ],
     { collapse: false, exitOnError: true }
