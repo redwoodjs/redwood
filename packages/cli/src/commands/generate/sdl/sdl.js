@@ -227,9 +227,7 @@ export const handler = async ({ model, crud, force, tests, typescript }) => {
       },
       {
         title: `Generating types ...`,
-        task: async () => {
-          return generateTypes()
-        },
+        task: () => generateTypes,
       },
     ].filter(Boolean),
     { collapse: false, exitOnError: true }
