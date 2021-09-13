@@ -9,7 +9,7 @@ import { registerBabel, RegisterHookOptions } from './common'
 // and export getWebSideBabelPlugins
 
 export const getWebSideBabelConfigPath = () => {
-  // @Note: web side has .babel.rc still, not babel.config.js
+  // NOTE: web side has .babel.rc still, not babel.config.js
   // This should be handled in the prebuild for web PR
   const babelRcPath = path.join(getPaths().web.base, '.babelrc.js')
   if (fs.existsSync(babelRcPath)) {
@@ -24,7 +24,7 @@ export const registerWebSideBabelHook = ({
   plugins = [],
   overrides,
 }: RegisterHookOptions = {}) => {
-  // @NOTE
+  // NOTE:
   // Even though we specify the config file, babel will still search for .babelrc
   // and merge them because we have specified the filename property, unless babelrc = false
   registerBabel({

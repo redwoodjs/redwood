@@ -15,7 +15,12 @@ export const dbAuth = (): AuthClient => {
       `${global.__REDWOOD__API_PROXY_PATH}/auth?method=getToken`
     )
     const token = await response.text()
-    return token
+
+    if (token.length === 0) {
+      return null
+    } else {
+      return token
+    }
   }
 
   const login = async (attributes: LoginAttributes) => {

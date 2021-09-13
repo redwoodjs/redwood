@@ -2520,10 +2520,10 @@
   resolved "https://registry.yarnpkg.com/@open-draft/until/-/until-1.0.3.tgz#db9cc719191a62e7d9200f6e7bab21c5b848adca"
   integrity sha512-Aq58f5HiWdyDlFffbbSjAlv596h/cOnt2DO1w3DOC7OJ5EHs0hd/nycJfiu9RJbT6Yk6F1knnRRXNSpxoIVZ9Q==
 
-"@redwoodjs/eslint-config@0.36.1":
-  version "0.36.1"
-  resolved "https://registry.yarnpkg.com/@redwoodjs/eslint-config/-/eslint-config-0.36.1.tgz#4f1777480aefc5384e3da90ba7b964f6dbfe0643"
-  integrity sha512-Q2K3p3PKPBKbZmAkg2OIxg3dRhB1F35DH6rb6Tczb7UYcLB0Kok8CgpAIiWcZ4ZscVA799p+/NTMrV2TaDIPGQ==
+"@redwoodjs/eslint-config@0.36.4":
+  version "0.36.4"
+  resolved "https://registry.yarnpkg.com/@redwoodjs/eslint-config/-/eslint-config-0.36.4.tgz#53dc018fc684e954ca2ccdbe961f496728555f36"
+  integrity sha512-nD5zHA0A8Yy6AmVtQeQOeVuaFs3R1+u5jiwjOux5JZzBE0jkYN9fiUuqvGpjnH7c5L8b3bcYTVrTTjXF+iTDkA==
   dependencies:
     "@typescript-eslint/eslint-plugin" "4.29.0"
     "@typescript-eslint/parser" "4.29.0"

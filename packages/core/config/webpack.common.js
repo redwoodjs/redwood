@@ -195,6 +195,11 @@ module.exports = (webpackEnv) => {
         ),
         '~redwood-app-root': path.resolve(redwoodPaths.web.app),
         react: path.resolve(redwoodPaths.base, 'node_modules', 'react'),
+        'react-hook-form': path.resolve(
+          redwoodPaths.base,
+          'node_modules',
+          'react-hook-form'
+        ),
       },
     },
     plugins: [
