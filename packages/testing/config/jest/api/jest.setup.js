@@ -14,8 +14,8 @@ const seedScenario = async (scenario) => {
     const scenarios = {}
     for (const [model, namedFixtures] of Object.entries(scenario)) {
       scenarios[model] = {}
-      for (const [name, data] of Object.entries(namedFixtures)) {
-        scenarios[model][name] = await db[model].create({ data })
+      for (const [name, createArgs] of Object.entries(namedFixtures)) {
+        scenarios[model][name] = await db[model].create(createArgs)
       }
     }
     return scenarios
