@@ -19,7 +19,7 @@ import {
   replaceParams,
   matchPath,
   validatePath,
-  TrailingSlashesTypes
+  TrailingSlashesTypes,
 } from './util'
 
 import type { AvailableRoutes } from './index'
