@@ -102,6 +102,14 @@ export const isCellFile = (p: string) => {
   return true
 }
 
+export const findScripts = (cwd: string = getPaths().scripts) => {
+  return fg.sync('*.{js,jsx,ts,tsx}', {
+    cwd,
+    absolute: true,
+    ignore: ['node_modules'],
+  })
+}
+
 export const isPageFile = (p: string) => {
   const { dir, name } = path.parse(p)
 

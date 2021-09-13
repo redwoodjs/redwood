@@ -4,7 +4,7 @@ import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
 
-import { registerApiSideBabelHook } from '@redwoodjs/internal'
+import { findScripts, registerApiSideBabelHook } from '@redwoodjs/internal'
 
 import { getPaths } from '../lib'
 import c from '../lib/colors'
@@ -32,6 +32,11 @@ export const builder = (yargs) => {
       description: 'The file name (extension is optional) of the script to run',
       type: 'string',
     })
+    .option('prisma', {
+      type: 'boolean',
+      default: true,
+      description: 'Generate the Prisma client',
+    })
     .strict(false)
     .epilogue(
       `Also see the ${terminalLink(
@@ -42,7 +47,7 @@ export const builder = (yargs) => {
 }
 
 export const handler = async (args) => {
-  const { name, ...scriptArgs } = args
+  const { name, prisma, ...scriptArgs } = args
   const scriptPath = path.join(getPaths().scripts, name)
 
   // Import babel config for running script
@@ -63,13 +68,23 @@ export const handler = async (args) => {
   try {
     require.resolve(scriptPath)
   } catch {
-    console.error(c.error(`\nNo script module exists with that name.\n`))
+    console.error(
+      c.error(`\nNo script called ${c.underline(name)} in ./scripts folder.\n`)
+    )
+
+    console.log('Available scripts:')
+    findScripts().forEach((scriptPath) => {
+      const { name } = path.parse(scriptPath)
+      console.log(c.info(`- ${name}`))
+    })
+    console.log()
     process.exit(1)
   }
 
   const scriptTasks = [
     {
       title: 'Generating Prisma client',
+      enabled: () => prisma,
       task: () => generatePrismaClient({ force: false }),
     },
     {
