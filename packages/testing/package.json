@@ -32,7 +32,7 @@
     "babel-jest": "27.0.6",
     "jest": "27.0.6",
     "jest-watch-typeahead": "0.6.4",
-    "msw": "0.32.3",
+    "msw": "0.35.0",
     "ts-toolbelt": "9.6.0",
     "whatwg-fetch": "3.6.2"
   },
