@@ -1,7 +1,7 @@
 import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 
-import { generate } from '@redwoodjs/internal'
+import { generate as generateTypes } from '@redwoodjs/internal'
 
 import { transformTSToJS } from '../../../lib'
 import { getSchema } from '../../../lib'
@@ -174,9 +174,7 @@ export const { command, description, builder, handler } =
       return [
         {
           title: `Generating types ...`,
-          task: async () => {
-            return generate()
-          },
+          task: () => generateTypes,
         },
       ]
     },
