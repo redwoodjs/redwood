@@ -1,0 +1,13 @@
+{
+  "extends": "../web/tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "$api": [
+        "../api/src/*",
+      ],
+      "$web": [
+        "../web/src/*",
+      ],
+    }
+  }
+}

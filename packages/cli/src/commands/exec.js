@@ -58,10 +58,41 @@ export const handler = async (args) => {
         {
           alias: {
             $api: getPaths().api.base,
+            $web: getPaths().web.base,
           },
         },
-        'exec-$api-module-resolver',
+        'exec-$side-module-resolver',
       ],
+    ],
+    overrides: [
+      {
+        test: ['./api/'],
+        plugins: [
+          [
+            'babel-plugin-module-resolver',
+            {
+              alias: {
+                src: getPaths().api.src,
+              },
+            },
+            'exec-api-src-module-resolver',
+          ],
+        ],
+      },
+      {
+        test: ['./web/'],
+        plugins: [
+          [
+            'babel-plugin-module-resolver',
+            {
+              alias: {
+                src: getPaths().web.src,
+              },
+            },
+            'exec-web-src-module-resolver',
+          ],
+        ],
+      },
     ],
   })
 
