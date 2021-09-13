@@ -26,7 +26,7 @@ test('creates a TypeScript function to execute', () => {
   const output = files({
     name: 'typescriptyTypescript',
     typescript: true,
-  }) //?
+  })
 
   const expectedOutputPath = path.normalize(
     '/path/to/project/scripts/typescriptyTypescript.ts'
