@@ -5041,7 +5041,6 @@ __metadata:
     babel-timing: 0.9.1
     copy-webpack-plugin: 9.0.1
     core-js: 3.16.1
-    cross-env: 7.0.3
     css-loader: 6.2.0
     css-minimizer-webpack-plugin: 3.0.2
     dotenv-webpack: 7.0.3

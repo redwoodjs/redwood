@@ -24,7 +24,7 @@
   "scripts": {
     "build": "yarn build:js",
     "build:js": "babel src -d dist",
-    "prepublishOnly": "yarn cross-env NODE_ENV=production yarn build",
+    "prepublishOnly": "NODE_ENV=production yarn build",
     "build:watch": "nodemon --watch src --ignore dist,template --exec \"yarn build\"",
     "test": "jest",
     "test:watch": "yarn test --watch"

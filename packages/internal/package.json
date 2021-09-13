@@ -53,7 +53,7 @@
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",
-    "prepublishOnly": "yarn cross-env NODE_ENV=production yarn build",
+    "prepublishOnly": "NODE_ENV=production yarn build",
     "build:clean-dist": "rimraf 'dist/**/*/__tests__'",
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\" --copy-files --no-copy-ignored && yarn build:clean-dist",
     "build:types": "tsc --build --verbose",
