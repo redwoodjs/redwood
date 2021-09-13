@@ -9,10 +9,10 @@
   "license": "MIT",
   "devDependencies": {
     "@auth0/auth0-spa-js": "1.17.1",
-    "@clerk/clerk-js": "1.31.5",
+    "@clerk/clerk-js": "1.32.2",
     "@clerk/clerk-sdk-node": "0.5.2",
-    "@clerk/types": "1.11.0",
-    "@supabase/supabase-js": "1.22.5",
+    "@clerk/types": "1.12.0",
+    "@supabase/supabase-js": "1.22.6",
     "@types/netlify-identity-widget": "1.9.2",
     "@types/react": "17.0.20",
     "firebase": "8.9.1",

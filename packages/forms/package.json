@@ -10,9 +10,9 @@
   "license": "MIT",
   "dependencies": {
     "@types/pascalcase": "1.0.0",
-    "core-js": "3.17.2",
+    "core-js": "3.17.3",
     "pascalcase": "1.0.0",
-    "react-hook-form": "7.15.1"
+    "react-hook-form": "7.15.3"
   },
   "scripts": {
     "build": "yarn build:js",
