@@ -48,8 +48,8 @@ export default App
 
 exports[`Should add config lines to App.{js,tsx} Matches Firebase Snapshot 1`] = `
 "import { AuthProvider } from '@redwoodjs/auth'
-import firebase from 'firebase/app'
-import 'firebase/auth'
+import { initializeApp, getApp, getApps } from 'firebase/app'
+import * as firebaseAuth from '@firebase/auth'
 import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
@@ -67,12 +67,27 @@ const firebaseClientConfig = {
   appId: process.env.FIREBASE_APP_ID,
 }
 
-const firebaseClient = ((config) => {
-  if (!firebase.apps.length) {
-    firebase.initializeApp(config)
+const firebaseApp = ((config) => {
+  const apps = getApps()
+  if (!apps.length) {
+    initializeApp(config)
   }
-  return firebase
+  return getApp()
 })(firebaseClientConfig)
+
+const actionCodeSettings = {
+  // URL you want to redirect back to. The domain (www.example.com) for this
+  // URL must be in the authorized domains list in the Firebase Console.
+  url: process.env.FIREBASE_ACTION_REDIRECT_URL,
+  handleCodeInApp: true,
+}
+
+export const firebaseClient = {
+  firebaseAuth,
+  firebaseApp, // optional
+  // actionCodeSettings, // optional
+}
+
 
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
