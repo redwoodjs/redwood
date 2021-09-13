@@ -6,7 +6,7 @@ tasks:
   - name: Terminal
     openMode: split-left
     init: |
-      eval $(gp env -e gp env RWFW_PATH="/workspace/redwood")
+      eval $(gp env -e RWFW_PATH="/workspace/redwood")
       mkdir /workspace/rw-test-app
     command: |
       cd /workspace/rw-test-app
