@@ -18,7 +18,11 @@ import { yargsDefaults } from '../generate'
  * Returns the path to a custom generator template, if found in the app.
  * Otherwise the default Redwood template.
  */
-const customOrDefaultTemplatePath = ({ side, generator, templatePath }) => {
+export const customOrDefaultTemplatePath = ({
+  side,
+  generator,
+  templatePath,
+}) => {
   // default template for this generator: ./page/templates/page.tsx.template
   const defaultPath = path.join(__dirname, generator, 'templates', templatePath)
   // where a custom template *might* exist: /path/to/app/web/src/lib/generators/page/page.tsx.template
