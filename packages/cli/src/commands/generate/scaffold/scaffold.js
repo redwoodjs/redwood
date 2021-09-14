@@ -195,7 +195,7 @@ const assetFiles = (name) => {
       !fs.existsSync(outputPath)
     ) {
       const template = generateTemplate(
-        path.join('scaffold', 'templates', 'assets', asset),
+        path.join(__dirname, 'scaffold', 'templates', 'assets', asset),
         {
           name,
         }
@@ -234,7 +234,7 @@ const layoutFiles = (
       outputLayoutName
     )
     const template = generateTemplate(
-      path.join('scaffold', 'templates', 'layouts', layout),
+      path.join(__dirname, 'scaffold', 'templates', 'layouts', layout),
       {
         name,
         pascalScaffoldPath,
@@ -287,7 +287,7 @@ const pageFiles = async (
       outputPageName
     )
     const template = generateTemplate(
-      path.join('scaffold', 'templates', 'pages', page),
+      path.join(__dirname, 'scaffold', 'templates', 'pages', page),
       {
         idType,
         idTsType,
@@ -418,7 +418,7 @@ const componentFiles = async (
     )
 
     const template = generateTemplate(
-      path.join('scaffold', 'templates', 'components', component),
+      path.join(__dirname, 'scaffold', 'templates', 'components', component),
       {
         name,
         columns,

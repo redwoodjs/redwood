@@ -149,7 +149,7 @@ export const files = async ({ name, crud, tests, typescript }) => {
     await sdlFromSchemaModel(pascalcase(pluralize.singular(name)), crud)
 
   let template = generateTemplate(
-    path.join('sdl', 'templates', `sdl.ts.template`),
+    path.join(__dirname, 'sdl', 'templates', `sdl.ts.template`),
     {
       name,
       crud,

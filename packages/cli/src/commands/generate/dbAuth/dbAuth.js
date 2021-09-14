@@ -48,7 +48,13 @@ export const files = ({ _tests, typescript }) => {
   const scaffoldOutputPath = path.join(getPaths().web.src, 'scaffold.css')
   if (!fs.existsSync(scaffoldOutputPath)) {
     const scaffoldTemplate = generateTemplate(
-      path.join('scaffold', 'templates', 'assets', 'scaffold.css.template'),
+      path.join(
+        __dirname,
+        'scaffold',
+        'templates',
+        'assets',
+        'scaffold.css.template'
+      ),
       { name: 'scaffold' }
     )
 
