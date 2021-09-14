@@ -55,7 +55,7 @@
     "prettier": "prettier --write './src/**/*.{ts,tsx}'"
   },
   "resolutions": {
-    "typescript": "4.4.2"
+    "typescript": "4.4.3"
   },
   "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"
 }
