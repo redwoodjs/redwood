@@ -16,7 +16,9 @@ const baseConfig = merge(webpackConfig('development'), {
       writeToDisk: false,
     },
     compress: true,
-    historyApiFallback: true,
+    historyApiFallback: {
+      disableDotRule: true,
+    },
     host: redwoodConfig.web.host || 'localhost',
     port: redwoodConfig.web.port,
     proxy: {

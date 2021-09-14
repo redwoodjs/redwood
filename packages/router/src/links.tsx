@@ -1,11 +1,8 @@
 import { forwardRef, useEffect } from 'react'
 
-import {
-  navigate,
-  matchPath,
-  useLocation,
-  flattenSearchParams,
-} from './internal'
+import { navigate } from './history'
+import { useLocation } from './location'
+import { flattenSearchParams, matchPath } from './util'
 
 type FlattenSearchParams = ReturnType<typeof flattenSearchParams>
 type UseMatchOptions = {
