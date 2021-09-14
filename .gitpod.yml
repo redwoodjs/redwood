@@ -6,6 +6,7 @@ tasks:
   - name: Terminal
     openMode: split-left
     init: |
+      eval $(gp env -e RWFW_PATH="/workspace/redwood")
       mkdir /workspace/rw-test-app
     command: |
       cd /workspace/rw-test-app
@@ -14,7 +15,6 @@ tasks:
 
   - name: "Dev Servers"
     openMode: split-right
-    before: export RW_PATH="/workspace/redwood"
     init: |
       cd /workspace/redwood
       yarn install
