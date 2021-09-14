@@ -3707,17 +3707,17 @@
     "@types/set-cookie-parser" "^2.4.0"
     set-cookie-parser "^2.4.6"
 
-"@mswjs/interceptors@^0.12.3":
-  version "0.12.5"
-  resolved "https://registry.yarnpkg.com/@mswjs/interceptors/-/interceptors-0.12.5.tgz#9d01ed8946aacc68723efdf7fd8926711b72b199"
-  integrity sha512-wlLHZgrFPxU5P0HQuUGyl0mQdwo/IFKEe4Pocg4xEj53m9gghsem8YdVzwJYMqxbQv1eMrEHgilvTdc36Vpr/Q==
+"@mswjs/interceptors@^0.12.6":
+  version "0.12.7"
+  resolved "https://registry.yarnpkg.com/@mswjs/interceptors/-/interceptors-0.12.7.tgz#0d1cd4cd31a0f663e0455993951201faa09d0909"
+  integrity sha512-eGjZ3JRAt0Fzi5FgXiV/P3bJGj0NqsN7vBS0J0FO2AQRQ0jCKQS4lEFm4wvlSgKQNfeuc/Vz6d81VtU3Gkx/zg==
   dependencies:
     "@open-draft/until" "^1.0.3"
-    debug "^4.3.0"
+    "@xmldom/xmldom" "^0.7.2"
+    debug "^4.3.2"
     headers-utils "^3.0.2"
     outvariant "^1.2.0"
     strict-event-emitter "^0.2.0"
-    xmldom "^0.6.0"
 
 "@n1ru4l/graphql-live-query@0.7.1":
   version "0.7.1"
@@ -6183,6 +6183,11 @@
   integrity sha512-Yw1akIogPhAT6XPYsRHlZZIS0tIGmAl9EYXHi2scf7LPKKqdqmow/Hu4kEqP2cJR3EjaU/9L0ZlAjFf3hFxmug==
   dependencies:
     tslib "^2.1.0"
+
+"@xmldom/xmldom@^0.7.2":
+  version "0.7.4"
+  resolved "https://registry.yarnpkg.com/@xmldom/xmldom/-/xmldom-0.7.4.tgz#93b2f9486c88b6464e97f76c9ab49b0a548fbe57"
+  integrity sha512-wdxC79cvO7PjSM34jATd/RYZuYWQ8y/R7MidZl1NYYlbpFn1+spfjkiR3ZsJfcaTs2IyslBN7VwBBJwrYKM+zw==
 
 "@xtuc/ieee754@^1.2.0":
   version "1.2.0"
@@ -9019,7 +9024,7 @@ debug@2.6.9, debug@^2.2.0, debug@^2.3.3, debug@^2.6.0, debug@^2.6.9:
   dependencies:
     ms "2.0.0"
 
-debug@4, debug@^4.0.1, debug@^4.1.0, debug@^4.1.1, debug@^4.3.0, debug@^4.3.1:
+debug@4, debug@^4.0.1, debug@^4.1.0, debug@^4.1.1, debug@^4.3.1:
   version "4.3.1"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.1.tgz#f0d229c505e0c6d8c49ac553d1b13dc183f6b2ee"
   integrity sha512-doEwdvm4PCeK4K3RQN2ZC2BYUBaxwLARCqZmMjtF8a51J2Rb0xpVloFRnCODwqjpwnAoao4pelN8l3RJdv3gRQ==
@@ -14855,13 +14860,13 @@ msal@1.4.12:
   dependencies:
     tslib "^1.9.3"
 
-msw@0.32.3:
-  version "0.32.3"
-  resolved "https://registry.yarnpkg.com/msw/-/msw-0.32.3.tgz#f5bf04f49a26d3268ba374f958c2a6ee04a4f27e"
-  integrity sha512-y7rJ5UnLZmp6qXU9rg6aiXgfQ75X2MacA2Y38VilHZuMS9LRycmppceY/SfhvYFZesR0QoP4AdzCLEP0h5PJ+Q==
+msw@0.35.0:
+  version "0.35.0"
+  resolved "https://registry.yarnpkg.com/msw/-/msw-0.35.0.tgz#18a4ceb6c822ef226a30421d434413bc45030d38"
+  integrity sha512-V7A6PqaS31F1k//fPS0OnO7vllfaqBUFsMEu3IpYixyWpiUInfyglodnbXhhtDyytkQikpkPZv8TZi/CvZzv/w==
   dependencies:
     "@mswjs/cookies" "^0.1.6"
-    "@mswjs/interceptors" "^0.12.3"
+    "@mswjs/interceptors" "^0.12.6"
     "@open-draft/until" "^1.0.3"
     "@types/cookie" "^0.4.1"
     "@types/inquirer" "^7.3.3"
@@ -20607,11 +20612,6 @@ xmlchars@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/xmlchars/-/xmlchars-2.2.0.tgz#060fe1bcb7f9c76fe2a17db86a9bc3ab894210cb"
   integrity sha512-JZnDKK8B0RCDw84FNdDAIpZK+JuJw+s7Lz8nksI7SIuU3UXJJslUthsi+uWBUYOwPFwW7W7PRLRfUKpxjtjFCw==
-
-xmldom@^0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/xmldom/-/xmldom-0.6.0.tgz#43a96ecb8beece991cef382c08397d82d4d0c46f"
-  integrity sha512-iAcin401y58LckRZ0TkI4k0VSM1Qg0KGSc3i8rU+xrxe19A/BN1zHyVSJY7uoutVlaTSzYyk/v5AmkewAP7jtg==
 
 xmlhttprequest@1.8.0:
   version "1.8.0"
