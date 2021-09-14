@@ -1,13 +1,19 @@
 {
-  "extends": "../web/tsconfig.json",
   "compilerOptions": {
+    "noEmit": true,
+    "allowJs": true,
+    "esModuleInterop": true,
+    "baseUrl": "./",
     "paths": {
-      "$api": [
-        "../api/src/*",
+      "$api/*": [
+        "../api/*",
       ],
-      "$web": [
-        "../web/src/*",
+      "$web/*": [
+        "../web/*",
       ],
-    }
-  }
+      "types/*": ["../types/*", "../web/types/*", "../api/types/*"],
+    },
+    "typeRoots": ["../node_modules/@types"],
+    "jsx": "preserve",
+  },
 }
