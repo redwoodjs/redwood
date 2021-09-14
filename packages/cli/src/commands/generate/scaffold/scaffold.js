@@ -181,9 +181,7 @@ export const files = async ({
 
 const assetFiles = (name) => {
   let fileList = {}
-  const assets = fs.readdirSync(
-    path.join(templateRoot, 'scaffold', 'templates', 'assets')
-  )
+  const assets = fs.readdirSync(path.join(__dirname, 'templates', 'assets'))
 
   assets.forEach((asset) => {
     const outputAssetName = asset.replace(/\.template/, '')
@@ -195,7 +193,7 @@ const assetFiles = (name) => {
       !fs.existsSync(outputPath)
     ) {
       const template = generateTemplate(
-        path.join(__dirname, 'scaffold', 'templates', 'assets', asset),
+        path.join(__dirname, 'templates', 'assets', asset),
         {
           name,
         }
@@ -217,9 +215,7 @@ const layoutFiles = (
   const singularName = pascalcase(pluralize.singular(name))
   let fileList = {}
 
-  const layouts = fs.readdirSync(
-    path.join(templateRoot, 'scaffold', 'templates', 'layouts')
-  )
+  const layouts = fs.readdirSync(path.join(__dirname, 'templates', 'layouts'))
 
   layouts.forEach((layout) => {
     const outputLayoutName = layout
@@ -234,7 +230,7 @@ const layoutFiles = (
       outputLayoutName
     )
     const template = generateTemplate(
-      path.join(__dirname, 'scaffold', 'templates', 'layouts', layout),
+      path.join(__dirname, 'templates', 'layouts', layout),
       {
         name,
         pascalScaffoldPath,
@@ -265,9 +261,7 @@ const pageFiles = async (
 
   let fileList = {}
 
-  const pages = fs.readdirSync(
-    path.join(templateRoot, 'scaffold', 'templates', 'pages')
-  )
+  const pages = fs.readdirSync(path.join(__dirname, 'templates', 'pages'))
 
   pages.forEach((page) => {
     // Sanitize page names
@@ -287,7 +281,7 @@ const pageFiles = async (
       outputPageName
     )
     const template = generateTemplate(
-      path.join(__dirname, 'scaffold', 'templates', 'pages', page),
+      path.join(__dirname, 'templates', 'pages', page),
       {
         idType,
         idTsType,
@@ -397,7 +391,7 @@ const componentFiles = async (
   }
 
   const components = fs.readdirSync(
-    path.join(templateRoot, 'scaffold', 'templates', 'components')
+    path.join(__dirname, 'templates', 'components')
   )
 
   await asyncForEach(components, (component) => {
@@ -418,7 +412,7 @@ const componentFiles = async (
     )
 
     const template = generateTemplate(
-      path.join(__dirname, 'scaffold', 'templates', 'components', component),
+      path.join(__dirname, 'templates', 'components', component),
       {
         name,
         columns,

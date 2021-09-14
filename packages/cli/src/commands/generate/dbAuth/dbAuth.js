@@ -50,6 +50,7 @@ export const files = ({ _tests, typescript }) => {
     const scaffoldTemplate = generateTemplate(
       path.join(
         __dirname,
+        '..',
         'scaffold',
         'templates',
         'assets',
