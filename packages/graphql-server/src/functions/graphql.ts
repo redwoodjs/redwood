@@ -342,30 +342,30 @@ const logResult =
 
     const options = {} as any
 
+    if (result.errors && result.errors.length > 0) {
+      envelopLogger.error(
+        {
+          errors: result.errors,
+        },
+        `GraphQL execution completed with errors:`
+      )
+    }
+
     if (result.data) {
       if (includeData) {
         options['data'] = result.data
       }
 
-      if (result.errors && result.errors.length > 0) {
-        envelopLogger.error(
-          {
-            errors: result.errors,
-          },
-          `GraphQL execution completed with errors:`
-        )
-      } else {
-        if (includeTracing) {
-          options['tracing'] = result.extensions?.envelopTracing
-        }
-
-        envelopLogger.debug(
-          {
-            ...options,
-          },
-          `GraphQL execution completed`
-        )
+      if (includeTracing) {
+        options['tracing'] = result.extensions?.envelopTracing
       }
+
+      envelopLogger.debug(
+        {
+          ...options,
+        },
+        `GraphQL execution completed`
+      )
     }
   }
 
