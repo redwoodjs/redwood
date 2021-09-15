@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "noEmit": true,
+    "allowJs": true,
+    "esModuleInterop": true,
+    "baseUrl": "./",
+    "paths": {
+      "$api/*": [
+        "../api/*",
+      ],
+      "$web/*": [
+        "../web/*",
+      ],
+      "types/*": ["../types/*", "../web/types/*", "../api/types/*"],
+    },
+    "typeRoots": ["../node_modules/@types"],
+    "jsx": "preserve",
+  },
+}

@@ -2,7 +2,7 @@
 
 exports[`creates a JavaScript function to execute 1`] = `
 "// To access your database
-import { db } from '../api/src/lib/db'
+import { db } from '$api/src/lib/db'
 
 export default async ({ args }) => {
   // Your script here...
@@ -14,7 +14,7 @@ export default async ({ args }) => {
 
 exports[`creates a TypeScript function to execute 1`] = `
 "// To access your database
-import { db } from '../api/src/lib/db'
+import { db } from '$api/src/lib/db'
 
 export default async ({ args }) => {
   // Your script here...
