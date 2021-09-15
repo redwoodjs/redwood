@@ -1,9 +1,8 @@
-import fs from 'fs'
 import path from 'path'
 
 import fg from 'fast-glob'
 
-import { getNamedExports, hasDefaultExport } from './ast'
+import { getNamedExports, hasDefaultExport, fileToAst } from './ast'
 import { getPaths } from './paths'
 
 export const findCells = (cwd: string = getPaths().web.src) => {
@@ -79,20 +78,26 @@ export const findPrerenderedHtml = (cwd = getPaths().web.dist) =>
 
 export const isCellFile = (p: string) => {
   const { dir, name } = path.parse(p)
+
+  // If the path isn't on the web side it cannot be a cell
+  if (!isFileInsideFolder(p, getPaths().web.src)) {
+    return false
+  }
+
   // A Cell must be a directory named module.
   if (!dir.endsWith(name)) {
     return false
   }
 
-  const code = fs.readFileSync(p, 'utf-8')
+  const ast = fileToAst(p)
 
   // A Cell should not have a default export.
-  if (hasDefaultExport(code)) {
+  if (hasDefaultExport(ast)) {
     return false
   }
 
   // A Cell must export QUERY and Success.
-  const exports = getNamedExports(code)
+  const exports = getNamedExports(ast)
   const exportedQUERY = exports.findIndex((v) => v.name === 'QUERY') !== -1
   const exportedSuccess = exports.findIndex((v) => v.name === 'Success') !== -1
   if (!exportedQUERY && !exportedSuccess) {
@@ -103,7 +108,7 @@ export const isCellFile = (p: string) => {
 }
 
 export const isPageFile = (p: string) => {
-  const { dir, name } = path.parse(p)
+  const { name } = path.parse(p)
 
   // A page must end with "Page.{jsx,js,tsx}".
   if (!name.endsWith('Page')) {
@@ -111,14 +116,13 @@ export const isPageFile = (p: string) => {
   }
 
   // A page should be in the `web/src/pages` directory.
-  const r = path.relative(getPaths().web.pages, dir)
-  if (!r && r.startsWith('..') && path.isAbsolute(r)) {
+  if (!isFileInsideFolder(p, getPaths().web.pages)) {
     return false
   }
 
   // A Page should have a default export.
-  const code = fs.readFileSync(p, 'utf-8')
-  if (!hasDefaultExport(code)) {
+  const ast = fileToAst(p)
+  if (!hasDefaultExport(ast)) {
     return false
   }
 
@@ -135,8 +139,8 @@ export const isGraphQLSchemaFile = (p: string) => {
     return false
   }
 
-  const code = fs.readFileSync(p, 'utf-8')
-  const exports = getNamedExports(code)
+  const ast = fileToAst(p)
+  const exports = getNamedExports(ast)
   return exports.findIndex((v) => v.name === 'schema') !== -1
 }
 
@@ -161,4 +165,18 @@ export const isApiFunction = (p: string, functionsPath: string) => {
     return true
   }
   return false
+}
+
+export const isFileInsideFolder = (filePath: string, folderPath: string) => {
+  const { dir } = path.parse(filePath)
+  const relativePathFromFolder = path.relative(folderPath, dir) //?
+  if (
+    !relativePathFromFolder ||
+    relativePathFromFolder.startsWith('..') ||
+    path.isAbsolute(relativePathFromFolder)
+  ) {
+    return false
+  } else {
+    return true
+  }
 }
