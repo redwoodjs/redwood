@@ -1,11 +1,12 @@
 import { assertSingleExecutionValue, createTestkit } from '@envelop/testing'
 import { makeExecutableSchema } from '@graphql-tools/schema'
+import { getDirectiveValues } from 'graphql'
 
 import { GraphQLTypeWithFields } from '../../index'
 import {
-  getDirectiveArgs,
   useRedwoodDirective,
   DIRECTIVE_REQUIRED_ERROR_MESSAGE,
+  DirectiveType,
 } from '../useRedwoodDirective'
 
 //  ===== Test Setup ======
@@ -101,12 +102,14 @@ const testInstance = createTestkit(
       onExecute: () => {
         throw new Error(AUTH_ERROR_MESSAGE)
       },
+      type: DirectiveType.VALIDATOR,
       name: 'requireAuth',
     }),
     useRedwoodDirective({
       onExecute: () => {
         return
       },
+      type: DirectiveType.VALIDATOR,
       name: 'skipAuth',
     }),
   ],
@@ -259,12 +262,11 @@ describe('Directives on Mutations', () => {
     ) as GraphQLTypeWithFields
 
     const deletePost = mutationType.getFields()['deletePost']
-    const directiveNode = deletePost.astNode.directives[0]
+    const directive = schemaWithDirectiveQueries.getDirective('requireAuth')
 
-    const { roles } = getDirectiveArgs(
-      schemaWithDirectiveQueries,
-      directiveNode
-    )
+    const { roles } = getDirectiveValues(directive, deletePost.astNode, {
+      args: 'roles',
+    })
 
     expect(roles).toContain('admin')
     expect(roles).toContain('publisher')
@@ -276,12 +278,11 @@ describe('Directives on Mutations', () => {
       'Post'
     ) as GraphQLTypeWithFields
 
-    const deletePost = postType.getFields()['description']
+    const description = postType.getFields()['description']
 
-    const directiveArgs = getDirectiveArgs(
-      schemaWithDirectiveQueries,
-      deletePost.astNode.directives[0]
-    )
+    const directive = schemaWithDirectiveQueries.getDirective('truncate')
+
+    const directiveArgs = getDirectiveValues(directive, description.astNode)
 
     expect(directiveArgs).toHaveProperty('maxLength')
     expect(directiveArgs.maxLength).toEqual(5)
@@ -295,12 +296,11 @@ describe('Directives on Mutations', () => {
       'Post'
     ) as GraphQLTypeWithFields
 
-    const deletePost = postType.getFields()['description']
+    const description = postType.getFields()['description']
 
-    const { maxLength } = getDirectiveArgs(
-      schemaWithDirectiveQueries,
-      deletePost.astNode.directives[0]
-    )
+    const directive = schemaWithDirectiveQueries.getDirective('truncate')
+
+    const { maxLength } = getDirectiveValues(directive, description.astNode)
 
     expect(maxLength).toEqual(5)
   })
