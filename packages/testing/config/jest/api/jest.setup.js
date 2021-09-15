@@ -34,7 +34,7 @@ const teardown = async () => {
   }
 }
 
-global.scenario = (...args) => {
+const buildScenario = (it) => (...args) => {
   let scenarioName, testName, testFunc
 
   if (args.length === 3) {
@@ -46,7 +46,7 @@ global.scenario = (...args) => {
     throw new Error('scenario() requires 2 or 3 arguments')
   }
 
-  return global.it(testName, async () => {
+  return it(testName, async () => {
     const path = require('path')
     const testFileDir = path.parse(global.testPath)
     const testFilePath = `${testFileDir.dir}/${
@@ -80,6 +80,9 @@ global.scenario = (...args) => {
     return result
   })
 }
+
+global.scenario = buildScenario(global.it)
+global.scenario.only = buildScenario(global.it.only)
 
 global.defineScenario = defineScenario
 
