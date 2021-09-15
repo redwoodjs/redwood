@@ -1,20 +1,15 @@
+import path from 'path'
+
+import { fileToAst } from '../ast'
 import { getJsxElements } from '../jsx'
 
+const getFixturePath = (relativeFilePath: string) => {
+  return path.join(__dirname, `fixtures/${relativeFilePath}`)
+}
+
 test('simple jsx tree', () => {
-  const code = `
-    export const Router = () => {
-      return (
-        <Router>
-          <Set private>
-            <Route path={"/" + "home"} name="home" page={HomePage} />
-            <Route path="/login" name="login" page={LoginPage} />
-            <Route path="/404" name="404" page={() => '404 - Not Found.'} />
-          </Set>
-        </Router>
-      )
-    }
-  `
-  const elements = getJsxElements(code, 'Router')
+  const simpleAst = fileToAst(getFixturePath('web/src/router/simple.tsx'))
+  const elements = getJsxElements(simpleAst, 'Router')
   expect(elements).toMatchInlineSnapshot(`
     Array [
       Object {
