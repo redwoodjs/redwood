@@ -1,10 +1,5 @@
 import type { FirebaseApp } from '@firebase/app'
-import type {
-  ActionCodeSettings,
-  CustomParameters,
-  OAuthProvider,
-  User,
-} from '@firebase/auth'
+import type { CustomParameters, OAuthProvider, User } from '@firebase/auth'
 import type FirebaseAuthNamespace from '@firebase/auth'
 
 import { AuthClient } from './'
@@ -14,7 +9,7 @@ export type FirebaseUser = User
 
 // @TODO: Firebase doesn't export a list of providerIds they use
 // But I found them here: https://github.com/firebase/firebase-js-sdk/blob/a5768b0aa7d7ce732279931aa436e988c9f36487/packages/rules-unit-testing/src/api/index.ts
-// NOTE: 2021-09-07 firebase has a const/enum ProviderId they export
+// NOTE: 2021-09-15 firebase now exports a const/enum ProviderId which could perhabps be used in place of this
 export type oAuthProvider =
   | 'google.com'
   | 'facebook.com'
@@ -41,11 +36,12 @@ const hasPasswordCreds = (options: Options): boolean => {
 type FirebaseClient = {
   firebaseAuth: FirebaseAuth
   firebaseApp?: FirebaseApp
-  actionCodeSettings?: ActionCodeSettings
 }
 
-export const firebase = (client: FirebaseClient): AuthClient => {
-  const { firebaseAuth, firebaseApp, actionCodeSettings } = client
+export const firebase = ({
+  firebaseAuth,
+  firebaseApp,
+}: FirebaseClient): AuthClient => {
   const auth = firebaseAuth.getAuth(firebaseApp)
 
   function getProvider(providerId: string) {
@@ -66,24 +62,14 @@ export const firebase = (client: FirebaseClient): AuthClient => {
   }
 
   const loginWithEmailLink = ({ email, emailLink }: Options) => {
-    // send emailLink if logIn called with no emailLink
-    if (!emailLink) {
-      return firebaseAuth.sendSignInLinkToEmail(
-        auth,
-        email as string,
-        actionCodeSettings as ActionCodeSettings
-      )
+    if (
+      email !== undefined &&
+      emailLink !== undefined &&
+      firebaseAuth.isSignInWithEmailLink(auth, emailLink)
+    ) {
+      return firebaseAuth.signInWithEmailLink(auth, email, emailLink)
     }
-
-    if (!firebaseAuth.isSignInWithEmailLink(auth, emailLink)) {
-      throw new Error('Login failed, invalid email link')
-    }
-
-    return firebaseAuth.signInWithEmailLink(
-      auth,
-      email as string,
-      emailLink as string
-    )
+    return undefined
   }
 
   return {
@@ -98,7 +84,6 @@ export const firebase = (client: FirebaseClient): AuthClient => {
           resolve(user)
         }, reject)
       })
-      return
     },
     login: async (
       options: oAuthProvider | Options = { providerId: 'google.com' }
@@ -149,6 +134,7 @@ export const firebase = (client: FirebaseClient): AuthClient => {
       const provider = getProvider(options.providerId || 'google.com')
       const providerWithOptions = applyProviderOptions(provider, options)
 
+      // Potentially useful to support signInWithCredential without popup
       return firebaseAuth.signInWithPopup(auth, providerWithOptions)
     },
     getToken: async () => {
