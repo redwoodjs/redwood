@@ -6,11 +6,12 @@ import path from 'path'
 
 import { files } from '../directive'
 
-test('creates a JavaScript directive', () => {
+test('creates a JavaScript validator directive', () => {
   const output = files({
     name: 'require-admin', // checking camel casing too!
     typescript: false,
     tests: true,
+    type: 'validator',
   })
 
   const expectedOutputPath = path.normalize(
@@ -26,11 +27,12 @@ test('creates a JavaScript directive', () => {
   expect(output[expectedTestOutputPath]).toMatchSnapshot('js directive test')
 })
 
-test('creates a TypeScript directive', () => {
+test('creates a TypeScript transformer directive', () => {
   const output = files({
     name: 'bazinga-foo_bar', // checking camel casing too!
     typescript: true,
     tests: true,
+    type: 'transformer',
   })
 
   const expectedOutputPath = path.normalize(

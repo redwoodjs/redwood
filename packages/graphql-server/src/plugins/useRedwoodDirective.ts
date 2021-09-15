@@ -1,10 +1,9 @@
 import { Plugin } from '@envelop/types'
-import { getArgumentValues } from '@graphql-tools/utils'
 import {
   DirectiveNode,
+  getDirectiveValues,
   GraphQLObjectType,
   GraphQLResolveInfo,
-  GraphQLSchema,
 } from 'graphql'
 
 import { GlobalContext } from '../index'
@@ -25,24 +24,54 @@ export interface DirectiveParams<FieldType = any> {
   info: GraphQLResolveInfo
   directiveNode?: DirectiveNode
   directiveArgs: Record<string, any>
-  getFieldValue: () => FieldType
+  resolvedValue: FieldType
 }
 
 /**
- * Write your directive logic inside this function.
+ * Write your validation logic inside this function.
+ * Validator directives do not have access to the field value, i.e. they are called before resolving the value
  *
- * - Return your transformed value if you want to replace it. e.g. masking a field
  * - Throw an error, if you want to stop executing e.g. not sufficient permissions
+ * - Validator directives can be async or sync
+ * - Returned value will be ignored
+ */
+export type ValidatorDirectiveFunc<FieldType = any> = (
+  args: Omit<DirectiveParams<FieldType>, 'resolvedValue'>
+) => Promise<void> | void
+
+/**
+ * Write your transformation logic inside this function.
+ * Transformer directives run **after** resolving the value
+ *
+ * - You can also throw an error, if you want to stop executing, but note that the value has already been resolved
+ * - Transformer directives **must** be synchonous, and return a value
  *
  */
-export type RedwoodDirective<FieldType = any> = (
+export type TransformerDirectiveFunc<FieldType = any> = (
   args: DirectiveParams<FieldType>
-) => FieldType | Promise<void> | void
+) => FieldType
 
-export type PluginOptions = {
-  onExecute: RedwoodDirective
+// @NOTE don't use unspecified enums, because !type would === true
+export enum DirectiveType {
+  VALIDATOR = 'VALIDATOR_DIRECTIVE',
+  TRANSFORMER = 'TRANSFORMER_DIRECTIVE',
+}
+
+interface ValidatorDirectiveOptions {
+  onExecute: ValidatorDirectiveFunc
+  type: DirectiveType.VALIDATOR
   name: string
 }
+
+interface TransformerDirectiveOptions {
+  onExecute: TransformerDirectiveFunc
+  type: DirectiveType.TRANSFORMER
+  name: string
+}
+
+export type DirectivePluginOptions =
+  | ValidatorDirectiveOptions
+  | TransformerDirectiveOptions
 
 export function hasDirective(info: GraphQLResolveInfo): boolean {
   try {
@@ -79,55 +108,61 @@ export function getDirectiveByName(
   }
 }
 
-export function getDirectiveArgs(
-  schema: GraphQLSchema,
-  directiveNode: DirectiveNode
-): Record<string, any> {
-  const directive = schema.getDirective(directiveNode.name.value)
-
-  if (directive) {
-    return getArgumentValues(directive, directiveNode)
-  }
-  return {}
-}
-
 export const useRedwoodDirective = (
-  options: PluginOptions
+  options: DirectivePluginOptions
 ): Plugin<{
-  onExecute: RedwoodDirective
+  onExecute: ValidatorDirectiveFunc | TransformerDirectiveFunc
 }> => {
-  const executeDirective = options.onExecute
-
   return {
-    onExecute() {
+    onExecute({ args: executionArgs }) {
       return {
-        async onResolverCalled({ args, root, context, info, resolverFn }) {
+        async onResolverCalled({ args, root, context, info }) {
           if (isQueryOrMutation(info) && !hasDirective(info)) {
             throw new Error(DIRECTIVE_REQUIRED_ERROR_MESSAGE)
           }
 
           const directiveNode = getDirectiveByName(info, options.name)
+          const directive = directiveNode
+            ? executionArgs.schema.getDirective(directiveNode.name.value)
+            : null
 
-          if (directiveNode) {
-            const directiveArgs = getDirectiveArgs(info.schema, directiveNode)
+          if (directiveNode && directive) {
+            const directiveArgs =
+              getDirectiveValues(
+                directive,
+                { directives: [directiveNode] },
+                executionArgs.variableValues
+              ) || {}
 
-            const transformedOutputMaybe = await executeDirective({
-              root,
-              args,
-              context,
-              info,
-              directiveNode,
-              directiveArgs,
-              getFieldValue: () => resolverFn(root, args, context, info),
-            })
+            if (_isValidator(options)) {
+              await options.onExecute({
+                root,
+                args,
+                context,
+                info,
+                directiveNode,
+                directiveArgs,
+              })
+            }
 
             // In order to change the value of the field, we have to return a function in this form
             // ({result, setResult}) => { setResult(newValue)}
             // Not super clear but mentioned here: https://www.envelop.dev/docs/plugins/lifecycle#onexecuteapi
 
-            if (transformedOutputMaybe) {
-              return ({ setResult }) => {
-                setResult(transformedOutputMaybe)
+            if (_isTransformer(options)) {
+              return ({ result, setResult }) => {
+                // @NOTE! A transformer cannot be async
+                const transformedValue = options.onExecute({
+                  root,
+                  args,
+                  context,
+                  info,
+                  directiveNode,
+                  directiveArgs,
+                  resolvedValue: result,
+                })
+
+                setResult(transformedValue)
               }
             }
           }
@@ -137,4 +172,17 @@ export const useRedwoodDirective = (
       }
     },
   }
+}
+
+// For narrowing types
+const _isValidator = (
+  options: DirectivePluginOptions
+): options is ValidatorDirectiveOptions => {
+  return options.type === DirectiveType.VALIDATOR
+}
+
+const _isTransformer = (
+  options: DirectivePluginOptions
+): options is TransformerDirectiveOptions => {
+  return options.type === DirectiveType.TRANSFORMER
 }

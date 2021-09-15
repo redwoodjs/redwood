@@ -27,13 +27,16 @@ import {
 import { renderPlaygroundPage } from 'graphql-playground-html'
 
 import { createCorsContext } from '../cors'
-import { makeDirectives } from '../directives/makeDirectives'
+import { parseDirectivesForPlugin } from '../directives/makeDirectives'
 import { getAsyncStoreInstance } from '../globalContext'
 import { createHealthcheckContext } from '../healthcheck'
 import { makeMergedSchema } from '../makeMergedSchema/makeMergedSchema'
 import { makeServices } from '../makeServices'
 import { useRedwoodAuthContext } from '../plugins/useRedwoodAuthContext'
-import { useRedwoodDirective } from '../plugins/useRedwoodDirective'
+import {
+  DirectivePluginOptions,
+  useRedwoodDirective,
+} from '../plugins/useRedwoodDirective'
 import { useRedwoodGlobalContextSetter } from '../plugins/useRedwoodGlobalContextSetter'
 import { useRedwoodLogger } from '../plugins/useRedwoodLogger'
 import { useRedwoodPopulateContext } from '../plugins/useRedwoodPopulateContext'
@@ -116,14 +119,11 @@ export const createGraphQLHandler = ({
     const wrappedServices = makeServices({ services })
 
     // @NOTE: Directives are optional
-    const projectDirectives = makeDirectives(directives)
+    const projectDirectives = parseDirectivesForPlugin(directives)
 
     if (projectDirectives.length > 0) {
       redwoodDirectivePlugins = projectDirectives.map((directive) =>
-        useRedwoodDirective({
-          name: directive.name,
-          onExecute: directive.onExecute,
-        })
+        useRedwoodDirective(directive as DirectivePluginOptions)
       )
     }
 
@@ -135,7 +135,7 @@ export const createGraphQLHandler = ({
     })
   } catch (e) {
     logger.error('⚠️ GraphQL server crashed')
-    logger.error(e)
+    logger.error(e as Error)
 
     // Forcefully crash the graphql server
     // so users know that a misconfiguration has happened

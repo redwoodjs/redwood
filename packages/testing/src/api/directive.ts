@@ -1,17 +1,10 @@
-import type { DocumentNode, ExecutableDefinitionNode } from 'graphql'
-
 import type {
-  RedwoodDirective,
+  ValidatorDirectiveFunc,
+  TransformerDirectiveFunc,
   DirectiveParams,
 } from '@redwoodjs/graphql-server'
 
-export const getDirectiveName = (schema: DocumentNode) => {
-  const definition = schema.definitions.find(
-    (definition) => definition.kind === 'DirectiveDefinition'
-  ) as ExecutableDefinitionNode
-
-  return definition.name?.value
-}
+export { getDirectiveName } from '@redwoodjs/graphql-server'
 
 /** Used for writing directive tests e.g.
  * @example
@@ -24,17 +17,17 @@ export const getDirectiveName = (schema: DocumentNode) => {
  *  expect(mockExecution()).toEqual('FFF')
  */
 type GqlExecutionMock = Omit<Partial<DirectiveParams>, 'getFieldValue'> & {
-  resolver?: () => any
+  mockedFieldValue?: any
 }
 
 export const mockRedwoodDirective = (
-  directive: RedwoodDirective,
+  directive: ValidatorDirectiveFunc | TransformerDirectiveFunc,
   executionMock: GqlExecutionMock
 ) => {
-  const { resolver = () => 'null', ...others } = executionMock
+  const { mockedFieldValue, ...others } = executionMock
   return () => {
     return directive({
-      getFieldValue: resolver,
+      fieldValue: mockedFieldValue,
       ...others,
     } as DirectiveParams) // we dont need all the values for
   }

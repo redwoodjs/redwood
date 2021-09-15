@@ -1,40 +1,42 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`creates a JavaScript directive: js directive 1`] = `
-"import { logger } from 'src/lib/logger'
+exports[`creates a JavaScript validator directive: js directive 1`] = `
+"import { createValidatorDirective } from '@redwoodjs/graphql-server'
+import { logger } from 'src/lib/logger'
 
 export const schema = gql\`
   directive @requireAdmin on FIELD_DEFINITION
 \`
 
-export const requireAdmin = ({ context, getFieldValue }) => {
-  // Implement your directive here. This will be executed \\"onExecute\\"
-  // More information on graphql lifecycle here: https://www.envelop.dev/docs/plugins/lifecycle
+const transform = ({ context, directiveArgs }) => {
+  /**
+   * Write your validation logic inside this function.
+   * Validator directives do not have access to the field value, i.e. they are called before resolving the value
+   *
+   * - Throw an error, if you want to stop executing e.g. not sufficient permissions
+   * - Validator directives can be async or sync
+   * - Returned value will be ignored
+   */
 
-  // If you want to implement a validation: throw an error if criteria not met to stop execution
-  // CurrentUser is only available when auth is setup.
-  // Any roles provided to the directive are available in the roles object provided to this function
+  // currentUser is only available when auth is setup.
   logger.debug(
     { currentUser: context.currentUser },
-    'currentUser in requireAdmin directive is only available when auth is setup'
-  )
-
-  // If you want to implement a transform: you can modify the value and return it
-  // @NOTE: Make sure that you want this data to be accessible, before calling getFieldValue
-  const fieldValue = getFieldValue()
-  logger.debug(
-    { fieldValue: fieldValue },
-    'fieldValue in requireAdmin directive can be modified'
+    'currentUser in requireAdmin directive'
   )
 
   // You can also modify your directive to take arguments
-  // and use the argumentValues object provided to this function to get values
+  // and use the directiveArgs object provided to this function to get values
   // See documentation here: https://redwoodjs.com/docs/directives
+  logger.debug(directiveArgs, 'directiveArgs in requireAdmin directive')
+
+  throw new Error('Implement me!')
 }
+
+export const requireAdmin = createValidatorDirective(schema, transform)
 "
 `;
 
-exports[`creates a JavaScript directive: js directive test 1`] = `
+exports[`creates a JavaScript validator directive: js directive test 1`] = `
 "import { mockRedwoodDirective, getDirectiveName } from '@redwoodjs/testing/api'
 
 import { schema, requireAdmin } from './requireAdmin.directive'
@@ -60,43 +62,45 @@ describe('requireAdmin directive', () => {
 "
 `;
 
-exports[`creates a TypeScript directive: ts directive 1`] = `
-"import type { RedwoodDirective } from '@redwoodjs/graphql-server'
-
+exports[`creates a TypeScript transformer directive: ts directive 1`] = `
+"import {
+  createTransformerDirective,
+  TransformerDirectiveFunc,
+} from '@redwoodjs/graphql-server'
 import { logger } from 'src/lib/logger'
 
 export const schema = gql\`
   directive @bazingaFooBar on FIELD_DEFINITION
 \`
 
-export const bazingaFooBar: RedwoodDirective = ({ context, getFieldValue }) => {
-  // Implement your directive here. This will be executed \\"onExecute\\"
-  // More information on graphql lifecycle here: https://www.envelop.dev/docs/plugins/lifecycle
+const transform: TransformerDirectiveFunc = ({ context, resolvedValue }) => {
+  /**
+   * Write your transformation logic inside this function.
+   * Transformer directives run **after** resolving the value
+   *
+   * - You can also throw an error, if you want to stop executing, but note that the value has already been resolved
+   * - Transformer directives **must** be synchronous, and return a value
+   **/
 
-  // If you want to implement a validation: throw an error if criteria not met to stop execution
-  // CurrentUser is only available when auth is setup.
-  // Any roles provided to the directive are available in the roles object provided to this function
+  // currentUser is only available when auth is setup.
   logger.debug(
     { currentUser: context.currentUser },
-    'currentUser in bazingaFooBar directive is only available when auth is setup'
+    'currentUser in bazingaFooBar directive'
   )
 
-  // If you want to implement a transform: you can modify the value and return it
-  // @NOTE: Make sure that you want this data to be accessible, before calling getFieldValue
-  const fieldValue = getFieldValue()
-  logger.debug(
-    { fieldValue: fieldValue },
-    'fieldValue in bazingaFooBar directive can be modified'
-  )
+  // ... you can modify the resolvedValue and return it
+  logger.debug(resolvedValue, 'resolvedValue in bazingaFooBar directive')
 
   // You can also modify your directive to take arguments
-  // and use the argumentValues object provided to this function to get values
+  // and use the directiveArgs object provided to this function to get values
   // See documentation here: https://redwoodjs.com/docs/directives
 }
+
+export const bazingaFooBar = createTransformerDirective(schema, transform)
 "
 `;
 
-exports[`creates a TypeScript directive: ts directive test 1`] = `
+exports[`creates a TypeScript transformer directive: ts directive test 1`] = `
 "import { mockRedwoodDirective, getDirectiveName } from '@redwoodjs/testing/api'
 
 import { schema, bazingaFooBar } from './bazingaFooBar.directive'
