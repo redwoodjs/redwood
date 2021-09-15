@@ -24,8 +24,7 @@ const firebaseApp = ((config) => {
 export const firebaseClient = {
   firebaseAuth,
   firebaseApp, // optional
-}
-`,
+}`,
   authProvider: { client: 'firebaseClient', type: 'firebase' },
 }
 
