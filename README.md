@@ -22,14 +22,14 @@ Redwood is the latest open source project initiated by Tom Preston-Werner, cofou
 > right; make it fast" paradigm, Redwood is in the later stages of the "make it
 > work" phase. That said, your input can have a huge impact during this period,
 > and we welcome your feedback and ideas! Check out the [Redwood Community
-> Forum](https://community.redwoodjs.com/) to join in.
+> Forum](https://community.redwoodjs.com/) to join in.  
 
 > **TUTORIAL:** The best way to get to know Redwood is by going through the extensive
 > [Redwood Tutorial](https://redwoodjs.com/tutorial). Have fun!
 
 > **QUICK START:** You can install and run a full-stack Redwood application on your
 > machine with only a couple commands. Check out the [Quick Start](https://redwoodjs.com/docs/quick-start)
-> guide to get started.
+> guide to get started.  
 
 **EXAMPLES:** If you'd like to see some examples of what a Redwood application looks
 like, take a look at the following projects:
@@ -542,7 +542,6 @@ And there you have it.
   <tr>
     <td align="center"><a href="http://prolabprints.com/"><img src="https://avatars.githubusercontent.com/u/7111699?v=4" width="100px;" alt=""/><br /><sub><b>Ron Dyar</b></sub></a></td>
     <td align="center"><a href="https://github.com/toddpress"><img src="https://avatars.githubusercontent.com/u/2934422?v=4" width="100px;" alt=""/><br /><sub><b>Todd Pressley</b></sub></a></td>
-    <td align="center"><a href="https://github.com/doesnotexist"><img src="https://avatars.githubusercontent.com/u/304697?v=4" width="100px;" alt=""/><br /><sub><b>Omar El-Domeiri</b></sub></a></td>
   </tr>
 </table>
 
