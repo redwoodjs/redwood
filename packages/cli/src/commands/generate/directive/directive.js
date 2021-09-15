@@ -33,7 +33,7 @@ export const files = ({ name, typescript = false, type, tests }) => {
     extension: typescript ? '.ts' : '.js',
     generator: 'directive',
     templatePath: `${type}.directive.ts.template`,
-    outputPath: path.join(getPaths().api.directives, outputFilename),
+    outputPath: path.join(getPaths().api.directives, camelName, outputFilename),
     templateVars: { camelName },
   })
 
@@ -49,7 +49,11 @@ export const files = ({ name, typescript = false, type, tests }) => {
       extension: typescript ? '.test.ts' : '.test.js',
       generator: 'directive',
       templatePath: 'directive.test.ts.template',
-      outputPath: path.join(getPaths().api.directives, testOutputFilename),
+      outputPath: path.join(
+        getPaths().api.directives,
+        camelName,
+        testOutputFilename
+      ),
       templateVars: { camelName },
     })
     files.push(testFile)
