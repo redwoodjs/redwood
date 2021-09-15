@@ -5,6 +5,7 @@ import { types } from '@babel/core'
 import { parse as babelParse, ParserPlugin } from '@babel/parser'
 import traverse from '@babel/traverse'
 import chalk from 'chalk'
+import { Parser } from 'prettier'
 
 import { isFileInsideFolder } from './files'
 import { getPaths } from './paths'
@@ -12,19 +13,17 @@ import { getPaths } from './paths'
 export const fileToAst = (filePath: string): types.Node => {
   const code = fs.readFileSync(filePath, 'utf-8')
 
-  const plugins: ParserPlugin[] = [
+  // use jsx plugin for web files, because in JS, the .jsx extension is not used
+  const isJsxFile =
+    path.extname(filePath).match(/[jt]sx$/) ||
+    isFileInsideFolder(filePath, getPaths().web.base)
+
+  const plugins = [
     'typescript',
     'nullishCoalescingOperator',
     'objectRestSpread',
-  ]
-
-  if (
-    path.extname(filePath).match(/[jt]sx$/) ||
-    // use jsx plugin for web files, because in JS, the .jsx extension is not used
-    isFileInsideFolder(filePath, getPaths().web.base)
-  ) {
-    plugins.push('jsx')
-  }
+    isJsxFile && 'jsx',
+  ].filter(Boolean) as ParserPlugin[]
 
   try {
     return babelParse(code, {
