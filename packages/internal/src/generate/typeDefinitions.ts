@@ -3,7 +3,7 @@ import path from 'path'
 
 import { generate } from '@graphql-codegen/cli'
 
-import { getCellGqlQuery } from '../ast'
+import { getCellGqlQuery, fileToAst } from '../ast'
 import { findCells, findDirectoryNamedModules } from '../files'
 import { parseGqlQueryToAst } from '../gql'
 import { getJsxElements } from '../jsx'
@@ -112,7 +112,7 @@ export const generateMirrorCell = (p: string, rwjsPaths = getPaths()) => {
   const typeDefPath = path.join(mirrorDir, typeDef)
   const { name } = path.parse(p)
 
-  const fileContents = fs.readFileSync(p, 'utf-8')
+  const fileContents = fileToAst(p)
   const cellQuery = getCellGqlQuery(fileContents)
 
   if (cellQuery) {
@@ -151,8 +151,8 @@ const writeTypeDefIncludeFile = (
 }
 
 export const generateTypeDefRouterRoutes = () => {
-  const code = fs.readFileSync(getPaths().web.routes, 'utf-8')
-  const routes = getJsxElements(code, 'Route').filter((x) => {
+  const ast = fileToAst(getPaths().web.routes)
+  const routes = getJsxElements(ast, 'Route').filter((x) => {
     // All generated "routes" should have a "name" and "path" prop-value
     return (
       typeof x.props?.path !== 'undefined' &&

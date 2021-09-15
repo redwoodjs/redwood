@@ -2,7 +2,7 @@ import React, { useReducer, createContext, useContext } from 'react'
 
 import { useAuth } from '@redwoodjs/auth'
 
-import type { ParamType } from './internal'
+import type { ParamType } from './util'
 
 const DEFAULT_PAGE_LOADING_DELAY = 1000 // milliseconds
 
