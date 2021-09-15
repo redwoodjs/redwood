@@ -26,7 +26,6 @@ export interface BrowserTargetPaths {
   base: string
   src: string
   app: string
-  lib: string
   generators: string
   index: string | null
   routes: string
@@ -79,7 +78,7 @@ const PATH_RW_SCRIPTS = 'scripts'
 const PATH_API_DIR_GRAPHQL = 'api/src/graphql'
 const PATH_API_DIR_CONFIG = 'api/src/config'
 const PATH_API_DIR_LIB = 'api/src/lib'
-const PATH_API_DIR_GENERATORS = 'api/src/lib/generators'
+const PATH_API_DIR_GENERATORS = 'api/generators'
 const PATH_API_DIR_SERVICES = 'api/src/services'
 const PATH_API_DIR_SRC = 'api/src'
 const PATH_WEB_ROUTES = 'web/src/Routes' // .js|.tsx
@@ -89,8 +88,7 @@ const PATH_WEB_DIR_COMPONENTS = 'web/src/components'
 const PATH_WEB_DIR_SRC = 'web/src'
 const PATH_WEB_DIR_SRC_APP = 'web/src/App'
 const PATH_WEB_DIR_SRC_INDEX = 'web/src/index' // .js|.tsx
-const PATH_WEB_DIR_LIB = 'web/src/lib'
-const PATH_WEB_DIR_GENERATORS = 'web/src/lib/generators'
+const PATH_WEB_DIR_GENERATORS = 'web/generators'
 const PATH_WEB_DIR_CONFIG = 'web/config'
 const PATH_WEB_DIR_CONFIG_WEBPACK = 'web/config/webpack.config.js'
 const PATH_WEB_DIR_CONFIG_POSTCSS = 'web/config/postcss.config.js'
@@ -189,7 +187,6 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       components: path.join(BASE_DIR, PATH_WEB_DIR_COMPONENTS),
       layouts: path.join(BASE_DIR, PATH_WEB_DIR_LAYOUTS),
       src: path.join(BASE_DIR, PATH_WEB_DIR_SRC),
-      lib: path.join(BASE_DIR, PATH_WEB_DIR_LIB),
       generators: path.join(BASE_DIR, PATH_WEB_DIR_GENERATORS),
       app: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_APP)) as string,
       index: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_INDEX)),
