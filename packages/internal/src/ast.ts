@@ -5,7 +5,6 @@ import { types } from '@babel/core'
 import { parse as babelParse, ParserPlugin } from '@babel/parser'
 import traverse from '@babel/traverse'
 import chalk from 'chalk'
-import { Parser } from 'prettier'
 
 import { isFileInsideFolder } from './files'
 import { getPaths } from './paths'
