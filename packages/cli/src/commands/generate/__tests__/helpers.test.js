@@ -46,7 +46,9 @@ test('customOrDefaultTemplatePath returns the default path if no custom template
   })
 
   expect(output).toMatch(
-    'redwood/packages/cli/src/commands/generate/page/templates/page.tsx.template'
+    path.normalize(
+      'redwood/packages/cli/src/commands/generate/page/templates/page.tsx.template'
+    )
   )
 })
 
@@ -60,8 +62,10 @@ test('customOrDefaultTemplatePath returns the app path if a custom template exis
     templatePath: 'page.tsx.template',
   })
 
-  expect(output).toMatch(
-    '/path/to/project/web/src/lib/generators/page/page.tsx.template'
+  expect(output).toEqual(
+    path.normalize(
+      '/path/to/project/web/src/lib/generators/page/page.tsx.template'
+    )
   )
 })
 
@@ -75,8 +79,10 @@ test('customOrDefaultTemplatePath returns the app path with proper side, generat
     templatePath: 'component.tsx.template',
   })
 
-  expect(output).toMatch(
-    '/path/to/project/api/src/lib/generators/cell/component.tsx.template'
+  expect(output).toEqual(
+    path.normalize(
+      '/path/to/project/api/src/lib/generators/cell/component.tsx.template'
+    )
   )
 })
 
