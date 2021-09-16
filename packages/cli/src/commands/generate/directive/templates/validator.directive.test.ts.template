@@ -8,9 +8,10 @@ describe('${camelName} directive', () => {
     expect(getDirectiveName(schema)).toBe('${camelName}')
   })
 
-  it('${camelName} throws an error if validation does not pass', () => {
-    expect(
-      mockRedwoodDirective(${camelName}, {})
-    ).toThrowError('Implementation missing for ${camelName')
+
+  it('has a ${camelName} throws an error if validation does not pass', () => {
+    const mockExecution = mockRedwoodDirective(${camelName}, {})
+
+    expect(mockExecution).toThrowError()
   })
 })

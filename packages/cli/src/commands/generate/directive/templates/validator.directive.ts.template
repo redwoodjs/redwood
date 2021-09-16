@@ -8,7 +8,7 @@ export const schema = gql`
   directive @${camelName} on FIELD_DEFINITION
 `
 
-const transform: ValidatorDirectiveFunc = ({ context, directiveArgs }) => {
+const validate: ValidatorDirectiveFunc = ({ context, directiveArgs }) => {
   /**
    * Write your validation logic inside this function.
    * Validator directives do not have access to the field value, i.e. they are called before resolving the value
@@ -21,14 +21,13 @@ const transform: ValidatorDirectiveFunc = ({ context, directiveArgs }) => {
   // currentUser is only available when auth is setup.
   logger.debug({ currentUser: context.currentUser }, 'currentUser in ${camelName} directive')
 
-
   // You can also modify your directive to take arguments
   // and use the directiveArgs object provided to this function to get values
   // See documentation here: https://redwoodjs.com/docs/directives
   logger.debug(directiveArgs, 'directiveArgs in ${camelName} directive')
 
 
-  throw new Error('Implement me!')
+  throw new Error('Implementation missing for ${camelName}')
 }
 
-export const ${camelName} = createValidatorDirective(schema, transform)
+export const ${camelName} = createValidatorDirective(schema, validate)
