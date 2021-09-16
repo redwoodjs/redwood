@@ -26,14 +26,10 @@ const adminApp = admin.initializeApp(config)
  *
  * @see https://github.com/redwoodjs/redwood/tree/main/packages/auth for examples
  */
-export const getCurrentUser = async (
-  decoded,
-  { _token, _type },
-  { _event, _context }
-) => {
+export const getCurrentUser = async (decoded) => {
   // RBAC for firebase Auth needs a custom implementation, can not use parseJWT
   // see: https://firebase.google.com/docs/auth/admin/custom-claims
-  const { email, uid } = decoded
+  const { email, uid } = decoded as admin.auth.DecodedIdToken
   return { email, uid }
 }
 
