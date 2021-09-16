@@ -140,6 +140,7 @@ const getSharedPlugins = (isEnvProduction) => {
       React: 'react',
       PropTypes: 'prop-types',
       gql: 'graphql-tag',
+      // Possibly used by storybook?
       mockGraphQLQuery: ['@redwoodjs/testing/web', 'mockGraphQLQuery'],
       mockGraphQLMutation: ['@redwoodjs/testing/web', 'mockGraphQLMutation'],
       mockCurrentUser: ['@redwoodjs/testing/web', 'mockCurrentUser'],

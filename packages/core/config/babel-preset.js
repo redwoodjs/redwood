@@ -84,9 +84,9 @@ module.exports = () => {
             {
               declarations: [
                 {
-                  // import { context } from '@redwoodjs/api'
+                  // import { context } from '@redwoodjs/graphql-server'
                   members: ['context'],
-                  path: '@redwoodjs/api',
+                  path: '@redwoodjs/graphql-server',
                 },
                 {
                   default: 'gql',
@@ -151,15 +151,6 @@ module.exports = () => {
                   // import gql from 'graphql-tag'
                   default: 'gql',
                   path: 'graphql-tag',
-                },
-                {
-                  // import { mockGraphQLQuery, mockGraphQLMutation, mockCurrentUser } from '@redwoodjs/testing'
-                  members: [
-                    'mockGraphQLQuery',
-                    'mockGraphQLMutation',
-                    'mockCurrentUser',
-                  ],
-                  path: '@redwoodjs/testing/web',
                 },
               ],
             },

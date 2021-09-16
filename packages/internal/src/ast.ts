@@ -1,9 +1,40 @@
-import { types } from '@babel/core'
-import { parse as babelParse } from '@babel/parser'
-import traverse from '@babel/traverse'
+import fs from 'fs'
+import path from 'path'
 
-export const parse = (code: string) =>
-  babelParse(code, { sourceType: 'module', plugins: ['jsx', 'typescript'] })
+import { types } from '@babel/core'
+import { parse as babelParse, ParserPlugin } from '@babel/parser'
+import traverse from '@babel/traverse'
+import chalk from 'chalk'
+
+import { isFileInsideFolder } from './files'
+import { getPaths } from './paths'
+
+export const fileToAst = (filePath: string): types.Node => {
+  const code = fs.readFileSync(filePath, 'utf-8')
+
+  // use jsx plugin for web files, because in JS, the .jsx extension is not used
+  const isJsxFile =
+    path.extname(filePath).match(/[jt]sx$/) ||
+    isFileInsideFolder(filePath, getPaths().web.base)
+
+  const plugins = [
+    'typescript',
+    'nullishCoalescingOperator',
+    'objectRestSpread',
+    isJsxFile && 'jsx',
+  ].filter(Boolean) as ParserPlugin[]
+
+  try {
+    return babelParse(code, {
+      sourceType: 'module',
+      plugins,
+    })
+  } catch (e: any) {
+    console.error(chalk.red(`Error parsing: ${filePath}`))
+    console.error(e)
+    throw new Error(e?.message) // we throw, so typescript doesn't complain about returning
+  }
+}
 
 interface NamedExports {
   name: string
@@ -12,9 +43,8 @@ interface NamedExports {
 /**
  * get all the named exports in a given piece of code.
  */
-export const getNamedExports = (code: string): NamedExports[] => {
+export const getNamedExports = (ast: types.Node): NamedExports[] => {
   const namedExports: NamedExports[] = []
-  const ast = parse(code) as types.Node
   traverse(ast, {
     ExportNamedDeclaration(path) {
       // Re-exports from other modules
@@ -62,9 +92,8 @@ export const getNamedExports = (code: string): NamedExports[] => {
 /**
  * get all the gql queries from the supplied code
  */
-export const getGqlQueries = (code: string) => {
+export const getGqlQueries = (ast: types.Node) => {
   const gqlQueries: string[] = []
-  const ast = parse(code) as types.Node
   traverse(ast, {
     TaggedTemplateExpression(path) {
       const gqlTag = path.node.tag
@@ -77,8 +106,7 @@ export const getGqlQueries = (code: string) => {
   return gqlQueries
 }
 
-export const getCellGqlQuery = (code: string) => {
-  const ast = parse(code) as types.Node
+export const getCellGqlQuery = (ast: types.Node) => {
   let cellQuery: string | undefined = undefined
   traverse(ast, {
     ExportNamedDeclaration({ node }) {
@@ -108,9 +136,8 @@ export const getCellGqlQuery = (code: string) => {
   return cellQuery
 }
 
-export const hasDefaultExport = (code: string): boolean => {
+export const hasDefaultExport = (ast: types.Node): boolean => {
   let exported = false
-  const ast = parse(code) as types.Node
   traverse(ast, {
     ExportDefaultDeclaration() {
       exported = true
