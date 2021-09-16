@@ -2,21 +2,21 @@
  * @module @redwoodjs/forms
  *
  * Redwood's form library.
- * Mostly simple wrappers around `react-hook-form` that makes it even easier to use.
+ * Mostly simple wrappers around `react-hook-form` that make it even easier to use.
  *
- * @remark
+ * @remarks
  *
- * We slightly extend `react-hook-form`'s `valueAs` props because it's important for us to coerce values
+ * @redwoodjs/forms slightly extends `react-hook-form`'s `valueAs` props because it's important for us to coerce values
  * to the correct type for GraphQL.
- * The properties that exclusive to Redwood are:
+ * The properties that are exclusive to Redwood are:
  * - `valueAsBoolean`
  * - `valueAsJSON`
  *
  * @see {@link https://react-hook-form.com/}
  *
- * @remark
+ * @remarks
  *
- * We make all of react-hook-form's exports available as well.
+ * We make all of `react-hook-form`'s exports available as well.
  *
  * @privateRemarks
  *
@@ -24,9 +24,9 @@
  * - `useErrorStyles`
  * - `useRegister`
  *
- * `useErrorStyles` takes care of the automatic error styling via a useEffect hook.
+ * `useErrorStyles` implements the error-specific styling via `useEffect`.
  *
- * `useRegister` hooks up fields to react-hook-form while providing some sensible defaults
+ * `useRegister` hooks fields up to `react-hook-form` while providing some sensible defaults
  * based on the field's type.
  *
  * @privateRemarks
@@ -41,6 +41,8 @@
  * @privateRemarks
  *
  * As for interfaces vs types, we're going with TypesScript's recommendation to use interfaces until types are needed.
+ *
+ * @see {@link https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#differences-between-type-aliases-and-interfaces}
  */
 import React, { useContext, forwardRef } from 'react'
 
@@ -58,7 +60,9 @@ import {
 import FormError from './FormError'
 
 /**
- * We slightly extend react-hook-form's RegisterOptions to make working with GraphQL a little easier.
+ * We slightly extend `react-hook-form`'s `RegisterOptions` to make working with GraphQL easier.
+ * `react-hook-form` provides the prop `setValueAs` for all-purpose coercion
+ * (i.e. anything that isn't `valueAsDate` or `valueAsNumber`, which are standard HTML).
  *
  * @see {@link https://react-hook-form.com/api/useform/register}
  */
@@ -71,9 +75,8 @@ interface RedwoodRegisterOptions extends RegisterOptions {
  * The main interface, just to have some sort of source of truth.
  *
  * @typeParam E - The type of element; we're only ever working with a few HTMLElements.
- * `HTMLInputElement`
  *
- * `extends` constrains the generic type while `=` provides a default
+ * `extends` constrains the generic while `=` provides a default.
  *
  * @see {@link https://www.typescriptlang.org/docs/handbook/2/generics.html#generic-constraints}
  */
@@ -102,7 +105,7 @@ type UseErrorStylesProps = Pick<
 /**
  * Adds styling to a field when an error is present.
  *
- * @remark
+ * @remarks
  *
  * Mostly just a `useEffect` hook.
  *
@@ -146,20 +149,27 @@ const useErrorStyles = ({
 
 /**
  * Maps remember the order in which their keys were inserted.
+ * Which basically ensures that if a user passes both `valueAsBoolean` and `valueAsJSON`,
+ * `valueAsBoolean` will be chosen consistently.
+ *
+ * This probably still isn't the best behavior.
  */
 export const valueAsProps = new Map<string, (value: string) => boolean | JSON>()
 valueAsProps.set('valueAsBoolean', (value: string) => !!value)
 valueAsProps.set('valueAsJSON', (value: string) => JSON.parse(value))
 
 /**
- * Provide some default coercion.
+ * Handles the flow of coercion, providing a default if none is specified. (And if it can.)
+ * Also implements Redwood's extensions to `react-hook-form`'s `valueAs` props.
  *
- * If any of `react-hook-form`'s validation properties are present
+ * If any of `react-hook-form`'s validation props are present
  * (`valueAsNumber`, `valueAsDate`, `setValueAs`), we just return.
  *
- * Otherwise we check to see if any of the `valueAsProps` are present.
+ * Otherwise we check to see if any of Redwood's `valueAs` props are present.
  *
  * The order here matters.
+ *
+ * I'm still not convinced this is the way to do it.
  */
 const setCoercion = (
   validation: RedwoodRegisterOptions,
@@ -201,9 +211,10 @@ type UseRegisterProps<
  *
  * Register the field into `react-hook-form` with defaults.
  *
- * @remark
+ * @remarks
  *
- * A field's `validation` prop is react-hook-form's RegisterOptions.
+ * A field's `validation` prop is `react-hook-form`'s `RegisterOptions`
+ * (with Redwood's extended `valueAs` props).
  *
  * @see {@link https://react-hook-form.com/api/useform/register}
  */
@@ -254,7 +265,7 @@ const useRegister = <
 }
 
 /**
- * Context for keeping track of errors from the server
+ * Context for keeping track of errors from the server.
  */
 interface ServerErrorsContextProps {
   [key: string]: string
@@ -274,7 +285,7 @@ interface FormProps
 }
 
 /**
- * Renders a `<form>` with the required contexts.
+ * Renders a `<form>` with the required context.
  */
 const Form = forwardRef<HTMLFormElement, FormProps>(
   (
@@ -318,7 +329,7 @@ interface LabelProps
 }
 
 /**
- * Renders a `<label>` that can be styled differently if errors are present on the related fields
+ * Renders a `<label>` that can be styled differently if errors are present on the related fields.
  */
 const Label = ({
   name,
@@ -363,10 +374,13 @@ const DEFAULT_MESSAGES = {
 }
 
 /**
- * Renders a `<span>` with a validation error message if there's an error on the corresponding field.
+ * Renders a `<span>` with an error message if there's a validation error on the corresponding field.
  * If no error message is provided, a default one is used based on the type of validation that caused the error.
  *
  * @example Displaying a validation error message with `<FieldError>`
+ *
+ * `<FieldError>` doesnt render (i.e. returns `null`) when there's no error on `<TextField>`.
+ *
  * ```jsx
  * <Label name="name" errorClassName="error">
  *   Name
@@ -381,7 +395,7 @@ const DEFAULT_MESSAGES = {
  *
  * @see {@link https://learn.redwoodjs.com/docs/tutorial/everyones-favorite-thing-to-build-forms#fielderror}
  *
- * @privateRemark
+ * @privateRemarks
  *
  * This is basically a helper for a common pattern you see in `react-hook-form`:
  *
@@ -415,7 +429,7 @@ interface TextAreaFieldProps
     Omit<React.ComponentPropsWithRef<'textarea'>, 'name'> {}
 
 /**
- * Renders a <textarea> field.
+ * Renders a `<textarea>` field.
  */
 const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(
   (
@@ -621,7 +635,7 @@ interface InputFieldProps
   /**
    * @privateRemarks
    *
-   * With this typing, passing 'checkbox' to `<InputField>`'s type is an error, which,
+   * With this typing, passing `'checkbox'` to `<InputField>`'s type is an error, which,
    * at face value, feels like it shouldn't be.
    *
    * Even though we provide a separate `<CheckboxField>`, maybe we should reconsider the typing here?
