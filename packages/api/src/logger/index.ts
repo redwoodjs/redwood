@@ -1,4 +1,3 @@
-import { isString } from 'lodash'
 import pino from 'pino'
 import type P from 'pino'
 import * as prettyPrint from 'pino-pretty'
@@ -208,17 +207,24 @@ export const defaultLoggerOptions: P.LoggerOptions = {
 
 /**
  * RedwoodLoggerOptions defines custom logger options that extend those available in LoggerOptions
- * and can define a destination like a file or other supported pin log transport stream
+ * and can define a targets like a file or other supported pin log transport stream
  *
  * @typedef {Object} RedwoodLoggerOptions
  * @extends LoggerOptions
  * @property {options} LoggerOptions - options define how to log
- * @property {string | DestinationStream} destination - destination defines where to log
+ * @property {TransportTargetOptions<TransportOptions>[]} targets - targets defines where to log
  * @property {boolean} showConfig - Display logger configuration on initialization
  */
-export interface RedwoodLoggerOptions {
+export interface TransportTargetOptions<
+  TransportOptions = Record<string, any>
+> {
+  target: string
+  options?: TransportOptions
+  level?: P.LevelWithSilent
+}
+export interface RedwoodLoggerOptions<TransportOptions = Record<string, any>> {
   options?: P.LoggerOptions
-  destination?: string | P.MultiStreamOptions
+  targets?: TransportTargetOptions<TransportOptions>[]
   showConfig?: boolean
 }
 
@@ -226,7 +232,7 @@ export interface RedwoodLoggerOptions {
  * Creates the logger
  *
  * @param options {RedwoodLoggerOptions} - Override the default logger configuration
- * @param destination {DestinationStream} - An optional destination stream
+ * @param targets {TransportMultiOptions} - An optional Transports
  * @param showConfig {Boolean} - Show the logger configuration. This is off by default.
  *s
  * @example
@@ -235,44 +241,24 @@ export interface RedwoodLoggerOptions {
  *
  * @example
  * // Create the logger to log to a file
- * createLogger({ destination: { 'var/logs/redwood-api.log' } })
+ * createLogger({ targets: [{
+      level: 'info',
+      target: 'pino-pretty', // must be installed separately
+    }]
+  })
  *
  * @return {BaseLogger} - The configured logger
  */
 export const createLogger = ({
+  targets,
   options,
-  destination,
-  showConfig = true, // change to false
+  showConfig = false,
 }: RedwoodLoggerOptions): P.BaseLogger => {
-  const hasDestination = typeof destination !== 'undefined'
-  const isFile = hasDestination && typeof destination === 'string'
-  const isStream = hasDestination && isFile
-  // Check if destination have one destination or multiple destinations or undefined
-  const stream: P.DestinationStream = isString(destination)
-    ? pino.transport({ target: destination })
-    : Array.isArray(destination)
-    ? pino.transport({ targets: destination })
-    : destination
-
-  // override, but retain default pretty print options
-  if (isPretty && options && options.prettyPrint) {
-    const prettyOptions = {
-      prettyPrint: {
-        ...(defaultLoggerOptions.prettyPrint as P.PrettyOptions),
-        ...(options.prettyPrint as P.PrettyOptions),
-      },
-    }
-
-    delete options.prettyPrint
-
-    options = {
-      ...defaultLoggerOptions,
-      ...prettyOptions,
-      ...options,
-    }
-  } else {
-    options = { ...defaultLoggerOptions, ...options }
-  }
+  // TODO:
+  // Add PrettyPrintOptions
+  // Check if isFile
+  // Keep config levels and redactions
+  // Find a better default end that pretty
 
   if (showConfig) {
     console.log('Logger Configuration')
@@ -280,36 +266,35 @@ export const createLogger = ({
     console.log(`isDevelopment: ${isDevelopment}`)
     console.log(`isTest: ${isTest}`)
     console.log(`isPretty: ${isPretty}`)
-    console.log(`isFile: ${isFile}`)
-    console.log(`isStream: ${isStream}`)
     console.log(`logLevel: ${logLevel}`)
     console.log(`options: ${JSON.stringify(options, null, 2)}`)
-    console.log(`destination: ${destination}`)
+    console.log(`targets: ${targets}`)
   }
-
-  if (isFile) {
-    if (isProduction) {
-      console.warn(
-        'Please make certain that file system access is available when logging to a file in a production environment.'
-      )
-    }
-
-    return pino(options, stream)
+  if (isPretty) {
+    const transport = pino.transport({
+      target: 'pino-pretty',
+      options: { destination: 1 }, // use 2 for stderr
+    })
+    pino(transport)
   } else {
-    if (isStream && isDevelopment && !isTest) {
-      console.warn(
-        'Logs will be sent to the transport stream in the current development environment.'
-      )
-    }
+    if (targets) {
+      if (isDevelopment && !isTest) {
+        console.warn(
+          'Logs will be sent to the transport stream in the current development environment.'
+        )
+      }
 
-    if (isStream && options.prettyPrint) {
-      console.warn(
-        'Logs sent to the transport stream are being prettified. This format may be incompatible.'
-      )
+      const transport = pino.transport({
+        targets,
+      })
+      return pino(transport)
     }
-
-    return pino(options, stream)
   }
+  const transport = pino.transport({
+    target: 'pino-pretty',
+    options: { destination: 1 }, // use 2 for stderr
+  })
+  return pino(transport)
 }
 
 /**

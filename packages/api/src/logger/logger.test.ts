@@ -8,7 +8,7 @@ import split from 'split2'
 const pid = process.pid
 const hostname = os.hostname()
 
-import { createLogger, emitLogLevels } from '../logger'
+import { createLogger, emitLogLevels, TransportTargetOptions } from '../logger'
 
 const once = (emitter, name) => {
   return new Promise((resolve, reject) => {
@@ -57,18 +57,19 @@ const watchFileCreated = (filename) => {
   })
 }
 
+type TransportOptions = Record<string, any>
 const setupLogger = (
   loggerOptions?: P.LoggerOptions,
-  destination?: string,
+  targets?: TransportTargetOptions<TransportOptions>[],
   showConfig?: boolean
 ): {
   logger: P.BaseLogger
   logSinkData?: Promise<unknown>
 } => {
-  if (destination) {
+  if (targets) {
     const logger = createLogger({
       options: { prettyPrint: false, ...loggerOptions },
-      destination: destination,
+      targets: targets,
       showConfig,
     })
 
@@ -79,7 +80,7 @@ const setupLogger = (
 
     const logger = createLogger({
       options: { ...loggerOptions, prettyPrint: false },
-      destination: stream,
+      targets: stream,
       showConfig,
     })
 
@@ -377,7 +378,12 @@ describe('logger', () => {
         '_' + Math.random().toString(36).substr(2, 9)
       )
 
-      const { logger } = setupLogger({ level: 'trace', prettyPrint: true }, tmp)
+      const { logger } = setupLogger({ level: 'trace', prettyPrint: true }, [
+        {
+          target: 'pino/file',
+          options: { destination: tmp },
+        },
+      ])
 
       const message = 'logged with pretty printing on'
 
@@ -402,7 +408,12 @@ describe('logger', () => {
           level: 'trace',
           prettyPrint: { translateTime: 'dddd, mmmm dS, yyyy, h:MM:ss TT' },
         },
-        tmp
+        [
+          {
+            target: 'pino/file',
+            options: { destination: tmp },
+          },
+        ]
       )
 
       const message = 'logged with pretty printing on'
@@ -425,7 +436,12 @@ describe('logger', () => {
         '_' + Math.random().toString(36).substr(2, 9)
       )
 
-      const { logger } = setupLogger({ level: 'trace' }, tmp)
+      const { logger } = setupLogger({ level: 'trace' }, [
+        {
+          target: 'pino/file',
+          options: { destination: tmp },
+        },
+      ])
 
       logger.warn('logged a warning to a temp file')
 
