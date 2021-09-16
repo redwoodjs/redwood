@@ -92,9 +92,6 @@ export const handler = async ({
     '@redwoodjs/core/config/webpack.development.js'
   )
 
-  if (watchNodeModules === undefined) {
-    watchNodeModules = process.env.WATCH_NODE_MODULES ?? false
-  }
 
   const redwoodConfigPath = getConfigPath()
 
