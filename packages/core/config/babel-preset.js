@@ -9,7 +9,11 @@ const TARGETS_NODE = '12.16'
 // Warning! Use the minor core-js version: "corejs: '3.6'", instead of "corejs: 3",
 // because we want to include the features added in the minor version.
 // https://github.com/zloirock/core-js/blob/master/README.md#babelpreset-env
-const CORE_JS_VERSION = '3.6'
+
+const CORE_JS_VERSION = packageJSON.dependencies['core-js']
+  .split('.')
+  .slice(0, 2)
+  .join('.') // Produces: 3.12, instead of 3.12.1
 
 /** @type {import('@babel/core').TransformOptions} */
 module.exports = () => {
