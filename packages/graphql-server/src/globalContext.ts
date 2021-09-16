@@ -22,7 +22,7 @@ let PER_REQUEST_CONTEXT:
   | AsyncLocalStorage<Map<string, GlobalContext>> = undefined
 
 export const usePerRequestContext = () =>
-  process.env.SAFE_GLOBAL_CONTEXT !== '1'
+  process.env.DISABLE_CONTEXT_ISOLATION !== '1'
 
 export const getPerRequestContext = () => {
   if (!PER_REQUEST_CONTEXT) {
