@@ -11,6 +11,6 @@ describe('${camelName} directive', () => {
   it('${camelName} throws an error if validation does not pass', () => {
     expect(
       mockRedwoodDirective(${camelName}, {})
-    ).toThrowError('Implement me')
+    ).toThrowError('Implementation missing for ${camelName')
   })
 })

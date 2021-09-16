@@ -15,5 +15,4 @@ describe('${camelName} directive', () => {
 
     expect(mockExecution()).toBe('bar')
   })
-  })
 })

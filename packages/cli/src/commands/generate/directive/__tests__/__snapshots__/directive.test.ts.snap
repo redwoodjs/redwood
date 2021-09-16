@@ -1,54 +1,62 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`creates a JavaScript validator directive: js directive 1`] = `
-"import { createValidatorDirective } from '@redwoodjs/graphql-server'
+exports[`creates a TypeScript transformer directive: ts directive 1`] = `
+"import {
+  createTransformerDirective,
+  TransformerDirectiveFunc,
+} from '@redwoodjs/graphql-server'
 import { logger } from 'src/lib/logger'
 
 export const schema = gql\`
-  directive @requireAdmin on FIELD_DEFINITION
+  directive @bazingaFooBar on FIELD_DEFINITION
 \`
 
-const transform = ({ context, directiveArgs }) => {
+const transform: TransformerDirectiveFunc = ({ context, resolvedValue }) => {
   /**
-   * Write your validation logic inside this function.
-   * Validator directives do not have access to the field value, i.e. they are called before resolving the value
+   * Write your transformation logic inside this function.
+   * Transformer directives run **after** resolving the value
    *
-   * - Throw an error, if you want to stop executing e.g. not sufficient permissions
-   * - Validator directives can be async or sync
-   * - Returned value will be ignored
-   */
+   * - You can also throw an error, if you want to stop executing, but note that the value has already been resolved
+   * - Transformer directives **must** be synchronous, and return a value
+   **/
 
   // currentUser is only available when auth is setup.
   logger.debug(
     { currentUser: context.currentUser },
-    'currentUser in requireAdmin directive'
+    'currentUser in bazingaFooBar directive'
   )
+
+  // ... you can modify the resolvedValue and return it
+  logger.debug(resolvedValue, 'resolvedValue in bazingaFooBar directive')
 
   // You can also modify your directive to take arguments
   // and use the directiveArgs object provided to this function to get values
   // See documentation here: https://redwoodjs.com/docs/directives
-  logger.debug(directiveArgs, 'directiveArgs in requireAdmin directive')
 
-  throw new Error('Implement me!')
+  return resolvedValue.replace('foo', 'bar')
 }
 
-export const requireAdmin = createValidatorDirective(schema, transform)
+export const bazingaFooBar = createTransformerDirective(schema, transform)
 "
 `;
 
-exports[`creates a JavaScript validator directive: js directive test 1`] = `
+exports[`creates a TypeScript transformer directive: ts directive test 1`] = `
 "import { mockRedwoodDirective, getDirectiveName } from '@redwoodjs/testing/api'
 
-import { schema, requireAdmin } from './requireAdmin.directive'
+import { schema, bazingaFooBar } from './bazingaFooBar.directive'
 
-describe('requireAdmin directive', () => {
+describe('bazingaFooBar directive', () => {
   it('declares the directive sdl as schema, with the correct name', () => {
     expect(schema).toBeTruthy()
-    expect(getDirectiveName(schema)).toBe('requireAdmin')
+    expect(getDirectiveName(schema)).toBe('bazingaFooBar')
   })
 
-  it('requireAdmin throws an error if validation does not pass', () => {
-    expect(mockRedwoodDirective(requireAdmin, {})).toThrowError('Implement me')
+  it('has a bazingaFooBar implementation transforms the value', () => {
+    const mockExecution = mockRedwoodDirective(bazingaFooBar, {
+      mockedResolvedValue: 'foo',
+    })
+
+    expect(mockExecution()).toBe('bar')
   })
 })
 "
