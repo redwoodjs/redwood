@@ -2,16 +2,12 @@ import { DocumentNode, ExecutableDefinitionNode } from 'graphql'
 
 import {
   DirectiveType,
+  RedwoodDirective,
+  TransformerDirective,
   TransformerDirectiveFunc,
+  ValidatorDirective,
   ValidatorDirectiveFunc,
 } from '../plugins/useRedwoodDirective'
-
-export interface ParsedDirective {
-  name: string
-  schema: DocumentNode
-  onExecute: ValidatorDirectiveFunc | TransformerDirectiveFunc // for now just support on execute
-  type: DirectiveType
-}
 
 /*
 We want directivesGlobs type to be an object with this shape:
@@ -25,7 +21,7 @@ export type DirectiveGlobImports = Record<string, any>
 
 export const makeDirectivesForPlugin = (
   directiveGlobs: DirectiveGlobImports
-): ParsedDirective[] => {
+): RedwoodDirective[] => {
   return Object.entries(directiveGlobs).flatMap(
     ([importedGlobName, exports]) => {
       // Incase the directives get nested, their name comes as nested_directory_filename_directive
@@ -38,7 +34,7 @@ export const makeDirectivesForPlugin = (
       // e.g. export default createValidatorDirective(schema, validationFunc)
       // or export requireAuth = createValidatorDirective(schema, checkAuth)
       const directive = (exports[directiveNameFromFile] ||
-        exports.default) as ParsedDirective
+        exports.default) as RedwoodDirective
 
       if (!directive.type) {
         throw new Error(
@@ -62,7 +58,7 @@ export const getDirectiveName = (schema: DocumentNode) => {
 export const createValidatorDirective = (
   schema: DocumentNode,
   directiveFunc: ValidatorDirectiveFunc
-): ParsedDirective => {
+): ValidatorDirective => {
   const directiveName = getDirectiveName(schema)
 
   if (!directiveName) {
@@ -86,7 +82,7 @@ export const createValidatorDirective = (
 export const createTransformerDirective = (
   schema: DocumentNode,
   directiveFunc: TransformerDirectiveFunc
-): ParsedDirective => {
+): TransformerDirective => {
   const directiveName = getDirectiveName(schema)
 
   if (!directiveName) {

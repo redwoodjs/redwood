@@ -1,7 +1,12 @@
 import type {
-  ValidatorDirectiveFunc,
-  TransformerDirectiveFunc,
   DirectiveParams,
+  ValidatorDirective,
+  TransformerDirective,
+} from '@redwoodjs/graphql-server'
+import {
+  context as globalContext,
+  setContext,
+  DirectiveType,
 } from '@redwoodjs/graphql-server'
 
 export { getDirectiveName } from '@redwoodjs/graphql-server'
@@ -16,19 +21,45 @@ export { getDirectiveName } from '@redwoodjs/graphql-server'
  *  expect(mockExecution).not.toThrow()
  *  expect(mockExecution()).toEqual('FFF')
  */
-type GqlExecutionMock = Omit<Partial<DirectiveParams>, 'getFieldValue'> & {
-  mockedFieldValue?: any
+
+interface DirectiveMocker {
+  (
+    directive: ValidatorDirective,
+    executionMock: Omit<Partial<DirectiveParams>, 'resolvedValue'>
+  ): any
 }
 
-export const mockRedwoodDirective = (
-  directive: ValidatorDirectiveFunc | TransformerDirectiveFunc,
-  executionMock: GqlExecutionMock
+type TransformerMock = Omit<Partial<DirectiveParams>, 'resolvedValue'> & {
+  mockedResolvedValue: any
+}
+interface DirectiveMocker {
+  (directive: TransformerDirective, executionMock: TransformerMock): any
+}
+
+export const mockRedwoodDirective: DirectiveMocker = (
+  directive,
+  executionMock
 ) => {
-  const { mockedFieldValue, ...others } = executionMock
+  const { directiveArgs = {}, context, ...others } = executionMock
+
+  if (context) {
+    setContext(context || {})
+  }
+
   return () => {
-    return directive({
-      fieldValue: mockedFieldValue,
-      ...others,
-    } as DirectiveParams) // we dont need all the values for
+    if (directive.type === DirectiveType.TRANSFORMER) {
+      const { mockedResolvedValue } = others as TransformerMock
+      return directive.onExecute({
+        resolvedValue: mockedResolvedValue,
+        context: globalContext,
+        ...others,
+      } as DirectiveParams)
+    } else {
+      directive.onExecute({
+        context: globalContext,
+        directiveArgs,
+        ...others,
+      } as DirectiveParams)
+    }
   }
 }

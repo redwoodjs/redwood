@@ -48,7 +48,7 @@ export const files = ({ name, typescript = false, type, tests }) => {
       name,
       extension: typescript ? '.test.ts' : '.test.js',
       generator: 'directive',
-      templatePath: 'directive.test.ts.template',
+      templatePath: `${type}.directive.test.ts.template`,
       outputPath: path.join(
         getPaths().api.directives,
         camelName,

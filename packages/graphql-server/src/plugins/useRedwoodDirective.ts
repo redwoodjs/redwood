@@ -1,6 +1,7 @@
 import { Plugin } from '@envelop/types'
 import {
   DirectiveNode,
+  DocumentNode,
   getDirectiveValues,
   GraphQLObjectType,
   GraphQLResolveInfo,
@@ -53,6 +54,16 @@ export type TransformerDirectiveFunc<FieldType = any> = (
 export enum DirectiveType {
   VALIDATOR = 'VALIDATOR_DIRECTIVE',
   TRANSFORMER = 'TRANSFORMER_DIRECTIVE',
+}
+
+export type RedwoodDirective = ValidatorDirective | TransformerDirective
+
+export interface ValidatorDirective extends ValidatorDirectiveOptions {
+  schema: DocumentNode
+}
+
+export interface TransformerDirective extends TransformerDirectiveOptions {
+  schema: DocumentNode
 }
 
 interface ValidatorDirectiveOptions {

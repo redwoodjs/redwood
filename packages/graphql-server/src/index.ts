@@ -20,6 +20,10 @@ export * from './directives/validateSchemaForDirectives'
 export {
   hasDirective,
   DirectiveParams,
+  DirectiveType,
+  RedwoodDirective,
+  ValidatorDirective,
   ValidatorDirectiveFunc,
+  TransformerDirective,
   TransformerDirectiveFunc,
 } from './plugins/useRedwoodDirective'

@@ -1,0 +1,16 @@
+import { mockRedwoodDirective, getDirectiveName } from '@redwoodjs/testing/api'
+
+import  { schema, ${camelName} } from './${camelName}.directive'
+
+describe('${camelName} directive', () => {
+  it('declares the directive sdl as schema, with the correct name', () => {
+    expect(schema).toBeTruthy()
+    expect(getDirectiveName(schema)).toBe('${camelName}')
+  })
+
+  it('${camelName} throws an error if validation does not pass', () => {
+    expect(
+      mockRedwoodDirective(${camelName}, {})
+    ).toThrowError('Implement me')
+  })
+})

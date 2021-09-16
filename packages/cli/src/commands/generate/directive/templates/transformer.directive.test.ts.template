@@ -8,15 +8,12 @@ describe('${camelName} directive', () => {
     expect(getDirectiveName(schema)).toBe('${camelName}')
   })
 
-  it('has a ${camelName} implementation that does not error', () => {
+  it('has a ${camelName} implementation transforms the value', () => {
     const mockExecution = mockRedwoodDirective(${camelName}, {
-      context: {}, // pass in context if you need to check specific cases
-      resolver: () => 'Example field value'
+      mockedResolvedValue: 'foo',
     })
 
-    expect(mockExecution).not.toThrow()
-
-    // @NOTE You can also test transformations like this:
-    // expect(mockExecution()).toBe('myTransformedValue')
+    expect(mockExecution()).toBe('bar')
+  })
   })
 })
