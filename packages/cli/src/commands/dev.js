@@ -105,7 +105,7 @@ export const handler = async ({
     },
     web: {
       name: 'web',
-      command: `cd "${rwjsPaths.web.base}" && yarn cross-env NODE_ENV=development WATCH_NODE_MODULES=${watchNodeModules} webpack serve --config "${webpackDevConfig}" ${forward}`,
+      command: `cd "${rwjsPaths.web.base}" && yarn cross-env NODE_ENV=development RWJS_WATCH_NODE_MODULES=${watchNodeModules ? '1' : ''} webpack serve --config "${webpackDevConfig}" ${forward}`,
       prefixColor: 'blue',
       runWhen: () => fs.existsSync(rwjsPaths.web.src),
     },
