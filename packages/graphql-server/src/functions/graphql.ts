@@ -27,7 +27,7 @@ import {
 import { renderPlaygroundPage } from 'graphql-playground-html'
 
 import { createCorsContext } from '../cors'
-import { parseDirectivesForPlugin } from '../directives/makeDirectives'
+import { makeDirectivesForPlugin } from '../directives/makeDirectives'
 import { getAsyncStoreInstance } from '../globalContext'
 import { createHealthcheckContext } from '../healthcheck'
 import { makeMergedSchema } from '../makeMergedSchema/makeMergedSchema'
@@ -119,7 +119,7 @@ export const createGraphQLHandler = ({
     const wrappedServices = makeServices({ services })
 
     // @NOTE: Directives are optional
-    const projectDirectives = parseDirectivesForPlugin(directives)
+    const projectDirectives = makeDirectivesForPlugin(directives)
 
     if (projectDirectives.length > 0) {
       redwoodDirectivePlugins = projectDirectives.map((directive) =>

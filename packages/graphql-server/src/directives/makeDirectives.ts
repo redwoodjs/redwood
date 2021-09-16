@@ -23,7 +23,7 @@ But not fully supported in TS
 */
 export type DirectiveGlobImports = Record<string, any>
 
-export const parseDirectivesForPlugin = (
+export const makeDirectivesForPlugin = (
   directiveGlobs: DirectiveGlobImports
 ): ParsedDirective[] => {
   return Object.entries(directiveGlobs).flatMap(

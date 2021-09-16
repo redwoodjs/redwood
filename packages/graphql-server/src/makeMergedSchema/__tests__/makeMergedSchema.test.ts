@@ -1,7 +1,11 @@
 import { parse, GraphQLResolveInfo } from 'graphql'
 import gql from 'graphql-tag'
 
-import { makeDirectives } from '../../directives/makeDirectives'
+import {
+  makeDirectivesForPlugin,
+  createTransformerDirective,
+  createValidatorDirective,
+} from '../../directives/makeDirectives'
 import { makeServices } from '../../makeServices'
 import {
   GraphQLTypeWithFields,
@@ -56,32 +60,39 @@ describe('makeMergedSchema', () => {
     },
   } as unknown as ServicesGlobImports
 
-  // mimics teh directives glob file structure
+  // mimics the directives glob file structure
+  const fooSchema = gql`
+    directive @foo on FIELD_DEFINITION
+  `
+
+  const bazingaSchema = gql`
+    directive @bazinga on FIELD_DEFINITION
+  `
+
+  const barSchema = gql`
+    directive @bar on FIELD_DEFINITION
+  `
   const directiveFiles = {
     foo_directive: {
-      foo: () => 'I am foo',
-      schema: gql`
-        directive @foo on FIELD_DEFINITION
-      `,
+      schema: fooSchema,
+      foo: createTransformerDirective(fooSchema, () => 'I am foo'),
     },
     nested_bazinga_directive: {
-      bazinga: async () => 'I am bazinga, async',
-      schema: gql`
-        directive @bazinga on FIELD_DEFINITION
-      `,
+      bazinga: createValidatorDirective(bazingaSchema, async () => {
+        throw new Error('Only soft kittens allowed')
+      }),
+      schema: bazingaSchema,
     },
     heavily_nested_bar_directive: {
-      bar: async () => 'I am bar, async',
-      schema: gql`
-        directive @bar on FIELD_DEFINITION
-      `,
+      bar: createTransformerDirective(barSchema, () => 'I am bar'),
+      schema: barSchema,
     },
   }
 
   const schema = makeMergedSchema({
     sdls,
     services: makeServices({ services }),
-    directives: makeDirectives(directiveFiles),
+    directives: makeDirectivesForPlugin(directiveFiles),
   })
 
   describe('Query Type', () => {

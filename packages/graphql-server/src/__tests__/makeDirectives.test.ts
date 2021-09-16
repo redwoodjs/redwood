@@ -1,42 +1,92 @@
 import gql from 'graphql-tag'
 
-import { makeDirectives } from '../directives/makeDirectives'
+import { DirectiveParams } from '..'
+import {
+  makeDirectivesForPlugin,
+  createTransformerDirective,
+  createValidatorDirective,
+} from '../directives/makeDirectives'
 
+const fooSchema = gql`
+  directive @foo on FIELD_DEFINITION
+`
+
+const bazingaSchema = gql`
+  directive @bazinga on FIELD_DEFINITION
+`
+
+const barSchema = gql`
+  directive @bar on FIELD_DEFINITION
+`
 test('Should map globs to defined structure correctly', async () => {
   // Mocking what our import-dir plugin would do
   const directiveFiles = {
     foo_directive: {
-      foo: () => 'I am foo',
-      schema: gql`
-        directive @foo on FIELD_DEFINITION
-      `,
+      schema: fooSchema,
+      foo: createTransformerDirective(fooSchema, () => 'I am foo'),
     },
     nested_bazinga_directive: {
-      bazinga: async () => 'I am bazinga, async',
-      schema: gql`
-        directive @bazinga on FIELD_DEFINITION
-      `,
+      bazinga: createValidatorDirective(bazingaSchema, async () => {
+        throw new Error('Only soft kittens allowed')
+      }),
+      schema: bazingaSchema,
     },
     heavily_nested_bar_directive: {
-      bar: async () => 'I am bar, async',
-      schema: gql`
-        directive @bar on FIELD_DEFINITION
-      `,
+      bar: createTransformerDirective(barSchema, () => 'I am bar'),
+      schema: barSchema,
     },
   }
 
   const [fooDirective, bazingaDirective, barDirective] =
-    makeDirectives(directiveFiles)
+    makeDirectivesForPlugin(directiveFiles)
 
   expect(fooDirective.name).toBe('foo')
-  expect(fooDirective.onExecute()).toBe('I am foo')
+  expect(fooDirective.onExecute({} as DirectiveParams)).toBe('I am foo')
   expect(fooDirective.schema.kind).toBe('Document')
 
   expect(bazingaDirective.name).toBe('bazinga')
-  expect(await bazingaDirective.onExecute()).toBe('I am bazinga, async')
+  expect(bazingaDirective.onExecute).rejects.toThrowError(
+    'Only soft kittens allowed'
+  )
   expect(bazingaDirective.schema.kind).toBe('Document')
 
   expect(barDirective.name).toBe('bar')
-  expect(await barDirective.onExecute()).toBe('I am bar, async')
+  expect(await barDirective.onExecute({} as DirectiveParams)).toBe('I am bar')
   expect(barDirective.schema.kind).toBe('Document')
+})
+
+describe('Errors out with a helpful message, if the directive is not constructed correctly', () => {
+  it('Tells you if you forgot to wrap the implementation function', () => {
+    const incorrectDirectiveFiles = {
+      foo_directive: {
+        schema: fooSchema,
+        foo: () => 'Oopy I forgot to wrap',
+      },
+    }
+
+    expect(() => makeDirectivesForPlugin(incorrectDirectiveFiles)).toThrowError(
+      'Please use `createValidatorDirective` or `createTransformerDirective` functions to define your directive'
+    )
+  })
+
+  it('Tells you if you forgot the implementation function', () => {
+    expect(() => createValidatorDirective(fooSchema, undefined)).toThrowError(
+      'Directive validation function not implemented for @foo'
+    )
+
+    expect(() => createTransformerDirective(fooSchema, undefined)).toThrowError(
+      'Directive transformer function not implemented for @foo'
+    )
+  })
+
+  it('Tells you if you messed up the schema', () => {
+    // The messages come from the graphql libs, so no need to check the messages
+    expect(() =>
+      createValidatorDirective(gql`directive @misdirective`, undefined)
+    ).toThrow()
+
+    expect(() =>
+      createTransformerDirective(gql`misdirective`, undefined)
+    ).toThrow()
+  })
 })
