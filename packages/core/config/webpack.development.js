@@ -43,7 +43,7 @@ const baseConfig = merge(webpackConfig('development'), {
   infrastructureLogging: {
     level: 'error', // new in v4; previously we used quiet
   },
-  ...(process.env.WATCH_NODE_MODULES === 'true' && {
+  ...(process.env.RWJS_WATCH_NODE_MODULES === '1' && {
     snapshot: {
       managedPaths: [],
     },
