@@ -54,7 +54,7 @@ export const handler = async ({
   forward = '',
   useEnvelop = false,
   generate = true,
-  watchNodeModules,
+  watchNodeModules = process.env.RWJS_WATCH_NODE_MODULES === '1',
 }) => {
   const rwjsPaths = getPaths()
 
