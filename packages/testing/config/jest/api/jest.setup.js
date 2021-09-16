@@ -1,8 +1,8 @@
 /* eslint-env jest */
 const path = require('path')
 
-const { setContext } = require('@redwoodjs/api')
 const { getSchemaDefinitions } = require('@redwoodjs/cli/dist/lib')
+const { setContext } = require('@redwoodjs/graphql-server')
 const { getPaths } = require('@redwoodjs/internal')
 const { defineScenario } = require('@redwoodjs/testing/dist/api')
 const { db } = require(path.join(getPaths().api.src, 'lib', 'db'))
@@ -14,8 +14,8 @@ const seedScenario = async (scenario) => {
     const scenarios = {}
     for (const [model, namedFixtures] of Object.entries(scenario)) {
       scenarios[model] = {}
-      for (const [name, data] of Object.entries(namedFixtures)) {
-        scenarios[model][name] = await db[model].create({ data })
+      for (const [name, createArgs] of Object.entries(namedFixtures)) {
+        scenarios[model][name] = await db[model].create(createArgs)
       }
     }
     return scenarios
@@ -86,6 +86,11 @@ global.defineScenario = defineScenario
 global.mockCurrentUser = (currentUser) => {
   setContext({ currentUser })
 }
+
+// Disable perRequestContext for tests
+beforeAll(() => {
+  process.env.DISABLE_CONTEXT_ISOLATION = '1'
+})
 
 afterAll(async () => {
   await db.$disconnect()
