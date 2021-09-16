@@ -1,3 +1,4 @@
+import fs from 'fs'
 import path from 'path'
 
 import fse from 'fs-extra'
@@ -15,13 +16,20 @@ const SIDE_MAP = {
   web: ['cell', 'component', 'layout', 'page', 'scaffold'],
   api: ['function', 'sdl', 'service'],
 }
+const EXCLUDE_GENERATORS = [
+  'dataMigration',
+  'dbAuth',
+  'generator',
+  'script',
+  'secret',
+]
 
 const copyGenerator = (name, { force }) => {
   const side = SIDE_MAP['web'].includes(name) ? 'web' : 'api'
   const from = path.join(__dirname, '..', name, 'templates')
   const to = path.join(getPaths()[side].generators, name)
 
-  // copy template files to appropriate side in app
+  // copy entire template directory contents to appropriate side in app
   fse.copySync(from, to, { overwrite: force, errorOnExist: true })
 
   return to
@@ -32,20 +40,17 @@ const copyGenerator = (name, { force }) => {
 // should be reversed to provide `yargsDefaults` as the default configuration
 // and accept a configuration such as its CURRENT default to append onto a command.
 export const builder = (yargs) => {
+  const availableGenerators = fs
+    .readdirSync(path.join(__dirname, '..'), { withFileTypes: true })
+    .filter((dir) => dir.isDirectory() && !dir.name.match(/__/))
+    .map((dir) => dir.name)
+
   yargs
     .positional('name', {
       description: 'Name of the generator to copy templates from',
-      choices: [
-        'cell',
-        'component',
-        'function',
-        'layout',
-        'page',
-        'scaffold',
-        'script',
-        'sdl',
-        'service',
-      ],
+      choices: availableGenerators.filter(
+        (dir) => !EXCLUDE_GENERATORS.includes(dir)
+      ),
     })
     .option('force', {
       alias: 'f',
