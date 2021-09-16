@@ -349,7 +349,7 @@ export const emitLogLevels = (setLogLevels: LogLevel[]): LogDefinition[] => {
  */
 interface PrismaLoggingConfig {
   db: PrismaClient
-  logger: P.BaseLogger
+  logger: P.LoggerExtras
   logLevels: LogLevel[]
 }
 
