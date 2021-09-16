@@ -1,8 +1,6 @@
 /**
  * This is the babel preset used in `create-redwood-app`
  */
-const { extendDefaultPlugins } = require('svgo')
-
 const { getPaths } = require('@redwoodjs/internal')
 
 const packageJSON = require('../package.json')
@@ -86,9 +84,9 @@ module.exports = () => {
             {
               declarations: [
                 {
-                  // import { context } from '@redwoodjs/api'
+                  // import { context } from '@redwoodjs/graphql-server'
                   members: ['context'],
-                  path: '@redwoodjs/api',
+                  path: '@redwoodjs/graphql-server',
                 },
                 {
                   default: 'gql',
@@ -154,15 +152,6 @@ module.exports = () => {
                   default: 'gql',
                   path: 'graphql-tag',
                 },
-                {
-                  // import { mockGraphQLQuery, mockGraphQLMutation, mockCurrentUser } from '@redwoodjs/testing'
-                  members: [
-                    'mockGraphQLQuery',
-                    'mockGraphQLMutation',
-                    'mockCurrentUser',
-                  ],
-                  path: '@redwoodjs/testing/web',
-                },
               ],
             },
           ],
@@ -171,22 +160,24 @@ module.exports = () => {
             'inline-react-svg',
             {
               svgo: {
-                plugins: extendDefaultPlugins([
+                plugins: [
+                  {
+                    name: 'preset-default',
+                    params: {
+                      overrides: {
+                        // @TODO confirm this is the right thing
+                        // On my projects, this was needed for backwards compatibility
+                        removeViewBox: false,
+                      },
+                    },
+                  },
                   {
                     name: 'removeAttrs',
                     params: { attrs: '(data-name)' },
                   },
-                  {
-                    // @TODO confirm this is the right thing
-                    // On my projects, this was needed for backwards compatibility
-                    name: 'removeViewBox',
-                    active: false,
-                  },
-                  {
-                    // Otherwise having style="xxx" breaks
-                    name: 'convertStyleToAttrs',
-                  },
-                ]),
+                  // Otherwise having style="xxx" breaks
+                  'convertStyleToAttrs',
+                ],
               },
             },
           ],

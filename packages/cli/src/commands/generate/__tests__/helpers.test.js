@@ -433,3 +433,59 @@ test('ensureUniquePlural skips any rule if singular and plural are already diffe
   expect(pluralize.singular(singular)).toBe(singular)
   expect(pluralize.plural(singular)).toBe(plural)
 })
+
+describe('mapRouteParamTypeToTsType', () => {
+  it('maps scalar type String to TS type string', () => {
+    expect(helpers.mapRouteParamTypeToTsType('String')).toBe('string')
+  })
+
+  it('maps scalar type Boolean to TS type boolean', () => {
+    expect(helpers.mapRouteParamTypeToTsType('Boolean')).toBe('boolean')
+  })
+
+  it('maps scalar type Int to TS type number', () => {
+    expect(helpers.mapRouteParamTypeToTsType('Int')).toBe('number')
+  })
+
+  it('maps scalar type Float to TS type number', () => {
+    expect(helpers.mapRouteParamTypeToTsType('Float')).toBe('number')
+  })
+
+  it('maps unexpected type to TS unknown', () => {
+    expect(helpers.mapRouteParamTypeToTsType('unknown')).toBe('unknown')
+  })
+})
+
+describe('mapPrismaScalarToPagePropTsType', () => {
+  it('maps scalar type String to TS type string', () => {
+    expect(helpers.mapPrismaScalarToPagePropTsType('String')).toBe('string')
+  })
+
+  it('maps scalar type Boolean to TS type boolean', () => {
+    expect(helpers.mapPrismaScalarToPagePropTsType('Boolean')).toBe('boolean')
+  })
+
+  it('maps scalar type Int to TS type number', () => {
+    expect(helpers.mapPrismaScalarToPagePropTsType('Int')).toBe('number')
+  })
+
+  it('maps scalar type BigInt to TS type number', () => {
+    expect(helpers.mapPrismaScalarToPagePropTsType('BigInt')).toBe('number')
+  })
+
+  it('maps scalar type Float to TS type number', () => {
+    expect(helpers.mapPrismaScalarToPagePropTsType('Float')).toBe('number')
+  })
+
+  it('maps scalar type Decimal to TS type number', () => {
+    expect(helpers.mapPrismaScalarToPagePropTsType('Float')).toBe('number')
+  })
+
+  it('maps scalar type DateTime to TS type string', () => {
+    expect(helpers.mapPrismaScalarToPagePropTsType('DateTime')).toBe('string')
+  })
+
+  it('maps all other type not-known to TS to unknown', () => {
+    expect(helpers.mapPrismaScalarToPagePropTsType('Json')).toBe('unknown')
+  })
+})

@@ -112,7 +112,8 @@ export const buildScenario = async (model) => {
 
   // turn scalar fields into actual scenario data
   for (const name of DEFAULT_SCENARIO_NAMES) {
-    standardScenario[scenarioModelName][name] = await fieldsToScenario(
+    standardScenario[scenarioModelName][name] = {}
+    standardScenario[scenarioModelName][name].data = await fieldsToScenario(
       scalarFields,
       relations,
       foreignKeys

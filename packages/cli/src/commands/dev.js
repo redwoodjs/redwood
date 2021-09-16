@@ -25,13 +25,6 @@ export const builder = (yargs) => {
         'String of one or more Webpack DevServer config options, for example: `--fwd="--port=1234 --no-open"`',
       type: 'string',
     })
-    .option('useEnvelop', {
-      type: 'boolean',
-      required: false,
-      default: getConfig().experimental.useEnvelop,
-      description:
-        'Use Envelop as GraphQL Server instead of Apollo Server [experimental]',
-    })
     .option('generate', {
       type: 'boolean',
       default: true,
@@ -52,7 +45,6 @@ export const builder = (yargs) => {
 export const handler = async ({
   side = ['api', 'web'],
   forward = '',
-  useEnvelop = false,
   generate = true,
   watchNodeModules = process.env.RWJS_WATCH_NODE_MODULES === '1',
 }) => {
@@ -115,10 +107,6 @@ export const handler = async ({
       prefixColor: 'green',
       runWhen: () => generate,
     },
-  }
-
-  if (useEnvelop) {
-    jobs.api.name = jobs.api.name + ' with envelop'
   }
 
   // TODO: Convert jobs to an array and supply cwd command.

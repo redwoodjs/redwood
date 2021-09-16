@@ -6,22 +6,18 @@ Before interacting with the Redwood community, please read and understand our [C
 
 **Table of Contents**
 
-- [Contributing](#contributing)
-  - [Local Development](#local-development)
-    - [Code Organization](#code-organization)
-    - [Local Setup](#local-setup)
-      - [Redwood Framework](#redwood-framework)
-      - [Redwood Project: Create a Functional Test Project](#redwood-project-create-a-functional-test-project)
-        - [Running the Test Project Script](#running-the-test-project-script)
-    - [Testing Framework Code in Your Project](#testing-framework-code-in-your-project)
-    - [Browser-based Setup](#browser-based-setup)
+  - [Code Organization](#code-organization)
+  - [Local Setup](#local-setup)
+    - [Redwood Framework](#redwood-framework)
+    - [Redwood Project: Create a Functional Test Project](#redwood-project-create-a-functional-test-project)
+    - [Testing the Framework in Your Project](#testing-the-framework-in-your-project)
+    - [Testing the CLI in Your Project](#testing-the-cli-in-your-project)
+  - [Browser-based Setup](#browser-based-setup)
   - [Integration Tests](#integration-tests)
   - [Releases](#releases)
     - [Troubleshooting](#troubleshooting)
 
-## Local Development
-
-### Code Organization
+## Code Organization
 
 As a Redwood user, you're already familiar with the codebase created by `yarn create redwood-app`. In this document, we'll refer to that codebase as a Redwood Project.
 
@@ -29,13 +25,13 @@ As a contributor, you'll have to familiarize yourself with one more codebase: th
 
 Here we'll assume your local copy of the Redwood Framework is in a directory called `redwood` and your Redwood Project is in a directory called `redwood-project`.
 
-Chances are that you'll have a few VS Codes open when you're contributing—one for the Redwood Framework and one for a Redwood Project. An easy way to tell which-is-which is by looking for a red bar at the bottom. The one with a red bar is the Redwood Framework:
+Chances are that you'll have more than a few VS Codes open when you're contributing—one with the Redwood Framework and one with a Redwood Project at least. An easy way to tell which-is-which is by looking for a red bar at the bottom. The one with a red bar is the Redwood Framework:
 
-<img src="https://user-images.githubusercontent.com/32992335/130157304-af0ca28c-96ae-411c-891c-c6c9e759920c.png" alt="The VS Code with the Redwood Framework has a red bar"/>
+![image](https://user-images.githubusercontent.com/32992335/130697522-313317f8-21e5-4f71-8b8e-9690dbad412a.png)
 
-### Local Setup
+## Local Setup
 
-#### Redwood Framework
+### Redwood Framework
 
 Use `git clone` to get a local copy of the Redwood Framework. If you've already got a local copy, make sure you've got the `main` branch's latest changes using `git pull`. Then run `yarn install` in the root directory to install the dependencies:
 
@@ -45,7 +41,7 @@ cd redwood
 yarn install
 ```
 
-#### Redwood Project: Create a Functional Test Project
+### Redwood Project: Create a Functional Test Project
 
 You'll almost always want to test the functionality of your changes to the Redwood Framework in a Redwood Project. When it comes to getting a Redwood Project to test your changes out in, you have several options:
 
@@ -81,31 +77,39 @@ But how do you actually test your changes in the Redwood Framework in your Redwo
 > yarn run build:test-project ~/my-repos/redwood-project --typescript --canary
 > ```
 
-### Testing Framework Code in Your Project
+### Testing the Framework in Your Project
 
 As you make changes to the Redwood Framework, you'll want to see your changes reflected "live" in a Redwood Project. Since we're always looking for ways to make contributing to Redwood easier, there are a few workflows we've come up with. The one you'll want to use is `yarn rwfw`.
 
 > `rwfw` is short for Redwood Framework.
 
-Navigate to your Redwood Project and run `yarn rwfw project:sync <framework directory>`:
+Navigate to your Redwood Project and run `RWFW_PATH=<framework directory> yarn rwfw project:sync`:
 
 ```terminal
 cd redwood-project
-yarn rwfw project:sync <framework directory>
+RWFW_PATH=~/redwood yarn rwfw project:sync
 ```
 
-where `<framework directory>` is the path to your local copy of the Redwood Framework. Once provided to `yarn rwfw`, it'll remember it and you shouldn't have to provide it again unless you move it.
+Where <framework directory> is the path to your local copy of the Redwood Framework. Once provided to `rwfw`, it'll remember it and you shouldn't have to provide it again unless you move it.
 
-As `project:sync` spins up, it'll start logging to the console. In order, it:
-- cleans and builds the framework
-- copies the framework's dependencies to your project
-- runs `yarn install` in your project
-- copies over the framework's packages to your project
-- waits for changes
+As `project:sync` starts up, it'll start logging to the console. In order, it:
+
+<!-- Markdown numbers for us automatically -->
+1. cleans and builds the framework
+1. copies the framework's dependencies to your project
+1. runs `yarn install` in your project
+1. copies over the framework's packages to your project
+1. waits for changes
+
+Step two is the only explicit change you'll see to your project. You'll see that a ton of packages have been added to your project's root `package.json`:
+
+![image](https://user-images.githubusercontent.com/32992335/130699570-6ceb91a6-58aa-4cbf-a080-9cee6f26aaf2.png)
+
+This is all the packages in the Redwood Framework. It's a lot! But don't worry, this'll be cleaned up when you exit the `yarn rwfw project:sync` command.
 
 Congratulations, you're all setup! Any changes you make in the Redwood Framework should be reflected in your Redwood Project.
 
-### Testing the CLI
+### Testing the CLI in Your Project
 
 While you can test the CLI using `yarn rwfw`, there's an easier way.
 
@@ -139,7 +143,7 @@ yarn dev --cwd <project directory>
 >
 > Tip 2: --cwd is optional, it will reference the `__fixtures__/example-todo-main` project in the framework.
 
-### Browser-based Setup
+## Browser-based Setup
 
 You can use the button below to start a development environment in the cloud and access it through your browser!
 
@@ -149,7 +153,7 @@ This generates a functional test project and links it with the Redwood Framework
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/redwoodjs/redwood)
 
-## Integration tests
+## Integration Tests
 
 We use Cypress to test the steps in the [tutorial](https://learn.redwoodjs.com/docs/tutorial/welcome-to-redwood/). You can run this end-to-end (e2e) test locally by running the following in your local copy of the Redwood Framework:
 

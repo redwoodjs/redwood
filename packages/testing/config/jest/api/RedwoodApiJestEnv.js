@@ -9,9 +9,6 @@ class RedwoodApiJestEnvironment extends NodeEnvironment {
   async setup() {
     await super.setup()
 
-    // Disable per-request-context in testing.
-    process.env.SAFE_GLOBAL_CONTEXT = '1'
-
     this.global.testPath = this.testPath
   }
 
