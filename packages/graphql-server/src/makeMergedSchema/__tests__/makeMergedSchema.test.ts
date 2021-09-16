@@ -27,10 +27,10 @@ describe('makeMergedSchema', () => {
         }
 
         type Query {
-          myOwnType: MyOwnType
-          inResolverAndServices: String
-          inResolver: String
-          inServices: String
+          myOwnType: MyOwnType @foo
+          inResolverAndServices: String @foo
+          inResolver: String @foo
+          inServices: String @foo
           foo: String @foo
         }
       `),
@@ -175,6 +175,30 @@ describe('makeMergedSchema', () => {
           )
       ).toEqual("MyOwnType: I'm defined in the services.")
     })
+  })
+
+  it('throws when directives not added to queries and mutations', () => {
+    // This'll be a ~~BUILD TIME~~ error, which is useful
+    const sdlsWithoutDirectives = {
+      withoutDirective: {
+        schema: parse(`
+          type Query {
+            bazinga: String
+          }
+        `),
+        resolvers: {},
+      },
+    }
+
+    expect(() =>
+      makeMergedSchema({
+        sdls: sdlsWithoutDirectives,
+        services: makeServices({ services }),
+        directives: makeDirectivesForPlugin(directiveFiles),
+      })
+    ).toThrowErrorMatchingInlineSnapshot(
+      `"You must specify one of @requireAuth, @skipAuth or a custom directive"`
+    )
   })
 
   describe('Directives', () => {

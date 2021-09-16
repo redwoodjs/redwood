@@ -6,6 +6,7 @@ import {
   GraphQLResolveInfo,
 } from 'graphql'
 
+import { DIRECTIVE_REQUIRED_ERROR_MESSAGE } from '../directives/validateSchemaForDirectives'
 import { GlobalContext } from '../index'
 
 function isQueryOrMutation(info: GraphQLResolveInfo): boolean {
@@ -13,9 +14,6 @@ function isQueryOrMutation(info: GraphQLResolveInfo): boolean {
 
   return parentType.name === 'Query' || parentType.name === 'Mutation'
 }
-
-export const DIRECTIVE_REQUIRED_ERROR_MESSAGE =
-  'You must specify one of @requireAuth, @skipAuth or a custom directive'
 
 export interface DirectiveParams<FieldType = any> {
   root: unknown

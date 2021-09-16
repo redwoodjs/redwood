@@ -10,6 +10,7 @@ import merge from 'lodash.merge'
 import omitBy from 'lodash.omitby'
 
 import { ParsedDirective } from '../directives/makeDirectives'
+import { validateSchemaForDirectives } from '../directives/validateSchemaForDirectives'
 import {
   Services,
   ServicesGlobImports,
@@ -199,11 +200,19 @@ export const makeMergedSchema = ({
    */
   schemaOptions?: Partial<IExecutableSchemaDefinition>
 }) => {
+  const sdlSchemas = Object.values(sdls).map(({ schema }) => schema)
+
+  if (process.env.NODE_ENV === 'development') {
+    sdlSchemas.forEach((schema) => {
+      validateSchemaForDirectives(schema)
+    })
+  }
+
   const typeDefs = mergeTypes(
     [
       rootSchema.schema,
-      ...directives.map((directive) => directive.schema),
-      ...Object.values(sdls).map(({ schema }) => schema),
+      ...directives.map((directive) => directive.schema), // pick out schemas from directives
+      ...sdlSchemas, // pick out the schemas from sdls
     ],
     { all: true }
   )

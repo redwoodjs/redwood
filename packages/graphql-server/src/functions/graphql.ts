@@ -134,8 +134,10 @@ export const createGraphQLHandler = ({
       schemaOptions,
     })
   } catch (e) {
-    logger.error('⚠️ GraphQL server crashed')
+    logger.error('')
+    logger.error('\n ⚠️ GraphQL server crashed \n')
     logger.error(e as Error)
+    logger.error('')
 
     // Forcefully crash the graphql server
     // so users know that a misconfiguration has happened
