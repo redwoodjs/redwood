@@ -453,7 +453,7 @@ const useRedwoodLogger = (
  *
  * Unexpected errors are those that are not Envelop or GraphQL errors
  **/
-export const formatError: FormatErrorHandler = (err) => {
+export const formatError: FormatErrorHandler = (err: any) => {
   if (
     err.originalError &&
     err.originalError instanceof EnvelopError === false
