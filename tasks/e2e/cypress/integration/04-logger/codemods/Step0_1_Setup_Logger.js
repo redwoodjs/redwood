@@ -19,7 +19,10 @@ import { createLogger, isTest } from '@redwoodjs/api/logger'
 export const logger = createLogger({
   // If want to override in test, can force logging levels
   options: { level: 'trace', prettyPrint: true },
-  destination: '${BASE_DIR}/${LOG_FILENAME}',
+  targets: [{
+    target: 'pino/file',
+    options: { destination: '${BASE_DIR}/${LOG_FILENAME}' }
+  }],
 })
 `
 }
