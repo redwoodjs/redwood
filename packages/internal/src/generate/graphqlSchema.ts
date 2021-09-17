@@ -13,7 +13,7 @@ export const generateGraphQLSchema = async () => {
       {
         cwd: rwjsPaths.api.src,
         schema: [
-          path.join(__dirname, '../rootGqlSchema.js'),
+          path.join(__dirname, '../rootGqlSchema.{js,ts}'), // support loading from either compiled JS or TS (for jest tests)
           'graphql/**/*.sdl.{js,ts}',
           'directives/**/*.{js,ts}',
         ],

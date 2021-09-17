@@ -55,12 +55,11 @@ export const loadAndValidateSdls = async () => {
   const apiSrc = ensurePosixPath(getPaths().api.src)
   const schema = await loadSchema(
     [
-      path.join(__dirname, './rootGqlSchema.js'),
+      path.join(__dirname, './rootGqlSchema.{js,ts}'), // support loading from either compiled JS or TS (for jest tests)
       path.join(apiSrc, 'graphql/**/*.sdl.{js,ts}'),
       path.join(apiSrc, 'directives/**/*.{js,ts}'),
     ],
     {
-      // load from a single schema file
       loaders: [new CodeFileLoader()],
     }
   )
