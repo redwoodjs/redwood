@@ -10,7 +10,7 @@
     { "path": "packages/router" },
     { "path": "packages/testing" },
     { "path": "packages/prerender" },
-    { "path": "packages/graphql-server" },
+    { "path": "packages/graphql-server" }
   ],
   "files": []
 }
