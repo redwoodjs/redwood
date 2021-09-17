@@ -13,6 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "@redwoodjs/auth": "0.36.4",
+    "@redwoodjs/graphql-server": "0.36.4",
     "@redwoodjs/internal": "0.36.4",
     "@redwoodjs/router": "0.36.4",
     "@redwoodjs/web": "0.36.4",

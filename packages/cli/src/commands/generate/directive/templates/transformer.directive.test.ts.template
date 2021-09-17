@@ -1,0 +1,18 @@
+import { mockRedwoodDirective, getDirectiveName } from '@redwoodjs/testing/api'
+
+import ${camelName} from './${camelName}'
+
+describe('${camelName} directive', () => {
+  it('declares the directive sdl as schema, with the correct name', () => {
+    expect(${camelName}.schema).toBeTruthy()
+    expect(getDirectiveName(${camelName}.schema)).toBe('${camelName}')
+  })
+
+  it('has a ${camelName} implementation transforms the value', () => {
+    const mockExecution = mockRedwoodDirective(${camelName}, {
+      mockedResolvedValue: 'foo',
+    })
+
+    expect(mockExecution()).toBe('bar')
+  })
+})

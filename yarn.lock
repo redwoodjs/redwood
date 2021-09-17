@@ -2382,6 +2382,11 @@
   dependencies:
     tiny-lru "7.0.6"
 
+"@envelop/testing@1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@envelop/testing/-/testing-1.1.0.tgz#84ea162d85e4c37b62ab13df2ad05e6c2b013abb"
+  integrity sha512-Jls502+MCIsYwvwdLX8vqmAwaMpO9bSx810MnVgLcgPeZjoGUDW7A+4tsNcGxbHszI85Q/D2BQHeL0F/W4G1Nw==
+
 "@envelop/types@1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@envelop/types/-/types-1.1.0.tgz#14578b09de7b57cc6bec24a4d0442cebcf426e93"
