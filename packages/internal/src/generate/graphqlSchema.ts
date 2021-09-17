@@ -1,3 +1,4 @@
+import { platform } from 'os'
 import path from 'path'
 
 import { generate } from '@graphql-codegen/cli'
@@ -43,13 +44,25 @@ export const generateGraphQLSchema = async () => {
   } catch (e: any) {
     // `generate` outputs errors which are helpful.
     // This tries to clean up the output of those errors.
-    console.error()
-    console.error(chalk.red('Error parsing SDLs or Schema'))
-    for (const error of e?.errors) {
-      console.error(error.details)
-    }
+    if (platform() !== 'win32') {
+      console.error()
+      console.error(chalk.red('Error parsing SDLs or Schema'))
+      for (const error of e?.errors) {
+        console.error(error.details)
+      }
 
-    console.error()
+      console.error()
+    } else {
+      // Due to an issue with glob-ing on Windows, cannot generate or test schema
+      // @todo Fix file glob-ing above
+      console.warn()
+      console.warn(chalk.red('Error parsing SDLs or Schema on win32'))
+      for (const error of e?.errors) {
+        console.error(error.details)
+      }
+
+      console.warn()
+    }
 
     return undefined
   }
