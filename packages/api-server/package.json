@@ -19,7 +19,7 @@
     "chokidar": "3.5.2",
     "dotenv-defaults": "2.0.2",
     "express": "4.17.1",
-    "fast-glob": "3.2.5",
+    "fast-glob": "3.2.7",
     "http-proxy-middleware": "2.0.1",
     "lodash.escape": "4.0.1",
     "morgan": "1.10.0",
