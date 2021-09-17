@@ -53,10 +53,6 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     // https://redwoodjs.com/tutorial/installation-starting-development
     cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step1_1_Routes)
     cy.visit('http://localhost:8910')
-
-    cy.get('[data-cy="e2e-test-splashpage"]').contains(
-      `You're seeing this because you don't have any pages yet.`
-    )
   })
 
   test_first_page()
