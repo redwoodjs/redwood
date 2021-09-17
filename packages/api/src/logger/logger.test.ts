@@ -80,7 +80,6 @@ const setupLogger = (
 
     const logger = createLogger({
       options: { ...loggerOptions, prettyPrint: false },
-      targets: stream,
       showConfig,
     })
 

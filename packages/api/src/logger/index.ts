@@ -267,7 +267,7 @@ export const createLogger = ({
   if (isPretty) {
     const transport = pino.transport({
       target: 'pino-pretty',
-      options: { destination: 1 }, // use 2 for stderr
+      options: { destination: 1 },
     })
     pino(transport)
   } else {
@@ -286,7 +286,7 @@ export const createLogger = ({
   }
   const transport = pino.transport({
     target: 'pino-pretty',
-    options: { destination: 1 }, // use 2 for stderr
+    options: { destination: 1 },
   })
   return pino(transport)
 }
