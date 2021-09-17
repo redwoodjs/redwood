@@ -7653,10 +7653,10 @@ colorette@^1.2.1, colorette@^1.2.2:
   resolved "https://registry.yarnpkg.com/colorette/-/colorette-1.2.2.tgz#cbcc79d5e99caea2dbf10eb3a26fd8b3e6acfa94"
   integrity sha512-MKGMzyfeuutC/ZJ1cba9NqcNpfeqMUcYmyF1ZFY6/Cn7CNSAKx6a+s48sqLqyAiZuaP2TcqMhoo+dlwFnVxT9w==
 
-colorette@^1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/colorette/-/colorette-1.3.0.tgz#ff45d2f0edb244069d3b772adeb04fed38d0a0af"
-  integrity sha512-ecORCqbSFP7Wm8Y6lyqMJjexBQqXSF7SSeaTyGGphogUjBlFP9m9o08wy86HL2uB7fMTxtOUzLMk7ogKcxMg1w==
+colorette@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/colorette/-/colorette-2.0.0.tgz#3d3f6be9891e66ae011338a34d95d9a7a02741a6"
+  integrity sha512-d9bi+jjWiz/9YkdIJjnoubyYXgWZ7Z0kA/KoFPBNSiQFnKtiqFZSwg7L6c+U+ju8yuy/M1AMkIIkdHcQnqWe6A==
 
 colors@^1.1.2, colors@^1.4.0:
   version "1.4.0"
@@ -15035,17 +15035,24 @@ pino-abstract-transport@^0.2.0:
   dependencies:
     split2 "^3.2.2"
 
-pino-pretty@7.0.0:
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/pino-pretty/-/pino-pretty-7.0.0.tgz#5a0a1e2ac0c98a4df94d421e52d3b9e19f32da56"
-  integrity sha512-lU5RpkfssYJxRI/veMGsUu7RqTUD/NDb2r+U4VIx7Dyo5vA3MbbbGMUOhAM4e02IAYXuTAa/PH56s8shstP9BA==
+pino-abstract-transport@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/pino-abstract-transport/-/pino-abstract-transport-0.3.0.tgz#9925d826a1b6e9a667ca43d14981d82240edd794"
+  integrity sha512-jsd59/ruahIoIU4xAdFtvk3lS9rwsDNJ7Vi0K34ATh1PEOD796SPqvydMaRk296CeTROyBG0SNCwsshN6QhxVg==
+  dependencies:
+    split2 "^3.2.2"
+
+pino-pretty@7.0.1:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/pino-pretty/-/pino-pretty-7.0.1.tgz#1e5cf4f7ddacc5b45f5308f3adf4fedb02a3ec95"
+  integrity sha512-GMcNSmkZkwZseMOkaQWgmkGBPPhSuVwDZMf85i3sbkD/rZldoYyLSyU22YcXvYoLc3usX25GLA1VN6zvzQx7MQ==
   dependencies:
     args "^5.0.1"
-    colorette "^1.3.0"
+    colorette "^2.0.0"
     dateformat "^4.5.1"
     fast-safe-stringify "^2.0.7"
     joycon "^3.0.0"
-    pino-abstract-transport "^0.2.0"
+    pino-abstract-transport "^0.3.0"
     pump "^3.0.0"
     readable-stream "^3.6.0"
     rfdc "^1.3.0"
