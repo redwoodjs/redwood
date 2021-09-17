@@ -1,4 +1,11 @@
+import path from 'path'
+
+import { CodeFileLoader } from '@graphql-tools/code-file-loader'
+import { loadSchema } from '@graphql-tools/load'
+import { getDocumentNodeFromSchema } from '@graphql-tools/utils'
 import { DocumentNode, ObjectTypeDefinitionNode, visit } from 'graphql'
+
+import { ensurePosixPath, getPaths } from './paths'
 
 export const DIRECTIVE_REQUIRED_ERROR_MESSAGE =
   'You must specify one of @requireAuth, @skipAuth or a custom directive'
@@ -14,9 +21,17 @@ export function validateSchemaForDirectives(
       if (typesToCheck.includes(typeNode.name.value)) {
         for (const field of typeNode.fields ||
           ([] as ObjectTypeDefinitionNode[])) {
+          const fieldName = field.name.value
+          const fieldTypeName = typeNode.name.value
+
+          // skip validation for redwood query
+          if (fieldName === 'redwood' && fieldTypeName === 'Query') {
+            return
+          }
+
           const hasDirective = field.directives?.length
           if (!hasDirective) {
-            validationOutput.push(`${field.name.value} ${typeNode.name.value}`)
+            validationOutput.push(`${fieldName} ${fieldTypeName}`)
           }
         }
       }
@@ -34,4 +49,21 @@ export function validateSchemaForDirectives(
       )}`
     )
   }
+}
+
+export const loadAndValidateSdls = async () => {
+  const apiSrc = ensurePosixPath(getPaths().api.src)
+  const schema = await loadSchema(
+    [
+      path.join(__dirname, './rootGqlSchema.js'),
+      path.join(apiSrc, 'graphql/**/*.sdl.{js,ts}'),
+      path.join(apiSrc, 'directives/**/*.{js,ts}'),
+    ],
+    {
+      // load from a single schema file
+      loaders: [new CodeFileLoader()],
+    }
+  )
+
+  validateSchemaForDirectives(getDocumentNodeFromSchema(schema))
 }

@@ -10,6 +10,7 @@ import merge from 'lodash.merge'
 import omitBy from 'lodash.omitby'
 
 import { validateSchemaForDirectives } from '@redwoodjs/internal'
+import { rootGqlSchema } from '@redwoodjs/internal'
 
 import type { RedwoodDirective } from '../plugins/useRedwoodDirective'
 import {
@@ -18,8 +19,6 @@ import {
   GraphQLTypeWithFields,
   SdlGlobImports,
 } from '../types'
-
-import * as rootSchema from './rootSchema'
 
 const mapFieldsToService = ({
   fields = {},
@@ -136,7 +135,7 @@ const mergeResolvers = (schemas: {
     merge(
       {},
       ...[
-        rootSchema.resolvers,
+        rootGqlSchema.resolvers,
         ...Object.values(schemas).map(({ resolvers }) => resolvers),
       ]
     ),
@@ -205,7 +204,7 @@ export const makeMergedSchema = ({
 
   const typeDefs = mergeTypes(
     [
-      rootSchema.schema,
+      rootGqlSchema.schema,
       ...directives.map((directive) => directive.schema), // pick out schemas from directives
       ...sdlSchemas, // pick out the schemas from sdls
     ],

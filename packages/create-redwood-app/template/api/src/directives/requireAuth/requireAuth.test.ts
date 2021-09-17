@@ -13,8 +13,6 @@ describe('requireAuth directive', () => {
     // mockRedwoodDirective(requireAuth, { context: { currentUser: { id: 1, name: 'Lebron McGretzky' } }})
     const mockExecution = mockRedwoodDirective(requireAuth, { context: {} })
 
-    expect(
-      mockExecution
-    ).not.toThrowError()
+    expect(mockExecution).not.toThrowError()
   })
 })

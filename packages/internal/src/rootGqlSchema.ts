@@ -10,7 +10,9 @@ import gql from 'graphql-tag'
 
 import { prismaVersion, redwoodVersion } from '@redwoodjs/api'
 
-import type { GlobalContext } from '../index'
+// We duplicate this here, because we don't want circular dependency with graphql-server
+// This type doesn't have any real impact outside this file
+interface GlobalContext extends Record<string, unknown> {}
 
 /**
  * This adds scalar types for dealing with Date, Time, DateTime, and JSON.
