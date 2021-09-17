@@ -162,6 +162,16 @@ export const User = {
 "
 `;
 
+exports[`in javascript mode creates a single word service scenario file 1`] = `
+"export const standard = defineScenario({
+  user: {
+    one: { data: { email: 'String1234567' } },
+    two: { data: { email: 'String1234567' } },
+  },
+})
+"
+`;
+
 exports[`in javascript mode creates a single word service test file 1`] = `
 "import { users } from './users'
 
@@ -377,6 +387,20 @@ export const User = {
   identity: (_obj, { root }: ResolverArgs<ReturnType<typeof user>>) =>
     db.user.findUnique({ where: { id: root.id } }).identity(),
 }
+"
+`;
+
+exports[`in typescript mode creates a single word service scenario file 1`] = `
+"import type { Prisma } from '@prisma/client'
+
+export const standard = defineScenario<Prisma.UserCreateArgs>({
+  user: {
+    one: { data: { email: 'String1234567' } },
+    two: { data: { email: 'String1234567' } },
+  },
+})
+
+export type StandardScenario = typeof standard
 "
 `;
 

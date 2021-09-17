@@ -19,12 +19,8 @@ export interface GlobalContext extends Record<string, unknown> {}
 let GLOBAL_CONTEXT: GlobalContext = {}
 let PER_REQUEST_CONTEXT: AsyncLocalStorage<Map<string, GlobalContext>>
 
-// @NOTE By default we use local storage context
-// If the user is sure they don't need it e.g. running in lambda,
-// they can disable it by setting SAFE_GLOBAL_CONTEXT === '1'
-// which may have performance benefits
 export const shouldUseLocalStorageContext = () =>
-  process.env.SAFE_GLOBAL_CONTEXT !== '1'
+  process.env.DISABLE_CONTEXT_ISOLATION !== '1'
 
 /**
  * This returns a AsyncLocalStorage instance, not the actual store

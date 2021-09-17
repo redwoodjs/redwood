@@ -21,11 +21,11 @@ const createContextHandler = (userContext?: Record<string, any>) => {
 
 describe('global context handlers', () => {
   beforeAll(() => {
-    process.env.SAFE_GLOBAL_CONTEXT = '1'
+    process.env.DISABLE_CONTEXT_ISOLATION = '1'
   })
 
   afterAll(() => {
-    process.env.SAFE_GLOBAL_CONTEXT = '0'
+    process.env.DISABLE_CONTEXT_ISOLATION = '0'
   })
 
   it('merges the graphql-server resolver and global context correctly', async () => {

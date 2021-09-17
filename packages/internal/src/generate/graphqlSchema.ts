@@ -1,4 +1,5 @@
 import { generate } from '@graphql-codegen/cli'
+import chalk from 'chalk'
 
 import { getPaths } from '../paths'
 
@@ -55,11 +56,15 @@ export const generateGraphQLSchema = async () => {
       true
     )
     return f[0].filename
-  } catch (e) {
+  } catch (e: any) {
     // `generate` outputs errors which are helpful.
     // This tries to clean up the output of those errors.
     console.error()
-    console.error('Error: Could not generate GraphQL schema')
+    console.error(chalk.red('Error parsing SDLs or Schema'))
+    for (const error of e?.errors) {
+      console.error(error.details)
+    }
+
     console.error()
 
     return undefined
