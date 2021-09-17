@@ -1,4 +1,3 @@
-import fs from 'fs'
 import path from 'path'
 
 import {
@@ -6,70 +5,83 @@ import {
   getNamedExports,
   hasDefaultExport,
   getCellGqlQuery,
+  fileToAst,
 } from '../ast'
 
-test('extracts named exports', () => {
-  const fakeCode = `
-  export { exportA, exportB } from './anotherModule.'
-  export const myVariableExport = gql\`query Q { node { field } } \`
-  export const myArrowFunctionExport = () => {
-    return <>Hello</>
+jest.mock('../paths', () => {
+  const path = require('path')
+  const baseFixturePath = path.join(__dirname, 'fixtures')
+  return {
+    getPaths: () => ({
+      base: baseFixturePath,
+      web: {
+        src: path.join(baseFixturePath, 'web/src'),
+        base: path.join(baseFixturePath, 'web'),
+      },
+      api: {
+        src: path.join(baseFixturePath, 'api/src'),
+        base: path.join(baseFixturePath, 'api'),
+      },
+    }),
   }
-  export function myFunctionExport() {}
-  export class MyClassExport {}
+})
 
-  `
+const getFixturePath = (relativeFilePath: string) => {
+  return path.join(__dirname, `fixtures/${relativeFilePath}`)
+}
 
+test('extracts named exports', () => {
+  // Fixture is in web folder, because it has a JSX export
+  const fakeCode = fileToAst(getFixturePath('/web/src/exports.ts'))
   const n = getNamedExports(fakeCode)
   expect(n).toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "name": "exportA",
-        "type": "re-export",
-      },
-      Object {
-        "name": "exportB",
-        "type": "re-export",
-      },
-      Object {
-        "name": "myVariableExport",
-        "type": "variable",
-      },
-      Object {
-        "name": "myArrowFunctionExport",
-        "type": "variable",
-      },
-      Object {
-        "name": "myFunctionExport",
-        "type": "function",
-      },
-      Object {
-        "name": "MyClassExport",
-        "type": "class",
-      },
-    ]
-  `)
+Array [
+  Object {
+    "name": "exportA",
+    "type": "re-export",
+  },
+  Object {
+    "name": "exportB",
+    "type": "re-export",
+  },
+  Object {
+    "name": "myVariableExport",
+    "type": "variable",
+  },
+  Object {
+    "name": "myArrowFunctionExport",
+    "type": "variable",
+  },
+  Object {
+    "name": "myFunctionExport",
+    "type": "function",
+  },
+  Object {
+    "name": "MyClassExport",
+    "type": "class",
+  },
+]
+`)
 })
 
 test('tests default exports', () => {
   expect(
-    hasDefaultExport(`
-    const a = 'b'
-    export default a
-  `)
+    hasDefaultExport(fileToAst(getFixturePath('/defaultExports/multiLine.js')))
   ).toEqual(true)
 
-  expect(hasDefaultExport(`export default a = 'b'`)).toEqual(true)
-  expect(hasDefaultExport(`export const a = 'b'`)).toEqual(false)
+  expect(
+    hasDefaultExport(fileToAst(getFixturePath('defaultExports/singleLine.js')))
+  ).toEqual(true)
+
+  expect(
+    hasDefaultExport(fileToAst(getFixturePath('defaultExports/none.js')))
+  ).toEqual(false)
 })
 
 test('Returns the exported query from a cell (ignoring others)', () => {
-  const cellFileContents = fs.readFileSync(
-    path.join(__dirname, 'fixtures/cell.ts'),
-    'utf-8'
-  )
+  const cellFileAst = fileToAst(getFixturePath('web/src/cell.ts'))
 
-  const cellQuery = getCellGqlQuery(cellFileContents)
+  const cellQuery = getCellGqlQuery(cellFileAst)
   expect(cellQuery).toMatchInlineSnapshot(`
     "
       query BazingaQuery($id: String!) {
@@ -82,12 +94,9 @@ test('Returns the exported query from a cell (ignoring others)', () => {
 })
 
 test('Returns the all quries from a file using getGqlQueries', () => {
-  const cellFileContents = fs.readFileSync(
-    path.join(__dirname, 'fixtures/cell.ts'),
-    'utf-8'
-  )
+  const cellFileAst = fileToAst(getFixturePath('web/src/cell.ts'))
 
-  const cellQuery = getGqlQueries(cellFileContents)
+  const cellQuery = getGqlQueries(cellFileAst)
   expect(cellQuery).toMatchInlineSnapshot(`
     Array [
       "
@@ -109,4 +118,8 @@ test('Returns the all quries from a file using getGqlQueries', () => {
     }",
     ]
   `)
+})
+
+test('Handles typecast syntax without erroring', () => {
+  expect(() => fileToAst(getFixturePath('api/typecast.ts'))).not.toThrow()
 })

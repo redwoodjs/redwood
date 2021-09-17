@@ -8,7 +8,7 @@ import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 import terminalLink from 'terminal-link'
 
-import { getConfig } from '@redwoodjs/internal'
+import { getConfig, generate as generateTypes } from '@redwoodjs/internal'
 
 import {
   generateTemplate,
@@ -224,6 +224,10 @@ export const handler = async ({ model, crud, force, tests, typescript }) => {
           const f = await files({ name: model, tests, crud, typescript })
           return writeFilesTask(f, { overwriteExisting: force })
         },
+      },
+      {
+        title: `Generating types ...`,
+        task: () => generateTypes,
       },
     ].filter(Boolean),
     { collapse: false, exitOnError: true }
