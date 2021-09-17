@@ -13,6 +13,16 @@
 // [^1] https://eslint.org/docs/rules/
 // [^2] https://www.npmjs.com/package/eslint-plugin-react#list-of-supported-rules
 
+const findUp = require('findup-sync')
+
+const babelConfigPath = (cwd = process.env.RWJS_CWD ?? process.cwd()) => {
+  const configPath = findUp('babel.config.js', { cwd })
+  if (!configPath) {
+    throw new Error(`Eslint-parser could not find a "babel.config.js" file`)
+  }
+  return configPath
+}
+
 module.exports = {
   extends: [
     'eslint:recommended',
@@ -23,7 +33,7 @@ module.exports = {
   parser: '@babel/eslint-parser',
   parserOptions: {
     babelOptions: {
-      configFile: '../../babel.config.js',
+      configFile: babelConfigPath(),
     },
   },
   plugins: [
