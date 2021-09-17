@@ -420,7 +420,7 @@ const SplashPage: React.VFC<SplashPageProps> = ({
                   <div className="resource">
                     <a
                       className="resource-link"
-                      href="https://github.com/redwoodjs/redwood/blob/main/CONTRIBUTING.md"
+                      href="https://redwoodjs.com/docs/contributing"
                       target="_blank"
                       rel="noreferrer"
                     ></a>
