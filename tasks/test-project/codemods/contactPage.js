@@ -64,6 +64,9 @@ const [create, { loading, error }] = useMutation(CREATE_CONTACT, {
     toast.success('Thank you for your submission!')
     formMethods.reset()
   },
+  onError: (error) => {
+    toast.error(error.message)
+  },
 })
 
 const onSubmit = (data) => {

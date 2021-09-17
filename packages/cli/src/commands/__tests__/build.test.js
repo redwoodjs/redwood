@@ -28,13 +28,14 @@ afterEach(() => jest.clearAllMocks())
 test('the build tasks are in the correct sequence', () => {
   handler({})
   expect(Listr.mock.calls[0][0].map((x) => x.title)).toMatchInlineSnapshot(`
-    Array [
-      "Generating Prisma Client...",
-      "Building API...",
-      "Cleaning Web...",
-      "Building Web...",
-    ]
-  `)
+Array [
+  "Generating Prisma Client...",
+  "Verifying graphql schema...",
+  "Building API...",
+  "Cleaning Web...",
+  "Building Web...",
+]
+`)
 })
 
 jest.mock('@redwoodjs/prerender/detection', () => {

@@ -289,6 +289,9 @@ const NewPost = () => {
       toast.success('Post created')
       navigate(routes.posts())
     },
+    onError: (error) => {
+      toast.error(error.message)
+    },
   })
 
   const onSave = (input) => {
@@ -332,6 +335,9 @@ const NewUserProfile = () => {
       onCompleted: () => {
         toast.success('UserProfile created')
         navigate(routes.userProfiles())
+      },
+      onError: (error) => {
+        toast.error(error.message)
       },
     }
   )
@@ -441,6 +447,9 @@ const Post = ({ post }) => {
     onCompleted: () => {
       toast.success('Post deleted')
       navigate(routes.posts())
+    },
+    onError: (error) => {
+      toast.error(error.message)
     },
   })
 
@@ -920,6 +929,9 @@ export const Success = ({ userProfile }) => {
         toast.success('UserProfile updated')
         navigate(routes.userProfiles())
       },
+      onError: (error) => {
+        toast.error(error.message)
+      },
     }
   )
 
@@ -1040,6 +1052,9 @@ const PostsList = ({ posts }) => {
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
     onCompleted: () => {
       toast.success('Post deleted')
+    },
+    onError: (error) => {
+      toast.error(error.message)
     },
     // This refetches the query on the list page. Read more about other ways to
     // update the cache over here:
@@ -1421,6 +1436,9 @@ const NewPost = () => {
       toast.success('Post created')
       navigate(routes.posts())
     },
+    onError: (error) => {
+      toast.error(error.message)
+    },
   })
 
   const onSave = (input) => {
@@ -1462,6 +1480,9 @@ const NewUserProfile = () => {
     onCompleted: () => {
       toast.success('UserProfile created')
       navigate(routes.userProfiles())
+    },
+    onError: (error) => {
+      toast.error(error.message)
     },
   })
 
@@ -1573,6 +1594,9 @@ const Post = ({ post }) => {
     onCompleted: () => {
       toast.success('Post deleted')
       navigate(routes.posts())
+    },
+    onError: (error) => {
+      toast.error(error.message)
     },
   })
 
@@ -2056,6 +2080,9 @@ export const Success = ({ post }: CellSuccessProps<EditPostById>) => {
       toast.success('Post updated')
       navigate(routes.posts())
     },
+    onError: (error) => {
+      toast.error(error.message)
+    },
   })
 
   const onSave = (input, id) => {
@@ -2116,6 +2143,9 @@ export const Success = ({ userProfile }: CellSuccessProps<EditUserProfileById>) 
     onCompleted: () => {
       toast.success('UserProfile updated')
       navigate(routes.userProfiles())
+    },
+    onError: (error) => {
+      toast.error(error.message)
     },
   })
 
@@ -2235,6 +2265,9 @@ const PostsList = ({ posts }) => {
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
     onCompleted: () => {
       toast.success('Post deleted')
+    },
+    onError: (error) => {
+      toast.error(error.message)
     },
     // This refetches the query on the list page. Read more about other ways to
     // update the cache over here:

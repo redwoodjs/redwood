@@ -2174,6 +2174,11 @@
   dependencies:
     tiny-lru "7.0.6"
 
+"@envelop/testing@1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@envelop/testing/-/testing-1.1.0.tgz#84ea162d85e4c37b62ab13df2ad05e6c2b013abb"
+  integrity sha512-Jls502+MCIsYwvwdLX8vqmAwaMpO9bSx810MnVgLcgPeZjoGUDW7A+4tsNcGxbHszI85Q/D2BQHeL0F/W4G1Nw==
+
 "@envelop/types@1.0.2":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@envelop/types/-/types-1.0.2.tgz#c0eb58929209aa3c6563921a9fc58f63448c02fc"
@@ -19655,4 +19660,3 @@ zwitch@^1.0.0:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/zwitch/-/zwitch-1.0.5.tgz#d11d7381ffed16b742f6af7b3f223d5cd9fe9920"
   integrity sha512-V50KMwwzqJV0NpZIZFwfOD5/lyny3WlSzRiXgA0G7VUnRlqttta1L6UQIHzd6EuBY/cHGfwTIck7w1yH6Q5zUw==
-
