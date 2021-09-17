@@ -15,8 +15,6 @@ export {
   getDirectiveName,
 } from './directives/makeDirectives'
 
-export * from './directives/validateSchemaForDirectives'
-
 export {
   hasDirective,
   DirectiveParams,

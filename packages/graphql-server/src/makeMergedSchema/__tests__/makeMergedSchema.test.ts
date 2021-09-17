@@ -178,7 +178,6 @@ describe('makeMergedSchema', () => {
   })
 
   it('throws when directives not added to queries and mutations', () => {
-    // This'll be a ~~BUILD TIME~~ error, which is useful
     const sdlsWithoutDirectives = {
       withoutDirective: {
         schema: parse(`

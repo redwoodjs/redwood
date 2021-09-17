@@ -7,7 +7,9 @@ import {
   GraphQLResolveInfo,
 } from 'graphql'
 
-import { DIRECTIVE_REQUIRED_ERROR_MESSAGE } from '../directives/validateSchemaForDirectives'
+// Just for consistent messaging
+import { DIRECTIVE_REQUIRED_ERROR_MESSAGE } from '@redwoodjs/internal'
+
 import { GlobalContext } from '../index'
 
 function isQueryOrMutation(info: GraphQLResolveInfo): boolean {
