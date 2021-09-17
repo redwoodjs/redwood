@@ -5,6 +5,7 @@ import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 
 import { getPaths } from '@redwoodjs/internal'
+import { runPrerender, writePrerenderedHtmlFile } from '@redwoodjs/prerender'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
 
 import c from '../lib/colors'
@@ -68,12 +69,6 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
     process.exit(1)
     // TODO: Run this automatically at this point.
   }
-
-  // Import runPrerender async, so babel config et all are only loaded
-  // when this task runs
-  const { runPrerender, writePrerenderedHtmlFile } = await import(
-    '@redwoodjs/prerender'
-  )
 
   const listrTasks = prerenderRoutes
     .filter((route) => route.path)

@@ -2,16 +2,9 @@
 
 import React from 'react'
 
-import {
-  parseSearch,
-  replaceParams,
-  matchPath,
-  PageLoader,
-  Redirect,
-  useLocation,
-  validatePath,
-  LocationProvider,
-} from './internal'
+import { Redirect } from './links'
+import { useLocation, LocationProvider } from './location'
+import { PageLoader } from './page-loader'
 import { ParamsProvider } from './params'
 import {
   RouterContextProvider,
@@ -19,7 +12,15 @@ import {
   useRouterState,
 } from './router-context'
 import { SplashPage } from './splash-page'
-import { flattenAll, isReactElement } from './util'
+import {
+  flattenAll,
+  isReactElement,
+  parseSearch,
+  replaceParams,
+  matchPath,
+  validatePath,
+  TrailingSlashesTypes,
+} from './util'
 
 import type { AvailableRoutes } from './index'
 
@@ -125,15 +126,18 @@ function isRoute(
   return isReactElement(node) && node.type === Route
 }
 
-interface RouterProps extends RouterContextProviderProps {}
+interface RouterProps extends RouterContextProviderProps {
+  trailingSlashes?: TrailingSlashesTypes
+}
 
 const Router: React.FC<RouterProps> = ({
   useAuth,
   paramTypes,
   pageLoadingDelay,
+  trailingSlashes = 'never',
   children,
 }) => (
-  <LocationProvider>
+  <LocationProvider trailingSlashes={trailingSlashes}>
     <LocationAwareRouter
       useAuth={useAuth}
       paramTypes={paramTypes}

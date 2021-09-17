@@ -1,6 +1,4 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-
-import { useApolloServerErrors } from '@envelop/apollo-server-errors'
 import {
   envelop,
   FormatErrorHandler,
@@ -39,12 +37,11 @@ import { renderPlaygroundPage } from 'graphql-playground-html'
 import { BaseLogger, LevelWithSilent } from 'pino'
 import { v4 as uuidv4 } from 'uuid'
 
+import { AuthContextPayload, getAuthenticationContext } from '@redwoodjs/api'
+
 import { CorsConfig, createCorsContext } from '../cors'
 import { createHealthcheckContext, OnHealthcheckFn } from '../healthcheck'
 import {
-  ApolloError,
-  AuthContextPayload,
-  getAuthenticationContext,
   getPerRequestContext,
   setContext,
   usePerRequestContext,
@@ -345,30 +342,30 @@ const logResult =
 
     const options = {} as any
 
+    if (result.errors && result.errors.length > 0) {
+      envelopLogger.error(
+        {
+          errors: result.errors,
+        },
+        `GraphQL execution completed with errors:`
+      )
+    }
+
     if (result.data) {
       if (includeData) {
         options['data'] = result.data
       }
 
-      if (result.errors && result.errors.length > 0) {
-        envelopLogger.error(
-          {
-            errors: result.errors,
-          },
-          `GraphQL execution completed with errors:`
-        )
-      } else {
-        if (includeTracing) {
-          options['tracing'] = result.extensions?.envelopTracing
-        }
-
-        envelopLogger.debug(
-          {
-            ...options,
-          },
-          `GraphQL execution completed`
-        )
+      if (includeTracing) {
+        options['tracing'] = result.extensions?.envelopTracing
       }
+
+      envelopLogger.debug(
+        {
+          ...options,
+        },
+        `GraphQL execution completed`
+      )
     }
   }
 
@@ -454,16 +451,12 @@ const useRedwoodLogger = (
 /*
  * Prevent unexpected error messages from leaking to the GraphQL clients.
  *
- * Unexpected errors are those that are not Envelop or Apollo errors
- *
- * Note that error masking should come after useApolloServerErrors since the originalError
- * will could become an ApolloError but if not, then should get masked
+ * Unexpected errors are those that are not Envelop or GraphQL errors
  **/
 export const formatError: FormatErrorHandler = (err) => {
   if (
     err.originalError &&
-    err.originalError instanceof EnvelopError === false &&
-    err.originalError instanceof ApolloError === false
+    err.originalError instanceof EnvelopError === false
   ) {
     return new GraphQLError('Something went wrong.')
   }
@@ -513,12 +506,7 @@ export const createGraphQLHandler = ({
     }),
     // Only allow execution of specific operation types
     useFilterAllowedOperations(allowedOperations || ['mutation', 'query']),
-    // Apollo Server compatible errors.
-    // Important: *must* be listed before useMaskedErrors
-    useApolloServerErrors(),
     // Prevent unexpected error messages from leaking to the GraphQL clients.
-    // Important: *must* be listed after useApolloServerErrors so it can detect if the error is an ApolloError
-    // and mask if not
     useMaskedErrors({ formatError }),
   ]
 

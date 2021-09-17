@@ -3,7 +3,7 @@ import {
   createGraphQLHandler,
   makeMergedSchema,
   makeServices,
-} from '@redwoodjs/api'
+} from '@redwoodjs/graphql-server'
 
 import schemas from 'src/graphql/**/*.{js,ts}'
 import { db } from 'src/lib/db'
