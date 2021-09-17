@@ -3,6 +3,7 @@ import path from 'path'
 import { generate } from '@graphql-codegen/cli'
 import chalk from 'chalk'
 
+import { ensurePosixPath } from '../paths'
 import { getPaths } from '../paths'
 
 export const generateGraphQLSchema = async () => {
@@ -13,7 +14,7 @@ export const generateGraphQLSchema = async () => {
       {
         cwd: rwjsPaths.api.src,
         schema: [
-          path.join(__dirname, '../rootGqlSchema.{js,ts}'), // support loading from either compiled JS or TS (for jest tests)
+          path.join(ensurePosixPath(__dirname), '../rootGqlSchema.{js,ts}'), // support loading from either compiled JS or TS (for jest tests)
           'graphql/**/*.sdl.{js,ts}',
           'directives/**/*.{js,ts}',
         ],
