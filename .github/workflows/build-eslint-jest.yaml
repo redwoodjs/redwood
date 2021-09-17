@@ -21,11 +21,25 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      # - name: Cache "node_modules"
-      #   uses: actions/cache@v2
-      #   with:
-      #     path: '**/node_modules'
-      #     key: node_modules_${{ runner.os }}_${{ hashFiles('**/yarn.lock') }}
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+
+      - name: Cache yarn
+        uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: yarn-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            yarn-
+
+      - name: 'Check or update Yarn cache (fix w/ "yarn install")'
+        env:
+          YARN_ENABLE_SCRIPTS: false # disable post-install scripts
+          YARN_NODE_LINKER: pnp # use pnp linker for better linking performance: it's meant to update yarn cache only
+        run: |
+          yarn install --immutable --skip-builds
 
       - name: Install dependencies
         run: yarn install --immutable

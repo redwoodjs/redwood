@@ -23,7 +23,7 @@ jobs:
           node --version
           yarn --version
       - name: Install dependencies
-        run: yarn install --immutable --check-files
+        run: yarn install --immutable
 
       - name: Build
         run: yarn build
