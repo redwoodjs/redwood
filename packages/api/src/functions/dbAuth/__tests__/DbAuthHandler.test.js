@@ -53,7 +53,7 @@ const UUID_REGEX =
 const SET_SESSION_REGEX = /^session=[a-zA-Z0-9+=/]+;/
 const UTC_DATE_REGEX = /\w{3}, \d{2} \w{3} \d{4} [\d:]{8} GMT/
 const LOGOUT_COOKIE =
-  'session=;Path=/;HttpOnly;SameSite=Strict;Secure;Expires=Thu, 01 Jan 1970 00:00:00 GMT'
+  'session=;Path=/;HttpOnly;SameSite=Strict;Expires=Thu, 01 Jan 1970 00:00:00 GMT'
 
 const createDbUser = async () => {
   return await db.user.create({
@@ -649,17 +649,31 @@ describe('dbAuth', () => {
 
   describe('_cookieAttributes', () => {
     it('returns an array of attributes for the session cookie', () => {
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(
+        { headers: { referer: 'http://test.host' } },
+        context,
+        options
+      )
       const attributes = dbAuth._cookieAttributes({})
 
-      expect(attributes.length).toEqual(5)
+      expect(attributes.length).toEqual(4)
       expect(attributes[0]).toEqual('Path=/')
       // expect(attributes[1]).toEqual('Domain=site.test')
       expect(attributes[1]).toEqual('HttpOnly')
       expect(attributes[2]).toEqual('SameSite=Strict')
-      expect(attributes[3]).toEqual('Secure')
-      expect(attributes[4]).toMatch(`Expires=`)
-      expect(attributes[4]).toMatch(UTC_DATE_REGEX)
+      expect(attributes[3]).toMatch(`Expires=`)
+      expect(attributes[3]).toMatch(UTC_DATE_REGEX)
+    })
+
+    it('includes the Secure attribute when referer is from an HTTPS URL', () => {
+      const dbAuth = new DbAuthHandler(
+        { headers: { referer: 'https://test.host' } },
+        context,
+        options
+      )
+      const attributes = dbAuth._cookieAttributes({})
+
+      expect(attributes[3]).toMatch(`Secure`)
     })
 
     it('includes a Domain in the cookie if DBAUTH_COOKIE_DOMAIN is set', () => {
@@ -668,7 +682,7 @@ describe('dbAuth', () => {
       const dbAuth = new DbAuthHandler(event, context, options)
       const attributes = dbAuth._cookieAttributes({})
 
-      expect(attributes[4]).toEqual('Domain=site.test')
+      expect(attributes[3]).toEqual('Domain=site.test')
     })
   })
 
@@ -679,7 +693,7 @@ describe('dbAuth', () => {
 
       expect(Object.keys(headers).length).toEqual(1)
       expect(headers['Set-Cookie']).toMatch(
-        `;Path=/;HttpOnly;SameSite=Strict;Secure;Expires=${dbAuth._futureExpiresDate}`
+        `;Path=/;HttpOnly;SameSite=Strict;Expires=${dbAuth._futureExpiresDate}`
       )
       // can't really match on the session value since it will change on every render,
       // due to CSRF token generation but we can check that it contains a only the

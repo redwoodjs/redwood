@@ -124,7 +124,7 @@ export class DbAuthHandler {
 
   // class constant: all the attributes of the cookie other than the value itself
   static get COOKIE_META() {
-    const meta = [`Path=/`, 'HttpOnly', 'SameSite=Strict', 'Secure']
+    const meta = [`Path=/`, 'HttpOnly', 'SameSite=Strict']
 
     // set DBAUTH_COOKIE_DOMAIN if you need any subdomains to access this cookie
     if (process.env.DBAUTH_COOKIE_DOMAIN) {
@@ -356,6 +356,12 @@ export class DbAuthHandler {
   // the session, or future (or left out completely) to set to `_futureExpiresDate`
   _cookieAttributes({ expires = 'future' }: { expires?: 'now' | 'future' }) {
     const meta = JSON.parse(JSON.stringify(DbAuthHandler.COOKIE_META))
+
+    // if we're using HTTPS then we set the cookie secure
+    if (this.event.headers?.referer?.match(/^https/)) {
+      meta.push('Secure')
+    }
+
     const expiresAt =
       expires === 'now'
         ? DbAuthHandler.PAST_EXPIRES_DATE
