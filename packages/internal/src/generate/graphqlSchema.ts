@@ -31,7 +31,7 @@ export const generateGraphQLSchema = async () => {
         schema: [
           rootSchema,
           'graphql/**/*.sdl.{js,ts}',
-          'directives/**/*.directive.{js,ts}',
+          'directives/**/*.{js,ts}',
         ],
         config: {
           scalars: {

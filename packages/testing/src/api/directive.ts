@@ -1,3 +1,5 @@
+import { A } from 'ts-toolbelt'
+
 import type {
   DirectiveParams,
   ValidatorDirective,
@@ -11,31 +13,41 @@ import {
 
 export { getDirectiveName } from '@redwoodjs/graphql-server'
 
-/** Used for writing directive tests e.g.
- * @example
- *  const mockExecution = mockRedwoodDirective(uppercase, {
- *    context: currentUser,
- *    resolver: () => 'fff',
- *  })
- *
- *  expect(mockExecution).not.toThrow()
- *  expect(mockExecution()).toEqual('FFF')
- */
-
+// @NOTE: overloaded interface
 interface DirectiveMocker {
   (
     directive: ValidatorDirective,
-    executionMock: Omit<Partial<DirectiveParams>, 'resolvedValue'>
+    executionMock: A.Compute<Omit<Partial<DirectiveParams>, 'resolvedValue'>>
   ): any
 }
 
-type TransformerMock = Omit<Partial<DirectiveParams>, 'resolvedValue'> & {
+type TransformerMock = A.Compute<
+  Omit<Partial<DirectiveParams>, 'resolvedValue'>
+> & {
   mockedResolvedValue: any
 }
+
+// Overload this definition for transformers
 interface DirectiveMocker {
   (directive: TransformerDirective, executionMock: TransformerMock): any
 }
 
+/**
+ *
+ * @description
+ * Used for writing directive tests e.g.
+ * - Transformer directives can be passed resolvedValue
+ * - Validator directives should check for errors thrown in certain situtations
+ *
+ * @example
+ *  const mockExecution = mockRedwoodDirective(myTransformer, {
+ *    context: currentUser,
+ *    resolvedValue: 'Original Value',
+ *  })
+ *
+ *  expect(mockExecution).not.toThrow()
+ *  expect(mockExecution()).toEqual('Transformed Value')
+ */
 export const mockRedwoodDirective: DirectiveMocker = (
   directive,
   executionMock

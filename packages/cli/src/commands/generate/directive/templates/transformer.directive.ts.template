@@ -30,4 +30,6 @@ const transform: TransformerDirectiveFunc = ({ context, resolvedValue }) => {
   return resolvedValue.replace('foo', 'bar')
 }
 
-export const ${camelName} = createTransformerDirective(schema, transform)
+const ${camelName} = createTransformerDirective(schema, transform)
+
+export default ${camelName}

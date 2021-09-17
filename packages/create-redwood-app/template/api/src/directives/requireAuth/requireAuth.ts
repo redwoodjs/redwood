@@ -8,9 +8,11 @@ export const schema = gql`
   directive @requireAuth(roles: [String]) on FIELD_DEFINITION
 `
 
-const validateAuth = ({ directiveArgs }) => {
+const validate = ({ directiveArgs }) => {
   const { roles } = directiveArgs
   applicationRequireAuth({ roles })
 }
 
-export const requireAuth = createValidatorDirective(schema, validateAuth)
+const requireAuth = createValidatorDirective(schema, validate)
+
+export default requireAuth

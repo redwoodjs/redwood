@@ -1,10 +1,10 @@
 import { getDirectiveName } from '@redwoodjs/testing/api'
 
-import { schema } from './skipAuth.directive'
+import skipAuth from './skipAuth'
 
 describe('skipAuth directive', () => {
   it('declares the directive sdl as schema, with the correct name', () => {
-    expect(schema).toBeTruthy()
-    expect(getDirectiveName(schema)).toBe('skipAuth')
+    expect(skipAuth.schema).toBeTruthy()
+    expect(getDirectiveName(skipAuth.schema)).toBe('skipAuth')
   })
 })

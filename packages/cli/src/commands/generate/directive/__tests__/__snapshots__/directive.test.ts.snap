@@ -32,25 +32,29 @@ const validate = ({ context, directiveArgs }) => {
   throw new Error('Implementation missing for requireAdmin')
 }
 
-export const requireAdmin = createValidatorDirective(schema, validate)
+const requireAdmin = createValidatorDirective(schema, validate)
+
+export default requireAdmin
 "
 `;
 
 exports[`creates a JavaScript validator directive: js directive test 1`] = `
 "import { mockRedwoodDirective, getDirectiveName } from '@redwoodjs/testing/api'
 
-import { schema, requireAdmin } from './requireAdmin.directive'
+import requireAdmin from './requireAdmin'
 
 describe('requireAdmin directive', () => {
   it('declares the directive sdl as schema, with the correct name', () => {
-    expect(schema).toBeTruthy()
-    expect(getDirectiveName(schema)).toBe('requireAdmin')
+    expect(requireAdmin.schema).toBeTruthy()
+    expect(getDirectiveName(requireAdmin.schema)).toBe('requireAdmin')
   })
 
   it('has a requireAdmin throws an error if validation does not pass', () => {
     const mockExecution = mockRedwoodDirective(requireAdmin, {})
 
-    expect(mockExecution).toThrowError()
+    expect(mockExecution).toThrowError(
+      'Implementation missing for requireAdmin'
+    )
   })
 })
 "
@@ -92,19 +96,21 @@ const transform: TransformerDirectiveFunc = ({ context, resolvedValue }) => {
   return resolvedValue.replace('foo', 'bar')
 }
 
-export const bazingaFooBar = createTransformerDirective(schema, transform)
+const bazingaFooBar = createTransformerDirective(schema, transform)
+
+export default bazingaFooBar
 "
 `;
 
 exports[`creates a TypeScript transformer directive: ts directive test 1`] = `
 "import { mockRedwoodDirective, getDirectiveName } from '@redwoodjs/testing/api'
 
-import { schema, bazingaFooBar } from './bazingaFooBar.directive'
+import bazingaFooBar from './bazingaFooBar'
 
 describe('bazingaFooBar directive', () => {
   it('declares the directive sdl as schema, with the correct name', () => {
-    expect(schema).toBeTruthy()
-    expect(getDirectiveName(schema)).toBe('bazingaFooBar')
+    expect(bazingaFooBar.schema).toBeTruthy()
+    expect(getDirectiveName(bazingaFooBar.schema)).toBe('bazingaFooBar')
   })
 
   it('has a bazingaFooBar implementation transforms the value', () => {

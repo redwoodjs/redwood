@@ -30,4 +30,6 @@ const validate: ValidatorDirectiveFunc = ({ context, directiveArgs }) => {
   throw new Error('Implementation missing for ${camelName}')
 }
 
-export const ${camelName} = createValidatorDirective(schema, validate)
+const ${camelName} = createValidatorDirective(schema, validate)
+
+export default ${camelName}

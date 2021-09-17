@@ -202,12 +202,6 @@ export const makeMergedSchema = ({
 }) => {
   const sdlSchemas = Object.values(sdls).map(({ schema }) => schema)
 
-  if (process.env.NODE_ENV === 'development') {
-    sdlSchemas.forEach((schema) => {
-      validateSchemaForDirectives(schema)
-    })
-  }
-
   const typeDefs = mergeTypes(
     [
       rootSchema.schema,
@@ -216,6 +210,11 @@ export const makeMergedSchema = ({
     ],
     { all: true }
   )
+
+  if (process.env.NODE_ENV === 'development') {
+    const mergedSDLs = mergeTypeDefs(sdlSchemas)
+    validateSchemaForDirectives(mergedSDLs)
+  }
 
   const schema = makeExecutableSchema({
     typeDefs,

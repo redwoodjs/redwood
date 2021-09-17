@@ -5,6 +5,8 @@ export const schema = gql`
   directive @skipAuth on FIELD_DEFINITION
 `
 
-export const skipAuth = createValidatorDirective(schema, () => {
+const skipAuth = createValidatorDirective(schema, () => {
   return
 })
+
+export default skipAuth
