@@ -1,6 +1,7 @@
 export {}
 
 declare global {
+  var __REDWOOD__PRERENDERING: boolean
   namespace NodeJS {
     interface Global {
       /**
