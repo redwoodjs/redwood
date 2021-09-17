@@ -215,16 +215,10 @@ export const defaultLoggerOptions: P.LoggerOptions = {
  * @property {TransportTargetOptions<TransportOptions>[]} targets - targets defines where to log
  * @property {boolean} showConfig - Display logger configuration on initialization
  */
-export interface TransportTargetOptions<
-  TransportOptions = Record<string, any>
-> {
-  target: string
-  options?: TransportOptions
-  level?: P.LevelWithSilent
-}
+
 export interface RedwoodLoggerOptions<TransportOptions = Record<string, any>> {
-  options?: P.LoggerOptions
-  targets?: TransportTargetOptions<TransportOptions>[]
+  options?: TransportOptions
+  targets?: readonly P.TransportTargetOptions<Record<string, any> | undefined>[]
   showConfig?: boolean
 }
 

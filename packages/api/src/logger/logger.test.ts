@@ -8,7 +8,7 @@ import split from 'split2'
 const pid = process.pid
 const hostname = os.hostname()
 
-import { createLogger, emitLogLevels, TransportTargetOptions } from '../logger'
+import { createLogger, emitLogLevels } from '../logger'
 
 const once = (emitter, name) => {
   return new Promise((resolve, reject) => {
@@ -60,7 +60,7 @@ const watchFileCreated = (filename) => {
 type TransportOptions = Record<string, any>
 const setupLogger = (
   loggerOptions?: P.LoggerOptions,
-  targets?: TransportTargetOptions<TransportOptions>[],
+  targets?: P.TransportTargetOptions<TransportOptions>[],
   showConfig?: boolean
 ): {
   logger: P.BaseLogger
@@ -382,6 +382,7 @@ describe('logger', () => {
         {
           target: 'pino/file',
           options: { destination: tmp },
+          level: 'trace',
         },
       ])
 
@@ -412,6 +413,7 @@ describe('logger', () => {
           {
             target: 'pino/file',
             options: { destination: tmp },
+            level: 'trace',
           },
         ]
       )
@@ -440,6 +442,7 @@ describe('logger', () => {
         {
           target: 'pino/file',
           options: { destination: tmp },
+          level: 'trace',
         },
       ])
 

@@ -150,7 +150,10 @@ type GraphQLLoggerOptions = {
  * @param logger your logger
  * @param options the GraphQLLoggerOptions such as tracing, operationName, etc
  */
-type LoggerConfig = { logger: P.BaseLogger; options?: GraphQLLoggerOptions }
+type LoggerConfig = {
+  logger: P.BaseLogger | P.LoggerExtras
+  options?: GraphQLLoggerOptions
+}
 
 /**
  * GraphQLHandlerOptions
@@ -386,10 +389,12 @@ const logResult =
 const useRedwoodLogger = (
   loggerConfig: LoggerConfig
 ): Plugin<RedwoodGraphQLContext> => {
-  const logger = loggerConfig.logger
+  const logger = loggerConfig.logger as P.BaseLogger
+  const loggerExtras = loggerConfig.logger as P.LoggerExtras
+
   const level = loggerConfig.options?.level || logger.level || 'warn'
 
-  const childLogger = logger.child({
+  const childLogger = loggerExtras.child({
     name: 'graphql-server',
   })
 
@@ -546,7 +551,7 @@ export const createGraphQLHandler = ({
   ): Promise<APIGatewayProxyResult> => {
     const enveloped = createSharedEnvelop({ event, context: lambdaContext })
 
-    const logger = loggerConfig.logger
+    const logger = loggerConfig.logger as P.BaseLogger
 
     // In the future, this could be part of a specific handler for AWS lambdas
     lambdaContext.callbackWaitsForEmptyEventLoop = false
