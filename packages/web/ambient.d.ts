@@ -1,4 +1,6 @@
+/* eslint-disable no-var */
 import type { HelmetData } from 'react-helmet-async'
+
 import type { AuthContextInterface } from '@redwoodjs/auth'
 
 declare global {

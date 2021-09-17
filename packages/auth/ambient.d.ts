@@ -1,3 +1,4 @@
+/* eslint-disable no-var */
 import type { AuthContextInterface } from './src/index'
 
 declare global {
