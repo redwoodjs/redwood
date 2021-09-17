@@ -8,7 +8,9 @@ import {
 } from 'graphql-scalars'
 import gql from 'graphql-tag'
 
-import { prismaVersion, redwoodVersion } from '@redwoodjs/api'
+// @TODO move prismaVersion & redwoodVersion to internal?
+// We don't want a circular dependency here..
+const { prismaVersion, redwoodVersion } = require('@redwoodjs/api')
 
 // We duplicate this here, because we don't want circular dependency with graphql-server
 // This type doesn't have any real impact outside this file
