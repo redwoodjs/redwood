@@ -10,7 +10,7 @@ afterAll(() => {
 })
 
 test('Safe Context OFF: Updates global context with extended context', async () => {
-  process.env.SAFE_GLOBAL_CONTEXT = '0' // default: use async local storage
+  process.env.DISABLE_CONTEXT_ISOLATION = '0' // default: use async local storage
   const testkit = createTestkit(
     [
       useRedwoodPopulateContext(() => ({ hello: 'world' })),
@@ -30,7 +30,7 @@ test('Safe Context OFF: Updates global context with extended context', async () 
 })
 
 test('Safe Context ON: Updates global context with extended context', async () => {
-  process.env.SAFE_GLOBAL_CONTEXT = '1' // user is saying its safe to not proxy the context
+  process.env.DISABLE_CONTEXT_ISOLATION = '1' // user is saying its safe to not proxy the context
 
   const testkit = createTestkit(
     [
