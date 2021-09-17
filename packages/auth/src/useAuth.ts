@@ -7,14 +7,8 @@ export const useAuth = (): AuthContextInterface => {
   return React.useContext(AuthContext) as AuthContextInterface
 }
 
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace NodeJS {
-    interface Global {
-      __REDWOOD__USE_AUTH: () => AuthContextInterface
-      __REDWOOD__API_PROXY_PATH: string
-    }
-  }
+declare var global: {
+  __REDWOOD__USE_AUTH: () => AuthContextInterface
 }
 
 global.__REDWOOD__USE_AUTH = useAuth
