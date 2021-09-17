@@ -3,11 +3,7 @@ import { makeExecutableSchema } from '@graphql-tools/schema'
 import { getDirectiveValues } from 'graphql'
 
 import { GraphQLTypeWithFields } from '../../index'
-import {
-  useRedwoodDirective,
-  DIRECTIVE_REQUIRED_ERROR_MESSAGE,
-  DirectiveType,
-} from '../useRedwoodDirective'
+import { useRedwoodDirective, DirectiveType } from '../useRedwoodDirective'
 
 //  ===== Test Setup ======
 const AUTH_ERROR_MESSAGE = 'Sorry, you cannot do that'
@@ -145,7 +141,9 @@ describe('Directives on Queries', () => {
     assertSingleExecutionValue(result)
 
     expect(result.errors).toBeTruthy()
-    expect(result.errors[0].message).toBe(DIRECTIVE_REQUIRED_ERROR_MESSAGE)
+    expect(result.errors[0].message).toMatchInlineSnapshot(
+      `"You must specify one of @requireAuth, @skipAuth or a custom directive"`
+    )
 
     expect(result.data?.noDirectiveSpecified).toBeNull()
   })

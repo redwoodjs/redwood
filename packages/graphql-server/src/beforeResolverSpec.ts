@@ -18,6 +18,12 @@ export const InsecureServiceError = class extends Error {
   }
 }
 
+/**
+ *
+ * @deprecated beforeResolver is being deprecated in favour of using directives
+ * to secure your services
+ *
+ */
 export const BeforeResolverSpec = class implements BeforeResolverSpecType {
   befores: Record<string, ValidatorCollection>
 

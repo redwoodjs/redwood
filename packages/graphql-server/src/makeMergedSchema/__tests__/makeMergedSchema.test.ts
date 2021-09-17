@@ -195,9 +195,10 @@ describe('makeMergedSchema', () => {
         services: makeServices({ services }),
         directives: makeDirectivesForPlugin(directiveFiles),
       })
-    ).toThrowErrorMatchingInlineSnapshot(
-      `"You must specify one of @requireAuth, @skipAuth or a custom directive"`
-    )
+    ).toThrowErrorMatchingInlineSnapshot(`
+      "You must specify one of @requireAuth, @skipAuth or a custom directive for
+      - bazinga Query"
+    `)
   })
 
   describe('Directives', () => {
