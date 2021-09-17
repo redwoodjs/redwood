@@ -64,7 +64,8 @@
   "devDependencies": {
     "@types/babel-core": "6.25.7",
     "@types/babel-plugin-tester": "9.0.4",
-    "babel-plugin-tester": "10.1.0"
+    "babel-plugin-tester": "10.1.0",
+    "jest": "27.0.6"
   },
   "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762",
   "scripts": {

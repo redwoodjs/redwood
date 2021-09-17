@@ -7,10 +7,13 @@
     "packages/*"
   ],
   "devDependencies": {
+    "@babel/cli": "7.14.8",
     "@babel/node": "7.14.9",
     "eslint": "7.32.0",
+    "jest": "27.0.6",
     "npm-packlist": "2.2.2",
     "rimraf": "3.0.2",
+    "typescript": "4.3.5",
     "typescript-transform-paths": "3.3.0"
   },
   "resolutions": {

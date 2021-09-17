@@ -29,12 +29,15 @@
     "youch-terminal": "1.1.1"
   },
   "devDependencies": {
+    "@babel/cli": "7.14.8",
     "@types/aws-lambda": "8.10.81",
     "@types/express": "4.17.13",
     "@types/lodash.escape": "4.0.6",
     "@types/morgan": "1.9.3",
     "@types/qs": "6.9.7",
-    "@types/stack-trace": "0.0.29"
+    "@types/stack-trace": "0.0.29",
+    "jest": "27.0.6",
+    "typescript": "4.3.5"
   },
   "scripts": {
     "build": "yarn build:js",

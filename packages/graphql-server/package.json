@@ -31,13 +31,16 @@
     "uuid": "8.3.2"
   },
   "devDependencies": {
+    "@babel/cli": "7.14.8",
     "@envelop/types": "1.0.2",
     "@redwoodjs/auth": "0.36.4",
     "@types/jsonwebtoken": "8.5.4",
     "@types/lodash.merge": "4.6.6",
     "@types/lodash.omitby": "4.6.6",
     "@types/uuid": "8.3.1",
-    "split2": "3.2.2"
+    "jest": "27.0.6",
+    "split2": "3.2.2",
+    "typescript": "4.3.5"
   },
   "jest": {
     "testPathIgnorePatterns": [
