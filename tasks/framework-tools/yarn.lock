@@ -5268,10 +5268,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:3.16.1":
-  version: 3.16.1
-  resolution: "core-js@npm:3.16.1"
-  checksum: c73230c7ddc1c45e9d175d1b500fb51d76c14046009b7dbc242311acf1974301eac35fb5515f50879586e476b39ba25ed926fc4df68748ed9fc04fe9d2841939
+"core-js@npm:3.16.3":
+  version: 3.16.3
+  resolution: "core-js@npm:3.16.3"
+  checksum: 5e6513aaaee756d19899c782e931c59e425721ca238209ed995540e6d4d3111990acee6684fd5ae43d9e21826b26c48293f6c523d1f8060d34b626b2590a402b
   languageName: node
   linkType: hard
 
@@ -6658,7 +6658,7 @@ __metadata:
     babel-jest: 27.0.6
     babel-plugin-auto-import: 1.1.0
     babel-plugin-remove-code: 0.0.6
-    core-js: 3.16.1
+    core-js: 3.16.3
     cp-cli: 2.0.0
     fast-glob: 3.2.7
     jest: 27.0.6
