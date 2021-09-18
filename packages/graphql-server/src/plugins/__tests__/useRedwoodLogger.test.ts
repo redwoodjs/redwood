@@ -3,7 +3,7 @@ import os from 'os'
 import { join } from 'path'
 
 import { createTestkit } from '@envelop/testing'
-import { BaseLogger, LoggerOptions } from 'pino'
+import type P from 'pino'
 
 import { createLogger } from '@redwoodjs/api/logger'
 
@@ -42,14 +42,14 @@ const parseLogFile = (logFile) => {
 }
 
 const setupLogger = (
-  loggerOptions: LoggerOptions,
-  destination: string
+  loggerOptions: P.LoggerOptions,
+  targets?: readonly P.TransportTargetOptions<Record<string, any>>[]
 ): {
-  logger: BaseLogger
+  logger: P.BaseLogger
 } => {
   const logger = createLogger({
     options: { prettyPrint: false, ...loggerOptions },
-    destination: destination,
+    targets: targets,
   })
 
   return { logger }
@@ -62,8 +62,8 @@ describe('Populates context', () => {
   )
 
   const { logger } = setupLogger(
-    { level: 'trace', prettyPrint: false },
-    logFile
+    { level: 'trace', prettyPrint: false }
+    // logFile to fix for transport targets
   )
 
   it('Should log debug statements around GraphQL the execution phase', async () => {

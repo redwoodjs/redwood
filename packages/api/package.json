@@ -11,7 +11,6 @@
   "license": "MIT",
   "dependencies": {
     "@prisma/client": "2.30.3",
-    "@types/pino": "6.3.11",
     "core-js": "3.17.3",
     "crypto-js": "4.1.1",
     "jsonwebtoken": "8.5.1",
