@@ -382,7 +382,7 @@ export const handlePrismaLogging = (config: PrismaLoggingConfig): void => {
   })
 
   const slowQueryThreshold =
-    config.slowQueryThreshold || DEFAULT_SLOW_QUERY_THRESHOLD
+    config.slowQueryThreshold ?? DEFAULT_SLOW_QUERY_THRESHOLD
   config.logLevels?.forEach((level) => {
     if (level === 'query') {
       config.db.$on(level, (event: any) => {
