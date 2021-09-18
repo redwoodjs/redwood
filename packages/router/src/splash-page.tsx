@@ -395,7 +395,7 @@ const SplashPage: React.VFC<SplashPageProps> = ({
                   <div className="resource">
                     <a
                       className="resource-link"
-                      href="https://community.redwoodjs.com/"
+                      href="https://redwoodjs.com/community"
                       target="_blank"
                       rel="noreferrer"
                     ></a>
