@@ -25,6 +25,7 @@ jest.mock('@redwoodjs/internal', () => {
           db: path.join(global.__dirname, 'fixtures'), // this folder
           src: path.join(BASE_PATH, './api/src'),
           services: path.join(BASE_PATH, './api/src/services'),
+          directives: path.join(BASE_PATH, './api/src/directives'),
           graphql: path.join(BASE_PATH, './api/src/graphql'),
           functions: path.join(BASE_PATH, './api/src/functions'),
         },
@@ -70,6 +71,8 @@ jest.mock('path', () => {
     },
   }
 })
+
+jest.spyOn(Math, 'random').mockReturnValue(0.123456789)
 
 export const generatorsRootPath = path.join(
   __dirname,

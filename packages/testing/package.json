@@ -16,6 +16,7 @@
     "@redwoodjs/internal": "0.36.4",
     "@redwoodjs/router": "0.36.4",
     "@redwoodjs/web": "0.36.4",
+    "@redwoodjs/graphql-server": "0.36.4",
     "@storybook/addon-a11y": "6.3.7",
     "@storybook/builder-webpack5": "6.3.7",
     "@storybook/manager-webpack5": "6.3.7",

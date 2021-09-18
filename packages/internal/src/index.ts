@@ -7,6 +7,10 @@ export * from './files'
 export { generate } from './generate/generate'
 export { buildApi } from './build/api'
 
+export * from './validateSchemaForDirectives'
+
 // Babel helpers
 export * from './build/babel/api'
 export * from './build/babel/web'
+
+export * as rootGqlSchema from './rootGqlSchema'

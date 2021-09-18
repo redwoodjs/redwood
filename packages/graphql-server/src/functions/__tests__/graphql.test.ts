@@ -2,14 +2,15 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { envelop, Plugin } from '@envelop/core'
 
-import { context, getPerRequestContext } from '../../index'
-import { usePopulateContext, useRedwoodGlobalContextSetter } from '../graphql'
+import { context, getAsyncStoreInstance } from '../../index'
+import { useRedwoodGlobalContextSetter } from '../../plugins/useRedwoodGlobalContextSetter'
+import { useRedwoodPopulateContext } from '../../plugins/useRedwoodPopulateContext'
 
 const createContextHandler = (userContext?: Record<string, any>) => {
   const plugins: Plugin<any>[] = [useRedwoodGlobalContextSetter()]
 
   if (userContext) {
-    plugins.push(usePopulateContext(userContext))
+    plugins.push(useRedwoodPopulateContext(userContext))
   }
 
   const getEnveloped = envelop({ plugins })
@@ -20,11 +21,11 @@ const createContextHandler = (userContext?: Record<string, any>) => {
 
 describe('global context handlers', () => {
   beforeAll(() => {
-    process.env.SAFE_GLOBAL_CONTEXT = '1'
+    process.env.DISABLE_CONTEXT_ISOLATION = '1'
   })
 
   afterAll(() => {
-    process.env.SAFE_GLOBAL_CONTEXT = '0'
+    process.env.DISABLE_CONTEXT_ISOLATION = '0'
   })
 
   it('merges the graphql-server resolver and global context correctly', async () => {
@@ -90,7 +91,7 @@ describe('global context handlers', () => {
 
 describe('per request context handlers', () => {
   it('merges the graphql-server resolver and global context correctly', async () => {
-    const localAsyncStorage = getPerRequestContext()
+    const localAsyncStorage = getAsyncStoreInstance()
 
     localAsyncStorage.run(new Map(), async () => {
       const handler = createContextHandler({ a: 1 })
@@ -109,7 +110,7 @@ describe('per request context handlers', () => {
   })
 
   it('maintains separate contexts for each request', (done) => {
-    const localAsyncStorage = getPerRequestContext()
+    const localAsyncStorage = getAsyncStoreInstance()
 
     // request 1 and request 2...
     // request 1 is slow...
