@@ -36,8 +36,8 @@ const SplashPage: React.VFC<SplashPageProps> = ({
     fetchVersion()
   }, [])
 
-  const introMessageNoRoutes = `You're seeing this because you don't have any pages yet.`
-  const introMessageRoutes = `You're seeing this because you don't have a home page yet.`
+  const introMessageNoRoutes = `You’re seeing this because you don’t have any pages yet.`
+  const introMessageRoutes = `You’re seeing this because you don’t have a home page yet.`
 
   return (
     <>
