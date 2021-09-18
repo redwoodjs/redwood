@@ -36,9 +36,6 @@ const SplashPage: React.VFC<SplashPageProps> = ({
     fetchVersion()
   }, [])
 
-  const introMessageNoRoutes = `You’re seeing this because you don’t have any pages yet.`
-  const introMessageRoutes = `You’re seeing this because you don’t have a home page yet.`
-
   return (
     <>
       <main>
@@ -173,28 +170,30 @@ const SplashPage: React.VFC<SplashPageProps> = ({
               margin-top: var(--space-8);
             }
 
-            .page-list {
-              margin-top: var(--space-6);
-              margin-bottom: var(--space-3);
-            }
-
-            code {
-              font-family: Fira Code,Fira Mono,Menlo,Monoco,monospace;
-              font-size: var(--space-4);
-              padding-top: var(--space-0);
-              padding-bottom: var(--space-0);
-              padding-left: var(--space-1);
-              padding-right: var(--space-1);
-              border-radius: var(--space-1);
-              color: var(--highlight-2);
-              background-color: var(--highlight-3);
-            }
-
             .intro-instructions {
               font-size: var(--space-5);
               font-weight: 400;
               line-height: var(--space-7);
               margin-bottom: var(--space-2);
+            }
+
+            code {
+              font-family: Fira Code,Fira Mono,Menlo,Monoco,monospace;
+              font-size: var(--space-4);
+              padding: var(--space-1) var(--space-2);
+              border-radius: var(--space-1);
+              color: var(--highlight-2);
+              background-color: var(--highlight-3);
+            }
+
+            .page-list {
+              margin: var(--space-2) 0;
+              padding: 0;
+              list-style-type: none;
+            }
+
+            .page-item {
+              margin: var(--space-4) 0;
             }
 
             /* Resources */
@@ -308,47 +307,54 @@ const SplashPage: React.VFC<SplashPageProps> = ({
                       fill="var(--highlight-1)"
                     />
                   </svg>
-                  <div className="intro-instructions-container">
-                    <p
-                      className="intro-instructions"
+                  {!hasGeneratedRoutes ? (
+                    <div
+                      className="intro-instructions-container"
                       data-cy="e2e-test-splashpage"
                     >
-                      {hasGeneratedRoutes
-                        ? introMessageRoutes
-                        : introMessageNoRoutes}
-                    </p>
-                    {hasGeneratedRoutes && (
-                      <>
-                        <div className="page-list">
-                          {' '}
-                          Here&apos;s a list of your current pages:
-                        </div>
-                        {routes.map((route) => {
-                          if (!route.props.notfound) {
-                            return (
-                              <div key={route.key}>
-                                <a
-                                  href={route.props.path}
-                                  target="_blank"
-                                  rel="noreferrer"
-                                >
-                                  {route.props.page.name}
-                                </a>
-                              </div>
-                            )
-                          }
-                          return <div key={route.key}></div>
-                        })}
-                      </>
-                    )}
-
-                    {!hasGeneratedRoutes && (
+                      <p className="intro-instructions">
+                        You’re seeing this because you don’t have any pages yet.
+                      </p>
                       <p className="intro-instructions">
                         Type <code>yarn redwood generate page my-page</code> in
                         your CLI to get started!
                       </p>
-                    )}
-                  </div>
+                    </div>
+                  ) : (
+                    <div
+                      className="intro-instructions-container"
+                      data-cy="e2e-test-splashpage"
+                    >
+                      <p className="intro-instructions">
+                        You’re seeing this because you don’t have a page at the{' '}
+                        <code>/</code> path yet.
+                      </p>
+                      <p className="intro-instructions">
+                        Here’s a list of your current pages and their paths:
+                      </p>
+                      <ul className="page-list">
+                        {routes.map((route) => {
+                          if (!route.props.notfound) {
+                            return (
+                              <li key={route.key} className="page-item">
+                                <code>
+                                  {`${route.props.name} -> `}
+                                  <a
+                                    href={route.props.path}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                  >
+                                    {route.props.path}
+                                  </a>
+                                </code>
+                              </li>
+                            )
+                          }
+                          return <div key={route.key}></div>
+                        })}
+                      </ul>
+                    </div>
+                  )}
                 </div>
                 <div className="resources">
                   <div className="resource">
