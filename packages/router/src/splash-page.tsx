@@ -79,6 +79,10 @@ const SplashPage: React.VFC<SplashPageProps> = ({
               }
             }
 
+            html, body {
+              margin: 0;
+            }
+
             .container {
               font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
                 "Helvetica Neue", Arial, "Noto Sans", sans-serif;
@@ -123,12 +127,16 @@ const SplashPage: React.VFC<SplashPageProps> = ({
             }
 
             /* Content */
-            .content {
-              position: relative;
-              padding: 0 var(--space-5);
+            .content-container {
               flex-grow: 1;
               display: flex;
               justify-content: center;
+              align-items: center;
+            }
+
+            .content {
+              padding: var(--space-5) var(--space-5) var(--space-8);
+              position: relative;
             }
 
             /* Logo */
@@ -144,7 +152,6 @@ const SplashPage: React.VFC<SplashPageProps> = ({
             /* Intro */
             .intro {
               text-align: center;
-              margin-top: var(--space-16);
               margin-bottom: var(--space-18);
             }
 
@@ -270,8 +277,8 @@ const SplashPage: React.VFC<SplashPageProps> = ({
               />
             </svg>
 
-            <section className="content">
-              <div>
+            <section className="content-container">
+              <div className="content">
                 <div className="intro">
                   <h1 className="intro-heading">Welcome to</h1>
                   <svg
