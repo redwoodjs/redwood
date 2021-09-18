@@ -46,6 +46,7 @@ describe('Form', () => {
               "false": false
             }
           `}
+          validation={{ valueAsJSON: true }}
         />
         <DatetimeLocalField
           name="datetimeLocal"
@@ -263,6 +264,7 @@ describe('Form', () => {
           name="jsonField"
           defaultValue="{bad-json}"
           data-testid="jsonField"
+          validation={{ valueAsJSON: true }}
         />
         <Submit>Save</Submit>
       </Form>

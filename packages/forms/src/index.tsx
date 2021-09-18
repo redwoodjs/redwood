@@ -168,14 +168,10 @@ const JSONValidation = (value: Record<string, unknown> | null) => value !== null
  * (`valueAsNumber`, `valueAsDate`, `setValueAs`), we just return.
  *
  * Otherwise we check to see if any of Redwood's `valueAs` props are present.
- *
- * The order here matters.
- *
- * I'm still not convinced this is the way to do it.
  */
 const setCoercion = (
   validation: RedwoodRegisterOptions,
-  { type, element }: { type?: string; element?: string } = {}
+  { type }: { type?: string } = {}
 ) => {
   if (
     validation.valueAsNumber ||
@@ -201,12 +197,9 @@ const setCoercion = (
       validation.setValueAs = valueAsProps['valueAsBoolean']
     } else if (type === 'date' || type === 'datetime-local') {
       validation.valueAsDate = true
-    } else if (type === 'number' || type === 'float') {
+    } else if (type === 'number') {
       validation.valueAsNumber = true
     }
-  } else if (element === 'textarea') {
-    validation.setValueAs = valueAsProps['valueAsJSON']
-    validation.validate = JSONValidation
   }
 }
 
@@ -246,7 +239,7 @@ const useRegister = <
 
   const validation = props.validation || { required: false }
 
-  setCoercion(validation, { type: props.type, element: props.element })
+  setCoercion(validation, { type: props.type })
 
   const {
     ref: _ref,
@@ -480,7 +473,6 @@ const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(
         validation,
         onBlur,
         onChange,
-        element: 'textarea',
       },
       ref
     )
