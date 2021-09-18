@@ -21,6 +21,7 @@ const baseConfig = {
   stories: [
     `${importStatementPath(rwjsPaths.web.src)}/**/*.stories.{tsx,jsx,js}`,
   ],
+  typescript: { reactDocgen: false },
   addons: [config.web.a11y && '@storybook/addon-a11y'].filter(Boolean),
   webpackFinal: (sbConfig, { configType }) => {
     // configType is 'PRODUCTION' or 'DEVELOPMENT', why shout?
