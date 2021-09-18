@@ -48,10 +48,12 @@ const SplashPage: React.VFC<SplashPageProps> = ({
               __html: `
             :root {
               --foreground: rgb(26, 32, 44);
-              --secondaryBg: rgb(253, 248, 246);
               --background: hsl(0, 0%, 100%);
+              --background-2: rgb(253, 248, 246);
+              --background-3: rgb(250, 234, 229);
               --highlight-1: rgb(191, 71, 34);
               --highlight-2: rgb(220, 94, 56);
+              --highlight-3: rgba(220, 94, 56, 0.2);
               --space-0: 0.125rem;
               --space-1: 0.25rem;
               --space-2: 0.5rem;
@@ -75,7 +77,8 @@ const SplashPage: React.VFC<SplashPageProps> = ({
               :root {
                 --foreground: hsl(0, 0%, 100%);
                 --background: hsl(250, 24%, 9%);
-                --secondaryBg: hsl(250, 21%, 11%);
+                --background-2: hsl(250, 21%, 11%);
+                --background-3: rgb(53, 37, 32);
               }
             }
 
@@ -146,7 +149,7 @@ const SplashPage: React.VFC<SplashPageProps> = ({
               left: 0%;
               transform: translate(-50%, -50%);
               max-height: 140vh;
-              color: var(--secondaryBg);
+              color: var(--background-2);
             }
 
             /* Intro */
@@ -177,14 +180,14 @@ const SplashPage: React.VFC<SplashPageProps> = ({
 
             code {
               font-family: Fira Code,Fira Mono,Menlo,Monoco,monospace;
-              color: var(--highlight-1);
+              font-size: var(--space-4);
               padding-top: var(--space-0);
               padding-bottom: var(--space-0);
               padding-left: var(--space-1);
               padding-right: var(--space-1);
               border-radius: var(--space-1);
-              background-color: #faeae5;
-              font-size: var(--space-4);
+              color: var(--highlight-2);
+              background-color: var(--highlight-3);
             }
 
             .intro-instructions {
@@ -235,8 +238,11 @@ const SplashPage: React.VFC<SplashPageProps> = ({
             @media (prefers-color-scheme: dark) {
               .resource {
                 color: var(--foreground);
-                background-color: var(--secondaryBg);
+                background-color: var(--background-2);
                 border-color: var(--highlight-1);
+              }
+              .resource:hover {
+                background-color: var(--highlight-3);
               }
             }
 
