@@ -6,8 +6,8 @@ import 'cypress-wait-until'
 
 import { waitForApiSide } from '../01-tutorial/sharedTests'
 
-import { setupLogger } from './codemods/Step0_1_Setup_Logger'
-import Step2_Add_Logger from './codemods/Step2_1_Add_Logger_to_Posts'
+import { setupLogger } from './codemods/Step1_1_Setup_Logger'
+import Step1_2_Add_Logger from './codemods/Step1_2_Add_Logger_to_Posts'
 import { setupPrismaLogger } from './codemods/Step2_1_Setup_Prisma_Logger'
 
 const BASE_DIR = Cypress.env('RW_PATH')
@@ -28,7 +28,7 @@ describe('The Redwood Logger - Basic Scaffold CRUD Logging', () => {
     )
     cy.writeFile(
       path.join(BASE_DIR, 'api/src/services/posts/posts.js'),
-      Step2_Add_Logger
+      Step1_2_Add_Logger
     )
 
     waitForApiSide()
