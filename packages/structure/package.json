@@ -17,7 +17,7 @@
     "dotenv-defaults": "2.0.2",
     "enquirer": "2.3.6",
     "findup-sync": "4.0.0",
-    "graphql": "15.5.1",
+    "graphql": "15.5.3",
     "lazy-get-decorator": "2.2.0",
     "line-column": "1.0.2",
     "lodash": "4.17.21",
@@ -25,7 +25,7 @@
     "lru-cache": "6.0.0",
     "proxyquire": "2.1.3",
     "toml": "3.0.0",
-    "ts-morph": "11.0.3",
+    "ts-morph": "12.0.0",
     "vscode-languageserver": "6.1.1",
     "vscode-languageserver-textdocument": "1.0.1",
     "vscode-languageserver-types": "3.15.1",
@@ -34,10 +34,10 @@
   "devDependencies": {
     "@babel/cli": "7.14.8",
     "@types/fs-extra": "9.0.12",
-    "@types/lodash": "4.14.172",
+    "@types/lodash": "4.14.173",
     "@types/lru-cache": "5.1.1",
-    "@types/node": "16.6.0",
-    "@types/vscode": "1.59.0",
+    "@types/node": "16.9.2",
+    "@types/vscode": "1.60.0",
     "jest": "27.0.6",
     "typescript": "4.3.5"
   },
@@ -58,7 +58,7 @@
     "prettier": "prettier --write './src/**/*.{ts,tsx}'"
   },
   "resolutions": {
-    "typescript": "4.3.5"
+    "typescript": "4.4.3"
   },
   "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"
 }

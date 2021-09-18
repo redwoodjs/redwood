@@ -127,7 +127,6 @@ const runDevServerInBackground = () => {
     shell: true,
     stdio: 'inherit',
     env: {
-      REDWOOD_SECURE_SERVICES: '1',
       RWJS_DELAY_RESTART: '500',
     },
   })

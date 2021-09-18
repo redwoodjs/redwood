@@ -18,7 +18,7 @@ export const nhost = async (token: string) => {
     const roles = claims[ROLES_CLAIM]
 
     return { ...decoded, roles }
-  } catch (error) {
+  } catch (error: any) {
     throw new Error(error)
   }
 }
