@@ -147,16 +147,16 @@ const useErrorStyles = ({
   return { className, style }
 }
 
-/**
- * Maps remember the order in which their keys were inserted.
- * Which basically ensures that if a user passes both `valueAsBoolean` and `valueAsJSON`,
- * `valueAsBoolean` will be chosen consistently.
- *
- * This probably still isn't the best behavior.
- */
-export const valueAsProps = new Map<string, (value: string) => boolean | JSON>()
-valueAsProps.set('valueAsBoolean', (value: string) => !!value)
-valueAsProps.set('valueAsJSON', (value: string) => JSON.parse(value))
+const valueAsProps = {
+  valueAsBoolean: (value: string) => !!value,
+  valueAsJSON: (value: string) => {
+    try {
+      return JSON.parse(value)
+    } catch (e) {
+      return null
+    }
+  },
+}
 
 /**
  * Handles the flow of coercion, providing a default if none is specified. (And if it can.)
@@ -173,7 +173,7 @@ valueAsProps.set('valueAsJSON', (value: string) => JSON.parse(value))
  */
 const setCoercion = (
   validation: RedwoodRegisterOptions,
-  { type }: { type?: string }
+  { type, element }: { type?: string; element?: string } = {}
 ) => {
   if (
     validation.valueAsNumber ||
@@ -183,16 +183,24 @@ const setCoercion = (
     return
   }
 
-  const valueAsProp = [...valueAsProps.keys()].find(
+  const valueAsProp = Object.keys(valueAsProps).find(
     (valueAsProp) => valueAsProp in validation
   )
 
   if (valueAsProp) {
-    validation.setValueAs = valueAsProps.get(valueAsProp)
-  } else if (type && (type === 'number' || type === 'float')) {
-    validation.valueAsNumber = true
-  } else if (type && type === 'checkbox') {
-    validation.setValueAs = valueAsProps.get('valueAsBoolean')
+    validation.setValueAs =
+      valueAsProps[valueAsProp as keyof typeof valueAsProps]
+    delete validation[valueAsProp as keyof typeof valueAsProps]
+  } else if (type) {
+    if (type === 'checkbox') {
+      validation.setValueAs = valueAsProps['valueAsBoolean']
+    } else if (type === 'date' || type === 'datetime-local') {
+      validation.valueAsDate = true
+    } else if (type === 'number' || type === 'float') {
+      validation.valueAsNumber = true
+    }
+  } else if (element === 'textarea') {
+    setCoercion({ ...validation, valueAsJSON: true })
   }
 }
 
@@ -225,31 +233,34 @@ const useRegister = <
     | HTMLSelectElement
     | HTMLInputElement = HTMLInputElement
 >(
-  props: UseRegisterProps<Element>,
+  props: UseRegisterProps<Element> & { element?: string },
   ref?: React.ForwardedRef<T>
 ) => {
   const { register } = useFormContext()
 
   const validation = props.validation || { required: false }
 
-  setCoercion(validation, { type: props.type })
+  setCoercion(validation, { type: props.type, element: props.element })
 
   const {
     ref: _ref,
     onBlur: handleBlur,
     onChange: handleChange,
+    ...rest
   } = register(props.name, validation)
 
   const onBlur: React.FocusEventHandler<Element> = (event) => {
     handleBlur(event)
-    props?.onBlur?.(event)
+    props.onBlur?.(event)
   }
+
   const onChange: React.ChangeEventHandler<Element> = (event) => {
     handleChange(event)
-    props?.onChange?.(event)
+    props.onChange?.(event)
   }
 
   return {
+    ...rest,
     ref: (element: T) => {
       _ref(element)
 
@@ -463,6 +474,7 @@ const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(
         validation,
         onBlur,
         onChange,
+        element: 'textarea',
       },
       ref
     )
