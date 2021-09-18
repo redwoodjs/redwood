@@ -90,7 +90,7 @@ describe('The Redwood Logger - Basic Scaffold CRUD Logging', () => {
 
     cy.writeFile(
       path.join(BASE_DIR, 'api/src/lib/db.js'),
-      setupPrismaLogger({ slowQueryThreshold: 9999 })
+      setupPrismaLogger({ slowQueryThreshold: 9_999 })
     )
 
     waitForApiSide()
