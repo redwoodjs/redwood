@@ -158,6 +158,8 @@ const valueAsProps = {
   },
 }
 
+const JSONValidation = (value: Record<string, unknown> | null) => value !== null
+
 /**
  * Handles the flow of coercion, providing a default if none is specified. (And if it can.)
  * Also implements Redwood's extensions to `react-hook-form`'s `valueAs` props.
@@ -191,6 +193,9 @@ const setCoercion = (
     validation.setValueAs =
       valueAsProps[valueAsProp as keyof typeof valueAsProps]
     delete validation[valueAsProp as keyof typeof valueAsProps]
+    if (valueAsProp === 'valueAsJSON' && !validation.validate) {
+      validation.validate = JSONValidation
+    }
   } else if (type) {
     if (type === 'checkbox') {
       validation.setValueAs = valueAsProps['valueAsBoolean']
@@ -200,7 +205,8 @@ const setCoercion = (
       validation.valueAsNumber = true
     }
   } else if (element === 'textarea') {
-    setCoercion({ ...validation, valueAsJSON: true })
+    validation.setValueAs = valueAsProps['valueAsJSON']
+    validation.validate = JSONValidation
   }
 }
 
