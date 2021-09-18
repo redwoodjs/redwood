@@ -112,7 +112,7 @@ export const createGraphQLHandler = ({
 }: GraphQLHandlerOptions) => {
   let schema: GraphQLSchema
   let redwoodDirectivePlugins = [] as Plugin<any>[]
-  const logger = loggerConfig.logger
+  const logger = loggerConfig.logger as P.BaseLogger
 
   try {
     // @NOTE: We wrap services for beforeResolvers
