@@ -54,15 +54,23 @@ export function validateSchemaForDirectives(
 export const loadAndValidateSdls = async () => {
   const apiSrc = ensurePosixPath(getPaths().api.src)
   const schema = await loadSchema(
-    [
-      path.join(ensurePosixPath(__dirname), './rootGqlSchema.{js,ts}'), // support loading from either compiled JS or TS (for jest tests)
-      path.join(apiSrc, 'graphql/**/*.sdl.{js,ts}'),
-      path.join(apiSrc, 'directives/**/*.{js,ts}'),
-    ],
+    {
+      '../rootGqlSchema.{js,ts}': {
+        noRequire: true
+      },
+      'graphql/**/*.sdl.{js,ts}': {
+        noRequire: true,
+      },
+      'directives/**/*.{js,ts}': {
+        noRequire: true,
+      },
+    },
     {
       loaders: [new CodeFileLoader()],
     }
   )
 
   validateSchemaForDirectives(getDocumentNodeFromSchema(schema))
+
+  return true
 }

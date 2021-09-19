@@ -11,8 +11,8 @@ export const schema = gql`
   }
 
   type Mutation {
-    createTodo(body: String!): Todo
-    updateTodoStatus(id: Int!, status: String!): Todo
-    renameTodo(id: Int!, body: String!): Todo
+    createTodo(body: String!): Todo @skipAuth
+    updateTodoStatus(id: Int!, status: String!): Todo @skipAuth
+    renameTodo(id: Int!, body: String!): Todo @skipAuth
   }
 `
