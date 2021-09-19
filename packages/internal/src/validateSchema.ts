@@ -77,6 +77,4 @@ export const loadAndValidateSdls = async () => {
   )
 
   validateSchemaForDirectives(getDocumentNodeFromSchema(projectSchema))
-
-  return true
 }

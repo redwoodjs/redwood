@@ -15,21 +15,11 @@ afterAll(() => {
 })
 
 test('Validates correctly on all platforms', async () => {
-  // expect.assertions(1)
-
-  // let didNotError
-  // try {
-  //   await loadAndValidateSdls()
-  //   didNotError = true
-  // } catch (e) {
-  //   didNotError = false
-  // } finally {
-  //   expect(didNotError).toBe(true)
-  // }
-
   let isSdlValid
+
   try {
-    isSdlValid = await loadAndValidateSdls()
+    await loadAndValidateSdls()
+    isSdlValid = true
   } catch (e) {
     isSdlValid = false
   }
