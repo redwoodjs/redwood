@@ -1,40 +1,14 @@
-import { existsSync, readFileSync, statSync, symlinkSync, unlinkSync } from 'fs'
+import { existsSync, readFileSync, statSync } from 'fs'
 import os from 'os'
 import { join } from 'path'
 
 import pino from 'pino'
-import split from 'split2'
 
 const pid = process.pid
 const hostname = os.hostname()
 
 import { createLogger, emitLogLevels } from '../logger'
 
-const once = (emitter, name) => {
-  return new Promise((resolve, reject) => {
-    if (name !== 'error') {
-      emitter.once('error', reject)
-    }
-
-    emitter.once(name, ({ ...args }) => {
-      emitter.removeListener('error', reject)
-      resolve({ ...args })
-    })
-  })
-}
-
-const sink = () => {
-  const logStatement = split((data) => {
-    try {
-      return JSON.parse(data)
-    } catch (err) {
-      console.log(err)
-      console.log(data)
-    }
-  })
-
-  return logStatement
-}
 
 const watchFileCreated = (filename) => {
   return new Promise((resolve, reject) => {
@@ -75,11 +49,13 @@ describe('logger', () => {
         '_' + Math.random().toString(36).substr(2, 9)
       )
 
-      const logger = createLogger({targets:[{
-        target: 'pino/file',
-        options: { destination },
-        level: 'trace'
-      }]})
+      const logger = createLogger({
+        targets: [{
+          target: 'pino/file',
+          options: { destination },
+          level: 'trace'
+        }]
+      })
 
       const transportStream = logger[pino.symbols.streamSym]
       await transportStream.end.bind(transportStream)
@@ -104,11 +80,13 @@ describe('logger', () => {
         '_' + Math.random().toString(36).substr(2, 9)
       )
 
-      const logger = createLogger({targets:[{
-        target: 'pino/file',
-        options: { destination },
-        level: 'info'
-      }]})
+      const logger = createLogger({
+        targets: [{
+          target: 'pino/file',
+          options: { destination },
+          level: 'info'
+        }]
+      })
 
       const transportStream = logger[pino.symbols.streamSym]
       await transportStream.end.bind(transportStream)
@@ -432,7 +410,8 @@ describe('logger', () => {
     })
   })
 
-  describe('file logging', () => {    test('it creates a log file with a statement', async () => {
+  describe('file logging', () => {
+    test('it creates a log file with a statement', async () => {
       const tmp = join(
         os.tmpdir(),
         '_' + Math.random().toString(36).substr(2, 9)
