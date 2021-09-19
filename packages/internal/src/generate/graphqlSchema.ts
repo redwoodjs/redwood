@@ -54,4 +54,3 @@ export const generateGraphQLSchema = async () => {
 
     return undefined
   }
-}
