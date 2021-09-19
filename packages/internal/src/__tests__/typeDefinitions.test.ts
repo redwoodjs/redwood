@@ -1,5 +1,4 @@
 import fs from 'fs'
-import { platform } from 'os'
 import path from 'path'
 
 import { findCells, findDirectoryNamedModules } from '../files'
@@ -169,25 +168,18 @@ test('generate scenario type defs', () => {
 test('Generate gql typedefs to correct paths', async () => {
   // Generate schema first
 
-  if (platform() !== 'win32') {
-    await generateGraphQLSchema()
-    const p1 = await generateTypeDefGraphQLWeb()
-    const p2 = await generateTypeDefGraphQLApi()
-    const paths = [...p1, ...p2]
-    const p = paths.map(cleanPaths)
+  await generateGraphQLSchema()
+  const p1 = await generateTypeDefGraphQLWeb()
+  const p2 = await generateTypeDefGraphQLApi()
+  const paths = [...p1, ...p2]
+  const p = paths.map(cleanPaths)
 
-    expect(p).toEqual(
-      expect.arrayContaining([
-        expect.stringMatching('web/types/graphql.d.ts'),
-        expect.stringMatching('api/types/graphql.d.ts'),
-      ])
-    )
-  } else {
-    console.warn(
-      platform(),
-      'Skipping Generate gql typedefs to correct paths test for platform'
-    )
-  }
+  expect(p).toEqual(
+    expect.arrayContaining([
+      expect.stringMatching('web/types/graphql.d.ts'),
+      expect.stringMatching('api/types/graphql.d.ts'),
+    ])
+  )
 }, 10_000) // Set timeout to 10s. Windows test runners are slow.
 
 test('mirror path for directory named modules', () => {

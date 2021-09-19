@@ -1,11 +1,10 @@
-import path from 'path'
-
 import { CodeFileLoader } from '@graphql-tools/code-file-loader'
-import { loadSchema } from '@graphql-tools/load'
-import { getDocumentNodeFromSchema } from '@graphql-tools/utils'
+import { loadTypedefs } from '@graphql-tools/load'
+import { mergeTypeDefs } from '@graphql-tools/merge'
 import { DocumentNode, ObjectTypeDefinitionNode, visit } from 'graphql'
 
 import { getPaths } from './paths'
+import { schema as rootSchema } from './rootGqlSchema'
 
 export const DIRECTIVE_REQUIRED_ERROR_MESSAGE =
   'You must specify one of @requireAuth, @skipAuth or a custom directive'
@@ -56,13 +55,8 @@ export function validateSchemaForDirectives(
 }
 
 export const loadAndValidateSdls = async () => {
-  const projectSchema = await loadSchema(
-    [
-      path.join(__dirname, './rootGqlSchema.js'), // support loading from either compiled JS
-      path.join(__dirname, './rootGqlSchema.ts'), // or TS (for jest tests)
-      'graphql/**/*.sdl.{js,ts}',
-      'directives/**/*.{js,ts}',
-    ],
+  const projectTypeSrc = await loadTypedefs(
+    ['graphql/**/*.sdl.{js,ts}', 'directives/**/*.{js,ts}'],
     {
       loaders: [
         new CodeFileLoader({
@@ -76,5 +70,15 @@ export const loadAndValidateSdls = async () => {
     }
   )
 
-  validateSchemaForDirectives(getDocumentNodeFromSchema(projectSchema))
+  // The output of the above function doesn't give us the documents directly
+  const projectDocumentNodes = Object.values(projectTypeSrc)
+    .map(({ document }) => document)
+    .filter((documentNode): documentNode is DocumentNode => {
+      return !!documentNode
+    })
+
+  // Merge in the rootSchema with JSON scalars, etc.
+  const mergedDocumentNode = mergeTypeDefs([rootSchema, projectDocumentNodes])
+
+  validateSchemaForDirectives(mergedDocumentNode)
 }
