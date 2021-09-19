@@ -1,11 +1,16 @@
+
+
 import path from 'path'
 
 import { CodeFileLoader } from '@graphql-tools/code-file-loader'
 import { loadSchema } from '@graphql-tools/load'
+
 import { getDocumentNodeFromSchema } from '@graphql-tools/utils'
 import { DocumentNode, ObjectTypeDefinitionNode, visit } from 'graphql'
 
-import { ensurePosixPath, getPaths } from './paths'
+import { getPaths } from './paths'
+
+
 
 export const DIRECTIVE_REQUIRED_ERROR_MESSAGE =
   'You must specify one of @requireAuth, @skipAuth or a custom directive'
@@ -24,8 +29,10 @@ export function validateSchemaForDirectives(
           const fieldName = field.name.value
           const fieldTypeName = typeNode.name.value
 
-          // skip validation for redwood query
-          if (fieldName === 'redwood' && fieldTypeName === 'Query') {
+          const isRedwoodQuery = fieldName === 'redwood' && fieldTypeName === 'Query'
+          const isCurrentUserQuery = fieldName === 'currentUser' && fieldTypeName === 'Query'
+          // skip validation for redwood query and currentUser
+          if (isRedwoodQuery || isCurrentUserQuery) {
             return
           }
 
@@ -52,25 +59,26 @@ export function validateSchemaForDirectives(
 }
 
 export const loadAndValidateSdls = async () => {
-  const apiSrc = ensurePosixPath(getPaths().api.src)
-  const schema = await loadSchema(
+  const projectSchema = await loadSchema(
+    [
+      path.join(__dirname, './rootGqlSchema.js'), // support loading from either compiled JS
+      path.join(__dirname, './rootGqlSchema.ts'), // or TS (for jest tests)
+      'graphql/**/*.sdl.{js,ts}',
+      'directives/**/*.{js,ts}'
+    ],
     {
-      '../rootGqlSchema.{js,ts}': {
-        noRequire: true
-      },
-      'graphql/**/*.sdl.{js,ts}': {
+      loaders: [new CodeFileLoader({
         noRequire: true,
-      },
-      'directives/**/*.{js,ts}': {
-        noRequire: true,
-      },
-    },
-    {
-      loaders: [new CodeFileLoader()],
+        pluckConfig: {
+          globalGqlIdentifierName: 'gql'
+        }
+      })],
+      cwd: getPaths().api.src
     }
   )
 
-  validateSchemaForDirectives(getDocumentNodeFromSchema(schema))
+
+  validateSchemaForDirectives(getDocumentNodeFromSchema(projectSchema))
 
   return true
 }

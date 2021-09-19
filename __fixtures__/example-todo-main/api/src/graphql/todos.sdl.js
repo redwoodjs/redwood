@@ -6,8 +6,8 @@ export const schema = gql`
   }
 
   type Query {
-    todos: [Todo]
-    todosCount: Int!
+    todos: [Todo] @skipAuth
+    todosCount: Int! @skipAuth
   }
 
   type Mutation {

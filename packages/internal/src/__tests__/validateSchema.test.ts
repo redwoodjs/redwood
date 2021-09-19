@@ -31,7 +31,6 @@ test('Validates correctly on all platforms', async () => {
   try {
     isSdlValid = await loadAndValidateSdls()
   } catch(e) {
-    e //?
     isSdlValid = false
   }
 
