@@ -30,10 +30,9 @@ test('Validates correctly on all platforms', async () => {
   let isSdlValid
   try {
     isSdlValid = await loadAndValidateSdls()
-  } catch(e) {
+  } catch (e) {
     isSdlValid = false
   }
 
   expect(isSdlValid).toBe(true)
-
 })

@@ -49,8 +49,8 @@ export const generateGraphQLSchema = async () => {
       console.error(error.details)
     }
 
-      console.warn()
-    }
-
-    return undefined
+    console.warn()
   }
+
+  return undefined
+}
