@@ -9,33 +9,7 @@ const SplashPage: React.VFC<SplashPageProps> = ({
   hasGeneratedRoutes,
   routes,
 }) => {
-  const [version, setVersion] = useState(null)
-  useEffect(() => {
-    async function fetchVersion() {
-      try {
-        const response = await global.fetch(
-          `${global.__REDWOOD__API_PROXY_PATH}/graphql`,
-          {
-            method: 'POST',
-            headers: {
-              'content-type': 'application/json',
-            },
-            body: JSON.stringify({
-              query: 'query RedwoodVersion { redwood { version } }',
-            }),
-          }
-        )
-
-        const versionData = await response.json()
-        setVersion(versionData?.data?.redwood?.version || null)
-      } catch (err) {
-        console.error('Unable to get Redwood version: ', err)
-      }
-    }
-
-    fetchVersion()
-  }, [])
-
+  const version = useVersion()
   return (
     <>
       <main>
@@ -552,6 +526,36 @@ const SplashPage: React.VFC<SplashPageProps> = ({
       </main>
     </>
   )
+}
+
+const useVersion = () => {
+  const [version, setVersion] = useState(null)
+  useEffect(() => {
+    async function fetchVersion() {
+      try {
+        const response = await global.fetch(
+          `${global.__REDWOOD__API_PROXY_PATH}/graphql`,
+          {
+            method: 'POST',
+            headers: {
+              'content-type': 'application/json',
+            },
+            body: JSON.stringify({
+              query: 'query RedwoodVersion { redwood { version } }',
+            }),
+          }
+        )
+
+        const versionData = await response.json()
+        setVersion(versionData?.data?.redwood?.version || null)
+      } catch (err) {
+        console.error('Unable to get Redwood version: ', err)
+      }
+    }
+
+    fetchVersion()
+  }, [])
+  return version
 }
 
 export { SplashPage }
