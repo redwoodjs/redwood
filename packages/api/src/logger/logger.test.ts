@@ -1,8 +1,8 @@
-import { existsSync, readFileSync, statSync } from 'fs'
+import { existsSync, readFileSync, statSync, symlinkSync, unlinkSync } from 'fs'
 import os from 'os'
 import { join } from 'path'
 
-import type P from 'pino'
+import pino from 'pino'
 import split from 'split2'
 
 const pid = process.pid
@@ -57,35 +57,7 @@ const watchFileCreated = (filename) => {
   })
 }
 
-type TransportOptions = Record<string, any>
-const setupLogger = (
-  loggerOptions?: P.LoggerOptions,
-  targets?: P.TransportTargetOptions<TransportOptions>[],
-  showConfig?: boolean
-): {
-  logger: P.BaseLogger
-  logSinkData?: Promise<unknown>
-} => {
-  if (targets) {
-    const logger = createLogger({
-      options: { prettyPrint: false, ...loggerOptions },
-      targets: targets,
-      showConfig,
-    })
 
-    return { logger }
-  } else {
-    const stream = sink()
-    const logSinkData = once(stream, 'data')
-
-    const logger = createLogger({
-      options: { ...loggerOptions, prettyPrint: false },
-      showConfig,
-    })
-
-    return { logger, logSinkData }
-  }
-}
 
 describe('logger', () => {
   describe('creates a logger without options', () => {
@@ -98,31 +70,61 @@ describe('logger', () => {
 
   describe('supports various logging levels', () => {
     test('it logs a trace message', async () => {
-      const { logger, logSinkData } = setupLogger({ level: 'trace' })
+      const destination = join(
+        os.tmpdir(),
+        '_' + Math.random().toString(36).substr(2, 9)
+      )
 
-      logger.trace('test of a trace level message')
-      const logStatement = await logSinkData
+      const logger = createLogger({targets:[{
+        target: 'pino/file',
+        options: { destination },
+        level: 'trace'
+      }]})
 
-      expect(logStatement).toHaveProperty('level')
-      expect(logStatement).toHaveProperty('time')
-      expect(logStatement).toHaveProperty('msg')
+      const transportStream = logger[pino.symbols.streamSym]
+      await transportStream.end.bind(transportStream)
 
-      expect(logStatement['level']).toEqual(10)
-      expect(logStatement['msg']).toEqual('test of a trace level message')
+      logger.info('test of a trace level message')
+
+      await watchFileCreated(destination)
+      const result = JSON.parse(await readFileSync(destination).toString().trim())
+      delete result.time
+      console.log(result)
+      expect(result).toMatchObject({
+        pid,
+        hostname,
+        level: 30,
+        msg: 'test of a trace level message'
+      })
     })
 
-    test('it logs an info message', async () => {
-      const { logger, logSinkData } = setupLogger({ level: 'trace' })
+    test.only('it logs an info message', async () => {
+      const destination = join(
+        os.tmpdir(),
+        '_' + Math.random().toString(36).substr(2, 9)
+      )
 
-      logger.info('test of an info level message')
-      const logStatement = await logSinkData
+      const logger = createLogger({targets:[{
+        target: 'pino/file',
+        options: { destination },
+        level: 'info'
+      }]})
 
-      expect(logStatement).toHaveProperty('level')
-      expect(logStatement).toHaveProperty('time')
-      expect(logStatement).toHaveProperty('msg')
+      const transportStream = logger[pino.symbols.streamSym]
+      await transportStream.end.bind(transportStream)
 
-      expect(logStatement['level']).toEqual(30)
-      expect(logStatement['msg']).toEqual('test of an info level message')
+      logger.info('test of a info level message')
+
+      await watchFileCreated(destination)
+      const result = JSON.parse(await readFileSync(destination).toString().trim())
+      delete result.time
+      console.log(result)
+      expect(result).toMatchObject({
+        pid,
+        hostname,
+        level: 30,
+        msg: 'test of a info level message'
+      })
     })
 
     test('it logs a debug message', async () => {
@@ -430,8 +432,7 @@ describe('logger', () => {
     })
   })
 
-  describe('file logging', () => {
-    test('it creates a log file with a statement', async () => {
+  describe('file logging', () => {    test('it creates a log file with a statement', async () => {
       const tmp = join(
         os.tmpdir(),
         '_' + Math.random().toString(36).substr(2, 9)
