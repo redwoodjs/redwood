@@ -49,7 +49,7 @@ export function validateSchemaForDirectives(
     throw new Error(
       `${DIRECTIVE_REQUIRED_ERROR_MESSAGE} for\n${fieldsWithoutDirectives.join(
         '\n'
-      )}`
+      )} \n`
     )
   }
 }
