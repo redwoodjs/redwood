@@ -10,7 +10,7 @@ exports[`in javascript mode creates a multi word sdl file 1`] = `
   }
 
   type Query {
-    userProfiles: [UserProfile!]!
+    userProfiles: [UserProfile!]! @requireAuth
   }
 
   input CreateUserProfileInput {
@@ -36,8 +36,8 @@ exports[`in javascript mode creates a multi word sdl file with CRUD actions 1`] 
   }
 
   type Query {
-    userProfiles: [UserProfile!]!
-    userProfile(id: Int!): UserProfile
+    userProfiles: [UserProfile!]! @requireAuth
+    userProfile(id: Int!): UserProfile @requireAuth
   }
 
   input CreateUserProfileInput {
@@ -51,9 +51,10 @@ exports[`in javascript mode creates a multi word sdl file with CRUD actions 1`] 
   }
 
   type Mutation {
-    createUserProfile(input: CreateUserProfileInput!): UserProfile!
+    createUserProfile(input: CreateUserProfileInput!): UserProfile! @requireAuth
     updateUserProfile(id: Int!, input: UpdateUserProfileInput!): UserProfile!
-    deleteUserProfile(id: Int!): UserProfile!
+      @requireAuth
+    deleteUserProfile(id: Int!): UserProfile! @requireAuth
   }
 \`
 "
@@ -73,8 +74,8 @@ exports[`in javascript mode creates a sdl file with enum definitions 1`] = `
   }
 
   type Query {
-    shoes: [Shoe!]!
-    shoe(id: Int!): Shoe
+    shoes: [Shoe!]! @requireAuth
+    shoe(id: Int!): Shoe @requireAuth
   }
 
   input CreateShoeInput {
@@ -86,9 +87,9 @@ exports[`in javascript mode creates a sdl file with enum definitions 1`] = `
   }
 
   type Mutation {
-    createShoe(input: CreateShoeInput!): Shoe!
-    updateShoe(id: Int!, input: UpdateShoeInput!): Shoe!
-    deleteShoe(id: Int!): Shoe!
+    createShoe(input: CreateShoeInput!): Shoe! @requireAuth
+    updateShoe(id: Int!, input: UpdateShoeInput!): Shoe! @requireAuth
+    deleteShoe(id: Int!): Shoe! @requireAuth
   }
 \`
 "
@@ -103,8 +104,8 @@ exports[`in javascript mode creates a sdl file with json definitions 1`] = `
   }
 
   type Query {
-    photos: [Photo!]!
-    photo(id: Int!): Photo
+    photos: [Photo!]! @requireAuth
+    photo(id: Int!): Photo @requireAuth
   }
 
   input CreatePhotoInput {
@@ -118,9 +119,9 @@ exports[`in javascript mode creates a sdl file with json definitions 1`] = `
   }
 
   type Mutation {
-    createPhoto(input: CreatePhotoInput!): Photo!
-    updatePhoto(id: Int!, input: UpdatePhotoInput!): Photo!
-    deletePhoto(id: Int!): Photo!
+    createPhoto(input: CreatePhotoInput!): Photo! @requireAuth
+    updatePhoto(id: Int!, input: UpdatePhotoInput!): Photo! @requireAuth
+    deletePhoto(id: Int!): Photo! @requireAuth
   }
 \`
 "
@@ -137,7 +138,7 @@ exports[`in javascript mode creates a single word sdl file 1`] = `
   }
 
   type Query {
-    users: [User!]!
+    users: [User!]! @requireAuth
   }
 
   input CreateUserInput {
@@ -168,8 +169,8 @@ exports[`in javascript mode creates a single word sdl file with CRUD actions 1`]
   }
 
   type Query {
-    posts: [Post!]!
-    post(id: Int!): Post
+    posts: [Post!]! @requireAuth
+    post(id: Int!): Post @requireAuth
   }
 
   input CreatePostInput {
@@ -191,9 +192,9 @@ exports[`in javascript mode creates a single word sdl file with CRUD actions 1`]
   }
 
   type Mutation {
-    createPost(input: CreatePostInput!): Post!
-    updatePost(id: Int!, input: UpdatePostInput!): Post!
-    deletePost(id: Int!): Post!
+    createPost(input: CreatePostInput!): Post! @requireAuth
+    updatePost(id: Int!, input: UpdatePostInput!): Post! @requireAuth
+    deletePost(id: Int!): Post! @requireAuth
   }
 \`
 "
@@ -209,7 +210,7 @@ exports[`in typescript mode creates a multi word sdl file 1`] = `
   }
 
   type Query {
-    userProfiles: [UserProfile!]!
+    userProfiles: [UserProfile!]! @requireAuth
   }
 
   input CreateUserProfileInput {
@@ -235,8 +236,8 @@ exports[`in typescript mode creates a multi word sdl file with CRUD actions 1`] 
   }
 
   type Query {
-    userProfiles: [UserProfile!]!
-    userProfile(id: Int!): UserProfile
+    userProfiles: [UserProfile!]! @requireAuth
+    userProfile(id: Int!): UserProfile @requireAuth
   }
 
   input CreateUserProfileInput {
@@ -250,9 +251,10 @@ exports[`in typescript mode creates a multi word sdl file with CRUD actions 1`] 
   }
 
   type Mutation {
-    createUserProfile(input: CreateUserProfileInput!): UserProfile!
+    createUserProfile(input: CreateUserProfileInput!): UserProfile! @requireAuth
     updateUserProfile(id: Int!, input: UpdateUserProfileInput!): UserProfile!
-    deleteUserProfile(id: Int!): UserProfile!
+      @requireAuth
+    deleteUserProfile(id: Int!): UserProfile! @requireAuth
   }
 \`
 "
@@ -272,8 +274,8 @@ exports[`in typescript mode creates a sdl file with enum definitions 1`] = `
   }
 
   type Query {
-    shoes: [Shoe!]!
-    shoe(id: Int!): Shoe
+    shoes: [Shoe!]! @requireAuth
+    shoe(id: Int!): Shoe @requireAuth
   }
 
   input CreateShoeInput {
@@ -285,9 +287,9 @@ exports[`in typescript mode creates a sdl file with enum definitions 1`] = `
   }
 
   type Mutation {
-    createShoe(input: CreateShoeInput!): Shoe!
-    updateShoe(id: Int!, input: UpdateShoeInput!): Shoe!
-    deleteShoe(id: Int!): Shoe!
+    createShoe(input: CreateShoeInput!): Shoe! @requireAuth
+    updateShoe(id: Int!, input: UpdateShoeInput!): Shoe! @requireAuth
+    deleteShoe(id: Int!): Shoe! @requireAuth
   }
 \`
 "
@@ -302,8 +304,8 @@ exports[`in typescript mode creates a sdl file with json definitions 1`] = `
   }
 
   type Query {
-    photos: [Photo!]!
-    photo(id: Int!): Photo
+    photos: [Photo!]! @requireAuth
+    photo(id: Int!): Photo @requireAuth
   }
 
   input CreatePhotoInput {
@@ -317,9 +319,9 @@ exports[`in typescript mode creates a sdl file with json definitions 1`] = `
   }
 
   type Mutation {
-    createPhoto(input: CreatePhotoInput!): Photo!
-    updatePhoto(id: Int!, input: UpdatePhotoInput!): Photo!
-    deletePhoto(id: Int!): Photo!
+    createPhoto(input: CreatePhotoInput!): Photo! @requireAuth
+    updatePhoto(id: Int!, input: UpdatePhotoInput!): Photo! @requireAuth
+    deletePhoto(id: Int!): Photo! @requireAuth
   }
 \`
 "
@@ -336,7 +338,7 @@ exports[`in typescript mode creates a single word sdl file 1`] = `
   }
 
   type Query {
-    users: [User!]!
+    users: [User!]! @requireAuth
   }
 
   input CreateUserInput {
@@ -367,8 +369,8 @@ exports[`in typescript mode creates a single word sdl file with CRUD actions 1`]
   }
 
   type Query {
-    posts: [Post!]!
-    post(id: Int!): Post
+    posts: [Post!]! @requireAuth
+    post(id: Int!): Post @requireAuth
   }
 
   input CreatePostInput {
@@ -390,9 +392,9 @@ exports[`in typescript mode creates a single word sdl file with CRUD actions 1`]
   }
 
   type Mutation {
-    createPost(input: CreatePostInput!): Post!
-    updatePost(id: Int!, input: UpdatePostInput!): Post!
-    deletePost(id: Int!): Post!
+    createPost(input: CreatePostInput!): Post! @requireAuth
+    updatePost(id: Int!, input: UpdatePostInput!): Post! @requireAuth
+    deletePost(id: Int!): Post! @requireAuth
   }
 \`
 "
