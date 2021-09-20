@@ -10521,11 +10521,6 @@ fast-safe-stringify@^2.0.7:
   resolved "https://registry.yarnpkg.com/fast-safe-stringify/-/fast-safe-stringify-2.0.7.tgz#124aa885899261f68aedb42a7c080de9da608743"
   integrity sha512-Utm6CdzT+6xsDk2m8S6uL8VHxNwI6Jub+e9NYTcAms28T84pTa25GJQV9j0CY0N1rM8hK4x6grpF2BQf+2qwVA==
 
-fast-safe-stringify@^2.0.8:
-  version "2.0.8"
-  resolved "https://registry.yarnpkg.com/fast-safe-stringify/-/fast-safe-stringify-2.0.8.tgz#dc2af48c46cf712b683e849b2bbd446b32de936f"
-  integrity sha512-lXatBjf3WPjmWD6DpIZxkeSsCOwqI0maYMpgDlx8g4U2qi4lbjA9oH/HD2a87G+KfsUmo5WbJFmqBZlPxtptag==
-
 fast-text-encoding@^1.0.0, fast-text-encoding@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/fast-text-encoding/-/fast-text-encoding-1.0.3.tgz#ec02ac8e01ab8a319af182dae2681213cfe9ce53"
@@ -15835,13 +15830,6 @@ pinkie@^2.0.0:
   resolved "https://registry.yarnpkg.com/pinkie/-/pinkie-2.0.4.tgz#72556b80cfa0d48a974e80e77248e80ed4f7f870"
   integrity sha1-clVrgM+g1IqXToDnckjoDtT3+HA=
 
-pino-abstract-transport@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/pino-abstract-transport/-/pino-abstract-transport-0.2.0.tgz#e27d58d7bb16735c587c54e1d4efecc2cce27436"
-  integrity sha512-40sX7xrzDXsrUYr65brL0+bLm6rpZ+wCujDeeBmmZ/y5RVcPdVQsmz0bBe8NtTpELgmzmKwRRPVj1lvKjgFVHw==
-  dependencies:
-    split2 "^3.2.2"
-
 pino-abstract-transport@^0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/pino-abstract-transport/-/pino-abstract-transport-0.3.0.tgz#9925d826a1b6e9a667ca43d14981d82240edd794"
@@ -15872,18 +15860,17 @@ pino-std-serializers@^4.0.0:
   resolved "https://registry.yarnpkg.com/pino-std-serializers/-/pino-std-serializers-4.0.0.tgz#1791ccd2539c091ae49ce9993205e2cd5dbba1e2"
   integrity sha512-cK0pekc1Kjy5w9V2/n+8MkZwusa6EyyxfeQCB799CQRhRt/CqYKiWs5adeu8Shve2ZNffvfC/7J64A2PJo1W/Q==
 
-pino@^7.0.0-rc.4:
-  version "7.0.0-rc.4"
-  resolved "https://registry.yarnpkg.com/pino/-/pino-7.0.0-rc.4.tgz#797df43698a3ecfda298642d8f104ed090d51601"
-  integrity sha512-DNBQThsGMoz35z0G9zVdDIRLBAyDk0GTeDl9dtT+61Ya5+HB/WVwwLLza6c5hOB3OQzwbUK2esON/zPfNCuIdA==
+pino@^7.0.0-rc.5:
+  version "7.0.0-rc.5"
+  resolved "https://registry.yarnpkg.com/pino/-/pino-7.0.0-rc.5.tgz#126c891d8a2b754a669f28586b00f24378dd22dd"
+  integrity sha512-L6b5jNXQro06CYGRcn889a8vjBTmPj73dJq5PuNjm90fJcmthtuBJtoHvE+PRNSLaVsMMaPxVKIVm4JD6eM+/Q==
   dependencies:
     fast-redact "^3.0.0"
-    fast-safe-stringify "^2.0.8"
     fastify-warning "^0.2.0"
     get-caller-file "^2.0.5"
     json-stringify-safe "^5.0.1"
     on-exit-leak-free "^0.2.0"
-    pino-abstract-transport "^0.2.0"
+    pino-abstract-transport "^0.3.0"
     pino-std-serializers "^4.0.0"
     quick-format-unescaped "^4.0.3"
     sonic-boom "^2.2.1"
