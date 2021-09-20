@@ -3,7 +3,6 @@ import os from 'os'
 import { join } from 'path'
 
 import { createTestkit } from '@envelop/testing'
-import type P from 'pino'
 
 import { createLogger } from '@redwoodjs/api/logger'
 
@@ -41,30 +40,21 @@ const parseLogFile = (logFile) => {
   )
 }
 
-const setupLogger = (
-  loggerOptions: P.LoggerOptions,
-  targets?: readonly P.TransportTargetOptions<Record<string, any>>[]
-): {
-  logger: P.BaseLogger
-} => {
-  const logger = createLogger({
-    options: { prettyPrint: false, ...loggerOptions },
-    targets: targets,
-  })
-
-  return { logger }
-}
-
 describe('Populates context', () => {
-  const logFile = join(
+  const destination = join(
     os.tmpdir(),
     '_' + Math.random().toString(36).substr(2, 9)
   )
 
-  const { logger } = setupLogger(
-    { level: 'trace', prettyPrint: false }
-    // logFile to fix for transport targets
-  )
+  const logger = createLogger({
+    targets: [
+      {
+        target: 'pino/file',
+        options: { destination },
+        level: 'trace',
+      },
+    ],
+  })
 
   it('Should log debug statements around GraphQL the execution phase', async () => {
     const loggerConfig = {
@@ -76,9 +66,9 @@ describe('Populates context', () => {
 
     await testkit.execute(testQuery, {}, {})
 
-    await watchFileCreated(logFile)
+    await watchFileCreated(destination)
 
-    const logStatements = parseLogFile(logFile)
+    const logStatements = parseLogFile(destination)
 
     const executionCompleted = logStatements.pop()
     const executionStarted = logStatements.pop()
@@ -117,9 +107,9 @@ describe('Populates context', () => {
 
     await testkit.execute(testErrorQuery, {}, {})
 
-    await watchFileCreated(logFile)
+    await watchFileCreated(destination)
 
-    const logStatements = parseLogFile(logFile)
+    const logStatements = parseLogFile(destination)
 
     const errorLogStatement = logStatements.pop()
 
