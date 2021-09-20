@@ -1,11 +1,10 @@
-import path from 'path'
-
 import { CodeFileLoader } from '@graphql-tools/code-file-loader'
-import { loadSchema } from '@graphql-tools/load'
-import { getDocumentNodeFromSchema } from '@graphql-tools/utils'
+import { loadTypedefs } from '@graphql-tools/load'
+import { mergeTypeDefs } from '@graphql-tools/merge'
 import { DocumentNode, ObjectTypeDefinitionNode, visit } from 'graphql'
 
-import { ensurePosixPath, getPaths } from './paths'
+import { getPaths } from './paths'
+import { schema as rootSchema } from './rootGqlSchema'
 
 export const DIRECTIVE_REQUIRED_ERROR_MESSAGE =
   'You must specify one of @requireAuth, @skipAuth or a custom directive'
@@ -24,8 +23,12 @@ export function validateSchemaForDirectives(
           const fieldName = field.name.value
           const fieldTypeName = typeNode.name.value
 
-          // skip validation for redwood query
-          if (fieldName === 'redwood' && fieldTypeName === 'Query') {
+          const isRedwoodQuery =
+            fieldName === 'redwood' && fieldTypeName === 'Query'
+          const isCurrentUserQuery =
+            fieldName === 'currentUser' && fieldTypeName === 'Query'
+          // skip validation for redwood query and currentUser
+          if (isRedwoodQuery || isCurrentUserQuery) {
             return
           }
 
@@ -46,23 +49,36 @@ export function validateSchemaForDirectives(
     throw new Error(
       `${DIRECTIVE_REQUIRED_ERROR_MESSAGE} for\n${fieldsWithoutDirectives.join(
         '\n'
-      )}`
+      )} \n`
     )
   }
 }
 
 export const loadAndValidateSdls = async () => {
-  const apiSrc = ensurePosixPath(getPaths().api.src)
-  const schema = await loadSchema(
-    [
-      path.join(ensurePosixPath(__dirname), './rootGqlSchema.{js,ts}'), // support loading from either compiled JS or TS (for jest tests)
-      path.join(apiSrc, 'graphql/**/*.sdl.{js,ts}'),
-      path.join(apiSrc, 'directives/**/*.{js,ts}'),
-    ],
+  const projectTypeSrc = await loadTypedefs(
+    ['graphql/**/*.sdl.{js,ts}', 'directives/**/*.{js,ts}'],
     {
-      loaders: [new CodeFileLoader()],
+      loaders: [
+        new CodeFileLoader({
+          noRequire: true,
+          pluckConfig: {
+            globalGqlIdentifierName: 'gql',
+          },
+        }),
+      ],
+      cwd: getPaths().api.src,
     }
   )
 
-  validateSchemaForDirectives(getDocumentNodeFromSchema(schema))
+  // The output of the above function doesn't give us the documents directly
+  const projectDocumentNodes = Object.values(projectTypeSrc)
+    .map(({ document }) => document)
+    .filter((documentNode): documentNode is DocumentNode => {
+      return !!documentNode
+    })
+
+  // Merge in the rootSchema with JSON scalars, etc.
+  const mergedDocumentNode = mergeTypeDefs([rootSchema, projectDocumentNodes])
+
+  validateSchemaForDirectives(mergedDocumentNode)
 }
