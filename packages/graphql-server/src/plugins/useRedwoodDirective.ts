@@ -7,16 +7,7 @@ import {
   GraphQLResolveInfo,
 } from 'graphql'
 
-// Just for consistent messaging
-import { DIRECTIVE_REQUIRED_ERROR_MESSAGE } from '@redwoodjs/internal'
-
 import { GlobalContext } from '../index'
-
-function isQueryOrMutation(info: GraphQLResolveInfo): boolean {
-  const { parentType } = info
-
-  return parentType.name === 'Query' || parentType.name === 'Mutation'
-}
 
 export interface DirectiveParams<FieldType = any> {
   root: unknown
@@ -128,10 +119,6 @@ export const useRedwoodDirective = (
     onExecute({ args: executionArgs }) {
       return {
         async onResolverCalled({ args, root, context, info }) {
-          if (isQueryOrMutation(info) && !hasDirective(info)) {
-            throw new Error(DIRECTIVE_REQUIRED_ERROR_MESSAGE)
-          }
-
           const directiveNode = getDirectiveByName(info, options.name)
           const directive = directiveNode
             ? executionArgs.schema.getDirective(directiveNode.name.value)
