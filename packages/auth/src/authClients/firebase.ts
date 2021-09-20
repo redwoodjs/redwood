@@ -111,7 +111,7 @@ export const firebase = ({
 
       return firebaseAuth.signInWithPopup(auth, providerWithOptions)
     },
-    logout: auth.signOut,
+    logout: async () => auth.signOut(),
     signup: (
       options: oAuthProvider | Options = { providerId: 'google.com' }
     ) => {
