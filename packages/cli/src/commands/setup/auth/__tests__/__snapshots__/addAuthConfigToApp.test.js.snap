@@ -49,7 +49,6 @@ export default App
 exports[`Should add config lines to App.{js,tsx} Matches Firebase Snapshot 1`] = `
 "import { AuthProvider } from '@redwoodjs/auth'
 import { initializeApp, getApp, getApps } from 'firebase/app'
-import * as firebaseAuth from '@firebase/auth'
 import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
@@ -75,15 +74,10 @@ const firebaseApp = ((config) => {
   return getApp()
 })(firebaseConfig)
 
-export const firebaseClient = {
-  firebaseAuth,
-  firebaseApp, // optional
-}
-
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
     <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
-      <AuthProvider client={firebaseClient} type=\\"firebase\\">
+      <AuthProvider client={firebaseApp} type=\\"firebase\\">
         <RedwoodApolloProvider>
           <Routes />
         </RedwoodApolloProvider>

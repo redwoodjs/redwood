@@ -33,15 +33,8 @@ const hasPasswordCreds = (options: Options): boolean => {
   return options.email !== undefined && options.password !== undefined
 }
 
-type FirebaseClient = {
-  firebaseAuth: FirebaseAuth
-  firebaseApp?: FirebaseApp
-}
-
-export const firebase = ({
-  firebaseAuth,
-  firebaseApp,
-}: FirebaseClient): AuthClient => {
+export const firebase = (firebaseApp: FirebaseApp): AuthClient => {
+  const firebaseAuth = require('@firebase/auth')
   const auth = firebaseAuth.getAuth(firebaseApp)
 
   function getProvider(providerId: string) {
@@ -79,7 +72,7 @@ export const firebase = ({
       // return a promise that we be await'd on for first page load until firebase
       // auth has loaded, indicated by the first firing of onAuthStateChange)
       return new Promise((resolve, reject) => {
-        const unsubscribe = auth.onAuthStateChanged((user) => {
+        const unsubscribe = auth.onAuthStateChanged((user: FirebaseUser) => {
           unsubscribe()
           resolve(user)
         }, reject)
