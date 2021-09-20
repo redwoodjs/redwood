@@ -177,7 +177,7 @@ export const isApiFunction = (p: string, functionsPath: string) => {
 
 export const isFileInsideFolder = (filePath: string, folderPath: string) => {
   const { dir } = path.parse(filePath)
-  const relativePathFromFolder = path.relative(folderPath, dir) //?
+  const relativePathFromFolder = path.relative(folderPath, dir)
   if (
     !relativePathFromFolder ||
     relativePathFromFolder.startsWith('..') ||

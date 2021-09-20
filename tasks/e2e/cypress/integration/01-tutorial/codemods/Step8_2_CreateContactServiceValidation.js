@@ -7,11 +7,6 @@ import { UserInputError } from '@redwoodjs/graphql-server'
 import { db } from 'src/lib/db'
 import { requireAuth } from 'src/lib/auth'
 
-// Used when the environment variable REDWOOD_SECURE_SERVICES=1
-export const beforeResolver = (rules) => {
-  rules.add(requireAuth)
-}
-
 const validate = (input) => {
   if (input.email && !input.email.match(/[^@]+@[^.]+\..+/)) {
     throw new UserInputError("Can't create new contact", {
