@@ -353,12 +353,11 @@ export class DbAuthHandler {
   // returns all the cookie attributes in an array with the proper expiration date
   //
   // pass the argument `expires` set to "now" to get the attributes needed to expire
-  // the session, or future (or left out completely) to set to `_futureExpiresDate`
+  // the session, or "future" (or left out completely) to set to `_futureExpiresDate`
   _cookieAttributes({ expires = 'future' }: { expires?: 'now' | 'future' }) {
     const meta = JSON.parse(JSON.stringify(DbAuthHandler.COOKIE_META))
 
-    // if we're using HTTPS then we set the cookie secure
-    if (this.event.headers?.referer?.match(/^https/)) {
+    if (process.env.NODE_ENV !== 'development') {
       meta.push('Secure')
     }
 
