@@ -45,6 +45,8 @@ test('finds directory named modules', () => {
 
   expect(p).toMatchInlineSnapshot(`
 Array [
+  "api/src/directives/requireAuth/requireAuth.js",
+  "api/src/directives/skipAuth/skipAuth.js",
   "api/src/functions/healthz/healthz.js",
   "api/src/functions/nested/nested.ts",
   "api/src/services/todos/todos.js",
