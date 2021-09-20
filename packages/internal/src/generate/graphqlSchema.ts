@@ -1,26 +1,9 @@
+import path from 'path'
+
 import { generate } from '@graphql-codegen/cli'
 import chalk from 'chalk'
 
 import { getPaths } from '../paths'
-
-// TODO: This is a duplicate of the same root schema in `@redwoodjs/api`
-// We need to have a decent way to share this between generated and api.
-const rootSchema = `
-scalar Date
-scalar Time
-scalar DateTime
-scalar JSON
-scalar JSONObject
-
-type Redwood {
-  version: String
-  currentUser: JSON
-  prismaVersion: String
-}
-
-type Query {
-  redwood: Redwood
-}`
 
 export const generateGraphQLSchema = async () => {
   const rwjsPaths = getPaths()
@@ -28,8 +11,13 @@ export const generateGraphQLSchema = async () => {
   try {
     const f: GenerateResponse = await generate(
       {
-        cwd: rwjsPaths.api.graphql,
-        schema: [rootSchema, '**/*.sdl.{js,ts}'],
+        cwd: rwjsPaths.api.src,
+        schema: [
+          path.join(__dirname, '../rootGqlSchema.js'), // support loading from either compiled JS
+          path.join(__dirname, '../rootGqlSchema.ts'), // or TS (for jest tests)
+          'graphql/**/*.sdl.{js,ts}',
+          'directives/**/*.{js,ts}',
+        ],
         config: {
           scalars: {
             DateTime: 'string',
@@ -55,14 +43,14 @@ export const generateGraphQLSchema = async () => {
   } catch (e: any) {
     // `generate` outputs errors which are helpful.
     // This tries to clean up the output of those errors.
-    console.error()
+    console.error(e)
     console.error(chalk.red('Error parsing SDLs or Schema'))
     for (const error of e?.errors) {
       console.error(error.details)
     }
 
-    console.error()
-
-    return undefined
+    console.warn()
   }
+
+  return undefined
 }

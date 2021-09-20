@@ -224,7 +224,7 @@ export class DbAuthHandler {
       ]()
 
       return this._ok(body, headers, options)
-    } catch (e) {
+    } catch (e: any) {
       if (e instanceof DbAuthError.WrongVerbError) {
         return this._notFound()
       } else {
@@ -303,7 +303,7 @@ export class DbAuthHandler {
       // to work, so return the user's ID in case we can use it for something
       // in the future
       return [user.id]
-    } catch (e) {
+    } catch (e: any) {
       if (e instanceof DbAuthError.NotLoggedInError) {
         return this._logoutResponse()
       } else {

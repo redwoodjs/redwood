@@ -17,5 +17,6 @@
     { "path": "../internal" },
     { "path": "../web" },
     { "path": "../auth" },
+    { "path": "../graphql-server" },
   ]
 }
