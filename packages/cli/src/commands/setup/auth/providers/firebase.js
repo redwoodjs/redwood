@@ -2,6 +2,7 @@
 export const config = {
   imports: [
     `import { initializeApp, getApp, getApps } from 'firebase/app'`,
+    `import * as firebaseAuth from '@firebase/auth'`,
   ],
   init: `const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
@@ -18,8 +19,13 @@ const firebaseApp = ((config) => {
     initializeApp(config)
   }
   return getApp()
-})(firebaseConfig)`,
-  authProvider: { client: 'firebaseApp', type: 'firebase' },
+})(firebaseConfig)
+
+export const firebaseClient = {
+  firebaseAuth,
+  firebaseApp, // optional
+}`,
+  authProvider: { client: 'firebaseClient', type: 'firebase' },
 }
 
 // required packages to install

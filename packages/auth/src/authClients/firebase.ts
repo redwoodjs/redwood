@@ -1,9 +1,10 @@
 import type { FirebaseApp } from '@firebase/app'
 import type { CustomParameters, OAuthProvider, User } from '@firebase/auth'
+import type FirebaseAuthNamespace from '@firebase/auth'
 
 import { AuthClient } from './'
 
-export type Firebase = FirebaseApp
+export type FirebaseAuth = typeof FirebaseAuthNamespace
 export type FirebaseUser = User
 
 // @TODO: Firebase doesn't export a list of providerIds they use
@@ -45,8 +46,15 @@ const applyProviderOptions = (
   return provider
 }
 
-export const firebase = (firebaseApp: FirebaseApp): AuthClient => {
-  const firebaseAuth = require('@firebase/auth')
+type FirebaseClient = {
+  firebaseAuth: FirebaseAuth
+  firebaseApp?: FirebaseApp
+}
+
+export const firebase = ({
+  firebaseAuth,
+  firebaseApp,
+}: FirebaseClient): AuthClient => {
   const auth = firebaseAuth.getAuth(firebaseApp)
 
   function getProvider(providerId: string) {
@@ -71,7 +79,7 @@ export const firebase = (firebaseApp: FirebaseApp): AuthClient => {
       // return a promise that we be await'd on for first page load until firebase
       // auth has loaded, indicated by the first firing of onAuthStateChange)
       return new Promise((resolve, reject) => {
-        const unsubscribe = auth.onAuthStateChanged((user: FirebaseUser) => {
+        const unsubscribe = auth.onAuthStateChanged((user: User | null) => {
           unsubscribe()
           resolve(user)
         }, reject)
