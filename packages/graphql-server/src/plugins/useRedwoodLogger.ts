@@ -179,9 +179,9 @@ const logResult =
 export const useRedwoodLogger = (
   loggerConfig: LoggerConfig
 ): Plugin<RedwoodGraphQLContext> => {
-  const logger = loggerConfig.logger  as P.BaseLogger
+  const logger = loggerConfig.logger as P.BaseLogger
   const level = loggerConfig.options?.level || logger.level || 'warn'
-  const loggerExtras = loggerConfig.logger  as P.LoggerExtras
+  const loggerExtras = loggerConfig.logger as P.LoggerExtras
 
   const childLogger = loggerExtras.child({
     name: 'graphql-server',

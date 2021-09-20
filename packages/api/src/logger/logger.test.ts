@@ -9,7 +9,6 @@ const hostname = os.hostname()
 
 import { createLogger, emitLogLevels } from '../logger'
 
-
 const watchFileCreated = (filename) => {
   return new Promise((resolve, reject) => {
     const TIMEOUT = 800
@@ -31,8 +30,6 @@ const watchFileCreated = (filename) => {
   })
 }
 
-
-
 describe('logger', () => {
   describe('creates a logger without options', () => {
     test('it logs a trace message', async () => {
@@ -50,11 +47,13 @@ describe('logger', () => {
       )
 
       const logger = createLogger({
-        targets: [{
-          target: 'pino/file',
-          options: { destination },
-          level: 'trace'
-        }]
+        targets: [
+          {
+            target: 'pino/file',
+            options: { destination },
+            level: 'trace',
+          },
+        ],
       })
 
       const transportStream = logger[pino.symbols.streamSym]
@@ -63,14 +62,16 @@ describe('logger', () => {
       logger.info('test of a trace level message')
 
       await watchFileCreated(destination)
-      const result = JSON.parse(await readFileSync(destination).toString().trim())
+      const result = JSON.parse(
+        await readFileSync(destination).toString().trim()
+      )
       delete result.time
       console.log(result)
       expect(result).toMatchObject({
         pid,
         hostname,
         level: 30,
-        msg: 'test of a trace level message'
+        msg: 'test of a trace level message',
       })
     })
 
@@ -81,11 +82,13 @@ describe('logger', () => {
       )
 
       const logger = createLogger({
-        targets: [{
-          target: 'pino/file',
-          options: { destination },
-          level: 'info'
-        }]
+        targets: [
+          {
+            target: 'pino/file',
+            options: { destination },
+            level: 'info',
+          },
+        ],
       })
 
       const transportStream = logger[pino.symbols.streamSym]
@@ -94,14 +97,16 @@ describe('logger', () => {
       logger.info('test of a info level message')
 
       await watchFileCreated(destination)
-      const result = JSON.parse(await readFileSync(destination).toString().trim())
+      const result = JSON.parse(
+        await readFileSync(destination).toString().trim()
+      )
       delete result.time
       console.log(result)
       expect(result).toMatchObject({
         pid,
         hostname,
         level: 30,
-        msg: 'test of a info level message'
+        msg: 'test of a info level message',
       })
     })
 
