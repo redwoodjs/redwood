@@ -1,10 +1,9 @@
 import type { FirebaseApp } from '@firebase/app'
 import type { CustomParameters, OAuthProvider, User } from '@firebase/auth'
-import type FirebaseAuthNamespace from '@firebase/auth'
 
 import { AuthClient } from './'
 
-export type FirebaseAuth = typeof FirebaseAuthNamespace
+export type Firebase = FirebaseApp
 export type FirebaseUser = User
 
 // @TODO: Firebase doesn't export a list of providerIds they use
@@ -33,25 +32,25 @@ const hasPasswordCreds = (options: Options): boolean => {
   return options.email !== undefined && options.password !== undefined
 }
 
+const applyProviderOptions = (
+  provider: OAuthProvider,
+  options: Options
+): OAuthProvider => {
+  if (options.customParameters) {
+    provider.setCustomParameters(options.customParameters)
+  }
+  if (options.scopes) {
+    options.scopes.forEach((scope) => provider.addScope(scope))
+  }
+  return provider
+}
+
 export const firebase = (firebaseApp: FirebaseApp): AuthClient => {
   const firebaseAuth = require('@firebase/auth')
   const auth = firebaseAuth.getAuth(firebaseApp)
 
   function getProvider(providerId: string) {
     return new firebaseAuth.OAuthProvider(providerId)
-  }
-
-  const applyProviderOptions = (
-    provider: OAuthProvider,
-    options: Options
-  ): OAuthProvider => {
-    if (options.customParameters) {
-      provider.setCustomParameters(options.customParameters)
-    }
-    if (options.scopes) {
-      options.scopes.forEach((scope) => provider.addScope(scope))
-    }
-    return provider
   }
 
   const loginWithEmailLink = ({ email, emailLink }: Options) => {
@@ -104,7 +103,7 @@ export const firebase = (firebaseApp: FirebaseApp): AuthClient => {
 
       return firebaseAuth.signInWithPopup(auth, providerWithOptions)
     },
-    logout: async () => auth.signOut(),
+    logout: auth.signOut,
     signup: (
       options: oAuthProvider | Options = { providerId: 'google.com' }
     ) => {
