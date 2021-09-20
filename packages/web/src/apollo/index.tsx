@@ -22,10 +22,14 @@ import {
 } from '../components/FetchConfigProvider'
 import { GraphQLHooksProvider } from '../components/GraphQLHooksProvider'
 
+export type ApolloClientCacheConfig = apolloClient.InMemoryCacheConfig
+
 export type GraphQLClientConfigProp = Omit<
   ApolloClientOptions<unknown>,
   'cache'
->
+> & {
+  cacheConfig?: ApolloClientCacheConfig
+}
 
 export type UseAuthProp = () => AuthContextInterface
 
@@ -70,9 +74,11 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
 
   const httpLink = createHttpLink({ uri })
 
+  const { cacheConfig, ...forwardConfig } = config ?? {}
+
   const client = new ApolloClient({
-    cache: new InMemoryCache(),
-    ...config,
+    cache: new InMemoryCache(cacheConfig),
+    ...forwardConfig,
     link: ApolloLink.from([withToken, authMiddleware.concat(httpLink)]),
   })
 

@@ -1,4 +1,4 @@
-import type { Scenario, DefineScenario } from '@redwoodjs/testing'
+import type { Scenario, DefineScenario } from '@redwoodjs/testing/api'
 
 declare global {
   /**

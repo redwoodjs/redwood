@@ -17,7 +17,7 @@ describe('paths', () => {
 
       const pages = processPagesDir(pagesDir)
 
-      expect(pages.length).toEqual(7)
+      expect(pages.length).toEqual(8)
 
       const adminEditUserPage = pages.find(
         (page) => page.importName === 'adminEditUserPage'
@@ -73,6 +73,14 @@ describe('paths', () => {
         importStatementPath(
           path.join(pagesDir, 'TypeScriptPage/TypeScriptPage')
         )
+      )
+
+      const privatePage = pages.find(
+        (page) => page.importName === 'PrivatePage'
+      )
+      expect(privatePage).not.toBeUndefined()
+      expect(privatePage.importPath).toEqual(
+        importStatementPath(path.join(pagesDir, 'PrivatePage/PrivatePage'))
       )
     })
   })

@@ -1,17 +1,17 @@
 import fs from 'fs'
-import path from 'path'
 
 import execa from 'execa'
 import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
+import rimraf from 'rimraf'
 import terminalLink from 'terminal-link'
 
-import { getConfig } from '@redwoodjs/internal'
+import { buildApi, loadAndValidateSdls } from '@redwoodjs/internal'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
 
 import { getPaths } from '../lib'
 import c from '../lib/colors'
-import { generatePrismaClient } from '../lib/generatePrismaClient'
+import { generatePrismaCommand } from '../lib/generatePrismaClient'
 
 import { getTasks as getPrerenderTasks } from './prerender'
 
@@ -61,14 +61,9 @@ export const builder = (yargs) => {
     })
     .option('prisma', {
       type: 'boolean',
+      alias: 'db',
       default: true,
       description: 'Generate the Prisma client',
-    })
-    .option('esbuild', {
-      type: 'boolean',
-      required: false,
-      default: getConfig().experimental.esbuild,
-      description: 'Use ESBuild for api side [experimental]',
     })
     .option('performance', {
       alias: 'perf',
@@ -87,34 +82,19 @@ export const builder = (yargs) => {
 export const handler = async ({
   side = ['api', 'web'],
   verbose = false,
+  performance = false,
   stats = false,
   prisma = true,
-  esbuild = false,
   prerender,
-  performance = false,
 }) => {
-  let webpackConfigPath = require.resolve(
-    `@redwoodjs/core/config/webpack.${stats ? 'stats' : 'production'}.js`
-  )
-
-  const execCommandsForSides = {
-    api: {
-      // must use path.join() here, and for 'web' below, to support Windows
-      cwd: path.join(getPaths().base, 'api'),
-      cmd: "yarn cross-env NODE_ENV=production babel src --out-dir dist --delete-dir-on-start --extensions .ts,.js --ignore '**/*.test.ts,**/*.test.js,**/__tests__' --source-maps",
-    },
-    web: {
-      cwd: path.join(getPaths().base, 'web'),
-      cmd: `yarn cross-env NODE_ENV=production webpack --config ${webpackConfigPath}`,
-    },
-  }
+  const rwjsPaths = getPaths()
 
   if (performance) {
-    webpackConfigPath = require.resolve(
-      '@redwoodjs/core/config/webpack.perf.js'
-    )
+    console.log('Measuring Web Build Performance...')
     execa.sync(
-      `yarn cross-env NODE_ENV=production webpack --config ${webpackConfigPath}`,
+      `yarn cross-env NODE_ENV=production webpack --config ${require.resolve(
+        '@redwoodjs/core/config/webpack.perf.js'
+      )}`,
       { stdio: 'inherit', shell: true }
     )
     // We do not want to continue building...
@@ -122,89 +102,94 @@ export const handler = async ({
   }
 
   if (stats) {
-    side = ['web']
-    console.log(
-      ' ⏩ Skipping `api` build because stats only works for Webpack at the moment.'
+    console.log('Building Web Stats...')
+    execa.sync(
+      `yarn cross-env NODE_ENV=production webpack --config ${require.resolve(
+        '@redwoodjs/core/config/webpack.stats.js'
+      )}`,
+      { stdio: 'inherit', shell: true }
     )
+    // We do not want to continue building...
+    return
   }
 
-  if (esbuild) {
-    console.log('Using experimental esbuild...')
-    execCommandsForSides.api.cmd = `yarn rimraf "${
-      getPaths().api.dist
-    }" && yarn cross-env NODE_ENV=production yarn rw-api-build`
-  }
-
-  const listrTasks = side.map((sideName) => {
-    const { cwd, cmd } = execCommandsForSides[sideName]
-    return {
-      title: `Building "${sideName}"${(stats && ' for stats') || ''}...`,
-      task: () => {
-        return execa(cmd, undefined, {
-          stdio: verbose ? 'inherit' : 'pipe',
-          shell: true,
-          cwd,
-        })
-      },
-    }
-  })
-
-  // Additional tasks, apart from build
-  if (side.includes('api') && prisma) {
-    try {
-      await generatePrismaClient({
-        verbose,
-        force: true,
-        schema: getPaths().api.dbSchema,
-      })
-    } catch (e) {
-      console.log(c.error(e.message))
-      process.exit(1)
-    }
-  }
-
-  if (side.includes('web')) {
-    // Clean web dist folder, _before_ building
-    listrTasks.unshift({
-      title: 'Cleaning "web"... (./web/dist/)',
-      task: () => {
-        return execa('rimraf dist/*', undefined, {
-          stdio: verbose ? 'inherit' : 'pipe',
-          shell: true,
-          cwd: getPaths().web.base,
-        })
-      },
-    })
-
-    // Prerender _after_ web build
-    if (prerender) {
-      const prerenderRoutes = detectPrerenderRoutes()
-
-      listrTasks.push({
-        title: 'Prerendering "web"...',
+  const tasks = [
+    side.includes('api') &&
+      prisma && {
+        title: 'Generating Prisma Client...',
         task: async () => {
-          const prerenderTasks = await getPrerenderTasks()
-          // Reuse prerender tasks, but run them in parallel to speed things up
-          return new Listr(prerenderTasks, {
-            renderer: verbose && VerboseRenderer,
-            concurrent: true,
+          const { cmd, args } = generatePrismaCommand(rwjsPaths.api.dbSchema)
+          return execa(cmd, args, {
+            stdio: verbose ? 'inherit' : 'pipe',
+            shell: true,
+            cwd: rwjsPaths.api.base,
           })
         },
-        skip: () => {
-          if (prerenderRoutes.length === 0) {
-            return 'You have not marked any routes as `prerender` in `Routes.{js,tsx}`'
-          }
-        },
-      })
-    }
-  }
+      },
+    side.includes('api') && {
+      title: 'Verifying graphql schema...',
+      task: loadAndValidateSdls,
+    },
+    side.includes('api') && {
+      title: 'Building API...',
+      task: () => {
+        const { errors, warnings } = buildApi()
 
-  const tasks = new Listr(listrTasks, {
+        if (errors.length) {
+          console.error(errors)
+        }
+        if (warnings.length) {
+          console.warn(warnings)
+        }
+      },
+    },
+    side.includes('web') && {
+      // Clean web
+      title: 'Cleaning Web...',
+      task: () => {
+        rimraf.sync(rwjsPaths.web.dist)
+      },
+    },
+    side.includes('web') && {
+      title: 'Building Web...',
+      task: () => {
+        return execa(
+          `yarn cross-env NODE_ENV=production webpack --config ${require.resolve(
+            '@redwoodjs/core/config/webpack.production.js'
+          )}`,
+          {
+            stdio: verbose ? 'inherit' : 'pipe',
+            shell: true,
+            cwd: rwjsPaths.web.base,
+          }
+        )
+      },
+    },
+    side.includes('web') &&
+      prerender && {
+        title: 'Prerendering Web...',
+        task: async () => {
+          const prerenderRoutes = detectPrerenderRoutes()
+          if (prerenderRoutes.length === 0) {
+            return `You have not marked any "prerender" in your ${terminalLink(
+              'Routes',
+              'file://' + rwjsPaths.web.routes
+            )}.`
+          }
+          return new Listr(await getPrerenderTasks(), {
+            renderer: verbose && VerboseRenderer,
+            concurrent: true, // Re-use prerender tasks, but run them in parallel to speed things up
+          })
+        },
+      },
+  ].filter(Boolean)
+
+  const jobs = new Listr(tasks, {
     renderer: verbose && VerboseRenderer,
   })
 
   try {
-    await tasks.run()
+    await jobs.run()
   } catch (e) {
     console.log(c.error(e.message))
     process.exit(1)

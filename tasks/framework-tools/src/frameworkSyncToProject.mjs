@@ -13,6 +13,7 @@ import {
   resolvePackageJsonPath,
   buildPackages,
 } from './lib/framework.mjs'
+import { cleanPackages } from './lib/framework.mjs'
 import {
   installProjectPackages,
   addDependenciesToPackageJson,
@@ -22,7 +23,7 @@ import {
 const projectPath = process.argv?.[2] ?? process.env.RWJS_CWD
 if (!projectPath) {
   console.log('Error: Please specify the path to your Redwood Project')
-  console.log(`Usage: ${process.argv?.[1]} /path/to/rwjs/proect`)
+  console.log(`Usage: ${process.argv?.[1]} /path/to/rwjs/project`)
   process.exit(1)
 }
 
@@ -42,6 +43,10 @@ function logStatus(m) {
   console.log(c.bgYellow(c.black('rwfw ')), c.yellow(m))
 }
 
+function logError(m) {
+  console.log(c.bgRed(c.black('rwfw ')), c.red(m))
+}
+
 chokidar
   .watch(REDWOOD_PACKAGES_PATH, {
     ignoreInitial: true,
@@ -57,6 +62,9 @@ chokidar
       ['.DS_Store'].some((ext) => file.endsWith(ext)),
   })
   .on('ready', async () => {
+    logStatus('Building Framework...')
+    cleanPackages()
+
     logStatus('Building Framework...')
     buildPackages()
 
@@ -90,21 +98,30 @@ chokidar
     const packageName = packageJsonName(packageJsonPath)
     logStatus(c.magenta(packageName))
 
-    console.log()
-    logStatus(`Building ${packageName}...`)
+    let hasHadError = false
+
     try {
-      buildPackages([packageJsonPath], { clean: true })
+      console.log()
+      logStatus(`Cleaning ${packageName}...`)
+      cleanPackages([packageJsonPath])
+
+      console.log()
+      logStatus(`Building ${packageName}...`)
+      buildPackages([packageJsonPath])
 
       console.log()
       logStatus(`Copying ${packageName}...`)
       copyFrameworkFilesToProject(projectPath, [packageJsonPath])
     } catch (error) {
-      console.log()
-      logStatus(`Error building ${packageName}...`)
+      hasHadError = true
       console.log(error)
+      console.log()
+      logError(`Error building ${packageName}...`)
     }
 
-    console.log()
-    logStatus(`Done, and waiting for changes...`)
-    console.log('-'.repeat(80))
+    if (!hasHadError) {
+      console.log()
+      logStatus(`Done, and waiting for changes...`)
+      console.log('-'.repeat(80))
+    }
   })

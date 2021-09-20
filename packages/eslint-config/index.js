@@ -34,7 +34,7 @@ module.exports = {
       },
     },
     {
-      files: 'api/db/seed.js',
+      files: ['api/db/seed.js', 'scripts/**'],
       env: {
         node: true,
         commonjs: true,

@@ -1,5 +1,5 @@
 const appMetadata = (token: {
-  decoded: { [index: string]: Record<string, unknown> }
+  decoded: { [index: string]: Record<string, any> }
   namespace?: string
 }): any => {
   const claim = token.namespace
@@ -9,7 +9,7 @@ const appMetadata = (token: {
 }
 
 const roles = (token: {
-  decoded: { [index: string]: Record<string, unknown> }
+  decoded: { [index: string]: Record<string, any> }
   namespace?: string
 }): any => {
   const metadata = appMetadata(token)
@@ -22,7 +22,7 @@ const roles = (token: {
 }
 
 export const parseJWT = (token: {
-  decoded: { [index: string]: Record<string, unknown> }
+  decoded: { [index: string]: Record<string, any> }
   namespace?: string
 }): any => {
   return {

@@ -1,9 +1,9 @@
-import { MissingBeforeResolverError } from '@redwoodjs/api'
-
 import { makeServices } from '../makeServices'
 
 describe('makeServices', () => {
   let services = []
+
+  let servicesWithoutBeforeResolver = []
 
   // silence warning messages in console
   beforeAll(() => {
@@ -26,30 +26,30 @@ describe('makeServices', () => {
         deletePost: () => {},
       },
     }
+
+    servicesWithoutBeforeResolver = {
+      tags_tags: {
+        tags: () => {},
+        tag: () => {},
+        createTag: () => {},
+        updateTag: () => {},
+        deleteTag: () => {},
+      },
+    }
   })
 
   afterEach(() => {
-    delete process.env['REDWOOD_SECURE_SERVICES']
     services = []
   })
 
-  it('returns same services if experimentalSecureService config option is absent', () => {
-    const madeServices = makeServices({ services })
-    expect(madeServices).toEqual(services)
-  })
-
-  it('throws an error if service does not export a beforeResolver()', () => {
-    process.env.REDWOOD_SECURE_SERVICES = '1'
-    services.posts_posts.beforeResolver = null
-
-    expect(() => {
-      makeServices({ services })
-    }).toThrow(MissingBeforeResolverError)
+  it('just returns services if no before resolver present', () => {
+    const madeServices = makeServices({
+      services: servicesWithoutBeforeResolver,
+    })
+    expect(madeServices).toBe(servicesWithoutBeforeResolver)
   })
 
   it('does not include beforeResolver() in returned services', () => {
-    process.env.REDWOOD_SECURE_SERVICES = '1'
-
     const madeServices = makeServices({ services })
 
     expect(Object.keys(madeServices.posts_posts)).not.toContain(

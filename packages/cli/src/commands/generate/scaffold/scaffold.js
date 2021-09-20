@@ -9,7 +9,7 @@ import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 import terminalLink from 'terminal-link'
 
-import { getConfig } from '@redwoodjs/internal'
+import { getConfig, generate as generateTypes } from '@redwoodjs/internal'
 
 import {
   generateTemplate,
@@ -23,8 +23,8 @@ import {
   writeFilesTask,
   addRoutesToRouterTask,
   addScaffoldImport,
+  transformTSToJS,
 } from '../../../lib'
-import { transformTSToJS } from '../../../lib'
 import c from '../../../lib/colors'
 import { yargsDefaults } from '../../generate'
 import { handler as dbAuthHandler } from '../dbAuth/dbAuth'
@@ -32,6 +32,7 @@ import {
   relationsForModel,
   intForeignKeysForModel,
   ensureUniquePlural,
+  mapPrismaScalarToPagePropTsType,
 } from '../helpers'
 import { files as sdlFiles, builder as sdlBuilder } from '../sdl/sdl'
 import {
@@ -260,6 +261,7 @@ const pageFiles = async (
   const singularName = pascalcase(pluralize.singular(name))
   const model = await getSchema(singularName)
   const idType = getIdType(model)
+  const idTsType = mapPrismaScalarToPagePropTsType(idType)
 
   let fileList = {}
 
@@ -288,6 +290,7 @@ const pageFiles = async (
       path.join('scaffold', 'templates', 'pages', page),
       {
         idType,
+        idTsType,
         name,
         pascalScaffoldPath,
         ...templateStrings,
@@ -334,13 +337,13 @@ const componentFiles = async (
     },
     Json: {
       componentName: 'TextAreaField',
-      dataType: 'Json',
+      transformValue: 'Json',
       displayFunction: 'jsonDisplay',
       listDisplayFunction: 'jsonTruncate',
       deserilizeFunction: 'JSON.stringify',
     },
     Float: {
-      dataType: 'Float',
+      transformValue: 'Float',
     },
     default: {
       componentName: 'TextField',
@@ -349,7 +352,7 @@ const componentFiles = async (
       validation: '{{ required: true }}',
       displayFunction: undefined,
       listDisplayFunction: 'truncate',
-      dataType: undefined,
+      transformValue: undefined,
     },
   }
   const columns = model.fields
@@ -375,9 +378,9 @@ const componentFiles = async (
       displayFunction:
         componentMetadata[column.type]?.displayFunction ||
         componentMetadata.default.displayFunction,
-      dataType:
-        componentMetadata[column.type]?.dataType ||
-        componentMetadata.default.dataType,
+      transformValue:
+        componentMetadata[column.type]?.transformValue ||
+        componentMetadata.default.transformValue,
     }))
   const editableColumns = columns.filter((column) => {
     return NON_EDITABLE_COLUMNS.indexOf(column.name) === -1
@@ -591,6 +594,10 @@ const tasks = ({ model, path, force, tests, typescript, javascript }) => {
       {
         title: 'Adding scaffold asset imports...',
         task: () => addScaffoldImport(),
+      },
+      {
+        title: `Generating types ...`,
+        task: () => generateTypes,
       },
     ],
     { collapse: false, exitOnError: true }

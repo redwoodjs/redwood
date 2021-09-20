@@ -25,6 +25,8 @@ const paramsForRoute = (route: string) => {
     })
 }
 
+export type TrailingSlashesTypes = 'never' | 'always' | 'preserve'
+
 export interface ParamType {
   constraint: RegExp
   transform: (value: any) => unknown
@@ -251,6 +253,34 @@ function flattenAll(children: ReactNode): ReactNode[] {
   })
 }
 
+/**
+ *
+ * @param {string} queryString
+ * @returns {Array<string | Record<string, any>>} A flat array of search params
+ *
+ * useMatch hook options searchParams requires a flat array
+ *
+ * Examples:
+ *
+ *  parseSearch('?key1=val1&key2=val2')
+ *  => { key1: 'val1', key2: 'val2' }
+ *
+ * flattenSearchParams(parseSearch('?key1=val1&key2=val2'))
+ * => [ { key1: 'val1' }, { key2: 'val2' } ]
+ *
+ */
+function flattenSearchParams(
+  queryString: string
+): Array<string | Record<string, any>> {
+  const searchParams = []
+
+  for (const [key, value] of Object.entries(parseSearch(queryString))) {
+    searchParams.push({ [key]: value })
+  }
+
+  return searchParams
+}
+
 export {
   createNamedContext,
   matchPath,
@@ -259,6 +289,7 @@ export {
   replaceParams,
   isReactElement,
   flattenAll,
+  flattenSearchParams,
 }
 
 /**

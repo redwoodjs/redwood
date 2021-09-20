@@ -1,13 +1,20 @@
 #!/usr/bin/env node
 
 import { fork } from 'child_process'
+import type { ChildProcess } from 'child_process'
 import path from 'path'
 
+import c from 'ansi-colors'
 import chokidar from 'chokidar'
 import dotenv from 'dotenv'
+import { debounce } from 'lodash'
 
-import { build } from '@redwoodjs/core/esbuild/apiBuild'
-import { getPaths } from '@redwoodjs/internal'
+import {
+  getPaths,
+  buildApi,
+  getConfig,
+  ensurePosixPath,
+} from '@redwoodjs/internal'
 
 const rwjsPaths = getPaths()
 
@@ -15,31 +22,62 @@ dotenv.config({
   path: rwjsPaths.base,
 })
 
-const tsInitialBuild = Date.now()
-console.log('Building API...')
-build({ incremental: true }).then((buildResult) => {
-  let chokidarReady = false
-  let httpServer = fork(path.join(__dirname, 'index.js'))
+// TODO:
+// 1. Move this file out of the HTTP server, and place it in the CLI?
 
-  process.on('SIGINT', () => {
-    console.log()
-    console.log('Shutting down... ')
-    httpServer.kill()
-    buildResult.stop?.()
-    console.log('Done.')
-    process.exit(0)
-  })
+let httpServerProcess: ChildProcess
 
-  chokidar
-    .watch(rwjsPaths.api.base, {
-      persistent: true,
-      ignoreInitial: true,
-      ignored: (file: string) =>
+const rebuildApiServer = () => {
+  try {
+    // Shutdown API server
+    httpServerProcess?.emit('exit')
+    httpServerProcess?.kill()
+
+    const buildTs = Date.now()
+    process.stdout.write(c.dim(c.italic('Building... ')))
+    buildApi()
+    console.log(c.dim(c.italic('Took ' + (Date.now() - buildTs) + ' ms')))
+
+    // Start API server
+    httpServerProcess = fork(path.join(__dirname, 'index.js'), [
+      '--port',
+      getConfig().api.port.toString(),
+    ])
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+// We want to delay exection when multiple files are modified on the filesystem,
+// this usually happens when running RedwoodJS generator commands.
+// Local writes are very fast, but writes in e2e environments are not,
+// so allow the default to be adjust with a env-var.
+const delayRestartServer = debounce(
+  rebuildApiServer,
+  process.env.RWJS_DELAY_RESTART
+    ? parseInt(process.env.RWJS_DELAY_RESTART, 10)
+    : 5
+)
+
+// NOTE: the file comes through as a unix path, even on windows
+// So we need to convert the rwjsPaths
+
+const IGNORED_API_PATHS = [
+  'api/dist', // use this, because using rwjsPaths.api.dist seems to not ignore on first build
+  rwjsPaths.api.types,
+  rwjsPaths.api.db,
+].map((path) => ensurePosixPath(path))
+
+chokidar
+  .watch(rwjsPaths.api.base, {
+    persistent: true,
+    ignoreInitial: true,
+    ignored: (file: string) => {
+      const x =
         file.includes('node_modules') ||
-        file.includes(rwjsPaths.api.dist) ||
-        file.includes(rwjsPaths.api.types) ||
-        file.includes(rwjsPaths.api.db) ||
+        IGNORED_API_PATHS.some((ignoredPath) => file.includes(ignoredPath)) ||
         [
+          '.DS_Store',
           '.db',
           '.sqlite',
           '-journal',
@@ -48,35 +86,18 @@ build({ incremental: true }).then((buildResult) => {
           '.scenarios.ts',
           '.scenarios.js',
           '.d.ts',
-        ].some((ext) => file.endsWith(ext)),
-    })
-    .on('ready', async () => {
-      chokidarReady = true
-      console.log('Built in', Date.now() - tsInitialBuild, 'ms')
-    })
-    .on('all', async (eventName, filePath) => {
-      // Chokidar emits when it's initial booting up, let's ignore those.
-      if (!chokidarReady) {
-        return
-      }
-
-      console.log(
-        `[${eventName}]`,
-        `${filePath.replace(rwjsPaths.api.base, '')}`
-      )
-
-      const tsRebuild = Date.now()
-      console.log('Building API...')
-      try {
-        await buildResult?.rebuild?.()
-        console.log('Built in', Date.now() - tsRebuild, 'ms')
-
-        // Restart HTTP...
-        httpServer.emit('exit')
-        httpServer.kill()
-        httpServer = fork(path.join(__dirname, 'index.js'))
-      } catch (e) {
-        console.error(e)
-      }
-    })
-})
+          '.log',
+        ].some((ext) => file.endsWith(ext))
+      return x
+    },
+  })
+  .on('ready', async () => {
+    rebuildApiServer()
+  })
+  .on('all', (eventName, filePath) => {
+    console.log(
+      c.dim(`[${eventName}] ${filePath.replace(rwjsPaths.api.base, '')}`)
+    )
+    delayRestartServer.cancel()
+    delayRestartServer()
+  })

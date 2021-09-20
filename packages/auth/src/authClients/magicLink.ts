@@ -17,6 +17,8 @@ export const magicLink = (client: MagicLink): AuthClientMagicLink => {
     login: async ({ email }) =>
       await client.auth.loginWithMagicLink({ email }),
     logout: async () => {
+      token = null
+      expireTime = 0
       await client.user.logout()
     },
     signup: async ({ email }) =>

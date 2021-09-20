@@ -10,13 +10,7 @@ import { files } from '../../../generate/scaffold/scaffold'
 import { tasks } from '../scaffold'
 
 jest.mock('fs')
-jest.mock('@babel/core', () => {
-  return {
-    transform: () => ({
-      code: '',
-    }),
-  }
-})
+
 jest.mock('../../../../lib', () => {
   const path = require('path')
   return {

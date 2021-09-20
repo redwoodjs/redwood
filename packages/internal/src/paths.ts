@@ -48,6 +48,7 @@ export interface Paths {
       includes: string
       mirror: string
     }
+    prebuild: string
   }
   web: BrowserTargetPaths
   api: NodeTargetPaths
@@ -76,6 +77,7 @@ const PATH_API_DIR_GRAPHQL = 'api/src/graphql'
 const PATH_API_DIR_CONFIG = 'api/src/config'
 const PATH_API_DIR_LIB = 'api/src/lib'
 const PATH_API_DIR_SERVICES = 'api/src/services'
+const PATH_API_DIR_DIRECTIVES = 'api/src/directives'
 const PATH_API_DIR_SRC = 'api/src'
 const PATH_WEB_ROUTES = 'web/src/Routes' // .js|.tsx
 const PATH_WEB_DIR_LAYOUTS = 'web/src/layouts/'
@@ -154,6 +156,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
         includes: path.join(BASE_DIR, '.redwood/types/includes'),
         mirror: path.join(BASE_DIR, '.redwood/types/mirror'),
       },
+      prebuild: path.join(BASE_DIR, '.redwood/prebuild'),
     },
 
     scripts: path.join(BASE_DIR, PATH_RW_SCRIPTS),
@@ -168,6 +171,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       lib: path.join(BASE_DIR, PATH_API_DIR_LIB),
       config: path.join(BASE_DIR, PATH_API_DIR_CONFIG),
       services: path.join(BASE_DIR, PATH_API_DIR_SERVICES),
+      directives: path.join(BASE_DIR, PATH_API_DIR_DIRECTIVES),
       src: path.join(BASE_DIR, PATH_API_DIR_SRC),
       dist: path.join(BASE_DIR, 'api/dist'),
       types: path.join(BASE_DIR, 'api/types'),

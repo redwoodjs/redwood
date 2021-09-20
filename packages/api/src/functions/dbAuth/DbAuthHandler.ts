@@ -1,9 +1,7 @@
 import type { PrismaClient } from '@prisma/client'
-import type { APIGatewayProxyEvent } from 'aws-lambda'
+import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import CryptoJS from 'crypto-js'
 import { v4 as uuidv4 } from 'uuid'
-
-import type { GlobalContext } from '../../globalContext'
 
 import * as DbAuthError from './errors'
 import { decryptSession, getSession } from './shared'
@@ -30,18 +28,51 @@ interface DbAuthHandlerOptions {
     salt: string
   }
   /**
-   * Whatever you want to happen to your data on new user signup. Redwood will
-   * check for duplicate usernames before calling this handler. At a minimum
-   * you need to save the `username`, `hashedPassword` and `salt` to your
-   * user table. `userAttributes` contains any additional object members that
-   * were included in the object given to the `signUp()` function you got
-   * from `useAuth()`
+   * Object containing login options
    */
-  signupHandler: (signupHandlerOptions: SignupHandlerOptions) => Promise<any>
+  login: {
+    /**
+     * Anything you want to happen before logging the user in. This can include
+     * throwing an error to prevent login. If you do want to allow login, this
+     * function must return an object representing the user you want to be logged
+     * in, containing at least an `id` field (whatever named field was provided
+     * for `authFields.id`). For example: `return { id: user.id }`
+     */
+    handler: (user: Record<string, unknown>) => Promise<any>
+    /**
+     * Object containing error strings
+     */
+    errors: {
+      usernameOrPasswordMissing: string
+      usernameNotFound: string
+      incorrectPassword: string
+    }
+    /**
+     * How long a user will remain logged in, in seconds
+     */
+    expires: number
+  }
   /**
-   * How long a user will remain logged in, in seconds
+   * Object containing login options
    */
-  loginExpires: number
+  signup: {
+    /**
+     * Whatever you want to happen to your data on new user signup. Redwood will
+     * check for duplicate usernames before calling this handler. At a minimum
+     * you need to save the `username`, `hashedPassword` and `salt` to your
+     * user table. `userAttributes` contains any additional object members that
+     * were included in the object given to the `signUp()` function you got
+     * from `useAuth()`
+     */
+    handler: (signupHandlerOptions: SignupHandlerOptions) => Promise<any>
+    /**
+     * Object containing error strings
+     */
+    errors: {
+      fieldMissing: '${field} cannot be blank'
+      usernameTaken: 'Username ${username} already in use'
+    }
+  }
 }
 
 interface SignupHandlerOptions {
@@ -57,10 +88,18 @@ interface SessionRecord {
 
 type AuthMethodNames = 'login' | 'logout' | 'signup' | 'getToken'
 
+type Params = {
+  username?: string
+  password?: string
+  method: AuthMethodNames
+  [key: string]: unknown
+}
+
 export class DbAuthHandler {
   event: APIGatewayProxyEvent
-  context: GlobalContext
+  context: LambdaContext
   options: DbAuthHandlerOptions
+  params: Params
   db: PrismaClient
   dbAccessor: any
   headerCsrfToken: string | undefined
@@ -108,7 +147,7 @@ export class DbAuthHandler {
   // convert to the UTC datetime string that's required for cookies
   get _futureExpiresDate() {
     const futureDate = new Date()
-    futureDate.setSeconds(futureDate.getSeconds() + this.options.loginExpires)
+    futureDate.setSeconds(futureDate.getSeconds() + this.options.login.expires)
     return futureDate.toUTCString()
   }
 
@@ -124,20 +163,19 @@ export class DbAuthHandler {
 
   constructor(
     event: APIGatewayProxyEvent,
-    context: GlobalContext,
+    context: LambdaContext,
     options: DbAuthHandlerOptions
   ) {
-    // must have a SESSION_SECRET so we can encrypt/decrypt the cookie
-    if (!process.env.SESSION_SECRET) {
-      throw new DbAuthError.NoSessionSecret()
-    }
-
     this.event = event
     this.context = context
     this.options = options
+
+    this._validateOptions()
+
+    this.params = this._parseBody()
     this.db = this.options.db
     this.dbAccessor = this.db[this.options.authModelAccessor]
-    this.headerCsrfToken = this.event.headers['x-csrf-token']
+    this.headerCsrfToken = this.event.headers['csrf-token']
     this.hasInvalidSession = false
 
     try {
@@ -186,28 +224,38 @@ export class DbAuthHandler {
       ]()
 
       return this._ok(body, headers, options)
-    } catch (e) {
+    } catch (e: any) {
       if (e instanceof DbAuthError.WrongVerbError) {
         return this._notFound()
       } else {
-        return this._badRequest(e.message)
+        return this._badRequest(e.message || e)
       }
     }
   }
 
   async login() {
-    const { username, password } = JSON.parse(this.event.body as string)
-    const user = await this._verifyUser(username, password)
-    const sessionData = { id: user[this.options.authFields.id] }
+    const { username, password } = this.params
+    const dbUser = await this._verifyUser(username, password)
+    const handlerUser = await this.options.login.handler(dbUser)
 
-    // this needs to go into graphql somewhere so that each request makes a new CSRF token
-    // and sets it in both the encrypted session and the x-csrf-token header
+    if (
+      handlerUser == null ||
+      handlerUser[this.options.authFields.id] == null
+    ) {
+      throw new DbAuthError.NoUserIdError()
+    }
+
+    const sessionData = { id: handlerUser[this.options.authFields.id] }
+
+    // TODO: this needs to go into graphql somewhere so that each request makes
+    // a new CSRF token and sets it in both the encrypted session and the
+    // csrf-token header
     const csrfToken = DbAuthHandler.CSRF_TOKEN
 
     return [
       sessionData,
       {
-        'X-CSRF-Token': csrfToken,
+        'csrf-token': csrfToken,
         ...this._createSessionHeader(sessionData, csrfToken),
       },
     ]
@@ -218,22 +266,32 @@ export class DbAuthHandler {
   }
 
   async signup() {
-    try {
-      const user = await this._createUser()
+    const userOrMessage = await this._createUser()
+
+    // at this point `user` is either an actual user, in which case log the
+    // user in automatically, or it's a string, which is a message to show
+    // the user (something like "please verify your email")
+
+    if (typeof userOrMessage === 'object') {
+      // signup.handler() returned a user, log them in
+      const user = userOrMessage
       const sessionData = { id: user[this.options.authFields.id] }
       const csrfToken = DbAuthHandler.CSRF_TOKEN
 
       return [
         sessionData,
         {
-          'X-CSRF-Token': csrfToken,
+          'csrf-token': csrfToken,
           ...this._createSessionHeader(sessionData, csrfToken),
         },
         { statusCode: 201 },
       ]
-    } catch (e) {
-      return this._logoutResponse(e.message)
+    } else {
+      // signup.handler() returned a message
+      const message = userOrMessage
+      return [JSON.stringify({ message }), {}, { statusCode: 201 }]
     }
+    // errors thrown in signup.handler() will be handled by `invoke()`
   }
 
   // converts the currentUser data to a JWT. returns `null` if session is not present
@@ -245,12 +303,50 @@ export class DbAuthHandler {
       // to work, so return the user's ID in case we can use it for something
       // in the future
       return [user.id]
-    } catch (e) {
+    } catch (e: any) {
       if (e instanceof DbAuthError.NotLoggedInError) {
         return this._logoutResponse()
       } else {
-        return this._logoutResponse(e.message)
+        return this._logoutResponse({ error: e.message })
       }
+    }
+  }
+
+  // validates that we have all the ENV and options we need to login/signup
+  _validateOptions() {
+    // must have a SESSION_SECRET so we can encrypt/decrypt the cookie
+    if (!process.env.SESSION_SECRET) {
+      throw new DbAuthError.NoSessionSecret()
+    }
+
+    // must have an expiration time set for the session cookie
+    if (!this.options?.login?.expires) {
+      throw new DbAuthError.NoSessionExpiration()
+    }
+
+    // must have a login handler to actually log a user in
+    if (!this.options?.login?.handler) {
+      throw new DbAuthError.NoLoginHandler()
+    }
+
+    // must have a signup handler to define how to create a new user
+    if (!this.options?.signup?.handler) {
+      throw new DbAuthError.NoSignupHandler()
+    }
+  }
+
+  // parses the event body into JSON, whether it's base64 encoded or not
+  _parseBody() {
+    if (this.event.body) {
+      if (this.event.isBase64Encoded) {
+        return JSON.parse(
+          Buffer.from(this.event.body || '', 'base64').toString('utf-8')
+        )
+      } else {
+        return JSON.parse(this.event.body)
+      }
+    } else {
+      return {}
     }
   }
 
@@ -309,7 +405,9 @@ export class DbAuthHandler {
       !password ||
       password.toString().trim() === ''
     ) {
-      throw new DbAuthError.UsernameAndPasswordRequiredError()
+      throw new DbAuthError.UsernameAndPasswordRequiredError(
+        this.options.login?.errors?.usernameOrPasswordMissing
+      )
     }
 
     // does user exist?
@@ -318,7 +416,10 @@ export class DbAuthHandler {
     })
 
     if (!user) {
-      throw new DbAuthError.UserNotFoundError(username)
+      throw new DbAuthError.UserNotFoundError(
+        username,
+        this.options.login?.errors?.usernameNotFound
+      )
     }
 
     // is password correct?
@@ -329,7 +430,10 @@ export class DbAuthHandler {
     if (hashedPassword === user[this.options.authFields.hashedPassword]) {
       return user
     } else {
-      throw new DbAuthError.IncorrectPasswordError()
+      throw new DbAuthError.IncorrectPasswordError(
+        username,
+        this.options.login?.errors.incorrectPassword
+      )
     }
   }
 
@@ -354,30 +458,33 @@ export class DbAuthHandler {
   // creates and returns a user, first checking that the username/password
   // values pass validation
   async _createUser() {
-    const { username, password, ...userAttributes } = JSON.parse(
-      this.event.body as string
-    )
-    this._validateField('username', username)
-    this._validateField('password', password)
+    const { username, password, ...userAttributes } = this.params
+    if (
+      this._validateField('username', username) &&
+      this._validateField('password', password)
+    ) {
+      const user = await this.dbAccessor.findUnique({
+        where: { [this.options.authFields.username]: username },
+      })
+      if (user) {
+        throw new DbAuthError.DuplicateUsernameError(
+          username,
+          this.options.signup?.errors?.usernameTaken
+        )
+      }
 
-    const user = await this.dbAccessor.findUnique({
-      where: { [this.options.authFields.username]: username },
-    })
-    if (user) {
-      throw new DbAuthError.DuplicateUsernameError(username)
+      // if we get here everything is good, call the app's signup handler and let
+      // them worry about scrubbing data and saving to the DB
+      const [hashedPassword, salt] = this._hashPassword(password)
+      const newUser = await this.options.signup.handler({
+        username,
+        hashedPassword,
+        salt,
+        userAttributes,
+      })
+
+      return newUser
     }
-
-    // if we get here everything is good, call the app's signup handler and let
-    // them worry about scrubbing data and saving to the DB
-    const [hashedPassword, salt] = this._hashPassword(password)
-    const newUser = await this.options.signupHandler({
-      username,
-      hashedPassword,
-      salt,
-      userAttributes,
-    })
-
-    return newUser
   }
 
   // hashes a password using either the given `salt` argument, or creates a new
@@ -397,10 +504,10 @@ export class DbAuthHandler {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     let methodName = this.event.queryStringParameters!.method as AuthMethodNames
 
-    if (!DbAuthHandler.METHODS.includes(methodName) && this.event.body) {
+    if (!DbAuthHandler.METHODS.includes(methodName) && this.params) {
       // try getting it from the body in JSON: { method: [methodName] }
       try {
-        methodName = JSON.parse(this.event.body).method
+        methodName = this.params.method
       } catch (e) {
         // there's no body, or it's not JSON, `handler` will return a 404
       }
@@ -411,18 +518,23 @@ export class DbAuthHandler {
 
   // checks that a single field meets validation requirements and
   // currently checks for presense only
-  _validateField(name: string, value: string) {
+  _validateField(name: string, value: string | undefined): value is string {
     // check for presense
     if (!value || value.trim() === '') {
-      throw new DbAuthError.FieldRequiredError(name)
+      throw new DbAuthError.FieldRequiredError(
+        name,
+        this.options.signup?.errors?.fieldMissing
+      )
     } else {
       return true
     }
   }
 
-  _logoutResponse(message?: string): [string, Record<'Set-Cookie', string>] {
+  _logoutResponse(
+    response?: Record<string, string>
+  ): [string, Record<'Set-Cookie', string>] {
     return [
-      message ? JSON.stringify({ message }) : '',
+      response ? JSON.stringify(response) : '',
       {
         ...this._deleteSessionHeader,
       },
@@ -432,7 +544,7 @@ export class DbAuthHandler {
   _ok(body: string, headers = {}, options = { statusCode: 200 }) {
     return {
       statusCode: options.statusCode,
-      body,
+      body: typeof body === 'string' ? body : JSON.stringify(body),
       headers: { 'Content-Type': 'application/json', ...headers },
     }
   }
@@ -446,7 +558,7 @@ export class DbAuthHandler {
   _badRequest(message: string) {
     return {
       statusCode: 400,
-      body: JSON.stringify({ message }),
+      body: JSON.stringify({ error: message }),
       headers: { 'Content-Type': 'application/json' },
     }
   }

@@ -12,13 +12,16 @@ import { templateForComponentFile } from '../helpers'
 export const files = ({
   name,
   typescript: generateTypescript = false,
+  tests: generateTests = true,
   ...rest
 }) => {
-  // Taken from ../component; should be updated to take from the project's configuration
   const extension = generateTypescript ? '.ts' : '.js'
 
   const functionName = camelcase(name)
-  const file = templateForComponentFile({
+
+  const outputFiles = []
+
+  const functionFiles = templateForComponentFile({
     name: functionName,
     componentName: functionName,
     extension,
@@ -28,15 +31,58 @@ export const files = ({
     templateVars: { ...rest },
     outputPath: path.join(
       getPaths().api.functions,
+      functionName,
       `${functionName}${extension}`
     ),
   })
 
-  const template = generateTypescript
-    ? file[1]
-    : transformTSToJS(file[0], file[1])
+  outputFiles.push(functionFiles)
 
-  return { [file[0]]: template }
+  if (generateTests) {
+    const testFile = templateForComponentFile({
+      name: functionName,
+      componentName: functionName,
+      extension,
+      apiPathSection: 'functions',
+      generator: 'function',
+      templatePath: 'test.ts.template',
+      templateVars: { ...rest },
+      outputPath: path.join(
+        getPaths().api.functions,
+        functionName,
+        `${functionName}.test${extension}`
+      ),
+    })
+
+    const scenarioFile = templateForComponentFile({
+      name: functionName,
+      componentName: functionName,
+      extension,
+      apiPathSection: 'functions',
+      generator: 'function',
+      templatePath: 'scenarios.ts.template',
+      templateVars: { ...rest },
+      outputPath: path.join(
+        getPaths().api.functions,
+        functionName,
+        `${functionName}.scenarios${extension}`
+      ),
+    })
+
+    outputFiles.push(testFile)
+    outputFiles.push(scenarioFile)
+  }
+
+  return outputFiles.reduce((acc, [outputPath, content]) => {
+    const template = generateTypescript
+      ? content
+      : transformTSToJS(outputPath, content)
+
+    return {
+      [outputPath]: template,
+      ...acc,
+    }
+  }, {})
 }
 
 export const command = 'function <name>'
@@ -67,14 +113,15 @@ export const builder = (yargs) => {
 
 // This could be built using createYargsForComponentGeneration;
 // however, we need to add a message after generating the function files
-export const handler = async ({ name, ...rest }) => {
+export const handler = async ({ name, force, ...rest }) => {
   const tasks = new Listr(
     [
       {
-        title: `Generating function files...`,
+        title: 'Generating function files...',
         task: async () => {
-          const f = await files({ name, ...rest })
-          return writeFilesTask(f, { overwriteExisting: rest.force })
+          return writeFilesTask(files({ name, ...rest }), {
+            overwriteExisting: force,
+          })
         },
       },
     ],

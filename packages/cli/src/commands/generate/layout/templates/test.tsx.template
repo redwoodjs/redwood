@@ -1,4 +1,4 @@
-import { render } from '@redwoodjs/testing'
+import { render } from '@redwoodjs/testing/web'
 
 import ${pascalName}Layout from './${pascalName}Layout'
 
