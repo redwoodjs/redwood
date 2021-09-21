@@ -2,7 +2,9 @@ import path from 'path'
 
 const BASE_PATH = path.resolve(__dirname, '../../src/__tests__/fixtures')
 
-export const getPaths = () => ({
+const originalInternal = require('@redwoodjs/internal')
+
+const mockedGetPaths = () => ({
   base: BASE_PATH,
   api: {
     src: path.resolve(BASE_PATH, './api/src'),
@@ -10,3 +12,8 @@ export const getPaths = () => ({
     graphql: path.resolve(BASE_PATH, './api/src/graphql'),
   },
 })
+
+module.exports = {
+  ...originalInternal,
+  getPaths: mockedGetPaths,
+}

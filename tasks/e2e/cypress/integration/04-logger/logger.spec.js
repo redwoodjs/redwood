@@ -6,8 +6,9 @@ import 'cypress-wait-until'
 
 import { waitForApiSide } from '../01-tutorial/sharedTests'
 
-import { setupLogger } from './codemods/Step0_1_Setup_Logger'
-import Step2_Add_Logger from './codemods/Step2_1_Add_Logger_to_Posts'
+import { setupLogger } from './codemods/Step1_1_Setup_Logger'
+import Step1_2_Add_Logger from './codemods/Step1_2_Add_Logger_to_Posts'
+import { setupPrismaLogger } from './codemods/Step2_1_Setup_Prisma_Logger'
 
 const BASE_DIR = Cypress.env('RW_PATH')
 const LOG_FILENAME = 'e2e.log'
@@ -27,7 +28,7 @@ describe('The Redwood Logger - Basic Scaffold CRUD Logging', () => {
     )
     cy.writeFile(
       path.join(BASE_DIR, 'api/src/services/posts/posts.js'),
-      Step2_Add_Logger
+      Step1_2_Add_Logger
     )
 
     waitForApiSide()
@@ -79,6 +80,61 @@ describe('The Redwood Logger - Basic Scaffold CRUD Logging', () => {
         console.log(str)
         return str.includes('> in deletePost()')
       })
+    )
+  })
+
+  it('2. Test logging for Prisma', () => {
+    // Without slow query logging.
+    // Reset log file.
+    cy.writeFile(LOG_PATH, '')
+
+    cy.writeFile(
+      path.join(BASE_DIR, 'api/src/lib/db.js'),
+      setupPrismaLogger({ slowQueryThreshold: 9_999 })
+    )
+
+    waitForApiSide()
+
+    cy.visit('http://localhost:8910/posts')
+
+    cy.contains('Edit')
+    cy.contains('Loading...').should('not.exist')
+
+    cy.waitUntil(
+      () =>
+        cy.readFile(LOG_PATH).then((str) => {
+          console.log(str)
+          return (
+            str.includes('Query performed in ') &&
+            !str.includes('Slow Query performed in ')
+          )
+        }),
+      { interval: 2000, timeout: 2000 }
+    )
+
+    // With slow query logging.
+    // Reset log file.
+    cy.writeFile(LOG_PATH, '')
+
+    cy.writeFile(
+      path.join(BASE_DIR, 'api/src/lib/db.js'),
+      setupPrismaLogger({ slowQueryThreshold: 0 })
+    )
+
+    waitForApiSide()
+
+    cy.visit('http://localhost:8910/posts')
+
+    cy.contains('Edit')
+    cy.contains('Loading...').should('not.exist')
+
+    cy.waitUntil(
+      () =>
+        cy.readFile(LOG_PATH).then((str) => {
+          console.log(str)
+          return str.includes('Slow Query performed in ')
+        }),
+      { interval: 2000, timeout: 2000 }
     )
   })
 })

@@ -2,25 +2,24 @@ import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 
 import type { SupportedAuthTypes } from '@redwoodjs/auth'
 
-import type { GlobalContext } from '../../globalContext'
-
 import { auth0 } from './auth0'
 import { azureActiveDirectory } from './azureActiveDirectory'
 import { clerk } from './clerk'
 import { dbAuth } from './dbAuth'
 import { ethereum } from './ethereum'
+import { firebase } from './firebase'
 import { netlify } from './netlify'
 import { nhost } from './nhost'
 import { supabase } from './supabase'
 
-const noop = (token: string) => token
-
 interface Req {
   event: APIGatewayProxyEvent
-  context: GlobalContext & LambdaContext
+  context: LambdaContext
 }
 
 type Decoded = null | string | Record<string, unknown>
+
+const noop = (token: string) => token
 
 const typesToDecoders: Record<
   SupportedAuthTypes,
@@ -34,7 +33,7 @@ const typesToDecoders: Record<
   nhost: nhost,
   goTrue: netlify,
   magicLink: noop,
-  firebase: noop,
+  firebase: firebase,
   supabase: supabase,
   ethereum: ethereum,
   dbAuth: dbAuth,
