@@ -46,43 +46,48 @@ const applyProviderOptions = (
   return provider
 }
 
-type FirebaseClient = {
-  firebaseAuth: FirebaseAuth
-  firebaseApp?: FirebaseApp
-}
-
-export const firebase = ({
-  firebaseAuth,
-  firebaseApp,
-}: FirebaseClient): AuthClient => {
-  const auth = firebaseAuth.getAuth(firebaseApp)
+export const firebase = (firebaseApp: FirebaseApp): AuthClient => {
+  const {
+    getAuth,
+    signInWithEmailAndPassword,
+    signInWithEmailLink,
+    isSignInWithEmailLink,
+    OAuthProvider,
+    signInWithPopup,
+    createUserWithEmailAndPassword,
+  } = require('firebase/auth') as FirebaseAuth
+  // This is an instance of the firebase authclient
+  const authClient = getAuth(firebaseApp)
 
   function getProvider(providerId: string) {
-    return new firebaseAuth.OAuthProvider(providerId)
+    return new OAuthProvider(providerId)
   }
 
   const loginWithEmailLink = ({ email, emailLink }: Options) => {
     if (
       email !== undefined &&
       emailLink !== undefined &&
-      firebaseAuth.isSignInWithEmailLink(auth, emailLink)
+      isSignInWithEmailLink(authClient, emailLink)
     ) {
-      return firebaseAuth.signInWithEmailLink(auth, email, emailLink)
+      return signInWithEmailLink(authClient, email, emailLink)
     }
     return undefined
   }
 
   return {
     type: 'firebase',
-    client: auth,
+    client: authClient,
     restoreAuthState: () => {
       // return a promise that we be await'd on for first page load until firebase
       // auth has loaded, indicated by the first firing of onAuthStateChange)
       return new Promise((resolve, reject) => {
-        const unsubscribe = auth.onAuthStateChanged((user: User | null) => {
-          unsubscribe()
-          resolve(user)
-        }, reject)
+        const unsubscribe = authClient.onAuthStateChanged(
+          (user: User | null) => {
+            unsubscribe()
+            resolve(user)
+          },
+          reject
+        )
       })
     },
     login: async (
@@ -95,8 +100,8 @@ export const firebase = ({
       }
 
       if (hasPasswordCreds(options)) {
-        return firebaseAuth.signInWithEmailAndPassword(
-          auth,
+        return signInWithEmailAndPassword(
+          authClient,
           options.email as string,
           options.password as string
         )
@@ -109,9 +114,9 @@ export const firebase = ({
       const provider = getProvider(options.providerId || 'google.com')
       const providerWithOptions = applyProviderOptions(provider, options)
 
-      return firebaseAuth.signInWithPopup(auth, providerWithOptions)
+      return signInWithPopup(authClient, providerWithOptions)
     },
-    logout: async () => auth.signOut(),
+    logout: async () => authClient.signOut(),
     signup: (
       options: oAuthProvider | Options = { providerId: 'google.com' }
     ) => {
@@ -120,8 +125,8 @@ export const firebase = ({
       }
 
       if (hasPasswordCreds(options)) {
-        return firebaseAuth.createUserWithEmailAndPassword(
-          auth,
+        return createUserWithEmailAndPassword(
+          authClient,
           options.email as string,
           options.password as string
         )
@@ -135,13 +140,13 @@ export const firebase = ({
       const providerWithOptions = applyProviderOptions(provider, options)
 
       // Potentially useful to support signInWithCredential without popup
-      return firebaseAuth.signInWithPopup(auth, providerWithOptions)
+      return signInWithPopup(authClient, providerWithOptions)
     },
     getToken: async () => {
-      return auth.currentUser ? auth.currentUser.getIdToken() : null
+      return authClient.currentUser ? authClient.currentUser.getIdToken() : null
     },
     getUserMetadata: async () => {
-      return auth.currentUser
+      return authClient.currentUser
     },
   }
 }
