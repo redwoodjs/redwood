@@ -1,4 +1,4 @@
-import { AuthenticationError } from '@redwoodjs/api'
+import { AuthenticationError } from '@redwoodjs/graphql-server'
 import admin from 'firebase-admin'
 
 const config = {
@@ -11,7 +11,7 @@ const config = {
   appId: process.env.FIREBASE_APP_ID,
 }
 
-// eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const adminApp = admin.initializeApp(config)
 
 /**
