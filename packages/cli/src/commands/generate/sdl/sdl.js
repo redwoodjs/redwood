@@ -20,7 +20,11 @@ import {
 } from '../../../lib'
 import c from '../../../lib/colors'
 import { yargsDefaults } from '../../generate'
-import { ensureUniquePlural, relationsForModel } from '../helpers'
+import {
+  customOrDefaultTemplatePath,
+  ensureUniquePlural,
+  relationsForModel,
+} from '../helpers'
 import { files as serviceFiles } from '../service/service'
 
 const IGNORE_FIELDS_FOR_INPUT = ['id', 'createdAt', 'updatedAt']
@@ -149,7 +153,11 @@ export const files = async ({ name, crud, tests, typescript }) => {
     await sdlFromSchemaModel(pascalcase(pluralize.singular(name)), crud)
 
   let template = generateTemplate(
-    path.join('sdl', 'templates', `sdl.ts.template`),
+    customOrDefaultTemplatePath({
+      side: 'api',
+      generator: 'sdl',
+      templatePath: 'sdl.ts.template',
+    }),
     {
       name,
       crud,
