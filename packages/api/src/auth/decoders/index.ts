@@ -49,13 +49,13 @@ export const decodeToken = async (
     // Make this a warning, instead of a hard error
     // Allow users to have multiple custom types if they choose to
     if (process.env.NODE_ENV === 'development') {
-      console.error(
+      console.warn(
         `The auth type "${type}" is not officially supported, we currently support: ${Object.keys(
           typesToDecoders
         ).join(', ')}`
       )
 
-      console.error(
+      console.warn(
         'Please ensure you have handlers for your custom auth in getCurrentUser in src/lib/auth.{js,ts}'
       )
     }
@@ -67,11 +67,5 @@ export const decodeToken = async (
 
   const decoder = typesToDecoders[type]
 
-  const decodedToken = decoder(token, req)
-
-  if (!decodedToken) {
-    throw new Error('Error decoding token for auth type "${type}".')
-  }
-
-  return decodedToken
+  return decoder(token, req)
 }
