@@ -28,7 +28,7 @@ export const useRedwoodAuthContext = (
         })
       } catch (error: any) {
         throw new Error(
-          `Unable to get authentication context: ${error.message}`
+          `Exception in getAuthenticationContext: ${error.message}`
         )
       }
 
@@ -45,7 +45,7 @@ export const useRedwoodAuthContext = (
           extendContext({ currentUser })
         }
       } catch (error: any) {
-        throw new Error(`Unable to get the current user: ${error.message}`)
+        throw new Error(`Exception in getCurrentUser: ${error.message}`)
       }
     },
   }
