@@ -55,6 +55,7 @@ import {
   RegisterOptions,
   UseFormReturn,
   UseFormProps,
+  ValidateResult,
 } from 'react-hook-form'
 
 import FormError from './FormError'

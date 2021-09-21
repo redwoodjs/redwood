@@ -80,7 +80,7 @@ export class RWCell extends RWComponent {
           },
         }
       }
-    } catch (e) {
+    } catch (e: any) {
       // Maybe the AST has a syntax error...
       yield {
         uri: this.uri,

@@ -13,6 +13,16 @@
 // [^1] https://eslint.org/docs/rules/
 // [^2] https://www.npmjs.com/package/eslint-plugin-react#list-of-supported-rules
 
+const findUp = require('findup-sync')
+
+const babelConfigPath = (cwd = process.env.RWJS_CWD ?? process.cwd()) => {
+  const configPath = findUp('babel.config.js', { cwd })
+  if (!configPath) {
+    throw new Error(`Eslint-parser could not find a "babel.config.js" file`)
+  }
+  return configPath
+}
+
 module.exports = {
   extends: [
     'eslint:recommended',
@@ -20,10 +30,15 @@ module.exports = {
     'plugin:prettier/recommended',
     'plugin:jest-dom/recommended',
   ],
-  parser: 'babel-eslint',
+  parser: '@babel/eslint-parser',
+  parserOptions: {
+    babelOptions: {
+      configFile: babelConfigPath(),
+    },
+  },
   plugins: [
     'prettier',
-    'babel',
+    '@babel',
     'import',
     'jsx-a11y',
     'react',
@@ -62,10 +77,16 @@ module.exports = {
       },
     ],
     'react/display-name': 'off',
-    'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
   },
   overrides: [
+    {
+      files: ['*.tsx', '*.js', '*.jsx'],
+      excludedFiles: ['api/src/**'],
+      rules: {
+        'react-hooks/rules-of-hooks': 'error',
+      },
+    },
     {
       files: ['*.ts', '*.tsx'],
       parser: '@typescript-eslint/parser',
