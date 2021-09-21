@@ -29,7 +29,7 @@ const adminApp = admin.initializeApp(config)
 export const getCurrentUser = async (decoded) => {
   // RBAC for firebase Auth needs a custom implementation, can not use parseJWT
   // see: https://firebase.google.com/docs/auth/admin/custom-claims
-  const { email, uid } = decoded as admin.auth.DecodedIdToken
+  const { email, uid } = decoded
   return { email, uid }
 }
 
