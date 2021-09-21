@@ -1,4 +1,5 @@
-import { AuthenticationError, ForbiddenError, parseJWT } from '@redwoodjs/graphql-server'
+import { parseJWT } from '@redwoodjs/api'
+import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
 
 /**
  * getCurrentUser returns the user information together with
@@ -17,17 +18,17 @@ export const getCurrentUser = async (
   { _token, _type },
   { _event, _context }
 ) => {
-  if (decoded) {
-    const { roles } = parseJWT({ decoded })
-
-    if (roles) {
-      return { ...decoded,  roles }
-    }
-
-    return { ...decoded }
+  if (!decoded) {
+    return null
   }
 
-  return
+  const { roles } = parseJWT({ decoded })
+
+  if (roles) {
+    return { ...decoded, roles }
+  }
+
+  return { ...decoded }
 }
 
 /**
