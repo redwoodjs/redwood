@@ -43,7 +43,7 @@ interface NamedExports {
 /**
  * get all the named exports in a given piece of code.
  */
-export const getNamedExports = (ast: types.Node): NamedExports[] => {
+export const getNamedExports = (ast: any): NamedExports[] => {
   const namedExports: NamedExports[] = []
   traverse(ast, {
     ExportNamedDeclaration(path) {
@@ -92,7 +92,7 @@ export const getNamedExports = (ast: types.Node): NamedExports[] => {
 /**
  * get all the gql queries from the supplied code
  */
-export const getGqlQueries = (ast: types.Node) => {
+export const getGqlQueries = (ast: any) => {
   const gqlQueries: string[] = []
   traverse(ast, {
     TaggedTemplateExpression(path) {
@@ -106,7 +106,7 @@ export const getGqlQueries = (ast: types.Node) => {
   return gqlQueries
 }
 
-export const getCellGqlQuery = (ast: types.Node) => {
+export const getCellGqlQuery = (ast: any) => {
   let cellQuery: string | undefined = undefined
   traverse(ast, {
     ExportNamedDeclaration({ node }) {
@@ -136,7 +136,7 @@ export const getCellGqlQuery = (ast: types.Node) => {
   return cellQuery
 }
 
-export const hasDefaultExport = (ast: types.Node): boolean => {
+export const hasDefaultExport = (ast: any): boolean => {
   let exported = false
   traverse(ast, {
     ExportDefaultDeclaration() {
