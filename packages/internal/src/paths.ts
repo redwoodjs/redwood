@@ -9,6 +9,7 @@ import { getConfig } from './config'
 export interface NodeTargetPaths {
   base: string
   dataMigrations: string
+  directives: string
   db: string
   dbSchema: string
   src: string
@@ -168,6 +169,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
     api: {
       base: path.join(BASE_DIR, 'api'),
       dataMigrations: path.join(BASE_DIR, schemaDir, 'dataMigrations'),
+      directives: path.join(BASE_DIR, 'api/directives'),
       db: path.join(BASE_DIR, schemaDir),
       dbSchema: path.join(BASE_DIR, schemaPath),
       functions: path.join(BASE_DIR, PATH_API_DIR_FUNCTIONS),

@@ -13,9 +13,13 @@
   },
   "scripts": {
     "build": "yarn build:js",
-    "build:js": "babel src -d dist",
+    "build:js": "babel src -d dist --extensions \".js,.ts\" --copy-files --no-copy-ignored && yarn build:clean-dist",
+    "build:clean-dist": "rimraf 'dist/**/*/__tests__'",
     "build:watch": "nodemon --watch src --ignore dist,template --exec \"yarn build\"",
     "test": "jest",
     "test:watch": "yarn test --watch"
+  },
+  "devDependencies": {
+    "@types/jscodeshift": "^0.11.2"
   }
 }
