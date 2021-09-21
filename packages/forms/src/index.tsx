@@ -9,6 +9,7 @@ import {
   RegisterOptions,
   UseFormReturn,
   UseFormProps,
+  ValidateResult,
 } from 'react-hook-form'
 
 import {
@@ -283,11 +284,16 @@ const FieldError = (props: FieldErrorProps) => {
   return validationError ? <span {...props}>{errorMessage}</span> : null
 }
 
-const jsonValidation = (value: string) => {
+const jsonValidation = (value: string): ValidateResult => {
   try {
     JSON.parse(value)
+    return true
   } catch (e) {
-    return e.message
+    if (e instanceof Error) {
+      return e.message
+    } else {
+      return 'Invalid JSON'
+    }
   }
 }
 
