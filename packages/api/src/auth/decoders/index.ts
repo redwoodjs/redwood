@@ -7,6 +7,7 @@ import { azureActiveDirectory } from './azureActiveDirectory'
 import { clerk } from './clerk'
 import { dbAuth } from './dbAuth'
 import { ethereum } from './ethereum'
+import { firebase } from './firebase'
 import { netlify } from './netlify'
 import { nhost } from './nhost'
 import { supabase } from './supabase'
@@ -32,7 +33,7 @@ const typesToDecoders: Record<
   nhost: nhost,
   goTrue: netlify,
   magicLink: noop,
-  firebase: noop,
+  firebase: firebase,
   supabase: supabase,
   ethereum: ethereum,
   dbAuth: dbAuth,
