@@ -1,16 +1,11 @@
-export const firebase = (token: string) => {
-  if (!process.env.FIREBASE_API_KEY) {
-    if (
-      process.env.NODE_ENV === 'development' ||
-      process.env.NODE_ENV === 'test'
-    ) {
-      console.warn(
-        'FIREBASE_API_KEY env var is not set. Be certain to set this value in Production.'
-      )
-    } else {
-      console.error('Firebase auth configuration error.')
-      throw new Error('Firebase auth configuration error.')
-    }
-  }
-  return token
+export const firebase = async (
+  token: string
+): Promise<null | Record<string, unknown>> => {
+  // Use require here to prevent dependency for non-firebase projects
+  const admin = require('firebase-admin')
+
+  return admin.auth().verifyIdToken(token)
+  // Alternative third-party JWT verification process described here:
+  // https://firebase.google.com/docs/auth/admin/verify-id-tokens#verify_id_tokens_using_a_third-party_jwt_library
+
 }
