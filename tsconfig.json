@@ -11,6 +11,7 @@
     { "path": "packages/testing" },
     { "path": "packages/prerender" },
     { "path": "packages/graphql-server" },
+    { "path": "packages/forms" },
   ],
   "files": []
 }
