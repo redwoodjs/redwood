@@ -35,7 +35,7 @@ export async function printDiagnostics(
     if (exceptions === 0) {
       console.log('Success: no errors or warnings were detected')
     }
-  } catch (e) {
+  } catch (e: any) {
     console.log('runtime error: ' + e.message)
   }
 }

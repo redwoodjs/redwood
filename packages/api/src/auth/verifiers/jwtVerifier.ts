@@ -31,7 +31,7 @@ const createSignature = ({
       : undefined
 
     return jwt.sign(payload, secret, { ...signOptions })
-  } catch (error) {
+  } catch (error: any) {
     throw new WebhookSignError(error.message)
   }
 }

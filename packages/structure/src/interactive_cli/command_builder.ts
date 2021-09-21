@@ -51,7 +51,7 @@ class CommandBuilder {
           }
           return
       }
-    } catch (e) {
+    } catch (e: any) {
       if (e.message === 'break') {
         return
       }

@@ -120,7 +120,7 @@ export const requestHandler = async (
     try {
       const lambaResponse = await handlerPromise
       return expressResponseForLambdaResult(res, lambaResponse)
-    } catch (error) {
+    } catch (error: any) {
       return expressResponseForLambdaError(res, error)
     }
   }
