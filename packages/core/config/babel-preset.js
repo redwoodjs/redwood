@@ -1,8 +1,6 @@
 /**
  * This is the babel preset used in `create-redwood-app`
  */
-const { extendDefaultPlugins } = require('svgo')
-
 const { getPaths } = require('@redwoodjs/internal')
 
 const packageJSON = require('../package.json')
@@ -11,6 +9,7 @@ const TARGETS_NODE = '12.16'
 // Warning! Use the minor core-js version: "corejs: '3.6'", instead of "corejs: 3",
 // because we want to include the features added in the minor version.
 // https://github.com/zloirock/core-js/blob/master/README.md#babelpreset-env
+
 const CORE_JS_VERSION = packageJSON.dependencies['core-js']
   .split('.')
   .slice(0, 2)
@@ -41,6 +40,7 @@ module.exports = () => {
       // same as @babel/plugin-proposal class-properties.
       // (https://babeljs.io/docs/en/babel-plugin-proposal-private-methods#loose)
       ['@babel/plugin-proposal-private-methods', { loose: true }],
+      ['@babel/plugin-proposal-private-property-in-object', { loose: true }],
       [
         '@babel/plugin-transform-runtime',
         {
@@ -100,9 +100,9 @@ module.exports = () => {
             {
               declarations: [
                 {
-                  // import { context } from '@redwoodjs/api'
+                  // import { context } from '@redwoodjs/graphql-server'
                   members: ['context'],
-                  path: '@redwoodjs/api',
+                  path: '@redwoodjs/graphql-server',
                 },
                 {
                   default: 'gql',
@@ -170,15 +170,6 @@ module.exports = () => {
                   default: 'gql',
                   path: 'graphql-tag',
                 },
-                {
-                  // import { mockGraphQLQuery, mockGraphQLMutation, mockCurrentUser } from '@redwoodjs/testing'
-                  members: [
-                    'mockGraphQLQuery',
-                    'mockGraphQLMutation',
-                    'mockCurrentUser',
-                  ],
-                  path: '@redwoodjs/testing',
-                },
               ],
             },
           ],
@@ -187,22 +178,14 @@ module.exports = () => {
             'inline-react-svg',
             {
               svgo: {
-                plugins: extendDefaultPlugins([
+                plugins: [
                   {
                     name: 'removeAttrs',
                     params: { attrs: '(data-name)' },
                   },
-                  {
-                    // @TODO confirm this is the right thing
-                    // On my projects, this was needed for backwards compatibility
-                    name: 'removeViewBox',
-                    active: false,
-                  },
-                  {
-                    // Otherwise having style="xxx" breaks
-                    name: 'convertStyleToAttrs',
-                  },
-                ]),
+                  // Otherwise having style="xxx" breaks
+                  'convertStyleToAttrs',
+                ],
               },
             },
           ],

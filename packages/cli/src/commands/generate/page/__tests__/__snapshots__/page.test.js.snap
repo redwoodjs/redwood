@@ -2,10 +2,18 @@
 
 exports[`creates a page component 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
+import { MetaTags } from '@redwoodjs/web'
 
 const HomePage = () => {
   return (
     <>
+      <MetaTags
+        title=\\"Home\\"
+        // description=\\"Home description\\"
+        /* you should un-comment description and add a unique description, 155 characters or less
+      You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
+      />
+
       <h1>HomePage</h1>
       <p>
         Find me in <code>./web/src/pages/HomePage/HomePage.js</code>
@@ -24,10 +32,18 @@ export default HomePage
 
 exports[`creates a page component 2`] = `
 "import { Link, routes } from '@redwoodjs/router'
+import { MetaTags } from '@redwoodjs/web'
 
 const ContactUsPage = () => {
   return (
     <>
+      <MetaTags
+        title=\\"ContactUs\\"
+        // description=\\"ContactUs description\\"
+        /* you should un-comment description and add a unique description, 155 characters or less
+      You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
+      />
+
       <h1>ContactUsPage</h1>
       <p>
         Find me in <code>./web/src/pages/ContactUsPage/ContactUsPage.js</code>
@@ -46,10 +62,18 @@ export default ContactUsPage
 
 exports[`creates a page component with a plural word for name 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
+import { MetaTags } from '@redwoodjs/web'
 
 const CatsPage = () => {
   return (
     <>
+      <MetaTags
+        title=\\"Cats\\"
+        // description=\\"Cats description\\"
+        /* you should un-comment description and add a unique description, 155 characters or less
+      You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
+      />
+
       <h1>CatsPage</h1>
       <p>
         Find me in <code>./web/src/pages/CatsPage/CatsPage.js</code>
@@ -68,10 +92,18 @@ export default CatsPage
 
 exports[`creates a page component with params 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
+import { MetaTags } from '@redwoodjs/web'
 
 const PostPage = ({ id }) => {
   return (
     <>
+      <MetaTags
+        title=\\"Post\\"
+        // description=\\"Post description\\"
+        /* you should un-comment description and add a unique description, 155 characters or less
+      You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
+      />
+
       <h1>PostPage</h1>
       <p>
         Find me in <code>./web/src/pages/PostPage/PostPage.js</code>
@@ -112,7 +144,7 @@ export default { title: 'Pages/ContactUsPage' }
 `;
 
 exports[`creates a page test 1`] = `
-"import { render } from '@redwoodjs/testing'
+"import { render } from '@redwoodjs/testing/web'
 
 import HomePage from './HomePage'
 
@@ -127,7 +159,7 @@ describe('HomePage', () => {
 `;
 
 exports[`creates a test for a component with multiple words for a name 1`] = `
-"import { render } from '@redwoodjs/testing'
+"import { render } from '@redwoodjs/testing/web'
 
 import ContactUsPage from './ContactUsPage'
 
@@ -142,7 +174,7 @@ describe('ContactUsPage', () => {
 `;
 
 exports[`creates a test for page component with params 1`] = `
-"import { render } from '@redwoodjs/testing'
+"import { render } from '@redwoodjs/testing/web'
 
 import PostPage from './PostPage'
 
@@ -172,7 +204,7 @@ export default { title: 'Pages/HomePage' }
 
 exports[`file generation 2`] = `
 Object {
-  "fileContent": "import { render } from '@redwoodjs/testing'
+  "fileContent": "import { render } from '@redwoodjs/testing/web'
 
 import HomePage from './HomePage'
 
@@ -191,10 +223,18 @@ describe('HomePage', () => {
 exports[`file generation 3`] = `
 Object {
   "fileContent": "import { Link, routes } from '@redwoodjs/router'
+import { MetaTags } from '@redwoodjs/web'
 
 const HomePage = () => {
   return (
     <>
+      <MetaTags
+        title=\\"Home\\"
+        // description=\\"Home description\\"
+        /* you should un-comment description and add a unique description, 155 characters or less
+      You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
+      />
+
       <h1>HomePage</h1>
       <p>
         Find me in <code>./web/src/pages/HomePage/HomePage.js</code>
@@ -248,7 +288,7 @@ export default { title: 'Pages/PostPage' }
 
 exports[`file generation with route params 2`] = `
 Object {
-  "fileContent": "import { render } from '@redwoodjs/testing'
+  "fileContent": "import { render } from '@redwoodjs/testing/web'
 
 import PostPage from './PostPage'
 
@@ -267,10 +307,18 @@ describe('PostPage', () => {
 exports[`file generation with route params 3`] = `
 Object {
   "fileContent": "import { Link, routes } from '@redwoodjs/router'
+import { MetaTags } from '@redwoodjs/web'
 
 const PostPage = ({ id }) => {
   return (
     <>
+      <MetaTags
+        title=\\"Post\\"
+        // description=\\"Post description\\"
+        /* you should un-comment description and add a unique description, 155 characters or less
+      You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
+      />
+
       <h1>PostPage</h1>
       <p>
         Find me in <code>./web/src/pages/PostPage/PostPage.js</code>
@@ -311,10 +359,17 @@ export default Routes",
 
 exports[`generates typescript pages 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
+import { MetaTags } from '@redwoodjs/web'
 
 const TSFilesPage = () => {
   return (
     <>
+      <MetaTags
+        title=\\"TSFiles\\"
+        // description=\\"TSFiles description\\"
+        /* you should un-comment description and add a unique description, 155 characters or less
+        You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
+      />
       <h1>TSFilesPage</h1>
       <p>
         Find me in <code>./web/src/pages/TsFilesPage/TsFilesPage.tsx</code>
@@ -343,7 +398,7 @@ export default { title: 'Pages/TSFilesPage' }
 `;
 
 exports[`generates typescript pages 3`] = `
-"import { render } from '@redwoodjs/testing'
+"import { render } from '@redwoodjs/testing/web'
 
 import TSFilesPage from './TSFilesPage'
 
@@ -359,6 +414,7 @@ describe('TSFilesPage', () => {
 
 exports[`generates typescript pages 4`] = `
 "import { Link, routes } from '@redwoodjs/router'
+import { MetaTags } from '@redwoodjs/web'
 
 type TSParamFilesPageProps = {
   id: string
@@ -367,6 +423,12 @@ type TSParamFilesPageProps = {
 const TSParamFilesPage = ({ id }: TSParamFilesPageProps) => {
   return (
     <>
+      <MetaTags
+        title=\\"TSParamFiles\\"
+        // description=\\"TSParamFiles description\\"
+        /* you should un-comment description and add a unique description, 155 characters or less
+        You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
+      />
       <h1>TSParamFilesPage</h1>
       <p>
         Find me in <code>./web/src/pages/TsParamFilesPage/TsParamFilesPage.tsx</code>
@@ -386,6 +448,7 @@ export default TSParamFilesPage
 
 exports[`generates typescript pages 5`] = `
 "import { Link, routes } from '@redwoodjs/router'
+import { MetaTags } from '@redwoodjs/web'
 
 type TSParamTypeFilesPageProps = {
   id: number
@@ -394,6 +457,12 @@ type TSParamTypeFilesPageProps = {
 const TSParamTypeFilesPage = ({ id }: TSParamTypeFilesPageProps) => {
   return (
     <>
+      <MetaTags
+        title=\\"TSParamTypeFiles\\"
+        // description=\\"TSParamTypeFiles description\\"
+        /* you should un-comment description and add a unique description, 155 characters or less
+        You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
+      />
       <h1>TSParamTypeFilesPage</h1>
       <p>
         Find me in <code>./web/src/pages/TsParamTypeFilesPage/TsParamTypeFilesPage.tsx</code>

@@ -23,7 +23,7 @@ import {
 const projectPath = process.argv?.[2] ?? process.env.RWJS_CWD
 if (!projectPath) {
   console.log('Error: Please specify the path to your Redwood Project')
-  console.log(`Usage: ${process.argv?.[1]} /path/to/rwjs/proect`)
+  console.log(`Usage: ${process.argv?.[1]} /path/to/rwjs/project`)
   process.exit(1)
 }
 
@@ -41,6 +41,10 @@ process.on('SIGINT', () => {
 
 function logStatus(m) {
   console.log(c.bgYellow(c.black('rwfw ')), c.yellow(m))
+}
+
+function logError(m) {
+  console.log(c.bgRed(c.black('rwfw ')), c.red(m))
 }
 
 chokidar
@@ -94,6 +98,8 @@ chokidar
     const packageName = packageJsonName(packageJsonPath)
     logStatus(c.magenta(packageName))
 
+    let hasHadError = false
+
     try {
       console.log()
       logStatus(`Cleaning ${packageName}...`)
@@ -107,12 +113,15 @@ chokidar
       logStatus(`Copying ${packageName}...`)
       copyFrameworkFilesToProject(projectPath, [packageJsonPath])
     } catch (error) {
-      console.log()
-      logStatus(`Error building ${packageName}...`)
+      hasHadError = true
       console.log(error)
+      console.log()
+      logError(`Error building ${packageName}...`)
     }
 
-    console.log()
-    logStatus(`Done, and waiting for changes...`)
-    console.log('-'.repeat(80))
+    if (!hasHadError) {
+      console.log()
+      logStatus(`Done, and waiting for changes...`)
+      console.log('-'.repeat(80))
+    }
   })

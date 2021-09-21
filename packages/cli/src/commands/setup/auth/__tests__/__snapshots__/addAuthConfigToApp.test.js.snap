@@ -32,7 +32,7 @@ const auth0 = new Auth0Client({
 
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider>
+    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
       <AuthProvider client={auth0} type=\\"auth0\\">
         <RedwoodApolloProvider>
           <Routes />
@@ -76,7 +76,7 @@ const firebaseClient = ((config) => {
 
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider>
+    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
       <AuthProvider client={firebaseClient} type=\\"firebase\\">
         <RedwoodApolloProvider>
           <Routes />
@@ -112,7 +112,7 @@ const azureActiveDirectoryClient = new UserAgentApplication({
 
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider>
+    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
       <AuthProvider client={azureActiveDirectoryClient} type=\\"azureActiveDirectory\\">
         <RedwoodApolloProvider>
           <Routes />
@@ -176,7 +176,7 @@ let ethereum
 
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider>
+    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
       <FetchConfigProvider>
       <ApolloInjector>
       <AuthProvider client={ethereum} type=\\"ethereum\\">
@@ -212,7 +212,7 @@ const goTrueClient = new GoTrue({
 
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider>
+    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
       <AuthProvider client={goTrueClient} type=\\"goTrue\\">
         <RedwoodApolloProvider>
           <Routes />
@@ -241,7 +241,7 @@ const m = new Magic(process.env.MAGICLINK_PUBLIC)
 
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider>
+    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
       <AuthProvider client={m} type=\\"magicLink\\">
         <RedwoodApolloProvider>
           <Routes />
@@ -271,7 +271,7 @@ isBrowser && netlifyIdentity.init()
 
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider>
+    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
       <AuthProvider client={netlifyIdentity} type=\\"netlify\\">
         <RedwoodApolloProvider>
           <Routes />
@@ -304,7 +304,7 @@ const nhostClient = createClient({
 
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider>
+    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
       <AuthProvider client={nhostClient} type=\\"nhost\\">
         <RedwoodApolloProvider>
           <Routes />
@@ -336,7 +336,7 @@ const supabaseClient = createClient(
 
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider>
+    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
       <AuthProvider client={supabaseClient} type=\\"supabase\\">
         <RedwoodApolloProvider>
           <Routes />

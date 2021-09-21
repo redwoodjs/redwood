@@ -65,10 +65,14 @@ const expressResponseForLambdaResult = (
     }
   }
 
-  // The AWS lambda docs specify that the response object must be
-  // compatible with `JSON.stringify`, but the type definition specifices that
-  // it must be a string.
-  if (typeof body === 'string') {
+  if (lambdaResult.isBase64Encoded) {
+    // Correctly handle base 64 encoded binary data. See
+    // https://aws.amazon.com/blogs/compute/handling-binary-data-using-amazon-api-gateway-http-apis
+    expressResFn.send(Buffer.from(body, 'base64'))
+  } else if (typeof body === 'string') {
+    // The AWS lambda docs specify that the response object must be
+    // compatible with `JSON.stringify`, but the type definition specifies that
+    // it must be a string.
     expressResFn.send(body)
   } else {
     expressResFn.json(body)
@@ -116,7 +120,7 @@ export const requestHandler = async (
     try {
       const lambaResponse = await handlerPromise
       return expressResponseForLambdaResult(res, lambaResponse)
-    } catch (error) {
+    } catch (error: any) {
       return expressResponseForLambdaError(res, error)
     }
   }

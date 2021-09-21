@@ -34,6 +34,9 @@ export const Success = ({ ${singularCamelName} }: CellSuccessProps<Edit${singula
       toast.success('${singularPascalName} updated')
       navigate(routes.${pluralRouteName}())
     },
+    onError: (error) => {
+      toast.error(error.message)
+    },
   })
 
   const onSave = (input, id) => {<% if (intForeignKeys.length) { %>

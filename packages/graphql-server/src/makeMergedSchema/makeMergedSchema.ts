@@ -9,13 +9,16 @@ import type { GraphQLSchema, GraphQLFieldMap, DocumentNode } from 'graphql'
 import merge from 'lodash.merge'
 import omitBy from 'lodash.omitby'
 
+import { validateSchemaForDirectives } from '@redwoodjs/internal'
+import { rootGqlSchema } from '@redwoodjs/internal'
+
+import type { RedwoodDirective } from '../plugins/useRedwoodDirective'
 import {
   Services,
-  ServicesCollection,
+  ServicesGlobImports,
   GraphQLTypeWithFields,
-} from '@redwoodjs/api'
-
-import * as rootSchema from './rootSchema'
+  SdlGlobImports,
+} from '../types'
 
 const mapFieldsToService = ({
   fields = {},
@@ -69,7 +72,7 @@ const mergeResolversWithServices = ({
 }: {
   schema: GraphQLSchema
   resolvers: { [key: string]: any }
-  services: ServicesCollection
+  services: ServicesGlobImports
 }): IResolvers => {
   const mergedServices = merge(
     {},
@@ -132,7 +135,7 @@ const mergeResolvers = (schemas: {
     merge(
       {},
       ...[
-        rootSchema.resolvers,
+        rootGqlSchema.resolvers,
         ...Object.values(schemas).map(({ resolvers }) => resolvers),
       ]
     ),
@@ -183,39 +186,47 @@ const mergeTypes = (
 }
 
 export const makeMergedSchema = ({
-  schemas,
+  sdls,
   services,
-  schemaDirectives,
   schemaOptions,
+  directives,
 }: {
-  schemas: {
-    [key: string]: {
-      schema: DocumentNode
-      resolvers: Record<string, unknown>
-    }
-  }
-  services: ServicesCollection
-  /** @deprecated: Please use `schemaOptions` instead. */
-  schemaDirectives?: IExecutableSchemaDefinition['schemaDirectives']
+  sdls: SdlGlobImports
+  services: ServicesGlobImports
+  directives: RedwoodDirective[]
+
   /**
    * A list of options passed to [makeExecutableSchema](https://www.graphql-tools.com/docs/generate-schema/#makeexecutableschemaoptions).
    */
   schemaOptions?: Partial<IExecutableSchemaDefinition>
 }) => {
+  const sdlSchemas = Object.values(sdls).map(({ schema }) => schema)
+
   const typeDefs = mergeTypes(
-    [rootSchema.schema, ...Object.values(schemas).map(({ schema }) => schema)],
+    [
+      rootGqlSchema.schema,
+      ...directives.map((directive) => directive.schema), // pick out schemas from directives
+      ...sdlSchemas, // pick out the schemas from sdls
+    ],
     { all: true }
   )
 
+  if (
+    process.env.NODE_ENV === 'development' ||
+    process.env.NODE_ENV === 'test'
+  ) {
+    const mergedSDLs = mergeTypeDefs(sdlSchemas)
+    validateSchemaForDirectives(mergedSDLs)
+  }
+
   const schema = makeExecutableSchema({
     typeDefs,
-    schemaDirectives,
     ...schemaOptions,
   })
 
   const resolvers: IResolvers = mergeResolversWithServices({
     schema,
-    resolvers: mergeResolvers(schemas),
+    resolvers: mergeResolvers(sdls),
     services,
   })
 

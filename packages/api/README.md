@@ -96,7 +96,7 @@ Remember, files in this directory (`api/src/functions`) are serverless functions
 1. Everything (i.e. sdl and services) is imported
 2. The services are wrapped into resolvers
 3. The sdl and resolvers are merged/stitched into a schema
-4. The ApolloServer is instantiated with said merged/stitched schema and context
+4. The GraphQL Server is instantiated with said merged/stitched schema and context
 
 These four steps map quite nicely to these four "code" steps, some of which are doing a little more under-the-hood than others:
 

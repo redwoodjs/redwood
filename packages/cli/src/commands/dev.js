@@ -19,23 +19,20 @@ export const builder = (yargs) => {
       description: 'Which dev server(s) to start',
       type: 'array',
     })
-    .positional('forward', {
+    .option('forward', {
       alias: 'fwd',
       description:
         'String of one or more Webpack DevServer config options, for example: `--fwd="--port=1234 --no-open"`',
       type: 'string',
     })
-    .option('useEnvelop', {
-      type: 'boolean',
-      required: false,
-      default: getConfig().experimental.useEnvelop,
-      description:
-        'Use Envelop as GraphQL Server instead of Apollo Server [experimental]',
-    })
     .option('generate', {
       type: 'boolean',
       default: true,
       description: 'Generate artifacts',
+    })
+    .option('watchNodeModules', {
+      type: 'boolean',
+      description: 'Reload on changes to node_modules',
     })
     .epilogue(
       `Also see the ${terminalLink(
@@ -48,8 +45,8 @@ export const builder = (yargs) => {
 export const handler = async ({
   side = ['api', 'web'],
   forward = '',
-  useEnvelop = false,
   generate = true,
+  watchNodeModules = process.env.RWJS_WATCH_NODE_MODULES === '1',
 }) => {
   const rwjsPaths = getPaths()
 
@@ -99,7 +96,11 @@ export const handler = async ({
     },
     web: {
       name: 'web',
-      command: `cd "${rwjsPaths.web.base}" && yarn cross-env NODE_ENV=development webpack serve --config "${webpackDevConfig}" ${forward}`,
+      command: `cd "${
+        rwjsPaths.web.base
+      }" && yarn cross-env NODE_ENV=development RWJS_WATCH_NODE_MODULES=${
+        watchNodeModules ? '1' : ''
+      } webpack serve --config "${webpackDevConfig}" ${forward}`,
       prefixColor: 'blue',
       runWhen: () => fs.existsSync(rwjsPaths.web.src),
     },
@@ -109,10 +110,6 @@ export const handler = async ({
       prefixColor: 'green',
       runWhen: () => generate,
     },
-  }
-
-  if (useEnvelop) {
-    jobs.api.name = jobs.api.name + ' with envelop'
   }
 
   // TODO: Convert jobs to an array and supply cwd command.

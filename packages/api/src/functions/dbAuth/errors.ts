@@ -7,6 +7,27 @@ export class NoSessionSecret extends Error {
   }
 }
 
+export class NoSessionExpiration extends Error {
+  constructor() {
+    super('dbAuth requires login expiration time, in seconds')
+    this.name = 'NoSessionExpiration'
+  }
+}
+
+export class NoLoginHandler extends Error {
+  constructor() {
+    super('dbAuth requires a login handler in order to log in a user')
+    this.name = 'NoLoginHandler'
+  }
+}
+
+export class NoSignupHandler extends Error {
+  constructor() {
+    super('dbAuth requires a signup handler in order to create new users')
+    this.name = 'NoSignupHandler'
+  }
+}
+
 export class UnknownAuthMethod extends Error {
   constructor(name: string) {
     super(`Unknown auth method '${name}'`)
@@ -29,9 +50,12 @@ export class NotLoggedInError extends Error {
 }
 
 export class UserNotFoundError extends Error {
-  constructor(username: string | undefined = undefined) {
+  constructor(
+    username: string | undefined = undefined,
+    message: string | undefined = 'Username ${username} not found'
+  ) {
     if (username) {
-      super(`User \`${username}\` not found`)
+      super(message.replace(/\$\{username\}/g, username))
     } else {
       super(`User not found`)
     }
@@ -41,29 +65,49 @@ export class UserNotFoundError extends Error {
 }
 
 export class UsernameAndPasswordRequiredError extends Error {
-  constructor() {
-    super(`Both username and password are required`)
+  constructor(
+    message: string | undefined = 'Both username and password are required'
+  ) {
+    super(message)
     this.name = 'UsernameAndPasswordRequiredError'
   }
 }
 
+export class NoUserIdError extends Error {
+  constructor() {
+    super(
+      'loginHandler() must return an object with an `id` field as set in `authFields.id`'
+    )
+    this.name = 'NoUserIdError'
+  }
+}
+
 export class FieldRequiredError extends Error {
-  constructor(name: string) {
-    super(`${name} is required`)
+  constructor(
+    name: string,
+    message: string | undefined = '${field} is required'
+  ) {
+    super(message.replace(/\$\{field\}/g, name))
     this.name = 'FieldRequiredError'
   }
 }
 
 export class DuplicateUsernameError extends Error {
-  constructor(username: string) {
-    super(`Username \`${username}\` already in use`)
+  constructor(
+    username: string,
+    message: string | undefined = 'Username `${username}` already in use'
+  ) {
+    super(message.replace(/\$\{username\}/g, username))
     this.name = 'DuplicateUsernameError'
   }
 }
 
 export class IncorrectPasswordError extends Error {
-  constructor() {
-    super(`Incorrect password`)
+  constructor(
+    username: string,
+    message: string | undefined = 'Incorrect password for ${username}'
+  ) {
+    super(message.replace(/\$\{username\}/g, username))
     this.name = 'IncorrectPasswordError'
   }
 }

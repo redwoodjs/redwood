@@ -1,6 +1,7 @@
 import React from 'react'
 
-import { createNamedContext, gHistory } from './internal'
+import { gHistory } from './history'
+import { createNamedContext, TrailingSlashesTypes } from './util'
 
 export interface LocationContextType {
   pathname: string
@@ -16,6 +17,7 @@ interface LocationProviderProps {
     search?: string
     hash?: string
   }
+  trailingSlashes?: TrailingSlashesTypes
 }
 
 class LocationProvider extends React.Component<LocationProviderProps> {
@@ -28,14 +30,47 @@ class LocationProvider extends React.Component<LocationProviderProps> {
   }
 
   getContext() {
-    const windowLocation =
-      typeof window !== 'undefined'
-        ? window.location
-        : {
-            pathname: this.context?.pathname || '',
-            search: this.context?.search || '',
-            hash: this.context?.hash || '',
+    let windowLocation
+
+    if (typeof window !== 'undefined') {
+      const { pathname } = window.location
+
+      // Since we have to update the URL, we might as well handle the trailing slash here, before matching.
+      //
+      // - never -> strip trailing slashes ("/about/" -> "/about")
+      // - always -> add trailing slashes ("/about" -> "/about/")
+      // - preserve -> do nothing ("/about" -> "/about", "/about/" -> "/about/")
+      //
+      switch (this.props.trailingSlashes) {
+        case 'never':
+          if (pathname.endsWith('/')) {
+            window.history.replaceState(
+              {},
+              '',
+              pathname.substr(0, pathname.length - 1)
+            )
           }
+          break
+
+        case 'always':
+          if (!pathname.endsWith('/')) {
+            window.history.replaceState({}, '', pathname + '/')
+          }
+          break
+
+        default:
+          break
+      }
+
+      windowLocation = window.location
+    } else {
+      windowLocation = {
+        pathname: this.context?.pathname || '',
+        search: this.context?.search || '',
+        hash: this.context?.hash || '',
+      }
+    }
+
     const { pathname, search, hash } = this.props.location || windowLocation
 
     return { pathname, search, hash }
