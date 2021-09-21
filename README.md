@@ -17,11 +17,10 @@ and feature upgrades over time and with minimum effort.
 
 Redwood is the latest open source project initiated by Tom Preston-Werner, cofounder of GitHub (most popular code host on the planet), creator of Jekyll (one of the first and most popular static site generators), creator of Gravatar (the most popular avatar service on the planet), author of the Semantic Versioning specification (powers the Node packaging ecosystem), and inventor of TOML (an obvious, minimal configuration language used by many projects).
 
-> **NOTICE:** RedwoodJS has not yet reached a stable version 1.0, but we are very
-> close. In the last two years, the project has matured significantly and is
-> already used in production by a number of startups. We intend to have a 1.0
-> release candidate before the end of 2021 and to release a truly production-ready
-> 1.0 in early 2022.
+> **NOTICE:** RedwoodJS is very close to a stable version 1.0. In the last two years,
+> the project has matured significantly and is already used in production by a number
+> of startups. We intend to have a 1.0 release candidate before the end of 2021 and
+> to release a truly production-ready 1.0 in early 2022.
 
 > **TUTORIAL:** The best way to get to know Redwood is by going through the extensive
 > [Redwood Tutorial](https://redwoodjs.com/tutorial). Have fun!
