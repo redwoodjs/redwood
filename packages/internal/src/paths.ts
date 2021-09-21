@@ -80,6 +80,7 @@ const PATH_API_DIR_CONFIG = 'api/src/config'
 const PATH_API_DIR_LIB = 'api/src/lib'
 const PATH_API_DIR_GENERATORS = 'api/generators'
 const PATH_API_DIR_SERVICES = 'api/src/services'
+const PATH_API_DIR_DIRECTIVES = 'api/src/directives'
 const PATH_API_DIR_SRC = 'api/src'
 const PATH_WEB_ROUTES = 'web/src/Routes' // .js|.tsx
 const PATH_WEB_DIR_LAYOUTS = 'web/src/layouts/'
@@ -175,6 +176,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       generators: path.join(BASE_DIR, PATH_API_DIR_GENERATORS),
       config: path.join(BASE_DIR, PATH_API_DIR_CONFIG),
       services: path.join(BASE_DIR, PATH_API_DIR_SERVICES),
+      directives: path.join(BASE_DIR, PATH_API_DIR_DIRECTIVES),
       src: path.join(BASE_DIR, PATH_API_DIR_SRC),
       dist: path.join(BASE_DIR, 'api/dist'),
       types: path.join(BASE_DIR, 'api/types'),

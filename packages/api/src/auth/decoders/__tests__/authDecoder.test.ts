@@ -3,6 +3,7 @@ import type { Context as LambdaContext } from 'aws-lambda'
 import mockedAPIGatewayProxyEvent from '../../../functions/fixtures/apiGatewayProxyEvent.fixture'
 import * as auth0Decoder from '../auth0'
 import * as clerkDecoder from '../clerk'
+import * as firebaseDecoder from '../firebase'
 import { decodeToken } from '../index'
 import * as netlifyDecoder from '../netlify'
 import * as supabaseDecoder from '../supabase'
@@ -35,6 +36,14 @@ jest.mock('../supabase', () => {
   return {
     supabase: jest.fn().mockImplementation(async () => {
       return { decodedWith: 'supabase', fakeDecodedToken: true }
+    }),
+  }
+})
+
+jest.mock('../firebase', () => {
+  return {
+    firebase: jest.fn().mockImplementation(async () => {
+      return { decodedWith: 'firebase', fakeDecodedToken: true }
     }),
   }
 })
@@ -124,13 +133,19 @@ describe('Uses correct Auth decoder', () => {
     expect(output).toEqual(MOCKED_JWT)
   })
 
-  it('returns undecoded token for firebase', async () => {
+  it('decodes firebase with firebase decoder', async () => {
     const output = await decodeToken('firebase', MOCKED_JWT, {
       event: mockedAPIGatewayProxyEvent,
       context: {} as LambdaContext,
     })
-
-    expect(output).toEqual(MOCKED_JWT)
+    expect(firebaseDecoder.firebase).toHaveBeenCalledWith(
+      MOCKED_JWT,
+      expect.anything()
+    )
+    expect(output).toEqual({
+      decodedWith: 'firebase',
+      fakeDecodedToken: true,
+    })
   })
 
   it('decodes supabase with supabase decoder', async () => {

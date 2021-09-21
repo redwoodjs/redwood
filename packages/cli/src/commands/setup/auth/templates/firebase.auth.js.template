@@ -1,14 +1,5 @@
-// Define what you want `currentUser` to return throughout your app. For example,
-// to return a real user from your database, you could do something like:
-//
-//   export const getCurrentUser = async ({ email }) => {
-//     return await db.user.findUnique({ where: { email } })
-//   }
-
-import { AuthenticationError } from '@redwoodjs/api'
+import { AuthenticationError } from '@redwoodjs/graphql-server'
 import admin from 'firebase-admin'
-
-import { db } from './db'
 
 const config = {
   apiKey: process.env.FIREBASE_API_KEY,
@@ -20,10 +11,25 @@ const config = {
   appId: process.env.FIREBASE_APP_ID,
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const adminApp = admin.initializeApp(config)
 
-export const getCurrentUser = async (decoded, { token, type }) => {
-  const { email, uid } = await adminApp.auth().verifyIdToken(token)
+/**
+ * getCurrentUser returns the user information together with
+ * an optional collection of roles used by requireAuth() to check
+ * if the user is authenticated or has role-based access
+ *
+ * @param decoded - The decoded access token containing user info and JWT claims like `sub`
+ * @param { token, SupportedAuthTypes type } - The access token itself as well as the auth provider type
+ * @param { APIGatewayEvent event, Context context } - An object which contains information from the invoker
+ * such as headers and cookies, and the context information about the invocation such as IP Address
+ *
+ * @see https://github.com/redwoodjs/redwood/tree/main/packages/auth for examples
+ */
+export const getCurrentUser = async (decoded) => {
+  // RBAC for firebase Auth needs a custom implementation, can not use parseJWT
+  // see: https://firebase.google.com/docs/auth/admin/custom-claims
+  const { email, uid } = decoded
   return { email, uid }
 }
 
@@ -38,7 +44,6 @@ export const isAuthenticated = () => {
 
 // Use this function in your services to check that a user is logged in, and
 // optionally raise an error if they're not.
-
 export const requireAuth = () => {
   if (!context.currentUser) {
     throw new AuthenticationError("You don't have permission to do that.")
