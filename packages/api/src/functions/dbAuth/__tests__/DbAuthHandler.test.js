@@ -649,7 +649,11 @@ describe('dbAuth', () => {
 
   describe('_cookieAttributes', () => {
     it('returns an array of attributes for the session cookie', () => {
-      const dbAuth = new DbAuthHandler(event, context, options)
+      const dbAuth = new DbAuthHandler(
+        { headers: { referer: 'http://test.host' } },
+        context,
+        options
+      )
       const attributes = dbAuth._cookieAttributes({})
 
       expect(attributes.length).toEqual(5)
@@ -662,13 +666,27 @@ describe('dbAuth', () => {
       expect(attributes[4]).toMatch(UTC_DATE_REGEX)
     })
 
+    it('does not include the Secure attribute when in development environment', () => {
+      const oldEnv = process.env.NODE_ENV
+      process.env.NODE_ENV = 'development'
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const attributes = dbAuth._cookieAttributes({})
+
+      // not in its usual position
+      expect(attributes[3]).not.toEqual('Secure')
+      // or anywhere else
+      expect(attributes.join(';')).not.toMatch(`Secure`)
+
+      process.env.NODE_ENV = oldEnv
+    })
+
     it('includes a Domain in the cookie if DBAUTH_COOKIE_DOMAIN is set', () => {
       process.env.DBAUTH_COOKIE_DOMAIN = 'site.test'
 
       const dbAuth = new DbAuthHandler(event, context, options)
       const attributes = dbAuth._cookieAttributes({})
 
-      expect(attributes[4]).toEqual('Domain=site.test')
+      expect(attributes[3]).toEqual('Domain=site.test')
     })
   })
 
