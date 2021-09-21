@@ -79,6 +79,8 @@ interface RedwoodRegisterOptions extends RegisterOptions {
  * `extends` constrains the generic while `=` provides a default.
  *
  * @see {@link https://www.typescriptlang.org/docs/handbook/2/generics.html#generic-constraints}
+ *
+ * @internal
  */
 interface FieldProps<
   Element extends
@@ -286,7 +288,37 @@ const ServerErrorsContext = React.createContext({} as ServerErrorsContextProps)
 interface FormProps
   extends Omit<React.ComponentPropsWithRef<'form'>, 'onSubmit'> {
   error?: any
+  /**
+   * The methods returned by `useForm`.
+   * This props's only necessary if you've called `useForm` yourself to get access to one of it's functions, like `reset`.
+   *
+   * @example
+   *
+   * ```javascript
+   * const formMethods = useForm()
+   *
+   * const onSubmit = (data) => {
+   *  sendDataToServer(data)
+   *  formMethods.reset()
+   * }
+   *
+   * return (
+   *   <Form formMethods={formMethods} onSubmit={onSubmit}>
+   * )
+   * ```
+   */
   formMethods?: UseFormReturn
+  /**
+   * Configures how React Hook Form performs validation, among other things.
+   *
+   * @example
+   *
+   * ```jsx
+   * <Form config={{ mode: 'onBlur' }}>
+   * ```
+   *
+   * @see {@link https://react-hook-form.com/api/useform}
+   */
   config?: UseFormProps
   onSubmit?: (
     values: Record<string, any>,
