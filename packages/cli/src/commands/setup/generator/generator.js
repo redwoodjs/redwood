@@ -26,7 +26,7 @@ const EXCLUDE_GENERATORS = [
 
 const copyGenerator = (name, { force }) => {
   const side = SIDE_MAP['web'].includes(name) ? 'web' : 'api'
-  const from = path.join(__dirname, '..', name, 'templates')
+  const from = path.join(__dirname, '../../generate', name, 'templates')
   const to = path.join(getPaths()[side].generators, name)
 
   // copy entire template directory contents to appropriate side in app
@@ -41,7 +41,9 @@ const copyGenerator = (name, { force }) => {
 // and accept a configuration such as its CURRENT default to append onto a command.
 export const builder = (yargs) => {
   const availableGenerators = fs
-    .readdirSync(path.join(__dirname, '..'), { withFileTypes: true })
+    .readdirSync(path.join(__dirname, '../../generate'), {
+      withFileTypes: true,
+    })
     .filter((dir) => dir.isDirectory() && !dir.name.match(/__/))
     .map((dir) => dir.name)
 
