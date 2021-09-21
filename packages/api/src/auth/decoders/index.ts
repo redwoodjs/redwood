@@ -5,9 +5,11 @@ import type { SupportedAuthTypes } from '@redwoodjs/auth'
 import { auth0 } from './auth0'
 import { azureActiveDirectory } from './azureActiveDirectory'
 import { clerk } from './clerk'
+import { custom } from './custom'
 import { dbAuth } from './dbAuth'
 import { ethereum } from './ethereum'
 import { firebase } from './firebase'
+import { magicLink } from './magicLink'
 import { netlify } from './netlify'
 import { nhost } from './nhost'
 import { supabase } from './supabase'
@@ -18,8 +20,6 @@ interface Req {
 }
 
 type Decoded = null | string | Record<string, unknown>
-
-const noop = (token: string) => token
 
 const typesToDecoders: Record<
   SupportedAuthTypes,
@@ -32,12 +32,12 @@ const typesToDecoders: Record<
   netlify: netlify,
   nhost: nhost,
   goTrue: netlify,
-  magicLink: noop,
+  magicLink: magicLink,
   firebase: firebase,
   supabase: supabase,
   ethereum: ethereum,
   dbAuth: dbAuth,
-  custom: noop,
+  custom: custom,
 }
 
 export const decodeToken = async (
@@ -59,7 +59,13 @@ export const decodeToken = async (
         'Please ensure you have handlers for your custom auth in getCurrentUser in src/lib/auth.{js,ts}'
       )
     }
+
+    throw new Error(
+      'The auth type "${type}" is not officially supported, we currently support'
+    )
   }
-  const decoder = typesToDecoders[type] || noop
+
+  const decoder = typesToDecoders[type]
+
   return decoder(token, req)
 }
