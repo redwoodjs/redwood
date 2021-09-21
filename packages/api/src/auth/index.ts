@@ -53,8 +53,6 @@ export const getAuthenticationContext = async ({
   event: APIGatewayProxyEvent
   context: LambdaContext
 }): Promise<undefined | AuthContextPayload> => {
-  console.log(context)
-  console.log(event)
   const type = getAuthProviderHeader(event)
   // No `auth-provider` header means that the user is logged out,
   // and none of this is auth malarky is required.
