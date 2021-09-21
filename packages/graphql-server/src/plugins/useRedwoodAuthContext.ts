@@ -2,6 +2,7 @@ import { Plugin } from '@envelop/core'
 
 import { getAuthenticationContext } from '@redwoodjs/api'
 
+// import { AuthenticationError } from '../errors'
 import {
   RedwoodGraphQLContext,
   GraphQLHandlerOptions,
@@ -18,17 +19,33 @@ export const useRedwoodAuthContext = (
     async onContextBuilding({ context, extendContext }) {
       const { requestContext } = context
 
-      const authContext = await getAuthenticationContext({
-        event: context.event,
-        context: requestContext,
-      })
+      let authContext = undefined
 
-      if (authContext) {
-        const currentUser = getCurrentUser
-          ? await getCurrentUser(authContext[0], authContext[1], authContext[2])
-          : authContext
+      try {
+        authContext = await getAuthenticationContext({
+          event: context.event,
+          context: requestContext,
+        })
+      } catch (error: any) {
+        throw new Error(
+          `Unable to get authentication context: ${error.message}`
+        )
+      }
 
-        extendContext({ currentUser })
+      try {
+        if (authContext) {
+          const currentUser = getCurrentUser
+            ? await getCurrentUser(
+                authContext[0],
+                authContext[1],
+                authContext[2]
+              )
+            : null
+
+          extendContext({ currentUser })
+        }
+      } catch (error: any) {
+        throw new Error(`Unable to get the current user: ${error.message}`)
       }
     },
   }

@@ -76,7 +76,9 @@ describe('useRedwoodAuthContext: ', () => {
 
     await expect(async () => {
       await testkit.execute(testQuery, {}, { requestContext: {} })
-    }).rejects.toEqual(new Error('Hey man, where is my DB?'))
+    }).rejects.toEqual(
+      new Error('Unable to get the current user: Hey man, where is my DB?')
+    )
     expect(mockedGetCurrentUser).toHaveBeenCalled()
   })
 })
