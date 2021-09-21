@@ -8,10 +8,10 @@
   "types": "dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@types/pascalcase": "1.0.0",
-    "core-js": "3.16.1",
+    "@types/pascalcase": "1.0.1",
+    "core-js": "3.17.3",
     "pascalcase": "1.0.0",
-    "react-hook-form": "7.12.2"
+    "react-hook-form": "7.15.3"
   },
   "scripts": {
     "build": "yarn build:js",

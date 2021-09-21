@@ -1,4 +1,4 @@
-import { AuthenticationError, ForbiddenError } from '@redwoodjs/api'
+import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
 import { db } from './db'
 
 // The session object sent in as the first arugment to getCurrentUser() will

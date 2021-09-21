@@ -18,19 +18,12 @@ export const InsecureServiceError = class extends Error {
   }
 }
 
-// Thrown if service has no `beforeResolver()` defined
-export const MissingBeforeResolverError = class extends Error {
-  constructor(servicePath: string) {
-    super(
-      `Must define a \`beforeResolver()\` in ${servicePath.replaceAll(
-        '_',
-        '/'
-      )}`
-    )
-    this.name = 'MissingBeforeResolver'
-  }
-}
-
+/**
+ *
+ * @deprecated beforeResolver is being deprecated in favour of using directives
+ * to secure your services
+ *
+ */
 export const BeforeResolverSpec = class implements BeforeResolverSpecType {
   befores: Record<string, ValidatorCollection>
 
