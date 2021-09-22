@@ -1,9 +1,6 @@
 export const magicLink = (token: string) => {
   if (!process.env.MAGICLINK_PUBLIC) {
-    if (
-      process.env.NODE_ENV === 'development' ||
-      process.env.NODE_ENV === 'test'
-    ) {
+    if (process.env.NODE_ENV === 'development') {
       console.warn(
         'MAGICLINK_PUBLIC env var is not set. Be certain to set this value in Production.'
       )

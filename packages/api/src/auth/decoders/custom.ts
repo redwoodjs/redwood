@@ -1,16 +1,10 @@
-export const custom = (token: string) => {
-  if (!process.env.CUSTOM_AUTH_SECRET) {
-    if (
-      process.env.NODE_ENV === 'development' ||
-      process.env.NODE_ENV === 'test'
-    ) {
-      console.warn(
-        'CUSTOM_AUTH_SECRET env var is not set. Be certain to set this value in Production.'
-      )
-    } else {
-      console.error('Custom Redwood Auth configuration error.')
-      throw new Error('Custom Redwood Auth configuration error.')
-    }
-  }
-  return token
+/**
+ * The Custom decoder will never return a decoded token or value.
+ * Instead, it is the developer's responsibility to use other values passed to
+ * getCurrentUser such as token or header parameters to authenticate
+ *
+ * @returns null
+ */
+export const custom = () => {
+  return null
 }

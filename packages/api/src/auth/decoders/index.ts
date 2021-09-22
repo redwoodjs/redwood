@@ -59,13 +59,12 @@ export const decodeToken = async (
         'Please ensure you have handlers for your custom auth in getCurrentUser in src/lib/auth.{js,ts}'
       )
     }
-
-    throw new Error(
-      'The auth type "${type}" is not officially supported, we currently support'
-    )
   }
 
-  const decoder = typesToDecoders[type]
+  // If the auth provider is unknown, it is the developer's
+  // responsibility to use other values passed to
+  // getCurrentUser such as token or header parameters to authenticate
+  const decoder = typesToDecoders[type] || custom
 
   const decodedToken = decoder(token, req)
 
