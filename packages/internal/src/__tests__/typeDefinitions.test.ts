@@ -52,7 +52,7 @@ test('generate the correct mirror types for cells', () => {
     import type { ComponentProps } from 'react'
 
     import { Success } from './NumTodosCell'
-    import type { NumTodosCell_GetCount, NumTodosCell_GetCountVariables } from 'types/graphql'
+    import type { Exact, NumTodosCell_GetCount, NumTodosCell_GetCountVariables } from 'types/graphql'
 
     type SuccessType = typeof Success
 
@@ -60,8 +60,8 @@ test('generate the correct mirror types for cells', () => {
 
     type CellInputs = Omit<
       ComponentProps<SuccessType>,
-      keyof QueryOperationResult | keyof NumTodosCell_GetCount | keyof NumTodosCell_GetCountVariables | 'updating'
-    > | NumTodosCell_GetCountVariables
+      keyof QueryOperationResult | keyof NumTodosCell_GetCount | 'updating'
+    > & (NumTodosCell_GetCountVariables extends Exact<{ [key: string]: never }> ? unknown : NumTodosCell_GetCountVariables)
 
     export default function (props: CellInputs): ReturnType<SuccessType>
     "
