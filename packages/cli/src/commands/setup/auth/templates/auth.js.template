@@ -6,7 +6,7 @@ import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
  * an optional collection of roles used by requireAuth() to check
  * if the user is authenticated or has role-based access
  *
- * @param decoded - The decoded access token containing user info and JWT claims like `sub`
+ * @param decoded - The decoded access token containing user info and JWT claims like `sub`. Note could be null.
  * @param { token, SupportedAuthTypes type } - The access token itself as well as the auth provider type
  * @param { APIGatewayEvent event, Context context } - An object which contains information from the invoker
  * such as headers and cookies, and the context information about the invocation such as IP Address
