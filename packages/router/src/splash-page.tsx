@@ -153,21 +153,45 @@ const SplashPage: React.VFC<SplashPageProps> = ({
 
             code {
               font-family: Fira Code,Fira Mono,Menlo,Monoco,monospace;
-              font-size: var(--space-4);
+              font-size: 0.8em;
               padding: var(--space-1) var(--space-2);
               border-radius: var(--space-1);
               color: var(--highlight-2);
               background-color: var(--highlight-3);
             }
 
-            .page-list {
+            .pages {
+              font-size: var(--space-5);
+              line-height: var(--space-7);
+            }
+
+            .pages-title {
+              margin-bottom: var(--space-1);
+              font-weight: 400;
+            }
+
+            .pages-list {
               margin: var(--space-2) 0;
               padding: 0;
               list-style-type: none;
             }
 
-            .page-item {
+            .pages-item {
               margin: var(--space-4) 0;
+            }
+
+            .callout {
+              font-size: var(--space-4);
+              line-height: var(--space-6);
+              font-weight: 400;
+              margin: var(--space-12) auto 0;
+              max-width: 32rem;
+              text-align: left;
+              border-left: 3px solid;
+              border-color: var(--highlight-2);
+              color: var(--foreground);
+              background-color: var(--background-2);
+              padding: var(--space-4);
             }
 
             /* Resources */
@@ -299,34 +323,37 @@ const SplashPage: React.VFC<SplashPageProps> = ({
                       className="intro-instructions-container"
                       data-cy="e2e-test-splashpage"
                     >
-                      <p className="intro-instructions">
+                      <div className="pages">
+                        <p className="pages-title">List of Pages by path:</p>
+                        <ul className="pages-list">
+                          {routes.map((route) => {
+                            if (!route.props.notfound) {
+                              return (
+                                <li key={route.key} className="pages-item">
+                                  <code>
+                                    {`${route.props.name} -> `}
+                                    <a
+                                      href={route.props.path}
+                                      target="_blank"
+                                      rel="noreferrer"
+                                    >
+                                      {route.props.path}
+                                    </a>
+                                  </code>
+                                </li>
+                              )
+                            }
+                            return <div key={route.key}></div>
+                          })}
+                        </ul>
+                      </div>
+                      <div className="callout">
                         You’re seeing this because you don’t have a page at the{' '}
-                        <code>/</code> path yet.
-                      </p>
-                      <p className="intro-instructions">
-                        Here’s a list of your current pages and their paths:
-                      </p>
-                      <ul className="page-list">
-                        {routes.map((route) => {
-                          if (!route.props.notfound) {
-                            return (
-                              <li key={route.key} className="page-item">
-                                <code>
-                                  {`${route.props.name} -> `}
-                                  <a
-                                    href={route.props.path}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                  >
-                                    {route.props.path}
-                                  </a>
-                                </code>
-                              </li>
-                            )
-                          }
-                          return <div key={route.key}></div>
-                        })}
-                      </ul>
+                        <code>/</code> path.
+                        <br />
+                        Type <code>yarn redwood generate page home /</code> in
+                        your CLI to create one.
+                      </div>
                     </div>
                   )}
                 </div>
