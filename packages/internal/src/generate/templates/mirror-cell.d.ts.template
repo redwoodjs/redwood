@@ -9,7 +9,7 @@ export * from './${name}'
 
 type CellInputs = Omit<
   ComponentProps<SuccessType>,
-  keyof QueryOperationResult | keyof ${queryResultType} | 'updating'
-> & ${queryVariablesType}
+  keyof QueryOperationResult | keyof ${queryResultType} | keyof ${queryVariablesType} | 'updating'
+> | ${queryVariablesType}
 
 export default function (props: CellInputs): ReturnType<SuccessType>

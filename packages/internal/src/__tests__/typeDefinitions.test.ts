@@ -60,8 +60,8 @@ test('generate the correct mirror types for cells', () => {
 
     type CellInputs = Omit<
       ComponentProps<SuccessType>,
-      keyof QueryOperationResult | keyof NumTodosCell_GetCount | 'updating'
-    > & NumTodosCell_GetCountVariables
+      keyof QueryOperationResult | keyof NumTodosCell_GetCount | keyof NumTodosCell_GetCountVariables | 'updating'
+    > | NumTodosCell_GetCountVariables
 
     export default function (props: CellInputs): ReturnType<SuccessType>
     "
