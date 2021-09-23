@@ -7,3 +7,13 @@ Still to confirm:
   ✔ npx execution @done(21-09-23 17:58)
     ☐ Put codemods into folders
   ☐ Trigerring remote transforms
+
+
+Dom to look at:
+  ☐ Add codemod for addDependency (graphql-server)
+  ☐ Update graphqlFunctionImports
+  ☐ add forms codemods to notion
+  ☐ Add codemod for Forms
+  ☐ Move builder/handler/etc. into a separate file?
+  ☐ Refactor addDirectives into lib
+      - look at reference for donwloading remote file here: packages/cli/src/commands/setup/tsconfig/tsconfig.js
