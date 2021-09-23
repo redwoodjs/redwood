@@ -8,3 +8,22 @@ export const standard = defineScenario({
     },
   },
 })
+
+export const myOtherScenario = defineScenario({
+  modelOne: {
+    foo: {
+      id: 55,
+    },
+    barr: {
+      id: 77,
+    },
+  },
+  modelTwo: {
+    one: {
+      name: 'alice',
+    },
+    fifteen: {
+      name: 'esteban',
+    },
+  },
+})
