@@ -3,7 +3,7 @@
  * The keys won't be named 'one' and 'two'.
  * But the logic in forEach may be enough.
  */
-import type { FileInfo, API } from 'jscodeshift'
+import type { FileInfo, API, ObjectExpression } from 'jscodeshift'
 
 module.exports = function (file: FileInfo, api: API) {
   const j = api.jscodeshift
@@ -14,15 +14,16 @@ module.exports = function (file: FileInfo, api: API) {
     })
     .forEach((scenarioPath) => {
       // First argument is the definition
-      const scenarioArgs = scenarioPath.value.arguments[0]
+      // @TODO figure out what types these are, not sure object expression is correct
+      const scenarioArgs = scenarioPath.value.arguments[0] as ObjectExpression
 
       const scenarioModels = scenarioArgs.properties // i.e. "user"
 
-      scenarioModels.forEach((model) => {
+      scenarioModels.forEach((model: any) => {
         const modelProps = model.value.properties // "one", "two"
         // FYI - you can see what the name is in key.name
 
-        modelProps.forEach((modelProp) => {
+        modelProps.forEach((modelProp: any) => {
           const dataDef = modelProp.value // this is {email:}
 
           modelProp.value = j.objectExpression([

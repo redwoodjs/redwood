@@ -1,0 +1,8 @@
+Structure/Architeceture of this package:
+  ☐ How to test TS files
+  ☐ How to have multiple test fixtures
+  ☐ Extract logic into reusable functions in lib
+
+Still to confirm:
+  ☐ npx execution
+  ☐ Trigerring remote transforms
