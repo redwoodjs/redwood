@@ -1,8 +1,9 @@
 Structure/Architeceture of this package:
-  ☐ How to test TS files
-  ☐ How to have multiple test fixtures
-  ☐ Extract logic into reusable functions in lib
+  ✔ How to test TS files @done(21-09-23 17:18)
+  ✔ How to have multiple test fixtures @done(21-09-23 17:19)
+  ✔ Extract logic into reusable functions in lib @done(21-09-23 17:58)
 
 Still to confirm:
-  ☐ npx execution
+  ✔ npx execution @done(21-09-23 17:58)
+    ☐ Put codemods into folders
   ☐ Trigerring remote transforms

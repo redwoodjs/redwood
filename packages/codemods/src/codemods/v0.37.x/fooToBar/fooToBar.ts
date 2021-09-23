@@ -24,6 +24,11 @@ export const builder = (yargs: yargs.Argv) => {
     required: true,
     type: 'array',
   })
+  yargs.option('renamedTo', {
+    describe: 'Whatever you want to rename to',
+    required: true,
+    type: 'array',
+  })
 }
 
 export const handler = ({
@@ -32,5 +37,6 @@ export const handler = ({
 }: {
   targetPaths: Pick<RunTransform, 'targetPaths'>
 }) => {
+  // @TODO pass URL to this file on github as transformPath
   runTransform({ transformPath: __filename, targetPaths, variables: rest })
 }
