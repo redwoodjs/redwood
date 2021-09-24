@@ -179,7 +179,7 @@ describe('makeMergedSchema', () => {
     })
   })
 
-  it('throws when directives not added to queries and mutations', () => {
+  it('throws when directives not added to queries', () => {
     const sdlsWithoutDirectives = {
       withoutDirective: {
         schema: parse(`
@@ -195,6 +195,145 @@ describe('makeMergedSchema', () => {
             redwood: Redwood
             bazinga: String
           }
+        `),
+        resolvers: {},
+      },
+    }
+
+    expect(() =>
+      makeMergedSchema({
+        sdls: sdlsWithoutDirectives,
+        services: makeServices({ services }),
+        directives: makeDirectivesForPlugin(directiveFiles),
+      })
+    ).toThrowError(DIRECTIVE_REQUIRED_ERROR_MESSAGE)
+  })
+
+  it('throws when directives not added to mutations', () => {
+    const sdlsWithoutDirectives = {
+      withoutDirective: {
+        schema: parse(`
+          scalar JSON
+
+          type Redwood {
+            version: String
+            currentUser: JSON
+            prismaVersion: String
+          }
+
+          type Query {
+            redwood: Redwood
+          }
+
+          type Mutation {
+            bazinga(id: Int): String
+          }
+
+        `),
+        resolvers: {},
+      },
+    }
+
+    expect(() =>
+      makeMergedSchema({
+        sdls: sdlsWithoutDirectives,
+        services: makeServices({ services }),
+        directives: makeDirectivesForPlugin(directiveFiles),
+      })
+    ).toThrowError(DIRECTIVE_REQUIRED_ERROR_MESSAGE)
+  })
+
+  it('throws when directives not added to queries and mutations', () => {
+    const sdlsWithoutDirectives = {
+      withoutDirective: {
+        schema: parse(`
+          scalar JSON
+
+          type Redwood {
+            version: String
+            currentUser: JSON
+            prismaVersion: String
+          }
+
+          type Query {
+            redwood: Redwood
+            myQuery: String!
+          }
+
+          type Mutation {
+            bazinga(id: Int): String!
+          }
+
+        `),
+        resolvers: {},
+      },
+    }
+
+    expect(() =>
+      makeMergedSchema({
+        sdls: sdlsWithoutDirectives,
+        services: makeServices({ services }),
+        directives: makeDirectivesForPlugin(directiveFiles),
+      })
+    ).toThrowError(DIRECTIVE_REQUIRED_ERROR_MESSAGE)
+  })
+
+  it('throws when directives not added to queries but is on a mutation', () => {
+    const sdlsWithoutDirectives = {
+      withoutDirective: {
+        schema: parse(`
+          scalar JSON
+
+          type Redwood {
+            version: String
+            currentUser: JSON
+            prismaVersion: String
+          }
+
+          type Query {
+            redwood: Redwood
+            myQuery: String!
+          }
+
+          type Mutation {
+            bazinga(id: Int): String! @foo
+          }
+
+        `),
+        resolvers: {},
+      },
+    }
+
+    expect(() =>
+      makeMergedSchema({
+        sdls: sdlsWithoutDirectives,
+        services: makeServices({ services }),
+        directives: makeDirectivesForPlugin(directiveFiles),
+      })
+    ).toThrowError(DIRECTIVE_REQUIRED_ERROR_MESSAGE)
+  })
+
+  it('throws when directives not added to mutations but is on a query', () => {
+    const sdlsWithoutDirectives = {
+      withoutDirective: {
+        schema: parse(`
+          scalar JSON
+
+          type Redwood {
+            version: String
+            currentUser: JSON
+            prismaVersion: String
+          }
+
+          type Query {
+            redwood: Redwood
+            myQuery: String! @foo
+          }
+
+          type Mutation {
+            bazinga(id: Int): String!
+          }
+
         `),
         resolvers: {},
       },
