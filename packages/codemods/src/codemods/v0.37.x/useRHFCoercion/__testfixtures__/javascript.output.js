@@ -4,7 +4,10 @@ const BazingaForm = ({ onSubmit = () => {} }) => {
       <TextField
         name="floatText"
         defaultValue="3.14"
-        validation={{ valueAsNumber: true }}
+        validation={{
+          required: true,
+          valueAsNumber: true,
+        }}
       />
       <TextAreaField
         name="json"

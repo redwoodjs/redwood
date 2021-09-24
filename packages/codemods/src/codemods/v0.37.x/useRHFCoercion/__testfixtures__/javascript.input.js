@@ -1,7 +1,12 @@
 const BazingaForm = ({ onSubmit = () => {} }) => {
   return (
     <Form onSubmit={onSubmit} validation={{ mode: 'onBlur' }}>
-      <TextField name="floatText" defaultValue="3.14" transformValue="Float" />
+      <TextField
+        name="floatText"
+        defaultValue="3.14"
+        transformValue="Float"
+        validation={{ required: true }}
+      />
       <TextAreaField
         name="json"
         transformValue="Json"
