@@ -361,51 +361,51 @@ exports[`generates typescript pages 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
-const TSFilesPage = () => {
+const TsFilesPage = () => {
   return (
     <>
       <MetaTags
-        title=\\"TSFiles\\"
-        // description=\\"TSFiles description\\"
+        title=\\"TsFiles\\"
+        // description=\\"TsFiles description\\"
         /* you should un-comment description and add a unique description, 155 characters or less
         You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
       />
-      <h1>TSFilesPage</h1>
+      <h1>TsFilesPage</h1>
       <p>
         Find me in <code>./web/src/pages/TsFilesPage/TsFilesPage.tsx</code>
       </p>
       <p>
         My default route is named <code>tsFiles</code>, link to me with \`
-        <Link to={routes.tsFiles()}>TSFiles</Link>\`
+        <Link to={routes.tsFiles()}>TsFiles</Link>\`
       </p>
     </>
   )
 }
 
-export default TSFilesPage
+export default TsFilesPage
 "
 `;
 
 exports[`generates typescript pages 2`] = `
-"import TSFilesPage from './TSFilesPage'
+"import TsFilesPage from './TsFilesPage'
 
 export const generated = () => {
-  return <TSFilesPage />
+  return <TsFilesPage />
 }
 
-export default { title: 'Pages/TSFilesPage' }
+export default { title: 'Pages/TsFilesPage' }
 "
 `;
 
 exports[`generates typescript pages 3`] = `
 "import { render } from '@redwoodjs/testing/web'
 
-import TSFilesPage from './TSFilesPage'
+import TsFilesPage from './TsFilesPage'
 
-describe('TSFilesPage', () => {
+describe('TsFilesPage', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<TSFilesPage />)
+      render(<TsFilesPage />)
     }).not.toThrow()
   })
 })
@@ -416,33 +416,33 @@ exports[`generates typescript pages 4`] = `
 "import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
-type TSParamFilesPageProps = {
+type TsParamFilesPageProps = {
   id: string
 }
 
-const TSParamFilesPage = ({ id }: TSParamFilesPageProps) => {
+const TsParamFilesPage = ({ id }: TsParamFilesPageProps) => {
   return (
     <>
       <MetaTags
-        title=\\"TSParamFiles\\"
-        // description=\\"TSParamFiles description\\"
+        title=\\"TsParamFiles\\"
+        // description=\\"TsParamFiles description\\"
         /* you should un-comment description and add a unique description, 155 characters or less
         You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
       />
-      <h1>TSParamFilesPage</h1>
+      <h1>TsParamFilesPage</h1>
       <p>
         Find me in <code>./web/src/pages/TsParamFilesPage/TsParamFilesPage.tsx</code>
       </p>
       <p>
         My default route is named <code>tsParamFiles</code>, link to me with \`
-        <Link to={routes.tsParamFiles({ id: '42' })}>TSParamFiles 42</Link>\`
+        <Link to={routes.tsParamFiles({ id: '42' })}>TsParamFiles 42</Link>\`
       </p>
       <p>The parameter passed to me is {id}</p>
     </>
   )
 }
 
-export default TSParamFilesPage
+export default TsParamFilesPage
 "
 `;
 
@@ -450,32 +450,32 @@ exports[`generates typescript pages 5`] = `
 "import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
-type TSParamTypeFilesPageProps = {
+type TsParamTypeFilesPageProps = {
   id: number
 }
 
-const TSParamTypeFilesPage = ({ id }: TSParamTypeFilesPageProps) => {
+const TsParamTypeFilesPage = ({ id }: TsParamTypeFilesPageProps) => {
   return (
     <>
       <MetaTags
-        title=\\"TSParamTypeFiles\\"
-        // description=\\"TSParamTypeFiles description\\"
+        title=\\"TsParamTypeFiles\\"
+        // description=\\"TsParamTypeFiles description\\"
         /* you should un-comment description and add a unique description, 155 characters or less
         You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
       />
-      <h1>TSParamTypeFilesPage</h1>
+      <h1>TsParamTypeFilesPage</h1>
       <p>
         Find me in <code>./web/src/pages/TsParamTypeFilesPage/TsParamTypeFilesPage.tsx</code>
       </p>
       <p>
         My default route is named <code>tsParamTypeFiles</code>, link to me with \`
-        <Link to={routes.tsParamTypeFiles({ id: 42 })}>TSParamTypeFiles 42</Link>\`
+        <Link to={routes.tsParamTypeFiles({ id: 42 })}>TsParamTypeFiles 42</Link>\`
       </p>
       <p>The parameter passed to me is {id}</p>
     </>
   )
 }
 
-export default TSParamTypeFilesPage
+export default TsParamTypeFilesPage
 "
 `;
