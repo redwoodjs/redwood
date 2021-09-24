@@ -9,36 +9,7 @@ const SplashPage: React.VFC<SplashPageProps> = ({
   hasGeneratedRoutes,
   routes,
 }) => {
-  const [version, setVersion] = useState(null)
-  useEffect(() => {
-    async function fetchVersion() {
-      try {
-        const response = await global.fetch(
-          `${global.__REDWOOD__API_PROXY_PATH}/graphql`,
-          {
-            method: 'POST',
-            headers: {
-              'content-type': 'application/json',
-            },
-            body: JSON.stringify({
-              query: 'query RedwoodVersion { redwood { version } }',
-            }),
-          }
-        )
-
-        const versionData = await response.json()
-        setVersion(versionData?.data?.redwood?.version || null)
-      } catch (err) {
-        console.error('Unable to get Redwood version: ', err)
-      }
-    }
-
-    fetchVersion()
-  }, [])
-
-  const introMessageNoRoutes = `You're seeing this because you don't have any pages yet.`
-  const introMessageRoutes = `You're seeing this because you don't have a home page yet.`
-
+  const version = useVersion()
   return (
     <>
       <main>
@@ -48,10 +19,12 @@ const SplashPage: React.VFC<SplashPageProps> = ({
               __html: `
             :root {
               --foreground: rgb(26, 32, 44);
-              --secondaryBg: rgb(253, 248, 246);
               --background: hsl(0, 0%, 100%);
+              --background-2: rgb(253, 248, 246);
+              --background-3: rgb(250, 234, 229);
               --highlight-1: rgb(191, 71, 34);
               --highlight-2: rgb(220, 94, 56);
+              --highlight-3: rgba(220, 94, 56, 0.2);
               --space-0: 0.125rem;
               --space-1: 0.25rem;
               --space-2: 0.5rem;
@@ -75,8 +48,13 @@ const SplashPage: React.VFC<SplashPageProps> = ({
               :root {
                 --foreground: hsl(0, 0%, 100%);
                 --background: hsl(250, 24%, 9%);
-                --secondaryBg: hsl(250, 21%, 11%);
+                --background-2: hsl(250, 21%, 11%);
+                --background-3: rgb(53, 37, 32);
               }
+            }
+
+            html, body {
+              margin: 0;
             }
 
             .container {
@@ -123,12 +101,16 @@ const SplashPage: React.VFC<SplashPageProps> = ({
             }
 
             /* Content */
-            .content {
-              position: relative;
-              padding: 0 var(--space-5);
+            .content-container {
               flex-grow: 1;
               display: flex;
               justify-content: center;
+              align-items: center;
+            }
+
+            .content {
+              padding: var(--space-5) var(--space-5) var(--space-8);
+              position: relative;
             }
 
             /* Logo */
@@ -138,13 +120,12 @@ const SplashPage: React.VFC<SplashPageProps> = ({
               left: 0%;
               transform: translate(-50%, -50%);
               max-height: 140vh;
-              color: var(--secondaryBg);
+              color: var(--background-2);
             }
 
             /* Intro */
             .intro {
               text-align: center;
-              margin-top: var(--space-16);
               margin-bottom: var(--space-18);
             }
 
@@ -163,28 +144,54 @@ const SplashPage: React.VFC<SplashPageProps> = ({
               margin-top: var(--space-8);
             }
 
-            .page-list {
-              margin-top: var(--space-6);
-              margin-bottom: var(--space-3);
-            }
-
-            code {
-              font-family: Fira Code,Fira Mono,Menlo,Monoco,monospace;
-              color: var(--highlight-1);
-              padding-top: var(--space-0);
-              padding-bottom: var(--space-0);
-              padding-left: var(--space-1);
-              padding-right: var(--space-1);
-              border-radius: var(--space-1);
-              background-color: #faeae5;
-              font-size: var(--space-4);
-            }
-
             .intro-instructions {
               font-size: var(--space-5);
               font-weight: 400;
               line-height: var(--space-7);
               margin-bottom: var(--space-2);
+            }
+
+            code {
+              font-family: Fira Code,Fira Mono,Menlo,Monoco,monospace;
+              font-size: 0.8em;
+              padding: var(--space-1) var(--space-2);
+              border-radius: var(--space-1);
+              color: var(--highlight-2);
+              background-color: var(--highlight-3);
+            }
+
+            .pages {
+              font-size: var(--space-5);
+              line-height: var(--space-7);
+            }
+
+            .pages-title {
+              margin-bottom: var(--space-1);
+              font-weight: 400;
+            }
+
+            .pages-list {
+              margin: var(--space-2) 0;
+              padding: 0;
+              list-style-type: none;
+            }
+
+            .pages-item {
+              margin: var(--space-4) 0;
+            }
+
+            .callout {
+              font-size: var(--space-4);
+              line-height: var(--space-6);
+              font-weight: 400;
+              margin: var(--space-12) auto 0;
+              max-width: 32rem;
+              text-align: left;
+              border-left: 3px solid;
+              border-color: var(--highlight-2);
+              color: var(--foreground);
+              background-color: var(--background-2);
+              padding: var(--space-4);
             }
 
             /* Resources */
@@ -228,8 +235,11 @@ const SplashPage: React.VFC<SplashPageProps> = ({
             @media (prefers-color-scheme: dark) {
               .resource {
                 color: var(--foreground);
-                background-color: var(--secondaryBg);
+                background-color: var(--background-2);
                 border-color: var(--highlight-1);
+              }
+              .resource:hover {
+                background-color: var(--highlight-3);
               }
             }
 
@@ -270,8 +280,8 @@ const SplashPage: React.VFC<SplashPageProps> = ({
               />
             </svg>
 
-            <section className="content">
-              <div>
+            <section className="content-container">
+              <div className="content">
                 <div className="intro">
                   <h1 className="intro-heading">Welcome to</h1>
                   <svg
@@ -295,47 +305,57 @@ const SplashPage: React.VFC<SplashPageProps> = ({
                       fill="var(--highlight-1)"
                     />
                   </svg>
-                  <div className="intro-instructions-container">
-                    <p
-                      className="intro-instructions"
+                  {!hasGeneratedRoutes ? (
+                    <div
+                      className="intro-instructions-container"
                       data-cy="e2e-test-splashpage"
                     >
-                      {hasGeneratedRoutes
-                        ? introMessageRoutes
-                        : introMessageNoRoutes}
-                    </p>
-                    {hasGeneratedRoutes && (
-                      <>
-                        <div className="page-list">
-                          {' '}
-                          Here&apos;s a list of your current pages:
-                        </div>
-                        {routes.map((route) => {
-                          if (!route.props.notfound) {
-                            return (
-                              <div key={route.key}>
-                                <a
-                                  href={route.props.path}
-                                  target="_blank"
-                                  rel="noreferrer"
-                                >
-                                  {route.props.page.name}
-                                </a>
-                              </div>
-                            )
-                          }
-                          return <div key={route.key}></div>
-                        })}
-                      </>
-                    )}
-
-                    {!hasGeneratedRoutes && (
+                      <p className="intro-instructions">
+                        You’re seeing this because you don’t have any pages yet.
+                      </p>
                       <p className="intro-instructions">
                         Type <code>yarn redwood generate page my-page</code> in
                         your CLI to get started!
                       </p>
-                    )}
-                  </div>
+                    </div>
+                  ) : (
+                    <div
+                      className="intro-instructions-container"
+                      data-cy="e2e-test-splashpage"
+                    >
+                      <div className="pages">
+                        <p className="pages-title">List of Pages by path:</p>
+                        <ul className="pages-list">
+                          {routes.map((route) => {
+                            if (!route.props.notfound) {
+                              return (
+                                <li key={route.key} className="pages-item">
+                                  <code>
+                                    {`${route.props.name} -> `}
+                                    <a
+                                      href={route.props.path}
+                                      target="_blank"
+                                      rel="noreferrer"
+                                    >
+                                      {route.props.path}
+                                    </a>
+                                  </code>
+                                </li>
+                              )
+                            }
+                            return <div key={route.key}></div>
+                          })}
+                        </ul>
+                      </div>
+                      <div className="callout">
+                        You’re seeing this because you don’t have a page at the{' '}
+                        <code>/</code> path.
+                        <br />
+                        Type <code>yarn redwood generate page home /</code> in
+                        your CLI to create one.
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <div className="resources">
                   <div className="resource">
@@ -533,6 +553,36 @@ const SplashPage: React.VFC<SplashPageProps> = ({
       </main>
     </>
   )
+}
+
+const useVersion = () => {
+  const [version, setVersion] = useState(null)
+  useEffect(() => {
+    async function fetchVersion() {
+      try {
+        const response = await global.fetch(
+          `${global.__REDWOOD__API_PROXY_PATH}/graphql`,
+          {
+            method: 'POST',
+            headers: {
+              'content-type': 'application/json',
+            },
+            body: JSON.stringify({
+              query: 'query RedwoodVersion { redwood { version } }',
+            }),
+          }
+        )
+
+        const versionData = await response.json()
+        setVersion(versionData?.data?.redwood?.version || null)
+      } catch (err) {
+        console.error('Unable to get Redwood version: ', err)
+      }
+    }
+
+    fetchVersion()
+  }, [])
+  return version
 }
 
 export { SplashPage }
