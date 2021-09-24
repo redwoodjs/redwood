@@ -9,28 +9,12 @@ export type SignupAttributes = Record<string, unknown> & LoginAttributes
 
 export type DbAuth = () => null
 
-const request = async (
-  verb: string,
-  method: string,
-  responseType: string,
-  attributes: Record<string, unknown> = {}
-) => {
-  const response = await fetch(`${global.__REDWOOD__API_PROXY_PATH}/auth`, {
-    method: verb,
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ...attributes, method }),
-  })
-
-  if (responseType === 'json') {
-    return await response.json()
-  } else  {
-    return await response.text()
-  }
-}
-
 export const dbAuth = (): AuthClient => {
   const getToken = async () => {
-    const token = await request('GET', 'logout', 'text')
+    const response = await fetch(
+      `${global.__REDWOOD__API_PROXY_PATH}/auth?method=getToken`
+    )
+    const token = await response.text()
 
     if (token.length === 0) {
       return null
@@ -41,30 +25,48 @@ export const dbAuth = (): AuthClient => {
 
   const login = async (attributes: LoginAttributes) => {
     const { username, password } = attributes
-
-    return await request('POST', 'login', 'json', { username, password })
+    const response = await fetch(`${global.__REDWOOD__API_PROXY_PATH}/auth`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password, method: 'login' }),
+    })
+    return await response.json()
   }
 
   const logout = async () => {
-    await request('POST', 'logout', 'text')
-
+    await fetch(`${global.__REDWOOD__API_PROXY_PATH}/auth`, {
+      method: 'POST',
+      body: JSON.stringify({ method: 'logout' }),
+    })
     return true
   }
 
   const signup = async (attributes: SignupAttributes) => {
-    return await request('POST', 'signup', 'json', attributes)
+    const response = await fetch(`${global.__REDWOOD__API_PROXY_PATH}/auth`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...attributes, method: 'signup' }),
+    })
+    return await response.json()
   }
 
   const forgotPassword = async (username: string) => {
-    return await request('POST', 'forgotPassword', 'json', { username })
+    const response = await fetch(`${global.__REDWOOD__API_PROXY_PATH}/auth`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, method: 'forgotPassword' }),
+    })
+    return await response.json()
   }
 
   const resetPassword = async (password: string) => {
-    return await request('POST', 'resetPassword', 'json', { password })
+    console.info('dbAuth Client, resetPassword: password', password)
+    return {}
   }
 
   const validateResetToken = async (token: string | null) => {
-    return await request('POST', 'validateResetToken', 'json', { token })
+    console.info('dbAuth Client, validateRestToken: token', token)
+    return true
   }
 
   return {

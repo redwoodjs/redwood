@@ -125,3 +125,17 @@ export class SessionDecryptionError extends Error {
     this.name = 'SessionDecryptionError'
   }
 }
+
+export class UsernameRequiredError extends Error {
+  constructor(message = 'Username is required') {
+    super(message)
+    this.name = 'UsernameRequiredError'
+  }
+}
+
+export class UsernameNotFoundError extends Error {
+  constructor(message = 'Username not found') {
+    super(message)
+    this.name = 'UsernameNotFoundError'
+  }
+}

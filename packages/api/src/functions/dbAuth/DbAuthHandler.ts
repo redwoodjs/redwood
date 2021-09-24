@@ -26,6 +26,19 @@ interface DbAuthHandlerOptions {
     username: string
     hashedPassword: string
     salt: string
+    resetToken: string
+    resetTokenExpiresAt: string
+  }
+  /**
+   * Object containing forgot password options
+   */
+  forgotPassword: {
+    handler: (user: Record<string, unknown>) => Promise<any>
+    errors: {
+      usernameNotFound: string
+      usernameRequired: string
+    }
+    expires: number
   }
   /**
    * Object containing login options
@@ -86,7 +99,7 @@ interface SessionRecord {
   id: string | number
 }
 
-type AuthMethodNames = 'login' | 'logout' | 'signup' | 'getToken'
+type AuthMethodNames = 'forgotPassword' | 'login' | 'logout' | 'signup' | 'getToken'
 
 type Params = {
   username?: string
@@ -109,12 +122,13 @@ export class DbAuthHandler {
 
   // class constant: list of auth methods that are supported
   static get METHODS(): AuthMethodNames[] {
-    return ['login', 'logout', 'signup', 'getToken']
+    return ['forgotPassword', 'login', 'logout', 'signup', 'getToken']
   }
 
   // class constant: maps the auth functions to their required HTTP verb for access
   static get VERBS() {
     return {
+      forgotPassword: 'POST',
       login: 'POST',
       logout: 'POST',
       signup: 'POST',
@@ -233,6 +247,48 @@ export class DbAuthHandler {
     }
   }
 
+  async forgotPassword() {
+    const { username } = this.params
+
+    if (!username || username.trim() === '') {
+      throw new DbAuthError.UsernameRequiredError(this.options.forgotPassword?.errors?.usernameRequired || `Username is required`)
+    }
+
+    let user = await this.dbAccessor.findUnique({
+      where: { [this.options.authFields.username]: username },
+    })
+
+    console.info("user", user)
+
+    if (user) {
+      const tokenExpires = new Date()
+      tokenExpires.setSeconds(tokenExpires.getSeconds() + this.options.forgotPassword.expires)
+      user = await this.dbAccessor.update({
+        where: { [this.options.authFields.id]: user[this.options.authFields.id] },
+        data: {
+          resetToken: uuidv4(),
+          resetTokenExpiresAt: tokenExpires
+        }
+      })
+
+      console.info("user with token", user)
+
+      const response = await this.options.forgotPassword.handler(this._sanitizeUser(user))
+
+      return [
+        response ? JSON.stringify(response) : '',
+        {
+          ...this._deleteSessionHeader,
+        },
+      ]
+    } else {
+      throw new DbAuthError.UsernameNotFoundError(
+        this.options.forgotPassword?.errors?.usernameNotFound ||
+          `Username '${username} not found`
+      )
+    }
+  }
+
   async login() {
     const { username, password } = this.params
     const dbUser = await this._verifyUser(username, password)
@@ -333,6 +389,17 @@ export class DbAuthHandler {
     if (!this.options?.signup?.handler) {
       throw new DbAuthError.NoSignupHandler()
     }
+  }
+
+  // removes sensative fields from user before sending over the wire
+  _sanitizeUser(user: Record<string, unknown>) {
+    const sanitized = JSON.parse(JSON.stringify(user))
+    delete sanitized[this.options.authFields.hashedPassword]
+    delete sanitized[this.options.authFields.salt]
+    delete sanitized[this.options.authFields.resetToken]
+    delete sanitized[this.options.authFields.resetTokenExpiresAt]
+
+    return sanitized
   }
 
   // parses the event body into JSON, whether it's base64 encoded or not
