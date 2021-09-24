@@ -40,6 +40,9 @@ export interface AuthContextInterface {
    * Redetermine authentication state and update the state.
    */
   reauthenticate(): Promise<void>
+  forgotPassword(username: string): Promise<any>
+  resetPassword(password: string): Promise<any>
+  validateResetToken(token: string | null): Promise<any>
   /**
    * A reference to the client that you passed into the `AuthProvider`,
    * which is useful if we do not support some specific functionality.
@@ -245,6 +248,34 @@ export class AuthProvider extends React.Component<
     return signupOutput
   }
 
+  forgotPassword = async (username: string) => {
+    if (this.rwClient.forgotPassword) {
+      return await this.rwClient.forgotPassword(username)
+    } else {
+      throw new Error(`forgotPassword not implemented in auth client`)
+    }
+  }
+
+  resetPassword = async (password: string) => {
+    if (this.rwClient.resetPassword) {
+      return await this.rwClient.resetPassword(password)
+    } else {
+      throw new Error(`resetPassword not implemented in auth client`)
+    }
+  }
+
+  validateResetToken = async (token: string | null) => {
+    if (this.rwClient.validateResetToken) {
+      if (token) {
+        return await this.rwClient.validateResetToken(token)
+      } else {
+        throw new Error(`Reset token is required`)
+      }
+    } else {
+      throw new Error(`validateResetToken not implemented in auth client`)
+    }
+  }
+
   render() {
     const { client, type, children } = this.props
 
@@ -259,6 +290,9 @@ export class AuthProvider extends React.Component<
           getCurrentUser: this.getCurrentUser,
           hasRole: this.hasRole,
           reauthenticate: this.reauthenticate,
+          forgotPassword: this.forgotPassword,
+          resetPassword: this.resetPassword,
+          validateResetToken: this.validateResetToken,
           client,
           type: type as SupportedAuthTypes,
         }}

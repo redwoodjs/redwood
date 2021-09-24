@@ -85,6 +85,9 @@ export interface AuthClient {
   getToken(): Promise<null | string>
   /** The user's data from the AuthProvider */
   getUserMetadata(): Promise<null | SupportedUserMetadata>
+  forgotPassword?(username: string): void | Promise<any>
+  resetPassword?(password: string): void | Promise<any>
+  validateResetToken?(token: string): void | Promise<any>
   client: SupportedAuthClients
   type: SupportedAuthTypes
 }
