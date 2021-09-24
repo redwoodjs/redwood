@@ -42,12 +42,12 @@ export default function transformer(file: FileInfo, api: API) {
 
   const outputAst = j(file.source)
 
+  /**
+   * 1 - renaming validation to config
+   */
   outputAst
     .find(j.JSXOpeningElement, { name: { name: 'Form' } })
     .forEach((p) => {
-      /**
-       * 1 - renaming validation to config
-       */
       const formValidationProp = j(p).find(j.JSXIdentifier, {
         name: 'validation',
       })
@@ -58,10 +58,14 @@ export default function transformer(file: FileInfo, api: API) {
       })
     })
 
+  /**
+   * 2 - move transformValue to validationProp
+   */
   outputAst
     .find(j.JSXAttribute, { name: { name: 'transformValue' } })
     .forEach((transformValueProp) => {
       const field = transformValueProp.parent
+      console.log('f', field)
       const transformValue = transformValueProp.node.value?.value
       j(transformValueProp).remove()
 
