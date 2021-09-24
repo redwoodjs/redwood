@@ -85,7 +85,7 @@ test('customOrDefaultTemplatePath returns the app path with proper side, generat
 })
 
 test('templateForComponentFile creates a proper output path for files', () => {
-  const names = ['FooBar', 'fooBar', 'foo-bar', 'foo_bar', 'FOO_BAR']
+  const names = ['FooBar', 'fooBar', 'foo-bar', 'foo_bar', 'FOO_BAR', 'FOOBar']
 
   names.forEach((name) => {
     const output = helpers.templateForComponentFile({
