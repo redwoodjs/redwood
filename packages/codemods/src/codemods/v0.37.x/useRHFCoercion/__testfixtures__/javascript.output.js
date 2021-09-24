@@ -23,7 +23,9 @@ const BazingaForm = ({ onSubmit = () => {} }) => {
       <SelectField
         name="select2"
         data-testid="select2"
-        validation={{ valueAsNumber: true }}
+        validation={{
+          valueAsNumber: true
+        }}
       >
         <option value={1}>Option 1</option>
         <option value={2}>Option 2</option>
