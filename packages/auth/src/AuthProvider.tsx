@@ -249,6 +249,8 @@ export class AuthProvider extends React.Component<
   }
 
   forgotPassword = async (username: string) => {
+    console.info('AuthProvider forgotPassword, username:', username)
+
     if (this.rwClient.forgotPassword) {
       return await this.rwClient.forgotPassword(username)
     } else {
@@ -257,6 +259,8 @@ export class AuthProvider extends React.Component<
   }
 
   resetPassword = async (password: string) => {
+    console.info('AuthProvider resetPassword, password:', password)
+
     if (this.rwClient.resetPassword) {
       return await this.rwClient.resetPassword(password)
     } else {
@@ -265,12 +269,10 @@ export class AuthProvider extends React.Component<
   }
 
   validateResetToken = async (token: string | null) => {
+    console.info('AuthProvider validateResetToken, token:', token)
+
     if (this.rwClient.validateResetToken) {
-      if (token) {
-        return await this.rwClient.validateResetToken(token)
-      } else {
-        throw new Error(`Reset token is required`)
-      }
+      return await this.rwClient.validateResetToken(token)
     } else {
       throw new Error(`validateResetToken not implemented in auth client`)
     }

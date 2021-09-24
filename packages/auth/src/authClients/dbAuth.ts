@@ -9,8 +9,23 @@ export type SignupAttributes = Record<string, unknown> & LoginAttributes
 
 export type DbAuth = () => null
 
+const request = async (
+  verb: string,
+  method: string,
+  attributes: Record<string, unknown> = {}
+) => {
+  const response = await fetch(`${global.__REDWOOD__API_PROXY_PATH}/auth`, {
+    method: verb,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ...attributes, method }),
+  })
+
+  return await response.json()
+}
+
 export const dbAuth = (): AuthClient => {
   const getToken = async () => {
+    // don't use request() here because we need the raw text, not JSON
     const response = await fetch(
       `${global.__REDWOOD__API_PROXY_PATH}/auth?method=getToken`
     )
@@ -25,29 +40,30 @@ export const dbAuth = (): AuthClient => {
 
   const login = async (attributes: LoginAttributes) => {
     const { username, password } = attributes
-    const response = await fetch(`${global.__REDWOOD__API_PROXY_PATH}/auth`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password, method: 'login' }),
-    })
-    return await response.json()
+
+    return await request('POST', 'login', { username, password })
   }
 
   const logout = async () => {
-    await fetch(`${global.__REDWOOD__API_PROXY_PATH}/auth`, {
-      method: 'POST',
-      body: JSON.stringify({ method: 'logout' }),
-    })
+    await request('POST', 'logout')
+
     return true
   }
 
   const signup = async (attributes: SignupAttributes) => {
-    const response = await fetch(`${global.__REDWOOD__API_PROXY_PATH}/auth`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...attributes, method: 'signup' }),
-    })
-    return await response.json()
+    return await request('POST', 'signup', attributes)
+  }
+
+  const forgotPassword = async (username: string) => {
+    return await request('POST', 'forgotPassword', { username })
+  }
+
+  const resetPassword = async (password: string) => {
+    return await request('POST', 'resetPassword', { password })
+  }
+
+  const validateResetToken = async (token: string | null) => {
+    return await request('POST', 'validateResetToken', { token })
   }
 
   return {
@@ -58,5 +74,8 @@ export const dbAuth = (): AuthClient => {
     signup,
     getToken,
     getUserMetadata: getToken,
+    forgotPassword,
+    resetPassword,
+    validateResetToken,
   }
 }
