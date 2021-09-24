@@ -71,7 +71,7 @@ function normalizeRequest(event: APIGatewayProxyEvent): Request {
  *
  * Unexpected errors are those that are not Envelop or GraphQL errors
  **/
-export const formatError: FormatErrorHandler = (err) => {
+export const formatError: FormatErrorHandler = (err: any) => {
   if (
     err.originalError &&
     err.originalError instanceof EnvelopError === false
@@ -285,7 +285,7 @@ export const createGraphQLHandler = ({
           statusCode: 500,
         }
       }
-    } catch (e) {
+    } catch (e: any) {
       logger.error(e)
       onException && onException()
 

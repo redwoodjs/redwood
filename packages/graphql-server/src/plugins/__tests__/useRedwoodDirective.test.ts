@@ -135,19 +135,6 @@ describe('Directives on Queries', () => {
     expect(result.data?.public).toBe('public')
   })
 
-  it('Should not allow execution without a directive', async () => {
-    const result = await testInstance.execute(`query { noDirectiveSpecified }`)
-
-    assertSingleExecutionValue(result)
-
-    expect(result.errors).toBeTruthy()
-    expect(result.errors[0].message).toMatchInlineSnapshot(
-      `"You must specify one of @requireAuth, @skipAuth or a custom directive"`
-    )
-
-    expect(result.data?.noDirectiveSpecified).toBeNull()
-  })
-
   it('Should not require Type fields (ie, not Query or Mutation root types) to have directives declared', async () => {
     const result = await testInstance.execute(`query { posts { title } }`)
 

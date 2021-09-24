@@ -194,6 +194,13 @@ export const useRedwoodLogger = (
   const includeQuery = loggerConfig?.options?.query
 
   return {
+    onPluginInit(context) {
+      context.registerContextErrorHandler(({ error }) => {
+        if (error) {
+          childLogger.error(`Error building context. ${error}`)
+        }
+      })
+    },
     onExecute({ args }) {
       const options = {} as any
       const rootOperation = args.document.definitions.find(

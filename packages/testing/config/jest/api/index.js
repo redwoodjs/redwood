@@ -6,6 +6,7 @@ const rwjsPaths = getPaths()
 const NODE_MODULES_PATH = path.join(rwjsPaths.base, 'node_modules')
 
 module.exports = {
+  roots: ['<rootDir>/src/'],
   testEnvironment: path.join(__dirname, './RedwoodApiJestEnv.js'),
   displayName: {
     color: 'redBright',
