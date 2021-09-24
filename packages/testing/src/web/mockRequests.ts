@@ -120,7 +120,7 @@ const mockGraphQL = (
         status: captureTransform(ctx.status),
         delay: captureTransform(ctx.delay),
         errors: captureTransform(ctx.errors),
-        set: captureTransform(ctx.set),
+        set: captureTransform(ctx.set as any),
         fetch: captureTransform(ctx.fetch),
         data: captureTransform(ctx.data),
         cookie: captureTransform(ctx.cookie),

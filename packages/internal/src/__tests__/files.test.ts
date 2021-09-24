@@ -18,8 +18,10 @@ import {
   findDirectoryNamedModules,
   findGraphQLSchemas,
   findPages,
+  isCellFile,
+  isFileInsideFolder,
 } from '../files'
-import { ensurePosixPath } from '../paths'
+import { ensurePosixPath, getPaths } from '../paths'
 
 const cleanPaths = (p) => {
   return ensurePosixPath(path.relative(FIXTURE_PATH, p))
@@ -43,6 +45,8 @@ test('finds directory named modules', () => {
 
   expect(p).toMatchInlineSnapshot(`
 Array [
+  "api/src/directives/requireAuth/requireAuth.js",
+  "api/src/directives/skipAuth/skipAuth.js",
   "api/src/functions/healthz/healthz.js",
   "api/src/functions/nested/nested.ts",
   "api/src/services/todos/todos.js",
@@ -102,4 +106,52 @@ Array [
   "api/src/functions/x/index.js",
 ]
 `)
+})
+
+test('isFileInsideFolder works correctly (esp on windows)', () => {
+  expect(
+    isFileInsideFolder(
+      path.join(FIXTURE_PATH, 'web/src/components/TableCell/TableCell.js'),
+      getPaths().web.base
+    )
+  ).toBe(true)
+
+  expect(
+    isFileInsideFolder(
+      path.join(FIXTURE_PATH, 'web/src/pages/NotFoundPage/NotFoundPage.js'),
+      getPaths().web.pages
+    )
+  ).toBe(true)
+
+  expect(
+    isFileInsideFolder(
+      path.join(FIXTURE_PATH, 'web/src/pages/NotFoundPage/NotFoundPage.js'),
+      getPaths().api.base
+    )
+  ).toBe(false)
+
+  expect(
+    isFileInsideFolder(
+      path.join(FIXTURE_PATH, 'api/src/functions/healthz/healthz.js'),
+      getPaths().api.functions
+    )
+  ).toBe(true)
+})
+
+test('isCellFile detects cells correctly', () => {
+  const invalidCell = isCellFile(
+    path.join(FIXTURE_PATH, 'web/src/components/TableCell/TableCell.js')
+  )
+
+  const validCell = isCellFile(
+    path.join(FIXTURE_PATH, 'web/src/components/TodoListCell/TodoListCell.tsx')
+  )
+
+  const notACell = isCellFile(
+    path.join(FIXTURE_PATH, 'api/src/services/todos/DoesNotExist.js')
+  )
+
+  expect(invalidCell).toBe(false)
+  expect(validCell).toBe(true)
+  expect(notACell).toBe(false)
 })

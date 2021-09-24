@@ -132,7 +132,7 @@ export class RWRoute extends BaseNode {
     try {
       validateRoutePath(this.path)
       return undefined
-    } catch (e) {
+    } catch (e: any) {
       return e.toString()
     }
   }

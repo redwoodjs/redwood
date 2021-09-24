@@ -1,6 +1,6 @@
 const mutation = `
 type Mutation {
-  createContact(input: CreateContactInput!): Contact
+  createContact(input: CreateContactInput!): Contact @requireAuth
 }
 `
 

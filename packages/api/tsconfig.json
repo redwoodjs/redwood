@@ -6,7 +6,7 @@
     "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
     "outDir": "dist",
   },
-  "include": ["src/**/*", "src/../package.json"],
+  "include": ["src/**/*"],
   "references": [
     { "path": "../auth" },
   ]

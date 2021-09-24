@@ -1,21 +1,33 @@
 // the lines that need to be added to App.{js,tsx}
 export const config = {
-  imports: [`import firebase from 'firebase/app'`, `import 'firebase/auth'`],
-  init: `const firebaseClientConfig = {
+  imports: [
+    `import { initializeApp, getApp, getApps } from 'firebase/app'`,
+    `import * as firebaseAuth from '@firebase/auth'`,
+  ],
+  init: `const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
   authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+
+  /** Optional config, may be needed, depending on how you use firebase
   projectId: process.env.FIREBASE_PROJECT_ID,
   storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.FIREBASE_APP_ID,
+  **/
 }
 
-const firebaseClient = ((config) => {
-  if (!firebase.apps.length) {
-    firebase.initializeApp(config)
+const firebaseApp = ((config) => {
+  const apps = getApps()
+  if (!apps.length) {
+    initializeApp(config)
   }
-  return firebase
-})(firebaseClientConfig)`,
+  return getApp()
+})(firebaseConfig)
+
+export const firebaseClient = {
+  firebaseAuth,
+  firebaseApp, // optional
+}`,
   authProvider: { client: 'firebaseClient', type: 'firebase' },
 }
 
