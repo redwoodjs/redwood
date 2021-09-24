@@ -125,6 +125,12 @@ export const users = () => {
   return db.user.findMany()
 }
 
+export const user = ({ id }) => {
+  return db.user.findUnique({
+    where: { id },
+  })
+}
+
 export const User = {
   identity: (_obj, { root }) =>
     db.user.findUnique({ where: { id: root.id } }).identity(),
@@ -139,6 +145,12 @@ export const users = () => {
   return db.user.findMany()
 }
 
+export const user = ({ id }) => {
+  return db.user.findUnique({
+    where: { id },
+  })
+}
+
 export const User = {
   userProfiles: (_obj, { root }) =>
     db.user.findUnique({ where: { id: root.id } }).userProfiles(),
@@ -151,6 +163,12 @@ exports[`in javascript mode creates a single word service file with multiple rel
 
 export const users = () => {
   return db.user.findMany()
+}
+
+export const user = ({ id }) => {
+  return db.user.findUnique({
+    where: { id },
+  })
 }
 
 export const User = {
@@ -186,10 +204,7 @@ describe('users', () => {
 `;
 
 exports[`in typescript mode creates a multi word service file 1`] = `
-"import type { BeforeResolverSpecType } from '@redwoodjs/graphql-server'
-
-import { db } from 'src/lib/db'
-import { requireAuth } from 'src/lib/auth'
+"import { db } from 'src/lib/db'
 
 export const userProfiles = () => {
   return db.userProfile.findMany()
@@ -268,10 +283,7 @@ describe('transactions', () => {
 `;
 
 exports[`in typescript mode creates a single word service file 1`] = `
-"import type { BeforeResolverSpecType } from '@redwoodjs/graphql-server'
-
-import { db } from 'src/lib/db'
-import { requireAuth } from 'src/lib/auth'
+"import { db } from 'src/lib/db'
 
 export const users = () => {
   return db.user.findMany()
@@ -281,10 +293,8 @@ export const users = () => {
 
 exports[`in typescript mode creates a single word service file with CRUD actions 1`] = `
 "import type { Prisma } from '@prisma/client'
-import type { BeforeResolverSpecType } from '@redwoodjs/graphql-server'
 
 import { db } from 'src/lib/db'
-import { requireAuth } from 'src/lib/auth'
 
 export const posts = () => {
   return db.post.findMany()
@@ -327,16 +337,18 @@ export const deletePost = ({ id }: Prisma.PostWhereUniqueInput) => {
 
 exports[`in typescript mode creates a single word service file with a belongsTo relation 1`] = `
 "import type { Prisma } from '@prisma/client'
-import type {
-  ResolverArgs,
-  BeforeResolverSpecType,
-} from '@redwoodjs/graphql-server'
+import type { ResolverArgs } from '@redwoodjs/graphql-server'
 
 import { db } from 'src/lib/db'
-import { requireAuth } from 'src/lib/auth'
 
 export const users = () => {
   return db.user.findMany()
+}
+
+export const user = ({ id }: Prisma.UserWhereUniqueInput) => {
+  return db.user.findUnique({
+    where: { id },
+  })
 }
 
 export const User = {
@@ -348,16 +360,18 @@ export const User = {
 
 exports[`in typescript mode creates a single word service file with a hasMany relation 1`] = `
 "import type { Prisma } from '@prisma/client'
-import type {
-  ResolverArgs,
-  BeforeResolverSpecType,
-} from '@redwoodjs/graphql-server'
+import type { ResolverArgs } from '@redwoodjs/graphql-server'
 
 import { db } from 'src/lib/db'
-import { requireAuth } from 'src/lib/auth'
 
 export const users = () => {
   return db.user.findMany()
+}
+
+export const user = ({ id }: Prisma.UserWhereUniqueInput) => {
+  return db.user.findUnique({
+    where: { id },
+  })
 }
 
 export const User = {
@@ -369,16 +383,18 @@ export const User = {
 
 exports[`in typescript mode creates a single word service file with multiple relations 1`] = `
 "import type { Prisma } from '@prisma/client'
-import type {
-  ResolverArgs,
-  BeforeResolverSpecType,
-} from '@redwoodjs/graphql-server'
+import type { ResolverArgs } from '@redwoodjs/graphql-server'
 
 import { db } from 'src/lib/db'
-import { requireAuth } from 'src/lib/auth'
 
 export const users = () => {
   return db.user.findMany()
+}
+
+export const user = ({ id }: Prisma.UserWhereUniqueInput) => {
+  return db.user.findUnique({
+    where: { id },
+  })
 }
 
 export const User = {
