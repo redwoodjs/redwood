@@ -69,8 +69,8 @@ interface DbAuthHandlerOptions {
      * Object containing error strings
      */
     errors: {
-      fieldMissing: '${field} cannot be blank'
-      usernameTaken: 'Username ${username} already in use'
+      fieldMissing: string
+      usernameTaken: string
     }
   }
 }
