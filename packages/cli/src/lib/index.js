@@ -129,7 +129,7 @@ export const nameVariants = (name) => {
   const normalizedName = pascalcase(paramCase(pluralize.singular(name)))
 
   return {
-    pascalName: pascalcase(name),
+    pascalName: pascalcase(paramCase(name)),
     camelName: camelcase(name),
     singularPascalName: normalizedName,
     pluralPascalName: pluralize(normalizedName),
