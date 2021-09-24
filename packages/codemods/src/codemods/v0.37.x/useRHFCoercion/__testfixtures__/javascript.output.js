@@ -11,7 +11,6 @@ const BazingaForm = ({ onSubmit = () => {} }) => {
       />
       <TextAreaField
         name="json"
-        validation={{ valueAsJSON: true }}
         defaultValue={`
           {
             "key_one": "value1",
@@ -19,12 +18,15 @@ const BazingaForm = ({ onSubmit = () => {} }) => {
             "false": false
           }
         `}
+        validation={{
+          valueAsJSON: true,
+        }}
       />
       <SelectField
         name="select2"
         data-testid="select2"
         validation={{
-          valueAsNumber: true
+          valueAsNumber: true,
         }}
       >
         <option value={1}>Option 1</option>
