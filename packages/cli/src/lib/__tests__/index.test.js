@@ -64,7 +64,7 @@ test('nameVariants returns a single word cased variables', () => {
 })
 
 test('nameVariants returns a multi word cased variables', () => {
-  const names = ['FooBar', 'fooBar', 'foo_bar', 'foo-bar']
+  const names = ['FooBar', 'fooBar', 'foo_bar', 'foo-bar', 'FOOBar']
 
   names.forEach((name) => {
     const vars = index.nameVariants(name)
