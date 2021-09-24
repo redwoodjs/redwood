@@ -7,8 +7,8 @@
     "dist"
   ],
   "dependencies": {
-    "execa": "5.1.1",
     "@redwoodjs/internal": "0.36.4",
+    "execa": "5.1.1",
     "jscodeshift": "0.13.0",
     "tempy": "2.0.0"
   },
@@ -21,6 +21,7 @@
     "test:watch": "yarn test --watch"
   },
   "devDependencies": {
+    "@types/jest": "27.0.1",
     "@types/jscodeshift": "^0.11.2"
   }
 }

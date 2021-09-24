@@ -5,7 +5,7 @@
     "rootDir": "src",
     "outDir": "dist",
   },
-  "include": ["src"],
+  "include": ["src", "./testUtils.d.ts"],
   "exclude": ["**/__testfixtures__"],
   "references": [
     { "internal": "../internal" },
