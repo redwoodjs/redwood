@@ -1,6 +1,8 @@
 import { parse, GraphQLResolveInfo } from 'graphql'
 import gql from 'graphql-tag'
 
+import { DIRECTIVE_REQUIRED_ERROR_MESSAGE } from '@redwoodjs/internal'
+
 import {
   makeDirectivesForPlugin,
   createTransformerDirective,
@@ -181,7 +183,16 @@ describe('makeMergedSchema', () => {
     const sdlsWithoutDirectives = {
       withoutDirective: {
         schema: parse(`
+          scalar JSON
+
+          type Redwood {
+            version: String
+            currentUser: JSON
+            prismaVersion: String
+          }
+
           type Query {
+            redwood: Redwood
             bazinga: String
           }
         `),
@@ -195,7 +206,7 @@ describe('makeMergedSchema', () => {
         services: makeServices({ services }),
         directives: makeDirectivesForPlugin(directiveFiles),
       })
-    ).toThrowError()
+    ).toThrowError(DIRECTIVE_REQUIRED_ERROR_MESSAGE)
   })
 
   describe('Directives', () => {

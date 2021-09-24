@@ -28,13 +28,11 @@ export function validateSchemaForDirectives(
           const isCurrentUserQuery =
             fieldName === 'currentUser' && fieldTypeName === 'Query'
           // skip validation for redwood query and currentUser
-          if (isRedwoodQuery || isCurrentUserQuery) {
-            return
-          }
-
-          const hasDirective = field.directives?.length
-          if (!hasDirective) {
-            validationOutput.push(`${fieldName} ${fieldTypeName}`)
+          if (!(isRedwoodQuery || isCurrentUserQuery)) {
+            const hasDirective = field.directives?.length
+            if (!hasDirective) {
+              validationOutput.push(`${fieldName} ${fieldTypeName}`)
+            }
           }
         }
       }
