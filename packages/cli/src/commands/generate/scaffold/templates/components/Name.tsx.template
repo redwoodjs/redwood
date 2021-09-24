@@ -36,6 +36,9 @@ const ${singularPascalName} = ({ ${singularCamelName} }) => {
       toast.success('${singularPascalName} deleted')
       navigate(routes.${pluralRouteName}())
     },
+    onError: (error) => {
+      toast.error(error.message)
+    },
   })
 
   const onDeleteClick = (id) => {

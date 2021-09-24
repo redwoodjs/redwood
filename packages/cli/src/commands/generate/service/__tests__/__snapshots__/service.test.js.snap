@@ -2,12 +2,6 @@
 
 exports[`in javascript mode creates a multi word service file 1`] = `
 "import { db } from 'src/lib/db'
-import { requireAuth } from 'src/lib/auth'
-
-// Used when the environment variable REDWOOD_SECURE_SERVICES=1
-export const beforeResolver = (rules) => {
-  rules.add(requireAuth)
-}
 
 export const userProfiles = () => {
   return db.userProfile.findMany()
@@ -83,12 +77,6 @@ describe('transactions', () => {
 
 exports[`in javascript mode creates a single word service file 1`] = `
 "import { db } from 'src/lib/db'
-import { requireAuth } from 'src/lib/auth'
-
-// Used when the environment variable REDWOOD_SECURE_SERVICES=1
-export const beforeResolver = (rules) => {
-  rules.add(requireAuth)
-}
 
 export const users = () => {
   return db.user.findMany()
@@ -98,12 +86,6 @@ export const users = () => {
 
 exports[`in javascript mode creates a single word service file with CRUD actions 1`] = `
 "import { db } from 'src/lib/db'
-import { requireAuth } from 'src/lib/auth'
-
-// Used when the environment variable REDWOOD_SECURE_SERVICES=1
-export const beforeResolver = (rules) => {
-  rules.add(requireAuth)
-}
 
 export const posts = () => {
   return db.post.findMany()
@@ -138,15 +120,15 @@ export const deletePost = ({ id }) => {
 
 exports[`in javascript mode creates a single word service file with a belongsTo relation 1`] = `
 "import { db } from 'src/lib/db'
-import { requireAuth } from 'src/lib/auth'
-
-// Used when the environment variable REDWOOD_SECURE_SERVICES=1
-export const beforeResolver = (rules) => {
-  rules.add(requireAuth)
-}
 
 export const users = () => {
   return db.user.findMany()
+}
+
+export const user = ({ id }) => {
+  return db.user.findUnique({
+    where: { id },
+  })
 }
 
 export const User = {
@@ -158,15 +140,15 @@ export const User = {
 
 exports[`in javascript mode creates a single word service file with a hasMany relation 1`] = `
 "import { db } from 'src/lib/db'
-import { requireAuth } from 'src/lib/auth'
-
-// Used when the environment variable REDWOOD_SECURE_SERVICES=1
-export const beforeResolver = (rules) => {
-  rules.add(requireAuth)
-}
 
 export const users = () => {
   return db.user.findMany()
+}
+
+export const user = ({ id }) => {
+  return db.user.findUnique({
+    where: { id },
+  })
 }
 
 export const User = {
@@ -178,15 +160,15 @@ export const User = {
 
 exports[`in javascript mode creates a single word service file with multiple relations 1`] = `
 "import { db } from 'src/lib/db'
-import { requireAuth } from 'src/lib/auth'
-
-// Used when the environment variable REDWOOD_SECURE_SERVICES=1
-export const beforeResolver = (rules) => {
-  rules.add(requireAuth)
-}
 
 export const users = () => {
   return db.user.findMany()
+}
+
+export const user = ({ id }) => {
+  return db.user.findUnique({
+    where: { id },
+  })
 }
 
 export const User = {
@@ -195,6 +177,16 @@ export const User = {
   identity: (_obj, { root }) =>
     db.user.findUnique({ where: { id: root.id } }).identity(),
 }
+"
+`;
+
+exports[`in javascript mode creates a single word service scenario file 1`] = `
+"export const standard = defineScenario({
+  user: {
+    one: { data: { email: 'String1234567' } },
+    two: { data: { email: 'String1234567' } },
+  },
+})
 "
 `;
 
@@ -212,15 +204,7 @@ describe('users', () => {
 `;
 
 exports[`in typescript mode creates a multi word service file 1`] = `
-"import type { BeforeResolverSpecType } from '@redwoodjs/api'
-
-import { db } from 'src/lib/db'
-import { requireAuth } from 'src/lib/auth'
-
-// Used when the environment variable REDWOOD_SECURE_SERVICES=1
-export const beforeResolver = (rules: BeforeResolverSpecType) => {
-  rules.add(requireAuth)
-}
+"import { db } from 'src/lib/db'
 
 export const userProfiles = () => {
   return db.userProfile.findMany()
@@ -299,15 +283,7 @@ describe('transactions', () => {
 `;
 
 exports[`in typescript mode creates a single word service file 1`] = `
-"import type { BeforeResolverSpecType } from '@redwoodjs/api'
-
-import { db } from 'src/lib/db'
-import { requireAuth } from 'src/lib/auth'
-
-// Used when the environment variable REDWOOD_SECURE_SERVICES=1
-export const beforeResolver = (rules: BeforeResolverSpecType) => {
-  rules.add(requireAuth)
-}
+"import { db } from 'src/lib/db'
 
 export const users = () => {
   return db.user.findMany()
@@ -317,15 +293,8 @@ export const users = () => {
 
 exports[`in typescript mode creates a single word service file with CRUD actions 1`] = `
 "import type { Prisma } from '@prisma/client'
-import type { BeforeResolverSpecType } from '@redwoodjs/api'
 
 import { db } from 'src/lib/db'
-import { requireAuth } from 'src/lib/auth'
-
-// Used when the environment variable REDWOOD_SECURE_SERVICES=1
-export const beforeResolver = (rules: BeforeResolverSpecType) => {
-  rules.add(requireAuth)
-}
 
 export const posts = () => {
   return db.post.findMany()
@@ -368,18 +337,18 @@ export const deletePost = ({ id }: Prisma.PostWhereUniqueInput) => {
 
 exports[`in typescript mode creates a single word service file with a belongsTo relation 1`] = `
 "import type { Prisma } from '@prisma/client'
-import type { ResolverArgs, BeforeResolverSpecType } from '@redwoodjs/api'
+import type { ResolverArgs } from '@redwoodjs/graphql-server'
 
 import { db } from 'src/lib/db'
-import { requireAuth } from 'src/lib/auth'
-
-// Used when the environment variable REDWOOD_SECURE_SERVICES=1
-export const beforeResolver = (rules: BeforeResolverSpecType) => {
-  rules.add(requireAuth)
-}
 
 export const users = () => {
   return db.user.findMany()
+}
+
+export const user = ({ id }: Prisma.UserWhereUniqueInput) => {
+  return db.user.findUnique({
+    where: { id },
+  })
 }
 
 export const User = {
@@ -391,18 +360,18 @@ export const User = {
 
 exports[`in typescript mode creates a single word service file with a hasMany relation 1`] = `
 "import type { Prisma } from '@prisma/client'
-import type { ResolverArgs, BeforeResolverSpecType } from '@redwoodjs/api'
+import type { ResolverArgs } from '@redwoodjs/graphql-server'
 
 import { db } from 'src/lib/db'
-import { requireAuth } from 'src/lib/auth'
-
-// Used when the environment variable REDWOOD_SECURE_SERVICES=1
-export const beforeResolver = (rules: BeforeResolverSpecType) => {
-  rules.add(requireAuth)
-}
 
 export const users = () => {
   return db.user.findMany()
+}
+
+export const user = ({ id }: Prisma.UserWhereUniqueInput) => {
+  return db.user.findUnique({
+    where: { id },
+  })
 }
 
 export const User = {
@@ -414,18 +383,18 @@ export const User = {
 
 exports[`in typescript mode creates a single word service file with multiple relations 1`] = `
 "import type { Prisma } from '@prisma/client'
-import type { ResolverArgs, BeforeResolverSpecType } from '@redwoodjs/api'
+import type { ResolverArgs } from '@redwoodjs/graphql-server'
 
 import { db } from 'src/lib/db'
-import { requireAuth } from 'src/lib/auth'
-
-// Used when the environment variable REDWOOD_SECURE_SERVICES=1
-export const beforeResolver = (rules: BeforeResolverSpecType) => {
-  rules.add(requireAuth)
-}
 
 export const users = () => {
   return db.user.findMany()
+}
+
+export const user = ({ id }: Prisma.UserWhereUniqueInput) => {
+  return db.user.findUnique({
+    where: { id },
+  })
 }
 
 export const User = {
@@ -434,6 +403,20 @@ export const User = {
   identity: (_obj, { root }: ResolverArgs<ReturnType<typeof user>>) =>
     db.user.findUnique({ where: { id: root.id } }).identity(),
 }
+"
+`;
+
+exports[`in typescript mode creates a single word service scenario file 1`] = `
+"import type { Prisma } from '@prisma/client'
+
+export const standard = defineScenario<Prisma.UserCreateArgs>({
+  user: {
+    one: { data: { email: 'String1234567' } },
+    two: { data: { email: 'String1234567' } },
+  },
+})
+
+export type StandardScenario = typeof standard
 "
 `;
 

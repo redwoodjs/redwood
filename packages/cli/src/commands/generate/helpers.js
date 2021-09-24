@@ -1,3 +1,4 @@
+import fs from 'fs'
 import path from 'path'
 
 import Listr from 'listr'
@@ -12,6 +13,32 @@ import { ensurePosixPath, getConfig } from '@redwoodjs/internal'
 import { generateTemplate, getPaths, writeFilesTask } from '../../lib'
 import c from '../../lib/colors'
 import { yargsDefaults } from '../generate'
+
+/**
+ * Returns the path to a custom generator template, if found in the app.
+ * Otherwise the default Redwood template.
+ */
+export const customOrDefaultTemplatePath = ({
+  side,
+  generator,
+  templatePath,
+}) => {
+  // default template for this generator: ./page/templates/page.tsx.template
+  const defaultPath = path.join(__dirname, generator, 'templates', templatePath)
+
+  // where a custom template *might* exist: /path/to/app/web/generators/page/page.tsx.template
+  const customPath = path.join(
+    getPaths()[side].generators,
+    generator,
+    templatePath
+  )
+
+  if (fs.existsSync(customPath)) {
+    return customPath
+  } else {
+    return defaultPath
+  }
+}
 
 /**
  * Reduces boilerplate for generating an output path and content to write to disk
@@ -39,7 +66,11 @@ export const templateForComponentFile = ({
   const componentOutputPath =
     outputPath ||
     path.join(basePath, outputComponentName, outputComponentName + extension)
-  const fullTemplatePath = path.join(generator, 'templates', templatePath)
+  const fullTemplatePath = customOrDefaultTemplatePath({
+    generator,
+    templatePath,
+    side: webPathSection ? 'web' : 'api',
+  })
   const content = generateTemplate(fullTemplatePath, {
     name,
     outputPath: ensurePosixPath(
@@ -240,4 +271,29 @@ export const ensureUniquePlural = async ({ model, inDestroyer = false }) => {
 
   // Set the rule
   pluralize.addIrregularRule(model, pluralToUse)
+}
+
+/** @type {(paramType: 'Int' | 'Float' | 'Boolean' | 'String') => string } **/
+export const mapRouteParamTypeToTsType = (paramType) => {
+  const routeParamToTsType = {
+    Int: 'number',
+    Float: 'number',
+    Boolean: 'boolean',
+    String: 'string',
+  }
+  return routeParamToTsType[paramType] || 'unknown'
+}
+
+/** @type {(paramType: 'String' | 'Boolean' | 'Int' | 'BigInt' | 'Float' | 'Decimal' | 'DateTime' ) => string } **/
+export const mapPrismaScalarToPagePropTsType = (scalarType) => {
+  const prismaScalarToTsType = {
+    String: 'string',
+    Boolean: 'boolean',
+    Int: 'number',
+    BigInt: 'number',
+    Float: 'number',
+    Decimal: 'number',
+    DateTime: 'string',
+  }
+  return prismaScalarToTsType[scalarType] || 'unknown'
 }

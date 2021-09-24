@@ -13,8 +13,8 @@ import { dbAuth } from './dbAuth'
 import type { DbAuth } from './dbAuth'
 import { ethereum } from './ethereum'
 import type { Ethereum, EthereumUser } from './ethereum'
-import { firebase } from './firebase'
-import type { Firebase } from './firebase'
+import { firebase, FirebaseUser } from './firebase'
+import type { FirebaseAuth } from './firebase'
 import { goTrue } from './goTrue'
 import type { GoTrue, GoTrueUser } from './goTrue'
 import { magicLink } from './magicLink'
@@ -49,7 +49,7 @@ export type SupportedAuthClients =
   | GoTrue
   | NetlifyIdentity
   | MagicLink
-  | Firebase
+  | FirebaseAuth
   | Supabase
   | Clerk
   | Ethereum
@@ -62,6 +62,7 @@ export type { Auth0User }
 export type { AzureActiveDirectoryUser }
 export type { DbAuth }
 export type { ClerkUser }
+export type { FirebaseUser }
 export type { GoTrueUser }
 export type { MagicUser }
 export type { SupabaseUser }
@@ -71,6 +72,7 @@ export type SupportedUserMetadata =
   | Auth0User
   | AzureActiveDirectoryUser
   | ClerkUser
+  | FirebaseUser
   | GoTrueUser
   | MagicUser
   | SupabaseUser
