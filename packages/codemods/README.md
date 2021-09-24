@@ -65,11 +65,11 @@ You can then run this transform on files via the CLI:
 yarn run jscodeshift -t fooToBar.js foo.js
 ```
 
-In this way, jscodeshift is similar to Jest in that it's a runner. 
+In this way, jscodeshift is similar to Jest in that it's a runner.
 
 #### The API
 
-In the example above, `file` is the file it's running the transformation on 
+In the example above, `file` is the file it's running the transformation on
 and `jscodeshift` itself is actually a property of `api`.
 Since it's used so much, you'll see this pattern a lot:
 
@@ -94,7 +94,7 @@ module.exports = function (file: FileInfo, api: API) {
 
   /**
    * This finds the line:
-   * 
+   *
    * ```
    * import { ... } from '@redwoodjs/router'
    * ```
@@ -109,20 +109,31 @@ module.exports = function (file: FileInfo, api: API) {
 ```
 
 Sometimes `jscodeshift` has a more-specific find method than `find`, like `findVariableDeclarators`. Use it when you can—it makes things a lot easier.
-But note that these find methods aren't on `Collection`. 
+But note that these find methods aren't on `Collection`.
 They're in the extensions:
 
 - [Node](https://github.com/facebook/jscodeshift/blob/main/src/collections/Node.js)
 - [JSXElement](https://github.com/facebook/jscodeshift/blob/main/src/collections/JSXElement.js)
 - etc.
 
-After you find what you're looking for, you usually want to replace it with something else. 
-Again, use AST Explorer to find out what the AST of that something else is. 
+After you find what you're looking for, you usually want to replace it with something else.
+Again, use AST Explorer to find out what the AST of that something else is.
 Then, instead of using a type (like `j.ImportDeclaration`) to find it, use a builder (like `js.importDeclaration`—it's just the type lowercased) to make it.
 
-Again, sometimes jscodeshift has a method that makes this trivial, especially for simple operations, like renaming or removing something (just use `renameTo` or `remove`). 
+Again, sometimes jscodeshift has a method that makes this trivial, especially for simple operations, like renaming or removing something (just use `renameTo` or `remove`).
 But sometimes you'll just have to use one of the more generic methods: `replaceWith`, `inserterBefore`, `insertAfter`, etc.
 
 ## Testing
 
 We're taking advantage of jscodeshift's integration with Jest to take most of the setup out of unit tests: https://github.com/facebook/jscodeshift#unit-testing.
+
+### Testing TS fixtures...
+
+To test TS files:
+https://github.com/facebook/jscodeshift/blob/main/src/testUtils.js#L87
+
+```javascript
+defineTest(__dirname, 'addPrismaCreateToScenarios', null, 'realExample', {
+  parser: 'ts',
+})
+```

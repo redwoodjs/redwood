@@ -1,4 +1,7 @@
 jest.autoMockOff()
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore Not inside tsconfig rootdir
 import { defineTest } from 'jscodeshift/dist/testUtils'
 
 defineTest(__dirname, 'addPrismaCreateToScenarios', { parser: 'tsx' }, 'simple')

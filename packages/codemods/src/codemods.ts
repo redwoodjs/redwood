@@ -24,10 +24,10 @@ const argv = yargs
  * Otherwise, show help
  */
 if (argv._.length === 0) {
-  if (argv.from && argv.to) {
-    // const codemods = getCodemods({ from: argv.from, to: argv.to })
-    // use listr or something to run them
-  } else {
-    yargs.showHelp()
-  }
+  // if (argv.from && argv.to) {
+  //   const codemods = getCodemods({ from: argv.from, to: argv.to })
+  //   use listr or something to run them
+  // } else {
+  yargs.showHelp()
+  // }
 }

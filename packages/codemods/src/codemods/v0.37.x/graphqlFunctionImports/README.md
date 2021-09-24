@@ -1,7 +1,3 @@
-# fooToBar
+# GraphQL Function Imports
 
-|         |     |
-|:--------|:----|
-| version | n/a |
-
-Just an example.
+Some GraphQL imports have moved from `@redwodjs/api` to `@redwoodjs/graphql-server`.
