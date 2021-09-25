@@ -580,6 +580,10 @@ const useVersion = () => {
       }
     }
 
+    if (!global.fetch) {
+      return
+    }
+
     fetchVersion()
   }, [])
   return version
