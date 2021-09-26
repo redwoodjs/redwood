@@ -139,7 +139,7 @@ describe('Uses correct Auth decoder', () => {
     )
 
     expect(output).toEqual({
-      decodedWith: 'magiclink',
+      decodedWith: 'magicLink',
       fakeDecodedToken: true,
     })
     // delete process.env['MAGIC_SECRET_API_KEY']
