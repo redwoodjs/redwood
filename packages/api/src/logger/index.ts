@@ -234,12 +234,13 @@ export interface RedwoodLoggerOptions<TransportOptions = Record<string, any>> {
  * createLogger({ options: { level: 'error' } })
  *
  * @example
- * // Create the logger to log to a file
+ * // Create the logger to log with pino-pretty to STDOUT just at the info level
  * createLogger({ targets: [{
-      level: 'info',
-      target: 'pino-pretty', // must be installed separately
-    }]
-  })
+ *    level: 'info',
+ *    target: 'pino-pretty', // must be installed separately
+ *    options: { destination: 1 },
+ *  }]
+ * })
  *
  * @return {BaseLogger} - The configured logger
  */
