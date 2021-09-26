@@ -59,7 +59,6 @@ jest.mock('../supabase', () => {
   }
 })
 
-
 const MOCKED_JWT = 'xxx.yyy.zzz'
 
 describe('Uses correct Auth decoder', () => {

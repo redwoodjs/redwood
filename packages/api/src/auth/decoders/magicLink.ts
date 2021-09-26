@@ -22,7 +22,7 @@ export const magicLink = async (token: string) => {
 
   const magicAdmin = new Magic(MAGIC_SECRET_API_KEY)
 
-  magicAdmin.token.validate(token)
+  await magicAdmin.token.validate(token)
 
   return magicAdmin.token.decode(token)
 }
