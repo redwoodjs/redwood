@@ -7,7 +7,7 @@ import * as auth0Decoder from '../auth0'
 import * as clerkDecoder from '../clerk'
 import * as firebaseDecoder from '../firebase'
 import { decodeToken } from '../index'
-import * as magiclinkDecoder from '../magicLink'
+import * as magicLinkDecoder from '../magicLink'
 import * as netlifyDecoder from '../netlify'
 import * as supabaseDecoder from '../supabase'
 
@@ -37,7 +37,7 @@ jest.mock('../firebase', () => {
 
 jest.mock('../magicLink', () => {
   return {
-    firebase: jest.fn().mockImplementation(async () => {
+    magicLink: jest.fn().mockImplementation(async () => {
       return { decodedWith: 'magicLink', fakeDecodedToken: true }
     }),
   }
@@ -133,7 +133,8 @@ describe('Uses correct Auth decoder', () => {
       event: mockedAPIGatewayProxyEvent,
       context: {} as LambdaContext,
     })
-    expect(magiclinkDecoder.magicLink).toHaveBeenCalledWith(
+
+    expect(magicLinkDecoder.magicLink).toHaveBeenCalledWith(
       MOCKED_JWT,
       expect.anything()
     )
