@@ -13,7 +13,7 @@
 //
 // This function validates the token, throw an error if validations fails
 // otherwise it will return the decoded token in the form of a ParsedDIDToken
-export const magicLink = async (token: string):  => {
+export const magicLink = async (token: string)  => {
   const { MAGIC_SECRET_API_KEY } = process.env
   if (!MAGIC_SECRET_API_KEY) {
     throw new Error('`MAGIC_SECRET_API_KEY` environment variable not set.')
