@@ -35,7 +35,7 @@ jest.mock('../firebase', () => {
   }
 })
 
-jest.mock('../magiclink', () => {
+jest.mock('../magicLink', () => {
   return {
     firebase: jest.fn().mockImplementation(async () => {
       return { decodedWith: 'magicLink', fakeDecodedToken: true }
