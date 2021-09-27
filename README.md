@@ -47,7 +47,7 @@ Here's a quick taste of the technologies a standard Redwood application will
 use:
 
 - [React](https://reactjs.org/)
-- [GraphQL](https://graphql.org/) ([Apollo](https://github.com/apollographql))
+- [GraphQL](https://graphql.org/) ([GraphQL Helix](https://github.com/contrawork/graphql-helix) + [Envelop](https://www.envelop.dev) + [Apollo Client](https://www.apollographql.com/docs/react))
 - [Prisma](https://www.prisma.io/)
 - [Jest](https://jestjs.io/)
 - [Storybook](https://storybook.js.org/)
@@ -67,6 +67,8 @@ use:
 - Forms with easy client- and/or server-side validation and error handling.
 - [Hot module replacement](https://webpack.js.org/concepts/hot-module-replacement/) (HMR) for faster development.
 - Database migrations (via Prisma 2).
+- [Envelop Plugins](https://www.envelop.dev) that enhances the GraphQL lifecycle from context to execution
+- Simple, but powerful GraphQL Directives to validate access or transform resolved data
 - Logging using [Pino](https://getpino.io) including to [transports](https://getpino.io/#/docs/transports)
 - Signature verification and payload signing for handling incoming and outgoing Webhooks
 - Page prerendering
@@ -74,7 +76,7 @@ use:
 
 ## Roadmap
 
-We intend to ship v1 in the first quarter of 2021.
+We intend to ship v1 in the fourth quarter of 2021.
 To see all the features we plan on including in Redwood's first major release, you can check out our [Roadmap](https://redwoodjs.com/roadmap).
 
 A framework like Redwood has a lot of moving parts; the Roadmap is a great way to get a high-level overview of where the framework is relative to where we want it to be. And since we link to all of our GitHub project boards, it's also a great way to get involved!
