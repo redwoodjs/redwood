@@ -9,8 +9,9 @@
   "dependencies": {
     "@redwoodjs/internal": "0.36.4",
     "execa": "5.1.1",
+    "fast-glob": "^3.2.7",
     "jscodeshift": "0.13.0",
-    "tempy": "2.0.0"
+    "tempy": "1.0.1"
   },
   "scripts": {
     "build": "yarn build:js",

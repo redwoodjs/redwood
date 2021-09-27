@@ -1,8 +1,9 @@
 /**
  * A simple wrapper around the jscodeshift CLI.
  *
- * @see {@link https://github.com/facebook/jscodeshift#usage-cli}
- * @see {@link https://github.com/prisma/codemods/blob/main/utils/runner.ts}
+ * @see jscodeshift CLI's usage {@link https://github.com/facebook/jscodeshift#usage-cli}
+ * @see prisma/codemods {@link https://github.com/prisma/codemods/blob/main/utils/runner.ts}
+ * @see react-codemod {@link https://github.com/reactjs/react-codemod/blob/master/bin/cli.js}
  */
 import path from 'path'
 
@@ -14,38 +15,42 @@ export interface RunTransform {
   options?: Record<string, any>
 }
 
+/**
+ * We can't run jscodeshift with yarn (like `yarn jscodeshift -t ...`).
+ *
+ * @see {@link https://github.com/facebook/jscodeshift/issues/424}
+ *
+ * Prisma and React have a different way of getting around it,
+ * but that didn't work for me.
+ * @see {@link https://github.com/reactjs/react-codemod/blob/b34b92a1f0b8ad333efe5effb50d17d46d66588b/bin/cli.js#L20}
+ *
+ * This seems to work though.
+ */
 const jscodeshiftExecutable = path.resolve(
   __dirname,
   '../../node_modules/.bin/jscodeshift'
 )
 
+/**
+ * Runs a transform on the given targetPath(s).
+ *
+ * @param transformPath Path to the transform.
+ * @param targetPaths Path(s) to the file(s) to transform. Can also be a directory.
+ * @param options jscodeshift options and transform options.
+ */
 export const runTransform = ({
   transformPath,
   targetPaths,
   options = {},
-}: // ...rest
-RunTransform) => {
+}: RunTransform) => {
   /**
    * Transforms `{ key: val }` to `'--key=val'`
-   *
-   * @todo
-   * If it's empty, it's interpreted as a path.
-   * Not a huge deal but it'll output "  not found", as if it couldn't find a file named " ".
    */
-  const optionsString = Object.entries(options)
-    .map((key, val) => `--${key}=${val}`)
-    .join(' ')
+  const flags = Object.entries(options).map((key, val) => `--${key}=${val}`)
 
   execa.sync(
     'node',
-    [
-      jscodeshiftExecutable,
-      '-v 2',
-      '-t',
-      transformPath,
-      targetPaths.join(' '),
-      optionsString,
-    ],
+    [jscodeshiftExecutable, '-t', transformPath, ...targetPaths, ...flags],
     {
       stdio: 'inherit',
     }
