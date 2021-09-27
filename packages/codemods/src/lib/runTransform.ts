@@ -60,10 +60,10 @@ export const runTransform = ({
       transformPath,
       ...targetPaths,
       ...flags,
-    ],
-    {
-      stdio: 'inherit',
-    }
+    ]
+    // {
+    //   stdio: 'inherit',
+    // }
   )
 }
 

@@ -11,6 +11,8 @@
     "execa": "5.1.1",
     "fast-glob": "^3.2.7",
     "jscodeshift": "0.13.0",
+    "require-directory": "^2.1.1",
+    "tasuku": "^1.0.2",
     "tempy": "1.0.1"
   },
   "scripts": {

@@ -1,8 +1,3 @@
-/**
- * The following is a naive implementation:
- * The keys won't be named 'one' and 'two'.
- * But the logic in forEach may be enough.
- */
 import type { FileInfo, API, ObjectExpression, Property } from 'jscodeshift'
 
 module.exports = function (file: FileInfo, api: API) {
@@ -13,7 +8,7 @@ module.exports = function (file: FileInfo, api: API) {
       return path.callee.name === 'defineScenario'
     })
     .forEach((scenarioPath) => {
-      // First argument is the definition
+      // The first argument is the definition.
       const scenarioDefinition = scenarioPath.value
         .arguments[0] as ObjectExpression
 

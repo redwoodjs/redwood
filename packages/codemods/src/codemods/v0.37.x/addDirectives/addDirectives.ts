@@ -1,18 +1,3 @@
-/**
- * Adds the `directives` directory and its subdirectories to a Redwood project.
- *
- * ```
- * api
- * ├── src
- * │   ├── directives                  # we need add this and its subirs
- * │   │   ├── requireAuth
- * │   │   ├── requireAuth.test.ts # -> get from github
- * │   │   │   └── requireAuth.ts      # -> get from github
- * │   │   ├── skipAuth
- * │   │   │   ├── skipAuth.test.ts    # -> get from github
- * │   │   │   └── skipAuth.ts         # -> get from github
- * ```
- */
 import fs from 'fs'
 import path from 'path'
 
@@ -25,11 +10,11 @@ export const addDirectives = async () => {
 
   /**
    * An object where the keys are resolved filenames and the values are (for the most part) URLs to fetch.
-   * Weaving the complexity into the data structure makes the logic simpler.
    *
-   * @remark
+   * @remarks
    *
-   * Without the brackets areound requireAuthDir and skipAuthDir, the key would just be 'requireAuthDir' and 'skipAuthDir' instead of their values.
+   * Without the brackets areound requireAuthDir and skipAuthDir,
+   * the key would just be 'requireAuthDir' and 'skipAuthDir' instead of their values.
    */
   const requireAuthDir = path.join(rwPaths.api.directives, 'requireAuth')
   const skipAuthDir = path.join(rwPaths.api.directives, 'skipAuth')

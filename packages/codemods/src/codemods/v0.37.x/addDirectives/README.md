@@ -1,15 +1,21 @@
 # Add Directives
 
-Adds the `directives` directory and its subdirectories to a Redwood project.
+|         |                  |
+|:--------|:-----------------|
+| version | `0.36` -> `0.37` |
+
+Adds the `directives` directory to a Redwood project. Copies from the create-redwood-app template: https://github.com/redwoodjs/redwood/tree/main/packages/create-redwood-app/template/api/src/directives.
 
 ```
 api
 ├── src
-│   ├── directives                  # we need add this and its subirs
+│   ├── directives
 │   │   ├── requireAuth
-│   │   ├── requireAuth.test.ts     # -> get from github
-│   │   │   └── requireAuth.ts      # -> get from github
+│   │   ├── requireAuth.test.ts
+│   │   │   └── requireAuth.ts
 │   │   ├── skipAuth
-│   │   │   ├── skipAuth.test.ts    # -> get from github
-│   │   │   └── skipAuth.ts         # -> get from github
+│   │   │   ├── skipAuth.test.ts
+│   │   │   └── skipAuth.ts
 ```
+
+No jscodeshift is involved.
