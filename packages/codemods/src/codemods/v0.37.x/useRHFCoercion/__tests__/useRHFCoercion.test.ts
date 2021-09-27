@@ -1,4 +1,9 @@
-jest.autoMockOff()
-import { defineTest } from 'jscodeshift/dist/testUtils'
+describe('React hook forms: Coercion', () => {
+  test('Transforms javascript', () => {
+    matchTransformSnapshot('useRHFCoercion', 'javascript')
+  })
 
-defineTest(__dirname, 'useRHFCoercion', null, 'javascript')
+  test('Transforms typescript', () => {
+    throw new Error('Implement me')
+  })
+})

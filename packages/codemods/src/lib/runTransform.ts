@@ -12,6 +12,7 @@ import execa from 'execa'
 export interface RunTransform {
   transformPath: string
   targetPaths: string[]
+  parser?: 'ts' | 'tsx' | 'js'
   options?: Record<string, any>
 }
 
@@ -41,6 +42,7 @@ const jscodeshiftExecutable = path.resolve(
 export const runTransform = ({
   transformPath,
   targetPaths,
+  parser = 'tsx',
   options = {},
 }: RunTransform) => {
   /**
@@ -50,7 +52,15 @@ export const runTransform = ({
 
   execa.sync(
     'node',
-    [jscodeshiftExecutable, '-t', transformPath, ...targetPaths, ...flags],
+    [
+      jscodeshiftExecutable,
+      '--parser',
+      parser,
+      '-t',
+      transformPath,
+      ...targetPaths,
+      ...flags,
+    ],
     {
       stdio: 'inherit',
     }

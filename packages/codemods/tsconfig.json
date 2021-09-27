@@ -2,10 +2,10 @@
   "extends": "../../tsconfig.compilerOption.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "rootDir": "src",
+    "rootDirs": ["src", "testUtils"],
     "outDir": "dist",
   },
-  "include": ["src", "./testUtils.d.ts"],
+  "include": ["src", "./testUtils.d.ts", "testUtils"],
   "exclude": ["**/__testfixtures__"],
   "references": [
     { "internal": "../internal" },

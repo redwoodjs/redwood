@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "@types/jest": "27.0.1",
-    "@types/jscodeshift": "^0.11.2"
+    "@types/jscodeshift": "^0.11.2",
+    "prettier": "2.4.1"
   }
 }
