@@ -54,12 +54,11 @@ export const matchTransformSnapshot = (
   expect(formatCode(transformedContent)).toEqual(formatCode(expectedOutput))
 }
 
+type MatchFunction = typeof matchTransformSnapshot
+
 // This file gets loaded in jest setup, so becomes available globally in tests
 declare global {
-  function matchTransformSnapshot(
-    transformName: string,
-    fixtureName?: string
-  ): void
+  const matchTransformSnapshot: MatchFunction
 }
 
 export default matchTransformSnapshot
