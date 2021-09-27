@@ -28,6 +28,20 @@ export class NoSignupHandler extends Error {
   }
 }
 
+export class NoForgotPasswordHandler extends Error {
+  constructor() {
+    super('dbAuth requires a forgot password handler in order to notify user')
+    this.name = 'NoForgotPasswordHandler'
+  }
+}
+
+export class NoResetPasswordHandler extends Error {
+  constructor() {
+    super('dbAuth requires a reset password handler in order to notify user')
+    this.name = 'NoResetPasswordHandler'
+  }
+}
+
 export class UnknownAuthMethod extends Error {
   constructor(name: string) {
     super(`Unknown auth method '${name}'`)
@@ -137,5 +151,26 @@ export class UsernameNotFoundError extends Error {
   constructor(message = 'Username not found') {
     super(message)
     this.name = 'UsernameNotFoundError'
+  }
+}
+
+export class ResetTokenExpiredError extends Error {
+  constructor(message = 'resetToken is expired') {
+    super(message)
+    this.name = 'ResetTokenExpiredError'
+  }
+}
+
+export class ResetTokenInvalidError extends Error {
+  constructor(message = 'resetToken is invalid') {
+    super(message)
+    this.name = 'ResetTokenInvalidError'
+  }
+}
+
+export class ResetTokenRequiredError extends Error {
+  constructor(message = 'resetToken is required') {
+    super(message)
+    this.name = 'ResetTokenRequiredError'
   }
 }

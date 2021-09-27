@@ -34,9 +34,9 @@ interface DbAuthHandlerOptions {
    */
   forgotPassword: {
     handler: (user: Record<string, unknown>) => Promise<any>
-    errors: {
-      usernameNotFound: string
-      usernameRequired: string
+    errors?: {
+      usernameNotFound?: string
+      usernameRequired?: string
     }
     expires: number
   }
@@ -55,15 +55,28 @@ interface DbAuthHandlerOptions {
     /**
      * Object containing error strings
      */
-    errors: {
-      usernameOrPasswordMissing: string
-      usernameNotFound: string
-      incorrectPassword: string
+    errors?: {
+      usernameOrPasswordMissing?: string
+      usernameNotFound?: string
+      incorrectPassword?: string
     }
     /**
      * How long a user will remain logged in, in seconds
      */
     expires: number
+  }
+  /**
+   * Object containing reset password options
+   */
+  resetPassword: {
+    handler: (user: Record<string, unknown>) => Promise<any>
+    allowReusedPassword: boolean
+    errors?: {
+      resetTokenExpired?: string
+      resetTokenInvalid?: string
+      resetTokenRequired?: string
+      reusedPassword?: string
+    }
   }
   /**
    * Object containing login options
@@ -81,9 +94,9 @@ interface DbAuthHandlerOptions {
     /**
      * Object containing error strings
      */
-    errors: {
-      fieldMissing: string
-      usernameTaken: string
+    errors?: {
+      fieldMissing?: string
+      usernameTaken?: string
     }
   }
 }
@@ -101,10 +114,12 @@ interface SessionRecord {
 
 type AuthMethodNames =
   | 'forgotPassword'
+  | 'getToken'
   | 'login'
   | 'logout'
+  | 'resetPassword'
   | 'signup'
-  | 'getToken'
+  | 'validateResetToken'
 
 type Params = {
   username?: string
@@ -127,17 +142,27 @@ export class DbAuthHandler {
 
   // class constant: list of auth methods that are supported
   static get METHODS(): AuthMethodNames[] {
-    return ['forgotPassword', 'login', 'logout', 'signup', 'getToken']
+    return [
+      'forgotPassword',
+      'getToken',
+      'login',
+      'logout',
+      'resetPassword',
+      'signup',
+      'validateResetToken',
+    ]
   }
 
   // class constant: maps the auth functions to their required HTTP verb for access
   static get VERBS() {
     return {
       forgotPassword: 'POST',
+      getToken: 'GET',
       login: 'POST',
       logout: 'POST',
+      resetPassword: 'POST',
       signup: 'POST',
-      getToken: 'GET',
+      validateResetToken: 'POST',
     }
   }
 
@@ -271,6 +296,7 @@ export class DbAuthHandler {
       tokenExpires.setSeconds(
         tokenExpires.getSeconds() + this.options.forgotPassword.expires
       )
+      // set token and expires time
       user = await this.dbAccessor.update({
         where: {
           [this.options.authFields.id]: user[this.options.authFields.id],
@@ -281,6 +307,7 @@ export class DbAuthHandler {
         },
       })
 
+      // call user-defined handler in their functions/auth.js
       const response = await this.options.forgotPassword.handler(
         this._sanitizeUser(user)
       )
@@ -331,6 +358,16 @@ export class DbAuthHandler {
     return this._logoutResponse()
   }
 
+  async resetPassword() {
+    console.info('called resetPassword in dbAuthHandler')
+    return [
+      '',
+      {
+        ...this._deleteSessionHeader,
+      },
+    ]
+  }
+
   async signup() {
     const userOrMessage = await this._createUser()
 
@@ -358,6 +395,24 @@ export class DbAuthHandler {
       return [JSON.stringify({ message }), {}, { statusCode: 201 }]
     }
     // errors thrown in signup.handler() will be handled by `invoke()`
+  }
+
+  async validateResetToken() {
+    // is token present at all?
+    if (this.params.token == null || String(this.params.token).trim() === '') {
+      throw new DbAuthError.ResetTokenRequiredError(
+        this.options.resetPassword?.errors?.resetTokenRequired
+      )
+    }
+
+    const user = await this._findUserByToken(this.params.token as string)
+
+    return [
+      JSON.stringify(this._sanitizeUser(user)),
+      {
+        ...this._deleteSessionHeader,
+      },
+    ]
   }
 
   // converts the currentUser data to a JWT. returns `null` if session is not present
@@ -398,6 +453,16 @@ export class DbAuthHandler {
     // must have a signup handler to define how to create a new user
     if (!this.options?.signup?.handler) {
       throw new DbAuthError.NoSignupHandler()
+    }
+
+    // must have a forgot password handler to define how to notify user of reset token
+    if (!this.options?.forgotPassword?.handler) {
+      throw new DbAuthError.NoForgotPasswordHandler()
+    }
+
+    // must have a reset password handler to define what to do with user once password changed
+    if (!this.options?.resetPassword?.handler) {
+      throw new DbAuthError.NoResetPasswordHandler()
     }
   }
 
@@ -475,6 +540,52 @@ export class DbAuthHandler {
     return true
   }
 
+  async _findUserByToken(token: string) {
+    const tokenExpires = new Date()
+    tokenExpires.setSeconds(
+      tokenExpires.getSeconds() - this.options.forgotPassword.expires
+    )
+
+    const user = await this.dbAccessor.findFirst({
+      where: {
+        [this.options.authFields.resetToken]: token,
+      },
+    })
+
+    // user not found with the given token
+    if (!user) {
+      throw new DbAuthError.ResetTokenInvalidError(
+        this.options.resetPassword?.errors?.resetTokenInvalid
+      )
+    }
+
+    console.info('after !user:', user)
+
+    // token has expired
+    if (user.resetTokenExpiresAt < tokenExpires) {
+      await this._clearResetToken(user)
+      throw new DbAuthError.ResetTokenExpiredError(
+        this.options.resetPassword?.errors?.resetTokenExpired
+      )
+    }
+
+    console.info('after tokenExpires:', tokenExpires)
+
+    return user
+  }
+
+  async _clearResetToken(user: Record<string, unknown>) {
+    console.info('clearResetToken', user)
+
+    await this.dbAccessor.update({
+      where: { [this.options.authFields.id]: user[this.options.authFields.id] },
+      data: {
+        resetToken: null,
+        resetTokenExpiresAt: null,
+      },
+    })
+  }
+
   // verifies that a username and password are correct, and returns the user if so
   async _verifyUser(
     username: string | undefined,
@@ -514,7 +625,7 @@ export class DbAuthHandler {
     } else {
       throw new DbAuthError.IncorrectPasswordError(
         username,
-        this.options.login?.errors.incorrectPassword
+        this.options.login?.errors?.incorrectPassword
       )
     }
   }
