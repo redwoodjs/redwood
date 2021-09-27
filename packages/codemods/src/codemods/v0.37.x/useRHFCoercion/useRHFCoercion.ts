@@ -63,20 +63,22 @@ export default function transformer(file: FileInfo, api: API) {
 
       j(formElement)
         .find(j.JSXAttribute, { name: { name: 'transformValue' } })
-        .forEach((transformValueProp) => {
+        .forEach((transformValueProp: any) => {
           const field = transformValueProp.parent
           const transformValue = transformValueProp.node.value?.value
           j(transformValueProp).remove()
 
-          const fieldHasValidation = field.node.attributes.some((attr) => {
+          const fieldHasValidation = field.node.attributes.some((attr: any) => {
             return attr.name.name === 'validation'
           })
 
           if (fieldHasValidation) {
             // only add a property to the object expression
-            const validationAttribute = field.node.attributes.filter((attr) => {
-              return attr.name.name === 'validation'
-            })
+            const validationAttribute = field.node.attributes.filter(
+              (attr: any) => {
+                return attr.name.name === 'validation'
+              }
+            )
             const validationAttributeObjectProperties =
               validationAttribute[0].value.expression.properties
 
