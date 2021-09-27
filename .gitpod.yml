@@ -27,6 +27,7 @@ tasks:
 ports:
   - port: 8911
     onOpen: ignore
+    visibility: public
   - port: 8910
     onOpen: notify
 
