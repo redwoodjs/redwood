@@ -99,7 +99,12 @@ interface SessionRecord {
   id: string | number
 }
 
-type AuthMethodNames = 'forgotPassword' | 'login' | 'logout' | 'signup' | 'getToken'
+type AuthMethodNames =
+  | 'forgotPassword'
+  | 'login'
+  | 'logout'
+  | 'signup'
+  | 'getToken'
 
 type Params = {
   username?: string
@@ -251,29 +256,38 @@ export class DbAuthHandler {
     const { username } = this.params
 
     if (!username || username.trim() === '') {
-      throw new DbAuthError.UsernameRequiredError(this.options.forgotPassword?.errors?.usernameRequired || `Username is required`)
+      throw new DbAuthError.UsernameRequiredError(
+        this.options.forgotPassword?.errors?.usernameRequired ||
+          `Username is required`
+      )
     }
 
     let user = await this.dbAccessor.findUnique({
       where: { [this.options.authFields.username]: username },
     })
 
-    console.info("user", user)
+    console.info('user', user)
 
     if (user) {
       const tokenExpires = new Date()
-      tokenExpires.setSeconds(tokenExpires.getSeconds() + this.options.forgotPassword.expires)
+      tokenExpires.setSeconds(
+        tokenExpires.getSeconds() + this.options.forgotPassword.expires
+      )
       user = await this.dbAccessor.update({
-        where: { [this.options.authFields.id]: user[this.options.authFields.id] },
+        where: {
+          [this.options.authFields.id]: user[this.options.authFields.id],
+        },
         data: {
           resetToken: uuidv4(),
-          resetTokenExpiresAt: tokenExpires
-        }
+          resetTokenExpiresAt: tokenExpires,
+        },
       })
 
-      console.info("user with token", user)
+      console.info('user with token', user)
 
-      const response = await this.options.forgotPassword.handler(this._sanitizeUser(user))
+      const response = await this.options.forgotPassword.handler(
+        this._sanitizeUser(user)
+      )
 
       return [
         response ? JSON.stringify(response) : '',
@@ -396,8 +410,8 @@ export class DbAuthHandler {
     const sanitized = JSON.parse(JSON.stringify(user))
     delete sanitized[this.options.authFields.hashedPassword]
     delete sanitized[this.options.authFields.salt]
-    delete sanitized[this.options.authFields.resetToken]
-    delete sanitized[this.options.authFields.resetTokenExpiresAt]
+    // delete sanitized[this.options.authFields.resetToken]
+    // delete sanitized[this.options.authFields.resetTokenExpiresAt]
 
     return sanitized
   }
