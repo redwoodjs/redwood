@@ -21,7 +21,7 @@ tasks:
       yarn run build:test-project ../rw-test-app --typescript --link --verbose
     command: |
       cd /workspace/rw-test-app
-      yarn rw dev
+      yarn rw dev --forward="--client-web-socket-url $(gp url 8910 | sed -e "s/https/wss/g")"
 
 
 ports:
