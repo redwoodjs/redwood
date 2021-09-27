@@ -266,8 +266,6 @@ export class DbAuthHandler {
       where: { [this.options.authFields.username]: username },
     })
 
-    console.info('user', user)
-
     if (user) {
       const tokenExpires = new Date()
       tokenExpires.setSeconds(
@@ -282,8 +280,6 @@ export class DbAuthHandler {
           resetTokenExpiresAt: tokenExpires,
         },
       })
-
-      console.info('user with token', user)
 
       const response = await this.options.forgotPassword.handler(
         this._sanitizeUser(user)
