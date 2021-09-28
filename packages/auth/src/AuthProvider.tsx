@@ -41,7 +41,7 @@ export interface AuthContextInterface {
    */
   reauthenticate(): Promise<void>
   forgotPassword(username: string): Promise<any>
-  resetPassword(password: string): Promise<any>
+  resetPassword(token: string, password: string): Promise<any>
   validateResetToken(token: string | null): Promise<any>
   /**
    * A reference to the client that you passed into the `AuthProvider`,
@@ -249,8 +249,6 @@ export class AuthProvider extends React.Component<
   }
 
   forgotPassword = async (username: string) => {
-    console.info('AuthProvider forgotPassword, username:', username)
-
     if (this.rwClient.forgotPassword) {
       return await this.rwClient.forgotPassword(username)
     } else {
@@ -258,19 +256,15 @@ export class AuthProvider extends React.Component<
     }
   }
 
-  resetPassword = async (password: string) => {
-    console.info('AuthProvider resetPassword, password:', password)
-
+  resetPassword = async (options?: any) => {
     if (this.rwClient.resetPassword) {
-      return await this.rwClient.resetPassword(password)
+      return await this.rwClient.resetPassword(options)
     } else {
       throw new Error(`resetPassword not implemented in auth client`)
     }
   }
 
   validateResetToken = async (token: string | null) => {
-    console.info('AuthProvider validateResetToken, token:', token)
-
     if (this.rwClient.validateResetToken) {
       return await this.rwClient.validateResetToken(token)
     } else {

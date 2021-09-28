@@ -5,11 +5,25 @@ export interface LoginAttributes {
   password: string
 }
 
+export interface ResetPasswordAttributes {
+  token: string
+  password: string
+}
+
 export type SignupAttributes = Record<string, unknown> & LoginAttributes
 
 export type DbAuth = () => null
 
 export const dbAuth = (): AuthClient => {
+  const forgotPassword = async (username: string) => {
+    const response = await fetch(`${global.__REDWOOD__API_PROXY_PATH}/auth`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, method: 'forgotPassword' }),
+    })
+    return await response.json()
+  }
+
   const getToken = async () => {
     const response = await fetch(
       `${global.__REDWOOD__API_PROXY_PATH}/auth?method=getToken`
@@ -41,6 +55,15 @@ export const dbAuth = (): AuthClient => {
     return true
   }
 
+  const resetPassword = async (attributes: ResetPasswordAttributes) => {
+    const response = await fetch(`${global.__REDWOOD__API_PROXY_PATH}/auth`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...attributes, method: 'resetPassword' }),
+    })
+    return await response.json()
+  }
+
   const signup = async (attributes: SignupAttributes) => {
     const response = await fetch(`${global.__REDWOOD__API_PROXY_PATH}/auth`, {
       method: 'POST',
@@ -48,20 +71,6 @@ export const dbAuth = (): AuthClient => {
       body: JSON.stringify({ ...attributes, method: 'signup' }),
     })
     return await response.json()
-  }
-
-  const forgotPassword = async (username: string) => {
-    const response = await fetch(`${global.__REDWOOD__API_PROXY_PATH}/auth`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, method: 'forgotPassword' }),
-    })
-    return await response.json()
-  }
-
-  const resetPassword = async (password: string) => {
-    console.info('dbAuth Client, resetPassword: password', password)
-    return {}
   }
 
   const validateResetToken = async (token: string | null) => {

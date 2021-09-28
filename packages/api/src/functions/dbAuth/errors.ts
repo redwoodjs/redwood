@@ -147,6 +147,13 @@ export class UsernameRequiredError extends Error {
   }
 }
 
+export class PasswordRequiredError extends Error {
+  constructor(message = 'Password is required') {
+    super(message)
+    this.name = 'PasswordRequiredError'
+  }
+}
+
 export class UsernameNotFoundError extends Error {
   constructor(message = 'Username not found') {
     super(message)
@@ -172,5 +179,12 @@ export class ResetTokenRequiredError extends Error {
   constructor(message = 'resetToken is required') {
     super(message)
     this.name = 'ResetTokenRequiredError'
+  }
+}
+
+export class ReusedPasswordError extends Error {
+  constructor(message = 'Cannot reuse last password') {
+    super(message)
+    this.name = 'ReusedPasswordError'
   }
 }

@@ -239,9 +239,8 @@ export class DbAuthHandler {
     }
   }
 
-  // Actual function that triggers everything else to happen:
-  // `login`, `logout`, `signup`, or `getToken` is called from here, after some
-  // checks to make sure the request is good
+  // Actual function that triggers everything else to happen: `login`, `signup`,
+  // etc. is called from here, after some checks to make sure the request is good
   async invoke() {
     // if there was a problem decryption the session, just return the logout
     // response immediately
@@ -280,6 +279,7 @@ export class DbAuthHandler {
   async forgotPassword() {
     const { username } = this.params
 
+    // was the username sent in at all?
     if (!username || username.trim() === '') {
       throw new DbAuthError.UsernameRequiredError(
         this.options.forgotPassword?.errors?.usernameRequired ||
@@ -326,6 +326,23 @@ export class DbAuthHandler {
     }
   }
 
+  async getToken() {
+    try {
+      const user = await this._getCurrentUser()
+
+      // need to return *something* for our existing Authorization header stuff
+      // to work, so return the user's ID in case we can use it for something
+      // in the future
+      return [user.id]
+    } catch (e: any) {
+      if (e instanceof DbAuthError.NotLoggedInError) {
+        return this._logoutResponse()
+      } else {
+        return this._logoutResponse({ error: e.message })
+      }
+    }
+  }
+
   async login() {
     const { username, password } = this.params
     const dbUser = await this._verifyUser(username, password)
@@ -338,20 +355,7 @@ export class DbAuthHandler {
       throw new DbAuthError.NoUserIdError()
     }
 
-    const sessionData = { id: handlerUser[this.options.authFields.id] }
-
-    // TODO: this needs to go into graphql somewhere so that each request makes
-    // a new CSRF token and sets it in both the encrypted session and the
-    // csrf-token header
-    const csrfToken = DbAuthHandler.CSRF_TOKEN
-
-    return [
-      sessionData,
-      {
-        'csrf-token': csrfToken,
-        ...this._createSessionHeader(sessionData, csrfToken),
-      },
-    ]
+    return this._loginResponse(handlerUser)
   }
 
   logout() {
@@ -359,13 +363,53 @@ export class DbAuthHandler {
   }
 
   async resetPassword() {
-    console.info('called resetPassword in dbAuthHandler')
-    return [
-      '',
-      {
-        ...this._deleteSessionHeader,
+    const { password, token } = this.params
+
+    // is the resetToken present?
+    if (token == null || String(token).trim() === '') {
+      throw new DbAuthError.ResetTokenRequiredError(
+        this.options.resetPassword?.errors?.resetTokenRequired
+      )
+    }
+
+    // is password present?
+    if (password == null || String(password).trim() === '') {
+      throw new DbAuthError.PasswordRequiredError()
+    }
+
+    let user = await this._findUserByToken(token as string)
+    const [hashedPassword] = this._hashPassword(password, user.salt)
+
+    if (
+      !this.options.resetPassword.allowReusedPassword &&
+      user.hashedPassword === hashedPassword
+    ) {
+      throw new DbAuthError.ReusedPasswordError(
+        this.options.resetPassword?.errors?.reusedPassword
+      )
+    }
+
+    // if we got here then we can update the password in the database
+    user = await this.dbAccessor.update({
+      where: { [this.options.authFields.id]: user[this.options.authFields.id] },
+      data: {
+        hashedPassword,
+        resetToken: null,
+        resetTokenExpiresAt: null,
       },
-    ]
+    })
+
+    // call the user-defined handler so they can decide what to do with this user
+    const response = await this.options.resetPassword.handler(
+      this._sanitizeUser(user)
+    )
+
+    // returning something truthy from the handler means to log them in automatically
+    if (response) {
+      return this._loginResponse(user)
+    } else {
+      return this._logoutResponse({})
+    }
   }
 
   async signup() {
@@ -374,27 +418,13 @@ export class DbAuthHandler {
     // at this point `user` is either an actual user, in which case log the
     // user in automatically, or it's a string, which is a message to show
     // the user (something like "please verify your email")
-
     if (typeof userOrMessage === 'object') {
-      // signup.handler() returned a user, log them in
       const user = userOrMessage
-      const sessionData = { id: user[this.options.authFields.id] }
-      const csrfToken = DbAuthHandler.CSRF_TOKEN
-
-      return [
-        sessionData,
-        {
-          'csrf-token': csrfToken,
-          ...this._createSessionHeader(sessionData, csrfToken),
-        },
-        { statusCode: 201 },
-      ]
+      return this._loginResponse(user, 201)
     } else {
-      // signup.handler() returned a message
       const message = userOrMessage
       return [JSON.stringify({ message }), {}, { statusCode: 201 }]
     }
-    // errors thrown in signup.handler() will be handled by `invoke()`
   }
 
   async validateResetToken() {
@@ -413,24 +443,6 @@ export class DbAuthHandler {
         ...this._deleteSessionHeader,
       },
     ]
-  }
-
-  // converts the currentUser data to a JWT. returns `null` if session is not present
-  async getToken() {
-    try {
-      const user = await this._getCurrentUser()
-
-      // need to return *something* for our existing Authorization header stuff
-      // to work, so return the user's ID in case we can use it for something
-      // in the future
-      return [user.id]
-    } catch (e: any) {
-      if (e instanceof DbAuthError.NotLoggedInError) {
-        return this._logoutResponse()
-      } else {
-        return this._logoutResponse({ error: e.message })
-      }
-    }
   }
 
   // validates that we have all the ENV and options we need to login/signup
@@ -717,8 +729,26 @@ export class DbAuthHandler {
     }
   }
 
+  _loginResponse(user: Record<string, any>, statusCode = 200) {
+    const sessionData = { id: user[this.options.authFields.id] }
+
+    // TODO: this needs to go into graphql somewhere so that each request makes
+    // a new CSRF token and sets it in both the encrypted session and the
+    // csrf-token header
+    const csrfToken = DbAuthHandler.CSRF_TOKEN
+
+    return [
+      sessionData,
+      {
+        'csrf-token': csrfToken,
+        ...this._createSessionHeader(sessionData, csrfToken),
+      },
+      { statusCode },
+    ]
+  }
+
   _logoutResponse(
-    response?: Record<string, string>
+    response?: Record<string, unknown>
   ): [string, Record<'Set-Cookie', string>] {
     return [
       response ? JSON.stringify(response) : '',
