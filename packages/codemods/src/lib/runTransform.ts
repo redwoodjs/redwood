@@ -16,21 +16,31 @@ export interface RunTransform {
   options?: Record<string, any>
 }
 
-/**
- * We can't run jscodeshift with yarn (like `yarn jscodeshift -t ...`).
- *
- * @see {@link https://github.com/facebook/jscodeshift/issues/424}
- *
- * Prisma and React have a different way of getting around it,
- * but that didn't work for me.
- * @see {@link https://github.com/reactjs/react-codemod/blob/b34b92a1f0b8ad333efe5effb50d17d46d66588b/bin/cli.js#L20}
- *
- * This seems to work though.
- */
-const jscodeshiftExecutable = path.resolve(
-  __dirname,
-  '../../node_modules/.bin/jscodeshift'
-)
+const getExecaArgs = () => {
+  if (process.platform === 'win32') {
+    return {
+      command: 'yarn jscodeshift',
+      cmdArgs: [],
+    }
+  } else {
+    /**
+     * We can't run jscodeshift with yarn (like `yarn jscodeshift -t ...`) on macos/linux
+     *
+     * @see {@link https://github.com/facebook/jscodeshift/issues/424}
+     *
+     * But on Windows, yarn jscodeshift does
+     */
+    const jscodeshiftExecutable = path.resolve(
+      __dirname,
+      '../../node_modules/.bin/jscodeshift'
+    )
+
+    return {
+      command: 'node',
+      cmdArgs: [jscodeshiftExecutable],
+    }
+  }
+}
 
 /**
  * Runs a transform on the given targetPath(s).
@@ -50,21 +60,29 @@ export const runTransform = ({
    */
   const flags = Object.entries(options).map((key, val) => `--${key}=${val}`)
 
-  execa.sync(
-    'node',
-    [
-      jscodeshiftExecutable,
-      '--parser',
-      parser,
-      '-t',
-      transformPath,
-      ...targetPaths,
-      ...flags,
-    ],
-    {
-      stdio: 'inherit',
-    }
-  )
+  const { command, cmdArgs } = getExecaArgs()
+
+  try {
+    execa.sync(
+      command,
+      [
+        ...cmdArgs,
+        '--parser',
+        parser,
+        '-t',
+        transformPath,
+        ...targetPaths,
+        ...flags,
+      ],
+      {
+        stdio: 'inherit',
+      }
+    )
+  } catch (e: any) {
+    console.error('Transform Error', e.message)
+
+    throw new Error('Failed to invoke transform')
+  }
 }
 
 export default runTransform
