@@ -16,7 +16,7 @@ export const handler = async () => {
     const rwPaths = getRWPaths()
 
     const files = getFilesWithPattern({
-      pattern: 'from @redwoodjs/api',
+      pattern: `from '@redwoodjs/api'`,
       filesToSearch: [rwPaths.api.src],
     })
 
