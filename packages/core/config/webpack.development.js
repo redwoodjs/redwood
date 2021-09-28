@@ -59,8 +59,6 @@ const baseConfig = merge(webpackConfig('development'), {
     host: redwoodConfig.web.host || 'localhost',
     port: redwoodConfig.web.port,
     proxy: getProxyConfig(),
-    inline: true,
-    overlay: true,
     open: redwoodConfig.browser.open,
   },
   watchOptions: {
