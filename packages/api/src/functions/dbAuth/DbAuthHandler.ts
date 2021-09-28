@@ -559,8 +559,6 @@ export class DbAuthHandler {
       )
     }
 
-    console.info('after !user:', user)
-
     // token has expired
     if (user.resetTokenExpiresAt < tokenExpires) {
       await this._clearResetToken(user)
@@ -569,14 +567,10 @@ export class DbAuthHandler {
       )
     }
 
-    console.info('after tokenExpires:', tokenExpires)
-
     return user
   }
 
   async _clearResetToken(user: Record<string, unknown>) {
-    console.info('clearResetToken', user)
-
     await this.dbAccessor.update({
       where: { [this.options.authFields.id]: user[this.options.authFields.id] },
       data: {
