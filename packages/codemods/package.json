@@ -13,7 +13,8 @@
     "jscodeshift": "0.13.0",
     "require-directory": "^2.1.1",
     "tasuku": "^1.0.2",
-    "tempy": "1.0.1"
+    "tempy": "1.0.1",
+    "vscode-ripgrep": "^1.12.0"
   },
   "scripts": {
     "build": "yarn build:js",
