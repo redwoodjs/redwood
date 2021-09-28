@@ -77,7 +77,7 @@ export const bothServerHandler = async ({
   port,
   socket,
 }: Omit<HttpServerParams, 'app'>) => {
-  const apiRootPath = coerceRootPath(getConfig().web.apiProxyPath)
+  const apiRootPath = coerceRootPath(getConfig().web.apiURL)
   let app = createApp()
 
   // Attach middleware
@@ -108,8 +108,10 @@ export const webServerHandler = ({ port, socket, apiHost }: WebServerArgs) => {
   // Attach middleware
   // We need to proxy api requests to prevent CORS issues
   if (apiHost) {
-    const apiProxyPath = getConfig().web.apiProxyPath
-    app = withApiProxy(app, { apiHost, apiProxyPath })
+    app = withApiProxy(app, {
+      apiHost,
+      apiUrl: getConfig().web.apiURL,
+    })
   }
 
   app = withWebServer(app)

@@ -12,7 +12,7 @@ export type DbAuth = () => null
 export const dbAuth = (): AuthClient => {
   const getToken = async () => {
     const response = await fetch(
-      `${global.__REDWOOD__API_PROXY_PATH}/auth?method=getToken`
+      `${global.REDWOOD_API_URL}/auth?method=getToken`
     )
     const token = await response.text()
 
@@ -25,7 +25,7 @@ export const dbAuth = (): AuthClient => {
 
   const login = async (attributes: LoginAttributes) => {
     const { username, password } = attributes
-    const response = await fetch(`${global.__REDWOOD__API_PROXY_PATH}/auth`, {
+    const response = await fetch(`${global.REDWOOD_API_URL}/auth`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password, method: 'login' }),
@@ -34,7 +34,7 @@ export const dbAuth = (): AuthClient => {
   }
 
   const logout = async () => {
-    await fetch(`${global.__REDWOOD__API_PROXY_PATH}/auth`, {
+    await fetch(`${global.REDWOOD_API_URL}/auth`, {
       method: 'POST',
       body: JSON.stringify({ method: 'logout' }),
     })
@@ -42,7 +42,7 @@ export const dbAuth = (): AuthClient => {
   }
 
   const signup = async (attributes: SignupAttributes) => {
-    const response = await fetch(`${global.__REDWOOD__API_PROXY_PATH}/auth`, {
+    const response = await fetch(`${global.REDWOOD_API_URL}/auth`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...attributes, method: 'signup' }),
