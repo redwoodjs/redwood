@@ -1,26 +1,13 @@
-import {
-  BeforeResolverSpec,
-  MissingBeforeResolverError,
-  ServicesCollection,
-  MakeServices,
-  Services,
-} from '@redwoodjs/api'
+import { BeforeResolverSpec } from './beforeResolverSpec'
+import { ServicesGlobImports, MakeServices, Services } from './types'
 
 export const makeServices: MakeServices = ({ services }) => {
-  if (process.env.REDWOOD_SECURE_SERVICES !== '1') {
-    console.warn('NOTICE: Redwood v1.0 will make resolvers secure by default.')
-
-    console.warn(
-      'To opt in to this behavior now, add `REDWOOD_SECURE_SERVICES=1` to your `.env.defaults` file. For more information: https://redwoodjs.com/docs/services'
-    )
-    return services
-  }
-
-  const servicesCollection: ServicesCollection = {}
+  const servicesCollection: ServicesGlobImports = {}
 
   for (const [name, resolvers] of Object.entries(services)) {
+    // Just return the services if beforeResolver not specified
     if (!resolvers?.beforeResolver) {
-      throw new MissingBeforeResolverError(name)
+      return services
     }
 
     const spec = new BeforeResolverSpec(Object.keys(resolvers))

@@ -10,10 +10,10 @@
   port = 8910
   apiURL = '/.netlify/functions'
   apiGraphQLServerPath = '/graphql'
+  includeEnvironmentVariables = [] # any ENV vars that should be available to the web side, see https://redwoodjs.com/docs/environment-variables#web
 [api]
   port = 8911
 [browser]
   open = true
 [experimental]
   esbuild = false
-  useEnvelop = false

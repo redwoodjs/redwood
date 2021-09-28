@@ -65,7 +65,6 @@ export interface Config {
   }
   experimental: {
     esbuild: boolean
-    useEnvelop: boolean
   }
 }
 
@@ -101,7 +100,6 @@ const DEFAULT_CONFIG: Config = {
   },
   experimental: {
     esbuild: false,
-    useEnvelop: false,
   },
 }
 

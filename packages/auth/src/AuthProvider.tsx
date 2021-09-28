@@ -212,11 +212,11 @@ export class AuthProvider extends React.Component<
           loading: false,
         })
       }
-    } catch (e) {
+    } catch (e: any) {
       this.setState({
         ...notAuthenticatedState,
         hasError: true,
-        error: e,
+        error: e as Error,
       })
     }
   }

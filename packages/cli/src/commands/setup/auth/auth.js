@@ -246,7 +246,7 @@ export const addApiConfig = () => {
     )
     // add object to handler
     content = content.replace(
-      /^(\s*)(schema: makeMergedSchema)(.*)$/m,
+      /^(\s*)(loggerConfig:)(.*)$/m,
       `$1getCurrentUser,\n$1$2$3`
     )
     fs.writeFileSync(graphqlPath, content)

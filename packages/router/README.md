@@ -2,8 +2,6 @@
 
 This is the built-in router for Redwood apps. It takes inspiration from Ruby on Rails, React Router, and Reach Router, but is very opinionated in its own way.
 
-> **WARNING:** RedwoodJS software has not reached a stable version 1.0 and should not be considered suitable for production use. In the "make it work; make it right; make it fast" paradigm, Redwood is in the later stages of the "make it work" phase.
-
 Redwood Router (RR from now on) is designed to list all routes in a single file, with limited nesting. We prefer this design, as it makes it very easy to track which routes map to which pages.
 
 ## Router and Route
@@ -411,7 +409,9 @@ const App = () => {
 
 ```
 
-## navigate
+## Navigation
+
+### navigate
 
 If you'd like to programmatically navigate to a different page, you can simply use the `navigate` function:
 
@@ -422,6 +422,24 @@ import { navigate, routes } from '@redwoodjs/router'
 const SomePage = () => {
   const onSomeAction = () => {
     navigate(routes.home())
+  }
+  ...
+}
+```
+
+The browser keeps track of the browsing history in a stack. By default when you navigate to a new page a new item is pushed to the history stack. But sometimes you want to replace the top item on the stack instead of appending to the stack. This is how you do that in Redwood: `navigate(routes.home(), { replace: true })`. As you can see you need to pass an options object as the second parameter to `navigate` with the option `replace` set to `true`.
+
+### back
+
+Going back is as easy as using the `back()` function that's exported from the router.
+
+```js
+// SomePage.js
+import { back } from '@redwoodjs/router'
+
+const SomePage = () => {
+  const onSomeAction = () => {
+    back()
   }
   ...
 }
