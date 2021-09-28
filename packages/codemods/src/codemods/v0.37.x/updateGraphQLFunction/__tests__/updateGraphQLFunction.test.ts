@@ -3,7 +3,7 @@ test('Graphql function changes', () => {
   matchTransformSnapshot('updateGraphQLFunction', 'graphql')
 })
 
-test('hey', () => {
+test('Inline import test', () => {
   matchInlineTransformSnapshot(
     'updateGraphQLFunction',
     `import {
@@ -11,6 +11,6 @@ test('hey', () => {
     makeMergedSchema,
     makeServices,
   } from '@redwoodjs/api'`,
-    `import { createGraphQLHandler } from '@d/graphql-server'`
+    `import { createGraphQLHandler } from '@redwoodjs/graphql-server'`
   )
 })
