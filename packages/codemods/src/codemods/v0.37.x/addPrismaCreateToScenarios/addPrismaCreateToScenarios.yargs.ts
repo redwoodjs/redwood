@@ -30,8 +30,8 @@ const addPrismaCreateToScenariosTask = (task: any) =>
     })
   })
 
+export { addPrismaCreateToScenariosTask as task }
+
 export const command = 'add-prisma-create-to-scenarios'
 export const description = 'Adds the data key to scenarios'
 export const handler = () => addPrismaCreateToScenariosTask(task)
-
-export { addPrismaCreateToScenariosTask as task }
