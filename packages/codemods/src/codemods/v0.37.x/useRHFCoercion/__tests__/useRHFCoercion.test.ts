@@ -4,6 +4,6 @@ describe('React hook forms: Coercion', () => {
   })
 
   test('Transforms typescript', () => {
-    throw new Error('Implement me')
+    matchTransformSnapshot('useRHFCoercion', 'typescript')
   })
 })

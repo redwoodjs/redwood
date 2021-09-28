@@ -1,5 +1,4 @@
-import type { FileInfo, API } from 'jscodeshift'
-import prettier from 'prettier'
+import type { FileInfo, API, StringLiteral } from 'jscodeshift'
 
 type TransformValue = 'Float' | 'Json' | 'Int' | 'Boolean' | 'DateTime'
 
@@ -63,9 +62,11 @@ export default function transformer(file: FileInfo, api: API) {
 
       j(formElement)
         .find(j.JSXAttribute, { name: { name: 'transformValue' } })
-        .forEach((transformValueProp: any) => {
+        .forEach((transformValueProp) => {
           const field = transformValueProp.parent
-          const transformValue = transformValueProp.node.value?.value
+          const transformOptions = transformValueProp.node
+            .value as StringLiteral
+          const transformValue = transformOptions.value
           j(transformValueProp).remove()
 
           const fieldHasValidation = field.node.attributes.some((attr: any) => {
@@ -83,7 +84,9 @@ export default function transformer(file: FileInfo, api: API) {
               validationAttribute[0].value.expression.properties
 
             validationAttributeObjectProperties.push(
-              mapTransformValueToValidationProperty(transformValue)
+              mapTransformValueToValidationProperty(
+                transformValue as TransformValue
+              )
             )
           } else {
             // add the whole validation attribute
@@ -91,7 +94,9 @@ export default function transformer(file: FileInfo, api: API) {
               j.jsxIdentifier('validation'),
               j.jsxExpressionContainer(
                 j.objectExpression([
-                  mapTransformValueToValidationProperty(transformValue),
+                  mapTransformValueToValidationProperty(
+                    transformValue as TransformValue
+                  ),
                 ])
               )
             )
@@ -101,11 +106,5 @@ export default function transformer(file: FileInfo, api: API) {
         })
     })
 
-  return prettier.format(outputAst.toSource({ trailingComma: true }), {
-    parser: 'babel-ts',
-    bracketSpacing: true,
-    tabWidth: 2,
-    semi: false,
-    singleQuote: true,
-  })
+  return outputAst.toSource()
 }

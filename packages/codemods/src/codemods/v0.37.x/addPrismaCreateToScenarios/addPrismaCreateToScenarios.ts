@@ -28,5 +28,5 @@ module.exports = function (file: FileInfo, api: API) {
         })
       })
     })
-    .toSource({ trailingComma: true })
+    .toSource()
 }
