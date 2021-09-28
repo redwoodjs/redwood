@@ -7,7 +7,11 @@ import { getPaths as getRWPaths } from '@redwoodjs/internal'
 import getFilesWithPattern from '../../../lib/getFilesWithPattern'
 import runTransform from '../../../lib/runTransform'
 
-const updateApiImportsTask = (task: any) => {
+export const command = 'update-api-imports'
+export const description =
+  'Updates @redwoodjs/api imports to @redwoodjs/graphql-server'
+
+export const handler = () => {
   task(
     'Updating @redwoodjs/api imports',
     async ({ setWarning }: { setWarning: any }) => {
@@ -29,10 +33,3 @@ const updateApiImportsTask = (task: any) => {
     }
   )
 }
-
-export { updateApiImportsTask as task }
-
-export const command = 'update-api-imports'
-export const description =
-  'Updates @redwoodjs/api imports to @redwoodjs/graphql-server'
-export const handler = () => updateApiImportsTask(task)

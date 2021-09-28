@@ -7,6 +7,9 @@ import { getPaths as getRWPaths } from '@redwoodjs/internal'
 
 import runTransform from '../../../lib/runTransform'
 
+export const command = 'add-prisma-create-to-scenarios'
+export const description = 'Adds the data key to scenarios'
+
 /**
  * The services dir looks like...
  *
@@ -20,7 +23,7 @@ import runTransform from '../../../lib/runTransform'
  *    |- post.scenario.js
  *    |- post.test.js
  */
-const addPrismaCreateToScenariosTask = (task: any) =>
+export const handler = () => {
   task('Add Prisma `create` to Scenarios', async () => {
     const rwPaths = getRWPaths()
 
@@ -29,9 +32,4 @@ const addPrismaCreateToScenariosTask = (task: any) =>
       targetPaths: fg.sync(`${rwPaths.api.services}/**/*.scenarios.{js,ts}`),
     })
   })
-
-export { addPrismaCreateToScenariosTask as task }
-
-export const command = 'add-prisma-create-to-scenarios'
-export const description = 'Adds the data key to scenarios'
-export const handler = () => addPrismaCreateToScenariosTask(task)
+}
