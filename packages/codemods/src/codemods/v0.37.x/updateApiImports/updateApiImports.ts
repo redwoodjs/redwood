@@ -1,4 +1,4 @@
-import type { FileInfo, API } from 'jscodeshift'
+import type { FileInfo, API, ImportSpecifier } from 'jscodeshift'
 
 const apiExports = [
   'DbAuthHandler',
@@ -26,15 +26,17 @@ export default function transformer(file: FileInfo, api: API) {
     .forEach((importDeclaration) => {
       const { specifiers } = importDeclaration.node
 
-      specifiers.forEach((specifier) => {
-        const { name } = specifier.imported
+      ;(specifiers as Array<ImportSpecifier> | undefined)?.forEach(
+        (specifier) => {
+          const { name } = specifier.imported
 
-        if (apiExports.includes(name)) {
-          apiSpecifiers.add(name)
-        } else {
-          graphqlServerSpecifiers.add(name)
+          if (apiExports.includes(name)) {
+            apiSpecifiers.add(name)
+          } else {
+            graphqlServerSpecifiers.add(name)
+          }
         }
-      })
+      )
 
       j(importDeclaration).remove()
     })
