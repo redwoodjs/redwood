@@ -9,17 +9,16 @@
   "dependencies": {
     "@redwoodjs/internal": "0.36.4",
     "execa": "5.1.1",
-    "fast-glob": "^3.2.7",
+    "fast-glob": "3.2.7",
     "jscodeshift": "0.13.0",
-    "require-directory": "^2.1.1",
-    "tasuku": "^1.0.2",
+    "require-directory": "2.1.1",
+    "tasuku": "1.0.2",
     "tempy": "1.0.1",
     "vscode-ripgrep": "^1.12.0"
   },
   "scripts": {
     "build": "yarn build:js",
-    "build:js": "babel src -d dist --extensions \".js,.ts\" --copy-files --no-copy-ignored && yarn build:clean-dist",
-    "build:clean-dist": "rimraf 'dist/**/*/{__tests__,__testfixtures__}'",
+    "build:js": "babel src -d dist --extensions \".js,.ts\" --copy-files --no-copy-ignored --ignore 'src/**/__tests__/**' --ignore 'src/**/__testfixtures__/**'",
     "build:watch": "nodemon --watch src --ignore dist,template --exec \"yarn build\"",
     "test": "jest",
     "test:watch": "yarn test --watch"
@@ -27,6 +26,7 @@
   "devDependencies": {
     "@types/jest": "27.0.1",
     "@types/jscodeshift": "^0.11.2",
+    "@types/require-directory": "^2.1.2",
     "prettier": "2.4.1"
   }
 }

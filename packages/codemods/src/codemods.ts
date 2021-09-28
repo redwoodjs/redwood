@@ -29,6 +29,8 @@ const getCodemods = ({
   from?: string
   to: string
 }) => {
+  console.log(`🗯 \n ~ file: codemods.ts ~ line 32 ~ to`, to)
+  console.log(`🗯 \n ~ file: codemods.ts ~ line 32 ~ from`, from)
   const codemodDirs = requireDirectory(
     module,
     path.join(__dirname, 'codemods/v0.37.x')
