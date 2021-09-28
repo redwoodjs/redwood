@@ -42,19 +42,25 @@ export default function transformer(file: FileInfo, api: API) {
     })
 
   // Insert new import declarations at the top.
-  ast
-    .find(j.Program)
-    .get('body', 0)
-    .insertBefore(
-      `import { ${[...apiSpecifiers].join(', ')} } from '@redwoodjs/api'`
-    )
+  if (apiSpecifiers.size) {
+    ast
+      .find(j.Program)
+      .get('body', 0)
+      .insertBefore(
+        `import { ${[...apiSpecifiers].join(', ')} } from '@redwoodjs/api'`
+      )
+  }
 
-  ast
-    .find(j.Program)
-    .get('body', 0)
-    .insertBefore(
-      `import { ${[...graphqlServerSpecifiers].join(
-        ', '
-      )} } from '@redwoodjs/graphql-server'`
-    )
+  if (graphqlServerSpecifiers.size) {
+    ast
+      .find(j.Program)
+      .get('body', 0)
+      .insertBefore(
+        `import { ${[...graphqlServerSpecifiers].join(
+          ', '
+        )} } from '@redwoodjs/graphql-server'`
+      )
+  }
+
+  return ast.toSource()
 }
