@@ -20,8 +20,6 @@ export const handler = async () => {
       filesToSearch: [rwPaths.api.src],
     })
 
-    console.log(files)
-
     if (files.length === 0) {
       setWarning('No files found')
     } else {
