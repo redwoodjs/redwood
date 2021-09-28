@@ -7,6 +7,7 @@ tasks:
     openMode: split-left
     init: |
       eval $(gp env -e RWFW_PATH="/workspace/redwood")
+      eval $(gp env -e RWJS_DEV_API_URL="http://localhost")
       mkdir /workspace/rw-test-app
     command: |
       cd /workspace/rw-test-app
@@ -21,7 +22,7 @@ tasks:
       yarn run build:test-project ../rw-test-app --typescript --link --verbose
     command: |
       cd /workspace/rw-test-app
-      yarn rw dev --forward="--client-web-socket-url $(gp url 8910 | sed -e "s/https/wss/g")"
+      yarn rw dev
 
 
 ports:
