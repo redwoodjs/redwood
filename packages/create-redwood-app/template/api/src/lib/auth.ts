@@ -1,8 +1,8 @@
 /**
  * Once you are ready to add authentication to your application
  * you'll build out requireAuth() with real functionality. For
- * now we just return `true` so that the beforeResolver() calls
- * in services have something to check against, simulating a logged
+ * now we just return `true` so that the calls in services
+ * have something to check against, simulating a logged
  * in user that is allowed to access that service.
  *
  * See https://redwoodjs.com/docs/authentication for more info.
