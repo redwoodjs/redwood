@@ -7,7 +7,10 @@ import { getPaths as getRWPaths } from '@redwoodjs/internal'
 import getFilesWithPattern from '../../../lib/getFilesWithPattern'
 import runTransform from '../../../lib/runTransform'
 
-const useRHFCoercionTask = (task: any) => {
+export const command = 'use-rhf-coercion'
+export const description = 'Updates forms to have rhf coercion'
+
+export const handler = () => {
   task('Updating forms', async ({ setWarning }: { setWarning: any }) => {
     const rwPaths = getRWPaths()
 
@@ -26,9 +29,3 @@ const useRHFCoercionTask = (task: any) => {
     }
   })
 }
-
-export { useRHFCoercionTask as task }
-
-export const command = 'use-rhf-coercion'
-export const description = 'Updates forms to have rhf coercion'
-export const handler = () => useRHFCoercionTask(task)
