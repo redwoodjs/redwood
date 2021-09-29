@@ -22,6 +22,7 @@
   },
   "scripts": {
     "build": "yarn build:js",
+    "prepublishOnly": "yarn build",
     "build:js": "babel src -d dist --extensions \".js,.ts\" --copy-files --no-copy-ignored --ignore \"src/**/__tests__/**\" --ignore \"src/**/__testfixtures__/**\"",
     "build:watch": "nodemon --watch src --ignore dist,template --exec \"yarn build\"",
     "test": "jest",
