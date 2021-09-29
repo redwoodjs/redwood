@@ -3,8 +3,7 @@ import path from 'path'
 import fg from 'fast-glob'
 import task from 'tasuku'
 
-import { getPaths as getRWPaths } from '@redwoodjs/internal'
-
+import getRWPaths from '../../../lib/getRWPaths'
 import runTransform from '../../../lib/runTransform'
 
 export const command = 'add-prisma-create-to-scenarios'

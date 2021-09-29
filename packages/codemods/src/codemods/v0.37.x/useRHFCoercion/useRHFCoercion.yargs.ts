@@ -2,9 +2,8 @@ import path from 'path'
 
 import task from 'tasuku'
 
-import { getPaths as getRWPaths } from '@redwoodjs/internal'
-
 import getFilesWithPattern from '../../../lib/getFilesWithPattern'
+import getRWPaths from '../../../lib/getRWPaths'
 import runTransform from '../../../lib/runTransform'
 
 export const command = 'use-rhf-coercion'

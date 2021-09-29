@@ -3,7 +3,7 @@ import path from 'path'
 
 import fetch from 'node-fetch'
 
-import { getPaths as getRWPaths } from '@redwoodjs/internal'
+import getRWPaths from '../../../lib/getRWPaths'
 
 export const addDirectives = async () => {
   const rwPaths = getRWPaths()
