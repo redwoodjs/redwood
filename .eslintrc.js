@@ -7,6 +7,7 @@ module.exports = {
     'fixtures',
     'packages/structure/**',
     'packages/core/**/__fixtures__/**/*',
+    'packages/codemods/**/__testfixtures__/**/*',
     'packages/core/config/storybook/**/*',
     'packages/create-redwood-app/template/web/src/Routes.tsx',
   ],
