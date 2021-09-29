@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import Listr from 'listr'
+import terminalLink from 'terminal-link'
 
 import {
   addRoutesToRouterTask,
@@ -12,6 +13,7 @@ import {
   writeFilesTask,
 } from '../../../lib'
 import c from '../../../lib/colors'
+import { yargsDefaults } from '../../generate'
 import { templateForComponentFile } from '../helpers'
 
 const ROUTES = [
@@ -19,30 +21,110 @@ const ROUTES = [
   `<Route path="/signup" page={SignupPage} name="signup" />`,
 ]
 
-export const files = ({ _tests, typescript }) => {
+export const command = 'dbAuth'
+export const description =
+  'Generate Login, Signup and Forgot Password pages for dbAuth'
+export const builder = (yargs) => {
+  yargs
+    .option('skip-forgot', {
+      description: 'Skip generating the Forgot Password page',
+      type: 'boolean',
+      default: false,
+    })
+    .option('skip-login', {
+      description: 'Skip generating the login page',
+      type: 'boolean',
+      default: false,
+    })
+    .option('skip-reset', {
+      description: 'Skip generating the Reset Password page',
+      type: 'boolean',
+      default: false,
+    })
+    .option('skip-signup', {
+      description: 'Skip generating the signup page',
+      type: 'boolean',
+      default: false,
+    })
+    .epilogue(
+      `Also see the ${terminalLink(
+        'Redwood CLI Reference',
+        'https://redwoodjs.com/docs/authentication#self-hosted-auth-installation-and-setup'
+      )}`
+    )
+
+  // Merge generator defaults in
+  Object.entries(yargsDefaults).forEach(([option, config]) => {
+    yargs.option(option, config)
+  })
+}
+
+export const files = ({
+  _tests,
+  typescript,
+  skipForgot,
+  skipLogin,
+  skipReset,
+  skipSignup,
+}) => {
   const files = []
 
-  files.push(
-    templateForComponentFile({
-      name: 'Login',
-      suffix: 'Page',
-      extension: typescript ? '.tsx' : '.js',
-      webPathSection: 'pages',
-      generator: 'dbAuth',
-      templatePath: 'login.tsx.template',
-    })
-  )
+  if (!skipForgot) {
+    files.push(
+      templateForComponentFile({
+        name: 'ForgotPassword',
+        suffix: 'Page',
+        extension: typescript ? '.tsx' : '.js',
+        webPathSection: 'pages',
+        generator: 'dbAuth',
+        templatePath: 'forgotPassword.tsx.template',
+      })
+    )
+  }
 
-  files.push(
-    templateForComponentFile({
-      name: 'Signup',
-      suffix: 'Page',
-      extension: typescript ? '.tsx' : '.js',
-      webPathSection: 'pages',
-      generator: 'dbAuth',
-      templatePath: 'signup.tsx.template',
-    })
-  )
+  if (!skipLogin) {
+    files.push(
+      templateForComponentFile({
+        name: 'Login',
+        suffix: 'Page',
+        extension: typescript ? '.tsx' : '.js',
+        webPathSection: 'pages',
+        generator: 'dbAuth',
+        templatePath: 'login.tsx.template',
+      })
+    )
+  }
+
+  if (!skipReset) {
+    files.push(
+      templateForComponentFile({
+        name: 'ResetPassword',
+        suffix: 'Page',
+        extension: typescript ? '.tsx' : '.js',
+        webPathSection: 'pages',
+        generator: 'dbAuth',
+        templatePath: 'resetPassword.tsx.template',
+      })
+    )
+  }
+
+  if (!skipSignup) {
+    files.push(
+      templateForComponentFile({
+        name: 'Signup',
+        suffix: 'Page',
+        extension: typescript ? '.tsx' : '.js',
+        webPathSection: 'pages',
+        generator: 'dbAuth',
+        templatePath: 'signup.tsx.template',
+      })
+    )
+  }
+
+  if (files.length === 0) {
+    console.info(c.error('\nNo files to generate.\n'))
+    process.exit(0)
+  }
 
   // add scaffold CSS file if it doesn't exist already
   const scaffoldOutputPath = path.join(getPaths().web.src, 'scaffold.css')
@@ -72,15 +154,43 @@ export const files = ({ _tests, typescript }) => {
   }, {})
 }
 
-const tasks = ({ force, tests, typescript }) => {
+const tasks = ({
+  force,
+  tests,
+  typescript,
+  skipForgot,
+  skipLogin,
+  skipReset,
+  skipSignup,
+}) => {
+  console.info({
+    force,
+    tests,
+    typescript,
+    skipForgot,
+    skipLogin,
+    skipReset,
+    skipSignup,
+  })
+
   return new Listr(
     [
       {
-        title: 'Creating login & signup pages...',
+        title: 'Creating pages...',
         task: async () => {
-          return writeFilesTask(files({ tests, typescript }), {
-            overwriteExisting: force,
-          })
+          return writeFilesTask(
+            files({
+              tests,
+              typescript,
+              skipForgot,
+              skipLogin,
+              skipReset,
+              skipSignup,
+            }),
+            {
+              overwriteExisting: force,
+            }
+          )
         },
       },
       {
@@ -116,8 +226,8 @@ const tasks = ({ force, tests, typescript }) => {
   )
 }
 
-export const handler = async ({ force, tests, typescript }) => {
-  const t = tasks({ force, tests, typescript })
+export const handler = async (options) => {
+  const t = tasks(options)
 
   try {
     await t.run()
