@@ -1,12 +1,106 @@
 import fs from 'fs'
 import path from 'path'
 
-import fg from 'fast-glob'
+import merge from 'deepmerge'
 import findUp from 'findup-sync'
+import toml from 'toml'
 
-import { getConfig } from './config'
+enum TargetEnum {
+  NODE = 'node',
+  BROWSER = 'browser',
+  REACT_NATIVE = 'react-native',
+  ELECTRON = 'electron',
+}
 
-export interface NodeTargetPaths {
+interface NodeTargetConfig {
+  title: string
+  name?: string
+  host: string
+  port: number
+  path: string
+  target: TargetEnum.NODE
+  schemaPath: string
+}
+
+interface BrowserTargetConfig {
+  title: string
+  name?: string
+  host: string
+  port: number
+  path: string
+  target: TargetEnum.BROWSER
+  // TODO: apiProxyHost: string
+  apiProxyPort: number
+  apiProxyPath: string
+  fastRefresh: boolean
+  a11y: boolean
+}
+
+interface Config {
+  web: BrowserTargetConfig
+  api: NodeTargetConfig
+  browser: {
+    open: boolean | string
+  }
+  generate: {
+    tests: boolean
+    stories: boolean
+    nestScaffoldByModel: boolean
+  }
+  experimental: {
+    esbuild: boolean
+  }
+}
+
+// Note that web's includeEnvironmentVariables is handled in `webpack.common.js`
+// https://github.com/redwoodjs/redwood/blob/d51ade08118c17459cebcdb496197ea52485364a/packages/core/config/webpack.common.js#L19
+const DEFAULT_CONFIG: Config = {
+  web: {
+    title: 'Redwood App',
+    host: 'localhost',
+    port: 8910,
+    path: './web',
+    target: TargetEnum.BROWSER,
+    apiProxyPath: '/.netlify/functions',
+    apiProxyPort: 8911,
+    fastRefresh: true,
+    a11y: true,
+  },
+  api: {
+    title: 'Redwood App',
+    host: 'localhost',
+    port: 8911,
+    path: './api',
+    target: TargetEnum.NODE,
+    schemaPath: './api/db/schema.prisma',
+  },
+  browser: {
+    open: false,
+  },
+  generate: {
+    tests: true,
+    stories: true,
+    nestScaffoldByModel: true,
+  },
+  experimental: {
+    esbuild: false,
+  },
+}
+
+/**
+ * These configuration options are modified by the user via the Redwood
+ * config file.
+ */
+const getConfig = (configPath = getConfigPath()): Config => {
+  try {
+    const rawConfig = fs.readFileSync(configPath, 'utf8')
+    return merge(DEFAULT_CONFIG, toml.parse(rawConfig))
+  } catch (e) {
+    throw new Error(`Could not parse "${configPath}": ${e}`)
+  }
+}
+
+interface NodeTargetPaths {
   base: string
   dataMigrations: string
   directives: string
@@ -23,7 +117,7 @@ export interface NodeTargetPaths {
   types: string
 }
 
-export interface BrowserTargetPaths {
+interface BrowserTargetPaths {
   base: string
   src: string
   app: string
@@ -42,7 +136,7 @@ export interface BrowserTargetPaths {
   types: string
 }
 
-export interface Paths {
+interface Paths {
   base: string
   generated: {
     base: string
@@ -56,19 +150,6 @@ export interface Paths {
   web: BrowserTargetPaths
   api: NodeTargetPaths
   scripts: string
-}
-
-export interface PagesDependency {
-  /** the variable to which the import is assigned */
-  importName: string
-  /** @alias importName */
-  const: string
-  /** absolute path without extension */
-  importPath: string
-  /** absolute path with extension */
-  path: string
-  /** const ${importName} = { ...data structure for async imports... } */
-  importStatement: string
 }
 
 const CONFIG_FILE_NAME = 'redwood.toml'
@@ -102,7 +183,7 @@ const PATH_WEB_DIR_DIST = 'web/dist'
 /**
  * Search the parent directories for the Redwood configuration file.
  */
-export const getConfigPath = (
+const getConfigPath = (
   cwd: string = process.env.RWJS_CWD ?? process.cwd()
 ): string => {
   const configPath = findUp(CONFIG_FILE_NAME, { cwd })
@@ -117,19 +198,15 @@ export const getConfigPath = (
 /**
  * The Redwood config file is used as an anchor for the base directory of a project.
  */
-export const getBaseDir = (configPath: string = getConfigPath()): string => {
+const getBaseDir = (configPath: string = getConfigPath()): string => {
   return path.dirname(configPath)
-}
-
-export const getBaseDirFromFile = (file: string) => {
-  return getBaseDir(getConfigPath(path.dirname(file)))
 }
 
 /**
  * Use this to resolve files when the path to the file is known,
  * but the extension is not.
  */
-export const resolveFile = (
+const resolveFile = (
   filePath: string,
   extensions: string[] = ['.js', '.tsx', '.ts', '.jsx']
 ): string | null => {
@@ -146,7 +223,7 @@ export const resolveFile = (
  * Path constants that are relevant to a Redwood project.
  */
 // TODO: Make this a proxy and make it lazy.
-export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
+const getRWPaths = (BASE_DIR: string = getBaseDir()): Paths => {
   const routes = resolveFile(path.join(BASE_DIR, PATH_WEB_ROUTES)) as string
   const { schemaPath } = getConfig(getConfigPath(BASE_DIR)).api
   const schemaDir = path.dirname(schemaPath)
@@ -209,83 +286,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
     },
   }
 
-  fs.mkdirSync(paths.generated.types.includes, { recursive: true })
-  fs.mkdirSync(paths.generated.types.mirror, { recursive: true })
-
   return paths
 }
 
-/**
- * Process the pages directory and return information useful for automated imports.
- *
- * Note: glob.sync returns posix style paths on Windows machines
- * @deprecated I will write a seperate method that use `getFiles` instead. This
- * is used by structure, babel auto-importer and the eslint plugin.
- */
-export const processPagesDir = (
-  webPagesDir: string = getPaths().web.pages
-): Array<PagesDependency> => {
-  const pagePaths = fg.sync('**/*Page.{js,jsx,ts,tsx}', {
-    cwd: webPagesDir,
-    ignore: ['node_modules'],
-  })
-  return pagePaths.map((pagePath) => {
-    const p = path.parse(pagePath)
-
-    const importName = p.dir.replace(/\//g, '')
-    const importPath = importStatementPath(
-      path.join(webPagesDir, p.dir, p.name)
-    )
-
-    const importStatement = `const ${importName} = { name: '${importName}', loader: import('${importPath}') }`
-    return {
-      importName,
-      const: importName,
-      importPath,
-      path: path.join(webPagesDir, pagePath),
-      importStatement,
-    }
-  })
-}
-
-/**
- * Converts Windows-style paths to Posix-style
- * C:\Users\Bob\dev\Redwood -> /c/Users/Bob/dev/Redwood
- *
- * The conversion only happens on Windows systems, and only for paths that are
- * not already Posix-style
- *
- * @param path Filesystem path
- */
-export const ensurePosixPath = (path: string) => {
-  let posixPath = path
-
-  if (process.platform === 'win32') {
-    if (/^[A-Z]:\\/.test(path)) {
-      const drive = path[0].toLowerCase()
-      posixPath = `/${drive}/${path.substring(3)}`
-    }
-
-    posixPath = posixPath.replace(/\\/g, '/')
-  }
-
-  return posixPath
-}
-
-/**
- * Switches backslash to regular slash on Windows so the path works in
- * import statements
- * C:\Users\Bob\dev\Redwood\UserPage\UserPage ->
- * C:/Users/Bob/dev/Redwood/UserPage/UserPage
- *
- * @param path Filesystem path
- */
-export const importStatementPath = (path: string) => {
-  let importPath = path
-
-  if (process.platform === 'win32') {
-    importPath = importPath.replaceAll('\\', '/')
-  }
-
-  return importPath
-}
+export default getRWPaths
