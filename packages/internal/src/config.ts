@@ -77,7 +77,7 @@ const DEFAULT_CONFIG: Config = {
     port: 8910,
     path: './web',
     target: TargetEnum.BROWSER,
-    apiURL: '/.netlify/functions',
+    apiURL: '/.redwood/functions',
     apiGraphQLServerPath: '/graphql',
     fastRefresh: true,
     a11y: true,
