@@ -22,18 +22,24 @@ export const builder = (yargs) => {
     )
 }
 
-export const handler = ({ fix }) => {
-  execa(
-    'yarn eslint',
-    [
-      fix && '--fix',
-      fs.existsSync(getPaths().web.src) && 'web/src',
-      fs.existsSync(getPaths().api.src) && 'api/src',
-    ].filter(Boolean),
-    {
-      cwd: getPaths().base,
-      shell: true,
-      stdio: 'inherit',
-    }
-  )
+export const handler = async ({ fix }) => {
+  try{
+    const result = await execa(
+      'yarn eslint',
+      [
+        fix && '--fix',
+        fs.existsSync(getPaths().web.src) && 'web/src',
+        fs.existsSync(getPaths().api.src) && 'api/src',
+      ].filter(Boolean),
+      {
+        cwd: getPaths().base,
+        shell: true,
+        stdio: 'inherit',
+      }
+    )
+    process.exit(result.exitCode)
+  } catch (e) {
+    console.log(c.error(e.message))
+    process.exit(e?.exitCode || 1)
+  }
 }
