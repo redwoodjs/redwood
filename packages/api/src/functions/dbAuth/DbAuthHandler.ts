@@ -297,6 +297,8 @@ export class DbAuthHandler {
       tokenExpires.setSeconds(
         tokenExpires.getSeconds() + this.options.forgotPassword.expires
       )
+
+      // generate a token
       let token = md5(uuidv4())
       const buffer = new Buffer(token)
       token = buffer.toString('base64').replace('=', '').substring(0, 16)
