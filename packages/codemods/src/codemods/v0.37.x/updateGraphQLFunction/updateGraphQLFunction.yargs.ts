@@ -7,7 +7,7 @@ import getRWPaths from '../../../lib/getRWPaths'
 import runTransform from '../../../lib/runTransform'
 
 export const command = 'update-graphql-function'
-export const description = 'Updates GraphQL functions'
+export const description = '(v0.36->v0.37) Updates GraphQL functions'
 
 export const handler = () => {
   task('Updating GraphQL functions', async () => {

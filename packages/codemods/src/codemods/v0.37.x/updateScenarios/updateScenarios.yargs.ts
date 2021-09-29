@@ -6,8 +6,8 @@ import task from 'tasuku'
 import getRWPaths from '../../../lib/getRWPaths'
 import runTransform from '../../../lib/runTransform'
 
-export const command = 'add-prisma-create-to-scenarios'
-export const description = 'Adds the data key to scenarios'
+export const command = 'update-scenarios'
+export const description = '(v0.36->v0.37) Adds the data key to scenarios'
 
 /**
  * The services dir looks like...
@@ -27,7 +27,7 @@ export const handler = () => {
     const rwPaths = getRWPaths()
 
     runTransform({
-      transformPath: path.join(__dirname, 'addPrismaCreateToScenarios.js'),
+      transformPath: path.join(__dirname, 'updateScenarios.js'),
       targetPaths: fg.sync(`${rwPaths.api.services}/**/*.scenarios.{js,ts}`),
     })
   })

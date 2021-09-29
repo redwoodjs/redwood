@@ -1,9 +1,9 @@
 describe('React hook forms: Coercion', () => {
   test('Transforms javascript', () => {
-    matchTransformSnapshot('useRHFCoercion', 'javascript')
+    matchTransformSnapshot('updateForms', 'javascript')
   })
 
   test('Transforms typescript', () => {
-    matchTransformSnapshot('useRHFCoercion', 'typescript')
+    matchTransformSnapshot('updateForms', 'typescript')
   })
 })
