@@ -89,13 +89,4 @@ export const matchInlineTransformSnapshot = (
   expect(formatCode(transformedContent)).toEqual(formatCode(expectedCode))
 }
 
-type MatchFunction = typeof matchTransformSnapshot
-type MatchInlineFunction = typeof matchInlineTransformSnapshot
-
-// This file gets loaded in jest setup, so becomes available globally in tests
-declare global {
-  const matchTransformSnapshot: MatchFunction
-  const matchInlineTransformSnapshot: MatchInlineFunction
-}
-
 export default matchTransformSnapshot
