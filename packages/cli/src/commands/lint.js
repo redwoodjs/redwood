@@ -4,6 +4,7 @@ import execa from 'execa'
 import terminalLink from 'terminal-link'
 
 import { getPaths } from '../lib'
+import c from '../lib/colors'
 
 export const command = 'lint'
 export const description = 'Lint your files'
