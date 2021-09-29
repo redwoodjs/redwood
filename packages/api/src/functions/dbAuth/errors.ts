@@ -183,7 +183,7 @@ export class ResetTokenRequiredError extends Error {
 }
 
 export class ReusedPasswordError extends Error {
-  constructor(message = 'Cannot reuse last password') {
+  constructor(message = 'Must choose a new password') {
     super(message)
     this.name = 'ReusedPasswordError'
   }

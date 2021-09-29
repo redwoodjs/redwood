@@ -3,8 +3,38 @@ import { DbAuthHandler } from '@redwoodjs/api'
 
 export const handler = async (event, context) => {
 
+  const forgotPasswordOptions = {
+    // handler() is invoked after verifying that a user was found with the given
+    // username. This is where you can send the user an email with a link to
+    // reset their password. With the default dbAuth routes and field names, the
+    // URL to reset the password will be:
+    //
+    // https://example.com/reset-password?resetToken=${user.resetToken}
+    //
+    // Whatever is returned from this function will be returned from
+    // the `forgotPassword()` function that is destructured from `useAuth()`
+    // You could use this return value to, for example, show the email
+    // address in a toast message so the user will know it worked and where
+    // to look for the email.
+    handler: (user) => {
+      return user
+    },
+
+    // How long the resetToken is valid for, in seconds (default is 24 hours)
+    expires: 60 * 60 * 24,
+
+    errors: {
+      // for security reasons you may want to be vague here rather than expose
+      // the fact that the email address wasn't found (prevents fishing for
+      // valid email addresses)
+      usernameNotFound: 'Username not found',
+      // if the user somehow gets around client validation
+      usernameRequired: 'Username is required',
+    },
+  }
+
   const loginOptions = {
-    // login.handler() is called after finding the user that matches the
+    // handler() is called after finding the user that matches the
     // username/password provided at login, but before actually considering them
     // logged in. The `user` argument will be the user in the database that
     // matched the username/password.
@@ -30,6 +60,30 @@ export const handler = async (event, context) => {
 
     // How long a user will remain logged in, in seconds
     expires: 60 * 60 * 24 * 365 * 10,
+  }
+
+  const resetPasswordOptions = {
+    // handler() is invoked after the password has been successfully updated in
+    // the database. Returning anything truthy will automatically logs the user
+    // in. Return `false` otherwise, and in the Reset Password page redirect the
+    // user to the login page.
+    handler: (user) => {
+      return true
+    },
+
+    // If `false` then the new password MUST be different than the current one
+    allowReusedPassword: true,
+
+    errors: {
+      // the resetToken is valid, but expired
+      resetTokenExpired: 'resetToken is expired',
+      // no user was found with the given resetToken
+      resetTokenInvalid: 'resetToken is invalid',
+      // the resetToken was not present in the URL
+      resetTokenRequired: 'resetToken is required',
+      // new password is the same as the old password (apparently they did not forget it)
+      reusedPassword: 'Must choose a new password',
+    },
   }
 
   const signupOptions = {
@@ -84,7 +138,9 @@ export const handler = async (event, context) => {
       salt: 'salt',
     },
 
+    forgotPassword: forgotPasswordOptions,
     login: loginOptions,
+    resetPassword: resetPasswordOptions,
     signup: signupOptions,
   })
 
