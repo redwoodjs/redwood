@@ -1,6 +1,7 @@
 import type { PrismaClient } from '@prisma/client'
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import CryptoJS from 'crypto-js'
+import md5 from 'md5'
 import { v4 as uuidv4 } from 'uuid'
 
 import * as DbAuthError from './errors'
@@ -296,14 +297,18 @@ export class DbAuthHandler {
       tokenExpires.setSeconds(
         tokenExpires.getSeconds() + this.options.forgotPassword.expires
       )
+      let token = md5(uuidv4())
+      const buffer = new Buffer(token)
+      token = buffer.toString('base64').replace('=', '').substring(0, 16)
+
       // set token and expires time
       user = await this.dbAccessor.update({
         where: {
           [this.options.authFields.id]: user[this.options.authFields.id],
         },
         data: {
-          resetToken: uuidv4(),
-          resetTokenExpiresAt: tokenExpires,
+          [this.options.authFields.resetToken]: token,
+          [this.options.authFields.resetTokenExpiresAt]: tokenExpires,
         },
       })
 
@@ -393,9 +398,9 @@ export class DbAuthHandler {
     user = await this.dbAccessor.update({
       where: { [this.options.authFields.id]: user[this.options.authFields.id] },
       data: {
-        hashedPassword,
-        resetToken: null,
-        resetTokenExpiresAt: null,
+        [this.options.authFields.hashedPassword]: hashedPassword,
+        [this.options.authFields.resetToken]: null,
+        [this.options.authFields.resetTokenExpiresAt]: null,
       },
     })
 
@@ -483,8 +488,6 @@ export class DbAuthHandler {
     const sanitized = JSON.parse(JSON.stringify(user))
     delete sanitized[this.options.authFields.hashedPassword]
     delete sanitized[this.options.authFields.salt]
-    // delete sanitized[this.options.authFields.resetToken]
-    // delete sanitized[this.options.authFields.resetTokenExpiresAt]
 
     return sanitized
   }
@@ -572,7 +575,7 @@ export class DbAuthHandler {
     }
 
     // token has expired
-    if (user.resetTokenExpiresAt < tokenExpires) {
+    if (user[this.options.authFields.resetTokenExpiresAt] < tokenExpires) {
       await this._clearResetToken(user)
       throw new DbAuthError.ResetTokenExpiredError(
         this.options.resetPassword?.errors?.resetTokenExpired
@@ -586,8 +589,8 @@ export class DbAuthHandler {
     await this.dbAccessor.update({
       where: { [this.options.authFields.id]: user[this.options.authFields.id] },
       data: {
-        resetToken: null,
-        resetTokenExpiresAt: null,
+        [this.options.authFields.resetToken]: null,
+        [this.options.authFields.resetTokenExpiresAt]: null,
       },
     })
   }
