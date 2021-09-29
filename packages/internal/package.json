@@ -34,7 +34,6 @@
     "fs-extra": "10.0.0",
     "glob": "7.1.7",
     "graphql": "15.5.3",
-    "graphql-scalars": "1.10.1",
     "kill-port": "1.6.1",
     "prettier": "2.4.1",
     "rimraf": "3.0.2",
