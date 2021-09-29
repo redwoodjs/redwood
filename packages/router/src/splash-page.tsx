@@ -561,7 +561,9 @@ const useVersion = () => {
     async function fetchVersion() {
       try {
         const response = await global.fetch(
-          `${global.__REDWOOD__API_PROXY_PATH}/graphql`,
+          `${
+            global.REDWOOD_API_URL + global.REDWOOD_API_GRAPHQL_SERVER_PATH
+          }/graphql`,
           {
             method: 'POST',
             headers: {
