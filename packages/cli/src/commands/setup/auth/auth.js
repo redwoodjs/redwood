@@ -9,8 +9,9 @@ import terminalLink from 'terminal-link'
 import { resolveFile } from '@redwoodjs/internal'
 import { getProject } from '@redwoodjs/structure'
 
-import { getPaths, writeFilesTask } from 'src/lib'
-import c from 'src/lib/colors'
+import { getPaths, writeFilesTask } from '../../../lib'
+import c from '../../../lib/colors'
+
 const AUTH_PROVIDER_IMPORT = `import { AuthProvider } from '@redwoodjs/auth'`
 
 const OUTPUT_PATHS = {
@@ -245,7 +246,7 @@ export const addApiConfig = () => {
     )
     // add object to handler
     content = content.replace(
-      /^(\s*)(schema: makeMergedSchema)(.*)$/m,
+      /^(\s*)(loggerConfig:)(.*)$/m,
       `$1getCurrentUser,\n$1$2$3`
     )
     fs.writeFileSync(graphqlPath, content)

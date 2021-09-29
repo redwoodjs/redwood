@@ -15,6 +15,7 @@ jest.mock('@redwoodjs/internal', () => {
   const path = require('path')
   return {
     ...jest.requireActual('@redwoodjs/internal'),
+    generate: () => {},
     getPaths: () => {
       const BASE_PATH = '/path/to/project'
       return {
@@ -22,13 +23,16 @@ jest.mock('@redwoodjs/internal', () => {
         api: {
           dataMigrations: path.join(BASE_PATH, './api/prisma/dataMigrations'),
           db: path.join(global.__dirname, 'fixtures'), // this folder
+          generators: path.join(BASE_PATH, './api/generators'),
           src: path.join(BASE_PATH, './api/src'),
           services: path.join(BASE_PATH, './api/src/services'),
+          directives: path.join(BASE_PATH, './api/src/directives'),
           graphql: path.join(BASE_PATH, './api/src/graphql'),
           functions: path.join(BASE_PATH, './api/src/functions'),
         },
         web: {
           src: path.join(BASE_PATH, './web/src'),
+          generators: path.join(BASE_PATH, './web/generators'),
           routes: path.join(BASE_PATH, 'web/src/Routes.js'),
           components: path.join(BASE_PATH, '/web/src/components'),
           layouts: path.join(BASE_PATH, '/web/src/layouts'),
@@ -69,6 +73,8 @@ jest.mock('path', () => {
     },
   }
 })
+
+jest.spyOn(Math, 'random').mockReturnValue(0.123456789)
 
 export const generatorsRootPath = path.join(
   __dirname,

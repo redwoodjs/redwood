@@ -129,7 +129,7 @@ export const nameVariants = (name) => {
   const normalizedName = pascalcase(paramCase(pluralize.singular(name)))
 
   return {
-    pascalName: pascalcase(name),
+    pascalName: pascalcase(paramCase(name)),
     camelName: camelcase(name),
     singularPascalName: normalizedName,
     pluralPascalName: pluralize(normalizedName),
@@ -142,11 +142,8 @@ export const nameVariants = (name) => {
   }
 }
 
-export const templateRoot = path.resolve(__dirname, '../commands/generate')
-
-export const generateTemplate = (templateFilename, { name, root, ...rest }) => {
-  const templatePath = path.join(root || templateRoot, templateFilename)
-  const template = lodash.template(readFile(templatePath).toString())
+export const generateTemplate = (templateFilename, { name, ...rest }) => {
+  const template = lodash.template(readFile(templateFilename).toString())
 
   const renderedTemplate = template({
     name,

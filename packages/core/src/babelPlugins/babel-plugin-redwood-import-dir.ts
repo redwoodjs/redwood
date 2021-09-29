@@ -1,7 +1,9 @@
 import path from 'path'
 
 import type { PluginObj, types } from '@babel/core'
-import glob from 'glob'
+import fg from 'fast-glob'
+
+import { importStatementPath } from '@redwoodjs/internal'
 
 /**
  * This babel plugin will search for import statements that include star `**`
@@ -30,7 +32,6 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         }
 
         const nodes = []
-
         // import <node.specifiers[0].local.name> from <node.source.value>
         // + let importName = {}
         const importName = p.node.specifiers[0].local.name
@@ -43,19 +44,19 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
           ])
         )
 
-        const importGlob = p.node.source.value
-
+        const importGlob = importStatementPath(p.node.source.value)
         const cwd = path.dirname(state.file.opts.filename)
-        const dirFiles = glob
+        const dirFiles = fg
           .sync(importGlob, { cwd })
           .filter((n) => !n.includes('.test.')) // ignore `*.test.*` files.
           .filter((n) => !n.includes('.scenarios.')) // ignore `*.scenarios.*` files.
+          .filter((n) => !n.includes('.d.ts'))
 
         const staticGlob = importGlob.split('*')[0]
         const filePathToVarName = (filePath: string) => {
           return filePath
             .replace(staticGlob, '')
-            .replace(/.(js|ts)/, '')
+            .replace(/\.(js|ts)$/, '')
             .replace(/[^a-zA-Z0-9]/g, '_')
         }
 
@@ -65,7 +66,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
           const fpVarName = filePathToVarName(filePath)
 
           // + import * as <importName>_<fpVarName> from <filePathWithoutExtension>
-          // import * as a from './services/a.j
+          // import * as a from './services/a
           nodes.push(
             t.importDeclaration(
               [
@@ -96,6 +97,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         for (const node of nodes) {
           p.insertBefore(node)
         }
+
         // - import importName from "dirPath"
         p.remove()
       },

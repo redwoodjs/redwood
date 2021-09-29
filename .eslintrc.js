@@ -7,6 +7,7 @@ module.exports = {
     'fixtures',
     'packages/structure/**',
     'packages/core/**/__fixtures__/**/*',
+    'packages/codemods/**/__testfixtures__/**/*',
     'packages/core/config/storybook/**/*',
     'packages/create-redwood-app/template/web/src/Routes.tsx',
   ],
@@ -49,6 +50,16 @@ module.exports = {
   },
   overrides: [
     {
+      // We override import order of the CRWA graphql function because we want the grouped glob imports
+      // to be ordered separately.
+      // Note: for some reason, the pattern as eslints each file to match against the pattern
+      // the files pattern has to be the filename and not the relative path (as one might expect)
+      files: ['graphql.ts'],
+      rules: {
+        'import/order': 'off',
+      },
+    },
+    {
       files: ['packages/structure/**'],
       rules: {
         '@typescript-eslint/no-this-alias': 'off',
@@ -70,7 +81,6 @@ module.exports = {
         'packages/prerender/src/browserUtils/**',
         'packages/router/src/**',
         'packages/web/src/**',
-        'packages/history/src/**',
       ],
       env: {
         es6: true,
@@ -101,7 +111,6 @@ module.exports = {
         'packages/core/src/**',
         'packages/core/config/**',
         'packages/create-redwood-app/src/create-redwood-app.js',
-        'packages/dev-server/src/**',
         'packages/internal/src/**',
         'packages/prerender/src/**',
         'packages/structure/src/**',

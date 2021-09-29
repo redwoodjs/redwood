@@ -3,11 +3,11 @@ import path from 'path'
 
 import { generate } from '@graphql-codegen/cli'
 
-import { getCellGqlQuery } from 'src/ast'
-import { findCells, findDirectoryNamedModules } from 'src/files'
-import { parseGqlQueryToAst } from 'src/gql'
-import { getJsxElements } from 'src/jsx'
-import { getPaths, processPagesDir } from 'src/paths'
+import { getCellGqlQuery, fileToAst } from '../ast'
+import { findCells, findDirectoryNamedModules } from '../files'
+import { parseGqlQueryToAst } from '../gql'
+import { getJsxElements } from '../jsx'
+import { getPaths, processPagesDir } from '../paths'
 
 import { writeTemplate } from './templates'
 
@@ -46,6 +46,7 @@ export const generateTypeDefs = async () => {
     ...generateTypeDefGlobImports(),
     ...generateTypeDefGlobalContext(),
     ...generateTypeDefScenarios(),
+    ...generateTypeDefTestMocks(),
     ...gqlApi,
     ...gqlWeb,
   ]
@@ -111,7 +112,7 @@ export const generateMirrorCell = (p: string, rwjsPaths = getPaths()) => {
   const typeDefPath = path.join(mirrorDir, typeDef)
   const { name } = path.parse(p)
 
-  const fileContents = fs.readFileSync(p, 'utf-8')
+  const fileContents = fileToAst(p)
   const cellQuery = getCellGqlQuery(fileContents)
 
   if (cellQuery) {
@@ -150,8 +151,8 @@ const writeTypeDefIncludeFile = (
 }
 
 export const generateTypeDefRouterRoutes = () => {
-  const code = fs.readFileSync(getPaths().web.routes, 'utf-8')
-  const routes = getJsxElements(code, 'Route').filter((x) => {
+  const ast = fileToAst(getPaths().web.routes)
+  const routes = getJsxElements(ast, 'Route').filter((x) => {
     // All generated "routes" should have a "name" and "path" prop-value
     return (
       typeof x.props?.path !== 'undefined' &&
@@ -173,6 +174,13 @@ export const generateTypeDefCurrentUser = () => {
 
 export const generateTypeDefScenarios = () => {
   return writeTypeDefIncludeFile('api-scenarios.d.ts.template')
+}
+
+export const generateTypeDefTestMocks = () => {
+  return [
+    writeTypeDefIncludeFile('api-test-globals.d.ts.template'),
+    writeTypeDefIncludeFile('web-test-globals.d.ts.template'),
+  ].flat()
 }
 
 export const generateTypeDefGlobImports = () => {

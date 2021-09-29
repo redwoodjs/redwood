@@ -1,8 +1,7 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React from 'react'
 
-import { gHistory } from '@redwoodjs/history'
-
-import { createNamedContext } from './internal'
+import { gHistory } from './history'
+import { createNamedContext, TrailingSlashesTypes } from './util'
 
 export interface LocationContextType {
   pathname: string
@@ -12,54 +11,94 @@ export interface LocationContextType {
 
 const LocationContext = createNamedContext<LocationContextType>('Location')
 
-interface Props {
-  children: React.ReactNode
-  location?: LocationContextType
+interface LocationProviderProps {
+  location?: {
+    pathname: string
+    search?: string
+    hash?: string
+  }
+  trailingSlashes?: TrailingSlashesTypes
 }
 
-const getContext = (
-  parentLocation: LocationContextType | undefined,
-  location: LocationContextType | undefined
-) => {
-  const windowLocation =
-    typeof window !== 'undefined'
-      ? window.location
-      : {
-          pathname: parentLocation?.pathname || '',
-          search: parentLocation?.search || '',
-          hash: parentLocation?.hash || '',
-        }
-  const { pathname, search, hash } = location || windowLocation
+class LocationProvider extends React.Component<LocationProviderProps> {
+  // When prerendering, there might be more than one level of location providers. Use the values from the one above.
+  static contextType = LocationContext
+  HISTORY_LISTENER_ID: string | undefined = undefined
 
-  return { pathname, search, hash }
-}
+  state = {
+    context: this.getContext(),
+  }
 
-const LocationProvider: React.FC<Props> = ({ children, location }) => {
-  const HISTORY_LISTENER_ID = useRef<string | undefined>(undefined)
-  const parentLocation = useContext(LocationContext)
-  const [context, setContext] = useState(getContext(parentLocation, location))
+  getContext() {
+    let windowLocation
 
-  useEffect(() => {
-    HISTORY_LISTENER_ID.current = gHistory.listen(() => {
-      setContext(getContext(parentLocation, location))
-    })
+    if (typeof window !== 'undefined') {
+      const { pathname } = window.location
 
-    return () => {
-      if (HISTORY_LISTENER_ID.current) {
-        gHistory.remove(HISTORY_LISTENER_ID.current)
+      // Since we have to update the URL, we might as well handle the trailing slash here, before matching.
+      //
+      // - never -> strip trailing slashes ("/about/" -> "/about")
+      // - always -> add trailing slashes ("/about" -> "/about/")
+      // - preserve -> do nothing ("/about" -> "/about", "/about/" -> "/about/")
+      //
+      switch (this.props.trailingSlashes) {
+        case 'never':
+          if (pathname.endsWith('/')) {
+            window.history.replaceState(
+              {},
+              '',
+              pathname.substr(0, pathname.length - 1)
+            )
+          }
+          break
+
+        case 'always':
+          if (!pathname.endsWith('/')) {
+            window.history.replaceState({}, '', pathname + '/')
+          }
+          break
+
+        default:
+          break
+      }
+
+      windowLocation = window.location
+    } else {
+      windowLocation = {
+        pathname: this.context?.pathname || '',
+        search: this.context?.search || '',
+        hash: this.context?.hash || '',
       }
     }
-  }, [parentLocation, location])
 
-  return (
-    <LocationContext.Provider value={context}>
-      {children}
-    </LocationContext.Provider>
-  )
+    const { pathname, search, hash } = this.props.location || windowLocation
+
+    return { pathname, search, hash }
+  }
+
+  componentDidMount() {
+    this.HISTORY_LISTENER_ID = gHistory.listen(() => {
+      this.setState(() => ({ context: this.getContext() }))
+    })
+  }
+
+  componentWillUnmount() {
+    if (this.HISTORY_LISTENER_ID) {
+      gHistory.remove(this.HISTORY_LISTENER_ID)
+    }
+  }
+
+  render() {
+    return (
+      <LocationContext.Provider value={this.state.context}>
+        {this.props.children}
+      </LocationContext.Provider>
+    )
+  }
 }
 
 const useLocation = () => {
-  const location = useContext(LocationContext)
+  const location = React.useContext(LocationContext)
 
   if (location === undefined) {
     throw new Error('useLocation must be used within a LocationProvider')

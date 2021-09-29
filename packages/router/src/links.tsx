@@ -1,21 +1,57 @@
 import { forwardRef, useEffect } from 'react'
 
-import { navigate } from '@redwoodjs/history'
+import { navigate } from './history'
+import { useLocation } from './location'
+import { flattenSearchParams, matchPath } from './util'
 
-import { matchPath, useLocation } from './internal'
+type FlattenSearchParams = ReturnType<typeof flattenSearchParams>
+type UseMatchOptions = {
+  searchParams?: FlattenSearchParams
+}
 
 /**
- * Returns true if the URL for the given "route" value matches the current URL.
+ * Returns true if the given pathname matches the current location.pathname,
+ * provide searchParams options to match the current location.search
+ *
  * This is useful for components that need to know "active" state, e.g.
  * <NavLink>.
+ *
+ * Examples:
+ *
+ * Match search params key existence
+ * const match = useMatch('/about', ['category', 'page'])
+ *
+ * Match search params key and value
+ * const match = useMatch('/items', [{page: 2}, {category: 'book'}])
+ *
+ * Mix match
+ * const match = useMatch('/list', [{page: 2}, 'gtm'])
+ *
  */
-const useMatch = (route: string) => {
+const useMatch = (pathname: string, options?: UseMatchOptions) => {
   const location = useLocation()
   if (!location) {
     return { match: false }
   }
 
-  return matchPath(route, location.pathname)
+  if (options?.searchParams) {
+    const locationParams = new URLSearchParams(location.search)
+    const hasUnmatched = options.searchParams.some((param) => {
+      if (typeof param === 'string') {
+        return !locationParams.has(param)
+      } else {
+        return Object.keys(param).some(
+          (key) => param[key] != locationParams.get(key)
+        )
+      }
+    })
+
+    if (hasUnmatched) {
+      return { match: false }
+    }
+  }
+
+  return matchPath(pathname, location.pathname)
 }
 
 interface LinkProps {
@@ -58,48 +94,57 @@ const Link = forwardRef<
 interface NavLinkProps {
   to: string
   activeClassName: string
+  activeMatchParams?: FlattenSearchParams
 }
 
 const NavLink = forwardRef<
   HTMLAnchorElement,
   NavLinkProps & React.AnchorHTMLAttributes<HTMLAnchorElement>
->(({ to, activeClassName, className, onClick, ...rest }, ref) => {
-  const matchInfo = useMatch(to)
-  const theClassName = [className, matchInfo.match && activeClassName]
-    .filter(Boolean)
-    .join(' ')
+>(
+  (
+    { to, activeClassName, activeMatchParams, className, onClick, ...rest },
+    ref
+  ) => {
+    // Separate pathname and search parameters, USVString expected
+    const [pathname, queryString] = to.split('?')
+    const searchParams = activeMatchParams || flattenSearchParams(queryString)
+    const matchInfo = useMatch(pathname, { searchParams })
+    const theClassName = [className, matchInfo.match && activeClassName]
+      .filter(Boolean)
+      .join(' ')
 
-  return (
-    <a
-      href={to}
-      ref={ref}
-      className={theClassName}
-      {...rest}
-      onClick={(event) => {
-        if (
-          event.button !== 0 ||
-          event.altKey ||
-          event.ctrlKey ||
-          event.metaKey ||
-          event.shiftKey
-        ) {
-          return
-        }
+    return (
+      <a
+        href={to}
+        ref={ref}
+        className={theClassName}
+        {...rest}
+        onClick={(event) => {
+          if (
+            event.button !== 0 ||
+            event.altKey ||
+            event.ctrlKey ||
+            event.metaKey ||
+            event.shiftKey
+          ) {
+            return
+          }
 
-        event.preventDefault()
+          event.preventDefault()
 
-        if (onClick) {
-          const result = onClick(event)
-          if (typeof result !== 'boolean' || result) {
+          if (onClick) {
+            const result = onClick(event)
+            if (typeof result !== 'boolean' || result) {
+              navigate(to)
+            }
+          } else {
             navigate(to)
           }
-        } else {
-          navigate(to)
-        }
-      }}
-    />
-  )
-})
+        }}
+      />
+    )
+  }
+)
 
 interface RedirectProps {
   /** The name of the route to redirect to */

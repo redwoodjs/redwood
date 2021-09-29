@@ -25,7 +25,11 @@ export function frameworkPkgJsonFiles() {
   return fg.sync('**/package.json', {
     cwd: REDWOOD_PACKAGES_PATH,
     deep: 2, // Only the top-level-packages.
-    ignore: ['**/node_modules/**', '**/create-redwood-app/**'],
+    ignore: [
+      '**/node_modules/**',
+      '**/create-redwood-app/**',
+      '**/codemods/**',
+    ],
     absolute: true,
   })
 }
@@ -138,23 +142,13 @@ export function packageJsonName(packageJsonPath) {
 }
 
 /**
- * Build Redwood packages.
+ * Clean Redwood packages.
  */
-export function buildPackages(
-  packages = frameworkPkgJsonFiles(),
-  { clean } = { clean: false }
-) {
+export function cleanPackages(packages = frameworkPkgJsonFiles()) {
   const packageNames = packages.map(packageJsonName)
 
-  // clean before building
-  if (clean) {
-    for (const packageJsonPath of packages) {
-      rimraf.sync(path.join(path.dirname(packageJsonPath), 'dist'))
-    }
-  }
-
   execa.sync(
-    'yarn lerna run build',
+    'yarn lerna run build:clean',
     ['--parallel', `--scope={${packageNames.join(',') + ','}}`],
     {
       shell: true,
@@ -162,6 +156,31 @@ export function buildPackages(
       cwd: path.resolve(__dirname, '../../'),
     }
   )
+}
+
+/**
+ * Build Redwood packages.
+ */
+export function buildPackages(packages = frameworkPkgJsonFiles()) {
+  const packageNames = packages.map(packageJsonName)
+
+  // Build JavaScript.
+  execa.sync(
+    'yarn lerna run build:js',
+    ['--parallel', `--scope={${packageNames.join(',') + ','}}`],
+    {
+      shell: true,
+      stdio: 'inherit',
+      cwd: path.resolve(__dirname, '../../'),
+    }
+  )
+
+  // Build all TypeScript.
+  execa.sync('yarn build:types', undefined, {
+    shell: true,
+    stdio: 'inherit',
+    cwd: path.resolve(__dirname, '../../'),
+  })
 }
 
 function sortObjectKeys(obj) {

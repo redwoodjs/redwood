@@ -14,12 +14,14 @@ export const magicLink = (client: MagicLink): AuthClientMagicLink => {
   return {
     type: 'magicLink',
     client,
-    login: async ({ email, showUI }) =>
+    login: async ({ email, showUI = true }) =>
       await client.auth.loginWithMagicLink({ email, showUI }),
     logout: async () => {
+      token = null
+      expireTime = 0
       await client.user.logout()
     },
-    signup: async ({ email, showUI }) =>
+    signup: async ({ email, showUI = true }) =>
       await client.auth.loginWithMagicLink({ email, showUI }),
     getToken: async () => {
       if (!token || Date.now() <= expireTime) {

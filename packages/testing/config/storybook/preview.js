@@ -6,7 +6,7 @@ const { merge } = require('webpack-merge')
 // booting up the mock server workers, and mocking the router.
 const {
   StorybookProvider,
-} = require('@redwoodjs/testing/dist/StorybookProvider')
+} = require('@redwoodjs/testing/dist/web/StorybookProvider')
 
 // Import the user's default CSS file
 require('~__REDWOOD__USER_WEB_DEFAULT_CSS')

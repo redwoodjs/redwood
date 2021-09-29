@@ -2,23 +2,14 @@
 // Rails' routing approach and from both React Router and Reach Router (the
 // latter of which has closely inspired some of this code).
 
-export {
-  Router,
-  Route,
-  Link,
-  NavLink,
-  useMatch,
-  Redirect,
-  routes,
-  useParams,
-  useLocation,
-  LocationProvider,
-  PageLoadingContext,
-} from './internal'
+export { navigate, back } from './history'
+export { Link, NavLink, useMatch, Redirect } from './links'
+export { useLocation, LocationProvider } from './location'
+export { usePageLoadingContext, PageLoadingContext } from './page-loader'
+export { useParams } from './params'
+export { Router, Route, routes } from './router'
 
 export * from './Set'
-
-export { usePageLoadingContext } from './page-loader'
 
 export { default as RouteAnnouncement } from './route-announcement'
 export * from './route-announcement'
@@ -43,5 +34,3 @@ export interface AvailableRoutes {
 }
 
 export { SkipNavLink, SkipNavContent } from '@reach/skip-nav'
-
-export { navigate, back, NavigateOptions } from '@redwoodjs/history'

@@ -1,3 +1,49 @@
+/**
+ * @module @redwoodjs/forms
+ *
+ * Redwood's form library.
+ * Mostly simple wrappers around `react-hook-form` that make it even easier to use.
+ *
+ * @remarks
+ *
+ * @redwoodjs/forms slightly extends `react-hook-form`'s `valueAs` props because it's important for us to coerce values
+ * to the correct type for GraphQL.
+ * The properties that are exclusive to Redwood are:
+ * - `valueAsBoolean`
+ * - `valueAsJSON`
+ *
+ * @see {@link https://react-hook-form.com/}
+ *
+ * @remarks
+ *
+ * We make all of `react-hook-form`'s exports available as well.
+ *
+ * @privateRemarks
+ *
+ * The two main hooks in this library are:
+ * - `useErrorStyles`
+ * - `useRegister`
+ *
+ * `useErrorStyles` implements the error-specific styling via `useEffect`.
+ *
+ * `useRegister` hooks fields up to `react-hook-form` while providing some sensible defaults
+ * based on the field's type.
+ *
+ * @privateRemarks
+ *
+ * We use `React.ComponentPropsWithRef` and `React.ComponentPropsWithoutRef` instead of `React.FC`
+ * because the community seems to be shifting away from `React.FC`.
+ *
+ * @see {@link https://fettblog.eu/typescript-react-why-i-dont-use-react-fc/}
+ * @see {@link https://github.com/facebook/create-react-app/pull/8177}
+ * @see {@link https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/function_components/}
+ *
+ * @privateRemarks
+ *
+ * As for interfaces vs types, we're going with TypesScript's recommendation to use interfaces until types are needed.
+ *
+ * @see {@link https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#differences-between-type-aliases-and-interfaces}
+ */
 import React, { useContext, forwardRef } from 'react'
 
 import pascalcase from 'pascalcase'
@@ -7,16 +53,357 @@ import {
   FormProvider,
   useFormContext,
   RegisterOptions,
-  UseFormMethods,
-  UseFormOptions,
+  UseFormReturn,
+  UseFormProps,
 } from 'react-hook-form'
 
-import {
-  CoercionContextProvider,
-  TDefinedCoercionFunctions,
-  useCoercion,
-} from './coercion'
 import FormError from './FormError'
+
+/**
+ * We slightly extend `react-hook-form`'s `RegisterOptions` to make working with GraphQL easier.
+ * `react-hook-form` provides the prop `setValueAs` for all-purpose coercion
+ * (i.e. anything that isn't `valueAsDate` or `valueAsNumber`, which are standard HTML).
+ *
+ * @see {@link https://react-hook-form.com/api/useform/register}
+ */
+interface RedwoodRegisterOptions extends RegisterOptions {
+  valueAsBoolean?: boolean
+  valueAsJSON?: boolean
+}
+
+/**
+ * The main interface, just to have some sort of source of truth.
+ *
+ * @typeParam E - The type of element; we're only ever working with a few HTMLElements.
+ *
+ * `extends` constrains the generic while `=` provides a default.
+ *
+ * @see {@link https://www.typescriptlang.org/docs/handbook/2/generics.html#generic-constraints}
+ *
+ * @internal
+ */
+interface FieldProps<
+  Element extends
+    | HTMLTextAreaElement
+    | HTMLSelectElement
+    | HTMLInputElement = HTMLInputElement
+> {
+  name: string
+  errorClassName?: string
+  errorStyle?: React.CSSProperties
+  className?: string
+  style?: React.CSSProperties
+  validation?: RedwoodRegisterOptions
+  type?: string
+  onBlur?: React.FocusEventHandler<Element>
+  onChange?: React.ChangeEventHandler<Element>
+}
+
+type UseErrorStylesProps = Pick<
+  FieldProps,
+  'name' | 'errorClassName' | 'errorStyle' | 'className' | 'style'
+>
+
+/**
+ * Adds styling to a field when an error is present.
+ *
+ * @remarks
+ *
+ * Mostly just a `useEffect` hook.
+ *
+ * `className` and `style` get swapped with `errorClassName` and `errorStyle` respectively
+ * when an error's present (on the server or otherwise).
+ */
+const useErrorStyles = ({
+  name,
+  errorClassName,
+  errorStyle,
+  className,
+  style,
+}: UseErrorStylesProps) => {
+  const {
+    formState: { errors },
+    setError,
+  } = useFormContext()
+
+  const serverError = useContext(ServerErrorsContext)[name]
+
+  React.useEffect(() => {
+    if (serverError) {
+      setError(name, { type: 'server', message: serverError })
+    }
+  }, [serverError, name, setError])
+
+  const validationError = name ? get(errors, name) : undefined
+
+  if (validationError) {
+    if (errorClassName) {
+      className = errorClassName
+    }
+
+    if (errorStyle) {
+      style = errorStyle
+    }
+  }
+
+  return { className, style }
+}
+
+const valueAsProps = {
+  valueAsBoolean: (value: string) => !!value,
+  valueAsJSON: (value: string) => {
+    try {
+      return JSON.parse(value)
+    } catch (e) {
+      return null
+    }
+  },
+}
+
+const JSONValidation = (value: Record<string, unknown> | null) => value !== null
+
+/**
+ * Handles the flow of coercion, providing a default if none is specified. (And if it can.)
+ * Also implements Redwood's extensions to `react-hook-form`'s `valueAs` props.
+ *
+ * If any of `react-hook-form`'s validation props are present
+ * (`valueAsNumber`, `valueAsDate`, `setValueAs`), we just return.
+ *
+ * Otherwise we check to see if any of Redwood's `valueAs` props are present.
+ */
+const setCoercion = (
+  validation: RedwoodRegisterOptions,
+  { type }: { type?: string } = {}
+) => {
+  if (
+    validation.valueAsNumber ||
+    validation.valueAsDate ||
+    validation.setValueAs
+  ) {
+    return
+  }
+
+  const valueAsProp = Object.keys(valueAsProps).find(
+    (valueAsProp) => valueAsProp in validation
+  )
+
+  if (valueAsProp) {
+    validation.setValueAs =
+      valueAsProps[valueAsProp as keyof typeof valueAsProps]
+    delete validation[valueAsProp as keyof typeof valueAsProps]
+    if (valueAsProp === 'valueAsJSON' && !validation.validate) {
+      validation.validate = JSONValidation
+    }
+  } else if (type) {
+    if (type === 'checkbox') {
+      validation.setValueAs = valueAsProps['valueAsBoolean']
+    } else if (type === 'date' || type === 'datetime-local') {
+      validation.valueAsDate = true
+    } else if (type === 'number') {
+      validation.valueAsNumber = true
+    }
+  }
+}
+
+type UseRegisterProps<
+  Element extends
+    | HTMLTextAreaElement
+    | HTMLSelectElement
+    | HTMLInputElement = HTMLInputElement
+> = Pick<
+  FieldProps<Element>,
+  'name' | 'validation' | 'type' | 'onBlur' | 'onChange'
+>
+
+/**
+ * useRegister
+ *
+ * Register the field into `react-hook-form` with defaults.
+ *
+ * @remarks
+ *
+ * A field's `validation` prop is `react-hook-form`'s `RegisterOptions`
+ * (with Redwood's extended `valueAs` props).
+ *
+ * @see {@link https://react-hook-form.com/api/useform/register}
+ */
+const useRegister = <
+  T,
+  Element extends
+    | HTMLTextAreaElement
+    | HTMLSelectElement
+    | HTMLInputElement = HTMLInputElement
+>(
+  props: UseRegisterProps<Element> & { element?: string },
+  ref?: React.ForwardedRef<T>
+) => {
+  const { register } = useFormContext()
+
+  const validation = props.validation || { required: false }
+
+  setCoercion(validation, { type: props.type })
+
+  const {
+    ref: _ref,
+    onBlur: handleBlur,
+    onChange: handleChange,
+    ...rest
+  } = register(props.name, validation)
+
+  const onBlur: React.FocusEventHandler<Element> = (event) => {
+    handleBlur(event)
+    props.onBlur?.(event)
+  }
+
+  const onChange: React.ChangeEventHandler<Element> = (event) => {
+    handleChange(event)
+    props.onChange?.(event)
+  }
+
+  return {
+    ...rest,
+    ref: (element: T) => {
+      _ref(element)
+
+      if (typeof ref === 'function') {
+        ref(element)
+      } else if (ref) {
+        ref.current = element
+      }
+    },
+    onBlur,
+    onChange,
+  }
+}
+
+/**
+ * Context for keeping track of errors from the server.
+ */
+interface ServerErrorsContextProps {
+  [key: string]: string
+}
+
+const ServerErrorsContext = React.createContext({} as ServerErrorsContextProps)
+
+interface FormProps
+  extends Omit<React.ComponentPropsWithRef<'form'>, 'onSubmit'> {
+  error?: any
+  /**
+   * The methods returned by `useForm`.
+   * This props's only necessary if you've called `useForm` yourself to get access to one of it's functions, like `reset`.
+   *
+   * @example
+   *
+   * ```javascript
+   * const formMethods = useForm()
+   *
+   * const onSubmit = (data) => {
+   *  sendDataToServer(data)
+   *  formMethods.reset()
+   * }
+   *
+   * return (
+   *   <Form formMethods={formMethods} onSubmit={onSubmit}>
+   * )
+   * ```
+   */
+  formMethods?: UseFormReturn
+  /**
+   * Configures how React Hook Form performs validation, among other things.
+   *
+   * @example
+   *
+   * ```jsx
+   * <Form config={{ mode: 'onBlur' }}>
+   * ```
+   *
+   * @see {@link https://react-hook-form.com/api/useform}
+   */
+  config?: UseFormProps
+  onSubmit?: (
+    values: Record<string, any>,
+    event?: React.BaseSyntheticEvent
+  ) => void
+}
+
+/**
+ * Renders a `<form>` with the required context.
+ */
+const Form = forwardRef<HTMLFormElement, FormProps>(
+  (
+    {
+      config,
+      error: errorProps,
+      formMethods: propFormMethods,
+      onSubmit,
+      children,
+      ...rest
+    },
+    ref
+  ) => {
+    const hookFormMethods = useForm(config)
+    const formMethods = propFormMethods || hookFormMethods
+
+    return (
+      <form
+        ref={ref}
+        {...rest}
+        onSubmit={formMethods.handleSubmit((data, event) =>
+          onSubmit?.(data, event)
+        )}
+      >
+        <ServerErrorsContext.Provider
+          value={
+            errorProps?.graphQLErrors[0]?.extensions?.exception?.messages || {}
+          }
+        >
+          <FormProvider {...formMethods}>{children}</FormProvider>
+        </ServerErrorsContext.Provider>
+      </form>
+    )
+  }
+)
+
+interface LabelProps
+  extends Pick<FieldProps, 'errorClassName' | 'errorStyle'>,
+    React.ComponentPropsWithoutRef<'label'> {
+  name: string
+}
+
+/**
+ * Renders a `<label>` that can be styled differently if errors are present on the related fields.
+ */
+const Label = ({
+  name,
+  children,
+  // for useErrorStyles
+  errorClassName,
+  errorStyle,
+  className,
+  style,
+  ...rest
+}: LabelProps) => {
+  const styles = useErrorStyles({
+    name,
+    errorClassName,
+    errorStyle,
+    className,
+    style,
+  })
+
+  return (
+    <label htmlFor={name} {...rest} {...styles}>
+      {children || name}
+    </label>
+  )
+}
+
+interface FieldErrorProps extends React.ComponentPropsWithoutRef<'span'> {
+  /**
+   * The name of the field the `<FieldError>`'s associated with.
+   */
+  name: string
+}
 
 const DEFAULT_MESSAGES = {
   required: 'is required',
@@ -28,444 +415,355 @@ const DEFAULT_MESSAGES = {
   validate: 'is not valid',
 }
 
-enum INPUT_TYPES {
-  BUTTON = 'button',
-  COLOR = 'color',
-  DATE = 'date',
-  DATETIME_LOCAL = 'datetime-local',
-  EMAIL = 'email',
-  FILE = 'file',
-  HIDDEN = 'hidden',
-  IMAGE = 'image',
-  MONTH = 'month',
-  NUMBER = 'number',
-  PASSWORD = 'password',
-  RADIO = 'radio',
-  RANGE = 'range',
-  RESET = 'reset',
-  SEARCH = 'search',
-  SUBMIT = 'submit',
-  TEL = 'tel',
-  TEXT = 'text',
-  TIME = 'time',
-  URL = 'url',
-  WEEK = 'week',
-}
-
-// Massages a hash of props depending on whether the given named field has
-// any errors on it
-
-interface InputTagProps {
-  name: string
-  errorClassName?: string
-  errorStyle?: React.CSSProperties
-  dataType?: TDefinedCoercionFunctions
-  transformValue?: ((value: string) => any) | TDefinedCoercionFunctions
-  className?: string
-  style?: React.CSSProperties
-}
-
-interface ValidatableFieldProps extends InputTagProps {
-  validation?: RegisterOptions
-  defaultValue?: string
-}
-
-const inputTagProps = <T extends InputTagProps>(
-  props: T
-): Omit<T, 'dataType' | 'transformValue' | 'errorClassName' | 'errorStyle'> => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { errors, setError } = useFormContext()
-
-  // Check for errors from server and set on field if present
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const fieldErrorsContext = useContext(FieldErrorContext)
-  const contextError = fieldErrorsContext[props.name]
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  React.useEffect(() => {
-    if (contextError) {
-      setError(props.name, { type: 'server', message: contextError })
-    }
-  }, [contextError, props.name, setError])
-
-  // any errors on this field
-  const validationError = props.name ? get(errors, props.name) : undefined
-
-  // get errorStyle/errorClassName and replace style/className if present
-  // Also remove dataType and transformValue from tagProps
+/**
+ * Renders a `<span>` with an error message if there's a validation error on the corresponding field.
+ * If no error message is provided, a default one is used based on the type of validation that caused the error.
+ *
+ * @example Displaying a validation error message with `<FieldError>`
+ *
+ * `<FieldError>` doesnt render (i.e. returns `null`) when there's no error on `<TextField>`.
+ *
+ * ```jsx
+ * <Label name="name" errorClassName="error">
+ *   Name
+ * </Label>
+ * <TextField
+ *   name="name"
+ *   validation={{ required: true }}
+ *   errorClassName="error"
+ * />
+ * <FieldError name="name" className="error" />
+ * ```
+ *
+ * @see {@link https://learn.redwoodjs.com/docs/tutorial/everyones-favorite-thing-to-build-forms#fielderror}
+ *
+ * @privateRemarks
+ *
+ * This is basically a helper for a common pattern you see in `react-hook-form`:
+ *
+ * ```jsx
+ * <form onSubmit={handleSubmit(onSubmit)}>
+ *   <input {...register("firstName", { required: true })} />
+ *   {errors.firstName?.type === 'required' && "First name is required"}
+ * ```
+ *
+ * @see {@link https://react-hook-form.com/get-started#Handleerrors}
+ */
+const FieldError = ({ name, ...rest }: FieldErrorProps) => {
   const {
-    errorClassName,
-    errorStyle,
-    dataType, // eslint-disable-line @typescript-eslint/no-unused-vars
-    transformValue, // eslint-disable-line @typescript-eslint/no-unused-vars
-    ...tagProps
-  } = props
-  if (validationError) {
-    if (errorClassName) {
-      tagProps.className = errorClassName
-    }
-    if (errorStyle) {
-      tagProps.style = errorStyle
-    }
-  }
+    formState: { errors },
+  } = useFormContext()
 
-  return tagProps
-}
+  const validationError = get(errors, name)
 
-// Context for keeping track of errors from the server
-interface FieldErrorContextProps {
-  [key: string]: string
-}
-const FieldErrorContext = React.createContext({} as FieldErrorContextProps)
-
-const coerceValues = (
-  data: Record<string, string>,
-  coerce: (name: string, value: string) => any
-) => {
-  const coercedData: Record<string, any> = {}
-
-  Object.keys(data).forEach((name) => {
-    coercedData[name] = coerce(name, data[name])
-  })
-
-  return coercedData
-}
-
-interface FormWithCoercionContext
-  extends Omit<React.HTMLProps<HTMLFormElement>, 'onSubmit'> {
-  error?: any
-  formMethods?: UseFormMethods
-  validation?: UseFormOptions
-  onSubmit?: (
-    values: Record<string, any>,
-    event?: React.BaseSyntheticEvent
-  ) => void
-}
-
-const FormWithCoercionContext: React.FC<FormWithCoercionContext> = (props) => {
-  // deconstruct some props we care about and keep the remaining `formProps` to
-  // pass to the <form> tag
-  const {
-    error: errorProps,
-    formMethods: propFormMethods,
-    onSubmit,
-    ...formProps
-  } = props
-  const useFormMethods = useForm(props.validation)
-  const formMethods = propFormMethods || useFormMethods
-  const { coerce } = useCoercion()
-
-  return (
-    <form
-      {...formProps}
-      onSubmit={formMethods.handleSubmit((data, event) =>
-        onSubmit?.(coerceValues(data, coerce), event)
-      )}
-    >
-      <FieldErrorContext.Provider
-        value={
-          errorProps?.graphQLErrors[0]?.extensions?.exception?.messages || {}
-        }
-      >
-        <FormProvider {...formMethods}>{props.children}</FormProvider>
-      </FieldErrorContext.Provider>
-    </form>
-  )
-}
-
-// Renders a containing <form> tag with required contexts
-
-const Form: React.FC<FormWithCoercionContext> = (props) => {
-  return (
-    <CoercionContextProvider>
-      <FormWithCoercionContext {...props} />
-    </CoercionContextProvider>
-  )
-}
-
-// Renders a <label> tag that can be styled differently if errors are present
-// on the related fields
-
-interface LabelProps {
-  name: string
-  errorClassName?: string
-  errorStyle?: React.CSSProperties
-}
-
-const Label: React.FC<
-  LabelProps & React.LabelHTMLAttributes<HTMLLabelElement>
-> = (props) => {
-  const tagProps = inputTagProps(props)
-
-  return (
-    <label htmlFor={props.name} {...tagProps}>
-      {props.children || props.name}
-    </label>
-  )
-}
-
-// Renders a <span> with a validation error message if there is an error on this
-// field
-
-interface FieldErrorProps extends React.HTMLProps<HTMLSpanElement> {
-  name: string
-}
-
-const FieldError = (props: FieldErrorProps) => {
-  const { errors } = useFormContext()
-  const validationError = get(errors, props.name)
   const errorMessage =
     validationError &&
     (validationError.message ||
-      `${props.name} ${
+      `${name} ${
         DEFAULT_MESSAGES[validationError.type as keyof typeof DEFAULT_MESSAGES]
       }`)
 
-  return validationError ? <span {...props}>{errorMessage}</span> : null
+  return validationError ? <span {...rest}>{errorMessage}</span> : null
 }
 
-const jsonValidation = (value: string) => {
-  try {
-    JSON.parse(value)
-  } catch (e) {
-    return e.message
-  }
-}
+interface TextAreaFieldProps
+  extends Omit<FieldProps<HTMLTextAreaElement>, 'type'>,
+    Omit<React.ComponentPropsWithRef<'textarea'>, 'name'> {}
 
-// Renders a <textarea> field
-
-const TextAreaField = forwardRef<
-  HTMLTextAreaElement,
-  ValidatableFieldProps & React.TextareaHTMLAttributes<HTMLTextAreaElement>
->((props, ref) => {
-  const { register } = useFormContext()
-  const { setCoercion } = useCoercion()
-
-  React.useEffect(() => {
-    if (
-      props.dataType !== undefined &&
-      (process.env.NODE_ENV === 'development' ||
-        process.env.NODE_ENV === 'test')
-    ) {
-      console.warn(
-        'Using the "dataType" prop on form input fields is deprecated. Use "transformValue" instead.'
-      )
-    }
-    setCoercion({
-      name: props.name,
-      transformValue: props.transformValue || props.dataType,
+/**
+ * Renders a `<textarea>` field.
+ */
+const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(
+  (
+    {
+      name,
+      id,
+      // for useErrorStyles
+      errorClassName,
+      errorStyle,
+      className,
+      style,
+      // for useRegister
+      validation,
+      onBlur,
+      onChange,
+      ...rest
+    },
+    ref
+  ) => {
+    const styles = useErrorStyles({
+      name,
+      errorClassName,
+      errorStyle,
+      className,
+      style,
     })
-  }, [setCoercion, props.name, props.transformValue, props.dataType])
 
-  const tagProps = inputTagProps(props)
-  // implements JSON validation if a transformValue of 'Json' is set
-  const validation = props.validation ? props.validation : { required: false }
-  if (!validation.validate && props.transformValue === 'Json') {
-    validation.validate = jsonValidation
+    const useRegisterReturn = useRegister(
+      {
+        name,
+        validation,
+        onBlur,
+        onChange,
+      },
+      ref
+    )
+
+    return (
+      <textarea id={id || name} {...rest} {...styles} {...useRegisterReturn} />
+    )
   }
+)
 
-  return (
-    <textarea
-      {...tagProps}
-      id={props.id || props.name}
-      ref={(element) => {
-        register(element, validation)
+interface SelectFieldProps
+  extends Omit<FieldProps<HTMLSelectElement>, 'type'>,
+    Omit<React.ComponentPropsWithRef<'select'>, 'name'> {}
 
-        if (typeof ref === 'function') {
-          ref(element)
-        } else if (ref) {
-          ref.current = element
-        }
-      }}
-    />
-  )
-})
-
-// Renders a <select> field
-
-const SelectField = forwardRef<
-  HTMLSelectElement,
-  ValidatableFieldProps & React.SelectHTMLAttributes<HTMLSelectElement>
->((props, ref) => {
-  const { register } = useFormContext()
-  const { setCoercion } = useCoercion()
-
-  React.useEffect(() => {
-    setCoercion({
-      name: props.name,
-      transformValue: props.transformValue,
+/**
+ * Renders a `<select>` field.
+ */
+const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
+  (
+    {
+      name,
+      id,
+      // for useErrorStyles
+      errorClassName,
+      errorStyle,
+      className,
+      style,
+      // for useRegister
+      validation,
+      onBlur,
+      onChange,
+      ...rest
+    },
+    ref
+  ) => {
+    const styles = useErrorStyles({
+      name,
+      errorClassName,
+      errorStyle,
+      className,
+      style,
     })
-  }, [setCoercion, props.name, props.transformValue])
 
-  const tagProps = inputTagProps(props)
+    const useRegisterReturn = useRegister(
+      {
+        name,
+        validation,
+        onBlur,
+        onChange,
+      },
+      ref
+    )
 
-  return (
-    <select
-      {...tagProps}
-      id={props.id || props.name}
-      ref={(element) => {
-        register(element, props.validation || { required: false })
-
-        if (typeof ref === 'function') {
-          ref(element)
-        } else if (ref) {
-          ref.current = element
-        }
-      }}
-    />
-  )
-})
-
-// Renders a <input type="checkbox"> field
+    return (
+      <select id={id || name} {...rest} {...styles} {...useRegisterReturn} />
+    )
+  }
+)
 
 interface CheckboxFieldProps
-  extends Omit<ValidatableFieldProps, 'defaultValue'> {
-  defaultChecked?: boolean
-}
+  extends Omit<FieldProps<HTMLInputElement>, 'type'>,
+    Omit<React.ComponentPropsWithRef<'input'>, 'name' | 'type'> {}
 
-export const CheckboxField = forwardRef<
-  HTMLInputElement,
-  CheckboxFieldProps & React.InputHTMLAttributes<HTMLInputElement>
->((props, ref) => {
-  const { register } = useFormContext()
-  const { setCoercion } = useCoercion()
-  const type = 'checkbox'
-
-  React.useEffect(() => {
-    if (
-      props.dataType !== undefined &&
-      (process.env.NODE_ENV === 'development' ||
-        process.env.NODE_ENV === 'test')
-    ) {
-      console.warn(
-        'Using the "dataType" prop on form input fields is deprecated. Use "transformValue" instead.'
-      )
-    }
-    setCoercion({
-      name: props.name,
-      type,
-      transformValue: props.transformValue || props.dataType,
+/**
+ * Renders an `<input type="checkbox">` field.
+ */
+export const CheckboxField = forwardRef<HTMLInputElement, CheckboxFieldProps>(
+  (
+    {
+      name,
+      id,
+      // for useErrorStyles
+      errorClassName,
+      errorStyle,
+      className,
+      style,
+      // for useRegister
+      validation,
+      onBlur,
+      onChange,
+      ...rest
+    },
+    ref
+  ) => {
+    const styles = useErrorStyles({
+      name,
+      errorClassName,
+      errorStyle,
+      className,
+      style,
     })
-  }, [setCoercion, props.name, type, props.transformValue, props.dataType])
 
-  const tagProps = inputTagProps(props)
+    const type = 'checkbox'
 
-  return (
-    <input
-      type="checkbox"
-      {...tagProps}
-      id={props.id || props.name}
-      ref={(element) => {
-        register(element, props.validation || { required: false })
+    const useRegisterReturn = useRegister(
+      {
+        name,
+        validation,
+        onBlur,
+        onChange,
+        type,
+      },
+      ref
+    )
 
-        if (typeof ref === 'function') {
-          ref(element)
-        } else if (ref) {
-          ref.current = element
-        }
-      }}
-    />
-  )
-})
+    return (
+      <input
+        id={id || name}
+        {...rest}
+        /** This order ensures type="checkbox" */
+        type={type}
+        {...styles}
+        {...useRegisterReturn}
+      />
+    )
+  }
+)
 
-// Renders a <button type="submit">
-
+/**
+ * Renders a `<button type="submit">` field.
+ *
+ * @example
+ * ```jsx{3}
+ * <Form onSubmit={onSubmit}>
+ *   // ...
+ *   <Submit>Save</Submit>
+ * </Form>
+ * ```
+ */
 const Submit = forwardRef<
   HTMLButtonElement,
-  React.ComponentPropsWithoutRef<'button'>
+  Omit<React.ComponentPropsWithRef<'button'>, 'type'>
 >((props, ref) => <button ref={ref} type="submit" {...props} />)
 
-// Renders a <input>
+/**
+ * All the types we'll be generating named `<InputFields>` for (which is basically all of them).
+ * Note that `'checkbox'` isn't here because we handle it separately above.
+ *
+ * @see {@link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#input_types}
+ */
+const INPUT_TYPES = [
+  'button',
+  'color',
+  'date',
+  'datetime-local',
+  'email',
+  'file',
+  'hidden',
+  'image',
+  'month',
+  'number',
+  'password',
+  'radio',
+  'range',
+  'reset',
+  'search',
+  'submit',
+  'tel',
+  'text',
+  'time',
+  'url',
+  'week',
+] as const
 
-interface InputFieldProps extends ValidatableFieldProps {
-  type?: INPUT_TYPES
+type InputType = typeof INPUT_TYPES[number]
+
+interface InputFieldProps
+  extends Omit<FieldProps<HTMLInputElement>, 'type'>,
+    Omit<React.ComponentPropsWithRef<'input'>, 'name' | 'type'> {
+  /**
+   * @privateRemarks
+   *
+   * With this typing, passing `'checkbox'` to `<InputField>`'s type is an error, which,
+   * at face value, feels like it shouldn't be.
+   *
+   * Even though we provide a separate `<CheckboxField>`, maybe we should reconsider the typing here?
+   */
+  type?: InputType
 }
 
-const InputField = forwardRef<
-  HTMLInputElement,
-  InputFieldProps & React.InputHTMLAttributes<HTMLInputElement>
->((props, ref) => {
-  const { register } = useFormContext()
-  const { setCoercion } = useCoercion()
-  React.useEffect(() => {
-    if (
-      props.dataType !== undefined &&
-      (process.env.NODE_ENV === 'development' ||
-        process.env.NODE_ENV === 'test')
-    ) {
-      console.warn(
-        'Using the "dataType" prop on form input fields is deprecated. Use "transformValue" instead.'
-      )
-    }
-    setCoercion({
-      name: props.name,
-      type: props.type,
-      transformValue: props.transformValue || props.dataType,
+/**
+ * Renders an `<input>` field.
+ *
+ * @see {@link https://redwoodjs.com/docs/form#inputfields}
+ */
+const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
+  (
+    {
+      name,
+      id,
+      // for useErrorStyles
+      errorClassName,
+      errorStyle,
+      className,
+      style,
+      // for useRegister
+      validation,
+      onBlur,
+      onChange,
+      type,
+      ...rest
+    },
+    ref
+  ) => {
+    const styles = useErrorStyles({
+      name,
+      errorClassName,
+      errorStyle,
+      className,
+      style,
     })
-  }, [
-    setCoercion,
-    props.name,
-    props.type,
-    props.transformValue,
-    props.dataType,
-  ])
 
-  const tagProps = inputTagProps(props)
+    const useRegisterReturn = useRegister(
+      {
+        name,
+        validation,
+        onBlur,
+        onChange,
+        type,
+      },
+      ref
+    )
 
-  return (
-    <input
-      {...tagProps}
-      id={props.id || props.name}
-      ref={(element) => {
-        register(element, props.validation || { required: false })
+    return (
+      <input
+        id={id || name}
+        {...rest}
+        type={type}
+        {...styles}
+        {...useRegisterReturn}
+      />
+    )
+  }
+)
 
-        if (typeof ref === 'function') {
-          ref(element)
-        } else if (ref) {
-          ref.current = element
-        }
-      }}
-    />
-  )
-})
-
-// Create a component for each type of Input.
-//
-// Uses a bit of Javascript metaprogramming to create the functions with a dynamic
-// name rather than having to write out each and every component definition. In
-// simple terms it creates an object with the key being the current value of `type`
-// and then immediately returns the value, which is the component function definition.
-//
-// In the end we end up with `inputComponents.TextField` and all the others. Export those
-// and we're good to go.
-
-const inputComponents: Record<
+/**
+ * `React.ForwardRefExoticComponent` is `forwardRef`'s return type.
+ * You can hover over `<InputField>` above to see the type inference at work.
+ */
+const InputComponents: Record<
   string,
-  React.ForwardRefExoticComponent<
-    InputFieldProps &
-      React.InputHTMLAttributes<HTMLInputElement> &
-      React.RefAttributes<HTMLInputElement>
-  >
+  React.ForwardRefExoticComponent<Omit<InputFieldProps, 'type'>>
 > = {}
-Object.values(INPUT_TYPES).forEach((type) => {
-  inputComponents[`${pascalcase(type)}Field`] = forwardRef<
+
+/**
+ * Create a component for each type in `INPUT_TYPES`.
+ *
+ * Rather than writing out each and every component definition,
+ * we use a bit of JS metaprogramming to create them all with the appropriate name.
+ *
+ * We end up with `InputComponents.TextField`, `InputComponents.TimeField`, etc.
+ * Export those and we're good to go!
+ */
+INPUT_TYPES.forEach((type) => {
+  InputComponents[`${pascalcase(type)}Field`] = forwardRef<
     HTMLInputElement,
-    InputFieldProps & React.InputHTMLAttributes<HTMLInputElement>
+    Omit<InputFieldProps, 'type'>
   >((props, ref) => <InputField ref={ref} type={type} {...props} />)
 })
-
-export {
-  Form,
-  FieldErrorContext,
-  FormError,
-  FieldError,
-  InputField,
-  Label,
-  TextAreaField,
-  SelectField,
-  Submit,
-}
 
 export const {
   ButtonField,
@@ -489,4 +787,18 @@ export const {
   TimeField,
   UrlField,
   WeekField,
-} = inputComponents
+} = InputComponents
+
+export {
+  Form,
+  ServerErrorsContext,
+  FormError,
+  FieldError,
+  InputField,
+  Label,
+  TextAreaField,
+  SelectField,
+  Submit,
+}
+
+export * from 'react-hook-form'

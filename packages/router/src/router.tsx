@@ -2,16 +2,9 @@
 
 import React from 'react'
 
-import {
-  parseSearch,
-  replaceParams,
-  matchPath,
-  PageLoader,
-  Redirect,
-  useLocation,
-  validatePath,
-  LocationProvider,
-} from './internal'
+import { Redirect } from './links'
+import { useLocation, LocationProvider } from './location'
+import { PageLoader } from './page-loader'
 import { ParamsProvider } from './params'
 import {
   RouterContextProvider,
@@ -19,7 +12,15 @@ import {
   useRouterState,
 } from './router-context'
 import { SplashPage } from './splash-page'
-import { flattenAll, isReactElement } from './util'
+import {
+  flattenAll,
+  isReactElement,
+  parseSearch,
+  replaceParams,
+  matchPath,
+  validatePath,
+  TrailingSlashesTypes,
+} from './util'
 
 import type { AvailableRoutes } from './index'
 
@@ -125,15 +126,18 @@ function isRoute(
   return isReactElement(node) && node.type === Route
 }
 
-interface RouterProps extends RouterContextProviderProps {}
+interface RouterProps extends RouterContextProviderProps {
+  trailingSlashes?: TrailingSlashesTypes
+}
 
 const Router: React.FC<RouterProps> = ({
   useAuth,
   paramTypes,
   pageLoadingDelay,
+  trailingSlashes = 'never',
   children,
 }) => (
-  <LocationProvider>
+  <LocationProvider trailingSlashes={trailingSlashes}>
     <LocationAwareRouter
       useAuth={useAuth}
       paramTypes={paramTypes}
@@ -152,14 +156,26 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
 }) => {
   const { pathname } = useLocation()
   const flatChildArray = flattenAll(children)
-  const shouldShowSplash =
+
+  const hasHomeRoute = flatChildArray.some((child) => {
+    if (isRoute(child)) {
+      return child.props.path === '/'
+    }
+
+    return false
+  })
+
+  // The user has not generated routes
+  // if the only route that exists is
+  // is the not found page
+  const hasGeneratedRoutes = !(
     flatChildArray.length === 1 &&
     isRoute(flatChildArray[0]) &&
     flatChildArray[0].props.notfound
+  )
 
-  if (shouldShowSplash) {
-    return <SplashPage />
-  }
+  const shouldShowSplash =
+    (!hasHomeRoute && pathname === '/') || !hasGeneratedRoutes
 
   flatChildArray.forEach((child) => {
     if (isRoute(child)) {
@@ -175,6 +191,15 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
       }
     }
   })
+
+  if (shouldShowSplash) {
+    return (
+      <SplashPage
+        hasGeneratedRoutes={hasGeneratedRoutes}
+        routes={flatChildArray}
+      />
+    )
+  }
 
   let activeRoute = undefined
   let NotFoundPage: PageType | undefined = undefined
@@ -230,14 +255,13 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
  */
 function activeRouteTree(
   children: React.ReactNode,
-  isActive: (child: React.ReactElement<InternalRouteProps>) => boolean,
-  foundActive = false
+  isActive: (child: React.ReactElement<InternalRouteProps>) => boolean
 ) {
   let active = false
 
   return React.Children.toArray(children).reduce<React.ReactNode[]>(
     (acc, child) => {
-      if (active || foundActive) {
+      if (active) {
         return acc
       }
 
@@ -254,16 +278,13 @@ function activeRouteTree(
       } else if (isReactElement(child) && child.props.children) {
         // We have a child element that's not a <Route ...>, and that has
         // children. It's probably a <Set>. Recurse down one level
-        const nestedChildren = activeRouteTree(
-          child.props.children,
-          isActive,
-          foundActive
-        )
+        const nestedChildren = activeRouteTree(child.props.children, isActive)
 
         if (nestedChildren.length > 0) {
           // We found something we wanted to keep. So let's push it to our
           // "active route tree"
           acc.push(React.cloneElement(child, child.props, nestedChildren))
+          active = true
         }
       }
 

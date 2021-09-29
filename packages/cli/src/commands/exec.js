@@ -1,13 +1,14 @@
 import path from 'path'
 
-import babelRequireHook from '@babel/register'
 import Listr from 'listr'
 import VerboseRenderer from 'listr-verbose-renderer'
 import terminalLink from 'terminal-link'
 
-import { getPaths } from 'src/lib'
-import c from 'src/lib/colors'
-import { generatePrismaClient } from 'src/lib/generatePrismaClient'
+import { findScripts, registerApiSideBabelHook } from '@redwoodjs/internal'
+
+import { getPaths } from '../lib'
+import c from '../lib/colors'
+import { generatePrismaClient } from '../lib/generatePrismaClient'
 
 const runScript = async (scriptPath, scriptArgs) => {
   const script = await import(scriptPath)
@@ -31,6 +32,11 @@ export const builder = (yargs) => {
       description: 'The file name (extension is optional) of the script to run',
       type: 'string',
     })
+    .option('prisma', {
+      type: 'boolean',
+      default: true,
+      description: 'Generate the Prisma client',
+    })
     .strict(false)
     .epilogue(
       `Also see the ${terminalLink(
@@ -41,37 +47,75 @@ export const builder = (yargs) => {
 }
 
 export const handler = async (args) => {
-  const { name, ...scriptArgs } = args
+  const { name, prisma, ...scriptArgs } = args
   const scriptPath = path.join(getPaths().scripts, name)
 
   // Import babel config for running script
-  babelRequireHook({
-    extends: path.join(getPaths().api.base, '.babelrc.js'),
-    extensions: ['.js', '.ts'],
+  registerApiSideBabelHook({
     plugins: [
       [
         'babel-plugin-module-resolver',
         {
           alias: {
             $api: getPaths().api.base,
+            $web: getPaths().web.base,
           },
         },
+        'exec-$side-module-resolver',
       ],
     ],
-    ignore: ['node_modules'],
-    cache: false,
+    overrides: [
+      {
+        test: ['./api/'],
+        plugins: [
+          [
+            'babel-plugin-module-resolver',
+            {
+              alias: {
+                src: getPaths().api.src,
+              },
+            },
+            'exec-api-src-module-resolver',
+          ],
+        ],
+      },
+      {
+        test: ['./web/'],
+        plugins: [
+          [
+            'babel-plugin-module-resolver',
+            {
+              alias: {
+                src: getPaths().web.src,
+              },
+            },
+            'exec-web-src-module-resolver',
+          ],
+        ],
+      },
+    ],
   })
 
   try {
     require.resolve(scriptPath)
   } catch {
-    console.error(c.error(`\nNo script module exists with that name.\n`))
+    console.error(
+      c.error(`\nNo script called ${c.underline(name)} in ./scripts folder.\n`)
+    )
+
+    console.log('Available scripts:')
+    findScripts().forEach((scriptPath) => {
+      const { name } = path.parse(scriptPath)
+      console.log(c.info(`- ${name}`))
+    })
+    console.log()
     process.exit(1)
   }
 
   const scriptTasks = [
     {
       title: 'Generating Prisma client',
+      enabled: () => prisma,
       task: () => generatePrismaClient({ force: false }),
     },
     {

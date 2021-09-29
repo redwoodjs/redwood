@@ -1,6 +1,6 @@
 global.__dirname = __dirname
 // Load shared mocks
-import 'src/lib/test'
+import '../../../../lib/test'
 
 import path from 'path'
 
@@ -32,6 +32,13 @@ test('creates a TypeScript function to execute', () => {
     '/path/to/project/scripts/typescriptyTypescript.ts'
   )
 
-  expect(Object.keys(output)).toContainEqual(expectedOutputPath)
+  const tsconfigPath = path.normalize('/path/to/project/scripts/tsconfig.json')
+
+  const outputFilePaths = Object.keys(output)
+
+  expect(outputFilePaths).toContainEqual(expectedOutputPath)
   expect(output[expectedOutputPath]).toMatchSnapshot()
+
+  // Should generate tsconfig, because its not present
+  expect(outputFilePaths).toContainEqual(tsconfigPath)
 })

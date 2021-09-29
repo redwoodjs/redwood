@@ -25,7 +25,7 @@ const UPDATE_${singularConstantName}_MUTATION = gql`
 export const Loading = () => <div>Loading...</div>
 
 export const Failure = ({ error }: CellFailureProps) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div className="rw-cell-error">{error.message}</div>
 )
 
 export const Success = ({ ${singularCamelName} }: CellSuccessProps<Edit${singularPascalName}ById>) => {
@@ -33,6 +33,9 @@ export const Success = ({ ${singularCamelName} }: CellSuccessProps<Edit${singula
     onCompleted: () => {
       toast.success('${singularPascalName} updated')
       navigate(routes.${pluralRouteName}())
+    },
+    onError: (error) => {
+      toast.error(error.message)
     },
   })
 

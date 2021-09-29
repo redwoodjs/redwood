@@ -2,10 +2,9 @@ global.__dirname = __dirname
 import path from 'path'
 
 // Load mocks
-import 'src/lib/test'
+import '../../../../lib/test'
 
-import { getDefaultArgs } from 'src/lib'
-
+import { getDefaultArgs } from '../../../../lib'
 import * as service from '../service'
 
 const extensionForBaseArgs = (baseArgs) =>
@@ -68,6 +67,7 @@ const itCreatesASingleWordServiceScenarioFile = (baseArgs) => {
     )
 
     expect(Object.keys(files)).toContain(filePath)
+    expect(files[filePath]).toMatchSnapshot()
   })
 }
 

@@ -3,7 +3,28 @@
 import fs from 'fs'
 import path from 'path'
 
-import { runCommandTask, getPaths } from 'src/lib'
+import { runCommandTask, getPaths } from '../lib'
+
+const skipTask = (schema = getPaths().api.dbSchema) => {
+  if (!fs.existsSync(schema)) {
+    console.log(
+      `Skipping database and Prisma client generation, no \`schema.prisma\` file found: \`${schema}\``
+    )
+    return true
+  }
+  return false
+}
+
+export const generatePrismaCommand = (schema) => {
+  if (skipTask(schema)) {
+    return {}
+  }
+
+  return {
+    cmd: 'yarn prisma',
+    args: ['generate', schema && `--schema="${schema}"`],
+  }
+}
 
 /**
  * Conditionally generate the prisma client, skip if it already exists.
@@ -13,10 +34,7 @@ export const generatePrismaClient = async ({
   force = true,
   schema = getPaths().api.dbSchema,
 }) => {
-  if (!fs.existsSync(schema)) {
-    console.log(
-      `Skipping database and Prisma client generation, no \`schema.prisma\` file found: \`${schema}\``
-    )
+  if (skipTask(schema)) {
     return
   }
 
@@ -41,8 +59,7 @@ export const generatePrismaClient = async ({
     [
       {
         title: 'Generating the Prisma client...',
-        cmd: 'yarn prisma',
-        args: ['generate', schema && `--schema="${schema}"`],
+        ...generatePrismaCommand(schema),
       },
     ],
     {

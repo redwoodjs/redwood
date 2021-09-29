@@ -177,7 +177,7 @@ const PostForm = (props) => {
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
           validation={{ required: true }}
-          dataType=\\"Float\\"
+          transformValue=\\"Float\\"
         />
 
         <FieldError name=\\"rating\\" className=\\"rw-field-error\\" />
@@ -212,7 +212,7 @@ const PostForm = (props) => {
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
           validation={{ required: true }}
-          dataType=\\"Json\\"
+          transformValue=\\"Json\\"
         />
 
         <FieldError name=\\"metadata\\" className=\\"rw-field-error\\" />
@@ -293,6 +293,9 @@ const NewUserProfile = () => {
         toast.success('UserProfile created')
         navigate(routes.userProfiles())
       },
+      onError: (error) => {
+        toast.error(error.message)
+      },
     }
   )
 
@@ -354,7 +357,7 @@ export const Loading = () => <div>Loading...</div>
 export const Empty = () => <div>Post not found</div>
 
 export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div className=\\"rw-cell-error\\">{error.message}</div>
 )
 
 export const Success = ({ post }) => {
@@ -401,6 +404,9 @@ const Post = ({ post }) => {
     onCompleted: () => {
       toast.success('Post deleted')
       navigate(routes.posts())
+    },
+    onError: (error) => {
+      toast.error(error.message)
     },
   })
 
@@ -604,11 +610,16 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   color: #1a202c;
   text-decoration: underline;
 }
+.rw-cell-error {
+  font-size: 90%;
+  font-weight: 600;
+}
 .rw-form-wrapper {
   box-sizing: border-box;
   font-size: 0.875rem;
   margin-top: -1rem;
 }
+.rw-cell-error,
 .rw-form-error-wrapper {
   padding: 1rem;
   background-color: #fff5f5;
@@ -864,7 +875,7 @@ const UPDATE_USER_PROFILE_MUTATION = gql\`
 export const Loading = () => <div>Loading...</div>
 
 export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div className=\\"rw-cell-error\\">{error.message}</div>
 )
 
 export const Success = ({ userProfile }) => {
@@ -874,6 +885,9 @@ export const Success = ({ userProfile }) => {
       onCompleted: () => {
         toast.success('UserProfile updated')
         navigate(routes.userProfiles())
+      },
+      onError: (error) => {
+        toast.error(error.message)
       },
     }
   )
@@ -941,7 +955,7 @@ export const Empty = () => {
 }
 
 export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div className=\\"rw-cell-error\\">{error.message}</div>
 )
 
 export const Success = ({ posts }) => {
@@ -995,6 +1009,9 @@ const PostsList = ({ posts }) => {
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
     onCompleted: () => {
       toast.success('Post deleted')
+    },
+    onError: (error) => {
+      toast.error(error.message)
     },
     // This refetches the query on the list page. Read more about other ways to
     // update the cache over here:
@@ -1084,7 +1101,7 @@ exports[`in typescript mode creates a edit page 1`] = `
 "import EditPostCell from 'src/components/EditPostCell'
 
 type PostPageProps = {
-  id: Int
+  id: number
 }
 
 const EditPostPage = ({ id }: PostPageProps) => {
@@ -1254,7 +1271,7 @@ const PostForm = (props) => {
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
           validation={{ required: true }}
-          dataType=\\"Float\\"
+          transformValue=\\"Float\\"
         />
         <FieldError name=\\"rating\\" className=\\"rw-field-error\\" />
 
@@ -1287,7 +1304,7 @@ const PostForm = (props) => {
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
           validation={{ required: true }}
-          dataType=\\"Json\\"
+          transformValue=\\"Json\\"
         />
         <FieldError name=\\"metadata\\" className=\\"rw-field-error\\" />
 
@@ -1378,6 +1395,9 @@ const NewUserProfile = () => {
       toast.success('UserProfile created')
       navigate(routes.userProfiles())
     },
+    onError: (error) => {
+      toast.error(error.message)
+    },
   })
 
   const onSave = (input) => {
@@ -1441,7 +1461,7 @@ export const Loading = () => <div>Loading...</div>
 export const Empty = () => <div>Post not found</div>
 
 export const Failure = ({ error }: CellFailureProps) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div className=\\"rw-cell-error\\">{error.message}</div>
 )
 
 export const Success = ({ post }: CellSuccessProps<FindPostById>) => {
@@ -1488,6 +1508,9 @@ const Post = ({ post }) => {
     onCompleted: () => {
       toast.success('Post deleted')
       navigate(routes.posts())
+    },
+    onError: (error) => {
+      toast.error(error.message)
     },
   })
 
@@ -1683,11 +1706,16 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   color: #1a202c;
   text-decoration: underline;
 }
+.rw-cell-error {
+  font-size: 90%;
+  font-weight: 600;
+}
 .rw-form-wrapper {
   box-sizing: border-box;
   font-size: 0.875rem;
   margin-top: -1rem;
 }
+.rw-cell-error,
 .rw-form-error-wrapper {
   padding: 1rem;
   background-color: #fff5f5;
@@ -1957,7 +1985,7 @@ const UPDATE_POST_MUTATION = gql\`
 export const Loading = () => <div>Loading...</div>
 
 export const Failure = ({ error }: CellFailureProps) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div className=\\"rw-cell-error\\">{error.message}</div>
 )
 
 export const Success = ({ post }: CellSuccessProps<EditPostById>) => {
@@ -1965,6 +1993,9 @@ export const Success = ({ post }: CellSuccessProps<EditPostById>) => {
     onCompleted: () => {
       toast.success('Post updated')
       navigate(routes.posts())
+    },
+    onError: (error) => {
+      toast.error(error.message)
     },
   })
 
@@ -2018,7 +2049,7 @@ const UPDATE_USER_PROFILE_MUTATION = gql\`
 export const Loading = () => <div>Loading...</div>
 
 export const Failure = ({ error }: CellFailureProps) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div className=\\"rw-cell-error\\">{error.message}</div>
 )
 
 export const Success = ({ userProfile }: CellSuccessProps<EditUserProfileById>) => {
@@ -2026,6 +2057,9 @@ export const Success = ({ userProfile }: CellSuccessProps<EditUserProfileById>) 
     onCompleted: () => {
       toast.success('UserProfile updated')
       navigate(routes.userProfiles())
+    },
+    onError: (error) => {
+      toast.error(error.message)
     },
   })
 
@@ -2091,7 +2125,7 @@ export const Empty = () => {
 }
 
 export const Failure = ({ error }: CellFailureProps) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div className=\\"rw-cell-error\\">{error.message}</div>
 )
 
 export const Success = ({ posts }: CellSuccessProps<FindPosts>) => {
@@ -2145,6 +2179,9 @@ const PostsList = ({ posts }) => {
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
     onCompleted: () => {
       toast.success('Post deleted')
+    },
+    onError: (error) => {
+      toast.error(error.message)
     },
     // This refetches the query on the list page. Read more about other ways to
     // update the cache over here:

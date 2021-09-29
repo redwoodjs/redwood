@@ -17,19 +17,17 @@ and feature upgrades over time and with minimum effort.
 
 Redwood is the latest open source project initiated by Tom Preston-Werner, cofounder of GitHub (most popular code host on the planet), creator of Jekyll (one of the first and most popular static site generators), creator of Gravatar (the most popular avatar service on the planet), author of the Semantic Versioning specification (powers the Node packaging ecosystem), and inventor of TOML (an obvious, minimal configuration language used by many projects).
 
-> **WARNING:** RedwoodJS software has not reached a stable version 1.0 and should
-> not be considered suitable for production use. In the "make it work; make it
-> right; make it fast" paradigm, Redwood is in the later stages of the "make it
-> work" phase. That said, your input can have a huge impact during this period,
-> and we welcome your feedback and ideas! Check out the [Redwood Community
-> Forum](https://community.redwoodjs.com/) to join in.  
+> **NOTICE:** RedwoodJS is very close to a stable version 1.0. In the last two years,
+> the project has matured significantly and is already used in production by a number
+> of startups. We intend to have a 1.0 release candidate before the end of 2021 and
+> to release a truly production-ready 1.0 in early 2022.
 
 > **TUTORIAL:** The best way to get to know Redwood is by going through the extensive
 > [Redwood Tutorial](https://redwoodjs.com/tutorial). Have fun!
 
 > **QUICK START:** You can install and run a full-stack Redwood application on your
 > machine with only a couple commands. Check out the [Quick Start](https://redwoodjs.com/docs/quick-start)
-> guide to get started.  
+> guide to get started.
 
 **EXAMPLES:** If you'd like to see some examples of what a Redwood application looks
 like, take a look at the following projects:
@@ -49,7 +47,7 @@ Here's a quick taste of the technologies a standard Redwood application will
 use:
 
 - [React](https://reactjs.org/)
-- [GraphQL](https://graphql.org/) ([Apollo](https://github.com/apollographql))
+- [GraphQL](https://graphql.org/) ([GraphQL Helix](https://github.com/contrawork/graphql-helix) + [Envelop](https://www.envelop.dev) + [Apollo Client](https://www.apollographql.com/docs/react))
 - [Prisma](https://www.prisma.io/)
 - [Jest](https://jestjs.io/)
 - [Storybook](https://storybook.js.org/)
@@ -69,6 +67,8 @@ use:
 - Forms with easy client- and/or server-side validation and error handling.
 - [Hot module replacement](https://webpack.js.org/concepts/hot-module-replacement/) (HMR) for faster development.
 - Database migrations (via Prisma 2).
+- [Envelop Plugins](https://www.envelop.dev) that enhance the GraphQL lifecycle from context to execution
+- Simple but powerful GraphQL Directives to validate access or transform resolved data
 - Logging using [Pino](https://getpino.io) including to [transports](https://getpino.io/#/docs/transports)
 - Signature verification and payload signing for handling incoming and outgoing Webhooks
 - Page prerendering
@@ -76,7 +76,7 @@ use:
 
 ## Roadmap
 
-We intend to ship v1 in the first quarter of 2021.
+We intend to have a 1.0 release candidate before the end of 2021 and to release a truly production-ready 1.0 in early 2022.
 To see all the features we plan on including in Redwood's first major release, you can check out our [Roadmap](https://redwoodjs.com/roadmap).
 
 A framework like Redwood has a lot of moving parts; the Roadmap is a great way to get a high-level overview of where the framework is relative to where we want it to be. And since we link to all of our GitHub project boards, it's also a great way to get involved!

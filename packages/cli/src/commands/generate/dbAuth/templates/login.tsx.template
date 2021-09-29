@@ -21,15 +21,18 @@ const LoginPage = () => {
     }
   }, [isAuthenticated])
 
-  const usernameRef = useRef()
+  const usernameRef = useRef<HTMLInputElement>()
   useEffect(() => {
     usernameRef.current.focus()
   }, [])
 
   const onSubmit = async (data) => {
     const response = await logIn({ ...data })
+
     if (response.message) {
-      toast.error(response.message)
+      toast(response.message)
+    } else if (response.error) {
+      toast.error(response.error)
     } else {
       toast.success('Welcome back!')
     }

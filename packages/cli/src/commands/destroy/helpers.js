@@ -1,8 +1,7 @@
 import Listr from 'listr'
 
-import { deleteFilesTask } from 'src/lib'
-import c from 'src/lib/colors'
-
+import { deleteFilesTask } from '../../lib'
+import c from '../../lib/colors'
 import { ensureUniquePlural } from '../generate/helpers'
 
 const tasks = ({ componentName, filesFn, name }) =>

@@ -24,7 +24,7 @@ export class RWTOML extends FileNode {
   *diagnostics() {
     try {
       this.parsedTOML
-    } catch (e) {
+    } catch (e: any) {
       const pos = { line: e.line - 1, character: e.column - 1 }
       const range = Range.create(pos, pos)
       // Forward the TOML parse error with correct location information

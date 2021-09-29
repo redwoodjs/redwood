@@ -1,11 +1,10 @@
 import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 
-import { generate } from '@redwoodjs/internal'
+import { generate as generateTypes } from '@redwoodjs/internal'
 
-import { transformTSToJS } from 'src/lib'
-import { getSchema } from 'src/lib'
-
+import { transformTSToJS } from '../../../lib'
+import { getSchema } from '../../../lib'
 import { yargsDefaults } from '../../generate'
 import {
   templateForComponentFile,
@@ -175,9 +174,7 @@ export const { command, description, builder, handler } =
       return [
         {
           title: `Generating types ...`,
-          task: async () => {
-            return generate()
-          },
+          task: () => generateTypes,
         },
       ]
     },

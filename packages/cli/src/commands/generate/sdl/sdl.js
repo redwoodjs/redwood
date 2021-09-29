@@ -8,7 +8,7 @@ import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
 import terminalLink from 'terminal-link'
 
-import { getConfig } from '@redwoodjs/internal'
+import { getConfig, generate as generateTypes } from '@redwoodjs/internal'
 
 import {
   generateTemplate,
@@ -17,11 +17,14 @@ import {
   getPaths,
   writeFilesTask,
   getEnum,
-} from 'src/lib'
-import c from 'src/lib/colors'
-
+} from '../../../lib'
+import c from '../../../lib/colors'
 import { yargsDefaults } from '../../generate'
-import { ensureUniquePlural, relationsForModel } from '../helpers'
+import {
+  customOrDefaultTemplatePath,
+  ensureUniquePlural,
+  relationsForModel,
+} from '../helpers'
 import { files as serviceFiles } from '../service/service'
 
 const IGNORE_FIELDS_FOR_INPUT = ['id', 'createdAt', 'updatedAt']
@@ -150,7 +153,11 @@ export const files = async ({ name, crud, tests, typescript }) => {
     await sdlFromSchemaModel(pascalcase(pluralize.singular(name)), crud)
 
   let template = generateTemplate(
-    path.join('sdl', 'templates', `sdl.ts.template`),
+    customOrDefaultTemplatePath({
+      side: 'api',
+      generator: 'sdl',
+      templatePath: 'sdl.ts.template',
+    }),
     {
       name,
       crud,
@@ -225,6 +232,10 @@ export const handler = async ({ model, crud, force, tests, typescript }) => {
           const f = await files({ name: model, tests, crud, typescript })
           return writeFilesTask(f, { overwriteExisting: force })
         },
+      },
+      {
+        title: `Generating types ...`,
+        task: () => generateTypes,
       },
     ].filter(Boolean),
     { collapse: false, exitOnError: true }

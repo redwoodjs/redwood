@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/structure",
   "description": "noun: the arrangement of and relations between the parts or elements of something complex",
-  "version": "0.35.2",
+  "version": "0.36.4",
   "license": "MIT",
   "main": "dist/index.js",
   "files": [
@@ -9,15 +9,15 @@
   ],
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@prisma/sdk": "2.27.0",
-    "@redwoodjs/internal": "0.35.2",
+    "@prisma/sdk": "2.30.3",
+    "@redwoodjs/internal": "0.36.4",
     "@types/line-column": "1.0.0",
-    "camelcase": "6.0.0",
+    "camelcase": "6.2.0",
     "deepmerge": "4.2.2",
     "dotenv-defaults": "2.0.2",
     "enquirer": "2.3.6",
     "findup-sync": "4.0.0",
-    "graphql": "15.5.1",
+    "graphql": "15.5.3",
     "lazy-get-decorator": "2.2.0",
     "line-column": "1.0.2",
     "lodash": "4.17.21",
@@ -25,7 +25,7 @@
     "lru-cache": "6.0.0",
     "proxyquire": "2.1.3",
     "toml": "3.0.0",
-    "ts-morph": "11.0.0",
+    "ts-morph": "12.0.0",
     "vscode-languageserver": "6.1.1",
     "vscode-languageserver-textdocument": "1.0.1",
     "vscode-languageserver-types": "3.15.1",
@@ -33,10 +33,10 @@
   },
   "devDependencies": {
     "@types/fs-extra": "9.0.12",
-    "@types/lodash": "4.14.171",
+    "@types/lodash": "4.14.173",
     "@types/lru-cache": "5.1.1",
-    "@types/node": "16.0.0",
-    "@types/vscode": "1.57.1"
+    "@types/node": "16.9.2",
+    "@types/vscode": "1.60.0"
   },
   "jest": {
     "testPathIgnorePatterns": [
@@ -48,14 +48,14 @@
     "build": "yarn build:js && yarn build:types",
     "prepublishOnly": "yarn cross-env NODE_ENV=production yarn build",
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
-    "build:types": "ttsc --build --verbose",
+    "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "test": "jest",
     "test:watch": "yarn test --watch",
     "prettier": "prettier --write './src/**/*.{ts,tsx}'"
   },
   "resolutions": {
-    "typescript": "4.3.5"
+    "typescript": "4.4.3"
   },
   "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"
 }

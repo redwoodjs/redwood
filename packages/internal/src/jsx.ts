@@ -2,7 +2,6 @@
 import type { types } from '@babel/core'
 import traverse from '@babel/traverse'
 
-import { parse } from './ast'
 import { getJsxAttributeValue } from './jsxAttributeValue'
 
 interface JsxElement {
@@ -13,15 +12,15 @@ interface JsxElement {
 /**
  * Extract JSX elements, children and props from static code.
  */
-export const getJsxElements = (code: string, name: string) => {
+export const getJsxElements = (ast: types.Node, name: string) => {
   let elements: JsxElement[] = []
-  traverse(parse(code) as types.Node, {
+  traverse(ast, {
     JSXIdentifier(path) {
       if (
         path.node.name === name &&
         path.parentPath.type === 'JSXOpeningElement'
       ) {
-        if (path.parentPath.parentPath.type === 'JSXElement') {
+        if (path?.parentPath?.parentPath?.type === 'JSXElement') {
           const element = reduceJsxElement([], path.parentPath.parentPath.node)
           elements = elements.concat(element)
         }

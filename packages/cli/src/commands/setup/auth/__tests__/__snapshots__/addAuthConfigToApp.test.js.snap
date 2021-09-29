@@ -32,7 +32,7 @@ const auth0 = new Auth0Client({
 
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider>
+    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
       <AuthProvider client={auth0} type=\\"auth0\\">
         <RedwoodApolloProvider>
           <Routes />
@@ -48,8 +48,8 @@ export default App
 
 exports[`Should add config lines to App.{js,tsx} Matches Firebase Snapshot 1`] = `
 "import { AuthProvider } from '@redwoodjs/auth'
-import firebase from 'firebase/app'
-import 'firebase/auth'
+import { initializeApp, getApp, getApps } from 'firebase/app'
+import * as firebaseAuth from '@firebase/auth'
 import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
@@ -58,25 +58,34 @@ import Routes from 'src/Routes'
 
 import './index.css'
 
-const firebaseClientConfig = {
+const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
   authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+
+  /** Optional config, may be needed, depending on how you use firebase
   projectId: process.env.FIREBASE_PROJECT_ID,
   storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.FIREBASE_APP_ID,
+  **/
 }
 
-const firebaseClient = ((config) => {
-  if (!firebase.apps.length) {
-    firebase.initializeApp(config)
+const firebaseApp = ((config) => {
+  const apps = getApps()
+  if (!apps.length) {
+    initializeApp(config)
   }
-  return firebase
-})(firebaseClientConfig)
+  return getApp()
+})(firebaseConfig)
+
+export const firebaseClient = {
+  firebaseAuth,
+  firebaseApp, // optional
+}
 
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider>
+    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
       <AuthProvider client={firebaseClient} type=\\"firebase\\">
         <RedwoodApolloProvider>
           <Routes />
@@ -112,7 +121,7 @@ const azureActiveDirectoryClient = new UserAgentApplication({
 
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider>
+    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
       <AuthProvider client={azureActiveDirectoryClient} type=\\"azureActiveDirectory\\">
         <RedwoodApolloProvider>
           <Routes />
@@ -176,7 +185,7 @@ let ethereum
 
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider>
+    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
       <FetchConfigProvider>
       <ApolloInjector>
       <AuthProvider client={ethereum} type=\\"ethereum\\">
@@ -212,7 +221,7 @@ const goTrueClient = new GoTrue({
 
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider>
+    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
       <AuthProvider client={goTrueClient} type=\\"goTrue\\">
         <RedwoodApolloProvider>
           <Routes />
@@ -241,7 +250,7 @@ const m = new Magic(process.env.MAGICLINK_PUBLIC)
 
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider>
+    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
       <AuthProvider client={m} type=\\"magicLink\\">
         <RedwoodApolloProvider>
           <Routes />
@@ -271,7 +280,7 @@ isBrowser && netlifyIdentity.init()
 
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider>
+    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
       <AuthProvider client={netlifyIdentity} type=\\"netlify\\">
         <RedwoodApolloProvider>
           <Routes />
@@ -304,7 +313,7 @@ const nhostClient = createClient({
 
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider>
+    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
       <AuthProvider client={nhostClient} type=\\"nhost\\">
         <RedwoodApolloProvider>
           <Routes />
@@ -336,7 +345,7 @@ const supabaseClient = createClient(
 
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider>
+    <RedwoodProvider titleTemplate=\\"%PageTitle | %AppTitle\\">
       <AuthProvider client={supabaseClient} type=\\"supabase\\">
         <RedwoodApolloProvider>
           <Routes />

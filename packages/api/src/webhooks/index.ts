@@ -6,13 +6,14 @@ import {
   WebhookVerificationError,
   DEFAULT_WEBHOOK_SECRET,
   SupportedVerifierTypes,
-} from 'src/auth/verifiers'
+} from '../auth/verifiers'
 
 export {
   VerifyOptions,
   WebhookVerificationError,
   DEFAULT_WEBHOOK_SECRET,
-} from 'src/auth/verifiers'
+  SupportedVerifierTypes,
+} from '../auth/verifiers'
 
 export const DEFAULT_WEBHOOK_SIGNATURE_HEADER = 'RW-WEBHOOK-SIGNATURE'
 
