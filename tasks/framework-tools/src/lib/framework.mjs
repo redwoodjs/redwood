@@ -25,7 +25,11 @@ export function frameworkPkgJsonFiles() {
   return fg.sync('**/package.json', {
     cwd: REDWOOD_PACKAGES_PATH,
     deep: 2, // Only the top-level-packages.
-    ignore: ['**/node_modules/**', '**/create-redwood-app/**'],
+    ignore: [
+      '**/node_modules/**',
+      '**/create-redwood-app/**',
+      '**/codemods/**',
+    ],
     absolute: true,
   })
 }
