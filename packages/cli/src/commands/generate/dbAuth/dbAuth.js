@@ -165,16 +165,6 @@ const tasks = ({
   skipReset,
   skipSignup,
 }) => {
-  console.info({
-    force,
-    tests,
-    typescript,
-    skipForgot,
-    skipLogin,
-    skipReset,
-    skipSignup,
-  })
-
   return new Listr(
     [
       {
