@@ -69,7 +69,7 @@ export const runTransform = ({
         ...cmdArgs,
         '--parser',
         parser,
-        `${process.env.NODE_ENV !== 'test' && '--no-babel'}`,
+        process.env.NODE_ENV === 'test' ? '--babel' : '--no-babel',
         '--ignore-pattern=**/node_modules/**',
         '-t',
         transformPath,
