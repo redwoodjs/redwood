@@ -199,8 +199,6 @@ export const defaultPrettyPrintOptions: P.PrettyOptions = {
  * @see {@link https://github.com/pinojs/pino-pretty}
  */
 export const defaultLoggerOptions: P.LoggerOptions = {
-  prettyPrint: isPretty && defaultPrettyPrintOptions,
-  prettifier: isPretty && prettifier,
   level: logLevel,
   redact: redactionsList,
 }
@@ -249,11 +247,14 @@ export const createLogger = ({
   options,
   showConfig = false,
 }: RedwoodLoggerOptions): P.BaseLogger => {
-  // TODO:
-  // Add PrettyPrintOptions
-  // Check if isFile
-  // Keep config levels and redactions
-  // Find a better default end that pretty
+  options = {
+    ...defaultLoggerOptions,
+    ...options,
+  }
+  const targetIsPretty = targets?.some(
+    (target) => target.target === 'pino-pretty'
+  )
+  const targetIsFile = targets?.some((target) => target.target === 'pino/file')
 
   if (showConfig) {
     console.log('Logger Configuration')
@@ -261,35 +262,60 @@ export const createLogger = ({
     console.log(`isDevelopment: ${isDevelopment}`)
     console.log(`isTest: ${isTest}`)
     console.log(`isPretty: ${isPretty}`)
+    console.log(`targetIsPretty: ${targetIsPretty}`)
+    console.log(`targetIsFile: ${targetIsFile}`)
     console.log(`logLevel: ${logLevel}`)
     console.log(`options: ${JSON.stringify(options, null, 2)}`)
-    console.log(`targets: ${targets}`)
   }
-  if (isPretty) {
-    const transport = pino.transport({
-      target: 'pino-pretty',
-      options: { destination: 1 },
-    })
-    pino(transport)
-  } else {
-    if (targets) {
-      if (isDevelopment && !isTest) {
+
+  if (targets) {
+    // override, but retain default pretty print options
+    if (isPretty && targetIsPretty) {
+      //TODO
+    }
+
+    if (targetIsFile) {
+      if (isProduction) {
         console.warn(
-          'Logs will be sent to the transport stream in the current development environment.'
+          'Please make certain that file system access is available when logging to a file in a production environment.'
         )
       }
 
       const transport = pino.transport({
         targets,
       })
-      return pino(transport)
+      return pino(options, transport)
+    } else {
+      if (
+        targets &&
+        isDevelopment &&
+        !isTest &&
+        !targetIsPretty &&
+        !targetIsFile
+      ) {
+        console.warn(
+          'Logs will be sent to the transport stream in the current development environment.'
+        )
+        const transport = pino.transport({
+          // Add Pino pretty-printing to the transport stream
+          targets,
+        })
+        return pino(options, transport)
+      }
+
+      if (targets && targetIsPretty && isProduction) {
+        console.warn(
+          'Logs sent to the transport stream are being prettified. This format may be incompatible.'
+        )
+      }
+
+      const transport = pino.transport({
+        targets,
+      })
+      return pino(options, transport)
     }
   }
-  const transport = pino.transport({
-    target: 'pino-pretty',
-    options: { destination: 1 },
-  })
-  return pino(transport)
+  return pino(options)
 }
 
 /**
