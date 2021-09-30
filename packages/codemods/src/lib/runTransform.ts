@@ -9,13 +9,6 @@ import path from 'path'
 
 import execa from 'execa'
 
-export interface RunTransform {
-  transformPath: string
-  targetPaths: string[]
-  parser?: 'ts' | 'tsx' | 'js'
-  options?: Record<string, any>
-}
-
 const getExecaArgs = () => {
   if (process.platform === 'win32') {
     return {
@@ -42,13 +35,22 @@ const getExecaArgs = () => {
   }
 }
 
-/**
- * Runs a transform on the given targetPath(s).
- *
- * @param transformPath Path to the transform.
- * @param targetPaths Path(s) to the file(s) to transform. Can also be a directory.
- * @param options jscodeshift options and transform options.
- */
+export interface RunTransform {
+  /**
+   * Path to the transform.
+   */
+  transformPath: string
+  /**
+   * Path(s) to the file(s) to transform. Can also be a directory.
+   */
+  targetPaths: string[]
+  parser?: 'babel' | 'ts' | 'tsx'
+  /**
+   * jscodeshift options and transform options.
+   */
+  options?: Record<string, any>
+}
+
 export const runTransform = ({
   transformPath,
   targetPaths,
@@ -67,14 +69,14 @@ export const runTransform = ({
       command,
       [
         ...cmdArgs,
-        '--parser',
-        parser,
+        `--parser=${parser}`,
         process.env.NODE_ENV === 'test' ? '--babel' : '--no-babel',
         '--ignore-pattern=**/node_modules/**',
+        // Putting flags here lets them override all the defaults.
+        ...flags,
         '-t',
         transformPath,
         ...targetPaths,
-        ...flags,
       ],
       {
         stdio: 'inherit',
