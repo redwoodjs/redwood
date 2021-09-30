@@ -1,4 +1,4 @@
-# Add Prisma Create to Scenarios
+# Update Scenarios
 
 |         |                  |
 |:--------|:-----------------|

@@ -1,4 +1,4 @@
-# Use RHF Coercion
+# Update Forms
 
 - Rename `<Form validation={...}>` to `<Form config={...}>`
 - Change a field's `transformValue` prop to...
