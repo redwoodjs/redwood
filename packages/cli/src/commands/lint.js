@@ -24,7 +24,7 @@ export const builder = (yargs) => {
 }
 
 export const handler = async ({ fix }) => {
-  try{
+  try {
     const result = await execa(
       'yarn eslint',
       [
