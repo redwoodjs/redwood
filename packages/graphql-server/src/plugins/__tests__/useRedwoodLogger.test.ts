@@ -47,6 +47,7 @@ describe('Populates context', () => {
   )
 
   const logger = createLogger({
+    options: { level: 'trace' },
     targets: [
       {
         target: 'pino/file',
