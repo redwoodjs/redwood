@@ -41,7 +41,7 @@ export interface AuthContextInterface {
    */
   reauthenticate(): Promise<void>
   forgotPassword(username: string): Promise<any>
-  resetPassword(token: string, password: string): Promise<any>
+  resetPassword(resetToken: string, password: string): Promise<any>
   validateResetToken(token: string | null): Promise<any>
   /**
    * A reference to the client that you passed into the `AuthProvider`,

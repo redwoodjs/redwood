@@ -370,10 +370,10 @@ export class DbAuthHandler {
   }
 
   async resetPassword() {
-    const { password, token } = this.params
+    const { password, resetToken } = this.params
 
     // is the resetToken present?
-    if (token == null || String(token).trim() === '') {
+    if (resetToken == null || String(resetToken).trim() === '') {
       throw new DbAuthError.ResetTokenRequiredError(
         this.options.resetPassword?.errors?.resetTokenRequired
       )
@@ -384,7 +384,7 @@ export class DbAuthHandler {
       throw new DbAuthError.PasswordRequiredError()
     }
 
-    let user = await this._findUserByToken(token as string)
+    let user = await this._findUserByToken(resetToken as string)
     const [hashedPassword] = this._hashPassword(password, user.salt)
 
     if (

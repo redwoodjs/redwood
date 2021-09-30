@@ -73,11 +73,11 @@ export const dbAuth = (): AuthClient => {
     return await response.json()
   }
 
-  const validateResetToken = async (token: string | null) => {
+  const validateResetToken = async (resetToken: string | null) => {
     const response = await fetch(`${global.__REDWOOD__API_PROXY_PATH}/auth`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token, method: 'validateResetToken' }),
+      body: JSON.stringify({ resetToken, method: 'validateResetToken' }),
     })
     return await response.json()
   }
