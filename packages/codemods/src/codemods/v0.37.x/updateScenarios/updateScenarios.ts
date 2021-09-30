@@ -1,6 +1,6 @@
 import type { FileInfo, API, ObjectExpression, Property } from 'jscodeshift'
 
-module.exports = function (file: FileInfo, api: API) {
+export default function transform(file: FileInfo, api: API) {
   const j = api.jscodeshift
 
   return j(file.source)
