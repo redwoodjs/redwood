@@ -14,6 +14,7 @@ import {
   buildApi,
   getConfig,
   ensurePosixPath,
+  loadAndValidateSdls,
 } from '@redwoodjs/internal'
 
 const rwjsPaths = getPaths()
@@ -95,6 +96,12 @@ chokidar
     rebuildApiServer()
   })
   .on('all', (eventName, filePath) => {
+    // We validate here, so that developers will see the error
+    // As they're running the dev server
+    if (filePath.includes('.sdl')) {
+      loadAndValidateSdls()
+    }
+
     console.log(
       c.dim(`[${eventName}] ${filePath.replace(rwjsPaths.api.base, '')}`)
     )
