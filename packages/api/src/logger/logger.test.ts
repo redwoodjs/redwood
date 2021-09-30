@@ -47,6 +47,7 @@ describe('logger', () => {
       )
 
       const logger = createLogger({
+        options: { level: 'trace' },
         targets: [
           {
             target: 'pino/file',
@@ -59,34 +60,34 @@ describe('logger', () => {
       const transportStream = logger[pino.symbols.streamSym]
       await transportStream.end.bind(transportStream)
 
-      logger.info('test of a trace level message')
+      logger.trace('test of a trace level message')
 
       await watchFileCreated(destination)
-      const result = JSON.parse(
+      const logStatement = JSON.parse(
         await readFileSync(destination).toString().trim()
       )
-      delete result.time
-      console.log(result)
-      expect(result).toMatchObject({
-        pid,
-        hostname,
-        level: 30,
-        msg: 'test of a trace level message',
-      })
+
+      expect(logStatement).toHaveProperty('level')
+      expect(logStatement).toHaveProperty('time')
+      expect(logStatement).toHaveProperty('msg')
+
+      expect(logStatement['level']).toEqual(10)
+      expect(logStatement['msg']).toEqual('test of a trace level message')
     })
 
-    test.only('it logs an info message', async () => {
+    test('it logs an info message', async () => {
       const destination = join(
         os.tmpdir(),
         '_' + Math.random().toString(36).substr(2, 9)
       )
 
       const logger = createLogger({
+        options: { level: 'trace' },
         targets: [
           {
             target: 'pino/file',
             options: { destination },
-            level: 'info',
+            level: 'trace',
           },
         ],
       })
@@ -94,27 +95,47 @@ describe('logger', () => {
       const transportStream = logger[pino.symbols.streamSym]
       await transportStream.end.bind(transportStream)
 
-      logger.info('test of a info level message')
+      logger.info('test of an info level message')
 
       await watchFileCreated(destination)
-      const result = JSON.parse(
+      const logStatement = JSON.parse(
         await readFileSync(destination).toString().trim()
       )
-      delete result.time
-      console.log(result)
-      expect(result).toMatchObject({
-        pid,
-        hostname,
-        level: 30,
-        msg: 'test of a info level message',
-      })
+
+      expect(logStatement).toHaveProperty('level')
+      expect(logStatement).toHaveProperty('time')
+      expect(logStatement).toHaveProperty('msg')
+
+      expect(logStatement['level']).toEqual(30)
+      expect(logStatement['msg']).toEqual('test of an info level message')
     })
 
     test('it logs a debug message', async () => {
-      const { logger, logSinkData } = setupLogger({ level: 'trace' })
+      const destination = join(
+        os.tmpdir(),
+        '_' + Math.random().toString(36).substr(2, 9)
+      )
+
+      const logger = createLogger({
+        options: { level: 'trace' },
+        targets: [
+          {
+            target: 'pino/file',
+            options: { destination },
+            level: 'trace',
+          },
+        ],
+      })
+
+      const transportStream = logger[pino.symbols.streamSym]
+      await transportStream.end.bind(transportStream)
 
       logger.debug('test of a debug level message')
-      const logStatement = await logSinkData
+
+      await watchFileCreated(destination)
+      const logStatement = JSON.parse(
+        await readFileSync(destination).toString().trim()
+      )
 
       expect(logStatement).toHaveProperty('level')
       expect(logStatement).toHaveProperty('time')
@@ -125,10 +146,31 @@ describe('logger', () => {
     })
 
     test('it logs a warning message', async () => {
-      const { logger, logSinkData } = setupLogger({ level: 'trace' })
+      const destination = join(
+        os.tmpdir(),
+        '_' + Math.random().toString(36).substr(2, 9)
+      )
+
+      const logger = createLogger({
+        options: { level: 'trace' },
+        targets: [
+          {
+            target: 'pino/file',
+            options: { destination },
+            level: 'trace',
+          },
+        ],
+      })
+
+      const transportStream = logger[pino.symbols.streamSym]
+      await transportStream.end.bind(transportStream)
 
       logger.warn('test of a warning level message')
-      const logStatement = await logSinkData
+
+      await watchFileCreated(destination)
+      const logStatement = JSON.parse(
+        await readFileSync(destination).toString().trim()
+      )
 
       expect(logStatement).toHaveProperty('level')
       expect(logStatement).toHaveProperty('time')
@@ -139,13 +181,34 @@ describe('logger', () => {
     })
 
     test('it logs an error message', async () => {
-      const { logger, logSinkData } = setupLogger({ level: 'trace' })
+      const destination = join(
+        os.tmpdir(),
+        '_' + Math.random().toString(36).substr(2, 9)
+      )
+
+      const logger = createLogger({
+        options: { level: 'trace' },
+        targets: [
+          {
+            target: 'pino/file',
+            options: { destination },
+            level: 'trace',
+          },
+        ],
+      })
+
+      const transportStream = logger[pino.symbols.streamSym]
+      await transportStream.end.bind(transportStream)
 
       const error = Object.assign(new Error('TestError'), {
         message: 'something unexpected happened',
       })
       logger.error({ message: error.message }, 'test of an error level message')
-      const logStatement = await logSinkData
+
+      await watchFileCreated(destination)
+      const logStatement = JSON.parse(
+        await readFileSync(destination).toString().trim()
+      )
 
       expect(logStatement).toHaveProperty('level')
       expect(logStatement).toHaveProperty('time')
@@ -160,16 +223,35 @@ describe('logger', () => {
 
   describe('supports key redaction', () => {
     test('it redacts defaults header authorization', async () => {
-      const { logger, logSinkData } = setupLogger({
-        level: 'trace',
-        redact: ['event.headers.authorization'],
+      const destination = join(
+        os.tmpdir(),
+        '_' + Math.random().toString(36).substr(2, 9)
+      )
+
+      const logger = createLogger({
+        options: { level: 'trace', redact: ['event.headers.authorization'] },
+        targets: [
+          {
+            target: 'pino/file',
+            options: { destination },
+            level: 'trace',
+          },
+        ],
       })
+
+      const transportStream = logger[pino.symbols.streamSym]
+      await transportStream.end.bind(transportStream)
+
       const event = {
         event: { headers: { authorization: 'Bearer access_token' } },
       }
-
       logger.info(event, 'test of an access token')
-      const logStatement = await logSinkData
+
+      await watchFileCreated(destination)
+      const logStatement = JSON.parse(
+        await readFileSync(destination).toString().trim()
+      )
+
       expect(logStatement['msg']).toEqual('test of an access token')
 
       expect(logStatement).toHaveProperty('event')
@@ -179,13 +261,32 @@ describe('logger', () => {
     })
 
     test('it redacts the value of a given key', async () => {
-      const { logger, logSinkData } = setupLogger({
-        level: 'trace',
-        redact: ['redactedKey'],
+      const destination = join(
+        os.tmpdir(),
+        '_' + Math.random().toString(36).substr(2, 9)
+      )
+
+      const logger = createLogger({
+        options: { level: 'trace', redact: ['redactedKey'] },
+        targets: [
+          {
+            target: 'pino/file',
+            options: { destination },
+            level: 'trace',
+          },
+        ],
       })
 
+      const transportStream = logger[pino.symbols.streamSym]
+      await transportStream.end.bind(transportStream)
+
       logger.info({ redactedKey: 'you cannot see me' }, 'test of a redaction')
-      const logStatement = await logSinkData
+
+      await watchFileCreated(destination)
+      const logStatement = JSON.parse(
+        await readFileSync(destination).toString().trim()
+      )
+
       expect(logStatement['msg']).toEqual('test of a redaction')
 
       expect(logStatement).toHaveProperty('redactedKey')
@@ -193,7 +294,24 @@ describe('logger', () => {
     })
 
     test('it redacts a JWT token key by default', async () => {
-      const { logger, logSinkData } = setupLogger({ level: 'trace' })
+      const destination = join(
+        os.tmpdir(),
+        '_' + Math.random().toString(36).substr(2, 9)
+      )
+
+      const logger = createLogger({
+        options: { level: 'trace' },
+        targets: [
+          {
+            target: 'pino/file',
+            options: { destination },
+            level: 'trace',
+          },
+        ],
+      })
+
+      const transportStream = logger[pino.symbols.streamSym]
+      await transportStream.end.bind(transportStream)
 
       logger.info(
         {
@@ -201,7 +319,12 @@ describe('logger', () => {
         },
         'test of a redacted JWT'
       )
-      const logStatement = await logSinkData
+
+      await watchFileCreated(destination)
+      const logStatement = JSON.parse(
+        await readFileSync(destination).toString().trim()
+      )
+
       expect(logStatement['msg']).toEqual('test of a redacted JWT')
 
       expect(logStatement).toHaveProperty('jwt')
@@ -209,7 +332,24 @@ describe('logger', () => {
     })
 
     test('it redacts a password key by default', async () => {
-      const { logger, logSinkData } = setupLogger({ level: 'trace' })
+      const destination = join(
+        os.tmpdir(),
+        '_' + Math.random().toString(36).substr(2, 9)
+      )
+
+      const logger = createLogger({
+        options: { level: 'trace' },
+        targets: [
+          {
+            target: 'pino/file',
+            options: { destination },
+            level: 'trace',
+          },
+        ],
+      })
+
+      const transportStream = logger[pino.symbols.streamSym]
+      await transportStream.end.bind(transportStream)
 
       logger.info(
         {
@@ -217,7 +357,12 @@ describe('logger', () => {
         },
         'test of a redacted password'
       )
-      const logStatement = await logSinkData
+
+      await watchFileCreated(destination)
+      const logStatement = JSON.parse(
+        await readFileSync(destination).toString().trim()
+      )
+
       expect(logStatement['msg']).toEqual('test of a redacted password')
 
       expect(logStatement).toHaveProperty('password')
@@ -225,7 +370,24 @@ describe('logger', () => {
     })
 
     test('it redacts a hashedPassword key by default', async () => {
-      const { logger, logSinkData } = setupLogger({ level: 'trace' })
+      const destination = join(
+        os.tmpdir(),
+        '_' + Math.random().toString(36).substr(2, 9)
+      )
+
+      const logger = createLogger({
+        options: { level: 'trace' },
+        targets: [
+          {
+            target: 'pino/file',
+            options: { destination },
+            level: 'trace',
+          },
+        ],
+      })
+
+      const transportStream = logger[pino.symbols.streamSym]
+      await transportStream.end.bind(transportStream)
 
       logger.info(
         {
@@ -233,7 +395,12 @@ describe('logger', () => {
         },
         'test of a redacted hashed password'
       )
-      const logStatement = await logSinkData
+
+      await watchFileCreated(destination)
+      const logStatement = JSON.parse(
+        await readFileSync(destination).toString().trim()
+      )
+
       expect(logStatement['msg']).toEqual('test of a redacted hashed password')
 
       expect(logStatement).toHaveProperty('hashedPassword')
@@ -241,7 +408,24 @@ describe('logger', () => {
     })
 
     test('it redacts a hashedPassword key in data by default', async () => {
-      const { logger, logSinkData } = setupLogger({ level: 'trace' })
+      const destination = join(
+        os.tmpdir(),
+        '_' + Math.random().toString(36).substr(2, 9)
+      )
+
+      const logger = createLogger({
+        options: { level: 'trace' },
+        targets: [
+          {
+            target: 'pino/file',
+            options: { destination },
+            level: 'trace',
+          },
+        ],
+      })
+
+      const transportStream = logger[pino.symbols.streamSym]
+      await transportStream.end.bind(transportStream)
 
       logger.info(
         {
@@ -251,7 +435,12 @@ describe('logger', () => {
         },
         'test of a redacted data hashed password'
       )
-      const logStatement = await logSinkData
+
+      await watchFileCreated(destination)
+      const logStatement = JSON.parse(
+        await readFileSync(destination).toString().trim()
+      )
+
       expect(logStatement['msg']).toEqual(
         'test of a redacted data hashed password'
       )
@@ -261,7 +450,24 @@ describe('logger', () => {
     })
 
     test('it redacts a hashedPassword key in user data by default', async () => {
-      const { logger, logSinkData } = setupLogger({ level: 'trace' })
+      const destination = join(
+        os.tmpdir(),
+        '_' + Math.random().toString(36).substr(2, 9)
+      )
+
+      const logger = createLogger({
+        options: { level: 'trace' },
+        targets: [
+          {
+            target: 'pino/file',
+            options: { destination },
+            level: 'trace',
+          },
+        ],
+      })
+
+      const transportStream = logger[pino.symbols.streamSym]
+      await transportStream.end.bind(transportStream)
 
       logger.info(
         {
@@ -273,7 +479,12 @@ describe('logger', () => {
         },
         'test of a redacted user data hashed password'
       )
-      const logStatement = await logSinkData
+
+      await watchFileCreated(destination)
+      const logStatement = JSON.parse(
+        await readFileSync(destination).toString().trim()
+      )
+
       expect(logStatement['msg']).toEqual(
         'test of a redacted user data hashed password'
       )
@@ -285,7 +496,24 @@ describe('logger', () => {
     })
 
     test('it redacts a salt key by default', async () => {
-      const { logger, logSinkData } = setupLogger({ level: 'trace' })
+      const destination = join(
+        os.tmpdir(),
+        '_' + Math.random().toString(36).substr(2, 9)
+      )
+
+      const logger = createLogger({
+        options: { level: 'trace' },
+        targets: [
+          {
+            target: 'pino/file',
+            options: { destination },
+            level: 'trace',
+          },
+        ],
+      })
+
+      const transportStream = logger[pino.symbols.streamSym]
+      await transportStream.end.bind(transportStream)
 
       logger.info(
         {
@@ -293,7 +521,12 @@ describe('logger', () => {
         },
         'test of a redacted salt'
       )
-      const logStatement = await logSinkData
+
+      await watchFileCreated(destination)
+      const logStatement = JSON.parse(
+        await readFileSync(destination).toString().trim()
+      )
+
       expect(logStatement['msg']).toEqual('test of a redacted salt')
 
       expect(logStatement).toHaveProperty('salt')
@@ -301,7 +534,24 @@ describe('logger', () => {
     })
 
     test('it redacts a salt key in data by default', async () => {
-      const { logger, logSinkData } = setupLogger({ level: 'trace' })
+      const destination = join(
+        os.tmpdir(),
+        '_' + Math.random().toString(36).substr(2, 9)
+      )
+
+      const logger = createLogger({
+        options: { level: 'trace' },
+        targets: [
+          {
+            target: 'pino/file',
+            options: { destination },
+            level: 'trace',
+          },
+        ],
+      })
+
+      const transportStream = logger[pino.symbols.streamSym]
+      await transportStream.end.bind(transportStream)
 
       logger.info(
         {
@@ -311,7 +561,12 @@ describe('logger', () => {
         },
         'test of a redacted data salt'
       )
-      const logStatement = await logSinkData
+
+      await watchFileCreated(destination)
+      const logStatement = JSON.parse(
+        await readFileSync(destination).toString().trim()
+      )
+
       expect(logStatement['msg']).toEqual('test of a redacted data salt')
 
       expect(logStatement).toHaveProperty('data.salt')
@@ -319,7 +574,24 @@ describe('logger', () => {
     })
 
     test('it redacts a salt key in user data by default', async () => {
-      const { logger, logSinkData } = setupLogger({ level: 'trace' })
+      const destination = join(
+        os.tmpdir(),
+        '_' + Math.random().toString(36).substr(2, 9)
+      )
+
+      const logger = createLogger({
+        options: { level: 'trace' },
+        targets: [
+          {
+            target: 'pino/file',
+            options: { destination },
+            level: 'trace',
+          },
+        ],
+      })
+
+      const transportStream = logger[pino.symbols.streamSym]
+      await transportStream.end.bind(transportStream)
 
       logger.info(
         {
@@ -331,7 +603,12 @@ describe('logger', () => {
         },
         'test of a redacted user data salt'
       )
-      const logStatement = await logSinkData
+
+      await watchFileCreated(destination)
+      const logStatement = JSON.parse(
+        await readFileSync(destination).toString().trim()
+      )
+
       expect(logStatement['msg']).toEqual('test of a redacted user data salt')
 
       expect(logStatement).toHaveProperty('data.user.salt')
@@ -339,7 +616,24 @@ describe('logger', () => {
     })
 
     test('it redacts the email key by default', async () => {
-      const { logger, logSinkData } = setupLogger({ level: 'trace' })
+      const destination = join(
+        os.tmpdir(),
+        '_' + Math.random().toString(36).substr(2, 9)
+      )
+
+      const logger = createLogger({
+        options: { level: 'trace' },
+        targets: [
+          {
+            target: 'pino/file',
+            options: { destination },
+            level: 'trace',
+          },
+        ],
+      })
+
+      const transportStream = logger[pino.symbols.streamSym]
+      await transportStream.end.bind(transportStream)
 
       logger.info(
         {
@@ -347,7 +641,12 @@ describe('logger', () => {
         },
         'test of a redacted email'
       )
-      const logStatement = await logSinkData
+
+      await watchFileCreated(destination)
+      const logStatement = JSON.parse(
+        await readFileSync(destination).toString().trim()
+      )
+
       expect(logStatement['msg']).toEqual('test of a redacted email')
 
       expect(logStatement).toHaveProperty('email')
@@ -357,59 +656,64 @@ describe('logger', () => {
 
   describe('when configuring pretty printing', () => {
     test('it pretty prints', async () => {
-      const tmp = join(
+      const destination = join(
         os.tmpdir(),
         '_' + Math.random().toString(36).substr(2, 9)
       )
 
-      const { logger } = setupLogger({ level: 'trace', prettyPrint: true }, [
-        {
-          target: 'pino/file',
-          options: { destination: tmp },
-          level: 'trace',
-        },
-      ])
+      const logger = createLogger({
+        options: { level: 'trace' },
+        targets: [
+          {
+            target: 'pino-pretty',
+            options: { destination },
+            level: 'trace',
+          },
+        ],
+      })
+
+      const transportStream = logger[pino.symbols.streamSym]
+      await transportStream.end.bind(transportStream)
 
       const message = 'logged with pretty printing on'
-
       logger.info(message)
 
-      await watchFileCreated(tmp)
-
-      const logStatement = readFileSync(tmp).toString().trim()
+      await watchFileCreated(destination)
+      const logStatement = await readFileSync(destination).toString().trim()
 
       expect(logStatement).toMatch(/INFO/)
       expect(logStatement).toContain(message)
     })
 
     test('it allows setting translateTime ', async () => {
-      const tmp = join(
+      const destination = join(
         os.tmpdir(),
         '_' + Math.random().toString(36).substr(2, 9)
       )
-
-      const { logger } = setupLogger(
-        {
-          level: 'trace',
-          prettyPrint: { translateTime: 'dddd, mmmm dS, yyyy, h:MM:ss TT' },
-        },
-        [
+      const logger = createLogger({
+        options: { level: 'trace' },
+        targets: [
           {
-            target: 'pino/file',
-            options: { destination: tmp },
+            target: 'pino-pretty',
+            options: {
+              destination,
+              translateTime: 'dddd, mmmm dS, yyyy, h:MM:ss TT',
+            },
             level: 'trace',
           },
-        ]
-      )
+        ],
+      })
+
+      const transportStream = logger[pino.symbols.streamSym]
+      await transportStream.end.bind(transportStream)
 
       const message = 'logged with pretty printing on'
 
       logger.info(message)
 
-      await watchFileCreated(tmp)
+      await watchFileCreated(destination)
+      const logStatement = await readFileSync(destination).toString().trim()
 
-      const logStatement = readFileSync(tmp).toString().trim()
-      console.log(logStatement)
       expect(logStatement).toMatch(/INFO/)
       expect(logStatement).toContain(message)
     })
@@ -417,25 +721,31 @@ describe('logger', () => {
 
   describe('file logging', () => {
     test('it creates a log file with a statement', async () => {
-      const tmp = join(
+      const destination = join(
         os.tmpdir(),
         '_' + Math.random().toString(36).substr(2, 9)
       )
 
-      const { logger } = setupLogger({ level: 'trace' }, [
-        {
-          target: 'pino/file',
-          options: { destination: tmp },
-          level: 'trace',
-        },
-      ])
+      const logger = createLogger({
+        options: { level: 'trace' },
+        targets: [
+          {
+            target: 'pino/file',
+            options: { destination },
+            level: 'trace',
+          },
+        ],
+      })
+
+      const transportStream = logger[pino.symbols.streamSym]
+      await transportStream.end.bind(transportStream)
 
       logger.warn('logged a warning to a temp file')
 
-      await watchFileCreated(tmp)
-
-      const logStatement = JSON.parse(readFileSync(tmp).toString())
-
+      await watchFileCreated(destination)
+      const logStatement = JSON.parse(
+        await readFileSync(destination).toString().trim()
+      )
       delete logStatement.time
 
       expect(logStatement).toEqual({
