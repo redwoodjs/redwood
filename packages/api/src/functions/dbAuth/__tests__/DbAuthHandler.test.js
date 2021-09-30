@@ -31,6 +31,12 @@ const TableMock = class {
     return data
   }
 
+  update({ where, data }) {
+    let record = this.records.find((r) => r.id === where.id)
+    record = Object.assign(record, data)
+    return record
+  }
+
   findUnique({ where }) {
     return this.records.find((record) => {
       const key = Object.keys(where)[0]
@@ -66,6 +72,10 @@ const createDbUser = async () => {
   })
 }
 
+const expectLogoutResponse = (response) => {
+  expect(response[1]['Set-Cookie']).toEqual(LOGOUT_COOKIE)
+}
+
 const encryptToCookie = (data) => {
   return `session=${CryptoJS.AES.encrypt(data, process.env.SESSION_SECRET)}`
 }
@@ -92,9 +102,15 @@ describe('dbAuth', () => {
         username: 'email',
         hashedPassword: 'hashedPassword',
         salt: 'salt',
+        resetToken: 'resetToken',
+        resetTokenExpiresAt: 'resetTokenExpiresAt',
       },
       db: db,
       excludeUserFields: [],
+      forgotPassword: {
+        handler: (user) => user,
+        expires: 10,
+      },
       login: {
         handler: (user) => user,
         errors: {
@@ -103,6 +119,9 @@ describe('dbAuth', () => {
           incorrectPassword: 'Incorrect password for ${username}',
         },
         expires: 60 * 60,
+      },
+      resetPassword: {
+        handler: (user) => user,
       },
       signup: {
         handler: ({ username, hashedPassword, salt, userAttributes }) => {
@@ -133,6 +152,7 @@ describe('dbAuth', () => {
     it('returns a UUID', () => {
       expect(DbAuthHandler.CSRF_TOKEN).toMatch(UUID_REGEX)
     })
+
     it('returns a unique UUID after each call', () => {
       const first = DbAuthHandler.CSRF_TOKEN
       const second = DbAuthHandler.CSRF_TOKEN
@@ -181,9 +201,15 @@ describe('dbAuth', () => {
       context = { foo: 'bar' }
       options = {
         db: db,
+        forgotPassword: {
+          handler: () => {},
+        },
         login: {
           handler: () => {},
           expires: 1,
+        },
+        resetPassword: {
+          handler: () => {},
         },
         signup: {
           handler: () => {},
@@ -196,38 +222,128 @@ describe('dbAuth', () => {
       expect(dbAuth.options).toEqual(options)
     })
 
-    it('throws an error if login expiration time is not defined', () => {
-      // login object doesn't exist at all
-      expect(() => new DbAuthHandler(event, context, {})).toThrow(
-        dbAuthError.NoSessionExpiration
-      )
-      // login object exists, but not `expires` key
-      expect(() => new DbAuthHandler(event, context, { login: {} })).toThrow(
-        dbAuthError.NoSessionExpiration
-      )
-    })
-
-    it('throws an error if no login.header option', () => {
-      expect(
-        () => new DbAuthHandler(event, context, { login: { expires: 1 } })
-      ).toThrow(dbAuthError.NoLoginHandler)
-    })
-
-    it('throws an error if no signup.header option', () => {
+    it('throws an error if no forgotPassword.handler option', () => {
       expect(
         () =>
           new DbAuthHandler(event, context, {
-            login: { handler: () => {}, expires: 1 },
+            login: {
+              handler: () => {},
+              expires: 1,
+            },
+            resetPassword: {
+              handler: () => {},
+            },
+            signup: {
+              handler: () => {},
+            },
+          })
+      ).toThrow(dbAuthError.NoForgotPasswordHandler)
+
+      expect(
+        () =>
+          new DbAuthHandler(event, context, {
+            forgotPassword: {},
+            login: {
+              handler: () => {},
+              expires: 1,
+            },
+            resetPassword: {
+              handler: () => {},
+            },
+            signup: {
+              handler: () => {},
+            },
+          })
+      ).toThrow(dbAuthError.NoForgotPasswordHandler)
+    })
+
+    it('throws an error if login expiration time is not defined', () => {
+      // login object doesn't exist at all
+      expect(
+        () =>
+          new DbAuthHandler(event, context, {
+            forgotPassword: {
+              handler: () => {},
+            },
+            resetPassword: {
+              handler: () => {},
+            },
+            signup: {
+              handler: () => {},
+            },
+          })
+      ).toThrow(dbAuthError.NoSessionExpirationError)
+      // login object exists, but not `expires` key
+      expect(
+        () =>
+          new DbAuthHandler(event, context, {
+            forgotPassword: {
+              handler: () => {},
+            },
+            login: {
+              handler: () => {},
+            },
+            resetPassword: {
+              handler: () => {},
+            },
+            signup: {
+              handler: () => {},
+            },
+          })
+      ).toThrow(dbAuthError.NoSessionExpirationError)
+    })
+
+    it('throws an error if no login.handler option', () => {
+      expect(
+        () =>
+          new DbAuthHandler(event, context, {
+            forgotPassword: {
+              handler: () => {},
+            },
+            login: {
+              expires: 1,
+            },
+            resetPassword: {
+              handler: () => {},
+            },
+            signup: {
+              handler: () => {},
+            },
+          })
+      ).toThrow(dbAuthError.NoLoginHandlerError)
+    })
+
+    it('throws an error if no signup.handler option', () => {
+      expect(
+        () =>
+          new DbAuthHandler(event, context, {
+            forgotPassword: {
+              handler: () => {},
+            },
+            login: {
+              handler: () => {},
+              expires: 1,
+            },
+            resetPassword: {
+              handler: () => {},
+            },
           })
       ).toThrow(dbAuthError.NoSignupHandler)
 
       expect(
         () =>
           new DbAuthHandler(event, context, {
-            login: { handler: () => {}, expires: 1 },
-            signup: {
-              errors: {},
+            forgotPassword: {
+              handler: () => {},
             },
+            login: {
+              handler: () => {},
+              expires: 1,
+            },
+            resetPassword: {
+              handler: () => {},
+            },
+            signup: {},
           })
       ).toThrow(dbAuthError.NoSignupHandler)
     })
@@ -324,7 +440,7 @@ describe('dbAuth', () => {
       delete process.env.SESSION_SECRET
 
       expect(() => new DbAuthHandler(event, context, options)).toThrow(
-        dbAuthError.NoSessionSecret
+        dbAuthError.NoSessionSecretError
       )
     })
   })
@@ -393,6 +509,75 @@ describe('dbAuth', () => {
         'Content-Type': 'application/json',
         foo: 'bar',
       })
+    })
+  })
+
+  describe('forgotPassword', () => {
+    it('throws an error if username is blank', async () => {
+      // missing completely
+      event.body = JSON.stringify({})
+      let dbAuth = new DbAuthHandler(event, context, options)
+
+      dbAuth.forgotPassword().catch((e) => {
+        expect(e).toBeInstanceOf(dbAuthError.UsernameRequiredError)
+      })
+
+      // empty string
+      event.body = JSON.stringify({ username: ' ' })
+      dbAuth = new DbAuthHandler(event, context, options)
+
+      dbAuth.forgotPassword().catch((e) => {
+        expect(e).toBeInstanceOf(dbAuthError.UsernameRequiredError)
+      })
+
+      expect.assertions(2)
+    })
+
+    it('throws an error if username is not found', async () => {
+      // missing completely
+      event.body = JSON.stringify({
+        username: 'notfound',
+      })
+      let dbAuth = new DbAuthHandler(event, context, options)
+
+      dbAuth.forgotPassword().catch((e) => {
+        expect(e).toBeInstanceOf(dbAuthError.UsernameNotFoundError)
+      })
+      expect.assertions(1)
+    })
+
+    it('sets the resetToken and resetTokenExpiresAt on the user', async () => {
+      const user = await createDbUser()
+      event.body = JSON.stringify({
+        username: user.email,
+      })
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      expect(user.resetToken).toEqual(undefined)
+      expect(user.resetTokenExpiresAt).toEqual(undefined)
+
+      const response = await dbAuth.forgotPassword()
+      const responseBody = JSON.parse(response[0])
+      const resetUser = await db.user.findUnique({
+        where: { id: user.id },
+      })
+
+      expect(resetUser.resetToken).not.toEqual(undefined)
+      // base64 characters only, except =
+      expect(resetUser.resetToken).toMatch(/^\w{16}$/)
+      expect(resetUser.resetTokenExpiresAt instanceof Date).toEqual(true)
+      expect(responseBody.resetToken).toEqual(resetUser.resetToken)
+    })
+
+    it('returns a logout session response', async () => {
+      const user = await createDbUser()
+      event.body = JSON.stringify({
+        username: user.email,
+      })
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const response = await dbAuth.forgotPassword()
+
+      expectLogoutResponse(response)
     })
   })
 
@@ -545,7 +730,7 @@ describe('dbAuth', () => {
       const dbAuth = new DbAuthHandler(event, context, options)
       const response = dbAuth.logout()
 
-      expect(response[1]['Set-Cookie']).toEqual(LOGOUT_COOKIE)
+      expectLogoutResponse(response)
     })
   })
 
