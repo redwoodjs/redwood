@@ -7,8 +7,7 @@ import getRWPaths from '../../../lib/getRWPaths'
 import runTransform from '../../../lib/runTransform'
 
 export const command = 'update-forms'
-export const description =
-  '(v0.36->v0.37) Updates @redwoodjs/forms props and coercion'
+export const description = '(v0.36->v0.37) Updates @redwoodjs/forms props'
 
 export const handler = () => {
   task('Updating forms', async ({ setWarning }: { setWarning: any }) => {

@@ -1,4 +1,4 @@
-describe('React hook forms: Coercion', () => {
+describe('Update Forms', () => {
   test('Transforms javascript', () => {
     matchTransformSnapshot('updateForms', 'javascript')
   })

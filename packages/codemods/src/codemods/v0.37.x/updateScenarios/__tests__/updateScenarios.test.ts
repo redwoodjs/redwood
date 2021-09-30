@@ -1,9 +1,9 @@
-describe('Add prisma create scenario', () => {
-  it('Modified simple scenarios', () => {
+describe('Update Scenarios', () => {
+  it('Modifies simple Scenarios', () => {
     matchTransformSnapshot('updateScenarios', 'simple')
   })
 
-  it('Modifies more complex scenarios', () => {
+  it('Modifies more complex Scenarios', () => {
     matchTransformSnapshot('updateScenarios', 'realExample')
   })
 })
