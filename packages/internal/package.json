@@ -12,6 +12,7 @@
   "types": "dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
+    "@redwoodjs/graphql-server": "0.36.4",
     "@babel/parser": "7.15.6",
     "@babel/plugin-transform-typescript": "7.15.4",
     "babel-plugin-polyfill-corejs3": "0.2.4",
