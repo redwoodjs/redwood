@@ -62,13 +62,15 @@ export const runTransform = ({
    */
   const flags = Object.entries(options).map((key, val) => `--${key}=${val}`)
 
-  const { command, cmdArgs } = getExecaArgs()
+  const jscodeshiftExecutable = path.resolve(
+    __dirname,
+    '../../node_modules/.bin/jscodeshift'
+  )
 
   try {
     execa.sync(
-      command,
+      jscodeshiftExecutable,
       [
-        ...cmdArgs,
         `--parser=${parser}`,
         process.env.NODE_ENV === 'test' ? '--babel' : '--no-babel',
         '--ignore-pattern=**/node_modules/**',

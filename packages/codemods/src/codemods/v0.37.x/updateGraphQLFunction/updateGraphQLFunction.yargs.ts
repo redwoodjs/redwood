@@ -3,7 +3,6 @@ import path from 'path'
 import fg from 'fast-glob'
 import task from 'tasuku'
 
-import getRWPaths from '../../../lib/getRWPaths'
 import runTransform from '../../../lib/runTransform'
 
 export const command = 'update-graphql-function'
@@ -12,11 +11,9 @@ export const description =
 
 export const handler = () => {
   task('Updating the GraphQL Function', async () => {
-    const rwPaths = getRWPaths()
-
     runTransform({
       transformPath: path.join(__dirname, 'updateGraphQLFunction.js'),
-      targetPaths: fg.sync(path.join(rwPaths.api.functions, 'graphql.{js,ts}')),
+      targetPaths: fg.sync('api/src/functions/graphql.{js,ts}'),
     })
   })
 }
