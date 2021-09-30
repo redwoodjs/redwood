@@ -62,32 +62,60 @@ export const runTransform = ({
    */
   const flags = Object.entries(options).map((key, val) => `--${key}=${val}`)
 
-  const jscodeshiftExecutable = path.resolve(
-    __dirname,
-    '../../node_modules/.bin/jscodeshift'
-  )
+  if (process.env.NODE_ENV === 'test') {
+    const { command, cmdArgs } = getExecaArgs()
 
-  try {
-    execa.sync(
-      jscodeshiftExecutable,
-      [
-        `--parser=${parser}`,
-        process.env.NODE_ENV === 'test' ? '--babel' : '--no-babel',
-        '--ignore-pattern=**/node_modules/**',
-        // Putting flags here lets them override all the defaults.
-        ...flags,
-        '-t',
-        transformPath,
-        ...targetPaths,
-      ],
-      {
-        stdio: 'inherit',
-      }
-    )
-  } catch (e: any) {
-    console.error('Transform Error', e.message)
+    try {
+      execa.sync(
+        command,
+        [
+          ...cmdArgs,
+          `--parser=${parser}`,
+          process.env.NODE_ENV === 'test' ? '--babel' : '--no-babel',
+          '--ignore-pattern=**/node_modules/**',
+          // Putting flags here lets them override all the defaults.
+          ...flags,
+          '-t',
+          transformPath,
+          ...targetPaths,
+        ],
+        {
+          stdio: 'inherit',
+        }
+      )
+    } catch (e: any) {
+      console.error('Transform Error', e.message)
 
-    throw new Error('Failed to invoke transform')
+      throw new Error('Failed to invoke transform')
+    }
+  } else {
+    try {
+      const jscodeshiftExecutable = path.resolve(
+        __dirname,
+        '../../node_modules/.bin/jscodeshift'
+      )
+
+      execa.sync(
+        jscodeshiftExecutable,
+        [
+          `--parser=${parser}`,
+          process.env.NODE_ENV === 'test' ? '--babel' : '--no-babel',
+          '--ignore-pattern=**/node_modules/**',
+          // Putting flags here lets them override all the defaults.
+          ...flags,
+          '-t',
+          transformPath,
+          ...targetPaths,
+        ],
+        {
+          stdio: 'inherit',
+        }
+      )
+    } catch (e: any) {
+      console.error('Transform Error', e.message)
+
+      throw new Error('Failed to invoke transform')
+    }
   }
 }
 
