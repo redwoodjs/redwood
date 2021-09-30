@@ -11,7 +11,7 @@ const apiExports = [
   'redwoodVersion',
 ]
 
-export default function transformer(file: FileInfo, api: API) {
+export default function transform(file: FileInfo, api: API) {
   const j = api.jscodeshift
 
   const ast = j(file.source)

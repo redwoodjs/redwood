@@ -1,3 +1,5 @@
-test('Update imports for @redwoodjs/api', () => {
-  matchTransformSnapshot('updateApiImports', 'apiImports')
+describe('Update API Imports', () => {
+  it('Updates @redwoodjs/api imports', () => {
+    matchTransformSnapshot('updateApiImports', 'apiImports')
+  })
 })

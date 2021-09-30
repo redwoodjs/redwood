@@ -13,7 +13,7 @@ const formatCode = (code: string) => {
 export const matchTransformSnapshot = (
   transformName: string,
   fixtureName: string = transformName,
-  parser: 'ts' | 'tsx' | 'js' = 'tsx'
+  parser: 'ts' | 'tsx' | 'babel' = 'tsx'
 ) => {
   const tempFilePath = tempy.file()
 
@@ -58,7 +58,7 @@ export const matchInlineTransformSnapshot = (
   transformName: string,
   fixtureCode: string,
   expectedCode: string,
-  parser: 'ts' | 'tsx' | 'js' = 'tsx'
+  parser: 'ts' | 'tsx' | 'babel' = 'tsx'
 ) => {
   const tempFilePath = tempy.file()
 
