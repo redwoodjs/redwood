@@ -1,9 +1,10 @@
 import { generate } from '@graphql-codegen/cli'
-import { print } from 'graphql'
 import chalk from 'chalk'
+import { print } from 'graphql'
+
+import { rootSchema } from '@redwoodjs/graphql-server'
 
 import { getPaths } from '../paths'
-import { rootSchema } from '@redwoodjs/graphql-server'
 
 export const generateGraphQLSchema = async () => {
   const rwjsPaths = getPaths()
