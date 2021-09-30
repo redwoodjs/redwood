@@ -1,51 +1,51 @@
-export class NoSessionSecret extends Error {
+export class NoSessionSecretError extends Error {
   constructor() {
     super(
       'dbAuth requires a SESSION_SECRET environment variable that is used to encrypt session cookies. Use `yarn rw g secret` to create one, then add to your `.env` file. DO NOT check this variable in your version control system!!'
     )
-    this.name = 'NoSessionSecret'
+    this.name = 'NoSessionSecretError'
   }
 }
 
-export class NoSessionExpiration extends Error {
+export class NoSessionExpirationError extends Error {
   constructor() {
     super('dbAuth requires login expiration time, in seconds')
-    this.name = 'NoSessionExpiration'
+    this.name = 'NoSessionExpirationError'
   }
 }
 
-export class NoLoginHandler extends Error {
+export class NoLoginHandlerError extends Error {
   constructor() {
     super('dbAuth requires a login handler in order to log in a user')
-    this.name = 'NoLoginHandler'
+    this.name = 'NoLoginHandlerError'
   }
 }
 
-export class NoSignupHandler extends Error {
+export class NoSignupHandlerError extends Error {
   constructor() {
     super('dbAuth requires a signup handler in order to create new users')
-    this.name = 'NoSignupHandler'
+    this.name = 'NoSignupHandlerError'
   }
 }
 
-export class NoForgotPasswordHandler extends Error {
+export class NoForgotPasswordHandlerError extends Error {
   constructor() {
     super('dbAuth requires a forgot password handler in order to notify user')
-    this.name = 'NoForgotPasswordHandler'
+    this.name = 'NoForgotPasswordHandlerError'
   }
 }
 
-export class NoResetPasswordHandler extends Error {
+export class NoResetPasswordHandlerError extends Error {
   constructor() {
     super('dbAuth requires a reset password handler in order to notify user')
-    this.name = 'NoResetPasswordHandler'
+    this.name = 'NoResetPasswordHandlerError'
   }
 }
 
-export class UnknownAuthMethod extends Error {
+export class UnknownAuthMethodError extends Error {
   constructor(name: string) {
     super(`Unknown auth method '${name}'`)
-    this.name = 'UnknownAuthMethod'
+    this.name = 'UnknownAuthMethodError'
   }
 }
 

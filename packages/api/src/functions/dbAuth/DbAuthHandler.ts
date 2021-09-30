@@ -456,32 +456,32 @@ export class DbAuthHandler {
   _validateOptions() {
     // must have a SESSION_SECRET so we can encrypt/decrypt the cookie
     if (!process.env.SESSION_SECRET) {
-      throw new DbAuthError.NoSessionSecret()
+      throw new DbAuthError.NoSessionSecretError()
     }
 
     // must have an expiration time set for the session cookie
     if (!this.options?.login?.expires) {
-      throw new DbAuthError.NoSessionExpiration()
+      throw new DbAuthError.NoSessionExpirationError()
     }
 
     // must have a login handler to actually log a user in
     if (!this.options?.login?.handler) {
-      throw new DbAuthError.NoLoginHandler()
+      throw new DbAuthError.NoLoginHandlerError()
     }
 
     // must have a signup handler to define how to create a new user
     if (!this.options?.signup?.handler) {
-      throw new DbAuthError.NoSignupHandler()
+      throw new DbAuthError.NoSignupHandlerError()
     }
 
     // must have a forgot password handler to define how to notify user of reset token
     if (!this.options?.forgotPassword?.handler) {
-      throw new DbAuthError.NoForgotPasswordHandler()
+      throw new DbAuthError.NoForgotPasswordHandlerError()
     }
 
     // must have a reset password handler to define what to do with user once password changed
     if (!this.options?.resetPassword?.handler) {
-      throw new DbAuthError.NoResetPasswordHandler()
+      throw new DbAuthError.NoResetPasswordHandlerError()
     }
   }
 
