@@ -208,6 +208,24 @@
       "contributions": [
         "tutorial"
       ]
+    },
+    {
+      "login": "stav",
+      "name": "Steven Almeroth",
+      "avatar_url": "https://avatars.githubusercontent.com/u/204645?v=4",
+      "profile": "http://stevenmichael.almeroth.net/",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "0x1a4f7d58",
+      "name": "Bob",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10007010?v=4",
+      "profile": "https://github.com/0x1a4f7d58",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 5
