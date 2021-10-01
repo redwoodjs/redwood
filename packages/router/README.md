@@ -381,6 +381,7 @@ In the following example, `/about/` will _not_ match `/about` and you will be se
       <Route path="/about" page={AboutPage} name="about" />
       <Route notfound page={NotFoundPage} />
     </Router>
+```
 ## useParams
 
 Sometimes it's convenient to receive route parameters as the props to the Page, but in the case where a deeply nested component needs access to the route parameters, it quickly becomes tedious to pass those props through every intervening component. RR solves this with the `useParams` hook:
