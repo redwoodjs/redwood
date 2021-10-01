@@ -1006,7 +1006,7 @@ describe('dbAuth', () => {
       tokenExpires.setSeconds(
         tokenExpires.getSeconds() - options.forgotPassword.expires + 1
       )
-      const user = await createDbUser({
+      await createDbUser({
         resetToken: '1234',
         resetTokenExpiresAt: tokenExpires,
       })
@@ -1027,7 +1027,7 @@ describe('dbAuth', () => {
       tokenExpires.setSeconds(
         tokenExpires.getSeconds() - options.forgotPassword.expires + 1
       )
-      const user = await createDbUser({
+      await createDbUser({
         resetToken: '1234',
         resetTokenExpiresAt: tokenExpires,
       })
