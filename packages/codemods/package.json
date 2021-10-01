@@ -1,13 +1,14 @@
 {
   "name": "@redwoodjs/codemods",
   "description": "Codemods to ease upgrading a RedwoodJS Project",
-  "version": "0.36.4",
+  "version": "0.37.0",
   "license": "MIT",
   "bin": "./dist/codemods.js",
   "files": [
     "dist"
   ],
   "dependencies": {
+    "core-js": "3.17.3",
     "deepmerge": "4.2.2",
     "execa": "5.1.1",
     "fast-glob": "3.2.7",
@@ -17,8 +18,7 @@
     "tasuku": "1.0.2",
     "toml": "3.0.0",
     "vscode-ripgrep": "1.0.0",
-    "yargs": "16.2.0",
-    "core-js": "3.17.3"
+    "yargs": "16.2.0"
   },
   "scripts": {
     "build": "yarn build:js",
@@ -29,7 +29,7 @@
     "test:watch": "yarn test --watch"
   },
   "devDependencies": {
-    "tempy": "1.0.1",
-    "@types/jscodeshift": "^0.11.2"
+    "@types/jscodeshift": "^0.11.2",
+    "tempy": "1.0.1"
   }
 }
