@@ -136,6 +136,8 @@ export const handler = async (event, context) => {
       username: 'email',
       hashedPassword: 'hashedPassword',
       salt: 'salt',
+      resetToken: 'resetToken',
+      resetTokenExpiresAt: 'resetTokenExpiresAt',
     },
 
     forgotPassword: forgotPasswordOptions,
