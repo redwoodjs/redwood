@@ -411,7 +411,7 @@ export class DbAuthHandler {
       this._sanitizeUser(user)
     )
 
-    // returning something truthy from the handler means to log them in automatically
+    // returning the user from the handler means to log them in automatically
     if (response) {
       return this._loginResponse(user)
     } else {
