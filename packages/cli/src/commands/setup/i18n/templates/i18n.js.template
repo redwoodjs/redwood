@@ -39,7 +39,6 @@ i18n
   .use(LanguageDetector)
   .init({
     interpolation: { escapeValue: false }, // React already does escaping
-    lng: 'en',
     fallbackLng: 'en',
     resources: {
       en: {
