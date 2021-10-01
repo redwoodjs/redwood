@@ -50,7 +50,7 @@ export const addDirectives = async () => {
     for (const [filename, url] of Object.entries(filenamesToUrls)) {
       const res = await fetch(url)
       const text = await res.text()
-      fs.writeFileSync(`${filename}.${isTSProject ? '.ts' : 'js'}`, text)
+      fs.writeFileSync(`${filename}.${isTSProject ? 'ts' : 'js'}`, text)
     }
   }
 }
