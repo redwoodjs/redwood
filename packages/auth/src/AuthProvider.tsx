@@ -252,7 +252,9 @@ export class AuthProvider extends React.Component<
     if (this.rwClient.forgotPassword) {
       return await this.rwClient.forgotPassword(username)
     } else {
-      throw new Error(`forgotPassword not implemented in auth client`)
+      throw new Error(
+        `Auth client ${this.rwClient.type} does not implement this function`
+      )
     }
   }
 
@@ -260,7 +262,9 @@ export class AuthProvider extends React.Component<
     if (this.rwClient.resetPassword) {
       return await this.rwClient.resetPassword(options)
     } else {
-      throw new Error(`resetPassword not implemented in auth client`)
+      throw new Error(
+        `Auth client ${this.rwClient.type} does not implement this function`
+      )
     }
   }
 
@@ -268,7 +272,9 @@ export class AuthProvider extends React.Component<
     if (this.rwClient.validateResetToken) {
       return await this.rwClient.validateResetToken(resetToken)
     } else {
-      throw new Error(`validateResetToken not implemented in auth client`)
+      throw new Error(
+        `Auth client ${this.rwClient.type} does not implement this function`
+      )
     }
   }
 
