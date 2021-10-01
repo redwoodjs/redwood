@@ -20,6 +20,7 @@
     "@prisma/client": "2.30.3",
     "@redwoodjs/api": "0.36.4",
     "@types/pino": "6.3.11",
+    "core-js": "3.17.3",
     "graphql": "15.5.3",
     "graphql-helix": "1.7.0",
     "graphql-playground-html": "1.6.29",
