@@ -8,7 +8,7 @@ import runTransform from '../../../lib/runTransform'
 
 export const command = 'update-api-imports'
 export const description =
-  'Updates @redwoodjs/api imports to @redwoodjs/graphql-server'
+  '(v0.36->v0.37) Updates @redwoodjs/api imports to @redwoodjs/graphql-server'
 
 export const handler = () => {
   task(
