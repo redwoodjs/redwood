@@ -249,7 +249,7 @@ import { Toaster } from '@redwoodjs/web/toast'
 const PostsLayout = ({ children }) => {
   return (
     <div className=\\"rw-scaffold\\">
-      <Toaster />
+      <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
       <header className=\\"rw-header\\">
         <h1 className=\\"rw-heading rw-heading-primary\\">
           <Link to={routes.posts()} className=\\"rw-link\\">
@@ -1401,7 +1401,7 @@ type PostLayoutProps = {
 const PostsLayout = ({ children }: PostLayoutProps) => {
   return (
     <div className=\\"rw-scaffold\\">
-      <Toaster />
+      <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
       <header className=\\"rw-header\\">
         <h1 className=\\"rw-heading rw-heading-primary\\">
           <Link

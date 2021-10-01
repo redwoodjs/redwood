@@ -46,7 +46,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <Toaster />
+      <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
       <Form
         id="tutorial-form"
         onSubmit={onSubmit}
