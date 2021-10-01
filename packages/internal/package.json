@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/internal",
-  "version": "0.36.4",
+  "version": "0.37.0",
   "files": [
     "dist"
   ],
@@ -12,13 +12,10 @@
   "types": "dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@redwoodjs/graphql-server": "0.36.4",
     "@babel/parser": "7.15.6",
     "@babel/plugin-transform-typescript": "7.15.4",
-    "babel-plugin-polyfill-corejs3": "0.2.4",
     "@babel/register": "7.15.3",
     "@babel/runtime-corejs3": "7.15.4",
-    "core-js": "3.17.3",
     "@babel/traverse": "7.15.4",
     "@graphql-codegen/cli": "2.2.0",
     "@graphql-codegen/core": "2.1.0",
@@ -27,7 +24,10 @@
     "@graphql-codegen/typescript-operations": "2.1.4",
     "@graphql-codegen/typescript-react-apollo": "3.1.4",
     "@graphql-codegen/typescript-resolvers": "2.2.1",
+    "@redwoodjs/graphql-server": "0.37.0",
+    "babel-plugin-polyfill-corejs3": "0.2.4",
     "chalk": "4.1.2",
+    "core-js": "3.17.3",
     "deepmerge": "4.2.2",
     "esbuild": "0.12.28",
     "fast-glob": "3.2.7",
