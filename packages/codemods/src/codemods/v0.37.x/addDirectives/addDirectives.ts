@@ -28,9 +28,9 @@ export const addDirectives = async () => {
     },
     [skipAuthDir]: {
       [path.join(skipAuthDir, 'skipAuth.ts')]:
-        'https://raw.githubusercontent.com/redwoodjs/redwood/main/packages/create-redwood-app/template/api/src/directives/skipAuth/skipAuth.test.ts',
-      [path.join(skipAuthDir, 'skipAuth.test.ts')]:
         'https://raw.githubusercontent.com/redwoodjs/redwood/main/packages/create-redwood-app/template/api/src/directives/skipAuth/skipAuth.ts',
+      [path.join(skipAuthDir, 'skipAuth.test.ts')]:
+        'https://raw.githubusercontent.com/redwoodjs/redwood/main/packages/create-redwood-app/template/api/src/directives/skipAuth/skipAuth.test.ts',
     },
   }
 
