@@ -365,15 +365,15 @@ In the route we've specified a route parameter of `{name:slug}` which will invok
 ## Trailing slashes
 RR by default removes all trailing slashes before attempting to match the route you are trying to navigate to.
 
-For example if you attempt to navigate to `/about` and you enter `/about/` RR will remove the trailing `/` and will match `path="/about"`
+For example, if you attempt to navigate to `/about` and you enter `/about/`, RR will remove the trailing `/` and will match `path="/about"`
 
 There are 3 values that can be used with the `trailingSlashes` prop
-- never (default) -> strips trailing slashes before matching ("/about/" -> "/about")
-- always -> always adds trailing slashes before matching ("/about" -> "/about/")
-- preserve -> paths without a slash won't match paths with a slash ("/about" -> "/about", "/about/" -> "/about/")
+1.  **never** (default): strips trailing slashes before matching ("/about/" -> "/about")
+2. **always**: always adds trailing slashes before matching ("/about" -> "/about/")
+3. **preserve** -> paths without a slash won't match paths with a slash ("/about" -> "/about", "/about/" -> "/about/")
 
-If you need to match trailing slashes exactly use the `preserve` value.
-In the following `/about/` will not match `/about` and you will be sent to the `NotFoundPage`
+If you need to match trailing slashes exactly, use the `preserve` value.
+In the following example, `/about/` will _not_ match `/about` and you will be sent to the `NotFoundPage`
 
 ```js
     <Router trailingSlashes={'preserve'}>
@@ -381,8 +381,6 @@ In the following `/about/` will not match `/about` and you will be sent to the `
       <Route path="/about" page={AboutPage} name="about" />
       <Route notfound page={NotFoundPage} />
     </Router>
-```
-
 ## useParams
 
 Sometimes it's convenient to receive route parameters as the props to the Page, but in the case where a deeply nested component needs access to the route parameters, it quickly becomes tedious to pass those props through every intervening component. RR solves this with the `useParams` hook:
