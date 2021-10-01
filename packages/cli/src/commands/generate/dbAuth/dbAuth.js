@@ -208,8 +208,8 @@ const tasks = ({
             `       navigate(routes.home())\n` +
             `     }\n\n` +
             `   and change the route to where you want them to go if the user is already\n` +
-            `   logged in. Also take a look in the onSubmit() functions in ForgotPasswordPage` +
-            `   and ResetPasswordPage to change where the user redirects to after submitting` +
+            `   logged in. Also take a look in the onSubmit() functions in ForgotPasswordPage\n` +
+            `   and ResetPasswordPage to change where the user redirects to after submitting\n` +
             `   those forms.\n\n` +
             `   Oh, and if you haven't already, add the necessary dbAuth functions and\n` +
             `   app setup by running:\n\n` +
