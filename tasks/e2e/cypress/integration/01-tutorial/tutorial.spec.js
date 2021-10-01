@@ -54,7 +54,8 @@ describe('The Redwood Tutorial - Golden path edition', () => {
     cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step1_1_Routes)
     cy.visit('http://localhost:8910')
 
-    cy.get('h1 > span').contains('Welcome to RedwoodJS!')
+    // cy.get('h1').should().contains('FOO!')
+    cy.get('h1', { timeout: 3000 }).should('contain', 'Welcome to')
   })
 
   test_first_page()
