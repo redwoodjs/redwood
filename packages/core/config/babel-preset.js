@@ -166,16 +166,6 @@ module.exports = () => {
               svgo: {
                 plugins: [
                   {
-                    name: 'preset-default',
-                    params: {
-                      overrides: {
-                        // @TODO confirm this is the right thing
-                        // On my projects, this was needed for backwards compatibility
-                        removeViewBox: false,
-                      },
-                    },
-                  },
-                  {
                     name: 'removeAttrs',
                     params: { attrs: '(data-name)' },
                   },

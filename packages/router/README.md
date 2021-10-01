@@ -2,8 +2,6 @@
 
 This is the built-in router for Redwood apps. It takes inspiration from Ruby on Rails, React Router, and Reach Router, but is very opinionated in its own way.
 
-> **WARNING:** RedwoodJS software has not reached a stable version 1.0 and should not be considered suitable for production use. In the "make it work; make it right; make it fast" paradigm, Redwood is in the later stages of the "make it work" phase.
-
 Redwood Router (RR from now on) is designed to list all routes in a single file, with limited nesting. We prefer this design, as it makes it very easy to track which routes map to which pages.
 
 ## Router and Route
@@ -364,6 +362,25 @@ Here we've created a custom `slug` route parameter type. It is defined by a `con
 
 In the route we've specified a route parameter of `{name:slug}` which will invoke our custom route parameter type and if we have a request for `/post/redwood-router`, the resulting `name` prop delivered to `PostPage` will be `['redwood', 'router']`.
 
+## Trailing slashes
+RR by default removes all trailing slashes before attempting to match the route you are trying to navigate to.
+
+For example, if you attempt to navigate to `/about` and you enter `/about/`, RR will remove the trailing `/` and will match `path="/about"`
+
+There are 3 values that can be used with the `trailingSlashes` prop
+1.  **never** (default): strips trailing slashes before matching ("/about/" -> "/about")
+2. **always**: always adds trailing slashes before matching ("/about" -> "/about/")
+3. **preserve** -> paths without a slash won't match paths with a slash ("/about" -> "/about", "/about/" -> "/about/")
+
+If you need to match trailing slashes exactly, use the `preserve` value.
+In the following example, `/about/` will _not_ match `/about` and you will be sent to the `NotFoundPage`
+
+```js
+    <Router trailingSlashes={'preserve'}>
+      <Route path="/" page={HomePage} name="home" />
+      <Route path="/about" page={AboutPage} name="about" />
+      <Route notfound page={NotFoundPage} />
+    </Router>
 ## useParams
 
 Sometimes it's convenient to receive route parameters as the props to the Page, but in the case where a deeply nested component needs access to the route parameters, it quickly becomes tedious to pass those props through every intervening component. RR solves this with the `useParams` hook:
