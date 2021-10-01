@@ -39,7 +39,7 @@ i18n
   .use(LanguageDetector)
   .init({
     interpolation: { escapeValue: false }, // React already does escaping
-    lng: 'en',
+    // lng: 'en', // Not needed when using i18next-browser-languageDetector
     fallbackLng: 'en',
     resources: {
       en: {
