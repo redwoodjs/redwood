@@ -201,12 +201,16 @@ const tasks = ({
           task.title =
             `One more thing...\n\n` +
             `   ${c.warning("Pages created! But you're not done yet:")}\n\n` +
-            `   You'll need to tell your pages where to redirect after a user has logged in\n` +
-            `   or signed up. Look in LoginPage and SignupPage for these lines:\n\n` +
+            `   You'll need to tell your pages where to redirect after a user has logged in,\n` +
+            `   signed up, or reset their password. Look in LoginPage, SignupPage,\n` +
+            `   ForgotPasswordPage and ResetPasswordPage for these lines: \n\n` +
             `     if (isAuthenticated) {\n` +
             `       navigate(routes.home())\n` +
             `     }\n\n` +
-            `   and change the route to where you want them to go.\n\n` +
+            `   and change the route to where you want them to go if the user is already\n` +
+            `   logged in. Also take a look in the onSubmit() functions in ForgotPasswordPage` +
+            `   and ResetPasswordPage to change where the user redirects to after submitting` +
+            `   those forms.\n\n` +
             `   Oh, and if you haven't already, add the necessary dbAuth functions and\n` +
             `   app setup by running:\n\n` +
             `     yarn rw setup auth dbAuth\n\n` +
