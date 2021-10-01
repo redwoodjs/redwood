@@ -21,7 +21,7 @@
     "@redwoodjs/api": "0.37.0",
     "@types/pino": "6.3.11",
     "core-js": "3.17.3",
-    "graphql": "15.5.3",
+    "graphql": "15.6.0",
     "graphql-helix": "1.7.0",
     "graphql-playground-html": "1.6.29",
     "graphql-scalars": "1.10.1",

@@ -42,7 +42,7 @@
     "esbuild-loader": "2.15.1",
     "fast-glob": "3.2.7",
     "file-loader": "6.2.0",
-    "graphql": "15.5.3",
+    "graphql": "15.6.0",
     "graphql-tag": "2.12.5",
     "html-webpack-plugin": "5.3.2",
     "lodash.escaperegexp": "4.1.2",

@@ -34,7 +34,7 @@
     "findup-sync": "4.0.0",
     "fs-extra": "10.0.0",
     "glob": "7.1.7",
-    "graphql": "15.5.3",
+    "graphql": "15.6.0",
     "kill-port": "1.6.1",
     "prettier": "2.4.1",
     "rimraf": "3.0.2",
