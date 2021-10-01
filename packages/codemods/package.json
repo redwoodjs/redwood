@@ -8,7 +8,7 @@
     "dist"
   ],
   "dependencies": {
-    "core-js": "3.17.3",
+    "core-js": "3.18.1",
     "deepmerge": "4.2.2",
     "execa": "5.1.1",
     "fast-glob": "3.2.7",

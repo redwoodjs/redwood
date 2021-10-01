@@ -13,7 +13,7 @@
   "dependencies": {
     "@apollo/client": "3.3.21",
     "@redwoodjs/auth": "0.37.0",
-    "core-js": "3.17.3",
+    "core-js": "3.18.1",
     "graphql": "15.5.3",
     "proptypes": "1.1.0",
     "react-helmet-async": "1.1.2",

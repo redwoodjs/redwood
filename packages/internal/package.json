@@ -27,7 +27,7 @@
     "@redwoodjs/graphql-server": "0.37.0",
     "babel-plugin-polyfill-corejs3": "0.2.4",
     "chalk": "4.1.2",
-    "core-js": "3.17.3",
+    "core-js": "3.18.1",
     "deepmerge": "4.2.2",
     "esbuild": "0.12.28",
     "fast-glob": "3.2.7",
