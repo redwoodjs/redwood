@@ -9,6 +9,7 @@
   "license": "MIT",
   "devDependencies": {
     "@auth0/auth0-spa-js": "1.18.0",
+    "@azure/msal-browser": "^2.17.0",
     "@clerk/clerk-js": "1.33.0",
     "@clerk/clerk-sdk-node": "0.5.2",
     "@clerk/types": "1.13.0",
@@ -19,7 +20,6 @@
     "firebase-admin": "9.11.1",
     "gotrue-js": "0.9.29",
     "magic-sdk": "6.0.5",
-    "msal": "1.4.12",
     "netlify-identity-widget": "1.9.2",
     "nhost-js-sdk": "3.1.0",
     "react": "17.0.2"
