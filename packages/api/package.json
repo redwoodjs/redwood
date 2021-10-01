@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/api",
-  "version": "0.37.0",
+  "version": "0.37.1",
   "files": [
     "dist",
     "logger",
@@ -21,7 +21,7 @@
     "uuid": "8.3.2"
   },
   "devDependencies": {
-    "@redwoodjs/auth": "0.37.0",
+    "@redwoodjs/auth": "v0.37.1",
     "@types/crypto-js": "4.0.2",
     "@types/jsonwebtoken": "8.5.5",
     "@types/lodash.merge": "4.6.6",
