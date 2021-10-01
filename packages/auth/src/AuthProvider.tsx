@@ -41,8 +41,8 @@ export interface AuthContextInterface {
    */
   reauthenticate(): Promise<void>
   forgotPassword(username: string): Promise<any>
-  resetPassword(resetToken: string, password: string): Promise<any>
-  validateResetToken(token: string | null): Promise<any>
+  resetPassword(options?: unknown): Promise<any>
+  validateResetToken(resetToken: string | null): Promise<any>
   /**
    * A reference to the client that you passed into the `AuthProvider`,
    * which is useful if we do not support some specific functionality.
@@ -264,9 +264,9 @@ export class AuthProvider extends React.Component<
     }
   }
 
-  validateResetToken = async (token: string | null) => {
+  validateResetToken = async (resetToken: string | null) => {
     if (this.rwClient.validateResetToken) {
-      return await this.rwClient.validateResetToken(token)
+      return await this.rwClient.validateResetToken(resetToken)
     } else {
       throw new Error(`validateResetToken not implemented in auth client`)
     }

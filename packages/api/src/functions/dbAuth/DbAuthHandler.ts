@@ -436,13 +436,16 @@ export class DbAuthHandler {
 
   async validateResetToken() {
     // is token present at all?
-    if (this.params.token == null || String(this.params.token).trim() === '') {
+    if (
+      this.params.resetToken == null ||
+      String(this.params.resetToken).trim() === ''
+    ) {
       throw new DbAuthError.ResetTokenRequiredError(
         this.options.resetPassword?.errors?.resetTokenRequired
       )
     }
 
-    const user = await this._findUserByToken(this.params.token as string)
+    const user = await this._findUserByToken(this.params.resetToken as string)
 
     return [
       JSON.stringify(this._sanitizeUser(user)),
