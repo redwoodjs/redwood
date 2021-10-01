@@ -2,7 +2,7 @@ import type { FileInfo, API, StringLiteral } from 'jscodeshift'
 
 type TransformValue = 'Float' | 'Json' | 'Int' | 'Boolean' | 'DateTime'
 
-export default function transformer(file: FileInfo, api: API) {
+export default function transform(file: FileInfo, api: API) {
   const j = api.jscodeshift
 
   const mapTransformValueToValidationProperty = (
@@ -39,12 +39,12 @@ export default function transformer(file: FileInfo, api: API) {
     }
   }
 
-  const outputAst = j(file.source)
+  const ast = j(file.source)
 
   /**
    * 1 - renaming validation to config
    */
-  outputAst
+  ast
     .find(j.JSXElement, { openingElement: { name: { name: 'Form' } } })
     .forEach((formElement) => {
       // Use opening element, to make sure we don't modify validation on <Field validation>
@@ -106,5 +106,5 @@ export default function transformer(file: FileInfo, api: API) {
         })
     })
 
-  return outputAst.toSource()
+  return ast.toSource()
 }
