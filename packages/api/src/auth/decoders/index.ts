@@ -5,6 +5,7 @@ import type { SupportedAuthTypes } from '@redwoodjs/auth'
 import { auth0 } from './auth0'
 import { azureActiveDirectory } from './azureActiveDirectory'
 import { clerk } from './clerk'
+import { cognito } from './cognito'
 import { custom } from './custom'
 import { dbAuth } from './dbAuth'
 import { ethereum } from './ethereum'
@@ -29,6 +30,7 @@ const typesToDecoders: Record<
   auth0: auth0,
   azureActiveDirectory: azureActiveDirectory,
   clerk,
+  cognito: cognito,
   netlify: netlify,
   nhost: nhost,
   goTrue: netlify,

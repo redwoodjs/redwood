@@ -9,6 +9,9 @@
   "license": "MIT",
   "devDependencies": {
     "@auth0/auth0-spa-js": "1.18.0",
+    "@aws-sdk/client-cognito-identity": "^3.34.0",
+    "@aws-sdk/credential-provider-cognito-identity": "^3.34.0",
+    "@aws-amplify/ui-react": "^1.2.19",
     "@clerk/clerk-js": "1.33.0",
     "@clerk/clerk-sdk-node": "0.5.2",
     "@clerk/types": "1.13.0",
