@@ -1,4 +1,4 @@
-import { APIGatewayProxyEvent } from 'aws-lambda'
+import type { APIGatewayProxyEvent } from 'aws-lambda'
 import { Request } from 'graphql-helix'
 
 import { CorsContext } from './cors'
