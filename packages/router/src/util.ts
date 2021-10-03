@@ -210,9 +210,9 @@ const replaceParams = (path: string, args: Record<string, unknown> = {}) => {
         const paramSpec = part.substr(1, part.length - 2)
         const paramName = paramSpec.split(':')[0]
         const arg = args[paramName]
-        if (arg) {
+        if (Object.prototype.hasOwnProperty.call(args, paramName)) {
           delete args[paramName]
-          return arg
+          return '' + arg
         }
       }
       return part
