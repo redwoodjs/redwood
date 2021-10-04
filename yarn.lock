@@ -5,23 +5,22 @@ __metadata:
   version: 4
   cacheKey: 8c0
 
-"@apollo/client@npm:3.3.21":
-  version: 3.3.21
-  resolution: "@apollo/client@npm:3.3.21"
+"@apollo/client@npm:3.4.15":
+  version: 3.4.15
+  resolution: "@apollo/client@npm:3.4.15"
   dependencies:
     "@graphql-typed-document-node/core": ^3.0.0
-    "@types/zen-observable": ^0.8.0
     "@wry/context": ^0.6.0
     "@wry/equality": ^0.5.0
-    fast-json-stable-stringify: ^2.0.0
-    graphql-tag: ^2.12.0
+    "@wry/trie": ^0.3.0
+    graphql-tag: ^2.12.3
     hoist-non-react-statics: ^3.3.2
-    optimism: ^0.16.0
+    optimism: ^0.16.1
     prop-types: ^15.7.2
     symbol-observable: ^4.0.0
-    ts-invariant: ^0.8.0
-    tslib: ^1.10.0
-    zen-observable: ^0.8.14
+    ts-invariant: ^0.9.0
+    tslib: ^2.3.0
+    zen-observable-ts: ~1.1.0
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0
     react: ^16.8.0 || ^17.0.0
@@ -31,7 +30,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 10c01cdcddbabadf1e692de076ef974882ac1d8d0fc6f722b4661f4d41ac9da9659fb550a7a621b8e250d0a69a20375f44df70ac9c3d8248623221c5b0c251af
+  checksum: 19a15ca44f2acad56c56d044f3ad329d64f01a4cd1d06729b0e0271866ede0b7075f4c27caf5c828da650cd01b5fac00f5cf6b5aac1df5d8568adcc49989af7a
   languageName: node
   linkType: hard
 
@@ -4566,7 +4565,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/web@workspace:packages/web"
   dependencies:
-    "@apollo/client": 3.3.21
+    "@apollo/client": 3.4.15
     "@babel/cli": 7.15.4
     "@redwoodjs/auth": 0.37.2
     "@types/react": 17.0.21
@@ -6735,7 +6734,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/zen-observable@npm:^0.8.0":
+"@types/zen-observable@npm:0.8.3":
   version: 0.8.3
   resolution: "@types/zen-observable@npm:0.8.3"
   checksum: c0605d109e58a32c9b47ab9becb4ee4bcd8ed54f452ccdcfbb025a60eb8abb1341f00fb045caaa6f1a72f1299f2cdf7b7918023aef34bd9bfdfdbae0e21e66eb
@@ -14123,7 +14122,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"graphql-tag@npm:2.12.5, graphql-tag@npm:^2.11.0, graphql-tag@npm:^2.12.0":
+"graphql-tag@npm:2.12.5, graphql-tag@npm:^2.11.0, graphql-tag@npm:^2.12.3":
   version: 2.12.5
   resolution: "graphql-tag@npm:2.12.5"
   dependencies:
@@ -19161,7 +19160,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"optimism@npm:^0.16.0":
+"optimism@npm:^0.16.1":
   version: 0.16.1
   resolution: "optimism@npm:0.16.1"
   dependencies:
@@ -24080,12 +24079,12 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"ts-invariant@npm:^0.8.0":
-  version: 0.8.2
-  resolution: "ts-invariant@npm:0.8.2"
+"ts-invariant@npm:^0.9.0":
+  version: 0.9.3
+  resolution: "ts-invariant@npm:0.9.3"
   dependencies:
     tslib: ^2.1.0
-  checksum: 79c3060cc612b542cd949a2446a0dc3e4c836ee734adbf22c5e922ba48d1dabad9382bff520fc2decd6cbd7ac16dcb1347bd0d1224a9438e916504b63e17705a
+  checksum: ac0712a08ffecdf5c7fbc28ef59b1f882ceb95e2558529485f33532882e05357a7f41ccfd52f60643f9d1d6e6d2428c41e52c2d01df66d1b2d49487e6e718243
   languageName: node
   linkType: hard
 
@@ -24156,7 +24155,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"tslib@npm:^1.10.0, tslib@npm:^1.8.1, tslib@npm:^1.9.0, tslib@npm:^1.9.2, tslib@npm:^1.9.3":
+"tslib@npm:^1.8.1, tslib@npm:^1.9.0, tslib@npm:^1.9.2, tslib@npm:^1.9.3":
   version: 1.14.1
   resolution: "tslib@npm:1.14.1"
   checksum: 69ae09c49eea644bc5ebe1bca4fa4cc2c82b7b3e02f43b84bd891504edf66dbc6b2ec0eef31a957042de2269139e4acff911e6d186a258fb14069cd7f6febce2
@@ -26222,7 +26221,17 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"zen-observable@npm:^0.8.14":
+"zen-observable-ts@npm:~1.1.0":
+  version: 1.1.0
+  resolution: "zen-observable-ts@npm:1.1.0"
+  dependencies:
+    "@types/zen-observable": 0.8.3
+    zen-observable: 0.8.15
+  checksum: 608dc1b82b1f8c66d1068b24017fd855e2355acaec3f5c41f7e3f780d58aa3b1ce3e175c82a65095f1b0f6ec18295b1f1d9aafa81b2f4556d55ae4e4bb6d4ec8
+  languageName: node
+  linkType: hard
+
+"zen-observable@npm:0.8.15":
   version: 0.8.15
   resolution: "zen-observable@npm:0.8.15"
   checksum: 71cc2f2bbb537300c3f569e25693d37b3bc91f225cefce251a71c30bc6bb3e7f8e9420ca0eb57f2ac9e492b085b8dfa075fd1e8195c40b83c951dd59c6e4fbf8
