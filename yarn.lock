@@ -4244,12 +4244,14 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/codemods@workspace:packages/codemods"
   dependencies:
+    "@babel/cli": 7.15.4
     "@types/jscodeshift": ^0.11.2
     core-js: 3.17.3
     deepmerge: 4.2.2
     execa: 5.1.1
     fast-glob: 3.2.7
     findup-sync: 4.0.0
+    jest: 27.2.0
     jscodeshift: 0.13.0
     node-fetch: 2.6.1
     tasuku: 1.0.2
@@ -21919,8 +21921,10 @@ resolve@^2.0.0-next.3:
   dependencies:
     "@babel/cli": 7.15.4
     "@babel/node": 7.15.4
+    "@types/jscodeshift": ^0.11.2
     eslint: 7.32.0
     jest: 27.2.0
+    jscodeshift: 0.13.0
     npm-packlist: 3.0.0
     rimraf: 3.0.2
     typescript: 4.4.3
