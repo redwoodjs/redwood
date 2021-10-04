@@ -26,7 +26,6 @@ import {
 } from '../../../lib'
 import c from '../../../lib/colors'
 import { yargsDefaults } from '../../generate'
-import { handler as dbAuthHandler } from '../dbAuth/dbAuth'
 import {
   customOrDefaultTemplatePath,
   relationsForModel,
@@ -643,8 +642,10 @@ export const handler = async ({
   typescript,
 }) => {
   if (modelArg.toLowerCase() === 'dbauth') {
-    // proxy to dbAuth generator
-    return await dbAuthHandler({ force, tests, typescript })
+    console.info(c.green('\nGenerate dbAuth pages with:\n'))
+    console.info('  yarn rw generate dbAuth\n')
+
+    process.exit(0)
   }
 
   if (tests === undefined) {
