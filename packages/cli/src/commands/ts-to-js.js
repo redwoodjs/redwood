@@ -5,4 +5,5 @@ export const description = 'Convert a TypeScript project to JavaScript'
 
 export const handler = () => {
   convertTsProjectToJs(getPaths().base)
+  convertTsProjectToJs(getPaths().scripts)
 }

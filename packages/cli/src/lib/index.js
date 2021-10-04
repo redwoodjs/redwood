@@ -104,8 +104,9 @@ export const getEnum = async (name) => {
  */
 export const getSchemaDefinitions = async () => {
   const schemaPath = path.join(getPaths().api.db, 'schema.prisma')
+
   const metadata = await getDMMF({
-    datamodel: readFile(schemaPath.toString()),
+    datamodelPath: schemaPath.toString(),
   })
 
   return metadata
@@ -174,7 +175,8 @@ export const prettify = (templateFilename, renderedTemplate) => {
   })
 }
 
-export const readFile = (target) => fs.readFileSync(target)
+export const readFile = (target) =>
+  fs.readFileSync(target, { encoding: 'utf8' })
 
 const SUPPORTED_EXTENSIONS = ['.js', '.ts', '.tsx']
 

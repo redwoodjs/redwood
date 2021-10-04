@@ -17,5 +17,8 @@
   "engines": {
     "node": "14.x",
     "yarn": "1.x"
+  },
+  "prisma": {
+    "seed": "yarn rw exec seed"
   }
 }
