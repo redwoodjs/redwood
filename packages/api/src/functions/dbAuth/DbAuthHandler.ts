@@ -1,6 +1,7 @@
 import type { PrismaClient } from '@prisma/client'
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import CryptoJS from 'crypto-js'
+import md5 from 'md5'
 import { v4 as uuidv4 } from 'uuid'
 
 import * as DbAuthError from './errors'
@@ -26,6 +27,19 @@ interface DbAuthHandlerOptions {
     username: string
     hashedPassword: string
     salt: string
+    resetToken: string
+    resetTokenExpiresAt: string
+  }
+  /**
+   * Object containing forgot password options
+   */
+  forgotPassword: {
+    handler: (user: Record<string, unknown>) => Promise<any>
+    errors?: {
+      usernameNotFound?: string
+      usernameRequired?: string
+    }
+    expires: number
   }
   /**
    * Object containing login options
@@ -42,15 +56,28 @@ interface DbAuthHandlerOptions {
     /**
      * Object containing error strings
      */
-    errors: {
-      usernameOrPasswordMissing: string
-      usernameNotFound: string
-      incorrectPassword: string
+    errors?: {
+      usernameOrPasswordMissing?: string
+      usernameNotFound?: string
+      incorrectPassword?: string
     }
     /**
      * How long a user will remain logged in, in seconds
      */
     expires: number
+  }
+  /**
+   * Object containing reset password options
+   */
+  resetPassword: {
+    handler: (user: Record<string, unknown>) => Promise<any>
+    allowReusedPassword: boolean
+    errors?: {
+      resetTokenExpired?: string
+      resetTokenInvalid?: string
+      resetTokenRequired?: string
+      reusedPassword?: string
+    }
   }
   /**
    * Object containing login options
@@ -68,9 +95,9 @@ interface DbAuthHandlerOptions {
     /**
      * Object containing error strings
      */
-    errors: {
-      fieldMissing: string
-      usernameTaken: string
+    errors?: {
+      fieldMissing?: string
+      usernameTaken?: string
     }
   }
 }
@@ -86,7 +113,14 @@ interface SessionRecord {
   id: string | number
 }
 
-type AuthMethodNames = 'login' | 'logout' | 'signup' | 'getToken'
+type AuthMethodNames =
+  | 'forgotPassword'
+  | 'getToken'
+  | 'login'
+  | 'logout'
+  | 'resetPassword'
+  | 'signup'
+  | 'validateResetToken'
 
 type Params = {
   username?: string
@@ -109,16 +143,27 @@ export class DbAuthHandler {
 
   // class constant: list of auth methods that are supported
   static get METHODS(): AuthMethodNames[] {
-    return ['login', 'logout', 'signup', 'getToken']
+    return [
+      'forgotPassword',
+      'getToken',
+      'login',
+      'logout',
+      'resetPassword',
+      'signup',
+      'validateResetToken',
+    ]
   }
 
   // class constant: maps the auth functions to their required HTTP verb for access
   static get VERBS() {
     return {
+      forgotPassword: 'POST',
+      getToken: 'GET',
       login: 'POST',
       logout: 'POST',
+      resetPassword: 'POST',
       signup: 'POST',
-      getToken: 'GET',
+      validateResetToken: 'POST',
     }
   }
 
@@ -195,9 +240,8 @@ export class DbAuthHandler {
     }
   }
 
-  // Actual function that triggers everything else to happen:
-  // `login`, `logout`, `signup`, or `getToken` is called from here, after some
-  // checks to make sure the request is good
+  // Actual function that triggers everything else to happen: `login`, `signup`,
+  // etc. is called from here, after some checks to make sure the request is good
   async invoke() {
     // if there was a problem decryption the session, just return the logout
     // response immediately
@@ -233,68 +277,62 @@ export class DbAuthHandler {
     }
   }
 
-  async login() {
-    const { username, password } = this.params
-    const dbUser = await this._verifyUser(username, password)
-    const handlerUser = await this.options.login.handler(dbUser)
+  async forgotPassword() {
+    const { username } = this.params
 
-    if (
-      handlerUser == null ||
-      handlerUser[this.options.authFields.id] == null
-    ) {
-      throw new DbAuthError.NoUserIdError()
+    // was the username sent in at all?
+    if (!username || username.trim() === '') {
+      throw new DbAuthError.UsernameRequiredError(
+        this.options.forgotPassword?.errors?.usernameRequired ||
+          `Username is required`
+      )
     }
 
-    const sessionData = { id: handlerUser[this.options.authFields.id] }
+    let user = await this.dbAccessor.findUnique({
+      where: { [this.options.authFields.username]: username },
+    })
 
-    // TODO: this needs to go into graphql somewhere so that each request makes
-    // a new CSRF token and sets it in both the encrypted session and the
-    // csrf-token header
-    const csrfToken = DbAuthHandler.CSRF_TOKEN
+    if (user) {
+      const tokenExpires = new Date()
+      tokenExpires.setSeconds(
+        tokenExpires.getSeconds() + this.options.forgotPassword.expires
+      )
 
-    return [
-      sessionData,
-      {
-        'csrf-token': csrfToken,
-        ...this._createSessionHeader(sessionData, csrfToken),
-      },
-    ]
-  }
+      // generate a token
+      let token = md5(uuidv4())
+      const buffer = new Buffer(token)
+      token = buffer.toString('base64').replace('=', '').substring(0, 16)
 
-  logout() {
-    return this._logoutResponse()
-  }
+      // set token and expires time
+      user = await this.dbAccessor.update({
+        where: {
+          [this.options.authFields.id]: user[this.options.authFields.id],
+        },
+        data: {
+          [this.options.authFields.resetToken]: token,
+          [this.options.authFields.resetTokenExpiresAt]: tokenExpires,
+        },
+      })
 
-  async signup() {
-    const userOrMessage = await this._createUser()
-
-    // at this point `user` is either an actual user, in which case log the
-    // user in automatically, or it's a string, which is a message to show
-    // the user (something like "please verify your email")
-
-    if (typeof userOrMessage === 'object') {
-      // signup.handler() returned a user, log them in
-      const user = userOrMessage
-      const sessionData = { id: user[this.options.authFields.id] }
-      const csrfToken = DbAuthHandler.CSRF_TOKEN
+      // call user-defined handler in their functions/auth.js
+      const response = await this.options.forgotPassword.handler(
+        this._sanitizeUser(user)
+      )
 
       return [
-        sessionData,
+        response ? JSON.stringify(response) : '',
         {
-          'csrf-token': csrfToken,
-          ...this._createSessionHeader(sessionData, csrfToken),
+          ...this._deleteSessionHeader,
         },
-        { statusCode: 201 },
       ]
     } else {
-      // signup.handler() returned a message
-      const message = userOrMessage
-      return [JSON.stringify({ message }), {}, { statusCode: 201 }]
+      throw new DbAuthError.UsernameNotFoundError(
+        this.options.forgotPassword?.errors?.usernameNotFound ||
+          `Username '${username} not found`
+      )
     }
-    // errors thrown in signup.handler() will be handled by `invoke()`
   }
 
-  // converts the currentUser data to a JWT. returns `null` if session is not present
   async getToken() {
     try {
       const user = await this._getCurrentUser()
@@ -312,27 +350,151 @@ export class DbAuthHandler {
     }
   }
 
+  async login() {
+    const { username, password } = this.params
+    const dbUser = await this._verifyUser(username, password)
+    const handlerUser = await this.options.login.handler(dbUser)
+
+    if (
+      handlerUser == null ||
+      handlerUser[this.options.authFields.id] == null
+    ) {
+      throw new DbAuthError.NoUserIdError()
+    }
+
+    return this._loginResponse(handlerUser)
+  }
+
+  logout() {
+    return this._logoutResponse()
+  }
+
+  async resetPassword() {
+    const { password, resetToken } = this.params
+
+    // is the resetToken present?
+    if (resetToken == null || String(resetToken).trim() === '') {
+      throw new DbAuthError.ResetTokenRequiredError(
+        this.options.resetPassword?.errors?.resetTokenRequired
+      )
+    }
+
+    // is password present?
+    if (password == null || String(password).trim() === '') {
+      throw new DbAuthError.PasswordRequiredError()
+    }
+
+    let user = await this._findUserByToken(resetToken as string)
+    const [hashedPassword] = this._hashPassword(password, user.salt)
+
+    if (
+      !this.options.resetPassword.allowReusedPassword &&
+      user.hashedPassword === hashedPassword
+    ) {
+      throw new DbAuthError.ReusedPasswordError(
+        this.options.resetPassword?.errors?.reusedPassword
+      )
+    }
+
+    // if we got here then we can update the password in the database
+    user = await this.dbAccessor.update({
+      where: { [this.options.authFields.id]: user[this.options.authFields.id] },
+      data: {
+        [this.options.authFields.hashedPassword]: hashedPassword,
+        [this.options.authFields.resetToken]: null,
+        [this.options.authFields.resetTokenExpiresAt]: null,
+      },
+    })
+
+    // call the user-defined handler so they can decide what to do with this user
+    const response = await this.options.resetPassword.handler(
+      this._sanitizeUser(user)
+    )
+
+    // returning the user from the handler means to log them in automatically
+    if (response) {
+      return this._loginResponse(user)
+    } else {
+      return this._logoutResponse({})
+    }
+  }
+
+  async signup() {
+    const userOrMessage = await this._createUser()
+
+    // at this point `user` is either an actual user, in which case log the
+    // user in automatically, or it's a string, which is a message to show
+    // the user (something like "please verify your email")
+    if (typeof userOrMessage === 'object') {
+      const user = userOrMessage
+      return this._loginResponse(user, 201)
+    } else {
+      const message = userOrMessage
+      return [JSON.stringify({ message }), {}, { statusCode: 201 }]
+    }
+  }
+
+  async validateResetToken() {
+    // is token present at all?
+    if (
+      this.params.resetToken == null ||
+      String(this.params.resetToken).trim() === ''
+    ) {
+      throw new DbAuthError.ResetTokenRequiredError(
+        this.options.resetPassword?.errors?.resetTokenRequired
+      )
+    }
+
+    const user = await this._findUserByToken(this.params.resetToken as string)
+
+    return [
+      JSON.stringify(this._sanitizeUser(user)),
+      {
+        ...this._deleteSessionHeader,
+      },
+    ]
+  }
+
   // validates that we have all the ENV and options we need to login/signup
   _validateOptions() {
     // must have a SESSION_SECRET so we can encrypt/decrypt the cookie
     if (!process.env.SESSION_SECRET) {
-      throw new DbAuthError.NoSessionSecret()
+      throw new DbAuthError.NoSessionSecretError()
     }
 
     // must have an expiration time set for the session cookie
     if (!this.options?.login?.expires) {
-      throw new DbAuthError.NoSessionExpiration()
+      throw new DbAuthError.NoSessionExpirationError()
     }
 
     // must have a login handler to actually log a user in
     if (!this.options?.login?.handler) {
-      throw new DbAuthError.NoLoginHandler()
+      throw new DbAuthError.NoLoginHandlerError()
     }
 
     // must have a signup handler to define how to create a new user
     if (!this.options?.signup?.handler) {
-      throw new DbAuthError.NoSignupHandler()
+      throw new DbAuthError.NoSignupHandlerError()
     }
+
+    // must have a forgot password handler to define how to notify user of reset token
+    if (!this.options?.forgotPassword?.handler) {
+      throw new DbAuthError.NoForgotPasswordHandlerError()
+    }
+
+    // must have a reset password handler to define what to do with user once password changed
+    if (!this.options?.resetPassword?.handler) {
+      throw new DbAuthError.NoResetPasswordHandlerError()
+    }
+  }
+
+  // removes sensative fields from user before sending over the wire
+  _sanitizeUser(user: Record<string, unknown>) {
+    const sanitized = JSON.parse(JSON.stringify(user))
+    delete sanitized[this.options.authFields.hashedPassword]
+    delete sanitized[this.options.authFields.salt]
+
+    return sanitized
   }
 
   // parses the event body into JSON, whether it's base64 encoded or not
@@ -398,6 +560,46 @@ export class DbAuthHandler {
     return true
   }
 
+  async _findUserByToken(token: string) {
+    const tokenExpires = new Date()
+    tokenExpires.setSeconds(
+      tokenExpires.getSeconds() - this.options.forgotPassword.expires
+    )
+
+    const user = await this.dbAccessor.findFirst({
+      where: {
+        [this.options.authFields.resetToken]: token,
+      },
+    })
+
+    // user not found with the given token
+    if (!user) {
+      throw new DbAuthError.ResetTokenInvalidError(
+        this.options.resetPassword?.errors?.resetTokenInvalid
+      )
+    }
+
+    // token has expired
+    if (user[this.options.authFields.resetTokenExpiresAt] < tokenExpires) {
+      await this._clearResetToken(user)
+      throw new DbAuthError.ResetTokenExpiredError(
+        this.options.resetPassword?.errors?.resetTokenExpired
+      )
+    }
+
+    return user
+  }
+
+  async _clearResetToken(user: Record<string, unknown>) {
+    await this.dbAccessor.update({
+      where: { [this.options.authFields.id]: user[this.options.authFields.id] },
+      data: {
+        [this.options.authFields.resetToken]: null,
+        [this.options.authFields.resetTokenExpiresAt]: null,
+      },
+    })
+  }
+
   // verifies that a username and password are correct, and returns the user if so
   async _verifyUser(
     username: string | undefined,
@@ -437,7 +639,7 @@ export class DbAuthHandler {
     } else {
       throw new DbAuthError.IncorrectPasswordError(
         username,
-        this.options.login?.errors.incorrectPassword
+        this.options.login?.errors?.incorrectPassword
       )
     }
   }
@@ -535,8 +737,26 @@ export class DbAuthHandler {
     }
   }
 
+  _loginResponse(user: Record<string, any>, statusCode = 200) {
+    const sessionData = { id: user[this.options.authFields.id] }
+
+    // TODO: this needs to go into graphql somewhere so that each request makes
+    // a new CSRF token and sets it in both the encrypted session and the
+    // csrf-token header
+    const csrfToken = DbAuthHandler.CSRF_TOKEN
+
+    return [
+      sessionData,
+      {
+        'csrf-token': csrfToken,
+        ...this._createSessionHeader(sessionData, csrfToken),
+      },
+      { statusCode },
+    ]
+  }
+
   _logoutResponse(
-    response?: Record<string, string>
+    response?: Record<string, unknown>
   ): [string, Record<'Set-Cookie', string>] {
     return [
       response ? JSON.stringify(response) : '',
