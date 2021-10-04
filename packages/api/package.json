@@ -17,7 +17,7 @@
     "jwks-rsa": "2.0.4",
     "lodash.merge": "4.6.2",
     "lodash.omitby": "4.6.0",
-    "pino": "^7.0.0-rc.6",
+    "pino": "^7.0.0-rc.8",
     "pino-pretty": "7.0.1",
     "uuid": "8.3.2"
   },

@@ -9721,6 +9721,16 @@ duplexify@^4.0.0, duplexify@^4.1.1:
     readable-stream "^3.1.1"
     stream-shift "^1.0.0"
 
+duplexify@^4.1.2:
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/duplexify/-/duplexify-4.1.2.tgz#18b4f8d28289132fa0b9573c898d9f903f81c7b0"
+  integrity sha512-fz3OjcNCHmRP12MJoZMPglx8m4rrFP8rovnk4vT8Fs+aonZoCwGg10dSsQsfP/E62eZcPTMSMP6686fu9Qlqtw==
+  dependencies:
+    end-of-stream "^1.4.1"
+    inherits "^2.0.3"
+    readable-stream "^3.1.1"
+    stream-shift "^1.0.0"
+
 ecdsa-sig-formatter@1.0.11, ecdsa-sig-formatter@^1.0.11:
   version "1.0.11"
   resolved "https://registry.yarnpkg.com/ecdsa-sig-formatter/-/ecdsa-sig-formatter-1.0.11.tgz#ae0f0fa2d85045ef14a817daa3ce9acd0489e5bf"
@@ -16040,6 +16050,14 @@ pino-abstract-transport@^0.3.0:
   dependencies:
     split2 "^3.2.2"
 
+pino-abstract-transport@v0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/pino-abstract-transport/-/pino-abstract-transport-0.4.0.tgz#be5913fa55542f82fccb77f6a9e04735fa583cac"
+  integrity sha512-Znl3f1ntZnDG+NpCyJyJDS+lkrlRSbgQBkV3eqNAvet/QHql6rhKLc4DuYRlwfc3fvV611O9NXPm5pbT9AJ50g==
+  dependencies:
+    duplexify "^4.1.2"
+    split2 "^3.2.2"
+
 pino-pretty@7.0.1:
   version "7.0.1"
   resolved "https://registry.yarnpkg.com/pino-pretty/-/pino-pretty-7.0.1.tgz#1e5cf4f7ddacc5b45f5308f3adf4fedb02a3ec95"
@@ -16063,17 +16081,17 @@ pino-std-serializers@^4.0.0:
   resolved "https://registry.yarnpkg.com/pino-std-serializers/-/pino-std-serializers-4.0.0.tgz#1791ccd2539c091ae49ce9993205e2cd5dbba1e2"
   integrity sha512-cK0pekc1Kjy5w9V2/n+8MkZwusa6EyyxfeQCB799CQRhRt/CqYKiWs5adeu8Shve2ZNffvfC/7J64A2PJo1W/Q==
 
-pino@^7.0.0-rc.6:
-  version "7.0.0-rc.6"
-  resolved "https://registry.yarnpkg.com/pino/-/pino-7.0.0-rc.6.tgz#8bdaabe59d787e323617cb66032c173e2d64c474"
-  integrity sha512-hlA8UAvtDW+5rZincQU7XZFwJRVXOke5JmlP1yvBZeliobAhU98p6a9Hd7Ur9iwqzDk4IoB+Sg1o9xEWlskZ3w==
+pino@^7.0.0-rc.8:
+  version "7.0.0-rc.8"
+  resolved "https://registry.yarnpkg.com/pino/-/pino-7.0.0-rc.8.tgz#aba53a91e5d8fe3ac3d47e9375ef6f5f78417f92"
+  integrity sha512-musBJ9+BiTw4DY5fmeFOYrOMtVfh/hTCTAt54OtpXR8Kwh0zrLm0SUNe0xG/JeP+jvJMCvK1r5yjnR9+hwM86g==
   dependencies:
     fast-redact "^3.0.0"
     fastify-warning "^0.2.0"
     get-caller-file "^2.0.5"
     json-stringify-safe "^5.0.1"
     on-exit-leak-free "^0.2.0"
-    pino-abstract-transport "^0.3.0"
+    pino-abstract-transport v0.4.0
     pino-std-serializers "^4.0.0"
     quick-format-unescaped "^4.0.3"
     sonic-boom "^2.2.1"
