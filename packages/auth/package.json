@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth",
-  "version": "0.36.4",
+  "version": "0.37.2",
   "files": [
     "dist"
   ],
@@ -16,7 +16,7 @@
     "@supabase/supabase-js": "1.22.6",
     "@types/netlify-identity-widget": "1.9.2",
     "@types/react": "17.0.21",
-    "firebase": "8.9.1",
+    "firebase": "9.0.1",
     "firebase-admin": "9.11.1",
     "gotrue-js": "0.9.29",
     "jest": "27.2.0",

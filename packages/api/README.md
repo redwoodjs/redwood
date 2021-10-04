@@ -193,7 +193,7 @@ And by passing `options` to `handleContext` we’re giving you another layer of 
 While we just told you context’s for resolvers, Redwood actually goes the extra mile and exports context so any of your services can use it:
 
 ```
-import { context } from '@redwoodjs/api'
+import { context } from '@redwoodjs/graphql-server'
 ```
 
 <!-- Normally you’d be running the server now, `server.listen().then...` But Redwood does things a little differently. As you might’ve guessed from the name, createGraphQLHandler returns a handler. In Redwood, serverless functions have to return a handler. -->
