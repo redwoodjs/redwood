@@ -8,7 +8,7 @@ type ${singularPascalName}LayoutProps = {
 const ${pluralPascalName}Layout = ({ children }: ${singularPascalName}LayoutProps) => {
   return (
     <div className="rw-scaffold">
-      <Toaster />
+      <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
       <header className="rw-header">
         <h1 className="rw-heading rw-heading-primary">
           <Link
