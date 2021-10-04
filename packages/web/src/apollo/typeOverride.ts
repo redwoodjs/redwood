@@ -1,21 +1,22 @@
 // Override useQuery and useMutation types
 import type {
-  QueryHookOptions,
   QueryResult,
-  MutationHookOptions,
   MutationTuple,
+  QueryHookOptions,
+  MutationHookOptions,
+  OperationVariables,
 } from '@apollo/client'
 
 // @MARK: Override relevant types from Apollo here
 declare global {
-  interface QueryOperationResult<TData = any, TVariables = any>
+  interface QueryOperationResult<TData = any, TVariables = OperationVariables>
     extends QueryResult<TData, TVariables> {}
   interface MutationOperationResult<TData, TVariables>
     extends MutationTuple<TData, TVariables> {}
 
-  interface GraphQLQueryHookOptions<TData = any, TVariables = any>
+  interface GraphQLQueryHookOptions<TData, TVariables>
     extends QueryHookOptions<TData, TVariables> {}
-  interface GraphQLMutationHookOptions<TData = any, TVariables = any>
+  interface GraphQLMutationHookOptions<TData, TVariables>
     extends MutationHookOptions<TData, TVariables> {}
 }
 

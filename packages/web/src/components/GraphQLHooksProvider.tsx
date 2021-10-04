@@ -1,14 +1,14 @@
 import type { DocumentNode } from 'graphql'
 
-type DefaultUseQueryType = (
+type DefaultUseQueryType = <TData, TVariables>(
   query: DocumentNode,
-  options?: GraphQLQueryHookOptions
-) => QueryOperationResult
+  options?: GraphQLQueryHookOptions<TData, TVariables>
+) => QueryOperationResult<TData, TVariables>
 
-type DefaultUseMutationType = (
+type DefaultUseMutationType = <TData, TVariables>(
   mutation: DocumentNode,
-  options?: GraphQLMutationHookOptions
-) => MutationOperationResult
+  options?: GraphQLMutationHookOptions<TData, TVariables>
+) => MutationOperationResult<TData, TVariables>
 export interface GraphQLHooks<
   TuseQuery = DefaultUseQueryType,
   TuseMutation = DefaultUseMutationType
@@ -64,13 +64,14 @@ export const GraphQLHooksProvider = <
   )
 }
 
-type GraphQLOperationVariables = Record<string, any>
-
 export function useQuery<TData = any, TVariables = GraphQLOperationVariables>(
   query: DocumentNode,
   options?: GraphQLQueryHookOptions<TData, TVariables>
 ): QueryOperationResult<TData, TVariables> {
-  return React.useContext(GraphQLHooksContext).useQuery(query, options)
+  return React.useContext(GraphQLHooksContext).useQuery<TData, TVariables>(
+    query,
+    options
+  )
 }
 
 export function useMutation<
@@ -80,5 +81,8 @@ export function useMutation<
   mutation: DocumentNode,
   options?: GraphQLMutationHookOptions<TData, TVariables>
 ): MutationOperationResult<TData, TVariables> {
-  return React.useContext(GraphQLHooksContext).useMutation(mutation, options)
+  return React.useContext(GraphQLHooksContext).useMutation<TData, TVariables>(
+    mutation,
+    options
+  )
 }
