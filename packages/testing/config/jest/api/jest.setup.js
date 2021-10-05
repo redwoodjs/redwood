@@ -1,6 +1,8 @@
 /* eslint-env jest */
 const path = require('path')
 
+const { Prisma } = require('@prisma/client')
+
 const { getSchemaDefinitions } = require('@redwoodjs/cli/dist/lib')
 const { setContext } = require('@redwoodjs/graphql-server')
 const { getPaths } = require('@redwoodjs/internal')
@@ -34,7 +36,7 @@ const teardown = async () => {
   )
 
   for (const model of prismaModelNames) {
-    await db.$queryRaw(`DELETE FROM "${model}"`)
+    await db.$executeRawUnsafe(`DELETE from "${model}"`)
   }
 }
 
