@@ -7,6 +7,11 @@ import Listr from 'listr'
 import { getPaths, writeFile } from '../../../lib'
 import c from '../../../lib/colors'
 
+export const command = 'cli-alias'
+export const aliases = ['shadowenv']
+export const description =
+  "Set up CLI command aliasing, e.g. 'yarn rw' --> 'rw', using Shadowenv. Note: this can also be used to create project-local env var shadowing. For more info: https://shopify.github.io/shadowenv/"
+
 const shadowenvConfigPath = `${getPaths().base}/.shadowenv.d/rw.lisp`
 
 export const builder = (yargs) => {
