@@ -4297,7 +4297,7 @@
     tiny-warning "^1.0.3"
     tslib "^2.3.0"
 
-"@redwoodjs/api-server@v0.37.2":
+"@redwoodjs/api-server@0.37.2":
   version "0.37.2"
   resolved "https://registry.yarnpkg.com/@redwoodjs/api-server/-/api-server-0.37.2.tgz#d6e5589195448b772f8e3abd4459205a0471281e"
   integrity sha512-lYKdXcTMJ1AkACxpsPpH+la4VZSu3BZMtp/a6p837K97c2IZl2qmY+0/g0y/xYbGX/dIgbKIq8XkjWSrccitYA==
@@ -4316,7 +4316,7 @@
     youch "2.2.2"
     youch-terminal "1.1.1"
 
-"@redwoodjs/api@0.37.2", "@redwoodjs/api@v0.37.2":
+"@redwoodjs/api@0.37.2":
   version "0.37.2"
   resolved "https://registry.yarnpkg.com/@redwoodjs/api/-/api-0.37.2.tgz#665de59b848ded74c48e8246604910917226852d"
   integrity sha512-B/VMVbZJv/b3e2PmjEBnWEp1vvJsANJ9qsnj76mcfSrzGReO5H3rZseO3TH9MrNLmf3+/4fN1hszHrzbyqTHeA==
@@ -4366,7 +4366,7 @@
     pino-pretty "5.1.3"
     uuid "8.3.2"
 
-"@redwoodjs/internal@0.37.2", "@redwoodjs/internal@v0.37.2":
+"@redwoodjs/internal@0.37.2":
   version "0.37.2"
   resolved "https://registry.yarnpkg.com/@redwoodjs/internal/-/internal-0.37.2.tgz#9c6d10678f41d653b51f312e2d5d06fb5a3f04ee"
   integrity sha512-tV8Faglff3qmyMzlPP4rJhBcfdas9CnCIMb0hZeXNMgyBc4EL2iQB2hOyE7E6v6DAJHrzKmF0kQIiGYn0zRyMw==
@@ -4399,7 +4399,7 @@
     rimraf "3.0.2"
     toml "3.0.0"
 
-"@redwoodjs/prerender@v0.37.2":
+"@redwoodjs/prerender@0.37.2":
   version "0.37.2"
   resolved "https://registry.yarnpkg.com/@redwoodjs/prerender/-/prerender-0.37.2.tgz#725d300c26a216211714f14131e9ac3743760624"
   integrity sha512-30faOKz6/D4Qef2PbXsbDnZ2DLxDDXAhDWp5zCU3RNzlv1Fq0CjZWT91u1SWihBTCA634RKmvBGaNUeIdYvsdQ==
@@ -4423,7 +4423,7 @@
     core-js "3.17.3"
     lodash.isequal "4.5.0"
 
-"@redwoodjs/structure@0.37.2", "@redwoodjs/structure@v0.37.2":
+"@redwoodjs/structure@0.37.2":
   version "0.37.2"
   resolved "https://registry.yarnpkg.com/@redwoodjs/structure/-/structure-0.37.2.tgz#ba04fb92e3cd9f46b607863a843a6fed9e12b10f"
   integrity sha512-Vm3fUd6CwF8Jhg6L7/31Ia4/1WMt3sERR2iRckFCV4uf9nnkPfJ9xkw6fhqKPpIwzyZyRrM9humWjrpJLB6XUg==
