@@ -196,6 +196,57 @@ This...
   3) Commits, Tags, and Pushes to GH
   4) and finally publishes all packages to NPM.
 
-### Troubleshooting
-
 If something went wrong you can use `yarn lerna publish from-package` to publish the packages that aren't already in the registry.
+
+## Troubleshooting
+
+### Migrating from yarn v1 to yarn v3
+
+As of `v0.37`, the Redwood Framework has moved from yarn `v1` to yarn `v3`.
+Aside from a few plugins, we aren't using most of it's advanced features (like [PnP](https://yarnpkg.com/features/pnp)) yet.
+So besides the output in your terminal looking different, not much else is.
+
+> We may explore things like PnP in the future.
+> We just have to take things one step at a time since we're trying to release `v1`.
+
+If you already have a local copy of the Redwood Framework,
+you'll have to run `git clean -fxd -e .env`;
+then run `yarn install` and you'll be good to go.
+
+#### Benefits
+
+Some of the benefit yarn `v3` brings us as we prepare for `v1` are:
+
+- faster CI (up to 50% faster)
+  - most importantly, no more Windows timeouts!
+- faster yarn installs
+- better dependency guarantees
+
+One of the most significant changes in yarn `v3` is it's stance on [hoisting](https://yarnpkg.com/advanced/lexicon/#hoisting).
+
+#### Interactivity
+
+Yarn 3 has a setting called [preferInteractive](https://yarnpkg.com/configuration/yarnrc#preferInteractive) that gives it permission to ask us for help.
+
+For example, if we're using `yarn add` to add a dependency to a workspace (say `packages/codemods`), and we already have that dependency in another worksapce (say `packages/api-server`), yarn will ask us if we want to use the same version:
+
+```
+redwood/packages/codemods$ yarn add yargs
+? Which range do you want to use? …
+❯ Reuse yargs@16.2.0 (originally used by @redwoodjs/api-server@0.37.2 and 2 others)
+  Use yargs@^17.2.1 (resolved from latest)
+```
+
+#### New Files
+
+Yarn `v3` keeps more of itself in the repo than before.
+For exmaple, yarn `v3` isn't installed globally, but on a per-project basis.
+
+Here's a quick overview of some of the new yarn-related files in this repo:
+
+| File             | Description                                                          |
+|:-----------------|:---------------------------------------------------------------------|
+| `.yarnrc.yml`    | Yarn's configuration file                                            |
+| `.yarn/plugins`  | Where installed [plugins](https://yarnpkg.com/features/plugins) live |
+| `.yarn/releases` | The `yarn v3` binaries themselves                                    |
+
