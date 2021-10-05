@@ -6,20 +6,24 @@ Before interacting with the Redwood community, please read and understand our [C
 
 **Table of Contents**
 
-- [Code Organization](#code-organization)
-- [Local Setup](#local-setup)
-  - [Redwood Framework](#redwood-framework)
-  - [Redwood Project: Create a Functional Test Project](#redwood-project-create-a-functional-test-project)
-  - [Testing the Framework in Your Project](#testing-the-framework-in-your-project)
-  - [Testing the CLI in Your Project](#testing-the-cli-in-your-project)
-- [Browser-based Setup](#browser-based-setup)
-- [Integration Tests](#integration-tests)
-- [Releases](#releases)
-- [Troubleshooting](#troubleshooting)
-  - [Migrating from yarn v1 to yarn v3](#migrating-from-yarn-v1-to-yarn-v3)
-    - [Benefits](#benefits)
-    - [Interactivity](#interactivity)
-    - [New Files](#new-files)
+- [Contributing](#contributing)
+  - [Code Organization](#code-organization)
+  - [Local Setup](#local-setup)
+    - [Redwood Framework](#redwood-framework)
+    - [Redwood Project: Create a Functional Test Project](#redwood-project-create-a-functional-test-project)
+    - [Testing the Framework in Your Project](#testing-the-framework-in-your-project)
+    - [Testing the CLI in Your Project](#testing-the-cli-in-your-project)
+  - [Browser-based Setup](#browser-based-setup)
+  - [Integration Tests](#integration-tests)
+  - [Releases](#releases)
+  - [Yarn v3: Tips and Troubleshooting](#yarn-v3-tips-and-troubleshooting)
+    - [Migrating from yarn v1 to yarn v3](#migrating-from-yarn-v1-to-yarn-v3)
+    - [New Yarn Commands and Utilities](#new-yarn-commands-and-utilities)
+    - [Added to CI: dedupe and constraints](#added-to-ci-dedupe-and-constraints)
+    - [About Yarn v3](#about-yarn-v3)
+      - [Benefits](#benefits)
+      - [New Files](#new-files)
+      - [Advanced Cases](#advanced-cases)
 
 ## Code Organization
 
@@ -202,21 +206,65 @@ This...
 
 If something went wrong you can use `yarn lerna publish from-package` to publish the packages that aren't already in the registry.
 
-## Troubleshooting
+## Yarn v3: Tips and Troubleshooting
 
 ### Migrating from yarn v1 to yarn v3
-
 As of `v0.37`, the Redwood Framework has moved from yarn `v1` to yarn `v3`.
+
+If you already have a local copy of the Redwood Framework, or if you're switching between branches that are using different versions, **you'll have to run**:
+```
+git clean -fxd -e .env
+yarn install
+```
+...and then you'll be good to go.
+
+> Note: Yarn v3 is installed in the directory, while Yarn v1 is installed globally. This allows us to switch as needed per branch and/or project.
+### New Yarn Commands and Utilities
+**`yarn add --interactive`**
+Reuse the specified package from other workspaces in the project. Example:
+```
+yarn workspace create-redwood-app add -i rimraf
+```
+
+> Note: Interactivity is enabled by default
+
+For example, if we're using `yarn add` to add a dependency to a workspace (say `packages/codemods`), and we already have that dependency in another worksapce (say `packages/api-server`), yarn will ask us if we want to use the same version:
+
+```
+redwood/packages/codemods$ yarn add yargs
+? Which range do you want to use? …
+❯ Reuse yargs@16.2.0 (originally used by @redwoodjs/api-server@0.37.2 and 2 others)
+  Use yargs@^17.2.1 (resolved from latest)
+```
+
+**`yarn workspaces foreach ...`**
+This is a command from the workspaces plugin. Runs the command across all workspaces. Example:
+```
+yarn workspaces foreach -i  -v some-package
+```
+-v: outputs the package name the command is currently running against
+
+### Added to CI: dedupe and constraints
+**`yarn dedupe --check`**
+> Duplicates are defined as descriptors with overlapping ranges being resolved and
+locked to different locators. They are a natural consequence of Yarn's
+deterministic installs, but they can sometimes pile up and unnecessarily
+increase the size of your project.
+> This command dedupes dependencies in the current project using different
+strategies (only one is implemented at the moment):
+
+**`yarn constraints`**
+See new file `constraints.pro` for repo config
+- https://yarnpkg.com/features/constraints
+- Reference from Babel project: https://github.com/babel/babel/blob/main/constraints.pro
+
+### About Yarn v3
 Aside from a few plugins, we aren't using most of it's advanced features (like [PnP](https://yarnpkg.com/features/pnp)) yet.
+
 So besides the output in your terminal looking different, not much else is.
 
 > We may explore things like PnP in the future.
 > We just have to take things one step at a time since we're trying to release `v1`.
-
-If you already have a local copy of the Redwood Framework,
-you'll have to run `git clean -fxd -e .env`;
-then run `yarn install` and you'll be good to go.
-
 #### Benefits
 
 Some of the benefit yarn `v3` brings us as we prepare for `v1` are:
@@ -227,19 +275,6 @@ Some of the benefit yarn `v3` brings us as we prepare for `v1` are:
 - better dependency guarantees
 
 One of the most significant changes in yarn `v3` is it's stance on [hoisting](https://yarnpkg.com/advanced/lexicon/#hoisting).
-
-#### Interactivity
-
-Yarn 3 has a setting called [preferInteractive](https://yarnpkg.com/configuration/yarnrc#preferInteractive) that gives it permission to ask us for help.
-
-For example, if we're using `yarn add` to add a dependency to a workspace (say `packages/codemods`), and we already have that dependency in another worksapce (say `packages/api-server`), yarn will ask us if we want to use the same version:
-
-```
-redwood/packages/codemods$ yarn add yargs
-? Which range do you want to use? …
-❯ Reuse yargs@16.2.0 (originally used by @redwoodjs/api-server@0.37.2 and 2 others)
-  Use yargs@^17.2.1 (resolved from latest)
-```
 
 #### New Files
 
@@ -254,3 +289,10 @@ Here's a quick overview of some of the new yarn-related files in this repo:
 | `.yarn/plugins`  | Where installed [plugins](https://yarnpkg.com/features/plugins) live |
 | `.yarn/releases` | The `yarn v3` binaries themselves                                    |
 
+#### Advanced Cases
+If needed, there's more information in [this PR #3154 comment](https://github.com/redwoodjs/redwood/pull/3154#issue-957115489) about special cases:
+- "Binary hoisting" is no longer allowed
+- Specifying Yarn v1 binary (when necessary)
+- `yarn dlx`
+- Set `YARN_IGNORE_PATH=1` to ignore local yarn version settings.
+- how "postinstall" script works
