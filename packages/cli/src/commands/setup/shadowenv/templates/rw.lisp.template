@@ -1,1 +1,5 @@
-(env/prepend-to-pathlist "PATH" (expand-path "./node_modules/.bin/"))
+(env/prepend-to-pathlist "PATH"
+  (join ":"
+    (expand-path "node_modules/.bin/redwood")
+    (expand-path "node_modules/.bin/rw")
+    (expand-path "node_modules/.bin/rwfw")))
