@@ -36,7 +36,7 @@ describe(
         timeout: 300_0000,
       }) // Slow!
         .its('stderr')
-        .should('eq', '')
+        .should('not.contain', 'ERR!')
         .and()
         .its('code')
         .should('eq', 0)
