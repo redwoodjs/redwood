@@ -14,7 +14,7 @@ export default async () => {
 
     // Note: if using PostgreSQL, using `createMany` to insert multiple records is much faster
     // @see: https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#createmany
-    return Promise.all(
+    Promise.all(
       data.map(async (userExample: Prisma.UserExampleCreateInput) => {
         const record = await db.userExample.create({
           data: { name: userExample.name, email: userExample.email },
