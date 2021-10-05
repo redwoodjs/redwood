@@ -39,7 +39,7 @@ export const handler = async ({ provider, force }) => {
     [
       {
         title: `Configuring ${providerData?.name ?? provider}...`,
-        task: (_, task) => {
+        task: () => {
           /**
            * Check if provider's config already exists.
            * If it exists, throw an error.
@@ -59,33 +59,37 @@ export const handler = async ({ provider, force }) => {
                 .toString(),
               {
                 overwriteExisting: force,
-              },
-              task
+              }
             )
           }
         },
       },
       providerData?.gitIgnoreAdditions?.length &&
         fs.existsSync(path.resolve(getPaths().base, '.gitignore')) && {
-          title: 'Updating .gitignore...',
-          task: async (_ctx, task) => {
+          title: '',
+          task: (_ctx, task) => {
+            task.title = 'Updating .gitignore...'
             const gitIgnore = path.resolve(getPaths().base, '.gitignore')
             const content = fs.readFileSync(gitIgnore).toString()
+            const contentWithoutNewlineCharacters = content.replace(
+              /\r?\n|\r/g,
+              ' '
+            )
 
             if (
               providerData.gitIgnoreAdditions.every((item) =>
-                content.includes(item)
+                contentWithoutNewlineCharacters.includes(item)
               )
             ) {
               task.skip('.gitignore already includes the additions.')
-            }
-
-            fs.appendFileSync(
-              gitIgnore,
-              ['\n', '# Deployment', ...providerData.gitIgnoreAdditions].join(
-                '\n'
+            } else {
+              fs.appendFileSync(
+                gitIgnore,
+                ['\n', '# cli-alias', ...providerData.gitIgnoreAdditions].join(
+                  '\n'
+                )
               )
-            )
+            }
           },
         },
       {
@@ -101,8 +105,8 @@ export const handler = async ({ provider, force }) => {
           )}`
         },
       },
-    ],
-    { collapse: false, exitOnError: true }
+    ].filter(Boolean),
+    { collapse: false }
   )
 
   try {
