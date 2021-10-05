@@ -210,11 +210,17 @@ const replaceParams = (path: string, args: Record<string, unknown> = {}) => {
         const paramSpec = part.substr(1, part.length - 2)
         const paramName = paramSpec.split(':')[0]
         const arg = args[paramName]
+
+        // The use of hasOwnProperty here is to check if the args object has
+        // the property at all, no matter what value it has (even `undefined`).
         if (Object.prototype.hasOwnProperty.call(args, paramName)) {
           delete args[paramName]
+
+          // Return arg as a string (needed to handle `undefined`)
           return '' + arg
         }
       }
+
       return part
     })
     .join('/')
