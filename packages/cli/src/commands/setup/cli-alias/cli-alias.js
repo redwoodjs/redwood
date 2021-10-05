@@ -18,8 +18,6 @@ const supportedProviders = fs
   .map((file) => path.basename(file, '.js'))
   .filter((file) => file !== 'README.md')
 
-const shadowenvConfigPath = `${getPaths().base}/.shadowenv.d/rw.lisp`
-
 export const builder = (yargs) => {
   yargs.positional('provider', {
     choices: supportedProviders,
@@ -40,19 +38,20 @@ export const handler = async ({ provider, force }) => {
   const tasks = new Listr(
     [
       {
-        title: 'Configuring Shadowenv...',
+        title: `Configuring ${providerData?.name ?? provider}...`,
         task: (_, task) => {
           /**
-           * Check if Shadowenv config already exists.
+           * Check if provider's config already exists.
            * If it exists, throw an error.
            */
-          if (!force && fs.existsSync(shadowenvConfigPath)) {
+          const configPath = providerData?.configPath
+          if (!force && fs.existsSync(configPath)) {
             throw new Error(
               'Shadowenv config already exists.\nUse --force to override existing config.'
             )
           } else {
             return writeFile(
-              shadowenvConfigPath,
+              configPath,
               fs
                 .readFileSync(
                   path.resolve(__dirname, 'templates', 'rw.lisp.template')
