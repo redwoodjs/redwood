@@ -19,7 +19,8 @@ export const builder = (yargs) => {
 }
 
 export const handler = async ({ force }) => {
-  const tasks = new Listr([
+  const tasks = new Listr(
+    [
     {
       title: 'Configuring Shadowenv...',
       task: (ctx) => {
@@ -75,7 +76,9 @@ export const handler = async ({ force }) => {
         )}  \n`
       },
     },
-  ])
+    ],
+    { collapse: false, exitOnError: true }
+  )
 
   try {
     await tasks.run()
