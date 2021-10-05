@@ -12,9 +12,19 @@ export const aliases = ['shadowenv']
 export const description =
   "Set up CLI command aliasing, e.g. 'yarn rw' --> 'rw', using Shadowenv. Note: this can also be used to create project-local env var shadowing. For more info: https://shopify.github.io/shadowenv/"
 
+const supportedProviders = fs
+  .readdirSync(path.resolve(__dirname, 'providers'))
+  .map((file) => path.basename(file, '.js'))
+  .filter((file) => file !== 'README.md')
+
 const shadowenvConfigPath = `${getPaths().base}/.shadowenv.d/rw.lisp`
 
 export const builder = (yargs) => {
+  yargs.positional('provider', {
+    choices: supportedProviders,
+    description: 'CLI command alias provider to configure',
+    type: 'string',
+  })
   yargs.option('force', {
     alias: 'f',
     default: false,
@@ -23,7 +33,8 @@ export const builder = (yargs) => {
   })
 }
 
-export const handler = async ({ force }) => {
+export const handler = async ({ provider, force }) => {
+  const providerData = await import(`./providers/${provider}`)
   const tasks = new Listr(
     [
       {
@@ -53,6 +64,29 @@ export const handler = async ({ force }) => {
           }
         },
       },
+      providerData?.gitIgnoreAdditions?.length &&
+        fs.existsSync(path.resolve(getPaths().base, '.gitignore')) && {
+          title: 'Updating .gitignore...',
+          task: async (_ctx, task) => {
+            const gitIgnore = path.resolve(getPaths().base, '.gitignore')
+            const content = fs.readFileSync(gitIgnore).toString()
+
+            if (
+              providerData.gitIgnoreAdditions.every((item) =>
+                content.includes(item)
+              )
+            ) {
+              task.skip('.gitignore already includes the additions.')
+            }
+
+            fs.appendFileSync(
+              gitIgnore,
+              ['\n', '# Deployment', ...providerData.gitIgnoreAdditions].join(
+                '\n'
+              )
+            )
+          },
+        },
       {
         title: '',
         task: (_, task) => {
