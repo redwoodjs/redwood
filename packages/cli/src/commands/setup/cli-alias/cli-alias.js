@@ -8,8 +8,8 @@ import { getPaths, writeFile } from '../../../lib'
 import c from '../../../lib/colors'
 
 export const command = 'cli-alias [provider]'
-const shadowenv = 'shadowenv'
-export const aliases = [shadowenv]
+const defaultProvider = 'shadowenv'
+export const aliases = [defaultProvider]
 export const description =
   "Set up CLI command aliasing, e.g. 'yarn rw' --> 'rw'. Note: Currently the only provider is Shadowenv. This can also be used to create project-local env var shadowing. For more info: https://shopify.github.io/shadowenv/"
 
@@ -23,7 +23,7 @@ export const builder = (yargs) => {
     choices: supportedProviders,
     description: 'CLI command alias provider to configure',
     type: 'string',
-    default: shadowenv,
+    default: defaultProvider,
   })
   yargs.option('force', {
     alias: 'f',
