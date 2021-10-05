@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/graphql-server",
-  "version": "0.37.1",
+  "version": "0.37.2",
   "files": [
     "dist"
   ],
@@ -25,6 +25,7 @@
     "graphql-helix": "1.7.0",
     "graphql-playground-html": "1.6.29",
     "graphql-scalars": "1.10.1",
+    "graphql-tag": "2.12.5",
     "lodash.merge": "4.6.2",
     "lodash.omitby": "4.6.0",
     "node-fetch": "2.6.1",
@@ -35,7 +36,7 @@
   "devDependencies": {
     "@envelop/testing": "1.1.1",
     "@envelop/types": "1.1.0",
-    "@redwoodjs/auth": "v0.37.1",
+    "@redwoodjs/auth": "0.37.2",
     "@types/jsonwebtoken": "8.5.5",
     "@types/lodash.merge": "4.6.6",
     "@types/lodash.omitby": "4.6.6",

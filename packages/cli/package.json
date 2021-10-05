@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/cli",
   "description": "The Redwood Command Line",
-  "version": "0.37.1",
+  "version": "0.37.2",
   "license": "MIT",
   "bin": {
     "redwood": "./dist/index.js",
