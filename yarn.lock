@@ -740,7 +740,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-private-property-in-object@npm:^7.15.4":
+"@babel/plugin-proposal-private-property-in-object@npm:7.15.4, @babel/plugin-proposal-private-property-in-object@npm:^7.15.4":
   version: 7.15.4
   resolution: "@babel/plugin-proposal-private-property-in-object@npm:7.15.4"
   dependencies:
@@ -4273,6 +4273,7 @@ __metadata:
     "@babel/plugin-proposal-class-properties": 7.14.5
     "@babel/plugin-proposal-decorators": 7.15.4
     "@babel/plugin-proposal-private-methods": 7.14.5
+    "@babel/plugin-proposal-private-property-in-object": 7.15.4
     "@babel/plugin-transform-runtime": 7.15.0
     "@babel/preset-env": 7.15.6
     "@babel/preset-react": 7.14.5
