@@ -6,16 +6,20 @@ Before interacting with the Redwood community, please read and understand our [C
 
 **Table of Contents**
 
-  - [Code Organization](#code-organization)
-  - [Local Setup](#local-setup)
-    - [Redwood Framework](#redwood-framework)
-    - [Redwood Project: Create a Functional Test Project](#redwood-project-create-a-functional-test-project)
-    - [Testing the Framework in Your Project](#testing-the-framework-in-your-project)
-    - [Testing the CLI in Your Project](#testing-the-cli-in-your-project)
-  - [Browser-based Setup](#browser-based-setup)
-  - [Integration Tests](#integration-tests)
-  - [Releases](#releases)
-    - [Troubleshooting](#troubleshooting)
+- [Code Organization](#code-organization)
+- [Local Setup](#local-setup)
+  - [Redwood Framework](#redwood-framework)
+  - [Redwood Project: Create a Functional Test Project](#redwood-project-create-a-functional-test-project)
+  - [Testing the Framework in Your Project](#testing-the-framework-in-your-project)
+  - [Testing the CLI in Your Project](#testing-the-cli-in-your-project)
+- [Browser-based Setup](#browser-based-setup)
+- [Integration Tests](#integration-tests)
+- [Releases](#releases)
+- [Troubleshooting](#troubleshooting)
+  - [Migrating from yarn v1 to yarn v3](#migrating-from-yarn-v1-to-yarn-v3)
+    - [Benefits](#benefits)
+    - [Interactivity](#interactivity)
+    - [New Files](#new-files)
 
 ## Code Organization
 
