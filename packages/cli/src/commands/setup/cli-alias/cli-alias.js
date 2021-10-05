@@ -90,15 +90,10 @@ export const handler = async ({ provider, force }) => {
       {
         title: '',
         task: (_, task) => {
-          task.title = `One more thing...\n\n ${boxen(
-            [
-              c.green(
-                'Depending on how your development environment is setup, there can be more manual setup steps needed to be performed in order to use Shadowenv as a CLI command aliasing tool.'
-              ),
-              'Please see: https://shopify.github.io/shadowenv/getting-started/',
-            ].join('\n   '),
+          task.title = `One more thing...\n ${boxen(
+            providerData.notes.join('\n   '),
             {
-              padding: { top: 1, bottom: 1, right: 1, left: 1 },
+              padding: { top: 0, bottom: 0, right: 1, left: 1 },
               margin: 1,
               borderColour: 'gray',
             }
