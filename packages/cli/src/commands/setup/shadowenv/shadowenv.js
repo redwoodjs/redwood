@@ -23,13 +23,12 @@ export const handler = async ({ force }) => {
     [
       {
         title: 'Configuring Shadowenv...',
-        task: (ctx) => {
+        task: (_, task) => {
           /**
            * Check if Shadowenv config already exists.
            * If it exists, throw an error.
            */
           if (!force && fs.existsSync(shadowenvConfigPath)) {
-            ctx.error = true
             throw new Error(
               'Shadowenv config already exists.\nUse --force to override existing config.'
             )
@@ -41,26 +40,17 @@ export const handler = async ({ force }) => {
                   path.resolve(__dirname, 'templates', 'rw.lisp.template')
                 )
                 .toString(),
-              { overwriteExisting: force }
+              {
+                overwriteExisting: force,
+              },
+              task
             )
           }
         },
       },
       {
-        title: 'Destination:',
-        enabled: (ctx) => !ctx.error,
-        task: (_ctx, task) => {
-          task.title = `  Wrote templates to ${shadowenvConfigPath.replace(
-            getPaths().base,
-            ''
-          )}
-        `
-        },
-      },
-      {
         title: '',
-        enabled: (ctx) => !ctx.error,
-        task: (_ctx, task) => {
+        task: (_, task) => {
           task.title = `One more thing...\n\n ${boxen(
             [
               c.green('Installation steps for Shadowenv'),
