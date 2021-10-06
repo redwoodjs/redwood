@@ -14,6 +14,7 @@ export {
 
 export {
   createCell,
+  CellProps,
   CellFailureProps,
   CellLoadingProps,
   CellSuccessProps,

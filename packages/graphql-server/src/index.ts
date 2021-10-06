@@ -25,3 +25,5 @@ export {
   TransformerDirective,
   TransformerDirectiveFunc,
 } from './plugins/useRedwoodDirective'
+
+export * as rootSchema from './rootSchema'
