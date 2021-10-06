@@ -9,6 +9,7 @@
   "license": "MIT",
   "devDependencies": {
     "@auth0/auth0-spa-js": "1.18.0",
+    "@babel/cli": "7.15.4",
     "@clerk/clerk-js": "1.33.0",
     "@clerk/clerk-sdk-node": "0.5.2",
     "@clerk/types": "1.13.0",
@@ -18,15 +19,17 @@
     "firebase": "9.0.1",
     "firebase-admin": "9.11.1",
     "gotrue-js": "0.9.29",
+    "jest": "27.2.0",
     "magic-sdk": "6.0.5",
     "msal": "1.4.12",
     "netlify-identity-widget": "1.9.2",
     "nhost-js-sdk": "3.1.0",
-    "react": "17.0.2"
+    "react": "17.0.2",
+    "typescript": "4.4.3"
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",
-    "prepublishOnly": "yarn cross-env NODE_ENV=production yarn build",
+    "prepublishOnly": "NODE_ENV=production yarn build",
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
     "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
