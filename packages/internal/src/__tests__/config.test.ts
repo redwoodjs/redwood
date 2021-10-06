@@ -31,7 +31,7 @@ describe('getConfig', () => {
         "web": Object {
           "a11y": true,
           "apiGraphQLServerPath": "/graphql",
-          "apiURL": "/.netlify/functions",
+          "apiURL": "/.redwood/functions",
           "fastRefresh": true,
           "host": "localhost",
           "path": "./web",
