@@ -5,6 +5,9 @@ import {
 import { logger } from 'src/lib/logger'
 
 export const schema = gql`
+  """
+  Use @${camelName} to transform the resolved value to return a modified result.
+  """
   directive @${camelName} on FIELD_DEFINITION
 `
 

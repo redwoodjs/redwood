@@ -7,6 +7,7 @@ tasks:
     openMode: split-left
     init: |
       eval $(gp env -e RWFW_PATH="/workspace/redwood")
+      eval $(gp env -e RWJS_DEV_API_URL="http://localhost")
       mkdir /workspace/rw-test-app
     command: |
       cd /workspace/rw-test-app
@@ -27,6 +28,7 @@ tasks:
 ports:
   - port: 8911
     onOpen: ignore
+    visibility: public
   - port: 8910
     onOpen: notify
 

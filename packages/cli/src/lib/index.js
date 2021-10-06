@@ -420,18 +420,31 @@ const wrapWithSet = (routesContent, layout, routes, newLineAndIndent) => {
 export const addRoutesToRouterTask = (routes, layout) => {
   const redwoodPaths = getPaths()
   const routesContent = readFile(redwoodPaths.web.routes).toString()
-  const newRoutes = routes.filter((route) => !routesContent.match(route))
+  let newRoutes = routes.filter((route) => !routesContent.match(route))
 
   if (newRoutes.length) {
-    const [routerStart, newLineAndIndent] =
-      routesContent.match(/\s*<Router.*?>(\s*)/)
+    const [routerStart, routerParams, newLineAndIndent] = routesContent.match(
+      /\s*<Router(.*?)>(\s*)/
+    )
+
+    if (/trailingSlashes={?(["'])always\1}?/.test(routerParams)) {
+      // newRoutes will be something like:
+      // ['<Route path="/foo" page={FooPage} name="foo"/>']
+      // and we need to replace `path="/foo"` with `path="/foo/"`
+      newRoutes = newRoutes.map((route) =>
+        route.replace(/ path="(.+?)" /, ' path="$1/" ')
+      )
+    }
+
     const routesBatch = layout
       ? wrapWithSet(routesContent, layout, newRoutes, newLineAndIndent)
       : newRoutes.join(newLineAndIndent)
+
     const newRoutesContent = routesContent.replace(
       routerStart,
       `${routerStart + routesBatch + newLineAndIndent}`
     )
+
     writeFile(redwoodPaths.web.routes, newRoutesContent, {
       overwriteExisting: true,
     })
