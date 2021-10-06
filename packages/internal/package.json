@@ -43,8 +43,8 @@
   },
   "devDependencies": {
     "@babel/cli": "7.15.4",
-    "@types/babel__core": "7.1.16",
     "@types/babel-plugin-tester": "9.0.4",
+    "@types/babel__core": "7.1.16",
     "@types/findup-sync": "4.0.1",
     "@types/fs-extra": "9.0.12",
     "@types/rimraf": "3.0.2",

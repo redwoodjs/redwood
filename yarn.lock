@@ -4284,14 +4284,11 @@ __metadata:
     "@redwoodjs/eslint-config": 0.37.2
     "@redwoodjs/internal": 0.37.2
     "@redwoodjs/testing": 0.37.2
-    "@types/babel-core": 6.25.7
-    "@types/babel-plugin-tester": 9.0.4
     babel-loader: 8.2.2
     babel-plugin-auto-import: 1.1.0
     babel-plugin-graphql-tag: 3.3.0
     babel-plugin-inline-react-svg: 2.0.1
     babel-plugin-module-resolver: 4.1.0
-    babel-plugin-tester: 10.1.0
     babel-timing: 0.9.1
     copy-webpack-plugin: 9.0.1
     core-js: 3.17.3
@@ -4305,7 +4302,6 @@ __metadata:
     graphql: 15.5.3
     graphql-tag: 2.12.5
     html-webpack-plugin: 5.3.2
-    jest: 27.2.0
     lodash.escaperegexp: 4.1.2
     mini-css-extract-plugin: 2.3.0
     nodemon: 2.0.12
@@ -4425,12 +4421,14 @@ __metadata:
     "@graphql-codegen/typescript-react-apollo": 3.1.4
     "@graphql-codegen/typescript-resolvers": 2.2.1
     "@redwoodjs/graphql-server": 0.37.2
+    "@types/babel-plugin-tester": 9.0.4
     "@types/babel__core": 7.1.16
     "@types/findup-sync": 4.0.1
     "@types/fs-extra": 9.0.12
     "@types/rimraf": 3.0.2
     babel-plugin-graphql-tag: 3.3.0
     babel-plugin-polyfill-corejs3: 0.2.4
+    babel-plugin-tester: 10.1.0
     chalk: 4.1.2
     core-js: 3.17.3
     deepmerge: 4.2.2
