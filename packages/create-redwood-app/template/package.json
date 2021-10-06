@@ -8,14 +8,14 @@
     ]
   },
   "devDependencies": {
-    "@redwoodjs/core": "v0.37.1"
+    "@redwoodjs/core": "0.37.2"
   },
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config",
     "root": true
   },
   "engines": {
-    "node": "14.x",
+    "node": ">=14.x <=16.x",
     "yarn": "1.x"
   }
 }
