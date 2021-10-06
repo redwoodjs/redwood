@@ -1,12 +1,12 @@
 import type { FileInfo, API } from 'jscodeshift'
 
-module.exports = function (file: FileInfo, api: API) {
+export default function transform(file: FileInfo, api: API) {
   const j = api.jscodeshift
 
-  const outputAst = j(file.source)
+  const ast = j(file.source)
 
   // STEP 1: Update imports
-  outputAst.find(j.ImportDeclaration).forEach((path) => {
+  ast.find(j.ImportDeclaration).forEach((path) => {
     // 1. Updates import statement to be
     // import { createGraphqlServer } from '@redwoodjs/graphqlserver'
     if (path.value.source.value === '@redwoodjs/api') {
@@ -36,7 +36,7 @@ module.exports = function (file: FileInfo, api: API) {
   })
 
   // STEP 2: Remove makeMergedSchema, pass in directives, sdls and services
-  outputAst
+  ast
     .find(j.CallExpression, { callee: { name: 'createGraphQLHandler' } })
     .forEach((path) => {
       const schemaProp = j(path.node).find(j.ObjectProperty, {
@@ -49,5 +49,5 @@ module.exports = function (file: FileInfo, api: API) {
       ])
     })
 
-  return outputAst.toSource({ trailingComma: true, quote: 'single' })
+  return ast.toSource({ trailingComma: true, quote: 'single' })
 }

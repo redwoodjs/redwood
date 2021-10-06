@@ -13,7 +13,7 @@ const formatCode = (code: string) => {
 export const matchTransformSnapshot = (
   transformName: string,
   fixtureName: string = transformName,
-  parser: 'ts' | 'tsx' | 'js' = 'tsx'
+  parser: 'ts' | 'tsx' | 'babel' = 'tsx'
 ) => {
   const tempFilePath = tempy.file()
 
@@ -58,7 +58,7 @@ export const matchInlineTransformSnapshot = (
   transformName: string,
   fixtureCode: string,
   expectedCode: string,
-  parser: 'ts' | 'tsx' | 'js' = 'tsx'
+  parser: 'ts' | 'tsx' | 'babel' = 'tsx'
 ) => {
   const tempFilePath = tempy.file()
 
@@ -87,15 +87,6 @@ export const matchInlineTransformSnapshot = (
   const transformedContent = fs.readFileSync(tempFilePath, 'utf-8')
 
   expect(formatCode(transformedContent)).toEqual(formatCode(expectedCode))
-}
-
-type MatchFunction = typeof matchTransformSnapshot
-type MatchInlineFunction = typeof matchInlineTransformSnapshot
-
-// This file gets loaded in jest setup, so becomes available globally in tests
-declare global {
-  const matchTransformSnapshot: MatchFunction
-  const matchInlineTransformSnapshot: MatchInlineFunction
 }
 
 export default matchTransformSnapshot

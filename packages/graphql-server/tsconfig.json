@@ -9,6 +9,5 @@
   "include": ["src/**/*"],
   "references": [
     { "path": "../api" },
-    { "path": "../internal" },
   ]
 }

@@ -732,3 +732,81 @@ test('Authenticated user has assigned role access as expected', async () => {
   fireEvent.click(screen.getByText('Log Out'))
   await waitFor(() => screen.getByText('Log In'))
 })
+
+test('proxies forgotPassword() calls to client', async () => {
+  const mockAuthClient = {
+    forgotPassword: async (args) => {
+      expect(args).toEqual('username')
+    },
+    client: () => {},
+    type: 'custom',
+  }
+
+  const TestAuthConsumer = () => {
+    const { forgotPassword } = useAuth()
+    forgotPassword('username')
+
+    return null
+  }
+
+  render(
+    <AuthProvider client={mockAuthClient} type="custom">
+      <TestAuthConsumer />
+    </AuthProvider>
+  )
+
+  // for whatever reason, forgotPassword is invoked twice
+  expect.assertions(2)
+})
+
+test('proxies resetPassword() calls to client', async () => {
+  const mockAuthClient = {
+    resetPassword: async (args) => {
+      expect(args).toEqual('password')
+    },
+    client: () => {},
+    type: 'custom',
+  }
+
+  const TestAuthConsumer = () => {
+    const { resetPassword } = useAuth()
+    resetPassword('password')
+
+    return null
+  }
+
+  render(
+    <AuthProvider client={mockAuthClient} type="custom">
+      <TestAuthConsumer />
+    </AuthProvider>
+  )
+
+  // for whatever reason, forgotPassword is invoked twice
+  expect.assertions(2)
+})
+
+test('proxies validateResetToken() calls to client', async () => {
+  const mockAuthClient = {
+    validateResetToken: async (args) => {
+      expect(args).toEqual('12345')
+    },
+    client: () => {},
+    type: 'custom',
+  }
+
+  const TestAuthConsumer = () => {
+    const { validateResetToken } = useAuth()
+    validateResetToken('12345')
+
+    return null
+  }
+
+  render(
+    <AuthProvider client={mockAuthClient} type="custom">
+      <TestAuthConsumer />
+    </AuthProvider>
+  )
+
+  // for whatever reason, forgotPassword is invoked twice
+  expect.assertions(2)
+})

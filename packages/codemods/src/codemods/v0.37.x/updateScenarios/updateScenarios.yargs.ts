@@ -3,11 +3,11 @@ import path from 'path'
 import fg from 'fast-glob'
 import task from 'tasuku'
 
-import getRWPaths from '../../../lib/getRWPaths'
 import runTransform from '../../../lib/runTransform'
 
-export const command = 'add-prisma-create-to-scenarios'
-export const description = 'Adds the data key to scenarios'
+export const command = 'update-scenarios'
+export const description =
+  "(v0.36->v0.37) Updates Scenarios (adds Prisma create's data key)"
 
 /**
  * The services dir looks like...
@@ -23,12 +23,10 @@ export const description = 'Adds the data key to scenarios'
  *    |- post.test.js
  */
 export const handler = () => {
-  task('Add Prisma `create` to Scenarios', async () => {
-    const rwPaths = getRWPaths()
-
+  task('Updating Scenarios', async () => {
     runTransform({
-      transformPath: path.join(__dirname, 'addPrismaCreateToScenarios.js'),
-      targetPaths: fg.sync(`${rwPaths.api.services}/**/*.scenarios.{js,ts}`),
+      transformPath: path.join(__dirname, 'updateScenarios.js'),
+      targetPaths: fg.sync('api/src/services/**/*.scenarios.{js,ts}'),
     })
   })
 }
