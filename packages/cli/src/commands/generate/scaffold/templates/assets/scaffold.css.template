@@ -44,7 +44,7 @@
   Style
 */
 
-.rw-scaffold {
+.rw-scaffold, .rw-toast {
   background-color: #fff;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji',
@@ -83,6 +83,16 @@
 .rw-link:hover {
   color: #2b6cb0;
 }
+.rw-forgot-link {
+  font-size: 0.75rem;
+  color: #a0aec0;
+  text-align: right;
+  margin-top: 0.1rem;
+}
+.rw-forgot-link:hover {
+  font-size: 0.75rem;
+  color: #4299e1;
+}
 .rw-heading {
   font-weight: 600;
 }
@@ -109,7 +119,8 @@
   font-size: 0.875rem;
   margin-top: -1rem;
 }
-.rw-cell-error, .rw-form-error-wrapper {
+.rw-cell-error,
+.rw-form-error-wrapper {
   padding: 1rem;
   background-color: #fff5f5;
   color: #c53030;
