@@ -2,7 +2,7 @@ name: Cypress E2E tests
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [push, opened, synchronize, reopened]
 
 jobs:
   cypress-run:
