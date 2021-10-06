@@ -69,6 +69,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_RW_PATH:  "${{ steps.createpath.outputs.project_path }}"
         with:
+          # cache-key: yarn-${{ hashFiles('yarn.lock') }}
           env: true
           browser: chrome
           record: false
