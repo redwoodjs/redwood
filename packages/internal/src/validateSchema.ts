@@ -3,8 +3,9 @@ import { loadTypedefs } from '@graphql-tools/load'
 import { mergeTypeDefs } from '@graphql-tools/merge'
 import { DocumentNode, ObjectTypeDefinitionNode, visit } from 'graphql'
 
+import { rootSchema } from '@redwoodjs/graphql-server'
+
 import { getPaths } from './paths'
-import { schema as rootSchema } from './rootGqlSchema'
 
 export const DIRECTIVE_REQUIRED_ERROR_MESSAGE =
   'You must specify one of @requireAuth, @skipAuth or a custom directive'
@@ -28,13 +29,11 @@ export function validateSchemaForDirectives(
           const isCurrentUserQuery =
             fieldName === 'currentUser' && fieldTypeName === 'Query'
           // skip validation for redwood query and currentUser
-          if (isRedwoodQuery || isCurrentUserQuery) {
-            return
-          }
-
-          const hasDirective = field.directives?.length
-          if (!hasDirective) {
-            validationOutput.push(`${fieldName} ${fieldTypeName}`)
+          if (!(isRedwoodQuery || isCurrentUserQuery)) {
+            const hasDirective = field.directives?.length
+            if (!hasDirective) {
+              validationOutput.push(`${fieldName} ${fieldTypeName}`)
+            }
           }
         }
       }
@@ -78,7 +77,10 @@ export const loadAndValidateSdls = async () => {
     })
 
   // Merge in the rootSchema with JSON scalars, etc.
-  const mergedDocumentNode = mergeTypeDefs([rootSchema, projectDocumentNodes])
+  const mergedDocumentNode = mergeTypeDefs([
+    rootSchema.schema,
+    projectDocumentNodes,
+  ])
 
   validateSchemaForDirectives(mergedDocumentNode)
 }

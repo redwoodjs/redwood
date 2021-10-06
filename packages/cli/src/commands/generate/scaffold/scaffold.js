@@ -13,7 +13,6 @@ import { getConfig, generate as generateTypes } from '@redwoodjs/internal'
 
 import {
   generateTemplate,
-  templateRoot,
   readFile,
   writeFile,
   asyncForEach,
@@ -27,8 +26,8 @@ import {
 } from '../../../lib'
 import c from '../../../lib/colors'
 import { yargsDefaults } from '../../generate'
-import { handler as dbAuthHandler } from '../dbAuth/dbAuth'
 import {
+  customOrDefaultTemplatePath,
   relationsForModel,
   intForeignKeysForModel,
   ensureUniquePlural,
@@ -182,7 +181,11 @@ export const files = async ({
 const assetFiles = (name) => {
   let fileList = {}
   const assets = fs.readdirSync(
-    path.join(templateRoot, 'scaffold', 'templates', 'assets')
+    customOrDefaultTemplatePath({
+      side: 'web',
+      generator: 'scaffold',
+      templatePath: 'assets',
+    })
   )
 
   assets.forEach((asset) => {
@@ -195,7 +198,11 @@ const assetFiles = (name) => {
       !fs.existsSync(outputPath)
     ) {
       const template = generateTemplate(
-        path.join('scaffold', 'templates', 'assets', asset),
+        customOrDefaultTemplatePath({
+          side: 'web',
+          generator: 'scaffold',
+          templatePath: path.join('assets', asset),
+        }),
         {
           name,
         }
@@ -218,7 +225,11 @@ const layoutFiles = (
   let fileList = {}
 
   const layouts = fs.readdirSync(
-    path.join(templateRoot, 'scaffold', 'templates', 'layouts')
+    customOrDefaultTemplatePath({
+      side: 'web',
+      generator: 'scaffold',
+      templatePath: 'layouts',
+    })
   )
 
   layouts.forEach((layout) => {
@@ -234,7 +245,11 @@ const layoutFiles = (
       outputLayoutName
     )
     const template = generateTemplate(
-      path.join('scaffold', 'templates', 'layouts', layout),
+      customOrDefaultTemplatePath({
+        side: 'web',
+        generator: 'scaffold',
+        templatePath: path.join('layouts', layout),
+      }),
       {
         name,
         pascalScaffoldPath,
@@ -266,7 +281,11 @@ const pageFiles = async (
   let fileList = {}
 
   const pages = fs.readdirSync(
-    path.join(templateRoot, 'scaffold', 'templates', 'pages')
+    customOrDefaultTemplatePath({
+      side: 'web',
+      generator: 'scaffold',
+      templatePath: 'pages',
+    })
   )
 
   pages.forEach((page) => {
@@ -287,7 +306,11 @@ const pageFiles = async (
       outputPageName
     )
     const template = generateTemplate(
-      path.join('scaffold', 'templates', 'pages', page),
+      customOrDefaultTemplatePath({
+        side: 'web',
+        generator: 'scaffold',
+        templatePath: path.join('pages', page),
+      }),
       {
         idType,
         idTsType,
@@ -397,7 +420,11 @@ const componentFiles = async (
   }
 
   const components = fs.readdirSync(
-    path.join(templateRoot, 'scaffold', 'templates', 'components')
+    customOrDefaultTemplatePath({
+      side: 'web',
+      generator: 'scaffold',
+      templatePath: 'components',
+    })
   )
 
   await asyncForEach(components, (component) => {
@@ -418,7 +445,11 @@ const componentFiles = async (
     )
 
     const template = generateTemplate(
-      path.join('scaffold', 'templates', 'components', component),
+      customOrDefaultTemplatePath({
+        side: 'web',
+        generator: 'scaffold',
+        templatePath: path.join('components', component),
+      }),
       {
         name,
         columns,
@@ -611,8 +642,10 @@ export const handler = async ({
   typescript,
 }) => {
   if (modelArg.toLowerCase() === 'dbauth') {
-    // proxy to dbAuth generator
-    return await dbAuthHandler({ force, tests, typescript })
+    console.info(c.green('\nGenerate dbAuth pages with:\n'))
+    console.info('  yarn rw generate dbAuth\n')
+
+    process.exit(0)
   }
 
   if (tests === undefined) {

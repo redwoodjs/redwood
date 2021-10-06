@@ -19,7 +19,7 @@ jest.mock('@redwoodjs/api', () => {
   }
 })
 
-describe('useRedwoodAuthContext: ', () => {
+describe('useRedwoodAuthContext', () => {
   const spiedPlugin = createSpiedPlugin()
 
   const expectContextContains = (obj) => {
@@ -67,7 +67,7 @@ describe('useRedwoodAuthContext: ', () => {
   it('Does not swallow exceptions raised in getCurrentUser', async () => {
     const mockedGetCurrentUser = jest
       .fn()
-      .mockRejectedValue(new Error('Hey man, where is my DB?'))
+      .mockRejectedValue(new Error('Could not fetch user from db.'))
 
     const testkit = createTestkit(
       [useRedwoodAuthContext(mockedGetCurrentUser)],
@@ -76,7 +76,11 @@ describe('useRedwoodAuthContext: ', () => {
 
     await expect(async () => {
       await testkit.execute(testQuery, {}, { requestContext: {} })
-    }).rejects.toEqual(new Error('Hey man, where is my DB?'))
+    }).rejects.toEqual(
+      new Error('Exception in getCurrentUser: Could not fetch user from db.')
+    )
     expect(mockedGetCurrentUser).toHaveBeenCalled()
   })
+
+  // @todo: Test exception raised when fetching auth context/parsing provider header
 })

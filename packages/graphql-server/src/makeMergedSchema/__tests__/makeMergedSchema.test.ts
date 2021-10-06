@@ -177,27 +177,6 @@ describe('makeMergedSchema', () => {
     })
   })
 
-  it('throws when directives not added to queries and mutations', () => {
-    const sdlsWithoutDirectives = {
-      withoutDirective: {
-        schema: parse(`
-          type Query {
-            bazinga: String
-          }
-        `),
-        resolvers: {},
-      },
-    }
-
-    expect(() =>
-      makeMergedSchema({
-        sdls: sdlsWithoutDirectives,
-        services: makeServices({ services }),
-        directives: makeDirectivesForPlugin(directiveFiles),
-      })
-    ).toThrowError()
-  })
-
   describe('Directives', () => {
     it('Confirms that directives have been made from a set of files and added to schema.', () => {
       expect(schema.getDirective('foo')).toBeTruthy()

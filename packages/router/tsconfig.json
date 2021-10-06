@@ -9,7 +9,7 @@
       "src/*": ["./src/*"]
     }
   },
-  "include": ["src", "./global.d.ts"],
+  "include": ["src", "./ambient.d.ts"],
   "references": [
     { "path": "../auth" },
   ]
