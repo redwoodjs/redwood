@@ -17,5 +17,9 @@
   "engines": {
     "node": "14.x",
     "yarn": "1.x"
+  },
+  "resolutions": {
+    "@webpack-cli/serve": "1.5.2"
   }
+
 }
