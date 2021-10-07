@@ -118,7 +118,8 @@ export const handler = async (
             {
               padding: { top: 0, bottom: 0, right: 1, left: 1 },
               margin: 1,
-              borderColor: 'gray',
+              // @ts-ignore // note: for some reason `borderColor` does not work here, it needs to be `borderColour` (note the u). Using `borderColor` results in a "broken" looking box output.
+              borderColour: 'gray',
             }
           )}`
         },
