@@ -58,25 +58,9 @@ const baseConfig = merge(webpackConfig('development'), {
     },
     host: redwoodConfig.web.host || 'localhost',
     port: redwoodConfig.web.port,
-<<<<<<< HEAD
-    proxy: {
-      [redwoodConfig.web.apiProxyPath]: {
-        target: `${process.env.RWJS_DEV_API_URL ?? 'http://[::1]'}:${
-          redwoodConfig.api.port
-        }`,
-        pathRewrite: {
-          [`^${escapeRegExp(redwoodConfig.web.apiProxyPath)}`]: '',
-        },
-        headers: {
-          Connection: 'keep-alive',
-        },
-      },
-    },
-=======
     proxy: getProxyConfig(),
     inline: true,
     overlay: true,
->>>>>>> origin/pp-add-api-url-config
     open: redwoodConfig.browser.open,
   },
   watchOptions: {
