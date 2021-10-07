@@ -26,6 +26,13 @@ export class ExclusionValidationError extends ServiceValidationError {
   }
 }
 
+export class InclusionValidationError extends ServiceValidationError {
+  constructor(name, message = `${name} is reserved`) {
+    super(message)
+    this.name = 'InclusionValidationError'
+  }
+}
+
 export class PresenceValidationError extends ServiceValidationError {
   constructor(name, message = `${name} is not present`) {
     super(message)

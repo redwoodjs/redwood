@@ -28,6 +28,14 @@ const VALIDATORS = {
     }
   },
 
+  inclusion: (name, value, options) => {
+    let inclusionList = options.in || options
+
+    if (!inclusionList.includes(value)) {
+      throw new ValidationErrors.InclusionValidationError(name, options.message)
+    }
+  },
+
   // requires that the given value is not `null` or `undefined`
   presence: (name, value, options) => {
     if (value == null) {

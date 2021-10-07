@@ -142,3 +142,41 @@ describe('validate exclusion', () => {
     ).not.toThrow()
   })
 })
+
+describe('validate inclusion', () => {
+  it('throws an error if the field is not in a given list of values, no options format', () => {
+    expect(() =>
+      validate('selection', 'qux', { inclusion: ['foo', 'bar'] })
+    ).toThrow(ValidationErrors.InclusionValidationError)
+  })
+
+  it('throws an error if the field is not in a given list of values, with options format', () => {
+    expect(() =>
+      validate('selection', 'quux', { inclusion: { in: ['foo', 'bar'] } })
+    ).toThrow(ValidationErrors.InclusionValidationError)
+  })
+
+  it('throws with a default message', () => {
+    try {
+      validate('selection', 'foo', { inclusion: ['foo', 'bar'] })
+    } catch (e) {
+      expect(e.message).toEqual('selection is not valid')
+    }
+  })
+
+  it('throws with a custom message', () => {
+    try {
+      validate('selection', 'baz', {
+        inclusion: { in: ['foo', 'bar'], message: 'Bad choice' },
+      })
+    } catch (e) {
+      expect(e.message).toEqual('Bad choice')
+    }
+  })
+
+  it('does not throw if the field is in the list', () => {
+    expect(() =>
+      validate('selection', 'foo', { inclusion: ['foo', 'bar'] })
+    ).not.toThrow()
+  })
+})
