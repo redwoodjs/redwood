@@ -41,18 +41,18 @@ export const handler = async ({ provider, force }) => {
       {
         title: `Configuring ${providerName}...`,
         task: (_ctx, task) => {
-          const configPath = providerData?.configPath
-          if (!configPath) {
+          const configOutputPath = providerData?.configOutputPath
+          if (!configOutputPath) {
             task.skip(
               `${providerName} does not contain any configuration file.`
             )
-          } else if (!force && fs.existsSync(configPath)) {
+          } else if (!force && fs.existsSync(configOutputPath)) {
             throw new Error(
               `${providerName} config already exists.\nUse --force to override existing config.`
             )
           } else {
             return writeFile(
-              configPath,
+              configOutputPath,
               fs
                 .readFileSync(
                   path.resolve(__dirname, 'templates', 'rw.lisp.template')

@@ -8,4 +8,4 @@ export const notes = [
   'More manual setup may be needed in order to use Shadowenv.\n',
   'Please see: https://shopify.github.io/shadowenv/getting-started/\n',
 ]
-export const configPath = `${getPaths().base}/.shadowenv.d/rw.lisp`
+export const configOutputPath = `${getPaths().base}/.shadowenv.d/rw.lisp`
