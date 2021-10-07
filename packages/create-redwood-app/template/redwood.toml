@@ -8,8 +8,8 @@
 [web]
   title = "Redwood App"
   port = 8910
-  apiProxyPath = "/.redwood/functions"
-  includeEnvironmentVariables = [] # any ENV vars that should be available to the web side, see https://redwoodjs.com/docs/environment-variables#web
+  apiURL = '/.netlify/functions'
+  apiGraphQLServerPath = '/graphql'
 [api]
   port = 8911
 [browser]

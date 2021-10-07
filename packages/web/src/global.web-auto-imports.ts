@@ -9,8 +9,8 @@ declare global {
   const gql: typeof _gql
 
   interface Window {
-    __REDWOOD__API_PROXY_PATH: string
-    __REDWOOD__APP_TITLE: string
+    REDWOOD_API_URL: string
+    REDWOOD_API_GRAPHQL_SERVER_PATH: string
   }
 
   // Overridable graphQL hook return types

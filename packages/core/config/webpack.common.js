@@ -148,9 +148,9 @@ const getSharedPlugins = (isEnvProduction) => {
     // The define plugin will replace these keys with their values during build
     // time.
     new webpack.DefinePlugin({
-      __REDWOOD__API_PROXY_PATH: JSON.stringify(redwoodConfig.web.apiProxyPath),
-      __REDWOOD__APP_TITLE: JSON.stringify(
-        redwoodConfig.web.title || path.basename(redwoodPaths.base)
+      ['process.env.REDWOOD_API_URL']: JSON.stringify(redwoodConfig.web.apiURL),
+      ['process.env.REDWOOD_API_GRAPHQL_SERVER_PATH']: JSON.stringify(
+        redwoodConfig.web.apiGraphQLServerPath
       ),
       ...getEnvVars(),
     }),
