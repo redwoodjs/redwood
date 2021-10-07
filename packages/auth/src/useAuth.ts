@@ -12,8 +12,8 @@ declare global {
   namespace NodeJS {
     interface Global {
       __REDWOOD__USE_AUTH: () => AuthContextInterface
-      REDWOOD_API_URL: string
-      REDWOOD_API_GRAPHQL_SERVER_PATH: string
+      __REDWOOD__API_URL: string
+      __REDWOOD__API_GRAPHQL_SERVER_PATH: string
     }
   }
 }

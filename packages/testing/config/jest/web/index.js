@@ -12,8 +12,8 @@ module.exports = {
     name: 'web',
   },
   globals: {
-    REDWOOD_API_URL: '',
-    REDWOOD_API_GRAPHQL_SERVER_PATH: '/',
+    __REDWOOD_API_URL: '',
+    __REDWOOD_API_GRAPHQL_SERVER_PATH: '/',
     __REDWOOD__APP_TITLE: 'Redwood App',
   },
   setupFilesAfterEnv: [path.resolve(__dirname, './jest.setup.js')],

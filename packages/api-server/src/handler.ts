@@ -15,12 +15,12 @@ import type { HttpServerParams } from './server'
  */
 
 export const commonOptions = {
-  port: { default: 8910, type: 'number', alias: 'p' },
+  port: { default: getConfig().web?.port || 8910, type: 'number', alias: 'p' },
   socket: { type: 'string' },
 } as const
 
 export const apiCliOptions = {
-  port: { default: 8911, type: 'number', alias: 'p' },
+  port: { default: getConfig().web?.port || 8911, type: 'number', alias: 'p' },
   socket: { type: 'string' },
   apiRootPath: {
     alias: ['rootPath', 'root-path'],
@@ -32,12 +32,12 @@ export const apiCliOptions = {
 } as const
 
 export const webCliOptions = {
-  port: { default: 8910, type: 'number', alias: 'p' },
+  port: { default: getConfig().web?.port || 8910, type: 'number', alias: 'p' },
   socket: { type: 'string' },
   apiHost: {
     alias: 'api-host',
     type: 'string',
-    desc: 'Forward requests from the apiProxyPath, defined in redwood.toml to this host',
+    desc: 'Forward requests from the apiUrl, defined in redwood.toml to this host',
   },
 } as const
 
@@ -77,7 +77,9 @@ export const bothServerHandler = async ({
   port,
   socket,
 }: Omit<HttpServerParams, 'app'>) => {
-  const apiRootPath = coerceRootPath(getConfig().web.apiURL)
+  const apiRootPath = getConfig().web.apiURL
+  const apiGraphQLServerPath = getConfig().web.apiGraphQLServerPath
+
   let app = createApp()
 
   // Attach middleware
@@ -93,8 +95,10 @@ export const bothServerHandler = async ({
       console.log(`Listening on ${socket}`)
     }
 
-    console.log(`Web server started on http://localhost:${port} `)
-    console.log(`APIs Listening on http://localhost:${port}${apiRootPath}`)
+    console.log(`Web server started on ${port} `)
+    console.log(
+      `API serving from ${apiRootPath} listening on ${port} with GraphQL endpoint at ${apiGraphQLServerPath}`
+    )
   })
 }
 
@@ -103,6 +107,11 @@ interface WebServerArgs extends Omit<HttpServerParams, 'app'> {
 }
 
 export const webServerHandler = ({ port, socket, apiHost }: WebServerArgs) => {
+  const apiUrl = getConfig().web.apiURL
+  const apiGraphQLServerPath = coerceRootPath(
+    getConfig().web.apiGraphQLServerPath
+  )
+
   let app = createApp()
 
   // Attach middleware
@@ -110,14 +119,14 @@ export const webServerHandler = ({ port, socket, apiHost }: WebServerArgs) => {
   if (apiHost) {
     app = withApiProxy(app, {
       apiHost,
-      apiUrl: getConfig().web.apiURL,
+      apiUrl,
     })
   }
 
   app = withWebServer(app)
 
   startServer({
-    port,
+    port: port,
     socket,
     app,
   }).on('listening', () => {
@@ -125,7 +134,8 @@ export const webServerHandler = ({ port, socket, apiHost }: WebServerArgs) => {
       console.log(`Listening on ${socket}`)
     }
 
-    console.log(`Web server started on http://localhost:${port} `)
+    console.log(`Web server started on port ${port} `)
+    console.log(`GraphQL endpoint is ${apiUrl}${apiGraphQLServerPath}`)
   })
 }
 

@@ -19,15 +19,16 @@ export const getRootHtmlPath = () => {
 
 export const registerShims = () => {
   const rwjsConfig = getConfig()
-  global.REDWOOD_API_URL = rwjsConfig.web.apiURL
-  global.REDWOOD_API_GRAPHQL_SERVER_PATH = rwjsConfig.web.apiGraphQLServerPath
+  global.__REDWOOD__API_URL = rwjsConfig.web.apiURL
+  global.__REDWOOD__API_GRAPHQL_SERVER_PATH =
+    rwjsConfig.web.apiGraphQLServerPath
   global.__REDWOOD__APP_TITLE = rwjsConfig.web.title
 
   global.__REDWOOD__USE_AUTH = () =>
     ({
       loading: true, // this should play nicely if the app waits for auth stuff to comeback first before render
       isAuthenticated: false,
-    } as AuthContextInterface) // we only need a parital AuthContextInterface for prerender
+    } as AuthContextInterface) // we only need a partial AuthContextInterface for prerender
 
   global.__REDWOOD__PRERENDERING = true
 

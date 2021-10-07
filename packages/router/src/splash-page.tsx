@@ -562,7 +562,8 @@ const useVersion = () => {
       try {
         const response = await global.fetch(
           `${
-            global.REDWOOD_API_URL + global.REDWOOD_API_GRAPHQL_SERVER_PATH
+            global.__REDWOOD__API_URL +
+            global.__REDWOOD__API_GRAPHQL_SERVER_PATH
           }/graphql`,
           {
             method: 'POST',
