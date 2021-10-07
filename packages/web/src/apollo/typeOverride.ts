@@ -1,9 +1,9 @@
 // Override useQuery and useMutation types
 import type {
-  QueryResult,
-  MutationTuple,
   QueryHookOptions,
+  QueryResult,
   MutationHookOptions,
+  MutationTuple,
   OperationVariables,
 } from '@apollo/client'
 
