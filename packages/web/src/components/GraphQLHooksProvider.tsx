@@ -1,11 +1,17 @@
 import type { DocumentNode } from 'graphql'
 
-type DefaultUseQueryType = <TData, TVariables>(
+type DefaultUseQueryType = <
+  TData = any,
+  TVariables = GraphQLOperationVariables
+>(
   query: DocumentNode,
   options?: GraphQLQueryHookOptions<TData, TVariables>
 ) => QueryOperationResult<TData, TVariables>
 
-type DefaultUseMutationType = <TData, TVariables>(
+type DefaultUseMutationType = <
+  TData = any,
+  TVariables = GraphQLOperationVariables
+>(
   mutation: DocumentNode,
   options?: GraphQLMutationHookOptions<TData, TVariables>
 ) => MutationOperationResult<TData, TVariables>
