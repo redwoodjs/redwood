@@ -10,11 +10,11 @@ import c from '../../../lib/colors'
 
 const defaultProvider = 'shadowenv'
 const defaultProviderNote =
-  'Currently the only provider is Shadowenv. This can also be used to create project-local env var shadowing. For more info: https://shopify.github.io/shadowenv/'
+  ' Note: Currently the only provider is Shadowenv. This can also be used to create project-local env var shadowing. For more info: https://shopify.github.io/shadowenv/'
 
 export const command = 'cli-alias [provider]'
 export const aliases = [defaultProvider]
-export const description = `Set up CLI command aliasing, e.g. 'yarn rw' --> 'rw'. Note: ${defaultProviderNote}`
+export const description = `Set up CLI command aliasing, e.g. 'yarn rw' --> 'rw'.${defaultProviderNote}`
 
 const supportedProviders = fs
   .readdirSync(path.resolve(__dirname, 'providers'))
