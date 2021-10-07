@@ -42,7 +42,13 @@ export const handler = async ({ provider, force }) => {
         title: `Configuring ${providerName}...`,
         task: (_ctx, task) => {
           const configOutputPath = providerData?.configOutputPath
-          if (!configOutputPath) {
+
+          const resolvedConfigTemplatePath = path.resolve(
+            __dirname,
+            'templates',
+            providerData?.configTemplatePath
+          )
+          if (!fs.existsSync(resolvedConfigTemplatePath)) {
             task.skip(
               `${providerName} does not contain any configuration file.`
             )
@@ -53,11 +59,7 @@ export const handler = async ({ provider, force }) => {
           } else {
             return writeFile(
               configOutputPath,
-              fs
-                .readFileSync(
-                  path.resolve(__dirname, 'templates', 'rw.lisp.template')
-                )
-                .toString(),
+              fs.readFileSync(resolvedConfigTemplatePath).toString(),
               {
                 overwriteExisting: force,
               }
