@@ -3,6 +3,7 @@ import {
   parseSearch,
   validatePath,
   flattenSearchParams,
+  replaceParams,
 } from '../util'
 
 describe('matchPath', () => {
@@ -204,5 +205,42 @@ describe('flattenSearchParams', () => {
 
   it('returns an empty array', () => {
     expect(flattenSearchParams('')).toEqual([])
+  })
+})
+
+describe('replaceParams', () => {
+  it('replaces named parameter with value from the args object', () => {
+    expect(replaceParams('/tags/{tag}', { tag: 'code' })).toEqual('/tags/code')
+  })
+
+  it('replaces multiple named parameters with values from the args object', () => {
+    expect(
+      replaceParams('/posts/{year}/{month}/{day}', {
+        year: '2021',
+        month: '09',
+        day: '19',
+      })
+    ).toEqual('/posts/2021/09/19')
+  })
+
+  it('appends extra parameters as search parameters', () => {
+    expect(replaceParams('/extra', { foo: 'foo' })).toEqual('/extra?foo=foo')
+    expect(replaceParams('/tags/{tag}', { tag: 'code', foo: 'foo' })).toEqual(
+      '/tags/code?foo=foo'
+    )
+  })
+
+  it('handles falsy parameter values', () => {
+    expect(replaceParams('/category/{categoryId}', { categoryId: 0 })).toEqual(
+      '/category/0'
+    )
+
+    expect(replaceParams('/boolean/{bool}', { bool: false })).toEqual(
+      '/boolean/false'
+    )
+
+    expect(replaceParams('/undef/{undef}', { undef: undefined })).toEqual(
+      '/undef/undefined'
+    )
   })
 })

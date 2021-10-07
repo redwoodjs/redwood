@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/graphql-server",
-  "version": "0.37.2",
+  "version": "0.37.3",
   "files": [
     "dist"
   ],
@@ -18,7 +18,7 @@
     "@graphql-tools/schema": "8.2.0",
     "@graphql-tools/utils": "8.2.2",
     "@prisma/client": "3.2.0",
-    "@redwoodjs/api": "0.37.2",
+    "@redwoodjs/api": "0.37.3",
     "@types/pino": "6.3.11",
     "core-js": "3.17.3",
     "graphql": "15.5.3",
@@ -34,14 +34,17 @@
     "uuid": "8.3.2"
   },
   "devDependencies": {
+    "@babel/cli": "7.15.4",
     "@envelop/testing": "1.1.1",
     "@envelop/types": "1.1.0",
-    "@redwoodjs/auth": "0.37.2",
+    "@redwoodjs/auth": "0.37.3",
     "@types/jsonwebtoken": "8.5.5",
     "@types/lodash.merge": "4.6.6",
     "@types/lodash.omitby": "4.6.6",
     "@types/uuid": "8.3.1",
-    "split2": "3.2.2"
+    "jest": "27.2.0",
+    "split2": "3.2.2",
+    "typescript": "4.4.3"
   },
   "jest": {
     "testPathIgnorePatterns": [
@@ -50,7 +53,7 @@
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",
-    "prepublishOnly": "yarn cross-env NODE_ENV=production yarn build",
+    "prepublishOnly": "NODE_ENV=production yarn build",
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
     "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
