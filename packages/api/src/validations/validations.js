@@ -10,9 +10,13 @@ const VALIDATORS = {
     }
   },
 
-  // requires that the given field be `true` and nothing else
+  // requires that the given field be `true` and nothing else, unless an array
+  // of valid values is included with an `in` option
   acceptance: (name, value, options) => {
-    if (value !== true) {
+    let acceptedValues = [true]
+    acceptedValues = acceptedValues.concat(options.in || [])
+
+    if (!acceptedValues.includes(value)) {
       throw new ValidationErrors.AcceptanceValidationError(
         name,
         options.message
@@ -20,6 +24,7 @@ const VALIDATORS = {
     }
   },
 
+  // requires that the given value NOT be in the list of possible values in options.in
   exclusion: (name, value, options) => {
     let exclusionList = options.in || options
 
@@ -28,6 +33,7 @@ const VALIDATORS = {
     }
   },
 
+  // requires that the given value be in the list of possible values in options.in
   inclusion: (name, value, options) => {
     let inclusionList = options.in || options
 

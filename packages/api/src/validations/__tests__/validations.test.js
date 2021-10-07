@@ -103,6 +103,16 @@ describe('validate acceptance', () => {
   it('does not throw an error if the field is present', () => {
     expect(() => validate('terms', true, { acceptance: true })).not.toThrow()
   })
+
+  it('does not throw an error if the value is in listed of accepted values', () => {
+    expect(() =>
+      validate('terms', 'true', {
+        acceptance: {
+          in: ['true'],
+        },
+      })
+    ).not.toThrow()
+  })
 })
 
 describe('validate exclusion', () => {
