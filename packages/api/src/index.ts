@@ -1,6 +1,8 @@
 export * from './auth'
 export * from './functions/dbAuth/DbAuthHandler'
 export { dbAuthSession } from './functions/dbAuth/shared'
+// @ts-ignore
+export * from './validations/validations'
 
 // @NOTE: use require, to avoid messing around with tsconfig and nested output dirs
 const packageJson = require('../package.json')
