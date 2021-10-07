@@ -49,13 +49,13 @@ export const handler = async (
           /** @type any */ _ctx,
           /** @type import('listr').ListrTaskWrapper */ task
         ) => {
-          const configOutputPath = providerData?.configOutputPath
-
           const resolvedConfigTemplatePath = path.resolve(
             __dirname,
             'templates',
             providerData?.configTemplatePath
           )
+          const configOutputPath = providerData?.configOutputPath
+
           if (!fs.existsSync(resolvedConfigTemplatePath)) {
             task.skip(
               `${providerName} does not contain any configuration file.`
