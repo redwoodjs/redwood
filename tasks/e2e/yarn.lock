@@ -5,9 +5,9 @@ __metadata:
   version: 4
   cacheKey: 8c0
 
-"@cypress/request@npm:^2.88.5":
-  version: 2.88.5
-  resolution: "@cypress/request@npm:2.88.5"
+"@cypress/request@npm:^2.88.6":
+  version: 2.88.6
+  resolution: "@cypress/request@npm:2.88.6"
   dependencies:
     aws-sign2: ~0.7.0
     aws4: ^1.8.0
@@ -22,14 +22,13 @@ __metadata:
     isstream: ~0.1.2
     json-stringify-safe: ~5.0.1
     mime-types: ~2.1.19
-    oauth-sign: ~0.9.0
     performance-now: ^2.1.0
     qs: ~6.5.2
     safe-buffer: ^5.1.2
     tough-cookie: ~2.5.0
     tunnel-agent: ^0.6.0
-    uuid: ^3.3.2
-  checksum: 00d5826904ee768931987a7cd5c9ada16d14624177c4e793141c3cea4220b07b597c669a3c0035468c84bf9c3c1c71cd8105246e0978bbbe5ea172ddd19144f7
+    uuid: ^8.3.2
+  checksum: f0d19dc36a223739f23fd454c210116f691251f84d2fecce76e83ec61618b921749c5c1f4a91c8edc493fa9cd33678015625104ca7b1c083322b9f846cccc462
   languageName: node
   linkType: hard
 
@@ -426,11 +425,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:8.2.0":
-  version: 8.2.0
-  resolution: "cypress@npm:8.2.0"
+"cypress@npm:8.5.0":
+  version: 8.5.0
+  resolution: "cypress@npm:8.5.0"
   dependencies:
-    "@cypress/request": ^2.88.5
+    "@cypress/request": ^2.88.6
     "@cypress/xvfb": ^1.2.4
     "@types/node": ^14.14.31
     "@types/sinonjs__fake-timers": ^6.0.2
@@ -464,6 +463,7 @@ __metadata:
     minimist: ^1.2.5
     ospath: ^1.2.2
     pretty-bytes: ^5.6.0
+    proxy-from-env: 1.0.0
     ramda: ~0.27.1
     request-progress: ^3.0.0
     supports-color: ^8.1.1
@@ -473,7 +473,7 @@ __metadata:
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: c3c27e049042b92e6c69e7cc991c051f0f2aa30a986a76f8f1e2903c3dc5b3c3e9191a94fa92e3ba519ac93fd4b7ad7a85f845d6b3a029016726a6ed29d95864
+  checksum: 1bf4c7b0dd9e2fc4dfaa23640e07791c3eaf0062561f45ac86f247e16e5243bd7179505777d995681508881e7ee0e7b48f1a31f49e37b21d50bab4dccbc13005
   languageName: node
   linkType: hard
 
@@ -534,7 +534,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "e2e@workspace:."
   dependencies:
-    cypress: 8.2.0
+    cypress: 8.5.0
     cypress-wait-until: 1.7.1
   languageName: unknown
   linkType: soft
@@ -1088,13 +1088,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"oauth-sign@npm:~0.9.0":
-  version: 0.9.0
-  resolution: "oauth-sign@npm:0.9.0"
-  checksum: fc92a516f6ddbb2699089a2748b04f55c47b6ead55a77cd3a2cbbce5f7af86164cb9425f9ae19acfd066f1ad7d3a96a67b8928c6ea946426f6d6c29e448497c2
-  languageName: node
-  linkType: hard
-
 "object-assign@npm:^4.1.0":
   version: 4.1.1
   resolution: "object-assign@npm:4.1.1"
@@ -1175,6 +1168,13 @@ __metadata:
   version: 5.6.0
   resolution: "pretty-bytes@npm:5.6.0"
   checksum: f69f494dcc1adda98dbe0e4a36d301e8be8ff99bfde7a637b2ee2820e7cb583b0fc0f3a63b0e3752c01501185a5cf38602c7be60da41bdf84ef5b70e89c370f3
+  languageName: node
+  linkType: hard
+
+"proxy-from-env@npm:1.0.0":
+  version: 1.0.0
+  resolution: "proxy-from-env@npm:1.0.0"
+  checksum: c64df9b21f7f820dc882cd6f7f81671840acd28b9688ee3e3e6af47a56ec7f0edcabe5bc96b32b26218b35eeff377bcc27ac27f89b6b21401003e187ff13256f
   languageName: node
   linkType: hard
 
@@ -1508,12 +1508,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:^3.3.2":
-  version: 3.4.0
-  resolution: "uuid@npm:3.4.0"
+"uuid@npm:^8.3.2":
+  version: 8.3.2
+  resolution: "uuid@npm:8.3.2"
   bin:
-    uuid: ./bin/uuid
-  checksum: 1c13950df865c4f506ebfe0a24023571fa80edf2e62364297a537c80af09c618299797bbf2dbac6b1f8ae5ad182ba474b89db61e0e85839683991f7e08795347
+    uuid: dist/bin/uuid
+  checksum: bcbb807a917d374a49f475fae2e87fdca7da5e5530820ef53f65ba1d12131bd81a92ecf259cc7ce317cbe0f289e7d79fdfebcef9bfa3087c8c8a2fa304c9be54
   languageName: node
   linkType: hard
 
