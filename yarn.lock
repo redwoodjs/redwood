@@ -4319,7 +4319,7 @@ __metadata:
     url-loader: 4.1.1
     webpack: 5.57.1
     webpack-bundle-analyzer: 4.4.2
-    webpack-cli: 4.9.0
+    webpack-cli: 4.8.0
     webpack-dev-server: 4.3.1
     webpack-manifest-plugin: 4.0.2
     webpack-merge: 5.8.0
@@ -7175,7 +7175,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@webpack-cli/configtest@npm:^1.1.0":
+"@webpack-cli/configtest@npm:^1.0.4":
   version: 1.1.0
   resolution: "@webpack-cli/configtest@npm:1.1.0"
   peerDependencies:
@@ -7185,7 +7185,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@webpack-cli/info@npm:^1.4.0":
+"@webpack-cli/info@npm:^1.3.0":
   version: 1.4.0
   resolution: "@webpack-cli/info@npm:1.4.0"
   dependencies:
@@ -9840,14 +9840,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"colorette@npm:^1.2.2":
+"colorette@npm:^1.2.1, colorette@npm:^1.2.2":
   version: 1.4.0
   resolution: "colorette@npm:1.4.0"
   checksum: 4955c8f7daafca8ae7081d672e4bd89d553bd5782b5846d5a7e05effe93c2f15f7e9c0cb46f341b59f579a39fcf436241ff79594899d75d5f3460c03d607fe9e
   languageName: node
   linkType: hard
 
-"colorette@npm:^2.0.10, colorette@npm:^2.0.14":
+"colorette@npm:^2.0.10":
   version: 2.0.14
   resolution: "colorette@npm:2.0.14"
   checksum: cc2f9c072eb584fbd7f0b8803271028b342a9a150c64e5de8e1c0d05a6d7adca9a79bbf756682e90f3e5ea8f5b7200ee7ba7894b662ac3b6ecca86646cf11ef6
@@ -25286,15 +25286,15 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"webpack-cli@npm:4.9.0":
-  version: 4.9.0
-  resolution: "webpack-cli@npm:4.9.0"
+"webpack-cli@npm:4.8.0":
+  version: 4.8.0
+  resolution: "webpack-cli@npm:4.8.0"
   dependencies:
     "@discoveryjs/json-ext": ^0.5.0
-    "@webpack-cli/configtest": ^1.1.0
-    "@webpack-cli/info": ^1.4.0
+    "@webpack-cli/configtest": ^1.0.4
+    "@webpack-cli/info": ^1.3.0
     "@webpack-cli/serve": 1.5.2
-    colorette: ^2.0.14
+    colorette: ^1.2.1
     commander: ^7.0.0
     execa: ^5.0.0
     fastest-levenshtein: ^1.0.12
@@ -25316,7 +25316,7 @@ resolve@^2.0.0-next.3:
       optional: true
   bin:
     webpack-cli: bin/cli.js
-  checksum: bb6711ef5495f220967f17e701d73b3490ac711651b0849928143450e69325ba044d0669631826812a50717ac820a670baebc63502ff5256ba2c993394f25c90
+  checksum: 3d01ac4b48fb257c7ab26d801970b9360d1bf72facbb07d580a74ea8772dc21b6de82c91c28f34263635b4180d924d1884c7cd96d6ce46d7c146e59794a42329
   languageName: node
   linkType: hard
 
