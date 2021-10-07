@@ -27,6 +27,7 @@
     "@redwoodjs/eslint-config": "0.37.2",
     "@redwoodjs/internal": "0.37.2",
     "@redwoodjs/testing": "0.37.2",
+    "@webpack-cli/serve": "1.5.2",
     "babel-loader": "8.2.2",
     "babel-plugin-auto-import": "1.1.0",
     "babel-plugin-graphql-tag": "3.3.0",
@@ -77,5 +78,8 @@
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build\"",
     "test": "jest",
     "test:watch": "yarn test --watch"
+  },
+  "resolutions": {
+    "@webpack-cli/serve": "1.5.2"
   }
 }
