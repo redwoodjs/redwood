@@ -4286,6 +4286,7 @@ __metadata:
     "@redwoodjs/testing": 0.37.2
     "@types/babel-core": 6.25.7
     "@types/babel-plugin-tester": 9.0.4
+    "@webpack-cli/serve": 1.5.2
     babel-loader: 8.2.2
     babel-plugin-auto-import: 1.1.0
     babel-plugin-graphql-tag: 3.3.0
@@ -7191,6 +7192,18 @@ __metadata:
   peerDependencies:
     webpack-cli: 4.x.x
   checksum: 7761987f8f0a8bb4df81135cdd0aee88d58ded5373dd7d96dea333bb86ba922c22dd0c2bd79d4dbb31523d03ca0dfed90e8a8547f60a2a13cc99b22e5a24715e
+  languageName: node
+  linkType: hard
+
+"@webpack-cli/serve@npm:1.5.2":
+  version: 1.5.2
+  resolution: "@webpack-cli/serve@npm:1.5.2"
+  peerDependencies:
+    webpack-cli: 4.x.x
+  peerDependenciesMeta:
+    webpack-dev-server:
+      optional: true
+  checksum: f90b7036078e806984431d1566122c491e541d4cf5cdfdad70ca817abe1fe4ec18c6d1beeb4182b489a8d7a0c6b8778483f23273696a599fae149e4707fa231b
   languageName: node
   linkType: hard
 
