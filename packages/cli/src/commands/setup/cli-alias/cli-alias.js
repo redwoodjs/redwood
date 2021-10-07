@@ -35,21 +35,20 @@ export const builder = (yargs) => {
 
 export const handler = async ({ provider, force }) => {
   const providerData = await import(`./providers/${provider}`)
+  const providerName = providerData?.name ?? provider
   const tasks = new Listr(
     [
       {
-        title: `Configuring ${providerData?.name ?? provider}...`,
-        task: () => {
-          /**
-           * Check if provider's config already exists.
-           * If it exists, throw an error.
-           */
+        title: `Configuring ${providerName}...`,
+        task: (_ctx, task) => {
           const configPath = providerData?.configPath
-          if (!force && fs.existsSync(configPath)) {
+          if (!configPath) {
+            task.skip(
+              `${providerName} does not contain any configuration file.`
+            )
+          } else if (!force && fs.existsSync(configPath)) {
             throw new Error(
-              `${
-                providerData?.name ?? provider
-              } config already exists.\nUse --force to override existing config.`
+              `${providerName} config already exists.\nUse --force to override existing config.`
             )
           } else {
             return writeFile(
@@ -94,7 +93,7 @@ export const handler = async ({ provider, force }) => {
             }
           },
         },
-      {
+      providerData?.notes?.length && {
         title: '',
         task: (_, task) => {
           task.title = `One more thing...\n ${boxen(
