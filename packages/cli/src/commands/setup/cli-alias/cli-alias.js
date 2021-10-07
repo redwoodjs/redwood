@@ -47,7 +47,9 @@ export const handler = async ({ provider, force }) => {
           const configPath = providerData?.configPath
           if (!force && fs.existsSync(configPath)) {
             throw new Error(
-              'Shadowenv config already exists.\nUse --force to override existing config.'
+              `${
+                providerData?.name ?? provider
+              } config already exists.\nUse --force to override existing config.`
             )
           } else {
             return writeFile(
