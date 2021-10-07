@@ -6,7 +6,7 @@ export { navigate, back } from './history'
 export { Link, NavLink, useMatch, Redirect } from './links'
 export { useLocation, LocationProvider } from './location'
 export { usePageLoadingContext, PageLoadingContext } from './page-loader'
-export { useParams } from './params'
+export { useParams, ParamsProvider } from './params'
 export { Router, Route, routes } from './router'
 
 export * from './Set'
