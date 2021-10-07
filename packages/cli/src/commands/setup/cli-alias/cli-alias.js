@@ -1,3 +1,4 @@
+//@ts-check
 import fs from 'fs'
 import path from 'path'
 
@@ -7,18 +8,20 @@ import Listr from 'listr'
 import { getPaths, writeFile } from '../../../lib'
 import c from '../../../lib/colors'
 
-export const command = 'cli-alias [provider]'
 const defaultProvider = 'shadowenv'
+const defaultProviderNote =
+  'Currently the only provider is Shadowenv. This can also be used to create project-local env var shadowing. For more info: https://shopify.github.io/shadowenv/'
+
+export const command = 'cli-alias [provider]'
 export const aliases = [defaultProvider]
-export const description =
-  "Set up CLI command aliasing, e.g. 'yarn rw' --> 'rw'. Note: Currently the only provider is Shadowenv. This can also be used to create project-local env var shadowing. For more info: https://shopify.github.io/shadowenv/"
+export const description = `Set up CLI command aliasing, e.g. 'yarn rw' --> 'rw'. Note: ${defaultProviderNote}`
 
 const supportedProviders = fs
   .readdirSync(path.resolve(__dirname, 'providers'))
   .map((file) => path.basename(file, '.js'))
   .filter((file) => file !== 'README.md')
 
-export const builder = (yargs) => {
+export const builder = (/** @type import('yargs').Argv */ yargs) => {
   yargs.positional('provider', {
     choices: supportedProviders,
     description: 'CLI command alias provider to configure',
@@ -33,14 +36,19 @@ export const builder = (yargs) => {
   })
 }
 
-export const handler = async ({ provider, force }) => {
+export const handler = async (
+  /** @type {{provider: string; force: boolean}} */ { provider, force }
+) => {
   const providerData = await import(`./providers/${provider}`)
   const providerName = providerData?.name ?? provider
   const tasks = new Listr(
     [
       {
         title: `Configuring ${providerName}...`,
-        task: (_ctx, task) => {
+        task: (
+          /** @type any */ _ctx,
+          /** @type import('listr').ListrTaskWrapper */ task
+        ) => {
           const configOutputPath = providerData?.configOutputPath
 
           const resolvedConfigTemplatePath = path.resolve(
@@ -70,7 +78,10 @@ export const handler = async ({ provider, force }) => {
       providerData?.gitIgnoreAdditions?.length &&
         fs.existsSync(path.resolve(getPaths().base, '.gitignore')) && {
           title: '',
-          task: (_ctx, task) => {
+          task: (
+            /** @type any */ _ctx,
+            /** @type import('listr').ListrTaskWrapper */ task
+          ) => {
             task.title = 'Updating .gitignore...'
             const gitIgnore = path.resolve(getPaths().base, '.gitignore')
             const content = fs.readFileSync(gitIgnore).toString()
@@ -80,8 +91,9 @@ export const handler = async ({ provider, force }) => {
             )
 
             if (
-              providerData.gitIgnoreAdditions.every((item) =>
-                contentWithoutNewlineCharacters.includes(item)
+              providerData.gitIgnoreAdditions.every(
+                (/** @type {string} */ item) =>
+                  contentWithoutNewlineCharacters.includes(item)
               )
             ) {
               task.skip('.gitignore already includes the additions.')
@@ -97,25 +109,27 @@ export const handler = async ({ provider, force }) => {
         },
       providerData?.notes?.length && {
         title: '',
-        task: (_, task) => {
+        task: (
+          /** @type any */ _ctx,
+          /** @type import('listr').ListrTaskWrapper */ task
+        ) => {
           task.title = `One more thing...\n ${boxen(
             providerData.notes.join('\n   '),
             {
               padding: { top: 0, bottom: 0, right: 1, left: 1 },
               margin: 1,
-              borderColour: 'gray',
+              borderColor: 'gray',
             }
           )}`
         },
       },
-    ].filter(Boolean),
-    { collapse: false }
+    ].filter(Boolean)
   )
 
   try {
     await tasks.run()
-  } catch (e) {
-    console.error(c.error(e.message))
+  } catch (/** @type any */ e) {
+    console.error(c.error(e?.message))
     process.exit(e?.exitCode || 1)
   }
 }
