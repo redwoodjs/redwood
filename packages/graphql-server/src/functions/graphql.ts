@@ -12,6 +12,8 @@ import { useDisableIntrospection } from '@envelop/disable-introspection'
 import { useFilterAllowedOperations } from '@envelop/filter-operation-type'
 import { useParserCache } from '@envelop/parser-cache'
 import { useValidationCache } from '@envelop/validation-cache'
+// @ts-ignore
+import { ServiceValidationError } from '@redwoodjs/api'
 import type {
   APIGatewayProxyEvent,
   APIGatewayProxyResult,
@@ -74,7 +76,8 @@ function normalizeRequest(event: APIGatewayProxyEvent): Request {
 export const formatError: FormatErrorHandler = (err: any) => {
   if (
     err.originalError &&
-    err.originalError instanceof EnvelopError === false
+    err.originalError instanceof EnvelopError === false &&
+    err.originalError instanceof ServiceValidationError === false
   ) {
     return new GraphQLError('Something went wrong.')
   }
