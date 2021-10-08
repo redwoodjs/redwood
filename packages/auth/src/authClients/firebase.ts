@@ -1,5 +1,5 @@
-import type { FirebaseApp, } from '@firebase/app'
-import type { CustomParameters, OAuthProvider, User, ProviderId} from '@firebase/auth'
+import type { FirebaseApp } from '@firebase/app'
+import type { CustomParameters, OAuthProvider, User } from '@firebase/auth'
 import type FirebaseAuthNamespace from '@firebase/auth'
 
 import { AuthClient } from './'
@@ -10,14 +10,18 @@ export type FirebaseUser = User
 // @TODO: Firebase supported providerIds are exported as a const enum_map here:
 // https://github.com/firebase/firebase-js-sdk/blob/master/packages/auth/src/model/enum_maps.ts#L28-L46
 // Perhaps there is some way to reference the const enum_map here as type declaration without importing sdk?
-export type oAuthProvider = 'facebook.com' | 'github.com' | 'google.com' | 'twitter.com'
-export type passwordProvider = 'password'
-export type phoneProvider = 'phone'
+export type providerId =
+  | 'google.com'
+  | 'facebook.com'
+  | 'github.com'
+  | 'twitter.com'
+  | 'password'
+  | 'phone'
 export type emailLinkProvider = 'emailLink'
 export type customTokenProvider = 'customToken'
 
 export type Options = {
-  providerId?: oAuthProvider | passwordProvider | phoneProvider | emailLinkProvider | customTokenProvider
+  providerId?: providerId | emailLinkProvider | customTokenProvider
   email?: string
   emailLink?: string
   customToken?: string
