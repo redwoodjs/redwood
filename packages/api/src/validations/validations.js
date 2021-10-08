@@ -33,12 +33,46 @@ const VALIDATORS = {
     }
   },
 
+  format: (name, value, options) => {
+    let pattern = options.pattern || options
+
+    if (!pattern.test(value)) {
+      throw new ValidationErrors.FormatValidationError(name, options.message)
+    }
+  },
+
   // requires that the given value be in the list of possible values in options.in
   inclusion: (name, value, options) => {
     let inclusionList = options.in || options
 
     if (!inclusionList.includes(value)) {
       throw new ValidationErrors.InclusionValidationError(name, options.message)
+    }
+  },
+
+  length: (name, value, options) => {
+    const len = value.toString().length
+
+    if (options.min && len < options.min) {
+      throw new ValidationErrors.MinLengthValidationError(name, options.message)
+    }
+    if (options.max && len > options.max) {
+      throw new ValidationErrors.MaxLengthValidationError(name, options.message)
+    }
+    if (options.equal && len !== options.equal) {
+      throw new ValidationErrors.EqualLengthValidationError(
+        name,
+        options.message
+      )
+    }
+    if (
+      options.between &&
+      (len < options.between[0] || len > options.between[1])
+    ) {
+      throw new ValidationErrors.BetweenLengthValidationError(
+        name,
+        options.message
+      )
     }
   },
 

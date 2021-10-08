@@ -26,10 +26,45 @@ export class ExclusionValidationError extends ServiceValidationError {
   }
 }
 
+export class FormatValidationError extends ServiceValidationError {
+  constructor(name, message = `${name} is not formatted correctly`) {
+    super(message)
+    this.name = 'FormatValidationError'
+  }
+}
+
 export class InclusionValidationError extends ServiceValidationError {
   constructor(name, message = `${name} is reserved`) {
     super(message)
     this.name = 'InclusionValidationError'
+  }
+}
+
+export class MinLengthValidationError extends ServiceValidationError {
+  constructor(name, message = `${name} is too short`) {
+    super(message)
+    this.name = 'MinLengthValidationError'
+  }
+}
+
+export class MaxLengthValidationError extends ServiceValidationError {
+  constructor(name, message = `${name} is too long`) {
+    super(message)
+    this.name = 'MaxLengthValidationError'
+  }
+}
+
+export class EqualLengthValidationError extends ServiceValidationError {
+  constructor(name, message = `${name} does not equal required length`) {
+    super(message)
+    this.name = 'EqualLengthValidationError'
+  }
+}
+
+export class BetweenLengthValidationError extends ServiceValidationError {
+  constructor(name, message = `${name} is not in required length range`) {
+    super(message)
+    this.name = 'BetweenLengthValidationError'
   }
 }
 

@@ -153,6 +153,48 @@ describe('validate exclusion', () => {
   })
 })
 
+describe('validate format', () => {
+  it('throws an error if the field does not match a pattern, flat format', () => {
+    expect(() => validate('text', 'foobar', { format: /baz/ })).toThrow(
+      ValidationErrors.FormatValidationError
+    )
+  })
+
+  it('throws an error if the field does not match a pattern, option format', () => {
+    expect(() => validate('text', 'foobar', { format: /baz/ })).toThrow(
+      ValidationErrors.FormatValidationError
+    )
+  })
+
+  it('throws with a default message', () => {
+    try {
+      validate('text', 'foobar', { format: /baz/ })
+    } catch (e) {
+      expect(e.message).toEqual('text is not formatted correctly')
+    }
+  })
+
+  it('throws with a custom message', () => {
+    try {
+      validate('text', 'foobar', {
+        format: { pattern: /baz/, message: 'bad format' },
+      })
+    } catch (e) {
+      expect(e.message).toEqual('bad format')
+    }
+  })
+
+  it('does not throw if the field is in the list', () => {
+    const patterns = [/foo/, /^foo/]
+
+    patterns.forEach((pattern) => {
+      expect(() =>
+        validate('text', 'foobar', { format: pattern })
+      ).not.toThrow()
+    })
+  })
+})
+
 describe('validate inclusion', () => {
   it('throws an error if the field is not in a given list of values, no options format', () => {
     expect(() =>
@@ -187,6 +229,139 @@ describe('validate inclusion', () => {
   it('does not throw if the field is in the list', () => {
     expect(() =>
       validate('selection', 'foo', { inclusion: ['foo', 'bar'] })
+    ).not.toThrow()
+  })
+})
+
+describe('validate length', () => {
+  it('throws an error if the field is shorter than minimum', () => {
+    expect(() => validate('username', 'a', { length: { min: 2 } })).toThrow(
+      ValidationErrors.MinLengthValidationError
+    )
+  })
+
+  it('throws min length error with a default message', () => {
+    try {
+      validate('username', 'a', { length: { min: 2 } })
+    } catch (e) {
+      expect(e.message).toEqual('username is too short')
+    }
+  })
+
+  it('throws min length error with a custom message', () => {
+    try {
+      validate('username', 'a', { length: { min: 2, message: 'too short' } })
+    } catch (e) {
+      expect(e.message).toEqual('too short')
+    }
+  })
+
+  it('throws an error if the field is longer than maximum', () => {
+    expect(() =>
+      validate('username', 'johndoeesquirethethird', { length: { max: 10 } })
+    ).toThrow(ValidationErrors.MaxLengthValidationError)
+  })
+
+  it('throws max length error with a default message', () => {
+    try {
+      validate('username', 'jeff', { length: { max: 2 } })
+    } catch (e) {
+      expect(e.message).toEqual('username is too long')
+    }
+  })
+
+  it('throws max length error with a custom message', () => {
+    try {
+      validate('username', 'jill', { length: { max: 2, message: 'too long' } })
+    } catch (e) {
+      expect(e.message).toEqual('too long')
+    }
+  })
+
+  it('throws an error if the field does not equal a given number', () => {
+    // too short
+    expect(() =>
+      validate('username', 'foobar', { length: { equal: 7 } })
+    ).toThrow(ValidationErrors.EqualLengthValidationError)
+
+    // too long
+    expect(() =>
+      validate('username', 'foobarbaz', { length: { equal: 7 } })
+    ).toThrow(ValidationErrors.EqualLengthValidationError)
+  })
+
+  it('throws equal length error with a default message', () => {
+    try {
+      validate('username', 'foobar', { length: { equal: 5 } })
+    } catch (e) {
+      expect(e.message).toEqual('username does not equal required length')
+    }
+  })
+
+  it('throws equal length error with a custom message', () => {
+    try {
+      validate('username', 'foobar', {
+        length: { equal: 5, message: 'wrong length' },
+      })
+    } catch (e) {
+      expect(e.message).toEqual('wrong length')
+    }
+  })
+
+  it('throws an error if the field is not within a range', () => {
+    // too short
+    expect(() =>
+      validate('username', 'foobar', { length: { between: [10, 20] } })
+    ).toThrow(ValidationErrors.BetweenLengthValidationError)
+
+    // too long
+    expect(() =>
+      validate('username', 'foobar', { length: { between: [2, 4] } })
+    ).toThrow(ValidationErrors.BetweenLengthValidationError)
+  })
+
+  it('throws between length error with a default message', () => {
+    try {
+      validate('username', 'foobar', { length: { between: [2, 4] } })
+    } catch (e) {
+      expect(e.message).toEqual('username is not in required length range')
+    }
+  })
+
+  it('throws between length error with a custom message', () => {
+    try {
+      validate('username', 'foobar', {
+        length: { between: [2, 4], message: 'not enough or too many' },
+      })
+    } catch (e) {
+      expect(e.message).toEqual('not enough or too many')
+    }
+  })
+
+  it('does not throw if the field is within the right length rante', () => {
+    // above minimum
+    expect(() =>
+      validate('username', 'foobar', { length: { min: 4 } })
+    ).not.toThrow()
+
+    // below maximum
+    expect(() =>
+      validate('username', 'foobar', { length: { max: 8 } })
+    ).not.toThrow()
+
+    // equal
+    expect(() =>
+      validate('username', 'foobar', { length: { equal: 6 } })
+    ).not.toThrow()
+
+    // between
+    expect(() =>
+      validate('username', 'foobar', { length: { between: [2, 10] } })
+    ).not.toThrow()
+
+    // multiple
+    expect(() =>
+      validate('username', 'foobar', { length: { min: 4, max: 8 } })
     ).not.toThrow()
   })
 })
