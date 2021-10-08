@@ -14,7 +14,7 @@ import type { DbAuth } from './dbAuth'
 import { ethereum } from './ethereum'
 import type { Ethereum, EthereumUser } from './ethereum'
 import { firebase } from './firebase'
-import type { FirebaseAuth, FirebaseUser } from './firebase'
+import type { FirebaseClient, FirebaseUser } from './firebase'
 import { goTrue } from './goTrue'
 import type { GoTrue, GoTrueUser } from './goTrue'
 import { magicLink } from './magicLink'
@@ -49,7 +49,7 @@ export type SupportedAuthClients =
   | GoTrue
   | NetlifyIdentity
   | MagicLink
-  | FirebaseAuth
+  | FirebaseClient
   | Supabase
   | Clerk
   | Ethereum
