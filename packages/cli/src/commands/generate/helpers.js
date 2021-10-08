@@ -246,12 +246,14 @@ export const validatePlural = (plural, singular) => {
 
 /**
  * Find Bar in FooBazBar
+ *
+ * @type {(paramType: 'string') => string }
  */
 function lastWord(str) {
   const capitals = str.match(/[A-Z]/g)
-  const lastIndex = str.lastIndexOf(capitals.slice(-1))
+  const lastIndex = str.lastIndexOf(capitals?.slice(-1))
 
-  return str.slice(lastIndex)
+  return lastIndex >= 0 ? str.slice(lastIndex) : str
 }
 
 // Ask user for plural version, if singular & plural are same for a word. For example: Pokemon
