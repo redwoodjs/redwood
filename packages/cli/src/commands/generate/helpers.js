@@ -1,7 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 
-import decamelize from 'decamelize'
 import Listr from 'listr'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
