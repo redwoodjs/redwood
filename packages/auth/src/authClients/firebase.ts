@@ -17,6 +17,7 @@ export type providerId =
   | 'twitter.com'
   | 'password'
   | 'phone'
+export type oAuthProvider = providerId
 export type emailLinkProvider = 'emailLink'
 export type customTokenProvider = 'customToken'
 
