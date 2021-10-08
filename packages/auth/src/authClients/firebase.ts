@@ -1,5 +1,5 @@
-import type { FirebaseApp } from '@firebase/app'
-import type { CustomParameters, OAuthProvider, User } from '@firebase/auth'
+import type { FirebaseApp, } from '@firebase/app'
+import type { CustomParameters, OAuthProvider, User, ProviderId} from '@firebase/auth'
 import type FirebaseAuthNamespace from '@firebase/auth'
 
 import { AuthClient } from './'
@@ -7,23 +7,17 @@ import { AuthClient } from './'
 export type FirebaseAuth = typeof FirebaseAuthNamespace
 export type FirebaseUser = User
 
-// @TODO: Firebase doesn't export a list of providerIds they use
-// But I found them here: https://github.com/firebase/firebase-js-sdk/blob/a5768b0aa7d7ce732279931aa436e988c9f36487/packages/rules-unit-testing/src/api/index.ts
-// NOTE: 2021-09-15 firebase now exports a const/enum ProviderId which could perhabps be used in place of this
-export type oAuthProvider =
-  | 'google.com'
-  | 'facebook.com'
-  | 'github.com'
-  | 'twitter.com'
-  | 'microsoft.com'
-  | 'apple.com'
-
+// @TODO: Firebase supporter providerIds are exported as a const enum_map here:
+// https://github.com/firebase/firebase-js-sdk/blob/master/packages/auth/src/model/enum_maps.ts#L28-L46
+// Not sure if there is some way to reference the const enum_map here instead of duplicating the strings here.
+export type oAuthProvider = 'facebook.com' | 'github.com' | 'google.com' | 'twitter.com'
+export type passwordProvider = 'password'
+export type phoneProvider = 'phone'
 export type emailLinkProvider = 'emailLink'
-
 export type customTokenProvider = 'customToken'
 
 export type Options = {
-  providerId?: oAuthProvider | emailLinkProvider | customTokenProvider
+  providerId?: oAuthProvider | passwordProvider | phoneProvider | emailLinkProvider | customTokenProvider
   email?: string
   emailLink?: string
   customToken?: string
