@@ -7,9 +7,9 @@ import { AuthClient } from './'
 export type FirebaseAuth = typeof FirebaseAuthNamespace
 export type FirebaseUser = User
 
-// @TODO: Firebase supporter providerIds are exported as a const enum_map here:
+// @TODO: Firebase supported providerIds are exported as a const enum_map here:
 // https://github.com/firebase/firebase-js-sdk/blob/master/packages/auth/src/model/enum_maps.ts#L28-L46
-// Not sure if there is some way to reference the const enum_map here instead of duplicating the strings here.
+// Perhaps there is some way to reference the const enum_map here as type declaration without importing sdk?
 export type oAuthProvider = 'facebook.com' | 'github.com' | 'google.com' | 'twitter.com'
 export type passwordProvider = 'password'
 export type phoneProvider = 'phone'
