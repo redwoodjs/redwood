@@ -41,28 +41,44 @@ export class InclusionValidationError extends ServiceValidationError {
 }
 
 export class MinLengthValidationError extends ServiceValidationError {
-  constructor(name, message = `${name} is too short`) {
+  constructor(
+    name,
+    value,
+    message = `${name} must have more than ${value} characters`
+  ) {
     super(message)
     this.name = 'MinLengthValidationError'
   }
 }
 
 export class MaxLengthValidationError extends ServiceValidationError {
-  constructor(name, message = `${name} is too long`) {
+  constructor(
+    name,
+    value,
+    message = `${name} must have less than ${value} characters`
+  ) {
     super(message)
     this.name = 'MaxLengthValidationError'
   }
 }
 
 export class EqualLengthValidationError extends ServiceValidationError {
-  constructor(name, message = `${name} does not equal required length`) {
+  constructor(
+    name,
+    value,
+    message = `${name} does not have exactly ${value} characters`
+  ) {
     super(message)
     this.name = 'EqualLengthValidationError'
   }
 }
 
 export class BetweenLengthValidationError extends ServiceValidationError {
-  constructor(name, message = `${name} is not in required length range`) {
+  constructor(
+    name,
+    value,
+    message = `${name} must be between ${value[0]} and ${value[1]} characters`
+  ) {
     super(message)
     this.name = 'BetweenLengthValidationError'
   }
@@ -72,5 +88,76 @@ export class PresenceValidationError extends ServiceValidationError {
   constructor(name, message = `${name} is not present`) {
     super(message)
     this.name = 'PresenceValidationError'
+  }
+}
+
+export class IntegerNumericalityValidationError extends ServiceValidationError {
+  constructor(name, message = `${name} is not an integer`) {
+    super(message)
+    this.name = 'IntegerNumericalityValidationError'
+  }
+}
+
+export class LessThanNumericalityValidationError extends ServiceValidationError {
+  constructor(name, value, message = `${name} must be less than ${value}`) {
+    super(message)
+    this.name = 'LessThanNumericalityValidationError'
+  }
+}
+
+export class LessThanOrEqualNumericalityValidationError extends ServiceValidationError {
+  constructor(
+    name,
+    value,
+    message = `${name} must be less than or equal to ${value}`
+  ) {
+    super(message)
+    this.name = 'LessThanOrEqualNumericalityValidationError'
+  }
+}
+
+export class GreaterThanNumericalityValidationError extends ServiceValidationError {
+  constructor(name, value, message = `${name} must be greater than ${value}`) {
+    super(message)
+    this.name = 'GreaterThanNumericalityValidationError'
+  }
+}
+
+export class GreaterThanOrEqualNumericalityValidationError extends ServiceValidationError {
+  constructor(
+    name,
+    value,
+    message = `${name} must be greater than or equal to ${value}`
+  ) {
+    super(message)
+    this.name = 'GreaterThanOrEqualNumericalityValidationError'
+  }
+}
+
+export class EqualNumericalityValidationError extends ServiceValidationError {
+  constructor(name, value, message = `${name} must equal ${value}`) {
+    super(message)
+    this.name = 'EqualNumericalityValidationError'
+  }
+}
+
+export class OtherThanNumericalityValidationError extends ServiceValidationError {
+  constructor(name, value, message = `${name} must not equal ${value}`) {
+    super(message)
+    this.name = 'OtherThanNumericalityValidationError'
+  }
+}
+
+export class EvenNumericalityValidationError extends ServiceValidationError {
+  constructor(name, message = `${name} must be even`) {
+    super(message)
+    this.name = 'EvenNumericalityValidationError'
+  }
+}
+
+export class OddNumericalityValidationError extends ServiceValidationError {
+  constructor(name, message = `${name} must be odd`) {
+    super(message)
+    this.name = 'OddNumericalityValidationError'
   }
 }

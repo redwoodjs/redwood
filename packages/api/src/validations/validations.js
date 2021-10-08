@@ -54,14 +54,23 @@ const VALIDATORS = {
     const len = value.toString().length
 
     if (options.min && len < options.min) {
-      throw new ValidationErrors.MinLengthValidationError(name, options.message)
+      throw new ValidationErrors.MinLengthValidationError(
+        name,
+        options.min,
+        options.message
+      )
     }
     if (options.max && len > options.max) {
-      throw new ValidationErrors.MaxLengthValidationError(name, options.message)
+      throw new ValidationErrors.MaxLengthValidationError(
+        name,
+        options.max,
+        options.message
+      )
     }
     if (options.equal && len !== options.equal) {
       throw new ValidationErrors.EqualLengthValidationError(
         name,
+        options.equal,
         options.message
       )
     }
@@ -70,6 +79,70 @@ const VALIDATORS = {
       (len < options.between[0] || len > options.between[1])
     ) {
       throw new ValidationErrors.BetweenLengthValidationError(
+        name,
+        options.between,
+        options.message
+      )
+    }
+  },
+
+  numericality: (name, value, options) => {
+    if (options.integer && value !== parseInt(value)) {
+      throw new ValidationErrors.IntegerNumericalityValidationError(
+        name,
+        options.message
+      )
+    }
+    if (options.lessThan && value >= options.lessThan) {
+      throw new ValidationErrors.LessThanNumericalityValidationError(
+        name,
+        options.lessThan,
+        options.message
+      )
+    }
+    if (options.lessThanOrEqual && value > options.lessThanOrEqual) {
+      throw new ValidationErrors.LessThanOrEqualNumericalityValidationError(
+        name,
+        options.lessThanOrEqual,
+        options.message
+      )
+    }
+    if (options.greaterThan && value <= options.greaterThan) {
+      throw new ValidationErrors.GreaterThanNumericalityValidationError(
+        name,
+        options.greaterThan,
+        options.message
+      )
+    }
+    if (options.greaterThanOrEqual && value < options.greaterThanOrEqual) {
+      throw new ValidationErrors.GreaterThanOrEqualNumericalityValidationError(
+        name,
+        options.greaterThanOrEqual,
+        options.message
+      )
+    }
+    if (options.equal && value !== options.equal) {
+      throw new ValidationErrors.EqualNumericalityValidationError(
+        name,
+        options.equal,
+        options.message
+      )
+    }
+    if (options.otherThan && value === options.otherThan) {
+      throw new ValidationErrors.OtherThanNumericalityValidationError(
+        name,
+        options.otherThan,
+        options.message
+      )
+    }
+    if (options.even && value % 2 !== 0) {
+      throw new ValidationErrors.EvenNumericalityValidationError(
+        name,
+        options.message
+      )
+    }
+    if (options.odd && value % 2 !== 1) {
+      throw new ValidationErrors.OddNumericalityValidationError(
         name,
         options.message
       )

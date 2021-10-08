@@ -244,7 +244,7 @@ describe('validate length', () => {
     try {
       validate('username', 'a', { length: { min: 2 } })
     } catch (e) {
-      expect(e.message).toEqual('username is too short')
+      expect(e.message).toEqual('username must have more than 2 characters')
     }
   })
 
@@ -266,7 +266,7 @@ describe('validate length', () => {
     try {
       validate('username', 'jeff', { length: { max: 2 } })
     } catch (e) {
-      expect(e.message).toEqual('username is too long')
+      expect(e.message).toEqual('username must have less than 2 characters')
     }
   })
 
@@ -294,7 +294,7 @@ describe('validate length', () => {
     try {
       validate('username', 'foobar', { length: { equal: 5 } })
     } catch (e) {
-      expect(e.message).toEqual('username does not equal required length')
+      expect(e.message).toEqual('username does not have exactly 5 characters')
     }
   })
 
@@ -324,7 +324,7 @@ describe('validate length', () => {
     try {
       validate('username', 'foobar', { length: { between: [2, 4] } })
     } catch (e) {
-      expect(e.message).toEqual('username is not in required length range')
+      expect(e.message).toEqual('username must be between 2 and 4 characters')
     }
   })
 
@@ -363,5 +363,197 @@ describe('validate length', () => {
     expect(() =>
       validate('username', 'foobar', { length: { min: 4, max: 8 } })
     ).not.toThrow()
+  })
+})
+
+describe('validate numericality', () => {
+  it('checks if value is an integer', () => {
+    expect(() =>
+      validate('number', 'a', { numericality: { integer: true } })
+    ).toThrow(ValidationErrors.IntegerNumericalityValidationError)
+    expect(() =>
+      validate('number', 1.2, { numericality: { integer: true } })
+    ).toThrow(ValidationErrors.IntegerNumericalityValidationError)
+
+    expect(() =>
+      validate('number', 3, { numericality: { integer: true } })
+    ).not.toThrow(ValidationErrors.IntegerNumericalityValidationError)
+  })
+
+  it('checks if value is less than required number', () => {
+    expect(() =>
+      validate('number', 2, { numericality: { lessThan: 1 } })
+    ).toThrow(ValidationErrors.LessThanNumericalityValidationError)
+    expect(() =>
+      validate('number', 2, { numericality: { lessThan: 2 } })
+    ).toThrow(ValidationErrors.LessThanNumericalityValidationError)
+    expect(() =>
+      validate('number', 2.1, { numericality: { lessThan: 2.1 } })
+    ).toThrow(ValidationErrors.LessThanNumericalityValidationError)
+    expect(() =>
+      validate('number', 2.2, { numericality: { lessThan: 2.1 } })
+    ).toThrow(ValidationErrors.LessThanNumericalityValidationError)
+
+    expect(() =>
+      validate('number', 2, { numericality: { lessThan: 3 } })
+    ).not.toThrow(ValidationErrors.LessThanNumericalityValidationError)
+    expect(() =>
+      validate('number', 3.1, { numericality: { lessThan: 3.2 } })
+    ).not.toThrow(ValidationErrors.LessThanNumericalityValidationError)
+  })
+
+  it('checks if value is less than or equal to required number', () => {
+    expect(() =>
+      validate('number', 2, { numericality: { lessThanOrEqual: 1 } })
+    ).toThrow(ValidationErrors.LessThanOrEqualNumericalityValidationError)
+    expect(() =>
+      validate('number', 2, { numericality: { lessThanOrEqual: 1.5 } })
+    ).toThrow(ValidationErrors.LessThanOrEqualNumericalityValidationError)
+    expect(() =>
+      validate('number', 2.2, { numericality: { lessThanOrEqual: 2.1 } })
+    ).toThrow(ValidationErrors.LessThanOrEqualNumericalityValidationError)
+    expect(() =>
+      validate('number', 2.2, { numericality: { lessThanOrEqual: 2 } })
+    ).toThrow(ValidationErrors.LessThanOrEqualNumericalityValidationError)
+
+    expect(() =>
+      validate('number', 2.2, { numericality: { lessThanOrEqual: 2.3 } })
+    ).not.toThrow(ValidationErrors.LessThanOrEqualNumericalityValidationError)
+    expect(() =>
+      validate('number', 2.2, { numericality: { lessThanOrEqual: 2.2 } })
+    ).not.toThrow(ValidationErrors.LessThanOrEqualNumericalityValidationError)
+  })
+
+  it('checks if value is greater than required number', () => {
+    expect(() =>
+      validate('number', 2, { numericality: { greaterThan: 3 } })
+    ).toThrow(ValidationErrors.GreaterThanNumericalityValidationError)
+    expect(() =>
+      validate('number', 2, { numericality: { greaterThan: 2 } })
+    ).toThrow(ValidationErrors.GreaterThanNumericalityValidationError)
+    expect(() =>
+      validate('number', 2.1, { numericality: { greaterThan: 3 } })
+    ).toThrow(ValidationErrors.GreaterThanNumericalityValidationError)
+    expect(() =>
+      validate('number', 3.0, { numericality: { greaterThan: 3.1 } })
+    ).toThrow(ValidationErrors.GreaterThanNumericalityValidationError)
+    expect(() =>
+      validate('number', 3.0, { numericality: { greaterThan: 3 } })
+    ).toThrow(ValidationErrors.GreaterThanNumericalityValidationError)
+
+    expect(() =>
+      validate('number', 3, { numericality: { greaterThan: 2 } })
+    ).not.toThrow(ValidationErrors.GreaterThanNumericalityValidationError)
+    expect(() =>
+      validate('number', 3.1, { numericality: { greaterThan: 3.0 } })
+    ).not.toThrow(ValidationErrors.GreaterThanNumericalityValidationError)
+  })
+
+  it('checks if value is greater than or equal to required number', () => {
+    expect(() =>
+      validate('number', 2, { numericality: { greaterThanOrEqual: 3 } })
+    ).toThrow(ValidationErrors.GreaterThanOrEqualNumericalityValidationError)
+    expect(() =>
+      validate('number', 3.0, { numericality: { greaterThanOrEqual: 3.1 } })
+    ).toThrow(ValidationErrors.GreaterThanOrEqualNumericalityValidationError)
+
+    expect(() =>
+      validate('number', 3, { numericality: { greaterThan: 2 } })
+    ).not.toThrow(ValidationErrors.GreaterThanNumericalityValidationError)
+    expect(() =>
+      validate('number', 3.1, { numericality: { greaterThan: 3.0 } })
+    ).not.toThrow(ValidationErrors.GreaterThanNumericalityValidationError)
+    expect(() =>
+      validate('number', 2, { numericality: { greaterThanOrEqual: 2 } })
+    ).not.toThrow(
+      ValidationErrors.GreaterThanOrEqualNumericalityValidationError
+    )
+    expect(() =>
+      validate('number', 2.5, { numericality: { greaterThanOrEqual: 2.5 } })
+    ).not.toThrow(
+      ValidationErrors.GreaterThanOrEqualNumericalityValidationError
+    )
+  })
+
+  it('checks if value is not equal to required number', () => {
+    expect(() => validate('number', 2, { numericality: { equal: 3 } })).toThrow(
+      ValidationErrors.EqualNumericalityValidationError
+    )
+    expect(() =>
+      validate('number', 2.0, { numericality: { equal: 3 } })
+    ).toThrow(ValidationErrors.EqualNumericalityValidationError)
+    expect(() =>
+      validate('number', 2.9, { numericality: { equal: 3.1 } })
+    ).toThrow(ValidationErrors.EqualNumericalityValidationError)
+    expect(() =>
+      validate('number', 2.9, { numericality: { equal: 3 } })
+    ).toThrow(ValidationErrors.EqualNumericalityValidationError)
+
+    expect(() =>
+      validate('number', 2, { numericality: { equal: 2 } })
+    ).not.toThrow(ValidationErrors.EqualNumericalityValidationError)
+    expect(() =>
+      validate('number', 2.0, { numericality: { equal: 2.0 } })
+    ).not.toThrow(ValidationErrors.EqualNumericalityValidationError)
+    expect(() =>
+      validate('number', 2, { numericality: { equal: 2.0 } })
+    ).not.toThrow(ValidationErrors.EqualNumericalityValidationError)
+    expect(() =>
+      validate('number', 2.0, { numericality: { equal: 2 } })
+    ).not.toThrow(ValidationErrors.EqualNumericalityValidationError)
+  })
+
+  it('checks if not equal to required number', () => {
+    expect(() =>
+      validate('number', 3, { numericality: { otherThan: 3 } })
+    ).toThrow(ValidationErrors.OtherThanNumericalityValidationError)
+    expect(() =>
+      validate('number', 2.9, { numericality: { otherThan: 2.9 } })
+    ).toThrow(ValidationErrors.OtherThanNumericalityValidationError)
+    expect(() =>
+      validate('number', 3.0, { numericality: { otherThan: 3 } })
+    ).toThrow(ValidationErrors.OtherThanNumericalityValidationError)
+
+    expect(() =>
+      validate('number', 2, { numericality: { otherThan: 3 } })
+    ).not.toThrow(ValidationErrors.OtherThanNumericalityValidationError)
+    expect(() =>
+      validate('number', 2.1, { numericality: { otherThan: 3.1 } })
+    ).not.toThrow(ValidationErrors.OtherThanNumericalityValidationError)
+    expect(() =>
+      validate('number', 3.0, { numericality: { otherThan: 4 } })
+    ).not.toThrow(ValidationErrors.OtherThanNumericalityValidationError)
+  })
+
+  it('checks for a value being even', () => {
+    expect(() =>
+      validate('number', 3, { numericality: { even: true } })
+    ).toThrow(ValidationErrors.EvenNumericalityValidationError)
+    expect(() =>
+      validate('number', 3.0, { numericality: { even: true } })
+    ).toThrow(ValidationErrors.EvenNumericalityValidationError)
+
+    expect(() =>
+      validate('number', 2, { numericality: { even: true } })
+    ).not.toThrow(ValidationErrors.EvenNumericalityValidationError)
+    expect(() =>
+      validate('number', 2.0, { numericality: { even: true } })
+    ).not.toThrow(ValidationErrors.EvenNumericalityValidationError)
+  })
+
+  it('checks for a value being odd', () => {
+    expect(() =>
+      validate('number', 2, { numericality: { odd: true } })
+    ).toThrow(ValidationErrors.OddNumericalityValidationError)
+    expect(() =>
+      validate('number', 2.0, { numericality: { odd: true } })
+    ).toThrow(ValidationErrors.OddNumericalityValidationError)
+
+    expect(() =>
+      validate('number', 3, { numericality: { odd: true } })
+    ).not.toThrow(ValidationErrors.OddNumericalityValidationError)
+    expect(() =>
+      validate('number', 3.0, { numericality: { odd: true } })
+    ).not.toThrow(ValidationErrors.OddNumericalityValidationError)
   })
 })
