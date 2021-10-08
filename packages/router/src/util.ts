@@ -21,7 +21,9 @@ const paramsForRoute = (route: string) => {
   return params
     .map((match) => match[1])
     .map((match) => {
-      return match.split(':')
+      return match.slice(match.length - 3) === '...'
+        ? [match, 'Glob']
+        : match.split(':')
     })
 }
 
@@ -45,6 +47,10 @@ const coreParamTypes = {
   Boolean: {
     constraint: /true|false/,
     transform: (boolAsString: string) => boolAsString === 'true',
+  },
+  Glob: {
+    constraint: /.*/,
+    transform: (glob: string) => glob,
   },
 }
 
@@ -93,7 +99,11 @@ const matchPath = (
     }
 
     typeConstrainedRoute = typeConstrainedRoute.replace(
-      type ? `{${name}:${type}}` : `{${name}}`,
+      type
+        ? type === 'Glob'
+          ? `{${name.slice(0, name.length - 3)}...}`
+          : `{${name}:${type}}`
+        : `{${name}}`,
       `(${typeRegex})`
     )
   }
