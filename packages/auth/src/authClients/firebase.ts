@@ -79,8 +79,8 @@ export const firebase = ({
     type: 'firebase',
     client: auth,
     restoreAuthState: () => {
-      // return a promise that we be await'd on for first page load until firebase
-      // auth has loaded, indicated by the first firing of onAuthStateChange)
+      // The first firing of onAuthStateChange indicates that firebase auth has
+      // loaded and the state is ready to be read. Unsubscribe after this first firing.
       return new Promise((resolve, reject) => {
         const unsubscribe = auth.onAuthStateChanged((user: User | null) => {
           unsubscribe()
