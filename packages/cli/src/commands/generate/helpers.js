@@ -245,6 +245,16 @@ export const validatePlural = (plural, singular) => {
   return true
 }
 
+/**
+ * Find Bar in FooBazBar
+ */
+function lastWord(str) {
+  const capitals = str.match(/[A-Z]/g)
+  const lastIndex = str.lastIndexOf(capitals.slice(-1))
+
+  return str.slice(lastIndex)
+}
+
 // Ask user for plural version, if singular & plural are same for a word. For example: Pokemon
 export const ensureUniquePlural = async ({ model, inDestroyer = false }) => {
   if (isWordPluralizable(model)) {
@@ -263,17 +273,20 @@ export const ensureUniquePlural = async ({ model, inDestroyer = false }) => {
     validate: (pluralInput) => validatePlural(pluralInput, model),
   })
 
-  const pluralToUse = decamelize(
-    // Quickfix is to remove that control char u0017, which is preprended if default input is cleared using option+backspace
-    // eslint-disable-next-line no-control-regex
-    promptResult.plural?.trim().replace(/\u0017/g, '')
-  )
+  // Quickfix is to remove that control char u0017, which is preprended if default input is cleared using option+backspace
+  // eslint-disable-next-line no-control-regex
+  const pluralToUse = promptResult.plural?.trim().replace(/\u0017/g, '')
+
   if (!pluralToUse) {
     throw Error('Plural name must not be empty')
   }
 
-  // Set the rule
-  pluralize.addIrregularRule(model, pluralToUse)
+  const singular = lastWord(model)
+  const plural = lastWord(pluralToUse)
+
+  // See https://github.com/plurals/pluralize/issues/184 for more details
+  pluralize.addPluralRule(new RegExp(singular + '$'), plural)
+  pluralize.addSingularRule(new RegExp(plural + '$'), singular)
 }
 
 /** @type {(paramType: 'Int' | 'Float' | 'Boolean' | 'String') => string } **/

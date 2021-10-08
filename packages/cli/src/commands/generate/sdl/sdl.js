@@ -243,8 +243,6 @@ export const handler = async ({ model, crud, force, tests, typescript }) => {
   )
 
   try {
-    model = decamelize(model)
-
     await ensureUniquePlural({ model })
     await tasks.run()
   } catch (e) {
