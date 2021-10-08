@@ -19,9 +19,6 @@ const adminApp = admin.initializeApp({
  * @see https://github.com/redwoodjs/redwood/tree/main/packages/auth for examples
  */
 export const getCurrentUser = async (decoded, { token, type }) => {
-  // RBAC for firebase Auth needs a custom implementation
-  // see: https://firebase.google.com/docs/auth/admin/custom-claims
-
   return decoded
 }
 
@@ -32,4 +29,31 @@ export const getCurrentUser = async (decoded, { token, type }) => {
  */
 export const isAuthenticated = () => {
   return !!context.currentUser
+}
+
+/**
+ * Use requireAuth in your services to check that a user is logged in,
+ * whether or not they are assigned a role, and optionally raise an
+ * error if they're not.
+ *
+ * @param {string= | string[]=} roles - A single role or list of roles to check if the user belongs to
+ *
+ * @returns - If the currentUser is authenticated (and assigned one of the given roles)
+ *
+ * @throws {AuthenticationError} - If the currentUser is not authenticated
+ * @throws {ForbiddenError} If the currentUser is not allowed due to role permissions
+ *
+ * @see https://github.com/redwoodjs/redwood/tree/main/packages/auth for examples
+ */
+export const requireAuth = ({ roles } = {}) => {
+  if (!isAuthenticated()) {
+    throw new AuthenticationError("You don't have permission to do that.")
+  }
+
+  // Custom RBAC implementation required for firebase
+  // https://firebase.google.com/docs/auth/admin/custom-claims
+
+  // if (!hasRole({ roles })) {
+  //  throw new ForbiddenError("You don't have access to do that.")
+  //}
 }
