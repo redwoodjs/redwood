@@ -116,6 +116,8 @@ export const firebase = ({
       const provider = getProvider(options.providerId || 'google.com')
       const providerWithOptions = applyProviderOptions(provider, options)
 
+      // TODO: it could be potentially useful to support signInWithCredential without popup
+
       return firebaseAuth.signInWithPopup(auth, providerWithOptions)
     },
     logout: async () => auth.signOut(),
@@ -145,7 +147,8 @@ export const firebase = ({
       const provider = getProvider(options.providerId || 'google.com')
       const providerWithOptions = applyProviderOptions(provider, options)
 
-      // Potentially useful to support signInWithCredential without popup
+      // TODO: it could be potentially useful to support signInWithCredential without popup
+
       return firebaseAuth.signInWithPopup(auth, providerWithOptions)
     },
     getToken: async () => {
