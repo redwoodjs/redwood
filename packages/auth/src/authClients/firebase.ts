@@ -87,7 +87,7 @@ export const firebase = ({
       })
     },
     login: async (
-      options: oAuthProvider | Options = { providerId: 'google.com' }
+      options: providerId | Options = { providerId: 'google.com' }
     ) => {
       // If argument provided is a string, it should be the oAuth Provider
       // Cast the provider string into the options object
@@ -119,9 +119,7 @@ export const firebase = ({
       return firebaseAuth.signInWithPopup(auth, providerWithOptions)
     },
     logout: async () => auth.signOut(),
-    signup: (
-      options: oAuthProvider | Options = { providerId: 'google.com' }
-    ) => {
+    signup: (options: providerId | Options = { providerId: 'google.com' }) => {
       if (typeof options === 'string') {
         options = { providerId: options }
       }
