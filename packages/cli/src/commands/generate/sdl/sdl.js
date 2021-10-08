@@ -3,6 +3,7 @@ import path from 'path'
 import boxen from 'boxen'
 import camelcase from 'camelcase'
 import chalk from 'chalk'
+import decamelize from 'decamelize'
 import Listr from 'listr'
 import pascalcase from 'pascalcase'
 import pluralize from 'pluralize'
@@ -242,6 +243,8 @@ export const handler = async ({ model, crud, force, tests, typescript }) => {
   )
 
   try {
+    model = decamelize(model)
+
     await ensureUniquePlural({ model })
     await tasks.run()
   } catch (e) {

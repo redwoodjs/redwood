@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
+import decamelize from 'decamelize'
 import Listr from 'listr'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
@@ -262,9 +263,11 @@ export const ensureUniquePlural = async ({ model, inDestroyer = false }) => {
     validate: (pluralInput) => validatePlural(pluralInput, model),
   })
 
-  // Quickfix is to remove that control char u0017, which is preprended if default input is cleared using option+backspace
-  // eslint-disable-next-line no-control-regex
-  const pluralToUse = promptResult.plural?.trim().replace(/\u0017/g, '')
+  const pluralToUse = decamelize(
+    // Quickfix is to remove that control char u0017, which is preprended if default input is cleared using option+backspace
+    // eslint-disable-next-line no-control-regex
+    promptResult.plural?.trim().replace(/\u0017/g, '')
+  )
   if (!pluralToUse) {
     throw Error('Plural name must not be empty')
   }

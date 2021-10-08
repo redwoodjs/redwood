@@ -473,12 +473,34 @@ test('ensureUniquePlural sets irregular rule from user input if singular is same
 test('ensureUniquePlural skips any rule if singular and plural are already different', async () => {
   const singular = 'post'
   const plural = 'posts'
-  prompts.inject('pikapika')
+  // prompts.inject('pikapika') // should not ask for input
 
   await helpers.ensureUniquePlural({ model: singular })
 
   expect(pluralize.singular(singular)).toBe(singular)
   expect(pluralize.plural(singular)).toBe(plural)
+})
+
+test('ensureUniquePlural handles snake_cased models', async () => {
+  const uncountableModel = 'custom_pokemon'
+  const userPluralInput = 'custom_pokemoni'
+  prompts.inject(userPluralInput)
+
+  await helpers.ensureUniquePlural({ model: uncountableModel })
+
+  expect(pluralize.singular(uncountableModel)).toBe(uncountableModel)
+  expect(pluralize.plural(uncountableModel)).toBe(userPluralInput)
+})
+
+test('ensureUniquePlural handles snake_cased models, even with PascalCase user input', async () => {
+  const uncountableModel = 'custom_pokemon'
+  const userPluralInput = 'CustomPokemoni'
+  prompts.inject(userPluralInput)
+
+  await helpers.ensureUniquePlural({ model: uncountableModel })
+
+  expect(pluralize.singular(uncountableModel)).toBe(uncountableModel)
+  expect(pluralize.plural(uncountableModel)).toBe('custom_pokemoni')
 })
 
 describe('mapRouteParamTypeToTsType', () => {

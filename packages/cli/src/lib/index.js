@@ -42,6 +42,7 @@ export const asyncForEach = async (array, callback) => {
  */
 export const getSchema = async (name) => {
   if (name) {
+    name = pascalcase(name)
     if (!schemaMemo[name]) {
       const schema = await getSchemaDefinitions()
       const model = schema.datamodel.models.find((model) => {
