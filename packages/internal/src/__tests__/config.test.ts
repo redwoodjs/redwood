@@ -30,6 +30,7 @@ describe('getConfig', () => {
         },
         "web": Object {
           "a11y": true,
+          "apiDbAuthURL": "/.redwood/functions/auth",
           "apiGraphQLURL": "/.redwood/functions/graphql",
           "apiURL": "/.redwood/functions",
           "fastRefresh": true,

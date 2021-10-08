@@ -83,6 +83,7 @@ const DEFAULT_CONFIG: Config = {
     path: './web',
     target: TargetEnum.BROWSER,
     apiURL: '/.redwood/functions',
+    apiDbAuthURL: '/.redwood/functions/auth',
     apiGraphQLURL: '/.redwood/functions/graphql',
     fastRefresh: true,
     a11y: true,
