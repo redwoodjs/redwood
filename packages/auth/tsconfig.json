@@ -9,5 +9,5 @@
       "src/*": ["./src/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "ambient.d.ts"]
 }

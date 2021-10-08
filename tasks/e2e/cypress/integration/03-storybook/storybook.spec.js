@@ -32,14 +32,14 @@ describe(
         Step2_2_BlogPostsCellMock
       )
 
+      // Slow!
       cy.exec(`cd ${BASE_DIR}; yarn rw storybook --build`, {
         timeout: 300_0000,
-      }) // Slow!
-        .its('stderr')
-        .should('eq', '')
-        .and()
-        .its('code')
-        .should('eq', 0)
+      }).then((result) => {
+        const { code, stderr } = result
+        expect(code).to.eq(0)
+        expect(stderr).to.not.contain('ERR!')
+      })
     })
 
     it('1. Component: BlogPost', () => {

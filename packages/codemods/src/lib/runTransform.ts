@@ -25,7 +25,7 @@ const getExecaArgs = () => {
      */
     const jscodeshiftExecutable = path.resolve(
       __dirname,
-      '../../node_modules/.bin/jscodeshift'
+      '../../../../node_modules/.bin/jscodeshift'
     )
 
     return {
