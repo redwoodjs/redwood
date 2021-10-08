@@ -23,4 +23,14 @@ export const getCurrentUser = async (decoded) => {
  */
 export const isAuthenticated = () => {
   return !!context.currentUser
-}d
+}
+
+// Use this function in your services to check that a user is logged in, and
+// optionally raise an error if they're not.
+export const requireAuth = () => {
+  if (!isAuthenticated()) {
+    throw new AuthenticationError("You don't have permission to do that.")
+  }
+
+  // Custom implementation of RBAC is required for magicLink
+}
