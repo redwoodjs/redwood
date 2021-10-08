@@ -123,7 +123,7 @@ export class AuthProvider extends React.Component<
   }
 
   getApiGraphQLUrl = () => {
-    return global.__REDWOOD__API_URL + global.__REDWOOD__API_GRAPHQL_SERVER_PATH
+    return global.RWJS_API_GRAPHQL_URL
   }
 
   getCurrentUser = async (): Promise<Record<string, unknown>> => {

@@ -30,7 +30,7 @@ describe('getConfig', () => {
         },
         "web": Object {
           "a11y": true,
-          "apiGraphQLServerPath": "/graphql",
+          "apiGraphQLURL": "/.redwood/functions/graphql",
           "apiURL": "/.redwood/functions",
           "fastRefresh": true,
           "host": "localhost",

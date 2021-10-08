@@ -8,8 +8,11 @@
 [web]
   title = "Redwood App"
   port = 8910
+
   apiURL = '/.redwood/functions'
-  apiGraphQLServerPath = '/graphql'
+  apiGraphQLURL = '/.redwood/functions/graphql'
+  apiDbAuthURL = '/.redwood/functions/auth'
+
   includeEnvironmentVariables = [] # any ENV vars that should be available to the web side, see https://redwoodjs.com/docs/environment-variables#web
 [api]
   port = 8911

@@ -34,20 +34,25 @@ interface BrowserTargetConfig {
    * This can be an absolute path proxied on the current domain (`/.netlify/functions`),
    * or a fully qualified URL (`https://api.example.org:8911/functions`).
    *
-   * Note: This shoulld not include the path to the GraphQL Server,
-   * `apiURL` and `apiGraphQLServerPath` are combined to determine the exact
-   * URL.
+   * Note: This shoulld not include the path to the GraphQL Server.
    **/
   apiURL: string
   /**
-   * The URL relative to the `apiURL` that specifies the location to Redwood
-   * GraphQL Server.
+   * FQDN or absolute path to the GraphQL serverless function, without the trailing slash.
+   * Example: `./redwood/functions/graphql` or `https://api.redwoodjs.com/graphql`
+   */
+  apiGraphQLURL: string
+  /**
+   * FQDN or absolute path to the DbAuth serverless function, without the trailing slash.
+   * Example: `./redwood/functions/auth` or `https://api.redwoodjs.com/auth`
    **/
-  apiGraphQLServerPath: string
-  /**  @deprecated - use `apiHost` and `apiGraphQLServerPath` instead. */
+  apiDbAuthURL: string
+
+  /**  @deprecated - use `apiHost` and `apiGraphQLURL` instead. */
   apiProxyPort?: number
-  /**  @deprecated - use `apiHost` and `apiGraphQLServerPath` instead. */
+  /**  @deprecated - use `apiHost` and `apiGraphQLURL` instead. */
   apiProxyPath?: string
+
   fastRefresh: boolean
   a11y: boolean
 }
@@ -78,7 +83,7 @@ const DEFAULT_CONFIG: Config = {
     path: './web',
     target: TargetEnum.BROWSER,
     apiURL: '/.redwood/functions',
-    apiGraphQLServerPath: '/graphql',
+    apiGraphQLURL: '/.redwood/functions/graphql',
     fastRefresh: true,
     a11y: true,
   },

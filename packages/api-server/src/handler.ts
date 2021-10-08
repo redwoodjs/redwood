@@ -51,7 +51,7 @@ export const apiServerHandler = async ({
   apiRootPath,
 }: ApiServerArgs) => {
   const tsApiServer = Date.now()
-  process.stdout.write(c.dim(c.italic('Starting API Server... ')))
+  process.stdout.write(c.dim(c.italic('Starting API Server...')))
   const app = createApp()
   const http = startServer({
     port,
@@ -78,7 +78,7 @@ export const bothServerHandler = async ({
   socket,
 }: Omit<HttpServerParams, 'app'>) => {
   const apiRootPath = getConfig().web.apiURL
-  const apiGraphQLServerPath = getConfig().web.apiGraphQLServerPath
+  const apiGraphQLURL = getConfig().web.apiGraphQLURL
 
   let app = createApp()
 
@@ -97,7 +97,7 @@ export const bothServerHandler = async ({
 
     console.log(`Web server started on ${port} `)
     console.log(
-      `API serving from ${apiRootPath} listening on ${port} with GraphQL endpoint at ${apiGraphQLServerPath}`
+      `API serving from ${apiRootPath} listening on ${port} with GraphQL endpoint at ${apiGraphQLURL}`
     )
   })
 }
@@ -108,9 +108,7 @@ interface WebServerArgs extends Omit<HttpServerParams, 'app'> {
 
 export const webServerHandler = ({ port, socket, apiHost }: WebServerArgs) => {
   const apiUrl = getConfig().web.apiURL
-  const apiGraphQLServerPath = coerceRootPath(
-    getConfig().web.apiGraphQLServerPath
-  )
+  const apiGraphQLURL = coerceRootPath(getConfig().web.apiGraphQLURL)
 
   let app = createApp()
 
@@ -135,7 +133,7 @@ export const webServerHandler = ({ port, socket, apiHost }: WebServerArgs) => {
     }
 
     console.log(`Web server started on port ${port} `)
-    console.log(`GraphQL endpoint is ${apiUrl}${apiGraphQLServerPath}`)
+    console.log(`GraphQL endpoint is ${apiUrl}${apiGraphQLURL}`)
   })
 }
 

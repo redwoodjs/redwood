@@ -1,7 +1,7 @@
 import type { AuthContextInterface, SupportedAuthTypes } from '@redwoodjs/auth'
 
 export const getApiGraphQLUrl = () => {
-  return global.__REDWOOD__API_URL + global.__REDWOOD__API_GRAPHQL_SERVER_PATH
+  return global.RWJS_API_GRAPHQL_URL
 }
 
 export interface FetchConfig {
