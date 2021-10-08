@@ -10,10 +10,16 @@ import { tasks } from '../service'
 jest.mock('fs')
 
 jest.mock('../../../../lib', () => {
-  const path = require('path')
   return {
     ...jest.requireActual('../../../../lib'),
     generateTemplate: () => '',
+  }
+})
+
+jest.mock('../../../../lib/schemaHelpers', () => {
+  const path = require('path')
+  return {
+    ...jest.requireActual('../../../../lib/schemaHelpers'),
     getSchema: () =>
       require(path.join(global.__dirname, 'fixtures', 'post.json')),
   }

@@ -2,7 +2,6 @@ import Listr from 'listr'
 
 import { deleteFilesTask } from '../../lib'
 import c from '../../lib/colors'
-import { ensureUniquePlural } from '../generate/helpers'
 
 const tasks = ({ componentName, filesFn, name }) =>
   new Listr(
@@ -20,8 +19,8 @@ const tasks = ({ componentName, filesFn, name }) =>
 
 export const createYargsForComponentDestroy = ({
   componentName,
+  preTasksFn = () => {},
   filesFn,
-  shouldEnsureUniquePlural = false,
 }) => {
   return {
     command: `${componentName} <name>`,
@@ -32,14 +31,10 @@ export const createYargsForComponentDestroy = ({
         type: 'string',
       })
     },
-    handler: async ({ name }) => {
-      if (shouldEnsureUniquePlural) {
-        await ensureUniquePlural({ model: name, inDestroyer: true })
-      }
-      const t = tasks({ componentName, filesFn, name })
-
+    handler: async (options) => {
       try {
-        await t.run()
+        options = await preTasksFn({ ...options, isDestroyer: true })
+        await tasks({ componentName, filesFn, name: options.name }).run()
       } catch (e) {
         console.log(c.error(e.message))
       }
