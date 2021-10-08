@@ -2723,10 +2723,10 @@
   resolved "https://registry.yarnpkg.com/@open-draft/until/-/until-1.0.3.tgz#db9cc719191a62e7d9200f6e7bab21c5b848adca"
   integrity sha512-Aq58f5HiWdyDlFffbbSjAlv596h/cOnt2DO1w3DOC7OJ5EHs0hd/nycJfiu9RJbT6Yk6F1knnRRXNSpxoIVZ9Q==
 
-"@redwoodjs/eslint-config@0.37.0":
-  version "0.37.0"
-  resolved "https://registry.yarnpkg.com/@redwoodjs/eslint-config/-/eslint-config-0.37.0.tgz#d46824473510dac25eeaaf1a9b16f0a75a3ac49c"
-  integrity sha512-IrGWIto7UnEaVJy0Gxw0srvDzZaBv2kjlSrT5Hyh7szowIJIwpRelgNPeftxlLUP0KanYqBoueinxCvPCAd+gg==
+"@redwoodjs/eslint-config@0.37.3":
+  version "0.37.3"
+  resolved "https://registry.yarnpkg.com/@redwoodjs/eslint-config/-/eslint-config-0.37.3.tgz#c68c7c4e7b966c43f2d8c61c0e28b4a3fee54094"
+  integrity sha512-6uF4Ij+/SgvqXTBwbhKznaDNRbMLVcB2V6HiP3Uoxja+r/2vhd9PkwKR9Dx7JhRGj6Ke9thnELVMwvvxTgGLFg==
   dependencies:
     "@babel/core" "^7.15.5"
     "@babel/eslint-parser" "^7.15.4"
