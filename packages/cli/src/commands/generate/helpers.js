@@ -209,8 +209,8 @@ export const intForeignKeysForModel = (model) => {
     .map((f) => f.name)
 }
 
-export const isWordNonPluralizable = (word) => {
-  return pluralize.isPlural(word) === pluralize.isSingular(word)
+export const isWordPluralizable = (word) => {
+  return pluralize.isPlural(word) !== pluralize.isSingular(word)
 }
 
 /**
@@ -219,7 +219,7 @@ export const isWordNonPluralizable = (word) => {
 export const forcePluralizeWord = (word) => {
   // If word is already plural, check if plural === singular, then add s
   // else use plural
-  const shouldAppendList = isWordNonPluralizable(word) // equipment === equipment
+  const shouldAppendList = !isWordPluralizable(word) // equipment === equipment
 
   if (shouldAppendList) {
     return pascalcase(`${word}_list`)
@@ -246,7 +246,7 @@ export const validatePlural = (plural, singular) => {
 
 // Ask user for plural version, if singular & plural are same for a word. For example: Pokemon
 export const ensureUniquePlural = async ({ model, inDestroyer = false }) => {
-  if (!isWordNonPluralizable(model)) {
+  if (isWordPluralizable(model)) {
     return
   }
 

@@ -10,7 +10,7 @@ import {
   templateForComponentFile,
   createYargsForComponentGeneration,
   forcePluralizeWord,
-  isWordNonPluralizable,
+  isWordPluralizable,
 } from '../helpers'
 
 const COMPONENT_SUFFIX = 'Cell'
@@ -62,7 +62,7 @@ export const files = async ({
   // Create a unique operation name.
 
   const shouldGenerateList =
-    (isWordNonPluralizable(name) ? options.list : pluralize.isPlural(name)) ||
+    (isWordPluralizable(name) ? pluralize.isPlural(name) : options.list) ||
     options.list
 
   if (shouldGenerateList) {
