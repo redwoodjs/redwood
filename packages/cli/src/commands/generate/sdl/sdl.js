@@ -5,7 +5,6 @@ import camelcase from 'camelcase'
 import chalk from 'chalk'
 import Listr from 'listr'
 import pascalcase from 'pascalcase'
-import pluralize from 'pluralize'
 import terminalLink from 'terminal-link'
 
 import { getConfig, generate as generateTypes } from '@redwoodjs/internal'
@@ -19,6 +18,7 @@ import {
   getEnum,
 } from '../../../lib'
 import c from '../../../lib/colors'
+import { pluralize, singularize } from '../../../lib/rwPluralize'
 import { yargsDefaults } from '../../generate'
 import {
   customOrDefaultTemplatePath,
@@ -150,7 +150,7 @@ const sdlFromSchemaModel = async (name, crud) => {
 
 export const files = async ({ name, crud, tests, typescript }) => {
   const { query, createInput, updateInput, idType, relations, enums } =
-    await sdlFromSchemaModel(pascalcase(pluralize.singular(name)), crud)
+    await sdlFromSchemaModel(pascalcase(singularize(name)), crud)
 
   let template = generateTemplate(
     customOrDefaultTemplatePath({

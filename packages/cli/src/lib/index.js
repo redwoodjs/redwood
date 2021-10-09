@@ -12,7 +12,6 @@ import VerboseRenderer from 'listr-verbose-renderer'
 import lodash from 'lodash/string'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
-import pluralize from 'pluralize'
 import { format } from 'prettier'
 
 import {
@@ -21,6 +20,7 @@ import {
 } from '@redwoodjs/internal'
 
 import c from './colors'
+import { pluralize, singularize } from './rwPluralize'
 
 /**
  * Used to memoize results from `getSchema` so we don't have to go through
@@ -127,7 +127,7 @@ export const getSchemaDefinitions = async () => {
  * pluralConstantName: FOO_BARS
 */
 export const nameVariants = (name) => {
-  const normalizedName = pascalcase(paramCase(pluralize.singular(name)))
+  const normalizedName = pascalcase(paramCase(singularize(name)))
 
   return {
     pascalName: pascalcase(paramCase(name)),
