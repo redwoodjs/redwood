@@ -4104,7 +4104,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redwoodjs/api-server@0.37.3, @redwoodjs/api-server@workspace:packages/api-server":
+"@redwoodjs/api-server@0.37.4, @redwoodjs/api-server@workspace:packages/api-server":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/api-server@workspace:packages/api-server"
   dependencies:
@@ -4138,13 +4138,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/api@0.37.3, @redwoodjs/api@workspace:packages/api":
+"@redwoodjs/api@0.37.4, @redwoodjs/api@workspace:packages/api":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/api@workspace:packages/api"
   dependencies:
     "@babel/cli": 7.15.4
     "@prisma/client": 3.2.1
-    "@redwoodjs/auth": 0.37.3
+    "@redwoodjs/auth": 0.37.4
     "@types/crypto-js": 4.0.2
     "@types/jsonwebtoken": 8.5.5
     "@types/lodash.merge": 4.6.6
@@ -4165,7 +4165,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/auth@0.37.3, @redwoodjs/auth@workspace:packages/auth":
+"@redwoodjs/auth@0.37.4, @redwoodjs/auth@workspace:packages/auth":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth@workspace:packages/auth"
   dependencies:
@@ -4190,16 +4190,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/cli@0.37.3, @redwoodjs/cli@workspace:packages/cli":
+"@redwoodjs/cli@0.37.4, @redwoodjs/cli@workspace:packages/cli":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/cli@workspace:packages/cli"
   dependencies:
     "@babel/cli": 7.15.4
     "@prisma/sdk": 3.2.1
-    "@redwoodjs/api-server": 0.37.3
-    "@redwoodjs/internal": 0.37.3
-    "@redwoodjs/prerender": 0.37.3
-    "@redwoodjs/structure": 0.37.3
+    "@redwoodjs/api-server": 0.37.4
+    "@redwoodjs/internal": 0.37.4
+    "@redwoodjs/prerender": 0.37.4
+    "@redwoodjs/structure": 0.37.4
     "@types/listr": 0.14.4
     "@types/node-fetch": 2.5.12
     boxen: 5.1.2
@@ -4245,7 +4245,7 @@ __metadata:
   resolution: "@redwoodjs/codemods@workspace:packages/codemods"
   dependencies:
     "@babel/cli": 7.15.4
-    "@types/jscodeshift": ^0.11.2
+    "@types/jscodeshift": 0.11.2
     core-js: 3.17.3
     deepmerge: 4.2.2
     execa: 5.1.1
@@ -4282,10 +4282,10 @@ __metadata:
     "@babel/preset-typescript": 7.15.0
     "@babel/runtime-corejs3": 7.15.4
     "@pmmmwh/react-refresh-webpack-plugin": 0.5.0-rc.6
-    "@redwoodjs/cli": 0.37.3
-    "@redwoodjs/eslint-config": 0.37.3
-    "@redwoodjs/internal": 0.37.3
-    "@redwoodjs/testing": 0.37.3
+    "@redwoodjs/cli": 0.37.4
+    "@redwoodjs/eslint-config": 0.37.4
+    "@redwoodjs/internal": 0.37.4
+    "@redwoodjs/testing": 0.37.4
     "@types/babel-core": 6.25.7
     "@types/babel-plugin-tester": 9.0.4
     "@webpack-cli/serve": 1.5.2
@@ -4328,7 +4328,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/eslint-config@0.37.3, @redwoodjs/eslint-config@workspace:packages/eslint-config":
+"@redwoodjs/eslint-config@0.37.4, @redwoodjs/eslint-config@workspace:packages/eslint-config":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/eslint-config@workspace:packages/eslint-config"
   dependencies:
@@ -4368,7 +4368,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/graphql-server@0.37.3, @redwoodjs/graphql-server@workspace:packages/graphql-server":
+"@redwoodjs/graphql-server@0.37.4, @redwoodjs/graphql-server@workspace:packages/graphql-server":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/graphql-server@workspace:packages/graphql-server"
   dependencies:
@@ -4385,8 +4385,8 @@ __metadata:
     "@graphql-tools/schema": 8.2.0
     "@graphql-tools/utils": 8.2.2
     "@prisma/client": 3.2.1
-    "@redwoodjs/api": 0.37.3
-    "@redwoodjs/auth": 0.37.3
+    "@redwoodjs/api": 0.37.4
+    "@redwoodjs/auth": 0.37.4
     "@types/jsonwebtoken": 8.5.5
     "@types/lodash.merge": 4.6.6
     "@types/lodash.omitby": 4.6.6
@@ -4410,7 +4410,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/internal@0.37.3, @redwoodjs/internal@workspace:packages/internal":
+"@redwoodjs/internal@0.37.4, @redwoodjs/internal@workspace:packages/internal":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/internal@workspace:packages/internal"
   dependencies:
@@ -4427,7 +4427,7 @@ __metadata:
     "@graphql-codegen/typescript-operations": 2.1.4
     "@graphql-codegen/typescript-react-apollo": 3.1.4
     "@graphql-codegen/typescript-resolvers": 2.2.1
-    "@redwoodjs/graphql-server": 0.37.3
+    "@redwoodjs/graphql-server": 0.37.4
     "@types/babel__core": 7.1.16
     "@types/findup-sync": 4.0.1
     "@types/fs-extra": 9.0.12
@@ -4456,16 +4456,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/prerender@0.37.3, @redwoodjs/prerender@workspace:packages/prerender":
+"@redwoodjs/prerender@0.37.4, @redwoodjs/prerender@workspace:packages/prerender":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/prerender@workspace:packages/prerender"
   dependencies:
     "@babel/cli": 7.15.4
-    "@redwoodjs/auth": 0.37.3
-    "@redwoodjs/internal": 0.37.3
-    "@redwoodjs/router": 0.37.3
-    "@redwoodjs/structure": 0.37.3
-    "@redwoodjs/web": 0.37.3
+    "@redwoodjs/auth": 0.37.4
+    "@redwoodjs/internal": 0.37.4
+    "@redwoodjs/router": 0.37.4
+    "@redwoodjs/structure": 0.37.4
+    "@redwoodjs/web": 0.37.4
     babel-plugin-ignore-html-and-css-imports: 0.1.0
     babel-plugin-tester: 10.1.0
     cheerio: 1.0.0-rc.10
@@ -4478,13 +4478,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/router@0.37.3, @redwoodjs/router@workspace:packages/router":
+"@redwoodjs/router@0.37.4, @redwoodjs/router@workspace:packages/router":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/router@workspace:packages/router"
   dependencies:
     "@babel/cli": 7.15.4
     "@reach/skip-nav": 0.16.0
-    "@redwoodjs/auth": 0.37.3
+    "@redwoodjs/auth": 0.37.4
     "@types/lodash.isequal": 4.5.5
     core-js: 3.17.3
     jest: 27.2.0
@@ -4496,13 +4496,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/structure@0.37.3, @redwoodjs/structure@workspace:packages/structure":
+"@redwoodjs/structure@0.37.4, @redwoodjs/structure@workspace:packages/structure":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/structure@workspace:packages/structure"
   dependencies:
     "@babel/cli": 7.15.4
     "@prisma/sdk": 3.2.1
-    "@redwoodjs/internal": 0.37.3
+    "@redwoodjs/internal": 0.37.4
     "@types/fs-extra": 9.0.12
     "@types/line-column": 1.0.0
     "@types/lodash": 4.14.173
@@ -4532,16 +4532,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/testing@0.37.3, @redwoodjs/testing@workspace:packages/testing":
+"@redwoodjs/testing@0.37.4, @redwoodjs/testing@workspace:packages/testing":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/testing@workspace:packages/testing"
   dependencies:
     "@babel/cli": 7.15.4
-    "@redwoodjs/auth": 0.37.3
-    "@redwoodjs/graphql-server": 0.37.3
-    "@redwoodjs/internal": 0.37.3
-    "@redwoodjs/router": 0.37.3
-    "@redwoodjs/web": 0.37.3
+    "@redwoodjs/auth": 0.37.4
+    "@redwoodjs/graphql-server": 0.37.4
+    "@redwoodjs/internal": 0.37.4
+    "@redwoodjs/router": 0.37.4
+    "@redwoodjs/web": 0.37.4
     "@storybook/addon-a11y": 6.3.8
     "@storybook/builder-webpack5": 6.3.8
     "@storybook/manager-webpack5": 6.3.8
@@ -4565,13 +4565,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/web@0.37.3, @redwoodjs/web@workspace:packages/web":
+"@redwoodjs/web@0.37.4, @redwoodjs/web@workspace:packages/web":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/web@workspace:packages/web"
   dependencies:
     "@apollo/client": 3.3.21
     "@babel/cli": 7.15.4
-    "@redwoodjs/auth": 0.37.3
+    "@redwoodjs/auth": 0.37.4
     "@types/react": 17.0.21
     core-js: 3.17.3
     graphql: 15.5.3
@@ -6099,7 +6099,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jscodeshift@npm:^0.11.2":
+"@types/jscodeshift@npm:0.11.2":
   version: 0.11.2
   resolution: "@types/jscodeshift@npm:0.11.2"
   dependencies:
@@ -10409,7 +10409,7 @@ __metadata:
     "@babel/cli": 7.15.4
     "@babel/node": 7.15.4
     "@babel/runtime-corejs3": 7.15.4
-    "@redwoodjs/internal": 0.37.3
+    "@redwoodjs/internal": 0.37.4
     axios: 0.21.4
     chalk: 4.1.2
     check-node-version: 4.1.0
