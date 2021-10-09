@@ -3,14 +3,18 @@
  * an optional collection of roles used by requireAuth() to check
  * if the user is authenticated or has role-based access
  *
- * @param decoded - The decoded access token containing user info and JWT claims like `sub`
+ * @param decoded - The decoded access token containing user info and JWT claims like `sub`. Note could be null.
  * @param { token, SupportedAuthTypes type } - The access token itself as well as the auth provider type
  * @param { APIGatewayEvent event, Context context } - An object which contains information from the invoker
  * such as headers and cookies, and the context information about the invocation such as IP Address
  *
  * @see https://github.com/redwoodjs/redwood/tree/main/packages/auth for examples
  */
-export const getCurrentUser = async (decoded) => {
+export const getCurrentUser = async (
+  decoded,
+  { _token, _type },
+  { _event, _context }
+) => {
   const { proof, claim } = decoded
   // https://magic.link/docs/introduction/decentralized-id#what-is-a-did-token
   return { proof, claim }
@@ -21,16 +25,23 @@ export const getCurrentUser = async (decoded) => {
  *
  * @returns {boolean} - If the currentUser is authenticated
  */
-export const isAuthenticated = () => {
+export const isAuthenticated = (): boolean => {
   return !!context.currentUser
 }
 
-// Use this function in your services to check that a user is logged in, and
-// optionally raise an error if they're not.
+/**
+ * Use requireAuth in your services to check that a user is logged in,
+ * and raise an error if they're not.
+ *
+ * @returns - If the currentUser is authenticated
+ *
+ * @throws {AuthenticationError} - If the currentUser is not authenticated
+ *
+ * @see https://github.com/redwoodjs/redwood/tree/main/packages/auth for examples
+ */
 export const requireAuth = () => {
   if (!isAuthenticated()) {
     throw new AuthenticationError("You don't have permission to do that.")
   }
-
   // Custom implementation of RBAC is required for magicLink
 }
