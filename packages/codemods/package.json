@@ -29,7 +29,7 @@
     "test:watch": "yarn test --watch"
   },
   "devDependencies": {
-    "@types/jscodeshift": "^0.11.2",
+    "@types/jscodeshift": "0.11.2",
     "tempy": "1.0.1"
   }
 }
