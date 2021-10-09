@@ -19,3 +19,4 @@ blog-test-project/*
 !.yarn/sdks
 !.yarn/versions
 .pnp.*
+*.code-workspace
