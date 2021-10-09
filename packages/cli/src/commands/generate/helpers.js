@@ -4,7 +4,6 @@ import path from 'path'
 import Listr from 'listr'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
-import pluralize from 'pluralize'
 import prompts from 'prompts'
 import terminalLink from 'terminal-link'
 
@@ -12,6 +11,12 @@ import { ensurePosixPath, getConfig } from '@redwoodjs/internal'
 
 import { generateTemplate, getPaths, writeFilesTask } from '../../lib'
 import c from '../../lib/colors'
+import {
+  pluralize,
+  isPlural,
+  isSingular,
+  addSingularPlural,
+} from '../../lib/rwPluralize'
 import { yargsDefaults } from '../generate'
 
 /**
@@ -210,22 +215,19 @@ export const intForeignKeysForModel = (model) => {
 }
 
 export const isWordPluralizable = (word) => {
-  return pluralize.isPlural(word) !== pluralize.isSingular(word)
+  return isPlural(word) !== isSingular(word)
 }
 
 /**
- * Adds an s if it can't pluralize the word
+ * Adds "List" to the end of words we can't pluralize
  */
 export const forcePluralizeWord = (word) => {
-  // If word is already plural, check if plural === singular, then add s
-  // else use plural
-  const shouldAppendList = !isWordPluralizable(word) // equipment === equipment
-
-  if (shouldAppendList) {
+  // If word is both plural and singular (like equipment), then append "List"
+  if (isPlural(word) && isSingular(word)) {
     return pascalcase(`${word}_list`)
   }
 
-  return pluralize.plural(word)
+  return pluralize(word)
 }
 
 export const validatePlural = (plural, singular) => {
@@ -242,18 +244,6 @@ export const validatePlural = (plural, singular) => {
     return 'Plural can not be empty.'
   }
   return true
-}
-
-/**
- * Find Bar in FooBazBar
- *
- * @type {(paramType: 'string') => string }
- */
-function lastWord(str) {
-  const capitals = str.match(/[A-Z]/g)
-  const lastIndex = str.lastIndexOf(capitals?.slice(-1))
-
-  return lastIndex >= 0 ? str.slice(lastIndex) : str
 }
 
 // Ask user for plural version, if singular & plural are same for a word. For example: Pokemon
@@ -282,12 +272,7 @@ export const ensureUniquePlural = async ({ model, inDestroyer = false }) => {
     throw Error('Plural name must not be empty')
   }
 
-  const singular = lastWord(model)
-  const plural = lastWord(pluralToUse)
-
-  // See https://github.com/plurals/pluralize/issues/184 for more details
-  pluralize.addPluralRule(new RegExp(singular + '$'), plural)
-  pluralize.addSingularRule(new RegExp(plural + '$'), singular)
+  addSingularPlural(model, pluralToUse)
 }
 
 /** @type {(paramType: 'Int' | 'Float' | 'Boolean' | 'String') => string } **/
