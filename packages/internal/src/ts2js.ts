@@ -14,6 +14,26 @@ import { getPaths } from './paths'
  */
 export const convertTsProjectToJs = (cwd = getPaths().base) => {
   const files = typeScriptSourceFiles(cwd)
+  convertTsFilesToJs(cwd, files)
+}
+
+/**
+ * Converts all the TypeScript files in the `api` and `web` sides to JavaScript.
+ *
+ * @param {string} cwd - The base path to the project.
+ */
+export const convertTsScriptsToJs = (cwd = getPaths().base) => {
+  const files = typeScriptSourceFiles(cwd, 'scripts/*.{ts,tsx}')
+  convertTsFilesToJs(cwd, files)
+}
+
+/**
+ * Converts TypeScript files to JavaScript.
+ *
+ * @param {string} cwd - Current directory
+ * @param {string[]} files - Collection of files to convert
+ */
+export const convertTsFilesToJs = (cwd: string, files: string[]) => {
   if (files.length === 0) {
     console.log('No TypeScript files found to convert to JS in this project.')
   }
@@ -46,10 +66,14 @@ export const convertTsProjectToJs = (cwd = getPaths().base) => {
 /**
  * Get all the source code from a Redwood project
  */
-export const typeScriptSourceFiles = (cwd: string) => {
+export const typeScriptSourceFiles = (
+  cwd: string,
+  globPattern = '{api,web}/src/**/*.{ts,tsx}'
+) => {
+  console.log(globPattern)
   // TODO: When sides are expanded read the `api` and `web` string instead
   // of hard-coding them.
-  return fg.sync('{api,web}/src/**/*.{ts,tsx}', {
+  return fg.sync(globPattern, {
     cwd,
     ignore: ['node_modules'],
   })
