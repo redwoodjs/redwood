@@ -12,7 +12,6 @@ import VerboseRenderer from 'listr-verbose-renderer'
 import lodash from 'lodash/string'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
-import pluralize from 'pluralize'
 import { format } from 'prettier'
 
 import {
@@ -21,6 +20,7 @@ import {
 } from '@redwoodjs/internal'
 
 import c from './colors'
+import { pluralize, singularize } from './rwPluralize'
 
 /**
  * Used to memoize results from `getSchema` so we don't have to go through
@@ -104,8 +104,9 @@ export const getEnum = async (name) => {
  */
 export const getSchemaDefinitions = async () => {
   const schemaPath = path.join(getPaths().api.db, 'schema.prisma')
+
   const metadata = await getDMMF({
-    datamodel: readFile(schemaPath.toString()),
+    datamodelPath: schemaPath.toString(),
   })
 
   return metadata
@@ -126,7 +127,7 @@ export const getSchemaDefinitions = async () => {
  * pluralConstantName: FOO_BARS
 */
 export const nameVariants = (name) => {
-  const normalizedName = pascalcase(paramCase(pluralize.singular(name)))
+  const normalizedName = pascalcase(paramCase(singularize(name)))
 
   return {
     pascalName: pascalcase(paramCase(name)),
@@ -174,7 +175,8 @@ export const prettify = (templateFilename, renderedTemplate) => {
   })
 }
 
-export const readFile = (target) => fs.readFileSync(target)
+export const readFile = (target) =>
+  fs.readFileSync(target, { encoding: 'utf8' })
 
 const SUPPORTED_EXTENSIONS = ['.js', '.ts', '.tsx']
 
@@ -420,18 +422,31 @@ const wrapWithSet = (routesContent, layout, routes, newLineAndIndent) => {
 export const addRoutesToRouterTask = (routes, layout) => {
   const redwoodPaths = getPaths()
   const routesContent = readFile(redwoodPaths.web.routes).toString()
-  const newRoutes = routes.filter((route) => !routesContent.match(route))
+  let newRoutes = routes.filter((route) => !routesContent.match(route))
 
   if (newRoutes.length) {
-    const [routerStart, newLineAndIndent] =
-      routesContent.match(/\s*<Router.*?>(\s*)/)
+    const [routerStart, routerParams, newLineAndIndent] = routesContent.match(
+      /\s*<Router(.*?)>(\s*)/
+    )
+
+    if (/trailingSlashes={?(["'])always\1}?/.test(routerParams)) {
+      // newRoutes will be something like:
+      // ['<Route path="/foo" page={FooPage} name="foo"/>']
+      // and we need to replace `path="/foo"` with `path="/foo/"`
+      newRoutes = newRoutes.map((route) =>
+        route.replace(/ path="(.+?)" /, ' path="$1/" ')
+      )
+    }
+
     const routesBatch = layout
       ? wrapWithSet(routesContent, layout, newRoutes, newLineAndIndent)
       : newRoutes.join(newLineAndIndent)
+
     const newRoutesContent = routesContent.replace(
       routerStart,
       `${routerStart + routesBatch + newLineAndIndent}`
     )
+
     writeFile(redwoodPaths.web.routes, newRoutesContent, {
       overwriteExisting: true,
     })
