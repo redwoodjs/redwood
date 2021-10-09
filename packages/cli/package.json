@@ -14,7 +14,7 @@
     "dist"
   ],
   "dependencies": {
-    "@prisma/sdk": "3.2.0",
+    "@prisma/sdk": "3.2.1",
     "@redwoodjs/api-server": "0.37.3",
     "@redwoodjs/internal": "0.37.3",
     "@redwoodjs/prerender": "0.37.3",
@@ -40,7 +40,7 @@
     "pascalcase": "1.0.0",
     "pluralize": "8.0.0",
     "prettier": "2.4.1",
-    "prisma": "3.2.0",
+    "prisma": "3.2.1",
     "prompts": "2.4.1",
     "rimraf": "3.0.2",
     "secure-random-password": "0.2.3",

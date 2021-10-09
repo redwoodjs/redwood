@@ -10,7 +10,7 @@
   "types": "./dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@prisma/client": "3.2.0",
+    "@prisma/client": "3.2.1",
     "@types/pino": "6.3.11",
     "core-js": "3.17.3",
     "crypto-js": "4.1.1",
