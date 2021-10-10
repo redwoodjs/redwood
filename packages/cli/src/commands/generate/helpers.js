@@ -4,7 +4,6 @@ import path from 'path'
 import Listr from 'listr'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
-import pluralize from 'pluralize'
 import prompts from 'prompts'
 import terminalLink from 'terminal-link'
 
@@ -12,6 +11,12 @@ import { ensurePosixPath, getConfig } from '@redwoodjs/internal'
 
 import { generateTemplate, getPaths, writeFilesTask } from '../../lib'
 import c from '../../lib/colors'
+import {
+  pluralize,
+  isPlural,
+  isSingular,
+  addSingularPlural,
+} from '../../lib/rwPluralize'
 import { yargsDefaults } from '../generate'
 
 /**
@@ -209,23 +214,20 @@ export const intForeignKeysForModel = (model) => {
     .map((f) => f.name)
 }
 
-export const isWordNonPluralizable = (word) => {
-  return pluralize.isPlural(word) === pluralize.isSingular(word)
+export const isWordPluralizable = (word) => {
+  return isPlural(word) !== isSingular(word)
 }
 
 /**
- * Adds an s if it can't pluralize the word
+ * Adds "List" to the end of words we can't pluralize
  */
 export const forcePluralizeWord = (word) => {
-  // If word is already plural, check if plural === singular, then add s
-  // else use plural
-  const shouldAppendList = isWordNonPluralizable(word) // equipment === equipment
-
-  if (shouldAppendList) {
+  // If word is both plural and singular (like equipment), then append "List"
+  if (isPlural(word) && isSingular(word)) {
     return pascalcase(`${word}_list`)
   }
 
-  return pluralize.plural(word)
+  return pluralize(word)
 }
 
 export const validatePlural = (plural, singular) => {
@@ -246,7 +248,7 @@ export const validatePlural = (plural, singular) => {
 
 // Ask user for plural version, if singular & plural are same for a word. For example: Pokemon
 export const ensureUniquePlural = async ({ model, inDestroyer = false }) => {
-  if (!isWordNonPluralizable(model)) {
+  if (isWordPluralizable(model)) {
     return
   }
 
@@ -265,12 +267,12 @@ export const ensureUniquePlural = async ({ model, inDestroyer = false }) => {
   // Quickfix is to remove that control char u0017, which is preprended if default input is cleared using option+backspace
   // eslint-disable-next-line no-control-regex
   const pluralToUse = promptResult.plural?.trim().replace(/\u0017/g, '')
+
   if (!pluralToUse) {
     throw Error('Plural name must not be empty')
   }
 
-  // Set the rule
-  pluralize.addIrregularRule(model, pluralToUse)
+  addSingularPlural(model, pluralToUse)
 }
 
 /** @type {(paramType: 'Int' | 'Float' | 'Boolean' | 'String') => string } **/
