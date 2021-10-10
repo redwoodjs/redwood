@@ -266,7 +266,7 @@ describe('query params should not override path params', () => {
   }
 
   const TestRouter = () => (
-    <Router useAuth={mockUseAuth()}>
+    <Router>
       <Route path="/user/{id:Int}/contact/{contactId:Int}" page={ParamPage} name="contact" />
     </Router>
   )
