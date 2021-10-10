@@ -6,7 +6,6 @@ import humanize from 'humanize-string'
 import Listr from 'listr'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
-import pluralize from 'pluralize'
 import terminalLink from 'terminal-link'
 
 import { getConfig, generate as generateTypes } from '@redwoodjs/internal'
@@ -25,6 +24,7 @@ import {
   transformTSToJS,
 } from '../../../lib'
 import c from '../../../lib/colors'
+import { pluralize, singularize } from '../../../lib/rwPluralize'
 import { yargsDefaults } from '../../generate'
 import {
   customOrDefaultTemplatePath,
@@ -54,7 +54,7 @@ const getImportComponentNames = (
   nestScaffoldByModel = true
 ) => {
   const pluralName = pascalcase(pluralize(name))
-  const singularName = pascalcase(pluralize.singular(name))
+  const singularName = pascalcase(singularize(name))
   let componentPath
   let layoutPath
   if (scaffoldPath === '') {
@@ -85,7 +85,7 @@ const getImportComponentNames = (
 // Includes imports from getImportComponentNames()
 const getTemplateStrings = (name, scaffoldPath, nestScaffoldByModel = true) => {
   const pluralPascalName = pascalcase(pluralize(name))
-  const singularPascalName = pascalcase(pluralize.singular(name))
+  const singularPascalName = pascalcase(singularize(name))
 
   const pluralCamelName = camelcase(pluralPascalName)
   const singularCamelName = camelcase(singularPascalName)
@@ -122,7 +122,7 @@ export const files = async ({
   typescript = false,
   nestScaffoldByModel,
 }) => {
-  const model = await getSchema(pascalcase(pluralize.singular(name)))
+  const model = await getSchema(pascalcase(singularize(name)))
   if (typeof nestScaffoldByModel === 'undefined') {
     nestScaffoldByModel = getConfig().generate.nestScaffoldByModel
   }
@@ -221,7 +221,7 @@ const layoutFiles = (
   templateStrings
 ) => {
   const pluralName = pascalcase(pluralize(name))
-  const singularName = pascalcase(pluralize.singular(name))
+  const singularName = pascalcase(singularize(name))
   let fileList = {}
 
   const layouts = fs.readdirSync(
@@ -273,7 +273,7 @@ const pageFiles = async (
   templateStrings
 ) => {
   const pluralName = pascalcase(pluralize(name))
-  const singularName = pascalcase(pluralize.singular(name))
+  const singularName = pascalcase(singularize(name))
   const model = await getSchema(singularName)
   const idType = getIdType(model)
   const idTsType = mapPrismaScalarToPagePropTsType(idType)
@@ -336,7 +336,7 @@ const componentFiles = async (
   templateStrings
 ) => {
   const pluralName = pascalcase(pluralize(name))
-  const singularName = pascalcase(pluralize.singular(name))
+  const singularName = pascalcase(singularize(name))
   const model = await getSchema(singularName)
   const idType = getIdType(model)
   const intForeignKeys = intForeignKeysForModel(model)
@@ -481,7 +481,7 @@ export const routes = async ({
   }
 
   const templateNames = getTemplateStrings(name, scaffoldPath)
-  const singularPascalName = pascalcase(pluralize.singular(name))
+  const singularPascalName = pascalcase(singularize(name))
   const pluralPascalName = pascalcase(pluralize(name))
   const pluralParamName = paramCase(pluralPascalName)
   const model = await getSchema(singularPascalName)

@@ -1,6 +1,5 @@
 import Listr from 'listr'
 import pascalcase from 'pascalcase'
-import pluralize from 'pluralize'
 
 import { ensureUniquePlural } from '../../../commands/generate/helpers'
 import {
@@ -11,6 +10,7 @@ import {
   writeFile,
 } from '../../../lib'
 import c from '../../../lib/colors'
+import { pluralize } from '../../../lib/rwPluralize'
 import {
   files,
   routes as scaffoldRoutes,
