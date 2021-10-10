@@ -34,6 +34,9 @@ function createDummyAuthContextValues(partial: Partial<AuthContextInterface>) {
     client: null,
     type: 'custom',
     hasError: false,
+    forgotPassword: () => null,
+    resetPassword: () => null,
+    validateResetToken: () => null,
   }
 
   return { ...authContextValues, ...partial }
