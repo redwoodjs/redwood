@@ -277,12 +277,8 @@ describe('query params should not override path params', () => {
     const screen = getScreen()
     act(() => navigate('/user/1/contact/2?contactId=two'))
     await waitFor(() => {
-      expect(
-        screen.queryByText('param 1,2')
-      ).toBeInTheDocument()
-      expect(
-        screen.queryByText('hookparams 1,2')
-      ).toBeInTheDocument()
+      expect(screen.queryByText('param 1,2')).toBeInTheDocument()
+      expect(screen.queryByText('hookparams 1,2')).toBeInTheDocument()
     })
   })
 })
