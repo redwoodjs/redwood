@@ -150,6 +150,40 @@ describe('inits routes and navigates as expected', () => {
   })
 })
 
+describe('query params should not override path params', () => {
+  const ParamPage = ({ id, contactId }: { id: number; contactId: number }) => {
+    const params = useParams()
+
+    return (
+      <div>
+        <p>param {`${id},${contactId}`}</p>
+        <p>hookparams {`${params.id},${params.contactId}`}</p>
+      </div>
+    )
+  }
+
+  const TestRouter = () => (
+    <Router useAuth={mockUseAuth()}>
+      <Route path="/user/{id:Int}/contact/{contactId:Int}" page={ParamPage} name="contact" />
+    </Router>
+  )
+
+  const getScreen = () => render(<TestRouter />)
+
+  test('query params of same key as patm params should not override path params', async () => {
+    const screen = getScreen()
+    act(() => navigate('/user/1/contact/2?contactId=two'))
+    await waitFor(() => {
+      expect(
+        screen.queryByText('param 1,2')
+      ).toBeInTheDocument()
+      expect(
+        screen.queryByText('hookparams 1,2')
+      ).toBeInTheDocument()
+    })
+  })
+})
+
 describe('test params escaping', () => {
   const ParamPage = ({ value, q }: { value: string; q: string }) => {
     const params = useParams()
