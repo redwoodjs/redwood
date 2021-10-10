@@ -19,7 +19,7 @@ const tasks = ({ componentName, filesFn, name }) =>
 
 export const createYargsForComponentDestroy = ({
   componentName,
-  preTasksFn = () => {},
+  preTasksFn = (options) => options,
   filesFn,
 }) => {
   return {

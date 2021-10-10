@@ -118,7 +118,7 @@ const appendPositionalsToCmd = (commandString, positionalsObj) => {
  */
 export const createYargsForComponentGeneration = ({
   componentName,
-  preTasksFn = () => {},
+  preTasksFn = (options) => options,
   filesFn,
   optionsObj = yargsDefaults,
   positionalsObj = {},
