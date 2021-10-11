@@ -12,14 +12,14 @@ about: Report an issue with documentation
 
 <!-- Issue Report -->
 
-**Page URL:**
+### 🔎 Page URL
 
  <!-- Where can we find the wrong docs? -->
 
-**Issue:**
+### 📃 Issue
 
 <!-- What is wrong with it? -->
 
-**Recommended Fix:**
+### 🙂 Recommended Fix
 
 <!-- How should we fix it? -->
