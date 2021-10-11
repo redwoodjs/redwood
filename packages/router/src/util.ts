@@ -94,6 +94,7 @@ const parseGlobOrOtherCoreType = (
     return `{${name}}`
   }
 }
+
 const matchPath = (
   route: string,
   pathname: string,
