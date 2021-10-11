@@ -13,17 +13,19 @@ const createNamedContext = <T extends unknown>(
 /**
  * Get param name and type transform for a route
  *
- *  '/blog/{year}/{month}/{day:Int}' => [['year'], ['month'], ['day', 'Int']]
+ *  '/blog/{year}/{month}/{day:Int}/{filePath...}' => [['year'], ['month'], ['day', 'Int'], ['filePath', Glob]]
+ *
+ *  The Glob type is unique, and is used for route params that are strings that include '/' characters... such as a file path
+ *  The ternary below handles them differently since the param type is not delimited by a ':'
  */
 const paramsForRoute = (route: string) => {
   // Match the strings between `{` and `}`.
   const params = [...route.matchAll(/\{([^}]+)\}/g)]
+
   return params
     .map((match) => match[1])
     .map((match) => {
-      return match.slice(match.length - 3) === '...'
-        ? [match, 'Glob']
-        : match.split(':')
+      return match.slice(-3) === '...' ? [match, 'Glob'] : match.split(':')
     })
 }
 
@@ -75,6 +77,24 @@ type SupportedRouterParamTypes = keyof typeof coreParamTypes
  *  matchPath('/post/{id:Int}', '/post/7')
  *  => { match: true, params: { id: 7 }}
  */
+
+/**
+ * Similar to the logic in the definition of paramsForRoute...
+ * we need a ternary to properyl grab params of type Glob
+ * Glob types can be of form glob="/path/to/file" with any number of "/" characters
+ */
+const parseGlobOrOtherCoreType = (
+  type: SupportedRouterParamTypes,
+  name: string
+) => {
+  if (type) {
+    return type === 'Glob'
+      ? `{${name.slice(0, name.length - 3)}...}`
+      : `{${name}:${type}}`
+  } else {
+    return `{${name}}`
+  }
+}
 const matchPath = (
   route: string,
   pathname: string,
@@ -99,11 +119,7 @@ const matchPath = (
     }
 
     typeConstrainedRoute = typeConstrainedRoute.replace(
-      type
-        ? type === 'Glob'
-          ? `{${name.slice(0, name.length - 3)}...}`
-          : `{${name}:${type}}`
-        : `{${name}}`,
+      parseGlobOrOtherCoreType(type as SupportedRouterParamTypes, name),
       `(${typeRegex})`
     )
   }
