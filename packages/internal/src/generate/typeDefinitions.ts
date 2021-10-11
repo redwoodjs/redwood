@@ -210,7 +210,7 @@ export const generateTypeDefGraphQLApi = async () => {
     console.error()
     console.error('Error: Could not generate GraphQL type definitions (api)')
     console.error()
-    return []
+    process.exit(1)
   }
 }
 
