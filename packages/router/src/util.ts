@@ -15,8 +15,9 @@ const createNamedContext = <T extends unknown>(
  *
  *  '/blog/{year}/{month}/{day:Int}/{filePath...}' => [['year'], ['month'], ['day', 'Int'], ['filePath', Glob]]
  *
- *  The Glob type is unique, and is used for route params that are strings that include '/' characters... such as a file path
- *  The ternary below handles them differently since the param type is not delimited by a ':'
+ * The Glob type is unique, and is used for route params that are strings that
+ * include '/' characters, such as a file path. The ternary below handles them
+ * differently since the param type is not delimited by a ':'
  */
 const paramsForRoute = (route: string) => {
   // Match the strings between `{` and `}`.
