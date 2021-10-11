@@ -88,9 +88,7 @@ const parseGlobOrOtherCoreType = (
   name: string
 ) => {
   if (type) {
-    return type === 'Glob'
-      ? `{${name.slice(0, name.length - 3)}...}`
-      : `{${name}:${type}}`
+    return type === 'Glob' ? `{${name}}` : `{${name}:${type}}`
   } else {
     return `{${name}}`
   }
@@ -128,6 +126,8 @@ const matchPath = (
   const matches = [
     ...pathname.matchAll(new RegExp(`^${typeConstrainedRoute}$`, 'g')),
   ]
+
+  console.log({ matches })
 
   if (matches.length === 0) {
     return { match: false }
