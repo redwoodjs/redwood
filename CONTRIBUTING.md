@@ -279,7 +279,7 @@ One of the most significant changes in yarn `v3` is it's stance on [hoisting](ht
 #### New Files
 
 Yarn `v3` keeps more of itself in the repo than before.
-For exmaple, yarn `v3` isn't installed globally, but on a per-project basis.
+For example, yarn `v3` isn't installed globally, but on a per-project basis.
 
 Here's a quick overview of some of the new yarn-related files in this repo:
 
