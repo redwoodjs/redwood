@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+blank_issues_enabled: false
+
+contact_links:
+  - name: Redwood discourse
+    url: https://community.redwoodjs.com/
+    about: Release announcements, community-driven help and contributing help
+
+  - name: Redwood Chat
+    url: "https://discord.gg/jjSYEQd"
+    about: The Redwood live-chat on Discord
