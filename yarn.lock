@@ -4286,8 +4286,6 @@ __metadata:
     "@redwoodjs/eslint-config": 0.37.4
     "@redwoodjs/internal": 0.37.4
     "@redwoodjs/testing": 0.37.4
-    "@types/babel-core": 6.25.7
-    "@types/babel-plugin-tester": 9.0.4
     "@webpack-cli/serve": 1.5.2
     babel-loader: 8.2.2
     babel-plugin-auto-import: 1.1.0
