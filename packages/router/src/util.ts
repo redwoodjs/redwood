@@ -127,8 +127,6 @@ const matchPath = (
     ...pathname.matchAll(new RegExp(`^${typeConstrainedRoute}$`, 'g')),
   ]
 
-  console.log({ matches })
-
   if (matches.length === 0) {
     return { match: false }
   }
