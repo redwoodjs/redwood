@@ -2,7 +2,7 @@ name: Projects Beta Automation
 
 on:
   issues:
-    type:
+    types:
       - opened
 
 jobs:
