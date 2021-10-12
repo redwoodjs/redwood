@@ -70,9 +70,31 @@ export const handler = async ({ sides, verbose, prisma }) => {
     },
   ]
 
+  /**
+   * Build types for the project
+   */
+
+  const tasks = new Listr(listrTasks, {
+    renderer: verbose && VerboseRenderer,
+  })
+
+  try {
+    await tasks.run()
+  } catch (e) {
+    console.log(c.error(e.message))
+    process.exit(e?.exitCode || 1)
+  }
+
+  /**
+   * Check typings for the project
+   */
+
+  const listrTypecheckTasks = []
+
   sides.forEach((sideName) => {
+    console.log('verbose', verbose)
     const cwd = path.join(getPaths().base, sideName)
-    listrTasks.push({
+    listrTypecheckTasks.push({
       title: `Typechecking "${sideName}"...`,
       task: () => {
         return execa('yarn tsc', ['--noEmit', '--skipLibCheck'], {
@@ -84,12 +106,13 @@ export const handler = async ({ sides, verbose, prisma }) => {
     })
   })
 
-  const tasks = new Listr(listrTasks, {
+  const typeCheckTasks = new Listr(listrTypecheckTasks, {
     renderer: verbose && VerboseRenderer,
+    concurrent: true,
   })
 
   try {
-    await tasks.run()
+    await typeCheckTasks.run()
   } catch (e) {
     console.log(c.error(e.message))
     process.exit(e?.exitCode || 1)
