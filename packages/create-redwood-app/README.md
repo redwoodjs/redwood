@@ -14,11 +14,13 @@
 </p>
 <!-- prettier-ignore-end -->
 <br>
-<h1 align="center">Bringing full-stack to the Jamstack</h1>
+<h1 align="center">The JS App Framework for Startups</h1>
 
-<h2 align="center">An opinionated, edge-ready framework for modern multi-client applications. <br>Built on React, GraphQL, and Prisma.</h2>
+<h2 align="center">Ship today with architecture for tomorrow.</h2>
 
-Do you love the Jamstack philosophy but need a database-backed web app? Want great developer experience and easy scaling? Redwood is here! Redwood works with the components and development workflow you love but with simple conventions and helpers to make your experience even better.
+Redwood is an opinionated, edge-ready framework for modern multi-client applications, built on React, GraphQL, and Prisma with full TypeScript support and ready to go with zero config.
+
+Want great developer experience and easy scaling? How about an integrated front- and back-end test suite, boilerplate code generators, component design, logging, API security + auth, and serverless or traditional deploy support? Redwood is here! Redwood works with the components and development workflow you love but with simple conventions and helpers to make your experience even better.
 
 <br>
 
