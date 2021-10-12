@@ -1,10 +1,10 @@
 import pascalcase from 'pascalcase'
-import pluralize from 'pluralize'
 
 import { generate as generateTypes } from '@redwoodjs/internal'
 
 import { transformTSToJS } from '../../../lib'
 import { getSchema } from '../../../lib'
+import { isPlural, singularize } from '../../../lib/rwPluralize'
 import { yargsDefaults } from '../../generate'
 import {
   templateForComponentFile,
@@ -62,8 +62,7 @@ export const files = async ({
   // Create a unique operation name.
 
   const shouldGenerateList =
-    (isWordPluralizable(name) ? pluralize.isPlural(name) : options.list) ||
-    options.list
+    (isWordPluralizable(name) ? isPlural(name) : options.list) || options.list
 
   if (shouldGenerateList) {
     cellName = forcePluralizeWord(name)
@@ -72,7 +71,7 @@ export const files = async ({
   } else {
     // needed for the singular cell GQL query find by id case
     try {
-      model = await getSchema(pascalcase(pluralize.singular(name)))
+      model = await getSchema(pascalcase(singularize(name)))
       idType = getIdType(model)
     } catch {
       // eat error so that the destroy cell generator doesn't raise when try to find prisma query engine in test runs
