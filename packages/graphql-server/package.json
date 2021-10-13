@@ -27,8 +27,8 @@
     "graphql-tag": "2.12.5",
     "lodash.merge": "4.6.2",
     "lodash.omitby": "4.6.0",
-    "pino": "^7.0.0-rc.8",
     "node-fetch": "2.6.1",
+    "pino": "^7.0.0-rc.9",
     "uuid": "8.3.2"
   },
   "devDependencies": {
