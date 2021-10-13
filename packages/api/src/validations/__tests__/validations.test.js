@@ -1,7 +1,3 @@
-// import { PrismaClient } from '@prisma/client'
-
-import * as Prisma from '@prisma/client'
-
 import * as ValidationErrors from '../errors'
 import { validate, validateUniqueness } from '../validations'
 
