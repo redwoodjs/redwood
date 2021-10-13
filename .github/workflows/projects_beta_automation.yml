@@ -5,7 +5,7 @@ on:
     types:
       - opened
   pull_request:
-    types: 
+    types:
       - opened
 
 jobs:
@@ -45,16 +45,16 @@ jobs:
           CONTENT_ID: ${{ github.event[github.event_name].node_id }}
         run: |
           item_id="$(gh api graphql --header 'GraphQL-Features: projects_next_graphql' -f query='
-            mutation($project: ID!, $issue: ID!) {
+            mutation($project: ID!, $content: ID!) {
               addProjectNextItem(input: { projectId: $project, contentId: $content }) {
                 projectNextItem {
                   id
                 }
               }
             }' -f project=$PROJECT_ID -f content=$CONTENT_ID --jq '.data.addProjectNextItem.projectNextItem.id')"
-          
+
           echo 'ITEM_ID='$item_id >> $GITHUB_ENV
-          
+
       - name: Set status
         env:
           GITHUB_TOKEN: ${{ secrets.PROJECTS_BETA_AUTOMATION }}
