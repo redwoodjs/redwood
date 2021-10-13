@@ -1,13 +1,13 @@
 import fs from 'fs'
 import path from 'path'
 
-import pluralize from 'pluralize'
 import prompts from 'prompts'
 
 // Setup test mocks
 global.__dirname = __dirname
 import '../../../lib/test'
 
+import { pluralize, singularize } from '../../../lib/rwPluralize'
 import * as helpers from '../helpers'
 import * as page from '../page/page'
 
@@ -466,19 +466,41 @@ test('ensureUniquePlural sets irregular rule from user input if singular is same
 
   await helpers.ensureUniquePlural({ model: uncountableModel })
 
-  expect(pluralize.singular(uncountableModel)).toBe(uncountableModel)
-  expect(pluralize.plural(uncountableModel)).toBe(userPluralInput)
+  expect(singularize(uncountableModel)).toBe(uncountableModel)
+  expect(pluralize(uncountableModel)).toBe(userPluralInput)
 })
 
 test('ensureUniquePlural skips any rule if singular and plural are already different', async () => {
   const singular = 'post'
   const plural = 'posts'
-  prompts.inject('pikapika')
+  // prompts.inject('pikapika') // should not ask for input
 
   await helpers.ensureUniquePlural({ model: singular })
 
-  expect(pluralize.singular(singular)).toBe(singular)
-  expect(pluralize.plural(singular)).toBe(plural)
+  expect(singularize(singular)).toBe(singular)
+  expect(pluralize(singular)).toBe(plural)
+})
+
+test('ensureUniquePlural handles PascalCase models', async () => {
+  const uncountableModel = 'CustomPokemon'
+  const userPluralInput = 'CustomPokemonii'
+  prompts.inject(userPluralInput)
+
+  await helpers.ensureUniquePlural({ model: uncountableModel })
+
+  expect(singularize(uncountableModel)).toBe(uncountableModel)
+  expect(pluralize(uncountableModel)).toBe(userPluralInput)
+})
+
+test('ensureUniquePlural handles PascalCase models, with *List input', async () => {
+  const uncountableModel = 'FarmEquipment'
+  const userPluralInput = 'FarmEquipmentList'
+  prompts.inject(userPluralInput)
+
+  await helpers.ensureUniquePlural({ model: uncountableModel })
+
+  expect(singularize(uncountableModel)).toBe(uncountableModel)
+  expect(pluralize(uncountableModel)).toBe(userPluralInput)
 })
 
 describe('mapRouteParamTypeToTsType', () => {
