@@ -5,10 +5,21 @@ import * as ValidationErrors from './errors'
 const VALIDATORS = {
   // Requires that the given value is `null` or `undefined`
   //
+  // `allowEmptyString`: if true, counts "" as being absent (does not throw)
+  //
   // { absence: true }
-  // { absense: { message: '...' } }
+  // { absense: { allowEmptyString: true, message: '...' } }
   absence: (name, value, options) => {
-    if (value != null) {
+    const absenceOptions = {
+      allowEmptyString: false,
+    }
+    Object.assign(absenceOptions, options)
+
+    if (value === '') {
+      if (!absenceOptions.allowEmptyString) {
+        throw new ValidationErrors.AbsenceValidationError(name, options.message)
+      }
+    } else if (value != null) {
       throw new ValidationErrors.AbsenceValidationError(name, options.message)
     }
   },
