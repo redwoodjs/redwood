@@ -189,12 +189,33 @@ const VALIDATORS = {
     }
   },
 
-  // Requires that the given value is not `null` or `undefined`
+  // Requires that the given value is not `null` or `undefined`. By default will
+  // consider an empty string to pass
+  //
+  // `allowEmptyString`: if set to `false` will throw an error if value is ""
+  // `allowNull`: if `true` will allow `null`
+  // `allowUndefined`: if `true` will allow `undefined`
+  //
+  // Default behavior is equivalent to:
+  //   { allowNull: false, allowUndefined: false, allowEmptyString: true }
   //
   // { presence: true }
-  // { presence: { message: '...' } }
+  // { presence: { allowEmptyString: false, message: '...' } }
   presence: (name, value, options) => {
-    if (value == null) {
+    const presenceOptions = {
+      allowNull: false,
+      allowUndefined: false,
+      allowEmptyString: true,
+    }
+    Object.assign(presenceOptions, options)
+
+    if (!presenceOptions.allowNull && value === null) {
+      throw new ValidationErrors.PresenceValidationError(name, options.message)
+    }
+    if (!presenceOptions.allowUndefined && value === undefined) {
+      throw new ValidationErrors.PresenceValidationError(name, options.message)
+    }
+    if (!presenceOptions.allowEmptyString && value === '') {
       throw new ValidationErrors.PresenceValidationError(name, options.message)
     }
   },

@@ -3,42 +3,6 @@ import { validate } from '../validations'
 
 describe('validate', () => {})
 
-describe('validate presence', () => {
-  it('throws an error if the field is null', () => {
-    expect(() => validate('email', null, { presence: true })).toThrow(
-      ValidationErrors.PresenceValidationError
-    )
-  })
-
-  it('throws an error if the field is undefined', () => {
-    expect(() => validate('email', undefined, { presence: true })).toThrow(
-      ValidationErrors.PresenceValidationError
-    )
-  })
-
-  it('throws with a default message', () => {
-    try {
-      validate('email', undefined, { presence: true })
-    } catch (e) {
-      expect(e.message).toEqual('email is not present')
-    }
-  })
-
-  it('throws with a custom message', () => {
-    try {
-      validate('email', undefined, { presence: { message: 'Gimmie an email' } })
-    } catch (e) {
-      expect(e.message).toEqual('Gimmie an email')
-    }
-  })
-
-  it('does not throw an error if the field is present', () => {
-    expect(() =>
-      validate('email', 'rob@redwoodjs.com', { presence: true })
-    ).not.toThrow()
-  })
-})
-
 describe('validate absence', () => {
   it('throws an error if the field is not null', () => {
     expect(() =>
@@ -555,5 +519,75 @@ describe('validate numericality', () => {
     expect(() =>
       validate('number', 3.0, { numericality: { odd: true } })
     ).not.toThrow(ValidationErrors.OddNumericalityValidationError)
+  })
+})
+
+describe('validate presence', () => {
+  it('checks for a field being null', () => {
+    expect(() => validate('email', null, { presence: true })).toThrow(
+      ValidationErrors.PresenceValidationError
+    )
+    expect(() =>
+      validate('email', null, { presence: { allowNull: false } })
+    ).toThrow(ValidationErrors.PresenceValidationError)
+
+    expect(() =>
+      validate('email', undefined, { presence: { allowUndefined: true } })
+    ).not.toThrow()
+    expect(() =>
+      validate('email', null, { presence: { allowNull: true } })
+    ).not.toThrow()
+    expect(() => validate('email', '', { presence: true })).not.toThrow()
+  })
+
+  it('checks for a field being undefined', () => {
+    expect(() => validate('email', undefined, { presence: true })).toThrow(
+      ValidationErrors.PresenceValidationError
+    )
+    expect(() =>
+      validate('email', undefined, { presence: { allowUndefined: false } })
+    ).toThrow(ValidationErrors.PresenceValidationError)
+
+    expect(() =>
+      validate('email', null, { presence: { allowNull: true } })
+    ).not.toThrow()
+    expect(() =>
+      validate('email', undefined, { presence: { allowUndefined: true } })
+    ).not.toThrow()
+  })
+
+  it('checks for a field being an empty string', () => {
+    expect(() =>
+      validate('email', '', { presence: { allowEmptyString: false } })
+    ).toThrow(ValidationErrors.PresenceValidationError)
+
+    expect(() => validate('email', '', { presence: true })).not.toThrow()
+    expect(() =>
+      validate('email', '', {
+        presence: { allowNull: true, allowUndefined: true },
+      })
+    ).not.toThrow()
+  })
+
+  it('throws with a default message', () => {
+    try {
+      validate('email', undefined, { presence: true })
+    } catch (e) {
+      expect(e.message).toEqual('email is not present')
+    }
+  })
+
+  it('throws with a custom message', () => {
+    try {
+      validate('email', undefined, { presence: { message: 'Gimmie an email' } })
+    } catch (e) {
+      expect(e.message).toEqual('Gimmie an email')
+    }
+  })
+
+  it('does not throw an error if the field is present', () => {
+    expect(() =>
+      validate('email', 'rob@redwoodjs.com', { presence: true })
+    ).not.toThrow()
   })
 })
