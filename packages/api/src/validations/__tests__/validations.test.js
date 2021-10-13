@@ -620,20 +620,26 @@ describe('validate', () => {
 // Mock just enough of PrismaClient that we can test a transaction is running.
 // Prisma.PrismaClient is a class so we need to return a function that returns
 // the actual methods of an instance of the class
-const findFirst = jest.fn()
-// eslint-disable-next-line no-import-assign
-Prisma.PrismaClient = jest.fn(() => ({
-  $transaction: async (func) => func(),
-  findFirst,
+//
+// mockFindFirst.mockImplementation() to change what `findFirst()` would return
+const mockFindFirst = jest.fn()
+jest.mock('@prisma/client', () => ({
+  PrismaClient: jest.fn(() => ({
+    $transaction: async (func) => func(),
+    findFirst: mockFindFirst,
+  })),
 }))
 
 describe('validateUniqueness', () => {
   beforeEach(() => {
-    findFirst.mockClear()
+    mockFindFirst.mockClear()
   })
 
   it('throws an error if record is not unique', async () => {
-    findFirst.mockImplementation(() => ({ id: 1, email: 'rob@redwoodjs.com' }))
+    mockFindFirst.mockImplementation(() => ({
+      id: 1,
+      email: 'rob@redwoodjs.com',
+    }))
 
     try {
       await validateUniqueness({ email: 'rob@redwoodjs.com' }, () => {})
@@ -644,7 +650,7 @@ describe('validateUniqueness', () => {
   })
 
   it('calls callback if record is unique', async () => {
-    findFirst.mockImplementation(() => null)
+    mockFindFirst.mockImplementation(() => null)
 
     await validateUniqueness({ email: 'rob@redwoodjs.com' }, () => {
       expect(true).toEqual(true)
@@ -654,7 +660,10 @@ describe('validateUniqueness', () => {
   })
 
   it('throws with a default error message', async () => {
-    findFirst.mockImplementation(() => ({ id: 2, email: 'rob@redwoodjs.com' }))
+    mockFindFirst.mockImplementation(() => ({
+      id: 2,
+      email: 'rob@redwoodjs.com',
+    }))
 
     // single field
     try {
@@ -676,7 +685,10 @@ describe('validateUniqueness', () => {
   })
 
   it('throws with a custom error message', async () => {
-    findFirst.mockImplementation(() => ({ id: 3, email: 'rob@redwoodjs.com' }))
+    mockFindFirst.mockImplementation(() => ({
+      id: 3,
+      email: 'rob@redwoodjs.com',
+    }))
 
     try {
       await validateUniqueness({ email: 'rob@redwoodjs.com' }, () => {}, {
