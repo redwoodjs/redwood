@@ -1,7 +1,9 @@
-import * as ValidationErrors from '../errors'
-import { validate } from '../validations'
+// import { PrismaClient } from '@prisma/client'
 
-describe('validate', () => {})
+import * as Prisma from '@prisma/client'
+
+import * as ValidationErrors from '../errors'
+import { validate, validateUniqueness } from '../validations'
 
 describe('validate absence', () => {
   it('checks if value is null or undefined', () => {
@@ -612,5 +614,77 @@ describe('validate', () => {
         format: /^\d+$/,
       })
     ).not.toThrow()
+  })
+})
+
+// Mock just enough of PrismaClient that we can test a transaction is running.
+// Prisma.PrismaClient is a class so we need to return a function that returns
+// the actual methods of an instance of the class
+const findFirst = jest.fn()
+// eslint-disable-next-line no-import-assign
+Prisma.PrismaClient = jest.fn(() => ({
+  $transaction: async (func) => func(),
+  findFirst,
+}))
+
+describe('validateUniqueness', () => {
+  beforeEach(() => {
+    findFirst.mockClear()
+  })
+
+  it('throws an error if record is not unique', async () => {
+    findFirst.mockImplementation(() => ({ id: 1, email: 'rob@redwoodjs.com' }))
+
+    try {
+      await validateUniqueness({ email: 'rob@redwoodjs.com' }, () => {})
+    } catch (e) {
+      expect(e).toBeInstanceOf(ValidationErrors.UniquenessValidationError)
+    }
+    expect.assertions(1)
+  })
+
+  it('calls callback if record is unique', async () => {
+    findFirst.mockImplementation(() => null)
+
+    await validateUniqueness({ email: 'rob@redwoodjs.com' }, () => {
+      expect(true).toEqual(true)
+    })
+
+    expect.assertions(1)
+  })
+
+  it('throws with a default error message', async () => {
+    findFirst.mockImplementation(() => ({ id: 2, email: 'rob@redwoodjs.com' }))
+
+    // single field
+    try {
+      await validateUniqueness({ email: 'rob@redwoodjs.com' }, () => {})
+    } catch (e) {
+      expect(e.message).toEqual('email must be unique')
+    }
+
+    // multiple fields
+    try {
+      await validateUniqueness(
+        { name: 'Rob', email: 'rob@redwoodjs.com' },
+        () => {}
+      )
+    } catch (e) {
+      expect(e.message).toEqual('name, email must be unique')
+    }
+    expect.assertions(2)
+  })
+
+  it('throws with a custom error message', async () => {
+    findFirst.mockImplementation(() => ({ id: 3, email: 'rob@redwoodjs.com' }))
+
+    try {
+      await validateUniqueness({ email: 'rob@redwoodjs.com' }, () => {}, {
+        message: 'Email already taken',
+      })
+    } catch (e) {
+      expect(e.message).toEqual('Email already taken')
+    }
+    expect.assertions(1)
   })
 })
