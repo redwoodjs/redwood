@@ -1,5 +1,7 @@
 // Handles validating values in services
 
+import { PrismaClient } from '@prisma/client'
+
 import * as ValidationErrors from './errors'
 
 const VALIDATORS = {
@@ -244,8 +246,21 @@ export const validate = (name, value, directives) => {
 
 // Wraps `callback` in a transaction to guarantee that `field` is not found in
 // the database and that the `callback` is executed before someone else gets a
-// chance to create the same value
-export const validateUniqueness = (field, callback) => {
-  console.info('field', field)
-  console.info('callback', callback)
+// chance to create the same value.
+//
+// validateUniqueness({ email: 'rob@redwoodjs.com' }, () => {
+//   return db.create(data: { email })
+// }, { message: '...'})
+export const validateUniqueness = async (fields, callback, options = {}) => {
+  const db = new PrismaClient()
+
+  return await db.$transaction(async () => {
+    if (await db.findFirst({ where: fields })) {
+      throw new ValidationErrors.UniquenessValidationError(
+        fields,
+        options.message
+      )
+    }
+    return callback.call(this)
+  })
 }

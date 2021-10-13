@@ -161,3 +161,13 @@ export class OddNumericalityValidationError extends ServiceValidationError {
     this.name = 'OddNumericalityValidationError'
   }
 }
+
+export class UniquenessValidationError extends ServiceValidationError {
+  constructor(fields, message) {
+    const names = Object.keys(fields).join(', ')
+    const errorMessage = message ? message : `${names} must be unique`
+
+    super(errorMessage)
+    this.name = 'UniquenessValidationError'
+  }
+}
