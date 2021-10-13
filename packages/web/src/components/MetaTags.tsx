@@ -1,5 +1,3 @@
-import { Fragment } from 'react'
-
 import { Head } from '../index'
 
 type RobotsParams =
@@ -81,39 +79,39 @@ export const MetaTags = (props: MetaTagsProps) => {
     children,
   } = props
   return (
-    <Head>
+    <>
       {title && (
-        <Fragment>
+        <Head>
           <title>{title}</title>
           <meta property="og:title" content={title} key="title" />
           <meta property="twitter:title" content={title} />
-        </Fragment>
+        </Head>
       )}
 
       {description && (
-        <Fragment>
+        <Head>
           <meta name="description" content={description} />
           <meta name="twitter:description" content={description} />
           <meta property="og:description" content={description} />
-        </Fragment>
+        </Head>
       )}
 
       {author && (
-        <Fragment>
+        <Head>
           <meta name="author" content={author} />
           <meta name="twitter:site" content={author} />
           <meta name="twitter:creator" content={author} />
-        </Fragment>
+        </Head>
       )}
 
       {ogUrl && <meta property="og:url" content={ogUrl} />}
 
       {/* en_US by default */}
       {locale && (
-        <Fragment>
+        <Head>
           <html lang={locale} />
           <meta property="og:locale" content={locale} />
-        </Fragment>
+        </Head>
       )}
 
       <meta property="og:type" content={ogType} />
@@ -123,12 +121,12 @@ export const MetaTags = (props: MetaTagsProps) => {
       {contentType && <meta property={`${tag}:type`} content={contentType} />}
 
       {tag === 'og:image' && (
-        <Fragment>
+        <Head>
           {ogWidth && <meta property="image:width" content={ogWidth} />}
           {ogHeight && <meta property="image:height" content={ogHeight} />}
           <meta property="twitter:card" content="summary_large_image" />
           <meta property="twitter:image" content={ogContentUrl} />
-        </Fragment>
+        </Head>
       )}
 
       {robots && (
@@ -139,6 +137,6 @@ export const MetaTags = (props: MetaTagsProps) => {
       )}
 
       {children}
-    </Head>
+    </>
   )
 }
