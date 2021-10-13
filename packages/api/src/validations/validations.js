@@ -3,15 +3,21 @@
 import * as ValidationErrors from './errors'
 
 const VALIDATORS = {
-  // requires that the given value is `null` or `undefined`
+  // Requires that the given value is `null` or `undefined`
+  //
+  // { absence: true }
+  // { absense: { message: '...' } }
   absence: (name, value, options) => {
     if (value != null) {
       throw new ValidationErrors.AbsenceValidationError(name, options.message)
     }
   },
 
-  // requires that the given field be `true` and nothing else, unless an array
+  // Requires that the given field be `true` and nothing else, unless an array
   // of valid values is included with an `in` option
+  //
+  // { acceptance: true }
+  // { acceptance: { in: ['true','1'], message: '...' } }
   acceptance: (name, value, options) => {
     let acceptedValues = [true]
     acceptedValues = acceptedValues.concat(options.in || [])
@@ -24,7 +30,10 @@ const VALIDATORS = {
     }
   },
 
-  // requires that the given value NOT be in the list of possible values in options.in
+  // Requires that the given value NOT be in the list of possible values
+  //
+  // { exclusion: ['foo', 'bar'] }
+  // { exclusion: { in: ['foo','bar'], message: '...' } }
   exclusion: (name, value, options) => {
     let exclusionList = options.in || options
 
@@ -33,6 +42,10 @@ const VALIDATORS = {
     }
   },
 
+  // Requires that the given value match a regular expression
+  //
+  // { format: /^foobar$/ }
+  // { format: { pattern: /^foobar$/, message: '...' } }
   format: (name, value, options) => {
     let pattern = options.pattern || options
 
@@ -41,7 +54,10 @@ const VALIDATORS = {
     }
   },
 
-  // requires that the given value be in the list of possible values in options.in
+  // Requires that the given value be in the list of possible values
+  //
+  // { inclusion: ['foo', 'bar'] }
+  // { inclusion: { in: ['foo','bar'], message: '...' } }
   inclusion: (name, value, options) => {
     let inclusionList = options.in || options
 
@@ -50,6 +66,16 @@ const VALIDATORS = {
     }
   },
 
+  // Requires that the given string be a certain length:
+  //
+  // `min`: must be at least `min` characters
+  // `ma`x`: must be no more than `max` characters
+  // `equal`: must be exactly `equal` characters
+  // `between`: an array consisting of the `min` and `max` length
+  //
+  // { length: { min: 4 } }
+  // { length: { min: 2, max: 16 } }
+  // { length: { between: [2, 16], message: '...' } }
   length: (name, value, options) => {
     const len = value.toString().length
 
@@ -86,6 +112,20 @@ const VALIDATORS = {
     }
   },
 
+  // Requires that number value meets some criteria:
+  //
+  // `integer`: value must be an integer
+  // `lessThan`: value must be less than `lessThan`
+  // `lessThanOrEqual`: value must be less than or equal to `lessThanOrEqual`
+  // `greaterThan`: value must be greater than `greaterThan`
+  // `greaterThanOrEqual`: value must be greater than or equal to `greaterThanOrEqual`
+  // `equal`: value must equal `equal`
+  // `otherThan`: value must be anything other than `otherThan`
+  // `even`: value must be an even number
+  // `odd`: value must be an odd number
+  //
+  // { numericality: { integer: true } }
+  // { numericality: { greaterThan: 3.5, message: '...' } }
   numericality: (name, value, options) => {
     if (options.integer && value !== parseInt(value)) {
       throw new ValidationErrors.IntegerNumericalityValidationError(
@@ -149,7 +189,10 @@ const VALIDATORS = {
     }
   },
 
-  // requires that the given value is not `null` or `undefined`
+  // Requires that the given value is not `null` or `undefined`
+  //
+  // { presence: true }
+  // { presence: { message: '...' } }
   presence: (name, value, options) => {
     if (value == null) {
       throw new ValidationErrors.PresenceValidationError(name, options.message)
@@ -157,12 +200,19 @@ const VALIDATORS = {
   },
 }
 
+// Main validation function, `directives` decides which actual validators
+// above to use
+//
+// validate('firstName', 'Rob', { presence: true, length: { min: 2 } })
 export const validate = (name, value, directives) => {
   for (const [validator, options] of Object.entries(directives)) {
     VALIDATORS[validator].call(this, name, value, options)
   }
 }
 
+// Wraps `callback` in a transaction to guarantee that `field` is not found in
+// the database and that the `callback` is executed before someone else gets a
+// chance to create the same value
 export const validateUniqueness = (field, callback) => {
   console.info('field', field)
   console.info('callback', callback)
