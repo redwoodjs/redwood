@@ -3,9 +3,8 @@
   "description": "",
   "version": "0.0.0",
   "private": true,
-
   "devDependencies": {
-    "all-contributors-cli": "^6.20.0"
+    "all-contributors-cli": "6.20.0"
   },
   "dependencies": {}
 }

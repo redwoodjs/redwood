@@ -33,8 +33,8 @@ export const ParamsProvider: React.FC<Props> = ({ path, children }) => {
     <ParamsContext.Provider
       value={{
         params: {
-          ...pathParams,
           ...searchParams,
+          ...pathParams,
         },
       }}
     >
