@@ -55,6 +55,7 @@ If you want to use the useAuth hook `Sign Up` with Auth0 to default the UI to th
 export type SupportedAuthClients =
   | Auth0
   | AzureActiveDirectory
+  | Cognito
   | GoTrue
   | NetlifyIdentity
   | MagicLink

@@ -8,6 +8,7 @@ import type {
 import { clerk } from './clerk'
 import type { Clerk, ClerkUser } from './clerk'
 import { cognito } from './cognito'
+import type { CognitoUserPool, CognitoUser } from './cognito'
 import { custom } from './custom'
 import type { Custom } from './custom'
 import { dbAuth } from './dbAuth'
@@ -47,6 +48,7 @@ const typesToClients = {
 export type SupportedAuthClients =
   | Auth0
   | AzureActiveDirectory
+  | CognitoUserPool
   | DbAuth
   | GoTrue
   | NetlifyIdentity
@@ -62,6 +64,7 @@ export type SupportedAuthTypes = keyof typeof typesToClients
 
 export type { Auth0User }
 export type { AzureActiveDirectoryUser }
+export type { CognitoUser }
 export type { DbAuth }
 export type { ClerkUser }
 export type { FirebaseUser }
@@ -74,6 +77,7 @@ export type SupportedUserMetadata =
   | Auth0User
   | AzureActiveDirectoryUser
   | ClerkUser
+  | CognitoUser
   | FirebaseUser
   | GoTrueUser
   | MagicUser
@@ -86,9 +90,9 @@ export interface AuthClient {
   login(options?: any): Promise<any>
   logout(options?: any): void | Promise<any>
   signup(options?: any): void | Promise<any>
-  getToken(): Promise<null | string>
+  getToken(options?: any): Promise<null | string>
   /** The user's data from the AuthProvider */
-  getUserMetadata(): Promise<null | SupportedUserMetadata>
+  getUserMetadata(options?: any): Promise<null | SupportedUserMetadata>
   client: SupportedAuthClients
   type: SupportedAuthTypes
 }
