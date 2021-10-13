@@ -1,0 +1,80 @@
+name: Projects Beta Automation
+
+on:
+  issues:
+    types:
+      - opened
+  pull_request:
+    types:
+      - opened
+
+jobs:
+  add_new_issues_to_projects_beta:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get project id
+        env:
+          GITHUB_TOKEN: ${{ secrets.PROJECTS_BETA_AUTOMATION }}
+          ORGANIZATION: redwoodjs
+          PROJECT_NUMBER: 4
+        run: |
+          gh api graphql --header 'GraphQL-Features: projects_next_graphql' -f query='
+            query($org: String!, $number: Int!) {
+              organization(login: $org){
+                projectNext(number: $number) {
+                  id
+                  fields(first:20) {
+                    nodes {
+                      id
+                      name
+                      settings
+                    }
+                  }
+                }
+              }
+            }' -f org=$ORGANIZATION -F number=$PROJECT_NUMBER > project_data.json
+
+          echo 'PROJECT_ID='$(jq '.data.organization.projectNext.id' project_data.json) >> $GITHUB_ENV
+          echo 'STATUS_FIELD_ID='$(jq '.data.organization.projectNext.fields.nodes[] | select(.name=="Status") | .id' project_data.json) >> $GITHUB_ENV
+          echo 'NEW_ISSUES_OPTION_ID='$(jq '.data.organization.projectNext.fields.nodes[] | select(.name=="Status") | .settings | fromjson.options[] | select(.name=="New issues") | .id' project_data.json) >> $GITHUB_ENV
+
+      - name: Add issue to project
+        env:
+          GITHUB_TOKEN: ${{ secrets.PROJECTS_BETA_AUTOMATION }}
+          CONTENT_ID: ${{ github.event[github.event_name].node_id }}
+        run: |
+          item_id="$(gh api graphql --header 'GraphQL-Features: projects_next_graphql' -f query='
+            mutation($project: ID!, $content: ID!) {
+              addProjectNextItem(input: { projectId: $project, contentId: $content }) {
+                projectNextItem {
+                  id
+                }
+              }
+            }' -f project=$PROJECT_ID -f content=$CONTENT_ID --jq '.data.addProjectNextItem.projectNextItem.id')"
+
+          echo 'ITEM_ID='$item_id >> $GITHUB_ENV
+
+      - name: Set status
+        env:
+          GITHUB_TOKEN: ${{ secrets.PROJECTS_BETA_AUTOMATION }}
+        run: |
+          gh api graphql --header 'GraphQL-Features: projects_next_graphql' -f query='
+            mutation (
+              $project: ID!
+              $item: ID!
+              $status_field: ID!
+              $status_value: String!
+            ) {
+              updateProjectNextItemField(input: {
+                projectId: $project
+                itemId: $item
+                fieldId: $status_field
+                value: $status_value
+              }) {
+                projectNextItem {
+                  id
+                }
+              }
+            }' -f project=$PROJECT_ID -f item=$ITEM_ID -f status_field=$STATUS_FIELD_ID -f status_value=$NEW_ISSUES_OPTION_ID --silent
+
