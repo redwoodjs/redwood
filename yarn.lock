@@ -57,6 +57,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@azure/msal-browser@npm:2.18.0":
+  version: 2.18.0
+  resolution: "@azure/msal-browser@npm:2.18.0"
+  dependencies:
+    "@azure/msal-common": ^5.0.1
+  checksum: 9c4f3c9dcfa4a24e0428c5babd22d1af96c1a10e969aa607ed2edc42449f39090b0d5c927352ee0dd1bd597adf0cfa0d7d140e31f6c2969084517aae0081937c
+  languageName: node
+  linkType: hard
+
+"@azure/msal-common@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "@azure/msal-common@npm:5.0.1"
+  dependencies:
+    debug: ^4.1.1
+  checksum: 05676f14d5e7b5cd9e996b6b773644aa081949f3f82cba47b42ecb8e71a686bf6563de1254d6566832ba7bd5bf5bce3221cc3a1078b303a5abc19dd35a3455c3
+  languageName: node
+  linkType: hard
+
 "@babel/cli@npm:7.15.4":
   version: 7.15.4
   resolution: "@babel/cli@npm:7.15.4"
@@ -4170,6 +4188,7 @@ __metadata:
   resolution: "@redwoodjs/auth@workspace:packages/auth"
   dependencies:
     "@auth0/auth0-spa-js": 1.18.0
+    "@azure/msal-browser": 2.18.0
     "@babel/cli": 7.15.4
     "@clerk/clerk-js": 1.33.0
     "@clerk/clerk-sdk-node": 0.5.2
@@ -4182,7 +4201,6 @@ __metadata:
     gotrue-js: 0.9.29
     jest: 27.2.0
     magic-sdk: 6.0.5
-    msal: 1.4.12
     netlify-identity-widget: 1.9.2
     nhost-js-sdk: 3.1.0
     react: 17.0.2
@@ -18378,15 +18396,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"msal@npm:1.4.12":
-  version: 1.4.12
-  resolution: "msal@npm:1.4.12"
-  dependencies:
-    tslib: ^1.9.3
-  checksum: 67a51c8909c0bc5d8507a367cca210b08a469f2332fba6f7294922548ebc0cc79f5b72daf134eb89080b1683699f576d4ffa096adf3409bde4b00387abb5e39f
-  languageName: node
-  linkType: hard
-
 "msw@npm:0.35.0":
   version: 0.35.0
   resolution: "msw@npm:0.35.0"
@@ -24125,7 +24134,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"tslib@npm:^1.10.0, tslib@npm:^1.8.1, tslib@npm:^1.9.0, tslib@npm:^1.9.2, tslib@npm:^1.9.3":
+"tslib@npm:^1.10.0, tslib@npm:^1.8.1, tslib@npm:^1.9.0, tslib@npm:^1.9.2":
   version: 1.14.1
   resolution: "tslib@npm:1.14.1"
   checksum: 69ae09c49eea644bc5ebe1bca4fa4cc2c82b7b3e02f43b84bd891504edf66dbc6b2ec0eef31a957042de2269139e4acff911e6d186a258fb14069cd7f6febce2
