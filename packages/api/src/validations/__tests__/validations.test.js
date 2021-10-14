@@ -135,12 +135,32 @@ describe('validate format', () => {
     })
   })
 
+  it('throws if no pattern given', () => {
+    try {
+      validate('text', 'foobar', { format: { pattern: null } })
+    } catch (e) {
+      expect(e.message).toEqual('No pattern for format validation')
+    }
+    try {
+      validate('text', 'foobar', { format: { pattern: undefined } })
+    } catch (e) {
+      expect(e.message).toEqual('No pattern for format validation')
+    }
+    try {
+      validate('text', 'foobar', { format: { message: 'no pattern' } })
+    } catch (e) {
+      expect(e.message).toEqual('No pattern for format validation')
+    }
+    expect.assertions(3)
+  })
+
   it('throws with a default message', () => {
     try {
       validate('text', 'foobar', { format: /baz/ })
     } catch (e) {
       expect(e.message).toEqual('text is not formatted correctly')
     }
+    expect.assertions(1)
   })
 
   it('throws with a custom message', () => {
@@ -151,6 +171,7 @@ describe('validate format', () => {
     } catch (e) {
       expect(e.message).toEqual('bad format')
     }
+    expect.assertions(1)
   })
 })
 

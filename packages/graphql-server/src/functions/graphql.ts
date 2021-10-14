@@ -12,7 +12,6 @@ import { useDisableIntrospection } from '@envelop/disable-introspection'
 import { useFilterAllowedOperations } from '@envelop/filter-operation-type'
 import { useParserCache } from '@envelop/parser-cache'
 import { useValidationCache } from '@envelop/validation-cache'
-// @ts-ignore
 import { ServiceValidationError } from '@redwoodjs/api'
 import type {
   APIGatewayProxyEvent,

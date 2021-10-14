@@ -4,6 +4,86 @@ import { PrismaClient } from '@prisma/client'
 
 import * as ValidationErrors from './errors'
 
+type AbsenceValidatorOptions =
+  | boolean
+  | {
+      allowEmptyString?: boolean
+      message?: string
+    }
+
+type AcceptanceValidatorOptions =
+  | boolean
+  | {
+      in?: Array<unknown>
+      message?: string
+    }
+
+type ExclusionValidatorOptions =
+  | Array<unknown>
+  | {
+      in?: Array<unknown>
+      message?: string
+    }
+
+type FormatValidatorOptions =
+  | RegExp
+  | {
+      pattern?: RegExp
+      message?: string
+    }
+
+type InclusionValidatorOptions =
+  | Array<unknown>
+  | {
+      in?: Array<unknown>
+      message?: string
+    }
+
+type LengthValidatorOptions = {
+  min?: number
+  max?: number
+  equal?: number
+  between?: Array<number>
+  message?: string
+}
+
+type NumericalityValidatorOptions = {
+  integer?: boolean
+  lessThan?: number
+  lessThanOrEqual?: number
+  greaterThan?: number
+  greaterThanOrEqual?: number
+  equal?: number
+  otherThan?: number
+  even?: boolean
+  odd?: boolean
+  message?: string
+}
+
+type PresenceValidatorOptions =
+  | boolean
+  | {
+      allowNull?: boolean
+      allowUndefined?: boolean
+      allowEmptyString?: boolean
+      message?: string
+    }
+
+type ValidateDirectives = {
+  absence?: AbsenceValidatorOptions
+  acceptance?: AcceptanceValidatorOptions
+  exclusion?: ExclusionValidatorOptions
+  format?: FormatValidatorOptions
+  inclusion?: InclusionValidatorOptions
+  length?: LengthValidatorOptions
+  numericality?: NumericalityValidatorOptions
+  presence?: PresenceValidatorOptions
+}
+
+type UniquenessValidatorOptions = {
+  message?: string
+}
+
 const VALIDATORS = {
   // Requires that the given value is `null` or `undefined`
   //
@@ -11,18 +91,24 @@ const VALIDATORS = {
   //
   // { absence: true }
   // { absense: { allowEmptyString: true, message: '...' } }
-  absence: (name, value, options) => {
+  absence: (
+    name: string,
+    value: string,
+    options: boolean | AbsenceValidatorOptions
+  ) => {
     const absenceOptions = {
       allowEmptyString: false,
     }
     Object.assign(absenceOptions, options)
+    const errorMessage =
+      typeof options === 'object' ? options.message : undefined
 
     if (value === '') {
       if (!absenceOptions.allowEmptyString) {
-        throw new ValidationErrors.AbsenceValidationError(name, options.message)
+        throw new ValidationErrors.AbsenceValidationError(name, errorMessage)
       }
     } else if (value != null) {
-      throw new ValidationErrors.AbsenceValidationError(name, options.message)
+      throw new ValidationErrors.AbsenceValidationError(name, errorMessage)
     }
   },
 
@@ -31,15 +117,23 @@ const VALIDATORS = {
   //
   // { acceptance: true }
   // { acceptance: { in: ['true','1'], message: '...' } }
-  acceptance: (name, value, options) => {
-    let acceptedValues = [true]
-    acceptedValues = acceptedValues.concat(options.in || [])
+  acceptance: (
+    name: string,
+    value: unknown,
+    options: AcceptanceValidatorOptions
+  ) => {
+    let acceptedValues: Array<unknown>
+
+    if (typeof options === 'object') {
+      acceptedValues = options.in || []
+    } else {
+      acceptedValues = [true]
+    }
+    const errorMessage =
+      typeof options === 'object' ? options.message : undefined
 
     if (!acceptedValues.includes(value)) {
-      throw new ValidationErrors.AcceptanceValidationError(
-        name,
-        options.message
-      )
+      throw new ValidationErrors.AcceptanceValidationError(name, errorMessage)
     }
   },
 
@@ -47,11 +141,17 @@ const VALIDATORS = {
   //
   // { exclusion: ['foo', 'bar'] }
   // { exclusion: { in: ['foo','bar'], message: '...' } }
-  exclusion: (name, value, options) => {
-    let exclusionList = options.in || options
+  exclusion: (
+    name: string,
+    value: unknown,
+    options: ExclusionValidatorOptions
+  ) => {
+    const exclusionList =
+      (Array.isArray(options) && options) || options.in || []
+    const errorMessage = Array.isArray(options) ? undefined : options.message
 
     if (exclusionList.includes(value)) {
-      throw new ValidationErrors.ExclusionValidationError(name, options.message)
+      throw new ValidationErrors.ExclusionValidationError(name, errorMessage)
     }
   },
 
@@ -59,11 +159,19 @@ const VALIDATORS = {
   //
   // { format: /^foobar$/ }
   // { format: { pattern: /^foobar$/, message: '...' } }
-  format: (name, value, options) => {
-    let pattern = options.pattern || options
+  format: (name: string, value: unknown, options: FormatValidatorOptions) => {
+    const pattern = options instanceof RegExp ? options : options.pattern
+    const errorMessage = options instanceof RegExp ? undefined : options.message
 
-    if (!pattern.test(value)) {
-      throw new ValidationErrors.FormatValidationError(name, options.message)
+    if (pattern == null) {
+      throw new ValidationErrors.FormatValidationError(
+        name,
+        'No pattern for format validation'
+      )
+    }
+
+    if (!pattern.test(String(value))) {
+      throw new ValidationErrors.FormatValidationError(name, errorMessage)
     }
   },
 
@@ -71,11 +179,17 @@ const VALIDATORS = {
   //
   // { inclusion: ['foo', 'bar'] }
   // { inclusion: { in: ['foo','bar'], message: '...' } }
-  inclusion: (name, value, options) => {
-    let inclusionList = options.in || options
+  inclusion: (
+    name: string,
+    value: unknown,
+    options: InclusionValidatorOptions
+  ) => {
+    const inclusionList =
+      (Array.isArray(options) && options) || options.in || []
+    const errorMessage = Array.isArray(options) ? undefined : options.message
 
     if (!inclusionList.includes(value)) {
-      throw new ValidationErrors.InclusionValidationError(name, options.message)
+      throw new ValidationErrors.InclusionValidationError(name, errorMessage)
     }
   },
 
@@ -89,8 +203,8 @@ const VALIDATORS = {
   // { length: { min: 4 } }
   // { length: { min: 2, max: 16 } }
   // { length: { between: [2, 16], message: '...' } }
-  length: (name, value, options) => {
-    const len = value.toString().length
+  length: (name: string, value: unknown, options: LengthValidatorOptions) => {
+    const len = String(value).length
 
     if (options.min && len < options.min) {
       throw new ValidationErrors.MinLengthValidationError(
@@ -139,8 +253,12 @@ const VALIDATORS = {
   //
   // { numericality: { integer: true } }
   // { numericality: { greaterThan: 3.5, message: '...' } }
-  numericality: (name, value, options) => {
-    if (options.integer && value !== parseInt(value)) {
+  numericality: (
+    name: string,
+    value: number,
+    options: NumericalityValidatorOptions
+  ) => {
+    if (options.integer && !Number.isInteger(value)) {
       throw new ValidationErrors.IntegerNumericalityValidationError(
         name,
         options.message
@@ -214,22 +332,28 @@ const VALIDATORS = {
   //
   // { presence: true }
   // { presence: { allowEmptyString: false, message: '...' } }
-  presence: (name, value, options) => {
+  presence: (
+    name: string,
+    value: string,
+    options: PresenceValidatorOptions
+  ) => {
     const presenceOptions = {
       allowNull: false,
       allowUndefined: false,
       allowEmptyString: true,
     }
     Object.assign(presenceOptions, options)
+    const errorMessage =
+      typeof options === 'object' ? options.message : undefined
 
     if (!presenceOptions.allowNull && value === null) {
-      throw new ValidationErrors.PresenceValidationError(name, options.message)
+      throw new ValidationErrors.PresenceValidationError(name, errorMessage)
     }
     if (!presenceOptions.allowUndefined && value === undefined) {
-      throw new ValidationErrors.PresenceValidationError(name, options.message)
+      throw new ValidationErrors.PresenceValidationError(name, errorMessage)
     }
     if (!presenceOptions.allowEmptyString && value === '') {
-      throw new ValidationErrors.PresenceValidationError(name, options.message)
+      throw new ValidationErrors.PresenceValidationError(name, errorMessage)
     }
   },
 }
@@ -238,9 +362,15 @@ const VALIDATORS = {
 // above to use
 //
 // validate('firstName', 'Rob', { presence: true, length: { min: 2 } })
-export const validate = (name, value, directives) => {
+export const validate = (
+  name: string,
+  value: unknown,
+  directives: ValidateDirectives
+) => {
   for (const [validator, options] of Object.entries(directives)) {
-    VALIDATORS[validator].call(this, name, value, options)
+    // eslint-disable-next-line
+    // @ts-ignore-next-line
+    VALIDATORS[validator as keyof typeof VALIDATORS](name, value, options)
   }
 }
 
@@ -251,7 +381,11 @@ export const validate = (name, value, directives) => {
 // validateUniqueness({ email: 'rob@redwoodjs.com' }, () => {
 //   return db.create(data: { email })
 // }, { message: '...'})
-export const validateUniqueness = async (fields, callback, options = {}) => {
+export const validateUniqueness = async (
+  fields: Record<string, unknown>,
+  callback: () => Promise<any>,
+  options: UniquenessValidatorOptions = {}
+) => {
   const db = new PrismaClient()
 
   return await db.$transaction(async () => {
