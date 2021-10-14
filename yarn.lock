@@ -3548,6 +3548,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@magic-ext/oauth@npm:^0.10.0":
+  version: 0.10.0
+  resolution: "@magic-ext/oauth@npm:0.10.0"
+  dependencies:
+    "@magic-sdk/types": ^5.1.0
+    crypto-js: ^3.3.0
+  checksum: e90816be63a3dea999d2a1d3ebdce3a11f8403e219532ca3b318a49ce281e85685b7ee79da995b99a651f2403612a24565f2a733305fa3e3ffcd9b000100ae68
+  languageName: node
+  linkType: hard
+
+"@magic-ext/webauthn@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "@magic-ext/webauthn@npm:0.2.0"
+  checksum: d6c60fd10e50718a22f46d4e7af68111c0930e3b0c120b845096edfa6bb79d420a4e010739b089f819938a662148dddca8285d6d25ad0236e8cc0df391e24967
+  languageName: node
+  linkType: hard
+
 "@magic-sdk/commons@npm:^2.0.5":
   version: 2.1.0
   resolution: "@magic-sdk/commons@npm:2.1.0"
@@ -4174,6 +4191,8 @@ __metadata:
     "@clerk/clerk-js": 1.33.0
     "@clerk/clerk-sdk-node": 0.5.2
     "@clerk/types": 1.13.0
+    "@magic-ext/oauth": ^0.10.0
+    "@magic-ext/webauthn": ^0.2.0
     "@supabase/supabase-js": 1.22.6
     "@types/netlify-identity-widget": 1.9.2
     "@types/react": 17.0.21
@@ -10495,6 +10514,13 @@ __metadata:
   version: 4.1.1
   resolution: "crypto-js@npm:4.1.1"
   checksum: 50cc66a35f2738171d9a6d80c85ba7d00cb6440b756db035ba9ccd03032c0a803029a62969ecd4c844106c980af87687c64b204dd967989379c4f354fb482d37
+  languageName: node
+  linkType: hard
+
+"crypto-js@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "crypto-js@npm:3.3.0"
+  checksum: 10b5d91bdc85095df9be01f9d0d954b8a3aba6202f143efa6215b8b3d5dd984e0883e10aeff792ef4a51b77cd4442320242b496acf6dce5069d0e0fc2e1d75d2
   languageName: node
   linkType: hard
 

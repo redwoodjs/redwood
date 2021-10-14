@@ -13,6 +13,8 @@
     "@clerk/clerk-js": "1.33.0",
     "@clerk/clerk-sdk-node": "0.5.2",
     "@clerk/types": "1.13.0",
+    "@magic-ext/oauth": "^0.10.0",
+    "@magic-ext/webauthn": "^0.2.0",
     "@supabase/supabase-js": "1.22.6",
     "@types/netlify-identity-widget": "1.9.2",
     "@types/react": "17.0.21",
