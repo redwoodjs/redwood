@@ -91,7 +91,19 @@ const copyFrameworkPackages = () => {
     process.exit(1)
   }
 }
-
+const SetYarnClassic = () => {
+  try {
+    execa.sync('yarn set version classic', {
+      cwd: REDWOOD_PROJECT_DIRECTORY,
+      shell: true,
+      stdio: 'inherit',
+    })
+  } catch (e) {
+    console.error('Error: Could not set yarn v1')
+    console.error(e)
+    process.exit(1)
+  }
+}
 const runYarnInstall = () => {
   try {
     execa.sync('yarn install', {
@@ -204,6 +216,7 @@ const tasks = [
   buildFramework && buildRedwoodFramework,
   createProject && createRedwoodJSApp,
   copyFramework && addFrameworkDepsToProject,
+  copyFramework && SetYarnClassic,
   copyFramework && runYarnInstall,
   copyFramework && copyFrameworkPackages,
   !typescript && convertProjectToJavaScript,
