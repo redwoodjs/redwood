@@ -9,7 +9,7 @@ on:
       - opened
 
 jobs:
-  add_new_issues_to_projects_beta:
+  add_incoming_to_projects_beta:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,6 +25,7 @@ jobs:
                   nodes {
                     id
                     name
+                    settings
                   }
                 }
               }
@@ -33,14 +34,15 @@ jobs:
 
           echo 'PROJECT_ID='$(jq '.data.organization.projectNext.id' project_data.json) >> $GITHUB_ENV
           echo 'STATUS_FIELD_ID='$(jq '.data.organization.projectNext.fields.nodes[] | select(.name=="Status") | .id' project_data.json) >> $GITHUB_ENV
+          echo 'NEW_ISSUES_OPTION_ID='$(jq '.data.organization.projectNext.fields.nodes[] | select(.name=="Status") | .settings | fromjson.options[] | select(.name=="New issues") | .id' project_data.json) >> $GITHUB_ENV
 
       - name: Set env var for issue
-        if: github.event_name == 'issue'
-        run: echo 'CONTENT_ID='${{ github.event.issue.node_id }} >> $GITHUB_ENV
+        if: github.event_name == 'issues'
+        run: echo 'CONTENT_ID="${{ github.event.issue.node_id }}"' >> $GITHUB_ENV
 
       - name: Set env var for pull request
         if: github.event_name == 'pull_request_target'
-        run: echo 'CONTENT_ID='${{ github.event.pull_request.node_id }} >> $GITHUB_ENV
+        run: echo 'CONTENT_ID="${{ github.event.pull_request.node_id }}"' >> $GITHUB_ENV
 
       - name: Add to project
         env:
@@ -54,25 +56,25 @@ jobs:
                 }
               }
             }' -f projectId=$PROJECT_ID -f contentId=$CONTENT_ID --jq '.data.addProjectNextItem.projectNextItem.id')"
-          
+
           echo 'ITEM_ID='$item_id >> $GITHUB_ENV
-          
+
       - name: Set status to "New issues"
         env:
           GITHUB_TOKEN: ${{ secrets.PROJECTS_BETA_AUTOMATION }}
         run: |
           gh api graphql --header 'GraphQL-Features: projects_next_graphql' -f query='
-            mutation ($projectId: ID!, $itemId: ID!, $statusFieldId: ID!) {
+            mutation ($projectId: ID!, $itemId: ID!, $statusFieldId: ID!, $newIssuesOptionId: String!) {
               updateProjectNextItemField(
                 input: {
                   projectId: $projectId
                   itemId: $itemId
                   fieldId: $statusFieldId
-                  value: "New issues"
+                  value: $newIssuesOptionId
                 }
               ) {
                 projectNextItem {
                   id
                 }
               }
-            }' -f projectId=$PROJECT_ID -f itemId=$ITEM_ID -f statusFieldId=$STATUS_FIELD_ID
+            }' -f projectId=$PROJECT_ID -f itemId=$ITEM_ID -f statusFieldId=$STATUS_FIELD_ID -f newIssuesOptionId=${{ env.NEW_ISSUES_OPTION_ID }}
