@@ -91,6 +91,13 @@ export class PresenceValidationError extends ServiceValidationError {
   }
 }
 
+export class TypeNumericalityValidationError extends ServiceValidationError {
+  constructor(name: string) {
+    super(`${name} must be a number`)
+    this.name = 'TypeNumericalityValidationError'
+  }
+}
+
 export class IntegerNumericalityValidationError extends ServiceValidationError {
   constructor(name: string, message = `${name} is not an integer`) {
     super(message)

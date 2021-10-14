@@ -333,10 +333,22 @@ describe('validate length', () => {
 })
 
 describe('validate numericality', () => {
-  it('checks if value is an integer', () => {
+  it('checks if value is a number', () => {
+    expect(() => validate('number', 'a', { numericality: true })).toThrow(
+      ValidationErrors.TypeNumericalityValidationError
+    )
+    expect(() => validate('number', [1], { numericality: true })).toThrow(
+      ValidationErrors.TypeNumericalityValidationError
+    )
     expect(() =>
-      validate('number', 'a', { numericality: { integer: true } })
-    ).toThrow(ValidationErrors.IntegerNumericalityValidationError)
+      validate('number', { foo: 1 }, { numericality: true })
+    ).toThrow(ValidationErrors.TypeNumericalityValidationError)
+
+    expect(() => validate('number', 42, { numericality: true })).not.toThrow()
+    expect(() => validate('number', 42.5, { numericality: true })).not.toThrow()
+  })
+
+  it('checks if value is an integer', () => {
     expect(() =>
       validate('number', 1.2, { numericality: { integer: true } })
     ).toThrow(ValidationErrors.IntegerNumericalityValidationError)

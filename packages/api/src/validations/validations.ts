@@ -47,18 +47,20 @@ type LengthValidatorOptions = {
   message?: string
 }
 
-type NumericalityValidatorOptions = {
-  integer?: boolean
-  lessThan?: number
-  lessThanOrEqual?: number
-  greaterThan?: number
-  greaterThanOrEqual?: number
-  equal?: number
-  otherThan?: number
-  even?: boolean
-  odd?: boolean
-  message?: string
-}
+type NumericalityValidatorOptions =
+  | boolean
+  | {
+      integer?: boolean
+      lessThan?: number
+      lessThanOrEqual?: number
+      greaterThan?: number
+      greaterThanOrEqual?: number
+      equal?: number
+      otherThan?: number
+      even?: boolean
+      odd?: boolean
+      message?: string
+    }
 
 type PresenceValidatorOptions =
   | boolean
@@ -93,7 +95,7 @@ const VALIDATORS = {
   // { absense: { allowEmptyString: true, message: '...' } }
   absence: (
     name: string,
-    value: string,
+    value: unknown,
     options: boolean | AbsenceValidatorOptions
   ) => {
     const absenceOptions = {
@@ -255,68 +257,77 @@ const VALIDATORS = {
   // { numericality: { greaterThan: 3.5, message: '...' } }
   numericality: (
     name: string,
-    value: number,
+    value: unknown,
     options: NumericalityValidatorOptions
   ) => {
-    if (options.integer && !Number.isInteger(value)) {
-      throw new ValidationErrors.IntegerNumericalityValidationError(
-        name,
-        options.message
-      )
+    if (typeof value !== 'number') {
+      throw new ValidationErrors.TypeNumericalityValidationError(name)
     }
-    if (options.lessThan && value >= options.lessThan) {
-      throw new ValidationErrors.LessThanNumericalityValidationError(
-        name,
-        options.lessThan,
-        options.message
-      )
-    }
-    if (options.lessThanOrEqual && value > options.lessThanOrEqual) {
-      throw new ValidationErrors.LessThanOrEqualNumericalityValidationError(
-        name,
-        options.lessThanOrEqual,
-        options.message
-      )
-    }
-    if (options.greaterThan && value <= options.greaterThan) {
-      throw new ValidationErrors.GreaterThanNumericalityValidationError(
-        name,
-        options.greaterThan,
-        options.message
-      )
-    }
-    if (options.greaterThanOrEqual && value < options.greaterThanOrEqual) {
-      throw new ValidationErrors.GreaterThanOrEqualNumericalityValidationError(
-        name,
-        options.greaterThanOrEqual,
-        options.message
-      )
-    }
-    if (options.equal && value !== options.equal) {
-      throw new ValidationErrors.EqualNumericalityValidationError(
-        name,
-        options.equal,
-        options.message
-      )
-    }
-    if (options.otherThan && value === options.otherThan) {
-      throw new ValidationErrors.OtherThanNumericalityValidationError(
-        name,
-        options.otherThan,
-        options.message
-      )
-    }
-    if (options.even && value % 2 !== 0) {
-      throw new ValidationErrors.EvenNumericalityValidationError(
-        name,
-        options.message
-      )
-    }
-    if (options.odd && value % 2 !== 1) {
-      throw new ValidationErrors.OddNumericalityValidationError(
-        name,
-        options.message
-      )
+
+    // if there are no options, all we can do is check that value is a number
+    if (typeof options === 'boolean') {
+      return
+    } else {
+      if (options.integer && !Number.isInteger(value)) {
+        throw new ValidationErrors.IntegerNumericalityValidationError(
+          name,
+          options.message
+        )
+      }
+      if (options.lessThan && value >= options.lessThan) {
+        throw new ValidationErrors.LessThanNumericalityValidationError(
+          name,
+          options.lessThan,
+          options.message
+        )
+      }
+      if (options.lessThanOrEqual && value > options.lessThanOrEqual) {
+        throw new ValidationErrors.LessThanOrEqualNumericalityValidationError(
+          name,
+          options.lessThanOrEqual,
+          options.message
+        )
+      }
+      if (options.greaterThan && value <= options.greaterThan) {
+        throw new ValidationErrors.GreaterThanNumericalityValidationError(
+          name,
+          options.greaterThan,
+          options.message
+        )
+      }
+      if (options.greaterThanOrEqual && value < options.greaterThanOrEqual) {
+        throw new ValidationErrors.GreaterThanOrEqualNumericalityValidationError(
+          name,
+          options.greaterThanOrEqual,
+          options.message
+        )
+      }
+      if (options.equal && value !== options.equal) {
+        throw new ValidationErrors.EqualNumericalityValidationError(
+          name,
+          options.equal,
+          options.message
+        )
+      }
+      if (options.otherThan && value === options.otherThan) {
+        throw new ValidationErrors.OtherThanNumericalityValidationError(
+          name,
+          options.otherThan,
+          options.message
+        )
+      }
+      if (options.even && value % 2 !== 0) {
+        throw new ValidationErrors.EvenNumericalityValidationError(
+          name,
+          options.message
+        )
+      }
+      if (options.odd && value % 2 !== 1) {
+        throw new ValidationErrors.OddNumericalityValidationError(
+          name,
+          options.message
+        )
+      }
     }
   },
 
@@ -334,7 +345,7 @@ const VALIDATORS = {
   // { presence: { allowEmptyString: false, message: '...' } }
   presence: (
     name: string,
-    value: string,
+    value: unknown,
     options: PresenceValidatorOptions
   ) => {
     const presenceOptions = {
@@ -368,8 +379,6 @@ export const validate = (
   directives: ValidateDirectives
 ) => {
   for (const [validator, options] of Object.entries(directives)) {
-    // eslint-disable-next-line
-    // @ts-ignore-next-line
     VALIDATORS[validator as keyof typeof VALIDATORS](name, value, options)
   }
 }
