@@ -92,7 +92,7 @@ const VALIDATORS = {
   // `allowEmptyString`: if true, counts "" as being absent (does not throw)
   //
   // { absence: true }
-  // { absense: { allowEmptyString: true, message: '...' } }
+  // { absence: { allowEmptyString: true, message: '...' } }
   absence: (
     name: string,
     value: unknown,
@@ -198,7 +198,7 @@ const VALIDATORS = {
   // Requires that the given string be a certain length:
   //
   // `min`: must be at least `min` characters
-  // `ma`x`: must be no more than `max` characters
+  // `max`: must be no more than `max` characters
   // `equal`: must be exactly `equal` characters
   // `between`: an array consisting of the `min` and `max` length
   //
@@ -253,6 +253,7 @@ const VALIDATORS = {
   // `even`: value must be an even number
   // `odd`: value must be an odd number
   //
+  // { numericality: true }
   // { numericality: { integer: true } }
   // { numericality: { greaterThan: 3.5, message: '...' } }
   numericality: (
