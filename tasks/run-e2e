@@ -216,7 +216,7 @@ const tasks = [
   buildFramework && buildRedwoodFramework,
   createProject && createRedwoodJSApp,
   copyFramework && addFrameworkDepsToProject,
-  copyFramework && SetYarnClassic,
+  copyFramework && setYarnClassic,
   copyFramework && runYarnInstall,
   copyFramework && copyFrameworkPackages,
   !typescript && convertProjectToJavaScript,
