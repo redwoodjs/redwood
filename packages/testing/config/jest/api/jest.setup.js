@@ -34,7 +34,7 @@ const teardown = async () => {
   )
 
   for (const model of prismaModelNames) {
-    await db.$queryRaw(`DELETE FROM "${model}"`)
+    await db.$executeRawUnsafe(`DELETE from "${model}"`)
   }
 }
 

@@ -1,7 +1,7 @@
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
 import { db } from './db'
 
-// The session object sent in as the first arugment to getCurrentUser() will
+// The session object sent in as the first argument to getCurrentUser() will
 // have a single key `id` containing the unique ID of the logged in user
 // (whatever field you set as `authFields.id` in your auth function config).
 // You'll need to update the call to `db` below if you use a different model
