@@ -2,6 +2,7 @@ import { execSync } from 'child_process'
 
 import camelcase from 'camelcase'
 import Listr from 'listr'
+import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 
 import { getConfig, generate as generateTypes } from '@redwoodjs/internal'
@@ -134,9 +135,9 @@ export const files = ({ name, tests, stories, typescript, ...rest }) => {
 
 export const routes = ({ name, path }) => {
   return [
-    `<Route path="${path}" page={${pascalcase(name)}Page} name="${camelcase(
-      name
-    )}" />`,
+    `<Route path="${path}" page={${pascalcase(
+      paramCase(name)
+    )}Page} name="${camelcase(name)}" />`,
   ]
 }
 
