@@ -40,11 +40,7 @@ describe('The Redwood Logger - Basic Scaffold CRUD Logging', () => {
     cy.contains('Loading...').should('not.exist')
 
     cy.waitUntil(
-      () =>
-        cy.readFile(LOG_PATH).then((str) => {
-          console.log(str)
-          return str.includes('> in posts()')
-        }),
+      () => cy.readFile(LOG_PATH).should('contain', '> in posts()'),
       { interval: 2000, timeout: 2000 }
     )
 
@@ -55,10 +51,7 @@ describe('The Redwood Logger - Basic Scaffold CRUD Logging', () => {
     cy.get('button').contains('Save').click()
 
     cy.waitUntil(() =>
-      cy.readFile(LOG_PATH).then((str) => {
-        console.log(str)
-        return str.includes('> in createPost()')
-      })
+      cy.readFile(LOG_PATH).should('contain', '> in createPost()')
     )
 
     // EDIT
@@ -67,19 +60,13 @@ describe('The Redwood Logger - Basic Scaffold CRUD Logging', () => {
     cy.get('button').contains('Save').click()
 
     cy.waitUntil(() =>
-      cy.readFile(LOG_PATH).then((str) => {
-        console.log(str)
-        return str.includes('> in updatePost()')
-      })
+      cy.readFile(LOG_PATH).should('contain', '> in updatePost()')
     )
 
     // DELETE
     cy.contains('Delete').click()
     cy.waitUntil(() =>
-      cy.readFile(LOG_PATH).then((str) => {
-        console.log(str)
-        return str.includes('> in deletePost()')
-      })
+      cy.readFile(LOG_PATH).should('contain', '> in deletePost()')
     )
   })
 
@@ -102,13 +89,8 @@ describe('The Redwood Logger - Basic Scaffold CRUD Logging', () => {
 
     cy.waitUntil(
       () =>
-        cy.readFile(LOG_PATH).then((str) => {
-          console.log(str)
-          return (
-            str.includes('Query performed in ') &&
-            !str.includes('Slow Query performed in ')
-          )
-        }),
+        cy.readFile(LOG_PATH).should('contain', 'Query performed in ') &&
+        cy.readFile(LOG_PATH).should('not.contain', 'Slow Query performed in '),
       { interval: 2000, timeout: 2000 }
     )
 
@@ -129,11 +111,7 @@ describe('The Redwood Logger - Basic Scaffold CRUD Logging', () => {
     cy.contains('Loading...').should('not.exist')
 
     cy.waitUntil(
-      () =>
-        cy.readFile(LOG_PATH).then((str) => {
-          console.log(str)
-          return str.includes('Slow Query performed in ')
-        }),
+      () => cy.readFile(LOG_PATH).should('contain', 'Slow Query performed in '),
       { interval: 2000, timeout: 2000 }
     )
   })
