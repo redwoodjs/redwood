@@ -1,5 +1,5 @@
 import * as ValidationErrors from '../errors'
-import { validate, validateUniqueness } from '../validations'
+import { validate, validateUniqueness, validateWith } from '../validations'
 
 describe('validate absence', () => {
   it('checks if value is null or undefined', () => {
@@ -643,6 +643,39 @@ describe('validate', () => {
         format: /^\d+$/,
       })
     ).not.toThrow()
+  })
+})
+
+describe('validateWith', () => {
+  it('runs a custom function as a validation', () => {
+    const validateFunction = jest.fn()
+    validateWith('email', 'rob@redwoodjs.com', validateFunction)
+
+    expect(validateFunction).toBeCalledWith('email', 'rob@redwoodjs.com')
+  })
+
+  it('catches errors and raises ServiceValidationError', () => {
+    // Error instance
+    try {
+      validateWith('email', 'rob@redwoodjs.com', () => {
+        throw new Error('Invalid value')
+      })
+    } catch (e) {
+      expect(e instanceof ValidationErrors.ServiceValidationError).toEqual(true)
+      expect(e.message).toEqual('Invalid value')
+    }
+
+    // Error string
+    try {
+      validateWith('email', 'rob@redwoodjs.com', () => {
+        throw 'Bad input'
+      })
+    } catch (e) {
+      expect(e instanceof ValidationErrors.ServiceValidationError).toEqual(true)
+      expect(e.message).toEqual('Bad input')
+    }
+
+    expect.assertions(4)
   })
 })
 

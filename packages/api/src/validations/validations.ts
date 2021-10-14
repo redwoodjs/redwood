@@ -384,6 +384,20 @@ export const validate = (
   }
 }
 
+// Run a custom validation function which should either throw or return nothing
+export const validateWith = (
+  name: string,
+  value: unknown,
+  func: (name: string, value: unknown) => void
+) => {
+  try {
+    func(name, value)
+  } catch (e) {
+    const message = (e as Error).message || (e as string)
+    throw new ValidationErrors.ServiceValidationError(message)
+  }
+}
+
 // Wraps `callback` in a transaction to guarantee that `field` is not found in
 // the database and that the `callback` is executed before someone else gets a
 // chance to create the same value.
