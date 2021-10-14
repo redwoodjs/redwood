@@ -1,6 +1,5 @@
-import type { Magic, MagicUserMetadata } from 'magic-sdk'
-
 import { OAuthRedirectConfiguration } from '@magic-ext/oauth'
+import type { Magic, MagicUserMetadata } from 'magic-sdk'
 
 import type { AuthClient } from './'
 
@@ -11,22 +10,24 @@ export interface AuthClientMagicLink extends AuthClient {
   signup(options: LoginProps): Promise<any>
 }
 
-type SocialProps = { type: 'social'; } & OAuthRedirectConfiguration
+type SocialProps = { type: 'social' } & OAuthRedirectConfiguration
 
-type WebAuthnProps = {
-  type: 'webauthn';
-  authType: 'login';
-  username: string;
-} | {
-  type: 'webauthn';
-  authType: 'signup';
-  username: string;
-  nickname: string;
-}
+type WebAuthnProps =
+  | {
+      type: 'webauthn'
+      authType: 'login'
+      username: string
+    }
+  | {
+      type: 'webauthn'
+      authType: 'signup'
+      username: string
+      nickname: string
+    }
 
 type LoginProps =
-  | { type: 'email'; email: string; showUI?: boolean; }
-  | { type: 'phoneNumber'; phoneNumber: string; }
+  | { type: 'email'; email: string; showUI?: boolean }
+  | { type: 'phoneNumber'; phoneNumber: string }
   | SocialProps
   | WebAuthnProps
 
@@ -36,23 +37,22 @@ export const magicLink = (client: MagicLink): AuthClientMagicLink => {
 
   const authFlow = async (options: LoginProps) => {
     switch (options.type) {
-      case "email": {
+      case 'email': {
         const { email, showUI } = options
         return await client.auth.loginWithMagicLink({ email, showUI })
       }
-      case "phoneNumber": {
+      case 'phoneNumber': {
         const { phoneNumber } = options
         return await client.auth.loginWithSMS({
-          phoneNumber
+          phoneNumber,
         })
       }
-      case "social": {
-        const { provider,
-          redirectURI,
-          scope,
-          loginHint } = options
+      case 'social': {
+        const { provider, redirectURI, scope, loginHint } = options
         if (!client.oauth) {
-          console.error("please install the OAuth2 NPM Package https://magic.link/docs/login-methods/social-logins/oauth-implementation/web")
+          console.error(
+            'please install the OAuth2 NPM Package https://magic.link/docs/login-methods/social-logins/oauth-implementation/web'
+          )
         }
         //@ts-ignore
         return await client.oauth.loginWithRedirect({
@@ -60,34 +60,37 @@ export const magicLink = (client: MagicLink): AuthClientMagicLink => {
           redirectURI,
           scope,
           loginHint,
-        });
+        })
       }
-      case "webauthn": {
+      case 'webauthn': {
         if (!client.oauth) {
-          console.error("please install the OAuth2 NPM Package https://magic.link/docs/login-methods/social-logins/oauth-implementation/web")
+          console.error(
+            'please install the OAuth2 NPM Package https://magic.link/docs/login-methods/social-logins/oauth-implementation/web'
+          )
         }
         switch (options.authType) {
           case 'login': {
-            const { username, } = options
+            const { username } = options
+
             //@ts-ignore
             return await client.webauthn.login({
               username,
-            });
+            })
           }
           case 'signup': {
-            const { username,
-              nickname } = options
+            const { username, nickname } = options
+
             //@ts-ignore
             return await client.webauthn.registerNewUser({
               username,
               nickname,
-            });
+            })
           }
         }
       }
       default:
         console.error(`please provide an "type"`)
-        break;
+        break
     }
   }
 
