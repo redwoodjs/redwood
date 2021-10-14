@@ -64,7 +64,7 @@ export class MaxLengthValidationError extends ServiceValidationError {
 
 export class EqualLengthValidationError extends ServiceValidationError {
   constructor(
-    name: sring,
+    name: string,
     value: number,
     message = `${name} does not have exactly ${value} characters`
   ) {
