@@ -39,7 +39,7 @@ jobs:
         run: echo 'CONTENT_ID='${{ github.event.issue.node_id }} >> $GITHUB_ENV
 
       - name: Set env var for pull request
-        if: github.event_name == 'pull_request_target:'
+        if: github.event_name == 'pull_request_target'
         run: echo 'CONTENT_ID='${{ github.event.pull_request.node_id }} >> $GITHUB_ENV
 
       - name: Add to project
