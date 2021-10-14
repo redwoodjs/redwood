@@ -1,5 +1,7 @@
 import type { Magic, MagicUserMetadata } from 'magic-sdk'
+
 import { OAuthRedirectConfiguration } from '@magic-ext/oauth'
+
 import type { AuthClient } from './'
 
 export type MagicLink = Magic
@@ -32,20 +34,20 @@ export const magicLink = (client: MagicLink): AuthClientMagicLink => {
   let token: string | null
   let expireTime = 0
 
-  let authFlow = async (options: LoginProps) => {
+  const authFlow = async (options: LoginProps) => {
     switch (options.type) {
       case "email": {
-        let { email, showUI } = options
+        const { email, showUI } = options
         return await client.auth.loginWithMagicLink({ email, showUI })
       }
       case "phoneNumber": {
-        let { phoneNumber } = options
+        const { phoneNumber } = options
         return await client.auth.loginWithSMS({
           phoneNumber
         })
       }
       case "social": {
-        let { provider,
+        const { provider,
           redirectURI,
           scope,
           loginHint } = options
@@ -66,14 +68,14 @@ export const magicLink = (client: MagicLink): AuthClientMagicLink => {
         }
         switch (options.authType) {
           case 'login': {
-            let { username, } = options
+            const { username, } = options
             //@ts-ignore
             return await client.webauthn.login({
               username,
             });
           }
           case 'signup': {
-            let { username,
+            const { username,
               nickname } = options
             //@ts-ignore
             return await client.webauthn.registerNewUser({
