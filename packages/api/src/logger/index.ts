@@ -296,9 +296,15 @@ export const createLogger = ({
         console.warn(
           'Logs will be sent to the transport stream in the current development environment.'
         )
+        const targetsAndPretty = targets.push({
+          level: 'info',
+          target: 'pino-pretty', // must be installed separately
+          options: { destination: 1 },
+        })
+
         const transport = pino.transport({
           // Add Pino pretty-printing to the transport stream
-          targets,
+          targetsAndPretty,
         })
         return pino(options, transport)
       }
