@@ -84,7 +84,7 @@ export interface AuthClient {
   login(options?: any): Promise<any>
   logout(options?: any): void | Promise<any>
   signup(options?: any): void | Promise<any>
-  getToken(): Promise<null | string>
+  getToken(options?: any): Promise<null | string>
   /** The user's data from the AuthProvider */
   getUserMetadata(): Promise<null | SupportedUserMetadata>
   client: SupportedAuthClients
