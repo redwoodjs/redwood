@@ -91,6 +91,23 @@ const copyFrameworkPackages = () => {
     process.exit(1)
   }
 }
+const checkYarnVersion = () => {
+  try {
+    const {stdout} = execa.sync('yarn --version', {
+      cwd: REDWOOD_PROJECT_DIRECTORY,
+      shell: true,
+    })
+    console.log('Yarn version is', stdout)
+    if(stdout.startsWith('3')){
+      setYarnClassic()
+    }
+  }
+  catch (e) {
+    console.error(e)
+    console.error('Error: We could not find yarn')
+    process.exit(1)
+  }
+}
 const setYarnClassic = () => {
   try {
     execa.sync('yarn set version classic', {
@@ -100,7 +117,7 @@ const setYarnClassic = () => {
     })
   } catch (e) {
     console.error(e)
-    console.error('Error: This E2E script requires the global Yarn version to be >=1.22.15. From a directory outside the Framework directory, check with `(cd / && yarn --version)`')
+    console.error('Error: We could not set yarn classic')
     process.exit(1)
   }
 }
@@ -216,7 +233,7 @@ const tasks = [
   buildFramework && buildRedwoodFramework,
   createProject && createRedwoodJSApp,
   copyFramework && addFrameworkDepsToProject,
-  copyFramework && setYarnClassic,
+  copyFramework && checkYarnVersion,
   copyFramework && runYarnInstall,
   copyFramework && copyFrameworkPackages,
   !typescript && convertProjectToJavaScript,
