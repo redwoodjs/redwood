@@ -77,7 +77,7 @@ export function isSingular(word) {
  * 'pokemon' to plural 'pokemonii'. We also add the reverse, so plural
  * 'pokemonii' to singular 'pokemon'. We *also* have to make sure that
  * the singular of 'pokemon' is 'pokemon', and that the plural of
- * 'pokemoii' is 'pokemonii'
+ * 'pokemonii' is 'pokemonii'
  *
  * After calling with 'pokemon', 'pokemonii' we'll have this
  *
