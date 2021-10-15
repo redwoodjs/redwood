@@ -19,31 +19,6 @@ import path from 'path'
 
 import * as index from '../index'
 
-test('getSchema returns a parsed schema.prisma', async () => {
-  let schema = await index.getSchema('Post')
-  expect(schema.fields[0].name).toEqual('id')
-  expect(schema.fields[1].name).toEqual('title')
-  expect(schema.fields[2].name).toEqual('slug')
-
-  // can get a different model
-  schema = await index.getSchema('User')
-  expect(schema.fields[0].name).toEqual('id')
-  expect(schema.fields[1].name).toEqual('name')
-  expect(schema.fields[2].name).toEqual('email')
-})
-
-test('getSchema throws an error if model name not found', async () => {
-  let error
-
-  try {
-    await index.getSchema('Foo')
-  } catch (e) {
-    error = e
-  }
-
-  expect(error).toEqual(new Error(error.message))
-})
-
 test('nameVariants returns a single word cased variables', () => {
   const names = ['Home', 'home']
 
@@ -64,7 +39,7 @@ test('nameVariants returns a single word cased variables', () => {
 })
 
 test('nameVariants returns a multi word cased variables', () => {
-  const names = ['FooBar', 'fooBar', 'foo_bar', 'foo-bar']
+  const names = ['FooBar', 'fooBar', 'foo_bar', 'foo-bar', 'FOOBar']
 
   names.forEach((name) => {
     const vars = index.nameVariants(name)
@@ -81,11 +56,13 @@ test('nameVariants returns a multi word cased variables', () => {
 })
 
 test('generateTemplate returns a lodash-templated string', () => {
-  const output = index.generateTemplate(path.join('fixtures', 'text.txt'), {
-    root: __dirname,
-    name: 'amet',
-    noun: 'world',
-  })
+  const output = index.generateTemplate(
+    path.join(__dirname, 'fixtures', 'text.txt'),
+    {
+      name: 'amet',
+      noun: 'world',
+    }
+  )
 
   expect(output).toEqual(`Lorem ipsum dolar sit amet\nHello, world!\n`)
 })
@@ -93,11 +70,13 @@ test('generateTemplate returns a lodash-templated string', () => {
 // Be careful when editing the code.js fixture as the prettifier.config.js will cause it to get
 // prettified and then it already match the expected output, with no changes
 test('generateTemplate returns prettified JS code', () => {
-  const output = index.generateTemplate(path.join('fixtures', 'code.js'), {
-    root: __dirname,
-    name: 'fox',
-    foo: 'dog',
-  })
+  const output = index.generateTemplate(
+    path.join(__dirname, 'fixtures', 'code.js'),
+    {
+      name: 'fox',
+      foo: 'dog',
+    }
+  )
 
   expect(output).toEqual(
     `const line1 = 'The quick brown foxes jumps over the lazy dog.'\nconst line2 = 'Sphinx of black quartz, judge my vow.'\n`

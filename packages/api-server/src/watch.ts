@@ -9,7 +9,13 @@ import chokidar from 'chokidar'
 import dotenv from 'dotenv'
 import { debounce } from 'lodash'
 
-import { getPaths, buildApi } from '@redwoodjs/internal'
+import {
+  getPaths,
+  buildApi,
+  getConfig,
+  ensurePosixPath,
+  loadAndValidateSdls,
+} from '@redwoodjs/internal'
 
 const rwjsPaths = getPaths()
 
@@ -22,11 +28,30 @@ dotenv.config({
 
 let httpServerProcess: ChildProcess
 
+const killApiServer = () => {
+  httpServerProcess?.emit('exit')
+  httpServerProcess?.kill()
+}
+
+const validate = async () => {
+  try {
+    await loadAndValidateSdls()
+    return true
+  } catch (e: any) {
+    killApiServer()
+    console.log(c.redBright(`[GQL Server Error] - Schema validation failed`))
+    console.error(c.red(e?.message))
+    console.log(c.redBright('-'.repeat(40)))
+
+    delayRestartServer.cancel()
+    return false
+  }
+}
+
 const rebuildApiServer = () => {
   try {
     // Shutdown API server
-    httpServerProcess?.emit('exit')
-    httpServerProcess?.kill()
+    killApiServer()
 
     const buildTs = Date.now()
     process.stdout.write(c.dim(c.italic('Building... ')))
@@ -34,7 +59,10 @@ const rebuildApiServer = () => {
     console.log(c.dim(c.italic('Took ' + (Date.now() - buildTs) + ' ms')))
 
     // Start API server
-    httpServerProcess = fork(path.join(__dirname, 'index.js'))
+    httpServerProcess = fork(path.join(__dirname, 'index.js'), [
+      '--port',
+      getConfig().api.port.toString(),
+    ])
   } catch (e) {
     console.error(e)
   }
@@ -51,6 +79,15 @@ const delayRestartServer = debounce(
     : 5
 )
 
+// NOTE: the file comes through as a unix path, even on windows
+// So we need to convert the rwjsPaths
+
+const IGNORED_API_PATHS = [
+  'api/dist', // use this, because using rwjsPaths.api.dist seems to not ignore on first build
+  rwjsPaths.api.types,
+  rwjsPaths.api.db,
+].map((path) => ensurePosixPath(path))
+
 chokidar
   .watch(rwjsPaths.api.base, {
     persistent: true,
@@ -58,9 +95,7 @@ chokidar
     ignored: (file: string) => {
       const x =
         file.includes('node_modules') ||
-        file.includes(rwjsPaths.api.dist) ||
-        file.includes(rwjsPaths.api.types) ||
-        file.includes(rwjsPaths.api.db) ||
+        IGNORED_API_PATHS.some((ignoredPath) => file.includes(ignoredPath)) ||
         [
           '.DS_Store',
           '.db',
@@ -78,8 +113,20 @@ chokidar
   })
   .on('ready', async () => {
     rebuildApiServer()
+    await validate()
   })
-  .on('all', (eventName, filePath) => {
+  .on('all', async (eventName, filePath) => {
+    // We validate here, so that developers will see the error
+    // As they're running the dev server
+    if (filePath.includes('.sdl')) {
+      const isValid = await validate()
+
+      // Exit early if not valid
+      if (!isValid) {
+        return
+      }
+    }
+
     console.log(
       c.dim(`[${eventName}] ${filePath.replace(rwjsPaths.api.base, '')}`)
     )

@@ -140,6 +140,7 @@ const getSharedPlugins = (isEnvProduction) => {
       React: 'react',
       PropTypes: 'prop-types',
       gql: 'graphql-tag',
+      // Possibly used by storybook?
       mockGraphQLQuery: ['@redwoodjs/testing/web', 'mockGraphQLQuery'],
       mockGraphQLMutation: ['@redwoodjs/testing/web', 'mockGraphQLMutation'],
       mockCurrentUser: ['@redwoodjs/testing/web', 'mockCurrentUser'],
@@ -195,6 +196,11 @@ module.exports = (webpackEnv) => {
         ),
         '~redwood-app-root': path.resolve(redwoodPaths.web.app),
         react: path.resolve(redwoodPaths.base, 'node_modules', 'react'),
+        'react-hook-form': path.resolve(
+          redwoodPaths.base,
+          'node_modules',
+          'react-hook-form'
+        ),
       },
     },
     plugins: [
@@ -243,15 +249,15 @@ module.exports = (webpackEnv) => {
             // (0)
             {
               test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
-              use: [
-                {
-                  loader: 'url-loader',
-                  options: {
-                    limit: '10000',
-                    name: 'static/media/[name].[contenthash:8].[ext]',
-                  },
+              type: 'asset',
+              parser: {
+                dataUrlCondition: {
+                  maxSize: 10_000,
                 },
-              ],
+              },
+              generator: {
+                filename: 'static/media/[name].[contenthash:8].[ext]',
+              },
             },
             // (1)
             {
@@ -309,9 +315,9 @@ module.exports = (webpackEnv) => {
             // (8)
             {
               test: /\.(svg|ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|pdf)(\?.*)?$/,
-              loader: 'file-loader',
-              options: {
-                name: 'static/media/[name].[contenthash:8].[ext]',
+              type: 'asset/resource',
+              generator: {
+                filename: 'static/media/[name].[contenthash:8].[ext]',
               },
             },
           ].filter(Boolean),

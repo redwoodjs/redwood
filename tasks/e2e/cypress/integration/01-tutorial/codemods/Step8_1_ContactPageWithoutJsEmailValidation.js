@@ -30,6 +30,9 @@ const ContactPage = () => {
       toast.success('Thank you for your submission!')
       formMethods.reset()
     },
+    onError: (error) => {
+      toast.error(error.message)
+    },
   })
 
   const onSubmit = async (data) => {
@@ -43,7 +46,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <Toaster />
+      <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
       <Form
         id="tutorial-form"
         onSubmit={onSubmit}

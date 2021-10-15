@@ -249,7 +249,7 @@ import { Toaster } from '@redwoodjs/web/toast'
 const PostsLayout = ({ children }) => {
   return (
     <div className=\\"rw-scaffold\\">
-      <Toaster />
+      <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
       <header className=\\"rw-header\\">
         <h1 className=\\"rw-heading rw-heading-primary\\">
           <Link to={routes.posts()} className=\\"rw-link\\">
@@ -288,6 +288,9 @@ const NewPost = () => {
     onCompleted: () => {
       toast.success('Post created')
       navigate(routes.posts())
+    },
+    onError: (error) => {
+      toast.error(error.message)
     },
   })
 
@@ -332,6 +335,9 @@ const NewUserProfile = () => {
       onCompleted: () => {
         toast.success('UserProfile created')
         navigate(routes.userProfiles())
+      },
+      onError: (error) => {
+        toast.error(error.message)
       },
     }
   )
@@ -441,6 +447,9 @@ const Post = ({ post }) => {
     onCompleted: () => {
       toast.success('Post deleted')
       navigate(routes.posts())
+    },
+    onError: (error) => {
+      toast.error(error.message)
     },
   })
 
@@ -588,7 +597,8 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   Style
 */
 
-.rw-scaffold {
+.rw-scaffold,
+.rw-toast {
   background-color: #fff;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji',
@@ -626,6 +636,16 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
 }
 .rw-link:hover {
   color: #2b6cb0;
+}
+.rw-forgot-link {
+  font-size: 0.75rem;
+  color: #a0aec0;
+  text-align: right;
+  margin-top: 0.1rem;
+}
+.rw-forgot-link:hover {
+  font-size: 0.75rem;
+  color: #4299e1;
 }
 .rw-heading {
   font-weight: 600;
@@ -920,6 +940,9 @@ export const Success = ({ userProfile }) => {
         toast.success('UserProfile updated')
         navigate(routes.userProfiles())
       },
+      onError: (error) => {
+        toast.error(error.message)
+      },
     }
   )
 
@@ -1041,6 +1064,9 @@ const PostsList = ({ posts }) => {
     onCompleted: () => {
       toast.success('Post deleted')
     },
+    onError: (error) => {
+      toast.error(error.message)
+    },
     // This refetches the query on the list page. Read more about other ways to
     // update the cache over here:
     // https://www.apollographql.com/docs/react/data/mutations/#making-all-other-cache-updates
@@ -1129,7 +1155,7 @@ exports[`in typescript mode creates a edit page 1`] = `
 "import EditPostCell from 'src/components/Post/EditPostCell'
 
 type PostPageProps = {
-  id: Int
+  id: number
 }
 
 const EditPostPage = ({ id }: PostPageProps) => {
@@ -1375,7 +1401,7 @@ type PostLayoutProps = {
 const PostsLayout = ({ children }: PostLayoutProps) => {
   return (
     <div className=\\"rw-scaffold\\">
-      <Toaster />
+      <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
       <header className=\\"rw-header\\">
         <h1 className=\\"rw-heading rw-heading-primary\\">
           <Link
@@ -1421,6 +1447,9 @@ const NewPost = () => {
       toast.success('Post created')
       navigate(routes.posts())
     },
+    onError: (error) => {
+      toast.error(error.message)
+    },
   })
 
   const onSave = (input) => {
@@ -1462,6 +1491,9 @@ const NewUserProfile = () => {
     onCompleted: () => {
       toast.success('UserProfile created')
       navigate(routes.userProfiles())
+    },
+    onError: (error) => {
+      toast.error(error.message)
     },
   })
 
@@ -1573,6 +1605,9 @@ const Post = ({ post }) => {
     onCompleted: () => {
       toast.success('Post deleted')
       navigate(routes.posts())
+    },
+    onError: (error) => {
+      toast.error(error.message)
     },
   })
 
@@ -1712,7 +1747,8 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   Style
 */
 
-.rw-scaffold {
+.rw-scaffold,
+.rw-toast {
   background-color: #fff;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji',
@@ -1750,6 +1786,16 @@ exports[`in typescript mode creates a stylesheet 1`] = `
 }
 .rw-link:hover {
   color: #2b6cb0;
+}
+.rw-forgot-link {
+  font-size: 0.75rem;
+  color: #a0aec0;
+  text-align: right;
+  margin-top: 0.1rem;
+}
+.rw-forgot-link:hover {
+  font-size: 0.75rem;
+  color: #4299e1;
 }
 .rw-heading {
   font-weight: 600;
@@ -2056,6 +2102,9 @@ export const Success = ({ post }: CellSuccessProps<EditPostById>) => {
       toast.success('Post updated')
       navigate(routes.posts())
     },
+    onError: (error) => {
+      toast.error(error.message)
+    },
   })
 
   const onSave = (input, id) => {
@@ -2116,6 +2165,9 @@ export const Success = ({ userProfile }: CellSuccessProps<EditUserProfileById>) 
     onCompleted: () => {
       toast.success('UserProfile updated')
       navigate(routes.userProfiles())
+    },
+    onError: (error) => {
+      toast.error(error.message)
     },
   })
 
@@ -2235,6 +2287,9 @@ const PostsList = ({ posts }) => {
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
     onCompleted: () => {
       toast.success('Post deleted')
+    },
+    onError: (error) => {
+      toast.error(error.message)
     },
     // This refetches the query on the list page. Read more about other ways to
     // update the cache over here:

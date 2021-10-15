@@ -3,7 +3,6 @@ import https from 'https'
 import path from 'path'
 
 import * as babel from '@babel/core'
-import { getDMMF } from '@prisma/sdk'
 import camelcase from 'camelcase'
 import decamelize from 'decamelize'
 import execa from 'execa'
@@ -12,7 +11,6 @@ import VerboseRenderer from 'listr-verbose-renderer'
 import lodash from 'lodash/string'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
-import pluralize from 'pluralize'
 import { format } from 'prettier'
 
 import {
@@ -21,94 +19,12 @@ import {
 } from '@redwoodjs/internal'
 
 import c from './colors'
-
-/**
- * Used to memoize results from `getSchema` so we don't have to go through
- * the work of open the file and parsing it from scratch each time getSchema()
- * is called with the same model name.
- */
-const schemaMemo = {}
+import { pluralize, singularize } from './rwPluralize'
 
 export const asyncForEach = async (array, callback) => {
   for (let index = 0; index < array.length; index++) {
     await callback(array[index], index, array)
   }
-}
-
-/**
- * Returns the database schema for the given `name` database table parsed from
- * the schema.prisma of the target application. If no `name` is given then the
- * entire schema is returned.
- */
-export const getSchema = async (name) => {
-  if (name) {
-    if (!schemaMemo[name]) {
-      const schema = await getSchemaDefinitions()
-      const model = schema.datamodel.models.find((model) => {
-        return model.name === name
-      })
-
-      if (model) {
-        // look for any fields that are enums and attach the possible enum values
-        // so we can put them in generated test files
-        model.fields.forEach((field) => {
-          const fieldEnum = schema.datamodel.enums.find((e) => {
-            return field.type === e.name
-          })
-          if (fieldEnum) {
-            field.enumValues = fieldEnum.values
-          }
-        })
-
-        // memoize based on the model name
-        schemaMemo[name] = model
-      } else {
-        throw new Error(
-          `No schema definition found for \`${name}\` in schema.prisma file`
-        )
-      }
-    }
-    return schemaMemo[name]
-  } else {
-    return (await getSchemaDefinitions()).metadata.datamodel
-  }
-}
-
-/**
- * Returns the enum defined with the given `name` parsed from
- * the schema.prisma of the target applicaiton. If no `name` is given then the
- * all enum definitions are returned
- */
-export const getEnum = async (name) => {
-  const schema = await getSchemaDefinitions()
-
-  if (name) {
-    const model = schema.datamodel.enums.find((model) => {
-      return model.name === name
-    })
-
-    if (model) {
-      return model
-    } else {
-      throw new Error(
-        `No enum schema definition found for \`${name}\` in schema.prisma file`
-      )
-    }
-  }
-
-  return schema.metadata.datamodel.enums
-}
-
-/*
- * Returns the DMMF defined by `prisma` resolving the relevant `schema.prisma` path.
- */
-export const getSchemaDefinitions = async () => {
-  const schemaPath = path.join(getPaths().api.db, 'schema.prisma')
-  const metadata = await getDMMF({
-    datamodel: readFile(schemaPath.toString()),
-  })
-
-  return metadata
 }
 
 /**
@@ -126,10 +42,10 @@ export const getSchemaDefinitions = async () => {
  * pluralConstantName: FOO_BARS
 */
 export const nameVariants = (name) => {
-  const normalizedName = pascalcase(paramCase(pluralize.singular(name)))
+  const normalizedName = pascalcase(paramCase(singularize(name)))
 
   return {
-    pascalName: pascalcase(name),
+    pascalName: pascalcase(paramCase(name)),
     camelName: camelcase(name),
     singularPascalName: normalizedName,
     pluralPascalName: pluralize(normalizedName),
@@ -142,11 +58,8 @@ export const nameVariants = (name) => {
   }
 }
 
-export const templateRoot = path.resolve(__dirname, '../commands/generate')
-
-export const generateTemplate = (templateFilename, { name, root, ...rest }) => {
-  const templatePath = path.join(root || templateRoot, templateFilename)
-  const template = lodash.template(readFile(templatePath).toString())
+export const generateTemplate = (templateFilename, { name, ...rest }) => {
+  const template = lodash.template(readFile(templateFilename).toString())
 
   const renderedTemplate = template({
     name,
@@ -177,7 +90,8 @@ export const prettify = (templateFilename, renderedTemplate) => {
   })
 }
 
-export const readFile = (target) => fs.readFileSync(target)
+export const readFile = (target) =>
+  fs.readFileSync(target, { encoding: 'utf8' })
 
 const SUPPORTED_EXTENSIONS = ['.js', '.ts', '.tsx']
 
@@ -423,18 +337,31 @@ const wrapWithSet = (routesContent, layout, routes, newLineAndIndent) => {
 export const addRoutesToRouterTask = (routes, layout) => {
   const redwoodPaths = getPaths()
   const routesContent = readFile(redwoodPaths.web.routes).toString()
-  const newRoutes = routes.filter((route) => !routesContent.match(route))
+  let newRoutes = routes.filter((route) => !routesContent.match(route))
 
   if (newRoutes.length) {
-    const [routerStart, newLineAndIndent] =
-      routesContent.match(/\s*<Router.*?>(\s*)/)
+    const [routerStart, routerParams, newLineAndIndent] = routesContent.match(
+      /\s*<Router(.*?)>(\s*)/
+    )
+
+    if (/trailingSlashes={?(["'])always\1}?/.test(routerParams)) {
+      // newRoutes will be something like:
+      // ['<Route path="/foo" page={FooPage} name="foo"/>']
+      // and we need to replace `path="/foo"` with `path="/foo/"`
+      newRoutes = newRoutes.map((route) =>
+        route.replace(/ path="(.+?)" /, ' path="$1/" ')
+      )
+    }
+
     const routesBatch = layout
       ? wrapWithSet(routesContent, layout, newRoutes, newLineAndIndent)
       : newRoutes.join(newLineAndIndent)
+
     const newRoutesContent = routesContent.replace(
       routerStart,
       `${routerStart + routesBatch + newLineAndIndent}`
     )
+
     writeFile(redwoodPaths.web.routes, newRoutesContent, {
       overwriteExisting: true,
     })

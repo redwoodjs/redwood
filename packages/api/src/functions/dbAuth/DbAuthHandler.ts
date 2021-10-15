@@ -1,9 +1,8 @@
 import type { PrismaClient } from '@prisma/client'
-import type { APIGatewayProxyEvent } from 'aws-lambda'
+import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import CryptoJS from 'crypto-js'
+import md5 from 'md5'
 import { v4 as uuidv4 } from 'uuid'
-
-import type { GlobalContext } from '../../globalContext'
 
 import * as DbAuthError from './errors'
 import { decryptSession, getSession } from './shared'
@@ -28,28 +27,79 @@ interface DbAuthHandlerOptions {
     username: string
     hashedPassword: string
     salt: string
+    resetToken: string
+    resetTokenExpiresAt: string
   }
   /**
-   * Anything you want to happen before logging the user in. This can include
-   * throwing an error to prevent login. If you do want to allow login, this
-   * function must return an object representing the user you want to be logged
-   * in, containing at least an `id` field (whatever named field was provided
-   * for `authFields.id`). For example: `return { id: user.id }`
+   * Object containing forgot password options
    */
-  loginHandler: (user: Record<string, unknown>) => Promise<any>
+  forgotPassword: {
+    handler: (user: Record<string, unknown>) => Promise<any>
+    errors?: {
+      usernameNotFound?: string
+      usernameRequired?: string
+    }
+    expires: number
+  }
   /**
-   * Whatever you want to happen to your data on new user signup. Redwood will
-   * check for duplicate usernames before calling this handler. At a minimum
-   * you need to save the `username`, `hashedPassword` and `salt` to your
-   * user table. `userAttributes` contains any additional object members that
-   * were included in the object given to the `signUp()` function you got
-   * from `useAuth()`
+   * Object containing login options
    */
-  signupHandler: (signupHandlerOptions: SignupHandlerOptions) => Promise<any>
+  login: {
+    /**
+     * Anything you want to happen before logging the user in. This can include
+     * throwing an error to prevent login. If you do want to allow login, this
+     * function must return an object representing the user you want to be logged
+     * in, containing at least an `id` field (whatever named field was provided
+     * for `authFields.id`). For example: `return { id: user.id }`
+     */
+    handler: (user: Record<string, unknown>) => Promise<any>
+    /**
+     * Object containing error strings
+     */
+    errors?: {
+      usernameOrPasswordMissing?: string
+      usernameNotFound?: string
+      incorrectPassword?: string
+    }
+    /**
+     * How long a user will remain logged in, in seconds
+     */
+    expires: number
+  }
   /**
-   * How long a user will remain logged in, in seconds
+   * Object containing reset password options
    */
-  loginExpires: number
+  resetPassword: {
+    handler: (user: Record<string, unknown>) => Promise<any>
+    allowReusedPassword: boolean
+    errors?: {
+      resetTokenExpired?: string
+      resetTokenInvalid?: string
+      resetTokenRequired?: string
+      reusedPassword?: string
+    }
+  }
+  /**
+   * Object containing login options
+   */
+  signup: {
+    /**
+     * Whatever you want to happen to your data on new user signup. Redwood will
+     * check for duplicate usernames before calling this handler. At a minimum
+     * you need to save the `username`, `hashedPassword` and `salt` to your
+     * user table. `userAttributes` contains any additional object members that
+     * were included in the object given to the `signUp()` function you got
+     * from `useAuth()`
+     */
+    handler: (signupHandlerOptions: SignupHandlerOptions) => Promise<any>
+    /**
+     * Object containing error strings
+     */
+    errors?: {
+      fieldMissing?: string
+      usernameTaken?: string
+    }
+  }
 }
 
 interface SignupHandlerOptions {
@@ -63,7 +113,14 @@ interface SessionRecord {
   id: string | number
 }
 
-type AuthMethodNames = 'login' | 'logout' | 'signup' | 'getToken'
+type AuthMethodNames =
+  | 'forgotPassword'
+  | 'getToken'
+  | 'login'
+  | 'logout'
+  | 'resetPassword'
+  | 'signup'
+  | 'validateResetToken'
 
 type Params = {
   username?: string
@@ -74,7 +131,7 @@ type Params = {
 
 export class DbAuthHandler {
   event: APIGatewayProxyEvent
-  context: GlobalContext
+  context: LambdaContext
   options: DbAuthHandlerOptions
   params: Params
   db: PrismaClient
@@ -86,22 +143,33 @@ export class DbAuthHandler {
 
   // class constant: list of auth methods that are supported
   static get METHODS(): AuthMethodNames[] {
-    return ['login', 'logout', 'signup', 'getToken']
+    return [
+      'forgotPassword',
+      'getToken',
+      'login',
+      'logout',
+      'resetPassword',
+      'signup',
+      'validateResetToken',
+    ]
   }
 
   // class constant: maps the auth functions to their required HTTP verb for access
   static get VERBS() {
     return {
+      forgotPassword: 'POST',
+      getToken: 'GET',
       login: 'POST',
       logout: 'POST',
+      resetPassword: 'POST',
       signup: 'POST',
-      getToken: 'GET',
+      validateResetToken: 'POST',
     }
   }
 
   // class constant: all the attributes of the cookie other than the value itself
   static get COOKIE_META() {
-    const meta = [`Path=/`, 'HttpOnly', 'SameSite=Strict', 'Secure']
+    const meta = [`Path=/`, 'HttpOnly', 'SameSite=Strict']
 
     // set DBAUTH_COOKIE_DOMAIN if you need any subdomains to access this cookie
     if (process.env.DBAUTH_COOKIE_DOMAIN) {
@@ -124,7 +192,7 @@ export class DbAuthHandler {
   // convert to the UTC datetime string that's required for cookies
   get _futureExpiresDate() {
     const futureDate = new Date()
-    futureDate.setSeconds(futureDate.getSeconds() + this.options.loginExpires)
+    futureDate.setSeconds(futureDate.getSeconds() + this.options.login.expires)
     return futureDate.toUTCString()
   }
 
@@ -140,17 +208,14 @@ export class DbAuthHandler {
 
   constructor(
     event: APIGatewayProxyEvent,
-    context: GlobalContext,
+    context: LambdaContext,
     options: DbAuthHandlerOptions
   ) {
-    // must have a SESSION_SECRET so we can encrypt/decrypt the cookie
-    if (!process.env.SESSION_SECRET) {
-      throw new DbAuthError.NoSessionSecret()
-    }
-
     this.event = event
     this.context = context
     this.options = options
+
+    this._validateOptions()
 
     this.params = this._parseBody()
     this.db = this.options.db
@@ -175,9 +240,8 @@ export class DbAuthHandler {
     }
   }
 
-  // Actual function that triggers everything else to happen:
-  // `login`, `logout`, `signup`, or `getToken` is called from here, after some
-  // checks to make sure the request is good
+  // Actual function that triggers everything else to happen: `login`, `signup`,
+  // etc. is called from here, after some checks to make sure the request is good
   async invoke() {
     // if there was a problem decryption the session, just return the logout
     // response immediately
@@ -204,7 +268,7 @@ export class DbAuthHandler {
       ]()
 
       return this._ok(body, headers, options)
-    } catch (e) {
+    } catch (e: any) {
       if (e instanceof DbAuthError.WrongVerbError) {
         return this._notFound()
       } else {
@@ -213,68 +277,62 @@ export class DbAuthHandler {
     }
   }
 
-  async login() {
-    const { username, password } = this.params
-    const dbUser = await this._verifyUser(username, password)
-    const handlerUser = await this.options.loginHandler(dbUser)
+  async forgotPassword() {
+    const { username } = this.params
 
-    if (
-      handlerUser == null ||
-      handlerUser[this.options.authFields.id] == null
-    ) {
-      throw new DbAuthError.NoUserIdError()
+    // was the username sent in at all?
+    if (!username || username.trim() === '') {
+      throw new DbAuthError.UsernameRequiredError(
+        this.options.forgotPassword?.errors?.usernameRequired ||
+          `Username is required`
+      )
     }
 
-    const sessionData = { id: handlerUser[this.options.authFields.id] }
+    let user = await this.dbAccessor.findUnique({
+      where: { [this.options.authFields.username]: username },
+    })
 
-    // TODO: this needs to go into graphql somewhere so that each request makes
-    // a new CSRF token and sets it in both the encrypted session and the
-    // csrf-token header
-    const csrfToken = DbAuthHandler.CSRF_TOKEN
+    if (user) {
+      const tokenExpires = new Date()
+      tokenExpires.setSeconds(
+        tokenExpires.getSeconds() + this.options.forgotPassword.expires
+      )
 
-    return [
-      sessionData,
-      {
-        'csrf-token': csrfToken,
-        ...this._createSessionHeader(sessionData, csrfToken),
-      },
-    ]
-  }
+      // generate a token
+      let token = md5(uuidv4())
+      const buffer = new Buffer(token)
+      token = buffer.toString('base64').replace('=', '').substring(0, 16)
 
-  logout() {
-    return this._logoutResponse()
-  }
+      // set token and expires time
+      user = await this.dbAccessor.update({
+        where: {
+          [this.options.authFields.id]: user[this.options.authFields.id],
+        },
+        data: {
+          [this.options.authFields.resetToken]: token,
+          [this.options.authFields.resetTokenExpiresAt]: tokenExpires,
+        },
+      })
 
-  async signup() {
-    const userOrMessage = await this._createUser()
-
-    // at this point `user` is either an actual user, in which case log the
-    // user in automatically, or it's a string, which is a message to show
-    // the user (something like "please verify your email")
-
-    if (typeof userOrMessage === 'object') {
-      // signupHandler returned a user, log them in
-      const user = userOrMessage
-      const sessionData = { id: user[this.options.authFields.id] }
-      const csrfToken = DbAuthHandler.CSRF_TOKEN
+      // call user-defined handler in their functions/auth.js
+      const response = await this.options.forgotPassword.handler(
+        this._sanitizeUser(user)
+      )
 
       return [
-        sessionData,
+        response ? JSON.stringify(response) : '',
         {
-          'csrf-token': csrfToken,
-          ...this._createSessionHeader(sessionData, csrfToken),
+          ...this._deleteSessionHeader,
         },
-        { statusCode: 201 },
       ]
     } else {
-      // signupHandler() returned a message
-      const message = userOrMessage
-      return [JSON.stringify({ message }), {}, { statusCode: 201 }]
+      throw new DbAuthError.UsernameNotFoundError(
+        this.options.forgotPassword?.errors?.usernameNotFound ||
+          `Username '${username} not found`
+      )
     }
-    // errors thrown in signupHandler() will be handled by `invoke()`
   }
 
-  // converts the currentUser data to a JWT. returns `null` if session is not present
   async getToken() {
     try {
       const user = await this._getCurrentUser()
@@ -283,7 +341,7 @@ export class DbAuthHandler {
       // to work, so return the user's ID in case we can use it for something
       // in the future
       return [user.id]
-    } catch (e) {
+    } catch (e: any) {
       if (e instanceof DbAuthError.NotLoggedInError) {
         return this._logoutResponse()
       } else {
@@ -292,23 +350,179 @@ export class DbAuthHandler {
     }
   }
 
+  async login() {
+    const { username, password } = this.params
+    const dbUser = await this._verifyUser(username, password)
+    const handlerUser = await this.options.login.handler(dbUser)
+
+    if (
+      handlerUser == null ||
+      handlerUser[this.options.authFields.id] == null
+    ) {
+      throw new DbAuthError.NoUserIdError()
+    }
+
+    return this._loginResponse(handlerUser)
+  }
+
+  logout() {
+    return this._logoutResponse()
+  }
+
+  async resetPassword() {
+    const { password, resetToken } = this.params
+
+    // is the resetToken present?
+    if (resetToken == null || String(resetToken).trim() === '') {
+      throw new DbAuthError.ResetTokenRequiredError(
+        this.options.resetPassword?.errors?.resetTokenRequired
+      )
+    }
+
+    // is password present?
+    if (password == null || String(password).trim() === '') {
+      throw new DbAuthError.PasswordRequiredError()
+    }
+
+    let user = await this._findUserByToken(resetToken as string)
+    const [hashedPassword] = this._hashPassword(password, user.salt)
+
+    if (
+      !this.options.resetPassword.allowReusedPassword &&
+      user.hashedPassword === hashedPassword
+    ) {
+      throw new DbAuthError.ReusedPasswordError(
+        this.options.resetPassword?.errors?.reusedPassword
+      )
+    }
+
+    // if we got here then we can update the password in the database
+    user = await this.dbAccessor.update({
+      where: { [this.options.authFields.id]: user[this.options.authFields.id] },
+      data: {
+        [this.options.authFields.hashedPassword]: hashedPassword,
+        [this.options.authFields.resetToken]: null,
+        [this.options.authFields.resetTokenExpiresAt]: null,
+      },
+    })
+
+    // call the user-defined handler so they can decide what to do with this user
+    const response = await this.options.resetPassword.handler(
+      this._sanitizeUser(user)
+    )
+
+    // returning the user from the handler means to log them in automatically
+    if (response) {
+      return this._loginResponse(user)
+    } else {
+      return this._logoutResponse({})
+    }
+  }
+
+  async signup() {
+    const userOrMessage = await this._createUser()
+
+    // at this point `user` is either an actual user, in which case log the
+    // user in automatically, or it's a string, which is a message to show
+    // the user (something like "please verify your email")
+    if (typeof userOrMessage === 'object') {
+      const user = userOrMessage
+      return this._loginResponse(user, 201)
+    } else {
+      const message = userOrMessage
+      return [JSON.stringify({ message }), {}, { statusCode: 201 }]
+    }
+  }
+
+  async validateResetToken() {
+    // is token present at all?
+    if (
+      this.params.resetToken == null ||
+      String(this.params.resetToken).trim() === ''
+    ) {
+      throw new DbAuthError.ResetTokenRequiredError(
+        this.options.resetPassword?.errors?.resetTokenRequired
+      )
+    }
+
+    const user = await this._findUserByToken(this.params.resetToken as string)
+
+    return [
+      JSON.stringify(this._sanitizeUser(user)),
+      {
+        ...this._deleteSessionHeader,
+      },
+    ]
+  }
+
+  // validates that we have all the ENV and options we need to login/signup
+  _validateOptions() {
+    // must have a SESSION_SECRET so we can encrypt/decrypt the cookie
+    if (!process.env.SESSION_SECRET) {
+      throw new DbAuthError.NoSessionSecretError()
+    }
+
+    // must have an expiration time set for the session cookie
+    if (!this.options?.login?.expires) {
+      throw new DbAuthError.NoSessionExpirationError()
+    }
+
+    // must have a login handler to actually log a user in
+    if (!this.options?.login?.handler) {
+      throw new DbAuthError.NoLoginHandlerError()
+    }
+
+    // must have a signup handler to define how to create a new user
+    if (!this.options?.signup?.handler) {
+      throw new DbAuthError.NoSignupHandlerError()
+    }
+
+    // must have a forgot password handler to define how to notify user of reset token
+    if (!this.options?.forgotPassword?.handler) {
+      throw new DbAuthError.NoForgotPasswordHandlerError()
+    }
+
+    // must have a reset password handler to define what to do with user once password changed
+    if (!this.options?.resetPassword?.handler) {
+      throw new DbAuthError.NoResetPasswordHandlerError()
+    }
+  }
+
+  // removes sensative fields from user before sending over the wire
+  _sanitizeUser(user: Record<string, unknown>) {
+    const sanitized = JSON.parse(JSON.stringify(user))
+    delete sanitized[this.options.authFields.hashedPassword]
+    delete sanitized[this.options.authFields.salt]
+
+    return sanitized
+  }
+
   // parses the event body into JSON, whether it's base64 encoded or not
   _parseBody() {
-    if (this.event.isBase64Encoded) {
-      return JSON.parse(
-        Buffer.from(this.event.body || '', 'base64').toString('utf-8')
-      )
+    if (this.event.body) {
+      if (this.event.isBase64Encoded) {
+        return JSON.parse(
+          Buffer.from(this.event.body || '', 'base64').toString('utf-8')
+        )
+      } else {
+        return JSON.parse(this.event.body)
+      }
     } else {
-      return this.event.body && JSON.parse(this.event.body)
+      return {}
     }
   }
 
   // returns all the cookie attributes in an array with the proper expiration date
   //
   // pass the argument `expires` set to "now" to get the attributes needed to expire
-  // the session, or future (or left out completely) to set to `_futureExpiresDate`
+  // the session, or "future" (or left out completely) to set to `_futureExpiresDate`
   _cookieAttributes({ expires = 'future' }: { expires?: 'now' | 'future' }) {
     const meta = JSON.parse(JSON.stringify(DbAuthHandler.COOKIE_META))
+
+    if (process.env.NODE_ENV !== 'development') {
+      meta.push('Secure')
+    }
+
     const expiresAt =
       expires === 'now'
         ? DbAuthHandler.PAST_EXPIRES_DATE
@@ -346,6 +560,46 @@ export class DbAuthHandler {
     return true
   }
 
+  async _findUserByToken(token: string) {
+    const tokenExpires = new Date()
+    tokenExpires.setSeconds(
+      tokenExpires.getSeconds() - this.options.forgotPassword.expires
+    )
+
+    const user = await this.dbAccessor.findFirst({
+      where: {
+        [this.options.authFields.resetToken]: token,
+      },
+    })
+
+    // user not found with the given token
+    if (!user) {
+      throw new DbAuthError.ResetTokenInvalidError(
+        this.options.resetPassword?.errors?.resetTokenInvalid
+      )
+    }
+
+    // token has expired
+    if (user[this.options.authFields.resetTokenExpiresAt] < tokenExpires) {
+      await this._clearResetToken(user)
+      throw new DbAuthError.ResetTokenExpiredError(
+        this.options.resetPassword?.errors?.resetTokenExpired
+      )
+    }
+
+    return user
+  }
+
+  async _clearResetToken(user: Record<string, unknown>) {
+    await this.dbAccessor.update({
+      where: { [this.options.authFields.id]: user[this.options.authFields.id] },
+      data: {
+        [this.options.authFields.resetToken]: null,
+        [this.options.authFields.resetTokenExpiresAt]: null,
+      },
+    })
+  }
+
   // verifies that a username and password are correct, and returns the user if so
   async _verifyUser(
     username: string | undefined,
@@ -358,7 +612,9 @@ export class DbAuthHandler {
       !password ||
       password.toString().trim() === ''
     ) {
-      throw new DbAuthError.UsernameAndPasswordRequiredError()
+      throw new DbAuthError.UsernameAndPasswordRequiredError(
+        this.options.login?.errors?.usernameOrPasswordMissing
+      )
     }
 
     // does user exist?
@@ -367,7 +623,10 @@ export class DbAuthHandler {
     })
 
     if (!user) {
-      throw new DbAuthError.UserNotFoundError(username)
+      throw new DbAuthError.UserNotFoundError(
+        username,
+        this.options.login?.errors?.usernameNotFound
+      )
     }
 
     // is password correct?
@@ -378,7 +637,10 @@ export class DbAuthHandler {
     if (hashedPassword === user[this.options.authFields.hashedPassword]) {
       return user
     } else {
-      throw new DbAuthError.IncorrectPasswordError()
+      throw new DbAuthError.IncorrectPasswordError(
+        username,
+        this.options.login?.errors?.incorrectPassword
+      )
     }
   }
 
@@ -412,13 +674,16 @@ export class DbAuthHandler {
         where: { [this.options.authFields.username]: username },
       })
       if (user) {
-        throw new DbAuthError.DuplicateUsernameError(username)
+        throw new DbAuthError.DuplicateUsernameError(
+          username,
+          this.options.signup?.errors?.usernameTaken
+        )
       }
 
       // if we get here everything is good, call the app's signup handler and let
       // them worry about scrubbing data and saving to the DB
       const [hashedPassword, salt] = this._hashPassword(password)
-      const newUser = await this.options.signupHandler({
+      const newUser = await this.options.signup.handler({
         username,
         hashedPassword,
         salt,
@@ -463,14 +728,35 @@ export class DbAuthHandler {
   _validateField(name: string, value: string | undefined): value is string {
     // check for presense
     if (!value || value.trim() === '') {
-      throw new DbAuthError.FieldRequiredError(name)
+      throw new DbAuthError.FieldRequiredError(
+        name,
+        this.options.signup?.errors?.fieldMissing
+      )
     } else {
       return true
     }
   }
 
+  _loginResponse(user: Record<string, any>, statusCode = 200) {
+    const sessionData = { id: user[this.options.authFields.id] }
+
+    // TODO: this needs to go into graphql somewhere so that each request makes
+    // a new CSRF token and sets it in both the encrypted session and the
+    // csrf-token header
+    const csrfToken = DbAuthHandler.CSRF_TOKEN
+
+    return [
+      sessionData,
+      {
+        'csrf-token': csrfToken,
+        ...this._createSessionHeader(sessionData, csrfToken),
+      },
+      { statusCode },
+    ]
+  }
+
   _logoutResponse(
-    response?: Record<string, string>
+    response?: Record<string, unknown>
   ): [string, Record<'Set-Cookie', string>] {
     return [
       response ? JSON.stringify(response) : '',
@@ -483,7 +769,7 @@ export class DbAuthHandler {
   _ok(body: string, headers = {}, options = { statusCode: 200 }) {
     return {
       statusCode: options.statusCode,
-      body,
+      body: typeof body === 'string' ? body : JSON.stringify(body),
       headers: { 'Content-Type': 'application/json', ...headers },
     }
   }

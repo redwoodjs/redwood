@@ -16,12 +16,16 @@ const baseConfig = merge(webpackConfig('development'), {
       writeToDisk: false,
     },
     compress: true,
-    historyApiFallback: true,
+    historyApiFallback: {
+      disableDotRule: true,
+    },
     host: redwoodConfig.web.host || 'localhost',
     port: redwoodConfig.web.port,
     proxy: {
       [redwoodConfig.web.apiProxyPath]: {
-        target: `http://[::1]:${redwoodConfig.api.port}`,
+        target: `${process.env.RWJS_DEV_API_URL ?? 'http://[::1]'}:${
+          redwoodConfig.api.port
+        }`,
         pathRewrite: {
           [`^${escapeRegExp(redwoodConfig.web.apiProxyPath)}`]: '',
         },
@@ -43,6 +47,11 @@ const baseConfig = merge(webpackConfig('development'), {
   infrastructureLogging: {
     level: 'error', // new in v4; previously we used quiet
   },
+  ...(process.env.RWJS_WATCH_NODE_MODULES === '1' && {
+    snapshot: {
+      managedPaths: [],
+    },
+  }),
   // TODO plugin does not yet work with Webpack 5: https://github.com/smooth-code/error-overlay-webpack-plugin/issues/67
   // plugins: [new ErrorOverlayPlugin()].filter(Boolean),
   // webpack-dev-server v4 enables an overlay by default, it's just not as pretty

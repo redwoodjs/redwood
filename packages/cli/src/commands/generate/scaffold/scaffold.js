@@ -6,32 +6,31 @@ import humanize from 'humanize-string'
 import Listr from 'listr'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
-import pluralize from 'pluralize'
 import terminalLink from 'terminal-link'
 
-import { getConfig } from '@redwoodjs/internal'
+import { getConfig, generate as generateTypes } from '@redwoodjs/internal'
 
 import {
   generateTemplate,
-  templateRoot,
   readFile,
   writeFile,
   asyncForEach,
-  getSchema,
   getDefaultArgs,
   getPaths,
   writeFilesTask,
   addRoutesToRouterTask,
   addScaffoldImport,
+  transformTSToJS,
 } from '../../../lib'
-import { transformTSToJS } from '../../../lib'
 import c from '../../../lib/colors'
+import { pluralize, singularize } from '../../../lib/rwPluralize'
+import { getSchema, verifyModelName } from '../../../lib/schemaHelpers'
 import { yargsDefaults } from '../../generate'
-import { handler as dbAuthHandler } from '../dbAuth/dbAuth'
 import {
+  customOrDefaultTemplatePath,
   relationsForModel,
   intForeignKeysForModel,
-  ensureUniquePlural,
+  mapPrismaScalarToPagePropTsType,
 } from '../helpers'
 import { files as sdlFiles, builder as sdlBuilder } from '../sdl/sdl'
 import {
@@ -54,7 +53,7 @@ const getImportComponentNames = (
   nestScaffoldByModel = true
 ) => {
   const pluralName = pascalcase(pluralize(name))
-  const singularName = pascalcase(pluralize.singular(name))
+  const singularName = pascalcase(singularize(name))
   let componentPath
   let layoutPath
   if (scaffoldPath === '') {
@@ -85,7 +84,7 @@ const getImportComponentNames = (
 // Includes imports from getImportComponentNames()
 const getTemplateStrings = (name, scaffoldPath, nestScaffoldByModel = true) => {
   const pluralPascalName = pascalcase(pluralize(name))
-  const singularPascalName = pascalcase(pluralize.singular(name))
+  const singularPascalName = pascalcase(singularize(name))
 
   const pluralCamelName = camelcase(pluralPascalName)
   const singularCamelName = camelcase(singularPascalName)
@@ -122,7 +121,7 @@ export const files = async ({
   typescript = false,
   nestScaffoldByModel,
 }) => {
-  const model = await getSchema(pascalcase(pluralize.singular(name)))
+  const model = await getSchema(name)
   if (typeof nestScaffoldByModel === 'undefined') {
     nestScaffoldByModel = getConfig().generate.nestScaffoldByModel
   }
@@ -181,7 +180,11 @@ export const files = async ({
 const assetFiles = (name) => {
   let fileList = {}
   const assets = fs.readdirSync(
-    path.join(templateRoot, 'scaffold', 'templates', 'assets')
+    customOrDefaultTemplatePath({
+      side: 'web',
+      generator: 'scaffold',
+      templatePath: 'assets',
+    })
   )
 
   assets.forEach((asset) => {
@@ -194,7 +197,11 @@ const assetFiles = (name) => {
       !fs.existsSync(outputPath)
     ) {
       const template = generateTemplate(
-        path.join('scaffold', 'templates', 'assets', asset),
+        customOrDefaultTemplatePath({
+          side: 'web',
+          generator: 'scaffold',
+          templatePath: path.join('assets', asset),
+        }),
         {
           name,
         }
@@ -213,11 +220,15 @@ const layoutFiles = (
   templateStrings
 ) => {
   const pluralName = pascalcase(pluralize(name))
-  const singularName = pascalcase(pluralize.singular(name))
+  const singularName = pascalcase(singularize(name))
   let fileList = {}
 
   const layouts = fs.readdirSync(
-    path.join(templateRoot, 'scaffold', 'templates', 'layouts')
+    customOrDefaultTemplatePath({
+      side: 'web',
+      generator: 'scaffold',
+      templatePath: 'layouts',
+    })
   )
 
   layouts.forEach((layout) => {
@@ -233,7 +244,11 @@ const layoutFiles = (
       outputLayoutName
     )
     const template = generateTemplate(
-      path.join('scaffold', 'templates', 'layouts', layout),
+      customOrDefaultTemplatePath({
+        side: 'web',
+        generator: 'scaffold',
+        templatePath: path.join('layouts', layout),
+      }),
       {
         name,
         pascalScaffoldPath,
@@ -257,14 +272,19 @@ const pageFiles = async (
   templateStrings
 ) => {
   const pluralName = pascalcase(pluralize(name))
-  const singularName = pascalcase(pluralize.singular(name))
+  const singularName = pascalcase(singularize(name))
   const model = await getSchema(singularName)
   const idType = getIdType(model)
+  const idTsType = mapPrismaScalarToPagePropTsType(idType)
 
   let fileList = {}
 
   const pages = fs.readdirSync(
-    path.join(templateRoot, 'scaffold', 'templates', 'pages')
+    customOrDefaultTemplatePath({
+      side: 'web',
+      generator: 'scaffold',
+      templatePath: 'pages',
+    })
   )
 
   pages.forEach((page) => {
@@ -285,9 +305,14 @@ const pageFiles = async (
       outputPageName
     )
     const template = generateTemplate(
-      path.join('scaffold', 'templates', 'pages', page),
+      customOrDefaultTemplatePath({
+        side: 'web',
+        generator: 'scaffold',
+        templatePath: path.join('pages', page),
+      }),
       {
         idType,
+        idTsType,
         name,
         pascalScaffoldPath,
         ...templateStrings,
@@ -310,7 +335,7 @@ const componentFiles = async (
   templateStrings
 ) => {
   const pluralName = pascalcase(pluralize(name))
-  const singularName = pascalcase(pluralize.singular(name))
+  const singularName = pascalcase(singularize(name))
   const model = await getSchema(singularName)
   const idType = getIdType(model)
   const intForeignKeys = intForeignKeysForModel(model)
@@ -394,7 +419,11 @@ const componentFiles = async (
   }
 
   const components = fs.readdirSync(
-    path.join(templateRoot, 'scaffold', 'templates', 'components')
+    customOrDefaultTemplatePath({
+      side: 'web',
+      generator: 'scaffold',
+      templatePath: 'components',
+    })
   )
 
   await asyncForEach(components, (component) => {
@@ -415,7 +444,11 @@ const componentFiles = async (
     )
 
     const template = generateTemplate(
-      path.join('scaffold', 'templates', 'components', component),
+      customOrDefaultTemplatePath({
+        side: 'web',
+        generator: 'scaffold',
+        templatePath: path.join('components', component),
+      }),
       {
         name,
         columns,
@@ -447,7 +480,7 @@ export const routes = async ({
   }
 
   const templateNames = getTemplateStrings(name, scaffoldPath)
-  const singularPascalName = pascalcase(pluralize.singular(name))
+  const singularPascalName = pascalcase(singularize(name))
   const pluralPascalName = pascalcase(pluralize(name))
   const pluralParamName = paramCase(pluralPascalName)
   const model = await getSchema(singularPascalName)
@@ -592,6 +625,10 @@ const tasks = ({ model, path, force, tests, typescript, javascript }) => {
         title: 'Adding scaffold asset imports...',
         task: () => addScaffoldImport(),
       },
+      {
+        title: `Generating types ...`,
+        task: () => generateTypes,
+      },
     ],
     { collapse: false, exitOnError: true }
   )
@@ -604,18 +641,20 @@ export const handler = async ({
   typescript,
 }) => {
   if (modelArg.toLowerCase() === 'dbauth') {
-    // proxy to dbAuth generator
-    return await dbAuthHandler({ force, tests, typescript })
+    console.info(c.green('\nGenerate dbAuth pages with:\n'))
+    console.info('  yarn rw generate dbAuth\n')
+
+    process.exit(0)
   }
 
   if (tests === undefined) {
     tests = getConfig().generate.tests
   }
   const { model, path } = splitPathAndModel(modelArg)
-  await ensureUniquePlural({ model })
 
-  const t = tasks({ model, path, force, tests, typescript })
   try {
+    const { name } = await verifyModelName({ name: model })
+    const t = tasks({ model: name, path, force, tests, typescript })
     await t.run()
   } catch (e) {
     console.log(c.error(e.message))

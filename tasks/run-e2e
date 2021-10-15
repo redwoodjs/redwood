@@ -127,7 +127,6 @@ const runDevServerInBackground = () => {
     shell: true,
     stdio: 'inherit',
     env: {
-      REDWOOD_SECURE_SERVICES: '1',
       RWJS_DELAY_RESTART: '500',
     },
   })
@@ -136,7 +135,8 @@ const runDevServerInBackground = () => {
 const runCypress = () => {
   console.log('Starting Cypress...')
   execa.sync(
-    'yarn cypress',
+    // do not use Yarn to run Cypress; this avoids missing binary errors
+    './node_modules/.bin/cypress',
     ['open', `--env RW_PATH=${REDWOOD_PROJECT_DIRECTORY}`],
     {
       cwd: path.join(REDWOODJS_FRAMEWORK_PATH, 'tasks/e2e'),
