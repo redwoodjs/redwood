@@ -98,7 +98,7 @@ const checkYarnVersion = () => {
       shell: true,
     })
     console.log('Yarn version is', stdout)
-    if(stdout.startsWith('3')){
+    if(!stdout.startsWith('1')){
       setYarnClassic()
     }
   }
