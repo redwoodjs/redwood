@@ -24,7 +24,7 @@ describe('validate absence', () => {
     try {
       validate('email', 'rob@redwoodjs.com', { absence: true })
     } catch (e) {
-      expect(e.message).toEqual('email is not absent')
+      expect(e.message).toEqual('Email is not absent')
     }
   })
 
@@ -66,7 +66,7 @@ describe('validate acceptance', () => {
     try {
       validate('terms', false, { acceptance: true })
     } catch (e) {
-      expect(e.message).toEqual('terms must be accepted')
+      expect(e.message).toEqual('Terms must be accepted')
     }
   })
 
@@ -100,7 +100,7 @@ describe('validate exclusion', () => {
     try {
       validate('selection', 'foo', { exclusion: ['foo', 'bar'] })
     } catch (e) {
-      expect(e.message).toEqual('selection is reserved')
+      expect(e.message).toEqual('Selection is reserved')
     }
   })
 
@@ -158,7 +158,7 @@ describe('validate format', () => {
     try {
       validate('text', 'foobar', { format: /baz/ })
     } catch (e) {
-      expect(e.message).toEqual('text is not formatted correctly')
+      expect(e.message).toEqual('Text is not formatted correctly')
     }
     expect.assertions(1)
   })
@@ -196,7 +196,7 @@ describe('validate inclusion', () => {
     try {
       validate('selection', 'foo', { inclusion: ['foo', 'bar'] })
     } catch (e) {
-      expect(e.message).toEqual('selection is not valid')
+      expect(e.message).toEqual('Selection is not valid')
     }
   })
 
@@ -221,7 +221,7 @@ describe('validate length', () => {
     try {
       validate('username', 'a', { length: { min: 2 } })
     } catch (e) {
-      expect(e.message).toEqual('username must have more than 2 characters')
+      expect(e.message).toEqual('Username must have more than 2 characters')
     }
 
     // custom error
@@ -249,7 +249,7 @@ describe('validate length', () => {
     try {
       validate('username', 'jeff', { length: { max: 2 } })
     } catch (e) {
-      expect(e.message).toEqual('username must have less than 2 characters')
+      expect(e.message).toEqual('Username must have less than 2 characters')
     }
 
     // custom error
@@ -280,7 +280,7 @@ describe('validate length', () => {
     try {
       validate('username', 'foobar', { length: { equal: 5 } })
     } catch (e) {
-      expect(e.message).toEqual('username does not have exactly 5 characters')
+      expect(e.message).toEqual('Username does not have exactly 5 characters')
     }
 
     // custom error
@@ -313,7 +313,7 @@ describe('validate length', () => {
     try {
       validate('username', 'foobar', { length: { between: [2, 4] } })
     } catch (e) {
-      expect(e.message).toEqual('username must be between 2 and 4 characters')
+      expect(e.message).toEqual('Username must be between 2 and 4 characters')
     }
 
     // custom error
@@ -539,7 +539,7 @@ describe('validate numericality', () => {
     try {
       validate('number', 3, { numericality: { even: true } })
     } catch (e) {
-      expect(e.message).toEqual('number must be even')
+      expect(e.message).toEqual('Number must be even')
     }
   })
 
@@ -605,7 +605,7 @@ describe('validate presence', () => {
     try {
       validate('email', undefined, { presence: true })
     } catch (e) {
-      expect(e.message).toEqual('email is not present')
+      expect(e.message).toEqual('Email is not present')
     }
   })
 
@@ -649,15 +649,15 @@ describe('validate', () => {
 describe('validateWith', () => {
   it('runs a custom function as a validation', () => {
     const validateFunction = jest.fn()
-    validateWith('email', 'rob@redwoodjs.com', validateFunction)
+    validateWith(validateFunction)
 
-    expect(validateFunction).toBeCalledWith('email', 'rob@redwoodjs.com')
+    expect(validateFunction).toBeCalledWith()
   })
 
   it('catches errors and raises ServiceValidationError', () => {
     // Error instance
     try {
-      validateWith('email', 'rob@redwoodjs.com', () => {
+      validateWith(() => {
         throw new Error('Invalid value')
       })
     } catch (e) {
@@ -667,7 +667,7 @@ describe('validateWith', () => {
 
     // Error string
     try {
-      validateWith('email', 'rob@redwoodjs.com', () => {
+      validateWith(() => {
         throw 'Bad input'
       })
     } catch (e) {
@@ -735,7 +735,7 @@ describe('validateUniqueness', () => {
     try {
       await validateUniqueness('user', { email: 'rob@redwoodjs.com' }, () => {})
     } catch (e) {
-      expect(e.message).toEqual('email must be unique')
+      expect(e.message).toEqual('Email must be unique')
     }
 
     // multiple fields
@@ -746,7 +746,7 @@ describe('validateUniqueness', () => {
         () => {}
       )
     } catch (e) {
-      expect(e.message).toEqual('name, email must be unique')
+      expect(e.message).toEqual('Name, Email must be unique')
     }
     expect.assertions(2)
   })
