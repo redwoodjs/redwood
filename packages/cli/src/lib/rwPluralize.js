@@ -92,7 +92,7 @@ export function isSingular(word) {
  *   }
  * }
  *
- * Firthermore we need to handle changing the mappings (this is only done in
+ * Furthermore we need to handle changing the mappings (this is only done in
  * tests). So if the method is called again, with input 'pokemon', 'pokemons'
  * all the old mappings first have to be removed, before adding the new ones
  *
