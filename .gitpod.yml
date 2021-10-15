@@ -5,9 +5,10 @@ workspaceLocation: .
 tasks:
   - name: Terminal
     openMode: split-left
+    before: |
+      export RWFW_PATH="/workspace/redwood"
+      export RWJS_DEV_API_URL="http://localhost"
     init: |
-      eval $(gp env -e RWFW_PATH="/workspace/redwood")
-      eval $(gp env -e RWJS_DEV_API_URL="http://localhost")
       mkdir /workspace/rw-test-app
     command: |
       cd /workspace/rw-test-app
@@ -16,6 +17,9 @@ tasks:
 
   - name: "Dev Servers"
     openMode: split-right
+    before: |
+      export RWFW_PATH="/workspace/redwood"
+      export RWJS_DEV_API_URL="http://localhost"
     init: |
       cd /workspace/redwood
       yarn install
