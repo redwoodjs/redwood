@@ -687,8 +687,12 @@ describe('validateWith', () => {
 const mockFindFirst = jest.fn()
 jest.mock('@prisma/client', () => ({
   PrismaClient: jest.fn(() => ({
-    $transaction: async (func) => func(),
-    findFirst: mockFindFirst,
+    $transaction: async (func) =>
+      func({
+        user: {
+          findFirst: mockFindFirst,
+        },
+      }),
   })),
 }))
 
@@ -704,7 +708,7 @@ describe('validateUniqueness', () => {
     }))
 
     try {
-      await validateUniqueness({ email: 'rob@redwoodjs.com' }, () => {})
+      await validateUniqueness('user', { email: 'rob@redwoodjs.com' }, () => {})
     } catch (e) {
       expect(e).toBeInstanceOf(ValidationErrors.UniquenessValidationError)
     }
@@ -714,7 +718,7 @@ describe('validateUniqueness', () => {
   it('calls callback if record is unique', async () => {
     mockFindFirst.mockImplementation(() => null)
 
-    await validateUniqueness({ email: 'rob@redwoodjs.com' }, () => {
+    await validateUniqueness('user', { email: 'rob@redwoodjs.com' }, () => {
       expect(true).toEqual(true)
     })
 
@@ -729,7 +733,7 @@ describe('validateUniqueness', () => {
 
     // single field
     try {
-      await validateUniqueness({ email: 'rob@redwoodjs.com' }, () => {})
+      await validateUniqueness('user', { email: 'rob@redwoodjs.com' }, () => {})
     } catch (e) {
       expect(e.message).toEqual('email must be unique')
     }
@@ -737,6 +741,7 @@ describe('validateUniqueness', () => {
     // multiple fields
     try {
       await validateUniqueness(
+        'user',
         { name: 'Rob', email: 'rob@redwoodjs.com' },
         () => {}
       )
@@ -753,9 +758,14 @@ describe('validateUniqueness', () => {
     }))
 
     try {
-      await validateUniqueness({ email: 'rob@redwoodjs.com' }, () => {}, {
-        message: 'Email already taken',
-      })
+      await validateUniqueness(
+        'user',
+        { email: 'rob@redwoodjs.com' },
+        () => {},
+        {
+          message: 'Email already taken',
+        }
+      )
     } catch (e) {
       expect(e.message).toEqual('Email already taken')
     }

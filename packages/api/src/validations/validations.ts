@@ -402,23 +402,29 @@ export const validateWith = (
 // the database and that the `callback` is executed before someone else gets a
 // chance to create the same value.
 //
-// validateUniqueness({ email: 'rob@redwoodjs.com' }, () => {
+// As of Prisma v3.2.1 requires preview feature "interactiveTransactions" be
+// enabled in prisma.schema:
+//
+//   previewFeatures = ["interactiveTransactions"]
+//
+// return validateUniqueness('user', { email: 'rob@redwoodjs.com' }, () => {
 //   return db.create(data: { email })
 // }, { message: '...'})
 export const validateUniqueness = async (
+  model: string,
   fields: Record<string, unknown>,
-  callback: () => Promise<any>,
+  callback: (tx: PrismaClient) => Promise<any>,
   options: UniquenessValidatorOptions = {}
 ) => {
   const db = new PrismaClient()
 
-  return await db.$transaction(async () => {
-    if (await db.findFirst({ where: fields })) {
+  return await db.$transaction(async (tx: PrismaClient) => {
+    if (await tx[model].findFirst({ where: fields })) {
       throw new ValidationErrors.UniquenessValidationError(
         fields,
         options.message
       )
     }
-    return callback.call(this)
+    return callback(tx)
   })
 }
