@@ -99,7 +99,7 @@ const setYarnClassic = () => {
       stdio: 'inherit',
     })
   } catch (e) {
-    console.error('Error: Could not set yarn v1')
+    console.error('Error: This E2E script requires the global Yarn version to be >=1.22.15. From a directory outside the Framework directory, check with `yarn --version`')
     console.error(e)
     process.exit(1)
   }
