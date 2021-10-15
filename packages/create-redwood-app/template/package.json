@@ -8,7 +8,7 @@
     ]
   },
   "devDependencies": {
-    "@redwoodjs/core": "0.37.2"
+    "@redwoodjs/core": "0.37.4"
   },
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config",
@@ -17,5 +17,11 @@
   "engines": {
     "node": ">=14.x <=16.x",
     "yarn": "1.x"
+  },
+  "prisma": {
+    "seed": "yarn rw exec seed"
+  },
+  "resolutions": {
+    "@webpack-cli/serve": "1.5.2"
   }
 }
