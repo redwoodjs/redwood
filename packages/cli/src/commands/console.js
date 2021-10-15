@@ -17,16 +17,6 @@ const loadPrismaClient = (replContext) => {
   replContext.db = db
 }
 
-const loadUserConfig = (replContext) => {
-  try {
-    const userConfig = require(paths.api.console)
-    Object.assign(replContext, userConfig)
-  } catch (e) {
-    console.error(`Error loading user console config from ${paths.api.console}`)
-    throw e
-  }
-}
-
 const consoleHistoryFile = path.join(paths.generated.base, 'console_history')
 const persistConsoleHistory = (r) => {
   fs.appendFileSync(
@@ -92,7 +82,4 @@ export const handler = () => {
 
   // Make the project's db (i.e. Prisma Client) available
   loadPrismaClient(r.context)
-
-  // Load the user's custom console configuration
-  loadUserConfig(r.context)
 }

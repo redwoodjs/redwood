@@ -74,8 +74,7 @@ const CONFIG_FILE_NAME = 'redwood.toml'
 const PATH_API_DIR_FUNCTIONS = 'api/src/functions'
 const PATH_RW_SCRIPTS = 'scripts'
 const PATH_API_DIR_GRAPHQL = 'api/src/graphql'
-const PATH_API_DIR_CONFIG = 'api/config'
-const PATH_API_DIR_CONFIG_CONSOLE = 'api/config/console' // .js|.ts
+const PATH_API_DIR_CONFIG = 'api/src/config'
 const PATH_API_DIR_LIB = 'api/src/lib'
 const PATH_API_DIR_SERVICES = 'api/src/services'
 const PATH_API_DIR_SRC = 'api/src'
@@ -170,7 +169,6 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       graphql: path.join(BASE_DIR, PATH_API_DIR_GRAPHQL),
       lib: path.join(BASE_DIR, PATH_API_DIR_LIB),
       config: path.join(BASE_DIR, PATH_API_DIR_CONFIG),
-      console: resolveFile(path.join(BASE_DIR, PATH_API_DIR_CONFIG_CONSOLE)),
       services: path.join(BASE_DIR, PATH_API_DIR_SERVICES),
       src: path.join(BASE_DIR, PATH_API_DIR_SRC),
       dist: path.join(BASE_DIR, 'api/dist'),
