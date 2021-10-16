@@ -93,16 +93,15 @@ const copyFrameworkPackages = () => {
 }
 const checkYarnVersion = () => {
   try {
-    const {stdout} = execa.sync('yarn --version', {
+    const { stdout } = execa.sync('yarn --version', {
       cwd: REDWOOD_PROJECT_DIRECTORY,
       shell: true,
     })
     console.log('Yarn version is', stdout)
-    if(!stdout.startsWith('1')){
+    if (!stdout.startsWith('1')) {
       setYarnClassic()
     }
-  }
-  catch (e) {
+  } catch (e) {
     console.error(e)
     console.error('Error: We could not find yarn')
     process.exit(1)
