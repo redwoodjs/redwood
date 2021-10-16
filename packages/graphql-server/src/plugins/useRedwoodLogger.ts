@@ -18,6 +18,8 @@ import { RedwoodGraphQLContext } from '../functions/types'
  * @param query - Include the query. This is the query or mutation (with fields) made in the request.
  * @param tracing - Include the tracing and timing information.
  * @param userAgent - Include the browser (or client's) user agent.
+ * @param excludeOperations - Exclude the specified operations from being logged.
+ *
  */
 type GraphQLLoggerOptions = {
   /**
@@ -88,6 +90,14 @@ type GraphQLLoggerOptions = {
    * This can be helpful to know what type of client made the request to resolve issues when encountering errors or unexpected behavior.
    */
   userAgent?: boolean
+
+  /**
+   * @description Exclude operation from the log output.
+   *
+   * This is useful when you want to filter out certain operations from the log output.
+   * For example `IntrospectionQuery` from GraphQL playground.
+   */
+  excludeOperations?: string[]
 }
 
 /**
@@ -193,6 +203,7 @@ export const useRedwoodLogger = (
   const includeRequestId = loggerConfig?.options?.requestId
   const includeUserAgent = loggerConfig?.options?.userAgent
   const includeQuery = loggerConfig?.options?.query
+  const excludeOperations = loggerConfig.options?.excludeOperations
 
   return {
     onPluginInit(context) {
@@ -210,6 +221,10 @@ export const useRedwoodLogger = (
 
       const operationName =
         args.operationName || rootOperation.name?.value || 'Anonymous Operation'
+
+      if (excludeOperations?.includes(operationName)) {
+        return
+      }
 
       if (includeOperationName) {
         options['operationName'] = operationName
