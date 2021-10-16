@@ -20,7 +20,7 @@ describe('in javascript (default) mode', () => {
     })
   })
 
-  test('returns exactly 17 files', () => {
+  test('returns exactly 17 files', async () => {
     expect(Object.keys(files).length).toEqual(17)
   })
   // SDL
