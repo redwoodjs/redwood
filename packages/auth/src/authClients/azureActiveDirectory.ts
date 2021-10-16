@@ -27,6 +27,11 @@ export const azureActiveDirectory = (
         scopes: ['openid', 'profile'],
       }
 
+      // The recommended call pattern is to first try to call AcquireTokenSilent,
+      // and if it fails with a MsalUiRequiredException, call AcquireTokenXYZ
+      // https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/wiki/AcquireTokenSilentAsync-using-a-cached-token
+      // NOTE: We are not catching by the `MsalUiRequiredException`, perhaps we can branch off `error.name`
+      // if this strategy doesn't work properly.
       try {
         const token = await client.acquireTokenSilent(request)
         return token.idToken
