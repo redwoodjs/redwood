@@ -22,18 +22,19 @@ export const azureActiveDirectory = (
     logout: (options?: EndSessionRequest) => client.logoutRedirect(options),
     signup: async (options?: RedirectRequest) => client.loginRedirect(options),
     getToken: async (options?: SilentRequest) => {
-      try {
-        // Acquire id token silently
-        const token = await client.acquireTokenSilent(
-          options || { scopes: ['openid', 'profile'] }
-        )
+      // Default to scopes if options is not passed
+      const request = options || {
+        scopes: ['openid', 'profile'],
+      }
 
+      try {
+        const token = await client.acquireTokenSilent(request)
         return token.idToken
       } catch (err) {
-        console.error(`An exception caught while trying to obtain token`, err)
-
-        return null
+        client.acquireTokenRedirect(request)
       }
+
+      return null
     },
     restoreAuthState: async () => {
       // As we are using the redirect flow, we need to call handleRedirectPromise
@@ -43,7 +44,7 @@ export const azureActiveDirectory = (
         // Wait for promise
         await client.handleRedirectPromise()
 
-        // Try get all accounts
+        // Get all accounts
         const accounts = client.getAllAccounts()
 
         if (accounts.length === 0) {
