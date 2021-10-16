@@ -4306,15 +4306,14 @@ __metadata:
     "@types/lodash.merge": 4.6.6
     "@types/lodash.omitby": 4.6.6
     "@types/md5": 2.3.1
-    "@types/pino": 6.3.11
     core-js: 3.17.3
     crypto-js: 4.1.1
     jest: 27.2.0
     jsonwebtoken: 8.5.1
     jwks-rsa: 2.0.4
     md5: 2.3.0
-    pino: ^7.0.0-rc.9
-    pino-pretty: 7.0.1
+    pino: 7.0.2
+    pino-pretty: 7.1.0
     split2: 3.2.2
     typescript: 4.4.3
     uuid: 8.3.2
@@ -4546,7 +4545,6 @@ __metadata:
     "@types/jsonwebtoken": 8.5.5
     "@types/lodash.merge": 4.6.6
     "@types/lodash.omitby": 4.6.6
-    "@types/uuid": 8.3.1
     core-js: 3.17.3
     graphql: 15.5.3
     graphql-helix: 1.7.0
@@ -4557,7 +4555,8 @@ __metadata:
     lodash.merge: 4.6.2
     lodash.omitby: 4.6.0
     node-fetch: 2.6.1
-    pino: ^7.0.0-rc.9
+    pino: 7.0.2
+    pino-pretty: 7.1.0
     split2: 3.2.2
     typescript: 4.4.3
     uuid: 8.3.2
@@ -6559,36 +6558,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/pino-pretty@npm:*":
-  version: 4.7.1
-  resolution: "@types/pino-pretty@npm:4.7.1"
-  dependencies:
-    "@types/pino": "*"
-  checksum: 61e90071f4a1c5ab8cf36b843dc843f793a192c99997f02a20ea216a8c65d205db4fcee6c201aaf489ed146b1af3d2560ace86d4dda087748e6c47ba59970f69
-  languageName: node
-  linkType: hard
-
-"@types/pino-std-serializers@npm:*":
-  version: 2.4.1
-  resolution: "@types/pino-std-serializers@npm:2.4.1"
-  dependencies:
-    "@types/node": "*"
-  checksum: 7853b0d056783f921346d6df9e6f7816d56879cc631f54225253e4b0f0abf7bf1e89b192980d92965739480a9dc6fcee7e966c6b7d8ddb242375507e668944f8
-  languageName: node
-  linkType: hard
-
-"@types/pino@npm:*, @types/pino@npm:6.3.11":
-  version: 6.3.11
-  resolution: "@types/pino@npm:6.3.11"
-  dependencies:
-    "@types/node": "*"
-    "@types/pino-pretty": "*"
-    "@types/pino-std-serializers": "*"
-    sonic-boom: ^2.1.0
-  checksum: 040fd0995920a3aa81d4b8db43dae3ed2f4b0387700467a54d70d22b99b2417a74384e78ed06dafb981dee76f8a08b2cf65d529d665e331d86a89eefec8d2d75
-  languageName: node
-  linkType: hard
-
 "@types/prettier@npm:*, @types/prettier@npm:^2.1.5":
   version: 2.4.1
   resolution: "@types/prettier@npm:2.4.1"
@@ -6782,13 +6751,6 @@ __metadata:
   version: 2.0.6
   resolution: "@types/unist@npm:2.0.6"
   checksum: 8690789328e8e10c487334341fcf879fd49f8987c98ce49849f9871052f95d87477735171bb661e6f551bdb95235e015dfdad1867ca1d9b5b88a053f72ac40eb
-  languageName: node
-  linkType: hard
-
-"@types/uuid@npm:8.3.1":
-  version: 8.3.1
-  resolution: "@types/uuid@npm:8.3.1"
-  checksum: 3f7adf2bf15a805044e2b30e40247008a0b3b2d0795ad0d2de57c91ff55c69c340e1e4d9fc6959e330f1a8844f584a8f0b9c73b813986430b8e7ac2b38c87d81
   languageName: node
   linkType: hard
 
@@ -10014,7 +9976,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"colorette@npm:^2.0.0, colorette@npm:^2.0.10":
+"colorette@npm:^2.0.10, colorette@npm:^2.0.7":
   version: 2.0.16
   resolution: "colorette@npm:2.0.16"
   checksum: 7430bd996545347f262ae9716bfc8ca3776606e9db854279082004f3141b15a64ad2ee0e4f10cacba5a07cc92ca3edc2d01cbe73fd2843ccd80e98d0e3a8e79b
@@ -11013,7 +10975,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dateformat@npm:^4.5.1":
+"dateformat@npm:^4.6.3":
   version: 4.6.3
   resolution: "dateformat@npm:4.6.3"
   checksum: e2023b905e8cfe2eb8444fb558562b524807a51cdfe712570f360f873271600b5c94aebffaf11efb285e2c072264a7cf243eadb68f3eba0f8cc85fb86cd25df6
@@ -19931,16 +19893,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"pino-abstract-transport@npm:^0.3.0":
-  version: 0.3.0
-  resolution: "pino-abstract-transport@npm:0.3.0"
-  dependencies:
-    split2: ^3.2.2
-  checksum: 8649fe47d9154779e4c74539edd7f67d1fa7e41da1bb56e8e04494adbee5f068cf7b298e979032fc47aff84a82061021d789349643f9f6e10ecb5c68644cf255
-  languageName: node
-  linkType: hard
-
-"pino-abstract-transport@npm:v0.4.0":
+"pino-abstract-transport@npm:^0.4.0, pino-abstract-transport@npm:v0.4.0":
   version: 0.4.0
   resolution: "pino-abstract-transport@npm:0.4.0"
   dependencies:
@@ -19950,16 +19903,16 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"pino-pretty@npm:7.0.1":
-  version: 7.0.1
-  resolution: "pino-pretty@npm:7.0.1"
+"pino-pretty@npm:7.1.0":
+  version: 7.1.0
+  resolution: "pino-pretty@npm:7.1.0"
   dependencies:
     args: ^5.0.1
-    colorette: ^2.0.0
-    dateformat: ^4.5.1
+    colorette: ^2.0.7
+    dateformat: ^4.6.3
     fast-safe-stringify: ^2.0.7
     joycon: ^3.0.0
-    pino-abstract-transport: ^0.3.0
+    pino-abstract-transport: ^0.4.0
     pump: ^3.0.0
     readable-stream: ^3.6.0
     rfdc: ^1.3.0
@@ -19968,7 +19921,7 @@ fsevents@^1.2.7:
     strip-json-comments: ^3.1.1
   bin:
     pino-pretty: bin.js
-  checksum: a7504d1496bda441d1d7d8678243f1ce302feaed34f335312b23eed971a026062b0bb08489b9524be630c4b5de1248c68d9e11507e21de814f9dad1bfe995f91
+  checksum: 6ed5ed8cb8495c08ffae88dcfe94cd9a4d67da23f77d2a22ea1cf5ab14371723aef726c890b9e88ca56697bdb4f1ccaa08457e0d841b8b8d4d2d6314edb48ab5
   languageName: node
   linkType: hard
 
@@ -19979,9 +19932,9 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"pino@npm:^7.0.0-rc.9":
-  version: 7.0.0-rc.9
-  resolution: "pino@npm:7.0.0-rc.9"
+"pino@npm:7.0.2":
+  version: 7.0.2
+  resolution: "pino@npm:7.0.2"
   dependencies:
     fast-redact: ^3.0.0
     fastify-warning: ^0.2.0
@@ -19995,7 +19948,7 @@ fsevents@^1.2.7:
     thread-stream: ^0.11.1
   bin:
     pino: bin.js
-  checksum: 9b65f2f98b9ca550c0f2e34198edd9dc14d5d5479f1c09cf4ac6f28cc01677a49e6defaa8cd60b5f1c13fa49f066fdfb6a1052eff531a9d8098f2b437a9959df
+  checksum: f88f3bb8fe64f4dc425192b62cd28ed24d18139736d1ba06d20c91b7e2083b58c1356a0e45f76d1524ce9e797b43c2d7f05ac0fbe3ef008917256553ee730580
   languageName: node
   linkType: hard
 
@@ -22842,7 +22795,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"sonic-boom@npm:^2.1.0, sonic-boom@npm:^2.2.0, sonic-boom@npm:^2.2.1":
+"sonic-boom@npm:^2.2.0, sonic-boom@npm:^2.2.1":
   version: 2.3.0
   resolution: "sonic-boom@npm:2.3.0"
   dependencies:
