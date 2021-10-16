@@ -35,3 +35,8 @@ model UserProfile {
   userId   Int
   user     User   @relation(fields: [userId], references: [id])
 }
+
+model CustomData {
+  id       Int    @id @default(autoincrement())
+  data     String
+}

@@ -15,7 +15,9 @@ jest.mock('@redwoodjs/internal', () => {
   }
 })
 
-import { getSchema } from '../schemaHelpers'
+import prompts from 'prompts'
+
+import { getSchema, verifyModelName } from '../schemaHelpers'
 
 test('getSchema returns a parsed schema.prisma', async () => {
   let schema = await getSchema('Post')
@@ -40,4 +42,22 @@ test('getSchema throws an error if model name not found', async () => {
   }
 
   expect(error).toEqual(new Error(error.message))
+})
+
+test('verifyModelName', async () => {
+  let modelName
+
+  modelName = await verifyModelName({ name: 'User' })
+  expect(modelName).toEqual({ name: 'User' })
+
+  modelName = await verifyModelName({ name: 'user' })
+  expect(modelName).toEqual({ name: 'User' })
+
+  prompts.inject('CustomDatas')
+  modelName = await verifyModelName({ name: 'CustomData' })
+  expect(modelName).toEqual({ name: 'CustomData' })
+
+  prompts.inject('CustomDatas')
+  modelName = await verifyModelName({ name: 'customData' })
+  expect(modelName).toEqual({ name: 'CustomData' })
 })
