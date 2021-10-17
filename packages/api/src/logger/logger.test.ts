@@ -2,7 +2,7 @@ import { existsSync, readFileSync, statSync } from 'fs'
 import os from 'os'
 import { join } from 'path'
 
-import { BaseLogger, LoggerOptions } from 'pino'
+import type P from 'pino'
 import split from 'split2'
 
 const pid = process.pid
@@ -58,11 +58,11 @@ const watchFileCreated = (filename) => {
 }
 
 const setupLogger = (
-  loggerOptions?: LoggerOptions,
+  loggerOptions?: P.LoggerOptions,
   destination?: string,
   showConfig?: boolean
 ): {
-  logger: BaseLogger
+  logger: P.BaseLogger
   logSinkData?: Promise<unknown>
 } => {
   if (destination) {

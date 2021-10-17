@@ -42,6 +42,7 @@ import { useRedwoodLogger } from '../plugins/useRedwoodLogger'
 import { useRedwoodPopulateContext } from '../plugins/useRedwoodPopulateContext'
 
 import type { GraphQLHandlerOptions } from './types'
+import type P from 'pino'
 
 /**
  * Extracts and parses body payload from event with base64 encoding check
@@ -111,7 +112,7 @@ export const createGraphQLHandler = ({
 }: GraphQLHandlerOptions) => {
   let schema: GraphQLSchema
   let redwoodDirectivePlugins = [] as Plugin<any>[]
-  const logger = loggerConfig.logger
+  const logger = loggerConfig.logger as P.BaseLogger
 
   try {
     // @NOTE: We wrap services for beforeResolvers
@@ -211,7 +212,7 @@ export const createGraphQLHandler = ({
       requestContext: lambdaContext,
     })
 
-    const logger = loggerConfig.logger
+    const logger = loggerConfig.logger as P.BaseLogger
 
     // In the future, this could be part of a specific handler for AWS lambdas
     lambdaContext.callbackWaitsForEmptyEventLoop = false
