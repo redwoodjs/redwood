@@ -28,12 +28,12 @@ const paramsForRoute = (route: string) => {
 export type TrailingSlashesTypes = 'never' | 'always' | 'preserve'
 
 export interface ParamType {
-  constraint: RegExp
-  transform: (value: any) => unknown
+  constraint?: RegExp
+  transform?: (value: any) => unknown
 }
 
 /** Definitions of the core param types. */
-const coreParamTypes = {
+const coreParamTypes: Record<string, ParamType> = {
   Int: {
     constraint: /\d+/,
     transform: Number,
@@ -81,16 +81,12 @@ const matchPath = (
 
   // Map all params from the route to their type constraint regex to create a "type-constrained route" regexp
   for (const [name, type] of routeParams) {
-    let typeRegex = '[^/]+'
-    // Undefined constraint if not supported
-    // So leaves it as string
+    // `undefined` constraint if `type` is not supported
     const constraint =
-      type && allParamTypes[type as SupportedRouterParamTypes]?.constraint
+      allParamTypes[type as SupportedRouterParamTypes]?.constraint
 
-    if (constraint) {
-      // Get the regex as a string
-      typeRegex = constraint.source || '[^/]+'
-    }
+    // Get the regex as a string, or default regex if no constraint
+    const typeRegex = constraint?.source || '[^/]+'
 
     typeConstrainedRoute = typeConstrainedRoute.replace(
       type ? `{${name}:${type}}` : `{${name}}`,
@@ -115,7 +111,7 @@ const matchPath = (
       const typeInfo = allParamTypes[transformName as SupportedRouterParamTypes]
 
       let transformedValue: string | unknown = value
-      if (typeInfo && typeof typeInfo.transform === 'function') {
+      if (typeof typeInfo?.transform === 'function') {
         transformedValue = typeInfo.transform(value)
       }
 
