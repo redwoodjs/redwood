@@ -53,6 +53,7 @@ const coreParamTypes = {
   },
   Glob: {
     constraint: /.*/,
+    transform: (glob: string) => glob,
   },
 }
 
