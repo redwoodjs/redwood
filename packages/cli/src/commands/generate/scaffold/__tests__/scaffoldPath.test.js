@@ -9,7 +9,7 @@ let filesLower, filesUpper
 
 beforeAll(async () => {
   filesLower = await scaffold.files({
-    model: 'post',
+    model: 'Post',
     path: 'admin',
     tests: true,
     nestScaffoldByModel: true,
@@ -219,7 +219,7 @@ describe('admin/post', () => {
     test('creates a single-word name routes', async () => {
       expect(
         await scaffold.routes({
-          model: 'post',
+          model: 'Post',
           path: 'admin',
           nestScaffoldByModel: true,
         })
@@ -234,7 +234,7 @@ describe('admin/post', () => {
     test('creates a multi-word name routes', async () => {
       expect(
         await scaffold.routes({
-          model: 'userProfile',
+          model: 'UserProfile',
           path: 'admin',
           nestScaffoldByModel: true,
         })
@@ -250,7 +250,7 @@ describe('admin/post', () => {
   describe('GraphQL queries', () => {
     test('the GraphQL in the index query does not contain object types', async () => {
       const userProfileFiles = await scaffold.files({
-        model: 'userProfile',
+        model: 'UserProfile',
         path: 'admin',
         tests: false,
         nestScaffoldByModel: true,
@@ -270,7 +270,7 @@ describe('admin/post', () => {
 
     test('the GraphQL in the show query does not contain object types', async () => {
       const userProfileFiles = await scaffold.files({
-        model: 'userProfile',
+        model: 'UserProfile',
         path: 'admin',
         tests: false,
         nestScaffoldByModel: true,
@@ -290,7 +290,7 @@ describe('admin/post', () => {
 
     test('the GraphQL in the edit query does not contain object types', async () => {
       const userProfileFiles = await scaffold.files({
-        model: 'userProfile',
+        model: 'UserProfile',
         path: 'admin',
         tests: false,
         nestScaffoldByModel: true,
@@ -312,7 +312,7 @@ describe('admin/post', () => {
   describe('Foreign key casting', () => {
     test('creates a new component with int foreign keys converted in onSave', async () => {
       const foreignKeyFiles = await scaffold.files({
-        model: 'userProfile',
+        model: 'UserProfile',
         path: 'admin',
         tests: false,
         nestScaffoldByModel: true,
@@ -327,7 +327,7 @@ describe('admin/post', () => {
 
     test('creates an edit component with int foreign keys converted in onSave', async () => {
       const foreignKeyFiles = await scaffold.files({
-        model: 'userProfile',
+        model: 'UserProfile',
         path: 'admin',
         tests: false,
         nestScaffoldByModel: true,
