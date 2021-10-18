@@ -44,20 +44,54 @@ test('getSchema throws an error if model name not found', async () => {
   expect(error).toEqual(new Error(error.message))
 })
 
-test('verifyModelName', async () => {
-  let modelName
+describe('verifyModelName', () => {
+  it('Accepts the model name in PascalCase', async () => {
+    const modelName = await verifyModelName({ name: 'User' })
+    expect(modelName).toEqual({ name: 'User' })
+  })
 
-  modelName = await verifyModelName({ name: 'User' })
-  expect(modelName).toEqual({ name: 'User' })
+  it('Accepts the model name in camelCase', async () => {
+    const modelName = await verifyModelName({ name: 'user' })
+    expect(modelName).toEqual({ name: 'User' })
+  })
 
-  modelName = await verifyModelName({ name: 'user' })
-  expect(modelName).toEqual({ name: 'User' })
+  it('Accepts the plural form of the model (in PascalCase) even if the model name is singular', async () => {
+    const modelName = await verifyModelName({ name: 'Users' })
+    expect(modelName).toEqual({ name: 'User' })
+  })
 
-  prompts.inject('CustomDatas')
-  modelName = await verifyModelName({ name: 'CustomData' })
-  expect(modelName).toEqual({ name: 'CustomData' })
+  it('Accepts the plural form of the model (in camelCase) even if the model name is singular', async () => {
+    const modelName = await verifyModelName({ name: 'users' })
+    expect(modelName).toEqual({ name: 'User' })
+  })
 
-  prompts.inject('CustomDatas')
-  modelName = await verifyModelName({ name: 'customData' })
-  expect(modelName).toEqual({ name: 'CustomData' })
+  it('Uses the plural form of the model if that model exists (PascalCase)', async () => {
+    prompts.inject('CustomDatas')
+    const modelName = await verifyModelName({ name: 'CustomData' })
+    expect(modelName).toEqual({ name: 'CustomData' })
+  })
+
+  it('Uses the plural form of the model if that model exists (camelCase)', async () => {
+    prompts.inject('CustomDatas')
+    const modelName = await verifyModelName({ name: 'customData' })
+    expect(modelName).toEqual({ name: 'CustomData' })
+  })
+
+  it('Uses the plural form of the model if that model exists (camelCase)', async () => {
+    prompts.inject('CustomDatas')
+    const modelName = await verifyModelName({ name: 'customData' })
+    expect(modelName).toEqual({ name: 'CustomData' })
+  })
+
+  it('Uses the plural form of the model even if a singular form also exists (PascalCase)', async () => {
+    prompts.inject('PostsList')
+    const modelName = await verifyModelName({ name: 'Posts' })
+    expect(modelName).toEqual({ name: 'Posts' })
+  })
+
+  it('Uses the plural form of the model even if a singular form also exists (camelCase)', async () => {
+    prompts.inject('PostsList')
+    const modelName = await verifyModelName({ name: 'posts' })
+    expect(modelName).toEqual({ name: 'Posts' })
+  })
 })
