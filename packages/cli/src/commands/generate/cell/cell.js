@@ -3,14 +3,14 @@ import pascalcase from 'pascalcase'
 import { generate as generateTypes } from '@redwoodjs/internal'
 
 import { transformTSToJS } from '../../../lib'
-import { getSchema } from '../../../lib'
+import { isWordPluralizable } from '../../../lib/pluralHelpers'
 import { isPlural, singularize } from '../../../lib/rwPluralize'
+import { getSchema } from '../../../lib/schemaHelpers'
 import { yargsDefaults } from '../../generate'
 import {
   templateForComponentFile,
   createYargsForComponentGeneration,
   forcePluralizeWord,
-  isWordPluralizable,
 } from '../helpers'
 
 const COMPONENT_SUFFIX = 'Cell'
