@@ -28,8 +28,6 @@
     "lodash.merge": "4.6.2",
     "lodash.omitby": "4.6.0",
     "node-fetch": "2.6.1",
-    "pino": "7.0.2",
-    "pino-pretty": "7.1.0",
     "uuid": "8.3.2"
   },
   "devDependencies": {

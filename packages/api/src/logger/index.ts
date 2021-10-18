@@ -3,6 +3,12 @@ import type P from 'pino'
 import * as prettyPrint from 'pino-pretty'
 
 export type LogLevel = 'info' | 'query' | 'warn' | 'error'
+export type BaseLogger = P.BaseLogger
+export type DestinationStream = P.DestinationStream
+export type LevelWithSilent = P.LevelWithSilent
+export type LoggerOptions = P.LoggerOptions
+export type LoggerExtras = P.LoggerExtras
+export type PrettyOptions = P.PrettyOptions
 
 // @TODO use type from Prisma once the issue is solved
 // https://github.com/prisma/prisma/issues/8291
@@ -135,7 +141,7 @@ export const redactionsList: string[] = [
  * @default 'silent' in Test
  *
  */
-export const logLevel: P.LevelWithSilent | string = (() => {
+export const logLevel: LevelWithSilent | string = (() => {
   if (typeof process.env.LOG_LEVEL !== 'undefined') {
     return process.env.LOG_LEVEL
   } else if (isProduction) {
@@ -159,7 +165,7 @@ export const logLevel: P.LevelWithSilent | string = (() => {
  * - Use a shorted log message that omits server name
  * - Humanize time in GMT
  * */
-export const defaultPrettyPrintOptions: P.PrettyOptions = {
+export const defaultPrettyPrintOptions: PrettyOptions = {
   colorize: true,
   ignore: 'hostname,pid',
   levelFirst: true,
@@ -196,7 +202,7 @@ export const defaultPrettyPrintOptions: P.PrettyOptions = {
  * @see {@link https://github.com/pinojs/pino/blob/master/docs/api.md}
  * @see {@link https://github.com/pinojs/pino-pretty}
  */
-export const defaultLoggerOptions: P.LoggerOptions = {
+export const defaultLoggerOptions: LoggerOptions = {
   prettyPrint: isPretty && defaultPrettyPrintOptions,
   prettifier: isPretty && prettifier,
   level: logLevel,
@@ -214,8 +220,8 @@ export const defaultLoggerOptions: P.LoggerOptions = {
  * @property {boolean} showConfig - Display logger configuration on initialization
  */
 export interface RedwoodLoggerOptions {
-  options?: P.LoggerOptions
-  destination?: string | P.DestinationStream
+  options?: LoggerOptions
+  destination?: string | DestinationStream
   showConfig?: boolean
 }
 
@@ -240,7 +246,7 @@ export const createLogger = ({
   options,
   destination,
   showConfig = false,
-}: RedwoodLoggerOptions): P.BaseLogger => {
+}: RedwoodLoggerOptions): BaseLogger => {
   const hasDestination = typeof destination !== 'undefined'
   const isFile = hasDestination && typeof destination === 'string'
   const isStream = hasDestination && !isFile
@@ -250,8 +256,8 @@ export const createLogger = ({
   if (isPretty && options && options.prettyPrint) {
     const prettyOptions = {
       prettyPrint: {
-        ...(defaultLoggerOptions.prettyPrint as P.PrettyOptions),
-        ...(options.prettyPrint as P.PrettyOptions),
+        ...(defaultLoggerOptions.prettyPrint as PrettyOptions),
+        ...(options.prettyPrint as PrettyOptions),
       },
     }
 
@@ -286,7 +292,7 @@ export const createLogger = ({
       )
     }
 
-    return pino(options, stream as P.DestinationStream)
+    return pino(options, stream as DestinationStream)
   } else {
     if (isStream && isDevelopment && !isTest) {
       console.warn(
@@ -300,7 +306,7 @@ export const createLogger = ({
       )
     }
 
-    return pino(options, stream as P.DestinationStream)
+    return pino(options, stream as DestinationStream)
   }
 }
 
@@ -342,7 +348,7 @@ export const emitLogLevels = (setLogLevels: LogLevel[]): LogDefinition[] => {
  */
 interface PrismaLoggingConfig {
   db: PrismaClient
-  logger: P.LoggerExtras
+  logger: LoggerExtras
   logLevels: LogLevel[]
   slowQueryThreshold?: number
 }
