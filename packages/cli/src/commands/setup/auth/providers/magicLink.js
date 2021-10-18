@@ -10,7 +10,7 @@ export const config = {
 
 // required packages to install
 export const webPackages = ['magic-sdk']
-export const apiPackages = []
+export const apiPackages = ['@magic-sdk/admin']
 
 // any notes to print out when the job is done
 export const notes = [
