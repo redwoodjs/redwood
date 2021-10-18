@@ -270,7 +270,11 @@ describe('query params should not override path params', () => {
 
   const TestRouter = () => (
     <Router>
-      <Route path="/user/{id:Int}/contact/{contactId:Int}" page={ParamPage} name="contact" />
+      <Route
+        path="/user/{id:Int}/contact/{contactId:Int}"
+        page={ParamPage}
+        name="contact"
+      />
     </Router>
   )
 
