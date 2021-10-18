@@ -14,7 +14,7 @@
 </p>
 <!-- prettier-ignore-end -->
 <br>
-<h1 align="center">The JS App Framework for Startups</h1>
+<h1 align="center">The App Framework for Startups</h1>
 
 <h2 align="center">Ship today with architecture for tomorrow.</h2>
 
