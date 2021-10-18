@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
+import camelcase from 'camelcase'
 import Listr from 'listr'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
@@ -56,10 +57,25 @@ export const templateForComponentFile = ({
   templateVars,
   componentName,
   outputPath,
+  subSection,
 }) => {
-  const basePath = webPathSection
+  let basePath = webPathSection
     ? getPaths().web[webPathSection]
     : getPaths().api[apiPathSection]
+
+  if (subSection) {
+    // Check to see if an alternate casing already exists; use that if it does.
+    const files = fs.readdirSync(basePath)
+    const existingSubSection = files.find((file) =>
+      new RegExp(subSection, 'i').test(file)
+    )
+
+    basePath = path.join(
+      basePath,
+      existingSubSection ? existingSubSection : camelcase(subSection)
+    )
+  }
+
   const outputComponentName =
     componentName || pascalcase(paramCase(name)) + suffix
   const componentOutputPath =
@@ -147,6 +163,10 @@ export const createYargsForComponentGeneration = ({
           description: 'Generate storybook files',
           type: 'boolean',
         })
+        .option('path', {
+          description: `Path to the ${componentName}`,
+          type: 'string',
+        })
 
       // Add in passed in positionals
       Object.entries(positionalsObj).forEach(([option, config]) => {
@@ -167,6 +187,13 @@ export const createYargsForComponentGeneration = ({
 
       try {
         options = await preTasksFn(options)
+
+        const { model, path } = splitPathAndModel(options.name)
+        options.name = model
+
+        if (!options.path) {
+          options.path = path
+        }
 
         const tasks = new Listr(
           [
@@ -242,4 +269,14 @@ export const mapPrismaScalarToPagePropTsType = (scalarType) => {
     DateTime: 'string',
   }
   return prismaScalarToTsType[scalarType] || 'unknown'
+}
+
+const splitPathAndModel = (pathSlashModel) => {
+  const path = pathSlashModel.split('/').slice(0, -1).join('/')
+  // This code will work whether or not there's a path in model
+  // E.g. if model is just 'post',
+  // path.split('/') will return ['post'].
+  const model = pathSlashModel.split('/').pop()
+
+  return { model, path }
 }

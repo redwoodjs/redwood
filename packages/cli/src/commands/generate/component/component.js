@@ -11,6 +11,7 @@ export const files = ({ name, typescript = false, ...options }) => {
   const componentFile = templateForComponentFile({
     name,
     webPathSection: REDWOOD_WEB_PATH_NAME,
+    subSection: options.path,
     extension,
     generator: 'component',
     templatePath: 'component.tsx.template',
@@ -19,6 +20,7 @@ export const files = ({ name, typescript = false, ...options }) => {
     name,
     extension: `.test${extension}`,
     webPathSection: REDWOOD_WEB_PATH_NAME,
+    subSection: options.path,
     generator: 'component',
     templatePath: 'test.tsx.template',
   })
@@ -26,6 +28,7 @@ export const files = ({ name, typescript = false, ...options }) => {
     name,
     extension: `.stories${extension}`,
     webPathSection: REDWOOD_WEB_PATH_NAME,
+    subSection: options.path,
     generator: 'component',
     templatePath: 'stories.tsx.template',
   })

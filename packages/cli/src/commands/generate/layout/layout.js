@@ -14,6 +14,7 @@ export const files = ({ name, typescript = false, ...options }) => {
     name,
     suffix: COMPONENT_SUFFIX,
     webPathSection: REDWOOD_WEB_PATH_NAME,
+    subSection: options.path,
     extension,
     generator: 'layout',
     templatePath: options.skipLink
@@ -25,6 +26,7 @@ export const files = ({ name, typescript = false, ...options }) => {
     suffix: COMPONENT_SUFFIX,
     extension: `.test${extension}`,
     webPathSection: REDWOOD_WEB_PATH_NAME,
+    subSection: options.path,
     generator: 'layout',
     templatePath: 'test.tsx.template',
   })
@@ -33,6 +35,7 @@ export const files = ({ name, typescript = false, ...options }) => {
     suffix: COMPONENT_SUFFIX,
     extension: `.stories${extension}`,
     webPathSection: REDWOOD_WEB_PATH_NAME,
+    subSection: options.path,
     generator: 'layout',
     templatePath: 'stories.tsx.template',
   })

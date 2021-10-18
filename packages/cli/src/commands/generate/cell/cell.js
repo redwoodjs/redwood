@@ -88,6 +88,7 @@ export const files = async ({
     name: cellName,
     suffix: COMPONENT_SUFFIX,
     extension: generateTypescript ? '.tsx' : '.js',
+    subSection: options.path,
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'cell',
     templatePath: `cell${templateNameSuffix}.tsx.template`,
@@ -102,6 +103,7 @@ export const files = async ({
     suffix: COMPONENT_SUFFIX,
     extension: generateTypescript ? '.test.tsx' : '.test.js',
     webPathSection: REDWOOD_WEB_PATH_NAME,
+    subSection: options.path,
     generator: 'cell',
     templatePath: 'test.js.template',
   })
@@ -111,6 +113,7 @@ export const files = async ({
     suffix: COMPONENT_SUFFIX,
     extension: generateTypescript ? '.stories.tsx' : '.stories.js',
     webPathSection: REDWOOD_WEB_PATH_NAME,
+    subSection: options.path,
     generator: 'cell',
     templatePath: 'stories.js.template',
   })
@@ -120,6 +123,7 @@ export const files = async ({
     suffix: COMPONENT_SUFFIX,
     extension: generateTypescript ? '.mock.ts' : '.mock.js',
     webPathSection: REDWOOD_WEB_PATH_NAME,
+    subSection: options.path,
     generator: 'cell',
     templatePath: `mock${templateNameSuffix}.js.template`,
   })
