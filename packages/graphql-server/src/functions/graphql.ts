@@ -114,7 +114,6 @@ export const createGraphQLHandler = ({
   const logger = loggerConfig.logger
 
   try {
-    // @NOTE: We wrap services for beforeResolvers
     // Likely to be deprecated, and we can just pass in services to makeMergedSchema
     const wrappedServices = makeServices({ services })
 
