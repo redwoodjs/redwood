@@ -12,6 +12,7 @@
     { "path": "packages/prerender" },
     { "path": "packages/graphql-server" },
     { "path": "packages/forms" },
+    { "path": "packages/codemods" },
   ],
   "files": []
 }

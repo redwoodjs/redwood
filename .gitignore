@@ -9,5 +9,13 @@ yarn-error.log
 tasks/.verdaccio
 tasks/e2e/cypress/fixtures/example.json
 tmp/
-.vscode/*
 blog-test-project/*
+.yarn/*
+**/.yarn/install-state.gz
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
+*.code-workspace

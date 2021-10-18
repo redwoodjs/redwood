@@ -16,7 +16,7 @@ Redwood has a vibrant community that we want to highlight as much as possible. U
 
 ## Managing All-Contributors Data
 In general, this is a three-part process:
-1. Update the four `*.all-contributorsrc` files with new contributors
+1. Update the three `*.all-contributorsrc` files with new contributors
 2. Merge changes into the main `.all-contributorsrc` file
 3. Update README.md#Contributors with changes
 
@@ -27,14 +27,15 @@ In general, this is a three-part process:
 _note: this file is also used for all aggregated contributors_
 - `.all-contributorsrc`
 
-**CRWA** `redwoodjs/create-redwood-app` project:
-- `.crwa.all-contributorsrc`
-
 **Website** `redwoodjs/redwoodjs.com` project:
 - `.rwjs.com.all-contributorsrc`
 
 **Learn** `redwoodjs/learn.redwoodjs.com` project:
 - `.learn.all-contributorsrc`
+
+// Archived
+**CRWA** `redwoodjs/create-redwood-app` project:
+- `.crwa.all-contributorsrc`
 
 >When adding contributors, use this "type" key for specific repos:
 >- 💻 (code) == Framework
@@ -67,6 +68,10 @@ _note: this file is also used for all aggregated contributors_
 > - ajcwebdev
 > - forresthayes
 > - kimadeline
+> - simoncrypta
+> - KrisCoulson
+> - keithtelliott
+> - callingmedic911
 
 #### Framework
 ```js

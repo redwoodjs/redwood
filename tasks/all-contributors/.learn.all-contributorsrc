@@ -174,28 +174,10 @@
       ]
     },
     {
-      "login": "simoncrypta",
-      "name": "Simon Gagnon",
-      "avatar_url": "https://avatars.githubusercontent.com/u/18013532?v=4",
-      "profile": "https://simoncrypta.dev/",
-      "contributions": [
-        "tutorial"
-      ]
-    },
-    {
       "login": "Vashiru",
       "name": "Vashiru",
       "avatar_url": "https://avatars.githubusercontent.com/u/11370057?v=4",
       "profile": "https://github.com/Vashiru",
-      "contributions": [
-        "tutorial"
-      ]
-    },
-    {
-      "login": "callingmedic911",
-      "name": "Aditya Pandey",
-      "avatar_url": "https://avatars.githubusercontent.com/u/2629902?v=4",
-      "profile": "https://adityaworks.com/",
       "contributions": [
         "tutorial"
       ]
@@ -225,6 +207,24 @@
       "profile": "https://github.com/toddpress",
       "contributions": [
         "tutorial"
+      ]
+    },
+    {
+      "login": "stav",
+      "name": "Steven Almeroth",
+      "avatar_url": "https://avatars.githubusercontent.com/u/204645?v=4",
+      "profile": "http://stevenmichael.almeroth.net/",
+      "contributions": [
+        "tutorial"
+      ]
+    },
+    {
+      "login": "0x1a4f7d58",
+      "name": "Bob",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10007010?v=4",
+      "profile": "https://github.com/0x1a4f7d58",
+      "contributions": [
+        "doc"
       ]
     }
   ],

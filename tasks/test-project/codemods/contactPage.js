@@ -1,5 +1,5 @@
 const body = `
-<Toaster />
+<Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
 <Form onSubmit={onSubmit} validation={{ mode: 'onBlur' }} error={error}>
   <Label
     name="name"

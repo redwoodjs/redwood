@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/structure",
   "description": "noun: the arrangement of and relations between the parts or elements of something complex",
-  "version": "0.36.4",
+  "version": "0.37.4",
   "license": "MIT",
   "main": "dist/index.js",
   "files": [
@@ -9,12 +9,12 @@
   ],
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@prisma/sdk": "2.30.3",
-    "@redwoodjs/internal": "0.36.4",
+    "@prisma/sdk": "3.2.1",
+    "@redwoodjs/internal": "0.37.4",
     "@types/line-column": "1.0.0",
     "camelcase": "6.2.0",
     "deepmerge": "4.2.2",
-    "dotenv-defaults": "2.0.2",
+    "dotenv-defaults": "3.0.0",
     "enquirer": "2.3.6",
     "findup-sync": "4.0.0",
     "graphql": "15.5.3",
@@ -32,11 +32,14 @@
     "yargs-parser": "20.2.9"
   },
   "devDependencies": {
+    "@babel/cli": "7.15.4",
     "@types/fs-extra": "9.0.12",
     "@types/lodash": "4.14.173",
     "@types/lru-cache": "5.1.1",
     "@types/node": "16.9.2",
-    "@types/vscode": "1.60.0"
+    "@types/vscode": "1.60.0",
+    "jest": "27.2.0",
+    "typescript": "4.4.3"
   },
   "jest": {
     "testPathIgnorePatterns": [
@@ -46,7 +49,7 @@
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",
-    "prepublishOnly": "yarn cross-env NODE_ENV=production yarn build",
+    "prepublishOnly": "NODE_ENV=production yarn build",
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
     "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",

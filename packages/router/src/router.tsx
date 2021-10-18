@@ -97,7 +97,7 @@ const InternalRoute: React.VFC<InternalRouteProps> = ({
   }
 
   const searchParams = parseSearch(location.search)
-  const allParams = { ...pathParams, ...searchParams }
+  const allParams = { ...searchParams, ...pathParams }
 
   if (redirect) {
     const newPath = replaceParams(redirect, allParams)

@@ -1,9 +1,9 @@
-import { APIGatewayProxyEvent } from 'aws-lambda'
+import type { APIGatewayProxyEvent } from 'aws-lambda'
 import { Request } from 'graphql-helix'
 
 import { CorsContext } from './cors'
 
-const HEALTH_CHECK_PATH = '/.well-known/apollo/server-health'
+const HEALTH_CHECK_PATH = '/health'
 
 export type OnHealthcheckFn = (event: APIGatewayProxyEvent) => Promise<any>
 
