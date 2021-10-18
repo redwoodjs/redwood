@@ -9,7 +9,7 @@ import terminalLink from 'terminal-link'
 import { resolveFile } from '@redwoodjs/internal'
 import { getProject } from '@redwoodjs/structure'
 
-import { getPaths, writeFilesTask } from '../../../lib'
+import { getPaths, writeFilesTask, transformTSToJS } from '../../../lib'
 import c from '../../../lib/colors'
 
 const AUTH_PROVIDER_IMPORT = `import { AuthProvider } from '@redwoodjs/auth'`
@@ -40,7 +40,7 @@ const getTemplates = () =>
   fs
     .readdirSync(path.resolve(__dirname, 'templates'))
     .reduce((templates, file) => {
-      if (file === 'auth.js.template') {
+      if (file === 'auth.ts.template') {
         return {
           ...templates,
           base: [path.resolve(__dirname, 'templates', file)],
@@ -192,8 +192,11 @@ export const files = (provider) => {
       templateFiles.forEach((templateFile) => {
         const outputPath =
           OUTPUT_PATHS[path.basename(templateFile).split('.')[1]]
+        const content = fs.readFileSync(templateFile).toString()
         files = Object.assign(files, {
-          [outputPath]: fs.readFileSync(templateFile).toString(),
+          [outputPath]: getProject().isTypeScriptProject
+            ? content
+            : transformTSToJS(outputPath, content),
         })
       })
     }
@@ -201,11 +204,13 @@ export const files = (provider) => {
 
   // if there are no provider-specific templates, just use the base auth one
   if (Object.keys(files).length === 0) {
+    const content = fs.readFileSync(templates.base[0]).toString()
     files = {
-      [OUTPUT_PATHS.auth]: fs.readFileSync(templates.base[0]).toString(),
+      [OUTPUT_PATHS.auth]: getProject().isTypeScriptProject
+        ? content
+        : transformTSToJS(templates.base[0], content),
     }
   }
-
   return files
 }
 
