@@ -1267,7 +1267,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jscodeshift@npm:^0.13.0":
+"jscodeshift@npm:0.13.0":
   version: 0.13.0
   resolution: "jscodeshift@npm:0.13.0"
   dependencies:
@@ -1647,7 +1647,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "redwoodjs-tutorial-codemods@workspace:."
   dependencies:
-    jscodeshift: ^0.13.0
+    jscodeshift: 0.13.0
   languageName: unknown
   linkType: soft
 

@@ -7,7 +7,12 @@ import { BaseLogger, LoggerOptions } from 'pino'
 
 import { createLogger } from '@redwoodjs/api/logger'
 
-import { testSchema, testQuery, testErrorQuery } from '../__fixtures__/common'
+import {
+  testSchema,
+  testQuery,
+  testErrorQuery,
+  testFilteredQuery,
+} from '../__fixtures__/common'
 import { LoggerConfig, useRedwoodLogger } from '../useRedwoodLogger'
 
 const watchFileCreated = (filename) => {
@@ -131,5 +136,27 @@ describe('Populates context', () => {
     expect(errorLogStatement.name).toEqual('graphql-server')
     expect(errorLogStatement.level).toEqual(50)
     expect(errorLogStatement.msg).toEqual('You are forbidden')
+  })
+
+  it('Should not log filtered graphql operations', async () => {
+    const loggerConfig = {
+      logger,
+      options: {
+        excludeOperations: ['FilteredQuery'],
+      },
+    } as LoggerConfig
+    const testkit = createTestkit([useRedwoodLogger(loggerConfig)], testSchema)
+    await testkit.execute(testFilteredQuery, {}, {})
+    await watchFileCreated(logFile)
+
+    const logStatements = parseLogFile(logFile)
+
+    expect(logStatements).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          msg: expect.stringContaining('FilteredQuery'),
+        }),
+      ])
+    )
   })
 })
