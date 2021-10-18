@@ -20,7 +20,7 @@ export const commonOptions = {
 } as const
 
 export const apiCliOptions = {
-  port: { default: getConfig().web?.port || 8911, type: 'number', alias: 'p' },
+  port: { default: getConfig().api?.port || 8911, type: 'number', alias: 'p' },
   socket: { type: 'string' },
   apiRootPath: {
     alias: ['rootPath', 'root-path'],
