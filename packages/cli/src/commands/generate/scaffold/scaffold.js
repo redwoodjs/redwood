@@ -394,8 +394,9 @@ const componentFiles = async (
         componentMetadata[column.type]?.deserilizeFunction ||
         componentMetadata.default.deserilizeFunction,
       validation:
-        componentMetadata[column.type]?.validation ??
-        componentMetadata.default.validation,
+        componentMetadata[column.type]?.validation ?? column?.isRequired
+          ? componentMetadata.default.validation
+          : null,
       listDisplayFunction:
         componentMetadata[column.type]?.listDisplayFunction ||
         componentMetadata.default.listDisplayFunction,
