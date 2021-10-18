@@ -15,7 +15,6 @@ import {
   readFile,
   writeFile,
   asyncForEach,
-  getSchema,
   getDefaultArgs,
   getPaths,
   writeFilesTask,
@@ -25,12 +24,12 @@ import {
 } from '../../../lib'
 import c from '../../../lib/colors'
 import { pluralize, singularize } from '../../../lib/rwPluralize'
+import { getSchema, verifyModelName } from '../../../lib/schemaHelpers'
 import { yargsDefaults } from '../../generate'
 import {
   customOrDefaultTemplatePath,
   relationsForModel,
   intForeignKeysForModel,
-  ensureUniquePlural,
   mapPrismaScalarToPagePropTsType,
 } from '../helpers'
 import { files as sdlFiles, builder as sdlBuilder } from '../sdl/sdl'
@@ -122,7 +121,7 @@ export const files = async ({
   typescript = false,
   nestScaffoldByModel,
 }) => {
-  const model = await getSchema(pascalcase(singularize(name)))
+  const model = await getSchema(name)
   if (typeof nestScaffoldByModel === 'undefined') {
     nestScaffoldByModel = getConfig().generate.nestScaffoldByModel
   }
@@ -652,10 +651,10 @@ export const handler = async ({
     tests = getConfig().generate.tests
   }
   const { model, path } = splitPathAndModel(modelArg)
-  await ensureUniquePlural({ model })
 
-  const t = tasks({ model, path, force, tests, typescript })
   try {
+    const { name } = await verifyModelName({ name: model })
+    const t = tasks({ model: name, path, force, tests, typescript })
     await t.run()
   } catch (e) {
     console.log(c.error(e.message))

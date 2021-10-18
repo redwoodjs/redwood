@@ -14,7 +14,7 @@ interface ServerError extends Error {
 
 interface RWGqlError {
   message: string
-  graphQLErrors: GraphQLError[]
+  graphQLErrors: ReadonlyArray<GraphQLError>
   networkError: Error | ServerParseError | ServerError | null
 }
 

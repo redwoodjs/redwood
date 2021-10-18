@@ -1,7 +1,9 @@
 /* eslint-env jest */
 const path = require('path')
 
-const { getSchemaDefinitions } = require('@redwoodjs/cli/dist/lib')
+const {
+  getSchemaDefinitions,
+} = require('@redwoodjs/cli/dist/lib/schemaHelpers')
 const { setContext } = require('@redwoodjs/graphql-server')
 const { getPaths } = require('@redwoodjs/internal')
 const { defineScenario } = require('@redwoodjs/testing/dist/api')
