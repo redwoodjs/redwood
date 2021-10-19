@@ -5,10 +5,10 @@
 
 _by Tom Preston-Werner, Peter Pistorius, Rob Cameron, David Price, and more than two hundred amazing contributors (see end of file for a full list)._
 
-**Redwood is an opinionated, full-stack, serverless web application framework
-that will allow you to build and deploy JAMstack applications with ease.**
+**Redwood is an opinionated, full-stack, serverless-ready web application framework
+that will allow you to build and deploy with ease.**
 Imagine a React frontend, statically delivered by CDN, that talks via GraphQL to
-your backend running on AWS Lambdas around the world, all deployable with just a
+your backend running on AWS Lambdas (or containers) around the world, all deployable with just a
 `git push`—that's Redwood. By making a lot of decisions for you, Redwood lets
 you get to work on what makes your application special, instead of wasting
 cycles choosing and re-choosing various technologies and configurations. Plus,
@@ -72,7 +72,7 @@ use:
 - Logging using [Pino](https://getpino.io) including to [transports](https://getpino.io/#/docs/transports)
 - Signature verification and payload signing for handling incoming and outgoing Webhooks
 - Page prerendering
-- First class JAMstack-style deployment to [Netlify](https://www.netlify.com/), [Vercel](https://vercel.com/), [Render](https://render.com/), and [Serverless](https://www.serverless.com/).
+- First class Jamstack-style deployment to both serverless and traditional infrastructure: [Netlify](https://www.netlify.com/), [Vercel](https://vercel.com/), [Serverless](https://www.serverless.com/), [Render](https://render.com/), [Docker container](https://community.redwoodjs.com/t/dockerize-redwoodjs/2291) (for AWS, Google Cloud, Azure, etc.), and many more on the way!
 
 ## Roadmap
 
@@ -83,7 +83,7 @@ A framework like Redwood has a lot of moving parts; the Roadmap is a great way t
 
 ## The Redwood philosophy
 
-Redwood believes that [JAMstack](https://jamstack.org/) is a huge leap forward in how we can write web
+Redwood believes that [Jamstack](https://jamstack.org/) architecture is a huge leap forward in how we can write web
 applications that are easy to write, deploy, scale, and maintain.
 
 Redwood believes that there is power in standards, and makes decisions for you
@@ -100,7 +100,7 @@ Redwood believes that, as much as possible, you should be able to operate in a
 serverless mindset and deploy to a generic computational grid. This helps unlock
 the next point...
 
-Redwood believes that deployment and scaling should be super easy. To deploy
+Redwood believes that deployment and scaling should be super easy, whether deploying to serverless or traditional infrastructure. To deploy
 your application, you should only need to commit and push to your Git
 repository. To scale from zero to thousands of users should not require your
 intervention. The principles of JAMstack and serverless make this possible.

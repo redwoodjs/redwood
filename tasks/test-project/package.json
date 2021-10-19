@@ -7,6 +7,6 @@
     "transform": "node node_modules/.bin/jscodeshift --fail-on-error"
   },
   "dependencies": {
-    "jscodeshift": "^0.13.0"
+    "jscodeshift": "0.13.0"
   }
 }

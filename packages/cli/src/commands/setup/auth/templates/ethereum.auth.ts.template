@@ -14,7 +14,7 @@ export const getCurrentUser = async (decoded) => {
  *
  * @returns {boolean} - If the currentUser is authenticated
  */
-export const isAuthenticated = () => {
+export const isAuthenticated = (): boolean => {
   return !!context.currentUser
 }
 
