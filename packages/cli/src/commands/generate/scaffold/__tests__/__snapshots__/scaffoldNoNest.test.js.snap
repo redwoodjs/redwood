@@ -126,7 +126,6 @@ const PostForm = (props) => {
           defaultValue={props.post?.image}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
-          validation={{ required: true }}
         />
 
         <FieldError name=\\"image\\" className=\\"rw-field-error\\" />
@@ -176,7 +175,6 @@ const PostForm = (props) => {
           defaultValue={props.post?.rating}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
-          validation={{ required: true }}
           transformValue=\\"Float\\"
         />
 
@@ -194,7 +192,6 @@ const PostForm = (props) => {
           defaultValue={formatDatetime(props.post?.postedAt)}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
-          validation={{ required: true }}
         />
 
         <FieldError name=\\"postedAt\\" className=\\"rw-field-error\\" />
@@ -1234,7 +1231,6 @@ const PostForm = (props) => {
           defaultValue={props.post?.image}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
-          validation={{ required: true }}
         />
         <FieldError name=\\"image\\" className=\\"rw-field-error\\" />
 
@@ -1281,7 +1277,6 @@ const PostForm = (props) => {
           defaultValue={props.post?.rating}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
-          validation={{ required: true }}
           transformValue=\\"Float\\"
         />
         <FieldError name=\\"rating\\" className=\\"rw-field-error\\" />
@@ -1298,7 +1293,6 @@ const PostForm = (props) => {
           defaultValue={formatDatetime(props.post?.postedAt)}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
-          validation={{ required: true }}
         />
         <FieldError name=\\"postedAt\\" className=\\"rw-field-error\\" />
 
