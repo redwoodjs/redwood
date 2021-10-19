@@ -748,6 +748,13 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   border-color: #c53030;
   color: #c53030;
 }
+
+.rw-input-error:focus {
+  outline: none;
+  border-color: #c53030;
+  box-shadow: 0 0 5px #c53030;
+}
+
 .rw-field-error {
   display: block;
   margin-top: 0.25rem;
@@ -1855,6 +1862,13 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   border-color: #c53030;
   color: #c53030;
 }
+
+.rw-input-error:focus {
+  outline: none;
+  border-color: #c53030;
+  box-shadow: 0 0 5px #c53030;
+}
+
 .rw-field-error {
   display: block;
   margin-top: 0.25rem;
