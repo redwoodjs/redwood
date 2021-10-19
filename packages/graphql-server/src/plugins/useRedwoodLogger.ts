@@ -1,8 +1,9 @@
 import { Plugin } from '@envelop/core'
 import { handleStreamOrSingleExecutionResult } from '@envelop/types'
 import { ExecutionResult, Kind, OperationDefinitionNode } from 'graphql'
-import type P from 'pino'
 import { v4 as uuidv4 } from 'uuid'
+
+import type { Logger, LevelWithSilent } from '@redwoodjs/api/logger'
 
 import { AuthenticationError, ForbiddenError } from '../errors'
 import { RedwoodGraphQLContext } from '../functions/types'
@@ -45,7 +46,7 @@ type GraphQLLoggerOptions = {
    * @default level of the logger set in LoggerConfig
    *
    */
-  level?: P.LevelWithSilent | string
+  level?: LevelWithSilent | string
 
   /**
    * @description Include response data sent to client.
@@ -107,7 +108,7 @@ type GraphQLLoggerOptions = {
  * @param options the GraphQLLoggerOptions such as tracing, operationName, etc
  */
 export type LoggerConfig = {
-  logger: P.BaseLogger | P.LoggerExtras
+  logger: Logger
   options?: GraphQLLoggerOptions
 }
 
@@ -117,11 +118,7 @@ export type LoggerConfig = {
  * when the execution of the operation is done.
  */
 const logResult =
-  (
-    loggerConfig: LoggerConfig,
-    envelopLogger: P.BaseLogger,
-    operationName: string
-  ) =>
+  (loggerConfig: LoggerConfig, envelopLogger: Logger, operationName: string) =>
   ({ result }: { result: ExecutionResult }) => {
     const includeTracing = loggerConfig?.options?.tracing
     const includeData = loggerConfig?.options?.data
@@ -189,11 +186,10 @@ const logResult =
 export const useRedwoodLogger = (
   loggerConfig: LoggerConfig
 ): Plugin<RedwoodGraphQLContext> => {
-  const logger = loggerConfig.logger as P.BaseLogger
-  const loggerExtras = loggerConfig.logger as P.LoggerExtras
+  const logger = loggerConfig.logger
   const level = loggerConfig.options?.level || logger.level || 'warn'
 
-  const childLogger = loggerExtras.child({
+  const childLogger = logger.child({
     name: 'graphql-server',
   })
 
