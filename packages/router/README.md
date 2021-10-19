@@ -343,8 +343,8 @@ We call built-in parameter types _core parameter types_. All core parameter type
 Suppose the data in your route url conveys information about a file path. Simply entering a string corresponding to the file path can lead to ambiguity,
 given that the variable includes `/` characters. In the example below, `filePath` can be any string at all... but unlike other parameter types,
 can include values of the form `file/to/path`.
-```js
 
+```js
 // Routes.js
 <Route path="/path/{filePath...}/end" page={FilePage} name="filePath"/>
 ```
