@@ -3,7 +3,7 @@ import pino from 'pino'
 import * as prettyPrint from 'pino-pretty'
 
 /**
- * Type from Pino
+ * Types from Pino
  * @see https://github.com/pinojs/pino/blob/master/pino.d.ts
  */
 export type Logger = BaseLogger & LoggerExtras & Record<string, any>
