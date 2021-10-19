@@ -4149,7 +4149,7 @@ __metadata:
     jsonwebtoken: 8.5.1
     jwks-rsa: 2.0.4
     md5: 2.3.0
-    pino: 7.0.2
+    pino: 7.0.3
     pino-pretty: 7.1.0
     split2: 3.2.2
     typescript: 4.4.3
@@ -19759,9 +19759,9 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"pino@npm:7.0.2":
-  version: 7.0.2
-  resolution: "pino@npm:7.0.2"
+"pino@npm:7.0.3":
+  version: 7.0.3
+  resolution: "pino@npm:7.0.3"
   dependencies:
     fast-redact: ^3.0.0
     fastify-warning: ^0.2.0
@@ -19775,7 +19775,7 @@ fsevents@^1.2.7:
     thread-stream: ^0.11.1
   bin:
     pino: bin.js
-  checksum: f88f3bb8fe64f4dc425192b62cd28ed24d18139736d1ba06d20c91b7e2083b58c1356a0e45f76d1524ce9e797b43c2d7f05ac0fbe3ef008917256553ee730580
+  checksum: 8769fe78ed32e5045a19c044f77eb5a6ba5de5aaad4794be83b6ebe37871794b4f67e30927a5c3d6419d413bf15678c429fbabcab081e893b2ae1f7b67f0ba18
   languageName: node
   linkType: hard
 

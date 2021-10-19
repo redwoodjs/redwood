@@ -16,7 +16,7 @@
     "jsonwebtoken": "8.5.1",
     "jwks-rsa": "2.0.4",
     "md5": "2.3.0",
-    "pino": "7.0.2",
+    "pino": "7.0.3",
     "pino-pretty": "7.1.0",
     "uuid": "8.3.2"
   },
