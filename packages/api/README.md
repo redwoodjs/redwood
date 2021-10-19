@@ -8,7 +8,10 @@ Right now, the `@redwoodjs/api` package exposes functions that help with logging
 
 We also plan to make Functions platform-agnostic. At the moment, we're targeting AWS Lambda, but we aim to provide a single interface for other providers and build-time support when you've targeted them.
 
+## Package Lead
 
+[@peterp](https://github.com/peterp/)
+[@dthyresson](https://github.com/dthyresson/)
 ### Logging
 
 RedwoodJS provides an opinionated logger with sensible, practical defaults that grants you visibility into the JAMStack applications you're developing and have deployed  -- with ease.
