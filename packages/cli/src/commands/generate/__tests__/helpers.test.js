@@ -82,7 +82,7 @@ test('customOrDefaultTemplatePath returns the app path with proper side, generat
 })
 
 test('templateForComponentFile creates a proper output path for files', () => {
-  const names = ['FooBar', 'fooBar', 'foo-bar', 'foo_bar', 'FOO_BAR', 'FOOBar']
+  const names = ['FooBar', 'fooBar', 'foo-bar', 'foo_bar']
 
   names.forEach((name) => {
     const output = helpers.templateForComponentFile({
@@ -96,6 +96,101 @@ test('templateForComponentFile creates a proper output path for files', () => {
 
     expect(output[0]).toEqual(
       path.normalize('/path/to/project/web/src/pages/FooBarPage/FooBarPage.js')
+    )
+  })
+})
+
+test('templateForComponentFile creates a proper output path for files', () => {
+  const names = ['FOO_BAR', 'FOO-BAR', 'FOOBAR']
+
+  names.forEach((name) => {
+    const output = helpers.templateForComponentFile({
+      name: name,
+      suffix: 'Page',
+      webPathSection: 'pages',
+      generator: 'page',
+      templatePath: 'page.tsx.template',
+      templateVars: page.paramVariants(helpers.pathName(undefined, name)),
+    })
+
+    expect(output[0]).toEqual(
+      path.normalize('/path/to/project/web/src/pages/FOOBARPage/FOOBARPage.js')
+    )
+  })
+})
+
+test('templateForComponentFile creates a proper output path for files', () => {
+  const names = ['FOOBar', 'FOO-Bar', 'FOO_Bar']
+
+  names.forEach((name) => {
+    const output = helpers.templateForComponentFile({
+      name: name,
+      suffix: 'Page',
+      webPathSection: 'pages',
+      generator: 'page',
+      templatePath: 'page.tsx.template',
+      templateVars: page.paramVariants(helpers.pathName(undefined, name)),
+    })
+
+    expect(output[0]).toEqual(
+      path.normalize('/path/to/project/web/src/pages/FOOBarPage/FOOBarPage.js')
+    )
+  })
+})
+
+test('templateForComponentFile creates a proper output path for files', () => {
+  const names = ['AbTest', 'abTest', 'ab-test', 'ab_test']
+
+  names.forEach((name) => {
+    const output = helpers.templateForComponentFile({
+      name: name,
+      suffix: 'Page',
+      webPathSection: 'pages',
+      generator: 'page',
+      templatePath: 'page.tsx.template',
+      templateVars: page.paramVariants(helpers.pathName(undefined, name)),
+    })
+
+    expect(output[0]).toEqual(
+      path.normalize('/path/to/project/web/src/pages/AbTestPage/AbTestPage.js')
+    )
+  })
+})
+
+test('templateForComponentFile creates a proper output path for files', () => {
+  const names = ['ABtest', 'aBtest', 'a-Btest', 'a_Btest']
+
+  names.forEach((name) => {
+    const output = helpers.templateForComponentFile({
+      name: name,
+      suffix: 'Page',
+      webPathSection: 'pages',
+      generator: 'page',
+      templatePath: 'page.tsx.template',
+      templateVars: page.paramVariants(helpers.pathName(undefined, name)),
+    })
+
+    expect(output[0]).toEqual(
+      path.normalize('/path/to/project/web/src/pages/ABtestPage/ABtestPage.js')
+    )
+  })
+})
+
+test('templateForComponentFile creates a proper output path for files', () => {
+  const names = ['ABTest', 'aBTest', 'AB_test', 'AB-test']
+
+  names.forEach((name) => {
+    const output = helpers.templateForComponentFile({
+      name: name,
+      suffix: 'Page',
+      webPathSection: 'pages',
+      generator: 'page',
+      templatePath: 'page.tsx.template',
+      templateVars: page.paramVariants(helpers.pathName(undefined, name)),
+    })
+
+    expect(output[0]).toEqual(
+      path.normalize('/path/to/project/web/src/pages/ABTestPage/ABTestPage.js')
     )
   })
 })

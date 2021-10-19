@@ -242,6 +242,76 @@ test('creates a camelCase route name for multiple word names', () => {
   })
 })
 
+test('creates a camelCase route name for multiple word names', () => {
+  const names = ['FOO_BAR', 'FOO-BAR']
+
+  names.forEach((name) => {
+    expect(page.routes({ name: name, path: 'foo-bar' })).toEqual([
+      '<Route path="foo-bar" page={FOOBARPage} name="fooBar" />',
+    ])
+  })
+})
+
+test('creates a camelCase route name for multiple word names', () => {
+  const names = ['FOOBAR']
+
+  names.forEach((name) => {
+    expect(page.routes({ name: name, path: 'foo-bar' })).toEqual([
+      '<Route path="foo-bar" page={FOOBARPage} name="foobar" />',
+    ])
+  })
+})
+
+test('creates a camelCase route name for multiple word names', () => {
+  const names = ['FOOBar', 'FOO-Bar', 'FOO_Bar']
+
+  names.forEach((name) => {
+    expect(page.routes({ name: name, path: 'foo-bar' })).toEqual([
+      '<Route path="foo-bar" page={FOOBarPage} name="fooBar" />',
+    ])
+  })
+})
+
+test('creates a camelCase route name for multiple word names', () => {
+  const names = ['AbTest', 'abTest', 'ab-test', 'ab_test']
+
+  names.forEach((name) => {
+    expect(page.routes({ name: name, path: 'foo-bar' })).toEqual([
+      '<Route path="foo-bar" page={AbTestPage} name="abTest" />',
+    ])
+  })
+})
+
+test('creates a camelCase route name for multiple word names', () => {
+  const names = ['ABtest', 'aBtest', 'a-Btest', 'a_Btest']
+
+  names.forEach((name) => {
+    expect(page.routes({ name: name, path: 'foo-bar' })).toEqual([
+      '<Route path="foo-bar" page={ABtestPage} name="aBtest" />',
+    ])
+  })
+})
+
+test('creates a camelCase route name for multiple word names', () => {
+  const names = ['ABTest', 'AB_test', 'AB-test']
+
+  names.forEach((name) => {
+    expect(page.routes({ name: name, path: 'foo-bar' })).toEqual([
+      '<Route path="foo-bar" page={ABTestPage} name="abTest" />',
+    ])
+  })
+})
+
+test('creates a camelCase route name for multiple word names', () => {
+  const names = ['aBTest']
+
+  names.forEach((name) => {
+    expect(page.routes({ name: name, path: 'foo-bar' })).toEqual([
+      '<Route path="foo-bar" page={ABTestPage} name="aBTest" />',
+    ])
+  })
+})
+
 test('creates a path equal to passed path', () => {
   expect(page.routes({ name: 'FooBar', path: 'fooBar-baz' })).toEqual([
     '<Route path="fooBar-baz" page={FooBarPage} name="fooBar" />',
