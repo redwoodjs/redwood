@@ -359,13 +359,13 @@ const componentFiles = async (
     },
     Json: {
       componentName: 'TextAreaField',
-      transformValue: 'Json',
+      validation: '{{ valueAsJSON: true }}',
       displayFunction: 'jsonDisplay',
       listDisplayFunction: 'jsonTruncate',
       deserilizeFunction: 'JSON.stringify',
     },
     Float: {
-      transformValue: 'Float',
+      validation: '{{ valueAsNumber: true }}',
     },
     default: {
       componentName: 'TextField',
@@ -374,9 +374,9 @@ const componentFiles = async (
       validation: '{{ required: true }}',
       displayFunction: undefined,
       listDisplayFunction: 'truncate',
-      transformValue: undefined,
     },
   }
+
   const columns = model.fields
     .filter((field) => field.kind !== 'object')
     .map((column) => ({
@@ -392,18 +392,14 @@ const componentFiles = async (
         componentMetadata[column.type]?.deserilizeFunction ||
         componentMetadata.default.deserilizeFunction,
       validation:
-        componentMetadata[column.type]?.validation ?? column?.isRequired
-          ? componentMetadata.default.validation
-          : null,
+        componentMetadata[column.type]?.validation ??
+        (column?.isRequired ? componentMetadata.default.validation : null),
       listDisplayFunction:
         componentMetadata[column.type]?.listDisplayFunction ||
         componentMetadata.default.listDisplayFunction,
       displayFunction:
         componentMetadata[column.type]?.displayFunction ||
         componentMetadata.default.displayFunction,
-      transformValue:
-        componentMetadata[column.type]?.transformValue ||
-        componentMetadata.default.transformValue,
     }))
   const editableColumns = columns.filter((column) => {
     return NON_EDITABLE_COLUMNS.indexOf(column.name) === -1
