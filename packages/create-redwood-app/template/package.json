@@ -20,8 +20,5 @@
   },
   "prisma": {
     "seed": "yarn rw exec seed"
-  },
-  "resolutions": {
-    "@webpack-cli/serve": "1.5.2"
   }
 }
