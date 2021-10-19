@@ -42,7 +42,7 @@ import { useRedwoodLogger } from '../plugins/useRedwoodLogger'
 import { useRedwoodPopulateContext } from '../plugins/useRedwoodPopulateContext'
 
 import type { GraphQLHandlerOptions } from './types'
-import type { BaseLogger } from '@redwoodjs/api'
+import type { BaseLogger } from '@redwoodjs/api/logger'
 /**
  * Extracts and parses body payload from event with base64 encoding check
  *
