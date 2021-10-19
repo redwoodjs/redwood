@@ -6,7 +6,7 @@ import * as prettyPrint from 'pino-pretty'
  * Type from Pino
  * @see https://github.com/pinojs/pino/blob/master/pino.d.ts
  */
-export type Logger = BaseLogger & LoggerExtras & Record<string, any>
+export type Logger = P.Logger
 export type BaseLogger = P.BaseLogger
 export type DestinationStream = P.DestinationStream
 export type LevelWithSilent = P.LevelWithSilent
