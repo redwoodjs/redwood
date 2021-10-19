@@ -336,6 +336,20 @@ We call built-in parameter types _core parameter types_. All core parameter type
 - `Int` - Matches and converts an integer.
 - `Float` - Matches and converts a Float.
 - `Boolean` - Matches and converts Boolean (true or false only)
+- `Glob` - Matches on all characters
+
+### Glob Type
+
+Suppose the data in your route url conveys information about a file path.  Simply entering a string corresponding to the file path can lead to ambiguity,
+given that the variable includes `/` characters. In the example below, `filePath` can be any string at all... but unlike other parameter types,
+can include values of the form `file/to/path`.
+
+```js
+// Routes.js
+<Route path="/path/{filePath:Glob}/end" page={FilePage} name="filePath"/>
+```
+
+In this example `filePath` can be any string at all... but includes capabilities for values of form `file/to/path`.
 
 > Note on TypeScript support
 Redwood will automatically generate types for your named routes, but you do have to run `yarn redwood dev` or `yarn redwood build` atleast once for your `Routes.{js,ts}` to be parsed
