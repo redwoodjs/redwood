@@ -94,8 +94,8 @@ const VALIDATORS = {
   // { absence: true }
   // { absence: { allowEmptyString: true, message: '...' } }
   absence: (
-    name: string,
     value: unknown,
+    name: string,
     options: boolean | AbsenceValidatorOptions
   ) => {
     const absenceOptions = {
@@ -120,8 +120,8 @@ const VALIDATORS = {
   // { acceptance: true }
   // { acceptance: { in: ['true','1'], message: '...' } }
   acceptance: (
-    name: string,
     value: unknown,
+    name: string,
     options: AcceptanceValidatorOptions
   ) => {
     let acceptedValues: Array<unknown>
@@ -144,8 +144,8 @@ const VALIDATORS = {
   // { exclusion: ['foo', 'bar'] }
   // { exclusion: { in: ['foo','bar'], message: '...' } }
   exclusion: (
-    name: string,
     value: unknown,
+    name: string,
     options: ExclusionValidatorOptions
   ) => {
     const exclusionList =
@@ -161,7 +161,7 @@ const VALIDATORS = {
   //
   // { format: /^foobar$/ }
   // { format: { pattern: /^foobar$/, message: '...' } }
-  format: (name: string, value: unknown, options: FormatValidatorOptions) => {
+  format: (value: unknown, name: string, options: FormatValidatorOptions) => {
     const pattern = options instanceof RegExp ? options : options.pattern
     const errorMessage = options instanceof RegExp ? undefined : options.message
 
@@ -182,8 +182,8 @@ const VALIDATORS = {
   // { inclusion: ['foo', 'bar'] }
   // { inclusion: { in: ['foo','bar'], message: '...' } }
   inclusion: (
-    name: string,
     value: unknown,
+    name: string,
     options: InclusionValidatorOptions
   ) => {
     const inclusionList =
@@ -205,7 +205,7 @@ const VALIDATORS = {
   // { length: { min: 4 } }
   // { length: { min: 2, max: 16 } }
   // { length: { between: [2, 16], message: '...' } }
-  length: (name: string, value: unknown, options: LengthValidatorOptions) => {
+  length: (value: unknown, name: string, options: LengthValidatorOptions) => {
     const len = String(value).length
 
     if (options.min && len < options.min) {
@@ -257,8 +257,8 @@ const VALIDATORS = {
   // { numericality: { integer: true } }
   // { numericality: { greaterThan: 3.5, message: '...' } }
   numericality: (
-    name: string,
     value: unknown,
+    name: string,
     options: NumericalityValidatorOptions
   ) => {
     if (typeof value !== 'number') {
@@ -345,8 +345,8 @@ const VALIDATORS = {
   // { presence: true }
   // { presence: { allowEmptyString: false, message: '...' } }
   presence: (
-    name: string,
     value: unknown,
+    name: string,
     options: PresenceValidatorOptions
   ) => {
     const presenceOptions = {
@@ -375,16 +375,20 @@ const VALIDATORS = {
 //
 // validate('firstName', 'Rob', { presence: true, length: { min: 2 } })
 export const validate = (
-  name: string,
   value: unknown,
+  name: string,
   directives: ValidateDirectives
 ) => {
   for (const [validator, options] of Object.entries(directives)) {
-    VALIDATORS[validator as keyof typeof VALIDATORS](name, value, options)
+    VALIDATORS[validator as keyof typeof VALIDATORS](value, name, options)
   }
 }
 
-// Run a custom validation function which should either throw or return nothing
+// Run a custom validation function which should either throw or return nothing.
+// Why not just write your own function? Because GraphQL will swallow it and
+// just send "Something went wrong" back to the client. This captures any custom
+// error you throw and turns it into a ServiceValidationError which will show
+// the actual error message.
 export const validateWith = (func: () => void) => {
   try {
     func()
