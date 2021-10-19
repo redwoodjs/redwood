@@ -359,13 +359,15 @@ const componentFiles = async (
     },
     Json: {
       componentName: 'TextAreaField',
-      validation: '{{ valueAsJSON: true }}',
+      validation: (isRequired) =>
+        `{{ valueAsJSON: true${isRequired ? ', required: true' : ''} }}`,
       displayFunction: 'jsonDisplay',
       listDisplayFunction: 'jsonTruncate',
       deserilizeFunction: 'JSON.stringify',
     },
     Float: {
-      validation: '{{ valueAsNumber: true }}',
+      validation: (isRequired) =>
+        `{{ valueAsNumber: true${isRequired ? ', required: true' : ''} }}`,
     },
     default: {
       componentName: 'TextField',
@@ -379,28 +381,40 @@ const componentFiles = async (
 
   const columns = model.fields
     .filter((field) => field.kind !== 'object')
-    .map((column) => ({
-      ...column,
-      label: humanize(column.name),
-      component:
-        componentMetadata[column.type]?.componentName ||
-        componentMetadata.default.componentName,
-      defaultProp:
-        componentMetadata[column.type]?.defaultProp ||
-        componentMetadata.default.defaultProp,
-      deserilizeFunction:
-        componentMetadata[column.type]?.deserilizeFunction ||
-        componentMetadata.default.deserilizeFunction,
-      validation:
-        componentMetadata[column.type]?.validation ??
-        (column?.isRequired ? componentMetadata.default.validation : null),
-      listDisplayFunction:
-        componentMetadata[column.type]?.listDisplayFunction ||
-        componentMetadata.default.listDisplayFunction,
-      displayFunction:
-        componentMetadata[column.type]?.displayFunction ||
-        componentMetadata.default.displayFunction,
-    }))
+    .map((column) => {
+      let validation
+
+      if (componentMetadata[column.type]?.validation) {
+        validation = componentMetadata[column.type]?.validation(
+          column?.isRequired
+        )
+      } else {
+        validation = column?.isRequired
+          ? componentMetadata.default.validation
+          : null
+      }
+
+      return {
+        ...column,
+        label: humanize(column.name),
+        component:
+          componentMetadata[column.type]?.componentName ||
+          componentMetadata.default.componentName,
+        defaultProp:
+          componentMetadata[column.type]?.defaultProp ||
+          componentMetadata.default.defaultProp,
+        deserilizeFunction:
+          componentMetadata[column.type]?.deserilizeFunction ||
+          componentMetadata.default.deserilizeFunction,
+        validation,
+        listDisplayFunction:
+          componentMetadata[column.type]?.listDisplayFunction ||
+          componentMetadata.default.listDisplayFunction,
+        displayFunction:
+          componentMetadata[column.type]?.displayFunction ||
+          componentMetadata.default.displayFunction,
+      }
+    })
   const editableColumns = columns.filter((column) => {
     return NON_EDITABLE_COLUMNS.indexOf(column.name) === -1
   })
