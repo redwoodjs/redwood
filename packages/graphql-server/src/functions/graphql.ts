@@ -31,7 +31,6 @@ import { makeDirectivesForPlugin } from '../directives/makeDirectives'
 import { getAsyncStoreInstance } from '../globalContext'
 import { createHealthcheckContext } from '../healthcheck'
 import { makeMergedSchema } from '../makeMergedSchema/makeMergedSchema'
-import { makeServices } from '../makeServices'
 import { useRedwoodAuthContext } from '../plugins/useRedwoodAuthContext'
 import {
   DirectivePluginOptions,
@@ -114,9 +113,6 @@ export const createGraphQLHandler = ({
   const logger = loggerConfig.logger
 
   try {
-    // Likely to be deprecated, and we can just pass in services to makeMergedSchema
-    const wrappedServices = makeServices({ services })
-
     // @NOTE: Directives are optional
     const projectDirectives = makeDirectivesForPlugin(directives)
 
@@ -128,7 +124,7 @@ export const createGraphQLHandler = ({
 
     schema = makeMergedSchema({
       sdls,
-      services: wrappedServices,
+      services,
       directives: projectDirectives,
       schemaOptions,
     })
