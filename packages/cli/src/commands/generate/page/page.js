@@ -2,7 +2,6 @@ import { execSync } from 'child_process'
 
 import camelcase from 'camelcase'
 import Listr from 'listr'
-import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 
 import { getConfig, generate as generateTypes } from '@redwoodjs/internal'
