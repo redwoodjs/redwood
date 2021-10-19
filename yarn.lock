@@ -1896,14 +1896,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/core@npm:1.1.0":
-  version: 1.1.0
-  resolution: "@envelop/core@npm:1.1.0"
+"@envelop/core@npm:1.3.0":
+  version: 1.3.0
+  resolution: "@envelop/core@npm:1.3.0"
   dependencies:
-    "@envelop/types": 1.1.0
+    "@envelop/types": 1.2.0
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0
-  checksum: 3005da30b3d073dcd107f31f70d5eb2609914fabc448f96427c5c43c0c211cde41039e5b8e01ddc24f8207ce3f733b99ef90afbabdb14b1a5f1c80c9f7d9a16c
+  checksum: 0f955d1e56cad8b07ee9e8806893ca70564c705bc4000237aca0144652ae5b761c1f408da50960d3ded79a8f3cd4f7775b4d53dcc9dda434c4673fc553cdd90f
   languageName: node
   linkType: hard
 
@@ -1936,14 +1936,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/parser-cache@npm:1.0.0":
-  version: 1.0.0
-  resolution: "@envelop/parser-cache@npm:1.0.0"
+"@envelop/parser-cache@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@envelop/parser-cache@npm:2.0.0"
   dependencies:
     tiny-lru: 7.0.6
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0
-  checksum: fe4356740e370e969a4065af8351b316249f9eb42ae6dae3cf6e9b476f808c63fd59a3f42a595f0ffc47df03b31e11cc6a6b125d78a6d84dadac04407847e3f8
+  checksum: b2eff77bd23ae9eb84a0f8dcdd5520b044d16c91edced147512cc3627973a49758af8c21de1843dfa23543941ed5267be7edca994aee5418408d20c71475a819
   languageName: node
   linkType: hard
 
@@ -1956,23 +1956,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/types@npm:1.1.0":
-  version: 1.1.0
-  resolution: "@envelop/types@npm:1.1.0"
+"@envelop/types@npm:1.2.0":
+  version: 1.2.0
+  resolution: "@envelop/types@npm:1.2.0"
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0
-  checksum: bd1a4a765c022d437a960e6509cd2365ea431394fe609d6460f86b7df9f8015f6831f5e4fc17b0ead699090271e364cf3a6ce7404d97ee4f8a0ad17317f618dd
+  checksum: df06d3816e4c981aafb66a7f6be0fa052a7d891fa9c787a41bc75c40cf41e2f82fb9abb0cbb20b204dde482b0f5b29a3ff14c2b830b77151ba15308a4dac91c0
   languageName: node
   linkType: hard
 
-"@envelop/validation-cache@npm:1.0.0":
-  version: 1.0.0
-  resolution: "@envelop/validation-cache@npm:1.0.0"
+"@envelop/validation-cache@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@envelop/validation-cache@npm:2.0.0"
   dependencies:
     tiny-lru: 7.0.6
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0
-  checksum: 16c1424f6e7d8afc379a5971e5bdc289423fa36929aaa80b69eed9ea59897c7ce241e4b1588f5201137fadb596a12be033ad6166a98d47fcb819f67b7910ebb6
+  checksum: 07357fcd174eb2d40e36abd1e7c10521db9fe9ed51c9cef5ca8a3f2dcb61e6ad262f8a8e35f80ce2df1edc46022b6486bc0b31cbd98600c55c5b6b9c78fada7d
   languageName: node
   linkType: hard
 
@@ -4372,14 +4372,14 @@ __metadata:
   resolution: "@redwoodjs/graphql-server@workspace:packages/graphql-server"
   dependencies:
     "@babel/cli": 7.15.4
-    "@envelop/core": 1.1.0
+    "@envelop/core": 1.3.0
     "@envelop/depth-limit": 1.0.0
     "@envelop/disable-introspection": 1.0.0
     "@envelop/filter-operation-type": 1.0.0
-    "@envelop/parser-cache": 1.0.0
+    "@envelop/parser-cache": ^2.0.0
     "@envelop/testing": 1.1.1
-    "@envelop/types": 1.1.0
-    "@envelop/validation-cache": 1.0.0
+    "@envelop/types": 1.2.0
+    "@envelop/validation-cache": ^2.0.0
     "@graphql-tools/merge": 8.1.2
     "@graphql-tools/schema": 8.2.0
     "@graphql-tools/utils": 8.2.2

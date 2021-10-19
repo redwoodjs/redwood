@@ -3,10 +3,11 @@ import {
   envelop,
   EnvelopError,
   FormatErrorHandler,
-  Plugin,
   useMaskedErrors,
   useSchema,
 } from '@envelop/core'
+import type { PluginOrDisabledPlugin } from '@envelop/core'
+
 import { useDepthLimit } from '@envelop/depth-limit'
 import { useDisableIntrospection } from '@envelop/disable-introspection'
 import { useFilterAllowedOperations } from '@envelop/filter-operation-type'
@@ -71,12 +72,12 @@ function normalizeRequest(event: APIGatewayProxyEvent): Request {
  *
  * Unexpected errors are those that are not Envelop or GraphQL errors
  **/
-export const formatError: FormatErrorHandler = (err: any) => {
+export const formatError: FormatErrorHandler = (err: any, message: string) => {
   if (
     err.originalError &&
     err.originalError instanceof EnvelopError === false
   ) {
-    return new GraphQLError('Something went wrong.')
+    return new GraphQLError(message)
   }
 
   return err
@@ -106,11 +107,12 @@ export const createGraphQLHandler = ({
   onHealthCheck,
   depthLimitOptions,
   allowedOperations,
+  errorMessage = 'Something went wrong.',
   graphiQLEndpoint,
   schemaOptions,
 }: GraphQLHandlerOptions) => {
   let schema: GraphQLSchema
-  let redwoodDirectivePlugins = [] as Plugin<any>[]
+  let redwoodDirectivePlugins = [] as PluginOrDisabledPlugin[]
   const logger = loggerConfig.logger
 
   try {
@@ -145,7 +147,7 @@ export const createGraphQLHandler = ({
   // so the order here matters
   const isDevEnv = process.env.NODE_ENV === 'development'
 
-  const plugins: Plugin<any>[] = []
+  const plugins: Array<PluginOrDisabledPlugin> = []
 
   if (!isDevEnv) {
     plugins.push(useDisableIntrospection())
@@ -188,7 +190,7 @@ export const createGraphQLHandler = ({
   }
 
   // Prevent unexpected error messages from leaking to the GraphQL clients.
-  plugins.push(useMaskedErrors({ formatError }))
+  plugins.push(useMaskedErrors({ formatError, errorMessage }))
 
   const corsContext = createCorsContext(cors)
 
