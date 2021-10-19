@@ -40,6 +40,15 @@ export const testQuery = /* GraphQL */ `
   }
 `
 
+export const testFilteredQuery = /* GraphQL */ `
+  query FilteredQuery {
+    me {
+      id
+      name
+    }
+  }
+`
+
 export const testErrorQuery = /* GraphQL */ `
   query forbiddenUserQuery {
     forbiddenUser {
