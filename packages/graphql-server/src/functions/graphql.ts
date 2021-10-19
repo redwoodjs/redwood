@@ -42,7 +42,6 @@ import { useRedwoodLogger } from '../plugins/useRedwoodLogger'
 import { useRedwoodPopulateContext } from '../plugins/useRedwoodPopulateContext'
 
 import type { GraphQLHandlerOptions } from './types'
-
 /**
  * Extracts and parses body payload from event with base64 encoding check
  *
@@ -212,7 +211,6 @@ export const createGraphQLHandler = ({
     })
 
     const logger = loggerConfig.logger
-
     // In the future, this could be part of a specific handler for AWS lambdas
     lambdaContext.callbackWaitsForEmptyEventLoop = false
 
