@@ -346,7 +346,7 @@ can include values of the form `file/to/path`.
 
 ```js
 // Routes.js
-<Route path="/path/{filePath:Glob}/end" page={FilePage} name="filePath"/>
+<Route path="/path/{filePath...}/end" page={FilePage} name="filePath"/>
 ```
 
 In this example `filePath` can be any string at all... but includes capabilities for values of form `file/to/path`.
