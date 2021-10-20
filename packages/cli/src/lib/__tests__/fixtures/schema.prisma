@@ -19,6 +19,8 @@ model Post {
   body     String
   image    String?
   postedAt DateTime?
+  postsId  Int
+  posts    Posts     @relation(fields: [postsId], references: [id])
 }
 
 model User {
@@ -34,4 +36,15 @@ model UserProfile {
   username String @unique
   userId   Int
   user     User   @relation(fields: [userId], references: [id])
+}
+
+model CustomData {
+  id   Int    @id @default(autoincrement())
+  data String
+}
+
+model Posts {
+  id             Int    @id @default(autoincrement())
+  collectionName String
+  posts          Post[]
 }

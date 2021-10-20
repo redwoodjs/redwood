@@ -1,4 +1,5 @@
 import { getDefaultArgs } from '../../../lib'
+import { verifyModelName } from '../../../lib/schemaHelpers'
 import { builder, files } from '../../generate/service/service'
 import { createYargsForComponentDestroy } from '../helpers'
 
@@ -17,6 +18,6 @@ export const filesWithTemplateVars = (templateVars) => {
 export const { command, description, handler, tasks } =
   createYargsForComponentDestroy({
     componentName: 'service',
+    preTasksFn: verifyModelName,
     filesFn: filesWithTemplateVars({ ...getDefaultArgs(builder), crud: true }),
-    shouldEnsureUniquePlural: true,
   })
