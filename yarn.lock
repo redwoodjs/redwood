@@ -4153,7 +4153,6 @@ __metadata:
     "@types/pino": 6.3.11
     core-js: 3.17.3
     crypto-js: 4.1.1
-    humanize-string: 2.1.0
     jest: 27.2.0
     jsonwebtoken: 8.5.1
     jwks-rsa: 2.0.4
