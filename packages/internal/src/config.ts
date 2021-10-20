@@ -48,11 +48,6 @@ interface BrowserTargetConfig {
    **/
   apiDbAuthURL: string
 
-  /**  @deprecated - use `apiHost` and `apiGraphQLURL` instead. */
-  apiProxyPort?: number
-  /**  @deprecated - use `apiHost` and `apiGraphQLURL` instead. */
-  apiProxyPath?: string
-
   fastRefresh: boolean
   a11y: boolean
 }
