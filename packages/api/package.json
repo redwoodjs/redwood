@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/api",
-  "version": "0.37.4",
+  "version": "0.37.5",
   "files": [
     "dist",
     "logger",
@@ -10,20 +10,19 @@
   "types": "./dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@prisma/client": "3.2.1",
-    "@types/pino": "6.3.11",
+    "@prisma/client": "3.3.0",
     "core-js": "3.17.3",
     "crypto-js": "4.1.1",
     "jsonwebtoken": "8.5.1",
     "jwks-rsa": "2.0.4",
     "md5": "2.3.0",
-    "pino": "6.13.2",
-    "pino-pretty": "5.1.3",
+    "pino": "7.0.3",
+    "pino-pretty": "7.1.0",
     "uuid": "8.3.2"
   },
   "devDependencies": {
     "@babel/cli": "7.15.4",
-    "@redwoodjs/auth": "0.37.4",
+    "@redwoodjs/auth": "0.37.5",
     "@types/crypto-js": "4.0.2",
     "@types/jsonwebtoken": "8.5.5",
     "@types/lodash.merge": "4.6.6",

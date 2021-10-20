@@ -1,12 +1,18 @@
-import pino, {
-  BaseLogger,
-  DestinationStream,
-  LevelWithSilent,
-  LoggerOptions,
-  PrettyOptions,
-} from 'pino'
+import type P from 'pino'
+import pino from 'pino'
 import * as prettyPrint from 'pino-pretty'
 
+/**
+ * Types from Pino
+ * @see https://github.com/pinojs/pino/blob/master/pino.d.ts
+ */
+export type Logger = P.Logger
+export type BaseLogger = P.BaseLogger
+export type DestinationStream = P.DestinationStream
+export type LevelWithSilent = P.LevelWithSilent
+export type LoggerOptions = P.LoggerOptions
+export type LoggerExtras = P.LoggerExtras
+export type PrettyOptions = P.PrettyOptions
 export type LogLevel = 'info' | 'query' | 'warn' | 'error'
 
 // @TODO use type from Prisma once the issue is solved
@@ -239,13 +245,13 @@ export interface RedwoodLoggerOptions {
  * // Create the logger to log to a file
  * createLogger({ destination: { 'var/logs/redwood-api.log' } })
  *
- * @return {BaseLogger} - The configured logger
+ * @return {Logger} - The configured logger
  */
 export const createLogger = ({
   options,
   destination,
   showConfig = false,
-}: RedwoodLoggerOptions): BaseLogger => {
+}: RedwoodLoggerOptions): Logger => {
   const hasDestination = typeof destination !== 'undefined'
   const isFile = hasDestination && typeof destination === 'string'
   const isStream = hasDestination && !isFile
@@ -347,7 +353,7 @@ export const emitLogLevels = (setLogLevels: LogLevel[]): LogDefinition[] => {
  */
 interface PrismaLoggingConfig {
   db: PrismaClient
-  logger: BaseLogger
+  logger: LoggerExtras
   logLevels: LogLevel[]
   slowQueryThreshold?: number
 }
