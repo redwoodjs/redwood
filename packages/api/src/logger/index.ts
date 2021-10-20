@@ -9,6 +9,8 @@ import * as prettyPrint from 'pino-pretty'
 export type Logger = P.Logger
 export type BaseLogger = P.BaseLogger
 export type DestinationStream = P.DestinationStream
+export type TransportTargetOptions = P.TransportTargetOptions
+export type TransportMultiOptions = P.TransportMultiOptions
 export type LevelWithSilent = P.LevelWithSilent
 export type LoggerOptions = P.LoggerOptions
 export type LoggerExtras = P.LoggerExtras
@@ -222,11 +224,13 @@ export const defaultLoggerOptions: LoggerOptions = {
  * @extends LoggerOptions
  * @property {options} LoggerOptions - options define how to log
  * @property {string | DestinationStream} destination - destination defines where to log
+ * @property {TransportTargetOptions | TransportMultiOptions} transport - destination defines where to log
  * @property {boolean} showConfig - Display logger configuration on initialization
  */
 export interface RedwoodLoggerOptions {
   options?: LoggerOptions
   destination?: string | DestinationStream
+  transport?: TransportTargetOptions | TransportMultiOptions
   showConfig?: boolean
 }
 
@@ -235,7 +239,9 @@ export interface RedwoodLoggerOptions {
  *
  * @param options {RedwoodLoggerOptions} - Override the default logger configuration
  * @param destination {DestinationStream} - An optional destination stream
+ * @param transport {TransportTargets} - An optional transport targets
  * @param showConfig {Boolean} - Show the logger configuration. This is off by default.
+ *
  *
  * @example
  * // Create the logger to log just at the error level
@@ -245,17 +251,31 @@ export interface RedwoodLoggerOptions {
  * // Create the logger to log to a file
  * createLogger({ destination: { 'var/logs/redwood-api.log' } })
  *
+ * @example
+ * // Create the logger to log to a file with a tread worker
+ * createLogger({ transport: {
+       targets: [
+         {
+           target: 'pino/file',
+           options: { destination },
+           level: 'info',
+         },
+       ],
+     }})
+ *
  * @return {Logger} - The configured logger
  */
 export const createLogger = ({
   options,
   destination,
+  transport,
   showConfig = false,
 }: RedwoodLoggerOptions): Logger => {
   const hasDestination = typeof destination !== 'undefined'
   const isFile = hasDestination && typeof destination === 'string'
   const isStream = hasDestination && !isFile
   const stream = destination
+  const isTransport = transport
 
   // override, but retain default pretty print options
   if (isPretty && options && options.prettyPrint) {
@@ -288,6 +308,11 @@ export const createLogger = ({
     console.log(`logLevel: ${logLevel}`)
     console.log(`options: ${JSON.stringify(options, null, 2)}`)
     console.log(`destination: ${destination}`)
+  }
+
+  if (isTransport) {
+    const transportStream = pino.transport({ ...transport })
+    return pino(options, transportStream)
   }
 
   if (isFile) {
