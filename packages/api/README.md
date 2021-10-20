@@ -45,6 +45,6 @@ For detailed logger configuration, see the RedwoodJS logger package [README](./s
 - [Prisma](https://www.prisma.io)
 - [Pino](https://getpino.io)
 
-Although this package depends, in the code-dependency sense, only on `@redwoodjs/internals`, it still hangs together with the others&mdash;notably, `@redwoodjs/web` and `@redwoodjs/api-server`. So, if you’re asking yourself “but when does my server run?” head over to `@redwoodjs/api-server`.
+Although this package depends, in the code-dependency sense, only on `@redwoodjs/internal`, it still hangs together with the others&mdash;notably, `@redwoodjs/web` and `@redwoodjs/api-server`. So, if you’re asking yourself “but when does my server run?” head over to `@redwoodjs/api-server`.
 
 If you’re asking yourself “but where is my GraphQL Server” head over to `@redwoodjs/graphql-server`.
