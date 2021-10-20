@@ -94,6 +94,8 @@ type UniquenessValidatorOptions = {
   message?: string
 }
 
+type UniquenessWhere = Record<'AND' | 'NOT', Array<Record<string, unknown>>>
+
 const VALIDATORS = {
   // Requires that the given value is `null` or `undefined`
   //
@@ -441,12 +443,37 @@ export const validateWith = (func: () => void) => {
 // the database and that the `callback` is executed before someone else gets a
 // chance to create the same value.
 //
+// In the case of updating an existing record, a uniqueness check will fail
+// (because the existing record itself will be returned from the database). In
+// this case you can provide a `$self` key with the `where` object to exclude
+// the current record.
+//
+// There is an optional `$scope` key which contains additional the `where`
+// clauses to include when checking whether the field is unique. So rather than
+// a product name having to be unique across the entire database, you could
+// check that it is only unique amoung a subset of records with the same
+// `companyId`.
+//
 // As of Prisma v3.2.1 requires preview feature "interactiveTransactions" be
 // enabled in prisma.schema:
 //
 //   previewFeatures = ["interactiveTransactions"]
 //
 // return validateUniqueness('user', { email: 'rob@redwoodjs.com' }, () => {
+//   return db.create(data: { email })
+// }, { message: '...'})
+//
+// return validateUniqueness('user', {
+//   email: 'rob@redwoodjs.com',
+//   $self: { id: 123 }
+// }, () => {
+//   return db.create(data: { email })
+// }, { message: '...'})
+//
+// return validateUniqueness('user', {
+//   email: 'rob@redwoodjs.com',
+//   $scope: { companyId: input.companyId }
+// }, () => {
 //   return db.create(data: { email })
 // }, { message: '...'})
 export const validateUniqueness = async (
@@ -456,9 +483,21 @@ export const validateUniqueness = async (
   options: UniquenessValidatorOptions = {}
 ) => {
   const db = new PrismaClient()
+  const { $self, $scope, ...rest } = fields
+
+  const where: UniquenessWhere = {
+    AND: [rest],
+    NOT: [],
+  }
+  if ($scope) {
+    where.AND.push($scope as Record<string, unknown>)
+  }
+  if ($self) {
+    where.NOT.push($self as Record<string, unknown>)
+  }
 
   return await db.$transaction(async (tx: PrismaClient) => {
-    if (await tx[model].findFirst({ where: fields })) {
+    if (await tx[model].findFirst({ where })) {
       throw new ValidationErrors.UniquenessValidationError(
         fields,
         options.message
