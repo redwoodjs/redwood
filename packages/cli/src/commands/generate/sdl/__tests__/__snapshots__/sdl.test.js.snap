@@ -1,5 +1,559 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`handler can be called with PascalCase model name 1`] = `
+Object {
+  "fileContent": "export const schema = gql\`
+  type User {
+    id: Int!
+    name: String
+    email: String!
+    isAdmin: Boolean!
+    profiles: [UserProfile]!
+  }
+
+  type Query {
+    users: [User!]! @requireAuth
+    user(id: Int!): User @requireAuth
+  }
+
+  input CreateUserInput {
+    name: String
+    email: String!
+    isAdmin: Boolean!
+  }
+
+  input UpdateUserInput {
+    name: String
+    email: String
+    isAdmin: Boolean
+  }
+
+  type Mutation {
+    createUser(input: CreateUserInput!): User! @requireAuth
+    updateUser(id: Int!, input: UpdateUserInput!): User! @requireAuth
+    deleteUser(id: Int!): User! @requireAuth
+  }
+\`
+",
+  "filePath": "/path/to/project/api/src/graphql/users.sdl.js",
+}
+`;
+
+exports[`handler can be called with PascalCase model name 2`] = `
+Object {
+  "fileContent": "export const standard = defineScenario({
+  user: {
+    one: { data: { email: 'String1234567' } },
+    two: { data: { email: 'String1234567' } },
+  },
+})
+",
+  "filePath": "/path/to/project/api/src/services/users/users.scenarios.js",
+}
+`;
+
+exports[`handler can be called with PascalCase model name 3`] = `
+Object {
+  "fileContent": "import { users, user, createUser, updateUser, deleteUser } from './users'
+
+describe('users', () => {
+  scenario('returns all users', async (scenario) => {
+    const result = await users()
+
+    expect(result.length).toEqual(Object.keys(scenario.user).length)
+  })
+
+  scenario('returns a single user', async (scenario) => {
+    const result = await user({ id: scenario.user.one.id })
+
+    expect(result).toEqual(scenario.user.one)
+  })
+
+  scenario('creates a user', async () => {
+    const result = await createUser({
+      input: { email: 'String1234567' },
+    })
+
+    expect(result.email).toEqual('String1234567')
+  })
+
+  scenario('updates a user', async (scenario) => {
+    const original = await user({ id: scenario.user.one.id })
+    const result = await updateUser({
+      id: original.id,
+      input: { email: 'String12345672' },
+    })
+
+    expect(result.email).toEqual('String12345672')
+  })
+
+  scenario('deletes a user', async (scenario) => {
+    const original = await deleteUser({ id: scenario.user.one.id })
+    const result = await user({ id: original.id })
+
+    expect(result).toEqual(null)
+  })
+})
+",
+  "filePath": "/path/to/project/api/src/services/users/users.test.js",
+}
+`;
+
+exports[`handler can be called with PascalCase model name 4`] = `
+Object {
+  "fileContent": "import { db } from 'src/lib/db'
+
+export const users = () => {
+  return db.user.findMany()
+}
+
+export const user = ({ id }) => {
+  return db.user.findUnique({
+    where: { id },
+  })
+}
+
+export const createUser = ({ input }) => {
+  return db.user.create({
+    data: input,
+  })
+}
+
+export const updateUser = ({ id, input }) => {
+  return db.user.update({
+    data: input,
+    where: { id },
+  })
+}
+
+export const deleteUser = ({ id }) => {
+  return db.user.delete({
+    where: { id },
+  })
+}
+
+export const User = {
+  profiles: (_obj, { root }) =>
+    db.user.findUnique({ where: { id: root.id } }).profiles(),
+}
+",
+  "filePath": "/path/to/project/api/src/services/users/users.js",
+}
+`;
+
+exports[`handler can be called with PascalCase model name 5`] = `
+Object {
+  "fileContent": "export const schema = gql\`
+  type CustomData {
+    id: Int!
+    data: String!
+  }
+
+  type Query {
+    customDatums: [CustomData!]! @requireAuth
+    customData(id: Int!): CustomData @requireAuth
+  }
+
+  input CreateCustomDataInput {
+    data: String!
+  }
+
+  input UpdateCustomDataInput {
+    data: String
+  }
+
+  type Mutation {
+    createCustomData(input: CreateCustomDataInput!): CustomData! @requireAuth
+    updateCustomData(id: Int!, input: UpdateCustomDataInput!): CustomData!
+      @requireAuth
+    deleteCustomData(id: Int!): CustomData! @requireAuth
+  }
+\`
+",
+  "filePath": "/path/to/project/api/src/graphql/customDatums.sdl.js",
+}
+`;
+
+exports[`handler can be called with PascalCase model name 6`] = `
+Object {
+  "fileContent": "export const standard = defineScenario({
+  customData: {
+    one: { data: { data: 'String' } },
+    two: { data: { data: 'String' } },
+  },
+})
+",
+  "filePath": "/path/to/project/api/src/services/customDatums/customDatums.scenarios.js",
+}
+`;
+
+exports[`handler can be called with PascalCase model name 7`] = `
+Object {
+  "fileContent": "import {
+  customDatums,
+  customData,
+  createCustomData,
+  updateCustomData,
+  deleteCustomData,
+} from './customDatums'
+
+describe('customDatums', () => {
+  scenario('returns all customDatums', async (scenario) => {
+    const result = await customDatums()
+
+    expect(result.length).toEqual(Object.keys(scenario.customData).length)
+  })
+
+  scenario('returns a single customData', async (scenario) => {
+    const result = await customData({ id: scenario.customData.one.id })
+
+    expect(result).toEqual(scenario.customData.one)
+  })
+
+  scenario('creates a customData', async () => {
+    const result = await createCustomData({
+      input: { data: 'String' },
+    })
+
+    expect(result.data).toEqual('String')
+  })
+
+  scenario('updates a customData', async (scenario) => {
+    const original = await customData({ id: scenario.customData.one.id })
+    const result = await updateCustomData({
+      id: original.id,
+      input: { data: 'String2' },
+    })
+
+    expect(result.data).toEqual('String2')
+  })
+
+  scenario('deletes a customData', async (scenario) => {
+    const original = await deleteCustomData({ id: scenario.customData.one.id })
+    const result = await customData({ id: original.id })
+
+    expect(result).toEqual(null)
+  })
+})
+",
+  "filePath": "/path/to/project/api/src/services/customDatums/customDatums.test.js",
+}
+`;
+
+exports[`handler can be called with PascalCase model name 8`] = `
+Object {
+  "fileContent": "import { db } from 'src/lib/db'
+
+export const customDatums = () => {
+  return db.customData.findMany()
+}
+
+export const customData = ({ id }) => {
+  return db.customData.findUnique({
+    where: { id },
+  })
+}
+
+export const createCustomData = ({ input }) => {
+  return db.customData.create({
+    data: input,
+  })
+}
+
+export const updateCustomData = ({ id, input }) => {
+  return db.customData.update({
+    data: input,
+    where: { id },
+  })
+}
+
+export const deleteCustomData = ({ id }) => {
+  return db.customData.delete({
+    where: { id },
+  })
+}
+",
+  "filePath": "/path/to/project/api/src/services/customDatums/customDatums.js",
+}
+`;
+
+exports[`handler can be called with camelCase model name 1`] = `
+Object {
+  "fileContent": "export const schema = gql\`
+  type User {
+    id: Int!
+    name: String
+    email: String!
+    isAdmin: Boolean!
+    profiles: [UserProfile]!
+  }
+
+  type Query {
+    users: [User!]! @requireAuth
+    user(id: Int!): User @requireAuth
+  }
+
+  input CreateUserInput {
+    name: String
+    email: String!
+    isAdmin: Boolean!
+  }
+
+  input UpdateUserInput {
+    name: String
+    email: String
+    isAdmin: Boolean
+  }
+
+  type Mutation {
+    createUser(input: CreateUserInput!): User! @requireAuth
+    updateUser(id: Int!, input: UpdateUserInput!): User! @requireAuth
+    deleteUser(id: Int!): User! @requireAuth
+  }
+\`
+",
+  "filePath": "/path/to/project/api/src/graphql/users.sdl.js",
+}
+`;
+
+exports[`handler can be called with camelCase model name 2`] = `
+Object {
+  "fileContent": "export const standard = defineScenario({
+  user: {
+    one: { data: { email: 'String1234567' } },
+    two: { data: { email: 'String1234567' } },
+  },
+})
+",
+  "filePath": "/path/to/project/api/src/services/users/users.scenarios.js",
+}
+`;
+
+exports[`handler can be called with camelCase model name 3`] = `
+Object {
+  "fileContent": "import { users, user, createUser, updateUser, deleteUser } from './users'
+
+describe('users', () => {
+  scenario('returns all users', async (scenario) => {
+    const result = await users()
+
+    expect(result.length).toEqual(Object.keys(scenario.user).length)
+  })
+
+  scenario('returns a single user', async (scenario) => {
+    const result = await user({ id: scenario.user.one.id })
+
+    expect(result).toEqual(scenario.user.one)
+  })
+
+  scenario('creates a user', async () => {
+    const result = await createUser({
+      input: { email: 'String1234567' },
+    })
+
+    expect(result.email).toEqual('String1234567')
+  })
+
+  scenario('updates a user', async (scenario) => {
+    const original = await user({ id: scenario.user.one.id })
+    const result = await updateUser({
+      id: original.id,
+      input: { email: 'String12345672' },
+    })
+
+    expect(result.email).toEqual('String12345672')
+  })
+
+  scenario('deletes a user', async (scenario) => {
+    const original = await deleteUser({ id: scenario.user.one.id })
+    const result = await user({ id: original.id })
+
+    expect(result).toEqual(null)
+  })
+})
+",
+  "filePath": "/path/to/project/api/src/services/users/users.test.js",
+}
+`;
+
+exports[`handler can be called with camelCase model name 4`] = `
+Object {
+  "fileContent": "import { db } from 'src/lib/db'
+
+export const users = () => {
+  return db.user.findMany()
+}
+
+export const user = ({ id }) => {
+  return db.user.findUnique({
+    where: { id },
+  })
+}
+
+export const createUser = ({ input }) => {
+  return db.user.create({
+    data: input,
+  })
+}
+
+export const updateUser = ({ id, input }) => {
+  return db.user.update({
+    data: input,
+    where: { id },
+  })
+}
+
+export const deleteUser = ({ id }) => {
+  return db.user.delete({
+    where: { id },
+  })
+}
+
+export const User = {
+  profiles: (_obj, { root }) =>
+    db.user.findUnique({ where: { id: root.id } }).profiles(),
+}
+",
+  "filePath": "/path/to/project/api/src/services/users/users.js",
+}
+`;
+
+exports[`handler can be called with camelCase model name 5`] = `
+Object {
+  "fileContent": "export const schema = gql\`
+  type CustomData {
+    id: Int!
+    data: String!
+  }
+
+  type Query {
+    customDatums: [CustomData!]! @requireAuth
+    customData(id: Int!): CustomData @requireAuth
+  }
+
+  input CreateCustomDataInput {
+    data: String!
+  }
+
+  input UpdateCustomDataInput {
+    data: String
+  }
+
+  type Mutation {
+    createCustomData(input: CreateCustomDataInput!): CustomData! @requireAuth
+    updateCustomData(id: Int!, input: UpdateCustomDataInput!): CustomData!
+      @requireAuth
+    deleteCustomData(id: Int!): CustomData! @requireAuth
+  }
+\`
+",
+  "filePath": "/path/to/project/api/src/graphql/customDatums.sdl.js",
+}
+`;
+
+exports[`handler can be called with camelCase model name 6`] = `
+Object {
+  "fileContent": "export const standard = defineScenario({
+  customData: {
+    one: { data: { data: 'String' } },
+    two: { data: { data: 'String' } },
+  },
+})
+",
+  "filePath": "/path/to/project/api/src/services/customDatums/customDatums.scenarios.js",
+}
+`;
+
+exports[`handler can be called with camelCase model name 7`] = `
+Object {
+  "fileContent": "import {
+  customDatums,
+  customData,
+  createCustomData,
+  updateCustomData,
+  deleteCustomData,
+} from './customDatums'
+
+describe('customDatums', () => {
+  scenario('returns all customDatums', async (scenario) => {
+    const result = await customDatums()
+
+    expect(result.length).toEqual(Object.keys(scenario.customData).length)
+  })
+
+  scenario('returns a single customData', async (scenario) => {
+    const result = await customData({ id: scenario.customData.one.id })
+
+    expect(result).toEqual(scenario.customData.one)
+  })
+
+  scenario('creates a customData', async () => {
+    const result = await createCustomData({
+      input: { data: 'String' },
+    })
+
+    expect(result.data).toEqual('String')
+  })
+
+  scenario('updates a customData', async (scenario) => {
+    const original = await customData({ id: scenario.customData.one.id })
+    const result = await updateCustomData({
+      id: original.id,
+      input: { data: 'String2' },
+    })
+
+    expect(result.data).toEqual('String2')
+  })
+
+  scenario('deletes a customData', async (scenario) => {
+    const original = await deleteCustomData({ id: scenario.customData.one.id })
+    const result = await customData({ id: original.id })
+
+    expect(result).toEqual(null)
+  })
+})
+",
+  "filePath": "/path/to/project/api/src/services/customDatums/customDatums.test.js",
+}
+`;
+
+exports[`handler can be called with camelCase model name 8`] = `
+Object {
+  "fileContent": "import { db } from 'src/lib/db'
+
+export const customDatums = () => {
+  return db.customData.findMany()
+}
+
+export const customData = ({ id }) => {
+  return db.customData.findUnique({
+    where: { id },
+  })
+}
+
+export const createCustomData = ({ input }) => {
+  return db.customData.create({
+    data: input,
+  })
+}
+
+export const updateCustomData = ({ id, input }) => {
+  return db.customData.update({
+    data: input,
+    where: { id },
+  })
+}
+
+export const deleteCustomData = ({ id }) => {
+  return db.customData.delete({
+    where: { id },
+  })
+}
+",
+  "filePath": "/path/to/project/api/src/services/customDatums/customDatums.js",
+}
+`;
+
 exports[`in javascript mode creates a multi word sdl file 1`] = `
 "export const schema = gql\`
   type UserProfile {

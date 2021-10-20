@@ -1,8 +1,9 @@
 import { Plugin } from '@envelop/core'
 import { handleStreamOrSingleExecutionResult } from '@envelop/types'
 import { ExecutionResult, Kind, OperationDefinitionNode } from 'graphql'
-import { BaseLogger, LevelWithSilent } from 'pino'
 import { v4 as uuidv4 } from 'uuid'
+
+import type { Logger, LevelWithSilent } from '@redwoodjs/api/logger'
 
 import { AuthenticationError, ForbiddenError } from '../errors'
 import { RedwoodGraphQLContext } from '../functions/types'
@@ -107,7 +108,7 @@ type GraphQLLoggerOptions = {
  * @param options the GraphQLLoggerOptions such as tracing, operationName, etc
  */
 export type LoggerConfig = {
-  logger: BaseLogger
+  logger: Logger
   options?: GraphQLLoggerOptions
 }
 
@@ -117,11 +118,7 @@ export type LoggerConfig = {
  * when the execution of the operation is done.
  */
 const logResult =
-  (
-    loggerConfig: LoggerConfig,
-    envelopLogger: BaseLogger,
-    operationName: string
-  ) =>
+  (loggerConfig: LoggerConfig, envelopLogger: Logger, operationName: string) =>
   ({ result }: { result: ExecutionResult }) => {
     const includeTracing = loggerConfig?.options?.tracing
     const includeData = loggerConfig?.options?.data
