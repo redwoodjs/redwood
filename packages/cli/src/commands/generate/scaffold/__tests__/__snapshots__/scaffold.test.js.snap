@@ -142,6 +142,7 @@ const PostForm = (props) => {
           defaultChecked={props.post?.isPinned}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
+          validation={{ required: true }}
         />
 
         <FieldError name=\\"isPinned\\" className=\\"rw-field-error\\" />
@@ -175,7 +176,7 @@ const PostForm = (props) => {
           defaultValue={props.post?.rating}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
-          transformValue=\\"Float\\"
+          validation={{ valueAsNumber: true }}
         />
 
         <FieldError name=\\"rating\\" className=\\"rw-field-error\\" />
@@ -208,8 +209,7 @@ const PostForm = (props) => {
           defaultValue={JSON.stringify(props.post?.metadata)}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
-          validation={{ required: true }}
-          transformValue=\\"Json\\"
+          validation={{ valueAsJSON: true, required: true }}
         />
 
         <FieldError name=\\"metadata\\" className=\\"rw-field-error\\" />
@@ -1278,6 +1278,7 @@ const PostForm = (props) => {
           defaultChecked={props.post?.isPinned}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
+          validation={{ required: true }}
         />
         <FieldError name=\\"isPinned\\" className=\\"rw-field-error\\" />
 
@@ -1309,7 +1310,7 @@ const PostForm = (props) => {
           defaultValue={props.post?.rating}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
-          transformValue=\\"Float\\"
+          validation={{ valueAsNumber: true }}
         />
         <FieldError name=\\"rating\\" className=\\"rw-field-error\\" />
 
@@ -1340,8 +1341,7 @@ const PostForm = (props) => {
           defaultValue={JSON.stringify(props.post?.metadata)}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
-          validation={{ required: true }}
-          transformValue=\\"Json\\"
+          validation={{ valueAsJSON: true, required: true }}
         />
         <FieldError name=\\"metadata\\" className=\\"rw-field-error\\" />
 
