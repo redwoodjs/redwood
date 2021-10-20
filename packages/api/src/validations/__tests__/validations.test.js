@@ -79,6 +79,52 @@ describe('validate acceptance', () => {
   })
 })
 
+describe('validate email', () => {
+  it('checks for email format', () => {
+    ;[
+      'rob',
+      'tom@redwoodjs',
+      'peter@redwoodjs.',
+      'david@.com',
+      'dom @redwood.com',
+      'tobbe@redwood js.com',
+      'danny@redwoodjs.co m',
+      ' dt@redwoodjs.com',
+    ].forEach((val) => {
+      expect(() => validate(val, 'email', { email: true })).toThrow(
+        ValidationErrors.EmailValidationError
+      )
+    })
+    ;[
+      'rob@redwoodjs.com',
+      'tom+test@sub.domain.com',
+      'david🚀@redwoodjs.com',
+    ].forEach((val) => {
+      expect(() =>
+        validate(val, 'email', {
+          email: true,
+        })
+      ).not.toThrow()
+    })
+  })
+
+  it('throws with a default message', () => {
+    try {
+      validate(false, 'Terms', { acceptance: true })
+    } catch (e) {
+      expect(e.message).toEqual('Terms must be accepted')
+    }
+  })
+
+  it('throws with a custom message', () => {
+    try {
+      validate(false, 'terms', { acceptance: { message: 'gotta accept' } })
+    } catch (e) {
+      expect(e.message).toEqual('gotta accept')
+    }
+  })
+})
+
 describe('validate exclusion', () => {
   it('checks for exclusion', () => {
     expect(() =>

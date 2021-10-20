@@ -150,12 +150,12 @@ const VALIDATORS = {
   // Requires that the given value be formatted like an email address. Uses a
   // very simple regex which checks for at least 1 character that is not an @,
   // then an @, then at least one character that isn't a period, then a period,
-  // then any character.
+  // then any character. There cannot be any spaces present.
   //
   // { email: true }
   // { email: { message: '...' } }
   email: (value: unknown, name: string, options: EmailValidatorOptions) => {
-    const pattern = new RegExp('[^@]+@[^.]+..+')
+    const pattern = /^[^@\s]+@[^.\s]+\.[^\s]+$/
     const errorMessage =
       typeof options === 'object' ? options.message : undefined
 
