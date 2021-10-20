@@ -34,7 +34,7 @@ interface BrowserTargetConfig {
    * This can be an absolute path proxied on the current domain (`/.netlify/functions`),
    * or a fully qualified URL (`https://api.example.org:8911/functions`).
    *
-   * Note: This shoulld not include the path to the GraphQL Server.
+   * Note: This should not include the path to the GraphQL Server.
    **/
   apiURL: string
   /**
