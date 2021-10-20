@@ -4249,7 +4249,7 @@ __metadata:
     tasuku: 1.0.2
     tempy: 1.0.1
     toml: 3.0.0
-    vscode-ripgrep: 1.0.0
+    vscode-ripgrep: 1.12.1
     yargs: 16.2.0
   bin:
     codemods: ./dist/codemods.js
@@ -4412,6 +4412,7 @@ __metadata:
     "@graphql-codegen/typescript-react-apollo": 3.1.4
     "@graphql-codegen/typescript-resolvers": 2.2.1
     "@redwoodjs/graphql-server": 0.37.5
+    "@types/babel-plugin-tester": 9.0.4
     "@types/babel__core": 7.1.16
     "@types/findup-sync": 4.0.1
     "@types/fs-extra": 9.0.12
@@ -7325,6 +7326,13 @@ __metadata:
   version: 1.1.2
   resolution: "address@npm:1.1.2"
   checksum: 3ac908133d1d8cc52110473833718e82775428e73b4eb51b42cd7c7f571c7459c28c3c54592231efdcb96f6ed376eb490194e97c533df9e8efb910fa29a34e55
+  languageName: node
+  linkType: hard
+
+"agent-base@npm:5":
+  version: 5.1.1
+  resolution: "agent-base@npm:5.1.1"
+  checksum: 3baa3f01072c16e3955ce7802166e576cde9831af82b262aae1c780af49c0c84e82e64ba9ef9e7d1704fe29e9f0096a78a4f998ec137360fee3cb95186f97161
   languageName: node
   linkType: hard
 
@@ -14690,6 +14698,16 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"https-proxy-agent@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "https-proxy-agent@npm:4.0.0"
+  dependencies:
+    agent-base: 5
+    debug: 4
+  checksum: fbba3e037ec04e1850e867064a763b86dd884baae9c5f4ad380504e321068c9e9b5de79cf2f3a28ede7c36036dce905b58d9f51703c5b3884d887114f4887f77
+  languageName: node
+  linkType: hard
+
 "https-proxy-agent@npm:^5.0.0":
   version: 5.0.0
   resolution: "https-proxy-agent@npm:5.0.0"
@@ -20661,6 +20679,13 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"proxy-from-env@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "proxy-from-env@npm:1.1.0"
+  checksum: fe7dd8b1bdbbbea18d1459107729c3e4a2243ca870d26d34c2c1bcd3e4425b7bcc5112362df2d93cc7fb9746f6142b5e272fd1cc5c86ddf8580175186f6ad42b
+  languageName: node
+  linkType: hard
+
 "proxyquire@npm:2.1.3":
   version: 2.1.3
   resolution: "proxyquire@npm:2.1.3"
@@ -24963,10 +24988,13 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"vscode-ripgrep@npm:1.0.0":
-  version: 1.0.0
-  resolution: "vscode-ripgrep@npm:1.0.0"
-  checksum: c2d8b28c328b11d00d9d0a502b3d5dec79bcebf3cba366fbf714cad502cd5a831eb6e1193e474a7c47bfbfe0e93cd310183a0b1c515cc4079cece59363623eb4
+"vscode-ripgrep@npm:1.12.1":
+  version: 1.12.1
+  resolution: "vscode-ripgrep@npm:1.12.1"
+  dependencies:
+    https-proxy-agent: ^4.0.0
+    proxy-from-env: ^1.1.0
+  checksum: bfd048f60e4f36533e68cfa9c0a97624ae8319c742c0ffdbb28e4f4be4503733432d4d2fb1ab74d0be622266c0658b348d1e3cc772b408a6f4e0c5011fb415f9
   languageName: node
   linkType: hard
 
