@@ -77,8 +77,7 @@ export const bothServerHandler = async ({
   port,
   socket,
 }: Omit<HttpServerParams, 'app'>) => {
-  const apiRootPath = getConfig().web.apiURL
-  const apiGraphQLURL = getConfig().web.apiGraphQLURL
+  const apiRootPath = coerceRootPath(getConfig().web.apiURL)
 
   let app = createApp()
 
@@ -97,7 +96,7 @@ export const bothServerHandler = async ({
 
     console.log(`Web server started on ${port} `)
     console.log(
-      `API serving from ${apiRootPath} listening on ${port} with GraphQL endpoint at ${apiGraphQLURL}`
+      `API serving from ${apiRootPath} listening on ${port} with GraphQL endpoint at ${apiRootPath}graphql`
     )
   })
 }
