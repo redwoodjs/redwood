@@ -282,7 +282,7 @@ describe('validate length', () => {
     try {
       validate('foobar', 'username', { length: { equal: 5 } })
     } catch (e) {
-      expect(e.message).toEqual('username does not have exactly 5 characters')
+      expect(e.message).toEqual('username must have exactly 5 characters')
     }
 
     // custom error
@@ -537,6 +537,44 @@ describe('validate numericality', () => {
     ).not.toThrow(ValidationErrors.OddNumericalityValidationError)
   })
 
+  it('checks for a value being positive', () => {
+    expect(() =>
+      validate(-1, 'number', { numericality: { positive: true } })
+    ).toThrow(ValidationErrors.PositiveNumericalityValidationError)
+    expect(() =>
+      validate(-2.0, 'number', { numericality: { positive: true } })
+    ).toThrow(ValidationErrors.PositiveNumericalityValidationError)
+    expect(() =>
+      validate(0, 'number', { numericality: { positive: true } })
+    ).toThrow(ValidationErrors.PositiveNumericalityValidationError)
+
+    expect(() =>
+      validate(3, 'number', { numericality: { positive: true } })
+    ).not.toThrow(ValidationErrors.PositiveNumericalityValidationError)
+    expect(() =>
+      validate(3.0, 'number', { numericality: { positive: true } })
+    ).not.toThrow(ValidationErrors.PositiveNumericalityValidationError)
+  })
+
+  it('checks for a value being negative', () => {
+    expect(() =>
+      validate(1, 'number', { numericality: { negative: true } })
+    ).toThrow(ValidationErrors.NegativeNumericalityValidationError)
+    expect(() =>
+      validate(2.0, 'number', { numericality: { negative: true } })
+    ).toThrow(ValidationErrors.NegativeNumericalityValidationError)
+    expect(() =>
+      validate(0, 'number', { numericality: { negative: true } })
+    ).toThrow(ValidationErrors.NegativeNumericalityValidationError)
+
+    expect(() =>
+      validate(-3, 'number', { numericality: { negative: true } })
+    ).not.toThrow(ValidationErrors.NegativeNumericalityValidationError)
+    expect(() =>
+      validate(-3.0, 'number', { numericality: { negative: true } })
+    ).not.toThrow(ValidationErrors.NegativeNumericalityValidationError)
+  })
+
   it('throws with a default message', () => {
     try {
       validate(3, 'number', { numericality: { even: true } })
@@ -607,7 +645,7 @@ describe('validate presence', () => {
     try {
       validate(undefined, 'email', { presence: true })
     } catch (e) {
-      expect(e.message).toEqual('email is not present')
+      expect(e.message).toEqual('email must be present')
     }
   })
 

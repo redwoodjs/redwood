@@ -19,6 +19,16 @@ export class AcceptanceValidationError extends ServiceValidationError {
   }
 }
 
+export class EmailValidationError extends ServiceValidationError {
+  constructor(
+    name: string,
+    message = `${name} must be formatted like an email address`
+  ) {
+    super(message)
+    this.name = 'EmailValidationError'
+  }
+}
+
 export class ExclusionValidationError extends ServiceValidationError {
   constructor(name: string, message = `${name} is reserved`) {
     super(message)
@@ -66,7 +76,7 @@ export class EqualLengthValidationError extends ServiceValidationError {
   constructor(
     name: string,
     value: number,
-    message = `${name} does not have exactly ${value} characters`
+    message = `${name} must have exactly ${value} characters`
   ) {
     super(message)
     this.name = 'EqualLengthValidationError'
@@ -85,7 +95,7 @@ export class BetweenLengthValidationError extends ServiceValidationError {
 }
 
 export class PresenceValidationError extends ServiceValidationError {
-  constructor(name: string, message = `${name} is not present`) {
+  constructor(name: string, message = `${name} must be present`) {
     super(message)
     this.name = 'PresenceValidationError'
   }
@@ -99,7 +109,7 @@ export class TypeNumericalityValidationError extends ServiceValidationError {
 }
 
 export class IntegerNumericalityValidationError extends ServiceValidationError {
-  constructor(name: string, message = `${name} is not an integer`) {
+  constructor(name: string, message = `${name} must be an integer`) {
     super(message)
     this.name = 'IntegerNumericalityValidationError'
   }
@@ -182,6 +192,20 @@ export class OddNumericalityValidationError extends ServiceValidationError {
   constructor(name: string, message = `${name} must be odd`) {
     super(message)
     this.name = 'OddNumericalityValidationError'
+  }
+}
+
+export class PositiveNumericalityValidationError extends ServiceValidationError {
+  constructor(name: string, message = `${name} must be positive`) {
+    super(message)
+    this.name = 'PositiveNumericalityValidationError'
+  }
+}
+
+export class NegativeNumericalityValidationError extends ServiceValidationError {
+  constructor(name: string, message = `${name} must be negative`) {
+    super(message)
+    this.name = 'NegativeNumericalityValidationError'
   }
 }
 

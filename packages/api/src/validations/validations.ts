@@ -18,6 +18,12 @@ type AcceptanceValidatorOptions =
       message?: string
     }
 
+type EmailValidatorOptions =
+  | boolean
+  | {
+      message?: string
+    }
+
 type ExclusionValidatorOptions =
   | Array<unknown>
   | {
@@ -59,6 +65,8 @@ type NumericalityValidatorOptions =
       otherThan?: number
       even?: boolean
       odd?: boolean
+      positive?: boolean
+      negative?: boolean
       message?: string
     }
 
@@ -136,6 +144,23 @@ const VALIDATORS = {
 
     if (!acceptedValues.includes(value)) {
       throw new ValidationErrors.AcceptanceValidationError(name, errorMessage)
+    }
+  },
+
+  // Requires that the given value be formatted like an email address. Uses a
+  // very simple regex which checks for at least 1 character that is not an @,
+  // then an @, then at least one character that isn't a period, then a period,
+  // then any character.
+  //
+  // { email: true }
+  // { email: { message: '...' } }
+  email: (value: unknown, name: string, options: EmailValidatorOptions) => {
+    const pattern = new RegExp('[^@]+@[^.]+..+')
+    const errorMessage =
+      typeof options === 'object' ? options.message : undefined
+
+    if (!pattern.test(String(value))) {
+      throw new ValidationErrors.EmailValidationError(name, errorMessage)
     }
   },
 
@@ -252,6 +277,8 @@ const VALIDATORS = {
   // `otherThan`: value must be anything other than `otherThan`
   // `even`: value must be an even number
   // `odd`: value must be an odd number
+  // `positive`: value must be a positive number
+  // `negative`: value must be a negative number
   //
   // { numericality: true }
   // { numericality: { integer: true } }
@@ -325,6 +352,18 @@ const VALIDATORS = {
       }
       if (options.odd && value % 2 !== 1) {
         throw new ValidationErrors.OddNumericalityValidationError(
+          name,
+          options.message
+        )
+      }
+      if (options.positive && value <= 0) {
+        throw new ValidationErrors.PositiveNumericalityValidationError(
+          name,
+          options.message
+        )
+      }
+      if (options.negative && value >= 0) {
+        throw new ValidationErrors.NegativeNumericalityValidationError(
           name,
           options.message
         )
