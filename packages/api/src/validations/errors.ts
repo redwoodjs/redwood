@@ -266,7 +266,7 @@ export class NegativeNumericalityValidationError extends ServiceValidationError 
 }
 
 export class UniquenessValidationError extends ServiceValidationError {
-  constructor(name: string, message: string | undefined) {
+  constructor(name: string, message: string | undefined, _substitutions = {}) {
     const errorMessage = message ? message : `${name} must be unique`
 
     super(errorMessage)

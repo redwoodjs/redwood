@@ -129,7 +129,7 @@ interface ValidateDirectivesWithMessages {
 }
 
 type UniquenessValidatorOptions = {
-  message?: string
+  message: string
 }
 
 type UniquenessWhere = Record<'AND' | 'NOT', Array<Record<string, unknown>>>
@@ -504,31 +504,54 @@ export const validateWith = (func: () => void) => {
 //
 //   previewFeatures = ["interactiveTransactions"]
 //
-// return validateUniqueness('user', { email: 'rob@redwoodjs.com' }, () => {
+// return validateUniqueness('user', { email: 'rob@redwoodjs.com' }, { message: '...'}, (db) => {
 //   return db.create(data: { email })
-// }, { message: '...'})
+// })
 //
 // return validateUniqueness('user', {
 //   email: 'rob@redwoodjs.com',
 //   $self: { id: 123 }
-// }, () => {
+// }, (db) => {
 //   return db.create(data: { email })
-// }, { message: '...'})
+// })
 //
 // return validateUniqueness('user', {
 //   email: 'rob@redwoodjs.com',
 //   $scope: { companyId: input.companyId }
-// }, () => {
+// }, (db) => {
 //   return db.create(data: { email })
-// }, { message: '...'})
-export const validateUniqueness = async (
+// })
+export async function validateUniqueness(
   model: string,
   fields: Record<string, unknown>,
-  callback: (tx: PrismaClient) => Promise<any>,
-  options: UniquenessValidatorOptions = {}
-) => {
+  optionsOrCallback: (tx: PrismaClient) => Promise<any>,
+  callback: never
+): Promise<any>
+export async function validateUniqueness(
+  model: string,
+  fields: Record<string, unknown>,
+  optionsOrCallback: UniquenessValidatorOptions,
+  callback: (tx: PrismaClient) => Promise<any>
+): Promise<any>
+export async function validateUniqueness(
+  model: string,
+  fields: Record<string, unknown>,
+  optionsOrCallback:
+    | UniquenessValidatorOptions
+    | ((tx: PrismaClient) => Promise<any>),
+  callback?: (tx: PrismaClient) => Promise<any>
+): Promise<any> {
   const db = new PrismaClient()
   const { $self, $scope, ...rest } = fields
+  let options = {}
+  let validCallback: (tx: PrismaClient) => Promise<any>
+
+  if (typeof optionsOrCallback === 'function') {
+    validCallback = optionsOrCallback
+  } else {
+    options = optionsOrCallback
+    validCallback = callback as (tx: PrismaClient) => Promise<any>
+  }
 
   const where: UniquenessWhere = {
     AND: [rest],
@@ -548,6 +571,6 @@ export const validateUniqueness = async (
       validationError('uniqueness', fieldsToString(fields), options)
     }
 
-    return callback(tx)
+    return validCallback(tx)
   })
 }

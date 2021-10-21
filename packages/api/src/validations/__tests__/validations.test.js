@@ -960,10 +960,10 @@ describe('validateUniqueness', () => {
       await validateUniqueness(
         'user',
         { email: 'rob@redwoodjs.com' },
-        () => {},
         {
           message: 'Email already taken',
-        }
+        },
+        () => {}
       )
     } catch (e) {
       expect(e.message).toEqual('Email already taken')
