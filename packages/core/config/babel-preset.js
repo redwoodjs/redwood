@@ -58,9 +58,10 @@ module.exports = () => {
       ],
     ],
     overrides: [
+      // ** API (also applies to Jest API config) **
       // ** SCRIPTS **
       {
-        test: ['./scripts/'],
+        test: ['./api/', './scripts/'],
         presets: [
           [
             '@babel/preset-env',
