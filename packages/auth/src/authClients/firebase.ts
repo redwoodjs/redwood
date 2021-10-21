@@ -46,7 +46,7 @@ const applyProviderOptions = (
   return provider
 }
 
-type FirebaseClient = {
+export type FirebaseClient = {
   firebaseAuth: FirebaseAuth
   firebaseApp?: FirebaseApp
 }
