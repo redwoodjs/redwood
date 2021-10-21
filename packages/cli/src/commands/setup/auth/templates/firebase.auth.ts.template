@@ -6,6 +6,7 @@ const adminApp = admin.initializeApp({
   projectId: process.env.FIREBASE_PROJECT_ID,
 })
 
+
 /**
  * getCurrentUser returns the user information together with
  * an optional collection of roles used by requireAuth() to check
