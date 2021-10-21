@@ -1,20 +1,33 @@
 export class ServiceValidationError extends Error {
-  constructor(message: string) {
-    super(message)
-    this.name = 'ValidationError'
+  constructor(message: string, substitutions = {}) {
+    let replacedMessage = message
+    for (const [key, value] of Object.entries(substitutions)) {
+      replacedMessage = replacedMessage.replaceAll(`{${key}}`, String(value))
+    }
+
+    super(replacedMessage)
+    this.name = 'ServiceValidationError'
   }
 }
 
 export class AbsenceValidationError extends ServiceValidationError {
-  constructor(name: string, message = `${name} is not absent`) {
-    super(message)
+  constructor(
+    name: string,
+    message = `${name} is not absent`,
+    substitutions = {}
+  ) {
+    super(message, substitutions)
     this.name = 'AbsenceValidationError'
   }
 }
 
 export class AcceptanceValidationError extends ServiceValidationError {
-  constructor(name: string, message = `${name} must be accepted`) {
-    super(message)
+  constructor(
+    name: string,
+    message = `${name} must be accepted`,
+    substitutions = {}
+  ) {
+    super(message, substitutions)
     this.name = 'AcceptanceValidationError'
   }
 }
@@ -22,30 +35,43 @@ export class AcceptanceValidationError extends ServiceValidationError {
 export class EmailValidationError extends ServiceValidationError {
   constructor(
     name: string,
-    message = `${name} must be formatted like an email address`
+    message = `${name} must be formatted like an email address`,
+    substitutions = {}
   ) {
-    super(message)
+    super(message, substitutions)
     this.name = 'EmailValidationError'
   }
 }
 
 export class ExclusionValidationError extends ServiceValidationError {
-  constructor(name: string, message = `${name} is reserved`) {
-    super(message)
+  constructor(
+    name: string,
+    message = `${name} is reserved`,
+    substitutions = {}
+  ) {
+    super(message, substitutions)
     this.name = 'ExclusionValidationError'
   }
 }
 
 export class FormatValidationError extends ServiceValidationError {
-  constructor(name: string, message = `${name} is not formatted correctly`) {
-    super(message)
+  constructor(
+    name: string,
+    message = `${name} is not formatted correctly`,
+    substitutions = {}
+  ) {
+    super(message, substitutions)
     this.name = 'FormatValidationError'
   }
 }
 
 export class InclusionValidationError extends ServiceValidationError {
-  constructor(name: string, message = `${name} is reserved`) {
-    super(message)
+  constructor(
+    name: string,
+    message = `${name} is reserved`,
+    substitutions = {}
+  ) {
+    super(message, substitutions)
     this.name = 'InclusionValidationError'
   }
 }
@@ -53,10 +79,10 @@ export class InclusionValidationError extends ServiceValidationError {
 export class MinLengthValidationError extends ServiceValidationError {
   constructor(
     name: string,
-    value: number,
-    message = `${name} must have more than ${value} characters`
+    message = `${name} must have more than {min} characters`,
+    substitutions: { min?: number } = {}
   ) {
-    super(message)
+    super(message, substitutions)
     this.name = 'MinLengthValidationError'
   }
 }
@@ -64,10 +90,10 @@ export class MinLengthValidationError extends ServiceValidationError {
 export class MaxLengthValidationError extends ServiceValidationError {
   constructor(
     name: string,
-    value: number,
-    message = `${name} must have less than ${value} characters`
+    message = `${name} must have less than {max} characters`,
+    substitutions: { max?: number } = {}
   ) {
-    super(message)
+    super(message, substitutions)
     this.name = 'MaxLengthValidationError'
   }
 }
@@ -75,10 +101,10 @@ export class MaxLengthValidationError extends ServiceValidationError {
 export class EqualLengthValidationError extends ServiceValidationError {
   constructor(
     name: string,
-    value: number,
-    message = `${name} must have exactly ${value} characters`
+    message = `${name} must have exactly {equal} characters`,
+    substitutions: { equal?: number } = {}
   ) {
-    super(message)
+    super(message, substitutions)
     this.name = 'EqualLengthValidationError'
   }
 }
@@ -86,31 +112,43 @@ export class EqualLengthValidationError extends ServiceValidationError {
 export class BetweenLengthValidationError extends ServiceValidationError {
   constructor(
     name: string,
-    value: Array<number>,
-    message = `${name} must be between ${value[0]} and ${value[1]} characters`
+    message = `${name} must be between {min} and {max} characters`,
+    substitutions: { min?: number; max?: number } = {}
   ) {
-    super(message)
+    super(message, substitutions)
     this.name = 'BetweenLengthValidationError'
   }
 }
 
 export class PresenceValidationError extends ServiceValidationError {
-  constructor(name: string, message = `${name} must be present`) {
-    super(message)
+  constructor(
+    name: string,
+    message = `${name} must be present`,
+    substitutions = {}
+  ) {
+    super(message, substitutions)
     this.name = 'PresenceValidationError'
   }
 }
 
 export class TypeNumericalityValidationError extends ServiceValidationError {
-  constructor(name: string) {
-    super(`${name} must be a number`)
+  constructor(
+    name: string,
+    message = `${name} must by a number`,
+    substitutions = {}
+  ) {
+    super(message, substitutions)
     this.name = 'TypeNumericalityValidationError'
   }
 }
 
 export class IntegerNumericalityValidationError extends ServiceValidationError {
-  constructor(name: string, message = `${name} must be an integer`) {
-    super(message)
+  constructor(
+    name: string,
+    message = `${name} must be an integer`,
+    substitutions = {}
+  ) {
+    super(message, substitutions)
     this.name = 'IntegerNumericalityValidationError'
   }
 }
@@ -118,10 +156,10 @@ export class IntegerNumericalityValidationError extends ServiceValidationError {
 export class LessThanNumericalityValidationError extends ServiceValidationError {
   constructor(
     name: string,
-    value: number,
-    message = `${name} must be less than ${value}`
+    message = `${name} must be less than {lessThan}`,
+    substitutions: { lessThan?: number } = {}
   ) {
-    super(message)
+    super(message, substitutions)
     this.name = 'LessThanNumericalityValidationError'
   }
 }
@@ -129,10 +167,10 @@ export class LessThanNumericalityValidationError extends ServiceValidationError 
 export class LessThanOrEqualNumericalityValidationError extends ServiceValidationError {
   constructor(
     name: string,
-    value: number,
-    message = `${name} must be less than or equal to ${value}`
+    message = `${name} must be less than or equal to {lessThanOrEqual}`,
+    substitutions: { lessThanOrEqual?: number } = {}
   ) {
-    super(message)
+    super(message, substitutions)
     this.name = 'LessThanOrEqualNumericalityValidationError'
   }
 }
@@ -140,10 +178,10 @@ export class LessThanOrEqualNumericalityValidationError extends ServiceValidatio
 export class GreaterThanNumericalityValidationError extends ServiceValidationError {
   constructor(
     name: string,
-    value: number,
-    message = `${name} must be greater than ${value}`
+    message = `${name} must be greater than {greaterThan}`,
+    substitutions: { greaterThan?: number } = {}
   ) {
-    super(message)
+    super(message, substitutions)
     this.name = 'GreaterThanNumericalityValidationError'
   }
 }
@@ -151,10 +189,10 @@ export class GreaterThanNumericalityValidationError extends ServiceValidationErr
 export class GreaterThanOrEqualNumericalityValidationError extends ServiceValidationError {
   constructor(
     name: string,
-    value: number,
-    message = `${name} must be greater than or equal to ${value}`
+    message = `${name} must be greater than or equal to {greaterThanOrEqual}`,
+    substitutions: { greaterThanOrEqual?: number } = {}
   ) {
-    super(message)
+    super(message, substitutions)
     this.name = 'GreaterThanOrEqualNumericalityValidationError'
   }
 }
@@ -162,10 +200,10 @@ export class GreaterThanOrEqualNumericalityValidationError extends ServiceValida
 export class EqualNumericalityValidationError extends ServiceValidationError {
   constructor(
     name: string,
-    value: number,
-    message = `${name} must equal ${value}`
+    message = `${name} must equal {equal}`,
+    substitutions: { equal?: number } = {}
   ) {
-    super(message)
+    super(message, substitutions)
     this.name = 'EqualNumericalityValidationError'
   }
 }
@@ -173,46 +211,61 @@ export class EqualNumericalityValidationError extends ServiceValidationError {
 export class OtherThanNumericalityValidationError extends ServiceValidationError {
   constructor(
     name: string,
-    value: number,
-    message = `${name} must not equal ${value}`
+    message = `${name} must not equal {otherThan}`,
+    substitutions: { otherThan?: number } = {}
   ) {
-    super(message)
+    super(message, substitutions)
     this.name = 'OtherThanNumericalityValidationError'
   }
 }
 
 export class EvenNumericalityValidationError extends ServiceValidationError {
-  constructor(name: string, message = `${name} must be even`) {
-    super(message)
+  constructor(
+    name: string,
+    message = `${name} must be even`,
+    substitutions = {}
+  ) {
+    super(message, substitutions)
     this.name = 'EvenNumericalityValidationError'
   }
 }
 
 export class OddNumericalityValidationError extends ServiceValidationError {
-  constructor(name: string, message = `${name} must be odd`) {
-    super(message)
+  constructor(
+    name: string,
+    message = `${name} must be odd`,
+    substitutions = {}
+  ) {
+    super(message, substitutions)
     this.name = 'OddNumericalityValidationError'
   }
 }
 
 export class PositiveNumericalityValidationError extends ServiceValidationError {
-  constructor(name: string, message = `${name} must be positive`) {
-    super(message)
+  constructor(
+    name: string,
+    message = `${name} must be positive`,
+    substitutions = {}
+  ) {
+    super(message, substitutions)
     this.name = 'PositiveNumericalityValidationError'
   }
 }
 
 export class NegativeNumericalityValidationError extends ServiceValidationError {
-  constructor(name: string, message = `${name} must be negative`) {
-    super(message)
+  constructor(
+    name: string,
+    message = `${name} must be negative`,
+    substitutions = {}
+  ) {
+    super(message, substitutions)
     this.name = 'NegativeNumericalityValidationError'
   }
 }
 
 export class UniquenessValidationError extends ServiceValidationError {
-  constructor(fields: Record<string, unknown>, message: string | undefined) {
-    const names = Object.keys(fields).join(', ')
-    const errorMessage = message ? message : `${names} must be unique`
+  constructor(name: string, message: string | undefined, substitutions = {}) {
+    const errorMessage = message ? message : `${name} must be unique`
 
     super(errorMessage)
     this.name = 'UniquenessValidationError'

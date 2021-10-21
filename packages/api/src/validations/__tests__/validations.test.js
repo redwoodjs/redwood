@@ -334,10 +334,10 @@ describe('validate length', () => {
     // custom error
     try {
       validate('foobar', 'username', {
-        length: { equal: 5, message: 'wrong length' },
+        length: { equal: 5, message: 'wrong length, must be {equal}' },
       })
     } catch (e) {
-      expect(e.message).toEqual('wrong length')
+      expect(e.message).toEqual('wrong length, must be 5')
     }
 
     // valid
@@ -404,6 +404,13 @@ describe('validate numericality', () => {
     expect(() =>
       validate(3, 'number', { numericality: { integer: true } })
     ).not.toThrow(ValidationErrors.IntegerNumericalityValidationError)
+
+    // default error
+    try {
+      validate(1.2, 'number', { numericality: { integer: true } })
+    } catch (e) {
+      expect(e.message).toEqual('number must be an integer')
+    }
   })
 
   it('checks if value is less than required number', () => {
@@ -426,6 +433,14 @@ describe('validate numericality', () => {
     expect(() =>
       validate(3.1, 'number', { numericality: { lessThan: 3.2 } })
     ).not.toThrow(ValidationErrors.LessThanNumericalityValidationError)
+
+    // default error
+    try {
+      validate(2, 'number', { numericality: { lessThan: 1 } })
+    } catch (e) {
+      expect(e.message).toEqual('number must be less than 1')
+    }
+    expect.assertions(7)
   })
 
   it('checks if value is less than or equal to required number', () => {
@@ -448,6 +463,14 @@ describe('validate numericality', () => {
     expect(() =>
       validate(2.2, 'number', { numericality: { lessThanOrEqual: 2.2 } })
     ).not.toThrow(ValidationErrors.LessThanOrEqualNumericalityValidationError)
+
+    // default error
+    try {
+      validate(3, 'number', { numericality: { lessThanOrEqual: 2 } })
+    } catch (e) {
+      expect(e.message).toEqual('number must be less than or equal to 2')
+    }
+    expect.assertions(7)
   })
 
   it('checks if value is greater than required number', () => {
@@ -473,6 +496,14 @@ describe('validate numericality', () => {
     expect(() =>
       validate(3.1, 'number', { numericality: { greaterThan: 3.0 } })
     ).not.toThrow(ValidationErrors.GreaterThanNumericalityValidationError)
+
+    // default error
+    try {
+      validate(2, 'number', { numericality: { greaterThan: 3 } })
+    } catch (e) {
+      expect(e.message).toEqual('number must be greater than 3')
+    }
+    expect.assertions(8)
   })
 
   it('checks if value is greater than or equal to required number', () => {
@@ -499,6 +530,14 @@ describe('validate numericality', () => {
     ).not.toThrow(
       ValidationErrors.GreaterThanOrEqualNumericalityValidationError
     )
+
+    // default error
+    try {
+      validate(2, 'number', { numericality: { greaterThanOrEqual: 3 } })
+    } catch (e) {
+      expect(e.message).toEqual('number must be greater than or equal to 3')
+    }
+    expect.assertions(7)
   })
 
   it('checks if value is not equal to required number', () => {
@@ -527,6 +566,14 @@ describe('validate numericality', () => {
     expect(() =>
       validate(2.0, 'number', { numericality: { equal: 2 } })
     ).not.toThrow(ValidationErrors.EqualNumericalityValidationError)
+
+    // default error
+    try {
+      validate(2, 'number', { numericality: { equal: 3 } })
+    } catch (e) {
+      expect(e.message).toEqual('number must equal 3')
+    }
+    expect.assertions(9)
   })
 
   it('checks if not equal to required number', () => {
@@ -549,6 +596,14 @@ describe('validate numericality', () => {
     expect(() =>
       validate(3.0, 'number', { numericality: { otherThan: 4 } })
     ).not.toThrow(ValidationErrors.OtherThanNumericalityValidationError)
+
+    // default error
+    try {
+      validate(3, 'number', { numericality: { otherThan: 3 } })
+    } catch (e) {
+      expect(e.message).toEqual('number must not equal 3')
+    }
+    expect.assertions(7)
   })
 
   it('checks for a value being even', () => {
@@ -565,6 +620,14 @@ describe('validate numericality', () => {
     expect(() =>
       validate(2.0, 'number', { numericality: { even: true } })
     ).not.toThrow(ValidationErrors.EvenNumericalityValidationError)
+
+    // default error
+    try {
+      validate(3, 'number', { numericality: { even: true } })
+    } catch (e) {
+      expect(e.message).toEqual('number must be even')
+    }
+    expect.assertions(5)
   })
 
   it('checks for a value being odd', () => {
@@ -581,6 +644,14 @@ describe('validate numericality', () => {
     expect(() =>
       validate(3.0, 'number', { numericality: { odd: true } })
     ).not.toThrow(ValidationErrors.OddNumericalityValidationError)
+
+    // default error
+    try {
+      validate(2, 'number', { numericality: { odd: true } })
+    } catch (e) {
+      expect(e.message).toEqual('number must be odd')
+    }
+    expect.assertions(5)
   })
 
   it('checks for a value being positive', () => {
@@ -600,6 +671,14 @@ describe('validate numericality', () => {
     expect(() =>
       validate(3.0, 'number', { numericality: { positive: true } })
     ).not.toThrow(ValidationErrors.PositiveNumericalityValidationError)
+
+    // default error
+    try {
+      validate(-1, 'number', { numericality: { positive: true } })
+    } catch (e) {
+      expect(e.message).toEqual('number must be positive')
+    }
+    expect.assertions(6)
   })
 
   it('checks for a value being negative', () => {
@@ -619,24 +698,14 @@ describe('validate numericality', () => {
     expect(() =>
       validate(-3.0, 'number', { numericality: { negative: true } })
     ).not.toThrow(ValidationErrors.NegativeNumericalityValidationError)
-  })
 
-  it('throws with a default message', () => {
+    // default error
     try {
-      validate(3, 'number', { numericality: { even: true } })
+      validate(1, 'number', { numericality: { negative: true } })
     } catch (e) {
-      expect(e.message).toEqual('number must be even')
+      expect(e.message).toEqual('number must be negative')
     }
-  })
-
-  it('throws with a custom message', () => {
-    try {
-      validate(3, 'number', {
-        numericality: { even: true, message: 'No odd numbers' },
-      })
-    } catch (e) {
-      expect(e.message).toEqual('No odd numbers')
-    }
+    expect.assertions(6)
   })
 })
 

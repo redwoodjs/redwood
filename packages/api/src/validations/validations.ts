@@ -1,6 +1,7 @@
 // Handles validating values in services
 
 import { PrismaClient } from '@prisma/client'
+import pascalcase from 'pascalcase'
 
 import * as ValidationErrors from './errors'
 
@@ -103,24 +104,16 @@ const VALIDATORS = {
   //
   // { absence: true }
   // { absence: { allowEmptyString: true, message: '...' } }
-  absence: (
-    value: unknown,
-    name: string,
-    options: boolean | AbsenceValidatorOptions
-  ) => {
-    const absenceOptions = {
-      allowEmptyString: false,
-    }
+  absence: (value: unknown, name: string, options: AbsenceValidatorOptions) => {
+    const absenceOptions = { allowEmptyString: false }
     Object.assign(absenceOptions, options)
-    const errorMessage =
-      typeof options === 'object' ? options.message : undefined
 
     if (value === '') {
       if (!absenceOptions.allowEmptyString) {
-        throw new ValidationErrors.AbsenceValidationError(name, errorMessage)
+        validationError('absence', name, options)
       }
     } else if (value != null) {
-      throw new ValidationErrors.AbsenceValidationError(name, errorMessage)
+      validationError('absence', name, options)
     }
   },
 
@@ -141,11 +134,9 @@ const VALIDATORS = {
     } else {
       acceptedValues = [true]
     }
-    const errorMessage =
-      typeof options === 'object' ? options.message : undefined
 
     if (!acceptedValues.includes(value)) {
-      throw new ValidationErrors.AcceptanceValidationError(name, errorMessage)
+      validationError('acceptance', name, options)
     }
   },
 
@@ -158,11 +149,9 @@ const VALIDATORS = {
   // { email: { message: '...' } }
   email: (value: unknown, name: string, options: EmailValidatorOptions) => {
     const pattern = /^[^@\s]+@[^.\s]+\.[^\s]+$/
-    const errorMessage =
-      typeof options === 'object' ? options.message : undefined
 
     if (!pattern.test(String(value))) {
-      throw new ValidationErrors.EmailValidationError(name, errorMessage)
+      validationError('email', name, options)
     }
   },
 
@@ -177,10 +166,9 @@ const VALIDATORS = {
   ) => {
     const exclusionList =
       (Array.isArray(options) && options) || options.in || []
-    const errorMessage = Array.isArray(options) ? undefined : options.message
 
     if (exclusionList.includes(value)) {
-      throw new ValidationErrors.ExclusionValidationError(name, errorMessage)
+      validationError('exclusion', name, options)
     }
   },
 
@@ -190,7 +178,6 @@ const VALIDATORS = {
   // { format: { pattern: /^foobar$/, message: '...' } }
   format: (value: unknown, name: string, options: FormatValidatorOptions) => {
     const pattern = options instanceof RegExp ? options : options.pattern
-    const errorMessage = options instanceof RegExp ? undefined : options.message
 
     if (pattern == null) {
       throw new ValidationErrors.FormatValidationError(
@@ -200,7 +187,7 @@ const VALIDATORS = {
     }
 
     if (!pattern.test(String(value))) {
-      throw new ValidationErrors.FormatValidationError(name, errorMessage)
+      validationError('format', name, options)
     }
   },
 
@@ -215,10 +202,9 @@ const VALIDATORS = {
   ) => {
     const inclusionList =
       (Array.isArray(options) && options) || options.in || []
-    const errorMessage = Array.isArray(options) ? undefined : options.message
 
     if (!inclusionList.includes(value)) {
-      throw new ValidationErrors.InclusionValidationError(name, errorMessage)
+      validationError('inclusion', name, options)
     }
   },
 
@@ -236,35 +222,22 @@ const VALIDATORS = {
     const len = String(value).length
 
     if (options.min && len < options.min) {
-      throw new ValidationErrors.MinLengthValidationError(
-        name,
-        options.min,
-        options.message
-      )
+      validationError('minLength', name, options, { min: options.min })
     }
     if (options.max && len > options.max) {
-      throw new ValidationErrors.MaxLengthValidationError(
-        name,
-        options.max,
-        options.message
-      )
+      validationError('maxLength', name, options, { max: options.max })
     }
     if (options.equal && len !== options.equal) {
-      throw new ValidationErrors.EqualLengthValidationError(
-        name,
-        options.equal,
-        options.message
-      )
+      validationError('equalLength', name, options, { equal: options.equal })
     }
     if (
       options.between &&
       (len < options.between[0] || len > options.between[1])
     ) {
-      throw new ValidationErrors.BetweenLengthValidationError(
-        name,
-        options.between,
-        options.message
-      )
+      validationError('betweenLength', name, options, {
+        min: options.between[0],
+        max: options.between[1],
+      })
     }
   },
 
@@ -291,7 +264,7 @@ const VALIDATORS = {
     options: NumericalityValidatorOptions
   ) => {
     if (typeof value !== 'number') {
-      throw new ValidationErrors.TypeNumericalityValidationError(name)
+      validationError('typeNumericality', name, options)
     }
 
     // if there are no options, all we can do is check that value is a number
@@ -299,76 +272,55 @@ const VALIDATORS = {
       return
     } else {
       if (options.integer && !Number.isInteger(value)) {
-        throw new ValidationErrors.IntegerNumericalityValidationError(
-          name,
-          options.message
-        )
+        validationError('integerNumericality', name, options)
       }
-      if (options.lessThan && value >= options.lessThan) {
-        throw new ValidationErrors.LessThanNumericalityValidationError(
-          name,
-          options.lessThan,
-          options.message
-        )
+      if (options.lessThan && (value as number) >= options.lessThan) {
+        validationError('lessThanNumericality', name, options, {
+          lessThan: options.lessThan,
+        })
       }
-      if (options.lessThanOrEqual && value > options.lessThanOrEqual) {
-        throw new ValidationErrors.LessThanOrEqualNumericalityValidationError(
-          name,
-          options.lessThanOrEqual,
-          options.message
-        )
+      if (
+        options.lessThanOrEqual &&
+        (value as number) > options.lessThanOrEqual
+      ) {
+        validationError('lessThanOrEqualNumericality', name, options, {
+          lessThanOrEqual: options.lessThanOrEqual,
+        })
       }
-      if (options.greaterThan && value <= options.greaterThan) {
-        throw new ValidationErrors.GreaterThanNumericalityValidationError(
-          name,
-          options.greaterThan,
-          options.message
-        )
+      if (options.greaterThan && (value as number) <= options.greaterThan) {
+        validationError('greaterThanNumericality', name, options, {
+          greaterThan: options.greaterThan,
+        })
       }
-      if (options.greaterThanOrEqual && value < options.greaterThanOrEqual) {
-        throw new ValidationErrors.GreaterThanOrEqualNumericalityValidationError(
-          name,
-          options.greaterThanOrEqual,
-          options.message
-        )
+      if (
+        options.greaterThanOrEqual &&
+        (value as number) < options.greaterThanOrEqual
+      ) {
+        validationError('greaterThanOrEqualNumericality', name, options, {
+          greaterThanOrEqual: options.greaterThanOrEqual,
+        })
       }
       if (options.equal && value !== options.equal) {
-        throw new ValidationErrors.EqualNumericalityValidationError(
-          name,
-          options.equal,
-          options.message
-        )
+        validationError('equalNumericality', name, options, {
+          equal: options.equal,
+        })
       }
       if (options.otherThan && value === options.otherThan) {
-        throw new ValidationErrors.OtherThanNumericalityValidationError(
-          name,
-          options.otherThan,
-          options.message
-        )
+        validationError('otherThanNumericality', name, options, {
+          otherThan: options.otherThan,
+        })
       }
-      if (options.even && value % 2 !== 0) {
-        throw new ValidationErrors.EvenNumericalityValidationError(
-          name,
-          options.message
-        )
+      if (options.even && (value as number) % 2 !== 0) {
+        validationError('evenNumericality', name, options)
       }
-      if (options.odd && value % 2 !== 1) {
-        throw new ValidationErrors.OddNumericalityValidationError(
-          name,
-          options.message
-        )
+      if (options.odd && (value as number) % 2 !== 1) {
+        validationError('oddNumericality', name, options)
       }
-      if (options.positive && value <= 0) {
-        throw new ValidationErrors.PositiveNumericalityValidationError(
-          name,
-          options.message
-        )
+      if (options.positive && (value as number) <= 0) {
+        validationError('positiveNumericality', name, options)
       }
-      if (options.negative && value >= 0) {
-        throw new ValidationErrors.NegativeNumericalityValidationError(
-          name,
-          options.message
-        )
+      if (options.negative && (value as number) >= 0) {
+        validationError('negativeNumericality', name, options)
       }
     }
   },
@@ -396,19 +348,42 @@ const VALIDATORS = {
       allowEmptyString: true,
     }
     Object.assign(presenceOptions, options)
-    const errorMessage =
-      typeof options === 'object' ? options.message : undefined
 
-    if (!presenceOptions.allowNull && value === null) {
-      throw new ValidationErrors.PresenceValidationError(name, errorMessage)
-    }
-    if (!presenceOptions.allowUndefined && value === undefined) {
-      throw new ValidationErrors.PresenceValidationError(name, errorMessage)
-    }
-    if (!presenceOptions.allowEmptyString && value === '') {
-      throw new ValidationErrors.PresenceValidationError(name, errorMessage)
+    if (
+      (!presenceOptions.allowNull && value === null) ||
+      (!presenceOptions.allowUndefined && value === undefined) ||
+      (!presenceOptions.allowEmptyString && value === '')
+    ) {
+      validationError('presence', name, options)
     }
   },
+}
+
+// Turns the keys of an object into a comma-delimited string
+//
+// { email: 'rob@redwood.com', name: 'Rob' } => 'email, name'
+const fieldsToString = (fields: Record<string, unknown>) => {
+  const output = []
+  for (const [key, _value] of Object.entries(fields)) {
+    output.push(key)
+  }
+  return output.join(', ')
+}
+
+const validationError = (
+  type: string,
+  name: string,
+  options: any,
+  substitutions = {}
+) => {
+  const errorClassName = `${pascalcase(
+    type
+  )}ValidationError` as keyof typeof ValidationErrors
+  const ErrorClass = ValidationErrors[errorClassName]
+  const errorMessage =
+    typeof options === 'object' ? (options.message as string) : undefined
+
+  throw new ErrorClass(name, errorMessage, substitutions)
 }
 
 // Main validation function, `directives` decides which actual validators
@@ -497,12 +472,12 @@ export const validateUniqueness = async (
   }
 
   return await db.$transaction(async (tx: PrismaClient) => {
-    if (await tx[model].findFirst({ where })) {
-      throw new ValidationErrors.UniquenessValidationError(
-        fields,
-        options.message
-      )
+    const found = await tx[model].findFirst({ where })
+
+    if (found) {
+      validationError('uniqueness', fieldsToString(fields), options)
     }
+
     return callback(tx)
   })
 }
