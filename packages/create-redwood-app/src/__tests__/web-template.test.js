@@ -7,7 +7,7 @@ test('Web/src/App should contain App', () => {
   // packages/cli/src/commands/setup/auth/auth.js should also be changed
 
   const indexContent = fs
-    .readFileSync(path.join(__dirname, '../template/web/src/App.tsx'))
+    .readFileSync(path.join(__dirname, '../../template/web/src/App.tsx'))
     .toString()
 
   expect(indexContent).toContain('const App = () => (')
