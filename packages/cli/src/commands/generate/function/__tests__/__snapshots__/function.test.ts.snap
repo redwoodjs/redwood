@@ -174,9 +174,10 @@ describe('foo function', () => {
 
   // You can also use scenarios to test your api functions
   // See guide here: https://redwoodjs.com/docs/testing#scenarios
-  //  scenario('Scenario test', async () => {
   //
-  //  })
+  // scenario('Scenario test', async () => {
+  //
+  // })
 })
 "
 `;

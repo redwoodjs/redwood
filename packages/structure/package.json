@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/structure",
   "description": "noun: the arrangement of and relations between the parts or elements of something complex",
-  "version": "0.37.4",
+  "version": "0.37.5",
   "license": "MIT",
   "main": "dist/index.js",
   "files": [
@@ -9,8 +9,8 @@
   ],
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@prisma/sdk": "3.2.1",
-    "@redwoodjs/internal": "0.37.4",
+    "@prisma/sdk": "3.3.0",
+    "@redwoodjs/internal": "0.37.5",
     "@types/line-column": "1.0.0",
     "camelcase": "6.2.0",
     "deepmerge": "4.2.2",
@@ -53,7 +53,7 @@
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
     "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
-    "test": "jest",
+    "test": "jest src",
     "test:watch": "yarn test --watch",
     "prettier": "prettier --write './src/**/*.{ts,tsx}'"
   },

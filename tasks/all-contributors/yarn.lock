@@ -21,7 +21,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"all-contributors-cli@npm:^6.20.0":
+"all-contributors-cli@npm:6.20.0":
   version: 6.20.0
   resolution: "all-contributors-cli@npm:6.20.0"
   dependencies:
@@ -366,7 +366,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "redwoodjs-all-contributors@workspace:."
   dependencies:
-    all-contributors-cli: ^6.20.0
+    all-contributors-cli: 6.20.0
   languageName: unknown
   linkType: soft
 
