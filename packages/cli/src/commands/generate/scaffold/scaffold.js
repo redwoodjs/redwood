@@ -6,7 +6,6 @@ import humanize from 'humanize-string'
 import Listr from 'listr'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
-import pluralize from 'pluralize'
 import terminalLink from 'terminal-link'
 
 import { getConfig, generate as generateTypes } from '@redwoodjs/internal'
@@ -16,7 +15,6 @@ import {
   readFile,
   writeFile,
   asyncForEach,
-  getSchema,
   getDefaultArgs,
   getPaths,
   writeFilesTask,
@@ -25,12 +23,13 @@ import {
   transformTSToJS,
 } from '../../../lib'
 import c from '../../../lib/colors'
+import { pluralize, singularize } from '../../../lib/rwPluralize'
+import { getSchema, verifyModelName } from '../../../lib/schemaHelpers'
 import { yargsDefaults } from '../../generate'
 import {
   customOrDefaultTemplatePath,
   relationsForModel,
   intForeignKeysForModel,
-  ensureUniquePlural,
   mapPrismaScalarToPagePropTsType,
 } from '../helpers'
 import { files as sdlFiles, builder as sdlBuilder } from '../sdl/sdl'
@@ -54,7 +53,7 @@ const getImportComponentNames = (
   nestScaffoldByModel = true
 ) => {
   const pluralName = pascalcase(pluralize(name))
-  const singularName = pascalcase(pluralize.singular(name))
+  const singularName = pascalcase(singularize(name))
   let componentPath
   let layoutPath
   if (scaffoldPath === '') {
@@ -85,7 +84,7 @@ const getImportComponentNames = (
 // Includes imports from getImportComponentNames()
 const getTemplateStrings = (name, scaffoldPath, nestScaffoldByModel = true) => {
   const pluralPascalName = pascalcase(pluralize(name))
-  const singularPascalName = pascalcase(pluralize.singular(name))
+  const singularPascalName = pascalcase(singularize(name))
 
   const pluralCamelName = camelcase(pluralPascalName)
   const singularCamelName = camelcase(singularPascalName)
@@ -122,7 +121,7 @@ export const files = async ({
   typescript = false,
   nestScaffoldByModel,
 }) => {
-  const model = await getSchema(pascalcase(pluralize.singular(name)))
+  const model = await getSchema(name)
   if (typeof nestScaffoldByModel === 'undefined') {
     nestScaffoldByModel = getConfig().generate.nestScaffoldByModel
   }
@@ -221,7 +220,7 @@ const layoutFiles = (
   templateStrings
 ) => {
   const pluralName = pascalcase(pluralize(name))
-  const singularName = pascalcase(pluralize.singular(name))
+  const singularName = pascalcase(singularize(name))
   let fileList = {}
 
   const layouts = fs.readdirSync(
@@ -273,7 +272,7 @@ const pageFiles = async (
   templateStrings
 ) => {
   const pluralName = pascalcase(pluralize(name))
-  const singularName = pascalcase(pluralize.singular(name))
+  const singularName = pascalcase(singularize(name))
   const model = await getSchema(singularName)
   const idType = getIdType(model)
   const idTsType = mapPrismaScalarToPagePropTsType(idType)
@@ -336,7 +335,7 @@ const componentFiles = async (
   templateStrings
 ) => {
   const pluralName = pascalcase(pluralize(name))
-  const singularName = pascalcase(pluralize.singular(name))
+  const singularName = pascalcase(singularize(name))
   const model = await getSchema(singularName)
   const idType = getIdType(model)
   const intForeignKeys = intForeignKeysForModel(model)
@@ -360,13 +359,15 @@ const componentFiles = async (
     },
     Json: {
       componentName: 'TextAreaField',
-      transformValue: 'Json',
+      validation: (isRequired) =>
+        `{{ valueAsJSON: true${isRequired ? ', required: true' : ''} }}`,
       displayFunction: 'jsonDisplay',
       listDisplayFunction: 'jsonTruncate',
       deserilizeFunction: 'JSON.stringify',
     },
     Float: {
-      transformValue: 'Float',
+      validation: (isRequired) =>
+        `{{ valueAsNumber: true${isRequired ? ', required: true' : ''} }}`,
     },
     default: {
       componentName: 'TextField',
@@ -375,36 +376,45 @@ const componentFiles = async (
       validation: '{{ required: true }}',
       displayFunction: undefined,
       listDisplayFunction: 'truncate',
-      transformValue: undefined,
     },
   }
+
   const columns = model.fields
     .filter((field) => field.kind !== 'object')
-    .map((column) => ({
-      ...column,
-      label: humanize(column.name),
-      component:
-        componentMetadata[column.type]?.componentName ||
-        componentMetadata.default.componentName,
-      defaultProp:
-        componentMetadata[column.type]?.defaultProp ||
-        componentMetadata.default.defaultProp,
-      deserilizeFunction:
-        componentMetadata[column.type]?.deserilizeFunction ||
-        componentMetadata.default.deserilizeFunction,
-      validation:
-        componentMetadata[column.type]?.validation ??
-        componentMetadata.default.validation,
-      listDisplayFunction:
-        componentMetadata[column.type]?.listDisplayFunction ||
-        componentMetadata.default.listDisplayFunction,
-      displayFunction:
-        componentMetadata[column.type]?.displayFunction ||
-        componentMetadata.default.displayFunction,
-      transformValue:
-        componentMetadata[column.type]?.transformValue ||
-        componentMetadata.default.transformValue,
-    }))
+    .map((column) => {
+      let validation
+
+      if (componentMetadata[column.type]?.validation) {
+        validation = componentMetadata[column.type]?.validation(
+          column?.isRequired
+        )
+      } else {
+        validation = column?.isRequired
+          ? componentMetadata.default.validation
+          : null
+      }
+
+      return {
+        ...column,
+        label: humanize(column.name),
+        component:
+          componentMetadata[column.type]?.componentName ||
+          componentMetadata.default.componentName,
+        defaultProp:
+          componentMetadata[column.type]?.defaultProp ||
+          componentMetadata.default.defaultProp,
+        deserilizeFunction:
+          componentMetadata[column.type]?.deserilizeFunction ||
+          componentMetadata.default.deserilizeFunction,
+        validation,
+        listDisplayFunction:
+          componentMetadata[column.type]?.listDisplayFunction ||
+          componentMetadata.default.listDisplayFunction,
+        displayFunction:
+          componentMetadata[column.type]?.displayFunction ||
+          componentMetadata.default.displayFunction,
+      }
+    })
   const editableColumns = columns.filter((column) => {
     return NON_EDITABLE_COLUMNS.indexOf(column.name) === -1
   })
@@ -481,7 +491,7 @@ export const routes = async ({
   }
 
   const templateNames = getTemplateStrings(name, scaffoldPath)
-  const singularPascalName = pascalcase(pluralize.singular(name))
+  const singularPascalName = pascalcase(singularize(name))
   const pluralPascalName = pascalcase(pluralize(name))
   const pluralParamName = paramCase(pluralPascalName)
   const model = await getSchema(singularPascalName)
@@ -652,10 +662,10 @@ export const handler = async ({
     tests = getConfig().generate.tests
   }
   const { model, path } = splitPathAndModel(modelArg)
-  await ensureUniquePlural({ model })
 
-  const t = tasks({ model, path, force, tests, typescript })
   try {
+    const { name } = await verifyModelName({ name: model })
+    const t = tasks({ model: name, path, force, tests, typescript })
     await t.run()
   } catch (e) {
     console.log(c.error(e.message))
