@@ -5,36 +5,63 @@ import pascalcase from 'pascalcase'
 
 import * as ValidationErrors from './errors'
 
-type AbsenceValidatorOptions = {
+interface AbsenceValidatorOptions {
   allowEmptyString?: boolean
   message?: string
 }
 
-type AcceptanceValidatorOptions = {
+interface AbsenceValidatorOptionsWithMessage extends AbsenceValidatorOptions {
+  message: string
+}
+
+interface AcceptanceValidatorOptions {
   in?: Array<unknown>
   message?: string
 }
 
-type EmailValidatorOptions = {
+interface AcceptanceValidatorOptionsWithMessage
+  extends AcceptanceValidatorOptions {
+  message: string
+}
+
+interface EmailValidatorOptions {
   message?: string
 }
 
-type ExclusionValidatorOptions = {
+interface EmailValidatorOptionsWithMessage extends EmailValidatorOptions {
+  message: string
+}
+
+interface ExclusionValidatorOptions {
   in?: Array<unknown>
   message?: string
 }
 
-type FormatValidatorOptions = {
+interface ExclusionValidatorOptionsWithMessage
+  extends ExclusionValidatorOptions {
+  message: string
+}
+
+interface FormatValidatorOptions {
   pattern?: RegExp
   message?: string
 }
 
-type InclusionValidatorOptions = {
+interface FormatValidatorOptionsWithMessage extends FormatValidatorOptions {
+  message: string
+}
+
+interface InclusionValidatorOptions {
   in?: Array<unknown>
   message?: string
 }
 
-type LengthValidatorOptions = {
+interface InclusionValidatorOptionsWithMessage
+  extends InclusionValidatorOptions {
+  message: string
+}
+
+interface LengthValidatorOptions {
   min?: number
   max?: number
   equal?: number
@@ -42,7 +69,11 @@ type LengthValidatorOptions = {
   message?: string
 }
 
-type NumericalityValidatorOptions = {
+interface LengthValidatorOptionsWithMessage extends LengthValidatorOptions {
+  message: string
+}
+
+interface NumericalityValidatorOptions {
   integer?: boolean
   lessThan?: number
   lessThanOrEqual?: number
@@ -57,22 +88,44 @@ type NumericalityValidatorOptions = {
   message?: string
 }
 
-type PresenceValidatorOptions = {
+interface NumericalityValidatorOptionsWithMessage
+  extends NumericalityValidatorOptions {
+  message: string
+}
+
+interface PresenceValidatorOptions {
   allowNull?: boolean
   allowUndefined?: boolean
   allowEmptyString?: boolean
   message?: string
 }
 
-type ValidateDirectives = {
+interface PresenceValidatorOptionsWithMessage extends PresenceValidatorOptions {
+  message: string
+}
+
+interface ValidateDirectives {
   absence?: AbsenceValidatorOptions
   acceptance?: AcceptanceValidatorOptions
+  email?: EmailValidatorOptions
   exclusion?: ExclusionValidatorOptions
   format?: FormatValidatorOptions
   inclusion?: InclusionValidatorOptions
   length?: LengthValidatorOptions
   numericality?: NumericalityValidatorOptions
   presence?: PresenceValidatorOptions
+}
+
+interface ValidateDirectivesWithMessages {
+  absence?: AbsenceValidatorOptionsWithMessage
+  acceptance?: AcceptanceValidatorOptionsWithMessage
+  email?: EmailValidatorOptionsWithMessage
+  exclusion?: ExclusionValidatorOptionsWithMessage
+  format?: FormatValidatorOptionsWithMessage
+  inclusion?: InclusionValidatorOptionsWithMessage
+  length?: LengthValidatorOptionsWithMessage
+  numericality?: NumericalityValidatorOptionsWithMessage
+  presence?: PresenceValidatorOptionsWithMessage
 }
 
 type UniquenessValidatorOptions = {
@@ -387,13 +440,33 @@ const validationError = (
 // above to use
 //
 // validate('firstName', 'Rob', { presence: true, length: { min: 2 } })
-export const validate = (
+export function validate(
   value: unknown,
-  name: string,
+  labelOrDirectives: ValidateDirectivesWithMessages,
+  directives?: never
+): void
+export function validate(
+  value: unknown,
+  labelOrDirectives: string,
   directives: ValidateDirectives
-) => {
-  for (const [validator, options] of Object.entries(directives)) {
-    VALIDATORS[validator as keyof typeof VALIDATORS](value, name, options)
+): void
+export function validate(
+  value: unknown,
+  labelOrDirectives: string | ValidateDirectivesWithMessages,
+  directives?: ValidateDirectives
+): void {
+  let label, validateDirectives
+
+  if (typeof labelOrDirectives === 'object') {
+    label = ''
+    validateDirectives = labelOrDirectives
+  } else {
+    label = labelOrDirectives
+    validateDirectives = directives as ValidateDirectives
+  }
+
+  for (const [validator, options] of Object.entries(validateDirectives)) {
+    VALIDATORS[validator as keyof typeof VALIDATORS](value, label, options)
   }
 }
 

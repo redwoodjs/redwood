@@ -30,7 +30,7 @@ describe('validate absence', () => {
 
   it('throws with a custom message', () => {
     try {
-      validate('rob@redwoodjs.com', 'email', {
+      validate('rob@redwoodjs.com', {
         absence: { message: 'No email please' },
       })
     } catch (e) {
@@ -72,7 +72,7 @@ describe('validate acceptance', () => {
 
   it('throws with a custom message', () => {
     try {
-      validate(false, 'terms', { acceptance: { message: 'gotta accept' } })
+      validate(false, { acceptance: { message: 'gotta accept' } })
     } catch (e) {
       expect(e.message).toEqual('gotta accept')
     }
@@ -118,7 +118,7 @@ describe('validate email', () => {
 
   it('throws with a custom message', () => {
     try {
-      validate(false, 'terms', { acceptance: { message: 'gotta accept' } })
+      validate(false, { acceptance: { message: 'gotta accept' } })
     } catch (e) {
       expect(e.message).toEqual('gotta accept')
     }
@@ -152,7 +152,7 @@ describe('validate exclusion', () => {
 
   it('throws with a custom message', () => {
     try {
-      validate('foo', 'selection', {
+      validate('foo', {
         exclusion: { in: ['foo', 'bar'], message: 'Bad choice' },
       })
     } catch (e) {
@@ -213,7 +213,7 @@ describe('validate format', () => {
 
   it('throws with a custom message', () => {
     try {
-      validate('foobar', 'text', {
+      validate('foobar', {
         format: { pattern: /baz/, message: 'bad format' },
       })
     } catch (e) {
@@ -250,7 +250,7 @@ describe('validate inclusion', () => {
 
   it('throws with a custom message', () => {
     try {
-      validate('baz', 'selection', {
+      validate('baz', {
         inclusion: { in: ['foo', 'bar'], message: 'Bad choice' },
       })
     } catch (e) {
@@ -274,7 +274,7 @@ describe('validate length', () => {
 
     // custom error
     try {
-      validate('a', 'username', { length: { min: 2, message: 'too short' } })
+      validate('a', { length: { min: 2, message: 'too short' } })
     } catch (e) {
       expect(e.message).toEqual('too short')
     }
@@ -302,7 +302,7 @@ describe('validate length', () => {
 
     // custom error
     try {
-      validate('jill', 'username', { length: { max: 2, message: 'too long' } })
+      validate('jill', { length: { max: 2, message: 'too long' } })
     } catch (e) {
       expect(e.message).toEqual('too long')
     }
@@ -333,7 +333,7 @@ describe('validate length', () => {
 
     // custom error
     try {
-      validate('foobar', 'username', {
+      validate('foobar', {
         length: { equal: 5, message: 'wrong length, must be {{equal}}' },
       })
     } catch (e) {
@@ -366,7 +366,7 @@ describe('validate length', () => {
 
     // custom error
     try {
-      validate('foobar', 'username', {
+      validate('foobar', {
         length: { between: [2, 4], message: 'not enough or too many' },
       })
     } catch (e) {
@@ -766,7 +766,7 @@ describe('validate presence', () => {
 
   it('throws with a custom message', () => {
     try {
-      validate(undefined, 'email', { presence: { message: 'Gimmie an email' } })
+      validate(undefined, { presence: { message: 'Gimmie an email' } })
     } catch (e) {
       expect(e.message).toEqual('Gimmie an email')
     }
@@ -774,6 +774,50 @@ describe('validate presence', () => {
 })
 
 describe('validate', () => {
+  it('accepts the two argument version', () => {
+    try {
+      validate(null, {
+        presence: { message: 'Email is required' },
+      })
+    } catch (e) {
+      expect(e.message).toEqual('Email is required')
+    }
+    expect.assertions(1)
+  })
+
+  it('will not throw a bad error if custom message is not present', () => {
+    try {
+      validate(null, {
+        presence: true,
+      })
+    } catch (e) {
+      expect(e.message).toEqual(' must be present')
+    }
+    expect.assertions(1)
+  })
+
+  it('accepts the three argument version', () => {
+    try {
+      validate(null, 'Email Address', {
+        presence: true,
+      })
+    } catch (e) {
+      expect(e.message).toEqual('Email Address must be present')
+    }
+    expect.assertions(1)
+  })
+
+  it('overrides label with custom message', () => {
+    try {
+      validate(null, 'Email Address', {
+        presence: { message: 'This cannot be blank' },
+      })
+    } catch (e) {
+      expect(e.message).toEqual('This cannot be blank')
+    }
+    expect.assertions(1)
+  })
+
   it('chains multiple validators', () => {
     // fails first validator
     expect(() =>
