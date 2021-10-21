@@ -100,7 +100,7 @@ test('templateForComponentFile creates a proper output path for files', () => {
   })
 })
 
-test('templateForComponentFile creates a proper output path for files', () => {
+test('templateForComponentFile creates a proper output path for files with all caps in component name', () => {
   const names = ['FOO_BAR', 'FOO-BAR', 'FOOBAR']
 
   names.forEach((name) => {
@@ -119,7 +119,7 @@ test('templateForComponentFile creates a proper output path for files', () => {
   })
 })
 
-test('templateForComponentFile creates a proper output path for files', () => {
+test('templateForComponentFile creates a proper output path for files for starting with uppercase and ending with lowercase', () => {
   const names = ['FOOBar', 'FOO-Bar', 'FOO_Bar']
 
   names.forEach((name) => {
@@ -138,26 +138,7 @@ test('templateForComponentFile creates a proper output path for files', () => {
   })
 })
 
-test('templateForComponentFile creates a proper output path for files', () => {
-  const names = ['AbTest', 'abTest', 'ab-test', 'ab_test']
-
-  names.forEach((name) => {
-    const output = helpers.templateForComponentFile({
-      name: name,
-      suffix: 'Page',
-      webPathSection: 'pages',
-      generator: 'page',
-      templatePath: 'page.tsx.template',
-      templateVars: page.paramVariants(helpers.pathName(undefined, name)),
-    })
-
-    expect(output[0]).toEqual(
-      path.normalize('/path/to/project/web/src/pages/AbTestPage/AbTestPage.js')
-    )
-  })
-})
-
-test('templateForComponentFile creates a proper output path for files', () => {
+test('templateForComponentFile creates a proper output path for files with uppercase after special characters in component name', () => {
   const names = ['ABtest', 'aBtest', 'a-Btest', 'a_Btest']
 
   names.forEach((name) => {
@@ -172,25 +153,6 @@ test('templateForComponentFile creates a proper output path for files', () => {
 
     expect(output[0]).toEqual(
       path.normalize('/path/to/project/web/src/pages/ABtestPage/ABtestPage.js')
-    )
-  })
-})
-
-test('templateForComponentFile creates a proper output path for files', () => {
-  const names = ['ABTest', 'aBTest', 'AB_test', 'AB-test']
-
-  names.forEach((name) => {
-    const output = helpers.templateForComponentFile({
-      name: name,
-      suffix: 'Page',
-      webPathSection: 'pages',
-      generator: 'page',
-      templatePath: 'page.tsx.template',
-      templateVars: page.paramVariants(helpers.pathName(undefined, name)),
-    })
-
-    expect(output[0]).toEqual(
-      path.normalize('/path/to/project/web/src/pages/ABTestPage/ABTestPage.js')
     )
   })
 })

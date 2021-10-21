@@ -232,7 +232,7 @@ test('creates a single-word route name', () => {
   })
 })
 
-test('creates a camelCase route name for multiple word names', () => {
+test('creates a camelCase route name for lowercase words', () => {
   const names = ['FooBar', 'foo_bar', 'foo-bar', 'fooBar']
 
   names.forEach((name) => {
@@ -242,7 +242,7 @@ test('creates a camelCase route name for multiple word names', () => {
   })
 })
 
-test('creates a camelCase route name for multiple word names', () => {
+test('creates a camelCase route name for uppercase words', () => {
   const names = ['FOO_BAR', 'FOO-BAR']
 
   names.forEach((name) => {
@@ -252,17 +252,7 @@ test('creates a camelCase route name for multiple word names', () => {
   })
 })
 
-test('creates a camelCase route name for multiple word names', () => {
-  const names = ['FOOBAR']
-
-  names.forEach((name) => {
-    expect(page.routes({ name: name, path: 'foo-bar' })).toEqual([
-      '<Route path="foo-bar" page={FOOBARPage} name="foobar" />',
-    ])
-  })
-})
-
-test('creates a camelCase route name for multiple word names', () => {
+test('creates a camelCase route name for uppercase and lowercase mixed words', () => {
   const names = ['FOOBar', 'FOO-Bar', 'FOO_Bar']
 
   names.forEach((name) => {
@@ -282,7 +272,7 @@ test('creates a camelCase route name for multiple word names', () => {
   })
 })
 
-test('creates a camelCase route name for multiple word names', () => {
+test('creates a camelCase route name for multiple words with uppercase character after special character', () => {
   const names = ['ABtest', 'aBtest', 'a-Btest', 'a_Btest']
 
   names.forEach((name) => {
@@ -292,22 +282,12 @@ test('creates a camelCase route name for multiple word names', () => {
   })
 })
 
-test('creates a camelCase route name for multiple word names', () => {
+test('creates a camelCase route name for multiple words starting with uppercase characters', () => {
   const names = ['ABTest', 'AB_test', 'AB-test']
 
   names.forEach((name) => {
     expect(page.routes({ name: name, path: 'foo-bar' })).toEqual([
       '<Route path="foo-bar" page={ABTestPage} name="abTest" />',
-    ])
-  })
-})
-
-test('creates a camelCase route name for multiple word names', () => {
-  const names = ['aBTest']
-
-  names.forEach((name) => {
-    expect(page.routes({ name: name, path: 'foo-bar' })).toEqual([
-      '<Route path="foo-bar" page={ABTestPage} name="aBTest" />',
     ])
   })
 })
