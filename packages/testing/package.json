@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/testing",
   "description": "Tools, wrappers and configuration for testing a Redwood project.",
-  "version": "0.37.3",
+  "version": "0.37.5",
   "files": [
     "config",
     "web",
@@ -12,11 +12,11 @@
   "types": "dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@redwoodjs/auth": "0.37.3",
-    "@redwoodjs/graphql-server": "0.37.3",
-    "@redwoodjs/internal": "0.37.3",
-    "@redwoodjs/router": "0.37.3",
-    "@redwoodjs/web": "0.37.3",
+    "@redwoodjs/auth": "0.37.5",
+    "@redwoodjs/graphql-server": "0.37.5",
+    "@redwoodjs/internal": "0.37.5",
+    "@redwoodjs/router": "0.37.5",
+    "@redwoodjs/web": "0.37.5",
     "@storybook/addon-a11y": "6.3.8",
     "@storybook/builder-webpack5": "6.3.8",
     "@storybook/manager-webpack5": "6.3.8",

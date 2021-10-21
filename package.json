@@ -35,6 +35,7 @@
     "build:clean": "yarn clean:prisma && yarn framework build:clean",
     "build:watch": "yarn framework build:watch",
     "test": "yarn framework test",
+    "e2e": "node ./tasks/run-e2e",
     "clean:prisma": "rimraf node_modules/.prisma/client && node node_modules/@prisma/client/scripts/postinstall.js",
     "lint": "yarn framework lint",
     "lint:fix": "yarn framework lint:fix",

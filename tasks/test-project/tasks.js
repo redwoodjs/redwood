@@ -228,7 +228,7 @@ async function apiTasks(outputPath, { verbose }) {
         task: async () => {
           await applyCodemod(
             'seed.js',
-            fullPath('api/db/seed.js', { addExtension: false }) // seed.js is seed.js in a TS project too
+            fullPath('scripts/seed.ts', { addExtension: false })
           )
 
           return execa('yarn rw prisma db seed', [], execaOptionsForProject)

@@ -20,9 +20,6 @@ describe('getConfig', () => {
         "browser": Object {
           "open": false,
         },
-        "experimental": Object {
-          "esbuild": false,
-        },
         "generate": Object {
           "nestScaffoldByModel": true,
           "stories": true,

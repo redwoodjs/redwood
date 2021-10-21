@@ -12,3 +12,8 @@ gen_enforced_dependency(WorkspaceCwd, DependencyIdent, DependencyRange2, Depende
   workspace_has_dependency(WorkspaceCwd, DependencyIdent, DependencyRange, DependencyType),
   workspace_has_dependency(OtherWorkspaceCwd, DependencyIdent, DependencyRange2, DependencyType2),
   DependencyRange \= DependencyRange2.
+
+% Prevents a dependency from having a caret in its version
+gen_enforced_dependency(WorkspaceCwd, DependencyIdent, TargetDependencyRange, DependencyType) :-
+  workspace_has_dependency(WorkspaceCwd, DependencyIdent, CurrentDependencyRange, DependencyType),
+  atom_concat('^', TargetDependencyRange, CurrentDependencyRange).
