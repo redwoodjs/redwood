@@ -76,7 +76,7 @@
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
     "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build\"",
-    "test": "jest",
+    "test": "jest src",
     "test:watch": "yarn test --watch"
   }
 }
