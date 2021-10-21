@@ -9,8 +9,13 @@ declare global {
   const gql: typeof _gql
 
   interface Window {
-    REDWOOD_API_URL: string
-    REDWOOD_API_GRAPHQL_SERVER_PATH: string
+    /**
+     * @deprecated Please use RWJS_API_GRAPHQL_URL or RWJS_API_DBAUTH_URL
+     */
+    __REDWOOD__API_PROXY_PATH: never
+
+    RWJS_API_DBAUTH_URL: string
+    RWJS_API_GRAPHQL_URL: string
     __REDWOOD__APP_TITLE: string
   }
 
