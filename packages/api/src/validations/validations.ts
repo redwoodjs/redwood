@@ -5,46 +5,34 @@ import pascalcase from 'pascalcase'
 
 import * as ValidationErrors from './errors'
 
-type AbsenceValidatorOptions =
-  | boolean
-  | {
-      allowEmptyString?: boolean
-      message?: string
-    }
+type AbsenceValidatorOptions = {
+  allowEmptyString?: boolean
+  message?: string
+}
 
-type AcceptanceValidatorOptions =
-  | boolean
-  | {
-      in?: Array<unknown>
-      message?: string
-    }
+type AcceptanceValidatorOptions = {
+  in?: Array<unknown>
+  message?: string
+}
 
-type EmailValidatorOptions =
-  | boolean
-  | {
-      message?: string
-    }
+type EmailValidatorOptions = {
+  message?: string
+}
 
-type ExclusionValidatorOptions =
-  | Array<unknown>
-  | {
-      in?: Array<unknown>
-      message?: string
-    }
+type ExclusionValidatorOptions = {
+  in?: Array<unknown>
+  message?: string
+}
 
-type FormatValidatorOptions =
-  | RegExp
-  | {
-      pattern?: RegExp
-      message?: string
-    }
+type FormatValidatorOptions = {
+  pattern?: RegExp
+  message?: string
+}
 
-type InclusionValidatorOptions =
-  | Array<unknown>
-  | {
-      in?: Array<unknown>
-      message?: string
-    }
+type InclusionValidatorOptions = {
+  in?: Array<unknown>
+  message?: string
+}
 
 type LengthValidatorOptions = {
   min?: number
@@ -54,31 +42,27 @@ type LengthValidatorOptions = {
   message?: string
 }
 
-type NumericalityValidatorOptions =
-  | boolean
-  | {
-      integer?: boolean
-      lessThan?: number
-      lessThanOrEqual?: number
-      greaterThan?: number
-      greaterThanOrEqual?: number
-      equal?: number
-      otherThan?: number
-      even?: boolean
-      odd?: boolean
-      positive?: boolean
-      negative?: boolean
-      message?: string
-    }
+type NumericalityValidatorOptions = {
+  integer?: boolean
+  lessThan?: number
+  lessThanOrEqual?: number
+  greaterThan?: number
+  greaterThanOrEqual?: number
+  equal?: number
+  otherThan?: number
+  even?: boolean
+  odd?: boolean
+  positive?: boolean
+  negative?: boolean
+  message?: string
+}
 
-type PresenceValidatorOptions =
-  | boolean
-  | {
-      allowNull?: boolean
-      allowUndefined?: boolean
-      allowEmptyString?: boolean
-      message?: string
-    }
+type PresenceValidatorOptions = {
+  allowNull?: boolean
+  allowUndefined?: boolean
+  allowEmptyString?: boolean
+  message?: string
+}
 
 type ValidateDirectives = {
   absence?: AbsenceValidatorOptions
@@ -104,7 +88,11 @@ const VALIDATORS = {
   //
   // { absence: true }
   // { absence: { allowEmptyString: true, message: '...' } }
-  absence: (value: unknown, name: string, options: AbsenceValidatorOptions) => {
+  absence: (
+    value: unknown,
+    name: string,
+    options: boolean | AbsenceValidatorOptions
+  ) => {
     const absenceOptions = { allowEmptyString: false }
     Object.assign(absenceOptions, options)
 
@@ -125,7 +113,7 @@ const VALIDATORS = {
   acceptance: (
     value: unknown,
     name: string,
-    options: AcceptanceValidatorOptions
+    options: boolean | AcceptanceValidatorOptions
   ) => {
     let acceptedValues: Array<unknown>
 
@@ -147,7 +135,11 @@ const VALIDATORS = {
   //
   // { email: true }
   // { email: { message: '...' } }
-  email: (value: unknown, name: string, options: EmailValidatorOptions) => {
+  email: (
+    value: unknown,
+    name: string,
+    options: boolean | EmailValidatorOptions
+  ) => {
     const pattern = /^[^@\s]+@[^.\s]+\.[^\s]+$/
 
     if (!pattern.test(String(value))) {
@@ -162,7 +154,7 @@ const VALIDATORS = {
   exclusion: (
     value: unknown,
     name: string,
-    options: ExclusionValidatorOptions
+    options: Array<unknown> | ExclusionValidatorOptions
   ) => {
     const exclusionList =
       (Array.isArray(options) && options) || options.in || []
@@ -176,7 +168,11 @@ const VALIDATORS = {
   //
   // { format: /^foobar$/ }
   // { format: { pattern: /^foobar$/, message: '...' } }
-  format: (value: unknown, name: string, options: FormatValidatorOptions) => {
+  format: (
+    value: unknown,
+    name: string,
+    options: RegExp | FormatValidatorOptions
+  ) => {
     const pattern = options instanceof RegExp ? options : options.pattern
 
     if (pattern == null) {
@@ -198,7 +194,7 @@ const VALIDATORS = {
   inclusion: (
     value: unknown,
     name: string,
-    options: InclusionValidatorOptions
+    options: Array<unknown> | InclusionValidatorOptions
   ) => {
     const inclusionList =
       (Array.isArray(options) && options) || options.in || []
@@ -261,7 +257,7 @@ const VALIDATORS = {
   numericality: (
     value: unknown,
     name: string,
-    options: NumericalityValidatorOptions
+    options: boolean | NumericalityValidatorOptions
   ) => {
     if (typeof value !== 'number') {
       validationError('typeNumericality', name, options)
@@ -340,7 +336,7 @@ const VALIDATORS = {
   presence: (
     value: unknown,
     name: string,
-    options: PresenceValidatorOptions
+    options: boolean | PresenceValidatorOptions
   ) => {
     const presenceOptions = {
       allowNull: false,
