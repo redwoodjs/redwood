@@ -36,7 +36,7 @@ export const isAuthenticated = (): boolean => {
 }
 
 /**
- * Use requireAuth in your services to check that a user is logged in,
+ * Call requireAuth in your services, or use the @requireAuth directive to check that a user is logged in,
  * and raise an error if they're not.
  *
  * @returns - If the currentUser is authenticated
