@@ -9,17 +9,17 @@ const { mergeUserWebpackConfig } = webpackConfig
 const redwoodConfig = getConfig()
 
 const getProxyConfig = () => {
-  const { apiURL } = redwoodConfig.web
+  const { apiUrl } = redwoodConfig.web
   const { port } = redwoodConfig.api
 
-  if (apiURL.startsWith('/')) {
+  if (apiUrl.startsWith('/')) {
     // Redwood only proxies absolute paths.
     return {
-      [apiURL]: {
+      [apiUrl]: {
         target: `${process.env.RWJS_DEV_API_URL ?? 'http://[::1]'}:${port}`,
         pathRewrite: {
           // Eg: Rewrite `/.netlify/functions/graphql` to `/graphql`, which the api-server expects
-          [`^${escapeRegExp(apiURL)}`]: '',
+          [`^${escapeRegExp(apiUrl)}`]: '',
         },
         headers: {
           Connection: 'keep-alive',
@@ -28,7 +28,7 @@ const getProxyConfig = () => {
     }
   }
 
-  if (apiURL.includes('://')) {
+  if (apiUrl.includes('://')) {
     // A developer may want to point their development environment to a staging or production GraphQL server.
     // They have specified an absolute URI,
     // which would contain `://`, `http://`, or `https://`
@@ -37,7 +37,7 @@ const getProxyConfig = () => {
     return undefined
   }
 
-  console.error('Error: `apiURL` is configured incorrectly.')
+  console.error('Error: `apiUrl` is configured incorrectly.')
   console.error(
     'It should be an absolute path (thats starts with `/`) or an absolute URI that starts with `http[s]://`'
   )

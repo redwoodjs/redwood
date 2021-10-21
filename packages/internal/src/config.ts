@@ -36,17 +36,19 @@ interface BrowserTargetConfig {
    *
    * Note: This should not include the path to the GraphQL Server.
    **/
-  apiURL: string
+  apiUrl: string
   /**
-   * FQDN or absolute path to the GraphQL serverless function, without the trailing slash.
+   * Optional: FQDN or absolute path to the GraphQL serverless function, without the trailing slash.
+   * This will override the apiUrl configuration just for the graphql function
    * Example: `./redwood/functions/graphql` or `https://api.redwoodjs.com/graphql`
    */
-  apiGraphQLURL: string
+  apiGraphQLUrl?: string
   /**
-   * FQDN or absolute path to the DbAuth serverless function, without the trailing slash.
+   * Optional: FQDN or absolute path to the DbAuth serverless function, without the trailing slash.
+   * This will override the apiUrl configuration just for the dbAuth function
    * Example: `./redwood/functions/auth` or `https://api.redwoodjs.com/auth`
    **/
-  apiDbAuthURL: string
+  apiDbAuthUrl?: string
 
   fastRefresh: boolean
   a11y: boolean
@@ -77,9 +79,7 @@ const DEFAULT_CONFIG: Config = {
     port: 8910,
     path: './web',
     target: TargetEnum.BROWSER,
-    apiURL: '/.redwood/functions',
-    apiDbAuthURL: '/.redwood/functions/auth',
-    apiGraphQLURL: '/.redwood/functions/graphql',
+    apiUrl: '/.redwood/functions',
     fastRefresh: true,
     a11y: true,
   },

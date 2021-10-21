@@ -77,7 +77,7 @@ export const bothServerHandler = async ({
   port,
   socket,
 }: Omit<HttpServerParams, 'app'>) => {
-  const apiRootPath = coerceRootPath(getConfig().web.apiURL)
+  const apiRootPath = coerceRootPath(getConfig().web.apiUrl)
 
   let app = createApp()
 
@@ -106,8 +106,12 @@ interface WebServerArgs extends Omit<HttpServerParams, 'app'> {
 }
 
 export const webServerHandler = ({ port, socket, apiHost }: WebServerArgs) => {
-  const apiUrl = getConfig().web.apiURL
-  const apiGraphQLURL = coerceRootPath(getConfig().web.apiGraphQLURL)
+  const apiUrl = getConfig().web.apiUrl
+  // Construct the graphql url from apiUrl by default
+  // But if apiGraphQLUrl is specified, use that instead
+  const graphqlEndpoint = coerceRootPath(
+    getConfig().web.apiGraphQLUrl ?? `${getConfig().web.apiUrl}graphql`
+  )
 
   let app = createApp()
 
@@ -132,7 +136,7 @@ export const webServerHandler = ({ port, socket, apiHost }: WebServerArgs) => {
     }
 
     console.log(`Web server started on port ${port} `)
-    console.log(`GraphQL endpoint is ${apiUrl}${apiGraphQLURL}`)
+    console.log(`GraphQL endpoint is ${apiUrl}${graphqlEndpoint}`)
   })
 }
 

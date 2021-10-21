@@ -15,19 +15,19 @@ const SUPPORTED_PROVIDERS = fs
   .map((file) => path.basename(file, '.js'))
   .filter((file) => file !== 'README.md')
 
-const updateApiURL = (apiURL) => {
+const updateApiURL = (apiUrl) => {
   const redwoodToml = fs.readFileSync(REDWOOD_TOML_PATH).toString()
   let newRedwoodToml = redwoodToml
 
-  if (redwoodToml.match(/apiURL/)) {
-    newRedwoodToml = newRedwoodToml.replace(/apiURL.*/g, `apiURL = "${apiURL}"`)
+  if (redwoodToml.match(/apiUrl/)) {
+    newRedwoodToml = newRedwoodToml.replace(/apiUrl.*/g, `apiUrl = "${apiUrl}"`)
   } else if (redwoodToml.match(/\[web\]/)) {
     newRedwoodToml = newRedwoodToml.replace(
       /\[web\]/,
-      `[web]\n  apiURL = "${apiURL}"`
+      `[web]\n  apiUrl = "${apiUrl}"`
     )
   } else {
-    newRedwoodToml += `[web]\n  apiURL = "${apiURL}"`
+    newRedwoodToml += `[web]\n  apiUrl = "${apiUrl}"`
   }
 
   fs.writeFileSync(REDWOOD_TOML_PATH, newRedwoodToml)
@@ -147,10 +147,10 @@ export const handler = async ({ provider, force, database }) => {
           await execa('yarn', ['install'])
         },
       },
-      providerData?.apiURL && {
+      providerData?.apiUrl && {
         title: 'Updating API URL...',
         task: async () => {
-          updateApiURL(providerData.apiURL)
+          updateApiURL(providerData.apiUrl)
         },
       },
       providerData?.files?.length && {

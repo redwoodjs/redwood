@@ -1,4 +1,4 @@
-export const apiURL = '/api'
+export const apiUrl = '/api'
 
 // any notes to print out when the job is done
 export const notes = [

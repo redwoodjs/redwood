@@ -19,7 +19,8 @@ export const getRootHtmlPath = () => {
 
 export const registerShims = () => {
   const rwjsConfig = getConfig()
-  global.RWJS_API_GRAPHQL_URL = rwjsConfig.web.apiGraphQLURL
+  global.RWJS_API_GRAPHQL_URL =
+    rwjsConfig.web.apiGraphQLUrl ?? `${rwjsConfig.web.apiUrl}graphql`
   global.__REDWOOD__APP_TITLE = rwjsConfig.web.title
 
   global.__REDWOOD__USE_AUTH = () =>

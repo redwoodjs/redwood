@@ -129,7 +129,7 @@ export const files = [
   },
 ]
 
-export const apiURL = '/.redwood/functions'
+export const apiUrl = '/.redwood/functions'
 
 // any notes to print out when the job is done
 export const notes = [
