@@ -19,7 +19,7 @@ declare global {
 
   /** @deprecated Please use `RWJS_API_GRAPHQL_URL` or `RWJS_API_DBAUTH_URL` */
   var __REDWOOD__API_URL: string
-  /** @deprecated Please use `RWJS_API_GRAPHQL_URL` or `RWJS_API_DBAUTH_URL` */
+  /** @deprecated Please use `RWJS_API_GRAPHQL_URL` */
   var __REDWOOD__API_GRAPHQL_SERVER_PATH: string
 
   namespace NodeJS {

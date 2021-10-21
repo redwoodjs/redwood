@@ -125,7 +125,6 @@ const getStyleLoaders = (isEnvProduction) => {
 const getSharedPlugins = (isEnvProduction) => {
   const shouldIncludeFastRefresh =
     redwoodConfig.web.fastRefresh !== false && !isEnvProduction
-
   return [
     isEnvProduction &&
       new MiniCssExtractPlugin({
@@ -146,7 +145,7 @@ const getSharedPlugins = (isEnvProduction) => {
       mockCurrentUser: ['@redwoodjs/testing/web', 'mockCurrentUser'],
     }),
     // The define plugin will replace these keys with their values during build
-    // time.
+    // time. Note that they're used in packages/web/src/config.ts, and made available in globalThis
     new webpack.DefinePlugin({
       ['process.env.RWJS_API_GRAPHQL_URL']: JSON.stringify(
         redwoodConfig.web.apiGraphQLUrl ?? `${redwoodConfig.web.apiUrl}/graphql`
