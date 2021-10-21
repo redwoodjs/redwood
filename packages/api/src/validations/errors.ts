@@ -1,11 +1,13 @@
 export class ServiceValidationError extends Error {
   constructor(message: string, substitutions = {}) {
-    let replacedMessage = message
+    let errorMessage = message
+
+    // replace instances of a string like `{max}` with any substituted values
     for (const [key, value] of Object.entries(substitutions)) {
-      replacedMessage = replacedMessage.replaceAll(`{${key}}`, String(value))
+      errorMessage = errorMessage.replaceAll(`{{${key}}}`, String(value))
     }
 
-    super(replacedMessage)
+    super(errorMessage)
     this.name = 'ServiceValidationError'
   }
 }
@@ -79,7 +81,7 @@ export class InclusionValidationError extends ServiceValidationError {
 export class MinLengthValidationError extends ServiceValidationError {
   constructor(
     name: string,
-    message = `${name} must have more than {min} characters`,
+    message = `${name} must have more than {{min}} characters`,
     substitutions: { min?: number } = {}
   ) {
     super(message, substitutions)
@@ -90,7 +92,7 @@ export class MinLengthValidationError extends ServiceValidationError {
 export class MaxLengthValidationError extends ServiceValidationError {
   constructor(
     name: string,
-    message = `${name} must have less than {max} characters`,
+    message = `${name} must have less than {{max}} characters`,
     substitutions: { max?: number } = {}
   ) {
     super(message, substitutions)
@@ -101,7 +103,7 @@ export class MaxLengthValidationError extends ServiceValidationError {
 export class EqualLengthValidationError extends ServiceValidationError {
   constructor(
     name: string,
-    message = `${name} must have exactly {equal} characters`,
+    message = `${name} must have exactly {{equal}} characters`,
     substitutions: { equal?: number } = {}
   ) {
     super(message, substitutions)
@@ -112,7 +114,7 @@ export class EqualLengthValidationError extends ServiceValidationError {
 export class BetweenLengthValidationError extends ServiceValidationError {
   constructor(
     name: string,
-    message = `${name} must be between {min} and {max} characters`,
+    message = `${name} must be between {{min}} and {{max}} characters`,
     substitutions: { min?: number; max?: number } = {}
   ) {
     super(message, substitutions)
@@ -156,7 +158,7 @@ export class IntegerNumericalityValidationError extends ServiceValidationError {
 export class LessThanNumericalityValidationError extends ServiceValidationError {
   constructor(
     name: string,
-    message = `${name} must be less than {lessThan}`,
+    message = `${name} must be less than {{lessThan}}`,
     substitutions: { lessThan?: number } = {}
   ) {
     super(message, substitutions)
@@ -167,7 +169,7 @@ export class LessThanNumericalityValidationError extends ServiceValidationError 
 export class LessThanOrEqualNumericalityValidationError extends ServiceValidationError {
   constructor(
     name: string,
-    message = `${name} must be less than or equal to {lessThanOrEqual}`,
+    message = `${name} must be less than or equal to {{lessThanOrEqual}}`,
     substitutions: { lessThanOrEqual?: number } = {}
   ) {
     super(message, substitutions)
@@ -178,7 +180,7 @@ export class LessThanOrEqualNumericalityValidationError extends ServiceValidatio
 export class GreaterThanNumericalityValidationError extends ServiceValidationError {
   constructor(
     name: string,
-    message = `${name} must be greater than {greaterThan}`,
+    message = `${name} must be greater than {{greaterThan}}`,
     substitutions: { greaterThan?: number } = {}
   ) {
     super(message, substitutions)
@@ -189,7 +191,7 @@ export class GreaterThanNumericalityValidationError extends ServiceValidationErr
 export class GreaterThanOrEqualNumericalityValidationError extends ServiceValidationError {
   constructor(
     name: string,
-    message = `${name} must be greater than or equal to {greaterThanOrEqual}`,
+    message = `${name} must be greater than or equal to {{greaterThanOrEqual}}`,
     substitutions: { greaterThanOrEqual?: number } = {}
   ) {
     super(message, substitutions)
@@ -200,7 +202,7 @@ export class GreaterThanOrEqualNumericalityValidationError extends ServiceValida
 export class EqualNumericalityValidationError extends ServiceValidationError {
   constructor(
     name: string,
-    message = `${name} must equal {equal}`,
+    message = `${name} must equal {{equal}}`,
     substitutions: { equal?: number } = {}
   ) {
     super(message, substitutions)
@@ -211,7 +213,7 @@ export class EqualNumericalityValidationError extends ServiceValidationError {
 export class OtherThanNumericalityValidationError extends ServiceValidationError {
   constructor(
     name: string,
-    message = `${name} must not equal {otherThan}`,
+    message = `${name} must not equal {{otherThan}}`,
     substitutions: { otherThan?: number } = {}
   ) {
     super(message, substitutions)

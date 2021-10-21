@@ -334,7 +334,7 @@ describe('validate length', () => {
     // custom error
     try {
       validate('foobar', 'username', {
-        length: { equal: 5, message: 'wrong length, must be {equal}' },
+        length: { equal: 5, message: 'wrong length, must be {{equal}}' },
       })
     } catch (e) {
       expect(e.message).toEqual('wrong length, must be 5')

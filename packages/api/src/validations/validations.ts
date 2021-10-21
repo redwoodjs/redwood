@@ -370,6 +370,7 @@ const fieldsToString = (fields: Record<string, unknown>) => {
   return output.join(', ')
 }
 
+// Throws the requisite error message for a failed validation
 const validationError = (
   type: string,
   name: string,
