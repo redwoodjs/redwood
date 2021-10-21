@@ -34,6 +34,9 @@ function createDummyAuthContextValues(partial: Partial<AuthContextInterface>) {
     client: null,
     type: 'custom',
     hasError: false,
+    forgotPassword: () => null,
+    resetPassword: () => null,
+    validateResetToken: () => null,
   }
 
   return { ...authContextValues, ...partial }
@@ -250,6 +253,40 @@ describe('test params escaping', () => {
     const screen = getScreen()
     act(() => navigate('/redirect2/example!com?q=example!com'))
     await waitFor(() => screen.getByText(/param example!comexample!com/i))
+  })
+})
+
+describe('query params should not override path params', () => {
+  const ParamPage = ({ id, contactId }: { id: number; contactId: number }) => {
+    const params = useParams()
+
+    return (
+      <div>
+        <p>param {`${id},${contactId}`}</p>
+        <p>hookparams {`${params.id},${params.contactId}`}</p>
+      </div>
+    )
+  }
+
+  const TestRouter = () => (
+    <Router>
+      <Route
+        path="/user/{id:Int}/contact/{contactId:Int}"
+        page={ParamPage}
+        name="contact"
+      />
+    </Router>
+  )
+
+  const getScreen = () => render(<TestRouter />)
+
+  test('query params of same key as path params should not override path params', async () => {
+    const screen = getScreen()
+    act(() => navigate('/user/1/contact/2?contactId=two'))
+    await waitFor(() => {
+      expect(screen.queryByText('param 1,2')).toBeInTheDocument()
+      expect(screen.queryByText('hookparams 1,2')).toBeInTheDocument()
+    })
   })
 })
 

@@ -120,15 +120,26 @@ describe('matchPath', () => {
     })
   })
 
+  it('transforms a param for Globs', () => {
+    expect(
+      matchPath('/version/{globbyMcGlob...}', '/version/path/to/file')
+    ).toEqual({
+      match: true,
+      params: {
+        'globbyMcGlob...': 'path/to/file',
+      },
+    })
+  })
+
   it('handles multiple typed params', () => {
     expect(
       matchPath(
-        '/dashboard/document/{id:Int}/{version:Float}/edit/{edit:Boolean}',
-        '/dashboard/document/44/1.8/edit/false'
+        '/dashboard/document/{id:Int}/{version:Float}/edit/{edit:Boolean}/{path...}/terminate',
+        '/dashboard/document/44/1.8/edit/false/path/to/file/terminate'
       )
     ).toEqual({
       match: true,
-      params: { id: 44, version: 1.8, edit: false },
+      params: { id: 44, version: 1.8, edit: false, 'path...': 'path/to/file' },
     })
   })
 })

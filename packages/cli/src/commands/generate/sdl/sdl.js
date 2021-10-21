@@ -4,8 +4,6 @@ import boxen from 'boxen'
 import camelcase from 'camelcase'
 import chalk from 'chalk'
 import Listr from 'listr'
-import pascalcase from 'pascalcase'
-import pluralize from 'pluralize'
 import terminalLink from 'terminal-link'
 
 import { getConfig, generate as generateTypes } from '@redwoodjs/internal'
@@ -13,18 +11,14 @@ import { getConfig, generate as generateTypes } from '@redwoodjs/internal'
 import {
   generateTemplate,
   transformTSToJS,
-  getSchema,
   getPaths,
   writeFilesTask,
-  getEnum,
 } from '../../../lib'
 import c from '../../../lib/colors'
+import { pluralize } from '../../../lib/rwPluralize'
+import { getSchema, getEnum, verifyModelName } from '../../../lib/schemaHelpers'
 import { yargsDefaults } from '../../generate'
-import {
-  customOrDefaultTemplatePath,
-  ensureUniquePlural,
-  relationsForModel,
-} from '../helpers'
+import { customOrDefaultTemplatePath, relationsForModel } from '../helpers'
 import { files as serviceFiles } from '../service/service'
 
 const IGNORE_FIELDS_FOR_INPUT = ['id', 'createdAt', 'updatedAt']
@@ -108,66 +102,59 @@ const idType = (model, crud) => {
 const sdlFromSchemaModel = async (name, crud) => {
   const model = await getSchema(name)
 
-  if (model) {
-    // get models for user-defined types referenced
-    const types = (
-      await Promise.all(
-        model.fields
-          .filter((field) => field.kind === 'object')
-          .map(async (field) => {
-            const model = await getSchema(field.type)
-            return model
-          })
-      )
-    ).reduce((acc, cur) => ({ ...acc, [cur.name]: cur }), {})
-
-    // Get enum definition and fields from user-defined types
-    const enums = (
-      await Promise.all(
-        model.fields
-          .filter((field) => field.kind === 'enum')
-          .map(async (field) => {
-            const enumDef = await getEnum(field.type)
-            return enumDef
-          })
-      )
-    ).reduce((acc, curr) => acc.concat(curr), [])
-
-    return {
-      query: querySDL(model).join('\n    '),
-      createInput: createInputSDL(model, types).join('\n    '),
-      updateInput: updateInputSDL(model, types).join('\n    '),
-      idType: idType(model, crud),
-      relations: relationsForModel(model),
-      enums,
-    }
-  } else {
-    throw new Error(
-      `"${name}" model not found, check if it exists in "./api/prisma/schema.prisma"`
+  // get models for user-defined types referenced
+  const types = (
+    await Promise.all(
+      model.fields
+        .filter((field) => field.kind === 'object')
+        .map(async (field) => {
+          const model = await getSchema(field.type)
+          return model
+        })
     )
+  ).reduce((acc, cur) => ({ ...acc, [cur.name]: cur }), {})
+
+  // Get enum definition and fields from user-defined types
+  const enums = (
+    await Promise.all(
+      model.fields
+        .filter((field) => field.kind === 'enum')
+        .map(async (field) => {
+          const enumDef = await getEnum(field.type)
+          return enumDef
+        })
+    )
+  ).reduce((acc, curr) => acc.concat(curr), [])
+
+  return {
+    query: querySDL(model).join('\n    '),
+    createInput: createInputSDL(model, types).join('\n    '),
+    updateInput: updateInputSDL(model, types).join('\n    '),
+    idType: idType(model, crud),
+    relations: relationsForModel(model),
+    enums,
   }
 }
 
 export const files = async ({ name, crud, tests, typescript }) => {
   const { query, createInput, updateInput, idType, relations, enums } =
-    await sdlFromSchemaModel(pascalcase(pluralize.singular(name)), crud)
+    await sdlFromSchemaModel(name, crud)
 
-  let template = generateTemplate(
-    customOrDefaultTemplatePath({
-      side: 'api',
-      generator: 'sdl',
-      templatePath: 'sdl.ts.template',
-    }),
-    {
-      name,
-      crud,
-      query,
-      createInput,
-      updateInput,
-      idType,
-      enums,
-    }
-  )
+  const templatePath = customOrDefaultTemplatePath({
+    side: 'api',
+    generator: 'sdl',
+    templatePath: 'sdl.ts.template',
+  })
+
+  let template = generateTemplate(templatePath, {
+    name,
+    crud,
+    query,
+    createInput,
+    updateInput,
+    idType,
+    enums,
+  })
 
   const extension = typescript ? 'ts' : 'js'
   let outputPath = path.join(
@@ -181,7 +168,13 @@ export const files = async ({ name, crud, tests, typescript }) => {
 
   return {
     [outputPath]: template,
-    ...(await serviceFiles({ name, crud, tests, relations, typescript })),
+    ...(await serviceFiles({
+      name,
+      crud,
+      tests,
+      relations,
+      typescript,
+    })),
   }
 }
 
@@ -224,25 +217,27 @@ export const handler = async ({ model, crud, force, tests, typescript }) => {
   if (tests === undefined) {
     tests = getConfig().generate.tests
   }
-  const tasks = new Listr(
-    [
-      {
-        title: 'Generating SDL files...',
-        task: async () => {
-          const f = await files({ name: model, tests, crud, typescript })
-          return writeFilesTask(f, { overwriteExisting: force })
-        },
-      },
-      {
-        title: `Generating types ...`,
-        task: () => generateTypes,
-      },
-    ].filter(Boolean),
-    { collapse: false, exitOnError: true }
-  )
 
   try {
-    await ensureUniquePlural({ model })
+    const { name } = await verifyModelName({ name: model })
+
+    const tasks = new Listr(
+      [
+        {
+          title: 'Generating SDL files...',
+          task: async () => {
+            const f = await files({ name, tests, crud, typescript })
+            return writeFilesTask(f, { overwriteExisting: force })
+          },
+        },
+        {
+          title: `Generating types ...`,
+          task: () => generateTypes,
+        },
+      ].filter(Boolean),
+      { collapse: false, exitOnError: true }
+    )
+
     await tasks.run()
   } catch (e) {
     console.error(c.error(e.message))

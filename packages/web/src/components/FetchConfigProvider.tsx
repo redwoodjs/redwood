@@ -1,11 +1,16 @@
 import type { AuthContextInterface, SupportedAuthTypes } from '@redwoodjs/auth'
 
+export const getApiGraphQLUrl = () => {
+  return global.RWJS_API_GRAPHQL_URL
+}
+
 export interface FetchConfig {
   uri: string
   headers?: { 'auth-provider': SupportedAuthTypes; authorization?: string }
 }
+
 export const FetchConfigContext = React.createContext<FetchConfig>({
-  uri: `${global.__REDWOOD__API_PROXY_PATH}/graphql`,
+  uri: getApiGraphQLUrl(),
 })
 
 const defaultAuthState = { loading: false, isAuthenticated: false }
@@ -28,7 +33,7 @@ export const FetchConfigProvider: React.FunctionComponent<{
   if (!isAuthenticated) {
     return (
       <FetchConfigContext.Provider
-        value={{ uri: `${global.__REDWOOD__API_PROXY_PATH}/graphql` }}
+        value={{ uri: getApiGraphQLUrl() }}
         {...rest}
       />
     )
@@ -37,7 +42,7 @@ export const FetchConfigProvider: React.FunctionComponent<{
   return (
     <FetchConfigContext.Provider
       value={{
-        uri: `${global.__REDWOOD__API_PROXY_PATH}/graphql`,
+        uri: getApiGraphQLUrl(),
         headers: {
           'auth-provider': type,
         },

@@ -1,13 +1,13 @@
 import camelcase from 'camelcase'
-import pascalcase from 'pascalcase'
-import pluralize from 'pluralize'
 import terminalLink from 'terminal-link'
 
-import { getSchema, transformTSToJS } from '../../../lib'
+import { transformTSToJS } from '../../../lib'
+import { pluralize, singularize } from '../../../lib/rwPluralize'
+import { getSchema, verifyModelName } from '../../../lib/schemaHelpers'
 import { yargsDefaults } from '../../generate'
 import {
-  templateForComponentFile,
   createYargsForComponentGeneration,
+  templateForComponentFile,
 } from '../helpers'
 
 const DEFAULT_SCENARIO_NAMES = ['one', 'two']
@@ -126,7 +126,7 @@ export const buildScenario = async (model) => {
 // outputs fields necessary to create an object in the test file
 export const fieldsToInput = async (model) => {
   const { scalarFields, foreignKeys } = await parseSchema(model)
-  const modelName = camelcase(pluralize.singular(model))
+  const modelName = camelcase(singularize(model))
   let inputObj = {}
 
   scalarFields.forEach((field) => {
@@ -147,7 +147,7 @@ export const fieldsToInput = async (model) => {
 // outputs fields necessary to update an object in the test file
 export const fieldsToUpdate = async (model) => {
   const { scalarFields, relations, foreignKeys } = await parseSchema(model)
-  const modelName = camelcase(pluralize.singular(model))
+  const modelName = camelcase(singularize(model))
   let field, newValue, fieldName
 
   // find an editable scalar field, ideally one that isn't a foreign key
@@ -228,7 +228,7 @@ export const files = async ({
   ...rest
 }) => {
   const componentName = camelcase(pluralize(name))
-  const model = pascalcase(pluralize.singular(name))
+  const model = name
   const extension = 'ts'
   const serviceFile = templateForComponentFile({
     name,
@@ -239,6 +239,7 @@ export const files = async ({
     templatePath: `service.${extension}.template`,
     templateVars: { relations: relations || [], ...rest },
   })
+
   const testFile = templateForComponentFile({
     name,
     componentName: componentName,
@@ -253,6 +254,7 @@ export const files = async ({
       ...rest,
     },
   })
+
   const scenariosFile = templateForComponentFile({
     name,
     componentName: componentName,
@@ -324,6 +326,6 @@ export const builder = (yargs) => {
 export const { command, description, handler } =
   createYargsForComponentGeneration({
     componentName: 'service',
+    preTasksFn: verifyModelName,
     filesFn: files,
-    shouldEnsureUniquePlural: true,
   })

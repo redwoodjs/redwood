@@ -7,7 +7,7 @@ import Listr from 'listr'
 
 import * as helpers from '../helpers'
 
-test('createYargsForComponentGeneration generates a yargs handler as expected', () => {
+test('createYargsForComponentGeneration generates a yargs handler as expected', async () => {
   const result = helpers.createYargsForComponentGeneration({
     componentName: 'bazinga',
     filesFn: () => [],
@@ -25,8 +25,8 @@ test('createYargsForComponentGeneration generates a yargs handler as expected', 
   expect(result.command).toBe('bazinga <name>')
   expect(result.description).toBe('Generate a bazinga component')
 
-  // Now lets check that tthe tasks are being called correctly
-  result.handler({
+  // Now lets check that the tasks are being called correctly
+  await result.handler({
     tests: false,
     stories: false,
   })

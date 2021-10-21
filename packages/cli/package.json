@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/cli",
   "description": "The Redwood Command Line",
-  "version": "0.37.3",
+  "version": "0.37.5",
   "license": "MIT",
   "bin": {
     "redwood": "./dist/index.js",
@@ -14,11 +14,11 @@
     "dist"
   ],
   "dependencies": {
-    "@prisma/sdk": "2.30.3",
-    "@redwoodjs/api-server": "0.37.3",
-    "@redwoodjs/internal": "0.37.3",
-    "@redwoodjs/prerender": "0.37.3",
-    "@redwoodjs/structure": "0.37.3",
+    "@prisma/sdk": "3.3.0",
+    "@redwoodjs/api-server": "0.37.5",
+    "@redwoodjs/internal": "0.37.5",
+    "@redwoodjs/prerender": "0.37.5",
+    "@redwoodjs/structure": "0.37.5",
     "boxen": "5.1.2",
     "camelcase": "6.2.0",
     "chalk": "4.1.2",
@@ -40,7 +40,7 @@
     "pascalcase": "1.0.0",
     "pluralize": "8.0.0",
     "prettier": "2.4.1",
-    "prisma": "2.30.3",
+    "prisma": "3.3.0",
     "prompts": "2.4.1",
     "rimraf": "3.0.2",
     "secure-random-password": "0.2.3",
@@ -62,7 +62,7 @@
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\" --copy-files --no-copy-ignored && yarn build:clean-dist",
     "fix:permissions": "chmod +x dist/index.js dist/redwood-tools.js dist/rwfw.js",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build && yarn fix:permissions\"",
-    "test": "jest",
+    "test": "jest src",
     "test:watch": "yarn test --watch"
   },
   "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"
