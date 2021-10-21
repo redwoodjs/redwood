@@ -3,8 +3,8 @@ import os from 'os'
 import { join } from 'path'
 
 import { createTestkit } from '@envelop/testing'
-import { BaseLogger, LoggerOptions } from 'pino'
 
+import type { Logger, LoggerOptions } from '@redwoodjs/api/logger'
 import { createLogger } from '@redwoodjs/api/logger'
 
 import {
@@ -50,7 +50,7 @@ const setupLogger = (
   loggerOptions: LoggerOptions,
   destination: string
 ): {
-  logger: BaseLogger
+  logger: Logger
 } => {
   const logger = createLogger({
     options: { prettyPrint: false, ...loggerOptions },
