@@ -21,11 +21,13 @@ export type oAuthProvider =
   | 'apple.com'
 
 export type emailLinkProvider = 'emailLink'
+export type customTokenProvider = 'customToken'
 
 export type Options = {
-  providerId?: oAuthProvider | emailLinkProvider
+  providerId?: oAuthProvider | emailLinkProvider | customTokenProvider
   email?: string
   emailLink?: string
+  customToken?: string
   password?: string
   scopes?: string[] // scopes available at https://developers.google.com/identity/protocols/oauth2/scopes
   customParameters?: CustomParameters // parameters available at https://firebase.google.com/docs/reference/js/firebase.auth.GoogleAuthProvider#setcustomparameters
@@ -108,6 +110,10 @@ export const firebase = ({
         return loginWithEmailLink(options)
       }
 
+      if (options.providerId === 'customToken' && options.customToken) {
+        return firebaseAuth.signInWithCustomToken(auth, options.customToken)
+      }
+
       const provider = getProvider(options.providerId || 'google.com')
       const providerWithOptions = applyProviderOptions(provider, options)
 
@@ -131,6 +137,10 @@ export const firebase = ({
 
       if (options.providerId === 'emailLink') {
         return loginWithEmailLink(options)
+      }
+
+      if (options.providerId === 'customToken' && options.customToken) {
+        return firebaseAuth.signInWithCustomToken(auth, options.customToken)
       }
 
       const provider = getProvider(options.providerId || 'google.com')
