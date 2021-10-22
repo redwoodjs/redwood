@@ -302,9 +302,11 @@ describe('validate length', () => {
 
     // custom error
     try {
-      validate('jill', { length: { max: 2, message: 'too long' } })
+      validate('jill', {
+        length: { max: 2, message: 'too long, must be less than ${max}' },
+      })
     } catch (e) {
-      expect(e.message).toEqual('too long')
+      expect(e.message).toEqual('too long, must be less than 2')
     }
 
     // valid
@@ -334,7 +336,7 @@ describe('validate length', () => {
     // custom error
     try {
       validate('foobar', {
-        length: { equal: 5, message: 'wrong length, must be {{equal}}' },
+        length: { equal: 5, message: 'wrong length, must be ${equal}' },
       })
     } catch (e) {
       expect(e.message).toEqual('wrong length, must be 5')
