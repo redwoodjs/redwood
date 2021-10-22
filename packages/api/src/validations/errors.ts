@@ -1,4 +1,6 @@
-export class ServiceValidationError extends Error {
+import { RedwoodError } from '../errors'
+
+export class ServiceValidationError extends RedwoodError {
   constructor(message: string, substitutions = {}) {
     let errorMessage = message
 
