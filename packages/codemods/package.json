@@ -19,7 +19,7 @@
     "node-fetch": "2.6.1",
     "tasuku": "1.0.2",
     "toml": "3.0.0",
-    "vscode-ripgrep": "1.0.0",
+    "vscode-ripgrep": "1.12.1",
     "yargs": "16.2.0"
   },
   "scripts": {

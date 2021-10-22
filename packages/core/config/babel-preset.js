@@ -14,6 +14,19 @@ const CORE_JS_VERSION = packageJSON.dependencies['core-js']
   .split('.')
   .slice(0, 2)
   .join('.') // Produces: 3.12, instead of 3.12.1
+if (!CORE_JS_VERSION) {
+  throw new Error(
+    'RedwoodJS Project Babel: Could not determine core-js version.'
+  )
+}
+
+const RUNTIME_CORE_JS_VERSION =
+  packageJSON.dependencies['@babel/runtime-corejs3']
+if (!RUNTIME_CORE_JS_VERSION) {
+  throw new Error(
+    'RedwoodJS Project Babel: Could not determine core-js runtime version'
+  )
+}
 
 /** @type {import('@babel/core').TransformOptions} */
 module.exports = () => {
@@ -37,16 +50,16 @@ module.exports = () => {
           // https://babeljs.io/docs/en/babel-plugin-transform-runtime/#version
           // Transform-runtime assumes that @babel/runtime@7.0.0 is installed.
           // Specifying the version can result in a smaller bundle size.
-          version: packageJSON.devDependencies['@babel/runtime-corejs3'],
+          version: RUNTIME_CORE_JS_VERSION,
         },
       ],
-
       [
-        require('../dist/babelPlugins/babel-plugin-redwood-directory-named-import'),
+        require('@redwoodjs/internal/dist/build/babelPlugins/babel-plugin-redwood-directory-named-import'),
       ],
     ],
     overrides: [
-      // ** API **
+      // ** API (also applies to Jest API config) **
+      // ** SCRIPTS **
       {
         test: ['./api/', './scripts/'],
         presets: [
@@ -100,7 +113,9 @@ module.exports = () => {
             },
           ],
           ['babel-plugin-graphql-tag'],
-          [require('../dist/babelPlugins/babel-plugin-redwood-import-dir')],
+          [
+            require('@redwoodjs/internal/dist/build/babelPlugins/babel-plugin-redwood-import-dir'),
+          ],
         ],
       },
       // ** WEB **
@@ -185,7 +200,9 @@ module.exports = () => {
       // ** Files ending in `Cell.[js,ts]` **
       {
         test: /.+Cell.(js|tsx)$/,
-        plugins: [require('../dist/babelPlugins/babel-plugin-redwood-cell')],
+        plugins: [
+          require('@redwoodjs/internal/dist/build/babelPlugins/babel-plugin-redwood-cell'),
+        ],
       },
       // Automatically import files in `./web/src/pages/*` in to
       // the `./web/src/Routes.[ts|jsx]` file.
@@ -193,7 +210,7 @@ module.exports = () => {
         test: ['./web/src/Routes.js', './web/src/Routes.tsx'],
         plugins: [
           [
-            require('../dist/babelPlugins/babel-plugin-redwood-routes-auto-loader'),
+            require('@redwoodjs/internal/dist/build/babelPlugins/babel-plugin-redwood-routes-auto-loader'),
             {
               useStaticImports: process.env.__REDWOOD__PRERENDERING === '1',
             },
@@ -205,7 +222,7 @@ module.exports = () => {
       {
         test: /.+Cell.mock.(js|ts)$/,
         plugins: [
-          require('../dist/babelPlugins/babel-plugin-redwood-mock-cell-data'),
+          require('@redwoodjs/internal/dist/build/babelPlugins/babel-plugin-redwood-mock-cell-data'),
         ],
       },
     ],
