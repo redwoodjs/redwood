@@ -73,7 +73,12 @@ function normalizeRequest(event: APIGatewayProxyEvent): Request {
 const allowErrors = [EnvelopError, RedwoodError]
 
 export const formatError: FormatErrorHandler = (err: any) => {
-  if (err.originalError && !allowErrors.includes(err.originalError)) {
+  if (
+    err.originalError &&
+    !allowErrors.find(
+      (allowedError) => err.originalError instanceof allowedError
+    )
+  ) {
     return new GraphQLError('Something went wrong.')
   }
 
