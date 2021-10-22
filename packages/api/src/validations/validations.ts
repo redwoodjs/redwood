@@ -104,7 +104,7 @@ interface PresenceValidatorOptionsWithMessage extends PresenceValidatorOptions {
   message: string
 }
 
-interface ValidateDirectives {
+interface ValidationRecipe {
   absence?: AbsenceValidatorOptions
   acceptance?: AcceptanceValidatorOptions
   email?: EmailValidatorOptions
@@ -116,7 +116,7 @@ interface ValidateDirectives {
   presence?: PresenceValidatorOptions
 }
 
-interface ValidateDirectivesWithMessages {
+interface ValidationWithMessagesRecipe {
   absence?: AbsenceValidatorOptionsWithMessage
   acceptance?: AcceptanceValidatorOptionsWithMessage
   email?: EmailValidatorOptionsWithMessage
@@ -442,30 +442,30 @@ const validationError = (
 // validate('firstName', 'Rob', { presence: true, length: { min: 2 } })
 export function validate(
   value: unknown,
-  labelOrDirectives: ValidateDirectivesWithMessages,
-  directives?: never
+  labelOrRecipe: ValidationWithMessagesRecipe,
+  recipe?: never
 ): void
 export function validate(
   value: unknown,
-  labelOrDirectives: string,
-  directives: ValidateDirectives
+  labelOrRecipe: string,
+  recipe: ValidationRecipe
 ): void
 export function validate(
   value: unknown,
-  labelOrDirectives: string | ValidateDirectivesWithMessages,
-  directives?: ValidateDirectives
+  labelOrRecipe: string | ValidationWithMessagesRecipe,
+  recipe?: ValidationRecipe
 ): void {
-  let label, validateDirectives
+  let label, validationRecipe
 
-  if (typeof labelOrDirectives === 'object') {
+  if (typeof labelOrRecipe === 'object') {
     label = ''
-    validateDirectives = labelOrDirectives
+    validationRecipe = labelOrRecipe
   } else {
-    label = labelOrDirectives
-    validateDirectives = directives as ValidateDirectives
+    label = labelOrRecipe
+    validationRecipe = recipe as ValidationRecipe
   }
 
-  for (const [validator, options] of Object.entries(validateDirectives)) {
+  for (const [validator, options] of Object.entries(validationRecipe)) {
     VALIDATORS[validator as keyof typeof VALIDATORS](value, label, options)
   }
 }
