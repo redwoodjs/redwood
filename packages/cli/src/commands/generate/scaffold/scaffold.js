@@ -535,13 +535,17 @@ const addLayoutImport = ({ model: name, path: scaffoldPath = '' }) => {
   const routesPath = getPaths().web.routes
   const routesContent = readFile(routesPath).toString()
 
-  const newRoutesContent = routesContent.replace(
-    /['"]@redwoodjs\/router['"](\s*)/,
-    `'@redwoodjs/router'\n${importLayout}$1`
-  )
-  writeFile(routesPath, newRoutesContent, { overwriteExisting: true })
+  if (!routesContent.match(importLayout)) {
+    const newRoutesContent = routesContent.replace(
+      /['"]@redwoodjs\/router['"](\s*)/,
+      `'@redwoodjs/router'\n${importLayout}$1`
+    )
+    writeFile(routesPath, newRoutesContent, { overwriteExisting: true })
 
-  return 'Added layout import to Routes.{js,tsx}'
+    return 'Added layout import to Routes.{js,tsx}'
+  } else {
+    return 'Layout import already exists in Routes.{js,tsx}'
+  }
 }
 
 const addSetImport = (task) => {
