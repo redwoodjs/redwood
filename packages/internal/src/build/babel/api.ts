@@ -35,15 +35,14 @@ export const getApiSideBabelPlugins = () => {
       'rwjs-babel-polyfill',
     ],
     [
-      require('@redwoodjs/core/dist/babelPlugins/babel-plugin-redwood-src-alias')
-        .default,
+      require('../babelPlugins/babel-plugin-redwood-src-alias').default,
       {
         srcAbsPath: rwjsPaths.api.src,
       },
       'rwjs-babel-src-alias',
     ],
     [
-      require('@redwoodjs/core/dist/babelPlugins/babel-plugin-redwood-directory-named-import')
+      require('../babelPlugins/babel-plugin-redwood-directory-named-import')
         .default,
       undefined,
       'rwjs-babel-directory-named-modules',
@@ -69,8 +68,7 @@ export const getApiSideBabelPlugins = () => {
     // FIXME: `graphql-tag` is not working: https://github.com/redwoodjs/redwood/pull/3193
     ['babel-plugin-graphql-tag', undefined, 'rwjs-babel-graphql-tag'],
     [
-      require('@redwoodjs/core/dist/babelPlugins/babel-plugin-redwood-import-dir')
-        .default,
+      require('../babelPlugins/babel-plugin-redwood-import-dir').default,
       undefined,
       'rwjs-babel-glob-import-dir',
     ],

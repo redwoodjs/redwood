@@ -1,6 +1,6 @@
 import type { PluginObj, types } from '@babel/core'
 
-import { importStatementPath, processPagesDir } from '@redwoodjs/internal'
+import { importStatementPath, processPagesDir } from '../../paths'
 
 interface PluginOptions {
   useStaticImports?: boolean
