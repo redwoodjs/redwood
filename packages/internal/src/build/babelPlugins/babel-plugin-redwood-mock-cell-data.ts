@@ -3,12 +3,9 @@ import path from 'path'
 // TODO: Figure out why Wallaby doesn't work with a normal import.
 import type { PluginObj, types } from '@babel/core'
 
-// TODO: Circular TS dependency
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import { getProject, URL_file } from '@redwoodjs/structure'
-
 import { getBaseDirFromFile } from '../../paths'
+
+const { getProject, URL_file } = require('@redwoodjs/structure')
 
 export default function ({ types: t }: { types: typeof types }): PluginObj {
   let nodesToRemove: any[] = []

@@ -1,6 +1,4 @@
 import { getPaths } from '@redwoodjs/internal'
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import { getProject } from '@redwoodjs/structure'
 
 export const detectPrerenderRoutes = () => {
