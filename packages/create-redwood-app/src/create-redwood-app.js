@@ -13,7 +13,8 @@ import checkNodeVersion from 'check-node-version'
 import execa from 'execa'
 import fs from 'fs-extra'
 import Listr from 'listr'
-import yargs from 'yargs'
+import { hideBin } from 'yargs/helpers'
+import yargs from 'yargs/yargs'
 
 import { name, version } from '../package'
 
@@ -48,10 +49,16 @@ const {
   'yarn-install': yarnInstall,
   typescript,
   overwrite,
-} = yargs
+} = yargs(hideBin(process.argv))
   .scriptName(name)
-  .usage('Usage: $0 <project directory> [option]')
-  .example('$0 newapp')
+  .usage('Usage: yarn create redwood-app <project directory> [option]')
+  .example([
+    ['yarn create redwood-app my-app', 'Create a Redwood App in `./my-app`'],
+    [
+      'yarn create redwood-app my-ts-app --ts',
+      'Create a Redwood App in TypeScript',
+    ],
+  ])
   .option('yarn-install', {
     default: true,
     type: 'boolean',
@@ -70,9 +77,10 @@ const {
     describe: 'Create even if target directory is empty',
   })
   .version(version)
-  .strict().argv
+  .parse()
 
 const targetDir = String(args).replace(/,/g, '-')
+
 if (!targetDir) {
   console.error('Please specify the project directory')
   console.log(
