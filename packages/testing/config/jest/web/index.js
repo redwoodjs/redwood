@@ -1,4 +1,5 @@
 const path = require('path')
+const { TextDecoder } = require('util')
 
 const { getPaths } = require('@redwoodjs/internal')
 
@@ -12,8 +13,10 @@ module.exports = {
     name: 'web',
   },
   globals: {
-    __REDWOOD__API_PROXY_PATH: '/',
+    __REDWOOD_API_URL: '',
+    __REDWOOD_API_GRAPHQL_SERVER_PATH: '/',
     __REDWOOD__APP_TITLE: 'Redwood App',
+    TextDecoder,
   },
   setupFilesAfterEnv: [path.resolve(__dirname, './jest.setup.js')],
   moduleNameMapper: {

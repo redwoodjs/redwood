@@ -9,7 +9,9 @@ export type FirebaseUser = User
 
 // @TODO: Firebase doesn't export a list of providerIds they use
 // But I found them here: https://github.com/firebase/firebase-js-sdk/blob/a5768b0aa7d7ce732279931aa436e988c9f36487/packages/rules-unit-testing/src/api/index.ts
-// NOTE: 2021-09-15 firebase now exports a const/enum ProviderId which could perhabps be used in place of this
+// NOTE 10/21/21: Firebase does appear to export a const enum_map of providerIds:
+// https://github.com/firebase/firebase-js-sdk/blob/master/packages/auth/src/model/enum_maps.ts#L28-L46
+// It may be possible to just use the exported enum map ala https://github.com/redwoodjs/redwood/pull/3537/files#r733851673
 export type oAuthProvider =
   | 'google.com'
   | 'facebook.com'
@@ -19,11 +21,13 @@ export type oAuthProvider =
   | 'apple.com'
 
 export type emailLinkProvider = 'emailLink'
+export type customTokenProvider = 'customToken'
 
 export type Options = {
-  providerId?: oAuthProvider | emailLinkProvider
+  providerId?: oAuthProvider | emailLinkProvider | customTokenProvider
   email?: string
   emailLink?: string
+  customToken?: string
   password?: string
   scopes?: string[] // scopes available at https://developers.google.com/identity/protocols/oauth2/scopes
   customParameters?: CustomParameters // parameters available at https://firebase.google.com/docs/reference/js/firebase.auth.GoogleAuthProvider#setcustomparameters
@@ -46,7 +50,7 @@ const applyProviderOptions = (
   return provider
 }
 
-type FirebaseClient = {
+export type FirebaseClient = {
   firebaseAuth: FirebaseAuth
   firebaseApp?: FirebaseApp
 }
@@ -76,8 +80,8 @@ export const firebase = ({
     type: 'firebase',
     client: auth,
     restoreAuthState: () => {
-      // return a promise that we be await'd on for first page load until firebase
-      // auth has loaded, indicated by the first firing of onAuthStateChange)
+      // The first firing of onAuthStateChange indicates that firebase auth has
+      // loaded and the state is ready to be read. Unsubscribe after this first firing.
       return new Promise((resolve, reject) => {
         const unsubscribe = auth.onAuthStateChanged((user: User | null) => {
           unsubscribe()
@@ -106,6 +110,10 @@ export const firebase = ({
         return loginWithEmailLink(options)
       }
 
+      if (options.providerId === 'customToken' && options.customToken) {
+        return firebaseAuth.signInWithCustomToken(auth, options.customToken)
+      }
+
       const provider = getProvider(options.providerId || 'google.com')
       const providerWithOptions = applyProviderOptions(provider, options)
 
@@ -131,10 +139,13 @@ export const firebase = ({
         return loginWithEmailLink(options)
       }
 
+      if (options.providerId === 'customToken' && options.customToken) {
+        return firebaseAuth.signInWithCustomToken(auth, options.customToken)
+      }
+
       const provider = getProvider(options.providerId || 'google.com')
       const providerWithOptions = applyProviderOptions(provider, options)
 
-      // Potentially useful to support signInWithCredential without popup
       return firebaseAuth.signInWithPopup(auth, providerWithOptions)
     },
     getToken: async () => {

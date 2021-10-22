@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/internal",
-  "version": "0.37.4",
+  "version": "0.37.5",
   "files": [
     "dist"
   ],
@@ -24,7 +24,7 @@
     "@graphql-codegen/typescript-operations": "2.1.4",
     "@graphql-codegen/typescript-react-apollo": "3.1.4",
     "@graphql-codegen/typescript-resolvers": "2.2.1",
-    "@redwoodjs/graphql-server": "0.37.4",
+    "@redwoodjs/graphql-server": "0.37.5",
     "babel-plugin-graphql-tag": "3.3.0",
     "babel-plugin-polyfill-corejs3": "0.2.4",
     "chalk": "4.1.2",
@@ -64,7 +64,7 @@
     "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "fix:permissions": "chmod +x dist/generate/generate.js dist/generate/watch.js",
-    "test": "jest",
+    "test": "jest src",
     "test:watch": "yarn test --watch"
   },
   "gitHead": "8be6a35c2dfd5aaeb12d55be4f0c77eefceb7762"

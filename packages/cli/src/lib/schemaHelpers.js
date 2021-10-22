@@ -99,14 +99,10 @@ export const getEnum = async (name) => {
 /*
  * Returns the DMMF defined by `prisma` resolving the relevant `schema.prisma` path.
  */
-export const getSchemaDefinitions = async () => {
-  const schemaPath = path.join(getPaths().api.db, 'schema.prisma')
+export const getSchemaDefinitions = () => {
+  const datamodelPath = path.join(getPaths().api.db, 'schema.prisma')
 
-  const metadata = await getDMMF({
-    datamodelPath: schemaPath.toString(),
-  })
-
-  return metadata
+  return getDMMF({ datamodelPath })
 }
 
 export async function verifyModelName(options) {
