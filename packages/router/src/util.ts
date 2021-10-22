@@ -1,10 +1,7 @@
 import React, { Children, ReactElement, ReactNode } from 'react'
 
 /** Create a React Context with the given name. */
-const createNamedContext = <T extends unknown>(
-  name: string,
-  defaultValue?: T
-) => {
+const createNamedContext = <T>(name: string, defaultValue?: T) => {
   const Ctx = React.createContext<T | undefined>(defaultValue)
   Ctx.displayName = name
   return Ctx
