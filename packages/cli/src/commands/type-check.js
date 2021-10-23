@@ -71,31 +71,13 @@ export const handler = async ({ sides, verbose, prisma }) => {
   ]
 
   /**
-   * Build types for the project
+   * Check typings for the project directory : [web, api]
    */
 
-  const tasks = new Listr(listrTasks, {
-    renderer: verbose && VerboseRenderer,
-  })
-
-  try {
-    await tasks.run()
-  } catch (e) {
-    console.log(c.error(e.message))
-    process.exit(e?.exitCode || 1)
-  }
-
-  /**
-   * Check typings for the project
-   */
-
-  const listrTypecheckTasks = []
-
-  sides.forEach((sideName) => {
-    console.log('verbose', verbose)
-    const cwd = path.join(getPaths().base, sideName)
-    listrTypecheckTasks.push({
-      title: `Typechecking "${sideName}"...`,
+  const typeChecks = sides.map((side) => {
+    const cwd = path.join(getPaths().base, side)
+    return {
+      title: `Typechecking "${side}"...`,
       task: () => {
         return execa('yarn tsc', ['--noEmit', '--skipLibCheck'], {
           stdio: verbose ? 'inherit' : 'pipe',
@@ -103,16 +85,27 @@ export const handler = async ({ sides, verbose, prisma }) => {
           cwd,
         })
       },
-    })
+    }
   })
 
-  const typeCheckTasks = new Listr(listrTypecheckTasks, {
-    renderer: verbose && VerboseRenderer,
-    concurrent: true,
-  })
+  // Approach here is used to run typechecking of web and api in parallel
+  const tasks = new Listr([
+    ...listrTasks,
+    ...[
+      {
+        title: 'TypeChecking ...',
+        task: () => {
+          return new Listr(typeChecks, {
+            renderer: verbose && VerboseRenderer,
+            concurrent: true,
+          })
+        },
+      },
+    ],
+  ])
 
   try {
-    await typeCheckTasks.run()
+    await tasks.run()
   } catch (e) {
     console.log(c.error(e.message))
     process.exit(e?.exitCode || 1)
