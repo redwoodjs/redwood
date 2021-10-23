@@ -425,9 +425,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:8.5.0":
-  version: 8.5.0
-  resolution: "cypress@npm:8.5.0"
+"cypress@npm:8.6.0":
+  version: 8.6.0
+  resolution: "cypress@npm:8.6.0"
   dependencies:
     "@cypress/request": ^2.88.6
     "@cypress/xvfb": ^1.2.4
@@ -473,7 +473,7 @@ __metadata:
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: 1bf4c7b0dd9e2fc4dfaa23640e07791c3eaf0062561f45ac86f247e16e5243bd7179505777d995681508881e7ee0e7b48f1a31f49e37b21d50bab4dccbc13005
+  checksum: 6d29723e3544861994fb30c8c0c0d1d23e2a9457c7ecbbba38363af695175ffabbcad6431667b18ae4b61b7142f05b0d0b77fd9bb61c84a34cb818938fc6c38e
   languageName: node
   linkType: hard
 
@@ -534,7 +534,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "e2e@workspace:."
   dependencies:
-    cypress: 8.5.0
+    cypress: 8.6.0
     cypress-wait-until: 1.7.1
   languageName: unknown
   linkType: soft
