@@ -5,7 +5,7 @@ import pluginTester from 'babel-plugin-tester'
 import plugin from '../babel-plugin-redwood-mock-cell-data'
 
 describe('babel plugin redwood mock cell data', () => {
-  const __fixtures__ = path.resolve(__dirname, '../../../../../__fixtures__') //?
+  const __fixtures__ = path.resolve(__dirname, '../../../../../../__fixtures__') //?
 
   pluginTester({
     plugin,
