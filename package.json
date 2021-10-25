@@ -42,7 +42,7 @@
     "postinstall": "yarn framework install",
     "build:link": "node ./tasks/build-and-copy",
     "build:test-project": "node ./tasks/test-project/test-project",
-    "build:release-notes": "cd tasks/release-notes && yarn install && ./release-notes.js"
+    "release-notes": "cd tasks/release-notes && yarn install && ./release-notes.js"
   },
   "packageManager": "yarn@3.0.2"
 }
