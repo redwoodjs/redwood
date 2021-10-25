@@ -35,12 +35,11 @@
     "@envelop/testing": "2.0.0",
     "@envelop/types": "1.2.0",
     "@redwoodjs/auth": "0.37.5",
-    "@types/jsonwebtoken": "8.5.5",
     "@types/lodash.merge": "4.6.6",
     "@types/lodash.omitby": "4.6.6",
     "@types/uuid": "8.3.1",
+    "aws-lambda": "1.0.6",
     "jest": "27.3.1",
-    "split2": "4.0.0",
     "typescript": "4.4.4"
   },
   "jest": {
