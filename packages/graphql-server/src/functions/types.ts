@@ -1,4 +1,4 @@
-import { Plugin } from '@envelop/core'
+import type { PluginOrDisabledPlugin } from '@envelop/core'
 import { DepthLimitConfig } from '@envelop/depth-limit'
 import type { AllowedOperations } from '@envelop/filter-operation-type'
 import { IExecutableSchemaDefinition } from '@graphql-tools/schema'
@@ -99,19 +99,27 @@ export interface GraphQLHandlerOptions {
   depthLimitOptions?: DepthLimitConfig
 
   /**
-   * @description  Only allows the specified operation types (e.g. subscription, query or mutation).
+   * @description Customize the default error message used to mask errors.
+   *
+   * By default, the masked error message is "Something went wrong"
+   *
+   * @see https://github.com/dotansimha/envelop/blob/main/packages/core/docs/use-masked-errors.md
+   */
+  defaultError?: string
+
+  /**
+   * @description Only allows the specified operation types (e.g. subscription, query or mutation).
    *
    * By default, only allow query and mutation (ie, do not allow subscriptions).
    *
    * @see https://github.com/dotansimha/envelop/tree/main/packages/plugins/filter-operation-type
    */
-
   allowedOperations?: AllowedOperations
 
   /**
    * @description  Custom Envelop plugins
    */
-  extraPlugins?: Plugin<any>[]
+  extraPlugins?: PluginOrDisabledPlugin[]
 
   /**
    * @description  Customize the GraphiQL Endpoint that appears in the location bar of the GraphQL Playground
