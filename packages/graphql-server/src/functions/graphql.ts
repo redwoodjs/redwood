@@ -3,10 +3,11 @@ import {
   envelop,
   EnvelopError,
   FormatErrorHandler,
-  Plugin,
   useMaskedErrors,
   useSchema,
 } from '@envelop/core'
+import type { PluginOrDisabledPlugin } from '@envelop/core'
+
 import { useDepthLimit } from '@envelop/depth-limit'
 import { useDisableIntrospection } from '@envelop/disable-introspection'
 import { useFilterAllowedOperations } from '@envelop/filter-operation-type'
@@ -70,16 +71,16 @@ function normalizeRequest(event: APIGatewayProxyEvent): Request {
  *
  * Unexpected errors are those that are not Envelop, GraphQL, or Redwood errors
  **/
-const allowErrors = [EnvelopError, RedwoodError]
+export const formatError: FormatErrorHandler = (err: any, message: string) => {
+  const allowErrors = [EnvelopError, RedwoodError]
 
-export const formatError: FormatErrorHandler = (err: any) => {
   if (
     err.originalError &&
     !allowErrors.find(
       (allowedError) => err.originalError instanceof allowedError
     )
   ) {
-    return new GraphQLError('Something went wrong.')
+    return new GraphQLError(message)
   }
 
   return err
@@ -109,11 +110,12 @@ export const createGraphQLHandler = ({
   onHealthCheck,
   depthLimitOptions,
   allowedOperations,
+  defaultError = 'Something went wrong.',
   graphiQLEndpoint,
   schemaOptions,
 }: GraphQLHandlerOptions) => {
   let schema: GraphQLSchema
-  let redwoodDirectivePlugins = [] as Plugin<any>[]
+  let redwoodDirectivePlugins = [] as PluginOrDisabledPlugin[]
   const logger = loggerConfig.logger
 
   try {
@@ -144,7 +146,7 @@ export const createGraphQLHandler = ({
   // so the order here matters
   const isDevEnv = process.env.NODE_ENV === 'development'
 
-  const plugins: Plugin<any>[] = []
+  const plugins: Array<PluginOrDisabledPlugin> = []
 
   if (!isDevEnv) {
     plugins.push(useDisableIntrospection())
@@ -187,7 +189,7 @@ export const createGraphQLHandler = ({
   }
 
   // Prevent unexpected error messages from leaking to the GraphQL clients.
-  plugins.push(useMaskedErrors({ formatError }))
+  plugins.push(useMaskedErrors({ formatError, errorMessage: defaultError }))
 
   const corsContext = createCorsContext(cors)
 
