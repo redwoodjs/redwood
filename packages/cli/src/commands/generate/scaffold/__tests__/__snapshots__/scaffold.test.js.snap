@@ -142,6 +142,7 @@ const PostForm = (props) => {
           defaultChecked={props.post?.isPinned}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
+          validation={{ required: true }}
         />
 
         <FieldError name=\\"isPinned\\" className=\\"rw-field-error\\" />
@@ -175,7 +176,7 @@ const PostForm = (props) => {
           defaultValue={props.post?.rating}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
-          transformValue=\\"Float\\"
+          validation={{ valueAsNumber: true }}
         />
 
         <FieldError name=\\"rating\\" className=\\"rw-field-error\\" />
@@ -208,8 +209,7 @@ const PostForm = (props) => {
           defaultValue={JSON.stringify(props.post?.metadata)}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
-          validation={{ required: true }}
-          transformValue=\\"Json\\"
+          validation={{ valueAsJSON: true, required: true }}
         />
 
         <FieldError name=\\"metadata\\" className=\\"rw-field-error\\" />
@@ -788,6 +788,13 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   border-color: #c53030;
   color: #c53030;
 }
+
+.rw-input-error:focus {
+  outline: none;
+  border-color: #c53030;
+  box-shadow: 0 0 5px #c53030;
+}
+
 .rw-field-error {
   display: block;
   margin-top: 0.25rem;
@@ -1289,6 +1296,7 @@ const PostForm = (props) => {
           defaultChecked={props.post?.isPinned}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
+          validation={{ required: true }}
         />
         <FieldError name=\\"isPinned\\" className=\\"rw-field-error\\" />
 
@@ -1320,7 +1328,7 @@ const PostForm = (props) => {
           defaultValue={props.post?.rating}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
-          transformValue=\\"Float\\"
+          validation={{ valueAsNumber: true }}
         />
         <FieldError name=\\"rating\\" className=\\"rw-field-error\\" />
 
@@ -1351,8 +1359,7 @@ const PostForm = (props) => {
           defaultValue={JSON.stringify(props.post?.metadata)}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
-          validation={{ required: true }}
-          transformValue=\\"Json\\"
+          validation={{ valueAsJSON: true, required: true }}
         />
         <FieldError name=\\"metadata\\" className=\\"rw-field-error\\" />
 
@@ -1935,6 +1942,13 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   border-color: #c53030;
   color: #c53030;
 }
+
+.rw-input-error:focus {
+  outline: none;
+  border-color: #c53030;
+  box-shadow: 0 0 5px #c53030;
+}
+
 .rw-field-error {
   display: block;
   margin-top: 0.25rem;
