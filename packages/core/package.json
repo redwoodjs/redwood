@@ -6,6 +6,11 @@
   "files": [
     "config"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/0xProject/tools.git",
+    "directory":"packages/core"
+  },
   "dependencies": {
     "@babel/cli": "7.15.7",
     "@babel/core": "7.15.8",

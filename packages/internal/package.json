@@ -41,6 +41,11 @@
     "rimraf": "3.0.2",
     "toml": "3.0.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/0xProject/tools.git",
+    "directory":"packages/internal"
+  },
   "devDependencies": {
     "@babel/cli": "7.15.7",
     "@types/babel-plugin-tester": "9.0.4",

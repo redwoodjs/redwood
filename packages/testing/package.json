@@ -38,6 +38,11 @@
     "ts-toolbelt": "9.6.0",
     "whatwg-fetch": "3.6.2"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/0xProject/tools.git",
+    "directory":"packages/testing"
+  },
   "scripts": {
     "build": "yarn build:js && yarn build:types",
     "prepublishOnly": "NODE_ENV=production yarn build",
