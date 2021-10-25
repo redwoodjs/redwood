@@ -5,7 +5,10 @@ import { db } from '$api/src/lib/db'
 export default async () => {
   try {
     //
-    // Change to match your data model and seeding needs
+    // Manually seed via `yarn rw prisma db seed`
+    // Seeds automatically with `rw prisma migrate dev` and `rw prisma migrate reset`
+    //
+    // Update "const data = []" to match your data model and seeding needs
     //
     const data: Prisma.UserExampleCreateInput[] = [
       // To try this example data with the userExample model in schema.prisma,
