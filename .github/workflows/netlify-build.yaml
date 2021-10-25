@@ -9,6 +9,7 @@ on:
   release:
     types:
       - published
+      - edited
 
 jobs:
   deploy_hook:

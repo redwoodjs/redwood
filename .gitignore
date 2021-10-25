@@ -10,5 +10,13 @@ tasks/.verdaccio
 tasks/e2e/cypress/fixtures/example.json
 tasks/release-notes/*.md
 tmp/
-.vscode/*
 blog-test-project/*
+.yarn/*
+**/.yarn/install-state.gz
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
+*.code-workspace
