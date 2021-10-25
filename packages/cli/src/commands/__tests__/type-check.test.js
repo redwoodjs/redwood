@@ -48,9 +48,10 @@ test('Should run tsc commands correctly, in order', async () => {
   await handler({
     sides: ['web', 'api'],
     prisma: false,
+    generate: true,
   })
 
-  expect(execa.mock.results[0].value.cmd).toEqual('yarn rw-gen')
+  expect(execa.mock.results[0].value.cmd).toEqual('yarn rw g types')
 
   // Ensure tsc command run correctly for web side
   expect(execa.mock.results[1].value.cmd).toEqual('yarn tsc')
@@ -73,9 +74,10 @@ test('Should generate prisma client', async () => {
   await handler({
     sides: ['api'],
     prisma: true,
+    generate: true,
   })
 
-  expect(execa.mock.results[0].value.cmd).toEqual('yarn rw-gen')
+  expect(execa.mock.results[0].value.cmd).toEqual('yarn rw g types')
 
   // Ensure tsc command run correctly for api side
   expect(execa.mock.results[1].value.cmd).toEqual('yarn tsc')
