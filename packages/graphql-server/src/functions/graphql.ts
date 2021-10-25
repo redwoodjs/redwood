@@ -3,15 +3,17 @@ import {
   envelop,
   EnvelopError,
   FormatErrorHandler,
-  Plugin,
   useMaskedErrors,
   useSchema,
 } from '@envelop/core'
+import type { PluginOrDisabledPlugin } from '@envelop/core'
+
 import { useDepthLimit } from '@envelop/depth-limit'
 import { useDisableIntrospection } from '@envelop/disable-introspection'
 import { useFilterAllowedOperations } from '@envelop/filter-operation-type'
 import { useParserCache } from '@envelop/parser-cache'
 import { useValidationCache } from '@envelop/validation-cache'
+import { RedwoodError } from '@redwoodjs/api'
 import type {
   APIGatewayProxyEvent,
   APIGatewayProxyResult,
@@ -31,7 +33,6 @@ import { makeDirectivesForPlugin } from '../directives/makeDirectives'
 import { getAsyncStoreInstance } from '../globalContext'
 import { createHealthcheckContext } from '../healthcheck'
 import { makeMergedSchema } from '../makeMergedSchema/makeMergedSchema'
-import { makeServices } from '../makeServices'
 import { useRedwoodAuthContext } from '../plugins/useRedwoodAuthContext'
 import {
   DirectivePluginOptions,
@@ -42,7 +43,6 @@ import { useRedwoodLogger } from '../plugins/useRedwoodLogger'
 import { useRedwoodPopulateContext } from '../plugins/useRedwoodPopulateContext'
 
 import type { GraphQLHandlerOptions } from './types'
-
 /**
  * Extracts and parses body payload from event with base64 encoding check
  *
@@ -69,14 +69,18 @@ function normalizeRequest(event: APIGatewayProxyEvent): Request {
 /*
  * Prevent unexpected error messages from leaking to the GraphQL clients.
  *
- * Unexpected errors are those that are not Envelop or GraphQL errors
+ * Unexpected errors are those that are not Envelop, GraphQL, or Redwood errors
  **/
-export const formatError: FormatErrorHandler = (err: any) => {
+export const formatError: FormatErrorHandler = (err: any, message: string) => {
+  const allowErrors = [EnvelopError, RedwoodError]
+
   if (
     err.originalError &&
-    err.originalError instanceof EnvelopError === false
+    !allowErrors.find(
+      (allowedError) => err.originalError instanceof allowedError
+    )
   ) {
-    return new GraphQLError('Something went wrong.')
+    return new GraphQLError(message)
   }
 
   return err
@@ -106,18 +110,15 @@ export const createGraphQLHandler = ({
   onHealthCheck,
   depthLimitOptions,
   allowedOperations,
+  defaultError = 'Something went wrong.',
   graphiQLEndpoint,
   schemaOptions,
 }: GraphQLHandlerOptions) => {
   let schema: GraphQLSchema
-  let redwoodDirectivePlugins = [] as Plugin<any>[]
+  let redwoodDirectivePlugins = [] as PluginOrDisabledPlugin[]
   const logger = loggerConfig.logger
 
   try {
-    // @NOTE: We wrap services for beforeResolvers
-    // Likely to be deprecated, and we can just pass in services to makeMergedSchema
-    const wrappedServices = makeServices({ services })
-
     // @NOTE: Directives are optional
     const projectDirectives = makeDirectivesForPlugin(directives)
 
@@ -129,7 +130,7 @@ export const createGraphQLHandler = ({
 
     schema = makeMergedSchema({
       sdls,
-      services: wrappedServices,
+      services,
       directives: projectDirectives,
       schemaOptions,
     })
@@ -145,7 +146,7 @@ export const createGraphQLHandler = ({
   // so the order here matters
   const isDevEnv = process.env.NODE_ENV === 'development'
 
-  const plugins: Plugin<any>[] = []
+  const plugins: Array<PluginOrDisabledPlugin> = []
 
   if (!isDevEnv) {
     plugins.push(useDisableIntrospection())
@@ -188,7 +189,7 @@ export const createGraphQLHandler = ({
   }
 
   // Prevent unexpected error messages from leaking to the GraphQL clients.
-  plugins.push(useMaskedErrors({ formatError }))
+  plugins.push(useMaskedErrors({ formatError, errorMessage: defaultError }))
 
   const corsContext = createCorsContext(cors)
 
@@ -212,7 +213,6 @@ export const createGraphQLHandler = ({
     })
 
     const logger = loggerConfig.logger
-
     // In the future, this could be part of a specific handler for AWS lambdas
     lambdaContext.callbackWaitsForEmptyEventLoop = false
 
