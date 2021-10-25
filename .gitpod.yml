@@ -5,17 +5,21 @@ workspaceLocation: .
 tasks:
   - name: Terminal
     openMode: split-left
+    before: |
+      export RWFW_PATH="/workspace/redwood"
+      export RWJS_DEV_API_URL="http://localhost"
     init: |
-      eval $(gp env -e RWFW_PATH="/workspace/redwood")
-      eval $(gp env -e RWJS_DEV_API_URL="http://localhost")
       mkdir /workspace/rw-test-app
     command: |
       cd /workspace/rw-test-app
-      echo -e "\n\n\033[94m ======================================================" && echo -e "\n\033[33m ⌛ Please wait until the dev server is running on the right-side terminal. \n "rw-test-app" is being generated & linked with latest framework code. \n\nIf you make further changes to the framework..." &&  echo -e "\033[33mRun \033[92m'yarn rwfw project:sync'\033[33m to watch & sync changes into the test project" &&  echo -e "\n\033[94m ======================================================\n\n"
+      echo -e "\n\n\033[94m ======================================================" && echo -e "\n\033[33m ⌛ Please wait until the dev server is running on the right-side terminal. \n "rw-test-app" is being generated & linked with latest framework code. \n\nIf you make further changes to the framework..." &&  echo -e "1. \033[33mEnsure env vars are set \033[92m'export RWFW_PATH="/workspace/redwood" RWJS_DEV_API_URL="http://localhost"'\033[33m" && echo -e "2. \033[33mRun \033[92m'yarn rwfw project:sync'\033[33m to watch & sync changes into the test project" &&  echo -e "\n\033[94m ======================================================\n\n"
 
 
   - name: "Dev Servers"
     openMode: split-right
+    before: |
+      export RWFW_PATH="/workspace/redwood"
+      export RWJS_DEV_API_URL="http://localhost"
     init: |
       cd /workspace/redwood
       yarn install
