@@ -83,7 +83,7 @@ export const handler = async ({ sides, verbose, prisma, generate }) => {
   const typeChecks = sides.map((side) => {
     const cwd = path.join(getPaths().base, side)
     return {
-      title: `Typechecking "${side}"...`,
+      title: `Checking "${side}"...`,
       task: () => {
         return execa('yarn tsc', ['--noEmit', '--skipLibCheck'], {
           stdio: 'inherit',
@@ -99,7 +99,7 @@ export const handler = async ({ sides, verbose, prisma, generate }) => {
     ...generateTasks,
     ...[
       {
-        title: 'TypeChecking ...',
+        title: 'Running type checks...',
         task: () => {
           return new Listr(typeChecks, {
             renderer: VerboseRenderer,
