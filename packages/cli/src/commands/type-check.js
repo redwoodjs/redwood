@@ -63,7 +63,7 @@ export const handler = async ({ sides, verbose, prisma, generate }) => {
       title: 'Generating prisma client...',
       task: () => {
         return generatePrismaClient({
-          verbose,
+          verbose: true,
           schema: getPaths().api.dbSchema,
         })
       },
@@ -95,9 +95,17 @@ export const handler = async ({ sides, verbose, prisma, generate }) => {
   })
 
   // Approach here is used to run typechecking of web and api in parallel
-  const tasks = new Listr([
-    ...generateTasks,
-    ...[
+  const tasks = new Listr(
+    [
+      {
+        title: 'Generating types...',
+        task: () => {
+          return new Listr(generateTasks, {
+            renderer: VerboseRenderer,
+            concurrent: true,
+          })
+        },
+      },
       {
         title: 'Running type checks...',
         task: () => {
@@ -108,9 +116,10 @@ export const handler = async ({ sides, verbose, prisma, generate }) => {
         },
       },
     ],
-  ] ,{
-    renderer: VerboseRenderer,
-  })
+    {
+      renderer: verbose && VerboseRenderer,
+    }
+  )
 
   try {
     await tasks.run()
