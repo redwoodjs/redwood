@@ -105,7 +105,7 @@ export interface GraphQLHandlerOptions {
    *
    * @see https://github.com/dotansimha/envelop/blob/main/packages/core/docs/use-masked-errors.md
    */
-  errorMessage?: string
+  defaultError?: string
 
   /**
    * @description Only allows the specified operation types (e.g. subscription, query or mutation).

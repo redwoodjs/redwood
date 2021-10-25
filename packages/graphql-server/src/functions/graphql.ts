@@ -107,7 +107,7 @@ export const createGraphQLHandler = ({
   onHealthCheck,
   depthLimitOptions,
   allowedOperations,
-  errorMessage = 'Something went wrong.',
+  defaultError = 'Something went wrong.',
   graphiQLEndpoint,
   schemaOptions,
 }: GraphQLHandlerOptions) => {
@@ -190,7 +190,7 @@ export const createGraphQLHandler = ({
   }
 
   // Prevent unexpected error messages from leaking to the GraphQL clients.
-  plugins.push(useMaskedErrors({ formatError, errorMessage }))
+  plugins.push(useMaskedErrors({ formatError, errorMessage: defaultError }))
 
   const corsContext = createCorsContext(cors)
 
