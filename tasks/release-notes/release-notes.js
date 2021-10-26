@@ -142,7 +142,7 @@ const handler = async (argv) => {
 
 // eslint-disable-next-line no-unused-expressions
 yargs
-  .scriptName('build:release-notes')
+  .scriptName('release-notes')
   .usage(
     '$0 <milestone>',
     'build release notes for a milestone',
