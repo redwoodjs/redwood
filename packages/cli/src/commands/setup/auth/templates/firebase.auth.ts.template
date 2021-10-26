@@ -16,6 +16,12 @@ const adminApp = admin.initializeApp({
  * @param { APIGatewayEvent event, Context context } - An object which contains information from the invoker
  * such as headers and cookies, and the context information about the invocation such as IP Address
  *
+ * !! BEWARE !! Anything returned from this function will be available to the
+ * client—it becomes the content of `currentUser` on the web side (as well as
+ * `context.currentUser` on the api side). You should carefully add additional
+ * fields to the return object only once you've decided they are safe to be seen
+ * if someone were to open the Web Inspector in their browser.
+ *
  * @see https://github.com/redwoodjs/redwood/tree/main/packages/auth for examples
  */
  export const getCurrentUser = async (
