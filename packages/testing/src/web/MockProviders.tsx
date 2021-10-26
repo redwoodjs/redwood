@@ -10,6 +10,7 @@ import { LocationProvider } from '@redwoodjs/router'
 import { RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
+import { MockParamsProvider } from './MockParamsProvider'
 import { mockedUserMeta } from './mockRequests'
 
 // Import the user's Router from `./web/src/Router.{tsx,js}`,
@@ -60,7 +61,9 @@ export const MockProviders: React.FunctionComponent = ({ children }) => {
       <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
         <RedwoodApolloProvider useAuth={fakeUseAuth}>
           <UserRouterWithRoutes />
-          <LocationProvider>{children}</LocationProvider>
+          <LocationProvider>
+            <MockParamsProvider>{children}</MockParamsProvider>
+          </LocationProvider>
         </RedwoodApolloProvider>
       </RedwoodProvider>
     </AuthProvider>
