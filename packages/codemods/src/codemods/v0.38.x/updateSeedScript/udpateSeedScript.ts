@@ -1,23 +1,26 @@
 import fs from 'fs'
 import path from 'path'
 
-import fg from 'fast-glob'
 import fetch from 'node-fetch'
 
+import getRootPackageJson from '../../../lib/getRootPackageJSON'
 import getRWPaths from '../../../lib/getRWPaths'
+import isTSProject from '../../../lib/isTSProject'
 import ts2js from '../../../lib/ts2js'
 
 export const udpateSeedScript = async () => {
   /**
-   * add prisma to package.json
+   * Add
+   *
+   * ```json
+   * "prisma": {
+   *   "seed": "yarn rw exec seed"
+   * }
+   * ```
+   *
+   * to root package.json.
    */
-  const rwPaths = getRWPaths()
-
-  const rootPackageJSONPath = path.join(rwPaths.base, 'package.json')
-
-  const rootPackageJSON = JSON.parse(
-    fs.readFileSync(rootPackageJSONPath, 'utf8')
-  )
+  const [rootPackageJSON, rootPackageJSONPath] = getRootPackageJson()
 
   rootPackageJSON.prisma = { seed: 'yarn rw exec seed' }
 
@@ -29,22 +32,18 @@ export const udpateSeedScript = async () => {
   /**
    * add template
    */
+  const rwPaths = getRWPaths()
+
   const hasScripts = fs.existsSync(rwPaths.scripts)
 
   if (!hasScripts) {
     fs.mkdirSync(rwPaths.scripts)
   }
 
-  const isTSProject =
-    fg.sync('api/tsconfig.json').length > 0 ||
-    fg.sync('web/tsconfig.json').length > 0
-
   const res = await fetch(
     'https://raw.githubusercontent.com/redwoodjs/redwood/main/packages/create-redwood-app/template/scripts/seed.ts'
   )
-
   let text = await res.text()
-
   if (!isTSProject) {
     text = (await ts2js(text)) as string
   }
