@@ -6,7 +6,7 @@ import { db } from './db'
 // for how to add Role-based Access Control (RBAC) here.
 //
 // !! BEWARE !! Anything returned from this function will be available to the
-// client—it becomes the content of `currentUser` on the web side (as well as
+// client--it becomes the content of `currentUser` on the web side (as well as
 // `context.currentUser` on the api side). You should carefully add additional
 // fields to the returned object once you've decided they are safe to be
 // seen if someone were to open the Web Inspector in their browser.
