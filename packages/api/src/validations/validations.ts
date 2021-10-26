@@ -500,7 +500,7 @@ export const validateWith = (func: () => void) => {
 // `companyId`.
 //
 // As of Prisma v3.2.1 requires preview feature "interactiveTransactions" be
-// enabled in prisma.schema:
+// enabled in schema.prisma:
 //
 //   previewFeatures = ["interactiveTransactions"]
 //
