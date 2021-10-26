@@ -73,7 +73,7 @@ export const getSchema = async (name) => {
 
 /**
  * Returns the enum defined with the given `name` parsed from
- * the schema.prisma of the target applicaiton. If no `name` is given then the
+ * the schema.prisma of the target application. If no `name` is given then the
  * all enum definitions are returned
  */
 export const getEnum = async (name) => {
