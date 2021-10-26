@@ -219,7 +219,6 @@ export const generateTypeDefGraphQLApi = async () => {
 }
 
 export const generateTypeDefGraphQLWeb = async () => {
-  if (findCells().length) {
     const rwjsPaths = getPaths()
     try {
       const f = await generateTypeDefGraphQL({
@@ -242,9 +241,6 @@ export const generateTypeDefGraphQLWeb = async () => {
       console.error()
       return []
     }
-  } else {
-    return []
-  }
 }
 
 const generateTypeDefGraphQL = async (generates: Record<string, unknown>) => {
@@ -256,14 +252,15 @@ const generateTypeDefGraphQL = async (generates: Record<string, unknown>) => {
       cwd: rwjsPaths.base,
       schema: rwjsPaths.generated.schema,
       config: {
-        scalars: {
+        namingConvention: 'keep', // to allow camelCased query names
+        scalars: { // We need these, otherwise these scalars are mapped to any
           DateTime: 'string',
           Date: 'string',
           JSON: 'Record<string, unknown>',
           JSONObject: 'Record<string, unknown>',
           Time: 'string',
         },
-        omitOperationSuffix: true, // prevent type names being PetQueryQuery, RW generators already append Query/Mutation/etc.
+        omitOperationSuffix: true, // prevent type names being PetQueryQuery, RW generators already append Query/Mutation/etc
       },
       // @ts-expect-error TODO: Figure out how to get the proper type here.
       generates,
