@@ -1,9 +1,7 @@
 import React from 'react'
 
-// ?? Not sure when to use @redwoodjs/router vs dist
-import { useLocation } from '@redwoodjs/router/dist/location'
-import { ParamsContext } from '@redwoodjs/router/dist/params'
-import { parseSearch } from '@redwoodjs/router/dist/util'
+import { useLocation, ParamsContext, parseSearch } from '@redwoodjs/router'
+
 interface Props {
   path?: string
 }
