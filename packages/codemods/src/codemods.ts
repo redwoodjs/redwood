@@ -6,6 +6,6 @@ import yargs from 'yargs'
 yargs
   .scriptName('codemods')
   .example([['$0 add-directives', 'Run the add-directives codemod']])
-  .commandDir('./codemods', { recurse: true })
+  .commandDir('./codemods/v0.38.x', { recurse: true })
   .demandCommand()
   .strict().argv
