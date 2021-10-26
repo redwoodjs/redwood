@@ -1,16 +1,9 @@
 import fs from 'fs'
-import path from 'path'
 
-import getRWPaths from '../../../lib/getRWPaths'
+import getRootPackageJSON from '../../../lib/getRootPackageJSON'
 
 export const updateNodeEngine = () => {
-  const rwPaths = getRWPaths()
-
-  const rootPackageJSONPath = path.join(rwPaths.base, 'package.json')
-
-  const rootPackageJSON = JSON.parse(
-    fs.readFileSync(rootPackageJSONPath, 'utf8')
-  )
+  const [rootPackageJSON, rootPackageJSONPath] = getRootPackageJSON()
 
   rootPackageJSON.engines.node = '>=14.x <=16.x'
 

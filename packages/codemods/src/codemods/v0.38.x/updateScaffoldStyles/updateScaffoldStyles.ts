@@ -4,11 +4,10 @@ import path from 'path'
 import getRWPaths from '../../../lib/getRWPaths'
 
 export const updateScaffoldStyles = () => {
-  const rwPaths = getRWPaths()
-  const scaffoldCSSPath = path.join(rwPaths.web.src, 'scaffold.css')
+  const scaffoldCSSPath = path.join(getRWPaths().web.src, 'scaffold.css')
 
   if (fs.existsSync(scaffoldCSSPath)) {
-    let scaffoldCSS = fs.readFileSync(scaffoldCSSPath, 'utf-8')
+    let scaffoldCSS = fs.readFileSync(scaffoldCSSPath, 'utf8')
 
     scaffoldCSS =
       scaffoldCSS +

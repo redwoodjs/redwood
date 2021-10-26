@@ -1,9 +1,7 @@
-import path from 'path'
-
 import { transform } from '@babel/core'
-import { format } from 'prettier'
 
 import getRWPaths from './getRWPaths'
+import prettify from './prettify'
 
 const ts2js = (file: string) => {
   const result = transform(file, {
@@ -21,21 +19,11 @@ const ts2js = (file: string) => {
     retainLines: true,
   })
 
-  return prettify((result as Record<string, string>).code)
-}
-
-const prettierConfig = () => {
-  try {
-    return require(path.join(getRWPaths().base, 'prettier.config.js'))
-  } catch (e) {
-    return undefined
+  if (result?.code) {
+    return prettify(result.code)
   }
-}
 
-const prettify = (code: string) =>
-  format(code, {
-    ...prettierConfig(),
-    parser: 'babel',
-  })
+  return null
+}
 
 export default ts2js

@@ -8,7 +8,7 @@ import getRWPaths from '../../../lib/getRWPaths'
 import isTSProject from '../../../lib/isTSProject'
 import ts2js from '../../../lib/ts2js'
 
-export const udpateSeedScript = async () => {
+export const updateSeedScript = async () => {
   /**
    * Add
    *
@@ -30,7 +30,7 @@ export const udpateSeedScript = async () => {
   )
 
   /**
-   * add template
+   * Add `scripts/seed.{js,ts}` template.
    */
   const rwPaths = getRWPaths()
 
@@ -43,13 +43,15 @@ export const udpateSeedScript = async () => {
   const res = await fetch(
     'https://raw.githubusercontent.com/redwoodjs/redwood/main/packages/create-redwood-app/template/scripts/seed.ts'
   )
-  let text = await res.text()
+
+  let text: string | null = await res.text()
+
   if (!isTSProject) {
-    text = (await ts2js(text)) as string
+    text = await ts2js(text)
   }
 
   fs.writeFileSync(
     path.join(rwPaths.scripts, `seed.${isTSProject ? 'ts' : 'js'}`),
-    text
+    text ? text : ''
   )
 }
