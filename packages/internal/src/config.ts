@@ -29,9 +29,27 @@ interface BrowserTargetConfig {
   port: number
   path: string
   target: TargetEnum.BROWSER
-  // TODO: apiProxyHost: string
-  apiProxyPort: number
-  apiProxyPath: string
+  /**
+   * Specify the URL to your api-server.
+   * This can be an absolute path proxied on the current domain (`/.netlify/functions`),
+   * or a fully qualified URL (`https://api.example.org:8911/functions`).
+   *
+   * Note: This should not include the path to the GraphQL Server.
+   **/
+  apiUrl: string
+  /**
+   * Optional: FQDN or absolute path to the GraphQL serverless function, without the trailing slash.
+   * This will override the apiUrl configuration just for the graphql function
+   * Example: `./redwood/functions/graphql` or `https://api.redwoodjs.com/graphql`
+   */
+  apiGraphQLUrl?: string
+  /**
+   * Optional: FQDN or absolute path to the DbAuth serverless function, without the trailing slash.
+   * This will override the apiUrl configuration just for the dbAuth function
+   * Example: `./redwood/functions/auth` or `https://api.redwoodjs.com/auth`
+   **/
+  apiDbAuthUrl?: string
+
   fastRefresh: boolean
   a11y: boolean
 }
@@ -58,8 +76,7 @@ const DEFAULT_CONFIG: Config = {
     port: 8910,
     path: './web',
     target: TargetEnum.BROWSER,
-    apiProxyPath: '/.netlify/functions',
-    apiProxyPort: 8911,
+    apiUrl: '/.redwood/functions',
     fastRefresh: true,
     a11y: true,
   },
