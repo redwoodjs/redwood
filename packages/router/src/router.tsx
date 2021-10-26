@@ -97,7 +97,7 @@ const InternalRoute: React.VFC<InternalRouteProps> = ({
   }
 
   const searchParams = parseSearch(location.search)
-  const allParams = { ...pathParams, ...searchParams }
+  const allParams = { ...searchParams, ...pathParams }
 
   if (redirect) {
     const newPath = replaceParams(redirect, allParams)
@@ -156,14 +156,26 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
 }) => {
   const { pathname } = useLocation()
   const flatChildArray = flattenAll(children)
-  const shouldShowSplash =
+
+  const hasHomeRoute = flatChildArray.some((child) => {
+    if (isRoute(child)) {
+      return child.props.path === '/'
+    }
+
+    return false
+  })
+
+  // The user has not generated routes
+  // if the only route that exists is
+  // is the not found page
+  const hasGeneratedRoutes = !(
     flatChildArray.length === 1 &&
     isRoute(flatChildArray[0]) &&
     flatChildArray[0].props.notfound
+  )
 
-  if (shouldShowSplash) {
-    return <SplashPage />
-  }
+  const shouldShowSplash =
+    (!hasHomeRoute && pathname === '/') || !hasGeneratedRoutes
 
   flatChildArray.forEach((child) => {
     if (isRoute(child)) {
@@ -179,6 +191,15 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
       }
     }
   })
+
+  if (shouldShowSplash) {
+    return (
+      <SplashPage
+        hasGeneratedRoutes={hasGeneratedRoutes}
+        routes={flatChildArray}
+      />
+    )
+  }
 
   let activeRoute = undefined
   let NotFoundPage: PageType | undefined = undefined

@@ -20,7 +20,8 @@ let CURRENT_USER_DATA: { name: string; email: string; roles?: string[] } = {
   email: 'nospam@example.net',
 }
 
-global.__REDWOOD__API_PROXY_PATH = '/.netlify/functions'
+global.RWJS_API_GRAPHQL_URL = '/.netlify/functions/graphql'
+
 const server = setupServer(
   graphql.query('__REDWOOD__AUTH_GET_CURRENT_USER', (_req, res, ctx) => {
     return res(
@@ -729,4 +730,82 @@ test('Authenticated user has assigned role access as expected', async () => {
   // Log out
   fireEvent.click(screen.getByText('Log Out'))
   await waitFor(() => screen.getByText('Log In'))
+})
+
+test('proxies forgotPassword() calls to client', async () => {
+  const mockAuthClient = {
+    forgotPassword: async (args) => {
+      expect(args).toEqual('username')
+    },
+    client: () => {},
+    type: 'custom',
+  }
+
+  const TestAuthConsumer = () => {
+    const { forgotPassword } = useAuth()
+    forgotPassword('username')
+
+    return null
+  }
+
+  render(
+    <AuthProvider client={mockAuthClient} type="custom">
+      <TestAuthConsumer />
+    </AuthProvider>
+  )
+
+  // for whatever reason, forgotPassword is invoked twice
+  expect.assertions(2)
+})
+
+test('proxies resetPassword() calls to client', async () => {
+  const mockAuthClient = {
+    resetPassword: async (args) => {
+      expect(args).toEqual('password')
+    },
+    client: () => {},
+    type: 'custom',
+  }
+
+  const TestAuthConsumer = () => {
+    const { resetPassword } = useAuth()
+    resetPassword('password')
+
+    return null
+  }
+
+  render(
+    <AuthProvider client={mockAuthClient} type="custom">
+      <TestAuthConsumer />
+    </AuthProvider>
+  )
+
+  // for whatever reason, forgotPassword is invoked twice
+  expect.assertions(2)
+})
+
+test('proxies validateResetToken() calls to client', async () => {
+  const mockAuthClient = {
+    validateResetToken: async (args) => {
+      expect(args).toEqual('12345')
+    },
+    client: () => {},
+    type: 'custom',
+  }
+
+  const TestAuthConsumer = () => {
+    const { validateResetToken } = useAuth()
+    validateResetToken('12345')
+
+    return null
+  }
+
+  render(
+    <AuthProvider client={mockAuthClient} type="custom">
+      <TestAuthConsumer />
+    </AuthProvider>
+  )
+
+  // for whatever reason, forgotPassword is invoked twice
+  expect.assertions(2)
 })

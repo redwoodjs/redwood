@@ -126,7 +126,6 @@ const PostForm = (props) => {
           defaultValue={props.post?.image}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
-          validation={{ required: true }}
         />
 
         <FieldError name=\\"image\\" className=\\"rw-field-error\\" />
@@ -143,6 +142,7 @@ const PostForm = (props) => {
           defaultChecked={props.post?.isPinned}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
+          validation={{ required: true }}
         />
 
         <FieldError name=\\"isPinned\\" className=\\"rw-field-error\\" />
@@ -176,8 +176,7 @@ const PostForm = (props) => {
           defaultValue={props.post?.rating}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
-          validation={{ required: true }}
-          transformValue=\\"Float\\"
+          validation={{ valueAsNumber: true }}
         />
 
         <FieldError name=\\"rating\\" className=\\"rw-field-error\\" />
@@ -194,7 +193,6 @@ const PostForm = (props) => {
           defaultValue={formatDatetime(props.post?.postedAt)}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
-          validation={{ required: true }}
         />
 
         <FieldError name=\\"postedAt\\" className=\\"rw-field-error\\" />
@@ -211,8 +209,7 @@ const PostForm = (props) => {
           defaultValue={JSON.stringify(props.post?.metadata)}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
-          validation={{ required: true }}
-          transformValue=\\"Json\\"
+          validation={{ valueAsJSON: true, required: true }}
         />
 
         <FieldError name=\\"metadata\\" className=\\"rw-field-error\\" />
@@ -249,7 +246,7 @@ import { Toaster } from '@redwoodjs/web/toast'
 const PostsLayout = ({ children }) => {
   return (
     <div className=\\"rw-scaffold\\">
-      <Toaster />
+      <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
       <header className=\\"rw-header\\">
         <h1 className=\\"rw-heading rw-heading-primary\\">
           <Link to={routes.posts()} className=\\"rw-link\\">
@@ -554,7 +551,8 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   Style
 */
 
-.rw-scaffold {
+.rw-scaffold,
+.rw-toast {
   background-color: #fff;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji',
@@ -592,6 +590,16 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
 }
 .rw-link:hover {
   color: #2b6cb0;
+}
+.rw-forgot-link {
+  font-size: 0.75rem;
+  color: #a0aec0;
+  text-align: right;
+  margin-top: 0.1rem;
+}
+.rw-forgot-link:hover {
+  font-size: 0.75rem;
+  color: #4299e1;
 }
 .rw-heading {
   font-weight: 600;
@@ -737,6 +745,13 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   border-color: #c53030;
   color: #c53030;
 }
+
+.rw-input-error:focus {
+  outline: none;
+  border-color: #c53030;
+  box-shadow: 0 0 5px #c53030;
+}
+
 .rw-field-error {
   display: block;
   margin-top: 0.25rem;
@@ -1223,7 +1238,6 @@ const PostForm = (props) => {
           defaultValue={props.post?.image}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
-          validation={{ required: true }}
         />
         <FieldError name=\\"image\\" className=\\"rw-field-error\\" />
 
@@ -1239,6 +1253,7 @@ const PostForm = (props) => {
           defaultChecked={props.post?.isPinned}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
+          validation={{ required: true }}
         />
         <FieldError name=\\"isPinned\\" className=\\"rw-field-error\\" />
 
@@ -1270,8 +1285,7 @@ const PostForm = (props) => {
           defaultValue={props.post?.rating}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
-          validation={{ required: true }}
-          transformValue=\\"Float\\"
+          validation={{ valueAsNumber: true }}
         />
         <FieldError name=\\"rating\\" className=\\"rw-field-error\\" />
 
@@ -1287,7 +1301,6 @@ const PostForm = (props) => {
           defaultValue={formatDatetime(props.post?.postedAt)}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
-          validation={{ required: true }}
         />
         <FieldError name=\\"postedAt\\" className=\\"rw-field-error\\" />
 
@@ -1303,8 +1316,7 @@ const PostForm = (props) => {
           defaultValue={JSON.stringify(props.post?.metadata)}
           className=\\"rw-input\\"
           errorClassName=\\"rw-input rw-input-error\\"
-          validation={{ required: true }}
-          transformValue=\\"Json\\"
+          validation={{ valueAsJSON: true, required: true }}
         />
         <FieldError name=\\"metadata\\" className=\\"rw-field-error\\" />
 
@@ -1347,7 +1359,7 @@ type PostLayoutProps = {
 const PostsLayout = ({ children }: PostLayoutProps) => {
   return (
     <div className=\\"rw-scaffold\\">
-      <Toaster />
+      <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
       <header className=\\"rw-header\\">
         <h1 className=\\"rw-heading rw-heading-primary\\">
           <Link
@@ -1650,7 +1662,8 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   Style
 */
 
-.rw-scaffold {
+.rw-scaffold,
+.rw-toast {
   background-color: #fff;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji',
@@ -1688,6 +1701,16 @@ exports[`in typescript mode creates a stylesheet 1`] = `
 }
 .rw-link:hover {
   color: #2b6cb0;
+}
+.rw-forgot-link {
+  font-size: 0.75rem;
+  color: #a0aec0;
+  text-align: right;
+  margin-top: 0.1rem;
+}
+.rw-forgot-link:hover {
+  font-size: 0.75rem;
+  color: #4299e1;
 }
 .rw-heading {
   font-weight: 600;
@@ -1833,6 +1856,13 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   border-color: #c53030;
   color: #c53030;
 }
+
+.rw-input-error:focus {
+  outline: none;
+  border-color: #c53030;
+  box-shadow: 0 0 5px #c53030;
+}
+
 .rw-field-error {
   display: block;
   margin-top: 0.25rem;

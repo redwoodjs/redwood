@@ -354,7 +354,7 @@ export const test_auth_cell_failure = () =>
       path.join(BASE_DIR, 'api/src/lib/auth.js'),
       Step9_1_RequireAuth
     )
-    // Add beforeResolver.
+
     cy.writeFile(
       path.join(BASE_DIR, 'api/src/services/posts/posts.js'),
       Step9_2_PostsRequireAuth

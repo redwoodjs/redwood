@@ -1,0 +1,37 @@
+{
+  "name": "@redwoodjs/codemods",
+  "description": "Codemods to ease upgrading a RedwoodJS Project",
+  "version": "0.37.5",
+  "license": "MIT",
+  "bin": "./dist/codemods.js",
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "@babel/cli": "7.15.7",
+    "core-js": "3.18.3",
+    "deepmerge": "4.2.2",
+    "execa": "5.1.1",
+    "fast-glob": "3.2.7",
+    "findup-sync": "4.0.0",
+    "jest": "27.3.1",
+    "jscodeshift": "0.13.0",
+    "node-fetch": "2.6.1",
+    "tasuku": "1.0.2",
+    "toml": "3.0.0",
+    "vscode-ripgrep": "1.12.1",
+    "yargs": "16.2.0"
+  },
+  "scripts": {
+    "build": "yarn build:js",
+    "prepublishOnly": "yarn build",
+    "build:js": "babel src -d dist --extensions \".js,.ts\" --ignore \"src/**/__tests__/**\" --ignore \"src/**/__testfixtures__/**\"",
+    "build:watch": "nodemon --watch src --ignore dist --exec \"yarn build\"",
+    "test": "NODE_ENV=test jest",
+    "test:watch": "yarn test --watch"
+  },
+  "devDependencies": {
+    "@types/jscodeshift": "0.11.2",
+    "tempy": "1.0.1"
+  }
+}

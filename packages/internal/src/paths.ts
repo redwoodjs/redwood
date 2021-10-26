@@ -9,6 +9,7 @@ import { getConfig } from './config'
 export interface NodeTargetPaths {
   base: string
   dataMigrations: string
+  directives: string
   db: string
   dbSchema: string
   src: string
