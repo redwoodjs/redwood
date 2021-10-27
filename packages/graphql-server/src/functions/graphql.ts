@@ -3,15 +3,17 @@ import {
   envelop,
   EnvelopError,
   FormatErrorHandler,
-  Plugin,
   useMaskedErrors,
   useSchema,
 } from '@envelop/core'
+import type { PluginOrDisabledPlugin } from '@envelop/core'
+
 import { useDepthLimit } from '@envelop/depth-limit'
 import { useDisableIntrospection } from '@envelop/disable-introspection'
 import { useFilterAllowedOperations } from '@envelop/filter-operation-type'
 import { useParserCache } from '@envelop/parser-cache'
 import { useValidationCache } from '@envelop/validation-cache'
+import { RedwoodError } from '@redwoodjs/api'
 import type {
   APIGatewayProxyEvent,
   APIGatewayProxyResult,
@@ -67,14 +69,18 @@ function normalizeRequest(event: APIGatewayProxyEvent): Request {
 /*
  * Prevent unexpected error messages from leaking to the GraphQL clients.
  *
- * Unexpected errors are those that are not Envelop or GraphQL errors
+ * Unexpected errors are those that are not Envelop, GraphQL, or Redwood errors
  **/
-export const formatError: FormatErrorHandler = (err: any) => {
+export const formatError: FormatErrorHandler = (err: any, message: string) => {
+  const allowErrors = [EnvelopError, RedwoodError]
+
   if (
     err.originalError &&
-    err.originalError instanceof EnvelopError === false
+    !allowErrors.find(
+      (allowedError) => err.originalError instanceof allowedError
+    )
   ) {
-    return new GraphQLError('Something went wrong.')
+    return new GraphQLError(message)
   }
 
   return err
@@ -104,11 +110,12 @@ export const createGraphQLHandler = ({
   onHealthCheck,
   depthLimitOptions,
   allowedOperations,
+  defaultError = 'Something went wrong.',
   graphiQLEndpoint,
   schemaOptions,
 }: GraphQLHandlerOptions) => {
   let schema: GraphQLSchema
-  let redwoodDirectivePlugins = [] as Plugin<any>[]
+  let redwoodDirectivePlugins = [] as PluginOrDisabledPlugin[]
   const logger = loggerConfig.logger
 
   try {
@@ -139,7 +146,7 @@ export const createGraphQLHandler = ({
   // so the order here matters
   const isDevEnv = process.env.NODE_ENV === 'development'
 
-  const plugins: Plugin<any>[] = []
+  const plugins: Array<PluginOrDisabledPlugin> = []
 
   if (!isDevEnv) {
     plugins.push(useDisableIntrospection())
@@ -182,7 +189,7 @@ export const createGraphQLHandler = ({
   }
 
   // Prevent unexpected error messages from leaking to the GraphQL clients.
-  plugins.push(useMaskedErrors({ formatError }))
+  plugins.push(useMaskedErrors({ formatError, errorMessage: defaultError }))
 
   const corsContext = createCorsContext(cors)
 

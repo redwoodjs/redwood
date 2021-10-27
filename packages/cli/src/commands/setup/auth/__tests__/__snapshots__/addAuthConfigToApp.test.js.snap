@@ -101,7 +101,7 @@ export default App
 
 exports[`Should add config lines to App.{js,tsx} Matches azureActiveDirectory Snapshot 1`] = `
 "import { AuthProvider } from '@redwoodjs/auth'
-import { UserAgentApplication } from 'msal'
+import { PublicClientApplication } from '@azure/msal-browser'
 import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
@@ -110,7 +110,7 @@ import Routes from 'src/Routes'
 
 import './index.css'
 
-const azureActiveDirectoryClient = new UserAgentApplication({
+const azureActiveDirectoryClient = new PublicClientApplication({
     auth: {
       clientId: process.env.AZURE_ACTIVE_DIRECTORY_CLIENT_ID,
       authority: process.env.AZURE_ACTIVE_DIRECTORY_AUTHORITY,
