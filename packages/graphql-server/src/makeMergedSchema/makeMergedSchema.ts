@@ -150,7 +150,7 @@ const mergeResolvers = (schemas: {
  *
  * const schema = makeMergedSchema({
  *  schema,
- *  services: makeServices({ services }),
+ *  services,
  * })
  * ```
  */
