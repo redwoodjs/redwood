@@ -4216,7 +4216,11 @@ __metadata:
   resolution: "@redwoodjs/codemods@workspace:packages/codemods"
   dependencies:
     "@babel/cli": 7.15.7
+    "@babel/core": 7.15.8
+    "@babel/plugin-transform-typescript": 7.15.8
+    "@types/babel__core": ^7
     "@types/jscodeshift": 0.11.2
+    "@types/prettier": ^2
     core-js: 3.18.3
     deepmerge: 4.2.2
     execa: 5.1.1
@@ -4225,6 +4229,7 @@ __metadata:
     jest: 27.3.1
     jscodeshift: 0.13.0
     node-fetch: 2.6.1
+    prettier: 2.4.1
     tasuku: 1.0.2
     tempy: 1.0.1
     toml: 3.0.0
@@ -5677,7 +5682,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/babel__core@npm:*, @types/babel__core@npm:7.1.16, @types/babel__core@npm:^7.0.0, @types/babel__core@npm:^7.1.14":
+"@types/babel__core@npm:*, @types/babel__core@npm:7.1.16, @types/babel__core@npm:^7, @types/babel__core@npm:^7.0.0, @types/babel__core@npm:^7.1.14":
   version: 7.1.16
   resolution: "@types/babel__core@npm:7.1.16"
   dependencies:
@@ -6353,7 +6358,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/prettier@npm:*, @types/prettier@npm:^2.1.5":
+"@types/prettier@npm:*, @types/prettier@npm:^2, @types/prettier@npm:^2.1.5":
   version: 2.4.1
   resolution: "@types/prettier@npm:2.4.1"
   checksum: 083103aa2fc29e8916760d87789bf2bfc0a61832fdb60a3be82325088f4dfeb45d944737dc817bc322575787a7221bb5677169ef0a712883b13803343106d966
