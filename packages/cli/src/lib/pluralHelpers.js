@@ -14,7 +14,7 @@ export const validatePlural = (plural, singular) => {
   if (trimmedPlural.match(/[\n\r\s]+/)) {
     return 'Only one word please!'
   }
-  // Control Char u0017 is retured if default input is cleared in the prompt
+  // Control Char u0017 is returned if default input is cleared in the prompt
   // using option+backspace
   // eslint-disable-next-line no-control-regex
   if (trimmedPlural.match(/^[\n\r\s\u0017]*$/)) {
@@ -37,12 +37,12 @@ export const ensureUniquePlural = async ({
   const generateMessage =
     `Cannot determine the plural of "${model}". \n` +
     'To continue, the generator requires a unique plural form:'
-  const destoryMessage =
+  const destroyMessage =
     `Cannot determine the plural of "${model}" originally used to generate ` +
     'the files. \n' +
     'To continue, the destroy command requires the plural form:'
 
-  const promptMessage = inDestroyer ? destoryMessage : generateMessage
+  const promptMessage = inDestroyer ? destroyMessage : generateMessage
 
   // News => Newses; Equipment => Equipments
   const initialPlural = model.slice(-1) === 's' ? `${model}es` : `${model}s`
@@ -55,7 +55,7 @@ export const ensureUniquePlural = async ({
     validate: (pluralInput) => validatePlural(pluralInput, model),
   })
 
-  // Quickfix is to remove that control char u0017, which is preprended if
+  // Quick-fix is to remove that control char u0017, which is prepended if
   // default input is cleared using option+backspace
   // eslint-disable-next-line no-control-regex
   const pluralToUse = promptResult.plural?.trim().replace(/\u0017/g, '')

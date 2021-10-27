@@ -201,8 +201,8 @@ describe('in typescript mode', () => {
 })
 
 describe('handler', () => {
-  const itCanBeCalledWithGivenModelName = (lettercase, model) => {
-    test(`can be called with ${lettercase} model name`, async () => {
+  const canBeCalledWithGivenModelName = (letterCase, model) => {
+    test(`can be called with ${letterCase} model name`, async () => {
       const spy = jest.spyOn(fs, 'writeFileSync')
 
       global.mockFs = true
@@ -219,7 +219,7 @@ describe('handler', () => {
 
       spy.mock.calls.forEach((calls) => {
         const testOutput = {
-          // Because windows paths are different, we need to normalise before
+          // Because windows paths are different, we need to normalize before
           // snapshotting
           filePath: ensurePosixPath(calls[0]),
           fileContent: calls[1],
@@ -233,11 +233,11 @@ describe('handler', () => {
     })
   }
 
-  itCanBeCalledWithGivenModelName('camelCase', 'user')
-  itCanBeCalledWithGivenModelName('PascalCase', 'User')
+  canBeCalledWithGivenModelName('camelCase', 'user')
+  canBeCalledWithGivenModelName('PascalCase', 'User')
 
   prompts.inject('CustomDatums')
-  itCanBeCalledWithGivenModelName('camelCase', 'customData')
+  canBeCalledWithGivenModelName('camelCase', 'customData')
   prompts.inject('CustomDatums')
-  itCanBeCalledWithGivenModelName('PascalCase', 'CustomData')
+  canBeCalledWithGivenModelName('PascalCase', 'CustomData')
 })
