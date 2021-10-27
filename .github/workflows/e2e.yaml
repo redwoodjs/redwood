@@ -85,8 +85,12 @@ jobs:
           git restore . && git clean -df
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
-      - name: Run `rw test`
-        run: yarn rw test --no-watch
+      - name: Run `rw test api`
+        run: yarn rw test api --no-watch
+        working-directory: ${{ steps.createpath.outputs.project_path }}
+
+      - name: Run `rw test web`
+        run: yarn rw test web --no-watch
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
       - name: Run `rw build` (no prerender)
