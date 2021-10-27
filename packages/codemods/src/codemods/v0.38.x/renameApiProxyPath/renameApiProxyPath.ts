@@ -7,7 +7,7 @@ export const renameApiProxyPath = () => {
   const redwoodTOMLPath = path.join(getRWPaths().base, 'redwood.toml')
 
   let redwoodTOML = fs.readFileSync(redwoodTOMLPath, 'utf8')
-  redwoodTOML = redwoodTOML.replace('apiProxyPath', 'apiURL')
+  redwoodTOML = redwoodTOML.replace('apiProxyPath', 'apiUrl')
 
   fs.writeFileSync(redwoodTOMLPath, redwoodTOML)
 }
