@@ -604,6 +604,11 @@ export const builder = (yargs) => {
       description: 'Generate test files',
       type: 'boolean',
     })
+    .option('tailwind', {
+      description:
+        'Generate TailwindCSS version of scaffold.css (automatically set to `true` if TailwindCSS config exists)',
+      type: 'boolean',
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -616,7 +621,15 @@ export const builder = (yargs) => {
     yargs.option(option, config)
   })
 }
-const tasks = ({ model, path, force, tests, typescript, javascript }) => {
+const tasks = ({
+  model,
+  path,
+  force,
+  tests,
+  typescript,
+  javascript,
+  tailwind,
+}) => {
   return new Listr(
     [
       {
@@ -628,6 +641,7 @@ const tasks = ({ model, path, force, tests, typescript, javascript }) => {
             tests,
             typescript,
             javascript,
+            tailwind,
           })
           return writeFilesTask(f, { overwriteExisting: force })
         },
@@ -662,6 +676,7 @@ export const handler = async ({
   force,
   tests,
   typescript,
+  tailwind,
 }) => {
   if (modelArg.toLowerCase() === 'dbauth') {
     console.info(c.green('\nGenerate dbAuth pages with:\n'))
@@ -677,7 +692,7 @@ export const handler = async ({
 
   try {
     const { name } = await verifyModelName({ name: model })
-    const t = tasks({ model: name, path, force, tests, typescript })
+    const t = tasks({ model: name, path, force, tests, typescript, tailwind })
     await t.run()
   } catch (e) {
     console.log(c.error(e.message))
