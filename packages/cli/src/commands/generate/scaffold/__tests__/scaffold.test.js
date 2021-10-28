@@ -8,6 +8,34 @@ import { getDefaultArgs } from '../../../../lib'
 import { yargsDefaults as defaults } from '../../../generate'
 import * as scaffold from '../scaffold'
 
+describe('tailwind flag', () => {
+  test('set to `false` generates a scaffold.css', async () => {
+    const files = await scaffold.files({
+      ...getDefaultArgs(defaults),
+      model: 'Post',
+      tailwind: false,
+      nestScaffoldByModel: true,
+    })
+
+    expect(
+      files[path.normalize('/path/to/project/web/src/scaffold.css')]
+    ).toMatchSnapshot()
+  })
+
+  test('set to `true` generates a scaffold.css', async () => {
+    const files = await scaffold.files({
+      ...getDefaultArgs(defaults),
+      model: 'Post',
+      tailwind: true,
+      nestScaffoldByModel: true,
+    })
+
+    expect(
+      files[path.normalize('/path/to/project/web/src/scaffold.css')]
+    ).toMatchSnapshot()
+  })
+})
+
 describe('in javascript (default) mode', () => {
   let files
 
