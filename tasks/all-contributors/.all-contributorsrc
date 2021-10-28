@@ -2141,6 +2141,51 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "facinick",
+      "name": "facinick",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12322728?v=4",
+      "profile": "https://github.com/facinick",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "virtuoushub",
+      "name": "Peter Colapietro",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4303638?v=4",
+      "profile": "https://github.com/virtuoushub",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "teovillanueva",
+      "name": "Teodoro Villaneuva",
+      "avatar_url": "https://avatars.githubusercontent.com/u/41754896?v=4",
+      "profile": "https://greener.bio/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "SarveshLimaye",
+      "name": "Sarvesh Limaye",
+      "avatar_url": "https://avatars.githubusercontent.com/u/74766567?v=4",
+      "profile": "https://github.com/SarveshLimaye",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "7shantanu7",
+      "name": "Shantanu Zadbuke",
+      "avatar_url": "https://avatars.githubusercontent.com/u/51382138?v=4",
+      "profile": "https://github.com/7shantanu7",
+      "contributions": [
+        "code"
+      ]
     }
   ]
 }
