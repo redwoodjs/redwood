@@ -2379,7 +2379,7 @@ export default PostsList
 "
 `;
 
-exports[`tailwind flag set to \`false\` generates a scaffold.css 1`] = `
+exports[`tailwind flag set to \`false\` generates a scaffold.css with raw CSS 1`] = `
 "/*
   normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css
 */
@@ -2729,7 +2729,7 @@ exports[`tailwind flag set to \`false\` generates a scaffold.css 1`] = `
 "
 `;
 
-exports[`tailwind flag set to \`true\` generates a scaffold.css 1`] = `
+exports[`tailwind flag set to \`true\` generates a scaffold.css with Tailwind components 1`] = `
 ".rw-scaffold {
   @apply bg-white text-gray-600;
 }
