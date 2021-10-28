@@ -678,6 +678,8 @@ export const handler = async ({
   typescript,
   tailwind,
 }) => {
+  console.info('tailwind', tailwind)
+
   if (modelArg.toLowerCase() === 'dbauth') {
     console.info(c.green('\nGenerate dbAuth pages with:\n'))
     console.info('  yarn rw generate dbAuth\n')
@@ -688,11 +690,24 @@ export const handler = async ({
   if (tests === undefined) {
     tests = getConfig().generate.tests
   }
-  const { model, path } = splitPathAndModel(modelArg)
+  const { model, path: modelPath } = splitPathAndModel(modelArg)
+
+  if (tailwind === undefined) {
+    if (fs.existsSync(path.join(getPaths().web.config, 'tailwind.config.js'))) {
+      tailwind = true
+    }
+  }
 
   try {
     const { name } = await verifyModelName({ name: model })
-    const t = tasks({ model: name, path, force, tests, typescript, tailwind })
+    const t = tasks({
+      model: name,
+      modelPath,
+      force,
+      tests,
+      typescript,
+      tailwind,
+    })
     await t.run()
   } catch (e) {
     console.log(c.error(e.message))
