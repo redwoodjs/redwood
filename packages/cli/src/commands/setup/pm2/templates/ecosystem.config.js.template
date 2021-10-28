@@ -1,0 +1,18 @@
+module.exports = {
+  apps: [
+    {
+      name: 'api',
+      script: 'node_modules/.bin/rw',
+      args: 'serve api',
+      instances: 2,
+      exec_mode: 'cluster',
+    },
+    {
+      name: 'web',
+      script: 'node_modules/.bin/rw',
+      args: 'serve web',
+      instances: 2,
+      exec_mode: 'cluster',
+    },
+  ],
+}
