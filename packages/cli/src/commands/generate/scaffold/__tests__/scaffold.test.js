@@ -683,7 +683,7 @@ describe('in typescript mode', () => {
 })
 
 describe.only('tailwind flag', () => {
-  test('set to `false` generates a scaffold.css', async () => {
+  test('set to `false` generates a scaffold.css with raw CSS', async () => {
     const files = await scaffold.files({
       ...getDefaultArgs(defaults),
       model: 'Post',
@@ -696,7 +696,7 @@ describe.only('tailwind flag', () => {
     ).toMatchSnapshot()
   })
 
-  test('set to `true` generates a scaffold.css', async () => {
+  test('set to `true` generates a scaffold.css with Tailwind components', async () => {
     const files = await scaffold.files({
       ...getDefaultArgs(defaults),
       model: 'Post',
