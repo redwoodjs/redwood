@@ -119,6 +119,7 @@ export const files = async ({
   path: scaffoldPath = '',
   tests = true,
   typescript = false,
+  tailwind = false,
   nestScaffoldByModel,
 }) => {
   const model = await getSchema(name)
@@ -158,7 +159,7 @@ export const files = async ({
       tests,
       typescript,
     })),
-    ...assetFiles(name),
+    ...assetFiles(name, tailwind),
     ...layoutFiles(
       name,
       pascalScaffoldPath,
@@ -177,7 +178,7 @@ export const files = async ({
   }
 }
 
-const assetFiles = (name) => {
+const assetFiles = (name, tailwind) => {
   let fileList = {}
   const assets = fs.readdirSync(
     customOrDefaultTemplatePath({
@@ -188,25 +189,32 @@ const assetFiles = (name) => {
   )
 
   assets.forEach((asset) => {
-    const outputAssetName = asset.replace(/\.template/, '')
-    const outputPath = path.join(getPaths().web.src, outputAssetName)
-
-    // skip assets that already exist on disk, never worry about overwriting
     if (
-      !SKIPPABLE_ASSETS.includes(path.basename(outputPath)) ||
-      !fs.existsSync(outputPath)
+      (tailwind && asset.match(/tailwind/)) ||
+      (!tailwind && !asset.match(/tailwind/))
     ) {
-      const template = generateTemplate(
-        customOrDefaultTemplatePath({
-          side: 'web',
-          generator: 'scaffold',
-          templatePath: path.join('assets', asset),
-        }),
-        {
-          name,
-        }
-      )
-      fileList[outputPath] = template
+      const outputAssetName = asset
+        .replace(/\.template/, '')
+        .replace(/\.tailwind/, '')
+      const outputPath = path.join(getPaths().web.src, outputAssetName)
+
+      // skip assets that already exist on disk, never worry about overwriting
+      if (
+        !SKIPPABLE_ASSETS.includes(path.basename(outputPath)) ||
+        !fs.existsSync(outputPath)
+      ) {
+        const template = generateTemplate(
+          customOrDefaultTemplatePath({
+            side: 'web',
+            generator: 'scaffold',
+            templatePath: path.join('assets', asset),
+          }),
+          {
+            name,
+          }
+        )
+        fileList[outputPath] = template
+      }
     }
   })
 
