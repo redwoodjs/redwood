@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/forms",
-  "version": "0.37.5",
+  "version": "0.38.0",
   "files": [
     "dist"
   ],
