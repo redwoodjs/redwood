@@ -114,6 +114,16 @@ const getTemplateStrings = (name, scaffoldPath, nestScaffoldByModel = true) => {
   }
 }
 
+// Checks whether Tailwind is installed, and if the `flag` argument is not
+// already set, returns true. Otherwise just returns `flag`
+export const shouldUseTailwindCSS = (flag) => {
+  if (flag === undefined) {
+    return fs.existsSync(path.join(getPaths().web.config, 'tailwind.config.js'))
+  } else {
+    return flag
+  }
+}
+
 export const files = async ({
   model: name,
   path: scaffoldPath = '',
@@ -621,7 +631,7 @@ export const builder = (yargs) => {
     yargs.option(option, config)
   })
 }
-const tasks = ({
+export const tasks = ({
   model,
   path,
   force,
@@ -678,8 +688,6 @@ export const handler = async ({
   typescript,
   tailwind,
 }) => {
-  console.info('tailwind', tailwind)
-
   if (modelArg.toLowerCase() === 'dbauth') {
     console.info(c.green('\nGenerate dbAuth pages with:\n'))
     console.info('  yarn rw generate dbAuth\n')
@@ -692,11 +700,7 @@ export const handler = async ({
   }
   const { model, path: modelPath } = splitPathAndModel(modelArg)
 
-  if (tailwind === undefined) {
-    if (fs.existsSync(path.join(getPaths().web.config, 'tailwind.config.js'))) {
-      tailwind = true
-    }
-  }
+  tailwind = shouldUseTailwindCSS(tailwind)
 
   try {
     const { name } = await verifyModelName({ name: model })
