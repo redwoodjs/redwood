@@ -3,7 +3,6 @@ global.__dirname = __dirname
 import fs from 'fs'
 
 import '../../../../lib/test'
-import { description } from '../../../generate'
 import { shouldUseTailwindCSS } from '../scaffold'
 
 jest.mock('fs', () => {
