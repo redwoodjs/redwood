@@ -26,7 +26,7 @@ Want great developer experience and easy scaling? How about an integrated front-
 
 <h2>Quick Start</h2>
 
-Redwood requires Node.js v14 and Yarn v1.15 (or newer).
+Redwood requires Node.js >=14.x <=16.x and Yarn v1.15 (or newer).
 ```console
 yarn create redwood-app redwood-project
 cd redwood-project
