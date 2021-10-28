@@ -199,6 +199,7 @@ const assetFiles = (name, tailwind) => {
   )
 
   assets.forEach((asset) => {
+    // check if the asset name matches the Tailwind preference
     if (
       (tailwind && asset.match(/tailwind/)) ||
       (!tailwind && !asset.match(/tailwind/))
@@ -688,17 +689,17 @@ export const handler = async ({
   typescript,
   tailwind,
 }) => {
+  /** @deprecated Used to be able to create dbAuth pages with `yarn rw g scaffold dbAuth` */
   if (modelArg.toLowerCase() === 'dbauth') {
     console.info(c.green('\nGenerate dbAuth pages with:\n'))
     console.info('  yarn rw generate dbAuth\n')
-
     process.exit(0)
   }
 
   if (tests === undefined) {
     tests = getConfig().generate.tests
   }
-  const { model, path: modelPath } = splitPathAndModel(modelArg)
+  const { model, path } = splitPathAndModel(modelArg)
 
   tailwind = shouldUseTailwindCSS(tailwind)
 
@@ -706,7 +707,7 @@ export const handler = async ({
     const { name } = await verifyModelName({ name: model })
     const t = tasks({
       model: name,
-      modelPath,
+      path,
       force,
       tests,
       typescript,
