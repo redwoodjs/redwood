@@ -608,7 +608,8 @@
       "profile": "https://github.com/guledali",
       "contributions": [
         "tool",
-        "doc"
+        "doc",
+        "tutorial"
       ]
     },
     {
@@ -1863,7 +1864,9 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/49038?v=4",
       "profile": "https://orta.io/",
       "contributions": [
-        "code"
+        "code",
+        "doc",
+        "tutorial"
       ]
     },
     {
@@ -2047,7 +2050,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/304697?v=4",
       "profile": "https://github.com/doesnotexist",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -2183,6 +2187,16 @@
       "name": "Shantanu Zadbuke",
       "avatar_url": "https://avatars.githubusercontent.com/u/51382138?v=4",
       "profile": "https://github.com/7shantanu7",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "DukeManh",
+      "name": "Duke Manh",
+      "avatar_url": "https://avatars.githubusercontent.com/u/51073515?v=4",
+      "profile": "https://github.com/DukeManh",
       "contributions": [
         "code"
       ]
