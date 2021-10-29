@@ -228,7 +228,7 @@ yarn workspace create-redwood-app add -i rimraf
 
 > Note: Interactivity is enabled by default
 
-For example, if we're using `yarn add` to add a dependency to a workspace (say `packages/codemods`), and we already have that dependency in another worksapce (say `packages/api-server`), yarn will ask us if we want to use the same version:
+For example, if we're using `yarn add` to add a dependency to a workspace (say `packages/codemods`), and we already have that dependency in another workspace (say `packages/api-server`), yarn will ask us if we want to use the same version:
 
 ```
 redwood/packages/codemods$ yarn add yargs
