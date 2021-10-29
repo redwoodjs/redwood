@@ -56,7 +56,7 @@ Each codemod has the following files:
 ### Different types of codemods
 Codemods are sometimes really simple, i.e. just normal string replace or updating the package.json. Other times we use jscodeshift to change code on a redwood project
 
-Here are a few different examples to help you get familirised:
+Here are a few different examples to help you get familiarised:
 
 - [Rename config in Redwood.toml](packages/codemods/src/codemods/v0.38.x/renameApiProxyPath)
 Simple string replace on the user's `redwood.toml`. No ASTs, no complications!
